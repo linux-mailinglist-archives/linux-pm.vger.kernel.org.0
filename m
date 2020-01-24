@@ -2,25 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD863148625
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2020 14:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD5814862A
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2020 14:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389516AbgAXNaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jan 2020 08:30:20 -0500
-Received: from albert.telenet-ops.be ([195.130.137.90]:56148 "EHLO
-        albert.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389504AbgAXNaT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jan 2020 08:30:19 -0500
+        id S2388121AbgAXNa2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jan 2020 08:30:28 -0500
+Received: from michel.telenet-ops.be ([195.130.137.88]:37546 "EHLO
+        michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388216AbgAXNaU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jan 2020 08:30:20 -0500
 Received: from ramsan ([84.195.182.253])
-        by albert.telenet-ops.be with bizsmtp
-        id uDW42100T5USYZQ06DW4VA; Fri, 24 Jan 2020 14:30:17 +0100
+        by michel.telenet-ops.be with bizsmtp
+        id uDW42100L5USYZQ06DW4cs; Fri, 24 Jan 2020 14:30:18 +0100
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan with esmtp (Exim 4.90_1)
         (envelope-from <geert@linux-m68k.org>)
-        id 1iuz2C-0007bH-D3; Fri, 24 Jan 2020 14:30:04 +0100
+        id 1iuz2C-0007bK-ED; Fri, 24 Jan 2020 14:30:04 +0100
 Received: from geert by rox.of.borg with local (Exim 4.90_1)
         (envelope-from <geert@linux-m68k.org>)
-        id 1iuz2C-00047C-Ba; Fri, 24 Jan 2020 14:30:04 +0100
+        id 1iuz2C-00047E-CN; Fri, 24 Jan 2020 14:30:04 +0100
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Gilad Ben-Yossef <gilad@benyossef.com>,
@@ -39,9 +39,9 @@ Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
         linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 1/2] debugfs: regset32: Add Runtime PM support
-Date:   Fri, 24 Jan 2020 14:29:56 +0100
-Message-Id: <20200124132957.15769-2-geert+renesas@glider.be>
+Subject: [PATCH 2/2] crypto: ccree - fix debugfs register access while suspended
+Date:   Fri, 24 Jan 2020 14:29:57 +0100
+Message-Id: <20200124132957.15769-3-geert+renesas@glider.be>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200124132957.15769-1-geert+renesas@glider.be>
 References: <20200124132957.15769-1-geert+renesas@glider.be>
@@ -50,61 +50,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hardware registers of devices under control of power management cannot
-be accessed at all times.  If such a device is suspended, register
-accesses may lead to undefined behavior, like reading bogus values, or
-causing exceptions or system locks.
+Reading the debugfs files under /sys/kernel/debug/ccree/ can be done by
+the user at any time.  On R-Car SoCs, the CCREE device is power-managed
+using a moduile clock, and if this clock is not running, bogus register
+values may be read.
 
-Extend struct debugfs_regset32 with an optional field to let device
-drivers specify the device the registers in the set belong to.  This
-allows debugfs_show_regset32() to make sure the device is resumed while
-its registers are being read.
+Fix this by filling in the debugfs_regset32.dev field, so debugfs will
+make sure the device is resumed while its registers are being read.
+
+This fixes the bogus values (0x00000260) in the register dumps on R-Car
+H3 ES1.0:
+
+    -e6601000.crypto/regs:HOST_IRR = 0x00000260
+    -e6601000.crypto/regs:HOST_POWER_DOWN_EN = 0x00000260
+    +e6601000.crypto/regs:HOST_IRR = 0x00000038
+    +e6601000.crypto/regs:HOST_POWER_DOWN_EN = 0x00000038
+     e6601000.crypto/regs:AXIM_MON_ERR = 0x00000000
+     e6601000.crypto/regs:DSCRPTR_QUEUE_CONTENT = 0x000002aa
+    -e6601000.crypto/regs:HOST_IMR = 0x00000260
+    +e6601000.crypto/regs:HOST_IMR = 0x017ffeff
+     e6601000.crypto/regs:AXIM_CFG = 0x001f0007
+     e6601000.crypto/regs:AXIM_CACHE_PARAMS = 0x00000000
+    -e6601000.crypto/regs:GPR_HOST = 0x00000260
+    +e6601000.crypto/regs:GPR_HOST = 0x017ffeff
+     e6601000.crypto/regs:AXIM_MON_COMP = 0x00000000
+    -e6601000.crypto/version:SIGNATURE = 0x00000260
+    -e6601000.crypto/version:VERSION = 0x00000260
+    +e6601000.crypto/version:SIGNATURE = 0xdcc63000
+    +e6601000.crypto/version:VERSION = 0xaf400001
+
+Note that this behavior is system-dependent, and the issue does not show
+up on all R-Car Gen3 SoCs and boards.  Even when the device is
+suspended, the module clock may be left enabled, if configured by the
+firmware for Secure Mode, or when controlled by the Real-Time Core.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- fs/debugfs/file.c       | 8 ++++++++
- include/linux/debugfs.h | 1 +
- 2 files changed, 9 insertions(+)
+ drivers/crypto/ccree/cc_debugfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
-index dede25247b81f72a..5e52d68421c678f2 100644
---- a/fs/debugfs/file.c
-+++ b/fs/debugfs/file.c
-@@ -18,6 +18,7 @@
- #include <linux/slab.h>
- #include <linux/atomic.h>
- #include <linux/device.h>
-+#include <linux/pm_runtime.h>
- #include <linux/poll.h>
- #include <linux/security.h>
+diff --git a/drivers/crypto/ccree/cc_debugfs.c b/drivers/crypto/ccree/cc_debugfs.c
+index 5669997386988055..35f3a2137502bd96 100644
+--- a/drivers/crypto/ccree/cc_debugfs.c
++++ b/drivers/crypto/ccree/cc_debugfs.c
+@@ -81,6 +81,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
+ 	regset->regs = debug_regs;
+ 	regset->nregs = ARRAY_SIZE(debug_regs);
+ 	regset->base = drvdata->cc_base;
++	regset->dev = dev;
  
-@@ -1057,7 +1058,14 @@ static int debugfs_show_regset32(struct seq_file *s, void *data)
- {
- 	struct debugfs_regset32 *regset = s->private;
+ 	ctx->dir = debugfs_create_dir(drvdata->plat_dev->name, cc_debugfs_dir);
  
-+	if (regset->dev)
-+		pm_runtime_get_sync(regset->dev);
-+
- 	debugfs_print_regs32(s, regset->regs, regset->nregs, regset->base, "");
-+
-+	if (regset->dev)
-+		pm_runtime_put(regset->dev);
-+
- 	return 0;
- }
+@@ -102,6 +103,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
+ 		verset->nregs = ARRAY_SIZE(pid_cid_regs);
+ 	}
+ 	verset->base = drvdata->cc_base;
++	verset->dev = dev;
  
-diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
-index bf9b6cafa4c26a68..5d0783ae09f365ac 100644
---- a/include/linux/debugfs.h
-+++ b/include/linux/debugfs.h
-@@ -35,6 +35,7 @@ struct debugfs_regset32 {
- 	const struct debugfs_reg32 *regs;
- 	int nregs;
- 	void __iomem *base;
-+	struct device *dev;	/* Optional device for Runtime PM */
- };
+ 	debugfs_create_regset32("version", 0400, ctx->dir, verset);
  
- extern struct dentry *arch_debugfs_dir;
 -- 
 2.17.1
 
