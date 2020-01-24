@@ -2,103 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5B4148ACE
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2020 15:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D88F148BF3
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2020 17:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387544AbgAXO63 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jan 2020 09:58:29 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:35192 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729567AbgAXO62 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jan 2020 09:58:28 -0500
-Received: by mail-wr1-f68.google.com with SMTP id g17so2338246wro.2
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2020 06:58:27 -0800 (PST)
+        id S2388142AbgAXQY4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jan 2020 11:24:56 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:33487 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388102AbgAXQY4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jan 2020 11:24:56 -0500
+Received: by mail-lj1-f194.google.com with SMTP id y6so3177054lji.0
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2020 08:24:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=H2kMYwKVMZJJODmSCD9XB1XUy/1Vo4ht1rbsU9Apdvk=;
-        b=bkthCIDnMnmz7IMKNGdlKVN9leVC3eeQHCjo7uykoVZG47klS81XDDBrRidkGfyR/7
-         mz+/ZCHBzRCgPKMVVHRQLyEPMtyXK8ebtOxJu0hPA4Ej6cC+SUz9h11meJQuamkzmwGa
-         /4hzbwju+7guE3O2IFZ3pn5uTfTT2zYW9z+FcA3EXuhHXrfbKfnUnsjP/n8FFaOA982R
-         E7Y7viGUZaudicKOMw4T7lXq1JIAiiO0z0u4X6efsTOwbMgsTV2259G899Li1Q/Np+/8
-         ulWrL+9Vjt0Ki2qeoeJyDE6QYoT7NRfuo5RPqxPYmeMfHNLJzHSQ0vo3zB6n0lMFri3E
-         83MQ==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2ZKQV9EUYn6O4Dwbxq9ZK3GxrnLNGiu/KoVo8Ur0eNc=;
+        b=1mGfJTx6KGaWGxumVkRlwu8JFX/T7ZxAi/ZPOibqWqzJC0d3Q6qE/tOOl1kSg0+arG
+         D+PfJu2DBY2lwp7fRrB9iFZ8Kr5f8m1MnAXwgNUfBLiHhOplxnUQLiRv/XHQI6S+EYuH
+         rpbt9IJH9DSh8+FVausrel1GvuhSQ6rZXs5HYp/wKDRdwASexD4MFTHeJ/MlErj+G0Dl
+         KFa4TU/4uMQL8oFQEGVlSczqhIBQiIhhNyMfoLHbPL6rVEBHh/jdu4mapAPNAS/p5I6M
+         VQgNDC1USFdKJQfbBnSsLWvtMEcip/ygylNCs8Vloj9hboY9ZfPNvoEYtqHp2P4ZcRCK
+         D51A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=H2kMYwKVMZJJODmSCD9XB1XUy/1Vo4ht1rbsU9Apdvk=;
-        b=ubMdudtZvHueE5l/xZNe++pzW1Y7t7UCrzsO0FZBkoTpMpZWD/jKwm+2HsCgSMXjyQ
-         dngZSklJ94O91nvuTlay2SAnxHJ6TR6oc/AbOu+dW3nKHREtkDcl8Z4mn5pMr21wR8eX
-         rawCoCcKEdNKeNEpyRhfuSMIZ0u+cRHRqKl3cJurK4hPMo93Jtbp8fYXHL4vurKT5Z9k
-         zpxAK40/xiEiGxQZ6kXdfDCmhYeJKNK0EKGeaXGLNqTRQb6Dc8k3qh5F4DjqLq4F+d2o
-         3tjKuVOaxp9jtlBuvVwiC/Ds4Y/icaImlRTdObDE6IZ0lEcUeYPC7VasqgN8pkxO/wLF
-         ry3w==
-X-Gm-Message-State: APjAAAUfMw1AEd9KiX25Yi8a5W/3m3Y2GLH89SEFRWsxrFS4MOgjdpc2
-        6gig9j3aAmuSC8IvUsVQ5Ig5FA==
-X-Google-Smtp-Source: APXvYqzm6jwWCBsOTsmoHYpWta3NHDV77loe37XCpWXtBF3jbOk4inufxpPJJAfjO7rpqpQTd7DeOQ==
-X-Received: by 2002:adf:fd87:: with SMTP id d7mr5067863wrr.226.1579877906269;
-        Fri, 24 Jan 2020 06:58:26 -0800 (PST)
-Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id k8sm7561244wrl.3.2020.01.24.06.58.25
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2ZKQV9EUYn6O4Dwbxq9ZK3GxrnLNGiu/KoVo8Ur0eNc=;
+        b=ZDggR8onPQluk5nIenN5TGx4k7iVgDG4wZNDliC5IFR8K23m1ZYF8mqqfz1d3EC8NA
+         Jb82q6MBHM/N2sGEHyIpK1jJwRZKq2iu/Wd0ewblnYcRlLy1Uitek+rrObiLcnLdwKcL
+         IegwEFzMn0BEaG5VbGzTGf9D3xct1nyrRK215u02vfP+NFFWSWHouNcZgr18o2Z7MmTS
+         70Lb/5M8WGF0KLvaXQeD8LxWlb3+OoBbgZS6u3rMaH8PyiRynvBfAJqUmABVHW5+uJOH
+         E7fjbNGxCnNNxAosKTpx+MkXm2MxUSDExOvhNS0Rxzpkdr9zy9TCLmFASDcjtqMoR9Vj
+         5PZg==
+X-Gm-Message-State: APjAAAVD/mY5HI5IgNW74aMiXX8zZ7UCpJWFrqmcqjcZuS/hval3taya
+        7hV5meK2xTFMZ76D6XBA0Jbc5A==
+X-Google-Smtp-Source: APXvYqwD3R6qmy6UAfp7uxu+afZInN2SHuLh7/0SKxfwyTm+CAMduCTdKlx73HrpU5r6GS5WWyvYzQ==
+X-Received: by 2002:a2e:3a13:: with SMTP id h19mr2778997lja.16.1579883094015;
+        Fri, 24 Jan 2020 08:24:54 -0800 (PST)
+Received: from localhost (h-93-159.A463.priv.bahnhof.se. [46.59.93.159])
+        by smtp.gmail.com with ESMTPSA id q14sm2974605lfc.60.2020.01.24.08.24.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2020 06:58:25 -0800 (PST)
-Date:   Fri, 24 Jan 2020 14:58:22 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Douglas Raillard <douglas.raillard@arm.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH v4 3/6] sched/cpufreq: Hook em_pd_get_higher_power()
- into get_next_freq()
-Message-ID: <20200124145822.GA221730@google.com>
-References: <20200122173538.1142069-1-douglas.raillard@arm.com>
- <20200122173538.1142069-4-douglas.raillard@arm.com>
- <20200123161644.GA144523@google.com>
- <5a2af4e7-f9eb-4f23-908a-fab2c7395a99@arm.com>
- <20200124143704.GA215244@google.com>
+        Fri, 24 Jan 2020 08:24:53 -0800 (PST)
+Date:   Fri, 24 Jan 2020 17:24:52 +0100
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Bin Liu <b-liu@ti.com>, linux-crypto@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Fix debugfs register access while suspended
+Message-ID: <20200124162452.GC286344@oden.dyn.berto.se>
+References: <20200124132957.15769-1-geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20200124143704.GA215244@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200124132957.15769-1-geert+renesas@glider.be>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday 24 Jan 2020 at 14:37:04 (+0000), Quentin Perret wrote:
-> On Thursday 23 Jan 2020 at 17:52:53 (+0000), Douglas Raillard wrote:
-> > We can't really move the call to em_pd_get_higher_freq() into
-> > cpufreq_driver_resolve_freq() since that's a schedutil-specific feature,
-> > and we would loose the !sg_policy->need_freq_update optimization.
-> 
-> Depends how you do it. You could add a new method to cpufreq_policy that
+Hi Geert,
 
-s/cpufreq_policy/cpufreq_governor
+Thanks for your series.
 
-> is defined only for sugov or something along those lines. And you'd call
-> that instead of cpufreq_frequency_table_target() when that makes sense.
+On 2020-01-24 14:29:55 +0100, Geert Uytterhoeven wrote:
+> 	Hi all,
 > 
-> > Maybe we can add a flag to cpufreq_driver_resolve_freq() that promises
-> > that the frequency is already a valid one. We have to be careful though,
-> > since a number of things can make that untrue:
-> >  - em_pd_get_higher_freq() will return the passed freq verbatim if it's
-> > higher than the max freq, so em_pd_get_higher_freq() will have to set
-> > the flag itself in case that logic changes.
-> >  - policy limits can change the value
-> >  - future things could tinker with the freq and forget to reset the flag.
-> > 
-> > If you think it's worth it I can make these changes.
+> While comparing register values read from debugfs files under
+> /sys/kernel/debug/ccree/, I noticed some oddities.
+> Apparently there is no guarantee these registers are read from the
+> device while it is resumed.  This may lead to bogus values, or crashes
+> and lock-ups.
 > 
-> The thing is, not only with the current patch we end up iterating the
-> frequencies twice for nothing, but also I think it'd be interesting to
-> use the EM for consistency with EAS. It'd be nice to use the same data
-> structure for the predictions we do in compute_energy() and for the
-> actual request.
+> This patch series:
+>   1. Allows debugfs_create_regset32() to be used for devices whose
+>      registers must be accessed when resumed,
+>   2. Fixes the CCREE driver to make use of this.
 > 
-> Thoughts ?
+> I have identified several other drivers that may be affected (i.e.
+> using debugfs_create_regset32() and pm_runtime_*()):
+>   - drivers/gpu/drm/msm/disp/dpu1
+>   - drivers/usb/dwc3
+>   - drivers/usb/host/ehci-omap.c
+>   - drivers/usb/host/ehci-tegra.c
+>   - drivers/usb/host/ohci-platform.c
+>   - drivers/usb/host/xhci.c
+>   - drivers/usb/host/xhci-dbgcap.c
+>   - drivers/usb/host/xhci-histb.c
+>   - drivers/usb/host/xhci-hub.c
+>   - drivers/usb/host/xhci-mtk.c
+>   - drivers/usb/host/xhci-pci.c
+>   - drivers/usb/host/xhci-plat.c
+>   - drivers/usb/host/xhci-tegra.c
+>   - drivers/usb/mtu3
+>   - drivers/usb/musb
 > 
-> Quentin
+> Some of these call pm_runtime_forbid(), but given the comment "users
+> should enable runtime pm using power/control in sysfs", this can be
+> overridden from userspace, so these are unsafe, too?
+> 
+> Thanks for your comments!
+
+Looks good to me,
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
+
+> 
+> Geert Uytterhoeven (2):
+>   debugfs: regset32: Add Runtime PM support
+>   crypto: ccree - fix debugfs register access while suspended
+> 
+>  drivers/crypto/ccree/cc_debugfs.c | 2 ++
+>  fs/debugfs/file.c                 | 8 ++++++++
+>  include/linux/debugfs.h           | 1 +
+>  3 files changed, 11 insertions(+)
+> 
+> -- 
+> 2.17.1
+> 
+> Gr{oetje,eeting}s,
+> 
+> 						Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+> 							    -- Linus Torvalds
+
+-- 
+Regards,
+Niklas Söderlund
