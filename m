@@ -2,77 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7271B147646
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2020 02:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB8514792E
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2020 09:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729875AbgAXBTA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jan 2020 20:19:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32982 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729900AbgAXBRz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 23 Jan 2020 20:17:55 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4533722464;
-        Fri, 24 Jan 2020 01:17:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579828674;
-        bh=8I4N5SI5pfjtzoqByMlS3MkZ2k66b7rxqF1BnrKZr/k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yv0RcOofRqgGLvg1lpWlq53g9eeZm6V3wAKVoWiaPMMeNqkKRAAq7GGlqiQZj1+oK
-         RXMVkGkBJPpMQX2/GJlYJhFbD631PRC3Qbwdu7KQKCewmfsd7iamfQN5SBwppJkwW0
-         C2febhM4CN6obLWQbV+MlmRrMpIWPBmlxRqouDRM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ben Dooks <ben.dooks@codethink.co.uk>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 06/11] ARM: OMAP2+: SmartReflex: add omap_sr_pdata definition
-Date:   Thu, 23 Jan 2020 20:17:42 -0500
-Message-Id: <20200124011747.18575-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200124011747.18575-1-sashal@kernel.org>
-References: <20200124011747.18575-1-sashal@kernel.org>
+        id S1726173AbgAXIGm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jan 2020 03:06:42 -0500
+Received: from sonic308-1.consmr.mail.bf2.yahoo.com ([74.6.130.40]:35321 "EHLO
+        sonic308-1.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725821AbgAXIGm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jan 2020 03:06:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1579853201; bh=+JEosOT2sVu+hkruxS8M8QchlzaUMN4I7aAE0kLIJgE=; h=Date:From:Reply-To:Subject:References:From:Subject; b=WUy5dmiCjc2gEn0qnMK8JQ5F27qlgQ8pzhBfDXSyV5Um7+LDycSfOzLsnStjEyQZDoOPQ8mDMs4/JCWYLgnOPC/FD0WStFllTMsZUr9bRGy8EatGq3p4WfXXQD3L5LIc6bZvkPxQIZi6f+ewm1TZNBTEsSJ65UlPd7cIZFZPIr6rD+5GYUsJ4GtmSxICVojtdUms+swdtjjXLYyoFvczW7pVt1zY7v2ZO5NUPozwRJAmio9YGay4psxFpvtNsXepIgE4PKjLH5SAd315dGt5Hq/YZMLblWzfele8Tfja1M3MEtlVU7NDNkZT3dft3lBir/ainKoTZMW2OmF+5srQbQ==
+X-YMail-OSG: bc.adU0VM1nNTX6ITdqWVQeubCrDw7HDTzzJhBYJOGHilj1d6WrrUtLUOHTpKZ4
+ 7kOU2xavSw39eZKAyPSLIW_K3yzQkvBYS2YI6CkLUUzzTqH7H1A1uM4g1UiwiAW68R2M5liDcBom
+ 2Az0ILJmzggrmVxKWWS8gHedr7KlUsXbHN01zxJqQaF3w1P1qNR6.wDPoNhqVIw8GXfTeHLYeJLX
+ OJg86dPGhRFXsL7nebgtSslyR3i3RbZENQ7wEvDphl2pkdT2t8rBUX_g6J2v4Ydnk7xZ1jhuiRFt
+ xf1WxH5go2L3Cpt6eSTuQMxd69iAR4fwFgTinF95Jj6Re2nRP1ilE0QNcIhv.CCO49ndthzLjJVg
+ iNSuMkKI9oEFdJWbnr6bkK.QTKlAIfra9AurCK6Ys1iBGmxVxciYlos9cTWxOA88SACuE33AXLeS
+ o4lsQ_3ZQvfS_KpTsxMKcrO_d5i.Frc1D.iwZnqJ8cMDS2BeZoyeRFA6R7MiqKp_1qSIi.Xgf3XA
+ HQ2ZOttSKkuNlaTt.WIgdXA0b2EsJTpRU8VfjmLXoPBgjmxNhWwnPnKoz47d2X.NBkF7mbbIZjUT
+ bMAGSnCIRvmkU8RzmxdRG2c.oj0M3V4aPNrct6HjnnjD7DquiATQt_HyPueweP.txgvwR0eqrZwd
+ TFsljkgDjJdAYUvAYftN2keEUfoFc8NVMwMpiYxEyEWHmOkytuMD8E7LyXQVcgdFL22810BopLaT
+ FO.G7KusfC7e6ozSaJkDkTe.p7ZTTMzodZ70pYqhf9E1yGs7fYFzdEBGqlS395FTAu3ZmLvA1Fqk
+ LA08Xe4CKq3ExN.QWNHZJiMsoWivvqJkQWZlwTiVqIk.oumpHehbePwNIRnOwb0PPTJT2z7ygmZo
+ 4zbGRH_0WTnMDPUN1UlDBQ8fUEAe9CHaq1aHX.T8YRN1Y6wYRC9yA8HgZa8AeE8abaxhUzF3U.PA
+ cxBOPe31Xq8SYXSOXGzXtlQSk3qUrs1ZXanKoqaUQY1_9HN324AVapfK71Rfd6pXHFV_Nay3Vq1N
+ WaSVx.C.jcRWO_VoMbXdQVVT3vaNgI7ck6wnnMTM6hu7yipMd50ebRpsE7laPpAOhR7bXUqRNpZg
+ n9DKb0hydIv5fl2fIi4i.wue8Q8SqCX9c2v9gKaFAddaV7m.HBxHrwHauyhdVOh3kT4uZiO0Iy4Z
+ RhPc5FB0qzt8R3qnryLFLv5LxAnJfeWTavJVgZvF88HlJu7jSqTnebiWBoyKVkMO9n3_csdLLCSV
+ VVx2lRu5zizp6GsrsaZanpNAQ2DgVF6HBZR_aLkdO2PAt914cwkcxIhrpG6U0ZKpWOQ2NaonRCA-
+ -
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.bf2.yahoo.com with HTTP; Fri, 24 Jan 2020 08:06:41 +0000
+Date:   Fri, 24 Jan 2020 08:06:36 +0000 (UTC)
+From:   Mustafa <sanimustafa87@gmail.com>
+Reply-To: mustafasani281@gmail.com
+Message-ID: <2029314625.11027103.1579853196873@mail.yahoo.com>
+Subject: My good friend,
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <2029314625.11027103.1579853196873.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.14873 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:72.0) Gecko/20100101 Firefox/72.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Ben Dooks <ben.dooks@codethink.co.uk>
 
-[ Upstream commit 2079fe6ea8cbd2fb2fbadba911f1eca6c362eb9b ]
 
-The omap_sr_pdata is not declared but is exported, so add a
-define for it to fix the following warning:
+My good friend,
 
-arch/arm/mach-omap2/pdata-quirks.c:609:36: warning: symbol 'omap_sr_pdata' was not declared. Should it be static?
+I just want to know if you, can help me, to transfer the amount of ($6Million). After the transfer we have to share it, 50% for me, and 50% for you. Please let me know if you can help me for more information regarding the transfer. I hope you can work with me honestly?
 
-Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/linux/power/smartreflex.h | 3 +++
- 1 file changed, 3 insertions(+)
+Thanks.
 
-diff --git a/include/linux/power/smartreflex.h b/include/linux/power/smartreflex.h
-index 7b81dad712de8..37d9b70ed8f0a 100644
---- a/include/linux/power/smartreflex.h
-+++ b/include/linux/power/smartreflex.h
-@@ -296,6 +296,9 @@ struct omap_sr_data {
- 	struct voltagedomain		*voltdm;
- };
- 
-+
-+extern struct omap_sr_data omap_sr_pdata[OMAP_SR_NR];
-+
- #ifdef CONFIG_POWER_AVS_OMAP
- 
- /* Smartreflex module enable/disable interface */
--- 
-2.20.1
-
+ Mustafa Sani,
