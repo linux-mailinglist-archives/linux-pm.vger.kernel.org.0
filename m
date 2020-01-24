@@ -2,296 +2,372 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFBD147B3C
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2020 10:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C26681481BB
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2020 12:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731711AbgAXJly (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jan 2020 04:41:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39470 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731675AbgAXJlx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 24 Jan 2020 04:41:53 -0500
-Received: from localhost (unknown [145.15.244.15])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 70E9421556;
-        Fri, 24 Jan 2020 09:41:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579858912;
-        bh=5KaAIMkJ6gMEzrwfSHsXucmw+DcKAeTRBjq9Y7V1UWQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RLBq39WEv6XWttUY18dSb152nYZOCyloDp+GyvcBnw9BAJ6n6UUFXbTmpdAS5UrwX
-         jPTsk71CERXGluBi/shm2tQO/E5JjPdGgxE9KCLHiia3w8oshaeNhqvKfGTzN7Vicy
-         OoSA3/pS7vwCoa0cmqAQVT+a+zLAF762RwlAep+A=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Doug Smythies <dsmythies@telus.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>, juri.lelli@redhat.com,
-        linux-pm@vger.kernel.org, mgorman@suse.de, rostedt@goodmis.org,
-        sargun@sargun.me, srinivas.pandruvada@linux.intel.com,
-        tj@kernel.org, xiexiuqi@huawei.com, xiezhipeng1@huawei.com,
-        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 089/102] sched/cpufreq: Move the cfs_rq_util_change() call to cpufreq_update_util()
-Date:   Fri, 24 Jan 2020 10:31:30 +0100
-Message-Id: <20200124092820.108025708@linuxfoundation.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200124092806.004582306@linuxfoundation.org>
-References: <20200124092806.004582306@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        id S2391193AbgAXLWU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jan 2020 06:22:20 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:52772 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391184AbgAXLWT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jan 2020 06:22:19 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200124112216euoutp0283c84fe0dbfc7d183495f876229937c6~szsocKtMb1664016640euoutp02f
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2020 11:22:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200124112216euoutp0283c84fe0dbfc7d183495f876229937c6~szsocKtMb1664016640euoutp02f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1579864936;
+        bh=7QgOgBbRwaO1gPunTQwolQO1mswbl0Pc5i8yAbUQ7qk=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=YZLOMn+A/X6tUtWKvkzA/UpAnpfqt0MdlZPtN/VIeL7jwui+D04mQCpyuPr3AFOa6
+         SNFwANL99xOyfNmGSuxg34vGqZTHNSGdGgJKTQlomG32M5P75InIXYqgHCQ7K2H56V
+         epn0RnABlf3bV80gvnQuysplVGeMvjp0U9u7UocU=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200124112216eucas1p1beb2dd4f097b85d70af5ece129f5cf6c~szsoCkfQW0250602506eucas1p1v;
+        Fri, 24 Jan 2020 11:22:16 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 31.64.60679.863DA2E5; Fri, 24
+        Jan 2020 11:22:16 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200124112215eucas1p202d735ab621b1ed19fffb34fa54c6a3b~szsnqz4Lm2557325573eucas1p2B;
+        Fri, 24 Jan 2020 11:22:15 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200124112215eusmtrp190437a0c868cb781a2c552b95a5b0c47~szsnp9YCU0042100421eusmtrp1h;
+        Fri, 24 Jan 2020 11:22:15 +0000 (GMT)
+X-AuditID: cbfec7f4-0cbff7000001ed07-4b-5e2ad368735f
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id F3.FC.08375.763DA2E5; Fri, 24
+        Jan 2020 11:22:15 +0000 (GMT)
+Received: from AMDC3555 (unknown [106.120.51.67]) by eusmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20200124112215eusmtip13e2ba550c7861f88bca97d78ccaa5b21~szsm5WRZf1680616806eusmtip1k;
+        Fri, 24 Jan 2020 11:22:15 +0000 (GMT)
+Message-ID: <0de33b1ae7c52270d11c606ecccc9af5f44d0421.camel@samsung.com>
+Subject: Re: [RFC PATCH v3 5/7] devfreq: exynos-bus: Add interconnect
+ functionality to exynos-bus
+From:   Artur =?UTF-8?Q?=C5=9Awigo=C5=84?= <a.swigon@samsung.com>
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc:     cw00.choi@samsung.com, myungjoo.ham@samsung.com,
+        inki.dae@samsung.com, sw0312.kim@samsung.com,
+        leonard.crestez@nxp.com, m.szyprowski@samsung.com,
+        b.zolnierkie@samsung.com, krzk@kernel.org
+Date:   Fri, 24 Jan 2020 12:22:14 +0100
+In-Reply-To: <15795421-db12-8466-bb7e-688e6625cf4a@linaro.org>
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRju29k5Ow63jlPwxaJoWaR5KbM4aJhG1In8EUH9KLwsPajkjR3n
+        Ja28gJWmiAbaFCw1LxNvy0RXhthyeB1iaqRmUSYqKuYytYw2j2L/nvd53ud7nhc+EpMZcQcy
+        IjqOVUYrIuWEWNjStTbgGj7kHHhsvNuabipqwOlR0zROl+oHcPr9z0WCLmzXEnT+ZJ6QNhob
+        RXT1xBJOa7+O4PSQroSgl3P0iC4yvhHQdfoJET2WVk3QRQUzhO9uRqt5SDDjI68JZjLbIGBe
+        VNxjmhZaBUxuswYxy9p9l0XXxadD2ciIeFbp7hMsDp+pNaHYkbOJb2ueYanosWcWsiKB8oSP
+        FXqUhcSkjKpGUJfWhfODCUHTcAHGD8sIxuoNom1LcUcNwQtVZmF6dsvyHYFmUI9btiQUA5q2
+        QmTBtlQIFHypE1owQZ2B/rEVgcVgR/1A0F9RvJmOUXoEcyvfNreE1CHQFQ1tuq0oH9iYNxF8
+        tgvM9+Sad0hzgg1stNpaaIzaDxkvize7AjUvguf1K1tdz0HP53TEY1uYNTRv8Xuht+CRkMcc
+        TLVN4rw5FYG2Uo/xgjeMD6wTljCMcoIGnTtP+0GXdkhkoYGSwod5G76DFPJbCjGelsCDTBkP
+        5aB7IuWNAOm1I1tvMzC6tiTIQwfUO7eo/7tFvZP6FGEaZM+quKgwlvOIZhPcOEUUp4oOcwuJ
+        idIi8zfr/WswtSLdn5udiCKR3FoCOU6BMlwRzyVFdSIgMbmdBF0zU5JQRdJtVhkTpFRFslwn
+        2kMK5faSE2UzATIqTBHH3mLZWFa5rQpIK4dUVD+nqkx0GW67un5HnH/xSLdLckDPwbuZqtDz
+        h+tnV12vpKwayi8Nekk9yvs6snP9/K1iX603KPuEyYtpK1W/p4xV1g03/BT+jsbsQHxdWzl1
+        fyFesuYz+ym4LEU92birrUl6MuiCzPeU5N0vrxR1t7zFu6S0KsFxlSYyjrY3qhfkQi5ccdwZ
+        U3KKf0AlGpJiAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOIsWRmVeSWpSXmKPExsVy+t/xu7rpl7XiDC7eM7LYOGM9q8X1L89Z
+        LeYfOcdqceXrezaL6Xs3sVlMuj+BxeL8+Q3sFivufmS12PT4GqvF5V1z2Cw+9x5htJhxfh+T
+        xdojd9ktbjeuYLOYMfklmwO/x6ZVnWwed67tYfO4332cyWPzknqPje92MHn0bVnF6PF5k1wA
+        e5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexsvV
+        XxgLrjlVHF65kLmBcYpJFyMnh4SAicTsAyvZuhi5OIQEljJK7F/TwgqRkJD4uP4GlC0s8eda
+        F1TRE0aJWx9XMoEkeAU8JFbtnM4IYgsLJEtMfriWBcRmE7CXOHv7GxNIg4jAZ0aJw4s+sYA4
+        zAJHGSWenbjPDlLFIqAqsWvGZbBuTgE7ib9vv0Ct+MQocfz3a7AEs4CmROv23+wQd+hIvD3V
+        BzSJA2i1oMTfHcIQJfISzVtnM09gFJyFpGMWQtUsJFULGJlXMYqklhbnpucWG+oVJ+YWl+al
+        6yXn525iBEbqtmM/N+9gvLQx+BCjAAejEg+vRK9mnBBrYllxZe4hRgkOZiURXsYwoBBvSmJl
+        VWpRfnxRaU5q8SFGU6B/JjJLiSbnA5NIXkm8oamhuYWlobmxubGZhZI4b4fAwRghgfTEktTs
+        1NSC1CKYPiYOTqkGRvPHzqFrZX9WVn5OWCFz+MdHicbcJfeuV9oHz2CPu8Fjcd1smeZjQ4sM
+        jwT7x2uOMSVr9rrp3ji3vCL8sMBaV4v3zxrDWI//MXqyaAOb14UkdrP8w7KNbDL7VvM2sLfq
+        8Tv5PRe4x9N0c65nHv92kZc/Uhgvyl3dqlZYmcS4oPmigduGDadWKbEUZyQaajEXFScCAEak
+        e/LqAgAA
+X-CMS-MailID: 20200124112215eucas1p202d735ab621b1ed19fffb34fa54c6a3b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20191220120145eucas1p295af63eed7b23982d8c49fcf875cec8c
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20191220120145eucas1p295af63eed7b23982d8c49fcf875cec8c
+References: <20191220115653.6487-1-a.swigon@samsung.com>
+        <CGME20191220120145eucas1p295af63eed7b23982d8c49fcf875cec8c@eucas1p2.samsung.com>
+        <20191220115653.6487-6-a.swigon@samsung.com>
+        <15795421-db12-8466-bb7e-688e6625cf4a@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Vincent Guittot <vincent.guittot@linaro.org>
+Hi Georgi,
 
-[ Upstream commit bef69dd87828ef5d8ecdab8d857cd3a33cf98675 ]
+On Wed, 2020-01-22 at 19:02 +0200, Georgi Djakov wrote:
+> Hi Artur,
+> 
+> On 12/20/19 13:56, Artur Świgoń wrote:
+> > This patch adds interconnect functionality to the exynos-bus devfreq
+> > driver.
+> > 
+> > The SoC topology is a graph (or, more specifically, a tree) and its
+> > edges are specified using the 'exynos,interconnect-parent-node' in the
+> > DT. Due to unspecified relative probing order, -EPROBE_DEFER may be
+> > propagated to ensure that the parent is probed before its children.
+> > 
+> > Each bus is now an interconnect provider and an interconnect node as well
+> > (cf. Documentation/interconnect/interconnect.rst), i.e. every bus registers
+> > itself as a node. Node IDs are not hardcoded but rather assigned at
+> 
+> Just to note that usually the provider consists of multiple nodes and each node
+> represents a single master or slave port on the AXI bus for example. I am not
+> sure whether this represents correctly the Exynos hardware, so it's up to
+> you.
+> 
+> > runtime, in probing order (subject to the above-mentioned exception
+> > regarding relative order). This approach allows for using this driver with
+> > various Exynos SoCs.
+> 
+> This sounds good. I am wondering whether such dynamic probing would be useful
+> for other platforms too. Then maybe it would make sense to even have a common DT
+> property, but we will see.
+> 
+> Is this going to be used only together with devfreq?
 
-update_cfs_rq_load_avg() calls cfs_rq_util_change() every time PELT decays,
-which might be inefficient when the cpufreq driver has rate limitation.
+Yes, this functions solely as an extension to devfreq, hence the slightly
+unusual architecture (one icc_provider/icc_node per devfreq).
 
-When a task is attached on a CPU, we have this call path:
+(Compared to a singleton icc_provider, this approach yields less code with
+a very simple xlate()).
 
-update_load_avg()
-  update_cfs_rq_load_avg()
-    cfs_rq_util_change -- > trig frequency update
-  attach_entity_load_avg()
-    cfs_rq_util_change -- > trig frequency update
+With exactly one icc_node for every devfreq device, I think I will actually
+reuse the devfreq ID (as seen in the device name, e.g. the "3" in "devfreq3")
+for the node ID. The devfreq framework already does the dynamic numbering
+thing that I do in this patch using IDR.
 
-The 1st frequency update will not take into account the utilization of the
-newly attached task and the 2nd one might be discarded because of rate
-limitation of the cpufreq driver.
+> > Frequencies requested via the interconnect API for a given node are
+> > propagated to devfreq using dev_pm_qos_update_request(). Please note that
+> > it is not an error when CONFIG_INTERCONNECT is 'n', in which case all
+> > interconnect API functions are no-op.
+> 
+> How about the case where CONFIG_INTERCONNECT=m. Looks like the build will fail
+> if CONFIG_ARM_EXYNOS_BUS_DEVFREQ=y, so this dependency should be expressed in
+> Kconfig.
 
-update_cfs_rq_load_avg() is only called by update_blocked_averages()
-and update_load_avg() so we can move the call to
-cfs_rq_util_change/cpufreq_update_util() into these two functions.
+I think adding:
+	depends on INTERCONNECT || !INTERCONNECT
 
-It's also interesting to note that update_load_avg() already calls
-cfs_rq_util_change() directly for the !SMP case.
+under ARM_EXYNOS_BUS_DEVFREQ does the trick.
 
-This change will also ensure that cpufreq_update_util() is called even
-when there is no more CFS rq in the leaf_cfs_rq_list to update, but only
-IRQ, RT or DL PELT signals.
-
-[ mingo: Minor updates. ]
-
-Reported-by: Doug Smythies <dsmythies@telus.net>
-Tested-by: Doug Smythies <dsmythies@telus.net>
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: juri.lelli@redhat.com
-Cc: linux-pm@vger.kernel.org
-Cc: mgorman@suse.de
-Cc: rostedt@goodmis.org
-Cc: sargun@sargun.me
-Cc: srinivas.pandruvada@linux.intel.com
-Cc: tj@kernel.org
-Cc: xiexiuqi@huawei.com
-Cc: xiezhipeng1@huawei.com
-Fixes: 039ae8bcf7a5 ("sched/fair: Fix O(nr_cgroups) in the load balancing path")
-Link: https://lkml.kernel.org/r/1574083279-799-1-git-send-email-vincent.guittot@linaro.org
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/sched/fair.c | 111 +++++++++++++++++++++++++-------------------
- 1 file changed, 62 insertions(+), 49 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 2b7034e6fa241..c87a798d14562 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3504,9 +3504,6 @@ update_cfs_rq_load_avg(u64 now, struct cfs_rq *cfs_rq)
- 	cfs_rq->load_last_update_time_copy = sa->last_update_time;
- #endif
- 
--	if (decayed)
--		cfs_rq_util_change(cfs_rq, 0);
--
- 	return decayed;
- }
- 
-@@ -3616,8 +3613,12 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
- 		attach_entity_load_avg(cfs_rq, se, SCHED_CPUFREQ_MIGRATION);
- 		update_tg_load_avg(cfs_rq, 0);
- 
--	} else if (decayed && (flags & UPDATE_TG))
--		update_tg_load_avg(cfs_rq, 0);
-+	} else if (decayed) {
-+		cfs_rq_util_change(cfs_rq, 0);
-+
-+		if (flags & UPDATE_TG)
-+			update_tg_load_avg(cfs_rq, 0);
-+	}
- }
- 
- #ifndef CONFIG_64BIT
-@@ -7517,6 +7518,28 @@ static inline bool others_have_blocked(struct rq *rq) { return false; }
- static inline void update_blocked_load_status(struct rq *rq, bool has_blocked) {}
- #endif
- 
-+static bool __update_blocked_others(struct rq *rq, bool *done)
-+{
-+	const struct sched_class *curr_class;
-+	u64 now = rq_clock_pelt(rq);
-+	bool decayed;
-+
-+	/*
-+	 * update_load_avg() can call cpufreq_update_util(). Make sure that RT,
-+	 * DL and IRQ signals have been updated before updating CFS.
-+	 */
-+	curr_class = rq->curr->sched_class;
-+
-+	decayed = update_rt_rq_load_avg(now, rq, curr_class == &rt_sched_class) |
-+		  update_dl_rq_load_avg(now, rq, curr_class == &dl_sched_class) |
-+		  update_irq_load_avg(rq, 0);
-+
-+	if (others_have_blocked(rq))
-+		*done = false;
-+
-+	return decayed;
-+}
-+
- #ifdef CONFIG_FAIR_GROUP_SCHED
- 
- static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
-@@ -7536,29 +7559,11 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
- 	return true;
- }
- 
--static void update_blocked_averages(int cpu)
-+static bool __update_blocked_fair(struct rq *rq, bool *done)
- {
--	struct rq *rq = cpu_rq(cpu);
- 	struct cfs_rq *cfs_rq, *pos;
--	const struct sched_class *curr_class;
--	struct rq_flags rf;
--	bool done = true;
--
--	rq_lock_irqsave(rq, &rf);
--	update_rq_clock(rq);
--
--	/*
--	 * update_cfs_rq_load_avg() can call cpufreq_update_util(). Make sure
--	 * that RT, DL and IRQ signals have been updated before updating CFS.
--	 */
--	curr_class = rq->curr->sched_class;
--	update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
--	update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
--	update_irq_load_avg(rq, 0);
--
--	/* Don't need periodic decay once load/util_avg are null */
--	if (others_have_blocked(rq))
--		done = false;
-+	bool decayed = false;
-+	int cpu = cpu_of(rq);
- 
- 	/*
- 	 * Iterates the task_group tree in a bottom up fashion, see
-@@ -7567,9 +7572,13 @@ static void update_blocked_averages(int cpu)
- 	for_each_leaf_cfs_rq_safe(rq, cfs_rq, pos) {
- 		struct sched_entity *se;
- 
--		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq))
-+		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
- 			update_tg_load_avg(cfs_rq, 0);
- 
-+			if (cfs_rq == &rq->cfs)
-+				decayed = true;
-+		}
-+
- 		/* Propagate pending load changes to the parent, if any: */
- 		se = cfs_rq->tg->se[cpu];
- 		if (se && !skip_blocked_update(se))
-@@ -7584,11 +7593,10 @@ static void update_blocked_averages(int cpu)
- 
- 		/* Don't need periodic decay once load/util_avg are null */
- 		if (cfs_rq_has_blocked(cfs_rq))
--			done = false;
-+			*done = false;
- 	}
- 
--	update_blocked_load_status(rq, !done);
--	rq_unlock_irqrestore(rq, &rf);
-+	return decayed;
- }
- 
- /*
-@@ -7638,29 +7646,16 @@ static unsigned long task_h_load(struct task_struct *p)
- 			cfs_rq_load_avg(cfs_rq) + 1);
- }
- #else
--static inline void update_blocked_averages(int cpu)
-+static bool __update_blocked_fair(struct rq *rq, bool *done)
- {
--	struct rq *rq = cpu_rq(cpu);
- 	struct cfs_rq *cfs_rq = &rq->cfs;
--	const struct sched_class *curr_class;
--	struct rq_flags rf;
--
--	rq_lock_irqsave(rq, &rf);
--	update_rq_clock(rq);
--
--	/*
--	 * update_cfs_rq_load_avg() can call cpufreq_update_util(). Make sure
--	 * that RT, DL and IRQ signals have been updated before updating CFS.
--	 */
--	curr_class = rq->curr->sched_class;
--	update_rt_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &rt_sched_class);
--	update_dl_rq_load_avg(rq_clock_pelt(rq), rq, curr_class == &dl_sched_class);
--	update_irq_load_avg(rq, 0);
-+	bool decayed;
- 
--	update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
-+	decayed = update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq);
-+	if (cfs_rq_has_blocked(cfs_rq))
-+		*done = false;
- 
--	update_blocked_load_status(rq, cfs_rq_has_blocked(cfs_rq) || others_have_blocked(rq));
--	rq_unlock_irqrestore(rq, &rf);
-+	return decayed;
- }
- 
- static unsigned long task_h_load(struct task_struct *p)
-@@ -7669,6 +7664,24 @@ static unsigned long task_h_load(struct task_struct *p)
- }
- #endif
- 
-+static void update_blocked_averages(int cpu)
-+{
-+	bool decayed = false, done = true;
-+	struct rq *rq = cpu_rq(cpu);
-+	struct rq_flags rf;
-+
-+	rq_lock_irqsave(rq, &rf);
-+	update_rq_clock(rq);
-+
-+	decayed |= __update_blocked_others(rq, &done);
-+	decayed |= __update_blocked_fair(rq, &done);
-+
-+	update_blocked_load_status(rq, !done);
-+	if (decayed)
-+		cpufreq_update_util(rq, 0);
-+	rq_unlock_irqrestore(rq, &rf);
-+}
-+
- /********** Helpers for find_busiest_group ************************/
- 
- /*
+> > 
+> > Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
+> > ---
+> >  drivers/devfreq/exynos-bus.c | 144 +++++++++++++++++++++++++++++++++++
+> >  1 file changed, 144 insertions(+)
+> > 
+> > diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+> > index 9fdb188915e8..694a9581dcdb 100644
+> > --- a/drivers/devfreq/exynos-bus.c
+> > +++ b/drivers/devfreq/exynos-bus.c
+> > @@ -14,14 +14,19 @@
+> >  #include <linux/devfreq-event.h>
+> >  #include <linux/device.h>
+> >  #include <linux/export.h>
+> > +#include <linux/idr.h>
+> > +#include <linux/interconnect-provider.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> >  #include <linux/pm_opp.h>
+> > +#include <linux/pm_qos.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/regulator/consumer.h>
+> >  
+> >  #define DEFAULT_SATURATION_RATIO	40
+> >  
+> > +#define kbps_to_khz(x) ((x) / 8)
+> > +
+> >  struct exynos_bus {
+> >  	struct device *dev;
+> >  
+> > @@ -35,6 +40,12 @@ struct exynos_bus {
+> >  	struct opp_table *opp_table;
+> >  	struct clk *clk;
+> >  	unsigned int ratio;
+> > +
+> > +	/* One provider per bus, one node per provider */
+> > +	struct icc_provider provider;
+> > +	struct icc_node *node;
+> > +
+> > +	struct dev_pm_qos_request qos_req;
+> >  };
+> >  
+> >  /*
+> > @@ -205,6 +216,39 @@ static void exynos_bus_passive_exit(struct device *dev)
+> >  	clk_disable_unprepare(bus->clk);
+> >  }
+> >  
+> > +static int exynos_bus_icc_set(struct icc_node *src, struct icc_node *dst)
+> > +{
+> > +	struct exynos_bus *src_bus = src->data, *dst_bus = dst->data;
+> > +	s32 src_freq = kbps_to_khz(src->avg_bw);
+> > +	s32 dst_freq = kbps_to_khz(dst->avg_bw);
+> > +	int ret;
+> > +
+> > +	ret = dev_pm_qos_update_request(&src_bus->qos_req, src_freq);
+> > +	if (ret < 0) {
+> > +		dev_err(src_bus->dev, "failed to update PM QoS request");
+> > +		return ret;
+> > +	}
+> > +
+> > +	ret = dev_pm_qos_update_request(&dst_bus->qos_req, dst_freq);
+> > +	if (ret < 0) {
+> > +		dev_err(dst_bus->dev, "failed to update PM QoS request");
+> > +		return ret;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static struct icc_node *exynos_bus_icc_xlate(struct of_phandle_args *spec,
+> > +					     void *data)
+> > +{
+> > +	struct exynos_bus *bus = data;
+> > +
+> > +	if (spec->np != bus->dev->of_node)
+> > +		return ERR_PTR(-EINVAL);
+> > +
+> > +	return bus->node;
+> > +}
+> > +
+> >  static int exynos_bus_parent_parse_of(struct device_node *np,
+> >  					struct exynos_bus *bus)
+> >  {
+> > @@ -419,6 +463,96 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
+> >  	return 0;
+> >  }
+> >  
+> > +static struct icc_node *exynos_bus_icc_get_parent(struct exynos_bus *bus)
+> > +{
+> > +	struct device_node *np = bus->dev->of_node;
+> > +	struct of_phandle_args args;
+> > +	int num, ret;
+> > +
+> > +	num = of_count_phandle_with_args(np, "exynos,interconnect-parent-node",
+> > +					"#interconnect-cells");
+> > +	if (num != 1)
+> > +		return NULL; /* parent nodes are optional */
+> > +
+> > +	ret = of_parse_phandle_with_args(np, "exynos,interconnect-parent-node",
+> > +					"#interconnect-cells", 0, &args);
+> > +	if (ret < 0)
+> > +		return ERR_PTR(ret);
+> > +
+> > +	of_node_put(args.np);
+> > +
+> > +	return of_icc_get_from_provider(&args);
+> > +}
+> > +
+> > +static int exynos_bus_icc_init(struct exynos_bus *bus)
+> > +{
+> > +	static DEFINE_IDA(ida);
+> > +
+> > +	struct device *dev = bus->dev;
+> > +	struct icc_provider *provider = &bus->provider;
+> > +	struct icc_node *node, *parent_node;
+> > +	int id, ret;
+> > +
+> > +	/* Initialize the interconnect provider */
+> > +	provider->set = exynos_bus_icc_set;
+> > +	provider->aggregate = icc_std_aggregate;
+> > +	provider->xlate = exynos_bus_icc_xlate;
+> > +	provider->dev = dev;
+> > +	provider->inter_set = true;
+> > +	provider->data = bus;
+> > +
+> > +	ret = icc_provider_add(provider);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	ret = id = ida_alloc(&ida, GFP_KERNEL);
+> > +	if (ret < 0)
+> > +		goto err_id;
+> > +
+> > +	node = icc_node_create(id);
+> > +	if (IS_ERR(node)) {
+> > +		ret = PTR_ERR(node);
+> > +		goto err_node;
+> > +	}
+> > +
+> > +	bus->node = node;
+> > +	node->name = dev->of_node->name;
+> > +	node->data = bus;
+> > +	icc_node_add(node, provider);
+> > +
+> > +	parent_node = exynos_bus_icc_get_parent(bus);
+> > +	if (IS_ERR(parent_node)) {
+> > +		ret = PTR_ERR(parent_node);
+> > +		goto err_parent;
+> > +	}
+> > +
+> > +	if (parent_node) {
+> > +		ret = icc_link_create(node, parent_node->id);
+> > +		if (ret < 0)
+> > +			goto err_parent;
+> > +	}
+> > +
+> > +	ret = dev_pm_qos_add_request(bus->devfreq->dev.parent, &bus->qos_req,
+> > +					DEV_PM_QOS_MIN_FREQUENCY, 0);
+> > +	if (ret < 0)
+> > +		goto err_request;
+> > +
+> > +	return 0;
+> > +
+> > +err_request:
+> > +	if (parent_node)
+> > +		icc_link_destroy(node, parent_node);
+> > +err_parent:
+> > +	icc_node_del(node);
+> > +	icc_node_destroy(id);
+> > +err_node:
+> > +	ida_free(&ida, id);
+> > +err_id:
+> > +	icc_provider_del(provider);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> >  static int exynos_bus_probe(struct platform_device *pdev)
+> >  {
+> >  	struct device *dev = &pdev->dev;
+> > @@ -468,6 +602,16 @@ static int exynos_bus_probe(struct platform_device *pdev)
+> >  	if (ret < 0)
+> >  		goto err;
+> >  
+> > +	/*
+> > +	 * Initialize interconnect provider. A return value of -ENOTSUPP means
+> > +	 * that CONFIG_INTERCONNECT is disabled.
+> > +	 */
+> > +	ret = exynos_bus_icc_init(bus);
+> > +	if (ret < 0 && ret != -ENOTSUPP) {
+> > +		dev_err(dev, "failed to initialize the interconnect provider");
+> > +		goto err;
+> > +	}
+> > +
+> >  	max_state = bus->devfreq->profile->max_state;
+> >  	min_freq = (bus->devfreq->profile->freq_table[0] / 1000);
+> >  	max_freq = (bus->devfreq->profile->freq_table[max_state - 1] / 1000);
+> > 
+> 
+> 
 -- 
-2.20.1
-
+Artur Świgoń
+Samsung R&D Institute Poland
+Samsung Electronics
 
 
