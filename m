@@ -2,67 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF88149AA5
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Jan 2020 14:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CABBE149AD4
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Jan 2020 14:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728843AbgAZNBN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Jan 2020 08:01:13 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:46089 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728689AbgAZNBN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Jan 2020 08:01:13 -0500
-Received: by mail-io1-f65.google.com with SMTP id t26so6963328ioi.13;
-        Sun, 26 Jan 2020 05:01:12 -0800 (PST)
+        id S1727322AbgAZNdK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Jan 2020 08:33:10 -0500
+Received: from mail-vk1-f196.google.com ([209.85.221.196]:43354 "EHLO
+        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726772AbgAZNdJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Jan 2020 08:33:09 -0500
+Received: by mail-vk1-f196.google.com with SMTP id m195so669541vkh.10
+        for <linux-pm@vger.kernel.org>; Sun, 26 Jan 2020 05:33:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=benyossef-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=Fe5qGJHJCsCWl/2D934wNBGowgZdtUVYwms1aiiozFs=;
-        b=ZH5ARQbuwphpaNvpY1SuKWAtvlC8o3UbaoAE44Le2OJ81OSV/Qq26Di8bqzNIwBBxE
-         Git7+VXnwWAkscpL67zZoKZPaasamLylqFNoDq3FDqNLnA5q/Towoczso2enBoycHCrX
-         QmOiKUpFOT6dIugN0CH+rfAbO9OCQRUcXLBo7w2nhcSLJEXCtTHIWVfIE4sKGRZPhw7w
-         VrkezRzvs2aErk7YilVcRp0mIF94Yws/arNip8htJPJfsdvpe0HoJ1serYvk71brxhIA
-         oWoys2RxWf0LSLUW4kZyqZutzLk5c5rQOfnxBcqyD9eD/DawnnJAD9q3kLPmQdRHo92Q
-         EaaA==
+        bh=emKfjakMK0JQ5BS5YCFkbZaOfKcUBqnq7Vw1qMXzarA=;
+        b=ai+SUiF/UB+ocFDZG4bWX3gairRXyO3KEZs3g3zkaG+2pYyYWK3fd9bt+E7Rar+SD4
+         EIwg+XvovGF4K2Odgt+HUesXodKNd95varMryoGJqOHTWZQOv6S1c9horPbB6zQHQUFj
+         z9zcOiYdUC0xWDGg/8FTElf80uvRJry+UUYvrQXpXo/t3fWys/BSnSQ76GW5zuNCsO1l
+         pZM6EFHBmDXPG3u5Ed5vydQglmNUzoQYPbUyeuzEM07UGxpDHAax8tnbup1DAOHP7Yde
+         /cxPg5ADJdZmZUlDdaVtddv2qRPpZENEBJutlRleqIojB4JNHjUkH8vvrlvOeC3MPHmZ
+         7vyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Fe5qGJHJCsCWl/2D934wNBGowgZdtUVYwms1aiiozFs=;
-        b=ZhFd/CB9WWKWbyscZHAlRbLlq6HNw7rlg2CZTbdHcDjwWyFIY1d++M5qWpjcgdDr0E
-         9/AYabDS9tbeejblW2fdJRW95b1m45T1odIJUvE86raOnvSm2hon0ginVCRraAAiaSPV
-         tQHzhIvpMbgs9uU2+KQpGT54ujaeDrkFOp8zh9L6M/+wyhxeOSHjrxEjvU0ZfLHaFIO/
-         RvNAfOyJ6fY/mTF3eLs9inHIsQHiQeaeAs6ZdjX1pH+xqmfiJy6XL38SVn9iQeCU+glC
-         OYnvM2/LUzBvkv7t67uEaGjeHFbUTu2oyIsm7kW0riOTAgUA9rgwH0CMsNlOOYfknbJA
-         ZzkA==
-X-Gm-Message-State: APjAAAWE8J5VTbZcwALhfEzC0nzLO7Xfw7p9QccwhK16DrrPfHhEIxXT
-        lYX3nvxm+dLIM/zIskHkTvQz3sO75hIHZuzsO24=
-X-Google-Smtp-Source: APXvYqyV82IjtOYASKBL3wF70Jmh/kknf2/qksjOk8uUTMPBEV9amI0E9t9oY9cHqJaM3MXS2O302LhyM7Mfn/lXjFc=
-X-Received: by 2002:a05:6638:538:: with SMTP id j24mr9294229jar.12.1580043672461;
- Sun, 26 Jan 2020 05:01:12 -0800 (PST)
+        bh=emKfjakMK0JQ5BS5YCFkbZaOfKcUBqnq7Vw1qMXzarA=;
+        b=KVqwSzTPMvSm8iW/8gkb9E3Xy+1UxbiJuC2QNfqh6Kw9VzbVQMQRG1xLJ04SsEgjzM
+         km7NViqGMcL2eiiH9vys5oDPvWuhedMsfdyAvGSF/0ulkTWnZWfqWOQ3WQ8UsYzxofrN
+         zncEWA7SP9sSB+loL6tYJUJUrFWCqIdQTfK6FznlIV/+oBCvYKKJYyRxOVxvkLGa/1FB
+         XXfn6XIruxmrcvVtQPV4ZAE+4bsaapmD5HtufEc++I/rEFF1b6TaqN+xdD53kwvfpc1F
+         CEGharTmdSK+9Til+80SV1V3JCtjnnNEjMTI8EH0rYvVWBtn1770Qmy75BkMFqb0H84C
+         v/7A==
+X-Gm-Message-State: APjAAAW/wn3XnCoM7mYTT+YpVxpWIvCPNi6uw2jGP6GrA96NCpjRTTFy
+        2ubAhcPSEFQ7bAvrTsOlOncqZ7i1HkSJYpVpQ0OCAg==
+X-Google-Smtp-Source: APXvYqwbEI5BxpWOjvqHw3OF1B1QFbz8m5/83C3fLpV6wDo9RxMYmlGUd3KSZPynqahIUdu2vYZLu7TpEP7jm7Xn4b4=
+X-Received: by 2002:ac5:cd8c:: with SMTP id i12mr5971417vka.100.1580045588469;
+ Sun, 26 Jan 2020 05:33:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20200106174639.20862-1-tiny.windzz@gmail.com> <20200106174639.20862-2-tiny.windzz@gmail.com>
- <20200107075816.ly6exfd4qtvfxxua@gilmour.lan> <662e157a-603f-7423-0491-f26f0fc8d7b6@linaro.org>
- <20200109131343.mjyuj5ed2xwvmwd4@gilmour.lan> <af4bca3b-ba95-aa10-5601-753f1c5275b3@linaro.org>
-In-Reply-To: <af4bca3b-ba95-aa10-5601-753f1c5275b3@linaro.org>
-From:   Frank Lee <tiny.windzz@gmail.com>
-Date:   Sun, 26 Jan 2020 21:01:01 +0800
-Message-ID: <CAEExFWtmUtzBje-DKt71W46rs3PTF_Di_x3YQCz+tg8+W1kyAA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] ARM: dts: sun8i-r40: Add thermal sensor and
- thermal zones
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megous@megous.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+References: <20200124132957.15769-1-geert+renesas@glider.be> <20200124132957.15769-3-geert+renesas@glider.be>
+In-Reply-To: <20200124132957.15769-3-geert+renesas@glider.be>
+From:   Gilad Ben-Yossef <gilad@benyossef.com>
+Date:   Sun, 26 Jan 2020 15:32:50 +0200
+Message-ID: <CAOtvUMdA2aD9DJBmSpOJOFRw=1_9OcaG4Y915q5L7dgo7n7HTA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] crypto: ccree - fix debugfs register access while suspended
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Bin Liu <b-liu@ti.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
@@ -70,47 +73,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-HI Chen-Yu and Maxime,
-
-Can you pick this up again?
-
-Yangtao
-
-On Fri, Jan 10, 2020 at 4:08 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Fri, Jan 24, 2020 at 3:30 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
 >
-> On 09/01/2020 14:13, Maxime Ripard wrote:
-> > Hi Daniel,
-> >
-> > On Thu, Jan 09, 2020 at 12:51:27PM +0100, Daniel Lezcano wrote:
-> >> On 07/01/2020 08:58, Maxime Ripard wrote:
-> >>> On Mon, Jan 06, 2020 at 05:46:39PM +0000, Yangtao Li wrote:
-> >>>> There are two sensors, sensor0 for CPU, sensor1 for GPU.
-> >>>>
-> >>>> Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-> >>>> Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-> >>>> Tested-on: sun8i-r40-bananapi-m2-ultra
-> >>>
-> >>> As far as I know, tested-on is not documented anywhere (and isn't
-> >>> really used either). I've removed it and applied, thanks!
-> >>
-> >> I think this patch should go through my tree as it refers to a commit =
-in
-> >> my branch.
-> >
-> > I'm not quite sure to get why. Even though that patch depends on the
-> > one affecting the driver to be functional, it doesn't break anything
-> > when merged through arm-soc, and similarly yours doesn't affect any
-> > other tree if it's merged through your tree, so there's no dependency?
+> Reading the debugfs files under /sys/kernel/debug/ccree/ can be done by
+> the user at any time.  On R-Car SoCs, the CCREE device is power-managed
+> using a moduile clock, and if this clock is not running, bogus register
+> values may be read.
 >
-> Sorry, I puzzled myself, I thought you meant you applied patch 1/2
+> Fix this by filling in the debugfs_regset32.dev field, so debugfs will
+> make sure the device is resumed while its registers are being read.
 >
+> This fixes the bogus values (0x00000260) in the register dumps on R-Car
+> H3 ES1.0:
+>
+>     -e6601000.crypto/regs:HOST_IRR =3D 0x00000260
+>     -e6601000.crypto/regs:HOST_POWER_DOWN_EN =3D 0x00000260
+>     +e6601000.crypto/regs:HOST_IRR =3D 0x00000038
+>     +e6601000.crypto/regs:HOST_POWER_DOWN_EN =3D 0x00000038
+>      e6601000.crypto/regs:AXIM_MON_ERR =3D 0x00000000
+>      e6601000.crypto/regs:DSCRPTR_QUEUE_CONTENT =3D 0x000002aa
+>     -e6601000.crypto/regs:HOST_IMR =3D 0x00000260
+>     +e6601000.crypto/regs:HOST_IMR =3D 0x017ffeff
+>      e6601000.crypto/regs:AXIM_CFG =3D 0x001f0007
+>      e6601000.crypto/regs:AXIM_CACHE_PARAMS =3D 0x00000000
+>     -e6601000.crypto/regs:GPR_HOST =3D 0x00000260
+>     +e6601000.crypto/regs:GPR_HOST =3D 0x017ffeff
+>      e6601000.crypto/regs:AXIM_MON_COMP =3D 0x00000000
+>     -e6601000.crypto/version:SIGNATURE =3D 0x00000260
+>     -e6601000.crypto/version:VERSION =3D 0x00000260
+>     +e6601000.crypto/version:SIGNATURE =3D 0xdcc63000
+>     +e6601000.crypto/version:VERSION =3D 0xaf400001
+>
+> Note that this behavior is system-dependent, and the issue does not show
+> up on all R-Car Gen3 SoCs and boards.  Even when the device is
+> suspended, the module clock may be left enabled, if configured by the
+> firmware for Secure Mode, or when controlled by the Real-Time Core.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/crypto/ccree/cc_debugfs.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/crypto/ccree/cc_debugfs.c b/drivers/crypto/ccree/cc_=
+debugfs.c
+> index 5669997386988055..35f3a2137502bd96 100644
+> --- a/drivers/crypto/ccree/cc_debugfs.c
+> +++ b/drivers/crypto/ccree/cc_debugfs.c
+> @@ -81,6 +81,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
+>         regset->regs =3D debug_regs;
+>         regset->nregs =3D ARRAY_SIZE(debug_regs);
+>         regset->base =3D drvdata->cc_base;
+> +       regset->dev =3D dev;
+>
+>         ctx->dir =3D debugfs_create_dir(drvdata->plat_dev->name, cc_debug=
+fs_dir);
+>
+> @@ -102,6 +103,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
+>                 verset->nregs =3D ARRAY_SIZE(pid_cid_regs);
+>         }
+>         verset->base =3D drvdata->cc_base;
+> +       verset->dev =3D dev;
+>
+>         debugfs_create_regset32("version", 0400, ctx->dir, verset);
 >
 > --
->  <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for A=
-RM SoCs
+> 2.17.1
 >
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+
+
+Acked-by: Gilad Ben-Yossef <gilad@benyossef.com>
+
+Thanks,
+Gilad
+--=20
+Gilad Ben-Yossef
+Chief Coffee Drinker
+
+values of =CE=B2 will give rise to dom!
