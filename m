@@ -2,180 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD18149B66
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Jan 2020 16:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343E9149EF0
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2020 07:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725944AbgAZPaX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Jan 2020 10:30:23 -0500
-Received: from mga14.intel.com ([192.55.52.115]:16591 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725907AbgAZPaX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 26 Jan 2020 10:30:23 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Jan 2020 07:30:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,366,1574150400"; 
-   d="scan'208";a="308565152"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Jan 2020 07:30:21 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1ivjrg-000Fpp-MO; Sun, 26 Jan 2020 23:30:20 +0800
-Date:   Sun, 26 Jan 2020 23:30:04 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD INCOMPLETE
- 5fe5946b2ebcf750cfd4847550fa96eb1f03c870
-Message-ID: <5e2db07c.aJhkabFbzNwKacLE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725830AbgA0GLW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jan 2020 01:11:22 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:45150 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbgA0GLW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jan 2020 01:11:22 -0500
+Received: by mail-pg1-f193.google.com with SMTP id b9so4595334pgk.12
+        for <linux-pm@vger.kernel.org>; Sun, 26 Jan 2020 22:11:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=XlOxx0+jj+Ueflcbt7+M5DoGBZOJ3YgoxX9npTLU818=;
+        b=vf8y+dkIOyamo0I61J7+ZSkbJGj40SHUioxA/UvAT4mXKJOPpTWo1waDRBuWBQKGFe
+         VB4npKCMULhEanj7fe7B8P0Tpm6YqrKnLnSB1yeFvIIKAc2mOQCU3qzaP7f9Jp3Lks/W
+         myykYoBSgxnIpiUwckSSFRex0x/vmDrNBMpRxBLIu3KmrNHM4QwwqGBMNr+qRycfZOuj
+         M9XsKdkv5UAKHg9vMRFEuDQmUgrGsepnOmykL2wWoEI0MGV+RmTS8ozosY4EKos+mJkF
+         qnnM6p9WFGXItpOfMQpF4gzErGhDTlMY3VyrI1dsQwHQp0c+2p4zjnepe8qoscXiZNd5
+         NwRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XlOxx0+jj+Ueflcbt7+M5DoGBZOJ3YgoxX9npTLU818=;
+        b=Kz2SEDtuXSwMku1sPx0WKudIajCqvcMieocnNhYe9ZhzTVbSjnKqdHxR1dnjdhkdX2
+         AcVH8V+9MQnqWzwXU7wYMB0BQzfzmds8cnaAsQ1gOfH7DHL0it6lnDsc0CWAcbPmgLd3
+         wkHki5U4SR05fepuVy+NoMI+0BidX1W5o44GpZyMVk6sHf69+bcyHLXTE0MuRcX7kpKj
+         tLmjO2NIFnJe41Uki6XgKHsIPOIOCg6cFjYKJUQr9wym2AnpHaiDkNCbbQaD4AB5U10A
+         ND2BT5UohDVq8Eqt0dviTM397HK8eOACf+2Tjfw103Pb5CgNUW09Ku1U3FcEutTx7x0l
+         HevA==
+X-Gm-Message-State: APjAAAXEm8e+38fu4S06X9b/8JUxIPJOxRZASn1e9MCoAI4A0BulqstF
+        zq/YrQlpBa4+j9Dat7xk42d0iw==
+X-Google-Smtp-Source: APXvYqwq3tBDze8fUjKjAxaItvqrHL1lPAynvz1JenxDlEme4cEH+PsLyuKkYKU8r2459NUUhS/9IA==
+X-Received: by 2002:a63:554c:: with SMTP id f12mr18365168pgm.23.1580105481429;
+        Sun, 26 Jan 2020 22:11:21 -0800 (PST)
+Received: from localhost ([122.172.51.87])
+        by smtp.gmail.com with ESMTPSA id j9sm14298014pfn.152.2020.01.26.22.11.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 26 Jan 2020 22:11:20 -0800 (PST)
+Date:   Mon, 27 Jan 2020 11:41:18 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sibi Sankar <sibis@codeaurora.org>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/5] OPP: Improve require-opps linking
+Message-ID: <20200127061118.5bxei6nghowlmf53@vireshk-i7>
+References: <20190717222340.137578-1-saravanak@google.com>
+ <20190717222340.137578-4-saravanak@google.com>
+ <20191125112812.26jk5hsdwqfnofc2@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20191125112812.26jk5hsdwqfnofc2@vireshk-i7>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 5fe5946b2ebcf750cfd4847550fa96eb1f03c870  Merge branch 'pm-core-next' into bleeding-edge
+On 25-11-19, 16:58, Viresh Kumar wrote:
+> >From 8df083ca64d82ff57f778689271cc1be75aa99c4 Mon Sep 17 00:00:00 2001
+> Message-Id: <8df083ca64d82ff57f778689271cc1be75aa99c4.1574681211.git.viresh.kumar@linaro.org>
+> From: Viresh Kumar <viresh.kumar@linaro.org>
+> Date: Mon, 25 Nov 2019 13:57:58 +0530
+> Subject: [PATCH] opp: Allow lazy-linking of required-opps
+> 
+> The OPP core currently requires the required opp tables to be available
+> before the dependent OPP table is added, as it needs to create links
+> from the dependent OPP table to the required ones. This may not be
+> convenient to all the platforms though, as this requires strict ordering
+> of probing of drivers.
+> 
+> This patch allows lazy-linking of the required-opps. The OPP tables for
+> which the required-opp-tables aren't available at the time of their
+> initialization, are added to a special list of OPP tables:
+> pending_opp_tables. Later on, whenever a new OPP table is registered
+> with the OPP core, we check if it is required by an OPP table in the
+> pending list; if yes, then we complete the linking then and there.
+> 
+> An OPP table is marked unusable until the time all its required-opp
+> tables are available. And if lazy-linking fails for an OPP table, the
+> OPP core disables all of its OPPs to make sure no one can use them.
+> 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/opp/core.c |  13 ++++++
+>  drivers/opp/of.c   | 113 +++++++++++++++++++++++++++++++++++++++++++--
+>  drivers/opp/opp.h  |   4 +-
+>  3 files changed, 124 insertions(+), 6 deletions(-)
 
-TIMEOUT after 2896m
+I was hoping to queue this up for next release, any update on getting
+this tested ?
 
 
-Sorry we cannot finish the testset for your branch within a reasonable time.
-It's our fault -- either some build server is down or some build worker is busy
-doing bisects for _other_ trees. The branch will get more complete coverage and
-possible error reports when our build infrastructure is restored or catches up.
-There will be no more build success notification for this branch head, but you
-can expect reasonably good test coverage after waiting for 1 day.
-
-configs timed out: 19
-
-alpha                               defconfig
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-nds32                               defconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-
-configs tested: 97
-configs skipped: 1
-
-arm                              allmodconfig
-arm                         at91_dt_defconfig
-arm64                               defconfig
-arm                        multi_v5_defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-arm                               allnoconfig
-arm                           efm32_defconfig
-arm                           sunxi_defconfig
-arm64                             allnoconfig
-arm64                            allmodconfig
-arm                          exynos_defconfig
-arm                        shmobile_defconfig
-arm                        multi_v7_defconfig
-riscv                          rv32_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-riscv                    nommu_virt_defconfig
-riscv                            allyesconfig
-m68k                          multi_defconfig
-m68k                       m5475evb_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                     edosk2674_defconfig
-m68k                           sun3_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                                defconfig
-ia64                             alldefconfig
-xtensa                       common_defconfig
-openrisc                    or1ksim_defconfig
-nios2                         3c120_defconfig
-xtensa                          iss_defconfig
-c6x                        evmc6678_defconfig
-c6x                              allyesconfig
-nios2                         10m50_defconfig
-openrisc                 simple_smp_defconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-i386                              allnoconfig
-i386                                defconfig
-i386                             allyesconfig
-i386                             alldefconfig
-sh                               allmodconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                                allnoconfig
-sh                            titan_defconfig
-x86_64               randconfig-c003-20200126
-i386                 randconfig-c003-20200126
-x86_64               randconfig-c002-20200126
-x86_64               randconfig-c001-20200126
-i386                 randconfig-c001-20200126
-i386                 randconfig-c002-20200126
-parisc                        c3000_defconfig
-parisc                         b180_defconfig
-parisc                              defconfig
-parisc                            allnoconfig
-sparc64                          allmodconfig
-sparc                            allyesconfig
-sparc64                          allyesconfig
-sparc                               defconfig
-sparc64                           allnoconfig
-sparc64                             defconfig
-arm64                randconfig-a001-20200125
-ia64                 randconfig-a001-20200125
-arm                  randconfig-a001-20200125
-arc                  randconfig-a001-20200125
-sparc                randconfig-a001-20200125
-x86_64               randconfig-f003-20200126
-x86_64               randconfig-f001-20200126
-x86_64               randconfig-f002-20200126
-i386                 randconfig-f002-20200126
-i386                 randconfig-f003-20200126
-i386                 randconfig-f001-20200126
-arc                              allyesconfig
-microblaze                    nommu_defconfig
-powerpc                          rhel-kconfig
-microblaze                      mmu_defconfig
-arc                                 defconfig
-csky                                defconfig
-nds32                             allnoconfig
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                         rhel-7.2-clear
-h8300                randconfig-a001-20200125
-nios2                randconfig-a001-20200125
-c6x                  randconfig-a001-20200125
-sparc64              randconfig-a001-20200125
-microblaze           randconfig-a001-20200125
-
----
-0-DAY kernel test infrastructure                 Open Source Technology Center
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+-- 
+viresh
