@@ -2,94 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4231D14ABD6
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2020 22:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D9C14ACBB
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2020 00:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727046AbgA0Vzf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jan 2020 16:55:35 -0500
-Received: from foss.arm.com ([217.140.110.172]:49574 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726080AbgA0Vzf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 27 Jan 2020 16:55:35 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1DD1031B;
-        Mon, 27 Jan 2020 13:55:35 -0800 (PST)
-Received: from e123648.arm.com (unknown [10.37.12.150])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9E54B3F68E;
-        Mon, 27 Jan 2020 13:55:29 -0800 (PST)
-From:   lukasz.luba@arm.com
-To:     kgene@kernel.org, krzk@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, robh+dt@kernel.org, mark.rutland@arm.com,
-        b.zolnierkie@samsung.com, lukasz.luba@arm.com,
-        dietmar.eggemann@arm.com
-Subject: [PATCH 3/3] ARM: exynos_defconfig: Enable Energy Model framework
-Date:   Mon, 27 Jan 2020 21:54:53 +0000
-Message-Id: <20200127215453.15144-4-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200127215453.15144-1-lukasz.luba@arm.com>
-References: <20200127215453.15144-1-lukasz.luba@arm.com>
+        id S1726327AbgA0Xyj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jan 2020 18:54:39 -0500
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:51382 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726083AbgA0Xyj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jan 2020 18:54:39 -0500
+Received: by mail-pg1-f202.google.com with SMTP id l190so7511827pgd.18
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jan 2020 15:54:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=0WVlBZ9h/3UAmHAjFKk1i1lby5ArQALhCHp8vRDwf6s=;
+        b=B0D4GdH37zFLkAB6DLlyqBHlLmNEXHfnkYgFffeTOmOr475hSOENtNB8TIo3G4sGe0
+         FGQeW1LRFZFwEwZe0xYBNGSrbzuvSB/n522fs6/iqw0svGmiqpGIgfsGVIAnWpo0xe6b
+         BoM87ucGn23bNOQFBFwtOThLn+0+3twkPtHYFFqqNHT27mvPiaZYPxgu4N/l/e8eaXcg
+         7jQiGP//cNxEUu+McL7virtX6XQNY1Tl0esKP2c/WrVvCyn1rDqO+BVfbr+AnTAAodm8
+         8eaZUZJdgvoPLStiKNbl0DHxWBNzGU98A6D6t+uV4+grA51Z1w5tPzJYd+kP7DcwXnGr
+         FQyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=0WVlBZ9h/3UAmHAjFKk1i1lby5ArQALhCHp8vRDwf6s=;
+        b=Kg/xRujDQGBNtOXFZiHv20UqjxkDID+UcxfrnkmS4/YD9dCYjMaMnPcrLisvNPEgK5
+         jQnpOiG8Kc2qRM7LU70nRtZj7zE5gAGwT2R+N++rXRQ8sf8mFI8T5FUhAFwUV/mmHSjN
+         HUiUuq6YTrr5+f0+flY5cPcUgc/Z2TvkJbSSO8+FBamdev14KDPERdmuKDT6EdEjY4Ej
+         /bouR46yCD3AsM/bwAM4IC/GlZCjHChD8PvZpGVkvWaoz4VhYE1aSvdtBreptDdrqoQ2
+         Kcerrj3uD/T7gFOy7/5OcmQcY1j0+I0DhW9YpYIK+UpBQopj/F2yqNt2mwKp1J2SYbx0
+         FxZw==
+X-Gm-Message-State: APjAAAXCW8J9DhDLN64wehEclPrkwMbWy8pOcjmwt9U/3LYn0VwTBlC9
+        6kqytLtHHUCd/fyRuOKQm8g+HPLEYogc+i14ZjGAvQ==
+X-Google-Smtp-Source: APXvYqxuHlif8YoC09sMp36DADFxZKUEjmOezwoOELE8SswXmvcrc2Cpl4SiqOBpXxHMb1qSYM81/g2GJjm81WrtmsBS6w==
+X-Received: by 2002:a63:ea4c:: with SMTP id l12mr20867620pgk.29.1580169278383;
+ Mon, 27 Jan 2020 15:54:38 -0800 (PST)
+Date:   Mon, 27 Jan 2020 15:53:51 -0800
+Message-Id: <20200127235356.122031-1-brendanhiggins@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
+Subject: [PATCH v1 0/5] uml: add more unspecified HAS_IOMEM dependencies
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Robert Hancock <hancock@sedsystems.ca>,
+        Esben Haabendal <esben@geanix.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        davidgow@google.com, heidifahim@google.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Lukasz Luba <lukasz.luba@arm.com>
+# TL;DR
 
-Enable the Energy Model (EM) brings possibility to use Energy Aware
-Scheduler (EAS). This compiles the EM but does not enable to run EAS in
-default. The EAS only works with SchedUtil - a CPUFreq governor which
-handles direct requests from the scheduler for the frequency change. Thus,
-to make EAS working in default, the SchedUtil governor should be
-configured as default CPUFreq governor. Although, the EAS might be enabled
-in runtime, when the EM is present for CPUs, the SchedUtil is compiled and
-then set as CPUFreq governor, i.e.:
+This patchset adds a missing HAS_IOMEM dependency to several drivers in
+an attempt to get allyesconfig closer to working for ARCH=um. Although I
+had caught all the broken ones in early 5.5[1], some new ones have
+broken since then.
 
-echo schedutil > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-echo schedutil > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+# What am I trying to do?
 
-To check if EAS is ready to work, the read output from the command below
-should show '1':
-cat /proc/sys/kernel/sched_energy_aware
+This patchset is part of my attempt to get `make ARCH=um allyesconfig`
+to produce a config that will build *and* boot to init, so that I can
+use it as a mechanism to run tests[2].
 
-To disable EAS in runtime simply 'echo 0' to the file above.
+# Why won't allyesconfig break again after this series of fixes?
 
-Some test results, which stress the scheduler on Odroid-XU3:
-hackbench -l 500 -s 4096
-With mainline code and with this patch set.
+Well, in short, it will break again; however, as I mentioned above, I am
+using UML for testing the kernel, and I am currently working on getting
+my tests to run on KernelCI. As part of our testing procedure for
+KernelCI, we are planning on building a UML kernel using allyesconfig
+and running our tests on it. Thus, we will find out very quickly once
+someone breaks allyesconfig again once we get this all working. So this
+will keep breaking until we have a build test on KernelCI running, but
+we will need to send out these fixes anyway.
 
-The tests have been made with and without CONFIG_PROVE_LOCKING (PL)
-(which is set to =y in default exynos_defconfig)
+Brendan Higgins (5):
+  net: axienet: add unspecified HAS_IOMEM dependency
+  reset: brcmstb-rescal: add unspecified HAS_IOMEM dependency
+  reset: intel: add unspecified HAS_IOMEM dependency
+  ptp: 1588_clock_ines: add unspecified HAS_IOMEM dependency
+  power: avs: qcom-cpr: add unspecified HAS_IOMEM dependency
 
-		|		this patch set			| mainline
-		|-----------------------------------------------|---------------
-		| performance	| SchedUtil	| SchedUtil	| performance
-		| governor	| governor	| governor	| governor
-		|		| w/o EAS	| w/ EAS	|
-----------------|---------------|---------------|---------------|---------------
-hackbench w/ PL | 12.7s		| 11.7s		| 12.0s		| 13.0s - 12.2s
-hackbench w/o PL| 9.2s		| 8.1s		| 8.2s		| 9.2s - 8.4s
+ drivers/net/ethernet/xilinx/Kconfig | 1 +
+ drivers/power/avs/Kconfig           | 2 +-
+ drivers/ptp/Kconfig                 | 1 +
+ drivers/reset/Kconfig               | 3 ++-
+ 4 files changed, 5 insertions(+), 2 deletions(-)
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- arch/arm/configs/exynos_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+[1] https://lore.kernel.org/lkml/20191211192742.95699-1-brendanhiggins@google.com/
+[2] https://bugzilla.kernel.org/show_bug.cgi?id=205223
 
-diff --git a/arch/arm/configs/exynos_defconfig b/arch/arm/configs/exynos_defconfig
-index 1db857056992..c0f8ecabc607 100644
---- a/arch/arm/configs/exynos_defconfig
-+++ b/arch/arm/configs/exynos_defconfig
-@@ -18,6 +18,7 @@ CONFIG_ZBOOT_ROM_BSS=0x0
- CONFIG_ARM_APPENDED_DTB=y
- CONFIG_ARM_ATAG_DTB_COMPAT=y
- CONFIG_CMDLINE="root=/dev/ram0 rw ramdisk=8192 initrd=0x41000000,8M console=ttySAC1,115200 init=/linuxrc mem=256M"
-+CONFIG_ENERGY_MODEL=y
- CONFIG_CPU_FREQ=y
- CONFIG_CPU_FREQ_STAT=y
- CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
 -- 
-2.17.1
+2.25.0.341.g760bfbb309-goog
 
