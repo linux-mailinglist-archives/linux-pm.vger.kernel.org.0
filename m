@@ -2,55 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E95714AB00
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2020 21:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CC114ABC8
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2020 22:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726569AbgA0UKG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jan 2020 15:10:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59796 "EHLO mail.kernel.org"
+        id S1726164AbgA0VzT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jan 2020 16:55:19 -0500
+Received: from foss.arm.com ([217.140.110.172]:49528 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725975AbgA0UKF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 27 Jan 2020 15:10:05 -0500
-Subject: Re: [GIT PULL] ACPI updates for v5.6-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580155804;
-        bh=jsOvmDuRfd1VIQkjHzP4ZikgDWrUFXtHUjnOciPSgH0=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=pwIsA3O1NkNLX5WT+roETzjx8rtXXMhHKU3nfPiEgM/O+/CMeAQxzjqP9Cv9WfvKz
-         MjHfMvgCsRqCq5Cpkn4AJNAUsKrDJYtCwxLDTndleYdMEZpPETVJJEmKWIxalnXk1y
-         CXhYY7WHUt7IaSioovL81npes+eadjGAK9ZnuDhk=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0iRaeR4n=ddVM9pJj0oxRpv1K2UWXqZbwiNmkrOPr3h1w@mail.gmail.com>
-References: <CAJZ5v0iRaeR4n=ddVM9pJj0oxRpv1K2UWXqZbwiNmkrOPr3h1w@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0iRaeR4n=ddVM9pJj0oxRpv1K2UWXqZbwiNmkrOPr3h1w@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
- acpi-5.6-rc1
-X-PR-Tracked-Commit-Id: ca11abf113474fe8e1205c6851a9a6ffd598bb26
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 55816dc1a50463ec0ea45954e87ec3dff70e2863
-Message-Id: <158015580487.19143.15342357529557939272.pr-tracker-bot@kernel.org>
-Date:   Mon, 27 Jan 2020 20:10:04 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1726080AbgA0VzT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 27 Jan 2020 16:55:19 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B720331B;
+        Mon, 27 Jan 2020 13:55:18 -0800 (PST)
+Received: from e123648.arm.com (unknown [10.37.12.150])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 02FD73F68E;
+        Mon, 27 Jan 2020 13:55:13 -0800 (PST)
+From:   lukasz.luba@arm.com
+To:     kgene@kernel.org, krzk@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        b.zolnierkie@samsung.com, lukasz.luba@arm.com,
+        dietmar.eggemann@arm.com
+Subject: [PATCH 0/3] Enable Odroid-XU3/4 to use Energy Model and Energy Aware Scheduler 
+Date:   Mon, 27 Jan 2020 21:54:50 +0000
+Message-Id: <20200127215453.15144-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Mon, 27 Jan 2020 17:33:12 +0100:
+From: Lukasz Luba <lukasz.luba@arm.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.6-rc1
+The Odroid-XU3/4 is a decent and easy accessible ARM big.LITTLE platform,
+which might be used for research and development.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/55816dc1a50463ec0ea45954e87ec3dff70e2863
+This small patch set provides possibility to run Energy Aware Scheduler (EAS)
+on Odroid-XU4/3 and experiment with it. 
 
-Thank you!
+The patch 1 enables SCHED_MC, which adds another level in sched_domain.
+The patch 2 provides 'dynamic-power-coefficient' in CPU DT nodes, which is
+then is used by the Energy Model (EM).
+The patch 3 enables EM and makes EAS possible to run. Please read the commit
+message in the patch 3 describing how to enable or disable EAS at runtime.
+Some of the test results are provided also in there.
+
+The patch set is on top of Krzysztof's tree, branch 'next/dt' [1] and has 
+been tested on Odroid-XU3.
+
+Regards,
+Lukasz Luba
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=next/dt
+
+Lukasz Luba (3):
+  ARM: exynos_defconfig: Enable SCHED_MC
+  ARM: dts: exynos: Add Exynos5422 CPU dynamic-power-coefficient
+    information
+  ARM: exynos_defconfig: Enable Energy Model framework
+
+ arch/arm/boot/dts/exynos5422-cpus.dtsi | 8 ++++++++
+ arch/arm/configs/exynos_defconfig      | 2 ++
+ 2 files changed, 10 insertions(+)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.17.1
+
