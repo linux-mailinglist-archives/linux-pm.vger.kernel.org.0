@@ -2,91 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C2414ACD3
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2020 00:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 003B014AE88
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2020 05:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728431AbgA0XzQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jan 2020 18:55:16 -0500
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:48769 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728026AbgA0XzP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jan 2020 18:55:15 -0500
-Received: by mail-pf1-f202.google.com with SMTP id u13so7464086pfl.15
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jan 2020 15:55:15 -0800 (PST)
+        id S1726240AbgA1EAR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jan 2020 23:00:17 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:37270 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726205AbgA1EAQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jan 2020 23:00:16 -0500
+Received: by mail-pg1-f193.google.com with SMTP id q127so6264974pga.4;
+        Mon, 27 Jan 2020 20:00:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=lQAaJOF70jpkpbgo3OKWXwDeISOpcrqAl/nKJxxpz8I=;
-        b=rNFOFNSB6Pg92/nVyITfWgqaiTYud0bMb33xDqixTNQOq/2QFKGJTspVwiGjqiEHol
-         pXrIgNPQkcZ7yhcGyUNMxOYTDeyNi4nk5v0DLZVGW7f35WCj4CpYY0BV+QiCJ7/LjfTK
-         wR/VvA3wAETdLgOYcFLndJ4cWSttfI7XnOE6Hude8Dtm6Flirqve4TknqZl+mMgPzuwT
-         1yJCA6VDlssrOkxal2JQTghrhpXiTXUoqltV/Sw/XeKRv4pVSnzUSrAisz2jLrfFewwj
-         xidGeyZfGUpJnurRqT5xDSrGmpDJ9rs3o1HBrNb/E3XWPuPQV72R9bC+ltwtlkjGQabS
-         Ms5A==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jeb7c9R5os4FhU0ngzBICJpqeLgUbo3fqd+rMCyfI9k=;
+        b=IW+3XxEtSxZB0jg2Zmo34BOWXi8x9EFk6y1X8o91SJHDfx9P+h4z02/iXKzyLfDV2G
+         2PI2HZYgIbGSOKfoyhZwcKCldaOh2qK3GtvZBFGHyS5dhbCaMugiele3BcuUdhEccr8R
+         9LO+7BfGF0BZLpdzTMstpR54lqLRDD4YMHOzXNcH/I62cRLV8ygRrUG1JRaYd6rmBgbU
+         e+z503oSx2K4jKhPGcdtmMJO2Swxpm0xik/gjtyOexEb+hf4RAo1GFCHBzN6oTbw4hGc
+         ztOf0ACL9lzYwsV8LX71FDr0EvfB18k7R2FYCt0JN6oQ0Q75/sukRYlhqESM1qFYY3EA
+         7wag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=lQAaJOF70jpkpbgo3OKWXwDeISOpcrqAl/nKJxxpz8I=;
-        b=Dz/6h6zioquJ6FH/5zAUGvZRld9p4pJ7NvmD7pJknjO3QedthBvpT+EzycWPcIQOTa
-         df2KDamBRT4KslnukUP06XTg7s5fp4YJ+2eijtFIJAEOU6RZl21Y7n5Hdsga2iTuU8Qb
-         Q7UErmD6jDaTLI5sfbvoZvLqBi+OvpfeUotrnDDIUqTyoCK2OxwkEar/ZxxG1vqlgzY8
-         2cNKNUfFl5na0OcFoHaOPIUW5KaIEBFS9k9tmQnVSFpAswEMXu0jKb/2amIJAN3IECY7
-         PDdMV0DETYr1PdcHmm7INNmIze/nMDRPIdDTfUL5zx8fwROGHOofsR7rcWER1spXdjrn
-         5+ug==
-X-Gm-Message-State: APjAAAUHwqb8we8tB4799kixu1O17y6MiKF4lws3dRerHKq5XKmsuYqQ
-        Xi4x5btqu+i3eJ6Z7A6MpgFdn04x7BnAOKGJ2W94Jg==
-X-Google-Smtp-Source: APXvYqyPdtbN9DZT8FHWQNBJKmpfTGEpiSZRuvKVXpp6IV7WTXe3QBgDE+xT1lY2W+Mc5+T5G2jPTWwGlbE8hQlH33U92g==
-X-Received: by 2002:a63:fa50:: with SMTP id g16mr21686970pgk.202.1580169314974;
- Mon, 27 Jan 2020 15:55:14 -0800 (PST)
-Date:   Mon, 27 Jan 2020 15:53:56 -0800
-In-Reply-To: <20200127235356.122031-1-brendanhiggins@google.com>
-Message-Id: <20200127235356.122031-6-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20200127235356.122031-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-Subject: [PATCH v1 5/5] power: avs: qcom-cpr: add unspecified HAS_IOMEM dependency
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>
-Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        davidgow@google.com, heidifahim@google.com,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jeb7c9R5os4FhU0ngzBICJpqeLgUbo3fqd+rMCyfI9k=;
+        b=VpvufCaHa36JLIhcYDtF+d4LcXHOlE1XQBdO5jnirgT+3l7wPIfuTR/LDRp2VT8qLD
+         aYBhw2pNgLPW4v3HTVShM2SZStezgT/IBJNHfm1dW7RD6pC3wKGcb1fCc9c0eYHyalY0
+         rql+rBf1AJUeJTkWndg+CDqiYeKdnaKeh4Ddc7q8BH+Pf+jfbecc0svsFKuvz9kZa4G4
+         o50D2dnrMybME3mGA87Lnhf4JArAHQ7Yy1U1QXDgw0VSYeZXGIrvnpyGKIuzjQHdYPM1
+         +615nrNnOeXst4j9ebZf0M1tjYoxqTYicln5INBOxilS9JWq8Zdmlk8oGPWi0WZep3wW
+         Og3Q==
+X-Gm-Message-State: APjAAAUgEepZ8c4hfqiAFRHxDXP3CscSeWtdpZpkGX27Iz9M103YVTnT
+        /IsjmnJoqflTihovoxYPMMw=
+X-Google-Smtp-Source: APXvYqyofZu1ouR4g/MgaA/VG2UwbEgLz/RWa+yyqBaKFqeaEMLSelMHmWqxmxcgxGpum/I4Tts+Ew==
+X-Received: by 2002:a63:fc01:: with SMTP id j1mr24047658pgi.220.1580184016303;
+        Mon, 27 Jan 2020 20:00:16 -0800 (PST)
+Received: from s15.smythies.com (mail.smythies.com. [173.180.45.4])
+        by smtp.gmail.com with ESMTPSA id d22sm17464489pgg.52.2020.01.27.20.00.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2020 20:00:15 -0800 (PST)
+From:   Doug Smythies <doug.smythies@gmail.com>
+X-Google-Original-From: Doug Smythies <dsmythies@telus.net>
+To:     dsmythies@telus.net, srinivas.pandruvada@linux.intel.com,
+        rjw@rjwysocki.net, len.brown@intel.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH 0/2] tools/power/x86/intel_pstate_tracer: changes for pyhton 3 and newer processors
+Date:   Mon, 27 Jan 2020 19:59:55 -0800
+Message-Id: <20200128035957.2577561-1-dsmythies@telus.net>
+X-Mailer: git-send-email 2.24.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently CONFIG_QCOM_CPR=y implicitly depends on CONFIG_HAS_IOMEM=y;
-consequently, on architectures without IOMEM we get the following build
-error:
+Some distributions are deleting python 3 support.
+A backward compatible minor syntax change is needed for
+use with python 3.
 
-/usr/bin/ld: drivers/power/avs/qcom-cpr.o: in function `cpr_probe':
-drivers/power/avs/qcom-cpr.c:1690: undefined reference to `devm_ioremap_resource'
+Processors have exceeded some of the fixed y-axis scale maximum values.
+Change them to autoscale the y-axis.
 
-Fix the build error by adding the unspecified dependency.
+Tested with python 2.7 and 3.7.
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- drivers/power/avs/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Doug Smythies (2):
+  tools/power/x86/intel_pstate_tracer: changes for python 3
+    compatibility
+  tools/power/x86/intel_pstate_tracer: change several graphs to
+    autoscale y-axis
 
-diff --git a/drivers/power/avs/Kconfig b/drivers/power/avs/Kconfig
-index b8fe166cd0d9f..cdb4237bfd02e 100644
---- a/drivers/power/avs/Kconfig
-+++ b/drivers/power/avs/Kconfig
-@@ -14,7 +14,7 @@ menuconfig POWER_AVS
- 
- config QCOM_CPR
- 	tristate "QCOM Core Power Reduction (CPR) support"
--	depends on POWER_AVS
-+	depends on POWER_AVS && HAS_IOMEM
- 	select PM_OPP
- 	select REGMAP
- 	help
+ .../intel_pstate_tracer.py                    | 38 +++++++++----------
+ 1 file changed, 18 insertions(+), 20 deletions(-)
+
 -- 
-2.25.0.341.g760bfbb309-goog
-
+2.24.0
