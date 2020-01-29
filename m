@@ -2,217 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5EA14D339
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2020 23:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0534514D340
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2020 23:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726618AbgA2Wt3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jan 2020 17:49:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48842 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726222AbgA2Wt3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 Jan 2020 17:49:29 -0500
-Received: from earth.universe (dyndsl-095-033-170-182.ewe-ip-backbone.de [95.33.170.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 54EAA206D5;
-        Wed, 29 Jan 2020 22:49:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580338168;
-        bh=R4R61fV6zl3ecz3GL/seP+pfgkzhu2DRdAZLGCd/Dx0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=X7hctuvnZ1Iv499bjytepuyMrQzvLdYp+Hra7eDVucw9ew03vD/ftaQ9sXaO8VBvw
-         CMv/sJn21dym63eolTv1r/rkJS2C7+CYO22c2INGUpTu6FSnIVmWt05vJKzG7XEyhK
-         FSxPG4DeFUk1LYET3g8fV/OxVqU8jhXriAHPMxpI=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 8C8FE3C0C7F; Wed, 29 Jan 2020 23:49:26 +0100 (CET)
-Date:   Wed, 29 Jan 2020 23:49:26 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 5.6
-Message-ID: <20200129224926.owfuj6mfya4crpwm@earth.universe>
+        id S1726617AbgA2WxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jan 2020 17:53:14 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:56225 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726222AbgA2WxO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jan 2020 17:53:14 -0500
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1iwwCr-0007iy-Me; Wed, 29 Jan 2020 23:53:09 +0100
+Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1iwwCo-0006yK-FW; Wed, 29 Jan 2020 23:53:06 +0100
+Date:   Wed, 29 Jan 2020 23:53:06 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+        rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
+        kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: USB Port Power-Off during suspend Bug?
+Message-ID: <20200129225306.dmtoemf62qhogysh@pengutronix.de>
+References: <20200129095442.3exfzwp3vrubfxir@pengutronix.de>
+ <Pine.LNX.4.44L0.2001291254080.1429-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vyxrw76l7bm35igj"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.2001291254080.1429-100000@iolanthe.rowland.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 23:46:04 up 75 days, 14:04, 71 users,  load average: 0.22, 0.17,
+ 0.07
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 20-01-29 12:59, Alan Stern wrote:
+> On Wed, 29 Jan 2020, Marco Felsch wrote:
+> 
+> > Hi Alan, Rafael, Greg,
+> > 
+> > long story short: I want to disable a usb-port completely during suspend
+> 
+> You're talking about what happens during a full system suspend, right?
 
---vyxrw76l7bm35igj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yes.
 
-Hi Linus,
+> > because it isn't needed and we need to save energy, because is a 32bit ARM
+> > (OF-based) handheld device. I use the port to connect a usb-ethernet
+> > dongle (all needed drivers are builtin no modules) which is needed for
+> > the NFS. The usb-ethernet dongle supports the persist setting because it
+> > does a hw-reset during resume anyway.
+> > 
+> > So what I did is:
+> >  1) Set the persist bit for the usb device
+> >  2) Set the control to auto for the usb device
+> >  3) Unset the pm_qos_no_power_off flag for the usb-port
+> > 
+> > But the port gets not disabled. I debugged it and found a problem in
+> > usb_port_suspend() logic [1] and the generic PM-framework more precisely
+> > the dpm mechanism. The usbcore does the correct pm_runtime counting but
+> > the call [2] don't trigger the usb_port_runtime_suspend() [3] because
+> > the dpm enables all runtime-pm device before the shutdown is executed.
+> 
+> That's right; it's supposed to work that way.  We don't want runtime 
+> suspend kicking in and messing things up during a system suspend.
 
-The following changes since commit e42617b825f8073569da76dc4510bfa019b1c35a:
+I'm absolutly fine with that behaviour.
 
-  Linux 5.5-rc1 (2019-12-08 14:57:55 -0800)
+> > IMHO both subsystem behaviours are correct and I don't know the
+> > _correct_ fix, therefore I wrote this email.
+> 
+> The correct fix is to add support for system suspend to the USB port 
+> driver.  Currently it only supports runtime suspend, as you can see 
+> from the definition of usb_port_pm_ops in port.c.
 
-are available in the Git repository at:
+I tought that this was intentionally to support only the runtime-pm ops.
+Okay so this means that we need to check the:
+  - persist
+  - do_wakeup
+  - pm_qos_power_off
+bits again for the suspend case. I tought I miss something and we can
+reuse the current checks.
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.6
+Regards,
+  Marco
 
-for you to fetch changes up to 3d32a8437c051013352baf5cbd0844fcf5d2f409:
+> Alan Stern
+> 
+> > As far as I understood it all non-ACPI platforms are affected.
+> > 
+> > Regards,
+> >   Marco
+> > 
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/hub.c?h=v5.5#n3238
+> > [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/hub.c?h=v5.5#n3328
+> > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/port.c?h=v5.5#n247
+> 
+> 
 
-  power: supply: ipaq_micro_battery: remove unneeded semicolon (2020-01-17 02:13:00 +0100)
-
-----------------------------------------------------------------
-power supply and reset changes for the v5.6 series
-
-Core:
- * Add battery internal resistance temperature table support
-
-Drivers:
- * sc27xx: Optimize the battery resistance with measuring temperature
- * max17042-battery: Add MAX17055 support
- * bq25890-charger: Add support of BQ25892 and BQ25896 chips
- * misc. fixes
-
-----------------------------------------------------------------
-Angus Ainslie (Purism) (2):
-      device-tree: bindings: max17042_battery: add all of the compatible strings
-      power: supply: max17042: add MAX17055 support
-
-Baolin Wang (4):
-      dt-bindings: power: Introduce one property to describe the battery resistance with temperature changes
-      power: supply: core: Add battery internal resistance temperature table support
-      dt-bindings: power: sc27xx: Add a new property to describe the real resistance of coulomb counter chip
-      power: supply: sc27xx: Calibrate the resistance of coulomb counter
-
-Bartosz Golaszewski (1):
-      power: supply: max77650: add of_match table
-
-Chen Wandun (1):
-      power: suppy: ucs1002: Make the symbol 'ucs1002_regulator_enable' static
-
-Chen Zhou (1):
-      power: supply: ipaq_micro_battery: remove unneeded semicolon
-
-Chris Packham (1):
-      power: reset: gpio-restart: don't error on deferral
-
-Chuhong Yuan (1):
-      power: supply: pda_power: add missed usb_unregister_notifier
-
-Claudiu Beznea (2):
-      power: reset: at91-poweroff: introduce struct shdwc_reg_config
-      power: reset: at91-poweroff: use proper master clock register offset
-
-Colin Ian King (1):
-      power: supply: bq25890_charger: fix incorrect error return when bq25890_field_read fails
-
-Dan Carpenter (1):
-      power: supply: sbs-battery: Fix a signedness bug in sbs_get_battery_capacity()
-
-Dan Murphy (1):
-      power: supply: core: Update sysfs-class-power ABI document
-
-Enric Balletbo i Serra (1):
-      power: supply: cros_usbpd: Remove dev_err() getting the number of ports
-
-Jean-Francois Dagenais (2):
-      power: supply: sbs-battery: use octal permissions on module param
-      power: supply: sbs-battery: fix CAPACITY_MODE bit naming
-
-Krzysztof Kozlowski (2):
-      power: supply: Fix Kconfig indentation
-      power: reset: Fix Kconfig indentation
-
-Lucas Stach (1):
-      power: suppy: ucs1002: disable power when max current is 0
-
-Ma Feng (3):
-      power: supply: ab8500: Remove unneeded semicolon
-      power: supply: ab8500_charger: Remove unneeded semicolon
-      power: supply: abx500_chargalg: Remove unneeded semicolon
-
-Marek Szyprowski (1):
-      power: supply: max17040: Correct IRQ wake handling
-
-Matheus Castello (4):
-      dt-bindings: power: supply: max17040: Add DT bindings for max17040 fuel gauge
-      power: supply: max17040: Add IRQ handler for low SOC alert
-      power: supply: max17040: Config alert SOC low level threshold from FDT
-      power: supply: max17040: Send uevent in SOC and status change
-
-Paul Cercueil (1):
-      power/supply: ingenic-battery: Don't change scale if there's only one
-
-Samuel Holland (8):
-      power: supply: axp20x_ac_power: Fix reporting online status
-      power: supply: axp20x_ac_power: Allow offlining
-      power: supply: axp20x_ac_power: Add wakeup control
-      power: supply: axp20x_usb_power: Remove unused device_node
-      power: supply: axp20x_usb_power: Use a match structure
-      power: supply: axp20x_usb_power: Allow offlining
-      power: supply: axp20x_usb_power: Add wakeup control
-      power: supply: axp20x_usb_power: Only poll while offline
-
-Sven Van Asbroeck (1):
-      power: supply: ltc2941-battery-gauge: fix use-after-free
-
-Yauhen Kharuzhy (3):
-      power: supply: bq25890_charger: Add support of BQ25892 and BQ25896 chips
-      dt-bindings: Add new chips to bq25890 binding documentation
-      power: supply: bq25890_charger: Add DT and I2C ids for all supported chips
-
-Yuanjiang Yu (1):
-      power: supply: sc27xx: Optimize the battery resistance with measuring temperature
-
- Documentation/ABI/testing/sysfs-class-power        |   3 +-
- .../devicetree/bindings/power/supply/battery.txt   |   5 +
- .../devicetree/bindings/power/supply/bq25890.txt   |   7 +-
- .../bindings/power/supply/max17040_battery.txt     |  33 ++++
- .../bindings/power/supply/max17042_battery.txt     |   6 +-
- .../devicetree/bindings/power/supply/sc27xx-fg.txt |   3 +
- drivers/power/reset/Kconfig                        |  16 +-
- drivers/power/reset/at91-sama5d2_shdwc.c           |  72 ++++---
- drivers/power/reset/gpio-restart.c                 |   8 +-
- drivers/power/supply/Kconfig                       |  30 +--
- drivers/power/supply/ab8500_charger.c              |   6 +-
- drivers/power/supply/ab8500_fg.c                   |  14 +-
- drivers/power/supply/abx500_chargalg.c             |   2 +-
- drivers/power/supply/axp20x_ac_power.c             | 131 +++++++++---
- drivers/power/supply/axp20x_usb_power.c            | 219 ++++++++++++++++-----
- drivers/power/supply/bq25890_charger.c             | 103 ++++++++--
- drivers/power/supply/cros_usbpd-charger.c          |  10 +-
- drivers/power/supply/ingenic-battery.c             |  15 +-
- drivers/power/supply/ipaq_micro_battery.c          |   6 +-
- drivers/power/supply/ltc2941-battery-gauge.c       |   2 +-
- drivers/power/supply/max17040_battery.c            | 122 +++++++++++-
- drivers/power/supply/max17042_battery.c            |  17 +-
- drivers/power/supply/max77650-charger.c            |   7 +
- drivers/power/supply/pda_power.c                   |   4 +
- drivers/power/supply/power_supply_core.c           |  67 ++++++-
- drivers/power/supply/sbs-battery.c                 |  35 ++--
- drivers/power/supply/sc27xx_fuel_gauge.c           |  49 ++++-
- drivers/power/supply/ucs1002_power.c               |  42 +++-
- include/linux/power/max17042_battery.h             |  48 ++++-
- include/linux/power_supply.h                       |  10 +
- 30 files changed, 882 insertions(+), 210 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-
---vyxrw76l7bm35igj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl4yC/YACgkQ2O7X88g7
-+pobKRAAgP4xDWKKKWWvOES6AjQ0sgRN10ZDBbrRy8VGNZ9GZTgcBqqW+wHujOU/
-6xyYN4vNUXNlLEbKmast0N//RSra68fTp38XiCMxzDNqocwZnLaadKW8zCg6nLjl
-+Mu7VtHDiBvElsAb53E+d9Vf86aEpPcVX/y+SMz93wHed96fT1+EpjKOX8AL4Ung
-JElf/RJjnffLXidIEPQnV3RFFIun20jnkdxqD+RshDzwPDKSFhu5PLEGicrmKV47
-VY5NbRCnz+xr2/HT3jOWmfrq83zuvfi3diCwXsFFFgNgIaMaeLXTp2heADs23QK5
-Xhug0ouxVu17paW6KaEjcv+JpE2KVYn+uZUzX+m2nizChOB0m6jDrq3A4mQkCcmc
-5e3my8leWgsZ79JK3N8vq4A+PCiNcu7rdv5Xe86JRnK1K4wlzo+8ZB05gVaWZ6YN
-3gt4qGRUjYMxdHbtYQQOvVwy7GjAko3qADz53ou6pOUfSTqaB7yDYkwvQaVByetT
-ocWNgwOg0aw+wKfjQyF96oZw0TwCMLtPR3rZJmb89P3D9xUdOOko8a4BmW1vb60G
-yEi6g+enz68H1jxULEazpkpwi48olcmoCgf8EDOh19j/5CO0i+mTHUiburyHvCk0
-dh6wQY30Hvxk7us5ElJR9ld6a77sP05DpSp+A0S4nCuEX4XRQQI=
-=7PU4
------END PGP SIGNATURE-----
-
---vyxrw76l7bm35igj--
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
