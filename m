@@ -2,39 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A40C014C790
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2020 09:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC3914C821
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2020 10:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726076AbgA2Ih2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jan 2020 03:37:28 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:54620 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726068AbgA2Ih2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jan 2020 03:37:28 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id C36AF291A32
-Subject: Re: [PATCH v8 1/4] platform: chrome: Add cros-usbpd-notify driver
-To:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@google.com>
-Cc:     Guenter Roeck <groeck@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>, sre@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, Jon Flatley <jflat@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>
-References: <20200124231834.63628-1-pmalani@chromium.org>
- <adcf2a99-d6d8-cd4e-e22d-9ce539d87b7f@collabora.com>
- <20200127184439.GA150048@google.com>
- <CACeCKafdroLXf62aHeP8CZPuiR02EEmKAGmhHczzoSyX0bFv5g@mail.gmail.com>
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Message-ID: <dc1fec43-1bb0-53de-af17-a91fea42a3f5@collabora.com>
-Date:   Wed, 29 Jan 2020 09:37:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1726067AbgA2Jf2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jan 2020 04:35:28 -0500
+Received: from foss.arm.com ([217.140.110.172]:38572 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726010AbgA2Jf2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 Jan 2020 04:35:28 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 40BA91FB;
+        Wed, 29 Jan 2020 01:35:27 -0800 (PST)
+Received: from [10.37.12.123] (unknown [10.37.12.123])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDE8D3F52E;
+        Wed, 29 Jan 2020 01:35:15 -0800 (PST)
+Subject: Re: [RFC v3 08/10] cpufreq: qcom: Update the bandwidth levels on
+ frequency change
+To:     Sibi Sankar <sibis@codeaurora.org>, viresh.kumar@linaro.org,
+        sboyd@kernel.org, georgi.djakov@linaro.org, saravanak@google.com
+Cc:     nm@ti.com, bjorn.andersson@linaro.org, agross@kernel.org,
+        david.brown@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org, mka@chromium.org,
+        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
+        ulf.hansson@linaro.org
+References: <20200127200350.24465-1-sibis@codeaurora.org>
+ <20200127200350.24465-9-sibis@codeaurora.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <91897fda-b982-47b7-7552-4740480cdf76@arm.com>
+Date:   Wed, 29 Jan 2020 09:35:11 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <CACeCKafdroLXf62aHeP8CZPuiR02EEmKAGmhHczzoSyX0bFv5g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200127200350.24465-9-sibis@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -42,375 +45,397 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Sibi,
 
-
-On 29/1/20 2:11, Prashant Malani wrote:
-> On Mon, Jan 27, 2020 at 10:44 AM Benson Leung <bleung@google.com> wrote:
->>
->> On Mon, Jan 27, 2020 at 03:58:42PM +0100, Enric Balletbo i Serra wrote:
->>> Hi Prashant,
->>>
->>> On 25/1/20 0:18, Prashant Malani wrote:
->>>> From: Jon Flatley <jflat@chromium.org>
->>>>
->>>> ChromiumOS uses ACPI device with HID "GOOG0003" for power delivery
->>>> related events. The existing cros-usbpd-charger driver relies on these
->>>> events without ever actually receiving them on ACPI platforms. This is
->>>> because in the ChromeOS kernel trees, the GOOG0003 device is owned by an
->>>> ACPI driver that offers firmware updates to USB-C chargers.
->>>>
->>>> Introduce a new platform driver under cros-ec, the ChromeOS embedded
->>>> controller, that handles these PD events and dispatches them
->>>> appropriately over a notifier chain to all drivers that use them.
->>>>
->>>> On platforms that don't have the ACPI device defined, the driver gets
->>>> instantiated for ECs which support the EC_FEATURE_USB_PD feature bit,
->>>> and the notification events will get delivered using the MKBP event
->>>> handling mechanism.
->>>>
->>>> Co-Developed-by: Prashant Malani <pmalani@chromium.org>
->>>> Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
->>>> Reviewed-by: Benson Leung <bleung@chromium.org>
->>>> Signed-off-by: Jon Flatley <jflat@chromium.org>
->>>> Signed-off-by: Prashant Malani <pmalani@chromium.org>
->>>> ---
->>>>
->>>
->>> Just a nit below but for my own reference:
->>>
->>> Acked-for-chrome-platform: Enric Balletbo i Serra <enric.balletbo@collabora.com>
->>>
->>> I am not sure if we're on time to get this merged on this merge window, though.
->>
->> I'm OK with creating a branch for this series and merging it into
->> chrome-platform-5.7 once Linus releases v5.6-rc1 late next week.
-> Thanks; I'm guessing one of the maintainers will perform the creation
-> of chrome-platform-5.7 and merge this patch into that branch.
-> Also, kindly pick https://lkml.org/lkml/2020/1/24/2068 , i.e patch 4/4
-> of this series (I think an earlier version of this patch, i.e
-> https://lkml.org/lkml/2020/1/17/628 was marked "Reviewed-by: Sebastian
-> Reichel <sebastian.reichel@collabora.com>"
+On 1/27/20 8:03 PM, Sibi Sankar wrote:
+> Add support to parse and update OPP tables attached to the cpu device
+> when the required OPP bandwidth values are populated to enable scaling
+> of DDR/L3 bandwidth levels with frequency change.
 > 
+> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+> ---
+>   drivers/cpufreq/qcom-cpufreq-hw.c | 246 +++++++++++++++++++++++++++---
+>   1 file changed, 225 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index fc92a8842e252..348eb2fdaccaf 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -6,6 +6,7 @@
+>   #include <linux/bitfield.h>
+>   #include <linux/cpufreq.h>
+>   #include <linux/init.h>
+> +#include <linux/interconnect.h>
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
+>   #include <linux/of_address.h>
+> @@ -28,17 +29,194 @@
+>   #define REG_VOLT_LUT			0x114
+>   #define REG_PERF_STATE			0x920
+>   
+> +#define QCOM_ICC_TAG_ACTIVE_ONLY	1
+> +
+>   static unsigned long cpu_hw_rate, xo_rate;
+>   static struct platform_device *global_pdev;
+>   
+> +/* opp table indices */
+> +enum {
+> +	QCOM_CPU_OPP_TABLE_INDEX,
+> +	QCOM_CPU_DDR_OPP_TABLE_INDEX,
+> +	QCOM_CPU_L3_OPP_TABLE_INDEX,
+> +};
+> +
+> +/* icc path indices */
+> +enum {
+> +	ICC_DDR_PATH,
+> +	ICC_L3_PATH,
+> +};
+> +
+> +struct qcom_cpufreq_hw_res {
+> +	void __iomem *base;
+> +
+> +	struct device *cpu_dev;
+> +
+> +	/* ddr/l3 icc paths */
+> +	struct icc_path *path[2];
+> +
+> +	/* cpu/ddr/l3 opp tables */
+> +	struct opp_table *opp_table[3];
+> +};
+> +
+> +struct cpufreq_hw_icc_info {
+> +	const char *icc_path_name;
+> +	u8 table_index;
+> +	u32 tag;
+> +};
+> +
+> +static const struct cpufreq_hw_icc_info icc_info[] = {
+> +	{
+> +		.icc_path_name = "cpu-ddr",
+> +		.table_index = QCOM_CPU_DDR_OPP_TABLE_INDEX,
+> +		.tag = QCOM_ICC_TAG_ACTIVE_ONLY,
+> +	},
+> +	{
+> +		.icc_path_name = "cpu-l3",
+> +		.table_index = QCOM_CPU_L3_OPP_TABLE_INDEX,
+> +		.tag = 0,
+> +	},
+> +};
+> +
+> +static int qcom_cpufreq_hw_add_opp_table(struct qcom_cpufreq_hw_res *res)
+> +{
+> +	struct opp_table **table = res->opp_table;
+> +	struct device_node *opp_table_np, *np;
+> +	struct device *dev = res->cpu_dev;
+> +	int ret, i;
+> +	u64 rate;
+> +
+> +	for (i = 0; i <= QCOM_CPU_L3_OPP_TABLE_INDEX; i++) {
+> +		ret = dev_pm_opp_of_add_table_indexed(dev, i);
+> +		if (ret) {
+> +			dev_dbg(dev, "Add OPP table failed index %d: %d\n",
+> +				i, ret);
+> +			goto err;
+> +		}
+> +
+> +		table[i] = dev_pm_opp_get_opp_table_indexed(dev, i);
+> +		if (!table[i]) {
+> +			dev_dbg(dev, "Get OPP table failed index %d\n", i);
+> +			ret = -EINVAL;
+> +			goto err;
+> +		}
+> +	}
+> +
+> +	/* Disable all cpu opps and cross-validate against LUT */
+> +	opp_table_np = dev_pm_opp_of_get_opp_desc_node(dev);
+> +	for_each_available_child_of_node(opp_table_np, np) {
+> +		ret = of_property_read_u64(np, "opp-hz", &rate);
+> +		if (ret)
+> +			continue;
+> +
+> +		dev_pm_opp_disable(dev, rate);
+> +	}
+> +	of_node_put(opp_table_np);
+> +
+> +	return 0;
+> +
+> +err:
+> +	for (; i >= 0; i--) {
+> +		if (table[i]) {
+> +			dev_pm_opp_put_opp_table(table[i]);
+> +			table[i] = NULL;
+> +		}
+> +	}
+> +
+> +	dev_pm_opp_remove_table(dev);
+> +	return ret;
+> +}
+> +
+> +static int qcom_cpufreq_hw_icc_init(struct qcom_cpufreq_hw_res *res, u8 index)
+> +{
+> +	const struct cpufreq_hw_icc_info *info = &icc_info[index];
+> +	struct icc_path **path = res->path;
+> +	struct device *dev = res->cpu_dev;
+> +
+> +	path[index] = of_icc_get(dev, info->icc_path_name);
+> +	if (IS_ERR(path[index])) {
+> +		dev_dbg(dev, "ICC %s path get failed ret: %ld\n",
+> +			info->icc_path_name, PTR_ERR(path[index]));
+> +		return PTR_ERR(path[index]);
+> +	}
+> +
+> +	icc_set_tag(path[index], info->tag);
+> +
+> +	return 0;
+> +}
+> +
+> +static void qcom_cpufreq_hw_icc_set(struct qcom_cpufreq_hw_res *res,
+> +				    unsigned long freq)
+> +{
+> +	struct opp_table **table = res->opp_table;
+> +	const struct cpufreq_hw_icc_info *info;
+> +	unsigned long freq_hz = freq * 1000;
+> +	struct icc_path **path = res->path;
+> +	struct device *dev = res->cpu_dev;
+> +	struct dev_pm_opp *cpu_opp, *opp;
+> +	struct opp_table *cpu_opp_table;
+> +	unsigned long peak_bw, avg_bw;
+> +	int ret;
+> +	int i;
+> +
+> +	cpu_opp_table = table[QCOM_CPU_OPP_TABLE_INDEX];
+> +	if (!cpu_opp_table)
+> +		return;
+> +
+> +	cpu_opp = dev_pm_opp_find_freq_exact(dev, freq_hz, true);
+> +	if (IS_ERR_OR_NULL(cpu_opp))
+> +		return;
+> +
+> +	for (i = 0; i <= ICC_L3_PATH; i++) {
+> +		if (IS_ERR(path[i])) {
+> +			if (PTR_ERR(path[i]) != -EPROBE_DEFER)
+> +				continue;
+> +
+> +			ret = qcom_cpufreq_hw_icc_init(res, i);
+> +			if (ret)
+> +				continue;
+> +		}
+> +
+> +		info = &icc_info[i];
+> +
+> +		opp = dev_pm_opp_xlate_required_opp(cpu_opp_table,
+> +						    table[info->table_index],
+> +						    cpu_opp);
+> +		if (IS_ERR_OR_NULL(opp))
+> +			continue;
+> +
+> +		peak_bw = dev_pm_opp_get_bw(opp, &avg_bw);
+> +		dev_pm_opp_put(opp);
+> +
+> +		icc_set_bw(res->path[i], avg_bw, peak_bw);
+> +	}
+> +	dev_pm_opp_put(cpu_opp);
+> +}
+> +
+> +static int qcom_cpufreq_update_opp(struct device *dev,
+> +				   unsigned long freq_khz,
+> +				   unsigned long volt)
+> +{
+> +	unsigned long freq_hz = freq_khz * 1000;
+> +
+> +	if (dev_pm_opp_update_voltage(dev, freq_hz, volt))
+> +		return dev_pm_opp_add(dev, freq_hz, volt);
+> +
+> +	/* Enable the opp after voltage update*/
+> +	return dev_pm_opp_enable(dev, freq_hz);
+> +}
+> +
+>   static int qcom_cpufreq_hw_target_index(struct cpufreq_policy *policy,
+>   					unsigned int index)
+>   {
+> -	void __iomem *perf_state_reg = policy->driver_data;
+> +	struct qcom_cpufreq_hw_res *res = policy->driver_data;
+> +	void __iomem *perf_state_reg = res->base + REG_PERF_STATE;
+>   	unsigned long freq = policy->freq_table[index].frequency;
+>   
+>   	writel_relaxed(index, perf_state_reg);
+>   
+> +	qcom_cpufreq_hw_icc_set(res, freq);
+> +
+>   	arch_set_freq_scale(policy->related_cpus, freq,
+>   			    policy->cpuinfo.max_freq);
+>   	return 0;
+> @@ -46,6 +224,7 @@ static int qcom_cpufreq_hw_target_index(struct cpufreq_policy *policy,
+>   
+>   static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
+>   {
+> +	struct qcom_cpufreq_hw_res *res;
+>   	void __iomem *perf_state_reg;
+>   	struct cpufreq_policy *policy;
+>   	unsigned int index;
+> @@ -54,7 +233,8 @@ static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
+>   	if (!policy)
+>   		return 0;
+>   
+> -	perf_state_reg = policy->driver_data;
+> +	res = policy->driver_data;
+> +	perf_state_reg = res->base + REG_PERF_STATE;
+>   
+>   	index = readl_relaxed(perf_state_reg);
+>   	index = min(index, LUT_MAX_ENTRIES - 1);
+> @@ -65,7 +245,8 @@ static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
+>   static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
+>   						unsigned int target_freq)
+>   {
+> -	void __iomem *perf_state_reg = policy->driver_data;
+> +	struct qcom_cpufreq_hw_res *res = policy->driver_data;
+> +	void __iomem *perf_state_reg = res->base + REG_PERF_STATE;
+>   	int index;
+>   	unsigned long freq;
+>   
+> @@ -82,18 +263,24 @@ static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
+>   	return freq;
+>   }
+>   
+> -static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
+> -				    struct cpufreq_policy *policy,
+> -				    void __iomem *base)
+> +static int qcom_cpufreq_hw_read_lut(struct cpufreq_policy *policy,
+> +				    struct qcom_cpufreq_hw_res *res)
+>   {
+>   	u32 data, src, lval, i, core_count, prev_freq = 0, freq;
+>   	u32 volt;
+>   	struct cpufreq_frequency_table	*table;
+> +	struct device *cpu_dev = res->cpu_dev;
+> +	void __iomem *base = res->base;
+> +	int ret;
+>   
+>   	table = kcalloc(LUT_MAX_ENTRIES + 1, sizeof(*table), GFP_KERNEL);
+>   	if (!table)
+>   		return -ENOMEM;
+>   
+> +	ret = qcom_cpufreq_hw_add_opp_table(res);
+> +	if (ret)
+> +		dev_dbg(cpu_dev, "Add OPP tables failed from dt\n");
+> +
+>   	for (i = 0; i < LUT_MAX_ENTRIES; i++) {
+>   		data = readl_relaxed(base + REG_FREQ_LUT +
+>   				      i * LUT_ROW_SIZE);
+> @@ -112,7 +299,7 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
+>   
+>   		if (freq != prev_freq && core_count != LUT_TURBO_IND) {
+>   			table[i].frequency = freq;
+> -			dev_pm_opp_add(cpu_dev, freq * 1000, volt);
+> +			qcom_cpufreq_update_opp(cpu_dev, freq, volt);
+>   			dev_dbg(cpu_dev, "index=%d freq=%d, core_count %d\n", i,
+>   				freq, core_count);
+>   		} else if (core_count == LUT_TURBO_IND) {
+> @@ -133,7 +320,8 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
+>   			if (prev->frequency == CPUFREQ_ENTRY_INVALID) {
+>   				prev->frequency = prev_freq;
+>   				prev->flags = CPUFREQ_BOOST_FREQ;
+> -				dev_pm_opp_add(cpu_dev,	prev_freq * 1000, volt);
+> +				qcom_cpufreq_update_opp(cpu_dev, prev_freq,
+> +							volt);
+>   			}
+>   
+>   			break;
+> @@ -175,11 +363,10 @@ static void qcom_get_related_cpus(int index, struct cpumask *m)
+>   static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>   {
+>   	struct device *dev = &global_pdev->dev;
+> +	struct qcom_cpufreq_hw_res *res;
+>   	struct of_phandle_args args;
+>   	struct device_node *cpu_np;
+>   	struct device *cpu_dev;
+> -	struct resource *res;
+> -	void __iomem *base;
+>   	int ret, index;
+>   
+>   	cpu_dev = get_cpu_device(policy->cpu);
+> @@ -201,16 +388,17 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>   
+>   	index = args.args[0];
+>   
+> -	res = platform_get_resource(global_pdev, IORESOURCE_MEM, index);
+> +	res = devm_kzalloc(dev, sizeof(*res), GFP_KERNEL);
+>   	if (!res)
+> -		return -ENODEV;
+> -
+> -	base = devm_ioremap(dev, res->start, resource_size(res));
+> -	if (!base)
+>   		return -ENOMEM;
+>   
+> +	res->cpu_dev = cpu_dev;
+> +	res->base = devm_platform_ioremap_resource(global_pdev, index);
+> +	if (IS_ERR(res->base))
+> +		return PTR_ERR(res->base);
+> +
+>   	/* HW should be in enabled state to proceed */
+> -	if (!(readl_relaxed(base + REG_ENABLE) & 0x1)) {
+> +	if (!(readl_relaxed(res->base + REG_ENABLE) & 0x1)) {
+>   		dev_err(dev, "Domain-%d cpufreq hardware not enabled\n", index);
+>   		ret = -ENODEV;
+>   		goto error;
+> @@ -223,9 +411,9 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>   		goto error;
+>   	}
+>   
+> -	policy->driver_data = base + REG_PERF_STATE;
+> +	policy->driver_data = res;
+>   
+> -	ret = qcom_cpufreq_hw_read_lut(cpu_dev, policy, base);
+> +	ret = qcom_cpufreq_hw_read_lut(policy, res);
+>   	if (ret) {
+>   		dev_err(dev, "Domain-%d failed to read LUT\n", index);
+>   		goto error;
+> @@ -240,22 +428,38 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>   
+>   	dev_pm_opp_of_register_em(policy->cpus);
+>   
+> -	policy->fast_switch_possible = true;
+> +	if (!res->opp_table[QCOM_CPU_OPP_TABLE_INDEX]) {
+> +		policy->fast_switch_possible = true;
+> +	} else {
+> +		qcom_cpufreq_hw_icc_init(res, ICC_DDR_PATH);
+> +		qcom_cpufreq_hw_icc_init(res, ICC_L3_PATH);
+> +	}
 
-That patch should go through Sebastian's tree, we will create an immutable
-branch for him when rc1 is released.
+This patch tries to disable silently the fast_switch. The fast_switch
+is used by SchedUtil governor.
 
-Thanks,
- Enric
+Regards,
+Lukasz
 
-> Thanks!
->>
->>>
->>> Thanks,
->>>  Enric
->>>
->>>> Changes in v8(pmalani@chromium.org):
->>>> - Fix style nits.
->>>> - Remove unrequired header.
->>>> - Remove #ifdef CONFIG_OF dependency for platform driver registration.
->>>> - Add module compile text to Kconfig help section.
->>>>
->>>> Changes in v7(pmalani@chromium.org):
->>>> - Removed use of module_platform_driver() and module_acpi_driver() since
->>>>   that was causing redefinition compilation errors on arm64 defconfig.
->>>>   Instead, explicitly defined the init and exit routines and
->>>>   register/unregister the platform and ACPI drivers there.
->>>> - Alphabetize #include header.
->>>>
->>>> Changes in v6(pmalani@chromium.org):
->>>> - Fix build error from typo in cros_usbpd_notify_acpi_device_ids
->>>>   variable name.
->>>>
->>>> Changes in v5(pmalani@chromium.org):
->>>> - Split the driver into platform and ACPI variants, each enclosed by
->>>>   CONFIG_OF and CONFIG_ACPI #ifdefs respectively.
->>>> - Updated the copyright year to 2020.
->>>> - Reworded the commit message and Kconfig description to incorporate
->>>>   the modified driver structure.
->>>>
->>>> Changes in v4(pmalani@chromium.org):
->>>> - No code changes, but added new version so that versioning is
->>>>   consistent with the next patch in the series.
->>>>
->>>> Changes in v3 (pmalani@chromium.org):
->>>> - Renamed driver and files from "cros_ec_pd_notify" to
->>>>   "cros_usbpd_notify" to be more consistent with other naming.
->>>> - Moved the change to include cros-usbpd-notify in the charger MFD
->>>>   into a separate follow-on patch.
->>>>
->>>> Changes in v2 (pmalani@chromium.org):
->>>> - Removed dependency on DT entry; instead, we will instantiate
->>>>   the driver on detecting EC_FEATURE_USB_PD for non-ACPI platforms.
->>>> - Modified the cros-ec-pd-notify device to be an mfd_cell under
->>>>   usbpdcharger for non-ACPI platforms. Altered the platform_probe() call
->>>>   to derive the cros EC structs appropriately.
->>>> - Replaced "usbpd_notify" with "pd_notify" in functions and structures.
->>>> - Addressed comments from upstream maintainer.
->>>>
->>>>  drivers/platform/chrome/Kconfig               |  13 ++
->>>>  drivers/platform/chrome/Makefile              |   1 +
->>>>  drivers/platform/chrome/cros_usbpd_notify.c   | 170 ++++++++++++++++++
->>>>  .../linux/platform_data/cros_usbpd_notify.h   |  17 ++
->>>>  4 files changed, 201 insertions(+)
->>>>  create mode 100644 drivers/platform/chrome/cros_usbpd_notify.c
->>>>  create mode 100644 include/linux/platform_data/cros_usbpd_notify.h
->>>>
->>>> diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
->>>> index 5f57282a28da0..e45e0fe057586 100644
->>>> --- a/drivers/platform/chrome/Kconfig
->>>> +++ b/drivers/platform/chrome/Kconfig
->>>> @@ -226,6 +226,19 @@ config CROS_USBPD_LOGGER
->>>>       To compile this driver as a module, choose M here: the
->>>>       module will be called cros_usbpd_logger.
->>>>
->>>> +config CROS_USBPD_NOTIFY
->>>> +   tristate "ChromeOS Type-C power delivery event notifier"
->>>> +   depends on CROS_EC
->>>
->>> Like other cros-ec subdevices I am wondering if we should depend on
->>> MFD_CROS_EC_DEV instead of CROS_EC (as doesn't really makes sense to only
->>> depends on CROS_EC)
->>>
->>> Also, like other cros-ec subdevices, we might be interested on have a:
->>>
->>>        default MFD_CROS_EC_DEV
->>>
->>> So it is selected when the cros-ec dev is configured by default.
->>>
->>> Thanks,
->>>
->>>  Enric
->>>
->>>> +   help
->>>> +     If you say Y here, you get support for Type-C PD event notifications
->>>> +     from the ChromeOS EC. On ACPI platorms this driver will bind to the
->>>> +     GOOG0003 ACPI device, and on platforms which don't have this device it
->>>> +     will get initialized on ECs which support the feature
->>>> +     EC_FEATURE_USB_PD.
->>>> +
->>>> +     To compile this driver as a module, choose M here: the
->>>> +     module will be called cros_usbpd_notify.
->>>> +
->>>>  source "drivers/platform/chrome/wilco_ec/Kconfig"
->>>>
->>>>  endif # CHROMEOS_PLATFORMS
->>>> diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
->>>> index aacd5920d8a18..f6465f8ef0b5e 100644
->>>> --- a/drivers/platform/chrome/Makefile
->>>> +++ b/drivers/platform/chrome/Makefile
->>>> @@ -22,5 +22,6 @@ obj-$(CONFIG_CROS_EC_DEBUGFS)             += cros_ec_debugfs.o
->>>>  obj-$(CONFIG_CROS_EC_SENSORHUB)            += cros_ec_sensorhub.o
->>>>  obj-$(CONFIG_CROS_EC_SYSFS)                += cros_ec_sysfs.o
->>>>  obj-$(CONFIG_CROS_USBPD_LOGGER)            += cros_usbpd_logger.o
->>>> +obj-$(CONFIG_CROS_USBPD_NOTIFY)            += cros_usbpd_notify.o
->>>>
->>>>  obj-$(CONFIG_WILCO_EC)                     += wilco_ec/
->>>> diff --git a/drivers/platform/chrome/cros_usbpd_notify.c b/drivers/platform/chrome/cros_usbpd_notify.c
->>>> new file mode 100644
->>>> index 0000000000000..6ead5c62b3c5f
->>>> --- /dev/null
->>>> +++ b/drivers/platform/chrome/cros_usbpd_notify.c
->>>> @@ -0,0 +1,170 @@
->>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>> +/*
->>>> + * Copyright 2020 Google LLC
->>>> + *
->>>> + * This driver serves as the receiver of cros_ec PD host events.
->>>> + */
->>>> +
->>>> +#include <linux/acpi.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/mfd/cros_ec.h>
->>>> +#include <linux/platform_data/cros_ec_proto.h>
->>>> +#include <linux/platform_data/cros_usbpd_notify.h>
->>>> +#include <linux/platform_device.h>
->>>> +
->>>> +#define DRV_NAME "cros-usbpd-notify"
->>>> +#define ACPI_DRV_NAME "GOOG0003"
->>>> +
->>>> +static BLOCKING_NOTIFIER_HEAD(cros_usbpd_notifier_list);
->>>> +
->>>> +/**
->>>> + * cros_usbpd_register_notify - Register a notifier callback for PD events.
->>>> + * @nb: Notifier block pointer to register
->>>> + *
->>>> + * On ACPI platforms this corresponds to host events on the ECPD
->>>> + * "GOOG0003" ACPI device. On non-ACPI platforms this will filter mkbp events
->>>> + * for USB PD events.
->>>> + *
->>>> + * Return: 0 on success or negative error code.
->>>> + */
->>>> +int cros_usbpd_register_notify(struct notifier_block *nb)
->>>> +{
->>>> +   return blocking_notifier_chain_register(&cros_usbpd_notifier_list,
->>>> +                                           nb);
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(cros_usbpd_register_notify);
->>>> +
->>>> +/**
->>>> + * cros_usbpd_unregister_notify - Unregister notifier callback for PD events.
->>>> + * @nb: Notifier block pointer to unregister
->>>> + *
->>>> + * Unregister a notifier callback that was previously registered with
->>>> + * cros_usbpd_register_notify().
->>>> + */
->>>> +void cros_usbpd_unregister_notify(struct notifier_block *nb)
->>>> +{
->>>> +   blocking_notifier_chain_unregister(&cros_usbpd_notifier_list, nb);
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(cros_usbpd_unregister_notify);
->>>> +
->>>> +#ifdef CONFIG_ACPI
->>>> +
->>>> +static int cros_usbpd_notify_add_acpi(struct acpi_device *adev)
->>>> +{
->>>> +   return 0;
->>>> +}
->>>> +
->>>> +static void cros_usbpd_notify_acpi(struct acpi_device *adev, u32 event)
->>>> +{
->>>> +   blocking_notifier_call_chain(&cros_usbpd_notifier_list, event, NULL);
->>>> +}
->>>> +
->>>> +static const struct acpi_device_id cros_usbpd_notify_acpi_device_ids[] = {
->>>> +   { ACPI_DRV_NAME, 0 },
->>>> +   { }
->>>> +};
->>>> +MODULE_DEVICE_TABLE(acpi, cros_usbpd_notify_acpi_device_ids);
->>>> +
->>>> +static struct acpi_driver cros_usbpd_notify_acpi_driver = {
->>>> +   .name = DRV_NAME,
->>>> +   .class = DRV_NAME,
->>>> +   .ids = cros_usbpd_notify_acpi_device_ids,
->>>> +   .ops = {
->>>> +           .add = cros_usbpd_notify_add_acpi,
->>>> +           .notify = cros_usbpd_notify_acpi,
->>>> +   },
->>>> +};
->>>> +
->>>> +#endif /* CONFIG_ACPI */
->>>> +
->>>> +static int cros_usbpd_notify_plat(struct notifier_block *nb,
->>>> +                             unsigned long queued_during_suspend,
->>>> +                             void *data)
->>>> +{
->>>> +   struct cros_ec_device *ec_dev = (struct cros_ec_device *)data;
->>>> +   u32 host_event = cros_ec_get_host_event(ec_dev);
->>>> +
->>>> +   if (!host_event)
->>>> +           return NOTIFY_BAD;
->>>> +
->>>> +   if (host_event & EC_HOST_EVENT_MASK(EC_HOST_EVENT_PD_MCU)) {
->>>> +           blocking_notifier_call_chain(&cros_usbpd_notifier_list,
->>>> +                                        host_event, NULL);
->>>> +           return NOTIFY_OK;
->>>> +   }
->>>> +   return NOTIFY_DONE;
->>>> +}
->>>> +
->>>> +static int cros_usbpd_notify_probe_plat(struct platform_device *pdev)
->>>> +{
->>>> +   struct device *dev = &pdev->dev;
->>>> +   struct cros_ec_dev *ecdev = dev_get_drvdata(dev->parent);
->>>> +   struct notifier_block *nb;
->>>> +   int ret;
->>>> +
->>>> +   nb = devm_kzalloc(dev, sizeof(*nb), GFP_KERNEL);
->>>> +   if (!nb)
->>>> +           return -ENOMEM;
->>>> +
->>>> +   nb->notifier_call = cros_usbpd_notify_plat;
->>>> +   dev_set_drvdata(dev, nb);
->>>> +
->>>> +   ret = blocking_notifier_chain_register(&ecdev->ec_dev->event_notifier,
->>>> +                                          nb);
->>>> +   if (ret < 0) {
->>>> +           dev_err(dev, "Failed to register notifier\n");
->>>> +           return ret;
->>>> +   }
->>>> +
->>>> +   return 0;
->>>> +}
->>>> +
->>>> +static int cros_usbpd_notify_remove_plat(struct platform_device *pdev)
->>>> +{
->>>> +   struct device *dev = &pdev->dev;
->>>> +   struct cros_ec_dev *ecdev = dev_get_drvdata(dev->parent);
->>>> +   struct notifier_block *nb =
->>>> +           (struct notifier_block *)dev_get_drvdata(dev);
->>>> +
->>>> +   blocking_notifier_chain_unregister(&ecdev->ec_dev->event_notifier, nb);
->>>> +
->>>> +   return 0;
->>>> +}
->>>> +
->>>> +static struct platform_driver cros_usbpd_notify_plat_driver = {
->>>> +   .driver = {
->>>> +           .name = DRV_NAME,
->>>> +   },
->>>> +   .probe = cros_usbpd_notify_probe_plat,
->>>> +   .remove = cros_usbpd_notify_remove_plat,
->>>> +};
->>>> +
->>>> +static int __init cros_usbpd_notify_init(void)
->>>> +{
->>>> +   int ret;
->>>> +
->>>> +   ret = platform_driver_register(&cros_usbpd_notify_plat_driver);
->>>> +   if (ret < 0)
->>>> +           return ret;
->>>> +
->>>> +#ifdef CONFIG_ACPI
->>>> +   acpi_bus_register_driver(&cros_usbpd_notify_acpi_driver);
->>>> +#endif
->>>> +   return 0;
->>>> +}
->>>> +
->>>> +static void __exit cros_usbpd_notify_exit(void)
->>>> +{
->>>> +#ifdef CONFIG_ACPI
->>>> +   acpi_bus_unregister_driver(&cros_usbpd_notify_acpi_driver);
->>>> +#endif
->>>> +   platform_driver_unregister(&cros_usbpd_notify_plat_driver);
->>>> +}
->>>> +
->>>> +module_init(cros_usbpd_notify_init);
->>>> +module_exit(cros_usbpd_notify_exit);
->>>> +
->>>> +MODULE_LICENSE("GPL");
->>>> +MODULE_DESCRIPTION("ChromeOS power delivery notifier device");
->>>> +MODULE_AUTHOR("Jon Flatley <jflat@chromium.org>");
->>>> +MODULE_ALIAS("platform:" DRV_NAME);
->>>> diff --git a/include/linux/platform_data/cros_usbpd_notify.h b/include/linux/platform_data/cros_usbpd_notify.h
->>>> new file mode 100644
->>>> index 0000000000000..4f2791722b6d3
->>>> --- /dev/null
->>>> +++ b/include/linux/platform_data/cros_usbpd_notify.h
->>>> @@ -0,0 +1,17 @@
->>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>> +/*
->>>> + * ChromeOS EC Power Delivery Notifier Driver
->>>> + *
->>>> + * Copyright 2020 Google LLC
->>>> + */
->>>> +
->>>> +#ifndef __LINUX_PLATFORM_DATA_CROS_USBPD_NOTIFY_H
->>>> +#define __LINUX_PLATFORM_DATA_CROS_USBPD_NOTIFY_H
->>>> +
->>>> +#include <linux/notifier.h>
->>>> +
->>>> +int cros_usbpd_register_notify(struct notifier_block *nb);
->>>> +
->>>> +void cros_usbpd_unregister_notify(struct notifier_block *nb);
->>>> +
->>>> +#endif  /* __LINUX_PLATFORM_DATA_CROS_USBPD_NOTIFY_H */
->>>>
->>
->> --
->> Benson Leung
->> Staff Software Engineer
->> Chrome OS Kernel
->> Google Inc.
->> bleung@google.com
->> Chromium OS Project
->> bleung@chromium.org
+>   
+>   	return 0;
+>   error:
+> -	devm_iounmap(dev, base);
+> +	devm_iounmap(dev, res->base);
+> +	devm_kfree(&global_pdev->dev, res);
+>   	return ret;
+>   }
+>   
+>   static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
+>   {
+> +	struct qcom_cpufreq_hw_res *res = policy->driver_data;
+>   	struct device *cpu_dev = get_cpu_device(policy->cpu);
+> -	void __iomem *base = policy->driver_data - REG_PERF_STATE;
+> +	struct opp_table **table = res->opp_table;
+> +	void __iomem *base = res->base;
+> +	int i;
+> +
+> +	for (i = 0; i <= QCOM_CPU_L3_OPP_TABLE_INDEX; i++) {
+> +		if (table[i])
+> +			dev_pm_opp_put_opp_table(table[i]);
+> +	}
+>   
+>   	dev_pm_opp_remove_all_dynamic(cpu_dev);
+>   	kfree(policy->freq_table);
+> +	dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
+>   	devm_iounmap(&global_pdev->dev, base);
+> +	devm_kfree(&global_pdev->dev, res);
+>   
+>   	return 0;
+>   }
+> 
