@@ -2,29 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5116614CC6C
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2020 15:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA67B14CC87
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2020 15:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726771AbgA2O1y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jan 2020 09:27:54 -0500
-Received: from mail26.static.mailgun.info ([104.130.122.26]:30833 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726717AbgA2O1x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jan 2020 09:27:53 -0500
+        id S1726358AbgA2Oh4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jan 2020 09:37:56 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:39015 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726339AbgA2Oh4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jan 2020 09:37:56 -0500
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1580308072; h=Message-ID: References: In-Reply-To: Subject:
+ s=smtp; t=1580308676; h=Message-ID: References: In-Reply-To: Subject:
  Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=ciNXvIxk2pNb9FBN0sX/XzKN25AtfjNSOiAW52AdExQ=;
- b=GO+48YaVGK1AbkR/+1AubQvRvQTUz/HbswT6Si0cpHiO1S8xUzu56h5daVusVINOKaccIcCk
- oxhZjN0bDsKYapmyHzoZ6D02/6xK0QDT/+Yt3r8vA8KMzntxVDUusAKPpWPNy9NqqZTcrVpT
- p90Wtkjn3YzEUH55x9lE/lrrMU0=
-X-Mailgun-Sending-Ip: 104.130.122.26
+ MIME-Version: Sender; bh=UXI/hhlOLak0WLD4Gd5HAGmNN/toFyZPzE+/lDtDp7s=;
+ b=pyD9VsHeT5Yrzlqw4ksamJG8/KAFtod7MvmW09tNYkKFWMUlQNUhQ5Zc4rZ0kI4PWPSrAbHx
+ CBCil6+/aME97ZjJxgkFvmOEEh1vyOja/SEvyFsrP4JMF0Hbb81m/uBpG0tbM6Oe+iZPG2G4
+ Itnz7ZW3N8ZEo0kCyztbqflxdXo=
+X-Mailgun-Sending-Ip: 104.130.122.25
 X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
 Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e319661.7f36f18b6fb8-smtp-out-n03;
- Wed, 29 Jan 2020 14:27:45 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5e3198c0.7f8308bec880-smtp-out-n01;
+ Wed, 29 Jan 2020 14:37:52 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 25E7BC447A5; Wed, 29 Jan 2020 14:27:44 +0000 (UTC)
+        id D1464C4479F; Wed, 29 Jan 2020 14:37:52 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -34,13 +34,13 @@ Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4F5F3C433CB;
-        Wed, 29 Jan 2020 14:27:42 +0000 (UTC)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 00F6AC43383;
+        Wed, 29 Jan 2020 14:37:51 +0000 (UTC)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Wed, 29 Jan 2020 19:57:42 +0530
+Date:   Wed, 29 Jan 2020 20:07:51 +0530
 From:   Sibi Sankar <sibis@codeaurora.org>
 To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     viresh.kumar@linaro.org, sboyd@kernel.org,
@@ -51,14 +51,12 @@ Cc:     viresh.kumar@linaro.org, sboyd@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, dianders@chromium.org, mka@chromium.org,
         vincent.guittot@linaro.org, amit.kucheria@linaro.org,
-        ulf.hansson@linaro.org
-Subject: Re: [RFC v3 08/10] cpufreq: qcom: Update the bandwidth levels on
- frequency change
-In-Reply-To: <91897fda-b982-47b7-7552-4740480cdf76@arm.com>
+        ulf.hansson@linaro.org, linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [RFC v3 00/10] DDR/L3 Scaling support on SDM845 and SC7180 SoCs
+In-Reply-To: <88b3885a-5ddd-b942-c5a5-d560b2f196bd@arm.com>
 References: <20200127200350.24465-1-sibis@codeaurora.org>
- <20200127200350.24465-9-sibis@codeaurora.org>
- <91897fda-b982-47b7-7552-4740480cdf76@arm.com>
-Message-ID: <c0f83687c0fa2ed8a689ed72efd81318@codeaurora.org>
+ <88b3885a-5ddd-b942-c5a5-d560b2f196bd@arm.com>
+Message-ID: <57f9a785d93193719ee0b91e43d0922f@codeaurora.org>
 X-Sender: sibis@codeaurora.org
 User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
@@ -70,401 +68,105 @@ Hey Lukasz,
 Thanks for taking time to review
 the series!
 
-On 2020-01-29 15:05, Lukasz Luba wrote:
+On 2020-01-29 15:16, Lukasz Luba wrote:
 > Hi Sibi,
 > 
-> On 1/27/20 8:03 PM, Sibi Sankar wrote:
->> Add support to parse and update OPP tables attached to the cpu device
->> when the required OPP bandwidth values are populated to enable scaling
->> of DDR/L3 bandwidth levels with frequency change.
->> 
->> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
->> ---
->>   drivers/cpufreq/qcom-cpufreq-hw.c | 246 
->> +++++++++++++++++++++++++++---
->>   1 file changed, 225 insertions(+), 21 deletions(-)
->> 
->> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c 
->> b/drivers/cpufreq/qcom-cpufreq-hw.c
->> index fc92a8842e252..348eb2fdaccaf 100644
->> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
->> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
->> @@ -6,6 +6,7 @@
->>   #include <linux/bitfield.h>
->>   #include <linux/cpufreq.h>
->>   #include <linux/init.h>
->> +#include <linux/interconnect.h>
->>   #include <linux/kernel.h>
->>   #include <linux/module.h>
->>   #include <linux/of_address.h>
->> @@ -28,17 +29,194 @@
->>   #define REG_VOLT_LUT			0x114
->>   #define REG_PERF_STATE			0x920
->>   +#define QCOM_ICC_TAG_ACTIVE_ONLY	1
->> +
->>   static unsigned long cpu_hw_rate, xo_rate;
->>   static struct platform_device *global_pdev;
->>   +/* opp table indices */
->> +enum {
->> +	QCOM_CPU_OPP_TABLE_INDEX,
->> +	QCOM_CPU_DDR_OPP_TABLE_INDEX,
->> +	QCOM_CPU_L3_OPP_TABLE_INDEX,
->> +};
->> +
->> +/* icc path indices */
->> +enum {
->> +	ICC_DDR_PATH,
->> +	ICC_L3_PATH,
->> +};
->> +
->> +struct qcom_cpufreq_hw_res {
->> +	void __iomem *base;
->> +
->> +	struct device *cpu_dev;
->> +
->> +	/* ddr/l3 icc paths */
->> +	struct icc_path *path[2];
->> +
->> +	/* cpu/ddr/l3 opp tables */
->> +	struct opp_table *opp_table[3];
->> +};
->> +
->> +struct cpufreq_hw_icc_info {
->> +	const char *icc_path_name;
->> +	u8 table_index;
->> +	u32 tag;
->> +};
->> +
->> +static const struct cpufreq_hw_icc_info icc_info[] = {
->> +	{
->> +		.icc_path_name = "cpu-ddr",
->> +		.table_index = QCOM_CPU_DDR_OPP_TABLE_INDEX,
->> +		.tag = QCOM_ICC_TAG_ACTIVE_ONLY,
->> +	},
->> +	{
->> +		.icc_path_name = "cpu-l3",
->> +		.table_index = QCOM_CPU_L3_OPP_TABLE_INDEX,
->> +		.tag = 0,
->> +	},
->> +};
->> +
->> +static int qcom_cpufreq_hw_add_opp_table(struct qcom_cpufreq_hw_res 
->> *res)
->> +{
->> +	struct opp_table **table = res->opp_table;
->> +	struct device_node *opp_table_np, *np;
->> +	struct device *dev = res->cpu_dev;
->> +	int ret, i;
->> +	u64 rate;
->> +
->> +	for (i = 0; i <= QCOM_CPU_L3_OPP_TABLE_INDEX; i++) {
->> +		ret = dev_pm_opp_of_add_table_indexed(dev, i);
->> +		if (ret) {
->> +			dev_dbg(dev, "Add OPP table failed index %d: %d\n",
->> +				i, ret);
->> +			goto err;
->> +		}
->> +
->> +		table[i] = dev_pm_opp_get_opp_table_indexed(dev, i);
->> +		if (!table[i]) {
->> +			dev_dbg(dev, "Get OPP table failed index %d\n", i);
->> +			ret = -EINVAL;
->> +			goto err;
->> +		}
->> +	}
->> +
->> +	/* Disable all cpu opps and cross-validate against LUT */
->> +	opp_table_np = dev_pm_opp_of_get_opp_desc_node(dev);
->> +	for_each_available_child_of_node(opp_table_np, np) {
->> +		ret = of_property_read_u64(np, "opp-hz", &rate);
->> +		if (ret)
->> +			continue;
->> +
->> +		dev_pm_opp_disable(dev, rate);
->> +	}
->> +	of_node_put(opp_table_np);
->> +
->> +	return 0;
->> +
->> +err:
->> +	for (; i >= 0; i--) {
->> +		if (table[i]) {
->> +			dev_pm_opp_put_opp_table(table[i]);
->> +			table[i] = NULL;
->> +		}
->> +	}
->> +
->> +	dev_pm_opp_remove_table(dev);
->> +	return ret;
->> +}
->> +
->> +static int qcom_cpufreq_hw_icc_init(struct qcom_cpufreq_hw_res *res, 
->> u8 index)
->> +{
->> +	const struct cpufreq_hw_icc_info *info = &icc_info[index];
->> +	struct icc_path **path = res->path;
->> +	struct device *dev = res->cpu_dev;
->> +
->> +	path[index] = of_icc_get(dev, info->icc_path_name);
->> +	if (IS_ERR(path[index])) {
->> +		dev_dbg(dev, "ICC %s path get failed ret: %ld\n",
->> +			info->icc_path_name, PTR_ERR(path[index]));
->> +		return PTR_ERR(path[index]);
->> +	}
->> +
->> +	icc_set_tag(path[index], info->tag);
->> +
->> +	return 0;
->> +}
->> +
->> +static void qcom_cpufreq_hw_icc_set(struct qcom_cpufreq_hw_res *res,
->> +				    unsigned long freq)
->> +{
->> +	struct opp_table **table = res->opp_table;
->> +	const struct cpufreq_hw_icc_info *info;
->> +	unsigned long freq_hz = freq * 1000;
->> +	struct icc_path **path = res->path;
->> +	struct device *dev = res->cpu_dev;
->> +	struct dev_pm_opp *cpu_opp, *opp;
->> +	struct opp_table *cpu_opp_table;
->> +	unsigned long peak_bw, avg_bw;
->> +	int ret;
->> +	int i;
->> +
->> +	cpu_opp_table = table[QCOM_CPU_OPP_TABLE_INDEX];
->> +	if (!cpu_opp_table)
->> +		return;
->> +
->> +	cpu_opp = dev_pm_opp_find_freq_exact(dev, freq_hz, true);
->> +	if (IS_ERR_OR_NULL(cpu_opp))
->> +		return;
->> +
->> +	for (i = 0; i <= ICC_L3_PATH; i++) {
->> +		if (IS_ERR(path[i])) {
->> +			if (PTR_ERR(path[i]) != -EPROBE_DEFER)
->> +				continue;
->> +
->> +			ret = qcom_cpufreq_hw_icc_init(res, i);
->> +			if (ret)
->> +				continue;
->> +		}
->> +
->> +		info = &icc_info[i];
->> +
->> +		opp = dev_pm_opp_xlate_required_opp(cpu_opp_table,
->> +						    table[info->table_index],
->> +						    cpu_opp);
->> +		if (IS_ERR_OR_NULL(opp))
->> +			continue;
->> +
->> +		peak_bw = dev_pm_opp_get_bw(opp, &avg_bw);
->> +		dev_pm_opp_put(opp);
->> +
->> +		icc_set_bw(res->path[i], avg_bw, peak_bw);
->> +	}
->> +	dev_pm_opp_put(cpu_opp);
->> +}
->> +
->> +static int qcom_cpufreq_update_opp(struct device *dev,
->> +				   unsigned long freq_khz,
->> +				   unsigned long volt)
->> +{
->> +	unsigned long freq_hz = freq_khz * 1000;
->> +
->> +	if (dev_pm_opp_update_voltage(dev, freq_hz, volt))
->> +		return dev_pm_opp_add(dev, freq_hz, volt);
->> +
->> +	/* Enable the opp after voltage update*/
->> +	return dev_pm_opp_enable(dev, freq_hz);
->> +}
->> +
->>   static int qcom_cpufreq_hw_target_index(struct cpufreq_policy 
->> *policy,
->>   					unsigned int index)
->>   {
->> -	void __iomem *perf_state_reg = policy->driver_data;
->> +	struct qcom_cpufreq_hw_res *res = policy->driver_data;
->> +	void __iomem *perf_state_reg = res->base + REG_PERF_STATE;
->>   	unsigned long freq = policy->freq_table[index].frequency;
->>     	writel_relaxed(index, perf_state_reg);
->>   +	qcom_cpufreq_hw_icc_set(res, freq);
->> +
->>   	arch_set_freq_scale(policy->related_cpus, freq,
->>   			    policy->cpuinfo.max_freq);
->>   	return 0;
->> @@ -46,6 +224,7 @@ static int qcom_cpufreq_hw_target_index(struct 
->> cpufreq_policy *policy,
->>     static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
->>   {
->> +	struct qcom_cpufreq_hw_res *res;
->>   	void __iomem *perf_state_reg;
->>   	struct cpufreq_policy *policy;
->>   	unsigned int index;
->> @@ -54,7 +233,8 @@ static unsigned int qcom_cpufreq_hw_get(unsigned 
->> int cpu)
->>   	if (!policy)
->>   		return 0;
->>   -	perf_state_reg = policy->driver_data;
->> +	res = policy->driver_data;
->> +	perf_state_reg = res->base + REG_PERF_STATE;
->>     	index = readl_relaxed(perf_state_reg);
->>   	index = min(index, LUT_MAX_ENTRIES - 1);
->> @@ -65,7 +245,8 @@ static unsigned int qcom_cpufreq_hw_get(unsigned 
->> int cpu)
->>   static unsigned int qcom_cpufreq_hw_fast_switch(struct 
->> cpufreq_policy *policy,
->>   						unsigned int target_freq)
->>   {
->> -	void __iomem *perf_state_reg = policy->driver_data;
->> +	struct qcom_cpufreq_hw_res *res = policy->driver_data;
->> +	void __iomem *perf_state_reg = res->base + REG_PERF_STATE;
->>   	int index;
->>   	unsigned long freq;
->>   @@ -82,18 +263,24 @@ static unsigned int 
->> qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
->>   	return freq;
->>   }
->>   -static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
->> -				    struct cpufreq_policy *policy,
->> -				    void __iomem *base)
->> +static int qcom_cpufreq_hw_read_lut(struct cpufreq_policy *policy,
->> +				    struct qcom_cpufreq_hw_res *res)
->>   {
->>   	u32 data, src, lval, i, core_count, prev_freq = 0, freq;
->>   	u32 volt;
->>   	struct cpufreq_frequency_table	*table;
->> +	struct device *cpu_dev = res->cpu_dev;
->> +	void __iomem *base = res->base;
->> +	int ret;
->>     	table = kcalloc(LUT_MAX_ENTRIES + 1, sizeof(*table), GFP_KERNEL);
->>   	if (!table)
->>   		return -ENOMEM;
->>   +	ret = qcom_cpufreq_hw_add_opp_table(res);
->> +	if (ret)
->> +		dev_dbg(cpu_dev, "Add OPP tables failed from dt\n");
->> +
->>   	for (i = 0; i < LUT_MAX_ENTRIES; i++) {
->>   		data = readl_relaxed(base + REG_FREQ_LUT +
->>   				      i * LUT_ROW_SIZE);
->> @@ -112,7 +299,7 @@ static int qcom_cpufreq_hw_read_lut(struct device 
->> *cpu_dev,
->>     		if (freq != prev_freq && core_count != LUT_TURBO_IND) {
->>   			table[i].frequency = freq;
->> -			dev_pm_opp_add(cpu_dev, freq * 1000, volt);
->> +			qcom_cpufreq_update_opp(cpu_dev, freq, volt);
->>   			dev_dbg(cpu_dev, "index=%d freq=%d, core_count %d\n", i,
->>   				freq, core_count);
->>   		} else if (core_count == LUT_TURBO_IND) {
->> @@ -133,7 +320,8 @@ static int qcom_cpufreq_hw_read_lut(struct device 
->> *cpu_dev,
->>   			if (prev->frequency == CPUFREQ_ENTRY_INVALID) {
->>   				prev->frequency = prev_freq;
->>   				prev->flags = CPUFREQ_BOOST_FREQ;
->> -				dev_pm_opp_add(cpu_dev,	prev_freq * 1000, volt);
->> +				qcom_cpufreq_update_opp(cpu_dev, prev_freq,
->> +							volt);
->>   			}
->>     			break;
->> @@ -175,11 +363,10 @@ static void qcom_get_related_cpus(int index, 
->> struct cpumask *m)
->>   static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
->>   {
->>   	struct device *dev = &global_pdev->dev;
->> +	struct qcom_cpufreq_hw_res *res;
->>   	struct of_phandle_args args;
->>   	struct device_node *cpu_np;
->>   	struct device *cpu_dev;
->> -	struct resource *res;
->> -	void __iomem *base;
->>   	int ret, index;
->>     	cpu_dev = get_cpu_device(policy->cpu);
->> @@ -201,16 +388,17 @@ static int qcom_cpufreq_hw_cpu_init(struct 
->> cpufreq_policy *policy)
->>     	index = args.args[0];
->>   -	res = platform_get_resource(global_pdev, IORESOURCE_MEM, index);
->> +	res = devm_kzalloc(dev, sizeof(*res), GFP_KERNEL);
->>   	if (!res)
->> -		return -ENODEV;
->> -
->> -	base = devm_ioremap(dev, res->start, resource_size(res));
->> -	if (!base)
->>   		return -ENOMEM;
->>   +	res->cpu_dev = cpu_dev;
->> +	res->base = devm_platform_ioremap_resource(global_pdev, index);
->> +	if (IS_ERR(res->base))
->> +		return PTR_ERR(res->base);
->> +
->>   	/* HW should be in enabled state to proceed */
->> -	if (!(readl_relaxed(base + REG_ENABLE) & 0x1)) {
->> +	if (!(readl_relaxed(res->base + REG_ENABLE) & 0x1)) {
->>   		dev_err(dev, "Domain-%d cpufreq hardware not enabled\n", index);
->>   		ret = -ENODEV;
->>   		goto error;
->> @@ -223,9 +411,9 @@ static int qcom_cpufreq_hw_cpu_init(struct 
->> cpufreq_policy *policy)
->>   		goto error;
->>   	}
->>   -	policy->driver_data = base + REG_PERF_STATE;
->> +	policy->driver_data = res;
->>   -	ret = qcom_cpufreq_hw_read_lut(cpu_dev, policy, base);
->> +	ret = qcom_cpufreq_hw_read_lut(policy, res);
->>   	if (ret) {
->>   		dev_err(dev, "Domain-%d failed to read LUT\n", index);
->>   		goto error;
->> @@ -240,22 +428,38 @@ static int qcom_cpufreq_hw_cpu_init(struct 
->> cpufreq_policy *policy)
->>     	dev_pm_opp_of_register_em(policy->cpus);
->>   -	policy->fast_switch_possible = true;
->> +	if (!res->opp_table[QCOM_CPU_OPP_TABLE_INDEX]) {
->> +		policy->fast_switch_possible = true;
->> +	} else {
->> +		qcom_cpufreq_hw_icc_init(res, ICC_DDR_PATH);
->> +		qcom_cpufreq_hw_icc_init(res, ICC_L3_PATH);
->> +	}
-> 
-> This patch tries to disable silently the fast_switch. The fast_switch
-> is used by SchedUtil governor.
+> In my opinion this solution depends on not always true assumption that
+> CPUFreq notification chain will be triggered when there is a frequency
 
-I agree that the series would benefit
-from splitting this patch into more
-chunks. SchedUtil will still be used
-as the governor but will operate in
-the slow path. The main reason is that
-the icc bandwidth votes through rpmh
-on SDM845/SC7180 cant be done in the
-fast path.
+This series does not create any
+devfreq devices nor use the cpufreq
+notification chain. It just relies
+on the opening up of required-opps
+from being exclusive to gen-pd using
+patches 1,2,3 from patch series[1].
+With the fast path disabled and
+schedutil enabled, this series will
+not miss any cpufreq changes.
 
+[1] https://patchwork.kernel.org/cover/11055499/
+
+> switch. Extending devfreq governor (as in one of the dependent patch
+> series that you have referred) by attaching to this notification
+> chain makes sense only when the SchedUtil and fast_switch is not in 
+> use.
+
+fast_switch and cpu notifier chains
+are mutually exclusive but schedutil
+will still operate in the slow path
+IIRC.
+
+> The Schedutil CPUFreq governor might use the fast_switch from this
+> driver and the notifications will not be triggered. I have also
+> commented patch 08/10 which tries to disable it.
 > 
 > Regards,
 > Lukasz
 > 
->>     	return 0;
->>   error:
->> -	devm_iounmap(dev, base);
->> +	devm_iounmap(dev, res->base);
->> +	devm_kfree(&global_pdev->dev, res);
->>   	return ret;
->>   }
->>     static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
->>   {
->> +	struct qcom_cpufreq_hw_res *res = policy->driver_data;
->>   	struct device *cpu_dev = get_cpu_device(policy->cpu);
->> -	void __iomem *base = policy->driver_data - REG_PERF_STATE;
->> +	struct opp_table **table = res->opp_table;
->> +	void __iomem *base = res->base;
->> +	int i;
->> +
->> +	for (i = 0; i <= QCOM_CPU_L3_OPP_TABLE_INDEX; i++) {
->> +		if (table[i])
->> +			dev_pm_opp_put_opp_table(table[i]);
->> +	}
->>     	dev_pm_opp_remove_all_dynamic(cpu_dev);
->>   	kfree(policy->freq_table);
->> +	dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
->>   	devm_iounmap(&global_pdev->dev, base);
->> +	devm_kfree(&global_pdev->dev, res);
->>     	return 0;
->>   }
+> On 1/27/20 8:03 PM, Sibi Sankar wrote:
+>> This RFC series aims to extend cpu based scaling support to L3/DDR on
+>> SDM845 and SC7180 SoCs.
+>> 
+>> Patches [1-3] - Blacklist SDM845 and SC7180 in cpufreq-dt-platdev
+>> Patches [5-7] - Hack in a way to add/remove multiple opp tables to
+>>                  a single device. I am yet to fix the debugfs to
+>> 		support multiple opp_tables per device but wanted to
+>> 		send what was working upstream to get an idea if multiple
+>> 		opp tables per device is a feature that will be useful
+>> 		upstream.
+>> Patches [9-10] - Add the cpu/cpu-ddr/cpu-l3 opp tables for SDM845
+>>                   and SC7180 SoCs.
+>> 
+>> v3:
+>>   * Migrated to using Saravana's opp-kBps bindings [1]
+>>   * Fixed some misc comments from Rajendra
+>>   * Added support for SC7180
+>> 
+>> v2:
+>>   * Incorporated Viresh's comments from:
+>>   
+>> https://lore.kernel.org/lkml/20190410102429.r6j6brm5kspmqxc3@vireshk-i7/
+>>   
+>> https://lore.kernel.org/lkml/20190410112516.gnh77jcwawvld6et@vireshk-i7/
+>>   * Dropped cpufreq-map passive governor
+>> 
+>> Git-branch: https://github.com/QuinAsura/linux/tree/lnext-012420
+>> 
+>> Some alternate ways of hosting the opp-tables:
+>> https://github.com/QuinAsura/linux/commit/50b92bfaadc8f9a0d1e12249646e018bd6d1a9d3
+>> https://github.com/QuinAsura/linux/commit/3d23d1eefd16ae6d9e3ef91e93e78749d8844e98
+>> Viresh didn't really like ^^ bindings and they dont really scale well. 
+>> Just
+>> including them here for completeness.
+>> 
+>> Depends on the following series:
+>> [1] https://patchwork.kernel.org/cover/11277199/
+>> [2] https://patchwork.kernel.org/cover/11055499/
+>> [3] https://patchwork.kernel.org/cover/11326381/
+>> 
+>> Sibi Sankar (10):
+>>    arm64: dts: qcom: sdm845: Add SoC compatible to MTP
+>>    cpufreq: blacklist SDM845 in cpufreq-dt-platdev
+>>    cpufreq: blacklist SC7180 in cpufreq-dt-platdev
+>>    OPP: Add and export helper to update voltage
+>>    opp: of: export _opp_of_get_opp_desc_node
+>>    opp: Allow multiple opp_tables to be mapped to a single device
+>>    opp: Remove multiple attached opp tables from a device
+>>    cpufreq: qcom: Update the bandwidth levels on frequency change
+>>    arm64: dts: qcom: sdm845: Add cpu OPP tables
+>>    arm64: dts: qcom: sc7180: Add cpu OPP tables
+>> 
+>>   arch/arm64/boot/dts/qcom/sc7180.dtsi    | 287 +++++++++++++++
+>>   arch/arm64/boot/dts/qcom/sdm845-mtp.dts |   2 +-
+>>   arch/arm64/boot/dts/qcom/sdm845.dtsi    | 453 
+>> ++++++++++++++++++++++++
+>>   drivers/cpufreq/cpufreq-dt-platdev.c    |   2 +
+>>   drivers/cpufreq/qcom-cpufreq-hw.c       | 246 +++++++++++--
+>>   drivers/opp/core.c                      | 111 +++++-
+>>   drivers/opp/of.c                        |   3 +-
+>>   drivers/opp/opp.h                       |   2 +
+>>   include/linux/pm_opp.h                  |  10 +
+>>   9 files changed, 1083 insertions(+), 33 deletions(-)
 >> 
 
 -- 
