@@ -2,37 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B1714C996
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2020 12:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C797014C99B
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2020 12:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgA2L22 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jan 2020 06:28:28 -0500
-Received: from foss.arm.com ([217.140.110.172]:39784 "EHLO foss.arm.com"
+        id S1726069AbgA2Lar (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jan 2020 06:30:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:39818 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726067AbgA2L22 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 Jan 2020 06:28:28 -0500
+        id S1726068AbgA2Lar (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 Jan 2020 06:30:47 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E91B51FB;
-        Wed, 29 Jan 2020 03:28:27 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA76A1FB;
+        Wed, 29 Jan 2020 03:30:46 -0800 (PST)
 Received: from [10.37.12.123] (unknown [10.37.12.123])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 365443F67D;
-        Wed, 29 Jan 2020 03:28:25 -0800 (PST)
-Subject: Re: [PATCH 2/2] PM / devfreq: Change to DEVFREQ_GOV_UPDATE_INTERVAL
- event name
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B5463F67D;
+        Wed, 29 Jan 2020 03:30:44 -0800 (PST)
+Subject: Re: [PATCH 1/2] PM / devfreq: Remove unneeded extern keyword
 To:     Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     chanwoo@kernel.org, myungjoo.ham@samsung.com,
         kyungmin.park@samsung.com
-References: <20200129112002.6998-1-cw00.choi@samsung.com>
- <CGME20200129111225epcas1p1c262e46a878ad68836a676bc351840bf@epcas1p1.samsung.com>
- <20200129112002.6998-2-cw00.choi@samsung.com>
+References: <CGME20200129111225epcas1p3f9b495ee2565858d19bce43fb6e86ac1@epcas1p3.samsung.com>
+ <20200129112002.6998-1-cw00.choi@samsung.com>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <bc60b915-1975-b623-6b85-fc034cf649f3@arm.com>
-Date:   Wed, 29 Jan 2020 11:28:22 +0000
+Message-ID: <ad034210-24ca-5eb6-a359-ae3151805c98@arm.com>
+Date:   Wed, 29 Jan 2020 11:30:42 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200129112002.6998-2-cw00.choi@samsung.com>
+In-Reply-To: <20200129112002.6998-1-cw00.choi@samsung.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -41,136 +39,230 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chanwoo,
-
-Apart from small mistakes in the commit message, looks good to me.
 
 On 1/29/20 11:20 AM, Chanwoo Choi wrote:
-> DEVFREQ_GOV_INTERVAL event indicates that update the interval
-> for polling mode of devfreq device. But, this event name doesn't
-> specify exactly what to do.
-> 
-> Change DEVFREQ_GOV_INTERVAL event name to DEVFREQ_GOV_UPDATE_INTERVAL
-> which specifies what to do by event name.
-> 
-> And modify the functio name for DEVFREQ_GOV_UPDATE_INTERVAL
-
-s/functio/function
-
-> with 'devfreq_' prefix + verb + obejct as following:
-
-'obejct'?
-
-> - devfreq_interval_update -> devfreq_updatee_interval
+> Remove unneeded extern keyword from devfreq-related header file
+> and adjust the indentation of function parameter to keep the
+> consistency in header file
 > 
 > Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
 > ---
->   drivers/devfreq/devfreq.c                 | 10 +++++-----
->   drivers/devfreq/governor.h                |  4 ++--
->   drivers/devfreq/governor_simpleondemand.c |  4 ++--
->   drivers/devfreq/tegra30-devfreq.c         |  4 ++--
->   4 files changed, 11 insertions(+), 11 deletions(-)
+>   drivers/devfreq/governor.h |  17 +++----
+>   include/linux/devfreq.h    | 100 ++++++++++++++++++-------------------
+>   2 files changed, 57 insertions(+), 60 deletions(-)
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index cceee8bc3c2f..8494c5f05a73 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -550,14 +550,14 @@ void devfreq_monitor_resume(struct devfreq *devfreq)
->   EXPORT_SYMBOL(devfreq_monitor_resume);
->   
->   /**
-> - * devfreq_interval_update() - Update device devfreq monitoring interval
-> + * devfreq_update_interval() - Update device devfreq monitoring interval
->    * @devfreq:    the devfreq instance.
->    * @delay:      new polling interval to be set.
->    *
->    * Helper function to set new load monitoring polling interval. Function
-> - * to be called from governor in response to DEVFREQ_GOV_INTERVAL event.
-> + * to be called from governor in response to DEVFREQ_GOV_UPDATE_INTERVAL event.
->    */
-> -void devfreq_interval_update(struct devfreq *devfreq, unsigned int *delay)
-> +void devfreq_update_interval(struct devfreq *devfreq, unsigned int *delay)
->   {
->   	unsigned int cur_delay = devfreq->profile->polling_ms;
->   	unsigned int new_delay = *delay;
-> @@ -597,7 +597,7 @@ void devfreq_interval_update(struct devfreq *devfreq, unsigned int *delay)
->   out:
->   	mutex_unlock(&devfreq->lock);
->   }
-> -EXPORT_SYMBOL(devfreq_interval_update);
-> +EXPORT_SYMBOL(devfreq_update_interval);
->   
->   /**
->    * devfreq_notifier_call() - Notify that the device frequency requirements
-> @@ -1426,7 +1426,7 @@ static ssize_t polling_interval_store(struct device *dev,
->   	if (ret != 1)
->   		return -EINVAL;
->   
-> -	df->governor->event_handler(df, DEVFREQ_GOV_INTERVAL, &value);
-> +	df->governor->event_handler(df, DEVFREQ_GOV_UPDATE_INTERVAL, &value);
->   	ret = count;
->   
->   	return ret;
 > diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
-> index 5ba3e051b1d0..c07ce77c253d 100644
+> index dc7533ccc3db..5ba3e051b1d0 100644
 > --- a/drivers/devfreq/governor.h
 > +++ b/drivers/devfreq/governor.h
-> @@ -18,7 +18,7 @@
->   /* Devfreq events */
->   #define DEVFREQ_GOV_START			0x1
->   #define DEVFREQ_GOV_STOP			0x2
-> -#define DEVFREQ_GOV_INTERVAL			0x3
-> +#define DEVFREQ_GOV_UPDATE_INTERVAL		0x3
->   #define DEVFREQ_GOV_SUSPEND			0x4
->   #define DEVFREQ_GOV_RESUME			0x5
+> @@ -57,17 +57,16 @@ struct devfreq_governor {
+>   				unsigned int event, void *data);
+>   };
 >   
-> @@ -61,7 +61,7 @@ void devfreq_monitor_start(struct devfreq *devfreq);
->   void devfreq_monitor_stop(struct devfreq *devfreq);
->   void devfreq_monitor_suspend(struct devfreq *devfreq);
->   void devfreq_monitor_resume(struct devfreq *devfreq);
-> -void devfreq_interval_update(struct devfreq *devfreq, unsigned int *delay);
-> +void devfreq_update_interval(struct devfreq *devfreq, unsigned int *delay);
+> -extern void devfreq_monitor_start(struct devfreq *devfreq);
+> -extern void devfreq_monitor_stop(struct devfreq *devfreq);
+> -extern void devfreq_monitor_suspend(struct devfreq *devfreq);
+> -extern void devfreq_monitor_resume(struct devfreq *devfreq);
+> -extern void devfreq_interval_update(struct devfreq *devfreq,
+> -					unsigned int *delay);
+> +void devfreq_monitor_start(struct devfreq *devfreq);
+> +void devfreq_monitor_stop(struct devfreq *devfreq);
+> +void devfreq_monitor_suspend(struct devfreq *devfreq);
+> +void devfreq_monitor_resume(struct devfreq *devfreq);
+> +void devfreq_interval_update(struct devfreq *devfreq, unsigned int *delay);
 >   
->   int devfreq_add_governor(struct devfreq_governor *governor);
->   int devfreq_remove_governor(struct devfreq_governor *governor);
-> diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
-> index 3d809f228619..1b314e1df028 100644
-> --- a/drivers/devfreq/governor_simpleondemand.c
-> +++ b/drivers/devfreq/governor_simpleondemand.c
-> @@ -96,8 +96,8 @@ static int devfreq_simple_ondemand_handler(struct devfreq *devfreq,
->   		devfreq_monitor_stop(devfreq);
->   		break;
+> -extern int devfreq_add_governor(struct devfreq_governor *governor);
+> -extern int devfreq_remove_governor(struct devfreq_governor *governor);
+> +int devfreq_add_governor(struct devfreq_governor *governor);
+> +int devfreq_remove_governor(struct devfreq_governor *governor);
 >   
-> -	case DEVFREQ_GOV_INTERVAL:
-> -		devfreq_interval_update(devfreq, (unsigned int *)data);
-> +	case DEVFREQ_GOV_UPDATE_INTERVAL:
-> +		devfreq_update_interval(devfreq, (unsigned int *)data);
->   		break;
+> -extern int devfreq_update_status(struct devfreq *devfreq, unsigned long freq);
+> +int devfreq_update_status(struct devfreq *devfreq, unsigned long freq);
 >   
->   	case DEVFREQ_GOV_SUSPEND:
-> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-> index 0b65f89d74d5..28b2c7ca416e 100644
-> --- a/drivers/devfreq/tegra30-devfreq.c
-> +++ b/drivers/devfreq/tegra30-devfreq.c
-> @@ -734,7 +734,7 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
->   		devfreq_monitor_stop(devfreq);
->   		break;
+>   static inline int devfreq_update_stats(struct devfreq *df)
+>   {
+> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+> index c6f82d4bec9f..82630fafacde 100644
+> --- a/include/linux/devfreq.h
+> +++ b/include/linux/devfreq.h
+> @@ -201,24 +201,23 @@ struct devfreq_freqs {
+>   };
 >   
-> -	case DEVFREQ_GOV_INTERVAL:
-> +	case DEVFREQ_GOV_UPDATE_INTERVAL:
->   		/*
->   		 * ACTMON hardware supports up to 256 milliseconds for the
->   		 * sampling period.
-> @@ -745,7 +745,7 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
->   		}
+>   #if defined(CONFIG_PM_DEVFREQ)
+> -extern struct devfreq *devfreq_add_device(struct device *dev,
+> -				  struct devfreq_dev_profile *profile,
+> -				  const char *governor_name,
+> -				  void *data);
+> -extern int devfreq_remove_device(struct devfreq *devfreq);
+> -extern struct devfreq *devm_devfreq_add_device(struct device *dev,
+> -				  struct devfreq_dev_profile *profile,
+> -				  const char *governor_name,
+> -				  void *data);
+> -extern void devm_devfreq_remove_device(struct device *dev,
+> -				  struct devfreq *devfreq);
+> +struct devfreq *devfreq_add_device(struct device *dev,
+> +				struct devfreq_dev_profile *profile,
+> +				const char *governor_name,
+> +				void *data);
+> +int devfreq_remove_device(struct devfreq *devfreq);
+> +struct devfreq *devm_devfreq_add_device(struct device *dev,
+> +				struct devfreq_dev_profile *profile,
+> +				const char *governor_name,
+> +				void *data);
+> +void devm_devfreq_remove_device(struct device *dev, struct devfreq *devfreq);
 >   
->   		tegra_actmon_pause(tegra);
-> -		devfreq_interval_update(devfreq, new_delay);
-> +		devfreq_update_interval(devfreq, new_delay);
->   		ret = tegra_actmon_resume(tegra);
->   		break;
+>   /* Supposed to be called by PM callbacks */
+> -extern int devfreq_suspend_device(struct devfreq *devfreq);
+> -extern int devfreq_resume_device(struct devfreq *devfreq);
+> +int devfreq_suspend_device(struct devfreq *devfreq);
+> +int devfreq_resume_device(struct devfreq *devfreq);
 >   
+> -extern void devfreq_suspend(void);
+> -extern void devfreq_resume(void);
+> +void devfreq_suspend(void);
+> +void devfreq_resume(void);
+>   
+>   /**
+>    * update_devfreq() - Reevaluate the device and configure frequency
+> @@ -226,35 +225,34 @@ extern void devfreq_resume(void);
+>    *
+>    * Note: devfreq->lock must be held
+>    */
+> -extern int update_devfreq(struct devfreq *devfreq);
+> +int update_devfreq(struct devfreq *devfreq);
+>   
+>   /* Helper functions for devfreq user device driver with OPP. */
+> -extern struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
+> -					   unsigned long *freq, u32 flags);
+> -extern int devfreq_register_opp_notifier(struct device *dev,
+> -					 struct devfreq *devfreq);
+> -extern int devfreq_unregister_opp_notifier(struct device *dev,
+> -					   struct devfreq *devfreq);
+> -extern int devm_devfreq_register_opp_notifier(struct device *dev,
+> -					      struct devfreq *devfreq);
+> -extern void devm_devfreq_unregister_opp_notifier(struct device *dev,
+> -						struct devfreq *devfreq);
+> -extern int devfreq_register_notifier(struct devfreq *devfreq,
+> -					struct notifier_block *nb,
+> -					unsigned int list);
+> -extern int devfreq_unregister_notifier(struct devfreq *devfreq,
+> -					struct notifier_block *nb,
+> -					unsigned int list);
+> -extern int devm_devfreq_register_notifier(struct device *dev,
+> +struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
+> +				unsigned long *freq, u32 flags);
+> +int devfreq_register_opp_notifier(struct device *dev,
+> +				struct devfreq *devfreq);
+> +int devfreq_unregister_opp_notifier(struct device *dev,
+> +				struct devfreq *devfreq);
+> +int devm_devfreq_register_opp_notifier(struct device *dev,
+> +				struct devfreq *devfreq);
+> +void devm_devfreq_unregister_opp_notifier(struct device *dev,
+> +				struct devfreq *devfreq);
+> +int devfreq_register_notifier(struct devfreq *devfreq,
+> +				struct notifier_block *nb,
+> +				unsigned int list);
+> +int devfreq_unregister_notifier(struct devfreq *devfreq,
+> +				struct notifier_block *nb,
+> +				unsigned int list);
+> +int devm_devfreq_register_notifier(struct device *dev,
+>   				struct devfreq *devfreq,
+>   				struct notifier_block *nb,
+>   				unsigned int list);
+> -extern void devm_devfreq_unregister_notifier(struct device *dev,
+> +void devm_devfreq_unregister_notifier(struct device *dev,
+>   				struct devfreq *devfreq,
+>   				struct notifier_block *nb,
+>   				unsigned int list);
+> -extern struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev,
+> -						int index);
+> +struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev, int index);
+>   
+>   #if IS_ENABLED(CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND)
+>   /**
+> @@ -311,9 +309,9 @@ struct devfreq_passive_data {
+>   
+>   #else /* !CONFIG_PM_DEVFREQ */
+>   static inline struct devfreq *devfreq_add_device(struct device *dev,
+> -					  struct devfreq_dev_profile *profile,
+> -					  const char *governor_name,
+> -					  void *data)
+> +					struct devfreq_dev_profile *profile,
+> +					const char *governor_name,
+> +					void *data)
+>   {
+>   	return ERR_PTR(-ENOSYS);
+>   }
+> @@ -350,31 +348,31 @@ static inline void devfreq_suspend(void) {}
+>   static inline void devfreq_resume(void) {}
+>   
+>   static inline struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
+> -					   unsigned long *freq, u32 flags)
+> +					unsigned long *freq, u32 flags)
+>   {
+>   	return ERR_PTR(-EINVAL);
+>   }
+>   
+>   static inline int devfreq_register_opp_notifier(struct device *dev,
+> -					 struct devfreq *devfreq)
+> +					struct devfreq *devfreq)
+>   {
+>   	return -EINVAL;
+>   }
+>   
+>   static inline int devfreq_unregister_opp_notifier(struct device *dev,
+> -					   struct devfreq *devfreq)
+> +					struct devfreq *devfreq)
+>   {
+>   	return -EINVAL;
+>   }
+>   
+>   static inline int devm_devfreq_register_opp_notifier(struct device *dev,
+> -						     struct devfreq *devfreq)
+> +					struct devfreq *devfreq)
+>   {
+>   	return -EINVAL;
+>   }
+>   
+>   static inline void devm_devfreq_unregister_opp_notifier(struct device *dev,
+> -							struct devfreq *devfreq)
+> +					struct devfreq *devfreq)
+>   {
+>   }
+>   
+> @@ -393,22 +391,22 @@ static inline int devfreq_unregister_notifier(struct devfreq *devfreq,
+>   }
+>   
+>   static inline int devm_devfreq_register_notifier(struct device *dev,
+> -				struct devfreq *devfreq,
+> -				struct notifier_block *nb,
+> -				unsigned int list)
+> +					struct devfreq *devfreq,
+> +					struct notifier_block *nb,
+> +					unsigned int list)
+>   {
+>   	return 0;
+>   }
+>   
+>   static inline void devm_devfreq_unregister_notifier(struct device *dev,
+> -				struct devfreq *devfreq,
+> -				struct notifier_block *nb,
+> -				unsigned int list)
+> +					struct devfreq *devfreq,
+> +					struct notifier_block *nb,
+> +					unsigned int list)
+>   {
+>   }
+>   
+>   static inline struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev,
+> -							int index)
+> +					int index)
+>   {
+>   	return ERR_PTR(-ENODEV);
+>   }
 > 
+
+Looks good to me.
 
 
 Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
