@@ -2,121 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0534514D340
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2020 23:53:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6143114D507
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 02:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbgA2WxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jan 2020 17:53:14 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:56225 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726222AbgA2WxO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jan 2020 17:53:14 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1iwwCr-0007iy-Me; Wed, 29 Jan 2020 23:53:09 +0100
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1iwwCo-0006yK-FW; Wed, 29 Jan 2020 23:53:06 +0100
-Date:   Wed, 29 Jan 2020 23:53:06 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-        rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
-        kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: USB Port Power-Off during suspend Bug?
-Message-ID: <20200129225306.dmtoemf62qhogysh@pengutronix.de>
-References: <20200129095442.3exfzwp3vrubfxir@pengutronix.de>
- <Pine.LNX.4.44L0.2001291254080.1429-100000@iolanthe.rowland.org>
+        id S1727179AbgA3Blg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jan 2020 20:41:36 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:46069 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726618AbgA3Blg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jan 2020 20:41:36 -0500
+Received: by mail-ot1-f66.google.com with SMTP id 59so1579333otp.12;
+        Wed, 29 Jan 2020 17:41:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2P8mIQM2+gpGwwpWHO7MIWsL+16CozNLtmz3AeK6KJA=;
+        b=sh4KnuZPnRoQwLcdY0e21qeGh/RWA9KkP9Xk6BJa9lr+DwN0U5HxoXsVrMTKefUF2z
+         xwCqC9eiI+Qy/ZyiVxzhWNmb1faaD9Xpv+8eUaRcq1F3y+CmuIpE/RT4Tzv70wMzTY/4
+         4H3m1olAIjuotpPfb0MQyMYNnFPO8bhpxH0rIJPZV1J3od0WRmrIJj9hvo+R6wfP4FHS
+         y5hqf0Ty2PyndwVfeQkzHspDrb9II6JQj/IrNY+gDfHDSiq7T1pWwBe/+yqWcN2KKQSp
+         dkspeeCwD9+l/kO0PffVUSyHijvVdI8lsEV/dGHJu49spPpLVWzwehLRfREsvZuNa97e
+         7aAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2P8mIQM2+gpGwwpWHO7MIWsL+16CozNLtmz3AeK6KJA=;
+        b=V2Tqqnd8qGZC0+cNER460B7wi8zq+03LgnQappyhSjTvBuDjI+crbn4LMdC5QNTJHM
+         95wIEQLo1MgJy3iz9GQQU/K6k5un9aYOnl7iLWesFDm4DGUmRJwhZVxYLdzNKKyZS/k/
+         D0ePb+iaID6GP9PS71Iuy3FNtvGmixzkJESbtC+a4uH2n8a0LfTxfrAqYAlCAE+YUoGv
+         nCBuoeSj58NcgTZSybqOTkXDjrONYRR+vr3pSA2IEcr+axK247A0V7q4CaVT+cvYANln
+         aE7GY9Aec9B5n8QePqhNZAeqYBhtJ+leAY09LjdxXvIZ132gR/OPktkC5t0YjAomdtis
+         a3TA==
+X-Gm-Message-State: APjAAAVbYSwkZR3B/IEx7Z16oQmltiw+fKSE+evtYbdACYhH9Jg7oPN+
+        eEcU4juny069OU4tAcipOSE=
+X-Google-Smtp-Source: APXvYqwx8XNMC2oG239rd8MwmWT71BEAXssFRVi4DTH6NF10X2y0cEiI33G9V1m33fi6InTuE/2zRw==
+X-Received: by 2002:a9d:8f1:: with SMTP id 104mr1637192otf.107.1580348495040;
+        Wed, 29 Jan 2020 17:41:35 -0800 (PST)
+Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id j45sm1313526ota.59.2020.01.29.17.41.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jan 2020 17:41:33 -0800 (PST)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Niklas Cassel <niklas.cassel@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH] power: avs: qcom-cpr: Avoid clang -Wsometimes-uninitialized in cpr_scale
+Date:   Wed, 29 Jan 2020 18:41:30 -0700
+Message-Id: <20200130014130.51313-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.2001291254080.1429-100000@iolanthe.rowland.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 23:46:04 up 75 days, 14:04, 71 users,  load average: 0.22, 0.17,
- 0.07
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-01-29 12:59, Alan Stern wrote:
-> On Wed, 29 Jan 2020, Marco Felsch wrote:
-> 
-> > Hi Alan, Rafael, Greg,
-> > 
-> > long story short: I want to disable a usb-port completely during suspend
-> 
-> You're talking about what happens during a full system suspend, right?
+Clang warns (trimmed for brevity):
 
-Yes.
+../drivers/power/avs/qcom-cpr.c:570:13: warning: variable 'reg_mask' is
+used uninitialized whenever 'if' condition is false
+[-Wsometimes-uninitialized]
 
-> > because it isn't needed and we need to save energy, because is a 32bit ARM
-> > (OF-based) handheld device. I use the port to connect a usb-ethernet
-> > dongle (all needed drivers are builtin no modules) which is needed for
-> > the NFS. The usb-ethernet dongle supports the persist setting because it
-> > does a hw-reset during resume anyway.
-> > 
-> > So what I did is:
-> >  1) Set the persist bit for the usb device
-> >  2) Set the control to auto for the usb device
-> >  3) Unset the pm_qos_no_power_off flag for the usb-port
-> > 
-> > But the port gets not disabled. I debugged it and found a problem in
-> > usb_port_suspend() logic [1] and the generic PM-framework more precisely
-> > the dpm mechanism. The usbcore does the correct pm_runtime counting but
-> > the call [2] don't trigger the usb_port_runtime_suspend() [3] because
-> > the dpm enables all runtime-pm device before the shutdown is executed.
-> 
-> That's right; it's supposed to work that way.  We don't want runtime 
-> suspend kicking in and messing things up during a system suspend.
+../drivers/power/avs/qcom-cpr.c:520:13: warning: variable 'new_uV' is
+used uninitialized whenever 'if' condition is false
+[-Wsometimes-uninitialized]
 
-I'm absolutly fine with that behaviour.
+Due to the fact that Clang's static analysis happens before any
+optimization passes are taken into account, it cannot see that both
+branches in the if statement must be taken because dir cannot be
+something other than UP or DOWN due to the check at the top of this
+function. Change the else if condition to else to fix this false
+positive.
 
-> > IMHO both subsystem behaviours are correct and I don't know the
-> > _correct_ fix, therefore I wrote this email.
-> 
-> The correct fix is to add support for system suspend to the USB port 
-> driver.  Currently it only supports runtime suspend, as you can see 
-> from the definition of usb_port_pm_ops in port.c.
+Fixes: bf6910abf548 ("power: avs: Add support for CPR (Core Power Reduction)")
+Link: https://github.com/ClangBuiltLinux/linux/issues/840
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
+ drivers/power/avs/qcom-cpr.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I tought that this was intentionally to support only the runtime-pm ops.
-Okay so this means that we need to check the:
-  - persist
-  - do_wakeup
-  - pm_qos_power_off
-bits again for the suspend case. I tought I miss something and we can
-reuse the current checks.
-
-Regards,
-  Marco
-
-> Alan Stern
-> 
-> > As far as I understood it all non-ACPI platforms are affected.
-> > 
-> > Regards,
-> >   Marco
-> > 
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/hub.c?h=v5.5#n3238
-> > [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/hub.c?h=v5.5#n3328
-> > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/port.c?h=v5.5#n247
-> 
-> 
-
+diff --git a/drivers/power/avs/qcom-cpr.c b/drivers/power/avs/qcom-cpr.c
+index 9192fb747653..e8831e4aee05 100644
+--- a/drivers/power/avs/qcom-cpr.c
++++ b/drivers/power/avs/qcom-cpr.c
+@@ -517,7 +517,7 @@ static int cpr_scale(struct cpr_drv *drv, enum voltage_change_dir dir)
+ 		dev_dbg(drv->dev,
+ 			"UP: -> new_uV: %d last_uV: %d perf state: %u\n",
+ 			new_uV, last_uV, cpr_get_cur_perf_state(drv));
+-	} else if (dir == DOWN) {
++	} else {
+ 		if (desc->clamp_timer_interval &&
+ 		    error_steps < desc->down_threshold) {
+ 			/*
+@@ -567,7 +567,7 @@ static int cpr_scale(struct cpr_drv *drv, enum voltage_change_dir dir)
+ 		/* Disable auto nack down */
+ 		reg_mask = RBCPR_CTL_SW_AUTO_CONT_NACK_DN_EN;
+ 		val = 0;
+-	} else if (dir == DOWN) {
++	} else {
+ 		/* Restore default threshold for UP */
+ 		reg_mask = RBCPR_CTL_UP_THRESHOLD_MASK;
+ 		reg_mask <<= RBCPR_CTL_UP_THRESHOLD_SHIFT;
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.25.0
+
