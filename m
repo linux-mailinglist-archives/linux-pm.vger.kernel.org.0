@@ -2,72 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7956D14DA82
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 13:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F11714DAFD
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 13:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726949AbgA3MT1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jan 2020 07:19:27 -0500
-Received: from jabberwock.ucw.cz ([46.255.230.98]:56500 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726873AbgA3MT1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jan 2020 07:19:27 -0500
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 1A7F41C2604; Thu, 30 Jan 2020 13:19:26 +0100 (CET)
-Date:   Thu, 30 Jan 2020 13:19:26 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Jonas Meurer <jonas@freesources.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Tim Dittler <tim.dittler@systemli.org>,
-        Yannik Sembritzki <yannik@sembritzki.me>
-Subject: Re: [PATCH v3] PM: suspend: Add sysfs attribute to control the "sync
- on suspend" behavior
-Message-ID: <20200130121926.cdz7dtrcbeuodqca@ucw.cz>
-References: <d05a1c0c-1212-17f4-3772-042e2ff76a40@freesources.org>
- <CAJZ5v0gXMkL8Z_=jUvNGoVjDr4s5osO8RNekJ1yg-b+=zi7GSw@mail.gmail.com>
+        id S1727221AbgA3MuF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jan 2020 07:50:05 -0500
+Received: from mail-ua1-f67.google.com ([209.85.222.67]:36604 "EHLO
+        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727202AbgA3MuF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jan 2020 07:50:05 -0500
+Received: by mail-ua1-f67.google.com with SMTP id y3so1103798uae.3
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jan 2020 04:50:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cnMkth7hV/dDIq+IhUJB/NKhjbFoKZU6UHmqdZyzOvk=;
+        b=iQ6sBgIOXFS+YVl144eNLc5JpHouW0m9Ee9ZuD1cG7XWSQpQUoXytyz8oSzkhZCStz
+         RZTGG/UeztBrkUBjBdU05mofzifuN+nig9XaIVD2qP13ClQ5vzEm8mV0oGvgEyJ8eYhX
+         /R9MYyfdejs+BAuK4dUK30jQUu74dDMfXqdAEp8GqbsFavOT/fcqJUZjdg3rJ8H7uw1G
+         OrSnyslcxopXLgogDTR1IOuPbWj5/+AkuPooBC+mX2YegTo7ytERWHloqLQz77bLGvR/
+         NeytO+8XzWfdENLpEts8kMEcNEHT/deUH8fwgQT339wOF7PF+oQBJr8l+TeJna6WzcGB
+         15Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cnMkth7hV/dDIq+IhUJB/NKhjbFoKZU6UHmqdZyzOvk=;
+        b=DyX9tq/Lpqikxh8uPbW9qbWtRmJnzPYzLuByUSs32P6RioWbMhjCKGiccqJjr8BDfO
+         rQKzUkWA6bX95A6D4ut55Elx2QCY0LnY8qCoPyKkGeAJ1mFHoiaJN9wQrD6Zbknms8Rc
+         /uWGzuSV2ja7v23cWLBVlyErjbjlvgrr7CREqJskuCKF4NnA+nRCPSjaGtzuZgTGtiRL
+         kN5nfIGFSEpD5oTLSsX3gXs8PSl1jItoSmRmAUCYF8/Fx+RE0lpfZaQGsznQr9VjI2Hg
+         YA0GrxfDesFckQcSxvsHfjFU7QZAXp18pMpiFrpy8xilaM5DEK7L6QOx/dJepWqlnuKL
+         nVlw==
+X-Gm-Message-State: APjAAAX2Dp1eejFe9KRrHjnfWQh5aRpuTj/6meb3A0uiXM8bpWjKHkPR
+        EkD7xS3+8BmWvHWG/ruV/LfnLHQx/mY06i9ybUD+Cw==
+X-Google-Smtp-Source: APXvYqzLFBjElA1AVzS3KAO1ZGYE8/2SstCFpuQS0BXBp8tlomfa/2p+73irPnPNVb+1+IYb+1jx8pAZxBMw4U6rzlY=
+X-Received: by 2002:ab0:b94:: with SMTP id c20mr2456278uak.67.1580388603038;
+ Thu, 30 Jan 2020 04:50:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gXMkL8Z_=jUvNGoVjDr4s5osO8RNekJ1yg-b+=zi7GSw@mail.gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+References: <cover.1577976221.git.amit.kucheria@linaro.org>
+ <0a969ecd48910dac4da81581eff45b5e579b2bfc.1577976221.git.amit.kucheria@linaro.org>
+ <20200102192925.GC988120@minitux>
+In-Reply-To: <20200102192925.GC988120@minitux>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Thu, 30 Jan 2020 18:19:52 +0530
+Message-ID: <CAHLCerM-zB=7P4Si88Hhyt8J7ojPGa6J9SmwTm8d8Jh3syiMtQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/9] drivers: thermal: tsens: Release device in success path
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, sivaa@codeaurora.org,
+        Andy Gross <agross@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi!
-
-> > The sysfs attribute `/sys/power/sync_on_suspend` controls, whether or not
-> > filesystems are synced by the kernel before system suspend.
+On Fri, Jan 3, 2020 at 12:59 AM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Thu 02 Jan 06:54 PST 2020, Amit Kucheria wrote:
+>
+> > We don't currently call put_device in case of successfully initialising
+> > the device.
 > >
-> > Congruously, the behaviour of build-time switch CONFIG_SUSPEND_SKIP_SYNC
-> > is slightly changed: It now defines the run-tim default for the new sysfs
-> > attribute `/sys/power/sync_on_suspend`.
+> > Allow control to fall through so we can use same code for success and
+> > error paths to put_device.
 > >
-> > The run-time attribute is added because the existing corresponding
-> > build-time Kconfig flag for (`CONFIG_SUSPEND_SKIP_SYNC`) is not flexible
-> > enough. E.g. Linux distributions that provide pre-compiled kernels
-> > usually want to stick with the default (sync filesystems before suspend)
-> > but under special conditions this needs to be changed.
+>
+> Given the relationship between priv->dev and op I think this wouldn't be
+> a problem in practice, but there's two devm_ioremap_resource() done on
+> op->dev in this function. So you're depending on op->dev to stick
+> around, but with this patch you're no longer expressing that dependency.
+>
+> That said, it looks iffy to do devm_ioremap_resource() on op->dev and
+> then create a regmap on priv->dev using that resource. So I think it
+> would be better to do platform_get_source() on op, and then
+> devm_ioremap_resource() on priv->dev, in which case the regmap backing
+> memory will be related to the same struct device as the regmap and it
+> makes perfect sense to put_device() the op->dev when you're done
+> inspecting it's resources.
+>
+
+Indeed, thanks for reviewing.
+
+Will fix.
+
+> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> > ---
+> >  drivers/thermal/qcom/tsens-common.c | 2 --
+> >  1 file changed, 2 deletions(-)
 > >
-> > One example for such a special condition is user-space handling of
-> > suspending block devices (e.g. using `cryptsetup luksSuspend` or `dmsetup
-> > suspend`) before system suspend. The Kernel trying to sync filesystems
-> > after the underlying block device already got suspended obviously leads
-> > to dead-locks. Be aware that you have to take care of the filesystem sync
-> > yourself before suspending the system in those scenarios.
+> > diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+> > index 1cbc5a6e5b4f..e84e94a6f1a7 100644
+> > --- a/drivers/thermal/qcom/tsens-common.c
+> > +++ b/drivers/thermal/qcom/tsens-common.c
+> > @@ -687,8 +687,6 @@ int __init init_common(struct tsens_priv *priv)
+> >       tsens_enable_irq(priv);
+> >       tsens_debug_init(op);
 > >
-> > Signed-off-by: Jonas Meurer <jonas@freesources.org>
-> 
-> Applied as 5.6 material with minor changes in the ABI document, thanks!
-
-For the record, I still believe this is bad idea.
-
-User should not have to tweak variables in /sys for system not to
-deadlock with cryptsetup.. and we are stuck with this pretty much
-forever.
-
-									Pavel
+> > -     return 0;
+> > -
+> >  err_put_device:
+> >       put_device(&op->dev);
+> >       return ret;
+> > --
+> > 2.20.1
+> >
