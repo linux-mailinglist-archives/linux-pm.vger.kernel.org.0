@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA3214DBB1
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 14:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9A414DBB4
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 14:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727483AbgA3N1o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jan 2020 08:27:44 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35990 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727261AbgA3N1n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jan 2020 08:27:43 -0500
-Received: by mail-pg1-f195.google.com with SMTP id k3so1663940pgc.3
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jan 2020 05:27:41 -0800 (PST)
+        id S1727497AbgA3N1r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jan 2020 08:27:47 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:51702 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727490AbgA3N1p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jan 2020 08:27:45 -0500
+Received: by mail-pj1-f65.google.com with SMTP id fa20so1334998pjb.1
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jan 2020 05:27:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BdqL+x3UnmB9p8cvhtPjpe4pu+I9XE06RhosU/aRLBE=;
-        b=HYp7PeVAZksaW1u+cvxO61DyoWNCC8cM05jGQztTJWPBrPgZhbYY+vtSf/heqTV4pQ
-         xpXDWt9jcY8YxTt7iesR+dTkiat5PVN24d2264YAInQ8f+BzMttqB9adIDAf2xVtauvb
-         tFEk5ALuumssLlS0ETq9FXAhVWWqT7nCts2fK8+7Zxav7HznrkoSZSujfyscpOkMqrqK
-         jztv9N4l+77Bk4qnuGpQU/ta68yBF7a4lUDSK7u6h8ImJVs5jBEyqkYfK76GI0byWM4s
-         Bw7SEq5qQloamU/RTopzSEBTkTCecktw5WLWsUG7hRkzMgqmRBbZXBUccMAmz/xiMQjG
-         LPkg==
+        bh=pomAiPgtoR9hWjv7O7J3D7woUIclgXwvwvp+FTh+Xkc=;
+        b=ZgVGj+Xjty+b8TbQTeuSX4IRcaCODllhvIOAdUsKTcQGjerqKlWz/naS+7dHeVZ3v3
+         bmfyYWU/EYGnBW5nmfLTXdJullrWqYDPckcERQUZfoZc0VnHqPnOYAEZRiK7zmHEQo6q
+         1z9Hi8us5lF1vDdf4ZuRS1k7uAWGbtW59YtyUasoaFvIj2prirzeHdbLm4Rwe2aTziYt
+         /kEERJXvs/aBq4ybV8XwT2Wtmqcfc+bYrZJY+hIBX2WAD262hGrLqRigK6CNvS8cjSCF
+         iwDcYkRSU4nGfXZwTcq8xv7ngZMqzpJQXUG4UfyzgHdGxEPAuSAJSQuGKq93LQzzROYT
+         ZcyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BdqL+x3UnmB9p8cvhtPjpe4pu+I9XE06RhosU/aRLBE=;
-        b=SVhlz8MSjzar7x2e8U8TLZ5iBn+q7fCAtjqYFXN3wIpRScsvy3f9g63VzLbSC2MFPo
-         TisrXXxfEuBqs4WBoVEaF/zivD4eJxK6yyLE4PCnsAqtPRfTiali5SDFbwd5LlVKgodk
-         svZXFeIslCo4BzgaycL165btlrczyXsAYWy0t6xcjeuegUP7qZWXfW/pfJzJxGOYDqYz
-         O7knrJNksxlwzUjSckipM49JQk/jkDjeiO8/o3m659kdSbvqfTeBjThPrMnUTlmyMonG
-         SlA9seLx3nyhDj89tHaM770LGJIo4J57XKzJnof+LodOi9SbNzEsIfDPDE8E1MJyXket
-         CZBQ==
-X-Gm-Message-State: APjAAAVh8ZFU6bbZYIUg6FK1fnZR1MYYntq+Clz1tfTOAqppw0/k4Cvj
-        d7/46wr0Q2aq+dzmjdefbEP4ZQ==
-X-Google-Smtp-Source: APXvYqwB7UPg0gz3fV4XjUVNVNhXYeDqUrc2+r90qXlJVZZVahoX7LFYttoPXw62+c1Kwls7LPcvMw==
-X-Received: by 2002:a63:1c1d:: with SMTP id c29mr4805414pgc.14.1580390861276;
-        Thu, 30 Jan 2020 05:27:41 -0800 (PST)
+        bh=pomAiPgtoR9hWjv7O7J3D7woUIclgXwvwvp+FTh+Xkc=;
+        b=OZ3361xBGY+YxY0Uv5ZNhO9VoEoQRM8NtDZ1I0BgZ6h5AfQQ6kJb9K0c0NJgfEQ2Ng
+         qL8rID2v9cRMVo/mlNYhE8ty8VlZFPFEChP5VpgE+wNate2fHQ4+7UtuhQscZHNp/5h9
+         sXkkl4u89QhDLr3Tast6Yb/wZ5uTZH/RDy660yyQKQ+XUOLgCLt7Pbv0qG4Drtkg3/Wk
+         gIjI0GvXDrZ8QogUSh98jAX5LB/RDuLN7mfifwmnTj/P86lcQHnGOkU04fA8TjaKKkb4
+         5+ETHQ5zl1wGjjCX9Z3gnzAvVh4M8k5l4wJpAjcERMi7Bxu7d3F+bex/JH0PqHyX/93e
+         n3aQ==
+X-Gm-Message-State: APjAAAUYVSa7u8EjLp4OgpwL7sNPOpks0Jkcid8Pdss9eyKSTEP/yWfR
+        oL0tCj5lm3xYsWtey03a22PDRg==
+X-Google-Smtp-Source: APXvYqxhD3CwYxceVh8ePcp5J8g05jLBz0vgt4lcREJGnxcbxpgzim8BcdEJ/8KXfLQ+sRj82Y0LTg==
+X-Received: by 2002:a17:90a:8a0e:: with SMTP id w14mr6097193pjn.51.1580390865120;
+        Thu, 30 Jan 2020 05:27:45 -0800 (PST)
 Received: from localhost ([45.127.45.97])
-        by smtp.gmail.com with ESMTPSA id r145sm6884089pfr.5.2020.01.30.05.27.39
+        by smtp.gmail.com with ESMTPSA id gx2sm6625098pjb.18.2020.01.30.05.27.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jan 2020 05:27:40 -0800 (PST)
+        Thu, 30 Jan 2020 05:27:44 -0800 (PST)
 From:   Amit Kucheria <amit.kucheria@linaro.org>
 To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         bjorn.andersson@linaro.org, swboyd@chromium.org,
         sivaa@codeaurora.org, Andy Gross <agross@kernel.org>
 Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
         linux-pm@vger.kernel.org
-Subject: [PATCH v4 6/7] drivers: thermal: tsens: kernel-doc fixup
-Date:   Thu, 30 Jan 2020 18:57:09 +0530
-Message-Id: <1fccb71bd5d54842d2c54d175c080d0edeabca26.1580390127.git.amit.kucheria@linaro.org>
+Subject: [PATCH v4 7/7] drivers: thermal: tsens: Remove unnecessary irq flag
+Date:   Thu, 30 Jan 2020 18:57:10 +0530
+Message-Id: <b6db92ea41420c907beb7643f82b6b8011645ac6.1580390127.git.amit.kucheria@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1580390127.git.amit.kucheria@linaro.org>
 References: <cover.1580390127.git.amit.kucheria@linaro.org>
@@ -63,51 +63,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Document ul_lock, threshold and control structure members and make
-the following kernel-doc invocation happy:
-
-$ scripts/kernel-doc -v -none drivers/thermal/qcom/*
-
-drivers/thermal/qcom/qcom-spmi-temp-alarm.c:105: info: Scanning doc for qpnp_tm_get_temp_stage
-drivers/thermal/qcom/tsens-common.c:18: info: Scanning doc for struct tsens_irq_data
-drivers/thermal/qcom/tsens-common.c:130: info: Scanning doc for tsens_hw_to_mC
-drivers/thermal/qcom/tsens-common.c:163: info: Scanning doc for tsens_mC_to_hw
-drivers/thermal/qcom/tsens-common.c:245: info: Scanning doc for tsens_set_interrupt
-drivers/thermal/qcom/tsens-common.c:268: info: Scanning doc for tsens_threshold_violated
-drivers/thermal/qcom/tsens-common.c:362: info: Scanning doc for tsens_critical_irq_thread
-drivers/thermal/qcom/tsens-common.c:438: info: Scanning doc for tsens_irq_thread
-drivers/thermal/qcom/tsens.h:41: info: Scanning doc for struct tsens_sensor
-drivers/thermal/qcom/tsens.h:59: info: Scanning doc for struct tsens_ops
-drivers/thermal/qcom/tsens.h:494: info: Scanning doc for struct tsens_features
-drivers/thermal/qcom/tsens.h:513: info: Scanning doc for struct tsens_plat_data
-drivers/thermal/qcom/tsens.h:529: info: Scanning doc for struct tsens_context
+IRQF_TRIGGER_HIGH is already specified through devicetree interrupts
+property. Remove it from code.
 
 Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 ---
- drivers/thermal/qcom/tsens.h | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/thermal/qcom/tsens.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index cf0511a947d4..dd163b27add4 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -526,6 +526,8 @@ struct tsens_plat_data {
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 5b003d598234..9ee00c67144c 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -118,7 +118,7 @@ static int tsens_register(struct tsens_priv *priv)
  
- /**
-  * struct tsens_context - Registers to be saved/restored across a context loss
-+ * @threshold: Threshold register value
-+ * @control: Control register value
-  */
- struct tsens_context {
- 	int	threshold;
-@@ -540,6 +542,7 @@ struct tsens_context {
-  * @srot_map: pointer to SROT register address space
-  * @tm_offset: deal with old device trees that don't address TM and SROT
-  *             address space separately
-+ * @ul_lock: lock while processing upper/lower threshold interrupts
-  * @crit_lock: lock while processing critical threshold interrupts
-  * @rf: array of regmap_fields used to store value of the field
-  * @ctx: registers to be saved and restored during suspend/resume
+ 	ret = devm_request_threaded_irq(&pdev->dev, irq,
+ 					NULL, tsens_irq_thread,
+-					IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
++					IRQF_ONESHOT,
+ 					dev_name(&pdev->dev), priv);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "%s: failed to get irq\n", __func__);
 -- 
 2.20.1
 
