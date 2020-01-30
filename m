@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5442114DBA6
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 14:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9C914DBAA
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 14:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727435AbgA3N1a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jan 2020 08:27:30 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:45529 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727107AbgA3N13 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jan 2020 08:27:29 -0500
-Received: by mail-pg1-f193.google.com with SMTP id b9so1634680pgk.12
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jan 2020 05:27:29 -0800 (PST)
+        id S1727201AbgA3N1f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jan 2020 08:27:35 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:34628 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727193AbgA3N1e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jan 2020 08:27:34 -0500
+Received: by mail-pg1-f194.google.com with SMTP id j4so1665259pgi.1
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jan 2020 05:27:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LlTOqa7aJHLIIA8wM9T5y4yWDZPqvXEMyPc1NafC2uQ=;
-        b=TdFEi2Frmszieg86oOD2LCWLCg4E0GtJkmryHCl6IjbDA7EYELAoVIoZMlEP7W26Lv
-         ybBx6uaIq9O8sDRXOWRV2SiK8SPFs+IHW4z6vKVpTUu2E85oS8K5jufdqSbPxwp2duK9
-         +UtWqwSgPOqI5THsCSBqyDmZCgPJCqZZTKC9kUQcMqPv49v9n5BYj4UGVbXP3DL6koHI
-         Ph/TeuAhQN+Kjv6URJj9jkNGHO7VONP0o4z9ovj05WkJlP9kAR2Y3KVTjSRhQ5vxV4zy
-         5VpHRKX83Kt/Agm+gVCxE6ndEhtYhFhE3WKJcuBDb3bt+wz5mUOA0I0SY2hguuHIXrwK
-         46vg==
+        bh=GyQvYrEqKzwV0i0i2SNaDO0kiISmGIj5GdoahhoXLXM=;
+        b=Azg1r6jpoX24VHsV1fEv4rIhjenPC1Y5m95I8xVBJXMH/1Fg5JhRtRPjtJ4FiktJvI
+         RYqe4A3KhKCIfE9tZ4QxfhP7PlnirMKGLl3vjd+xkihF20JDAylGAR9ElY6nHbQjmF3o
+         KL4iEme/TTRyxm+zFFJ3q0aNRrjzTmeZsHaRpQuY+puP8zVaYqNKV7kO+cg7iB9DhsjU
+         Hy0NyJjMSJa9GVI/1kjIcZ0V1zOl5DQJNLqdg5oL1I5uSfi8bDtusLVDQhBrvHAJfH7O
+         5CtDLhlTfZ80s+o2H8msuV7IuRAl/siOMnjVZg/knhYrkBJveSchBGhGgcs6EcLylk6t
+         hQ9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LlTOqa7aJHLIIA8wM9T5y4yWDZPqvXEMyPc1NafC2uQ=;
-        b=g2X8XTcG6FPNLUPFEXB1qjJyc4wK/hfKOuUNXv3vBOk+ddteh84HlM4fWIYnIJXV6/
-         Fw5V9M94DzO2lxOcU1ZxLpsT2Orh2es0X3kR6ISA5P94YSB+evz197X8E9klNaejxFBg
-         aZvjW6GS7CqvF5IQpMLno9ZXnX3qg/klqOEAJxWhoBsap9S+bdmoL2RpQtveQUpdgh4K
-         PwtnO/6HQcxIyoenQ/RxouzCj3B/scWyeyZ6s0xXrowFOw63n2ndoWW8poWM4iESGvyW
-         5y/bDsghbNdOjpsRufujvj1Qz4ycCBVALT/0+MzBKpN0jGE0jgfvwbfcm9hzJWKNYxdV
-         m9cQ==
-X-Gm-Message-State: APjAAAV1gc8WrhzNVl0+Ml6hUGG6E4wHR8svrYhj3YC+aokFMIciIjcz
-        jImtbzqLz4RiX25NRKP2a5OiWQ==
-X-Google-Smtp-Source: APXvYqw5xncpx1fmf3yrnaXvl84AGEyCPAkxltvfdhVRdIUqx8JmWlvspCXIiBJt+XS5krsc1s/SWg==
-X-Received: by 2002:a63:d14:: with SMTP id c20mr4564044pgl.77.1580390848719;
-        Thu, 30 Jan 2020 05:27:28 -0800 (PST)
+        bh=GyQvYrEqKzwV0i0i2SNaDO0kiISmGIj5GdoahhoXLXM=;
+        b=mt7zsmyCiEIpqlwJgxb2y+fy7sNIgYdDacUF1pLhONqwM6ghYeyry/KU7Zq19ib/+X
+         BDNmKlVZNflkMvvP9fyAd61VlS60nKQJGCoX1JC5Vn4QFFdFNFZtyREoKvjf+R+n9zOC
+         5VnEahc2QlNXxJyEBJNqr+p6wcFR1FJkZ728Af5dz7qRYopuxc4gfRzq+UdiCteeqTlJ
+         QM+ckFZAOWIBVaTR98Yz0XddcuNK3IId4qjZESrqwddctqXR1r+yo3yEo+W+nrwzs857
+         HmE52ZmV9WsJn/303KR+IlJY1w6PR0hONKjQ5WrGQ7wjf9B33fetYCGmmju9px9QtxVe
+         CWVQ==
+X-Gm-Message-State: APjAAAU/u2GGoRyAPBrIywquBvpKCeS0XqOfP4HYnhaMDYwnR3shD9EU
+        lcAwncYikrIB81vAzvkPZd++KQ==
+X-Google-Smtp-Source: APXvYqxTrlqJuvwv3dUC1AycII3srwzGhYQehETIZ4bu61IA1iamTyXUmG6dx9GWncggdXLaCrj6Sw==
+X-Received: by 2002:a65:66da:: with SMTP id c26mr4764603pgw.354.1580390852917;
+        Thu, 30 Jan 2020 05:27:32 -0800 (PST)
 Received: from localhost ([45.127.45.97])
-        by smtp.gmail.com with ESMTPSA id o184sm6543006pgo.62.2020.01.30.05.27.27
+        by smtp.gmail.com with ESMTPSA id t65sm6546647pgb.17.2020.01.30.05.27.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jan 2020 05:27:27 -0800 (PST)
+        Thu, 30 Jan 2020 05:27:32 -0800 (PST)
 From:   Amit Kucheria <amit.kucheria@linaro.org>
 To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         bjorn.andersson@linaro.org, swboyd@chromium.org,
         sivaa@codeaurora.org, Andy Gross <agross@kernel.org>
 Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
         linux-pm@vger.kernel.org
-Subject: [PATCH v4 3/7] drivers: thermal: tsens: Release device in success path
-Date:   Thu, 30 Jan 2020 18:57:06 +0530
-Message-Id: <332d79312d2618c96adaa0f125ea033e49f0af5d.1580390127.git.amit.kucheria@linaro.org>
+Subject: [PATCH v4 4/7] drivers: thermal: tsens: Add critical interrupt support
+Date:   Thu, 30 Jan 2020 18:57:07 +0530
+Message-Id: <932e07a83fed192678b8f718bbae37d0dc83590d.1580390127.git.amit.kucheria@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1580390127.git.amit.kucheria@linaro.org>
 References: <cover.1580390127.git.amit.kucheria@linaro.org>
@@ -63,52 +63,397 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-We don't currently call put_device in case of successfully initialising
-the device.
+TSENS IP v2.x adds critical threshold interrupt support for each sensor
+in addition to the upper/lower threshold interrupt. Add support in the
+driver.
 
-Allow control to fall through so we can use same code for success and
-error paths to put_device.
-
-As a part of this fixup, change devm_ioremap_resource to act on the same
-device pointer as that used to allocate regmap memory. That ensures that
-we are free to release op->dev after examining its resources.
+While the critical interrupts themselves aren't currently used by Linux,
+the HW line is also used by the TSENS watchdog. So this patch acts as
+infrastructure to enable watchdog functionality for the TSENS IP.
 
 Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 ---
- drivers/thermal/qcom/tsens-common.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/thermal/qcom/tsens-common.c | 120 ++++++++++++++++++++++++++--
+ drivers/thermal/qcom/tsens-v2.c     |   8 +-
+ drivers/thermal/qcom/tsens.c        |  24 +++++-
+ drivers/thermal/qcom/tsens.h        |  71 ++++++++++++++++
+ 4 files changed, 212 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-index 1cbc5a6e5b4f..013750fff8b2 100644
+index 013750fff8b2..9d1594d2f1ed 100644
 --- a/drivers/thermal/qcom/tsens-common.c
 +++ b/drivers/thermal/qcom/tsens-common.c
-@@ -602,7 +602,7 @@ int __init init_common(struct tsens_priv *priv)
- 		/* DT with separate SROT and TM address space */
- 		priv->tm_offset = 0;
- 		res = platform_get_resource(op, IORESOURCE_MEM, 1);
--		srot_base = devm_ioremap_resource(&op->dev, res);
-+		srot_base = devm_ioremap_resource(dev, res);
- 		if (IS_ERR(srot_base)) {
- 			ret = PTR_ERR(srot_base);
- 			goto err_put_device;
-@@ -620,7 +620,7 @@ int __init init_common(struct tsens_priv *priv)
+@@ -23,6 +23,10 @@
+  * @low_thresh:     lower threshold temperature value
+  * @low_irq_mask:   mask register for lower threshold irqs
+  * @low_irq_clear:  clear register for lower threshold irqs
++ * @crit_viol:      critical threshold violated
++ * @crit_thresh:    critical threshold temperature value
++ * @crit_irq_mask:  mask register for critical threshold irqs
++ * @crit_irq_clear: clear register for critical threshold irqs
+  *
+  * Structure containing data about temperature threshold settings and
+  * irq status if they were violated.
+@@ -36,6 +40,10 @@ struct tsens_irq_data {
+ 	int low_thresh;
+ 	u32 low_irq_mask;
+ 	u32 low_irq_clear;
++	u32 crit_viol;
++	u32 crit_thresh;
++	u32 crit_irq_mask;
++	u32 crit_irq_clear;
+ };
+ 
+ char *qfprom_read(struct device *dev, const char *cname)
+@@ -189,6 +197,9 @@ static void tsens_set_interrupt_v1(struct tsens_priv *priv, u32 hw_id,
+ 	case LOWER:
+ 		index = LOW_INT_CLEAR_0 + hw_id;
+ 		break;
++	case CRITICAL:
++		/* No critical interrupts before v2 */
++		return;
+ 	}
+ 	regmap_field_write(priv->rf[index], enable ? 0 : 1);
+ }
+@@ -214,6 +225,10 @@ static void tsens_set_interrupt_v2(struct tsens_priv *priv, u32 hw_id,
+ 		index_mask  = LOW_INT_MASK_0 + hw_id;
+ 		index_clear = LOW_INT_CLEAR_0 + hw_id;
+ 		break;
++	case CRITICAL:
++		index_mask  = CRIT_INT_MASK_0 + hw_id;
++		index_clear = CRIT_INT_CLEAR_0 + hw_id;
++		break;
  	}
  
- 	res = platform_get_resource(op, IORESOURCE_MEM, 0);
--	tm_base = devm_ioremap_resource(&op->dev, res);
-+	tm_base = devm_ioremap_resource(dev, res);
- 	if (IS_ERR(tm_base)) {
- 		ret = PTR_ERR(tm_base);
- 		goto err_put_device;
-@@ -687,8 +687,6 @@ int __init init_common(struct tsens_priv *priv)
+ 	if (enable) {
+@@ -268,7 +283,14 @@ static int tsens_threshold_violated(struct tsens_priv *priv, u32 hw_id,
+ 	ret = regmap_field_read(priv->rf[LOWER_STATUS_0 + hw_id], &d->low_viol);
+ 	if (ret)
+ 		return ret;
+-	if (d->up_viol || d->low_viol)
++
++	if (priv->feat->crit_int) {
++		ret = regmap_field_read(priv->rf[CRITICAL_STATUS_0 + hw_id], &d->crit_viol);
++		if (ret)
++			return ret;
++	}
++
++	if (d->up_viol || d->low_viol || d->crit_viol)
+ 		return 1;
+ 
+ 	return 0;
+@@ -292,22 +314,36 @@ static int tsens_read_irq_state(struct tsens_priv *priv, u32 hw_id,
+ 		ret = regmap_field_read(priv->rf[LOW_INT_MASK_0 + hw_id], &d->low_irq_mask);
+ 		if (ret)
+ 			return ret;
++		ret = regmap_field_read(priv->rf[CRIT_INT_CLEAR_0 + hw_id], &d->crit_irq_clear);
++		if (ret)
++			return ret;
++		ret = regmap_field_read(priv->rf[CRIT_INT_MASK_0 + hw_id], &d->crit_irq_mask);
++		if (ret)
++			return ret;
++
++		d->crit_thresh = tsens_hw_to_mC(s, CRIT_THRESH_0 + hw_id);
+ 	} else {
+ 		/* No mask register on older TSENS */
+ 		d->up_irq_mask = 0;
+ 		d->low_irq_mask = 0;
++		d->crit_irq_clear = 0;
++		d->crit_irq_mask = 0;
++		d->crit_thresh = 0;
+ 	}
+ 
+ 	d->up_thresh  = tsens_hw_to_mC(s, UP_THRESH_0 + hw_id);
+ 	d->low_thresh = tsens_hw_to_mC(s, LOW_THRESH_0 + hw_id);
+ 
+-	dev_dbg(priv->dev, "[%u] %s%s: status(%u|%u) | clr(%u|%u) | mask(%u|%u)\n",
+-		hw_id, __func__, (d->up_viol || d->low_viol) ? "(V)" : "",
+-		d->low_viol, d->up_viol, d->low_irq_clear, d->up_irq_clear,
+-		d->low_irq_mask, d->up_irq_mask);
+-	dev_dbg(priv->dev, "[%u] %s%s: thresh: (%d:%d)\n", hw_id, __func__,
+-		(d->up_viol || d->low_viol) ? "(violation)" : "",
+-		d->low_thresh, d->up_thresh);
++	dev_dbg(priv->dev, "[%u] %s%s: status(%u|%u|%u) |"
++		" clr(%u|%u|%u) | mask(%u|%u|%u)\n",
++		hw_id, __func__,
++		(d->up_viol || d->low_viol || d->crit_viol) ? "(V)" : "",
++		d->low_viol, d->up_viol, d->crit_viol,
++		d->low_irq_clear, d->up_irq_clear, d->crit_irq_clear,
++		d->low_irq_mask, d->up_irq_mask, d->crit_irq_mask);
++	dev_dbg(priv->dev, "[%u] %s%s: thresh: (%d:%d:%d)\n", hw_id, __func__,
++		(d->up_viol || d->low_viol || d->crit_viol) ? "(V)" : "",
++		d->low_thresh, d->up_thresh, d->crit_thresh);
+ 
+ 	return 0;
+ }
+@@ -321,6 +357,57 @@ static inline u32 masked_irq(u32 hw_id, u32 mask, enum tsens_ver ver)
+ 	return 0;
+ }
+ 
++/**
++ * tsens_critical_irq_thread() - Threaded interrupt handler for critical interrupts
++ * @irq: irq number
++ * @data: tsens controller private data
++ *
++ * Check all sensors to find ones that violated their critical threshold limits.
++ * Clear and then re-enable the interrupt.
++ *
++ * The level-triggered interrupt might deassert if the temperature returned to
++ * within the threshold limits by the time the handler got scheduled. We
++ * consider the irq to have been handled in that case.
++ *
++ * Return: IRQ_HANDLED
++ */
++irqreturn_t tsens_critical_irq_thread(int irq, void *data)
++{
++	struct tsens_priv *priv = data;
++	struct tsens_irq_data d;
++	unsigned long flags;
++	int temp, ret, i;
++
++	for (i = 0; i < priv->num_sensors; i++) {
++		const struct tsens_sensor *s = &priv->sensor[i];
++		u32 hw_id = s->hw_id;
++
++		if (IS_ERR(s->tzd))
++			continue;
++		if (!tsens_threshold_violated(priv, hw_id, &d))
++			continue;
++		ret = get_temp_tsens_valid(s, &temp);
++		if (ret) {
++			dev_err(priv->dev, "[%u] %s: error reading sensor\n", hw_id, __func__);
++			continue;
++		}
++
++		spin_lock_irqsave(&priv->crit_lock, flags);
++
++		tsens_read_irq_state(priv, hw_id, s, &d);
++
++		if (d.crit_viol &&
++		    !masked_irq(hw_id, d.crit_irq_mask, tsens_version(priv))) {
++			/* Mask critical interrupts, not currently used on Linux */
++			tsens_set_interrupt(priv, hw_id, CRITICAL, false);
++		}
++
++		spin_unlock_irqrestore(&priv->crit_lock, flags);
++	}
++
++	return IRQ_HANDLED;
++}
++
+ /**
+  * tsens_irq_thread - Threaded interrupt handler for uplow interrupts
+  * @irq: irq number
+@@ -683,7 +770,24 @@ int __init init_common(struct tsens_priv *priv)
+ 		}
+ 	}
+ 
++	if (priv->feat->crit_int) {
++		/* This loop might need changes if enum regfield_ids is reordered */
++		for (j = CRITICAL_STATUS_0; j <= CRIT_THRESH_15; j += 16) {
++			for (i = 0; i < priv->feat->max_sensors; i++) {
++				int idx = j + i;
++
++				priv->rf[idx] = devm_regmap_field_alloc(dev, priv->tm_map,
++									priv->fields[idx]);
++				if (IS_ERR(priv->rf[idx])) {
++					ret = PTR_ERR(priv->rf[idx]);
++					goto err_put_device;
++				}
++			}
++		}
++	}
++
+ 	spin_lock_init(&priv->ul_lock);
++	spin_lock_init(&priv->crit_lock);
  	tsens_enable_irq(priv);
  	tsens_debug_init(op);
  
--	return 0;
--
+diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+index f1c8ec62e69f..ce5ef0055d13 100644
+--- a/drivers/thermal/qcom/tsens-v2.c
++++ b/drivers/thermal/qcom/tsens-v2.c
+@@ -51,8 +51,9 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
+ 	[INT_EN]  = REG_FIELD(TM_INT_EN_OFF, 0, 2),
+ 
+ 	/* TEMPERATURE THRESHOLDS */
+-	REG_FIELD_FOR_EACH_SENSOR16(LOW_THRESH, TM_Sn_UPPER_LOWER_THRESHOLD_OFF,  0,  11),
+-	REG_FIELD_FOR_EACH_SENSOR16(UP_THRESH,  TM_Sn_UPPER_LOWER_THRESHOLD_OFF, 12,  23),
++	REG_FIELD_FOR_EACH_SENSOR16(LOW_THRESH,  TM_Sn_UPPER_LOWER_THRESHOLD_OFF,  0,  11),
++	REG_FIELD_FOR_EACH_SENSOR16(UP_THRESH,   TM_Sn_UPPER_LOWER_THRESHOLD_OFF, 12,  23),
++	REG_FIELD_FOR_EACH_SENSOR16(CRIT_THRESH, TM_Sn_CRITICAL_THRESHOLD_OFF,     0,  11),
+ 
+ 	/* INTERRUPTS [CLEAR/STATUS/MASK] */
+ 	REG_FIELD_SPLIT_BITS_0_15(LOW_INT_STATUS,  TM_UPPER_LOWER_INT_STATUS_OFF),
+@@ -61,6 +62,9 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
+ 	REG_FIELD_SPLIT_BITS_16_31(UP_INT_STATUS,  TM_UPPER_LOWER_INT_STATUS_OFF),
+ 	REG_FIELD_SPLIT_BITS_16_31(UP_INT_CLEAR,   TM_UPPER_LOWER_INT_CLEAR_OFF),
+ 	REG_FIELD_SPLIT_BITS_16_31(UP_INT_MASK,    TM_UPPER_LOWER_INT_MASK_OFF),
++	REG_FIELD_SPLIT_BITS_0_15(CRIT_INT_STATUS, TM_CRITICAL_INT_STATUS_OFF),
++	REG_FIELD_SPLIT_BITS_0_15(CRIT_INT_CLEAR,  TM_CRITICAL_INT_CLEAR_OFF),
++	REG_FIELD_SPLIT_BITS_0_15(CRIT_INT_MASK,   TM_CRITICAL_INT_MASK_OFF),
+ 
+ 	/* Sn_STATUS */
+ 	REG_FIELD_FOR_EACH_SENSOR16(LAST_TEMP,       TM_Sn_STATUS_OFF,  0,  11),
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 0e7cf5236932..5b003d598234 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -87,7 +87,7 @@ static const struct thermal_zone_of_device_ops tsens_of_ops = {
+ 
+ static int tsens_register(struct tsens_priv *priv)
+ {
+-	int i, ret, irq;
++	int i, ret, irq, irq_crit;
+ 	struct thermal_zone_device *tzd;
+ 	struct platform_device *pdev;
+ 
+@@ -125,6 +125,28 @@ static int tsens_register(struct tsens_priv *priv)
+ 		goto err_put_device;
+ 	}
+ 
++	if (priv->feat->crit_int) {
++		irq_crit = platform_get_irq_byname(pdev, "critical");
++		if (irq_crit < 0) {
++			ret = irq_crit;
++			/* For old DTs with no IRQ defined */
++			if (irq_crit == -ENXIO)
++				ret = 0;
++			goto err_crit_int;
++		}
++		ret = devm_request_threaded_irq(&pdev->dev, irq_crit,
++						NULL, tsens_critical_irq_thread,
++						IRQF_ONESHOT,
++						dev_name(&pdev->dev), priv);
++		if (ret) {
++			dev_err(&pdev->dev, "%s: failed to get critical irq\n", __func__);
++			goto err_crit_int;
++		}
++
++		enable_irq_wake(irq_crit);
++	}
++
++err_crit_int:
+ 	enable_irq_wake(irq);
+ 
  err_put_device:
- 	put_device(&op->dev);
- 	return ret;
+diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+index 70dc34c80537..a252619c2399 100644
+--- a/drivers/thermal/qcom/tsens.h
++++ b/drivers/thermal/qcom/tsens.h
+@@ -23,6 +23,7 @@
+ 
+ struct tsens_priv;
+ 
++/* IP version numbers in ascending order */
+ enum tsens_ver {
+ 	VER_0_1 = 0,
+ 	VER_1_X,
+@@ -32,6 +33,7 @@ enum tsens_ver {
+ enum tsens_irq_type {
+ 	LOWER,
+ 	UPPER,
++	CRITICAL,
+ };
+ 
+ /**
+@@ -374,6 +376,70 @@ enum regfield_ids {
+ 	CRITICAL_STATUS_13,
+ 	CRITICAL_STATUS_14,
+ 	CRITICAL_STATUS_15,
++	CRIT_INT_STATUS_0,	/* CRITICAL interrupt status */
++	CRIT_INT_STATUS_1,
++	CRIT_INT_STATUS_2,
++	CRIT_INT_STATUS_3,
++	CRIT_INT_STATUS_4,
++	CRIT_INT_STATUS_5,
++	CRIT_INT_STATUS_6,
++	CRIT_INT_STATUS_7,
++	CRIT_INT_STATUS_8,
++	CRIT_INT_STATUS_9,
++	CRIT_INT_STATUS_10,
++	CRIT_INT_STATUS_11,
++	CRIT_INT_STATUS_12,
++	CRIT_INT_STATUS_13,
++	CRIT_INT_STATUS_14,
++	CRIT_INT_STATUS_15,
++	CRIT_INT_CLEAR_0,	/* CRITICAL interrupt clear */
++	CRIT_INT_CLEAR_1,
++	CRIT_INT_CLEAR_2,
++	CRIT_INT_CLEAR_3,
++	CRIT_INT_CLEAR_4,
++	CRIT_INT_CLEAR_5,
++	CRIT_INT_CLEAR_6,
++	CRIT_INT_CLEAR_7,
++	CRIT_INT_CLEAR_8,
++	CRIT_INT_CLEAR_9,
++	CRIT_INT_CLEAR_10,
++	CRIT_INT_CLEAR_11,
++	CRIT_INT_CLEAR_12,
++	CRIT_INT_CLEAR_13,
++	CRIT_INT_CLEAR_14,
++	CRIT_INT_CLEAR_15,
++	CRIT_INT_MASK_0,	/* CRITICAL interrupt mask */
++	CRIT_INT_MASK_1,
++	CRIT_INT_MASK_2,
++	CRIT_INT_MASK_3,
++	CRIT_INT_MASK_4,
++	CRIT_INT_MASK_5,
++	CRIT_INT_MASK_6,
++	CRIT_INT_MASK_7,
++	CRIT_INT_MASK_8,
++	CRIT_INT_MASK_9,
++	CRIT_INT_MASK_10,
++	CRIT_INT_MASK_11,
++	CRIT_INT_MASK_12,
++	CRIT_INT_MASK_13,
++	CRIT_INT_MASK_14,
++	CRIT_INT_MASK_15,
++	CRIT_THRESH_0,		/* CRITICAL threshold values */
++	CRIT_THRESH_1,
++	CRIT_THRESH_2,
++	CRIT_THRESH_3,
++	CRIT_THRESH_4,
++	CRIT_THRESH_5,
++	CRIT_THRESH_6,
++	CRIT_THRESH_7,
++	CRIT_THRESH_8,
++	CRIT_THRESH_9,
++	CRIT_THRESH_10,
++	CRIT_THRESH_11,
++	CRIT_THRESH_12,
++	CRIT_THRESH_13,
++	CRIT_THRESH_14,
++	CRIT_THRESH_15,
+ 	MIN_STATUS_0,		/* MIN threshold violated */
+ 	MIN_STATUS_1,
+ 	MIN_STATUS_2,
+@@ -460,6 +526,7 @@ struct tsens_context {
+  * @srot_map: pointer to SROT register address space
+  * @tm_offset: deal with old device trees that don't address TM and SROT
+  *             address space separately
++ * @crit_lock: lock while processing critical threshold interrupts
+  * @rf: array of regmap_fields used to store value of the field
+  * @ctx: registers to be saved and restored during suspend/resume
+  * @feat: features of the IP
+@@ -479,6 +546,9 @@ struct tsens_priv {
+ 	/* lock for upper/lower threshold interrupts */
+ 	spinlock_t			ul_lock;
+ 
++	/* lock for critical threshold interrupts */
++	spinlock_t			crit_lock;
++
+ 	struct regmap_field		*rf[MAX_REGFIELDS];
+ 	struct tsens_context		ctx;
+ 	struct tsens_features		*feat;
+@@ -500,6 +570,7 @@ int tsens_enable_irq(struct tsens_priv *priv);
+ void tsens_disable_irq(struct tsens_priv *priv);
+ int tsens_set_trips(void *_sensor, int low, int high);
+ irqreturn_t tsens_irq_thread(int irq, void *data);
++irqreturn_t tsens_critical_irq_thread(int irq, void *data);
+ 
+ /* TSENS target */
+ extern struct tsens_plat_data data_8960;
 -- 
 2.20.1
 
