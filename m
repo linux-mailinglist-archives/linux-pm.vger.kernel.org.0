@@ -2,113 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F11714DAFD
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 13:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA2014DB9B
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 14:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727221AbgA3MuF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jan 2020 07:50:05 -0500
-Received: from mail-ua1-f67.google.com ([209.85.222.67]:36604 "EHLO
-        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727202AbgA3MuF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jan 2020 07:50:05 -0500
-Received: by mail-ua1-f67.google.com with SMTP id y3so1103798uae.3
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jan 2020 04:50:03 -0800 (PST)
+        id S1727260AbgA3N1R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jan 2020 08:27:17 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:39364 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726948AbgA3N1R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jan 2020 08:27:17 -0500
+Received: by mail-pl1-f195.google.com with SMTP id g6so1353222plp.6
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jan 2020 05:27:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cnMkth7hV/dDIq+IhUJB/NKhjbFoKZU6UHmqdZyzOvk=;
-        b=iQ6sBgIOXFS+YVl144eNLc5JpHouW0m9Ee9ZuD1cG7XWSQpQUoXytyz8oSzkhZCStz
-         RZTGG/UeztBrkUBjBdU05mofzifuN+nig9XaIVD2qP13ClQ5vzEm8mV0oGvgEyJ8eYhX
-         /R9MYyfdejs+BAuK4dUK30jQUu74dDMfXqdAEp8GqbsFavOT/fcqJUZjdg3rJ8H7uw1G
-         OrSnyslcxopXLgogDTR1IOuPbWj5/+AkuPooBC+mX2YegTo7ytERWHloqLQz77bLGvR/
-         NeytO+8XzWfdENLpEts8kMEcNEHT/deUH8fwgQT339wOF7PF+oQBJr8l+TeJna6WzcGB
-         15Bg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gOwA34ILdL4oq25kJIGC/jLpgzcKXdQaeYAFeBcy1qU=;
+        b=dDfuPRQ92jWU0LIkSN1QSD3lU0PgvRSKLD0/H/oICMEy+QGRURjYYoIOpY68SEDw6v
+         cvyLpxh1WKa9yC3IKL5OQnHVPccffzEltS+6hPhxusl5diXJU0KSernxH89Df20Lo1dz
+         L2JvC+UEHFUOG92LTb0G0YPjVkfVQ/pbE/XDZ/kv4tjCSqBC56vDPSJbWio9hr9o0ts7
+         bxMsA7iYWbuTGQ0v5Kse7F2G7ayr0SvYqa20rj3t5z39NtpIyA6MmbjUjZOs73necCLF
+         j9t/5cckZplBRMr1E7VbV0Mqq05NAyNYlecxuoyeN+Bw+lO36miU8u2x015oZFk4T07e
+         eF+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cnMkth7hV/dDIq+IhUJB/NKhjbFoKZU6UHmqdZyzOvk=;
-        b=DyX9tq/Lpqikxh8uPbW9qbWtRmJnzPYzLuByUSs32P6RioWbMhjCKGiccqJjr8BDfO
-         rQKzUkWA6bX95A6D4ut55Elx2QCY0LnY8qCoPyKkGeAJ1mFHoiaJN9wQrD6Zbknms8Rc
-         /uWGzuSV2ja7v23cWLBVlyErjbjlvgrr7CREqJskuCKF4NnA+nRCPSjaGtzuZgTGtiRL
-         kN5nfIGFSEpD5oTLSsX3gXs8PSl1jItoSmRmAUCYF8/Fx+RE0lpfZaQGsznQr9VjI2Hg
-         YA0GrxfDesFckQcSxvsHfjFU7QZAXp18pMpiFrpy8xilaM5DEK7L6QOx/dJepWqlnuKL
-         nVlw==
-X-Gm-Message-State: APjAAAX2Dp1eejFe9KRrHjnfWQh5aRpuTj/6meb3A0uiXM8bpWjKHkPR
-        EkD7xS3+8BmWvHWG/ruV/LfnLHQx/mY06i9ybUD+Cw==
-X-Google-Smtp-Source: APXvYqzLFBjElA1AVzS3KAO1ZGYE8/2SstCFpuQS0BXBp8tlomfa/2p+73irPnPNVb+1+IYb+1jx8pAZxBMw4U6rzlY=
-X-Received: by 2002:ab0:b94:: with SMTP id c20mr2456278uak.67.1580388603038;
- Thu, 30 Jan 2020 04:50:03 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1577976221.git.amit.kucheria@linaro.org>
- <0a969ecd48910dac4da81581eff45b5e579b2bfc.1577976221.git.amit.kucheria@linaro.org>
- <20200102192925.GC988120@minitux>
-In-Reply-To: <20200102192925.GC988120@minitux>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gOwA34ILdL4oq25kJIGC/jLpgzcKXdQaeYAFeBcy1qU=;
+        b=eTbUQ3f7vJJCvOfgTH8IDuF9hHfCkOT1U8zIXPukNtMdvvQaaJLiroMcaJ1nlKU8eR
+         c4l0zrl5CLptz3xsViwtHuNXduEAfj9iX6jSknHJn5fJ5o244l/7aODpdLAFBYPdfRHP
+         4+psrXPp5+pIdCbA2CsVWjQr5/yuAEZkNC+mcqTdZ/XiEx4aNft6EoKD2PNn1a7PKWgy
+         INmjr4xKRcjrUbw3m4tLYgG/zv2WGAFmRWECtL4ktHUOD6iyGOXHyBWibHMtVYZ9Ov60
+         RMznsON3/eH29NM6kHjFsv0MO1q/rP3l34lA6nC39jyQTffkR/a//egRh7BHNmHI/Lgq
+         FZMg==
+X-Gm-Message-State: APjAAAUGxVBRARBz+AuoC4cBuPpq1uQ5I+m1XfQc5GKqwZd/b6FwoeOi
+        RKJPKBPA0kQEk3Yir6p1J0Ot1w==
+X-Google-Smtp-Source: APXvYqybNMBlwVwbr5VBc7GgFdTLkBEI3jWbTqxHCsdTz2w9rxxEqg9xiNLt2XBIsvjvMyBQ31KyKg==
+X-Received: by 2002:a17:90a:d783:: with SMTP id z3mr5766375pju.3.1580390836630;
+        Thu, 30 Jan 2020 05:27:16 -0800 (PST)
+Received: from localhost ([45.127.45.97])
+        by smtp.gmail.com with ESMTPSA id w187sm6757314pfw.62.2020.01.30.05.27.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jan 2020 05:27:15 -0800 (PST)
 From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Thu, 30 Jan 2020 18:19:52 +0530
-Message-ID: <CAHLCerM-zB=7P4Si88Hhyt8J7ojPGa6J9SmwTm8d8Jh3syiMtQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/9] drivers: thermal: tsens: Release device in success path
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>, sivaa@codeaurora.org,
-        Andy Gross <agross@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        bjorn.andersson@linaro.org, swboyd@chromium.org,
+        sivaa@codeaurora.org, Andy Gross <agross@kernel.org>
+Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v4 0/7] thermal: tsens: Handle critical interrupts
+Date:   Thu, 30 Jan 2020 18:57:03 +0530
+Message-Id: <cover.1580390127.git.amit.kucheria@linaro.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 3, 2020 at 12:59 AM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> On Thu 02 Jan 06:54 PST 2020, Amit Kucheria wrote:
->
-> > We don't currently call put_device in case of successfully initialising
-> > the device.
-> >
-> > Allow control to fall through so we can use same code for success and
-> > error paths to put_device.
-> >
->
-> Given the relationship between priv->dev and op I think this wouldn't be
-> a problem in practice, but there's two devm_ioremap_resource() done on
-> op->dev in this function. So you're depending on op->dev to stick
-> around, but with this patch you're no longer expressing that dependency.
->
-> That said, it looks iffy to do devm_ioremap_resource() on op->dev and
-> then create a regmap on priv->dev using that resource. So I think it
-> would be better to do platform_get_source() on op, and then
-> devm_ioremap_resource() on priv->dev, in which case the regmap backing
-> memory will be related to the same struct device as the regmap and it
-> makes perfect sense to put_device() the op->dev when you're done
-> inspecting it's resources.
->
+TSENS IP v2.x supports critical interrupts and v2.3+ adds watchdog support
+in case the FSM is stuck. Enable support in the driver.
 
-Indeed, thanks for reviewing.
+This series was generated on top of linux-next from 20200130 to integrate
+some patches that that are queued currently.
 
-Will fix.
+Changes from v3:
+- Remove the DTS changes that are already queued
+- Fix review comments by Bjorn
+- Fixup patch description to clarify that we don't use TSENS critical
+  interrupts in Linux, but need it for the watchdog support that uses the
+  same HW irq line.
+- Separate kernel-doc fixes into a separate patch.
 
-> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> > ---
-> >  drivers/thermal/qcom/tsens-common.c | 2 --
-> >  1 file changed, 2 deletions(-)
-> >
-> > diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-> > index 1cbc5a6e5b4f..e84e94a6f1a7 100644
-> > --- a/drivers/thermal/qcom/tsens-common.c
-> > +++ b/drivers/thermal/qcom/tsens-common.c
-> > @@ -687,8 +687,6 @@ int __init init_common(struct tsens_priv *priv)
-> >       tsens_enable_irq(priv);
-> >       tsens_debug_init(op);
-> >
-> > -     return 0;
-> > -
-> >  err_put_device:
-> >       put_device(&op->dev);
-> >       return ret;
-> > --
-> > 2.20.1
-> >
+Changes from v2:
+- Handle old DTBs w/o critical irq in the same way as fix sent for 5.5
+
+Changes from v1:
+- Make tsens_features non-const to allow run time detection of features
+- Pass tsens_sensor around as a const
+- Fix a bug to release dev pointer in success path
+- Address review comments from Bjorn and Stephen (thanks for the review)
+- Add msm8998 and msm8996 DTSI changes for critical interrupts
+
+
+
+Amit Kucheria (7):
+  drivers: thermal: tsens: Pass around struct tsens_sensor as a constant
+  drivers: thermal: tsens: use simpler variables
+  drivers: thermal: tsens: Release device in success path
+  drivers: thermal: tsens: Add critical interrupt support
+  drivers: thermal: tsens: Add watchdog support
+  drivers: thermal: tsens: kernel-doc fixup
+  drivers: thermal: tsens: Remove unnecessary irq flag
+
+ drivers/thermal/qcom/tsens-8960.c   |   2 +-
+ drivers/thermal/qcom/tsens-common.c | 191 ++++++++++++++++++++++++----
+ drivers/thermal/qcom/tsens-v2.c     |  18 ++-
+ drivers/thermal/qcom/tsens.c        |  26 +++-
+ drivers/thermal/qcom/tsens.h        |  94 +++++++++++++-
+ 5 files changed, 300 insertions(+), 31 deletions(-)
+
+-- 
+2.20.1
+
