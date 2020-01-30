@@ -2,83 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CC314E3F9
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 21:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1E114E412
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 21:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727530AbgA3Ubx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jan 2020 15:31:53 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:51020 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727319AbgA3Ubx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jan 2020 15:31:53 -0500
-Received: by mail-pj1-f65.google.com with SMTP id r67so1845171pjb.0
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jan 2020 12:31:51 -0800 (PST)
+        id S1727639AbgA3UfS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jan 2020 15:35:18 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:39872 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726514AbgA3UfS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jan 2020 15:35:18 -0500
+Received: by mail-pj1-f68.google.com with SMTP id e9so1839779pjr.4
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jan 2020 12:35:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P+0rKLDNQs9w1hNYJYZaKwLvj6vZBP5mJnYXqFucuhM=;
-        b=iq8U0whKUir6BtwA+hkEPrARPnboBH0L4GdBB8V5rfVP4JY5aMnYgRrZmiShSuPqvX
-         BHaonQ7Zj54ppZIG+cuxcjKa9ODjO6MWeiX4jm9xrda4Qvl33AM7moaTllpENFnGWuzV
-         GGY+6lpgCAlmgbbvHnGLrBVN/7YWMNLNTKE2Q=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=K8xpZJk5r8LvK8SEB8UDnXhxydNJQH92r9shiRyDh0U=;
+        b=NCYs16ObyUpU5CF6U1vX5Du9Q5jLIvalbfLqCjxUztyNQPzGehPqj9VpiAAmfTsiNx
+         dqKimQohqH5cxx+cG3WtqLGLF5lS6/C8bmuwQltO/wVFZappP41B6WGgiQQue7TszP7C
+         0y9sYnu9JcpnjXLC90RbyEno5neX/E8Fq000U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P+0rKLDNQs9w1hNYJYZaKwLvj6vZBP5mJnYXqFucuhM=;
-        b=lryQcjonh4S/Ofpc0O3u0WIFEq1IDWa+78pPr3ye50Ovjk1fI538Mspg/Kwe1mtRVi
-         4AA3eO7MkLYPuechnUBqqVJuja6ZWXsUUuoOtim61b/mNVEQ4cfWnURQsPmtphG+epqK
-         rOFGYwGBwU4+iB2OB6ZTQmXo1rT0U+5Du1J2+DbvxYsojSJvTfSVXWZRxdWLFV7EE5Cq
-         bLaIzQb/jO80qpeeqDPqhrzQE9ZJM56S2t889+iJu9TlUlxPn3dnaQ+4OQ5AELiIVrV4
-         ZEM6h4CBM/irS7E5cVdU8Bvwm/reV3gVvNdsQx9PUWVFRT5sREiaNh48rME94n0feD1q
-         ATSg==
-X-Gm-Message-State: APjAAAVsQzC+B2MbZijHFtEvW9PAObzRd+LLtLwSlMitTTZiw6cfj5Om
-        3gNmg/gdVoNwinIISBgEU2NJmQ==
-X-Google-Smtp-Source: APXvYqywzkMhkKxlKfSDU6MFr6XCU75z4SAPc7PY0WLGJOKTg2UN9bOXzElPAjE3XEpsIBbIRtv9zg==
-X-Received: by 2002:a17:902:6508:: with SMTP id b8mr6423357plk.201.1580416310690;
-        Thu, 30 Jan 2020 12:31:50 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=K8xpZJk5r8LvK8SEB8UDnXhxydNJQH92r9shiRyDh0U=;
+        b=rR+40mLXczqSliN1XJU0KiEBSIMqibyhl5S97TOGMAoBPEoXRq9Hk8hYmqWrPDJimI
+         5Wuua27ZKm0KA6WJ/hsn5Gn5RsTBfAi3IFXL/a201grIlLrqECZPjOeYXE3c28q8AUPJ
+         PBtIZBZj9tLa/CXdiKLyne77uloRWuSykE8hwOuAlWBXBXwSX6DAyCm9F9rjpQgcbsXR
+         Jhrbi1N0H+1jGy8JbJ7nohjceVEje+F/TQG5kwXyqH8A7QvjapzzJY1AOsjwllnaTJsQ
+         Iz7ZAFDY+TvM0IVIRYSQbZxKSUlxJvgx+znJ1ndh6bDGXq8b/+XTn9I+cQ0nCsLsDl4z
+         IFvQ==
+X-Gm-Message-State: APjAAAW8IWXjsq9OieUNWt3d29JXPm3YFuJhg7K5+OC5fvodmu8jvb60
+        PSn1TE4JnCXhzraC4Bk7ULvz09tO1v9J4A==
+X-Google-Smtp-Source: APXvYqysCKebpesFDRwT37HHcsQnFbdT9N00zImxHSZYYAj2LAMZDF+V94LnOugKJ3R03+Fz+cVEKQ==
+X-Received: by 2002:a17:90a:ba98:: with SMTP id t24mr8115381pjr.12.1580416517735;
+        Thu, 30 Jan 2020 12:35:17 -0800 (PST)
 Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:172e:4646:c089:ce59])
-        by smtp.gmail.com with ESMTPSA id q12sm7469321pfh.158.2020.01.30.12.31.48
+        by smtp.gmail.com with ESMTPSA id q12sm7469321pfh.158.2020.01.30.12.35.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jan 2020 12:31:49 -0800 (PST)
+        Thu, 30 Jan 2020 12:35:17 -0800 (PST)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Prashant Malani <pmalani@chromium.org>,
-        Akshu Agrawal <akshu.agrawal@amd.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        alsa-devel@alsa-project.org (moderated list:SOUND - SOC LAYER / DYNAMIC
-        AUDIO POWER MANAGEM...),
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Benson Leung <bleung@chromium.org>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Evan Green <evgreen@chromium.org>,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
         Guenter Roeck <groeck@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
-        linux-iio@vger.kernel.org (open list:IIO SUBSYSTEM AND DRIVERS),
-        linux-input@vger.kernel.org (open list:HID CORE LAYER),
-        linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE
-        (V4L/DVB)),
+        Sebastian Reichel <sre@kernel.org>,
         linux-pm@vger.kernel.org (open list:POWER SUPPLY CLASS/SUBSYSTEM and
-        DRIVERS), linux-pwm@vger.kernel.org (open list:PWM SUBSYSTEM),
-        linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Nick Vaccaro <nvaccaro@chromium.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Raul E Rangel <rrangel@chromium.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@the-dreams.de>
-Subject: [PATCH 00/17] platform/chrome: Replace cros_ec_cmd_xfer_status
-Date:   Thu, 30 Jan 2020 12:30:31 -0800
-Message-Id: <20200130203106.201894-1-pmalani@chromium.org>
+        DRIVERS)
+Subject: [PATCH 12/17] power: supply: cros: Use cros_ec_send_cmd_msg()
+Date:   Thu, 30 Jan 2020 12:30:59 -0800
+Message-Id: <20200130203106.201894-13-pmalani@chromium.org>
 X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
+In-Reply-To: <20200130203106.201894-1-pmalani@chromium.org>
+References: <20200130203106.201894-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -86,53 +63,123 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Many callers of cros_ec_cmd_xfer_status() use similar setup and cleanup
-code, including setting up the cros_ec_command message struct and
-copying the received buffer.
+Replace cros_usbpd_charger_ec_command() with cros_ec_send_cmd_msg()
+which does the same thing, but is defined in a common location in
+platform/chrome and exposed for other modules to use. This allows us to
+remove cros_usbpd_charger_ec_command() entirely.
 
-This series introduces a replacement function cros_ec_send_cmd_msg() that
-performs this setup and teardown, and then updates all call sites that
-used xfer_status() to use the new function instead.
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+---
+ drivers/power/supply/cros_usbpd-charger.c | 63 ++++++-----------------
+ 1 file changed, 15 insertions(+), 48 deletions(-)
 
-The final patch in the series drops cros_ec_cmd_xfer_status() altogether.
-
-Prashant Malani (17):
-  platform/chrome: Add EC command msg wrapper
-  platform/chrome: chardev: Use send_cmd_msg()
-  platform/chrome: proto: Use send_cmd_msg
-  platform/chrome: usbpd_logger: Use cmd_send_msg()
-  platform/chrome: sensorhub: Use send_cmd_msg()
-  platform/chrome: debugfs: Use send_cmd_msg()
-  platform/chrome: sysfs: Use send_cmd_msg()
-  extcon: cros_ec: Use cros_ec_send_cmd_msg()
-  hid: google-hammer: Use cros_ec_send_cmd_msg()
-  iio: cros_ec: Use cros_ec_send_cmd_msg()
-  ASoC: cros_ec_codec: Use cros_ec_send_cmd_msg()
-  power: supply: cros: Use cros_ec_send_cmd_msg()
-  pwm: cros-ec: Remove cros_ec_cmd_xfer_status()
-  rtc: cros-ec: Use cros_ec_send_cmd_msg()
-  media: cros-ec-cec: Use cros_ec_send_cmd_msg()
-  i2c: cros-ec-tunnel: Use cros_ec_send_cmd_msg()
-  platform/chrome: Drop cros_ec_cmd_xfer_status()
-
- drivers/extcon/extcon-usbc-cros-ec.c          |  62 ++------
- drivers/hid/hid-google-hammer.c               |  23 +--
- drivers/i2c/busses/i2c-cros-ec-tunnel.c       |  23 ++-
- .../cros_ec_sensors/cros_ec_sensors_core.c    |  43 +++---
- .../media/platform/cros-ec-cec/cros-ec-cec.c  |  39 ++---
- drivers/platform/chrome/cros_ec_chardev.c     |  18 +--
- drivers/platform/chrome/cros_ec_debugfs.c     | 135 ++++++------------
- drivers/platform/chrome/cros_ec_proto.c       |  75 ++++++----
- drivers/platform/chrome/cros_ec_sensorhub.c   |  29 ++--
- drivers/platform/chrome/cros_ec_sysfs.c       | 106 ++++++--------
- drivers/platform/chrome/cros_usbpd_logger.c   |  13 +-
- drivers/power/supply/cros_usbpd-charger.c     |  63 ++------
- drivers/pwm/pwm-cros-ec.c                     |  27 ++--
- drivers/rtc/rtc-cros-ec.c                     |  27 ++--
- include/linux/platform_data/cros_ec_proto.h   |   6 +-
- sound/soc/codecs/cros_ec_codec.c              |  71 +++------
- 16 files changed, 276 insertions(+), 484 deletions(-)
-
+diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/supply/cros_usbpd-charger.c
+index ffad9ee03a6858..cacaca5737a6ee 100644
+--- a/drivers/power/supply/cros_usbpd-charger.c
++++ b/drivers/power/supply/cros_usbpd-charger.c
+@@ -92,46 +92,14 @@ static bool cros_usbpd_charger_port_is_dedicated(struct port_data *port)
+ 	return port->port_number >= port->charger->num_usbpd_ports;
+ }
+ 
+-static int cros_usbpd_charger_ec_command(struct charger_data *charger,
+-					 unsigned int version,
+-					 unsigned int command,
+-					 void *outdata,
+-					 unsigned int outsize,
+-					 void *indata,
+-					 unsigned int insize)
+-{
+-	struct cros_ec_dev *ec_dev = charger->ec_dev;
+-	struct cros_ec_command *msg;
+-	int ret;
+-
+-	msg = kzalloc(sizeof(*msg) + max(outsize, insize), GFP_KERNEL);
+-	if (!msg)
+-		return -ENOMEM;
+-
+-	msg->version = version;
+-	msg->command = ec_dev->cmd_offset + command;
+-	msg->outsize = outsize;
+-	msg->insize = insize;
+-
+-	if (outsize)
+-		memcpy(msg->data, outdata, outsize);
+-
+-	ret = cros_ec_cmd_xfer_status(charger->ec_device, msg);
+-	if (ret >= 0 && insize)
+-		memcpy(indata, msg->data, insize);
+-
+-	kfree(msg);
+-	return ret;
+-}
+-
+ static int cros_usbpd_charger_get_num_ports(struct charger_data *charger)
+ {
+ 	struct ec_response_charge_port_count resp;
+ 	int ret;
+ 
+-	ret = cros_usbpd_charger_ec_command(charger, 0,
+-					    EC_CMD_CHARGE_PORT_COUNT,
+-					    NULL, 0, &resp, sizeof(resp));
++	ret = cros_ec_send_cmd_msg(charger->ec_device, 0,
++				   EC_CMD_CHARGE_PORT_COUNT,
++				   NULL, 0, &resp, sizeof(resp));
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -143,8 +111,8 @@ static int cros_usbpd_charger_get_usbpd_num_ports(struct charger_data *charger)
+ 	struct ec_response_usb_pd_ports resp;
+ 	int ret;
+ 
+-	ret = cros_usbpd_charger_ec_command(charger, 0, EC_CMD_USB_PD_PORTS,
+-					    NULL, 0, &resp, sizeof(resp));
++	ret = cros_ec_send_cmd_msg(charger->ec_device, 0, EC_CMD_USB_PD_PORTS,
++				   NULL, 0, &resp, sizeof(resp));
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -160,10 +128,9 @@ static int cros_usbpd_charger_get_discovery_info(struct port_data *port)
+ 
+ 	req.port = port->port_number;
+ 
+-	ret = cros_usbpd_charger_ec_command(charger, 0,
+-					    EC_CMD_USB_PD_DISCOVERY,
+-					    &req, sizeof(req),
+-					    &resp, sizeof(resp));
++	ret = cros_ec_send_cmd_msg(charger->ec_device, 0,
++				   EC_CMD_USB_PD_DISCOVERY, &req, sizeof(req),
++				   &resp, sizeof(resp));
+ 	if (ret < 0) {
+ 		dev_err(charger->dev,
+ 			"Unable to query discovery info (err:0x%x)\n", ret);
+@@ -190,10 +157,10 @@ static int cros_usbpd_charger_get_power_info(struct port_data *port)
+ 	int ret;
+ 
+ 	req.port = port->port_number;
+-	ret = cros_usbpd_charger_ec_command(charger, 0,
+-					    EC_CMD_USB_PD_POWER_INFO,
+-					    &req, sizeof(req),
+-					    &resp, sizeof(resp));
++	ret = cros_ec_send_cmd_msg(charger->ec_device, 0,
++				   EC_CMD_USB_PD_POWER_INFO,
++				   &req, sizeof(req),
++				   &resp, sizeof(resp));
+ 	if (ret < 0) {
+ 		dev_err(dev, "Unable to query PD power info (err:0x%x)\n", ret);
+ 		return ret;
+@@ -335,9 +302,9 @@ static int cros_usbpd_charger_set_ext_power_limit(struct charger_data *charger,
+ 	req.current_lim = current_lim;
+ 	req.voltage_lim = voltage_lim;
+ 
+-	ret = cros_usbpd_charger_ec_command(charger, 0,
+-					    EC_CMD_EXTERNAL_POWER_LIMIT,
+-					    &req, sizeof(req), NULL, 0);
++	ret = cros_ec_send_cmd_msg(charger->ec_device, 0,
++				   EC_CMD_EXTERNAL_POWER_LIMIT,
++				   &req, sizeof(req), NULL, 0);
+ 	if (ret < 0)
+ 		dev_err(charger->dev,
+ 			"Unable to set the 'External Power Limit': %d\n", ret);
 -- 
 2.25.0.341.g760bfbb309-goog
 
