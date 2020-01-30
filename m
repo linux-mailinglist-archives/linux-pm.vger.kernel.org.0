@@ -2,64 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B57014D898
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 11:05:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A9914D9EF
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 12:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbgA3KFn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jan 2020 05:05:43 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:55036 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726873AbgA3KFn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jan 2020 05:05:43 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1ix6hd-00070v-NY; Thu, 30 Jan 2020 10:05:37 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Pascal Paillet <p.paillet@st.com>, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] thermal: stm32: fix spelling mistake "preprare" -> "prepare"
-Date:   Thu, 30 Jan 2020 10:05:37 +0000
-Message-Id: <20200130100537.18069-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.24.0
+        id S1726980AbgA3LkN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jan 2020 06:40:13 -0500
+Received: from foss.arm.com ([217.140.110.172]:51404 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726873AbgA3LkM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 30 Jan 2020 06:40:12 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1DF96328;
+        Thu, 30 Jan 2020 03:40:12 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 734143F67D;
+        Thu, 30 Jan 2020 03:40:09 -0800 (PST)
+Date:   Thu, 30 Jan 2020 11:40:04 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Sibi Sankar <sibis@codeaurora.org>
+Cc:     viresh.kumar@linaro.org, sboyd@kernel.org,
+        georgi.djakov@linaro.org, saravanak@google.com, nm@ti.com,
+        bjorn.andersson@linaro.org, agross@kernel.org,
+        david.brown@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org,
+        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
+        ulf.hansson@linaro.org, Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [RFC v3 02/10] cpufreq: blacklist SDM845 in cpufreq-dt-platdev
+Message-ID: <20200130114004.GA56122@bogus>
+References: <20200127200350.24465-1-sibis@codeaurora.org>
+ <20200127200350.24465-3-sibis@codeaurora.org>
+ <20200128204423.GF46072@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200128204423.GF46072@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+On Tue, Jan 28, 2020 at 12:44:23PM -0800, Matthias Kaehlcke wrote:
+> On Tue, Jan 28, 2020 at 01:33:42AM +0530, Sibi Sankar wrote:
+> > Add SDM845 to cpufreq-dt-platdev blacklist.
+>
+> nit: you could mention that cpufreq is handled by the
+> 'qcom-cpufreq-hw' driver.
+>
 
-There is a spelling mistake in a dev_err error message. Fix it.
+IIUC, these platforms get the OPP table from the firmware and there shouldn't
+be OPP entries in the DT. If not, why not fix that to avoid more confusion.
+Can we make cpu0_node_has_opp_v2_prop return false in short.
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/thermal/st/stm_thermal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_thermal.c
-index 1cc5e6c5709e..ad9e3bf8fdf6 100644
---- a/drivers/thermal/st/stm_thermal.c
-+++ b/drivers/thermal/st/stm_thermal.c
-@@ -535,7 +535,7 @@ static int stm_thermal_probe(struct platform_device *pdev)
- 	/* Configure and enable HW sensor */
- 	ret = stm_thermal_prepare(sensor);
- 	if (ret) {
--		dev_err(&pdev->dev, "Error preprare sensor: %d\n", ret);
-+		dev_err(&pdev->dev, "Error prepare sensor: %d\n", ret);
- 		return ret;
- 	}
- 
--- 
-2.24.0
-
+--
+Regards,
+Sudeep
