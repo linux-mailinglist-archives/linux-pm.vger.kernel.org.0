@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFC114DA19
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 12:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EDDC14DA1B
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2020 12:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727184AbgA3LrV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jan 2020 06:47:21 -0500
-Received: from foss.arm.com ([217.140.110.172]:51500 "EHLO foss.arm.com"
+        id S1726980AbgA3LsD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jan 2020 06:48:03 -0500
+Received: from foss.arm.com ([217.140.110.172]:51508 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726980AbgA3LrV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 30 Jan 2020 06:47:21 -0500
+        id S1726873AbgA3LsD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 30 Jan 2020 06:48:03 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B77EB328;
-        Thu, 30 Jan 2020 03:47:20 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8D64A328;
+        Thu, 30 Jan 2020 03:48:00 -0800 (PST)
 Received: from [10.37.12.72] (unknown [10.37.12.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1978D3F68E;
-        Thu, 30 Jan 2020 03:47:18 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 16F283F68E;
+        Thu, 30 Jan 2020 03:47:58 -0800 (PST)
 Subject: Re: [PATCH 0/1] drivers: devfreq: use DELAYED_WORK in DEVFREQ
  monitoring subsystem
 To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
@@ -25,8 +25,8 @@ To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
 Cc:     b.zolnierkie@samsung.com
 References: <20200127151731.8640-1-lukasz.luba@arm.com>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <b4d1624f-4ca8-c985-ff42-f5f677c72fa9@arm.com>
-Date:   Thu, 30 Jan 2020 11:47:16 +0000
+Message-ID: <58c222ab-d974-74ad-e922-fc7dcc7d5294@arm.com>
+Date:   Thu, 30 Jan 2020 11:47:57 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
