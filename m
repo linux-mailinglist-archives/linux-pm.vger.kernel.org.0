@@ -2,129 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0165B14EA80
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2020 11:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A68314EB74
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2020 12:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728268AbgAaKNp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Jan 2020 05:13:45 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:34300 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728160AbgAaKNp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jan 2020 05:13:45 -0500
-Received: by mail-oi1-f194.google.com with SMTP id l136so6747661oig.1;
-        Fri, 31 Jan 2020 02:13:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=raabJwU4zEa7l6nAkAqDBvubVlQSjL6C05vgOXbsY4Y=;
-        b=qBYoO8hSNd26sXZI9kaAHYcDMa/5/Xn91LZOGK50pqpaiv31ONUX9azCTRz3Mwls2t
-         YOs9s11m7SUKvtCq22bDEY85YzZMrnWKEtIhnn+1S9TIYMCdXmvRQcvbwpxRrFbCtrA0
-         Kwgrt+oyfh87L4MKFp+bB5cpOgungwqPpxtAwsWhB6zUHPBaiFsTX+Vndbel9prcQgph
-         N9cZoSZa7glDODlM3Xk1z9ZaI1RfA5FcE/YtotrvRpE5uuXSvhmvOJL5Xy+d5iAWfVIC
-         pyJZI4h8yyYgfUcAzFaPUnxTYV/YWeDOyjrX7qGJb2X8KnmZqHRwgW7sncoV4f23+wAA
-         HfLQ==
-X-Gm-Message-State: APjAAAW9Sxvu+VVEvZY+vfN/FYfYjFJNSuot2WOBpj3OVAidi5yZMCM6
-        sZOM5fDrPZfaeMM643+BgB1UDqqq9mM9URfp73A=
-X-Google-Smtp-Source: APXvYqwANun9+k0d+8aGujSI7AOEX1OlHtdp2RAu5sqPcA4CFr9uMMT9NzlT9H2xd2gMjMXa+DzdY9SgamiGDUmN1xw=
-X-Received: by 2002:aca:bfc2:: with SMTP id p185mr5936669oif.57.1580465624588;
- Fri, 31 Jan 2020 02:13:44 -0800 (PST)
+        id S1728389AbgAaLHo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 31 Jan 2020 06:07:44 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:41652 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728325AbgAaLHo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jan 2020 06:07:44 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-73-VjcVhdg1N8ihqIuBpg4wFw-1; Fri, 31 Jan 2020 11:07:40 +0000
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Fri, 31 Jan 2020 11:07:40 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Fri, 31 Jan 2020 11:07:40 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+CC:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        David Box <david.e.box@linux.intel.com>,
+        "Artem Bityutskiy" <artem.bityutskiy@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: RE: [PATCH 2/2] intel_idle: Introduce 'states_off' module parameter
+Thread-Topic: [PATCH 2/2] intel_idle: Introduce 'states_off' module parameter
+Thread-Index: AQHV13w6Eg2UWHP5m0aqtl9kDKUdz6gEmmHQ
+Date:   Fri, 31 Jan 2020 11:07:39 +0000
+Message-ID: <86fb1cd10e344f76a3e96c4b6c722680@AcuMS.aculab.com>
+References: <1720216.0Jr2BLnqKp@kreacher> <16995896.bQtfYxEEOs@kreacher>
+In-Reply-To: <16995896.bQtfYxEEOs@kreacher>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20200124132957.15769-1-geert+renesas@glider.be> <20200124132957.15769-2-geert+renesas@glider.be>
-In-Reply-To: <20200124132957.15769-2-geert+renesas@glider.be>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 31 Jan 2020 11:13:33 +0100
-Message-ID: <CAJZ5v0ihj48QwB0HqA8LUYkSYiOVEbRmNd4acpy6hbq_0RDzLA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] debugfs: regset32: Add Runtime PM support
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gilad Ben-Yossef <gilad@benyossef.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Bin Liu <b-liu@ti.com>, linux-crypto@vger.kernel.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MC-Unique: VjcVhdg1N8ihqIuBpg4wFw-1
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 24, 2020 at 2:30 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> Hardware registers of devices under control of power management cannot
-> be accessed at all times.  If such a device is suspended, register
-> accesses may lead to undefined behavior, like reading bogus values, or
-> causing exceptions or system locks.
->
-> Extend struct debugfs_regset32 with an optional field to let device
-> drivers specify the device the registers in the set belong to.  This
-> allows debugfs_show_regset32() to make sure the device is resumed while
-> its registers are being read.
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Rafael J. Wysocki
+> Sent: 30 January 2020 14:47
+> 
+> In certain system configurations it may not be desirable to use some
+> C-states assumed to be available by intel_idle and the driver needs
+> to be prevented from using them even before the cpuidle sysfs
+> interface becomes accessible to user space.  Currently, the only way
+> to achieve that is by setting the 'max_cstate' module parameter to a
+> value lower than the index of the shallowest of the C-states in
+> question, but that may be overly intrusive, because it effectively
+> makes all of the idle states deeper than the 'max_cstate' one go
+> away (and the C-state to avoid may be in the middle of the range
+> normally regarded as available).
+> 
+> To allow that limitation to be overcome, introduce a new module
+> parameter called 'states_off' to represent a list of idle states to
+> be disabled by default in the form of a bitmask and update the
+> documentation to cover it.
 
-LGTM:
+The problem I see is that there are (at least) 3 different ways of
+referring to the C-States:
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+1) The state names, C1, C1E, C3, C7 etc.
+   I'm not sure these are visible outside intel_idle.c.
+2) The maximum allowed latency in us.
+3) The index into the cpu-dependant tables in intel_idle.c.
 
-> ---
->  fs/debugfs/file.c       | 8 ++++++++
->  include/linux/debugfs.h | 1 +
->  2 files changed, 9 insertions(+)
->
-> diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
-> index dede25247b81f72a..5e52d68421c678f2 100644
-> --- a/fs/debugfs/file.c
-> +++ b/fs/debugfs/file.c
-> @@ -18,6 +18,7 @@
->  #include <linux/slab.h>
->  #include <linux/atomic.h>
->  #include <linux/device.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/poll.h>
->  #include <linux/security.h>
->
-> @@ -1057,7 +1058,14 @@ static int debugfs_show_regset32(struct seq_file *s, void *data)
->  {
->         struct debugfs_regset32 *regset = s->private;
->
-> +       if (regset->dev)
-> +               pm_runtime_get_sync(regset->dev);
-> +
->         debugfs_print_regs32(s, regset->regs, regset->nregs, regset->base, "");
-> +
-> +       if (regset->dev)
-> +               pm_runtime_put(regset->dev);
-> +
->         return 0;
->  }
->
-> diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
-> index bf9b6cafa4c26a68..5d0783ae09f365ac 100644
-> --- a/include/linux/debugfs.h
-> +++ b/include/linux/debugfs.h
-> @@ -35,6 +35,7 @@ struct debugfs_regset32 {
->         const struct debugfs_reg32 *regs;
->         int nregs;
->         void __iomem *base;
-> +       struct device *dev;     /* Optional device for Runtime PM */
->  };
->
->  extern struct dentry *arch_debugfs_dir;
-> --
-> 2.17.1
->
+Boot parameters that set 3 are completely hopeless for normal
+users. The C-state names might be - but they aren't documented.
+
+Unless you know exactly which cpu table is being used the
+only constraint a user can request is the latency.
+
+(I've had the misfortune to read intel_idle.c in the last week.
+Almost impenetrable TLA ridden uncommented code.)
+
+...
+> + * The positions of the bits that are set in the two's complement representation
+> + * of this value are the indices of the idle states to be disabled by default
+> + * (as reflected by the names of the corresponding idle state directories in
+> + * sysfs, "state0", "state1" ... "state<i>" ..., where <i> is the index of the
+> + * given state).
+
+What has 'two's complement' got to do with anything?
+
+...
+> +The value of the ``states_off`` module parameter (0 by default) represents a
+> +list of idle states to be disabled by default in the form of a bitmask.  Namely,
+> +the positions of the bits that are set in the two's complement representation of
+> +that value are the indices of idle states to be disabled by default (as
+> +reflected by the names of the corresponding idle state directories in ``sysfs``,
+> +:file:`state0`, :file:`state1` ... :file:`state<i>` ..., where ``<i>`` is the
+> +index of the given idle state; see :ref:`idle-states-representation` in
+> +:doc:`cpuidle`).  For example, if ``states_off`` is equal to 3, the driver will
+> +disable idle states 0 and 1 by default, and if it is equal to 8, idle state 3
+> +will be disabled by default and so on (bit positions beyond the maximum idle
+> +state index are ignored).  The idle states disabled this way can be enabled (on
+> +a per-CPU basis) from user space via ``sysfs``.
+
+A few line breaks would make that easier to read.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
