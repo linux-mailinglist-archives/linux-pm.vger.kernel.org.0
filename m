@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6970F14EA7C
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2020 11:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0165B14EA80
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2020 11:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728307AbgAaKLl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Jan 2020 05:11:41 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:39327 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728160AbgAaKLl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jan 2020 05:11:41 -0500
-Received: by mail-ot1-f65.google.com with SMTP id 77so6075430oty.6;
-        Fri, 31 Jan 2020 02:11:40 -0800 (PST)
+        id S1728268AbgAaKNp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Jan 2020 05:13:45 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:34300 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728160AbgAaKNp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jan 2020 05:13:45 -0500
+Received: by mail-oi1-f194.google.com with SMTP id l136so6747661oig.1;
+        Fri, 31 Jan 2020 02:13:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dSq/O5z4OiKt2gIxWlmYXDdfWXOXBwGpqYL0q2hrwZQ=;
-        b=hfxHnOabjLtHmshzS23bvfpf6uonOdaofUKFUkaVj5ngOjGYLfQ8VPomyRR76zQclQ
-         4IhWIphL2avzbuhgaHKVm2gPD/eh1F9STX5LKAKQV+yWFLGa7x4izC0H1svzeNNLH3QS
-         H5wcnDKJZ0jRx6MTwY7CQy1tcav8wO2pvp4ZGJTwSpdWyiQS9Rb/wpYAYwJVPxomSNjD
-         D3HwopchQJ4sd2Z57vy0Vv12D3VK3Vi7VP4KbtW2fmd0JZ/hF6JpnnKgwDd/NAGoLOO2
-         N1MR4eGOLUNMD4T23f8jpAGfTocYvOkZq6cpSU+pZqdtC2ESVDgoIkx8ABgOMm77peCk
-         5SXQ==
-X-Gm-Message-State: APjAAAU7fAoTAh5EFhxb+sDvC9prRU3ibipRaBk5qoi4Ae+6zxI/hKln
-        iVfhukU4T7u5rYcoWUC47SzvHceDW2XrsWnOMdo=
-X-Google-Smtp-Source: APXvYqzvE5/+Pbp+3XgX3B4B6R/3TqiKaD+1/9bs8HNzUkgVsARShDsPlW5lSa4ht2ZHeJy9a0d6wVgWmSFh7YrtAg8=
-X-Received: by 2002:a9d:67d7:: with SMTP id c23mr7192372otn.262.1580465499703;
- Fri, 31 Jan 2020 02:11:39 -0800 (PST)
+        bh=raabJwU4zEa7l6nAkAqDBvubVlQSjL6C05vgOXbsY4Y=;
+        b=qBYoO8hSNd26sXZI9kaAHYcDMa/5/Xn91LZOGK50pqpaiv31ONUX9azCTRz3Mwls2t
+         YOs9s11m7SUKvtCq22bDEY85YzZMrnWKEtIhnn+1S9TIYMCdXmvRQcvbwpxRrFbCtrA0
+         Kwgrt+oyfh87L4MKFp+bB5cpOgungwqPpxtAwsWhB6zUHPBaiFsTX+Vndbel9prcQgph
+         N9cZoSZa7glDODlM3Xk1z9ZaI1RfA5FcE/YtotrvRpE5uuXSvhmvOJL5Xy+d5iAWfVIC
+         pyJZI4h8yyYgfUcAzFaPUnxTYV/YWeDOyjrX7qGJb2X8KnmZqHRwgW7sncoV4f23+wAA
+         HfLQ==
+X-Gm-Message-State: APjAAAW9Sxvu+VVEvZY+vfN/FYfYjFJNSuot2WOBpj3OVAidi5yZMCM6
+        sZOM5fDrPZfaeMM643+BgB1UDqqq9mM9URfp73A=
+X-Google-Smtp-Source: APXvYqwANun9+k0d+8aGujSI7AOEX1OlHtdp2RAu5sqPcA4CFr9uMMT9NzlT9H2xd2gMjMXa+DzdY9SgamiGDUmN1xw=
+X-Received: by 2002:aca:bfc2:: with SMTP id p185mr5936669oif.57.1580465624588;
+ Fri, 31 Jan 2020 02:13:44 -0800 (PST)
 MIME-Version: 1.0
-References: <20200124132957.15769-1-geert+renesas@glider.be> <20200124132957.15769-3-geert+renesas@glider.be>
-In-Reply-To: <20200124132957.15769-3-geert+renesas@glider.be>
+References: <20200124132957.15769-1-geert+renesas@glider.be> <20200124132957.15769-2-geert+renesas@glider.be>
+In-Reply-To: <20200124132957.15769-2-geert+renesas@glider.be>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 31 Jan 2020 11:11:28 +0100
-Message-ID: <CAJZ5v0hqzs1GaJ+qs=8DHhe-zK4QSNGJiKn1B9qsp0jcK3pSuQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] crypto: ccree - fix debugfs register access while suspended
+Date:   Fri, 31 Jan 2020 11:13:33 +0100
+Message-ID: <CAJZ5v0ihj48QwB0HqA8LUYkSYiOVEbRmNd4acpy6hbq_0RDzLA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] debugfs: regset32: Add Runtime PM support
 To:     Geert Uytterhoeven <geert+renesas@glider.be>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Gilad Ben-Yossef <gilad@benyossef.com>,
@@ -65,39 +65,15 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Fri, Jan 24, 2020 at 2:30 PM Geert Uytterhoeven
 <geert+renesas@glider.be> wrote:
 >
-> Reading the debugfs files under /sys/kernel/debug/ccree/ can be done by
-> the user at any time.  On R-Car SoCs, the CCREE device is power-managed
-> using a moduile clock, and if this clock is not running, bogus register
-> values may be read.
+> Hardware registers of devices under control of power management cannot
+> be accessed at all times.  If such a device is suspended, register
+> accesses may lead to undefined behavior, like reading bogus values, or
+> causing exceptions or system locks.
 >
-> Fix this by filling in the debugfs_regset32.dev field, so debugfs will
-> make sure the device is resumed while its registers are being read.
->
-> This fixes the bogus values (0x00000260) in the register dumps on R-Car
-> H3 ES1.0:
->
->     -e6601000.crypto/regs:HOST_IRR = 0x00000260
->     -e6601000.crypto/regs:HOST_POWER_DOWN_EN = 0x00000260
->     +e6601000.crypto/regs:HOST_IRR = 0x00000038
->     +e6601000.crypto/regs:HOST_POWER_DOWN_EN = 0x00000038
->      e6601000.crypto/regs:AXIM_MON_ERR = 0x00000000
->      e6601000.crypto/regs:DSCRPTR_QUEUE_CONTENT = 0x000002aa
->     -e6601000.crypto/regs:HOST_IMR = 0x00000260
->     +e6601000.crypto/regs:HOST_IMR = 0x017ffeff
->      e6601000.crypto/regs:AXIM_CFG = 0x001f0007
->      e6601000.crypto/regs:AXIM_CACHE_PARAMS = 0x00000000
->     -e6601000.crypto/regs:GPR_HOST = 0x00000260
->     +e6601000.crypto/regs:GPR_HOST = 0x017ffeff
->      e6601000.crypto/regs:AXIM_MON_COMP = 0x00000000
->     -e6601000.crypto/version:SIGNATURE = 0x00000260
->     -e6601000.crypto/version:VERSION = 0x00000260
->     +e6601000.crypto/version:SIGNATURE = 0xdcc63000
->     +e6601000.crypto/version:VERSION = 0xaf400001
->
-> Note that this behavior is system-dependent, and the issue does not show
-> up on all R-Car Gen3 SoCs and boards.  Even when the device is
-> suspended, the module clock may be left enabled, if configured by the
-> firmware for Secure Mode, or when controlled by the Real-Time Core.
+> Extend struct debugfs_regset32 with an optional field to let device
+> drivers specify the device the registers in the set belong to.  This
+> allows debugfs_show_regset32() to make sure the device is resumed while
+> its registers are being read.
 >
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
@@ -106,29 +82,49 @@ LGTM:
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 > ---
->  drivers/crypto/ccree/cc_debugfs.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  fs/debugfs/file.c       | 8 ++++++++
+>  include/linux/debugfs.h | 1 +
+>  2 files changed, 9 insertions(+)
 >
-> diff --git a/drivers/crypto/ccree/cc_debugfs.c b/drivers/crypto/ccree/cc_debugfs.c
-> index 5669997386988055..35f3a2137502bd96 100644
-> --- a/drivers/crypto/ccree/cc_debugfs.c
-> +++ b/drivers/crypto/ccree/cc_debugfs.c
-> @@ -81,6 +81,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
->         regset->regs = debug_regs;
->         regset->nregs = ARRAY_SIZE(debug_regs);
->         regset->base = drvdata->cc_base;
-> +       regset->dev = dev;
+> diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
+> index dede25247b81f72a..5e52d68421c678f2 100644
+> --- a/fs/debugfs/file.c
+> +++ b/fs/debugfs/file.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/atomic.h>
+>  #include <linux/device.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/poll.h>
+>  #include <linux/security.h>
 >
->         ctx->dir = debugfs_create_dir(drvdata->plat_dev->name, cc_debugfs_dir);
+> @@ -1057,7 +1058,14 @@ static int debugfs_show_regset32(struct seq_file *s, void *data)
+>  {
+>         struct debugfs_regset32 *regset = s->private;
 >
-> @@ -102,6 +103,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
->                 verset->nregs = ARRAY_SIZE(pid_cid_regs);
->         }
->         verset->base = drvdata->cc_base;
-> +       verset->dev = dev;
+> +       if (regset->dev)
+> +               pm_runtime_get_sync(regset->dev);
+> +
+>         debugfs_print_regs32(s, regset->regs, regset->nregs, regset->base, "");
+> +
+> +       if (regset->dev)
+> +               pm_runtime_put(regset->dev);
+> +
+>         return 0;
+>  }
 >
->         debugfs_create_regset32("version", 0400, ctx->dir, verset);
+> diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
+> index bf9b6cafa4c26a68..5d0783ae09f365ac 100644
+> --- a/include/linux/debugfs.h
+> +++ b/include/linux/debugfs.h
+> @@ -35,6 +35,7 @@ struct debugfs_regset32 {
+>         const struct debugfs_reg32 *regs;
+>         int nregs;
+>         void __iomem *base;
+> +       struct device *dev;     /* Optional device for Runtime PM */
+>  };
 >
+>  extern struct dentry *arch_debugfs_dir;
 > --
 > 2.17.1
 >
