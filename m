@@ -2,95 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB6214F8CA
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2020 17:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCC214F935
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2020 18:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726670AbgBAQR3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Feb 2020 11:17:29 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:37980 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726622AbgBAQR3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Feb 2020 11:17:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=3vjyCuUd1rcmzpTApqXqaXmSINLqolKaqvd7qWnbCoE=; b=qKo32vC7xT+ajMvJr90kXxOnr
-        P9jW40jsDsk/9gtBmrJ5fouEoeMDxeU9MSQ7wpXQacSBpIiQiqhGSyVYOujAiTaYVpWIs/MqRNML4
-        HoHoiZEP+1InsKeqB/ExovSvnze8u7PsUNGjHIdNyio+2NG681NdOBcC4tbkJ9uxFmAODelVeKL7h
-        hTvlGA2s1msG2+tHAtpm43q4FsDJ+9Rn30zsmvp9egf/tgnPlJdEhySLAb7H1zvxgY+b/d2hmAAkh
-        wLg02nyW8Z2B/oXR0iLnpeOBFvMpTgURrBpW5nbUF2ViGnGKVprdr3JlKnILqrGBpCFkvpQOiPBvX
-        ok1r3U9Pg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ixvSa-0002Ib-SE; Sat, 01 Feb 2020 16:17:28 +0000
-Subject: Re: [PATCH] Documentation: Fix build error for cpu-idle-cooling.rst
- and client.rst
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Vinod Koul <vkoul@kernel.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20200201062521.7296-1-changbin.du@gmail.com>
- <6d6bfd1d-dd22-8999-fc73-3cf12dbb3a98@infradead.org>
- <20200201125914.lpejzlgxazuu4i6f@mail.google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <4ca88e39-7dcd-1709-96cc-4fb324715835@infradead.org>
-Date:   Sat, 1 Feb 2020 08:17:27 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726270AbgBARva (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Feb 2020 12:51:30 -0500
+Received: from smtp.gentoo.org ([140.211.166.183]:56048 "EHLO smtp.gentoo.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726169AbgBARva (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 1 Feb 2020 12:51:30 -0500
+Received: from naomi.gilbertsystems.net (d14-69-92-185.try.wideopenwest.com [69.14.185.92])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: floppym)
+        by smtp.gentoo.org (Postfix) with ESMTPSA id AE21934E3CE;
+        Sat,  1 Feb 2020 17:51:29 +0000 (UTC)
+From:   Mike Gilbert <floppym@gentoo.org>
+To:     linux-pm@vger.kernel.org
+Cc:     Mike Gilbert <floppym@gentoo.org>
+Subject: [PATCH] cpupower: avoid multiple definition with gcc -fno-common
+Date:   Sat,  1 Feb 2020 12:50:46 -0500
+Message-Id: <20200201175046.3948500-1-floppym@gentoo.org>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-In-Reply-To: <20200201125914.lpejzlgxazuu4i6f@mail.google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2/1/20 4:59 AM, Changbin Du wrote:
-> Hi,
-> On Fri, Jan 31, 2020 at 10:33:30PM -0800, Randy Dunlap wrote:
->> On 1/31/20 10:25 PM, Changbin Du wrote:
->>> This fixed some errors and warnings in cpu-idle-cooling.rst and client.rst.
->>>
->>> Sphinx parallel build error:
->>> docutils.utils.SystemMessage: ...Documentation/driver-api/thermal/cpu-idle-cooling.rst:96: (SEVERE/4) Unexpected section title.
->>>
->>> Sphinx parallel build error:
->>> docutils.utils.SystemMessage: ...Documentation/driver-api/dmaengine/client.rst:155: (SEVERE/4) Unexpected section title.
->>>
->>> Signed-off-by: Changbin Du <changbin.du@gmail.com>
->>
->> Hi,
->> This commit has been merged:
->> commit fe27f13d677ccd826386094df6977cfbc13ccf5e
->> Author: Randy Dunlap <rdunlap@infradead.org>
->> Date:   Mon Jan 20 14:33:16 2020 -0800
->>
->>     Documentation: cpu-idle-cooling: fix a SEVERE docs build failure
->>
->> Feel free to send patches against current Linus git tree.
->>
-> Seems it is not in Linus's tree yet. But is it in Jonathan's tree now? I could
-> rebase to the doc tree instead.
-> 
->> Thanks.
+The -fno-common option will be enabled by default in GCC 10.
 
-Hm, now I am confused.  I cannot find it at
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+Bug: https://bugs.gentoo.org/707462
+Signed-off-by: Mike Gilbert <floppym@gentoo.org>
+---
+ tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c  | 2 +-
+ tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c | 2 ++
+ tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h | 2 +-
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
-but in my local clone of that git tree, I can do
-$ git show fe27f13d677ccd826386094df6977cfbc13ccf5e
-and see it.
-
-
+diff --git a/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c b/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
+index 33dc34db4f3c..1b69f25a1281 100644
+--- a/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
++++ b/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
+@@ -82,7 +82,7 @@ static struct pci_access *pci_acc;
+ static struct pci_dev *amd_fam14h_pci_dev;
+ static int nbp1_entered;
+ 
+-struct timespec start_time;
++extern struct timespec start_time;
+ static unsigned long long timediff;
+ 
+ #ifdef DEBUG
+diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
+index 6d44fec55ad5..7c77045fef52 100644
+--- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
++++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
+@@ -27,6 +27,8 @@ struct cpuidle_monitor *all_monitors[] = {
+ 0
+ };
+ 
++int cpu_count;
++
+ static struct cpuidle_monitor *monitors[MONITORS_MAX];
+ static unsigned int avail_monitors;
+ 
+diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
+index 5b5eb1da0cce..c559d3115330 100644
+--- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
++++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
+@@ -25,7 +25,7 @@
+ #endif
+ #define CSTATE_DESC_LEN 60
+ 
+-int cpu_count;
++extern int cpu_count;
+ 
+ /* Hard to define the right names ...: */
+ enum power_range_e {
 -- 
-~Randy
+2.25.0
 
