@@ -2,227 +2,323 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE1C150031
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2020 02:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFA0150033
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2020 02:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbgBCBCT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Feb 2020 20:02:19 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:19506 "EHLO
+        id S1726670AbgBCBJy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Feb 2020 20:09:54 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:24045 "EHLO
         mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726393AbgBCBCT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Feb 2020 20:02:19 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200203010215epoutp0280c10f471771c535bf3a90a1e22af0f8~vvsJKVRMJ2692226922epoutp02L
-        for <linux-pm@vger.kernel.org>; Mon,  3 Feb 2020 01:02:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200203010215epoutp0280c10f471771c535bf3a90a1e22af0f8~vvsJKVRMJ2692226922epoutp02L
+        with ESMTP id S1726637AbgBCBJx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Feb 2020 20:09:53 -0500
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200203010950epoutp02992b40231972e9b1e5d0bb8308b51fd0~vvywEU1OC0073600736epoutp02e
+        for <linux-pm@vger.kernel.org>; Mon,  3 Feb 2020 01:09:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200203010950epoutp02992b40231972e9b1e5d0bb8308b51fd0~vvywEU1OC0073600736epoutp02e
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1580691735;
-        bh=2FwVrGlwaYbgic9bnLnPLjOB21m9Nn35aPYVdnTo5kA=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=qchiYCiozB1t5Ui5hlcXcK1jH4h6Lzts0wdc4wKFWEZvQH7Z4+KxjrpilFbR11xtY
-         OAsFZH2bFREFNrlDL335kUXAI2ZLI3noapVt54A7u6sM5eyh4B/51ZMa+hOivLqy6q
-         oLOMkzsT9yR+RwKWayf9q/aBlStLdKUF5XZkteCg=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        s=mail20170921; t=1580692190;
+        bh=RQmoYEoCJrDBF3NGfioncJhLMZZJauhsFwOd7mIxRXM=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=bCXDsABTnWEFcAxUQsQJq/7EV70umTAyUXu588p9iVCMNFr9sCyXvQxQ3jgN3XvDM
+         XtQGVGWoXnJ8wBTToHB1xOZeyKeP+X256aVFFZPSB7vwXUPzlbiKJDxi5bifvI3gCp
+         23N9ngNgRbU/mIrnQvmYkHza2ENWFANHGbdjF+5A=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
         epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200203010215epcas1p106c5b2b07e8ced079c871962187a2479~vvsIksI2F2531725317epcas1p1K;
-        Mon,  3 Feb 2020 01:02:15 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 489qKw3bKJzMqYm0; Mon,  3 Feb
-        2020 01:02:12 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        99.BE.57028.411773E5; Mon,  3 Feb 2020 10:02:12 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200203010212epcas1p26a3d99b150514bbd8f0e342a3b8cbba9~vvsFlontq3087830878epcas1p2K;
-        Mon,  3 Feb 2020 01:02:12 +0000 (GMT)
+        20200203010949epcas1p1f651a0db3b1df904e13505c51da40343~vvyvheIRl1965619656epcas1p1G;
+        Mon,  3 Feb 2020 01:09:49 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.158]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 489qVf66j2zMqYkX; Mon,  3 Feb
+        2020 01:09:46 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        BD.61.48498.AD2773E5; Mon,  3 Feb 2020 10:09:46 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200203010946epcas1p16010f3f1e5b079927bd81b8e70c0a015~vvys0R2Y-0039600396epcas1p1v;
+        Mon,  3 Feb 2020 01:09:46 +0000 (GMT)
 Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200203010212epsmtrp238fdd337e08433cb3beb526df78ee1cf~vvsFkoHH71762117621epsmtrp2R;
-        Mon,  3 Feb 2020 01:02:12 +0000 (GMT)
-X-AuditID: b6c32a35-50bff7000001dec4-dc-5e377114ed7b
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200203010946epsmtrp1d46994cbbe3a0a22910605e48f1727c7~vvyszPEC41442914429epsmtrp1L;
+        Mon,  3 Feb 2020 01:09:46 +0000 (GMT)
+X-AuditID: b6c32a36-a55ff7000001bd72-4e-5e3772da08a2
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        FC.3E.06569.311773E5; Mon,  3 Feb 2020 10:02:11 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        F0.AE.06569.AD2773E5; Mon,  3 Feb 2020 10:09:46 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200203010211epsmtip260eda329d8576d33e7d5f84d832c943b~vvsFW_6oA1730717307epsmtip2c;
-        Mon,  3 Feb 2020 01:02:11 +0000 (GMT)
-Subject: Re: [PATCH 0/1] drivers: devfreq: use DELAYED_WORK in DEVFREQ
- monitoring subsystem
-To:     Lukasz Luba <lukasz.luba@arm.com>, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     b.zolnierkie@samsung.com, Kamil Konieczny <k.konieczny@samsung.com>
+        20200203010946epsmtip2332d592caf87478db944e064894428e9~vvysoH5j72257522575epsmtip2O;
+        Mon,  3 Feb 2020 01:09:46 +0000 (GMT)
 From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <931bb376-0045-9929-6e67-15d34ebf3fbe@samsung.com>
-Date:   Mon, 3 Feb 2020 10:10:00 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
-MIME-Version: 1.0
-In-Reply-To: <729911b2-434b-fbe5-b556-5bdba8114085@arm.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNJsWRmVeSWpSXmKPExsWy7bCmga5IoXmcwYQVshYbZ6xntVjwaQar
-        xdmmN+wWl3fNYbP43HuE0WJhUwu7xe3GFWwO7B5r5q1h9OjbsorR4/MmuQDmqGybjNTElNQi
-        hdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWFvMTcVFslF58AXbfMHKDlSgpliTmlQKGAxOJi
-        JX07m6L80pJUhYz84hJbpdSClJwCywK94sTc4tK8dL3k/FwrQwMDI1OgwoTsjOUHsgpeKVZ0
-        3exhbGD8LN3FyMkhIWAisXh1L0sXIxeHkMAORonfB1+xgCSEBD4xSqy6ZQiR+MYocfv/dXaY
-        jqOdz1khEnsZJT4/eMII4bxnlNh+bTMjSJWwQKzElsnH2EASIgLTGCU+HZkFlmAWcJeY1/qc
-        GcRmE9CS2P/iBhuIzS+gKHH1x2OwGl4BO4lrPROYQGwWARWJjfcbWUFsUYEwiZPbWqBqBCVO
-        znwCdiungLXEuc71LBDzxSVuPZnPBGHLSzRvnc0McoSEwGM2iRdvXjFD/OAi8en5GlYIW1ji
-        1fEtUL9JSXx+t5cNwq6WWHnyCBtEcwejxJb9F6AajCX2L50MtIEDaIOmxPpd+hBhRYmdv+dC
-        Pckn8e5rDytIiYQAr0RHmxBEibLE5Qd3mSBsSYnF7Z1sExiVZiF5ZxaSF2YheWEWwrIFjCyr
-        GMVSC4pz01OLDQsMkWN7EyM4YWqZ7mCccs7nEKMAB6MSD++Mh2ZxQqyJZcWVuYcYJTiYlUR4
-        66xM44R4UxIrq1KL8uOLSnNSiw8xmgJDeyKzlGhyPjCZ55XEG5oaGRsbW5gYmpkaGiqJ8z6M
-        1IwTEkhPLEnNTk0tSC2C6WPi4JRqYCyZUbO5rZw36tH8bNM9UWrX5z6z/33ln94r+cDNkhon
-        np1o3cY64crkWRPOcKku9D/ab/r+VeB14X1fbVPe32/qZT7zN7ra9/uP5zHxW+eFJmw4UbPo
-        3ZrAa2xtK5bvXn6oOqLwzVKvp6d3RHSUnJ310zJA+++0uXOTjW+v2rFdueb882fd5ZGaSizF
-        GYmGWsxFxYkArgsBgK4DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjkeLIzCtJLcpLzFFi42LZdlhJXle40DzO4MV9S4uNM9azWiz4NIPV
-        4mzTG3aLy7vmsFl87j3CaLGwqYXd4nbjCjYHdo8189YwevRtWcXo8XmTXABzFJdNSmpOZllq
-        kb5dAlfG8gNZBa8UK7pu9jA2MH6W7mLk5JAQMJE42vmctYuRi0NIYDejxJabl1kgEpIS0y4e
-        Ze5i5ACyhSUOHy6GqHnLKLHp2lxGkBphgViJLZOPsYEkRASmMUqsXbkcrJlZwF1iXutzZoiO
-        60wSR88sYQNJsAloSex/cQPM5hdQlLj64zHYJF4BO4lrPROYQGwWARWJjfcbWUFsUYEwiZ1L
-        HjNB1AhKnJz5BGwBp4C1xLnO9VDL1CX+zLvEDGGLS9x6Mp8JwpaXaN46m3kCo/AsJO2zkLTM
-        QtIyC0nLAkaWVYySqQXFuem5xYYFRnmp5XrFibnFpXnpesn5uZsYwbGjpbWD8cSJ+EOMAhyM
-        Sjy8Mx6axQmxJpYVV+YeYpTgYFYS4a2zMo0T4k1JrKxKLcqPLyrNSS0+xCjNwaIkziuffyxS
-        SCA9sSQ1OzW1ILUIJsvEwSnVwLhst2PiMpYY0zl8t2xU85qct1jtWN3v59cvWHh2spNiWN++
-        GKdPXze/ePYoUDw4zGNOXngI49/tsVELVWbeaj7b96gk8sWJX4pGe2VfvLS44vxI7ItDXn7V
-        cebXB6t+bfnrInnTc82nBfO2ul2eX7pwdatpcKKU1QOHZe5at5zXPuHa7vPvs4ESS3FGoqEW
-        c1FxIgC2/SV7mQIAAA==
-X-CMS-MailID: 20200203010212epcas1p26a3d99b150514bbd8f0e342a3b8cbba9
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     cw00.choi@samsung.com, chanwoo@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        lukasz.luba@arm.com
+Subject: [PATCHv2 1/2] PM / devfreq: Remove unneeded extern keyword
+Date:   Mon,  3 Feb 2020 10:17:32 +0900
+Message-Id: <20200203011733.7639-1-cw00.choi@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGKsWRmVeSWpSXmKPExsWy7bCmnu6tIvM4g0d/9S0m3rjCYnH9y3NW
+        i7NNb9gtLu+aw2bxufcIo8XCphZ2i9uNK9gc2D3WzFvD6LFpVSebR9+WVYwenzfJBbBEZdtk
+        pCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAF2gpFCWmFMK
+        FApILC5W0rezKcovLUlVyMgvLrFVSi1IySmwLNArTswtLs1L10vOz7UyNDAwMgUqTMjO+LP4
+        LHtBs0PF0cbDzA2MF0y6GDk5JARMJHp27GDvYuTiEBLYwSjxeMlJFpCEkMAnRoneOwUQiW+M
+        Es0Tr7DCdEzv2sQMUbSXUeLgOTWIoi+MEi0LO5lAEmwCWhL7X9xgA7FFBKwkTv/vAGtgFqiU
+        +HLuKNggYQFnib6DnWA1LAKqEk3fDoPFeQUsJY7ffskIsUxeYvWGA8wgCyQE/rJKPJq0CSrh
+        IvHjUh8ThC0s8er4FnYIW0riZX8blF0tsfLkETaI5g5GiS37L0C9YCyxf+lkoGYOoIs0Jdbv
+        0ocIK0rs/D2XEeJQPol3X3tYQUokBHglOtqEIEqUJS4/uAu1VlJicTvI/SAlHhIthyMhYRIr
+        MaHzAeMERtlZCPMXMDKuYhRLLSjOTU8tNiwwQo6jTYzgNKVltoNx0TmfQ4wCHIxKPLwzHprF
+        CbEmlhVX5h5ilOBgVhLhrbMyjRPiTUmsrEotyo8vKs1JLT7EaAoMvInMUqLJ+cAUmlcSb2hq
+        ZGxsbGFiaGZqaKgkzvswUjNOSCA9sSQ1OzW1ILUIpo+Jg1OqgVFYUVG2NFPGJ0Tp15KLbCfe
+        deztyP/4f/4dzcOH2WPqrBssl0y8bHpI77+imvLs+gD9wrP9C+rb1vmbTXstGzKn+enOm7oK
+        s/WKfRWEla/pfnkn9pjpoJLDIx9l7nn3dkkGqoe3NOjNlHtszelpaCIZprhSQPJhVjpfn/q5
+        M2sfLTttuPV8ihJLcUaioRZzUXEiANHsN5lpAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjluLIzCtJLcpLzFFi42LZdlhJXvdWkXmcwfLtMhYTb1xhsbj+5Tmr
+        xdmmN+wWl3fNYbP43HuE0WJhUwu7xe3GFWwO7B5r5q1h9Ni0qpPNo2/LKkaPz5vkAliiuGxS
+        UnMyy1KL9O0SuDL+LD7LXtDsUHG08TBzA+MFky5GTg4JAROJ6V2bmLsYuTiEBHYzSrSvvs4O
+        kZCUmHbxKFCCA8gWljh8uBii5hOjxP6+ecwgNWwCWhL7X9xgA7FFBGwk7i6+xgJiMwvUS7Sd
+        2Q82R1jAWaLvYCdYDYuAqkTTt8OsIDavgKXE8dsvGSF2yUus3nCAeQIjzwJGhlWMkqkFxbnp
+        ucWGBUZ5qeV6xYm5xaV56XrJ+bmbGMGho6W1g/HEifhDjAIcjEo8vDMemsUJsSaWFVfmHmKU
+        4GBWEuGtszKNE+JNSaysSi3Kjy8qzUktPsQozcGiJM4rn38sUkggPbEkNTs1tSC1CCbLxMEp
+        1cBoLfkgdrJMRsztrVcYefR8CyyKz1ZM3MK0JVNHasJmXh6JgEcL6y3nWsvsLAv/P9G7X3D+
+        t6h/a2T3v3+YZcuspyIoJ8XfOMFE+zj/iydeN+yL3vWq6Z90+MxY45vaHlW+YZ70jfMVZuHG
+        GmVTps5rWqdtd1TfouNpVePKyitWUjcniCfvnq/EUpyRaKjFXFScCAC3ZZyxGQIAAA==
+X-CMS-MailID: 20200203010946epcas1p16010f3f1e5b079927bd81b8e70c0a015
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200130114724epcas1p1b2a9ea756c7d53a2f26b60abbef0ab51
-References: <20200127151731.8640-1-lukasz.luba@arm.com>
-        <CGME20200130114724epcas1p1b2a9ea756c7d53a2f26b60abbef0ab51@epcas1p1.samsung.com>
-        <b4d1624f-4ca8-c985-ff42-f5f677c72fa9@arm.com>
-        <6107fa2b-81ad-060d-89a2-d8941ac4d17e@samsung.com>
-        <f5c5cd64-b72c-2802-f6ea-ab3d28483260@samsung.com>
-        <729911b2-434b-fbe5-b556-5bdba8114085@arm.com>
+X-CMS-RootMailID: 20200203010946epcas1p16010f3f1e5b079927bd81b8e70c0a015
+References: <CGME20200203010946epcas1p16010f3f1e5b079927bd81b8e70c0a015@epcas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/31/20 6:38 PM, Lukasz Luba wrote:
-> Hi Chanwoo,
-> 
-> On 1/31/20 12:47 AM, Chanwoo Choi wrote:
->> On 1/31/20 9:42 AM, Chanwoo Choi wrote:
->>> Hi Lukasz,
->>>
->>> On 1/30/20 8:47 PM, Lukasz Luba wrote:
->>>> Hi Chanwoo, MyungJoo,
->>>>
->>>> Gentle ping. The issue is not only in the devfreq itself,
->>>> but also it affects thermal. The devfreq cooling rely on
->>>> busy_time and total_time updated by the devfreq monitoring
->>>> (in simple_ondemand).
->>>> Thermal uses DELAYED_WORK and is more reliable, but uses stale
->>>> data from devfreq_dev_stats. It is especially visible when
->>>> you have cgroup spanning one cluster. Android uses cgroups
->>>> heavily. You can make easily this setup using 'taskset',
->>>> run some benchmarks and observe 'devfreq_monitor' traces and
->>>> timestamps, i.e. for your exynos-bus.
->>>>
->>>> The patch is really non-invasive and simple. It can be a good starting
->>>> point for testing and proposing other solutions.
->>>
->>> Sorry for late reply. I'm preparing the RFC patch about my approach
->>> to support this requirement as following:
->>>
->>> As you knew, DEFERRABLE_WORK with CONFIG_NO_HZ focuses on removing
->>> the redundant of power-consumption by preventing the unneeded wakeup
->>> from idle state if there are no any interrupts and runnable threads.
->>>
->>> Finally, I agree the requirement of delaywd_work for devfreq subsystem.
->>> But, I would like to support both deferrable_work and delayed_work
->>> on devfreq subsystem. It is better to select either deferrable_work
->>> or delayed_work by user like Kamil's suggestion[1].
->>> [1] https://lore.kernel.org/patchwork/patch/1164317/
->>> - [2/4] PM / devfreq: add possibility for delayed work
->>>
->>> But, I want to change the timer type for devfreq device
->>> using simple_ondemand governor via sysfs as following:
->>>
->>> Example:
->>>
->>> 1.
->>> enum work_timer_type {
->>>     DEVFREQ_WORK_TIMER_DEFERRABLE = 0,
->>>     DEVFREQ_WORK_TIMER_DELAYED = 0,
->>> };
->>>
->>> struct devfreq_simple_ondemand_data {
->>>     unsigned int upthreshold;
->>>     unsigned int downdifferential;
->>>     enum work_timer_type timer_type;
->>> };
->>>
->>> The developer of devfreq device driver can choose
->>> the default work time type by initializing the 'timer_type of
->>> struct devfreq_simple_ondemand_data'.
->>>
->>> 2. Change the work timer type at the runtime
->>> - Change the work timer type from 'deferrable' to 'delayed'
->>> $ echo delayed > /sys/class/devfreq/devfreq0/work_timer_type
->>> $ cat /sys/class/devfreq/devfreq0/work_timer_type
->>> delayed
->>>
->>> - Change the work timer type from 'delayed' to 'deferrable'
->>> $ echo deferrable > /sys/class/devfreq/devfreq0/work_timer_type
->>> $ cat /sys/class/devfreq/devfreq0/work_timer_type
->>> deferrable
->>>
->>
->> And
->> Only show '/sys/class/devfreq/devfreq0/work_timer_type' sysfs attribute,
->> if devfreq device uses the simple_ondemand. Because this 'work_timer_type'
->> sysfs attribute only depends on simple_ondemand governor and are useful.
->>
->> So, 'work_timer_type' sysfs attribute will be handled
->> at drivers/devfreq/governor_simpleondemand.c.
->>
->> After posting my suggestion, we can discuss it.
->>
->>
->>> I'm developing the RFC patch and then I'll send it as soon as possible.
-> 
-> Good, thank you for the explanation. For the first glance the design
-> looks OK, we can discuss it a bit more in you RFC series.
-> I would recommend to not make it conditional on simple_ondemand governor
-> just add a comment that for i.e. performance or passive governors it has
-> less sense to use this setting. There might be some other governors
-> loaded as modules, which could benefit from it, or in Android e.g.
-> https://android.googlesource.com/kernel/msm/+/refs/heads/android-msm-coral-4.14-android10/drivers/devfreq/governor_msm_adreno_tz.c
+Remove unneeded extern keyword from devfreq-related header file
+and adjust the indentation of function parameter to keep the
+consistency in header file
 
-OK. Instead, I'll add the flag for governors. The governor flag
-indicates each sysfs entries like polling_interval, work_timer_type.
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+---
+Changes from v1:
+- Add reviewed tag of Lukasz
 
-If each governor want to use the specific sysfs attributes,
-just set the flag when governor is defined.
+ drivers/devfreq/governor.h |  17 +++----
+ include/linux/devfreq.h    | 100 ++++++++++++++++++-------------------
+ 2 files changed, 57 insertions(+), 60 deletions(-)
 
-Thanks.
-
-> 
-> It would be good if it can land in mainline before v5.8-v5.9.
-> 
-> Regards,
-> Lukasz
-> 
-> 
-> 
-> 
-
-
+diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
+index dc7533ccc3db..5ba3e051b1d0 100644
+--- a/drivers/devfreq/governor.h
++++ b/drivers/devfreq/governor.h
+@@ -57,17 +57,16 @@ struct devfreq_governor {
+ 				unsigned int event, void *data);
+ };
+ 
+-extern void devfreq_monitor_start(struct devfreq *devfreq);
+-extern void devfreq_monitor_stop(struct devfreq *devfreq);
+-extern void devfreq_monitor_suspend(struct devfreq *devfreq);
+-extern void devfreq_monitor_resume(struct devfreq *devfreq);
+-extern void devfreq_interval_update(struct devfreq *devfreq,
+-					unsigned int *delay);
++void devfreq_monitor_start(struct devfreq *devfreq);
++void devfreq_monitor_stop(struct devfreq *devfreq);
++void devfreq_monitor_suspend(struct devfreq *devfreq);
++void devfreq_monitor_resume(struct devfreq *devfreq);
++void devfreq_interval_update(struct devfreq *devfreq, unsigned int *delay);
+ 
+-extern int devfreq_add_governor(struct devfreq_governor *governor);
+-extern int devfreq_remove_governor(struct devfreq_governor *governor);
++int devfreq_add_governor(struct devfreq_governor *governor);
++int devfreq_remove_governor(struct devfreq_governor *governor);
+ 
+-extern int devfreq_update_status(struct devfreq *devfreq, unsigned long freq);
++int devfreq_update_status(struct devfreq *devfreq, unsigned long freq);
+ 
+ static inline int devfreq_update_stats(struct devfreq *df)
+ {
+diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+index c6f82d4bec9f..82630fafacde 100644
+--- a/include/linux/devfreq.h
++++ b/include/linux/devfreq.h
+@@ -201,24 +201,23 @@ struct devfreq_freqs {
+ };
+ 
+ #if defined(CONFIG_PM_DEVFREQ)
+-extern struct devfreq *devfreq_add_device(struct device *dev,
+-				  struct devfreq_dev_profile *profile,
+-				  const char *governor_name,
+-				  void *data);
+-extern int devfreq_remove_device(struct devfreq *devfreq);
+-extern struct devfreq *devm_devfreq_add_device(struct device *dev,
+-				  struct devfreq_dev_profile *profile,
+-				  const char *governor_name,
+-				  void *data);
+-extern void devm_devfreq_remove_device(struct device *dev,
+-				  struct devfreq *devfreq);
++struct devfreq *devfreq_add_device(struct device *dev,
++				struct devfreq_dev_profile *profile,
++				const char *governor_name,
++				void *data);
++int devfreq_remove_device(struct devfreq *devfreq);
++struct devfreq *devm_devfreq_add_device(struct device *dev,
++				struct devfreq_dev_profile *profile,
++				const char *governor_name,
++				void *data);
++void devm_devfreq_remove_device(struct device *dev, struct devfreq *devfreq);
+ 
+ /* Supposed to be called by PM callbacks */
+-extern int devfreq_suspend_device(struct devfreq *devfreq);
+-extern int devfreq_resume_device(struct devfreq *devfreq);
++int devfreq_suspend_device(struct devfreq *devfreq);
++int devfreq_resume_device(struct devfreq *devfreq);
+ 
+-extern void devfreq_suspend(void);
+-extern void devfreq_resume(void);
++void devfreq_suspend(void);
++void devfreq_resume(void);
+ 
+ /**
+  * update_devfreq() - Reevaluate the device and configure frequency
+@@ -226,35 +225,34 @@ extern void devfreq_resume(void);
+  *
+  * Note: devfreq->lock must be held
+  */
+-extern int update_devfreq(struct devfreq *devfreq);
++int update_devfreq(struct devfreq *devfreq);
+ 
+ /* Helper functions for devfreq user device driver with OPP. */
+-extern struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
+-					   unsigned long *freq, u32 flags);
+-extern int devfreq_register_opp_notifier(struct device *dev,
+-					 struct devfreq *devfreq);
+-extern int devfreq_unregister_opp_notifier(struct device *dev,
+-					   struct devfreq *devfreq);
+-extern int devm_devfreq_register_opp_notifier(struct device *dev,
+-					      struct devfreq *devfreq);
+-extern void devm_devfreq_unregister_opp_notifier(struct device *dev,
+-						struct devfreq *devfreq);
+-extern int devfreq_register_notifier(struct devfreq *devfreq,
+-					struct notifier_block *nb,
+-					unsigned int list);
+-extern int devfreq_unregister_notifier(struct devfreq *devfreq,
+-					struct notifier_block *nb,
+-					unsigned int list);
+-extern int devm_devfreq_register_notifier(struct device *dev,
++struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
++				unsigned long *freq, u32 flags);
++int devfreq_register_opp_notifier(struct device *dev,
++				struct devfreq *devfreq);
++int devfreq_unregister_opp_notifier(struct device *dev,
++				struct devfreq *devfreq);
++int devm_devfreq_register_opp_notifier(struct device *dev,
++				struct devfreq *devfreq);
++void devm_devfreq_unregister_opp_notifier(struct device *dev,
++				struct devfreq *devfreq);
++int devfreq_register_notifier(struct devfreq *devfreq,
++				struct notifier_block *nb,
++				unsigned int list);
++int devfreq_unregister_notifier(struct devfreq *devfreq,
++				struct notifier_block *nb,
++				unsigned int list);
++int devm_devfreq_register_notifier(struct device *dev,
+ 				struct devfreq *devfreq,
+ 				struct notifier_block *nb,
+ 				unsigned int list);
+-extern void devm_devfreq_unregister_notifier(struct device *dev,
++void devm_devfreq_unregister_notifier(struct device *dev,
+ 				struct devfreq *devfreq,
+ 				struct notifier_block *nb,
+ 				unsigned int list);
+-extern struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev,
+-						int index);
++struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev, int index);
+ 
+ #if IS_ENABLED(CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND)
+ /**
+@@ -311,9 +309,9 @@ struct devfreq_passive_data {
+ 
+ #else /* !CONFIG_PM_DEVFREQ */
+ static inline struct devfreq *devfreq_add_device(struct device *dev,
+-					  struct devfreq_dev_profile *profile,
+-					  const char *governor_name,
+-					  void *data)
++					struct devfreq_dev_profile *profile,
++					const char *governor_name,
++					void *data)
+ {
+ 	return ERR_PTR(-ENOSYS);
+ }
+@@ -350,31 +348,31 @@ static inline void devfreq_suspend(void) {}
+ static inline void devfreq_resume(void) {}
+ 
+ static inline struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
+-					   unsigned long *freq, u32 flags)
++					unsigned long *freq, u32 flags)
+ {
+ 	return ERR_PTR(-EINVAL);
+ }
+ 
+ static inline int devfreq_register_opp_notifier(struct device *dev,
+-					 struct devfreq *devfreq)
++					struct devfreq *devfreq)
+ {
+ 	return -EINVAL;
+ }
+ 
+ static inline int devfreq_unregister_opp_notifier(struct device *dev,
+-					   struct devfreq *devfreq)
++					struct devfreq *devfreq)
+ {
+ 	return -EINVAL;
+ }
+ 
+ static inline int devm_devfreq_register_opp_notifier(struct device *dev,
+-						     struct devfreq *devfreq)
++					struct devfreq *devfreq)
+ {
+ 	return -EINVAL;
+ }
+ 
+ static inline void devm_devfreq_unregister_opp_notifier(struct device *dev,
+-							struct devfreq *devfreq)
++					struct devfreq *devfreq)
+ {
+ }
+ 
+@@ -393,22 +391,22 @@ static inline int devfreq_unregister_notifier(struct devfreq *devfreq,
+ }
+ 
+ static inline int devm_devfreq_register_notifier(struct device *dev,
+-				struct devfreq *devfreq,
+-				struct notifier_block *nb,
+-				unsigned int list)
++					struct devfreq *devfreq,
++					struct notifier_block *nb,
++					unsigned int list)
+ {
+ 	return 0;
+ }
+ 
+ static inline void devm_devfreq_unregister_notifier(struct device *dev,
+-				struct devfreq *devfreq,
+-				struct notifier_block *nb,
+-				unsigned int list)
++					struct devfreq *devfreq,
++					struct notifier_block *nb,
++					unsigned int list)
+ {
+ }
+ 
+ static inline struct devfreq *devfreq_get_devfreq_by_phandle(struct device *dev,
+-							int index)
++					int index)
+ {
+ 	return ERR_PTR(-ENODEV);
+ }
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+2.17.1
+
