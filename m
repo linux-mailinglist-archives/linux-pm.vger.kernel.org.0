@@ -2,165 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE824150518
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2020 12:19:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F9815069F
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2020 14:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727983AbgBCLT2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Feb 2020 06:19:28 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:48188 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727707AbgBCLT2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Feb 2020 06:19:28 -0500
-Received: from 79.184.253.222.ipv4.supernova.orange.pl (79.184.253.222) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 388e399c8b7c643b; Mon, 3 Feb 2020 12:19:25 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        David Box <david.e.box@linux.intel.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        David Laight <David.Laight@aculab.com>
-Subject: [PATCH v2 2/2] intel_idle: Introduce 'states_off' module parameter
-Date:   Mon, 03 Feb 2020 12:19:07 +0100
-Message-ID: <3192311.hLYMgh4pot@kreacher>
-In-Reply-To: <1921392.EN65KG1giI@kreacher>
-References: <1720216.0Jr2BLnqKp@kreacher> <1921392.EN65KG1giI@kreacher>
+        id S1727267AbgBCNLj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Feb 2020 08:11:39 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:43386 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727526AbgBCNLg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Feb 2020 08:11:36 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1580735495; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=vkyTdOaRH1ioFtJvRUXIFVkHYEEyCnAk8WaTMV+sKk4=; b=kieC8vJacnljFapjibpGYKaj7q9tU8iNY20Huze2ChLp6im2aZGQzy7nNg4weLjM76+dCns8
+ 3kWqtIq3JeXgp/6vHyBhEVfIx4UmG91E4PdTSeJo35AsRmHjRolh8iVmBgBkAhy01MUkLUsa
+ gynIwzxAYjjBSUFqvJEnvkHybkM=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e381c06.7fc5a7bc37d8-smtp-out-n02;
+ Mon, 03 Feb 2020 13:11:34 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 39582C433CB; Mon,  3 Feb 2020 13:11:34 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.13.37] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mkshah)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B3FB2C43383;
+        Mon,  3 Feb 2020 13:11:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B3FB2C43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=mkshah@codeaurora.org
+Subject: Re: [PATCH v2 4/6] drivers: qcom: rpmh-rsc: Add RSC power domain
+ support
+To:     Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
+        david.brown@linaro.org, linux-arm-msm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
+        lsrao@codeaurora.org, ulf.hansson@linaro.org
+References: <20190823081703.17325-1-mkshah@codeaurora.org>
+ <20190823081703.17325-5-mkshah@codeaurora.org>
+ <5d7146be.1c69fb81.38760.7fb8@mx.google.com>
+From:   Maulik Shah <mkshah@codeaurora.org>
+Message-ID: <d6ec3b9e-ed3c-3b6d-f313-1c5acbc786d1@codeaurora.org>
+Date:   Mon, 3 Feb 2020 18:41:27 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <5d7146be.1c69fb81.38760.7fb8@mx.google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-In certain system configurations it may not be desirable to use some
-C-states assumed to be available by intel_idle and the driver needs
-to be prevented from using them even before the cpuidle sysfs
-interface becomes accessible to user space.  Currently, the only way
-to achieve that is by setting the 'max_cstate' module parameter to a
-value lower than the index of the shallowest of the C-states in
-question, but that may be overly intrusive, because it effectively
-makes all of the idle states deeper than the 'max_cstate' one go
-away (and the C-state to avoid may be in the middle of the range
-normally regarded as available).
+On 9/5/2019 11:02 PM, Stephen Boyd wrote:
+> Quoting Maulik Shah (2019-08-23 01:17:01)
+>> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
+>> index e278fc11fe5c..884b39599e8f 100644
+>> --- a/drivers/soc/qcom/rpmh-rsc.c
+>> +++ b/drivers/soc/qcom/rpmh-rsc.c
+>> @@ -498,6 +498,32 @@ static int tcs_ctrl_write(struct rsc_drv *drv, const struct tcs_request *msg)
+>>          return ret;
+>>   }
+>>   
+>> +/**
+>> + *  rpmh_rsc_ctrlr_is_idle: Check if any of the AMCs are busy.
+>> + *
+>> + *  @drv: The controller
+>> + *
+>> + *  Returns false if the TCSes are engaged in handling requests,
+> Please use kernel-doc style for returns here.
+Done.
+>> + *  True if controller is idle.
+>> + */
+>> +static bool rpmh_rsc_ctrlr_is_idle(struct rsc_drv *drv)
+>> +{
+>> +       int m;
+>> +       struct tcs_group *tcs = get_tcs_of_type(drv, ACTIVE_TCS);
+>> +       bool ret = true;
+>> +
+>> +       spin_lock(&drv->lock);
+> I think these need to be irqsave/restore still.
+Done.
+>> +       for (m = tcs->offset; m < tcs->offset + tcs->num_tcs; m++) {
+>> +               if (!tcs_is_free(drv, m)) {
+> This snippet is from tcs_invalidate(). Please collapse it into some sort
+> of function or macro like for_each_tcs().
+Keeping it as it is, the snippet is actually little different from 
+tcs_invalidate.
+>> +                       ret = false;
+>> +                       break;
+>> +               }
+>> +       }
+>> +       spin_unlock(&drv->lock);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>>   /**
+>>    * rpmh_rsc_write_ctrl_data: Write request to the controller
+>>    *
+>> @@ -521,6 +547,53 @@ int rpmh_rsc_write_ctrl_data(struct rsc_drv *drv, const struct tcs_request *msg)
+>>          return tcs_ctrl_write(drv, msg);
+>>   }
+>>   
+>> +static int rpmh_domain_power_off(struct generic_pm_domain *rsc_pd)
+>> +{
+>> +       struct rsc_drv *drv = container_of(rsc_pd, struct rsc_drv, rsc_pd);
+>> +
+>> +       /*
+>> +        * RPMh domain can not be powered off when there is pending ACK for
+>> +        * ACTIVE_TCS request. Exit when controller is busy.
+>> +        */
+>> +
+> Nitpick: Remove this extra newline.
+Done.
+>> +       if (!rpmh_rsc_ctrlr_is_idle(drv))
+>> +               return -EBUSY;
+>> +
+>> +       return rpmh_flush(&drv->client);
+>> +}
+>> +
+>> +static int rpmh_probe_power_domain(struct platform_device *pdev,
+>> +                                  struct rsc_drv *drv)
+>> +{
+>> +       int ret;
+>> +       struct generic_pm_domain *rsc_pd = &drv->rsc_pd;
+>> +       struct device_node *dn = pdev->dev.of_node;
+>> +
+>> +       rsc_pd->name = kasprintf(GFP_KERNEL, "%s", dn->name);
+> Maybe use devm_kasprintf?
+Done.
+>> +       if (!rsc_pd->name)
+>> +               return -ENOMEM;
+>> +
+>> +       rsc_pd->name = kbasename(rsc_pd->name);
+>> +       rsc_pd->power_off = rpmh_domain_power_off;
+>> +       rsc_pd->flags |= GENPD_FLAG_IRQ_SAFE;
+>> +
+>> +       ret = pm_genpd_init(rsc_pd, NULL, false);
+>> +       if (ret)
+>> +               goto free_name;
+>> +
+>> +       ret = of_genpd_add_provider_simple(dn, rsc_pd);
+>> +       if (ret)
+>> +               goto remove_pd;
+>> +
+>> +       return ret;
+>> +
+>> +remove_pd:
+>> +       pm_genpd_remove(rsc_pd);
+>> +free_name:
+>> +       kfree(rsc_pd->name);
+> And then drop this one?
+Done.
+>> +       return ret;
+>> +}
+>> +
+>>   static int rpmh_probe_tcs_config(struct platform_device *pdev,
+>>                                   struct rsc_drv *drv)
+>>   {
+>> @@ -650,6 +723,17 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
+>>          if (ret)
+>>                  return ret;
+>>   
+>> +       /*
+>> +        * Power domain is not required for controllers that support 'solver'
+>> +        * mode where they can be in autonomous mode executing low power mode
+>> +        * to power down.
+>> +        */
+>> +       if (of_property_read_bool(dn, "#power-domain-cells")) {
+>> +               ret = rpmh_probe_power_domain(pdev, drv);
+>> +               if (ret)
+>> +                       return ret;
+>> +       }
+>> +
+>>          spin_lock_init(&drv->lock);
+>>          bitmap_zero(drv->tcs_in_use, MAX_TCS_NR);
+> What happens if it fails later on? The genpd provider is still sitting
+> around and needs to be removed on probe failure later on in this
+> function. It would be nicer if there wasn't another function to probe
+> the power domain and it was just inlined here actually. That way we
+> don't have to wonder about what's going on across two blocks of code.
 
-To allow that limitation to be overcome, introduce a new module
-parameter called 'states_off' to represent a list of idle states to
-be disabled by default in the form of a bitmask and update the
-documentation to cover it.
+Thanks for pointing this.  Moved it at the end of probe to avoid this.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
--> v2:
-   * Address a couple of review comments from David Laight.
-
----
- Documentation/admin-guide/pm/intel_idle.rst |   19 ++++++++++++++++++-
- drivers/idle/intel_idle.c                   |   23 ++++++++++++++++++++---
- 2 files changed, 38 insertions(+), 4 deletions(-)
-
-Index: linux-pm/drivers/idle/intel_idle.c
-===================================================================
---- linux-pm.orig/drivers/idle/intel_idle.c
-+++ linux-pm/drivers/idle/intel_idle.c
-@@ -63,6 +63,7 @@ static struct cpuidle_driver intel_idle_
- };
- /* intel_idle.max_cstate=0 disables driver */
- static int max_cstate = CPUIDLE_STATE_MAX - 1;
-+static unsigned int disabled_states_mask;
- 
- static unsigned int mwait_substates;
- 
-@@ -1234,6 +1235,9 @@ static void __init intel_idle_init_cstat
- 		if (cx->type > ACPI_STATE_C2)
- 			state->flags |= CPUIDLE_FLAG_TLB_FLUSHED;
- 
-+		if (disabled_states_mask & BIT(cstate))
-+			state->flags |= CPUIDLE_FLAG_OFF;
-+
- 		state->enter = intel_idle;
- 		state->enter_s2idle = intel_idle_s2idle;
- 	}
-@@ -1466,9 +1470,10 @@ static void __init intel_idle_init_cstat
- 		/* Structure copy. */
- 		drv->states[drv->state_count] = cpuidle_state_table[cstate];
- 
--		if ((icpu->use_acpi || force_use_acpi) &&
--		    intel_idle_off_by_default(mwait_hint) &&
--		    !(cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_ALWAYS_ENABLE))
-+		if ((disabled_states_mask & BIT(drv->state_count)) ||
-+		    ((icpu->use_acpi || force_use_acpi) &&
-+		     intel_idle_off_by_default(mwait_hint) &&
-+		     !(cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_ALWAYS_ENABLE)))
- 			drv->states[drv->state_count].flags |= CPUIDLE_FLAG_OFF;
- 
- 		drv->state_count++;
-@@ -1487,6 +1492,10 @@ static void __init intel_idle_init_cstat
- static void __init intel_idle_cpuidle_driver_init(struct cpuidle_driver *drv)
- {
- 	cpuidle_poll_state_init(drv);
-+
-+	if (disabled_states_mask & BIT(0))
-+		drv->states[0].flags |= CPUIDLE_FLAG_OFF;
-+
- 	drv->state_count = 1;
- 
- 	if (icpu)
-@@ -1667,3 +1676,11 @@ device_initcall(intel_idle_init);
-  * is the easiest way (currently) to continue doing that.
-  */
- module_param(max_cstate, int, 0444);
-+/*
-+ * The positions of the bits that are set in this number are the indices of the
-+ * idle states to be disabled by default (as reflected by the names of the
-+ * corresponding idle state directories in sysfs, "state0", "state1" ...
-+ * "state<i>" ..., where <i> is the index of the given state).
-+ */
-+module_param_named(states_off, disabled_states_mask, uint, 0444);
-+MODULE_PARM_DESC(states_off, "Mask of disabled idle states");
-Index: linux-pm/Documentation/admin-guide/pm/intel_idle.rst
-===================================================================
---- linux-pm.orig/Documentation/admin-guide/pm/intel_idle.rst
-+++ linux-pm/Documentation/admin-guide/pm/intel_idle.rst
-@@ -168,7 +168,7 @@ and ``idle=nomwait``.  If any of them is
- ``MWAIT`` instruction is not allowed to be used, so the initialization of
- ``intel_idle`` will fail.
- 
--Apart from that there are three module parameters recognized by ``intel_idle``
-+Apart from that there are four module parameters recognized by ``intel_idle``
- itself that can be set via the kernel command line (they cannot be updated via
- sysfs, so that is the only way to change their values).
- 
-@@ -195,6 +195,23 @@ driver ignore the system's ACPI tables e
- recognized processor models, respectively (they both are unset by default and
- ``use_acpi`` has no effect if ``no_acpi`` is set).
- 
-+The value of the ``states_off`` module parameter (0 by default) represents a
-+list of idle states to be disabled by default in the form of a bitmask.
-+
-+Namely, the positions of the bits that are set in the ``states_off`` value are
-+the indices of idle states to be disabled by default (as reflected by the names
-+of the corresponding idle state directories in ``sysfs``, :file:`state0`,
-+:file:`state1` ... :file:`state<i>` ..., where ``<i>`` is the index of the given
-+idle state; see :ref:`idle-states-representation` in :doc:`cpuidle`).
-+
-+For example, if ``states_off`` is equal to 3, the driver will disable idle
-+states 0 and 1 by default, and if it is equal to 8, idle state 3 will be
-+disabled by default and so on (bit positions beyond the maximum idle state index
-+are ignored).
-+
-+The idle states disabled this way can be enabled (on a per-CPU basis) from user
-+space via ``sysfs``.
-+
- 
- .. _intel-idle-core-and-package-idle-states:
- 
-
-
-
+>
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
