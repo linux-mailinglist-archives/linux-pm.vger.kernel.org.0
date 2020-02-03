@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93208150F2F
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2020 19:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBBF150FD6
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2020 19:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729342AbgBCSOT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Feb 2020 13:14:19 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:40305 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728923AbgBCSOS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Feb 2020 13:14:18 -0500
-Received: by mail-pf1-f196.google.com with SMTP id q8so7974535pfh.7
-        for <linux-pm@vger.kernel.org>; Mon, 03 Feb 2020 10:14:17 -0800 (PST)
+        id S1729654AbgBCSmR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Feb 2020 13:42:17 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39067 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729069AbgBCSmR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Feb 2020 13:42:17 -0500
+Received: by mail-pl1-f193.google.com with SMTP id g6so6196371plp.6
+        for <linux-pm@vger.kernel.org>; Mon, 03 Feb 2020 10:42:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=IVwPeQjWnavkYSmreRihBcQCqzcKg6GvGjN7vrooL6I=;
-        b=DtX5C74mzvURRslkfhYTbEWniKOBw9KEJSR3cHSmYH69gU2PWjEz+geJRVgphNtLbk
-         F6crXZWVvIdzHd6d4EfPrqX5UJROzbjwFQrlC+pCco5HrIMJbpSt/hyytkolvwhtzHls
-         ldq23iqkmxJ99PzYXSMzkMqK4tpGoQ6IRRR3ogFKz1EO1FCjYrW0lEQf4+3jvUypIUGK
-         Ldx1tW5YsUZQaFfqc7+xet3qac+Lxs3QEyJiqXdlNRR6m0hF3vQ1u3isU5mAevs3Zlo2
-         UwN564q2bAIua7iFzbObi5cErmMrfSPIuGQjXotXeyxw5IRUtRDGEygMrHBh+HZ1GTBR
-         6I5Q==
+        bh=agwkyBrldDg9XuoJ/vuTI4Bkm2/60ebehPR4ONCSu1A=;
+        b=VXhPfUbvBDPUPwgbLZ+4MxcC+79OxTxus1DagUQ6PZIiK2UHMJjD6BUw6ZUhutRicA
+         AJg5jJl+3QUgunQNplsGHuqurSmnQvgznY5mbYUSue4QpFGXen18JGdddf7mEHTxfT74
+         jb2o3f8djD5lRy6hUQlrkaUErCqYG4eG6l6u2yvJeVNF7ZtE3ztFOpquhw5qhSzp0CMh
+         PGnyIfgYBh/T42kRWPuPqYwCwZWOHa2r32p6LCLt/5LiT5jZPxsTMltX9yHxR8eQkoRj
+         q5ZLWse95cjzwqVE7EXLBn05/9sO8rDgF+NotlOpDB83qYZK6UK9SudViPpb5uJL19sY
+         b99w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=IVwPeQjWnavkYSmreRihBcQCqzcKg6GvGjN7vrooL6I=;
-        b=Hp2QTUk6f1RjYtlX6OAAx6RT6impR5E1p/9lAx4Jnm0wiZO2oqo2yd2Ic/mAk3ytp9
-         aXbtbZrfl5PQejiyyqU7jNj5bfE+iK5UuHzNOTWA4D8ihzPCI+uNX1carBFvmt1E8ZhL
-         Shh5COg/ZRkkDbKKYuf4g4Lm25/8WnKdSGV/Yz3y+y971lFA6j2RLhpyz8zphROFwR4+
-         VPhVjUgs5kfT3YFtSwZJavy3/2OC4ndMCzhAKU+ww6/sXrcVd7pg/fXN6ezHXN2pYa5M
-         9uijcRzWlpHjGDnMjyB2emF61khjqTRTKiQlgJJAJYR7wLneT18b/OK2FyMwf+Hwjrbx
-         OAbg==
-X-Gm-Message-State: APjAAAVdmdwiYwUNNhtMWQLnfDnDGl0oDzyLPxXcJwEivyD0R5QcerFx
-        Ox2EBRRZMRpq6zofsvH1KnJDHw==
-X-Google-Smtp-Source: APXvYqxkgpl/cr1CnUuiWJNV7TN7ZP1AWB4FhxD0zzu8YMafzUAWo/WgGlqMypt9vpgwtQ17L8/NPg==
-X-Received: by 2002:a63:7949:: with SMTP id u70mr25980401pgc.233.1580753656675;
-        Mon, 03 Feb 2020 10:14:16 -0800 (PST)
+        bh=agwkyBrldDg9XuoJ/vuTI4Bkm2/60ebehPR4ONCSu1A=;
+        b=SO3aSlhQ/iVZeT0l7shtuIS/5gJBG2URuLEEWSrQyhUT+hpG5YHDdcgJYVG3JRXtsn
+         +ffU39XtW0+U+T0qUdXdmAwxM+TJcvENZGciFL7lN1HD+TLsO7OBr059dG1pI8aevi0z
+         1uPrGQTtUFLLSfmu8RV2pVTSrbMWcAtoiddpBUmPbOxBS0kHxAs9nINZVh9xVflU26R1
+         jR57Mql5FDLyyAE1eAMhWO9BozyOD45AfgA0mGs0dk3MwtLyXu8aOvRMEZ/FAJLM+kyn
+         PtZ9gKI3T6mDe7sVPcWxaY5J5VO32QKJcSDyJFtsbzSG5+315fkS7Ch6BKz2eI71H7N1
+         ti/Q==
+X-Gm-Message-State: APjAAAXJavW+zcxMa1y35nzFBTEJbkiT0oBordn8bU1A9MuuQFlmmFO/
+        T84fPZOkmUCl0GekhGPMBlah5Q==
+X-Google-Smtp-Source: APXvYqywujKu1jX+eoX2Ww6KqrPLX4hn6f7F55QKMclqSfe3MX/7rEZ4+VJs8S0YyZQpaUrEQwhQtg==
+X-Received: by 2002:a17:902:ff08:: with SMTP id f8mr21399303plj.261.1580755336546;
+        Mon, 03 Feb 2020 10:42:16 -0800 (PST)
 Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id z14sm19775106pgj.43.2020.02.03.10.14.15
+        by smtp.gmail.com with ESMTPSA id t8sm159330pjy.20.2020.02.03.10.42.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2020 10:14:15 -0800 (PST)
-Date:   Mon, 3 Feb 2020 10:14:13 -0800
+        Mon, 03 Feb 2020 10:42:16 -0800 (PST)
+Date:   Mon, 3 Feb 2020 10:42:13 -0800
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Amit Kucheria <amit.kucheria@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
@@ -52,15 +52,14 @@ Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
         linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 4/7] drivers: thermal: tsens: Add critical interrupt
- support
-Message-ID: <20200203181413.GF3948@builder>
+Subject: Re: [PATCH v4 5/7] drivers: thermal: tsens: Add watchdog support
+Message-ID: <20200203184213.GG3948@builder>
 References: <cover.1580390127.git.amit.kucheria@linaro.org>
- <932e07a83fed192678b8f718bbae37d0dc83590d.1580390127.git.amit.kucheria@linaro.org>
+ <a1f7d34b7281c4e40307f67fce9a5c435ee5e7eb.1580390127.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <932e07a83fed192678b8f718bbae37d0dc83590d.1580390127.git.amit.kucheria@linaro.org>
+In-Reply-To: <a1f7d34b7281c4e40307f67fce9a5c435ee5e7eb.1580390127.git.amit.kucheria@linaro.org>
 User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -69,54 +68,51 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Thu 30 Jan 05:27 PST 2020, Amit Kucheria wrote:
 
-> TSENS IP v2.x adds critical threshold interrupt support for each sensor
-> in addition to the upper/lower threshold interrupt. Add support in the
-> driver.
-> 
-> While the critical interrupts themselves aren't currently used by Linux,
-> the HW line is also used by the TSENS watchdog. So this patch acts as
-> infrastructure to enable watchdog functionality for the TSENS IP.
+> TSENS IP v2.3 onwards adds support for a watchdog to detect if the TSENS
+> HW FSM is stuck. Add support to detect and restart the FSM in the
+> driver. The watchdog is configured by the bootloader, we just enable the
+> watchdog bark as a debug feature in the kernel.
 > 
 > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 > ---
-
-Please do provide a changelog when respinning your patches.
-
->  drivers/thermal/qcom/tsens-common.c | 120 ++++++++++++++++++++++++++--
->  drivers/thermal/qcom/tsens-v2.c     |   8 +-
->  drivers/thermal/qcom/tsens.c        |  24 +++++-
->  drivers/thermal/qcom/tsens.h        |  71 ++++++++++++++++
->  4 files changed, 212 insertions(+), 11 deletions(-)
+>  drivers/thermal/qcom/tsens-common.c | 43 +++++++++++++++++++++++++++++
+>  drivers/thermal/qcom/tsens-v2.c     | 10 +++++++
+>  drivers/thermal/qcom/tsens.h        | 14 ++++++++++
+>  3 files changed, 67 insertions(+)
 > 
 > diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-[..]
-> +irqreturn_t tsens_critical_irq_thread(int irq, void *data)
-> +{
-> +	struct tsens_priv *priv = data;
-> +	struct tsens_irq_data d;
-> +	unsigned long flags;
-> +	int temp, ret, i;
+> index 9d1594d2f1ed..ee2414f33606 100644
+> --- a/drivers/thermal/qcom/tsens-common.c
+> +++ b/drivers/thermal/qcom/tsens-common.c
+> @@ -377,6 +377,26 @@ irqreturn_t tsens_critical_irq_thread(int irq, void *data)
+>  	struct tsens_irq_data d;
+>  	unsigned long flags;
+>  	int temp, ret, i;
+> +	u32 wdog_status, wdog_count;
 > +
-> +	for (i = 0; i < priv->num_sensors; i++) {
-> +		const struct tsens_sensor *s = &priv->sensor[i];
-> +		u32 hw_id = s->hw_id;
+> +	if (priv->feat->has_watchdog) {
+> +		ret = regmap_field_read(priv->rf[WDOG_BARK_STATUS], &wdog_status);
+> +		if (ret)
+> +			return ret;
 > +
-> +		if (IS_ERR(s->tzd))
-> +			continue;
-> +		if (!tsens_threshold_violated(priv, hw_id, &d))
-> +			continue;
-> +		ret = get_temp_tsens_valid(s, &temp);
-> +		if (ret) {
-> +			dev_err(priv->dev, "[%u] %s: error reading sensor\n", hw_id, __func__);
-> +			continue;
-> +		}
+> +		if (wdog_status) {
+> +			/* Clear WDOG interrupt */
+> +			regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 1);
+> +			regmap_field_write(priv->rf[WDOG_BARK_CLEAR], 0);
+> +			ret = regmap_field_read(priv->rf[WDOG_BARK_COUNT], &wdog_count);
+> +			if (ret)
+> +				return ret;
+> +			if (wdog_count)
+> +				dev_dbg(priv->dev, "%s: watchdog count: %d\n", __func__, wdog_count);
 > +
-> +		spin_lock_irqsave(&priv->crit_lock, flags);
-> +
+> +			return IRQ_HANDLED;
 
-I see that I failed to follow up on the discussion on the previous
-revision. The handler is called from a single thread, so you don't need
-a lock to protect the irq handler from itself.
+Patch looks good, but would is make sense to fall through and handle
+critical interrupts as well (both in positive and error cases of this
+hunk)?
+
+
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
 Regards,
 Bjorn
