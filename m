@@ -2,333 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE45150E56
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2020 18:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7432D150F18
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2020 19:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728409AbgBCRIm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Feb 2020 12:08:42 -0500
-Received: from foss.arm.com ([217.140.110.172]:56364 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727708AbgBCRIl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 3 Feb 2020 12:08:41 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DDFF330E;
-        Mon,  3 Feb 2020 09:08:40 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE0763F52E;
-        Mon,  3 Feb 2020 09:08:38 -0800 (PST)
-Date:   Mon, 3 Feb 2020 17:08:32 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Maulik Shah <mkshah@codeaurora.org>
-Cc:     swboyd@chromium.org, agross@kernel.org, david.brown@linaro.org,
-        Lorenzo.Pieralisi@arm.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, bjorn.andersson@linaro.org,
-        evgreen@chromium.org, dianders@chromium.org, rnayak@codeaurora.org,
-        ilina@codeaurora.org, lsrao@codeaurora.org, ulf.hansson@linaro.org,
-        rjw@rjwysocki.net, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v3 5/7] drivers: firmware: psci: Add hierarchical domain
- idle states converter
-Message-ID: <20200203170832.GA38466@bogus>
-References: <1580736940-6985-1-git-send-email-mkshah@codeaurora.org>
- <1580736940-6985-6-git-send-email-mkshah@codeaurora.org>
+        id S1727952AbgBCSFx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Feb 2020 13:05:53 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:37475 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726272AbgBCSFx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Feb 2020 13:05:53 -0500
+Received: by mail-pj1-f65.google.com with SMTP id m13so97077pjb.2
+        for <linux-pm@vger.kernel.org>; Mon, 03 Feb 2020 10:05:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=MKuFB5E1oxEAAV+N9k0A26pCTgfaStT9oN6zKZCrLv8=;
+        b=bp83Pi2dgb5hRetlS7exSO9BmknI8Hu/DMqkw7DZL9xAz0wLy+eg7JzfM3kO6bgZSh
+         HFm91d1X6Aj/HVWmbkP+w9sWz6v6sG/6yCbf3h3zHlerHsJtXup08CbrmyJEhIm22XQa
+         AXxS8CEXEXMys6Opvh0A55noAXE7KSr24Pfz3sGicZYkQ3rO5LMZbqM3aSUOAOaOM0bH
+         YkUVvnGhkJUYbK4zbAbdfvPsGK6Tnz8rjNWtXjMK3DFILNdNsa5u6I8uu+C2yKmJ943V
+         oz5rw0ViLz8/6syqhjrBW8CyAgHNARZ16xgtXiwGj7bX89RA1+vyCFnu+0nZyk1adk5D
+         F78g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=MKuFB5E1oxEAAV+N9k0A26pCTgfaStT9oN6zKZCrLv8=;
+        b=Y9U2Tx9J0ww1HsngpBCH9DiNwEk/vmcwpSxrpEFRopzPbsAWdyVLa9QxRNkZ8N9TDN
+         Xszb9e5+qsNCFNVyGYCY+GjNM6WV/3wf5VTweUAtJ7Vo6XQ/Z29L3JKnT5tP+Rd4GOLV
+         MfZwLBy9K8VUZIG+CzUYj9e1ckKEa+w0kWms9oDPM/qAy2CghztBH/18h3aLnQooO2rS
+         ADpY4OXnZB86icT/zZX1QAuI7+cuR9WXZxKm6fFSnlbn3Dvas2ETQbNhiEAL4KvA8N1K
+         3ApXZYPBs2xCll7tzVqPSbKyVw2fAFYOq+//01P+1GRXlwiq4LYc4lNh+g/YatX0hLiw
+         UF5A==
+X-Gm-Message-State: APjAAAWTQYBvvrgFjpecWkGOKVAaQCYGUqAKHQRASl8SrA/ySL/jl4N7
+        nfIn048h8sZZFyhpb/N8FLPqXA==
+X-Google-Smtp-Source: APXvYqxZIxDYwXggwmD/lgCeaDGAzEZKvP0x6vKPSzZerdydE/cCyw/jeeN+8rnbZOA2VoW8Z1SncQ==
+X-Received: by 2002:a17:902:59c9:: with SMTP id d9mr24370224plj.184.1580753151209;
+        Mon, 03 Feb 2020 10:05:51 -0800 (PST)
+Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id u11sm127434pjn.2.2020.02.03.10.05.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Feb 2020 10:05:50 -0800 (PST)
+Date:   Mon, 3 Feb 2020 10:05:48 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        swboyd@chromium.org, sivaa@codeaurora.org,
+        Andy Gross <agross@kernel.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 3/7] drivers: thermal: tsens: Release device in
+ success path
+Message-ID: <20200203180548.GE3948@builder>
+References: <cover.1580390127.git.amit.kucheria@linaro.org>
+ <332d79312d2618c96adaa0f125ea033e49f0af5d.1580390127.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1580736940-6985-6-git-send-email-mkshah@codeaurora.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <332d79312d2618c96adaa0f125ea033e49f0af5d.1580390127.git.amit.kucheria@linaro.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 03, 2020 at 07:05:38PM +0530, Maulik Shah wrote:
-> From: Ulf Hansson <ulf.hansson@linaro.org>
->
-> If the hierarchical CPU topology is used, but the OS initiated mode isn't
-> supported, we need to rely solely on the regular cpuidle framework to
-> manage the idle state selection, rather than using genpd and its
-> governor.
->
-> For this reason, introduce a new PSCI DT helper function,
-> psci_dt_pm_domains_parse_states(), which parses and converts the
-> hierarchically described domain idle states from DT, into regular flattened
-> cpuidle states. The converted states are added to the existing cpuidle
-> driver's array of idle states, which make them available for cpuidle.
->
+On Thu 30 Jan 05:27 PST 2020, Amit Kucheria wrote:
 
-And what's the main motivation for this if OSI is not supported in the
-firmware ?
+> We don't currently call put_device in case of successfully initialising
+> the device.
+> 
+> Allow control to fall through so we can use same code for success and
+> error paths to put_device.
+> 
+> As a part of this fixup, change devm_ioremap_resource to act on the same
+> device pointer as that used to allocate regmap memory. That ensures that
+> we are free to release op->dev after examining its resources.
+> 
 
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> [applied to new path, resolved conflicts]
-> Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 > ---
->  drivers/cpuidle/cpuidle-psci-domain.c | 137 +++++++++++++++++++++++++++++-----
->  drivers/cpuidle/cpuidle-psci.c        |  41 +++++-----
->  drivers/cpuidle/cpuidle-psci.h        |  11 +++
->  3 files changed, 153 insertions(+), 36 deletions(-)
->
-> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> index 423f03b..3c417f7 100644
-> --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> @@ -26,13 +26,17 @@ struct psci_pd_provider {
->  };
->
->  static LIST_HEAD(psci_pd_providers);
-> -static bool osi_mode_enabled __initdata;
-> +static bool osi_mode_enabled;
->
->  static int psci_pd_power_off(struct generic_pm_domain *pd)
->  {
->  	struct genpd_power_state *state = &pd->states[pd->state_idx];
->  	u32 *pd_state;
->
-> +	/* If we have failed to enable OSI mode, then abort power off. */
-> +	if ((psci_has_osi_support()) && !osi_mode_enabled)
-> +		return -EBUSY;
-> +
-
-Why is this needed ? IIUC we don't create genpd domains if OSI is not
-enabled.
-
->  	if (!state->data)
->  		return 0;
->
-> @@ -101,6 +105,105 @@ static void psci_pd_free_states(struct genpd_power_state *states,
->  	kfree(states);
->  }
->
-> +static void psci_pd_convert_states(struct cpuidle_state *idle_state,
-> +			u32 *psci_state, struct genpd_power_state *state)
-> +{
-> +	u32 *state_data = state->data;
-> +	u64 target_residency_us = state->residency_ns;
-> +	u64 exit_latency_us = state->power_on_latency_ns +
-> +			state->power_off_latency_ns;
-> +
-> +	*psci_state = *state_data;
-> +	do_div(target_residency_us, 1000);
-> +	idle_state->target_residency = target_residency_us;
-> +	do_div(exit_latency_us, 1000);
-> +	idle_state->exit_latency = exit_latency_us;
-> +	idle_state->enter = &psci_enter_domain_idle_state;
-> +	idle_state->flags |= CPUIDLE_FLAG_TIMER_STOP;
-> +
-> +	strncpy(idle_state->name, to_of_node(state->fwnode)->name,
-> +		CPUIDLE_NAME_LEN - 1);
-> +	strncpy(idle_state->desc, to_of_node(state->fwnode)->name,
-> +		CPUIDLE_NAME_LEN - 1);
-> +}
-> +
-> +static bool psci_pd_is_provider(struct device_node *np)
-> +{
-> +	struct psci_pd_provider *pd_prov, *it;
-> +
-> +	list_for_each_entry_safe(pd_prov, it, &psci_pd_providers, link) {
-> +		if (pd_prov->node == np)
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +int __init psci_dt_pm_domains_parse_states(struct cpuidle_driver *drv,
-> +			struct device_node *cpu_node, u32 *psci_states)
-> +{
-> +	struct genpd_power_state *pd_states;
-> +	struct of_phandle_args args;
-> +	int ret, pd_state_count, i, state_idx, psci_idx;
-> +	u32 cpu_psci_state = psci_states[drv->state_count - 1];
-> +	struct device_node *np = of_node_get(cpu_node);
-> +
-> +	/* Walk the CPU topology to find compatible domain idle states. */
-> +	while (np) {
-> +		ret = of_parse_phandle_with_args(np, "power-domains",
-> +					"#power-domain-cells", 0, &args);
-> +		of_node_put(np);
-> +		if (ret)
-> +			return 0;
-> +
-> +		np = args.np;
-> +
-> +		/* Verify that the node represents a psci pd provider. */
-> +		if (!psci_pd_is_provider(np)) {
-> +			of_node_put(np);
-> +			return 0;
-> +		}
-> +
-> +		/* Parse for compatible domain idle states. */
-> +		ret = psci_pd_parse_states(np, &pd_states, &pd_state_count);
-> +		if (ret) {
-> +			of_node_put(np);
-> +			return ret;
-> +		}
-> +
-> +		i = 0;
-> +		while (i < pd_state_count) {
-> +
-> +			state_idx = drv->state_count;
-> +			if (state_idx >= CPUIDLE_STATE_MAX) {
-> +				pr_warn("exceeding max cpuidle states\n");
-> +				of_node_put(np);
-> +				return 0;
-> +			}
-> +
-> +			psci_idx = state_idx + i;
-> +			psci_pd_convert_states(&drv->states[state_idx + i],
-> +					&psci_states[psci_idx], &pd_states[i]);
-> +
-> +			/*
-> +			 * In the hierarchical CPU topology the master PM domain
-> +			 * idle state's DT property, "arm,psci-suspend-param",
-> +			 * don't contain the bits for the idle state of the CPU,
-> +			 * let's add those here.
-> +			 */
-> +			psci_states[psci_idx] |= cpu_psci_state;
-
-No we can't do that. Refer previous discussions around that.
-
-> +			pr_debug("psci-power-state %#x index %d\n",
-> +				psci_states[psci_idx], psci_idx);
-> +
-> +			drv->state_count++;
-> +			i++;
-> +		}
-> +		psci_pd_free_states(pd_states, pd_state_count);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int __init psci_pd_init(struct device_node *np)
->  {
->  	struct generic_pm_domain *pd;
-> @@ -125,11 +228,14 @@ static int __init psci_pd_init(struct device_node *np)
->  	 * Parse the domain idle states and let genpd manage the state selection
->  	 * for those being compatible with "domain-idle-state".
->  	 */
-> -	ret = psci_pd_parse_states(np, &states, &state_count);
-> -	if (ret)
-> -		goto free_name;
->
-> -	pd->free_states = psci_pd_free_states;
-> +	if (psci_has_osi_support()) {
-> +		ret = psci_pd_parse_states(np, &states, &state_count);
-> +		if (ret)
-> +			goto free_name;
-> +		pd->free_states = psci_pd_free_states;
-> +	}
-> +
->  	pd->name = kbasename(pd->name);
->  	pd->power_off = psci_pd_power_off;
->  	pd->states = states;
-> @@ -236,10 +342,6 @@ static int __init psci_idle_init_domains(void)
->  	if (!np)
->  		return -ENODEV;
->
-> -	/* Currently limit the hierarchical topology to be used in OSI mode. */
-> -	if (!psci_has_osi_support())
-> -		goto out;
-> -
->  	/*
->  	 * Parse child nodes for the "#power-domain-cells" property and
->  	 * initialize a genpd/genpd-of-provider pair when it's found.
-> @@ -265,14 +367,16 @@ static int __init psci_idle_init_domains(void)
->  		goto remove_pd;
->
->  	/* Try to enable OSI mode. */
-> -	ret = psci_set_osi_mode();
-> -	if (ret) {
-> -		pr_warn("failed to enable OSI mode: %d\n", ret);
-> -		psci_pd_remove_topology(np);
-> -		goto remove_pd;
-> +	if (psci_has_osi_support()) {
-> +		ret = psci_set_osi_mode();
-> +		if (ret) {
-> +			pr_warn("failed to enable OSI mode: %d\n", ret);
-> +			psci_pd_remove_topology(np);
-> +			goto remove_pd;
-> +		} else
-> +			osi_mode_enabled = true;
+>  drivers/thermal/qcom/tsens-common.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
+> index 1cbc5a6e5b4f..013750fff8b2 100644
+> --- a/drivers/thermal/qcom/tsens-common.c
+> +++ b/drivers/thermal/qcom/tsens-common.c
+> @@ -602,7 +602,7 @@ int __init init_common(struct tsens_priv *priv)
+>  		/* DT with separate SROT and TM address space */
+>  		priv->tm_offset = 0;
+>  		res = platform_get_resource(op, IORESOURCE_MEM, 1);
+> -		srot_base = devm_ioremap_resource(&op->dev, res);
+> +		srot_base = devm_ioremap_resource(dev, res);
+>  		if (IS_ERR(srot_base)) {
+>  			ret = PTR_ERR(srot_base);
+>  			goto err_put_device;
+> @@ -620,7 +620,7 @@ int __init init_common(struct tsens_priv *priv)
 >  	}
->
-> -	osi_mode_enabled = true;
->  	of_node_put(np);
->  	pr_info("Initialized CPU PM domain topology\n");
->  	return pd_count;
-> @@ -293,9 +397,6 @@ struct device __init *psci_dt_attach_cpu(int cpu)
->  {
->  	struct device *dev;
->
-> -	if (!osi_mode_enabled)
-> -		return NULL;
+>  
+>  	res = platform_get_resource(op, IORESOURCE_MEM, 0);
+> -	tm_base = devm_ioremap_resource(&op->dev, res);
+> +	tm_base = devm_ioremap_resource(dev, res);
+>  	if (IS_ERR(tm_base)) {
+>  		ret = PTR_ERR(tm_base);
+>  		goto err_put_device;
+> @@ -687,8 +687,6 @@ int __init init_common(struct tsens_priv *priv)
+>  	tsens_enable_irq(priv);
+>  	tsens_debug_init(op);
+>  
+> -	return 0;
 > -
->  	dev = dev_pm_domain_attach_by_name(get_cpu_device(cpu), "psci");
->  	if (IS_ERR_OR_NULL(dev))
->  		return dev;
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> index edd7a54..3fa2aee 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -49,7 +49,7 @@ static inline int psci_enter_state(int idx, u32 state)
->  	return CPU_PM_CPU_IDLE_ENTER_PARAM(psci_cpu_suspend_enter, idx, state);
->  }
->
-> -static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
-> +int psci_enter_domain_idle_state(struct cpuidle_device *dev,
->  					struct cpuidle_driver *drv, int idx)
->  {
->  	struct psci_cpuidle_data *data = this_cpu_ptr(&psci_cpuidle_data);
-> @@ -193,24 +193,29 @@ static int __init psci_dt_cpu_init_idle(struct cpuidle_driver *drv,
->  		goto free_mem;
->  	}
->
-> -	/* Currently limit the hierarchical topology to be used in OSI mode. */
-> -	if (psci_has_osi_support()) {
-> -		data->dev = psci_dt_attach_cpu(cpu);
-> -		if (IS_ERR(data->dev)) {
-> -			ret = PTR_ERR(data->dev);
-> +	if (!psci_has_osi_support()) {
-> +		ret = psci_dt_pm_domains_parse_states(drv, cpu_node,
-> +					      psci_states);
-> +		if (ret)
->  			goto free_mem;
-> -		}
-> -
-> -		/*
-> -		 * Using the deepest state for the CPU to trigger a potential
-> -		 * selection of a shared state for the domain, assumes the
-> -		 * domain states are all deeper states.
-> -		 */
-> -		if (data->dev) {
-> -			drv->states[state_count - 1].enter =
-> -				psci_enter_domain_idle_state;
-> -			psci_cpuidle_use_cpuhp = true;
-> -		}
-> +	}
-> +
-> +	data->dev = psci_dt_attach_cpu(cpu);
-> +	if (IS_ERR(data->dev)) {
-> +		ret = PTR_ERR(data->dev);
-> +		goto free_mem;
-> +	}
-> +
-> +	/*
-> +	 * Using the deepest state for the CPU to trigger a potential
-> +	 * selection of a shared state for the domain, assumes the
-> +	 * domain states are all deeper states.
-> +	 */
-> +
-> +	if (data->dev) {
-> +		drv->states[state_count - 1].enter =
-> +			psci_enter_domain_idle_state;
-> +		psci_cpuidle_use_cpuhp = true;
->  	}
->
->  	/* Idle states parsed correctly, store them in the per-cpu struct. */
-
---
-Regards,
-Sudeep
+>  err_put_device:
+>  	put_device(&op->dev);
+>  	return ret;
+> -- 
+> 2.20.1
+> 
