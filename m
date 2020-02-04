@@ -2,125 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBA4151D1A
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2020 16:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 333EB151DE8
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2020 17:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727304AbgBDPVo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Feb 2020 10:21:44 -0500
-Received: from foss.arm.com ([217.140.110.172]:38078 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727369AbgBDPVn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 Feb 2020 10:21:43 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDA41101E;
-        Tue,  4 Feb 2020 07:21:42 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC71A3F52E;
-        Tue,  4 Feb 2020 07:21:40 -0800 (PST)
-Date:   Tue, 4 Feb 2020 15:21:32 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Maulik Shah <mkshah@codeaurora.org>
-Cc:     swboyd@chromium.org, agross@kernel.org, david.brown@linaro.org,
-        Lorenzo.Pieralisi@arm.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, bjorn.andersson@linaro.org,
-        evgreen@chromium.org, dianders@chromium.org, rnayak@codeaurora.org,
-        ilina@codeaurora.org, lsrao@codeaurora.org, ulf.hansson@linaro.org,
-        rjw@rjwysocki.net, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v3 5/7] drivers: firmware: psci: Add hierarchical domain
- idle states converter
-Message-ID: <20200204152132.GA44858@bogus>
-References: <1580736940-6985-1-git-send-email-mkshah@codeaurora.org>
- <1580736940-6985-6-git-send-email-mkshah@codeaurora.org>
- <20200203170832.GA38466@bogus>
- <0d7f7ade-3a1e-5428-d851-f1a886f58712@codeaurora.org>
+        id S1727318AbgBDQLa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Feb 2020 11:11:30 -0500
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:38771 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727308AbgBDQLa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Feb 2020 11:11:30 -0500
+Received: by mail-ua1-f68.google.com with SMTP id c7so6923679uaf.5
+        for <linux-pm@vger.kernel.org>; Tue, 04 Feb 2020 08:11:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3Wna36vo5UJeWT90pPlyYZdqk7kd5cJ0fLDcJ01xAb0=;
+        b=A21gEwgiD1x55Cgg9LjGfwbgFr/pS5Aa5glZkaPN7ewWZr/AH0Ut8TFTqMXagzixII
+         y8sWSkkrWyr8VTB+HQi587L2bzikWmqncXEqczU4GRd//Y2QP4QzAqDdpemle9Gx7TmS
+         ZqhPoj2VUI2qjwzncsxNVVYt7jOZQPsWfcsuHdfqNnAylB0pHJwSk9FNSlSYg8DDtG9E
+         YbxGiVEcPl2GkyvB4xTgsGSkrhVY1V5NiWFIFA7qflV7rgMwWepSjz71KmQFVPppN+Ea
+         FXtbPXPIhygSTNxHKTu2nZ/U1sjRvLcmKrstFw5MmhQbKI+Vh7JXa5PgOzWZ3VVtVcMX
+         79Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3Wna36vo5UJeWT90pPlyYZdqk7kd5cJ0fLDcJ01xAb0=;
+        b=W6Uo5pzaqUS8mt5DfMO6liyRT2sRuwwaOl8WL2RkiTnEdl4BJ9zo2LLe0GLhR4eXWS
+         Nl24H2g+wX/q+HCWUq2QCzCev1uS1YFk7gTz19atgM6QcrAIQfyxXzuP85A+/asSZTsE
+         w4+MFFAnCZwNIx6n2/fEHFQCEZJU+iYEk1dHKDgbxpwD1atiYLAjuouYooEpE7bE0SNt
+         kASNlrHngGYNCOizhkC2Ld4XAosRub270EVD2g4jx0CNxj0XSsQ9mTLafImKAgJvEXwk
+         Yw7ea/6l49Ocrm6CbQwQ/nnhnpJcy3PzQKL9u26bJCsjcsTu+qaR0OCm7N5faTAuSzsU
+         iZFg==
+X-Gm-Message-State: APjAAAWovLAjibh+BLunCpSZOg5vEeyTEP8XBMhniiaJN9Jl0Ck2q8FN
+        0yCKNVBZbRCuhN2HIZuOL44omPD5DkdWUn3pmR/bxA==
+X-Google-Smtp-Source: APXvYqxOPdcglcZaUAT0pZaljv73i4NlWwFKpThbuWemE8YWkXfRhT7zfpj0xd/OaNAUkecAe3IzrKUUtxl5vdmvEEc=
+X-Received: by 2002:ab0:e16:: with SMTP id g22mr17400525uak.129.1580832689305;
+ Tue, 04 Feb 2020 08:11:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d7f7ade-3a1e-5428-d851-f1a886f58712@codeaurora.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <1574254593-16078-1-git-send-email-thara.gopinath@linaro.org> <1574254593-16078-3-git-send-email-thara.gopinath@linaro.org>
+In-Reply-To: <1574254593-16078-3-git-send-email-thara.gopinath@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 4 Feb 2020 17:10:53 +0100
+Message-ID: <CAPDyKFqdyvvFCQ-vJU=0xBV0OKik3pBvX33H-mb=i9_TSU8QLw@mail.gmail.com>
+Subject: Re: [Patch v4 2/7] soc: qcom: rpmhpd: Introduce function to retrieve
+ power domain performance state count
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 04, 2020 at 10:22:42AM +0530, Maulik Shah wrote:
+On Wed, 20 Nov 2019 at 13:56, Thara Gopinath <thara.gopinath@linaro.org> wrote:
 >
-> On 2/3/2020 10:38 PM, Sudeep Holla wrote:
-> > On Mon, Feb 03, 2020 at 07:05:38PM +0530, Maulik Shah wrote:
-> > > From: Ulf Hansson <ulf.hansson@linaro.org>
-> > >
-> > > If the hierarchical CPU topology is used, but the OS initiated mode isn't
-> > > supported, we need to rely solely on the regular cpuidle framework to
-> > > manage the idle state selection, rather than using genpd and its
-> > > governor.
-> > >
-> > > For this reason, introduce a new PSCI DT helper function,
-> > > psci_dt_pm_domains_parse_states(), which parses and converts the
-> > > hierarchically described domain idle states from DT, into regular flattened
-> > > cpuidle states. The converted states are added to the existing cpuidle
-> > > driver's array of idle states, which make them available for cpuidle.
-> > >
-> > And what's the main motivation for this if OSI is not supported in the
-> > firmware ?
+> Populate .get_performace_state_count in genpd ops to retrieve the count of
+> performance states supported by a rpmh power domain.
 >
-> Hi Sudeep,
->
-> Main motivation is to do last-man activities before the CPU cluster can
-> enter a deep idle state.
->
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 
-Details on those last-man activities will help the discussion. Basically
-I am wondering what they are and why they need to done in OSPM ?
+Apologize for the delays! Re-kicking reviews now, I will provide
+further comments later today or tomorrow.
 
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > [applied to new path, resolved conflicts]
-> > > Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
-> > > ---
-> > >   drivers/cpuidle/cpuidle-psci-domain.c | 137 +++++++++++++++++++++++++++++-----
-> > >   drivers/cpuidle/cpuidle-psci.c        |  41 +++++-----
-> > >   drivers/cpuidle/cpuidle-psci.h        |  11 +++
-> > >   3 files changed, 153 insertions(+), 36 deletions(-)
-> > >
-> > > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > index 423f03b..3c417f7 100644
-> > > --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> > > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > @@ -26,13 +26,17 @@ struct psci_pd_provider {
-> > >   };
-> > >
-> > >   static LIST_HEAD(psci_pd_providers);
-> > > -static bool osi_mode_enabled __initdata;
-> > > +static bool osi_mode_enabled;
-> > >
-> > >   static int psci_pd_power_off(struct generic_pm_domain *pd)
-> > >   {
-> > >   	struct genpd_power_state *state = &pd->states[pd->state_idx];
-> > >   	u32 *pd_state;
-> > >
-> > > +	/* If we have failed to enable OSI mode, then abort power off. */
-> > > +	if ((psci_has_osi_support()) && !osi_mode_enabled)
-> > > +		return -EBUSY;
-> > > +
-> > Why is this needed ? IIUC we don't create genpd domains if OSI is not
-> > enabled.
+For this one:
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
+
+> ---
+>  drivers/soc/qcom/rpmhpd.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 >
-> we do create genpd domains, for cpu domains, we just abort power off here
-> since idle states are converted into regular flattened mode.
+> diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
+> index 5741ec3..9d37534 100644
+> --- a/drivers/soc/qcom/rpmhpd.c
+> +++ b/drivers/soc/qcom/rpmhpd.c
+> @@ -285,6 +285,13 @@ static unsigned int rpmhpd_get_performance_state(struct generic_pm_domain *genpd
+>         return dev_pm_opp_get_level(opp);
+>  }
 >
-
-OK, IIRC the OSI patches from Ulf didn't add the genpd or rather removed
-them in case of any failure to enable OSI. Has that been changed ? If so,
-why ?
-
-> however genpd poweroff will be used by parent domain (rsc in this case)
-> which is kept in hireachy in DTSI with cluster domain to do last man
-> activities.
+> +static int rpmhpd_performance_states_count(struct generic_pm_domain *domain)
+> +{
+> +       struct rpmhpd *pd = domain_to_rpmhpd(domain);
+> +
+> +       return pd->level_count;
+> +}
+> +
+>  static int rpmhpd_update_level_mapping(struct rpmhpd *rpmhpd)
+>  {
+>         int i;
+> @@ -373,6 +380,8 @@ static int rpmhpd_probe(struct platform_device *pdev)
+>                 rpmhpds[i]->pd.power_on = rpmhpd_power_on;
+>                 rpmhpds[i]->pd.set_performance_state = rpmhpd_set_performance_state;
+>                 rpmhpds[i]->pd.opp_to_performance_state = rpmhpd_get_performance_state;
+> +               rpmhpds[i]->pd.get_performance_state_count =
+> +                                       rpmhpd_performance_states_count;
+>                 pm_genpd_init(&rpmhpds[i]->pd, NULL, true);
 >
-
-I am bit confused here. Either we do OSI or PC and what you are describing
-sounds like a mix-n-match to me and I am totally against it.
-
---
-Regards,
-Sudeep
+>                 data->domains[i] = &rpmhpds[i]->pd;
+> --
+> 2.1.4
+>
