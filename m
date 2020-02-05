@@ -2,286 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0331530A9
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2020 13:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D899153110
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2020 13:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728147AbgBEM1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Feb 2020 07:27:20 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:60280 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727104AbgBEM1P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Feb 2020 07:27:15 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1580905634; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=i2C4DEcswPKQW3w2ue5RgC1m630n76+YV2l+o97UXI8=; b=XNQUfos41YpZ+DYnCeYJNEPZ+JUbop9Kf2/WZDOctnOSVDJl/BlkGEmJBWw/GU0GwYaqczY3
- sd4bTo6utZ6HJX884GkDo3zU92uGIEWjrnbjkazKWAmONmoKnhX6Ysz3DZhkG/nfNemll028
- I6tLAjUntBTq0rimSnq+AJ3R/3E=
-X-Mailgun-Sending-Ip: 104.130.122.25
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e3ab4a0.7f25d49d4378-smtp-out-n02;
- Wed, 05 Feb 2020 12:27:12 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 18429C447AA; Wed,  5 Feb 2020 12:27:10 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mkshah-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: mkshah)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 82456C43383;
-        Wed,  5 Feb 2020 12:27:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 82456C43383
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=mkshah@codeaurora.org
-From:   Maulik Shah <mkshah@codeaurora.org>
-To:     swboyd@chromium.org, agross@kernel.org, david.brown@linaro.org,
-        sudeep.holla@arm.com, Lorenzo.Pieralisi@arm.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        bjorn.andersson@linaro.org, evgreen@chromium.org,
-        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
-        lsrao@codeaurora.org, ulf.hansson@linaro.org, rjw@rjwysocki.net,
-        Maulik Shah <mkshah@codeaurora.org>, devicetree@vger.kernel.org
-Subject: [PATCH v4 6/6] arm64: dts: qcom: sc7180: Add cpuidle low power states
-Date:   Wed,  5 Feb 2020 17:56:12 +0530
-Message-Id: <1580905572-22712-7-git-send-email-mkshah@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1580905572-22712-1-git-send-email-mkshah@codeaurora.org>
-References: <1580905572-22712-1-git-send-email-mkshah@codeaurora.org>
+        id S1727479AbgBEMt5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Feb 2020 07:49:57 -0500
+Received: from foss.arm.com ([217.140.110.172]:46778 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726308AbgBEMt4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 5 Feb 2020 07:49:56 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 057631FB;
+        Wed,  5 Feb 2020 04:49:56 -0800 (PST)
+Received: from [10.37.12.130] (unknown [10.37.12.130])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3DB2D3F52E;
+        Wed,  5 Feb 2020 04:49:34 -0800 (PST)
+Subject: Re: [PATCH 3/3] ARM: exynos_defconfig: Enable Energy Model framework
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     kgene@kernel.org, linux-arm-kernel@lists.infradead.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        Chanwoo Choi <cw00.choi@samsung.com>, robh+dt@kernel.org,
+        mark.rutland@arm.com,
+        =?UTF-8?Q?Bart=c5=82omiej_=c5=bbo=c5=82nierkiewicz?= 
+        <b.zolnierkie@samsung.com>, dietmar.eggemann@arm.com
+References: <20200127215453.15144-1-lukasz.luba@arm.com>
+ <20200127215453.15144-4-lukasz.luba@arm.com>
+ <CAJKOXPeA=_3zPx6Aq3CAUi7JsXr9AigWGWCTNWo_jkm=oVWe_g@mail.gmail.com>
+ <db3f2554-288d-81ab-2373-1447367ba673@arm.com>
+ <20200131204118.GA27284@kozik-lap>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <c54e252d-dc55-5fa3-f97f-643d7efbfdc1@arm.com>
+Date:   Wed, 5 Feb 2020 12:49:26 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20200131204118.GA27284@kozik-lap>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add device bindings for cpuidle states for cpu devices.
+Hi Krzysztof,
 
-Cc: devicetree@vger.kernel.org
-Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 135 +++++++++++++++++++++++++++++++++++
- 1 file changed, 135 insertions(+)
+On 1/31/20 8:41 PM, Krzysztof Kozlowski wrote:
+> On Fri, Jan 31, 2020 at 05:30:46PM +0000, Lukasz Luba wrote:
+>   
+>>>
+>>>>                   |-----------------------------------------------|---------------
+>>>>                   | performance   | SchedUtil     | SchedUtil     | performance
+>>>>                   | governor      | governor      | governor      | governor
+>>>>                   |               | w/o EAS       | w/ EAS        |
+>>>> ----------------|---------------|---------------|---------------|---------------
+>>>> hackbench w/ PL | 12.7s         | 11.7s         | 12.0s         | 13.0s - 12.2s
+>>>> hackbench w/o PL| 9.2s          | 8.1s          | 8.2s          | 9.2s - 8.4s
+>>>
+>>> Why does the performance different before and after this patch?
+>>
+>> Probably due to better locality and cache utilization. I can see that
+>> there is ~700k context switches vs ~450k and ~160k migrations vs ~50k.
+>> If you need to communicate two threads in different clusters, it will go
+>> through CCI.
+> 
+> Mhmm... I was not specific - I mean, "performance governor". All this
+> you mentioned should not differ between performance governor before and
+> after. However once you have 12.7, then 13.0 - 12.2. Unless multi-core
+> scheduler affects it... but then these numbers here are not showing
+> only this change, but also the SCHED_MC effect.  In such case each of
+> commits should be coming with their own numbers.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 8011c5f..844a25a 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -86,6 +86,8 @@
- 			compatible = "arm,armv8";
- 			reg = <0x0 0x0>;
- 			enable-method = "psci";
-+			power-domains = <&CPU_PD0>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_0>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-@@ -103,6 +105,8 @@
- 			compatible = "arm,armv8";
- 			reg = <0x0 0x100>;
- 			enable-method = "psci";
-+			power-domains = <&CPU_PD1>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_100>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-@@ -117,6 +121,8 @@
- 			compatible = "arm,armv8";
- 			reg = <0x0 0x200>;
- 			enable-method = "psci";
-+			power-domains = <&CPU_PD2>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_200>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-@@ -131,6 +137,8 @@
- 			compatible = "arm,armv8";
- 			reg = <0x0 0x300>;
- 			enable-method = "psci";
-+			power-domains = <&CPU_PD3>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_300>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-@@ -145,6 +153,8 @@
- 			compatible = "arm,armv8";
- 			reg = <0x0 0x400>;
- 			enable-method = "psci";
-+			power-domains = <&CPU_PD4>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_400>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-@@ -159,6 +169,8 @@
- 			compatible = "arm,armv8";
- 			reg = <0x0 0x500>;
- 			enable-method = "psci";
-+			power-domains = <&CPU_PD5>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_500>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-@@ -173,6 +185,8 @@
- 			compatible = "arm,armv8";
- 			reg = <0x0 0x600>;
- 			enable-method = "psci";
-+			power-domains = <&CPU_PD6>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_600>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-@@ -187,6 +201,8 @@
- 			compatible = "arm,armv8";
- 			reg = <0x0 0x700>;
- 			enable-method = "psci";
-+			power-domains = <&CPU_PD7>;
-+			power-domain-names = "psci";
- 			next-level-cache = <&L2_700>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-@@ -195,6 +211,60 @@
- 				next-level-cache = <&L3_0>;
- 			};
- 		};
-+
-+		idle-states {
-+			entry-method = "psci";
-+
-+			LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "little-power-down";
-+				arm,psci-suspend-param = <0x40000003>;
-+				entry-latency-us = <549>;
-+				exit-latency-us = <901>;
-+				min-residency-us = <1774>;
-+				local-timer-stop;
-+			};
-+
-+			LITTLE_CPU_SLEEP_1: cpu-sleep-0-1 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "little-rail-power-down";
-+				arm,psci-suspend-param = <0x40000004>;
-+				entry-latency-us = <702>;
-+				exit-latency-us = <915>;
-+				min-residency-us = <4001>;
-+				local-timer-stop;
-+			};
-+
-+			BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "big-power-down";
-+				arm,psci-suspend-param = <0x40000003>;
-+				entry-latency-us = <523>;
-+				exit-latency-us = <1244>;
-+				min-residency-us = <2207>;
-+				local-timer-stop;
-+			};
-+
-+			BIG_CPU_SLEEP_1: cpu-sleep-1-1 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "big-rail-power-down";
-+				arm,psci-suspend-param = <0x40000004>;
-+				entry-latency-us = <526>;
-+				exit-latency-us = <1854>;
-+				min-residency-us = <5555>;
-+				local-timer-stop;
-+			};
-+
-+			CLUSTER_SLEEP_0: cluster-sleep-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "cluster-power-down";
-+				arm,psci-suspend-param = <0x40003444>;
-+				entry-latency-us = <3263>;
-+				exit-latency-us = <6562>;
-+				min-residency-us = <9926>;
-+				local-timer-stop;
-+			};
-+		};
- 	};
- 
- 	memory@80000000 {
-@@ -297,6 +367,70 @@
- 	psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
-+
-+		CPU_PD0: cpu-pd0 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&apps_rsc>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>,
-+					     <&LITTLE_CPU_SLEEP_1>,
-+					     <&CLUSTER_SLEEP_0>;
-+		};
-+
-+		CPU_PD1: cpu-pd1 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&apps_rsc>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>,
-+					     <&LITTLE_CPU_SLEEP_1>,
-+					     <&CLUSTER_SLEEP_0>;
-+		};
-+
-+		CPU_PD2: cpu-pd2 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&apps_rsc>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>,
-+					     <&LITTLE_CPU_SLEEP_1>,
-+					     <&CLUSTER_SLEEP_0>;
-+		};
-+
-+		CPU_PD3: cpu-pd3 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&apps_rsc>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>,
-+					     <&LITTLE_CPU_SLEEP_1>,
-+					     <&CLUSTER_SLEEP_0>;
-+		};
-+
-+		CPU_PD4: cpu-pd4 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&apps_rsc>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>,
-+					     <&LITTLE_CPU_SLEEP_1>,
-+					     <&CLUSTER_SLEEP_0>;
-+		};
-+
-+		CPU_PD5: cpu-pd5 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&apps_rsc>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>,
-+					     <&LITTLE_CPU_SLEEP_1>,
-+					     <&CLUSTER_SLEEP_0>;
-+		};
-+
-+		CPU_PD6: cpu-pd6 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&apps_rsc>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>,
-+					     <&BIG_CPU_SLEEP_1>,
-+					     <&CLUSTER_SLEEP_0>;
-+		};
-+
-+		CPU_PD7: cpu-pd7 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&apps_rsc>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>,
-+					     <&BIG_CPU_SLEEP_1>,
-+					     <&CLUSTER_SLEEP_0>;
-+		};
- 	};
- 
- 	soc: soc {
-@@ -1417,6 +1551,7 @@
- 					  <SLEEP_TCS   3>,
- 					  <WAKE_TCS    3>,
- 					  <CONTROL_TCS 1>;
-+			#power-domain-cells = <0>;
- 
- 			rpmhcc: clock-controller {
- 				compatible = "qcom,sc7180-rpmh-clk";
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+Agree, I should have not put 'this patch set' in the commit
+msg. It should go into the cover letter and avoid this confusion.
+You are right with ' Unless multi-core scheduler affects it...',
+that's why when the SCHED_MC is missing, the decisions about task
+placing might cause this variation and delay '13.0 - 12.2' seconds.
+
+> 
+>> As mentioned in response to patch 1/3. The fist patch would create MC
+>> domain, something different than Energy Model or EAS. The decisions in
+>> the scheduler would be different.
+>>
+>> I can merge 1/3 and 3/3 if you like, though.
+> 
+> I understand now that their independent. Still, they are part of one
+> goal to tune the scheduler for Exynos platform. Splitting these looks
+> too much, like enabling multiple drivers one after another.
+> 
+> However if you provide numbers for each of cases (before patches, multi
+> core scheduler, energy model with DTS), then I see benefit of splitting
+> it.  Each commit would have its own rationale.  I am not sure if it is
+> worth such investigation - that's just defconfig... distros might ignore
+> it anyway.
+
+Good point, and I agree that it would require more investigation, for
+which unfortunately I don't have currently spare cycles.
+
+Should I merge patch 1/3 and 3/3 and send the v2 with a cover letter
+which would have the test results?
+
+Regards,
+Lukasz
+
