@@ -2,70 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B5A1522FC
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2020 00:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEC615305C
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2020 13:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727537AbgBDXXj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Feb 2020 18:23:39 -0500
-Received: from sonic303-21.consmr.mail.ir2.yahoo.com ([77.238.178.202]:38464
-        "EHLO sonic303-21.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727522AbgBDXXj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Feb 2020 18:23:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1580858617; bh=eg3qZapD09VJqj25AUJW5s1BYxWsWc1QdQQ9ZvAlPmk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=PJ1zQCsa0B0ZHr2X9UHAvaWMGTJ6gGAz1PPbVoZgCKRncT1P2LGWmIbFbMnlz3Zsa9XZyEirpU4aDk9cGdFAuUbgULY3ylXvbYwtDL6PSEb0J38qAaxNo1TpAWp9DJtKeNL0DnEBGejWd0IqyAgceiT0zKZuZmdUdXlu61g7i8R3T7Q+wzyAvI8e+huyAgpaa8treTyokdY8cWXkO1YtTHr7lUN29C5jcz+ubm6nVWpDTosB0jHOSZ/mlebBn3F0TM7WZWpX/UB4w9ili4ZMokEbvbG11yY8pBu5zeeYZrXwMAYqsxB5Ho83LZPnb8X6E1RJFlNxfX/g80f1DVhp9g==
-X-YMail-OSG: tl7B3uEVM1mlxULk6H7bhWnm_4iL3SL6Yfcieuz1atqoyWoI9xPNp2ayBBhsyqv
- NK2SDampif2eGJFJmoYKWflWn4v8jvqaG0gF4pCaVAHkXVbAcocEybR6u.fk1JFZxNyfTDERn_5E
- 3k23v3pcIrsSVgkxoYPXaTruwXLYZvEQZNq3oVBugWYbJMPTNCpbsfOfzcS.S42F2QBB49YgaFS7
- tzM.dXpftyqSnU4l4Cl4fqQ5rRce9wwojHL1dy5TAJJgajc7rVemoQu8._kU5IkmRvKkuxRJAzbp
- QfsyaakIFzEXXRFmxlww1A0meOOcgYDvVSWF2WlzsTN48MppCsP7fYo3yUMJRLUaA7487Lodihul
- NX8On.ltVtp9CbhF0l56tH5RqSb9yLOmkTZRRPLMJ9deqy.uZAJdw5.GQJoKJvAQNmVMB4dRexwO
- g0tWMh_n3ztQYi6Z9VIM6LT4cjR2N5Yjkzk4Nt.P0eVrLlSL.cijSCJcui_ayvHjPUbiu0ireUZ8
- I5FHzw6ezRvpw.1PJQ1hRv9zHp_DMI.WOTMB4RDqMjhDcqKuCgdQXzo8JGowcEGZhiI8Ub9iBJnY
- 5PAepPAEyKaa.tCUwcjAgi9.Q5Eateu4mVjPBNtBu6NZDs7Wu9TLZHkJPmAMaFJ03BHIO3CwVQeA
- uPCNkLMe4fZ0btsEb9o3SP5QIA.VJTGWZk8.PMsWGFq2FjYtBawi7BZFpbD_04oX0CjK.AsIF4nF
- 7b3MLCFcNgqAeBs_wCeoZFUuqcVOEeW4tPG5SeoZalQBIXrctmWB8_Tb9A72EVSWbTBQE9xiyuds
- 1Ye6swoqS2gG22o9FsoH_Omizi6i72b08Jzuu6oc1q3O3YmOnFxfzIgmeioDpurD3ihbMfmjRG3A
- 9V6arcbM0M0sOOCsxZ3mWlv0AHEEXsUGLhZ2dF4fwdZxGxhP.sIxFlHavlRpsrHTkxCVhzIcoW2L
- askf_kJc8vhQ8jFWK9goT27TqEdvVnh3vzK25tyVKJPFqkJ0ICNYK9MgNzHm6aAWsSTFS7pgt3df
- zfQOCGEMzawGdSruLN1tA._84sC1liBME9t1K6lg.XsG01VZLq7CiK0VBzmqCu6qCUmkhObp2ZYS
- WdIRllDsFUjseqgavlO4OuFkWaTb4g4r6kR_xhCSoJFaGgyejBsjvzPoE2P6Kl0mC2llHROXGIau
- wAg.Ldrl0Pi7CwVWjlcuiNTPYGO8pn1vVXpm34dWbvvwgKHOYnL.PLj0UCUxgi1LIgLiWGThcLNp
- W7nYUojoawfz4tAW92QiookWbjlTOfKKK7TVZUi2alMjBTDm5sN0Ba3D7mdZbkvcDIekXJTHsMuB
- RHec-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ir2.yahoo.com with HTTP; Tue, 4 Feb 2020 23:23:37 +0000
-Date:   Tue, 4 Feb 2020 23:23:36 +0000 (UTC)
-From:   Ms Lisa Hugh <lisa.hugh111@gmail.com>
-Reply-To: ms.lisahugh000@gmail.com
-Message-ID: <599962984.986743.1580858616932@mail.yahoo.com>
-Subject: BUSINESS TRANSFER CO-OPERATION.
+        id S1726308AbgBEMHd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Feb 2020 07:07:33 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:27299 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726277AbgBEMHd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Feb 2020 07:07:33 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1580904453; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=Rw6fpPoaZ9TjeIMYqlvtFgTZBBMNHEMBUrNzr/IGp5k=; b=KJJ25gaIVRQZ9LjIfY8BlDbv1qfTYNC+P/Si0Ay/7kOjvasuzoCwskU3MaHFLqZYYuvyFq7e
+ VSS/qmtrZFMt5t42kGX8iiEBN3mnN1j/7MLN4Das4s/Q/kZ2xOBES1t4wTGYOnurffHCyoLz
+ dT+UbvV34sJJOZ+w+BWhDlyDAWo=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e3ab001.7fc5a6c5e500-smtp-out-n02;
+ Wed, 05 Feb 2020 12:07:29 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 2830CC447A2; Wed,  5 Feb 2020 12:07:29 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.13.37] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mkshah)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1DF5BC43383;
+        Wed,  5 Feb 2020 12:07:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1DF5BC43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=mkshah@codeaurora.org
+Subject: Re: [PATCH v3 6/7] arm64: dts: qcom: sc7180: Add cpuidle low power
+ states
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     swboyd@chromium.org, agross@kernel.org, david.brown@linaro.org,
+        sudeep.holla@arm.com, Lorenzo.Pieralisi@arm.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
+        lsrao@codeaurora.org, ulf.hansson@linaro.org, rjw@rjwysocki.net,
+        devicetree@vger.kernel.org
+References: <1580736940-6985-1-git-send-email-mkshah@codeaurora.org>
+ <1580736940-6985-7-git-send-email-mkshah@codeaurora.org>
+ <20200204231509.GB18972@google.com>
+From:   Maulik Shah <mkshah@codeaurora.org>
+Message-ID: <b07c9989-b44a-969c-4c4a-9f9465781e45@codeaurora.org>
+Date:   Wed, 5 Feb 2020 17:37:20 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20200204231509.GB18972@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-References: <599962984.986743.1580858616932.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15158 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:72.0) Gecko/20100101 Firefox/72.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Language: en-GB
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+On 2/5/2020 4:45 AM, Matthias Kaehlcke wrote:
+> On Mon, Feb 03, 2020 at 07:05:39PM +0530, Maulik Shah wrote:
+>> Add device bindings for cpuidle states for cpu devices.
+>>
+>> Cc: devicetree@vger.kernel.org
+>> Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sc7180.dtsi | 78 ++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 78 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+>> index 8011c5f..0aa0ced 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+>> @@ -86,6 +86,9 @@
+>>   			compatible = "arm,armv8";
+>>   			reg = <0x0 0x0>;
+>>   			enable-method = "psci";
+>> +			cpu-idle-states = <&LITTLE_CPU_SLEEP_0
+>> +					   &LITTLE_CPU_SLEEP_1
+>> +					   &CLUSTER_SLEEP_0>;
+> These entries are deleted again by the next patch in this series ('arm64:
+> dts: qcom: sc7180: Convert to the hierarchical CPU topology layout').
+> What is the point in adding them in the first place?
 
-Dear Friend,
+Clubbed 6th and 7th patch in v4 series.
 
-I am Ms Lisa Hugh work with the department of Audit and accounting manager here in the Bank,
-
-Please i need your assistance for the transferring of this abandon (US$4.5M DOLLARS) to your bank account for both of us benefit.
-
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me after success.
-
-Below information that is needed from you.
-
-1)Private telephone number...
-2)Age...
-3)Nationality...
-4)Occupation ...
-5)Full Name....
-Thanks.
-
-
-Ms Lisa Hugh
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
