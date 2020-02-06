@@ -2,88 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E50154465
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2020 13:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79881154545
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2020 14:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbgBFM72 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Feb 2020 07:59:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58726 "EHLO mail.kernel.org"
+        id S1727872AbgBFNrG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Feb 2020 08:47:06 -0500
+Received: from foss.arm.com ([217.140.110.172]:58556 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726744AbgBFM71 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 6 Feb 2020 07:59:27 -0500
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 79DDB2192A;
-        Thu,  6 Feb 2020 12:59:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580993966;
-        bh=6OY7DPI2yOZ1X/1zJRZnKqanPxQshh7/EXoL02sHfpY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QEFZkBJhSZNCXOTa8av2d4HzjHuE/BqXM9vnRkZ1T0w7nQ/lzWrl9bxK23i0c49nO
-         L+OTfzCqYtSpvJhn8YUlKgo0JM4vJn4NpJCTpRbPqZXHOPrwQRmVlrlhyJwowP0yxM
-         P7GM0LepDBfNTFrz//gR7J0dhEslbO/HNJT8ZGYE=
-Received: by mail-lf1-f41.google.com with SMTP id 9so4016395lfq.10;
-        Thu, 06 Feb 2020 04:59:26 -0800 (PST)
-X-Gm-Message-State: APjAAAVW4/hyoKy9DiR+aAGGIkynoWOWrmHBj+cP+IvG0AnDZARtfdUL
-        8zJw93feOl2w0cIp1TOd0isgkgXR3GHN55ogPtE=
-X-Google-Smtp-Source: APXvYqxXmYq0CkBT0Cjv9peoxswFZXHCgyB59GVNonQ53ahGHtf1ogSPH5YE7w3/aQn7BCzLj014+bBH5621DMrKfcY=
-X-Received: by 2002:ac2:485c:: with SMTP id 28mr1744468lfy.118.1580993964531;
- Thu, 06 Feb 2020 04:59:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20200127215453.15144-1-lukasz.luba@arm.com> <20200127215453.15144-4-lukasz.luba@arm.com>
- <CAJKOXPeA=_3zPx6Aq3CAUi7JsXr9AigWGWCTNWo_jkm=oVWe_g@mail.gmail.com>
- <db3f2554-288d-81ab-2373-1447367ba673@arm.com> <20200131204118.GA27284@kozik-lap>
- <c54e252d-dc55-5fa3-f97f-643d7efbfdc1@arm.com>
-In-Reply-To: <c54e252d-dc55-5fa3-f97f-643d7efbfdc1@arm.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Thu, 6 Feb 2020 13:59:13 +0100
-X-Gmail-Original-Message-ID: <CAJKOXPfTjdtNMx=+dPVcQ53RiXx0y-r=KXBRhzA4jS77SHxciQ@mail.gmail.com>
-Message-ID: <CAJKOXPfTjdtNMx=+dPVcQ53RiXx0y-r=KXBRhzA4jS77SHxciQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] ARM: exynos_defconfig: Enable Energy Model framework
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     kgene@kernel.org, linux-arm-kernel@lists.infradead.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        Chanwoo Choi <cw00.choi@samsung.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com,
-        =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
-        <b.zolnierkie@samsung.com>, dietmar.eggemann@arm.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1727361AbgBFNrF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 6 Feb 2020 08:47:05 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AFCB730E;
+        Thu,  6 Feb 2020 05:47:04 -0800 (PST)
+Received: from e123648.arm.com (unknown [10.37.12.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 648223F52E;
+        Thu,  6 Feb 2020 05:46:52 -0800 (PST)
+From:   lukasz.luba@arm.com
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com
+Cc:     Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com,
+        Chris.Redpath@arm.com, ionela.voinescu@arm.com,
+        javi.merino@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
+        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, qperret@google.com, bsegall@google.com,
+        mgorman@suse.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, kernel@pengutronix.de, khilman@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
+        lorenzo.pieralisi@arm.com, lukasz.luba@arm.com,
+        patrick.bellasi@matbug.net
+Subject: [PATCH v2 0/4] Add support for devices in the Energy Model
+Date:   Thu,  6 Feb 2020 13:46:36 +0000
+Message-Id: <20200206134640.11367-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 5 Feb 2020 at 13:49, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >> As mentioned in response to patch 1/3. The fist patch would create MC
-> >> domain, something different than Energy Model or EAS. The decisions in
-> >> the scheduler would be different.
-> >>
-> >> I can merge 1/3 and 3/3 if you like, though.
-> >
-> > I understand now that their independent. Still, they are part of one
-> > goal to tune the scheduler for Exynos platform. Splitting these looks
-> > too much, like enabling multiple drivers one after another.
-> >
-> > However if you provide numbers for each of cases (before patches, multi
-> > core scheduler, energy model with DTS), then I see benefit of splitting
-> > it.  Each commit would have its own rationale.  I am not sure if it is
-> > worth such investigation - that's just defconfig... distros might ignore
-> > it anyway.
->
-> Good point, and I agree that it would require more investigation, for
-> which unfortunately I don't have currently spare cycles.
->
-> Should I merge patch 1/3 and 3/3 and send the v2 with a cover letter
-> which would have the test results?
+From: Lukasz Luba <lukasz.luba@arm.com>
 
-Yes, let's do this way.
+Hi all,
 
-Thanks for working on this!
+This patch set introduces support for devices in the Energy Model (EM)
+framework. It will unify the power model for thermal subsystem and make it
+simpler. The 1st patch refactors EM framework and adds support for devices.
+The 2nd patch changes dev_pm_opp_of_register_em() in OPP/OF which now should
+take as an argument struct device pointer. It touches a few trees
+(OMAP, NXP, mediatek) updating their CPUfreq drivers to the new interface.
+Patch 3/4 changes thermal devfreq cooling removing old code for calculating
+local power table. It simplifies the code and uses EM for requested power
+calculation. Last patch 4/4 adds EM to Panfrost driver.
 
-Best regards,
-Krzysztof
+The patch set is based on linux-next tag next-20200206 but also applies on
+top of today's Linus's master.
+
+Changes:
+v2:
+- changed EM API em_register_perf_domain() adding cpumask_t pointer
+  as last argument (which was discussed with Dietmar and Quentin)
+- removed dependency on PM_OPP, thanks to the cpumask_t argument
+- removed enum em_type and em->type dependent code
+- em_get_pd() can handle CPU device as well as devfreq device
+- updated EM documentation
+- in devfreq cooling added code which prevents from race condition with
+  devfreq governors which are trying to use OPPs while thermal is in the middle
+  of disabling them.
+- in devfreq cooling added code which updates state of the devfreq device to
+  avoid working on stale data when governor has not updated it for a long time
+- in devfreq cooling added backward compatibility frequency table for drivers
+  which did not provide EM
+- added Steven's Reviewed-by to trace code in thermal
+- added another CPUFreq driver which needs to be updated to the new API
+
+The v1 can be found here [1].
+
+Regards,
+Lukasz Luba
+
+[1] https://lkml.org/lkml/2020/1/16/619
+
+
+Lukasz Luba (4):
+  PM / EM: add devices to Energy Model
+  OPP: change parameter to device pointer in dev_pm_opp_of_register_em()
+  thermal: devfreq_cooling: Refactor code and switch to use Energy Model
+  drm/panfrost: Register to the Energy Model with devfreq device
+
+ Documentation/power/energy-model.rst        | 129 +++---
+ drivers/cpufreq/cpufreq-dt.c                |   2 +-
+ drivers/cpufreq/imx6q-cpufreq.c             |   2 +-
+ drivers/cpufreq/mediatek-cpufreq.c          |   2 +-
+ drivers/cpufreq/omap-cpufreq.c              |   2 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c           |   2 +-
+ drivers/cpufreq/scmi-cpufreq.c              |  11 +-
+ drivers/cpufreq/scpi-cpufreq.c              |   2 +-
+ drivers/cpufreq/vexpress-spc-cpufreq.c      |   2 +-
+ drivers/gpu/drm/panfrost/panfrost_devfreq.c |   3 +
+ drivers/opp/of.c                            |  45 +--
+ drivers/thermal/cpufreq_cooling.c           |  10 +-
+ drivers/thermal/devfreq_cooling.c           | 427 +++++++++-----------
+ include/linux/devfreq_cooling.h             |  17 -
+ include/linux/energy_model.h                | 108 +++--
+ include/linux/pm_opp.h                      |  14 +-
+ include/trace/events/thermal.h              |  19 +-
+ kernel/power/energy_model.c                 | 399 ++++++++++++++----
+ kernel/sched/sched.h                        |   2 +-
+ kernel/sched/topology.c                     |   4 +-
+ 20 files changed, 712 insertions(+), 490 deletions(-)
+
+-- 
+2.17.1
+
