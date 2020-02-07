@@ -2,89 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F31471551A4
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2020 05:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9332D1551B4
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2020 06:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727392AbgBGEwg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Feb 2020 23:52:36 -0500
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:41853 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726674AbgBGEwg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Feb 2020 23:52:36 -0500
-Received: by mail-qt1-f196.google.com with SMTP id l19so989633qtq.8
-        for <linux-pm@vger.kernel.org>; Thu, 06 Feb 2020 20:52:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zD+SD3a85WaBxn1quERCa86dJtVc2O8o6GA7qwBXCJo=;
-        b=uddvL1JO80blrtkaBfjv1aHwZ4HIytAKy0DI5CT9/O4us4MST76ZlsrdKQysjeImgW
-         w3Rx79nuHFyMRNvG7GnsVnVipDncm8zE7nRpEr7FqIPPz+nnKLNEXI2N76W3/ZLZkT5Z
-         Y+BlQr+helxKkejSPCoOc9+BTLIWiwLQ03l+TqRQxvE+nKlsNfS120O2c1Iubg5+ZFQO
-         mLIoBeBnxdYYchquUqH0Cg9qF9NKVYhKYgC1vSkUjq5URuH7BKhqIKwelatUjTN1YoQl
-         aI//XrgBlQA4abFi3U/VDYgOreY2cfEO+w03A5k1j7T7RMvtX94WDRb/ZOl/0/s+XH7w
-         IDtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zD+SD3a85WaBxn1quERCa86dJtVc2O8o6GA7qwBXCJo=;
-        b=XAMHFRLhrQELYdFAlJ/wjlY2yMGbQNvJbiT0znHOb2KPPEa8Ar9m4lq+CUqZ1EfVac
-         2WeY5HmEQtlEM0uIUNeXfhaiPM6vRYh0bXj2ovu5koMUzWRNaD/zPPczrvyCFeCkwquB
-         CPu6OfdUgAK/daL9uneY2pa9Nde/Tp9hKj6MdbsI9/KviH2wXwqOnvmb0zDEOAzzVpYB
-         tcbGFME0UrHZmhoUSa83X6NdP/a2zOJswtoxS6yiAkYFD1aDTnUEz1pKuplI+O+eJziZ
-         SY3YOU8R+Yj/FeQImOtGruyaKLcs52GMSENYlzVdY2mSaJ5sl4exUMQytWaeTmku6t9V
-         oF+Q==
-X-Gm-Message-State: APjAAAVI2gS6d1NWz61okGxPicpS9Uw7xWLXn2dgY7vUQbT4lFoVkjKE
-        JnQmeELa/gEfAwCEWnzhQC5DpGnqG6/Hlcv8iRmlRQ==
-X-Google-Smtp-Source: APXvYqxdMLigY2gCSUFZRs79VGs+uC4dThA5WCs4e+pUPAKLGhvcheCYWpetzZ/p8JD1bZZO+ae2gLnu+ndNSyfimRU=
-X-Received: by 2002:ac8:59:: with SMTP id i25mr5804123qtg.110.1581051155016;
- Thu, 06 Feb 2020 20:52:35 -0800 (PST)
+        id S1725851AbgBGFJW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Feb 2020 00:09:22 -0500
+Received: from mail-vi1eur05on2088.outbound.protection.outlook.com ([40.107.21.88]:6034
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725837AbgBGFJW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 7 Feb 2020 00:09:22 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iEiOXt6hLBeQwofBwW35Z2VA2FOTKkDsCTV7gHhQARTtDYoPm9FyJ2pc1fbG8vKTIe26NWSBwoacMm6C/hMEC9rem9WLtXuKEN1uztvsV3m8hMKgocCLitjuNf+h63lUsp7w1WIo0DRcM7XP4RWp6WBI2vAL2MiZPbdy14098AkJG4C2EIkRSdjUEEaxA4Jz1sLjGy1G5uB76xnbzEN2JGiQxN05Ib40FsmmxB4FzsQjFi79obkN2/G33/WWe8G6OoVgMgLzQNyE/C96CL9NPtz90R7B5PKUFr5dBemLS85rUJln14sB20GhGZ9i5ieo69djjpp+V0oxTVhXbRgEpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kQ1dUI9G1SnZHyPWkNQAH5A+nQuUh9yMcE0AodF5+oQ=;
+ b=JEhjtQWSd0cUtCPnnv6AFSXlIfVjEOExjZhZCDTVFl9V8NU62KUl3CSccCVn8bqArZdM+ZE84UPLqmdqhAuz1R8/MlYwV9e4YxngLSh3VXKbf994h6wS18j8HnJGvn+XNpy49eXZ/c/2vFvavwnybD/6H4dvAdvBRl24Zq8KEX7d444saTaw+umXcLIxlGsPT6pzfB3saBs7e1jydgLkuBiI2VPC3AQfjDbyObcsZaJgVINSJrcLabewoTc2p3XLmc7OmxKwLCTtpkSxOq7vEKdoHzMcQALX9zIcnKrps2OPMB5zvKeIql4vwrBAqQa7jSp9cP6x2syh8aHNn1Qwfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kQ1dUI9G1SnZHyPWkNQAH5A+nQuUh9yMcE0AodF5+oQ=;
+ b=XKoSz2a3pGrYREh9AZifEohZo0NxtbiqxJbYEQjcbObYfuxwceitE2+AoBBY6injC2M8j9J4UErMmC22ttjeqG6YycWuwPEpftobV9xnWlpGECngzWE3fCxzBigK+6bxW6hspyp0PiXEgAJmFyqzHhoXqrBXDlEILYbhFAFf6mQ=
+Received: from VI1PR04MB4333.eurprd04.prod.outlook.com (52.134.122.155) by
+ VI1PR04MB5904.eurprd04.prod.outlook.com (20.178.127.157) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2707.21; Fri, 7 Feb 2020 05:09:19 +0000
+Received: from VI1PR04MB4333.eurprd04.prod.outlook.com
+ ([fe80::fd7e:a5a0:691e:c123]) by VI1PR04MB4333.eurprd04.prod.outlook.com
+ ([fe80::fd7e:a5a0:691e:c123%6]) with mapi id 15.20.2707.024; Fri, 7 Feb 2020
+ 05:09:19 +0000
+From:   Andy Tang <andy.tang@nxp.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Ask for help about cpufreq issue
+Thread-Topic: Ask for help about cpufreq issue
+Thread-Index: AdXdcxSxB0cyUSagT5OnSrOpW6FSxA==
+Date:   Fri, 7 Feb 2020 05:09:19 +0000
+Message-ID: <VI1PR04MB4333D45D033CB8E33CB9070FF31C0@VI1PR04MB4333.eurprd04.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=andy.tang@nxp.com; 
+x-originating-ip: [92.121.68.129]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 5bca33bf-00b7-4ece-ae18-08d7ab8be327
+x-ms-traffictypediagnostic: VI1PR04MB5904:
+x-microsoft-antispam-prvs: <VI1PR04MB590497A159DCDF3584D6F3CEF31C0@VI1PR04MB5904.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0306EE2ED4
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(396003)(346002)(39860400002)(136003)(376002)(189003)(199004)(6916009)(4326008)(6506007)(76116006)(9686003)(55016002)(71200400001)(186003)(8936002)(26005)(86362001)(81156014)(316002)(8676002)(478600001)(54906003)(66476007)(81166006)(66446008)(44832011)(2906002)(33656002)(5660300002)(7696005)(52536014)(64756008)(66556008)(66946007);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5904;H:VI1PR04MB4333.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: UAe9dYBaEWD5EBicKvoI6x9oiuMYsx0FfNz2/Ee1fUBq6r6iZ5kr2xPK7CUHGlmgIbdCh7RhWAIhEbnNByPK8wIYegwHcbzCc0woytSrRXmWJDT6p83rCiwDiVPfgwOOKwF34Zo4FeJTWVyDswYyzJZVy5g6NlHYepnWdBl8kmmNRB71DflGMasB1g3h6846NhEwysD7nhGicsw1jvIXRTKqVXT9G2dJ7Q2JvtSKBB4Um89gA9vHthbyXLyds3Oboh5LUCeibw1uTjtEh71LwO4txpPOaQE9QXH8ENZn+GOsjFP3XCnAnKG4JFTsDDDJA3xyXtlhoB7e2ajxKYWiKUA+rY9Yv4hdV9tU8fQmDgvS3zW8kj3qexGzeMnpW8o/IUtL6iPWA6iSY+NPo6/VcUjdImmWeDUQf2uXR2s3MQJ/bQpv5bTV2jDa7bWnzIyF
+x-ms-exchange-antispam-messagedata: N3/tY730govVD8tYQLU3q9QM6dddlsSG19xDEBJIG+JekOuyUR4wxzmwTTaigg2KPeOZrFGkf2fqaUdzKFzoC8TXlWheOTdtSoZAi4YNPnCCNwuQ4aF5AlSTlOvvWHzJyjI9OJPsXVy+QhegX2XOLA==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20191015065002.18701-1-drake@endlessm.com> <CADnq5_M4Leu0raYS6M72MqTm1+PLg9BjHCHLAYuB2-dEVP56_A@mail.gmail.com>
- <CAD8Lp443ZhPEo0PJRxbTSB9DY9x92OvWBeH29m9Ehpyhg+2n5A@mail.gmail.com>
- <CADnq5_OaATVESAY9E2mtd7PoV2VjG=WLS56LCHVpieSHDTas0A@mail.gmail.com>
- <CAD8Lp46f9LR_VJ26BGfOGvj8sTjKZowkbjLNv6R4CsVMfRZQ=Q@mail.gmail.com>
- <CAD8Lp46+Te+AUQKLkLEcGf34izw=JzkU5w=CsZRf_UKJQ_k7qg@mail.gmail.com>
- <CADnq5_OObnKTP7-tBmPz75R5qXs8ubRxgfX-qkBnzqcox0TZyQ@mail.gmail.com>
- <CAD8Lp44FKuEsmdK+zDX_-ZYQEnqjQM-z6nnfE-CJ62mutd+scA@mail.gmail.com> <CADnq5_PNGr4=MqpBeKbhxJ-gpniSCj7L0wO5_V6mjuwpKoaCAg@mail.gmail.com>
-In-Reply-To: <CADnq5_PNGr4=MqpBeKbhxJ-gpniSCj7L0wO5_V6mjuwpKoaCAg@mail.gmail.com>
-From:   Daniel Drake <drake@endlessm.com>
-Date:   Fri, 7 Feb 2020 12:52:23 +0800
-Message-ID: <CAD8Lp47vOdyG+BSzFy2URULz4icXYHW7SMW9zBEt4nfz804XTw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: always reset asic when going into suspend
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Chunming Zhou <David1.Zhou@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5bca33bf-00b7-4ece-ae18-08d7ab8be327
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2020 05:09:19.5157
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rePYEbRdb4JL3Mrslapan86KyvWFkMRf+5O+nvjvC/riBgmyWa1wt8DuGxV4yf3yG1Q/YK4oZZdnfcDaB2r1qw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5904
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 11:15 PM Alex Deucher <alexdeucher@gmail.com> wrote:
-> It's just papering over the problem.  It would be better from a power
-> perspective for the driver to just not suspend and keep running like
-> normal.  When the driver is not suspended runtime things like clock
-> and power gating are active which keep the GPU power at a minimum.
+Hi Viresh,
 
-Until we have a better solution, are there any strategies we could
-apply here to avoid the suspend as you say?
-e.g. DMI quirk these products to disable suspend? Or disable suspend
-on all s2idle setups?
+Cpufreq failed to work on our board. CPU frequency keeps at the lowest freq=
+uency whatever governor I choose.
 
-This would certainly be better than the current situation of the
-machine becoming unusable on resume.
+Hardware platform: ls1043ardb board (4 cores arm64 arch)
+Software: linux kernel v5.4.3 + ubuntu 1804.
 
-> I talked to our sbios team and they seem to think our S0ix
-> implementation works pretty differently from Intel's.  I'm not really
-> an expert on this area however.  We have a new team ramping on up this
-> for Linux however.
+Test log:
+root@localhost:~# echo performance > /sys/devices/system/cpu/cpu0/cpufreq/s=
+caling_governor
+root@localhost:~# cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq
+500000
+root@localhost:~# cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_availabl=
+e_frequencies
+1600000 1000000 800000 500000
 
-Thanks for following up on this internally! Can I lend a product
-sample to the new team so that they have direct access?
+All the parameters you may need:
+root@localhost:~# for entry in `ls /sys/devices/system/cpu/cpufreq/policy0/=
+` ; do echo $entry;  cat  /sys/devices/system/cpu/cpufreq/policy0/$entry; d=
+one
+affected_cpus
+0 1 2 3
+cpuinfo_cur_freq
+500000
+cpuinfo_max_freq
+1600000
+cpuinfo_min_freq
+500000
+cpuinfo_transition_latency
+31
+related_cpus
+0 1 2 3
+scaling_available_frequencies
+1600000 1000000 800000 500000
+scaling_available_governors
+userspace ondemand performance schedutil
+scaling_cur_freq
+500000
+scaling_driver
+qoriq_cpufreq
+scaling_governor
+performance
+scaling_max_freq
+500000
+scaling_min_freq
+500000
+scaling_setspeed
+<unsupported>
+stats
+cat: /sys/devices/system/cpu/cpufreq/policy0/stats: Is a directory
 
-Daniel
+
+Could you please instruct me how to investigate this issue?
+
+BR,
+Andy
