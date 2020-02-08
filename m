@@ -2,55 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 702D61560DF
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2020 22:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B91A31562B6
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2020 03:24:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727727AbgBGVzU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Feb 2020 16:55:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42396 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727691AbgBGVzT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 7 Feb 2020 16:55:19 -0500
-Subject: Re: [GIT PULL] Additional power management updates for v5.6-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581112519;
-        bh=fOCxGy7MCh6Fy+wzJ7TB/GLsOp9F+XkQM82zHKt/dy4=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=gqJTqaewu2c2VeI6pZAfLJ8gD+QlUeHlkV4axuxLfndSj+IcODUlpKdW+8HLk49CW
-         Qu+WuFmV4YV8o9XB6shdoIoMs74GihUvgT7izgr6dSvFtTHKm3UFpYrHRhwUiltkAV
-         NLeIXmaF0qT5FpnTF7E+ieX9PvLNCRva+cxnUtCI=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0iDEpbZmZvTKxhZYq0CQWJSRZBDfhXgNOJT-wSxUrsb3g@mail.gmail.com>
-References: <CAJZ5v0iDEpbZmZvTKxhZYq0CQWJSRZBDfhXgNOJT-wSxUrsb3g@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0iDEpbZmZvTKxhZYq0CQWJSRZBDfhXgNOJT-wSxUrsb3g@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
- pm-5.6-rc1-3
-X-PR-Tracked-Commit-Id: 332008256f1f7cd8294acd6e288fb821f685d1a9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ba7dcfc7badad87e450e4aaec79662a038dbf9ed
-Message-Id: <158111251898.9631.17351659043416665666.pr-tracker-bot@kernel.org>
-Date:   Fri, 07 Feb 2020 21:55:18 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1726995AbgBHCYq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Feb 2020 21:24:46 -0500
+Received: from mail-wr1-f42.google.com ([209.85.221.42]:37372 "EHLO
+        mail-wr1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726743AbgBHCYq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Feb 2020 21:24:46 -0500
+Received: by mail-wr1-f42.google.com with SMTP id w15so1080671wru.4
+        for <linux-pm@vger.kernel.org>; Fri, 07 Feb 2020 18:24:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=UHOD7FX5bmGy4CQPmK4moSUfcy6Iw8FiVkEQEDFki7E=;
+        b=N6dWGMlw+qAPJNCWLB0OXCuHaWOp/43Axs27Mhl/J3Di8u9w22RPK4LDjY167x2Z2w
+         YPRf02khx4DtATaJT3YYyGPbS/Ce0Pbg/0Ym5zP8YiCe1FckgFu7IURIQcKm39mrxZSo
+         t+oTkVXxuDFO1/n8W4YTh0SpcP6cfgqyqyHBag14Qk0t9uzWdPUCEFWUXrznhYDWa9xH
+         sV+Q6Zfhe+rzTNYrvY+X/JzlxurDpyGaCQI7Z7D6/O2lkoNj5RZAzjsDCRjfVCiGVGVQ
+         QCr/Q6Q60zwSNIqlkT63GrNzlJiWnMFcdWdJX9EE334F2r3pQ5zATyW6RRKu9Bz65E60
+         FXjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=UHOD7FX5bmGy4CQPmK4moSUfcy6Iw8FiVkEQEDFki7E=;
+        b=bIjtTgx/FTM/9O169vLxtRnsAeUXFH0gEc7ifQHou8K+DC2hmMPOTaPG5nw7U0oynp
+         veFfgd2zC6bBx75C85lKRsLZip/6zyC6WbhS7ZBwKmhTzkJkB4fUxaQz7WemqXgd16Zh
+         QErVTF1H//bcX190gsavG+sa/OztVNmQpHSGr2d4bOCJTFjxsMSOZahWJf895N5URjnX
+         AVEjifLBydbnSNJ4fiIA3S377c7UvRDBaVXVLMey1HKsMTt+m5nkxzDz0bsfTWfAUBJC
+         kyUdix+aOwUc2m5Ivw16XUhU/1QtVkDQxhbkgDEOvnkYilwb8XTra3M7OhLyYFsqMP0x
+         2Vwg==
+X-Gm-Message-State: APjAAAV5e5AtqDvde27SMr46Fc4zCrXc8QL05ubkggHRIPbviHwwl2V2
+        2AC824xqBtM73/xAwCkOBhQVHw==
+X-Google-Smtp-Source: APXvYqzj8Wzu2t8QEsHz4pfdOVLp+X9Xsw7M/8kjxsPHSdbnW2lgX7xa/SQzWzlrl/YcTfgCdv6U1A==
+X-Received: by 2002:a5d:4984:: with SMTP id r4mr2128326wrq.137.1581128682756;
+        Fri, 07 Feb 2020 18:24:42 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id 5sm6009895wrc.75.2020.02.07.18.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Feb 2020 18:24:42 -0800 (PST)
+Message-ID: <5e3e1bea.1c69fb81.79c0.9f4a@mx.google.com>
+Date:   Fri, 07 Feb 2020 18:24:42 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.5-rc7-146-g4529d29bc6a6
+Subject: pm/testing build: 5 builds: 0 failed,
+ 5 passed (v5.5-rc7-146-g4529d29bc6a6)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 7 Feb 2020 11:34:48 +0100:
+pm/testing build: 5 builds: 0 failed, 5 passed (v5.5-rc7-146-g4529d29bc6a6)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.6-rc1-3
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+5-rc7-146-g4529d29bc6a6/
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ba7dcfc7badad87e450e4aaec79662a038dbf9ed
+Tree: pm
+Branch: testing
+Git Describe: v5.5-rc7-146-g4529d29bc6a6
+Git Commit: 4529d29bc6a6f458ae731425ce4f7e3856365bbe
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 5 unique architectures
 
-Thank you!
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
