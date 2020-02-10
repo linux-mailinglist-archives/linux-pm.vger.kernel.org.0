@@ -2,177 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D23581572DF
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 11:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDE7157389
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 12:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727452AbgBJKbP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Feb 2020 05:31:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:58676 "EHLO foss.arm.com"
+        id S1727003AbgBJLhc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Feb 2020 06:37:32 -0500
+Received: from foss.arm.com ([217.140.110.172]:59062 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726961AbgBJKbP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 10 Feb 2020 05:31:15 -0500
+        id S1726961AbgBJLhc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 10 Feb 2020 06:37:32 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A2B61FB;
-        Mon, 10 Feb 2020 02:31:14 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7566A3F68F;
-        Mon, 10 Feb 2020 02:31:12 -0800 (PST)
-Date:   Mon, 10 Feb 2020 10:31:10 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Maulik Shah <mkshah@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        David Brown <david.brown@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>, lsrao@codeaurora.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH v3 5/7] drivers: firmware: psci: Add hierarchical domain
- idle states converter
-Message-ID: <20200210103110.GB19089@bogus>
-References: <CAPDyKFoyepN2VX4COMomp1e9dXPozzrgCdcy0paee2jp8Wm3YA@mail.gmail.com>
- <20200205161816.GD38466@bogus>
- <CAPDyKFqaA7oN2+oLS=Puw+jQXke_ErGQAWYuTuU-6PS7mo5YbQ@mail.gmail.com>
- <20200206204514.GB8107@codeaurora.org>
- <20200207111955.GA40103@bogus>
- <CAPDyKFp-zvD1iFcpRaTFiuazxYmLEx0Czf3=TZJxjSCDmmPsvA@mail.gmail.com>
- <20200207144850.GA18655@e121166-lin.cambridge.arm.com>
- <CAPDyKFoZ+QQFdG3yQ5wGpg2Z5c9WksUhresGz02o3HVrGt1UhQ@mail.gmail.com>
- <20200207161547.GB8342@bogus>
- <CAPDyKFpzr4MA4XuNqCX1jwAzZataVwbVKvADiy39hq=UgDB4tg@mail.gmail.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C6C11FB;
+        Mon, 10 Feb 2020 03:37:31 -0800 (PST)
+Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DC73B3F6CF;
+        Mon, 10 Feb 2020 03:37:29 -0800 (PST)
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Subject: Re: [RFC PATCH v4 0/6] sched/cpufreq: Make schedutil energy aware
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        viresh kumar <viresh.kumar@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Quentin Perret <qperret@google.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+References: <20200122173538.1142069-1-douglas.raillard@arm.com>
+ <CAKfTPtC9A6KVwYsQWgXXk-12GeJhkJfEm3Lk=LjcoOJvvoZ1uA@mail.gmail.com>
+Organization: ARM
+Message-ID: <0fa87613-d74f-ad2c-38a9-76e2efd172d1@arm.com>
+Date:   Mon, 10 Feb 2020 11:37:28 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFpzr4MA4XuNqCX1jwAzZataVwbVKvADiy39hq=UgDB4tg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAKfTPtC9A6KVwYsQWgXXk-12GeJhkJfEm3Lk=LjcoOJvvoZ1uA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB-large
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Feb 08, 2020 at 11:25:18AM +0100, Ulf Hansson wrote:
-> On Fri, 7 Feb 2020 at 17:15, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Fri, Feb 07, 2020 at 04:52:52PM +0100, Ulf Hansson wrote:
-> > > On Fri, 7 Feb 2020 at 15:48, Lorenzo Pieralisi
-> > > <lorenzo.pieralisi@arm.com> wrote:
-> > > >
-> > > > On Fri, Feb 07, 2020 at 01:32:28PM +0100, Ulf Hansson wrote:
-> > > > > [...]
-> > > > >
-> > > > > > > I understand the arguments for using PC vs OSI and agree with it. But
-> > > > > > > what in PSCI is against Linux knowing when the last core is powering
-> > > > > > > down when the PSCI is configured to do only Platform Cordinated.
-> > > > > >
-> > > > > > Nothing :D. But knowing the evolution and reasons for adding OSI in the
-> > > > > > PSCI specification and having argued about benefits of OSI over PC for
-> > > > > > years and finally when we have it in mainline, this argument of using
-> > > > > > PC for exact reasons why OSI evolved is something I can't understand
-> > > > > > and I am confused.
-> > > > > >
-> > > > > > > There should not be any objection to drivers knowing when all the cores
-> > > > > > > are powered down, be it reference counting CPU PM notifications or using
-> > > > > > > a cleaner approach like this where GendPD framwork does everything
-> > > > > > > cleanly and gives a nice callback. ARM architecture allows for different
-> > > > > > > aspects of CPU access be handled at different levels. I see this as an
-> > > > > > > extension of that approach.
-> > > > > > >
-> > > > > >
-> > > > > > One thing that was repeatedly pointed out during OSI patch review was no
-> > > > > > extra overhead for PC mode where firmware can make decisions. So, just
-> > > > > > use OSI now and let us be done with this discussion of OSI vs PC. If PC
-> > > > > > is what you think you need for future, we can revert all OSI changes and
-> > > > > > start discussing again :-)
-> > > > >
-> > > > > Just to make it clear, I fully agree with you in regards to overhead
-> > > > > for PC-mode. This is especially critical for ARM SoCs with lots of
-> > > > > cores, I assume.
-> > > > >
-> > > > > However, the overhead you refer to, is *only* going to be present in
-> > > > > case when the DTS has the hierarchical CPU topology description with
-> > > > > "power-domains". Because, that is *optional* to use, I am expecting
-> > > > > only those SoC/platforms that needs to manage last-man activities to
-> > > > > use this layout, the others will remain unaffected.
-> > > >
-> > > > In PC mode not only there is no need but it is wrong to manage
-> > > > any last-man activity in the kernel. I wonder why we are still
-> > > > talking about this to be honest.
-> > >
-> > > I guess the discussion is here because there is a use case to consider now.
-> > >
-> >
-> > If this is what Bjorn presented in his email, I have responded to that.
-> > If it's any different, please let us know the complete details.
-> >
-> > > For sure, we agree on what is the best solution. But this is rather
-> > > about what can we do to improve the current situation, if we should do
-> > > anything.
-> > >
-> >
-> > Sure, and I haven't found a reason to do that in OSPM yet(as part of the
-> > discussion in this thread)
-> >
-> > > >
-> > > > Code to handle PSCI platform coordinated mode has been/is in
-> > > > the kernel today and that's all is needed according to the PSCI
-> > > > specifications.
-> > >
-> > > PSCI specifies CPU power management, not SoC power management. If
-> > > these things were completely decoupled, I would agree with you, but
-> > > that's not the case. Maybe SCMI, etc, helps with this in future.
-> > >
-> >
-> > Why does that not work even if they are not decoupled. The IO/device
-> > that share with CPU votes from OSPM and the CPU/Cluster from PSCI in
-> > PC mode. There is no argument there, but why it needs to be done in OSPM
-> > is the objection here.
->
-> That implies the votes from I/O devices needs to reach the FW
-> immediately when the vote is done. No caching or other optimizations
-> can be done at OSPM.
->
-> In principle, the FW needs to have an always up to date view of the
-> votes, etc. That sounds highly inefficient, both from energy and
-> latency point of view, at least in my opinion.
->
+Hi Vincent,
 
-Sorry but I need to re-iterate, use OSI if you need all those fancy
-caching and other optimizations.
+On 1/27/20 5:16 PM, Vincent Guittot wrote:
+> On Wed, 22 Jan 2020 at 18:36, Douglas RAILLARD <douglas.raillard@arm.com> wrote:
+>>
+>> Make schedutil cpufreq governor energy-aware.
+>>
+>> - patch 1 introduces a function to retrieve a frequency given a base
+>>   frequency and an energy cost margin.
+>> - patch 2 links Energy Model perf_domain to sugov_policy.
+>> - patch 3 updates get_next_freq() to make use of the Energy Model.
+>> - patch 4 adds sugov_cpu_ramp_boost() function.
+>> - patch 5 updates sugov_update_(single|shared)() to make use of
+>>   sugov_cpu_ramp_boost().
+>> - patch 6 introduces a tracepoint in get_next_freq() for
+>>   testing/debugging. Since it's not a trace event, it's not exposed to
+>>   userspace in a directly usable way, allowing for painless future
+>>   updates/removal.
+>>
+>> The benefits of using the EM in schedutil are twofold:
+>>
+>> 1) Selecting the highest possible frequency for a given cost. Some
+>>    platforms can have lower frequencies that are less efficient than
+>>    higher ones, in which case they should be skipped for most purposes.
+> 
+> This make sense. Why using a lower frequency when a higher one is more
+> power efficient
 
-> >
-> > > Anyway, my fear is that not many ARM vendors implements OSI support,
-> > > but still they have "last-man-activities" to deal with. This is not
-> > > only QCOM.
-> > >
-> >
-> > I am interested to hear from them. And the same question to same too as
-> > above.
->
-> I have been talking to some of them. But, yes, we need to hear more from them.
->
-> >
-> > > I guess an option would be to add OSI support to the public ARM
-> > > Trusted Firmware, then we could more easily point to that - rather
-> > > than trying to mitigate the problem on the kernel side.
-> > >
-> >
-> > I would say go for it. But don't mix responsibility of OSPM in PC vs OSI.
-> > We have discussed this for years and I hope this discussion ends ASAP.
-> > I don't see any point in dragging this any further.
->
-> Okay.
->
+Apparently in some cases it can be useful for thermal capping. AFAIU the
+alternate solution is to race to idle with a more efficient OPP (idle
+injection work of Linaro).
 
-I keep saying that but still responding to the discussions. I must stop ;-)
+>>    They can still be useful to give more freedom to thermal throttling
+>>    mechanisms, but not under normal circumstances.
+>>    note: the EM framework will warn about such OPPs "hertz/watts ratio
+>>    non-monotonically decreasing"
+>>
+>> 2) Driving the frequency selection with power in mind, in addition to
+>>    maximizing the utilization of the non-idle CPUs in the system.
+>>
+>> Point 1) is implemented in "PM: Introduce em_pd_get_higher_freq()" and
+>> enabled in schedutil by
+>> "sched/cpufreq: Hook em_pd_get_higher_power() into get_next_freq()".
+>>
+>> Point 2) is enabled in
+>> "sched/cpufreq: Boost schedutil frequency ramp up". It allows using
+>> higher frequencies when it is known that the true utilization of
+>> currently running tasks is exceeding their previous stable point.
+>> The benefits are:
+>>
+>> * Boosting the frequency when the behavior of a runnable task changes,
+>>   leading to an increase in utilization. That shortens the frequency
+>>   ramp up duration, which in turns allows the utilization signal to
+>>   reach stable values quicker.  Since the allowed frequency boost is
+>>   bounded in energy, it will behave consistently across platforms,
+>>   regardless of the OPP cost range.
+> 
+> Could you explain this a bit more ?
 
---
-Regards,
-Sudeep
+The goal is to detect when the task starts asking more CPU time than it
+did during the previous period. At this stage, we don't know how much
+more, so we increase the frequency faster to allow signals to settle
+more quickly.
+
+The PELT signal does increases independently from the chosen frequency,
+but that's only up until idle time shows up. At this point, the util
+will drop again, and the frequency with it.
+
+>>
+>> * The boost is only transient, and should not impact a lot the energy
+>>   consumed of workloads with very stable utilization signals.
+>>
+>> This has been lightly tested with a rtapp task ramping from 10% to 75%
+>> utilisation on a big core.
+> 
+> Which kind of UC are you targeting ?
+
+One case are tasks with "random" behavior like threads in thread pools
+that can end up doing very different things. There may be other cases as
+well, but I'll need to do more extensive testing with actual applications.
+
+> 
+> Do you have some benchmark showing the benefit and how you can bound
+> the increase of energy ?
+
+In the test setup described above, it increases the energy consumption
+by ~2.5%.
+
+I also did some preliminary experiments to reduce the margin taken in
+map_util_freq(), which becomes less necessary if the frequency is
+boosted in the cases where util increase is getting out of hands. That
+can recover some amount of lost power.
+
+The real cost in practice heavily depends on:
+* the workloads (if its util jumps around, it will boost more frequently)
+* the discrete frequencies available (if boosting does not bring us to
+the next freq, no boost is actually applied).
+
+> 
+> The benefit of point2 is less obvious for me. We already have uclamp
+> which helps to overwrite the "utilization" that is seen by schedutil
+> to boost or cap the frequency when some tasks are running. I'm curious
+> to see what would be the benefit of this on top.
+
+uclamp is only useful when a target utilization is known beforehand by
+the task itself or some kind of manager. In all the cases relying on
+plain PELT, we can decrease the freq change reaction time.
+
+Note that schedutil is already built around the duty cycle detection
+with a bias for higher frequency when the task period increases (using
+util est enqueued). What this series bring is a way to detect when util
+est enqueued turns from a set-point into a lower bound.
+
+>>
+>> v1 -> v2:
+>>
+>>   * Split the new sugov_cpu_ramp_boost() from the existing
+>>     sugov_cpu_is_busy() as they seem to seek a different goal.
+>>
+>>   * Implement sugov_cpu_ramp_boost() based on CFS util_avg and
+>>     util_est_enqueued signals, rather than using idle calls count.
+>>     This makes the ramp boost much more accurate in finding boost
+>>     opportunities, and give a "continuous" output rather than a boolean.
+>>
+>>   * Add EM_COST_MARGIN_SCALE=1024 to represent the
+>>     margin values of em_pd_get_higher_freq().
+>>
+>> v2 -> v3:
+>>
+>>   * Check util_avg >= sg_cpu->util_avg in sugov_cpu_ramp_boost_update()
+>>     to avoid boosting when the utilization is decreasing.
+>>
+>>   * Add a tracepoint for testing.
+>>
+>> v3 -> v4:
+>>
+>>   * em_pd_get_higher_freq() now interprets the margin as absolute,
+>>     rather than relative to the cost of the base frequency.
+>>
+>>   * Modify misleading comment in em_pd_get_higher_freq() since min_freq
+>>     can actually be higher than the max available frequency in normal
+>>     operations.
+>>
+>> Douglas RAILLARD (6):
+>>   PM: Introduce em_pd_get_higher_freq()
+>>   sched/cpufreq: Attach perf domain to sugov policy
+>>   sched/cpufreq: Hook em_pd_get_higher_power() into get_next_freq()
+>>   sched/cpufreq: Introduce sugov_cpu_ramp_boost
+>>   sched/cpufreq: Boost schedutil frequency ramp up
+>>   sched/cpufreq: Add schedutil_em_tp tracepoint
+>>
+>>  include/linux/energy_model.h     |  56 ++++++++++++++
+>>  include/trace/events/power.h     |   9 +++
+>>  kernel/sched/cpufreq_schedutil.c | 124 +++++++++++++++++++++++++++++--
+>>  3 files changed, 182 insertions(+), 7 deletions(-)
+>>
+>> --
+>> 2.24.1
+>>
