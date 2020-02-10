@@ -2,91 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C297157879
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 14:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E02315792B
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 14:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729686AbgBJNIM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Feb 2020 08:08:12 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:41776 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729457AbgBJNIM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Feb 2020 08:08:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TdcuDpxLgQJeHBcjjVmCcGsEmDfK4lLRpvk8VBOXZEk=; b=Su/gbaRlBpenaffOyzKGTCy2Kv
-        U4VhuSMUBuiH5znbE8cOJQiXc7OAauUE3Rr5zDYruT/2zFwUqWw8u8N06QVtl4w+u1uzvUsPrb83e
-        YoMJyArf4azD3c8CyMwK5/ciw1xcEI1wqrDRRWJ1ghDMGFrXoTFVImPDMhyXO2OMJ93EZ1TtXLuzZ
-        B6zyGC0NSxpn8QH/CrgKfXvO9aihTKBAL5brXqHdW8vzr0HZSFqXZsstmks+fnPKx5s/ZmNoaX0ak
-        9NxODiMBETNDfExlqYLhuSIDGHbL7fqHP2RoIQL1WoJDdoJkcjziR2P0GIStEQf2EjcTYrJp0bn8j
-        V07W3OhA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j18nE-0005je-1z; Mon, 10 Feb 2020 13:08:04 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0B8B2300446;
-        Mon, 10 Feb 2020 14:06:13 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2B97120148931; Mon, 10 Feb 2020 14:08:02 +0100 (CET)
-Date:   Mon, 10 Feb 2020 14:08:02 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Douglas RAILLARD <douglas.raillard@arm.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        qperret@google.com, linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH v4 4/6] sched/cpufreq: Introduce sugov_cpu_ramp_boost
-Message-ID: <20200210130802.GG14879@hirez.programming.kicks-ass.net>
-References: <20200122173538.1142069-1-douglas.raillard@arm.com>
- <20200122173538.1142069-5-douglas.raillard@arm.com>
+        id S1727836AbgBJNNK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Feb 2020 08:13:10 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40920 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730732AbgBJNNJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Feb 2020 08:13:09 -0500
+Received: by mail-lj1-f196.google.com with SMTP id n18so7071680ljo.7
+        for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2020 05:13:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OW7a6sFO2Iqv10j6Lrm9vfeuEckoEH9rsnAFekhcXZ4=;
+        b=Xl9RTe3eBD6wMc4vG5QTCpt/zeyykjk96CyAlj4kBN2T7mEH+Q6bUywzN2mWBIzF56
+         /wN4KQWXHJGtTcO/3i5dMzX0mjYCdJ6A89h2Q+g2D+ce/u4z/peOkdZmDDw19aoymXfF
+         9w/d7vdCJaHPitDl68u/m0TtZwyVl31MtFjWV7g6MoLhiGvZ/6/rjhDaYtdmB9S1KMzd
+         2wsJk2MteEVGP3h3D1eM2OyaIz5nYGz4UAteuPExApGbYR5KvmBcq5UHZ7eLOl6mYxeC
+         IingSG0GeZdr8h2zXBxd9h1ASzumrOlLOsg4TTKmu2CL+jZ9JQMGhLJBOIlXvzYG3ZG4
+         TF7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OW7a6sFO2Iqv10j6Lrm9vfeuEckoEH9rsnAFekhcXZ4=;
+        b=AjWv6lfmxHpJa6+wALA/rdxxQIwGjIbf+f2WFMyOuTJrXL+PJtekpNVUEFQtu2USNe
+         P/mACwk/AU6YlDeuOgbIk0/bzYMvqikeohOxTbZpIUKaBj24J/6saDkX5/+k1rxDaoVQ
+         AVZPvKfgStkNBj7LjfNH/kKOuMzChHW2LhXpY4YS3J6gfDzt/KzyTyJkkvEvt6pubRol
+         7Iw5cKbxrVudGU580ZmlXg6k1wM216oyUMYj9r68kygesErYvu4o5Uajxyg/H60lf2UO
+         K/yQgrai3mblaGDZ92iGZzY1Mg510tU7GG16wZI1jtop58XvdKdWr1wIdLfMAwDjWOtY
+         1GkA==
+X-Gm-Message-State: APjAAAXMfhAAjg3pcPLcWW+9wmDLCzQKnP7dOE4BHzZxtQicLWjFaTqI
+        CWTlDBH1C6JIkKJG13G9m54zcxfMCovytC1UHbfrkKm9oXo=
+X-Google-Smtp-Source: APXvYqyqFAwdkMFg3ysvCO6zj/hGx0EcCiuEehH7lrqyRelVl56YcATuj3ZDmJ9Rr5sKXDsttop3K5UBLHQgpLvaOfQ=
+X-Received: by 2002:a2e:b6ce:: with SMTP id m14mr836003ljo.99.1581340387514;
+ Mon, 10 Feb 2020 05:13:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200122173538.1142069-5-douglas.raillard@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190125110600.GA29332@localhost.localdomain> <CACRpkdYTCgXo8FeitEfRujeWdshnsR3Kn57cKUZsA3CsZ5Cnrw@mail.gmail.com>
+ <20190128135354.GA4156@localhost.localdomain> <CACRpkdZDOJJ6qSS8fkqQsgmchDWATfhTP=TZATwt6-Z_WQXpJQ@mail.gmail.com>
+ <bf72c35353dc2442794ab5cf19c7074abaccea9d.camel@fi.rohmeurope.com>
+In-Reply-To: <bf72c35353dc2442794ab5cf19c7074abaccea9d.camel@fi.rohmeurope.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 10 Feb 2020 14:12:56 +0100
+Message-ID: <CACRpkdaxJ-xM4Tak=C1Y_e9xy1KK21v93fhtUdh+TH=-Nx30zg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 09/10] power: supply: Initial support for ROHM
+ BD70528 PMIC charger block
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "sre@kernel.org" <sre@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 22, 2020 at 05:35:36PM +0000, Douglas RAILLARD wrote:
+On Thu, Feb 6, 2020 at 8:54 AM Vaittinen, Matti
+<Matti.Vaittinen@fi.rohmeurope.com> wrote:
 
-> +static unsigned long sugov_cpu_ramp_boost_update(struct sugov_cpu *sg_cpu)
-> +{
-> +	struct rq *rq = cpu_rq(sg_cpu->cpu);
-> +	unsigned long util_est_enqueued;
-> +	unsigned long util_avg;
-> +	unsigned long boost = 0;
-> +
+> I started working for a driver for ROHM BD99954 charger chip and ended
+> up writing the linear range code once again. And that reminded me of
+> this year old discussion :)
 
-Should we NO-OP this function when !sched_feat(UTIL_EST) ?
+OK!
 
-> +	util_est_enqueued = READ_ONCE(rq->cfs.avg.util_est.enqueued);
+> > They all seem to have trickle and fast charging, USB phy
+> > interaction and AC plug interaction of some kind for detecting
+> > those and in some cases temperature detection directly
+> > or using an ADC.
+>
+> Yes. That's pretty much what these ROHM chips have. But SW mostly needs
+> to set the limit values - it does not need to participate in state
+> changing and most of these things are also something users do not care
+> (I guess). Fuel gauging is other topic but I'm not planning to
+> implement it for in-tree drivers at least for now :/
+>
+> The thing that comes to (my) mind is just a common DT properties for
+> input current/voltage limits, battery voltages for switching to next
+> charging state, current values for different charging states - and
+> parsing of these properties.
+>
+> I've seen some comments about DT not being a good place for battery
+> specific properties as batteries may be replaced with another having
+> different type - but I don't think this is valid problem for many of
+> the devices today. Of course some devices may have batteries that can
+> be changed - but many don't - and for those it is perfectly Ok to have
+> battery data defined in DT, right?
 
-Otherwise you're reading garbage here, no?
+If something is a property of the charging circuit, then it can be derived
+from the compatible value, so anything that is just peculiar for this
+chip version doesn't go into device tree, just use a custom struct and
+the match data for that.
 
-> +	util_avg = READ_ONCE(rq->cfs.avg.util_avg);
-> +
-> +	/*
-> +	 * Boost when util_avg becomes higher than the previous stable
-> +	 * knowledge of the enqueued tasks' set util, which is CPU's
-> +	 * util_est_enqueued.
-> +	 *
-> +	 * We try to spot changes in the workload itself, so we want to
-> +	 * avoid the noise of tasks being enqueued/dequeued. To do that,
-> +	 * we only trigger boosting when the "amount of work" enqueued
-> +	 * is stable.
-> +	 */
-> +	if (util_est_enqueued == sg_cpu->util_est_enqueued &&
-> +	    util_avg >= sg_cpu->util_avg &&
-> +	    util_avg > util_est_enqueued)
-> +		boost = util_avg - util_est_enqueued;
-> +
-> +	sg_cpu->util_est_enqueued = util_est_enqueued;
-> +	sg_cpu->util_avg = util_avg;
-> +	WRITE_ONCE(sg_cpu->ramp_boost, boost);
-> +	return boost;
-> +}
+Then we have the battery. I suppose that could be defined as a DT
+node for the battery itself, and not as part of the charging IC, and we
+should think about how to create a battery DT binding. What
+characteristics are chargers really interested in? This could be some
+work.
+
+If different devices have different batteries then the boot loader
+could ideally patch the DT with the right battery. This was the solution
+advocated for devices with different display panels, to a question
+from Hans de Goede at one point IIRC.
+
+> But ... do we need to provide a way for user-space to configure these
+> settings instead of the DT? Or any other possible sources for this
+> information?
+
+What we usually have said is that "policy should be in userspace"
+and "kernel manages hardware". This creates a not-so-small
+grey area in between and it is unfortunately up to interpretation.
+
+Today there is also a THIRD alternative, and that is to let
+userspace insert a policy using a BPF program. This is the
+approach taken by the network and tracing stacks and we look at
+more applications. If the kernel needs to be able to handle charging
+and emergencies even if userspace is not up or available, this or other
+userspace policies are not viable.
+
+I have a strong feeling that it should be a battery node in the device
+tree.
+
+> Hmm. If changing means state changes - then these ROHM chips probably
+> play no role here as there the HW does most of the state changes
+> autonomously. (AFAIR, it's been a while since I looked at the other but
+> BD99954).
+
+Good it's a simpler hardware. We just need to think about making
+the code reusable.
+
+> So ... If I extract the linear_range code from BD70528 driver (it
+> should be usable for the BD99954 as such) - should I place it to some
+> common header/lib? (This is plain integer math so I don't like the
+> idea of placing it in fixp-arith.h).
+
+Start with moving it to some separate file, like
+power_supply_interpolation.c that we just always compile in
+and we can take it from there.
+
+Just some thoughts...
+
+Yours,
+Linus Walleij
