@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 483B515743F
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 13:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C13157444
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 13:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727508AbgBJMLe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Feb 2020 07:11:34 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38543 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727436AbgBJMLe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Feb 2020 07:11:34 -0500
-Received: by mail-lj1-f196.google.com with SMTP id w1so6862392ljh.5;
-        Mon, 10 Feb 2020 04:11:31 -0800 (PST)
+        id S1727435AbgBJMME (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Feb 2020 07:12:04 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:40118 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727121AbgBJMMD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Feb 2020 07:12:03 -0500
+Received: by mail-lj1-f193.google.com with SMTP id n18so6845797ljo.7;
+        Mon, 10 Feb 2020 04:12:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=lB5Gls1bE5ZTM4FMK83JW7NErQx+DjSi+JPZdDq6b/Q=;
-        b=fgXpoB97Z2uDj0LPfwUfTrJuc/09JkoKK0RpXenJ2XGazDyNxD3DCtxP0hGTbdSejs
-         EXHfRZgdCNlm//vlzUNbx0WWptrNrbUhnJHDdzY+jCtEhlBXS9KCWgDoMl9wagNLYxTa
-         htuC/Ha+ickz1eJL/Po85qgTOrdY0zr1q1XcNFLMCyftFTX5powedeuzcEarraBE4fhu
-         HznNE7SUrH6/dXxtMkzAZqLEjLT5E8fhR7in1XpEZ6mIjm1bp6TGEd8fl3nfWRue3lRC
-         COo9lgE/gZYvtEa49PMGROahvpGVCf8X/vENiNhvKScrNsZ+Aum44C9ujHD61I/WVr2v
-         nPXw==
-X-Gm-Message-State: APjAAAU0MIoVI5lmgKFvsWRyklISXG1fsp+GR0F3/bSVnbrq3z5kakS0
-        VzPbPh4Ieso2YUacDpNFFKxhYYcU
-X-Google-Smtp-Source: APXvYqzBK31c7zKdZ+qT85bpPwAbr58MQfb3D4n4F3URm6rq4jWZ6p1cySqQbYIll3nD6/mRI1XBeg==
-X-Received: by 2002:a05:651c:239:: with SMTP id z25mr741897ljn.48.1581336690406;
-        Mon, 10 Feb 2020 04:11:30 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KY6h38OrTl9v1GuFalSTU/piBjftlEdbF7ex5QgcZrw=;
+        b=TKmnDU5+M9uA10BW7+e5n4/mZGx4AWelxki4suwWJ/Ai1h0fBZO0nStvxCWRHfU9My
+         6WTeiDJRuOWFHaM53M3PiSuXMaPO3GcJ2rUOjaawf2BYg96Bf6+buEmKLQAkgaEgsvO3
+         iBmPNRMIvk1yPRej7sE5F0p09yonsF3JaIWF/AWDxb2rOWE91tJ8eGbvXR5B32JNlK4F
+         dWNl2ZHVWrecEYHPeZTbj8RH0d+BKivnMxkeZR235vYk6/MCTIYINKqntlOCcQnrRvgJ
+         Bmcwn3zIGEJwhgFcqQjW00NOcaRePqoOkx4frq7DCJTutb117XeKQ/AoXA0jYjS2o7PF
+         bcWQ==
+X-Gm-Message-State: APjAAAWx6YjRzFUgAtO1LJRdFrqS7uFsOzvbHGUPpzmAaUwdYdbLYZiQ
+        cNRpsFXRqE1tECDddYkd6go=
+X-Google-Smtp-Source: APXvYqx2anjGXV8UVCUo0GBiLDMzRsqO7Sc+9LeJTmjiaI3eWYKzd8CrmWE40wKbBfVdaUhsxnAluQ==
+X-Received: by 2002:a05:651c:414:: with SMTP id 20mr708367lja.165.1581336721661;
+        Mon, 10 Feb 2020 04:12:01 -0800 (PST)
 Received: from localhost.localdomain ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id b20sm133154ljp.20.2020.02.10.04.11.29
+        by smtp.gmail.com with ESMTPSA id t1sm116768lji.98.2020.02.10.04.12.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2020 04:11:29 -0800 (PST)
-Date:   Mon, 10 Feb 2020 14:11:20 +0200
+        Mon, 10 Feb 2020 04:12:01 -0800 (PST)
+Date:   Mon, 10 Feb 2020 14:11:52 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     mikko.mutanen@fi.rohmeurope.com, markus.laine@fi.rohmeurope.com,
@@ -43,72 +43,162 @@ Cc:     mikko.mutanen@fi.rohmeurope.com, markus.laine@fi.rohmeurope.com,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 0/3] Support ROHM BD99954 charger IC
-Message-ID: <cover.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [RFC PATCH 1/3] dt_bindings: ROHM BD99954 Charger
+Message-ID: <fc866eb870e1980fd2a5cd37cf02cde5e8fb3d06.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
+References: <cover.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Support ROHM BD99954 Battery Management IC
+The ROHM BD99954 is a Battery Management LSI for 1-4 cell Lithium-Ion
+secondary battery. Intended to be used in space-constraint equipment such
+as Low profile Notebook PC, Tablets and other applications. BD99954
+provides a Dual-source Battery Charger, two port BC1.2 detection and a
+Battery Monitor.
 
-ROHM BD99954 is a Battery Management IC for 1-4 cell Lithium-Ion
-secondary battery. BD99954 is intended to be used in space-constraint
-equipment such as Low profile Notebook PC, Tablets and other
-applications.
+Document the DT bindings for BD99954
 
-Series introduces "linear ranges" helper intended to help converting
-real-world values to register values when conversion is linear. This
-version just meld the helpers in power/supply but this is hardly the
-correct place. Maybe they would fit regmap?
-
-This version of series introduces ROHM specific DT binding entries
-for few charger parameters. I think these parameters are pretty common
-and maybe the "rohm,"-prefix should be dropped and we should try having
-common properties for different chips?
-
-If this seems reasonable I can try drafting parser functions in
-power/supply framework and extract the corresponding DT yaml bindings
-into generic power-supply.yaml doc.
-
-Please let me know if you think these properties should not be common
-- or that the power/supply framework should not contain helpers for
-parsing these properties. Then I'll just drop the RFC from series and
-submit the ROHM specific properties and do DT parsing in this driver.
-
-Patch 1:
-	BD99954 charger DT binding docs
-Patch 2:
-	Linear ranges helpers
-Patch 3:
-	BD99954 driver
-
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
+I think these properties could probably be generic and not
+vendor specific, right? If so, then I could try adding parser
+function(s) for them in power/supply framework. How do you
+guys see this?
 
-Matti Vaittinen (3):
-  dt_bindings: ROHM BD99954 Charger
-  power: Add linear_range helper
-  power: supply: Support ROHM bd99954 charger
-
- .../bindings/power/supply/rohm,bd9995x.yaml   |  118 ++
- drivers/power/supply/Kconfig                  |   14 +
- drivers/power/supply/Makefile                 |    2 +
- drivers/power/supply/bd70528-charger.c        |   65 +-
- drivers/power/supply/bd99954-charger.c        | 1056 ++++++++++++++++
- drivers/power/supply/linear-ranges.h          |   36 +
- drivers/power/supply/linear_ranges.c          |   89 ++
- include/linux/power/bd99954-charger.h         | 1075 +++++++++++++++++
- 8 files changed, 2398 insertions(+), 57 deletions(-)
+ .../bindings/power/supply/rohm,bd9995x.yaml   | 118 ++++++++++++++++++
+ 1 file changed, 118 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml
- create mode 100644 drivers/power/supply/bd99954-charger.c
- create mode 100644 drivers/power/supply/linear-ranges.h
- create mode 100644 drivers/power/supply/linear_ranges.c
- create mode 100644 include/linux/power/bd99954-charger.h
 
+diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml b/Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml
+new file mode 100644
+index 000000000000..ba9fe1dc3f2f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml
+@@ -0,0 +1,118 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/rohm,bd9995x.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ROHM BD99954 Battery charger driver
++
++maintainers:
++  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Markus Laine <markus.laine@fi.rohmeurope.com>
++  - Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
++
++description: |
++  The ROHM BD99954 is a Battery Management LSI for 1-4 cell Lithium-Ion
++  secondary battery intended to be used in space-constraint equipment such
++  as Low profile Notebook PC, Tablets and other applications. BD99954
++  provides a Dual-source Battery Charger, two port BC1.2 detection and a
++  Battery Monitor.
++
++properties:
++  compatible:
++    const: rohm,bd9995x-charger
++
++  rohm,vbus-input-current-limit-microamp:
++    description:
++      system specific VBUS input current limit (in microamps).
++    minimum: 32000
++    maximum: 16352000
++    multipleOf: 32000
++
++  rohm,vcc-input-current-limit-microamp:
++    description:
++      system specific VCC/VACP input current limit (in microamps).
++    minimum: 32000
++    maximum: 16352000
++    multipleOf: 32000
++
++  rohm,trickle-charging-current-microamp:
++    description:
++      battery specific value for trickle-charging current.
++    minimum: 64000
++    maximum: 1024000
++    multipleOf: 64000
++
++  rohm,pre-charging-current-microamp:
++    description:
++      battery specific value for pre-charging current.
++    minimum: 64000
++    maximum: 1024000
++    multipleOf: 64000
++
++  rohm,fast-charging-regulation-microvolt:
++    description:
++      battery/system specific upper limit for battry/system voltage.
++    minimum: 2560000
++    maximum: 19200000
++    multipleOf: 16000
++
++  rohm,vsys-regulation-microvolt:
++    description:
++      system specific lower limit for system voltage.
++    minimum: 2560000
++    maximum: 19200000
++    multipleOf: 64000
++
++  rohm,pre-charge-voltage-threshold-microvolt:
++    description:
++      voltage limit for changing from trickle to pre-charging.
++    minimum: 2048000
++    maximum: 19200000
++    multipleOf: 64000
++
++  rohm,re-charge-battery-voltage-microvolt:
++    description:
++      voltage limit for automatically re-starting the battery charging.
++    minimum: 2560000
++    maximum: 19200000
++    multipleOf: 16000
++
++  rohm,battery-over-voltage-threshold-microvolt:
++    description:
++      voltage limit for detecting battery over voltage.
++    minimum: 2560000
++    maximum: 19200000
++    multipleOf: 16000
++
++required:
++  - compatible
++  - rohm,vbus-input-current-limit-microamp
++  - rohm,vcc-input-current-limit-microamp
++  - rohm,trickle-charging-current-microamp
++  - rohm,pre-charging-current-microamp
++  - rohm,fast-charging-regulation-microvolt
++  - rohm,vsys-regulation-microvolt
++  - rohm,pre-charge-voltage-threshold-microvolt
++  - rohm,re-charge-battery-voltage-microvolt
++  - rohm,battery-over-voltage-threshold-microvolt
++
++examples:
++  - |
++    i2c {
++        charger@9 {
++            compatible = "rohm,bd9995x-charger";
++            reg = <0x9>;
++            interrupt-parent = <&gpio1>;
++            interrupts = <29 8>;
++            rohm,vsys-regulation-microvolt = <8960000>;
++            rohm,vbus-input-current-limit-microamp = <1472000>;
++            rohm,vcc-input-current-limit-microamp = <1472000>;
++            rohm,trickle-charging-current-microamp = <256000>;
++            rohm,pre-charging-current-microamp = <256000>;
++            rohm,fast-charging-regulation-microvolt = <8400000>;
++            rohm,pre-charge-voltage-threshold-microvolt = <2048000>;
++            rohm,re-charge-battery-voltage-microvolt = <8112000>;
++            rohm,battery-over-voltage-threshold-microvolt = <8912000>;
++        };
++    };
 -- 
 2.21.0
 
