@@ -2,113 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA54615832E
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 20:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2554158392
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 20:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727363AbgBJTBe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Feb 2020 14:01:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37346 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727043AbgBJTBd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 10 Feb 2020 14:01:33 -0500
-Received: from localhost (unknown [104.132.1.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0F1862080C;
-        Mon, 10 Feb 2020 19:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581361293;
-        bh=hfd+qk1h5SK9bd1Ir48S/em+hSG8dzRp5pZAPDAAMIQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ojh684A1y1NmPWSzbUM54xdXc/WNHGWox35GRur1T+b0ouLumY3A6m2a+iltPQVRc
-         17gRdhIrC70KqY/Ei19dRx0+aQYcQOxdZxZtZQGPB3xh/cu8yjruisN0jayque3gNW
-         fyo4qu5bEQs+tucceMMTA4cST9nXBWFWnXaT0H0I=
-Date:   Mon, 10 Feb 2020 11:01:32 -0800
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Gilad Ben-Yossef <gilad@benyossef.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Bin Liu <b-liu@ti.com>, linux-crypto@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] debugfs: regset32: Add Runtime PM support
-Message-ID: <20200210190132.GB1058087@kroah.com>
-References: <20200124132957.15769-1-geert+renesas@glider.be>
- <20200124132957.15769-2-geert+renesas@glider.be>
+        id S1727575AbgBJTaL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Feb 2020 14:30:11 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:42505 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727363AbgBJTaL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Feb 2020 14:30:11 -0500
+Received: by mail-ed1-f68.google.com with SMTP id e10so1700091edv.9;
+        Mon, 10 Feb 2020 11:30:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zdlFZQe/OnqqWy/rZ1pDr5RvrV8lpGf4yVtCyVl/HnE=;
+        b=szNJKZZIdZqAhXUo7BmsnZNmPZlcO3U1Xo+WUeQIfrs+Suo3uqMqHBWTYzRX6w5RkA
+         tXEDtSC9AbCmi8I0CE5EP2uyFIHac92DHIFT8+Vl2MRxkPSsH6LEblRIL1rFV1G5xV88
+         WlCA0MrPIv2Wo1oDQ9e4BX8cV1d4Udwblb5IBkVg77b1T8JUpjqv6IyOsHOG5g+C8JIu
+         +XE6XY/O3Rb4k3nav0yoqHthOtjsN2mzhQq86YkaGuySBCzQrJQcaEFeYKlgQWtCVEPe
+         xs2nF9yiEwiOLT8jJaquQi03UiDcb8OvNHPr7MpAOOifAN6dQmM9vS5z4zc2+aMZQ6pq
+         gb3Q==
+X-Gm-Message-State: APjAAAXJw2bZgm19tsN77s0OmSyC7zwM5YPXxb0Oqwxd6aQpr8HbkWwk
+        ROFBOWOqCXd15f0CqiiRwnaIknYDpKM=
+X-Google-Smtp-Source: APXvYqzShuEGhyo0aJa4PgQ87LvbUidIAfGr/qyPwdm5rUY+mEGPJRNk9PRDX5vEy76WXm4YM9go/w==
+X-Received: by 2002:a50:84ab:: with SMTP id 40mr2641443edq.14.1581363009556;
+        Mon, 10 Feb 2020 11:30:09 -0800 (PST)
+Received: from kozik-lap ([194.230.155.125])
+        by smtp.googlemail.com with ESMTPSA id m5sm79440ede.10.2020.02.10.11.30.08
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 10 Feb 2020 11:30:08 -0800 (PST)
+Date:   Mon, 10 Feb 2020 20:30:06 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH] soc: samsung: chipid: Fix return value on non-Exynos
+ platforms
+Message-ID: <20200210193006.GC27658@kozik-lap>
+References: <CGME20200207070701eucas1p2d6422d731f031ee66737683b54085ac7@eucas1p2.samsung.com>
+ <20200207070552.26986-1-m.szyprowski@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200124132957.15769-2-geert+renesas@glider.be>
+In-Reply-To: <20200207070552.26986-1-m.szyprowski@samsung.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 24, 2020 at 02:29:56PM +0100, Geert Uytterhoeven wrote:
-> Hardware registers of devices under control of power management cannot
-> be accessed at all times.  If such a device is suspended, register
-> accesses may lead to undefined behavior, like reading bogus values, or
-> causing exceptions or system locks.
+On Fri, Feb 07, 2020 at 08:05:52AM +0100, Marek Szyprowski wrote:
+> Correct the probe return value to -ENODEV on non-Exynos platforms.
 > 
-> Extend struct debugfs_regset32 with an optional field to let device
-> drivers specify the device the registers in the set belong to.  This
-> allows debugfs_show_regset32() to make sure the device is resumed while
-> its registers are being read.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
->  fs/debugfs/file.c       | 8 ++++++++
->  include/linux/debugfs.h | 1 +
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
-> index dede25247b81f72a..5e52d68421c678f2 100644
-> --- a/fs/debugfs/file.c
-> +++ b/fs/debugfs/file.c
-> @@ -18,6 +18,7 @@
->  #include <linux/slab.h>
->  #include <linux/atomic.h>
->  #include <linux/device.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/poll.h>
->  #include <linux/security.h>
->  
-> @@ -1057,7 +1058,14 @@ static int debugfs_show_regset32(struct seq_file *s, void *data)
->  {
->  	struct debugfs_regset32 *regset = s->private;
->  
-> +	if (regset->dev)
-> +		pm_runtime_get_sync(regset->dev);
-> +
->  	debugfs_print_regs32(s, regset->regs, regset->nregs, regset->base, "");
-> +
-> +	if (regset->dev)
-> +		pm_runtime_put(regset->dev);
-> +
->  	return 0;
->  }
->  
-> diff --git a/include/linux/debugfs.h b/include/linux/debugfs.h
-> index bf9b6cafa4c26a68..5d0783ae09f365ac 100644
-> --- a/include/linux/debugfs.h
-> +++ b/include/linux/debugfs.h
-> @@ -35,6 +35,7 @@ struct debugfs_regset32 {
->  	const struct debugfs_reg32 *regs;
->  	int nregs;
->  	void __iomem *base;
-> +	struct device *dev;	/* Optional device for Runtime PM */
->  };
->  
->  extern struct dentry *arch_debugfs_dir;
+>  drivers/soc/samsung/exynos-chipid.c | 2 +-
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Thanks, applied (with Cc-stable and Fixes tags).
+
+Best regards,
+Krzysztof
+
