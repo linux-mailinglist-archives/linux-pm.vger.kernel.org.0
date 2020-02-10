@@ -2,131 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 855E1157B94
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 14:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF72B157D00
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 15:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731423AbgBJNbD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Feb 2020 08:31:03 -0500
-Received: from merlin.infradead.org ([205.233.59.134]:49268 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728236AbgBJNbA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Feb 2020 08:31:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zJERE8RQFEvavVoodECE0tC0EkLezz+9Xi+PVOEgn48=; b=tag8GRycoSig7G87Xiy3/Rl1cJ
-        J29GI3xoEKlqPONfUNUIpUxL5OHGGIC5AOxHpHLqU2iwWnBT4RGMH+YTI+sAkCxzjjPeV+C5qj0xi
-        vSmI9H2lva7YSIjtkCsUxz3Sg+JBEWQyBM+LjqqPuod3oMGXbqgWhZbKM+5DLilC8ho2WJLLI/nrb
-        k3dhocsQJic0vn3wWIzHr/gCLhR9G/TmpsTgRAjN7XSThaUx1ZNO9C5oeTi46s+jM7ZAkXyHVoK55
-        i5o8i/+yqBA6HXQzW/V0wkJ54WoAJ08wmrAhdE1BsJMS3D9ACsmrAZzem6gJRjYOdOoCdZUUt5Qwb
-        f9TqO+ig==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j199J-0006YY-0H; Mon, 10 Feb 2020 13:30:53 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3C7B7300E0C;
-        Mon, 10 Feb 2020 14:29:03 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5D8B120148931; Mon, 10 Feb 2020 14:30:51 +0100 (CET)
-Date:   Mon, 10 Feb 2020 14:30:51 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Douglas Raillard <douglas.raillard@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        qperret@google.com, Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [RFC PATCH v4 0/6] sched/cpufreq: Make schedutil energy aware
-Message-ID: <20200210133051.GI14897@hirez.programming.kicks-ass.net>
-References: <20200122173538.1142069-1-douglas.raillard@arm.com>
- <CAJZ5v0hL9AbpgivRGtCtqQo4XRYdt=SDjD=_FAVZmKAi=+VvzA@mail.gmail.com>
- <d0155018-52e6-e1c9-a03d-1b9703b7a28a@arm.com>
+        id S1728184AbgBJODf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Feb 2020 09:03:35 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:45856 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726846AbgBJODf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Feb 2020 09:03:35 -0500
+X-AuditID: c0a8fbf4-263ff70000001e6c-bf-5e4162b58186
+Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 6A.F9.07788.5B2614E5; Mon, 10 Feb 2020 15:03:33 +0100 (CET)
+Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
+ WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
+ 14.03.0439.000; Mon, 10 Feb 2020 15:03:21 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>
+CC:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Subject: Re: [RFC PATCH v2 09/10] power: supply: Initial support for ROHM
+ BD70528 PMIC charger block
+Thread-Topic: [RFC PATCH v2 09/10] power: supply: Initial support for ROHM
+ BD70528 PMIC charger block
+Thread-Index: AQHUtJ37F9J3F5izh0ixQskYfWqxuaXElbMAgAAxfs2CS0QlgIAGokgAgAAOIIA=
+Date:   Mon, 10 Feb 2020 14:03:20 +0000
+Message-ID: <17e9b06aa05b81e22a37c198d59f76d362e288ea.camel@fi.rohmeurope.com>
+References: <20190125110600.GA29332@localhost.localdomain>
+         <CACRpkdYTCgXo8FeitEfRujeWdshnsR3Kn57cKUZsA3CsZ5Cnrw@mail.gmail.com>
+         <20190128135354.GA4156@localhost.localdomain>
+         <CACRpkdZDOJJ6qSS8fkqQsgmchDWATfhTP=TZATwt6-Z_WQXpJQ@mail.gmail.com>
+         <bf72c35353dc2442794ab5cf19c7074abaccea9d.camel@fi.rohmeurope.com>
+         <CACRpkdaxJ-xM4Tak=C1Y_e9xy1KK21v93fhtUdh+TH=-Nx30zg@mail.gmail.com>
+In-Reply-To: <CACRpkdaxJ-xM4Tak=C1Y_e9xy1KK21v93fhtUdh+TH=-Nx30zg@mail.gmail.com>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <EE2215DE81139647B8E7CB42198C2331@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d0155018-52e6-e1c9-a03d-1b9703b7a28a@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBKsWRmVeSWpSXmKPExsVyYMXvTbpbkxzjDK7fN7J4c3w6k8WUP8uZ
+        LD73HmG0aN17hN3i9O4SB1aPTas62TzuXNvD5vF+31U2j8+b5AJYorhtkhJLyoIz0/P07RK4
+        M1rvv2MqOGdX8XJJXQNjg20XIyeHhICJxPFt3SxdjFwcQgJXGSW2NXYyQjgnGCX2T1nC2sXI
+        wcEmYCPRdZMdpEFEwFLi8Ik5YA3MAjsYJZbe+wSWEBZIk1i3thWqKF1i5717LBC2n8SWJz/Z
+        QGwWAVWJFcv6wGxeoPjRH7fYIJZ1Mkv0fVnNCpLgFAiU6Hn7A6yZUUBWorPhHROIzSwgLrHp
+        2XdWiLMFJJbsOc8MYYtKvHz8DyquJLH350MWkKOZBTQl1u/ShzAdJB7v9IGYoigxpfshO8QJ
+        ghInZz5hmcAoNgvJglkIzbMQmmchaZ6FpHkBI+sqRoncxMyc9MSSVEO9otRSvaL8jFwglZyf
+        u4kREodfdjD+P+R5iJGJg/EQoyQHk5Io75JAxzghvqT8lMqMxOKM+KLSnNTiQ4wSHMxKIryW
+        0kA53pTEyqrUonyYlDQHi5I4r/rDibFCAiC7slNTC1KLYLIyHBxKEryeiUCNgkWp6akVaZk5
+        JQhpJg5OkOFcUiLFqXkpqUWJpSUZ8aDUEV8MTB4gKR6gvVtA2nmLCxJzgaIQracYDTkmvJy7
+        iJlj59F5QPLI3KWLmIVY8vLzUqXEeSclADUIgDRklObBrXvFKM7BqCTMOwVkHA8wOcNNewW0
+        iAlo0XUTB5BFJYkIKakGRvFTXgEZtvYHrd/b18055nn21Z6pX9nechz0PpoxtUP6gugDqzM3
+        Hr5ly9bt/PGYZW31E/fA/82SrXmz39/6sUbva71/9GPRDUmLL7PYnP6ua/L03Y69LkI58xb8
+        VVf4cud2e4gq58EpPMaWIjOP3JkUtnEb4/KLh+QZL+d/q7mZdux0+jefb7eUWIozEg21mIuK
+        EwHdl7OTiwMAAA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 05:16:52PM +0000, Douglas Raillard wrote:
-> Hi Rafael,
-> 
-> On 1/23/20 3:43 PM, Rafael J. Wysocki wrote:
-> > On Wed, Jan 22, 2020 at 6:36 PM Douglas RAILLARD
-> > <douglas.raillard@arm.com> wrote:
-> >>
-> >> Make schedutil cpufreq governor energy-aware.
-> > 
-> > I have to say that your terminology is confusing to me, like what
-> > exactly does "energy-aware" mean in the first place?
-> 
-> Should be better rephrased as "Make schedutil cpufreq governor use the
-> energy model" I guess. Schedutil is indeed already energy aware since it
-> tries to use the lowest frequency possible for the job to be done (kind of).
-
-So ARM64 will soon get x86-like power management if I read these here
-patches right:
-
-  https://lkml.kernel.org/r/20191218182607.21607-2-ionela.voinescu@arm.com
-
-And I'm thinking a part of Rafael's concerns will also apply to those
-platforms.
-
-> Other than that, the only energy-related information schedutil uses is
-> the assumption that lower freq == better efficiency. Explicit use of the
-> EM allows to refine this assumption.
-
-I'm thinking that such platforms guarantee this on their own, if not,
-there just isn't anything we can do about it, so that assumption is
-fair.
-
-(I've always found it weird to have less efficient OPPs listed anyway)
-
-> >> 1) Selecting the highest possible frequency for a given cost. Some
-> >>    platforms can have lower frequencies that are less efficient than
-> >>    higher ones, in which case they should be skipped for most purposes.
-> >>    They can still be useful to give more freedom to thermal throttling
-> >>    mechanisms, but not under normal circumstances.
-> >>    note: the EM framework will warn about such OPPs "hertz/watts ratio
-> >>    non-monotonically decreasing"
-> > 
-> > While all of that is fair enough for platforms using the EM, do you
-> > realize that the EM is not available on the majority of architectures
-> > (including some fairly significant ones) and so adding overhead
-> > related to it for all of them is quite less than welcome?
-> 
-> When CONFIG_ENERGY_MODEL is not defined, em_pd_get_higher_freq() is
-> defined to a static inline no-op function, so that feature won't incur
-> overhead (patch 1+2+3).
-> 
-> Patch 4 and 5 do add some new logic that could be used on any platform.
-> Current code will use the boost as an energy margin, but it would be
-> straightforward to make a util-based version (like iowait boost) on
-> non-EM platforms.
-
-Right, so the condition 'util_avg > util_est' makes sense to trigger
-some sort of boost off of.
-
-What kind would make sense for these platforms? One possibility would be
-to instead of frobbing the energy margin, as you do here, to frob the C
-in get_next_freq().
-
-(I have vague memories of this being proposed earlier; it also avoids
-that double OPP iteration thing complained about elsewhere in this
-thread if I'm not mistaken).
-
-
-That is; I'm thinking it is important (esp. now that we got frequency
-invariance sorted for x86), to have this patch also work for !EM
-architectures (as those ARM64-AMU things would be).
-
-
+SGVsbG8gTGludXMsDQoNCkZpcnN0IG9mIGFsbCAtIHRoYW5rcyBmb3IgdGFraW5nIHRoZSB0aW1l
+IHRvIGhlbHAgbWUgb25jZSBhZ2Fpbi4NCg0KSSBqdXN0IHNvbWUgdGltZSBhZ28gZGlkIHN1Ym1p
+dCB0aGUgUkZDIGZvciBCRDk5OTU0IC0gYW5kIGltbWVkaWF0ZWx5DQpyZWdyZXR0ZWQgZG9pbmcg
+c28gYXMgb25seSBmZXcgbWludXRlcyBsYXRlciBJIHNwb3R0ZWQgdGhlIGFscmVhZHkNCmV4aXN0
+aW5nIGJhdHRlcnkgY29kZS9iaW5kaW5ncy4gSXQncyBxdWl0ZSBlbWJhcnJhc3NpbmcgdG8gc2Vu
+ZCBvdXQgYW4NCmVtYWlsIGZvciB3aWRlIGF1ZGllbmNlIGp1c3QgdG8gbm90aWNlIHRoYXQgSSd2
+ZSB3cml0dGVuIGxhcmdlIGFtb3VudA0Kb2Ygbm9uc2Vuc2UgOi8gKEkgc3VnZ2VzdGVkIGFkZGlu
+ZyBjb21tb24gYmluZGluZ3MgYW5kIHBhcnNlcnMgYW5kDQpkaWRuJ3Qgbm90aWNlIHdlIGFscmVh
+ZHkgaGFkIGJ1bmNoIG9mIHRoZW0pLg0KDQpPbiBNb24sIDIwMjAtMDItMTAgYXQgMTQ6MTIgKzAx
+MDAsIExpbnVzIFdhbGxlaWogd3JvdGU6DQo+IE9uIFRodSwgRmViIDYsIDIwMjAgYXQgODo1NCBB
+TSBWYWl0dGluZW4sIE1hdHRpDQo+IDxNYXR0aS5WYWl0dGluZW5AZmkucm9obWV1cm9wZS5jb20+
+IHdyb3RlOg0KPiANCj4gDQo+ID4gPiBUaGV5IGFsbCBzZWVtIHRvIGhhdmUgdHJpY2tsZSBhbmQg
+ZmFzdCBjaGFyZ2luZywgVVNCIHBoeQ0KPiA+ID4gaW50ZXJhY3Rpb24gYW5kIEFDIHBsdWcgaW50
+ZXJhY3Rpb24gb2Ygc29tZSBraW5kIGZvciBkZXRlY3RpbmcNCj4gPiA+IHRob3NlIGFuZCBpbiBz
+b21lIGNhc2VzIHRlbXBlcmF0dXJlIGRldGVjdGlvbiBkaXJlY3RseQ0KPiA+ID4gb3IgdXNpbmcg
+YW4gQURDLg0KPiA+IA0KPiA+IFllcy4gVGhhdCdzIHByZXR0eSBtdWNoIHdoYXQgdGhlc2UgUk9I
+TSBjaGlwcyBoYXZlLiBCdXQgU1cgbW9zdGx5DQo+ID4gbmVlZHMNCj4gPiB0byBzZXQgdGhlIGxp
+bWl0IHZhbHVlcyAtIGl0IGRvZXMgbm90IG5lZWQgdG8gcGFydGljaXBhdGUgaW4gc3RhdGUNCj4g
+PiBjaGFuZ2luZyBhbmQgbW9zdCBvZiB0aGVzZSB0aGluZ3MgYXJlIGFsc28gc29tZXRoaW5nIHVz
+ZXJzIGRvIG5vdA0KPiA+IGNhcmUNCj4gPiAoSSBndWVzcykuIEZ1ZWwgZ2F1Z2luZyBpcyBvdGhl
+ciB0b3BpYyBidXQgSSdtIG5vdCBwbGFubmluZyB0bw0KPiA+IGltcGxlbWVudCBpdCBmb3IgaW4t
+dHJlZSBkcml2ZXJzIGF0IGxlYXN0IGZvciBub3cgOi8NCj4gPiANCj4gPiBUaGUgdGhpbmcgdGhh
+dCBjb21lcyB0byAobXkpIG1pbmQgaXMganVzdCBhIGNvbW1vbiBEVCBwcm9wZXJ0aWVzDQo+ID4g
+Zm9yDQo+ID4gaW5wdXQgY3VycmVudC92b2x0YWdlIGxpbWl0cywgYmF0dGVyeSB2b2x0YWdlcyBm
+b3Igc3dpdGNoaW5nIHRvDQo+ID4gbmV4dA0KPiA+IGNoYXJnaW5nIHN0YXRlLCBjdXJyZW50IHZh
+bHVlcyBmb3IgZGlmZmVyZW50IGNoYXJnaW5nIHN0YXRlcyAtIGFuZA0KPiA+IHBhcnNpbmcgb2Yg
+dGhlc2UgcHJvcGVydGllcy4NCj4gPiANCj4gPiBJJ3ZlIHNlZW4gc29tZSBjb21tZW50cyBhYm91
+dCBEVCBub3QgYmVpbmcgYSBnb29kIHBsYWNlIGZvciBiYXR0ZXJ5DQo+ID4gc3BlY2lmaWMgcHJv
+cGVydGllcyBhcyBiYXR0ZXJpZXMgbWF5IGJlIHJlcGxhY2VkIHdpdGggYW5vdGhlcg0KPiA+IGhh
+dmluZw0KPiA+IGRpZmZlcmVudCB0eXBlIC0gYnV0IEkgZG9uJ3QgdGhpbmsgdGhpcyBpcyB2YWxp
+ZCBwcm9ibGVtIGZvciBtYW55DQo+ID4gb2YNCj4gPiB0aGUgZGV2aWNlcyB0b2RheS4gT2YgY291
+cnNlIHNvbWUgZGV2aWNlcyBtYXkgaGF2ZSBiYXR0ZXJpZXMgdGhhdA0KPiA+IGNhbg0KPiA+IGJl
+IGNoYW5nZWQgLSBidXQgbWFueSBkb24ndCAtIGFuZCBmb3IgdGhvc2UgaXQgaXMgcGVyZmVjdGx5
+IE9rIHRvDQo+ID4gaGF2ZQ0KPiA+IGJhdHRlcnkgZGF0YSBkZWZpbmVkIGluIERULCByaWdodD8N
+Cj4gDQo+IElmIHNvbWV0aGluZyBpcyBhIHByb3BlcnR5IG9mIHRoZSBjaGFyZ2luZyBjaXJjdWl0
+LCB0aGVuIGl0IGNhbiBiZQ0KPiBkZXJpdmVkDQo+IGZyb20gdGhlIGNvbXBhdGlibGUgdmFsdWUs
+IHNvIGFueXRoaW5nIHRoYXQgaXMganVzdCBwZWN1bGlhciBmb3IgdGhpcw0KPiBjaGlwIHZlcnNp
+b24gZG9lc24ndCBnbyBpbnRvIGRldmljZSB0cmVlLCBqdXN0IHVzZSBhIGN1c3RvbSBzdHJ1Y3QN
+Cj4gYW5kDQo+IHRoZSBtYXRjaCBkYXRhIGZvciB0aGF0Lg0KDQpBZ3JlZS4gQXNzdW1pbmcgdGhl
+IGxpbWl0YXRpb24gY29tZXMgZnJvbSBjaGFyZ2luZyBjaXJjdWl0IGl0c2VsZi4gQnV0DQpJIHRo
+b3VnaHQgdGhhdCBmb3IgZXhhbXBsZSBzb21lIGlucHV0IGN1cnJlbnQgbGltaXRzIG1pZ2h0IGNv
+bWUgZnJvbQ0KdGhlIGV4dGVybmFsIGNpcmN1aXRyeSAobmVpdGhlciBmcm9tIGNoYXJnZXIsIG5v
+ciBmcm9tIGJhdHRlcnkpLg0KDQo+IFRoZW4gd2UgaGF2ZSB0aGUgYmF0dGVyeS4gSSBzdXBwb3Nl
+IHRoYXQgY291bGQgYmUgZGVmaW5lZCBhcyBhIERUDQo+IG5vZGUgZm9yIHRoZSBiYXR0ZXJ5IGl0
+c2VsZiwgYW5kIG5vdCBhcyBwYXJ0IG9mIHRoZSBjaGFyZ2luZyBJQywgYW5kDQo+IHdlDQo+IHNo
+b3VsZCB0aGluayBhYm91dCBob3cgdG8gY3JlYXRlIGEgYmF0dGVyeSBEVCBiaW5kaW5nLg0KDQpP
+aCwgeWVzLiBUaGlzIGlzIG15IG5ld2VzdCBtaXN0YWtlLiBXZSBhbHJlYWR5IHNlZW0gdG8gaGF2
+ZSB0aGUNCiJzaW1wbGUtYmF0dGVyeSIgYmluZGluZ3MgYW5kIGEgaGVscGVyIHRvIHJldHJpZXZl
+IGdpdmVuIGNvbmZpZ3MuIEFmdGVyDQpJIHVuZGVyc3Rvb2QgdGhhdCBJIG5vdGljZWQgdGhhdCB0
+aGVyZSBpcyBvbmx5IGNvdXBsZSBvZiBiaW5kaW5ncyBJDQptaWdodCBhZGQgdGhlcmUuDQoNCj4g
+IFdoYXQNCj4gY2hhcmFjdGVyaXN0aWNzIGFyZSBjaGFyZ2VycyByZWFsbHkgaW50ZXJlc3RlZCBp
+bj8gVGhpcyBjb3VsZCBiZSBzb21lDQo+IHdvcmsuDQo+IA0KPiBJZiBkaWZmZXJlbnQgZGV2aWNl
+cyBoYXZlIGRpZmZlcmVudCBiYXR0ZXJpZXMgdGhlbiB0aGUgYm9vdCBsb2FkZXINCj4gY291bGQg
+aWRlYWxseSBwYXRjaCB0aGUgRFQgd2l0aCB0aGUgcmlnaHQgYmF0dGVyeS4gVGhpcyB3YXMgdGhl
+DQo+IHNvbHV0aW9uDQo+IGFkdm9jYXRlZCBmb3IgZGV2aWNlcyB3aXRoIGRpZmZlcmVudCBkaXNw
+bGF5IHBhbmVscywgdG8gYSBxdWVzdGlvbg0KPiBmcm9tIEhhbnMgZGUgR29lZGUgYXQgb25lIHBv
+aW50IElJUkMuDQoNCkhtbS4gVGhpcyBzb3VuZHMgc2ltcGxlciB0aGFuIGFkZGluZyBidW5jaCBv
+ZiBjaGFyZ2VyIGRyaXZlcnMgaW4gYm9vdA0KbG9hZGVyLiBPVE9ILCBpZiBib290IGxvYWRlciBj
+YW4gZGV0ZWN0IHRoZSB0eXBlIG9mIHRoZSBiYXR0ZXJ5LCB0aGVuIEkNCnNlZSB3aHkgbGludXgg
+Y291bGRuJ3Q/IEFuZCBpZiB0eXBlIG9mIGJhdHRlcnkgY2FuIGJlIGhhcmQtY29kZWQgaW4NCmJv
+b3QsIHRoZW4gSSBkb24ndCBzZWUgd2h5IGl0IGNvdWxkbid0IGJlIGhhcmQtY29kZWQgaW4gRFQu
+IEJ1dCB0aGlzDQphbGwgZ29lcyBmYXIgYmV5b25kIG15IGFyZWEgb2YgZXhwZXJ0aWNlIDspDQoN
+Cj4gPiBCdXQgLi4uIGRvIHdlIG5lZWQgdG8gcHJvdmlkZSBhIHdheSBmb3IgdXNlci1zcGFjZSB0
+byBjb25maWd1cmUNCj4gPiB0aGVzZQ0KPiA+IHNldHRpbmdzIGluc3RlYWQgb2YgdGhlIERUPyBP
+ciBhbnkgb3RoZXIgcG9zc2libGUgc291cmNlcyBmb3IgdGhpcw0KPiA+IGluZm9ybWF0aW9uPw0K
+PiANCj4gV2hhdCB3ZSB1c3VhbGx5IGhhdmUgc2FpZCBpcyB0aGF0ICJwb2xpY3kgc2hvdWxkIGJl
+IGluIHVzZXJzcGFjZSINCj4gYW5kICJrZXJuZWwgbWFuYWdlcyBoYXJkd2FyZSIuIFRoaXMgY3Jl
+YXRlcyBhIG5vdC1zby1zbWFsbA0KPiBncmV5IGFyZWEgaW4gYmV0d2VlbiBhbmQgaXQgaXMgdW5m
+b3J0dW5hdGVseSB1cCB0byBpbnRlcnByZXRhdGlvbi4NCj4gDQo+IFRvZGF5IHRoZXJlIGlzIGFs
+c28gYSBUSElSRCBhbHRlcm5hdGl2ZSwgYW5kIHRoYXQgaXMgdG8gbGV0DQo+IHVzZXJzcGFjZSBp
+bnNlcnQgYSBwb2xpY3kgdXNpbmcgYSBCUEYgcHJvZ3JhbS4gVGhpcyBpcyB0aGUNCj4gYXBwcm9h
+Y2ggdGFrZW4gYnkgdGhlIG5ldHdvcmsgYW5kIHRyYWNpbmcgc3RhY2tzIGFuZCB3ZSBsb29rIGF0
+DQo+IG1vcmUgYXBwbGljYXRpb25zLiBJZiB0aGUga2VybmVsIG5lZWRzIHRvIGJlIGFibGUgdG8g
+aGFuZGxlIGNoYXJnaW5nDQo+IGFuZCBlbWVyZ2VuY2llcyBldmVuIGlmIHVzZXJzcGFjZSBpcyBu
+b3QgdXAgb3IgYXZhaWxhYmxlLCB0aGlzIG9yDQo+IG90aGVyDQo+IHVzZXJzcGFjZSBwb2xpY2ll
+cyBhcmUgbm90IHZpYWJsZS4NCg0KSnVzdCBhcyBhIHRoZW9yZXRpY2FsIGRpc2N1c3Npb24gdGhp
+cyBpcyBpbnRlcmVzdGluZyB0b3BpYy4gSSB0aGluayB0aGUNCmZ1ZWwtZ2F1Z2UgbWlnaHQgYmUg
+YXJlYSB3aGVyZSB3ZSBjb3VsZCB3YW50IHRvIGF2b2lkIHdha2luZyB1cCB0aGUNCnVzZXItc3Bh
+Y2Ugd2hlbiBzdGF0ZXMgY2hhbmdlLiBCdXQgZm9yIG15IGN1cnJlbnQgY3J1c2FkZSB0byBwb3dl
+ci0NCnN1cHBseS13b3JsZCB3ZSBhcmUgbW9zdGx5IGxpbWl0ZWQgdG8gb25lLXRpbWUgY29uZmln
+dXJhdGlvbnMgbGlrZQ0KYmF0dGVyeSBwcm9wZXJ0aWVzIGFuZCBzeXN0ZW0gY29uc3RyYWludHMg
+Zm9yIGlucHV0IGN1cnJlbnRzIGV0Yy4NCg0KPiBJIGhhdmUgYSBzdHJvbmcgZmVlbGluZyB0aGF0
+IGl0IHNob3VsZCBiZSBhIGJhdHRlcnkgbm9kZSBpbiB0aGUNCj4gZGV2aWNlDQo+IHRyZWUuDQoN
+Clllcy4gTm93IHRoYXQgSSBsZWFybmVkIGFib3V0IGl0IC0gbW9zdGx5IHNvLiBFeGNlcHQgdGhl
+IGlucHV0IGN1cnJlbnQNCmxpbWl0cyBhbmQgVlNZUyByZWd1bGF0aW9uLg0KDQo+ID4gSG1tLiBJ
+ZiBjaGFuZ2luZyBtZWFucyBzdGF0ZSBjaGFuZ2VzIC0gdGhlbiB0aGVzZSBST0hNIGNoaXBzDQo+
+ID4gcHJvYmFibHkNCj4gPiBwbGF5IG5vIHJvbGUgaGVyZSBhcyB0aGVyZSB0aGUgSFcgZG9lcyBt
+b3N0IG9mIHRoZSBzdGF0ZSBjaGFuZ2VzDQo+ID4gYXV0b25vbW91c2x5LiAoQUZBSVIsIGl0J3Mg
+YmVlbiBhIHdoaWxlIHNpbmNlIEkgbG9va2VkIGF0IHRoZSBvdGhlcg0KPiA+IGJ1dA0KPiA+IEJE
+OTk5NTQpLg0KPiANCj4gR29vZCBpdCdzIGEgc2ltcGxlciBoYXJkd2FyZS4gV2UganVzdCBuZWVk
+IHRvIHRoaW5rIGFib3V0IG1ha2luZw0KPiB0aGUgY29kZSByZXVzYWJsZS4NCj4gDQo+ID4gU28g
+Li4uIElmIEkgZXh0cmFjdCB0aGUgbGluZWFyX3JhbmdlIGNvZGUgZnJvbSBCRDcwNTI4IGRyaXZl
+ciAoaXQNCj4gPiBzaG91bGQgYmUgdXNhYmxlIGZvciB0aGUgQkQ5OTk1NCBhcyBzdWNoKSAtIHNo
+b3VsZCBJIHBsYWNlIGl0IHRvDQo+ID4gc29tZQ0KPiA+IGNvbW1vbiBoZWFkZXIvbGliPyAoVGhp
+cyBpcyBwbGFpbiBpbnRlZ2VyIG1hdGggc28gSSBkb24ndCBsaWtlIHRoZQ0KPiA+IGlkZWEgb2Yg
+cGxhY2luZyBpdCBpbiBmaXhwLWFyaXRoLmgpLg0KPiANCj4gU3RhcnQgd2l0aCBtb3ZpbmcgaXQg
+dG8gc29tZSBzZXBhcmF0ZSBmaWxlLCBsaWtlDQo+IHBvd2VyX3N1cHBseV9pbnRlcnBvbGF0aW9u
+LmMgdGhhdCB3ZSBqdXN0IGFsd2F5cyBjb21waWxlIGluDQo+IGFuZCB3ZSBjYW4gdGFrZSBpdCBm
+cm9tIHRoZXJlLg0KDQpPaCwgdGhhdCdzIHByZXR0eSBtdWNoIHdoYXQgSSBkaWQgOikgQW5kIHRo
+YXQgaXMgcHJldHR5IG11Y2ggdGhlIG9ubHkNCnBhdGNoIHRoYXQgbWFrZXMgc2Vuc2UgaW4gdGhp
+cyBmaXJzdCBSRkMgdmVyc2lvbiA6fA0KDQo+IA0KPiBKdXN0IHNvbWUgdGhvdWdodHMuLi4NCj4g
+DQpUaGFua3MgTGludXMuIEkgX3JlYWxseV8gYXBwcmVjaWF0ZSB5b3VyIHRpbWUgYW5kIGhlbHAh
+IDopDQoNCkJlc3QgUmVnYXJkcywNCglNYXR0aSBWYWl0dGluZW4NCg0K
