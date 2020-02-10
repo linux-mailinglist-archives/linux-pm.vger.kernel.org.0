@@ -2,170 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF72B157D00
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 15:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99994157FEB
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 17:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728184AbgBJODf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Feb 2020 09:03:35 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:45856 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726846AbgBJODf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Feb 2020 09:03:35 -0500
-X-AuditID: c0a8fbf4-263ff70000001e6c-bf-5e4162b58186
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 6A.F9.07788.5B2614E5; Mon, 10 Feb 2020 15:03:33 +0100 (CET)
-Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0439.000; Mon, 10 Feb 2020 15:03:21 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>
-CC:     "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Subject: Re: [RFC PATCH v2 09/10] power: supply: Initial support for ROHM
- BD70528 PMIC charger block
-Thread-Topic: [RFC PATCH v2 09/10] power: supply: Initial support for ROHM
- BD70528 PMIC charger block
-Thread-Index: AQHUtJ37F9J3F5izh0ixQskYfWqxuaXElbMAgAAxfs2CS0QlgIAGokgAgAAOIIA=
-Date:   Mon, 10 Feb 2020 14:03:20 +0000
-Message-ID: <17e9b06aa05b81e22a37c198d59f76d362e288ea.camel@fi.rohmeurope.com>
-References: <20190125110600.GA29332@localhost.localdomain>
-         <CACRpkdYTCgXo8FeitEfRujeWdshnsR3Kn57cKUZsA3CsZ5Cnrw@mail.gmail.com>
-         <20190128135354.GA4156@localhost.localdomain>
-         <CACRpkdZDOJJ6qSS8fkqQsgmchDWATfhTP=TZATwt6-Z_WQXpJQ@mail.gmail.com>
-         <bf72c35353dc2442794ab5cf19c7074abaccea9d.camel@fi.rohmeurope.com>
-         <CACRpkdaxJ-xM4Tak=C1Y_e9xy1KK21v93fhtUdh+TH=-Nx30zg@mail.gmail.com>
-In-Reply-To: <CACRpkdaxJ-xM4Tak=C1Y_e9xy1KK21v93fhtUdh+TH=-Nx30zg@mail.gmail.com>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EE2215DE81139647B8E7CB42198C2331@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        id S1727452AbgBJQif (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Feb 2020 11:38:35 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:52790 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727029AbgBJQif (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Feb 2020 11:38:35 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id 4F23E293474
+Subject: Re: [PATCH v8 3/4] mfd: cros_ec: Check DT node for usbpd-notify add
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Guenter Roeck <groeck@chromium.org>,
+        Benson Leung <bleung@chromium.org>, lee.jones@linaro.org,
+        sre@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20200124231834.63628-1-pmalani@chromium.org>
+ <20200124231834.63628-3-pmalani@chromium.org>
+ <495e2427-7233-cb4d-0128-f6926969fb8a@collabora.com>
+ <e755af86-3c45-8dcb-07af-68fbe903d87a@collabora.com>
+ <CACeCKadtoAA0z88dYy3O-tQE=KLpR5Rx=ZXkkEKyhnAsKyqzjw@mail.gmail.com>
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Message-ID: <60312890-cd5e-840e-8c71-2d7876542650@collabora.com>
+Date:   Mon, 10 Feb 2020 17:38:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBKsWRmVeSWpSXmKPExsVyYMXvTbpbkxzjDK7fN7J4c3w6k8WUP8uZ
-        LD73HmG0aN17hN3i9O4SB1aPTas62TzuXNvD5vF+31U2j8+b5AJYorhtkhJLyoIz0/P07RK4
-        M1rvv2MqOGdX8XJJXQNjg20XIyeHhICJxPFt3SxdjFwcQgJXGSW2NXYyQjgnGCX2T1nC2sXI
-        wcEmYCPRdZMdpEFEwFLi8Ik5YA3MAjsYJZbe+wSWEBZIk1i3thWqKF1i5717LBC2n8SWJz/Z
-        QGwWAVWJFcv6wGxeoPjRH7fYIJZ1Mkv0fVnNCpLgFAiU6Hn7A6yZUUBWorPhHROIzSwgLrHp
-        2XdWiLMFJJbsOc8MYYtKvHz8DyquJLH350MWkKOZBTQl1u/ShzAdJB7v9IGYoigxpfshO8QJ
-        ghInZz5hmcAoNgvJglkIzbMQmmchaZ6FpHkBI+sqRoncxMyc9MSSVEO9otRSvaL8jFwglZyf
-        u4kREodfdjD+P+R5iJGJg/EQoyQHk5Io75JAxzghvqT8lMqMxOKM+KLSnNTiQ4wSHMxKIryW
-        0kA53pTEyqrUonyYlDQHi5I4r/rDibFCAiC7slNTC1KLYLIyHBxKEryeiUCNgkWp6akVaZk5
-        JQhpJg5OkOFcUiLFqXkpqUWJpSUZ8aDUEV8MTB4gKR6gvVtA2nmLCxJzgaIQracYDTkmvJy7
-        iJlj59F5QPLI3KWLmIVY8vLzUqXEeSclADUIgDRklObBrXvFKM7BqCTMOwVkHA8wOcNNewW0
-        iAlo0XUTB5BFJYkIKakGRvFTXgEZtvYHrd/b18055nn21Z6pX9nechz0PpoxtUP6gugDqzM3
-        Hr5ly9bt/PGYZW31E/fA/82SrXmz39/6sUbva71/9GPRDUmLL7PYnP6ua/L03Y69LkI58xb8
-        VVf4cud2e4gq58EpPMaWIjOP3JkUtnEb4/KLh+QZL+d/q7mZdux0+jefb7eUWIozEg21mIuK
-        EwHdl7OTiwMAAA==
+In-Reply-To: <CACeCKadtoAA0z88dYy3O-tQE=KLpR5Rx=ZXkkEKyhnAsKyqzjw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGVsbG8gTGludXMsDQoNCkZpcnN0IG9mIGFsbCAtIHRoYW5rcyBmb3IgdGFraW5nIHRoZSB0aW1l
-IHRvIGhlbHAgbWUgb25jZSBhZ2Fpbi4NCg0KSSBqdXN0IHNvbWUgdGltZSBhZ28gZGlkIHN1Ym1p
-dCB0aGUgUkZDIGZvciBCRDk5OTU0IC0gYW5kIGltbWVkaWF0ZWx5DQpyZWdyZXR0ZWQgZG9pbmcg
-c28gYXMgb25seSBmZXcgbWludXRlcyBsYXRlciBJIHNwb3R0ZWQgdGhlIGFscmVhZHkNCmV4aXN0
-aW5nIGJhdHRlcnkgY29kZS9iaW5kaW5ncy4gSXQncyBxdWl0ZSBlbWJhcnJhc3NpbmcgdG8gc2Vu
-ZCBvdXQgYW4NCmVtYWlsIGZvciB3aWRlIGF1ZGllbmNlIGp1c3QgdG8gbm90aWNlIHRoYXQgSSd2
-ZSB3cml0dGVuIGxhcmdlIGFtb3VudA0Kb2Ygbm9uc2Vuc2UgOi8gKEkgc3VnZ2VzdGVkIGFkZGlu
-ZyBjb21tb24gYmluZGluZ3MgYW5kIHBhcnNlcnMgYW5kDQpkaWRuJ3Qgbm90aWNlIHdlIGFscmVh
-ZHkgaGFkIGJ1bmNoIG9mIHRoZW0pLg0KDQpPbiBNb24sIDIwMjAtMDItMTAgYXQgMTQ6MTIgKzAx
-MDAsIExpbnVzIFdhbGxlaWogd3JvdGU6DQo+IE9uIFRodSwgRmViIDYsIDIwMjAgYXQgODo1NCBB
-TSBWYWl0dGluZW4sIE1hdHRpDQo+IDxNYXR0aS5WYWl0dGluZW5AZmkucm9obWV1cm9wZS5jb20+
-IHdyb3RlOg0KPiANCj4gDQo+ID4gPiBUaGV5IGFsbCBzZWVtIHRvIGhhdmUgdHJpY2tsZSBhbmQg
-ZmFzdCBjaGFyZ2luZywgVVNCIHBoeQ0KPiA+ID4gaW50ZXJhY3Rpb24gYW5kIEFDIHBsdWcgaW50
-ZXJhY3Rpb24gb2Ygc29tZSBraW5kIGZvciBkZXRlY3RpbmcNCj4gPiA+IHRob3NlIGFuZCBpbiBz
-b21lIGNhc2VzIHRlbXBlcmF0dXJlIGRldGVjdGlvbiBkaXJlY3RseQ0KPiA+ID4gb3IgdXNpbmcg
-YW4gQURDLg0KPiA+IA0KPiA+IFllcy4gVGhhdCdzIHByZXR0eSBtdWNoIHdoYXQgdGhlc2UgUk9I
-TSBjaGlwcyBoYXZlLiBCdXQgU1cgbW9zdGx5DQo+ID4gbmVlZHMNCj4gPiB0byBzZXQgdGhlIGxp
-bWl0IHZhbHVlcyAtIGl0IGRvZXMgbm90IG5lZWQgdG8gcGFydGljaXBhdGUgaW4gc3RhdGUNCj4g
-PiBjaGFuZ2luZyBhbmQgbW9zdCBvZiB0aGVzZSB0aGluZ3MgYXJlIGFsc28gc29tZXRoaW5nIHVz
-ZXJzIGRvIG5vdA0KPiA+IGNhcmUNCj4gPiAoSSBndWVzcykuIEZ1ZWwgZ2F1Z2luZyBpcyBvdGhl
-ciB0b3BpYyBidXQgSSdtIG5vdCBwbGFubmluZyB0bw0KPiA+IGltcGxlbWVudCBpdCBmb3IgaW4t
-dHJlZSBkcml2ZXJzIGF0IGxlYXN0IGZvciBub3cgOi8NCj4gPiANCj4gPiBUaGUgdGhpbmcgdGhh
-dCBjb21lcyB0byAobXkpIG1pbmQgaXMganVzdCBhIGNvbW1vbiBEVCBwcm9wZXJ0aWVzDQo+ID4g
-Zm9yDQo+ID4gaW5wdXQgY3VycmVudC92b2x0YWdlIGxpbWl0cywgYmF0dGVyeSB2b2x0YWdlcyBm
-b3Igc3dpdGNoaW5nIHRvDQo+ID4gbmV4dA0KPiA+IGNoYXJnaW5nIHN0YXRlLCBjdXJyZW50IHZh
-bHVlcyBmb3IgZGlmZmVyZW50IGNoYXJnaW5nIHN0YXRlcyAtIGFuZA0KPiA+IHBhcnNpbmcgb2Yg
-dGhlc2UgcHJvcGVydGllcy4NCj4gPiANCj4gPiBJJ3ZlIHNlZW4gc29tZSBjb21tZW50cyBhYm91
-dCBEVCBub3QgYmVpbmcgYSBnb29kIHBsYWNlIGZvciBiYXR0ZXJ5DQo+ID4gc3BlY2lmaWMgcHJv
-cGVydGllcyBhcyBiYXR0ZXJpZXMgbWF5IGJlIHJlcGxhY2VkIHdpdGggYW5vdGhlcg0KPiA+IGhh
-dmluZw0KPiA+IGRpZmZlcmVudCB0eXBlIC0gYnV0IEkgZG9uJ3QgdGhpbmsgdGhpcyBpcyB2YWxp
-ZCBwcm9ibGVtIGZvciBtYW55DQo+ID4gb2YNCj4gPiB0aGUgZGV2aWNlcyB0b2RheS4gT2YgY291
-cnNlIHNvbWUgZGV2aWNlcyBtYXkgaGF2ZSBiYXR0ZXJpZXMgdGhhdA0KPiA+IGNhbg0KPiA+IGJl
-IGNoYW5nZWQgLSBidXQgbWFueSBkb24ndCAtIGFuZCBmb3IgdGhvc2UgaXQgaXMgcGVyZmVjdGx5
-IE9rIHRvDQo+ID4gaGF2ZQ0KPiA+IGJhdHRlcnkgZGF0YSBkZWZpbmVkIGluIERULCByaWdodD8N
-Cj4gDQo+IElmIHNvbWV0aGluZyBpcyBhIHByb3BlcnR5IG9mIHRoZSBjaGFyZ2luZyBjaXJjdWl0
-LCB0aGVuIGl0IGNhbiBiZQ0KPiBkZXJpdmVkDQo+IGZyb20gdGhlIGNvbXBhdGlibGUgdmFsdWUs
-IHNvIGFueXRoaW5nIHRoYXQgaXMganVzdCBwZWN1bGlhciBmb3IgdGhpcw0KPiBjaGlwIHZlcnNp
-b24gZG9lc24ndCBnbyBpbnRvIGRldmljZSB0cmVlLCBqdXN0IHVzZSBhIGN1c3RvbSBzdHJ1Y3QN
-Cj4gYW5kDQo+IHRoZSBtYXRjaCBkYXRhIGZvciB0aGF0Lg0KDQpBZ3JlZS4gQXNzdW1pbmcgdGhl
-IGxpbWl0YXRpb24gY29tZXMgZnJvbSBjaGFyZ2luZyBjaXJjdWl0IGl0c2VsZi4gQnV0DQpJIHRo
-b3VnaHQgdGhhdCBmb3IgZXhhbXBsZSBzb21lIGlucHV0IGN1cnJlbnQgbGltaXRzIG1pZ2h0IGNv
-bWUgZnJvbQ0KdGhlIGV4dGVybmFsIGNpcmN1aXRyeSAobmVpdGhlciBmcm9tIGNoYXJnZXIsIG5v
-ciBmcm9tIGJhdHRlcnkpLg0KDQo+IFRoZW4gd2UgaGF2ZSB0aGUgYmF0dGVyeS4gSSBzdXBwb3Nl
-IHRoYXQgY291bGQgYmUgZGVmaW5lZCBhcyBhIERUDQo+IG5vZGUgZm9yIHRoZSBiYXR0ZXJ5IGl0
-c2VsZiwgYW5kIG5vdCBhcyBwYXJ0IG9mIHRoZSBjaGFyZ2luZyBJQywgYW5kDQo+IHdlDQo+IHNo
-b3VsZCB0aGluayBhYm91dCBob3cgdG8gY3JlYXRlIGEgYmF0dGVyeSBEVCBiaW5kaW5nLg0KDQpP
-aCwgeWVzLiBUaGlzIGlzIG15IG5ld2VzdCBtaXN0YWtlLiBXZSBhbHJlYWR5IHNlZW0gdG8gaGF2
-ZSB0aGUNCiJzaW1wbGUtYmF0dGVyeSIgYmluZGluZ3MgYW5kIGEgaGVscGVyIHRvIHJldHJpZXZl
-IGdpdmVuIGNvbmZpZ3MuIEFmdGVyDQpJIHVuZGVyc3Rvb2QgdGhhdCBJIG5vdGljZWQgdGhhdCB0
-aGVyZSBpcyBvbmx5IGNvdXBsZSBvZiBiaW5kaW5ncyBJDQptaWdodCBhZGQgdGhlcmUuDQoNCj4g
-IFdoYXQNCj4gY2hhcmFjdGVyaXN0aWNzIGFyZSBjaGFyZ2VycyByZWFsbHkgaW50ZXJlc3RlZCBp
-bj8gVGhpcyBjb3VsZCBiZSBzb21lDQo+IHdvcmsuDQo+IA0KPiBJZiBkaWZmZXJlbnQgZGV2aWNl
-cyBoYXZlIGRpZmZlcmVudCBiYXR0ZXJpZXMgdGhlbiB0aGUgYm9vdCBsb2FkZXINCj4gY291bGQg
-aWRlYWxseSBwYXRjaCB0aGUgRFQgd2l0aCB0aGUgcmlnaHQgYmF0dGVyeS4gVGhpcyB3YXMgdGhl
-DQo+IHNvbHV0aW9uDQo+IGFkdm9jYXRlZCBmb3IgZGV2aWNlcyB3aXRoIGRpZmZlcmVudCBkaXNw
-bGF5IHBhbmVscywgdG8gYSBxdWVzdGlvbg0KPiBmcm9tIEhhbnMgZGUgR29lZGUgYXQgb25lIHBv
-aW50IElJUkMuDQoNCkhtbS4gVGhpcyBzb3VuZHMgc2ltcGxlciB0aGFuIGFkZGluZyBidW5jaCBv
-ZiBjaGFyZ2VyIGRyaXZlcnMgaW4gYm9vdA0KbG9hZGVyLiBPVE9ILCBpZiBib290IGxvYWRlciBj
-YW4gZGV0ZWN0IHRoZSB0eXBlIG9mIHRoZSBiYXR0ZXJ5LCB0aGVuIEkNCnNlZSB3aHkgbGludXgg
-Y291bGRuJ3Q/IEFuZCBpZiB0eXBlIG9mIGJhdHRlcnkgY2FuIGJlIGhhcmQtY29kZWQgaW4NCmJv
-b3QsIHRoZW4gSSBkb24ndCBzZWUgd2h5IGl0IGNvdWxkbid0IGJlIGhhcmQtY29kZWQgaW4gRFQu
-IEJ1dCB0aGlzDQphbGwgZ29lcyBmYXIgYmV5b25kIG15IGFyZWEgb2YgZXhwZXJ0aWNlIDspDQoN
-Cj4gPiBCdXQgLi4uIGRvIHdlIG5lZWQgdG8gcHJvdmlkZSBhIHdheSBmb3IgdXNlci1zcGFjZSB0
-byBjb25maWd1cmUNCj4gPiB0aGVzZQ0KPiA+IHNldHRpbmdzIGluc3RlYWQgb2YgdGhlIERUPyBP
-ciBhbnkgb3RoZXIgcG9zc2libGUgc291cmNlcyBmb3IgdGhpcw0KPiA+IGluZm9ybWF0aW9uPw0K
-PiANCj4gV2hhdCB3ZSB1c3VhbGx5IGhhdmUgc2FpZCBpcyB0aGF0ICJwb2xpY3kgc2hvdWxkIGJl
-IGluIHVzZXJzcGFjZSINCj4gYW5kICJrZXJuZWwgbWFuYWdlcyBoYXJkd2FyZSIuIFRoaXMgY3Jl
-YXRlcyBhIG5vdC1zby1zbWFsbA0KPiBncmV5IGFyZWEgaW4gYmV0d2VlbiBhbmQgaXQgaXMgdW5m
-b3J0dW5hdGVseSB1cCB0byBpbnRlcnByZXRhdGlvbi4NCj4gDQo+IFRvZGF5IHRoZXJlIGlzIGFs
-c28gYSBUSElSRCBhbHRlcm5hdGl2ZSwgYW5kIHRoYXQgaXMgdG8gbGV0DQo+IHVzZXJzcGFjZSBp
-bnNlcnQgYSBwb2xpY3kgdXNpbmcgYSBCUEYgcHJvZ3JhbS4gVGhpcyBpcyB0aGUNCj4gYXBwcm9h
-Y2ggdGFrZW4gYnkgdGhlIG5ldHdvcmsgYW5kIHRyYWNpbmcgc3RhY2tzIGFuZCB3ZSBsb29rIGF0
-DQo+IG1vcmUgYXBwbGljYXRpb25zLiBJZiB0aGUga2VybmVsIG5lZWRzIHRvIGJlIGFibGUgdG8g
-aGFuZGxlIGNoYXJnaW5nDQo+IGFuZCBlbWVyZ2VuY2llcyBldmVuIGlmIHVzZXJzcGFjZSBpcyBu
-b3QgdXAgb3IgYXZhaWxhYmxlLCB0aGlzIG9yDQo+IG90aGVyDQo+IHVzZXJzcGFjZSBwb2xpY2ll
-cyBhcmUgbm90IHZpYWJsZS4NCg0KSnVzdCBhcyBhIHRoZW9yZXRpY2FsIGRpc2N1c3Npb24gdGhp
-cyBpcyBpbnRlcmVzdGluZyB0b3BpYy4gSSB0aGluayB0aGUNCmZ1ZWwtZ2F1Z2UgbWlnaHQgYmUg
-YXJlYSB3aGVyZSB3ZSBjb3VsZCB3YW50IHRvIGF2b2lkIHdha2luZyB1cCB0aGUNCnVzZXItc3Bh
-Y2Ugd2hlbiBzdGF0ZXMgY2hhbmdlLiBCdXQgZm9yIG15IGN1cnJlbnQgY3J1c2FkZSB0byBwb3dl
-ci0NCnN1cHBseS13b3JsZCB3ZSBhcmUgbW9zdGx5IGxpbWl0ZWQgdG8gb25lLXRpbWUgY29uZmln
-dXJhdGlvbnMgbGlrZQ0KYmF0dGVyeSBwcm9wZXJ0aWVzIGFuZCBzeXN0ZW0gY29uc3RyYWludHMg
-Zm9yIGlucHV0IGN1cnJlbnRzIGV0Yy4NCg0KPiBJIGhhdmUgYSBzdHJvbmcgZmVlbGluZyB0aGF0
-IGl0IHNob3VsZCBiZSBhIGJhdHRlcnkgbm9kZSBpbiB0aGUNCj4gZGV2aWNlDQo+IHRyZWUuDQoN
-Clllcy4gTm93IHRoYXQgSSBsZWFybmVkIGFib3V0IGl0IC0gbW9zdGx5IHNvLiBFeGNlcHQgdGhl
-IGlucHV0IGN1cnJlbnQNCmxpbWl0cyBhbmQgVlNZUyByZWd1bGF0aW9uLg0KDQo+ID4gSG1tLiBJ
-ZiBjaGFuZ2luZyBtZWFucyBzdGF0ZSBjaGFuZ2VzIC0gdGhlbiB0aGVzZSBST0hNIGNoaXBzDQo+
-ID4gcHJvYmFibHkNCj4gPiBwbGF5IG5vIHJvbGUgaGVyZSBhcyB0aGVyZSB0aGUgSFcgZG9lcyBt
-b3N0IG9mIHRoZSBzdGF0ZSBjaGFuZ2VzDQo+ID4gYXV0b25vbW91c2x5LiAoQUZBSVIsIGl0J3Mg
-YmVlbiBhIHdoaWxlIHNpbmNlIEkgbG9va2VkIGF0IHRoZSBvdGhlcg0KPiA+IGJ1dA0KPiA+IEJE
-OTk5NTQpLg0KPiANCj4gR29vZCBpdCdzIGEgc2ltcGxlciBoYXJkd2FyZS4gV2UganVzdCBuZWVk
-IHRvIHRoaW5rIGFib3V0IG1ha2luZw0KPiB0aGUgY29kZSByZXVzYWJsZS4NCj4gDQo+ID4gU28g
-Li4uIElmIEkgZXh0cmFjdCB0aGUgbGluZWFyX3JhbmdlIGNvZGUgZnJvbSBCRDcwNTI4IGRyaXZl
-ciAoaXQNCj4gPiBzaG91bGQgYmUgdXNhYmxlIGZvciB0aGUgQkQ5OTk1NCBhcyBzdWNoKSAtIHNo
-b3VsZCBJIHBsYWNlIGl0IHRvDQo+ID4gc29tZQ0KPiA+IGNvbW1vbiBoZWFkZXIvbGliPyAoVGhp
-cyBpcyBwbGFpbiBpbnRlZ2VyIG1hdGggc28gSSBkb24ndCBsaWtlIHRoZQ0KPiA+IGlkZWEgb2Yg
-cGxhY2luZyBpdCBpbiBmaXhwLWFyaXRoLmgpLg0KPiANCj4gU3RhcnQgd2l0aCBtb3ZpbmcgaXQg
-dG8gc29tZSBzZXBhcmF0ZSBmaWxlLCBsaWtlDQo+IHBvd2VyX3N1cHBseV9pbnRlcnBvbGF0aW9u
-LmMgdGhhdCB3ZSBqdXN0IGFsd2F5cyBjb21waWxlIGluDQo+IGFuZCB3ZSBjYW4gdGFrZSBpdCBm
-cm9tIHRoZXJlLg0KDQpPaCwgdGhhdCdzIHByZXR0eSBtdWNoIHdoYXQgSSBkaWQgOikgQW5kIHRo
-YXQgaXMgcHJldHR5IG11Y2ggdGhlIG9ubHkNCnBhdGNoIHRoYXQgbWFrZXMgc2Vuc2UgaW4gdGhp
-cyBmaXJzdCBSRkMgdmVyc2lvbiA6fA0KDQo+IA0KPiBKdXN0IHNvbWUgdGhvdWdodHMuLi4NCj4g
-DQpUaGFua3MgTGludXMuIEkgX3JlYWxseV8gYXBwcmVjaWF0ZSB5b3VyIHRpbWUgYW5kIGhlbHAh
-IDopDQoNCkJlc3QgUmVnYXJkcywNCglNYXR0aSBWYWl0dGluZW4NCg0K
+Hi Prashant,
+
+On 10/2/20 17:32, Prashant Malani wrote:
+> Hi Enric,
+> 
+> On Mon, Feb 10, 2020, 02:11 Enric Balletbo i Serra <enric.balletbo@collabora.com
+> <mailto:enric.balletbo@collabora.com>> wrote:
+> 
+>     Hi Prashant,
+> 
+>     On 27/1/20 15:50, Enric Balletbo i Serra wrote:
+>     > Hi Prashant,
+>     >
+>     > On 25/1/20 0:18, Prashant Malani wrote:
+>     >> Add a check to ensure there is indeed an EC device tree entry before
+>     >> adding the cros-usbpd-notify device. This covers configs where both
+>     >> CONFIG_ACPI and CONFIG_OF are defined, but the EC device is defined
+>     >> using device tree and not in ACPI.
+>     >>
+>     >> Signed-off-by: Prashant Malani <pmalani@chromium.org
+>     <mailto:pmalani@chromium.org>>
+>     >
+>     > With this change, an playing with different CONFIG_ACPI + CONFIG_OF
+>     combinations
+>     > I don't see anymore the problem where the driver is registered twice on
+>     > CONFIG_ACPI side. So,
+>     >
+>     > Tested-by: Enric Balletbo i Serra <enric.balletbo@collabora.com
+>     <mailto:enric.balletbo@collabora.com>>
+>     >
+>     > Maybe it requires a fixes tag if Lee already picked the other patch?
+>     >
+>     > Fixes: 4602dce0361e ("mfd: cros_ec: Add cros-usbpd-notify subdevice")
+>     >
+> 
+>     Now that v7 from mfd side was merged and v8 from platform side was merged, could
+>     you resend this specific patch alone collecting all the fixes and tested tags. I
+>     guess will be more clear for mfd people.
+> 
+> 
+> Sounds good. Should I maintain the same versioning and series info i.e v9 3/4?
+> Or just v9?
+> 
+
+I'd do "[PATCH RESEND] mfd: cros_ec: Check DT node for usbpd-notify add" and
+then after the "---" explain that you are resending this alone because the other
+patches are already applied, and reference this patch series.
+
+> Thanks,
+> 
+>     Thanks,
+>      Enric
+> 
+>     >> ---
+>     >>
+>     >> Changes in v8:
+>     >> - Patch first introduced in v8 of the series.
+>     >>
+>     >>  drivers/mfd/cros_ec_dev.c | 2 +-
+>     >>  1 file changed, 1 insertion(+), 1 deletion(-)
+>     >>
+>     >> diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
+>     >> index d0c28a4c10ad0..411e80fc9a066 100644
+>     >> --- a/drivers/mfd/cros_ec_dev.c
+>     >> +++ b/drivers/mfd/cros_ec_dev.c
+>     >> @@ -212,7 +212,7 @@ static int ec_device_probe(struct platform_device *pdev)
+>     >>       * explicitly added on platforms that don't have the PD notifier ACPI
+>     >>       * device entry defined.
+>     >>       */
+>     >> -    if (IS_ENABLED(CONFIG_OF)) {
+>     >> +    if (IS_ENABLED(CONFIG_OF) && ec->ec_dev->dev->of_node) {
+>     >>              if (cros_ec_check_features(ec, EC_FEATURE_USB_PD)) {
+>     >>                      retval = mfd_add_hotplug_devices(ec->dev,
+>     >>                                      cros_usbpd_notify_cells,
+>     >>
+> 
