@@ -2,205 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDE7157389
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 12:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483B515743F
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2020 13:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727003AbgBJLhc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Feb 2020 06:37:32 -0500
-Received: from foss.arm.com ([217.140.110.172]:59062 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726961AbgBJLhc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 10 Feb 2020 06:37:32 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C6C11FB;
-        Mon, 10 Feb 2020 03:37:31 -0800 (PST)
-Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DC73B3F6CF;
-        Mon, 10 Feb 2020 03:37:29 -0800 (PST)
-From:   Douglas Raillard <douglas.raillard@arm.com>
-Subject: Re: [RFC PATCH v4 0/6] sched/cpufreq: Make schedutil energy aware
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        viresh kumar <viresh.kumar@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Quentin Perret <qperret@google.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-References: <20200122173538.1142069-1-douglas.raillard@arm.com>
- <CAKfTPtC9A6KVwYsQWgXXk-12GeJhkJfEm3Lk=LjcoOJvvoZ1uA@mail.gmail.com>
-Organization: ARM
-Message-ID: <0fa87613-d74f-ad2c-38a9-76e2efd172d1@arm.com>
-Date:   Mon, 10 Feb 2020 11:37:28 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        id S1727508AbgBJMLe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Feb 2020 07:11:34 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:38543 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727436AbgBJMLe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Feb 2020 07:11:34 -0500
+Received: by mail-lj1-f196.google.com with SMTP id w1so6862392ljh.5;
+        Mon, 10 Feb 2020 04:11:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=lB5Gls1bE5ZTM4FMK83JW7NErQx+DjSi+JPZdDq6b/Q=;
+        b=fgXpoB97Z2uDj0LPfwUfTrJuc/09JkoKK0RpXenJ2XGazDyNxD3DCtxP0hGTbdSejs
+         EXHfRZgdCNlm//vlzUNbx0WWptrNrbUhnJHDdzY+jCtEhlBXS9KCWgDoMl9wagNLYxTa
+         htuC/Ha+ickz1eJL/Po85qgTOrdY0zr1q1XcNFLMCyftFTX5powedeuzcEarraBE4fhu
+         HznNE7SUrH6/dXxtMkzAZqLEjLT5E8fhR7in1XpEZ6mIjm1bp6TGEd8fl3nfWRue3lRC
+         COo9lgE/gZYvtEa49PMGROahvpGVCf8X/vENiNhvKScrNsZ+Aum44C9ujHD61I/WVr2v
+         nPXw==
+X-Gm-Message-State: APjAAAU0MIoVI5lmgKFvsWRyklISXG1fsp+GR0F3/bSVnbrq3z5kakS0
+        VzPbPh4Ieso2YUacDpNFFKxhYYcU
+X-Google-Smtp-Source: APXvYqzBK31c7zKdZ+qT85bpPwAbr58MQfb3D4n4F3URm6rq4jWZ6p1cySqQbYIll3nD6/mRI1XBeg==
+X-Received: by 2002:a05:651c:239:: with SMTP id z25mr741897ljn.48.1581336690406;
+        Mon, 10 Feb 2020 04:11:30 -0800 (PST)
+Received: from localhost.localdomain ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id b20sm133154ljp.20.2020.02.10.04.11.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2020 04:11:29 -0800 (PST)
+Date:   Mon, 10 Feb 2020 14:11:20 +0200
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
+Cc:     mikko.mutanen@fi.rohmeurope.com, markus.laine@fi.rohmeurope.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/3] Support ROHM BD99954 charger IC
+Message-ID: <cover.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-In-Reply-To: <CAKfTPtC9A6KVwYsQWgXXk-12GeJhkJfEm3Lk=LjcoOJvvoZ1uA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB-large
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Vincent,
+Support ROHM BD99954 Battery Management IC
 
-On 1/27/20 5:16 PM, Vincent Guittot wrote:
-> On Wed, 22 Jan 2020 at 18:36, Douglas RAILLARD <douglas.raillard@arm.com> wrote:
->>
->> Make schedutil cpufreq governor energy-aware.
->>
->> - patch 1 introduces a function to retrieve a frequency given a base
->>   frequency and an energy cost margin.
->> - patch 2 links Energy Model perf_domain to sugov_policy.
->> - patch 3 updates get_next_freq() to make use of the Energy Model.
->> - patch 4 adds sugov_cpu_ramp_boost() function.
->> - patch 5 updates sugov_update_(single|shared)() to make use of
->>   sugov_cpu_ramp_boost().
->> - patch 6 introduces a tracepoint in get_next_freq() for
->>   testing/debugging. Since it's not a trace event, it's not exposed to
->>   userspace in a directly usable way, allowing for painless future
->>   updates/removal.
->>
->> The benefits of using the EM in schedutil are twofold:
->>
->> 1) Selecting the highest possible frequency for a given cost. Some
->>    platforms can have lower frequencies that are less efficient than
->>    higher ones, in which case they should be skipped for most purposes.
-> 
-> This make sense. Why using a lower frequency when a higher one is more
-> power efficient
+ROHM BD99954 is a Battery Management IC for 1-4 cell Lithium-Ion
+secondary battery. BD99954 is intended to be used in space-constraint
+equipment such as Low profile Notebook PC, Tablets and other
+applications.
 
-Apparently in some cases it can be useful for thermal capping. AFAIU the
-alternate solution is to race to idle with a more efficient OPP (idle
-injection work of Linaro).
+Series introduces "linear ranges" helper intended to help converting
+real-world values to register values when conversion is linear. This
+version just meld the helpers in power/supply but this is hardly the
+correct place. Maybe they would fit regmap?
 
->>    They can still be useful to give more freedom to thermal throttling
->>    mechanisms, but not under normal circumstances.
->>    note: the EM framework will warn about such OPPs "hertz/watts ratio
->>    non-monotonically decreasing"
->>
->> 2) Driving the frequency selection with power in mind, in addition to
->>    maximizing the utilization of the non-idle CPUs in the system.
->>
->> Point 1) is implemented in "PM: Introduce em_pd_get_higher_freq()" and
->> enabled in schedutil by
->> "sched/cpufreq: Hook em_pd_get_higher_power() into get_next_freq()".
->>
->> Point 2) is enabled in
->> "sched/cpufreq: Boost schedutil frequency ramp up". It allows using
->> higher frequencies when it is known that the true utilization of
->> currently running tasks is exceeding their previous stable point.
->> The benefits are:
->>
->> * Boosting the frequency when the behavior of a runnable task changes,
->>   leading to an increase in utilization. That shortens the frequency
->>   ramp up duration, which in turns allows the utilization signal to
->>   reach stable values quicker.  Since the allowed frequency boost is
->>   bounded in energy, it will behave consistently across platforms,
->>   regardless of the OPP cost range.
-> 
-> Could you explain this a bit more ?
+This version of series introduces ROHM specific DT binding entries
+for few charger parameters. I think these parameters are pretty common
+and maybe the "rohm,"-prefix should be dropped and we should try having
+common properties for different chips?
 
-The goal is to detect when the task starts asking more CPU time than it
-did during the previous period. At this stage, we don't know how much
-more, so we increase the frequency faster to allow signals to settle
-more quickly.
+If this seems reasonable I can try drafting parser functions in
+power/supply framework and extract the corresponding DT yaml bindings
+into generic power-supply.yaml doc.
 
-The PELT signal does increases independently from the chosen frequency,
-but that's only up until idle time shows up. At this point, the util
-will drop again, and the frequency with it.
+Please let me know if you think these properties should not be common
+- or that the power/supply framework should not contain helpers for
+parsing these properties. Then I'll just drop the RFC from series and
+submit the ROHM specific properties and do DT parsing in this driver.
 
->>
->> * The boost is only transient, and should not impact a lot the energy
->>   consumed of workloads with very stable utilization signals.
->>
->> This has been lightly tested with a rtapp task ramping from 10% to 75%
->> utilisation on a big core.
-> 
-> Which kind of UC are you targeting ?
+Patch 1:
+	BD99954 charger DT binding docs
+Patch 2:
+	Linear ranges helpers
+Patch 3:
+	BD99954 driver
 
-One case are tasks with "random" behavior like threads in thread pools
-that can end up doing very different things. There may be other cases as
-well, but I'll need to do more extensive testing with actual applications.
+---
 
-> 
-> Do you have some benchmark showing the benefit and how you can bound
-> the increase of energy ?
+Matti Vaittinen (3):
+  dt_bindings: ROHM BD99954 Charger
+  power: Add linear_range helper
+  power: supply: Support ROHM bd99954 charger
 
-In the test setup described above, it increases the energy consumption
-by ~2.5%.
+ .../bindings/power/supply/rohm,bd9995x.yaml   |  118 ++
+ drivers/power/supply/Kconfig                  |   14 +
+ drivers/power/supply/Makefile                 |    2 +
+ drivers/power/supply/bd70528-charger.c        |   65 +-
+ drivers/power/supply/bd99954-charger.c        | 1056 ++++++++++++++++
+ drivers/power/supply/linear-ranges.h          |   36 +
+ drivers/power/supply/linear_ranges.c          |   89 ++
+ include/linux/power/bd99954-charger.h         | 1075 +++++++++++++++++
+ 8 files changed, 2398 insertions(+), 57 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml
+ create mode 100644 drivers/power/supply/bd99954-charger.c
+ create mode 100644 drivers/power/supply/linear-ranges.h
+ create mode 100644 drivers/power/supply/linear_ranges.c
+ create mode 100644 include/linux/power/bd99954-charger.h
 
-I also did some preliminary experiments to reduce the margin taken in
-map_util_freq(), which becomes less necessary if the frequency is
-boosted in the cases where util increase is getting out of hands. That
-can recover some amount of lost power.
+-- 
+2.21.0
 
-The real cost in practice heavily depends on:
-* the workloads (if its util jumps around, it will boost more frequently)
-* the discrete frequencies available (if boosting does not bring us to
-the next freq, no boost is actually applied).
 
-> 
-> The benefit of point2 is less obvious for me. We already have uclamp
-> which helps to overwrite the "utilization" that is seen by schedutil
-> to boost or cap the frequency when some tasks are running. I'm curious
-> to see what would be the benefit of this on top.
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
-uclamp is only useful when a target utilization is known beforehand by
-the task itself or some kind of manager. In all the cases relying on
-plain PELT, we can decrease the freq change reaction time.
-
-Note that schedutil is already built around the duty cycle detection
-with a bias for higher frequency when the task period increases (using
-util est enqueued). What this series bring is a way to detect when util
-est enqueued turns from a set-point into a lower bound.
-
->>
->> v1 -> v2:
->>
->>   * Split the new sugov_cpu_ramp_boost() from the existing
->>     sugov_cpu_is_busy() as they seem to seek a different goal.
->>
->>   * Implement sugov_cpu_ramp_boost() based on CFS util_avg and
->>     util_est_enqueued signals, rather than using idle calls count.
->>     This makes the ramp boost much more accurate in finding boost
->>     opportunities, and give a "continuous" output rather than a boolean.
->>
->>   * Add EM_COST_MARGIN_SCALE=1024 to represent the
->>     margin values of em_pd_get_higher_freq().
->>
->> v2 -> v3:
->>
->>   * Check util_avg >= sg_cpu->util_avg in sugov_cpu_ramp_boost_update()
->>     to avoid boosting when the utilization is decreasing.
->>
->>   * Add a tracepoint for testing.
->>
->> v3 -> v4:
->>
->>   * em_pd_get_higher_freq() now interprets the margin as absolute,
->>     rather than relative to the cost of the base frequency.
->>
->>   * Modify misleading comment in em_pd_get_higher_freq() since min_freq
->>     can actually be higher than the max available frequency in normal
->>     operations.
->>
->> Douglas RAILLARD (6):
->>   PM: Introduce em_pd_get_higher_freq()
->>   sched/cpufreq: Attach perf domain to sugov policy
->>   sched/cpufreq: Hook em_pd_get_higher_power() into get_next_freq()
->>   sched/cpufreq: Introduce sugov_cpu_ramp_boost
->>   sched/cpufreq: Boost schedutil frequency ramp up
->>   sched/cpufreq: Add schedutil_em_tp tracepoint
->>
->>  include/linux/energy_model.h     |  56 ++++++++++++++
->>  include/trace/events/power.h     |   9 +++
->>  kernel/sched/cpufreq_schedutil.c | 124 +++++++++++++++++++++++++++++--
->>  3 files changed, 182 insertions(+), 7 deletions(-)
->>
->> --
->> 2.24.1
->>
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
