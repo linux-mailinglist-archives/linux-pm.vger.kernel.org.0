@@ -2,28 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0168D159D8E
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1427159D81
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727924AbgBKXkb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Feb 2020 18:40:31 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:47266 "EHLO
+        id S1728043AbgBKXin (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Feb 2020 18:38:43 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:48838 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728035AbgBKXip (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 18:38:45 -0500
+        with ESMTP id S1727933AbgBKXin (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 18:38:43 -0500
 Received: from 79.184.254.199.ipv4.supernova.orange.pl (79.184.254.199) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 520e3db86b693f71; Wed, 12 Feb 2020 00:38:42 +0100
+ id cde7f2ee43101b1e; Wed, 12 Feb 2020 00:38:41 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 24/28] sound: Call cpu_latency_qos_*() instead of pm_qos_*()
-Date:   Wed, 12 Feb 2020 00:34:15 +0100
-Message-ID: <197693303.hiACyxC3Vm@kreacher>
+        Amit Kucheria <amit.kucheria@linaro.org>
+Subject: [PATCH 25/28] PM: QoS: Drop PM_QOS_CPU_DMA_LATENCY and rename related functions
+Date:   Wed, 12 Feb 2020 00:35:04 +0100
+Message-ID: <1836468.2mkKzJxuJO@kreacher>
 In-Reply-To: <1654227.8mz0SueHsU@kreacher>
 References: <1654227.8mz0SueHsU@kreacher>
 MIME-Version: 1.0
@@ -36,218 +33,279 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-Call cpu_latency_qos_add/update/remove_request() and
-cpu_latency_qos_request_active() instead of
-pm_qos_add/update/remove_request() and pm_qos_request_active(),
-respectively, because the latter are going to be dropped.
+Drop the PM QoS classes enum including PM_QOS_CPU_DMA_LATENCY,
+drop the wrappers around pm_qos_request(), pm_qos_request_active(),
+and pm_qos_add/update/remove_request() introduced previously, rename
+these functions, respectively, to cpu_latency_qos_limit(),
+cpu_latency_qos_request_active(), and
+cpu_latency_qos_add/update/remove_request(), and update their
+kerneldoc comments.  [While at it, drop some useless comments from
+these functions.]
 
 No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- sound/core/pcm_native.c               | 14 +++++++-------
- sound/soc/intel/atom/sst/sst.c        |  5 ++---
- sound/soc/intel/atom/sst/sst_loader.c |  4 ++--
- sound/soc/ti/omap-dmic.c              |  7 ++++---
- sound/soc/ti/omap-mcbsp.c             | 16 ++++++++--------
- sound/soc/ti/omap-mcpdm.c             | 16 ++++++++--------
- 6 files changed, 31 insertions(+), 31 deletions(-)
+ include/linux/pm_qos.h | 47 +++---------------------
+ kernel/power/qos.c     | 98 +++++++++++++++++++++++++-------------------------
+ 2 files changed, 54 insertions(+), 91 deletions(-)
 
-diff --git a/sound/core/pcm_native.c b/sound/core/pcm_native.c
-index 336406bcb59e..151bac1bbd0b 100644
---- a/sound/core/pcm_native.c
-+++ b/sound/core/pcm_native.c
-@@ -748,11 +748,11 @@ static int snd_pcm_hw_params(struct snd_pcm_substream *substream,
- 	snd_pcm_timer_resolution_change(substream);
- 	snd_pcm_set_state(substream, SNDRV_PCM_STATE_SETUP);
+diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+index 63d39e66f95d..e0ca4d780457 100644
+--- a/include/linux/pm_qos.h
++++ b/include/linux/pm_qos.h
+@@ -9,14 +9,6 @@
+ #include <linux/notifier.h>
+ #include <linux/device.h>
  
--	if (pm_qos_request_active(&substream->latency_pm_qos_req))
--		pm_qos_remove_request(&substream->latency_pm_qos_req);
-+	if (cpu_latency_qos_request_active(&substream->latency_pm_qos_req))
-+		cpu_latency_qos_remove_request(&substream->latency_pm_qos_req);
- 	if ((usecs = period_to_usecs(runtime)) >= 0)
--		pm_qos_add_request(&substream->latency_pm_qos_req,
--				   PM_QOS_CPU_DMA_LATENCY, usecs);
-+		cpu_latency_qos_add_request(&substream->latency_pm_qos_req,
-+					    usecs);
- 	return 0;
-  _error:
- 	/* hardware might be unusable from this time,
-@@ -821,7 +821,7 @@ static int snd_pcm_hw_free(struct snd_pcm_substream *substream)
- 		return -EBADFD;
- 	result = do_hw_free(substream);
- 	snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
--	pm_qos_remove_request(&substream->latency_pm_qos_req);
-+	cpu_latency_qos_remove_request(&substream->latency_pm_qos_req);
- 	return result;
+-enum {
+-	PM_QOS_RESERVED = 0,
+-	PM_QOS_CPU_DMA_LATENCY,
+-
+-	/* insert new class ID */
+-	PM_QOS_NUM_CLASSES,
+-};
+-
+ enum pm_qos_flags_status {
+ 	PM_QOS_FLAGS_UNDEFINED = -1,
+ 	PM_QOS_FLAGS_NONE,
+@@ -144,40 +136,11 @@ bool pm_qos_update_flags(struct pm_qos_flags *pqf,
+ 			 struct pm_qos_flags_request *req,
+ 			 enum pm_qos_req_action action, s32 val);
+ 
+-void pm_qos_add_request(struct pm_qos_request *req, int pm_qos_class,
+-			s32 value);
+-void pm_qos_update_request(struct pm_qos_request *req,
+-			   s32 new_value);
+-void pm_qos_remove_request(struct pm_qos_request *req);
+-s32 pm_qos_request(int pm_qos_class);
+-int pm_qos_request_active(struct pm_qos_request *req);
+-
+-static inline void cpu_latency_qos_add_request(struct pm_qos_request *req,
+-					       s32 value)
+-{
+-	pm_qos_add_request(req, PM_QOS_CPU_DMA_LATENCY, value);
+-}
+-
+-static inline void cpu_latency_qos_update_request(struct pm_qos_request *req,
+-						  s32 new_value)
+-{
+-	pm_qos_update_request(req, new_value);
+-}
+-
+-static inline void cpu_latency_qos_remove_request(struct pm_qos_request *req)
+-{
+-	pm_qos_remove_request(req);
+-}
+-
+-static inline bool cpu_latency_qos_request_active(struct pm_qos_request *req)
+-{
+-	return pm_qos_request_active(req);
+-}
+-
+-static inline s32 cpu_latency_qos_limit(void)
+-{
+-	return pm_qos_request(PM_QOS_CPU_DMA_LATENCY);
+-}
++s32 cpu_latency_qos_limit(void);
++bool cpu_latency_qos_request_active(struct pm_qos_request *req);
++void cpu_latency_qos_add_request(struct pm_qos_request *req, s32 value);
++void cpu_latency_qos_update_request(struct pm_qos_request *req, s32 new_value);
++void cpu_latency_qos_remove_request(struct pm_qos_request *req);
+ 
+ #ifdef CONFIG_PM
+ enum pm_qos_flags_status __dev_pm_qos_flags(struct device *dev, s32 mask);
+diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+index 7bb55aca03bb..7374c76f409a 100644
+--- a/kernel/power/qos.c
++++ b/kernel/power/qos.c
+@@ -230,21 +230,25 @@ static struct pm_qos_constraints cpu_latency_constraints = {
+ };
+ 
+ /**
+- * pm_qos_request - returns current system wide qos expectation
+- * @pm_qos_class: Ignored.
+- *
+- * This function returns the current target value.
++ * cpu_latency_qos_limit - Return current system-wide CPU latency QoS limit.
+  */
+-s32 pm_qos_request(int pm_qos_class)
++s32 cpu_latency_qos_limit(void)
+ {
+ 	return pm_qos_read_value(&cpu_latency_constraints);
  }
  
-@@ -2598,8 +2598,8 @@ void snd_pcm_release_substream(struct snd_pcm_substream *substream)
- 		substream->ops->close(substream);
- 		substream->hw_opened = 0;
- 	}
--	if (pm_qos_request_active(&substream->latency_pm_qos_req))
--		pm_qos_remove_request(&substream->latency_pm_qos_req);
-+	if (cpu_latency_qos_request_active(&substream->latency_pm_qos_req))
-+		cpu_latency_qos_remove_request(&substream->latency_pm_qos_req);
- 	if (substream->pcm_release) {
- 		substream->pcm_release(substream);
- 		substream->pcm_release = NULL;
-diff --git a/sound/soc/intel/atom/sst/sst.c b/sound/soc/intel/atom/sst/sst.c
-index 68bcec5241f7..d6563985e008 100644
---- a/sound/soc/intel/atom/sst/sst.c
-+++ b/sound/soc/intel/atom/sst/sst.c
-@@ -325,8 +325,7 @@ int sst_context_init(struct intel_sst_drv *ctx)
- 		ret = -ENOMEM;
- 		goto do_free_mem;
- 	}
--	pm_qos_add_request(ctx->qos, PM_QOS_CPU_DMA_LATENCY,
--				PM_QOS_DEFAULT_VALUE);
-+	cpu_latency_qos_add_request(ctx->qos, PM_QOS_DEFAULT_VALUE);
+-int pm_qos_request_active(struct pm_qos_request *req)
++/**
++ * cpu_latency_qos_request_active - Check the given PM QoS request.
++ * @req: PM QoS request to check.
++ *
++ * Return: 'true' if @req has been added to the CPU latency QoS list, 'false'
++ * otherwise.
++ */
++bool cpu_latency_qos_request_active(struct pm_qos_request *req)
+ {
+ 	return req->qos == &cpu_latency_constraints;
+ }
+-EXPORT_SYMBOL_GPL(pm_qos_request_active);
++EXPORT_SYMBOL_GPL(cpu_latency_qos_request_active);
  
- 	dev_dbg(ctx->dev, "Requesting FW %s now...\n", ctx->firmware_name);
- 	ret = request_firmware_nowait(THIS_MODULE, true, ctx->firmware_name,
-@@ -364,7 +363,7 @@ void sst_context_cleanup(struct intel_sst_drv *ctx)
- 	sysfs_remove_group(&ctx->dev->kobj, &sst_fw_version_attr_group);
- 	flush_scheduled_work();
- 	destroy_workqueue(ctx->post_msg_wq);
--	pm_qos_remove_request(ctx->qos);
-+	cpu_latency_qos_remove_request(ctx->qos);
- 	kfree(ctx->fw_sg_list.src);
- 	kfree(ctx->fw_sg_list.dst);
- 	ctx->fw_sg_list.list_len = 0;
-diff --git a/sound/soc/intel/atom/sst/sst_loader.c b/sound/soc/intel/atom/sst/sst_loader.c
-index ce11c36848c4..9b0e3739c738 100644
---- a/sound/soc/intel/atom/sst/sst_loader.c
-+++ b/sound/soc/intel/atom/sst/sst_loader.c
-@@ -412,7 +412,7 @@ int sst_load_fw(struct intel_sst_drv *sst_drv_ctx)
+ static void cpu_latency_qos_apply(struct pm_qos_request *req,
+ 				  enum pm_qos_req_action action, s32 value)
+@@ -255,25 +259,24 @@ static void cpu_latency_qos_apply(struct pm_qos_request *req,
+ }
+ 
+ /**
+- * pm_qos_add_request - inserts new qos request into the list
+- * @req: pointer to a preallocated handle
+- * @pm_qos_class: Ignored.
+- * @value: defines the qos request
++ * cpu_latency_qos_add_request - Add new CPU latency QoS request.
++ * @req: Pointer to a preallocated handle.
++ * @value: Requested constraint value.
++ *
++ * Use @value to initialize the request handle pointed to by @req, insert it as
++ * a new entry to the CPU latency QoS list and recompute the effective QoS
++ * constraint for that list.
+  *
+- * This function inserts a new entry in the PM_QOS_CPU_DMA_LATENCY list of
+- * requested QoS performance characteristics.  It recomputes the aggregate QoS
+- * expectations for the PM_QOS_CPU_DMA_LATENCY list and initializes the @req
+- * handle.  Caller needs to save this handle for later use in updates and
+- * removal.
++ * Callers need to save the handle for later use in updates and removal of the
++ * QoS request represented by it.
+  */
+-void pm_qos_add_request(struct pm_qos_request *req,
+-			int pm_qos_class, s32 value)
++void cpu_latency_qos_add_request(struct pm_qos_request *req, s32 value)
+ {
+-	if (!req) /*guard against callers passing in null */
++	if (!req)
+ 		return;
+ 
+-	if (pm_qos_request_active(req)) {
+-		WARN(1, KERN_ERR "pm_qos_add_request() called for already added request\n");
++	if (cpu_latency_qos_request_active(req)) {
++		WARN(1, KERN_ERR "%s called for already added request\n", __func__);
+ 		return;
+ 	}
+ 
+@@ -282,25 +285,24 @@ void pm_qos_add_request(struct pm_qos_request *req,
+ 	req->qos = &cpu_latency_constraints;
+ 	cpu_latency_qos_apply(req, PM_QOS_ADD_REQ, value);
+ }
+-EXPORT_SYMBOL_GPL(pm_qos_add_request);
++EXPORT_SYMBOL_GPL(cpu_latency_qos_add_request);
+ 
+ /**
+- * pm_qos_update_request - modifies an existing qos request
+- * @req : handle to list element holding a pm_qos request to use
+- * @value: defines the qos request
+- *
+- * Updates an existing qos request for the PM_QOS_CPU_DMA_LATENCY list along
+- * with updating the target PM_QOS_CPU_DMA_LATENCY value.
++ * cpu_latency_qos_update_request - Modify existing CPU latency QoS request.
++ * @req : QoS request to update.
++ * @new_value: New requested constraint value.
+  *
+- * Attempts are made to make this code callable on hot code paths.
++ * Use @new_value to update the QoS request represented by @req in the CPU
++ * latency QoS list along with updating the effective constraint value for that
++ * list.
+  */
+-void pm_qos_update_request(struct pm_qos_request *req, s32 new_value)
++void cpu_latency_qos_update_request(struct pm_qos_request *req, s32 new_value)
+ {
+-	if (!req) /*guard against callers passing in null */
++	if (!req)
+ 		return;
+ 
+-	if (!pm_qos_request_active(req)) {
+-		WARN(1, KERN_ERR "pm_qos_update_request() called for unknown object\n");
++	if (!cpu_latency_qos_request_active(req)) {
++		WARN(1, KERN_ERR "%s called for unknown object\n", __func__);
+ 		return;
+ 	}
+ 
+@@ -311,24 +313,22 @@ void pm_qos_update_request(struct pm_qos_request *req, s32 new_value)
+ 
+ 	cpu_latency_qos_apply(req, PM_QOS_UPDATE_REQ, new_value);
+ }
+-EXPORT_SYMBOL_GPL(pm_qos_update_request);
++EXPORT_SYMBOL_GPL(cpu_latency_qos_update_request);
+ 
+ /**
+- * pm_qos_remove_request - modifies an existing qos request
+- * @req: handle to request list element
++ * cpu_latency_qos_remove_request - Remove existing CPU latency QoS request.
++ * @req: QoS request to remove.
+  *
+- * Will remove pm qos request from the list of constraints and
+- * recompute the current target value for PM_QOS_CPU_DMA_LATENCY.  Call this
+- * on slow code paths.
++ * Remove the CPU latency QoS request represented by @req from the CPU latency
++ * QoS list along with updating the effective constraint value for that list.
+  */
+-void pm_qos_remove_request(struct pm_qos_request *req)
++void cpu_latency_qos_remove_request(struct pm_qos_request *req)
+ {
+-	if (!req) /*guard against callers passing in null */
++	if (!req)
+ 		return;
+-		/* silent return to keep pcm code cleaner */
+ 
+-	if (!pm_qos_request_active(req)) {
+-		WARN(1, KERN_ERR "pm_qos_remove_request() called for unknown object\n");
++	if (!cpu_latency_qos_request_active(req)) {
++		WARN(1, KERN_ERR "%s called for unknown object\n", __func__);
+ 		return;
+ 	}
+ 
+@@ -337,7 +337,7 @@ void pm_qos_remove_request(struct pm_qos_request *req)
+ 	cpu_latency_qos_apply(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
+ 	memset(req, 0, sizeof(*req));
+ }
+-EXPORT_SYMBOL_GPL(pm_qos_remove_request);
++EXPORT_SYMBOL_GPL(cpu_latency_qos_remove_request);
+ 
+ /* User space interface to the CPU latency QoS via misc device. */
+ 
+@@ -349,7 +349,7 @@ static int cpu_latency_qos_open(struct inode *inode, struct file *filp)
+ 	if (!req)
  		return -ENOMEM;
  
- 	/* Prevent C-states beyond C6 */
--	pm_qos_update_request(sst_drv_ctx->qos, 0);
-+	cpu_latency_qos_update_request(sst_drv_ctx->qos, 0);
- 
- 	sst_drv_ctx->sst_state = SST_FW_LOADING;
- 
-@@ -442,7 +442,7 @@ int sst_load_fw(struct intel_sst_drv *sst_drv_ctx)
- 
- restore:
- 	/* Re-enable Deeper C-states beyond C6 */
--	pm_qos_update_request(sst_drv_ctx->qos, PM_QOS_DEFAULT_VALUE);
-+	cpu_latency_qos_update_request(sst_drv_ctx->qos, PM_QOS_DEFAULT_VALUE);
- 	sst_free_block(sst_drv_ctx, block);
- 	dev_dbg(sst_drv_ctx->dev, "fw load successful!!!\n");
- 
-diff --git a/sound/soc/ti/omap-dmic.c b/sound/soc/ti/omap-dmic.c
-index 3f226be123d4..913579c43e9d 100644
---- a/sound/soc/ti/omap-dmic.c
-+++ b/sound/soc/ti/omap-dmic.c
-@@ -112,7 +112,7 @@ static void omap_dmic_dai_shutdown(struct snd_pcm_substream *substream,
- 
- 	mutex_lock(&dmic->mutex);
- 
--	pm_qos_remove_request(&dmic->pm_qos_req);
-+	cpu_latency_qos_remove_request(&dmic->pm_qos_req);
- 
- 	if (!dai->active)
- 		dmic->active = 0;
-@@ -230,8 +230,9 @@ static int omap_dmic_dai_prepare(struct snd_pcm_substream *substream,
- 	struct omap_dmic *dmic = snd_soc_dai_get_drvdata(dai);
- 	u32 ctrl;
- 
--	if (pm_qos_request_active(&dmic->pm_qos_req))
--		pm_qos_update_request(&dmic->pm_qos_req, dmic->latency);
-+	if (cpu_latency_qos_request_active(&dmic->pm_qos_req))
-+		cpu_latency_qos_update_request(&dmic->pm_qos_req,
-+					       dmic->latency);
- 
- 	/* Configure uplink threshold */
- 	omap_dmic_write(dmic, OMAP_DMIC_FIFO_CTRL_REG, dmic->threshold);
-diff --git a/sound/soc/ti/omap-mcbsp.c b/sound/soc/ti/omap-mcbsp.c
-index 26b503bbdb5f..302d5c493c29 100644
---- a/sound/soc/ti/omap-mcbsp.c
-+++ b/sound/soc/ti/omap-mcbsp.c
-@@ -836,10 +836,10 @@ static void omap_mcbsp_dai_shutdown(struct snd_pcm_substream *substream,
- 	int stream2 = tx ? SNDRV_PCM_STREAM_CAPTURE : SNDRV_PCM_STREAM_PLAYBACK;
- 
- 	if (mcbsp->latency[stream2])
--		pm_qos_update_request(&mcbsp->pm_qos_req,
--				      mcbsp->latency[stream2]);
-+		cpu_latency_qos_update_request(&mcbsp->pm_qos_req,
-+					       mcbsp->latency[stream2]);
- 	else if (mcbsp->latency[stream1])
--		pm_qos_remove_request(&mcbsp->pm_qos_req);
-+		cpu_latency_qos_remove_request(&mcbsp->pm_qos_req);
- 
- 	mcbsp->latency[stream1] = 0;
- 
-@@ -863,10 +863,10 @@ static int omap_mcbsp_dai_prepare(struct snd_pcm_substream *substream,
- 	if (!latency || mcbsp->latency[stream1] < latency)
- 		latency = mcbsp->latency[stream1];
- 
--	if (pm_qos_request_active(pm_qos_req))
--		pm_qos_update_request(pm_qos_req, latency);
-+	if (cpu_latency_qos_request_active(pm_qos_req))
-+		cpu_latency_qos_update_request(pm_qos_req, latency);
- 	else if (latency)
--		pm_qos_add_request(pm_qos_req, PM_QOS_CPU_DMA_LATENCY, latency);
-+		cpu_latency_qos_add_request(pm_qos_req, latency);
+-	pm_qos_add_request(req, PM_QOS_CPU_DMA_LATENCY, PM_QOS_DEFAULT_VALUE);
++	cpu_latency_qos_add_request(req, PM_QOS_DEFAULT_VALUE);
+ 	filp->private_data = req;
  
  	return 0;
- }
-@@ -1434,8 +1434,8 @@ static int asoc_mcbsp_remove(struct platform_device *pdev)
- 	if (mcbsp->pdata->ops && mcbsp->pdata->ops->free)
- 		mcbsp->pdata->ops->free(mcbsp->id);
+@@ -361,7 +361,7 @@ static int cpu_latency_qos_release(struct inode *inode, struct file *filp)
  
--	if (pm_qos_request_active(&mcbsp->pm_qos_req))
--		pm_qos_remove_request(&mcbsp->pm_qos_req);
-+	if (cpu_latency_qos_request_active(&mcbsp->pm_qos_req))
-+		cpu_latency_qos_remove_request(&mcbsp->pm_qos_req);
+ 	filp->private_data = NULL;
  
- 	if (mcbsp->pdata->buffer_size)
- 		sysfs_remove_group(&mcbsp->dev->kobj, &additional_attr_group);
-diff --git a/sound/soc/ti/omap-mcpdm.c b/sound/soc/ti/omap-mcpdm.c
-index a726cd7a8252..d7ac4df6f2d9 100644
---- a/sound/soc/ti/omap-mcpdm.c
-+++ b/sound/soc/ti/omap-mcpdm.c
-@@ -281,10 +281,10 @@ static void omap_mcpdm_dai_shutdown(struct snd_pcm_substream *substream,
+-	pm_qos_remove_request(req);
++	cpu_latency_qos_remove_request(req);
+ 	kfree(req);
+ 
+ 	return 0;
+@@ -374,7 +374,7 @@ static ssize_t cpu_latency_qos_read(struct file *filp, char __user *buf,
+ 	unsigned long flags;
+ 	s32 value;
+ 
+-	if (!req || !pm_qos_request_active(req))
++	if (!req || !cpu_latency_qos_request_active(req))
+ 		return -EINVAL;
+ 
+ 	spin_lock_irqsave(&pm_qos_lock, flags);
+@@ -400,7 +400,7 @@ static ssize_t cpu_latency_qos_write(struct file *filp, const char __user *buf,
+ 			return ret;
  	}
  
- 	if (mcpdm->latency[stream2])
--		pm_qos_update_request(&mcpdm->pm_qos_req,
--				      mcpdm->latency[stream2]);
-+		cpu_latency_qos_update_request(&mcpdm->pm_qos_req,
-+					       mcpdm->latency[stream2]);
- 	else if (mcpdm->latency[stream1])
--		pm_qos_remove_request(&mcpdm->pm_qos_req);
-+		cpu_latency_qos_remove_request(&mcpdm->pm_qos_req);
+-	pm_qos_update_request(filp->private_data, value);
++	cpu_latency_qos_update_request(filp->private_data, value);
  
- 	mcpdm->latency[stream1] = 0;
- 
-@@ -386,10 +386,10 @@ static int omap_mcpdm_prepare(struct snd_pcm_substream *substream,
- 	if (!latency || mcpdm->latency[stream1] < latency)
- 		latency = mcpdm->latency[stream1];
- 
--	if (pm_qos_request_active(pm_qos_req))
--		pm_qos_update_request(pm_qos_req, latency);
-+	if (cpu_latency_qos_request_active(pm_qos_req))
-+		cpu_latency_qos_update_request(pm_qos_req, latency);
- 	else if (latency)
--		pm_qos_add_request(pm_qos_req, PM_QOS_CPU_DMA_LATENCY, latency);
-+		cpu_latency_qos_add_request(pm_qos_req, latency);
- 
- 	if (!omap_mcpdm_active(mcpdm)) {
- 		omap_mcpdm_start(mcpdm);
-@@ -451,8 +451,8 @@ static int omap_mcpdm_remove(struct snd_soc_dai *dai)
- 	free_irq(mcpdm->irq, (void *)mcpdm);
- 	pm_runtime_disable(mcpdm->dev);
- 
--	if (pm_qos_request_active(&mcpdm->pm_qos_req))
--		pm_qos_remove_request(&mcpdm->pm_qos_req);
-+	if (cpu_latency_qos_request_active(&mcpdm->pm_qos_req))
-+		cpu_latency_qos_remove_request(&mcpdm->pm_qos_req);
- 
- 	return 0;
+ 	return count;
  }
 -- 
 2.16.4
