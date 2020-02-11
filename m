@@ -2,55 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 229A0158A06
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2020 07:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEA2158A44
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2020 08:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726973AbgBKGeo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Feb 2020 01:34:44 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:50936 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726958AbgBKGen (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 01:34:43 -0500
-Received: by mail-pj1-f67.google.com with SMTP id r67so861971pjb.0
-        for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2020 22:34:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HGcC2OnO32w/HS2RDBKApvVUrcxu3cIrBuwc7D/gpYM=;
-        b=bCpYck5a+TRFpLBgG9B/DRlll5qh+p0IGt9ss7xd3iVadm0WA7HpvHpe4DNVOJRoy3
-         RI7Dgjz8mmL6C6daZ5lydmvwTRG0l0Fu9hV/cBO93v3Byg44mWEch1DztXqgMkpJmfFC
-         fxOIyDMEBmyfXluYJlAxz8B5vMevc/diIpJiGhzRtyorAts2wVtkoOtpQc/DWhJjGaOM
-         R28MyzLFkKan49o0jZm5NsBAZFL2KHJYhxj177L1zZgTkI3+1t062MdQ+sxjAII2wRNm
-         UzRbmRFlVO+n6jUBnHbdLWxtorONHV5WawF7KTbpjxo3/lziIeYVamlblt0tV6oYmlXI
-         n3XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HGcC2OnO32w/HS2RDBKApvVUrcxu3cIrBuwc7D/gpYM=;
-        b=R2IsepkviXsQ3rmHPNgKJVbDemHGV8z6Umx8cW3sbGMSLmjNd23ynSw04xH7IitCxb
-         IWX7RnyKnPrmtk/KKWZ6XSf7Y0ChN4gK6KV327y3JFE/VMW1KKfsp5s+iz0FKHNTSaZ2
-         UNHBO3H/XJTVVkdwur5zFO/TXLNhLNLJeoaCaTmMBg8ZGtDmVwR3hm1qeAcD2gvngOoL
-         rmuWWgGj9YOGkDZ2TG0r776AIFTwuSQes89akgEL4eNbwnUGfsTnNeNrQmIrAMCX3l4N
-         iuypTCa6WQ040tvzR0VQiPSQo9W3BuagLm5OrYdzC9GXcpBn9UX0ZUDea32chQ0aejWR
-         CEyQ==
-X-Gm-Message-State: APjAAAXIyvQd691MLM42VmblmFvn5UWNo7avJ8haZJWYzRYaH2tYXzBR
-        G8I+gt9666ftQAMnNav+mcb5SVlgf7c=
-X-Google-Smtp-Source: APXvYqzP+A+Wrb3rddrLsAkf0bJsOeDu3DgqhgL6griYCa9cqeQrNcs+Pjg1ChOtQy/0VCbJd+4ULg==
-X-Received: by 2002:a17:90a:5d85:: with SMTP id t5mr1929762pji.126.1581402883197;
-        Mon, 10 Feb 2020 22:34:43 -0800 (PST)
-Received: from localhost ([122.167.210.63])
-        by smtp.gmail.com with ESMTPSA id o1sm2744069pfg.60.2020.02.10.22.34.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 10 Feb 2020 22:34:42 -0800 (PST)
-Date:   Tue, 11 Feb 2020 12:04:39 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Andy Tang <andy.tang@nxp.com>
-Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        id S1728075AbgBKHUH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Feb 2020 02:20:07 -0500
+Received: from mail-db8eur05on2077.outbound.protection.outlook.com ([40.107.20.77]:6022
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728070AbgBKHUH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Feb 2020 02:20:07 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NEO48MtKVnEVcILvP07i25Nfler8T3pXdb5mT/rz2YIfI+UkKDX5ddSgb2Uiv06TIo68nj3EcQiz1MrJVaU4BV52CbwNoC76VaQUU8YjeIm5kd5OoVnBcAR9X9G+NQZyYOu2SXhKxr1gQZhUx31bREIVrAUaty7Vsn7jMxLD62cBGEgbS21PDDhK8/CDEWCuueFnikh7U7Yb2VWB4XH0FakD1IRXlVZNcFVi2whSkMv5CXG9V6HZeaosSEVfbBDzIhOL+xWaDMj5ch7cIgwSEas5mJARtajbTz32PnD8QB6f1cfeDqY6B0xcVHpaq9hT63bBQ4AdJt+cmG+gkDu3yQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=swCis5M99B9lvtBFYHv1jP/JpkOMAf/kh26dIan5In4=;
+ b=ezmap3RYPA+rJVuBlcXYLry9VDU20YUoO182cVvG/nN4WTqFFnzyHBXMGcV0giIRt8IGnYe7AEFIV1G14p52uZllWCmADk7jFLvhU8I/OyUeFDRFdhQXI6qVLjrK4B3cvvM41weHOKdM7mXa2bGEUmutS02/Cpqf2iknrOJksBq5JNFT6nobPgO7AxQjuYtK4yfZXAHr5Gu4joKvKle64A0z1fNYvQhu0UAjovhCFHkjFdMLORzBWA4kRSA8Bj3F3/X3thYPznSVK25mRggq7xIzwb0gPvH39K+DocllKa8pnW60sCyBmgHi7TLb0y/j0ymYSzZRVG8AhAASImN8tA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=swCis5M99B9lvtBFYHv1jP/JpkOMAf/kh26dIan5In4=;
+ b=U0WZTkfbqtEi0aN000nwYzeTXNpBU9HDf47SEhMOofdYqd/4w9kyDMwYnnIfZMImrciFlWlJ7Gt7Ot13N+9KTlkzefa/CCa/rZmjTMSK5jw4ZSnWzbAw3KfEfZSJkKPFwSbzAuEtCbSkFsqxvTMwMS+04De21UEwTDOiEqzlS7Y=
+Received: from VI1PR04MB4333.eurprd04.prod.outlook.com (52.134.122.155) by
+ VI1PR04MB5488.eurprd04.prod.outlook.com (20.178.120.81) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2707.21; Tue, 11 Feb 2020 07:20:03 +0000
+Received: from VI1PR04MB4333.eurprd04.prod.outlook.com
+ ([fe80::fd7e:a5a0:691e:c123]) by VI1PR04MB4333.eurprd04.prod.outlook.com
+ ([fe80::fd7e:a5a0:691e:c123%6]) with mapi id 15.20.2707.030; Tue, 11 Feb 2020
+ 07:20:03 +0000
+From:   Andy Tang <andy.tang@nxp.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [EXT] Re: Ask for help about cpufreq issue
-Message-ID: <20200211063439.aqc4h6np3wjpsg2j@vireshk-i7>
+Subject: RE: [EXT] Re: Ask for help about cpufreq issue
+Thread-Topic: [EXT] Re: Ask for help about cpufreq issue
+Thread-Index: AdXdcxSxB0cyUSagT5OnSrOpW6FSxAAA6GCAAAAcdEAAA3btAADDOJ9wAANpvoAAAOC7QAAAkWqAAAGPepA=
+Date:   Tue, 11 Feb 2020 07:20:03 +0000
+Message-ID: <VI1PR04MB433391DABC853D5E6811B76AF3180@VI1PR04MB4333.eurprd04.prod.outlook.com>
 References: <VI1PR04MB4333D45D033CB8E33CB9070FF31C0@VI1PR04MB4333.eurprd04.prod.outlook.com>
  <20200207052321.povhuxrlm25ueoak@vireshk-i7>
  <VI1PR04MB43334D5868037FCAE4D7631BF31C0@VI1PR04MB4333.eurprd04.prod.outlook.com>
@@ -58,26 +50,59 @@ References: <VI1PR04MB4333D45D033CB8E33CB9070FF31C0@VI1PR04MB4333.eurprd04.prod.
  <VI1PR04MB4333E6B3340BADBC737E9CFFF3180@VI1PR04MB4333.eurprd04.prod.outlook.com>
  <20200211055315.qlqrxiqf72u36ijl@vireshk-i7>
  <VI1PR04MB4333D6A41BD1AB77489E3139F3180@VI1PR04MB4333.eurprd04.prod.outlook.com>
+ <20200211063439.aqc4h6np3wjpsg2j@vireshk-i7>
+In-Reply-To: <20200211063439.aqc4h6np3wjpsg2j@vireshk-i7>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=andy.tang@nxp.com; 
+x-originating-ip: [120.244.236.31]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 91b348f3-fbf8-4aaa-866d-08d7aec2d05f
+x-ms-traffictypediagnostic: VI1PR04MB5488:
+x-microsoft-antispam-prvs: <VI1PR04MB5488EEDF75FBC4E976F569DBF3180@VI1PR04MB5488.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0310C78181
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(346002)(136003)(396003)(376002)(366004)(199004)(189003)(7696005)(478600001)(54906003)(71200400001)(44832011)(316002)(8936002)(55016002)(8676002)(52536014)(4744005)(9686003)(81166006)(81156014)(4326008)(5660300002)(33656002)(66446008)(66946007)(64756008)(66556008)(66476007)(76116006)(26005)(53546011)(6506007)(186003)(86362001)(6916009)(2906002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5488;H:VI1PR04MB4333.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YI6O9rRLDajNw5bTVhPCg3hpzUgDHpnmVCBihiwKmMcV/psK2hrZhW8fAW0zlvRINmIIQFt2gHq02WFz5FTfVJSUnp0M4fVBWTWJJeeo/UioFvXgbvKgYnYIxwKTLrzWo1k1Xf24HdFv/8tUfwPTxiWoHdYAT7bhVaHEjRaag3WhG1aEVbnIhg0Tr3f9WOzdb9fb6g188Aye/ZrfvHslv6K/PHMcwN+0Otd0l1+QmwxGk3BAY1zFBMOGzOEBNWLkd4dpGNWQPjM271qPLartQIIGmFgieQrE5YIKbnPH5cCC/QEOQIaL0mwgPdzSbqQooSkdcO6c41r5AAhTOIPY1fEKRd/M+RThtIsq9wF7LEuhtMMj50cA0i2X84Jtzd1IIsHowp+KMv2FrXO0EEhLsAb/OtvDdOaQTM6ad1PMnLDd1iY6DnqbnWarIPPv+t76
+x-ms-exchange-antispam-messagedata: LwpVMJ1Zz5iNZGu+HC+gdumbBjkU/LEoFH6304kZxO5KKAu5EcyLxIGeOG04lX6L7mKfNCAGJIqEBLmvHawVJs2cBRghAFpaLubF+FnMChmbQosGv8133yOT31OGOkB4R+Ds+QH0rxG3Z0vHehA3yw==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <VI1PR04MB4333D6A41BD1AB77489E3139F3180@VI1PR04MB4333.eurprd04.prod.outlook.com>
-User-Agent: NeoMutt/20180716-391-311a52
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91b348f3-fbf8-4aaa-866d-08d7aec2d05f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2020 07:20:03.7375
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: w6wegfErcZuTSa2TpLl86nV60swFQwi0ymodsA22jARlb6IqN2eSFFAptPurUTdfo2OEvDSfJtfR1ZlAPmlwLw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5488
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-02-20, 06:23, Andy Tang wrote:
-> I am going to track to dev_pm_qos_add_request() as you suggested.
-> Before that, I am also wondering what the factor it could be to limit the cpu max frequency?
-
-One of them is thermal, but there can be others as well. Just do
-following search in your kernel source code:
-
-git grep freq_qos_add_request
-
-This will list all the sources of this constraint.
-
--- 
-viresh
+VGhhbmsgeW91IHZlcnkgbXVjaC4gSSBjb25maXJtZWQgaXQgd2FzIGNhdXNlZCBieSBRT1MuDQpU
+byBiZSBzcGVjaWZpYywgaXQgd2FzIGNhdXNlZCBieSBUTVUuDQoNCkJSLA0KQW5keQ0KDQo+IC0t
+LS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFZpcmVzaCBLdW1hciA8dmlyZXNoLmt1
+bWFyQGxpbmFyby5vcmc+DQo+IFNlbnQ6IDIwMjDE6jLUwjExyNUgMTQ6MzUNCj4gVG86IEFuZHkg
+VGFuZyA8YW5keS50YW5nQG54cC5jb20+DQo+IENjOiByandAcmp3eXNvY2tpLm5ldDsgbGludXgt
+cG1Admdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbRVhUXSBSZTogQXNrIGZvciBoZWxw
+IGFib3V0IGNwdWZyZXEgaXNzdWUNCj4gDQo+IENhdXRpb246IEVYVCBFbWFpbA0KPiANCj4gT24g
+MTEtMDItMjAsIDA2OjIzLCBBbmR5IFRhbmcgd3JvdGU6DQo+ID4gSSBhbSBnb2luZyB0byB0cmFj
+ayB0byBkZXZfcG1fcW9zX2FkZF9yZXF1ZXN0KCkgYXMgeW91IHN1Z2dlc3RlZC4NCj4gPiBCZWZv
+cmUgdGhhdCwgSSBhbSBhbHNvIHdvbmRlcmluZyB3aGF0IHRoZSBmYWN0b3IgaXQgY291bGQgYmUg
+dG8gbGltaXQgdGhlIGNwdQ0KPiBtYXggZnJlcXVlbmN5Pw0KPiANCj4gT25lIG9mIHRoZW0gaXMg
+dGhlcm1hbCwgYnV0IHRoZXJlIGNhbiBiZSBvdGhlcnMgYXMgd2VsbC4gSnVzdCBkbyBmb2xsb3dp
+bmcNCj4gc2VhcmNoIGluIHlvdXIga2VybmVsIHNvdXJjZSBjb2RlOg0KPiANCj4gZ2l0IGdyZXAg
+ZnJlcV9xb3NfYWRkX3JlcXVlc3QNCj4gDQo+IFRoaXMgd2lsbCBsaXN0IGFsbCB0aGUgc291cmNl
+cyBvZiB0aGlzIGNvbnN0cmFpbnQuDQo+IA0KPiAtLQ0KPiB2aXJlc2gNCg==
