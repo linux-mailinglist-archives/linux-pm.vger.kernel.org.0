@@ -2,98 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B01158B77
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2020 09:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DA7158B97
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2020 10:04:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727797AbgBKIvT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Feb 2020 03:51:19 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:32977 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727704AbgBKIvS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 03:51:18 -0500
-Received: by mail-pj1-f68.google.com with SMTP id m7so740416pjs.0;
-        Tue, 11 Feb 2020 00:51:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=Kufx2b86GhMKj2/5JRyQcdEYbiaBCWhtsF2yQMRwNJQ=;
-        b=ISuJhI952AfdvwSTac/cDpCFI/qpWyE+qRpiSDF8F50DWcKhHDp1sy9MaKVp5uCazY
-         X+dq/WQzT6gQb8eY4hqESnGG8bQrEA1Z/uAsVIu74NKdz4BqCgyafsBt1FwQ7SnXKn4E
-         cMeVKyLRS2zHdq1GrScxcz1Mj1RFR6B5dMTw1Prlw9oSRowV1Jz4e/xXImXryTkY93Iq
-         gerJNXOyJbQJKtbFdKhPg+ja353+WtT+9i3Vy2guNKNxOK3qHdFH0M6MpSBOYAJn4oUR
-         ohq/1x02oA6Zc+9vZdlhdBY4MmlEBnMuoNpD3sFWXrcEtKMojx69JZ+BXlMO/eX+L0ev
-         5INQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Kufx2b86GhMKj2/5JRyQcdEYbiaBCWhtsF2yQMRwNJQ=;
-        b=S4SjxqWcneIB2zxyZ2Rz+ZHIMmq7JxRQuIthb00rfhmUUiV7y/2KkYMel6NiZZjoia
-         UvLhuHMtVPKk6zZ9TCqmcoQ1YNmaBskFvrX7S8nVRAH4mQRzNLD6Rc5laaqEZXCX0qG8
-         xNhJjw0pjsQR1rMzVDHfIc4Wb5UxSs4USfRw/ZbiDw0D1Jv+qkvOKOSSrJKzA0KcCN/N
-         NPCX90bb20Tn8gUmUPbRX6f5QfYCpMAYapR2/354/2BgE4KPZqEd64FWxsOEfpdLplJ7
-         elA5WXvVLtFyHwV8SqTBnxJDBv3rzE2Lk3BusVGIiBsBJY/5HMxpwLIuzR4cv0ykNOEV
-         pmQQ==
-X-Gm-Message-State: APjAAAUlkX/+5aDoRO+lCCwr0wpsPiqWV8s+iWjD6WKfn5OaTGxbGQ6P
-        H88V/4L1m1qXHHTst403hwA=
-X-Google-Smtp-Source: APXvYqxnj7704HHSz3OzLC6RklyKHrNrKRxeJMkFXmg3pfeK2UpiIbXY1kMPj4g0PxeKZt8Dw5WO0g==
-X-Received: by 2002:a17:90a:c697:: with SMTP id n23mr2334308pjt.37.1581411076548;
-        Tue, 11 Feb 2020 00:51:16 -0800 (PST)
-Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id g19sm3179271pfh.134.2020.02.11.00.51.14
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 11 Feb 2020 00:51:15 -0800 (PST)
-From:   Baolin Wang <baolin.wang7@gmail.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baolin.wang7@gmail.com, zhang.lyra@gmail.com, orsonzhai@gmail.com
-Subject: [PATCH] power: supply: Allow charger manager can be built as a module
-Date:   Tue, 11 Feb 2020 16:50:22 +0800
-Message-Id: <2d0854b00d7f85e988aff4f8186e8ac5d8a9aff2.1581410798.git.baolin.wang7@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        id S1727121AbgBKJEp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Feb 2020 04:04:45 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:43935 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725787AbgBKJEo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 04:04:44 -0500
+Received: from 79.184.254.199.ipv4.supernova.orange.pl (79.184.254.199) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
+ id adfc0e3b68c92435; Tue, 11 Feb 2020 10:04:40 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen Yu <yu.c.chen@intel.com>,
+        David Box <david.e.box@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH v2] ACPI: EC: Fix flushing of pending work
+Date:   Tue, 11 Feb 2020 10:04:40 +0100
+Message-ID: <28760106.ljELEbzjY3@kreacher>
+In-Reply-To: <2209952.LFAxc7Zn43@kreacher>
+References: <2209952.LFAxc7Zn43@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Allow charger manager can be built as a module like other charger
-drivers.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
+Commit 016b87ca5c8c ("ACPI: EC: Rework flushing of pending work")
+introduced a subtle bug into the flushing of pending EC work while
+suspended to idle, which may cause the EC driver to fail to
+re-enable the EC GPE after handling a non-wakeup event (like a
+battery status change event, for example).
+
+The problem is that the work item flushed by flush_scheduled_work()
+in __acpi_ec_flush_work() may disable the EC GPE and schedule another
+work item expected to re-enable it, but that new work item is not
+flushed, so __acpi_ec_flush_work() returns with the EC GPE disabled
+and the CPU running it goes into an idle state subsequently.  If all
+of the other CPUs are in idle states at that point, the EC GPE won't
+be re-enabled until at least one CPU is woken up by another interrupt
+source, so system wakeup events that would normally come from the EC
+then don't work.
+
+This is reproducible on a Dell XPS13 9360 in my office which
+sometimes stops reacting to power button and lid events (triggered
+by the EC on that machine) after switching from AC power to battery
+power or vice versa while suspended to idle (each of those switches
+causes the EC GPE to trigger for several times in a row, but they
+are not system wakeup events).
+
+To avoid this problem, it is necessary to drain the workqueue
+entirely in __acpi_ec_flush_work(), but that cannot be done with
+respect to system_wq, because work items may be added to it from
+other places while __acpi_ec_flush_work() is running.  For this
+reason, make the EC driver use a dedicated workqueue for EC events
+processing (let that workqueue be ordered so that EC events are
+processed sequentially) and use drain_workqueue() on it in
+__acpi_ec_flush_work().
+
+Fixes: 016b87ca5c8c ("ACPI: EC: Rework flushing of pending work")
+Cc: 5.4+ <stable@vger.kernel.org> # 5.4+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/power/supply/Kconfig          |    2 +-
- include/linux/power/charger-manager.h |    7 +------
- 2 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 9a5591a..195bc04 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -480,7 +480,7 @@ config CHARGER_GPIO
- 	  called gpio-charger.
+-> v2:
+   * Use a dedicated wq for EC events.
+
+---
+ drivers/acpi/ec.c |   43 ++++++++++++++++++++++++++-----------------
+ 1 file changed, 26 insertions(+), 17 deletions(-)
+
+Index: linux-pm/drivers/acpi/ec.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/ec.c
++++ linux-pm/drivers/acpi/ec.c
+@@ -179,6 +179,7 @@ EXPORT_SYMBOL(first_ec);
  
- config CHARGER_MANAGER
--	bool "Battery charger manager for multiple chargers"
-+	tristate "Battery charger manager for multiple chargers"
- 	depends on REGULATOR
- 	select EXTCON
- 	help
-diff --git a/include/linux/power/charger-manager.h b/include/linux/power/charger-manager.h
-index ad19e68..40493b2 100644
---- a/include/linux/power/charger-manager.h
-+++ b/include/linux/power/charger-manager.h
-@@ -248,11 +248,6 @@ struct charger_manager {
- 	u64 charging_end_time;
+ static struct acpi_ec *boot_ec;
+ static bool boot_ec_is_ecdt = false;
++static struct workqueue_struct *ec_wq;
+ static struct workqueue_struct *ec_query_wq;
+ 
+ static int EC_FLAGS_QUERY_HANDSHAKE; /* Needs QR_EC issued when SCI_EVT set */
+@@ -469,7 +470,7 @@ static void acpi_ec_submit_query(struct
+ 		ec_dbg_evt("Command(%s) submitted/blocked",
+ 			   acpi_ec_cmd_string(ACPI_EC_COMMAND_QUERY));
+ 		ec->nr_pending_queries++;
+-		schedule_work(&ec->work);
++		queue_work(ec_wq, &ec->work);
+ 	}
+ }
+ 
+@@ -535,7 +536,7 @@ static void acpi_ec_enable_event(struct
+ #ifdef CONFIG_PM_SLEEP
+ static void __acpi_ec_flush_work(void)
+ {
+-	flush_scheduled_work(); /* flush ec->work */
++	drain_workqueue(ec_wq); /* flush ec->work */
+ 	flush_workqueue(ec_query_wq); /* flush queries */
+ }
+ 
+@@ -556,8 +557,8 @@ static void acpi_ec_disable_event(struct
+ 
+ void acpi_ec_flush_work(void)
+ {
+-	/* Without ec_query_wq there is nothing to flush. */
+-	if (!ec_query_wq)
++	/* Without ec_wq there is nothing to flush. */
++	if (!ec_wq)
+ 		return;
+ 
+ 	__acpi_ec_flush_work();
+@@ -2107,25 +2108,33 @@ static struct acpi_driver acpi_ec_driver
+ 	.drv.pm = &acpi_ec_pm,
  };
  
--#ifdef CONFIG_CHARGER_MANAGER
- extern void cm_notify_event(struct power_supply *psy,
--				enum cm_event_types type, char *msg);
--#else
--static inline void cm_notify_event(struct power_supply *psy,
--				enum cm_event_types type, char *msg) { }
--#endif
-+			    enum cm_event_types type, char *msg);
- #endif /* _CHARGER_MANAGER_H */
--- 
-1.7.9.5
+-static inline int acpi_ec_query_init(void)
++static void acpi_ec_destroy_workqueues(void)
+ {
+-	if (!ec_query_wq) {
+-		ec_query_wq = alloc_workqueue("kec_query", 0,
+-					      ec_max_queries);
+-		if (!ec_query_wq)
+-			return -ENODEV;
++	if (ec_wq) {
++		destroy_workqueue(ec_wq);
++		ec_wq = NULL;
+ 	}
+-	return 0;
+-}
+-
+-static inline void acpi_ec_query_exit(void)
+-{
+ 	if (ec_query_wq) {
+ 		destroy_workqueue(ec_query_wq);
+ 		ec_query_wq = NULL;
+ 	}
+ }
+ 
++static int acpi_ec_init_workqueues(void)
++{
++	if (!ec_wq)
++		ec_wq = alloc_ordered_workqueue("kec", 0);
++
++	if (!ec_query_wq)
++		ec_query_wq = alloc_workqueue("kec_query", 0, ec_max_queries);
++
++	if (!ec_wq || !ec_query_wq) {
++		acpi_ec_destroy_workqueues();
++		return -ENODEV;
++	}
++	return 0;
++}
++
+ static const struct dmi_system_id acpi_ec_no_wakeup[] = {
+ 	{
+ 		.ident = "Thinkpad X1 Carbon 6th",
+@@ -2157,7 +2166,7 @@ int __init acpi_ec_init(void)
+ 	int ecdt_fail, dsdt_fail;
+ 
+ 	/* register workqueue for _Qxx evaluations */
+-	result = acpi_ec_query_init();
++	result = acpi_ec_init_workqueues();
+ 	if (result)
+ 		return result;
+ 
+@@ -2188,6 +2197,6 @@ static void __exit acpi_ec_exit(void)
+ {
+ 
+ 	acpi_bus_unregister_driver(&acpi_ec_driver);
+-	acpi_ec_query_exit();
++	acpi_ec_destroy_workqueues();
+ }
+ #endif	/* 0 */
+
+
 
