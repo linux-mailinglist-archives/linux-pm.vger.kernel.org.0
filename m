@@ -2,89 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EC715943F
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2020 17:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1769A159567
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2020 17:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730638AbgBKQD6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Feb 2020 11:03:58 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:35636 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728252AbgBKQD6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 11:03:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1581437025; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GxhdVQMuODyhj8Ef1OMGPYNtTlY3IQiUcj0GELNasU4=;
-        b=aS9S3lr0RX/TZHUDSfSMyjljjgL6X7fGX0B/FV4bcp7eOErZXfYDigSnFOe7UXe/T5aufw
-        bptWWqlgAXme/vwC2h/JJe7J5q60EROG4LV46T+mHPIqM9uqGnDp+frhwbj2FqzmrA2VWV
-        QluMd154+yb1J0ZFtL8hNPmE8Oezbew=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>, od@zcrc.me,
-        linux-pm@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [RFC PATCH 3/3] mmc: jz4740: Use pm_sleep_ptr() macro
-Date:   Tue, 11 Feb 2020 13:03:21 -0300
-Message-Id: <20200211160321.22124-4-paul@crapouillou.net>
-In-Reply-To: <20200211160321.22124-1-paul@crapouillou.net>
-References: <20200211160321.22124-1-paul@crapouillou.net>
+        id S1730950AbgBKQyL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Feb 2020 11:54:11 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42112 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730298AbgBKQyJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 11:54:09 -0500
+Received: from 79.184.254.199.ipv4.supernova.orange.pl (79.184.254.199) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
+ id d2a3bbaa5cdf3a2b; Tue, 11 Feb 2020 17:54:07 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        David Box <david.e.box@linux.intel.com>,
+        Chen Yu <yu.c.chen@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Bob Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>
+Subject: [PATCH 0/2] ACPI: PM: s2idle: Prevent spurious SCIs from waking up the system
+Date:   Tue, 11 Feb 2020 17:51:36 +0100
+Message-ID: <6974889.tv0o8xEHfr@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use the newly introduced pm_sleep_ptr() macro to simplify the code.
+Hi All,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/mmc/host/jz4740_mmc.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+On some systems the platform generates spurious SCIs while the system is
+suspended to idle and those SCIs are treated as genuine system events after
+the rework of the main suspend-to-idle control flow in 5.4.  The patches
+here address this problem by adding a mechanism to check whether or not
+SCIs generated while the system is suspended to idle are spurious and to
+discard the spurious ones.
 
-diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
-index fbae87d1f017..09554f9831de 100644
---- a/drivers/mmc/host/jz4740_mmc.c
-+++ b/drivers/mmc/host/jz4740_mmc.c
-@@ -1099,24 +1099,18 @@ static int jz4740_mmc_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM_SLEEP
--
--static int jz4740_mmc_suspend(struct device *dev)
-+static int __maybe_unused jz4740_mmc_suspend(struct device *dev)
- {
- 	return pinctrl_pm_select_sleep_state(dev);
- }
- 
--static int jz4740_mmc_resume(struct device *dev)
-+static int __maybe_unused jz4740_mmc_resume(struct device *dev)
- {
- 	return pinctrl_select_default_state(dev);
- }
- 
- static SIMPLE_DEV_PM_OPS(jz4740_mmc_pm_ops, jz4740_mmc_suspend,
- 	jz4740_mmc_resume);
--#define JZ4740_MMC_PM_OPS (&jz4740_mmc_pm_ops)
--#else
--#define JZ4740_MMC_PM_OPS NULL
--#endif
- 
- static struct platform_driver jz4740_mmc_driver = {
- 	.probe = jz4740_mmc_probe,
-@@ -1124,7 +1118,7 @@ static struct platform_driver jz4740_mmc_driver = {
- 	.driver = {
- 		.name = "jz4740-mmc",
- 		.of_match_table = of_match_ptr(jz4740_mmc_of_match),
--		.pm = JZ4740_MMC_PM_OPS,
-+		.pm = pm_sleep_ptr(&jz4740_mmc_pm_ops),
- 	},
- };
- 
--- 
-2.25.0
+Patch [1/2] updates ACPICA to provide a way to examine the status bits of
+all GPEs enabled at the moment in one go.
+
+Patch [2/2] uses that mechanism to implement the check mentioned above.
+
+This series is on top of https://patchwork.kernel.org/patch/11373185/ which
+should appear in linux-next tomorrow.
+
+Thanks!
+
+
 
