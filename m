@@ -2,101 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33716159D48
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 568E3159DA3
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727988AbgBKXim (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Feb 2020 18:38:42 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:64962 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727933AbgBKXil (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 18:38:41 -0500
-Received: from 79.184.254.199.ipv4.supernova.orange.pl (79.184.254.199) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 58cecbe0eccce4dc; Wed, 12 Feb 2020 00:38:39 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
+        id S1727976AbgBKXsK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Feb 2020 18:48:10 -0500
+Received: from mga06.intel.com ([134.134.136.31]:29089 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727955AbgBKXsK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Feb 2020 18:48:10 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Feb 2020 15:48:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,428,1574150400"; 
+   d="asc'?scan'208";a="233621554"
+Received: from jtkirshe-desk1.jf.intel.com ([134.134.177.74])
+  by orsmga003.jf.intel.com with ESMTP; 11 Feb 2020 15:48:09 -0800
+Message-ID: <43c9336e1c0c23e374420586868052e947b75126.camel@intel.com>
+Subject: Re: [PATCH 20/28] drivers: net: Call cpu_latency_qos_*() instead of
+ pm_qos_*()
+From:   Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+Reply-To: jeffrey.t.kirsher@intel.com
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Amit Kucheria <amit.kucheria@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH 28/28] PM: QoS: Make CPU latency QoS depend on CONFIG_CPU_IDLE
-Date:   Wed, 12 Feb 2020 00:37:11 +0100
-Message-ID: <3915146.cHaPKLg5L1@kreacher>
-In-Reply-To: <1654227.8mz0SueHsU@kreacher>
-References: <1654227.8mz0SueHsU@kreacher>
+        intel-wired-lan@lists.osuosl.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        linux-wireless@vger.kernel.org
+Date:   Tue, 11 Feb 2020 15:48:09 -0800
+In-Reply-To: <10624145.o336LLEsho@kreacher>
+References: <1654227.8mz0SueHsU@kreacher> <10624145.o336LLEsho@kreacher>
+Organization: Intel
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-GaZoanpPv4L3uFpFpUoG"
+User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-Because cpuidle is the only user of the effective constraint coming
-from the CPU latency QoS, add #ifdef CONFIG_CPU_IDLE around that code
-to avoid building it unnecessarily.
+--=-GaZoanpPv4L3uFpFpUoG
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- include/linux/pm_qos.h | 13 +++++++++++++
- kernel/power/qos.c     |  2 ++
- 2 files changed, 15 insertions(+)
+On Wed, 2020-02-12 at 00:24 +0100, Rafael J. Wysocki wrote:
+> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+>=20
+> Call cpu_latency_qos_add/update/remove_request() instead of
+> pm_qos_add/update/remove_request(), respectively, because the
+> latter are going to be dropped.
+>=20
+> No intentional functional impact.
+>=20
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-index df065db3f57a..4a69d4af3ff8 100644
---- a/include/linux/pm_qos.h
-+++ b/include/linux/pm_qos.h
-@@ -143,11 +143,24 @@ bool pm_qos_update_flags(struct pm_qos_flags *pqf,
- 			 struct pm_qos_flags_request *req,
- 			 enum pm_qos_req_action action, s32 val);
- 
-+#ifdef CONFIG_CPU_IDLE
- s32 cpu_latency_qos_limit(void);
- bool cpu_latency_qos_request_active(struct pm_qos_request *req);
- void cpu_latency_qos_add_request(struct pm_qos_request *req, s32 value);
- void cpu_latency_qos_update_request(struct pm_qos_request *req, s32 new_value);
- void cpu_latency_qos_remove_request(struct pm_qos_request *req);
-+#else
-+static inline s32 cpu_latency_qos_limit(void) { return INT_MAX; }
-+static inline bool cpu_latency_qos_request_active(struct pm_qos_request *req)
-+{
-+	return false;
-+}
-+static inline void cpu_latency_qos_add_request(struct pm_qos_request *req,
-+					       s32 value) {}
-+static inline void cpu_latency_qos_update_request(struct pm_qos_request *req,
-+						  s32 new_value) {}
-+static inline void cpu_latency_qos_remove_request(struct pm_qos_request *req) {}
-+#endif
- 
- #ifdef CONFIG_PM
- enum pm_qos_flags_status __dev_pm_qos_flags(struct device *dev, s32 mask);
-diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index ef73573db43d..32927682bcc4 100644
---- a/kernel/power/qos.c
-+++ b/kernel/power/qos.c
-@@ -209,6 +209,7 @@ bool pm_qos_update_flags(struct pm_qos_flags *pqf,
- 	return prev_value != curr_value;
- }
- 
-+#ifdef CONFIG_CPU_IDLE
- /* Definitions related to the CPU latency QoS. */
- 
- static struct pm_qos_constraints cpu_latency_constraints = {
-@@ -421,6 +422,7 @@ static int __init cpu_latency_qos_init(void)
- 	return ret;
- }
- late_initcall(cpu_latency_qos_init);
-+#endif /* CONFIG_CPU_IDLE */
- 
- /* Definitions related to the frequency QoS below. */
- 
--- 
-2.16.4
+Acked-by: Jeff Kirsher <jeffrey.t.kirsher@intel.com
+
+For the e1000e changes
+
+> ---
+>  drivers/net/ethernet/intel/e1000e/netdev.c   | 13 ++++++-------
+>  drivers/net/wireless/ath/ath10k/core.c       |  4 ++--
+>  drivers/net/wireless/intel/ipw2x00/ipw2100.c | 10 +++++-----
+>  3 files changed, 13 insertions(+), 14 deletions(-)
 
 
+--=-GaZoanpPv4L3uFpFpUoG
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCAAdFiEEiTyZWz+nnTrOJ1LZ5W/vlVpL7c4FAl5DPTkACgkQ5W/vlVpL
+7c4a3g//SCBWhCZ3vnz6qb26ASH5pK5fgz/l9o0FmD/sOn6jHfXbGmD3C8zTo6ic
+j1pQ488wAXMKm+Ay6CNyy3tqC3l9Lg1GKu6wQ4R/evm7cCk38Mwg7+sHa5aNdjwo
+6+KmMvHD9aY3Ya+QzsrJg5ZztvW/CWP69SJ1J2JfM9a401S0Us5MX/O2WmdyYo/9
+nXRGTYYj3Aekg1Ghs2JdWkYyiPGUDTic1R8psB8I7rDHZV5zmrrBferSMz8jB9Gk
+ReQE43h5rF0CZKQevMws/J6gO2Ndfbre5BZoXA7wydzs4kkV2O98u0aTc/HBP16l
+q8vf//TZ0cJy+rTEexxKIlWsfdIKQbYsWIenY6GEjR7W0n/chJYQZw40wGODisMd
+Et4ZZwL7fVpWxLxVtSrhlAieD2RpAYyCYl6l9s46lcmHSf59kbx1EyN/EmwrpEIn
+N9wCiCX9s1Nj4kH1CQAdTXhK8InLFKxKdApKSbACTwXyKuxMB/Pk65fbh4BVGTGo
+kX0PZgKNIFo4+YvZZUwin+rioyBGQopgfbgy5z4StXQ2Rd0jEpwrMIu0mxXy39PG
+X9A0+gUBAlsWDr+Jv8NCXpw5Q74vbSzHuUZwi4wpDbwnjqb6WO2yXv9mJXJCgR+b
+xJA8RDrjt9XmBr4zk43EzPZqqPlp5w2oiPH3e7cJ84sDSG7H9Sc=
+=6ivJ
+-----END PGP SIGNATURE-----
+
+--=-GaZoanpPv4L3uFpFpUoG--
 
