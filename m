@@ -2,25 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE4A159D6A
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3E6159D61
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728009AbgBKXj3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1728320AbgBKXj3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 11 Feb 2020 18:39:29 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:59281 "EHLO
+Received: from cloudserver094114.home.pl ([79.96.170.134]:51023 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728199AbgBKXjC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 18:39:02 -0500
+        with ESMTP id S1728190AbgBKXjB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 18:39:01 -0500
 Received: from 79.184.254.199.ipv4.supernova.orange.pl (79.184.254.199) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 6c68c8faf8632b37; Wed, 12 Feb 2020 00:38:59 +0100
+ id a806f37668c6bdd0; Wed, 12 Feb 2020 00:38:59 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Amit Kucheria <amit.kucheria@linaro.org>
-Subject: [PATCH 05/28] PM: QoS: Clean up pm_qos_read_value() and pm_qos_get/set_value()
-Date:   Tue, 11 Feb 2020 23:58:39 +0100
-Message-ID: <4773736.iBQsUQvRLO@kreacher>
+Subject: [PATCH 06/28] PM: QoS: Drop iterations over global QoS classes
+Date:   Tue, 11 Feb 2020 23:59:22 +0100
+Message-ID: <2037812.lB3JyXoBhI@kreacher>
 In-Reply-To: <1654227.8mz0SueHsU@kreacher>
 References: <1654227.8mz0SueHsU@kreacher>
 MIME-Version: 1.0
@@ -33,67 +33,118 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-Move the definition of pm_qos_read_value() before the one of
-pm_qos_get_value() and add a kerneldoc comment to it (as it is
-not static).
+After commit c3082a674f46 ("PM: QoS: Get rid of unused flags") the
+only global PM QoS class in use is PM_QOS_CPU_DMA_LATENCY, so it
+does not really make sense to iterate over global QoS classes
+anywhere, since there is only one.
 
-Also replace the BUG() in pm_qos_get_value() with WARN() (to
-prevent the kernel from crashing if an unknown PM QoS type is
-used by mistake) and drop the comment next to it that is not
-necessary any more.
+Remove iterations over global QoS classes from the code and use
+PM_QOS_CPU_DMA_LATENCY as the target class directly where needed.
 
-Additionally, drop the unnecessary inline modifier from the header
-of pm_qos_set_value().
+No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- kernel/power/qos.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ kernel/power/qos.c | 52 ++++++++++++++--------------------------------------
+ 1 file changed, 14 insertions(+), 38 deletions(-)
 
 diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index 6a36809d6160..f09eca5ffe07 100644
+index f09eca5ffe07..57ff542a4f9d 100644
 --- a/kernel/power/qos.c
 +++ b/kernel/power/qos.c
-@@ -98,8 +98,16 @@ static const struct file_operations pm_qos_power_fops = {
- 	.llseek = noop_llseek,
- };
+@@ -412,7 +412,8 @@ int pm_qos_remove_notifier(int pm_qos_class, struct notifier_block *notifier)
+ }
+ EXPORT_SYMBOL_GPL(pm_qos_remove_notifier);
  
--/* unlocked internal variant */
--static inline int pm_qos_get_value(struct pm_qos_constraints *c)
-+/**
-+ * pm_qos_read_value - Return the current effective constraint value.
-+ * @c: List of PM QoS constraint requests.
-+ */
-+s32 pm_qos_read_value(struct pm_qos_constraints *c)
-+{
-+	return c->target_value;
-+}
+-/* User space interface to PM QoS classes via misc devices */
++/* User space interface to global PM QoS via misc device. */
 +
-+static int pm_qos_get_value(struct pm_qos_constraints *c)
+ static int register_pm_qos_misc(struct pm_qos_object *qos)
  {
- 	if (plist_head_empty(&c->list))
- 		return c->no_constraint_value;
-@@ -112,18 +120,12 @@ static inline int pm_qos_get_value(struct pm_qos_constraints *c)
- 		return plist_last(&c->list)->prio;
- 
- 	default:
--		/* runtime check for not using enum */
--		BUG();
-+		WARN(1, "Unknown PM QoS type in %s\n", __func__);
- 		return PM_QOS_DEFAULT_VALUE;
- 	}
+ 	qos->pm_qos_power_miscdev.minor = MISC_DYNAMIC_MINOR;
+@@ -422,35 +423,18 @@ static int register_pm_qos_misc(struct pm_qos_object *qos)
+ 	return misc_register(&qos->pm_qos_power_miscdev);
  }
  
--s32 pm_qos_read_value(struct pm_qos_constraints *c)
+-static int find_pm_qos_object_by_minor(int minor)
 -{
--	return c->target_value;
+-	int pm_qos_class;
+-
+-	for (pm_qos_class = PM_QOS_CPU_DMA_LATENCY;
+-		pm_qos_class < PM_QOS_NUM_CLASSES; pm_qos_class++) {
+-		if (minor ==
+-			pm_qos_array[pm_qos_class]->pm_qos_power_miscdev.minor)
+-			return pm_qos_class;
+-	}
+-	return -1;
 -}
 -
--static inline void pm_qos_set_value(struct pm_qos_constraints *c, s32 value)
-+static void pm_qos_set_value(struct pm_qos_constraints *c, s32 value)
+ static int pm_qos_power_open(struct inode *inode, struct file *filp)
  {
- 	c->target_value = value;
+-	long pm_qos_class;
++	struct pm_qos_request *req;
+ 
+-	pm_qos_class = find_pm_qos_object_by_minor(iminor(inode));
+-	if (pm_qos_class >= PM_QOS_CPU_DMA_LATENCY) {
+-		struct pm_qos_request *req = kzalloc(sizeof(*req), GFP_KERNEL);
+-		if (!req)
+-			return -ENOMEM;
++	req = kzalloc(sizeof(*req), GFP_KERNEL);
++	if (!req)
++		return -ENOMEM;
+ 
+-		pm_qos_add_request(req, pm_qos_class, PM_QOS_DEFAULT_VALUE);
+-		filp->private_data = req;
++	pm_qos_add_request(req, PM_QOS_CPU_DMA_LATENCY, PM_QOS_DEFAULT_VALUE);
++	filp->private_data = req;
+ 
+-		return 0;
+-	}
+-	return -EPERM;
++	return 0;
  }
+ 
+ static int pm_qos_power_release(struct inode *inode, struct file *filp)
+@@ -464,7 +448,6 @@ static int pm_qos_power_release(struct inode *inode, struct file *filp)
+ 	return 0;
+ }
+ 
+-
+ static ssize_t pm_qos_power_read(struct file *filp, char __user *buf,
+ 		size_t count, loff_t *f_pos)
+ {
+@@ -507,26 +490,19 @@ static ssize_t pm_qos_power_write(struct file *filp, const char __user *buf,
+ 	return count;
+ }
+ 
+-
+ static int __init pm_qos_power_init(void)
+ {
+-	int ret = 0;
+-	int i;
++	int ret;
+ 
+ 	BUILD_BUG_ON(ARRAY_SIZE(pm_qos_array) != PM_QOS_NUM_CLASSES);
+ 
+-	for (i = PM_QOS_CPU_DMA_LATENCY; i < PM_QOS_NUM_CLASSES; i++) {
+-		ret = register_pm_qos_misc(pm_qos_array[i]);
+-		if (ret < 0) {
+-			pr_err("%s: %s setup failed\n",
+-			       __func__, pm_qos_array[i]->name);
+-			return ret;
+-		}
+-	}
++	ret = register_pm_qos_misc(pm_qos_array[PM_QOS_CPU_DMA_LATENCY]);
++	if (ret < 0)
++		pr_err("%s: %s setup failed\n", __func__,
++		       pm_qos_array[PM_QOS_CPU_DMA_LATENCY]->name);
+ 
+ 	return ret;
+ }
+-
+ late_initcall(pm_qos_power_init);
+ 
+ /* Definitions related to the frequency QoS below. */
 -- 
 2.16.4
 
