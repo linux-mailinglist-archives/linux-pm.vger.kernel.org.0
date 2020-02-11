@@ -2,25 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F82C159D58
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5934A159D56
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728279AbgBKXjG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Feb 2020 18:39:06 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:46664 "EHLO
+        id S1728263AbgBKXjE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Feb 2020 18:39:04 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:57039 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728240AbgBKXjF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 18:39:05 -0500
+        with ESMTP id S1728235AbgBKXjE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 18:39:04 -0500
 Received: from 79.184.254.199.ipv4.supernova.orange.pl (79.184.254.199) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id c814c39a8c8d77ab; Wed, 12 Feb 2020 00:39:02 +0100
+ id 6e9d651d0f4d8073; Wed, 12 Feb 2020 00:39:01 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>
-Subject: [PATCH 01/28] PM: QoS: Drop debugfs interface
-Date:   Tue, 11 Feb 2020 23:52:35 +0100
-Message-ID: <2121727.25eEc26k0f@kreacher>
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH 02/28] PM: QoS: Drop pm_qos_update_request_timeout()
+Date:   Tue, 11 Feb 2020 23:58:17 +0100
+Message-ID: <1676747.ilkPls4vKt@kreacher>
 In-Reply-To: <1654227.8mz0SueHsU@kreacher>
 References: <1654227.8mz0SueHsU@kreacher>
 MIME-Version: 1.0
@@ -33,131 +34,186 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-After commit c3082a674f46 ("PM: QoS: Get rid of unused flags") the
-only global PM QoS class in use is PM_QOS_CPU_DMA_LATENCY and the
-existing PM QoS debugfs interface has become overly complicated (as
-it takes other potentially possible PM QoS classes that are not there
-any more into account).  It is also not particularly useful (the
-"type" of the PM_QOS_CPU_DMA_LATENCY is known, its aggregate value
-can be read from /dev/cpu_dma_latency and the number of requests in
-the queue does not really matter) and there are no known users
-depending on it.  Moreover, there are dedicated trace events that
-can be used for tracking PM QoS usage with much higher precision.
+The pm_qos_update_request_timeout() function is not called from
+anywhere, so drop it along with the work member in struct
+pm_qos_request needed by it.
 
-For these reasons, drop the PM QoS debugfs interface altogether.
+Also drop the useless pm_qos_update_request_timeout trace event
+that is only triggered by that function (so it never triggers at
+all) and update the trace events documentation accordingly.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- kernel/power/qos.c | 73 ++----------------------------------------------------
- 1 file changed, 2 insertions(+), 71 deletions(-)
+ Documentation/trace/events-power.rst |  2 --
+ include/linux/pm_qos.h               |  4 ---
+ include/trace/events/power.h         | 24 ------------------
+ kernel/power/qos.c                   | 48 ------------------------------------
+ 4 files changed, 78 deletions(-)
 
+diff --git a/Documentation/trace/events-power.rst b/Documentation/trace/events-power.rst
+index 2ef318962e29..eec7453a168e 100644
+--- a/Documentation/trace/events-power.rst
++++ b/Documentation/trace/events-power.rst
+@@ -78,11 +78,9 @@ target/flags update.
+   pm_qos_add_request                 "pm_qos_class=%s value=%d"
+   pm_qos_update_request              "pm_qos_class=%s value=%d"
+   pm_qos_remove_request              "pm_qos_class=%s value=%d"
+-  pm_qos_update_request_timeout      "pm_qos_class=%s value=%d, timeout_us=%ld"
+ 
+ The first parameter gives the QoS class name (e.g. "CPU_DMA_LATENCY").
+ The second parameter is value to be added/updated/removed.
+-The third parameter is timeout value in usec.
+ ::
+ 
+   pm_qos_update_target               "action=%s prev_value=%d curr_value=%d"
+diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+index 19eafca5680e..4747bdb6bed2 100644
+--- a/include/linux/pm_qos.h
++++ b/include/linux/pm_qos.h
+@@ -8,7 +8,6 @@
+ #include <linux/plist.h>
+ #include <linux/notifier.h>
+ #include <linux/device.h>
+-#include <linux/workqueue.h>
+ 
+ enum {
+ 	PM_QOS_RESERVED = 0,
+@@ -43,7 +42,6 @@ enum pm_qos_flags_status {
+ struct pm_qos_request {
+ 	struct plist_node node;
+ 	int pm_qos_class;
+-	struct delayed_work work; /* for pm_qos_update_request_timeout */
+ };
+ 
+ struct pm_qos_flags_request {
+@@ -149,8 +147,6 @@ void pm_qos_add_request(struct pm_qos_request *req, int pm_qos_class,
+ 			s32 value);
+ void pm_qos_update_request(struct pm_qos_request *req,
+ 			   s32 new_value);
+-void pm_qos_update_request_timeout(struct pm_qos_request *req,
+-				   s32 new_value, unsigned long timeout_us);
+ void pm_qos_remove_request(struct pm_qos_request *req);
+ 
+ int pm_qos_request(int pm_qos_class);
+diff --git a/include/trace/events/power.h b/include/trace/events/power.h
+index 7457e238e1b7..ecf39daabf16 100644
+--- a/include/trace/events/power.h
++++ b/include/trace/events/power.h
+@@ -404,30 +404,6 @@ DEFINE_EVENT(pm_qos_request, pm_qos_remove_request,
+ 	TP_ARGS(pm_qos_class, value)
+ );
+ 
+-TRACE_EVENT(pm_qos_update_request_timeout,
+-
+-	TP_PROTO(int pm_qos_class, s32 value, unsigned long timeout_us),
+-
+-	TP_ARGS(pm_qos_class, value, timeout_us),
+-
+-	TP_STRUCT__entry(
+-		__field( int,                    pm_qos_class   )
+-		__field( s32,                    value          )
+-		__field( unsigned long,          timeout_us     )
+-	),
+-
+-	TP_fast_assign(
+-		__entry->pm_qos_class = pm_qos_class;
+-		__entry->value = value;
+-		__entry->timeout_us = timeout_us;
+-	),
+-
+-	TP_printk("pm_qos_class=%s value=%d, timeout_us=%ld",
+-		  __print_symbolic(__entry->pm_qos_class,
+-			{ PM_QOS_CPU_DMA_LATENCY,	"CPU_DMA_LATENCY" }),
+-		  __entry->value, __entry->timeout_us)
+-);
+-
+ DECLARE_EVENT_CLASS(pm_qos_update,
+ 
+ 	TP_PROTO(enum pm_qos_req_action action, int prev_value, int curr_value),
 diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index 83edf8698118..d932fa42e8e4 100644
+index d932fa42e8e4..67dab7f330e4 100644
 --- a/kernel/power/qos.c
 +++ b/kernel/power/qos.c
-@@ -137,69 +137,6 @@ static inline void pm_qos_set_value(struct pm_qos_constraints *c, s32 value)
- 	c->target_value = value;
+@@ -295,21 +295,6 @@ static void __pm_qos_update_request(struct pm_qos_request *req,
+ 			&req->node, PM_QOS_UPDATE_REQ, new_value);
  }
  
--static int pm_qos_debug_show(struct seq_file *s, void *unused)
+-/**
+- * pm_qos_work_fn - the timeout handler of pm_qos_update_request_timeout
+- * @work: work struct for the delayed work (timeout)
+- *
+- * This cancels the timeout request by falling back to the default at timeout.
+- */
+-static void pm_qos_work_fn(struct work_struct *work)
 -{
--	struct pm_qos_object *qos = (struct pm_qos_object *)s->private;
--	struct pm_qos_constraints *c;
--	struct pm_qos_request *req;
--	char *type;
--	unsigned long flags;
--	int tot_reqs = 0;
--	int active_reqs = 0;
+-	struct pm_qos_request *req = container_of(to_delayed_work(work),
+-						  struct pm_qos_request,
+-						  work);
 -
--	if (IS_ERR_OR_NULL(qos)) {
--		pr_err("%s: bad qos param!\n", __func__);
--		return -EINVAL;
--	}
--	c = qos->constraints;
--	if (IS_ERR_OR_NULL(c)) {
--		pr_err("%s: Bad constraints on qos?\n", __func__);
--		return -EINVAL;
--	}
--
--	/* Lock to ensure we have a snapshot */
--	spin_lock_irqsave(&pm_qos_lock, flags);
--	if (plist_head_empty(&c->list)) {
--		seq_puts(s, "Empty!\n");
--		goto out;
--	}
--
--	switch (c->type) {
--	case PM_QOS_MIN:
--		type = "Minimum";
--		break;
--	case PM_QOS_MAX:
--		type = "Maximum";
--		break;
--	case PM_QOS_SUM:
--		type = "Sum";
--		break;
--	default:
--		type = "Unknown";
--	}
--
--	plist_for_each_entry(req, &c->list, node) {
--		char *state = "Default";
--
--		if ((req->node).prio != c->default_value) {
--			active_reqs++;
--			state = "Active";
--		}
--		tot_reqs++;
--		seq_printf(s, "%d: %d: %s\n", tot_reqs,
--			   (req->node).prio, state);
--	}
--
--	seq_printf(s, "Type=%s, Value=%d, Requests: active=%d / total=%d\n",
--		   type, pm_qos_get_value(c), active_reqs, tot_reqs);
--
--out:
--	spin_unlock_irqrestore(&pm_qos_lock, flags);
--	return 0;
+-	__pm_qos_update_request(req, PM_QOS_DEFAULT_VALUE);
 -}
 -
--DEFINE_SHOW_ATTRIBUTE(pm_qos_debug);
+ /**
+  * pm_qos_add_request - inserts new qos request into the list
+  * @req: pointer to a preallocated handle
+@@ -334,7 +319,6 @@ void pm_qos_add_request(struct pm_qos_request *req,
+ 		return;
+ 	}
+ 	req->pm_qos_class = pm_qos_class;
+-	INIT_DELAYED_WORK(&req->work, pm_qos_work_fn);
+ 	trace_pm_qos_add_request(pm_qos_class, value);
+ 	pm_qos_update_target(pm_qos_array[pm_qos_class]->constraints,
+ 			     &req->node, PM_QOS_ADD_REQ, value);
+@@ -362,40 +346,10 @@ void pm_qos_update_request(struct pm_qos_request *req,
+ 		return;
+ 	}
+ 
+-	cancel_delayed_work_sync(&req->work);
+ 	__pm_qos_update_request(req, new_value);
+ }
+ EXPORT_SYMBOL_GPL(pm_qos_update_request);
+ 
+-/**
+- * pm_qos_update_request_timeout - modifies an existing qos request temporarily.
+- * @req : handle to list element holding a pm_qos request to use
+- * @new_value: defines the temporal qos request
+- * @timeout_us: the effective duration of this qos request in usecs.
+- *
+- * After timeout_us, this qos request is cancelled automatically.
+- */
+-void pm_qos_update_request_timeout(struct pm_qos_request *req, s32 new_value,
+-				   unsigned long timeout_us)
+-{
+-	if (!req)
+-		return;
+-	if (WARN(!pm_qos_request_active(req),
+-		 "%s called for unknown object.", __func__))
+-		return;
+-
+-	cancel_delayed_work_sync(&req->work);
+-
+-	trace_pm_qos_update_request_timeout(req->pm_qos_class,
+-					    new_value, timeout_us);
+-	if (new_value != req->node.prio)
+-		pm_qos_update_target(
+-			pm_qos_array[req->pm_qos_class]->constraints,
+-			&req->node, PM_QOS_UPDATE_REQ, new_value);
+-
+-	schedule_delayed_work(&req->work, usecs_to_jiffies(timeout_us));
+-}
 -
  /**
-  * pm_qos_update_target - manages the constraints list and calls the notifiers
-  *  if needed
-@@ -529,15 +466,12 @@ int pm_qos_remove_notifier(int pm_qos_class, struct notifier_block *notifier)
- EXPORT_SYMBOL_GPL(pm_qos_remove_notifier);
+  * pm_qos_remove_request - modifies an existing qos request
+  * @req: handle to request list element
+@@ -415,8 +369,6 @@ void pm_qos_remove_request(struct pm_qos_request *req)
+ 		return;
+ 	}
  
- /* User space interface to PM QoS classes via misc devices */
--static int register_pm_qos_misc(struct pm_qos_object *qos, struct dentry *d)
-+static int register_pm_qos_misc(struct pm_qos_object *qos)
- {
- 	qos->pm_qos_power_miscdev.minor = MISC_DYNAMIC_MINOR;
- 	qos->pm_qos_power_miscdev.name = qos->name;
- 	qos->pm_qos_power_miscdev.fops = &pm_qos_power_fops;
- 
--	debugfs_create_file(qos->name, S_IRUGO, d, (void *)qos,
--			    &pm_qos_debug_fops);
+-	cancel_delayed_work_sync(&req->work);
 -
- 	return misc_register(&qos->pm_qos_power_miscdev);
- }
- 
-@@ -631,14 +565,11 @@ static int __init pm_qos_power_init(void)
- {
- 	int ret = 0;
- 	int i;
--	struct dentry *d;
- 
- 	BUILD_BUG_ON(ARRAY_SIZE(pm_qos_array) != PM_QOS_NUM_CLASSES);
- 
--	d = debugfs_create_dir("pm_qos", NULL);
--
- 	for (i = PM_QOS_CPU_DMA_LATENCY; i < PM_QOS_NUM_CLASSES; i++) {
--		ret = register_pm_qos_misc(pm_qos_array[i], d);
-+		ret = register_pm_qos_misc(pm_qos_array[i]);
- 		if (ret < 0) {
- 			pr_err("%s: %s setup failed\n",
- 			       __func__, pm_qos_array[i]->name);
+ 	trace_pm_qos_remove_request(req->pm_qos_class, PM_QOS_DEFAULT_VALUE);
+ 	pm_qos_update_target(pm_qos_array[req->pm_qos_class]->constraints,
+ 			     &req->node, PM_QOS_REMOVE_REQ,
 -- 
 2.16.4
 
