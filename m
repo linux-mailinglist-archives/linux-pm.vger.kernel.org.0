@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B89E7159905
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2020 19:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1143159909
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2020 19:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731487AbgBKSqe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Feb 2020 13:46:34 -0500
-Received: from foss.arm.com ([217.140.110.172]:52380 "EHLO foss.arm.com"
+        id S1731500AbgBKSqh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Feb 2020 13:46:37 -0500
+Received: from foss.arm.com ([217.140.110.172]:52406 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727958AbgBKSqe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Feb 2020 13:46:34 -0500
+        id S1727958AbgBKSqh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Feb 2020 13:46:37 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DF831FB;
-        Tue, 11 Feb 2020 10:46:33 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D37FB30E;
+        Tue, 11 Feb 2020 10:46:36 -0800 (PST)
 Received: from e108754-lin.cambridge.arm.com (e108754-lin.cambridge.arm.com [10.1.198.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DA7C23F68F;
-        Tue, 11 Feb 2020 10:46:30 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A4BC73F68F;
+        Tue, 11 Feb 2020 10:46:34 -0800 (PST)
 From:   Ionela Voinescu <ionela.voinescu@arm.com>
 To:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
         maz@kernel.org, suzuki.poulose@arm.com, sudeep.holla@arm.com,
@@ -25,10 +25,10 @@ To:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
 Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
         viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH v3 4/7] Documentation: arm64: document support for the AMU extension
-Date:   Tue, 11 Feb 2020 18:45:39 +0000
-Message-Id: <20200211184542.29585-5-ionela.voinescu@arm.com>
+        linux-pm@vger.kernel.org
+Subject: [PATCH v3 5/7] cpufreq: add function to get the hardware max frequency
+Date:   Tue, 11 Feb 2020 18:45:40 +0000
+Message-Id: <20200211184542.29585-6-ionela.voinescu@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200211184542.29585-1-ionela.voinescu@arm.com>
 References: <20200211184542.29585-1-ionela.voinescu@arm.com>
@@ -37,181 +37,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The activity monitors extension is an optional extension introduced
-by the ARMv8.4 CPU architecture.
+Add weak function to return the hardware maximum frequency of a
+CPU, with the default implementation returning cpuinfo.max_freq.
 
-Add initial documentation for the AMUv1 extension:
- - arm64/amu.txt: AMUv1 documentation
- - arm64/booting.txt: system registers initialisation
+The default can be overwritten by a strong function in platforms
+that want to provide an alternative implementation.
 
 Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- Documentation/arm64/amu.rst     | 114 ++++++++++++++++++++++++++++++++
- Documentation/arm64/booting.rst |  14 ++++
- Documentation/arm64/index.rst   |   1 +
- 3 files changed, 129 insertions(+)
- create mode 100644 Documentation/arm64/amu.rst
+ drivers/cpufreq/cpufreq.c | 20 ++++++++++++++++++++
+ include/linux/cpufreq.h   |  5 +++++
+ 2 files changed, 25 insertions(+)
 
-diff --git a/Documentation/arm64/amu.rst b/Documentation/arm64/amu.rst
-new file mode 100644
-index 000000000000..ad609ada2d8e
---- /dev/null
-+++ b/Documentation/arm64/amu.rst
-@@ -0,0 +1,114 @@
-+=======================================================
-+Activity Monitors Unit (AMU) extension in AArch64 Linux
-+=======================================================
-+
-+Author: Ionela Voinescu <ionela.voinescu@arm.com>
-+
-+Date: 2019-09-10
-+
-+This document briefly describes the provision of Activity Monitors Unit
-+support in AArch64 Linux.
-+
-+
-+Architecture overview
-+---------------------
-+
-+The activity monitors extension is an optional extension introduced by the
-+ARMv8.4 CPU architecture.
-+
-+The activity monitors unit, implemented in each CPU, provides performance
-+counters intended for system management use. The AMU extension provides a
-+system register interface to the counter registers and also supports an
-+optional external memory-mapped interface.
-+
-+Version 1 of the Activity Monitors architecture implements a counter group
-+of four fixed and architecturally defined 64-bit event counters.
-+  - CPU cycle counter: increments at the frequency of the CPU.
-+  - Constant counter: increments at the fixed frequency of the system
-+    clock.
-+  - Instructions retired: increments with every architecturally executed
-+    instruction.
-+  - Memory stall cycles: counts instruction dispatch stall cycles caused by
-+    misses in the last level cache within the clock domain.
-+
-+When in WFI or WFE these counters do not increment.
-+
-+The Activity Monitors architecture provides space for up to 16 architected
-+event counters. Future versions of the architecture may use this space to
-+implement additional architected event counters.
-+
-+Additionally, version 1 implements a counter group of up to 16 auxiliary
-+64-bit event counters.
-+
-+On cold reset all counters reset to 0.
-+
-+
-+Basic support
-+-------------
-+
-+The kernel can safely run a mix of CPUs with and without support for the
-+activity monitors extension. Therefore, if the capability is not disabled
-+at system level (either through CONFIG_ARM64_AMU_EXTN or kernel parameter)
-+we unconditionally enable the capability to allow any late CPU (secondary
-+or hotplugged) to detect and use the feature.
-+
-+When the feature is detected on a CPU, we flag the availability of the
-+feature but this does not guarantee the correct functionality of the
-+counters, only the presence of the extension.
-+
-+Firmware (code running at higher exception levels, e.g. arm-tf) support is
-+needed to:
-+ - Enable access for lower exception levels (EL2 and EL1) to the AMU
-+   registers.
-+ - Enable the counters. If not enabled these will read as 0.
-+ - Save/restore the counters before/after the CPU is being put/brought up
-+   from the 'off' power state.
-+
-+When using kernels that have this feature enabled but boot with broken
-+firmware the user may experience panics or lockups when accessing the
-+counter registers. Even if these symptoms are not observed, the values
-+returned by the register reads might not correctly reflect reality. Most
-+commonly, the counters will read as 0, indicating that they are not
-+enabled.
-+
-+If proper support is not provided in firmware it's best to disable
-+CONFIG_ARM64_AMU_EXTN or disable the capability at runtime through the
-+corresponding kernel parameter. To be noted that for security reasons,
-+this does not bypass the setting of AMUSERENR_EL0 to trap accesses from
-+EL0 (userspace) to EL1 (kernel). Therefore, firmware should still ensure
-+accesses to AMU registers are not trapped in EL2/EL3.
-+
-+The fixed counters of AMUv1 are accessible though the following system
-+register definitions:
-+ - SYS_AMEVCNTR0_CORE_EL0
-+ - SYS_AMEVCNTR0_CONST_EL0
-+ - SYS_AMEVCNTR0_INST_RET_EL0
-+ - SYS_AMEVCNTR0_MEM_STALL_EL0
-+
-+Auxiliary platform specific counters can be accessed using
-+SYS_AMEVCNTR1_EL0(n), where n is a value between 0 and 15.
-+
-+Details can be found in: arch/arm64/include/asm/sysreg.h.
-+
-+
-+Userspace access
-+----------------
-+
-+Currently, access from userspace to the AMU registers is disabled due to:
-+ - Security reasons: they might expose information about code executed in
-+   secure mode.
-+ - Purpose: AMU counters are intended for system management use.
-+
-+Also, the presence of the feature is not visible to userspace.
-+
-+
-+Virtualization
-+--------------
-+
-+Currently, access from userspace (EL0) and kernelspace (EL1) on the KVM
-+guest side is disabled due to:
-+ - Security reasons: they might expose information about code executed
-+   by other guests or the host.
-+
-+Any attempt to access the AMU registers will result in an UNDEFINED
-+exception being injected into the guest.
-diff --git a/Documentation/arm64/booting.rst b/Documentation/arm64/booting.rst
-index 5d78a6f5b0ae..a3f1a47b6f1c 100644
---- a/Documentation/arm64/booting.rst
-+++ b/Documentation/arm64/booting.rst
-@@ -248,6 +248,20 @@ Before jumping into the kernel, the following conditions must be met:
-     - HCR_EL2.APK (bit 40) must be initialised to 0b1
-     - HCR_EL2.API (bit 41) must be initialised to 0b1
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 77114a3897fb..d2ff3018861d 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1733,6 +1733,26 @@ unsigned int cpufreq_quick_get_max(unsigned int cpu)
+ }
+ EXPORT_SYMBOL(cpufreq_quick_get_max);
  
-+  For CPUs with Activity Monitors Unit v1 (AMUv1) extension present:
-+  - If EL3 is present:
-+    CPTR_EL3.TAM (bit 30) must be initialised to 0b0
-+    CPTR_EL2.TAM (bit 30) must be initialised to 0b0
-+    AMCNTENSET0_EL0 must be initialised to 0b1111
-+    AMCNTENSET1_EL0 must be initialised to a platform specific value
-+    having 0b1 set for the corresponding bit for each of the auxiliary
-+    counters present.
-+  - If the kernel is entered at EL1:
-+    AMCNTENSET0_EL0 must be initialised to 0b1111
-+    AMCNTENSET1_EL0 must be initialised to a platform specific value
-+    having 0b1 set for the corresponding bit for each of the auxiliary
-+    counters present.
++/**
++ * cpufreq_get_hw_max_freq - get the max hardware frequency of the CPU
++ * @cpu: CPU number
++ *
++ * The default return value is the max_freq field of cpuinfo.
++ */
++__weak unsigned int cpufreq_get_hw_max_freq(unsigned int cpu)
++{
++	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
++	unsigned int ret_freq = 0;
 +
- The requirements described above for CPU mode, caches, MMUs, architected
- timers, coherency and system registers apply to all CPUs.  All CPUs must
- enter the kernel in the same exception level.
-diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
-index 5c0c69dc58aa..09cbb4ed2237 100644
---- a/Documentation/arm64/index.rst
-+++ b/Documentation/arm64/index.rst
-@@ -6,6 +6,7 @@ ARM64 Architecture
-     :maxdepth: 1
++	if (policy) {
++		ret_freq = policy->cpuinfo.max_freq;
++		cpufreq_cpu_put(policy);
++	}
++
++	return ret_freq;
++}
++EXPORT_SYMBOL(cpufreq_get_hw_max_freq);
++
+ static unsigned int __cpufreq_get(struct cpufreq_policy *policy)
+ {
+ 	if (unlikely(policy_is_inactive(policy)))
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 31b1b0e03df8..b4423ff619f4 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -194,6 +194,7 @@ extern struct kobject *cpufreq_global_kobject;
+ unsigned int cpufreq_get(unsigned int cpu);
+ unsigned int cpufreq_quick_get(unsigned int cpu);
+ unsigned int cpufreq_quick_get_max(unsigned int cpu);
++unsigned int cpufreq_get_hw_max_freq(unsigned int cpu);
+ void disable_cpufreq(void);
  
-     acpi_object_usage
-+    amu
-     arm-acpi
-     booting
-     cpu-feature-registers
+ u64 get_cpu_idle_time(unsigned int cpu, u64 *wall, int io_busy);
+@@ -223,6 +224,10 @@ static inline unsigned int cpufreq_quick_get_max(unsigned int cpu)
+ {
+ 	return 0;
+ }
++static inline unsigned int cpufreq_get_hw_max_freq(unsigned int cpu)
++{
++	return 0;
++}
+ static inline void disable_cpufreq(void) { }
+ #endif
+ 
 -- 
 2.17.1
 
