@@ -2,26 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C0A159D87
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1F3159D79
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728089AbgBKXir (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Feb 2020 18:38:47 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:63262 "EHLO
+        id S1728373AbgBKXkM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Feb 2020 18:40:12 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:59099 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728075AbgBKXir (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 18:38:47 -0500
+        with ESMTP id S1728069AbgBKXis (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 18:38:48 -0500
 Received: from 79.184.254.199.ipv4.supernova.orange.pl (79.184.254.199) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 20770e2449c7a7fa; Wed, 12 Feb 2020 00:38:45 +0100
+ id 5033a46d26c3f379; Wed, 12 Feb 2020 00:38:44 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Amit Kucheria <amit.kucheria@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org
-Subject: [PATCH 19/28] drivers: mmc: Call cpu_latency_qos_*() instead of pm_qos_*()
-Date:   Wed, 12 Feb 2020 00:21:53 +0100
-Message-ID: <3311890.58F1UHHIxI@kreacher>
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        intel-wired-lan@lists.osuosl.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        linux-wireless@vger.kernel.org
+Subject: [PATCH 20/28] drivers: net: Call cpu_latency_qos_*() instead of pm_qos_*()
+Date:   Wed, 12 Feb 2020 00:24:36 +0100
+Message-ID: <10624145.o336LLEsho@kreacher>
 In-Reply-To: <1654227.8mz0SueHsU@kreacher>
 References: <1654227.8mz0SueHsU@kreacher>
 MIME-Version: 1.0
@@ -34,77 +37,125 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-Call cpu_latency_qos_add/remove_request() instead of
-pm_qos_add/remove_request(), respectively, because the
+Call cpu_latency_qos_add/update/remove_request() instead of
+pm_qos_add/update/remove_request(), respectively, because the
 latter are going to be dropped.
 
 No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/mmc/host/sdhci-esdhc-imx.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/net/ethernet/intel/e1000e/netdev.c   | 13 ++++++-------
+ drivers/net/wireless/ath/ath10k/core.c       |  4 ++--
+ drivers/net/wireless/intel/ipw2x00/ipw2100.c | 10 +++++-----
+ 3 files changed, 13 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
-index 382f25b2fa45..b2bdf5012c55 100644
---- a/drivers/mmc/host/sdhci-esdhc-imx.c
-+++ b/drivers/mmc/host/sdhci-esdhc-imx.c
-@@ -1452,8 +1452,7 @@ static int sdhci_esdhc_imx_probe(struct platform_device *pdev)
- 						  pdev->id_entry->driver_data;
+diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+index db4ea58bac82..0f02c7a5ee9b 100644
+--- a/drivers/net/ethernet/intel/e1000e/netdev.c
++++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+@@ -3280,10 +3280,10 @@ static void e1000_configure_rx(struct e1000_adapter *adapter)
  
- 	if (imx_data->socdata->flags & ESDHC_FLAG_PMQOS)
--		pm_qos_add_request(&imx_data->pm_qos_req,
--			PM_QOS_CPU_DMA_LATENCY, 0);
-+		cpu_latency_qos_add_request(&imx_data->pm_qos_req, 0);
+ 		dev_info(&adapter->pdev->dev,
+ 			 "Some CPU C-states have been disabled in order to enable jumbo frames\n");
+-		pm_qos_update_request(&adapter->pm_qos_req, lat);
++		cpu_latency_qos_update_request(&adapter->pm_qos_req, lat);
+ 	} else {
+-		pm_qos_update_request(&adapter->pm_qos_req,
+-				      PM_QOS_DEFAULT_VALUE);
++		cpu_latency_qos_update_request(&adapter->pm_qos_req,
++					       PM_QOS_DEFAULT_VALUE);
+ 	}
  
- 	imx_data->clk_ipg = devm_clk_get(&pdev->dev, "ipg");
- 	if (IS_ERR(imx_data->clk_ipg)) {
-@@ -1572,7 +1571,7 @@ static int sdhci_esdhc_imx_probe(struct platform_device *pdev)
- 	clk_disable_unprepare(imx_data->clk_per);
- free_sdhci:
- 	if (imx_data->socdata->flags & ESDHC_FLAG_PMQOS)
--		pm_qos_remove_request(&imx_data->pm_qos_req);
-+		cpu_latency_qos_remove_request(&imx_data->pm_qos_req);
- 	sdhci_pltfm_free(pdev);
- 	return err;
- }
-@@ -1595,7 +1594,7 @@ static int sdhci_esdhc_imx_remove(struct platform_device *pdev)
- 	clk_disable_unprepare(imx_data->clk_ahb);
+ 	/* Enable Receives */
+@@ -4636,8 +4636,7 @@ int e1000e_open(struct net_device *netdev)
+ 		e1000_update_mng_vlan(adapter);
  
- 	if (imx_data->socdata->flags & ESDHC_FLAG_PMQOS)
--		pm_qos_remove_request(&imx_data->pm_qos_req);
-+		cpu_latency_qos_remove_request(&imx_data->pm_qos_req);
+ 	/* DMA latency requirement to workaround jumbo issue */
+-	pm_qos_add_request(&adapter->pm_qos_req, PM_QOS_CPU_DMA_LATENCY,
+-			   PM_QOS_DEFAULT_VALUE);
++	cpu_latency_qos_add_request(&adapter->pm_qos_req, PM_QOS_DEFAULT_VALUE);
  
- 	sdhci_pltfm_free(pdev);
+ 	/* before we allocate an interrupt, we must be ready to handle it.
+ 	 * Setting DEBUG_SHIRQ in the kernel makes it fire an interrupt
+@@ -4679,7 +4678,7 @@ int e1000e_open(struct net_device *netdev)
+ 	return 0;
  
-@@ -1667,7 +1666,7 @@ static int sdhci_esdhc_runtime_suspend(struct device *dev)
- 	clk_disable_unprepare(imx_data->clk_ahb);
+ err_req_irq:
+-	pm_qos_remove_request(&adapter->pm_qos_req);
++	cpu_latency_qos_remove_request(&adapter->pm_qos_req);
+ 	e1000e_release_hw_control(adapter);
+ 	e1000_power_down_phy(adapter);
+ 	e1000e_free_rx_resources(adapter->rx_ring);
+@@ -4743,7 +4742,7 @@ int e1000e_close(struct net_device *netdev)
+ 	    !test_bit(__E1000_TESTING, &adapter->state))
+ 		e1000e_release_hw_control(adapter);
  
- 	if (imx_data->socdata->flags & ESDHC_FLAG_PMQOS)
--		pm_qos_remove_request(&imx_data->pm_qos_req);
-+		cpu_latency_qos_remove_request(&imx_data->pm_qos_req);
+-	pm_qos_remove_request(&adapter->pm_qos_req);
++	cpu_latency_qos_remove_request(&adapter->pm_qos_req);
+ 
+ 	pm_runtime_put_sync(&pdev->dev);
+ 
+diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
+index 5ec16ce19b69..a202a4eea76a 100644
+--- a/drivers/net/wireless/ath/ath10k/core.c
++++ b/drivers/net/wireless/ath/ath10k/core.c
+@@ -1052,11 +1052,11 @@ static int ath10k_download_fw(struct ath10k *ar)
+ 	}
+ 
+ 	memset(&latency_qos, 0, sizeof(latency_qos));
+-	pm_qos_add_request(&latency_qos, PM_QOS_CPU_DMA_LATENCY, 0);
++	cpu_latency_qos_add_request(&latency_qos, 0);
+ 
+ 	ret = ath10k_bmi_fast_download(ar, address, data, data_len);
+ 
+-	pm_qos_remove_request(&latency_qos);
++	cpu_latency_qos_remove_request(&latency_qos);
  
  	return ret;
  }
-@@ -1680,8 +1679,7 @@ static int sdhci_esdhc_runtime_resume(struct device *dev)
- 	int err;
+diff --git a/drivers/net/wireless/intel/ipw2x00/ipw2100.c b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
+index 536cd729c086..5dfcce77d094 100644
+--- a/drivers/net/wireless/intel/ipw2x00/ipw2100.c
++++ b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
+@@ -1730,7 +1730,7 @@ static int ipw2100_up(struct ipw2100_priv *priv, int deferred)
+ 	/* the ipw2100 hardware really doesn't want power management delays
+ 	 * longer than 175usec
+ 	 */
+-	pm_qos_update_request(&ipw2100_pm_qos_req, 175);
++	cpu_latency_qos_update_request(&ipw2100_pm_qos_req, 175);
  
- 	if (imx_data->socdata->flags & ESDHC_FLAG_PMQOS)
--		pm_qos_add_request(&imx_data->pm_qos_req,
--			PM_QOS_CPU_DMA_LATENCY, 0);
-+		cpu_latency_qos_add_request(&imx_data->pm_qos_req, 0);
+ 	/* If the interrupt is enabled, turn it off... */
+ 	spin_lock_irqsave(&priv->low_lock, flags);
+@@ -1875,7 +1875,8 @@ static void ipw2100_down(struct ipw2100_priv *priv)
+ 	ipw2100_disable_interrupts(priv);
+ 	spin_unlock_irqrestore(&priv->low_lock, flags);
  
- 	err = clk_prepare_enable(imx_data->clk_ahb);
- 	if (err)
-@@ -1714,7 +1712,7 @@ static int sdhci_esdhc_runtime_resume(struct device *dev)
- 	clk_disable_unprepare(imx_data->clk_ahb);
- remove_pm_qos_request:
- 	if (imx_data->socdata->flags & ESDHC_FLAG_PMQOS)
--		pm_qos_remove_request(&imx_data->pm_qos_req);
-+		cpu_latency_qos_remove_request(&imx_data->pm_qos_req);
- 	return err;
- }
+-	pm_qos_update_request(&ipw2100_pm_qos_req, PM_QOS_DEFAULT_VALUE);
++	cpu_latency_qos_update_request(&ipw2100_pm_qos_req,
++				       PM_QOS_DEFAULT_VALUE);
+ 
+ 	/* We have to signal any supplicant if we are disassociating */
+ 	if (associated)
+@@ -6566,8 +6567,7 @@ static int __init ipw2100_init(void)
+ 	printk(KERN_INFO DRV_NAME ": %s, %s\n", DRV_DESCRIPTION, DRV_VERSION);
+ 	printk(KERN_INFO DRV_NAME ": %s\n", DRV_COPYRIGHT);
+ 
+-	pm_qos_add_request(&ipw2100_pm_qos_req, PM_QOS_CPU_DMA_LATENCY,
+-			   PM_QOS_DEFAULT_VALUE);
++	cpu_latency_qos_add_request(&ipw2100_pm_qos_req, PM_QOS_DEFAULT_VALUE);
+ 
+ 	ret = pci_register_driver(&ipw2100_pci_driver);
+ 	if (ret)
+@@ -6594,7 +6594,7 @@ static void __exit ipw2100_exit(void)
+ 			   &driver_attr_debug_level);
  #endif
+ 	pci_unregister_driver(&ipw2100_pci_driver);
+-	pm_qos_remove_request(&ipw2100_pm_qos_req);
++	cpu_latency_qos_remove_request(&ipw2100_pm_qos_req);
+ }
+ 
+ module_init(ipw2100_init);
 -- 
 2.16.4
 
