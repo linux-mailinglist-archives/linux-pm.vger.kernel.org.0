@@ -2,84 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3481C159963
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2020 20:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E96159D59
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730836AbgBKTGR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Feb 2020 14:06:17 -0500
-Received: from foss.arm.com ([217.140.110.172]:52708 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728503AbgBKTGR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Feb 2020 14:06:17 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 447741FB;
-        Tue, 11 Feb 2020 11:06:16 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD8913F68F;
-        Tue, 11 Feb 2020 11:06:15 -0800 (PST)
-Date:   Tue, 11 Feb 2020 19:06:14 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, mikko.mutanen@fi.rohmeurope.com,
-        markus.laine@fi.rohmeurope.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/3] power: (regmap:) Add linear_range helper
-Message-ID: <20200211190614.GP4543@sirena.org.uk>
-References: <cover.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
- <20b107ac6e40206b82d014a145abe0569d7a6f81.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
+        id S1728276AbgBKXjG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Feb 2020 18:39:06 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:50793 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728189AbgBKXjF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 18:39:05 -0500
+Received: from 79.184.254.199.ipv4.supernova.orange.pl (79.184.254.199) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
+ id ac3b5ede439dbdc3; Wed, 12 Feb 2020 00:39:03 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>
+Subject: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU latency QoS interface
+Date:   Tue, 11 Feb 2020 23:51:05 +0100
+Message-ID: <1654227.8mz0SueHsU@kreacher>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ftQmbtOmUf2cr8rB"
-Content-Disposition: inline
-In-Reply-To: <20b107ac6e40206b82d014a145abe0569d7a6f81.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
-X-Cookie: Hire the morally handicapped.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi All,
 
---ftQmbtOmUf2cr8rB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This series of patches is based on the observation that after commit
+c3082a674f46 ("PM: QoS: Get rid of unused flags") the only global PM QoS class
+in use is PM_QOS_CPU_DMA_LATENCY, but there is still a significant amount of
+code dedicated to the handling of global PM QoS classes in general.  That code
+takes up space and adds overhead in vain, so it is better to get rid of it.
 
-On Mon, Feb 10, 2020 at 02:13:13PM +0200, Matti Vaittinen wrote:
+Moreover, with that unuseful code removed, the interface for adding QoS
+requests for CPU latency becomes inelegant and confusing, so it is better to
+clean it up.
 
-> Provide a linear_range helper which can do conversion from user value
-> to register value 'selector'.
+Patches [01/28-12/28] do the first part described above, which also includes
+some assorted cleanups of the core PM QoS code that doesn't go away.
 
-> Mark, this is loosely bound to register handling... Do you think
-> the regmap could host these helpers?
+Patches [13/28-25/28] rework the CPU latency QoS interface (in the classic
+"define stubs, migrate users, change the API proper" manner), patches
+[26-27/28] update the general comments and documentation to match the code
+after the previous changes and the last one makes the CPU latency QoS depend
+on CPU_IDLE (because cpuidle is the only user of its target value today).
 
-There's no real tie to regmap here, something like this could quite
-happily be used by memory mapped devices where regmap has limited uses
-and would be a lot to pull in.  A separate library would probably make
-more sense.  Not sure how many users there would be outside of power
-related stuff, I don't recall seeing the pattern elsewhere.
+The majority of the patches in this series don't change the functionality of
+the code at all (at least not intentionally).
 
-Note also that we already have quite extensive helpers for this sort of
-stuff in the regulator API which I sense may have been involved in this
-implementation and to an extent in ALSA which takes a different approach
-with TLVs since it baked selectors directly into the ABI.
+Please refer to the changelogs of individual patches for details.
 
---ftQmbtOmUf2cr8rB
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks!
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5C+yUACgkQJNaLcl1U
-h9BvKAf/RRzCbi0uxTdR1wgKG+fIeGPs3TkKagNkbWs4xD+Ppm3RpSu7lGNVDe2P
-pNzxz4qP/9Q46Dm6iRplC5CsAARbYKjkflALvQ1TvuZB+vss5jc/9ARdOeKpRuhJ
-T9kFP6CfRPh5JgDPwqqk/lUhe9fe5Ta26uoegdG9wZsn8J/vW5pnY7EDUkV4axPt
-43zEvmzeyYnSBMARnvl9jdj4ysDEh6YpGy/lKGV9wvUMN8JmwtuEqbXgrtrVFzBd
-dS12KPckixezMm7VwMrcZ9ain+W5knJt1yh/fjnBCqjd73rsWvsD8ijNNn7U0wPR
-NdkkyrqpvCiXu7Om10I9uS2DhFOfYg==
-=hzV/
------END PGP SIGNATURE-----
 
---ftQmbtOmUf2cr8rB--
