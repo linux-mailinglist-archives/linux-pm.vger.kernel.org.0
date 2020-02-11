@@ -2,107 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEA2158A44
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2020 08:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD23E158A51
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2020 08:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728075AbgBKHUH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Feb 2020 02:20:07 -0500
-Received: from mail-db8eur05on2077.outbound.protection.outlook.com ([40.107.20.77]:6022
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728070AbgBKHUH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Feb 2020 02:20:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NEO48MtKVnEVcILvP07i25Nfler8T3pXdb5mT/rz2YIfI+UkKDX5ddSgb2Uiv06TIo68nj3EcQiz1MrJVaU4BV52CbwNoC76VaQUU8YjeIm5kd5OoVnBcAR9X9G+NQZyYOu2SXhKxr1gQZhUx31bREIVrAUaty7Vsn7jMxLD62cBGEgbS21PDDhK8/CDEWCuueFnikh7U7Yb2VWB4XH0FakD1IRXlVZNcFVi2whSkMv5CXG9V6HZeaosSEVfbBDzIhOL+xWaDMj5ch7cIgwSEas5mJARtajbTz32PnD8QB6f1cfeDqY6B0xcVHpaq9hT63bBQ4AdJt+cmG+gkDu3yQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=swCis5M99B9lvtBFYHv1jP/JpkOMAf/kh26dIan5In4=;
- b=ezmap3RYPA+rJVuBlcXYLry9VDU20YUoO182cVvG/nN4WTqFFnzyHBXMGcV0giIRt8IGnYe7AEFIV1G14p52uZllWCmADk7jFLvhU8I/OyUeFDRFdhQXI6qVLjrK4B3cvvM41weHOKdM7mXa2bGEUmutS02/Cpqf2iknrOJksBq5JNFT6nobPgO7AxQjuYtK4yfZXAHr5Gu4joKvKle64A0z1fNYvQhu0UAjovhCFHkjFdMLORzBWA4kRSA8Bj3F3/X3thYPznSVK25mRggq7xIzwb0gPvH39K+DocllKa8pnW60sCyBmgHi7TLb0y/j0ymYSzZRVG8AhAASImN8tA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=swCis5M99B9lvtBFYHv1jP/JpkOMAf/kh26dIan5In4=;
- b=U0WZTkfbqtEi0aN000nwYzeTXNpBU9HDf47SEhMOofdYqd/4w9kyDMwYnnIfZMImrciFlWlJ7Gt7Ot13N+9KTlkzefa/CCa/rZmjTMSK5jw4ZSnWzbAw3KfEfZSJkKPFwSbzAuEtCbSkFsqxvTMwMS+04De21UEwTDOiEqzlS7Y=
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com (52.134.122.155) by
- VI1PR04MB5488.eurprd04.prod.outlook.com (20.178.120.81) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2707.21; Tue, 11 Feb 2020 07:20:03 +0000
-Received: from VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::fd7e:a5a0:691e:c123]) by VI1PR04MB4333.eurprd04.prod.outlook.com
- ([fe80::fd7e:a5a0:691e:c123%6]) with mapi id 15.20.2707.030; Tue, 11 Feb 2020
- 07:20:03 +0000
-From:   Andy Tang <andy.tang@nxp.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: [EXT] Re: Ask for help about cpufreq issue
-Thread-Topic: [EXT] Re: Ask for help about cpufreq issue
-Thread-Index: AdXdcxSxB0cyUSagT5OnSrOpW6FSxAAA6GCAAAAcdEAAA3btAADDOJ9wAANpvoAAAOC7QAAAkWqAAAGPepA=
-Date:   Tue, 11 Feb 2020 07:20:03 +0000
-Message-ID: <VI1PR04MB433391DABC853D5E6811B76AF3180@VI1PR04MB4333.eurprd04.prod.outlook.com>
-References: <VI1PR04MB4333D45D033CB8E33CB9070FF31C0@VI1PR04MB4333.eurprd04.prod.outlook.com>
- <20200207052321.povhuxrlm25ueoak@vireshk-i7>
- <VI1PR04MB43334D5868037FCAE4D7631BF31C0@VI1PR04MB4333.eurprd04.prod.outlook.com>
- <20200207070544.geurecsy4i22xpzl@vireshk-i7>
- <VI1PR04MB4333E6B3340BADBC737E9CFFF3180@VI1PR04MB4333.eurprd04.prod.outlook.com>
- <20200211055315.qlqrxiqf72u36ijl@vireshk-i7>
- <VI1PR04MB4333D6A41BD1AB77489E3139F3180@VI1PR04MB4333.eurprd04.prod.outlook.com>
- <20200211063439.aqc4h6np3wjpsg2j@vireshk-i7>
-In-Reply-To: <20200211063439.aqc4h6np3wjpsg2j@vireshk-i7>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=andy.tang@nxp.com; 
-x-originating-ip: [120.244.236.31]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 91b348f3-fbf8-4aaa-866d-08d7aec2d05f
-x-ms-traffictypediagnostic: VI1PR04MB5488:
-x-microsoft-antispam-prvs: <VI1PR04MB5488EEDF75FBC4E976F569DBF3180@VI1PR04MB5488.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0310C78181
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(346002)(136003)(396003)(376002)(366004)(199004)(189003)(7696005)(478600001)(54906003)(71200400001)(44832011)(316002)(8936002)(55016002)(8676002)(52536014)(4744005)(9686003)(81166006)(81156014)(4326008)(5660300002)(33656002)(66446008)(66946007)(64756008)(66556008)(66476007)(76116006)(26005)(53546011)(6506007)(186003)(86362001)(6916009)(2906002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5488;H:VI1PR04MB4333.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YI6O9rRLDajNw5bTVhPCg3hpzUgDHpnmVCBihiwKmMcV/psK2hrZhW8fAW0zlvRINmIIQFt2gHq02WFz5FTfVJSUnp0M4fVBWTWJJeeo/UioFvXgbvKgYnYIxwKTLrzWo1k1Xf24HdFv/8tUfwPTxiWoHdYAT7bhVaHEjRaag3WhG1aEVbnIhg0Tr3f9WOzdb9fb6g188Aye/ZrfvHslv6K/PHMcwN+0Otd0l1+QmwxGk3BAY1zFBMOGzOEBNWLkd4dpGNWQPjM271qPLartQIIGmFgieQrE5YIKbnPH5cCC/QEOQIaL0mwgPdzSbqQooSkdcO6c41r5AAhTOIPY1fEKRd/M+RThtIsq9wF7LEuhtMMj50cA0i2X84Jtzd1IIsHowp+KMv2FrXO0EEhLsAb/OtvDdOaQTM6ad1PMnLDd1iY6DnqbnWarIPPv+t76
-x-ms-exchange-antispam-messagedata: LwpVMJ1Zz5iNZGu+HC+gdumbBjkU/LEoFH6304kZxO5KKAu5EcyLxIGeOG04lX6L7mKfNCAGJIqEBLmvHawVJs2cBRghAFpaLubF+FnMChmbQosGv8133yOT31OGOkB4R+Ds+QH0rxG3Z0vHehA3yw==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        id S1727178AbgBKHY4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Feb 2020 02:24:56 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:45366 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727041AbgBKHY4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 02:24:56 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01B7OntF041310;
+        Tue, 11 Feb 2020 01:24:49 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1581405889;
+        bh=t1zdbUy3wKpxVvWbk6TLsJ4+AsPZpXT7Lus31I/HQg8=;
+        h=From:To:CC:Subject:Date;
+        b=FQMHv87RWk0WDhxvUR0HWabGYDugs4YTBqqd0rv4njnv3N/mlv0V7EUy6abckCTbv
+         cycWkmrz/sA3lddxTOcpy4kKXpCaCSZSGVzukceGM05dKpryyB7RqWdBTlport/qp8
+         tb7NOEGiRJhVv/hf6xy95mbn0o5u7CPQ95BVia/k=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01B7OnI7050682
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 11 Feb 2020 01:24:49 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 11
+ Feb 2020 01:24:48 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 11 Feb 2020 01:24:48 -0600
+Received: from uda0131933.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01B7OjYI129498;
+        Tue, 11 Feb 2020 01:24:46 -0600
+From:   Lokesh Vutla <lokeshvutla@ti.com>
+To:     <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>
+CC:     Tero Kristo <t-kristo@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH] cpufreq: ti-cpufreq: Add support for OPP_PLUS
+Date:   Tue, 11 Feb 2020 12:53:55 +0530
+Message-ID: <20200211072355.5476-1-lokeshvutla@ti.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91b348f3-fbf8-4aaa-866d-08d7aec2d05f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2020 07:20:03.7375
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: w6wegfErcZuTSa2TpLl86nV60swFQwi0ymodsA22jARlb6IqN2eSFFAptPurUTdfo2OEvDSfJtfR1ZlAPmlwLw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5488
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-VGhhbmsgeW91IHZlcnkgbXVjaC4gSSBjb25maXJtZWQgaXQgd2FzIGNhdXNlZCBieSBRT1MuDQpU
-byBiZSBzcGVjaWZpYywgaXQgd2FzIGNhdXNlZCBieSBUTVUuDQoNCkJSLA0KQW5keQ0KDQo+IC0t
-LS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFZpcmVzaCBLdW1hciA8dmlyZXNoLmt1
-bWFyQGxpbmFyby5vcmc+DQo+IFNlbnQ6IDIwMjDE6jLUwjExyNUgMTQ6MzUNCj4gVG86IEFuZHkg
-VGFuZyA8YW5keS50YW5nQG54cC5jb20+DQo+IENjOiByandAcmp3eXNvY2tpLm5ldDsgbGludXgt
-cG1Admdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbRVhUXSBSZTogQXNrIGZvciBoZWxw
-IGFib3V0IGNwdWZyZXEgaXNzdWUNCj4gDQo+IENhdXRpb246IEVYVCBFbWFpbA0KPiANCj4gT24g
-MTEtMDItMjAsIDA2OjIzLCBBbmR5IFRhbmcgd3JvdGU6DQo+ID4gSSBhbSBnb2luZyB0byB0cmFj
-ayB0byBkZXZfcG1fcW9zX2FkZF9yZXF1ZXN0KCkgYXMgeW91IHN1Z2dlc3RlZC4NCj4gPiBCZWZv
-cmUgdGhhdCwgSSBhbSBhbHNvIHdvbmRlcmluZyB3aGF0IHRoZSBmYWN0b3IgaXQgY291bGQgYmUg
-dG8gbGltaXQgdGhlIGNwdQ0KPiBtYXggZnJlcXVlbmN5Pw0KPiANCj4gT25lIG9mIHRoZW0gaXMg
-dGhlcm1hbCwgYnV0IHRoZXJlIGNhbiBiZSBvdGhlcnMgYXMgd2VsbC4gSnVzdCBkbyBmb2xsb3dp
-bmcNCj4gc2VhcmNoIGluIHlvdXIga2VybmVsIHNvdXJjZSBjb2RlOg0KPiANCj4gZ2l0IGdyZXAg
-ZnJlcV9xb3NfYWRkX3JlcXVlc3QNCj4gDQo+IFRoaXMgd2lsbCBsaXN0IGFsbCB0aGUgc291cmNl
-cyBvZiB0aGlzIGNvbnN0cmFpbnQuDQo+IA0KPiAtLQ0KPiB2aXJlc2gNCg==
+DRA762 SoC introduces OPP_PLUS which runs at 1.8GHz. Add
+support for this OPP in ti-cpufreq driver.
+
+Acked-by: Dave Gerlach <d-gerlach@ti.com>
+Signed-off-by: Lokesh Vutla <lokeshvutla@ti.com>
+---
+ drivers/cpufreq/ti-cpufreq.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+index 557cb513bf7f..ab0de27539ad 100644
+--- a/drivers/cpufreq/ti-cpufreq.c
++++ b/drivers/cpufreq/ti-cpufreq.c
+@@ -25,11 +25,14 @@
+ 
+ #define DRA7_EFUSE_HAS_OD_MPU_OPP		11
+ #define DRA7_EFUSE_HAS_HIGH_MPU_OPP		15
++#define DRA76_EFUSE_HAS_PLUS_MPU_OPP		18
+ #define DRA7_EFUSE_HAS_ALL_MPU_OPP		23
++#define DRA76_EFUSE_HAS_ALL_MPU_OPP		24
+ 
+ #define DRA7_EFUSE_NOM_MPU_OPP			BIT(0)
+ #define DRA7_EFUSE_OD_MPU_OPP			BIT(1)
+ #define DRA7_EFUSE_HIGH_MPU_OPP			BIT(2)
++#define DRA76_EFUSE_PLUS_MPU_OPP		BIT(3)
+ 
+ #define OMAP3_CONTROL_DEVICE_STATUS		0x4800244C
+ #define OMAP3_CONTROL_IDCODE			0x4830A204
+@@ -80,6 +83,10 @@ static unsigned long dra7_efuse_xlate(struct ti_cpufreq_data *opp_data,
+ 	 */
+ 
+ 	switch (efuse) {
++	case DRA76_EFUSE_HAS_PLUS_MPU_OPP:
++	case DRA76_EFUSE_HAS_ALL_MPU_OPP:
++		calculated_efuse |= DRA76_EFUSE_PLUS_MPU_OPP;
++		/* Fall through */
+ 	case DRA7_EFUSE_HAS_ALL_MPU_OPP:
+ 	case DRA7_EFUSE_HAS_HIGH_MPU_OPP:
+ 		calculated_efuse |= DRA7_EFUSE_HIGH_MPU_OPP;
+-- 
+2.23.0
+
