@@ -2,86 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B52C015A6B2
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 11:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 052DD15A706
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 11:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728081AbgBLKnw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 05:43:52 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:52574 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727347AbgBLKno (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 05:43:44 -0500
-Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1j1pUc-0005aC-KQ; Wed, 12 Feb 2020 10:43:42 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     "David S. Miller" <davem@davemloft.net>,
+        id S1725874AbgBLKxB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 05:53:01 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:39519 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbgBLKxA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 05:53:00 -0500
+Received: by mail-ot1-f67.google.com with SMTP id 77so1457615oty.6;
+        Wed, 12 Feb 2020 02:53:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xDaTG9CjFB5v08pxicGCnpkVMw06DjcCCmv/DeDv44U=;
+        b=HIUS7iAUkK28kZCD5AEONCrJZT4uY97mXLftnxlSbHOR7DsnTiwn/K6IvMSpN/3qJi
+         KpQZCBxOirR1XFrPnRkJ9xAMMqC7uiXJWywNvp8tIyPNIhXtR4TvacHNK+qOPtge86jU
+         EPlQLUV8Se+oNvdXBvoMcquEeP5dLmKVYHpFUTPap0ZAzfq3W1EuRVfkuPYS140V0Z7l
+         uuqRpNBFQs0RChDrCeY37lCTgf2aSHGyRcZXNybu9/6KWC0vYmMTZ1g+oatetAt9GHjW
+         nMkYBHQdiZcQKpnhddFalnmTsHS5EXZPQXVUing/IyS1WpG8uvqLo+F6f18XReRHx0WV
+         ItcQ==
+X-Gm-Message-State: APjAAAVzqH1JOnGkAp+xEVtEwq1mfXqwKfCgwKSmWEXWun4ImdoxGHei
+        565V2gWgelr6MbF/db2NhvSFWuQU5tGy+HXVghPd54yk
+X-Google-Smtp-Source: APXvYqwlBWTrC37R7VTa9EjcJ61LqHAjx4orj3e8146ySRFGC3hM/aolrQr5MVazU5TX6FEIW3dTsCxbWszSxvggp/s=
+X-Received: by 2002:a05:6830:1651:: with SMTP id h17mr8361894otr.167.1581504779738;
+ Wed, 12 Feb 2020 02:52:59 -0800 (PST)
+MIME-Version: 1.0
+References: <20200212104321.43570-1-christian.brauner@ubuntu.com> <20200212104321.43570-8-christian.brauner@ubuntu.com>
+In-Reply-To: <20200212104321.43570-8-christian.brauner@ubuntu.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 12 Feb 2020 11:52:49 +0100
+Message-ID: <CAJZ5v0i+BFg6fEt4UP0vGb=KXBf=iWQcf1cL-2nk-xr=2xZ66w@mail.gmail.com>
+Subject: Re: [PATCH net-next 07/10] drivers/base/power: add dpm_sysfs_change_owner()
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
         Stephen Hemminger <stephen@networkplumber.org>,
-        linux-pm@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH net-next 10/10] net: fix sysfs permssions when device changes network namespace
-Date:   Wed, 12 Feb 2020 11:43:21 +0100
-Message-Id: <20200212104321.43570-11-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200212104321.43570-1-christian.brauner@ubuntu.com>
-References: <20200212104321.43570-1-christian.brauner@ubuntu.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now that we moved all the helpers in place and make use netdev_change_owner()
-to fixup the permissions when moving network devices between network
-namespaces.
+On Wed, Feb 12, 2020 at 11:43 AM Christian Brauner
+<christian.brauner@ubuntu.com> wrote:
+>
+> Add a helper to change the owner of a device's power entries. This
+> needs to happen when the ownership of a device is changed, e.g. when
+> moving network devices between network namespaces.
+> The ownership of a device's power entries is determined based on the
+> ownership of the corresponding kobject, i.e. only if the ownership of a
+> kobject is changed will this function change the ownership of the
+> corresponding sysfs entries.
+> This function will be used to correctly account for ownership changes,
+> e.g. when moving network devices between network namespaces.
+>
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> ---
+>  drivers/base/core.c        |  4 ++++
+>  drivers/base/power/power.h |  2 ++
+>  drivers/base/power/sysfs.c | 37 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 43 insertions(+)
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 262217287a09..dfaf6d3614fa 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -3515,6 +3515,10 @@ int device_change_owner(struct device *dev)
+>         if (error)
+>                 goto out;
+>
+> +       error = dpm_sysfs_change_owner(dev);
+> +       if (error)
+> +               goto out;
+> +
+>  #ifdef CONFIG_BLOCK
+>         if (sysfs_deprecated && dev->class == &block_class)
+>                 goto out;
+> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+> index 444f5c169a0b..f68490d0811b 100644
+> --- a/drivers/base/power/power.h
+> +++ b/drivers/base/power/power.h
+> @@ -74,6 +74,7 @@ extern int pm_qos_sysfs_add_flags(struct device *dev);
+>  extern void pm_qos_sysfs_remove_flags(struct device *dev);
+>  extern int pm_qos_sysfs_add_latency_tolerance(struct device *dev);
+>  extern void pm_qos_sysfs_remove_latency_tolerance(struct device *dev);
+> +extern int dpm_sysfs_change_owner(struct device *dev);
+>
+>  #else /* CONFIG_PM */
+>
+> @@ -88,6 +89,7 @@ static inline void pm_runtime_remove(struct device *dev) {}
+>
+>  static inline int dpm_sysfs_add(struct device *dev) { return 0; }
+>  static inline void dpm_sysfs_remove(struct device *dev) {}
+> +static inline int dpm_sysfs_change_owner(struct device *dev) { return 0; }
+>
+>  #endif
+>
+> diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+> index d7d82db2e4bc..ce1fd346e854 100644
+> --- a/drivers/base/power/sysfs.c
+> +++ b/drivers/base/power/sysfs.c
+> @@ -684,6 +684,43 @@ int dpm_sysfs_add(struct device *dev)
+>         return rc;
+>  }
+>
+> +int dpm_sysfs_change_owner(struct device *dev)
+> +{
+> +       int rc;
+> +
+> +       if (device_pm_not_required(dev))
+> +               return 0;
+> +
+> +       rc = sysfs_group_change_owner(&dev->kobj, &pm_attr_group);
+> +       if (rc)
+> +               return rc;
+> +
+> +       if (pm_runtime_callbacks_present(dev)) {
+> +               rc = sysfs_group_change_owner(&dev->kobj,
+> +                                             &pm_runtime_attr_group);
+> +               if (rc)
+> +                       return rc;
+> +       }
+> +       if (device_can_wakeup(dev)) {
+> +               rc = sysfs_group_change_owner(&dev->kobj,
+> +                                             &pm_wakeup_attr_group);
+> +               if (rc)
+> +                       return rc;
+> +       }
+> +       if (dev->power.set_latency_tolerance) {
+> +               rc = sysfs_group_change_owner(&dev->kobj,
+> +                               &pm_qos_latency_tolerance_attr_group);
+> +               if (rc)
+> +                       return rc;
+> +       }
+> +       if (dev->power.wakeup && dev->power.wakeup->dev) {
 
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
- net/core/dev.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+This is related to the device_can_wakeup(dev) condition above (i.e. it
+will never be 'true' if that one is 'false').
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index a69e8bd7ed74..e463539f0b1d 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10017,6 +10017,7 @@ EXPORT_SYMBOL(unregister_netdev);
- int dev_change_net_namespace(struct net_device *dev, struct net *net, const char *pat)
- {
- 	int err, new_nsid, new_ifindex;
-+	struct net *net_old = dev_net(dev);
- 
- 	ASSERT_RTNL();
- 
-@@ -10031,7 +10032,7 @@ int dev_change_net_namespace(struct net_device *dev, struct net *net, const char
- 
- 	/* Get out if there is nothing todo */
- 	err = 0;
--	if (net_eq(dev_net(dev), net))
-+	if (net_eq(net_old, net))
- 		goto out;
- 
- 	/* Pick the destination device name, and ensure
-@@ -10107,6 +10108,12 @@ int dev_change_net_namespace(struct net_device *dev, struct net *net, const char
- 	err = device_rename(&dev->dev, dev->name);
- 	WARN_ON(err);
- 
-+	/* Adapt owner in case owning user namespace of target network
-+	 * namespace is different from the original one.
-+	 */
-+	err = netdev_change_owner(dev, net_old, net);
-+	WARN_ON(err);
-+
- 	/* Add the device back in the hashes */
- 	list_netdevice(dev);
- 
--- 
-2.25.0
+LGTM apart from this.
 
+> +               rc = device_change_owner(dev->power.wakeup->dev);
+> +               if (rc)
+> +                       return rc;
+> +       }
+> +       return 0;
+> +}
+> +
+>  int wakeup_sysfs_add(struct device *dev)
+>  {
+>         return sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
+> --
+> 2.25.0
+>
