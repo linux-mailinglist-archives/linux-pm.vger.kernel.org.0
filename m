@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 090A315B550
+	by mail.lfdr.de (Postfix) with ESMTP id F39CE15B552
 	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 00:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729403AbgBLXwV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 18:52:21 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:41706 "EHLO
+        id S1729413AbgBLXwX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 18:52:23 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:42863 "EHLO
         mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729379AbgBLXwV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 18:52:21 -0500
-Received: by mail-lj1-f195.google.com with SMTP id h23so4430162ljc.8;
-        Wed, 12 Feb 2020 15:52:19 -0800 (PST)
+        with ESMTP id S1729392AbgBLXwW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 18:52:22 -0500
+Received: by mail-lj1-f195.google.com with SMTP id d10so4427842ljl.9;
+        Wed, 12 Feb 2020 15:52:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=P85n51a0RBVxAMi5sGqF85UkwlVfbar5qjBQfMRzeKU=;
-        b=nzXaT4dzfAgiQKy5Hd01UJteDiS1LiO7zNzf0SP6B1ymnqFrRD+onbnr/tlEelgJnF
-         KSjIzyT+VZdHXQW2TJmLdmBvehq/n8uI/AcBZbMIWU1g9Q1EyjwxdLiRZVUPF8TMfRbO
-         XTDnQn6SIKamTeQ8TX/iCxWRfB/cToDnwc0lW3QhJz5+fXV5ASHx9p7r4h7mmXhOJpBe
-         ip4YvamK0p/7Qd94jmzhRHPSFD0s1Xuo43nxcDha4O/kX9deQ9tPYtDR/f6bvvSYGHbw
-         NnQf67ozJ/NDV5LciDfg7h8+m81fuGi51EXMDF2R13hfiAq5w6kEYS9nYWP6bVJdBo4l
-         z5zg==
+        bh=z3O1HMuzT815KP/fiKiNHhisNV4yTz5j0lwdEN1r2gA=;
+        b=LjFPmiKtXUf4Gcbj9Ksipwu0FpomMDO71t+hfsdeWAeatZ2h/MPpUhVAiwKjtEDCXd
+         ziKaSJgxemoR+HHFfu2I+90ncgoiXzFGF72HkNsfsaNaM5IUYmOsnMpIBCFM0cwnsa6I
+         nxqMHAhU6Ri7t5OqOZtVC+QwFiRG432QoGGSLNOf9wGXVKMdalgMZ1K9/H3xxw37d0bm
+         l51YqJGoY/xD4DTZyuFzHJ4DQz1T/8XfzncIolFHZ27vZsMVKpeMg1TDQ6GfSfQQtn8P
+         WBel7S0GA0gaf9F9JFPpvJdR6ZXI4/vYigVyopEhi9TTD+yycl1gp4c6jRYnSK9kwd8N
+         eJ+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=P85n51a0RBVxAMi5sGqF85UkwlVfbar5qjBQfMRzeKU=;
-        b=Du2uPIdt8+fNDochtKD/koDinDH3j1U+Zw8wvSori+LCPqtaPcMsLTZLYgSGBv3kbs
-         Ws8GZAIBFp4R+MmVESGjW2reJhF09gh+KYcVWUeuXdUGRTsf0vR7HGkjidQAV2tE6Dw8
-         ZYFFWFz2qT59oucszzxmeIU6RhFtvZdunbKvndxpghsY0Vd7tKhWrvGiyo1hGVai57g8
-         SWuMTvYR2m687gg2b4NEspkJBFxUjEYRxMgRYCprLJkvTCSrbsDfedIpYv+wjXBCbDQl
-         DegMy/jkk+73nqg6FcEHM0Ob3nufGCDMr5AN4Gvk/HrgQDzhH5LAFL4GMls2dIbExo+X
-         yCVA==
-X-Gm-Message-State: APjAAAUT4wZx8ewRcEKiOk2CVn1ra/Z8udxxBjXB4AyeMY3wGYsZOYOb
-        RF+rUy3MCRyFawUJBUrmU4E=
-X-Google-Smtp-Source: APXvYqxgblEqBB3WbawetVv2cbtsEoQAAzyB3qrCoBRbEFe6d/63ODv2PlksKH1ZVsTov/Ki+wIb5w==
-X-Received: by 2002:a2e:b0f5:: with SMTP id h21mr9619821ljl.9.1581551538778;
-        Wed, 12 Feb 2020 15:52:18 -0800 (PST)
+        bh=z3O1HMuzT815KP/fiKiNHhisNV4yTz5j0lwdEN1r2gA=;
+        b=igfEC+YeQPBX91/DQ5Cmrluz2ppRegcw9yF/FkDt/UGEdnme5J+Y0VEnuigId99x9f
+         UT652vur7S9CL+cq1ozEs2FRA5iJV7+VYWV0tPkCTXBSdD/rgEGWIDSoQs+nhYVZHVhr
+         SeRyR8UTbEAC0AgJsJjoTzqmuWdXYxt66Q83WtmDzcaPpLalTj27Uk+z7P8kYj0D3E6v
+         TK6ymlogxZFnM3E1yNgXng6j7pATZdwOwmkbXBlp67Dp0iQK49ZU4DwbTi2CMlK7wsW4
+         p3cHzjXni7Z6wFhzdMsMcXYS+EUY4XFcpuS2vr3aVWRh/tVWegtGpffHHgw8Zh2PwnUh
+         TtbA==
+X-Gm-Message-State: APjAAAWAEr/rjVvWB7HHdQ+ZDCbCsHSIQtMlYw6duJHd/CIzZ3ZJ8dn6
+        7sBzsI1d4K3koHxBd6kPEk3gN8iF
+X-Google-Smtp-Source: APXvYqwoQrEHepz5UakbmcPEYM9Zx2wf91PR4MfdnpAcwmLQ+KDgn+ElMeslvJGG09O5cM0k7IXTQw==
+X-Received: by 2002:a2e:7d0c:: with SMTP id y12mr9458679ljc.39.1581551539810;
+        Wed, 12 Feb 2020 15:52:19 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id d5sm251686lfb.20.2020.02.12.15.52.17
+        by smtp.gmail.com with ESMTPSA id d5sm251686lfb.20.2020.02.12.15.52.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2020 15:52:18 -0800 (PST)
+        Wed, 12 Feb 2020 15:52:19 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -56,9 +56,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Peter Geis <pgwipeout@gmail.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v9 09/17] arm: tegra20: cpuidle: Handle case where secondary CPU hangs on entering LP2
-Date:   Thu, 13 Feb 2020 02:51:26 +0300
-Message-Id: <20200212235134.12638-10-digetx@gmail.com>
+Subject: [PATCH v9 10/17] arm: tegra20: cpuidle: Make abort_flag atomic
+Date:   Thu, 13 Feb 2020 02:51:27 +0300
+Message-Id: <20200212235134.12638-11-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20200212235134.12638-1-digetx@gmail.com>
 References: <20200212235134.12638-1-digetx@gmail.com>
@@ -69,9 +69,11 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It is possible that something may go wrong with the secondary CPU, in that
-case it is much nicer to get a dump of the flow-controller state before
-hanging machine.
+Replace memory accessors with atomic API just to make code consistent
+with the abort_barrier. The new variant may be even more correct now since
+atomic_read() will prevent compiler from generating wrong things like
+carrying abort_flag value in a register instead of re-fetching it from
+memory.
 
 Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
 Tested-by: Peter Geis <pgwipeout@gmail.com>
@@ -79,72 +81,39 @@ Tested-by: Jasper Korten <jja2000@gmail.com>
 Tested-by: David Heidelberg <david@ixit.cz>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/mach-tegra/cpuidle-tegra20.c | 47 +++++++++++++++++++++++++--
- 1 file changed, 45 insertions(+), 2 deletions(-)
+ arch/arm/mach-tegra/cpuidle-tegra20.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/arch/arm/mach-tegra/cpuidle-tegra20.c b/arch/arm/mach-tegra/cpuidle-tegra20.c
-index 9672c619f4bc..bcc158b72e67 100644
+index bcc158b72e67..ccb8b0aa6c46 100644
 --- a/arch/arm/mach-tegra/cpuidle-tegra20.c
 +++ b/arch/arm/mach-tegra/cpuidle-tegra20.c
-@@ -83,14 +83,57 @@ static inline void tegra20_wake_cpu1_from_reset(void)
- }
- #endif
+@@ -32,7 +32,7 @@
+ #include "sleep.h"
  
-+static void tegra20_report_cpus_state(void)
-+{
-+	unsigned long cpu, lcpu, csr;
-+
-+	for_each_cpu(lcpu, cpu_possible_mask) {
-+		cpu = cpu_logical_map(lcpu);
-+		csr = flowctrl_read_cpu_csr(cpu);
-+
-+		pr_err("cpu%lu: online=%d flowctrl_csr=0x%08lx\n",
-+		       cpu, cpu_online(lcpu), csr);
-+	}
-+}
-+
-+static int tegra20_wait_for_secondary_cpu_parking(void)
-+{
-+	unsigned int retries = 3;
-+
-+	while (retries--) {
-+		ktime_t timeout = ktime_add_ms(ktime_get(), 500);
-+
-+		/*
-+		 * The primary CPU0 core shall wait for the secondaries
-+		 * shutdown in order to power-off CPU's cluster safely.
-+		 * The timeout value depends on the current CPU frequency,
-+		 * it takes about 40-150us  in average and over 1000us in
-+		 * a worst case scenario.
-+		 */
-+		do {
-+			if (tegra_cpu_rail_off_ready())
-+				return 0;
-+
-+		} while (ktime_before(ktime_get(), timeout));
-+
-+		pr_err("secondary CPU taking too long to park\n");
-+
-+		tegra20_report_cpus_state();
-+	}
-+
-+	pr_err("timed out waiting secondaries to park\n");
-+
-+	return -ETIMEDOUT;
-+}
-+
- static bool tegra20_cpu_cluster_power_down(struct cpuidle_device *dev,
- 					   struct cpuidle_driver *drv,
- 					   int index)
- {
- 	bool ret;
+ #ifdef CONFIG_PM_SLEEP
+-static bool abort_flag;
++static atomic_t abort_flag;
+ static atomic_t abort_barrier;
+ static int tegra20_idle_lp2_coupled(struct cpuidle_device *dev,
+ 				    struct cpuidle_driver *drv,
+@@ -168,13 +168,14 @@ static int tegra20_idle_lp2_coupled(struct cpuidle_device *dev,
+ 	bool entered_lp2 = false;
  
--	while (!tegra_cpu_rail_off_ready())
--		cpu_relax();
-+	if (tegra20_wait_for_secondary_cpu_parking())
-+		return false;
+ 	if (tegra_pending_sgi())
+-		WRITE_ONCE(abort_flag, true);
++		atomic_set(&abort_flag, 1);
  
- 	ret = !tegra_pm_enter_lp2();
+ 	cpuidle_coupled_parallel_barrier(dev, &abort_barrier);
+ 
+-	if (abort_flag) {
++	if (atomic_read(&abort_flag)) {
+ 		cpuidle_coupled_parallel_barrier(dev, &abort_barrier);
+-		abort_flag = false;	/* clean flag for next coming */
++		/* clean flag for next coming */
++		atomic_set(&abort_flag, 0);
+ 		return -EINTR;
+ 	}
  
 -- 
 2.24.0
