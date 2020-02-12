@@ -2,85 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 627B615A505
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 10:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6902115A54C
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 10:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728737AbgBLJj1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 04:39:27 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:36119 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728748AbgBLJj1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 04:39:27 -0500
-Received: by mail-ot1-f66.google.com with SMTP id j20so1288542otq.3;
-        Wed, 12 Feb 2020 01:39:26 -0800 (PST)
+        id S1728670AbgBLJsv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 04:48:51 -0500
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:46529 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728801AbgBLJss (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 04:48:48 -0500
+Received: by mail-vs1-f66.google.com with SMTP id t12so727639vso.13
+        for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2020 01:48:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=H+Fm6etSpj2MWADhXyV9PGzYJlmqEQ52/Wr0GihWUEQXNK+fU+p0POGfytLAx/6Bsp
+         BzMlNVCPKeEvhzVGjstuhRht1bH7ywg7kSlenTMuAPtkHHMMoeUTnXu7WEeU74X3foCD
+         isFOv3LKoMB5fibUdrkLkOdJ7MJ5UH3K7/nltzZqvO/4UUxs8qIxacnfwVD9F5NcbHc8
+         qSzLfmoRNq0cIYImWKhe9Uyl4pSVe4kF5uuP9h0Svm79jimK7mwgFO642CgG3cm45e8F
+         B3B2GqzYetAzsiW4KI5yYXMopwOsEyKhKnWphUw+G2jISTsn4cckJPSEfmrAqry6xSFz
+         RuRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TVHOXdZQIG1hvtkU7bEsPCeerg5kIqs/hMFqFNcg7JQ=;
-        b=MgFVvTtWfybkX/WaurDlA9sq1dsTTfieDJf//q15OBbbO0GlW5+RyhJ8SpmhaYvtkE
-         Zxb1aFYLWqamEfHj37bpMvcjvi5E3OdSY23+Yt2HCafifN3BjjTCseJgjc6hNlPGBNFQ
-         d7a5rx98Df1AIATFgzn552ndLacOCSbQr0LbQT2KiJQBpZFg6RgMT2rQUKmPC2JR1ieT
-         IgWL9QWevNbNCzJIAeL7GZdJ4TEtWN6uTLlged6igijw2sMDBeLKpThXrS5YuSK9+Iff
-         XIOte3k7juJUzPsjEiuqOXxu/W9rO9sroqSPDQ1pUdkfa7kIGhTBijisAMxn+RMCWTFq
-         rAfg==
-X-Gm-Message-State: APjAAAWp+MmFWraqspUWsBYGa096WhtO45cJNLZ5Wo6hDQkAuZPnjxpU
-        24p45HZ+JFi9L1n5KtapY7b/9IhJqoAcV9/djkEEYlsv
-X-Google-Smtp-Source: APXvYqyf5AKNcupGWKoQbkmna9mQluMsReB0/JD7RKP0eRz9UunJT3HBsSKQKZIs5ApbFq6dG7AZKOkfvWCTNbbuqa4=
-X-Received: by 2002:a9d:67d7:: with SMTP id c23mr8653774otn.262.1581500366103;
- Wed, 12 Feb 2020 01:39:26 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=K30Kdlrarn7MKSoi0ibhgKd+uOyzwEW3Cud3B6g85vWlGBN3Upy0CdOvp9Vi3vQAQd
+         JIeEVP/yBYKU/Lg6yoWmY4cFavyyWa+Jb+9IF7hYyWo1fjeEKTCC/Jz8pRTY6Sf1q3uK
+         mqggvNTD9HlnZHHrmLWwQNLSlLghLVy5GQ2G4tU4+fh+vSZe0DvRnf/ZhXsFGnWR8RxF
+         wzaxHWn47LakGYweOYrCSPqfkyhQ6h7R9tJ1cgLNAcGGQYeljB74bIM4hMm0qa/iq7V1
+         5pp4L10uvjQtsLKdFO7rH6+uvQ4kU/9AW8XyB9GTl6AdBFbjlUwryZ1rP1sQ7OnGsTs5
+         AHeg==
+X-Gm-Message-State: APjAAAW7CCKE/f2dI69Rx49ZGhkGTqr1PZXBVOfLVYL16Cbb1rdgo7rL
+        +CvukSI2lMMKGxh0nk8ovXnk2/r0urNyp5/kBO8=
+X-Google-Smtp-Source: APXvYqwOiQbmR0FBvILhRTHuu7V+eRHPP+VcfL0g8Fma4XTHqSQ6mg0H05Af2W8R1Vn3xK4Cdsf+GJ06YFvAWkM72MM=
+X-Received: by 2002:a05:6102:2e4:: with SMTP id j4mr11694498vsj.134.1581500927003;
+ Wed, 12 Feb 2020 01:48:47 -0800 (PST)
 MIME-Version: 1.0
-References: <1654227.8mz0SueHsU@kreacher>
-In-Reply-To: <1654227.8mz0SueHsU@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 12 Feb 2020 10:39:13 +0100
-Message-ID: <CAJZ5v0h1z2p66J5KB3P0RjPkLE-DfDbcfhG_OrnDG_weir7HMA@mail.gmail.com>
-Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU
- latency QoS interface
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Received: by 2002:a05:6102:109d:0:0:0:0 with HTTP; Wed, 12 Feb 2020 01:48:46
+ -0800 (PST)
+Reply-To: ayishagddafio@mail.ru
+From:   AISHA GADDAFI <mahasaliou99999@gmail.com>
+Date:   Wed, 12 Feb 2020 01:48:46 -0800
+Message-ID: <CAMugOs_Nqd3VGiRvkGZe9Z+YzyvjpAovouRdUNBFsOsy-QXWCw@mail.gmail.com>
+Subject: Lieber Freund (Assalamu Alaikum),?
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 12:39 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> Hi All,
->
-> This series of patches is based on the observation that after commit
-> c3082a674f46 ("PM: QoS: Get rid of unused flags") the only global PM QoS class
-> in use is PM_QOS_CPU_DMA_LATENCY, but there is still a significant amount of
-> code dedicated to the handling of global PM QoS classes in general.  That code
-> takes up space and adds overhead in vain, so it is better to get rid of it.
->
-> Moreover, with that unuseful code removed, the interface for adding QoS
-> requests for CPU latency becomes inelegant and confusing, so it is better to
-> clean it up.
->
-> Patches [01/28-12/28] do the first part described above, which also includes
-> some assorted cleanups of the core PM QoS code that doesn't go away.
->
-> Patches [13/28-25/28] rework the CPU latency QoS interface (in the classic
-> "define stubs, migrate users, change the API proper" manner), patches
-> [26-27/28] update the general comments and documentation to match the code
-> after the previous changes and the last one makes the CPU latency QoS depend
-> on CPU_IDLE (because cpuidle is the only user of its target value today).
->
-> The majority of the patches in this series don't change the functionality of
-> the code at all (at least not intentionally).
->
-> Please refer to the changelogs of individual patches for details.
->
-> Thanks!
+--=20
+Lieber Freund (Assalamu Alaikum),
 
-This patch series is available in the git branch at
+Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
+Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
+Mutter und eine Witwe
+mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
+hen
+Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-cpu-latency-qos
+Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
+f=C3=BCnfhunderttausend
+United State Dollar ($ 27.500.000.00) und ich brauche eine
+vertrauensw=C3=BCrdige Investition
+Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
+jedoch
+M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
+von
+Investitionsprojekten in Ihrem Land
+Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
+bauen.
 
-for easier access, but please note that it may be updated in response
-to review comments etc.
+Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
+n und
+Unternehmensgewinn zu verhandeln
+Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
+
+Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
+antworten Sie bitte dringend
+Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
+.
+
+Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
+esse (
+ayishagddafio@mail.ru ) zur weiteren Diskussion.
+
+Freundliche Gr=C3=BC=C3=9Fe
+Frau Aisha Al-Qaddafi
