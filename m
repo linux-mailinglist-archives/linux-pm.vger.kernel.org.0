@@ -2,156 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD99215ABB1
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 16:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A3115AC00
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 16:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727957AbgBLPHv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 10:07:51 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:59897 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727698AbgBLPHu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 10:07:50 -0500
-Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1j1tcB-0006F3-Aq; Wed, 12 Feb 2020 15:07:47 +0000
-Date:   Wed, 12 Feb 2020 16:07:43 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH net-next 05/10] sysfs: add sysfs_change_owner()
-Message-ID: <20200212150743.zyubvz53unyevbkx@wittgenstein>
-References: <20200212104321.43570-1-christian.brauner@ubuntu.com>
- <20200212104321.43570-6-christian.brauner@ubuntu.com>
- <20200212131808.GA1789899@kroah.com>
+        id S1727519AbgBLPgR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 10:36:17 -0500
+Received: from foss.arm.com ([217.140.110.172]:34146 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727026AbgBLPgR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 12 Feb 2020 10:36:17 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FBF5328;
+        Wed, 12 Feb 2020 07:36:16 -0800 (PST)
+Received: from [10.1.194.46] (e113632-lin.cambridge.arm.com [10.1.194.46])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B7A873F68F;
+        Wed, 12 Feb 2020 07:36:13 -0800 (PST)
+Subject: Re: [PATCH v3 2/7] arm64: trap to EL1 accesses to AMU counters from
+ EL0
+To:     Ionela Voinescu <ionela.voinescu@arm.com>, catalin.marinas@arm.com,
+        will@kernel.org, mark.rutland@arm.com, maz@kernel.org,
+        suzuki.poulose@arm.com, sudeep.holla@arm.com, lukasz.luba@arm.com,
+        rjw@rjwysocki.net
+Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Steve Capper <steve.capper@arm.com>
+References: <20200211184542.29585-1-ionela.voinescu@arm.com>
+ <20200211184542.29585-3-ionela.voinescu@arm.com>
+From:   Valentin Schneider <valentin.schneider@arm.com>
+Message-ID: <17a791d0-89ec-9b1e-ff36-502cbf51ab17@arm.com>
+Date:   Wed, 12 Feb 2020 15:36:12 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+In-Reply-To: <20200211184542.29585-3-ionela.voinescu@arm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200212131808.GA1789899@kroah.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 05:18:08AM -0800, Greg Kroah-Hartman wrote:
-> On Wed, Feb 12, 2020 at 11:43:16AM +0100, Christian Brauner wrote:
-> > Add a helper to change the owner of sysfs objects.
+On 11/02/2020 18:45, Ionela Voinescu wrote:
+> The activity monitors extension is an optional extension introduced
+> by the ARMv8.4 CPU architecture. In order to access the activity
+> monitors counters safely, if desired, the kernel should detect the
+> presence of the extension through the feature register, and mediate
+> the access.
 > 
-> Seems sane, but:
+> Therefore, disable direct accesses to activity monitors counters
+> from EL0 (userspace) and trap them to EL1 (kernel).
 > 
-> > The ownership of a sysfs object is determined based on the ownership of
-> > the corresponding kobject, i.e. only if the ownership of a kobject is
-> > changed will this function change the ownership of the corresponding
-> > sysfs entry.
+> To be noted that the ARM64_AMU_EXTN kernel config and the disable_amu
+> kernel parameter do not have an effect on this code. Given that the
+> amuserenr_el0 resets to an UNKNOWN value, setting the trap of EL0
+> accesses to EL1 is always attempted for safety and security
+> considerations. Therefore firmware should still ensure accesses to
+> AMU registers are not trapped in EL2/EL3 as this code cannot be
+> bypassed if the CPU implements the Activity Monitors Unit.
 > 
-> A "sysfs object" is a kobject.  So I don't understand this sentance,
-> sorry.
+> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Steve Capper <steve.capper@arm.com>
 
-I meant that only if you change the uid/gid the underlying kobject is
-associated with will this function do anything, meaning that you can't
-pass in uids/gids directly. I'll explain why I did this down below [1].
-Sorry if that was confusing.
-
-> 
-> > This function will be used to correctly account for kobject ownership
-> > changes, e.g. when moving network devices between network namespaces.
-> > 
-> > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> > ---
-> >  fs/sysfs/file.c       | 35 +++++++++++++++++++++++++++++++++++
-> >  include/linux/sysfs.h |  6 ++++++
-> >  2 files changed, 41 insertions(+)
-> > 
-> > diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
-> > index 6239d9584f0b..6a0fe88061fd 100644
-> > --- a/fs/sysfs/file.c
-> > +++ b/fs/sysfs/file.c
-> > @@ -642,3 +642,38 @@ int sysfs_file_change_owner(struct kobject *kobj, const char *name)
-> >  	return error;
-> >  }
-> >  EXPORT_SYMBOL_GPL(sysfs_file_change_owner);
-> > +
-> > +/**
-> > + *	sysfs_change_owner - change owner of the given object.
-> > + *	@kobj:	object.
-> > + */
-> > +int sysfs_change_owner(struct kobject *kobj)
-> 
-> What does this change the owner of the given object _to_?
-
-[1]:
-So ownership only changes if the kobject's uid/gid have been changed.
-So when to stick with the networking example, when a network device is
-moved into a new network namespace, the uid/gid of the kobject will be
-changed to the root user of the owning user namespace of that network
-namespace. So when the move of the network device has completed and
-kobject_get_ownership() is called it will now return a different
-uid/gid.
-So my reasoning was that ownership is determined dynamically that way. I
-guess what you're hinting at is that we could simply add uid_t uid,
-gid_t gid arguments to these sysfs helpers. That's fine with me too. It
-means that callers are responsible to either retrieve the ownership from
-the kobject (in case it was changed through another call) or the call to
-syfs_change_owner(kobj, uid, gid) sets the new owner of the kobject. I
-don't know what the best approach is. Maybe a hybrid whereby we allow
-passing in uid/gid but also allow passing in ({g,u}id_t - 1) to indicate
-that we want the ownership to be taken from the kobject itself (e.g.
-when a network device has been updated by dev_change_net_namespace()).
-
-> 
-> > +{
-> > +	int error;
-> > +	const struct kobj_type *ktype;
-> > +
-> > +	if (!kobj->state_in_sysfs)
-> > +		return -EINVAL;
-> > +
-> > +	error = sysfs_file_change_owner(kobj, NULL);
-> 
-> It passes NULL?
-
-Which means, change the ownership of "kobj" itself and not lookup a file
-relative to "kobj".
-
-> 
-> 
-> > +	if (error)
-> > +		return error;
-> > +
-> > +	ktype = get_ktype(kobj);
-> > +	if (ktype) {
-> > +		struct attribute **kattr;
-> > +
-> > +		for (kattr = ktype->default_attrs; kattr && *kattr; kattr++) {
-> > +			error = sysfs_file_change_owner(kobj, (*kattr)->name);
-> > +			if (error)
-> > +				return error;
-> > +		}
-> > +
-> > +		error = sysfs_groups_change_owner(kobj, ktype->default_groups);
-> > +		if (error)
-> > +			return error;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(sysfs_change_owner);
-> 
-> I can understand wanting to change owners/groups/whatever of existing
-> sysfs objects and their files, but I can't figure out how to call this
-> function to set the attribute I want to change.
-> 
-> With only one parameter, how does this work?  It guesses?  :)
-
-See [1]. :)
-And sorry if that wasn't clear!
-
-Thanks!
-Christian
+Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
