@@ -2,73 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF9D15A497
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 10:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B1A15A4CA
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 10:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728680AbgBLJZV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 04:25:21 -0500
-Received: from sonic310-13.consmr.mail.bf2.yahoo.com ([74.6.135.123]:45396
-        "EHLO sonic310-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728667AbgBLJZU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 04:25:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1581499520; bh=6u3qDl6yXWBH9oVBF6VmNFaXPPfmaUEmS0LDo6+oXlw=; h=Date:From:Reply-To:Subject:References:From:Subject; b=J5dKLDfDi56lQeQxTLu6EvFzlMGYE77+iQr5xLKxUL/xh0c0Vh57iP0res/9SMqSpHDBwGGwfVmZZRDB9rLOiv9G8uJN+aqyoiJYD1LFBbZ9L01vHXxK2EttWjJ0EDnsmrrBmBsULki8il9+D9k7FONEh9KbQP+Tt+zDlFcLdZOnA8NQyHDJbEJpO9q9gCEpM3hWgD6kw8BlQzDZvXLSzGtraPJBe/F9EBu6XWWS/cuP57RBrB0P/5HPCoUrI7UTDPvydriuPlcleiA0cjoyGaaJEk/mr6z56WN3Ds5bqSk8WfXK2ALcwxiiyVfzxKTljnRgwqDesG2H7WKwwG6Wfg==
-X-YMail-OSG: mdu5LJwVM1kTJTJtU.QodtkUw68C5A_MPMG.I15g11QEKAnaLtUdiivTTW8QKsb
- foLwfXzbqtbDPZKPLj7AKJ4mYMTli0OEOjauViGoOLmhmAvwtiakjuYnJPiVfqWgdMrNj5Eacx3L
- YnDA7bQ7pP7BDaTUZAVs_DNRMFnRuPZ__yjd0CBf3RpoZMlpVf1pYwU1Qj_MWIyqMD7.ttT0zvAb
- Nxew.Kb_hShpWiqEl0KCcfT5kmJbHj1H_I.1PZTgAiqs.nlNHcwZWY2AjvEq39qe6fa0z79OIdxd
- edqXvHjcIrWzjDHYrv.aEavwjDrdpT1N4.tGAKUBRGZ7_m323B1B8YAiRAp3JGrSM7mjjcES.eE2
- PQOumQJyTeTWHfeNCQMbsHUGGYfFqiwrm7gCtxaW_psafHwkVT_RHEsBNY9obtSs1IdV8tu0zCcZ
- SyjZEVSDccEkPZ6pG35vuZXq0QqS7KnKZRqqLvVOgnfIp9nW813FZiV6mISoFeFbkW62Uo.Hle3E
- .uBTzj6cyt_hMX4uWnl4NHqGeLgxXSiL3ehlsznHULri3YpxdpctktyB93lRv4XtjUb9EonESP8n
- UxgKhNAf0PUgnSf7882waQqpPx.HYr4adTn1TX_ei._dGg3yBNdc8v0z9E7LmmEjLIMxUrb2ZaPU
- fb3B039.Dsz4Hl15ip4i730Y94jcqkbQMaOZY2UzZ_9DpN225nGS24O1vjOflXPpX4dsLUrII.t.
- Hv8lhFY7dTJj3vOu65tzIRU3IC_TlMcW2yfWdC1csDT2MrPyMXKz.MZzQu1r1BIEbR_KLJbXsnFr
- n0dB61_tkrK_fykqu3opUIvHgU4UvHoaXfnRm6JOKW_8.uuy2QenfZkUVZMglk2fQ7I3A1Y2S5s_
- SNYRumc8tL6wt6cFYST.9Vb_Vw8HUFA3VWRisM4._rSBMBXo6dkdDm5oLPqKtOv2qf2kBug2Eyi6
- nRCT5oJcgHGYU61pu3npE.ncjkzeycCSR.Cl22GCJ4BJoiCLjHh9T_WDI6mhMJXT8gMoUMh2Aku5
- q4hcrRYvOqHNrC5fpR9h6deFMVYeqqwzRuVIaVlyAcBS.dnF0S8H8fk8UWmJhcqaYaIjUmNGi4HJ
- y7pL7s_j4TKKJUzRBj2JWuzaWH6Sip69NpGxN_Y_PkYXtDEpmZ08vDnRD3e.6pLLBGDoihL7kp.d
- seEEe0dWtL81YVeIblChqJ1P8NosWiqu3fetD.s.zcze6..3f2PtyeEmf1mIytxSZg124oSom3_h
- gbBN6f6gVa6M4f0lgUovnuG.m.1zJkBCVvZ5y0VuXUmbNTfXmhsNmuHqMkTEde8ouuspkKGjF3Mo
- ikYo-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.bf2.yahoo.com with HTTP; Wed, 12 Feb 2020 09:25:20 +0000
-Date:   Wed, 12 Feb 2020 09:25:17 +0000 (UTC)
-From:   Ms Lisa Hugh <lisa.hugh222@gmail.com>
-Reply-To: ms.lisahugh000@gmail.com
-Message-ID: <1853831241.1328184.1581499517784@mail.yahoo.com>
-Subject: BUSINESS TRANSFER CO-OPERATION.
+        id S1728727AbgBLJaj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 04:30:39 -0500
+Received: from foss.arm.com ([217.140.110.172]:57938 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728530AbgBLJaj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 12 Feb 2020 04:30:39 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D521130E;
+        Wed, 12 Feb 2020 01:30:38 -0800 (PST)
+Received: from [10.1.194.46] (e113632-lin.cambridge.arm.com [10.1.194.46])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D400A3F6CF;
+        Wed, 12 Feb 2020 01:30:36 -0800 (PST)
+Subject: Re: [PATCH v3 7/7] clocksource/drivers/arm_arch_timer: validate
+ arch_timer_rate
+To:     Ionela Voinescu <ionela.voinescu@arm.com>, catalin.marinas@arm.com,
+        will@kernel.org, mark.rutland@arm.com, maz@kernel.org,
+        suzuki.poulose@arm.com, sudeep.holla@arm.com, lukasz.luba@arm.com,
+        rjw@rjwysocki.net
+Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20200211184542.29585-1-ionela.voinescu@arm.com>
+ <20200211184542.29585-8-ionela.voinescu@arm.com>
+From:   Valentin Schneider <valentin.schneider@arm.com>
+Message-ID: <05e257b6-0a39-135d-8117-7883739538c3@arm.com>
+Date:   Wed, 12 Feb 2020 09:30:34 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20200211184542.29585-8-ionela.voinescu@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-References: <1853831241.1328184.1581499517784.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15199 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:72.0) Gecko/20100101 Firefox/72.0
-To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 11/02/2020 18:45, Ionela Voinescu wrote:
+> From: Valentin Schneider <valentin.schneider@arm.com>
+> 
+> Using an arch timer with a frequency of less than 1MHz can result in an
+> incorrect functionality of the system which assumes a reasonable rate.
+> 
+> One example is the use of activity monitors for frequency invariance
+> which uses the rate of the arch timer as the known rate of the constant
+> cycle counter in computing its ratio compared to the maximum frequency
+> of a CPU. For arch timer frequencies less than 1MHz this ratio could
+> end up being 0 which is an invalid value for its use.
+> 
 
+I'm being pedantic here (as usual), but I'd contrast this a bit more. The
+activity monitor code checks by itself that the ratio doesn't end up being
+0, which is why we don't slam the brakes if the arch timer freq is < 1MHz.
 
-Dear Friend,
+It's just a CNTFRQ sanity check that goes a bit beyond the 0 value check,
+IMO.
 
-I am Ms Lisa Hugh work with the department of Audit and accounting manager here in the Bank(B.O.A).
+> Therefore, warn if the arch timer rate is below 1MHz which contravenes
+> the recommended architecture interval of 1 to 50MHz.
+> 
+> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
 
-Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment and the amount is (US$4.5M DOLLARS).
+ISTR something somewhere that says the first signoff should be that of the
+author of the patch, and seeing as I just provided an untested diff that
+ought to be you :)
 
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me after success.
-
-Note/ 50% for you why 50% for me after success of the transfer to your bank account.
-
-Below information is what i need from you so will can be reaching each other .
-
-1)Full name ...
-2)Private telephone number...
-3)Age...
-4)Nationality...
-5)Occupation ...
-
-
-Thanks.
-
-Ms Lisa Hugh
