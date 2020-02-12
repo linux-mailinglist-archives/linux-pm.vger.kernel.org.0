@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2452415B54D
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 00:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF8B15B55C
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 00:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729454AbgBLXw3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 18:52:29 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:40050 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729434AbgBLXw3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 18:52:29 -0500
-Received: by mail-lf1-f68.google.com with SMTP id c23so2875762lfi.7;
-        Wed, 12 Feb 2020 15:52:27 -0800 (PST)
+        id S1729509AbgBLXwo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 18:52:44 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:43284 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729453AbgBLXwb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 18:52:31 -0500
+Received: by mail-lf1-f65.google.com with SMTP id 9so2864727lfq.10;
+        Wed, 12 Feb 2020 15:52:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zsiGVctojQQ/6++c4wQ+fRDwiUrqLwmb6/O4RUjlNXE=;
-        b=OU7ZIoH6xa+RHKvzKulLNccHwssYjB1zeJg521ypdoR6sRKoJsmJ2nKPcwohrYHCZr
-         m+j5R/XsjR3vmmdB2r9Rqq2qyYCGq4iX/6ftkIdcJtaPhgQix9G1jallZ3WficK/4MyQ
-         81LYxBMqhzu/g+JvedxO0kgLrr/99RoACcF63aPmxxQJWzxLC7wfoFPexwTRFnWNic4w
-         j7kVxrxPNAhbbswkCE0VrSTNDqOIUvcXvAQPSONtrsTyeRNKpLS7sqCBwXZuobxzu327
-         6889rNENjD6+Do/lERUsdv1qmd/1ZOfnR5KaD3xnchMeu8s5q1+At+JiUKAxCQ2PTudD
-         qoxw==
+        bh=OX3etwg8UyXmbbSJQLCscVLMHChzcySiKJD4V7kijDA=;
+        b=pb0kujSMPSK9w5g/NZnWBfK3adbQLCtsLhaqCVMO1zfTwrmWPfIqE9FfIUTklifwcQ
+         EpG+m0tpurnUvzieFdKYgbEdgACJYECFHzlBdD2lP8Roe56xjXoSBuQmgO2gDo/PsvZi
+         SFlzdWhQYGZI6EZsLX/fDgvQ0V4V8RgGi0yGYcDpoJXqKm5ZjEdRb2J3c39S7uy3iVta
+         6aHw5RcIuYMcWcbj35bIe5BG2v8ci45vzA54VVZy1ik+OqyvwHF4+6+WsH39gMqPVQpT
+         bLpYVtgl7JBk5ajwAHpy6FIeenOMRAc+wtA7M6jHtaZ3K6SwXJ5a+fMo7OZ3bSIWIl9o
+         LsnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zsiGVctojQQ/6++c4wQ+fRDwiUrqLwmb6/O4RUjlNXE=;
-        b=Nd0v8/CJwNxuFZQxWsoU3uUfDFokqL4pXp7ioBPNj64E7k0A6ZHjGMNwiLbpU2Ampy
-         KsYuj+ix/BYg4glAm9H9716tfclZs2KUqaPAQ9GV0tLkEqEvg9LAqUfyZwZfkoGsoJRG
-         6ay3BGys6Wm02/JqlW/FfqOf8OcYs6FiVXr+8Uw9CZ/ZWye0SflHH2UzDI+BgjDeJvQo
-         Dk41kUt/yTUjAQU+HyBC2QwSgyg18tf+iD35qZqv9V60tSQ3Ro7S0t9/p09iAW6d4afS
-         5Jgji6sWKIQHUvrihKmZr94DUbPNfm9rIEYydLwUY+Ns7n1kGxFL/JL5I57FjhU0fSeG
-         nV/Q==
-X-Gm-Message-State: APjAAAWNslwnhU3LyGBCpWn661fvXiqS16R1GjOAkNOMfbcrbdZ6sFe4
-        EuBsKAuLw1ODYH3RrbNUAFY=
-X-Google-Smtp-Source: APXvYqznhcpF7KnI+KM7LHINL4een5Ysq+21b+f/U4l60sOASA+jqVYxQ1lri4YNGc2FKdl2s0EJDA==
-X-Received: by 2002:a19:9d5:: with SMTP id 204mr7661617lfj.120.1581551546802;
-        Wed, 12 Feb 2020 15:52:26 -0800 (PST)
+        bh=OX3etwg8UyXmbbSJQLCscVLMHChzcySiKJD4V7kijDA=;
+        b=tGhtz7D2IDZCWDyDv5n/MIvMZNtoA0bF2fWiF3Y60dYn611ZHEjkvBz1E4TFCuTnD+
+         D4oHaW+EMc0XRGvpMWpAzPhkgXx9DQafAccpd2zdm25bTvc6Vul550fzuwYO8GnWcjAi
+         n1GFl0Bj9gtKuOajK3w7/9bJsiKb798MHiwb8A+IQNJboe6ST+SohzgOU2GEluEDn3M2
+         w6WJL5kUr/Zx7g4PNlazhYhj5wQ+Mod/1RPrGxCv/Fo2Zs5DvY/MimTcdX53D7nahiDs
+         k/YCAIkKe7cnvDLZxXyXVJv6e4Kko0h9pntZI7XgktcukGzQElQn1WVKr69PsilS1G59
+         sZjw==
+X-Gm-Message-State: APjAAAVibMkF9phuCNVetTmRmd9cE9483vcXglWs2DMmbSE9FXLOBNkv
+        8149uG5OzfHZPOmUoQ9cJl4=
+X-Google-Smtp-Source: APXvYqzB2TcbLmdxgpXvaaPhZYtm6jwsllo4cX22rC0BJrqGpeJtyb78eZi0LoL0mfpDNpirtJvZjQ==
+X-Received: by 2002:a19:7401:: with SMTP id v1mr7867766lfe.129.1581551547805;
+        Wed, 12 Feb 2020 15:52:27 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id d5sm251686lfb.20.2020.02.12.15.52.25
+        by smtp.gmail.com with ESMTPSA id d5sm251686lfb.20.2020.02.12.15.52.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2020 15:52:26 -0800 (PST)
+        Wed, 12 Feb 2020 15:52:27 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -56,9 +56,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Peter Geis <pgwipeout@gmail.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v9 16/17] ARM: multi_v7_defconfig: Enable Tegra cpuidle driver
-Date:   Thu, 13 Feb 2020 02:51:33 +0300
-Message-Id: <20200212235134.12638-17-digetx@gmail.com>
+Subject: [PATCH v9 17/17] ARM: tegra: Enable Tegra cpuidle driver in tegra_defconfig
+Date:   Thu, 13 Feb 2020 02:51:34 +0300
+Message-Id: <20200212235134.12638-18-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20200212235134.12638-1-digetx@gmail.com>
 References: <20200212235134.12638-1-digetx@gmail.com>
@@ -75,20 +75,20 @@ it is now a proper platform driver.
 Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/configs/multi_v7_defconfig | 1 +
+ arch/arm/configs/tegra_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 017d65f86eba..7c8a1c310bbb 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -113,6 +113,7 @@ CONFIG_CPU_IDLE=y
- CONFIG_ARM_CPUIDLE=y
- CONFIG_ARM_ZYNQ_CPUIDLE=y
- CONFIG_ARM_EXYNOS_CPUIDLE=y
+diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
+index a27592d3b1fa..aa94369bdd0f 100644
+--- a/arch/arm/configs/tegra_defconfig
++++ b/arch/arm/configs/tegra_defconfig
+@@ -25,6 +25,7 @@ CONFIG_CPU_FREQ=y
+ CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
+ CONFIG_CPUFREQ_DT=y
+ CONFIG_CPU_IDLE=y
 +CONFIG_ARM_TEGRA_CPUIDLE=y
- CONFIG_KERNEL_MODE_NEON=y
- CONFIG_RASPBERRYPI_FIRMWARE=y
+ CONFIG_VFP=y
+ CONFIG_NEON=y
  CONFIG_TRUSTED_FOUNDATIONS=y
 -- 
 2.24.0
