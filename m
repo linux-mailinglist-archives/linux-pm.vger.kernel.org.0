@@ -2,98 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 568E3159DA3
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 00:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFAD159FC7
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 05:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727976AbgBKXsK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Feb 2020 18:48:10 -0500
-Received: from mga06.intel.com ([134.134.136.31]:29089 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727955AbgBKXsK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Feb 2020 18:48:10 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Feb 2020 15:48:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,428,1574150400"; 
-   d="asc'?scan'208";a="233621554"
-Received: from jtkirshe-desk1.jf.intel.com ([134.134.177.74])
-  by orsmga003.jf.intel.com with ESMTP; 11 Feb 2020 15:48:09 -0800
-Message-ID: <43c9336e1c0c23e374420586868052e947b75126.camel@intel.com>
-Subject: Re: [PATCH 20/28] drivers: net: Call cpu_latency_qos_*() instead of
- pm_qos_*()
-From:   Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Reply-To: jeffrey.t.kirsher@intel.com
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        intel-wired-lan@lists.osuosl.org,
-        Kalle Valo <kvalo@codeaurora.org>,
-        linux-wireless@vger.kernel.org
-Date:   Tue, 11 Feb 2020 15:48:09 -0800
-In-Reply-To: <10624145.o336LLEsho@kreacher>
-References: <1654227.8mz0SueHsU@kreacher> <10624145.o336LLEsho@kreacher>
-Organization: Intel
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-GaZoanpPv4L3uFpFpUoG"
-User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
+        id S1727843AbgBLELw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Feb 2020 23:11:52 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:52223 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727602AbgBLELw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Feb 2020 23:11:52 -0500
+Received: by mail-pj1-f68.google.com with SMTP id fa20so295073pjb.1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2020 20:11:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=W+QTR48OqykWy5/ehCHMs+7sFSz/xjk3FQlT6pd118Y=;
+        b=E+06gfvMBiE1Ks3YH7MaemoT8YRv8WXvpxjrb+QqvFOex+72qLSpkgBl5uG49ETpZf
+         bmgnQ7pdpz5fhuaROXGdw1HjsXZKHJRPxTOrjbmi+tTr4pNbMvrW/8/gZbj4qF2TzW5u
+         J6qDMIkegCf1SRu1ZVfB5QYgvbZq+aAGFqck6Cej66IOntQeldJnAmwtA6kK2O63tEt7
+         Q+UQdvS58idwRCQ8Xy7hRID9idiXwkG+shSqFYLWtC7QEVDZEe9v1qNBePtz84IdwoTV
+         m0olzSec61urUmNKEHS1DxqXZewjrqKDfRCWo/dvrWwO+oPwac7OTtgYcRLeSQnbkCkV
+         +RhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=W+QTR48OqykWy5/ehCHMs+7sFSz/xjk3FQlT6pd118Y=;
+        b=MQ16Qsk/PzFgN38aPYZ+w66+a8CyiB6Yhh/bLMHkip07dZEax0OPYy4WM8djmh1EZ8
+         kEYyF3MmHCMZ7WwST5kqIwGguO2FYILS0l4Co7W32CBco1lfjqeTYbVxzjPf1L7cF/fj
+         liNBcHueEIkPiGeT/aOo0disxuGW74/NooJq1LC4F2zWpm5UxoaqVW1bo8zomu6xYCpJ
+         huoD+1dt7PjCFpyCNfGAsbFSTIymRZ6QnLDZ3/xABovPR/9bIxfEemCF2rcZIJb3LFJc
+         XLcaIb3+aWaXP6+JJZDbDIK3r797xR4H5ihFb92fYdKu/PdHblrCV4/ZerPo5zEDug6H
+         D1tQ==
+X-Gm-Message-State: APjAAAW7sST+kmyqQee8dlZ+64Zh+pZX5RCKvWgKF/l8v1HCNrQf6iQG
+        z/C1Z7JhtbXNYXdlQOB08oGxVw==
+X-Google-Smtp-Source: APXvYqw4xtMA6dvfNR7gOlXiS9oB5WsGSZ/+0TAc5So7WwT2pipAfAUhC5o56tc8WfT5SsrQKtzg/Q==
+X-Received: by 2002:a17:90a:d80b:: with SMTP id a11mr7716068pjv.142.1581480711508;
+        Tue, 11 Feb 2020 20:11:51 -0800 (PST)
+Received: from localhost ([122.167.210.63])
+        by smtp.gmail.com with ESMTPSA id c3sm6214302pfj.159.2020.02.11.20.11.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 11 Feb 2020 20:11:50 -0800 (PST)
+Date:   Wed, 12 Feb 2020 09:41:48 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lokesh Vutla <lokeshvutla@ti.com>
+Cc:     linux-pm@vger.kernel.org, Tero Kristo <t-kristo@ti.com>,
+        Dave Gerlach <d-gerlach@ti.com>, Sekhar Nori <nsekhar@ti.com>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] cpufreq: ti-cpufreq: Add support for OPP_PLUS
+Message-ID: <20200212041148.vptopihbts7ummb4@vireshk-i7>
+References: <20200211072355.5476-1-lokeshvutla@ti.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200211072355.5476-1-lokeshvutla@ti.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---=-GaZoanpPv4L3uFpFpUoG
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, 2020-02-12 at 00:24 +0100, Rafael J. Wysocki wrote:
-> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
->=20
-> Call cpu_latency_qos_add/update/remove_request() instead of
-> pm_qos_add/update/remove_request(), respectively, because the
-> latter are going to be dropped.
->=20
-> No intentional functional impact.
->=20
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Acked-by: Jeff Kirsher <jeffrey.t.kirsher@intel.com
-
-For the e1000e changes
-
+On 11-02-20, 12:53, Lokesh Vutla wrote:
+> DRA762 SoC introduces OPP_PLUS which runs at 1.8GHz. Add
+> support for this OPP in ti-cpufreq driver.
+> 
+> Acked-by: Dave Gerlach <d-gerlach@ti.com>
+> Signed-off-by: Lokesh Vutla <lokeshvutla@ti.com>
 > ---
->  drivers/net/ethernet/intel/e1000e/netdev.c   | 13 ++++++-------
->  drivers/net/wireless/ath/ath10k/core.c       |  4 ++--
->  drivers/net/wireless/intel/ipw2x00/ipw2100.c | 10 +++++-----
->  3 files changed, 13 insertions(+), 14 deletions(-)
+>  drivers/cpufreq/ti-cpufreq.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+> index 557cb513bf7f..ab0de27539ad 100644
+> --- a/drivers/cpufreq/ti-cpufreq.c
+> +++ b/drivers/cpufreq/ti-cpufreq.c
+> @@ -25,11 +25,14 @@
+>  
+>  #define DRA7_EFUSE_HAS_OD_MPU_OPP		11
+>  #define DRA7_EFUSE_HAS_HIGH_MPU_OPP		15
+> +#define DRA76_EFUSE_HAS_PLUS_MPU_OPP		18
+>  #define DRA7_EFUSE_HAS_ALL_MPU_OPP		23
+> +#define DRA76_EFUSE_HAS_ALL_MPU_OPP		24
+>  
+>  #define DRA7_EFUSE_NOM_MPU_OPP			BIT(0)
+>  #define DRA7_EFUSE_OD_MPU_OPP			BIT(1)
+>  #define DRA7_EFUSE_HIGH_MPU_OPP			BIT(2)
+> +#define DRA76_EFUSE_PLUS_MPU_OPP		BIT(3)
+>  
+>  #define OMAP3_CONTROL_DEVICE_STATUS		0x4800244C
+>  #define OMAP3_CONTROL_IDCODE			0x4830A204
+> @@ -80,6 +83,10 @@ static unsigned long dra7_efuse_xlate(struct ti_cpufreq_data *opp_data,
+>  	 */
+>  
+>  	switch (efuse) {
+> +	case DRA76_EFUSE_HAS_PLUS_MPU_OPP:
+> +	case DRA76_EFUSE_HAS_ALL_MPU_OPP:
+> +		calculated_efuse |= DRA76_EFUSE_PLUS_MPU_OPP;
+> +		/* Fall through */
+>  	case DRA7_EFUSE_HAS_ALL_MPU_OPP:
+>  	case DRA7_EFUSE_HAS_HIGH_MPU_OPP:
+>  		calculated_efuse |= DRA7_EFUSE_HIGH_MPU_OPP;
 
+Applied. Thanks.
 
---=-GaZoanpPv4L3uFpFpUoG
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiTyZWz+nnTrOJ1LZ5W/vlVpL7c4FAl5DPTkACgkQ5W/vlVpL
-7c4a3g//SCBWhCZ3vnz6qb26ASH5pK5fgz/l9o0FmD/sOn6jHfXbGmD3C8zTo6ic
-j1pQ488wAXMKm+Ay6CNyy3tqC3l9Lg1GKu6wQ4R/evm7cCk38Mwg7+sHa5aNdjwo
-6+KmMvHD9aY3Ya+QzsrJg5ZztvW/CWP69SJ1J2JfM9a401S0Us5MX/O2WmdyYo/9
-nXRGTYYj3Aekg1Ghs2JdWkYyiPGUDTic1R8psB8I7rDHZV5zmrrBferSMz8jB9Gk
-ReQE43h5rF0CZKQevMws/J6gO2Ndfbre5BZoXA7wydzs4kkV2O98u0aTc/HBP16l
-q8vf//TZ0cJy+rTEexxKIlWsfdIKQbYsWIenY6GEjR7W0n/chJYQZw40wGODisMd
-Et4ZZwL7fVpWxLxVtSrhlAieD2RpAYyCYl6l9s46lcmHSf59kbx1EyN/EmwrpEIn
-N9wCiCX9s1Nj4kH1CQAdTXhK8InLFKxKdApKSbACTwXyKuxMB/Pk65fbh4BVGTGo
-kX0PZgKNIFo4+YvZZUwin+rioyBGQopgfbgy5z4StXQ2Rd0jEpwrMIu0mxXy39PG
-X9A0+gUBAlsWDr+Jv8NCXpw5Q74vbSzHuUZwi4wpDbwnjqb6WO2yXv9mJXJCgR+b
-xJA8RDrjt9XmBr4zk43EzPZqqPlp5w2oiPH3e7cJ84sDSG7H9Sc=
-=6ivJ
------END PGP SIGNATURE-----
-
---=-GaZoanpPv4L3uFpFpUoG--
-
+-- 
+viresh
