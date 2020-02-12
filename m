@@ -2,96 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC0E15A46E
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 10:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF9D15A497
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 10:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728530AbgBLJRV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 04:17:21 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:37227 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728150AbgBLJRV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 04:17:21 -0500
-Received: by mail-oi1-f193.google.com with SMTP id q84so1371183oic.4;
-        Wed, 12 Feb 2020 01:17:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UFykYmpeqq57o6fsy3lLQgTxgLUBdF0//2jzAtV9jNI=;
-        b=oHqav0W9EJMmXoN2QtfEobnDgt5oyffWex9D0gqZjWBhvps765zyokW19FXeE6r/+P
-         BwBWvNTotuxxQiyPFFKnbeHym3f2B3/+ae6sEnRI3DOLQSXzigpK301ptNNtdNGnf7hk
-         QZZm2axThTABIY3JmQYYxWg9PdDIyVJt+bFHG83lw8S5aOCejaUgp5XiitZ0DW0z8Ooh
-         dRqBUt/x4C5cPhXGGxA5bJvejyVqvoaZLu1A5kCjKf0gIb5J2siZ1Tcv1hBaOk8OIYYE
-         xeN546t0tn2l3/Maf+ZKkiYeHX2EQLp0Xm0Y50rjXh7OYVfVeRcZaofkz2SNSXKvzBjr
-         9YVQ==
-X-Gm-Message-State: APjAAAW04Fh1J6YR2fMwK7K0TaAHQEHB3lNqY5xXrlFqBDXaZdO3IFYf
-        ey1wiuVCnusxMeFI5D9mhUDY0qZgBdXc+Fa5dLBKEA==
-X-Google-Smtp-Source: APXvYqzvxhB1urHRH45huzlpCbCrbTRtg8deoE3xRA4Tt/YsGbE5dBuQR8SE6FVUo6yzeJG6lRcGDlDORNKCut2uUdg=
-X-Received: by 2002:aca:d6c8:: with SMTP id n191mr5789883oig.103.1581499040711;
- Wed, 12 Feb 2020 01:17:20 -0800 (PST)
+        id S1728680AbgBLJZV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 04:25:21 -0500
+Received: from sonic310-13.consmr.mail.bf2.yahoo.com ([74.6.135.123]:45396
+        "EHLO sonic310-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728667AbgBLJZU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 04:25:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1581499520; bh=6u3qDl6yXWBH9oVBF6VmNFaXPPfmaUEmS0LDo6+oXlw=; h=Date:From:Reply-To:Subject:References:From:Subject; b=J5dKLDfDi56lQeQxTLu6EvFzlMGYE77+iQr5xLKxUL/xh0c0Vh57iP0res/9SMqSpHDBwGGwfVmZZRDB9rLOiv9G8uJN+aqyoiJYD1LFBbZ9L01vHXxK2EttWjJ0EDnsmrrBmBsULki8il9+D9k7FONEh9KbQP+Tt+zDlFcLdZOnA8NQyHDJbEJpO9q9gCEpM3hWgD6kw8BlQzDZvXLSzGtraPJBe/F9EBu6XWWS/cuP57RBrB0P/5HPCoUrI7UTDPvydriuPlcleiA0cjoyGaaJEk/mr6z56WN3Ds5bqSk8WfXK2ALcwxiiyVfzxKTljnRgwqDesG2H7WKwwG6Wfg==
+X-YMail-OSG: mdu5LJwVM1kTJTJtU.QodtkUw68C5A_MPMG.I15g11QEKAnaLtUdiivTTW8QKsb
+ foLwfXzbqtbDPZKPLj7AKJ4mYMTli0OEOjauViGoOLmhmAvwtiakjuYnJPiVfqWgdMrNj5Eacx3L
+ YnDA7bQ7pP7BDaTUZAVs_DNRMFnRuPZ__yjd0CBf3RpoZMlpVf1pYwU1Qj_MWIyqMD7.ttT0zvAb
+ Nxew.Kb_hShpWiqEl0KCcfT5kmJbHj1H_I.1PZTgAiqs.nlNHcwZWY2AjvEq39qe6fa0z79OIdxd
+ edqXvHjcIrWzjDHYrv.aEavwjDrdpT1N4.tGAKUBRGZ7_m323B1B8YAiRAp3JGrSM7mjjcES.eE2
+ PQOumQJyTeTWHfeNCQMbsHUGGYfFqiwrm7gCtxaW_psafHwkVT_RHEsBNY9obtSs1IdV8tu0zCcZ
+ SyjZEVSDccEkPZ6pG35vuZXq0QqS7KnKZRqqLvVOgnfIp9nW813FZiV6mISoFeFbkW62Uo.Hle3E
+ .uBTzj6cyt_hMX4uWnl4NHqGeLgxXSiL3ehlsznHULri3YpxdpctktyB93lRv4XtjUb9EonESP8n
+ UxgKhNAf0PUgnSf7882waQqpPx.HYr4adTn1TX_ei._dGg3yBNdc8v0z9E7LmmEjLIMxUrb2ZaPU
+ fb3B039.Dsz4Hl15ip4i730Y94jcqkbQMaOZY2UzZ_9DpN225nGS24O1vjOflXPpX4dsLUrII.t.
+ Hv8lhFY7dTJj3vOu65tzIRU3IC_TlMcW2yfWdC1csDT2MrPyMXKz.MZzQu1r1BIEbR_KLJbXsnFr
+ n0dB61_tkrK_fykqu3opUIvHgU4UvHoaXfnRm6JOKW_8.uuy2QenfZkUVZMglk2fQ7I3A1Y2S5s_
+ SNYRumc8tL6wt6cFYST.9Vb_Vw8HUFA3VWRisM4._rSBMBXo6dkdDm5oLPqKtOv2qf2kBug2Eyi6
+ nRCT5oJcgHGYU61pu3npE.ncjkzeycCSR.Cl22GCJ4BJoiCLjHh9T_WDI6mhMJXT8gMoUMh2Aku5
+ q4hcrRYvOqHNrC5fpR9h6deFMVYeqqwzRuVIaVlyAcBS.dnF0S8H8fk8UWmJhcqaYaIjUmNGi4HJ
+ y7pL7s_j4TKKJUzRBj2JWuzaWH6Sip69NpGxN_Y_PkYXtDEpmZ08vDnRD3e.6pLLBGDoihL7kp.d
+ seEEe0dWtL81YVeIblChqJ1P8NosWiqu3fetD.s.zcze6..3f2PtyeEmf1mIytxSZg124oSom3_h
+ gbBN6f6gVa6M4f0lgUovnuG.m.1zJkBCVvZ5y0VuXUmbNTfXmhsNmuHqMkTEde8ouuspkKGjF3Mo
+ ikYo-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.bf2.yahoo.com with HTTP; Wed, 12 Feb 2020 09:25:20 +0000
+Date:   Wed, 12 Feb 2020 09:25:17 +0000 (UTC)
+From:   Ms Lisa Hugh <lisa.hugh222@gmail.com>
+Reply-To: ms.lisahugh000@gmail.com
+Message-ID: <1853831241.1328184.1581499517784@mail.yahoo.com>
+Subject: BUSINESS TRANSFER CO-OPERATION.
 MIME-Version: 1.0
-References: <1654227.8mz0SueHsU@kreacher> <CAPDyKFrcRzDE9=A28uf2sp=zaJpbEGrW5jm3L6CBVVc=GaL-Jg@mail.gmail.com>
-In-Reply-To: <CAPDyKFrcRzDE9=A28uf2sp=zaJpbEGrW5jm3L6CBVVc=GaL-Jg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 12 Feb 2020 10:17:08 +0100
-Message-ID: <CAJZ5v0gGjM2wgBvRAg_Oz1eBNQM8TMY601803miafBiRY5=M0w@mail.gmail.com>
-Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU
- latency QoS interface
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1853831241.1328184.1581499517784.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15199 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:72.0) Gecko/20100101 Firefox/72.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 9:38 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Wed, 12 Feb 2020 at 00:39, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> >
-> > Hi All,
-> >
-> > This series of patches is based on the observation that after commit
-> > c3082a674f46 ("PM: QoS: Get rid of unused flags") the only global PM QoS class
-> > in use is PM_QOS_CPU_DMA_LATENCY, but there is still a significant amount of
-> > code dedicated to the handling of global PM QoS classes in general.  That code
-> > takes up space and adds overhead in vain, so it is better to get rid of it.
-> >
-> > Moreover, with that unuseful code removed, the interface for adding QoS
-> > requests for CPU latency becomes inelegant and confusing, so it is better to
-> > clean it up.
-> >
-> > Patches [01/28-12/28] do the first part described above, which also includes
-> > some assorted cleanups of the core PM QoS code that doesn't go away.
-> >
-> > Patches [13/28-25/28] rework the CPU latency QoS interface (in the classic
-> > "define stubs, migrate users, change the API proper" manner), patches
-> > [26-27/28] update the general comments and documentation to match the code
-> > after the previous changes and the last one makes the CPU latency QoS depend
-> > on CPU_IDLE (because cpuidle is the only user of its target value today).
-> >
-> > The majority of the patches in this series don't change the functionality of
-> > the code at all (at least not intentionally).
-> >
-> > Please refer to the changelogs of individual patches for details.
-> >
-> > Thanks!
->
-> A big thanks for cleaning this up! The PM_QOS_CPU_DMA_LATENCY and
-> friends, has been annoying me for a long time. This certainly makes
-> the code far better and more understandable!
->
-> I have looked through the series and couldn't find any obvious
-> mistakes, so feel free to add:
->
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Thanks for the review, much appreciated!
 
-> Note, the review tag also means, that's fine for you to pick the mmc
-> patch via your tree.
+Dear Friend,
 
-Thank you!
+I am Ms Lisa Hugh work with the department of Audit and accounting manager here in the Bank(B.O.A).
+
+Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment and the amount is (US$4.5M DOLLARS).
+
+I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me after success.
+
+Note/ 50% for you why 50% for me after success of the transfer to your bank account.
+
+Below information is what i need from you so will can be reaching each other .
+
+1)Full name ...
+2)Private telephone number...
+3)Age...
+4)Nationality...
+5)Occupation ...
+
+
+Thanks.
+
+Ms Lisa Hugh
