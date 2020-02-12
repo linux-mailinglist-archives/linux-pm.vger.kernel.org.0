@@ -2,147 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D7515ACAC
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 17:04:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F25E15ACD8
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 17:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728658AbgBLQEE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 11:04:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53926 "EHLO mail.kernel.org"
+        id S1728401AbgBLQKs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 11:10:48 -0500
+Received: from foss.arm.com ([217.140.110.172]:34666 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726728AbgBLQEE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 12 Feb 2020 11:04:04 -0500
-Received: from localhost (unknown [104.132.1.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 26EFD2082F;
-        Wed, 12 Feb 2020 16:04:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581523443;
-        bh=xU2rLIEhWXbj7R8laJx0IdOIdIu2LUAcXTPhXJVEGts=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s2wmDc2m/nLk75G4YSx5bHyDiFUbZLlVFIIXygs098A1skc2j+utskUCrOA66qQl9
-         7jGPPvqRTxjMSKJI4frmiE3XkvpjPDGb/qSUUdl6X3x7jT6kc/DQxsph1C3AF0veK7
-         Y5inDoL9lP0tLIbht/gumou5mEGOejK6bkPVT/ng=
-Date:   Wed, 12 Feb 2020 08:04:02 -0800
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
+        id S1726351AbgBLQKs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 12 Feb 2020 11:10:48 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4AC8328;
+        Wed, 12 Feb 2020 08:10:47 -0800 (PST)
+Received: from localhost (e108754-lin.cambridge.arm.com [10.1.198.52])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 501EA3F68F;
+        Wed, 12 Feb 2020 08:10:47 -0800 (PST)
+Date:   Wed, 12 Feb 2020 16:10:45 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Suzuki Kuruppassery Poulose <suzuki.poulose@arm.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
+        maz@kernel.org, sudeep.holla@arm.com, lukasz.luba@arm.com,
+        valentin.schneider@arm.com, rjw@rjwysocki.net,
+        peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
+        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: Re: [PATCH net-next 05/10] sysfs: add sysfs_change_owner()
-Message-ID: <20200212160402.GA1799124@kroah.com>
-References: <20200212104321.43570-1-christian.brauner@ubuntu.com>
- <20200212104321.43570-6-christian.brauner@ubuntu.com>
- <20200212131808.GA1789899@kroah.com>
- <20200212150743.zyubvz53unyevbkx@wittgenstein>
+Subject: Re: [PATCH v3 1/7] arm64: add support for the AMU extension v1
+Message-ID: <20200212161045.GA7475@arm.com>
+References: <20200211184542.29585-1-ionela.voinescu@arm.com>
+ <20200211184542.29585-2-ionela.voinescu@arm.com>
+ <93472f17-6465-641d-ea82-3230b5697ffd@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200212150743.zyubvz53unyevbkx@wittgenstein>
+In-Reply-To: <93472f17-6465-641d-ea82-3230b5697ffd@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 04:07:43PM +0100, Christian Brauner wrote:
-> On Wed, Feb 12, 2020 at 05:18:08AM -0800, Greg Kroah-Hartman wrote:
-> > On Wed, Feb 12, 2020 at 11:43:16AM +0100, Christian Brauner wrote:
-> > > Add a helper to change the owner of sysfs objects.
-> > 
-> > Seems sane, but:
-> > 
-> > > The ownership of a sysfs object is determined based on the ownership of
-> > > the corresponding kobject, i.e. only if the ownership of a kobject is
-> > > changed will this function change the ownership of the corresponding
-> > > sysfs entry.
-> > 
-> > A "sysfs object" is a kobject.  So I don't understand this sentance,
-> > sorry.
+Hi Suzuki,
+
+On Wednesday 12 Feb 2020 at 11:30:44 (+0000), Suzuki Kuruppassery Poulose wrote:
+> > +static int __init set_disable_amu(char *str)
+> > +{
+> > +	int value = 0;
+> > +
+> > +	disable_amu = get_option(&str, &value) ? !!value : true;
 > 
-> I meant that only if you change the uid/gid the underlying kobject is
-> associated with will this function do anything, meaning that you can't
-> pass in uids/gids directly. I'll explain why I did this down below [1].
-> Sorry if that was confusing.
+> minor nit: You could simply use strtobool(str) here, which accepts:
 > 
-> > 
-> > > This function will be used to correctly account for kobject ownership
-> > > changes, e.g. when moving network devices between network namespaces.
-> > > 
-> > > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> > > ---
-> > >  fs/sysfs/file.c       | 35 +++++++++++++++++++++++++++++++++++
-> > >  include/linux/sysfs.h |  6 ++++++
-> > >  2 files changed, 41 insertions(+)
-> > > 
-> > > diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
-> > > index 6239d9584f0b..6a0fe88061fd 100644
-> > > --- a/fs/sysfs/file.c
-> > > +++ b/fs/sysfs/file.c
-> > > @@ -642,3 +642,38 @@ int sysfs_file_change_owner(struct kobject *kobj, const char *name)
-> > >  	return error;
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(sysfs_file_change_owner);
-> > > +
-> > > +/**
-> > > + *	sysfs_change_owner - change owner of the given object.
-> > > + *	@kobj:	object.
-> > > + */
-> > > +int sysfs_change_owner(struct kobject *kobj)
-> > 
-> > What does this change the owner of the given object _to_?
+> disable_amu= [0/1/on/off/y/n]
+>
+
+Yes, this was intentional as I wanted "disable_amu" to be a valid option
+as well, not only "disable_amu=<option>".
+
+If you don't mind I'd like to keep it like this. Currently the use of
+AMU is enabled by default, and the most common kernel parameter to
+disable it would be "disable_amu". Allowing "disable_amu=0" is just in
+case we change the default in the kernel to not support AMU and we'd
+like platforms to be able to enable it. 
+
 > 
-> [1]:
-> So ownership only changes if the kobject's uid/gid have been changed.
-> So when to stick with the networking example, when a network device is
-> moved into a new network namespace, the uid/gid of the kobject will be
-> changed to the root user of the owning user namespace of that network
-> namespace. So when the move of the network device has completed and
-> kobject_get_ownership() is called it will now return a different
-> uid/gid.
-
-Ok, then this needs to say "change the uid/gid of the kobject to..." in
-order to explain what it is now being set to.  Otherwise this is really
-confusing if you only read the kerneldoc, right?
-
-> So my reasoning was that ownership is determined dynamically that way. I
-> guess what you're hinting at is that we could simply add uid_t uid,
-> gid_t gid arguments to these sysfs helpers. That's fine with me too.
-
-It's fine if you want to set it to the "root owner", just say that
-somewhere :)
-
-> It
-> means that callers are responsible to either retrieve the ownership from
-> the kobject (in case it was changed through another call) or the call to
-> syfs_change_owner(kobj, uid, gid) sets the new owner of the kobject. I
-> don't know what the best approach is. Maybe a hybrid whereby we allow
-> passing in uid/gid but also allow passing in ({g,u}id_t - 1) to indicate
-> that we want the ownership to be taken from the kobject itself (e.g.
-> when a network device has been updated by dev_change_net_namespace()).
+> > +
+> > +	return 0;
+> > +}
+> > +early_param("disable_amu", set_disable_amu);
+> > +
+> > +static bool has_amu(const struct arm64_cpu_capabilities *cap,
+> > +		       int __unused)
+> > +{
+> > +	/*
+> > +	 * The AMU extension is a non-conflicting feature: the kernel can
+> > +	 * safely run a mix of CPUs with and without support for the
+> > +	 * activity monitors extension. Therefore, if not disabled through
+> > +	 * the kernel command line early parameter, enable the capability
+> > +	 * to allow any late CPU to use the feature.
+> > +	 *
+> > +	 * With this feature enabled, the cpu_enable function will be called
+> > +	 * for all CPUs that match the criteria, including secondary and
+> > +	 * hotplugged, marking this feature as present on that respective CPU.
+> > +	 * The enable function will also print a detection message.
+> > +	 */
+> > +
+> > +	if (!disable_amu && !zalloc_cpumask_var(&amu_cpus, GFP_KERNEL)) {
 > 
-> > 
-> > > +{
-> > > +	int error;
-> > > +	const struct kobj_type *ktype;
-> > > +
-> > > +	if (!kobj->state_in_sysfs)
-> > > +		return -EINVAL;
-> > > +
-> > > +	error = sysfs_file_change_owner(kobj, NULL);
-> > 
-> > It passes NULL?
+> This looks problematic. Don't we end up in allocating the memory during
+> "each CPU" check and thus leaking memory ? Do we really need to allocate
+> this dynamically ?
 > 
-> Which means, change the ownership of "kobj" itself and not lookup a file
-> relative to "kobj".
 
-Ok, that's totally not obvious at all :(
+Yes, it does make some assumptions. Given that the AMU capability is
+a WEAK_LOCAL_CPU_FEATURE I relied on the match function being called
+only once, when the return value is true. If the return value is false,
+which will result in it being called multiple times, it's either because
+disable_amu == false, or it has become false due to a previous failed
+allocation, in which case a new allocation will not be attempted.
 
-Better naming please, I know it's hard, but it matters.
+For better handling I could have a cpumask_available check before the
+allocation just in case the capability type changes in the future, or to
+at least not rely on assumptions based on the type of the capability.
 
-thanks,
+The reason this is dynamic is that I wanted to avoid the memory being
+allocated when disable_amu is true - as Valentin mentioned in a comment
+in the meantime "the static allocation is done against NR_CPUS whereas
+the dynamic one is done against nr_cpu_ids".
 
-greg k-h
+Would this be alright?
+
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 182e05ca3410..4cee6b147ddd 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -1222,7 +1222,11 @@ static bool has_amu(const struct arm64_cpu_capabilities *cap,
+         * The enable function will also print a detection message.
+         */
+ 
+-       if (!disable_amu && !zalloc_cpumask_var(&amu_cpus, GFP_KERNEL)) {
++       if (disable_amu)
++               return false;
++
++       if (!cpumask_available(amu_cpus) &&
++           !zalloc_cpumask_var(&amu_cpus, GFP_KERNEL)) {
+                pr_err("Activity Monitors Unit (AMU): fail to allocate memory");
+                disable_amu = true;
+        }
+
+Otherwise I can go for static allocation.
+
+Thank you,
+Ionela.
