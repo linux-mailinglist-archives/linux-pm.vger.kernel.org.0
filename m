@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACD115A678
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 11:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1386E15A686
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 11:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727779AbgBLKej (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 05:34:39 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:35604 "EHLO
+        id S1727347AbgBLKfj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 05:35:39 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:35740 "EHLO
         mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727558AbgBLKei (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 05:34:38 -0500
-Received: by mail-oi1-f196.google.com with SMTP id b18so1564861oie.2;
-        Wed, 12 Feb 2020 02:34:37 -0800 (PST)
+        with ESMTP id S1727361AbgBLKfi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 05:35:38 -0500
+Received: by mail-oi1-f196.google.com with SMTP id b18so1567037oie.2;
+        Wed, 12 Feb 2020 02:35:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=annKQUxliL7g9llg5hUdfeFX3nCzS9hBSmQMK3dnva4=;
-        b=oIXMovIVoli/wN93QBIBqvscaVXfvW8yGYrkMUwHQatDQhPyfHfYOxGdSgvT4QLDiu
-         xEQj8Ig9WnRgokgnpaBcM236er2EaDwJyOzVRga0nmejZ1bnTB9qyEkilYHEQKnDZcWs
-         l3QGYdqQ494kAJC1LIyzkal2a/BLSeEbdoJlZFtFLrmhOe/kie5vnWgrvG0xIzKE335Z
-         gl38W77H5EsSkEO2JHWUj4LW32LKx7f2gizogXWFf6LK8glgZBwDup8KhIz+5pX3swZe
-         9hmAibn+IXx9WeqVwAiHOU5jZH0vYgDj1lAj9WdylJ8DToU8CjCgjbc4QtkWesQYaBVt
-         5TnQ==
-X-Gm-Message-State: APjAAAUtPvBRh8KFV0vacKVYPJuCTnoTBwjsIHp8WWC/+AL/pmjWC4HI
-        2c/5oQl6w7YhQnnCL6QpPTYQPbC8N+lkEN/UpggzIg==
-X-Google-Smtp-Source: APXvYqwFCghaCvnTXfbxqiNJsmUbujLORuF4vWYMSQRfnVcXxG+OJC60iPiS/78by2mRAbllksCWs72VKlDc/7CHhu0=
-X-Received: by 2002:a54:488d:: with SMTP id r13mr5546067oic.115.1581503677172;
- Wed, 12 Feb 2020 02:34:37 -0800 (PST)
+        bh=NnnbDSzoop0s0gj0miT73Peda0TDZhvlDkQKNkLxkbs=;
+        b=LOyIbD3I3b5JwiL+mGbgzmuh3mR/H8dkgkps/koXX6WCvPSSHPdeGxhFcPIXh6PnG3
+         SPfhexHgQaAB1m029SjjqGXPRh1FP89Ml6a5c6CUuxJjXmUlEtqsBliZHsUjv8k47CN+
+         bgwc/kddOwkRb9Q6EnQuIGnoEbUEOFpoITuuG27D9qg5mUk7xes+liNC+QuMDln+QcCW
+         SdaJPo2C88L72iBTClz755t3MZM49u8HBXGI35InZW5wfdtqLpWDtZSCVTHDN9vTY70M
+         SqXmsd3V/J2rdAXJbta+/d9g9rcMkMvjaot9/pLhGRErTGNQjTPDZPco1gJmUrDP6JfR
+         /EKA==
+X-Gm-Message-State: APjAAAVnTC/d362cp49tGDSvfQmJOJKO1rp1T+5rp8ByqCKF6MDvB5/U
+        VSmizxSLNaPBS1Fi+Al9Rgf3DYsv4OQg7bJgkWimchiR
+X-Google-Smtp-Source: APXvYqx/wHUIDKIKoZeysuin0Zjc/oUAVs+aOzddBBu1ZdL8iabUtwLtopMZOgBPOMdlL9Sajxk811bKA7gbDfAMaTc=
+X-Received: by 2002:a54:4e96:: with SMTP id c22mr5929326oiy.110.1581503736425;
+ Wed, 12 Feb 2020 02:35:36 -0800 (PST)
 MIME-Version: 1.0
-References: <1654227.8mz0SueHsU@kreacher> <3305010.P0mNzRSuHC@kreacher>
-In-Reply-To: <3305010.P0mNzRSuHC@kreacher>
+References: <1654227.8mz0SueHsU@kreacher> <2339403.frKpfgBVMR@kreacher>
+In-Reply-To: <2339403.frKpfgBVMR@kreacher>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 12 Feb 2020 11:34:26 +0100
-Message-ID: <CAJZ5v0hV6iEJ=dmNMYL7RU2sQZy5rXffMbVEJ3d4Qa=r9No2OQ@mail.gmail.com>
-Subject: Re: [PATCH 10/28] PM: QoS: Rename things related to the CPU latency QoS
+Date:   Wed, 12 Feb 2020 11:35:25 +0100
+Message-ID: <CAJZ5v0itHeg2nb40ZFRxzoZG-33UqypE1F-wGucHdyAD8BSH9A@mail.gmail.com>
+Subject: Re: [PATCH 22/28] drivers: tty: Call cpu_latency_qos_*() instead of pm_qos_*()
 To:     linux-serial@vger.kernel.org
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -48,251 +48,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 12:39 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+On Wed, Feb 12, 2020 at 12:40 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
 > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 >
-> First, rename PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE to
-> PM_QOS_CPU_LATENCY_DEFAULT_VALUE and update all of the code
-> referring to it accordingly.
->
-> Next, rename cpu_dma_constraints to cpu_latency_constraints, move
-> the definition of it closer to the functions referring to it and
-> update all of them accordingly.  [While at it, add a comment to mark
-> the start of the code related to the CPU latency QoS.]
->
-> Finally, rename the pm_qos_power_*() family of functions and
-> pm_qos_power_fops to cpu_latency_qos_*() and cpu_latency_qos_fops,
-> respectively, and update the definition of cpu_latency_qos_miscdev.
-> [While at it, update the miscdev interface code start comment.]
+> Call cpu_latency_qos_add/update/remove_request() instead of
+> pm_qos_add/update/remove_request(), respectively, because the
+> latter are going to be dropped.
 >
 > No intentional functional impact.
 >
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-
 Please note that the whole series is available here:
 
 https://lore.kernel.org/linux-pm/1654227.8mz0SueHsU@kreacher/
 
-
 > ---
->  drivers/tty/serial/8250/8250_omap.c |  6 ++--
->  drivers/tty/serial/omap-serial.c    |  6 ++--
->  include/linux/pm_qos.h              |  2 +-
->  kernel/power/qos.c                  | 56 +++++++++++++++++++------------------
->  4 files changed, 36 insertions(+), 34 deletions(-)
+>  drivers/tty/serial/8250/8250_omap.c | 7 +++----
+>  drivers/tty/serial/omap-serial.c    | 9 ++++-----
+>  2 files changed, 7 insertions(+), 9 deletions(-)
 >
 > diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-> index 6f343ca08440..19f8d2f9e7ba 100644
+> index 19f8d2f9e7ba..76fe72bfb8bb 100644
 > --- a/drivers/tty/serial/8250/8250_omap.c
 > +++ b/drivers/tty/serial/8250/8250_omap.c
-> @@ -1222,8 +1222,8 @@ static int omap8250_probe(struct platform_device *pdev)
->                          DEFAULT_CLK_SPEED);
->         }
+> @@ -569,7 +569,7 @@ static void omap8250_uart_qos_work(struct work_struct *work)
+>         struct omap8250_priv *priv;
 >
-> -       priv->latency = PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE;
-> -       priv->calc_latency = PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE;
-> +       priv->latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
-> +       priv->calc_latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
->         pm_qos_add_request(&priv->pm_qos_request, PM_QOS_CPU_DMA_LATENCY,
->                            priv->latency);
+>         priv = container_of(work, struct omap8250_priv, qos_work);
+> -       pm_qos_update_request(&priv->pm_qos_request, priv->latency);
+> +       cpu_latency_qos_update_request(&priv->pm_qos_request, priv->latency);
+>  }
+>
+>  #ifdef CONFIG_SERIAL_8250_DMA
+> @@ -1224,8 +1224,7 @@ static int omap8250_probe(struct platform_device *pdev)
+>
+>         priv->latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
+>         priv->calc_latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
+> -       pm_qos_add_request(&priv->pm_qos_request, PM_QOS_CPU_DMA_LATENCY,
+> -                          priv->latency);
+> +       cpu_latency_qos_add_request(&priv->pm_qos_request, priv->latency);
 >         INIT_WORK(&priv->qos_work, omap8250_uart_qos_work);
-> @@ -1445,7 +1445,7 @@ static int omap8250_runtime_suspend(struct device *dev)
->         if (up->dma && up->dma->rxchan)
->                 omap_8250_rx_dma_flush(up);
 >
-> -       priv->latency = PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE;
-> +       priv->latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
->         schedule_work(&priv->qos_work);
->
+>         spin_lock_init(&priv->rx_dma_lock);
+> @@ -1295,7 +1294,7 @@ static int omap8250_remove(struct platform_device *pdev)
+>         pm_runtime_put_sync(&pdev->dev);
+>         pm_runtime_disable(&pdev->dev);
+>         serial8250_unregister_port(priv->line);
+> -       pm_qos_remove_request(&priv->pm_qos_request);
+> +       cpu_latency_qos_remove_request(&priv->pm_qos_request);
+>         device_init_wakeup(&pdev->dev, false);
 >         return 0;
+>  }
 > diff --git a/drivers/tty/serial/omap-serial.c b/drivers/tty/serial/omap-serial.c
-> index 48017cec7f2f..ce2558767eee 100644
+> index ce2558767eee..e0b720ac754b 100644
 > --- a/drivers/tty/serial/omap-serial.c
 > +++ b/drivers/tty/serial/omap-serial.c
-> @@ -1722,8 +1722,8 @@ static int serial_omap_probe(struct platform_device *pdev)
->                          DEFAULT_CLK_SPEED);
->         }
+> @@ -831,7 +831,7 @@ static void serial_omap_uart_qos_work(struct work_struct *work)
+>         struct uart_omap_port *up = container_of(work, struct uart_omap_port,
+>                                                 qos_work);
 >
-> -       up->latency = PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE;
-> -       up->calc_latency = PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE;
-> +       up->latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
-> +       up->calc_latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
->         pm_qos_add_request(&up->pm_qos_request,
->                 PM_QOS_CPU_DMA_LATENCY, up->latency);
+> -       pm_qos_update_request(&up->pm_qos_request, up->latency);
+> +       cpu_latency_qos_update_request(&up->pm_qos_request, up->latency);
+>  }
+>
+>  static void
+> @@ -1724,8 +1724,7 @@ static int serial_omap_probe(struct platform_device *pdev)
+>
+>         up->latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
+>         up->calc_latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
+> -       pm_qos_add_request(&up->pm_qos_request,
+> -               PM_QOS_CPU_DMA_LATENCY, up->latency);
+> +       cpu_latency_qos_add_request(&up->pm_qos_request, up->latency);
 >         INIT_WORK(&up->qos_work, serial_omap_uart_qos_work);
-> @@ -1869,7 +1869,7 @@ static int serial_omap_runtime_suspend(struct device *dev)
 >
->         serial_omap_enable_wakeup(up, true);
->
-> -       up->latency = PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE;
-> +       up->latency = PM_QOS_CPU_LATENCY_DEFAULT_VALUE;
->         schedule_work(&up->qos_work);
+>         platform_set_drvdata(pdev, up);
+> @@ -1759,7 +1758,7 @@ static int serial_omap_probe(struct platform_device *pdev)
+>         pm_runtime_dont_use_autosuspend(&pdev->dev);
+>         pm_runtime_put_sync(&pdev->dev);
+>         pm_runtime_disable(&pdev->dev);
+> -       pm_qos_remove_request(&up->pm_qos_request);
+> +       cpu_latency_qos_remove_request(&up->pm_qos_request);
+>         device_init_wakeup(up->dev, false);
+>  err_rs485:
+>  err_port_line:
+> @@ -1777,7 +1776,7 @@ static int serial_omap_remove(struct platform_device *dev)
+>         pm_runtime_dont_use_autosuspend(up->dev);
+>         pm_runtime_put_sync(up->dev);
+>         pm_runtime_disable(up->dev);
+> -       pm_qos_remove_request(&up->pm_qos_request);
+> +       cpu_latency_qos_remove_request(&up->pm_qos_request);
+>         device_init_wakeup(&dev->dev, false);
 >
 >         return 0;
-> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-> index cb57e5918a25..a3e0bfc6c470 100644
-> --- a/include/linux/pm_qos.h
-> +++ b/include/linux/pm_qos.h
-> @@ -28,7 +28,7 @@ enum pm_qos_flags_status {
->  #define PM_QOS_LATENCY_ANY     S32_MAX
->  #define PM_QOS_LATENCY_ANY_NS  ((s64)PM_QOS_LATENCY_ANY * NSEC_PER_USEC)
->
-> -#define PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE       (2000 * USEC_PER_SEC)
-> +#define PM_QOS_CPU_LATENCY_DEFAULT_VALUE       (2000 * USEC_PER_SEC)
->  #define PM_QOS_RESUME_LATENCY_DEFAULT_VALUE    PM_QOS_LATENCY_ANY
->  #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT    PM_QOS_LATENCY_ANY
->  #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS PM_QOS_LATENCY_ANY_NS
-> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-> index 201b43bc6457..a6bf53e9db17 100644
-> --- a/kernel/power/qos.c
-> +++ b/kernel/power/qos.c
-> @@ -56,14 +56,6 @@
->   */
->  static DEFINE_SPINLOCK(pm_qos_lock);
->
-> -static struct pm_qos_constraints cpu_dma_constraints = {
-> -       .list = PLIST_HEAD_INIT(cpu_dma_constraints.list),
-> -       .target_value = PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE,
-> -       .default_value = PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE,
-> -       .no_constraint_value = PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE,
-> -       .type = PM_QOS_MIN,
-> -};
-> -
->  /**
->   * pm_qos_read_value - Return the current effective constraint value.
->   * @c: List of PM QoS constraint requests.
-> @@ -227,6 +219,16 @@ bool pm_qos_update_flags(struct pm_qos_flags *pqf,
->         return prev_value != curr_value;
->  }
->
-> +/* Definitions related to the CPU latency QoS. */
-> +
-> +static struct pm_qos_constraints cpu_latency_constraints = {
-> +       .list = PLIST_HEAD_INIT(cpu_latency_constraints.list),
-> +       .target_value = PM_QOS_CPU_LATENCY_DEFAULT_VALUE,
-> +       .default_value = PM_QOS_CPU_LATENCY_DEFAULT_VALUE,
-> +       .no_constraint_value = PM_QOS_CPU_LATENCY_DEFAULT_VALUE,
-> +       .type = PM_QOS_MIN,
-> +};
-> +
->  /**
->   * pm_qos_request - returns current system wide qos expectation
->   * @pm_qos_class: Ignored.
-> @@ -235,13 +237,13 @@ bool pm_qos_update_flags(struct pm_qos_flags *pqf,
->   */
->  int pm_qos_request(int pm_qos_class)
->  {
-> -       return pm_qos_read_value(&cpu_dma_constraints);
-> +       return pm_qos_read_value(&cpu_latency_constraints);
->  }
->  EXPORT_SYMBOL_GPL(pm_qos_request);
->
->  int pm_qos_request_active(struct pm_qos_request *req)
->  {
-> -       return req->qos == &cpu_dma_constraints;
-> +       return req->qos == &cpu_latency_constraints;
->  }
->  EXPORT_SYMBOL_GPL(pm_qos_request_active);
->
-> @@ -278,7 +280,7 @@ void pm_qos_add_request(struct pm_qos_request *req,
->
->         trace_pm_qos_add_request(PM_QOS_CPU_DMA_LATENCY, value);
->
-> -       req->qos = &cpu_dma_constraints;
-> +       req->qos = &cpu_latency_constraints;
->         cpu_latency_qos_update(req, PM_QOS_ADD_REQ, value);
->  }
->  EXPORT_SYMBOL_GPL(pm_qos_add_request);
-> @@ -338,9 +340,9 @@ void pm_qos_remove_request(struct pm_qos_request *req)
->  }
->  EXPORT_SYMBOL_GPL(pm_qos_remove_request);
->
-> -/* User space interface to global PM QoS via misc device. */
-> +/* User space interface to the CPU latency QoS via misc device. */
->
-> -static int pm_qos_power_open(struct inode *inode, struct file *filp)
-> +static int cpu_latency_qos_open(struct inode *inode, struct file *filp)
->  {
->         struct pm_qos_request *req;
->
-> @@ -354,7 +356,7 @@ static int pm_qos_power_open(struct inode *inode, struct file *filp)
->         return 0;
->  }
->
-> -static int pm_qos_power_release(struct inode *inode, struct file *filp)
-> +static int cpu_latency_qos_release(struct inode *inode, struct file *filp)
->  {
->         struct pm_qos_request *req = filp->private_data;
->
-> @@ -366,8 +368,8 @@ static int pm_qos_power_release(struct inode *inode, struct file *filp)
->         return 0;
->  }
->
-> -static ssize_t pm_qos_power_read(struct file *filp, char __user *buf,
-> -                                size_t count, loff_t *f_pos)
-> +static ssize_t cpu_latency_qos_read(struct file *filp, char __user *buf,
-> +                                   size_t count, loff_t *f_pos)
->  {
->         struct pm_qos_request *req = filp->private_data;
->         unsigned long flags;
-> @@ -377,14 +379,14 @@ static ssize_t pm_qos_power_read(struct file *filp, char __user *buf,
->                 return -EINVAL;
->
->         spin_lock_irqsave(&pm_qos_lock, flags);
-> -       value = pm_qos_get_value(&cpu_dma_constraints);
-> +       value = pm_qos_get_value(&cpu_latency_constraints);
->         spin_unlock_irqrestore(&pm_qos_lock, flags);
->
->         return simple_read_from_buffer(buf, count, f_pos, &value, sizeof(s32));
->  }
->
-> -static ssize_t pm_qos_power_write(struct file *filp, const char __user *buf,
-> -                                 size_t count, loff_t *f_pos)
-> +static ssize_t cpu_latency_qos_write(struct file *filp, const char __user *buf,
-> +                                    size_t count, loff_t *f_pos)
->  {
->         s32 value;
->
-> @@ -404,21 +406,21 @@ static ssize_t pm_qos_power_write(struct file *filp, const char __user *buf,
->         return count;
->  }
->
-> -static const struct file_operations pm_qos_power_fops = {
-> -       .write = pm_qos_power_write,
-> -       .read = pm_qos_power_read,
-> -       .open = pm_qos_power_open,
-> -       .release = pm_qos_power_release,
-> +static const struct file_operations cpu_latency_qos_fops = {
-> +       .write = cpu_latency_qos_write,
-> +       .read = cpu_latency_qos_read,
-> +       .open = cpu_latency_qos_open,
-> +       .release = cpu_latency_qos_release,
->         .llseek = noop_llseek,
->  };
->
->  static struct miscdevice cpu_latency_qos_miscdev = {
->         .minor = MISC_DYNAMIC_MINOR,
->         .name = "cpu_dma_latency",
-> -       .fops = &pm_qos_power_fops,
-> +       .fops = &cpu_latency_qos_fops,
->  };
->
-> -static int __init pm_qos_power_init(void)
-> +static int __init cpu_latency_qos_init(void)
->  {
->         int ret;
->
-> @@ -429,7 +431,7 @@ static int __init pm_qos_power_init(void)
->
->         return ret;
->  }
-> -late_initcall(pm_qos_power_init);
-> +late_initcall(cpu_latency_qos_init);
->
->  /* Definitions related to the frequency QoS below. */
->
 > --
 > 2.16.4
 >
