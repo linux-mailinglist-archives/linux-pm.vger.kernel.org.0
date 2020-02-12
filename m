@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2F415B502
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 00:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B4215B525
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 00:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729152AbgBLXqc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 18:46:32 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:43397 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727117AbgBLXqb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 18:46:31 -0500
-Received: by mail-lj1-f193.google.com with SMTP id a13so4415561ljm.10;
-        Wed, 12 Feb 2020 15:46:29 -0800 (PST)
+        id S1729289AbgBLXqe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 18:46:34 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:40430 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729132AbgBLXqd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 18:46:33 -0500
+Received: by mail-lj1-f194.google.com with SMTP id n18so4416092ljo.7;
+        Wed, 12 Feb 2020 15:46:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZN0eR+MlbTG+jtIAem/YdJyWllF55za1q3k6zHdgMmU=;
-        b=J8YMlsQRXh/PWKTkaxJT8iR3O87HjnuuCR62rrp0vDQuZ9hGclVV3JphgpZC5LyOQM
-         dZEoGBQEU+SyMTAAqNfMqqGkDTqNze9AcZ3XQmU0FlmmWySYxW5xGFGwaK7tuwyTWHR/
-         vxM/PtASB86La0/IUPul2idxkzdrX5HdNTigy7s/VygP1gLn8ulggOFVcUPGs6vTgG9b
-         ee/MHKOKj+KUAA/jql78A9nlk1j/MBM9Kc6tuUMRVhvfqvU0Q0O6xRTpNeOPKCNdclcV
-         eqMIO5y+1bEQXZqda3uYxrSKS0PW7FrFtSqTKbTxLD4eFkcBhYnOsic0FByhWDxp21/m
-         6QEw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=asV4gL+YsfNPLapkas09h6qgYAxvmOzGpvVowKzGjNI=;
+        b=nNu3rbbzn0gb1FUgJUvYHi3ItgCG3HkiepSBJTDSuAm3pR5b+xSfKnKOWiMqu343wk
+         +PNtCNQB8y9n/jZMNg142IQXWPFo0jhSG7gEri0Ense4bgvM5HtlrEfVwJdZk/KrnbGn
+         wSvk4GNzrw+o6hIJUM46N3PeFJc4wbxjqye5vNmPpYo8zrddidoT2nN3lLimWSWuaDgw
+         n7DiMXEgxRrYLOAk3jK56L7yEXfeP3sGMKG9ASaPGL4nK78SbR/f2eLlAR2eyxqPcYuI
+         Qt4b50cP33dQvedMEwQ+yCYO8rXbiFqppkPRAkWcwhHBQR/2Jl3efNrClLDGwK3Ousbp
+         RPLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZN0eR+MlbTG+jtIAem/YdJyWllF55za1q3k6zHdgMmU=;
-        b=J9eWFmdZa13VBo0JgT5h5L70IjQPCvrnW97KXXd1iaFI/Sh313Y67UWKWSNmMJbkrT
-         +vI5MSDTBc9QFvfHF44YboAT6geKx36TKIFp6ilgZuK6lTyXmxFPjr+JBrCkwAU+j3Ak
-         tjRTAIouol60KWQsdIcqsYP6Ag3GAw4IZs3+EQ4wI/nanOt434Bh7LbEYYhfUbUcGGzM
-         mV5UcCuMWktvUSUe2hQ4V6+l1q3CuCF6L/PS7xJWMF41pomgoE9ikzOlTMHQO6ZZpbZQ
-         AqhKXlgcDaI2chpCpmqbuSoqG6Fy0NOqjTduSLqYJXd0Ttg6/LvjkUBTqtqMEgwRZKxN
-         Aogg==
-X-Gm-Message-State: APjAAAUSEUSsUz8Ekr2otNwba3XG6lIJ9rfnZWLVKpDXAfAl9s9oiZ2J
-        xQ2zWUtCX+GzrWJvnSbl8FY=
-X-Google-Smtp-Source: APXvYqxHWD54LlyxDzOWUXKmLuxx2rMLtoPbna7MGldJwQmMmyPSOO/X0wGnoktRJWGi8Es22UreIQ==
-X-Received: by 2002:a2e:9618:: with SMTP id v24mr9204006ljh.181.1581551188927;
-        Wed, 12 Feb 2020 15:46:28 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=asV4gL+YsfNPLapkas09h6qgYAxvmOzGpvVowKzGjNI=;
+        b=V2O1OQupOWMWe0uEVWK7Al0vMJPqVhMRh1fO5eO8fKdnmxITjjYia2tfJvu9UfaGow
+         HAhZTWyCpOyBA1vJMYWXEESA+c4oZK9IM2so8gONyoVOL9H2wnlN1zbpQeS+V4YhYEVc
+         koidFzZwlB6E8ePHdKSMZMIqHlsxSatj4/Dok5nShM0o/R17MZYt1pRDiwGazFgVqFVz
+         4YehEB5JiroXgMs66Lnt1il1aJMHMR/9hs2BLlrHxnF3Pe3OKRLZ8w/PjMlrixiZ8l8v
+         b+j855n0x14tQEnKw9AZrUpHqohp/YsKLUkoBTik3k2+8jfYICtUWf6jqEmYyVVds05E
+         wxPQ==
+X-Gm-Message-State: APjAAAV9/Y2trNtmkAF3mFowDqqOAHEhEIqRyxYuS094iubZdfUDpNpa
+        dnP8CutZtxtdZyklBsx7dOQ=
+X-Google-Smtp-Source: APXvYqxobdw2OZAtVWnOPi/VrXCgsk1Fb4iKfiQnDWWZpg8tiHi3WR8kmv1V4jPgsZIGLabWCzzx2Q==
+X-Received: by 2002:a05:651c:d4:: with SMTP id 20mr8974374ljr.269.1581551190349;
+        Wed, 12 Feb 2020 15:46:30 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id u15sm234453lfl.87.2020.02.12.15.46.27
+        by smtp.gmail.com with ESMTPSA id u15sm234453lfl.87.2020.02.12.15.46.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2020 15:46:28 -0800 (PST)
+        Wed, 12 Feb 2020 15:46:29 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -61,10 +61,12 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         David Heidelberg <david@ixit.cz>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 00/12] NVIDIA Tegra20 CPUFreq driver major update
-Date:   Thu, 13 Feb 2020 02:45:55 +0300
-Message-Id: <20200212234607.11521-1-digetx@gmail.com>
+Subject: [PATCH v7 01/12] clk: tegra: Add custom CCLK implementation
+Date:   Thu, 13 Feb 2020 02:45:56 +0300
+Message-Id: <20200212234607.11521-2-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20200212234607.11521-1-digetx@gmail.com>
+References: <20200212234607.11521-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -72,107 +74,270 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+CCLK stands for "CPU Clock", CPU core is running off CCLK. CCLK supports
+multiple parents, it has internal clock divider and a clock skipper.
+PLLX is the main CCLK parent that provides clock rates above 1GHz and it
+has special property such that the CCLK's internal divider is set into
+bypass mode when PLLX is selected as a parent for CCLK.
 
-This series moves intermediate-clk handling from tegra20-cpufreq into
-tegra-clk driver. This allows us to switch to generic cpufreq-dt driver
-which brings voltage scaling, per-hardware OPPs and Tegra30 support out
-of the box. All boards need to adopt CPU OPPs in their device-trees in
-order to get cpufreq support.
+This patch forks generic Super Clock into CCLK implementation which takes
+into account all CCLK specifics. The proper CCLK implementation is needed
+by the upcoming Tegra20 CPUFreq driver update that will allow to utilize
+the generic cpufreq-dt driver by moving intermediate clock selection into
+the clock driver.
 
-Changelog:
+Note that technically this patch could be squashed into clk-super.c, but
+it is cleaner to have a separate source file. Also note that currently all
+CCLKLP bits are left in the clk-super.c and only CCLKG is supported by
+clk-tegra-super-cclk. It shouldn't be difficult to move the CCLKLP bits,
+but CCLKLP is not used by anything in kernel and thus better not to touch
+it for now.
 
-v7: - Added acks from Peter De Schrijver.
-
-    - Added tested-by from Marcel Ziswiler, Peter Geis, Jasper Korten and
-      David Heidelberg who tested these patches on Apalis/Colibri devboards,
-      Ouya, TF300T and Nexus 7 devices respectively.
-
-    - Rebased series on top of recent linux-next.
-
-v6: - Dropped "cpufreq: dt-platdev: Blacklist NVIDIA Tegra20 and Tegra30 SoCs"
-      patch from the series since Viresh picked up that patch separately.
-
-    - Added two new patches to this series:
-
-        ARM: tegra: Switch CPU to PLLP on resume from LP1 on Tegra30/114/124
-        ARM: tegra: Don't enable PLLX while resuming from LP1 on Tegra30
-
-      Previously these patches were sent out separately from this series,
-      but it should be more consistent to include them into the series since
-      they directly relate to enabling of the cpufreq driver on Tegra30.
-
-v5: - The "Use generic cpufreq-dt driver (Tegra30 supported now)" patch
-      is separated now into two patches by factoring out the blacklisting
-      of cpufreq-dt-platdev into a standalone patch. This is done in a
-      response to request from Jon Hunter to fix the warning splats during
-      boot that are coming from OPP core because OPPs are unavailable. The
-      OPPs will become available once tegra20-cpufreq driver will be updated
-      to support the cpufreq-dt.
-
-v4: - Updated CCLK diagram in the "Add custom CCLK implementation" patch.
-
-    - <linux/cpu.h> is now included in the "Use generic cpufreq-dt driver"
-      patch, for consistency.
-
-    - Returned value of get_cpu_device() is now checked in the "Use generic
-      cpufreq-dt driver" patch, for consistency as well.
-
-v3: - The "Add custom CCLK implementation" patch was updated in accordance
-      to the comments from Peter De Schrijver. We will not use the clock
-      skipper.
-
-    - Re added OPPs for T30 Beaver board because Thierry has that board ;)
-
-    - Added r-b for the "DT binding" patch from Rob Herring.
-
-v2: - Kept modularity of the tegra20-cpufreq as was requested by Viresh Kumar
-      in a review comment to v1.
-
-    - Added acks from Viresh Kumar.
-
-    - Added tested-by from Nicolas Chauvet to the "trimslice" patch.
-      Nicolas told me on IRC that it works fine.
-
-    - Fixed compilation of the "Add custom CCLK implementation" patch. The
-      error happened because v1 was based on top of yet unreviewed/unapplied
-      patch "clk: tegra: divider: Support enable-bit for Super clocks".
-      Thanks to Peter Geis for reporting the problem.
-
-    - Replaced Tegra30 "beaver" board with "cardhu-a04" because turned out
-      that's what NVIDIA uses in the testing farm.
-
-Dmitry Osipenko (12):
-  clk: tegra: Add custom CCLK implementation
-  clk: tegra: pll: Add pre/post rate-change hooks
-  clk: tegra: cclk: Add helpers for handling PLLX rate changes
-  clk: tegra20: Use custom CCLK implementation
-  clk: tegra30: Use custom CCLK implementation
-  ARM: tegra: Switch CPU to PLLP on resume from LP1 on Tegra30/114/124
-  ARM: tegra: Don't enable PLLX while resuming from LP1 on Tegra30
-  dt-bindings: cpufreq: Add binding for NVIDIA Tegra20/30
-  cpufreq: tegra20: Use generic cpufreq-dt driver (Tegra30 supported
-    now)
-  ARM: tegra: Create tegra20-cpufreq platform device on Tegra30
-  ARM: dts: tegra30: beaver: Set up voltage regulators for DVFS
-  ARM: dts: tegra30: beaver: Add CPU Operating Performance Points
-
- .../cpufreq/nvidia,tegra20-cpufreq.txt        |  56 +++++
- arch/arm/boot/dts/tegra30-beaver.dts          |  40 +++-
- arch/arm/mach-tegra/sleep-tegra30.S           |  16 +-
- arch/arm/mach-tegra/tegra.c                   |   4 +
- drivers/clk/tegra/Makefile                    |   1 +
- drivers/clk/tegra/clk-pll.c                   |  12 +-
- drivers/clk/tegra/clk-tegra-super-cclk.c      | 212 +++++++++++++++++
- drivers/clk/tegra/clk-tegra20.c               |   7 +-
- drivers/clk/tegra/clk-tegra30.c               |   6 +-
- drivers/clk/tegra/clk.h                       |  19 +-
- drivers/cpufreq/Kconfig.arm                   |   6 +-
- drivers/cpufreq/tegra20-cpufreq.c             | 217 +++++-------------
- 12 files changed, 415 insertions(+), 181 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
+Tested-by: Peter Geis <pgwipeout@gmail.com>
+Tested-by: Marcel Ziswiler <marcel@ziswiler.com>
+Tested-by: Jasper Korten <jja2000@gmail.com>
+Tested-by: David Heidelberg <david@ixit.cz>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/clk/tegra/Makefile               |   1 +
+ drivers/clk/tegra/clk-tegra-super-cclk.c | 178 +++++++++++++++++++++++
+ drivers/clk/tegra/clk.h                  |  11 +-
+ 3 files changed, 188 insertions(+), 2 deletions(-)
  create mode 100644 drivers/clk/tegra/clk-tegra-super-cclk.c
 
+diff --git a/drivers/clk/tegra/Makefile b/drivers/clk/tegra/Makefile
+index df966ca06788..f04b490f5416 100644
+--- a/drivers/clk/tegra/Makefile
++++ b/drivers/clk/tegra/Makefile
+@@ -14,6 +14,7 @@ obj-y					+= clk-tegra-audio.o
+ obj-y					+= clk-tegra-periph.o
+ obj-y					+= clk-tegra-pmc.o
+ obj-y					+= clk-tegra-fixed.o
++obj-y					+= clk-tegra-super-cclk.o
+ obj-y					+= clk-tegra-super-gen4.o
+ obj-$(CONFIG_TEGRA_CLK_EMC)		+= clk-emc.o
+ obj-$(CONFIG_ARCH_TEGRA_2x_SOC)         += clk-tegra20.o
+diff --git a/drivers/clk/tegra/clk-tegra-super-cclk.c b/drivers/clk/tegra/clk-tegra-super-cclk.c
+new file mode 100644
+index 000000000000..7bcb9e8d0860
+--- /dev/null
++++ b/drivers/clk/tegra/clk-tegra-super-cclk.c
+@@ -0,0 +1,178 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Based on clk-super.c
++ * Copyright (c) 2012, NVIDIA CORPORATION.  All rights reserved.
++ *
++ * Based on older tegra20-cpufreq driver by Colin Cross <ccross@google.com>
++ * Copyright (C) 2010 Google, Inc.
++ *
++ * Author: Dmitry Osipenko <digetx@gmail.com>
++ * Copyright (C) 2019 GRATE-DRIVER project
++ */
++
++#include <linux/bits.h>
++#include <linux/clk-provider.h>
++#include <linux/err.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/slab.h>
++#include <linux/types.h>
++
++#include "clk.h"
++
++#define PLLP_INDEX		4
++#define PLLX_INDEX		8
++
++#define SUPER_CDIV_ENB		BIT(31)
++
++static u8 cclk_super_get_parent(struct clk_hw *hw)
++{
++	return tegra_clk_super_ops.get_parent(hw);
++}
++
++static int cclk_super_set_parent(struct clk_hw *hw, u8 index)
++{
++	return tegra_clk_super_ops.set_parent(hw, index);
++}
++
++static int cclk_super_set_rate(struct clk_hw *hw, unsigned long rate,
++			       unsigned long parent_rate)
++{
++	return tegra_clk_super_ops.set_rate(hw, rate, parent_rate);
++}
++
++static unsigned long cclk_super_recalc_rate(struct clk_hw *hw,
++					    unsigned long parent_rate)
++{
++	if (cclk_super_get_parent(hw) == PLLX_INDEX)
++		return parent_rate;
++
++	return tegra_clk_super_ops.recalc_rate(hw, parent_rate);
++}
++
++static int cclk_super_determine_rate(struct clk_hw *hw,
++				     struct clk_rate_request *req)
++{
++	struct clk_hw *pllp_hw = clk_hw_get_parent_by_index(hw, PLLP_INDEX);
++	struct clk_hw *pllx_hw = clk_hw_get_parent_by_index(hw, PLLX_INDEX);
++	struct tegra_clk_super_mux *super = to_clk_super_mux(hw);
++	unsigned long pllp_rate;
++	long rate = req->rate;
++
++	if (WARN_ON_ONCE(!pllp_hw || !pllx_hw))
++		return -EINVAL;
++
++	/*
++	 * Switch parent to PLLP for all CCLK rates that are suitable for PLLP.
++	 * PLLX will be disabled in this case, saving some power.
++	 */
++	pllp_rate = clk_hw_get_rate(pllp_hw);
++
++	if (rate <= pllp_rate) {
++		if (super->flags & TEGRA20_SUPER_CLK)
++			rate = pllp_rate;
++		else
++			rate = tegra_clk_super_ops.round_rate(hw, rate,
++							      &pllp_rate);
++
++		req->best_parent_rate = pllp_rate;
++		req->best_parent_hw = pllp_hw;
++		req->rate = rate;
++	} else {
++		rate = clk_hw_round_rate(pllx_hw, rate);
++		req->best_parent_rate = rate;
++		req->best_parent_hw = pllx_hw;
++		req->rate = rate;
++	}
++
++	if (WARN_ON_ONCE(rate <= 0))
++		return -EINVAL;
++
++	return 0;
++}
++
++static const struct clk_ops tegra_cclk_super_ops = {
++	.get_parent = cclk_super_get_parent,
++	.set_parent = cclk_super_set_parent,
++	.set_rate = cclk_super_set_rate,
++	.recalc_rate = cclk_super_recalc_rate,
++	.determine_rate = cclk_super_determine_rate,
++};
++
++static const struct clk_ops tegra_cclk_super_mux_ops = {
++	.get_parent = cclk_super_get_parent,
++	.set_parent = cclk_super_set_parent,
++	.determine_rate = cclk_super_determine_rate,
++};
++
++struct clk *tegra_clk_register_super_cclk(const char *name,
++		const char * const *parent_names, u8 num_parents,
++		unsigned long flags, void __iomem *reg, u8 clk_super_flags,
++		spinlock_t *lock)
++{
++	struct tegra_clk_super_mux *super;
++	struct clk *clk;
++	struct clk_init_data init;
++	u32 val;
++
++	super = kzalloc(sizeof(*super), GFP_KERNEL);
++	if (!super)
++		return ERR_PTR(-ENOMEM);
++
++	init.name = name;
++	init.flags = flags;
++	init.parent_names = parent_names;
++	init.num_parents = num_parents;
++
++	super->reg = reg;
++	super->lock = lock;
++	super->width = 4;
++	super->flags = clk_super_flags;
++	super->hw.init = &init;
++
++	if (super->flags & TEGRA20_SUPER_CLK) {
++		init.ops = &tegra_cclk_super_mux_ops;
++	} else {
++		init.ops = &tegra_cclk_super_ops;
++
++		super->frac_div.reg = reg + 4;
++		super->frac_div.shift = 16;
++		super->frac_div.width = 8;
++		super->frac_div.frac_width = 1;
++		super->frac_div.lock = lock;
++		super->div_ops = &tegra_clk_frac_div_ops;
++	}
++
++	/*
++	 * Tegra30+ has the following CPUG clock topology:
++	 *
++	 *        +---+  +-------+  +-+            +-+                +-+
++	 * PLLP+->+   +->+DIVIDER+->+0|  +-------->+0|  ------------->+0|
++	 *        |   |  +-------+  | |  |  +---+  | |  |             | |
++	 * PLLC+->+MUX|             | +->+  | S |  | +->+             | +->+CPU
++	 *  ...   |   |             | |  |  | K |  | |  |  +-------+  | |
++	 * PLLX+->+-->+------------>+1|  +->+ I +->+1|  +->+ DIV2  +->+1|
++	 *        +---+             +++     | P |  +++     |SKIPPER|  +++
++	 *                           ^      | P |   ^      +-------+   ^
++	 *                           |      | E |   |                  |
++	 *                PLLX_SEL+--+      | R |   |       OVERHEAT+--+
++	 *                                  +---+   |
++	 *                                          |
++	 *                         SUPER_CDIV_ENB+--+
++	 *
++	 * Tegra20 is similar, but simpler. It doesn't have the divider and
++	 * thermal DIV2 skipper.
++	 *
++	 * At least for now we're not going to use clock-skipper, hence let's
++	 * ensure that it is disabled.
++	 */
++	val = readl_relaxed(reg + 4);
++	val &= ~SUPER_CDIV_ENB;
++	writel_relaxed(val, reg + 4);
++
++	clk = clk_register(NULL, &super->hw);
++	if (IS_ERR(clk))
++		kfree(super);
++
++	return clk;
++}
+diff --git a/drivers/clk/tegra/clk.h b/drivers/clk/tegra/clk.h
+index 416a6b09f6a3..ee35a847df08 100644
+--- a/drivers/clk/tegra/clk.h
++++ b/drivers/clk/tegra/clk.h
+@@ -729,8 +729,10 @@ struct clk *tegra_clk_register_periph_data(void __iomem *clk_base,
+  * TEGRA_DIVIDER_2 - LP cluster has additional divider. This flag indicates
+  *     that this is LP cluster clock.
+  * TEGRA210_CPU_CLK - This flag is used to identify CPU cluster for gen5
+- * super mux parent using PLLP branches. To use PLLP branches to CPU, need
+- * to configure additional bit PLLP_OUT_CPU in the clock registers.
++ *     super mux parent using PLLP branches. To use PLLP branches to CPU, need
++ *     to configure additional bit PLLP_OUT_CPU in the clock registers.
++ * TEGRA20_SUPER_CLK - Tegra20 doesn't have a dedicated divider for Super
++ *     clocks, it only has a clock-skipper.
+  */
+ struct tegra_clk_super_mux {
+ 	struct clk_hw	hw;
+@@ -748,6 +750,7 @@ struct tegra_clk_super_mux {
+ 
+ #define TEGRA_DIVIDER_2 BIT(0)
+ #define TEGRA210_CPU_CLK BIT(1)
++#define TEGRA20_SUPER_CLK BIT(2)
+ 
+ extern const struct clk_ops tegra_clk_super_ops;
+ struct clk *tegra_clk_register_super_mux(const char *name,
+@@ -758,6 +761,10 @@ struct clk *tegra_clk_register_super_clk(const char *name,
+ 		const char * const *parent_names, u8 num_parents,
+ 		unsigned long flags, void __iomem *reg, u8 clk_super_flags,
+ 		spinlock_t *lock);
++struct clk *tegra_clk_register_super_cclk(const char *name,
++		const char * const *parent_names, u8 num_parents,
++		unsigned long flags, void __iomem *reg, u8 clk_super_flags,
++		spinlock_t *lock);
+ 
+ /**
+  * struct tegra_sdmmc_mux - switch divider with Low Jitter inputs for SDMMC
 -- 
 2.24.0
 
