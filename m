@@ -2,130 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F393515A5E8
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 11:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6CC15A609
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 11:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbgBLKOW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 05:14:22 -0500
-Received: from mga12.intel.com ([192.55.52.136]:11547 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725812AbgBLKOV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 12 Feb 2020 05:14:21 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Feb 2020 02:14:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,428,1574150400"; 
-   d="scan'208";a="222244543"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga007.jf.intel.com with ESMTP; 12 Feb 2020 02:14:18 -0800
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1j1p2C-000ui5-K7; Wed, 12 Feb 2020 12:14:20 +0200
-Date:   Wed, 12 Feb 2020 12:14:20 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        id S1726204AbgBLKQj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 05:16:39 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:41999 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725945AbgBLKQj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 05:16:39 -0500
+Received: by mail-ot1-f66.google.com with SMTP id 66so1346431otd.9;
+        Wed, 12 Feb 2020 02:16:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BSd7L1WcqmA7Rn1t/qtLYAH7L9DL0l8H2ANtY/V6cDc=;
+        b=gReBd1Ywov8ljWD1+wSAQA4uHUVj9uIy8Je3MtzuZ/kZ3CfR+97pLCp1EsVr5huVDr
+         GR1VRClCJVP8AW3Cgyi0H6jaJPPDkO6FHevE1c0xsjAUH+YCMWbbnM8W18oqECMsbpSS
+         qOrcI90WIJqKOlMLWXwOVANoe0XBIukrGCGw75mUIfdtfGYXgR/bnthuX2UjDT0oosSa
+         TUV4X4oS99IFidi2xfF1cA9lGHIsup04ePZnAUtJF3f1To/aBZWLyhII/OADy4If9B8F
+         qP+xKFU5uPIq9FPY9CkPOUF9nPlyte7zT8A8gfwTR3NplT58yHbFGktJ+484YJcC57ID
+         AIGA==
+X-Gm-Message-State: APjAAAVIwgvvVF/6r0CnFL3O11z7Eus+JKxJ72EJEMjywrs58Pn/WgDG
+        76MmwOtaRzj8ReakPVliPuZPgQjg4+LABMt/u6o=
+X-Google-Smtp-Source: APXvYqyfmunP1o2BTpeb9JU1HjP2UYYEVp4pQeJQcvu4Jqvu9FNFexZwM5K2BHzwypUIBN4OQGyWST7sYQ52txz7keM=
+X-Received: by 2002:a9d:67d7:: with SMTP id c23mr8759446otn.262.1581502598886;
+ Wed, 12 Feb 2020 02:16:38 -0800 (PST)
+MIME-Version: 1.0
+References: <1654227.8mz0SueHsU@kreacher> <197693303.hiACyxC3Vm@kreacher> <20200212100810.GA4028@sirena.org.uk>
+In-Reply-To: <20200212100810.GA4028@sirena.org.uk>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 12 Feb 2020 11:16:27 +0100
+Message-ID: <CAJZ5v0i8DsjQkf_4ezOYMrvB47ZuxsgNmTbHQB-JEK8bMHUpPg@mail.gmail.com>
+Subject: Re: [PATCH 24/28] sound: Call cpu_latency_qos_*() instead of pm_qos_*()
+To:     Mark Brown <broonie@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Amit Kucheria <amit.kucheria@linaro.org>,
-        David Box <david.e.box@linux.intel.com>,
-        x86 Maintainers <x86@kernel.org>
-Subject: Re: [PATCH 15/28] x86: platform: iosf_mbi: Call cpu_latency_qos_*()
- instead of pm_qos_*()
-Message-ID: <20200212101420.GQ10400@smile.fi.intel.com>
-References: <1654227.8mz0SueHsU@kreacher>
- <2577606.BoWb2c14C5@kreacher>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2577606.BoWb2c14C5@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>, Liam Girdwood <lgirdwood@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 12:10:00AM +0100, Rafael J. Wysocki wrote:
-> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> 
-> Call cpu_latency_qos_add/update/remove_request() instead of
-> pm_qos_add/update/remove_request(), respectively, because the
-> latter are going to be dropped.
-> 
-> No intentional functional impact.
+On Wed, Feb 12, 2020 at 11:08 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, Feb 12, 2020 at 12:34:15AM +0100, Rafael J. Wysocki wrote:
+> > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> >
+> > Call cpu_latency_qos_add/update/remove_request() and
+> > cpu_latency_qos_request_active() instead of
+> > pm_qos_add/update/remove_request() and pm_qos_request_active(),
+> > respectively, because the latter are going to be dropped.
+>
+> What's the story with dependencies here, I only have this patch and not
+> the cover letter?
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The cover letter is here:
 
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  arch/x86/platform/intel/iosf_mbi.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/platform/intel/iosf_mbi.c b/arch/x86/platform/intel/iosf_mbi.c
-> index 9e2444500428..526f70f27c1c 100644
-> --- a/arch/x86/platform/intel/iosf_mbi.c
-> +++ b/arch/x86/platform/intel/iosf_mbi.c
-> @@ -265,7 +265,7 @@ static void iosf_mbi_reset_semaphore(void)
->  			    iosf_mbi_sem_address, 0, PUNIT_SEMAPHORE_BIT))
->  		dev_err(&mbi_pdev->dev, "Error P-Unit semaphore reset failed\n");
->  
-> -	pm_qos_update_request(&iosf_mbi_pm_qos, PM_QOS_DEFAULT_VALUE);
-> +	cpu_latency_qos_update_request(&iosf_mbi_pm_qos, PM_QOS_DEFAULT_VALUE);
->  
->  	blocking_notifier_call_chain(&iosf_mbi_pmic_bus_access_notifier,
->  				     MBI_PMIC_BUS_ACCESS_END, NULL);
-> @@ -301,8 +301,8 @@ static void iosf_mbi_reset_semaphore(void)
->   * 4) When CPU cores enter C6 or C7 the P-Unit needs to talk to the PMIC
->   *    if this happens while the kernel itself is accessing the PMIC I2C bus
->   *    the SoC hangs.
-> - *    As the third step we call pm_qos_update_request() to disallow the CPU
-> - *    to enter C6 or C7.
-> + *    As the third step we call cpu_latency_qos_update_request() to disallow the
-> + *    CPU to enter C6 or C7.
->   *
->   * 5) The P-Unit has a PMIC bus semaphore which we can request to stop
->   *    autonomous P-Unit tasks from accessing the PMIC I2C bus while we hold it.
-> @@ -338,7 +338,7 @@ int iosf_mbi_block_punit_i2c_access(void)
->  	 * requires the P-Unit to talk to the PMIC and if this happens while
->  	 * we're holding the semaphore, the SoC hangs.
->  	 */
-> -	pm_qos_update_request(&iosf_mbi_pm_qos, 0);
-> +	cpu_latency_qos_update_request(&iosf_mbi_pm_qos, 0);
->  
->  	/* host driver writes to side band semaphore register */
->  	ret = iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
-> @@ -547,8 +547,7 @@ static int __init iosf_mbi_init(void)
->  {
->  	iosf_debugfs_init();
->  
-> -	pm_qos_add_request(&iosf_mbi_pm_qos, PM_QOS_CPU_DMA_LATENCY,
-> -			   PM_QOS_DEFAULT_VALUE);
-> +	cpu_latency_qos_add_request(&iosf_mbi_pm_qos, PM_QOS_DEFAULT_VALUE);
->  
->  	return pci_register_driver(&iosf_mbi_pci_driver);
->  }
-> @@ -561,7 +560,7 @@ static void __exit iosf_mbi_exit(void)
->  	pci_dev_put(mbi_pdev);
->  	mbi_pdev = NULL;
->  
-> -	pm_qos_remove_request(&iosf_mbi_pm_qos);
-> +	cpu_latency_qos_remove_request(&iosf_mbi_pm_qos);
->  }
->  
->  module_init(iosf_mbi_init);
-> -- 
-> 2.16.4
-> 
-> 
-> 
-> 
-> 
+https://lore.kernel.org/linux-pm/CAJZ5v0h1z2p66J5KB3P0RjPkLE-DfDbcfhG_OrnDG_weir7HMA@mail.gmail.com/T/#m92ce7ffd743083e89e45c0a98da8c0140e44c70b
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Generally speaking, this patch depends on the previous patches in the series.
