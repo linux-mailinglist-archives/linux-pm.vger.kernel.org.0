@@ -2,110 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA9A15B3EB
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 23:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2D515B40E
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2020 23:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729195AbgBLWgX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 17:36:23 -0500
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:14698 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727947AbgBLWgX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 17:36:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1581546982; x=1613082982;
-  h=date:from:to:subject:message-id:mime-version;
-  bh=ZcT5NL3HFOPFbym2IiAARR+k8Y7xo5J+zpygwD2ALWc=;
-  b=OBTbLSy3uAILFo/AKR2w77FqbxDrXMS0XsBY6hCNboXUgPEOEGQNiojN
-   SCwczM2RxJ+CFTGBy0emzyV8tgXCjP1eSguAFPoShKCMJfUGE4RQM2WHq
-   VAWYow1x5lP0lQ1mJ5nFZM2r1AscK5HPOUGEbwBI/HnVOi6pEYW1RWLZv
-   M=;
-IronPort-SDR: RuG58dnJ7bK0jmVNwi+pnsRoVw06xDHGaPsu5B6jHAddTjNNYzGJxuu6rUzhRt+WNLOPfopBFM
- 6yF3lWoXEQ8Q==
-X-IronPort-AV: E=Sophos;i="5.70,434,1574121600"; 
-   d="scan'208";a="16854725"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1e-c7c08562.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 12 Feb 2020 22:36:22 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1e-c7c08562.us-east-1.amazon.com (Postfix) with ESMTPS id 910E62427DA;
-        Wed, 12 Feb 2020 22:36:14 +0000 (UTC)
-Received: from EX13D01UWB002.ant.amazon.com (10.43.161.136) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Wed, 12 Feb 2020 22:35:52 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX13d01UWB002.ant.amazon.com (10.43.161.136) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Wed, 12 Feb 2020 22:35:52 +0000
-Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
- Server id 15.0.1367.3 via Frontend Transport; Wed, 12 Feb 2020 22:35:52 +0000
-Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id 28812400D1; Wed, 12 Feb 2020 22:35:52 +0000 (UTC)
-Date:   Wed, 12 Feb 2020 22:35:52 +0000
-From:   Anchal Agarwal <anchalag@amazon.com>
-To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
-        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
-        <linux-mm@kvack.org>, <kamatam@amazon.com>,
-        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
-        <roger.pau@citrix.com>, <axboe@kernel.dk>, <davem@davemloft.net>,
-        <rjw@rjwysocki.net>, <len.brown@intel.com>, <pavel@ucw.cz>,
-        <peterz@infradead.org>, <eduval@amazon.com>, <sblbir@amazon.com>,
-        <anchalag@amazon.com>, <xen-devel@lists.xenproject.org>,
-        <vkuznets@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dwmw@amazon.co.uk>,
-        <fllinden@amaozn.com>, <benh@kernel.crashing.org>
-Subject: [RFC PATCH v3 12/12] PM / hibernate: update the resume offset on
- SNAPSHOT_SET_SWAP_AREA
-Message-ID: <20200212223552.GA4609@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+        id S1728447AbgBLWrn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 17:47:43 -0500
+Received: from vsp-unauthed02.binero.net ([195.74.38.227]:29866 "EHLO
+        vsp-unauthed02.binero.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727692AbgBLWrn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 17:47:43 -0500
+X-Halon-ID: a77b4be1-4de9-11ea-aa6d-005056917f90
+Authorized-sender: niklas@soderlund.pp.se
+Received: from bismarck.berto.se (p4fca2392.dip0.t-ipconnect.de [79.202.35.146])
+        by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
+        id a77b4be1-4de9-11ea-aa6d-005056917f90;
+        Wed, 12 Feb 2020 23:47:39 +0100 (CET)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Cc:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH] thermal: rcar_gen3_thermal: Remove unneeded curly brackets
+Date:   Wed, 12 Feb 2020 23:47:32 +0100
+Message-Id: <20200212224732.736785-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Aleksei Besogonov <cyberax@amazon.com>
+When devm_add_action() was turned into devm_add_action_or_reset() the
+curly brackets for the error case where kept but are not needed, remove
+them to match the style of the driver.
 
-The SNAPSHOT_SET_SWAP_AREA is supposed to be used to set the hibernation
-offset on a running kernel to enable hibernating to a swap file.
-However, it doesn't actually update the swsusp_resume_block variable. As
-a result, the hibernation fails at the last step (after all the data is
-written out) in the validation of the swap signature in
-mark_swapfiles().
-
-Before this patch, the command line processing was the only place where
-swsusp_resume_block was set.
-
-Signed-off-by: Aleksei Besogonov <cyberax@amazon.com>
-Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
-Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
-
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 ---
-  Changes since V2: None
----
- kernel/power/user.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/thermal/rcar_gen3_thermal.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index 77438954cc2b..d396e313cb7b 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -374,8 +374,12 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
- 			if (swdev) {
- 				offset = swap_area.offset;
- 				data->swap = swap_type_of(swdev, offset, NULL);
--				if (data->swap < 0)
-+				if (data->swap < 0) {
- 					error = -ENODEV;
-+				} else {
-+					swsusp_resume_device = swdev;
-+					swsusp_resume_block = offset;
-+				}
- 			} else {
- 				data->swap = -1;
- 				error = -EINVAL;
+diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+index 55d1736f532cdb33..a2bf9d8074cc4fcf 100644
+--- a/drivers/thermal/rcar_gen3_thermal.c
++++ b/drivers/thermal/rcar_gen3_thermal.c
+@@ -444,9 +444,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+ 			goto error_unregister;
+ 
+ 		ret = devm_add_action_or_reset(dev, rcar_gen3_hwmon_action, zone);
+-		if (ret) {
++		if (ret)
+ 			goto error_unregister;
+-		}
+ 
+ 		ret = of_thermal_get_ntrips(tsc->zone);
+ 		if (ret < 0)
 -- 
-2.24.1.AMZN
+2.25.0
 
