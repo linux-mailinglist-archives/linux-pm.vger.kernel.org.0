@@ -2,94 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C95115BBF9
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 10:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E29F715BC8D
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 11:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729532AbgBMJrH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Feb 2020 04:47:07 -0500
-Received: from foss.arm.com ([217.140.110.172]:44026 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729494AbgBMJrG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 13 Feb 2020 04:47:06 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0132A1FB;
-        Thu, 13 Feb 2020 01:47:05 -0800 (PST)
-Received: from localhost (unknown [10.1.198.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 959CF3F6CF;
-        Thu, 13 Feb 2020 01:47:05 -0800 (PST)
-Date:   Thu, 13 Feb 2020 09:47:04 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-        maz@kernel.org, suzuki.poulose@arm.com, sudeep.holla@arm.com,
-        valentin.schneider@arm.com, rjw@rjwysocki.net,
-        peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 6/7] arm64: use activity monitors for frequency
- invariance
-Message-ID: <20200213094704.GA30335@arm.com>
-References: <20200211184542.29585-1-ionela.voinescu@arm.com>
- <20200211184542.29585-7-ionela.voinescu@arm.com>
- <a63fd15f-f02d-6afe-6e1f-817b9eb452d1@arm.com>
+        id S1729674AbgBMKRZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Feb 2020 05:17:25 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:36344 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729511AbgBMKRY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Feb 2020 05:17:24 -0500
+Received: by mail-oi1-f193.google.com with SMTP id c16so5241065oic.3;
+        Thu, 13 Feb 2020 02:17:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UmM5NXNcETsSD9gaokm/HGtL7fBM7CvM2iUBsAPp3HY=;
+        b=bmO0XlLPkHLs6xm3pJaJ1CSMnWD1aIfeUtKi+3DemROzU++4C3A9C/rw3O5LAN7APM
+         ohFWGZTERwohzs2yKEh8lApWsWGtq6+fRNWTtBbPiahAzSd5lt5SutkszzNG2M6oTZH+
+         8pvmFprkq2SMDNtO8sS8EtaIHZO5MK/tAm/8/7pcMRa5iP/788SB12dgtOgIQbKF+/az
+         tyEgJqRYDP30C3piRpDyGSA4+AmczGIKNv4DmyQdTOGVYj/tp/dfZVy6HEaEX8WjNS7a
+         cm1toxVxKLzDN631htCG2P9eha+ckVaNQCzNnFbr1e3T9uGIqoo2wCMO9Ogd+uPOcNFN
+         Y04Q==
+X-Gm-Message-State: APjAAAVtdfNM61AqlDhUq8rulg0fKu16w6O3RMAldxLA0accV4RVQZ/X
+        Ce9SmNPBVdwRf3OEZJmYhJEc30tUIFp/+6eJ618=
+X-Google-Smtp-Source: APXvYqx1gOwRIVhZqmxsMzXdhmTZ6mkSJd6vLVA+opgY3Sr/vxNAVShGOvP858qENQKEqxMP7NLYej+IvIZ/4vr7iKc=
+X-Received: by 2002:a54:4e96:: with SMTP id c22mr2458959oiy.110.1581589042574;
+ Thu, 13 Feb 2020 02:17:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a63fd15f-f02d-6afe-6e1f-817b9eb452d1@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <1654227.8mz0SueHsU@kreacher> <CAP245DXY2MsV6rf95QdATTXXZWoYYLFBO3QxQgkg=44Fw0cLNA@mail.gmail.com>
+In-Reply-To: <CAP245DXY2MsV6rf95QdATTXXZWoYYLFBO3QxQgkg=44Fw0cLNA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 13 Feb 2020 11:17:11 +0100
+Message-ID: <CAJZ5v0i5thgrdGNQ+a1tuw=CGa8PAhHt19GoDpC8KLLjNVoQLQ@mail.gmail.com>
+Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU
+ latency QoS interface
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz,
+On Thu, Feb 13, 2020 at 8:10 AM Amit Kucheria <amit.kucheria@linaro.org> wrote:
+>
+> On Wed, Feb 12, 2020 at 5:09 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >
+> > Hi All,
+> >
+> > This series of patches is based on the observation that after commit
+> > c3082a674f46 ("PM: QoS: Get rid of unused flags") the only global PM QoS class
+> > in use is PM_QOS_CPU_DMA_LATENCY, but there is still a significant amount of
+> > code dedicated to the handling of global PM QoS classes in general.  That code
+> > takes up space and adds overhead in vain, so it is better to get rid of it.
+> >
+> > Moreover, with that unuseful code removed, the interface for adding QoS
+> > requests for CPU latency becomes inelegant and confusing, so it is better to
+> > clean it up.
+> >
+> > Patches [01/28-12/28] do the first part described above, which also includes
+> > some assorted cleanups of the core PM QoS code that doesn't go away.
+> >
+> > Patches [13/28-25/28] rework the CPU latency QoS interface (in the classic
+> > "define stubs, migrate users, change the API proper" manner), patches
+> > [26-27/28] update the general comments and documentation to match the code
+> > after the previous changes and the last one makes the CPU latency QoS depend
+> > on CPU_IDLE (because cpuidle is the only user of its target value today).
+> >
+> > The majority of the patches in this series don't change the functionality of
+> > the code at all (at least not intentionally).
+> >
+> > Please refer to the changelogs of individual patches for details.
+>
+> Hi Rafael,
+>
+> Nice cleanup to the code and docs.
+>
+> I've reviewed the series, and briefly tested it by setting latencies
+> from userspace. Can we not remove the debugfs interface? It is a quick
+> way to check the global cpu latency clamp on the system from userspace
+> without setting up tracepoints or writing a program to read
+> /dev/cpu_dma_latency.
 
-[..]
-> > +
-> > +/* Obtain max frequency (in KHz) as reported by hardware */
-> > +__weak unsigned int cpu_get_max_freq(unsigned int cpu)
-> > +{
-> > +	return 0;
-> > +}
-> > +
-> > +#ifdef CONFIG_CPU_FREQ
-> > +/* Replace max frequency getter with cpufreq based function */
-> > +#define cpu_get_max_freq cpufreq_get_hw_max_freq
-> > +#endif
-> 
-> Can we just use cpufreq_get_hw_max_freq()?
-> We have cpufreq_get_hw_max_freq returning 0 in such case, so it should
-> be OK.
-> 
+Come on.
 
-The reasoning for the implementation is the following:
- - For CONFIG_CPU_FREQ we use cpufreq_get_hw_max_freq (weak default or
-   strong alternative)
- - For !CONFIG_CPU_FREQ cpufreq_get_hw_max_freq returns 0 - it signals
-   that cpufreq cannot return the hardware max frequency. In this case
-   cpu_get_max_freq is used (weak default or strong alternative
-   implementation).
+What about in Python?
 
-> Is there a possibility that some platform which has !CONFIG_CPU_FREQ
-> would define its own cpu_get_max_freq() overwriting the weak function
-> above?
-> Based on the code which checks 'if (unlikely(!max_freq_hz))' it should,
-> otherwise 'valid_cpus' is not set.
-> 
-> I would assume that we won't see such platform, interested
-> in AMU freq invariance without CONFIG_CPU_FREQ.
-> 
-> We already have a lot of these defines or __weak functions, which is
-> hard to follow.
+#!/usr/bin/env python
+import numpy as np
 
-There is no dependency between CONFIG_CPU_FREQ and frequency invariance.
-Therefore, I did not see a reason to potentially bypass the use of AMU
-for frequency invariance for !CONFIG_CPU_FREQ.
+if __name__ == '__main__':
+    f = open("/dev/cpu_dma_latency", "r")
+    print(np.fromfile(f, dtype=np.int32, count=1))
+    f.close()
 
-But I agree it makes the code harder to read so I can remove
-cpu_get_max_freq and keep cpufreq_get_hw_max_freq only until there is a
-provable need for this. 
+And probably you can do it in at least 20 different ways. :-)
 
-Thank you for the review,
-Ionela.
+Also note that "echo the_debugfs_thing" does the equivalent, but the
+conversion takes place in the kernel.  Is it really a good idea to
+carry the whole debugfs interface because of that one conversion?
+
+> Except for patch 01/28 removing the debugfs interface, please feel to add my
+>
+> Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+> Tested-by: Amit Kucheria <amit.kucheria@linaro.org>
+
+Thanks!
