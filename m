@@ -2,152 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3C015BD25
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 11:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B81115BD39
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 12:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729531AbgBMKxp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Feb 2020 05:53:45 -0500
-Received: from mout02.posteo.de ([185.67.36.66]:48791 "EHLO mout02.posteo.de"
+        id S1729544AbgBMLAI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Feb 2020 06:00:08 -0500
+Received: from foss.arm.com ([217.140.110.172]:44918 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726232AbgBMKxp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 13 Feb 2020 05:53:45 -0500
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id A7B76240100
-        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2020 11:53:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1581591221; bh=mA7MNu76VrdfaF31R+MslvhMKuM1R3H8nGbJ2BrWQqg=;
-        h=Subject:From:To:Cc:Autocrypt:Date:From;
-        b=h5K2KDjINRHkTq/VGcBE2WTrteB67XTdicjJ1WrodK72tNtqO9LKc2z1Df3J2kxH4
-         LqZCBi6rlTDwz3c4kBIP1Mk0tfT+EsQw+i1LYM0w1bgCMz9Q+JgQ9f1i4Ojfz7+Emo
-         t0PcIV4yLpVUTpM+me+jJTG1B+EN61r5h84rniCmzUkwFOED8xck1O46lmFNnsEdkL
-         v7f8R1+Epz2ZG8amUOl3DqNcdgAZwCOa7P031BfiitPEDlujNwy6PqUIbtODkZoieP
-         fPLAmHimf7oCNxo1QTpc0jrNW2zxmfno77quj8heewMDOk5xyNO16lDEcA29rEAIbv
-         WE2MP7tDiD2kw==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 48JCzZ1g4Fz9rxS;
-        Thu, 13 Feb 2020 11:53:30 +0100 (CET)
-Subject: Re: [PATCH RFC v6 2/9] PM / devfreq: Add generic imx bus scaling
- driver
-From:   Martin Kepplinger <martink@posteo.de>
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        Angus Ainslie <angus@akkea.ca>, Jacky Bai <ping.bai@nxp.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        "linux-pm-owner@vger.kernel.org" <linux-pm-owner@vger.kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Silvano Di Ninno <silvano.dininno@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-References: <cover.1573761527.git.leonard.crestez@nxp.com>
- <f329e715898a6b9fd0cee707a93fb1e144e31bd4.1573761527.git.leonard.crestez@nxp.com>
- <e311a376e6aec0c380686a7e307d2c07@akkea.ca>
- <VI1PR04MB70233920AC838AD88E1ECC26EE4F0@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <008f2fa973b23fc716d678c5bd35af54@akkea.ca>
- <VI1PR04MB7023E7C380EFA956629EEB67EE4F0@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <d1ca09bdeb7580c9b62b491c6eb30148@akkea.ca>
- <VI1PR04MB702329DCBBC98C405421D8DFEE4F0@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <9a8dac5b-25c0-7dca-8c25-9796ba2b4df5@posteo.de>
-Autocrypt: addr=martink@posteo.de; keydata=
- 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
-Message-ID: <671afc9c-66d0-03d5-c810-ffb4e4ad76d7@posteo.de>
-Date:   Thu, 13 Feb 2020 11:53:29 +0100
+        id S1726232AbgBMLAI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 13 Feb 2020 06:00:08 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46A8F1FB;
+        Thu, 13 Feb 2020 03:00:07 -0800 (PST)
+Received: from [192.168.0.7] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 875E83F6CF;
+        Thu, 13 Feb 2020 03:00:00 -0800 (PST)
+Subject: Re: [PATCH v2 1/4] PM / EM: add devices to Energy Model
+To:     lukasz.luba@arm.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com
+Cc:     Morten.Rasmussen@arm.com, Chris.Redpath@arm.com,
+        ionela.voinescu@arm.com, javi.merino@arm.com,
+        cw00.choi@samsung.com, b.zolnierkie@samsung.com, rjw@rjwysocki.net,
+        sudeep.holla@arm.com, viresh.kumar@linaro.org, nm@ti.com,
+        sboyd@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, qperret@google.com, bsegall@google.com,
+        mgorman@suse.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, kernel@pengutronix.de, khilman@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
+        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net
+References: <20200206134640.11367-1-lukasz.luba@arm.com>
+ <20200206134640.11367-2-lukasz.luba@arm.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <62a54ec9-0491-367d-0a36-7ea32c449acc@arm.com>
+Date:   Thu, 13 Feb 2020 11:59:59 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <9a8dac5b-25c0-7dca-8c25-9796ba2b4df5@posteo.de>
+In-Reply-To: <20200206134640.11367-2-lukasz.luba@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -156,54 +55,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04.02.20 10:45, Martin Kepplinger wrote:
-> On 20.11.19 19:02, Leonard Crestez wrote:
->> On 20.11.2019 18:38, Angus Ainslie wrote:
->>> On 2019-11-20 08:30, Leonard Crestez wrote:
->>>> On 20.11.2019 17:41, Angus Ainslie wrote:
->>>>> Hi Leonard,
->>>>>
->>>>> On 2019-11-20 07:04, Leonard Crestez wrote:
->>>>>> On 20.11.2019 16:08, Angus Ainslie wrote:
->>>>>> Is "mainline ATF" an important criteria for Purism?
->>>>>
->>>>> Yes we intend to bring all of our patches to mainline and were hoping
->>>>> that NXP would be doing the same. Shouldn't a mainline kernel run on a
->>>>> mainline ATF ?
->>>>
->>>> You can still use mainline ATF (tested right now) but the imx8m-ddrc
->>>> driver won't probe.
->>>
->>> Sorry I was talking about the DDR frequency scaling specifically. >
->>>> The ability to mix and match different branches of firmware and kernel
->>>> is very useful for testing. There might be slight incompatibilities but
->>>> in theory if a feature depends on both firmware and kernel support then
->>>> it should gracefully degrade rather than crash or hang.
->>>
->>> I saw the check you put in for the correct ATF version and that's very
->>> helpful thanks.
->>>
->>>> ATF support for this feature will be mainlined eventually, I picked the
->>>> linux side first because review is more challenging and changes are
->>>> much larger relative to what we have in our internal tree.
->>>
->>> Do you have a patch against mainline ATF that we can test this feature
->>> with ?
->>
->> Not right now, and imx atf is based on a slightly older version so some 
->> porting effort might be required.
->>
-> 
-> Hi Leonard,
-> 
-> Have you, by chance, looked at the mainline ATF side for your devfreq
-> work in the meantime? I'd happily test. (btw. the linux driver fails
-> "nicely" there.)
-> 
+On 06/02/2020 14:46, lukasz.luba@arm.com wrote:
+> From: Lukasz Luba <lukasz.luba@arm.com>
 
-hi again. Do you have any plans regarding the ATF implementation of
-IMX_SIP_DDR_DVFS in mainline yet? The kernel is only one half of the
-devfreq solution after all. I'm asking just to schedule my work a bit :)
+[..]
 
-thanks,
-                            martin
+> @@ -26,7 +28,7 @@ framework, and interested clients reading the data from it::
+
+s/::/: ?
+
+>         | Thermal (IPA) |  | Scheduler (EAS) |  |     Other     |
+>         +---------------+  +-----------------+  +---------------+
+>                 |                   | em_pd_energy()    |
+> -               |                   | em_cpu_get()      |
+> +               |  em_get_pd()      | em_cpu_get()      |
+>                 +---------+         |         +---------+
+
+em_get_pd() and em_cpu_get()? Why not em_pd_get()? em_cpu_get() is a
+specific em_get_pd(). right?
+
+[...]
+
+> @@ -85,13 +89,20 @@ API.
+>  2.3 Accessing performance domains
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  
+> +There is two API functions which provide the access to the energy model:
+> +em_cpu_get() which takes CPU id as an argument and em_get_pd() with device
+> +pointer as an argument. It depends on the subsystem which interface it is
+> +going to use, but in case of CPU devices both functions return the same
+> +performance domain.
+
+There is probably a reason why we need this specific function for CPU
+devices? The reason should be described. People might ask why
+em_get_pd() is not sufficient.
+
+[...]
+
+> - * A "performance domain" represents a group of CPUs whose performance is
+> - * scaled together. All CPUs of a performance domain must have the same
+> - * micro-architecture. Performance domains often have a 1-to-1 mapping with
+> - * CPUFreq policies.
+> + * In case of CPU device, a "performance domain" represents a group of CPUs
+> + * whose performance is scaled together. All CPUs of a performance domain
+> + * must have the same micro-architecture. Performance domains often have
+> + * a 1-to-1 mapping with CPUFreq policies.
+> + * In case of other devices the 'priv' field is unused.
+>   */
+>  struct em_perf_domain {
+> -	struct em_cap_state *table;
+> -	int nr_cap_states;
+> -	unsigned long cpus[0];
+> +	struct em_perf_state *table;
+> +	int nr_perf_states;
+> +	void *priv;
+
+In case you go back to the variable length field plus type field to
+distingush EM devices, keep cpus[0] as the name.
+
+[..]
+
+>  /**
+> - * em_pd_energy() - Estimates the energy consumed by the CPUs of a perf. domain
+> + * em_pd_energy() - Estimates the energy consumed by the CPUs of a perf.
+> +			domain
+
+Why this change?
+
+[...]
+
+> @@ -141,12 +210,12 @@ static struct em_perf_domain *em_create_pd(cpumask_t *span, int nr_states,
+>  		 */
+>  		opp_eff = freq / power;
+>  		if (opp_eff >= prev_opp_eff)
+> -			pr_warn("pd%d: hertz/watts ratio non-monotonically decreasing: em_cap_state %d >= em_cap_state%d\n",
+> -					cpu, i, i - 1);
+> +			dev_warn(dev, "energy_model: hertz/watts ratio non-monotonically decreasing: em_perf_state %d >= em_perf_state%d\n",
+
+s/energy_model/EM ?
+
+[...]
