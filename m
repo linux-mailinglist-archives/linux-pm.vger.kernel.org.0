@@ -2,111 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E19215CC8E
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 21:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC8815CCEC
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 22:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728138AbgBMUrl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Feb 2020 15:47:41 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:42736 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727965AbgBMUrk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Feb 2020 15:47:40 -0500
-Received: by mail-oi1-f196.google.com with SMTP id j132so7206670oih.9;
-        Thu, 13 Feb 2020 12:47:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=z3dk5qxcEVX9/dZvrNaONjzVzfrEpAE56fEOJ9OyDRY=;
-        b=FSnfpqIZN3arayi8/cjP1yKVv5k8Y+fvQdTaETBz/WEwkFtS4ZbSG++V2Ihgz2k0UG
-         /qFlyxcmmHHcDl/FgXm4+Tserz8lfy1bLSim7x0kebFs7hRBJVc0YFNxa/jFwgJrqO6C
-         oOuxB3IF90cwnHC00WGp/xBsmhFMkr54qlBWmeq8XAWlESReP0si53SEwtmlK/c1vf27
-         5/+Q92M85gAaWm6NP/B+MRebo+1N/Sd4E579epmxTbt+nJAiWo3TFG7ev2mEQMffmC+q
-         wpFY61FTsNW5fwo+s14skRFgNl6BMlqoyPCqqQ2J3oB8PSKNN9GdcS0x2B7aE+XVKzqx
-         UQiA==
-X-Gm-Message-State: APjAAAWCuY48j3pOyyD0D7dWvs5vfLvX4TboeiCH9Q2s0aJaAMsdHE5r
-        BhJ5HB3uDFunLckgJBA1xA==
-X-Google-Smtp-Source: APXvYqzQA7r7V4YoQpEtQwWPfWwQz5RkPdR405hNAG7fAhbJpVu3jI2rmNBq0FR14AcPd35Qq8d0MA==
-X-Received: by 2002:aca:ddc2:: with SMTP id u185mr4359191oig.24.1581626859710;
-        Thu, 13 Feb 2020 12:47:39 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id f1sm1173808otq.4.2020.02.13.12.47.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2020 12:47:39 -0800 (PST)
-Received: (nullmailer pid 3866 invoked by uid 1000);
-        Thu, 13 Feb 2020 20:47:38 -0000
-Date:   Thu, 13 Feb 2020 14:47:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Keerthy <j-keerthy@ti.com>
-Cc:     rui.zhang@intel.com, robh+dt@kernel.org, daniel.lezcano@linaro.org,
-        j-keerthy@ti.com, amit.kucheria@verdurent.com, t-kristo@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        mark.rutland@arm.com
-Subject: Re: [PATCH 1/4] dt-bindings: thermal: k3: Add VTM bindings
- documentation
-Message-ID: <20200213204738.GA2973@bogus>
-References: <20200213102440.20539-1-j-keerthy@ti.com>
- <20200213102440.20539-2-j-keerthy@ti.com>
+        id S1726780AbgBMVGT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Feb 2020 16:06:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58260 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726282AbgBMVGT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 13 Feb 2020 16:06:19 -0500
+Received: from earth.universe (unknown [185.62.205.105])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CA5CE206B6;
+        Thu, 13 Feb 2020 21:06:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581627978;
+        bh=0k7c0ULe1lXlvkdOAK687I5knZOYpG1zM7rIY2J1x8o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fjcFDYuU7oTqSD7VBy7dlfHr5pBpgLlsSGrT7NYlbiF7CkKt5HicozhbVP25dJIRt
+         SuyfLbjHCVbryrapB6I/Xr2/QmTJ/xd7Cj0KLYO5/I/pX6ImwzSbom8OnViHJQi6GP
+         g0iZmm+nimAn13RULqmok03k+KCxkMrAvtCgEHT0=
+Received: by earth.universe (Postfix, from userid 1000)
+        id 884683C0C83; Thu, 13 Feb 2020 22:06:14 +0100 (CET)
+Date:   Thu, 13 Feb 2020 22:06:14 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>
+Subject: Re: [PATCH 17/28] drivers: hsi: Call cpu_latency_qos_*() instead of
+ pm_qos_*()
+Message-ID: <20200213210614.2n4xbt3wbd6ltntj@earth.universe>
+References: <1654227.8mz0SueHsU@kreacher>
+ <5212477.aCSzomBNgy@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uu4yb2e2brmudxu5"
 Content-Disposition: inline
-In-Reply-To: <20200213102440.20539-2-j-keerthy@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <5212477.aCSzomBNgy@kreacher>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 13 Feb 2020 15:54:37 +0530, Keerthy wrote:
-> Add VTM bindings documentation. In the Voltage Thermal
-> Management Module(VTM), K3 AM654 supplies a voltage
-> reference and a temperature sensor feature that are gathered in the band
-> gap voltage and temperature sensor (VBGAPTS) module. The band
-> gap provides current and voltage reference for its internal
-> circuits and other analog IP blocks. The analog-to-digital
-> converter (ADC) produces an output value that is proportional
-> to the silicon temperature.
-> 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
+
+--uu4yb2e2brmudxu5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Wed, Feb 12, 2020 at 12:13:17AM +0100, Rafael J. Wysocki wrote:
+> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+>=20
+> Call cpu_latency_qos_add/remove_request() and
+> cpu_latency_qos_request_active() instead of
+> pm_qos_add/remove_request() and pm_qos_request_active(),
+> respectively, because the latter are going to be dropped.
+>=20
+> No intentional functional impact.
+>=20
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  .../bindings/thermal/ti,am654-thermal.yaml    | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
-> 
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Acked-by: Sebastian Reichel <sre@kernel.org>
 
-warning: no schema found in file: Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml: ignoring, error parsing file
-Documentation/devicetree/bindings/display/simple-framebuffer.example.dts:21.16-37.11: Warning (chosen_node_is_root): /example-0/chosen: chosen node must be at root node
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 35, in check_doc
-    testtree = dtschema.load(filename, line_number=line_number, duplicate_keys=False)
-  File "/usr/local/lib/python3.6/dist-packages/dtschema/lib.py", line 513, in load
-    return yaml.load(f.read())
-  File "/usr/local/lib/python3.6/dist-packages/ruamel/yaml/main.py", line 343, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.6/dist-packages/ruamel/yaml/constructor.py", line 111, in get_single_data
-    node = self.composer.get_single_node()
-  File "_ruamel_yaml.pyx", line 718, in _ruamel_yaml.CParser.get_single_node
-ruamel.yaml.composer.ComposerError: expected a single document in the stream
-  in "<unicode string>", line 2, column 1
-but found another document
-  in "<unicode string>", line 4, column 1
+-- Sebastian
 
-During handling of the above exception, another exception occurred:
+>  drivers/hsi/clients/cmt_speech.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/hsi/clients/cmt_speech.c b/drivers/hsi/clients/cmt_s=
+peech.c
+> index 9eec970cdfa5..89869c66fb9d 100644
+> --- a/drivers/hsi/clients/cmt_speech.c
+> +++ b/drivers/hsi/clients/cmt_speech.c
+> @@ -965,14 +965,13 @@ static int cs_hsi_buf_config(struct cs_hsi_iface *h=
+i,
+> =20
+>  	if (old_state !=3D hi->iface_state) {
+>  		if (hi->iface_state =3D=3D CS_STATE_CONFIGURED) {
+> -			pm_qos_add_request(&hi->pm_qos_req,
+> -				PM_QOS_CPU_DMA_LATENCY,
+> +			cpu_latency_qos_add_request(&hi->pm_qos_req,
+>  				CS_QOS_LATENCY_FOR_DATA_USEC);
+>  			local_bh_disable();
+>  			cs_hsi_read_on_data(hi);
+>  			local_bh_enable();
+>  		} else if (old_state =3D=3D CS_STATE_CONFIGURED) {
+> -			pm_qos_remove_request(&hi->pm_qos_req);
+> +			cpu_latency_qos_remove_request(&hi->pm_qos_req);
+>  		}
+>  	}
+>  	return r;
+> @@ -1075,8 +1074,8 @@ static void cs_hsi_stop(struct cs_hsi_iface *hi)
+>  	WARN_ON(!cs_state_idle(hi->control_state));
+>  	WARN_ON(!cs_state_idle(hi->data_state));
+> =20
+> -	if (pm_qos_request_active(&hi->pm_qos_req))
+> -		pm_qos_remove_request(&hi->pm_qos_req);
+> +	if (cpu_latency_qos_request_active(&hi->pm_qos_req))
+> +		cpu_latency_qos_remove_request(&hi->pm_qos_req);
+> =20
+>  	spin_lock_bh(&hi->lock);
+>  	cs_hsi_free_data(hi);
+> --=20
+> 2.16.4
+>=20
+>=20
+>=20
+>=20
+>=20
 
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 74, in <module>
-    ret = check_doc(args.yamldt)
-  File "/usr/local/bin/dt-doc-validate", line 40, in check_doc
-    print(filename + ":", exc.path[-1], exc.message)
-AttributeError: 'ComposerError' object has no attribute 'path'
-Documentation/devicetree/bindings/Makefile:12: recipe for target 'Documentation/devicetree/bindings/thermal/ti,am654-thermal.example.dts' failed
-make[1]: *** [Documentation/devicetree/bindings/thermal/ti,am654-thermal.example.dts] Error 1
-Makefile:1263: recipe for target 'dt_binding_check' failed
-make: *** [dt_binding_check] Error 2
+--uu4yb2e2brmudxu5
+Content-Type: application/pgp-signature; name="signature.asc"
 
-See https://patchwork.ozlabs.org/patch/1237405
-Please check and re-submit.
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl5FukIACgkQ2O7X88g7
++pqOqQ//RpRCO95YyRcMTmNlCqFgCPcHQlREw9A44Up8RaFsdmuPueMUyiTcMuL7
+aZFY1ocvZDw4QUEKZ0k2l3A3fnrf80SafS/tT8muaP/iloYL3AsjfaEFrNmk/fX4
+6gf1IJrYDdp6S7fj26cz321Yln8jgpz2fRsJ+O9WGBUYbwAtY8I9XXxw4qZ0jizf
+YlMX+9OiJdUTJKhHbJs/bIoOgCYpY9m6hFVhoYmTpBzD6RD746UlAP4Y1XNUR8yL
+K7hbxxfKmt24pHoCeIy9gQ+aXHpeKj+d9Id8L9PSxrxdFwH6VmgKoR3ZzKFrLpmS
+1ZCOu6oVyC/apJzIJJOf7kRKPfiCxdRdJMItDsYwtVKYPb5EfBmC0btEH5g6IHOA
+b7Ue7D+/vM02XzPoYiSoHRoTSzhIQvTtpt176r1GaSL2gVO3Q5BYcfn3N6ho9Y5Y
+3q38i/o2raXkR/WSyRjsH6JVVfF/aIXOpGccNXTAgJw6m8DUlthMshbvrAaHdEhF
+RL7pdwiPUAKy6Y7Ijn308wMl/tKkz1+KWNde6lpN6KieGfnTX1/8Nut2siw5n0R+
+lq45oFMP4aslARb7T5XpxPdN3jk9LyQDghzkEiqVD15BplxPlFba08jcUPIL8UDh
+hBYXc8K1p6pu3NOBgGkrYchFasncXGE5WoEuVaifaCFOCBAwh10=
+=3487
+-----END PGP SIGNATURE-----
+
+--uu4yb2e2brmudxu5--
