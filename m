@@ -2,136 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B81115BD39
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 12:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3DA15BD45
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 12:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729544AbgBMLAI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Feb 2020 06:00:08 -0500
-Received: from foss.arm.com ([217.140.110.172]:44918 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726232AbgBMLAI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 13 Feb 2020 06:00:08 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46A8F1FB;
-        Thu, 13 Feb 2020 03:00:07 -0800 (PST)
-Received: from [192.168.0.7] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 875E83F6CF;
-        Thu, 13 Feb 2020 03:00:00 -0800 (PST)
-Subject: Re: [PATCH v2 1/4] PM / EM: add devices to Energy Model
-To:     lukasz.luba@arm.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com
-Cc:     Morten.Rasmussen@arm.com, Chris.Redpath@arm.com,
-        ionela.voinescu@arm.com, javi.merino@arm.com,
-        cw00.choi@samsung.com, b.zolnierkie@samsung.com, rjw@rjwysocki.net,
-        sudeep.holla@arm.com, viresh.kumar@linaro.org, nm@ti.com,
-        sboyd@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, qperret@google.com, bsegall@google.com,
-        mgorman@suse.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, kernel@pengutronix.de, khilman@kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, robh@kernel.org,
-        matthias.bgg@gmail.com, steven.price@arm.com,
-        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
-        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
-        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net
-References: <20200206134640.11367-1-lukasz.luba@arm.com>
- <20200206134640.11367-2-lukasz.luba@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <62a54ec9-0491-367d-0a36-7ea32c449acc@arm.com>
-Date:   Thu, 13 Feb 2020 11:59:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1729760AbgBMLCX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Feb 2020 06:02:23 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:41128 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729511AbgBMLCW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Feb 2020 06:02:22 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01DB2EFf111932;
+        Thu, 13 Feb 2020 05:02:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1581591734;
+        bh=28ZV+G9aiHL8+0UPcgwBKCixdQrHOAJ3kWPdgROidOE=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=hWw+rIQmsQW7yzhJKnbXQSX2a5PodRgs4kzltZJABZ9Ene1GCbCFpIO/cFW02aCgT
+         Gcqqm0xfUJvajrap++QLGZH9CjCaNT8uEwzDIjSZlFMHuh1w7hvNnMitXiVcv/O6Xl
+         ofM1IbfVq4FR0vuTe5KJv+L2EPbIYQl1IWStMj2w=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01DB2DjF000944
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 13 Feb 2020 05:02:13 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 13
+ Feb 2020 05:02:13 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 13 Feb 2020 05:02:13 -0600
+Received: from [10.24.69.20] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01DB29Mp077470;
+        Thu, 13 Feb 2020 05:02:10 -0600
+Subject: Re: [PATCH 3/4] arm64: dts: ti: am654: Add thermal zones
+To:     Keerthy <j-keerthy@ti.com>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <daniel.lezcano@linaro.org>
+CC:     <mark.rutland@arm.com>, <devicetree@vger.kernel.org>,
+        <amit.kucheria@verdurent.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <t-kristo@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20200213102440.20539-1-j-keerthy@ti.com>
+ <20200213102440.20539-4-j-keerthy@ti.com>
+From:   Lokesh Vutla <lokeshvutla@ti.com>
+Message-ID: <0d0a5c81-3b85-afbd-7fd6-8c2a6432ec86@ti.com>
+Date:   Thu, 13 Feb 2020 16:31:18 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200206134640.11367-2-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200213102440.20539-4-j-keerthy@ti.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/02/2020 14:46, lukasz.luba@arm.com wrote:
-> From: Lukasz Luba <lukasz.luba@arm.com>
 
-[..]
 
-> @@ -26,7 +28,7 @@ framework, and interested clients reading the data from it::
+On 13/02/20 3:54 PM, Keerthy wrote:
+> The am654 SoC has three thermal zones namely MPU0, MPU1 and MCU
+> zones
+> 
+> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> ---
+>  .../boot/dts/ti/am654-industrial-thermal.dtsi | 45 +++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/ti/am654-industrial-thermal.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/ti/am654-industrial-thermal.dtsi b/arch/arm64/boot/dts/ti/am654-industrial-thermal.dtsi
+> new file mode 100644
+> index 000000000000..cdc3d40c3f60
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/ti/am654-industrial-thermal.dtsi
 
-s/::/: ?
+Can you rename file to k3-am654-industrial-thermal.dtsi. This will be consistent
+with other k3-am654 dt files.
 
->         | Thermal (IPA) |  | Scheduler (EAS) |  |     Other     |
->         +---------------+  +-----------------+  +---------------+
->                 |                   | em_pd_energy()    |
-> -               |                   | em_cpu_get()      |
-> +               |  em_get_pd()      | em_cpu_get()      |
->                 +---------+         |         +---------+
+Thanks and regards,
+Lokesh
 
-em_get_pd() and em_cpu_get()? Why not em_pd_get()? em_cpu_get() is a
-specific em_get_pd(). right?
-
-[...]
-
-> @@ -85,13 +89,20 @@ API.
->  2.3 Accessing performance domains
->  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->  
-> +There is two API functions which provide the access to the energy model:
-> +em_cpu_get() which takes CPU id as an argument and em_get_pd() with device
-> +pointer as an argument. It depends on the subsystem which interface it is
-> +going to use, but in case of CPU devices both functions return the same
-> +performance domain.
-
-There is probably a reason why we need this specific function for CPU
-devices? The reason should be described. People might ask why
-em_get_pd() is not sufficient.
-
-[...]
-
-> - * A "performance domain" represents a group of CPUs whose performance is
-> - * scaled together. All CPUs of a performance domain must have the same
-> - * micro-architecture. Performance domains often have a 1-to-1 mapping with
-> - * CPUFreq policies.
-> + * In case of CPU device, a "performance domain" represents a group of CPUs
-> + * whose performance is scaled together. All CPUs of a performance domain
-> + * must have the same micro-architecture. Performance domains often have
-> + * a 1-to-1 mapping with CPUFreq policies.
-> + * In case of other devices the 'priv' field is unused.
->   */
->  struct em_perf_domain {
-> -	struct em_cap_state *table;
-> -	int nr_cap_states;
-> -	unsigned long cpus[0];
-> +	struct em_perf_state *table;
-> +	int nr_perf_states;
-> +	void *priv;
-
-In case you go back to the variable length field plus type field to
-distingush EM devices, keep cpus[0] as the name.
-
-[..]
-
->  /**
-> - * em_pd_energy() - Estimates the energy consumed by the CPUs of a perf. domain
-> + * em_pd_energy() - Estimates the energy consumed by the CPUs of a perf.
-> +			domain
-
-Why this change?
-
-[...]
-
-> @@ -141,12 +210,12 @@ static struct em_perf_domain *em_create_pd(cpumask_t *span, int nr_states,
->  		 */
->  		opp_eff = freq / power;
->  		if (opp_eff >= prev_opp_eff)
-> -			pr_warn("pd%d: hertz/watts ratio non-monotonically decreasing: em_cap_state %d >= em_cap_state%d\n",
-> -					cpu, i, i - 1);
-> +			dev_warn(dev, "energy_model: hertz/watts ratio non-monotonically decreasing: em_perf_state %d >= em_perf_state%d\n",
-
-s/energy_model/EM ?
-
-[...]
