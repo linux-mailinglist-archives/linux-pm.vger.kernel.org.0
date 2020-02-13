@@ -2,75 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE38C15B5A6
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 01:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B60A215B5B9
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 01:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729285AbgBMAGx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 19:06:53 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:45306 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727117AbgBMAGx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 19:06:53 -0500
-Received: by mail-qk1-f193.google.com with SMTP id a2so3947084qko.12
-        for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2020 16:06:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EDJUToEt64sYdPk/trsg/w/cAFjxyyVNajzKkjxTLpM=;
-        b=nziJvcKqFRJii0hlM0b1yxzorRxDn2DultIEe1tCLiSjxuNnSO1bXttdnxOZZsgvLN
-         8yK0bAvZ/Rokl9Vtpp8Ruigs+ZYZ+LIN4JdyBTjZe07DHYmsp0OCSfddvYVaCOsC8Uou
-         0s+6PqARSelT27SF65WkbORzoubddvlDEXSAM=
+        id S1727117AbgBMAQ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 19:16:56 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:39600 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727032AbgBMAQz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 19:16:55 -0500
+Received: by mail-ot1-f66.google.com with SMTP id 77so3856944oty.6;
+        Wed, 12 Feb 2020 16:16:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EDJUToEt64sYdPk/trsg/w/cAFjxyyVNajzKkjxTLpM=;
-        b=WLZT/MpHU3Icc3lrHTk1SlwbmVhasfbdb5rXGRikVVLd70iBNjMSxzq29JwOQCF73N
-         4iy46GpxC21YI0z515/Y2/RUew8AlVLhOjCGWCavod+GvI4iSPNX5Q6mAsGzRQzhsDZk
-         wMJKdNj0wL7obWqtrhyX1dfYeVq6QwwIXfoI2VvgyGF8cC03QUmg04FD4jO19rRijTrb
-         cL9s9xYYlRKdI5SoP7N/MSySulEZANoqT0cEd79WD6Ci9Ygqj0C8t2FNCANarsv3ekHp
-         QoYMwz3NWEiE4G7UNsVkeKPxDn3YXJA6E8lW1gGMVpURKy16MM2BMF7POAAcn3zLYgWb
-         XS4g==
-X-Gm-Message-State: APjAAAWXLcNZyDOhZ8uFzmEM5Vi2ZMonDhuqZZC1tgZBlP9uZHpRhw4F
-        Ob1P/Iu9JXCOr5WZy7v+BNbZlle7igWEidpYK6VkUQ==
-X-Google-Smtp-Source: APXvYqysZTAX6q7Ru/YaQ5ufa8rnGlLHqhM7dXnZKo1GenZCZZPoChIMT6FeNZFkhvJpov1IoPaCYAR/CjsySzL1LFY=
-X-Received: by 2002:ae9:ed88:: with SMTP id c130mr3326135qkg.299.1581552410838;
- Wed, 12 Feb 2020 16:06:50 -0800 (PST)
+        bh=6XI34I6WG5cLO+IgVIv5RydOAiN6nIiwYbnYoCUKFLk=;
+        b=dAPiFd+zJYHknfheTFxz769Gfrs5LDUqufR50NKXumQR4tneo5tmA7bpkGou/hp5j5
+         ppGgD8LAXPQBswgNT3PgkmAvkU391h+z9rw3itMva2ZgmhD9/kTerruAsIfJNj3tSWv9
+         34wHU/tKoS/I3KpWuKzZAyn6X/Rh7xMsnvVcVDDeCL9RsmtzDWp1IypsSDD32GK65gFG
+         eEDvFiwMscPppWcKsA0cMVBqTgqO3KPvpzjnLY3Dh6dd2UvtT+2p8Fmbe7HR6Pa/6uee
+         6bhxcd7JnyBXoeKWBntSBZ9MmhZSMmpwmY0jjNGsSLsSqhyPunU0uLSc0xMTXTEdmA5+
+         HABw==
+X-Gm-Message-State: APjAAAWpNVBk2aWBHVdJ/Ajwwpq9KujwwSg74M+PQesZgkgmcsvzl8ut
+        6q45Of4jjo47ilA4Lg30njsDlxpKkeL5Yr3pAIg=
+X-Google-Smtp-Source: APXvYqzCjosDGyoF+GSyhDK4xJdLQQpA5vtY7pWUxrUuPlSlWLSCbL0WCZhsfzBrvkujPWkg8kndIBiPkjrIrmSGzaU=
+X-Received: by 2002:a9d:67d7:: with SMTP id c23mr11454498otn.262.1581553014559;
+ Wed, 12 Feb 2020 16:16:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20200212075529.156756-1-drinkcat@chromium.org>
- <20200212081340.vcfd3t5w5pgxfuha@vireshk-i7> <CANMq1KA1=LTtCD2ic7GcskX7izuEkAqUo1xxwwCXBeTLi0r5vg@mail.gmail.com>
- <20200212090356.x6aieuddym5zea5d@vireshk-i7>
-In-Reply-To: <20200212090356.x6aieuddym5zea5d@vireshk-i7>
-From:   Nicolas Boichat <drinkcat@chromium.org>
-Date:   Thu, 13 Feb 2020 08:06:39 +0800
-Message-ID: <CANMq1KCut88owb2r5_uHi-k57io0T_D9ag0rf==UAEsqoH07eQ@mail.gmail.com>
-Subject: Re: [PATCH] PM / OPP: Add support for multiple regulators
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>
+References: <1654227.8mz0SueHsU@kreacher> <87wo8rjsa4.fsf@riseup.net>
+In-Reply-To: <87wo8rjsa4.fsf@riseup.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 13 Feb 2020 01:16:43 +0100
+Message-ID: <CAJZ5v0hAn0V-QhebFt=vqKK6gBLxjTq7SNOWOStt7huCXMSH7g@mail.gmail.com>
+Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU
+ latency QoS interface
+To:     Francisco Jerez <currojerez@riseup.net>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 12, 2020 at 5:04 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Thu, Feb 13, 2020 at 12:31 AM Francisco Jerez <currojerez@riseup.net> wrote:
 >
-> On 12-02-20, 16:57, Nicolas Boichat wrote:
-> > I see... And you're right that it's probably best to change the
-> > voltages in a specific order (I just ignored that problem ,-P). I do
-> > wonder if there's something we could do in the core/DT to specify that
-> > order (if it's a simple order?), it's not really ideal to have to copy
-> > paste code around...
+> "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
 >
-> I will suggest adding your own version (like TI) for now, if we later
-> feel that there is too much duplicate code, we can look for an
-> alternative. But as of now, there aren't a lot of platforms using
-> multiple regulators anyway.
+> > Hi All,
+> >
+> > This series of patches is based on the observation that after commit
+> > c3082a674f46 ("PM: QoS: Get rid of unused flags") the only global PM QoS class
+> > in use is PM_QOS_CPU_DMA_LATENCY, but there is still a significant amount of
+> > code dedicated to the handling of global PM QoS classes in general.  That code
+> > takes up space and adds overhead in vain, so it is better to get rid of it.
+> >
+> > Moreover, with that unuseful code removed, the interface for adding QoS
+> > requests for CPU latency becomes inelegant and confusing, so it is better to
+> > clean it up.
+> >
+> > Patches [01/28-12/28] do the first part described above, which also includes
+> > some assorted cleanups of the core PM QoS code that doesn't go away.
+> >
+> > Patches [13/28-25/28] rework the CPU latency QoS interface (in the classic
+> > "define stubs, migrate users, change the API proper" manner), patches
+> > [26-27/28] update the general comments and documentation to match the code
+> > after the previous changes and the last one makes the CPU latency QoS depend
+> > on CPU_IDLE (because cpuidle is the only user of its target value today).
+> >
+> > The majority of the patches in this series don't change the functionality of
+> > the code at all (at least not intentionally).
+> >
+> > Please refer to the changelogs of individual patches for details.
+> >
+> > Thanks!
+>
+> Hi Rafael,
+>
+> I believe some of the interfaces removed here could be useful in the
+> near future.
 
-Will do. Thanks!
+I disagree.
 
-> --
-> viresh
+>  It goes back to the energy efficiency- (and IGP graphics
+> performance-)improving series I submitted a while ago [1].  It relies on
+> some mechanism for the graphics driver to report an I/O bottleneck to
+> CPUFREQ, allowing it to make a more conservative trade-off between
+> energy efficiency and latency, which can greatly reduce the CPU package
+> energy usage of IO-bound applications (in some graphics benchmarks I've
+> seen it reduced by over 40% on my ICL laptop), and therefore also allows
+> TDP-bound applications to obtain a reciprocal improvement in throughput.
+>
+> I'm not particularly fond of the global PM QoS interfaces TBH, it seems
+> like an excessively blunt hammer to me, so I can very much relate to the
+> purpose of this series.  However the finer-grained solution I've
+> implemented has seen some push-back from i915 and CPUFREQ devs due to
+> its complexity, since it relies on task scheduler changes in order to
+> track IO bottlenecks per-process (roughly as suggested by Peter Zijlstra
+> during our previous discussions), pretty much in the spirit of PELT but
+> applied to IO utilization.
+>
+> With that in mind I was hoping we could take advantage of PM QoS as a
+> temporary solution [2], by introducing a global PM QoS class similar but
+> with roughly converse semantics to PM_QOS_CPU_DMA_LATENCY, allowing
+> device drivers to report a *lower* bound on CPU latency beyond which PM
+> shall not bother to reduce latency if doing so would have negative
+> consequences on the energy efficiency and/or parallelism of the system.
+
+So I really don't quite see how that could be responded to, by cpuidle
+say.  What exactly do you mean by "reducing latency" in particular?
+
+> Of course one would expect the current PM_QOS_CPU_DMA_LATENCY upper
+> bound to take precedence over the new lower bound in cases where the
+> former is in conflict with the latter.
+
+So that needs to be done on top of this series.
+
+> I can think of several alternatives to that which don't involve
+> temporarily holding off your clean-up,
+
+The cleanup goes in.  Please work on top of it.
+
+> but none of them sound particularly exciting:
+>
+>  1/ Use an interface specific to CPUFREQ, pretty much like the one
+>     introduced in my original submission [1].
+
+It uses frequency QoS already today, do you really need something else?
+
+>  2/ Use per-CPU PM QoS, which AFAICT would require the graphics driver
+>     to either place a request on every CPU of the system (which would
+>     cause a frequent operation to have O(N) complexity on the number of
+>     CPUs on the system), or play a cat-and-mouse game with the task
+>     scheduler.
+
+That's in place already too in the form of device PM QoS; see
+drivers/base/power/qos.c.
+
+>  3/ Add a new global PM QoS mechanism roughly duplicating the
+>     cpu_latency_qos_* interfaces introduced in this series.  Drop your
+>     change making this available to CPU IDLE only.
+
+It sounds like you really want performance for energy efficiency and
+CPU latency has a little to do with that.
+
+>  3/ Go straight to a scheduling-based approach, which is likely to
+>     greatly increase the review effort required to upstream this
+>     feature.  (Peter might disagree though?)
+
+Are you familiar with the utilization clamps mechanism?
+
+Thanks!
