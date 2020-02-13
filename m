@@ -2,236 +2,215 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B90115C856
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 17:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCAEE15C9BB
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 18:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728363AbgBMQft (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Feb 2020 11:35:49 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:44211 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728580AbgBMQft (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Feb 2020 11:35:49 -0500
-Received: by mail-oi1-f195.google.com with SMTP id d62so6356212oia.11;
-        Thu, 13 Feb 2020 08:35:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TDXzjfcGCJhPOQkjevaE1t+2oC5AHKQw1IBxSjGZvLs=;
-        b=LEIMz+rHy/mVh9woHIAjbwPdNMCvROwQFG9nXG3A1nwk0CUKm36Gj1nupaG9dqR9yS
-         1YA2pTsWMFhL9dC1dMaCSJ236Bw+1hD/QGDMZ8rF7u1Ee+LaA9pCyY0CovlRjprVvNzF
-         HSQLdnbqf7kAPq5zVjpct2N2yqxYMhaWHvmKZ1XV9Vutp+1vcLQQzX2DmNbxEkP7C7uU
-         CSEmoL6tax0JEOGVb0kZvhmQgLAX/j2wzeZH1R3IaCcS/NjdQqv5NTdQcDCSR321XdOZ
-         sXZd/rz9YViVS+/+YLrJvb5PatbIN5Dre2DVX5iUiKCkuCDqEiKP3lgMXP9+6q5E1j0F
-         ZXEw==
-X-Gm-Message-State: APjAAAUbWTv0+CDLedb2IXqyH2XoavZ0siTybW9Oc7eRETBazwZItvQQ
-        txR4RfPMBO26/nlNjUaZo+PM2GU0JNkUVjYOQ1tFaayc
-X-Google-Smtp-Source: APXvYqzAKudWPe9TDsIkvPBSoeOlVb+sSKdzxwx9WgFgr5/oWSBbZyHH7zfrTVof5O23aIYgU+f6ymjOFC5OfvKSSbs=
-X-Received: by 2002:aca:bfc2:: with SMTP id p185mr3624641oif.57.1581611746549;
- Thu, 13 Feb 2020 08:35:46 -0800 (PST)
+        id S1727604AbgBMRtw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Feb 2020 12:49:52 -0500
+Received: from foss.arm.com ([217.140.110.172]:51600 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726282AbgBMRtw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 13 Feb 2020 12:49:52 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 658C3328;
+        Thu, 13 Feb 2020 09:49:51 -0800 (PST)
+Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 389A93F68E;
+        Thu, 13 Feb 2020 09:49:50 -0800 (PST)
+Subject: Re: [RFC PATCH v4 0/6] sched/cpufreq: Make schedutil energy aware
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        qperret@google.com, linux-pm@vger.kernel.org
+References: <20200122173538.1142069-1-douglas.raillard@arm.com>
+ <c49ca012-bb3e-580d-9b45-359caa67d7c1@arm.com>
+ <20200210132133.GH14897@hirez.programming.kicks-ass.net>
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Organization: ARM
+Message-ID: <4a664419-f5a6-882f-83ee-5bbf20ff33d3@arm.com>
+Date:   Thu, 13 Feb 2020 17:49:48 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-References: <1654227.8mz0SueHsU@kreacher> <87wo8rjsa4.fsf@riseup.net>
- <CAJZ5v0hAn0V-QhebFt=vqKK6gBLxjTq7SNOWOStt7huCXMSH7g@mail.gmail.com>
- <878sl6j4fd.fsf@riseup.net> <CAJZ5v0jNFMwqSwSones91WgDwGqusyY1nEMDKAYuSZiLjH61dw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jNFMwqSwSones91WgDwGqusyY1nEMDKAYuSZiLjH61dw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 13 Feb 2020 17:35:35 +0100
-Message-ID: <CAJZ5v0iMvzFGbuYsOo+AkWAqUbkQVT-FHsTDbStPiNenw783LQ@mail.gmail.com>
-Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU
- latency QoS interface
-To:     Francisco Jerez <currojerez@riseup.net>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200210132133.GH14897@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB-large
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 12:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Feb 13, 2020 at 9:07 AM Francisco Jerez <currojerez@riseup.net> wrote:
-> >
-> > "Rafael J. Wysocki" <rafael@kernel.org> writes:
-> >
-> > > On Thu, Feb 13, 2020 at 12:31 AM Francisco Jerez <currojerez@riseup.net> wrote:
-> > >>
-> > >> "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
-> > >>
-> > >> > Hi All,
-> > >> >
-> > >> > This series of patches is based on the observation that after commit
-> > >> > c3082a674f46 ("PM: QoS: Get rid of unused flags") the only global PM QoS class
-> > >> > in use is PM_QOS_CPU_DMA_LATENCY, but there is still a significant amount of
-> > >> > code dedicated to the handling of global PM QoS classes in general.  That code
-> > >> > takes up space and adds overhead in vain, so it is better to get rid of it.
-> > >> >
-> > >> > Moreover, with that unuseful code removed, the interface for adding QoS
-> > >> > requests for CPU latency becomes inelegant and confusing, so it is better to
-> > >> > clean it up.
-> > >> >
-> > >> > Patches [01/28-12/28] do the first part described above, which also includes
-> > >> > some assorted cleanups of the core PM QoS code that doesn't go away.
-> > >> >
-> > >> > Patches [13/28-25/28] rework the CPU latency QoS interface (in the classic
-> > >> > "define stubs, migrate users, change the API proper" manner), patches
-> > >> > [26-27/28] update the general comments and documentation to match the code
-> > >> > after the previous changes and the last one makes the CPU latency QoS depend
-> > >> > on CPU_IDLE (because cpuidle is the only user of its target value today).
-> > >> >
-> > >> > The majority of the patches in this series don't change the functionality of
-> > >> > the code at all (at least not intentionally).
-> > >> >
-> > >> > Please refer to the changelogs of individual patches for details.
-> > >> >
-> > >> > Thanks!
-> > >>
-> > >> Hi Rafael,
-> > >>
-> > >> I believe some of the interfaces removed here could be useful in the
-> > >> near future.
-> > >
-> > > I disagree.
-> > >
-> > >>  It goes back to the energy efficiency- (and IGP graphics
-> > >> performance-)improving series I submitted a while ago [1].  It relies on
-> > >> some mechanism for the graphics driver to report an I/O bottleneck to
-> > >> CPUFREQ, allowing it to make a more conservative trade-off between
-> > >> energy efficiency and latency, which can greatly reduce the CPU package
-> > >> energy usage of IO-bound applications (in some graphics benchmarks I've
-> > >> seen it reduced by over 40% on my ICL laptop), and therefore also allows
-> > >> TDP-bound applications to obtain a reciprocal improvement in throughput.
-> > >>
-> > >> I'm not particularly fond of the global PM QoS interfaces TBH, it seems
-> > >> like an excessively blunt hammer to me, so I can very much relate to the
-> > >> purpose of this series.  However the finer-grained solution I've
-> > >> implemented has seen some push-back from i915 and CPUFREQ devs due to
-> > >> its complexity, since it relies on task scheduler changes in order to
-> > >> track IO bottlenecks per-process (roughly as suggested by Peter Zijlstra
-> > >> during our previous discussions), pretty much in the spirit of PELT but
-> > >> applied to IO utilization.
-> > >>
-> > >> With that in mind I was hoping we could take advantage of PM QoS as a
-> > >> temporary solution [2], by introducing a global PM QoS class similar but
-> > >> with roughly converse semantics to PM_QOS_CPU_DMA_LATENCY, allowing
-> > >> device drivers to report a *lower* bound on CPU latency beyond which PM
-> > >> shall not bother to reduce latency if doing so would have negative
-> > >> consequences on the energy efficiency and/or parallelism of the system.
-> > >
-> > > So I really don't quite see how that could be responded to, by cpuidle
-> > > say.  What exactly do you mean by "reducing latency" in particular?
-> > >
-> >
-> > cpuidle wouldn't necessarily have to do anything about it since it would
-> > be intended merely as a hint that a device in the system other than the
-> > CPU has a bottleneck.  It could provide a lower bound for the wake-up
-> > latency of the idle states that may be considered by cpuidle.  It seems
-> > to me like it could be useful when a program can tell from the
-> > characteristics of the workload that a latency reduction below a certain
-> > time bound wouldn't materially affect the performance of the system
-> > (e.g. if you have 20 ms to render a GPU-bound frame, you may not care at
-> > all about the CPU taking a fraction of a millisecond more to wake up a
-> > few times each frame).
->
-> Well, this is not how cpuidle works.
->
-> What it does is to try to find the deepest idle state that makes sense
-> to let the CPU go into given all of the constraints etc.  IOW it never
-> tries to reduce the latency, it looks how far it can go with possible
-> energy savings given a specific latency limit (or no limit at all).
->
-> > For cpufreq I was planning to have it influence a time parameter of the
-> > utilization averaging done by the governor, which would allow it to have
-> > a more optimal response in the long term (in the sense of lowering the
-> > energy cost of performing the same work in the specified timeframe),
-> > even if such a large time parameter wouldn't normally be considered
-> > appropriate for utilization averaging due to latency concerns.
->
-> So this is fine in the schedutil case in principle, it but would not
-> work with HWP, because that doesn't take the scheduler's utilization
-> metrics into account.
->
-> To cover the HWP case you need to influence the min and max frequency
-> limits, realistically.
->
-> > >> Of course one would expect the current PM_QOS_CPU_DMA_LATENCY upper
-> > >> bound to take precedence over the new lower bound in cases where the
-> > >> former is in conflict with the latter.
-> > >
-> > > So that needs to be done on top of this series.
-> > >
-> > >> I can think of several alternatives to that which don't involve
-> > >> temporarily holding off your clean-up,
-> > >
-> > > The cleanup goes in.  Please work on top of it.
-> > >
-> >
-> > Hopefully we can come up with an alternative in that case.  TBH I'd love
-> > to see your clean-up go in too, but global PM QoS seemed fairly
-> > appealing as a way to split up my work so it could be reviewed
-> > incrementally, even though I'm aiming for a finer-grained solution than
-> > that.
->
-> Well, so "global PM QoS" really means a struct struct
-> pm_qos_constraints object with a global reader of its target_value.
->
-> Of course, pm_qos_update_target() is not particularly convenient to
-> use, so you'd need to wrap it into an _add/update/remove_request()
-> family of functions along the lines of the cpu_latency_qos_*() ones I
-> suppose and you won't need the _apply() thing.
->
-> > >> but none of them sound particularly exciting:
-> > >>
-> > >>  1/ Use an interface specific to CPUFREQ, pretty much like the one
-> > >>     introduced in my original submission [1].
-> > >
-> > > It uses frequency QoS already today, do you really need something else?
-> > >
-> >
-> > Yes.  I don't see how frequency QoS could be useful for this as-is,
-> > unless we're willing to introduce code in every device driver that takes
-> > advantage of this and have them monitor the utilization of every CPU in
-> > the system, so they can calculate an appropriate max frequency
-> > constraint -- One which we can be reasonably certain won't hurt the
-> > long-term performance of the CPU cores these constraints are being
-> > placed on.
->
-> I'm not really sure if I understand you correctly.
->
-> The frequency QoS in cpufreq is a way to influence the min and max
-> freq limits used by it for each CPU.  That is done in a couple of
-> places like store_max/min_perf_pct() in intel_pstate or
-> processor_set_cur_state() (I guess the latter would be close to what
-> you think about, but the other way around - you seem to want to
-> influence the min and not the max).
+On 2/10/20 1:21 PM, Peter Zijlstra wrote:
+> On Wed, Jan 22, 2020 at 06:14:24PM +0000, Douglas Raillard wrote:
+>> Hi Peter,
+>>
+>> Since the v3 was posted a while ago, here is a short recap of the hanging
+>> comments:
+>>
+>> * The boost margin was relative, but we came to the conclusion it would make
+>>   more sense to make it absolute (done in that v4).
+> 
+> As per (patch #1):
+> 
+> +       max_cost = pd->table[pd->nr_cap_states - 1].cost;
+> +       cost_margin = (cost_margin * max_cost) / EM_COST_MARGIN_SCALE;
+> 
+> So we'll allow the boost to double energy consumption (or rather, since
+> you cannot go above the max OPP, we're allowed that).
 
-It looks like *I* got this part the other way around. :-/
+Indeed. This might need some tweaking based on testing, maybe +50% is
+enough, or maybe +200% is even better.
 
-I think that your use case is almost equivalent to the thermal
-pressure one, so you'd want to limit the max and so that would be
-something similar to store_max_perf_pct() with its input side hooked
-up to a QoS list.
 
-But it looks like that QoS list would rather be of a "reservation"
-type, so a request added to it would mean something like "leave this
-fraction of power that appears to be available to the CPU subsystem
-unused, because I need it for a different purpose".  And in principle
-there might be multiple requests in there at the same time and those
-"reservations" would add up.  So that would be a kind of "limited sum"
-QoS type which wasn't even there before my changes.
+>> * The main remaining blur point was why defining boost=(util - util_est) makes
+>>   sense. The justification for that is that we use PELT-shaped signal to drive
+>>   the frequency, so using a PELT-shaped signal for the boost makes sense for the
+>>   same reasons.
+> 
+> As per (patch #4):
+> 
+> +       unsigned long boost = 0;
+> 
+> +       if (util_est_enqueued == sg_cpu->util_est_enqueued &&
+> +           util_avg >= sg_cpu->util_avg &&
+> +           util_avg > util_est_enqueued)
+> +               boost = util_avg - util_est_enqueued;
+> 
+> The result of that is not, strictly speaking, a PELT shaped signal.
+> Although when it is !0 the curves are similar, albeit offset.
 
-A user of that QoS list might then do something like
+Yes, it has the same rate of increase as PELT.
 
-ret = cpu_power_reserve_add(1, 4);
+> 
+>> AFAIK there is no specific criteria to meet for frequency selection signal shape
+>> for anything else than periodic tasks (if we don't add other constraints on
+>> top), so (util - util_est)=(util - constant) seems as good as anything else.
+>> Especially since util is deemed to be a good fit in practice for frequency
+>> selection. Let me know if I missed anything on that front.
+> 
+> 
+> Given:
+> 
+>   sugov_get_util() <- cpu_util_cfs() <- UTIL_EST ? util_est.enqueued : util_avg.
 
-meaning that it wants 25% of the "potential" CPU power to be not
-utilized by CPU performance scaling and that could affect the
-scheduler through load modifications (kind of along the thermal
-pressure patchset discussed some time ago) and HWP (as well as the
-non-HWP intel_pstate by preventing turbo frequencies from being used
-etc).
+cpu_util_cfs uses max_t (maybe irrelevant for this discussion):
+UTIL_EST ? max(util_est.enqueued, util_avg) : util_avg
+
+> our next_f becomes:
+> 
+>   next_f = 1.25 * util_est * max_freq / max;
+
+> so our min_freq in em_pd_get_higher_freq() will already be compensated
+> for the offset.
+
+Yes, the boost is added on top of the existing behavior.
+
+> So even when:
+> 
+>   boost = util_avg - util_est
+> 
+> is small, despite util_avg being huge (~1024), due to large util_est,
+> we'll still get an effective boost to max_cost ASSUMING cs[].cost and
+> cost_margin have the same curve.
+
+I'm not sure to follow, cs[].cost can be plotted against cs[].freq, but
+cost_margin is a time-based signal (the boost value), so it would be
+plotted against time.
+
+> 
+> They have not.
+> 
+> assuming cs[].cost ~ f^3, and given our cost_margin ~ f, that leaves a
+> factor f^2 on the table.
+
+I'm guessing that you arrived to `cost_margin ~ f` this way:
+
+cost_margin = util - util_est_enqueued
+cost_margin = util - constant
+
+# with constant small enough
+cost_margin ~ util
+
+# with util ~ 1/f
+cost_margin ~ 1/f
+
+In the case you describe, `constant` is actually almost equal to `util`
+so `cost_margin ~! util`, and that series assumes frequency invariant
+util_avg so `util !~ 1/f` (I'll probably have to fix that).
+
+> So the higher the min_freq, the less effective the boost.
+
+Yes, since the boost is allowing a fixed amount of extra power. Higher
+OPPs are less efficient than lower ones, so if min_freq is high, we
+won't speed up as much as if min_freq was low.
+
+> Maybe it all works out in practise, but I'm missing a big picture
+
+Here is a big picture :)
+
+https://gist.github.com/douglas-raillard-arm/f76586428836ec70c6db372993e0b731#file-ramp_boost-svg
+
+The board is a Juno R0, with a periodic task pinned on a big CPU
+(capa=1024):
+* phase 1:  5% duty cycle (=51 PELT units)
+* phase 2: 75% duty cycle (=768 PELT units)
+
+Legend:
+* blue square wave: when the task executes (like in kernelshark)
+* base_cost = cost of frequency as selected by schedutil in normal
+operations
+* allowed_cost = base_cost + cost_margin
+* util = util_avg
+
+note: the small gaps right after the duty cycle transition between
+t=4.15 and 4.25 are due to sugov task executing, so there is no dequeue
+and no util_est update.
+
+> description of it all somewhere.
+
+Now a textual version of it:
+
+em_pd_get_higher_freq() does the following:
+
+# Turn the abstract cost margin on the EM_COST_MARGIN_SCALE into a
+# concrete value. cost_margin=EM_COST_MARGIN_SCALE will give a concrete
+# value of "max_cost", which is the highest OPP on that CPU.
+concrete_margin = (cost_margin * max_cost) / EM_COST_MARGIN_SCALE;
+
+# Then it finds the lowest OPP satisfying min_freq:
+min_opp = OPP_AT_FREQ(min_freq)
+
+# It takes the cost associated, and finds the highest OPP that has a
+# cost lower than that:
+max_cost = COST_OF(min_opp) + concrete_margin
+
+final_freq = MAX(
+	FREQ_OF(opp)
+	for opp in available_opps
+	if COST_OF(opp) <= max_cost
+)
+
+So this means that:
+   util - util_est_enqueued ~= 0
+=> cost_margin              ~= 0
+=> concrete_cost_margin     ~= 0
+=> max_cost   = COST_OF(min_opp) + 0
+=> final_freq = FREQ_OF(min_opp)
+
+The effective boost is ~0, so you will get the current behaviour of
+schedutil.
+
+If the task starts needing more cycles than during its previous period,
+`util - util_est_enqueued` will grow like util since util_est_enqueued
+is constant. The longer we wait, the higher the boost, until the task
+goes to sleep again.
+
+At next wakeup, util_est_enqueued has caught up and either:
+1) util becomes stable, so no more boosting
+2) util keeps increasing, so go for another round of boosting
+
+
+Thanks,
+Douglas
