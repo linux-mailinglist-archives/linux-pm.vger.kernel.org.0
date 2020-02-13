@@ -2,121 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C7A15B5F4
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 01:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B8415B9E8
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 08:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729369AbgBMAiS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 19:38:18 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42937 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729190AbgBMAiS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 19:38:18 -0500
-Received: by mail-lf1-f67.google.com with SMTP id y19so2923640lfl.9;
-        Wed, 12 Feb 2020 16:38:17 -0800 (PST)
+        id S1729804AbgBMHKT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Feb 2020 02:10:19 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37490 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729383AbgBMHKT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Feb 2020 02:10:19 -0500
+Received: by mail-lj1-f195.google.com with SMTP id v17so5342643ljg.4
+        for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2020 23:10:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6VRuFj0c+RR5xGzAmKGNr9wl5GP6aspxRb/bDjcgieY=;
-        b=f5gjSkstyjpmmV0lR8bqdecWRblXCrc8SK+pqqiIvk4L8waZccX8O8Y2eXLGk1BipN
-         /8F0C5FiwVi3ioV0P7WogpfxpTPsL+rGSwXur6oI0ZP7Mo9BW8ybW25/31MXeFO5RLJK
-         B/SdA5qd8e91eeIO75Pd70nqGWpmeqFzAudoND0ASAW2UCNaCQjIsRz/Yryr8KcD87ez
-         BfpvIeo58sbR5q4fqd2VMAAAyvL7pqDsdrxhbtNhYNyK74SEFzdC+a13iFpTIyWOEAVX
-         5Fc08Scru4ZzRuysCghFScaiH0R2QIUvUJiqeiebsGnQhs5LtGXwL4KQbVIDVBe0VGb7
-         La+Q==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Vg2ne5AyyglOAv8FBMMwHyfnVt31BO4UzavNdGGQICU=;
+        b=v/6iFBYYAvUyH1ig7uVxg5hp1J8W8pqTDvVe0oceLhdcpHrvCci4+tF2xXQNtxzQPu
+         NKnZfw4MmkSWjVBNlp37Az1Fd4k9TFuYRV7SWLWH2ToujZ9cpggJ2KTajdvy+bzqJ48u
+         Amm262fwmwPMBW9u/oNOafTF4C3pXNHBnUAnMohr9hjAefmdH/GbH5ceZCSvT6lWJlxb
+         VcufdzCYyhzDOx9Qc2EMeKSYxnTz8XK0IjrM6+4eSYLVdJR0lhAALzQ+4VIlbb6G16d/
+         INxdJ1lb3L/AZVPz49LRoyCYB6KYpEau3aOcTip0b/Dk4M6kU7SKMGO2Bmt7UkBrmAaa
+         6a9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6VRuFj0c+RR5xGzAmKGNr9wl5GP6aspxRb/bDjcgieY=;
-        b=h+sseUF7MJxQZGlHEgGNnpgV5n0Nny9muBtF1yXHLCEPnZj7EFexp9koI1V7Oe/kkN
-         Iw/zHjncIz4HF17l2xtG6vffEZHZzMCeUEhUFnJzJPJE93CuBMVNXpb/bzQLlyhesqmZ
-         /7C2qxJjNo4AqHJTHYKU2kdOj4zjcHQZm4nG34kilhxPT7udBrYkIN6q5a96jft61nPb
-         70FHx5jdQUt5+BHGBxkc7O+dWgZAF1D7/cGpFUN0vq2/SMwf15kpzQZbNXGNlfAMu0C6
-         YhBXgOCd3jNQ8JeDoQEv5fNwianUE2576/UR/QmHJ1qoEEvD+i0CDvwSWNFABm8IwX5R
-         UTQA==
-X-Gm-Message-State: APjAAAV/bu+mNx2CK3MkwDYFh98ukthsAMqFtZBCvSydgoN/KxtbMoF7
-        jEYRrOhMGblBb2O/xwIr3SXYwOLd
-X-Google-Smtp-Source: APXvYqyU2LIzu076BOgfOGAG4BemY1o4JaSFhiUPuO8enMLHjXtwsBkhKTntzqtE6LCiWewr6uPTRQ==
-X-Received: by 2002:a19:4208:: with SMTP id p8mr7938370lfa.160.1581554295984;
-        Wed, 12 Feb 2020 16:38:15 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id b17sm287671lfp.15.2020.02.12.16.38.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Feb 2020 16:38:15 -0800 (PST)
-Subject: Re: [PATCH v9 00/17] Consolidate and improve NVIDIA Tegra CPUIDLE
- driver(s)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Jasper Korten <jja2000@gmail.com>,
-        David Heidelberg <david@ixit.cz>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200212235134.12638-1-digetx@gmail.com>
-Message-ID: <0a62d941-ddf7-4c9f-3897-2209eab994cf@gmail.com>
-Date:   Thu, 13 Feb 2020 03:38:13 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vg2ne5AyyglOAv8FBMMwHyfnVt31BO4UzavNdGGQICU=;
+        b=eL7CIVqLr53soiLfrFIChOezCvXTrqZsNTOdU3wkyzA9waqXP7dBihuvwvMPZ1q1RL
+         BJOrtZ1YdJ3hyiZQ2B0tS34zgRx7avF7AJJz4lpO76MzDW2r1nmk24x0NYEVfUTnjSYT
+         +XSynpv42bmPEm7LyRjkMGg4mc521plc4spIGVA7KbBZCywXkQ5wD/f8pFO6QWYQKsuV
+         GkEQcE8f8zbIpCqBqhPjh3LOQL2ZuKaTuACo2hPX05HIKoCWOkX/uGj9XSpzperuQPPS
+         1nuJ3npPdD6Z58ynd6vQ1jmJBTd2AqEZelkdoPHj/87eTahaWLc7wVsZ3gIlZ58RddRR
+         JRtA==
+X-Gm-Message-State: APjAAAUCBfSbohTNgG3GFah4YmzDFHI/SgKHttxq6uRriEFK5Ga9PQlh
+        sN7ChpQwAVMphp7VRs3y6EsniYOhZjnkSSdwKbLvBQ==
+X-Google-Smtp-Source: APXvYqzaqiU/b6IGWITzU+eEe7MG3UAMGPlHrN3BYM1ZLAe965Y8HgMBCww+Yvh2kbxnhfBUSc8FAGZm3qKahOTJp04=
+X-Received: by 2002:a2e:7005:: with SMTP id l5mr9592622ljc.230.1581577817025;
+ Wed, 12 Feb 2020 23:10:17 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200212235134.12638-1-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1654227.8mz0SueHsU@kreacher>
+In-Reply-To: <1654227.8mz0SueHsU@kreacher>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Thu, 13 Feb 2020 12:40:05 +0530
+Message-ID: <CAP245DXY2MsV6rf95QdATTXXZWoYYLFBO3QxQgkg=44Fw0cLNA@mail.gmail.com>
+Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU
+ latency QoS interface
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-13.02.2020 02:51, Dmitry Osipenko пишет:
-> Hello,
-> 
-> This series does the following:
-> 
->   1. Unifies Tegra20/30/114 drivers into a single driver and moves it out
->      into common drivers/cpuidle/ directory.
-> 
->   2. Enables CPU cluster power-down idling state on Tegra30.
-> 
-> In the end there is a quite nice clean up of the Tegra CPUIDLE drivers
-> and of the Tegra's arch code in general. Please apply, thanks!
-> 
-> !!!WARNING!!! This series was made on top of the cpufreq patches [1]. But it
->               should be fine as long as Thierry Reding would pick up this and
->               the cpufreq patchsets via the Tegra tree, otherwise there will
->               one minor merge-conflict.
-> 
-> [1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=158206
-> 
-> Changelog:
-> 
-> v9: - Added acks from Peter De Schrijver.
-> 
->     - Added tested-by from Peter Geis, Jasper Korten and David Heidelberg
->       who tested these patches on Ouya, TF300T and Nexus 7 devices.
+On Wed, Feb 12, 2020 at 5:09 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> Hi All,
+>
+> This series of patches is based on the observation that after commit
+> c3082a674f46 ("PM: QoS: Get rid of unused flags") the only global PM QoS class
+> in use is PM_QOS_CPU_DMA_LATENCY, but there is still a significant amount of
+> code dedicated to the handling of global PM QoS classes in general.  That code
+> takes up space and adds overhead in vain, so it is better to get rid of it.
+>
+> Moreover, with that unuseful code removed, the interface for adding QoS
+> requests for CPU latency becomes inelegant and confusing, so it is better to
+> clean it up.
+>
+> Patches [01/28-12/28] do the first part described above, which also includes
+> some assorted cleanups of the core PM QoS code that doesn't go away.
+>
+> Patches [13/28-25/28] rework the CPU latency QoS interface (in the classic
+> "define stubs, migrate users, change the API proper" manner), patches
+> [26-27/28] update the general comments and documentation to match the code
+> after the previous changes and the last one makes the CPU latency QoS depend
+> on CPU_IDLE (because cpuidle is the only user of its target value today).
+>
+> The majority of the patches in this series don't change the functionality of
+> the code at all (at least not intentionally).
+>
+> Please refer to the changelogs of individual patches for details.
 
-I forgot to mention that both cpufreq and cpuidle patchsets were also
-tested on AC100 by Nicolas Chauvet and I forgot to ask for the explicit
-t-b. Nicolas, thank you very much for all the testing of the
-grate-kernel! Please feel free to give yours t-b :)
+Hi Rafael,
 
->     - Temporarily dropped the "cpuidle: tegra: Support CPU cluster power-down
->       state on Tegra30" patch because Michał Mirosław reported that it didn't
->       work well on his TF300T. After some testing we found that changing
->       a way in which firmware performs L2 cache maintenance helps, but later
->       on we also found that the current v9 series works just fine without the
->       extra firmware changes using recent linux-next and the reason why v8
->       didn't work before is still unknown (need more testing). So I decided
->       that it will be better to postpone the dropped patch until we know for
->       sure that it works well for everyone in every possible configuration.
+Nice cleanup to the code and docs.
 
-Michał, please let me know if you'll spot any problems with the recent
-version of the patches and please feel free to give yours t-b if it
-works well.
+I've reviewed the series, and briefly tested it by setting latencies
+from userspace. Can we not remove the debugfs interface? It is a quick
+way to check the global cpu latency clamp on the system from userspace
+without setting up tracepoints or writing a program to read
+/dev/cpu_dma_latency.
+
+Except for patch 01/28 removing the debugfs interface, please feel to add my
+
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+Tested-by: Amit Kucheria <amit.kucheria@linaro.org>
+
+Regards,
+Amit
