@@ -2,174 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B870515B5EF
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 01:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C7A15B5F4
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2020 01:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729404AbgBMAhf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Feb 2020 19:37:35 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:39004 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729190AbgBMAhf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 19:37:35 -0500
-Received: by mail-ot1-f66.google.com with SMTP id 77so3899470oty.6;
-        Wed, 12 Feb 2020 16:37:33 -0800 (PST)
+        id S1729369AbgBMAiS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Feb 2020 19:38:18 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:42937 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729190AbgBMAiS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Feb 2020 19:38:18 -0500
+Received: by mail-lf1-f67.google.com with SMTP id y19so2923640lfl.9;
+        Wed, 12 Feb 2020 16:38:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6VRuFj0c+RR5xGzAmKGNr9wl5GP6aspxRb/bDjcgieY=;
+        b=f5gjSkstyjpmmV0lR8bqdecWRblXCrc8SK+pqqiIvk4L8waZccX8O8Y2eXLGk1BipN
+         /8F0C5FiwVi3ioV0P7WogpfxpTPsL+rGSwXur6oI0ZP7Mo9BW8ybW25/31MXeFO5RLJK
+         B/SdA5qd8e91eeIO75Pd70nqGWpmeqFzAudoND0ASAW2UCNaCQjIsRz/Yryr8KcD87ez
+         BfpvIeo58sbR5q4fqd2VMAAAyvL7pqDsdrxhbtNhYNyK74SEFzdC+a13iFpTIyWOEAVX
+         5Fc08Scru4ZzRuysCghFScaiH0R2QIUvUJiqeiebsGnQhs5LtGXwL4KQbVIDVBe0VGb7
+         La+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KedYKr8RiYJaNB8p8w/xpKKC0jwMfWBD0pdKgXNjg2I=;
-        b=QRlL9xmLLl0cidJMeUhPVTJo8PaZlHuA9R5wMaSXKS3eLlw+631ToDX6OEccjMHj/k
-         /V68uiFaToqmNu/5qNDRTKBLyd843JDcUiSyniGN417S52gpslwHLuBsJafRFdcLyP0F
-         kssimdW5jyVma/VVwzbVOKHAlb0bGZ0wXQl0bX9e1lx2cfNM8x4gGUd5nqZt6Laf+04z
-         lBShrgkDNz65rD5UFMKd19qPriAwdLfARYLtB4DWuyeLAQ1apHBLAhenhLgU+ETBrqME
-         G6fMpHbQ1IGTlMfHQQ+DM8YtnSm3FGW+VGg5zns02Iubr8IkDuhoPh38sb0PbtdzxZUp
-         eISw==
-X-Gm-Message-State: APjAAAVdInADTkXJMUmK3fpc9DEHCrCNzjAUuotoBKy8m/sLxNN5sa1G
-        hq/BVRw7hhp1iFjPIzUdWfVK+tg/a5yReAeMhko=
-X-Google-Smtp-Source: APXvYqxTwMHMp08wrFwfEGBrXjnR7Fs36ncNbLwNt+YQR+KcrH12QRF+8i5aNqajGNOTE8FKS2v3xnRBaDHPirdCtZw=
-X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr11676135otd.266.1581554252888;
- Wed, 12 Feb 2020 16:37:32 -0800 (PST)
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6VRuFj0c+RR5xGzAmKGNr9wl5GP6aspxRb/bDjcgieY=;
+        b=h+sseUF7MJxQZGlHEgGNnpgV5n0Nny9muBtF1yXHLCEPnZj7EFexp9koI1V7Oe/kkN
+         Iw/zHjncIz4HF17l2xtG6vffEZHZzMCeUEhUFnJzJPJE93CuBMVNXpb/bzQLlyhesqmZ
+         /7C2qxJjNo4AqHJTHYKU2kdOj4zjcHQZm4nG34kilhxPT7udBrYkIN6q5a96jft61nPb
+         70FHx5jdQUt5+BHGBxkc7O+dWgZAF1D7/cGpFUN0vq2/SMwf15kpzQZbNXGNlfAMu0C6
+         YhBXgOCd3jNQ8JeDoQEv5fNwianUE2576/UR/QmHJ1qoEEvD+i0CDvwSWNFABm8IwX5R
+         UTQA==
+X-Gm-Message-State: APjAAAV/bu+mNx2CK3MkwDYFh98ukthsAMqFtZBCvSydgoN/KxtbMoF7
+        jEYRrOhMGblBb2O/xwIr3SXYwOLd
+X-Google-Smtp-Source: APXvYqyU2LIzu076BOgfOGAG4BemY1o4JaSFhiUPuO8enMLHjXtwsBkhKTntzqtE6LCiWewr6uPTRQ==
+X-Received: by 2002:a19:4208:: with SMTP id p8mr7938370lfa.160.1581554295984;
+        Wed, 12 Feb 2020 16:38:15 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id b17sm287671lfp.15.2020.02.12.16.38.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Feb 2020 16:38:15 -0800 (PST)
+Subject: Re: [PATCH v9 00/17] Consolidate and improve NVIDIA Tegra CPUIDLE
+ driver(s)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Jasper Korten <jja2000@gmail.com>,
+        David Heidelberg <david@ixit.cz>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200212235134.12638-1-digetx@gmail.com>
+Message-ID: <0a62d941-ddf7-4c9f-3897-2209eab994cf@gmail.com>
+Date:   Thu, 13 Feb 2020 03:38:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-References: <1654227.8mz0SueHsU@kreacher> <87wo8rjsa4.fsf@riseup.net> <CAJZ5v0hAn0V-QhebFt=vqKK6gBLxjTq7SNOWOStt7huCXMSH7g@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hAn0V-QhebFt=vqKK6gBLxjTq7SNOWOStt7huCXMSH7g@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 13 Feb 2020 01:37:21 +0100
-Message-ID: <CAJZ5v0hrOma52rocMsitvYUK6WxHAa0702_8XJn1UJZVyhz=rQ@mail.gmail.com>
-Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU
- latency QoS interface
-To:     Francisco Jerez <currojerez@riseup.net>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200212235134.12638-1-digetx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 1:16 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Feb 13, 2020 at 12:31 AM Francisco Jerez <currojerez@riseup.net> wrote:
-> >
-> > "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
-> >
-> > > Hi All,
-> > >
-> > > This series of patches is based on the observation that after commit
-> > > c3082a674f46 ("PM: QoS: Get rid of unused flags") the only global PM QoS class
-> > > in use is PM_QOS_CPU_DMA_LATENCY, but there is still a significant amount of
-> > > code dedicated to the handling of global PM QoS classes in general.  That code
-> > > takes up space and adds overhead in vain, so it is better to get rid of it.
-> > >
-> > > Moreover, with that unuseful code removed, the interface for adding QoS
-> > > requests for CPU latency becomes inelegant and confusing, so it is better to
-> > > clean it up.
-> > >
-> > > Patches [01/28-12/28] do the first part described above, which also includes
-> > > some assorted cleanups of the core PM QoS code that doesn't go away.
-> > >
-> > > Patches [13/28-25/28] rework the CPU latency QoS interface (in the classic
-> > > "define stubs, migrate users, change the API proper" manner), patches
-> > > [26-27/28] update the general comments and documentation to match the code
-> > > after the previous changes and the last one makes the CPU latency QoS depend
-> > > on CPU_IDLE (because cpuidle is the only user of its target value today).
-> > >
-> > > The majority of the patches in this series don't change the functionality of
-> > > the code at all (at least not intentionally).
-> > >
-> > > Please refer to the changelogs of individual patches for details.
-> > >
-> > > Thanks!
-> >
-> > Hi Rafael,
-> >
-> > I believe some of the interfaces removed here could be useful in the
-> > near future.
->
-> I disagree.
->
-> >  It goes back to the energy efficiency- (and IGP graphics
-> > performance-)improving series I submitted a while ago [1].  It relies on
-> > some mechanism for the graphics driver to report an I/O bottleneck to
-> > CPUFREQ, allowing it to make a more conservative trade-off between
-> > energy efficiency and latency, which can greatly reduce the CPU package
-> > energy usage of IO-bound applications (in some graphics benchmarks I've
-> > seen it reduced by over 40% on my ICL laptop), and therefore also allows
-> > TDP-bound applications to obtain a reciprocal improvement in throughput.
-> >
-> > I'm not particularly fond of the global PM QoS interfaces TBH, it seems
-> > like an excessively blunt hammer to me, so I can very much relate to the
-> > purpose of this series.  However the finer-grained solution I've
-> > implemented has seen some push-back from i915 and CPUFREQ devs due to
-> > its complexity, since it relies on task scheduler changes in order to
-> > track IO bottlenecks per-process (roughly as suggested by Peter Zijlstra
-> > during our previous discussions), pretty much in the spirit of PELT but
-> > applied to IO utilization.
-> >
-> > With that in mind I was hoping we could take advantage of PM QoS as a
-> > temporary solution [2], by introducing a global PM QoS class similar but
-> > with roughly converse semantics to PM_QOS_CPU_DMA_LATENCY, allowing
-> > device drivers to report a *lower* bound on CPU latency beyond which PM
-> > shall not bother to reduce latency if doing so would have negative
-> > consequences on the energy efficiency and/or parallelism of the system.
->
-> So I really don't quite see how that could be responded to, by cpuidle
-> say.  What exactly do you mean by "reducing latency" in particular?
->
-> > Of course one would expect the current PM_QOS_CPU_DMA_LATENCY upper
-> > bound to take precedence over the new lower bound in cases where the
-> > former is in conflict with the latter.
->
-> So that needs to be done on top of this series.
->
-> > I can think of several alternatives to that which don't involve
-> > temporarily holding off your clean-up,
->
-> The cleanup goes in.  Please work on top of it.
->
-> > but none of them sound particularly exciting:
-> >
-> >  1/ Use an interface specific to CPUFREQ, pretty much like the one
-> >     introduced in my original submission [1].
->
-> It uses frequency QoS already today, do you really need something else?
->
-> >  2/ Use per-CPU PM QoS, which AFAICT would require the graphics driver
-> >     to either place a request on every CPU of the system (which would
-> >     cause a frequent operation to have O(N) complexity on the number of
-> >     CPUs on the system), or play a cat-and-mouse game with the task
-> >     scheduler.
->
-> That's in place already too in the form of device PM QoS; see
-> drivers/base/power/qos.c.
->
-> >  3/ Add a new global PM QoS mechanism roughly duplicating the
-> >     cpu_latency_qos_* interfaces introduced in this series.  Drop your
-> >     change making this available to CPU IDLE only.
->
-> It sounds like you really want performance for energy efficiency and
-> CPU latency has a little to do with that.
->
-> >  3/ Go straight to a scheduling-based approach, which is likely to
-> >     greatly increase the review effort required to upstream this
-> >     feature.  (Peter might disagree though?)
->
-> Are you familiar with the utilization clamps mechanism?
+13.02.2020 02:51, Dmitry Osipenko пишет:
+> Hello,
+> 
+> This series does the following:
+> 
+>   1. Unifies Tegra20/30/114 drivers into a single driver and moves it out
+>      into common drivers/cpuidle/ directory.
+> 
+>   2. Enables CPU cluster power-down idling state on Tegra30.
+> 
+> In the end there is a quite nice clean up of the Tegra CPUIDLE drivers
+> and of the Tegra's arch code in general. Please apply, thanks!
+> 
+> !!!WARNING!!! This series was made on top of the cpufreq patches [1]. But it
+>               should be fine as long as Thierry Reding would pick up this and
+>               the cpufreq patchsets via the Tegra tree, otherwise there will
+>               one minor merge-conflict.
+> 
+> [1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=158206
+> 
+> Changelog:
+> 
+> v9: - Added acks from Peter De Schrijver.
+> 
+>     - Added tested-by from Peter Geis, Jasper Korten and David Heidelberg
+>       who tested these patches on Ouya, TF300T and Nexus 7 devices.
 
-And BTW, posting patches as RFC is fine even if they have not been
-tested.  At least you let people know that you work on something this
-way, so if they work on changes in the same area, they may take that
-into consideration.
+I forgot to mention that both cpufreq and cpuidle patchsets were also
+tested on AC100 by Nicolas Chauvet and I forgot to ask for the explicit
+t-b. Nicolas, thank you very much for all the testing of the
+grate-kernel! Please feel free to give yours t-b :)
 
-Also if there are objections to your proposal, you may save quite a
-bit of time by sending it early.
+>     - Temporarily dropped the "cpuidle: tegra: Support CPU cluster power-down
+>       state on Tegra30" patch because Michał Mirosław reported that it didn't
+>       work well on his TF300T. After some testing we found that changing
+>       a way in which firmware performs L2 cache maintenance helps, but later
+>       on we also found that the current v9 series works just fine without the
+>       extra firmware changes using recent linux-next and the reason why v8
+>       didn't work before is still unknown (need more testing). So I decided
+>       that it will be better to postpone the dropped patch until we know for
+>       sure that it works well for everyone in every possible configuration.
 
-It is unfortunate that this series has clashed with the changes that
-you were about to propose, but in this particular case in my view it
-is better to clean up things and start over.
-
-Thanks!
+Michał, please let me know if you'll spot any problems with the recent
+version of the patches and please feel free to give yours t-b if it
+works well.
