@@ -2,89 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1846C15FAAD
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2020 00:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F5015FAB5
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2020 00:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728126AbgBNXeZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 18:34:25 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:44992 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727620AbgBNXeZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 18:34:25 -0500
-Received: by mail-oi1-f196.google.com with SMTP id d62so11041852oia.11
-        for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2020 15:34:23 -0800 (PST)
+        id S1727998AbgBNXh6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 18:37:58 -0500
+Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:11094 "EHLO
+        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727935AbgBNXh6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 18:37:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bDwgZwWEZBQk29NnYfaGxDMUMeCdsRhSZX1d/rIRhxg=;
-        b=OOd5U6oKpovMR6LKPXMaj8uM7Mw2QJILaFv1jCn8dj8LNnoYbRfBdI6LICyZRTke9A
-         vBS3qYHaUpSILlCiysIyflj8cmWyTq7jOnN0ctlCO/9ZM0tMR0/fhFllptCByH8WNapx
-         xiBZirFjgWTgNYTkkjrcMJDdFfV+j2uacM++cCbGmtAed1Dd2EgM/DlBlGqTP1G/c85X
-         iBHzbQOiRNi5Uos3mBcxtHFcLknEC/v10ui/M8CwxwjwQ1YqbHHrncLwCc3cg9FCuZkK
-         3qMiYL3ZXd0NxDFqJpxYoRcu1PorX/wCWV7svDqPs2U6ko7ferg4QrKcVtvyOMjAteFS
-         Fa5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bDwgZwWEZBQk29NnYfaGxDMUMeCdsRhSZX1d/rIRhxg=;
-        b=POu7OZ+j/xuNyHLeGf44sIgT3j4JD0Qgia9E3ZBXmrg6oafoaH96CjveHNmctREmk8
-         /H8qBWxxfXBNh65aQ5by67TfeHGnPNMzHnrLSjnq8oxxiIizA2P0WObLsJXMwjEtRHBV
-         N4gIylk+ecLCU/VBOTzR85Ro2fMx6o4MUIOlSecp/8qnjH6AsXw4QML14Cs69GTqVmUX
-         VCQlKDrNFlW0aQJrIz2jY+c2x9MRn6vo8bpw5R6wUKg27k/EE9ZP+CqtzW/moqNjUK6z
-         btyNXhID9mdQz332gVlAJwiQLpJ92/CtHswdqdhgtm4ueYjLSdBEDnjlzI1qfNkPw1OR
-         S5wg==
-X-Gm-Message-State: APjAAAXFIBNhKpoMeXTjRkhI7mutoSZ9Z/X3cxVzQFdVc8040TMhXMnp
-        1Uz6tjO0R6JEy34NahNAPpZbV/KNu0WgcUrjlhmXIA==
-X-Google-Smtp-Source: APXvYqyxEEchfAIYCAJCyFLYCbJyC5TN4Yg6b/NqwWNA0uFFN3wAJLP6U99c68Vkxn+8vw95fl2ig1lswc/FIbYIKTk=
-X-Received: by 2002:aca:c551:: with SMTP id v78mr3569733oif.161.1581723262981;
- Fri, 14 Feb 2020 15:34:22 -0800 (PST)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1581723478; x=1613259478;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version;
+  bh=EQ7DYgwRNfv/wLxL7rAiSYHGXBWj+UpFbImhG+fPeeA=;
+  b=frwXioL5A6gIcBbvs3qeVm8regPJYzCZP19izrYOZ9sgVJZwiTn/8HW8
+   wKpvMxIynKFbKQ11mFgdY+D7bzZNP0lk2yFs5m6rqkAtvq81xiMDoFePX
+   I+ukea/T9UdV3cqIcJJKz20FXf8tUc4WkOXC/YjOHpRLcanJ/RlS9JYeX
+   8=;
+IronPort-SDR: Q+WsFLrDc545+uyxEQXx2T1ZRLEWdxxBOun40BWcJP2NUiHjjlq24uaOoUb2DTvjrBMDx/6M8O
+ LKQVe6HaWxjw==
+X-IronPort-AV: E=Sophos;i="5.70,442,1574121600"; 
+   d="scan'208";a="16799280"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1a-16acd5e0.us-east-1.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 14 Feb 2020 23:37:56 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
+        by email-inbound-relay-1a-16acd5e0.us-east-1.amazon.com (Postfix) with ESMTPS id C02A6A25F4;
+        Fri, 14 Feb 2020 23:37:48 +0000 (UTC)
+Received: from EX13D05UWB001.ant.amazon.com (10.43.161.181) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Fri, 14 Feb 2020 23:37:47 +0000
+Received: from EX13D07UWB001.ant.amazon.com (10.43.161.238) by
+ EX13D05UWB001.ant.amazon.com (10.43.161.181) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Fri, 14 Feb 2020 23:37:46 +0000
+Received: from EX13D07UWB001.ant.amazon.com ([10.43.161.238]) by
+ EX13D07UWB001.ant.amazon.com ([10.43.161.238]) with mapi id 15.00.1367.000;
+ Fri, 14 Feb 2020 23:37:46 +0000
+From:   "Agarwal, Anchal" <anchalag@amazon.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Kamata, Munehisa" <kamatam@amazon.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "roger.pau@citrix.com" <roger.pau@citrix.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "fllinden@amaozn.com" <fllinden@amaozn.com>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
+Subject: Re: [RFC PATCH v3 00/12] Enable PM hibernation on guest VMs
+Thread-Topic: [RFC PATCH v3 00/12] Enable PM hibernation on guest VMs
+Thread-Index: AQHV4fPo8eXu12vqTkyMeBw6bIMui6gY9+iAgAHdmAA=
+Date:   Fri, 14 Feb 2020 23:37:46 +0000
+Message-ID: <F2086290-8DF5-4CD5-B142-DA9FD85D27E1@amazon.com>
+References: <20200212222935.GA3421@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <87a75m3ftk.fsf@nanos.tec.linutronix.de>
+In-Reply-To: <87a75m3ftk.fsf@nanos.tec.linutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.43.162.233]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7EB21256422AE247A547687FA7DB3733@amazon.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20200214233226.82096-1-john.stultz@linaro.org>
-In-Reply-To: <20200214233226.82096-1-john.stultz@linaro.org>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Fri, 14 Feb 2020 15:34:11 -0800
-Message-ID: <CALAqxLVukbQETMSfjc3OsEE4BGt-uXxw-NTqgLxA=ja4JAVD4w@mail.gmail.com>
-Subject: Re: [PATCH v2] driver core: Extend returning EPROBE_DEFER for two
- minutes after late_initcall
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Todd Kjos <tkjos@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 3:32 PM John Stultz <john.stultz@linaro.org> wrote:
->
-> Due to commit e01afc3250255 ("PM / Domains: Stop deferring probe
-> at the end of initcall"), along with commit 25b4e70dcce9
-> ("driver core: allow stopping deferred probe after init") after
-> late_initcall, drivers will stop getting EPROBE_DEFER, and
-> instead see an error causing the driver to fail to load.
->
-> That change causes trouble when trying to use many clk drivers
-> as modules, as the clk modules may not load until much later
-> after init has started. If a dependent driver loads and gets an
-> error instead of EPROBE_DEFER, it won't try to reload later when
-> the dependency is met, and will thus fail to load.
->
-> Instead of reverting that patch, this patch tries to extend the
-> time that EPROBE_DEFER is retruned by 30 seconds, to (hopefully)
-> ensure that everything has had a chance to load.
-
-Oh, and of course I forgot to fix the subject line and didn't see it
-until git send-email was done.  That should be 30 seconds, not two
-minutes. I'll fix that up for the next version.
-
-Apologies!
--john
+SSBkaWQgcmVzZW5kIHRoZW0gdG9kYXkuIEFwb2xvZ2llcyBmb3IgZGVsYXkNCmh0dHBzOi8vbGtt
+bC5vcmcvbGttbC8yMDIwLzIvMTQvMjc4OQ0KDQpUaGFua3MsDQpBbmNoYWwNCg0K77u/ICAgIEFu
+Y2hhLA0KICAgIA0KICAgIEFuY2hhbCBBZ2Fyd2FsIDxhbmNoYWxhZ0BhbWF6b24uY29tPiB3cml0
+ZXM6DQogICAgDQogICAgPiBIZWxsbywNCiAgICA+IEkgYW0gc2VuZGluZyBvdXQgYSB2MyB2ZXJz
+aW9uIG9mIHNlcmllcyBvZiBwYXRjaGVzIHRoYXQgaW1wbGVtZW50cyBndWVzdA0KICAgID4gUE0g
+aGliZXJuYXRpb24uDQogICAgDQogICAgY2FuIHlvdSBwcmV0dHkgcGxlYXNlIHRocmVhZCB5b3Vy
+IHBhdGNoIHNlcmllcyBzbyB0aGF0IHRoZSAxLW4vbiBtYWlscw0KICAgIGhhdmUgYQ0KICAgIA0K
+ICAgICAgUmVmZXJlbmNlczogPG1lc3NhZ2UtaWQtb2YtMC1vZi1uLW1haWxAd2hhdGV2ZXJ5b3Vy
+Y2xpZW50cHV0c3RoZXJlPg0KICAgIA0KICAgIGluIHRoZSBoZWFkZXJzPyBnaXQtc2VuZC1lbWFp
+bCBkb2VzIHRoYXQgcHJvcGVyIGFzIGRvIG90aGVyIHRvb2xzLg0KICAgIA0KICAgIENvbGxlY3Rp
+bmcgdGhlIGluZGl2aWR1YWwgbWFpbHMgaXMgcGFpbmZ1bC4NCiAgICANCiAgICBUaGFua3MsDQog
+ICAgDQogICAgICAgICAgICB0Z2x4DQogICAgDQoNCg==
