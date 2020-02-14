@@ -2,131 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2541415D5F1
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 11:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABAC115D6CB
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 12:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387414AbgBNKm5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 05:42:57 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:40619 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387409AbgBNKm5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 05:42:57 -0500
-Received: by mail-oi1-f196.google.com with SMTP id a142so8970303oii.7;
-        Fri, 14 Feb 2020 02:42:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ElQ4XTao5BBX71Zwi3H6xOYBPtV7GHSLam5Ec0mM0f0=;
-        b=GuchQ/sJt7GQabRkHIKwMCfTKcHuUawD4K22DmE4t5hdZwP1kHXHzFWkrZPpeCObTr
-         JsLM85g08tP3MDjaRi4Vx0md/6e36uryPVFRRl0c1dOLDgEDhlT8/s9Mbv05lXPwlAHk
-         dkCN+C3MXFqKarZ0zZs/2UOKS4mtKvhV9UpqlMUj2eXNNeDJtwRE9U9trDBhnpH9tPsk
-         g4YJnMisCn+anUpEi9dWyUjDgRdz8nco2F7nGtzuYwTZlz97Q9hTaw2FOVwyQXOorpv/
-         1WOG2Oq06o7w9UUonN6r7piivmvnOkg9idQC0kMoN7TL22IJ53m8cPmVAklt3/swCMiZ
-         kQDA==
-X-Gm-Message-State: APjAAAWa53WQNYswYT1w1RDtTgYFJK0gdWojybEDQIWPlJN7ZIPKRy9X
-        w5bZ8hIZ2CV9DRKpubGWwwKg5DwQa9D9NPgYR4oWEg==
-X-Google-Smtp-Source: APXvYqzimSl+0e2efwrs0p3a3e4x5f5/qW30jMLg+PuMujuKXKW9v8A00J4QynLY5a6KdAn8yYXbIsx6KjB+fxi9vfk=
-X-Received: by 2002:aca:bfc2:: with SMTP id p185mr1448301oif.57.1581676975796;
- Fri, 14 Feb 2020 02:42:55 -0800 (PST)
+        id S1728083AbgBNLrx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 06:47:53 -0500
+Received: from foss.arm.com ([217.140.110.172]:60130 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728004AbgBNLrw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 Feb 2020 06:47:52 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE7F91045;
+        Fri, 14 Feb 2020 03:47:51 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 719253F68F;
+        Fri, 14 Feb 2020 03:47:51 -0800 (PST)
+Date:   Fri, 14 Feb 2020 11:47:49 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "Laine, Markus" <Markus.Laine@fi.rohmeurope.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [RFC PATCH 2/3] power: (regmap:) Add linear_range helper
+Message-ID: <20200214114749.GB4827@sirena.org.uk>
+References: <cover.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
+ <20b107ac6e40206b82d014a145abe0569d7a6f81.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
+ <20200211190614.GP4543@sirena.org.uk>
+ <cb9ed43aafcd8e1f6af05bfec8108ee8c14af265.camel@fi.rohmeurope.com>
 MIME-Version: 1.0
-References: <1654227.8mz0SueHsU@kreacher> <87wo8rjsa4.fsf@riseup.net>
- <CAJZ5v0hAn0V-QhebFt=vqKK6gBLxjTq7SNOWOStt7huCXMSH7g@mail.gmail.com>
- <878sl6j4fd.fsf@riseup.net> <CAJZ5v0jNFMwqSwSones91WgDwGqusyY1nEMDKAYuSZiLjH61dw@mail.gmail.com>
- <CAJZ5v0iMvzFGbuYsOo+AkWAqUbkQVT-FHsTDbStPiNenw783LQ@mail.gmail.com> <87sgjegh20.fsf@riseup.net>
-In-Reply-To: <87sgjegh20.fsf@riseup.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 14 Feb 2020 11:42:44 +0100
-Message-ID: <CAJZ5v0hm2vVbM5dXGitvvUrWoZXZXXaJ+P3x38BjHRukZKgB3Q@mail.gmail.com>
-Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU
- latency QoS interface
-To:     Francisco Jerez <currojerez@riseup.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Pd0ReVV5GZGQvF3a"
+Content-Disposition: inline
+In-Reply-To: <cb9ed43aafcd8e1f6af05bfec8108ee8c14af265.camel@fi.rohmeurope.com>
+X-Cookie: Shipping not included.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 1:14 AM Francisco Jerez <currojerez@riseup.net> wrote:
->
-> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->
-> > On Thu, Feb 13, 2020 at 12:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 
-[cut]
+--Pd0ReVV5GZGQvF3a
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> >
-> > I think that your use case is almost equivalent to the thermal
-> > pressure one, so you'd want to limit the max and so that would be
-> > something similar to store_max_perf_pct() with its input side hooked
-> > up to a QoS list.
-> >
-> > But it looks like that QoS list would rather be of a "reservation"
-> > type, so a request added to it would mean something like "leave this
-> > fraction of power that appears to be available to the CPU subsystem
-> > unused, because I need it for a different purpose".  And in principle
-> > there might be multiple requests in there at the same time and those
-> > "reservations" would add up.  So that would be a kind of "limited sum"
-> > QoS type which wasn't even there before my changes.
-> >
-> > A user of that QoS list might then do something like
-> >
-> > ret = cpu_power_reserve_add(1, 4);
-> >
-> > meaning that it wants 25% of the "potential" CPU power to be not
-> > utilized by CPU performance scaling and that could affect the
-> > scheduler through load modifications (kind of along the thermal
-> > pressure patchset discussed some time ago) and HWP (as well as the
-> > non-HWP intel_pstate by preventing turbo frequencies from being used
-> > etc).
->
-> The problems with this are the same as with the per-CPU frequency QoS
-> approach: How does the device driver know what the appropriate fraction
-> of CPU power is?
+On Wed, Feb 12, 2020 at 06:56:37AM +0000, Vaittinen, Matti wrote:
+> On Tue, 2020-02-11 at 19:06 +0000, Mark Brown wrote:
 
-Of course it doesn't know and it may never know exactly, but it may guess.
+> > Note also that we already have quite extensive helpers for this sort
+> > of
+> > stuff in the regulator API which I sense may have been involved in
+> > this
+> > implementation
 
-Also, it may set up a feedback loop: request an aggressive
-reservation, run for a while, measure something and refine if there's
-headroom.  Then repeat.
+> You sense well xD
 
-> Depending on the instantaneous behavior of the
-> workload it might take 1% or 95% of the CPU power in order to keep the
-> IO device busy.  Each user of this would need to monitor the performance
-> of every CPU in the system and update the constraints on each of them
-> periodically (whether or not they're talking to that IO device, which
-> would possibly negatively impact the latency of unrelated applications
-> running on other CPUs, unless we're willing to race with the task
-> scheduler).
+If you're factoring stuff out of an existing implementation it'd be good
+to explicitly do that - this both shows where things came from and also
+means that you can show that the existing user works with the new code
+which is good.
 
-No, it just needs to measure a signal representing how much power *it*
-gets and decide whether or not it can let the CPU subsystem use more
-power.
+> But another option - which I thought only now - would be to see if
+> current regulator implementation could be re-named to more generic and
+> placed under some more generic component (I thought of regmap but as
+> you pointed out this is equally usefull for devices connected to memory
+> mapped buses - so maybe under lib - if static inline functions in a
+> header are not a good option). I just have a feeling that the linear-
+> ranges is currently kind of embedded in the code which is internal to
+> regulator framework so it is probably not easily extracted from
+> regulator code?
 
-> A solution based on utilization clamps (with some
-> extensions) sounds more future-proof to me honestly.
+It is a bit but I think that's solvable with some refactoring in place
+(eg, pushing things into a smaller struct embedded in the main regulator
+one and then moving them out).  I might look at it myself if nobody else
+gets to it first...
 
-Except that it would be rather hard to connect it to something like
-RAPL, which should be quite straightforward with the approach I'm
-talking about.
+> So if we do not start pulling the range code out of regulator framework
+> (for now at least) - and if we do not place this under regmap - then I
+> can drop you out of the recipient list for this charger driver in order
+> to not pollute your inbox ;) How do you feel Mark, do you want to be
+> following this series?
 
-The problem with all scheduler-based ways, again, is that there is no
-direct connection between the scheduler and HWP, or even with whatever
-the processor does with the P-states in the turbo range.  If any
-P-state in the turbo range is requested, the processor has a license
-to use whatever P-state it wants, so this pretty much means allowing
-it to use as much power as it can.
+Well, if there's a refactoring out of the regulator code going on I'll
+need to look at that anyway.
 
-So in the first place, if you want to limit the use of power in the
-CPU subsystem through frequency control alone, you need to prevent it
-from using turbo P-states at all.  However, with RAPL you can just
-limit power which may still allow some (but not all) turbo P-states to
-be used.
+--Pd0ReVV5GZGQvF3a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5GiOUACgkQJNaLcl1U
+h9ACeAf8DB2xRPKGrvFQ8dGG0zRPuFif0voo7h906pgsLKrxhw1RdAS6b0hf2/Vf
+kgaDDlXcG5xbcnXivGAh1rK/l58zaUNsEWIGg0vhkwIHajdX5qqn5lspqrSj8JT/
+xo0LuYHy7Nki0SdRUgulm85zbaO6tbjqZFiLwaFDY0ZmaOH1tCbmxAD8BHweJltX
+cHfajZQO9UIjSOc46qfetMGchng6pdu+TAsc7SywjwqHQis2xKjcuZSiunjpMlwA
+Ixe4rx2+fbsyx9Zn1VqU7nr8JMlwILt78mrLNlKq4/6XbLAb4BCmwHvzFLe89Z7B
+6ALKhYNedwGJ0oe3fI6OvNl5a/H2uA==
+=6GmO
+-----END PGP SIGNATURE-----
+
+--Pd0ReVV5GZGQvF3a--
