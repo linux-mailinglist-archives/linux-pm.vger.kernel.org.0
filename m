@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A632F15E732
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 17:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E5F15E52F
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 17:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392691AbgBNQwo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 11:52:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52316 "EHLO mail.kernel.org"
+        id S2393294AbgBNQW5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 11:22:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58888 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404485AbgBNQTQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:19:16 -0500
+        id S2393289AbgBNQW5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:22:57 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C30DC24717;
-        Fri, 14 Feb 2020 16:19:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E646924768;
+        Fri, 14 Feb 2020 16:22:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697155;
-        bh=MoUzBAvRtBWq8Ndubur4hy59jRiTGFG7/mRJIg9KZ+E=;
+        s=default; t=1581697376;
+        bh=fsw8bX3AiW/+z9HUZPwx9bSyI1oArS/BAj87FAOnCEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zTBb2OhokFQsuov2WQ+XnFX29ZjOLR8VpOV1sxGvLzDD5nN2LKzevSRqI5SDczfw2
-         idN8iU0qrpRBde5Q5EMgsYMsyoD82yqloCi1E0kjEhyBjysPFwwUFI79hVxqTGFMRs
-         of06KrqtwE8cQReFIkobVrp/zuqWEVZQmWOE6B0k=
+        b=lARSIb4sZG64xltn/HFUJ8kGIliT0RRtyqYe+o5oKSry326GcXTAP7SshGcgh9F72
+         QNfoundoHG7tggKOhkpe8eEKw3ctsWU1m1S7bPGf80DNoqBPbVhVNwVTu7gZmHMDl8
+         t+J8N/Y2Nr0I84zD3eWESKj+XH4d0evQJrxHaMMg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         kbuild test robot <lkp@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 093/186] PM / devfreq: rk3399_dmc: Add COMPILE_TEST and HAVE_ARM_SMCCC dependency
-Date:   Fri, 14 Feb 2020 11:15:42 -0500
-Message-Id: <20200214161715.18113-93-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 074/141] PM / devfreq: rk3399_dmc: Add COMPILE_TEST and HAVE_ARM_SMCCC dependency
+Date:   Fri, 14 Feb 2020 11:20:14 -0500
+Message-Id: <20200214162122.19794-74-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
-References: <20200214161715.18113-1-sashal@kernel.org>
+In-Reply-To: <20200214162122.19794-1-sashal@kernel.org>
+References: <20200214162122.19794-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,10 +61,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index 6a172d338f6dc..4c4ec68b0566d 100644
+index 41254e702f1e9..2ce7cc94d78b1 100644
 --- a/drivers/devfreq/Kconfig
 +++ b/drivers/devfreq/Kconfig
-@@ -103,7 +103,8 @@ config ARM_TEGRA_DEVFREQ
+@@ -102,7 +102,8 @@ config ARM_TEGRA_DEVFREQ
  
  config ARM_RK3399_DMC_DEVFREQ
  	tristate "ARM RK3399 DMC DEVFREQ Driver"
