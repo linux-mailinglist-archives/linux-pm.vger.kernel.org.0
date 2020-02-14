@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BB215D2BC
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 08:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 701D515D2BD
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 08:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbgBNHW1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 02:22:27 -0500
-Received: from mail-wr1-f46.google.com ([209.85.221.46]:41649 "EHLO
-        mail-wr1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725897AbgBNHW1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 02:22:27 -0500
-Received: by mail-wr1-f46.google.com with SMTP id c9so9684675wrw.8
-        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2020 23:22:26 -0800 (PST)
+        id S1725897AbgBNHWe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 02:22:34 -0500
+Received: from mail-wm1-f43.google.com ([209.85.128.43]:55705 "EHLO
+        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728374AbgBNHWd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 02:22:33 -0500
+Received: by mail-wm1-f43.google.com with SMTP id q9so8842943wmj.5
+        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2020 23:22:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=Rcu8+0wi0noOgKyHnZkEE8vWwQRe3AmgJ6bgwk+oz8w=;
-        b=MIfdYLXBSwCdGltvyIMIyL6eAy4Iqfr6vOFHsconC0ynraeF8bbPnq2wz+D/V5+pax
-         bw9eiEhssfe2BT/UyVR7k0NsNia8fxzrp+TgPeOxGuQ4HL/oqF8YsBjZWLmegPiuBwdu
-         ZinJ/lwPPnlNf9a+q5GVj7DNqWM2u7uKrpi808CFoJFXKM5qSCvtSMJNEpDQaRcoO/ob
-         4IpI6rQTrQ53bPK1YRLBeS5cXZYu7e27VrJ0UMG/gfe2Ck3xYGk6x2lKaSdHxmGgiThr
-         drEMAttrQ+S8dUUTNvja4dqFLMmLCuh+BGdsyVEDFqxyOpKSFpPQ0+FHiQTBvvEuWR66
-         Liew==
+        bh=4EPBu8kolqEvADUma0cYsF48TH+3+kf5PwbYKr4fw8A=;
+        b=AX37qK76jmg72efukl0r1QQloedhThnFlFbzov1PnSVZQrEIOC1KhltUFKIBEPgkTp
+         yffqAtvW43U5nB/NR/2zAO9QmJDvxeuVicE6dsBOZPQO9OthKFIa7btbZk05YZhi1SZO
+         vWauxkDy7yVU+zWwpTPvjGaVLTv7QY4CnsK+/hA1daxDEBd398qO7ayA1/ns/BX8lkNM
+         W/NN5IHPTnVfj/QqNfN7WNhFB/EPgO+Bz23UU3N08HhuWj2sAgHlp+s/y2nGb0egvjIZ
+         3lM2BwCfY+AC3qGsH8JYPZyyVDB7aeE7dIcMNcYewdHMhSk8xUMqJVhVd4OBQQ6Qg6O4
+         ZO1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=Rcu8+0wi0noOgKyHnZkEE8vWwQRe3AmgJ6bgwk+oz8w=;
-        b=gZeWUISp5ozlkeJWCLFTyasXq44OtAIoefUXUxk8P1uwSEk+8KY9JpamXKd4IuJR9E
-         geHpeiyR9G4oeQ6IS5pD0k8J/68gbkguSdQ8gmiydWG2Ew5zY2va0FPDLaNzYyBbml3I
-         VQV7yK/wX8Rgm46JBRWNsgNs4LWaPTCN4Un2hLAjRNLKVISk5UVoOmcv5mIQUjuC2FWJ
-         VSYa0PTBBPNac+c8ozVWFHhw11BdTX12HhCkRXjOrXimawmirivjJoett4YFoGZLQxcF
-         fOCNSMNqnAfsxXzFUqTzKYGRDI9rmo0cqTMpR9HvBhxRSc0OYEzyQjfL/9C/tL6cxLUq
-         VlGw==
-X-Gm-Message-State: APjAAAWWgPJnc6EyNScTiyMGcIW3EK7it3VL4N8DuiTnyExdin7Dnz/X
-        REAgcCPurJrzc7cQFgBJHjGqUQ==
-X-Google-Smtp-Source: APXvYqwM/DcpdjYAHvwDAqIHPNXf2rxpM5q97La8R1CSqxdYuZK+OaLxCq9UJrayAJOBq51OCHYY5Q==
-X-Received: by 2002:a5d:61c2:: with SMTP id q2mr2200533wrv.425.1581664946114;
-        Thu, 13 Feb 2020 23:22:26 -0800 (PST)
+        bh=4EPBu8kolqEvADUma0cYsF48TH+3+kf5PwbYKr4fw8A=;
+        b=skcdOwp4+cAfBS8O+xA73NbRXWXdEo6z6VK1V/NHjBCV2Ca0kjVm/vCDRL9BBSFZBf
+         /vzU1I3YuzaGF4RNsGmg4XtBHSJp/3A341o5djmkJgtAPO8cbokP0hf8F2FJa/gGWKi1
+         Ci1BttjFh17RnUPaOjDCzs7s3Gacjl1W7uh65p+PKUavUQGP6g8VX5Q1+mt4nig+B3yv
+         wAQP3tcPcKQeSLnl5AU9xuFPSIa54ehkZ7RwQltRy+nEHmZeE9Ywr9vVWhc5EfIWOf2t
+         B8w5xNhIpmOFZFzh1vfBTF7t5DtH/Qpx29cbaQ0HW/9AZoMEGL11vLnbJ+Tfk6fgJcUg
+         9igA==
+X-Gm-Message-State: APjAAAU/A+13yHU1pR8yMGMrJeiTQHNf/tkuxTMvlqq3esS9FnlyYJcm
+        82S7CP1crqdb1l7GCaHg5b524Q==
+X-Google-Smtp-Source: APXvYqw9nRykSIN8grORX1Tu0U+HXNP3YHhiJ3Rws+M/pxotSDEIM3ZY/m9qXKlzfbeCdjNg6YD+JQ==
+X-Received: by 2002:a1c:39d7:: with SMTP id g206mr2960089wma.111.1581664950294;
+        Thu, 13 Feb 2020 23:22:30 -0800 (PST)
 Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id q10sm6147597wme.16.2020.02.13.23.22.25
+        by smtp.gmail.com with ESMTPSA id g25sm16716399wmh.3.2020.02.13.23.22.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2020 23:22:25 -0800 (PST)
-Message-ID: <5e464ab1.1c69fb81.1ca64.9b05@mx.google.com>
-Date:   Thu, 13 Feb 2020 23:22:25 -0800 (PST)
+        Thu, 13 Feb 2020 23:22:29 -0800 (PST)
+Message-ID: <5e464ab5.1c69fb81.3e7ec.e310@mx.google.com>
+Date:   Thu, 13 Feb 2020 23:22:29 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: boot
+X-Kernelci-Report-Type: test
 X-Kernelci-Branch: testing
 X-Kernelci-Tree: pm
 X-Kernelci-Kernel: v5.6-rc1-10-g55fe2ef33c65
-Subject: pm/testing boot: 28 boots: 1 failed,
- 27 passed (v5.6-rc1-10-g55fe2ef33c65)
+Subject: pm/testing baseline: 28 runs,
+ 0 regressions (v5.6-rc1-10-g55fe2ef33c65)
 To:     rafael@kernel.org, linux-pm@vger.kernel.org,
         kernel-build-reports@lists.linaro.org
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -63,26 +63,225 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing boot: 28 boots: 1 failed, 27 passed (v5.6-rc1-10-g55fe2ef33c65)
+pm/testing baseline: 28 runs, 0 regressions (v5.6-rc1-10-g55fe2ef33c65)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
-el/v5.6-rc1-10-g55fe2ef33c65/
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-6-rc1-10-g55fe2ef33c65/
+Test results summary
+--------------------
 
-Tree: pm
-Branch: testing
-Git Describe: v5.6-rc1-10-g55fe2ef33c65
-Git Commit: 55fe2ef33c658a1c0922ca161b136bb7171ac084
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Tested: 24 unique boards, 11 SoC families, 1 build out of 4
+run | platform                     | arch | lab           | compiler | defc=
+onfig          | results
+----+------------------------------+------+---------------+----------+-----=
+---------------+--------
+1   | alpine-db                    | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
 
-Boot Failure Detected:
+2   | am335x-boneblack             | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 4/5    =
 
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
+3   | at91-sama5d4_xplained        | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
 
----
-For more info write to <info@kernelci.org>
+4   | bcm2836-rpi-2-b              | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 0/1    =
+
+5   | exynos4412-odroidx2          | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 4/5    =
+
+6   | exynos5422-odroidxu3         | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+7   | imx6q-sabrelite              | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+8   | meson8b-odroidc1             | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+9   | omap3-beagle-xm              | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+10  | omap4-panda                  | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+11  | omap4-panda                  | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+12  | qemu_arm-virt-gicv2          | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 1/1    =
+
+13  | qemu_arm-virt-gicv2          | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 1/1    =
+
+14  | qemu_arm-virt-gicv3          | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 1/1    =
+
+15  | qemu_arm-virt-gicv3          | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 1/1    =
+
+16  | rk3288-rock2-square          | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+17  | rk3288-veyron-jaq            | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 64/65  =
+
+18  | sun4i-a10-olinuxino-lime     | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+19  | sun5i-a13-olinuxino-micro    | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+20  | sun7i-a20-cubieboard2        | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+21  | sun7i-a20-olinuxino-lime2    | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+22  | sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+23  | sun8i-h2-plus-orangepi-r1    | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+24  | sun8i-h2-plus-orangepi-zero  | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+25  | sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+26  | tegra124-jetson-tk1          | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+27  | tegra124-jetson-tk1          | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+28  | tegra124-nyan-big            | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 5/5    =
+
+
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.6-rc1-10-g55fe2ef33c65
+  URL:      git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.g=
+it
+  SHA:      55fe2ef33c658a1c0922ca161b136bb7171ac084 =
+
+
+
+Test Failures
+-------------
+     =
+
+
+run | platform                     | arch | lab           | compiler | defc=
+onfig          | results
+----+------------------------------+------+---------------+----------+-----=
+---------------+--------
+2   | am335x-boneblack             | arm  | lab-baylibre  | gcc-8    | mult=
+i_v7_defconfig | 4/5    =
+
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-am335x-boneblack.=
+txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-am335x-boneblack.=
+html
+  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
+9.02-8-gd700ebb99e8f/armel/baseline/rootfs.cpio.gz     =
+
+
+  dmesg - 3 tests: 2  PASS, 1 FAIL, 0 SKIP
+    * crit:
+        never passed
+        1 lines    =
+
+         =
+
+
+run | platform                     | arch | lab           | compiler | defc=
+onfig          | results
+----+------------------------------+------+---------------+----------+-----=
+---------------+--------
+4   | bcm2836-rpi-2-b              | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 0/1    =
+
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-bcm2836-rpi-2-b.=
+txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-bcm2836-rpi-2-b.=
+html
+  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
+9.02-8-gd700ebb99e8f/armel/baseline/rootfs.cpio.gz  =
+
+
+  1 tests: 0 PASS, 1 FAIL, 0 SKIP
+    * login:
+        never passed   =
+
+      =
+
+
+run | platform                     | arch | lab           | compiler | defc=
+onfig          | results
+----+------------------------------+------+---------------+----------+-----=
+---------------+--------
+5   | exynos4412-odroidx2          | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 4/5    =
+
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos4412-odroi=
+dx2.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos4412-odroi=
+dx2.html
+  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
+9.02-8-gd700ebb99e8f/armel/baseline/rootfs.cpio.gz     =
+
+
+  dmesg - 3 tests: 2  PASS, 1 FAIL, 0 SKIP
+    * alert:
+        never passed
+        1 lines    =
+
+                                       =
+
+
+run | platform                     | arch | lab           | compiler | defc=
+onfig          | results
+----+------------------------------+------+---------------+----------+-----=
+---------------+--------
+17  | rk3288-veyron-jaq            | arm  | lab-collabora | gcc-8    | mult=
+i_v7_defconfig | 64/65  =
+
+
+  Results:     64 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-rk3288-veyron-ja=
+q.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-rk3288-veyron-ja=
+q.html
+  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
+9.02-8-gd700ebb99e8f/armel/baseline/rootfs.cpio.gz       =
+
+
+  bootrr - 61 tests: 60  PASS, 1 FAIL, 0 SKIP
+    * rk3x-i2c5-probed:
+        never passed  =
+
+                                      =20
