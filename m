@@ -2,110 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2B615FA9B
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2020 00:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA9A15FAA9
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2020 00:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728172AbgBNX2h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 18:28:37 -0500
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:1236 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727976AbgBNX2h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 18:28:37 -0500
+        id S1727942AbgBNXcc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 18:32:32 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:35360 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727529AbgBNXcc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 18:32:32 -0500
+Received: by mail-pg1-f195.google.com with SMTP id v23so2296424pgk.2
+        for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2020 15:32:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1581722917; x=1613258917;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=XFd2LTl25ne3kMWrL/YPna7uVttvsKNxoFQR8TCvE9E=;
-  b=m0a62/lKKLCqMlQYPcsCumDyvtuTauNQVD6L5UwkutcOiVZvd078XFM8
-   DlDNWxn5Xvj1kG7gqOKOJNpPw3+ZVsKfayPQd8MhIHUb68E8Jh42wok7P
-   HOkZIEbFOF/8UjAerb3YePdKAakmk+Ikxw7g+Qo/HpVw3ZFOFQtqklxMz
-   w=;
-IronPort-SDR: Uq4xL82dqRbjGX7NdFvnD6eSDrEZWhgkJv2ITzh9uXV0XvYsU1YnSahYNjBZ0qyDvhYKBxVhJc
- Teid1lqAMnhQ==
-X-IronPort-AV: E=Sophos;i="5.70,442,1574121600"; 
-   d="scan'208";a="26559030"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1e-303d0b0e.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 14 Feb 2020 23:28:35 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1e-303d0b0e.us-east-1.amazon.com (Postfix) with ESMTPS id 3AFE1A23FF;
-        Fri, 14 Feb 2020 23:28:27 +0000 (UTC)
-Received: from EX13D08UEB002.ant.amazon.com (10.43.60.107) by
- EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 14 Feb 2020 23:28:07 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
- EX13D08UEB002.ant.amazon.com (10.43.60.107) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 14 Feb 2020 23:28:07 +0000
-Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.61.169) with Microsoft SMTP
- Server id 15.0.1236.3 via Frontend Transport; Fri, 14 Feb 2020 23:28:07 +0000
-Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id 500DF4028E; Fri, 14 Feb 2020 23:28:07 +0000 (UTC)
-Date:   Fri, 14 Feb 2020 23:28:07 +0000
-From:   Anchal Agarwal <anchalag@amazon.com>
-To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
-        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
-        <linux-mm@kvack.org>, <kamatam@amazon.com>,
-        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
-        <roger.pau@citrix.com>, <axboe@kernel.dk>, <davem@davemloft.net>,
-        <rjw@rjwysocki.net>, <len.brown@intel.com>, <pavel@ucw.cz>,
-        <peterz@infradead.org>, <eduval@amazon.com>, <sblbir@amazon.com>,
-        <anchalag@amazon.com>, <xen-devel@lists.xenproject.org>,
-        <vkuznets@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dwmw@amazon.co.uk>,
-        <fllinden@amaozn.com>, <benh@kernel.crashing.org>
-Subject: [RFC PATCH v3 12/12] PM / hibernate: update the resume offset on
- SNAPSHOT_SET_SWAP_AREA
-Message-ID: <4659d20be8f27e40ef39adfa06b0c759c2d6cd78.1581721799.git.anchalag@amazon.com>
-References: <cover.1581721799.git.anchalag@amazon.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <cover.1581721799.git.anchalag@amazon.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=AEe1XGyTWqkzhlgRgpYtuBl1Yjp3hmm+kvRYMs3wUvI=;
+        b=EkJxDj2mwMx8wX8lW1XNriMQ9dQgixwTl+SgJLSFykIMCJfld/jkqDJvmdh3e+phRd
+         D1U8AyXTN9kM7Y8TUjYPDxDYUfnz3nWAdNh1+fAs8jye/mNN2AhFMdd+V9buD7wei9Ru
+         oeO/l5QJHhRD/leFqBO0fYZigih9psvg/4LIMuBiiKVxKfqzQtsyV3uoO9bHZRsSaIwZ
+         whj4LStOg5tGpEl/Pd3nVXGv13x00suiNECZnLuOoLhHZhtt08FfanM2eOqEe8qt5EVa
+         DLSi6rOL3QZJb+sb2OqrsCJQHV4Gf15WJwJwNT6JM/Xt143CUEqeXIT3RRwTf6LslRGO
+         goIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=AEe1XGyTWqkzhlgRgpYtuBl1Yjp3hmm+kvRYMs3wUvI=;
+        b=Y2ll30d09n5E95KcOgnQB6fYtlagR10fgrNhUf6/Ep3aWPq5ihrg4P1wedcdslPZ8f
+         AJugH3EQ2ly1CnY47+JxOcEp45GKkvVphrp2HSQ6iWxYxzKsNHnWcO2fU4BBr5+S4g4/
+         666h1n1hZ1sfZEtzJkLnkhRasmb8FEPMmOh934PFgB19akAWjGPGECx6vlrsQdPpnZ2Q
+         a3pXHVyHu3GaBvTGn5tLIWOL6NawZxq+CtssUJPC2HdVw3DMuzT88783kbrPAGOPermH
+         Ufmaeo6sBrC4SryvmUQXtxAByGy5hBIIMtTF4gmDqfJrG2lpemWakzjhwwljJAP7BnxO
+         U+hw==
+X-Gm-Message-State: APjAAAX8dgNJQswZH3cuyT7TzR/4VSk3YI0Rs5b6Nulhf9RujZvOmheh
+        ntMaxluJeq4Q2qC//Bdbxq0qVQ==
+X-Google-Smtp-Source: APXvYqzgBII0sPALArT4QCNkYh1u20q+JC7yfNO/Gi6+mOWOSy+wsplpo6Z8vkCPl9zmgRj3oAGlHA==
+X-Received: by 2002:a63:5a65:: with SMTP id k37mr6172994pgm.264.1581723151766;
+        Fri, 14 Feb 2020 15:32:31 -0800 (PST)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id t186sm8596702pgd.26.2020.02.14.15.32.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2020 15:32:31 -0800 (PST)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Todd Kjos <tkjos@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2] driver core: Extend returning EPROBE_DEFER for two minutes after late_initcall
+Date:   Fri, 14 Feb 2020 23:32:26 +0000
+Message-Id: <20200214233226.82096-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Aleksei Besogonov <cyberax@amazon.com>
+Due to commit e01afc3250255 ("PM / Domains: Stop deferring probe
+at the end of initcall"), along with commit 25b4e70dcce9
+("driver core: allow stopping deferred probe after init") after
+late_initcall, drivers will stop getting EPROBE_DEFER, and
+instead see an error causing the driver to fail to load.
 
-The SNAPSHOT_SET_SWAP_AREA is supposed to be used to set the hibernation
-offset on a running kernel to enable hibernating to a swap file.
-However, it doesn't actually update the swsusp_resume_block variable. As
-a result, the hibernation fails at the last step (after all the data is
-written out) in the validation of the swap signature in
-mark_swapfiles().
+That change causes trouble when trying to use many clk drivers
+as modules, as the clk modules may not load until much later
+after init has started. If a dependent driver loads and gets an
+error instead of EPROBE_DEFER, it won't try to reload later when
+the dependency is met, and will thus fail to load.
 
-Before this patch, the command line processing was the only place where
-swsusp_resume_block was set.
+Instead of reverting that patch, this patch tries to extend the
+time that EPROBE_DEFER is retruned by 30 seconds, to (hopefully)
+ensure that everything has had a chance to load.
 
-Signed-off-by: Aleksei Besogonov <cyberax@amazon.com>
-Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
-Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
+30 seconds was chosen to match the similar timeout used by the
+regulator code here in commit 55576cf18537 ("regulator: Defer
+init completion for a while after late_initcall")
+
+Specifically, on db845c, this change allows us to set
+SDM_GPUCC_845, QCOM_CLK_RPMH and COMMON_CLK_QCOM as modules and
+get a working system, where as without it the display will fail
+to load.
+
+Cc: Rob Herring <robh@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Kevin Hilman <khilman@kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-pm@vger.kernel.org
+Fixes: e01afc3250255 ("PM / Domains: Stop deferring probe at the end of initcall")
+Fixes: 25b4e70dcce9 ("driver core: allow stopping deferred probe after init")
+Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
- kernel/power/user.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+v2:
+* Add calls to driver_deferred_probe_trigger() after the two minute timeout,
+  as suggested by Bjorn
+* Minor whitespace cleanups
+* Switch to 30 second timeout to match what the regulator code is doing as
+  suggested by Rob.
+---
+ drivers/base/dd.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index 77438954cc2b..d396e313cb7b 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -374,8 +374,12 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
- 			if (swdev) {
- 				offset = swap_area.offset;
- 				data->swap = swap_type_of(swdev, offset, NULL);
--				if (data->swap < 0)
-+				if (data->swap < 0) {
- 					error = -ENODEV;
-+				} else {
-+					swsusp_resume_device = swdev;
-+					swsusp_resume_block = offset;
-+				}
- 			} else {
- 				data->swap = -1;
- 				error = -EINVAL;
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index d811e60610d3..0f519ef3b257 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -311,6 +311,15 @@ static void deferred_probe_timeout_work_func(struct work_struct *work)
+ }
+ static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
+ 
++static void deferred_initcall_done_work_func(struct work_struct *work)
++{
++	initcalls_done = true;
++	driver_deferred_probe_trigger();
++	flush_work(&deferred_probe_work);
++}
++static DECLARE_DELAYED_WORK(deferred_initcall_done_work,
++			    deferred_initcall_done_work_func);
++
+ /**
+  * deferred_probe_initcall() - Enable probing of deferred devices
+  *
+@@ -327,7 +336,8 @@ static int deferred_probe_initcall(void)
+ 	driver_deferred_probe_trigger();
+ 	/* Sort as many dependencies as possible before exiting initcalls */
+ 	flush_work(&deferred_probe_work);
+-	initcalls_done = true;
++	schedule_delayed_work(&deferred_initcall_done_work,
++			      msecs_to_jiffies(30000));
+ 
+ 	/*
+ 	 * Trigger deferred probe again, this time we won't defer anything
 -- 
-2.24.1.AMZN
+2.17.1
 
