@@ -2,46 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB68E15FA7F
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2020 00:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1954015FA85
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2020 00:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727998AbgBNX0V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 18:26:21 -0500
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:17774 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727620AbgBNX0V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 18:26:21 -0500
+        id S1728119AbgBNX0u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 18:26:50 -0500
+Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:9208 "EHLO
+        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727963AbgBNX0t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 18:26:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1581722781; x=1613258781;
+  t=1581722809; x=1613258809;
   h=date:from:to:subject:message-id:references:mime-version:
    in-reply-to;
-  bh=FFWPXgIVAXjgcT115sJOuzax8nToCuuiY/HaQ9mneTM=;
-  b=c2gPM2ccrXe+xF0iWXQu0K+fje3b041XaBdFv36ipfHd9xfIscKOqOiD
-   kQWJ9KR1kql/pa0JYwAURnWhmspWkaDvIMgGN9pr+mi056EJYe2WRx3gc
-   yyJZg6UKGb9xE1r96ewDXS+Hqpoa/lcw/DMpnbGJsirx0mpJgGYoz5Y1i
-   o=;
-IronPort-SDR: HuP4SSd2cYzUs+cM+RhoYVn7umcRvOl9TOTmD8HMurf/Mfr4/l1GvqltmzwCu2MsYaJQvZr5nv
- dr8D5uHlcrXQ==
+  bh=UMKkqskcj+uJc+bMo+rVrL+B1mUIrmErlOz9JcigkDg=;
+  b=K7YnIgqvLokD5Zq7gJtR+xt+KWcEPo58+XvVX/HcROgC7lM147PcEho/
+   jcGOZyfAyaEYDax4nMIyx5cLiHe8+yfGtZbgsUOrCFf5yubwIbQ185lFa
+   n7rb7LVujZxHf78bVUGxpcwxQE7uCS4bLl6jqNLBxq8O6vFpV5AytflBN
+   s=;
+IronPort-SDR: XLi6hZdvWyf7uNHazz/iulkhBXgI093HQ6dQRzAdNaXJql5DDSrkG+d7cAh5YRJHw6o1DuT9Es
+ 275DPTN1UEvw==
 X-IronPort-AV: E=Sophos;i="5.70,442,1574121600"; 
-   d="scan'208";a="25192188"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1e-27fb8269.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 14 Feb 2020 23:26:19 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1e-27fb8269.us-east-1.amazon.com (Postfix) with ESMTPS id A91A5A2774;
-        Fri, 14 Feb 2020 23:26:11 +0000 (UTC)
-Received: from EX13D08UEE001.ant.amazon.com (10.43.62.126) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 14 Feb 2020 23:25:52 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D08UEE001.ant.amazon.com (10.43.62.126) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 14 Feb 2020 23:25:51 +0000
+   d="scan'208";a="16798132"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1d-38ae4ad2.us-east-1.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 14 Feb 2020 23:26:47 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1d-38ae4ad2.us-east-1.amazon.com (Postfix) with ESMTPS id 46059A272A;
+        Fri, 14 Feb 2020 23:26:39 +0000 (UTC)
+Received: from EX13D07UWB004.ant.amazon.com (10.43.161.196) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Fri, 14 Feb 2020 23:26:25 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13D07UWB004.ant.amazon.com (10.43.161.196) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Fri, 14 Feb 2020 23:26:25 +0000
 Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server id 15.0.1367.3 via Frontend Transport; Fri, 14 Feb 2020 23:25:51 +0000
+ (172.22.96.68) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1367.3 via Frontend Transport; Fri, 14 Feb 2020 23:26:24 +0000
 Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id ED1114028E; Fri, 14 Feb 2020 23:25:50 +0000 (UTC)
-Date:   Fri, 14 Feb 2020 23:25:50 +0000
+        id 9BC794028E; Fri, 14 Feb 2020 23:26:24 +0000 (UTC)
+Date:   Fri, 14 Feb 2020 23:26:24 +0000
 From:   Anchal Agarwal <anchalag@amazon.com>
 To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
         <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
@@ -55,9 +55,9 @@ To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
         <vkuznets@redhat.com>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <dwmw@amazon.co.uk>,
         <fllinden@amaozn.com>, <benh@kernel.crashing.org>
-Subject: [RFC PATCH v3 07/12] genirq: Shutdown irq chips in suspend/resume
- during hibernation
-Message-ID: <e782c510916c8c05dc95ace151aba4eced207b31.1581721799.git.anchalag@amazon.com>
+Subject: [RFC PATCH v3 08/12] xen/time: introduce
+ xen_{save,restore}_steal_clock
+Message-ID: <489caa869095f77ed8db188d36e858533d7b4d7c.1581721799.git.anchalag@amazon.com>
 References: <cover.1581721799.git.anchalag@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -69,137 +69,105 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are no pm handlers for the legacy devices, so during tear down
-stale event channel <> IRQ mapping may still remain in the image and
-resume may fail. To avoid adding much code by implementing handlers for
-legacy devices, add a new irq_chip flag IRQCHIP_SHUTDOWN_ON_SUSPEND which
-when enabled on an irq-chip e.g xen-pirq, it will let core suspend/resume
-irq code to shutdown and restart the active irqs. PM suspend/hibernation
-code will rely on this.
-Without this, in PM hibernation, information about the event channel
-remains in hibernation image, but there is no guarantee that the same
-event channel numbers are assigned to the devices when restoring the
-system. This may cause conflict like the following and prevent some
-devices from being restored correctly.
+From: Munehisa Kamata <kamatam@amazon.com>
 
+Currently, steal time accounting code in scheduler expects steal clock
+callback to provide monotonically increasing value. If the accounting
+code receives a smaller value than previous one, it uses a negative
+value to calculate steal time and results in incorrectly updated idle
+and steal time accounting. This breaks userspace tools which read
+/proc/stat.
+
+top - 08:05:35 up  2:12,  3 users,  load average: 0.00, 0.07, 0.23
+Tasks:  80 total,   1 running,  79 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.0%us,  0.0%sy,  0.0%ni,30100.0%id,  0.0%wa,  0.0%hi, 0.0%si,-1253874204672.0%st
+
+This can actually happen when a Xen PVHVM guest gets restored from
+hibernation, because such a restored guest is just a fresh domain from
+Xen perspective and the time information in runstate info starts over
+from scratch.
+
+This patch introduces xen_save_steal_clock() which saves current values
+in runstate info into per-cpu variables. Its couterpart,
+xen_restore_steal_clock(), sets offset if it found the current values in
+runstate info are smaller than previous ones. xen_steal_clock() is also
+modified to use the offset to ensure that scheduler only sees
+monotonically increasing number.
+
+Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
 Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- drivers/xen/events/events_base.c |  1 +
- include/linux/irq.h              |  2 ++
- kernel/irq/chip.c                |  2 +-
- kernel/irq/internals.h           |  1 +
- kernel/irq/pm.c                  | 31 ++++++++++++++++++++++---------
- 5 files changed, 27 insertions(+), 10 deletions(-)
+ drivers/xen/time.c    | 29 ++++++++++++++++++++++++++++-
+ include/xen/xen-ops.h |  2 ++
+ 2 files changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/xen/events/events_base.c b/drivers/xen/events/events_base.c
-index 6c8843968a52..e44f27b45bef 100644
---- a/drivers/xen/events/events_base.c
-+++ b/drivers/xen/events/events_base.c
-@@ -1620,6 +1620,7 @@ static struct irq_chip xen_pirq_chip __read_mostly = {
- 	.irq_set_affinity	= set_affinity_irq,
+diff --git a/drivers/xen/time.c b/drivers/xen/time.c
+index 0968859c29d0..3560222cc0dd 100644
+--- a/drivers/xen/time.c
++++ b/drivers/xen/time.c
+@@ -23,6 +23,9 @@ static DEFINE_PER_CPU(struct vcpu_runstate_info, xen_runstate);
  
- 	.irq_retrigger		= retrigger_dynirq,
-+	.flags                  = IRQCHIP_SHUTDOWN_ON_SUSPEND,
- };
+ static DEFINE_PER_CPU(u64[4], old_runstate_time);
  
- static struct irq_chip xen_percpu_chip __read_mostly = {
-diff --git a/include/linux/irq.h b/include/linux/irq.h
-index fb301cf29148..2873a579fd9d 100644
---- a/include/linux/irq.h
-+++ b/include/linux/irq.h
-@@ -511,6 +511,7 @@ struct irq_chip {
-  * IRQCHIP_EOI_THREADED:	Chip requires eoi() on unmask in threaded mode
-  * IRQCHIP_SUPPORTS_LEVEL_MSI	Chip can provide two doorbells for Level MSIs
-  * IRQCHIP_SUPPORTS_NMI:	Chip can deliver NMIs, only for root irqchips
-+ * IRQCHIP_SHUTDOWN_ON_SUSPEND: Shutdown non wake irqs in the suspend path
-  */
- enum {
- 	IRQCHIP_SET_TYPE_MASKED		= (1 <<  0),
-@@ -522,6 +523,7 @@ enum {
- 	IRQCHIP_EOI_THREADED		= (1 <<  6),
- 	IRQCHIP_SUPPORTS_LEVEL_MSI	= (1 <<  7),
- 	IRQCHIP_SUPPORTS_NMI		= (1 <<  8),
-+	IRQCHIP_SHUTDOWN_ON_SUSPEND     = (1 <<  9),
- };
- 
- #include <linux/irqdesc.h>
-diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
-index b76703b2c0af..a1e8df5193ba 100644
---- a/kernel/irq/chip.c
-+++ b/kernel/irq/chip.c
-@@ -233,7 +233,7 @@ __irq_startup_managed(struct irq_desc *desc, struct cpumask *aff, bool force)
- }
- #endif
- 
--static int __irq_startup(struct irq_desc *desc)
-+int __irq_startup(struct irq_desc *desc)
++static DEFINE_PER_CPU(u64, xen_prev_steal_clock);
++static DEFINE_PER_CPU(u64, xen_steal_clock_offset);
++
+ /* return an consistent snapshot of 64-bit time/counter value */
+ static u64 get64(const u64 *p)
  {
- 	struct irq_data *d = irq_desc_get_irq_data(desc);
- 	int ret = 0;
-diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
-index 3924fbe829d4..11c7c55bda63 100644
---- a/kernel/irq/internals.h
-+++ b/kernel/irq/internals.h
-@@ -80,6 +80,7 @@ extern void __enable_irq(struct irq_desc *desc);
- extern int irq_activate(struct irq_desc *desc);
- extern int irq_activate_and_startup(struct irq_desc *desc, bool resend);
- extern int irq_startup(struct irq_desc *desc, bool resend, bool force);
-+extern int __irq_startup(struct irq_desc *desc);
+@@ -149,7 +152,7 @@ bool xen_vcpu_stolen(int vcpu)
+ 	return per_cpu(xen_runstate, vcpu).state == RUNSTATE_runnable;
+ }
  
- extern void irq_shutdown(struct irq_desc *desc);
- extern void irq_shutdown_and_deactivate(struct irq_desc *desc);
-diff --git a/kernel/irq/pm.c b/kernel/irq/pm.c
-index 8f557fa1f4fe..dc48a25f1756 100644
---- a/kernel/irq/pm.c
-+++ b/kernel/irq/pm.c
-@@ -85,16 +85,25 @@ static bool suspend_device_irq(struct irq_desc *desc)
- 	}
+-u64 xen_steal_clock(int cpu)
++static u64 __xen_steal_clock(int cpu)
+ {
+ 	struct vcpu_runstate_info state;
  
- 	desc->istate |= IRQS_SUSPENDED;
--	__disable_irq(desc);
--
- 	/*
--	 * Hardware which has no wakeup source configuration facility
--	 * requires that the non wakeup interrupts are masked at the
--	 * chip level. The chip implementation indicates that with
--	 * IRQCHIP_MASK_ON_SUSPEND.
-+	 * Some irq chips (e.g. XEN PIRQ) require a full shutdown on suspend
-+	 * as some of the legacy drivers(e.g. floppy) do nothing during the
-+	 * suspend path
- 	 */
--	if (irq_desc_get_chip(desc)->flags & IRQCHIP_MASK_ON_SUSPEND)
--		mask_irq(desc);
-+	if (irq_desc_get_chip(desc)->flags & IRQCHIP_SHUTDOWN_ON_SUSPEND) {
-+		irq_shutdown(desc);
+@@ -157,6 +160,30 @@ u64 xen_steal_clock(int cpu)
+ 	return state.time[RUNSTATE_runnable] + state.time[RUNSTATE_offline];
+ }
+ 
++u64 xen_steal_clock(int cpu)
++{
++	return __xen_steal_clock(cpu) + per_cpu(xen_steal_clock_offset, cpu);
++}
++
++void xen_save_steal_clock(int cpu)
++{
++	per_cpu(xen_prev_steal_clock, cpu) = xen_steal_clock(cpu);
++}
++
++void xen_restore_steal_clock(int cpu)
++{
++	u64 steal_clock = __xen_steal_clock(cpu);
++
++	if (per_cpu(xen_prev_steal_clock, cpu) > steal_clock) {
++		/* Need to update the offset */
++		per_cpu(xen_steal_clock_offset, cpu) =
++		    per_cpu(xen_prev_steal_clock, cpu) - steal_clock;
 +	} else {
-+		__disable_irq(desc);
-+
-+	       /*
-+		* Hardware which has no wakeup source configuration facility
-+		* requires that the non wakeup interrupts are masked at the
-+		* chip level. The chip implementation indicates that with
-+		* IRQCHIP_MASK_ON_SUSPEND.
-+		*/
-+		if (irq_desc_get_chip(desc)->flags & IRQCHIP_MASK_ON_SUSPEND)
-+			mask_irq(desc);
++		/* Avoid unnecessary steal clock warp */
++		per_cpu(xen_steal_clock_offset, cpu) = 0;
 +	}
- 	return true;
- }
- 
-@@ -152,7 +161,11 @@ static void resume_irq(struct irq_desc *desc)
- 	irq_state_set_masked(desc);
- resume:
- 	desc->istate &= ~IRQS_SUSPENDED;
--	__enable_irq(desc);
++}
 +
-+	if (irq_desc_get_chip(desc)->flags & IRQCHIP_SHUTDOWN_ON_SUSPEND)
-+		__irq_startup(desc);
-+	else
-+		__enable_irq(desc);
- }
+ void xen_setup_runstate_info(int cpu)
+ {
+ 	struct vcpu_register_runstate_memory_area area;
+diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
+index 3b3992b5b0c2..12b3f4474a05 100644
+--- a/include/xen/xen-ops.h
++++ b/include/xen/xen-ops.h
+@@ -37,6 +37,8 @@ void xen_time_setup_guest(void);
+ void xen_manage_runstate_time(int action);
+ void xen_get_runstate_snapshot(struct vcpu_runstate_info *res);
+ u64 xen_steal_clock(int cpu);
++void xen_save_steal_clock(int cpu);
++void xen_restore_steal_clock(int cpu);
  
- static void resume_irqs(bool want_early)
+ int xen_setup_shutdown_event(void);
+ 
 -- 
 2.24.1.AMZN
 
