@@ -2,121 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 493A415F083
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 18:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CB515ED26
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 18:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388364AbgBNP5r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 10:57:47 -0500
-Received: from foss.arm.com ([217.140.110.172]:35872 "EHLO foss.arm.com"
+        id S2390744AbgBNRcQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 12:32:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57524 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388237AbgBNP5r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:57:47 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5E40D328;
-        Fri, 14 Feb 2020 07:57:46 -0800 (PST)
-Received: from localhost (e108754-lin.cambridge.arm.com [10.1.198.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F3AAF3F68E;
-        Fri, 14 Feb 2020 07:57:45 -0800 (PST)
-Date:   Fri, 14 Feb 2020 15:57:44 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-        maz@kernel.org, suzuki.poulose@arm.com, sudeep.holla@arm.com,
-        lukasz.luba@arm.com, valentin.schneider@arm.com, rjw@rjwysocki.net,
-        peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] clocksource/drivers/arm_arch_timer: validate
- arch_timer_rate
-Message-ID: <20200214155744.GA8784@arm.com>
-References: <20200211184542.29585-1-ionela.voinescu@arm.com>
- <20200211184542.29585-8-ionela.voinescu@arm.com>
- <87mu9mgg41.fsf@nanos.tec.linutronix.de>
- <20200214154525.GA21875@arm.com>
+        id S2390513AbgBNQGu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:06:50 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 01D1F24676;
+        Fri, 14 Feb 2020 16:06:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581696409;
+        bh=I6FKwP+LM7+J5E/prXxfyE67zXp+oC1gcc+XNAtkz3Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=r27mktdzT7FblANcr/YSV8CrlBz0r+sNJ9Gdz4qsNGivRYg/muJhFlzBx9ijl8aBr
+         oBT/QUr7ylarof5vXOxg58qXhlz9xPmvLtk6X9HIVyj0fOsgzII0C955xjH4MPSs1f
+         kr8q0E//lZSQK/PBOZSos9Of0NP1oMZNIyPdwugQ=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 232/459] PM / devfreq: exynos-ppmu: Fix excessive stack usage
+Date:   Fri, 14 Feb 2020 10:58:02 -0500
+Message-Id: <20200214160149.11681-232-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
+References: <20200214160149.11681-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200214154525.GA21875@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday 14 Feb 2020 at 15:45:25 (+0000), Ionela Voinescu wrote:
-> Hi Thomas,
-> 
-> On Friday 14 Feb 2020 at 01:35:58 (+0100), Thomas Gleixner wrote:
-> > Ionela Voinescu <ionela.voinescu@arm.com> writes:
-> > 
-> > > From: Valentin Schneider <valentin.schneider@arm.com>
-> > >
-> > > Using an arch timer with a frequency of less than 1MHz can result in an
-> > > incorrect functionality of the system which assumes a reasonable rate.
-> > >
-> > > One example is the use of activity monitors for frequency invariance
-> > > which uses the rate of the arch timer as the known rate of the constant
-> > > cycle counter in computing its ratio compared to the maximum frequency
-> > > of a CPU. For arch timer frequencies less than 1MHz this ratio could
-> > > end up being 0 which is an invalid value for its use.
-> > >
-> > > Therefore, warn if the arch timer rate is below 1MHz which contravenes
-> > > the recommended architecture interval of 1 to 50MHz.
-> > >
-> > > Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> > 
-> > So this patch is from Valentin. Where is his Signed-off-by?
-> > 
-> 
-> Yes, sorry about this. This was based on a diff that Valentin provided
-> in v2. I'll change the author as agreed at:
-> https://lore.kernel.org/lkml/20200212103249.GA19041@arm.com/
-> 
-> > >  
-> > > +static int validate_timer_rate(void)
-> > > +{
-> > > +	if (!arch_timer_rate)
-> > > +		return -EINVAL;
-> > > +
-> > > +	/* Arch timer frequency < 1MHz can cause trouble */
-> > > +	WARN_ON(arch_timer_rate < 1000000);
-> > 
-> > This does not make sense to me. If the rate is out of bounds then why
-> > warn an just continue instead of making it fail?
-> > 
-> 
-> Because it's not a hard restriction, it's just atypical for the rate to
-> be below 1Mhz. The spec only mentions a typical range of 1 to 50MHz and
-> the warning is only here to flag a potentially problematic rate, below
-> what is assumed typical in the spec.
-> 
-> In [1], where I'm actually relying on arch_timer_rate being higher than
-> than 1/SCHED_CAPACITY_SCALE² of the maximum frequency, I am making it
-> fail, as, for that scenario, it is a hard restriction.
-> 
-> 
-> +	 * We use a factor of 2 * SCHED_CAPACITY_SHIFT -> SCHED_CAPACITY_SCALE²
-> +	 * in order to ensure a good resolution for arch_max_freq_scale for
-> +	 * very low arch timer frequencies (up to the KHz range which should be
-> +	 * unlikely).
-> +	 */
-> +	ratio = (u64)arch_timer_get_rate() << (2 * SCHED_CAPACITY_SHIFT);
-> +	ratio = div64_u64(ratio, max_freq_hz);
-> +	if (!ratio) {
-> +		pr_err("System timer frequency too low.\n");
-> +		return -EINVAL;
-> +	}
-> +
-> 
-> [1] https://lore.kernel.org/lkml/89339501-5ee4-e871-3076-c8b02c6fbf6e@arm.com/
+From: Arnd Bergmann <arnd@arndb.de>
 
-I've mistakenly referenced a bad link ^
+[ Upstream commit d4556f5e99d5f603913bac01adaff8670cb2d08b ]
 
-It was supposed to be:
+Putting a 'struct devfreq_event_dev' object on the stack is generally
+a bad idea and here it leads to a warnig about potential stack overflow:
 
-[1] https://lore.kernel.org/lkml/20200211184542.29585-7-ionela.voinescu@arm.com/
+drivers/devfreq/event/exynos-ppmu.c:643:12: error: stack frame size of 1040 bytes in function 'exynos_ppmu_probe' [-Werror,-Wframe-larger-than=]
 
-Thanks,
-Ionela.
+There is no real need for the device structure, only the string inside
+it, so add an internal helper function that simply takes the string
+as its argument and remove the device structure.
+
+Fixes: 1dd62c66d345 ("PM / devfreq: events: extend events by type of counted data")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+[cw00.choi: Fix the issue from 'desc->name' to 'desc[j].name']
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/devfreq/event/exynos-ppmu.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
+index 87b42055e6bc9..c4873bb791f88 100644
+--- a/drivers/devfreq/event/exynos-ppmu.c
++++ b/drivers/devfreq/event/exynos-ppmu.c
+@@ -101,17 +101,22 @@ static struct __exynos_ppmu_events {
+ 	PPMU_EVENT(dmc1_1),
+ };
+ 
+-static int exynos_ppmu_find_ppmu_id(struct devfreq_event_dev *edev)
++static int __exynos_ppmu_find_ppmu_id(const char *edev_name)
+ {
+ 	int i;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(ppmu_events); i++)
+-		if (!strcmp(edev->desc->name, ppmu_events[i].name))
++		if (!strcmp(edev_name, ppmu_events[i].name))
+ 			return ppmu_events[i].id;
+ 
+ 	return -EINVAL;
+ }
+ 
++static int exynos_ppmu_find_ppmu_id(struct devfreq_event_dev *edev)
++{
++	return __exynos_ppmu_find_ppmu_id(edev->desc->name);
++}
++
+ /*
+  * The devfreq-event ops structure for PPMU v1.1
+  */
+@@ -556,13 +561,11 @@ static int of_get_devfreq_events(struct device_node *np,
+ 			 * use default if not.
+ 			 */
+ 			if (info->ppmu_type == EXYNOS_TYPE_PPMU_V2) {
+-				struct devfreq_event_dev edev;
+ 				int id;
+ 				/* Not all registers take the same value for
+ 				 * read+write data count.
+ 				 */
+-				edev.desc = &desc[j];
+-				id = exynos_ppmu_find_ppmu_id(&edev);
++				id = __exynos_ppmu_find_ppmu_id(desc[j].name);
+ 
+ 				switch (id) {
+ 				case PPMU_PMNCNT0:
+-- 
+2.20.1
+
