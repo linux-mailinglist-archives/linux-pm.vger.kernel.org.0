@@ -2,46 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B6715FA5B
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2020 00:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E79B15FA69
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2020 00:24:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728282AbgBNXWk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 18:22:40 -0500
-Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:8451 "EHLO
-        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728273AbgBNXWh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 18:22:37 -0500
+        id S1728343AbgBNXXO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 18:23:14 -0500
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:17213 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728176AbgBNXXM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 18:23:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1581722557; x=1613258557;
+  t=1581722593; x=1613258593;
   h=date:from:to:subject:message-id:references:mime-version:
    in-reply-to;
-  bh=eMxbySX2+Q9C9EOEiRSgj0VbC617wxOCoVYvUYL8fpI=;
-  b=WICp9M02s017QBgouIW2fL8yanCHWC10hGpybHWE0fEu+nag6alQ8cnz
-   8lh8aHcVKA7hZm8Z5qUZGdtVq2a5l9Uif78V6Thn+CCuzaG3jTsv/d5oF
-   wqpy0YjPch33NcDS7EVFdtAyaybvoCmouMDqL7Fc2oohZmksIxvCwvagE
+  bh=j3Iz4zet15tTZehEn1q0m7zvUCktveIQzobSO7Tbh5A=;
+  b=h8uRaeIRKXw3Vk0FQN9W2P2da1CbF74prdqapqBbBhtVYsC9992I310a
+   wMJxPCwkWnUFYYSZK2nbw+nIlxOYkv9nRXm2y0USMZpaa4MyhhAioNI6T
+   Arg+49/vtVUWGQJULIGbSS+5QZLrLpIfu9yzt2e30izmohytApurhIg4o
    8=;
-IronPort-SDR: y8XMJpVBLvSO59b36Gvrm5SW1/nIbpAtTjjiO/1OKPsLUicx920bBL8XverR7HeoI3BJ2aceF9
- AUi0ra0Y0/HQ==
+IronPort-SDR: XqbB6njxZYLKkIjkrKS2XRIKw7AMuDayPVSyoFyViFpl0hxCLi0sqh45jyTtWEAAW59D1maMOt
+ C5x6jnIh1OpA==
 X-IronPort-AV: E=Sophos;i="5.70,442,1574121600"; 
-   d="scan'208";a="16797643"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1d-f273de60.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 14 Feb 2020 23:22:34 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1d-f273de60.us-east-1.amazon.com (Postfix) with ESMTPS id 1A7F0A07D0;
-        Fri, 14 Feb 2020 23:22:26 +0000 (UTC)
-Received: from EX13D08UEE003.ant.amazon.com (10.43.62.118) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 14 Feb 2020 23:22:09 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D08UEE003.ant.amazon.com (10.43.62.118) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 14 Feb 2020 23:22:08 +0000
+   d="scan'208";a="25191815"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2b-baacba05.us-west-2.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 14 Feb 2020 23:23:11 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2b-baacba05.us-west-2.amazon.com (Postfix) with ESMTPS id 48800A2065;
+        Fri, 14 Feb 2020 23:23:09 +0000 (UTC)
+Received: from EX13D10UWA002.ant.amazon.com (10.43.160.228) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Fri, 14 Feb 2020 23:23:01 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D10UWA002.ant.amazon.com (10.43.160.228) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Fri, 14 Feb 2020 23:23:00 +0000
 Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
- Server id 15.0.1367.3 via Frontend Transport; Fri, 14 Feb 2020 23:22:08 +0000
+ (172.22.96.68) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1367.3 via Frontend Transport; Fri, 14 Feb 2020 23:23:00 +0000
 Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id 756394028E; Fri, 14 Feb 2020 23:22:08 +0000 (UTC)
-Date:   Fri, 14 Feb 2020 23:22:08 +0000
+        id E28634028E; Fri, 14 Feb 2020 23:23:00 +0000 (UTC)
+Date:   Fri, 14 Feb 2020 23:23:00 +0000
 From:   Anchal Agarwal <anchalag@amazon.com>
 To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
         <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
@@ -55,9 +55,9 @@ To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
         <vkuznets@redhat.com>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <dwmw@amazon.co.uk>,
         <fllinden@amaozn.com>, <benh@kernel.crashing.org>
-Subject: [RFC PATCH v3 01/12] xen/manage: keep track of the on-going suspend
- mode
-Message-ID: <36567b7204db25d7307a165a6565837a213efdf8.1581721799.git.anchalag@amazon.com>
+Subject: [RFC PATCH v3 02/12] xenbus: add freeze/thaw/restore callbacks
+ support
+Message-ID: <4693a477cca9a4f56ec369853b7cf982aaf30e7e.1581721799.git.anchalag@amazon.com>
 References: <cover.1581721799.git.anchalag@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -71,159 +71,197 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Munehisa Kamata <kamatam@amazon.com>
 
-Guest hibernation is different from xen suspend/resume/live migration.
-Xen save/restore does not use pm_ops as is needed by guest hibernation.
-Hibernation in guest follows ACPI path and is guest inititated , the
-hibernation image is saved within guest as compared to later modes
-which are xen toolstack assisted and image creation/storage is in
-control of hypervisor/host machine.
-To differentiate between Xen suspend and PM hibernation, keep track
-of the on-going suspend mode by mainly using a new PM notifier.
-Introduce simple functions which help to know the on-going suspend mode
-so that other Xen-related code can behave differently according to the
-current suspend mode.
-Since Xen suspend doesn't have corresponding PM event, its main logic
-is modfied to acquire pm_mutex and set the current mode.
+Since commit b3e96c0c7562 ("xen: use freeze/restore/thaw PM events for
+suspend/resume/chkpt"), xenbus uses PMSG_FREEZE, PMSG_THAW and
+PMSG_RESTORE events for Xen suspend. However, they're actually assigned
+to xenbus_dev_suspend(), xenbus_dev_cancel() and xenbus_dev_resume()
+respectively, and only suspend and resume callbacks are supported at
+driver level. To support PM suspend and PM hibernation, modify the bus
+level PM callbacks to invoke not only device driver's suspend/resume but
+also freeze/thaw/restore.
 
-Though, acquirng pm_mutex is still right thing to do, we may
-see deadlock if PM hibernation is interrupted by Xen suspend.
-PM hibernation depends on xenwatch thread to process xenbus state
-transactions, but the thread will sleep to wait pm_mutex which is
-already held by PM hibernation context in the scenario. Xen shutdown
-code may need some changes to avoid the issue.
+Note that we'll use freeze/restore callbacks even for PM suspend whereas
+suspend/resume callbacks are normally used in the case, becausae the
+existing xenbus device drivers already have suspend/resume callbacks
+specifically designed for Xen suspend. So we can allow the device
+drivers to keep the existing callbacks wihtout modification.
 
-[Anchal Changelog: Merged patch xen/manage: introduce helper function
-to know the on-going suspend mode into this one for better readability]
-Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
+[Anchal Changelog: Refactored the callbacks code]
+Signed-off-by: Agarwal Anchal <anchalag@amazon.com>
 Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
 ---
- drivers/xen/manage.c  | 73 +++++++++++++++++++++++++++++++++++++++++++
- include/xen/xen-ops.h |  3 ++
- 2 files changed, 76 insertions(+)
+ drivers/xen/xenbus/xenbus_probe.c | 99 +++++++++++++++++++++++++------
+ include/xen/xenbus.h              |  3 +
+ 2 files changed, 84 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/xen/manage.c b/drivers/xen/manage.c
-index cd046684e0d1..0b30ab522b77 100644
---- a/drivers/xen/manage.c
-+++ b/drivers/xen/manage.c
-@@ -14,6 +14,7 @@
- #include <linux/freezer.h>
- #include <linux/syscore_ops.h>
- #include <linux/export.h>
+diff --git a/drivers/xen/xenbus/xenbus_probe.c b/drivers/xen/xenbus/xenbus_probe.c
+index 5b471889d723..0fa8eeee68c2 100644
+--- a/drivers/xen/xenbus/xenbus_probe.c
++++ b/drivers/xen/xenbus/xenbus_probe.c
+@@ -49,6 +49,7 @@
+ #include <linux/io.h>
+ #include <linux/slab.h>
+ #include <linux/module.h>
 +#include <linux/suspend.h>
  
- #include <xen/xen.h>
- #include <xen/xenbus.h>
-@@ -40,6 +41,31 @@ enum shutdown_state {
- /* Ignore multiple shutdown requests. */
- static enum shutdown_state shutting_down = SHUTDOWN_INVALID;
+ #include <asm/page.h>
+ #include <asm/pgtable.h>
+@@ -597,27 +598,44 @@ int xenbus_dev_suspend(struct device *dev)
+ 	struct xenbus_driver *drv;
+ 	struct xenbus_device *xdev
+ 		= container_of(dev, struct xenbus_device, dev);
+-
++	bool xen_suspend = xen_suspend_mode_is_xen_suspend();
+ 	DPRINTK("%s", xdev->nodename);
  
-+enum suspend_modes {
-+	NO_SUSPEND = 0,
-+	XEN_SUSPEND,
-+	PM_SUSPEND,
-+	PM_HIBERNATION,
-+};
+ 	if (dev->driver == NULL)
+ 		return 0;
+ 	drv = to_xenbus_driver(dev->driver);
+-	if (drv->suspend)
+-		err = drv->suspend(xdev);
+-	if (err)
+-		pr_warn("suspend %s failed: %i\n", dev_name(dev), err);
 +
-+/* Protected by pm_mutex */
-+static enum suspend_modes suspend_mode = NO_SUSPEND;
-+
-+bool xen_suspend_mode_is_xen_suspend(void)
-+{
-+	return suspend_mode == XEN_SUSPEND;
-+}
-+
-+bool xen_suspend_mode_is_pm_suspend(void)
-+{
-+	return suspend_mode == PM_SUSPEND;
-+}
-+
-+bool xen_suspend_mode_is_pm_hibernation(void)
-+{
-+	return suspend_mode == PM_HIBERNATION;
-+}
-+
- struct suspend_info {
- 	int cancelled;
- };
-@@ -99,6 +125,10 @@ static void do_suspend(void)
- 	int err;
- 	struct suspend_info si;
- 
-+	lock_system_sleep();
-+
-+	suspend_mode = XEN_SUSPEND;
-+
- 	shutting_down = SHUTDOWN_SUSPEND;
- 
- 	err = freeze_processes();
-@@ -162,6 +192,10 @@ static void do_suspend(void)
- 	thaw_processes();
- out:
- 	shutting_down = SHUTDOWN_INVALID;
-+
-+	suspend_mode = NO_SUSPEND;
-+
-+	unlock_system_sleep();
- }
- #endif	/* CONFIG_HIBERNATE_CALLBACKS */
- 
-@@ -387,3 +421,42 @@ int xen_setup_shutdown_event(void)
- EXPORT_SYMBOL_GPL(xen_setup_shutdown_event);
- 
- subsys_initcall(xen_setup_shutdown_event);
-+
-+static int xen_pm_notifier(struct notifier_block *notifier,
-+			   unsigned long pm_event, void *unused)
-+{
-+	switch (pm_event) {
-+	case PM_SUSPEND_PREPARE:
-+		suspend_mode = PM_SUSPEND;
-+		break;
-+	case PM_HIBERNATION_PREPARE:
-+	case PM_RESTORE_PREPARE:
-+		suspend_mode = PM_HIBERNATION;
-+		break;
-+	case PM_POST_SUSPEND:
-+	case PM_POST_RESTORE:
-+	case PM_POST_HIBERNATION:
-+		/* Set back to the default */
-+		suspend_mode = NO_SUSPEND;
-+		break;
-+	default:
-+		pr_warn("Receive unknown PM event 0x%lx\n", pm_event);
-+		return -EINVAL;
++	if (xen_suspend) {
++		if (drv->suspend)
++			err = drv->suspend(xdev);
++	} else {
++		if (drv->freeze) {
++			err = drv->freeze(xdev);
++			if (!err) {
++				free_otherend_watch(xdev);
++				free_otherend_details(xdev);
++				return 0;
++			}
++		}
 +	}
 +
-+	return 0;
-+};
++	if (err) {
++		pr_warn("%s %s failed: %i\n", xen_suspend ?
++			"suspend" : "freeze", dev_name(dev), err);
++		return err;
++	}
 +
-+static struct notifier_block xen_pm_notifier_block = {
-+	.notifier_call = xen_pm_notifier
-+};
-+
-+static int xen_setup_pm_notifier(void)
-+{
-+	if (!xen_hvm_domain())
-+		return -ENODEV;
-+
-+	return register_pm_notifier(&xen_pm_notifier_block);
-+}
-+
-+subsys_initcall(xen_setup_pm_notifier);
-diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
-index d89969aa9942..6c36e161dfd1 100644
---- a/include/xen/xen-ops.h
-+++ b/include/xen/xen-ops.h
-@@ -40,6 +40,9 @@ u64 xen_steal_clock(int cpu);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(xenbus_dev_suspend);
  
- int xen_setup_shutdown_event(void);
+ int xenbus_dev_resume(struct device *dev)
+ {
+-	int err;
++	int err = 0;
+ 	struct xenbus_driver *drv;
+ 	struct xenbus_device *xdev
+ 		= container_of(dev, struct xenbus_device, dev);
+-
++	bool xen_suspend = xen_suspend_mode_is_xen_suspend();
+ 	DPRINTK("%s", xdev->nodename);
  
-+bool xen_suspend_mode_is_xen_suspend(void);
-+bool xen_suspend_mode_is_pm_suspend(void);
-+bool xen_suspend_mode_is_pm_hibernation(void);
- extern unsigned long *xen_contiguous_bitmap;
+ 	if (dev->driver == NULL)
+@@ -625,24 +643,32 @@ int xenbus_dev_resume(struct device *dev)
+ 	drv = to_xenbus_driver(dev->driver);
+ 	err = talk_to_otherend(xdev);
+ 	if (err) {
+-		pr_warn("resume (talk_to_otherend) %s failed: %i\n",
++		pr_warn("%s (talk_to_otherend) %s failed: %i\n",
++			xen_suspend ? "resume" : "restore",
+ 			dev_name(dev), err);
+ 		return err;
+ 	}
  
- #if defined(CONFIG_XEN_PV) || defined(CONFIG_ARM) || defined(CONFIG_ARM64)
+-	xdev->state = XenbusStateInitialising;
++	if (xen_suspend) {
++		xdev->state = XenbusStateInitialising;
++		if (drv->resume)
++			err = drv->resume(xdev);
++	} else {
++		if (drv->restore)
++			err = drv->restore(xdev);
++	}
+ 
+-	if (drv->resume) {
+-		err = drv->resume(xdev);
+-		if (err) {
+-			pr_warn("resume %s failed: %i\n", dev_name(dev), err);
+-			return err;
+-		}
++	if (err) {
++		pr_warn("%s %s failed: %i\n",
++			xen_suspend ? "resume" : "restore",
++			dev_name(dev), err);
++		return err;
+ 	}
+ 
+ 	err = watch_otherend(xdev);
+ 	if (err) {
+-		pr_warn("resume (watch_otherend) %s failed: %d.\n",
++		pr_warn("%s (watch_otherend) %s failed: %d.\n",
++			xen_suspend ? "resume" : "restore",
+ 			dev_name(dev), err);
+ 		return err;
+ 	}
+@@ -653,8 +679,45 @@ EXPORT_SYMBOL_GPL(xenbus_dev_resume);
+ 
+ int xenbus_dev_cancel(struct device *dev)
+ {
+-	/* Do nothing */
+-	DPRINTK("cancel");
++	int err = 0;
++	struct xenbus_driver *drv;
++	struct xenbus_device *xdev
++		= container_of(dev, struct xenbus_device, dev);
++	bool xen_suspend = xen_suspend_mode_is_xen_suspend();
++
++	if (xen_suspend) {
++		/* Do nothing */
++		DPRINTK("cancel");
++		return 0;
++	}
++
++	DPRINTK("%s", xdev->nodename);
++
++	if (dev->driver == NULL)
++		return 0;
++	drv = to_xenbus_driver(dev->driver);
++	err = talk_to_otherend(xdev);
++	if (err) {
++		pr_warn("thaw (talk_to_otherend) %s failed: %d.\n",
++			dev_name(dev), err);
++		return err;
++	}
++
++	if (drv->thaw) {
++		err = drv->thaw(xdev);
++		if (err) {
++			pr_warn("thaw %s failed: %i\n", dev_name(dev), err);
++			return err;
++		}
++	}
++
++	err = watch_otherend(xdev);
++	if (err) {
++		pr_warn("thaw (watch_otherend) %s failed: %d.\n",
++			dev_name(dev), err);
++		return err;
++	}
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(xenbus_dev_cancel);
+diff --git a/include/xen/xenbus.h b/include/xen/xenbus.h
+index 869c816d5f8c..20261d5f4e78 100644
+--- a/include/xen/xenbus.h
++++ b/include/xen/xenbus.h
+@@ -100,6 +100,9 @@ struct xenbus_driver {
+ 	int (*remove)(struct xenbus_device *dev);
+ 	int (*suspend)(struct xenbus_device *dev);
+ 	int (*resume)(struct xenbus_device *dev);
++	int (*freeze)(struct xenbus_device *dev);
++	int (*thaw)(struct xenbus_device *dev);
++	int (*restore)(struct xenbus_device *dev);
+ 	int (*uevent)(struct xenbus_device *, struct kobj_uevent_env *);
+ 	struct device_driver driver;
+ 	int (*read_otherend_details)(struct xenbus_device *dev);
 -- 
 2.24.1.AMZN
 
