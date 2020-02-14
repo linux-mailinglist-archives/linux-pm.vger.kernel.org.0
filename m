@@ -2,117 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4771D15DB53
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 16:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A632F15E732
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 17:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729633AbgBNPp2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 10:45:28 -0500
-Received: from foss.arm.com ([217.140.110.172]:35094 "EHLO foss.arm.com"
+        id S2392691AbgBNQwo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 11:52:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52316 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729627AbgBNPp1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:45:27 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA4AC328;
-        Fri, 14 Feb 2020 07:45:26 -0800 (PST)
-Received: from localhost (e108754-lin.cambridge.arm.com [10.1.198.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B5D83F68E;
-        Fri, 14 Feb 2020 07:45:26 -0800 (PST)
-Date:   Fri, 14 Feb 2020 15:45:25 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-        maz@kernel.org, suzuki.poulose@arm.com, sudeep.holla@arm.com,
-        lukasz.luba@arm.com, valentin.schneider@arm.com, rjw@rjwysocki.net,
-        peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] clocksource/drivers/arm_arch_timer: validate
- arch_timer_rate
-Message-ID: <20200214154525.GA21875@arm.com>
-References: <20200211184542.29585-1-ionela.voinescu@arm.com>
- <20200211184542.29585-8-ionela.voinescu@arm.com>
- <87mu9mgg41.fsf@nanos.tec.linutronix.de>
+        id S2404485AbgBNQTQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:19:16 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C30DC24717;
+        Fri, 14 Feb 2020 16:19:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581697155;
+        bh=MoUzBAvRtBWq8Ndubur4hy59jRiTGFG7/mRJIg9KZ+E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=zTBb2OhokFQsuov2WQ+XnFX29ZjOLR8VpOV1sxGvLzDD5nN2LKzevSRqI5SDczfw2
+         idN8iU0qrpRBde5Q5EMgsYMsyoD82yqloCi1E0kjEhyBjysPFwwUFI79hVxqTGFMRs
+         of06KrqtwE8cQReFIkobVrp/zuqWEVZQmWOE6B0k=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        kbuild test robot <lkp@intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 093/186] PM / devfreq: rk3399_dmc: Add COMPILE_TEST and HAVE_ARM_SMCCC dependency
+Date:   Fri, 14 Feb 2020 11:15:42 -0500
+Message-Id: <20200214161715.18113-93-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
+References: <20200214161715.18113-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87mu9mgg41.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Thomas,
+From: Chanwoo Choi <cw00.choi@samsung.com>
 
-On Friday 14 Feb 2020 at 01:35:58 (+0100), Thomas Gleixner wrote:
-> Ionela Voinescu <ionela.voinescu@arm.com> writes:
-> 
-> > From: Valentin Schneider <valentin.schneider@arm.com>
-> >
-> > Using an arch timer with a frequency of less than 1MHz can result in an
-> > incorrect functionality of the system which assumes a reasonable rate.
-> >
-> > One example is the use of activity monitors for frequency invariance
-> > which uses the rate of the arch timer as the known rate of the constant
-> > cycle counter in computing its ratio compared to the maximum frequency
-> > of a CPU. For arch timer frequencies less than 1MHz this ratio could
-> > end up being 0 which is an invalid value for its use.
-> >
-> > Therefore, warn if the arch timer rate is below 1MHz which contravenes
-> > the recommended architecture interval of 1 to 50MHz.
-> >
-> > Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> 
-> So this patch is from Valentin. Where is his Signed-off-by?
-> 
+[ Upstream commit eff5d31f7407fa9d31fb840106f1593399457298 ]
 
-Yes, sorry about this. This was based on a diff that Valentin provided
-in v2. I'll change the author as agreed at:
-https://lore.kernel.org/lkml/20200212103249.GA19041@arm.com/
+To build test, add COMPILE_TEST depedency to both ARM_RK3399_DMC_DEVFREQ
+and DEVFREQ_EVENT_ROCKCHIP_DFI configuration. And ARM_RK3399_DMC_DEVFREQ
+used the SMCCC interface so that add HAVE_ARM_SMCCC dependency to prevent
+the build break.
 
-> >  
-> > +static int validate_timer_rate(void)
-> > +{
-> > +	if (!arch_timer_rate)
-> > +		return -EINVAL;
-> > +
-> > +	/* Arch timer frequency < 1MHz can cause trouble */
-> > +	WARN_ON(arch_timer_rate < 1000000);
-> 
-> This does not make sense to me. If the rate is out of bounds then why
-> warn an just continue instead of making it fail?
-> 
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/devfreq/Kconfig       | 3 ++-
+ drivers/devfreq/event/Kconfig | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Because it's not a hard restriction, it's just atypical for the rate to
-be below 1Mhz. The spec only mentions a typical range of 1 to 50MHz and
-the warning is only here to flag a potentially problematic rate, below
-what is assumed typical in the spec.
+diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+index 6a172d338f6dc..4c4ec68b0566d 100644
+--- a/drivers/devfreq/Kconfig
++++ b/drivers/devfreq/Kconfig
+@@ -103,7 +103,8 @@ config ARM_TEGRA_DEVFREQ
+ 
+ config ARM_RK3399_DMC_DEVFREQ
+ 	tristate "ARM RK3399 DMC DEVFREQ Driver"
+-	depends on ARCH_ROCKCHIP
++	depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
++		(COMPILE_TEST && HAVE_ARM_SMCCC)
+ 	select DEVFREQ_EVENT_ROCKCHIP_DFI
+ 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
+ 	select PM_DEVFREQ_EVENT
+diff --git a/drivers/devfreq/event/Kconfig b/drivers/devfreq/event/Kconfig
+index cd949800eed96..8851bc4e8e3e1 100644
+--- a/drivers/devfreq/event/Kconfig
++++ b/drivers/devfreq/event/Kconfig
+@@ -33,7 +33,7 @@ config DEVFREQ_EVENT_EXYNOS_PPMU
+ 
+ config DEVFREQ_EVENT_ROCKCHIP_DFI
+ 	tristate "ROCKCHIP DFI DEVFREQ event Driver"
+-	depends on ARCH_ROCKCHIP
++	depends on ARCH_ROCKCHIP || COMPILE_TEST
+ 	help
+ 	  This add the devfreq-event driver for Rockchip SoC. It provides DFI
+ 	  (DDR Monitor Module) driver to count ddr load.
+-- 
+2.20.1
 
-In [1], where I'm actually relying on arch_timer_rate being higher than
-than 1/SCHED_CAPACITY_SCALE² of the maximum frequency, I am making it
-fail, as, for that scenario, it is a hard restriction.
-
-
-+	 * We use a factor of 2 * SCHED_CAPACITY_SHIFT -> SCHED_CAPACITY_SCALE²
-+	 * in order to ensure a good resolution for arch_max_freq_scale for
-+	 * very low arch timer frequencies (up to the KHz range which should be
-+	 * unlikely).
-+	 */
-+	ratio = (u64)arch_timer_get_rate() << (2 * SCHED_CAPACITY_SHIFT);
-+	ratio = div64_u64(ratio, max_freq_hz);
-+	if (!ratio) {
-+		pr_err("System timer frequency too low.\n");
-+		return -EINVAL;
-+	}
-+
-
-[1] https://lore.kernel.org/lkml/89339501-5ee4-e871-3076-c8b02c6fbf6e@arm.com/
-
-Thanks,
-Ionela.
-
-> Thanks,
-> 
->         tglx
