@@ -2,269 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E0515D2EC
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 08:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D5915D2EE
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 08:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728799AbgBNHhG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 02:37:06 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:34732 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728779AbgBNHhF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 02:37:05 -0500
-Received: by mail-lf1-f66.google.com with SMTP id l18so6133210lfc.1;
-        Thu, 13 Feb 2020 23:37:01 -0800 (PST)
+        id S1728829AbgBNHhd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 02:37:33 -0500
+Received: from mail-wm1-f54.google.com ([209.85.128.54]:38283 "EHLO
+        mail-wm1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728773AbgBNHhc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 02:37:32 -0500
+Received: by mail-wm1-f54.google.com with SMTP id a9so9463731wmj.3
+        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2020 23:37:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=2w3UaRY4tOJq3E4doSRjv1RzbI5MGYeTGPh7GmlOT1s=;
+        b=D9IrKvwGgEicphChsMgpf/4o5TJHxH0Z9CN01skiE3zKdiNCW3zXBiDWl+61Cz1K0n
+         Ev7AYj7d8oY8RU5llfs5DWdwC4dKk/sp+kKe7s+5hzoAWpzrkK2IVJOA7q49gFEQadvt
+         FeQ1m6xkjQ8EDy2X2I9ErV6wgo2Vdx53+/36J2kMY6rXkDDOJY8XCXHrywcDO5ovYIsU
+         Yx+zIdfi1wA+uWg1Dz4GNXpOGANPQSh1iVYaP1NS0Gr8BqCf0qJHOEEwRLvXOu8H5es4
+         y/TvivhfuudNWxZqA8Ixq5QGFFbeEj9PI5ncJAe88YcIWHX3ideTVzxybGvGr8PvGyVU
+         I9lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cpHL/FMefeNmXKGIm1elRfDh1SjiQSSKKDy7A4ArDZ8=;
-        b=rGvB3BfAGGMwmfG304YLniCdgLijm8xDa7NcbbV3heklvMZcsrcuYRf16DytvnVMH/
-         Ep0Bijt0/NtRCZgVvMoqW88E/zEx9Keb7jt832ox1xb4ygk9vO42X+aEBIjPVziiFCge
-         9orGMxkbKOonsP9hsuKE8/gqej20C+T/UBMuVQFX11A+N2kS/k8+Ds5UfvI1NQymx/v0
-         SUj+cg0iK7gRlRcCjS/e3kXHev+n4C+2laI6yyMRZRw4ER4UhPDyGxvU26a6MNRhu1Ys
-         j+7+mfz3Yo4h8PtNEXfPRAj6SdNxbA+y4KeQvvRNMT57wPnTUZ8+eEHAKSiIa6P5i0/a
-         DX3Q==
-X-Gm-Message-State: APjAAAXScBC6iEPoNEYn+FW1gzZmj0eSJGJZog991Dc66D3uiSrwUVh1
-        ZWNCY8VDML8T2PgfZOSptnc=
-X-Google-Smtp-Source: APXvYqypqLwhaeWH5coE5ggQ1qlUBDAxnQzGiGWLLRVyV68SmEZGQRl7wSGQUFjb6tloork1SYqmZA==
-X-Received: by 2002:ac2:5e9b:: with SMTP id b27mr1031470lfq.184.1581665820488;
-        Thu, 13 Feb 2020 23:37:00 -0800 (PST)
-Received: from localhost.localdomain ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id f9sm2974618ljp.62.2020.02.13.23.36.59
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=2w3UaRY4tOJq3E4doSRjv1RzbI5MGYeTGPh7GmlOT1s=;
+        b=tldLwVRdADyUdGENlxS2V88qmup3vjZaQzzQJSDq2RhOEOXmCEOqcodftAj3gTCUww
+         wV0Xyi6AkiyuWSYnL5QQEkybpeopexHAdtXQBlLQ27KYTQeRfXhRAwrbf129KU/wop7+
+         GutA9fsItd5zbIkwtFofyZsmSRUQxbhS75YcXlu77IFNZ878zSAA0brhZhRxA1UaDs0Q
+         7qRgOVlQY91Fwmkf3Fe5VysAJit6CD3CjYJS6lDP2pbXgaLx2JP1muwcicMjC77OFvBo
+         tCg66EJPd+6XkbTQx07k183NPpuWPhnIZI2qdGGziyNfbhqvw45uDHnx6Tqn3HQVgGa7
+         g0QA==
+X-Gm-Message-State: APjAAAVgVZXT19D/za6OV2+D+B2VpxArSwV46zpGioeJJpV6N+hCPA7N
+        2FgingoWAyG4m/XaRr0Bu/RmqbiWkDwjdQ==
+X-Google-Smtp-Source: APXvYqxREzdER4L+wJlDVO7np0N3EGPnInc6xERrVc+S2ih5ky6S+1oQjiWkGJ7ExaftkX58SqLQlA==
+X-Received: by 2002:a1c:3d46:: with SMTP id k67mr3069024wma.171.1581665851110;
+        Thu, 13 Feb 2020 23:37:31 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id k16sm6315217wru.0.2020.02.13.23.37.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2020 23:36:59 -0800 (PST)
-Date:   Fri, 14 Feb 2020 09:36:47 +0200
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
-Cc:     mikko.mutanen@fi.rohmeurope.com, markus.laine@fi.rohmeurope.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 2/5] dt_bindings: ROHM BD99954 Charger
-Message-ID: <104b5ef63c2ad4771503d9e6618bf427721042c3.1581597365.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1581597365.git.matti.vaittinen@fi.rohmeurope.com>
+        Thu, 13 Feb 2020 23:37:30 -0800 (PST)
+Message-ID: <5e464e3a.1c69fb81.8c39c.af78@mx.google.com>
+Date:   Thu, 13 Feb 2020 23:37:30 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1581597365.git.matti.vaittinen@fi.rohmeurope.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.6-rc1-10-g55fe2ef33c65
+Subject: pm/testing sleep: 5 runs, 0 regressions (v5.6-rc1-10-g55fe2ef33c65)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The ROHM BD99954 is a Battery Management LSI for 1-4 cell Lithium-Ion
-secondary battery. Intended to be used in space-constraint equipment such
-as Low profile Notebook PC, Tablets and other applications. BD99954
-provides a Dual-source Battery Charger, two port BC1.2 detection and a
-Battery Monitor.
+pm/testing sleep: 5 runs, 0 regressions (v5.6-rc1-10-g55fe2ef33c65)
 
-Document the DT bindings for BD99954
+Test results summary
+--------------------
 
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
----
+run | platform             | arch | lab           | compiler | defconfig   =
+       | results
+----+----------------------+------+---------------+----------+-------------=
+-------+--------
+1   | bcm2836-rpi-2-b      | arm  | lab-collabora | gcc-8    | multi_v7_def=
+config | 0/1    =
 
-It would probably be nice if the charger DT binding yaml could somehow
-be listing and evaluating properties that it can use from static battery
-nodes - and perhaps some warning could be emitted if unsupported
-properties are given from battery nodes(?) Just some thinking here.
-What if the charger ignores for example the current limits from battery
-node (I am not sure but I think a few may ignore) - I guess it would be
-nice to give a nudge to a person who added those properties in his DT
-if they won't have any impact? Any thoughts?
+2   | exynos5422-odroidxu3 | arm  | lab-collabora | gcc-8    | multi_v7_def=
+config | 21/21  =
 
- .../bindings/power/supply/rohm,bd9995x.yaml   | 167 ++++++++++++++++++
- 1 file changed, 167 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml
+3   | rk3288-rock2-square  | arm  | lab-collabora | gcc-8    | multi_v7_def=
+config | 1/21   =
 
-diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml b/Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml
-new file mode 100644
-index 000000000000..bd1e37ee644d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml
-@@ -0,0 +1,167 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/rohm,bd9995x.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ROHM BD99954 Battery charger driver
-+
-+maintainers:
-+  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-+  - Markus Laine <markus.laine@fi.rohmeurope.com>
-+  - Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
-+
-+description: |
-+  The ROHM BD99954 is a Battery Management LSI for 1-4 cell Lithium-Ion
-+  secondary battery intended to be used in space-constraint equipment such
-+  as Low profile Notebook PC, Tablets and other applications. BD99954
-+  provides a Dual-source Battery Charger, two port BC1.2 detection and a
-+  Battery Monitor.
-+
-+Optional properties:
-+- monitored-battery: phandle of battery characteristics devicetree node
-+  The charger uses the following battery properties:
-+    + precharge-current-microamp: maximum charge current during precharge
-+      phase (typically 20% of battery capacity).
-+    + charge-term-current-microamp: a charge cycle terminates when the
-+      battery voltage is above recharge threshold, and the current is below
-+      this setting (typically 10% of battery capacity).
-+  See also Documentation/devicetree/bindings/power/supply/battery.txt
-+- ti,system-minimum-microvolt: when power is connected and the battery is below
-+  minimum system voltage, the system will be regulated above this setting.
-+
-+properties:
-+  compatible:
-+    const: rohm,bd9995x-charger
-+#
-+#    The battery charging profile of BD99954.
-+#
-+#    Curve (1) represents charging current.
-+#    Curve (2) represents battery voltage.
-+#
-+#    The BD99954 data sheet divides charging to three phases.
-+#    a) Trickle-charge with constant current (8).
-+#    b) pre-charge with constant current (6)
-+#    c) fast-charge with:
-+#       First a constant current (5) phase (CC)
-+#       Then constant voltage (CV) phase (after the battery voltage has reached
-+#       target level - until charging current has dropped to termination
-+#       level (7)
-+#
-+#     V ^                                                        ^ I
-+#       .                                                        .
-+#       .                                                        .
-+# (4)- -.- - - - - - - - - - - - - -  +++++++++++++++++++++++++++.
-+#       .                            /                           .
-+#       .                     ++++++/++ - - - - - - - - - - - - -.- - (5)
-+#       .                     +    /  +                          .
-+#       .                     +   -   --                         .
-+#       .                     +  -     +                         .
-+#       .                     +.-      -:                        .
-+#       .                    .+         +`                       .
-+#       .                  .- +       | `/                       .
-+#       .               .."   +          .:                      .
-+#       .             -"      +           --                     .
-+#       .    (2)  ..."        +       |    :-                    .
-+#       .    ...""            +             -:                   .
-+# (3)- -.-.""- - - - -+++++++++ - - - - - - -.:- - - - - - - - - .- - (6)
-+#       .             +                       `:.                .
-+#       .             +               |         -:               .
-+#       .             +                           -:             .
-+#       .             +                             ..           .
-+#       .   (1)       +               |               "+++- - - -.- - (7)
-+#       -++++++++++++++- - - - - - - - - - - - - - - - - + - - - .- - (8)
-+#       .                                                +       -
-+#       -------------------------------------------------+++++++++-->
-+#       |             |       |   CC   |      CV         |
-+#       | --trickle-- | -pre- | ---------fast----------- |
-+#
-+#   The charger uses the following battery properties
-+# - tricklecharge-current-microamp:
-+#     Current used at trickle-charge phase (8 in above chart)
-+#     minimum: 64000
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+# - precharge-current-microamp:
-+#     Current used at pre-charge phase (6 in above chart)
-+#     minimum: 64000
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+# - constant-charge-current-max-microamp
-+#     Current used at fast charge constant current phase (5 in above chart)
-+#     minimum: 64000
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+# - constant-charge-voltage-max-microvolt
-+#     The constant voltage used in fast charging phase (4 in above chart)
-+#     minimum: 2560000
-+#     maximum: 19200000
-+#     multipleOf: 16000
-+# - precharge-upper-limit-microvolt
-+#     charging mode is changed from trickle charging to pre-charging
-+#     when battery voltage exceeds this limit voltage (3 in above chart)
-+#     minimum: 2048000
-+#     maximum: 19200000
-+#     multipleOf: 64000
-+# - re-charge-voltage-microvolt
-+#     minimum: 2560000
-+#     maximum: 19200000
-+#     multipleOf: 16000
-+#     re-charging is automatically started when battry has been discharging
-+#     to the point where the battery voltage drops below this limit
-+# - over-voltage-threshold-microvolt
-+#     battery is expected to be faulty if battery voltage exceeds this limit.
-+#     Charger will then enter to a "battery faulty" -state
-+#     minimum: 2560000
-+#     maximum: 19200000
-+#     multipleOf: 16000
-+# - charge-term-current-microamp
-+#     minimum: 0
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+#     a charge cycle terminates when the battery voltage is above recharge
-+#     threshold, and the current is below this setting (7 in above chart)
-+#   See also Documentation/devicetree/bindings/power/supply/battery.txt
-+
-+  monitored-battery:
-+    description:
-+      phandle of battery characteristics devicetree node
-+
-+  rohm,vbus-input-current-limit-microamp:
-+    description:
-+      system specific VBUS input current limit (in microamps).
-+    minimum: 32000
-+    maximum: 16352000
-+    multipleOf: 32000
-+
-+  rohm,vcc-input-current-limit-microamp:
-+    description:
-+      system specific VCC/VACP input current limit (in microamps).
-+    minimum: 32000
-+    maximum: 16352000
-+    multipleOf: 32000
-+
-+  rohm,vsys-regulation-microvolt:
-+    description:
-+      system specific lower limit for system voltage.
-+    minimum: 2560000
-+    maximum: 19200000
-+    multipleOf: 64000
-+
-+required:
-+  - compatible
-+
-+examples:
-+  - |
-+    i2c {
-+        charger@9 {
-+            compatible = "rohm,bd9995x-charger";
-+            monitored-battery = <&battery>;
-+            reg = <0x9>;
-+            interrupt-parent = <&gpio1>;
-+            interrupts = <29 8>;
-+            rohm,vsys-regulation-microvolt = <8960000>;
-+            rohm,vbus-input-current-limit-microamp = <1472000>;
-+            rohm,vcc-input-current-limit-microamp = <1472000>;
-+        };
-+    };
--- 
-2.21.0
+4   | rk3288-veyron-jaq    | arm  | lab-collabora | gcc-8    | multi_v7_def=
+config | 21/21  =
+
+5   | tegra124-nyan-big    | arm  | lab-collabora | gcc-8    | multi_v7_def=
+config | 2/2    =
 
 
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
 
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
+  Test:     sleep
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.6-rc1-10-g55fe2ef33c65
+  URL:      git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.g=
+it
+  SHA:      55fe2ef33c658a1c0922ca161b136bb7171ac084 =
+
+
+
+Test Failures
+-------------
+  =
+
+
+run | platform             | arch | lab           | compiler | defconfig   =
+       | results
+----+----------------------+------+---------------+----------+-------------=
+-------+--------
+1   | bcm2836-rpi-2-b      | arm  | lab-collabora | gcc-8    | multi_v7_def=
+config | 0/1    =
+
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
+0207.3/armhf/rootfs.cpio.gz  =
+
+
+  1 tests: 0 PASS, 1 FAIL, 0 SKIP
+    * login:
+        never passed   =
+
+         =
+
+
+run | platform             | arch | lab           | compiler | defconfig   =
+       | results
+----+----------------------+------+---------------+----------+-------------=
+-------+--------
+3   | rk3288-rock2-square  | arm  | lab-collabora | gcc-8    | multi_v7_def=
+config | 1/21   =
+
+
+  Results:     1 PASS, 20 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-square=
+.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc1-10-g55fe2e=
+f33c65/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-square=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
+0207.3/armhf/rootfs.cpio.gz  =
+
+
+  21 tests: 1 PASS, 20 FAIL, 0 SKIP
+    * rtcwake-mem-1:
+        never passed
+    * rtcwake-mem-2:
+        never passed
+    * rtcwake-mem-3:
+        never passed
+    * rtcwake-mem-4:
+        never passed
+    * rtcwake-mem-5:
+        never passed
+    * rtcwake-mem-6:
+        never passed
+    * rtcwake-mem-7:
+        never passed
+    * rtcwake-mem-8:
+        never passed
+    * rtcwake-mem-9:
+        never passed
+    * rtcwake-mem-10:
+        never passed
+    * rtcwake-freeze-1:
+        never passed
+    * rtcwake-freeze-2:
+        never passed
+    * rtcwake-freeze-3:
+        never passed
+    * rtcwake-freeze-4:
+        never passed
+    * rtcwake-freeze-5:
+        never passed
+    * rtcwake-freeze-6:
+        never passed
+    * rtcwake-freeze-7:
+        never passed
+    * rtcwake-freeze-8:
+        never passed
+    * rtcwake-freeze-9:
+        never passed
+    * rtcwake-freeze-10:
+        never passed   =
+
+           =20
