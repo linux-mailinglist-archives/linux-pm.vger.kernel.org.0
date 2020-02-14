@@ -2,198 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9E415F7BB
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 21:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6F315F888
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 22:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729682AbgBNUbt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 15:31:49 -0500
-Received: from mx1.riseup.net ([198.252.153.129]:39218 "EHLO mx1.riseup.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730112AbgBNUbt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Feb 2020 15:31:49 -0500
-Received: from capuchin.riseup.net (unknown [10.0.1.176])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 48K4mM4k61zF0VW;
-        Fri, 14 Feb 2020 12:31:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1581712307; bh=UDW59QgM48LzXutZWg8Zr3CXbTOd/mv0/7P22JtvSnY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=YZafQIzcDWFgAxZ5vH05saipFOE71Y7JBj4iavNDhWxGVwcmH+Bn/Clr9Aair+WFh
-         z1j/RV3ZCo6EM7SRprpgJ1dPinFZSYCtFcaRKUaNlAmPTx3KcQsJiXxFzluJMRymZ5
-         D4j18sTr2tJA2WVhMqGCL9Kbomko7ulDcMT9YWSI=
-X-Riseup-User-ID: 2F2AC137C94F413A53FC645837296E0BD74C8BB708B00DAFB1112017EF2AAE3C
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by capuchin.riseup.net (Postfix) with ESMTPSA id 48K4mL6FmJz8vYX;
-        Fri, 14 Feb 2020 12:31:46 -0800 (PST)
-From:   Francisco Jerez <currojerez@riseup.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        "Pandruvada\, Srinivas" <srinivas.pandruvada@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU latency QoS interface
-In-Reply-To: <CAJZ5v0hm2vVbM5dXGitvvUrWoZXZXXaJ+P3x38BjHRukZKgB3Q@mail.gmail.com>
-References: <1654227.8mz0SueHsU@kreacher> <87wo8rjsa4.fsf@riseup.net> <CAJZ5v0hAn0V-QhebFt=vqKK6gBLxjTq7SNOWOStt7huCXMSH7g@mail.gmail.com> <878sl6j4fd.fsf@riseup.net> <CAJZ5v0jNFMwqSwSones91WgDwGqusyY1nEMDKAYuSZiLjH61dw@mail.gmail.com> <CAJZ5v0iMvzFGbuYsOo+AkWAqUbkQVT-FHsTDbStPiNenw783LQ@mail.gmail.com> <87sgjegh20.fsf@riseup.net> <CAJZ5v0hm2vVbM5dXGitvvUrWoZXZXXaJ+P3x38BjHRukZKgB3Q@mail.gmail.com>
-Date:   Fri, 14 Feb 2020 12:32:42 -0800
-Message-ID: <87imk8hpud.fsf@riseup.net>
+        id S1730187AbgBNVPa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 16:15:30 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:42254 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730337AbgBNVP3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Feb 2020 16:15:29 -0500
+Received: by mail-wr1-f68.google.com with SMTP id k11so12529962wrd.9;
+        Fri, 14 Feb 2020 13:15:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=CUR/M+JsDPA/zNxI0kwnGhffn6CjdF4EnxGaGRqf9ts=;
+        b=YIQtuFIq8j/JZqVZ4o+ITcfQXPn59YUQjKR2Vwygk8FdwYgcVIAbmr+3lXzbVP/My9
+         qR0jhz6Ue5qzzr7W/UW4wwMQKVF6xsq5l/NSOLkuklOCWqV2KOPzWTEx+aQbocnlncHo
+         YAhCbje/LfFHsdCxZPNgPeV0kGC0raHGKaZg7HLONYmkU487gvzwqZesQrHT81NmIluq
+         K7eVSSVctu6snmPZ7vHnuhZPCTQI7W7ikW5HLXCU+fz/z0UOtRL0jXwAiRy8/mV3bnK3
+         RXGTqA1lG6BgapxKNpShbwdkNWxtiB3iBJvgyqGazTqAV9/ltcsBnR/3N6+mjLuqt5bs
+         dbWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=CUR/M+JsDPA/zNxI0kwnGhffn6CjdF4EnxGaGRqf9ts=;
+        b=J9rl4mKL976z0EOf6KdMU/MTsP3wNXHCU5ck86CP10Dv/IEGejt2NW/r64aFwJowBs
+         8ZdOgTF/YOA9gNJmexx8A3Y9ruTnuR3Y07H9wBzMLPkmjsnfXRY9LOBDNCavDrv6XGpV
+         FeEwBYCHZDNg27w9/rymeFo16NBK3dUt5v6mmvt6jpwibWbMGpRFjkpaC+2pnPx6Rs6h
+         akzWfuP4OIrmfQlRAmaUmDGgePqKIo6zMtMYHxjXgwJfCOToQvgRIxm9EvYME00UX9lp
+         Wynwd2a0pHPqyIzWk6FOby0XMUyFTUo6Tc1DEfy+nAh3J1MPIJBUMC8zFxQTsEyU5rIT
+         lHJw==
+X-Gm-Message-State: APjAAAVutzxYHFX4YR92DBdnN6k13YuJll0p08RCS2701UtIo4vt9v5S
+        zuFLUFWx6fyIZes634Pts9g=
+X-Google-Smtp-Source: APXvYqxi6ywswNldZdP7mnpmlT+iS3dXBegYxcsCWxu+/DB1s2FGHxtWAo7HAEX60U4k7gAqI+MXGw==
+X-Received: by 2002:a05:6000:c4:: with SMTP id q4mr5616831wrx.332.1581714926560;
+        Fri, 14 Feb 2020 13:15:26 -0800 (PST)
+Received: from dumbo (ip4da2e549.direct-adsl.nl. [77.162.229.73])
+        by smtp.gmail.com with ESMTPSA id j65sm9011625wmb.21.2020.02.14.13.15.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2020 13:15:25 -0800 (PST)
+Date:   Fri, 14 Feb 2020 22:15:24 +0100
+From:   Domenico Andreoli <domenico.andreoli@linux.com>
+To:     "Darrick J. Wong" <darrick.wong@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: Regression: hibernation is broken since
+ e6bc9de714972cac34daa1dc1567ee48a47a9342
+Message-ID: <20200214211523.GA32637@dumbo>
+Mail-Followup-To: "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org
+References: <20200213172351.GA6747@dumbo>
+ <20200213175753.GS6874@magnolia>
+ <20200213183515.GA8798@dumbo>
+ <20200213193410.GB6868@magnolia>
+ <20200213194135.GF6870@magnolia>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="==-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200213194135.GF6870@magnolia>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---==-=-=
-Content-Type: multipart/mixed; boundary="=-=-="
+[ added linux-pm ]
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+On Thu, Feb 13, 2020 at 11:41:35AM -0800, Darrick J. Wong wrote:
+> On Thu, Feb 13, 2020 at 11:34:10AM -0800, Darrick J. Wong wrote:
+> > 
+> > Well ... you could try the in-kernel hibernate (which I think is what
+> > 'systemctl hibernate' does), though you'd lose the nifty features of
+> > µswsusp.
 
-"Rafael J. Wysocki" <rafael@kernel.org> writes:
+Indeed 'systemctl hibernate' works perfectly with v5.6-rc1 in my setup.
 
-> On Fri, Feb 14, 2020 at 1:14 AM Francisco Jerez <currojerez@riseup.net> wrote:
->>
->> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->>
->> > On Thu, Feb 13, 2020 at 12:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> [cut]
->
->> >
->> > I think that your use case is almost equivalent to the thermal
->> > pressure one, so you'd want to limit the max and so that would be
->> > something similar to store_max_perf_pct() with its input side hooked
->> > up to a QoS list.
->> >
->> > But it looks like that QoS list would rather be of a "reservation"
->> > type, so a request added to it would mean something like "leave this
->> > fraction of power that appears to be available to the CPU subsystem
->> > unused, because I need it for a different purpose".  And in principle
->> > there might be multiple requests in there at the same time and those
->> > "reservations" would add up.  So that would be a kind of "limited sum"
->> > QoS type which wasn't even there before my changes.
->> >
->> > A user of that QoS list might then do something like
->> >
->> > ret = cpu_power_reserve_add(1, 4);
->> >
->> > meaning that it wants 25% of the "potential" CPU power to be not
->> > utilized by CPU performance scaling and that could affect the
->> > scheduler through load modifications (kind of along the thermal
->> > pressure patchset discussed some time ago) and HWP (as well as the
->> > non-HWP intel_pstate by preventing turbo frequencies from being used
->> > etc).
->>
->> The problems with this are the same as with the per-CPU frequency QoS
->> approach: How does the device driver know what the appropriate fraction
->> of CPU power is?
->
-> Of course it doesn't know and it may never know exactly, but it may guess.
->
-> Also, it may set up a feedback loop: request an aggressive
-> reservation, run for a while, measure something and refine if there's
-> headroom.  Then repeat.
->
+> > In the end, though, I'll probably have to revert all those IS_SWAPFILE
+> > checks (at least if CONFIG_HIBERNATION=y) since it's not fair to force
+> > you to totally reconfigure your hibernation setup.
+> 
+> Also, does the following partial revert fix uswsusp for you?  It'll
+> allow the direct writes that uswsusp wants to do, while leaving the rest
+> (mmap writes) in place.
+> 
+> --D
+> 
+> diff --git a/fs/block_dev.c b/fs/block_dev.c
+> index 69bf2fb6f7cd..077d9fa6b87d 100644
+> --- a/fs/block_dev.c
+> +++ b/fs/block_dev.c
+> @@ -2001,8 +2001,10 @@ ssize_t blkdev_write_iter(struct kiocb *iocb, struct iov_iter *from)
+>  	if (bdev_read_only(I_BDEV(bd_inode)))
+>  		return -EPERM;
+>  
+> +#ifndef CONFIG_HIBERNATION
+>  	if (IS_SWAPFILE(bd_inode))
+>  		return -ETXTBSY;
+> +#endif
 
-Yeah, of course, but that's obviously more computationally intensive and
-less accurate than computing an approximately optimal constraint in a
-single iteration (based on knowledge from performance counters and a
-notion of the latency requirements of the application), since such a
-feedback loop relies on repeatedly overshooting and undershooting the
-optimal value (the latter causes an artificial CPU bottleneck, possibly
-slowing down other applications too) in order to converge to and remain
-in a neighborhood of the optimal value.
+This alone is enough to make uswsusp work again.
 
-Incidentally people tested a power balancing solution with a feedback
-loop very similar to the one you're describing side by side to the RFC
-patch series I provided a link to earlier (which targeted Gen9 LP
-parts), and the energy efficiency improvements they observed were
-roughly half of the improvement obtained with my series unsurprisingly.
+I propose this alternative:
 
-Not to speak about generalizing such a feedback loop to bottlenecks on
-multiple I/O devices.
+--- a/fs/block_dev.c
++++ b/fs/block_dev.c
+@@ -2001,7 +2001,8 @@ ssize_t blkdev_write_iter(struct kiocb *iocb, struct iov_iter *from)
+        if (bdev_read_only(I_BDEV(bd_inode)))
+                return -EPERM;
+ 
+-       if (IS_SWAPFILE(bd_inode))
++       /* Hibernation might happen via uswsusp, let it write to the swap */
++       if (IS_SWAPFILE(bd_inode) && !IS_ENABLED(CONFIG_HIBERNATION))
+                return -ETXTBSY;
+ 
+        if (!iov_iter_count(from))
 
->> Depending on the instantaneous behavior of the
->> workload it might take 1% or 95% of the CPU power in order to keep the
->> IO device busy.  Each user of this would need to monitor the performance
->> of every CPU in the system and update the constraints on each of them
->> periodically (whether or not they're talking to that IO device, which
->> would possibly negatively impact the latency of unrelated applications
->> running on other CPUs, unless we're willing to race with the task
->> scheduler).
->
-> No, it just needs to measure a signal representing how much power *it*
-> gets and decide whether or not it can let the CPU subsystem use more
-> power.
->
+I looked for a more selective way to enable writes to swap at runtime,
+so I tried with system_entering_hibernation() but it's not yet armed
+at the point in which uswsusp wants to write to the swap and therefore
+it does not work.
 
-Well yes it's technically possible to set frequency constraints based on
-trial-and-error without sampling utilization information from the CPU
-cores, but don't we agree that this kind of information can be highly
-valuable?
+--- a/fs/block_dev.c
++++ b/fs/block_dev.c
+@@ -34,6 +34,7 @@
+ #include <linux/task_io_accounting_ops.h>
+ #include <linux/falloc.h>
+ #include <linux/uaccess.h>
++#include <linux/suspend.h>
+ #include "internal.h"
 
->> A solution based on utilization clamps (with some
->> extensions) sounds more future-proof to me honestly.
->
-> Except that it would be rather hard to connect it to something like
-> RAPL, which should be quite straightforward with the approach I'm
-> talking about.
->
+ struct bdev_inode {
+@@ -2001,7 +2002,8 @@ ssize_t blkdev_write_iter(struct kiocb *iocb, struct iov_iter *from)
+        if (bdev_read_only(I_BDEV(bd_inode)))
+                return -EPERM;
 
-I think using RAPL as additional control variable would be useful, but
-fully orthogonal to the cap being set by some global mechanism or being
-derived from the aggregation of a number of per-process power caps based
-on the scheduler behavior.  The latter sounds like the more reasonable
-fit for a multi-tasking, possibly virtualized environment honestly.
-Either way RAPL is neither necessary nor sufficient in order to achieve
-the energy efficiency improvement I'm working on.
+-       if (IS_SWAPFILE(bd_inode))
++       /* Hibernation might happen via uswsusp, let it write to the swap */
++       if (IS_SWAPFILE(bd_inode) && !system_entering_hibernation())
+                return -ETXTBSY;
 
-> The problem with all scheduler-based ways, again, is that there is no
-> direct connection between the scheduler and HWP,
+        if (!iov_iter_count(from))
 
-I was planning to introduce such a connection in RFC part 2.  I have a
-prototype for that based on a not particularly pretty custom interface,
-I wouldn't mind trying to get it to use utilization clamps if you think
-that's the way forward.
+>  	if (!iov_iter_count(from))
+>  		return 0;
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 1784478270e1..3df3211abe25 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -2920,8 +2920,10 @@ inline ssize_t generic_write_checks(struct kiocb *iocb, struct iov_iter *from)
+>  	loff_t count;
+>  	int ret;
+>  
+> +#ifndef CONFIG_HIBERNATION
+>  	if (IS_SWAPFILE(inode))
+>  		return -ETXTBSY;
+> +#endif
+>  
+>  	if (!iov_iter_count(from))
+>  		return 0;
 
-> or even with whatever the processor does with the P-states in the
-> turbo range.  If any P-state in the turbo range is requested, the
-> processor has a license to use whatever P-state it wants, so this
-> pretty much means allowing it to use as much power as it can.
->
-> So in the first place, if you want to limit the use of power in the
-> CPU subsystem through frequency control alone, you need to prevent it
-> from using turbo P-states at all.  However, with RAPL you can just
-> limit power which may still allow some (but not all) turbo P-states to
-> be used.
+The above is not needed in my case but I'm not sure it would not be
+needed in some other configuration of uswsusp.
 
-My goal is not to limit the use of power of the CPU (if it has enough
-load to utilize 100% of the cycles at turbo frequency so be it), but to
-get it to use it more efficiently.  If you are constrained by a given
-power budget (e.g. the TDP or the one you want set via RAPL) you can do
-more with it if you set a stable frequency rather than if you let the
-CPU bounce back and forth between turbo and idle.  This can only be
-achieved effectively if the frequency governor has a rough idea of the
-latency requirements of the workload, since it involves a
-latency/energy-efficiency trade-off.
+Dom
 
---=-=-=--
-
---==-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEAREIAB0WIQST8OekYz69PM20/4aDmTidfVK/WwUCXkcD6wAKCRCDmTidfVK/
-W8xqAP9m+jQ3Rp0GOFfNtJkPma7sqpuQwGB0G3rQEZq3nVYbhwD/buI2xcJubmuD
-enQ8G39me8IzFy8dc57smMz3BqDV3ag=
-=l5DG
------END PGP SIGNATURE-----
---==-=-=--
+-- 
+rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
+ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
