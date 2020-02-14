@@ -2,38 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1E715ED22
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 18:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E751515F391
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2020 19:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390269AbgBNRcJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Feb 2020 12:32:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57536 "EHLO mail.kernel.org"
+        id S2389697AbgBNSNF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Feb 2020 13:13:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59996 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390519AbgBNQGv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:06:51 -0500
+        id S1730730AbgBNPw4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:52:56 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 496BB206D7;
-        Fri, 14 Feb 2020 16:06:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 016FE222C4;
+        Fri, 14 Feb 2020 15:52:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696411;
-        bh=BN8+ZaNbGgmLxYVRgR35u0FGVKgnwKnoUJxz89LB8gU=;
+        s=default; t=1581695575;
+        bh=pkzmAGkgONH4rFn4Kchybr1EOFbP5fb3Z/OEklRicnc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WOKWK5OsW1TKzXNpk86e7xoewTRArZTkg43TkPjHOirhrwtj7pQi9YdX+uXH67r4A
-         yILK3dLjjofCjRtcLkHTTmxcakSQsMrvUmFP+JFX6AmCZQhcRnHcu4L1AON8wctpz9
-         o6hXmlYjDslIWF2rn0xFFL2S38QVsvpjFYMPcDBU=
+        b=KRUKB4jmr64Z+q6aVIRtv3Y6pWxNrMo+q78hvU6mDQjxH8+6HE0FDn/4m8hoYDvYw
+         MINXk66iCVWyZaPWxOjOc/wINc9YdhoMx1Dh6ZI1EmrXsR9SYvaIFNkZ1oftoV4glu
+         0i9wqef8rOW+xABZwRfaRKiCv7RBtCLzcUbfxmwQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        kbuild test robot <lkp@intel.com>,
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 233/459] PM / devfreq: rk3399_dmc: Add COMPILE_TEST and HAVE_ARM_SMCCC dependency
-Date:   Fri, 14 Feb 2020 10:58:03 -0500
-Message-Id: <20200214160149.11681-233-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 186/542] opp: Free static OPPs on errors while adding them
+Date:   Fri, 14 Feb 2020 10:42:58 -0500
+Message-Id: <20200214154854.6746-186-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
-References: <20200214160149.11681-1-sashal@kernel.org>
+In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
+References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,50 +42,76 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Chanwoo Choi <cw00.choi@samsung.com>
+From: Viresh Kumar <viresh.kumar@linaro.org>
 
-[ Upstream commit eff5d31f7407fa9d31fb840106f1593399457298 ]
+[ Upstream commit ba0033192145cbd4e70ef64552958b13d597eb9e ]
 
-To build test, add COMPILE_TEST depedency to both ARM_RK3399_DMC_DEVFREQ
-and DEVFREQ_EVENT_ROCKCHIP_DFI configuration. And ARM_RK3399_DMC_DEVFREQ
-used the SMCCC interface so that add HAVE_ARM_SMCCC dependency to prevent
-the build break.
+The static OPPs aren't getting freed properly, if errors occur while
+adding them. Fix that by calling _put_opp_list_kref() and putting their
+reference on failures.
 
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Fixes: 11e1a1648298 ("opp: Don't decrement uninitialized list_kref")
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/devfreq/Kconfig       | 3 ++-
- drivers/devfreq/event/Kconfig | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ drivers/opp/of.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index af4a3ccb96b34..1433f2ba9d3b1 100644
---- a/drivers/devfreq/Kconfig
-+++ b/drivers/devfreq/Kconfig
-@@ -118,7 +118,8 @@ config ARM_TEGRA20_DEVFREQ
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 1cbb58240b801..1e5fcdee043c4 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -678,15 +678,17 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
+ 			dev_err(dev, "%s: Failed to add OPP, %d\n", __func__,
+ 				ret);
+ 			of_node_put(np);
+-			return ret;
++			goto put_list_kref;
+ 		} else if (opp) {
+ 			count++;
+ 		}
+ 	}
  
- config ARM_RK3399_DMC_DEVFREQ
- 	tristate "ARM RK3399 DMC DEVFREQ Driver"
--	depends on ARCH_ROCKCHIP
-+	depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
-+		(COMPILE_TEST && HAVE_ARM_SMCCC)
- 	select DEVFREQ_EVENT_ROCKCHIP_DFI
- 	select DEVFREQ_GOV_SIMPLE_ONDEMAND
- 	select PM_DEVFREQ_EVENT
-diff --git a/drivers/devfreq/event/Kconfig b/drivers/devfreq/event/Kconfig
-index cef2cf5347ca7..a53e0a6ffdfeb 100644
---- a/drivers/devfreq/event/Kconfig
-+++ b/drivers/devfreq/event/Kconfig
-@@ -34,7 +34,7 @@ config DEVFREQ_EVENT_EXYNOS_PPMU
+ 	/* There should be one of more OPP defined */
+-	if (WARN_ON(!count))
+-		return -ENOENT;
++	if (WARN_ON(!count)) {
++		ret = -ENOENT;
++		goto put_list_kref;
++	}
  
- config DEVFREQ_EVENT_ROCKCHIP_DFI
- 	tristate "ROCKCHIP DFI DEVFREQ event Driver"
--	depends on ARCH_ROCKCHIP
-+	depends on ARCH_ROCKCHIP || COMPILE_TEST
- 	help
- 	  This add the devfreq-event driver for Rockchip SoC. It provides DFI
- 	  (DDR Monitor Module) driver to count ddr load.
+ 	list_for_each_entry(opp, &opp_table->opp_list, node)
+ 		pstate_count += !!opp->pstate;
+@@ -695,7 +697,8 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
+ 	if (pstate_count && pstate_count != count) {
+ 		dev_err(dev, "Not all nodes have performance state set (%d: %d)\n",
+ 			count, pstate_count);
+-		return -ENOENT;
++		ret = -ENOENT;
++		goto put_list_kref;
+ 	}
+ 
+ 	if (pstate_count)
+@@ -704,6 +707,11 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
+ 	opp_table->parsed_static_opps = true;
+ 
+ 	return 0;
++
++put_list_kref:
++	_put_opp_list_kref(opp_table);
++
++	return ret;
+ }
+ 
+ /* Initializes OPP tables based on old-deprecated bindings */
+@@ -738,6 +746,7 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
+ 		if (ret) {
+ 			dev_err(dev, "%s: Failed to add OPP %ld (%d)\n",
+ 				__func__, freq, ret);
++			_put_opp_list_kref(opp_table);
+ 			return ret;
+ 		}
+ 		nr -= 2;
 -- 
 2.20.1
 
