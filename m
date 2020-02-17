@@ -2,210 +2,249 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 823B11617D2
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2020 17:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7971617E0
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2020 17:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729242AbgBQQU4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Feb 2020 11:20:56 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:55358 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728789AbgBQQUv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Feb 2020 11:20:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=jLWQhdjlNUCvPW2x0jtz8CREosgEHwxuovRUzRlgqDg=; b=hsSIlzNJdpuYMfFdAgTlQr4cMW
-        OBEQozCh2VV0JPvYBKObSHXd2OnmJ15hhPh06NffSd7dVkESle6A6+56gBRO8AoQWPk2DUTxFqgD3
-        rfhwg5p4XjO6+z2Pdv3GU4I6as2jlXa7SZtuFFTYEblb4q3ppiU8+ZVjcJUcP5dkE6vImtbM+fFWx
-        lYizYDJaZ1ySNMPoRyAS7qtQq7WAPi9VqFa75qWUN7Ya/jIq+E0ZzUMYrIe0peLvV5lyiK1ZmIRYR
-        cIP+1MKPMaPlofi/rUkhF0Zyj6CWm8bHkeH46zFGQ6sP+Z32/jGfF5+mLWpQgmNMx5Noz8tuIQFD5
-        Y5jc6IeA==;
-Received: from tmo-109-126.customers.d1-online.com ([80.187.109.126] helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j3j8Y-00042J-Cn; Mon, 17 Feb 2020 16:20:51 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j3j8W-000fqA-Ef; Mon, 17 Feb 2020 17:20:44 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        id S1726866AbgBQQ2H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Feb 2020 11:28:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36710 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726633AbgBQQ2H (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 17 Feb 2020 11:28:07 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8216E2464E;
+        Mon, 17 Feb 2020 16:28:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581956886;
+        bh=C8RxAj56JzF+6V6vAmNXABlORocMkJ+b3XVRAMW2BTg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dx1gr2XBvM2rMWH+FcHhx+R+oWMUOPeRKI3UJIyvqbfaDyepXgE071vAFPeNtbnqY
+         rKxBDVeFIWaWlxJ+NLOl2aLl63VZ1rCf9Mb8GDV7ZCGB11uIw9ufMvrA4r6/BYy2w9
+         1KeGS2CBSe4Ermsxpoknh3NqNM6YdvbFKwnAizwY=
+Date:   Mon, 17 Feb 2020 17:28:03 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
         linux-pm@vger.kernel.org
-Subject: [PATCH v2 20/24] docs: cpu-freq: convert pcc-cpufreq.txt to ReST
-Date:   Mon, 17 Feb 2020 17:20:38 +0100
-Message-Id: <63ed3462eb3083290d9bc41332ab45524a71b3d9.1581956285.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <cover.1581956285.git.mchehab+huawei@kernel.org>
-References: <cover.1581956285.git.mchehab+huawei@kernel.org>
+Subject: Re: [PATCH net-next v2 08/10] net-sysfs: add netdev_change_owner()
+Message-ID: <20200217162803.GA1502885@kroah.com>
+References: <20200217161436.1748598-1-christian.brauner@ubuntu.com>
+ <20200217161436.1748598-9-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200217161436.1748598-9-christian.brauner@ubuntu.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-- Add a SPDX header;
-- Add a document title, based on the original contents of
-  cpu-freq/index.txt;
-- Add copyright symbol;
-- Remove a c-like comment, adding the useful info not covered
-  by the SPDX and document title headers as text;
-- Comment out the existing text-only index;
-- Mark literal blocks as such;
-- Some whitespace fixes and new line breaks;
-- Add it to cpu-freq/index.rst.
+On Mon, Feb 17, 2020 at 05:14:34PM +0100, Christian Brauner wrote:
+> Add a function to change the owner of a network device when it is moved
+> between network namespaces.
+> 
+> Currently, when moving network devices between network namespaces the
+> ownership of the corresponding sysfs entries is not changed. This leads
+> to problems when tools try to operate on the corresponding sysfs files.
+> This leads to a bug whereby a network device that is created in a
+> network namespaces owned by a user namespace will have its corresponding
+> sysfs entry owned by the root user of the corresponding user namespace.
+> If such a network device has to be moved back to the host network
+> namespace the permissions will still be set to the user namespaces. This
+> means unprivileged users can e.g. trigger uevents for such incorrectly
+> owned devices. They can also modify the settings of the device itself.
+> Both of these things are unwanted.
+> 
+> For example, workloads will create network devices in the host network
+> namespace. Other tools will then proceed to move such devices between
+> network namespaces owner by other user namespaces. While the ownership
+> of the device itself is updated in
+> net/core/net-sysfs.c:dev_change_net_namespace() the corresponding sysfs
+> entry for the device is not:
+> 
+> drwxr-xr-x 5 nobody nobody    0 Jan 25 18:08 .
+> drwxr-xr-x 9 nobody nobody    0 Jan 25 18:08 ..
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 addr_assign_type
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 addr_len
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 address
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 broadcast
+> -rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 carrier
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 carrier_changes
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 carrier_down_count
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 carrier_up_count
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 dev_id
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 dev_port
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 dormant
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 duplex
+> -rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 flags
+> -rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 gro_flush_timeout
+> -rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 ifalias
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 ifindex
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 iflink
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 link_mode
+> -rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 mtu
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 name_assign_type
+> -rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 netdev_group
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 operstate
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 phys_port_id
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 phys_port_name
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 phys_switch_id
+> drwxr-xr-x 2 nobody nobody    0 Jan 25 18:09 power
+> -rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 proto_down
+> drwxr-xr-x 4 nobody nobody    0 Jan 25 18:09 queues
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 speed
+> drwxr-xr-x 2 nobody nobody    0 Jan 25 18:09 statistics
+> lrwxrwxrwx 1 nobody nobody    0 Jan 25 18:08 subsystem -> ../../../../class/net
+> -rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 tx_queue_len
+> -r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 type
+> -rw-r--r-- 1 nobody nobody 4096 Jan 25 18:08 uevent
+> 
+> However, if a device is created directly in the network namespace then
+> the device's sysfs permissions will be correctly updated:
+> 
+> drwxr-xr-x 5 root   root      0 Jan 25 18:12 .
+> drwxr-xr-x 9 nobody nobody    0 Jan 25 18:08 ..
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 addr_assign_type
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 addr_len
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 address
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 broadcast
+> -rw-r--r-- 1 root   root   4096 Jan 25 18:12 carrier
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 carrier_changes
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 carrier_down_count
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 carrier_up_count
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 dev_id
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 dev_port
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 dormant
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 duplex
+> -rw-r--r-- 1 root   root   4096 Jan 25 18:12 flags
+> -rw-r--r-- 1 root   root   4096 Jan 25 18:12 gro_flush_timeout
+> -rw-r--r-- 1 root   root   4096 Jan 25 18:12 ifalias
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 ifindex
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 iflink
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 link_mode
+> -rw-r--r-- 1 root   root   4096 Jan 25 18:12 mtu
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 name_assign_type
+> -rw-r--r-- 1 root   root   4096 Jan 25 18:12 netdev_group
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 operstate
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 phys_port_id
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 phys_port_name
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 phys_switch_id
+> drwxr-xr-x 2 root   root      0 Jan 25 18:12 power
+> -rw-r--r-- 1 root   root   4096 Jan 25 18:12 proto_down
+> drwxr-xr-x 4 root   root      0 Jan 25 18:12 queues
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 speed
+> drwxr-xr-x 2 root   root      0 Jan 25 18:12 statistics
+> lrwxrwxrwx 1 nobody nobody    0 Jan 25 18:12 subsystem -> ../../../../class/net
+> -rw-r--r-- 1 root   root   4096 Jan 25 18:12 tx_queue_len
+> -r--r--r-- 1 root   root   4096 Jan 25 18:12 type
+> -rw-r--r-- 1 root   root   4096 Jan 25 18:12 uevent
+> 
+> Now, when creating a network device in a network namespace owned by a
+> user namespace and moving it to the host the permissions will be set to
+> the id that the user namespace root user has been mapped to on the host
+> leading to all sorts of permission issues:
+> 
+> 458752
+> drwxr-xr-x 5 458752 458752      0 Jan 25 18:12 .
+> drwxr-xr-x 9 root   root        0 Jan 25 18:08 ..
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 addr_assign_type
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 addr_len
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 address
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 broadcast
+> -rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 carrier
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 carrier_changes
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 carrier_down_count
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 carrier_up_count
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 dev_id
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 dev_port
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 dormant
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 duplex
+> -rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 flags
+> -rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 gro_flush_timeout
+> -rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 ifalias
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 ifindex
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 iflink
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 link_mode
+> -rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 mtu
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 name_assign_type
+> -rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 netdev_group
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 operstate
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 phys_port_id
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 phys_port_name
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 phys_switch_id
+> drwxr-xr-x 2 458752 458752      0 Jan 25 18:12 power
+> -rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 proto_down
+> drwxr-xr-x 4 458752 458752      0 Jan 25 18:12 queues
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 speed
+> drwxr-xr-x 2 458752 458752      0 Jan 25 18:12 statistics
+> lrwxrwxrwx 1 root   root        0 Jan 25 18:12 subsystem -> ../../../../class/net
+> -rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 tx_queue_len
+> -r--r--r-- 1 458752 458752   4096 Jan 25 18:12 type
+> -rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 uevent
+> 
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> ---
+> /* v2 */
+> unchanged
+> ---
+>  net/core/net-sysfs.c | 27 +++++++++++++++++++++++++++
+>  net/core/net-sysfs.h |  2 ++
+>  2 files changed, 29 insertions(+)
+> 
+> diff --git a/net/core/net-sysfs.c b/net/core/net-sysfs.c
+> index 4c826b8bf9b1..4fda021edf6d 100644
+> --- a/net/core/net-sysfs.c
+> +++ b/net/core/net-sysfs.c
+> @@ -1767,6 +1767,33 @@ int netdev_register_kobject(struct net_device *ndev)
+>  	return error;
+>  }
+>  
+> +/* Change owner for sysfs entries when moving network devices across network
+> + * namespaces owned by different user namespaces.
+> + */
+> +int netdev_change_owner(struct net_device *ndev, const struct net *net_old,
+> +			const struct net *net_new)
+> +{
+> +	struct device *dev = &ndev->dev;
+> +	kuid_t old_uid, new_uid;
+> +	kgid_t old_gid, new_gid;
+> +	int error;
+> +
+> +	net_ns_get_ownership(net_old, &old_uid, &old_gid);
+> +	net_ns_get_ownership(net_new, &new_uid, &new_gid);
+> +
+> +	/* The network namespace was changed but the owning user namespace is
+> +	 * identical so there's no need to change the owner of sysfs entries.
+> +	 */
+> +	if (uid_eq(old_uid, new_uid) && gid_eq(old_gid, new_gid))
+> +		return 0;
+> +
+> +	error = device_change_owner(dev);
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/cpu-freq/index.rst              |  1 +
- .../{pcc-cpufreq.txt => pcc-cpufreq.rst}      | 86 ++++++++-----------
- 2 files changed, 38 insertions(+), 49 deletions(-)
- rename Documentation/cpu-freq/{pcc-cpufreq.txt => pcc-cpufreq.rst} (80%)
+Ok, maybe I'm slow here, but what actually changed the gid/uid here?
+How did it change?  All you did was look up the old uid/gid and the new
+uid/gid.  But what set the device to the new one?
 
-diff --git a/Documentation/cpu-freq/index.rst b/Documentation/cpu-freq/index.rst
-index d12ef0bb78a5..fb2db2eb7eaf 100644
---- a/Documentation/cpu-freq/index.rst
-+++ b/Documentation/cpu-freq/index.rst
-@@ -19,6 +19,7 @@ Author: Dominik Brodowski  <linux@brodo.de>
-    cpu-drivers
-    cpufreq-nforce2
-    cpufreq-stats
-+   pcc-cpufreq
- 
- Mailing List
- ------------
-diff --git a/Documentation/cpu-freq/pcc-cpufreq.txt b/Documentation/cpu-freq/pcc-cpufreq.rst
-similarity index 80%
-rename from Documentation/cpu-freq/pcc-cpufreq.txt
-rename to Documentation/cpu-freq/pcc-cpufreq.rst
-index 9e3c3b33514c..6fd891f757a7 100644
---- a/Documentation/cpu-freq/pcc-cpufreq.txt
-+++ b/Documentation/cpu-freq/pcc-cpufreq.rst
-@@ -1,45 +1,29 @@
--/*
-- *  pcc-cpufreq.txt - PCC interface documentation
-- *
-- *  Copyright (C) 2009 Red Hat, Matthew Garrett <mjg@redhat.com>
-- *  Copyright (C) 2009 Hewlett-Packard Development Company, L.P.
-- *      Nagananda Chumbalkar <nagananda.chumbalkar@hp.com>
-- *
-- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- *
-- *  This program is free software; you can redistribute it and/or modify
-- *  it under the terms of the GNU General Public License as published by
-- *  the Free Software Foundation; version 2 of the License.
-- *
-- *  This program is distributed in the hope that it will be useful, but
-- *  WITHOUT ANY WARRANTY; without even the implied warranty of
-- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, GOOD TITLE or NON
-- *  INFRINGEMENT. See the GNU General Public License for more details.
-- *
-- *  You should have received a copy of the GNU General Public License along
-- *  with this program; if not, write to the Free Software Foundation, Inc.,
-- *  675 Mass Ave, Cambridge, MA 02139, USA.
-- *
-- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- */
-+.. SPDX-License-Identifier: GPL-2.0
-+.. include:: <isonum.txt>
- 
-+=========================================================
-+Processor Clocking Control (PCC) CPUFreq Driver Specifics
-+=========================================================
- 
--			Processor Clocking Control Driver
--			---------------------------------
-+Copyright |copy| 2009 Red Hat, Matthew Garrett <mjg@redhat.com>
- 
--Contents:
-----------
--1.	Introduction
--1.1	PCC interface
--1.1.1   Get Average Frequency
--1.1.2	Set Desired Frequency
--1.2	Platforms affected
--2.	Driver and /sys details
--2.1	scaling_available_frequencies
--2.2	cpuinfo_transition_latency
--2.3	cpuinfo_cur_freq
--2.4	related_cpus
--3.	Caveats
-+Copyright |copy| 2009 Hewlett-Packard Development Company, L.P.,
-+Nagananda Chumbalkar <nagananda.chumbalkar@hp.com>
-+
-+
-+.. Contents:
-+
-+   1.	Introduction
-+   1.1	PCC interface
-+   1.1.1   Get Average Frequency
-+   1.1.2	Set Desired Frequency
-+   1.2	Platforms affected
-+   2.	Driver and /sys details
-+   2.1	scaling_available_frequencies
-+   2.2	cpuinfo_transition_latency
-+   2.3	cpuinfo_cur_freq
-+   2.4	related_cpus
-+   3.	Caveats
- 
- 1. Introduction:
- ----------------
-@@ -140,7 +124,9 @@ Internally, there is no need for the driver to convert the "target" frequency
- to a corresponding P-state.
- 
- The VERSION number for the driver will be of the format v.xy.ab.
--eg: 1.00.02
-+eg::
-+
-+   1.00.02
-    ----- --
-     |    |
-     |    -- this will increase with bug fixes/enhancements to the driver
-@@ -168,21 +154,21 @@ A) Often cpuinfo_cur_freq will show a value different than what is declared
- in the scaling_available_frequencies or scaling_cur_freq, or scaling_max_freq.
- This is due to "turbo boost" available on recent Intel processors. If certain
- conditions are met the BIOS can achieve a slightly higher speed than requested
--by OSPM. An example:
-+by OSPM. An example::
- 
--scaling_cur_freq	: 2933000
--cpuinfo_cur_freq	: 3196000
-+	scaling_cur_freq	: 2933000
-+	cpuinfo_cur_freq	: 3196000
- 
- B) There is a round-off error associated with the cpuinfo_cur_freq value.
- Since the driver obtains the current frequency as a "percentage" (%) of the
- nominal frequency from the BIOS, sometimes, the values displayed by
--scaling_cur_freq and cpuinfo_cur_freq may not match. An example:
-+scaling_cur_freq and cpuinfo_cur_freq may not match. An example::
- 
--scaling_cur_freq	: 1600000
--cpuinfo_cur_freq	: 1583000
-+	scaling_cur_freq	: 1600000
-+	cpuinfo_cur_freq	: 1583000
- 
- In this example, the nominal frequency is 2933 MHz. The driver obtains the
--current frequency, cpuinfo_cur_freq, as 54% of the nominal frequency:
-+current frequency, cpuinfo_cur_freq, as 54% of the nominal frequency::
- 
- 	54% of 2933 MHz = 1583 MHz
- 
-@@ -193,8 +179,10 @@ corresponds to the frequency of the P0 P-state.
- -----------------
- The related_cpus field is identical to affected_cpus.
- 
--affected_cpus	: 4
--related_cpus	: 4
-+::
-+
-+	affected_cpus	: 4
-+	related_cpus	: 4
- 
- Currently, the PCC driver does not evaluate _PSD. The platforms that support
- PCC do not implement SW_ALL. So OSPM doesn't need to perform any coordination
--- 
-2.24.1
+All of these functions are just really odd to me, one would think that a
+"change owner" function would have the new owner in the paramter to know
+what to change it to?  Your documentation says "owner must be changed
+before calling this function", but how did that get changed and who
+changed it?
 
+Why not just pass it as part of the function itself?
+
+Otherwise it looks really odd, like the above call.  As I can't see how
+anything changes here at all by reading this code.  And that's a huge
+sign of a bad API, when the maintainer of the subsystem can not even
+understand how someone is using it with a single function call :)
+
+thanks,
+
+greg k-h
