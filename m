@@ -2,109 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF86160C07
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2020 08:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0418160C0F
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2020 09:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbgBQH7j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Feb 2020 02:59:39 -0500
-Received: from mga11.intel.com ([192.55.52.93]:16751 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726267AbgBQH7i (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 17 Feb 2020 02:59:38 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Feb 2020 23:59:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,451,1574150400"; 
-   d="scan'208";a="229120141"
-Received: from zhouy1-mobl1.ccr.corp.intel.com ([10.249.169.88])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Feb 2020 23:59:35 -0800
-Message-ID: <19d5aad060442ca4917046286b82e723199d4088.camel@intel.com>
-Subject: Re: [PATCH] thermal/intel_powerclamp: Don't report an error for AMD
- CPUs
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Alexander Koskovich <zvnexus@gmail.com>, arjan@linux.intel.com,
-        jacob.jun.pan@linux.intel.com
-Cc:     Alexander Koskovich <zvnexus@outlook.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 17 Feb 2020 15:59:34 +0800
-In-Reply-To: <20200215160938.1025-1-zvnexus@outlook.com>
-References: <20200215160938.1025-1-zvnexus@outlook.com>
+        id S1726768AbgBQIBb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 17 Feb 2020 03:01:31 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:39996 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726267AbgBQIBa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Feb 2020 03:01:30 -0500
+Received: by mail-oi1-f193.google.com with SMTP id a142so15854143oii.7;
+        Mon, 17 Feb 2020 00:01:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CQ1mKDwhrXQV7zEXL+R8pA9wSR2h3UQcHntZ6yLJatE=;
+        b=gc15yOUpSE0MSwTKxD4KeyFTlCqNqnem/0jXIqb8DUXEdxCrD0Zt86cW4zhS/7woGl
+         S/Q6auKuaGOA5SxQgNFFgUIqHvYtS86rWdsggjKUu7SCkZz5ZY30lpHZykmis3GNncAu
+         Tn7aKngF006RPzbuV5xx+TlxWISfslQTEZ51aZp4m9DfeHUxCcESt9bkTEPNu2bNSA/b
+         viIw+H4TSTg+R31t2smomvuRgtaD2U4GQQmG/QfbP5miDDEV4rmuaTbJBlVF3IGOuFmx
+         6l7Is2oSnq9hLBzIOTqz50sj62eL9vJ22NH5vmeqFFe+DnfZ8dHxCbfMg4aVxsUnQz7f
+         7bhQ==
+X-Gm-Message-State: APjAAAVNXqCu7MjXXcOa+VZARMOkaiFtC73OHwI0DOgRfU9RD2RHXsPc
+        oLoSPRrqISjv4/tJjMxt+6w5aoGHhSiF4A9E6M+pJw==
+X-Google-Smtp-Source: APXvYqz54VsuWqMzr2U/2Jdpu2Lgc6B0HcOy1XVGCSHxRSr7iUM9SOQflHUOxeJm4B62XzG8iu+n3/bG5T0fHsdQvFU=
+X-Received: by 2002:aca:b4c3:: with SMTP id d186mr8906251oif.131.1581926490013;
+ Mon, 17 Feb 2020 00:01:30 -0800 (PST)
+MIME-Version: 1.0
+References: <20200216130252.125100-1-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20200216130252.125100-1-niklas.soderlund+renesas@ragnatech.se>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 17 Feb 2020 09:01:18 +0100
+Message-ID: <CAMuHMdUdBVwAbG8Qicg3_aKvwjq91QJWS5FQwM6NPdgbyP2Wzw@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add entry for Renesas R-Car thermal drivers
+To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 2020-02-15 at 11:09 -0500, Alexander Koskovich wrote:
-> Resolves dmesg error "intel_powerclamp: CPU does not support MWAIT".
-> 
-> The error that is outputted in dmesg prior to this patch
-> is innacurate, AMD Ryzen CPUs do support MWAIT. We could
-> also add the AMD vendor to the MWAIT check, but even though
-> AMD CPUs do support MWAIT, they fail the C-state package
-> check so it's better just to bail out in the beginning.
-> 
-> Signed-off-by: Alexander Koskovich <zvnexus@outlook.com>
+Hi Niklas,
 
-I think you're resending the same patch.
+On Sun, Feb 16, 2020 at 2:09 PM Niklas Söderlund
+<niklas.soderlund+renesas@ragnatech.se> wrote:
+> Add an entry to make myself a maintainer of the Renesas R-Car thermal
+> drivers.
+>
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-As intel_powerclamp_ids already checks for Intel CPUs, so we don't need
-the check for AMD CPU, but instead, just remove the following line
+Thanks for your patch!
 
-"pr_err("CPU does not support MWAIT\n");"
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14206,6 +14206,15 @@ F:     Documentation/devicetree/bindings/i2c/renesas,iic.txt
+>  F:     drivers/i2c/busses/i2c-rcar.c
+>  F:     drivers/i2c/busses/i2c-sh_mobile.c
+>
+> +RENESAS R-CAR THERMAL DRIVERS
+> +M:     Niklas Söderlund <niklas.soderlund@ragnatech.se>
 
-when intel_powerclamp driver fails to probe.
++renesas@???
 
-thanks,
-rui
-
-> ---
->  drivers/thermal/intel/intel_powerclamp.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/thermal/intel/intel_powerclamp.c
-> b/drivers/thermal/intel/intel_powerclamp.c
-> index 53216dcbe173..3c5b25bfa596 100644
-> --- a/drivers/thermal/intel/intel_powerclamp.c
-> +++ b/drivers/thermal/intel/intel_powerclamp.c
-> @@ -650,6 +650,11 @@ static struct thermal_cooling_device_ops
-> powerclamp_cooling_ops = {
->  	.set_cur_state = powerclamp_set_cur_state,
->  };
->  
-> +static const struct x86_cpu_id amd_cpu[] = {
-> +	{ X86_VENDOR_AMD },
-> +	{},
-> +};
+> +L:     linux-renesas-soc@vger.kernel.org
+> +S:     Supported
+> +F:     Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.txt
+> +F:     Documentation/devicetree/bindings/thermal/rcar-thermal.txt
+> +F:     drivers/thermal/rcar_gen3_thermal.c
+> +F:     drivers/thermal/rcar_thermal.c
 > +
->  static const struct x86_cpu_id __initconst intel_powerclamp_ids[] =
-> {
->  	{ X86_VENDOR_INTEL, X86_FAMILY_ANY, X86_MODEL_ANY,
-> X86_FEATURE_MWAIT },
->  	{}
-> @@ -659,6 +664,11 @@ MODULE_DEVICE_TABLE(x86cpu,
-> intel_powerclamp_ids);
->  static int __init powerclamp_probe(void)
->  {
->  
-> +	if (x86_match_cpu(amd_cpu)) {
-> +		pr_info("Intel PowerClamp does not support AMD
-> CPUs\n");
-> +		return -ENODEV;
-> +	}
-> +
->  	if (!x86_match_cpu(intel_powerclamp_ids)) {
->  		pr_err("CPU does not support MWAIT\n");
->  		return -ENODEV;
+>  RENESAS RIIC DRIVER
+>  M:     Chris Brandt <chris.brandt@renesas.com>
+>  S:     Supported
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
