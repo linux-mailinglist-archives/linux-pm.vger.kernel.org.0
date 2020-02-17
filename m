@@ -2,276 +2,334 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5257F160F10
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2020 10:45:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD580160F81
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2020 11:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728970AbgBQJpS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Feb 2020 04:45:18 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:43312 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728967AbgBQJpS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Feb 2020 04:45:18 -0500
-Received: by mail-ed1-f68.google.com with SMTP id dc19so19880361edb.10
-        for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2020 01:45:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Nu7jWISZb77Z0tiPaYwqP5zwhpW6xuzz3wSY4EXTCT4=;
-        b=d6J5PEU7VyQi67HKjSTaI+gvJgl7/9g1rJtiCtB3RqPV7ZbFZWHqMy8tYi2jxwKC6J
-         bequMP/PwbMSd/tr0HyT+OZJWHhr4GoIBTiG4wiz6J3VFZiVwMuY/hk/UALTnGYeUyb7
-         7lxctQoybLVN3C0e9fKqpeWcinZNeOoA+llHk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Nu7jWISZb77Z0tiPaYwqP5zwhpW6xuzz3wSY4EXTCT4=;
-        b=XhcNqBMyWiQlxJs4PwbccZE357An86RrI6djdhhcPMkcTNZxCccCSpHSgBf2cjUwyW
-         /J+iVnSDXUkC0VKwOwquMbByAscbNgGPJA2tPCEjemyQyapQFpemYrQhPUip1T2k61i3
-         jguZzfcuOLqvzqWvKgqiLrLf/liqApaANMPDbXb9XID+D5oTWT9J0Fy2bP+1CHOYnsXD
-         ns/cR/dn0kVcZ/wdGo+y7GykTwh+keo82H6LCmpr55K9xMiIll3ZwWkU6k2yROP2CASq
-         5hMiWzt7x3F+B05E97D4Z/at32ZWfoFJrB/IJBF6hA0tjDHim3Ei4mRyx9tiareU1ldg
-         FUaw==
-X-Gm-Message-State: APjAAAUgZlENq3ZT0rlMCenf0AGeu2ELUvc8wQO5MXHgHe0KL1anT5os
-        r8ZqhJH4vUCfnQEmu/hOd4SVEiAW/c+ixg==
-X-Google-Smtp-Source: APXvYqyK8Zuuh7qWIyGk8tsT9I7Uhr8cMWxcGp45cRnBBjChn0lo2aGbcP+iQ6VeCsFvNMjkb8gTAQ==
-X-Received: by 2002:a05:6402:1692:: with SMTP id a18mr13085941edv.322.1581932715697;
-        Mon, 17 Feb 2020 01:45:15 -0800 (PST)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id dn12sm485282edb.89.2020.02.17.01.45.14
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Feb 2020 01:45:14 -0800 (PST)
-Received: by mail-wr1-f43.google.com with SMTP id w15so18828879wru.4
-        for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2020 01:45:14 -0800 (PST)
-X-Received: by 2002:adf:f6c1:: with SMTP id y1mr20634317wrp.17.1581932714265;
- Mon, 17 Feb 2020 01:45:14 -0800 (PST)
+        id S1729112AbgBQKF1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Feb 2020 05:05:27 -0500
+Received: from esa4.hc3370-68.iphmx.com ([216.71.155.144]:10663 "EHLO
+        esa4.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728833AbgBQKF1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Feb 2020 05:05:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1581933927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2gB/QZ7u4q45t/yp2TSnLERU6K4lxysDb+964WivSl4=;
+  b=gaJjrAWOl9gH9G9o5vGnVq9seJSv+TnRNG4cNcC0DrwISClwnru+p0eh
+   AubGmzsaBfIqsxYdvZo2IB+/Q1fzZS5ZqezLt1HbUPPquz+wzfTlhl8j1
+   nkoV4gzr3+TSwo/VkgHiKfqrKBHv5Jha2XJ4FW09gEIzJBJWbvdPjN7R0
+   0=;
+Authentication-Results: esa4.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none; spf=None smtp.pra=roger.pau@citrix.com; spf=Pass smtp.mailfrom=roger.pau@citrix.com; spf=None smtp.helo=postmaster@mail.citrix.com
+Received-SPF: None (esa4.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  roger.pau@citrix.com) identity=pra; client-ip=162.221.158.21;
+  receiver=esa4.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="roger.pau@citrix.com";
+  x-conformance=sidf_compatible
+Received-SPF: Pass (esa4.hc3370-68.iphmx.com: domain of
+  roger.pau@citrix.com designates 162.221.158.21 as permitted
+  sender) identity=mailfrom; client-ip=162.221.158.21;
+  receiver=esa4.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="roger.pau@citrix.com";
+  x-conformance=sidf_compatible; x-record-type="v=spf1";
+  x-record-text="v=spf1 ip4:209.167.231.154 ip4:178.63.86.133
+  ip4:195.66.111.40/30 ip4:85.115.9.32/28 ip4:199.102.83.4
+  ip4:192.28.146.160 ip4:192.28.146.107 ip4:216.52.6.88
+  ip4:216.52.6.188 ip4:162.221.158.21 ip4:162.221.156.83
+  ip4:168.245.78.127 ~all"
+Received-SPF: None (esa4.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@mail.citrix.com) identity=helo;
+  client-ip=162.221.158.21; receiver=esa4.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="postmaster@mail.citrix.com";
+  x-conformance=sidf_compatible
+IronPort-SDR: 2b092rFWJXgE74OPGqqRjNgmQSjSJodO8MuU0fMmusZ8vT5zX3uBpug0UoVBfJdPO1oATdAEU9
+ O+F05nELxG/as+2DHKBP5vJA7MCOMOBce127FfljLI+GeJi3m5rRwbLiBqpYrAMWfXB9bFzcfd
+ quKX7bT7fDofLxaD1cSTHh7deVSnfwxDHDE4ozjmEk6bDse/8GdboK8xdvkMRazujeDUsJegpm
+ G0fuzH/E2uDSb/INDIVGdSENM1uNKmBlyq+53vyYhflSU9u1FNGTYSoFUdg5dDdJ6SLslq/bI8
+ wsI=
+X-SBRS: 2.7
+X-MesageID: 13179199
+X-Ironport-Server: esa4.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.158.21
+X-Policy: $RELAYED
+X-IronPort-AV: E=Sophos;i="5.70,452,1574139600"; 
+   d="scan'208";a="13179199"
+Date:   Mon, 17 Feb 2020 11:05:09 +0100
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     Anchal Agarwal <anchalag@amazon.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
+        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <fllinden@amaozn.com>,
+        <benh@kernel.crashing.org>
+Subject: Re: [RFC PATCH v3 06/12] xen-blkfront: add callbacks for PM suspend
+ and hibernation
+Message-ID: <20200217100509.GE4679@Air-de-Roger>
+References: <cover.1581721799.git.anchalag@amazon.com>
+ <890c404c585d7790514527f0c021056a7be6e748.1581721799.git.anchalag@amazon.com>
 MIME-Version: 1.0
-References: <20200116025637.3524-1-bibby.hsieh@mediatek.com>
- <20200116025637.3524-5-bibby.hsieh@mediatek.com> <CAAFQd5Bh9dUuu2fzxQSyuyRrEvN5o8PBqPCUTdrC5btN2Q1HVw@mail.gmail.com>
-In-Reply-To: <CAAFQd5Bh9dUuu2fzxQSyuyRrEvN5o8PBqPCUTdrC5btN2Q1HVw@mail.gmail.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Mon, 17 Feb 2020 18:45:01 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DtnBhGV-VemTwudm7K-UtFsGg99YGuD-cyR93u0OAPuA@mail.gmail.com>
-Message-ID: <CAAFQd5DtnBhGV-VemTwudm7K-UtFsGg99YGuD-cyR93u0OAPuA@mail.gmail.com>
-Subject: Re: [PATCH v10 4/4] i2c: core: support bus regulator controlling in adapter
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <890c404c585d7790514527f0c021056a7be6e748.1581721799.git.anchalag@amazon.com>
+X-ClientProxiedBy: AMSPEX02CAS02.citrite.net (10.69.22.113) To
+ AMSPEX02CL01.citrite.net (10.69.22.125)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Fri, Feb 14, 2020 at 11:25:34PM +0000, Anchal Agarwal wrote:
+> From: Munehisa Kamata <kamatam@amazon.com
+> 
+> Add freeze, thaw and restore callbacks for PM suspend and hibernation
+> support. All frontend drivers that needs to use PM_HIBERNATION/PM_SUSPEND
+> events, need to implement these xenbus_driver callbacks.
+> The freeze handler stops a block-layer queue and disconnect the
+> frontend from the backend while freeing ring_info and associated resources.
+> The restore handler re-allocates ring_info and re-connect to the
+> backend, so the rest of the kernel can continue to use the block device
+> transparently. Also, the handlers are used for both PM suspend and
+> hibernation so that we can keep the existing suspend/resume callbacks for
+> Xen suspend without modification. Before disconnecting from backend,
+> we need to prevent any new IO from being queued and wait for existing
+> IO to complete.
 
-On Tue, Jan 28, 2020 at 4:31 PM Tomasz Figa <tfiga@chromium.org> wrote:
->
-> Hi Rafael,
->
-> On Thu, Jan 16, 2020 at 11:56 AM Bibby Hsieh <bibby.hsieh@mediatek.com> wrote:
-> >
-> > Although in the most platforms, the bus power of i2c
-> > are alway on, some platforms disable the i2c bus power
-> > in order to meet low power request.
-> >
-> > We get and enable bulk regulator in i2c adapter device.
-> >
-> > Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
-> > ---
-> >  drivers/i2c/i2c-core-base.c | 81 +++++++++++++++++++++++++++++++++++++
-> >  include/linux/i2c.h         |  3 ++
-> >  2 files changed, 84 insertions(+)
-> >
->
-> I posted some comments in a separate reply [1] and Wolfram confirmed
-> that he's fine with the approach [2]. Would you have some time to take
-> a look from the PM point of view? Thanks.
->
-> [1] https://patchwork.ozlabs.org/patch/1223991/#2350984
-> [2] https://patchwork.ozlabs.org/patch/1223991/#2351032
->
-> Please let me know if you want me to CC you directly on any of those replies.
+This is different from Xen (xenstore) initiated suspension, as in that
+case Linux doesn't flush the rings or disconnects from the backend.
 
-Would you have a few minutes to take a look at this?
+This is done so that in case suspensions fails the recovery doesn't
+need to reconnect the PV devices, and in order to speed up suspension
+time (ie: waiting for all queues to be flushed can take time as Linux
+supports multiqueue, multipage rings and indirect descriptors), and
+the backend could be contended if there's a lot of IO pressure from
+guests.
 
-Thanks,
-Tomasz
+Linux already keeps a shadow of the ring contents, so in-flight
+requests can be re-issued after the frontend has reconnected during
+resume.
 
->
-> Best regards,
-> Tomasz
->
-> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> > index 9333c865d4a9..9b9e96b094ca 100644
-> > --- a/drivers/i2c/i2c-core-base.c
-> > +++ b/drivers/i2c/i2c-core-base.c
-> > @@ -306,6 +306,7 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
-> >  static int i2c_device_probe(struct device *dev)
-> >  {
-> >         struct i2c_client       *client = i2c_verify_client(dev);
-> > +       struct i2c_adapter      *adap = client->adapter;
-> >         struct i2c_driver       *driver;
-> >         int status;
-> >
-> > @@ -371,6 +372,12 @@ static int i2c_device_probe(struct device *dev)
-> >
-> >         dev_dbg(dev, "probe\n");
-> >
-> > +       status = regulator_enable(adap->bus_reg);
-> > +       if (status != 0) {
-> > +               dev_err(&adap->dev, "Failed to enable power regulator\n");
-> > +               goto err_clear_wakeup_irq;
-> > +       }
-> > +
-> >         status = of_clk_set_defaults(dev->of_node, false);
-> >         if (status < 0)
-> >                 goto err_clear_wakeup_irq;
-> > @@ -407,6 +414,7 @@ static int i2c_device_probe(struct device *dev)
-> >  static int i2c_device_remove(struct device *dev)
-> >  {
-> >         struct i2c_client       *client = i2c_verify_client(dev);
-> > +       struct i2c_adapter      *adap = client->adapter;
-> >         struct i2c_driver       *driver;
-> >         int status = 0;
-> >
-> > @@ -420,6 +428,8 @@ static int i2c_device_remove(struct device *dev)
-> >         }
-> >
-> >         dev_pm_domain_detach(&client->dev, true);
-> > +       if (!pm_runtime_status_suspended(&adap->dev))
-> > +               regulator_disable(adap->bus_reg);
-> >
-> >         dev_pm_clear_wake_irq(&client->dev);
-> >         device_init_wakeup(&client->dev, false);
-> > @@ -431,6 +441,71 @@ static int i2c_device_remove(struct device *dev)
-> >         return status;
-> >  }
-> >
-> > +#ifdef CONFIG_PM_SLEEP
-> > +static int i2c_resume(struct device *dev)
-> > +{
-> > +       struct i2c_client *client = i2c_verify_client(dev);
-> > +       struct i2c_adapter *adap = client->adapter;
-> > +       int err;
-> > +
-> > +       if (pm_runtime_status_suspended(&adap->dev)) {
-> > +               err = regulator_enable(adap->bus_reg);
-> > +               if (err)
-> > +                       return err;
-> > +       }
-> > +
-> > +       return pm_generic_resume(dev);
-> > +}
-> > +
-> > +static int i2c_suspend(struct device *dev)
-> > +{
-> > +       struct i2c_client *client = i2c_verify_client(dev);
-> > +       struct i2c_adapter *adap = client->adapter;
-> > +       int err;
-> > +
-> > +       if (!pm_runtime_status_suspended(&adap->dev)) {
-> > +               err = regulator_disable(adap->bus_reg);
-> > +               if (err)
-> > +                       return err;
-> > +       }
-> > +
-> > +       return pm_generic_suspend(dev);
-> > +}
-> > +#endif
-> > +
-> > +#ifdef CONFIG_PM
-> > +static int i2c_runtime_resume(struct device *dev)
-> > +{
-> > +       struct i2c_client *client = i2c_verify_client(dev);
-> > +       struct i2c_adapter *adap = client->adapter;
-> > +       int err;
-> > +
-> > +       err = regulator_enable(adap->bus_reg);
-> > +       if (err)
-> > +               return err;
-> > +
-> > +       return pm_generic_runtime_resume(dev);
-> > +}
-> > +
-> > +static int i2c_runtime_suspend(struct device *dev)
-> > +{
-> > +       struct i2c_client *client = i2c_verify_client(dev);
-> > +       struct i2c_adapter *adap = client->adapter;
-> > +       int err;
-> > +
-> > +       err = pm_generic_runtime_suspend(dev);
-> > +       if (err)
-> > +               return err;
-> > +
-> > +       return regulator_disable(adap->bus_reg);
-> > +}
-> > +#endif
-> > +
-> > +static const struct dev_pm_ops i2c_device_pm = {
-> > +       SET_SYSTEM_SLEEP_PM_OPS(i2c_suspend, i2c_resume)
-> > +       SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume, NULL)
-> > +};
-> > +
-> >  static void i2c_device_shutdown(struct device *dev)
-> >  {
-> >         struct i2c_client *client = i2c_verify_client(dev);
-> > @@ -488,6 +563,7 @@ struct bus_type i2c_bus_type = {
-> >         .probe          = i2c_device_probe,
-> >         .remove         = i2c_device_remove,
-> >         .shutdown       = i2c_device_shutdown,
-> > +       .pm             = &i2c_device_pm,
-> >  };
-> >  EXPORT_SYMBOL_GPL(i2c_bus_type);
-> >
-> > @@ -1351,6 +1427,11 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
-> >                 goto out_reg;
-> >
-> >         dev_dbg(&adap->dev, "adapter [%s] registered\n", adap->name);
-> > +       adap->bus_reg = devm_regulator_get(&adap->dev, "bus");
-> > +       if (IS_ERR(adap->bus_reg)) {
-> > +               res = PTR_ERR(adap->bus_reg);
-> > +               goto out_reg;
-> > +       }
-> >
-> >         pm_runtime_no_callbacks(&adap->dev);
-> >         pm_suspend_ignore_children(&adap->dev, true);
-> > diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> > index d2f786706657..833b81a680da 100644
-> > --- a/include/linux/i2c.h
-> > +++ b/include/linux/i2c.h
-> > @@ -15,6 +15,7 @@
-> >  #include <linux/device.h>      /* for struct device */
-> >  #include <linux/sched.h>       /* for completion */
-> >  #include <linux/mutex.h>
-> > +#include <linux/regulator/consumer.h>
-> >  #include <linux/rtmutex.h>
-> >  #include <linux/irqdomain.h>           /* for Host Notify IRQ */
-> >  #include <linux/of.h>          /* for struct device_node */
-> > @@ -330,6 +331,7 @@ struct i2c_client {
-> >         int init_irq;                   /* irq set at initialization    */
-> >         int irq;                        /* irq issued by device         */
-> >         struct list_head detected;
-> > +
-> >  #if IS_ENABLED(CONFIG_I2C_SLAVE)
-> >         i2c_slave_cb_t slave_cb;        /* callback for slave mode      */
-> >  #endif
-> > @@ -723,6 +725,7 @@ struct i2c_adapter {
-> >         const struct i2c_adapter_quirks *quirks;
-> >
-> >         struct irq_domain *host_notify_domain;
-> > +       struct regulator *bus_reg;
-> >  };
-> >  #define to_i2c_adapter(d) container_of(d, struct i2c_adapter, dev)
-> >
-> > --
-> > 2.18.0
+> Freeze/unfreeze of the queues will guarantee that there
+> are no requests in use on the shared ring.
+> 
+> Note:For older backends,if a backend doesn't have commit'12ea729645ace'
+> xen/blkback: unmap all persistent grants when frontend gets disconnected,
+> the frontend may see massive amount of grant table warning when freeing
+> resources.
+> [   36.852659] deferring g.e. 0xf9 (pfn 0xffffffffffffffff)
+> [   36.855089] xen:grant_table: WARNING:e.g. 0x112 still in use!
+> 
+> In this case, persistent grants would need to be disabled.
+> 
+> [Anchal Changelog: Removed timeout/request during blkfront freeze.
+> Fixed major part of the code to work with blk-mq]
+> Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
+> Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+> ---
+>  drivers/block/xen-blkfront.c | 119 ++++++++++++++++++++++++++++++++---
+>  1 file changed, 112 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
+> index 478120233750..d715ed3cb69a 100644
+> --- a/drivers/block/xen-blkfront.c
+> +++ b/drivers/block/xen-blkfront.c
+> @@ -47,6 +47,8 @@
+>  #include <linux/bitmap.h>
+>  #include <linux/list.h>
+>  #include <linux/workqueue.h>
+> +#include <linux/completion.h>
+> +#include <linux/delay.h>
+>  
+>  #include <xen/xen.h>
+>  #include <xen/xenbus.h>
+> @@ -79,6 +81,8 @@ enum blkif_state {
+>  	BLKIF_STATE_DISCONNECTED,
+>  	BLKIF_STATE_CONNECTED,
+>  	BLKIF_STATE_SUSPENDED,
+> +	BLKIF_STATE_FREEZING,
+> +	BLKIF_STATE_FROZEN
+>  };
+>  
+>  struct grant {
+> @@ -220,6 +224,7 @@ struct blkfront_info
+>  	struct list_head requests;
+>  	struct bio_list bio_list;
+>  	struct list_head info_list;
+> +	struct completion wait_backend_disconnected;
+>  };
+>  
+>  static unsigned int nr_minors;
+> @@ -261,6 +266,7 @@ static DEFINE_SPINLOCK(minor_lock);
+>  static int blkfront_setup_indirect(struct blkfront_ring_info *rinfo);
+>  static void blkfront_gather_backend_features(struct blkfront_info *info);
+>  static int negotiate_mq(struct blkfront_info *info);
+> +static void __blkif_free(struct blkfront_info *info);
+>  
+>  static int get_id_from_freelist(struct blkfront_ring_info *rinfo)
+>  {
+> @@ -995,6 +1001,7 @@ static int xlvbd_init_blk_queue(struct gendisk *gd, u16 sector_size,
+>  	info->sector_size = sector_size;
+>  	info->physical_sector_size = physical_sector_size;
+>  	blkif_set_queue_limits(info);
+> +	init_completion(&info->wait_backend_disconnected);
+>  
+>  	return 0;
+>  }
+> @@ -1218,6 +1225,8 @@ static void xlvbd_release_gendisk(struct blkfront_info *info)
+>  /* Already hold rinfo->ring_lock. */
+>  static inline void kick_pending_request_queues_locked(struct blkfront_ring_info *rinfo)
+>  {
+> +	if (unlikely(rinfo->dev_info->connected == BLKIF_STATE_FREEZING))
+> +		return;
+>  	if (!RING_FULL(&rinfo->ring))
+>  		blk_mq_start_stopped_hw_queues(rinfo->dev_info->rq, true);
+>  }
+> @@ -1341,8 +1350,6 @@ static void blkif_free_ring(struct blkfront_ring_info *rinfo)
+>  
+>  static void blkif_free(struct blkfront_info *info, int suspend)
+>  {
+> -	unsigned int i;
+> -
+>  	/* Prevent new requests being issued until we fix things up. */
+>  	info->connected = suspend ?
+>  		BLKIF_STATE_SUSPENDED : BLKIF_STATE_DISCONNECTED;
+> @@ -1350,6 +1357,13 @@ static void blkif_free(struct blkfront_info *info, int suspend)
+>  	if (info->rq)
+>  		blk_mq_stop_hw_queues(info->rq);
+>  
+> +	__blkif_free(info);
+> +}
+> +
+> +static void __blkif_free(struct blkfront_info *info)
+> +{
+> +	unsigned int i;
+> +
+>  	for (i = 0; i < info->nr_rings; i++)
+>  		blkif_free_ring(&info->rinfo[i]);
+>  
+> @@ -1553,8 +1567,10 @@ static irqreturn_t blkif_interrupt(int irq, void *dev_id)
+>  	struct blkfront_ring_info *rinfo = (struct blkfront_ring_info *)dev_id;
+>  	struct blkfront_info *info = rinfo->dev_info;
+>  
+> -	if (unlikely(info->connected != BLKIF_STATE_CONNECTED))
+> -		return IRQ_HANDLED;
+> +	if (unlikely(info->connected != BLKIF_STATE_CONNECTED)) {
+> +		if (info->connected != BLKIF_STATE_FREEZING)
+> +			return IRQ_HANDLED;
+> +	}
+>  
+>  	spin_lock_irqsave(&rinfo->ring_lock, flags);
+>   again:
+> @@ -2020,6 +2036,7 @@ static int blkif_recover(struct blkfront_info *info)
+>  	struct bio *bio;
+>  	unsigned int segs;
+>  
+> +	bool frozen = info->connected == BLKIF_STATE_FROZEN;
+>  	blkfront_gather_backend_features(info);
+>  	/* Reset limits changed by blk_mq_update_nr_hw_queues(). */
+>  	blkif_set_queue_limits(info);
+> @@ -2046,6 +2063,9 @@ static int blkif_recover(struct blkfront_info *info)
+>  		kick_pending_request_queues(rinfo);
+>  	}
+>  
+> +	if (frozen)
+> +		return 0;
+> +
+>  	list_for_each_entry_safe(req, n, &info->requests, queuelist) {
+>  		/* Requeue pending requests (flush or discard) */
+>  		list_del_init(&req->queuelist);
+> @@ -2359,6 +2379,7 @@ static void blkfront_connect(struct blkfront_info *info)
+>  
+>  		return;
+>  	case BLKIF_STATE_SUSPENDED:
+> +	case BLKIF_STATE_FROZEN:
+>  		/*
+>  		 * If we are recovering from suspension, we need to wait
+>  		 * for the backend to announce it's features before
+> @@ -2476,12 +2497,37 @@ static void blkback_changed(struct xenbus_device *dev,
+>  		break;
+>  
+>  	case XenbusStateClosed:
+> -		if (dev->state == XenbusStateClosed)
+> +		if (dev->state == XenbusStateClosed) {
+> +			if (info->connected == BLKIF_STATE_FREEZING) {
+> +				__blkif_free(info);
+> +				info->connected = BLKIF_STATE_FROZEN;
+> +				complete(&info->wait_backend_disconnected);
+> +				break;
+> +			}
+> +
+>  			break;
+> +		}
+> +
+> +		/*
+> +		 * We may somehow receive backend's Closed again while thawing
+> +		 * or restoring and it causes thawing or restoring to fail.
+> +		 * Ignore such unexpected state anyway.
+> +		 */
+> +		if (info->connected == BLKIF_STATE_FROZEN &&
+> +				dev->state == XenbusStateInitialised) {
+> +			dev_dbg(&dev->dev,
+> +					"ignore the backend's Closed state: %s",
+> +					dev->nodename);
+> +			break;
+> +		}
+>  		/* fall through */
+>  	case XenbusStateClosing:
+> -		if (info)
+> -			blkfront_closing(info);
+> +		if (info) {
+> +			if (info->connected == BLKIF_STATE_FREEZING)
+> +				xenbus_frontend_closed(dev);
+> +			else
+> +				blkfront_closing(info);
+> +		}
+>  		break;
+>  	}
+>  }
+> @@ -2625,6 +2671,62 @@ static void blkif_release(struct gendisk *disk, fmode_t mode)
+>  	mutex_unlock(&blkfront_mutex);
+>  }
+>  
+> +static int blkfront_freeze(struct xenbus_device *dev)
+> +{
+> +	unsigned int i;
+> +	struct blkfront_info *info = dev_get_drvdata(&dev->dev);
+> +	struct blkfront_ring_info *rinfo;
+> +	/* This would be reasonable timeout as used in xenbus_dev_shutdown() */
+> +	unsigned int timeout = 5 * HZ;
+> +	int err = 0;
+> +
+> +	info->connected = BLKIF_STATE_FREEZING;
+> +
+> +	blk_mq_freeze_queue(info->rq);
+> +	blk_mq_quiesce_queue(info->rq);
+> +
+> +	for (i = 0; i < info->nr_rings; i++) {
+> +		rinfo = &info->rinfo[i];
+> +
+> +		gnttab_cancel_free_callback(&rinfo->callback);
+> +		flush_work(&rinfo->work);
+> +	}
+> +
+> +	/* Kick the backend to disconnect */
+> +	xenbus_switch_state(dev, XenbusStateClosing);
+
+Are you sure this is safe?
+
+I don't think you wait for all requests pending on the ring to be
+finished by the backend, and hence you might loose requests as the
+ones on the ring would not be re-issued by blkfront_restore AFAICT.
+
+Thanks, Roger.
