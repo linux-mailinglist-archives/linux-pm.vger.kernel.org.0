@@ -2,89 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 246371628FA
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 15:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CAE162A7E
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 17:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726667AbgBRO67 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Feb 2020 09:58:59 -0500
-Received: from mout.gmx.net ([212.227.17.21]:60305 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726540AbgBRO67 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 18 Feb 2020 09:58:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1582037931;
-        bh=AKEe5GkAENzAllhW9wit/K+ItMrJsGooEPHh3QAMS0k=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=Ed7nv27MmOhrCRb0jwaNMfXunQDoloW4nb5x+FCQnrh07A48s4qz6N5ATdIDn0LCz
-         X8K4vzni2aHWEiFxXjmXVqj4EV5d+56JH9ZL9wulut8zPyb4EREeGguEPRTI0FK0va
-         68zNHNYqpE1ufNSib185SEpXDSZyGryWmT7r1GKc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.223]) by mail.gmx.com (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Msq24-1jJFjf1fXk-00t96u; Tue, 18
- Feb 2020 15:58:51 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-doc@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] docs: power: Drop reference to interface.rst
-Date:   Tue, 18 Feb 2020 15:58:18 +0100
-Message-Id: <20200218145819.17314-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.20.1
+        id S1726648AbgBRQaI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Feb 2020 11:30:08 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:57195 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbgBRQaI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Feb 2020 11:30:08 -0500
+Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1j45l7-0003h0-5w; Tue, 18 Feb 2020 16:30:05 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        linux-pm@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH net-next v3 1/9] sysfs: add sysfs_file_change_owner{_by_name}()
+Date:   Tue, 18 Feb 2020 17:29:35 +0100
+Message-Id: <20200218162943.2488012-2-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200218162943.2488012-1-christian.brauner@ubuntu.com>
+References: <20200218162943.2488012-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:um4vvbYIrZ3DzIDgpFy8U3EJcAeplKNx0PjRgZ9T90zJsCXrjwv
- myE4G3+RGIwO04LcuGoQvgZFjRfuqJxGgNYFsagp10+E6uZ+vHDgDw+hr3xlVuRwQFSOVjO
- Ta8Gxyngnf9ahBfWSliHXW9HrtD9ztaaWDkhgr4ChpDHFUUnoq0FNtunIRJNjoBuHpDE+Er
- rfgJ4hDefe4vcIjTxG2Jg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:i/NGwyUvS8o=:nhloy+zYvjuZO518bPkL94
- 85pfXbdDHw4O7z+AGvux7vtbr8Re614aoznpLTV4dnYt50XwShIOnjlc/W8I6hb/XtmVhDgB/
- X13Rt/hEPCCashEbOvEbTLhURIqyfeOdh+nBYOPDHEWlwN0SOMb035z77mo+TkcK3p6QMGhwp
- mzr2PFuGcMCIy4sUSwdoqM6rDuSgVAB7r4UQ9ilR8Ar4ZrRYg+ylsMMiaifvvGLKYsAQkQ4x9
- E2+tZ+f3SfGqYTsIWRAwSLoF4ALxS/3i//2SVRWdTSxO86R5xcffsndsB88QxCSq8G1ibj9w9
- 6lPtQ8HOkoaKWoNLVssn0XsN0hCLyKa1FWRRh7n3tt6IwpcLpPXk6pANi9xWkcyKq/9RleuNi
- htQNHKefgfR7gKeo4V+hzW8njcEMc8EYM+agEKge1UqwSeO6/B4e4aUD9ZsZCFs8iac01jEHu
- NZ3tG3Qhl/Fucj9jStu8/Y1me3G1sXXbsSLDVaki4r5mmh6IUBVFCPrRJltEEQ8/iST9Q8fC3
- vsjAAGovEGInY3G2SvE+9kbb3rOPoZdgamlGaPX1Xj/BbLhzSXUwNcBIZHM3pSXRw+y7EyTc7
- 7vdPSo94Q16fIBmh57Vbuur8XsI+HPyy73GTS+14Qx67h1/FtDV/fAUExFo6TkemIxbJ1X1Gz
- XIHbSPkIBD08hh0LkOTu1BllJ44XbtvlX/vxCbnks2TyJ/D3j9rikvwEPO2Fg6qacdCGXV6he
- 2ytBBq1abPGtOR+fh/Ui1iylHF4L+jSvBW7GfqRVJI14G0+nVKEmYs0/JNNzZhWFPeYufDIO2
- H7/ycGCd/jWElNpYO3E0PL81D27hqFnIwjjaBXLHhTbA9BznILiST3s/bnZrsfnZ5q3lvditN
- b/4NpL9WHBqUJGOQXelsN1eU/3fGP4X92QuxgdLCuKH5KLtTPB548NNYNGFGw9hEVw7D1/LOL
- NGzQJedjLnri0nom6aM1oO/XnqIEt98Wv8oEJwLCelmIZ0atdpZvcWdTHePfC73GsacNlt+AL
- 4VL8bi291grKWEB043ZztXe4cTwe/W7L3O96gScMO9+byF+fpHJ03gHs5V7dCbv9bin+L0isn
- 4/L3P5Ev5es7oRza6ABs5hYVGtGKaE8XVxTkOUhwjUX/S8q8eWKoRu90qqNoX5DwCalA5LdNh
- vZj473yErNNYdPwrT95x7MbaV7KSxzg5aflRrQPPe7r60Nd7pHndhh2wIFHUz3ONQeOO5tEiX
- oQwkSP2af4/gBCPjf
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It has been merged into sleep-states.rst.
+Add helpers to change the owner of a sysfs files.
+This function will be used to correctly account for kobject ownership
+changes, e.g. when moving network devices between network namespaces.
 
-Fixes: c21502efdaed ("Documentation: admin-guide: PM: Update sleep states =
-documentation")
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- Documentation/power/index.rst | 1 -
- 1 file changed, 1 deletion(-)
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+/* v2 */
+-  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+   - Better naming for sysfs_file_change_owner() to reflect the fact that it
+     can be used to change the owner of the kobject itself by passing NULL as
+     argument.
+- Christian Brauner <christian.brauner@ubuntu.com>:
+  - Split sysfs_file_change_owner() into two helpers sysfs_change_owner() and
+    sysfs_change_owner_by_name(). The former changes the owner of the kobject
+    itself, the latter the owner of the kobject looked up via the name
+    argument.
 
-diff --git a/Documentation/power/index.rst b/Documentation/power/index.rst
-index 002e42745263..ced8a8007434 100644
-=2D-- a/Documentation/power/index.rst
-+++ b/Documentation/power/index.rst
-@@ -13,7 +13,6 @@ Power Management
-     drivers-testing
-     energy-model
-     freezing-of-tasks
--    interface
-     opp
-     pci
-     pm_qos_interface
-=2D-
-2.20.1
+/* v3 */
+-  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+   - Add explicit uid/gid parameters.
+---
+ fs/sysfs/file.c       | 67 +++++++++++++++++++++++++++++++++++++++++++
+ include/linux/sysfs.h | 17 +++++++++++
+ 2 files changed, 84 insertions(+)
+
+diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
+index 130fc6fbcc03..32bb04b4d9d9 100644
+--- a/fs/sysfs/file.c
++++ b/fs/sysfs/file.c
+@@ -558,3 +558,70 @@ void sysfs_remove_bin_file(struct kobject *kobj,
+ 	kernfs_remove_by_name(kobj->sd, attr->attr.name);
+ }
+ EXPORT_SYMBOL_GPL(sysfs_remove_bin_file);
++
++static int internal_change_owner(struct kernfs_node *kn, struct kobject *kobj,
++				 kuid_t kuid, kgid_t kgid)
++{
++	struct iattr newattrs = {
++		.ia_valid = ATTR_UID | ATTR_GID,
++		.ia_uid = kuid,
++		.ia_gid = kgid,
++	};
++	return kernfs_setattr(kn, &newattrs);
++}
++
++/**
++ *	sysfs_file_change_owner_by_name - change owner of a file.
++ *	@kobj:	object.
++ *	@name:	name of the file to change.
++ *	@kuid:	new owner's kuid
++ *	@kgid:	new owner's kgid
++ */
++int sysfs_file_change_owner_by_name(struct kobject *kobj, const char *name,
++				    kuid_t kuid, kgid_t kgid)
++{
++	struct kernfs_node *kn;
++	int error;
++
++	if (!name)
++		return -EINVAL;
++
++	if (!kobj->state_in_sysfs)
++		return -EINVAL;
++
++	kn = kernfs_find_and_get(kobj->sd, name);
++	if (!kn)
++		return -ENOENT;
++
++	error = internal_change_owner(kn, kobj, kuid, kgid);
++
++	kernfs_put(kn);
++
++	return error;
++}
++EXPORT_SYMBOL_GPL(sysfs_file_change_owner_by_name);
++
++/**
++ *	sysfs_file_change_owner - change owner of a file.
++ *	@kobj:	object.
++ *	@kuid: new owner's kuid
++ *	@kgid: new owner's kgid
++ */
++int sysfs_file_change_owner(struct kobject *kobj, kuid_t kuid, kgid_t kgid)
++{
++	struct kernfs_node *kn;
++	int error;
++
++	if (!kobj->state_in_sysfs)
++		return -EINVAL;
++
++	kernfs_get(kobj->sd);
++
++	kn = kobj->sd;
++	error = internal_change_owner(kn, kobj, kuid, kgid);
++
++	kernfs_put(kn);
++
++	return error;
++}
++EXPORT_SYMBOL_GPL(sysfs_file_change_owner);
+diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
+index fa7ee503fb76..c11d11c78713 100644
+--- a/include/linux/sysfs.h
++++ b/include/linux/sysfs.h
+@@ -310,6 +310,10 @@ static inline void sysfs_enable_ns(struct kernfs_node *kn)
+ 	return kernfs_enable_ns(kn);
+ }
+ 
++int sysfs_file_change_owner(struct kobject *kobj, kuid_t kuid, kgid_t kgid);
++int sysfs_file_change_owner_by_name(struct kobject *kobj, const char *name,
++				    kuid_t kuid, kgid_t kgid);
++
+ #else /* CONFIG_SYSFS */
+ 
+ static inline int sysfs_create_dir_ns(struct kobject *kobj, const void *ns)
+@@ -522,6 +526,19 @@ static inline void sysfs_enable_ns(struct kernfs_node *kn)
+ {
+ }
+ 
++static inline int int sysfs_file_change_owner(struct kobject *kobj, kuid_t kuid,
++					      kgid_t kgid)
++{
++	return 0;
++}
++
++static inline int sysfs_file_change_owner_by_name(struct kobject *kobj,
++						  const char *name, kuid_t kuid,
++						  kgid_t kgid)
++{
++	return 0;
++}
++
+ #endif /* CONFIG_SYSFS */
+ 
+ static inline int __must_check sysfs_create_file(struct kobject *kobj,
+-- 
+2.25.0
 
