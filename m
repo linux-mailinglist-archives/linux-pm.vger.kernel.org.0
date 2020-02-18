@@ -2,170 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF6616230C
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 10:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7D7162332
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 10:16:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbgBRJKg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Feb 2020 04:10:36 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:35180 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726186AbgBRJKg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Feb 2020 04:10:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=gtxCElNvSCXWFICx33F89B+eF/cQ+L9FjqnWYk2rKuI=; b=h/D+gqw5OmQpGOwUjnu/fi4+kH
-        bT0h8EUVx9iIS8HNfPlJzJPk40KKUsFKNf009z67RPKZuDo+88sdToDM6wpb5+YlEa7V9G6OJvFol
-        R8RQl98kwCpA4ooFYQSURvPloAPXb0/KOMWODRXhBfm93RtLstFP639AaaseMhA7rBw6OI8LTEr+J
-        PXc4gR41BMqKLfnINKvS8pLmCqR3uXPMYK/daZvPEV9ynEWBeYzh1jVee6AgvUIOeV700uQ2EOPBg
-        z3vWEhpNHMY0ljZor0m1CokA7zJdOq2gDEs8oPaHQ9a9htLoD+FYLhrx/s8ITQGSuGwynWgVTIITp
-        vszoRJOw==;
-Received: from tmo-109-126.customers.d1-online.com ([80.187.109.126] helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j3ytn-00046s-Vd; Tue, 18 Feb 2020 09:10:36 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j3j8V-000foa-PM; Mon, 17 Feb 2020 17:20:43 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-sh@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        linux-crypto@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        keyrings@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        David Howells <dhowells@redhat.com>, linux-pci@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-pm@vger.kernel.org,
-        Javi Merino <javi.merino@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Subject: [PATCH v2 00/24] Manually convert  thermal, crypto and misc devices to ReST
-Date:   Mon, 17 Feb 2020 17:20:18 +0100
-Message-Id: <cover.1581956285.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.24.1
+        id S1726338AbgBRJQX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Feb 2020 04:16:23 -0500
+Received: from esa4.hc3370-68.iphmx.com ([216.71.155.144]:6247 "EHLO
+        esa4.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726186AbgBRJQX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Feb 2020 04:16:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1582017382;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=lcDVb9zXtKxtRtcOkp+nnORggRYgX9o2VvFOkpOp/P8=;
+  b=Wcv8Oo1vNyFtzekkkXrdLKefd1xRdv460LmxJby949OKvkMac/Er3JG3
+   lTs+CjdkJIO8oOYPmh+FPXH7iqdmUBrTnS/bbAt0WbgBDFgygU9H3toEN
+   TRs29hb+u+6WHreqTy9IrLpRoQxg82Gw2ENKMOT5qL5D4R5ZNUZ/izLsb
+   w=;
+Authentication-Results: esa4.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none; spf=None smtp.pra=roger.pau@citrix.com; spf=Pass smtp.mailfrom=roger.pau@citrix.com; spf=None smtp.helo=postmaster@mail.citrix.com
+Received-SPF: None (esa4.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  roger.pau@citrix.com) identity=pra; client-ip=162.221.158.21;
+  receiver=esa4.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="roger.pau@citrix.com";
+  x-conformance=sidf_compatible
+Received-SPF: Pass (esa4.hc3370-68.iphmx.com: domain of
+  roger.pau@citrix.com designates 162.221.158.21 as permitted
+  sender) identity=mailfrom; client-ip=162.221.158.21;
+  receiver=esa4.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="roger.pau@citrix.com";
+  x-conformance=sidf_compatible; x-record-type="v=spf1";
+  x-record-text="v=spf1 ip4:209.167.231.154 ip4:178.63.86.133
+  ip4:195.66.111.40/30 ip4:85.115.9.32/28 ip4:199.102.83.4
+  ip4:192.28.146.160 ip4:192.28.146.107 ip4:216.52.6.88
+  ip4:216.52.6.188 ip4:162.221.158.21 ip4:162.221.156.83
+  ip4:168.245.78.127 ~all"
+Received-SPF: None (esa4.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@mail.citrix.com) identity=helo;
+  client-ip=162.221.158.21; receiver=esa4.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="postmaster@mail.citrix.com";
+  x-conformance=sidf_compatible
+IronPort-SDR: +NEaIej/3FoAmfEcfZRKSsrlG2EvLazi8i5c8rEat0w9DZFheqa79Nk6lGtTXdWahQxWJl2DCh
+ tlH9OIp4sxxYTLOa3B/zsETTAUK8TdmCfj5QS1nbH7zQdOb38cbTB0gh9TwQ83rCNVxkZpFmoq
+ j1LtHDChEp7jQ9ejWC3CN7k9hxaDnckSFEXLd4lOIy3xb5OQT9MQ0pZkm803x4ik86Fj0f3jA3
+ liTdQc2+rRln3CHugnKLQ5/73TashOzsfWqyviP0SOWxvTvxXsU6PhJjMAiJRq9l7kT8QkhDY2
+ q1o=
+X-SBRS: 2.7
+X-MesageID: 13228854
+X-Ironport-Server: esa4.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.158.21
+X-Policy: $RELAYED
+X-IronPort-AV: E=Sophos;i="5.70,456,1574139600"; 
+   d="scan'208";a="13228854"
+Date:   Tue, 18 Feb 2020 10:16:11 +0100
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     Anchal Agarwal <anchalag@amazon.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
+        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <fllinden@amaozn.com>,
+        <benh@kernel.crashing.org>
+Subject: Re: [RFC PATCH v3 06/12] xen-blkfront: add callbacks for PM suspend
+ and hibernation
+Message-ID: <20200218091611.GN4679@Air-de-Roger>
+References: <cover.1581721799.git.anchalag@amazon.com>
+ <890c404c585d7790514527f0c021056a7be6e748.1581721799.git.anchalag@amazon.com>
+ <20200217100509.GE4679@Air-de-Roger>
+ <20200217230553.GA8100@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200217230553.GA8100@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+X-ClientProxiedBy: AMSPEX02CAS01.citrite.net (10.69.22.112) To
+ AMSPEX02CL01.citrite.net (10.69.22.125)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Feb 17, 2020 at 11:05:53PM +0000, Anchal Agarwal wrote:
+> On Mon, Feb 17, 2020 at 11:05:09AM +0100, Roger Pau Monné wrote:
+> > On Fri, Feb 14, 2020 at 11:25:34PM +0000, Anchal Agarwal wrote:
+> > > From: Munehisa Kamata <kamatam@amazon.com
+> > > 
+> > > Add freeze, thaw and restore callbacks for PM suspend and hibernation
+> > > support. All frontend drivers that needs to use PM_HIBERNATION/PM_SUSPEND
+> > > events, need to implement these xenbus_driver callbacks.
+> > > The freeze handler stops a block-layer queue and disconnect the
+> > > frontend from the backend while freeing ring_info and associated resources.
+> > > The restore handler re-allocates ring_info and re-connect to the
+> > > backend, so the rest of the kernel can continue to use the block device
+> > > transparently. Also, the handlers are used for both PM suspend and
+> > > hibernation so that we can keep the existing suspend/resume callbacks for
+> > > Xen suspend without modification. Before disconnecting from backend,
+> > > we need to prevent any new IO from being queued and wait for existing
+> > > IO to complete.
+> > 
+> > This is different from Xen (xenstore) initiated suspension, as in that
+> > case Linux doesn't flush the rings or disconnects from the backend.
+> Yes, AFAIK in xen initiated suspension backend takes care of it. 
 
-Manually convert some files from thermal, crypto and misc-devices
-to ReST format.
+No, in Xen initiated suspension backend doesn't take care of flushing
+the rings, the frontend has a shadow copy of the ring contents and it
+re-issues the requests on resume.
 
-This patch is against linux-next 20200217 tag.
+> > > +static int blkfront_freeze(struct xenbus_device *dev)
+> > > +{
+> > > +	unsigned int i;
+> > > +	struct blkfront_info *info = dev_get_drvdata(&dev->dev);
+> > > +	struct blkfront_ring_info *rinfo;
+> > > +	/* This would be reasonable timeout as used in xenbus_dev_shutdown() */
+> > > +	unsigned int timeout = 5 * HZ;
+> > > +	int err = 0;
+> > > +
+> > > +	info->connected = BLKIF_STATE_FREEZING;
+> > > +
+> > > +	blk_mq_freeze_queue(info->rq);
+> > > +	blk_mq_quiesce_queue(info->rq);
+> > > +
+> > > +	for (i = 0; i < info->nr_rings; i++) {
+> > > +		rinfo = &info->rinfo[i];
+> > > +
+> > > +		gnttab_cancel_free_callback(&rinfo->callback);
+> > > +		flush_work(&rinfo->work);
+> > > +	}
+> > > +
+> > > +	/* Kick the backend to disconnect */
+> > > +	xenbus_switch_state(dev, XenbusStateClosing);
+> > 
+> > Are you sure this is safe?
+> > 
+> In my testing running multiple fio jobs, other test scenarios running
+> a memory loader works fine. I did not came across a scenario that would
+> have failed resume due to blkfront issues unless you can sugest some?
 
-v2: 
+AFAICT you don't wait for the in-flight requests to be finished, and
+just rely on blkback to finish processing those. I'm not sure all
+blkback implementations out there can guarantee that.
 
-- a small change at patch 2 to avoid uneeded whitespace changes;
-- added 13 new patches at the end
+The approach used by Xen initiated suspension is to re-issue the
+in-flight requests when resuming. I have to admit I don't think this
+is the best approach, but I would like to keep both the Xen and the PM
+initiated suspension using the same logic, and hence I would request
+that you try to re-use the existing resume logic (blkfront_resume).
 
-Mauro Carvalho Chehab (24):
-  docs: thermal: convert cpu-idle-cooling.rst to ReST
-  docs: crypto: convert asymmetric-keys.txt to ReST
-  docs: crypto: convert api-intro.txt to ReST format
-  docs: crypto: convert async-tx-api.txt to ReST format
-  docs: crypto: descore-readme.txt: convert to ReST format
-  docs: misc-devices/spear-pcie-gadget.txt: convert to ReST
-  docs: misc-devices/pci-endpoint-test.txt: convert to ReST
-  docs: misc-devices/pci-endpoint-test.txt: convert to ReST
-  docs: misc-devices/c2port.txt: convert to ReST format
-  docs: misc-devices/bh1770glc.txt: convert to ReST
-  docs: misc-devices/apds990x.txt: convert to ReST format
-  docs: pci: endpoint/function/binding/pci-test.txt convert to ReST
-  docs: arm64: convert perf.txt to ReST format
-  docs: cpu-freq: convert index.txt to ReST
-  docs: cpu-freq: convert amd-powernow.txt to ReST
-  docs: cpu-freq: convert core.txt to ReST
-  docs: cpu-freq: convert cpu-drivers.txt to ReST
-  docs: cpu-freq: convert cpufreq-nforce2.txt to ReST
-  docs: cpu-freq: convert cpufreq-stats.txt to ReST
-  docs: cpu-freq: convert pcc-cpufreq.txt to ReST
-  docs: powerpc: convert vcpudispatch_stats.txt to ReST
-  docs: sh: convert new-machine.txt to ReST
-  docs: sh: convert register-banks.txt to ReST
-  docs: trace: ring-buffer-design.txt: convert to ReST format
+> > I don't think you wait for all requests pending on the ring to be
+> > finished by the backend, and hence you might loose requests as the
+> > ones on the ring would not be re-issued by blkfront_restore AFAICT.
+> > 
+> AFAIU, blk_mq_freeze_queue/blk_mq_quiesce_queue should take care of no used
+> request on the shared ring. Also, we I want to pause the queue and flush all
+> the pending requests in the shared ring before disconnecting from backend.
 
- .../endpoint/function/binding/pci-test.rst    |  26 +
- .../endpoint/function/binding/pci-test.txt    |  19 -
- Documentation/PCI/endpoint/index.rst          |   2 +
- Documentation/arm64/index.rst                 |   1 +
- Documentation/arm64/{perf.txt => perf.rst}    |   7 +-
- .../{amd-powernow.txt => amd-powernow.rst}    |  12 +-
- Documentation/cpu-freq/{core.txt => core.rst} |  65 +-
- .../{cpu-drivers.txt => cpu-drivers.rst}      | 129 ++-
- ...pufreq-nforce2.txt => cpufreq-nforce2.rst} |  18 +-
- .../{cpufreq-stats.txt => cpufreq-stats.rst}  | 121 +--
- Documentation/cpu-freq/index.rst              |  42 +
- Documentation/cpu-freq/index.txt              |  56 --
- .../{pcc-cpufreq.txt => pcc-cpufreq.rst}      |  86 +-
- .../crypto/{api-intro.txt => api-intro.rst}   | 186 ++--
- ...symmetric-keys.txt => asymmetric-keys.rst} |  91 +-
- .../{async-tx-api.txt => async-tx-api.rst}    | 253 +++---
- ...{descore-readme.txt => descore-readme.rst} | 152 +++-
- Documentation/crypto/index.rst                |   5 +
- .../driver-api/thermal/cpu-idle-cooling.rst   |  18 +-
- Documentation/driver-api/thermal/index.rst    |   1 +
- Documentation/index.rst                       |   1 +
- .../{ad525x_dpot.txt => ad525x_dpot.rst}      |  24 +-
- .../{apds990x.txt => apds990x.rst}            |  31 +-
- .../{bh1770glc.txt => bh1770glc.rst}          |  45 +-
- .../misc-devices/{c2port.txt => c2port.rst}   |  58 +-
- Documentation/misc-devices/index.rst          |   6 +
- .../misc-devices/pci-endpoint-test.rst        |  56 ++
- .../misc-devices/pci-endpoint-test.txt        |  41 -
- .../misc-devices/spear-pcie-gadget.rst        | 170 ++++
- .../misc-devices/spear-pcie-gadget.txt        | 130 ---
- Documentation/powerpc/index.rst               |   1 +
- ...patch_stats.txt => vcpudispatch_stats.rst} |  17 +-
- Documentation/sh/index.rst                    |   6 +
- .../sh/{new-machine.txt => new-machine.rst}   | 193 +++--
- ...{register-banks.txt => register-banks.rst} |  12 +-
- Documentation/trace/index.rst                 |   1 +
- ...ffer-design.txt => ring-buffer-design.rst} | 802 ++++++++++--------
- 37 files changed, 1603 insertions(+), 1281 deletions(-)
- create mode 100644 Documentation/PCI/endpoint/function/binding/pci-test.rst
- delete mode 100644 Documentation/PCI/endpoint/function/binding/pci-test.txt
- rename Documentation/arm64/{perf.txt => perf.rst} (95%)
- rename Documentation/cpu-freq/{amd-powernow.txt => amd-powernow.rst} (89%)
- rename Documentation/cpu-freq/{core.txt => core.rst} (69%)
- rename Documentation/cpu-freq/{cpu-drivers.txt => cpu-drivers.rst} (72%)
- rename Documentation/cpu-freq/{cpufreq-nforce2.txt => cpufreq-nforce2.rst} (55%)
- rename Documentation/cpu-freq/{cpufreq-stats.txt => cpufreq-stats.rst} (53%)
- create mode 100644 Documentation/cpu-freq/index.rst
- delete mode 100644 Documentation/cpu-freq/index.txt
- rename Documentation/cpu-freq/{pcc-cpufreq.txt => pcc-cpufreq.rst} (80%)
- rename Documentation/crypto/{api-intro.txt => api-intro.rst} (70%)
- rename Documentation/crypto/{asymmetric-keys.txt => asymmetric-keys.rst} (91%)
- rename Documentation/crypto/{async-tx-api.txt => async-tx-api.rst} (55%)
- rename Documentation/crypto/{descore-readme.txt => descore-readme.rst} (81%)
- rename Documentation/misc-devices/{ad525x_dpot.txt => ad525x_dpot.rst} (85%)
- rename Documentation/misc-devices/{apds990x.txt => apds990x.rst} (86%)
- rename Documentation/misc-devices/{bh1770glc.txt => bh1770glc.rst} (83%)
- rename Documentation/misc-devices/{c2port.txt => c2port.rst} (59%)
- create mode 100644 Documentation/misc-devices/pci-endpoint-test.rst
- delete mode 100644 Documentation/misc-devices/pci-endpoint-test.txt
- create mode 100644 Documentation/misc-devices/spear-pcie-gadget.rst
- delete mode 100644 Documentation/misc-devices/spear-pcie-gadget.txt
- rename Documentation/powerpc/{vcpudispatch_stats.txt => vcpudispatch_stats.rst} (94%)
- rename Documentation/sh/{new-machine.txt => new-machine.rst} (73%)
- rename Documentation/sh/{register-banks.txt => register-banks.rst} (88%)
- rename Documentation/trace/{ring-buffer-design.txt => ring-buffer-design.rst} (55%)
+Oh, so blk_mq_freeze_queue does wait for in-flight requests to be
+finished. I guess it's fine then.
 
--- 
-2.24.1
+> Quiescing the queue seemed a better option here as we want to make sure ongoing
+> requests dispatches are totally drained.
+> I should accept that some of these notion is borrowed from how nvme freeze/unfreeze 
+> is done although its not apple to apple comparison.
 
+That's fine, but I would still like to requests that you use the same
+logic (as much as possible) for both the Xen and the PM initiated
+suspension.
 
+So you either apply this freeze/unfreeze to the Xen suspension (and
+drop the re-issuing of requests on resume) or adapt the same approach
+as the Xen initiated suspension. Keeping two completely different
+approaches to suspension / resume on blkfront is not suitable long
+term.
+
+Thanks, Roger.
