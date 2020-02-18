@@ -2,231 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2005A1620DC
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 07:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1860D162179
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 08:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726072AbgBRG3l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Feb 2020 01:29:41 -0500
-Received: from mail-wm1-f54.google.com ([209.85.128.54]:33708 "EHLO
-        mail-wm1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726065AbgBRG3k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Feb 2020 01:29:40 -0500
-Received: by mail-wm1-f54.google.com with SMTP id m10so1431891wmc.0
-        for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2020 22:29:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=J/Hqskr9uyz0hFmSE27FhMqBK5iUjQ8LW2sBeyMtaC0=;
-        b=tkUr0NGzVba8JYNsYS+D84K13UAeNBkE3rjenZ2Z5Nj5zpe7t74/WVnDoyPnY6Imp1
-         94eq0g5kKqg8zY0q+xmvnzRFMs5TqCsdd9bDl2opPutSMK8zO+gmetKdH+cQ36efOacN
-         7Phb4G/J4Ha9gNmAjtIp4+1cGx/gl/r6ZvpKaEGckW/Ov7VRouNNqyk4m4JNWYLP0dUY
-         REC4EDUt3gXDqobYoT6OFWh0wRh0AZaMvjrTms7oVAsCh+is1cau00nxpb5PBZPWpolW
-         kBxcXJO8mRwTwkvmM5PQQNWABbhXQdhAakm94A1qeTfaifXswHahNRWfdcLHHmhPmBw+
-         H8CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=J/Hqskr9uyz0hFmSE27FhMqBK5iUjQ8LW2sBeyMtaC0=;
-        b=fW+CO1MJjYdExHXxVcBt38OimdCgpYEdxD8HlqSpjaon03RTJhb7HutT9q7XYKq5LD
-         H3RVeLrJpYJdCMlnsJ4Y5yY1zisPF2hwqksofnoFrGKRR8OxlEGejMFSPIDeUzAFOgcx
-         ySnbLUzr4fpsF8dICX4zv24okP6bD8oM4kX+8IpQYVH5xwmqyt6705NRVOFGXgPm5AEY
-         idr4fBKjLneWJ0y8iNKt3G+glyMYtLZRwMUbz6UOfBOwWW/tJWJQMe/1/w+yp/8v8u3v
-         5pRbgKY+UzZgupTgFTy5NqU500+Vz9+2jYP4xeWXlfNm0F7rotnASncvLV8CNTWYk7F1
-         hLuw==
-X-Gm-Message-State: APjAAAUkYo5KOauPR1LRgFHGnvuyKRvb26pIesJMrMAV7yMCT3dWGWOB
-        eTzIuj7AdLQqHjO5aCne7RG2rQ==
-X-Google-Smtp-Source: APXvYqy5CM4tnUz5qYymJniNdh3ntCERwi6cvtfr6RiFUADL1J8yxcbow3MZzvPKNC9unzoZf2FS8A==
-X-Received: by 2002:a05:600c:146:: with SMTP id w6mr1122983wmm.180.1582007378313;
-        Mon, 17 Feb 2020 22:29:38 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id t10sm2244390wmi.40.2020.02.17.22.29.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2020 22:29:37 -0800 (PST)
-Message-ID: <5e4b8451.1c69fb81.f061.872c@mx.google.com>
-Date:   Mon, 17 Feb 2020 22:29:37 -0800 (PST)
+        id S1726127AbgBRHXp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Feb 2020 02:23:45 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:64016 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726104AbgBRHXp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Feb 2020 02:23:45 -0500
+X-AuditID: c0a8fbf4-489ff70000004419-60-5e4b90ff5c3c
+Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 0D.8D.17433.FF09B4E5; Tue, 18 Feb 2020 08:23:43 +0100 (CET)
+Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
+ WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
+ 14.03.0439.000; Tue, 18 Feb 2020 08:23:39 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "broonie@kernel.org" <broonie@kernel.org>
+CC:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "Laine, Markus" <Markus.Laine@fi.rohmeurope.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [RFC PATCH 2/3] power: (regmap:) Add linear_range helper
+Thread-Topic: [RFC PATCH 2/3] power: (regmap:) Add linear_range helper
+Thread-Index: AQHV4At5sLPMospsI0G2S3c08J9KoagWS84AgADGiACAA3X4gIAADG2AgAXzFoA=
+Date:   Tue, 18 Feb 2020 07:23:38 +0000
+Message-ID: <208a81c87e944c69d95da85d7fd0f3ea2bd61547.camel@fi.rohmeurope.com>
+References: <cover.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
+         <20b107ac6e40206b82d014a145abe0569d7a6f81.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
+         <20200211190614.GP4543@sirena.org.uk>
+         <cb9ed43aafcd8e1f6af05bfec8108ee8c14af265.camel@fi.rohmeurope.com>
+         <20200214114749.GB4827@sirena.org.uk>
+         <375c7756fca56de4f2f85d1a1a4e0b01dadc290b.camel@fi.rohmeurope.com>
+In-Reply-To: <375c7756fca56de4f2f85d1a1a4e0b01dadc290b.camel@fi.rohmeurope.com>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
 Content-Type: text/plain; charset="utf-8"
+Content-ID: <08DBE84724581D40814E2FDDE1264D17@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: pm-5.6-rc2-146-g00b838d60ec4
-Subject: pm/testing sleep: 6 runs, 0 regressions (pm-5.6-rc2-146-g00b838d60ec4)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sf0gTURzn3d3O88flOWd7rR/QIKL8VdAfJ0kIVsxMK8OiyNnVLrdym91u
+        YgWxiqRtRdOyH2NWpFKIGC0HalqxFlqiKWGZFWVKpUQFCvZ73eOq+df7vO/n14P3pXClk9RQ
+        JovICxauVEvGEPeu//Cnhj25+mWBYCpbMzJGspdDfQr27M9rGPuk3Ueyk6dCgG14NoCxvoZu
+        gj3eGYpie26LWdG6pktNQNfmfRWl8zc6Sd3Lpx2kbtK/YKNie2zmLk4s32wqsaSv2hlrfFup
+        KeuPr3hzbZx0AF+8C0RTkFkB+1w9CheIoZTMIICBW7V/L90A9r85AVyAokgmE7qeRyGDikmF
+        Nd/rSKTBmWoCfnG3EYhIZNbA6rFBXBathQ+PDODIq2LyYfNoMoIEswj+7C1HClqa+pqdQK46
+        gsPm3rACEdHMBjjU/YREGDDzodPxCUMYZ9TQ/25aIT+agfUdj3EZJ8Hx0d9/51rY+W2EQF04
+        swTeaE+XYRasP7dFTlkIz7pHouQnJMCHF8cID5jtnVHgjZi9EbN3htk7w3wFKBoBNHOm0hJO
+        5JenCbw9TbAazdKx22r2A/lrp1pBOJgTBBgFgmAOhWmT6MrsXL1y1i6r4YCRsxmLBXspbwsC
+        SOFaFZ2rXqdX0gbuwEFesP6j5lKEVk0vHqkqUjKoax/Pl/HCP3YeRWkhnXJaCk0Q+BK+Yo+p
+        VIzQGBWNwmM0KhtvMfACZxeNxWg3im3SciAqTurNQXbaVsaZpalsfQSSKc947VWcCtU2XMWV
+        hMVq4TVqmkZSBkmNdsv/ogmgpoA2UQ6Kk/b7f86EVIFJFeICHaoQuQilcYDzgdEPaVV0bbo+
+        692Or5sq9xo6pz6fOZqReH+D2bZ6cuvKOuuhcCI5GkhRLerqPJWin46vP8N99A4MuwfvFBcU
+        Zrc9X9xzIZz24uavte79h8Y8rV0Tpry7ysP3FmZ05Yewmuy8rG3VOXEtQ0Wr+x4UtKx3iK89
+        B9+fLJw30bh7+FiVlrAZueVLccHG/QHBGMn1nAMAAA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 6 runs, 0 regressions (pm-5.6-rc2-146-g00b838d60ec4)
-
-Test results summary
---------------------
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
-
-2   | exynos5422-odroidxu3 | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 21/21  =
-
-3   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-4   | rk3288-veyron-jaq    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 21/21  =
-
-5   | rk3399-gru-kevin     | arm64 | lab-collabora | gcc-8    | defconfig  =
-        | 7/11   =
-
-6   | tegra124-nyan-big    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 2/2    =
-
-
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: pm-5.6-rc2-146-g00b838d60ec4
-  URL:      git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.g=
-it
-  SHA:      00b838d60ec480d931f6209868e69e0d251000c2 =
-
-
-
-Test Failures
--------------
-  =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
-
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/pm-5.6-rc2-146-g00b=
-838d60ec4/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.=
-txt
-  HTML log:    https://storage.kernelci.org//pm/testing/pm-5.6-rc2-146-g00b=
-838d60ec4/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0207.3/armhf/rootfs.cpio.gz  =
-
-
-  1 tests: 0 PASS, 1 FAIL, 0 SKIP
-    * login:
-        never passed   =
-
-         =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-3   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-
-  Results:     1 PASS, 20 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/pm-5.6-rc2-146-g00b=
-838d60ec4/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squ=
-are.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/pm-5.6-rc2-146-g00b=
-838d60ec4/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squ=
-are.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0207.3/armhf/rootfs.cpio.gz  =
-
-
-  21 tests: 1 PASS, 20 FAIL, 0 SKIP
-    * rtcwake-mem-1:
-        never passed
-    * rtcwake-mem-2:
-        never passed
-    * rtcwake-mem-3:
-        never passed
-    * rtcwake-mem-4:
-        never passed
-    * rtcwake-mem-5:
-        never passed
-    * rtcwake-mem-6:
-        never passed
-    * rtcwake-mem-7:
-        never passed
-    * rtcwake-mem-8:
-        never passed
-    * rtcwake-mem-9:
-        never passed
-    * rtcwake-mem-10:
-        never passed
-    * rtcwake-freeze-1:
-        never passed
-    * rtcwake-freeze-2:
-        never passed
-    * rtcwake-freeze-3:
-        never passed
-    * rtcwake-freeze-4:
-        never passed
-    * rtcwake-freeze-5:
-        never passed
-    * rtcwake-freeze-6:
-        never passed
-    * rtcwake-freeze-7:
-        never passed
-    * rtcwake-freeze-8:
-        never passed
-    * rtcwake-freeze-9:
-        never passed
-    * rtcwake-freeze-10:
-        never passed   =
-
-         =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-5   | rk3399-gru-kevin     | arm64 | lab-collabora | gcc-8    | defconfig  =
-        | 7/11   =
-
-
-  Results:     7 PASS, 4 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/pm-5.6-rc2-146-g00b=
-838d60ec4/arm64/defconfig/gcc-8/lab-collabora/sleep-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/pm-5.6-rc2-146-g00b=
-838d60ec4/arm64/defconfig/gcc-8/lab-collabora/sleep-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0207.3/arm64/rootfs.cpio.gz  =
-
-
-  11 tests: 7 PASS, 4 FAIL, 0 SKIP
-    * rtcwake-mem-3:
-        never passed
-    * rtcwake-mem-4:
-        never passed
-    * rtcwake-mem-5:
-        never passed
-    * rtcwake-mem-6:
-        never passed   =
-
-        =20
+TW9ybmluZyBNYXJrLA0KDQpPbiBGcmksIDIwMjAtMDItMTQgYXQgMTQ6MzIgKzAyMDAsIE1hdHRp
+IFZhaXR0aW5lbiB3cm90ZToNCj4gT24gRnJpLCAyMDIwLTAyLTE0IGF0IDExOjQ3ICswMDAwLCBN
+YXJrIEJyb3duIHdyb3RlOg0KPiA+IE9uIFdlZCwgRmViIDEyLCAyMDIwIGF0IDA2OjU2OjM3QU0g
+KzAwMDAsIFZhaXR0aW5lbiwgTWF0dGkgd3JvdGU6DQo+ID4gPiBPbiBUdWUsIDIwMjAtMDItMTEg
+YXQgMTk6MDYgKzAwMDAsIE1hcmsgQnJvd24gd3JvdGU6DQo+ID4gPiA+IA0KPiA+IA0KPiA+IEl0
+IGlzIGEgYml0IGJ1dCBJIHRoaW5rIHRoYXQncyBzb2x2YWJsZSB3aXRoIHNvbWUgcmVmYWN0b3Jp
+bmcgaW4NCj4gPiBwbGFjZQ0KPiA+IChlZywgcHVzaGluZyB0aGluZ3MgaW50byBhIHNtYWxsZXIg
+c3RydWN0IGVtYmVkZGVkIGluIHRoZSBtYWluDQo+ID4gcmVndWxhdG9yDQo+ID4gb25lIGFuZCB0
+aGVuIG1vdmluZyB0aGVtIG91dCkuICBJIG1pZ2h0IGxvb2sgYXQgaXQgbXlzZWxmIGlmIG5vYm9k
+eQ0KPiA+IGVsc2UNCj4gPiBnZXRzIHRvIGl0IGZpcnN0Li4uDQo+IA0KPiBJIG5lZWQgc29tZXRo
+aW5nIGxpa2UgdGhpcyBpbiBvcmRlciB0byBjb252ZXJ0IEJEOTk5NTQgY3VycmVudCBhbmQNCj4g
+dm9sdGFnZSB2YWx1ZXMgdG8gcmVnaXN0ZXIgdmFsdWVzLiBJIHdpbGwgaGFwcGlseSB1c2Ugd2hh
+dC1ldmVyIHlvdQ0KPiBkbw0KPiBwdWxsIHRvZ2V0aGVyIC0gYnV0IGlmIHlvdSBkb24ndCBmZWVs
+IGxpa2UgZG9pbmcgaXQgbm93IEkgbWlnaHQgbG9vaw0KPiBhdA0KPiB0aGUgcmVndWxhdG9yIHBh
+cnQgd2hpbGUgSSBhbSB3b3JraW5nIHdpdGggQkQ5OTk1NCBhbnl3YXlzLiBQbGVhc2UNCj4ganVz
+dA0KPiBsZXQgbWUga25vdyBpZiB5b3Ugd2FudCBtZSB0byBzZWUgaWYgSSBjYW4gcHVsbCB0aGUg
+cmFuZ2Ugc3R1ZmYgb3V0DQo+IG9mDQo+IHJlZ3VsYXRvciBhcmVhLg0KDQpKdXN0IHRvIGF2b2lk
+IGR1cGxpY2F0ZSB3b3JrIC0gSSBzdGFydGVkIHdvcmtpbmcgd2l0aCB0aGlzLiBQbGVhc2UgbGV0
+DQptZSBrbm93IGlmIHlvdSBhcmUgYWxyZWFkeSB3b3JraW5nIG9uIGl0IHNvIEkgYW0gbm90IGRv
+aW5nIHRoaXMgaW4NCnZhaW4uDQoNCkJ5IHRoZSB3YXkgLSBkbyB5b3UgaGF2ZSBzb21lIG5pY2Ug
+dGVzdCBjYXNlcyBmb3IgcmVndWxhdG9ycyBoaWRkZW4NCnNvbWV3aGVyZT8gSWYgc28sIGRvIHlv
+dSB0aGluayB5b3UgY291bGQgc2hhcmUgdGhlbT8gSSBzdXJlIGhhdmUgc29tZQ0KZm9yIEJENzE4
+eDcgYnV0IHRoZXkgYXJlIHNvbWV3aGF0IGNsdW1zeSBhbmQgcmVxdWlyZSBzcGVjaWFsIEhXLiAo
+SSd2ZQ0KbmV2ZXIgbGlrZWQgdW5pdC10ZXN0cyBidXQgSSBtdXN0IGFkbWl0IHRoZXJlIGFyZSBz
+b21lIHNwZWNpZmljIGNhc2VzDQp3aGVyZSB0aGV5IHdvdWxkIGJlIHByZXR0eSB1c2FibGUpLg0K
+DQpCZXN0IFJlZ2FyZHMsDQoJTWF0dGkgVmFpdHRpbmVuDQo=
