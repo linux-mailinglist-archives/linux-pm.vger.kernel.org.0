@@ -2,20 +2,20 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEBD162A9C
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 17:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD46162A82
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 17:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726713AbgBRQal (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Feb 2020 11:30:41 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:57207 "EHLO
+        id S1726823AbgBRQaM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Feb 2020 11:30:12 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:57224 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726636AbgBRQaK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Feb 2020 11:30:10 -0500
+        with ESMTP id S1726786AbgBRQaL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Feb 2020 11:30:11 -0500
 Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein.fritz.box)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1j45l9-0003h0-4i; Tue, 18 Feb 2020 16:30:07 +0000
+        id 1j45l9-0003h0-N6; Tue, 18 Feb 2020 16:30:07 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -26,9 +26,9 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Stephen Hemminger <stephen@networkplumber.org>,
         linux-pm@vger.kernel.org,
         Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH net-next v3 4/9] sysfs: add sysfs_change_owner()
-Date:   Tue, 18 Feb 2020 17:29:38 +0100
-Message-Id: <20200218162943.2488012-5-christian.brauner@ubuntu.com>
+Subject: [PATCH net-next v3 5/9] device: add device_change_owner()
+Date:   Tue, 18 Feb 2020 17:29:39 +0100
+Message-Id: <20200218162943.2488012-6-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200218162943.2488012-1-christian.brauner@ubuntu.com>
 References: <20200218162943.2488012-1-christian.brauner@ubuntu.com>
@@ -39,95 +39,128 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a helper to change the owner of sysfs objects.
-This function will be used to correctly account for kobject ownership
-changes, e.g. when moving network devices between network namespaces.
+Add a helper to change the owner of a device's sysfs entries. This
+needs to happen when the ownership of a device is changed, e.g. when
+moving network devices between network namespaces.
+This function will be used to correctly account for ownership changes,
+e.g. when moving network devices between network namespaces.
 
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 ---
 /* v2 */
--  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
-   - Add comment how ownership of sysfs object is changed.
+unchanged
 
 /* v3 */
 -  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
    - Add explicit uid/gid parameters.
 ---
- fs/sysfs/file.c       | 39 +++++++++++++++++++++++++++++++++++++++
- include/linux/sysfs.h |  6 ++++++
- 2 files changed, 45 insertions(+)
+ drivers/base/core.c    | 80 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/device.h |  1 +
+ 2 files changed, 81 insertions(+)
 
-diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
-index df5107d7b3fd..02f7e852aad4 100644
---- a/fs/sysfs/file.c
-+++ b/fs/sysfs/file.c
-@@ -665,3 +665,42 @@ int sysfs_file_change_owner(struct kobject *kobj, kuid_t kuid, kgid_t kgid)
- 	return error;
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 42a672456432..ec0d5e8cfd0f 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3458,6 +3458,86 @@ int device_move(struct device *dev, struct device *new_parent,
  }
- EXPORT_SYMBOL_GPL(sysfs_file_change_owner);
-+
-+/**
-+ *	sysfs_change_owner - change owner of the given object.
-+ *	@kobj:	object.
-+ *	@kuid:	new owner's kuid
-+ *	@kgid:	new owner's kgid
-+ */
-+int sysfs_change_owner(struct kobject *kobj, kuid_t kuid, kgid_t kgid)
+ EXPORT_SYMBOL_GPL(device_move);
+ 
++static int device_attrs_change_owner(struct device *dev, kuid_t kuid,
++				     kgid_t kgid)
 +{
++	struct kobject *kobj = &dev->kobj;
++	struct class *class = dev->class;
++	const struct device_type *type = dev->type;
 +	int error;
-+	const struct kobj_type *ktype;
 +
-+	if (!kobj->state_in_sysfs)
-+		return -EINVAL;
++	if (class) {
++		error = sysfs_groups_change_owner(kobj, class->dev_groups, kuid,
++						  kgid);
++		if (error)
++			return error;
++	}
 +
-+	error = sysfs_file_change_owner(kobj, kuid, kgid);
++	if (type) {
++		error = sysfs_groups_change_owner(kobj, type->groups, kuid,
++						  kgid);
++		if (error)
++			return error;
++	}
++
++	error = sysfs_groups_change_owner(kobj, dev->groups, kuid, kgid);
 +	if (error)
 +		return error;
 +
-+	ktype = get_ktype(kobj);
-+	if (ktype) {
-+		struct attribute **kattr;
-+
-+		for (kattr = ktype->default_attrs; kattr && *kattr; kattr++) {
-+			error = sysfs_file_change_owner_by_name(
-+				kobj, (*kattr)->name, kuid, kgid);
-+			if (error)
-+				return error;
-+		}
-+
-+		error = sysfs_groups_change_owner(kobj, ktype->default_groups,
-+						  kuid, kgid);
++	if (device_supports_offline(dev) && !dev->offline_disabled) {
++		error = sysfs_file_change_owner_by_name(
++			kobj, dev_attr_online.attr.name, kuid, kgid);
 +		if (error)
 +			return error;
 +	}
 +
 +	return 0;
 +}
-+EXPORT_SYMBOL_GPL(sysfs_change_owner);
-diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
-index 564a2e57b90a..fa1a37dd0f2b 100644
---- a/include/linux/sysfs.h
-+++ b/include/linux/sysfs.h
-@@ -313,6 +313,7 @@ static inline void sysfs_enable_ns(struct kernfs_node *kn)
- int sysfs_file_change_owner(struct kobject *kobj, kuid_t kuid, kgid_t kgid);
- int sysfs_file_change_owner_by_name(struct kobject *kobj, const char *name,
- 				    kuid_t kuid, kgid_t kgid);
-+int sysfs_change_owner(struct kobject *kobj, kuid_t kuid, kgid_t kgid);
- int sysfs_link_change_owner(struct kobject *kobj, struct kobject *targ,
- 			    const char *name, kuid_t kuid, kgid_t kgid);
- int sysfs_groups_change_owner(struct kobject *kobj,
-@@ -555,6 +556,11 @@ static inline int sysfs_link_change_owner(struct kobject *kobj,
- 	return 0;
- }
- 
-+static inline int sysfs_change_owner(struct kobject *kobj, kuid_t kuid, kgid_t kgid)
-+{
-+	return 0;
-+}
 +
- static inline int sysfs_groups_change_owner(struct kobject *kobj,
- 			  const struct attribute_group **groups,
- 			  kuid_t kuid, kgid_t kgid)
++/**
++ * device_change_owner - change the owner of an existing device.
++ * @dev: device.
++ * @kuid: new owner's kuid
++ * @kgid: new owner's kgid
++ */
++int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
++{
++	int error;
++	struct kobject *kobj = &dev->kobj;
++
++	dev = get_device(dev);
++	if (!dev)
++		return -EINVAL;
++
++	error = sysfs_change_owner(kobj, kuid, kgid);
++	if (error)
++		goto out;
++
++	error = sysfs_file_change_owner_by_name(kobj, dev_attr_uevent.attr.name,
++						kuid, kgid);
++	if (error)
++		goto out;
++
++	error = device_attrs_change_owner(dev, kuid, kgid);
++	if (error)
++		goto out;
++
++#ifdef CONFIG_BLOCK
++	if (sysfs_deprecated && dev->class == &block_class)
++		goto out;
++#endif
++
++	error = sysfs_link_change_owner(&dev->class->p->subsys.kobj, &dev->kobj,
++					dev_name(dev), kuid, kgid);
++	if (error)
++		goto out;
++
++out:
++	put_device(dev);
++	return error;
++}
++EXPORT_SYMBOL_GPL(device_change_owner);
++
+ /**
+  * device_shutdown - call ->shutdown() on each device to shutdown.
+  */
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 0cd7c647c16c..3e40533d2037 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -817,6 +817,7 @@ extern struct device *device_find_child_by_name(struct device *parent,
+ extern int device_rename(struct device *dev, const char *new_name);
+ extern int device_move(struct device *dev, struct device *new_parent,
+ 		       enum dpm_order dpm_order);
++extern int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid);
+ extern const char *device_get_devnode(struct device *dev,
+ 				      umode_t *mode, kuid_t *uid, kgid_t *gid,
+ 				      const char **tmp);
 -- 
 2.25.0
 
