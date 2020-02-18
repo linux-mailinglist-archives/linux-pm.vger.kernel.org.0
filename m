@@ -2,97 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1860D162179
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 08:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F351621F8
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 09:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726127AbgBRHXp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Feb 2020 02:23:45 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:64016 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726104AbgBRHXp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Feb 2020 02:23:45 -0500
-X-AuditID: c0a8fbf4-489ff70000004419-60-5e4b90ff5c3c
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 0D.8D.17433.FF09B4E5; Tue, 18 Feb 2020 08:23:43 +0100 (CET)
-Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0439.000; Tue, 18 Feb 2020 08:23:39 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "broonie@kernel.org" <broonie@kernel.org>
-CC:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "Laine, Markus" <Markus.Laine@fi.rohmeurope.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [RFC PATCH 2/3] power: (regmap:) Add linear_range helper
-Thread-Topic: [RFC PATCH 2/3] power: (regmap:) Add linear_range helper
-Thread-Index: AQHV4At5sLPMospsI0G2S3c08J9KoagWS84AgADGiACAA3X4gIAADG2AgAXzFoA=
-Date:   Tue, 18 Feb 2020 07:23:38 +0000
-Message-ID: <208a81c87e944c69d95da85d7fd0f3ea2bd61547.camel@fi.rohmeurope.com>
-References: <cover.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
-         <20b107ac6e40206b82d014a145abe0569d7a6f81.1581327762.git.matti.vaittinen@fi.rohmeurope.com>
-         <20200211190614.GP4543@sirena.org.uk>
-         <cb9ed43aafcd8e1f6af05bfec8108ee8c14af265.camel@fi.rohmeurope.com>
-         <20200214114749.GB4827@sirena.org.uk>
-         <375c7756fca56de4f2f85d1a1a4e0b01dadc290b.camel@fi.rohmeurope.com>
-In-Reply-To: <375c7756fca56de4f2f85d1a1a4e0b01dadc290b.camel@fi.rohmeurope.com>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
+        id S1726225AbgBRID0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Feb 2020 03:03:26 -0500
+Received: from mail-eopbgr130040.outbound.protection.outlook.com ([40.107.13.40]:28325
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726154AbgBRIDZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 18 Feb 2020 03:03:25 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oLZ+Zt3tDsA3sb1D2ZkeqJPmgRgoW+HYYezYdsKP8ITzlEWunCuu03K95xrodo4jhsMsBVDKs0gLHmz96DVEZiJ0u64xcTWTCzLgwCIPxm41DjbZxcA7WAyB9rF+pHPE/iqhfBfnMIoPO3eZlKSdMFgcdexf7w/ZVh9jLLO4itBESS1M7LZmkqwCJ5YvFuLHA/1fL/YMUEy/vnCsXaH9pnLcJ5oXihadTAi4nL1J0N9yDkQoHwKvKxU++HcW2vjDh2vuBknvPVyRNzMCLmPAAzgoJQXERM4Y3elVL7oBl/BDyA0IOS1GCTX766t2DzhM6qgRpcK4aRk1J5VO8h5oAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=16Br2kpiLMSh0/S1ibk6sri7P4dEzNk2pcC68P2NoUs=;
+ b=FC46FonkXHtXsxihNT10fIpjtm1KO+3CguLBUwvg1LFxTEYoudoBqDyY3VoyDxT/5p+if3iU4o5GNNy1OaMRtdZqzTKXHBvhctgwHrFBhCWolAQLrrT59Zl0eAYgzUecfwuDFKFJt4BGQOcBr+7RNDxylGz/poH00aRhgUjZX7YQfFVjrmxODXGpricIQWWai/bBoPmn8d+CMGF+fSYrfjYzfWhZMO6I1wrB+jE8UErE4NQRJ/7YgRp2EInP5ES2awKPDrY2jWAj+YWjhhJcD5HUKxafsmlHpMYIY14l83XTOP7gl4K+R90aF+pYOWmTRIWz9E9PtqLaOIOZ1wfn6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=16Br2kpiLMSh0/S1ibk6sri7P4dEzNk2pcC68P2NoUs=;
+ b=lmHkZkEpx1W3KoDRuRxUP6qnDDy5lJDJIYgjbwZFHRQcvsy7/iHs/usUixGPRQfhVGlomr4ZkyOjKXddzGghEZp0XKio2kX1VH63bLQMIR2qkhKY1MgzfcTATKrV1CRIidCiC1LLiGgwK5u8J0Ym4RCU+tOuUpviR44GLaOKjIM=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB4799.eurprd04.prod.outlook.com (20.177.49.84) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2729.29; Tue, 18 Feb 2020 08:03:13 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e%6]) with mapi id 15.20.2729.032; Tue, 18 Feb 2020
+ 08:03:13 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Greg KH <greg@kroah.com>
+CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 23/28] drivers: usb: Call cpu_latency_qos_*() instead of
+ pm_qos_*()
+Thread-Topic: [PATCH 23/28] drivers: usb: Call cpu_latency_qos_*() instead of
+ pm_qos_*()
+Thread-Index: AQHV4TRn3BXs86jgkEan911jMn55C6gX5NGAgAi8gwA=
+Date:   Tue, 18 Feb 2020 08:03:13 +0000
+Message-ID: <20200218080314.GB30350@b29397-desktop>
+References: <1654227.8mz0SueHsU@kreacher> <19064076.ICumzjfW0v@kreacher>
+ <20200212183827.GA1900941@kroah.com>
+In-Reply-To: <20200212183827.GA1900941@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <08DBE84724581D40814E2FDDE1264D17@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 04ceddd4-c15a-43da-4683-08d7b44900b1
+x-ms-traffictypediagnostic: VI1PR04MB4799:
+x-microsoft-antispam-prvs: <VI1PR04MB479974CC4D66D9149F3D2EFB8B110@VI1PR04MB4799.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1388;
+x-forefront-prvs: 031763BCAF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(376002)(396003)(346002)(39860400002)(366004)(136003)(199004)(189003)(86362001)(186003)(26005)(316002)(2906002)(53546011)(33716001)(54906003)(44832011)(1076003)(71200400001)(6506007)(81156014)(81166006)(478600001)(6486002)(76116006)(91956017)(4744005)(66946007)(8936002)(9686003)(5660300002)(66556008)(64756008)(66446008)(66476007)(33656002)(4326008)(6916009)(8676002)(6512007);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4799;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nxsnkHhSeM5XVEnLF8sUxgsxmetM0wFIeNGyMemvKA5moqtz8cGahg9L7jzwABAKeBWSyo4ytapdLisxogFWz4vegBLJGhzug0IW+1g8mYtpt5HVUT2btAn232C+Vr7djIC57FxUL2PzVjmZAdVigrEPQFpp9v+wiARqghFk13YfdDJoRgJk8NbjMZPl39BDsDlTESthITEvZp3XG8ye34R0DlWKuC5tQhwhRDvcdmN7ScSIhcgfQrTXS/Cplnkrfgxvcm8jGi7ovH91uF74zCllMxiKGzeTT5qyDbYf1p8cye3PEUNWyzhkkUfXKjIB0hDhm/CA30B2I4oZ7o9ut8SdRIOIrJ5Zi82D8zZvETlO2hRG/47rIWPIBaihjAsYa6n/do2ca/FXDDHc/yvekVV//XgGLppzaxIZG+KqaJed9hdr8PXorHxXgOnoCd3v
+x-ms-exchange-antispam-messagedata: J5D/dTc8h546uJLR6d0qd7nLsQErNHARbN+h10w1D/PGbLTyv4/sIp84QpFAlAf4aNhG/8CXo4/BT8FN7pzglXYYoYrMOrQyRzQePstCrY9tF8WI9/sB0skmD2PqNQqaJRCmkpDP5WzBSSkplVDWyg==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <9B3641F5F58C8D4ABABD9F3FE98C7F05@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sf0gTURzn3d3O88flOWd7rR/QIKL8VdAfJ0kIVsxMK8OiyNnVLrdym91u
-        YgWxiqRtRdOyH2NWpFKIGC0HalqxFlqiKWGZFWVKpUQFCvZ73eOq+df7vO/n14P3pXClk9RQ
-        JovICxauVEvGEPeu//Cnhj25+mWBYCpbMzJGspdDfQr27M9rGPuk3Ueyk6dCgG14NoCxvoZu
-        gj3eGYpie26LWdG6pktNQNfmfRWl8zc6Sd3Lpx2kbtK/YKNie2zmLk4s32wqsaSv2hlrfFup
-        KeuPr3hzbZx0AF+8C0RTkFkB+1w9CheIoZTMIICBW7V/L90A9r85AVyAokgmE7qeRyGDikmF
-        Nd/rSKTBmWoCfnG3EYhIZNbA6rFBXBathQ+PDODIq2LyYfNoMoIEswj+7C1HClqa+pqdQK46
-        gsPm3rACEdHMBjjU/YREGDDzodPxCUMYZ9TQ/25aIT+agfUdj3EZJ8Hx0d9/51rY+W2EQF04
-        swTeaE+XYRasP7dFTlkIz7pHouQnJMCHF8cID5jtnVHgjZi9EbN3htk7w3wFKBoBNHOm0hJO
-        5JenCbw9TbAazdKx22r2A/lrp1pBOJgTBBgFgmAOhWmT6MrsXL1y1i6r4YCRsxmLBXspbwsC
-        SOFaFZ2rXqdX0gbuwEFesP6j5lKEVk0vHqkqUjKoax/Pl/HCP3YeRWkhnXJaCk0Q+BK+Yo+p
-        VIzQGBWNwmM0KhtvMfACZxeNxWg3im3SciAqTurNQXbaVsaZpalsfQSSKc947VWcCtU2XMWV
-        hMVq4TVqmkZSBkmNdsv/ogmgpoA2UQ6Kk/b7f86EVIFJFeICHaoQuQilcYDzgdEPaVV0bbo+
-        692Or5sq9xo6pz6fOZqReH+D2bZ6cuvKOuuhcCI5GkhRLerqPJWin46vP8N99A4MuwfvFBcU
-        Zrc9X9xzIZz24uavte79h8Y8rV0Tpry7ysP3FmZ05Yewmuy8rG3VOXEtQ0Wr+x4UtKx3iK89
-        B9+fLJw30bh7+FiVlrAZueVLccHG/QHBGMn1nAMAAA==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04ceddd4-c15a-43da-4683-08d7b44900b1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2020 08:03:13.1755
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 568mV9jvQUDAvsnCbHLUcobou5og9mKf9cE64gQwiTplYcHKPY1FgWbE9tUxzG/cYHKnKCkswtxH504TzHZisg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4799
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-TW9ybmluZyBNYXJrLA0KDQpPbiBGcmksIDIwMjAtMDItMTQgYXQgMTQ6MzIgKzAyMDAsIE1hdHRp
-IFZhaXR0aW5lbiB3cm90ZToNCj4gT24gRnJpLCAyMDIwLTAyLTE0IGF0IDExOjQ3ICswMDAwLCBN
-YXJrIEJyb3duIHdyb3RlOg0KPiA+IE9uIFdlZCwgRmViIDEyLCAyMDIwIGF0IDA2OjU2OjM3QU0g
-KzAwMDAsIFZhaXR0aW5lbiwgTWF0dGkgd3JvdGU6DQo+ID4gPiBPbiBUdWUsIDIwMjAtMDItMTEg
-YXQgMTk6MDYgKzAwMDAsIE1hcmsgQnJvd24gd3JvdGU6DQo+ID4gPiA+IA0KPiA+IA0KPiA+IEl0
-IGlzIGEgYml0IGJ1dCBJIHRoaW5rIHRoYXQncyBzb2x2YWJsZSB3aXRoIHNvbWUgcmVmYWN0b3Jp
-bmcgaW4NCj4gPiBwbGFjZQ0KPiA+IChlZywgcHVzaGluZyB0aGluZ3MgaW50byBhIHNtYWxsZXIg
-c3RydWN0IGVtYmVkZGVkIGluIHRoZSBtYWluDQo+ID4gcmVndWxhdG9yDQo+ID4gb25lIGFuZCB0
-aGVuIG1vdmluZyB0aGVtIG91dCkuICBJIG1pZ2h0IGxvb2sgYXQgaXQgbXlzZWxmIGlmIG5vYm9k
-eQ0KPiA+IGVsc2UNCj4gPiBnZXRzIHRvIGl0IGZpcnN0Li4uDQo+IA0KPiBJIG5lZWQgc29tZXRo
-aW5nIGxpa2UgdGhpcyBpbiBvcmRlciB0byBjb252ZXJ0IEJEOTk5NTQgY3VycmVudCBhbmQNCj4g
-dm9sdGFnZSB2YWx1ZXMgdG8gcmVnaXN0ZXIgdmFsdWVzLiBJIHdpbGwgaGFwcGlseSB1c2Ugd2hh
-dC1ldmVyIHlvdQ0KPiBkbw0KPiBwdWxsIHRvZ2V0aGVyIC0gYnV0IGlmIHlvdSBkb24ndCBmZWVs
-IGxpa2UgZG9pbmcgaXQgbm93IEkgbWlnaHQgbG9vaw0KPiBhdA0KPiB0aGUgcmVndWxhdG9yIHBh
-cnQgd2hpbGUgSSBhbSB3b3JraW5nIHdpdGggQkQ5OTk1NCBhbnl3YXlzLiBQbGVhc2UNCj4ganVz
-dA0KPiBsZXQgbWUga25vdyBpZiB5b3Ugd2FudCBtZSB0byBzZWUgaWYgSSBjYW4gcHVsbCB0aGUg
-cmFuZ2Ugc3R1ZmYgb3V0DQo+IG9mDQo+IHJlZ3VsYXRvciBhcmVhLg0KDQpKdXN0IHRvIGF2b2lk
-IGR1cGxpY2F0ZSB3b3JrIC0gSSBzdGFydGVkIHdvcmtpbmcgd2l0aCB0aGlzLiBQbGVhc2UgbGV0
-DQptZSBrbm93IGlmIHlvdSBhcmUgYWxyZWFkeSB3b3JraW5nIG9uIGl0IHNvIEkgYW0gbm90IGRv
-aW5nIHRoaXMgaW4NCnZhaW4uDQoNCkJ5IHRoZSB3YXkgLSBkbyB5b3UgaGF2ZSBzb21lIG5pY2Ug
-dGVzdCBjYXNlcyBmb3IgcmVndWxhdG9ycyBoaWRkZW4NCnNvbWV3aGVyZT8gSWYgc28sIGRvIHlv
-dSB0aGluayB5b3UgY291bGQgc2hhcmUgdGhlbT8gSSBzdXJlIGhhdmUgc29tZQ0KZm9yIEJENzE4
-eDcgYnV0IHRoZXkgYXJlIHNvbWV3aGF0IGNsdW1zeSBhbmQgcmVxdWlyZSBzcGVjaWFsIEhXLiAo
-SSd2ZQ0KbmV2ZXIgbGlrZWQgdW5pdC10ZXN0cyBidXQgSSBtdXN0IGFkbWl0IHRoZXJlIGFyZSBz
-b21lIHNwZWNpZmljIGNhc2VzDQp3aGVyZSB0aGV5IHdvdWxkIGJlIHByZXR0eSB1c2FibGUpLg0K
-DQpCZXN0IFJlZ2FyZHMsDQoJTWF0dGkgVmFpdHRpbmVuDQo=
+On 20-02-12 10:38:27, Greg KH wrote:
+> On Wed, Feb 12, 2020 at 12:28:44AM +0100, Rafael J. Wysocki wrote:
+> > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> >=20
+> > Call cpu_latency_qos_add/remove_request() instead of
+> > pm_qos_add/remove_request(), respectively, because the
+> > latter are going to be dropped.
+> >=20
+> > No intentional functional impact.
+> >=20
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/usb/chipidea/ci_hdrc_imx.c | 12 +++++-------
+> >  1 file changed, 5 insertions(+), 7 deletions(-)
+>=20
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Hi Greg,
+
+With this patch applied, the usb-next can't compile pass.
+
+--=20
+
+Thanks,
+Peter Chen=
