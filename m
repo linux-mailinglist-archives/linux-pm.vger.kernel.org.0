@@ -2,105 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5E21620A8
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 07:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B241620B1
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2020 07:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726072AbgBRGFz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Feb 2020 01:05:55 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:60112 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726065AbgBRGFy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Feb 2020 01:05:54 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01I62kh1042519;
-        Tue, 18 Feb 2020 06:05:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=xHYB9ApyxtCd8sJEDxP4CyHzMENkv5YG5prVMkaKwwU=;
- b=KentcE9mWSEfHTiuOOp9DfTDnGgCYGdRIOnocnj7+JZzRjQWg9t4ekBy3B+/m71gyq6i
- 9ozJDpxkpTV553gKJfIK68NJjjNTeR0wbE1VFfkjhDHYhKrdTLtPCMzFD/anqslolDup
- 4dP2SjOOwhkVAw++2/d6JCjLNtKeku8MZBzfl6I9Vt7XfGvjUJ+joOedlX3rtiXVYuy4
- sKobK+cx8paAJ8TOgRYFyoR+uISimdI7U7NIpD23iLdqgkPPGjA/MJgqhkX8sArveAX/
- V4YTw327k3gzUZVqc7IaCbrGQKbe28DJ3iN0q6OVtJIgsEEkLCYxqbg/G8uU1eDrK44J 7w== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 2y7aq5pg5q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Feb 2020 06:05:51 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01I61gqV129744;
-        Tue, 18 Feb 2020 06:05:50 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2y6tep0u58-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Feb 2020 06:05:50 +0000
-Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 01I65neJ030022;
-        Tue, 18 Feb 2020 06:05:49 GMT
-Received: from kili.mountain (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 17 Feb 2020 22:05:49 -0800
-Date:   Tue, 18 Feb 2020 09:05:42 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     leonard.crestez@nxp.com
-Cc:     linux-pm@vger.kernel.org
-Subject: [bug report] PM / devfreq: Use PM QoS for sysfs min/max_freq
-Message-ID: <20200218060542.yylim4ke6toujhjd@kili.mountain>
+        id S1726065AbgBRGOg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Feb 2020 01:14:36 -0500
+Received: from mail-wm1-f42.google.com ([209.85.128.42]:39081 "EHLO
+        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726017AbgBRGOg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Feb 2020 01:14:36 -0500
+Received: by mail-wm1-f42.google.com with SMTP id c84so1524385wme.4
+        for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2020 22:14:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=o7+mPUtWkvMAcZo6X8o4Tr1W9/R/DA4wX6AmvYHjIbo=;
+        b=NELpYC9kOKWZjKIZ2AvtlgMWOPmMCNj/HdTw5SNxjLuY9mLXbCRzJ87UBC+Y/L2xxN
+         9qr2TKgqtfx9FjwELcgkMpKkVT5f1rVExb+sGReE5OGrBa52wk9sy7eODPNW6NIRrz6f
+         x3f1pGezWuvGXBjh6IBiFOQLsCNy5Z2N8cwGDyEEt/0bQFtMZkf0iceo3QL2F6T8KHkG
+         t+SefYZQ1VMWjg6+7edksOeMoWw+tNFcb1Al1SkG37wB2B3L0k2h9U46fd0vjTSb1SXB
+         PdzDHjAAgKsudS8W7vXQOQtUWKnyWh0pP2zBw3m61KQiLbkg3+4z0lP6YGxccRFqrKrm
+         998w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=o7+mPUtWkvMAcZo6X8o4Tr1W9/R/DA4wX6AmvYHjIbo=;
+        b=sQtzZYBc7huodqWLZA8tD9FRkvOLONaGcroHyrje50dG6/nAa0Bf8NLJMIj5gYiMB9
+         5xM7FW9KAwcmXxv3rPZX7omfzSKoH3a7UhoZgbcaPA60SVKvEjI0a2c84qVmQyTOzkHi
+         5MqRC3jGW9PoqCW5GWB2InZNVHXdyg3SxiJEiU7dfjcTs2YyWXGR/KgUEwgJxBnDovxN
+         eIcnY852URoHc+RnlCh+oRfGQkV/sL92jJesvCfur7Odo1aJoXdWdtIcXkZIYXrQ6P9W
+         WQsWpjxJ7WW8hqI7yaTM4QWbmk282q+neYHQdnwt4M71NoxPFTThsiu7erdhsNudXqwr
+         ++Ow==
+X-Gm-Message-State: APjAAAVxirG3SPIvOM3fyeYIhYLP4Ncq7sWSZyGBqDDhqaPWtJ3CIOfn
+        TMhe9YWIVi+gYIeZ3+AcXgHzSYWzPNPZ/Q==
+X-Google-Smtp-Source: APXvYqyIFbND+0lHcokOSWOJkJ39E6tXNz/oDOh8SxYKsfBSqVUGeKRVGsW+6f+3MqmZXXR2tNn9DQ==
+X-Received: by 2002:a7b:c249:: with SMTP id b9mr1028349wmj.74.1582006474889;
+        Mon, 17 Feb 2020 22:14:34 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id s139sm2175535wme.35.2020.02.17.22.14.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Feb 2020 22:14:34 -0800 (PST)
+Message-ID: <5e4b80ca.1c69fb81.341ba.814d@mx.google.com>
+Date:   Mon, 17 Feb 2020 22:14:34 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9534 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 bulkscore=0
- suspectscore=1 mlxscore=0 mlxlogscore=824 adultscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002180049
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9534 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 impostorscore=0 adultscore=0
- spamscore=0 priorityscore=1501 suspectscore=1 clxscore=1011 bulkscore=0
- phishscore=0 mlxlogscore=881 lowpriorityscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002180049
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: pm-5.6-rc2-146-g00b838d60ec4
+Subject: pm/testing boot: 57 boots: 3 failed,
+ 54 passed (pm-5.6-rc2-146-g00b838d60ec4)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Leonard Crestez,
+pm/testing boot: 57 boots: 3 failed, 54 passed (pm-5.6-rc2-146-g00b838d60ec=
+4)
 
-The patch 27dbc542f651: "PM / devfreq: Use PM QoS for sysfs
-min/max_freq" from Dec 5, 2019, leads to the following static checker
-warning:
+Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
+el/pm-5.6-rc2-146-g00b838d60ec4/
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/pm-=
+5.6-rc2-146-g00b838d60ec4/
 
-	drivers/devfreq/devfreq.c:723 devfreq_dev_release()
-	warn: 'err' can be either negative or positive
+Tree: pm
+Branch: testing
+Git Describe: pm-5.6-rc2-146-g00b838d60ec4
+Git Commit: 00b838d60ec480d931f6209868e69e0d251000c2
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Tested: 50 unique boards, 14 SoC families, 3 builds out of 5
 
-drivers/devfreq/devfreq.c
-   701                                           DEV_PM_QOS_MIN_FREQUENCY);
-   702          if (err && err != -ENOENT)
-   703                  dev_warn(dev->parent,
-   704                          "Failed to remove min_freq notifier: %d\n", err);
-   705  
-   706          if (dev_pm_qos_request_active(&devfreq->user_max_freq_req)) {
-   707                  err = dev_pm_qos_remove_request(&devfreq->user_max_freq_req);
-   708                  if (err)
-                            ^^^
-   709                          dev_warn(dev->parent,
-   710                                  "Failed to remove max_freq request: %d\n", err);
-   711          }
-   712          if (dev_pm_qos_request_active(&devfreq->user_min_freq_req)) {
-   713                  err = dev_pm_qos_remove_request(&devfreq->user_min_freq_req);
-   714                  if (err)
-                            ^^^
-If dev_pm_qos_remove_request() returns 1 it means that the "aggregated
-constraint value has changed".  It's not necessarily a failure so should
-we really print a warning?
+Boot Regressions Detected:
 
-   715                          dev_warn(dev->parent,
-   716                                  "Failed to remove min_freq request: %d\n", err);
-   717          }
-   718  
-   719          if (devfreq->profile->exit)
-   720                  devfreq->profile->exit(devfreq->dev.parent);
+arm:
 
-regards,
-dan carpenter
+    multi_v7_defconfig:
+        gcc-8:
+          omap3-beagle-xm:
+              lab-baylibre: new failure (last pass: v5.6-rc1-10-g55fe2ef33c=
+65)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          bcm2837-rpi-3-b:
+              lab-baylibre: new failure (last pass: v5.5-rc7-146-g4529d29bc=
+6a6)
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            omap3-beagle-xm: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            bcm2837-rpi-3-b: 1 failed lab
+
+---
+For more info write to <info@kernelci.org>
