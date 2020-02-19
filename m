@@ -2,26 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB95C163855
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2020 01:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1C2163864
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2020 01:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbgBSAPi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Feb 2020 19:15:38 -0500
-Received: from foss.arm.com ([217.140.110.172]:37410 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726521AbgBSAPi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 18 Feb 2020 19:15:38 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D41F41FB;
-        Tue, 18 Feb 2020 16:15:37 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5775E3F68F;
-        Tue, 18 Feb 2020 16:15:37 -0800 (PST)
-Date:   Wed, 19 Feb 2020 00:15:35 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
+        id S1726795AbgBSATS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Feb 2020 19:19:18 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36197 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726521AbgBSATR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Feb 2020 19:19:17 -0500
+Received: by mail-ot1-f66.google.com with SMTP id j20so21453631otq.3
+        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2020 16:19:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xenh2Sb7watxNJKL24pMYing6QNd1CcZcrQqPV0Tmqc=;
+        b=OtBOFvHpDvOG/VrUXyWUqM7/v93QMT690BDatQIdj4wKhYvlnn/TszCLy4WZEd0uH1
+         PvT2NIC6GflEREjR7GMOwzt79s3Mq5OdV+wwBC4BvW6tLoFAzeeIi499q2VuSoOR4al1
+         fVnCluY89EcQHTVt4DA+Yobkp/sG1FzVMy55Z0hFR9EeVlZj3Y3TxNQMqD36p/jt+592
+         Sbj0PRujciQo2114ylm54UcukkvTu6eVlTAzUjU154FQmKb3BrTAzhceOHtUGkM4whJH
+         TS9dvtMRhULVi7xu5/E5dHfcj7qF/OR1XODIJSnVr/ZV8FVWi8Ahxbe8aAuSBXhDCkw/
+         Nwsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xenh2Sb7watxNJKL24pMYing6QNd1CcZcrQqPV0Tmqc=;
+        b=F9jNrHxODppYjWFH+TmEfFhk5ZbTdhSv4pokyfx8x8MFMUSFvEfRtMIVfFP1SHt8vv
+         zH7pT2iYU6/QhXPRHVQtvOhY7lDGvhYPDMf56zYwjVUruIHiy7dpj+CgKtay0D57PFLQ
+         waRMucXam26AjIyzR4NX7DqUOmJgnOkqzBoEzmN9R4M6dS3qyCSWI6xQ8fy0IC/V1AxZ
+         3jhjT4+fnYFEpjQhIT8uV7nUvHZG4kUEkm0fWkE/0Wm1b24fBbOaD6Q8eqon+79wpZ85
+         a5pd6QTXN9B0mN9RVscEYpo4kgy+tCQ2/J4b0mBm33pwUGAT72146LKY7bOM3+irlTQy
+         VHqA==
+X-Gm-Message-State: APjAAAWrIa9LkG8XYRXTqPSOIzGUMQINI5mGLdt8n7laDviPhwkPS88k
+        3bcYo6u06eBY+4Vo82wVNwzX6tftJcT1kcmDV9ietg==
+X-Google-Smtp-Source: APXvYqyWeP93XV4oSanGCNVvzUTbLsEGnn0vejUafZA+l6yt+5W3qHMpIqtdSnnnzDUW6i7itjjql9xeMAeIzRuITjY=
+X-Received: by 2002:a9d:634c:: with SMTP id y12mr4006764otk.12.1582071557097;
+ Tue, 18 Feb 2020 16:19:17 -0800 (PST)
+MIME-Version: 1.0
+References: <20200218220748.54823-1-john.stultz@linaro.org> <CAHp75VcPL7DYp9hjgMu+d=CE=g+V7ZxT9ZyXX-OjEW_JQ4m_nA@mail.gmail.com>
+In-Reply-To: <CAHp75VcPL7DYp9hjgMu+d=CE=g+V7ZxT9ZyXX-OjEW_JQ4m_nA@mail.gmail.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Tue, 18 Feb 2020 16:19:05 -0800
+Message-ID: <CALAqxLWtYfwCzDRVecWF8yRQSKQZh-N2g0SifageUaG0QhBGJg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] driver core: Rework logic in __driver_deferred_probe_check_state
+ to allow EPROBE_DEFER to be returned for longer
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
@@ -29,70 +57,38 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Todd Kjos <tkjos@google.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] driver core: Rework logic in
- __driver_deferred_probe_check_state to allow EPROBE_DEFER to be returned for
- longer
-Message-ID: <20200219001535.GQ4232@sirena.org.uk>
-References: <20200218220748.54823-1-john.stultz@linaro.org>
- <CAL_JsqK5eVCuKiy2R_=5cyEBFM=YvMODqDYrmJxLPyN-Em-++g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9+VnUxDxRuy97YQ+"
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqK5eVCuKiy2R_=5cyEBFM=YvMODqDYrmJxLPyN-Em-++g@mail.gmail.com>
-X-Cookie: No alcohol, dogs or horses.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Feb 18, 2020 at 4:06 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Wednesday, February 19, 2020, John Stultz <john.stultz@linaro.org> wrote:
+>> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+>> index b25bcab2a26b..9d916a7b56a6 100644
+>> --- a/drivers/base/dd.c
+>> +++ b/drivers/base/dd.c
+>> @@ -237,13 +237,12 @@ __setup("deferred_probe_timeout=", deferred_probe_timeout_setup);
+>>
+>>  static int __driver_deferred_probe_check_state(struct device *dev)
+>>  {
+>> -       if (!initcalls_done)
+>> -               return -EPROBE_DEFER;
+>
+>
+> Why to touch this? Can't you simple add a new condition here 'if (deferred_probe_timeout > 0)'... ?
 
---9+VnUxDxRuy97YQ+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I think that might work. I'll give it a spin later tonight and double check it.
 
-On Tue, Feb 18, 2020 at 04:51:39PM -0600, Rob Herring wrote:
-> On Tue, Feb 18, 2020 at 4:07 PM John Stultz <john.stultz@linaro.org> wrote:
+The main thing I wanted to do is fix the logic hole in the current
+code where after initcalls_done=true but before deferred_probe_timeout
+has expired we just fall through and return 0, which results in an
+ENODEV being returned from the calling function.
 
-> > Specifically, on db845c, this change (when combined with booting
-> > using deferred_probe_timeout=30) allows us to set SDM_GPUCC_845,
-> > QCOM_CLK_RPMH and COMMON_CLK_QCOM as modules and get a working
-> > system, where as without it the display will fail to load.
-
-> I would change the default for deferred_probe_timeout to 30 and then
-> regulator code can rely on that. Curious, why 30 sec is fine now when
-> you originally had 2 min? I'd just pick what you think is best. I
-> doubt Mark had any extensive experiments to come up with 30sec.
-
-Sort of - I've spent a bunch of time looking at the sorts of devices
-where this is applicable for regulators and 30s is wildly excessive for
-the use case.  I didn't specifically measure anything at the time I did
-the change though, even longer should work just as well.
-
-That feature in the regulator framework is targetted quite narrowly at
-things we really don't want to glitch out during boot if we can avoid it
-like the display, people tend to make efforts to ensure that they come
-up quickly during boot anyway so we're not expecting to worry about the
-full boot time for bigger systems.  The expectation is that most devices
-will cope fine with having the power turned off for a period and if the
-user can't see it happening then it doesn't *really* matter.
-
---9+VnUxDxRuy97YQ+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5MficACgkQJNaLcl1U
-h9ADvAf/dCuCTqkr7k83orjGQpiBBxwwP5TzaUQLzl6Er3k6ZrnIKgFxlzmtqGex
-NJAACaOkDMq11a8aFmlVsDydWlwtXOrukfdBPbdXJTTlnM5+LWXr7vAhe7lUcFVe
-CI5lPe1UDp9jqRKB+RuaPIdzZ1kn4La1Npd6SWcxLiEDSAOEy+afBUnqTwk1gemG
-2A43mqQ6c5bl4boQ+cwuFzyNHH5IUd9vIZiTCK6doCw3oVidm6JPMH6ol4vlJEaN
-p6XVYnVEPtU0iqhgpcMLCC0jIUbZg6Xx4gGsi1U1EaUcMZMFqBeiDZuUJ3pFaqws
-2OiahHbeeqJ9k56s9c40M0xQAHgqKw==
-=npzu
------END PGP SIGNATURE-----
-
---9+VnUxDxRuy97YQ+--
+thanks
+-john
