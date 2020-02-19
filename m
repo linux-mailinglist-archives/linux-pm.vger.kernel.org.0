@@ -2,155 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8461E164770
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2020 15:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C997164D4A
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2020 19:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726610AbgBSOwc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Feb 2020 09:52:32 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:34961 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726609AbgBSOwc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Feb 2020 09:52:32 -0500
-Received: by mail-ot1-f66.google.com with SMTP id r16so395163otd.2;
-        Wed, 19 Feb 2020 06:52:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=QQd+mLOG3Djgf9pAJU1+5MgOvviH0euD+JIlNG66B4U=;
-        b=UaxOYRYAOVLA5URhT5swdnX0tTISSjvtmo46PBJUm461PJPLlctco5Ojgu1Kh2cM+r
-         TDJpPW5tc+YOv6POJAWUr7X5IyCh2LlLxG98iumRSokKqa0sI0TfHi9Ud9n7KhY5IGT1
-         v2Y0x0P5Xst2Q3HdEiW1i9ZLKUwnpBX4vE6WtgSsWKLi/gYeJlUnVY9JFDXnAsCUOR70
-         dKi3pokSEw5oiWVcyhv4TuXZMzCPD7tb2qNRjV1vvtuQtmghiPbmXqLm+YwSlSmnD8X0
-         Jjgl36FzF06fQHRUzqsYb9glP8YRy41zqUVmi63pEMj5oPtjDqI1LGIJJOBAP+6kJIUT
-         mubg==
-X-Gm-Message-State: APjAAAU467FTtLAwGDCqtZz+JDwn8ZrLzS1nS50o6A4I4EoSshtsW6ei
-        NY1i2OEdAxG0n2SjKGe6Vg==
-X-Google-Smtp-Source: APXvYqxLc1uqkSdx5A61GndakpE7hENl4nGHvYyySsvT2z371AUhrfW4GKZzZgnB1JAXwHj26eqB9w==
-X-Received: by 2002:a05:6830:22ca:: with SMTP id q10mr21274221otc.280.1582123951275;
-        Wed, 19 Feb 2020 06:52:31 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id r17sm691926otq.70.2020.02.19.06.52.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2020 06:52:28 -0800 (PST)
-Received: (nullmailer pid 4462 invoked by uid 1000);
-        Wed, 19 Feb 2020 14:52:27 -0000
-Date:   Wed, 19 Feb 2020 08:52:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Keerthy <j-keerthy@ti.com>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, t-kristo@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        mark.rutland@arm.com
-Subject: Re: [PATCH v3 1/4] dt-bindings: thermal: k3: Add VTM bindings
- documentation
-Message-ID: <20200219145227.GA1317@bogus>
-References: <20200219074314.22829-1-j-keerthy@ti.com>
- <20200219074314.22829-2-j-keerthy@ti.com>
+        id S1726659AbgBSSEp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Feb 2020 13:04:45 -0500
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:6594 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726514AbgBSSEp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Feb 2020 13:04:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1582135485; x=1613671485;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=3Zqh9Z5ArCKT5eh3kytqNR+atJTyGLoFKV/QsPjClkg=;
+  b=oqMj2W+qDZkw2Dp39HVx5C4B1C7VumFPWUfHdx8b4Q7df7y3V3tVG+2u
+   DBLkOj4GXqIoKyZ0UDXhKSCjnW+xcjN7H/yH1EKmd0dg2I19n+IFGRLqw
+   +eRKjGRs5QUIx/W75ME+xiICZNYLdp0ESbhdmZWprHlMA9Kph9vfqJc+8
+   8=;
+IronPort-SDR: SWoQO1RFkW7rgd2CL4S62O3VarDPqWQrz58ohCj8J+VHKH9cgFWDywhjXDZn2lMphuLg99bCok
+ LxZKOSkF49jw==
+X-IronPort-AV: E=Sophos;i="5.70,461,1574121600"; 
+   d="scan'208";a="27530192"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2b-4ff6265a.us-west-2.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 19 Feb 2020 18:04:42 +0000
+Received: from EX13MTAUEE002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
+        by email-inbound-relay-2b-4ff6265a.us-west-2.amazon.com (Postfix) with ESMTPS id 170F4A268C;
+        Wed, 19 Feb 2020 18:04:40 +0000 (UTC)
+Received: from EX13D08UEE003.ant.amazon.com (10.43.62.118) by
+ EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Wed, 19 Feb 2020 18:04:25 +0000
+Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
+ EX13D08UEE003.ant.amazon.com (10.43.62.118) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Wed, 19 Feb 2020 18:04:25 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
+ Server id 15.0.1367.3 via Frontend Transport; Wed, 19 Feb 2020 18:04:24 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id DFEB5403C0; Wed, 19 Feb 2020 18:04:24 +0000 (UTC)
+Date:   Wed, 19 Feb 2020 18:04:24 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     Roger Pau =?iso-8859-1?Q?Monn=E9?= <roger.pau@citrix.com>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
+        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>, <anchalag@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <fllinden@amaozn.com>,
+        <benh@kernel.crashing.org>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
+        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <fllinden@amaozn.com>,
+        <benh@kernel.crashing.org>
+Subject: Re: [RFC PATCH v3 06/12] xen-blkfront: add callbacks for PM suspend
+ and hibernation
+Message-ID: <20200219180424.GA17584@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <cover.1581721799.git.anchalag@amazon.com>
+ <890c404c585d7790514527f0c021056a7be6e748.1581721799.git.anchalag@amazon.com>
+ <20200217100509.GE4679@Air-de-Roger>
+ <20200217230553.GA8100@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200218091611.GN4679@Air-de-Roger>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <20200219074314.22829-2-j-keerthy@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200218091611.GN4679@Air-de-Roger>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 01:13:11PM +0530, Keerthy wrote:
-> Add VTM bindings documentation. In the Voltage Thermal
-> Management Module(VTM), K3 AM654 supplies a voltage
-> reference and a temperature sensor feature that are gathered in the band
-> gap voltage and temperature sensor (VBGAPTS) module. The band
-> gap provides current and voltage reference for its internal
-> circuits and other analog IP blocks. The analog-to-digital
-> converter (ADC) produces an output value that is proportional
-> to the silicon temperature.
+On Tue, Feb 18, 2020 at 10:16:11AM +0100, Roger Pau Monné wrote:
+> On Mon, Feb 17, 2020 at 11:05:53PM +0000, Anchal Agarwal wrote:
+> > On Mon, Feb 17, 2020 at 11:05:09AM +0100, Roger Pau Monné wrote:
+> > > On Fri, Feb 14, 2020 at 11:25:34PM +0000, Anchal Agarwal wrote:
+> > > > From: Munehisa Kamata <kamatam@amazon.com
+> > > > 
+> > > > Add freeze, thaw and restore callbacks for PM suspend and hibernation
+> > > > support. All frontend drivers that needs to use PM_HIBERNATION/PM_SUSPEND
+> > > > events, need to implement these xenbus_driver callbacks.
+> > > > The freeze handler stops a block-layer queue and disconnect the
+> > > > frontend from the backend while freeing ring_info and associated resources.
+> > > > The restore handler re-allocates ring_info and re-connect to the
+> > > > backend, so the rest of the kernel can continue to use the block device
+> > > > transparently. Also, the handlers are used for both PM suspend and
+> > > > hibernation so that we can keep the existing suspend/resume callbacks for
+> > > > Xen suspend without modification. Before disconnecting from backend,
+> > > > we need to prevent any new IO from being queued and wait for existing
+> > > > IO to complete.
+> > > 
+> > > This is different from Xen (xenstore) initiated suspension, as in that
+> > > case Linux doesn't flush the rings or disconnects from the backend.
+> > Yes, AFAIK in xen initiated suspension backend takes care of it. 
 > 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> ---
+> No, in Xen initiated suspension backend doesn't take care of flushing
+> the rings, the frontend has a shadow copy of the ring contents and it
+> re-issues the requests on resume.
 > 
-> Changes in v3:
+Yes, I meant suspension in general where both xenstore and backend knows
+system is going under suspension and not flushing of rings. That happens
+in frontend when backend indicates that state is closing and so on.
+I may have written it in wrong context.
+> > > > +static int blkfront_freeze(struct xenbus_device *dev)
+> > > > +{
+> > > > +	unsigned int i;
+> > > > +	struct blkfront_info *info = dev_get_drvdata(&dev->dev);
+> > > > +	struct blkfront_ring_info *rinfo;
+> > > > +	/* This would be reasonable timeout as used in xenbus_dev_shutdown() */
+> > > > +	unsigned int timeout = 5 * HZ;
+> > > > +	int err = 0;
+> > > > +
+> > > > +	info->connected = BLKIF_STATE_FREEZING;
+> > > > +
+> > > > +	blk_mq_freeze_queue(info->rq);
+> > > > +	blk_mq_quiesce_queue(info->rq);
+> > > > +
+> > > > +	for (i = 0; i < info->nr_rings; i++) {
+> > > > +		rinfo = &info->rinfo[i];
+> > > > +
+> > > > +		gnttab_cancel_free_callback(&rinfo->callback);
+> > > > +		flush_work(&rinfo->work);
+> > > > +	}
+> > > > +
+> > > > +	/* Kick the backend to disconnect */
+> > > > +	xenbus_switch_state(dev, XenbusStateClosing);
+> > > 
+> > > Are you sure this is safe?
+> > > 
+> > In my testing running multiple fio jobs, other test scenarios running
+> > a memory loader works fine. I did not came across a scenario that would
+> > have failed resume due to blkfront issues unless you can sugest some?
 > 
->   * Fixed errors seen with:
->     dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
+> AFAICT you don't wait for the in-flight requests to be finished, and
+> just rely on blkback to finish processing those. I'm not sure all
+> blkback implementations out there can guarantee that.
 > 
->  .../bindings/thermal/ti,am654-thermal.yaml    | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
+> The approach used by Xen initiated suspension is to re-issue the
+> in-flight requests when resuming. I have to admit I don't think this
+> is the best approach, but I would like to keep both the Xen and the PM
+> initiated suspension using the same logic, and hence I would request
+> that you try to re-use the existing resume logic (blkfront_resume).
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
-> new file mode 100644
-> index 000000000000..b6dc95c3acab
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
-> @@ -0,0 +1,57 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/ti,am654-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments AM654 VTM (DTS) binding
-> +
-> +maintainers:
-> +  - Keerthy <j-keerthy@ti.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: ti,am654-vtm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +    description: phandle to the associated power domain
-
-No need to redefine a standard property description.
-
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +required:
-> +  - "#thermal-sensor-cells"
-> +  - compatible
-> +  - reg
-> +  - power-domains
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-> +    vtm: wkup_vtm0@42050000 {
-
-thermal-sensor@...
-
-Use generic node names and don't use '_' in node names.
-
-> +        compatible = "ti,am654-vtm";
-> +        reg = <0x0 0x42050000 0x0 0x25c>;
-> +        power-domains = <&k3_pds 80 TI_SCI_PD_EXCLUSIVE>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
-> +
-> +    mpu0_thermal: mpu0_thermal {
-> +        polling-delay-passive = <250>; /* milliseconds */
-> +        polling-delay = <500>; /* milliseconds */
-> +        thermal-sensors = <&vtm0 0>;
-> +
-> +        trips {
-> +                mpu0_crit: mpu0_crit {
-> +                        temperature = <125000>; /* milliCelsius */
-> +                        hysteresis = <2000>; /* milliCelsius */
-> +                        type = "critical";
-> +                };
-> +        };
-> +    };
-> +...
-> -- 
-> 2.17.1
+> > > I don't think you wait for all requests pending on the ring to be
+> > > finished by the backend, and hence you might loose requests as the
+> > > ones on the ring would not be re-issued by blkfront_restore AFAICT.
+> > > 
+> > AFAIU, blk_mq_freeze_queue/blk_mq_quiesce_queue should take care of no used
+> > request on the shared ring. Also, we I want to pause the queue and flush all
+> > the pending requests in the shared ring before disconnecting from backend.
 > 
+> Oh, so blk_mq_freeze_queue does wait for in-flight requests to be
+> finished. I guess it's fine then.
+> 
+Ok.
+> > Quiescing the queue seemed a better option here as we want to make sure ongoing
+> > requests dispatches are totally drained.
+> > I should accept that some of these notion is borrowed from how nvme freeze/unfreeze 
+> > is done although its not apple to apple comparison.
+> 
+> That's fine, but I would still like to requests that you use the same
+> logic (as much as possible) for both the Xen and the PM initiated
+> suspension.
+> 
+> So you either apply this freeze/unfreeze to the Xen suspension (and
+> drop the re-issuing of requests on resume) or adapt the same approach
+> as the Xen initiated suspension. Keeping two completely different
+> approaches to suspension / resume on blkfront is not suitable long
+> term.
+> 
+I agree with you on overhaul of xen suspend/resume wrt blkfront is a good
+idea however, IMO that is a work for future and this patch series should 
+not be blocked for it. What do you think?
+> Thanks, Roger.
+> 
+Thanks,
+Anchal
