@@ -2,72 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85000163EAD
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2020 09:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8801640EF
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2020 10:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbgBSIPQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Feb 2020 03:15:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34528 "EHLO mail.kernel.org"
+        id S1726512AbgBSJ7B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Feb 2020 04:59:01 -0500
+Received: from foss.arm.com ([217.140.110.172]:45038 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726156AbgBSIPQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 19 Feb 2020 03:15:16 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1E242176D;
-        Wed, 19 Feb 2020 08:15:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582100116;
-        bh=2lJvgbRb9rP6Vhs0w8YL7pQP2f3DBRY6ioR0MgXbnAM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KsUc4mlSoOf5rkLOIyakA9xHsbeBxTx9HmoTKBL5+29cWoHsD++AiexBiih06GTzT
-         wbNMPotqi517j9MFy4wCrMP19VGEXYXceLGx8sDvgPBkp00r+Pb7da1tz28ua5QBoU
-         NEHviUetaGrJLSX/r7WtHJDI3agfb13actQrPl9E=
-Date:   Wed, 19 Feb 2020 09:15:14 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Todd Kjos <tkjos@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] driver core: Make deferred_probe_timeout global
- so it can be shared
-Message-ID: <20200219081514.GA2735658@kroah.com>
-References: <20200218220748.54823-1-john.stultz@linaro.org>
- <20200218220748.54823-2-john.stultz@linaro.org>
- <20200219075730.GA2732797@kroah.com>
- <e67836f6-dcaa-c7b6-0779-35a9ff98ba38@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e67836f6-dcaa-c7b6-0779-35a9ff98ba38@infradead.org>
+        id S1726453AbgBSJ7B (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 19 Feb 2020 04:59:01 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 550BE1FB;
+        Wed, 19 Feb 2020 01:59:00 -0800 (PST)
+Received: from e123648.arm.com (unknown [10.37.12.28])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5972A3F6CF;
+        Wed, 19 Feb 2020 01:58:56 -0800 (PST)
+From:   lukasz.luba@arm.com
+To:     kgene@kernel.org, krzk@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, robh+dt@kernel.org, mark.rutland@arm.com,
+        b.zolnierkie@samsung.com, lukasz.luba@arm.com,
+        dietmar.eggemann@arm.com
+Subject: [PATCH v2 0/2] Enable Odroid-XU3/4 to use Energy Model and Energy Aware Scheduler 
+Date:   Wed, 19 Feb 2020 09:58:26 +0000
+Message-Id: <20200219095828.8063-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 12:00:09AM -0800, Randy Dunlap wrote:
-> On 2/18/20 11:57 PM, Greg Kroah-Hartman wrote:
-> > On Tue, Feb 18, 2020 at 10:07:48PM +0000, John Stultz wrote:
-> >> --- a/include/linux/device/driver.h
-> >> +++ b/include/linux/device/driver.h
-> >> @@ -236,6 +236,7 @@ driver_find_device_by_acpi_dev(struct device_driver *drv, const void *adev)
-> >>  }
-> >>  #endif
-> >>  
-> >> +extern int deferred_probe_timeout;
-> >>  void driver_deferred_probe_add(struct device *dev);
-> > 
-> > If this is going to be global now, can you rename it to
-> > "driver_defferred_probe_timeout" to make it more in line with the other
-> 
-> or driver_deferred_probe_timeout please.
+From: Lukasz Luba <lukasz.luba@arm.com>
 
-Yes, that's spelt better :)
+The Odroid-XU4/3 is a decent and easy accessible ARM big.LITTLE platform,
+which might be used for research and development.
+
+This small patch set provides possibility to run Energy Aware Scheduler (EAS)
+on Odroid-XU4/3 and experiment with it. 
+
+The patch 1/2 provides 'dynamic-power-coefficient' in CPU DT nodes, which is
+then used by the Energy Model (EM).
+The patch 2/2 enables SCHED_MC (which adds another level in scheduling domains)
+and enables EM making EAS possible to run (when schedutil is set as a CPUFreq
+governor).
+
+1. Test results
+
+Two types of different tests have been executed. The first is energy test
+case showing impact on energy consumption of this patch set. It is using a
+synthetic set of tasks (rt-app based). The second is the performance test
+case which is using hackbench (less time to complete is better).
+In both tests schedutil has been used as cpufreq governor. In all tests
+PROVE_LOCKING has not been compiled into the kernels.
+
+1.1 Energy test case
+
+10 iterations of 24 periodic rt-app tasks (16ms period, 10% duty-cycle)
+with energy measurement. The cpufreq governor - schedutil. Unit is Joules.
+The energy is calculated based on hwmon0 and hwmon3 power1_input.
+The goal is to save energy, lower is better.
+
++-----------+-----------------+------------------------+
+|           | Without patches | With patches           |
++-----------+--------+--------+----------------+-------+
+| benchmark |  Mean  | RSD*   | Mean           | RSD*  |
++-----------+--------+--------+----------------+-------+
+| 24 rt-app |  21.56 |  1.37% |  19.85 (-9.2%) | 0.92% |
+|    tasks  |        |        |                |       |
++-----------+--------+--------+----------------+-------+
+
+1.2 Performance test case
+
+10 consecutive iterations of hackbench (hackbench -l 500 -s 4096),
+no delay between two successive executions.
+The cpufreq governor - schedutil. Units in seconds.
+The goal is to see not regression, lower completion time is better.
+
++-----------+-----------------+------------------------+
+|           | Without patches | With patches           |
++-----------+--------+--------+----------------+-------+
+| benchmark | Mean   | RSD*   | Mean           | RSD*  |
++-----------+--------+--------+----------------+-------+
+| hackbench |  8.15  | 2.86%  |  7.95 (-2.5%)  | 0.60% |
++-----------+--------+--------+----------------+-------+
+
+*RSD: Relative Standard Deviation (std dev / mean)
+
+Changes:
+v2:
+- changed dynamic power coeffcient to 90 for A7, which prevents odd
+  behaviour for some low utilisation and at low OPPs;
+  now, the power ratio is ~3x between big an LITTLE core;
+  it's better aligned with [1]; probably due to measurement noise
+  at lower OPPs the values obtained from hwmon0|3 were different
+  from reality; some synthetic workloads showed this differences
+- cleaned commit messages (no measurements in commit message)
+- merged configs into one patch and re-ordered patches
+- provided energy measurmements in the cover letter
+- measurements focused on comparing similar setup - with schedutil governor,
+  to compare apples with apples
+
+The v1 can be found in [2].
+The patch set is on top of Krzysztof's tree, branch 'next/dt' [3] and has 
+been tested on Odroid-XU3 rev0.2 20140529.
+
+Regards,
+Lukasz Luba
+
+[1] https://www.cl.cam.ac.uk/~rdm34/big.LITTLE.pdf
+[2] https://lore.kernel.org/linux-arm-kernel/20200127215453.15144-1-lukasz.luba@arm.com/T/
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/log/?h=next/dt
+
+Lukasz Luba (2):
+  ARM: dts: exynos: Add dynamic-power-coefficient to Exynos5422 CPUs
+  ARM: exynos_defconfig: Enable SCHED_MC and ENERGY_MODEL
+
+ arch/arm/boot/dts/exynos5422-cpus.dtsi | 8 ++++++++
+ arch/arm/configs/exynos_defconfig      | 2 ++
+ 2 files changed, 10 insertions(+)
+
+-- 
+2.17.1
+
