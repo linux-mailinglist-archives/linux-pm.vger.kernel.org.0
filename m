@@ -2,66 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DA7165675
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 06:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A28C7165679
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 06:04:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725936AbgBTFBD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 00:01:03 -0500
-Received: from mail-il1-f193.google.com ([209.85.166.193]:35804 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725811AbgBTFBD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 00:01:03 -0500
-Received: by mail-il1-f193.google.com with SMTP id g12so22643496ild.2
-        for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2020 21:01:03 -0800 (PST)
+        id S1726165AbgBTFEt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 00:04:49 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:40133 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725811AbgBTFEr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 00:04:47 -0500
+Received: by mail-pl1-f194.google.com with SMTP id y1so1056846plp.7
+        for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2020 21:04:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=sTj1eM307TtW0Iz0ttI3uAeiIkIcleaDLb9EPNkL1bw=;
-        b=HI8CtxU7bPsXfmYQVK+06soWkHT3Stsv09TC5ilgOfU69wHFvNhX+9p+Ro1DLPY/sD
-         7f91AV7sU0mY1xcwmXdXPmZd/4yu7zGlc+NrVF/BtywTxmxxD8eslGMvS3d2CDzkY1XC
-         RNvt634JqDAovutPY3rmLKnBK9cO6FyFalrINrnikfxPv8YKoaUuRfYN4157tDaGOtM9
-         RUheWEV4lESB9oKBObiybfZz0JjfO3md6eeGMGEkTnFXRSXxkVdxXakADLYL2/Uqni4u
-         vaYFsCbUQNoUWxTedI4tIu27OOmbc3GBWtDbLyZkOO8tgwvz56tN9QOjomshTokOi0AA
-         9hkw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=SnxfHJcH3dJfaGTadw6bDQp2VaipWSYONj5VWzxr75M=;
+        b=D82B6Jl8GzSqPhqK3gndl940M+e/p4RQ4dcJD+Il3Wl28R8uKElrD4Dcf4Ln1l1Jj5
+         tgh4qBdLTgNeP6q4cgXK6W6AhqUQi5QFV8P2OqsSgenyi8Tk4QT4WgYo7mtQw7N8aNLg
+         5IqJv+0BdKWBZYJVeHo0JB0frJE6SebarcgYR9A6H5TVZA49g825fAsaFUvcZFJT/c3/
+         f3Yq1QKFehUNcF3+V/5l2+HY7OnSBCA4BbsnEPxSTNDHNZToNb0eyW0f+hXSTpD0FHuJ
+         82BJBfgIfCF+UjlMuJyXcn2S3KLONmzUqYAbmPrihKNm2IDZnZ1qJcwx73ZNGClIuKCx
+         QKfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=sTj1eM307TtW0Iz0ttI3uAeiIkIcleaDLb9EPNkL1bw=;
-        b=kxX+bGyDqEDIZVVCIfN6vhIk4+o+yUsy0Pn2YAiSMja/C1dBwH8C+T3tGKYm7Nulbr
-         HZWXAwbOgIKwBLS/8jQPlSxEXMZ3NipWcGfB7JkQ4rvb2+b862p3jHAz+v/pfqFBHP65
-         Unp2SN4PPZlla1gOOAyWY9hNn+YXYhVxA/qG/6EIumH2r7S/BZ5CMdftbsThEgoSBkN1
-         ACbIHl6bn7k+oNslBK1n8mQak/hBmjujing9fcACk3VqHdO8HDLPNKNZ34Vl8TqZpt9g
-         ZL8XP9x7yt5C500w12zfdX6GtcAIfbgsQrwrnKCva5PsnOKocnl/qwcao4x5UG/Yho+s
-         LeyA==
-X-Gm-Message-State: APjAAAWlxadT0D0z5lyNpFNbnbwtNSKxSHaRNk7YVliYLUyGEBURZeZD
-        vMwrvwGdtTtLny0BUh+j7uC6bxH2lJYU4fX2fKc=
-X-Google-Smtp-Source: APXvYqxyPnNYrVunqbxzDu/KRbgePJ2Ic0lKgQq91MQ8L5F7cVh7WDbeHwlTPejcehVkVyZ598qpk9Zj6xsnx/Zbj4s=
-X-Received: by 2002:a92:88dc:: with SMTP id m89mr27878930ilh.265.1582174862951;
- Wed, 19 Feb 2020 21:01:02 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a02:110a:0:0:0:0:0 with HTTP; Wed, 19 Feb 2020 21:01:02
- -0800 (PST)
-Reply-To: daborahraymond@gmail.com
-From:   "Mrs. Daborah Raymond" <clecischerdienvargas@gmail.com>
-Date:   Thu, 20 Feb 2020 06:01:02 +0100
-Message-ID: <CAM8_cKPUaJpZi5zTUZ2viHF=n4CAcdSqBKe4xsLRr4nY6FN-_w@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=SnxfHJcH3dJfaGTadw6bDQp2VaipWSYONj5VWzxr75M=;
+        b=PS5KMNHsdTSDODLagkbaz7GYPZXmbugvfUx/6zzjI9nwl4/VTv1Dd2TmxQHssA2k6E
+         WKxYanitPwGKdA9wA+mIh599f4J8yOOYNjAztucyvtUtpsyvtr/DRgTeLrZNRNQxouvo
+         Jn/moMcAlxzwSFGKDAnrlzY54oyLxDNRSkIJHPes0TfNPxG431YCEQsAbb3VWqFfv96T
+         6fSt0zv4f/DNU4HBWTmlbU9okKZ1p4sGFzWVrIBgfCpLYSpOjsGaFgmXN+KEFm+tqB2s
+         v+DKG8crvS/2fWblwLEXhUkjKi6FI1XhipAxWp/vtomqTw0xIC9Ctw8eXhIqeq1s46x+
+         wVAQ==
+X-Gm-Message-State: APjAAAXHTTRtLjFk13ObFHkNhKqvQ8XMZxaKRTnAP8/D1puFdZUhttmk
+        ZQ3WW6nKUhgZBh6FjLvL3bq09A==
+X-Google-Smtp-Source: APXvYqzLkWrpUiPoCfJrHFXtM/ZLRzMES/WG77gcztnA8Jv+vkT8aXnXJVoRLKX27cVA5hi5qJHsWA==
+X-Received: by 2002:a17:90a:9311:: with SMTP id p17mr1466208pjo.140.1582175085036;
+        Wed, 19 Feb 2020 21:04:45 -0800 (PST)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id z4sm1400847pfn.42.2020.02.19.21.04.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2020 21:04:44 -0800 (PST)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Todd Kjos <tkjos@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v4 0/6] driver core: Try to improve and cleanup driver_deferred_probe_check_state()
+Date:   Thu, 20 Feb 2020 05:04:34 +0000
+Message-Id: <20200220050440.45878-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear friend
+This series tries to improve and cleanup the
+driver_deferred_probe_check_state() code in the driver core.
 
-How are you my name is Mrs. Daborah Raymond i want you to know that I
-have a deal worth
+This is most important for being able to support modules
+dependencies which may be loaded by userland, far after
+late_initcall is done. For instance, this series allows
+us to use successfully various clk drivers as modules on
+the db845c board. And without it, those drivers have to
+be statically built in to work.
 
-$4.5 Millions to discuss with you if interested  reply to my private
-email with trust and honest
+The first patch (or two) is really the most critical for me,
+but as I was working to understand the code (and with some
+prodding), it seemed a further cleanup was in order.
 
- (daborahraymond@gmail.com) for more
+If folks have concerns about the tail end of the patch set, I'm
+fine to defer that. The main issue for me is the inability to
+load module dependencies after init starts. 
 
- details
+New in v4:
+* Split earlier version of the patches apart
+* Defaulting deferred_probe_timeout to 30 seconds if modules
+  are enabled.
+* Deeper cleanup on driver_deferred_probe_check_state_continue()
+
+Feedback would be greatly appreciated!
+
+thanks
+-john
+
+Cc: Rob Herring <robh@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Kevin Hilman <khilman@kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Thierry Reding <treding@nvidia.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-pm@vger.kernel.org
+
+John Stultz (6):
+  driver core: Fix driver_deferred_probe_check_state() logic
+  driver core: Set deferred_probe_timeout to a longer default if
+    CONFIG_MODULES is set
+  pinctrl: Remove use of driver_deferred_probe_check_state_continue()
+  driver core: Remove driver_deferred_probe_check_state_continue()
+  driver core: Rename deferred_probe_timeout and make it global
+  regulator: Use driver_deferred_probe_timeout for
+    regulator_init_complete_work
+
+ drivers/base/dd.c             | 78 ++++++++++++-----------------------
+ drivers/pinctrl/devicetree.c  |  9 ++--
+ drivers/regulator/core.c      | 25 ++++++-----
+ include/linux/device/driver.h |  2 +-
+ 4 files changed, 47 insertions(+), 67 deletions(-)
+
+-- 
+2.17.1
+
