@@ -2,110 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B231658E8
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 09:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E3D165910
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 09:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbgBTIIR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 20 Feb 2020 03:08:17 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:35764 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726541AbgBTIIQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 03:08:16 -0500
-Received: from mail-pf1-f198.google.com ([209.85.210.198])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1j4gsX-0001GW-UA
-        for linux-pm@vger.kernel.org; Thu, 20 Feb 2020 08:08:14 +0000
-Received: by mail-pf1-f198.google.com with SMTP id r127so1965663pfc.11
-        for <linux-pm@vger.kernel.org>; Thu, 20 Feb 2020 00:08:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=Ap9U+phFzhqWDo4fgbwK0bHCPUbHZGx2Chn9f/utSqE=;
-        b=WCa0erULXWdqU5RrNOtXiA8ksQtHeAP1m2H9BWAFMyaH54yt9VvHp429pYcLMoIElF
-         cpMw/3hRYrFHV+g2nHYHJgouii/JxnYZ3nCk4dJri9NF+TOq8wum9lcrcBVQjR8H/7X8
-         W/2HpZZi4xtmlZMrO9ifkygghYb0XEszLXyQJtL7pQ2Ge9255AnZoYaGDHl2XON3ha7W
-         HimgbEP/lso7ZfKVcAcl9+e+7/yOzuHxnOlVfdq+R0JxPGGmtDsPp3GApvqgnLsJ0grN
-         ki8S0koQzKPx9fW2JdsuGpakm630BBMqReSbNOkPndMLSlMSsHy8V9e2VILng3fBrJvi
-         tLSA==
-X-Gm-Message-State: APjAAAVtETiGGkpEY85Fsa/mUxstinxZcCdwMZCC0RkKZh8+PEnevTIB
-        MQwTe8KCJ2tptQAVNZhRurX7uExX6oF4oXcjIQXFBVndYbpXn+sYkvZ67qNUB/B573ZdkHGLZbX
-        0yinI+slKhwyNUNjR06RMBHZM3ZD5MO0eUA8l
-X-Received: by 2002:a63:3f85:: with SMTP id m127mr32163672pga.15.1582186092305;
-        Thu, 20 Feb 2020 00:08:12 -0800 (PST)
-X-Google-Smtp-Source: APXvYqw5CB2MYi46pbLazZTtP3PKhLmyTFeQsVGMXYGM8GaSr/DT/ckFZWcNpfje4HaQNdbg8P3+gw==
-X-Received: by 2002:a63:3f85:: with SMTP id m127mr32163647pga.15.1582186092011;
-        Thu, 20 Feb 2020 00:08:12 -0800 (PST)
-Received: from 2001-b011-380f-3214-b828-48d4-ee3d-9937.dynamic-ip6.hinet.net (2001-b011-380f-3214-b828-48d4-ee3d-9937.dynamic-ip6.hinet.net. [2001:b011:380f:3214:b828:48d4:ee3d:9937])
-        by smtp.gmail.com with ESMTPSA id w11sm2415060pgh.5.2020.02.20.00.08.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Feb 2020 00:08:08 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3608.60.0.2.5\))
-Subject: Re: Hard Disk consumes lots of power in s2idle
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <a9fd25cd0a151d20e975ce79ab70197e39ef01e1.camel@linux.intel.com>
-Date:   Thu, 20 Feb 2020 16:08:06 +0800
-Cc:     Linux PM <linux-pm@vger.kernel.org>, linux-ide@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Kent Lin <kent.lin@canonical.com>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <235CF4F8-19BF-4B00-8C92-E59CB2D476A7@canonical.com>
-References: <0955D72C-D24D-402E-884F-C706578BF477@canonical.com>
- <a9fd25cd0a151d20e975ce79ab70197e39ef01e1.camel@linux.intel.com>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-X-Mailer: Apple Mail (2.3608.60.0.2.5)
+        id S1726801AbgBTIXj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 03:23:39 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:51576 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726637AbgBTIXj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 20 Feb 2020 03:23:39 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7F3EF1A5385;
+        Thu, 20 Feb 2020 09:23:37 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 441491A531C;
+        Thu, 20 Feb 2020 09:23:22 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id CE272402ED;
+        Thu, 20 Feb 2020 16:23:08 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org, leonard.crestez@nxp.com, daniel.baluta@nxp.com,
+        shengjiu.wang@nxp.com, peng.fan@nxp.com, ping.bai@nxp.com,
+        jun.li@nxp.com, bjorn.andersson@linaro.org, olof@lixom.net,
+        vkoul@kernel.org, dinguyen@kernel.org,
+        marcin.juszkiewicz@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH RESEND 1/4] dt-bindings: thermal: imx8mm-thermal: Add binding doc for i.MX8MM
+Date:   Thu, 20 Feb 2020 16:17:23 +0800
+Message-Id: <1582186646-22096-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Srinivas,
+Add thermal binding doc for Freescale's i.MX8MM Thermal Monitoring Unit.
 
-> On Feb 20, 2020, at 02:36, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com> wrote:
-> 
-> Hi Kai,
-> 
-> On Wed, 2020-02-19 at 22:22 +0800, Kai-Heng Feng wrote:
->> Hi Srinivas,
->> 
->> Your previous work to support DEVSLP works well on SATA SSDs, so I am
->> asking you the issue I am facing:
->> Once a laptop has a HDD installed, the power consumption during
->> S2Idle increases ~0.4W, which is quite a lot.
->> However, HDDs don't seem to support DEVSLP, so I wonder if you know
->> to do proper power management for HDDs?
-> What is the default here
-> cat /sys/power/mem_sleep
-> s2idle or deep?
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/thermal/imx8mm-thermal.txt        | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
 
-It defaults to s2idle.
-
-> 
-> Please follow debug steps here:
-> https://01.org/blogs/qwang59/2018/how-achieve-s0ix-states-linux
-> 
-> We need to check whether you get any PC10 residency or not.
-
-Yes it reaches PC10. It doesn't reach SLP_S0 though.
-The real number on S2Idle power consumption:
-No HDD: ~1.4W
-One HDD: ~1.8W
-
-If the SoC doesn't hit PC10 the number should be significantly higher.
-That's why I think the issue is the power management on HDD itself.
-
-Kai-Heng
-
-> 
-> Thanks,
-> Srinivas
-> 
-> 
->> 
->> Kai-Heng
-> 
+diff --git a/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+new file mode 100644
+index 0000000..d09ae82
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+@@ -0,0 +1,15 @@
++* Thermal Monitoring Unit (TMU) on Freescale i.MX8MM SoC
++
++Required properties:
++- compatible : Must be "fsl,imx8mm-tmu".
++- reg : Address range of TMU registers.
++- clocks : TMU's clock source.
++- #thermal-sensor-cells : Should be 0. See ./thermal.txt for a description.
++
++Example:
++tmu: tmu@30260000 {
++	compatible = "fsl,imx8mm-tmu";
++	reg = <0x30260000 0x10000>;
++	clocks = <&clk IMX8MM_CLK_TMU_ROOT>;
++	#thermal-sensor-cells = <0>;
++};
+-- 
+2.7.4
 
