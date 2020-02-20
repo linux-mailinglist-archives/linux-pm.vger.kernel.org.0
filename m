@@ -2,174 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D817216561E
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 05:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DA7165675
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 06:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727637AbgBTENJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Feb 2020 23:13:09 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:43230 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727576AbgBTENJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Feb 2020 23:13:09 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01K4CuOG110720;
-        Wed, 19 Feb 2020 22:12:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1582171976;
-        bh=VnPvu6lppxPv2dAKzH9uu04g0NKMjMplhPQHKEVZkYQ=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=B722om15HqawzVDoJiHSFhM8PBZDDsGrXsRDRpnPmdR0juUnMEVWjSl2YfIv+igMb
-         OHh96HuFmTEpBHucnG08YMMrsPhGpb9S0mMq0Pb96VW/iPNmB3pX63P/kt8P4c8Gc9
-         snGryF61C+HuGEiobV1QYz+3+rFJ8G55bFbb+Wn0=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01K4Cu4w025017
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Feb 2020 22:12:56 -0600
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 19
- Feb 2020 22:12:56 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 19 Feb 2020 22:12:56 -0600
-Received: from [10.24.69.174] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01K4Cqv0056397;
-        Wed, 19 Feb 2020 22:12:53 -0600
-Subject: Re: [PATCH v3 1/4] dt-bindings: thermal: k3: Add VTM bindings
- documentation
-To:     Rob Herring <robh@kernel.org>
-CC:     <rui.zhang@intel.com>, <daniel.lezcano@linaro.org>,
-        <amit.kucheria@verdurent.com>, <t-kristo@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <mark.rutland@arm.com>
-References: <20200219074314.22829-1-j-keerthy@ti.com>
- <20200219074314.22829-2-j-keerthy@ti.com> <20200219145227.GA1317@bogus>
-From:   Keerthy <j-keerthy@ti.com>
-Message-ID: <55b68963-b931-bf67-482e-146e42af4298@ti.com>
-Date:   Thu, 20 Feb 2020 09:42:58 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1725936AbgBTFBD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 00:01:03 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:35804 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725811AbgBTFBD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 00:01:03 -0500
+Received: by mail-il1-f193.google.com with SMTP id g12so22643496ild.2
+        for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2020 21:01:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=sTj1eM307TtW0Iz0ttI3uAeiIkIcleaDLb9EPNkL1bw=;
+        b=HI8CtxU7bPsXfmYQVK+06soWkHT3Stsv09TC5ilgOfU69wHFvNhX+9p+Ro1DLPY/sD
+         7f91AV7sU0mY1xcwmXdXPmZd/4yu7zGlc+NrVF/BtywTxmxxD8eslGMvS3d2CDzkY1XC
+         RNvt634JqDAovutPY3rmLKnBK9cO6FyFalrINrnikfxPv8YKoaUuRfYN4157tDaGOtM9
+         RUheWEV4lESB9oKBObiybfZz0JjfO3md6eeGMGEkTnFXRSXxkVdxXakADLYL2/Uqni4u
+         vaYFsCbUQNoUWxTedI4tIu27OOmbc3GBWtDbLyZkOO8tgwvz56tN9QOjomshTokOi0AA
+         9hkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=sTj1eM307TtW0Iz0ttI3uAeiIkIcleaDLb9EPNkL1bw=;
+        b=kxX+bGyDqEDIZVVCIfN6vhIk4+o+yUsy0Pn2YAiSMja/C1dBwH8C+T3tGKYm7Nulbr
+         HZWXAwbOgIKwBLS/8jQPlSxEXMZ3NipWcGfB7JkQ4rvb2+b862p3jHAz+v/pfqFBHP65
+         Unp2SN4PPZlla1gOOAyWY9hNn+YXYhVxA/qG/6EIumH2r7S/BZ5CMdftbsThEgoSBkN1
+         ACbIHl6bn7k+oNslBK1n8mQak/hBmjujing9fcACk3VqHdO8HDLPNKNZ34Vl8TqZpt9g
+         ZL8XP9x7yt5C500w12zfdX6GtcAIfbgsQrwrnKCva5PsnOKocnl/qwcao4x5UG/Yho+s
+         LeyA==
+X-Gm-Message-State: APjAAAWlxadT0D0z5lyNpFNbnbwtNSKxSHaRNk7YVliYLUyGEBURZeZD
+        vMwrvwGdtTtLny0BUh+j7uC6bxH2lJYU4fX2fKc=
+X-Google-Smtp-Source: APXvYqxyPnNYrVunqbxzDu/KRbgePJ2Ic0lKgQq91MQ8L5F7cVh7WDbeHwlTPejcehVkVyZ598qpk9Zj6xsnx/Zbj4s=
+X-Received: by 2002:a92:88dc:: with SMTP id m89mr27878930ilh.265.1582174862951;
+ Wed, 19 Feb 2020 21:01:02 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200219145227.GA1317@bogus>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Received: by 2002:a02:110a:0:0:0:0:0 with HTTP; Wed, 19 Feb 2020 21:01:02
+ -0800 (PST)
+Reply-To: daborahraymond@gmail.com
+From:   "Mrs. Daborah Raymond" <clecischerdienvargas@gmail.com>
+Date:   Thu, 20 Feb 2020 06:01:02 +0100
+Message-ID: <CAM8_cKPUaJpZi5zTUZ2viHF=n4CAcdSqBKe4xsLRr4nY6FN-_w@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Dear friend
 
+How are you my name is Mrs. Daborah Raymond i want you to know that I
+have a deal worth
 
-On 19/02/20 8:22 pm, Rob Herring wrote:
-> On Wed, Feb 19, 2020 at 01:13:11PM +0530, Keerthy wrote:
->> Add VTM bindings documentation. In the Voltage Thermal
->> Management Module(VTM), K3 AM654 supplies a voltage
->> reference and a temperature sensor feature that are gathered in the band
->> gap voltage and temperature sensor (VBGAPTS) module. The band
->> gap provides current and voltage reference for its internal
->> circuits and other analog IP blocks. The analog-to-digital
->> converter (ADC) produces an output value that is proportional
->> to the silicon temperature.
->>
->> Signed-off-by: Keerthy <j-keerthy@ti.com>
->> ---
->>
->> Changes in v3:
->>
->>    * Fixed errors seen with:
->>      dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
->>
->>   .../bindings/thermal/ti,am654-thermal.yaml    | 57 +++++++++++++++++++
->>   1 file changed, 57 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
->> new file mode 100644
->> index 000000000000..b6dc95c3acab
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
->> @@ -0,0 +1,57 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/thermal/ti,am654-thermal.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Texas Instruments AM654 VTM (DTS) binding
->> +
->> +maintainers:
->> +  - Keerthy <j-keerthy@ti.com>
->> +
->> +properties:
->> +  compatible:
->> +    const: ti,am654-vtm
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  power-domains:
->> +    maxItems: 1
->> +    description: phandle to the associated power domain
-> 
-> No need to redefine a standard property description.
+$4.5 Millions to discuss with you if interested  reply to my private
+email with trust and honest
 
-Okay.
+ (daborahraymond@gmail.com) for more
 
-> 
->> +
->> +  "#thermal-sensor-cells":
->> +    const: 1
->> +
->> +required:
->> +  - "#thermal-sensor-cells"
->> +  - compatible
->> +  - reg
->> +  - power-domains
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
->> +    vtm: wkup_vtm0@42050000 {
-> 
-> thermal-sensor@...
-> 
-> Use generic node names and don't use '_' in node names
-
-vtm stands for voltage thermal manager and comprises of multiple 
-sensors. This is similar to omap bandgap. Should i replace vtm with more 
-generic name like thermal? as used in:
-
-Documentation/devicetree/bindings/thermal/st,stm32-thermal.yaml
-
-- Keerthy
-
-> 
->> +        compatible = "ti,am654-vtm";
->> +        reg = <0x0 0x42050000 0x0 0x25c>;
->> +        power-domains = <&k3_pds 80 TI_SCI_PD_EXCLUSIVE>;
->> +        #thermal-sensor-cells = <1>;
->> +    };
->> +
->> +    mpu0_thermal: mpu0_thermal {
->> +        polling-delay-passive = <250>; /* milliseconds */
->> +        polling-delay = <500>; /* milliseconds */
->> +        thermal-sensors = <&vtm0 0>;
->> +
->> +        trips {
->> +                mpu0_crit: mpu0_crit {
->> +                        temperature = <125000>; /* milliCelsius */
->> +                        hysteresis = <2000>; /* milliCelsius */
->> +                        type = "critical";
->> +                };
->> +        };
->> +    };
->> +...
->> -- 
->> 2.17.1
->>
+ details
