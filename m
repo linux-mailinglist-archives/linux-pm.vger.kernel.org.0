@@ -2,87 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E11165943
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 09:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0140C165995
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 09:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbgBTIek (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 03:34:40 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:54414 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726501AbgBTIek (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 03:34:40 -0500
-X-AuditID: c0a8fbf4-473ff70000004419-ff-5e4e449e3033
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id E2.55.17433.E944E4E5; Thu, 20 Feb 2020 09:34:38 +0100 (CET)
-Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0439.000; Thu, 20 Feb 2020 09:34:34 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>
-CC:     "rafael@kernel.org" <rafael@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "Laine, Markus" <Markus.Laine@fi.rohmeurope.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
-Subject: Re: [RFC PATCH v3 3/8] drivers: base: add linear ranges helpers
-Thread-Topic: [RFC PATCH v3 3/8] drivers: base: add linear ranges helpers
-Thread-Index: AQHV58BcZJpQgU8ZXUak5RlY2LGYvqgjo9cAgAANCYA=
-Date:   Thu, 20 Feb 2020 08:34:33 +0000
-Message-ID: <1eaaa72f167e370cc2875dfa43ee0198ec7d0cfc.camel@fi.rohmeurope.com>
-References: <cover.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
-         <1f6cb9fb9dbc429dc48110f18ad3a8c0c40196c6.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
-         <2f0755df-4bc6-c53d-edea-45bc99e6a47b@infradead.org>
-In-Reply-To: <2f0755df-4bc6-c53d-edea-45bc99e6a47b@infradead.org>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A415A209DAF1BE4E82B744B915D72122@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        id S1726829AbgBTIqX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 03:46:23 -0500
+Received: from esa3.hc3370-68.iphmx.com ([216.71.145.155]:19254 "EHLO
+        esa3.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726501AbgBTIqW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 03:46:22 -0500
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Feb 2020 03:46:22 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1582188382;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=JwHl4quXWDG9itkjDYku543f/vfU0gx98KV7jgfEzIs=;
+  b=deUwhqPq14V103UTUp8rLwhZ+mSjnmQ8rHFGKXIkn1HB22dXM9EEfTig
+   RNf1pAFhMnJv2dsF1UVrOXjAyszfVw/E0qwwKWK8iZcO1USzg/ekjgnDb
+   9Yv1HYp7KLYWy31ulaQZq1icmXdEpBUTlBvSvYWJCLjtc1fmZ8MI6agG1
+   M=;
+Authentication-Results: esa3.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none; spf=None smtp.pra=roger.pau@citrix.com; spf=Pass smtp.mailfrom=roger.pau@citrix.com; spf=None smtp.helo=postmaster@mail.citrix.com
+Received-SPF: None (esa3.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  roger.pau@citrix.com) identity=pra; client-ip=162.221.158.21;
+  receiver=esa3.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="roger.pau@citrix.com";
+  x-conformance=sidf_compatible
+Received-SPF: Pass (esa3.hc3370-68.iphmx.com: domain of
+  roger.pau@citrix.com designates 162.221.158.21 as permitted
+  sender) identity=mailfrom; client-ip=162.221.158.21;
+  receiver=esa3.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="roger.pau@citrix.com";
+  x-conformance=sidf_compatible; x-record-type="v=spf1";
+  x-record-text="v=spf1 ip4:209.167.231.154 ip4:178.63.86.133
+  ip4:195.66.111.40/30 ip4:85.115.9.32/28 ip4:199.102.83.4
+  ip4:192.28.146.160 ip4:192.28.146.107 ip4:216.52.6.88
+  ip4:216.52.6.188 ip4:162.221.158.21 ip4:162.221.156.83
+  ip4:168.245.78.127 ~all"
+Received-SPF: None (esa3.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@mail.citrix.com) identity=helo;
+  client-ip=162.221.158.21; receiver=esa3.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="postmaster@mail.citrix.com";
+  x-conformance=sidf_compatible
+IronPort-SDR: MM0J4GlVDlB8jW19M11+P9HrOGhNxD8WXYL9vu3YBiAQ460tEWfz3gUg2Lw6ArGektClf8Nbag
+ ZDMsNn+bIaHgvmiQrWsOTOXSdwNZIukFIJ+v8ThpcN5voCcqc9fpCjOv1dFXfaPkJlXRiaocNz
+ Ey3nz+5z5gJ8Z3tkNDhfq+2pULZijq4YhGeqIYtykJ4RyOTbAeqOEVpuzrpMAKyUgCJObCNTDs
+ ys4QXG50X3UKLzLY0I+Ya9hAkPZ3tBMhdhqXVkrciAd+JgmZ9nUhR/Mfl0wZ+8MU2oflNLNG06
+ Zow=
+X-SBRS: 2.7
+X-MesageID: 12723432
+X-Ironport-Server: esa3.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.158.21
+X-Policy: $RELAYED
+X-IronPort-AV: E=Sophos;i="5.70,463,1574139600"; 
+   d="scan'208";a="12723432"
+Date:   Thu, 20 Feb 2020 09:39:04 +0100
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     Anchal Agarwal <anchalag@amazon.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
+        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <fllinden@amaozn.com>,
+        <benh@kernel.crashing.org>
+Subject: Re: [RFC PATCH v3 06/12] xen-blkfront: add callbacks for PM suspend
+ and hibernation
+Message-ID: <20200220083904.GI4679@Air-de-Roger>
+References: <cover.1581721799.git.anchalag@amazon.com>
+ <890c404c585d7790514527f0c021056a7be6e748.1581721799.git.anchalag@amazon.com>
+ <20200217100509.GE4679@Air-de-Roger>
+ <20200217230553.GA8100@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200218091611.GN4679@Air-de-Roger>
+ <20200219180424.GA17584@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPJsWRmVeSWpSXmKPExsVyYMXvTbrzXPziDPausbSY+vAJm8X8I+dY
-        LZoXr2ez+Halg8ni8q45bBafe48wWiy9fpHJYs7SEywWc79MZbZ4e2c6i0Xr3iPsFqd3lzjw
-        eKyZt4bRY+esu+wem1doeWxa1cnmsX/uGnaPz5vkAtiiuG2SEkvKgjPT8/TtErgzPn1+yVRw
-        h7Ni8f+pLA2Mezi7GDk5JARMJNp3H2brYuTiEBK4yijRf/0eM4RzglFi+rS7TF2MHBxsAjYS
-        XTfZQRpEBHIkVk/qA2tgFnjEInF8Rg8bSEJYwENi74xXTBBFnhJb7sxmhbCtJM6+PQXWzCKg
-        KjF7bhuYzSvgJ/G4tRdq821GidYLnWDNnAKOEhsnTwJrZhSQlehseAcWZxYQl9j07DsrxNkC
-        Ekv2nGeGsEUlXj7+BxVXktj78yELyNHMApoS63fpQ5gOEg/Os0FMUZSY0v0Q6gRBiZMzn7BM
-        YBSbhWTBLITmWQjNs5A0z0LSvICRdRWjRG5iZk56YkmqoV5RaqleUX5GLpBKzs/dxAiJ8C87
-        GP8f8jzEyMTBeIhRkoNJSZR3hohfnBBfUn5KZUZicUZ8UWlOavEhRgkOZiURXjUeoBxvSmJl
-        VWpRPkxKmoNFSZxX/eHEWCEBkF3ZqakFqUUwWRkODiUJ3kRnoEbBotT01Iq0zJwShDQTByfI
-        cC4pkeLUvJTUosTSkox4UPKILwamD5AUD9De/w4ge4sLEnOBohCtpxi1OSa8nLuImePI3KWL
-        mIVY8vLzUqXEecucgEoFQEozSvPgFr1iFOdgVBLmXQ+S5QGmerg5r4BWMAGteC/sA7KiJBEh
-        JdXA6JBQ81nh5XP7AL+PMwLZF/FvPxTqGJH4c1fr/Mnz3eWiIhtnSTKsTZjJs2/FRKm9de1V
-        i4zr7v66vDagZLZPwIxk5l0pFrIZTY/n1dc3hcz8sPWAy7tjTdXnjC9+mrzefpareyaj6O4d
-        xq1PNUVb1u2tvCt0ecWqlLVbVvAlHFEx774Yu/SthRJLcUaioRZzUXEiAC5psxSyAwAA
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200219180424.GA17584@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+X-ClientProxiedBy: AMSPEX02CAS02.citrite.net (10.69.22.113) To
+ AMSPEX02CL01.citrite.net (10.69.22.125)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-VGhhbmtzIGZvciB0YWtpbmcgYSBsb29rIGF0IHRoaXMgUmFuZHkgOikgSGlnaGx5IGFwcHJlY2lh
-dGVkLg0KDQpPbiBXZWQsIDIwMjAtMDItMTkgYXQgMjM6NDcgLTA4MDAsIFJhbmR5IER1bmxhcCB3
-cm90ZToNCj4gSGksDQo+IEhlcmUgYXJlIHNvbWUga2VybmVsLWRvYyBjb21tZW50cyBmb3IgeW91
-Og0KDQpJIGFncmVlZCB3aXRoIGFsbCB0aGUgY29tbWVudHMgLSBJJ2xsIGZpeCB0aGVtIGZvciBu
-ZXh0IHZlcnNpb24uDQoNCj4gT24gMi8xOS8yMCAxMTozNSBQTSwgTWF0dGkgVmFpdHRpbmVuIHdy
-b3RlOg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL2Jhc2UvS2NvbmZpZyAgICAgICAgIHwgICAzICsN
-Cj4gPiAgZHJpdmVycy9iYXNlL01ha2VmaWxlICAgICAgICB8ICAgMSArDQo+ID4gIGRyaXZlcnMv
-YmFzZS9saW5lYXJfcmFuZ2VzLmMgfCAyNDYNCj4gPiArKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKw0KPiA+ICBpbmNsdWRlL2xpbnV4L2xpbmVhcl9yYW5nZS5oIHwgIDQ4ICsrKysr
-KysNCj4gPiAgNCBmaWxlcyBjaGFuZ2VkLCAyOTggaW5zZXJ0aW9ucygrKQ0KPiA+ICBjcmVhdGUg
-bW9kZSAxMDA2NDQgZHJpdmVycy9iYXNlL2xpbmVhcl9yYW5nZXMuYw0KPiA+ICBjcmVhdGUgbW9k
-ZSAxMDA2NDQgaW5jbHVkZS9saW51eC9saW5lYXJfcmFuZ2UuaA0KPiA+IGRpZmYgLS1naXQgYS9k
-cml2ZXJzL2Jhc2UvbGluZWFyX3Jhbmdlcy5jDQo+ID4gYi9kcml2ZXJzL2Jhc2UvbGluZWFyX3Jh
-bmdlcy5jDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAwMDAu
-LjVmYTNiOTZiZjJiOA0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9kcml2ZXJzL2Jhc2Uv
-bGluZWFyX3Jhbmdlcy5jDQoNCg0KQmVzdCBSZWdhcmRzLA0KCU1hdHRpIFZhaXR0aW5lbg0K
+Thanks for this work, please see below.
+
+On Wed, Feb 19, 2020 at 06:04:24PM +0000, Anchal Agarwal wrote:
+> On Tue, Feb 18, 2020 at 10:16:11AM +0100, Roger Pau Monné wrote:
+> > On Mon, Feb 17, 2020 at 11:05:53PM +0000, Anchal Agarwal wrote:
+> > > On Mon, Feb 17, 2020 at 11:05:09AM +0100, Roger Pau Monné wrote:
+> > > > On Fri, Feb 14, 2020 at 11:25:34PM +0000, Anchal Agarwal wrote:
+> > > > > From: Munehisa Kamata <kamatam@amazon.com
+> > > > > 
+> > > > > Add freeze, thaw and restore callbacks for PM suspend and hibernation
+> > > > > support. All frontend drivers that needs to use PM_HIBERNATION/PM_SUSPEND
+> > > > > events, need to implement these xenbus_driver callbacks.
+> > > > > The freeze handler stops a block-layer queue and disconnect the
+> > > > > frontend from the backend while freeing ring_info and associated resources.
+> > > > > The restore handler re-allocates ring_info and re-connect to the
+> > > > > backend, so the rest of the kernel can continue to use the block device
+> > > > > transparently. Also, the handlers are used for both PM suspend and
+> > > > > hibernation so that we can keep the existing suspend/resume callbacks for
+> > > > > Xen suspend without modification. Before disconnecting from backend,
+> > > > > we need to prevent any new IO from being queued and wait for existing
+> > > > > IO to complete.
+> > > > 
+> > > > This is different from Xen (xenstore) initiated suspension, as in that
+> > > > case Linux doesn't flush the rings or disconnects from the backend.
+> > > Yes, AFAIK in xen initiated suspension backend takes care of it. 
+> > 
+> > No, in Xen initiated suspension backend doesn't take care of flushing
+> > the rings, the frontend has a shadow copy of the ring contents and it
+> > re-issues the requests on resume.
+> > 
+> Yes, I meant suspension in general where both xenstore and backend knows
+> system is going under suspension and not flushing of rings.
+
+backend has no idea the guest is going to be suspended. Backend code
+is completely agnostic to suspension/resume.
+
+> That happens
+> in frontend when backend indicates that state is closing and so on.
+> I may have written it in wrong context.
+
+I'm afraid I'm not sure I fully understand this last sentence.
+
+> > > > > +static int blkfront_freeze(struct xenbus_device *dev)
+> > > > > +{
+> > > > > +	unsigned int i;
+> > > > > +	struct blkfront_info *info = dev_get_drvdata(&dev->dev);
+> > > > > +	struct blkfront_ring_info *rinfo;
+> > > > > +	/* This would be reasonable timeout as used in xenbus_dev_shutdown() */
+> > > > > +	unsigned int timeout = 5 * HZ;
+> > > > > +	int err = 0;
+> > > > > +
+> > > > > +	info->connected = BLKIF_STATE_FREEZING;
+> > > > > +
+> > > > > +	blk_mq_freeze_queue(info->rq);
+> > > > > +	blk_mq_quiesce_queue(info->rq);
+> > > > > +
+> > > > > +	for (i = 0; i < info->nr_rings; i++) {
+> > > > > +		rinfo = &info->rinfo[i];
+> > > > > +
+> > > > > +		gnttab_cancel_free_callback(&rinfo->callback);
+> > > > > +		flush_work(&rinfo->work);
+> > > > > +	}
+> > > > > +
+> > > > > +	/* Kick the backend to disconnect */
+> > > > > +	xenbus_switch_state(dev, XenbusStateClosing);
+> > > > 
+> > > > Are you sure this is safe?
+> > > > 
+> > > In my testing running multiple fio jobs, other test scenarios running
+> > > a memory loader works fine. I did not came across a scenario that would
+> > > have failed resume due to blkfront issues unless you can sugest some?
+> > 
+> > AFAICT you don't wait for the in-flight requests to be finished, and
+> > just rely on blkback to finish processing those. I'm not sure all
+> > blkback implementations out there can guarantee that.
+> > 
+> > The approach used by Xen initiated suspension is to re-issue the
+> > in-flight requests when resuming. I have to admit I don't think this
+> > is the best approach, but I would like to keep both the Xen and the PM
+> > initiated suspension using the same logic, and hence I would request
+> > that you try to re-use the existing resume logic (blkfront_resume).
+> > 
+> > > > I don't think you wait for all requests pending on the ring to be
+> > > > finished by the backend, and hence you might loose requests as the
+> > > > ones on the ring would not be re-issued by blkfront_restore AFAICT.
+> > > > 
+> > > AFAIU, blk_mq_freeze_queue/blk_mq_quiesce_queue should take care of no used
+> > > request on the shared ring. Also, we I want to pause the queue and flush all
+> > > the pending requests in the shared ring before disconnecting from backend.
+> > 
+> > Oh, so blk_mq_freeze_queue does wait for in-flight requests to be
+> > finished. I guess it's fine then.
+> > 
+> Ok.
+> > > Quiescing the queue seemed a better option here as we want to make sure ongoing
+> > > requests dispatches are totally drained.
+> > > I should accept that some of these notion is borrowed from how nvme freeze/unfreeze 
+> > > is done although its not apple to apple comparison.
+> > 
+> > That's fine, but I would still like to requests that you use the same
+> > logic (as much as possible) for both the Xen and the PM initiated
+> > suspension.
+> > 
+> > So you either apply this freeze/unfreeze to the Xen suspension (and
+> > drop the re-issuing of requests on resume) or adapt the same approach
+> > as the Xen initiated suspension. Keeping two completely different
+> > approaches to suspension / resume on blkfront is not suitable long
+> > term.
+> > 
+> I agree with you on overhaul of xen suspend/resume wrt blkfront is a good
+> idea however, IMO that is a work for future and this patch series should 
+> not be blocked for it. What do you think?
+
+It's not so much that I think an overhaul of suspend/resume in
+blkfront is needed, it's just that I don't want to have two completely
+different suspend/resume paths inside blkfront.
+
+So from my PoV I think the right solution is to either use the same
+code (as much as possible) as it's currently used by Xen initiated
+suspend/resume, or to also switch Xen initiated suspension to use the
+newly introduced code.
+
+Having two different approaches to suspend/resume in the same driver
+is a recipe for disaster IMO: it adds complexity by forcing developers
+to take into account two different suspend/resume approaches when
+there's no need for it.
+
+Thanks, Roger.
