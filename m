@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C3B16587F
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 08:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5DB165883
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 08:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726759AbgBTHfV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 02:35:21 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:46628 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726443AbgBTHfV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 02:35:21 -0500
-Received: by mail-lf1-f65.google.com with SMTP id z26so2226263lfg.13;
-        Wed, 19 Feb 2020 23:35:18 -0800 (PST)
+        id S1726679AbgBTHft (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 02:35:49 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:45302 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726443AbgBTHfs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 02:35:48 -0500
+Received: by mail-lf1-f67.google.com with SMTP id z5so2230126lfd.12;
+        Wed, 19 Feb 2020 23:35:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ql2HduRsN3YaSuvoHPSqRaIQbvZ8WP90c57ltIwIGZE=;
-        b=qovvFR12gR+m7WOSBSxSgXXbCSF0SuR/Ejo8lElONNU0AJAvBCTEm/OitXsNLWl2Kg
-         2Ib4q13q12FvQ/SXKaStvZCY7zm7XGbIjyGxCH4zfk39JInqJaOf/4EgaB3jsDRxocUw
-         vC4qFSmorNFa3YWuMC52eBcRIX8WgH0CNPFaCck8CP58KxnruxXAjaj1cKbF7NHKL5F5
-         iZb7+f/Jl84PsoIKOjtqQtzNsGsg0rSOzUd8MiaRF0IVeftXj+0fJh49sjHI3WRCCFfX
-         xq6e1EKJdlQBvpTaOnnmpxOeZl5Xelyu0hSjXPT3rWWA1T+C/5hc2DWs4rVgAoZ7T5jp
-         6Gew==
-X-Gm-Message-State: APjAAAX8TEdATZ9pUCRp0qkLhAjaJK1y2Ff+YSm/82ocCNlm8wzNyVVA
-        ZqrfE2LwfgHK+yIgnKeYuYw=
-X-Google-Smtp-Source: APXvYqwO4DZMfq+31C2aGGMWK5qR56nrlMGuO9YrxpSWEvwrLcfTDoDeewuOjthSQSLClt4hcjeASA==
-X-Received: by 2002:ac2:5196:: with SMTP id u22mr14955587lfi.123.1582184117382;
-        Wed, 19 Feb 2020 23:35:17 -0800 (PST)
+        bh=OxS2NJiiysFFBK2NxbOtBNkRQD3aocx0PLSD5ksFpQo=;
+        b=cl52r1Nomc+rngzKY4xzAzOfjQRgN6laEuYHvBF2rXL6xxzo/LFpK0ACw714ZPLtd/
+         eeQYpdSA+6160MXyjdkjIAhv2+c50gvxf5/D7/FHKoUrZekP6LWa0t2oDC0Rr5/G99PG
+         MLTfl1P6K7lqTxzGqvWMseVO4PkthDGGd4NKRs6p0ATytvUOw1pOvFNEBz6w/W595ATe
+         NffBbYdOCMczNvqaAi0OESQy53k9/clNXG05MA3uPIeW3VtSAQVjUtNBosB7VNbdjcp/
+         nXNaKYmDK3zyCBflF/TcXXiusLLUAvqz71oPtFnYbqrPI2rkf+YsBrcNjJ05fM8YTZ7y
+         s1KA==
+X-Gm-Message-State: APjAAAX59dX/v3o6lzUaM4IIfxQWjFV/MQ3+4t+uDE/hC5dpA3UXnwb8
+        MamXGuSf3XNJGa8jWxzVBJ6lhoqJ
+X-Google-Smtp-Source: APXvYqyI0ERRO273xIto5lSMD60j10LJUxvakrv+tTuLWg9Fqvs10r75D3V7P7p24/7W4IPjYci08g==
+X-Received: by 2002:a05:6512:1107:: with SMTP id l7mr3494065lfg.108.1582184145555;
+        Wed, 19 Feb 2020 23:35:45 -0800 (PST)
 Received: from localhost.localdomain ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id j19sm1399556lfb.90.2020.02.19.23.35.16
+        by smtp.gmail.com with ESMTPSA id i20sm1267471lfl.79.2020.02.19.23.35.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2020 23:35:16 -0800 (PST)
-Date:   Thu, 20 Feb 2020 09:35:10 +0200
+        Wed, 19 Feb 2020 23:35:45 -0800 (PST)
+Date:   Thu, 20 Feb 2020 09:35:37 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     Sebastian Reichel <sre@kernel.org>,
@@ -48,8 +48,8 @@ Cc:     Sebastian Reichel <sre@kernel.org>,
         linux-kernel@vger.kernel.org,
         Markus Laine <markus.laine@fi.rohmeurope.com>,
         Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
-Subject: [RFC PATCH v3 2/8] dt_bindings: ROHM BD99954 Charger
-Message-ID: <f82f140cd758d435a1ab4e45fef4e17a5af2db5c.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [RFC PATCH v3 3/8] drivers: base: add linear ranges helpers
+Message-ID: <1f6cb9fb9dbc429dc48110f18ad3a8c0c40196c6.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -61,179 +61,367 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The ROHM BD99954 is a Battery Management LSI for 1-4 cell Lithium-Ion
-secondary battery. Intended to be used in space-constraint equipment such
-as Low profile Notebook PC, Tablets and other applications. BD99954
-provides a Dual-source Battery Charger, two port BC1.2 detection and a
-Battery Monitor.
+Many devices have control registers which control some measurable
+property. Often a register contains control field so that change in
+this field causes linear change in the controlled property. It is not
+a rare case that user wants to give 'meaningfull' control values and
+driver needs to convert them to register field values. Even more
+often user wants to 'see' the currently set value - again in
+meaningfull units - and driver needs to convert the values it reads
+from register to these meaningfull units. Examples of this include:
 
-Document the DT bindings for BD99954
+- regulators, voltage/current configurations
+- power, voltage/current configurations
+- clk(?) NCOs
+
+and maybe others I can't think of right now.
+
+Provide a linear_range helper which can do conversion from user value
+to register value 'selector'.
+
+The idea here is stolen from regulator framework and patches refactoring
+the regulator helpers to use this are following.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
- .../bindings/power/supply/rohm,bd9995x.yaml   | 153 ++++++++++++++++++
- 1 file changed, 153 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml
+ drivers/base/Kconfig         |   3 +
+ drivers/base/Makefile        |   1 +
+ drivers/base/linear_ranges.c | 246 +++++++++++++++++++++++++++++++++++
+ include/linux/linear_range.h |  48 +++++++
+ 4 files changed, 298 insertions(+)
+ create mode 100644 drivers/base/linear_ranges.c
+ create mode 100644 include/linux/linear_range.h
 
-diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml b/Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml
+diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+index c3b3b5c0b0da..c52aae709331 100644
+--- a/drivers/base/Kconfig
++++ b/drivers/base/Kconfig
+@@ -209,4 +209,7 @@ config GENERIC_ARCH_TOPOLOGY
+ 	  appropriate scaling, sysfs interface for reading capacity values at
+ 	  runtime.
+ 
++config LINEAR_RANGES
++	tristate
++
+ endmenu
+diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+index 157452080f3d..dbb6c4f7ef07 100644
+--- a/drivers/base/Makefile
++++ b/drivers/base/Makefile
+@@ -23,6 +23,7 @@ obj-$(CONFIG_PINCTRL) += pinctrl.o
+ obj-$(CONFIG_DEV_COREDUMP) += devcoredump.o
+ obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) += platform-msi.o
+ obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) += arch_topology.o
++obj-$(CONFIG_LINEAR_RANGES) += linear_ranges.o
+ 
+ obj-y			+= test/
+ 
+diff --git a/drivers/base/linear_ranges.c b/drivers/base/linear_ranges.c
 new file mode 100644
-index 000000000000..032aaa0a305e
+index 000000000000..5fa3b96bf2b8
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/rohm,bd9995x.yaml
-@@ -0,0 +1,153 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/rohm,bd9995x.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/base/linear_ranges.c
+@@ -0,0 +1,246 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * linear_ranges.c -- helpers to map values in a linear range to range index
++ *
++ * Original idea borrowed from regulator framework
++ *
++ * It might be useful if we could support also inversely proportional ranges?
++ * Copyright 2020 ROHM Semiconductors
++ */
 +
-+title: ROHM BD99954 Battery charger driver
++#include <linux/errno.h>
++#include <linux/export.h>
++#include <linux/kernel.h>
++#include <linux/linear_range.h>
 +
-+maintainers:
-+  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-+  - Markus Laine <markus.laine@fi.rohmeurope.com>
-+  - Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
++/**
++ * linear_range_values_in_range - return the amount of values in a range
++ *
++ * @r:		pointer to linear range where values are counted
++ *
++ * Compute the amount of values in range pointed by @r. Note, values can
++ * be all equal - range with selectors 0,...,2 with step 0 still contains
++ * 3 values even though they are all equal.
++ *
++ * Returns the amount of values in range pointed by @r
++ */
++unsigned int linear_range_values_in_range(const struct linear_range *r)
++{
++	if (!r)
++		return 0;
++	return r->max_sel - r->min_sel + 1;
++}
++EXPORT_SYMBOL(linear_range_values_in_range);
 +
-+description: |
-+  The ROHM BD99954 is a Battery Management LSI for 1-4 cell Lithium-Ion
-+  secondary battery intended to be used in space-constraint equipment such
-+  as Low profile Notebook PC, Tablets and other applications. BD99954
-+  provides a Dual-source Battery Charger, two port BC1.2 detection and a
-+  Battery Monitor.
++/**
++ * linear_range_values_in_range_array - return the amount of values in ranges
++ *
++ * @r:		pointer to array of linear ranges where values are counted
++ * @ranges:	amount of ranges we include in computation.
++ *
++ * Compute the amount of values in ranges pointed by @r. Note, values can
++ * be all equal - range with selectors 0,...,2 with step 0 still contains
++ * 3 values even though they are all equal.
++ *
++ * Returns the amount of values in first @ranges ranges pointed by @r
++ */
++unsigned int linear_range_values_in_range_array(const struct linear_range *r,
++						int ranges)
++{
++	int i, values_in_range = 0;
 +
++	for (i = 0; i < ranges; i++) {
++		int values;
 +
-+properties:
-+  compatible:
-+    const: rohm,bd9995x-charger
-+#
-+#    The battery charging profile of BD99954.
-+#
-+#    Curve (1) represents charging current.
-+#    Curve (2) represents battery voltage.
-+#
-+#    The BD99954 data sheet divides charging to three phases.
-+#    a) Trickle-charge with constant current (8).
-+#    b) pre-charge with constant current (6)
-+#    c) fast-charge with:
-+#       First a constant current (5) phase (CC)
-+#       Then constant voltage (CV) phase (after the battery voltage has reached
-+#       target level - until charging current has dropped to termination
-+#       level (7)
-+#
-+#     V ^                                                        ^ I
-+#       .                                                        .
-+#       .                                                        .
-+# (4)- -.- - - - - - - - - - - - - -  +++++++++++++++++++++++++++.
-+#       .                            /                           .
-+#       .                     ++++++/++ - - - - - - - - - - - - -.- - (5)
-+#       .                     +    /  +                          .
-+#       .                     +   -   --                         .
-+#       .                     +  -     +                         .
-+#       .                     +.-      -:                        .
-+#       .                    .+         +`                       .
-+#       .                  .- +       | `/                       .
-+#       .               .."   +          .:                      .
-+#       .             -"      +           --                     .
-+#       .    (2)  ..."        +       |    :-                    .
-+#       .    ...""            +             -:                   .
-+# (3)- -.-.""- - - - -+++++++++ - - - - - - -.:- - - - - - - - - .- - (6)
-+#       .             +                       `:.                .
-+#       .             +               |         -:               .
-+#       .             +                           -:             .
-+#       .             +                             ..           .
-+#       .   (1)       +               |               "+++- - - -.- - (7)
-+#       -++++++++++++++- - - - - - - - - - - - - - - - - + - - - .- - (8)
-+#       .                                                +       -
-+#       -------------------------------------------------+++++++++-->
-+#       |             |       |   CC   |      CV         |
-+#       | --trickle-- | -pre- | ---------fast----------- |
-+#
-+#   The charger uses the following battery properties
-+# - trickle-charge-current-microamp:
-+#     Current used at trickle-charge phase (8 in above chart)
-+#     minimum: 64000
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+# - precharge-current-microamp:
-+#     Current used at pre-charge phase (6 in above chart)
-+#     minimum: 64000
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+# - constant-charge-current-max-microamp
-+#     Current used at fast charge constant current phase (5 in above chart)
-+#     minimum: 64000
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+# - constant-charge-voltage-max-microvolt
-+#     The constant voltage used in fast charging phase (4 in above chart)
-+#     minimum: 2560000
-+#     maximum: 19200000
-+#     multipleOf: 16000
-+# - precharge-upper-limit-microvolt
-+#     charging mode is changed from trickle charging to pre-charging
-+#     when battery voltage exceeds this limit voltage (3 in above chart)
-+#     minimum: 2048000
-+#     maximum: 19200000
-+#     multipleOf: 64000
-+# - re-charge-voltage-microvolt
-+#     minimum: 2560000
-+#     maximum: 19200000
-+#     multipleOf: 16000
-+#     re-charging is automatically started when battry has been discharging
-+#     to the point where the battery voltage drops below this limit
-+# - over-voltage-threshold-microvolt
-+#     battery is expected to be faulty if battery voltage exceeds this limit.
-+#     Charger will then enter to a "battery faulty" -state
-+#     minimum: 2560000
-+#     maximum: 19200000
-+#     multipleOf: 16000
-+# - charge-term-current-microamp
-+#     minimum: 0
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+#     a charge cycle terminates when the battery voltage is above recharge
-+#     threshold, and the current is below this setting (7 in above chart)
-+#   See also Documentation/devicetree/bindings/power/supply/battery.txt
++		values = linear_range_values_in_range(&r[i]);
++		if (!values)
++			return values;
 +
-+  monitored-battery:
-+    description:
-+      phandle of battery characteristics devicetree node
++		values_in_range += values;
++	}
++	return values_in_range;
++}
++EXPORT_SYMBOL(linear_range_values_in_range_array);
 +
-+  rohm,vsys-regulation-microvolt:
-+    description: system specific lower limit for system voltage.
-+    minimum: 2560000
-+    maximum: 19200000
-+    #multipleOf: 64000
++/**
++ * linear_range_get_max_value - return the largest value in a range
++ *
++ * @r:		pointer to linear range where value is looked from
++ *
++ * Returns the largest value in the given range
++ */
++unsigned int linear_range_get_max_value(const struct linear_range *r)
++{
++	return r->min + (r->max_sel - r->min_sel) * r->step;
++}
++EXPORT_SYMBOL(linear_range_get_max_value);
 +
-+  rohm,vbus-input-current-limit-microamp:
-+    description: system specific VBUS input current limit (in microamps).
-+    minimum: 32000
-+    maximum: 16352000
-+    #multipleOf: 32000
++/**
++ * linear_range_get_value - fetch a value from given range
++ *
++ * @r:		pointer to linear range where value is looked from
++ * @selector:	selector for which the value is searched
++ * @val:	address where found value is updated
++ *
++ * Search given ranges for value which matches given selector.
++ *
++ * Returns 0 on success, -EINVAL given selector is not found from any of the
++ * ranges.
++ */
++int linear_range_get_value(const struct linear_range *r, unsigned int selector,
++			   unsigned int *val)
++{
++	if (r->min_sel > selector || r->max_sel < selector)
++		return -EINVAL;
 +
-+  rohm,vcc-input-current-limit-microamp:
-+    description: system specific VCC/VACP input current limit (in microamps).
-+    minimum: 32000
-+    maximum: 16352000
-+    #multipleOf: 32000
++	*val = r->min + (selector - r->min_sel) * r->step;
 +
-+required:
-+  - compatible
++	return 0;
++}
++EXPORT_SYMBOL(linear_range_get_value);
 +
-+examples:
-+  - |
-+    i2c {
-+        charger@9 {
-+            compatible = "rohm,bd9995x-charger";
-+            monitored-battery = <&battery>;
-+            reg = <0x9>;
-+            interrupt-parent = <&gpio1>;
-+            interrupts = <29 8>;
-+            rohm,vsys-regulation-microvolt = <8960000>;
-+            rohm,vbus-input-current-limit-microamp = <1472000>;
-+            rohm,vcc-input-current-limit-microamp = <1472000>;
-+        };
-+    };
++/**
++ * linear_range_get_value_array - fetch a value from array of ranges
++ *
++ * @r:		pointer to array of linear ranges where value is looked from
++ * @ranges:	amount of ranges in an array
++ * @selector:	selector for which the value is searched
++ * @val:	address where found value is updated
++ *
++ * Search through an array of ranges for value which matches given selector.
++ *
++ * Returns 0 on success, -EINVAL given selector is not found from any of the
++ * ranges.
++ */
++int linear_range_get_value_array(const struct linear_range *r, int ranges,
++				 unsigned int selector, unsigned int *val)
++{
++	int i;
++
++	for (i = 0; i < ranges; i++)
++		if (r[i].min_sel <= selector && r[i].max_sel >= selector)
++			return linear_range_get_value(&r[i], selector, val);
++
++	return -EINVAL;
++}
++EXPORT_SYMBOL(linear_range_get_value_array);
++
++/**
++ * linear_range_get_selector_low - return linear range selector for value
++ *
++ * @r:		pointer to linear range where selector is looked from
++ * @val:	value for which the selcetor is searched
++ * @selector:	address where found selector value is updated
++ * @found:	flag to indicate that given value was in the range
++ *
++ * Return selector which which range value is closest match for given
++ * input value. Value is matching if it is equal or smaller than given
++ * value. If given value is in the range, then @found is set true.
++ *
++ * Returns 0 on success, -EINVAL if range is invalid or does not contain
++ * value smaller or equal to given value
++ */
++int linear_range_get_selector_low(const struct linear_range *r,
++				  unsigned int val, unsigned int *selector,
++				  bool *found)
++{
++	*found = false;
++
++	if (r->min > val)
++		return -EINVAL;
++
++	if (linear_range_get_max_value(r) >= val)
++		*found = true;
++
++	if (!r->step)
++		*selector = r->min_sel;
++	else
++		*selector = (val - r->min) / r->step + r->min_sel;
++
++	return 0;
++}
++EXPORT_SYMBOL(linear_range_get_selector_low);
++
++/**
++ * linear_range_get_selector_low_array - return linear range selector for value
++ *
++ * @r:		pointer to array of linear ranges where selector is looked from
++ * @ranges:	amount of ranges to scan from array
++ * @val:	value for which the selcetor is searched
++ * @selector:	address where found selector value is updated
++ * @found:	flag to indicate that given value was in the range
++ *
++ * Return Scan array of ranges for selector which which range value matches
++ * given input value. Value is matching if it is equal or smaller than given
++ * value. If given value is found to be in a range scannins is stopped and
++ * @found is set true. If a range with values smaller than given value is found
++ * but the range max is being smaller than given value, then the ranges
++ * biggest selector is updated to @selector but scanning ranges is continued
++ * and @found is set to false.
++ *
++ * Returns 0 on success, -EINVAL if range array is invalid or does not contain
++ * range with a value smaller or equal to given value
++ */
++int linear_range_get_selector_low_array(const struct linear_range *r,
++					int ranges, unsigned int val,
++					unsigned int *selector, bool *found)
++{
++	int i;
++	int ret = -EINVAL;
++
++	for (i = 0; i < ranges; i++) {
++		int tmpret;
++
++		tmpret = linear_range_get_selector_low(&r[i], val, selector,
++						       found);
++
++		if (!tmpret)
++			ret = 0;
++
++		if (*found)
++			break;
++	}
++
++	return ret;
++}
++EXPORT_SYMBOL(linear_range_get_selector_low_array);
++
++/**
++ * linear_range_get_selector_high - return linear range selector for value
++ *
++ * @r:		pointer to linear range where selector is looked from
++ * @val:	value for which the selcetor is searched
++ * @selector:	address where found selector value is updated
++ * @found:	flag to indicate that given value was in the range
++ *
++ * Return selector which which range value is closest match for given
++ * input value. Value is matching if it is equal or higher than given
++ * value. If given value is in the range, then @found is set true.
++ *
++ * Returns 0 on success, -EINVAL if range is invalid or does not contain
++ * value greater or equal to given value
++ */
++int linear_range_get_selector_high(const struct linear_range *r,
++				   unsigned int val, unsigned int *selector,
++				   bool *found)
++{
++	*found = false;
++
++	if (linear_range_get_max_value(r) < val)
++		return -EINVAL;
++
++	if (r->min <= val) {
++		*found = true;
++	} else {
++		*selector = r->min_sel;
++		return 0;
++	}
++
++	if (!r->step)
++		*selector = r->max_sel;
++	else
++		*selector = DIV_ROUND_UP(val - r->min, r->step) + r->min_sel;
++
++	return 0;
++}
++EXPORT_SYMBOL(linear_range_get_selector_high);
+diff --git a/include/linux/linear_range.h b/include/linux/linear_range.h
+new file mode 100644
+index 000000000000..534ca59a308a
+--- /dev/null
++++ b/include/linux/linear_range.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/* Copyright (C) 2020 ROHM Semiconductors */
++
++#ifndef LINEAR_RANGE_H
++#define LINEAR_RANGE_H
++
++#include <linux/types.h>
++
++/**
++ * struct linear_range - table of selector - value pairs
++ *
++ * Define a lookup-table for range of values. Intended to help when looking
++ * for a register value matching certaing physical measure (like voltage).
++ * Usable when increment of one in register always results a constant increment
++ * of the physical measure (like voltage).
++ *
++ * @min:  Lowest value in range
++ * @min_sel: Lowest selector for range
++ * @max_sel: Highest selector for range
++ * @step: Value step size
++ */
++struct linear_range {
++	unsigned int min;
++	unsigned int min_sel;
++	unsigned int max_sel;
++	unsigned int step;
++};
++
++unsigned int linear_range_values_in_range(const struct linear_range *r);
++unsigned int linear_range_values_in_range_array(const struct linear_range *r,
++						int ranges);
++unsigned int linear_range_get_max_value(const struct linear_range *r);
++
++int linear_range_get_value(const struct linear_range *r, unsigned int selector,
++			   unsigned int *val);
++int linear_range_get_value_array(const struct linear_range *r, int ranges,
++				 unsigned int selector, unsigned int *val);
++int linear_range_get_selector_low(const struct linear_range *r,
++				  unsigned int val, unsigned int *selector,
++				  bool *found);
++int linear_range_get_selector_high(const struct linear_range *r,
++				   unsigned int val, unsigned int *selector,
++				   bool *found);
++int linear_range_get_selector_low_array(const struct linear_range *r,
++					int ranges, unsigned int val,
++					unsigned int *selector, bool *found);
++
++#endif
 -- 
 2.21.0
 
