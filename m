@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A902165890
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 08:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02696165892
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 08:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726788AbgBTHgy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 02:36:54 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:39677 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726756AbgBTHgy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 02:36:54 -0500
-Received: by mail-lf1-f68.google.com with SMTP id t23so2262343lfk.6;
-        Wed, 19 Feb 2020 23:36:52 -0800 (PST)
+        id S1726756AbgBTHhX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 02:37:23 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:43439 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726669AbgBTHhW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 02:37:22 -0500
+Received: by mail-lf1-f66.google.com with SMTP id s23so282564lfs.10;
+        Wed, 19 Feb 2020 23:37:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=whNPw+eezGy5wSUPae3plMsR1ZOgHxy5/jyWH2SY3UQ=;
-        b=hgOYKC6I1yTwDA081p28PUFIA03ainp/xWl7W6KExxWfzEgbnC01LatRvBpvxSFkAr
-         5fwlX9tjr21i8bj1zs7FxlLRQbt+I3kToZogQkM3ihp9e9OAdcO9JSV13JWgaT7AwVaU
-         KXIUcYRKSeI29SWMuw2j9Jpyg4NVP24SCU5j+Msm4a2Ss4I7wDGzsoRFsL13PYPQW9Pc
-         hwaB7WXXqvXPvbVRMiZzgMtciml5bdL225fzJywWibDkGPPxZ888z+4I6gOmBaAfYjm2
-         9ZjKkvmrJ9xzU1I4VNSmFGbRslzqpOzgRA2m9iSTgXMJaqf90i5jAiwRZiLc9YJtHddQ
-         fqNA==
-X-Gm-Message-State: APjAAAWV7EhrSgLA0Az2OC+GchQOIy0wEvOYuNiX4SyjVc9vDyO2Mjni
-        KcdPSDWdIOz7eDrOkpHpAZg=
-X-Google-Smtp-Source: APXvYqyVBPSPld821HEtfQx9FlQM/oA3qAt8gjCCG6v0cO9fp/rziqu5HTDUo96Z04c2GR5lyHRL/Q==
-X-Received: by 2002:ac2:515b:: with SMTP id q27mr15203470lfd.119.1582184211290;
-        Wed, 19 Feb 2020 23:36:51 -0800 (PST)
+        bh=QNPNa1+imPj2slGLEw4BrWjk/NyPD8xHo2U0RiypqUE=;
+        b=oOoHXh8bnQB+66Xk4fOng1ELvhQ64HZ9h4oRu1TwSrulf7k539OLLP21lFF2FDfrqQ
+         qhbhreLBPQfEinKgKDGeCQhCYBgV1NZmdIemmD2JP5pkEWfjJRZXCSu0MNmmqaWij2Zi
+         gSh4e8hoXqSnOyIc/J2H5Xkx8mJITywBeOZMYeSDkM2Cyd8nR7nztRj8rgX9mWSZVNEp
+         MWltn6MDm8CjCAJptkK7K+3T9tHN9XGp6S1Hm419zVeragV8Lke0zUmq22U1S5haYTjB
+         rHT+Pw/HHRlSuZtMighOLiKw7kDI88I3CHr6MqyqxA8jXJYlqUQS7eOgFnOrH5dm2RJl
+         G3Jw==
+X-Gm-Message-State: APjAAAVEoLQsP6mzJIS5cL8I2h23fGNfTqxtp47ZeB1QIU7HHgekdD9E
+        GBtl04yEaj/xpRyoHoBA3Uw=
+X-Google-Smtp-Source: APXvYqyvd1SWQt/CUJGkv5dH+Db+wsaIv/4PjwimXVJzwlq3pv4U7zVrKd8ZaqOB0Jn6VVuJ6c2cYA==
+X-Received: by 2002:a05:6512:3194:: with SMTP id i20mr1116611lfe.172.1582184239301;
+        Wed, 19 Feb 2020 23:37:19 -0800 (PST)
 Received: from localhost.localdomain ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id k23sm1173926ljj.85.2020.02.19.23.36.49
+        by smtp.gmail.com with ESMTPSA id g15sm1189262ljl.10.2020.02.19.23.37.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2020 23:36:50 -0800 (PST)
-Date:   Thu, 20 Feb 2020 09:36:38 +0200
+        Wed, 19 Feb 2020 23:37:18 -0800 (PST)
+Date:   Thu, 20 Feb 2020 09:37:07 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     Sebastian Reichel <sre@kernel.org>,
@@ -48,8 +48,8 @@ Cc:     Sebastian Reichel <sre@kernel.org>,
         linux-kernel@vger.kernel.org,
         Markus Laine <markus.laine@fi.rohmeurope.com>,
         Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
-Subject: [RFC PATCH v3 5/8] regulator: use linear_ranges helper
-Message-ID: <ba2eb2d7363b386136a546a769a6e2d077558094.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [RFC PATCH v3 6/8] power: supply: bd70528: use linear ranges
+Message-ID: <6344e3f32d38dd1ada5998bb8c68cc4fed5d1513.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -61,293 +61,266 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Change the regulator helpers to use common linear_ranges code.
+Change the bd70528 to use common linear_range code instead of
+implementing a copy of it in this driver.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
- drivers/regulator/Kconfig        |   1 +
- drivers/regulator/helpers.c      | 124 ++++++++++++++-----------------
- include/linux/regulator/driver.h |  25 +------
- 3 files changed, 59 insertions(+), 91 deletions(-)
+ drivers/power/supply/Kconfig           |   1 +
+ drivers/power/supply/bd70528-charger.c | 142 ++++++++++---------------
+ 2 files changed, 55 insertions(+), 88 deletions(-)
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index 74eb5af7295f..6715eee43304 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- menuconfig REGULATOR
- 	bool "Voltage and Current Regulator Support"
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index 27164a1d3c7c..f77b54c12d30 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -695,6 +695,7 @@ config CHARGER_UCS1002
+ config CHARGER_BD70528
+ 	tristate "ROHM bd70528 charger driver"
+ 	depends on MFD_ROHM_BD70528
 +	select LINEAR_RANGES
+ 	default n
  	help
- 	  Generic Voltage and Current Regulator support.
+ 	 Say Y here to enable support for getting battery status
+diff --git a/drivers/power/supply/bd70528-charger.c b/drivers/power/supply/bd70528-charger.c
+index b8e1ec106627..b32fa3cbb0c1 100644
+--- a/drivers/power/supply/bd70528-charger.c
++++ b/drivers/power/supply/bd70528-charger.c
+@@ -72,6 +72,7 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
++#include <linux/linear_ranges.h>
  
-diff --git a/drivers/regulator/helpers.c b/drivers/regulator/helpers.c
-index 2c15df0484e5..49f257c37dda 100644
---- a/drivers/regulator/helpers.c
-+++ b/drivers/regulator/helpers.c
-@@ -129,10 +129,11 @@ int regulator_get_voltage_sel_pickable_regmap(struct regulator_dev *rdev)
- 	unsigned int r_val;
- 	int range;
- 	unsigned int val;
--	int ret, i;
--	unsigned int voltages_in_range = 0;
-+	int ret;
-+	unsigned int voltages = 0;
-+	const struct linear_range *r = rdev->desc->linear_ranges;
- 
--	if (!rdev->desc->linear_ranges)
-+	if (!r)
- 		return -EINVAL;
- 
- 	ret = regmap_read(rdev->regmap, rdev->desc->vsel_reg, &val);
-@@ -150,11 +151,9 @@ int regulator_get_voltage_sel_pickable_regmap(struct regulator_dev *rdev)
- 	if (range < 0)
- 		return -EINVAL;
- 
--	for (i = 0; i < range; i++)
--		voltages_in_range += (rdev->desc->linear_ranges[i].max_sel -
--				     rdev->desc->linear_ranges[i].min_sel) + 1;
-+	voltages = linear_range_values_in_range_array(r, range);
- 
--	return val + voltages_in_range;
-+	return val + voltages;
+ #define CHG_STAT_SUSPEND	0x0
+ #define CHG_STAT_TRICKLE	0x1
+@@ -335,38 +336,37 @@ static int bd70528_get_present(struct bd70528_psy *bdpsy, int *val)
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(regulator_get_voltage_sel_pickable_regmap);
  
-@@ -177,8 +176,11 @@ int regulator_set_voltage_sel_pickable_regmap(struct regulator_dev *rdev,
- 	unsigned int voltages_in_range = 0;
- 
- 	for (i = 0; i < rdev->desc->n_linear_ranges; i++) {
--		voltages_in_range = (rdev->desc->linear_ranges[i].max_sel -
--				     rdev->desc->linear_ranges[i].min_sel) + 1;
-+		const struct linear_range *r;
-+
-+		r = &rdev->desc->linear_ranges[i];
-+		voltages_in_range = linear_range_values_in_range(r);
-+
- 		if (sel < voltages_in_range)
- 			break;
- 		sel -= voltages_in_range;
-@@ -405,6 +407,8 @@ int regulator_map_voltage_linear_range(struct regulator_dev *rdev,
- {
- 	const struct linear_range *range;
- 	int ret = -EINVAL;
-+	unsigned int sel;
-+	bool found;
- 	int voltage, i;
- 
- 	if (!rdev->desc->n_linear_ranges) {
-@@ -413,35 +417,19 @@ int regulator_map_voltage_linear_range(struct regulator_dev *rdev,
- 	}
- 
- 	for (i = 0; i < rdev->desc->n_linear_ranges; i++) {
--		int linear_max_uV;
--
- 		range = &rdev->desc->linear_ranges[i];
--		linear_max_uV = range->min_uV +
--			(range->max_sel - range->min_sel) * range->uV_step;
- 
--		if (!(min_uV <= linear_max_uV && max_uV >= range->min_uV))
-+		ret = linear_range_get_selector_high(range, min_uV, &sel,
-+						     &found);
-+		if (ret)
- 			continue;
--
--		if (min_uV <= range->min_uV)
--			min_uV = range->min_uV;
--
--		/* range->uV_step == 0 means fixed voltage range */
--		if (range->uV_step == 0) {
--			ret = 0;
--		} else {
--			ret = DIV_ROUND_UP(min_uV - range->min_uV,
--					   range->uV_step);
--			if (ret < 0)
--				return ret;
--		}
--
--		ret += range->min_sel;
-+		ret = sel;
- 
- 		/*
- 		 * Map back into a voltage to verify we're still in bounds.
- 		 * If we are not, then continue checking rest of the ranges.
- 		 */
--		voltage = rdev->desc->ops->list_voltage(rdev, ret);
-+		voltage = rdev->desc->ops->list_voltage(rdev, sel);
- 		if (voltage >= min_uV && voltage <= max_uV)
- 			break;
- 	}
-@@ -478,30 +466,25 @@ int regulator_map_voltage_pickable_linear_range(struct regulator_dev *rdev,
- 
- 	for (i = 0; i < rdev->desc->n_linear_ranges; i++) {
- 		int linear_max_uV;
-+		bool found;
-+		unsigned int sel;
- 
- 		range = &rdev->desc->linear_ranges[i];
--		linear_max_uV = range->min_uV +
--			(range->max_sel - range->min_sel) * range->uV_step;
-+		linear_max_uV = linear_range_get_max_value(range);
- 
--		if (!(min_uV <= linear_max_uV && max_uV >= range->min_uV)) {
--			selector += (range->max_sel - range->min_sel + 1);
-+		if (!(min_uV <= linear_max_uV && max_uV >= range->min)) {
-+			selector += linear_range_values_in_range(range);
- 			continue;
- 		}
- 
--		if (min_uV <= range->min_uV)
--			min_uV = range->min_uV;
--
--		/* range->uV_step == 0 means fixed voltage range */
--		if (range->uV_step == 0) {
--			ret = 0;
--		} else {
--			ret = DIV_ROUND_UP(min_uV - range->min_uV,
--					   range->uV_step);
--			if (ret < 0)
--				return ret;
-+		ret = linear_range_get_selector_high(range, min_uV, &sel,
-+						     &found);
-+		if (ret) {
-+			selector += linear_range_values_in_range(range);
-+			continue;
- 		}
- 
--		ret += selector;
-+		ret = selector + sel;
- 
- 		voltage = rdev->desc->ops->list_voltage(rdev, ret);
- 
-@@ -511,7 +494,7 @@ int regulator_map_voltage_pickable_linear_range(struct regulator_dev *rdev,
- 		 * exit but retry until we have checked all ranges.
- 		 */
- 		if (voltage < min_uV || voltage > max_uV)
--			selector += (range->max_sel - range->min_sel + 1);
-+			selector += linear_range_values_in_range(range);
- 		else
- 			break;
- 	}
-@@ -569,18 +552,28 @@ int regulator_list_voltage_pickable_linear_range(struct regulator_dev *rdev,
- 	}
- 
- 	for (i = 0; i < rdev->desc->n_linear_ranges; i++) {
--		unsigned int sels_in_range;
-+		unsigned int sel_indexes;
- 
- 		range = &rdev->desc->linear_ranges[i];
- 
--		sels_in_range = range->max_sel - range->min_sel;
-+		sel_indexes = linear_range_values_in_range(range) - 1;
- 
--		if (all_sels + sels_in_range >= selector) {
-+		if (all_sels + sel_indexes >= selector) {
- 			selector -= all_sels;
--			return range->min_uV + (range->uV_step * selector);
-+			/*
-+			 * As we see here, pickable ranges work only as
-+			 * long as the first selector for each pickable
-+			 * range is 0, and the each subsequent range for
-+			 * this 'pick' follow immediately at next unused
-+			 * selector (Eg. there is no gaps between ranges).
-+			 * I think this is fine but it probably should be
-+			 * documented. OTOH, whole pickable range stuff
-+			 * might benefit from some documentation
-+			 */
-+			return range->min + (range->step * selector);
- 		}
- 
--		all_sels += (sels_in_range + 1);
-+		all_sels += (sel_indexes + 1);
- 	}
- 
- 	return -EINVAL;
-@@ -602,27 +595,18 @@ EXPORT_SYMBOL_GPL(regulator_list_voltage_pickable_linear_range);
- int regulator_desc_list_voltage_linear_range(const struct regulator_desc *desc,
- 					     unsigned int selector)
- {
--	const struct linear_range *range;
--	int i;
--
--	if (!desc->n_linear_ranges) {
--		BUG_ON(!desc->n_linear_ranges);
--		return -EINVAL;
--	}
--
--	for (i = 0; i < desc->n_linear_ranges; i++) {
--		range = &desc->linear_ranges[i];
--
--		if (!(selector >= range->min_sel &&
--		      selector <= range->max_sel))
--			continue;
-+	unsigned int val;
-+	int ret;
- 
--		selector -= range->min_sel;
-+	BUG_ON(!desc->n_linear_ranges);
- 
--		return range->min_uV + (range->uV_step * selector);
--	}
-+	ret = linear_range_get_value_array(desc->linear_ranges,
-+					   desc->n_linear_ranges, selector,
-+					   &val);
-+	if (ret)
-+		return ret;
- 
--	return -EINVAL;
-+	return val;
- }
- EXPORT_SYMBOL_GPL(regulator_desc_list_voltage_linear_range);
- 
-diff --git a/include/linux/regulator/driver.h b/include/linux/regulator/driver.h
-index 8419a4321775..7a3982da8868 100644
---- a/include/linux/regulator/driver.h
-+++ b/include/linux/regulator/driver.h
-@@ -13,6 +13,7 @@
- #define __LINUX_REGULATOR_DRIVER_H_
- 
- #include <linux/device.h>
-+#include <linux/linear_range.h>
- #include <linux/notifier.h>
- #include <linux/regulator/consumer.h>
- #include <linux/ww_mutex.h>
-@@ -39,31 +40,13 @@ enum regulator_status {
- 	REGULATOR_STATUS_UNDEFINED,
- };
- 
--/**
-- * struct linear_range - specify linear voltage ranges
-- *
-- * Specify a range of voltages for regulator_map_linear_range() and
-- * regulator_list_linear_range().
-- *
-- * @min_uV:  Lowest voltage in range
-- * @min_sel: Lowest selector for range
-- * @max_sel: Highest selector for range
-- * @uV_step: Step size
-- */
 -struct linear_range {
--	unsigned int min_uV;
--	unsigned int min_sel;
--	unsigned int max_sel;
--	unsigned int uV_step;
+-	int min;
+-	int step;
+-	int vals;
+-	int low_sel;
 -};
 -
--/* Initialize struct linear_range */
-+/* Initialize struct linear_range for regulators */
- #define REGULATOR_LINEAR_RANGE(_min_uV, _min_sel, _max_sel, _step_uV)	\
- {									\
--	.min_uV		= _min_uV,					\
-+	.min		= _min_uV,					\
- 	.min_sel	= _min_sel,					\
- 	.max_sel	= _max_sel,					\
--	.uV_step	= _step_uV,					\
-+	.step		= _step_uV,					\
- }
+ static const struct linear_range current_limit_ranges[] = {
+ 	{
+ 		.min = 5,
+ 		.step = 1,
+-		.vals = 36,
+-		.low_sel = 0,
++		.min_sel = 0,
++		.max_sel = 0x22,
+ 	},
+ 	{
+ 		.min = 40,
+ 		.step = 5,
+-		.vals = 5,
+-		.low_sel = 0x23,
++		.min_sel = 0x23,
++		.max_sel = 0x26,
+ 	},
+ 	{
+ 		.min = 60,
+ 		.step = 20,
+-		.vals = 8,
+-		.low_sel = 0x27,
++		.min_sel = 0x27,
++		.max_sel = 0x2d,
+ 	},
+ 	{
+ 		.min = 200,
+ 		.step = 50,
+-		.vals = 7,
+-		.low_sel = 0x2e,
+-	}
++		.min_sel = 0x2e,
++		.max_sel = 0x34,
++	},
++	{
++		.min = 500,
++		.step = 0,
++		.min_sel = 0x35,
++		.max_sel = 0x3f,
++	},
+ };
  
- /**
+ /*
+@@ -378,14 +378,14 @@ static const struct linear_range warm_charge_curr[] = {
+ 	{
+ 		.min = 10,
+ 		.step = 10,
+-		.vals = 20,
+-		.low_sel = 0,
++		.min_sel = 0,
++		.max_sel = 0x12
+ 	},
+ 	{
+ 		.min = 200,
+ 		.step = 25,
+-		.vals = 13,
+-		.low_sel = 0x13,
++		.min_sel = 0x13,
++		.max_sel = 0x1f
+ 	},
+ };
+ 
+@@ -398,56 +398,6 @@ static const struct linear_range warm_charge_curr[] = {
+ #define MAX_WARM_CHG_CURR_SEL 0x1f
+ #define MIN_CHG_CURR_SEL 0x0
+ 
+-static int find_value_for_selector_low(const struct linear_range *r,
+-				       int selectors, unsigned int sel,
+-				       unsigned int *val)
+-{
+-	int i;
+-
+-	for (i = 0; i < selectors; i++) {
+-		if (r[i].low_sel <= sel && r[i].low_sel + r[i].vals >= sel) {
+-			*val = r[i].min + (sel - r[i].low_sel) * r[i].step;
+-			return 0;
+-		}
+-	}
+-	return -EINVAL;
+-}
+-
+-/*
+- * For BD70528 voltage/current limits we happily accept any value which
+- * belongs the range. We could check if value matching the selector is
+- * desired by computing the range min + (sel - sel_low) * range step - but
+- * I guess it is enough if we use voltage/current which is closest (below)
+- * the requested?
+- */
+-static int find_selector_for_value_low(const struct linear_range *r,
+-				       int selectors, unsigned int val,
+-				       unsigned int *sel, bool *found)
+-{
+-	int i;
+-	int ret = -EINVAL;
+-
+-	*found = false;
+-	for (i = 0; i < selectors; i++) {
+-		if (r[i].min <= val) {
+-			if (r[i].min + r[i].step * r[i].vals >= val) {
+-				*found = true;
+-				*sel = r[i].low_sel + (val - r[i].min) /
+-				       r[i].step;
+-				ret = 0;
+-				break;
+-			}
+-			/*
+-			 * If the range max is smaller than requested
+-			 * we can set the max supported value from range
+-			 */
+-			*sel = r[i].low_sel + r[i].vals;
+-			ret = 0;
+-		}
+-	}
+-	return ret;
+-}
+-
+ static int get_charge_current(struct bd70528_psy *bdpsy, int *ma)
+ {
+ 	unsigned int sel;
+@@ -463,9 +413,9 @@ static int get_charge_current(struct bd70528_psy *bdpsy, int *ma)
+ 
+ 	sel &= BD70528_MASK_CHG_CHG_CURR;
+ 
+-	ret = find_value_for_selector_low(&warm_charge_curr[0],
+-					  ARRAY_SIZE(warm_charge_curr), sel,
+-					  ma);
++	ret = linear_range_get_value_array(&warm_charge_curr[0],
++					   ARRAY_SIZE(warm_charge_curr),
++					   sel, ma);
+ 	if (ret) {
+ 		dev_err(bdpsy->dev,
+ 			"Unknown charge current value 0x%x\n",
+@@ -491,10 +441,9 @@ static int get_current_limit(struct bd70528_psy *bdpsy, int *ma)
+ 
+ 	sel &= BD70528_MASK_CHG_DCIN_ILIM;
+ 
+-	ret = find_value_for_selector_low(&current_limit_ranges[0],
+-					  ARRAY_SIZE(current_limit_ranges), sel,
+-					  ma);
+-
++	ret = linear_range_get_value_array(&current_limit_ranges[0],
++					   ARRAY_SIZE(current_limit_ranges),
++					   sel, ma);
+ 	if (ret) {
+ 		/* Unspecified values mean 500 mA */
+ 		*ma = 500;
+@@ -588,15 +537,28 @@ static int set_charge_current(struct bd70528_psy *bdpsy, int ma)
+ 		goto set;
+ 	}
+ 
+-	ret = find_selector_for_value_low(&warm_charge_curr[0],
+-					  ARRAY_SIZE(warm_charge_curr), ma,
+-					  &reg, &found);
++/*
++ * For BD70528 voltage/current limits we happily accept any value which
++ * belongs the range. We could check if value matching the selector is
++ * desired by computing the range min + (sel - sel_low) * range step - but
++ * I guess it is enough if we use voltage/current which is closest (below)
++ * the requested?
++ */
++
++	ret = linear_range_get_selector_low_array(warm_charge_curr,
++						  ARRAY_SIZE(warm_charge_curr),
++						  ma, &reg, &found);
+ 	if (ret) {
++		dev_err(bdpsy->dev,
++			 "Unsupported charge current %u mA\n", ma);
+ 		reg = MIN_CHG_CURR_SEL;
+ 		goto set;
+ 	}
+ 	if (!found) {
+-		/* There was a gap in supported values and we hit it */
++		/*
++		 * There was a gap in supported values and we hit it.
++		 * Yet a smaller value was found so we use it.
++		 */
+ 		dev_warn(bdpsy->dev,
+ 			 "Unsupported charge current %u mA\n", ma);
+ 	}
+@@ -629,7 +591,7 @@ static int set_charge_current(struct bd70528_psy *bdpsy, int ma)
+ static int set_current_limit(struct bd70528_psy *bdpsy, int ma)
+ {
+ 	unsigned int reg;
+-	int ret = 0, tmpret;
++	int ret = 0, tmpret, i;
+ 	bool found;
+ 
+ 	if (ma > 500) {
+@@ -648,17 +610,21 @@ static int set_current_limit(struct bd70528_psy *bdpsy, int ma)
+ 		goto set;
+ 	}
+ 
+-	ret = find_selector_for_value_low(&current_limit_ranges[0],
+-					  ARRAY_SIZE(current_limit_ranges), ma,
+-					  &reg, &found);
++	ret = linear_range_get_selector_low_array(current_limit_ranges,
++					ARRAY_SIZE(current_limit_ranges),
++					ma, &reg, &found);
+ 	if (ret) {
++		dev_err(bdpsy->dev, "Unsupported current limit %umA\n", ma);
+ 		reg = MIN_CURR_LIMIT_SEL;
+ 		goto set;
+ 	}
+ 	if (!found) {
+-		/* There was a gap in supported values and we hit it ?*/
+-		dev_warn(bdpsy->dev, "Unsupported current limit %umA\n",
+-			 ma);
++		/*
++		 * There was a gap in supported values and we hit it.
++		 * We found a smaller value from ranges and use it.
++		 * Warn user though.
++		 */
++		dev_warn(bdpsy->dev, "Unsupported current limit %umA\n", ma);
+ 	}
+ 
+ set:
 -- 
 2.21.0
 
