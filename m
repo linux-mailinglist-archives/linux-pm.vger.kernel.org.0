@@ -2,210 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 618E8166141
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 16:45:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 270F1166185
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 16:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728541AbgBTPpg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 10:45:36 -0500
-Received: from esa3.hc3370-68.iphmx.com ([216.71.145.155]:15412 "EHLO
-        esa3.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728497AbgBTPpg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 10:45:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1582213536;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Hf2jfb9piSiHju6Ntp+FvddJlG4b1AFVZOCjx1jkZss=;
-  b=Qmuf/Xrp4UXYymWQ2h/clPw8NoSfx150gmhKIT068jN/FTbRrbRPLx0x
-   L8KpeFGsfNw8Jx4ghpbSvslWa+CFrIWXHaXD92PdzvnZmK9mZMFOwJqCb
-   xDuyvDx3j0PklYQ/gx9Txo9Won0gY+TvnVZ1HGS0fLNiMIeBlc1/iJa8+
-   M=;
-Authentication-Results: esa3.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none; spf=None smtp.pra=roger.pau@citrix.com; spf=Pass smtp.mailfrom=roger.pau@citrix.com; spf=None smtp.helo=postmaster@mail.citrix.com
-Received-SPF: None (esa3.hc3370-68.iphmx.com: no sender
-  authenticity information available from domain of
-  roger.pau@citrix.com) identity=pra; client-ip=162.221.158.21;
-  receiver=esa3.hc3370-68.iphmx.com;
-  envelope-from="roger.pau@citrix.com";
-  x-sender="roger.pau@citrix.com";
-  x-conformance=sidf_compatible
-Received-SPF: Pass (esa3.hc3370-68.iphmx.com: domain of
-  roger.pau@citrix.com designates 162.221.158.21 as permitted
-  sender) identity=mailfrom; client-ip=162.221.158.21;
-  receiver=esa3.hc3370-68.iphmx.com;
-  envelope-from="roger.pau@citrix.com";
-  x-sender="roger.pau@citrix.com";
-  x-conformance=sidf_compatible; x-record-type="v=spf1";
-  x-record-text="v=spf1 ip4:209.167.231.154 ip4:178.63.86.133
-  ip4:195.66.111.40/30 ip4:85.115.9.32/28 ip4:199.102.83.4
-  ip4:192.28.146.160 ip4:192.28.146.107 ip4:216.52.6.88
-  ip4:216.52.6.188 ip4:162.221.158.21 ip4:162.221.156.83
-  ip4:168.245.78.127 ~all"
-Received-SPF: None (esa3.hc3370-68.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@mail.citrix.com) identity=helo;
-  client-ip=162.221.158.21; receiver=esa3.hc3370-68.iphmx.com;
-  envelope-from="roger.pau@citrix.com";
-  x-sender="postmaster@mail.citrix.com";
-  x-conformance=sidf_compatible
-IronPort-SDR: ZHDdixRenlbATRuHBknsZwWZz7xs0v0NuFZmuADao7Vcj1Y3cpXV28Hpg3tWGHyzoPqbmMUbpn
- 3RODTM7jZRSgjsyQkTF3P48v+0IReUEWZ/qXIH4g3s1pEH2JtscssVMtFiFSbpoQgfNeWqCMkb
- 0q7nIJ3+Peu47qKTW6NylrFNYzp5kHsYcD7w38iuUDqhFLh6hPmlWZvuKSAUdEpuUKProKqZLy
- qQu+6xMWY0Wg+XDKCXpD16MdjYaSofKLq9wdY7VLTpLCCcAeTgGxcwP8wx9THTPwEkScIK6usq
- D9s=
-X-SBRS: 2.7
-X-MesageID: 12745476
-X-Ironport-Server: esa3.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.158.21
-X-Policy: $RELAYED
-X-IronPort-AV: E=Sophos;i="5.70,464,1574139600"; 
-   d="scan'208";a="12745476"
-Date:   Thu, 20 Feb 2020 16:45:07 +0100
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     "Durrant, Paul" <pdurrant@amazon.co.uk>
-CC:     "Agarwal, Anchal" <anchalag@amazon.com>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "hpa@zytor.com" <hpa@zytor.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "fllinden@amaozn.com" <fllinden@amaozn.com>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>
-Subject: Re: [Xen-devel] [RFC PATCH v3 06/12] xen-blkfront: add callbacks for
- PM suspend and hibernation
-Message-ID: <20200220154507.GO4679@Air-de-Roger>
-References: <cover.1581721799.git.anchalag@amazon.com>
- <890c404c585d7790514527f0c021056a7be6e748.1581721799.git.anchalag@amazon.com>
- <20200217100509.GE4679@Air-de-Roger>
- <20200217230553.GA8100@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200218091611.GN4679@Air-de-Roger>
- <20200219180424.GA17584@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200220083904.GI4679@Air-de-Roger>
- <f986b845491b47cc8469d88e2e65e2a7@EX13D32EUC003.ant.amazon.com>
+        id S1728460AbgBTP4B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 10:56:01 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:38735 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728419AbgBTP4A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 10:56:00 -0500
+Received: by mail-pl1-f196.google.com with SMTP id t6so1708935plj.5
+        for <linux-pm@vger.kernel.org>; Thu, 20 Feb 2020 07:56:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dPLlvkm9LDItGatWM8z0zqMFKuHSP92PMk+ALHwse6g=;
+        b=ziQRes5Wn8emIACRiQKqwWQd7p+hOvkb67mJ6Bz09tTlUTSaeOt6azfgjJBuzGxsVx
+         XrkSwyDlksNCs4l+mjPgIhrQI8wQC4jCoSmlcxefVgwinDvD0GV9iPu37Uu7FGHLQ3d8
+         9rHCoKTuh7/OZJDwUonf8aJhm2Y3qa+mlLgX9bXWUEjQd59BjeeskxAHjtohAuDX7juC
+         JukbhoovrJ+3s2YDXq6GdAt0p9A5JpVvweXA0i0ZlTYRg6alPWV0V+1v8VjHqAfXhjkA
+         mtizN6+hPmJOZP9fOQst8tsBOv5XiYOlVjbdL2EhtNBHAho8BnWSbJiEQA/OVpugM2+9
+         Helw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dPLlvkm9LDItGatWM8z0zqMFKuHSP92PMk+ALHwse6g=;
+        b=D5W9PZiZkd9IZHNmfsyw+Fra0bQJ7wyzYbgwLJO7DRmHY1ESShgx8RRLXjSSs+vlqV
+         a6FpCKvgXb/VhoiWOgHrUOsFz2AroZm2xB9K8QyCYwQWrwZ1LQxidD1j4KaHrtu3oDPc
+         lScZ7H1R44CRT46+FkOkOvadyRwiIZDUefG9xWY7AxZiCevvHgJ45ZvJ355ldgf/LtTv
+         hH+xcJzsG6T8UAuGcMVL6ehOx5SV0rR8r5j8wMLDS8TI0pyNm3YR4V72idKDrnirno4Z
+         7xEYvRh4OiCPB93n2T/HE0eJ2LvBT4P90+lAGya+R7Z22IRnsjA86+u0YVqAWrpMUIev
+         uTUg==
+X-Gm-Message-State: APjAAAX8CcUJKuuDT389SIcb5s1k8QlNs6XABPFY1B0FK0qYn/ZUgJq2
+        7R0OHj8GOTpaW5gACa3MH17m4Q==
+X-Google-Smtp-Source: APXvYqzQg5xdhcudupIotNjSrqXf+6W08xrzP5NVdRO6Vhdy1jTtk44EddZdLaITBvHl0445gSYhzA==
+X-Received: by 2002:a17:902:528:: with SMTP id 37mr32621886plf.322.1582214159735;
+        Thu, 20 Feb 2020 07:55:59 -0800 (PST)
+Received: from ripper (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id q6sm19046pfh.127.2020.02.20.07.55.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Feb 2020 07:55:59 -0800 (PST)
+Date:   Thu, 20 Feb 2020 07:55:03 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Todd Kjos <tkjos@google.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 1/6] driver core: Fix
+ driver_deferred_probe_check_state() logic
+Message-ID: <20200220155503.GD955802@ripper>
+References: <20200220050440.45878-1-john.stultz@linaro.org>
+ <20200220050440.45878-2-john.stultz@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f986b845491b47cc8469d88e2e65e2a7@EX13D32EUC003.ant.amazon.com>
-X-ClientProxiedBy: AMSPEX02CAS01.citrite.net (10.69.22.112) To
- AMSPEX02CL01.citrite.net (10.69.22.125)
+In-Reply-To: <20200220050440.45878-2-john.stultz@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 08:54:36AM +0000, Durrant, Paul wrote:
-> > -----Original Message-----
-> > From: Xen-devel <xen-devel-bounces@lists.xenproject.org> On Behalf Of
-> > Roger Pau Monné
-> > Sent: 20 February 2020 08:39
-> > To: Agarwal, Anchal <anchalag@amazon.com>
-> > Cc: Valentin, Eduardo <eduval@amazon.com>; len.brown@intel.com;
-> > peterz@infradead.org; benh@kernel.crashing.org; x86@kernel.org; linux-
-> > mm@kvack.org; pavel@ucw.cz; hpa@zytor.com; tglx@linutronix.de;
-> > sstabellini@kernel.org; fllinden@amaozn.com; Kamata, Munehisa
-> > <kamatam@amazon.com>; mingo@redhat.com; xen-devel@lists.xenproject.org;
-> > Singh, Balbir <sblbir@amazon.com>; axboe@kernel.dk;
-> > konrad.wilk@oracle.com; bp@alien8.de; boris.ostrovsky@oracle.com;
-> > jgross@suse.com; netdev@vger.kernel.org; linux-pm@vger.kernel.org;
-> > rjw@rjwysocki.net; linux-kernel@vger.kernel.org; vkuznets@redhat.com;
-> > davem@davemloft.net; Woodhouse, David <dwmw@amazon.co.uk>
-> > Subject: Re: [Xen-devel] [RFC PATCH v3 06/12] xen-blkfront: add callbacks
-> > for PM suspend and hibernation
-> > 
-> > Thanks for this work, please see below.
-> > 
-> > On Wed, Feb 19, 2020 at 06:04:24PM +0000, Anchal Agarwal wrote:
-> > > On Tue, Feb 18, 2020 at 10:16:11AM +0100, Roger Pau Monné wrote:
-> > > > On Mon, Feb 17, 2020 at 11:05:53PM +0000, Anchal Agarwal wrote:
-> > > > > On Mon, Feb 17, 2020 at 11:05:09AM +0100, Roger Pau Monné wrote:
-> > > > > > On Fri, Feb 14, 2020 at 11:25:34PM +0000, Anchal Agarwal wrote:
-> > > > > Quiescing the queue seemed a better option here as we want to make
-> > sure ongoing
-> > > > > requests dispatches are totally drained.
-> > > > > I should accept that some of these notion is borrowed from how nvme
-> > freeze/unfreeze
-> > > > > is done although its not apple to apple comparison.
-> > > >
-> > > > That's fine, but I would still like to requests that you use the same
-> > > > logic (as much as possible) for both the Xen and the PM initiated
-> > > > suspension.
-> > > >
-> > > > So you either apply this freeze/unfreeze to the Xen suspension (and
-> > > > drop the re-issuing of requests on resume) or adapt the same approach
-> > > > as the Xen initiated suspension. Keeping two completely different
-> > > > approaches to suspension / resume on blkfront is not suitable long
-> > > > term.
-> > > >
-> > > I agree with you on overhaul of xen suspend/resume wrt blkfront is a
-> > good
-> > > idea however, IMO that is a work for future and this patch series should
-> > > not be blocked for it. What do you think?
-> > 
-> > It's not so much that I think an overhaul of suspend/resume in
-> > blkfront is needed, it's just that I don't want to have two completely
-> > different suspend/resume paths inside blkfront.
-> > 
-> > So from my PoV I think the right solution is to either use the same
-> > code (as much as possible) as it's currently used by Xen initiated
-> > suspend/resume, or to also switch Xen initiated suspension to use the
-> > newly introduced code.
-> > 
-> > Having two different approaches to suspend/resume in the same driver
-> > is a recipe for disaster IMO: it adds complexity by forcing developers
-> > to take into account two different suspend/resume approaches when
-> > there's no need for it.
+On Wed 19 Feb 21:04 PST 2020, John Stultz wrote:
+
+> driver_deferred_probe_check_state() has some uninituitive behavior.
 > 
-> I disagree. S3 or S4 suspend/resume (or perhaps we should call them power state transitions to avoid confusion) are quite different from Xen suspend/resume.
-> Power state transitions ought to be, and indeed are, visible to the software running inside the guest. Applications, as well as drivers, can receive notification and take whatever action they deem appropriate.
-> Xen suspend/resume OTOH is used when a guest is migrated and the code should go to all lengths possible to make any software running inside the guest (other than Xen specific enlightened code, such as PV drivers) completely unaware that anything has actually happened.
+> * From boot to late_initcall, it returns -EPROBE_DEFER
+> 
+> * From late_initcall to the deferred_probe_timeout (if set)
+>   it returns -ENODEV
+> 
+> * If the deferred_probe_timeout it set, after it fires, it
+>   returns -ETIMEDOUT
+> 
+> This is a bit confusing, as its useful to have the function
+> return -EPROBE_DEFER while the timeout is still running. This
+> behavior has resulted in the somwhat duplicative
+> driver_deferred_probe_check_state_continue() function being
+> added.
+> 
+> Thus this patch tries to improve the logic, so that it behaves
+> as such:
+> 
+> * If deferred_probe_timeout is set, it returns -EPROBE_DEFER
+>   until the timeout, afterwhich it returns -ETIMEDOUT.
+> 
+> * If deferred_probe_timeout is not set (-1), it returns
+>   -EPROBE_DEFER until late_initcall, after which it returns
+> 
+> This will make the deferred_probe_timeout value much more
+> functional, and will allow us to consolidate the
+> driver_deferred_probe_check_state() and
+> driver_deferred_probe_check_state_continue() logic in a later
+> patch.
+> 
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Kevin Hilman <khilman@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Todd Kjos <tkjos@google.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Thierry Reding <treding@nvidia.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> Change-Id: I8349b7a403ce8cbce485ea0a0a5512fddffb635c
 
-So from what you say above PM state transitions are notified to all
-drivers, and Xen suspend/resume is only notified to PV drivers, and
-here we are speaking about blkfront which is a PV driver, and should
-get notified in both cases. So I'm unsure why the same (or at least
-very similar) approach can't be used in both cases.
+Please drop the Change-Id.
 
-The suspend/resume approach proposed by this patch is completely
-different than the one used by a xenbus initiated suspend/resume, and
-I don't see a technical reason that warrants this difference.
+> ---
+> v4:
+> * Simplified logic suggested by Andy Shevchenko
+> * Clarified commit message to focus on logic change
+> ---
+>  drivers/base/dd.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index b25bcab2a26b..bb383dca39c1 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -237,7 +237,7 @@ __setup("deferred_probe_timeout=", deferred_probe_timeout_setup);
+>  
+>  static int __driver_deferred_probe_check_state(struct device *dev)
+>  {
+> -	if (!initcalls_done)
+> +	if (!initcalls_done || deferred_probe_timeout > 0)
+>  		return -EPROBE_DEFER;
+>  
+>  	if (!deferred_probe_timeout) {
+> @@ -252,9 +252,11 @@ static int __driver_deferred_probe_check_state(struct device *dev)
+>   * driver_deferred_probe_check_state() - Check deferred probe state
+>   * @dev: device to check
+>   *
+> - * Returns -ENODEV if init is done and all built-in drivers have had a chance
+> - * to probe (i.e. initcalls are done), -ETIMEDOUT if deferred probe debug
+> - * timeout has expired, or -EPROBE_DEFER if none of those conditions are met.
+> + * Returnes -EPROBE_DEFER if initcalls have not completed, or the deferred
 
-I'm not saying that the approach used here is wrong, it's just that I
-don't see the point in having two different ways to do suspend/resume
-in the same driver, unless there's a technical reason for it, which I
-don't think has been provided.
+As pointed out by Rafael, this should be Return:
 
-I would be fine with switching xenbus initiated suspend/resume to also
-use the approach proposed here: freeze the queues and drain the shared
-rings before suspending.
+With that addressed, you have my
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-> So, whilst it may be possible to use common routines to, for example, re-establish PV frontend/backend communication, PV frontend code should be acutely aware of the circumstances they are operating in. I can cite example code in the Windows PV driver, which have supported guest S3/S4 power state transitions since day 1.
+Regards,
+Bjorn
 
-Hm, please bear with me, as I'm not sure I fully understand. Why isn't
-the current suspend/resume logic suitable for PM transitions?
-
-As said above, I'm happy to switch xenbus initiated suspend/resume to
-use the logic in this patch, but unless there's a technical reason for
-it I don't see why blkfront should have two completely different
-approaches to suspend/resume depending on whether it's a PM or a
-xenbus state change.
-
-Thanks, Roger.
+> + * probe timeout is set, but not expried.
+> + * Returns -ETIMEDOUT if the probe timeout was set and has expired.
+> + * Returns -ENODEV if initcalls have completed and the deferred probe timeout
+> + * was not set.
+>   *
+>   * Drivers or subsystems can opt-in to calling this function instead of directly
+>   * returning -EPROBE_DEFER.
+> -- 
+> 2.17.1
+> 
