@@ -2,109 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD19D1666DC
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 20:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F6C1666FD
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 20:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728336AbgBTTJu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 14:09:50 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:55910 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728111AbgBTTJu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 14:09:50 -0500
-Received: by mail-wm1-f68.google.com with SMTP id q9so3194144wmj.5
-        for <linux-pm@vger.kernel.org>; Thu, 20 Feb 2020 11:09:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorremedies-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uxgm65AiGAZd1c3mWrOHtCMe0ItoHLyc5sH5oQlZuOk=;
-        b=bEQw8fRxTq9gK07ho/vlQ9mY5JSMzS2lukVBuNH0s+QSj+sRKmetC8CtlXbAtzbG4e
-         aJruoBKjDFJSWooUYK1iuNZEcB/VrLZbIw8hwZFTZItHR6KTIVdQjkmfEiwd2lGNrFUE
-         Eeeca6ZkuLTHGzDBqzesneJFeeEqvesNEt0OE1JiSlh9R6nA4yrKlJfxicXpEO9sdOvr
-         +L9FexC9L/v28qwJ8CDQsTnY8r7e20mJe2ePeYLthO+PLa0vcq7QDNxrKlAbURFR2/Rv
-         QMRbUZxmDEuFHVYZcAx88AHaxSVLl7Jp+eXSlYA83v1Qro+cu5iGyjlDu0IuZR9u123X
-         wWSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uxgm65AiGAZd1c3mWrOHtCMe0ItoHLyc5sH5oQlZuOk=;
-        b=idrgUW2zC9FLNhVihbu5Yi+dEgA+ekMAR0kplZd2zEFaSsd/c7ogYfrL9MG7TmC2KM
-         fuu6ie87sridkD4Stw5s9QBozr/DHOXqoYUaDRw9cI3muTFEn83enCA46qUl4OSb1Aic
-         3vDTAB9m4aG+QuqMowt7tgU1rUHkRh18Pm7osKNsVr/gf4Drpr18/9Xj4A0qDBvl2Y3z
-         waSFI2IaGAf61HBiW9Sdj9Amx5zM9FnD6OiHqeO2wsepGk9bESV0ar1zh/p9VeG3TVek
-         N9JGR8JHoj2wO9mUgMeMJrEDDyesU/m4ClSuePWzUeOg533nHtW0tMM6zmeXP6NQFKbP
-         Cjig==
-X-Gm-Message-State: APjAAAWMVp4F+u5RTY6m+ygm98hM3P5k1fYs+rBWgLOI0QSea+MQwZzG
-        qnIE6Vk8aE9jAX5on0m6sscuRTc9mBAr7qgeJnMrB3dkJJ0=
-X-Google-Smtp-Source: APXvYqxAlqZf0rk14n919Xz1clF4UrM8WARcg9j48fX51IWAABGXvZV+D2jB3/8POfgO6hJ00yPKZyUtwOdraO04dtc=
-X-Received: by 2002:a7b:c147:: with SMTP id z7mr5887766wmi.168.1582225788812;
- Thu, 20 Feb 2020 11:09:48 -0800 (PST)
+        id S1728929AbgBTTPR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 14:15:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55488 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728111AbgBTTPQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 20 Feb 2020 14:15:16 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A82A6206E2;
+        Thu, 20 Feb 2020 19:15:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582226116;
+        bh=wuYgJdYmKiQd4r+UyQmCOa68AWBzeQV+TJZRUaxsiHc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vamKU3a5baew9BfJzvbhFHb8QbsMKNRkpgWRf7kyQ3tUHggXWr7moIvwnPJDDNIdG
+         mQtRAN6lBR8NNjgnZ/h18FTHAEsZWh26AEH7su4F4HrK13Qf2Rt+/3dzuRQl7oTS4f
+         GM5YLQ5ezaSdf4JarVAEGbNUi5DQq0kj0xd/c+Kg=
+Date:   Thu, 20 Feb 2020 20:15:13 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Orson Zhai <orson.unisoc@gmail.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        John Stultz <john.stultz@linaro.org>, mingmin.ling@unisoc.com,
+        orsonzhai@gmail.com, jingchao.ye@unisoc.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] Revert "PM / devfreq: Modify the device name as
+ devfreq(X) for sysfs"
+Message-ID: <20200220191513.GA3450796@kroah.com>
+References: <1582220224-1904-1-git-send-email-orson.unisoc@gmail.com>
 MIME-Version: 1.0
-References: <CAJCQCtTPSC8666h5fuW=iSaVvuRq9to731W2-sAT6xUuESAzsw@mail.gmail.com>
- <CAA25o9TvFMEJnF45NFVqAfdxzKy5umzHHVDs+SCxrChGSKczTw@mail.gmail.com>
- <CAJCQCtQw7EJwREM8Fy_PWCwy3E7Jc=kLTRo_kgLNwNhYA32ABA@mail.gmail.com>
- <CAJCQCtQkK+J-6eoadBLr+CkJ6CLf3Kt+6CeTJANRiU+M7A9CNQ@mail.gmail.com> <CAA25o9T2wwqoopoNRySdZoYkD+vtqRPsB1YPnag=TkOp5D9sYA@mail.gmail.com>
-In-Reply-To: <CAA25o9T2wwqoopoNRySdZoYkD+vtqRPsB1YPnag=TkOp5D9sYA@mail.gmail.com>
-From:   Chris Murphy <lists@colorremedies.com>
-Date:   Thu, 20 Feb 2020 12:09:32 -0700
-Message-ID: <CAJCQCtScZg1CP2WTDoOy4-urPbvP_5Hw0H-AKTwHugN9YhdxLg@mail.gmail.com>
-Subject: Re: is hibernation usable?
-To:     Luigi Semenzato <semenzato@google.com>
-Cc:     Linux Memory Management List <linux-mm@kvack.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1582220224-1904-1-git-send-email-orson.unisoc@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 10:16 AM Luigi Semenzato <semenzato@google.com> wrote:
->
-> I think this is the right group for the memory issues.
->
-> I suspect that the problem with failed allocations (ENOMEM) boils down
-> to the unreliability of the page allocator.  In my experience, under
-> pressure (i.e. pages must be swapped out to be reclaimed) allocations
-> can fail even when in theory they should succeed.  (I wish I were
-> wrong and that someone would convincingly correct me.)
+On Fri, Feb 21, 2020 at 01:37:04AM +0800, Orson Zhai wrote:
+> This reverts commit 4585fbcb5331fc910b7e553ad3efd0dd7b320d14.
+> 
+> The name changing as devfreq(X) breaks some user space applications,
+> such as Android HAL from Unisoc and Hikey [1].
+> The device name will be changed unexpectly after every boot depending
+> on module init sequence. It will make trouble to setup some system
+> configuration like selinux for Android.
+> 
+> So we'd like to revert it back to old naming rule before any better
+> way being found.
+> 
+> [1] https://lkml.org/lkml/2018/5/8/1042
+> 
+> Cc: John Stultz <john.stultz@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Orson Zhai <orson.unisoc@gmail.com>
+> 
+> ---
+>  drivers/devfreq/devfreq.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index cceee8b..7dcf209 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -738,7 +738,6 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  {
+>  	struct devfreq *devfreq;
+>  	struct devfreq_governor *governor;
+> -	static atomic_t devfreq_no = ATOMIC_INIT(-1);
+>  	int err = 0;
+>  
+>  	if (!dev || !profile || !governor_name) {
+> @@ -800,8 +799,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
+>  	atomic_set(&devfreq->suspend_count, 0);
+>  
+> -	dev_set_name(&devfreq->dev, "devfreq%d",
+> -				atomic_inc_return(&devfreq_no));
+> +	dev_set_name(&devfreq->dev, "%s", dev_name(dev));
+>  	err = device_register(&devfreq->dev);
+>  	if (err) {
+>  		mutex_unlock(&devfreq->lock);
+> -- 
+> 2.7.4
+> 
 
-What is vm.swappiness set to on your system? A fellow Fedora
-contributor who has consistently reproduced what you describe, has
-discovered he has vm.swappiness=0, and even if it's set to 1, the
-problem no longer happens. And this is not a documented consequence of
-using a value of 0.
+Thanks for this, I agree, this needs to get back to the way things were
+as it seems to break too many existing systems as-is.
 
+I'll queue this up in my tree now, thanks.
 
-> I have a workaround in which I use memcgroups to free pages before
-> starting hibernation.  The cgroup request "echo $limit >
-> .../memory.limit_in_bytes"  blocks until memory usage in the chosen
-> cgroup is below $limit.  However, I have seen this request fail even
-> when there is extra available swap space.
->
-> The callback for the operation is mem_cgroup_resize_limit() (BTW I am
-> looking at kernel version 4.3.5) and that code has a loop where
-> try_to_free_pages() is called up to retry_count, which is at least 5.
-> Why 5?  One suspects that the writer of that code must have also
-> realized that the page freeing request is unreliable and it's worth
-> trying multiple times.
->
-> So you could try something similar.  I don't know if there are
-> interfaces to try_to_free_pages() other than those in cgroups.  If
-> not, and you aren't using cgroups, one way might be to start several
-> memory-eating processes (such as "dd if=/dev/zero bs=1G count=1 |
-> sleep infinity") and monitor allocation, then when they use more than
-> 50% of RAM kill them and immediately hibernate before the freed pages
-> are reused.  If you can build your custom kernel, maybe it's worth
-> adding a sysfs entry to invoke try_to_free_pages().  You could also
-> change the hibernation code to do that, but having the user-level hook
-> may be more flexible.
-
-Fedora 31+ now uses cgroupsv2. In any case, my use case is making sure
-this works correctly, sanely, with mainline kernels because Fedora
-doesn't do custom things with the kernel.
-
-
-
--- 
-Chris Murphy
+greg k-h
