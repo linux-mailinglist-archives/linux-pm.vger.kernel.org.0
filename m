@@ -2,147 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9650D165919
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 09:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E11165943
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 09:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726943AbgBTIXr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 03:23:47 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:43808 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726989AbgBTIXq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 20 Feb 2020 03:23:46 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C3F3E201B99;
-        Thu, 20 Feb 2020 09:23:43 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 87D902048C7;
-        Thu, 20 Feb 2020 09:23:28 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 31EE3402E6;
-        Thu, 20 Feb 2020 16:23:15 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org, leonard.crestez@nxp.com, daniel.baluta@nxp.com,
-        shengjiu.wang@nxp.com, peng.fan@nxp.com, ping.bai@nxp.com,
-        jun.li@nxp.com, bjorn.andersson@linaro.org, olof@lixom.net,
-        vkoul@kernel.org, dinguyen@kernel.org,
-        marcin.juszkiewicz@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH RESEND 4/4] arm64: dts: imx8mm: Add thermal zone support
-Date:   Thu, 20 Feb 2020 16:17:26 +0800
-Message-Id: <1582186646-22096-4-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1582186646-22096-1-git-send-email-Anson.Huang@nxp.com>
-References: <1582186646-22096-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726882AbgBTIek (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 03:34:40 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:54414 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726501AbgBTIek (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 03:34:40 -0500
+X-AuditID: c0a8fbf4-473ff70000004419-ff-5e4e449e3033
+Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id E2.55.17433.E944E4E5; Thu, 20 Feb 2020 09:34:38 +0100 (CET)
+Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
+ WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
+ 14.03.0439.000; Thu, 20 Feb 2020 09:34:34 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>
+CC:     "rafael@kernel.org" <rafael@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "Laine, Markus" <Markus.Laine@fi.rohmeurope.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
+Subject: Re: [RFC PATCH v3 3/8] drivers: base: add linear ranges helpers
+Thread-Topic: [RFC PATCH v3 3/8] drivers: base: add linear ranges helpers
+Thread-Index: AQHV58BcZJpQgU8ZXUak5RlY2LGYvqgjo9cAgAANCYA=
+Date:   Thu, 20 Feb 2020 08:34:33 +0000
+Message-ID: <1eaaa72f167e370cc2875dfa43ee0198ec7d0cfc.camel@fi.rohmeurope.com>
+References: <cover.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
+         <1f6cb9fb9dbc429dc48110f18ad3a8c0c40196c6.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
+         <2f0755df-4bc6-c53d-edea-45bc99e6a47b@infradead.org>
+In-Reply-To: <2f0755df-4bc6-c53d-edea-45bc99e6a47b@infradead.org>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A415A209DAF1BE4E82B744B915D72122@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPJsWRmVeSWpSXmKPExsVyYMXvTbrzXPziDPausbSY+vAJm8X8I+dY
+        LZoXr2ez+Halg8ni8q45bBafe48wWiy9fpHJYs7SEywWc79MZbZ4e2c6i0Xr3iPsFqd3lzjw
+        eKyZt4bRY+esu+wem1doeWxa1cnmsX/uGnaPz5vkAtiiuG2SEkvKgjPT8/TtErgzPn1+yVRw
+        h7Ni8f+pLA2Mezi7GDk5JARMJNp3H2brYuTiEBK4yijRf/0eM4RzglFi+rS7TF2MHBxsAjYS
+        XTfZQRpEBHIkVk/qA2tgFnjEInF8Rg8bSEJYwENi74xXTBBFnhJb7sxmhbCtJM6+PQXWzCKg
+        KjF7bhuYzSvgJ/G4tRdq821GidYLnWDNnAKOEhsnTwJrZhSQlehseAcWZxYQl9j07DsrxNkC
+        Ekv2nGeGsEUlXj7+BxVXktj78yELyNHMApoS63fpQ5gOEg/Os0FMUZSY0v0Q6gRBiZMzn7BM
+        YBSbhWTBLITmWQjNs5A0z0LSvICRdRWjRG5iZk56YkmqoV5RaqleUX5GLpBKzs/dxAiJ8C87
+        GP8f8jzEyMTBeIhRkoNJSZR3hohfnBBfUn5KZUZicUZ8UWlOavEhRgkOZiURXjUeoBxvSmJl
+        VWpRPkxKmoNFSZxX/eHEWCEBkF3ZqakFqUUwWRkODiUJ3kRnoEbBotT01Iq0zJwShDQTByfI
+        cC4pkeLUvJTUosTSkox4UPKILwamD5AUD9De/w4ge4sLEnOBohCtpxi1OSa8nLuImePI3KWL
+        mIVY8vLzUqXEecucgEoFQEozSvPgFr1iFOdgVBLmXQ+S5QGmerg5r4BWMAGteC/sA7KiJBEh
+        JdXA6JBQ81nh5XP7AL+PMwLZF/FvPxTqGJH4c1fr/Mnz3eWiIhtnSTKsTZjJs2/FRKm9de1V
+        i4zr7v66vDagZLZPwIxk5l0pFrIZTY/n1dc3hcz8sPWAy7tjTdXnjC9+mrzefpareyaj6O4d
+        xq1PNUVb1u2tvCt0ecWqlLVbVvAlHFEx774Yu/SthRJLcUaioRZzUXEiAC5psxSyAwAA
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add thermal zone and tmu node to support i.MX8MM thermal
-driver, ONLY cpu thermal zone is supported, and cpu cooling
-is also added.
-
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mm.dtsi | 43 +++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-index b3d0b29..e438095 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-@@ -68,6 +68,7 @@
- 			nvmem-cells = <&cpu_speed_grade>;
- 			nvmem-cell-names = "speed_grade";
- 			cpu-idle-states = <&cpu_pd_wait>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		A53_1: cpu@1 {
-@@ -80,6 +81,7 @@
- 			next-level-cache = <&A53_L2>;
- 			operating-points-v2 = <&a53_opp_table>;
- 			cpu-idle-states = <&cpu_pd_wait>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		A53_2: cpu@2 {
-@@ -92,6 +94,7 @@
- 			next-level-cache = <&A53_L2>;
- 			operating-points-v2 = <&a53_opp_table>;
- 			cpu-idle-states = <&cpu_pd_wait>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		A53_3: cpu@3 {
-@@ -104,6 +107,7 @@
- 			next-level-cache = <&A53_L2>;
- 			operating-points-v2 = <&a53_opp_table>;
- 			cpu-idle-states = <&cpu_pd_wait>;
-+			#cooling-cells = <2>;
- 		};
- 
- 		A53_L2: l2-cache0 {
-@@ -204,6 +208,38 @@
- 		arm,no-tick-in-suspend;
- 	};
- 
-+	thermal-zones {
-+		cpu-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <2000>;
-+			thermal-sensors = <&tmu>;
-+			trips {
-+				cpu_alert0: trip0 {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu_crit0: trip1 {
-+					temperature = <95000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu_alert0>;
-+					cooling-device =
-+						<&A53_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+						<&A53_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+						<&A53_2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+						<&A53_3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+	};
-+
- 	usbphynop1: usbphynop1 {
- 		compatible = "usb-nop-xceiv";
- 		clocks = <&clk IMX8MM_CLK_USB_PHY_REF>;
-@@ -363,6 +399,13 @@
- 				gpio-ranges = <&iomuxc 0 119 30>;
- 			};
- 
-+			tmu: tmu@30260000 {
-+				compatible = "fsl,imx8mm-tmu";
-+				reg = <0x30260000 0x10000>;
-+				clocks = <&clk IMX8MM_CLK_TMU_ROOT>;
-+				#thermal-sensor-cells = <0>;
-+			};
-+
- 			wdog1: watchdog@30280000 {
- 				compatible = "fsl,imx8mm-wdt", "fsl,imx21-wdt";
- 				reg = <0x30280000 0x10000>;
--- 
-2.7.4
-
+VGhhbmtzIGZvciB0YWtpbmcgYSBsb29rIGF0IHRoaXMgUmFuZHkgOikgSGlnaGx5IGFwcHJlY2lh
+dGVkLg0KDQpPbiBXZWQsIDIwMjAtMDItMTkgYXQgMjM6NDcgLTA4MDAsIFJhbmR5IER1bmxhcCB3
+cm90ZToNCj4gSGksDQo+IEhlcmUgYXJlIHNvbWUga2VybmVsLWRvYyBjb21tZW50cyBmb3IgeW91
+Og0KDQpJIGFncmVlZCB3aXRoIGFsbCB0aGUgY29tbWVudHMgLSBJJ2xsIGZpeCB0aGVtIGZvciBu
+ZXh0IHZlcnNpb24uDQoNCj4gT24gMi8xOS8yMCAxMTozNSBQTSwgTWF0dGkgVmFpdHRpbmVuIHdy
+b3RlOg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL2Jhc2UvS2NvbmZpZyAgICAgICAgIHwgICAzICsN
+Cj4gPiAgZHJpdmVycy9iYXNlL01ha2VmaWxlICAgICAgICB8ICAgMSArDQo+ID4gIGRyaXZlcnMv
+YmFzZS9saW5lYXJfcmFuZ2VzLmMgfCAyNDYNCj4gPiArKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKw0KPiA+ICBpbmNsdWRlL2xpbnV4L2xpbmVhcl9yYW5nZS5oIHwgIDQ4ICsrKysr
+KysNCj4gPiAgNCBmaWxlcyBjaGFuZ2VkLCAyOTggaW5zZXJ0aW9ucygrKQ0KPiA+ICBjcmVhdGUg
+bW9kZSAxMDA2NDQgZHJpdmVycy9iYXNlL2xpbmVhcl9yYW5nZXMuYw0KPiA+ICBjcmVhdGUgbW9k
+ZSAxMDA2NDQgaW5jbHVkZS9saW51eC9saW5lYXJfcmFuZ2UuaA0KPiA+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL2Jhc2UvbGluZWFyX3Jhbmdlcy5jDQo+ID4gYi9kcml2ZXJzL2Jhc2UvbGluZWFyX3Jh
+bmdlcy5jDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAwMDAu
+LjVmYTNiOTZiZjJiOA0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9kcml2ZXJzL2Jhc2Uv
+bGluZWFyX3Jhbmdlcy5jDQoNCg0KQmVzdCBSZWdhcmRzLA0KCU1hdHRpIFZhaXR0aW5lbg0K
