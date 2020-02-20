@@ -2,131 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0778165EC0
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 14:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A423E165EF5
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 14:39:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728236AbgBTN15 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 08:27:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56366 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726959AbgBTN14 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 20 Feb 2020 08:27:56 -0500
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CD720222C4;
-        Thu, 20 Feb 2020 13:27:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582205275;
-        bh=LRERjOY5swhgYq3TNDFqarey7d7DB+nwUJMGhi6oW7I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ETWCB9au7GNELIvo2IGphOuMC7YLOuI9PCos8dfJeskBQpqRE9gfhSM/3dYm1hNfQ
-         2+spmMhLjQy3O803GwZkQTSPkJ/g6oQqkLq/GAlXUOKsIRrlaqsih03lVpecyg5ceO
-         j/kEiaLM42UzlHx+s3/fjdb6NH2uMpau8TVCPWH8=
-Received: by mail-qk1-f175.google.com with SMTP id a141so3490257qkg.6;
-        Thu, 20 Feb 2020 05:27:55 -0800 (PST)
-X-Gm-Message-State: APjAAAU5VN/68yT5A8b4H5dbRWFBnXY/ikAo3Cd0y05KAxgUxwkzjSGF
-        VImFrswwT63uTmoCc5MGXDmeSIVwTMTqqd3fMg==
-X-Google-Smtp-Source: APXvYqxZVZomqdZk3IaaKKbZU5jEWBttIla8w6bWDNkZ/rJVdlHm/dja7DRh0sdZhj/Rpu1qHX+SAaGxb8OtZWG18r4=
-X-Received: by 2002:a37:6457:: with SMTP id y84mr28648400qkb.254.1582205274941;
- Thu, 20 Feb 2020 05:27:54 -0800 (PST)
+        id S1728177AbgBTNjA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 08:39:00 -0500
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:37584 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728132AbgBTNjA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 08:39:00 -0500
+Received: by mail-vs1-f65.google.com with SMTP id x18so2667694vsq.4
+        for <linux-pm@vger.kernel.org>; Thu, 20 Feb 2020 05:38:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9l++DCXufdLXm9XLDzVSaxos88atxrWAtSR1NHhF4gs=;
+        b=ym2KXZVdEHiCU8vHjy8My+7wkUnHMQG/cOhk0DsdnYxgZq41d4MVywXZMGA6KAEIAU
+         qMeqoITbdKNFQpjYOcsRmC1L3joYg4Taflrn+9aec4EMjAJ/iZZtFn+5GUZJqrEuus5m
+         ckNujPDaYhol+D3bRW3q1Os7Zzimc1zJ/rZJIumZGleJeYIUnDUREoc2sofXnV0vdc5t
+         78cNmFADz1TOyZ++mkMzNp/na3/0AiIv4fg8nDJUJEF8LbVMejm54oZ8+tY4w+GKY8Jx
+         JYJ1KdFJ9bk8G7Pl9JbEt495Ckf1IJrXaZouEjSu9t/PXA3f3ApFwcli8iWb1WKDv36h
+         DflA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9l++DCXufdLXm9XLDzVSaxos88atxrWAtSR1NHhF4gs=;
+        b=S+EKQvAPR6zy8jeitfUXzpE2yRJBz9Tw7PBVk8kZYSqAUNeVOjeYgP+hmmmriYphAM
+         7NvAykqSm0VFa8PV432KvD1K00xY76KHXNmaTURlVDRxHdbmLtDldIZqN9YX7CD6sCxH
+         +WbUBNXSNMOTGGOwVc390xH/a62Hu1+Vifzoldtu2p20eD46oHOpwCkWrhx2iBVzrLsZ
+         NkZpBZTBTmGLfV30oxNqs2tHrGLVJffMSTlXaKlSsek3ephaX+GalljtVXWEFPTToIou
+         BWeAL//61ufg24k0uoTUMweTW9LMcTb/6pdt0aP21TvQ8qSwwiePWE3AYkieBRgfgxQm
+         2aTw==
+X-Gm-Message-State: APjAAAXvBbwLUS42+9ePnC1jHgkCG1l8mGAamQ2Dq1hmiX2YGQlEPvQ2
+        43sYcWE5sPKLrnZY8OFOpYiJoKDqXzTzXVFXOaVQFg==
+X-Google-Smtp-Source: APXvYqxXwVhO8u4M/slsd7HjlRfC2UHqCmjvtpaM3sw1gBHnKEOXllmPORh09cMFgvW5/XqEvtTgO/1fjfHMN2zKMO4=
+X-Received: by 2002:a05:6102:22d6:: with SMTP id a22mr16389607vsh.191.1582205937696;
+ Thu, 20 Feb 2020 05:38:57 -0800 (PST)
 MIME-Version: 1.0
-References: <1579087831-94965-1-git-send-email-jianxin.pan@amlogic.com> <1579087831-94965-3-git-send-email-jianxin.pan@amlogic.com>
-In-Reply-To: <1579087831-94965-3-git-send-email-jianxin.pan@amlogic.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 20 Feb 2020 07:27:43 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJwYChw_S4anOPGhH4r3uwD9SVCnRqa_5BwRvwVicjwrg@mail.gmail.com>
-Message-ID: <CAL_JsqJwYChw_S4anOPGhH4r3uwD9SVCnRqa_5BwRvwVicjwrg@mail.gmail.com>
-Subject: Re: [PATCH v6 2/4] dt-bindings: power: add Amlogic secure power
- domains bindings
-To:     Jianxin Pan <jianxin.pan@amlogic.com>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>, devicetree@vger.kernel.org,
-        Jian Hu <jian.hu@amlogic.com>,
-        Hanjie Lin <hanjie.lin@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
+References: <20200211160321.22124-1-paul@crapouillou.net> <20200211160321.22124-4-paul@crapouillou.net>
+In-Reply-To: <20200211160321.22124-4-paul@crapouillou.net>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 20 Feb 2020 14:38:20 +0100
+Message-ID: <CAPDyKFquXSB+ztXZQS4MPV20dRN_-CKJkmCF0A97pG+vJYRsbg@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/3] mmc: jz4740: Use pm_sleep_ptr() macro
+To:     Paul Cercueil <paul@crapouillou.net>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        od@zcrc.me, Linux PM <linux-pm@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 5:30 AM Jianxin Pan <jianxin.pan@amlogic.com> wrote:
+On Tue, 11 Feb 2020 at 17:03, Paul Cercueil <paul@crapouillou.net> wrote:
 >
-> Add the bindings for the Amlogic Secure power domains, controlling the
-> secure power domains.
+> Use the newly introduced pm_sleep_ptr() macro to simplify the code.
 >
-> The bindings targets the Amlogic A1 and C1 compatible SoCs, in which the
-> power domain registers are in secure world.
->
-> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->  .../bindings/power/amlogic,meson-sec-pwrc.yaml     | 40 ++++++++++++++++++++++
->  include/dt-bindings/power/meson-a1-power.h         | 32 +++++++++++++++++
->  2 files changed, 72 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->  create mode 100644 include/dt-bindings/power/meson-a1-power.h
+>  drivers/mmc/host/jz4740_mmc.c | 12 +++---------
+>  1 file changed, 3 insertions(+), 9 deletions(-)
 >
-> diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-> new file mode 100644
-> index 00000000..af32209
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +# Copyright (c) 2019 Amlogic, Inc
-> +# Author: Jianxin Pan <jianxin.pan@amlogic.com>
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/power/amlogic,meson-sec-pwrc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Amlogic Meson Secure Power Domains
-> +
-> +maintainers:
-> +  - Jianxin Pan <jianxin.pan@amlogic.com>
-> +
-> +description: |+
-> +  Secure Power Domains used in Meson A1/C1 SoCs, and should be the child node
-> +  of secure-monitor.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - amlogic,meson-a1-pwrc
-> +
-> +  "#power-domain-cells":
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - "#power-domain-cells"
-> +
-> +examples:
-> +  - |
-> +    secure-monitor {
-> +        compatible = "amlogic,meson-gxbb-sm";
-> +
-> +        pwrc: power-controller {
-> +            compatible = "amlogic,meson-a1-pwrc";
-> +            #power-domain-cells = <1>;
-> +        };
-> +    }
+> diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+> index fbae87d1f017..09554f9831de 100644
+> --- a/drivers/mmc/host/jz4740_mmc.c
+> +++ b/drivers/mmc/host/jz4740_mmc.c
+> @@ -1099,24 +1099,18 @@ static int jz4740_mmc_remove(struct platform_device *pdev)
+>         return 0;
+>  }
+>
+> -#ifdef CONFIG_PM_SLEEP
+> -
+> -static int jz4740_mmc_suspend(struct device *dev)
+> +static int __maybe_unused jz4740_mmc_suspend(struct device *dev)
+>  {
+>         return pinctrl_pm_select_sleep_state(dev);
+>  }
+>
+> -static int jz4740_mmc_resume(struct device *dev)
+> +static int __maybe_unused jz4740_mmc_resume(struct device *dev)
+>  {
+>         return pinctrl_select_default_state(dev);
+>  }
+>
+>  static SIMPLE_DEV_PM_OPS(jz4740_mmc_pm_ops, jz4740_mmc_suspend,
+>         jz4740_mmc_resume);
+> -#define JZ4740_MMC_PM_OPS (&jz4740_mmc_pm_ops)
+> -#else
+> -#define JZ4740_MMC_PM_OPS NULL
+> -#endif
 
-Missing ';':
+All of the above code can be simplified in this way, without having to
+convert into using the new pm_sleep_ptr() macro, below.
 
-Error: Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.example.dts:27.5-6
-syntax error
-FATAL ERROR: Unable to parse input tree
+The only "penalty" would be that, the struct dev_pm_ops
+(jz4740_mmc_pm_ops) would then be referenced even when CONFIG_PM* is
+unset, thus the compiler would be able to throw it away.
 
-Please fix this as linux-next is now failing dt_binding_check.
+Just wanted to point this out.
 
-Rob
+>
+>  static struct platform_driver jz4740_mmc_driver = {
+>         .probe = jz4740_mmc_probe,
+> @@ -1124,7 +1118,7 @@ static struct platform_driver jz4740_mmc_driver = {
+>         .driver = {
+>                 .name = "jz4740-mmc",
+>                 .of_match_table = of_match_ptr(jz4740_mmc_of_match),
+> -               .pm = JZ4740_MMC_PM_OPS,
+> +               .pm = pm_sleep_ptr(&jz4740_mmc_pm_ops),
+
+If the driver would have runtime suspend/resume callbacks, then it
+would need the use the pm_ptr() macro instead, I guess.
+
+>         },
+>  };
+>
+> --
+> 2.25.0
+>
+
+My overall feeling is that this series improves the code/behaviour,
+but I am also a bit worried about adding yet another pair of macros
+for dealing with CONFIG_PM* callbacks as it could add more confusion.
+
+An option could be to introduce only the pm_ptr() macro, then skip the
+optimization that pm_sleep_ptr() gives. This could make it easier to
+use, as you wouldn't need to decide between two macros. Just a
+thought.
+
+I don't know what Rafael's thinks about this, let's see if he has some
+other ideas.
+
+Kind regards
+Uffe
