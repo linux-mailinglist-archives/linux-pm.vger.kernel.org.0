@@ -2,184 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 169EF165B9E
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 11:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CA9165BA3
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 11:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbgBTKfd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 05:35:33 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:39333 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726501AbgBTKfd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 05:35:33 -0500
-Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1j4jB1-0003kB-U3; Thu, 20 Feb 2020 10:35:28 +0000
-Date:   Thu, 20 Feb 2020 11:35:26 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH net-next v3 6/9] drivers/base/power: add
- dpm_sysfs_change_owner()
-Message-ID: <20200220103526.5iqh3vhdjo7mp7ko@wittgenstein>
-References: <20200218162943.2488012-1-christian.brauner@ubuntu.com>
- <20200218162943.2488012-7-christian.brauner@ubuntu.com>
- <CAJZ5v0hJwXH8Oc4spzDDemHhBVGKqtbrV2UG6-gmT-F0hA4ynA@mail.gmail.com>
- <20200220102107.grkyypt7swrufzas@wittgenstein>
- <CAJZ5v0itDdfdNd6TzLi=2J517CyjEBbKb+K4OfkkSt-B+w9taw@mail.gmail.com>
+        id S1727495AbgBTKg3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 05:36:29 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:32979 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727263AbgBTKg3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 05:36:29 -0500
+Received: by mail-ot1-f66.google.com with SMTP id w6so3218860otk.0;
+        Thu, 20 Feb 2020 02:36:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=miXTb5HAsIjYSRoFoX3UH15Dws4NhNQxWNMPkO2fDLE=;
+        b=JOEgvdemrDTCAe4fgny6maoWpUYXoCVcYMq3RT3K+uCEzUvFU/TtbjWAc3w+lavnjo
+         QRt5CSjMXhUkjlica9XxU393ZmdANYZU7shc3gCuO3mpJUaR8WMBcHPiTzBkJuWMfWVY
+         zphhYT2IiAEPyloqxCjyhWjCGbXnAhKKa9xLS4lfbZ8vsZt3miJZHsNL33zCZxwzad5X
+         qB4ml7LVBVUACI0z5mZo5Ig4LRGxDUF9sSgMZILsQ9j1Sw9dnlXRiGJE980YXDpnHOxI
+         wXIHlayCqYqVdoYeOMY+oHIJlPsqW6mhwYEHl1iKmQN0R5+sRLQ8Af7obOyunEy4romq
+         jvKA==
+X-Gm-Message-State: APjAAAWNd6irPlJqNnUMHx6Kwgu8JtleRDodLhlDpFFamcOHJv8E0c+H
+        zkdcziguG1HYAiIciE2jTeXkbZEgbgZVLT1jBz8=
+X-Google-Smtp-Source: APXvYqzKD8vfsYd9LIyX1NTkCe04vt+5krg0iwxtBfD5CVB9Bx8JIBmvjT94OvR0nDTq/oxZhnlqp2jiITkDYILcSeY=
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr1304767otd.266.1582194988112;
+ Thu, 20 Feb 2020 02:36:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0itDdfdNd6TzLi=2J517CyjEBbKb+K4OfkkSt-B+w9taw@mail.gmail.com>
+References: <20200220050440.45878-1-john.stultz@linaro.org> <20200220050440.45878-3-john.stultz@linaro.org>
+In-Reply-To: <20200220050440.45878-3-john.stultz@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 20 Feb 2020 11:36:16 +0100
+Message-ID: <CAJZ5v0jZ8VVEFjMcCMby-RdEwUY6mS5w3pMktv-hfJQ7OEp9Gg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/6] driver core: Set deferred_probe_timeout to a
+ longer default if CONFIG_MODULES is set
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Todd Kjos <tkjos@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 11:30:32AM +0100, Rafael J. Wysocki wrote:
-> On Thu, Feb 20, 2020 at 11:21 AM Christian Brauner
-> <christian.brauner@ubuntu.com> wrote:
-> >
-> > On Thu, Feb 20, 2020 at 11:02:04AM +0100, Rafael J. Wysocki wrote:
-> > > On Tue, Feb 18, 2020 at 5:30 PM Christian Brauner
-> > > <christian.brauner@ubuntu.com> wrote:
-> > > >
-> > > > Add a helper to change the owner of a device's power entries. This
-> > > > needs to happen when the ownership of a device is changed, e.g. when
-> > > > moving network devices between network namespaces.
-> > > > This function will be used to correctly account for ownership changes,
-> > > > e.g. when moving network devices between network namespaces.
-> > > >
-> > > > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> > > > ---
-> > > > /* v2 */
-> > > > - "Rafael J. Wysocki" <rafael@kernel.org>:
-> > > >   -  Fold if (dev->power.wakeup && dev->power.wakeup->dev) check into
-> > > >      if (device_can_wakeup(dev)) check since the former can never be true if
-> > > >      the latter is false.
-> > > >
-> > > > - Christian Brauner <christian.brauner@ubuntu.com>:
-> > > >   - Place (dev->power.wakeup && dev->power.wakeup->dev) check under
-> > > >     CONFIG_PM_SLEEP ifdefine since it will wakeup_source will only be available
-> > > >     when this config option is set.
-> > > >
-> > > > /* v3 */
-> > > > -  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
-> > > >    - Add explicit uid/gid parameters.
-> > > > ---
-> > > >  drivers/base/core.c        |  4 ++++
-> > > >  drivers/base/power/power.h |  3 +++
-> > > >  drivers/base/power/sysfs.c | 42 ++++++++++++++++++++++++++++++++++++++
-> > > >  3 files changed, 49 insertions(+)
-> > > >
-> > > > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > > > index ec0d5e8cfd0f..efec2792f5d7 100644
-> > > > --- a/drivers/base/core.c
-> > > > +++ b/drivers/base/core.c
-> > > > @@ -3522,6 +3522,10 @@ int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
-> > > >         if (error)
-> > > >                 goto out;
-> > > >
-> > > > +       error = dpm_sysfs_change_owner(dev, kuid, kgid);
-> > > > +       if (error)
-> > > > +               goto out;
-> > > > +
-> > > >  #ifdef CONFIG_BLOCK
-> > > >         if (sysfs_deprecated && dev->class == &block_class)
-> > > >                 goto out;
-> > > > diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
-> > > > index 444f5c169a0b..54292cdd7808 100644
-> > > > --- a/drivers/base/power/power.h
-> > > > +++ b/drivers/base/power/power.h
-> > > > @@ -74,6 +74,7 @@ extern int pm_qos_sysfs_add_flags(struct device *dev);
-> > > >  extern void pm_qos_sysfs_remove_flags(struct device *dev);
-> > > >  extern int pm_qos_sysfs_add_latency_tolerance(struct device *dev);
-> > > >  extern void pm_qos_sysfs_remove_latency_tolerance(struct device *dev);
-> > > > +extern int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid);
-> > > >
-> > > >  #else /* CONFIG_PM */
-> > > >
-> > > > @@ -88,6 +89,8 @@ static inline void pm_runtime_remove(struct device *dev) {}
-> > > >
-> > > >  static inline int dpm_sysfs_add(struct device *dev) { return 0; }
-> > > >  static inline void dpm_sysfs_remove(struct device *dev) {}
-> > > > +static inline int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid,
-> > > > +                                        kgid_t kgid) { return 0; }
-> > > >
-> > > >  #endif
-> > > >
-> > > > diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-> > > > index d7d82db2e4bc..4e79afcd5ca8 100644
-> > > > --- a/drivers/base/power/sysfs.c
-> > > > +++ b/drivers/base/power/sysfs.c
-> > > > @@ -684,6 +684,48 @@ int dpm_sysfs_add(struct device *dev)
-> > > >         return rc;
-> > > >  }
-> > > >
-> > > > +int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
-> > > > +{
-> > > > +       int rc;
-> > > > +
-> > > > +       if (device_pm_not_required(dev))
-> > > > +               return 0;
-> > > > +
-> > > > +       rc = sysfs_group_change_owner(&dev->kobj, &pm_attr_group, kuid, kgid);
-> > > > +       if (rc)
-> > > > +               return rc;
-> > > > +
-> > > > +       if (pm_runtime_callbacks_present(dev)) {
-> > > > +               rc = sysfs_group_change_owner(
-> > > > +                       &dev->kobj, &pm_runtime_attr_group, kuid, kgid);
-> > > > +               if (rc)
-> > > > +                       return rc;
-> > > > +       }
-> > > > +       if (device_can_wakeup(dev)) {
-> > > > +               rc = sysfs_group_change_owner(&dev->kobj, &pm_wakeup_attr_group,
-> > > > +                                             kuid, kgid);
-> > > > +               if (rc)
-> > > > +                       return rc;
-> > > > +
-> > > > +#ifdef CONFIG_PM_SLEEP
-> > > > +               if (dev->power.wakeup && dev->power.wakeup->dev) {
-> > > > +                       rc = device_change_owner(dev->power.wakeup->dev, kuid,
-> > > > +                                                kgid);
-> > > > +                       if (rc)
-> > > > +                               return rc;
-> > > > +               }
-> > > > +#endif
-> > >
-> > > First off, I don't particularly like #ifdefs in function bodies.  In
-> > > particular, there is a CONFIG_PM_SLEEP block in this file already and
-> > > you could define a new function in there to carry out the above
-> > > operations, and provide an empty stub of it for the "unset" case.
-> > > Failing to do so is somewhat on the "rushing things in" side in my
-> > > view.
-> >
-> > How ifdefines are used is highly dependent on the subsystem; networking
-> > ofen uses in-place ifdefines in some parts and not in others. That has
-> > nothing to do with rushing things. I'm happy to change it to your
-> > preferences.
-> 
-> Thanks!
-> 
-> > Thanks for pointing out your expectations. But please don't
-> > assume bad intentions on my part because I'm not meeting them right
-> > away. It often is the case that adding a helper that is called in one
-> > place is not well-received.
-> 
-> Fair enough, sorry for being harsh.
+On Thu, Feb 20, 2020 at 6:05 AM John Stultz <john.stultz@linaro.org> wrote:
+>
+> When using modules, its common for the modules not to be loaded
+> until quite late by userland. With the current code,
+> driver_deferred_probe_check_state() will stop returning
+> EPROBE_DEFER after late_initcall, which can cause module
+> dependency resolution to fail after that.
+>
+> So allow a longer window of 30 seconds (picked somewhat
+> arbitrarily, but influenced by the similar regulator core
+> timeout value) in the case where modules are enabled.
+>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Kevin Hilman <khilman@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Todd Kjos <tkjos@google.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Thierry Reding <treding@nvidia.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> Change-Id: I9c5a02a54915ff53f9f14d49c601f41d7105e05e
+> ---
+> v4:
+> * Split out into its own patch as suggested by Mark
+> * Made change conditional on CONFIG_MODULES
+> ---
+>  drivers/base/dd.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index bb383dca39c1..fa138f24e2d3 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -224,7 +224,16 @@ static int deferred_devs_show(struct seq_file *s, void *data)
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(deferred_devs);
+>
+> +#ifdef CONFIG_MODULES
+> +/*
+> + * In the case of modules, set the default probe timeout to
+> + * 30 seconds to give userland some time to load needed modules
+> + */
+> +static int deferred_probe_timeout = 30;
+> +#else
+> +/* In the case of !modules, no probe timeout needed */
+>  static int deferred_probe_timeout = -1;
+> +#endif
 
-Np, I didn't read it as such. I was really just worried you thought
-that I was trying to rush things in. It's Thursday anyway, usually about
-the time where we're all grumpy because we can't wait until we made it
-to Friday. :)
+Looks reasonable to me.
 
-Christian
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+>  static int __init deferred_probe_timeout_setup(char *str)
+>  {
+>         int timeout;
+> --
