@@ -2,102 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F6C1666FD
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 20:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F085166746
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 20:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728929AbgBTTPR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 14:15:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55488 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728111AbgBTTPQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 20 Feb 2020 14:15:16 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A82A6206E2;
-        Thu, 20 Feb 2020 19:15:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582226116;
-        bh=wuYgJdYmKiQd4r+UyQmCOa68AWBzeQV+TJZRUaxsiHc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vamKU3a5baew9BfJzvbhFHb8QbsMKNRkpgWRf7kyQ3tUHggXWr7moIvwnPJDDNIdG
-         mQtRAN6lBR8NNjgnZ/h18FTHAEsZWh26AEH7su4F4HrK13Qf2Rt+/3dzuRQl7oTS4f
-         GM5YLQ5ezaSdf4JarVAEGbNUi5DQq0kj0xd/c+Kg=
-Date:   Thu, 20 Feb 2020 20:15:13 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Orson Zhai <orson.unisoc@gmail.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        John Stultz <john.stultz@linaro.org>, mingmin.ling@unisoc.com,
-        orsonzhai@gmail.com, jingchao.ye@unisoc.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] Revert "PM / devfreq: Modify the device name as
- devfreq(X) for sysfs"
-Message-ID: <20200220191513.GA3450796@kroah.com>
-References: <1582220224-1904-1-git-send-email-orson.unisoc@gmail.com>
+        id S1728334AbgBTTim (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 14:38:42 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:54705 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728248AbgBTTil (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 14:38:41 -0500
+Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1j4reg-0005Xc-Ak; Thu, 20 Feb 2020 19:38:38 +0000
+Date:   Thu, 20 Feb 2020 20:38:37 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH net-next v3 3/9] sysfs: add sysfs_group{s}_change_owner()
+Message-ID: <20200220193837.3agsi2idqirzpkiu@wittgenstein>
+References: <20200218162943.2488012-1-christian.brauner@ubuntu.com>
+ <20200218162943.2488012-4-christian.brauner@ubuntu.com>
+ <20200220111550.GE3374196@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1582220224-1904-1-git-send-email-orson.unisoc@gmail.com>
+In-Reply-To: <20200220111550.GE3374196@kroah.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 01:37:04AM +0800, Orson Zhai wrote:
-> This reverts commit 4585fbcb5331fc910b7e553ad3efd0dd7b320d14.
+On Thu, Feb 20, 2020 at 12:15:50PM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Feb 18, 2020 at 05:29:37PM +0100, Christian Brauner wrote:
+> > Add helpers to change the owner of sysfs groups.
+> > This function will be used to correctly account for kobject ownership
+> > changes, e.g. when moving network devices between network namespaces.
+> > 
+> > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> > ---
+> > /* v2 */
+> > -  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+> >    - Add comment how ownership of sysfs object is changed.
+> > 
+> > /* v3 */
+> > -  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+> >    - Add explicit uid/gid parameters.
+> > - Christian Brauner <christian.brauner@ubuntu.com>:
+> >   - Collapse groups ownership helper patches into a single patch.
+> > ---
+> >  fs/sysfs/group.c      | 117 ++++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/sysfs.h |  20 ++++++++
+> >  2 files changed, 137 insertions(+)
+> > 
+> > diff --git a/fs/sysfs/group.c b/fs/sysfs/group.c
+> > index c4ab045926b7..bae562d3cba1 100644
+> > --- a/fs/sysfs/group.c
+> > +++ b/fs/sysfs/group.c
+> > @@ -13,6 +13,7 @@
+> >  #include <linux/dcache.h>
+> >  #include <linux/namei.h>
+> >  #include <linux/err.h>
+> > +#include <linux/fs.h>
+> >  #include "sysfs.h"
+> >  
+> >  
+> > @@ -457,3 +458,119 @@ int __compat_only_sysfs_link_entry_to_kobj(struct kobject *kobj,
+> >  	return PTR_ERR_OR_ZERO(link);
+> >  }
+> >  EXPORT_SYMBOL_GPL(__compat_only_sysfs_link_entry_to_kobj);
+> > +
+> > +static int sysfs_group_attrs_change_owner(struct kernfs_node *grp_kn,
+> > +					  const struct attribute_group *grp,
+> > +					  struct iattr *newattrs)
+> > +{
+> > +	struct kernfs_node *kn;
+> > +	int error;
+> > +
+> > +	if (grp->attrs) {
+> > +		struct attribute *const *attr;
+> > +
+> > +		for (attr = grp->attrs; *attr; attr++) {
+> > +			kn = kernfs_find_and_get(grp_kn, (*attr)->name);
+> > +			if (!kn)
+> > +				return -ENOENT;
+> > +
+> > +			error = kernfs_setattr(kn, newattrs);
+> > +			kernfs_put(kn);
+> > +			if (error)
+> > +				return error;
+> > +		}
+> > +	}
+> > +
+> > +	if (grp->bin_attrs) {
+> > +		struct bin_attribute *const *bin_attr;
+> > +
+> > +		for (bin_attr = grp->bin_attrs; *bin_attr; bin_attr++) {
+> > +			kn = kernfs_find_and_get(grp_kn, (*bin_attr)->attr.name);
+> > +			if (!kn)
+> > +				return -ENOENT;
+> > +
+> > +			error = kernfs_setattr(kn, newattrs);
+> > +			kernfs_put(kn);
+> > +			if (error)
+> > +				return error;
+> > +		}
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +/**
+> > + * sysfs_group_change_owner - change owner of an attribute group.
+> > + * @kobj:	The kobject containing the group.
+> > + * @grp:	The attribute group.
+> > + * @kuid:	new owner's kuid
+> > + * @kgid:	new owner's kgid
+> > + *
+> > + * Returns 0 on success or error code on failure.
 > 
-> The name changing as devfreq(X) breaks some user space applications,
-> such as Android HAL from Unisoc and Hikey [1].
-> The device name will be changed unexpectly after every boot depending
-> on module init sequence. It will make trouble to setup some system
-> configuration like selinux for Android.
-> 
-> So we'd like to revert it back to old naming rule before any better
-> way being found.
-> 
-> [1] https://lkml.org/lkml/2018/5/8/1042
-> 
-> Cc: John Stultz <john.stultz@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Orson Zhai <orson.unisoc@gmail.com>
-> 
-> ---
->  drivers/devfreq/devfreq.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index cceee8b..7dcf209 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -738,7 +738,6 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  {
->  	struct devfreq *devfreq;
->  	struct devfreq_governor *governor;
-> -	static atomic_t devfreq_no = ATOMIC_INIT(-1);
->  	int err = 0;
->  
->  	if (!dev || !profile || !governor_name) {
-> @@ -800,8 +799,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  	devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
->  	atomic_set(&devfreq->suspend_count, 0);
->  
-> -	dev_set_name(&devfreq->dev, "devfreq%d",
-> -				atomic_inc_return(&devfreq_no));
-> +	dev_set_name(&devfreq->dev, "%s", dev_name(dev));
->  	err = device_register(&devfreq->dev);
->  	if (err) {
->  		mutex_unlock(&devfreq->lock);
-> -- 
-> 2.7.4
-> 
+> This is fine to document, just funny it's the only one documented about
+> the return value so far in this series.
 
-Thanks for this, I agree, this needs to get back to the way things were
-as it seems to break too many existing systems as-is.
+I stuck to the documentation style common to the file. Most of the
+functions in fs/syfs/file.c did not mention return codes
+sysfs_remove_bin_file(), sysfs_create_bin_file(),
+sysfs_remove_file_from_group() etc. But I'll document all in this series
+with return codes now.
 
-I'll queue this up in my tree now, thanks.
-
-greg k-h
+Thanks!
+Christian
