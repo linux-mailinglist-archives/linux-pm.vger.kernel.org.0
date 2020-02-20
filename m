@@ -2,54 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B224C165B7A
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 11:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B40DE165B86
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 11:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726859AbgBTK2m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 05:28:42 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:41142 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726801AbgBTK2m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 05:28:42 -0500
-Received: by mail-oi1-f193.google.com with SMTP id i1so26995252oie.8;
-        Thu, 20 Feb 2020 02:28:42 -0800 (PST)
+        id S1726893AbgBTKao (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 05:30:44 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35422 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726885AbgBTKao (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 05:30:44 -0500
+Received: by mail-ot1-f67.google.com with SMTP id r16so3194069otd.2;
+        Thu, 20 Feb 2020 02:30:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zFBAIbuDCjTjmW06WHYZexwuHI/VktjiadQxllE5tFo=;
-        b=HONQm9eIsvaRDW+4iW2uC9laW5HC6PIzQqVKQa1jDwpbeEfFfrNl1CBGiNNwKAbjvZ
-         PH5hOIsPnACwLDyztCxqEEhHk2EtSp9OB1TJlZknrktm5mO4u6Z3+0ObNxgKgpRHtnIm
-         QwaH4T302tYIIlu6/0ITMIafdwVix4zXBHSUrUb0leJ+eEb2qKnzLfAygL/7H0GGi/dh
-         31H259DhwYNh+0sE/4xLPgY+kcaWRCtaT2Eio6BH+PDF31YtJCM2a8w/ShK+O6Mmjesl
-         PAxg/l1XwNA680w5+JUsm9GdL3zNnJ8Fc7EQbf2e8L0DtQp02PhQgdyIueclgSP855us
-         GfNw==
-X-Gm-Message-State: APjAAAX3BHasixomluyuiUcUvgIB6fAjC2ge9uYQXwk4ibH5EONOuqpw
-        6Gwbip8jc2cP3OYTx4J7dpSvb3HJNZsL/pVOT1M=
-X-Google-Smtp-Source: APXvYqzZ6ybSzXMcdaP3OhqdQD94MQHqguLaLbx0WQl2FUi/mEWzifAg752SnrHoBp9RtMPM/JcmiG8RTEXRWlzY+0Q=
-X-Received: by 2002:aca:bfc2:: with SMTP id p185mr1503321oif.57.1582194521672;
- Thu, 20 Feb 2020 02:28:41 -0800 (PST)
+        bh=wO6AuiI3EdmqOyIBwgh0qHP3XlZjJrsiTj0RBtDfBq8=;
+        b=VOSCq7vWqeAqiYW9P6iKo9iBz7Aygdh7eDJjXJVGRFsgUQcbp3RUX0by+uM+vFvTP5
+         W6ZB0dj1jL0RaX70sioIyTKE+mLS32b7anfjjUYlJTfzCIFpT1xclg4Ve0oJBD7gv1Bp
+         D7TEeTRyZLcJHoJaTZpV0k30Q7wRx/+zrWCAstmLkPl6+Iq6lqELF0WcegxPMgL4zFA1
+         GxxwhBfLw80KYZSS8LZaSDvHv8FIO5LCM9vW8osl0V5Fn534uSawCZggeYVVOlu0S/F2
+         i4uF6nIQYuoQGgGlVIbyxijCEvzQa9pR7RaWpM5WF5vvqoS4V370aWqRg51A3Hw0S3UR
+         pDSA==
+X-Gm-Message-State: APjAAAWrnASxXeYbXHlsI+hhDnzDN0fUIyjnmErytKLbUPGkpeZ8vIJV
+        xLp0tq2t0OXhNC9bo+jzXmzsmqz5TzEg0G2Be/Q=
+X-Google-Smtp-Source: APXvYqzoNQiMHXsINekY6fRvwCSG2MWfDbUr3Fyn5ZFXqEJMKQeSsMrQOWb3oOXeOZRjssfcvy0Ifs17byzMgZWWz2I=
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr1287589otd.266.1582194643319;
+ Thu, 20 Feb 2020 02:30:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20200220050440.45878-1-john.stultz@linaro.org> <20200220050440.45878-2-john.stultz@linaro.org>
-In-Reply-To: <20200220050440.45878-2-john.stultz@linaro.org>
+References: <20200218162943.2488012-1-christian.brauner@ubuntu.com>
+ <20200218162943.2488012-7-christian.brauner@ubuntu.com> <CAJZ5v0hJwXH8Oc4spzDDemHhBVGKqtbrV2UG6-gmT-F0hA4ynA@mail.gmail.com>
+ <20200220102107.grkyypt7swrufzas@wittgenstein>
+In-Reply-To: <20200220102107.grkyypt7swrufzas@wittgenstein>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 20 Feb 2020 11:28:30 +0100
-Message-ID: <CAJZ5v0iotVcMU5R1vb+p1c-L3mY31iQ56nUNsEA110RMEVWbMg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/6] driver core: Fix driver_deferred_probe_check_state()
- logic
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Todd Kjos <tkjos@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+Date:   Thu, 20 Feb 2020 11:30:32 +0100
+Message-ID: <CAJZ5v0itDdfdNd6TzLi=2J517CyjEBbKb+K4OfkkSt-B+w9taw@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 6/9] drivers/base/power: add dpm_sysfs_change_owner()
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
         Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
@@ -57,104 +54,134 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 6:05 AM John Stultz <john.stultz@linaro.org> wrote:
+On Thu, Feb 20, 2020 at 11:21 AM Christian Brauner
+<christian.brauner@ubuntu.com> wrote:
 >
-> driver_deferred_probe_check_state() has some uninituitive behavior.
+> On Thu, Feb 20, 2020 at 11:02:04AM +0100, Rafael J. Wysocki wrote:
+> > On Tue, Feb 18, 2020 at 5:30 PM Christian Brauner
+> > <christian.brauner@ubuntu.com> wrote:
+> > >
+> > > Add a helper to change the owner of a device's power entries. This
+> > > needs to happen when the ownership of a device is changed, e.g. when
+> > > moving network devices between network namespaces.
+> > > This function will be used to correctly account for ownership changes,
+> > > e.g. when moving network devices between network namespaces.
+> > >
+> > > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> > > ---
+> > > /* v2 */
+> > > - "Rafael J. Wysocki" <rafael@kernel.org>:
+> > >   -  Fold if (dev->power.wakeup && dev->power.wakeup->dev) check into
+> > >      if (device_can_wakeup(dev)) check since the former can never be true if
+> > >      the latter is false.
+> > >
+> > > - Christian Brauner <christian.brauner@ubuntu.com>:
+> > >   - Place (dev->power.wakeup && dev->power.wakeup->dev) check under
+> > >     CONFIG_PM_SLEEP ifdefine since it will wakeup_source will only be available
+> > >     when this config option is set.
+> > >
+> > > /* v3 */
+> > > -  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+> > >    - Add explicit uid/gid parameters.
+> > > ---
+> > >  drivers/base/core.c        |  4 ++++
+> > >  drivers/base/power/power.h |  3 +++
+> > >  drivers/base/power/sysfs.c | 42 ++++++++++++++++++++++++++++++++++++++
+> > >  3 files changed, 49 insertions(+)
+> > >
+> > > diff --git a/drivers/base/core.c b/drivers/base/core.c
+> > > index ec0d5e8cfd0f..efec2792f5d7 100644
+> > > --- a/drivers/base/core.c
+> > > +++ b/drivers/base/core.c
+> > > @@ -3522,6 +3522,10 @@ int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
+> > >         if (error)
+> > >                 goto out;
+> > >
+> > > +       error = dpm_sysfs_change_owner(dev, kuid, kgid);
+> > > +       if (error)
+> > > +               goto out;
+> > > +
+> > >  #ifdef CONFIG_BLOCK
+> > >         if (sysfs_deprecated && dev->class == &block_class)
+> > >                 goto out;
+> > > diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+> > > index 444f5c169a0b..54292cdd7808 100644
+> > > --- a/drivers/base/power/power.h
+> > > +++ b/drivers/base/power/power.h
+> > > @@ -74,6 +74,7 @@ extern int pm_qos_sysfs_add_flags(struct device *dev);
+> > >  extern void pm_qos_sysfs_remove_flags(struct device *dev);
+> > >  extern int pm_qos_sysfs_add_latency_tolerance(struct device *dev);
+> > >  extern void pm_qos_sysfs_remove_latency_tolerance(struct device *dev);
+> > > +extern int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid);
+> > >
+> > >  #else /* CONFIG_PM */
+> > >
+> > > @@ -88,6 +89,8 @@ static inline void pm_runtime_remove(struct device *dev) {}
+> > >
+> > >  static inline int dpm_sysfs_add(struct device *dev) { return 0; }
+> > >  static inline void dpm_sysfs_remove(struct device *dev) {}
+> > > +static inline int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid,
+> > > +                                        kgid_t kgid) { return 0; }
+> > >
+> > >  #endif
+> > >
+> > > diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+> > > index d7d82db2e4bc..4e79afcd5ca8 100644
+> > > --- a/drivers/base/power/sysfs.c
+> > > +++ b/drivers/base/power/sysfs.c
+> > > @@ -684,6 +684,48 @@ int dpm_sysfs_add(struct device *dev)
+> > >         return rc;
+> > >  }
+> > >
+> > > +int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
+> > > +{
+> > > +       int rc;
+> > > +
+> > > +       if (device_pm_not_required(dev))
+> > > +               return 0;
+> > > +
+> > > +       rc = sysfs_group_change_owner(&dev->kobj, &pm_attr_group, kuid, kgid);
+> > > +       if (rc)
+> > > +               return rc;
+> > > +
+> > > +       if (pm_runtime_callbacks_present(dev)) {
+> > > +               rc = sysfs_group_change_owner(
+> > > +                       &dev->kobj, &pm_runtime_attr_group, kuid, kgid);
+> > > +               if (rc)
+> > > +                       return rc;
+> > > +       }
+> > > +       if (device_can_wakeup(dev)) {
+> > > +               rc = sysfs_group_change_owner(&dev->kobj, &pm_wakeup_attr_group,
+> > > +                                             kuid, kgid);
+> > > +               if (rc)
+> > > +                       return rc;
+> > > +
+> > > +#ifdef CONFIG_PM_SLEEP
+> > > +               if (dev->power.wakeup && dev->power.wakeup->dev) {
+> > > +                       rc = device_change_owner(dev->power.wakeup->dev, kuid,
+> > > +                                                kgid);
+> > > +                       if (rc)
+> > > +                               return rc;
+> > > +               }
+> > > +#endif
+> >
+> > First off, I don't particularly like #ifdefs in function bodies.  In
+> > particular, there is a CONFIG_PM_SLEEP block in this file already and
+> > you could define a new function in there to carry out the above
+> > operations, and provide an empty stub of it for the "unset" case.
+> > Failing to do so is somewhat on the "rushing things in" side in my
+> > view.
 >
-> * From boot to late_initcall, it returns -EPROBE_DEFER
->
-> * From late_initcall to the deferred_probe_timeout (if set)
->   it returns -ENODEV
->
-> * If the deferred_probe_timeout it set, after it fires, it
->   returns -ETIMEDOUT
->
-> This is a bit confusing, as its useful to have the function
-> return -EPROBE_DEFER while the timeout is still running. This
-> behavior has resulted in the somwhat duplicative
-> driver_deferred_probe_check_state_continue() function being
-> added.
->
-> Thus this patch tries to improve the logic, so that it behaves
-> as such:
->
-> * If deferred_probe_timeout is set, it returns -EPROBE_DEFER
->   until the timeout, afterwhich it returns -ETIMEDOUT.
->
-> * If deferred_probe_timeout is not set (-1), it returns
->   -EPROBE_DEFER until late_initcall, after which it returns
->
-> This will make the deferred_probe_timeout value much more
-> functional, and will allow us to consolidate the
-> driver_deferred_probe_check_state() and
-> driver_deferred_probe_check_state_continue() logic in a later
-> patch.
->
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Kevin Hilman <khilman@kernel.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Todd Kjos <tkjos@google.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Thierry Reding <treding@nvidia.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-> Change-Id: I8349b7a403ce8cbce485ea0a0a5512fddffb635c
-> ---
-> v4:
-> * Simplified logic suggested by Andy Shevchenko
-> * Clarified commit message to focus on logic change
-> ---
->  drivers/base/dd.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index b25bcab2a26b..bb383dca39c1 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -237,7 +237,7 @@ __setup("deferred_probe_timeout=", deferred_probe_timeout_setup);
->
->  static int __driver_deferred_probe_check_state(struct device *dev)
->  {
-> -       if (!initcalls_done)
-> +       if (!initcalls_done || deferred_probe_timeout > 0)
->                 return -EPROBE_DEFER;
+> How ifdefines are used is highly dependent on the subsystem; networking
+> ofen uses in-place ifdefines in some parts and not in others. That has
+> nothing to do with rushing things. I'm happy to change it to your
+> preferences.
 
-Makes sense to me.
+Thanks!
 
->
->         if (!deferred_probe_timeout) {
-> @@ -252,9 +252,11 @@ static int __driver_deferred_probe_check_state(struct device *dev)
->   * driver_deferred_probe_check_state() - Check deferred probe state
->   * @dev: device to check
->   *
-> - * Returns -ENODEV if init is done and all built-in drivers have had a chance
-> - * to probe (i.e. initcalls are done), -ETIMEDOUT if deferred probe debug
-> - * timeout has expired, or -EPROBE_DEFER if none of those conditions are met.
-> + * Returnes -EPROBE_DEFER if initcalls have not completed, or the deferred
+> Thanks for pointing out your expectations. But please don't
+> assume bad intentions on my part because I'm not meeting them right
+> away. It often is the case that adding a helper that is called in one
+> place is not well-received.
 
-s/Returnes/Returns/
-
-And I would write
-
-* Return:
-* -EPROBE_DEFER if initcalls have not completed, or the deferred
-*  probe timeout is set, but not expried.
-* -ETIMEDOUT if the deferred probe timeout was set and has expired.
-* -ENODEV if initcalls have completed and the deferred probe timeout
-was not set.
-
-> + * probe timeout is set, but not expried.
-> + * Returns -ETIMEDOUT if the probe timeout was set and has expired.
-> + * Returns -ENODEV if initcalls have completed and the deferred probe timeout
-> + * was not set.
->   *
->   * Drivers or subsystems can opt-in to calling this function instead of directly
->   * returning -EPROBE_DEFER.
-> --
+Fair enough, sorry for being harsh.
