@@ -2,124 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE061665B3
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 19:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD19D1666DC
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 20:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728400AbgBTSAs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 13:00:48 -0500
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:37413 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728354AbgBTSAs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 13:00:48 -0500
-Received: by mail-ed1-f67.google.com with SMTP id t7so23155375edr.4;
-        Thu, 20 Feb 2020 10:00:45 -0800 (PST)
+        id S1728336AbgBTTJu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 14:09:50 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:55910 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728111AbgBTTJu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 14:09:50 -0500
+Received: by mail-wm1-f68.google.com with SMTP id q9so3194144wmj.5
+        for <linux-pm@vger.kernel.org>; Thu, 20 Feb 2020 11:09:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorremedies-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Uxgm65AiGAZd1c3mWrOHtCMe0ItoHLyc5sH5oQlZuOk=;
+        b=bEQw8fRxTq9gK07ho/vlQ9mY5JSMzS2lukVBuNH0s+QSj+sRKmetC8CtlXbAtzbG4e
+         aJruoBKjDFJSWooUYK1iuNZEcB/VrLZbIw8hwZFTZItHR6KTIVdQjkmfEiwd2lGNrFUE
+         Eeeca6ZkuLTHGzDBqzesneJFeeEqvesNEt0OE1JiSlh9R6nA4yrKlJfxicXpEO9sdOvr
+         +L9FexC9L/v28qwJ8CDQsTnY8r7e20mJe2ePeYLthO+PLa0vcq7QDNxrKlAbURFR2/Rv
+         QMRbUZxmDEuFHVYZcAx88AHaxSVLl7Jp+eXSlYA83v1Qro+cu5iGyjlDu0IuZR9u123X
+         wWSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JuWavBe6OXyRFy5qql3DEFdCwPYGMywA79SDbY508v4=;
-        b=ZAdsux1lXeRKDT//oS/PZRqYIHiJBgSn720SlCyHD31cakfxNNnwcbjAnmt8DLPe98
-         FVZy7RaYvo+l1arPYoZlddPxxsz1WK5LKUN2zDkJNIHV5rxePheJYa1Cc5ByyfK7JuCJ
-         4P/xqSYQt69fjd4gxXflBBtRlXGEYBcs55Tx0Low7nZG9alOXHxsvmS6MwIdeVM1LRbV
-         4/pGqOhBOT3PtEYtR1UPSHqZ3WW2LF+MFhP+O7U/cFrjNZoCIbALdSzeyj/zHah7Yhf4
-         8CTCaW5qVrbM/ARBCR5WB9j8Mn07QkE8LqNFqpzkYAZvP9vD1/lITos88bggs3ZgVNgt
-         Huew==
-X-Gm-Message-State: APjAAAXGja9/sJJlc4zfEyN/mysWkzReY4K1FTiiDomhFpXTw1WetHui
-        liyAhRf2Fg18ucACDyWwGNo=
-X-Google-Smtp-Source: APXvYqwN5Yx4Jc42BqpycwqSM0vNnKWMTJp0qMmgsdSQ1M3eTaby6XleOAjAIb1VUKWVgqrdjO6gCg==
-X-Received: by 2002:a17:906:19c8:: with SMTP id h8mr31704573ejd.250.1582221644629;
-        Thu, 20 Feb 2020 10:00:44 -0800 (PST)
-Received: from kozik-lap ([194.230.155.125])
-        by smtp.googlemail.com with ESMTPSA id yh21sm14798ejb.62.2020.02.20.10.00.42
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 20 Feb 2020 10:00:43 -0800 (PST)
-Date:   Thu, 20 Feb 2020 19:00:40 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, kgene@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, cw00.choi@samsung.com,
-        robh+dt@kernel.org, mark.rutland@arm.com, b.zolnierkie@samsung.com,
-        dietmar.eggemann@arm.com
-Subject: Re: [RESEND PATCH v2 0/2] Enable Odroid-XU3/4 to use Energy Model
- and Energy Aware Scheduler
-Message-ID: <20200220180040.GA8338@kozik-lap>
-References: <20200220095636.29469-1-lukasz.luba@arm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Uxgm65AiGAZd1c3mWrOHtCMe0ItoHLyc5sH5oQlZuOk=;
+        b=idrgUW2zC9FLNhVihbu5Yi+dEgA+ekMAR0kplZd2zEFaSsd/c7ogYfrL9MG7TmC2KM
+         fuu6ie87sridkD4Stw5s9QBozr/DHOXqoYUaDRw9cI3muTFEn83enCA46qUl4OSb1Aic
+         3vDTAB9m4aG+QuqMowt7tgU1rUHkRh18Pm7osKNsVr/gf4Drpr18/9Xj4A0qDBvl2Y3z
+         waSFI2IaGAf61HBiW9Sdj9Amx5zM9FnD6OiHqeO2wsepGk9bESV0ar1zh/p9VeG3TVek
+         N9JGR8JHoj2wO9mUgMeMJrEDDyesU/m4ClSuePWzUeOg533nHtW0tMM6zmeXP6NQFKbP
+         Cjig==
+X-Gm-Message-State: APjAAAWMVp4F+u5RTY6m+ygm98hM3P5k1fYs+rBWgLOI0QSea+MQwZzG
+        qnIE6Vk8aE9jAX5on0m6sscuRTc9mBAr7qgeJnMrB3dkJJ0=
+X-Google-Smtp-Source: APXvYqxAlqZf0rk14n919Xz1clF4UrM8WARcg9j48fX51IWAABGXvZV+D2jB3/8POfgO6hJ00yPKZyUtwOdraO04dtc=
+X-Received: by 2002:a7b:c147:: with SMTP id z7mr5887766wmi.168.1582225788812;
+ Thu, 20 Feb 2020 11:09:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200220095636.29469-1-lukasz.luba@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <CAJCQCtTPSC8666h5fuW=iSaVvuRq9to731W2-sAT6xUuESAzsw@mail.gmail.com>
+ <CAA25o9TvFMEJnF45NFVqAfdxzKy5umzHHVDs+SCxrChGSKczTw@mail.gmail.com>
+ <CAJCQCtQw7EJwREM8Fy_PWCwy3E7Jc=kLTRo_kgLNwNhYA32ABA@mail.gmail.com>
+ <CAJCQCtQkK+J-6eoadBLr+CkJ6CLf3Kt+6CeTJANRiU+M7A9CNQ@mail.gmail.com> <CAA25o9T2wwqoopoNRySdZoYkD+vtqRPsB1YPnag=TkOp5D9sYA@mail.gmail.com>
+In-Reply-To: <CAA25o9T2wwqoopoNRySdZoYkD+vtqRPsB1YPnag=TkOp5D9sYA@mail.gmail.com>
+From:   Chris Murphy <lists@colorremedies.com>
+Date:   Thu, 20 Feb 2020 12:09:32 -0700
+Message-ID: <CAJCQCtScZg1CP2WTDoOy4-urPbvP_5Hw0H-AKTwHugN9YhdxLg@mail.gmail.com>
+Subject: Re: is hibernation usable?
+To:     Luigi Semenzato <semenzato@google.com>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 09:56:34AM +0000, Lukasz Luba wrote:
-> Hi all,
-> 
-> This is just a resend, now with proper v2 in the patches subject.
-> 
-> The Odroid-XU4/3 is a decent and easy accessible ARM big.LITTLE platform,
-> which might be used for research and development.
-> 
-> This small patch set provides possibility to run Energy Aware Scheduler (EAS)
-> on Odroid-XU4/3 and experiment with it. 
-> 
-> The patch 1/2 provides 'dynamic-power-coefficient' in CPU DT nodes, which is
-> then used by the Energy Model (EM).
-> The patch 2/2 enables SCHED_MC (which adds another level in scheduling domains)
-> and enables EM making EAS possible to run (when schedutil is set as a CPUFreq
-> governor).
-> 
-> 1. Test results
-> 
-> Two types of different tests have been executed. The first is energy test
-> case showing impact on energy consumption of this patch set. It is using a
-> synthetic set of tasks (rt-app based). The second is the performance test
-> case which is using hackbench (less time to complete is better).
-> In both tests schedutil has been used as cpufreq governor. In all tests
-> PROVE_LOCKING has not been compiled into the kernels.
-> 
-> 1.1 Energy test case
-> 
-> 10 iterations of 24 periodic rt-app tasks (16ms period, 10% duty-cycle)
-> with energy measurement. The cpufreq governor - schedutil. Unit is Joules.
-> The energy is calculated based on hwmon0 and hwmon3 power1_input.
-> The goal is to save energy, lower is better.
-> 
-> +-----------+-----------------+------------------------+
-> |           | Without patches | With patches           |
-> +-----------+--------+--------+----------------+-------+
-> | benchmark |  Mean  | RSD*   | Mean           | RSD*  |
-> +-----------+--------+--------+----------------+-------+
-> | 24 rt-app |  21.56 |  1.37% |  19.85 (-9.2%) | 0.92% |
-> |    tasks  |        |        |                |       |
-> +-----------+--------+--------+----------------+-------+
-> 
-> 1.2 Performance test case
-> 
-> 10 consecutive iterations of hackbench (hackbench -l 500 -s 4096),
-> no delay between two successive executions.
-> The cpufreq governor - schedutil. Units in seconds.
-> The goal is to see not regression, lower completion time is better.
-> 
-> +-----------+-----------------+------------------------+
-> |           | Without patches | With patches           |
-> +-----------+--------+--------+----------------+-------+
-> | benchmark | Mean   | RSD*   | Mean           | RSD*  |
-> +-----------+--------+--------+----------------+-------+
-> | hackbench |  8.15  | 2.86%  |  7.95 (-2.5%)  | 0.60% |
-> +-----------+--------+--------+----------------+-------+
-> 
-> *RSD: Relative Standard Deviation (std dev / mean)
+On Thu, Feb 20, 2020 at 10:16 AM Luigi Semenzato <semenzato@google.com> wrote:
+>
+> I think this is the right group for the memory issues.
+>
+> I suspect that the problem with failed allocations (ENOMEM) boils down
+> to the unreliability of the page allocator.  In my experience, under
+> pressure (i.e. pages must be swapped out to be reclaimed) allocations
+> can fail even when in theory they should succeed.  (I wish I were
+> wrong and that someone would convincingly correct me.)
 
-Nice measurements!
+What is vm.swappiness set to on your system? A fellow Fedora
+contributor who has consistently reproduced what you describe, has
+discovered he has vm.swappiness=0, and even if it's set to 1, the
+problem no longer happens. And this is not a documented consequence of
+using a value of 0.
 
-Applied both, thank you.
 
-Best regards,
-Krzysztof
+> I have a workaround in which I use memcgroups to free pages before
+> starting hibernation.  The cgroup request "echo $limit >
+> .../memory.limit_in_bytes"  blocks until memory usage in the chosen
+> cgroup is below $limit.  However, I have seen this request fail even
+> when there is extra available swap space.
+>
+> The callback for the operation is mem_cgroup_resize_limit() (BTW I am
+> looking at kernel version 4.3.5) and that code has a loop where
+> try_to_free_pages() is called up to retry_count, which is at least 5.
+> Why 5?  One suspects that the writer of that code must have also
+> realized that the page freeing request is unreliable and it's worth
+> trying multiple times.
+>
+> So you could try something similar.  I don't know if there are
+> interfaces to try_to_free_pages() other than those in cgroups.  If
+> not, and you aren't using cgroups, one way might be to start several
+> memory-eating processes (such as "dd if=/dev/zero bs=1G count=1 |
+> sleep infinity") and monitor allocation, then when they use more than
+> 50% of RAM kill them and immediately hibernate before the freed pages
+> are reused.  If you can build your custom kernel, maybe it's worth
+> adding a sysfs entry to invoke try_to_free_pages().  You could also
+> change the hibernation code to do that, but having the user-level hook
+> may be more flexible.
 
+Fedora 31+ now uses cgroupsv2. In any case, my use case is making sure
+this works correctly, sanely, with mainline kernels because Fedora
+doesn't do custom things with the kernel.
+
+
+
+-- 
+Chris Murphy
