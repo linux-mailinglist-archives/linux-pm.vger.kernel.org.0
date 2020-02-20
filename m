@@ -2,121 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D79165B93
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 11:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169EF165B9E
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 11:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbgBTKeR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 05:34:17 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:34818 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726501AbgBTKeR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 05:34:17 -0500
-Received: by mail-oi1-f176.google.com with SMTP id b18so27076827oie.2;
-        Thu, 20 Feb 2020 02:34:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VAP40k6HR+6LKosbEIXZrUrjkDmLImj5HhCg+dOGS6g=;
-        b=hCXCxjaL0arZq7Mt6L0VY1KmxZ3S4aTZLSRFXbg4e3Ralvtzr3fWxZ2Z6vIcbkT0BL
-         csNWls07d4p3WpWqojOy9sejBvNvJPxEuLO70+h/mxr7WIhZOd7DdSUWGqahgddBHOJV
-         2bUi38qlgAZ7S6i1NSe7QcVg3rMZtRSFGfola/ztzFyCyMANObqTbB9u6fq1M5bdH5XD
-         NL0NgftZBUfgTY3xwiPDKzdb0x8ZM55D8BQvwzNoWxYzaOXSKFn05vth3rhh4AkMZQbg
-         YcnjLT40iamQOiajmgmky5tX1k0V29dmNXCaUqNSjmx+gV1GhXNzd1A705y2Y6KUEzCJ
-         elXQ==
-X-Gm-Message-State: APjAAAU4URjUlmGWEPorwgAEsqIIRAYdfZgT9PPTFbsHaGpgIQSo1/HA
-        jYHEY9/i+ax4dkjDGTywQjtQbRwv7Ogl5usUqMM=
-X-Google-Smtp-Source: APXvYqxofCC5wkjMP+nnXS7Hd45Hjl/OC5qNpLdFit8SZ20DA4UkgIppGZx0Jh5bzPvWsHc4pCJIzjWzfolo2wunR4k=
-X-Received: by 2002:a54:4e96:: with SMTP id c22mr1527235oiy.110.1582194856166;
- Thu, 20 Feb 2020 02:34:16 -0800 (PST)
+        id S1726871AbgBTKfd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 05:35:33 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:39333 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726501AbgBTKfd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 05:35:33 -0500
+Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1j4jB1-0003kB-U3; Thu, 20 Feb 2020 10:35:28 +0000
+Date:   Thu, 20 Feb 2020 11:35:26 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 6/9] drivers/base/power: add
+ dpm_sysfs_change_owner()
+Message-ID: <20200220103526.5iqh3vhdjo7mp7ko@wittgenstein>
+References: <20200218162943.2488012-1-christian.brauner@ubuntu.com>
+ <20200218162943.2488012-7-christian.brauner@ubuntu.com>
+ <CAJZ5v0hJwXH8Oc4spzDDemHhBVGKqtbrV2UG6-gmT-F0hA4ynA@mail.gmail.com>
+ <20200220102107.grkyypt7swrufzas@wittgenstein>
+ <CAJZ5v0itDdfdNd6TzLi=2J517CyjEBbKb+K4OfkkSt-B+w9taw@mail.gmail.com>
 MIME-Version: 1.0
-References: <0955D72C-D24D-402E-884F-C706578BF477@canonical.com>
- <a9fd25cd0a151d20e975ce79ab70197e39ef01e1.camel@linux.intel.com>
- <235CF4F8-19BF-4B00-8C92-E59CB2D476A7@canonical.com> <CAJZ5v0jXvo0ceNMp=kstTi24Ne7F-ZGMcD0T0TSMpcZZWsJsUA@mail.gmail.com>
- <CA007B3C-C084-429E-B774-70264A9E609F@canonical.com>
-In-Reply-To: <CA007B3C-C084-429E-B774-70264A9E609F@canonical.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 20 Feb 2020 11:34:05 +0100
-Message-ID: <CAJZ5v0in-v9iu88Wj0gAg_th-E-QWDSHZ_XvgyoOuqE=CZPtqQ@mail.gmail.com>
-Subject: Re: Hard Disk consumes lots of power in s2idle
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Kent Lin <kent.lin@canonical.com>, Tejun Heo <tj@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0itDdfdNd6TzLi=2J517CyjEBbKb+K4OfkkSt-B+w9taw@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 11:25 AM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
->
->
-> > On Feb 20, 2020, at 18:12, Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Thu, Feb 20, 2020 at 11:30:32AM +0100, Rafael J. Wysocki wrote:
+> On Thu, Feb 20, 2020 at 11:21 AM Christian Brauner
+> <christian.brauner@ubuntu.com> wrote:
 > >
-> > On Thu, Feb 20, 2020 at 9:08 AM Kai-Heng Feng
-> > <kai.heng.feng@canonical.com> wrote:
-> >>
-> >> Hi Srinivas,
-> >>
-> >>> On Feb 20, 2020, at 02:36, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com> wrote:
-> >>>
-> >>> Hi Kai,
-> >>>
-> >>> On Wed, 2020-02-19 at 22:22 +0800, Kai-Heng Feng wrote:
-> >>>> Hi Srinivas,
-> >>>>
-> >>>> Your previous work to support DEVSLP works well on SATA SSDs, so I am
-> >>>> asking you the issue I am facing:
-> >>>> Once a laptop has a HDD installed, the power consumption during
-> >>>> S2Idle increases ~0.4W, which is quite a lot.
-> >>>> However, HDDs don't seem to support DEVSLP, so I wonder if you know
-> >>>> to do proper power management for HDDs?
-> >>> What is the default here
-> >>> cat /sys/power/mem_sleep
-> >>> s2idle or deep?
-> >>
-> >> It defaults to s2idle.
-> >>
-> >>>
-> >>> Please follow debug steps here:
-> >>> https://01.org/blogs/qwang59/2018/how-achieve-s0ix-states-linux
-> >>>
-> >>> We need to check whether you get any PC10 residency or not.
-> >>
-> >> Yes it reaches PC10. It doesn't reach SLP_S0 though.
-> >> The real number on S2Idle power consumption:
-> >> No HDD: ~1.4W
-> >> One HDD: ~1.8W
-> >>
-> >> If the SoC doesn't hit PC10 the number should be significantly higher.
-> >> That's why I think the issue is the power management on HDD itself.
+> > On Thu, Feb 20, 2020 at 11:02:04AM +0100, Rafael J. Wysocki wrote:
+> > > On Tue, Feb 18, 2020 at 5:30 PM Christian Brauner
+> > > <christian.brauner@ubuntu.com> wrote:
+> > > >
+> > > > Add a helper to change the owner of a device's power entries. This
+> > > > needs to happen when the ownership of a device is changed, e.g. when
+> > > > moving network devices between network namespaces.
+> > > > This function will be used to correctly account for ownership changes,
+> > > > e.g. when moving network devices between network namespaces.
+> > > >
+> > > > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> > > > ---
+> > > > /* v2 */
+> > > > - "Rafael J. Wysocki" <rafael@kernel.org>:
+> > > >   -  Fold if (dev->power.wakeup && dev->power.wakeup->dev) check into
+> > > >      if (device_can_wakeup(dev)) check since the former can never be true if
+> > > >      the latter is false.
+> > > >
+> > > > - Christian Brauner <christian.brauner@ubuntu.com>:
+> > > >   - Place (dev->power.wakeup && dev->power.wakeup->dev) check under
+> > > >     CONFIG_PM_SLEEP ifdefine since it will wakeup_source will only be available
+> > > >     when this config option is set.
+> > > >
+> > > > /* v3 */
+> > > > -  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+> > > >    - Add explicit uid/gid parameters.
+> > > > ---
+> > > >  drivers/base/core.c        |  4 ++++
+> > > >  drivers/base/power/power.h |  3 +++
+> > > >  drivers/base/power/sysfs.c | 42 ++++++++++++++++++++++++++++++++++++++
+> > > >  3 files changed, 49 insertions(+)
+> > > >
+> > > > diff --git a/drivers/base/core.c b/drivers/base/core.c
+> > > > index ec0d5e8cfd0f..efec2792f5d7 100644
+> > > > --- a/drivers/base/core.c
+> > > > +++ b/drivers/base/core.c
+> > > > @@ -3522,6 +3522,10 @@ int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
+> > > >         if (error)
+> > > >                 goto out;
+> > > >
+> > > > +       error = dpm_sysfs_change_owner(dev, kuid, kgid);
+> > > > +       if (error)
+> > > > +               goto out;
+> > > > +
+> > > >  #ifdef CONFIG_BLOCK
+> > > >         if (sysfs_deprecated && dev->class == &block_class)
+> > > >                 goto out;
+> > > > diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+> > > > index 444f5c169a0b..54292cdd7808 100644
+> > > > --- a/drivers/base/power/power.h
+> > > > +++ b/drivers/base/power/power.h
+> > > > @@ -74,6 +74,7 @@ extern int pm_qos_sysfs_add_flags(struct device *dev);
+> > > >  extern void pm_qos_sysfs_remove_flags(struct device *dev);
+> > > >  extern int pm_qos_sysfs_add_latency_tolerance(struct device *dev);
+> > > >  extern void pm_qos_sysfs_remove_latency_tolerance(struct device *dev);
+> > > > +extern int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid);
+> > > >
+> > > >  #else /* CONFIG_PM */
+> > > >
+> > > > @@ -88,6 +89,8 @@ static inline void pm_runtime_remove(struct device *dev) {}
+> > > >
+> > > >  static inline int dpm_sysfs_add(struct device *dev) { return 0; }
+> > > >  static inline void dpm_sysfs_remove(struct device *dev) {}
+> > > > +static inline int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid,
+> > > > +                                        kgid_t kgid) { return 0; }
+> > > >
+> > > >  #endif
+> > > >
+> > > > diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+> > > > index d7d82db2e4bc..4e79afcd5ca8 100644
+> > > > --- a/drivers/base/power/sysfs.c
+> > > > +++ b/drivers/base/power/sysfs.c
+> > > > @@ -684,6 +684,48 @@ int dpm_sysfs_add(struct device *dev)
+> > > >         return rc;
+> > > >  }
+> > > >
+> > > > +int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
+> > > > +{
+> > > > +       int rc;
+> > > > +
+> > > > +       if (device_pm_not_required(dev))
+> > > > +               return 0;
+> > > > +
+> > > > +       rc = sysfs_group_change_owner(&dev->kobj, &pm_attr_group, kuid, kgid);
+> > > > +       if (rc)
+> > > > +               return rc;
+> > > > +
+> > > > +       if (pm_runtime_callbacks_present(dev)) {
+> > > > +               rc = sysfs_group_change_owner(
+> > > > +                       &dev->kobj, &pm_runtime_attr_group, kuid, kgid);
+> > > > +               if (rc)
+> > > > +                       return rc;
+> > > > +       }
+> > > > +       if (device_can_wakeup(dev)) {
+> > > > +               rc = sysfs_group_change_owner(&dev->kobj, &pm_wakeup_attr_group,
+> > > > +                                             kuid, kgid);
+> > > > +               if (rc)
+> > > > +                       return rc;
+> > > > +
+> > > > +#ifdef CONFIG_PM_SLEEP
+> > > > +               if (dev->power.wakeup && dev->power.wakeup->dev) {
+> > > > +                       rc = device_change_owner(dev->power.wakeup->dev, kuid,
+> > > > +                                                kgid);
+> > > > +                       if (rc)
+> > > > +                               return rc;
+> > > > +               }
+> > > > +#endif
+> > >
+> > > First off, I don't particularly like #ifdefs in function bodies.  In
+> > > particular, there is a CONFIG_PM_SLEEP block in this file already and
+> > > you could define a new function in there to carry out the above
+> > > operations, and provide an empty stub of it for the "unset" case.
+> > > Failing to do so is somewhat on the "rushing things in" side in my
+> > > view.
 > >
-> > I'm assuming that you mean a non-SSD device here.
->
-> Yes, it's spinning rust here.
->
-> >
-> > That would be handled via ata_port_suspend() I gather and whatever
-> > that does should do the right thing.
-> >
-> > Do you think that the disk doesn't spin down or it spins down, but the
-> > logic stays on?
->
-> The spin sound is audible, so I am certain the HDD spins down during S2Idle.
+> > How ifdefines are used is highly dependent on the subsystem; networking
+> > ofen uses in-place ifdefines in some parts and not in others. That has
+> > nothing to do with rushing things. I'm happy to change it to your
+> > preferences.
+> 
+> Thanks!
+> 
+> > Thanks for pointing out your expectations. But please don't
+> > assume bad intentions on my part because I'm not meeting them right
+> > away. It often is the case that adding a helper that is called in one
+> > place is not well-received.
+> 
+> Fair enough, sorry for being harsh.
 
-OK
+Np, I didn't read it as such. I was really just worried you thought
+that I was trying to rush things in. It's Thursday anyway, usually about
+the time where we're all grumpy because we can't wait until we made it
+to Friday. :)
 
-> How do I know if the logic is on or off?
-
-Well, if it were off, it would not draw power. :-)
-
-So IMO it is reasonable to assume that the logic on the drive stays
-on.  I'm not aware of anything that can be done to turn it off,
-however.
+Christian
