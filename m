@@ -2,112 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BF1165B2A
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 11:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B80165B3A
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2020 11:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726805AbgBTKJv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 05:09:51 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44210 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726771AbgBTKJv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 05:09:51 -0500
-Received: by mail-pf1-f194.google.com with SMTP id y5so1674369pfb.11;
-        Thu, 20 Feb 2020 02:09:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NpuuBxfbKHIUwnb3LRiYILCMm22iCmnjP8uXzLSEjVk=;
-        b=iWfuxaMZ1GQAXTsX3hPS/1aDPr5XJzqKbDVGbvb470Z38y5jXGtfwv1GBtfG91LdJg
-         tetHrqKrBS+ZnHgF0HKe62d5hwp1mi85Ywe1ShUV9cPxQt16RvVQ9nDVztFQxMvPFHXr
-         q978IwmZd5GBg4usV63XWJiTrktJtna8fXrAmhITtGKGGEinaLqnV4PXWJTF28y/NStB
-         ZxeJzWC/CgV7Ur4MzWcU5R0mpOM2alMsKMC/pCrYdl8o+VO/AWmf6V4R0rR5ZujLlmSA
-         KcmFNH0x6yo04LwD4qED5ZwDFTsTlQRdmQkvohwCF7FM7Fi0S3OK/VY/YOUNYIzbBvow
-         iQ9A==
+        id S1726859AbgBTKMa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Feb 2020 05:12:30 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:33322 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726837AbgBTKMa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 05:12:30 -0500
+Received: by mail-ot1-f48.google.com with SMTP id w6so3162493otk.0;
+        Thu, 20 Feb 2020 02:12:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NpuuBxfbKHIUwnb3LRiYILCMm22iCmnjP8uXzLSEjVk=;
-        b=VlW3PfGLKEU5U9RH76+nZL1TGurNLzAAN6Kuj/8LSJXk8sHXxJSf3SDiyywkgle+fc
-         9cddsOrAA6JrzdxcKmz+E7onuDeDq5H86GAn3rFPMPyrA3n7507ZBwl+DUU4JSpaYIuy
-         R9v3PtlDSY7MmKFTXSO9MIm73pxXtZkOhtf11UbO1iCJyMabCX9XlYQgaSux/6+tzhqg
-         YtZQR0810xej4TsDd8KGrprcgqJH22tyWGV8rSH7r3DIKOrezyTqPZGdYDvgkRAad2oW
-         uxxzSVqZuvff2BM5G2UveDDLCjksla/kf2qflUYqtzKj+pNw7kD0td4DzbkmUlj6wNeX
-         TPQw==
-X-Gm-Message-State: APjAAAWbj9jtc6Uw1ymLsBxA4odVuEvBcrwXnHnSreoAgDCPa0Ky/jVR
-        s1d9U71idm/9FElJmCZgw1RxXSE6We6Mq6Xy5zc=
-X-Google-Smtp-Source: APXvYqwy658WWlnW63JID/OYabb2tkComA3d7a+Zy6/L9sWbvQoYTfebwxlkJb4JZR8q8u7tLijnNFJySepK+2+BBe0=
-X-Received: by 2002:a65:5242:: with SMTP id q2mr31475579pgp.74.1582193389555;
- Thu, 20 Feb 2020 02:09:49 -0800 (PST)
+        bh=atbLNfB8xffrjjqL/ucnkxeJEJuBIPdca68FUgtNQMk=;
+        b=SqasnrST3n+jX0FPziWcQVzVB4/hhmq2VLS3t3+0fQB8bTcd27NaB/PFyJSvlhgGSN
+         lExGrPh6BMlzZ3JWdorgEDK9ZaJqVRAAzLtq88y3JDSAKsJbsnH42m+pxwOtfuAHgcuv
+         WwBFaoN1JO8PNj277IKlT3woka7kbkVMBYfE+14sBKeJKzHfSYya58z5Ay3nN2Eeso9s
+         wt51XewSaNJxatJvbVj6mu+toPUlNIPhqlIcv9uWC7jd842Y7JQvT6mIahh/5ozwJNmG
+         PJXPfQt7k8BwZuWW2ObTy7ONxrftozWgzACJz9mX4iufERksD23iD2WFoo2sklIfcVO6
+         K69w==
+X-Gm-Message-State: APjAAAXaGu0AYewYyVjqMbygxRe+Lhmu9fWEOrFY+POkFh8CmUlDK9RL
+        5YV2WFclGkG4Jprlt69Fb88IMhumsmAlHiGt2rQ=
+X-Google-Smtp-Source: APXvYqy3Lp8uHjhvoeSvWG/0ZPoL7miqjtkSwXlVVq4jK3/MToh1rTxX+T/UAWNlCujO8eBtqs+s/LYv38RBeaN/s98=
+X-Received: by 2002:a05:6830:1651:: with SMTP id h17mr21715032otr.167.1582193549689;
+ Thu, 20 Feb 2020 02:12:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20200218220748.54823-1-john.stultz@linaro.org> <20200220052739.87057-1-saravanak@google.com>
-In-Reply-To: <20200220052739.87057-1-saravanak@google.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 20 Feb 2020 12:09:41 +0200
-Message-ID: <CAHp75VfodUCQWRcPB08Qmp8o+BxwL4j4aAgqt9cuJ=mHLLAQyQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] driver core: Rework logic in __driver_deferred_probe_check_state
- to allow EPROBE_DEFER to be returned for longer
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+References: <0955D72C-D24D-402E-884F-C706578BF477@canonical.com>
+ <a9fd25cd0a151d20e975ce79ab70197e39ef01e1.camel@linux.intel.com> <235CF4F8-19BF-4B00-8C92-E59CB2D476A7@canonical.com>
+In-Reply-To: <235CF4F8-19BF-4B00-8C92-E59CB2D476A7@canonical.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 20 Feb 2020 11:12:18 +0100
+Message-ID: <CAJZ5v0jXvo0ceNMp=kstTi24Ne7F-ZGMcD0T0TSMpcZZWsJsUA@mail.gmail.com>
+Subject: Re: Hard Disk consumes lots of power in s2idle
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Todd Kjos <tkjos@google.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, kernel-team@android.com
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Kent Lin <kent.lin@canonical.com>, Tejun Heo <tj@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 7:29 AM Saravana Kannan <saravanak@google.com> wrote:
-> On Tue, Feb 18, 2020 at 4:07 PM John Stultz wrote:
-> > Due to commit e01afc3250255 ("PM / Domains: Stop deferring probe
-> > at the end of initcall"), along with commit 25b4e70dcce9
-> > ("driver core: allow stopping deferred probe after init") after
-> > late_initcall, drivers will stop getting EPROBE_DEFER, and
-> > instead see an error causing the driver to fail to load.
+On Thu, Feb 20, 2020 at 9:08 AM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
 >
-> Both of those patches were the best solution at that point in time. But
-> the kernel has changed a lot since then. Power domain and IOMMU drivers
-> can work as modules now. We have of_devlink and sync_state().
+> Hi Srinivas,
 >
-> So, while a delay might have been the ideal solution back then, I think
-> we need to work towards removing arbitrary timeouts instead of making
-> the timeout mechanism more elaborate.
+> > On Feb 20, 2020, at 02:36, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com> wrote:
+> >
+> > Hi Kai,
+> >
+> > On Wed, 2020-02-19 at 22:22 +0800, Kai-Heng Feng wrote:
+> >> Hi Srinivas,
+> >>
+> >> Your previous work to support DEVSLP works well on SATA SSDs, so I am
+> >> asking you the issue I am facing:
+> >> Once a laptop has a HDD installed, the power consumption during
+> >> S2Idle increases ~0.4W, which is quite a lot.
+> >> However, HDDs don't seem to support DEVSLP, so I wonder if you know
+> >> to do proper power management for HDDs?
+> > What is the default here
+> > cat /sys/power/mem_sleep
+> > s2idle or deep?
 >
-> I think driver_deferred_probe_check_state() logic should boiled down
-> to something like:
-
-...
-
-> Once we add of_devlink support for power-domains, you won't even hit the
-> genpd error path if you have of_devlink enabled. I believe in the case
-> you are testing DB 845c, of_devlink is enabled?
+> It defaults to s2idle.
 >
-> If of_devlink is enabled, the devices depending on the unprobed power
-> domains would be deferred without even calling the driver's probe()
-> function.
+> >
+> > Please follow debug steps here:
+> > https://01.org/blogs/qwang59/2018/how-achieve-s0ix-states-linux
+> >
+> > We need to check whether you get any PC10 residency or not.
 >
-> Adding power-domain support to of_devlink is a 2 line change. I'll send
-> it out soon.
+> Yes it reaches PC10. It doesn't reach SLP_S0 though.
+> The real number on S2Idle power consumption:
+> No HDD: ~1.4W
+> One HDD: ~1.8W
+>
+> If the SoC doesn't hit PC10 the number should be significantly higher.
+> That's why I think the issue is the power management on HDD itself.
 
-...
+I'm assuming that you mean a non-SSD device here.
 
-Pardon me for not knowing the OF and devlink stuff in particular, but
-have you had a chance to test your changes on some (rather complex)
-ACPI enabled platforms?
-Would it have any complications there?
+That would be handled via ata_port_suspend() I gather and whatever
+that does should do the right thing.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Do you think that the disk doesn't spin down or it spins down, but the
+logic stays on?
