@@ -2,143 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB55167B9A
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 12:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC88167CAE
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 12:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726913AbgBULNQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 06:13:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33912 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726694AbgBULNQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 21 Feb 2020 06:13:16 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 154DE207FD;
-        Fri, 21 Feb 2020 11:13:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582283595;
-        bh=1Udq+7Q69q3s3KUMwUZ8BG97EPboX7J33NslS8Xmk0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KV9jz8yu6t/SDUZjJtrNxxjcTDcMTonrg1ozc33TeV+Y09h6uI05MN2kYNDEatK7A
-         hBQPWg8ZkhXmM92WnIeC8Gr9CDjk+jJlt4l2j6JVJsXqYgYcG9mn2XlwPT4e3Y0nK2
-         P5UZpgmIITRx6wT+fYHMHgV6ksp+iMbAhPrklyhE=
-Date:   Fri, 21 Feb 2020 12:13:13 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Orson Zhai <orson.unisoc@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        mingmin.ling@unisoc.com, orsonzhai@gmail.com,
-        jingchao.ye@unisoc.com, Linux PM list <linux-pm@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH] Revert "PM / devfreq: Modify the device name as
- devfreq(X) for sysfs"
-Message-ID: <20200221111313.GA110504@kroah.com>
-References: <1582220224-1904-1-git-send-email-orson.unisoc@gmail.com>
- <20200220191513.GA3450796@kroah.com>
- <CALAqxLViRgGE8FsukCJL+doqk_GqabLDCtXBWem+VOGf9xXZdg@mail.gmail.com>
- <CGME20200221070652epcas1p11e82863794f130373055c0b7bdedff23@epcas1p1.samsung.com>
- <20200221070646.GA4103708@kroah.com>
- <1b9e510a-71bb-5aa8-ef85-a9a9c623f313@samsung.com>
+        id S1728228AbgBULvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 06:51:14 -0500
+Received: from esa4.hc3370-68.iphmx.com ([216.71.155.144]:7892 "EHLO
+        esa4.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728186AbgBULvM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 06:51:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1582285872;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=rkTHwapBz7ayghLmZpskUOnKPxyODDcUxzL7ge8Xcgw=;
+  b=OZLTIKh1todi/eF9m5Zuw3e9FZEB208cvD/izr6fF51TJPS2N0TSYqR4
+   6Ap5YuK1xxh7K19MUlsOXe4oNWYUWCoqTG1Wx0Q1yqjdhxWGXldm55R3G
+   KiNjwjVU3w7qy4AllGqLyTaLsITZY3VdlftLBuZo8vrRaw3FpH1v/N+4V
+   8=;
+Authentication-Results: esa4.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none; spf=None smtp.pra=roger.pau@citrix.com; spf=Pass smtp.mailfrom=roger.pau@citrix.com; spf=None smtp.helo=postmaster@mail.citrix.com
+Received-SPF: None (esa4.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  roger.pau@citrix.com) identity=pra; client-ip=162.221.158.21;
+  receiver=esa4.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="roger.pau@citrix.com";
+  x-conformance=sidf_compatible
+Received-SPF: Pass (esa4.hc3370-68.iphmx.com: domain of
+  roger.pau@citrix.com designates 162.221.158.21 as permitted
+  sender) identity=mailfrom; client-ip=162.221.158.21;
+  receiver=esa4.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="roger.pau@citrix.com";
+  x-conformance=sidf_compatible; x-record-type="v=spf1";
+  x-record-text="v=spf1 ip4:209.167.231.154 ip4:178.63.86.133
+  ip4:195.66.111.40/30 ip4:85.115.9.32/28 ip4:199.102.83.4
+  ip4:192.28.146.160 ip4:192.28.146.107 ip4:216.52.6.88
+  ip4:216.52.6.188 ip4:162.221.158.21 ip4:162.221.156.83
+  ip4:168.245.78.127 ~all"
+Received-SPF: None (esa4.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@mail.citrix.com) identity=helo;
+  client-ip=162.221.158.21; receiver=esa4.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="postmaster@mail.citrix.com";
+  x-conformance=sidf_compatible
+IronPort-SDR: Iy6vkmYvTTmAxcv0sDnk287OqaApR945+t3bbH8+KbvqO+kHUjaYPybqDsL2Uz3ckkNdz7m7Ij
+ Y/kSARbsrffvGwZ0DdF9joLHQxzx+xK9WlQ/XDSamvWxHYxvaUCzUm0cfcLxehNY2mp7FjoWjT
+ D4xjlWsuciis2JlVC9Q0xgZJzdXhb7ZyOnQTX4w+09xcbPdlJMXCastv+6vAPcXH/ReEzapMJk
+ MexwEdNGylwcSepie7bUtm+7uwAyQBY4nMkkPM9+s4Fdfth/Af4mJg7YaOlCyON2+hTYr7itc9
+ ax0=
+X-SBRS: 2.7
+X-MesageID: 13435837
+X-Ironport-Server: esa4.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.158.21
+X-Policy: $RELAYED
+X-IronPort-AV: E=Sophos;i="5.70,468,1574139600"; 
+   d="scan'208";a="13435837"
+Date:   Fri, 21 Feb 2020 12:51:03 +0100
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     "Durrant, Paul" <pdurrant@amazon.co.uk>
+CC:     "Agarwal, Anchal" <anchalag@amazon.com>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "hpa@zytor.com" <hpa@zytor.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "fllinden@amaozn.com" <fllinden@amaozn.com>,
+        "Kamata, Munehisa" <kamatam@amazon.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>
+Subject: Re: [Xen-devel] [RFC PATCH v3 06/12] xen-blkfront: add callbacks for
+ PM suspend and hibernation
+Message-ID: <20200221115103.GY4679@Air-de-Roger>
+References: <20200220083904.GI4679@Air-de-Roger>
+ <f986b845491b47cc8469d88e2e65e2a7@EX13D32EUC003.ant.amazon.com>
+ <20200220154507.GO4679@Air-de-Roger>
+ <c9662397256a4568a5cc7d70a84940e5@EX13D32EUC003.ant.amazon.com>
+ <20200220164839.GR4679@Air-de-Roger>
+ <e42fa35800f04b6f953e4af87f2c1a02@EX13D32EUC003.ant.amazon.com>
+ <20200221092219.GU4679@Air-de-Roger>
+ <5ddf980a3fba4fb39571184e688cefc5@EX13D32EUC003.ant.amazon.com>
+ <20200221102130.GW4679@Air-de-Roger>
+ <66a211bae1de4be9861ef8393607d1b3@EX13D32EUC003.ant.amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <1b9e510a-71bb-5aa8-ef85-a9a9c623f313@samsung.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <66a211bae1de4be9861ef8393607d1b3@EX13D32EUC003.ant.amazon.com>
+X-ClientProxiedBy: AMSPEX02CAS02.citrite.net (10.69.22.113) To
+ AMSPEX02CL01.citrite.net (10.69.22.125)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 05:11:02PM +0900, Chanwoo Choi wrote:
-> On 2/21/20 4:06 PM, Greg Kroah-Hartman wrote:
-> > On Thu, Feb 20, 2020 at 11:47:41AM -0800, John Stultz wrote:
-> >> On Thu, Feb 20, 2020 at 11:15 AM Greg Kroah-Hartman
-> >> <gregkh@linuxfoundation.org> wrote:
-> >>>
-> >>> On Fri, Feb 21, 2020 at 01:37:04AM +0800, Orson Zhai wrote:
-> >>>> This reverts commit 4585fbcb5331fc910b7e553ad3efd0dd7b320d14.
-> >>>>
-> >>>> The name changing as devfreq(X) breaks some user space applications,
-> >>>> such as Android HAL from Unisoc and Hikey [1].
-> >>>> The device name will be changed unexpectly after every boot depending
-> >>>> on module init sequence. It will make trouble to setup some system
-> >>>> configuration like selinux for Android.
-> >>>>
-> >>>> So we'd like to revert it back to old naming rule before any better
-> >>>> way being found.
-> >>>>
-> >>>> [1] https://protect2.fireeye.com/url?k=00fa721e-5d2a7af6-00fbf951-000babff32e3-95e4b92259b05656&u=https://lkml.org/lkml/2018/5/8/1042
-> >>>>
-> >>>> Cc: John Stultz <john.stultz@linaro.org>
-> >>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >>>> Cc: stable@vger.kernel.org
-> >>>> Signed-off-by: Orson Zhai <orson.unisoc@gmail.com>
-> >>>>
-> >>>> ---
-> >>>>  drivers/devfreq/devfreq.c | 4 +---
-> >>>>  1 file changed, 1 insertion(+), 3 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> >>>> index cceee8b..7dcf209 100644
-> >>>> --- a/drivers/devfreq/devfreq.c
-> >>>> +++ b/drivers/devfreq/devfreq.c
-> >>>> @@ -738,7 +738,6 @@ struct devfreq *devfreq_add_device(struct device *dev,
-> >>>>  {
-> >>>>       struct devfreq *devfreq;
-> >>>>       struct devfreq_governor *governor;
-> >>>> -     static atomic_t devfreq_no = ATOMIC_INIT(-1);
-> >>>>       int err = 0;
-> >>>>
-> >>>>       if (!dev || !profile || !governor_name) {
-> >>>> @@ -800,8 +799,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
-> >>>>       devfreq->suspend_freq = dev_pm_opp_get_suspend_opp_freq(dev);
-> >>>>       atomic_set(&devfreq->suspend_count, 0);
-> >>>>
-> >>>> -     dev_set_name(&devfreq->dev, "devfreq%d",
-> >>>> -                             atomic_inc_return(&devfreq_no));
-> >>>> +     dev_set_name(&devfreq->dev, "%s", dev_name(dev));
-> >>>>       err = device_register(&devfreq->dev);
-> >>>>       if (err) {
-> >>>>               mutex_unlock(&devfreq->lock);
-> >>>> --
-> >>>> 2.7.4
-> >>>>
-> >>>
-> >>> Thanks for this, I agree, this needs to get back to the way things were
-> >>> as it seems to break too many existing systems as-is.
-> >>>
-> >>> I'll queue this up in my tree now, thanks.
-> >>
-> >> Oof this old thing. I unfortunately didn't get back to look at the
-> >> devfreq name node issue or the compatibility links, since the impact
-> >> of the regression (breaking the powerHAL's interactions with the gpu)
-> >> wasn't as big as other problems we had. While the regression was
-> >> frustrating, my only hesitancy at this point is that its been this way
-> >> since 4.10, so reverting the problematic patch is likely to break any
-> >> new users since then.
+On Fri, Feb 21, 2020 at 10:33:42AM +0000, Durrant, Paul wrote:
+> > -----Original Message-----
+> > From: Roger Pau Monné <roger.pau@citrix.com>
+> > Sent: 21 February 2020 10:22
+> > To: Durrant, Paul <pdurrant@amazon.co.uk>
+> > Cc: Agarwal, Anchal <anchalag@amazon.com>; Valentin, Eduardo
+> > <eduval@amazon.com>; len.brown@intel.com; peterz@infradead.org;
+> > benh@kernel.crashing.org; x86@kernel.org; linux-mm@kvack.org;
+> > pavel@ucw.cz; hpa@zytor.com; tglx@linutronix.de; sstabellini@kernel.org;
+> > fllinden@amaozn.com; Kamata, Munehisa <kamatam@amazon.com>;
+> > mingo@redhat.com; xen-devel@lists.xenproject.org; Singh, Balbir
+> > <sblbir@amazon.com>; axboe@kernel.dk; konrad.wilk@oracle.com;
+> > bp@alien8.de; boris.ostrovsky@oracle.com; jgross@suse.com;
+> > netdev@vger.kernel.org; linux-pm@vger.kernel.org; rjw@rjwysocki.net;
+> > linux-kernel@vger.kernel.org; vkuznets@redhat.com; davem@davemloft.net;
+> > Woodhouse, David <dwmw@amazon.co.uk>
+> > Subject: Re: [Xen-devel] [RFC PATCH v3 06/12] xen-blkfront: add callbacks
+> > for PM suspend and hibernation
 > > 
-> > Looks like most users just revert that commit in their trees:
-> > 	https://protect2.fireeye.com/url?k=1012ad0f-4dc2a5e7-10132640-000babff32e3-35779c5ed675ef0f&u=https://source.codeaurora.org/quic/la/kernel/msm-4.14/commit/drivers/devfreq?h=msm-4.14&id=ccf273f6d89ad0fa8032e9225305ad6f62c7770c
+> > On Fri, Feb 21, 2020 at 09:56:54AM +0000, Durrant, Paul wrote:
+> > > > -----Original Message-----
+> > > > From: Roger Pau Monné <roger.pau@citrix.com>
+> > > > Sent: 21 February 2020 09:22
+> > > > To: Durrant, Paul <pdurrant@amazon.co.uk>
+> > > > Cc: Agarwal, Anchal <anchalag@amazon.com>; Valentin, Eduardo
+> > > > <eduval@amazon.com>; len.brown@intel.com; peterz@infradead.org;
+> > > > benh@kernel.crashing.org; x86@kernel.org; linux-mm@kvack.org;
+> > > > pavel@ucw.cz; hpa@zytor.com; tglx@linutronix.de;
+> > sstabellini@kernel.org;
+> > > > fllinden@amaozn.com; Kamata, Munehisa <kamatam@amazon.com>;
+> > > > mingo@redhat.com; xen-devel@lists.xenproject.org; Singh, Balbir
+> > > > <sblbir@amazon.com>; axboe@kernel.dk; konrad.wilk@oracle.com;
+> > > > bp@alien8.de; boris.ostrovsky@oracle.com; jgross@suse.com;
+> > > > netdev@vger.kernel.org; linux-pm@vger.kernel.org; rjw@rjwysocki.net;
+> > > > linux-kernel@vger.kernel.org; vkuznets@redhat.com;
+> > davem@davemloft.net;
+> > > > Woodhouse, David <dwmw@amazon.co.uk>
+> > > > Subject: Re: [Xen-devel] [RFC PATCH v3 06/12] xen-blkfront: add
+> > callbacks
+> > > > for PM suspend and hibernation
+> > > >
+> > > > On Thu, Feb 20, 2020 at 05:01:52PM +0000, Durrant, Paul wrote:
+> > > > > > > Hopefully what I said above illustrates why it may not be 100%
+> > > > common.
+> > > > > >
+> > > > > > Yes, that's fine. I don't expect it to be 100% common (as I guess
+> > > > > > that the hooks will have different prototypes), but I expect
+> > > > > > that routines can be shared, and that the approach taken can be
+> > the
+> > > > > > same.
+> > > > > >
+> > > > > > For example one necessary difference will be that xenbus initiated
+> > > > > > suspend won't close the PV connection, in case suspension fails.
+> > On PM
+> > > > > > suspend you seem to always close the connection beforehand, so you
+> > > > > > will always have to re-negotiate on resume even if suspension
+> > failed.
+> > > > > >
+> > > > > > What I'm mostly worried about is the different approach to ring
+> > > > > > draining. Ie: either xenbus is changed to freeze the queues and
+> > drain
+> > > > > > the shared rings, or PM uses the already existing logic of not
+> > > > > > flushing the rings an re-issuing in-flight requests on resume.
+> > > > > >
+> > > > >
+> > > > > Yes, that's needs consideration. I don’t think the same semantic can
+> > be
+> > > > suitable for both. E.g. in a xen-suspend we need to freeze with as
+> > little
+> > > > processing as possible to avoid dirtying RAM late in the migration
+> > cycle,
+> > > > and we know that in-flight data can wait. But in a transition to S4 we
+> > > > need to make sure that at least all the in-flight blkif requests get
+> > > > completed, since they probably contain bits of the guest's memory
+> > image
+> > > > and that's not going to get saved any other way.
+> > > >
+> > > > Thanks, that makes sense and something along this lines should be
+> > > > added to the commit message IMO.
+> > > >
+> > > > Wondering about S4, shouldn't we expect the queues to already be
+> > > > empty? As any subsystem that wanted to store something to disk should
+> > > > make sure requests have been successfully completed before
+> > > > suspending.
+> > >
+> > > What about writing the suspend image itself? Normal filesystem I/O
+> > > will have been flushed of course, but whatever vestigial kernel
+> > > actually writes out the hibernation file may well expect a final
+> > > D0->D3 on the storage device to cause a flush.
 > > 
-> > So we should be ok here.
+> > Hm, I have no idea really. I think whatever writes to the disk before
+> > suspend should actually make sure requests have completed, but what
+> > you suggest might also be a possibility.
+> > 
+> > Can you figure out whether there are requests on the ring or in the
+> > queue before suspending?
 > 
-> I'm sorry about changing the devfreq node name.
-> 
-> OK. Do you pick this patch to your tree?
+> Well there's clearly pending stuff in the ring if rsp_prod != req_prod :-)
 
-Yes, I can do that.
+Right, I assume there's no document that states what's the expected
+state for queues &c when switching PM states, so we have to assume
+that there might be in-flight requests on the ring and in the driver
+queues.
 
-> or If not, I'll apply it to devfreq-next branch for v5.7-rc1.
-> 
-> And do you apply it to kernel of linux-stable tree since 4.11?
+> As for internal queues, I don't know how blkfront manages that (or whether it has any pending work queue at all).
 
-Yeah, I'll mark it for stable.
+There are no internal queues, just the generic ones from blk_mq which
+every block device has IIRC.
 
-Can I get an ack from you for this?
-
-thanks,
-
-greg k-h
+Thanks, Roger.
