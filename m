@@ -2,140 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD42168876
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 21:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3890E1688FC
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 22:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbgBUUyK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 15:54:10 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:41995 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726681AbgBUUyJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 15:54:09 -0500
-Received: by mail-lf1-f66.google.com with SMTP id 83so2442963lfh.9;
-        Fri, 21 Feb 2020 12:54:07 -0800 (PST)
+        id S1728436AbgBUVJU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 16:09:20 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:41045 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727912AbgBUVJU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 16:09:20 -0500
+Received: by mail-qk1-f193.google.com with SMTP id d11so3172623qko.8
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 13:09:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TrycIB0Byl3AK0/v0YAATqy+JxvB3RPNOGJqr8JA/xw=;
-        b=VcEXe+chIrvnVX6OZ7ZdBGQGCnkMJBzOwQxBBzVz6riu1k8SR4N8biCIZ6e1GpL+a5
-         hIdlgF4jnQi7LetD8lBnZne8b7xm7PsVmdnXR2EsQCzU/BeJPaPWl9A+tYxSN80lizps
-         6tRbqaKxTacjzhIitdni9e05xLTY48tZGFvU81weF0jrOOiP1tlX3w2lGwcHftvThtS3
-         pOgwbrUy6E/dA/T/wGuGNfiVl4kgqxIjUdrHH2p2qmstUMIkqFgIU2SCpgqlRAjC0rSO
-         hJR7KPy9heZuPm5pdyyzMpMAP1sjJsmG60uppPrFl8BzuBwJxmpAEoFtc0KqRIuswjAl
-         +upQ==
+        d=lca.pw; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=ENPq/7GL2LdhwWd45tusEGIXiUDzJQV+38GbQQfDu9Y=;
+        b=VeesGLC8L7IzrzUN89qTRkqVXcW8jd53cLBfKygxcqlUrbJxcGc7bp+qUu5jCyDADH
+         EFzyxAyXvvYYmGIdXrocupJmYKEvrPvx8NDyBs2hFpLJmOBlvlBRikDqJjxCbgQJirlg
+         cnpRslIQxdm/MIQI51Ie35aGcmCU+FF6haH2N+J1IT0hqSkWeq0bJsT6zeiU2NWtk8gw
+         KniHr/MXtAVag3o4PU5+oWGTg5uEij0ZObOHno5LKAr5XeMyQcigiQ7kLrCewHgvYtU+
+         XeUbjFE/aV8iI2Tq3bFTinhkLWG4Rpg57qRpEOpaz9t/jboqevP8L581oOPP/DWH2ggA
+         hqRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TrycIB0Byl3AK0/v0YAATqy+JxvB3RPNOGJqr8JA/xw=;
-        b=ccRquuMyec5rRZLJsH9H9ItJ8tfR+6V1a2rrkOOexsGwMnslg6f4yMk3NUYMg9Yb1n
-         gqYQlOZbjw3zlzmqxuXi96kW5JpK3yfuAAosr+mnnQDQ/l6E46IIiTpQhWjzgj45rxRR
-         ieHTqvVWG2fH0ZplxL0hvzL5e7bNpb2g4fLAL0AmJDWRvGkspCIYDXhZvzyVIY67vttg
-         6RGXL7Q7U5QsDmp0JpcI9o3tpRtHdJjDnbeXeDREsRYznYc+Br3wIdZ8WfalHixp1ssz
-         lhkMfp9z88SOTZuU+i4IycWkdHEivUiyvlA6k1aaUegS+IiiwmGV4j3mOlSLhy0+46tf
-         GI1g==
-X-Gm-Message-State: APjAAAWaHR7zfoN+mV3XH91ib6TDRx/jsZDTL3AJILx7LLUcfPBjT/Fb
-        T9hjfMTx1FxfPnXi/ovoInlIyYk5
-X-Google-Smtp-Source: APXvYqxOt9u2fSIhWRTt2ibCHFzbfYqE6UBnnkMsKJycj6okTC+5hRtdU3Asa2jDkGJ1HO3o8FkkUw==
-X-Received: by 2002:ac2:489b:: with SMTP id x27mr20442508lfc.130.1582318446607;
-        Fri, 21 Feb 2020 12:54:06 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id r20sm2140722lfi.91.2020.02.21.12.54.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 12:54:05 -0800 (PST)
-Subject: Re: [PATCH v9 09/17] arm: tegra20: cpuidle: Handle case where
- secondary CPU hangs on entering LP2
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Jasper Korten <jja2000@gmail.com>,
-        David Heidelberg <david@ixit.cz>,
-        Peter Geis <pgwipeout@gmail.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200212235134.12638-1-digetx@gmail.com>
- <20200212235134.12638-10-digetx@gmail.com>
- <20200221154318.GO10516@linaro.org>
- <239a2b66-8da8-2e6c-d19d-9ed207ad0a64@gmail.com>
- <20200221173649.GU10516@linaro.org>
- <b51f3f6b-8287-5ce8-fcaa-77cbab507618@gmail.com>
- <f27481cf-ca5e-df47-932b-fcb4713f0d78@linaro.org>
- <50a8fb7c-f497-2234-c0b0-560aec1c5691@gmail.com>
- <21e3cc35-cc6b-5452-da93-bdaac43716c5@linaro.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <c13aa8f9-092b-55ca-742e-17db0184649b@gmail.com>
-Date:   Fri, 21 Feb 2020 23:54:03 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
-MIME-Version: 1.0
-In-Reply-To: <21e3cc35-cc6b-5452-da93-bdaac43716c5@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ENPq/7GL2LdhwWd45tusEGIXiUDzJQV+38GbQQfDu9Y=;
+        b=piQLs4UWj24sFDnUnDJvmrNP7a0Nv0Ge52Po6HJOkgjoGCv6H5Rg0oqZQMv5RvMlAx
+         jV7cRa4OLUADqkMQG3S8k6aBlN8gW2oX6xTmlDswp0d4ow7ms1VHRb7ADa2ulm10Tss1
+         DHdt38o3AL8SQJmnt0cLBhTFDsPqrtjKAECUBdOKm2kxIATIg5C4fu9LRxL8dIIP+d8c
+         SNOJ9qtIQzFjKo1ECJTtqjTM5Xz8qlRMIRAuJKK1iBbhw30GrFDOG/qbUJdRG+I7Oqfc
+         XzzNPPiYZpWw/UQIKHmDw4tevEam0t9c92tl7v76XQjkMrqMagtT45CzCWAPZZspwpb7
+         QUng==
+X-Gm-Message-State: APjAAAW/rFON9rXluEUHgtwpBnoqemC4DvOSjbkcJS4oozEiq9Ngg9qr
+        NhKns8YblpCwuN8h2MUp/awnTw==
+X-Google-Smtp-Source: APXvYqzATGs4NTBVmPJHvs7Z3ZHgRZmLgy9kkqqhvC+t4Mg3ozlWXa7l0q0WQNcSuMmGZmO1EmypVg==
+X-Received: by 2002:a37:a84f:: with SMTP id r76mr35023486qke.115.1582319358843;
+        Fri, 21 Feb 2020 13:09:18 -0800 (PST)
+Received: from qcai.nay.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id n191sm2120818qkn.6.2020.02.21.13.09.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 21 Feb 2020 13:09:18 -0800 (PST)
+From:   Qian Cai <cai@lca.pw>
+To:     rjw@rjwysocki.net
+Cc:     elver@google.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Qian Cai <cai@lca.pw>
+Subject: [PATCH -next] power/qos: fix a data race in pm_qos_*_value
+Date:   Fri, 21 Feb 2020 16:09:10 -0500
+Message-Id: <1582319350-23515-1-git-send-email-cai@lca.pw>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-21.02.2020 23:48, Daniel Lezcano пишет:
-> On 21/02/2020 21:21, Dmitry Osipenko wrote:
->> 21.02.2020 23:02, Daniel Lezcano пишет:
-> 
-> [ ... ]
-> 
->>>>>>>> +
->>>>>>>> +		/*
->>>>>>>> +		 * The primary CPU0 core shall wait for the secondaries
->>>>>>>> +		 * shutdown in order to power-off CPU's cluster safely.
->>>>>>>> +		 * The timeout value depends on the current CPU frequency,
->>>>>>>> +		 * it takes about 40-150us  in average and over 1000us in
->>>>>>>> +		 * a worst case scenario.
->>>>>>>> +		 */
->>>>>>>> +		do {
->>>>>>>> +			if (tegra_cpu_rail_off_ready())
->>>>>>>> +				return 0;
->>>>>>>> +
->>>>>>>> +		} while (ktime_before(ktime_get(), timeout));
->>>>>>>
->>>>>>> So this loop will aggresively call tegra_cpu_rail_off_ready() and retry 3
->>>>>>> times. The tegra_cpu_rail_off_ready() function can be called thoushand of times
->>>>>>> here but the function will hang 1.5s :/
->>>>>>>
->>>>>>> I suggest something like:
->>>>>>>
->>>>>>> 	while (retries--i && !tegra_cpu_rail_off_ready()) 
->>>>>>> 		udelay(100);
->>>>>>>
->>>>>>> So <retries> calls to tegra_cpu_rail_off_ready() and 100us x <retries> maximum
->>>>>>> impact.
->>>>>> But udelay() also results into CPU spinning in a busy-loop, and thus,
->>>>>> what's the difference?
->>>>>
->>>>> busy looping instead of register reads with all the hardware things involved behind.
->>>>
->>>> Please notice that this code runs only on an older Cortex-A9/A15, which
->>>> doesn't support WFE for the delaying, and thus, CPU always busy-loops
->>>> inside udelay().
->>>>
->>>> What about if I'll add cpu_relax() to the loop? Do you think it it could
->>>> have any positive effect?
->>>
->>> I think udelay() has a call to cpu_relax().
->>
->> Yes, my point is that udelay() doesn't bring much benefit for us here
->> because:
->>
->> 1. we want to enter into power-gated state as quick as possible and
->> udelay() just adds an unnecessary delay
->>
->> 2. udelay() spins in a busy-loop until delay is expired, just like we're
->> doing it in this function already
-> 
-> In this case why not remove ktime_get() and increase the number of retries?
+cpu_latency_constraints.target_value could be accessed concurrently as
+noticed by KCSAN,
 
-Because the busy-loop performance depends on CPU's frequency, so we
-can't rely on a bare number of the retries.
+ LTP: starting ppoll01
+ BUG: KCSAN: data-race in cpu_latency_qos_limit / pm_qos_update_target
+
+ write to 0xffffffff99081470 of 4 bytes by task 27532 on cpu 2:
+  pm_qos_update_target+0xa4/0x370
+  pm_qos_set_value at kernel/power/qos.c:78
+  cpu_latency_qos_apply+0x3b/0x50
+  cpu_latency_qos_remove_request+0xea/0x270
+  cpu_latency_qos_release+0x4b/0x70
+  __fput+0x187/0x3d0
+  ____fput+0x1e/0x30
+  task_work_run+0xbf/0x130
+  do_exit+0xa78/0xfd0
+  do_group_exit+0x8b/0x180
+  __x64_sys_exit_group+0x2e/0x30
+  do_syscall_64+0x91/0xb05
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+ read to 0xffffffff99081470 of 4 bytes by task 0 on cpu 41:
+  cpu_latency_qos_limit+0x1f/0x30
+  pm_qos_read_value at kernel/power/qos.c:55
+  cpuidle_governor_latency_req+0x4f/0x80
+  cpuidle_governor_latency_req at drivers/cpuidle/governor.c:114
+  menu_select+0x6b/0xc29
+  cpuidle_select+0x50/0x70
+  do_idle+0x214/0x280
+  cpu_startup_entry+0x1d/0x1f
+  start_secondary+0x1b2/0x230
+  secondary_startup_64+0xb6/0xc0
+
+ Reported by Kernel Concurrency Sanitizer on:
+ CPU: 41 PID: 0 Comm: swapper/41 Tainted: G L 5.6.0-rc2-next-20200221+ #7
+ Hardware name: HPE ProLiant DL385 Gen10/ProLiant DL385 Gen10, BIOS A40 07/10/2019
+
+The read is outside pm_qos_lock critical section which results in a data
+race. Fix it by adding a pair of READ|WRITE_ONCE().
+
+Signed-off-by: Qian Cai <cai@lca.pw>
+---
+ kernel/power/qos.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+index 32927682bcc4..db0bed2cae26 100644
+--- a/kernel/power/qos.c
++++ b/kernel/power/qos.c
+@@ -52,7 +52,7 @@
+  */
+ s32 pm_qos_read_value(struct pm_qos_constraints *c)
+ {
+-	return c->target_value;
++	return READ_ONCE(c->target_value);
+ }
+ 
+ static int pm_qos_get_value(struct pm_qos_constraints *c)
+@@ -75,7 +75,7 @@ static int pm_qos_get_value(struct pm_qos_constraints *c)
+ 
+ static void pm_qos_set_value(struct pm_qos_constraints *c, s32 value)
+ {
+-	c->target_value = value;
++	WRITE_ONCE(c->target_value, value);
+ }
+ 
+ /**
+-- 
+1.8.3.1
+
