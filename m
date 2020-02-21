@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1923716852B
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 18:40:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0CA9168532
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 18:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbgBURkk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 12:40:40 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:39552 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbgBURkk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 12:40:40 -0500
-Received: by mail-wr1-f67.google.com with SMTP id y11so2956723wrt.6
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 09:40:38 -0800 (PST)
+        id S1727799AbgBURle (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 12:41:34 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:34274 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727855AbgBURle (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 12:41:34 -0500
+Received: by mail-wm1-f66.google.com with SMTP id s144so5672236wme.1
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 09:41:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=3V9d6h+w2Jn04j6QHprbTz1jBnUlayRXHk3bj59std0=;
-        b=S1zv+eyvfvNLGritTRUO4O07zMDmH2GjJWPuiXIdVvT9rwyOC+uM4H0gOWvu+ZG7KC
-         kOsSv3VIpoe9UPLxuvjnnDVkz4Dp8GU0MoTlYJlGUL5pWSc/rUBLrDMe/wAaNSM/BUnK
-         Me8EM5xUyclfKueqfEGGeTUUgxgPkUZCr3eV4M0Gwi6DWnsPArzYVUKSuosGhHaIdJqm
-         AFNgITQd7cNvZWvfkKidj38GQoZ5vIr+NFAT4ATDQWmJCWRnnxMv3Gxd8n8Al0+IZyQn
-         oYDKiFRoJ3dxZzYmq1ebb22sbS69QYJAycY+JRDTaLK1YrfdlNMlMSNTqt0QUwsT3P+R
-         12QA==
+        bh=WYt19hWbIa5Xu8CWd9oipzHMFzU2GBfzETdCcySKemk=;
+        b=vLOXiT3LsFWCymfBWSf00sI8eNVCzOAsnAYW2uMu2fl5aol6UNQA1cDd5eBMO6+E8X
+         cDJpIAGGZx0RA+9rmpmL2S7/RmM7BY0Y9qQ7thrXPF3b6AR+Ykj6cN27an4Hi7FKF2wN
+         NBlG16z/AfiNYeM7wwugQp1X1RtxgjPYHtspY6lEjAuL9pXH6WaOmthn6YgTAx/eIQhp
+         +TNVXXACeXcBBOEkEUvKjSL6RG6A+uLcldANURzXnA3MGyO8jpjF2QWiQvTQD0QP1ozd
+         98KvSuy1Oe+7jTHBZub6c5lA7xdKBc8ZDnx922r6+qRd9EiaogA+6Tz9MIobp6ObKwib
+         jKkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=3V9d6h+w2Jn04j6QHprbTz1jBnUlayRXHk3bj59std0=;
-        b=RJKdaC1NHbKJK4lengn5KGsexCUCgvH9o5C6JrOAWMaKnrY3AZiOdUC3dYa0JXzRJm
-         yriT2xQ0tOiTv3se4qhmJ/HIJUz/34CnF0eCFhBi9XmuL6meUiX1CNRgYTfU555VczCK
-         NLq9YVjwn9INVIBb7i0n6sV+4mYQ7C4xRFRHkz3e70/JMq8IdiSiJd+B0IqNZQPV6Cpp
-         3JZG+BR33jDCgSU7mxTKMFysqwITDeEKKmdrVwS3rtXauCvynuWXNj1UevM8dfHiNiHf
-         2ozUK5vNOvhi3CIBDZ28+gigA/UtRispSHYc0CkR+P+rx3DphP7VAIP5XRtzlcUETZAQ
-         jLmA==
-X-Gm-Message-State: APjAAAWDMTTSdj536zBlyBYS4OgpBWMBWyxOMHtXVAAv75Ru0g1T2rI6
-        wlkGAzIZpebLdL3GKQVWVYcU6g==
-X-Google-Smtp-Source: APXvYqyMv9sqLAcg9X7RL2yIUHrWh1u/L1U9ff6yIGnRxUO9BHWyghYULmWGNzjMlwA/tOgJhZrSmA==
-X-Received: by 2002:adf:a19c:: with SMTP id u28mr49326009wru.221.1582306837974;
-        Fri, 21 Feb 2020 09:40:37 -0800 (PST)
+        bh=WYt19hWbIa5Xu8CWd9oipzHMFzU2GBfzETdCcySKemk=;
+        b=RhAKlv6h9hc2onMXVWbCiPoHaMPPG514mwtw+u5CgnbLgsxCxBOVKTZkpQOCeOPsCI
+         hRbz+AbIAF0N1/qLzAupVLHq5npV08dEFN6HyJbIhSeF4jwr5GCY9Za/ry5pBaEg+4wm
+         RwbrXkgze4oUwMwPJ8maJj6yfX3oH24RtBMMy/fXrzK8iqBhnybGIfvSrqjodEf5dKag
+         YFAM4Weh2ZCY/0VF0DZFXYVUaU8e9yFKMbVtCR8qhLD6pQooPdzPvr8sLRdt00ZBpFHO
+         M0oevSIrfPXZCvh4sEr0n3lgmue2T1pyrBK9YUg2TLDFl+cTcZsN8MM3OXChinErpDL+
+         WiBw==
+X-Gm-Message-State: APjAAAW3yoJtGsZ4ml/z9sDQYATE9y/GItucIQwCqqZASg1KIb8Deast
+        gS6zPc9pAvWXuaZnTse3X3ZvqA==
+X-Google-Smtp-Source: APXvYqxS9rE7ngm9CQLvZpUgXpRRYzTQIAk89jaGKyx1v3OnFAHZORuHOe8eqf+brp+9uMmwLjbhbA==
+X-Received: by 2002:a05:600c:4105:: with SMTP id j5mr5150857wmi.28.1582306891123;
+        Fri, 21 Feb 2020 09:41:31 -0800 (PST)
 Received: from linaro.org ([2a01:e34:ed2f:f020:903b:a048:f296:e3ae])
-        by smtp.gmail.com with ESMTPSA id f207sm4980688wme.9.2020.02.21.09.40.35
+        by smtp.gmail.com with ESMTPSA id a5sm4658651wmb.37.2020.02.21.09.41.29
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 21 Feb 2020 09:40:37 -0800 (PST)
-Date:   Fri, 21 Feb 2020 18:40:33 +0100
+        Fri, 21 Feb 2020 09:41:30 -0800 (PST)
+Date:   Fri, 21 Feb 2020 18:41:28 +0100
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
@@ -58,30 +58,35 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         David Heidelberg <david@ixit.cz>,
         Peter Geis <pgwipeout@gmail.com>, linux-pm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 05/17] ARM: tegra: Propagate error from
- tegra_idle_lp2_last()
-Message-ID: <20200221174033.GV10516@linaro.org>
+Subject: Re: [PATCH v9 13/17] cpuidle: tegra: Squash Tegra30 driver into the
+ common driver
+Message-ID: <20200221174128.GW10516@linaro.org>
 References: <20200212235134.12638-1-digetx@gmail.com>
- <20200212235134.12638-6-digetx@gmail.com>
- <20200221151612.GJ10516@linaro.org>
- <1a8c81ab-6f6a-8221-6a4e-c080ba595836@gmail.com>
+ <20200212235134.12638-14-digetx@gmail.com>
+ <20200221162951.GQ10516@linaro.org>
+ <89a9838c-faf3-b890-cea2-aad53df1eac3@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1a8c81ab-6f6a-8221-6a4e-c080ba595836@gmail.com>
+In-Reply-To: <89a9838c-faf3-b890-cea2-aad53df1eac3@gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 08:21:41PM +0300, Dmitry Osipenko wrote:
-> 21.02.2020 18:16, Daniel Lezcano пишет:
-> > On Thu, Feb 13, 2020 at 02:51:22AM +0300, Dmitry Osipenko wrote:
-> >> Technically cpu_suspend() may fail and it's never good to lose information
-> >> about failure. For example things like cpuidle core could correctly sample
-> >> idling time in the case of failure.
+On Fri, Feb 21, 2020 at 07:59:14PM +0300, Dmitry Osipenko wrote:
+> 21.02.2020 19:29, Daniel Lezcano пишет:
+> > On Thu, Feb 13, 2020 at 02:51:30AM +0300, Dmitry Osipenko wrote:
+> >> Tegra20 and Terga30 SoCs have common C1 and CC6 idling states and thus
+> >> share the same code paths, there is no point in having separate drivers
+> >> for a similar hardware. This patch merely moves functionality of the old
+> >> driver into the new, although the CC6 state is kept disabled for now since
+> >> old driver had a rudimentary support for this state (allowing to enter
+> >> into CC6 only when secondary CPUs are put offline), while new driver can
+> >> provide a full-featured support. The new feature will be enabled by
+> >> another patch.
 > >>
 > >> Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
 > >> Tested-by: Peter Geis <pgwipeout@gmail.com>
@@ -89,30 +94,14 @@ On Fri, Feb 21, 2020 at 08:21:41PM +0300, Dmitry Osipenko wrote:
 > >> Tested-by: David Heidelberg <david@ixit.cz>
 > >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > >> ---
+> >>  arch/arm/mach-tegra/Makefile          |   3 -
+> >>  arch/arm/mach-tegra/cpuidle-tegra30.c | 123 --------------------------
 > > 
-> > [ ... ]
-> > 
-> >>  	cpu_cluster_pm_enter();
-> >>  	suspend_cpu_complex();
-> >>  
-> >> -	cpu_suspend(PHYS_OFFSET - PAGE_OFFSET, &tegra_sleep_cpu);
-> >> +	err = cpu_suspend(PHYS_OFFSET - PAGE_OFFSET, &tegra_sleep_cpu);
-> >>  
-> >>  	/*
-> >>  	 * Resume L2 cache if it wasn't re-enabled early during resume,
-> >> @@ -208,6 +210,8 @@ void tegra_idle_lp2_last(void)
-> >>  
-> >>  	restore_cpu_complex();
-> > 
-> > If the cpu_suspend fails, does restore_cpu_complex() need to be called ?
+> > Add the -M option when resending please.
 > 
-> Yes, because suspend_cpu_complex() didn't fail. I don't see any reason
-> why restore_cpu_complex() shouldn't be called, please clarify yours thought.
+> Okay, thank you very much for taking a look at the patches!
 
-If the suspend fails, the power down does not happen, thus the logic is not
-lost and then it not necessary to restore something which has not been lost.
-
-I don't know the hardware details, so that may be partially correct.
+Yeah, sorry for the delay. Nice cleanup BTW.
 
 -- 
 
