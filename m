@@ -2,77 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A8516789C
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 09:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB781678CD
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 09:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728466AbgBUItU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 03:49:20 -0500
-Received: from mail-wr1-f52.google.com ([209.85.221.52]:46378 "EHLO
-        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728512AbgBUItN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 03:49:13 -0500
-Received: by mail-wr1-f52.google.com with SMTP id z7so988746wrl.13
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 00:49:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vdh1pOW7qqgRrMSZGB/WB2aWLiCweGEbhLNKasJ4wr0=;
-        b=jrGL2CnLzDGFoHIlRin5521Kcmxa7LvZB1yE0goESpijYejm0S6mfMcvFX7EhscHs7
-         5PXuPak5vILqlycvzVkQvLEWGjte+BULXNjETAWUn0SJfEFomfdTbECZdsSmHRM/byNE
-         C3arPegYcRDAZE1sBnQRxE3dE0PXXewByiE+w/JkFafs0X00ckZQhxasCJI2wU4/xgey
-         NFF8XEBqjRCxFcA8u2c3JHr674eGGdyd7y3dOpk4RTrD1Paypezs4pLAMQSKJPOmYWrC
-         j+h3U/yScRlHdcHubr+KfSdZgbs95NdSvgMfYckkc+h4ZgDbBKVWIcGBi+vLrJ8Z6P5b
-         V29A==
-X-Gm-Message-State: APjAAAW1DJPJsTy/hlTMhCAU0UoIP5Uhx2hxPBmQ/IlfbT9gDCbXm+a7
-        3O0zKZLiusJpM6VWyd6qsTI=
-X-Google-Smtp-Source: APXvYqziC3Fp719mdNhI+e0sUbB4RI4UWaJxY4CRFHc66rKeKuKrzVRLj9qALBn+HrI1zgwlsN4LbA==
-X-Received: by 2002:adf:b64b:: with SMTP id i11mr50206866wre.58.1582274951554;
-        Fri, 21 Feb 2020 00:49:11 -0800 (PST)
-Received: from localhost (prg-ext-pat.suse.com. [213.151.95.130])
-        by smtp.gmail.com with ESMTPSA id y139sm3077189wmd.24.2020.02.21.00.49.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2020 00:49:10 -0800 (PST)
-Date:   Fri, 21 Feb 2020 09:49:10 +0100
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Luigi Semenzato <semenzato@google.com>
-Cc:     Chris Murphy <lists@colorremedies.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: is hibernation usable?
-Message-ID: <20200221084910.GM20509@dhcp22.suse.cz>
-References: <CAJCQCtTPSC8666h5fuW=iSaVvuRq9to731W2-sAT6xUuESAzsw@mail.gmail.com>
- <CAA25o9TvFMEJnF45NFVqAfdxzKy5umzHHVDs+SCxrChGSKczTw@mail.gmail.com>
- <CAJCQCtQw7EJwREM8Fy_PWCwy3E7Jc=kLTRo_kgLNwNhYA32ABA@mail.gmail.com>
- <CAJCQCtQkK+J-6eoadBLr+CkJ6CLf3Kt+6CeTJANRiU+M7A9CNQ@mail.gmail.com>
- <CAA25o9T2wwqoopoNRySdZoYkD+vtqRPsB1YPnag=TkOp5D9sYA@mail.gmail.com>
- <CAA25o9SCanFH3nV52BwN=7EuSUFjX=Jrd+FCiV=6ThW=beKKMw@mail.gmail.com>
+        id S1727893AbgBUIwh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 03:52:37 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:61440 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726930AbgBUIwg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 03:52:36 -0500
+X-AuditID: c0a8fbf4-473ff70000004419-f9-5e4f9a52c61a
+Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id B6.69.17433.25A9F4E5; Fri, 21 Feb 2020 09:52:34 +0100 (CET)
+Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
+ WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
+ 14.03.0439.000; Fri, 21 Feb 2020 09:52:30 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "robh@kernel.org" <robh@kernel.org>
+CC:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
+        "Laine, Markus" <Markus.Laine@fi.rohmeurope.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 2/5] dt_bindings: ROHM BD99954 Charger
+Thread-Topic: [RFC PATCH v2 2/5] dt_bindings: ROHM BD99954 Charger
+Thread-Index: AQHV4wmFTXdRcLHQD0CUbuLOwEiFn6ghWyIAgADEoQCAAl8sgIAA0r4A
+Date:   Fri, 21 Feb 2020 08:52:29 +0000
+Message-ID: <caa199d4ba76b210d7d0f0b6881d9a32cf2ca3a9.camel@fi.rohmeurope.com>
+References: <cover.1581597365.git.matti.vaittinen@fi.rohmeurope.com>
+         <104b5ef63c2ad4771503d9e6618bf427721042c3.1581597365.git.matti.vaittinen@fi.rohmeurope.com>
+         <20200218202122.GA599@bogus>
+         <1da3415507c216d09eb72c30ad915bc139d2ff3d.camel@fi.rohmeurope.com>
+         <CAL_Jsq+x+5RCT0L5HGocdSOuve2qm5JvqSYXAwDbJ4qP9wr9TA@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+x+5RCT0L5HGocdSOuve2qm5JvqSYXAwDbJ4qP9wr9TA@mail.gmail.com>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1759D1CBF27F5942AB15CF08CA71111D@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA25o9SCanFH3nV52BwN=7EuSUFjX=Jrd+FCiV=6ThW=beKKMw@mail.gmail.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCJsWRmVeSWpSXmKPExsVyYMXvTbpBs/zjDK71mlpMffiEzWL+kXOs
+        FlP+LGeyuLxrDpvF594jjBZLr19kspiz9ASLxf89O9gtTu8uceD0WDNvDaPHzll32T02repk
+        87hzbQ+bx+dNcgGsUdw2SYklZcGZ6Xn6dgncGb9P7WYsOKVccWDCT+YGxitKXYycHBICJhJL
+        Fr1g7GLk4hASuMoo0bZxOjuEc4JRYv2B90AOBwebgI1E1012kAYRAXWJhasfMoPUMAtMYpH4
+        /OkuI0hCWMBRou16PytEkZPErkuXoGw3iV9vjoPZLAKqEpfWnwMbxCvgJ3F9yi1WiGUXmSTO
+        /r/EBJLgFAiUmPblHhuIzSggK9HZ8A4sziwgLrHp2XdWiLMFJJbsOc8MYYtKvHz8DyquJLH3
+        50MWkKOZBTQl1u/Sh2h1kDi6/yQbhK0oMaX7IdQNghInZz5hmcAoNgvJhlkI3bOQdM9C0j0L
+        SfcCRtZVjBK5iZk56YklqYZ6RamlekX5GblAKjk/dxMjJH6/7GD8f8jzECMTB+MhRkkOJiVR
+        XsU+/zghvqT8lMqMxOKM+KLSnNTiQ4wSHMxKIrxqPH5xQrwpiZVVqUX5MClpDhYlcV71hxNj
+        hQRAdmWnphakFsFkZTg4lCR4i2cCDRUsSk1PrUjLzClBSDNxcIIM55ISKU7NS0ktSiwtyYgH
+        JZD4YmAKAUnxAO09MQOonbe4IDEXKArReorRkGPCy7mLmDk2z10KJI+ASCGWvPy8VClx3gCQ
+        fQIgDRmleXDrXjGKczAqCfPOBBnHA0zqcNNeAS1iAlr0XtgHZFFJIkJKqoExQd6W42tu7LWo
+        LA3jqY9OtUbYlO3/53lzp4CCkeH1r8xbZzHfqbO5UjZzTXEjz6kkO9f/BWZblogtmlTqlzn5
+        NN/covshq2VPXVra5sfN6XE7uNVV1OrMA4a02aKCM1qqpiy7pXL4a3FMSGyXSfvEfs3Jh1h3
+        dz/UKEvY9bVi4dyLz/jk1moosRRnJBpqMRcVJwIAZdjgcqcDAAA=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu 20-02-20 09:38:06, Luigi Semenzato wrote:
-> I was forgetting: forcing swap by eating up memory is dangerous
-> because it can lead to unexpected OOM kills
-
-Could you be more specific what you have in mind? swapoff causing the
-OOM killer?
-
-> , but you can mitigate that
-> by giving the memory-eaters a higher OOM kill score.  Still, some way
-> of calling try_to_free_pages() directly from user-level would be
-> preferable.  I wonder if such API has been discussed.
-
-No, there is no API to trigger the global memory reclaim. You could
-start the reclaim by increasing min_free_kbytes but I wouldn't really
-recommend that unless you know exactly what you are doing and also I
-fail to see the point. If s2disk fails due to insufficient swap space
-then how can a pro-active reclaim help in the first place?
--- 
-Michal Hocko
-SUSE Labs
+TW9ybmluZyBhZ2FpbiBSb2IsDQoNCk9uIFRodSwgMjAyMC0wMi0yMCBhdCAxNDoxOCAtMDYwMCwg
+Um9iIEhlcnJpbmcgd3JvdGU6DQo+IE9uIFdlZCwgRmViIDE5LCAyMDIwIGF0IDI6MDUgQU0gVmFp
+dHRpbmVuLCBNYXR0aQ0KPiA8TWF0dGkuVmFpdHRpbmVuQGZpLnJvaG1ldXJvcGUuY29tPiB3cm90
+ZToNCj4gPiBNb3JuaW5nIFJvYiwNCj4gPiANCj4gPiBPbiBUdWUsIDIwMjAtMDItMTggYXQgMTQ6
+MjEgLTA2MDAsIFJvYiBIZXJyaW5nIHdyb3RlOg0KPiA+ID4gT24gRnJpLCAxNCBGZWIgMjAyMCAw
+OTozNjo0NyArMDIwMCwgTWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0KPiA+ID4gPiBUaGUgUk9ITSBC
+RDk5OTU0IGlzIGEgQmF0dGVyeSBNYW5hZ2VtZW50IExTSSBmb3IgMS00IGNlbGwNCj4gPiA+ID4g
+TGl0aGl1bS0NCj4gPiA+ID4gSW9uDQo+ID4gPiA+IHNlY29uZGFyeSBiYXR0ZXJ5LiBJbnRlbmRl
+ZCB0byBiZSB1c2VkIGluIHNwYWNlLWNvbnN0cmFpbnQNCj4gPiA+ID4gZXF1aXBtZW50IHN1Y2gN
+Cj4gPiA+ID4gYXMgTG93IHByb2ZpbGUgTm90ZWJvb2sgUEMsIFRhYmxldHMgYW5kIG90aGVyIGFw
+cGxpY2F0aW9ucy4NCj4gPiA+ID4gQkQ5OTk1NA0KPiA+ID4gPiBwcm92aWRlcyBhIER1YWwtc291
+cmNlIEJhdHRlcnkgQ2hhcmdlciwgdHdvIHBvcnQgQkMxLjINCj4gPiA+ID4gZGV0ZWN0aW9uDQo+
+ID4gPiA+IGFuZCBhDQo+ID4gPiA+IEJhdHRlcnkgTW9uaXRvci4NCj4gPiA+ID4gDQo+ID4gPiA+
+IERvY3VtZW50IHRoZSBEVCBiaW5kaW5ncyBmb3IgQkQ5OTk1NA0KPiA+ID4gPiANCj4gPiA+ID4g
+U2lnbmVkLW9mZi1ieTogTWF0dGkgVmFpdHRpbmVuIDwNCj4gPiA+ID4gbWF0dGkudmFpdHRpbmVu
+QGZpLnJvaG1ldXJvcGUuY29tPg0KPiA+ID4gPiAtLS0NCj4gPiA+ID4gDQo+ID4gSXQgYWxzbyBs
+b29rcyBsaWtlIHRoZSAnY29yZSBiaW5kaW5ncycgbGlrZSByZWd1bGF0b3JzIHVzZQ0KPiA+IHNp
+bmd1bGFyLg0KPiA+IEhlbmNlIEknbGwgbGVhdmUgdGhpcyB0byBzaW5ndWxhciBmb3IgdjMgZXZl
+biB0aG91Z2ggaXQgZmFpbHMgdGhlDQo+ID4gdmFsaWRhdGlvbiAtIHBsZWFzZSBsZXQgbWUga25v
+dyBpZiB0aGlzIHdhcyB3cm9uZyBjaG9pY2Ugb3IgaWYgeW91DQo+ID4gc3BvdA0KPiA+IGFueSBv
+dGhlciBvZGRpdGllcyB0aGVyZS4gSSBjYW4ndCBzZWUgd2hhdCBlbHNlIGl0IGNvdWxkIGJlIGJ1
+dCBmb3INCj4gPiBzb21lIHJlYXNvbiBJIHN0aWxsIGZpbmQgdGhpcyB5YW1sIHRlcnJpYmx5IGhh
+cmQgOigNCj4gPiANCj4gPiBIbW0uLiBJIHdvbmRlciBpZiBJIGhhdmUgc29tZSBvbGQgY2hlY2tl
+ciB0b29scyBpbnN0YWxsZWQgYW5kIHVzZWQNCj4gPiBvbg0KPiA+IG15IFBDPyBJIGFsc28gZ2V0
+IHZhbGlkYXRpb24gZmFpbHVyZXMgZm9yIHRoZSBleGFtcGxlIHNjaGVtYXMgOi8NCj4gDQo+IFlv
+dSBkbyBoYXZlIHRvIHN0YXkgdXAgdG8gZGF0ZS4NCg0KVWguIFNvIGl0IHNlZW1zLg0KSSB1cGRh
+dGVkIHRoZSBtdWx0aXBsZU9mIHdhcyByZWNvZ25pemVkIG5vdy4gSSBhbHNvIGdvdCBuaWNlIHdh
+cm5pbmcNCmFib3V0IG1pc3NpbmcgI3NpemUtY2VsbHMgYW5kICNhZGRyZXNzLWNlbGxzIGZvciB0
+aGUgaTJjIGJ1cy4gSXQga2luZA0Kb2YgaXMgb3V0IG9mIHRoZSBzY29wZSBvZiB0aGUgY2hhcmdl
+ciBiaW5kaW5nICh3aGljaCBzaG91bGQganVzdCBzaXQgaW4NCnRoZSBidXMpIGJ1dCB0aGUgd2Fy
+bmluZyB3YXMgY2xlYXIgZW5vdWdoIHNvIEkgdW5kZXJzdG9vZCB3aGF0IGl0IHdhcw0KYWJvdXQu
+IE5pY2Ugam9iLCB0aGFua3MuDQoNCkkganVzdCB3b25kZXIgaWYgaXQgd291bGQgYmUgYmlnIHRh
+c2sgdG8gYWRkIHZlcnNpb24gcXVlcnkgKGxpa2UgZHQtDQpkb2MtdmFsaWRhdGUgLS12ZXJzaW9u
+KSB0byB0aGUgdG9vbGluZ3MgYW5kIGluY2x1ZGUgInJlcXVpcmVkIHZlcnNpb24iDQppbiBrZXJu
+ZWwgbWFrZWZpbGVzIHNvIHRoYXQgdGhlICdkdF9iaW5kaW5nX2NoZWNrJyBtYWtlIHRhcmdldCBj
+b3VsZA0Kd2FybiBpZiBvbmUgdXNlcyB0b28gb2xkIHZlcnNpb24/IChJZ25vcmFudCBjLWNvZGVy
+cyBsaWtlIG1lIG1heSBub3QNCmtub3cgdGhlIGR0LXNjaGVtYSB0b29saW5nIGlzIG5vdCBpbmNs
+dWRlZCBpbiBrZXJuZWwgc2NyaXB0cyBhbmQgbmVlZHMNCnRvIGJlIHVwZGF0ZWQgb24gaG9zdCBQ
+Qy4pIEp1c3QgYSBzdWdnZXN0aW9uIHdoaWNoIG1pZ2h0IHJlZHVjZSBlcnJvcnMNCmJlZm9yZSBw
+YXRjaCBzdWJtaXNzaW9ucy4NCg0KPiA+ID4gd2FybmluZzogbm8gc2NoZW1hIGZvdW5kIGluIGZp
+bGU6DQo+ID4gPiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcG93ZXIvc3VwcGx5
+L3JvaG0sYmQ5OTk1eC55YW1sDQo+ID4gPiAvYnVpbGRzL3JvYmhlcnJpbmcvbGludXgtZHQtDQo+
+ID4gPiByZXZpZXcvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL3N1cHBs
+eS9yb2htLGJkOTk5NQ0KPiA+ID4geC55YQ0KPiA+ID4gbWw6IGlnbm9yaW5nLCBlcnJvciBwYXJz
+aW5nIGZpbGUNCj4gPiA+IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9kaXNwbGF5
+L3NpbXBsZS0NCj4gPiA+IGZyYW1lYnVmZmVyLmV4YW1wbGUuZHRzOjIxLjE2LTM3LjExOiBXYXJu
+aW5nDQo+ID4gPiAoY2hvc2VuX25vZGVfaXNfcm9vdCk6DQo+ID4gPiAvZXhhbXBsZS0wL2Nob3Nl
+bjogY2hvc2VuIG5vZGUgbXVzdCBiZSBhdCByb290IG5vZGUNCj4gPiA+IERvY3VtZW50YXRpb24v
+ZGV2aWNldHJlZS9iaW5kaW5ncy9wb3dlci9zdXBwbHkvcm9obSxiZDk5OTV4LnlhbWw6DQo+ID4g
+PiAgIHdoDQo+ID4gPiBpbGUgc2Nhbm5pbmcgYSBzaW1wbGUga2V5DQo+ID4gPiAgIGluICI8dW5p
+Y29kZSBzdHJpbmc+IiwgbGluZSAyOSwgY29sdW1uIDMNCj4gPiA+IGNvdWxkIG5vdCBmaW5kIGV4
+cGVjdGVkICc6Jw0KPiA+ID4gICBpbiAiPHVuaWNvZGUgc3RyaW5nPiIsIGxpbmUgMzAsIGNvbHVt
+biAxDQo+IA0KPiBUaG91Z2ggdGhpcyBpcyBqdXN0IGluY29ycmVjdCBZQU1MIGFuZCB0aGUgdG9v
+bCB2ZXJzaW9uIHNob3VsZG4ndA0KPiBtYXR0ZXIuDQoNClllcy4gVGhhdCBzaG91bGQgYmUgZml4
+ZWQgbm93LiBBbmQgdjQgd2lsbCBhbHNvIGhhdmUgdGhlIG11bHRpcGxlT2YNCnVuY29tbWVudGVk
+IGFuZCAjc2l6ZS1jZWxscyBhbmQgI2FkZHJlc3MtY2VsbHMgZm9yIHRoZSBpMmMgYnVzIGFkZGVk
+Lg0KSSdsbCB3YWl0IGZvciBhIHdoaWxlIGZvciBvdGhlcnMgdG8gZ2l2ZSBmZWVkYmFjayBmcm9t
+IHRoZSBzZXJpZXMNCmJlZm9yZSBzZW5kaW5nIGl0IG91dCB0aG91Z2guIFRoYW5rcyBmb3IgdGhl
+IGhlbHAhDQoNCi0tTWF0dGkNCg0K
