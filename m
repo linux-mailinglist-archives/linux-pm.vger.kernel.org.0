@@ -2,111 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CA9168532
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 18:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE19168630
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 19:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727799AbgBURle (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 12:41:34 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:34274 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727855AbgBURle (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 12:41:34 -0500
-Received: by mail-wm1-f66.google.com with SMTP id s144so5672236wme.1
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 09:41:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=WYt19hWbIa5Xu8CWd9oipzHMFzU2GBfzETdCcySKemk=;
-        b=vLOXiT3LsFWCymfBWSf00sI8eNVCzOAsnAYW2uMu2fl5aol6UNQA1cDd5eBMO6+E8X
-         cDJpIAGGZx0RA+9rmpmL2S7/RmM7BY0Y9qQ7thrXPF3b6AR+Ykj6cN27an4Hi7FKF2wN
-         NBlG16z/AfiNYeM7wwugQp1X1RtxgjPYHtspY6lEjAuL9pXH6WaOmthn6YgTAx/eIQhp
-         +TNVXXACeXcBBOEkEUvKjSL6RG6A+uLcldANURzXnA3MGyO8jpjF2QWiQvTQD0QP1ozd
-         98KvSuy1Oe+7jTHBZub6c5lA7xdKBc8ZDnx922r6+qRd9EiaogA+6Tz9MIobp6ObKwib
-         jKkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=WYt19hWbIa5Xu8CWd9oipzHMFzU2GBfzETdCcySKemk=;
-        b=RhAKlv6h9hc2onMXVWbCiPoHaMPPG514mwtw+u5CgnbLgsxCxBOVKTZkpQOCeOPsCI
-         hRbz+AbIAF0N1/qLzAupVLHq5npV08dEFN6HyJbIhSeF4jwr5GCY9Za/ry5pBaEg+4wm
-         RwbrXkgze4oUwMwPJ8maJj6yfX3oH24RtBMMy/fXrzK8iqBhnybGIfvSrqjodEf5dKag
-         YFAM4Weh2ZCY/0VF0DZFXYVUaU8e9yFKMbVtCR8qhLD6pQooPdzPvr8sLRdt00ZBpFHO
-         M0oevSIrfPXZCvh4sEr0n3lgmue2T1pyrBK9YUg2TLDFl+cTcZsN8MM3OXChinErpDL+
-         WiBw==
-X-Gm-Message-State: APjAAAW3yoJtGsZ4ml/z9sDQYATE9y/GItucIQwCqqZASg1KIb8Deast
-        gS6zPc9pAvWXuaZnTse3X3ZvqA==
-X-Google-Smtp-Source: APXvYqxS9rE7ngm9CQLvZpUgXpRRYzTQIAk89jaGKyx1v3OnFAHZORuHOe8eqf+brp+9uMmwLjbhbA==
-X-Received: by 2002:a05:600c:4105:: with SMTP id j5mr5150857wmi.28.1582306891123;
-        Fri, 21 Feb 2020 09:41:31 -0800 (PST)
-Received: from linaro.org ([2a01:e34:ed2f:f020:903b:a048:f296:e3ae])
-        by smtp.gmail.com with ESMTPSA id a5sm4658651wmb.37.2020.02.21.09.41.29
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 21 Feb 2020 09:41:30 -0800 (PST)
-Date:   Fri, 21 Feb 2020 18:41:28 +0100
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Jasper Korten <jja2000@gmail.com>,
-        David Heidelberg <david@ixit.cz>,
-        Peter Geis <pgwipeout@gmail.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 13/17] cpuidle: tegra: Squash Tegra30 driver into the
- common driver
-Message-ID: <20200221174128.GW10516@linaro.org>
-References: <20200212235134.12638-1-digetx@gmail.com>
- <20200212235134.12638-14-digetx@gmail.com>
- <20200221162951.GQ10516@linaro.org>
- <89a9838c-faf3-b890-cea2-aad53df1eac3@gmail.com>
+        id S1725995AbgBUSM2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 13:12:28 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:50782 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725947AbgBUSM2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 21 Feb 2020 13:12:28 -0500
+X-Greylist: delayed 1727 seconds by postgrey-1.27 at vger.kernel.org; Fri, 21 Feb 2020 13:12:27 EST
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1j5CKv-0002wU-0a; Fri, 21 Feb 2020 18:43:37 +0100
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Joao Martins <joao.m.martins@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] cpuidle-haltpoll: allow force loading on hosts without the REALTIME hint
+Date:   Fri, 21 Feb 2020 18:43:31 +0100
+Message-Id: <20200221174331.1480468-1-mail@maciej.szmigiero.name>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <89a9838c-faf3-b890-cea2-aad53df1eac3@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 07:59:14PM +0300, Dmitry Osipenko wrote:
-> 21.02.2020 19:29, Daniel Lezcano пишет:
-> > On Thu, Feb 13, 2020 at 02:51:30AM +0300, Dmitry Osipenko wrote:
-> >> Tegra20 and Terga30 SoCs have common C1 and CC6 idling states and thus
-> >> share the same code paths, there is no point in having separate drivers
-> >> for a similar hardware. This patch merely moves functionality of the old
-> >> driver into the new, although the CC6 state is kept disabled for now since
-> >> old driver had a rudimentary support for this state (allowing to enter
-> >> into CC6 only when secondary CPUs are put offline), while new driver can
-> >> provide a full-featured support. The new feature will be enabled by
-> >> another patch.
-> >>
-> >> Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
-> >> Tested-by: Peter Geis <pgwipeout@gmail.com>
-> >> Tested-by: Jasper Korten <jja2000@gmail.com>
-> >> Tested-by: David Heidelberg <david@ixit.cz>
-> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >> ---
-> >>  arch/arm/mach-tegra/Makefile          |   3 -
-> >>  arch/arm/mach-tegra/cpuidle-tegra30.c | 123 --------------------------
-> > 
-> > Add the -M option when resending please.
-> 
-> Okay, thank you very much for taking a look at the patches!
+From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 
-Yeah, sorry for the delay. Nice cleanup BTW.
+Before commit 1328edca4a14 ("cpuidle-haltpoll: Enable kvm guest polling
+when dedicated physical CPUs are available") the cpuidle-haltpoll driver
+could also be used in scenarios when the host does not advertise the
+KVM_HINTS_REALTIME hint.
 
--- 
+While the behavior introduced by the aforementioned commit makes sense as
+the default there are cases where the old behavior is desired, for example,
+when other kernel changes triggered by presence by this hint are unwanted,
+for some workloads where the latency benefit from polling overweights the
+loss from idle CPU capacity that otherwise would be available, or just when
+running under older Qemu versions that lack this hint.
 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Let's provide a typical "force" module parameter that allows restoring the
+old behavior.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+---
+ drivers/cpuidle/cpuidle-haltpoll.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+index b0ce9bc78113..07e5b36076bb 100644
+--- a/drivers/cpuidle/cpuidle-haltpoll.c
++++ b/drivers/cpuidle/cpuidle-haltpoll.c
+@@ -18,6 +18,11 @@
+ #include <linux/kvm_para.h>
+ #include <linux/cpuidle_haltpoll.h>
+ 
++static bool force __read_mostly;
++module_param(force, bool, 0444);
++MODULE_PARM_DESC(force,
++		 "Load even if the host does not provide the REALTIME hint");
++
+ static struct cpuidle_device __percpu *haltpoll_cpuidle_devices;
+ static enum cpuhp_state haltpoll_hp_state;
+ 
+@@ -90,6 +95,11 @@ static void haltpoll_uninit(void)
+ 	haltpoll_cpuidle_devices = NULL;
+ }
+ 
++static bool haltpool_want(void)
++{
++	return kvm_para_has_hint(KVM_HINTS_REALTIME) || force;
++}
++
+ static int __init haltpoll_init(void)
+ {
+ 	int ret;
+@@ -102,7 +112,7 @@ static int __init haltpoll_init(void)
+ 	cpuidle_poll_state_init(drv);
+ 
+ 	if (!kvm_para_available() ||
+-		!kvm_para_has_hint(KVM_HINTS_REALTIME))
++	    !haltpool_want())
+ 		return -ENODEV;
+ 
+ 	ret = cpuidle_register_driver(drv);
