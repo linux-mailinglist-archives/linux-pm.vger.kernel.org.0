@@ -2,106 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87247167988
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 10:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BCF167965
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 10:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727860AbgBUJg2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 21 Feb 2020 04:36:28 -0500
-Received: from mail.fireflyinternet.com ([77.68.26.236]:61518 "EHLO
-        fireflyinternet.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727840AbgBUJg2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 04:36:28 -0500
-X-Greylist: delayed 989 seconds by postgrey-1.27 at vger.kernel.org; Fri, 21 Feb 2020 04:36:27 EST
-X-Default-Received-SPF: pass (skip=forwardok (res=PASS)) x-ip-name=78.156.65.138;
-Received: from localhost (unverified [78.156.65.138]) 
-        by fireflyinternet.com (Firefly Internet (M1)) with ESMTP (TLS) id 20298788-1500050 
-        for multiple; Fri, 21 Feb 2020 09:19:51 +0000
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-From:   Chris Wilson <chris@chris-wilson.co.uk>
-In-Reply-To: <4974198.mf5Me8BlfX@kreacher>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-References: <CAHk-=wgqwiBLGvwTqU2kJEPNmafPpPe_K0XgBU-A58M+mkwpgQ@mail.gmail.com>
- <158197497594.2449.9692451182044632969@skylake-alporthouse-com>
- <10791544.HYfhKnFLvn@kreacher> <4974198.mf5Me8BlfX@kreacher>
-Message-ID: <158227678951.3099.15076882205129643027@skylake-alporthouse-com>
-User-Agent: alot/0.6
-Subject: Re: Linux 5.6-rc2
-Date:   Fri, 21 Feb 2020 09:19:49 +0000
+        id S1726100AbgBUJbn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 04:31:43 -0500
+Received: from mail27.static.mailgun.info ([104.130.122.27]:49740 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726244AbgBUJbn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 04:31:43 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1582277503; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=i8n52dio23fhyBvctmCgbH1eqA0EsTex5cCqVUZijW8=; b=d5i5M1f3tI9z5T8CLEnoxrVDYqBwUkFOCZmXgkcxBhNm3VItjDysrj6slyHNqL9yhh3exP1A
+ euHvUgttTUi3m9/1em3Tt0uJklpFhiTTelAQlVdI+rR8N3gBw/GBYU8vCuoGIVNZup0INdGi
+ QhSWm8Gu/UlndnhVcTBq0le8dCQ=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e4fa37e.7f0e2b0e9e30-smtp-out-n03;
+ Fri, 21 Feb 2020 09:31:42 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6D13EC433A2; Fri, 21 Feb 2020 09:31:41 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from okukatla1-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: okukatla)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C6FEBC43383;
+        Fri, 21 Feb 2020 09:31:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C6FEBC43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=okukatla@codeaurora.org
+From:   Odelu Kukatla <okukatla@codeaurora.org>
+To:     georgi.djakov@linaro.org, daidavid1@codeaurora.org,
+        bjorn.andersson@linaro.org, evgreen@google.com
+Cc:     sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
+        elder@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm-owner@vger.kernel.org,
+        Odelu Kukatla <okukatla@codeaurora.org>
+Subject: [V3, 0/3] Add SC7180 interconnect provider driver
+Date:   Fri, 21 Feb 2020 15:00:47 +0530
+Message-Id: <1582277450-27382-1-git-send-email-okukatla@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Rafael J. Wysocki (2020-02-21 00:46:18)
-> On Thursday, February 20, 2020 11:41:22 PM CET Rafael J. Wysocki wrote:
-> > On Monday, February 17, 2020 10:29:35 PM CET Chris Wilson wrote:
-> > > Quoting Linus Torvalds (2020-02-17 21:20:27)
-> > > > On Mon, Feb 17, 2020 at 8:22 AM Chris Wilson <chris@chris-wilson.co.uk> wrote:
-> > > > >
-> > > > > Quoting Linus Torvalds (2020-02-16 21:32:32)
-> > > > > > Rafael J. Wysocki (4):
-> > > > > >       ACPI: EC: Fix flushing of pending work
-> > > > > >       ACPI: PM: s2idle: Avoid possible race related to the EC GPE
-> > > > > >       ACPICA: Introduce acpi_any_gpe_status_set()
-> > > > > >       ACPI: PM: s2idle: Prevent spurious SCIs from waking up the system
-> > > > >
-> > > > > Our S0 testing broke on all platforms, so we've reverted
-> > > > > e3728b50cd9b ("ACPI: PM: s2idle: Avoid possible race related to the EC GPE")
-> > > > > fdde0ff8590b ("ACPI: PM: s2idle: Prevent spurious SCIs from waking up the system")
-> > > > >
-> > > > > There wasn't much in the logs, for example,
-> > > > > https://intel-gfx-ci.01.org/tree/drm-tip/IGT_5445/fi-kbl-7500u/igt@gem_exec_suspend@basic-s0.html
-> > > > 
-> > > > So the machine suspends, but never comes back?
-> > > > 
-> > > > Do you need to revert both for it to work for you? Or is the revert of
-> > > > fdde0ff8590b just to avoid the conflict?
-> > > 
-> > > fdde0ff85 was just to avoid conflicts.
-> > >  
-> > > > I'm assuming you bisected this, and the bisect indicated e3728b50cd9b,
-> > > > and then to revert it you reverted the other commit too..
-> > > 
-> > > Lucky guess based on diff rc1..rc2. Bisect was going to be painful, but
-> > > could be done if this is not enough clue for Rafael.
-> > 
-> > Sorry for the delayed response, was away.
-> > 
-> > I'm guessing that you are using rtcwake for wakeup, in which case reverting
-> > fdde0ff85 alone should unbreak it.
-> > 
-> > Can you please double check that?
-> 
-> And below is a patch that should fix it if I'm not mistaken (verified on my
-> system where I was able to reproduce the issue), so it would suffice to test
-> this one on top of the -rc2.
+Add driver to support scaling of the on-chip interconnects on
+the SC7180-based platforms.
 
-Correct on both accounts. Reverting fdde0ff85 alone was enough, and
-replacing the reverts with the suggested patch works.
+Depends-on: Split SDM845 interconnect nodes and consolidate RPMh support
+Depends-on: Add device tree support for sc7180
 
-> ---
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH] ACPI: PM: s2idle: Check fixed wakeup events in acpi_s2idle_wake()
-> 
-> Commit fdde0ff8590b ("ACPI: PM: s2idle: Prevent spurious SCIs from
-> waking up the system") overlooked the fact that fixed events can wake
-> up the system too and broke RTC wakeup from suspend-to-idle as a
-> result.
-> 
-> Fix this issue by checking the fixed events in acpi_s2idle_wake() in
-> addition to checking wakeup GPEs and break out of the suspend-to-idle
-> loop if the status bits of any enabled fixed events are set then.
-> 
-> Fixes: fdde0ff8590b ("ACPI: PM: s2idle: Prevent spurious SCIs from waking up the system")
-> Reported-by: Chris Wilson <chris@chris-wilson.co.uk>
-> Cc: 5.4+ <stable@vger.kernel.org> # 5.4+
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Tested-by: Chris Wilson <chris@chris-wilson.co.uk>
--Chris
+Odelu Kukatla (3):
+  dt-bindings: interconnect: Add Qualcomm SC7180 DT bindings
+  interconnect: qcom: Add SC7180 interconnect provider driver
+  dt-bindings: interconnect: Add Qualcomm SC7180 DT bindings
+
+ .../bindings/interconnect/qcom,sc7180.yaml         |  85 +++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |  95 +++
+ drivers/interconnect/qcom/Kconfig                  |  10 +
+ drivers/interconnect/qcom/Makefile                 |   2 +
+ drivers/interconnect/qcom/sc7180.c                 | 642 +++++++++++++++++++++
+ drivers/interconnect/qcom/sc7180.h                 | 149 +++++
+ include/dt-bindings/interconnect/qcom,sc7180.h     | 161 ++++++
+ 7 files changed, 1144 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml
+ create mode 100644 drivers/interconnect/qcom/sc7180.c
+ create mode 100644 drivers/interconnect/qcom/sc7180.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sc7180.h
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
