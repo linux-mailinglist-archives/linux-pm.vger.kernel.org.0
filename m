@@ -2,104 +2,306 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E72BA1679B0
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 10:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B46631679B3
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 10:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728209AbgBUJrK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 04:47:10 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:43478 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727152AbgBUJrJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 04:47:09 -0500
-Received: by mail-wr1-f67.google.com with SMTP id r11so1217128wrq.10
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 01:47:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorremedies-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iThJ2IqXIL3xfKQBGqdwkNTDMnV6nWu1wNuJBy3C2yA=;
-        b=cqap6/WfWMnCEnkhHmZmkagcfjvNYNyFShE3gD4elanhFQa3ZJ18KHndFZ1SNIca8i
-         1m2/ZTDoRDe2K8Y9RXXAOCQHkuJ/IqgFIJUe3I3WBgA6OqX218zpWiUMioei7hsk+JB7
-         O6G5mYbEYFAFL1hBcxU84i3c/oMzKRtzX8mssXGCIguaZDPbpDo4dpKj0tkubxvCXVCl
-         U0zUZ+8eZY2ZhPG5hr20uSgeNd3DP3HSTGJpzHFvKDAUO8pj+F5fq8+JlnIE93cpB18C
-         AfDM2rTvncFLyVMmz/uGQdfE0r59pSocWGTYibMdnWGtcUf+PZq88MwcicBJZa6ZEvZ6
-         0DkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iThJ2IqXIL3xfKQBGqdwkNTDMnV6nWu1wNuJBy3C2yA=;
-        b=q+420+/6XHVcvdpLjUbAt8Tbupc2OLSm9xQ24kB+VGLLqryog8gj8MdcKZ7GS6e+jU
-         mWGeF3hv0eV17cdk7CvvBdAt9AxXUlFWFFdF+ThTsXt0LFsA5yXgSw+f/ZNTriI57LqV
-         1WolQTm5lQy3aSfRcxbCGzMXhol8nBYceTsAH2gIcFXAkCRrRMkhScvdMw1niGfGY0pz
-         vQjsOi2Phzy4FcP1+082fyi8Z8nFZX31DEwoQeCx3ckomzHjF94QbFAixRPUkbeTPWYp
-         i3E8qevBuPHFJuBrNcj0QDUbyuGOkM+YUAN5Mnh8dr/2T0/cSUb55h2e1lHL3akQbDC9
-         5rSw==
-X-Gm-Message-State: APjAAAV5tlFhbC1TASDE6E2YThZI7ptGoyKNULX0P6mFEg1e4FHJUD9p
-        uhZs4XbdrRwIOC3vtRb73vdrSE5cEBPfwqoGBhZ6ZQ==
-X-Google-Smtp-Source: APXvYqw0SbueTOfivperUQxsM70eayKJ8KOMv1BZWQPaWv8uZB7Ikvrrl4u6etBH7HmFzINwCm4AukPxAoxEyFaCrLo=
-X-Received: by 2002:adf:fa43:: with SMTP id y3mr47066785wrr.65.1582278427240;
- Fri, 21 Feb 2020 01:47:07 -0800 (PST)
+        id S1728221AbgBUJri (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 04:47:38 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:29444 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728114AbgBUJri (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 04:47:38 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1582278457; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=0Y3jNt1vNMZa0kmEMEcR2PDj6LTjkMjoYD3v/NckgOg=; b=He8gCgTFDKt1lwIdMedeOofV6A+r+iAXretRBo/gK8qw60Hu5NKLLTSOjDvw7wDkDyYuAcCN
+ VrIjsmEhBBeh6PFy84glLukE20ef5/ZKjyO8Z6Ywd2iXae8Ereie1iltMhZXEtT2PN5yaxIB
+ vg3ypscebf112/WMJqiNzQuPZU0=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e4fa733.7fc054e83928-smtp-out-n01;
+ Fri, 21 Feb 2020 09:47:31 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8429DC447A0; Fri, 21 Feb 2020 09:47:30 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.13.37] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mkshah)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4EE5CC43383;
+        Fri, 21 Feb 2020 09:47:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4EE5CC43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=mkshah@codeaurora.org
+Subject: Re: [v3] soc: qcom: Introduce subsystem sleep stats driver
+To:     Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
+        david.brown@linaro.org, rafael@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, bjorn.andersson@linaro.org,
+        evgreen@chromium.org, dianders@chromium.org, rnayak@codeaurora.org,
+        ilina@codeaurora.org, lsrao@codeaurora.org
+References: <1573039165-30435-1-git-send-email-mkshah@codeaurora.org>
+ <5dcf0e86.1c69fb81.a126f.5beb@mx.google.com>
+From:   Maulik Shah <mkshah@codeaurora.org>
+Message-ID: <1daea14a-9873-c0aa-9e2e-12b65828cfcc@codeaurora.org>
+Date:   Fri, 21 Feb 2020 15:17:22 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-References: <CAJCQCtTPSC8666h5fuW=iSaVvuRq9to731W2-sAT6xUuESAzsw@mail.gmail.com>
- <CAA25o9TvFMEJnF45NFVqAfdxzKy5umzHHVDs+SCxrChGSKczTw@mail.gmail.com>
- <CAJCQCtQw7EJwREM8Fy_PWCwy3E7Jc=kLTRo_kgLNwNhYA32ABA@mail.gmail.com>
- <CAJCQCtQkK+J-6eoadBLr+CkJ6CLf3Kt+6CeTJANRiU+M7A9CNQ@mail.gmail.com>
- <CAA25o9T2wwqoopoNRySdZoYkD+vtqRPsB1YPnag=TkOp5D9sYA@mail.gmail.com>
- <CAA25o9SCanFH3nV52BwN=7EuSUFjX=Jrd+FCiV=6ThW=beKKMw@mail.gmail.com>
- <20200221084910.GM20509@dhcp22.suse.cz> <CAJZ5v0h5MnpK9YjO+Z7_M1Cj8tup4qPriALx-EHt4ypbmCWfUw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0h5MnpK9YjO+Z7_M1Cj8tup4qPriALx-EHt4ypbmCWfUw@mail.gmail.com>
-From:   Chris Murphy <lists@colorremedies.com>
-Date:   Fri, 21 Feb 2020 02:46:51 -0700
-Message-ID: <CAJCQCtQ1FrAZpBbXPXcJwb4eTaCH5j9+gCStrX_hKwAEoLSK-g@mail.gmail.com>
-Subject: Re: is hibernation usable?
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Michal Hocko <mhocko@kernel.org>,
-        Luigi Semenzato <semenzato@google.com>,
-        Chris Murphy <lists@colorremedies.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <5dcf0e86.1c69fb81.a126f.5beb@mx.google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-GB
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 2:04 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+
+On 11/16/2019 2:15 AM, Stephen Boyd wrote:
+> Quoting Maulik Shah (2019-11-06 03:19:25)
+>> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+>> index 6f87b9d..e095eae 100644
+>> --- a/Documentation/ABI/testing/sysfs-power
+>> +++ b/Documentation/ABI/testing/sysfs-power
+>> @@ -288,6 +288,16 @@ Description:
+>>                  writing a "0" (default) to it disables them.  Reads from
+>>                  this file return the current value.
+>>   
+>> +What:          /sys/power/subsystem_sleep/stats
+>> +Date:          December 2017
+>> +Contact:       Maulik Shah <mkshah@codeaurora.org>
+>> +Description:
+>> +               The /sys/power/subsystem_sleep/stats file prints the subsystem
+>> +               sleep information on Qualcomm Technologies, Inc. (QTI) SoCs.
+>> +
+>> +               Reading from this file will display subsystem level low power
+>> +               mode statistics.
+> I still don't understand what this has to do with the kernel's power
+> management support.
+
+Using debugfs in v2 in single stats driver.
+
+https://lore.kernel.org/patchwork/project/lkml/list/?series=430622
+
 >
-> My understanding of the problem is that the size of swap is
-> (theoretically) sufficient, but it is not used as expected during the
-> preallocation of image memory.
+>> +
+>>   What:          /sys/power/resume_offset
+>>   Date:          April 2018
+>>   Contact:       Mario Limonciello <mario.limonciello@dell.com>
+>> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+>> index 79d8265..bed0704 100644
+>> --- a/drivers/soc/qcom/Kconfig
+>> +++ b/drivers/soc/qcom/Kconfig
+>> @@ -185,6 +185,15 @@ config QCOM_SOCINFO
+>>           Say yes here to support the Qualcomm socinfo driver, providing
+>>           information about the SoC to user space.
+>>   
+>> +config QCOM_SS_SLEEP_STATS
+>> +       tristate "Qualcomm Technologies Inc. Subsystem Sleep Stats driver"
+>> +       depends on QCOM_SMEM
+>> +       help
+>> +         Say y here to enable support for the Qualcomm Technologies Inc (QTI)
+> This 'Inc' is missing the full stop like in the summary above. Please be
+> consistent.
+corrected.
+>
+>> +         SS sleep stats driver to read the sleep stats of various subsystems
+> what is 'SS'?
+corrected.
+>
+>> +         from SMEM. The stats are exported to sysfs. The driver also maintains
+>> +         application processor sleep stats.
+>> +
+>>   config QCOM_WCNSS_CTRL
+>>          tristate "Qualcomm WCNSS control driver"
+>>          depends on ARCH_QCOM || COMPILE_TEST
+>> diff --git a/drivers/soc/qcom/subsystem_sleep_stats.c b/drivers/soc/qcom/subsystem_sleep_stats.c
+>> new file mode 100644
+>> index 00000000..724b213
+>> --- /dev/null
+>> +++ b/drivers/soc/qcom/subsystem_sleep_stats.c
+>> @@ -0,0 +1,143 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +
+>> +/*
+>> + * Copyright (c) 2017-2019, The Linux Foundation. All rights reserved.
+>> + */
+>> +
+>> +#define pr_fmt(fmt) "%s: " fmt, KBUILD_MODNAME
+>> +
+>> +#include <linux/errno.h>
+>> +#include <linux/module.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/types.h>
+> I think we need to include linux/kernel.h for scnprintf() too.
+done.
+>> +
+>> +#include <linux/soc/qcom/smem.h>
+>> +
+>> +enum subsystem_item_id {
+>> +       MODEM = 605,
+>> +       ADSP,
+>> +       CDSP,
+>> +       SLPI,
+>> +       GPU,
+>> +       DISPLAY,
+>> +};
+>> +
+>> +enum subsystem_pid {
+>> +       PID_APSS = 0,
+>> +       PID_MODEM = 1,
+>> +       PID_ADSP = 2,
+>> +       PID_SLPI = 3,
+>> +       PID_CDSP = 5,
+>> +       PID_GPU = PID_APSS,
+>> +       PID_DISPLAY = PID_APSS,
+>> +};
+> Can these just be defines? There seems to be no value in enum because
+> we're not testing these in switch statements and they're randomly
+> assigned values.
 
-Right. I have no idea how locality of pages is determined in the swap
-device. But if it's sufficiently fragmented such that contiguous free
-space for a hibernation image is not sufficient, then hibernation
-could fail.
+this is inline with subsystem_item_id enum which uses 605 to 610 item 
+ids in enum.
 
-> It was stated in one of the previous messages (not in this thread,
-> cannot find it now) that swap (of the same size as RAM) was activated
-> (swapon) right before hibernation, so theoretically that should be
-> sufficient AFAICS.
+keeping it same for better readbility.
 
-I mentioned it as an idea floated by systemd developers. I'm not sure
-if it's mentioned elsewhere. Some folks wonder if such functionality
-could be prone to racing.
-https://lore.kernel.org/linux-mm/CAJCQCtSx0FOX7q0p=9XgDLJ6O0+hF_vc-wU4KL=c9xoSGGkstA@mail.gmail.com/T/#m4d47d127da493f998b232d42d81621335358aee1
+>
+>> +
+>> +struct subsystem_data {
+>> +       char *name;
+>> +       enum subsystem_item_id item_id;
+>> +       enum subsystem_pid pid;
+>> +};
+>> +
+>> +static const struct subsystem_data subsystems[] = {
+>> +       { "MODEM", MODEM, PID_MODEM },
+>> +       { "ADSP", ADSP, PID_ADSP },
+>> +       { "CDSP", CDSP, PID_CDSP },
+>> +       { "SLPI", SLPI, PID_SLPI },
+>> +       { "GPU", GPU, PID_GPU },
+>> +       { "DISPLAY", DISPLAY, PID_DISPLAY },
+>> +};
+>> +
+>> +struct subsystem_stats {
+>> +       uint32_t version_id;
+>> +       uint32_t count;
+>> +       uint64_t last_entered;
+>> +       uint64_t last_exited;
+>> +       uint64_t accumulated_duration;
+> We use u32 and u64 in kernel code. Also, is this the value in shared
+> memory? Probably it's little endian so needs to be __le32 an __le64.
+corrected.
+>> +};
+>> +
+>> +struct subsystem_stats_prv_data {
+>> +       struct kobj_attribute ka;
+>> +       struct kobject *kobj;
+>> +};
+>> +
+>> +static struct subsystem_stats_prv_data *prvdata;
+>> +
+>> +static inline ssize_t subsystem_stats_print(char *prvbuf, ssize_t length,
+>> +                                           struct subsystem_stats *record,
+>> +                                           const char *name)
+>> +{
+>> +       return scnprintf(prvbuf, length, "%s\n\tVersion:0x%x\n"
+>> +                       "\tSleep Count:0x%x\n"
+>> +                       "\tSleep Last Entered At:0x%llx\n"
+>> +                       "\tSleep Last Exited At:0x%llx\n"
+>> +                       "\tSleep Accumulated Duration:0x%llx\n\n",
+>> +                       name, record->version_id, record->count,
+>> +                       record->last_entered, record->last_exited,
+>> +                       record->accumulated_duration);
+> This isn't one value per file as per sysfs rules. Why can't this go to
+> debugfs? Otherwise, it would be better to split it up into multiple
+> files.
+>
+> And it still looks like something that should be plumbed into the remote
+> proc subsystem so we can see from userspace what remote processors are
+> 1) present in the system and 2) how long they've been in a sleep state.
+Using debugfs.
+>
+>> +}
+>> +
+>> +static ssize_t subsystem_stats_show(struct kobject *kobj,
+>> +                                   struct kobj_attribute *attr, char *buf)
+>> +{
+>> +       ssize_t length = 0;
+>> +       int i = 0;
+> Drop assignment to i here.
+done.
+>
+>> +       size_t size = 0;
+> Why assign size to 0? It looks unused in this function besides to store
+> the size in qcom_smem_get(). It looks like we can pass NULL for that
+> argument if we don't care to actually look at the size of what is
+> returned.
+done.
+>> +       struct subsystem_stats *record = NULL;
+> Please don't assign to NULL and then overwrite it without testing in
+> between.
+done.
+>
+>> +
+>> +       /* Read SMEM data written by other subsystems */
+>> +       for (i = 0; i < ARRAY_SIZE(subsystems); i++) {
+>> +               record = (struct subsystem_stats *) qcom_smem_get(
+> The cast is unnecessary, it returns a void * already.
+done.
+>> +                         subsystems[i].pid, subsystems[i].item_id, &size);
+>> +
+>> +               if (!IS_ERR(record) && (PAGE_SIZE - length > 0))
+>> +                       length += subsystem_stats_print(buf + length,
+>> +                                                       PAGE_SIZE - length,
+>> +                                                       record,
+>> +                                                       subsystems[i].name);
+>> +       }
+>> +
+>> +       return length;
+>> +}
+>> +
+>> +static int __init subsystem_sleep_stats_init(void)
+>> +{
+>> +       struct kobject *ss_stats_kobj;
+>> +       int ret;
+>> +
+>> +       prvdata = kzalloc(sizeof(*prvdata), GFP_KERNEL);
+>> +       if (!prvdata)
+>> +               return -ENOMEM;
+>> +
+>> +       ss_stats_kobj = kobject_create_and_add("subsystem_sleep",
+>> +                                              power_kobj);
+> If this module is loaded on non-qcom platforms we'll create
+> subsystem_sleep directory still. Please don't do that. If this was
+> connected to remote proc it would be easier to avoid this problem.
+This is clubbed in single stats driver for both sleep stats in v2 link 
+pasted above.
+>
+>> +       if (!ss_stats_kobj)
+>> +               return -ENOMEM;
+>> +
+>> +       prvdata->kobj = ss_stats_kobj;
+>> +
+>> +       sysfs_attr_init(&prvdata->ka.attr);
+>> +       prvdata->ka.attr.mode = 0444;
+>> +       prvdata->ka.attr.name = "stats";
+>> +       prvdata->ka.show = subsystem_stats_show;
+>> +
+>> +       ret = sysfs_create_file(prvdata->kobj, &prvdata->ka.attr);
+>> +       if (ret) {
+>> +               kobject_put(prvdata->kobj);
+>> +               kfree(prvdata);
+>> +       }
+>> +
+>> +       return ret;
+>> +}
+>> +
 
-Another idea that's been suggested for a while is formally separating
-hibernation and paging into separate files (or partitions).
-a. Guarantees hibernation image has the necessary contiguous free space.
-b. Might be easier to create (or even obviate) a sane interface for
-hibernation images in swapfiles; that is, if it were a dedicated
-hibernationfile rather than being inserted in a swapfile. Right now
-that interface doesn't exist, so e.g. on Btrfs while it can support
-swapfiles and hibernation images, the offset has to be figured out
-manually so resume can succeed.
-https://github.com/systemd/systemd/issues/11939#issuecomment-471684411
-
-
-
-
-
---
-Chris Murphy
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
