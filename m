@@ -2,225 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC88167CAE
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 12:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C10167D91
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 13:38:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728228AbgBULvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 06:51:14 -0500
-Received: from esa4.hc3370-68.iphmx.com ([216.71.155.144]:7892 "EHLO
-        esa4.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728186AbgBULvM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 06:51:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1582285872;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=rkTHwapBz7ayghLmZpskUOnKPxyODDcUxzL7ge8Xcgw=;
-  b=OZLTIKh1todi/eF9m5Zuw3e9FZEB208cvD/izr6fF51TJPS2N0TSYqR4
-   6Ap5YuK1xxh7K19MUlsOXe4oNWYUWCoqTG1Wx0Q1yqjdhxWGXldm55R3G
-   KiNjwjVU3w7qy4AllGqLyTaLsITZY3VdlftLBuZo8vrRaw3FpH1v/N+4V
-   8=;
-Authentication-Results: esa4.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none; spf=None smtp.pra=roger.pau@citrix.com; spf=Pass smtp.mailfrom=roger.pau@citrix.com; spf=None smtp.helo=postmaster@mail.citrix.com
-Received-SPF: None (esa4.hc3370-68.iphmx.com: no sender
-  authenticity information available from domain of
-  roger.pau@citrix.com) identity=pra; client-ip=162.221.158.21;
-  receiver=esa4.hc3370-68.iphmx.com;
-  envelope-from="roger.pau@citrix.com";
-  x-sender="roger.pau@citrix.com";
-  x-conformance=sidf_compatible
-Received-SPF: Pass (esa4.hc3370-68.iphmx.com: domain of
-  roger.pau@citrix.com designates 162.221.158.21 as permitted
-  sender) identity=mailfrom; client-ip=162.221.158.21;
-  receiver=esa4.hc3370-68.iphmx.com;
-  envelope-from="roger.pau@citrix.com";
-  x-sender="roger.pau@citrix.com";
-  x-conformance=sidf_compatible; x-record-type="v=spf1";
-  x-record-text="v=spf1 ip4:209.167.231.154 ip4:178.63.86.133
-  ip4:195.66.111.40/30 ip4:85.115.9.32/28 ip4:199.102.83.4
-  ip4:192.28.146.160 ip4:192.28.146.107 ip4:216.52.6.88
-  ip4:216.52.6.188 ip4:162.221.158.21 ip4:162.221.156.83
-  ip4:168.245.78.127 ~all"
-Received-SPF: None (esa4.hc3370-68.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@mail.citrix.com) identity=helo;
-  client-ip=162.221.158.21; receiver=esa4.hc3370-68.iphmx.com;
-  envelope-from="roger.pau@citrix.com";
-  x-sender="postmaster@mail.citrix.com";
-  x-conformance=sidf_compatible
-IronPort-SDR: Iy6vkmYvTTmAxcv0sDnk287OqaApR945+t3bbH8+KbvqO+kHUjaYPybqDsL2Uz3ckkNdz7m7Ij
- Y/kSARbsrffvGwZ0DdF9joLHQxzx+xK9WlQ/XDSamvWxHYxvaUCzUm0cfcLxehNY2mp7FjoWjT
- D4xjlWsuciis2JlVC9Q0xgZJzdXhb7ZyOnQTX4w+09xcbPdlJMXCastv+6vAPcXH/ReEzapMJk
- MexwEdNGylwcSepie7bUtm+7uwAyQBY4nMkkPM9+s4Fdfth/Af4mJg7YaOlCyON2+hTYr7itc9
- ax0=
-X-SBRS: 2.7
-X-MesageID: 13435837
-X-Ironport-Server: esa4.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.158.21
-X-Policy: $RELAYED
-X-IronPort-AV: E=Sophos;i="5.70,468,1574139600"; 
-   d="scan'208";a="13435837"
-Date:   Fri, 21 Feb 2020 12:51:03 +0100
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     "Durrant, Paul" <pdurrant@amazon.co.uk>
-CC:     "Agarwal, Anchal" <anchalag@amazon.com>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "hpa@zytor.com" <hpa@zytor.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "fllinden@amaozn.com" <fllinden@amaozn.com>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>
-Subject: Re: [Xen-devel] [RFC PATCH v3 06/12] xen-blkfront: add callbacks for
- PM suspend and hibernation
-Message-ID: <20200221115103.GY4679@Air-de-Roger>
-References: <20200220083904.GI4679@Air-de-Roger>
- <f986b845491b47cc8469d88e2e65e2a7@EX13D32EUC003.ant.amazon.com>
- <20200220154507.GO4679@Air-de-Roger>
- <c9662397256a4568a5cc7d70a84940e5@EX13D32EUC003.ant.amazon.com>
- <20200220164839.GR4679@Air-de-Roger>
- <e42fa35800f04b6f953e4af87f2c1a02@EX13D32EUC003.ant.amazon.com>
- <20200221092219.GU4679@Air-de-Roger>
- <5ddf980a3fba4fb39571184e688cefc5@EX13D32EUC003.ant.amazon.com>
- <20200221102130.GW4679@Air-de-Roger>
- <66a211bae1de4be9861ef8393607d1b3@EX13D32EUC003.ant.amazon.com>
+        id S1727352AbgBUMiR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 07:38:17 -0500
+Received: from foss.arm.com ([217.140.110.172]:38454 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726976AbgBUMiQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 21 Feb 2020 07:38:16 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0AF8230E;
+        Fri, 21 Feb 2020 04:38:16 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 780EA3F68F;
+        Fri, 21 Feb 2020 04:38:15 -0800 (PST)
+Date:   Fri, 21 Feb 2020 12:38:13 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCH 1/3] regulator: max14577: Add proper dt-compatible strings
+Message-ID: <20200221123813.GB5546@sirena.org.uk>
+References: <CGME20200220145134eucas1p288ae1910d3e8d12dc12f010ed0b07b45@eucas1p2.samsung.com>
+ <20200220145127.21273-1-m.szyprowski@samsung.com>
+ <20200220165614.GD3926@sirena.org.uk>
+ <964b8c4c-36ca-203d-e62b-4a8fc970e23d@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="f2QGlHpHGjS2mn6Y"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <66a211bae1de4be9861ef8393607d1b3@EX13D32EUC003.ant.amazon.com>
-X-ClientProxiedBy: AMSPEX02CAS02.citrite.net (10.69.22.113) To
- AMSPEX02CL01.citrite.net (10.69.22.125)
+In-Reply-To: <964b8c4c-36ca-203d-e62b-4a8fc970e23d@samsung.com>
+X-Cookie: Dead? No excuse for laying off work.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 10:33:42AM +0000, Durrant, Paul wrote:
-> > -----Original Message-----
-> > From: Roger Pau Monné <roger.pau@citrix.com>
-> > Sent: 21 February 2020 10:22
-> > To: Durrant, Paul <pdurrant@amazon.co.uk>
-> > Cc: Agarwal, Anchal <anchalag@amazon.com>; Valentin, Eduardo
-> > <eduval@amazon.com>; len.brown@intel.com; peterz@infradead.org;
-> > benh@kernel.crashing.org; x86@kernel.org; linux-mm@kvack.org;
-> > pavel@ucw.cz; hpa@zytor.com; tglx@linutronix.de; sstabellini@kernel.org;
-> > fllinden@amaozn.com; Kamata, Munehisa <kamatam@amazon.com>;
-> > mingo@redhat.com; xen-devel@lists.xenproject.org; Singh, Balbir
-> > <sblbir@amazon.com>; axboe@kernel.dk; konrad.wilk@oracle.com;
-> > bp@alien8.de; boris.ostrovsky@oracle.com; jgross@suse.com;
-> > netdev@vger.kernel.org; linux-pm@vger.kernel.org; rjw@rjwysocki.net;
-> > linux-kernel@vger.kernel.org; vkuznets@redhat.com; davem@davemloft.net;
-> > Woodhouse, David <dwmw@amazon.co.uk>
-> > Subject: Re: [Xen-devel] [RFC PATCH v3 06/12] xen-blkfront: add callbacks
-> > for PM suspend and hibernation
-> > 
-> > On Fri, Feb 21, 2020 at 09:56:54AM +0000, Durrant, Paul wrote:
-> > > > -----Original Message-----
-> > > > From: Roger Pau Monné <roger.pau@citrix.com>
-> > > > Sent: 21 February 2020 09:22
-> > > > To: Durrant, Paul <pdurrant@amazon.co.uk>
-> > > > Cc: Agarwal, Anchal <anchalag@amazon.com>; Valentin, Eduardo
-> > > > <eduval@amazon.com>; len.brown@intel.com; peterz@infradead.org;
-> > > > benh@kernel.crashing.org; x86@kernel.org; linux-mm@kvack.org;
-> > > > pavel@ucw.cz; hpa@zytor.com; tglx@linutronix.de;
-> > sstabellini@kernel.org;
-> > > > fllinden@amaozn.com; Kamata, Munehisa <kamatam@amazon.com>;
-> > > > mingo@redhat.com; xen-devel@lists.xenproject.org; Singh, Balbir
-> > > > <sblbir@amazon.com>; axboe@kernel.dk; konrad.wilk@oracle.com;
-> > > > bp@alien8.de; boris.ostrovsky@oracle.com; jgross@suse.com;
-> > > > netdev@vger.kernel.org; linux-pm@vger.kernel.org; rjw@rjwysocki.net;
-> > > > linux-kernel@vger.kernel.org; vkuznets@redhat.com;
-> > davem@davemloft.net;
-> > > > Woodhouse, David <dwmw@amazon.co.uk>
-> > > > Subject: Re: [Xen-devel] [RFC PATCH v3 06/12] xen-blkfront: add
-> > callbacks
-> > > > for PM suspend and hibernation
-> > > >
-> > > > On Thu, Feb 20, 2020 at 05:01:52PM +0000, Durrant, Paul wrote:
-> > > > > > > Hopefully what I said above illustrates why it may not be 100%
-> > > > common.
-> > > > > >
-> > > > > > Yes, that's fine. I don't expect it to be 100% common (as I guess
-> > > > > > that the hooks will have different prototypes), but I expect
-> > > > > > that routines can be shared, and that the approach taken can be
-> > the
-> > > > > > same.
-> > > > > >
-> > > > > > For example one necessary difference will be that xenbus initiated
-> > > > > > suspend won't close the PV connection, in case suspension fails.
-> > On PM
-> > > > > > suspend you seem to always close the connection beforehand, so you
-> > > > > > will always have to re-negotiate on resume even if suspension
-> > failed.
-> > > > > >
-> > > > > > What I'm mostly worried about is the different approach to ring
-> > > > > > draining. Ie: either xenbus is changed to freeze the queues and
-> > drain
-> > > > > > the shared rings, or PM uses the already existing logic of not
-> > > > > > flushing the rings an re-issuing in-flight requests on resume.
-> > > > > >
-> > > > >
-> > > > > Yes, that's needs consideration. I don’t think the same semantic can
-> > be
-> > > > suitable for both. E.g. in a xen-suspend we need to freeze with as
-> > little
-> > > > processing as possible to avoid dirtying RAM late in the migration
-> > cycle,
-> > > > and we know that in-flight data can wait. But in a transition to S4 we
-> > > > need to make sure that at least all the in-flight blkif requests get
-> > > > completed, since they probably contain bits of the guest's memory
-> > image
-> > > > and that's not going to get saved any other way.
-> > > >
-> > > > Thanks, that makes sense and something along this lines should be
-> > > > added to the commit message IMO.
-> > > >
-> > > > Wondering about S4, shouldn't we expect the queues to already be
-> > > > empty? As any subsystem that wanted to store something to disk should
-> > > > make sure requests have been successfully completed before
-> > > > suspending.
-> > >
-> > > What about writing the suspend image itself? Normal filesystem I/O
-> > > will have been flushed of course, but whatever vestigial kernel
-> > > actually writes out the hibernation file may well expect a final
-> > > D0->D3 on the storage device to cause a flush.
-> > 
-> > Hm, I have no idea really. I think whatever writes to the disk before
-> > suspend should actually make sure requests have completed, but what
-> > you suggest might also be a possibility.
-> > 
-> > Can you figure out whether there are requests on the ring or in the
-> > queue before suspending?
-> 
-> Well there's clearly pending stuff in the ring if rsp_prod != req_prod :-)
 
-Right, I assume there's no document that states what's the expected
-state for queues &c when switching PM states, so we have to assume
-that there might be in-flight requests on the ring and in the driver
-queues.
+--f2QGlHpHGjS2mn6Y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> As for internal queues, I don't know how blkfront manages that (or whether it has any pending work queue at all).
+On Fri, Feb 21, 2020 at 11:44:03AM +0100, Marek Szyprowski wrote:
+> On 20.02.2020 17:56, Mark Brown wrote:
 
-There are no internal queues, just the generic ones from blk_mq which
-every block device has IIRC.
+> > Why would we want to encode the particular way Linux happens to
+> > represent regulators on a MFD into the DT binding?  It's not clear that
+> > this is a generic thing (another OS might choose to have a separate
+> > object for each regulator with no parent for example) and the compatible
+> > isn't adding any information we didn't have already knowing about the
+> > parent device.
 
-Thanks, Roger.
+> Well, that's how the bindings for max14577/max77836 are defined:
+
+> Documentation/devicetree/bindings/mfd/max14577.txt
+
+> I've only fixed regulator, charger and extcon drivers to match the cells=
+=20
+> created by the current mfd driver.
+
+We could just remove the compatible strings from the binding
+documentation, they won't do any harm if we don't use them.
+
+--f2QGlHpHGjS2mn6Y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5PzzUACgkQJNaLcl1U
+h9A8Ngf/SfRefh9o1XBTE2v/15NpjtrE65kGU09QEQ1tkHy4YEO5itYQeNBOU92n
+mwdRrsqe1dh5P303HYqqLL6NPr85ZRfH5dSAVrUVEymN8kmBbjDnRlk5erYMqWUo
+ZGqe1H85+7ncnoVN+p9OhazcrhGgDYiOI0Jh2W8xmoOkkdnEIfsE+izIpEK/qyhS
+Xa3M0XrzGs2NKZxn9l3Cd6/2V/5sKuAuwT3nt65q5LZ1Qciz2Yt+Iuj2g3+ig37/
+oiVbnUIP2/vtkHxO9ofdoaTTTkx2yXT4SXXaMWioB0OHLd3vxM26LY/F6CWtAMMF
+phTmMf8zdhw7NSHZpCFFEdHiuy+9ww==
+=AD14
+-----END PGP SIGNATURE-----
+
+--f2QGlHpHGjS2mn6Y--
