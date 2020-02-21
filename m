@@ -2,83 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD63168497
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 18:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7535F1684B8
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 18:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727799AbgBURNp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 12:13:45 -0500
-Received: from foss.arm.com ([217.140.110.172]:44062 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725957AbgBURNp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 21 Feb 2020 12:13:45 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0986E30E;
-        Fri, 21 Feb 2020 09:13:45 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 73B143F68F;
-        Fri, 21 Feb 2020 09:13:44 -0800 (PST)
-Date:   Fri, 21 Feb 2020 17:13:42 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/3] regulator: max14577: Add proper dt-compatible strings
-Message-ID: <20200221171342.GI5546@sirena.org.uk>
-References: <CGME20200220145134eucas1p288ae1910d3e8d12dc12f010ed0b07b45@eucas1p2.samsung.com>
- <20200220145127.21273-1-m.szyprowski@samsung.com>
- <20200220165614.GD3926@sirena.org.uk>
- <964b8c4c-36ca-203d-e62b-4a8fc970e23d@samsung.com>
- <20200221123813.GB5546@sirena.org.uk>
- <b52332cd-1dec-fdfe-51fc-8605d94abe7d@samsung.com>
+        id S1728072AbgBURTa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 12:19:30 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:40769 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728364AbgBURT3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 12:19:29 -0500
+Received: by mail-ot1-f66.google.com with SMTP id i6so2654702otr.7
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 09:19:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aFj7tYI0k/f8j7tYUdpdud7KpLh5j6ouKtsSoqEvszI=;
+        b=YzgEvcaOL7wY8aO+jLfgHbjlVU2xxOJSB3+tw4wl4fh5uOdZSBNHo/iltx0MWip/dx
+         EmTuDub5yPlgPH3bHf5Zz0dcdgGkjIUEsy71Jt8pUh7yhvxFxNSCOXr/6sOdr2B80kxv
+         8Rp2Bs9lxT2sACVW1LTq3mJ1eHtNvRY4dxHL9l6QS2XrYWRcypud1ZZG3AQHWS8FfBNu
+         SESXEQZR7Sf5hOVEpl2Y7jZZIzX77sTXqn/o5jSTY6+C3NsxB5EKu5h//4gqTaj3aest
+         bhQC3td7VGOiHJJHqbjo3DXgSmmWovjvU9eaomChJmjbNFaN6EImUpYyfFyRsZJx0O8a
+         6QoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aFj7tYI0k/f8j7tYUdpdud7KpLh5j6ouKtsSoqEvszI=;
+        b=BG3RvsBqawpx8crqRpvcI7NXBwxmaD9AThlI1WexmkxqSJR0GUDxM6xufy1MXM9EXc
+         caOXCdL8E3NwYzGviNLcgAvr0n7j6ILV5KIFIR54G0BGhn945FrAVQeUk6rGAMwZypYz
+         07nqbmmOTjkXstwbvCgYA3SDEUXXIRd/4dQgOcAp+lMD2LVkrfQ4GIsB5lCXSYpg4NzG
+         svR1YgFgXNVldHepWY+W1O6KB5RwvovS/28C7V5k/y5CKfoOt0AP+75RDC1bg997l5UE
+         O8jQ+Um4P9rlH0337DO/1YMUzt7kwThW7eRn5PQBOP0g2tw7CoO9xbmdAN5W2guLTaW+
+         L6pw==
+X-Gm-Message-State: APjAAAXqSOyTEhz+UFBgYZTVgmlHhDPz1S4b1dsa6HU/s1GcNxHmjWkq
+        Kl7L5wWOZORWoilkMdV9G/NTZG6KGyuYWDecs9GrsA==
+X-Google-Smtp-Source: APXvYqxSTtKq6jL9E+diPzBIZDb2QUskTpf2GmcCBEObkgjrpqHE6Zct2GYZmNiSd+PjgI9aUQvm9vp2GioZkW3oYlo=
+X-Received: by 2002:a9d:12af:: with SMTP id g44mr16732511otg.332.1582305568936;
+ Fri, 21 Feb 2020 09:19:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="16qp2B0xu0fRvRD7"
-Content-Disposition: inline
-In-Reply-To: <b52332cd-1dec-fdfe-51fc-8605d94abe7d@samsung.com>
-X-Cookie: Dead? No excuse for laying off work.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200220050440.45878-1-john.stultz@linaro.org>
+ <20200220050440.45878-4-john.stultz@linaro.org> <CACRpkdYVQs0dDT8dn2GzQQXrbXATRi8iqHB41EQBMEwMiEFgzA@mail.gmail.com>
+In-Reply-To: <CACRpkdYVQs0dDT8dn2GzQQXrbXATRi8iqHB41EQBMEwMiEFgzA@mail.gmail.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Fri, 21 Feb 2020 09:19:17 -0800
+Message-ID: <CALAqxLVQ1MqEC6Sdm0DcWHQpuWnOMt5NxNrj_v+byeEa1cfang@mail.gmail.com>
+Subject: Re: [PATCH v4 3/6] pinctrl: Remove use of driver_deferred_probe_check_state_continue()
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Todd Kjos <tkjos@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Feb 21, 2020 at 7:22 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Thu, Feb 20, 2020 at 6:05 AM John Stultz <john.stultz@linaro.org> wrote:
+>
+> > With the earlier sanity fixes to
+> > driver_deferred_probe_check_state() it should be usable for the
+> > pinctrl logic here.
+> >
+> > So tweak the logic to use driver_deferred_probe_check_state()
+> > instead of driver_deferred_probe_check_state_continue()
+> >
+> > Cc: Rob Herring <robh@kernel.org>
+> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > Cc: Kevin Hilman <khilman@kernel.org>
+> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > Cc: Pavel Machek <pavel@ucw.cz>
+> > Cc: Len Brown <len.brown@intel.com>
+> > Cc: Todd Kjos <tkjos@google.com>
+> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Cc: Liam Girdwood <lgirdwood@gmail.com>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Thierry Reding <treding@nvidia.com>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: linux-pm@vger.kernel.org
+> > Signed-off-by: John Stultz <john.stultz@linaro.org>
+> > Change-Id: If72682e0a7641b33edf56f188fc067c68bbc571e
+>
+> I sure trust that you know what you're doing here.
 
---16qp2B0xu0fRvRD7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Classic mistake. :)
 
-On Fri, Feb 21, 2020 at 02:23:57PM +0100, Marek Szyprowski wrote:
-> On 21.02.2020 13:38, Mark Brown wrote:
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+>
+> I assume you will merge this through device core?
 
-> > We could just remove the compatible strings from the binding
-> > documentation, they won't do any harm if we don't use them.
+I guess? I'm going to resend it again as I think its a reasonable
+cleanup, but the urgent need for it from me may be solved by
+of_devlink Saravana's patch instead.
 
-> Frankly I have no strong opinion on this. I've just wanted to fix the=20
-> broken autoloading of the drivers compiled as modules.
-
-Shouldn't adding the relevant module table for the platform devices work
-just as well for that?  Possibly also deleting the of_compatible bits in
-the MFD as well, ISTR that's needed to make the platform device work.
-
---16qp2B0xu0fRvRD7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5QD8YACgkQJNaLcl1U
-h9Bw3Qf+ICypwgqpOfbViorwhsNd3hYeovxUVDcqxnxihICh9+jgxBTl7heRL5hd
-QsO0mgj65HXPtElBIxhBtE7WZiKbT/WavCR8EHVpoST/q00zg4FKMWlVfbiP3Nqm
-2NcRBzx43XUlji4hEiwq4c4FI22PwMw84dqqWczq47rU7AdDX/vTfJEJzgs3jRDb
-LcZRK/8ShQjhv8nTDfNIm57atMXTraRQmnRLCH21RkhRo652Pz2oLnWhYamUJvtj
-WR/yFEXF20EkD1hAaHYwy2KnaQG5dJuBW9nvD+iFcOq9rQm+IlK+FHb3lG44wAAy
-nkIA9S0bNtrAzcebaglfcs3wtVORAA==
-=vq2s
------END PGP SIGNATURE-----
-
---16qp2B0xu0fRvRD7--
+thanks
+-john
