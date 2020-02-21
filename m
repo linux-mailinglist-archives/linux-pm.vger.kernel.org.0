@@ -2,146 +2,285 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AE916755F
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 09:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 424BA1677B6
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 09:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388604AbgBUIZt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 03:25:49 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34816 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388736AbgBUIZs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 03:25:48 -0500
-Received: by mail-wr1-f66.google.com with SMTP id w12so960077wrt.2
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 00:25:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:autocrypt:organization:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TXvq+EuElcafseyPa7Xn9BIOxypv/HGxoGPqvN1nfZA=;
-        b=0vR7OpRWb43/h5/gI3hfsOzbo8AUJRSYzECLw98e+lDQF7+xvGznDeOc2G3WpPAQkx
-         msqWiqCw5bHAate/jXi91zGVeflcUoUvr2K9M+T85G0KWwTRcpU/eNYQ/hSaG/FK++El
-         ZOP4g5IrXVoiB1UhWTS5xu/wvkdVO+l0TQUB3w5JPSSv/1rF1QYbx0aaqPvh+zd1UxIZ
-         hkvUB1iXdtefkWb8Le7+KtoKPUVs3Zu3NLrrrNO2chU9C/6+8FVt4Q2PZbBrm2xkcR/t
-         fsAq+07bhFEbHFLwd8V0UDLiibpnqxdi5ANL8EkyNxwlXaPJMsRpqeXnrXH8Non/ak5F
-         Tfvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :organization:message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=TXvq+EuElcafseyPa7Xn9BIOxypv/HGxoGPqvN1nfZA=;
-        b=uCCKxHv+bMaex5YdmIIJgSfVe1m7EfSPftpFaz54hk5kYkVU/3MSUp/85+dOi/C/Bf
-         WoD+zhuSQnmBRO6oChWrsxrF1Iva0/p4FsoUmdzGPiTlPmxhlJ8o5gnvryf7q6Wg4jTq
-         ebsQi2XbRaiQIcbsvVdLz2dvj8xRljpSqaleNp/DVhv+hLS2Gl4AQvodnXccPqoJ0Kv9
-         siTgrj2r/zaxjkTqkbrXqAGJS/ZEUDzP8B0a091wWTLaGOjj0YXFyIl3Jp0Rufrn/QQE
-         fFblzHanEYy4h+xyPpKxKxHQR0eQcaRgiR5PV0l9DY+twHeBzt8sQjwmSGSTeQmMOFBh
-         7b1Q==
-X-Gm-Message-State: APjAAAVtkSSSDJ+PwyzxcwlEj81mfJS3UYVnfLMdrRF2xYEy4HjxBz+U
-        L0rEJCzAtF9pTTd0RhL9EnN5OQ==
-X-Google-Smtp-Source: APXvYqwWNTLg5jYxYhcBRVc0+kdrHr6iJ8Fa1H5VxAKW7NSwQQEg6HjJBqUFt17tnQm+zo2bJx1O5A==
-X-Received: by 2002:a5d:5347:: with SMTP id t7mr47046590wrv.401.1582273546143;
-        Fri, 21 Feb 2020 00:25:46 -0800 (PST)
-Received: from ?IPv6:2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858? ([2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858])
-        by smtp.gmail.com with ESMTPSA id f65sm2752337wmf.29.2020.02.21.00.25.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 00:25:45 -0800 (PST)
-Subject: Re: [PATCH] dt-bindings: power: Fix dt_binding_check error
-To:     Jianxin Pan <jianxin.pan@amlogic.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Victor Wan <victor.wan@amlogic.com>
-References: <1582269169-17557-1-git-send-email-jianxin.pan@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
- 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
- BSwxi7g3Mu7u5kUByanqHyA=
-Organization: Baylibre
-Message-ID: <b3da2987-a226-b230-4379-1ff4d57ef7fe@baylibre.com>
-Date:   Fri, 21 Feb 2020 09:25:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1730502AbgBUInV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 03:43:21 -0500
+Received: from mail27.static.mailgun.info ([104.130.122.27]:36466 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730538AbgBUInU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 03:43:20 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1582274599; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=2uuwEllZOFN2t55iFCOv+EfXhVOJ4HA08UuWs0sOrD8=;
+ b=msBpmOrL8eK+eq/dkNatIwfSCEC3ZCTRBrTweb8Q91BDNSZX15GDsBrhfQACegivsJKDll/Z
+ GtEKkxGwoH3MBvqEY0gqsCzbuF1BbDIlmQAIIgNCRBkRNoXydji7bfVV3vGrM0T76S4acQyp
+ aAPhOVZ2vRuLRQbDT07ZrdJ09Ps=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e4f9826.7f6e24517998-smtp-out-n01;
+ Fri, 21 Feb 2020 08:43:18 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 62DBFC4479F; Fri, 21 Feb 2020 08:43:17 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: okukatla)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0C53DC43383;
+        Fri, 21 Feb 2020 08:43:16 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <1582269169-17557-1-git-send-email-jianxin.pan@amlogic.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+Date:   Fri, 21 Feb 2020 14:13:15 +0530
+From:   okukatla@codeaurora.org
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>, bjorn.andersson@linaro.org,
+        daidavid1@codeaurora.org, evgreen@google.com,
+        georgi.djakov@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        ilina@codeaurora.org, seansw@qti.qualcomm.com, elder@linaro.org,
+        linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [V2, 2/3] interconnect: qcom: Add SC7180 interconnect provider
+ driver
+In-Reply-To: <5e118869.1c69fb81.c28bf.4564@mx.google.com>
+References: <1577782737-32068-1-git-send-email-okukatla@codeaurora.org>
+ <1577782737-32068-3-git-send-email-okukatla@codeaurora.org>
+ <5e118869.1c69fb81.c28bf.4564@mx.google.com>
+Message-ID: <1829865b2179f7aae3fce5e2a93902bf@codeaurora.org>
+X-Sender: okukatla@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/02/2020 08:12, Jianxin Pan wrote:
-> Missing ';' in the end of secure-monitor example node.
+On 2020-01-05 12:25, Stephen Boyd wrote:
+> Quoting Odelu Kukatla (2019-12-31 00:58:56)
+>> diff --git a/drivers/interconnect/qcom/sc7180.c 
+>> b/drivers/interconnect/qcom/sc7180.c
+>> new file mode 100644
+>> index 0000000..4a398e0
+>> --- /dev/null
+>> +++ b/drivers/interconnect/qcom/sc7180.c
+>> @@ -0,0 +1,788 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+>> + *
+>> + */
+>> +
+>> +#include <dt-bindings/interconnect/qcom,sc7180.h>
 > 
-> Fixes: f50b4108ede1 ("dt-bindings: power: add Amlogic secure power domains bindings")
-> Reported-by: Rob Herring<robh+dt@kernel.org>
-> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
-> ---
->  Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Can you include this after linux/ headers? That is the "preferred" way
+> to include headers.
 > 
-> diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-> index af32209..bc4e037 100644
-> --- a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-> +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
-> @@ -36,5 +36,5 @@ examples:
->              compatible = "amlogic,meson-a1-pwrc";
->              #power-domain-cells = <1>;
->          };
-> -    }
-> +    };
->  
+done.
+>> +#include <linux/device.h>
+>> +#include <linux/interconnect.h>
+>> +#include <linux/interconnect-provider.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_device.h>
 > 
-
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+> Hopefully this include isn't used and can be removed.
+> 
+I will remove it.
+>> +#include <linux/of_platform.h>
+> 
+> Is this include used?
+> 
+I will remove it.
+>> +#include <linux/platform_device.h>
+>> +
+>> +#include "icc-rpmh.h"
+>> +#include "bcm-voter.h"
+>> +
+> [...]
+>> +
+>> +static struct qcom_icc_node *system_noc_nodes[] = {
+>> +       [MASTER_SNOC_CFG] = &qhm_snoc_cfg,
+>> +       [MASTER_A1NOC_SNOC] = &qnm_aggre1_noc,
+>> +       [MASTER_A2NOC_SNOC] = &qnm_aggre2_noc,
+>> +       [MASTER_GEM_NOC_SNOC] = &qnm_gemnoc,
+>> +       [MASTER_PIMEM] = &qxm_pimem,
+>> +       [SLAVE_APPSS] = &qhs_apss,
+>> +       [SLAVE_SNOC_CNOC] = &qns_cnoc,
+>> +       [SLAVE_SNOC_GEM_NOC_GC] = &qns_gemnoc_gc,
+>> +       [SLAVE_SNOC_GEM_NOC_SF] = &qns_gemnoc_sf,
+>> +       [SLAVE_IMEM] = &qxs_imem,
+>> +       [SLAVE_PIMEM] = &qxs_pimem,
+>> +       [SLAVE_SERVICE_SNOC] = &srvc_snoc,
+>> +       [SLAVE_QDSS_STM] = &xs_qdss_stm,
+>> +       [SLAVE_TCU] = &xs_sys_tcu_cfg,
+>> +};
+>> +
+>> +static struct qcom_icc_desc sc7180_system_noc = {
+> 
+> Can this be const? And the other ones?
+> yes, will change it.
+>> +       .nodes = system_noc_nodes,
+>> +       .num_nodes = ARRAY_SIZE(system_noc_nodes),
+>> +       .bcms = system_noc_bcms,
+>> +       .num_bcms = ARRAY_SIZE(system_noc_bcms),
+>> +};
+>> +
+>> +static int qnoc_probe(struct platform_device *pdev)
+>> +{
+>> +       const struct qcom_icc_desc *desc;
+>> +       struct icc_onecell_data *data;
+>> +       struct icc_provider *provider;
+>> +       struct qcom_icc_node **qnodes;
+>> +       struct qcom_icc_provider *qp;
+>> +       struct icc_node *node;
+>> +       size_t num_nodes, i;
+>> +       int ret;
+>> +
+>> +       desc = of_device_get_match_data(&pdev->dev);
+> 
+> Use device_get_match_data() instead?
+> 
+will update it.
+>> +       if (!desc)
+>> +               return -EINVAL;
+>> +
+>> +       qnodes = desc->nodes;
+>> +       num_nodes = desc->num_nodes;
+>> +
+>> +       qp = devm_kzalloc(&pdev->dev, sizeof(*qp), GFP_KERNEL);
+>> +       if (!qp)
+>> +               return -ENOMEM;
+>> +
+>> +       data = devm_kcalloc(&pdev->dev, num_nodes, sizeof(*node), 
+>> GFP_KERNEL);
+>> +       if (!data)
+>> +               return -ENOMEM;
+>> +
+>> +       provider = &qp->provider;
+>> +       provider->dev = &pdev->dev;
+>> +       provider->set = qcom_icc_set;
+>> +       provider->pre_aggregate = qcom_icc_pre_aggregate;
+>> +       provider->aggregate = qcom_icc_aggregate;
+>> +       provider->xlate = of_icc_xlate_onecell;
+>> +       INIT_LIST_HEAD(&provider->nodes);
+>> +       provider->data = data;
+>> +
+>> +       qp->dev = &pdev->dev;
+>> +       qp->bcms = desc->bcms;
+>> +       qp->num_bcms = desc->num_bcms;
+>> +
+>> +       qp->voter = of_bcm_voter_get(qp->dev, NULL);
+>> +       if (IS_ERR(qp->voter))
+>> +               return PTR_ERR(qp->voter);
+>> +
+>> +       ret = icc_provider_add(provider);
+>> +       if (ret) {
+>> +               dev_err(&pdev->dev, "error adding interconnect 
+>> provider\n");
+>> +               return ret;
+>> +       }
+>> +
+>> +       for (i = 0; i < num_nodes; i++) {
+>> +               size_t j;
+>> +
+>> +               if (!qnodes[i])
+>> +                       continue;
+>> +
+>> +               node = icc_node_create(qnodes[i]->id);
+>> +               if (IS_ERR(node)) {
+>> +                       ret = PTR_ERR(node);
+>> +                       goto err;
+>> +               }
+>> +
+>> +               node->name = qnodes[i]->name;
+>> +               node->data = qnodes[i];
+>> +               icc_node_add(node, provider);
+>> +
+>> +               dev_dbg(&pdev->dev, "registered node %pK %s %d\n", 
+>> node,
+>> +                       qnodes[i]->name, node->id);
+> 
+> Is this more debug junk? Maybe if it is useful it can be part of the
+> core framework instead of in this driver?
+> 
+>> +
+>> +               /* populate links */
+> 
+> Useless comment.
+> i will clean up this.
+>> +               for (j = 0; j < qnodes[i]->num_links; j++)
+>> +                       icc_link_create(node, qnodes[i]->links[j]);
+>> +
+>> +               data->nodes[i] = node;
+>> +       }
+>> +       data->num_nodes = num_nodes;
+>> +
+>> +       for (i = 0; i < qp->num_bcms; i++)
+>> +               qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
+>> +
+>> +       platform_set_drvdata(pdev, qp);
+>> +
+>> +       dev_dbg(&pdev->dev, "Registered SC7180 ICC\n");
+> 
+> This driver debug message is pretty useless. Please remove it.
+> i will removr it.
+>> +
+>> +       return ret;
+> 
+> return 0?
+> 
+>> +err:
+>> +       icc_nodes_remove(provider);
+>> +       icc_provider_del(provider);
+>> +       return ret;
+>> +}
+>> +
+>> +static int qnoc_remove(struct platform_device *pdev)
+>> +{
+>> +       struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
+>> +
+>> +       icc_nodes_remove(&qp->provider);
+>> +       return icc_provider_del(&qp->provider);
+>> +}
+>> +
+>> +static const struct of_device_id qnoc_of_match[] = {
+>> +       { .compatible = "qcom,sc7180-aggre1-noc",
+>> +         .data = &sc7180_aggre1_noc},
+>> +       { .compatible = "qcom,sc7180-aggre2-noc",
+>> +         .data = &sc7180_aggre2_noc},
+>> +       { .compatible = "qcom,sc7180-camnoc-virt",
+>> +         .data = &sc7180_camnoc_virt},
+>> +       { .compatible = "qcom,sc7180-compute-noc",
+>> +         .data = &sc7180_compute_noc},
+>> +       { .compatible = "qcom,sc7180-config-noc",
+>> +         .data = &sc7180_config_noc},
+>> +       { .compatible = "qcom,sc7180-dc-noc",
+>> +         .data = &sc7180_dc_noc},
+>> +       { .compatible = "qcom,sc7180-gem-noc",
+>> +         .data = &sc7180_gem_noc},
+>> +       { .compatible = "qcom,sc7180-ipa-virt",
+>> +         .data = &sc7180_ipa_virt},
+>> +       { .compatible = "qcom,sc7180-mc-virt",
+>> +         .data = &sc7180_mc_virt},
+>> +       { .compatible = "qcom,sc7180-mmss-noc",
+>> +         .data = &sc7180_mmss_noc},
+>> +       { .compatible = "qcom,sc7180-npu-noc",
+>> +         .data = &sc7180_npu_noc},
+>> +       { .compatible = "qcom,sc7180-qup-virt",
+>> +         .data = &sc7180_qup_virt},
+>> +       { .compatible = "qcom,sc7180-system-noc",
+>> +         .data = &sc7180_system_noc},
+>> +       { },
+> 
+> Nitpick: Drop the comma as it's the sentinel and nothing can come 
+> after.
+> will remove it.
+>> +};
+>> +MODULE_DEVICE_TABLE(of, qnoc_of_match);
