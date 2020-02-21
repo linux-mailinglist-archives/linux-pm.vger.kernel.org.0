@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 388CE167DC1
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 13:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E51167DED
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 14:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727137AbgBUMxI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 07:53:08 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:38442 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726909AbgBUMxH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 07:53:07 -0500
-Received: by mail-wr1-f67.google.com with SMTP id e8so1936041wrm.5
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 04:53:05 -0800 (PST)
+        id S1728081AbgBUNE4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 08:04:56 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:39893 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728330AbgBUNEz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 08:04:55 -0500
+Received: by mail-wm1-f65.google.com with SMTP id c84so1764306wme.4
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 05:04:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=1Ecw0TwcU7uRxX0RbgoPbcukxSNyerj4Gg5H+/7jGU4=;
-        b=Is97m+zF/OlL47unjgTyrlN2h5LOz7b+bCuBXaZ7I4NfCKXkYB+eEn9tr8HWToU5hS
-         LcgaMH98pZ8E1XJVjarNN4j5rDbOg0TvWZqonAeorXDYmylpc5/p3a6zdZo0+OViPxVf
-         vjaBs1HwK+d066WsYLlvTd/cfgCUGAocMJZCBxAbIYOmchE4hYYwfT2fgcgtO/lDa6n+
-         s46hilc6kKO54iNjcQIKiz/zMeNqSx8RMh2L/6aFfRv62MCyYyw9TIi26wXy7zkiHsnO
-         0qJx6mpEC9etxLhetlmYRb+0QZ7ItHTVG67ZgyBXOa2HCHtlIL/DA/fAs1ZuOWKYzTqv
-         60OQ==
+        bh=bJNVzMRkFtXXYPsTt3SQwSqc9RpddqkHKGG4HJkeN0I=;
+        b=jkgvwEvxyvKjU2Titynfam24eXLGYSEaz4oiQM93hFTl4Jb4XLMaJcbX31PBGNr7S4
+         MfS43Igd6k6jCuZzDeWQ/4h204Y84NqG/NxkRws+7Vd1aqGx+rLpsIDijDI9YZUblMYQ
+         SAhRpyFYdkWEG2Radn/TtiRKHmfjcVcALIu5A0NbeLfuKvQWyhigGDbvzYoutsWfwMcW
+         r3DnA9sqddt7ur7yiPziRvAZlcGuEEFx782y7WHjH2JrzEww9hKjB4lncsJUbOT3ZF2F
+         hYNMVWHJRqeUEhM/fSIOyrGp3p5D3BlJFn3jbvtc1r/h2UPfXCW9p1KdWT+TUByJfH1O
+         4pxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=1Ecw0TwcU7uRxX0RbgoPbcukxSNyerj4Gg5H+/7jGU4=;
-        b=mquCyySOwaTSUIhIuJijMUTGYsFZmZ392rkkB3oQIeEFrb8sJ9qp+fg2LIHNsUMEpc
-         MRcRMtEwDsgsoE4VmqvGFyWPrzeypkKt47S5gDfhfCr8L0RALYT1w0+mO27+IM+/b31F
-         DQkFCTytZBaFxYZopSlUun0vjpIj0GQqt/r9adgGikcZNO2KBiL/UfEdNI+LrUnX3wOh
-         L0s/iFXbbkIm2FG7VvKRxNVrVlN4LWV6rK7zih1xKAPFtn76uQXYwyffL3cLt3zn0onl
-         jsuTzNj5imaz3x09uvuvSinQ5HShD0/uIpA3jkqdqb65tdPvgHxS0gEi/+Dh4TnxUpJU
-         L4Yw==
-X-Gm-Message-State: APjAAAXIAMKIcAY0lBbbEaj2GGDUb3o1130l2kPaXcMl5dy6xTDgijUs
-        GjFJNaVgeBFAZ6blhWLnrnz/7w==
-X-Google-Smtp-Source: APXvYqxlFnvz5Oqlv3ZiF1S9hXG57kU+AY4Dg2xiBGuM31y83G3pczXUHHnhoRpdAgUpGaKfUCxWBQ==
-X-Received: by 2002:a05:6000:124b:: with SMTP id j11mr45114087wrx.285.1582289584497;
-        Fri, 21 Feb 2020 04:53:04 -0800 (PST)
+        bh=bJNVzMRkFtXXYPsTt3SQwSqc9RpddqkHKGG4HJkeN0I=;
+        b=RPi0TtBL/TnbORLf9/d7JRozreMK691SOf8meyLXnzv4eNi6vLJxtFlaCLwcTDIB0G
+         Lb97rXM4O/86nG5bBYSWtQ3QmjEEmmSAzUudEOuNpwdcAza+EOrdV2Uz9+hVNwzmwqRp
+         sw6DoahWmJiKm0/CGiAPVeGt6Ivra/lna3bjJXu/3UygwCSfx6lxl5yUKJo/3bz2m0LA
+         /Znu+hyXVb/ufit4MnwVma+NQ1V+oa5E+Im7DT1dWQc3sq6CZvuG6TlZw7JGGEA6nlE1
+         BFSBlaUuQng6GFOM3Wa0no2E1pxcmZVMclb/8t8j/mXwvaQtzeCqhyPuFJRRCXwJoKrh
+         8ojA==
+X-Gm-Message-State: APjAAAXBzhapdUlG29V/PKOy/oggAiTY2ATh3QadmkoPNrFPYDq7Kge7
+        QySD9OF/HBLAI8lfCkjQvooZoA==
+X-Google-Smtp-Source: APXvYqwrCwOw/nJYCU07QgEOQnMfnFDja/YSvf9ktRaNNnMixM8MO9y/tOJAK/QRxV9OsIfVPeM/zw==
+X-Received: by 2002:a1c:20d6:: with SMTP id g205mr3942457wmg.38.1582290292313;
+        Fri, 21 Feb 2020 05:04:52 -0800 (PST)
 Received: from linaro.org ([2a01:e34:ed2f:f020:2dfb:b5ce:9043:4adb])
-        by smtp.gmail.com with ESMTPSA id k10sm3781715wrd.68.2020.02.21.04.53.02
+        by smtp.gmail.com with ESMTPSA id z10sm3561868wmk.31.2020.02.21.05.04.50
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 21 Feb 2020 04:53:03 -0800 (PST)
-Date:   Fri, 21 Feb 2020 13:53:00 +0100
+        Fri, 21 Feb 2020 05:04:51 -0800 (PST)
+Date:   Fri, 21 Feb 2020 14:04:48 +0100
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     Anson Huang <Anson.Huang@nxp.com>
 Cc:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
@@ -60,142 +60,98 @@ Cc:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
         marcin.juszkiewicz@linaro.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org, Linux-imx@nxp.com
-Subject: Re: [PATCH V15 RESEND 3/5] thermal: imx_sc: add i.MX system
- controller thermal support
-Message-ID: <20200221125300.GB10516@linaro.org>
+Subject: Re: [PATCH V15 RESEND 5/5] arm64: dts: imx: add i.MX8QXP thermal
+ support
+Message-ID: <20200221130448.GC10516@linaro.org>
 References: <1582161028-2844-1-git-send-email-Anson.Huang@nxp.com>
- <1582161028-2844-3-git-send-email-Anson.Huang@nxp.com>
+ <1582161028-2844-5-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1582161028-2844-3-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1582161028-2844-5-git-send-email-Anson.Huang@nxp.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Anson,
-
-sorry for the delay with this review, hopefully the upstreaming will be now a
-bit more smooth.
-
-Apart the comments below, the driver looks good to me.
-
-On Thu, Feb 20, 2020 at 09:10:26AM +0800, Anson Huang wrote:
-> i.MX8QXP is an ARMv8 SoC which has a Cortex-M4 system controller
-> inside, the system controller is in charge of controlling power,
-> clock and thermal sensors etc..
-> 
-> This patch adds i.MX system controller thermal driver support,
-> Linux kernel has to communicate with system controller via MU
-> (message unit) IPC to get each thermal sensor's temperature,
-> it supports multiple sensors which are passed from device tree,
-> please see the binding doc for details.
+On Thu, Feb 20, 2020 at 09:10:28AM +0800, Anson Huang wrote:
+> Add i.MX8QXP CPU thermal zone support.
 > 
 > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 > ---
 > No change.
 > ---
->  drivers/thermal/Kconfig          |  11 +++
->  drivers/thermal/Makefile         |   1 +
->  drivers/thermal/imx_sc_thermal.c | 142 +++++++++++++++++++++++++++++++++++++++
->  3 files changed, 154 insertions(+)
->  create mode 100644 drivers/thermal/imx_sc_thermal.c
+>  arch/arm64/boot/dts/freescale/imx8qxp.dtsi | 36 ++++++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
 > 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 5a05db5..d1cb8dc 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -251,6 +251,17 @@ config IMX_THERMAL
->  	  cpufreq is used as the cooling device to throttle CPUs when the
->  	  passive trip is crossed.
+> diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> index fb5f752..0a14fe4 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> @@ -11,6 +11,7 @@
+>  #include <dt-bindings/input/input.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/pinctrl/pads-imx8qxp.h>
+> +#include <dt-bindings/thermal/thermal.h>
 >  
-> +config IMX_SC_THERMAL
-> +	tristate "Temperature sensor driver for NXP i.MX SoCs with System Controller"
-> +	depends on ARCH_MXC && IMX_SCU
-
-IMX_SCU depends on IMX_MBOX which depends on ARCH_MXC. This dependency could be
-simplified.
-
-Also add the COMPILE_TEST option to improve compilation test coverage.
-
-> +	depends on OF
-> +	help
-> +	  Support for Temperature Monitor (TEMPMON) found on NXP i.MX SoCs with
-> +	  system controller inside, Linux kernel has to communicate with system
-> +	  controller via MU (message unit) IPC to get temperature from thermal
-> +	  sensor. It supports one critical trip point and one
-> +	  passive trip point for each thermal sensor.
+>  / {
+>  	interrupt-parent = <&gic>;
+> @@ -189,6 +190,11 @@
+>  			compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
+>  			timeout-sec = <60>;
+>  		};
 > +
->  config MAX77620_THERMAL
->  	tristate "Temperature sensor driver for Maxim MAX77620 PMIC"
->  	depends on MFD_MAX77620
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index 9fb88e2..a11a6d8 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -43,6 +43,7 @@ obj-$(CONFIG_DB8500_THERMAL)	+= db8500_thermal.o
->  obj-$(CONFIG_ARMADA_THERMAL)	+= armada_thermal.o
->  obj-$(CONFIG_TANGO_THERMAL)	+= tango_thermal.o
->  obj-$(CONFIG_IMX_THERMAL)	+= imx_thermal.o
-> +obj-$(CONFIG_IMX_SC_THERMAL)	+= imx_sc_thermal.o
->  obj-$(CONFIG_MAX77620_THERMAL)	+= max77620_thermal.o
->  obj-$(CONFIG_QORIQ_THERMAL)	+= qoriq_thermal.o
->  obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
-> diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
-> new file mode 100644
-> index 0000000..d406ecb
-> --- /dev/null
-> +++ b/drivers/thermal/imx_sc_thermal.c
-> @@ -0,0 +1,142 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Copyright 2018-2019 NXP.
-
-*sigh* 2020 now ...
-
-[ ... ]
-
-> +static int imx_sc_thermal_get_temp(void *data, int *temp)
-> +{
-> +	struct imx_sc_msg_misc_get_temp msg;
-> +	struct imx_sc_rpc_msg *hdr = &msg.hdr;
-> +	struct imx_sc_sensor *sensor = data;
-> +	int ret;
+> +		tsens: thermal-sensor {
+> +			compatible = "fsl,imx8qxp-sc-thermal", "fsl,imx-sc-thermal";
+> +			#thermal-sensor-cells = <1>;
+> +		};
+>  	};
+>  
+>  	timer {
+> @@ -586,4 +592,34 @@
+>  			#clock-cells = <1>;
+>  		};
+>  	};
 > +
-> +	msg.data.req.resource_id = sensor->resource_id;
-> +	msg.data.req.type = IMX_SC_C_TEMP;
-> +
-> +	hdr->ver = IMX_SC_RPC_VERSION;
-> +	hdr->svc = IMX_SC_RPC_SVC_MISC;
-> +	hdr->func = IMX_SC_MISC_FUNC_GET_TEMP;
-> +	hdr->size = 2;
+> +	thermal_zones: thermal-zones {
+> +		cpu-thermal0 {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <2000>;
+> +			thermal-sensors = <&tsens IMX_SC_R_SYSTEM>;
+> +			trips {
+> +				cpu_alert0: trip0 {
+> +					temperature = <107000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
 
-Can you explain this 'size' value?
+May be you can add a 'hot' trip point before 'critical' for future use before
+reaching the emergency shutdown.
 
-[ ... ]
-
-> +MODULE_DEVICE_TABLE(of, imx_sc_thermal_table);
-> +
-> +static struct platform_driver imx_sc_thermal_driver = {
-> +		.probe = imx_sc_thermal_probe,
-
-The driver can be compiled as module but there is no 'remove' callback
-
-> +		.driver = {
-> +			.name = "imx-sc-thermal",
-> +			.of_match_table = imx_sc_thermal_table,
-> +		},
-> +};
-> +module_platform_driver(imx_sc_thermal_driver);
-> +
-> +MODULE_AUTHOR("Anson Huang <Anson.Huang@nxp.com>");
-> +MODULE_DESCRIPTION("Thermal driver for NXP i.MX SoCs with system controller");
-> +MODULE_LICENSE("GPL v2");
-
-
+> +				cpu_crit0: trip1 {
+> +					temperature = <127000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_alert0>;
+> +					cooling-device =
+> +						<&A35_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +						<&A35_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +						<&A35_2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +						<&A35_3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+> +		};
+> +	};
+>  };
+> -- 
+> 2.7.4
+> 
 
 -- 
 
