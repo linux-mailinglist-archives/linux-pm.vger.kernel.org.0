@@ -2,442 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BED47166E49
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 05:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB83166F5F
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 06:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729371AbgBUEPO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Feb 2020 23:15:14 -0500
-Received: from mail-pl1-f171.google.com ([209.85.214.171]:42019 "EHLO
-        mail-pl1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729027AbgBUEPO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Feb 2020 23:15:14 -0500
-Received: by mail-pl1-f171.google.com with SMTP id e8so301690plt.9
-        for <linux-pm@vger.kernel.org>; Thu, 20 Feb 2020 20:15:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=wSyDl9ZInkC/WCT8OcRUCpZRo3gJQy2ioo/9aXB+86s=;
-        b=O/tpK3HpTIYqUJnrWUsVI5TTHNAxEgzSJYDy0IyO5OTJVRBX34p50fwDv1lQ6E53MF
-         uOX/FIqqMJDdLDTOvj/uVH6TQAbwGehId9q29bP7XHmBQYW3QczoMrqpeismY+pREIAI
-         ld+GtCEmntyyF7zPiVl/AVXuk3Zs/ppp5DIINwQH1Av0iWu3EW3Bu0A4S01gygnfJrl/
-         LhVpkylNKcHbiuw8md76XjWYztUhQ/aRvLPoiOtNTWLdZEsgrJTMXd1enDSJpQSJeZb+
-         LFZ5ki+7KnQFIUpsijFYGMQh/w5rfZaaaj/rmhw6CKTElGGnh/KJ/h4NYLyB2dy+7Yc8
-         kKdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=wSyDl9ZInkC/WCT8OcRUCpZRo3gJQy2ioo/9aXB+86s=;
-        b=J0uTghdDI0HrxMoeKIJ2HaSTM/VaFQ/fQwpQbhgNosAL3TekE30pjEpKnV+RZaGzgT
-         HHja5ig5/ao34hHx692fZvuz5YMLgBLi0fNzjUPWr8blbeUsumCrmbWbZTg0gyrvrgCx
-         UuBwBvu8SuEfWQIMeHxDKYniUPl2sMgcPuaLbPGUORDLeL8Nhzeqm9ZIVv1fJSytaJ20
-         WvWg1eZ/NLs5Q4YbYkrj23jOb2vzIbYt+ut3qJneqV+cLnCXS2AaTLhG3ZoAYhijtqo9
-         eDCRiHy8xo4ihSpOIJ9hNg0JgLmHjgzvYS+kYmez7OCpSdphFTPotxOc9FhgLZD+wlIn
-         3pxQ==
-X-Gm-Message-State: APjAAAVwQUDDqKC4WuJx1hB2bKDIjEi2oPHkM+S//ZA2AfTjPi4c4elD
-        I/oHhx0DTBVQ7pbmp/jb80o0Qw==
-X-Google-Smtp-Source: APXvYqwgFcgvk5OS99Vn7a78v8kA68Ev6EEr5JYoBKA4luiftmjB5DFZPlVufu+ZfN+w4eEHuj5WXg==
-X-Received: by 2002:a17:90a:d804:: with SMTP id a4mr686796pjv.11.1582258512868;
-        Thu, 20 Feb 2020 20:15:12 -0800 (PST)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k4sm1087765pfg.40.2020.02.20.20.15.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Feb 2020 20:15:12 -0800 (PST)
-Message-ID: <5e4f5950.1c69fb81.9db02.4bac@mx.google.com>
-Date:   Thu, 20 Feb 2020 20:15:12 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726100AbgBUF5z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 00:57:55 -0500
+Received: from mail27.static.mailgun.info ([104.130.122.27]:40400 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726331AbgBUF5y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 00:57:54 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1582264674; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=X2NaiNYDwEsquSBg7TBO8wBDxqN+iwNUppUwtZAbcmI=; b=czmmyRWkjD1pCtUFa7SYS3Z30CDJNpfdFjDIPq9wt6lOpvd292ev0+EGB5orQHY2nHwO+pZx
+ f6IOn8mH0y6iU4soTlFQEjHIUHOxrxrpeQoM4dOwSnId0sh9oBbE0yAmjTfM8i3xL4j6PqRy
+ nznKzq8fkKNxYLi7Rh/a1lRfCYw=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e4f715a.7fc39fd95f80-smtp-out-n03;
+ Fri, 21 Feb 2020 05:57:46 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E25F3C4479F; Fri, 21 Feb 2020 05:57:45 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.13.37] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mkshah)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 19B54C43383;
+        Fri, 21 Feb 2020 05:57:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 19B54C43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=mkshah@codeaurora.org
+Subject: Re: [PATCH 1/2] dt-bindings: Introduce soc sleep stats bindings for
+ Qualcomm SoCs
+To:     Stephen Boyd <swboyd@chromium.org>, andy.gross@linaro.org,
+        david.brown@linaro.org, linux-arm-msm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        bjorn.andersson@linaro.org, evgreen@chromium.org,
+        dianders@chromium.org, rnayak@codeaurora.org, ilina@codeaurora.org,
+        lsrao@codeaurora.org, devicetree@vger.kernel.org,
+        Mahesh Sivasubramanian <msivasub@codeaurora.org>
+References: <20190808061228.16573-1-mkshah@codeaurora.org>
+ <20190808061228.16573-2-mkshah@codeaurora.org>
+ <5d4c4bb6.1c69fb81.db640.7518@mx.google.com>
+From:   Maulik Shah <mkshah@codeaurora.org>
+Message-ID: <9b106bc1-572a-a277-c88b-d6960b3cec35@codeaurora.org>
+Date:   Fri, 21 Feb 2020 11:27:38 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.6-rc2-54-gc6cef55cdff7
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 59 runs,
- 1 regressions (v5.6-rc2-54-gc6cef55cdff7)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <5d4c4bb6.1c69fb81.db640.7518@mx.google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-GB
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 59 runs, 1 regressions (v5.6-rc2-54-gc6cef55cdff7)
 
-Test results summary
---------------------
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-1   | alpine-db                    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-2   | am335x-boneblack             | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-3   | at91-sama5d4_xplained        | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-4   | bcm2836-rpi-2-b              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 0/1    =
-
-5   | bcm2837-rpi-3-b              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-6   | exynos4412-odroidx2          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-7   | exynos5422-odroidxu3         | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-8   | hifive-unleashed-a00         | riscv  | lab-baylibre          | gcc-8=
-    | defconfig          | 1/1    =
-
-9   | hip07-d05                    | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 3/5    =
-
-10  | imx6q-sabrelite              | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-11  | imx8mn-ddr4-evk              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-12  | meson-g12a-sei510            | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-13  | meson-g12a-u200              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-14  | meson-g12a-x96-max           | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-15  | meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-16  | meson-g12b-odroid-n2         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-17  | meson-gxbb-p200              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 4/4    =
-
-18  | meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-19  | meson-gxl-s805x-p241         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-20  | meson-gxl-s905d-p230         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-21  | meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-22  | meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-23  | meson-gxm-khadas-vim2        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-24  | meson-gxm-q200               | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-25  | meson-sm1-sei610             | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-26  | meson8b-odroidc1             | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-27  | minnowboard-turbot-E3826     | x86_64 | lab-collabora         | gcc-8=
-    | x86_64_defconfig   | 5/5    =
-
-28  | omap3-beagle-xm              | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-29  | omap4-panda                  | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-30  | omap4-panda                  | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-31  | qemu_arm-virt-gicv2          | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 1/1    =
-
-32  | qemu_arm-virt-gicv2          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 1/1    =
-
-33  | qemu_arm-virt-gicv3          | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 1/1    =
-
-34  | qemu_arm-virt-gicv3          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 1/1    =
-
-35  | qemu_arm64-virt-gicv2        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-36  | qemu_arm64-virt-gicv2        | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-37  | qemu_arm64-virt-gicv3        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-38  | qemu_arm64-virt-gicv3        | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-39  | qemu_x86_64                  | x86_64 | lab-baylibre          | gcc-8=
-    | x86_64_defconfig   | 5/5    =
-
-40  | qemu_x86_64                  | x86_64 | lab-collabora         | gcc-8=
-    | x86_64_defconfig   | 5/5    =
-
-41  | rk3288-rock2-square          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-42  | rk3288-veyron-jaq            | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 63/65  =
-
-43  | rk3399-gru-kevin             | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 79/82  =
-
-44  | rk3399-puma-haikou           | arm64  | lab-theobroma-systems | gcc-8=
-    | defconfig          | 5/5    =
-
-45  | sun4i-a10-olinuxino-lime     | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-46  | sun50i-a64-pine64-plus       | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-47  | sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-48  | sun50i-h6-pine-h64           | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-49  | sun50i-h6-pine-h64-model-b   | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-50  | sun5i-a13-olinuxino-micro    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-51  | sun7i-a20-cubieboard2        | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-52  | sun7i-a20-olinuxino-lime2    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-53  | sun8i-h2-plus...ch-all-h3-cc | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-54  | sun8i-h2-plus-orangepi-r1    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-55  | sun8i-h2-plus-orangepi-zero  | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-56  | sun8i-h3-libretech-all-h3-cc | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-57  | tegra124-jetson-tk1          | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-58  | tegra124-jetson-tk1          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-59  | tegra124-nyan-big            | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.6-rc2-54-gc6cef55cdff7
-  URL:      git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.g=
-it
-  SHA:      c6cef55cdff715472903e65bda7182f1f254ef6e =
-
-
-
-Test Failures
--------------
-     =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-2   | am335x-boneblack             | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-am335x-boneblack.=
-txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-am335x-boneblack.=
-html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-8-gd700ebb99e8f/armel/baseline/rootfs.cpio.gz     =
-
-
-  dmesg - 3 tests: 2  PASS, 1 FAIL, 0 SKIP
-    * crit:
-        never passed
-        1 lines    =
-
-         =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-4   | bcm2836-rpi-2-b              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 0/1    =
-
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-bcm2836-rpi-2-b.=
-txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-bcm2836-rpi-2-b.=
-html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-8-gd700ebb99e8f/armel/baseline/rootfs.cpio.gz  =
-
-
-  1 tests: 0 PASS, 1 FAIL, 0 SKIP
-    * login:
-        never passed   =
-
-         =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-6   | exynos4412-odroidx2          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos4412-odroi=
-dx2.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos4412-odroi=
-dx2.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-8-gd700ebb99e8f/armel/baseline/rootfs.cpio.gz     =
-
-
-  dmesg - 3 tests: 2  PASS, 1 FAIL, 0 SKIP
-    * alert:
-        never passed
-        1 lines    =
-
-            =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-9   | hip07-d05                    | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 3/5    =
-
-
-  Results:     3 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm64/defconfig/gcc-8/lab-collabora/baseline-hip07-d05.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm64/defconfig/gcc-8/lab-collabora/baseline-hip07-d05.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-8-gd700ebb99e8f/arm64/baseline/rootfs.cpio.gz     =
-
-
-  dmesg - 3 tests: 1  PASS, 2 FAIL, 0 SKIP
-    * alert:
-        never passed
-        11 lines
-    * emerg:
-        never passed
-        2 lines    =
-
-                                                                           =
-                           =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-42  | rk3288-veyron-jaq            | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 63/65  =
-
-
-  Results:     63 PASS, 2 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-rk3288-veyron-ja=
-q.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-rk3288-veyron-ja=
-q.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-8-gd700ebb99e8f/armel/baseline/rootfs.cpio.gz       =
-
-
-  bootrr - 61 tests: 59  PASS, 2 FAIL, 0 SKIP
-    * cros-ec-keyb-probed:
-        new failure (last pass: pm-5.6-rc2-146-g00b838d60ec4)
-    * rk3x-i2c5-probed:
-        never passed  =
-
-      =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-43  | rk3399-gru-kevin             | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 79/82  =
-
-
-  Results:     79 PASS, 3 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc2-54-gc6cef5=
-5cdff7/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-8-gd700ebb99e8f/arm64/baseline/rootfs.cpio.gz       =
-
-
-  bootrr - 78 tests: 75  PASS, 3 FAIL, 0 SKIP
-    * cros-ec-sensors-accel0-probed:
-        never passed
-    * cros-ec-sensors-accel1-probed:
-        never passed
-    * cros-ec-sensors-gyro0-probed:
-        never passed  =
-
-                                                     =20
+On 8/8/2019 9:50 PM, Stephen Boyd wrote:
+> Quoting Maulik Shah (2019-08-07 23:12:27)
+>> Add device binding documentation for Qualcomm Technology Inc's (QTI)
+>> SoC sleep stats driver. The driver is used for displaying SoC sleep
+>> statistic maintained by Always On Processor or Resource Power Manager.
+>>
+>> Cc: devicetree@vger.kernel.org
+>> Signed-off-by: Mahesh Sivasubramanian <msivasub@codeaurora.org>
+>> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+>> Signed-off-by: Maulik Shah <mkshah@codeaurora.org>
+> Your SoB chain is odd. The author is Mahesh? Otherwise, use the
+> Co-Developed-by tag.
+corrected in v2.
+>> ---
+>>   .../bindings/soc/qcom/soc-sleep-stats.txt     | 36 +++++++++++++++++++
+>>   1 file changed, 36 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/soc/qcom/soc-sleep-stats.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/qcom/soc-sleep-stats.txt b/Documentation/devicetree/bindings/soc/qcom/soc-sleep-stats.txt
+>> new file mode 100644
+>> index 000000000000..ee40687ded34
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/soc/qcom/soc-sleep-stats.txt
+>> @@ -0,0 +1,36 @@
+>> +* SoC Sleep Stats
+>> +
+>> +Always On Processor/Resource Power Manager maintains statistics of the SoC
+>> +sleep modes involving lowering or powering down of the backbone rails - Cx
+> What is a 'backbone' rail?
+done.
+>
+>> +and Mx and the oscillator clock, XO.
+> Drop the comma? XO is the oscillator clock.
+done.
+>
+>> +
+>> +Statistics includes SoC sleep mode type, number of times low power mode were
+>> +entered, time of last entry, time of last exit and accumulated sleep duration.
+>> +SoC Sleep Stats driver provides sysfs interface to display this information.
+> Can this document be YAML? Then it can be validated.
+converted to YAML in v2.
+>
+>> +
+>> +PROPERTIES
+>> +
+>> +- compatible:
+>> +       Usage: required
+>> +       Value type: <string>
+>> +       Definition: Should be "qcom,rpmh-sleep-stats" or "qcom,rpm-sleep-stats".
+>> +
+>> +- reg:
+>> +       Usage: required
+>> +       Value type: <prop-encoded-array>
+>> +       Definition: The base address on the Always On Processor or Resource Power
+>> +                   Manager from where the stats are read.
+>> +
+>> +EXAMPLE 1:
+>> +
+>> +       rpmh_sleep_stats: soc-sleep-stats@c3f0000 {
+>> +               compatible = "qcom,rpmh-sleep-stats";
+>> +               reg = <0 0xc3f0000 0 0x400>;
+> Is this memory region in DDR? Or some specific IMEM location? I wonder
+> if it would be better to just have a pointer from the RPM node to this
+> memory region and then populate some stats if so.
+Not a DDR.
+>
+>> +       };
+>> +
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
