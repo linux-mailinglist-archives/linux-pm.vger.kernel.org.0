@@ -2,143 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D40167E1C
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 14:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 665B6167E6F
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 14:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728351AbgBUNMd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 08:12:33 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:36850 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727137AbgBUNMd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 08:12:33 -0500
-Received: by mail-wm1-f66.google.com with SMTP id p17so1798202wma.1
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 05:12:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=a/KavHLvvULXfL2VP34j+gxXqKWZ5d3n9oQaqLdPQv4=;
-        b=eib3Jfwyj+tZtw0Vz5eRWnOQiMb9kRoD6q2gN2p55T9aS3rgoCUuv4jkOzgSy6JAgQ
-         LEjM/7bJFu5XAMFaMvFkgF8XI6h8ICSPxck1TJrj6R8L0TLPzxasmiTqaRBEuJSE492o
-         xUPyAD7jB/fuLzt6Z6u8a/djHUo7qip9vuLowvh5OaxbICooz75RPYWXY584WFX80Hsq
-         UecpvDo6HfzMYfFJjPppbxEhywhbLPSsEWUgzWENhmVwerLyCsfebJ75YhAi0BV6oT34
-         gcEUPT4zy5xBisJiKhATgcWrOM/bv0x40XtU3oXOP8d4vAUNTTge4+2/pCIL965PidD5
-         SzyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=a/KavHLvvULXfL2VP34j+gxXqKWZ5d3n9oQaqLdPQv4=;
-        b=KnEJ3leq1RdCkOdxmOAo7/uui4tQpVmevxXeJjk68DYFbiiuQ4WgieG8KRYS7DwpM2
-         nAgUMDG9PSaVu5rKzI7HuKXMeMoyIC5Tv01S+9VCFIDWcS9bZjUT+phwKIpfcaEpZnoJ
-         fzS0pHHNG3BZeMSYUJz5Zltet0KxXORObEursvcPHKgUm9l/ZqrUYIuwSdxEeK+NUKxs
-         TkYGzsMC+vJFWSl2ffQuUPwNUIt9m7CS/do+NI6SzIZbgdGbbbaA/cBQ9hCJ1cknJ3YF
-         CToI9vCIxLlB5U/QV0KrkoBZQYaeYxrn1XnQd0Ge8HE72kSHK38zTzeQT0jNmuT/CnRd
-         KQMQ==
-X-Gm-Message-State: APjAAAU3b3A7dOt7dIcGAB2IoBBSVG7WeINwl9Lj+d7Q5jkoCTb9rTZk
-        BBKze+JcG6FkxnJWT+7O3EVflQ==
-X-Google-Smtp-Source: APXvYqx5emu1fdVAd6Tj3p81RSkBc6Mf5Yyr0nrkLGXMlG0khLLYOloIT2vAb1bEk0+GwUGFpzZSvQ==
-X-Received: by 2002:a1c:4e02:: with SMTP id g2mr3929356wmh.131.1582290750388;
-        Fri, 21 Feb 2020 05:12:30 -0800 (PST)
-Received: from linaro.org ([2a01:e34:ed2f:f020:2dfb:b5ce:9043:4adb])
-        by smtp.gmail.com with ESMTPSA id c15sm3881537wrt.1.2020.02.21.05.12.28
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 21 Feb 2020 05:12:29 -0800 (PST)
-Date:   Fri, 21 Feb 2020 14:12:26 +0100
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Anson Huang <anson.huang@nxp.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "srinivas.kandagatla@linaro.org" <srinivas.kandagatla@linaro.org>,
-        "krzk@kernel.org" <krzk@kernel.org>,
-        Andy Duan <fugang.duan@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "olof@lixom.net" <olof@lixom.net>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        "marcin.juszkiewicz@linaro.org" <marcin.juszkiewicz@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH V15 RESEND 2/5] thermal: of-thermal: add API for getting
- sensor ID from DT
-Message-ID: <20200221131226.GE10516@linaro.org>
-References: <1582161028-2844-1-git-send-email-Anson.Huang@nxp.com>
- <1582161028-2844-2-git-send-email-Anson.Huang@nxp.com>
- <20200221091112.GA10516@linaro.org>
- <DB3PR0402MB39161BB726FE5413F30F0263F5120@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+        id S1728301AbgBUNYB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 08:24:01 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:52265 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727781AbgBUNYB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 08:24:01 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200221132358euoutp02b35ba8f95ba422dbcd7ee0ffdf293a56~1ba4gH1ct0042700427euoutp02N
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 13:23:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200221132358euoutp02b35ba8f95ba422dbcd7ee0ffdf293a56~1ba4gH1ct0042700427euoutp02N
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1582291438;
+        bh=cuI5yqQy9lm3oM5kNN1Ooe7HUzA9bMYoiTHONcqUpI8=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=pL52/6GGDKq1EiWCgVQ22tDhadPhKOHsCnLrtrgEkwK+lReWHo4LYUQmCOEnAYjFU
+         aXizCYbD2xGF8DMTfTAyDDK8ON2HUocK1ZxLzZi6UKIXaDE7QMi667MH5f1XHm1t1E
+         ZnLgBl+mBaCP9HIk0J8CMO+HJtUZ8/XQN1R4IrHI=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200221132358eucas1p20a85c3e80cb1b725c355142b3fcfafe0~1ba4QT_qP0512805128eucas1p2S;
+        Fri, 21 Feb 2020 13:23:58 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 4C.F1.60698.EE9DF4E5; Fri, 21
+        Feb 2020 13:23:58 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200221132358eucas1p27c02884550108bf3712d697d8f14f425~1ba31wdN30532105321eucas1p2U;
+        Fri, 21 Feb 2020 13:23:58 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200221132357eusmtrp1a484ec18f4669f8a3dda246bec1d19e7~1ba31HfDl0122101221eusmtrp1d;
+        Fri, 21 Feb 2020 13:23:57 +0000 (GMT)
+X-AuditID: cbfec7f5-a0fff7000001ed1a-66-5e4fd9ee860a
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 6B.D8.08375.DE9DF4E5; Fri, 21
+        Feb 2020 13:23:57 +0000 (GMT)
+Received: from [106.120.51.15] (unknown [106.120.51.15]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200221132357eusmtip25b14ebb49d9fe1d507d885ec24e9edfd~1ba3ZahHZ0994509945eusmtip2H;
+        Fri, 21 Feb 2020 13:23:57 +0000 (GMT)
+Subject: Re: [PATCH 1/3] regulator: max14577: Add proper dt-compatible
+ strings
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <b52332cd-1dec-fdfe-51fc-8605d94abe7d@samsung.com>
+Date:   Fri, 21 Feb 2020 14:23:57 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DB3PR0402MB39161BB726FE5413F30F0263F5120@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200221123813.GB5546@sirena.org.uk>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBKsWRmVeSWpSXmKPExsWy7djPc7rvbvrHGczYLWaxccZ6VoupD5+w
+        WVz/8pzV4vz5DewWl3fNYbP43HuE0eJ24wo2i9a9R9gtTu8uceD02LSqk82jb8sqRo/Pm+QC
+        mKO4bFJSczLLUov07RK4Mla9W8ta8IWzYvuy4gbGZo4uRg4OCQETib5f7F2MXBxCAisYJdac
+        b2eFcL4wSnxctQ4q85lRovPha6YuRk6wjvkbepggEssZJfp/boFqecsoMW3XJLAqYYEAiQXX
+        bjGC2CICyhJXv+9lASliFtjCJNG/cR4bSIJNwFCi620XmM0rYCcx4+oRJpCjWARUJea/UAAJ
+        iwrESsxeeZgFokRQ4uTMJ2A2p4CRxKQra5hBbGYBeYntb+dA2eISt57Mh7p0G7vE9eMVELaL
+        RP/7CYwQtrDEq+Nb2CFsGYnTk3vAbpMQaGaUeHhuLTuE08MocblpBlSHtcSdc7/YQI5jFtCU
+        WL9LHyLsKHFhyjkmSEDySdx4KwhxA5/EpG3TmSHCvBIdbUIQ1WoSs46vg1t78MIl5gmMSrOQ
+        fDYLyTezkHwzC2HvAkaWVYziqaXFuempxcZ5qeV6xYm5xaV56XrJ+bmbGIHp5/S/4193MO77
+        k3SIUYCDUYmH1+GYf5wQa2JZcWXuIUYJDmYlEV41Hr84Id6UxMqq1KL8+KLSnNTiQ4zSHCxK
+        4rzGi17GCgmkJ5akZqemFqQWwWSZODilGhgNea72yGv/mPb1hMHZFg9DxWtvtsoaJ7Q5ckot
+        tfLMzruu6fVjwq8P37mKRFdJ39RP3SZ969WNji8rNA2+sc3kzJK/e9g3Kpy5etGhmKOvb0s4
+        ZXpNvfPcUl0meHFR4c9F391LjCy/R4oteJj8mJXTXUZNdf7Sc65nqpRtHng35lbKCW4r8FBi
+        Kc5INNRiLipOBAAZUz8jOwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNIsWRmVeSWpSXmKPExsVy+t/xe7pvb/rHGZx7bWWxccZ6VoupD5+w
+        WVz/8pzV4vz5DewWl3fNYbP43HuE0eJ24wo2i9a9R9gtTu8uceD02LSqk82jb8sqRo/Pm+QC
+        mKP0bIryS0tSFTLyi0tslaINLYz0DC0t9IxMLPUMjc1jrYxMlfTtbFJSczLLUov07RL0Mla9
+        W8ta8IWzYvuy4gbGZo4uRk4OCQETifkbepi6GLk4hASWMkp87f3FBJGQkTg5rYEVwhaW+HOt
+        iw2i6DWjxPXGZUAOB4ewgJ/E2lkGIDUiAsoSV7/vZQGpYRbYxiRxqWkOI0TDNCaJ/e+nM4JU
+        sQkYSnS9BZnEycErYCcx4+oRJpBBLAKqEvNfKICERQViJW7M7GCCKBGUODnzCQuIzSlgJDHp
+        yhpmEJtZwExi3uaHULa8xPa3c6BscYlbT+YzTWAUmoWkfRaSlllIWmYhaVnAyLKKUSS1tDg3
+        PbfYUK84Mbe4NC9dLzk/dxMjMOK2Hfu5eQfjpY3BhxgFOBiVeHgdjvnHCbEmlhVX5h5ilOBg
+        VhLhVePxixPiTUmsrEotyo8vKs1JLT7EaAr020RmKdHkfGAyyCuJNzQ1NLewNDQ3Njc2s1AS
+        5+0QOBgjJJCeWJKanZpakFoE08fEwSnVwMj0wjimnKFrj60gW8GJfvM5H+9b9j/tMiuXD2Zs
+        eLfgS19CR1jGpEmWWioXZilfKTDIWmb/+Mu/t4XiC3y3ngurPeSR+jRR4fvqK/x8as61qnLM
+        vOfFmnd9DHxV+GwT85nb839ecGFffXlTW/qz8Nk1t7yfpni92ims++7zO2njYI0Zb67NsVdi
+        Kc5INNRiLipOBAC2sJJozgIAAA==
+X-CMS-MailID: 20200221132358eucas1p27c02884550108bf3712d697d8f14f425
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200220145134eucas1p288ae1910d3e8d12dc12f010ed0b07b45
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200220145134eucas1p288ae1910d3e8d12dc12f010ed0b07b45
+References: <CGME20200220145134eucas1p288ae1910d3e8d12dc12f010ed0b07b45@eucas1p2.samsung.com>
+        <20200220145127.21273-1-m.szyprowski@samsung.com>
+        <20200220165614.GD3926@sirena.org.uk>
+        <964b8c4c-36ca-203d-e62b-4a8fc970e23d@samsung.com>
+        <20200221123813.GB5546@sirena.org.uk>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 09:26:29AM +0000, Anson Huang wrote:
-> Hi, Daniel
-> 
-> > >   *       a valid .of_node, for the sensor node.
-> > > @@ -499,36 +546,22 @@ thermal_zone_of_sensor_register(struct device
-> > *dev, int sensor_id, void *data,
-> > >  	sensor_np = of_node_get(dev->of_node);
-> > >
-> > >  	for_each_available_child_of_node(np, child) {
-> > > -		struct of_phandle_args sensor_specs;
-> > >  		int ret, id;
-> > >
-> > >  		/* For now, thermal framework supports only 1 sensor per
-> > zone */
-> > > -		ret = of_parse_phandle_with_args(child, "thermal-sensors",
-> > > -						 "#thermal-sensor-cells",
-> > > -						 0, &sensor_specs);
-> > > +		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
-> > >  		if (ret)
-> > >  			continue;
-> > >
-> > > -		if (sensor_specs.args_count >= 1) {
-> > > -			id = sensor_specs.args[0];
-> > > -			WARN(sensor_specs.args_count > 1,
-> > > -			     "%pOFn: too many cells in sensor specifier %d\n",
-> > > -			     sensor_specs.np, sensor_specs.args_count);
-> > > -		} else {
-> > > -			id = 0;
-> > > -		}
-> > 
-> > Please take also the opportunity to factor out the function
-> > thermal_zone_of_sensor_register().
-> 
-> Sorry, I do NOT quite understand terms "factor out the function ...", could you please advise more detail?
+Hi Mark,
 
-Never mind, I realized I puzzled myself with the changes in the series :)
++CC: Rob Herring, here is the whole thread:
 
-Thanks
+https://lore.kernel.org/lkml/20200221123813.GB5546@sirena.org.uk/T/#t
 
-  -- Daniel
+On 21.02.2020 13:38, Mark Brown wrote:
+> On Fri, Feb 21, 2020 at 11:44:03AM +0100, Marek Szyprowski wrote:
+>> On 20.02.2020 17:56, Mark Brown wrote:
+>>
+>>> Why would we want to encode the particular way Linux happens to
+>>> represent regulators on a MFD into the DT binding?  It's not clear that
+>>> this is a generic thing (another OS might choose to have a separate
+>>> object for each regulator with no parent for example) and the compatible
+>>> isn't adding any information we didn't have already knowing about the
+>>> parent device.
+>>>
+>> Well, that's how the bindings for max14577/max77836 are defined:
+>>
+>> Documentation/devicetree/bindings/mfd/max14577.txt
+>>
+>> I've only fixed regulator, charger and extcon drivers to match the cells
+>> created by the current mfd driver.
+> We could just remove the compatible strings from the binding
+> documentation, they won't do any harm if we don't use them.
+
+Frankly I have no strong opinion on this. I've just wanted to fix the 
+broken autoloading of the drivers compiled as modules.
+
+Best regards
 
 -- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
