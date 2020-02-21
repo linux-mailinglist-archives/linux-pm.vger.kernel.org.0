@@ -2,207 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A04DA167984
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 10:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CC616798A
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 10:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727046AbgBUJgQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 04:36:16 -0500
-Received: from mail27.static.mailgun.info ([104.130.122.27]:27083 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728073AbgBUJgP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 04:36:15 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1582277775; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=dlszzUGlv2unK5PKobKXkEQRus5tUEcWTbP60Jg5+dM=; b=GBOiX8PtxJPKJS6/ygYnfeMSNQgU1aLrofEjJfAQx9UCC8dTWe2ASvcYobdDQ8H/DISUXVFh
- w64+w+MI4ZWZhJasiyHWyJ8h48W0OEgGJNfaBZMeBAiNFHBmwNhqDol9eNjBJ37q3m/JqFkB
- B8mFHVxJAJ4804BzLcKNtzlAVj4=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e4fa47a.7f0e2a30e8b8-smtp-out-n03;
- Fri, 21 Feb 2020 09:35:54 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 919A5C4479C; Fri, 21 Feb 2020 09:35:53 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from okukatla1-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: okukatla)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1E2C3C447A0;
-        Fri, 21 Feb 2020 09:35:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1E2C3C447A0
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=okukatla@codeaurora.org
-From:   Odelu Kukatla <okukatla@codeaurora.org>
-To:     georgi.djakov@linaro.org, daidavid1@codeaurora.org,
-        bjorn.andersson@linaro.org, evgreen@google.com,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
-        elder@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-msm-owner@vger.kernel.org,
-        Odelu Kukatla <okukatla@codeaurora.org>
-Subject: [V3, 3/3] dt-bindings: interconnect: Add Qualcomm SC7180 DT bindings
-Date:   Fri, 21 Feb 2020 15:00:50 +0530
-Message-Id: <1582277450-27382-4-git-send-email-okukatla@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1582277450-27382-1-git-send-email-okukatla@codeaurora.org>
-References: <1582277450-27382-1-git-send-email-okukatla@codeaurora.org>
+        id S1727957AbgBUJgl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 04:36:41 -0500
+Received: from mail-wr1-f52.google.com ([209.85.221.52]:42697 "EHLO
+        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726984AbgBUJgl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 04:36:41 -0500
+Received: by mail-wr1-f52.google.com with SMTP id k11so1181135wrd.9
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 01:36:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fttQOOv4xbgc3N7wuWKLpsK6IZKSEPyxzY4b9QO9DYU=;
+        b=IMqj2Yl0hEDrKfeqmpxtr1P8viwDcVAQYUbiYJc2kBAeIbp5Hhqp/BoS2/V6WC1RtL
+         APbAPzB1AwekuvLpxc5t+kRmhvcA1MDDAWw8U5R8nREWr/iVAhxtAYfpjrzQbXYY1JEm
+         ET46wbU2sOh3yMAri7zlqOmWq4JSizqEiSNiV+JtgUV8dcN1DJoshsr+pjWlQQ+m2O2Z
+         RNvL7VMSX2na/bn6Mx49Ts+355euET8Wq4TSGm5Dxj+HdbeYg78h43GKYzd/mCp+aqF6
+         muG+3TjIP29/K64TwljMYG6+mQhjFAwgZEy6KiJsHtJwcjOvOgT6jfjnQneczOmq0mmJ
+         1Vjw==
+X-Gm-Message-State: APjAAAX0skN1DfwhrmK/bjc03aPbRGm+ih3on+wTnj5JpyUUYJABV3LU
+        1zQNwLkNxnJqR8e24Hl1ZUI=
+X-Google-Smtp-Source: APXvYqwMB/j+4OtqvPIvMMYYGCukRtGpa/JsmfkBlrXsYAC/ivaoy+IatxHgOn7v0lN1eed3/4qMqA==
+X-Received: by 2002:a5d:540f:: with SMTP id g15mr45764094wrv.86.1582277798833;
+        Fri, 21 Feb 2020 01:36:38 -0800 (PST)
+Received: from localhost (prg-ext-pat.suse.com. [213.151.95.130])
+        by smtp.gmail.com with ESMTPSA id h13sm3293314wrw.54.2020.02.21.01.36.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Feb 2020 01:36:37 -0800 (PST)
+Date:   Fri, 21 Feb 2020 10:36:35 +0100
+From:   Michal Hocko <mhocko@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Luigi Semenzato <semenzato@google.com>,
+        Chris Murphy <lists@colorremedies.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: is hibernation usable?
+Message-ID: <20200221093635.GN20509@dhcp22.suse.cz>
+References: <CAJCQCtTPSC8666h5fuW=iSaVvuRq9to731W2-sAT6xUuESAzsw@mail.gmail.com>
+ <CAA25o9TvFMEJnF45NFVqAfdxzKy5umzHHVDs+SCxrChGSKczTw@mail.gmail.com>
+ <CAJCQCtQw7EJwREM8Fy_PWCwy3E7Jc=kLTRo_kgLNwNhYA32ABA@mail.gmail.com>
+ <CAJCQCtQkK+J-6eoadBLr+CkJ6CLf3Kt+6CeTJANRiU+M7A9CNQ@mail.gmail.com>
+ <CAA25o9T2wwqoopoNRySdZoYkD+vtqRPsB1YPnag=TkOp5D9sYA@mail.gmail.com>
+ <CAA25o9SCanFH3nV52BwN=7EuSUFjX=Jrd+FCiV=6ThW=beKKMw@mail.gmail.com>
+ <20200221084910.GM20509@dhcp22.suse.cz>
+ <CAJZ5v0h5MnpK9YjO+Z7_M1Cj8tup4qPriALx-EHt4ypbmCWfUw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0h5MnpK9YjO+Z7_M1Cj8tup4qPriALx-EHt4ypbmCWfUw@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Qualcomm SC7180 platform has several bus fabrics that could be
-controlled and tuned dynamically according to the bandwidth demand.
+On Fri 21-02-20 10:04:18, Rafael J. Wysocki wrote:
+> On Fri, Feb 21, 2020 at 9:49 AM Michal Hocko <mhocko@kernel.org> wrote:
+> >
+> > On Thu 20-02-20 09:38:06, Luigi Semenzato wrote:
+> > > I was forgetting: forcing swap by eating up memory is dangerous
+> > > because it can lead to unexpected OOM kills
+> >
+> > Could you be more specific what you have in mind? swapoff causing the
+> > OOM killer?
+> >
+> > > , but you can mitigate that
+> > > by giving the memory-eaters a higher OOM kill score.  Still, some way
+> > > of calling try_to_free_pages() directly from user-level would be
+> > > preferable.  I wonder if such API has been discussed.
+> >
+> > No, there is no API to trigger the global memory reclaim. You could
+> > start the reclaim by increasing min_free_kbytes but I wouldn't really
+> > recommend that unless you know exactly what you are doing and also I
+> > fail to see the point. If s2disk fails due to insufficient swap space
+> > then how can a pro-active reclaim help in the first place?
+> 
+> My understanding of the problem is that the size of swap is
+> (theoretically) sufficient, but it is not used as expected during the
+> preallocation of image memory.
+> 
+> It was stated in one of the previous messages (not in this thread,
+> cannot find it now) that swap (of the same size as RAM) was activated
+> (swapon) right before hibernation, so theoretically that should be
+> sufficient AFAICS.
 
-Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 95 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 95 insertions(+)
+Hmm, this is interesting. Let me have a closer look...
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index cc5a94f..3e28f34 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -748,6 +748,69 @@
- 			};
- 		};
- 
-+		config_noc: interconnect@1500000 {
-+			compatible = "qcom,sc7180-config-noc";
-+			reg = <0 0x01500000 0 0x28000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		system_noc: interconnect@1620000 {
-+			compatible = "qcom,sc7180-system-noc";
-+			reg = <0 0x01620000 0 0x17080>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		mc_virt: interconnect@1638000 {
-+			compatible = "qcom,sc7180-mc-virt";
-+			reg = <0 0x01638000 0 0x1000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		qup_virt: interconnect@1650000 {
-+			compatible = "qcom,sc7180-qup-virt";
-+			reg = <0 0x01650000 0 0x1000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		aggre1_noc: interconnect@16e0000 {
-+			compatible = "qcom,sc7180-aggre1-noc";
-+			reg = <0 0x016e0000 0 0x15080>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		aggre2_noc: interconnect@1705000 {
-+			compatible = "qcom,sc7180-aggre2-noc";
-+			reg = <0 0x01705000 0 0x9000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		compute_noc: interconnect@170e000 {
-+			compatible = "qcom,sc7180-compute-noc";
-+			reg = <0 0x0170e000 0 0x6000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		mmss_noc: interconnect@1740000 {
-+			compatible = "qcom,sc7180-mmss-noc";
-+			reg = <0 0x01740000 0 0x1c100>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		ipa_virt: interconnect@1e00000 {
-+			compatible = "qcom,sc7180-ipa-virt";
-+			reg = <0 0x01e00000 0 0x1000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
- 		tcsr_mutex_regs: syscon@1f40000 {
- 			compatible = "syscon";
- 			reg = <0 0x01f40000 0 0x40000>;
-@@ -1103,6 +1166,13 @@
- 			};
- 		};
- 
-+		dc_noc: interconnect@9160000 {
-+			compatible = "qcom,sc7180-dc-noc";
-+			reg = <0 0x09160000 0 0x03200>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
- 		system-cache-controller@9200000 {
- 			compatible = "qcom,sc7180-llcc";
- 			reg = <0 0x09200000 0 0x200000>, <0 0x09600000 0 0x50000>;
-@@ -1110,6 +1180,20 @@
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		gem_noc: interconnect@9680000 {
-+			compatible = "qcom,sc7180-gem-noc";
-+			reg = <0 0x09680000 0 0x3e200>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		npu_noc: interconnect@9990000 {
-+			compatible = "qcom,sc7180-npu-noc";
-+			reg = <0 0x09990000 0 0x1600>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
- 		usb_1: usb@a6f8800 {
- 			compatible = "qcom,sc7180-dwc3", "qcom,dwc3";
- 			reg = <0 0x0a6f8800 0 0x400>;
-@@ -1154,6 +1238,13 @@
- 			};
- 		};
- 
-+		camnoc_virt: interconnect@ac00000 {
-+			compatible = "qcom,sc7180-camnoc-virt";
-+			reg = <0 0x0ac00000 0 0x1000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
- 		pdc: interrupt-controller@b220000 {
- 			compatible = "qcom,sc7180-pdc", "qcom,pdc";
- 			reg = <0 0x0b220000 0 0x30000>;
-@@ -1481,6 +1572,10 @@
- 					};
- 				};
- 			};
-+
-+			apps_bcm_voter: bcm_voter {
-+				compatible = "qcom,bcm-voter";
-+			};
- 		};
- 
- 		cpufreq_hw: cpufreq@18323000 {
+pm_restrict_gfp_mask which would completely rule out any IO
+happens after hibernate_preallocate_memory is done and my limited
+understanding tells me that this is where all the reclaim happens
+(via shrink_all_memory). It is quite possible that the MM decides to
+not swap in that path - depending on the memory usage - and miss it's
+target. More details would be needed. E.g. vmscan tracepoints could tell
+us more.
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Michal Hocko
+SUSE Labs
