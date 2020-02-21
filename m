@@ -2,155 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74282167DF5
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 14:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D40167E1C
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2020 14:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728431AbgBUNFq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Feb 2020 08:05:46 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:33086 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727928AbgBUNFq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 08:05:46 -0500
-Received: by mail-wr1-f65.google.com with SMTP id u6so2011069wrt.0
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 05:05:44 -0800 (PST)
+        id S1728351AbgBUNMd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Feb 2020 08:12:33 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:36850 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727137AbgBUNMd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Feb 2020 08:12:33 -0500
+Received: by mail-wm1-f66.google.com with SMTP id p17so1798202wma.1
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 05:12:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=Jmee0gPaCTfsOpWSoQjCJFto4t8cMGzSFxQTb3xz48k=;
-        b=tOVwwD8qmpuy5R/iusBnSTi8xzbbMZqdDcRX1UOwcX8kYv5EzHXV5Ir5H2I6/HY6Hv
-         GHf+wxF/Eu/sDmuamXnYsjUsxTYXICaKH1O67ZVlBrWMNCXCIY8FwA5CAIT5tRVzIm5R
-         SzzKxvH5U9ZGw02P+TWARGK1gYUEDSeg0Nil+OEPJxqUoNA9ceBM1Xs+S2wAuJCu2a2t
-         BcG8GYWfdv51wj9aVj+vQ6z1GkOcoaDsm2wii0rDsEMImic2AUBX6vBFegMWdWgq+3Dv
-         Xqma0ebK4QQ3qXwG/wD/JNMq7nmiAXc4fiLJTXOZPl/Fg4IPEXNX+500312IIPGI2tC1
-         Ht6w==
+        bh=a/KavHLvvULXfL2VP34j+gxXqKWZ5d3n9oQaqLdPQv4=;
+        b=eib3Jfwyj+tZtw0Vz5eRWnOQiMb9kRoD6q2gN2p55T9aS3rgoCUuv4jkOzgSy6JAgQ
+         LEjM/7bJFu5XAMFaMvFkgF8XI6h8ICSPxck1TJrj6R8L0TLPzxasmiTqaRBEuJSE492o
+         xUPyAD7jB/fuLzt6Z6u8a/djHUo7qip9vuLowvh5OaxbICooz75RPYWXY584WFX80Hsq
+         UecpvDo6HfzMYfFJjPppbxEhywhbLPSsEWUgzWENhmVwerLyCsfebJ75YhAi0BV6oT34
+         gcEUPT4zy5xBisJiKhATgcWrOM/bv0x40XtU3oXOP8d4vAUNTTge4+2/pCIL965PidD5
+         SzyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=Jmee0gPaCTfsOpWSoQjCJFto4t8cMGzSFxQTb3xz48k=;
-        b=S02kfSZMo1MykR3FY9FBT4cJ+uJOut94ra/JYHZTzWx+vZZUQrnS7UxuHBNWaEPjNN
-         /JQ9usPmSUWY7oZHNeaczS9SqzVF0NrNdK3zn/JlTP+8wGi4F3xU1+FDopxRSQBSi/1q
-         ir4UcnzmJ4cVgLkfbOtgoGzR1I7XEQaozSc6gOu75c7bR1rf2rWnBl8CVQLj7tGpGyZh
-         8J1pndjLOEWek/DcIy4leq18tbDEQvaFJFtdaCEGHX2+PmyCD6RgBXEtb/psAeh43Jjy
-         mH8jvr082nVaDYH/OKkEHFgFbpzLcnXKmQdsLN2mzC4LJibJMPY0qM1E51XsnCsgtdwg
-         x1LA==
-X-Gm-Message-State: APjAAAW2LMXImv8wfLmRrV0jODvvHG9k7DZazXSd8hd1pnZMzokiYtsM
-        ZULkuPYTW1ly32sI5wVxSS0xkg==
-X-Google-Smtp-Source: APXvYqxdbqMgUjOMna0Vnnx+4FKMnwXT3QMS6vD/TsFNrXqcxXU3SY8DOXJ72CRLWnbQ393hdP3QPw==
-X-Received: by 2002:a5d:53c1:: with SMTP id a1mr47209498wrw.373.1582290343755;
-        Fri, 21 Feb 2020 05:05:43 -0800 (PST)
+        bh=a/KavHLvvULXfL2VP34j+gxXqKWZ5d3n9oQaqLdPQv4=;
+        b=KnEJ3leq1RdCkOdxmOAo7/uui4tQpVmevxXeJjk68DYFbiiuQ4WgieG8KRYS7DwpM2
+         nAgUMDG9PSaVu5rKzI7HuKXMeMoyIC5Tv01S+9VCFIDWcS9bZjUT+phwKIpfcaEpZnoJ
+         fzS0pHHNG3BZeMSYUJz5Zltet0KxXORObEursvcPHKgUm9l/ZqrUYIuwSdxEeK+NUKxs
+         TkYGzsMC+vJFWSl2ffQuUPwNUIt9m7CS/do+NI6SzIZbgdGbbbaA/cBQ9hCJ1cknJ3YF
+         CToI9vCIxLlB5U/QV0KrkoBZQYaeYxrn1XnQd0Ge8HE72kSHK38zTzeQT0jNmuT/CnRd
+         KQMQ==
+X-Gm-Message-State: APjAAAU3b3A7dOt7dIcGAB2IoBBSVG7WeINwl9Lj+d7Q5jkoCTb9rTZk
+        BBKze+JcG6FkxnJWT+7O3EVflQ==
+X-Google-Smtp-Source: APXvYqx5emu1fdVAd6Tj3p81RSkBc6Mf5Yyr0nrkLGXMlG0khLLYOloIT2vAb1bEk0+GwUGFpzZSvQ==
+X-Received: by 2002:a1c:4e02:: with SMTP id g2mr3929356wmh.131.1582290750388;
+        Fri, 21 Feb 2020 05:12:30 -0800 (PST)
 Received: from linaro.org ([2a01:e34:ed2f:f020:2dfb:b5ce:9043:4adb])
-        by smtp.gmail.com with ESMTPSA id y1sm3422496wrq.16.2020.02.21.05.05.41
+        by smtp.gmail.com with ESMTPSA id c15sm3881537wrt.1.2020.02.21.05.12.28
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 21 Feb 2020 05:05:43 -0800 (PST)
-Date:   Fri, 21 Feb 2020 14:05:40 +0100
+        Fri, 21 Feb 2020 05:12:29 -0800 (PST)
+Date:   Fri, 21 Feb 2020 14:12:26 +0100
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, aisheng.dong@nxp.com,
-        linux@roeck-us.net, srinivas.kandagatla@linaro.org,
-        krzk@kernel.org, fugang.duan@nxp.com, peng.fan@nxp.com,
-        daniel.baluta@nxp.com, bjorn.andersson@linaro.org, olof@lixom.net,
-        dinguyen@kernel.org, leonard.crestez@nxp.com,
-        marcin.juszkiewicz@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Linux-imx@nxp.com
-Subject: Re: [PATCH V15 RESEND 5/5] arm64: dts: imx: add i.MX8QXP thermal
- support
-Message-ID: <20200221130540.GD10516@linaro.org>
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "srinivas.kandagatla@linaro.org" <srinivas.kandagatla@linaro.org>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        Andy Duan <fugang.duan@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "olof@lixom.net" <olof@lixom.net>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        "marcin.juszkiewicz@linaro.org" <marcin.juszkiewicz@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH V15 RESEND 2/5] thermal: of-thermal: add API for getting
+ sensor ID from DT
+Message-ID: <20200221131226.GE10516@linaro.org>
 References: <1582161028-2844-1-git-send-email-Anson.Huang@nxp.com>
- <1582161028-2844-5-git-send-email-Anson.Huang@nxp.com>
+ <1582161028-2844-2-git-send-email-Anson.Huang@nxp.com>
+ <20200221091112.GA10516@linaro.org>
+ <DB3PR0402MB39161BB726FE5413F30F0263F5120@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1582161028-2844-5-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <DB3PR0402MB39161BB726FE5413F30F0263F5120@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 09:10:28AM +0800, Anson Huang wrote:
-> Add i.MX8QXP CPU thermal zone support.
+On Fri, Feb 21, 2020 at 09:26:29AM +0000, Anson Huang wrote:
+> Hi, Daniel
 > 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
-> No change.
-> ---
->  arch/arm64/boot/dts/freescale/imx8qxp.dtsi | 36 ++++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
+> > >   *       a valid .of_node, for the sensor node.
+> > > @@ -499,36 +546,22 @@ thermal_zone_of_sensor_register(struct device
+> > *dev, int sensor_id, void *data,
+> > >  	sensor_np = of_node_get(dev->of_node);
+> > >
+> > >  	for_each_available_child_of_node(np, child) {
+> > > -		struct of_phandle_args sensor_specs;
+> > >  		int ret, id;
+> > >
+> > >  		/* For now, thermal framework supports only 1 sensor per
+> > zone */
+> > > -		ret = of_parse_phandle_with_args(child, "thermal-sensors",
+> > > -						 "#thermal-sensor-cells",
+> > > -						 0, &sensor_specs);
+> > > +		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
+> > >  		if (ret)
+> > >  			continue;
+> > >
+> > > -		if (sensor_specs.args_count >= 1) {
+> > > -			id = sensor_specs.args[0];
+> > > -			WARN(sensor_specs.args_count > 1,
+> > > -			     "%pOFn: too many cells in sensor specifier %d\n",
+> > > -			     sensor_specs.np, sensor_specs.args_count);
+> > > -		} else {
+> > > -			id = 0;
+> > > -		}
+> > 
+> > Please take also the opportunity to factor out the function
+> > thermal_zone_of_sensor_register().
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> index fb5f752..0a14fe4 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> @@ -11,6 +11,7 @@
->  #include <dt-bindings/input/input.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/pinctrl/pads-imx8qxp.h>
-> +#include <dt-bindings/thermal/thermal.h>
->  
->  / {
->  	interrupt-parent = <&gic>;
-> @@ -189,6 +190,11 @@
->  			compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
->  			timeout-sec = <60>;
->  		};
-> +
-> +		tsens: thermal-sensor {
-> +			compatible = "fsl,imx8qxp-sc-thermal", "fsl,imx-sc-thermal";
-> +			#thermal-sensor-cells = <1>;
-> +		};
->  	};
->  
->  	timer {
-> @@ -586,4 +592,34 @@
->  			#clock-cells = <1>;
->  		};
->  	};
-> +
-> +	thermal_zones: thermal-zones {
-> +		cpu-thermal0 {
-> +			polling-delay-passive = <250>;
-> +			polling-delay = <2000>;
-> +			thermal-sensors = <&tsens IMX_SC_R_SYSTEM>;
-> +			trips {
-> +				cpu_alert0: trip0 {
-> +					temperature = <107000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
+> Sorry, I do NOT quite understand terms "factor out the function ...", could you please advise more detail?
 
-Same comment as previous patch.
+Never mind, I realized I puzzled myself with the changes in the series :)
 
-> +				cpu_crit0: trip1 {
-> +					temperature = <127000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +			cooling-maps {
-> +				map0 {
-> +					trip = <&cpu_alert0>;
-> +					cooling-device =
-> +						<&A35_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +						<&A35_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +						<&A35_2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +						<&A35_3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> +				};
-> +			};
-> +		};
-> +	};
->  };
-> -- 
-> 2.7.4
-> 
+Thanks
+
+  -- Daniel
 
 -- 
 
