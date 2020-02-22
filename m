@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C65D168D45
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2020 08:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49438168D4F
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2020 08:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726294AbgBVHjf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Feb 2020 02:39:35 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:54877 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726832AbgBVHjd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Feb 2020 02:39:33 -0500
-Received: by mail-wm1-f67.google.com with SMTP id z12so833816wmi.4
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 23:39:30 -0800 (PST)
+        id S1726343AbgBVHwF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Feb 2020 02:52:05 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:44129 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726653AbgBVHwE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Feb 2020 02:52:04 -0500
+Received: by mail-wr1-f68.google.com with SMTP id m16so4517624wrx.11
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2020 23:52:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=P9t2Wd4NAlaQd0ZmuCGU4S49XeAYAORDzD+LvPV2h6k=;
-        b=M80r+PDiPzVXoBoLSf+oTAiKoTnwYn55XiHqhTskfdbe4e86+5EWTS67LqO8HpfpD9
-         VhlJkhh2Vd+MgkqpGsitj0zfffPiHrVjyWy6+qoyX09xrO6cHyZoMrlW2g+1KCT++ryi
-         mYRU8RFsR1zQtXKMTH2VXrfaOil/oqv3fjbeIlXOSF91l5dbhYT/clpwU3t7e3iQN7kc
-         U9YPrrMucrjQT7MxazmwViJu/exLq/HkAZVd3UKy5uTAYU9BwL89Ao11qtI0nUFI1kir
-         9x83vDmAWUyfU8H64lVJ4fDCBbPKe9kVRk4aQMy8iCuvqwf2GucjeTWcaqiIS1AL3Zzq
-         1sBg==
+        bh=QUtHKT7e8Py7ijOYzzIEt46tkkQ7iGc4YaN3KsSFBLM=;
+        b=Q79JC3DECAOa5y6wlykoNBhfn7WKO7SbH70qdgTm2pCFXoO6i2OiqalqD9C7d5kNGV
+         /zr7pI/kje9kHg31Q1G7nEuV6hOIS1rOJnLyaq+YCXOjzer3DGSl9Ndkh+AOLqrhYs32
+         bqahe4B/z6U+hxWISnwsvHkV5qxd9gF85YJEqRyAkYM0ENpgTZ5SbyvU2yXUuo7XMvUx
+         iMLfTnSSEfCz+SUrkDbcMe8iVR2/6tqdN6ty/H1psx5TrLvJgCHELJ3165FSh3Wb8q/A
+         dihUQgkYn0qLWz5hGC6hDOiTZOaAgq3GjbYMt1gE6WwcIJBg588CamMnqlqLXr3wHIYM
+         +DkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=P9t2Wd4NAlaQd0ZmuCGU4S49XeAYAORDzD+LvPV2h6k=;
-        b=AJcnMNX/hrJ8BdU6XV/7iXd9TITdnuZ4MfDljQuPQTY31jOX6MB98/dhLGBK86hlM4
-         LFEaLm7H7FXlpP8XBbqdmKbArBaWcJ6fp9s8fUc9MaN28YdBYFPLrwzsoMuVrTwLkZkj
-         Edv0RrUMhCns4DxyzG1cvpQx4RHVld+S8mFWxVgF/jUOF06N9sSSPrestueLv32L4yMa
-         XlHRVtYGcI0GW2SGLdrxXWnjdjMcKFzDdCBBoi8X+WVz8KkvG0bd73D/gKxjqlH3YxJv
-         lj5qiepxt5tsYLqQVORrSFnmC4lZIOQP0j/r/bRenFwE2FJj3iXKBmD9OLLpCrmsA7F2
-         TCtw==
-X-Gm-Message-State: APjAAAVGTCFzC/NKYkKls444atu3TvqAnW8HqYaqvDdzW8dF2Nex88yv
-        q4CuIIgc1w/22QADcbNeCK3tQg==
-X-Google-Smtp-Source: APXvYqyqNqfvOSii00tp9NMAPL+QpnOgiilbNi4/8kMHXUjMniO+/GbiGuvMG0sgxRwD5iYpaaGP4A==
-X-Received: by 2002:a05:600c:248:: with SMTP id 8mr8548174wmj.1.1582357169598;
-        Fri, 21 Feb 2020 23:39:29 -0800 (PST)
+        bh=QUtHKT7e8Py7ijOYzzIEt46tkkQ7iGc4YaN3KsSFBLM=;
+        b=ciXjRZvAPp6E3cuc8IzeiwLic+bk2Ge78y9rXkyrj6/j78Kb5ToaMxkVVavgBWox8A
+         SIbo+C/P0+XAXnAku6Bmi54mV1w6Fo0gvn9Y1M/cAWOB2/XsJyncNd+YK/g7D4aHr9gr
+         i5YLzZwKHeX2cunLWdrbd/utZ49fGf96pypjzS97GI7jEjl4n+PgKwUVBTv+qmhVVLxO
+         v5bPC+r4j9KY99BaKIMpkgg3VxfgMm8TX/KvM6nKNF1hzGo4r7gNWMrSSjapNfBFV0Hd
+         EvTroE1cFs+UB4fVrNfM4z95KXQNUFdTcqSX1YVv1ruDXwzajdCfWim4bmMG1XbxgNn2
+         HDCw==
+X-Gm-Message-State: APjAAAVE1ks2D7CvqLcOWC7S2ofukACBDBgV7MpPBvi76k5VVyy3wsZv
+        EugAXfQML4KT1O8mdN05CDBQnA==
+X-Google-Smtp-Source: APXvYqzBZw6U9SQJ/DL73MMLA6PSr+uS16G3wh9wgcOUAhYt9tB+b1B4hmC4GaCY/tHpstV3bZFeIQ==
+X-Received: by 2002:a5d:5221:: with SMTP id i1mr49845193wra.44.1582357920292;
+        Fri, 21 Feb 2020 23:52:00 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:903b:a048:f296:e3ae? ([2a01:e34:ed2f:f020:903b:a048:f296:e3ae])
-        by smtp.googlemail.com with ESMTPSA id p5sm7181582wrt.79.2020.02.21.23.39.27
+        by smtp.googlemail.com with ESMTPSA id r6sm7514006wrp.95.2020.02.21.23.51.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 23:39:28 -0800 (PST)
-Subject: Re: [PATCH V15 RESEND 3/5] thermal: imx_sc: add i.MX system
- controller thermal support
+        Fri, 21 Feb 2020 23:51:59 -0800 (PST)
+Subject: Re: [PATCH V15 RESEND 5/5] arm64: dts: imx: add i.MX8QXP thermal
+ support
 To:     Anson Huang <anson.huang@nxp.com>
 Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "mark.rutland@arm.com" <mark.rutland@arm.com>,
@@ -76,9 +76,9 @@ Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         dl-linux-imx <linux-imx@nxp.com>
 References: <1582161028-2844-1-git-send-email-Anson.Huang@nxp.com>
- <1582161028-2844-3-git-send-email-Anson.Huang@nxp.com>
- <20200221125300.GB10516@linaro.org>
- <DB3PR0402MB3916CCBD8F36161B6F9EA45FF5120@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <1582161028-2844-5-git-send-email-Anson.Huang@nxp.com>
+ <20200221130448.GC10516@linaro.org>
+ <DB3PR0402MB39163B3EC2B6077C51D821DEF5120@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -134,12 +134,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <aed6c4ab-59e2-ebcb-be91-4b7e909419d9@linaro.org>
-Date:   Sat, 22 Feb 2020 08:39:26 +0100
+Message-ID: <59784965-dba6-5878-68fa-5657f3e5f02e@linaro.org>
+Date:   Sat, 22 Feb 2020 08:51:57 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <DB3PR0402MB3916CCBD8F36161B6F9EA45FF5120@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+In-Reply-To: <DB3PR0402MB39163B3EC2B6077C51D821DEF5120@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -148,159 +148,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/02/2020 00:46, Anson Huang wrote:
+On 22/02/2020 00:53, Anson Huang wrote:
 > Hi, Daniel
 > 
->> Subject: Re: [PATCH V15 RESEND 3/5] thermal: imx_sc: add i.MX system
->> controller thermal support
->>
->> Hi Anson,
->>
->> sorry for the delay with this review, hopefully the upstreaming will be now a
->> bit more smooth.
-> 
-> Thanks very much for review😊
-> 
->>
->> Apart the comments below, the driver looks good to me.
->>
->> On Thu, Feb 20, 2020 at 09:10:26AM +0800, Anson Huang wrote:
->>> i.MX8QXP is an ARMv8 SoC which has a Cortex-M4 system controller
->>> inside, the system controller is in charge of controlling power, clock
->>> and thermal sensors etc..
->>>
->>> This patch adds i.MX system controller thermal driver support, Linux
->>> kernel has to communicate with system controller via MU (message unit)
->>> IPC to get each thermal sensor's temperature, it supports multiple
->>> sensors which are passed from device tree, please see the binding doc
->>> for details.
->>>
->>> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
->>> ---
->>> No change.
->>> ---
->>>  drivers/thermal/Kconfig          |  11 +++
->>>  drivers/thermal/Makefile         |   1 +
->>>  drivers/thermal/imx_sc_thermal.c | 142
->>> +++++++++++++++++++++++++++++++++++++++
->>>  3 files changed, 154 insertions(+)
->>>  create mode 100644 drivers/thermal/imx_sc_thermal.c
->>>
->>> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig index
->>> 5a05db5..d1cb8dc 100644
->>> --- a/drivers/thermal/Kconfig
->>> +++ b/drivers/thermal/Kconfig
->>> @@ -251,6 +251,17 @@ config IMX_THERMAL
->>>  	  cpufreq is used as the cooling device to throttle CPUs when the
->>>  	  passive trip is crossed.
->>>
->>> +config IMX_SC_THERMAL
->>> +	tristate "Temperature sensor driver for NXP i.MX SoCs with System
->> Controller"
->>> +	depends on ARCH_MXC && IMX_SCU
->>
->> IMX_SCU depends on IMX_MBOX which depends on ARCH_MXC. This
->> dependency could be simplified.
->>
->> Also add the COMPILE_TEST option to improve compilation test coverage.
-> 
-> Will make it depends on IMX_SCU and COMPILE_TEST
-> 
->>
->>> +	depends on OF
->>> +	help
->>> +	  Support for Temperature Monitor (TEMPMON) found on NXP i.MX
->> SoCs with
->>> +	  system controller inside, Linux kernel has to communicate with
->> system
->>> +	  controller via MU (message unit) IPC to get temperature from
->> thermal
->>> +	  sensor. It supports one critical trip point and one
->>> +	  passive trip point for each thermal sensor.
->>> +
->>>  config MAX77620_THERMAL
->>>  	tristate "Temperature sensor driver for Maxim MAX77620 PMIC"
->>>  	depends on MFD_MAX77620
->>> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile index
->>> 9fb88e2..a11a6d8 100644
->>> --- a/drivers/thermal/Makefile
->>> +++ b/drivers/thermal/Makefile
->>> @@ -43,6 +43,7 @@ obj-$(CONFIG_DB8500_THERMAL)	+=
->> db8500_thermal.o
->>>  obj-$(CONFIG_ARMADA_THERMAL)	+= armada_thermal.o
->>>  obj-$(CONFIG_TANGO_THERMAL)	+= tango_thermal.o
->>>  obj-$(CONFIG_IMX_THERMAL)	+= imx_thermal.o
->>> +obj-$(CONFIG_IMX_SC_THERMAL)	+= imx_sc_thermal.o
->>>  obj-$(CONFIG_MAX77620_THERMAL)	+= max77620_thermal.o
->>>  obj-$(CONFIG_QORIQ_THERMAL)	+= qoriq_thermal.o
->>>  obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
->>> diff --git a/drivers/thermal/imx_sc_thermal.c
->>> b/drivers/thermal/imx_sc_thermal.c
->>> new file mode 100644
->>> index 0000000..d406ecb
->>> --- /dev/null
->>> +++ b/drivers/thermal/imx_sc_thermal.c
->>> @@ -0,0 +1,142 @@
->>> +// SPDX-License-Identifier: GPL-2.0+
->>> +/*
->>> + * Copyright 2018-2019 NXP.
->>
->> *sigh* 2020 now ...
-> 
-> Yes, should be 2018-2020
-> 
->>
->> [ ... ]
->>
->>> +static int imx_sc_thermal_get_temp(void *data, int *temp) {
->>> +	struct imx_sc_msg_misc_get_temp msg;
->>> +	struct imx_sc_rpc_msg *hdr = &msg.hdr;
->>> +	struct imx_sc_sensor *sensor = data;
->>> +	int ret;
->>> +
->>> +	msg.data.req.resource_id = sensor->resource_id;
->>> +	msg.data.req.type = IMX_SC_C_TEMP;
->>> +
->>> +	hdr->ver = IMX_SC_RPC_VERSION;
->>> +	hdr->svc = IMX_SC_RPC_SVC_MISC;
->>> +	hdr->func = IMX_SC_MISC_FUNC_GET_TEMP;
->>> +	hdr->size = 2;
->>
->> Can you explain this 'size' value?
-> 
-> The size means the SCU message size, including the header and the data, its unit
-> is word(4 bytes), in thermal get temperature message, the header takes 1 word and
-> the data takes another 1, so it is 2, we all pass the size in this way to SCU in i.MX8
-> SoCs, the SCU know how long message it will need to receive from AP.
 
-Thanks for the clarification.
+[ ... ]
 
->> [ ... ]
->>
->>> +MODULE_DEVICE_TABLE(of, imx_sc_thermal_table);
 >>> +
->>> +static struct platform_driver imx_sc_thermal_driver = {
->>> +		.probe = imx_sc_thermal_probe,
+>>> +	thermal_zones: thermal-zones {
+>>> +		cpu-thermal0 {
+>>> +			polling-delay-passive = <250>;
+>>> +			polling-delay = <2000>;
+>>> +			thermal-sensors = <&tsens IMX_SC_R_SYSTEM>;
+>>> +			trips {
+>>> +				cpu_alert0: trip0 {
+>>> +					temperature = <107000>;
+>>> +					hysteresis = <2000>;
+>>> +					type = "passive";
+>>> +				};
 >>
->> The driver can be compiled as module but there is no 'remove' callback
+>> May be you can add a 'hot' trip point before 'critical' for future use before
+>> reaching the emergency shutdown.
 > 
-> As there is nothing needs to be done in .remove callback, so I skip it. But
-> I think I can add a blank .remove callback to make it more complete.
+> The 'passive' trip is actually the 'hot' trip point you mentioned, and I have combined it to
+> below cooling map which will throttle cpu-freq when passive (hot) point is reached.
+> We all use 'passive' as 'hot' alarm and trigger cpu-freq throttle on i.MX platforms. 
 
-Ah, right. Everything is handled by "devm_"
+Sorry, I'm not sure to get the point. A 'hot' trip point is not a
+'passive' trip point. The 'hot' trip point is a critical temperature and
+a notification is raised [1][2].
+
+It is the last chance for the system to do something before the next
+trip point 'critical' is reached and where an emergency shutdown is done.
+
+The 'passive' trip point is the target temperature for mitigation in a
+normal situation when the system is loaded.
+
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/thermal_core.c#n288
+[2]
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/thermal_core.c#n420
 
 
->>> +		.driver = {
->>> +			.name = "imx-sc-thermal",
->>> +			.of_match_table = imx_sc_thermal_table,
->>> +		},
->>> +};
->>> +module_platform_driver(imx_sc_thermal_driver);
->>> +
->>> +MODULE_AUTHOR("Anson Huang <Anson.Huang@nxp.com>");
->>> +MODULE_DESCRIPTION("Thermal driver for NXP i.MX SoCs with system
->>> +controller"); MODULE_LICENSE("GPL v2");
->
+
 
 -- 
  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
