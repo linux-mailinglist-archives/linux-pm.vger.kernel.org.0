@@ -2,388 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7A8168DDA
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2020 10:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9038168EC9
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2020 13:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727124AbgBVJAU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Feb 2020 04:00:20 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:60542 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726675AbgBVJAT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Feb 2020 04:00:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=1Ec93HvvQv5rRZi0GxCPtkfIn9YVu0EbHv8lrpBvD3c=; b=hb18EYnCNMTfq2FTucvg/Rcg7Z
-        j54mQwl64UFduej61QyAFVutIxKVK9HrfJUQnZxjMV7tDiURKzA3wksO01FtrqW//x5I2qARD5I8s
-        ECkWnXfWb236+YVs8tOuastqyNZNllZN4qw7QJlKG6EsZm9l359jxbWRtZsKjo70wTIE/N2cRcNCe
-        9mqyYyoclF9WbSH5WQwOd62eXErvUvQEZgzY9xggPE5pNpedBqmfyqwWkYbWlPlmTaHLK7MOtHaGK
-        l4iNd6m2//JIyN1txAZNlP+6a6L+RNI6aVkwEuCKpZ+XyQ4tsjaY34wSrwNDH3wQvw4GUtLWBrliw
-        eq+azmQw==;
-Received: from [80.156.29.194] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j5Qdz-0007Hq-AA; Sat, 22 Feb 2020 09:00:15 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1j5Qdx-001N4H-Hu; Sat, 22 Feb 2020 10:00:13 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Jyri Sarha <jsarha@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-gpio@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org
-Subject: [PATCH 2/7] docs: dt: fix several broken references due to renames
-Date:   Sat, 22 Feb 2020 10:00:02 +0100
-Message-Id: <83c5df4acbbe0fa55a1d58d4c4a435b51cd2a7ad.1582361737.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <cover.1582361737.git.mchehab+huawei@kernel.org>
-References: <cover.1582361737.git.mchehab+huawei@kernel.org>
+        id S1726839AbgBVMT2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Feb 2020 07:19:28 -0500
+Received: from mail-eopbgr30081.outbound.protection.outlook.com ([40.107.3.81]:41756
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726763AbgBVMT2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 22 Feb 2020 07:19:28 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eKwMk+A6UsMEf1E5ezoNYBVTzfCNaOAX7xu78j30ZoUpgoYBElzoehiuwk4sXOIw+Yuhl2BrlXgRi8WotPnw1uIFM14KJ6B1G2YgwXq0NKYlCgjO14d6NRxZT/jXqO60kjMk3jNXWhK+75WCwLYYvRd9fXHGKU0e2W6T7S5Jk9V7PEtap3qPfHoAYviZjxGe3jOe+aeSbue1eqUGuynNE7gUvBwG4+GU/zqc8uXtKrXcO3EYpx2deNXTZhMeMlUrB1bYQC4noV2K0e2iJvGVjJvHdMs24/TAJobzy1ykD2q3Fqij7QDfSsU9MFIGuLzHmEbaJ6ivGqM7nnZzE8emrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s9QEeRmRoR9QNocwVCLdB4WwrRXf1LxGi1jk+68svXo=;
+ b=CiwxwZRgpnOIuJiT8naDmL0sdOp+U0wA9dmP2eUMr6PoLVtWr1oFjKwIFVN0Loc58iKsaUuSuCr6hq0bMtP6AczP/GQDvQ+rHd0bVMZ9xKU533AmqnFmwq8eT3FhemrAz2T7NRBA3NculW9YdPrTsPHvWZ+k55sKBANsC7A6po9tggMt0xEuqg34LbJS/fcVDdoeAmBUUjsXZPoTrZOUkbypf8pa0X4ZjfavJXrONAWVOnHsMT3YqoD+81AHQk8gY9AAUmtvIZD8D28JCq4+O8x6bPUG+vNat5jLlMG7xNl/nv7EoQkN5049mcmdqmU9d1EfGWys70lg7s5gxkL3zg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s9QEeRmRoR9QNocwVCLdB4WwrRXf1LxGi1jk+68svXo=;
+ b=KmdW+Ay4sqrm5L8wyv9DlMnjmlsT+Iv4wZsAkcQjdRVFQQ2w6Uv1YNx0ROUII70JkKT6txGt53X2HVKpjmeALWMKvyWiX8bKF2+yYAWiH24IcDW/6IiVj+foJJtTY4tD8tp4wfXamYJesRDpNbWpmsd9OBYL8rTQ/5KjfJWqq1M=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
+ DB3PR0402MB3946.eurprd04.prod.outlook.com (52.134.72.13) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2729.34; Sat, 22 Feb 2020 12:19:17 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::e44d:fa34:a0af:d96]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::e44d:fa34:a0af:d96%5]) with mapi id 15.20.2750.021; Sat, 22 Feb 2020
+ 12:19:17 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "srinivas.kandagatla@linaro.org" <srinivas.kandagatla@linaro.org>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        Andy Duan <fugang.duan@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "olof@lixom.net" <olof@lixom.net>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        "marcin.juszkiewicz@linaro.org" <marcin.juszkiewicz@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH V15 RESEND 5/5] arm64: dts: imx: add i.MX8QXP thermal
+ support
+Thread-Topic: [PATCH V15 RESEND 5/5] arm64: dts: imx: add i.MX8QXP thermal
+ support
+Thread-Index: AQHV54t0EBaEeunlYUezwg4Plo/Olqgln+YAgACz3LCAAIcQgIAASMDw
+Date:   Sat, 22 Feb 2020 12:19:17 +0000
+Message-ID: <DB3PR0402MB3916080CD147ACAD4A9D1621F5EE0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <1582161028-2844-1-git-send-email-Anson.Huang@nxp.com>
+ <1582161028-2844-5-git-send-email-Anson.Huang@nxp.com>
+ <20200221130448.GC10516@linaro.org>
+ <DB3PR0402MB39163B3EC2B6077C51D821DEF5120@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <59784965-dba6-5878-68fa-5657f3e5f02e@linaro.org>
+In-Reply-To: <59784965-dba6-5878-68fa-5657f3e5f02e@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anson.huang@nxp.com; 
+x-originating-ip: [220.161.57.125]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 16424ddd-0314-4d52-0c79-08d7b791703f
+x-ms-traffictypediagnostic: DB3PR0402MB3946:|DB3PR0402MB3946:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB3PR0402MB3946040C76E93553E4044EEEF5EE0@DB3PR0402MB3946.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 03218BFD9F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10001)(10009020)(4636009)(346002)(396003)(366004)(136003)(376002)(39860400002)(199004)(189003)(6506007)(66446008)(66946007)(26005)(66476007)(44832011)(76116006)(52536014)(66556008)(4326008)(2906002)(64756008)(186003)(45080400002)(33656002)(53546011)(86362001)(8936002)(7696005)(71200400001)(966005)(5660300002)(54906003)(55016002)(7416002)(6916009)(8676002)(316002)(478600001)(9686003)(81156014)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3946;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +aKQ5b+2RB/lj7b9chNHqqPNO+0k2rm47r4aQxc1qKHLJcS9ea9gLj676p7XyKMGliJnQDX3V6h0ERtZou5/N00UwkjKZmZCdfWWEBvZsv72eiVKP+3qS0ICv67pNVPHow7ybvpuyPzVpBjb8IV74bq7lKvcUFTsHvU2UkAgibtkXuzlUp8FPy06exW+zQVn6W6hULC5KzJUqYr3Fjcwh+C0KnPgax/F+leN1XG5NnhWKRRnQtxR0TvfRxEDCR63X3z919u0/euz8LFsyjVgDXpSzwnIHMqLvK5ON33X2xGmqKs6aPgqM2phcgOA3h1STeBZMOGbZXp6bFGpjl6fZ/1Lpplp+vkAhRcDP4aj6rPg44OF3A8M1QPsAXqiMtjndGfZanRZYWWK751bJXpH537ejO/WFzWbjpO8ZDZn2GlYpglRZWXglUlfld4B2v4R40pb9W+wtys3h4KCORnbzhavaGLhqmk5qVy9W74vmo4Ase+6Uuqpt9xTpgt7oCGuSC59PmoAPelEmp0tU5SZR9UBqY+tKI12hcfQFDXpQp6gU3gQzjqAXblIp7Xl7NjV9UaWeRlefRbKgBg/1wDFSXd0IfyGu9kG9FhAw9jO9n9myRb0mPAlryFw/KAZLHEI
+x-ms-exchange-antispam-messagedata: dIvJYft6EFXnj9PqH6BYogvwy3ugdh2PIeuVh+FaRMTmwWfv3anIDDhP5hV7pz//0N9rlDwUUnOA2Phmw4jgvGChjH+MxmdqJRysLQuY9HmMK2d60dm1fxltRMW0Wb9loSEBjk3IeuWvowZusgH7Yg==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16424ddd-0314-4d52-0c79-08d7b791703f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2020 12:19:17.4057
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DwpJQaqOgZ1SjB3/2iGJUL7OpJrCfK+V4+F0D4Zl2VxTXyw01TUzMv4NNC7XHGECCd2SClU344V+95r2yDcwqg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3946
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Several DT references got broken due to txt->yaml conversion.
-
-Those are auto-fixed by running:
-
-	scripts/documentation-file-ref-check --fix
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/devicetree/bindings/arm/arm,scmi.txt        | 2 +-
- Documentation/devicetree/bindings/arm/arm,scpi.txt        | 2 +-
- .../devicetree/bindings/arm/bcm/brcm,bcm63138.txt         | 2 +-
- .../devicetree/bindings/arm/hisilicon/hi3519-sysctrl.txt  | 2 +-
- .../devicetree/bindings/arm/msm/qcom,idle-state.txt       | 2 +-
- Documentation/devicetree/bindings/arm/omap/mpu.txt        | 2 +-
- Documentation/devicetree/bindings/arm/psci.yaml           | 2 +-
- .../devicetree/bindings/clock/qcom,gcc-apq8064.yaml       | 2 +-
- .../devicetree/bindings/display/tilcdc/tilcdc.txt         | 2 +-
- Documentation/devicetree/bindings/leds/common.yaml        | 2 +-
- .../devicetree/bindings/leds/register-bit-led.txt         | 2 +-
- .../devicetree/bindings/memory-controllers/ti/emif.txt    | 2 +-
- Documentation/devicetree/bindings/misc/fsl,qoriq-mc.txt   | 2 +-
- .../bindings/pinctrl/aspeed,ast2400-pinctrl.yaml          | 2 +-
- .../bindings/pinctrl/aspeed,ast2500-pinctrl.yaml          | 2 +-
- .../bindings/pinctrl/aspeed,ast2600-pinctrl.yaml          | 2 +-
- .../devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml  | 2 +-
- .../devicetree/bindings/reset/st,stm32mp1-rcc.txt         | 2 +-
- .../devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml  | 2 +-
- MAINTAINERS                                               | 8 ++++----
- 20 files changed, 23 insertions(+), 23 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/arm/arm,scmi.txt b/Documentation/devicetree/bindings/arm/arm,scmi.txt
-index f493d69e6194..dc102c4e4a78 100644
---- a/Documentation/devicetree/bindings/arm/arm,scmi.txt
-+++ b/Documentation/devicetree/bindings/arm/arm,scmi.txt
-@@ -102,7 +102,7 @@ Required sub-node properties:
- [1] Documentation/devicetree/bindings/clock/clock-bindings.txt
- [2] Documentation/devicetree/bindings/power/power-domain.yaml
- [3] Documentation/devicetree/bindings/thermal/thermal.txt
--[4] Documentation/devicetree/bindings/sram/sram.txt
-+[4] Documentation/devicetree/bindings/sram/sram.yaml
- [5] Documentation/devicetree/bindings/reset/reset.txt
- 
- Example:
-diff --git a/Documentation/devicetree/bindings/arm/arm,scpi.txt b/Documentation/devicetree/bindings/arm/arm,scpi.txt
-index 7b83ef43b418..dd04d9d9a1b8 100644
---- a/Documentation/devicetree/bindings/arm/arm,scpi.txt
-+++ b/Documentation/devicetree/bindings/arm/arm,scpi.txt
-@@ -109,7 +109,7 @@ Required properties:
- [0] http://infocenter.arm.com/help/topic/com.arm.doc.dui0922b/index.html
- [1] Documentation/devicetree/bindings/clock/clock-bindings.txt
- [2] Documentation/devicetree/bindings/thermal/thermal.txt
--[3] Documentation/devicetree/bindings/sram/sram.txt
-+[3] Documentation/devicetree/bindings/sram/sram.yaml
- [4] Documentation/devicetree/bindings/power/power-domain.yaml
- 
- Example:
-diff --git a/Documentation/devicetree/bindings/arm/bcm/brcm,bcm63138.txt b/Documentation/devicetree/bindings/arm/bcm/brcm,bcm63138.txt
-index b82b6a0ae6f7..8c7a4908a849 100644
---- a/Documentation/devicetree/bindings/arm/bcm/brcm,bcm63138.txt
-+++ b/Documentation/devicetree/bindings/arm/bcm/brcm,bcm63138.txt
-@@ -62,7 +62,7 @@ Timer node:
- 
- Syscon reboot node:
- 
--See Documentation/devicetree/bindings/power/reset/syscon-reboot.txt for the
-+See Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml for the
- detailed list of properties, the two values defined below are specific to the
- BCM6328-style timer:
- 
-diff --git a/Documentation/devicetree/bindings/arm/hisilicon/hi3519-sysctrl.txt b/Documentation/devicetree/bindings/arm/hisilicon/hi3519-sysctrl.txt
-index 115c5be0bd0b..8defacc44dd5 100644
---- a/Documentation/devicetree/bindings/arm/hisilicon/hi3519-sysctrl.txt
-+++ b/Documentation/devicetree/bindings/arm/hisilicon/hi3519-sysctrl.txt
-@@ -1,7 +1,7 @@
- * Hisilicon Hi3519 System Controller Block
- 
- This bindings use the following binding:
--Documentation/devicetree/bindings/mfd/syscon.txt
-+Documentation/devicetree/bindings/mfd/syscon.yaml
- 
- Required properties:
- - compatible: "hisilicon,hi3519-sysctrl".
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt b/Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
-index 06df04cc827a..6ce0b212ec6d 100644
---- a/Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
-+++ b/Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
-@@ -81,4 +81,4 @@ Example:
- 		};
- 	};
- 
--[1]. Documentation/devicetree/bindings/arm/idle-states.txt
-+[1]. Documentation/devicetree/bindings/arm/idle-states.yaml
-diff --git a/Documentation/devicetree/bindings/arm/omap/mpu.txt b/Documentation/devicetree/bindings/arm/omap/mpu.txt
-index f301e636fd52..e41490e6979c 100644
---- a/Documentation/devicetree/bindings/arm/omap/mpu.txt
-+++ b/Documentation/devicetree/bindings/arm/omap/mpu.txt
-@@ -17,7 +17,7 @@ am335x and am437x only:
- - pm-sram: Phandles to ocmcram nodes to be used for power management.
- 	   First should be type 'protect-exec' for the driver to use to copy
- 	   and run PM functions, second should be regular pool to be used for
--	   data region for code. See Documentation/devicetree/bindings/sram/sram.txt
-+	   data region for code. See Documentation/devicetree/bindings/sram/sram.yaml
- 	   for more details.
- 
- Examples:
-diff --git a/Documentation/devicetree/bindings/arm/psci.yaml b/Documentation/devicetree/bindings/arm/psci.yaml
-index 8ef85420b2ab..f8218e60e3e2 100644
---- a/Documentation/devicetree/bindings/arm/psci.yaml
-+++ b/Documentation/devicetree/bindings/arm/psci.yaml
-@@ -100,7 +100,7 @@ properties:
-       bindings in [1]) must specify this property.
- 
-       [1] Kernel documentation - ARM idle states bindings
--        Documentation/devicetree/bindings/arm/idle-states.txt
-+        Documentation/devicetree/bindings/arm/idle-states.yaml
- 
-   "#power-domain-cells":
-     description:
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-index 17f87178f6b8..3647007f82ca 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-@@ -42,7 +42,7 @@ properties:
-       be part of GCC and hence the TSENS properties can also be part
-       of the GCC/clock-controller node.
-       For more details on the TSENS properties please refer
--      Documentation/devicetree/bindings/thermal/qcom-tsens.txt
-+      Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
- 
-   nvmem-cell-names:
-     minItems: 1
-diff --git a/Documentation/devicetree/bindings/display/tilcdc/tilcdc.txt b/Documentation/devicetree/bindings/display/tilcdc/tilcdc.txt
-index 7bf1bb444812..aac617acb64f 100644
---- a/Documentation/devicetree/bindings/display/tilcdc/tilcdc.txt
-+++ b/Documentation/devicetree/bindings/display/tilcdc/tilcdc.txt
-@@ -37,7 +37,7 @@ Optional nodes:
-    supports a single port with a single endpoint.
- 
-  - See also Documentation/devicetree/bindings/display/tilcdc/panel.txt and
--   Documentation/devicetree/bindings/display/tilcdc/tfp410.txt for connecting
-+   Documentation/devicetree/bindings/display/bridge/ti,tfp410.txt for connecting
-    tfp410 DVI encoder or lcd panel to lcdc
- 
- [1] There is an errata about AM335x color wiring. For 16-bit color mode
-diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
-index d97d099b87e5..c60b994fe116 100644
---- a/Documentation/devicetree/bindings/leds/common.yaml
-+++ b/Documentation/devicetree/bindings/leds/common.yaml
-@@ -85,7 +85,7 @@ properties:
-         # LED will act as a back-light, controlled by the framebuffer system
-       - backlight
-         # LED will turn on (but for leds-gpio see "default-state" property in
--        # Documentation/devicetree/bindings/leds/leds-gpio.txt)
-+        # Documentation/devicetree/bindings/leds/leds-gpio.yaml)
-       - default-on
-         # LED "double" flashes at a load average based rate
-       - heartbeat
-diff --git a/Documentation/devicetree/bindings/leds/register-bit-led.txt b/Documentation/devicetree/bindings/leds/register-bit-led.txt
-index cf1ea403ba7a..c7af6f70a97b 100644
---- a/Documentation/devicetree/bindings/leds/register-bit-led.txt
-+++ b/Documentation/devicetree/bindings/leds/register-bit-led.txt
-@@ -5,7 +5,7 @@ where single bits in a certain register can turn on/off a
- single LED. The register bit LEDs appear as children to the
- syscon device, with the proper compatible string. For the
- syscon bindings see:
--Documentation/devicetree/bindings/mfd/syscon.txt
-+Documentation/devicetree/bindings/mfd/syscon.yaml
- 
- Each LED is represented as a sub-node of the syscon device. Each
- node's name represents the name of the corresponding LED.
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ti/emif.txt b/Documentation/devicetree/bindings/memory-controllers/ti/emif.txt
-index 44d71469c914..63f674ffeb4f 100644
---- a/Documentation/devicetree/bindings/memory-controllers/ti/emif.txt
-+++ b/Documentation/devicetree/bindings/memory-controllers/ti/emif.txt
-@@ -32,7 +32,7 @@ Required only for "ti,emif-am3352" and "ti,emif-am4372":
- - sram			: Phandles for generic sram driver nodes,
-   first should be type 'protect-exec' for the driver to use to copy
-   and run PM functions, second should be regular pool to be used for
--  data region for code. See Documentation/devicetree/bindings/sram/sram.txt
-+  data region for code. See Documentation/devicetree/bindings/sram/sram.yaml
-   for more details.
- 
- Optional properties:
-diff --git a/Documentation/devicetree/bindings/misc/fsl,qoriq-mc.txt b/Documentation/devicetree/bindings/misc/fsl,qoriq-mc.txt
-index bb7e896cb644..9134e9bcca56 100644
---- a/Documentation/devicetree/bindings/misc/fsl,qoriq-mc.txt
-+++ b/Documentation/devicetree/bindings/misc/fsl,qoriq-mc.txt
-@@ -26,7 +26,7 @@ For generic IOMMU bindings, see
- Documentation/devicetree/bindings/iommu/iommu.txt.
- 
- For arm-smmu binding, see:
--Documentation/devicetree/bindings/iommu/arm,smmu.txt.
-+Documentation/devicetree/bindings/iommu/arm,smmu.yaml.
- 
- Required properties:
- 
-diff --git a/Documentation/devicetree/bindings/pinctrl/aspeed,ast2400-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/aspeed,ast2400-pinctrl.yaml
-index bb690e20c368..135c7dfbc180 100644
---- a/Documentation/devicetree/bindings/pinctrl/aspeed,ast2400-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/aspeed,ast2400-pinctrl.yaml
-@@ -17,7 +17,7 @@ description: |+
-                     "aspeed,ast2400-scu", "syscon", "simple-mfd"
- 
-   Refer to the the bindings described in
--  Documentation/devicetree/bindings/mfd/syscon.txt
-+  Documentation/devicetree/bindings/mfd/syscon.yaml
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/pinctrl/aspeed,ast2500-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/aspeed,ast2500-pinctrl.yaml
-index f7f5d57f2c9a..824f7fd1d51b 100644
---- a/Documentation/devicetree/bindings/pinctrl/aspeed,ast2500-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/aspeed,ast2500-pinctrl.yaml
-@@ -18,7 +18,7 @@ description: |+
-   			"aspeed,g5-scu", "syscon", "simple-mfd"
- 
-   Refer to the the bindings described in
--  Documentation/devicetree/bindings/mfd/syscon.txt
-+  Documentation/devicetree/bindings/mfd/syscon.yaml
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/pinctrl/aspeed,ast2600-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/aspeed,ast2600-pinctrl.yaml
-index 3749fa233e87..ac8d1c30a8ed 100644
---- a/Documentation/devicetree/bindings/pinctrl/aspeed,ast2600-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/aspeed,ast2600-pinctrl.yaml
-@@ -17,7 +17,7 @@ description: |+
-                 "aspeed,ast2600-scu", "syscon", "simple-mfd"
- 
-   Refer to the the bindings described in
--  Documentation/devicetree/bindings/mfd/syscon.txt
-+  Documentation/devicetree/bindings/mfd/syscon.yaml
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml
-index aab70e8b681e..d3098c924b25 100644
---- a/Documentation/devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml
-+++ b/Documentation/devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml
-@@ -18,7 +18,7 @@ description: |+
-                 "amlogic,meson-gx-hhi-sysctrl", "simple-mfd", "syscon"
- 
-   Refer to the the bindings described in
--  Documentation/devicetree/bindings/mfd/syscon.txt
-+  Documentation/devicetree/bindings/mfd/syscon.yaml
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/reset/st,stm32mp1-rcc.txt b/Documentation/devicetree/bindings/reset/st,stm32mp1-rcc.txt
-index b4edaf7c7ff3..2880d5dda95e 100644
---- a/Documentation/devicetree/bindings/reset/st,stm32mp1-rcc.txt
-+++ b/Documentation/devicetree/bindings/reset/st,stm32mp1-rcc.txt
-@@ -3,4 +3,4 @@ STMicroelectronics STM32MP1 Peripheral Reset Controller
- 
- The RCC IP is both a reset and a clock controller.
- 
--Please see Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.txt
-+Please see Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
-diff --git a/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
-index d9fdf4809a49..f3e68ed03abf 100644
---- a/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
-@@ -17,7 +17,7 @@ description: |+
-                 "brcm,bcm2711-avs-monitor", "syscon", "simple-mfd"
- 
-   Refer to the the bindings described in
--  Documentation/devicetree/bindings/mfd/syscon.txt
-+  Documentation/devicetree/bindings/mfd/syscon.yaml
- 
- properties:
-   compatible:
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e8bcf73f63cc..d110256a6802 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4022,7 +4022,7 @@ M:	Cheng-Yi Chiang <cychiang@chromium.org>
- S:	Maintained
- R:	Enric Balletbo i Serra <enric.balletbo@collabora.com>
- R:	Guenter Roeck <groeck@chromium.org>
--F:	Documentation/devicetree/bindings/sound/google,cros-ec-codec.txt
-+F:	Documentation/devicetree/bindings/sound/google,cros-ec-codec.yaml
- F:	sound/soc/codecs/cros_ec_codec.*
- 
- CIRRUS LOGIC AUDIO CODEC DRIVERS
-@@ -5673,7 +5673,7 @@ L:	dri-devel@lists.freedesktop.org
- T:	git git://anongit.freedesktop.org/drm/drm-misc
- S:	Maintained
- F:	drivers/gpu/drm/stm
--F:	Documentation/devicetree/bindings/display/st,stm32-ltdc.txt
-+F:	Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml
- 
- DRM DRIVERS FOR TI LCDC
- M:	Jyri Sarha <jsarha@ti.com>
-@@ -10193,7 +10193,7 @@ MAXBOTIX ULTRASONIC RANGER IIO DRIVER
- M:	Andreas Klinger <ak@it-klinger.de>
- L:	linux-iio@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/iio/proximity/maxbotix,mb1232.txt
-+F:	Documentation/devicetree/bindings/iio/proximity/maxbotix,mb1232.yaml
- F:	drivers/iio/proximity/mb1232.c
- 
- MAXIM MAX77650 PMIC MFD DRIVER
-@@ -10496,7 +10496,7 @@ M:	Hugues Fruchet <hugues.fruchet@st.com>
- L:	linux-media@vger.kernel.org
- T:	git git://linuxtv.org/media_tree.git
- S:	Supported
--F:	Documentation/devicetree/bindings/media/st,stm32-dcmi.txt
-+F:	Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml
- F:	drivers/media/platform/stm32/stm32-dcmi.c
- 
- MEDIA DRIVERS FOR NVIDIA TEGRA - VDE
--- 
-2.24.1
-
+SGksIERhbmllbA0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggVjE1IFJFU0VORCA1LzVdIGFybTY0
+OiBkdHM6IGlteDogYWRkIGkuTVg4UVhQIHRoZXJtYWwNCj4gc3VwcG9ydA0KPiANCj4gT24gMjIv
+MDIvMjAyMCAwMDo1MywgQW5zb24gSHVhbmcgd3JvdGU6DQo+ID4gSGksIERhbmllbA0KPiA+DQo+
+IA0KPiBbIC4uLiBdDQo+IA0KPiA+Pj4gKw0KPiA+Pj4gKwl0aGVybWFsX3pvbmVzOiB0aGVybWFs
+LXpvbmVzIHsNCj4gPj4+ICsJCWNwdS10aGVybWFsMCB7DQo+ID4+PiArCQkJcG9sbGluZy1kZWxh
+eS1wYXNzaXZlID0gPDI1MD47DQo+ID4+PiArCQkJcG9sbGluZy1kZWxheSA9IDwyMDAwPjsNCj4g
+Pj4+ICsJCQl0aGVybWFsLXNlbnNvcnMgPSA8JnRzZW5zIElNWF9TQ19SX1NZU1RFTT47DQo+ID4+
+PiArCQkJdHJpcHMgew0KPiA+Pj4gKwkJCQljcHVfYWxlcnQwOiB0cmlwMCB7DQo+ID4+PiArCQkJ
+CQl0ZW1wZXJhdHVyZSA9IDwxMDcwMDA+Ow0KPiA+Pj4gKwkJCQkJaHlzdGVyZXNpcyA9IDwyMDAw
+PjsNCj4gPj4+ICsJCQkJCXR5cGUgPSAicGFzc2l2ZSI7DQo+ID4+PiArCQkJCX07DQo+ID4+DQo+
+ID4+IE1heSBiZSB5b3UgY2FuIGFkZCBhICdob3QnIHRyaXAgcG9pbnQgYmVmb3JlICdjcml0aWNh
+bCcgZm9yIGZ1dHVyZQ0KPiA+PiB1c2UgYmVmb3JlIHJlYWNoaW5nIHRoZSBlbWVyZ2VuY3kgc2h1
+dGRvd24uDQo+ID4NCj4gPiBUaGUgJ3Bhc3NpdmUnIHRyaXAgaXMgYWN0dWFsbHkgdGhlICdob3Qn
+IHRyaXAgcG9pbnQgeW91IG1lbnRpb25lZCwgYW5kDQo+ID4gSSBoYXZlIGNvbWJpbmVkIGl0IHRv
+IGJlbG93IGNvb2xpbmcgbWFwIHdoaWNoIHdpbGwgdGhyb3R0bGUgY3B1LWZyZXEgd2hlbg0KPiBw
+YXNzaXZlIChob3QpIHBvaW50IGlzIHJlYWNoZWQuDQo+ID4gV2UgYWxsIHVzZSAncGFzc2l2ZScg
+YXMgJ2hvdCcgYWxhcm0gYW5kIHRyaWdnZXIgY3B1LWZyZXEgdGhyb3R0bGUgb24gaS5NWA0KPiBw
+bGF0Zm9ybXMuDQo+IA0KPiBTb3JyeSwgSSdtIG5vdCBzdXJlIHRvIGdldCB0aGUgcG9pbnQuIEEg
+J2hvdCcgdHJpcCBwb2ludCBpcyBub3QgYSAncGFzc2l2ZScgdHJpcA0KPiBwb2ludC4gVGhlICdo
+b3QnIHRyaXAgcG9pbnQgaXMgYSBjcml0aWNhbCB0ZW1wZXJhdHVyZSBhbmQgYSBub3RpZmljYXRp
+b24gaXMgcmFpc2VkDQo+IFsxXVsyXS4NCj4gDQo+IEl0IGlzIHRoZSBsYXN0IGNoYW5jZSBmb3Ig
+dGhlIHN5c3RlbSB0byBkbyBzb21ldGhpbmcgYmVmb3JlIHRoZSBuZXh0IHRyaXAgcG9pbnQNCj4g
+J2NyaXRpY2FsJyBpcyByZWFjaGVkIGFuZCB3aGVyZSBhbiBlbWVyZ2VuY3kgc2h1dGRvd24gaXMg
+ZG9uZS4NCj4gDQo+IFRoZSAncGFzc2l2ZScgdHJpcCBwb2ludCBpcyB0aGUgdGFyZ2V0IHRlbXBl
+cmF0dXJlIGZvciBtaXRpZ2F0aW9uIGluIGEgbm9ybWFsDQo+IHNpdHVhdGlvbiB3aGVuIHRoZSBz
+eXN0ZW0gaXMgbG9hZGVkLg0KDQpBaCwgbm93IEkgdW5kZXJzdGFuZCB5b3VyIHBvaW50LCBhcyBh
+bGwgaS5NWCBTb0NzIE9OTFkgc3VwcG9ydCBwYXNzaXZlIGFuZCBjcml0aWNhbA0KcG9pbnQsIGFu
+ZCBuZXZlciBzdXBwb3J0IHRoZSBub3RpZmljYXRpb24gb2YgaG90IHRyaXAgcG9pbnQsIHNvIEkg
+dGhpbmsgaXQgc2hvdWxkIGJlIE9LDQp0byBsZWF2ZSBpLk1YOFFYUCBzYW1lIGFzIG90aGVyIGku
+TVggU29DcywgaWYgd2UgcGxhbiB0byBzdXBwb3J0IGhvdCB0cmlwIHBvaW50IG5vdGlmaWNhdGlv
+biwNCkkgd2lsbCBjdXQgYW5vdGhlciBwYXRjaCBmb3IgYWxsIGkuTVggU29DcywgZG9lcyBpdCBt
+YWtlIHNlbnNlIHRvIHlvdT8gSWYgeWVzLCBwbGVhc2UgaGVscA0KcmV2aWV3IHRoZSBWMTYgcGF0
+Y2ggc2V0IEkgc2VudCBvdXQuDQoNCnRoYW5rcyBhZ2FpbiBmb3IgcmV2aWV3LA0KQW5zb24NCg0K
+DQo+IA0KPiBbMV0NCj4gaHR0cHM6Ly9ldXIwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29r
+LmNvbS8/dXJsPWh0dHBzJTNBJTJGJTJGZ2l0Lmtlcg0KPiBuZWwub3JnJTJGcHViJTJGc2NtJTJG
+bGludXglMkZrZXJuZWwlMkZnaXQlMkZ0b3J2YWxkcyUyRmxpbnV4LmdpdCUyRg0KPiB0cmVlJTJG
+ZHJpdmVycyUyRnRoZXJtYWwlMkZ0aGVybWFsX2NvcmUuYyUyM24yODgmYW1wO2RhdGE9MDIlN0Mw
+MQ0KPiAlN0NhbnNvbi5odWFuZyU0MG54cC5jb20lN0MyYTE0MjJjM2NiMGY0NmMzYjEzMzA4ZDdi
+NzZjMTk4YyU3Qw0KPiA2ODZlYTFkM2JjMmI0YzZmYTkyY2Q5OWM1YzMwMTYzNSU3QzAlN0MwJTdD
+NjM3MTc5NTQ3MjIzMzYwMDUxJmENCj4gbXA7c2RhdGE9ZlJtc0ZiQ1ZGZHYzVndGRXFwMXNTSHh0
+MnJ1Y1EzM3lZbm5hUEU1Z3MxZyUzRCZhbXA7cmVzDQo+IGVydmVkPTANCj4gWzJdDQo+IGh0dHBz
+Oi8vZXVyMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1odHRwcyUzQSUy
+RiUyRmdpdC5rZXINCj4gbmVsLm9yZyUyRnB1YiUyRnNjbSUyRmxpbnV4JTJGa2VybmVsJTJGZ2l0
+JTJGdG9ydmFsZHMlMkZsaW51eC5naXQlMkYNCj4gdHJlZSUyRmRyaXZlcnMlMkZ0aGVybWFsJTJG
+dGhlcm1hbF9jb3JlLmMlMjNuNDIwJmFtcDtkYXRhPTAyJTdDMDENCj4gJTdDYW5zb24uaHVhbmcl
+NDBueHAuY29tJTdDMmExNDIyYzNjYjBmNDZjM2IxMzMwOGQ3Yjc2YzE5OGMlN0MNCj4gNjg2ZWEx
+ZDNiYzJiNGM2ZmE5MmNkOTljNWMzMDE2MzUlN0MwJTdDMCU3QzYzNzE3OTU0NzIyMzM2MDA1MSZh
+DQo+IG1wO3NkYXRhPVFFaXdRY0w4RlpLZzZSczd5OWg5WEt2RmYlMkZsVmVvMjBNd0tUaXFVYk13
+QSUzRCZhbQ0KPiBwO3Jlc2VydmVkPTANCj4gDQo+IA0KPiANCj4gDQo+IC0tDQo+IA0KPiA8aHR0
+cHM6Ly9ldXIwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0dHAlM0El
+MkYlMkZ3d3cuDQo+IGxpbmFyby5vcmclMkYmYW1wO2RhdGE9MDIlN0MwMSU3Q2Fuc29uLmh1YW5n
+JTQwbnhwLmNvbSU3QzJhMTQyMg0KPiBjM2NiMGY0NmMzYjEzMzA4ZDdiNzZjMTk4YyU3QzY4NmVh
+MWQzYmMyYjRjNmZhOTJjZDk5YzVjMzAxNjM1JTdDDQo+IDAlN0MwJTdDNjM3MTc5NTQ3MjIzMzYw
+MDUxJmFtcDtzZGF0YT14VDJVdE5ISEE4MjZhemlWMWFVbVBYcGENCj4gQm5xN2RCbSUyRkpQRkc0
+UzIlMkY1cVElM0QmYW1wO3Jlc2VydmVkPTA+IExpbmFyby5vcmcg4pSCIE9wZW4NCj4gc291cmNl
+IHNvZnR3YXJlIGZvciBBUk0gU29Dcw0KPiANCj4gRm9sbG93IExpbmFybzoNCj4gPGh0dHBzOi8v
+ZXVyMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1odHRwJTNBJTJGJTJG
+d3d3Lg0KPiBmYWNlYm9vay5jb20lMkZwYWdlcyUyRkxpbmFybyZhbXA7ZGF0YT0wMiU3QzAxJTdD
+YW5zb24uaHVhbmclNA0KPiAwbnhwLmNvbSU3QzJhMTQyMmMzY2IwZjQ2YzNiMTMzMDhkN2I3NmMx
+OThjJTdDNjg2ZWExZDNiYzJiNGM2ZmE5DQo+IDJjZDk5YzVjMzAxNjM1JTdDMCU3QzAlN0M2Mzcx
+Nzk1NDcyMjMzNjAwNTEmYW1wO3NkYXRhPWVTcjg5am0yDQo+IFF4enBpMmJYJTJCTiUyRmNoaXpy
+a0YzNzJ5cHlMZ3Y1JTJCdUk4MkljJTNEJmFtcDtyZXNlcnZlZD0wPg0KPiBGYWNlYm9vayB8DQo+
+IDxodHRwczovL2V1cjAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0
+cCUzQSUyRiUyRnR3aXR0ZQ0KPiByLmNvbSUyRiUyMyElMkZsaW5hcm9vcmcmYW1wO2RhdGE9MDIl
+N0MwMSU3Q2Fuc29uLmh1YW5nJTQwbnhwLmMNCj4gb20lN0MyYTE0MjJjM2NiMGY0NmMzYjEzMzA4
+ZDdiNzZjMTk4YyU3QzY4NmVhMWQzYmMyYjRjNmZhOTJjZDk5DQo+IGM1YzMwMTYzNSU3QzAlN0Mw
+JTdDNjM3MTc5NTQ3MjIzMzYwMDUxJmFtcDtzZGF0YT1jUnlkUCUyRkpwZnVEDQo+IHVaRlhVaXZr
+NkY0QXQxbGMlMkZzT0hkU3pERG5EdERPdWclM0QmYW1wO3Jlc2VydmVkPTA+IFR3aXR0ZXIgfA0K
+PiA8aHR0cHM6Ly9ldXIwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0
+dHAlM0ElMkYlMkZ3d3cuDQo+IGxpbmFyby5vcmclMkZsaW5hcm8tDQo+IGJsb2clMkYmYW1wO2Rh
+dGE9MDIlN0MwMSU3Q2Fuc29uLmh1YW5nJTQwbnhwLmNvbSU3QzJhMTQyMmMzY2IwDQo+IGY0NmMz
+YjEzMzA4ZDdiNzZjMTk4YyU3QzY4NmVhMWQzYmMyYjRjNmZhOTJjZDk5YzVjMzAxNjM1JTdDMCU3
+QzANCj4gJTdDNjM3MTc5NTQ3MjIzMzYwMDUxJmFtcDtzZGF0YT13bHdsYnJMR1h0JTJGZHB1dncy
+eHBDVG9pQUl3ZXVkDQo+IFFEdkxjOHgwa2dKT29RJTNEJmFtcDtyZXNlcnZlZD0wPiBCbG9nDQoN
+Cg==
