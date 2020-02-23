@@ -2,118 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9D3169989
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2020 20:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47114169AA7
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 00:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726302AbgBWTDQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Feb 2020 14:03:16 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:34183 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726208AbgBWTDP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Feb 2020 14:03:15 -0500
-Received: by mail-wr1-f68.google.com with SMTP id n10so7853822wrm.1;
-        Sun, 23 Feb 2020 11:03:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=A5PcRNqVDequHW3hKDEELTuy+nfThlBZndOvTTb6Fzk=;
-        b=AiZCF/a2q8ooI9RYiTznc9nYqhl3/7byEYXyNvKbyt86kczZ4RqS+FIH2UF2g5Rrf7
-         Qdvgpn7kRC/MUeY6T1nIEHbA2m1JijwgttNfNUJZal6KQCWbL7dMuMaBa+Z/czcHjyl4
-         qbdrTbQ4ACXTDuactRbJCJ4naOG0CzW06uyDar3wxOOPDWmxtwgHLmH8sQy3/6HUZHEz
-         El37Fc8TXC20FvNxqSBAXPdEYf9l95rKz7TbOkKjT4wtEJcLpY5xXgUGrCGvXupW/ePL
-         tCxUdqDZt4VAkasTUgJxzyeJOlnsUgTzWKqtl4e80AgugR8cuo69rtFNHb+dCr1SLpkZ
-         Qejg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=A5PcRNqVDequHW3hKDEELTuy+nfThlBZndOvTTb6Fzk=;
-        b=l/ASUnJcBbeOEeYVUnSA6eUph3xc36drgCp0TyQKUVI1z/CYbvAEZ8hogypLjMo8s5
-         vosy3M3HzoaWyscbgBl0D69t+1xckKuMKr01ywakPS/nhghIzNMRt+EtQnxGgnSX7mW6
-         JzSMJncYqrlff6hu3bhzMJfiPByELr5MRkXgHk+s1QBKN13s53fjbweb0enjXwrhaCGe
-         K4KGK8yY4/C+12dfdL6SlavgmiVIha5X1ihXzFgJXCK2Z9cOu1Pr6RNeHFxQSFaX/QT/
-         EDtGpN1RQ1578hKKPGfkT8CqGK88d64e7Afw8/nh1nG+/ksW1e0ox7D5p0qhMxpVMxMv
-         kXBg==
-X-Gm-Message-State: APjAAAUmjtHuSrKu+Jr75umuhH3m28UxQ3ef/F9qCgSmAsPAENKSrnPc
-        WI+xu9owilH6yLkv5/iaYeM=
-X-Google-Smtp-Source: APXvYqxfXJKIZsXIveZSysVzGSvhzDQFvhvyaaEt/yWFzajfEc5h0Bse/ct1rSyy5oVYBNw1Tp/vLw==
-X-Received: by 2002:a5d:560d:: with SMTP id l13mr35511905wrv.222.1582484593685;
-        Sun, 23 Feb 2020 11:03:13 -0800 (PST)
-Received: from dumbo (ip4da2e549.direct-adsl.nl. [77.162.229.73])
-        by smtp.gmail.com with ESMTPSA id y12sm14812427wrw.88.2020.02.23.11.03.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Feb 2020 11:03:12 -0800 (PST)
-Date:   Sun, 23 Feb 2020 20:03:11 +0100
-From:   Domenico Andreoli <domenico.andreoli@linux.com>
-To:     "Darrick J. Wong" <darrick.wong@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: Regression: hibernation is broken since
- e6bc9de714972cac34daa1dc1567ee48a47a9342
-Message-ID: <20200223190311.GA26811@dumbo>
-Mail-Followup-To: "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org
-References: <20200213172351.GA6747@dumbo>
- <20200213175753.GS6874@magnolia>
- <20200213183515.GA8798@dumbo>
- <20200213193410.GB6868@magnolia>
- <20200213194135.GF6870@magnolia>
- <20200214211523.GA32637@dumbo>
- <20200222002319.GK9504@magnolia>
+        id S1727151AbgBWXRA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Feb 2020 18:17:00 -0500
+Received: from ozlabs.org ([203.11.71.1]:51165 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727064AbgBWXRA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 23 Feb 2020 18:17:00 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48Qh0l2zmzz9sPK;
+        Mon, 24 Feb 2020 10:16:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1582499816;
+        bh=ZDsuoOV08OG4rWiKXytPH30q7PC/XrARg94GbSYzkBw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AKp3byLjUgGeWJ48kznETWc0Q3R5R+v1q1teBHVmawsNupD3Pe0ucEI5ezfd7pOAy
+         PW/mL8pfaMHcX16KOvg6I71vLR4Bieg2nsmUWXZItzr0DqnsomYD7lx/lHov0Ft8fQ
+         Hf9+mEEH7uRY8xZKIUCj0bEH679ZzqORtM5yx8UTUHzGIBFxluhGQUmhq4N54emir2
+         DaqzTzxbhB0bQqArroPfI+p1d3N/FF3ywJHRFrTAM8fouTZOkblsC/wk0kpn1xMWFG
+         BG9VEhQqMOam6UjEzDAKYuuUNUCRK7y1rY9DM21KuhEbv+hcA0Ck6cutVtrQKqe0bu
+         jN215DYPbaD8g==
+Date:   Mon, 24 Feb 2020 10:16:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kevin Hilman <khilman@baylibre.com>,
+        Carlo Caione <carlo@caione.org>
+Cc:     Jianxin Pan <jianxin.pan@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, Jian Hu <jian.hu@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: Re: [PATCH] soc: amlogic: fix compile failure with
+ MESON_SECURE_PM_DOMAINS & !MESON_SM
+Message-ID: <20200224101654.530f1837@canb.auug.org.au>
+In-Reply-To: <20200218092229.0448d266@canb.auug.org.au>
+References: <1581955933-69832-1-git-send-email-jianxin.pan@amlogic.com>
+        <20200218080743.07e58c6e@canb.auug.org.au>
+        <20200218092229.0448d266@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200222002319.GK9504@magnolia>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/HRS=wqj=EXtghxVG08E8STH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 04:23:19PM -0800, Darrick J. Wong wrote:
-> 
-> Ok, third try.  Does the following work?  This is a little more
-> selective in that it only disables the write protection on the swap
-> device/file that uswusp is going to write to.
+--Sig_/HRS=wqj=EXtghxVG08E8STH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes it works but also verified that once the S_SWAPFILE bit is cleared
-it's never restored, therefore the protecton is gone after the first
-hibernation.
+Hi all,
 
-> 
-> --D
-> 
-> diff --git a/kernel/power/user.c b/kernel/power/user.c
-> index 77438954cc2b..a3ae9cbbfcf0 100644
-> --- a/kernel/power/user.c
-> +++ b/kernel/power/user.c
-> @@ -372,10 +372,17 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
->  			 */
->  			swdev = new_decode_dev(swap_area.dev);
->  			if (swdev) {
-> +				struct block_device *bd;
-> +
->  				offset = swap_area.offset;
-> -				data->swap = swap_type_of(swdev, offset, NULL);
-> +				data->swap = swap_type_of(swdev, offset, &bd);
->  				if (data->swap < 0)
->  					error = -ENODEV;
-> +
-> +				inode_lock(bd->bd_inode);
-> +				bd->bd_inode->i_flags &= ~S_SWAPFILE;
-> +				inode_unlock(bd->bd_inode);
-> +				bdput(bd);
->  			} else {
->  				data->swap = -1;
->  				error = -EINVAL;
+On Tue, 18 Feb 2020 09:22:29 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Tue, 18 Feb 2020 08:07:43 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > On Tue, 18 Feb 2020 00:12:13 +0800 Jianxin Pan <jianxin.pan@amlogic.com=
+> wrote: =20
+> > >
+> > > When MESON_SECURE_PM_DOMAINS & !MESON_SM, there will be compile failu=
+re:
+> > > .../meson-secure-pwrc.o: In function `meson_secure_pwrc_on':
+> > > .../meson-secure-pwrc.c:76: undefined reference to `meson_sm_call'
+> > >=20
+> > > Fix this by adding depends on MESON_SM for MESON_SECURE_PM_DOMAINS.
+> > >=20
+> > > Fixes: b3dde5013e13 ("soc: amlogic: Add support for Secure power doma=
+ins controller")
+> > >=20
+> > > Reported-by: kbuild test robot <lkp@intel.com>
+> > > Reported-by: patchwork-bot+linux-amlogic<patchwork-bot+linux-amlogic@=
+kernel.org>
+> > > Reported-by: Stephen Rothwell<sfr@canb.auug.org.au>
+> > > Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
+> > > ---
+> > >  drivers/soc/amlogic/Kconfig | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)   =20
+> >=20
+> > I will apply that patch to linux-next today. =20
+>=20
+> This fixes the build for me.
+>=20
+> Tested-by: Stephen Rothwell<sfr@canb.auug.org.au>
+>=20
+> Also, please keep the commit message tags together at the end of the
+> commit message i.e. remove the blank line after the Fixes: tag above.
+> (see "git interpret-trailers ")
 
--- 
-rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
-ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
+I am still applying this patch ...
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/HRS=wqj=EXtghxVG08E8STH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5TB+YACgkQAVBC80lX
+0Gw1Ygf9FYA4QbsYVulSaeKZSzIU8INOux2IozBcABlP9zBBHobUJpQC28V80fti
+ImqOIwDNv+r67DnCKDg64+X5PfPyOySRYssr9sRSWcjwoud1qt2ln0iez9tDMG0t
+B7ntUEWmRAFZ0GtBYqSGZw73lldQRod4lD7B1RrxVK36xIVMUo+X/ZWAEbvlQGn1
+oWkoVMxhbDK6crqYBKgTfAVSa2QbpNQV++y0fmmfJUMl/8txhSYEhMIrKr+pr4i6
+xHLq3w3J4HJXTo/07+1RjlhgVHdO+e3JyLunOA5MA+aW215AjiCXGcSLHX7PD1QM
+mtWa7KCNYCHULAxJs6JOuzD+gOMLLg==
+=gH3w
+-----END PGP SIGNATURE-----
+
+--Sig_/HRS=wqj=EXtghxVG08E8STH--
