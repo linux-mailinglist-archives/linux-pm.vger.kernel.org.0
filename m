@@ -2,349 +2,406 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF1616B1EF
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 22:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5443E16B352
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 22:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727421AbgBXVQO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Feb 2020 16:16:14 -0500
-Received: from mx1.riseup.net ([198.252.153.129]:51906 "EHLO mx1.riseup.net"
+        id S1727954AbgBXVyk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Feb 2020 16:54:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37102 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726722AbgBXVQO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 24 Feb 2020 16:16:14 -0500
-Received: from capuchin.riseup.net (capuchin-pn.riseup.net [10.0.1.176])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 48RFH15NQXzF00S;
-        Mon, 24 Feb 2020 13:16:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1582578974; bh=L0+6AdvBLtE+R3pTYEnO/b72g4awwI7J3xRkDeWL4XQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=UanxhMHAm324IKaumjbJmXIFK9JUpK+9SyAYGPUgd9aGw/lxiJzKyE20N7e9+SDjz
-         B585ys9nEyFZ1w96XBLTX7PXRU08D8MPyNXRJAI1kkoP6cI9a83gn6cOYu8vm7gsb2
-         cAt7hiUEo4DrtjqxTPU/PUbrXNiECYG1MAIOOG/o=
-X-Riseup-User-ID: CACFD77AC6A979ED6FD404C940A78177ED8DA9B9A5CD45A9B3ACC96E7F6896B2
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by capuchin.riseup.net (Postfix) with ESMTPSA id 48RFH12WxYz8smj;
-        Mon, 24 Feb 2020 13:16:13 -0800 (PST)
-From:   Francisco Jerez <currojerez@riseup.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        "Pandruvada\, Srinivas" <srinivas.pandruvada@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU latency QoS interface
-In-Reply-To: <CAJZ5v0iz5e6GhpJcphKtyzS=MeteuQeSVOVkL-9YjeQ3OWO-Jw@mail.gmail.com>
-References: <1654227.8mz0SueHsU@kreacher> <87wo8rjsa4.fsf@riseup.net> <CAJZ5v0hAn0V-QhebFt=vqKK6gBLxjTq7SNOWOStt7huCXMSH7g@mail.gmail.com> <878sl6j4fd.fsf@riseup.net> <CAJZ5v0jNFMwqSwSones91WgDwGqusyY1nEMDKAYuSZiLjH61dw@mail.gmail.com> <CAJZ5v0iMvzFGbuYsOo+AkWAqUbkQVT-FHsTDbStPiNenw783LQ@mail.gmail.com> <87sgjegh20.fsf@riseup.net> <CAJZ5v0hm2vVbM5dXGitvvUrWoZXZXXaJ+P3x38BjHRukZKgB3Q@mail.gmail.com> <87imk8hpud.fsf@riseup.net> <CAJZ5v0iz5e6GhpJcphKtyzS=MeteuQeSVOVkL-9YjeQ3OWO-Jw@mail.gmail.com>
-Date:   Mon, 24 Feb 2020 13:16:14 -0800
-Message-ID: <87k14belep.fsf@riseup.net>
+        id S1727421AbgBXVyj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 24 Feb 2020 16:54:39 -0500
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 05910218AC;
+        Mon, 24 Feb 2020 21:54:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582581278;
+        bh=obX8DiN4IrYT1zO5U8yavN8DCCXwanFzw3GwRY1tH1g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qi/Or2syWvs4vt/3zqxDi7OsAV/wGo4jhq+rRRl/HMz8N7pqG0cTciXbUBV0qVr9c
+         eEW9pUI72QtZcvuHGMQJMQE7M0h+PKBp7tRZGxkrR5tbaAb2M1Sd6yMZ7Tks9d6Z0z
+         r3EhI+huoh+bTVS/NtTLPMWa/E9mKePmq+HRXsyc=
+Received: by mail-qv1-f46.google.com with SMTP id l14so4813694qvu.12;
+        Mon, 24 Feb 2020 13:54:37 -0800 (PST)
+X-Gm-Message-State: APjAAAX5f6UxR+m6VRkalxWORKjik5TpeR6faiMizGGIcIU8nW1VxpjJ
+        eZ7rfLsicD5kVuq66cS6NYSyRy78JjghHhUv0g==
+X-Google-Smtp-Source: APXvYqzwUVT+GARPLCUuMgnIG0gjCzR3NI+tm7sDdZJ+6BoRvSiv/BjaaIHEAuFY8Dmx2ij5u+++18RFUoPRGIgA4Kw=
+X-Received: by 2002:a0c:f6cd:: with SMTP id d13mr45666490qvo.20.1582581277019;
+ Mon, 24 Feb 2020 13:54:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="==-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+References: <cover.1582528977.git.amit.kucheria@linaro.org> <59d24f8ec98e29d119c5cbdb2abe6d4644cc51cf.1582528977.git.amit.kucheria@linaro.org>
+In-Reply-To: <59d24f8ec98e29d119c5cbdb2abe6d4644cc51cf.1582528977.git.amit.kucheria@linaro.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 24 Feb 2020 15:54:25 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+wBF-VGmaaDk6EYzE=4g7Yq=w15WLL=mLjiR5FmxdWkQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+wBF-VGmaaDk6EYzE=4g7Yq=w15WLL=mLjiR5FmxdWkQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 3/3] dt-bindings: thermal: Add yaml bindings for
+ thermal zones
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---==-=-=
-Content-Type: multipart/mixed; boundary="=-=-="
-
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-"Rafael J. Wysocki" <rafael@kernel.org> writes:
-
-> Sorry for the late response, I was offline for a major part of the
-> previous week.
+On Mon, Feb 24, 2020 at 1:26 AM Amit Kucheria <amit.kucheria@linaro.org> wrote:
 >
-> On Fri, Feb 14, 2020 at 9:31 PM Francisco Jerez <currojerez@riseup.net> wrote:
->>
->> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->>
->> > On Fri, Feb 14, 2020 at 1:14 AM Francisco Jerez <currojerez@riseup.net> wrote:
->> >>
->> >> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->> >>
->> >> > On Thu, Feb 13, 2020 at 12:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->> >
->> > [cut]
->> >
->> >> >
->> >> > I think that your use case is almost equivalent to the thermal
->> >> > pressure one, so you'd want to limit the max and so that would be
->> >> > something similar to store_max_perf_pct() with its input side hooked
->> >> > up to a QoS list.
->> >> >
->> >> > But it looks like that QoS list would rather be of a "reservation"
->> >> > type, so a request added to it would mean something like "leave this
->> >> > fraction of power that appears to be available to the CPU subsystem
->> >> > unused, because I need it for a different purpose".  And in principle
->> >> > there might be multiple requests in there at the same time and those
->> >> > "reservations" would add up.  So that would be a kind of "limited sum"
->> >> > QoS type which wasn't even there before my changes.
->> >> >
->> >> > A user of that QoS list might then do something like
->> >> >
->> >> > ret = cpu_power_reserve_add(1, 4);
->> >> >
->> >> > meaning that it wants 25% of the "potential" CPU power to be not
->> >> > utilized by CPU performance scaling and that could affect the
->> >> > scheduler through load modifications (kind of along the thermal
->> >> > pressure patchset discussed some time ago) and HWP (as well as the
->> >> > non-HWP intel_pstate by preventing turbo frequencies from being used
->> >> > etc).
->> >>
->> >> The problems with this are the same as with the per-CPU frequency QoS
->> >> approach: How does the device driver know what the appropriate fraction
->> >> of CPU power is?
->> >
->> > Of course it doesn't know and it may never know exactly, but it may guess.
->> >
->> > Also, it may set up a feedback loop: request an aggressive
->> > reservation, run for a while, measure something and refine if there's
->> > headroom.  Then repeat.
->> >
->>
->> Yeah, of course, but that's obviously more computationally intensive and
->> less accurate than computing an approximately optimal constraint in a
->> single iteration (based on knowledge from performance counters and a
->> notion of the latency requirements of the application), since such a
->> feedback loop relies on repeatedly overshooting and undershooting the
->> optimal value (the latter causes an artificial CPU bottleneck, possibly
->> slowing down other applications too) in order to converge to and remain
->> in a neighborhood of the optimal value.
+> As part of moving the thermal bindings to YAML, split it up into 3
+> bindings: thermal sensors, cooling devices and thermal zones.
 >
-> I'm not saying that feedback loops are the way to go in general, but
-> that in some cases they are applicable and this particular case looks
-> like it may be one of them.
+> The thermal-zone binding is a software abstraction to capture the
+> properties of each zone - how often they should be checked, the
+> temperature thresholds (trips) at which mitigation actions need to be
+> taken and the level of mitigation needed at those thresholds.
 >
->> Incidentally people tested a power balancing solution with a feedback
->> loop very similar to the one you're describing side by side to the RFC
->> patch series I provided a link to earlier (which targeted Gen9 LP
->> parts), and the energy efficiency improvements they observed were
->> roughly half of the improvement obtained with my series unsurprisingly.
->>
->> Not to speak about generalizing such a feedback loop to bottlenecks on
->> multiple I/O devices.
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> ---
+>  .../bindings/thermal/thermal-zones.yaml       | 302 ++++++++++++++++++
+>  1 file changed, 302 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/thermal-zones.yaml
 >
-> The generalizing part I'm totally unconvinced above.
+> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> new file mode 100644
+> index 000000000000..bc1ce8e41324
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> @@ -0,0 +1,302 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR MIT)
+
+Why MIT instead of BSD-2-Clause? And do you have rights to add that?
+Any text you copied over from the .txt file was only GPL2. Relicensing
+would be nice if you can get permission from the authors.
+
+> +# Copyright 2020 Linaro Ltd.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/thermal-zones.yaml#
+> +$schema: http://devicetree.org/meta-schemas/base.yaml#
+> +
+> +title: Thermal zone binding
+> +
+> +maintainers:
+> +  - Amit Kucheria <amitk@kernel.org>
+> +
+> +description: |
+> +  Thermal management is achieved in devicetree by describing the sensor hardware
+> +  and the software abstraction of cooling devices and thermal zones required to
+> +  take appropriate action to mitigate thermal overloads.
+> +
+> +  The following node types are used to completely describe a thermal management
+> +  system in devicetree:
+> +   - thermal-sensor: device that measures temperature, has SoC-specific bindings
+> +   - cooling-device: device used to dissipate heat either passively or artively
+
+typo
+
+> +   - thermal-zones: a container of the following node types used to describe all
+> +     thermal data for the platform
+> +
+> +  This binding describes the thermal-zones.
+> +
+> +  The polling-delay properties of a thermal-zone are bound to the maximum dT/dt
+> +  (temperature derivative over time) in two situations for a thermal zone:
+> +    1. when passive cooling is activated (polling-delay-passive)
+> +    2. when the zone just needs to be monitored (polling-delay) or when
+> +       active cooling is activated.
+> +
+> +  The maximum dT/dt is highly bound to hardware power consumption and
+> +  dissipation capability. The delays should be chosen to account for said
+> +  max dT/dt, such that a device does not cross several trip boundaries
+> +  unexpectedly between polls. Choosing the right polling delays shall avoid
+> +  having the device in temperature ranges that may damage the silicon structures
+> +  and reduce silicon lifetime.
+> +
+> +properties:
+> +  thermal-zones:
+> +    type: object
+> +    description:
+> +      A /thermal-zones node is required in order to use the thermal framework to
+> +      manage input from the various thermal zones in the system in order to
+> +      mitigate thermal overload conditions. It does not represent a real device
+> +      in the system, but acts as a container to link thermal sensor devices,
+> +      platform-data regarding temperature thresholds and the mitigation actions
+> +      to take when the temperature crosses those thresholds.
+> +
+> +    properties:
+> +      $nodename:
+> +        pattern: "^[a-zA-Z][a-zA-Z0-9,\\-]{1,12}-thermal$"
+> +        type: object
+> +        description:
+> +          Each thermal zone node contains information about how frequently it
+> +          must be checked, the sensor responsible for reporting temperature for
+> +          this zone, one sub-node containing the various trip points for this
+> +          zone and one sub-node containing all the zone cooling-maps.
+> +
+> +        properties:
+> +          polling-delay:
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            minimum: 0
+> +            description:
+> +              The maximum number of milliseconds to wait between polls when
+> +              checking this thermal zone. Setting this to 0 disables the polling
+> +              timers setup by the thermal framework and assumes that the thermal
+> +              sensors in this zone support interrupts.
+> +
+> +          polling-delay-passive:
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            minimum: 0
+> +            description:
+> +              The maximum number of milliseconds to wait between polls when
+> +              checking this thermal zone while doing passive cooling. Setting
+> +              this to 0 disables the polling timers setup by the thermal
+> +              framework and assumes that the thermal sensors in this zone
+> +              support interrupts.
+> +
+> +          thermal-sensors:
+> +            $ref: /schemas/types.yaml#/definitions/phandle-array
+> +            description:
+> +              A list of thermal sensor phandles and sensor specifiers used to
+> +              monitor this thermal zone.
+> +
+> +          trips:
+> +            type: object
+> +            description:
+> +              This node describes a set of points in the temperature domain at
+> +              which the thermal framework needs to takes action. The actions to
+> +              be taken are defined in another node called cooling-maps.
+> +
+> +            patternProperties:
+> +              "^[a-zA-Z][a-zA-Z0-9,+\\._]{0,63}$":
+> +                type: object
+> +
+> +                properties:
+> +                  temperature:
+> +                    $ref: /schemas/types.yaml#/definitions/int32
+> +                    description:
+> +                      An integer expressing the trip temperature in millicelsius.
+
+Wouldn't 200000 mC be a reasonable max? And -273000 mC min.
+
+> +
+> +                  hysteresis:
+> +                    $ref: /schemas/types.yaml#/definitions/uint32
+> +                    description:
+> +                      An unsigned integer expressing the hysteresis delta with
+> +                      respect to the trip temperature property above, also in
+> +                      millicelsius.
+> +
+> +                  type:
+> +                    oneOf:
+> +                      - items:
+> +                        - enum:
+
+Drop oneOf and items. Just enum is enough.
+
+> +                            - active
+> +                            - passive
+> +                            - hot
+> +                            - critical
+> +                    description: |
+> +                      There are four valid trip types,
+> +                       - active   - enable active cooling e.g. fans
+> +                       - passive  - enable passive cooling e.g. throttling cpu
+> +                       - hot      - send notification to driver if .notify
+> +                                    callback registered
+> +                       - critical - send notification to driver if .notify
+> +                                    callback registered and trigger a shutdown
+
+Perhaps make these comments on each enum entry.
+
+> +
+> +                required:
+> +                  - temperature
+> +                  - hysteresis
+> +                  - type
+
+'additionalProperties: false'? Or can the node have other properties?
+
+> +
+> +          cooling-maps:
+> +            type: object
+> +            description:
+> +              This node describes the action to be taken when a thermal zone
+> +              crosses one of the temperature thresholds described in the trips
+> +              node. The action takes the form of a mapping relation between a
+> +              trip and the target cooling device state.
+> +
+> +            patternProperties:
+> +              "^map[0-9][-a-zA-Z0-9]*$":
+> +                type: object
+> +
+> +                properties:
+> +                  trip:
+> +                    $ref: /schemas/types.yaml#/definitions/phandle
+> +                    description:
+> +                      A phandle of a trip point node within this thermal zone.
+> +
+> +                  cooling-device:
+> +                    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +                    description:
+> +                      A list of cooling device phandles along with the minimum
+> +                      and maximum cooling state specifiers for each cooling
+> +                      device. Using the THERMAL_NO_LIMIT (-1UL) constant in the
+> +                      cooling-device phandle limit specifier lets the framework
+> +                      use the minimum and maximum cooling state for that cooling
+> +                      device automatically.
+> +
+> +                  contribution:
+> +                    $ref: /schemas/types.yaml#/definitions/uint32
+> +                    minimum: 0
+> +                    maximum: 100
+> +                    description:
+> +                      The contribution of the cooling devices at the trip
+> +                      temperature, both referenced in this map, to this thermal
+> +                      zone as a percentage.
+> +
+> +                required:
+> +                  - trip
+> +                  - cooling-device
+
+'additionalProperties: false'?
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/thermal/thermal.h>
+> +
+> +    // Example 1: SDM845 TSENS
+> +    soc: soc@0 {
+> +            #address-cells = <2>;
+> +            #size-cells = <2>;
+> +
+> +            /* ... */
+> +
+> +            tsens0: thermal-sensor@c263000 {
+> +                    compatible = "qcom,sdm845-tsens", "qcom,tsens-v2";
+> +                    reg = <0 0x0c263000 0 0x1ff>, /* TM */
+> +                          <0 0x0c222000 0 0x1ff>; /* SROT */
+> +                    #qcom,sensors = <13>;
+> +                    interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>;
+> +                    interrupt-names = "uplow";
+> +                    #thermal-sensor-cells = <1>;
+> +            };
+> +
+> +            tsens1: thermal-sensor@c265000 {
+> +                    compatible = "qcom,sdm845-tsens", "qcom,tsens-v2";
+> +                    reg = <0 0x0c265000 0 0x1ff>, /* TM */
+> +                          <0 0x0c223000 0 0x1ff>; /* SROT */
+> +                    #qcom,sensors = <8>;
+> +                    interrupts = <GIC_SPI 507 IRQ_TYPE_LEVEL_HIGH>;
+> +                    interrupt-names = "uplow";
+> +                    #thermal-sensor-cells = <1>;
+> +            };
+> +    };
+> +
+> +    /* ... */
+> +
+> +    thermal-zones {
+> +            cpu0-thermal {
+> +                    polling-delay-passive = <250>;
+> +                    polling-delay = <1000>;
+> +
+> +                    thermal-sensors = <&tsens0 1>;
+> +
+> +                    trips {
+> +                            cpu0_alert0: trip-point0 {
+> +                                    temperature = <90000>;
+> +                                    hysteresis = <2000>;
+> +                                    type = "passive";
+> +                            };
+> +
+> +                            cpu0_alert1: trip-point1 {
+> +                                    temperature = <95000>;
+> +                                    hysteresis = <2000>;
+> +                                    type = "passive";
+> +                            };
+> +
+> +                            cpu0_crit: cpu_crit {
+> +                                    temperature = <110000>;
+> +                                    hysteresis = <1000>;
+> +                                    type = "critical";
+> +                            };
+> +                    };
+> +
+> +                    cooling-maps {
+> +                            map0 {
+> +                                    trip = <&cpu0_alert0>;
+> +                                    cooling-device = <&CPU0 THERMAL_NO_LIMIT
+> +                                                            THERMAL_NO_LIMIT>,
+> +                                                     <&CPU1 THERMAL_NO_LIMIT
+> +                                                            THERMAL_NO_LIMIT>,
+> +                                                     <&CPU2 THERMAL_NO_LIMIT
+> +                                                            THERMAL_NO_LIMIT>,
+> +                                                     <&CPU3 THERMAL_NO_LIMIT
+> +                                                            THERMAL_NO_LIMIT>;
+> +                            };
+> +
+> +                            map1 {
+> +                                    trip = <&cpu0_alert1>;
+> +                                    cooling-device = <&CPU0 THERMAL_NO_LIMIT
+> +                                                            THERMAL_NO_LIMIT>,
+> +                                                     <&CPU1 THERMAL_NO_LIMIT
+> +                                                            THERMAL_NO_LIMIT>,
+> +                                                     <&CPU2 THERMAL_NO_LIMIT
+> +                                                            THERMAL_NO_LIMIT>,
+> +                                                     <&CPU3 THERMAL_NO_LIMIT
+> +                                                            THERMAL_NO_LIMIT>;
+> +                            };
+> +                    };
+> +            };
+> +
+> +            /* ... */
+> +
+> +            cluster0-thermal {
+> +                    polling-delay-passive = <250>;
+> +                    polling-delay = <1000>;
+> +
+> +                    thermal-sensors = <&tsens0 5>;
+> +
+> +                    trips {
+> +                            cluster0_alert0: trip-point0 {
+> +                                    temperature = <90000>;
+> +                                    hysteresis = <2000>;
+> +                                    type = "hot";
+> +                            };
+> +                            cluster0_crit: cluster0_crit {
+> +                                    temperature = <110000>;
+> +                                    hysteresis = <2000>;
+> +                                    type = "critical";
+> +                            };
+> +                    };
+> +            };
+> +
+> +            /* ... */
+> +
+> +            gpu-thermal-top {
+> +                    polling-delay-passive = <250>;
+> +                    polling-delay = <1000>;
+> +
+> +                    thermal-sensors = <&tsens0 11>;
+> +
+> +                    trips {
+> +                            gpu1_alert0: trip-point0 {
+> +                                    temperature = <90000>;
+> +                                    hysteresis = <2000>;
+> +                                    type = "hot";
+> +                            };
+> +                    };
+> +            };
+> +    };
+> +...
+> --
+> 2.20.1
 >
-
-One of the main problems I see with generalizing a driver-controlled
-feedback loop to multiple devices is that any one of the drivers has no
-visibility over the performance of other workloads running on the same
-CPU core but not tied to the same feedback loop.  E.g. consider a
-GPU-bound application running concurrently with some latency-bound
-application on the same CPU core: It would be easy (if somewhat
-inaccurate) for the GPU driver to monitor the utilization of the one
-device it controls in order to prevent performance loss as a result of
-its frequency constraints, but how could it tell whether it's having a
-negative impact on the performance of the other non-GPU-bound
-application?  It doesn't seem possible to avoid that without the driver
-monitoring the performance counters of each CPU core *and* having some
-sort of interface in place for other unrelated applications to
-communicate their latency constraints (which brings us back to the PM
-QoS discussion).
-
->> >> Depending on the instantaneous behavior of the
->> >> workload it might take 1% or 95% of the CPU power in order to keep the
->> >> IO device busy.  Each user of this would need to monitor the performance
->> >> of every CPU in the system and update the constraints on each of them
->> >> periodically (whether or not they're talking to that IO device, which
->> >> would possibly negatively impact the latency of unrelated applications
->> >> running on other CPUs, unless we're willing to race with the task
->> >> scheduler).
->> >
->> > No, it just needs to measure a signal representing how much power *it*
->> > gets and decide whether or not it can let the CPU subsystem use more
->> > power.
->> >
->>
->> Well yes it's technically possible to set frequency constraints based on
->> trial-and-error without sampling utilization information from the CPU
->> cores, but don't we agree that this kind of information can be highly
->> valuable?
->
-> OK, so there are three things, frequency constraints (meaning HWP min
-> and max limits, for example), frequency requests (this is what cpufreq
-> does) and power limits.
->
-> If the processor has at least some autonomy in driving the frequency,
-> using frequency requests (i.e. cpufreq governors) for limiting power
-> is inefficient in general, because the processor is not required to
-> grant those requests at all.
->
-
-For limiting power yes, I agree that it would be less effective than a
-RAPL constraint, but the purpose of my proposal is not to set an upper
-limit on the power usage of the CPU in absolute terms, but in terms
-relative to its performance: Given that the energy efficiency of the CPU
-is steadily decreasing with frequency past the inflection point of the
-power curve, it's more energy-efficient to set a frequency constraint
-rather than to set a constraint on its long-term average power
-consumption while letting the clock frequency swing arbitrarily around
-the most energy-efficient frequency.
-
-Please don't get me wrong: I think that leveraging RAPL constraints as
-additional variable is authentically useful especially for thermal
-management, but it's largely complementary to frequency constraints
-which provide a more direct way to control the energy efficiency of the
-CPU.
-
-But even if we decide to use RAPL for this, wouldn't the RAPL governor
-need to make a certain latency trade-off?  In order to avoid performance
-degradation it would be necessary for the governor to respond to changes
-in the load of the CPU, and some awareness of the latency constraints of
-the application seems necessary either way in order to do that
-effectively.  IOW the kind of latency constraint I wanted to propose
-would be useful to achieve the most energy-efficient outcome whether we
-use RAPL, frequency constraints, or both.
-
-> Using frequency limits may be good enough, but it generally limits the
-> processor's ability to respond at short-time scales (for example,
-> setting the max frequency limit will prevent the processor from using
-> frequencies above that limit even temporarily, but that might be the
-> most energy-efficient option in some cases).
->
-> Using power limits (which is what RAPL does) doesn't bring such shortcomings in.
-
-But preventing a short-term oscillation of the CPU frequency is the
-desired outcome rather than a shortcoming whenever the time scale of the
-oscillation is orders of magnitude smaller than the latency requirements
-known to the application, since it lowers the energy efficiency (and
-therefore parallelism) of the system without any visible benefit for the
-workload.  The mechanism I'm proposing wouldn't prevent such short-term
-oscillations when needed except when an application or device driver
-explicitly requests PM to damp them.
-
->
->> >> A solution based on utilization clamps (with some
->> >> extensions) sounds more future-proof to me honestly.
->> >
->> > Except that it would be rather hard to connect it to something like
->> > RAPL, which should be quite straightforward with the approach I'm
->> > talking about.
->> >
->>
->> I think using RAPL as additional control variable would be useful, but
->> fully orthogonal to the cap being set by some global mechanism or being
->> derived from the aggregation of a number of per-process power caps based
->> on the scheduler behavior.
->
-> I'm not sure what do you mean by "the cap" here.  A maximum frequency
-> limit or something else?
->
-
-Either a frequency or a power cap.  Either way it seems valuable (but
-not strictly necessary up front) for the cap to be derived from the
-scheduler's behavior.
-
->> The latter sounds like the more reasonable
->> fit for a multi-tasking, possibly virtualized environment honestly.
->> Either way RAPL is neither necessary nor sufficient in order to achieve
->> the energy efficiency improvement I'm working on.
->
-> The "not necessary" I can agree with, but I don't see any arguments
-> for the "not sufficient" statement.
->
-
-Not sufficient since RAPL doesn't provide as much of a direct limit on
-the energy efficiency of the system as a frequency constraint would
-[More on that above].
-
->> > The problem with all scheduler-based ways, again, is that there is no
->> > direct connection between the scheduler and HWP,
->>
->> I was planning to introduce such a connection in RFC part 2.  I have a
->> prototype for that based on a not particularly pretty custom interface,
->> I wouldn't mind trying to get it to use utilization clamps if you think
->> that's the way forward.
->
-> Well, I may think so, but that's just thinking at this point.  I have
-> no real numbers to support that theory.
->
-
-Right.  And the only way to get numbers is to implement it.  I wouldn't
-mind giving that a shot as a follow up.  But a PM QoS-based solution is
-likely to give most of the benefit in the most common scenarios.
-
->> > or even with whatever the processor does with the P-states in the
->> > turbo range.  If any P-state in the turbo range is requested, the
->> > processor has a license to use whatever P-state it wants, so this
->> > pretty much means allowing it to use as much power as it can.
->> >
->> > So in the first place, if you want to limit the use of power in the
->> > CPU subsystem through frequency control alone, you need to prevent it
->> > from using turbo P-states at all.  However, with RAPL you can just
->> > limit power which may still allow some (but not all) turbo P-states to
->> > be used.
->>
->> My goal is not to limit the use of power of the CPU (if it has enough
->> load to utilize 100% of the cycles at turbo frequency so be it), but to
->> get it to use it more efficiently.  If you are constrained by a given
->> power budget (e.g. the TDP or the one you want set via RAPL) you can do
->> more with it if you set a stable frequency rather than if you let the
->> CPU bounce back and forth between turbo and idle.
->
-> Well, this basically means driving the CPU frequency by hand with the
-> assumption that the processor cannot do the right thing in this
-> respect, while in theory the HWP algorithm should be able to produce
-> the desired result.
->
-> IOW, your argumentation seems to go into the "HWP is useless"
-> direction, more or less and while there are people who will agree with
-> such a statement, others won't.
->
-
-I don't want to drive the CPU frequency by hand, and I don't think HWP
-is useless by any means.  The purpose of my changes is to get HWP to do
-a better job by constraining its response to a reasonable range based on
-information which is largely unavailable to HWP -- E.g.: What are the
-latency constraints of the application?  Does the application have an IO
-bottleneck?  Which CPU core did we schedule the IO-bottlenecking
-application to?
-
->> This can only be
->> achieved effectively if the frequency governor has a rough idea of the
->> latency requirements of the workload, since it involves a
->> latency/energy-efficiency trade-off.
->
-> Let me state this again (and this will be the last time, because I
-> don't really like to repeat points): the frequency governor can only
-> *request* the processor to do something in general and the request may
-> or may not be granted, for various reasons.  If it is not granted, the
-> whole "control" mechanism fails.
-
-And what's wrong with that?  The purpose of the latency constraint
-interface is not to provide a hard limit on the CPU frequency, but to
-give applications some influence on the latency trade-off made by the
-governor whenever it isn't in conflict with the constraints set by other
-applications (possibly as a result of them being part of the same clock
-domain which may indeed cause the effective frequency to deviate from
-the range specified by the P-state governor).  IOW the CPU frequency
-momentarily exceeding the optimal value for any specific application
-wouldn't violate the interface.  The result can still be massively more
-energy-efficient than placing a long-term power constraint, or not
-placing any constraint at all, even if P-state requests are not
-guaranteed to succeed in general.
-
-Regards,
-Francisco.
-
---=-=-=--
-
---==-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEAREIAB0WIQST8OekYz69PM20/4aDmTidfVK/WwUCXlQ9HgAKCRCDmTidfVK/
-WzlNAP9PkK8q+HxhB149Oonyz5mKrS125tf24VCGQGDflN/A/AD/ajzg1UcP7OFY
-3m2ha5ENi9q48B2ySmHDy/6BS+mav1M=
-=fBxC
------END PGP SIGNATURE-----
---==-=-=--
