@@ -2,174 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E80E16B098
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 20:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B6F16B0CA
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 21:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726778AbgBXTvl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 24 Feb 2020 14:51:41 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:49863 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726628AbgBXTvl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Feb 2020 14:51:41 -0500
-Received: from [192.168.1.183] ([37.4.249.121]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MxUjv-1jMCpG0EVV-00xvGV; Mon, 24 Feb 2020 20:51:31 +0100
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-Subject: bcm2835: Firmware transaction timeout caused by pm_test
-Openpgp: preference=signencrypt
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- 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 AQ==
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-rpi-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Message-ID: <84ce1178-f535-107b-f796-77e5e542ffdc@i2se.com>
-Date:   Mon, 24 Feb 2020 20:51:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727197AbgBXUK3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Feb 2020 15:10:29 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:40112 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726628AbgBXUK2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 24 Feb 2020 15:10:28 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92.3)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1j6K3b-0001SI-W7; Mon, 24 Feb 2020 21:10:24 +0100
+Subject: Re: [PATCH] cpuidle-haltpoll: allow force loading on hosts without
+ the REALTIME hint
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Joao Martins <joao.m.martins@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>, kvm@vger.kernel.org
+References: <20200221174331.1480468-1-mail@maciej.szmigiero.name>
+Autocrypt: addr=mail@maciej.szmigiero.name; prefer-encrypt=mutual; keydata=
+ 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 Iw==
+Message-ID: <114f7b8d-6f88-222a-d1fa-abcfc0e6a1f2@maciej.szmigiero.name>
+Date:   Mon, 24 Feb 2020 21:10:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
+In-Reply-To: <20200221174331.1480468-1-mail@maciej.szmigiero.name>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
 Content-Language: en-US
-X-Provags-ID: V03:K1:f0ZAexjlhNFaXYNzDiIOXy6TGlz1I7KggjqeFhAGQa/FgSOHpsH
- SIjQmezYC73z9cr4+paA0AruZh0vmRuFdtA+eL4JD+nppeCDMWa1fSxxi9rcVGmh0N1K2O9
- feiW1lUFFwSFGeL1wbgKLBpblhQLyJhIO4iYZcri1CZNsXmrNbgpRAY3t8/EUZVxiauuj41
- oFJSmITnyiXHStaUcXzSw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cLRVUTvICA4=:jXtOSIao1gKdoJ2QqEqKIA
- GrbzNWPg2R2k4pD/eN56B/hmaD2Z0170qmz3w6qgVPIHtC9lk661oFBBCsX9LCnCm1569zXfb
- 9B5WZpAjiwLwiflHNGy6mkeVMlNWK/RrZjUjkwjZwB5bNKpMrtOKLNwwFMStSsD9vx2EaEZL8
- G5NmoQmYlu33AQ806pfTumQfbs/umez/XcOxPTW+F1faKY5u18r45V+z+JTQ28aO7NrMvTZxZ
- HW7Y51Z4sTV0clVQ0rkoUBd8Wr8fBOw0gWhlcvrQPAl4B/ruBz12YT6hiEMVHv6YnUzqV675C
- KVE+mD64TlU51ClkWG5Uzz/sE91VdxhEsT8qjN9wVo+RU1DVVwH/QqSNIUh1gRorTSNMsV6Ix
- qnY5KtwCZeqMai0Bi5BLuPCAm60iuA3s3c3A0u8x2Qpn+k6jtCwSDhJvfkC1Xbqsx8cG78MQB
- /WimEVY9avyaU/37lqIxlYgc/QAgDj6e+9FsmqGRRm+9lDbb0a6NYuHBjjQnbDmOySYxAeADT
- ecdR/JjKVUT/UOOcgWu23AKkz/MKNByjlhO5ahU4nIFtCrQ2b10cmn5lqLKTDskxl6f7lJVI3
- RvvUwLBX14g3VMv7gu8ZZEFNnbWOz68hEV9qs3dCsQY3a5HUg7s2UCwaiqVd+aEjXYtHz7PJg
- UNMNeZDuJ9ufz82dJB/s1XcwYkVT3KnJUvrtQEMFCWdN6Bq43JjfkjaVFhyLJfKiewhdpbXUj
- Q76UZaxUr7FvOxXsXh8n3K/CP08HSSF4cZhd1oqvNSsvXskNpOcQNYOO60gSJ5UNhT7cMpbaG
- rTAr2iQG+1Vt9FalHX0EPK23ovVzk900kw6I8r6Xu4zPp3qdVhOIM884Q/nKm4A0C5tgUeb
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+(CC'ing also Marcelo as the cpuidle-haltpoll driver author and the KVM ML).
 
-yesterday i noticed that i'm able to trigger a warning with pm_test on
-my Raspberry Pi 3A+ (current linux-next, multi_v7_defconfig +
-CONFIG_PM_DEBUG). It seems that the code tries to disable a power domain
-while the necessary mailbox / firmware driver is already disabled.
-
-raspberrypi-firmware soc:firmware: Attached to firmware from 2019-03-27
-15:45
-
-Steps to reproduce:
-
-echo platform > /sys/power/pm_test
-echo freeze > /sys/power/state
-
-Resulting warning:
-
-[  330.955150] ------------[ cut here ]------------
-[  330.955178] WARNING: CPU: 0 PID: 732 at
-drivers/firmware/raspberrypi.c:60 rpi_firmware_property_list+0x1b0/0x254
-[  330.955182] Firmware transaction timeout
-[  330.955184] Modules linked in: brcmfmac sha256_generic libsha256
-sha256_arm cfg80211 vc4 brcmutil snd_soc_core ac97_bus hci_uart
-snd_pcm_dmaengine btbcm snd_pcm bluetooth snd_timer snd ecdh_generic
-soundcore ecc crc32_arm_ce raspberrypi_hwmon phy_generic bcm2835_thermal
-[  330.955249] CPU: 0 PID: 732 Comm: bash Not tainted
-5.6.0-rc2-next-20200220-00003-g85f2ed6-dirty #6
-[  330.955253] Hardware name: BCM2835
-[  330.955281] [<c03129d4>] (unwind_backtrace) from [<c030cc7c>]
-(show_stack+0x10/0x14)
-[  330.955296] [<c030cc7c>] (show_stack) from [<c0f08180>]
-(dump_stack+0xc0/0xd4)
-[  330.955312] [<c0f08180>] (dump_stack) from [<c0347aac>]
-(__warn+0xe0/0xf8)
-[  330.955327] [<c0347aac>] (__warn) from [<c0347b38>]
-(warn_slowpath_fmt+0x74/0xb8)
-[  330.955342] [<c0347b38>] (warn_slowpath_fmt) from [<c0d1b3ec>]
-(rpi_firmware_property_list+0x1b0/0x254)
-[  330.955357] [<c0d1b3ec>] (rpi_firmware_property_list) from
-[<c0d1b4f0>] (rpi_firmware_property+0x60/0x8c)
-[  330.955372] [<c0d1b4f0>] (rpi_firmware_property) from [<c087ca4c>]
-(rpi_domain_off+0x58/0x74)
-[  330.955388] [<c087ca4c>] (rpi_domain_off) from [<c09c1fc4>]
-(genpd_sync_power_off+0x60/0xf4)
-[  330.955403] [<c09c1fc4>] (genpd_sync_power_off) from [<c09c20ec>]
-(genpd_finish_suspend+0x94/0x10c)
-[  330.955418] [<c09c20ec>] (genpd_finish_suspend) from [<c09bb248>]
-(dpm_run_callback+0x58/0x1f4)
-[  330.955434] [<c09bb248>] (dpm_run_callback) from [<c09bc16c>]
-(__device_suspend_noirq+0xa8/0x298)
-[  330.955450] [<c09bc16c>] (__device_suspend_noirq) from [<c09bd5d0>]
-(dpm_suspend_noirq+0x114/0x354)
-[  330.955466] [<c09bd5d0>] (dpm_suspend_noirq) from [<c0398e54>]
-(suspend_devices_and_enter+0x37c/0x98c)
-[  330.955479] [<c0398e54>] (suspend_devices_and_enter) from
-[<c039979c>] (pm_suspend+0x338/0x460)
-[  330.955493] [<c039979c>] (pm_suspend) from [<c0397a4c>]
-(state_store+0x6c/0xc8)
-[  330.955510] [<c0397a4c>] (state_store) from [<c0526970>]
-(kernfs_fop_write+0xf8/0x210)
-[  330.955529] [<c0526970>] (kernfs_fop_write) from [<c0497f7c>]
-(__vfs_write+0x2c/0x1c4)
-[  330.955544] [<c0497f7c>] (__vfs_write) from [<c049ade4>]
-(vfs_write+0xa4/0x184)
-[  330.955555] [<c049ade4>] (vfs_write) from [<c049b084>]
-(ksys_write+0xa4/0xd4)
-[  330.955568] [<c049b084>] (ksys_write) from [<c0301000>]
-(ret_fast_syscall+0x0/0x54)
-[  330.955574] Exception stack(0xd4c13fa8 to 0xd4c13ff0)
-[  330.955585] 3fa0:                   00000007 0010aa08 00000001
-0010aa08 00000007 00000000
-[  330.955597] 3fc0: 00000007 0010aa08 b6e73d50 00000004 00000007
-00000004 00000000 000fe77c
-[  330.955605] 3fe0: 00000000 bec84904 b 338.198160] done.
-
-
-
+On 21.02.2020 18:43, Maciej S. Szmigiero wrote:
+> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+> 
+> Before commit 1328edca4a14 ("cpuidle-haltpoll: Enable kvm guest polling
+> when dedicated physical CPUs are available") the cpuidle-haltpoll driver
+> could also be used in scenarios when the host does not advertise the
+> KVM_HINTS_REALTIME hint.
+> 
+> While the behavior introduced by the aforementioned commit makes sense as
+> the default there are cases where the old behavior is desired, for example,
+> when other kernel changes triggered by presence by this hint are unwanted,
+> for some workloads where the latency benefit from polling overweights the
+> loss from idle CPU capacity that otherwise would be available, or just when
+> running under older Qemu versions that lack this hint.
+> 
+> Let's provide a typical "force" module parameter that allows restoring the
+> old behavior.
+> 
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> ---
+>  drivers/cpuidle/cpuidle-haltpoll.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+> index b0ce9bc78113..07e5b36076bb 100644
+> --- a/drivers/cpuidle/cpuidle-haltpoll.c
+> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
+> @@ -18,6 +18,11 @@
+>  #include <linux/kvm_para.h>
+>  #include <linux/cpuidle_haltpoll.h>
+>  
+> +static bool force __read_mostly;
+> +module_param(force, bool, 0444);
+> +MODULE_PARM_DESC(force,
+> +		 "Load even if the host does not provide the REALTIME hint");
+> +
+>  static struct cpuidle_device __percpu *haltpoll_cpuidle_devices;
+>  static enum cpuhp_state haltpoll_hp_state;
+>  
+> @@ -90,6 +95,11 @@ static void haltpoll_uninit(void)
+>  	haltpoll_cpuidle_devices = NULL;
+>  }
+>  
+> +static bool haltpool_want(void)
+> +{
+> +	return kvm_para_has_hint(KVM_HINTS_REALTIME) || force;
+> +}
+> +
+>  static int __init haltpoll_init(void)
+>  {
+>  	int ret;
+> @@ -102,7 +112,7 @@ static int __init haltpoll_init(void)
+>  	cpuidle_poll_state_init(drv);
+>  
+>  	if (!kvm_para_available() ||
+> -		!kvm_para_has_hint(KVM_HINTS_REALTIME))
+> +	    !haltpool_want())
+>  		return -ENODEV;
+>  
+>  	ret = cpuidle_register_driver(drv);
+> 
