@@ -2,484 +2,551 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5353169BB5
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 02:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07611169C42
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 03:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727167AbgBXBRI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Feb 2020 20:17:08 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:36992 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727151AbgBXBRI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Feb 2020 20:17:08 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01O1Gu5R079983;
-        Sun, 23 Feb 2020 19:16:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1582507016;
-        bh=y6nnpuc3nFl46C5sPxEeUff54sJnsVDjqKhjAE1tLuM=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=FkXDNS4GZwlNQi3YapPU+n9P62EIknRxfmTxo/6Kq0Faf+tXgab7WUMFBkH3RBtyA
-         hyhNoYXyXzMAMpvz7NRHurhO6k0POx3RJvwGVnqkgpaX6pknSCat7aKn4GPypOyEG/
-         pLQROXj06eeoZ8f3KBT+x+r0mfsMjcEbtxDUaSAE=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01O1GuYa127711
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 23 Feb 2020 19:16:56 -0600
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Sun, 23
- Feb 2020 19:16:55 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Sun, 23 Feb 2020 19:16:55 -0600
-Received: from [10.250.132.7] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01O1Gp1p055793;
-        Sun, 23 Feb 2020 19:16:52 -0600
-Subject: Re: [PATCH 2/4] thermal: k3: Add support for bandgap sensors
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CC:     <rui.zhang@intel.com>, <robh+dt@kernel.org>,
-        <amit.kucheria@verdurent.com>, <t-kristo@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <mark.rutland@arm.com>
-References: <20200213102440.20539-1-j-keerthy@ti.com>
- <20200213102440.20539-3-j-keerthy@ti.com> <20200220221334.GA7119@linaro.org>
-From:   "J, KEERTHY" <j-keerthy@ti.com>
-Message-ID: <987f9f02-151c-22a6-6afc-0c7a17e1da62@ti.com>
-Date:   Mon, 24 Feb 2020 06:46:51 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1727151AbgBXCOj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Feb 2020 21:14:39 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37412 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727166AbgBXCOi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Feb 2020 21:14:38 -0500
+Received: by mail-wr1-f66.google.com with SMTP id l5so4223193wrx.4;
+        Sun, 23 Feb 2020 18:14:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n7qZeDLe9C8uIfZLH1RoCy09aS1tRuJbO7l+fQA3p+Q=;
+        b=WENtOuva9uhPddj0wXc0K7WMc2eiR3NZSzTWQrxca3d4Ar2OcYks+9QpCIoAndo5Ps
+         2mHIPd4p9ZRQ8puAys78nKFI7IPeg1VBtqQo5YKX50EHmk1PkBwtebZh8lMax1wSEoKp
+         fV/GBZMc9XuwRKSaOgWzZuUwIK1/DNm+e0rvNNxJBkFDNEcBBEcsiifhcKSZpvwESrux
+         07Rq+qk90Akg6MliTJoWLOA51a/C3Tnw3IrBuNvWppmA50VZUycn6HYf7+3q3rqVl5K6
+         riAgMMeB13oGQRYjXKOdeyKY28JEccOEXkS63CODM1AtgNO20Cy2oCHH01jxfTXZRWyG
+         7Gtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n7qZeDLe9C8uIfZLH1RoCy09aS1tRuJbO7l+fQA3p+Q=;
+        b=QZ3ZCgmYx/tmhIIlb7wKGjfM+6iKIa6NA148MtOHRzoJVOS3UGkqg7nwfB0pmZ6rMX
+         GqYhbiDYHT78r24gMWX9jKT7WSvgCuPk1oFj0nH+agxdQ5Ck65AC1KRetBN/muhexKCO
+         vgDrEy61FS6xryUgW0gAKdxP5izAlKeJz7fh/6dvZqwhEv1Tr9H8EgyXg41qpHojdTLB
+         SI7k09YcJ/UcZlSiTP/DVVBqck4EI+nT0hlX4Faw3pO3I13uz8W2w5+dnxFBsFnwYsTK
+         61xq12V//1KLFiz1g49M6BqfnHUurCc3HRCEZJMgNZMtSC9ErBgloVx9juKYEoVutM+1
+         U27A==
+X-Gm-Message-State: APjAAAUD4IjDQc6EPCf0gazriIrMDkvZTZPbIN6SFtPtWHJGfCeGoers
+        ll/cgVg6Jj5oS7bAX+k61+2tIxSbB32TuMMMWhY=
+X-Google-Smtp-Source: APXvYqweenjRYAtAulrPdy+truvH/RBsdeSC1Z5IOqLTAYVbM7iHn81eSs/yzy223G7AkoJzsRR4llwfH2rgWRrQsd4=
+X-Received: by 2002:a5d:6284:: with SMTP id k4mr65084645wru.398.1582510475462;
+ Sun, 23 Feb 2020 18:14:35 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200220221334.GA7119@linaro.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20200222220432.448115-1-martin.blumenstingl@googlemail.com> <20200222220432.448115-3-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20200222220432.448115-3-martin.blumenstingl@googlemail.com>
+From:   Qiang Yu <yuq825@gmail.com>
+Date:   Mon, 24 Feb 2020 10:14:24 +0800
+Message-ID: <CAKGbVbtGti_K9XacknSffLTr0BrCtt9yaHCehncJ9QY=+RAMcA@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 2/2] drm/lima: Add optional devfreq and cooling
+ device support
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        linux-rockchip@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Sun, Feb 23, 2020 at 6:04 AM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+>
+> Most platforms with a Mali-400 or Mali-450 GPU also have support for
+> changing the GPU clock frequency. Add devfreq support so the GPU clock
+> rate is updated based on the actual GPU usage when the
+> "operating-points-v2" property is present in the board.dts.
+>
+> The actual devfreq code is taken from panfrost_devfreq.c and modified so
+> it matches what the lima hardware needs:
+> - a call to dev_pm_opp_set_clkname() during initialization because there
+>   are two clocks on Mali-4x0 IPs. "core" is the one that actually clocks
+>   the GPU so we need to control it using devfreq.
+> - locking when reading or writing the devfreq statistics because (unlike
+>   than panfrost) we have multiple PP and GP IRQs which may finish jobs
+>   concurrently.
+>
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+>  drivers/gpu/drm/lima/Kconfig        |   1 +
+>  drivers/gpu/drm/lima/Makefile       |   3 +-
+>  drivers/gpu/drm/lima/lima_devfreq.c | 215 ++++++++++++++++++++++++++++
+>  drivers/gpu/drm/lima/lima_devfreq.h |  15 ++
+>  drivers/gpu/drm/lima/lima_device.c  |   4 +
+>  drivers/gpu/drm/lima/lima_device.h  |  18 +++
+>  drivers/gpu/drm/lima/lima_drv.c     |  14 +-
+>  drivers/gpu/drm/lima/lima_sched.c   |   9 ++
+>  drivers/gpu/drm/lima/lima_sched.h   |   3 +
+>  9 files changed, 279 insertions(+), 3 deletions(-)
+>  create mode 100644 drivers/gpu/drm/lima/lima_devfreq.c
+>  create mode 100644 drivers/gpu/drm/lima/lima_devfreq.h
+>
+> diff --git a/drivers/gpu/drm/lima/Kconfig b/drivers/gpu/drm/lima/Kconfig
+> index d589f09d04d9..09404bc96ad8 100644
+> --- a/drivers/gpu/drm/lima/Kconfig
+> +++ b/drivers/gpu/drm/lima/Kconfig
+> @@ -10,5 +10,6 @@ config DRM_LIMA
+>         depends on OF
+>         select DRM_SCHED
+>         select DRM_GEM_SHMEM_HELPER
+> +       select PM_DEVFREQ
+>         help
+>          DRM driver for ARM Mali 400/450 GPUs.
+> diff --git a/drivers/gpu/drm/lima/Makefile b/drivers/gpu/drm/lima/Makefile
+> index a85444b0a1d4..5e5c29875e9c 100644
+> --- a/drivers/gpu/drm/lima/Makefile
+> +++ b/drivers/gpu/drm/lima/Makefile
+> @@ -14,6 +14,7 @@ lima-y := \
+>         lima_sched.o \
+>         lima_ctx.o \
+>         lima_dlbu.o \
+> -       lima_bcast.o
+> +       lima_bcast.o \
+> +       lima_devfreq.o
+>
+>  obj-$(CONFIG_DRM_LIMA) += lima.o
+> diff --git a/drivers/gpu/drm/lima/lima_devfreq.c b/drivers/gpu/drm/lima/lima_devfreq.c
+> new file mode 100644
+> index 000000000000..3a6b315136ce
+> --- /dev/null
+> +++ b/drivers/gpu/drm/lima/lima_devfreq.c
+> @@ -0,0 +1,215 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2019 Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> + *
+> + * Based on panfrost_devfreq.c:
+> + *   Copyright 2019 Collabora ltd.
+> + */
+> +#include <linux/clk.h>
+> +#include <linux/devfreq.h>
+> +#include <linux/devfreq_cooling.h>
+> +#include <linux/device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_opp.h>
+> +#include <linux/property.h>
+> +
+> +#include "lima_device.h"
+> +#include "lima_devfreq.h"
+> +
+> +static void lima_devfreq_update_utilization(struct lima_device *ldev)
+> +{
+> +       unsigned long irqflags;
+> +       ktime_t now, last;
+> +
+> +       if (!ldev->devfreq.devfreq)
+> +               return;
+> +
+> +       spin_lock_irqsave(&ldev->devfreq.lock, irqflags);
+> +
+> +       now = ktime_get();
+> +       last = ldev->devfreq.time_last_update;
+> +
+> +       if (atomic_read(&ldev->devfreq.busy_count) > 0)
+> +               ldev->devfreq.busy_time += ktime_sub(now, last);
+> +       else
+> +               ldev->devfreq.idle_time += ktime_sub(now, last);
+> +
+> +       ldev->devfreq.time_last_update = now;
+> +
+> +       spin_unlock_irqrestore(&ldev->devfreq.lock, irqflags);
+> +}
+> +
+> +static int lima_devfreq_target(struct device *dev, unsigned long *freq,
+> +                              u32 flags)
+> +{
+> +       struct dev_pm_opp *opp;
+> +       int err;
+> +
+> +       opp = devfreq_recommended_opp(dev, freq, flags);
+> +       if (IS_ERR(opp))
+> +               return PTR_ERR(opp);
+> +       dev_pm_opp_put(opp);
+> +
+> +       err = dev_pm_opp_set_rate(dev, *freq);
+> +       if (err)
+> +               return err;
+> +
+> +       return 0;
+> +}
+> +
+> +static void lima_devfreq_reset(struct lima_device *ldev)
+> +{
+> +       unsigned long irqflags;
+> +
+> +       spin_lock_irqsave(&ldev->devfreq.lock, irqflags);
+> +
+> +       ldev->devfreq.busy_time = 0;
+> +       ldev->devfreq.idle_time = 0;
+> +       ldev->devfreq.time_last_update = ktime_get();
+> +
+> +       spin_unlock_irqrestore(&ldev->devfreq.lock, irqflags);
+> +}
+> +
+> +static int lima_devfreq_get_dev_status(struct device *dev,
+> +                                      struct devfreq_dev_status *status)
+> +{
+> +       struct lima_device *ldev = dev_get_drvdata(dev);
+> +       unsigned long irqflags;
+> +
+> +       lima_devfreq_update_utilization(ldev);
+> +
+> +       status->current_frequency = clk_get_rate(ldev->clk_gpu);
+> +
+> +       spin_lock_irqsave(&ldev->devfreq.lock, irqflags);
+> +
+> +       status->total_time = ktime_to_ns(ktime_add(ldev->devfreq.busy_time,
+> +                                                  ldev->devfreq.idle_time));
+> +       status->busy_time = ktime_to_ns(ldev->devfreq.busy_time);
+> +
+> +       spin_unlock_irqrestore(&ldev->devfreq.lock, irqflags);
+> +
+> +       lima_devfreq_reset(ldev);
+> +
+> +       dev_dbg(ldev->dev, "busy %lu total %lu %lu %% freq %lu MHz\n",
+> +               status->busy_time, status->total_time,
+> +               status->busy_time / (status->total_time / 100),
+> +               status->current_frequency / 1000 / 1000);
+> +
+> +       return 0;
+> +}
+> +
+> +static struct devfreq_dev_profile lima_devfreq_profile = {
+> +       .polling_ms = 50, /* ~3 frames */
+> +       .target = lima_devfreq_target,
+> +       .get_dev_status = lima_devfreq_get_dev_status,
+> +};
+> +
+> +void lima_devfreq_fini(struct lima_device *ldev)
+> +{
+> +       if (ldev->devfreq.cooling)
+> +               devfreq_cooling_unregister(ldev->devfreq.cooling);
+> +
+> +       if (ldev->devfreq.devfreq)
+> +               devm_devfreq_remove_device(&ldev->pdev->dev,
+> +                                          ldev->devfreq.devfreq);
+> +
+> +       dev_pm_opp_of_remove_table(&ldev->pdev->dev);
+> +
+This does not have a paired add when lima_devfreq_init() return before do
+dev_pm_opp_of_add_table().
 
+> +       if (ldev->devfreq.regulators_opp_table)
+> +               dev_pm_opp_put_regulators(ldev->devfreq.regulators_opp_table);
+> +
+> +       if (ldev->devfreq.clkname_opp_table)
+> +               dev_pm_opp_put_clkname(ldev->devfreq.clkname_opp_table);
+> +}
+> +
+> +int lima_devfreq_init(struct lima_device *ldev)
+> +{
+> +       struct thermal_cooling_device *cooling;
+> +       struct device *dev = &ldev->pdev->dev;
+> +       struct opp_table *opp_table;
+> +       struct devfreq *devfreq;
+> +       struct dev_pm_opp *opp;
+> +       unsigned long cur_freq;
+> +       int ret;
+> +
+> +       if (!device_property_present(dev, "operating-points-v2"))
+> +               /* Optional, continue without devfreq */
+> +               return 0;
+> +
+> +       spin_lock_init(&ldev->devfreq.lock);
+> +
+> +       opp_table = dev_pm_opp_set_clkname(dev, "core");
+> +       if (IS_ERR(opp_table)) {
+> +               ret = PTR_ERR(opp_table);
+> +               goto err_fini;
+> +       }
+> +
+> +       ldev->devfreq.clkname_opp_table = opp_table;
+> +
+> +       opp_table = dev_pm_opp_set_regulators(dev,
+> +                                             (const char *[]){ "mali" },
+> +                                             1);
+> +       if (IS_ERR(opp_table)) {
+> +               ret = PTR_ERR(opp_table);
+> +
+> +               /* Continue if the optional regulator is missing */
+> +               if (ret != -ENODEV)
+> +                       goto err_fini;
+> +       } else {
+> +               ldev->devfreq.regulators_opp_table = opp_table;
+> +       }
+> +
+> +       ret = dev_pm_opp_of_add_table(dev);
+> +       if (ret)
+> +               goto err_fini;
+> +
+> +       lima_devfreq_reset(ldev);
+> +
+> +       cur_freq = clk_get_rate(ldev->clk_gpu);
+> +
+> +       opp = devfreq_recommended_opp(dev, &cur_freq, 0);
+> +       if (IS_ERR(opp)) {
+> +               ret = PTR_ERR(opp);
+> +               goto err_fini;
+> +       }
+> +
+> +       lima_devfreq_profile.initial_freq = cur_freq;
+> +       dev_pm_opp_put(opp);
+> +
+> +       devfreq = devm_devfreq_add_device(dev, &lima_devfreq_profile,
+> +                                         DEVFREQ_GOV_SIMPLE_ONDEMAND, NULL);
+> +       if (IS_ERR(devfreq)) {
+> +               dev_err(dev, "Couldn't initialize GPU devfreq\n");
+> +               ret = PTR_ERR(devfreq);
+> +               goto err_fini;
+> +       }
+> +
+> +       ldev->devfreq.devfreq = devfreq;
+> +
+> +       cooling = of_devfreq_cooling_register(dev->of_node, devfreq);
+> +       if (IS_ERR(cooling))
+> +               dev_info(dev, "Failed to register cooling device\n");
+> +       else
+> +               ldev->devfreq.cooling = cooling;
+> +
+> +       return 0;
+> +
+> +err_fini:
+> +       lima_devfreq_fini(ldev);
+> +       return ret;
+> +}
+> +
+> +void lima_devfreq_record_busy(struct lima_device *ldev)
+> +{
+> +       lima_devfreq_update_utilization(ldev);
+> +       atomic_inc(&ldev->devfreq.busy_count);
+> +}
+> +
+> +void lima_devfreq_record_idle(struct lima_device *ldev)
+> +{
+> +       int count;
+> +
+> +       lima_devfreq_update_utilization(ldev);
+> +       count = atomic_dec_if_positive(&ldev->devfreq.busy_count);
+> +       WARN_ON(count < 0);
+> +}
+> diff --git a/drivers/gpu/drm/lima/lima_devfreq.h b/drivers/gpu/drm/lima/lima_devfreq.h
+> new file mode 100644
+> index 000000000000..fe4f8a437033
+> --- /dev/null
+> +++ b/drivers/gpu/drm/lima/lima_devfreq.h
+> @@ -0,0 +1,15 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* Copyright 2019 Martin Blumenstingl <martin.blumenstingl@googlemail.com> */
+> +
+> +#ifndef __LIMA_DEVFREQ_H__
+> +#define __LIMA_DEVFREQ_H__
+> +
+> +struct lima_device;
+> +
+> +int lima_devfreq_init(struct lima_device *ldev);
+> +void lima_devfreq_fini(struct lima_device *ldev);
+> +
+> +void lima_devfreq_record_busy(struct lima_device *ldev);
+> +void lima_devfreq_record_idle(struct lima_device *ldev);
+> +
+> +#endif
+> diff --git a/drivers/gpu/drm/lima/lima_device.c b/drivers/gpu/drm/lima/lima_device.c
+> index 19829b543024..7f1f7a1c03e5 100644
+> --- a/drivers/gpu/drm/lima/lima_device.c
+> +++ b/drivers/gpu/drm/lima/lima_device.c
+> @@ -214,6 +214,8 @@ static int lima_init_gp_pipe(struct lima_device *dev)
+>         struct lima_sched_pipe *pipe = dev->pipe + lima_pipe_gp;
+>         int err;
+>
+> +       pipe->ldev = dev;
+> +
+>         err = lima_sched_pipe_init(pipe, "gp");
+>         if (err)
+>                 return err;
+> @@ -244,6 +246,8 @@ static int lima_init_pp_pipe(struct lima_device *dev)
+>         struct lima_sched_pipe *pipe = dev->pipe + lima_pipe_pp;
+>         int err, i;
+>
+> +       pipe->ldev = dev;
+> +
+>         err = lima_sched_pipe_init(pipe, "pp");
+>         if (err)
+>                 return err;
+> diff --git a/drivers/gpu/drm/lima/lima_device.h b/drivers/gpu/drm/lima/lima_device.h
+> index 31158d86271c..f5348474a6fc 100644
+> --- a/drivers/gpu/drm/lima/lima_device.h
+> +++ b/drivers/gpu/drm/lima/lima_device.h
+> @@ -5,6 +5,7 @@
+>  #define __LIMA_DEVICE_H__
+>
+>  #include <drm/drm_device.h>
+> +#include <linux/atomic.h>
+>  #include <linux/delay.h>
+>
+>  #include "lima_sched.h"
+> @@ -94,6 +95,23 @@ struct lima_device {
+>
+>         u32 *dlbu_cpu;
+>         dma_addr_t dlbu_dma;
+> +
+> +       struct {
+> +               struct devfreq *devfreq;
+> +               struct opp_table *clkname_opp_table;
+> +               struct opp_table *regulators_opp_table;
+> +               struct thermal_cooling_device *cooling;
+> +               ktime_t busy_time;
+> +               ktime_t idle_time;
+> +               ktime_t time_last_update;
+> +               atomic_t busy_count;
+Better make this count a normal int which is also protected by the spinlock,
+because current implementation can't protect atomic ops for state change
+and busy idle check and we are using spinlock already. For example, just
+add a parameter to:
+lima_devfreq_update_utilization(struct lima_device *ldev, bool busy)
 
-On 2/21/2020 3:43 AM, Daniel Lezcano wrote:
-> On Thu, Feb 13, 2020 at 03:54:38PM +0530, Keerthy wrote:
->> The bandgap provides current and voltage reference for its internal
->> circuits and other analog IP blocks. The analog-to-digital
->> converter (ADC) produces an output value that is proportional
->> to the silicon temperature.
->>
->> Currently reading temperatures and trend computing is supported
->> as there are no active/passive cooling agent supported.
->>
->> Signed-off-by: Keerthy <j-keerthy@ti.com>
->> ---
->>   drivers/thermal/Kconfig      |  12 ++
->>   drivers/thermal/Makefile     |   1 +
->>   drivers/thermal/k3_bandgap.c | 342 +++++++++++++++++++++++++++++++++++
->>   3 files changed, 355 insertions(+)
->>   create mode 100644 drivers/thermal/k3_bandgap.c
->>
->> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
->> index 5a05db5438d6..fa598eddc7ac 100644
->> --- a/drivers/thermal/Kconfig
->> +++ b/drivers/thermal/Kconfig
->> @@ -251,6 +251,18 @@ config IMX_THERMAL
->>   	  cpufreq is used as the cooling device to throttle CPUs when the
->>   	  passive trip is crossed.
->>   
->> +config K3_THERMAL
->> +	bool "Texas Instruments K3 thermal support"
->> +	depends on THERMAL
-> 
-> All the Kconfig is under the THERMAL option, so this dependency is not
-> necessary.
+> +               /*
+> +                * Protect busy_time, idle_time and time_last_update because
+> +                * these can be updated concurrently - for example by the GP
+> +                * and PP interrupts.
+> +                */
+> +               spinlock_t lock;
+> +       } devfreq;
+>  };
+>
+>  static inline struct lima_device *
+> diff --git a/drivers/gpu/drm/lima/lima_drv.c b/drivers/gpu/drm/lima/lima_drv.c
+> index 2daac64d8955..5d9cfc940dd8 100644
+> --- a/drivers/gpu/drm/lima/lima_drv.c
+> +++ b/drivers/gpu/drm/lima/lima_drv.c
+> @@ -10,6 +10,7 @@
+>  #include <drm/drm_prime.h>
+>  #include <drm/lima_drm.h>
+>
+> +#include "lima_devfreq.h"
+>  #include "lima_drv.h"
+>  #include "lima_gem.h"
+>  #include "lima_vm.h"
+> @@ -306,18 +307,26 @@ static int lima_pdev_probe(struct platform_device *pdev)
+>         if (err)
+>                 goto err_out1;
+>
+> +       err = lima_devfreq_init(ldev);
+> +       if (err) {
+> +               dev_err(&pdev->dev, "Fatal error during devfreq init\n");
+> +               goto err_out2;
+> +       }
+> +
+>         /*
+>          * Register the DRM device with the core and the connectors with
+>          * sysfs.
+>          */
+>         err = drm_dev_register(ddev, 0);
+>         if (err < 0)
+> -               goto err_out2;
+> +               goto err_out3;
+>
+>         return 0;
+>
+> -err_out2:
+> +err_out3:
+>         lima_device_fini(ldev);
+> +err_out2:
+> +       lima_devfreq_fini(ldev);
+>  err_out1:
+>         drm_dev_put(ddev);
+>  err_out0:
+> @@ -331,6 +340,7 @@ static int lima_pdev_remove(struct platform_device *pdev)
+>         struct drm_device *ddev = ldev->ddev;
+>
+>         drm_dev_unregister(ddev);
+> +       lima_devfreq_fini(ldev);
+>         lima_device_fini(ldev);
+>         drm_dev_put(ddev);
+>         lima_sched_slab_fini();
+> diff --git a/drivers/gpu/drm/lima/lima_sched.c b/drivers/gpu/drm/lima/lima_sched.c
+> index 3886999b4533..2eae4ddfa504 100644
+> --- a/drivers/gpu/drm/lima/lima_sched.c
+> +++ b/drivers/gpu/drm/lima/lima_sched.c
+> @@ -5,6 +5,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/xarray.h>
+>
+> +#include "lima_devfreq.h"
+>  #include "lima_drv.h"
+>  #include "lima_sched.h"
+>  #include "lima_vm.h"
+> @@ -214,6 +215,8 @@ static struct dma_fence *lima_sched_run_job(struct drm_sched_job *job)
+>          */
+>         ret = dma_fence_get(task->fence);
+>
+> +       lima_devfreq_record_busy(pipe->ldev);
+> +
+>         pipe->current_task = task;
+>
+>         /* this is needed for MMU to work correctly, otherwise GP/PP
+> @@ -285,6 +288,8 @@ static void lima_sched_timedout_job(struct drm_sched_job *job)
+>         pipe->current_vm = NULL;
+>         pipe->current_task = NULL;
+>
+> +       lima_devfreq_record_idle(pipe->ldev);
+> +
+>         drm_sched_resubmit_jobs(&pipe->base);
+>         drm_sched_start(&pipe->base, true);
+>  }
+> @@ -362,6 +367,10 @@ void lima_sched_pipe_task_done(struct lima_sched_pipe *pipe)
+>                 else
+>                         drm_sched_fault(&pipe->base);
+>         } else {
+> +               struct lima_sched_task *task = pipe->current_task;
+> +
+Duplicated declare of task.
 
-Okay
+Regards,
+Qiang
 
-> 
->> +	depends on ARCH_K3 || COMPILE_TEST
->> +	help
->> +	  If you say yes here you get thermal support for the Texas Instruments
->> +	  K3 SoC family. The current chip supported is:
->> +	   - AM654
->> +
->> +	  This includes temperature reading functionality and also trend
->> +	  computation.
->> +
-> 
-> [ ... ]
-> 
->> +
->> +#define K3_VTM_ADC_BEGIN_VAL		540
->> +#define K3_VTM_ADC_END_VAL		944
->> +
->> +static const int k3_adc_to_temp[K3_VTM_ADC_END_VAL - K3_VTM_ADC_BEGIN_VAL
->> +				+ 1] = {
-> 
-> No need to specify a size for the array that can be done with:
-> 
-> static const int k3_adc_to_temp[] = {
-> 
-> And then use ARRAY_SIZE macro.
-
-Okay. I will address all the comments mentioned below.
-
-Thanks for the review.
-
-- Keerthy
-
-> 
->> +	-40000, -40000, -40000, -40000, -39800, -39400, -39000, -38600, -38200,
->> +	-37800, -37400, -37000, -36600, -36200, -35800, -35300, -34700, -34200,
->> +	-33800, -33400, -33000, -32600, -32200, -31800, -31400, -31000, -30600,
->> +	-30200, -29800, -29400, -29000, -28600, -28200, -27700, -27100, -26600,
->> +	-26200, -25800, -25400, -25000, -24600, -24200, -23800, -23400, -23000,
->> +	-22600, -22200, -21800, -21400, -21000, -20500, -19900, -19400, -19000,
->> +	-18600, -18200, -17800, -17400, -17000, -16600, -16200, -15800, -15400,
->> +	-15000, -14600, -14200, -13800, -13400, -13000, -12500, -11900, -11400,
->> +	-11000, -10600, -10200, -9800, -9400, -9000, -8600, -8200, -7800, -7400,
->> +	-7000, -6600, -6200, -5800, -5400, -5000, -4500, -3900, -3400, -3000,
->> +	-2600, -2200, -1800, -1400, -1000, -600, -200, 200, 600, 1000, 1400,
->> +	1800, 2200, 2600, 3000, 3400, 3900, 4500, 5000, 5400, 5800, 6200, 6600,
->> +	7000, 7400, 7800, 8200, 8600, 9000, 9400, 9800, 10200, 10600, 11000,
->> +	11400, 11800, 12200, 12700, 13300, 13800, 14200, 14600, 15000, 15400,
->> +	15800, 16200, 16600, 17000, 17400, 17800, 18200, 18600, 19000, 19400,
->> +	19800, 20200, 20600, 21000, 21400, 21900, 22500, 23000, 23400, 23800,
->> +	24200, 24600, 25000, 25400, 25800, 26200, 26600, 27000, 27400, 27800,
->> +	28200, 28600, 29000, 29400, 29800, 30200, 30600, 31000, 31400, 31900,
->> +	32500, 33000, 33400, 33800, 34200, 34600, 35000, 35400, 35800, 36200,
->> +	36600, 37000, 37400, 37800, 38200, 38600, 39000, 39400, 39800, 40200,
->> +	40600, 41000, 41400, 41800, 42200, 42600, 43100, 43700, 44200, 44600,
->> +	45000, 45400, 45800, 46200, 46600, 47000, 47400, 47800, 48200, 48600,
->> +	49000, 49400, 49800, 50200, 50600, 51000, 51400, 51800, 52200, 52600,
->> +	53000, 53400, 53800, 54200, 54600, 55000, 55400, 55900, 56500, 57000,
->> +	57400, 57800, 58200, 58600, 59000, 59400, 59800, 60200, 60600, 61000,
->> +	61400, 61800, 62200, 62600, 63000, 63400, 63800, 64200, 64600, 65000,
->> +	65400, 65800, 66200, 66600, 67000, 67400, 67800, 68200, 68600, 69000,
->> +	69400, 69800, 70200, 70600, 71000, 71500, 72100, 72600, 73000, 73400,
->> +	73800, 74200, 74600, 75000, 75400, 75800, 76200, 76600, 77000, 77400,
->> +	77800, 78200, 78600, 79000, 79400, 79800, 80200, 80600, 81000, 81400,
->> +	81800, 82200, 82600, 83000, 83400, 83800, 84200, 84600, 85000, 85400,
->> +	85800, 86200, 86600, 87000, 87400, 87800, 88200, 88600, 89000, 89400,
->> +	89800, 90200, 90600, 91000, 91400, 91800, 92200, 92600, 93000, 93400,
->> +	93800, 94200, 94600, 95000, 95400, 95800, 96200, 96600, 97000, 97500,
->> +	98100, 98600, 99000, 99400, 99800, 100200, 100600, 101000, 101400,
->> +	101800, 102200, 102600, 103000, 103400, 103800, 104200, 104600, 105000,
->> +	105400, 105800, 106200, 106600, 107000, 107400, 107800, 108200, 108600,
->> +	109000, 109400, 109800, 110200, 110600, 111000, 111400, 111800, 112200,
->> +	112600, 113000, 113400, 113800, 114200, 114600, 115000, 115400, 115800,
->> +	116200, 116600, 117000, 117400, 117800, 118200, 118600, 119000, 119400,
->> +	119800, 120200, 120600, 121000, 121400, 121800, 122200, 122600, 123000,
->> +	123400, 123800, 124200, 124600, 124900, 125000,
->> +};
->> +
->> +struct k3_thermal_data;
->> +
->> +struct k3_bandgap {
->> +	struct device *dev;
-> 
-> This field is useless, the function using it can use the local dev variable
-> 
->> +	void __iomem *base;
->> +	const struct k3_bandgap_data *conf;
->> +	spinlock_t lock; /* shields this struct */
-> 
-> Where is used this lock?
-> 
->> +	int ts_cnt;
-> 
-> This field is unused.
-> 
->> +	u32 errata;
->> +	struct k3_thermal_data *ts_data[K3_VTM_MAX_NUM_TS];
-> 
-> This field is unused.
-> 
->> +};
->> +
->> +struct k3_vtm_driver_data {
->> +	u32 errata;
->> +};
->> +
->> +/* common data structures */
->> +struct k3_thermal_data {
->> +	struct thermal_zone_device *ti_thermal;
->> +	struct thermal_cooling_device *cool_dev;
-> 
-> This field is unused
-> 
->> +	struct k3_bandgap *bgp;
->> +	enum thermal_device_mode mode;
-> 
-> This field is unused
-> 
->> +	struct work_struct thermal_wq;
-> 
-> Where is used this workq?
-> 
->> +	int sensor_id;
->> +	u32 ctrl_offset;
->> +	u32 stat_offset;
->> +	int prev_temp;
->> +};
->> +
->> +static unsigned int vtm_get_best_value(unsigned int s0, unsigned int s1,
->> +				       unsigned int s2)
->> +{
->> +	int d01 = abs(s0 - s1);
->> +	int d02 = abs(s0 - s2);
->> +	int d12 = abs(s1 - s2);
->> +
->> +	if (d01 <= d02 && d01 <= d12)
->> +		return (s0 + s1) / 2;
->> +
->> +	if (d02 <= d01 && d02 <= d12)
->> +		return (s0 + s2) / 2;
->> +
->> +	return (s1 + s2) / 2;
->> +}
->> +
->> +static int k3_bgp_read_temp(struct k3_thermal_data *devdata,
->> +			    int *temp)
->> +{
->> +	struct k3_bandgap *bgp;
->> +	unsigned int dtemp, s0, s1, s2;
->> +
->> +	bgp = devdata->bgp;
-> 
-> nit: missing line
-> 
->> +	/**
->> +	 * Errata is applicable for am654 pg 1.0 silicon. There
->> +	 * is a variation of the order for 8-10 degree centigrade.
->> +	 * Work around that by getting the average of two closest
->> +	 * readings out of three readings everytime we want to
->> +	 * report temperatures.
->> +	 *
->> +	 * Errata workaround.
->> +	 */
-> 
-> nit: extra line
-> 
->> +	if (bgp->errata) {
-> 
-> Right now only am654 is supported and has the errata. This test is pointless
-> because no other compatible string is defined. If you want to set the scene for
-> more platforms I suggest to add a get_temp function in the drvdata which does
-> this 3 points averaging and get rid of this test (and the errata field).
-> 
->> +		s0 = readl(bgp->base + devdata->stat_offset) &
->> +			K3_VTM_TS_STAT_DTEMP_MASK;
->> +		s1 = readl(bgp->base + devdata->stat_offset) &
->> +			K3_VTM_TS_STAT_DTEMP_MASK;
->> +		s2 = readl(bgp->base + devdata->stat_offset) &
->> +			K3_VTM_TS_STAT_DTEMP_MASK;
->> +		dtemp = vtm_get_best_value(s0, s1, s2);
->> +	} else {
->> +		dtemp = readl(bgp->base + devdata->stat_offset) &
->> +				K3_VTM_TS_STAT_DTEMP_MASK;
->> +	}
->> +
->> +	if (dtemp < K3_VTM_ADC_BEGIN_VAL || dtemp > K3_VTM_ADC_END_VAL)
->> +		return -EINVAL;
->> +
->> +	*temp = k3_adc_to_temp[dtemp - K3_VTM_ADC_BEGIN_VAL];
->> +
->> +	return 0;
->> +}
->> +
->> +/* thermal zone ops */
->> +/* Get temperature callback function for thermal zone */
-> 
-> Fix comment format
-> 
-> /*
->   *
->   */
-> 
->> +static int k3_thermal_get_temp(void *devdata, int *temp)
->> +{
->> +	struct k3_thermal_data *data = devdata;
->> +	int ret = 0;
->> +
->> +	ret = k3_bgp_read_temp(data, temp);
->> +	if (ret)
->> +		return ret;
->> +
->> +	data->prev_temp = *temp;
->> +
->> +	return ret;
->> +}
->> +
->> +static int k3_thermal_get_trend(void *p, int trip, enum thermal_trend *trend)
->> +{
->> +	struct k3_thermal_data *data = p;
->> +	struct k3_bandgap *bgp;
->> +	int ret = 0, temp = 0;
->> +
->> +	bgp = data->bgp;
->> +
->> +	ret = k3_bgp_read_temp(data, &temp);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if (temp > data->prev_temp)
->> +		*trend = THERMAL_TREND_RAISING;
->> +	else if (temp < data->prev_temp)
->> +		*trend = THERMAL_TREND_DROPPING;
->> +	else
->> +		*trend = THERMAL_TREND_STABLE;
->> +
->> +	return 0;
->> +}
-> 
-> This function get_trend() is not really useful, it does what the governors do.
-> 
-> It can be dropped.
-> 
->> +static const struct thermal_zone_of_device_ops k3_of_thermal_ops = {
->> +	.get_temp = k3_thermal_get_temp,
->> +	.get_trend = k3_thermal_get_trend,
->> +};
->> +
->> +static void k3_thermal_work(struct work_struct *work)
->> +{
->> +	struct k3_thermal_data *data = container_of(work,
->> +					struct k3_thermal_data, thermal_wq);
->> +
->> +	thermal_zone_device_update(data->ti_thermal, THERMAL_EVENT_UNSPECIFIED);
->> +
->> +	dev_dbg(&data->ti_thermal->device, "updated thermal zone %s\n",
->> +		data->ti_thermal->type);
->> +}
->> +
->> +static const struct of_device_id of_k3_bandgap_match[];
->> +
->> +static int k3_bandgap_probe(struct platform_device *pdev)
->> +{
->> +	int ret = 0, cnt, val, id, reg_cnt = 0;
->> +	struct resource *res;
->> +	struct device *dev = &pdev->dev;
->> +	struct k3_bandgap *bgp;
->> +	struct k3_thermal_data *data;
->> +	const struct k3_vtm_driver_data *drv_data;
->> +
->> +	bgp = devm_kzalloc(&pdev->dev, sizeof(*bgp), GFP_KERNEL);
->> +	if (!bgp)
->> +		return -ENOMEM;
->> +
->> +	drv_data = of_device_get_match_data(&pdev->dev);
->> +	if (drv_data)
->> +		bgp->errata = drv_data->errata;
->> +
->> +	bgp->dev = dev;
->> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> +	bgp->base = devm_ioremap_resource(dev, res);
->> +	if (IS_ERR(bgp->base))
->> +		return PTR_ERR(bgp->base);
->> +
->> +	pm_runtime_enable(dev);
->> +	ret = pm_runtime_get_sync(dev);
->> +	if (ret < 0) {
->> +		pm_runtime_put_noidle(dev);
->> +		pm_runtime_disable(dev);
->> +		return ret;
->> +	}
->> +
->> +	/* Get the sensor count in the VTM */
->> +	val = readl(bgp->base + K3_VTM_DEVINFO_PWR0_OFFSET);
->> +	cnt = val & K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK;
->> +	cnt >>= __ffs(K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK);
->> +	bgp->ts_cnt = cnt;
->> +
->> +	data = devm_kcalloc(bgp->dev, cnt, sizeof(*data), GFP_KERNEL);
->> +	if (!data) {
->> +		ret = -ENOMEM;
->> +		goto err_alloc;
->> +	}
->> +
->> +	/* Register the thermal sensors */
->> +	for (id = 0; id < cnt; id++) {
->> +		data[id].sensor_id = id;
->> +		data[id].bgp = bgp;
->> +		data[id].ctrl_offset = K3_VTM_TMPSENS0_CTRL_OFFSET +
->> +					id * K3_VTM_REGS_PER_TS;
->> +		data[id].stat_offset = data[id].ctrl_offset + 0x8;
->> +		INIT_WORK(&data[id].thermal_wq, k3_thermal_work);
->> +
->> +		val = readl(data[id].bgp->base + data[id].ctrl_offset);
->> +		val |= (K3_VTM_TMPSENS_CTRL_SOC |
->> +			K3_VTM_TMPSENS_CTRL_CLRZ |
->> +			K3_VTM_TMPSENS_CTRL_CLKON_REQ);
->> +		val &= ~K3_VTM_TMPSENS_CTRL_CBIASSEL;
->> +		writel(val, data[id].bgp->base + data[id].ctrl_offset);
->> +
->> +		bgp->ts_data[id] = &data[id];
->> +		data[id].ti_thermal =
->> +		devm_thermal_zone_of_sensor_register(bgp->dev, id,
->> +						     &data[id],
->> +						     &k3_of_thermal_ops);
->> +		if (IS_ERR(data[id].ti_thermal)) {
->> +			dev_err(bgp->dev, "thermal zone device is NULL\n");
->> +			ret = PTR_ERR(data[id].ti_thermal);
->> +			goto err_alloc;
->> +		}
->> +
->> +		reg_cnt++;
->> +
->> +		/* Initialize Previous temp */
->> +		k3_thermal_get_temp(&data[id], &data[id].prev_temp);
->> +	}
->> +
->> +	platform_set_drvdata(pdev, bgp);
->> +
->> +	return 0;
->> +
->> +err_alloc:
->> +	pm_runtime_put_sync(&pdev->dev);
->> +	pm_runtime_disable(&pdev->dev);
->> +
->> +	return ret;
->> +}
->> +
->> +static int k3_bandgap_remove(struct platform_device *pdev)
->> +{
->> +	pm_runtime_put_sync(&pdev->dev);
->> +	pm_runtime_disable(&pdev->dev);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct k3_vtm_driver_data am654_data = {
->> +	.errata = 1,
->> +};
->> +
->> +static const struct of_device_id of_k3_bandgap_match[] = {
->> +	{
->> +		.compatible = "ti,am654-vtm",
->> +		.data = &am654_data,
->> +	},
->> +	{ /* sentinel */ },
->> +};
->> +MODULE_DEVICE_TABLE(of, of_k3_bandgap_match);
->> +
->> +static struct platform_driver k3_bandgap_sensor_driver = {
->> +	.probe = k3_bandgap_probe,
->> +	.remove = k3_bandgap_remove,
->> +	.driver = {
->> +		.name = "k3-soc-thermal",
->> +		.of_match_table	= of_k3_bandgap_match,
->> +	},
->> +};
->> +
->> +module_platform_driver(k3_bandgap_sensor_driver);
->> +
->> +MODULE_DESCRIPTION("K3 bandgap temperature sensor driver");
->> +MODULE_LICENSE("GPL v2");
->> +MODULE_AUTHOR("J Keerthy <j-keerthy@ti.com>");
->> -- 
->> 2.17.1
->>
-> 
+> +               lima_devfreq_record_idle(pipe->ldev);
+> +
+>                 pipe->task_fini(pipe);
+>                 dma_fence_signal(task->fence);
+>         }
+> diff --git a/drivers/gpu/drm/lima/lima_sched.h b/drivers/gpu/drm/lima/lima_sched.h
+> index d64393fb50a9..19bbc5214cf2 100644
+> --- a/drivers/gpu/drm/lima/lima_sched.h
+> +++ b/drivers/gpu/drm/lima/lima_sched.h
+> @@ -6,6 +6,7 @@
+>
+>  #include <drm/gpu_scheduler.h>
+>
+> +struct lima_device;
+>  struct lima_vm;
+>
+>  struct lima_sched_task {
+> @@ -44,6 +45,8 @@ struct lima_sched_pipe {
+>         u32 fence_seqno;
+>         spinlock_t fence_lock;
+>
+> +       struct lima_device *ldev;
+> +
+>         struct lima_sched_task *current_task;
+>         struct lima_vm *current_vm;
+>
+> --
+> 2.25.1
+>
