@@ -2,171 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B6F16B0CA
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 21:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D121216B0CF
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 21:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727197AbgBXUK3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Feb 2020 15:10:29 -0500
-Received: from vps-vb.mhejs.net ([37.28.154.113]:40112 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726628AbgBXUK2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 24 Feb 2020 15:10:28 -0500
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92.3)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1j6K3b-0001SI-W7; Mon, 24 Feb 2020 21:10:24 +0100
-Subject: Re: [PATCH] cpuidle-haltpoll: allow force loading on hosts without
- the REALTIME hint
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Joao Martins <joao.m.martins@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>, kvm@vger.kernel.org
-References: <20200221174331.1480468-1-mail@maciej.szmigiero.name>
-Autocrypt: addr=mail@maciej.szmigiero.name; prefer-encrypt=mutual; keydata=
- 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 Iw==
-Message-ID: <114f7b8d-6f88-222a-d1fa-abcfc0e6a1f2@maciej.szmigiero.name>
-Date:   Mon, 24 Feb 2020 21:10:18 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726722AbgBXUNC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Feb 2020 15:13:02 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:41201 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726628AbgBXUNB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Feb 2020 15:13:01 -0500
+Received: by mail-ed1-f68.google.com with SMTP id c26so13451500eds.8;
+        Mon, 24 Feb 2020 12:13:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TwCT11Q8st6DRF5f77QlbvmNTg2E5sCFURGACQNwpRo=;
+        b=M0qrcKD1M4eGLM7wE1bVijszZHCZ3HAstykQhGiAT8kwM8u1A9FA1M4/bnWGs2SSAh
+         OntM4rK2t0bx1eZ6Sw2QpBNjWHAjZwm40zs8dqcLB/5QKPdLg+gVBgriIHgBxLeqiQGH
+         mtkzawKMsPDG9So3snvEEO6qFzcSSsC6FFQAKTBFH9ym+/1F9lcSy9eePmGzYOLNdhO9
+         TEtWXhuBSb/BIcd1ep2Ok/JepZ9Ng4roi+GKiHpao87Y+cDWflKUHF5+Kpl+jHXxh6PX
+         WsfHbUnTuD8OGBwOu7J621GKErKrMKzQMS6LIIZ8dmEb6Ys41qhHvQ02EHLcnqDMf4H+
+         X0Zg==
+X-Gm-Message-State: APjAAAU9VPfYo01EI2VXMD3RZzz/NZyPDrMzZo1mqary0+ox0yd4l30D
+        TI1HIJd7M700ixCfF7hvfDQ=
+X-Google-Smtp-Source: APXvYqz1+/Sz4RMczX4pFEQdlHMFqh55PdbPuTHZn3Ir9AYpBo51uk9X0M9WvatqCco7VEZqEmqhhQ==
+X-Received: by 2002:a17:906:2653:: with SMTP id i19mr47243420ejc.287.1582575180052;
+        Mon, 24 Feb 2020 12:13:00 -0800 (PST)
+Received: from kozik-lap ([194.230.155.125])
+        by smtp.googlemail.com with ESMTPSA id d16sm1051538eds.18.2020.02.24.12.12.57
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 24 Feb 2020 12:12:59 -0800 (PST)
+Date:   Mon, 24 Feb 2020 21:12:56 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/3] regulator: max14577: Add proper dt-compatible strings
+Message-ID: <20200224201256.GA8060@kozik-lap>
+References: <CGME20200220145134eucas1p288ae1910d3e8d12dc12f010ed0b07b45@eucas1p2.samsung.com>
+ <20200220145127.21273-1-m.szyprowski@samsung.com>
+ <20200220165614.GD3926@sirena.org.uk>
+ <964b8c4c-36ca-203d-e62b-4a8fc970e23d@samsung.com>
+ <20200221123813.GB5546@sirena.org.uk>
+ <b52332cd-1dec-fdfe-51fc-8605d94abe7d@samsung.com>
+ <20200221171342.GI5546@sirena.org.uk>
+ <61dc8192-e313-021f-9e23-928257a66984@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <20200221174331.1480468-1-mail@maciej.szmigiero.name>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+In-Reply-To: <61dc8192-e313-021f-9e23-928257a66984@samsung.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-(CC'ing also Marcelo as the cpuidle-haltpoll driver author and the KVM ML).
+On Mon, Feb 24, 2020 at 03:08:05PM +0100, Marek Szyprowski wrote:
+> Hi Mark,
+> 
+> On 21.02.2020 18:13, Mark Brown wrote:
+> > On Fri, Feb 21, 2020 at 02:23:57PM +0100, Marek Szyprowski wrote:
+> >> On 21.02.2020 13:38, Mark Brown wrote:
+> >>> We could just remove the compatible strings from the binding
+> >>> documentation, they won't do any harm if we don't use them.
+> >> Frankly I have no strong opinion on this. I've just wanted to fix the
+> >> broken autoloading of the drivers compiled as modules.
+> > Shouldn't adding the relevant module table for the platform devices work
+> > just as well for that?  Possibly also deleting the of_compatible bits in
+> > the MFD as well, ISTR that's needed to make the platform device work.
+> 
+> Right. This will work too. MFD cells will match to their drivers by the 
+> name and modalias strings will be correct. The question is which 
+> approach is preffered? Krzysztof? I've checked other mfd drivers, but I 
+> cannot find any pattern in this area.
 
-On 21.02.2020 18:43, Maciej S. Szmigiero wrote:
-> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> 
-> Before commit 1328edca4a14 ("cpuidle-haltpoll: Enable kvm guest polling
-> when dedicated physical CPUs are available") the cpuidle-haltpoll driver
-> could also be used in scenarios when the host does not advertise the
-> KVM_HINTS_REALTIME hint.
-> 
-> While the behavior introduced by the aforementioned commit makes sense as
-> the default there are cases where the old behavior is desired, for example,
-> when other kernel changes triggered by presence by this hint are unwanted,
-> for some workloads where the latency benefit from polling overweights the
-> loss from idle CPU capacity that otherwise would be available, or just when
-> running under older Qemu versions that lack this hint.
-> 
-> Let's provide a typical "force" module parameter that allows restoring the
-> old behavior.
-> 
-> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> ---
->  drivers/cpuidle/cpuidle-haltpoll.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-> index b0ce9bc78113..07e5b36076bb 100644
-> --- a/drivers/cpuidle/cpuidle-haltpoll.c
-> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
-> @@ -18,6 +18,11 @@
->  #include <linux/kvm_para.h>
->  #include <linux/cpuidle_haltpoll.h>
->  
-> +static bool force __read_mostly;
-> +module_param(force, bool, 0444);
-> +MODULE_PARM_DESC(force,
-> +		 "Load even if the host does not provide the REALTIME hint");
-> +
->  static struct cpuidle_device __percpu *haltpoll_cpuidle_devices;
->  static enum cpuhp_state haltpoll_hp_state;
->  
-> @@ -90,6 +95,11 @@ static void haltpoll_uninit(void)
->  	haltpoll_cpuidle_devices = NULL;
->  }
->  
-> +static bool haltpool_want(void)
-> +{
-> +	return kvm_para_has_hint(KVM_HINTS_REALTIME) || force;
-> +}
-> +
->  static int __init haltpoll_init(void)
->  {
->  	int ret;
-> @@ -102,7 +112,7 @@ static int __init haltpoll_init(void)
->  	cpuidle_poll_state_init(drv);
->  
->  	if (!kvm_para_available() ||
-> -		!kvm_para_has_hint(KVM_HINTS_REALTIME))
-> +	    !haltpool_want())
->  		return -ENODEV;
->  
->  	ret = cpuidle_register_driver(drv);
-> 
+I would guess that adding MODULE_DEVICE_TABLE() for OF-matches in main
+MFD driver would fix the issue... otherwise the same problem we have
+with max77693 (also MUIC/extcon/regulator/charger).
+
+Some of these drivers (I guess only charger) bind to a OF node so they
+need a compatible. I think we added this to regulators and extcon for
+symmetry.
+Without this binding, the charger would need to read a specific child
+node from parent. This make them tightly coupled. It seems to me more
+robust for each component to bind to his own node, when needed.
+
+Another reason of adding compatibles was an idea of reusability of
+MFD children (between different MFD drivers or even standalone) but it
+never got implemented (children still depend on parent significantly).
+
+In general, I like the approach of children with compatibles but I will
+not argue against changing the drivers. They could really use some
+cleanup :)
+Long time I tried to remove the support for platform_data [1] - maybe
+let's continue?
+
+[1] https://lore.kernel.org/lkml/20170217200200.4521-1-krzk@kernel.org/
+
+Best regards,
+Krzysztof
+
