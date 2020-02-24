@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A92AF16B474
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 23:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F412916B460
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 23:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728537AbgBXWnf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Feb 2020 17:43:35 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38893 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727957AbgBXWmo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Feb 2020 17:42:44 -0500
-Received: by mail-lj1-f196.google.com with SMTP id w1so11908466ljh.5;
-        Mon, 24 Feb 2020 14:42:43 -0800 (PST)
+        id S1728069AbgBXWna (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Feb 2020 17:43:30 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:37796 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728252AbgBXWmq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Feb 2020 17:42:46 -0500
+Received: by mail-lf1-f68.google.com with SMTP id b15so8066602lfc.4;
+        Mon, 24 Feb 2020 14:42:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/yQMglB4vCGlQCm7ZMgMT2Lxj53zxpwTod0Ou3j2MPA=;
-        b=aCyZG32WV9ULftR0U56FZfjl38mwJetGIzdPzml6rnpdFyFd83PBjxc0CnFKgEGqRS
-         gwO/EPCydYn99hlqG/c4hskaiqn74hpi6KoubwuwkXu4Q/4xxAHFDEMB/8mv9Y68Js8+
-         0Z1N+iEOs/9OQtkFonImSfRdjE8ud9zfd20w9XKnqQg4X78KFIm7yCQaoho2SDKls5zW
-         ++xb7/JOZq3U/Odx+rRC7oZTU95vql+v9cOzosjMw/VJeoOT2/xp0BhGZhb059Db43/L
-         EuJTJiXqMjIerpzELQZlWKLoXB4qvYlxaSXBqAYSrL3eWhwAHRjqMeyZRJxu71lbzLn9
-         +0kg==
+        bh=nIyuKZWIZi/B5cTCqrl8qdcGjW5k6PQ+Dl+Q52lH0cU=;
+        b=ZUTA5YiaSxFRz/5GiZEXH/fQSYJ4U2Jo6OWoRZPQJkXeYfdyL+r8Ew6o53y0NQ/ZGK
+         Nz+Oyvehtg4/Uatv6UzpCjsz7TZmiRyNtQHwk0azTaot2laWe6Z4ztqHVwJmItabhN0f
+         2kRiH7Dh0vYafg103a+y2yIM+K8vLm8QBlHT/6BnTUiTK31R0NV1BxGc536JFrnVCNKD
+         LiLaCCjoc0wiTyweav6Da70DvsXPsTXLqcR2TB/UvcO7Agrm9ktw5Ia9MIIV8aXmVJM/
+         Ie/Golg8SjWkvlqL2943fyg6f6GkhdHudpls1CCbWTbgUqZH3/Ni/I1Oy2A7CXkLBmFn
+         N/5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/yQMglB4vCGlQCm7ZMgMT2Lxj53zxpwTod0Ou3j2MPA=;
-        b=JQnFQS6K0lc9q7nyNhnExCQ4aIo3LmMkzl6W5cwA5Di/FlwpUjeAtAM9xwqSBp3QeC
-         I7nVwzvVDPEa37zGweHywNt/UFCquSiiySYra1DMkZyInjwiXUlz3VqOaYOmvLZMH0sa
-         x8bcnAQqZH+VIDgulW/uOhUX/Ikae9BU6FbjAsLB9AKhcIHNW8GwHBQe09eL9zWpgk+t
-         PS/W6NNOLUrj93uE7dioGy2C5vVkyqP4y+mG63IZBJ3OtB5pzrFTbO+VPErD7UkEO5dS
-         NXI/gcO6nJeLD+kSU2BMKjU76GOq/9xyLVSgdLg0xbTogEfVp+WO5hAyr/T0DhJRPOgP
-         r6zA==
-X-Gm-Message-State: APjAAAVXEM51QsIqds5C8pbWybAZ6GWKMAM2Mifo/DGkpLUaxjLZK13s
-        2rVCyZLtBJxgMqvByDGsNM0=
-X-Google-Smtp-Source: APXvYqwuyN7R7TxkBWhN8OLpWsJfZx3xp4fMg+TfX9uk6PxYpF6XtE5DS5tYiAwhzRBCB1Q93DlZug==
-X-Received: by 2002:a05:651c:111a:: with SMTP id d26mr31608564ljo.153.1582584162623;
-        Mon, 24 Feb 2020 14:42:42 -0800 (PST)
+        bh=nIyuKZWIZi/B5cTCqrl8qdcGjW5k6PQ+Dl+Q52lH0cU=;
+        b=YYI5ipb71oAPHdabXG6GiLcPivsv9Quj+G/wN7cQtuFueYzQefNdmo8CDUCqir6FjI
+         lk7HM7QQyO9inZm2OcTfnKkozwppcO+p+jgODo10x0gNab8QGZorSEFa6nyGuZE9qvWs
+         BHAt6dJK4oKmhf1owCMH83ems4fye9HyWb/Sv4hceIEXRUb+76spQNfeck6+CHAKgKY1
+         Y5z0mkR0/Dt3NdzWBUqLJq6SfbM092hZeqCj6CZSOtvZgKz1KueHUNDkX63mcd0xlV0t
+         ThDKD/BDZacM9VCjdK8lqrof+jRK0qp40W6nh87XQv99h7q3/3apqFT3OuuhTfJFw7mv
+         57Xg==
+X-Gm-Message-State: APjAAAWGv01mbc2QTROSSgK+t4L5g7F80GEox3EUJxe0zgwz495UvgRB
+        7FdJYDi1LkQ6MJ2p0okIpjM=
+X-Google-Smtp-Source: APXvYqxbRCCCBd7E8CLBaxTr5AOAUU2DoPJi/QOJmaBGNtS4agc/HYfYHKD6U70SRjhPTej+W9K7dQ==
+X-Received: by 2002:ac2:4467:: with SMTP id y7mr6150265lfl.167.1582584163658;
+        Mon, 24 Feb 2020 14:42:43 -0800 (PST)
 Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id j7sm6264833lfh.25.2020.02.24.14.42.41
+        by smtp.gmail.com with ESMTPSA id j7sm6264833lfh.25.2020.02.24.14.42.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2020 14:42:42 -0800 (PST)
+        Mon, 24 Feb 2020 14:42:43 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -57,9 +57,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Nicolas Chauvet <kwizart@gmail.com>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v11 08/17] ARM: tegra: Make outer_disable() open-coded
-Date:   Tue, 25 Feb 2020 01:40:48 +0300
-Message-Id: <20200224224057.21877-9-digetx@gmail.com>
+Subject: [PATCH v11 09/17] arm: tegra20: cpuidle: Handle case where secondary CPU hangs on entering LP2
+Date:   Tue, 25 Feb 2020 01:40:49 +0300
+Message-Id: <20200224224057.21877-10-digetx@gmail.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20200224224057.21877-1-digetx@gmail.com>
 References: <20200224224057.21877-1-digetx@gmail.com>
@@ -70,56 +70,96 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The outer_disable() of Tegra's suspend code is open-coded now since
-that helper produces spurious warning message about secondary CPUs being
-online when CPU enters into LP2 from cpuidle. The secondaries are actually
-halted by the cpuidle driver on entering into LP2 idle-state, but the
-online status is not touched by the cpuidle. This fixes a storm of
-warnings once LP2 idling state is enabled on Tegra30. The outer_disable()
-helper has sanity checks for interrupts and secondary CPUs being disabled
-and we are pretty confident about the interrupts state during of CPU
-idling / system suspend. The rail-off status check is added in this patch
-as equivalent for the "num_online_cpus() > 1".
+It is possible that something may go wrong with the secondary CPU, in that
+case it is much nicer to get a dump of the flow-controller state before
+hanging machine.
 
 Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
 Tested-by: Peter Geis <pgwipeout@gmail.com>
 Tested-by: Jasper Korten <jja2000@gmail.com>
 Tested-by: David Heidelberg <david@ixit.cz>
 Tested-by: Nicolas Chauvet <kwizart@gmail.com>
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/mach-tegra/pm.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ arch/arm/mach-tegra/cpuidle-tegra20.c | 51 +++++++++++++++++++++++++--
+ 1 file changed, 49 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/mach-tegra/pm.c b/arch/arm/mach-tegra/pm.c
-index 7d9ef26e52a7..d1e1a61b12cf 100644
---- a/arch/arm/mach-tegra/pm.c
-+++ b/arch/arm/mach-tegra/pm.c
-@@ -138,6 +138,10 @@ void tegra_pm_set_cpu_in_lp2(void)
+diff --git a/arch/arm/mach-tegra/cpuidle-tegra20.c b/arch/arm/mach-tegra/cpuidle-tegra20.c
+index a5b7d4e68f43..40566da25c6c 100644
+--- a/arch/arm/mach-tegra/cpuidle-tegra20.c
++++ b/arch/arm/mach-tegra/cpuidle-tegra20.c
+@@ -14,6 +14,7 @@
+ #include <linux/tick.h>
+ #include <linux/cpuidle.h>
+ #include <linux/cpu_pm.h>
++#include <linux/delay.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
  
- static int tegra_sleep_cpu(unsigned long v2p)
- {
-+	if (tegra_cpu_car_ops->rail_off_ready &&
-+	    WARN_ON(!tegra_cpu_rail_off_ready()))
-+		return -EBUSY;
+@@ -82,14 +83,60 @@ static inline void tegra20_wake_cpu1_from_reset(void)
+ }
+ #endif
+ 
++static void tegra20_report_cpus_state(void)
++{
++	unsigned long cpu, lcpu, csr;
 +
- 	/*
- 	 * L2 cache disabling using kernel API only allowed when all
- 	 * secondary CPU's are offline. Cache have to be disabled with
-@@ -146,9 +150,10 @@ static int tegra_sleep_cpu(unsigned long v2p)
- 	 * if any of secondary CPU's is online and this is the LP2-idle
- 	 * code-path only for Tegra20/30.
- 	 */
--	if (trusted_foundations_registered())
--		outer_disable();
--
-+#ifdef CONFIG_OUTER_CACHE
-+	if (trusted_foundations_registered() && outer_cache.disable)
-+		outer_cache.disable();
-+#endif
- 	/*
- 	 * Note that besides of setting up CPU reset vector this firmware
- 	 * call may also do the following, depending on the FW version:
++	for_each_cpu(lcpu, cpu_possible_mask) {
++		cpu = cpu_logical_map(lcpu);
++		csr = flowctrl_read_cpu_csr(cpu);
++
++		pr_err("cpu%lu: online=%d flowctrl_csr=0x%08lx\n",
++		       cpu, cpu_online(lcpu), csr);
++	}
++}
++
++static int tegra20_wait_for_secondary_cpu_parking(void)
++{
++	unsigned int retries = 3;
++
++	while (retries--) {
++		unsigned int delay_us = 10;
++		unsigned int timeout_us = 500 * 1000 / delay_us;
++
++		/*
++		 * The primary CPU0 core shall wait for the secondaries
++		 * shutdown in order to power-off CPU's cluster safely.
++		 * The timeout value depends on the current CPU frequency,
++		 * it takes about 40-150us  in average and over 1000us in
++		 * a worst case scenario.
++		 */
++		do {
++			if (tegra_cpu_rail_off_ready())
++				return 0;
++
++			udelay(delay_us);
++
++		} while (timeout_us--);
++
++		pr_err("secondary CPU taking too long to park\n");
++
++		tegra20_report_cpus_state();
++	}
++
++	pr_err("timed out waiting secondaries to park\n");
++
++	return -ETIMEDOUT;
++}
++
+ static bool tegra20_cpu_cluster_power_down(struct cpuidle_device *dev,
+ 					   struct cpuidle_driver *drv,
+ 					   int index)
+ {
+ 	bool ret;
+ 
+-	while (!tegra_cpu_rail_off_ready())
+-		cpu_relax();
++	if (tegra20_wait_for_secondary_cpu_parking())
++		return false;
+ 
+ 	ret = !tegra_pm_enter_lp2();
+ 
 -- 
 2.24.0
 
