@@ -2,188 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E59C716A725
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 14:18:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6668A16A731
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 14:22:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727329AbgBXNSX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Feb 2020 08:18:23 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:49625 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727275AbgBXNSX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Feb 2020 08:18:23 -0500
-Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1j6Dcq-0005Wj-K9; Mon, 24 Feb 2020 13:18:20 +0000
-Date:   Mon, 24 Feb 2020 14:18:19 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH net-next v3 5/9] device: add device_change_owner()
-Message-ID: <20200224131819.gos6xlqwlrnqc7gt@wittgenstein>
-References: <20200218162943.2488012-1-christian.brauner@ubuntu.com>
- <20200218162943.2488012-6-christian.brauner@ubuntu.com>
- <20200220112513.GH3374196@kroah.com>
+        id S1727463AbgBXNV7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Feb 2020 08:21:59 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:39444 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727348AbgBXNV6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 24 Feb 2020 08:21:58 -0500
+Received: from zn.tnic (p200300EC2F0C0F00754C15A63F97C369.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:f00:754c:15a6:3f97:c369])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 74D611EC06AC;
+        Mon, 24 Feb 2020 14:21:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1582550516;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=APjkWpDkYH8yw2wswFHOWZARM3dlj65G1SzI9xgA+P4=;
+        b=lxE4UnPODOkaacszfRk6SFjs53/XedHYzkTkjwsQeni5GNQ9cNkYoZG8wiG40LRf/vIlZ0
+        Qkr8rbk2qp2J5olJmt6WVSUnb/CulXVkOxvp3ZOxNFbtJ5/dj+jY+I76cXFTgACF9e9grz
+        6v39vyX+2O+d+4EaZn4c+ZjiJNXFxHw=
+Date:   Mon, 24 Feb 2020 14:21:52 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Cao jin <caoj.fnst@cn.fujitsu.com>
+Cc:     x86@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
+        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com
+Subject: Re: [RFC PATCH 1/2] x86/acpi: Improve code readablity of early madt
+ processing
+Message-ID: <20200224132152.GB29318@zn.tnic>
+References: <20200123014144.19155-1-caoj.fnst@cn.fujitsu.com>
+ <20200123014144.19155-2-caoj.fnst@cn.fujitsu.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200220112513.GH3374196@kroah.com>
+In-Reply-To: <20200123014144.19155-2-caoj.fnst@cn.fujitsu.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 12:25:13PM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Feb 18, 2020 at 05:29:39PM +0100, Christian Brauner wrote:
-> > Add a helper to change the owner of a device's sysfs entries. This
-> > needs to happen when the ownership of a device is changed, e.g. when
-> > moving network devices between network namespaces.
-> > This function will be used to correctly account for ownership changes,
-> > e.g. when moving network devices between network namespaces.
-> > 
-> > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> > ---
-> > /* v2 */
-> > unchanged
-> > 
-> > /* v3 */
-> > -  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
-> >    - Add explicit uid/gid parameters.
-> > ---
-> >  drivers/base/core.c    | 80 ++++++++++++++++++++++++++++++++++++++++++
-> >  include/linux/device.h |  1 +
-> >  2 files changed, 81 insertions(+)
-> > 
-> > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > index 42a672456432..ec0d5e8cfd0f 100644
-> > --- a/drivers/base/core.c
-> > +++ b/drivers/base/core.c
-> > @@ -3458,6 +3458,86 @@ int device_move(struct device *dev, struct device *new_parent,
-> >  }
-> >  EXPORT_SYMBOL_GPL(device_move);
-> >  
-> > +static int device_attrs_change_owner(struct device *dev, kuid_t kuid,
-> > +				     kgid_t kgid)
-> > +{
-> > +	struct kobject *kobj = &dev->kobj;
-> > +	struct class *class = dev->class;
-> > +	const struct device_type *type = dev->type;
-> > +	int error;
-> > +
-> > +	if (class) {
-> > +		error = sysfs_groups_change_owner(kobj, class->dev_groups, kuid,
-> > +						  kgid);
-> > +		if (error)
-> > +			return error;
-> > +	}
-> > +
-> > +	if (type) {
-> > +		error = sysfs_groups_change_owner(kobj, type->groups, kuid,
-> > +						  kgid);
-> > +		if (error)
-> > +			return error;
-> > +	}
-> > +
-> > +	error = sysfs_groups_change_owner(kobj, dev->groups, kuid, kgid);
-> > +	if (error)
-> > +		return error;
-> > +
-> > +	if (device_supports_offline(dev) && !dev->offline_disabled) {
-> > +		error = sysfs_file_change_owner_by_name(
-> > +			kobj, dev_attr_online.attr.name, kuid, kgid);
-> > +		if (error)
-> > +			return error;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/**
-> > + * device_change_owner - change the owner of an existing device.
+On Thu, Jan 23, 2020 at 09:41:43AM +0800, Cao jin wrote:
+> Current processing logic is confusing.
 > 
-> The "owner" and what else gets changed here?  Please document this
-> better.
-> 
-> 
-> > + * @dev: device.
-> > + * @kuid: new owner's kuid
-> > + * @kgid: new owner's kgid
-> > + */
-> > +int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
-> > +{
-> > +	int error;
-> > +	struct kobject *kobj = &dev->kobj;
-> > +
-> > +	dev = get_device(dev);
-> > +	if (!dev)
-> > +		return -EINVAL;
-> > +
-> > +	error = sysfs_change_owner(kobj, kuid, kgid);
-> 
-> the kobject of the device is changed, good.
-> 
-> > +	if (error)
-> > +		goto out;
-> > +
-> > +	error = sysfs_file_change_owner_by_name(kobj, dev_attr_uevent.attr.name,
-> > +						kuid, kgid);
-> 
-> Why call out the uevent file explicitly here?
+> Return value of early_acpi_parse_madt_lapic_addr_ovr() indicates error(< 0),
+> parsed entry number(>= 0).
 
-This again, mirrors the creation of a kobject in sysfs. The uevent file
-is created separately and thus should be chowned separately.
+You mean, the count of table entries parsed successfully?
 
-> 
-> > +	if (error)
-> > +		goto out;
-> > +
-> > +	error = device_attrs_change_owner(dev, kuid, kgid);
-> > +	if (error)
-> > +		goto out;
-> 
-> Doesn't this also change the uevent file?
+> So, it makes no sense to initialize acpi_lapic & smp_found_config
+> seeing no override entry, instead, initialize them seeing MADT.
 
-No, not as far as I can tell. The uevent file is created in an extra
-step when the kobject/sysfs entries are created.
+Err, that logical conclusion is not really clear to me - pls try
+again with more detail. I kinda see what you mean by looking at
+acpi_process_madt() but before I commit a change like that, I better
+have the warm and fuzzy feeling that it is correct and properly
+explained in its commit message.
 
-> 
-> > +
-> > +#ifdef CONFIG_BLOCK
-> > +	if (sysfs_deprecated && dev->class == &block_class)
-> > +		goto out;
-> > +#endif
-> 
-> Ugh, we still need this?
+So why did
 
-Yeah, apparently. It's what I gather from how a device is added.
+  cbf9bd603ab1 ("acpi: get boot_cpu_id as early for k8_scan_nodes")
 
-> 
-> > +
-> > +	error = sysfs_link_change_owner(&dev->class->p->subsys.kobj, &dev->kobj,
-> > +					dev_name(dev), kuid, kgid);
-> 
-> Now what is this changing?
+do it this way? Was it wrong or why?
 
-So, this changed the ownership of the class link for the device to match
-the directory entry for that device, so e.g. given a network device
-symlink (or any other type) that points to the actual directory entry
-for that device:
+I'm very wary about touching ACPI parsing code for no good reason
+because, well, it is ACPI...
 
-/sys/class/net/my-dev -> ../../devices/virtual/net/my-dev
+Thx.
 
-it makes my-dev show the same permissions as the directory my-dev has.
-If we don't do this this will look weird, because the symlink will show
-different permissions than the target it is pointoing to.
+-- 
+Regards/Gruss,
+    Boris.
 
-> 
-> Again, more documentation please as to exactly what is being changed in
-> this function is needed.
-
-Sure!
+https://people.kernel.org/tglx/notes-about-netiquette
