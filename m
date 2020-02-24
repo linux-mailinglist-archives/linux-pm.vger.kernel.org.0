@@ -2,278 +2,277 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D75A216B3F7
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 23:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F5E16B46E
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 23:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727459AbgBXW25 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Feb 2020 17:28:57 -0500
-Received: from mga12.intel.com ([192.55.52.136]:35898 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726651AbgBXW25 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 24 Feb 2020 17:28:57 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Feb 2020 14:28:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,481,1574150400"; 
-   d="scan'208";a="437858293"
-Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.154.101]) ([10.249.154.101])
-  by fmsmga006.fm.intel.com with ESMTP; 24 Feb 2020 14:28:53 -0800
-Subject: Re: [PATCH v10 4/4] i2c: core: support bus regulator controlling in
- adapter
-To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
+        id S1726651AbgBXWmh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Feb 2020 17:42:37 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:45783 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728104AbgBXWmh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Feb 2020 17:42:37 -0500
+Received: by mail-lj1-f194.google.com with SMTP id e18so11884276ljn.12;
+        Mon, 24 Feb 2020 14:42:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ni+9+C2OixXBozsO+Vukxpmas05+jGj37YYvv1otaGU=;
+        b=mIDmf64usA3lY1ve2h7wNxlX75VUo8vdW1zR6TRiZHBsRf24rNM/rnrJrGhU8Hg+0S
+         QnSZTAQbXD3tfA/D6Vgbj0JdFdQivpb4LuF9+nQUh2pGk2Dm3rtxAc58hRSBplT3H8NX
+         Kb9wDhQfQKLuXKDFkn+kmmsInPCXM0xmfioSx8hoW9va6kwLKFzrm6y0tQFmh4Rtfj/2
+         DH9w0oROR6qGfIL6CMIXzwvoODHXPp5/dWcDw9U1SYAGBdXGoG9xgP486IbO8M6tjBEq
+         5B2sAPbMYMC0bYSabNYbQQzh/Eee7VqMpq2r/oT5c7OMqwNNLckuf1bOytP9o2SsuFZ4
+         kuPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ni+9+C2OixXBozsO+Vukxpmas05+jGj37YYvv1otaGU=;
+        b=HpcNd8Tm8R3fih3PGM2qc0wIJoGjU80Xs+piiRSoeAkWltLRxRbLl4Kqw3RO45rAma
+         bVEil1O/XImVEqLb8TzR3B0neZ+x1OiJ/k+SqgSzXgk8dWeH/xMssiSJg++BnAnj8Oz4
+         bOTl+VRnesitHG1vXAFdeBnla5u92n3RnBM3RNU7IjJkvlL+ysFDr2dnIJ9ZLclEdQWB
+         KoG11pnix4NX3JS4zts5avLVNZ2d+5OemmUpYMvlrth892959x2Uxsx4w9TSOR2TwzfE
+         lXiPJ1M8L5hK99QN8eiRbchqG4SijZjrvVVSlCyFk+EVvDYbiPIlVbIZyqD17MjrTwJz
+         DrEw==
+X-Gm-Message-State: APjAAAW2TPCZnNLY8/980LMXk1ELXSLfzxFlV92B7XlbS+aT7m5nKSv7
+        6qkcTP3iLH6dDNf2T7cAnW4=
+X-Google-Smtp-Source: APXvYqyajfWTUwTxY/nQW9d5FP5Av8CektEP+9OYz9Dm+Lxuq0uwtm7IPeGJZsNsXl+CukmsEysAkA==
+X-Received: by 2002:a2e:8145:: with SMTP id t5mr32085323ljg.144.1582584153582;
+        Mon, 24 Feb 2020 14:42:33 -0800 (PST)
+Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.gmail.com with ESMTPSA id j7sm6264833lfh.25.2020.02.24.14.42.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2020 14:42:32 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-devicetree <devicetree@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20200116025637.3524-1-bibby.hsieh@mediatek.com>
- <20200116025637.3524-5-bibby.hsieh@mediatek.com>
- <CAAFQd5Bh9dUuu2fzxQSyuyRrEvN5o8PBqPCUTdrC5btN2Q1HVw@mail.gmail.com>
- <CAAFQd5DtnBhGV-VemTwudm7K-UtFsGg99YGuD-cyR93u0OAPuA@mail.gmail.com>
- <1582255353.19370.2.camel@mtksdaap41>
-From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
- 173, 80-298 Gdansk
-Message-ID: <b11d1b1a-5d00-3200-6779-e54a828915f9@intel.com>
-Date:   Mon, 24 Feb 2020 23:28:52 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Jasper Korten <jja2000@gmail.com>,
+        David Heidelberg <david@ixit.cz>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v11 00/17] Consolidate and improve NVIDIA Tegra CPUIDLE driver(s)
+Date:   Tue, 25 Feb 2020 01:40:40 +0300
+Message-Id: <20200224224057.21877-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <1582255353.19370.2.camel@mtksdaap41>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2/21/2020 4:22 AM, Bibby Hsieh wrote:
-> Hi, Rafael,
->
-> I'm Sorry to bother you.
->
-> I'm not sure if you receive our email...
-> So I re-sent this email to your another email.
+Hello,
 
-I actually have not realized that there was a question directly for me 
-in this thread.
+This series does the following:
 
+  1. Unifies Tegra20/30/114 drivers into a single driver and moves it out
+     into common drivers/cpuidle/ directory.
 
-> On Mon, 2020-02-17 at 18:45 +0900, Tomasz Figa wrote:
->> Hi Rafael,
->>
->> On Tue, Jan 28, 2020 at 4:31 PM Tomasz Figa <tfiga@chromium.org> wrote:
->>> Hi Rafael,
->>>
->>> On Thu, Jan 16, 2020 at 11:56 AM Bibby Hsieh <bibby.hsieh@mediatek.com> wrote:
->>>> Although in the most platforms, the bus power of i2c
->>>> are alway on, some platforms disable the i2c bus power
->>>> in order to meet low power request.
->>>>
->>>> We get and enable bulk regulator in i2c adapter device.
->>>>
->>>> Signed-off-by: Bibby Hsieh <bibby.hsieh@mediatek.com>
->>>> ---
->>>>   drivers/i2c/i2c-core-base.c | 81 +++++++++++++++++++++++++++++++++++++
->>>>   include/linux/i2c.h         |  3 ++
->>>>   2 files changed, 84 insertions(+)
->>>>
->>> I posted some comments in a separate reply [1] and Wolfram confirmed
->>> that he's fine with the approach [2]. Would you have some time to take
->>> a look from the PM point of view? Thanks.
->>>
->>> [1] https://patchwork.ozlabs.org/patch/1223991/#2350984
->>> [2] https://patchwork.ozlabs.org/patch/1223991/#2351032
->>>
->>> Please let me know if you want me to CC you directly on any of those replies.
->> Would you have a few minutes to take a look at this?
->>
->> Thanks,
->> Tomasz
->>
->>> Best regards,
->>> Tomasz
->>>
->>>> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
->>>> index 9333c865d4a9..9b9e96b094ca 100644
->>>> --- a/drivers/i2c/i2c-core-base.c
->>>> +++ b/drivers/i2c/i2c-core-base.c
->>>> @@ -306,6 +306,7 @@ static int i2c_smbus_host_notify_to_irq(const struct i2c_client *client)
->>>>   static int i2c_device_probe(struct device *dev)
->>>>   {
->>>>          struct i2c_client       *client = i2c_verify_client(dev);
->>>> +       struct i2c_adapter      *adap = client->adapter;
->>>>          struct i2c_driver       *driver;
->>>>          int status;
->>>>
->>>> @@ -371,6 +372,12 @@ static int i2c_device_probe(struct device *dev)
->>>>
->>>>          dev_dbg(dev, "probe\n");
->>>>
->>>> +       status = regulator_enable(adap->bus_reg);
->>>> +       if (status != 0) {
->>>> +               dev_err(&adap->dev, "Failed to enable power regulator\n");
->>>> +               goto err_clear_wakeup_irq;
->>>> +       }
->>>> +
->>>>          status = of_clk_set_defaults(dev->of_node, false);
->>>>          if (status < 0)
->>>>                  goto err_clear_wakeup_irq;
->>>> @@ -407,6 +414,7 @@ static int i2c_device_probe(struct device *dev)
->>>>   static int i2c_device_remove(struct device *dev)
->>>>   {
->>>>          struct i2c_client       *client = i2c_verify_client(dev);
->>>> +       struct i2c_adapter      *adap = client->adapter;
->>>>          struct i2c_driver       *driver;
->>>>          int status = 0;
->>>>
->>>> @@ -420,6 +428,8 @@ static int i2c_device_remove(struct device *dev)
->>>>          }
->>>>
->>>>          dev_pm_domain_detach(&client->dev, true);
->>>> +       if (!pm_runtime_status_suspended(&adap->dev))
->>>> +               regulator_disable(adap->bus_reg);
->>>>
->>>>          dev_pm_clear_wake_irq(&client->dev);
->>>>          device_init_wakeup(&client->dev, false);
->>>> @@ -431,6 +441,71 @@ static int i2c_device_remove(struct device *dev)
->>>>          return status;
->>>>   }
->>>>
->>>> +#ifdef CONFIG_PM_SLEEP
->>>> +static int i2c_resume(struct device *dev)
->>>> +{
->>>> +       struct i2c_client *client = i2c_verify_client(dev);
->>>> +       struct i2c_adapter *adap = client->adapter;
->>>> +       int err;
->>>> +
->>>> +       if (pm_runtime_status_suspended(&adap->dev)) {
+  2. Prepares upcoming CPU cluster power-down idling state enabling for
+     Tegra30.
 
-In general, this is racy, because the RPM status of the device may 
-change while it is running unless there are specific reasons why that 
-cannot happen.
+In the end there is a quite nice clean up of the Tegra CPUIDLE drivers
+and of the Tegra's arch code in general. Please apply, thanks!
 
-It generally is better to do such checks at the "early resume" and 
-(analogously) "late suspend" stages when RPM is disabled.
+!!!WARNING!!! This series was made on top of the cpufreq patches [1]. But it
+              should be fine as long as Thierry Reding would pick up this and
+              the cpufreq patchsets via the Tegra tree, otherwise there will
+              one minor merge-conflict.
 
->>>> +               err = regulator_enable(adap->bus_reg);
->>>> +               if (err)
->>>> +                       return err;
->>>> +       }
->>>> +
->>>> +       return pm_generic_resume(dev);
->>>> +}
->>>> +
->>>> +static int i2c_suspend(struct device *dev)
->>>> +{
->>>> +       struct i2c_client *client = i2c_verify_client(dev);
->>>> +       struct i2c_adapter *adap = client->adapter;
->>>> +       int err;
->>>> +
->>>> +       if (!pm_runtime_status_suspended(&adap->dev)) {
->>>> +               err = regulator_disable(adap->bus_reg);
->>>> +               if (err)
->>>> +                       return err;
->>>> +       }
->>>> +
->>>> +       return pm_generic_suspend(dev);
->>>> +}
->>>> +#endif
->>>> +
->>>> +#ifdef CONFIG_PM
->>>> +static int i2c_runtime_resume(struct device *dev)
->>>> +{
->>>> +       struct i2c_client *client = i2c_verify_client(dev);
->>>> +       struct i2c_adapter *adap = client->adapter;
->>>> +       int err;
->>>> +
->>>> +       err = regulator_enable(adap->bus_reg);
->>>> +       if (err)
->>>> +               return err;
->>>> +
->>>> +       return pm_generic_runtime_resume(dev);
->>>> +}
->>>> +
->>>> +static int i2c_runtime_suspend(struct device *dev)
->>>> +{
->>>> +       struct i2c_client *client = i2c_verify_client(dev);
->>>> +       struct i2c_adapter *adap = client->adapter;
->>>> +       int err;
->>>> +
->>>> +       err = pm_generic_runtime_suspend(dev);
->>>> +       if (err)
->>>> +               return err;
->>>> +
->>>> +       return regulator_disable(adap->bus_reg);
->>>> +}
->>>> +#endif
->>>> +
->>>> +static const struct dev_pm_ops i2c_device_pm = {
->>>> +       SET_SYSTEM_SLEEP_PM_OPS(i2c_suspend, i2c_resume)
->>>> +       SET_RUNTIME_PM_OPS(i2c_runtime_suspend, i2c_runtime_resume, NULL)
->>>> +};
->>>> +
->>>>   static void i2c_device_shutdown(struct device *dev)
->>>>   {
->>>>          struct i2c_client *client = i2c_verify_client(dev);
->>>> @@ -488,6 +563,7 @@ struct bus_type i2c_bus_type = {
->>>>          .probe          = i2c_device_probe,
->>>>          .remove         = i2c_device_remove,
->>>>          .shutdown       = i2c_device_shutdown,
->>>> +       .pm             = &i2c_device_pm,
->>>>   };
->>>>   EXPORT_SYMBOL_GPL(i2c_bus_type);
->>>>
->>>> @@ -1351,6 +1427,11 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
->>>>                  goto out_reg;
->>>>
->>>>          dev_dbg(&adap->dev, "adapter [%s] registered\n", adap->name);
->>>> +       adap->bus_reg = devm_regulator_get(&adap->dev, "bus");
->>>> +       if (IS_ERR(adap->bus_reg)) {
->>>> +               res = PTR_ERR(adap->bus_reg);
->>>> +               goto out_reg;
->>>> +       }
->>>>
->>>>          pm_runtime_no_callbacks(&adap->dev);
->>>>          pm_suspend_ignore_children(&adap->dev, true);
->>>> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
->>>> index d2f786706657..833b81a680da 100644
->>>> --- a/include/linux/i2c.h
->>>> +++ b/include/linux/i2c.h
->>>> @@ -15,6 +15,7 @@
->>>>   #include <linux/device.h>      /* for struct device */
->>>>   #include <linux/sched.h>       /* for completion */
->>>>   #include <linux/mutex.h>
->>>> +#include <linux/regulator/consumer.h>
->>>>   #include <linux/rtmutex.h>
->>>>   #include <linux/irqdomain.h>           /* for Host Notify IRQ */
->>>>   #include <linux/of.h>          /* for struct device_node */
->>>> @@ -330,6 +331,7 @@ struct i2c_client {
->>>>          int init_irq;                   /* irq set at initialization    */
->>>>          int irq;                        /* irq issued by device         */
->>>>          struct list_head detected;
->>>> +
->>>>   #if IS_ENABLED(CONFIG_I2C_SLAVE)
->>>>          i2c_slave_cb_t slave_cb;        /* callback for slave mode      */
->>>>   #endif
->>>> @@ -723,6 +725,7 @@ struct i2c_adapter {
->>>>          const struct i2c_adapter_quirks *quirks;
->>>>
->>>>          struct irq_domain *host_notify_domain;
->>>> +       struct regulator *bus_reg;
->>>>   };
->>>>   #define to_i2c_adapter(d) container_of(d, struct i2c_adapter, dev)
->>>>
->>>> --
->>>> 2.18.0
+[1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=158206
 
+Changelog:
+
+v11: - Added acks from Daniel Lezcano.
+
+     - Added t-b from Nicolas Chauvet.
+
+     - @Daniel Lezcano: In regards to -M, I assume it's useless. The
+       cpuidle-tegra driver was rewritten from scratch, it's not a simple
+       code move.
+
+         rename arch/arm/mach-tegra/cpuidle-tegra20.c => drivers/cpuidle/cpuidle-tegra.c (9%)
+
+     - Replaced ktime_get() with udelay(), thanks to Daniel Lezcano for the
+       suggestion.
+
+     - Note to Thierry: this series uses [1] +  next-20200218 for the base,
+       you could also cherry-pick the patches from the grate-kernel if it
+       makes things easier (it is up-to-date).
+
+v10: - Added acks from Peter De Schrijver.
+
+    - Added tested-by from Peter Geis, Jasper Korten and David Heidelberg
+      who tested these patches on Ouya, TF300T and Nexus 7 devices.
+
+    - Temporarily dropped the "cpuidle: tegra: Support CPU cluster power-down
+      state on Tegra30" patch because Michał Mirosław reported that it didn't
+      work well on his TF300T. After some testing we found that changing
+      a way in which firmware performs L2 cache maintenance helps, but later
+      on we also found that the current v9 series works just fine without the
+      extra firmware changes using recent linux-next and the reason why v8
+      didn't work before is still unknown (need more testing). So I decided
+      that it will be better to postpone the dropped patch until we know for
+      sure that it works well for everyone in every possible configuration.
+
+    - Rebased this series on top of recent linux-next, in a result dropped
+      the "cpuidle: Avoid NULL dereference in cpuidle_driver_state_disabled()"
+      patch because it's not needed anymore.
+
+v9: - Rebased on recent linux-next. Dropped the v8 "Avoid NULL dereference.."
+      patch as a result, it's not needed anymore.
+
+    - Temporarily dropped "cpuidle: tegra: Support CPU cluster power-down
+      state on Tegra30" patch because Michał Mirosław reported that it causes
+      problem for ASUS TF300T Tegra30 device, we'll have to resolve the
+      problem first.
+
+    - Added ACKs from Peter De Schrijver to the patches.
+
+v8: - Rebased on recent linux-next, now making use of
+      cpuidle_driver_state_disabled(). Added new patch to make this new API
+      usable by the updated Tegra cpuidle driver:
+
+        cpuidle: Avoid NULL dereference in cpuidle_driver_state_disabled()
+
+    - Added new patch to handle case where LP2 isn't available:
+
+        cpuidle: tegra: Disable CC6 state if LP2 unavailable
+
+v7: - drivers/cpuidle/cpuidle-tegra.c now includes an explicit comment that
+      clarifies the new terminology that is used for naming of the idling
+      states. This change was suggested by Peter De Schrijver in the review
+      comment to v6. See the comment to struct tegra_idle_driver in the code.
+
+    - (!) This series is now based on top of the "NVIDIA Tegra20 CPUFreq
+      driver major update" patchset. The conflict between these two series
+      is trivial to resolve, but still it's worth to mention about that.
+
+v6: - Addressed request from Thierry Reding to change the way patches are
+      organized by making changes in a more incremental manner.
+
+    - tegra_sleep_cpu() now checks for the secondary CPUs to be offline
+      in the "Make outer_disable() open-coded" patch.
+
+v5: - Rebased on a recent linux-next, fixed one minor conflict in Kconfig.
+
+    - Improved commit's message of the "Support CPU cluster power-down state
+      on Tegra30" patch.
+
+    - The "Support CPU cluster power-down state on Tegra30" patch is also
+      got split and now there is additional "Make outer_disable() open-coded"
+      patch.
+
+    - Made minor cosmetic changes to the "Introduce unified driver for
+      NVIDIA Tegra SoCs" patch by improving error message and renaming
+      one variable.
+
+v4: - Fixed compilation with !CONFIG_CACHE_L2X0 (and tested that it still
+      works).
+
+    - Replaced ktime_compare() with ktime_before() in the new driver,
+      for consistency.
+
+v3: - Addressed review comments that were made by Jon Hunter to v2 by
+      splitting patches into smaller (and simpler) chunks, better
+      documenting changes in the commit messages and using proper error
+      codes in the code.
+
+      Warnings are replaced with a useful error messages in the code of
+      "Introduce unified driver for NVIDIA Tegra SoCs" patch.
+
+      Secondary CPUs parking timeout increased to 100ms because I found
+      that it actually may happen to take more than 1ms if CPU is running
+      on a *very* low frequency.
+
+      Added diagnostic messages that are reporting Flow Controller state
+      when CPU parking fails.
+
+      Further polished cpuidle driver's code.
+
+      The coupled state entering is now aborted if there is a pending SGI
+      (Software Generated Interrupt) because it will be lost after GIC's
+      power-cycling. Like it was done by the old Tegra20 CPUIDLE driver.
+
+v2: - Added patches to enable the new cpuidle driver in the defconfigs:
+
+        ARM: multi_v7_defconfig: Enable Tegra cpuidle driver
+        ARM: tegra: Enable Tegra cpuidle driver in tegra_defconfig
+
+    - Dropped patches that removed CPUIDLE_FLAG_TIMER_STOP from the idling
+      states because that flag actually doesn't have any negative effects,
+      but still is correct for the case of a local CPU timer on older Tegra
+      SoCs:
+
+        cpuidle: tegra: Remove CPUIDLE_FLAG_TIMER_STOP from Tegra114/124 idle-state
+        cpuidle: tegra: Remove CPUIDLE_FLAG_TIMER_STOP from all states
+
+    - The "Add unified driver for NVIDIA Tegra SoCs" patch got more polish.
+      Tegra30 and Terga114 states are now squashed into a single common C7
+      state (following Parker TRM terminology, see 17.2.2.2 Power Management
+      States), more comments added, etc minor changes.
+
+Dmitry Osipenko (17):
+  ARM: tegra: Compile sleep-tegra20/30.S unconditionally
+  ARM: tegra: Add tegra_pm_park_secondary_cpu()
+  ARM: tegra: Remove pen-locking from cpuidle-tegra20
+  ARM: tegra: Change tegra_set_cpu_in_lp2() type to void
+  ARM: tegra: Propagate error from tegra_idle_lp2_last()
+  ARM: tegra: Expose PM functions required for new cpuidle driver
+  ARM: tegra: Rename some of the newly exposed PM functions
+  ARM: tegra: Make outer_disable() open-coded
+  arm: tegra20: cpuidle: Handle case where secondary CPU hangs on
+    entering LP2
+  arm: tegra20: cpuidle: Make abort_flag atomic
+  arm: tegra20/30: cpuidle: Remove unnecessary memory barrier
+  cpuidle: Refactor and move out NVIDIA Tegra20 driver into
+    drivers/cpuidle
+  cpuidle: tegra: Squash Tegra30 driver into the common driver
+  cpuidle: tegra: Squash Tegra114 driver into the common driver
+  cpuidle: tegra: Disable CC6 state if LP2 unavailable
+  ARM: multi_v7_defconfig: Enable Tegra cpuidle driver
+  ARM: tegra: Enable Tegra cpuidle driver in tegra_defconfig
+
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ arch/arm/configs/tegra_defconfig              |   1 +
+ arch/arm/mach-tegra/Makefile                  |  19 +-
+ arch/arm/mach-tegra/cpuidle-tegra114.c        |  89 ----
+ arch/arm/mach-tegra/cpuidle-tegra20.c         | 212 ----------
+ arch/arm/mach-tegra/cpuidle-tegra30.c         | 132 ------
+ arch/arm/mach-tegra/cpuidle.c                 |  50 ---
+ arch/arm/mach-tegra/cpuidle.h                 |  21 -
+ arch/arm/mach-tegra/irq.c                     |   3 +-
+ arch/arm/mach-tegra/pm.c                      |  54 ++-
+ arch/arm/mach-tegra/pm.h                      |   4 -
+ arch/arm/mach-tegra/reset-handler.S           |  11 -
+ arch/arm/mach-tegra/reset.h                   |   9 +-
+ arch/arm/mach-tegra/sleep-tegra20.S           | 170 --------
+ arch/arm/mach-tegra/sleep-tegra30.S           |   6 +-
+ arch/arm/mach-tegra/sleep.h                   |  15 -
+ arch/arm/mach-tegra/tegra.c                   |   7 +-
+ drivers/cpuidle/Kconfig.arm                   |   8 +
+ drivers/cpuidle/Makefile                      |   1 +
+ drivers/cpuidle/cpuidle-tegra.c               | 392 ++++++++++++++++++
+ include/soc/tegra/cpuidle.h                   |   2 +-
+ .../mach-tegra => include/soc/tegra}/irq.h    |   8 +-
+ include/soc/tegra/pm.h                        |  31 ++
+ 23 files changed, 485 insertions(+), 761 deletions(-)
+ delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra114.c
+ delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra20.c
+ delete mode 100644 arch/arm/mach-tegra/cpuidle-tegra30.c
+ delete mode 100644 arch/arm/mach-tegra/cpuidle.c
+ delete mode 100644 arch/arm/mach-tegra/cpuidle.h
+ create mode 100644 drivers/cpuidle/cpuidle-tegra.c
+ rename {arch/arm/mach-tegra => include/soc/tegra}/irq.h (59%)
+
+-- 
+2.24.0
 
