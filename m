@@ -2,134 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F72169B30
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 01:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49301169B8A
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 02:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727158AbgBXA3W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Feb 2020 19:29:22 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:33744 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727151AbgBXA3W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Feb 2020 19:29:22 -0500
-Received: by mail-ot1-f65.google.com with SMTP id w6so7232084otk.0;
-        Sun, 23 Feb 2020 16:29:21 -0800 (PST)
+        id S1727156AbgBXBBg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Feb 2020 20:01:36 -0500
+Received: from mail-qt1-f181.google.com ([209.85.160.181]:42395 "EHLO
+        mail-qt1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727151AbgBXBBg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Feb 2020 20:01:36 -0500
+Received: by mail-qt1-f181.google.com with SMTP id r5so5520035qtt.9
+        for <linux-pm@vger.kernel.org>; Sun, 23 Feb 2020 17:01:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=geE21WUpBxQzQVQ/tm6WUyB7aw7f534naxzTS3XIcv0=;
+        b=jGJpEda6lopIP0mDT3i7FtSyQ3i6gqRGvIA9MaPXAtj59/jXfXc8AwPdE72fa0U4+y
+         lrdobdpZ61vy2gEduRj+HlYMaCBuHmHKxLnUALcURmkJRWhmUiG1gvFSWWtIQPzZ49DJ
+         2YzwNIWLLpKVEBDxc3Oo+ea2TiDzuXuqKrurEdRW7HK5HxUdVWt3Cv6lENsIv5/Rr9n6
+         tX/f32Zp/qsFhZe1DocUrH+nkPXCwLJk0/T79wKK9/W77YiagWI430Jx4VVL7AEF+b9e
+         KWyMl9upimK5JT0V1cbEhDB8eW/HFzK2yQFCVOPPox/CxUmledYa0Wu1mrsGXx3nNmGJ
+         zmpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9C3Udx1D1DIdp1i8/eh8sT/C9Vzzs0UrF8N4PaPtKL8=;
-        b=PYHLlY6A5SIei/BPPam5xL5F7rBhryLnJqbmwRxf4aauTfz+bqvxnO3ymsAAxZH9yx
-         lsYKxxGfxaWny9y0SE1ItUlbJXnRU0SlLtSqx/Y3QNThuNaPRLILGlHwRqUThdkZlYM5
-         UX7sNMuCkSgCD7Km0T0Ls7HeQ/2DyxzJJ1rL5T7RO6u7Z2D7VNagRl0MN2+a91jNWGyd
-         AXNoYVQKEGGf5UMlsITqolwcoTQ6/8zT41LOrsEs9rwe2EXOdW5mbKoBOIimJbPASdcd
-         qdPoqB2b4vAzgrMUxL8sAHfd9YzaZqNeo+Ru4beCgJiwviwQ9XklFgxcqUylHe6GI+bb
-         GBMg==
-X-Gm-Message-State: APjAAAXYirrcD/ThSmJfuh0kp6I5fLtkXAvDnaEE/SOTD/yA13lNgm//
-        8HKIwquIh7o3q014fy9unQnkXLULM+BqEiyWk8VHyA9N
-X-Google-Smtp-Source: APXvYqzDN+R8PPgZf6yIc7l0P8ZtL6kbXsw+7HtqFkiR99MwsbCjyGxiwOog3gTlFJ76sAPKK8B+bnGwRCP77nTtGnI=
-X-Received: by 2002:a9d:7559:: with SMTP id b25mr37014520otl.189.1582504161350;
- Sun, 23 Feb 2020 16:29:21 -0800 (PST)
-MIME-Version: 1.0
-References: <1654227.8mz0SueHsU@kreacher> <87wo8rjsa4.fsf@riseup.net>
- <CAJZ5v0hAn0V-QhebFt=vqKK6gBLxjTq7SNOWOStt7huCXMSH7g@mail.gmail.com>
- <CAJZ5v0hrOma52rocMsitvYUK6WxHAa0702_8XJn1UJZVyhz=rQ@mail.gmail.com>
- <877e0qj4bm.fsf@riseup.net> <CAJZ5v0hH1XiphdakYFPmHLL+hFKw2U3YNU9HSRxsdRUV6ZtM5g@mail.gmail.com>
- <87ftf3fv69.fsf@riseup.net>
-In-Reply-To: <87ftf3fv69.fsf@riseup.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 24 Feb 2020 01:29:10 +0100
-Message-ID: <CAJZ5v0jqp7aEh43kUvxyMWxbnEUjUZZ31iHk_oxDdvGM6RTdMw@mail.gmail.com>
-Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU
- latency QoS interface
-To:     Francisco Jerez <currojerez@riseup.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=geE21WUpBxQzQVQ/tm6WUyB7aw7f534naxzTS3XIcv0=;
+        b=ilzLIo9eD53iR5Q2fE9IsgVZ9JthpLxf1E/M3ms5CF68n64dhfWFdvywgtiWhAmTot
+         z1ScLhye90Nq2wddYLMjmxxcX59ZkbpyQiTYiG2HPXn3AYyxv3kaF8paeTDu/iREmyQa
+         G8CkSAQujMe966P6zh3ce3jTqJoWBg7WGj9zVjjHR8aWZSuO6Gpa6d3NzD+sLwhJ12yO
+         DXswPe9sLbJWuCWpt0AdONRFWs9d+DKI7LTYdaF17voka2OLqd4cEvwOjEUdplMyjj0G
+         ciRdtXTiqyvHXTkxOAroPkRxr6fAKEsrPT5LO2tKr2Hfqgt1zGkMFvFN2WgwX63JGlRj
+         fKxg==
+X-Gm-Message-State: APjAAAU8Wao4vcnjuzSfi/Kjjt5IpR5J35Su6ccoXJkoP3Yg/XTC0Jfw
+        GjGoyw6m5RFQZxSpLwqWihIT6Q==
+X-Google-Smtp-Source: APXvYqzHDhibNU/FjhfRNLuBs+K68RGY5OBJ3tRFqPbaKs8ZtyL2ibvIYBw9UDct2gsG48nwEyaGlg==
+X-Received: by 2002:aed:2f01:: with SMTP id l1mr44205155qtd.391.1582506095368;
+        Sun, 23 Feb 2020 17:01:35 -0800 (PST)
+Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id e2sm5242528qkb.112.2020.02.23.17.01.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Feb 2020 17:01:34 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Qian Cai <cai@lca.pw>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH -next] power/qos: fix a data race in pm_qos_*_value
+Date:   Sun, 23 Feb 2020 20:01:33 -0500
+Message-Id: <62491094-D13B-4EED-8190-4AA4EB77036B@lca.pw>
+References: <CAJZ5v0iSEV9S=zTa9++vUCO6GTfBE2sxNY+b4mMMt4Y6RCRvjA@mail.gmail.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, elver@google.com,
         Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+In-Reply-To: <CAJZ5v0iSEV9S=zTa9++vUCO6GTfBE2sxNY+b4mMMt4Y6RCRvjA@mail.gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+X-Mailer: iPhone Mail (17D50)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 11:10 PM Francisco Jerez <currojerez@riseup.net> wrote:
->
-> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->
-> > On Thu, Feb 13, 2020 at 9:09 AM Francisco Jerez <currojerez@riseup.net> wrote:
-> >>
-> >> "Rafael J. Wysocki" <rafael@kernel.org> writes:
-> >>
-> >> > On Thu, Feb 13, 2020 at 1:16 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >> >>
-> >> >> On Thu, Feb 13, 2020 at 12:31 AM Francisco Jerez <currojerez@riseup.net> wrote:
-> >> >> >
-> >
-> > [cut]
-> >
-> >> >
-> >> > And BTW, posting patches as RFC is fine even if they have not been
-> >> > tested.  At least you let people know that you work on something this
-> >> > way, so if they work on changes in the same area, they may take that
-> >> > into consideration.
-> >> >
-> >>
-> >> Sure, that was going to be the first RFC.
-> >>
-> >> > Also if there are objections to your proposal, you may save quite a
-> >> > bit of time by sending it early.
-> >> >
-> >> > It is unfortunate that this series has clashed with the changes that
-> >> > you were about to propose, but in this particular case in my view it
-> >> > is better to clean up things and start over.
-> >> >
-> >>
-> >> Luckily it doesn't clash with the second RFC I was meaning to send,
-> >> maybe we should just skip the first?
-> >
-> > Yes, please.
-> >
-> >> Or maybe it's valuable as a curiosity anyway?
-> >
-> > No, let's just focus on the latest one.
-> >
-> > Thanks!
->
-> We don't seem to have reached much of an agreement on the general
-> direction of RFC2, so I can't really get started with it.  Here is RFC1
-> for the record:
->
-> https://github.com/curro/linux/commits/intel_pstate-lp-hwp-v10.8-alt
 
-Appreciate the link, but that hasn't been posted to linux-pm yet, so
-there's not much to discuss.
 
-And when you post it, please rebase it on top of linux-next.
+> On Feb 23, 2020, at 7:12 PM, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>=20
+> It may be a bug under certain conditions, but you don't mention what
+> conditions they are.  Reporting it as a general bug is not accurate at
+> the very least.
 
-> Specifically the following patch conflicts with this series:
->
-> https://github.com/curro/linux/commit/9a16f35531bbb76d38493da892ece088e31dc2e0
->
-> Series improves performance-per-watt of GfxBench gl_4 (AKA Car Chase) by
-> over 15% on my system with the branch above, actual FPS "only" improves
-> about 5.9% on ICL laptop due to it being very lightly TDP-bound with its
-> rather huge TDP.  The performance of almost every graphics benchmark
-> I've tried improves significantly with it (a number of SynMark
-> test-cases are improved by around 40% in perf-per-watt, Egypt
-> perf-per-watt improves by about 25%).
->
-> Hopefully we can come up with some alternative plan of action.
+Could we rule out load tearing, store tearing and reload of global_req in cp=
+uidle_governor_latency() for all compilers and architectures which could int=
+roduce logic bugs?
 
-It is very easy to replace the patch above with an alternative one on
-top of linux-next that will add CPU_RESPONSE_FREQUENCY QoS along the
-lines of the CPU latency QoS implementation in there without the need
-restore to global QoS classes.
+	int global_req =3D cpu_latency_qos_limit();
 
-IOW, you don't really need the code that goes away in linux-next to
-implement what you need.
+	if (device_req > global_req)
+		device_req =3D global_req;
 
-Thanks!
+If under register pressure, the compiler might get ride of the tmp variable,=
+ i.e.,
+
+If (device_req > cpu_latency_qos_limit())
+=E2=80=94-> race with the writer.
+         device_req =3D cpu_latency_qos_limit();
+
+
