@@ -2,62 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49301169B8A
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 02:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D81C8169BA3
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 02:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727156AbgBXBBg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Feb 2020 20:01:36 -0500
-Received: from mail-qt1-f181.google.com ([209.85.160.181]:42395 "EHLO
-        mail-qt1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727151AbgBXBBg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Feb 2020 20:01:36 -0500
-Received: by mail-qt1-f181.google.com with SMTP id r5so5520035qtt.9
-        for <linux-pm@vger.kernel.org>; Sun, 23 Feb 2020 17:01:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=geE21WUpBxQzQVQ/tm6WUyB7aw7f534naxzTS3XIcv0=;
-        b=jGJpEda6lopIP0mDT3i7FtSyQ3i6gqRGvIA9MaPXAtj59/jXfXc8AwPdE72fa0U4+y
-         lrdobdpZ61vy2gEduRj+HlYMaCBuHmHKxLnUALcURmkJRWhmUiG1gvFSWWtIQPzZ49DJ
-         2YzwNIWLLpKVEBDxc3Oo+ea2TiDzuXuqKrurEdRW7HK5HxUdVWt3Cv6lENsIv5/Rr9n6
-         tX/f32Zp/qsFhZe1DocUrH+nkPXCwLJk0/T79wKK9/W77YiagWI430Jx4VVL7AEF+b9e
-         KWyMl9upimK5JT0V1cbEhDB8eW/HFzK2yQFCVOPPox/CxUmledYa0Wu1mrsGXx3nNmGJ
-         zmpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=geE21WUpBxQzQVQ/tm6WUyB7aw7f534naxzTS3XIcv0=;
-        b=ilzLIo9eD53iR5Q2fE9IsgVZ9JthpLxf1E/M3ms5CF68n64dhfWFdvywgtiWhAmTot
-         z1ScLhye90Nq2wddYLMjmxxcX59ZkbpyQiTYiG2HPXn3AYyxv3kaF8paeTDu/iREmyQa
-         G8CkSAQujMe966P6zh3ce3jTqJoWBg7WGj9zVjjHR8aWZSuO6Gpa6d3NzD+sLwhJ12yO
-         DXswPe9sLbJWuCWpt0AdONRFWs9d+DKI7LTYdaF17voka2OLqd4cEvwOjEUdplMyjj0G
-         ciRdtXTiqyvHXTkxOAroPkRxr6fAKEsrPT5LO2tKr2Hfqgt1zGkMFvFN2WgwX63JGlRj
-         fKxg==
-X-Gm-Message-State: APjAAAU8Wao4vcnjuzSfi/Kjjt5IpR5J35Su6ccoXJkoP3Yg/XTC0Jfw
-        GjGoyw6m5RFQZxSpLwqWihIT6Q==
-X-Google-Smtp-Source: APXvYqzHDhibNU/FjhfRNLuBs+K68RGY5OBJ3tRFqPbaKs8ZtyL2ibvIYBw9UDct2gsG48nwEyaGlg==
-X-Received: by 2002:aed:2f01:: with SMTP id l1mr44205155qtd.391.1582506095368;
-        Sun, 23 Feb 2020 17:01:35 -0800 (PST)
-Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id e2sm5242528qkb.112.2020.02.23.17.01.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Feb 2020 17:01:34 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Qian Cai <cai@lca.pw>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH -next] power/qos: fix a data race in pm_qos_*_value
-Date:   Sun, 23 Feb 2020 20:01:33 -0500
-Message-Id: <62491094-D13B-4EED-8190-4AA4EB77036B@lca.pw>
-References: <CAJZ5v0iSEV9S=zTa9++vUCO6GTfBE2sxNY+b4mMMt4Y6RCRvjA@mail.gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, elver@google.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-In-Reply-To: <CAJZ5v0iSEV9S=zTa9++vUCO6GTfBE2sxNY+b4mMMt4Y6RCRvjA@mail.gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-X-Mailer: iPhone Mail (17D50)
+        id S1727170AbgBXBNB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Feb 2020 20:13:01 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:48240 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727151AbgBXBNB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Feb 2020 20:13:01 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01O1Cl99116584;
+        Sun, 23 Feb 2020 19:12:47 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1582506767;
+        bh=IqVWASLT7aINSbL5SEyNqr9FEXULB8G5X7AY+iwQoX4=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=G5rowaEp6JlthuiWuocNqdJxXGH2PUygMpd9oymQNtxnZbSCwac80hGHlk7eU67vc
+         DyNpwvT26Uleu33CUthsYe7/cQhgmO9iInF7VMJjgqzZh8yJ48qVW71YfFOwdk4R/i
+         oZ5TNU8/m293ezyP2z/r8tritGHMOWDzjAXrM7vQ=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01O1ClLZ121797
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 23 Feb 2020 19:12:47 -0600
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Sun, 23
+ Feb 2020 19:12:46 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Sun, 23 Feb 2020 19:12:46 -0600
+Received: from [10.250.132.7] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01O1ChMI046730;
+        Sun, 23 Feb 2020 19:12:43 -0600
+Subject: Re: [PATCH v2 1/4] dt-bindings: thermal: k3: Add VTM bindings
+ documentation
+To:     Rob Herring <robh@kernel.org>
+CC:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Tero Kristo <t-kristo@ti.com>, <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+References: <20200214063443.23589-1-j-keerthy@ti.com>
+ <20200214063443.23589-2-j-keerthy@ti.com> <20200218202048.GA32279@bogus>
+ <6895cf5e-9195-c914-f4ce-a83f36027dbf@ti.com>
+ <CAL_JsqLamx4hdXLJ5SCP1FPHRP11JP6V-1=NyRY2QM1bvtMtpg@mail.gmail.com>
+From:   "J, KEERTHY" <j-keerthy@ti.com>
+Message-ID: <fb571925-a4c7-d7ea-ddc4-d5573f1727e1@ti.com>
+Date:   Mon, 24 Feb 2020 06:42:42 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <CAL_JsqLamx4hdXLJ5SCP1FPHRP11JP6V-1=NyRY2QM1bvtMtpg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -65,26 +70,84 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-> On Feb 23, 2020, at 7:12 PM, Rafael J. Wysocki <rafael@kernel.org> wrote:
->=20
-> It may be a bug under certain conditions, but you don't mention what
-> conditions they are.  Reporting it as a general bug is not accurate at
-> the very least.
+On 2/21/2020 1:58 AM, Rob Herring wrote:
+> On Wed, Feb 19, 2020 at 1:40 AM Keerthy <j-keerthy@ti.com> wrote:
+>>
+>>
+>>
+>> On 19/02/20 1:50 am, Rob Herring wrote:
+>>> On Fri, 14 Feb 2020 12:04:40 +0530, Keerthy wrote:
+>>>> Add VTM bindings documentation. In the Voltage Thermal
+>>>> Management Module(VTM), K3 AM654 supplies a voltage
+>>>> reference and a temperature sensor feature that are gathered in the band
+>>>> gap voltage and temperature sensor (VBGAPTS) module. The band
+>>>> gap provides current and voltage reference for its internal
+>>>> circuits and other analog IP blocks. The analog-to-digital
+>>>> converter (ADC) produces an output value that is proportional
+>>>> to the silicon temperature.
+>>>>
+>>>> Signed-off-by: Keerthy <j-keerthy@ti.com>
+>>>> ---
+>>>>
+>>>> Changes in v2:
+>>>>
+>>>>     * Fixed make dt_binding_check errors.
+>>>>
+>>>>    .../bindings/thermal/ti,am654-thermal.yaml    | 57 +++++++++++++++++++
+>>>>    1 file changed, 57 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
+>>>>
+>>>
+>>> My bot found errors running 'make dt_binding_check' on your patch:
+>>>
+>>> Documentation/devicetree/bindings/display/simple-framebuffer.example.dts:21.16-37.11: Warning (chosen_node_is_root): /example-0/chosen: chosen node must be at root node
+>>> Error: Documentation/devicetree/bindings/thermal/ti,am654-thermal.example.dts:21.41-42 syntax error
+>>> FATAL ERROR: Unable to parse input tree
+>>> scripts/Makefile.lib:300: recipe for target 'Documentation/devicetree/bindings/thermal/ti,am654-thermal.example.dt.yaml' failed
+>>> make[1]: *** [Documentation/devicetree/bindings/thermal/ti,am654-thermal.example.dt.yaml] Error 1
+>>> Makefile:1263: recipe for target 'dt_binding_check' failed
+>>> make: *** [dt_binding_check] Error 2
+>>>
+>>> See https://patchwork.ozlabs.org/patch/1237882
+>>> Please check and re-submit.
+>>
+>> Rob,
+>>
+>> I am using:
+>>
+>> Tree: https//github.com/devicetree-org/dt-schema.git
+>> branch: master
+>>
+>> I have make dt_binding_check working for
+>> Documentation/devicetree/bindings/thermal/ti,am654-thermal.example.dt.yaml
+>>
+>> Documentation/devicetree/bindings/thermal/ti,am654-thermal.example.dts
+>> is created without any errors :
+>>
+>> https://pastebin.ubuntu.com/p/6MkMbKPpbY/
+>>
+>> I did not see any errors as the other files erred out.
+> 
+> 'make -k' is your friend.
+> 
 
-Could we rule out load tearing, store tearing and reload of global_req in cp=
-uidle_governor_latency() for all compilers and architectures which could int=
-roduce logic bugs?
+Okay
 
-	int global_req =3D cpu_latency_qos_limit();
+> What branch are you on. Only linux-next breaks generally.
 
-	if (device_req > global_req)
-		device_req =3D global_req;
+linux-next
 
-If under register pressure, the compiler might get ride of the tmp variable,=
- i.e.,
-
-If (device_req > cpu_latency_qos_limit())
-=E2=80=94-> race with the writer.
-         device_req =3D cpu_latency_qos_limit();
-
-
+Thanks,
+Keerthy
+> 
+>> Today i tried with DT_SCHEMA_FILES option and then finally reproduced
+>> the errors. It is a bit confusing for the first time users.
+>>
+>> Now i have it compiled without any errors.
+>>
+>> Posting v3 in a bit.
+>>
+>> - Keerthy
+>>
+>>
+>>>
