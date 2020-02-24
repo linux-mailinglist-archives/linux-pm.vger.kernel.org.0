@@ -2,134 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B0B169B1F
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 01:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F72169B30
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 01:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727156AbgBXAM4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Feb 2020 19:12:56 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:34433 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726534AbgBXAM4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Feb 2020 19:12:56 -0500
-Received: by mail-oi1-f193.google.com with SMTP id l136so7378951oig.1;
-        Sun, 23 Feb 2020 16:12:56 -0800 (PST)
+        id S1727158AbgBXA3W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Feb 2020 19:29:22 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:33744 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727151AbgBXA3W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Feb 2020 19:29:22 -0500
+Received: by mail-ot1-f65.google.com with SMTP id w6so7232084otk.0;
+        Sun, 23 Feb 2020 16:29:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dXtF/HmMIrcd+cQtmXxs/T7lgY990MkWtsdCks/TALQ=;
-        b=n1y0GFsabmOGSPdsWZwUCkx5zUH6EwT/QM3R2QhUuCiDi3yzz+PlNtyUy0TyjkaW2z
-         0UXfQNjTXmYZoELA1HAxUQAJLNjYNY39B8SSw1qtR/Cqi/xKT2FFUKwGb4qakt8texD1
-         edAMrtAmNF4Sj0eT4p4yVi/E7U96+SFVo695gqCUl3zp/ufLB857dk4BhGP2ojxdNTeu
-         sdZnAq0wGuvcG783Ra8g15VheMBuZu+3T/i2ZAdMaV7dEcMcm0uBLSzpNj0Yh228rE53
-         eoVqjUwO8HOcdq3BR66pH5P9r1PCCjFKfh6XDdi7fOqtSjygDUrlxhS89HckN2/1s9vI
-         DMlA==
-X-Gm-Message-State: APjAAAUY7HY0fwsDVAp/1y9UjrNXKl7d/BQGrMtUQhIpE4or/3pTYyF1
-        NZCivzGDXntTznKoRJ2k6vTFf8FpkvFWt1z7LDbfOw==
-X-Google-Smtp-Source: APXvYqzdpH/FefyGNd/m5kE+ZaANP4jSIXHMUatJ93J6tlevnB7xPSMTV256Cq9jT+92l+vsHgJ3g0osYRVYlYV+4is=
-X-Received: by 2002:a54:4e96:: with SMTP id c22mr11067116oiy.110.1582503175589;
- Sun, 23 Feb 2020 16:12:55 -0800 (PST)
+        bh=9C3Udx1D1DIdp1i8/eh8sT/C9Vzzs0UrF8N4PaPtKL8=;
+        b=PYHLlY6A5SIei/BPPam5xL5F7rBhryLnJqbmwRxf4aauTfz+bqvxnO3ymsAAxZH9yx
+         lsYKxxGfxaWny9y0SE1ItUlbJXnRU0SlLtSqx/Y3QNThuNaPRLILGlHwRqUThdkZlYM5
+         UX7sNMuCkSgCD7Km0T0Ls7HeQ/2DyxzJJ1rL5T7RO6u7Z2D7VNagRl0MN2+a91jNWGyd
+         AXNoYVQKEGGf5UMlsITqolwcoTQ6/8zT41LOrsEs9rwe2EXOdW5mbKoBOIimJbPASdcd
+         qdPoqB2b4vAzgrMUxL8sAHfd9YzaZqNeo+Ru4beCgJiwviwQ9XklFgxcqUylHe6GI+bb
+         GBMg==
+X-Gm-Message-State: APjAAAXYirrcD/ThSmJfuh0kp6I5fLtkXAvDnaEE/SOTD/yA13lNgm//
+        8HKIwquIh7o3q014fy9unQnkXLULM+BqEiyWk8VHyA9N
+X-Google-Smtp-Source: APXvYqzDN+R8PPgZf6yIc7l0P8ZtL6kbXsw+7HtqFkiR99MwsbCjyGxiwOog3gTlFJ76sAPKK8B+bnGwRCP77nTtGnI=
+X-Received: by 2002:a9d:7559:: with SMTP id b25mr37014520otl.189.1582504161350;
+ Sun, 23 Feb 2020 16:29:21 -0800 (PST)
 MIME-Version: 1.0
-References: <1582319350-23515-1-git-send-email-cai@lca.pw>
-In-Reply-To: <1582319350-23515-1-git-send-email-cai@lca.pw>
+References: <1654227.8mz0SueHsU@kreacher> <87wo8rjsa4.fsf@riseup.net>
+ <CAJZ5v0hAn0V-QhebFt=vqKK6gBLxjTq7SNOWOStt7huCXMSH7g@mail.gmail.com>
+ <CAJZ5v0hrOma52rocMsitvYUK6WxHAa0702_8XJn1UJZVyhz=rQ@mail.gmail.com>
+ <877e0qj4bm.fsf@riseup.net> <CAJZ5v0hH1XiphdakYFPmHLL+hFKw2U3YNU9HSRxsdRUV6ZtM5g@mail.gmail.com>
+ <87ftf3fv69.fsf@riseup.net>
+In-Reply-To: <87ftf3fv69.fsf@riseup.net>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 24 Feb 2020 01:12:41 +0100
-Message-ID: <CAJZ5v0iSEV9S=zTa9++vUCO6GTfBE2sxNY+b4mMMt4Y6RCRvjA@mail.gmail.com>
-Subject: Re: [PATCH -next] power/qos: fix a data race in pm_qos_*_value
-To:     Qian Cai <cai@lca.pw>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, elver@google.com,
+Date:   Mon, 24 Feb 2020 01:29:10 +0100
+Message-ID: <CAJZ5v0jqp7aEh43kUvxyMWxbnEUjUZZ31iHk_oxDdvGM6RTdMw@mail.gmail.com>
+Subject: Re: [PATCH 00/28] PM: QoS: Get rid of unuseful code and rework CPU
+ latency QoS interface
+To:     Francisco Jerez <currojerez@riseup.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 10:09 PM Qian Cai <cai@lca.pw> wrote:
+On Fri, Feb 21, 2020 at 11:10 PM Francisco Jerez <currojerez@riseup.net> wrote:
 >
-> cpu_latency_constraints.target_value could be accessed concurrently as
-> noticed by KCSAN,
+> "Rafael J. Wysocki" <rafael@kernel.org> writes:
+>
+> > On Thu, Feb 13, 2020 at 9:09 AM Francisco Jerez <currojerez@riseup.net> wrote:
+> >>
+> >> "Rafael J. Wysocki" <rafael@kernel.org> writes:
+> >>
+> >> > On Thu, Feb 13, 2020 at 1:16 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >> >>
+> >> >> On Thu, Feb 13, 2020 at 12:31 AM Francisco Jerez <currojerez@riseup.net> wrote:
+> >> >> >
+> >
+> > [cut]
+> >
+> >> >
+> >> > And BTW, posting patches as RFC is fine even if they have not been
+> >> > tested.  At least you let people know that you work on something this
+> >> > way, so if they work on changes in the same area, they may take that
+> >> > into consideration.
+> >> >
+> >>
+> >> Sure, that was going to be the first RFC.
+> >>
+> >> > Also if there are objections to your proposal, you may save quite a
+> >> > bit of time by sending it early.
+> >> >
+> >> > It is unfortunate that this series has clashed with the changes that
+> >> > you were about to propose, but in this particular case in my view it
+> >> > is better to clean up things and start over.
+> >> >
+> >>
+> >> Luckily it doesn't clash with the second RFC I was meaning to send,
+> >> maybe we should just skip the first?
+> >
+> > Yes, please.
+> >
+> >> Or maybe it's valuable as a curiosity anyway?
+> >
+> > No, let's just focus on the latest one.
+> >
+> > Thanks!
+>
+> We don't seem to have reached much of an agreement on the general
+> direction of RFC2, so I can't really get started with it.  Here is RFC1
+> for the record:
+>
+> https://github.com/curro/linux/commits/intel_pstate-lp-hwp-v10.8-alt
 
-Yes, they could, pretty much by design.
+Appreciate the link, but that hasn't been posted to linux-pm yet, so
+there's not much to discuss.
 
-So why *exactly* is this a problem?
+And when you post it, please rebase it on top of linux-next.
 
->  LTP: starting ppoll01
->  BUG: KCSAN: data-race in cpu_latency_qos_limit / pm_qos_update_target
+> Specifically the following patch conflicts with this series:
+>
+> https://github.com/curro/linux/commit/9a16f35531bbb76d38493da892ece088e31dc2e0
+>
+> Series improves performance-per-watt of GfxBench gl_4 (AKA Car Chase) by
+> over 15% on my system with the branch above, actual FPS "only" improves
+> about 5.9% on ICL laptop due to it being very lightly TDP-bound with its
+> rather huge TDP.  The performance of almost every graphics benchmark
+> I've tried improves significantly with it (a number of SynMark
+> test-cases are improved by around 40% in perf-per-watt, Egypt
+> perf-per-watt improves by about 25%).
+>
+> Hopefully we can come up with some alternative plan of action.
 
-It may be a bug under certain conditions, but you don't mention what
-conditions they are.  Reporting it as a general bug is not accurate at
-the very least.
+It is very easy to replace the patch above with an alternative one on
+top of linux-next that will add CPU_RESPONSE_FREQUENCY QoS along the
+lines of the CPU latency QoS implementation in there without the need
+restore to global QoS classes.
 
->  write to 0xffffffff99081470 of 4 bytes by task 27532 on cpu 2:
->   pm_qos_update_target+0xa4/0x370
->   pm_qos_set_value at kernel/power/qos.c:78
->   cpu_latency_qos_apply+0x3b/0x50
->   cpu_latency_qos_remove_request+0xea/0x270
->   cpu_latency_qos_release+0x4b/0x70
->   __fput+0x187/0x3d0
->   ____fput+0x1e/0x30
->   task_work_run+0xbf/0x130
->   do_exit+0xa78/0xfd0
->   do_group_exit+0x8b/0x180
->   __x64_sys_exit_group+0x2e/0x30
->   do_syscall_64+0x91/0xb05
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
->
->  read to 0xffffffff99081470 of 4 bytes by task 0 on cpu 41:
->   cpu_latency_qos_limit+0x1f/0x30
->   pm_qos_read_value at kernel/power/qos.c:55
->   cpuidle_governor_latency_req+0x4f/0x80
->   cpuidle_governor_latency_req at drivers/cpuidle/governor.c:114
->   menu_select+0x6b/0xc29
->   cpuidle_select+0x50/0x70
->   do_idle+0x214/0x280
->   cpu_startup_entry+0x1d/0x1f
->   start_secondary+0x1b2/0x230
->   secondary_startup_64+0xb6/0xc0
->
->  Reported by Kernel Concurrency Sanitizer on:
->  CPU: 41 PID: 0 Comm: swapper/41 Tainted: G L 5.6.0-rc2-next-20200221+ #7
->  Hardware name: HPE ProLiant DL385 Gen10/ProLiant DL385 Gen10, BIOS A40 07/10/2019
->
-> The read is outside pm_qos_lock critical section which results in a data
-> race.
+IOW, you don't really need the code that goes away in linux-next to
+implement what you need.
 
-This is purely theoretical AFAICS and so it should be presented this way.
-
-Also the call traces above don't add much value to the changelog, so
-maybe try to explain what the problem is in English.
-
-> Fix it by adding a pair of READ|WRITE_ONCE().
->
-> Signed-off-by: Qian Cai <cai@lca.pw>
-> ---
->  kernel/power/qos.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-> index 32927682bcc4..db0bed2cae26 100644
-> --- a/kernel/power/qos.c
-> +++ b/kernel/power/qos.c
-> @@ -52,7 +52,7 @@
->   */
->  s32 pm_qos_read_value(struct pm_qos_constraints *c)
->  {
-> -       return c->target_value;
-> +       return READ_ONCE(c->target_value);
->  }
->
->  static int pm_qos_get_value(struct pm_qos_constraints *c)
-> @@ -75,7 +75,7 @@ static int pm_qos_get_value(struct pm_qos_constraints *c)
->
->  static void pm_qos_set_value(struct pm_qos_constraints *c, s32 value)
->  {
-> -       c->target_value = value;
-> +       WRITE_ONCE(c->target_value, value);
->  }
->
->  /**
-> --
-> 1.8.3.1
->
+Thanks!
