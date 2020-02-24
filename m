@@ -2,211 +2,260 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD5516ACDD
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 18:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 291D816AD20
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 18:22:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727619AbgBXRNu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Feb 2020 12:13:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55350 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727090AbgBXRNu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 24 Feb 2020 12:13:50 -0500
-Received: from earth.universe (dyndsl-091-096-061-166.ewe-ip-backbone.de [91.96.61.166])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C9F8B20836;
-        Mon, 24 Feb 2020 17:13:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582564429;
-        bh=Ai1gyeG8Ted5a1YKe7xePygaQZvcPxx/36/7ngnSPb0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e2Pw6+wGpDTpdGNsCFI9u5iGeW6TtWpuvR/U5vwOenDcn+vVHi66lr61X9mpQu1aP
-         MwSAc2qAqDxLw3wc6m1abpsy9COGAwzo2kO8AoD7q2tJ78koAcfBekaYZ7tsa11R+8
-         45dQoIoacuT1mPw8ZyvETfUEPshjodWYrLSuLjbA=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 9034C3C0C83; Mon, 24 Feb 2020 18:13:47 +0100 (CET)
-Date:   Mon, 24 Feb 2020 18:13:47 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:POWER SUPPLY CLASS/SUBSYSTEM and DRIVERS" 
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 12/17] power: supply: cros: Use cros_ec_cmd()
-Message-ID: <20200224171347.ghei34x5zn5umewg@earth.universe>
-References: <20200205190028.183069-1-pmalani@chromium.org>
- <20200205190028.183069-13-pmalani@chromium.org>
+        id S1728072AbgBXRVZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Feb 2020 12:21:25 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:57089 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728012AbgBXRVY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Feb 2020 12:21:24 -0500
+Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1j6HQ1-0004D9-1Y; Mon, 24 Feb 2020 17:21:21 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        linux-pm@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH v4 0/9] net: fix sysfs permssions when device changes network
+Date:   Mon, 24 Feb 2020 18:21:01 +0100
+Message-Id: <20200224172110.4121492-1-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bzw77mvqr2inibwn"
-Content-Disposition: inline
-In-Reply-To: <20200205190028.183069-13-pmalani@chromium.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hey everyone,
 
---bzw77mvqr2inibwn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is v4 with more documentation and other fixes that Greg requested.
 
-Hi,
+This is v3 with explicit uid and gid parameters added to functions that
+change sysfs object ownership as Greg requested.
 
-On Wed, Feb 05, 2020 at 11:00:18AM -0800, Prashant Malani wrote:
-> Replace cros_usbpd_charger_ec_command() with cros_ec_cmd() which does
-> the same thing, but is defined in a common location in platform/chrome
-> and exposed for other modules to use. This allows us to remove
-> cros_usbpd_charger_ec_command() entirely.
->=20
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
+(I've tagged this with net-next since it's triggered by a bug for
+ network device files but it also touches driver core aspects so it's
+ not clear-cut. I can of course split this series into separate
+ patchsets.) 
+We have been struggling with a bug surrounding the ownership of network
+device sysfs files when moving network devices between network
+namespaces owned by different user namespaces reported by multiple
+users.
 
-Acked-by: Sebastian Reichel <sre@kernel.org>
+Currently, when moving network devices between network namespaces the
+ownership of the corresponding sysfs entries is not changed. This leads
+to problems when tools try to operate on the corresponding sysfs files.
 
--- Sebastian
+I also causes a bug when creating a network device in a network
+namespaces owned by a user namespace and moving that network device back
+to the host network namespaces. Because when a network device is created
+in a network namespaces it will be owned by the root user of the user
+namespace and all its associated sysfs files will also be owned by the
+root user of the corresponding user namespace.
+If such a network device has to be moved back to the host network
+namespace the permissions will still be set to the root user of the
+owning user namespaces of the originating network namespace. This means
+unprivileged users can e.g. re-trigger uevents for such incorrectly
+owned devices on the host or in other network namespaces. They can also
+modify the settings of the device itself through sysfs when they
+wouldn't be able to do the same through netlink. Both of these things
+are unwanted.
 
-> Changes in v2:
-> - Updated to use new function name and parameter list.
->=20
->  drivers/power/supply/cros_usbpd-charger.c | 58 ++++-------------------
->  1 file changed, 10 insertions(+), 48 deletions(-)
->=20
-> diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/su=
-pply/cros_usbpd-charger.c
-> index 30c3d37511c9e1..4631d96fda2ca1 100644
-> --- a/drivers/power/supply/cros_usbpd-charger.c
-> +++ b/drivers/power/supply/cros_usbpd-charger.c
-> @@ -91,46 +91,13 @@ static bool cros_usbpd_charger_port_is_dedicated(stru=
-ct port_data *port)
->  	return port->port_number >=3D port->charger->num_usbpd_ports;
->  }
-> =20
-> -static int cros_usbpd_charger_ec_command(struct charger_data *charger,
-> -					 unsigned int version,
-> -					 unsigned int command,
-> -					 void *outdata,
-> -					 unsigned int outsize,
-> -					 void *indata,
-> -					 unsigned int insize)
-> -{
-> -	struct cros_ec_dev *ec_dev =3D charger->ec_dev;
-> -	struct cros_ec_command *msg;
-> -	int ret;
-> -
-> -	msg =3D kzalloc(sizeof(*msg) + max(outsize, insize), GFP_KERNEL);
-> -	if (!msg)
-> -		return -ENOMEM;
-> -
-> -	msg->version =3D version;
-> -	msg->command =3D ec_dev->cmd_offset + command;
-> -	msg->outsize =3D outsize;
-> -	msg->insize =3D insize;
-> -
-> -	if (outsize)
-> -		memcpy(msg->data, outdata, outsize);
-> -
-> -	ret =3D cros_ec_cmd_xfer_status(charger->ec_device, msg);
-> -	if (ret >=3D 0 && insize)
-> -		memcpy(indata, msg->data, insize);
-> -
-> -	kfree(msg);
-> -	return ret;
-> -}
-> -
->  static int cros_usbpd_charger_get_num_ports(struct charger_data *charger)
->  {
->  	struct ec_response_charge_port_count resp;
->  	int ret;
-> =20
-> -	ret =3D cros_usbpd_charger_ec_command(charger, 0,
-> -					    EC_CMD_CHARGE_PORT_COUNT,
-> -					    NULL, 0, &resp, sizeof(resp));
-> +	ret =3D cros_ec_cmd(charger->ec_device, 0, EC_CMD_CHARGE_PORT_COUNT, NU=
-LL,
-> +			  0, &resp, sizeof(resp), NULL);
->  	if (ret < 0)
->  		return ret;
-> =20
-> @@ -142,8 +109,8 @@ static int cros_usbpd_charger_get_usbpd_num_ports(str=
-uct charger_data *charger)
->  	struct ec_response_usb_pd_ports resp;
->  	int ret;
-> =20
-> -	ret =3D cros_usbpd_charger_ec_command(charger, 0, EC_CMD_USB_PD_PORTS,
-> -					    NULL, 0, &resp, sizeof(resp));
-> +	ret =3D cros_ec_cmd(charger->ec_device, 0, EC_CMD_USB_PD_PORTS, NULL, 0,
-> +			  &resp, sizeof(resp), NULL);
->  	if (ret < 0)
->  		return ret;
-> =20
-> @@ -159,10 +126,8 @@ static int cros_usbpd_charger_get_discovery_info(str=
-uct port_data *port)
-> =20
->  	req.port =3D port->port_number;
-> =20
-> -	ret =3D cros_usbpd_charger_ec_command(charger, 0,
-> -					    EC_CMD_USB_PD_DISCOVERY,
-> -					    &req, sizeof(req),
-> -					    &resp, sizeof(resp));
-> +	ret =3D cros_ec_cmd(charger->ec_device, 0, EC_CMD_USB_PD_DISCOVERY, &re=
-q,
-> +			  sizeof(req), &resp, sizeof(resp), NULL);
->  	if (ret < 0) {
->  		dev_err(charger->dev,
->  			"Unable to query discovery info (err:0x%x)\n", ret);
-> @@ -189,10 +154,8 @@ static int cros_usbpd_charger_get_power_info(struct =
-port_data *port)
->  	int ret;
-> =20
->  	req.port =3D port->port_number;
-> -	ret =3D cros_usbpd_charger_ec_command(charger, 0,
-> -					    EC_CMD_USB_PD_POWER_INFO,
-> -					    &req, sizeof(req),
-> -					    &resp, sizeof(resp));
-> +	ret =3D cros_ec_cmd(charger->ec_device, 0, EC_CMD_USB_PD_POWER_INFO, &r=
-eq,
-> +			  sizeof(req), &resp, sizeof(resp), NULL);
->  	if (ret < 0) {
->  		dev_err(dev, "Unable to query PD power info (err:0x%x)\n", ret);
->  		return ret;
-> @@ -334,9 +297,8 @@ static int cros_usbpd_charger_set_ext_power_limit(str=
-uct charger_data *charger,
->  	req.current_lim =3D current_lim;
->  	req.voltage_lim =3D voltage_lim;
-> =20
-> -	ret =3D cros_usbpd_charger_ec_command(charger, 0,
-> -					    EC_CMD_EXTERNAL_POWER_LIMIT,
-> -					    &req, sizeof(req), NULL, 0);
-> +	ret =3D cros_ec_cmd(charger->ec_device, 0, EC_CMD_EXTERNAL_POWER_LIMIT,
-> +			  &req, sizeof(req), NULL, 0, NULL);
->  	if (ret < 0)
->  		dev_err(charger->dev,
->  			"Unable to set the 'External Power Limit': %d\n", ret);
-> --=20
-> 2.25.0.341.g760bfbb309-goog
->=20
+For example, quite a few workloads will create network devices in the
+host network namespace. Other tools will then proceed to move such
+devices between network namespaces owner by other user namespaces. While
+the ownership of the device itself is updated in
+net/core/net-sysfs.c:dev_change_net_namespace() the corresponding sysfs
+entry for the device is not. Below you'll find that moving a network
+device (here a veth device) from a network namespace into another
+network namespaces owned by a different user namespace with a different
+id mapping. As you can see the permissions are wrong even though it is
+owned by the userns root user after it has been moved and can be
+interacted with through netlink: 
 
---bzw77mvqr2inibwn
-Content-Type: application/pgp-signature; name="signature.asc"
+drwxr-xr-x 5 nobody nobody    0 Jan 25 18:08 .
+drwxr-xr-x 9 nobody nobody    0 Jan 25 18:08 ..
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 addr_assign_type
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 addr_len
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 address
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 broadcast
+-rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 carrier
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 carrier_changes
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 carrier_down_count
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 carrier_up_count
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 dev_id
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 dev_port
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 dormant
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 duplex
+-rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 flags
+-rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 gro_flush_timeout
+-rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 ifalias
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 ifindex
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 iflink
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 link_mode
+-rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 mtu
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 name_assign_type
+-rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 netdev_group
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 operstate
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 phys_port_id
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 phys_port_name
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 phys_switch_id
+drwxr-xr-x 2 nobody nobody    0 Jan 25 18:09 power
+-rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 proto_down
+drwxr-xr-x 4 nobody nobody    0 Jan 25 18:09 queues
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 speed
+drwxr-xr-x 2 nobody nobody    0 Jan 25 18:09 statistics
+lrwxrwxrwx 1 nobody nobody    0 Jan 25 18:08 subsystem -> ../../../../class/net
+-rw-r--r-- 1 nobody nobody 4096 Jan 25 18:09 tx_queue_len
+-r--r--r-- 1 nobody nobody 4096 Jan 25 18:09 type
+-rw-r--r-- 1 nobody nobody 4096 Jan 25 18:08 uevent
 
------BEGIN PGP SIGNATURE-----
+Constrast this with creating a device of the same type in the network
+namespace directly. In this case the device's sysfs permissions will be
+correctly updated.
+(Please also note, that in a lot of workloads this strategy of creating
+ the network device directly in the network device to workaround this
+ issue can not be used. Either because the network device is dedicated
+ after it has been created or because it used by a process that is
+ heavily sandboxed and couldn't create network devices itself.):
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl5UBEMACgkQ2O7X88g7
-+ppZ2A/8Dx23pfIa3OCbkEH9B+vKKdGZhQQSTuZgRnX76RGhgmJ56xswQxcn97XR
-d95OxueYJC7NLXqGvJs4/UladL+5iEfa+rJrKcngFOYwKgVcPa8XeQrYVmVCrZbv
-odxkh7dcN/J9AGErdovc52qspQ/WiJVs+yw3x1a9WzdrEIX1WW3v60uWlIojKaNi
-KwQG7zaSEXlQZu7nrUyZ7fNb6yCc+DDhj04vSpWGEgYYa199aT5u2QvEgaj3pxEF
-SpZt4c4JhtNHlqbVJX/bixN2f5OQJWikoOPjYYnk8CnSNZWqPRtETpROHLi+pxo5
-C1sKf2+DryI/+z7yBONg/jqEYXEds9e9CERYxDtNa5ausTZvsEbLNpCZJoXW/lYU
-7joBxMOynx0xpU2MhCfsQuLhxTEDyBWO+Z45qElvs5eMnA8BJMzr57sq8Knju2bx
-BRiYQ82qEZ7duIe84YuuU1OywVfkKJADVXXYbIenOSh0GOqB6Izf39ANjgRlNIa+
-07RU1YHPWi5JmObJSC1HO/8Of1Up11CxtszBp/5hZZd1VqEBbdMgMiRYdO+gIWGy
-1O34uo5o20I3kRpobJthk89ZaBbIDUrVnF+ZUYOwl+j6p3/wPKjsbl60aLuNsSaK
-J9q5XxkDkeDnqkeuM5kVo+kypVfKjdCR0YNlP3bwXa/uLlZgI+g=
-=xsT6
------END PGP SIGNATURE-----
+drwxr-xr-x 5 root   root      0 Jan 25 18:12 .
+drwxr-xr-x 9 nobody nobody    0 Jan 25 18:08 ..
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 addr_assign_type
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 addr_len
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 address
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 broadcast
+-rw-r--r-- 1 root   root   4096 Jan 25 18:12 carrier
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 carrier_changes
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 carrier_down_count
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 carrier_up_count
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 dev_id
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 dev_port
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 dormant
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 duplex
+-rw-r--r-- 1 root   root   4096 Jan 25 18:12 flags
+-rw-r--r-- 1 root   root   4096 Jan 25 18:12 gro_flush_timeout
+-rw-r--r-- 1 root   root   4096 Jan 25 18:12 ifalias
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 ifindex
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 iflink
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 link_mode
+-rw-r--r-- 1 root   root   4096 Jan 25 18:12 mtu
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 name_assign_type
+-rw-r--r-- 1 root   root   4096 Jan 25 18:12 netdev_group
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 operstate
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 phys_port_id
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 phys_port_name
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 phys_switch_id
+drwxr-xr-x 2 root   root      0 Jan 25 18:12 power
+-rw-r--r-- 1 root   root   4096 Jan 25 18:12 proto_down
+drwxr-xr-x 4 root   root      0 Jan 25 18:12 queues
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 speed
+drwxr-xr-x 2 root   root      0 Jan 25 18:12 statistics
+lrwxrwxrwx 1 nobody nobody    0 Jan 25 18:12 subsystem -> ../../../../class/net
+-rw-r--r-- 1 root   root   4096 Jan 25 18:12 tx_queue_len
+-r--r--r-- 1 root   root   4096 Jan 25 18:12 type
+-rw-r--r-- 1 root   root   4096 Jan 25 18:12 uevent
 
---bzw77mvqr2inibwn--
+Now, when creating a network device in a network namespace owned by a
+user namespace and moving it to the host the permissions will be set to
+the id that the user namespace root user has been mapped to on the host
+leading to all sorts of permission issues mentioned above:
+
+458752
+drwxr-xr-x 5 458752 458752      0 Jan 25 18:12 .
+drwxr-xr-x 9 root   root        0 Jan 25 18:08 ..
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 addr_assign_type
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 addr_len
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 address
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 broadcast
+-rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 carrier
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 carrier_changes
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 carrier_down_count
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 carrier_up_count
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 dev_id
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 dev_port
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 dormant
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 duplex
+-rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 flags
+-rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 gro_flush_timeout
+-rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 ifalias
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 ifindex
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 iflink
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 link_mode
+-rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 mtu
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 name_assign_type
+-rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 netdev_group
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 operstate
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 phys_port_id
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 phys_port_name
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 phys_switch_id
+drwxr-xr-x 2 458752 458752      0 Jan 25 18:12 power
+-rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 proto_down
+drwxr-xr-x 4 458752 458752      0 Jan 25 18:12 queues
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 speed
+drwxr-xr-x 2 458752 458752      0 Jan 25 18:12 statistics
+lrwxrwxrwx 1 root   root        0 Jan 25 18:12 subsystem -> ../../../../class/net
+-rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 tx_queue_len
+-r--r--r-- 1 458752 458752   4096 Jan 25 18:12 type
+-rw-r--r-- 1 458752 458752   4096 Jan 25 18:12 uevent
+
+Fix this by changing the basic sysfs files associated with network
+devices when moving them between network namespaces. To this end we add
+some infrastructure to sysfs.
+
+The patchset takes care to only do this when the owning user namespaces
+changes and the kids differ. So there's only a performance overhead,
+when the owning user namespace of the network namespace is different
+__and__ the kid mappings for the root user are different for the two
+user namespaces:
+Assume we have a netdev eth0 which we create in netns1 owned by userns1.
+userns1 has an id mapping of 0 100000 100000. Now we move eth0 into
+netns2 which is owned by userns2 which also defines an id mapping of 0
+100000 100000. In this case sysfs doesn't need updating. The patch will
+handle this case and not do any needless work. Now assume eth0 is moved
+into netns3 which is owned by userns3 which defines an id mapping of 0
+123456 65536. In this case the root user in each namespace corresponds
+to different kid and sysfs needs updating.
+
+Thanks!
+Christian
+
+Christian Brauner (9):
+  sysfs: add sysfs_file_change_owner_by_name()
+  sysfs: add sysfs_link_change_owner()
+  sysfs: add sysfs_group{s}_change_owner()
+  sysfs: add sysfs_change_owner()
+  device: add device_change_owner()
+  drivers/base/power: add dpm_sysfs_change_owner()
+  net-sysfs: add netdev_change_owner()
+  net-sysfs: add queue_change_owner()
+  net: fix sysfs permssions when device changes network namespace
+
+ drivers/base/core.c        | 120 ++++++++++++++++++++++++++++++
+ drivers/base/power/power.h |   3 +
+ drivers/base/power/sysfs.c |  61 ++++++++++++++-
+ fs/sysfs/file.c            | 148 +++++++++++++++++++++++++++++++++++++
+ fs/sysfs/group.c           | 117 +++++++++++++++++++++++++++++
+ include/linux/device.h     |   1 +
+ include/linux/sysfs.h      |  46 ++++++++++++
+ net/core/dev.c             |   9 ++-
+ net/core/net-sysfs.c       | 133 +++++++++++++++++++++++++++++++++
+ net/core/net-sysfs.h       |   2 +
+ 10 files changed, 638 insertions(+), 2 deletions(-)
+
+
+base-commit: bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9
+-- 
+2.25.1
+
