@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F45616B8BB
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 06:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F9A16B8BD
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 06:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726857AbgBYFIj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 00:08:39 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:40611 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726400AbgBYFIi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 00:08:38 -0500
-Received: by mail-pf1-f194.google.com with SMTP id b185so6534950pfb.7
-        for <linux-pm@vger.kernel.org>; Mon, 24 Feb 2020 21:08:38 -0800 (PST)
+        id S1726988AbgBYFIm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Feb 2020 00:08:42 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:39817 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726819AbgBYFIl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 00:08:41 -0500
+Received: by mail-pf1-f195.google.com with SMTP id 84so6541039pfy.6
+        for <linux-pm@vger.kernel.org>; Mon, 24 Feb 2020 21:08:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=VjGy9mDSQTtqTfodJGzoJsBP+0BqRCAD5WnADk/Arw0=;
-        b=QWV3p9i6zgdUqYL2d/2B5WDRt4NHawZ9OByHIbJAMrmiLd0KSO3xLeTNpgJVmrcp/0
-         xqki/c8H0Iv/9yANo6VcgCAnCWj0iuko5+4Zdp5ODNwpyOHZWaIktGmCJ4nXAC1JJFvd
-         9R0uvmxHps9ROinDk3kyZ1XeAxdr1S8gUarQvwvao6S4nhJ28Mb+vxsSFiHYEQ77omgN
-         8YI9LWrxpITC+nnOg+Pl1Y8Wg8b7YZ1plkloQDfuNpIDS1xzwboO0elIFvuYW3y2r778
-         3CTF+ftFwL+WNquuDIU4RbR2zZrtmrpGNppSCYBZdzbJkCqbczkrn/uvD9cmlAewHCBb
-         ugsA==
+        bh=bdantuu/5XxtE9f3CRUqpZsUq5/+hM9onGf3l9IzGoE=;
+        b=eseBaJptDm8Ew+v8SqbkusD/nIsIJS5Q63dC5indg6vPCEKfEsMcIPCQ8LryIf6XAJ
+         luL/+OrUx2Oy46HC+ptZ0HilMyfsc3zomlNmnYnHrzOLjZXAFyJ08p9/b5DGXYu8eaNo
+         PUEltGUedjDLPkqZYyTqtRnfnUv2t/X/LDaRewmylTEofSd4xUVGA5OvCe0kLjUwXBn/
+         CRfUhK+/zob1g6uYsBJXymtFuGPFlDawi9R0laHsTU7R41pTUTtrKve6Bra6du4WP12c
+         XCipO95SvbpgfSoF3P77ZiAEQSxcEhkwIXQFr7HKn24Gcs06BdepRKmhhhLGfZjwPG7U
+         nieg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=VjGy9mDSQTtqTfodJGzoJsBP+0BqRCAD5WnADk/Arw0=;
-        b=IzolI9i5F51QxCBSvLMDYz+h4AdKa1hU5EObks3HAxQ3nyFKUWUrs+GFEAd6buKDtJ
-         +CHSOEDpJdy99uIDeMABMmqLbp9zCCHN0zQadaoPSxd4leXUHLqiWS5UJ+0nNzyfARMf
-         lA/dX6KaREez9I9BiQ9Y3IHQMCbhOOJBZdIPYC74FputfypHc0p8HhMGLg7TAr7pGPLA
-         B3cJmAgBhIXE2jcRUrMB4mI6jmEG7JPYImAHCxMMAb/ItITeU3gW1l1akvMnOBq+w2nA
-         p8jpzM3leEcQP2wRPaqMyn4MbzGhIt+nvPZ+E2ffpy2DI6iZ2KzxfV9hpXMfSoRzTUC/
-         l97Q==
-X-Gm-Message-State: APjAAAVtK4K6jWs+SvbFWJF7GG5A5l/T3lVdbvt9YIEnbF17l/axwyXg
-        zs3Cew4MDD13He3QHWu8BFwgpA==
-X-Google-Smtp-Source: APXvYqx5KRNfMIWOAh/4UQZeEBO6iVmZ2gYODKQvJ1DZC3K6GWCUjoTKnkYshlse4PleF/uQhjP5Qg==
-X-Received: by 2002:a63:60a:: with SMTP id 10mr49705597pgg.302.1582607317741;
-        Mon, 24 Feb 2020 21:08:37 -0800 (PST)
+        bh=bdantuu/5XxtE9f3CRUqpZsUq5/+hM9onGf3l9IzGoE=;
+        b=SVwUERgGoNYMwHCG+Qa4TIs5n0yDO41d/j3rzLsoM2uLbXEaFqorR120nrhd/UKUn3
+         bJZ6MIdF+8Pfdp8b5k+cQqIEzw1TzlxdmHTxy/MQGcba70mpJPFhOoD/yY7kvqkc6EhB
+         6QZ1GN6n8eX7QCof3LteCM8jGBJlolMXLyNfQFu1L4kvDdBOHO0hj8CoqObHcjEE+MW/
+         uMe4gBs/fpPmLdyah1evGVjIjQnnovzvfWP7OzAS7KTAqPQb8zsMeYZty92YcolosN6u
+         fyqPtSvR0UqGlXAYTYW15tJIA6cgzw/6fSy+5x7kFlGlmeFfMoqYOY9ixCPZ8Obv2bcO
+         zTJA==
+X-Gm-Message-State: APjAAAXypoLzifPU0BliWIHzg3E706pMesV0wwVId1SDwXyDLgcs0QnF
+        ndAg6KaQ4DVFV5n5OQSNedBIdg==
+X-Google-Smtp-Source: APXvYqx5Kz8YB9icmd79yhCto0VvLnWu8Muf2e9T+i5OFmjE22x563qcKYydlVaxtypL+7AeLyRalw==
+X-Received: by 2002:a63:e5d:: with SMTP id 29mr9354407pgo.124.1582607321206;
+        Mon, 24 Feb 2020 21:08:41 -0800 (PST)
 Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id r66sm15156450pfc.74.2020.02.24.21.08.34
+        by smtp.gmail.com with ESMTPSA id r66sm15156450pfc.74.2020.02.24.21.08.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2020 21:08:37 -0800 (PST)
+        Mon, 24 Feb 2020 21:08:40 -0800 (PST)
 From:   John Stultz <john.stultz@linaro.org>
 To:     lkml <linux-kernel@vger.kernel.org>
 Cc:     John Stultz <john.stultz@linaro.org>,
@@ -60,9 +60,9 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-pm@vger.kernel.org
-Subject: [PATCH v5 1/6] driver core: Fix driver_deferred_probe_check_state() logic
-Date:   Tue, 25 Feb 2020 05:08:23 +0000
-Message-Id: <20200225050828.56458-2-john.stultz@linaro.org>
+Subject: [PATCH v5 2/6] driver core: Set deferred_probe_timeout to a longer default if CONFIG_MODULES is set
+Date:   Tue, 25 Feb 2020 05:08:24 +0000
+Message-Id: <20200225050828.56458-3-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200225050828.56458-1-john.stultz@linaro.org>
 References: <20200225050828.56458-1-john.stultz@linaro.org>
@@ -71,39 +71,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-driver_deferred_probe_check_state() has some uninituitive behavior.
+When using modules, its common for the modules not to be loaded
+until quite late by userland. With the current code,
+driver_deferred_probe_check_state() will stop returning
+EPROBE_DEFER after late_initcall, which can cause module
+dependency resolution to fail after that.
 
-* From boot to late_initcall, it returns -EPROBE_DEFER
-
-* From late_initcall to the deferred_probe_timeout (if set)
-  it returns -ENODEV
-
-* If the deferred_probe_timeout it set, after it fires, it
-  returns -ETIMEDOUT
-
-This is a bit confusing, as its useful to have the function
-return -EPROBE_DEFER while the timeout is still running. This
-behavior has resulted in the somwhat duplicative
-driver_deferred_probe_check_state_continue() function being
-added.
-
-Thus this patch tries to improve the logic, so that it behaves
-as such:
-
-* If late_initcall has passed, and modules are not enabled
-  it returns -ENODEV
-
-* If modules are enabled and deferred_probe_timeout is set,
-  it returns -EPROBE_DEFER until the timeout, afterwhich it
-  returns -ETIMEDOUT.
-
-* In all other cases, it returns -EPROBE_DEFER
-
-This will make the deferred_probe_timeout value much more
-functional, and will allow us to consolidate the
-driver_deferred_probe_check_state() and
-driver_deferred_probe_check_state_continue() logic in a later
-patch.
+So allow a longer window of 30 seconds (picked somewhat
+arbitrarily, but influenced by the similar regulator core
+timeout value) in the case where modules are enabled.
 
 Cc: Rob Herring <robh@kernel.org>
 Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
@@ -120,73 +96,38 @@ Cc: Thierry Reding <treding@nvidia.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-pm@vger.kernel.org
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
 v4:
-* Simplified logic suggested by Andy Shevchenko
-* Clarified commit message to focus on logic change
-v5:
-* Cleanup comment wording as suggested by Rafael
-* Tweaked the logic to use Saravana's suggested conditionals
+* Split out into its own patch as suggested by Mark
+* Made change conditional on CONFIG_MODULES
 ---
- drivers/base/dd.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ drivers/base/dd.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index b25bcab2a26b..d75b34de6964 100644
+index d75b34de6964..fe26f2574a6d 100644
 --- a/drivers/base/dd.c
 +++ b/drivers/base/dd.c
-@@ -237,24 +237,26 @@ __setup("deferred_probe_timeout=", deferred_probe_timeout_setup);
- 
- static int __driver_deferred_probe_check_state(struct device *dev)
- {
--	if (!initcalls_done)
--		return -EPROBE_DEFER;
-+	if (!IS_ENABLED(CONFIG_MODULES) && initcalls_done)
-+		return -ENODEV;
- 
- 	if (!deferred_probe_timeout) {
- 		dev_WARN(dev, "deferred probe timeout, ignoring dependency");
- 		return -ETIMEDOUT;
- 	}
- 
--	return 0;
-+	return -EPROBE_DEFER;
+@@ -224,7 +224,16 @@ static int deferred_devs_show(struct seq_file *s, void *data)
  }
+ DEFINE_SHOW_ATTRIBUTE(deferred_devs);
  
- /**
-  * driver_deferred_probe_check_state() - Check deferred probe state
-  * @dev: device to check
-  *
-- * Returns -ENODEV if init is done and all built-in drivers have had a chance
-- * to probe (i.e. initcalls are done), -ETIMEDOUT if deferred probe debug
-- * timeout has expired, or -EPROBE_DEFER if none of those conditions are met.
-+ * Return:
-+ * -ENODEV if initcalls have completed and modules are disabled.
-+ * -ETIMEDOUT if the deferred probe timeout was set and has expired
-+ *  and modules are enabled.
-+ * -EPROBE_DEFER in other cases.
-  *
-  * Drivers or subsystems can opt-in to calling this function instead of directly
-  * returning -EPROBE_DEFER.
-@@ -264,7 +266,7 @@ int driver_deferred_probe_check_state(struct device *dev)
- 	int ret;
- 
- 	ret = __driver_deferred_probe_check_state(dev);
--	if (ret < 0)
-+	if (ret != -ENODEV)
- 		return ret;
- 
- 	dev_warn(dev, "ignoring dependency for device, assuming no driver");
-@@ -292,7 +294,7 @@ int driver_deferred_probe_check_state_continue(struct device *dev)
- 	int ret;
- 
- 	ret = __driver_deferred_probe_check_state(dev);
--	if (ret < 0)
-+	if (ret != -ENODEV)
- 		return ret;
- 
- 	return -EPROBE_DEFER;
++#ifdef CONFIG_MODULES
++/*
++ * In the case of modules, set the default probe timeout to
++ * 30 seconds to give userland some time to load needed modules
++ */
++static int deferred_probe_timeout = 30;
++#else
++/* In the case of !modules, no probe timeout needed */
+ static int deferred_probe_timeout = -1;
++#endif
+ static int __init deferred_probe_timeout_setup(char *str)
+ {
+ 	int timeout;
 -- 
 2.17.1
 
