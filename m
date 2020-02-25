@@ -2,103 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E0116BF2C
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 11:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B817216C039
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 13:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730384AbgBYK4r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 05:56:47 -0500
-Received: from foss.arm.com ([217.140.110.172]:49072 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729106AbgBYK4r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 25 Feb 2020 05:56:47 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80E7A30E;
-        Tue, 25 Feb 2020 02:56:46 -0800 (PST)
-Received: from [10.37.12.155] (unknown [10.37.12.155])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 75D703F6CF;
-        Tue, 25 Feb 2020 02:56:36 -0800 (PST)
-Subject: Re: [PATCH v3 1/4] PM / EM: add devices to Energy Model
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com
-Cc:     Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com,
-        javi.merino@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
-        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, qperret@google.com, bsegall@google.com,
-        mgorman@suse.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, kernel@pengutronix.de, khilman@kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, robh@kernel.org,
-        matthias.bgg@gmail.com, steven.price@arm.com,
-        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
-        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
-        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
-        orjan.eide@arm.com
-References: <20200221194731.13814-1-lukasz.luba@arm.com>
- <20200221194731.13814-2-lukasz.luba@arm.com>
- <4ac6a187-1a09-335d-5c05-bf810ff81aaa@infradead.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <cf0d6bf7-ad87-4fbf-0392-646d5aa6d52b@arm.com>
-Date:   Tue, 25 Feb 2020 10:56:34 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1729189AbgBYMGz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Feb 2020 07:06:55 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:35903 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726019AbgBYMGz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 07:06:55 -0500
+Received: by mail-lf1-f68.google.com with SMTP id f24so9590789lfh.3
+        for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2020 04:06:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qL37Y4QwC2H5BVQcBjGxnhk5Q0ixQAlzjLOKjSRSjzg=;
+        b=sAPoYCpPeqNu1VtPX1gXiQd8dXC9Ud2kT4nsPsqkPjP3zT0K32Y/IeK8JfXh4BF3lr
+         jkwYdlfWZcPTDjrbWeWEh40nPgt+T4+MmNrd5i4YpaaUuJbjXprQyie7WiLLWVLFI612
+         vbcV8uCfmIUI7JIY0nhk7p2ChzdllK/kao+L+oCjBRyTGOTcX9bAcO4OVnYTeHRis5oB
+         ELDgUbJn4tdo9imAGxWaOWsdEsvshYK0XFKDf36phutEiWJda7cdLhBXYMFC1WeE8PbK
+         rCZH4JLpQY/MDgFCrCAY8ibiVOREbl4XByl7pwe4wXdFMsCecj5eoeq/tSHCk4PmtLSK
+         q0eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qL37Y4QwC2H5BVQcBjGxnhk5Q0ixQAlzjLOKjSRSjzg=;
+        b=kAkJwZazkqcV/9/b0MCTu4ffFYItALMFtIsr6zIM5s7fP/G6YwUm47tIx+BmOgwUCM
+         tgkzHdXxf2MPfDlEoDJOimiIUoHcA9lYMWgxc/5Mn+Pzf5PZ3eXgTlRc8Fg3PuBSuAAO
+         z8CJtDSeKqIKSASJdBliSyHFLL8p9Jt3XQBBFBUBpzlRGW98xhKa7iyDn34yNeOdgCQm
+         nSniE4XXz4oolYd2rOYWnuBy54s+3CZvgk2nDgIMyrVlsqH3zI9q+HgdqQepJJOmSC3K
+         +AhXAFbh1+Rc2T/RHeeF6OWwuWCfOpH4lZbsH1lkeVy7U9JtPFIgLe8exAuKV8t9gZT7
+         1Gpg==
+X-Gm-Message-State: APjAAAWnozLoc/zp2HEYwKUi0u/Xla+uRu5vGrxnQg/AEn/mAgqcVBAR
+        9Gwh/zu4XuPa5MrA4pddDz8HVwSlzGThqYnYui1zuw==
+X-Google-Smtp-Source: APXvYqx4hD9HaTlSuNdaASWszKdhnnTGw4UdpRdVSDuvLrBOJV88/DSZ6LkAIwOgsPHB/a0L3ZRa+lZx6hi8twr3z8I=
+X-Received: by 2002:ac2:5a05:: with SMTP id q5mr6326196lfn.143.1582632411863;
+ Tue, 25 Feb 2020 04:06:51 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <4ac6a187-1a09-335d-5c05-bf810ff81aaa@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1582615616.git.amit.kucheria@linaro.org>
+ <0f506cfdd8eb9d50b5eb43c9dca510284ac8ded1.1582615616.git.amit.kucheria@linaro.org>
+ <20200225101614.GN2618@vkoul-mobl>
+In-Reply-To: <20200225101614.GN2618@vkoul-mobl>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Tue, 25 Feb 2020 17:36:40 +0530
+Message-ID: <CAP245DUh2zZA=pfhoYswuffdR1_p72QR73SdWJCH8w8XySFpvg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] dt-bindings: thermal: tsens: Make dtbs_check pass
+ for sc7180 tsens
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        sivaa@codeaurora.org, Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Randy,
+On Tue, Feb 25, 2020 at 3:46 PM Vinod Koul <vkoul@kernel.org> wrote:
+>
+> On 25-02-20, 13:01, Amit Kucheria wrote:
+> > Fixes the following warnings:
+> > builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> > thermal-sensor@c263000: compatible: ['qcom,sc7180-tsens',
+> > 'qcom,tsens-v2'] is not valid under any of the given schemas (Possible
+> > causes of the failure):
+> > builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> > thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> > ['qcom,msm8916-tsens', 'qcom,msm8974-tsens']
+> > builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> > thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> > ['qcom,msm8976-tsens', 'qcom,qcs404-tsens']
+> > builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> > thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> > ['qcom,msm8996-tsens', 'qcom,msm8998-tsens', 'qcom,sdm845-tsens']
+> > builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> > thermal-sensor@c263000: compatible:1: 'qcom,tsens-v0_1' was expected
+> > builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> > thermal-sensor@c263000: compatible:1: 'qcom,tsens-v1' was expected
+>
+> I think the patch title should be "add qcom,sc7180-tsens to  qcom-tsens.yaml"
+>
+> and it would be great to see explanation on how adding it fixes these
+> warns.
 
-Thank you for taking the time to look into this patch.
+Agreed. I'll send out a new version with the commit messages fixed.
 
-On 2/22/20 12:42 AM, Randy Dunlap wrote:
-> Hi,
-> One minor nit. Please see inline:
-> 
-> On 2/21/20 11:47 AM, Lukasz Luba wrote:
->> Add support of other devices into the Energy Model framework not only the
->> CPUs. Change the interface to be more unified which can handle other
->> devices as well.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   Documentation/power/energy-model.rst     | 133 ++++----
->>
->> diff --git a/Documentation/power/energy-model.rst b/Documentation/power/energy-model.rst
->> index 90a345d57ae9..7576820664e5 100644
->> --- a/Documentation/power/energy-model.rst
->> +++ b/Documentation/power/energy-model.rst
-> 
->> @@ -85,13 +89,20 @@ API.
->>   2.3 Accessing performance domains
->>   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->>   
->> +There is two API functions which provide the access to the energy model:
-> 
->     There are two
+> Relooking at series I think this applies to rest of the series too :)
+>
 
-Indeed a mistake, I will fix it.
-
-> 
->> +em_cpu_get() which takes CPU id as an argument and em_pd_get() with device
->> +pointer as an argument. It depends on the subsystem which interface it is
->> +going to use, but in case of CPU devices both functions return the same
->> +performance domain.
->> +
-> 
-> 
-> cheers.
-> 
-
-Regards,
-Lukasz
+Thanks for the review.
