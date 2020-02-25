@@ -2,207 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 355E816EAB7
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 17:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4EF16EB07
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 17:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730990AbgBYQBF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 11:01:05 -0500
-Received: from mail27.static.mailgun.info ([104.130.122.27]:12966 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730882AbgBYQBE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 11:01:04 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1582646463; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=Jt+IAVS9xM4+4RfW6VNL2gtvTWM4sE89zEqE8H9YrCc=; b=IjCBlub8hpsijxDvg5s02qkxCn/mOrmzIcS+wKy9JT9z4ofY9vf20/zkPOhENOH0Nwe4gGEE
- tC3oSJnNTib+v1pUtYEs1a2FF/PYKTlrT0yVeCES/xya5b6BpOG9rNQboZIQVrMRnYhT1V05
- 4B/V9zDbDYaJ31IL3O1uuYFHpv0=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e554496.7f8d2debeae8-smtp-out-n02;
- Tue, 25 Feb 2020 16:00:22 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D200AC447A3; Tue, 25 Feb 2020 16:00:20 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from okukatla1-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: okukatla)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9764BC447A3;
-        Tue, 25 Feb 2020 16:00:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9764BC447A3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=okukatla@codeaurora.org
-From:   Odelu Kukatla <okukatla@codeaurora.org>
-To:     georgi.djakov@linaro.org, daidavid1@codeaurora.org,
-        bjorn.andersson@linaro.org, evgreen@google.com,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
-        elder@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-msm-owner@vger.kernel.org,
-        Odelu Kukatla <okukatla@codeaurora.org>
-Subject: [V4, 3/3] arm64: dts: sc7180: Add interconnect provider DT nodes
-Date:   Tue, 25 Feb 2020 21:29:44 +0530
-Message-Id: <1582646384-1458-4-git-send-email-okukatla@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1582646384-1458-1-git-send-email-okukatla@codeaurora.org>
-References: <1582646384-1458-1-git-send-email-okukatla@codeaurora.org>
+        id S1730357AbgBYQNY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Feb 2020 11:13:24 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35462 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729189AbgBYQNY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 11:13:24 -0500
+Received: by mail-ot1-f67.google.com with SMTP id r16so50324otd.2;
+        Tue, 25 Feb 2020 08:13:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VL+DlyeyetOp4hj4Wd5H2StakcvzqSai3gD2cxZNaVU=;
+        b=TCJFthGcpQjUV/t0A1xP4NxNmzxtaPk8RQ9L0c7x7ukdLOADNc4qsmFQrs3s1cmoF8
+         12OJSRL5wKhACXCm27oGkuuYuW7pO9CAg5YbTrV7Vei+8vsE0t4TuP1G0LmpPC9VTaip
+         w5j0I5h/f15lY1x+pA/NDnOrH26xHCVTAZJ/kx21em7dlwQt2iS8k/IbfYGGvwTfCXse
+         R3zQYnBAD8W47X7+04bYE3DzPXpddDYSdUsmwuQvcZwTvtEdmtM3ew2rNtqsgVY/mx1M
+         Kcbdu3XfjKovb6hlbilsLbL8M5YdCd+KOxDlAnRvhHsPAPSjgm5/0yhnrHk4qvaqLlyb
+         oWWQ==
+X-Gm-Message-State: APjAAAW7ljdwiaM5XkKnXBJ86E0jKvTp2+SvMU9QbCSl1TJJgRiC9XFu
+        sIYuvWsTI40kP9k57U7gE1bIQDY8Ci/PWouK5HA=
+X-Google-Smtp-Source: APXvYqy63J+4B+eRAxGKURNWKgaKqO36eFLFSszHvTNIVZUAJvPu1RoqON1pZkTd0zEjWOHRd5HvC3NhPplF8VrLqMI=
+X-Received: by 2002:a9d:7653:: with SMTP id o19mr43546746otl.118.1582647202902;
+ Tue, 25 Feb 2020 08:13:22 -0800 (PST)
+MIME-Version: 1.0
+References: <20200225131938.120447-1-christian.brauner@ubuntu.com> <20200225131938.120447-7-christian.brauner@ubuntu.com>
+In-Reply-To: <20200225131938.120447-7-christian.brauner@ubuntu.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 25 Feb 2020 17:13:11 +0100
+Message-ID: <CAJZ5v0ip8Z78_tOrDB+dR_t+V6YfKi6qY14nr6j6fW=zPu99wQ@mail.gmail.com>
+Subject: Re: [PATCH v6 6/9] drivers/base/power: add dpm_sysfs_change_owner()
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the DT nodes for the network-on-chip interconnect buses found
-on sc7180-based platforms.
+On Tue, Feb 25, 2020 at 2:22 PM Christian Brauner
+<christian.brauner@ubuntu.com> wrote:
+>
+> Add a helper to change the owner of a device's power entries. This
+> needs to happen when the ownership of a device is changed, e.g. when
+> moving network devices between network namespaces.
+> This function will be used to correctly account for ownership changes,
+> e.g. when moving network devices between network namespaces.
+>
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 
-Signed-off-by: Odelu Kukatla <okukatla@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 95 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 95 insertions(+)
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index cc5a94f..3e28f34 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -748,6 +748,69 @@
- 			};
- 		};
- 
-+		config_noc: interconnect@1500000 {
-+			compatible = "qcom,sc7180-config-noc";
-+			reg = <0 0x01500000 0 0x28000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		system_noc: interconnect@1620000 {
-+			compatible = "qcom,sc7180-system-noc";
-+			reg = <0 0x01620000 0 0x17080>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		mc_virt: interconnect@1638000 {
-+			compatible = "qcom,sc7180-mc-virt";
-+			reg = <0 0x01638000 0 0x1000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		qup_virt: interconnect@1650000 {
-+			compatible = "qcom,sc7180-qup-virt";
-+			reg = <0 0x01650000 0 0x1000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		aggre1_noc: interconnect@16e0000 {
-+			compatible = "qcom,sc7180-aggre1-noc";
-+			reg = <0 0x016e0000 0 0x15080>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		aggre2_noc: interconnect@1705000 {
-+			compatible = "qcom,sc7180-aggre2-noc";
-+			reg = <0 0x01705000 0 0x9000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		compute_noc: interconnect@170e000 {
-+			compatible = "qcom,sc7180-compute-noc";
-+			reg = <0 0x0170e000 0 0x6000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		mmss_noc: interconnect@1740000 {
-+			compatible = "qcom,sc7180-mmss-noc";
-+			reg = <0 0x01740000 0 0x1c100>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		ipa_virt: interconnect@1e00000 {
-+			compatible = "qcom,sc7180-ipa-virt";
-+			reg = <0 0x01e00000 0 0x1000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
- 		tcsr_mutex_regs: syscon@1f40000 {
- 			compatible = "syscon";
- 			reg = <0 0x01f40000 0 0x40000>;
-@@ -1103,6 +1166,13 @@
- 			};
- 		};
- 
-+		dc_noc: interconnect@9160000 {
-+			compatible = "qcom,sc7180-dc-noc";
-+			reg = <0 0x09160000 0 0x03200>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
- 		system-cache-controller@9200000 {
- 			compatible = "qcom,sc7180-llcc";
- 			reg = <0 0x09200000 0 0x200000>, <0 0x09600000 0 0x50000>;
-@@ -1110,6 +1180,20 @@
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		gem_noc: interconnect@9680000 {
-+			compatible = "qcom,sc7180-gem-noc";
-+			reg = <0 0x09680000 0 0x3e200>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
-+		npu_noc: interconnect@9990000 {
-+			compatible = "qcom,sc7180-npu-noc";
-+			reg = <0 0x09990000 0 0x1600>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
- 		usb_1: usb@a6f8800 {
- 			compatible = "qcom,sc7180-dwc3", "qcom,dwc3";
- 			reg = <0 0x0a6f8800 0 0x400>;
-@@ -1154,6 +1238,13 @@
- 			};
- 		};
- 
-+		camnoc_virt: interconnect@ac00000 {
-+			compatible = "qcom,sc7180-camnoc-virt";
-+			reg = <0 0x0ac00000 0 0x1000>;
-+			#interconnect-cells = <1>;
-+			qcom,bcm-voters = <&apps_bcm_voter>;
-+		};
-+
- 		pdc: interrupt-controller@b220000 {
- 			compatible = "qcom,sc7180-pdc", "qcom,pdc";
- 			reg = <0 0x0b220000 0 0x30000>;
-@@ -1481,6 +1572,10 @@
- 					};
- 				};
- 			};
-+
-+			apps_bcm_voter: bcm_voter {
-+				compatible = "qcom,bcm-voter";
-+			};
- 		};
- 
- 		cpufreq_hw: cpufreq@18323000 {
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+> ---
+> /* v2 */
+> - "Rafael J. Wysocki" <rafael@kernel.org>:
+>   -  Fold if (dev->power.wakeup && dev->power.wakeup->dev) check into
+>      if (device_can_wakeup(dev)) check since the former can never be true if
+>      the latter is false.
+>
+> - Christian Brauner <christian.brauner@ubuntu.com>:
+>   - Place (dev->power.wakeup && dev->power.wakeup->dev) check under
+>     CONFIG_PM_SLEEP ifdefine since it will wakeup_source will only be available
+>     when this config option is set.
+>
+> /* v3 */
+> -  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+>    - Add explicit uid/gid parameters.
+>
+> /* v4 */
+> - "Rafael J. Wysocki" <rafael@kernel.org>:
+>    - Remove in-function #ifdef in favor of separate helper that is a nop
+>      whenver !CONFIG_PM_SLEEP.
+>
+> /* v5 */
+> - "Rafael J. Wysocki" <rafael@kernel.org>:
+>    - Return directly if condition is true in dpm_sysfs_wakeup_change_owner()
+>      instead of using additional variable.
+>
+> /* v6 */
+> - Christian Brauner <christian.brauner@ubuntu.com>:
+>   - Make dpm_sysfs_wakeup_change_owner() static inline.
+> ---
+>  drivers/base/core.c        |  4 +++
+>  drivers/base/power/power.h |  3 +++
+>  drivers/base/power/sysfs.c | 55 +++++++++++++++++++++++++++++++++++++-
+>  3 files changed, 61 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 988f34ce2eb0..fb8b7990f6fd 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -3552,6 +3552,10 @@ int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
+>         if (error)
+>                 goto out;
+>
+> +       error = dpm_sysfs_change_owner(dev, kuid, kgid);
+> +       if (error)
+> +               goto out;
+> +
+>  #ifdef CONFIG_BLOCK
+>         if (sysfs_deprecated && dev->class == &block_class)
+>                 goto out;
+> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+> index 444f5c169a0b..54292cdd7808 100644
+> --- a/drivers/base/power/power.h
+> +++ b/drivers/base/power/power.h
+> @@ -74,6 +74,7 @@ extern int pm_qos_sysfs_add_flags(struct device *dev);
+>  extern void pm_qos_sysfs_remove_flags(struct device *dev);
+>  extern int pm_qos_sysfs_add_latency_tolerance(struct device *dev);
+>  extern void pm_qos_sysfs_remove_latency_tolerance(struct device *dev);
+> +extern int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid);
+>
+>  #else /* CONFIG_PM */
+>
+> @@ -88,6 +89,8 @@ static inline void pm_runtime_remove(struct device *dev) {}
+>
+>  static inline int dpm_sysfs_add(struct device *dev) { return 0; }
+>  static inline void dpm_sysfs_remove(struct device *dev) {}
+> +static inline int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid,
+> +                                        kgid_t kgid) { return 0; }
+>
+>  #endif
+>
+> diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+> index d7d82db2e4bc..2b99fe1eb207 100644
+> --- a/drivers/base/power/sysfs.c
+> +++ b/drivers/base/power/sysfs.c
+> @@ -480,6 +480,14 @@ static ssize_t wakeup_last_time_ms_show(struct device *dev,
+>         return enabled ? sprintf(buf, "%lld\n", msec) : sprintf(buf, "\n");
+>  }
+>
+> +static inline int dpm_sysfs_wakeup_change_owner(struct device *dev, kuid_t kuid,
+> +                                               kgid_t kgid)
+> +{
+> +       if (dev->power.wakeup && dev->power.wakeup->dev)
+> +               return device_change_owner(dev->power.wakeup->dev, kuid, kgid);
+> +       return 0;
+> +}
+> +
+>  static DEVICE_ATTR_RO(wakeup_last_time_ms);
+>
+>  #ifdef CONFIG_PM_AUTOSLEEP
+> @@ -501,7 +509,13 @@ static ssize_t wakeup_prevent_sleep_time_ms_show(struct device *dev,
+>
+>  static DEVICE_ATTR_RO(wakeup_prevent_sleep_time_ms);
+>  #endif /* CONFIG_PM_AUTOSLEEP */
+> -#endif /* CONFIG_PM_SLEEP */
+> +#else /* CONFIG_PM_SLEEP */
+> +static inline int dpm_sysfs_wakeup_change_owner(struct device *dev, kuid_t kuid,
+> +                                               kgid_t kgid)
+> +{
+> +       return 0;
+> +}
+> +#endif
+>
+>  #ifdef CONFIG_PM_ADVANCED_DEBUG
+>  static ssize_t runtime_usage_show(struct device *dev,
+> @@ -684,6 +698,45 @@ int dpm_sysfs_add(struct device *dev)
+>         return rc;
+>  }
+>
+> +int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
+> +{
+> +       int rc;
+> +
+> +       if (device_pm_not_required(dev))
+> +               return 0;
+> +
+> +       rc = sysfs_group_change_owner(&dev->kobj, &pm_attr_group, kuid, kgid);
+> +       if (rc)
+> +               return rc;
+> +
+> +       if (pm_runtime_callbacks_present(dev)) {
+> +               rc = sysfs_group_change_owner(
+> +                       &dev->kobj, &pm_runtime_attr_group, kuid, kgid);
+> +               if (rc)
+> +                       return rc;
+> +       }
+> +
+> +       if (device_can_wakeup(dev)) {
+> +               rc = sysfs_group_change_owner(&dev->kobj, &pm_wakeup_attr_group,
+> +                                             kuid, kgid);
+> +               if (rc)
+> +                       return rc;
+> +
+> +               rc = dpm_sysfs_wakeup_change_owner(dev, kuid, kgid);
+> +               if (rc)
+> +                       return rc;
+> +       }
+> +
+> +       if (dev->power.set_latency_tolerance) {
+> +               rc = sysfs_group_change_owner(
+> +                       &dev->kobj, &pm_qos_latency_tolerance_attr_group, kuid,
+> +                       kgid);
+> +               if (rc)
+> +                       return rc;
+> +       }
+> +       return 0;
+> +}
+> +
+>  int wakeup_sysfs_add(struct device *dev)
+>  {
+>         return sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
+> --
+> 2.25.1
+>
