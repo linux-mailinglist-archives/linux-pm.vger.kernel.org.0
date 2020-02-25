@@ -2,154 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2407B16B8ED
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 06:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD3F16B99B
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 07:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726936AbgBYFQu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 00:16:50 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:37970 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726019AbgBYFQu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 00:16:50 -0500
-Received: by mail-pj1-f68.google.com with SMTP id j17so759886pjz.3
-        for <linux-pm@vger.kernel.org>; Mon, 24 Feb 2020 21:16:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ka0sLhQPFaXTwv3tDELStRrEtg68nriJ9HVXgH82wMY=;
-        b=MfzMx3OoAyEtSqpOZ0WtdfDaIjNPNeuyzCbpqjIHCgRZgMdnb82+zNuqvO6REVU3Iz
-         o+3zenb5smKGh3pixYR+Th7xOVONXMP31NIJZl757/wtxGpCjkDfZ4NUgK1hIosRnjwv
-         MHyju43+Ea0LICvpxU2VsKsh0K5P+E5xBE/ehqeDUd06hWz3g+VuMRdGemx5p9pnMFhD
-         /1599Z4dFSIqEqyA5RkpiSdFKbiDLUMeavkbuhE6aWYllSUgVgsqCHV5ML0pToE/OKAI
-         UNtCr8UEjxEPce8u3sf5Lk0XrmZy6+7fHf4CLiFctxKfHk+/zeXH/1VF6oRpWHxlgtzc
-         oU/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ka0sLhQPFaXTwv3tDELStRrEtg68nriJ9HVXgH82wMY=;
-        b=sBR85l+hbBW/ajsjHzKm3sWxOkD3h+USLHMa0iE6v3eSNJPIltUx9qZBMg9tylw2t5
-         d7blNaJPFKkvogS+TthGlR3pQhjlbdtv/aCWNZOLNIpCjwlOrNRFClVHr5nvEKhu+Hwd
-         8CQ0lYwoGL+9GunKIi3WTznsqCj4Y4AJYU3KeNhojSIf2DuFy1Gpx3rBa0vLCaX8h5lV
-         WvVo3M2thQp+q2u+vaya6a4rsO4OWHeeBcYS7oBly41HWeBL3nPU+2xWsbYmFDgtVtAT
-         ZvmOfXAHeKsYzE9rH6KAx3zyosFZ9Osiopb3W3MkzNp0zTBSGYJwFDvFQ1TBAytN57ZP
-         /p6Q==
-X-Gm-Message-State: APjAAAUYIQxrcsLkrwFw3x6Rp0aK25qLSuNT2x+7+GKNUnfnr8Ezva++
-        Fl3rrtMUCCq0Jq7JMSQTELv6NA==
-X-Google-Smtp-Source: APXvYqwE3DS3Lo/dEPP82F1RYKX99PIFmYhZi/GdGxhG2n/gVblaUuZg64+xGY3KaryvIrqLQbTarw==
-X-Received: by 2002:a17:902:7048:: with SMTP id h8mr54903891plt.64.1582607808882;
-        Mon, 24 Feb 2020 21:16:48 -0800 (PST)
-Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id c184sm15092223pfa.39.2020.02.24.21.16.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2020 21:16:47 -0800 (PST)
-Date:   Mon, 24 Feb 2020 21:16:45 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     georgi.djakov@linaro.org
-Cc:     Sibi Sankar <sibis@codeaurora.org>, robh+dt@kernel.org,
-        evgreen@chromium.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, mark.rutland@arm.com,
-        daidavid1@codeaurora.org, saravanak@google.com, mka@chromium.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 0/6]     Split SDM845 interconnect nodes and
- consolidate RPMh support
-Message-ID: <20200225051645.GX3948@builder>
-References: <20200209183411.17195-1-sibis@codeaurora.org>
+        id S1728931AbgBYGXi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Feb 2020 01:23:38 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:57586 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgBYGXi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 01:23:38 -0500
+X-AuditID: c0a8fbf4-473ff70000004419-54-5e54bd689c0f
+Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 7D.20.17433.86DB45E5; Tue, 25 Feb 2020 07:23:36 +0100 (CET)
+Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
+ WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
+ 14.03.0487.000; Tue, 25 Feb 2020 07:23:32 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "broonie@kernel.org" <broonie@kernel.org>
+CC:     "rafael@kernel.org" <rafael@kernel.org>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "Laine, Markus" <Markus.Laine@fi.rohmeurope.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
+Subject: Re: [RFC PATCH v3 5/8] regulator: use linear_ranges helper
+Thread-Topic: [RFC PATCH v3 5/8] regulator: use linear_ranges helper
+Thread-Index: AQHV58CCun7qdt/zDkaUtOc73neHtagqMwKAgAE06AA=
+Date:   Tue, 25 Feb 2020 06:23:31 +0000
+Message-ID: <d5e63ea6935991d855e2ae12915b3b4614e8f3aa.camel@fi.rohmeurope.com>
+References: <cover.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
+         <ba2eb2d7363b386136a546a769a6e2d077558094.1582182989.git.matti.vaittinen@fi.rohmeurope.com>
+         <20200224115751.GE6215@sirena.org.uk>
+In-Reply-To: <20200224115751.GE6215@sirena.org.uk>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E02D104186D47044A745BE5D96E6817C@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200209183411.17195-1-sibis@codeaurora.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUgTYRjn3d1u59bFu6Xt1azwKqJEzUi6ykrsaxaEpEgYaWdebuk2uc3Q
+        +seKIFeRklIezkQzypbSqPBrabI/tKIPK1KkYFbiVxYpShnanefXX+/zPr+v9+F9SExXQgSR
+        Joud4y1sFk2o8dZ7k+4woycxZdMNz1qmxPeNYG57XyuZi1V1BDP+4bKCed9YRjCj17yAqf70
+        TsGUVbfjjHOsBGMuebwq5mWTPUZjcJW7gKFB+KwyuGsKCEOL06UyjLpXxSuTNdFprP1MginD
+        ErHrhMY4OVKrzG5W5xZ97wf54JbaAfxIBLcgZ7MAHEBN6uBHgLy9gkq+tAP0p+Kt0gFIkoDR
+        yNGtkgT+MAyV/K0iJA4GR3D0sW8MSJxlcA+qb98tc/aiQc8FpVxvR3e7OmZqHK5DvuYWlUSn
+        4GHU79TJUa8Auv9zeqbvBzejm/VpEh3Alaggf0Qh1RjUI3ffhFJ+M0R3mt9gch2ABr5OzfZp
+        5PnjwyUbDG5AdY0RsjQGDXVNztqEoOIrvplJKKhFHaXf8EKwXFiUICyohUVqYZFaWKSuAMoa
+        gMysKSuDtXOR4TyXE85bjWbxOGk1u4H8zWP1YLotrg0oSNAGAkkFHUAdaExM0S1Ns6bnGVmb
+        MZXPyeJsbQCRGO1PHQJHUnRUOpt3luOtc9AKEqf11Hpf0XEdlLIyOS6b4+fQYJKkEWVqEk21
+        PJfB5Z4yZdkXYAXpJ5mrg/xtnCWd49kcuzFV2o5Um7geErREzI16KsopWzZrFruy9AUIJQsH
+        nJUY6XVWV2I63GK1cEF6ymUWqVCiGnMs80GDQE8Cehk1JQ23RNz1eZ9BMUIhRjz4lyBF2NkF
+        KCgflCclj2qEfcPnivu/pIVcjxsqm3JNBP/YOhW95kbob/9nx04f6jhfn61VxhbkBUBtWOe2
+        3BBN69UN8eNCUebDFhD1nO08ulq9v2ppaXCPqqeMjjkc1jpMFPYm7tif1OC3s7QwydfZoMWf
+        HByvNSQ7Mn9Rn2KnA+NHNufmPZ7o1j+icZuRjdyI8Tb2P6IQL6KoAwAA
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun 09 Feb 10:34 PST 2020, Sibi Sankar wrote:
-
-Hi Georgi,
-
-Will you pick up the bindings and driver patches for v5.7? So that I can
-apply the dts patches.
-
-Regards,
-Bjorn
-
-> While there are no current consumers of the SDM845 interconnect device in
-> devicetree, take this opportunity to redefine the interconnect device nodes
-> as the previous definitions of using a single child node under the apps_rsc
-> device did not accurately capture the description of the hardware.
-> The Network-On-Chip (NoC) interconnect devices should be represented in a
-> manner akin to QCS404 platforms[1] where there is a separation of NoC devices
-> and its RPM/RPMh counterparts.
-> 
-> The bcm-voter devices are representing the RPMh devices that the interconnect
-> providers need to communicate with and there can be more than one instance of
-> the Bus Clock Manager (BCM) which can live under different instances of Resource
-> State Coordinators (RSC). There are display use cases where consumers may need
-> to target a different bcm-voter (Some display specific RSC) than the default,
-> and there needs to be a way to represent this connection in devicetree.
-> 
-> This patches series extends the discussions[2][3] involving the SDM845
-> interconnect bindings by adding accompanying driver implementations
-> using the split NoC devices. Some of the code used to support the SDM845
-> provider driver are refactored into common modules that can used by other
-> RPMh based interconnect providers such as SC7180[4]. This patch series also
-> updates existing sdm845 binding documentation to DT schema format using
-> json-schema.
-> 
-> v3:
-> - Picked up Robs R-b for patch 1 
-> - Fixup qcom,bcm-voter.yaml. comments (Rob)
-> - Use qcom,bcm-voter instead of SoC specific compatible for
->   SDM845 and SC7180 (Odelu/Sibi)
-> - Fixup bindings check failures for qcom,sdm845.yaml
-> - Fixup the misc bugs. comments (Evan/Sibi)
-> - Fixup reg size for aggre1/2_noc
-> 
-> v2: 
-> - Reorganized dt-binding patches
-> - Fixed a bug that adds duplicate BCM node to voter (Georgi)
-> - Addressed misc. comments (Georgi)
-> 
-> v1: https://lkml.org/lkml/2019/12/16/15
-> 
-> [1]: https://lkml.org/lkml/2019/6/13/143
-> [2]: https://lkml.org/lkml/2019/7/19/1063
-> [3]: https://lkml.org/lkml/2019/10/16/1793
-> [4]: https://lkml.org/lkml/2019/11/26/389
-> 
-> David Dai (6):
->   dt-bindings: interconnect: Convert qcom,sdm845 to DT schema
->   dt-bindings: interconnect: Add YAML schemas for QCOM bcm-voter
->   dt-bindings: interconnect: Update Qualcomm SDM845 DT bindings
->   interconnect: qcom: Consolidate interconnect RPMh support
->   interconnect: qcom: sdm845: Split qnodes into their respective NoCs
->   arm64: dts: sdm845: Redefine interconnect provider DT nodes
-> 
->  .../bindings/interconnect/qcom,bcm-voter.yaml |   45 +
->  .../bindings/interconnect/qcom,sdm845.txt     |   24 -
->  .../bindings/interconnect/qcom,sdm845.yaml    |   74 +
->  arch/arm64/boot/dts/qcom/sdm845.dtsi          |   65 +-
->  drivers/interconnect/qcom/Kconfig             |   13 +-
->  drivers/interconnect/qcom/Makefile            |    4 +
->  drivers/interconnect/qcom/bcm-voter.c         |  366 +++++
->  drivers/interconnect/qcom/bcm-voter.h         |   27 +
->  drivers/interconnect/qcom/icc-rpmh.c          |  147 ++
->  drivers/interconnect/qcom/icc-rpmh.h          |  149 +++
->  drivers/interconnect/qcom/sdm845.c            | 1185 +++++++----------
->  .../dt-bindings/interconnect/qcom,sdm845.h    |  263 ++--
->  12 files changed, 1516 insertions(+), 846 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
->  delete mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845.txt
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845.yaml
->  create mode 100644 drivers/interconnect/qcom/bcm-voter.c
->  create mode 100644 drivers/interconnect/qcom/bcm-voter.h
->  create mode 100644 drivers/interconnect/qcom/icc-rpmh.c
->  create mode 100644 drivers/interconnect/qcom/icc-rpmh.h
-> 
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
+SGVsbG8gTWFyaywNCg0KT24gTW9uLCAyMDIwLTAyLTI0IGF0IDExOjU3ICswMDAwLCBNYXJrIEJy
+b3duIHdyb3RlOg0KPiBPbiBUaHUsIEZlYiAyMCwgMjAyMCBhdCAwOTozNjozOEFNICswMjAwLCBN
+YXR0aSBWYWl0dGluZW4gd3JvdGU6DQo+ID4gQ2hhbmdlIHRoZSByZWd1bGF0b3IgaGVscGVycyB0
+byB1c2UgY29tbW9uIGxpbmVhcl9yYW5nZXMgY29kZS4NCj4gDQo+IFRoaXMgbmVlZHMgdG8gYmUg
+c3F1YXNoZWQgaW4gd2l0aCB0aGUgcHJldmlvdXMgY29tbWl0IHRvIGF2b2lkIGJ1aWxkDQo+IGJy
+ZWFrcy4NCg0KSSBkb24ndCB0aGluayBzby4NCg0KT25seSBjaGFuZ2UgcmVxdWlyZWQgb24gaW5k
+aXZpZHVhbCByZWd1bGF0b3IgZHJpdmVycyBzaG91bGQgYmUgcmVuYW1pbmcNCnRoZSBzdHJ1Y3Qg
+cmVndWxhdG9yX2xpbmVhcl9yYW5nZSB0byBsaW5lYXJfcmFuZ2UuIFJlc3Qgb2YgdGhlIGNoYW5n
+ZXMNCnNob3VsZCBiZSBpbnRlcm5hbCB0byByZWd1bGF0b3IgZnJhbWV3b3JrLCByaWdodD8NCg0K
+RXZlbiB0aGUgbmFtaW5nIGNoYW5nZSBvZiB0aGUgbGluZWFyX3JhbmdlIHN0cnVjdCBtZW1iZXJz
+IHNob3VsZCBub3QgYmUNCnZpc2libGUgdG8gdGhlc2UgZHJpdmVycyBhcyB0aGV5IHVzZSB0aGUg
+aW5pdGlhbGl6ZXIgbWFjcm8gZm9yIHNldHRpbmcNCnRoZSB2YWx1ZXMuIEkgbXVzdCBhZG1pdCBJ
+IGRpZG4ndCBjb21waWxlIF9hbGxfIHRoZSByZWd1bGF0b3IgZHJpdmVycw0Kd2hlbiBJIHRlc3Rl
+ZCB0aGlzIHRob3VnaC4gSSB3aWxsIHRyeSBjb21waWxpbmcgYXQgbGVhc3QgbW9zdCBvZiB0aGUN
+CnJlZ3VsYXRvciBkcml2ZXJzIGZvciBuZXh0IHZlcnNpb24gdGhvdWdoLiBBbmQgSSB0aGluayB0
+aGUgZmVlZGJhY2sgZm9yDQp0aGlzIHNlcmllcyBoYXMgYmVlbiBtb3N0bHkgcG9zaXRpdmUgc28g
+SSdsbCBhbHNvIGRyb3AgdGhlIFJGQyBmb3IgaXQuDQoNCkJlc3QgUmVnYXJkcw0KCU1hdHRpIFZh
+aXR0aW5lbg0K
