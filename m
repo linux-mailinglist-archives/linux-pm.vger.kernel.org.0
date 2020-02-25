@@ -2,96 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E378216B454
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2020 23:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A4A16B8B9
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 06:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728474AbgBXWnH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Feb 2020 17:43:07 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:36825 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728423AbgBXWmy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Feb 2020 17:42:54 -0500
-Received: by mail-lj1-f193.google.com with SMTP id r19so11912989ljg.3;
-        Mon, 24 Feb 2020 14:42:53 -0800 (PST)
+        id S1726417AbgBYFIf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Feb 2020 00:08:35 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34510 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725788AbgBYFIf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 00:08:35 -0500
+Received: by mail-pf1-f195.google.com with SMTP id i6so6548323pfc.1
+        for <linux-pm@vger.kernel.org>; Mon, 24 Feb 2020 21:08:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=I/mPxVay/Hu7K8kphFH3cVYIKPmVTHJMz4OBtoUwnDw=;
-        b=pck/NJYXlaxPY/Q2J7OuVN6xmLsa88Uo+1U6VsrkPtynrVeYdq58ngBpPJxUOrd2Vt
-         yuwC94w71HwS9MpFJoJwOGJ4soe6WOpN0TVYTOZWZSnCF2Kiuzc1dhBt3Ho7p5LuThmu
-         EbEDSmkg+2vzCpnlxld3cUuk6LP76DO0IeeFJGSFVcywbk5Qo8KhIWkpgvrddHtZzqnv
-         5Hcn4MNg62vOb7OEAqKS3SQYKUmV8ude/Tytebl0h6RCm3nqG0zuqaH/w7B372Y1CHZO
-         kaXf8V9l6Y9dx6iXtFcwTuAMnAg5v0VxJTVJN3M+H+AJ/CjOUG3yNdQ1BEjCf0GOsZUW
-         kH5A==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=tqUZYiy81UZHq8KwguRSjJqW3NIJKHOMPFN5dA6hUv8=;
+        b=HGakzGuddi3jXQkWHnNveg1vOMeIzRUtO/HXDf4I2PUzHfltbjm1Qezj+1200nLeOB
+         TQvKVErZTc5ASbCnmw+DEp1J0aTGRROvPcxXLhkOhmFlbwjoca4lTNscoG8v3YySwblG
+         Tv7aOi6vW0mj+pArzFrotksKu9IMk6MiwwrmDodrY1/X5U51Le3pXnoRpcW1kF8bicPZ
+         d10DqU4SEZ9Imy5zD+ds94sLfJPaFa7cpdFCuxwMCg7xjk/fu8OlPoCLglRW3DkIcCWl
+         ZNR7NukXTFSf/c9NrJRxAkIBcaMiGanlWaynkU5LP+2+pVU7o5bb0NWxWW8u3ajLM/tN
+         6ZFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=I/mPxVay/Hu7K8kphFH3cVYIKPmVTHJMz4OBtoUwnDw=;
-        b=bxZTEqVoKLMO3dgjHBei2Gn2SsFE+AcscU3Dp1C8syG6PJQHLUwl8yOYMfyXKLFpH4
-         Pl6VVt154NdsGg1G2akqSH44/u10eHBINxS9ds7nLBz/hTH7+fRoqOOMMLebAoYX1Toa
-         fFWvuCY7lH1unChhuwC29nB5An0uPzjxD5K6xNHamRCO1Qp1InOiHgvDk/fBfe7y6C6M
-         QUt52aI65gUWVTt9cOTAxTc51GoUDvK7xrFtnq8MPMatjqRPKc7O9d9UXtcl/o3n7WeA
-         +JuUD5NVOkExeWfYRNNqlWdVpAeKQ5Yu2I/pAYihYQ2rlgdHrNPiHKp8gpJkx/V9AWrJ
-         wfyw==
-X-Gm-Message-State: APjAAAVGS2uTDRT8EZSLXsh++xu0XElhHkpEqKeuMszeaWp3XbcIxBct
-        iU1/TnVh+Z8PZcFTUa0PP5Q=
-X-Google-Smtp-Source: APXvYqzSdEcbWR3nCTxQCqY20tMSNhhfhYra8xq6nWa3oEW2qkCRskdNNhiQ6sqd9ohn/Q1yrUTREw==
-X-Received: by 2002:a2e:9143:: with SMTP id q3mr30254680ljg.199.1582584172729;
-        Mon, 24 Feb 2020 14:42:52 -0800 (PST)
-Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id j7sm6264833lfh.25.2020.02.24.14.42.51
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=tqUZYiy81UZHq8KwguRSjJqW3NIJKHOMPFN5dA6hUv8=;
+        b=kLbFZRx2QA+15EvRxXrcTMfKwarAyteyg0gQ80kTDZhnC3vb6IOyA4LCM468dSxqv5
+         88ot6pkbfRsy92z19vHnzl30tR6DgKKSLQ/HQoQwiL7y/hDvFgQQR0pvtRNX0YbTqP8q
+         OX7j9ECg/4uaQCOeuNuUk1g96o1l6xmk7FPtVVdnDbboEf7eflQ69vugZkzVwJ5i6VOj
+         rLCSqEKO1vLOuumdMqtAljOngg++JYbUgxWotyD/hHwic2f9lV2De9rJ9TzyPdhwPHCa
+         WJfBAsEX2G10ZXAKRqkJFBQl2uYkYWUlQ0QADK8OvE8zV0RyGNtxF6oRxE3NgfwFF+cx
+         nO3w==
+X-Gm-Message-State: APjAAAWQc5KJj59K3VJ47hf7HMpLT2UGuIyTKZqyJnvAXKBTSLFUJb49
+        BVomq63QdvCA97Ez9cg8r5FquQ==
+X-Google-Smtp-Source: APXvYqz6IE9jh60Xr9+8h5LussuaMmJSlBt6AR00pDT9XEyDZcJ9EfJ4du1eFt5MYekdaXcI574iUw==
+X-Received: by 2002:a62:6342:: with SMTP id x63mr54999297pfb.103.1582607314399;
+        Mon, 24 Feb 2020 21:08:34 -0800 (PST)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id r66sm15156450pfc.74.2020.02.24.21.08.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2020 14:42:52 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mon, 24 Feb 2020 21:08:33 -0800 (PST)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Rob Herring <robh@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Jasper Korten <jja2000@gmail.com>,
-        David Heidelberg <david@ixit.cz>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v11 17/17] ARM: tegra: Enable Tegra cpuidle driver in tegra_defconfig
-Date:   Tue, 25 Feb 2020 01:40:57 +0300
-Message-Id: <20200224224057.21877-18-digetx@gmail.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20200224224057.21877-1-digetx@gmail.com>
-References: <20200224224057.21877-1-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Todd Kjos <tkjos@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v5 0/6] driver core: Improve and cleanup driver_deferred_probe_check_state()
+Date:   Tue, 25 Feb 2020 05:08:22 +0000
+Message-Id: <20200225050828.56458-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Tegra CPU Idle driver was moved out into driver/cpuidle/ directory and
-it is now a proper platform driver.
+This series goal is to improve and cleanup the
+driver_deferred_probe_check_state() code in the driver core.
 
-Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/configs/tegra_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+This series is useful for being able to support modules
+dependencies which may be loaded by userland, far after
+late_initcall is done. For instance, this series allows us to
+successfully use various clk drivers as modules on the db845c
+board. And without it, those drivers have to be statically built
+in to work.
 
-diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
-index a27592d3b1fa..aa94369bdd0f 100644
---- a/arch/arm/configs/tegra_defconfig
-+++ b/arch/arm/configs/tegra_defconfig
-@@ -25,6 +25,7 @@ CONFIG_CPU_FREQ=y
- CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
- CONFIG_CPUFREQ_DT=y
- CONFIG_CPU_IDLE=y
-+CONFIG_ARM_TEGRA_CPUIDLE=y
- CONFIG_VFP=y
- CONFIG_NEON=y
- CONFIG_TRUSTED_FOUNDATIONS=y
+Since I first sent out this patch, Saravana suggested an
+alternative approach which also works for our needs, and is a
+bit simpler:
+ https://lore.kernel.org/lkml/20200220055250.196456-1-saravanak@google.com/T/#u
+
+However, while that patch provides the functionality we need,
+I still suspect the driver_deferred_probe_check_state() code
+could benefit from the cleanup in this patch, as the existing
+logic is somewhat muddy.
+
+New in v5:
+* Reworked the driver_deferred_probe_check_state() logic as
+  suggested by Saravana to tie the initcall_done checking with
+  modules being enabled.
+* Cleanup some comment wording as suggested by Rafael
+* Try to slightly simplify the regulator logic as suggested by
+  Bjorn
+
+Thanks so much to Bjorn, Saravana and Rafael for their reviews
+and suggestions! Additional review and feedback is always greatly
+appreciated!
+
+thanks
+-john
+
+Cc: Rob Herring <robh@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Kevin Hilman <khilman@kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Saravana Kannan <saravanak@google.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Thierry Reding <treding@nvidia.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-pm@vger.kernel.org
+
+John Stultz (6):
+  driver core: Fix driver_deferred_probe_check_state() logic
+  driver core: Set deferred_probe_timeout to a longer default if
+    CONFIG_MODULES is set
+  pinctrl: Remove use of driver_deferred_probe_check_state_continue()
+  driver core: Remove driver_deferred_probe_check_state_continue()
+  driver core: Rename deferred_probe_timeout and make it global
+  regulator: Use driver_deferred_probe_timeout for
+    regulator_init_complete_work
+
+ drivers/base/dd.c             | 82 +++++++++++++----------------------
+ drivers/pinctrl/devicetree.c  |  9 ++--
+ drivers/regulator/core.c      | 25 ++++++-----
+ include/linux/device/driver.h |  2 +-
+ 4 files changed, 49 insertions(+), 69 deletions(-)
+
 -- 
-2.24.0
+2.17.1
 
