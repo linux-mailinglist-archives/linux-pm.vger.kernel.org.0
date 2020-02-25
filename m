@@ -2,135 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9692716B9F5
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 07:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DACE16BA2D
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 07:59:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726827AbgBYGp4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 01:45:56 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:24792 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725851AbgBYGpz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 01:45:55 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01P6jfxg166980;
-        Tue, 25 Feb 2020 01:45:51 -0500
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2ybu13qm2v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Feb 2020 01:45:50 -0500
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 01P6jhKO167045;
-        Tue, 25 Feb 2020 01:45:43 -0500
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2ybu13qm0b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Feb 2020 01:45:43 -0500
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 01P6jA14027561;
-        Tue, 25 Feb 2020 06:45:35 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02wdc.us.ibm.com with ESMTP id 2yaux6hsbr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Feb 2020 06:45:35 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01P6jZf245351314
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Feb 2020 06:45:35 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EEBB3AC059;
-        Tue, 25 Feb 2020 06:45:34 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B0458AC05B;
-        Tue, 25 Feb 2020 06:45:34 +0000 (GMT)
-Received: from sofia.ibm.com (unknown [9.124.35.114])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Feb 2020 06:45:34 +0000 (GMT)
-Received: by sofia.ibm.com (Postfix, from userid 1000)
-        id 7FAAC2E2F59; Tue, 25 Feb 2020 12:15:32 +0530 (IST)
-Date:   Tue, 25 Feb 2020 12:15:32 +0530
-From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
-To:     "Oliver O'Halloran" <oohall@gmail.com>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/2] cpufreq/powernv: Fix unsafe notifiers
-Message-ID: <20200225064532.GJ12846@in.ibm.com>
-Reply-To: ego@linux.vnet.ibm.com
-References: <20200206062622.28235-1-oohall@gmail.com>
- <20200206062622.28235-2-oohall@gmail.com>
+        id S1728976AbgBYG7o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Feb 2020 01:59:44 -0500
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:30171 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725788AbgBYG7o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 01:59:44 -0500
+X-IronPort-AV: E=Sophos;i="5.70,483,1574092800"; 
+   d="scan'208";a="83893039"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 25 Feb 2020 14:59:35 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id 4DEF750A9967;
+        Tue, 25 Feb 2020 14:49:48 +0800 (CST)
+Received: from [10.167.226.60] (10.167.226.60) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1395.4; Tue, 25 Feb 2020 14:59:26 +0800
+Subject: Re: [RFC PATCH 1/2] x86/acpi: Improve code readablity of early madt
+ processing
+To:     Borislav Petkov <bp@alien8.de>
+CC:     <x86@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <rjw@rjwysocki.net>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <hpa@zytor.com>
+References: <20200123014144.19155-1-caoj.fnst@cn.fujitsu.com>
+ <20200123014144.19155-2-caoj.fnst@cn.fujitsu.com>
+ <20200224132152.GB29318@zn.tnic>
+From:   Cao jin <caoj.fnst@cn.fujitsu.com>
+Message-ID: <8b19ed2f-2470-c522-cc47-f615c615be20@cn.fujitsu.com>
+Date:   Tue, 25 Feb 2020 15:02:06 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200206062622.28235-2-oohall@gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-25_01:2020-02-21,2020-02-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- malwarescore=0 bulkscore=0 phishscore=0 mlxlogscore=999 spamscore=0
- adultscore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002250054
+In-Reply-To: <20200224132152.GB29318@zn.tnic>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.167.226.60]
+X-ClientProxiedBy: G08CNEXCHPEKD05.g08.fujitsu.local (10.167.33.203) To
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206)
+X-yoursite-MailScanner-ID: 4DEF750A9967.AAB10
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: caoj.fnst@cn.fujitsu.com
+X-Spam-Status: No
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Feb 06, 2020 at 05:26:22PM +1100, Oliver O'Halloran wrote:
-> The PowerNV cpufreq driver registers two notifiers: one to catch throttle
-> messages from the OCC and one to bump the CPU frequency back to normal
-> before a reboot. Both require the cpufreq driver to be registered in order
-> to function since the notifier callbacks use various cpufreq_*() functions.
+On 2/24/20 9:21 PM, Borislav Petkov wrote:
+> On Thu, Jan 23, 2020 at 09:41:43AM +0800, Cao jin wrote:
+>> Current processing logic is confusing.
+>>
+>> Return value of early_acpi_parse_madt_lapic_addr_ovr() indicates error(< 0),
+>> parsed entry number(>= 0).
 > 
-> Right now we register both notifiers before we've initialised the driver.
-> This seems to work, but we should head off any protential problems by
-> registering the notifiers after the driver is initialised.
-> 
-> Cc: Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>
-> Signed-off-by: Oliver O'Halloran <oohall@gmail.com>
+> You mean, the count of table entries parsed successfully?
 
-Reviewed-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
+Yes, 0 for no override sub-table.
 
-> ---
->  drivers/cpufreq/powernv-cpufreq.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-> index 1806b1d..03798c4 100644
-> --- a/drivers/cpufreq/powernv-cpufreq.c
-> +++ b/drivers/cpufreq/powernv-cpufreq.c
-> @@ -1114,9 +1114,6 @@ static int __init powernv_cpufreq_init(void)
->  	if (rc)
->  		goto out;
+>> So, it makes no sense to initialize acpi_lapic & smp_found_config
+>> seeing no override entry, instead, initialize them seeing MADT.
 > 
-> -	register_reboot_notifier(&powernv_cpufreq_reboot_nb);
-> -	opal_message_notifier_register(OPAL_MSG_OCC, &powernv_cpufreq_opal_nb);
-> -
->  	if (powernv_pstate_info.wof_enabled)
->  		powernv_cpufreq_driver.boost_enabled = true;
->  	else
-> @@ -1125,15 +1122,17 @@ static int __init powernv_cpufreq_init(void)
->  	rc = cpufreq_register_driver(&powernv_cpufreq_driver);
->  	if (rc) {
->  		pr_info("Failed to register the cpufreq driver (%d)\n", rc);
-> -		goto cleanup_notifiers;
-> +		goto cleanup;
->  	}
+> Err, that logical conclusion is not really clear to me - pls try
+> again with more detail. I kinda see what you mean by looking at
+> acpi_process_madt() but before I commit a change like that, I better
+> have the warm and fuzzy feeling that it is correct and properly
+> explained in its commit message.
 > 
->  	if (powernv_pstate_info.wof_enabled)
->  		cpufreq_enable_boost_support();
+
+My understanding of early_acpi_process_madt(): mainly for getting APIC
+register base address(acpi_lapic_addr) from MADT, then process it via
+register_lapic_address().  acpi_lapic_addr could be got from one of
+following 2 places:
+
+  1. MADT header (32-bit address, always exist)
+  2. MADT sub-table: Local APIC Address Override (64-bit address,
+     optional, high priority and use it if present)
+
+So the making-sense logic to me goes like:
+
+  1. get (32-bit) acpi_lapic_addr from MADT header.
+  2. check if there is MADT override structure & get 64-bit
+     acpi_lapic_addr if present.
+  3. register_lapic_address(acpi_lapic_addr);
+
+Then, it looks weird to me putting register_lapic_address() into
+early_acpi_parse_madt_lapic_addr_ovr(), the result is not wrong, but the
+code logic is hard for newbie. (these 2 functions both does more than
+its name tells, register_lapic_address() also get boot cpu APIC ID &
+version.)
+
+Variable acpi_lapic and its counterpart smp_found_config from MPS
+indicate whether it is SMP system, right? The following code:
+
+
+	error = early_acpi_parse_madt_lapic_addr_ovr();
+	if (!error) {
+		acpi_lapic = 1;
+		smp_found_config = 1;
+	}
+
+means setting them when there is no override sub-table, so why can't
+moving the setting operation out? Another issue: if there *is* override
+sub-table, don't set those two?
+
+> So why did
 > 
-> +	register_reboot_notifier(&powernv_cpufreq_reboot_nb);
-> +	opal_message_notifier_register(OPAL_MSG_OCC, &powernv_cpufreq_opal_nb);
-> +
->  	return 0;
-> -cleanup_notifiers:
-> -	unregister_all_notifiers();
-> +cleanup:
->  	clean_chip_info();
->  out:
->  	pr_info("Platform driver disabled. System does not support PState control\n");
-> -- 
-> 2.9.5
+>   cbf9bd603ab1 ("acpi: get boot_cpu_id as early for k8_scan_nodes")
 > 
+> do it this way? Was it wrong or why?
+
+Not a clue... The title says it wants boot_cpu_physical_apicid, but did
+many other things. Maybe Thomas could provide some insights?
+
+> 
+> I'm very wary about touching ACPI parsing code for no good reason
+> because, well, it is ACPI...
+
+I was expecting ACPI guys could help to confirm;) I also understand this
+should be tested widely, but I just have a normal PC, so it is a RFC:)
+-- 
+Sincerely,
+Cao jin
+
+
