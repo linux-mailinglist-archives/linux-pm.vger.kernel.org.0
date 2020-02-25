@@ -2,220 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4EF16EB07
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 17:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DABE216EB42
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 17:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730357AbgBYQNY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 11:13:24 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:35462 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729189AbgBYQNY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 11:13:24 -0500
-Received: by mail-ot1-f67.google.com with SMTP id r16so50324otd.2;
-        Tue, 25 Feb 2020 08:13:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VL+DlyeyetOp4hj4Wd5H2StakcvzqSai3gD2cxZNaVU=;
-        b=TCJFthGcpQjUV/t0A1xP4NxNmzxtaPk8RQ9L0c7x7ukdLOADNc4qsmFQrs3s1cmoF8
-         12OJSRL5wKhACXCm27oGkuuYuW7pO9CAg5YbTrV7Vei+8vsE0t4TuP1G0LmpPC9VTaip
-         w5j0I5h/f15lY1x+pA/NDnOrH26xHCVTAZJ/kx21em7dlwQt2iS8k/IbfYGGvwTfCXse
-         R3zQYnBAD8W47X7+04bYE3DzPXpddDYSdUsmwuQvcZwTvtEdmtM3ew2rNtqsgVY/mx1M
-         Kcbdu3XfjKovb6hlbilsLbL8M5YdCd+KOxDlAnRvhHsPAPSjgm5/0yhnrHk4qvaqLlyb
-         oWWQ==
-X-Gm-Message-State: APjAAAW7ljdwiaM5XkKnXBJ86E0jKvTp2+SvMU9QbCSl1TJJgRiC9XFu
-        sIYuvWsTI40kP9k57U7gE1bIQDY8Ci/PWouK5HA=
-X-Google-Smtp-Source: APXvYqy63J+4B+eRAxGKURNWKgaKqO36eFLFSszHvTNIVZUAJvPu1RoqON1pZkTd0zEjWOHRd5HvC3NhPplF8VrLqMI=
-X-Received: by 2002:a9d:7653:: with SMTP id o19mr43546746otl.118.1582647202902;
- Tue, 25 Feb 2020 08:13:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20200225131938.120447-1-christian.brauner@ubuntu.com> <20200225131938.120447-7-christian.brauner@ubuntu.com>
-In-Reply-To: <20200225131938.120447-7-christian.brauner@ubuntu.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Feb 2020 17:13:11 +0100
-Message-ID: <CAJZ5v0ip8Z78_tOrDB+dR_t+V6YfKi6qY14nr6j6fW=zPu99wQ@mail.gmail.com>
-Subject: Re: [PATCH v6 6/9] drivers/base/power: add dpm_sysfs_change_owner()
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
+        id S1730659AbgBYQVf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Feb 2020 11:21:35 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:55338 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728051AbgBYQVf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 11:21:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=J3p3P1Xs0O9vBplWiDfg1XuROWQome6tzfHEzwiApJU=; b=Kz5vmBt0G2YWRfEPqm9mUBVMss
+        cPiRtJ23JAwKdJiDWEcQn6d9h7UzBhbjjgDJPBXzpxPD5zPKnkixFabpBou2UJGkwQgOMDFvX432+
+        Jy0ogOtBMxdji+YUDDm4EREXv5uLplk7GBPmOYpM+JQwTauVHYCUovkLaUV+7DbnKbN3gDgIU0f4I
+        lohHkNFlNlsdqekU+IG+wMdRQWgYVVGlZ0CwscvUWxDO8ITwsrWA7uL7NNOo+dB2Ru/AnYeTD6Rwn
+        WVS6KlYp7cyECY4cbvgwFXRwQ+ccyRBY6iMychwLSb2vvFzHr4nDnPelXTtgxC0u4N2aaiDaPb3k7
+        r40hwkmQ==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j6cxi-0003cc-4t; Tue, 25 Feb 2020 16:21:34 +0000
+Subject: Re: [PATCH v4 9/9] power: supply: Support ROHM bd99954 charger
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        mazziesaccount@gmail.com
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Markus Laine <markus.laine@fi.rohmeurope.com>,
+        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
+References: <cover.1582617178.git.matti.vaittinen@fi.rohmeurope.com>
+ <529dd6298be245051f333ab4d9264902bf889aa6.1582617178.git.matti.vaittinen@fi.rohmeurope.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <c187bb77-e804-93bd-64db-9418be58f191@infradead.org>
+Date:   Tue, 25 Feb 2020 08:21:33 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <529dd6298be245051f333ab4d9264902bf889aa6.1582617178.git.matti.vaittinen@fi.rohmeurope.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 25, 2020 at 2:22 PM Christian Brauner
-<christian.brauner@ubuntu.com> wrote:
->
-> Add a helper to change the owner of a device's power entries. This
-> needs to happen when the ownership of a device is changed, e.g. when
-> moving network devices between network namespaces.
-> This function will be used to correctly account for ownership changes,
-> e.g. when moving network devices between network namespaces.
->
-> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+On 2/25/20 12:55 AM, Matti Vaittinen wrote:
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 8781c674ed07..0b3bad6fc736 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -702,6 +702,16 @@ config CHARGER_BD70528
+>  	 information and altering charger configurations from charger
+>  	 block of the ROHM BD70528 Power Management IC.
+>  
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi,
 
-> ---
-> /* v2 */
-> - "Rafael J. Wysocki" <rafael@kernel.org>:
->   -  Fold if (dev->power.wakeup && dev->power.wakeup->dev) check into
->      if (device_can_wakeup(dev)) check since the former can never be true if
->      the latter is false.
->
-> - Christian Brauner <christian.brauner@ubuntu.com>:
->   - Place (dev->power.wakeup && dev->power.wakeup->dev) check under
->     CONFIG_PM_SLEEP ifdefine since it will wakeup_source will only be available
->     when this config option is set.
->
-> /* v3 */
-> -  Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
->    - Add explicit uid/gid parameters.
->
-> /* v4 */
-> - "Rafael J. Wysocki" <rafael@kernel.org>:
->    - Remove in-function #ifdef in favor of separate helper that is a nop
->      whenver !CONFIG_PM_SLEEP.
->
-> /* v5 */
-> - "Rafael J. Wysocki" <rafael@kernel.org>:
->    - Return directly if condition is true in dpm_sysfs_wakeup_change_owner()
->      instead of using additional variable.
->
-> /* v6 */
-> - Christian Brauner <christian.brauner@ubuntu.com>:
->   - Make dpm_sysfs_wakeup_change_owner() static inline.
-> ---
->  drivers/base/core.c        |  4 +++
->  drivers/base/power/power.h |  3 +++
->  drivers/base/power/sysfs.c | 55 +++++++++++++++++++++++++++++++++++++-
->  3 files changed, 61 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 988f34ce2eb0..fb8b7990f6fd 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -3552,6 +3552,10 @@ int device_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
->         if (error)
->                 goto out;
->
-> +       error = dpm_sysfs_change_owner(dev, kuid, kgid);
-> +       if (error)
-> +               goto out;
+> +config CHARGER_BD99954
+> +	tristate "ROHM bd99954 charger driver"
+> +	depends on I2C
+> +	select LINEAR_RANGES
+> +	default n
+
+Drop the "default n", since it is already the default.
+
+> +	help
+> +	 Say Y here to enable support for getting battery and charger
+> +	 information and altering charger configurations from the ROHM
+> +	 BD99954 charger IC.
+
+Please indent the 3 lines of help text with one additional space (2 total).
+See Documentation/process/coding-style.rst:
+
+10) Kconfig configuration files
+-------------------------------
+
+For all of the Kconfig* configuration files throughout the source tree,
+the indentation is somewhat different.  Lines under a ``config`` definition
+are indented with one tab, while help text is indented an additional two
+spaces.  Example::
+
+  config AUDIT
+	bool "Auditing support"
+	depends on NET
+	help
+	  Enable auditing infrastructure that can be used with another
+	  kernel subsystem, such as SELinux (which requires this for
+	  logging of avc messages output).  Does not do system-call
+	  auditing without CONFIG_AUDITSYSCALL.
+
 > +
->  #ifdef CONFIG_BLOCK
->         if (sysfs_deprecated && dev->class == &block_class)
->                 goto out;
-> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
-> index 444f5c169a0b..54292cdd7808 100644
-> --- a/drivers/base/power/power.h
-> +++ b/drivers/base/power/power.h
-> @@ -74,6 +74,7 @@ extern int pm_qos_sysfs_add_flags(struct device *dev);
->  extern void pm_qos_sysfs_remove_flags(struct device *dev);
->  extern int pm_qos_sysfs_add_latency_tolerance(struct device *dev);
->  extern void pm_qos_sysfs_remove_latency_tolerance(struct device *dev);
-> +extern int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid);
->
->  #else /* CONFIG_PM */
->
-> @@ -88,6 +89,8 @@ static inline void pm_runtime_remove(struct device *dev) {}
->
->  static inline int dpm_sysfs_add(struct device *dev) { return 0; }
->  static inline void dpm_sysfs_remove(struct device *dev) {}
-> +static inline int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid,
-> +                                        kgid_t kgid) { return 0; }
->
->  #endif
->
-> diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-> index d7d82db2e4bc..2b99fe1eb207 100644
-> --- a/drivers/base/power/sysfs.c
-> +++ b/drivers/base/power/sysfs.c
-> @@ -480,6 +480,14 @@ static ssize_t wakeup_last_time_ms_show(struct device *dev,
->         return enabled ? sprintf(buf, "%lld\n", msec) : sprintf(buf, "\n");
->  }
->
-> +static inline int dpm_sysfs_wakeup_change_owner(struct device *dev, kuid_t kuid,
-> +                                               kgid_t kgid)
-> +{
-> +       if (dev->power.wakeup && dev->power.wakeup->dev)
-> +               return device_change_owner(dev->power.wakeup->dev, kuid, kgid);
-> +       return 0;
-> +}
-> +
->  static DEVICE_ATTR_RO(wakeup_last_time_ms);
->
->  #ifdef CONFIG_PM_AUTOSLEEP
-> @@ -501,7 +509,13 @@ static ssize_t wakeup_prevent_sleep_time_ms_show(struct device *dev,
->
->  static DEVICE_ATTR_RO(wakeup_prevent_sleep_time_ms);
->  #endif /* CONFIG_PM_AUTOSLEEP */
-> -#endif /* CONFIG_PM_SLEEP */
-> +#else /* CONFIG_PM_SLEEP */
-> +static inline int dpm_sysfs_wakeup_change_owner(struct device *dev, kuid_t kuid,
-> +                                               kgid_t kgid)
-> +{
-> +       return 0;
-> +}
-> +#endif
->
->  #ifdef CONFIG_PM_ADVANCED_DEBUG
->  static ssize_t runtime_usage_show(struct device *dev,
-> @@ -684,6 +698,45 @@ int dpm_sysfs_add(struct device *dev)
->         return rc;
->  }
->
-> +int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
-> +{
-> +       int rc;
-> +
-> +       if (device_pm_not_required(dev))
-> +               return 0;
-> +
-> +       rc = sysfs_group_change_owner(&dev->kobj, &pm_attr_group, kuid, kgid);
-> +       if (rc)
-> +               return rc;
-> +
-> +       if (pm_runtime_callbacks_present(dev)) {
-> +               rc = sysfs_group_change_owner(
-> +                       &dev->kobj, &pm_runtime_attr_group, kuid, kgid);
-> +               if (rc)
-> +                       return rc;
-> +       }
-> +
-> +       if (device_can_wakeup(dev)) {
-> +               rc = sysfs_group_change_owner(&dev->kobj, &pm_wakeup_attr_group,
-> +                                             kuid, kgid);
-> +               if (rc)
-> +                       return rc;
-> +
-> +               rc = dpm_sysfs_wakeup_change_owner(dev, kuid, kgid);
-> +               if (rc)
-> +                       return rc;
-> +       }
-> +
-> +       if (dev->power.set_latency_tolerance) {
-> +               rc = sysfs_group_change_owner(
-> +                       &dev->kobj, &pm_qos_latency_tolerance_attr_group, kuid,
-> +                       kgid);
-> +               if (rc)
-> +                       return rc;
-> +       }
-> +       return 0;
-> +}
-> +
->  int wakeup_sysfs_add(struct device *dev)
->  {
->         return sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
-> --
-> 2.25.1
->
+>  config CHARGER_WILCO
+>  	tristate "Wilco EC based charger for ChromeOS"
+>  	depends on WILCO_EC
+
+thanks.
+-- 
+~Randy
+
