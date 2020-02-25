@@ -2,101 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2066316C214
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 14:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5432716C2DD
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 14:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730542AbgBYNWb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 08:22:31 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:33185 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730430AbgBYNWQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 08:22:16 -0500
-Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1j6aA9-0008Ie-Qg; Tue, 25 Feb 2020 13:22:13 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        linux-pm@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v6 9/9] net: fix sysfs permssions when device changes network namespace
-Date:   Tue, 25 Feb 2020 14:19:38 +0100
-Message-Id: <20200225131938.120447-10-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200225131938.120447-1-christian.brauner@ubuntu.com>
-References: <20200225131938.120447-1-christian.brauner@ubuntu.com>
+        id S1730081AbgBYN4e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Feb 2020 08:56:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34472 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729287AbgBYN4e (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 25 Feb 2020 08:56:34 -0500
+Received: from localhost (unknown [122.167.120.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 14BBC218AC;
+        Tue, 25 Feb 2020 13:56:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582638992;
+        bh=HsjJvbTH+q59fYeim5ErNffTAszwiuMCgtA22AZPS8Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HyufZEX6mJzQQ2vyo28R4iOHwTgc0pv8EAHYQTNtjGO44+qp3Nxhoa+Ku9yap4mA9
+         SQyzxEqPclvtceqUOlyz3nWTCs8/6LkNvYArUGMMe//cvZIvTHDSzYFUuP4rGm2zxD
+         tvvcHlC5eYRKSusIbkPuSzIfwIdXtSbSF1pQbaao=
+Date:   Tue, 25 Feb 2020 19:26:28 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, bjorn.andersson@linaro.org,
+        sivaa@codeaurora.org, Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: thermal: tsens: Add entry for sc7180
+ tsens to binding
+Message-ID: <20200225135628.GP2618@vkoul-mobl>
+References: <cover.1582632110.git.amit.kucheria@linaro.org>
+ <3e760279e7152825d56f8b35160a9a55a5083ce1.1582632110.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e760279e7152825d56f8b35160a9a55a5083ce1.1582632110.git.amit.kucheria@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now that we moved all the helpers in place and make use netdev_change_owner()
-to fixup the permissions when moving network devices between network
-namespaces.
+On 25-02-20, 17:38, Amit Kucheria wrote:
+> The qcom-tsens binding requires a SoC-specific and a TSENS
+> family-specific binding to be specified in the compatible string.
+> 
+> Since qcom,sc7180-tsens is not listed in the YAML binding, we see the
+> following warnings in 'make dtbs_check'. Fix them.
+> 
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible: ['qcom,sc7180-tsens',
+> 'qcom,tsens-v2'] is not valid under any of the given schemas (Possible
+> causes of the failure):
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8916-tsens', 'qcom,msm8974-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8976-tsens', 'qcom,qcs404-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8996-tsens', 'qcom,msm8998-tsens', 'qcom,sdm845-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible:1: 'qcom,tsens-v0_1' was expected
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible:1: 'qcom,tsens-v1' was expected
+> 
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible: ['qcom,sc7180-tsens',
+> 'qcom,tsens-v2'] is not valid under any of the given schemas (Possible
+> causes of the failure):
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8916-tsens', 'qcom,msm8974-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8976-tsens', 'qcom,qcs404-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8996-tsens', 'qcom,msm8998-tsens', 'qcom,sdm845-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible:1: 'qcom,tsens-v0_1' was expected
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible:1: 'qcom,tsens-v1' was expected
 
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-/* v2 */
-unchanged
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
 
-/* v3 */
-unchanged
+> 
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index eef13b9446a8..13e294328932 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -39,6 +39,7 @@ properties:
+>                - qcom,msm8996-tsens
+>                - qcom,msm8998-tsens
+>                - qcom,sdm845-tsens
+> +              - qcom,sc7180-tsens
+>            - const: qcom,tsens-v2
+>  
+>    reg:
+> -- 
+> 2.20.1
 
-/* v4 */
-unchanged
-
-/* v5 */
-unchanged
-
-/* v6 */
-unchanged
----
- net/core/dev.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index a69e8bd7ed74..0f9c4684fcbd 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -10016,6 +10016,7 @@ EXPORT_SYMBOL(unregister_netdev);
- 
- int dev_change_net_namespace(struct net_device *dev, struct net *net, const char *pat)
- {
-+	struct net *net_old = dev_net(dev);
- 	int err, new_nsid, new_ifindex;
- 
- 	ASSERT_RTNL();
-@@ -10031,7 +10032,7 @@ int dev_change_net_namespace(struct net_device *dev, struct net *net, const char
- 
- 	/* Get out if there is nothing todo */
- 	err = 0;
--	if (net_eq(dev_net(dev), net))
-+	if (net_eq(net_old, net))
- 		goto out;
- 
- 	/* Pick the destination device name, and ensure
-@@ -10107,6 +10108,12 @@ int dev_change_net_namespace(struct net_device *dev, struct net *net, const char
- 	err = device_rename(&dev->dev, dev->name);
- 	WARN_ON(err);
- 
-+	/* Adapt owner in case owning user namespace of target network
-+	 * namespace is different from the original one.
-+	 */
-+	err = netdev_change_owner(dev, net_old, net);
-+	WARN_ON(err);
-+
- 	/* Add the device back in the hashes */
- 	list_netdevice(dev);
- 
 -- 
-2.25.1
-
+~Vinod
