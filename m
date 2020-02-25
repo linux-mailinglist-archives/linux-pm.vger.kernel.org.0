@@ -2,139 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 361F316BE19
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 10:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12E516BE68
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 11:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729296AbgBYJ71 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 04:59:27 -0500
-Received: from foss.arm.com ([217.140.110.172]:48508 "EHLO foss.arm.com"
+        id S1730086AbgBYKQV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Feb 2020 05:16:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60058 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729238AbgBYJ71 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 25 Feb 2020 04:59:27 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A46E230E;
-        Tue, 25 Feb 2020 01:59:26 -0800 (PST)
-Received: from [10.37.12.155] (unknown [10.37.12.155])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B6BFF3F6CF;
-        Tue, 25 Feb 2020 01:59:22 -0800 (PST)
-Subject: Re: [PATCH v4 6/7] arm64: use activity monitors for frequency
- invariance
-To:     Valentin Schneider <valentin.schneider@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-        maz@kernel.org, suzuki.poulose@arm.com, sudeep.holla@arm.com,
-        dietmar.eggemann@arm.com, rjw@rjwysocki.net, peterz@infradead.org,
-        mingo@redhat.com, vincent.guittot@linaro.org,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20200224141142.25445-1-ionela.voinescu@arm.com>
- <20200224141142.25445-7-ionela.voinescu@arm.com> <jhjmu97ygk9.fsf@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <18604cef-1e26-96a6-38b3-ab03b1b53b48@arm.com>
-Date:   Tue, 25 Feb 2020 09:59:20 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1729702AbgBYKQV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 25 Feb 2020 05:16:21 -0500
+Received: from localhost (unknown [122.167.120.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9062121556;
+        Tue, 25 Feb 2020 10:16:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582625780;
+        bh=xhugCcXsdvxmy9hj5XGYrT1xM/LDjkFC5Qq8nX+dKIs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KwZAkaiSP/Br/sdl4/u9ZJClNk6MnLu9FyxNTiCesQcjS+dpDBmMt3I6zuxlr1gKJ
+         GB95oUUG/U90zRpBYQbeDmcvN78yrD752Xux8kUDorEjy0Y6GzkYgyhokB1MwIa1j1
+         BGcTW1j2iPmDjPic8M5mNpyfFCKIXhBvQ2Gj+nvw=
+Date:   Tue, 25 Feb 2020 15:46:14 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, bjorn.andersson@linaro.org,
+        sivaa@codeaurora.org, Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] dt-bindings: thermal: tsens: Make dtbs_check pass
+ for sc7180 tsens
+Message-ID: <20200225101614.GN2618@vkoul-mobl>
+References: <cover.1582615616.git.amit.kucheria@linaro.org>
+ <0f506cfdd8eb9d50b5eb43c9dca510284ac8ded1.1582615616.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <jhjmu97ygk9.fsf@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0f506cfdd8eb9d50b5eb43c9dca510284ac8ded1.1582615616.git.amit.kucheria@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 25-02-20, 13:01, Amit Kucheria wrote:
+> Fixes the following warnings:
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible: ['qcom,sc7180-tsens',
+> 'qcom,tsens-v2'] is not valid under any of the given schemas (Possible
+> causes of the failure):
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8916-tsens', 'qcom,msm8974-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8976-tsens', 'qcom,qcs404-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8996-tsens', 'qcom,msm8998-tsens', 'qcom,sdm845-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible:1: 'qcom,tsens-v0_1' was expected
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c263000: compatible:1: 'qcom,tsens-v1' was expected
+
+I think the patch title should be "add qcom,sc7180-tsens to  qcom-tsens.yaml"
+
+and it would be great to see explanation on how adding it fixes these
+warns.
+
+Relooking at series I think this applies to rest of the series too :)
+
+Thanks
 
 
-On 2/24/20 6:40 PM, Valentin Schneider wrote:
 > 
-> Ionela Voinescu writes:
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible: ['qcom,sc7180-tsens',
+> 'qcom,tsens-v2'] is not valid under any of the given schemas (Possible
+> causes of the failure):
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8916-tsens', 'qcom,msm8974-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8976-tsens', 'qcom,qcs404-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible:0: 'qcom,sc7180-tsens' is not one of
+> ['qcom,msm8996-tsens', 'qcom,msm8998-tsens', 'qcom,sdm845-tsens']
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible:1: 'qcom,tsens-v0_1' was expected
+> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
+> thermal-sensor@c265000: compatible:1: 'qcom,tsens-v1' was expected
 > 
->> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> With the small nits below:
-> 
-> Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
-> 
->> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
->> index fa9528dfd0ce..7606cbd63517 100644
->> --- a/arch/arm64/kernel/topology.c
->> +++ b/arch/arm64/kernel/topology.c
->> +
->> +static inline int
-> 
-> That should be bool, seeing what it returns.
-> 
->> +enable_policy_freq_counters(int cpu, cpumask_var_t valid_cpus)
->> +{
->> +	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
->> +
->> +	if (!policy) {
->> +		pr_debug("CPU%d: No cpufreq policy found.\n", cpu);
->> +		return false;
->> +	}
->> +
->> +	if (cpumask_subset(policy->related_cpus, valid_cpus))
->> +		cpumask_or(amu_fie_cpus, policy->related_cpus,
->> +			   amu_fie_cpus);
->> +
->> +	cpufreq_cpu_put(policy);
->> +
->> +	return true;
->> +}
->> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
->> index 1eb81f113786..1ab2b7503d63 100644
->> --- a/drivers/base/arch_topology.c
->> +++ b/drivers/base/arch_topology.c
->> @@ -29,6 +29,14 @@ void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
->>        unsigned long scale;
->>        int i;
->>
->> +	/*
->> +	 * If the use of counters for FIE is enabled, just return as we don't
->> +	 * want to update the scale factor with information from CPUFREQ.
->> +	 * Instead the scale factor will be updated from arch_scale_freq_tick.
->> +	 */
->> +	if (arch_cpu_freq_counters(cpus))
->> +		return;
->> +
->>        scale = (cur_freq << SCHED_CAPACITY_SHIFT) / max_freq;
->>
->>        for_each_cpu(i, cpus)
->> diff --git a/include/linux/topology.h b/include/linux/topology.h
->> index eb2fe6edd73c..397aad6ae163 100644
->> --- a/include/linux/topology.h
->> +++ b/include/linux/topology.h
->> @@ -227,5 +227,12 @@ static inline const struct cpumask *cpu_cpu_mask(int cpu)
->>        return cpumask_of_node(cpu_to_node(cpu));
->>   }
->>
->> +#ifndef arch_cpu_freq_counters
->> +static __always_inline
->> +bool arch_cpu_freq_counters(struct cpumask *cpus)
->> +{
->> +	return false;
->> +}
->> +#endif
->>
-> 
-> Apologies for commenting on this only now, I had missed it in my earlier
-> round of review.
-> 
-> I would've liked to keep this contained within arm64 stuff until we agreed
-> on a more generic counter-driven FIE interface, but seems like we can't evade
-> it due to the arch_topology situation.
-> 
-> Would it make sense to relocate this stub to arch_topology.h instead, at
-> least for the time being? That way the only non-arm64 changes are condensed
-> in arch_topology (even if it doesn't change much in terms of header files,
-> since topology.h imports arch_topology.h)
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index eef13b9446a8..13e294328932 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -39,6 +39,7 @@ properties:
+>                - qcom,msm8996-tsens
+>                - qcom,msm8998-tsens
+>                - qcom,sdm845-tsens
+> +              - qcom,sc7180-tsens
+>            - const: qcom,tsens-v2
+>  
+>    reg:
+> -- 
+> 2.20.1
 
-Or make it as a 'weak' and place it just above the arch_set_freq_scale()
-in arch_topology.c, not touching headers?
-
-
+-- 
+~Vinod
