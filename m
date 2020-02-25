@@ -2,132 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DACE16BA2D
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 07:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0695916BAA0
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2020 08:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728976AbgBYG7o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 01:59:44 -0500
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:30171 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725788AbgBYG7o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 01:59:44 -0500
-X-IronPort-AV: E=Sophos;i="5.70,483,1574092800"; 
-   d="scan'208";a="83893039"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 25 Feb 2020 14:59:35 +0800
-Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
-        by cn.fujitsu.com (Postfix) with ESMTP id 4DEF750A9967;
-        Tue, 25 Feb 2020 14:49:48 +0800 (CST)
-Received: from [10.167.226.60] (10.167.226.60) by
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
- (TLS) id 15.0.1395.4; Tue, 25 Feb 2020 14:59:26 +0800
-Subject: Re: [RFC PATCH 1/2] x86/acpi: Improve code readablity of early madt
- processing
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <x86@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <rjw@rjwysocki.net>, <len.brown@intel.com>, <pavel@ucw.cz>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <hpa@zytor.com>
-References: <20200123014144.19155-1-caoj.fnst@cn.fujitsu.com>
- <20200123014144.19155-2-caoj.fnst@cn.fujitsu.com>
- <20200224132152.GB29318@zn.tnic>
-From:   Cao jin <caoj.fnst@cn.fujitsu.com>
-Message-ID: <8b19ed2f-2470-c522-cc47-f615c615be20@cn.fujitsu.com>
-Date:   Tue, 25 Feb 2020 15:02:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726019AbgBYHb3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Feb 2020 02:31:29 -0500
+Received: from mail-pj1-f44.google.com ([209.85.216.44]:40880 "EHLO
+        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728976AbgBYHb2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 02:31:28 -0500
+Received: by mail-pj1-f44.google.com with SMTP id 12so891337pjb.5
+        for <linux-pm@vger.kernel.org>; Mon, 24 Feb 2020 23:31:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=anRqB6ZtL5ycMSdajgec54nGj236WP/DD78Va57iy7E=;
+        b=bxt4Go+kFXLoTGSLuVk7Qh43XAwFUpCugL/zR7Uq+NXiGfPA551Q9fJPKnKvVV+Jdn
+         AKKdRX3y/FJl6613sHqwMD+tTsKEV2hti4sy3qHnVR66Q4D408T7K9cdx/8WdFfe6DFR
+         Payjy6ihMlXDG6bjo1BarL6zYCvn9qqeeWfrFhpSb6ariCnYnMWxsUuZAsFZ/gagE0ss
+         sfxSutPt+RGyzmMWC0Mzy6jT7a4l7f1ldZF8GsXmkr6z351C4qGl4WYpVJEwyFfImAJD
+         H28d/q2ExOWTtNia4PG7h7nWIu3CIP+tnbaOQW3bjVxrlNv9qcPNLCx5EKV3/O2Cem1i
+         ywhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=anRqB6ZtL5ycMSdajgec54nGj236WP/DD78Va57iy7E=;
+        b=n7VN/hv4sLkMDiGJYnbXpZ55B3FVjY6f8s62SVxIo93P9+m+ZI/xPEIysxkppkvD7q
+         HHai4wZhwwEZHcdpxJ20EtE/9sZiMDXra7IYQvWCqjAqTGEdPkp4zTU9Uh2ILZa6NZ4c
+         qNvE2jg7FSn2fMWSNyJdg2hiXZT7pcKonJUdpmh7PHHsktSq9GV078AxtgUh096XsQ3J
+         1FmUS2JcIGGovAZSlPrMwvKMtw2wh+bHIvnl/52IXL55bRBPZr1Uo8SPpMLFvopsxCUN
+         RKxGjYqNSfiljEAf6EBZIPf1RlYsQlPgHBR8ldh5iO2/qy3zdvbMrapcxxo1hXFZC897
+         N8nw==
+X-Gm-Message-State: APjAAAXRMz1PBeiSPMtr8Db8Sz8D1S4Mezu1NV2ccepFkfG0ar/CdgBa
+        qBMycEl1oG9Kz23NsmNetCi2sw==
+X-Google-Smtp-Source: APXvYqzIhBgnnHmdXw789bIxcX/nWiy2QzrnJRrPhCxP/ISxohPFT45JIgqw5WHSHhqOshHIoNCGCw==
+X-Received: by 2002:a17:90a:26e1:: with SMTP id m88mr3613337pje.101.1582615887991;
+        Mon, 24 Feb 2020 23:31:27 -0800 (PST)
+Received: from localhost ([103.195.202.114])
+        by smtp.gmail.com with ESMTPSA id r3sm15946733pfg.145.2020.02.24.23.31.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2020 23:31:26 -0800 (PST)
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org, bjorn.andersson@linaro.org,
+        sivaa@codeaurora.org, Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH v1 0/3] Cleanup dtbs_check warnings for tsens
+Date:   Tue, 25 Feb 2020 13:01:19 +0530
+Message-Id: <cover.1582615616.git.amit.kucheria@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20200224132152.GB29318@zn.tnic>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.167.226.60]
-X-ClientProxiedBy: G08CNEXCHPEKD05.g08.fujitsu.local (10.167.33.203) To
- G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206)
-X-yoursite-MailScanner-ID: 4DEF750A9967.AAB10
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: caoj.fnst@cn.fujitsu.com
-X-Spam-Status: No
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2/24/20 9:21 PM, Borislav Petkov wrote:
-> On Thu, Jan 23, 2020 at 09:41:43AM +0800, Cao jin wrote:
->> Current processing logic is confusing.
->>
->> Return value of early_acpi_parse_madt_lapic_addr_ovr() indicates error(< 0),
->> parsed entry number(>= 0).
-> 
-> You mean, the count of table entries parsed successfully?
+Make dtbs_check pass for tsens bits. I'm working on another series to
+cleanup other DT warnings for QC platforms.
 
-Yes, 0 for no override sub-table.
+Amit Kucheria (3):
+  dt-bindings: thermal: tsens: Make dtbs_check pass for sc7180 tsens
+  dt-bindings: thermal: tsens: Make dtbs_check pass for msm8916 tsens
+  dt-bindings: thermal: tsens: Make dtbs_check pass for msm8996 tsens
 
-> 
->> So, it makes no sense to initialize acpi_lapic & smp_found_config
->> seeing no override entry, instead, initialize them seeing MADT.
-> 
-> Err, that logical conclusion is not really clear to me - pls try
-> again with more detail. I kinda see what you mean by looking at
-> acpi_process_madt() but before I commit a change like that, I better
-> have the warm and fuzzy feeling that it is correct and properly
-> explained in its commit message.
-> 
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ arch/arm64/boot/dts/qcom/msm8916.dtsi                     | 2 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi                     | 4 ++--
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-My understanding of early_acpi_process_madt(): mainly for getting APIC
-register base address(acpi_lapic_addr) from MADT, then process it via
-register_lapic_address().  acpi_lapic_addr could be got from one of
-following 2 places:
-
-  1. MADT header (32-bit address, always exist)
-  2. MADT sub-table: Local APIC Address Override (64-bit address,
-     optional, high priority and use it if present)
-
-So the making-sense logic to me goes like:
-
-  1. get (32-bit) acpi_lapic_addr from MADT header.
-  2. check if there is MADT override structure & get 64-bit
-     acpi_lapic_addr if present.
-  3. register_lapic_address(acpi_lapic_addr);
-
-Then, it looks weird to me putting register_lapic_address() into
-early_acpi_parse_madt_lapic_addr_ovr(), the result is not wrong, but the
-code logic is hard for newbie. (these 2 functions both does more than
-its name tells, register_lapic_address() also get boot cpu APIC ID &
-version.)
-
-Variable acpi_lapic and its counterpart smp_found_config from MPS
-indicate whether it is SMP system, right? The following code:
-
-
-	error = early_acpi_parse_madt_lapic_addr_ovr();
-	if (!error) {
-		acpi_lapic = 1;
-		smp_found_config = 1;
-	}
-
-means setting them when there is no override sub-table, so why can't
-moving the setting operation out? Another issue: if there *is* override
-sub-table, don't set those two?
-
-> So why did
-> 
->   cbf9bd603ab1 ("acpi: get boot_cpu_id as early for k8_scan_nodes")
-> 
-> do it this way? Was it wrong or why?
-
-Not a clue... The title says it wants boot_cpu_physical_apicid, but did
-many other things. Maybe Thomas could provide some insights?
-
-> 
-> I'm very wary about touching ACPI parsing code for no good reason
-> because, well, it is ACPI...
-
-I was expecting ACPI guys could help to confirm;) I also understand this
-should be tested widely, but I just have a normal PC, so it is a RFC:)
 -- 
-Sincerely,
-Cao jin
-
+2.20.1
 
