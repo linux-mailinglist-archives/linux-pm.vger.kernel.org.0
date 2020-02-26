@@ -2,154 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E94316FA32
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 10:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539CB16FB53
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 10:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726132AbgBZJF3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Feb 2020 04:05:29 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:34780 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726494AbgBZJF3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 04:05:29 -0500
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 570C543F;
-        Wed, 26 Feb 2020 10:05:26 +0100 (CET)
-Subject: Re: [PATCH] thermal: rcar_gen3_thermal: Generate interrupt when
- temperature changes
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>, linux-pm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-References: <20200212224917.737314-1-niklas.soderlund+renesas@ragnatech.se>
-From:   Kieran Bingham <kbingham@kernel.org>
-Message-ID: <46d8fe77-57f1-83e3-33ae-5080c6de2424@kernel.org>
-Date:   Wed, 26 Feb 2020 09:05:22 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1727912AbgBZJv7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Feb 2020 04:51:59 -0500
+Received: from mail27.static.mailgun.info ([104.130.122.27]:12298 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727803AbgBZJv6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 04:51:58 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1582710718; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=POFy3KliRKq8cq0QRv2JZ6k1sTr7/Med4NwvQ/3jSlA=; b=SKV9rUcpp6Sxu7YiTz7NRy91ncANc3LJd2BYccReMqUrQCHlAeKGbDU1ZOfMsu7YFIghAhhG
+ uv2Mpo0OKARZu1ZqPbSaW4snTVVuLAgeU55Em2G1TorMvp5DBaZ/OdmSnL4RTLyp7aNnrnl8
+ Enc5Nb4T5ycB9vnm7Cww9ur5UD4=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e563fb0.7fcf28283688-smtp-out-n02;
+ Wed, 26 Feb 2020 09:51:44 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id ED25CC447A4; Wed, 26 Feb 2020 09:51:43 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from codeaurora.org (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pkondeti)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A2010C43383;
+        Wed, 26 Feb 2020 09:51:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A2010C43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=pkondeti@codeaurora.org
+Date:   Wed, 26 Feb 2020 15:21:34 +0530
+From:   Pavan Kondeti <pkondeti@codeaurora.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
+        maz@kernel.org, suzuki.poulose@arm.com, sudeep.holla@arm.com,
+        lukasz.luba@arm.com, valentin.schneider@arm.com,
+        dietmar.eggemann@arm.com, rjw@rjwysocki.net, peterz@infradead.org,
+        mingo@redhat.com, vincent.guittot@linaro.org,
+        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 6/7] arm64: use activity monitors for frequency
+ invariance
+Message-ID: <20200226095134.GM28029@codeaurora.org>
+References: <20200224141142.25445-1-ionela.voinescu@arm.com>
+ <20200224141142.25445-7-ionela.voinescu@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200212224917.737314-1-niklas.soderlund+renesas@ragnatech.se>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200224141142.25445-7-ionela.voinescu@arm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Niklas,
+On Mon, Feb 24, 2020 at 02:11:41PM +0000, Ionela Voinescu wrote:
 
-On 12/02/2020 22:49, Niklas Söderlund wrote:
-> The desired behavior of the driver is to generate an interrupt and call
+[...]
 
-s/behavior/behaviour/ but that's me being English, so you can ignore
-that ... (at your peril ... :-D )
-
-> thermal_zone_device_update() as soon as the temperature have changed
-> more then one degree.
-> 
-> When the set_trips operation was implemented it was believed that the
-> trip window set by the framework would move around the current
-> temperature and the hysteresis value described in devicetree. The
-
-Should the hysteresis value described in devicetree be a part of the
-+-MCELCIUS(1) calculations? or is it determined that a one degree window
-each side is sufficient to contain such hysteresis of the readings?
-
-> behavior of the framework is however to set a window based on the trip
-> points described in devicetree.
-> 
-> Remove the set_trips operation which was not used correctly and update
-> the temperatures that triggers interrupts directly from the interrupt
-> handler.
-> 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
-Sounds good to me.
-
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
-> ---
->  drivers/thermal/rcar_gen3_thermal.c | 24 ++++++++++++------------
->  1 file changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> index 72877bdc072daaed..55d1736f532cdb33 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -81,8 +81,6 @@ struct rcar_gen3_thermal_tsc {
->  	void __iomem *base;
->  	struct thermal_zone_device *zone;
->  	struct equation_coefs coef;
-> -	int low;
-> -	int high;
->  	int tj_t;
->  	int id; /* thermal channel id */
->  };
-> @@ -204,12 +202,14 @@ static int rcar_gen3_thermal_mcelsius_to_temp(struct rcar_gen3_thermal_tsc *tsc,
->  	return INT_FIXPT(val);
->  }
->  
-> -static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
-> +static int rcar_gen3_thermal_update_range(struct rcar_gen3_thermal_tsc *tsc)
->  {
-> -	struct rcar_gen3_thermal_tsc *tsc = devdata;
-> +	int temperature, low, high;
->  
-> -	low = clamp_val(low, -40000, 120000);
-> -	high = clamp_val(high, -40000, 120000);
-> +	rcar_gen3_thermal_get_temp(tsc, &temperature);
+> +static int __init init_amu_fie(void)
+> +{
+> +	cpumask_var_t valid_cpus;
+> +	bool have_policy = false;
+> +	int cpu;
 > +
-> +	low = temperature - MCELSIUS(1);
-> +	high = temperature + MCELSIUS(1);
->  
->  	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQTEMP1,
->  				rcar_gen3_thermal_mcelsius_to_temp(tsc, low));
-> @@ -217,15 +217,11 @@ static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
->  	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQTEMP2,
->  				rcar_gen3_thermal_mcelsius_to_temp(tsc, high));
->  
-> -	tsc->low = low;
-> -	tsc->high = high;
-> -
->  	return 0;
->  }
->  
->  static const struct thermal_zone_of_device_ops rcar_gen3_tz_of_ops = {
->  	.get_temp	= rcar_gen3_thermal_get_temp,
-> -	.set_trips	= rcar_gen3_thermal_set_trips,
->  };
->  
->  static void rcar_thermal_irq_set(struct rcar_gen3_thermal_priv *priv, bool on)
-> @@ -246,9 +242,11 @@ static irqreturn_t rcar_gen3_thermal_irq(int irq, void *data)
->  	for (i = 0; i < priv->num_tscs; i++) {
->  		status = rcar_gen3_thermal_read(priv->tscs[i], REG_GEN3_IRQSTR);
->  		rcar_gen3_thermal_write(priv->tscs[i], REG_GEN3_IRQSTR, 0);
-> -		if (status)
-> +		if (status) {
-> +			rcar_gen3_thermal_update_range(priv->tscs[i]);
->  			thermal_zone_device_update(priv->tscs[i]->zone,
->  						   THERMAL_EVENT_UNSPECIFIED);
-> +		}
->  	}
->  
->  	return IRQ_HANDLED;
-> @@ -454,6 +452,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->  		if (ret < 0)
->  			goto error_unregister;
->  
-> +		rcar_gen3_thermal_update_range(tsc);
-> +
->  		dev_info(dev, "TSC%d: Loaded %d trip points\n", i, ret);
->  	}
->  
-> @@ -492,7 +492,7 @@ static int __maybe_unused rcar_gen3_thermal_resume(struct device *dev)
->  		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
->  
->  		priv->thermal_init(tsc);
-> -		rcar_gen3_thermal_set_trips(tsc, tsc->low, tsc->high);
-> +		rcar_gen3_thermal_update_range(tsc);
->  	}
->  
->  	rcar_thermal_irq_set(priv, true);
-> 
+> +	if (!zalloc_cpumask_var(&valid_cpus, GFP_KERNEL) ||
+> +	    !zalloc_cpumask_var(&amu_fie_cpus, GFP_KERNEL))
+> +		return -ENOMEM;
 
+The patch looks good to me. one minor comment here. In an unlikely
+scenario, valid_cpus which is a temporary mask can get allocated
+but amu_fie_cpus may not. In that case, we have to free valid_cpus
+here. I have seen some static code inspection tools catching these
+type of errors. If you happen to rebase this series, fix this.
+
+Thanks,
+Pavan
+
+-- 
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
