@@ -2,109 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F5416F3FC
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 00:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE34F16F416
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 01:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729529AbgBYXyh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 18:54:37 -0500
-Received: from mga06.intel.com ([134.134.136.31]:56759 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729090AbgBYXyh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 25 Feb 2020 18:54:37 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 15:54:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,486,1574150400"; 
-   d="scan'208";a="230279712"
-Received: from jekeller-mobl1.amr.corp.intel.com (HELO [134.134.177.78]) ([134.134.177.78])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Feb 2020 15:54:34 -0800
-Subject: Re: [PATCH v5 13/19] x86/cpufeatures: Add flag to track whether MSR
- IA32_FEAT_CTL is configured
-To:     Sean Christopherson <sean.j.christopherson@intel.com>
-Cc:     TonyWWang-oc@zhaoxin.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, bp@alien8.de, bp@suse.de,
-        hpa@zytor.com, jacob.jun.pan@linux.intel.com,
-        jarkko.sakkinen@linux.intel.com, jmattson@google.com,
-        jolsa@redhat.com, joro@8bytes.org, kvm@vger.kernel.org,
-        lenb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-pm@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com,
-        namhyung@kernel.org, pbonzini@redhat.com, peterz@infradead.org,
-        rkrcmar@redhat.com, shuah@kernel.org, tglx@linutronix.de,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-References: <20191221044513.21680-14-sean.j.christopherson@intel.com>
- <e741196d-52aa-0f5e-8f1e-a37ddf2e5025@intel.com>
- <20200225221234.GL9245@linux.intel.com>
- <1eaf6fbe-0adb-5074-3bc4-1e8327e0cdb3@intel.com>
- <20200225232900.GO9245@linux.intel.com>
-From:   Jacob Keller <jacob.e.keller@intel.com>
-Organization: Intel Corporation
-Message-ID: <5434303a-0742-3811-fd14-6445d296c0f0@intel.com>
-Date:   Tue, 25 Feb 2020 15:54:34 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1729282AbgBZAKv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 25 Feb 2020 19:10:51 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:35579 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728865AbgBZAKv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 19:10:51 -0500
+Received: by mail-ot1-f65.google.com with SMTP id r16so1336130otd.2;
+        Tue, 25 Feb 2020 16:10:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CNziFfrmWhbjTTcbCNHSKad5NAJHz5/qi6i9152J5Fw=;
+        b=E5o1GriPPWq1oxiOzsk3gxRNiv7P9iUZIeeTIp88ZT3ojghJYLhPef1WJiKJDAbbC5
+         e4g+WogCi2MDQo/8Qp1sYDrtBi/vU3I5Rki338XhWJTAgbsche5Y/pcwuHP1phjAlb0r
+         VobBGYIBb0khUPFUc43aZs/m6dwJWEgTC57C0WjZWK8C5Ypx4IM0xxq2A0sFZytSB45I
+         2JhRsEFSdsdsRcFze/ApGD44C39Aa+tRw25bhKEzAjKy1BBh7dyfAXcyUyNUhQaGjDRm
+         TxoAwTR9W+jbh5JImeV1ry6BJ+exg+ctGEOZy2r/rsgQSfYMuU+f4KXnvt6S1QLws0Eq
+         d59w==
+X-Gm-Message-State: APjAAAUkQU+YUrGbjXWAKDJS3fSAYunsxpb26/epNATmDdgeOkQvtnbS
+        CZSTq+BMpmS3vsX6EMNDY2yRFeRUJu6RarpaCyU=
+X-Google-Smtp-Source: APXvYqzE8QeT1pVs1t+cjoDwnhRfObMOEixeQC7HrEUB+jxrwhoSmRaOPqThinOpS5dpvEVROBthaigAvIN6rf/uYNQ=
+X-Received: by 2002:a9d:67d7:: with SMTP id c23mr917931otn.262.1582675849939;
+ Tue, 25 Feb 2020 16:10:49 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200225232900.GO9245@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAJZ5v0iSEV9S=zTa9++vUCO6GTfBE2sxNY+b4mMMt4Y6RCRvjA@mail.gmail.com>
+ <62491094-D13B-4EED-8190-4AA4EB77036B@lca.pw> <CAJZ5v0jXZOd0yfnwcP1NrfrXnALx=5E1nmK8DHk8bJ0SLUYzAQ@mail.gmail.com>
+ <1582570959.7365.116.camel@lca.pw>
+In-Reply-To: <1582570959.7365.116.camel@lca.pw>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 26 Feb 2020 01:10:39 +0100
+Message-ID: <CAJZ5v0jDjK63R4kbBb_aU7ZBXbCG_vfOW33aVBRbYV7hEOWYqA@mail.gmail.com>
+Subject: Re: [PATCH -next] power/qos: fix a data race in pm_qos_*_value
+To:     Qian Cai <cai@lca.pw>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Marco Elver <elver@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2/25/2020 3:29 PM, Sean Christopherson wrote:
-> On Tue, Feb 25, 2020 at 02:52:32PM -0800, Jacob Keller wrote:
->> On 2/25/2020 2:12 PM, Sean Christopherson wrote:
->>> On Tue, Feb 25, 2020 at 01:49:13PM -0800, Jacob Keller wrote:
->>>> Hi Sean,
->>>>
->>>> I suspect something is wrong and the features are enabled even though
->>>> the BIOS has it disabled, leading to later failure because of this.
->>>
->>> Hrm.  On the failing kernel, what are the values of MSR 0x3a for all CPUs,
->>> i.e. what's the output of 'sudo rdmsr -a 0x3a'?
->>>
->>
->> On the old (fedora 30) kernel, every cpu reports as '1'.
->>
->> I can't easily test the failing kernel because it crashes during boot.
-> 
-> No need, your BIOS is likely locking the MSR, I doubt the value is any
-> different when running the new kernel.
-> 
-> Does reverting commit a4d0b2fdbcf7 ("KVM: VMX: Use VMX feature flag to
-> query BIOS enabling") resolve the issue?
-> 
-> Is the failing kernel an (umodified) upstream kernel?  A stable kernel?
-> Or something else?  Assuming it's an unmodified upstream kernel, can you
-> send your .config?  I've tried all the obvious Kconfig combinations but
-> haven't been able to reproduce the problem.  Staring at the code hasn't
-> yielded any revelations either.
-> 
+On Mon, Feb 24, 2020 at 8:02 PM Qian Cai <cai@lca.pw> wrote:
+>
+> On Mon, 2020-02-24 at 10:54 +0100, Rafael J. Wysocki wrote:
+> > On Mon, Feb 24, 2020 at 2:01 AM Qian Cai <cai@lca.pw> wrote:
+> > >
+> > >
+> > >
+> > > > On Feb 23, 2020, at 7:12 PM, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > >
+> > > > It may be a bug under certain conditions, but you don't mention what
+> > > > conditions they are.  Reporting it as a general bug is not accurate at
+> > > > the very least.
+> > >
+> > > Could we rule out load tearing, store tearing and reload of global_req in cpuidle_governor_latency() for all compilers and architectures which could introduce logic bugs?
+> > >
+> > >         int global_req = cpu_latency_qos_limit();
+> > >
+> > >         if (device_req > global_req)
+> > >                 device_req = global_req;
+> > >
+> > > If under register pressure, the compiler might get ride of the tmp variable, i.e.,
+> > >
+> > > If (device_req > cpu_latency_qos_limit())
+> > > —-> race with the writer.
+> > >          device_req = cpu_latency_qos_limit();
+> >
+> > Yes, there is a race here with or without the WRITE_ONCE()/READ_ONCE()
+> > annotations (note that these annotations don't prevent CPUs from
+> > reordering things, so device_req may be set before global_req
+> > regardless).
+> >
+> > However, worst-case it may cause an old value to be used and that can
+> > happen anyway if the entire cpuidle_governor_latency_req() runs
+> > between the curr_value update and pm_qos_set_value() in
+> > pm_qos_update_target(), for example.
+> >
+> > IOW, there is no guarantee that the new value will be used immediately
+> > after updating a QoS request anyway.
+> >
+> > I agree with adding the annotations (I was considering posting a patch
+> > doing that myself), but just as a matter of making the intention
+> > clear.
+>
+> OK, how about this updated texts?
+>
+> [PATCH -next] power/qos: annotate a data race in pm_qos_*_value
+>
+> cpu_latency_constraints.target_value could be accessed concurrently via,
+>
+> cpu_latency_qos_apply
+>   pm_qos_update_target
+>     pm_qos_set_value
+>
+> cpuidle_governor_latency_req
+>   cpu_latency_qos_limit
+>     pm_qos_read_value
+>
+> The read is outside pm_qos_lock critical section which results in a data race.
+> However, the worst case is that an old value to be used and that can happen
+> anyway, so annotate this data race using a pair of READ|WRITE_ONCE().
 
-I reverted the suggested commit and added some prints:
+I would rather say something like this:
 
-[   26.056398] X86_FEATURE_MSR_IA32_FEAT_CTL is enabled
-[   26.062426] X86_FEATURE_VMX is enabled
-[   26.066923] kvm: disabled by bios
-
-So the old code flow is finding KVM to be disabled, but both features
-are set...
-
-The code that sets this is run first:
-
-> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_LOCKED is set
-> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_INSIDE_SMX is unset
-> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX is unset
-> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: MSR locked by bios
-> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: VMX (outside TXT) disabled by BIOS
-> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: disabling X86_FEATURE_VMX
-
-But somehow... it is still set later...
-
-So there's something weird going on. Maybe "boot_cpu_has" in the
-vmx_disabled_by_bios is wrong? Hmm.
+The target_value field in struct pm_qos_constraints is used for
+lockless access to the effective constraint value of a given QoS list,
+so the readers of it cannot expect it to always reflect the most
+recent effective constraint value.  However, they can and do expect it
+to be equal to a valid effective constraint value computed at a
+certain time in the past (event though it may not be the most recent
+one), so add READ|WRITE_ONCE() annotations around the target_value
+accesses to prevent the compiler from possibly causing that
+expectation to be unmet by generating code in an exceptionally
+convoluted way.
