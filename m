@@ -2,163 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A4716FDD8
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 12:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8D616FE00
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 12:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728157AbgBZLfv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Feb 2020 06:35:51 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:36092 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728071AbgBZLfv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 06:35:51 -0500
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 640D243F;
-        Wed, 26 Feb 2020 12:35:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1582716948;
-        bh=ay7JOYWD1Vz0y3Z7MViB60RY0BgYPE3y9xb8JrohwxY=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=BN+9WPc964VxPwZJZ/G0eSn8/6Z0ebSs5i33nu1cL1aJkPBQCY6P4T1BlW0dp+6Yz
-         pUCZU2plhupJZQMQhYxwuBgh2ddtQUAlof2t9h/3DQG6zRjyLWbbwKAevOsez0HQkX
-         Gvr2z1MHiHGwHCooZ4qM7XR7SV5UmWmyiib/BvZM=
-Reply-To: kieran.bingham+renesas@ideasonboard.com
+        id S1728244AbgBZLlo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Feb 2020 06:41:44 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:38279 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726440AbgBZLln (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 06:41:43 -0500
+Received: by mail-wm1-f68.google.com with SMTP id a9so2676819wmj.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2020 03:41:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Vfn97DJpV57zYlv5LkzeHtiDxo5HOeUeu8dPGqQNetY=;
+        b=szakbPkZySLGFDE0K+A9Mpu7Mj3fnKA+zPpRQPCF9OxlOFr0SzYgu5NaXIku4LJ3/P
+         dQwYPgMk9UQk+7wenyY1x4mrxXvCouVUYhaFtwMWTHdEjEafpjEV+x1EigDz9oSpLmlE
+         FVPvHYIcQCuAkh8wzHnV4wzWlSN7s+mx/ifphwoaT8DXdohdeuBfqVLIeFLrZtwtsS9w
+         zKDU3HmLXb5gwM2Mmz5lp0o2Rmr0Jipx+1mgydKhHEQyUmIADHWPtSEU2y4Qgv0WQAZ0
+         2sPD/66xfzt+OMkas51Eo+pnVnIhxqhBJdM9vFhTStgNTiH12niFjNzeYj9d5n35FcpE
+         SB/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Vfn97DJpV57zYlv5LkzeHtiDxo5HOeUeu8dPGqQNetY=;
+        b=F+JvHG2L0ChUxi6o7rO4WeA58lKd0OiGttAET17A5V0kO7c5gI9+bfWMIckCRgD1xT
+         QDL1HpgcAFx9oQXCHs/DyB3r2XxXNWXsfhyUK92Vv7QodB7Ap4CclsNfrSk5OYUJdy2o
+         isRFQrfCeMJ0tPDx5xBYmyyqXpQ/J/O4fBG/QPQpNnzYUpXMbleXIPaaDtWwAVnMvV2e
+         RtWkTuqLG4x+QFAtWX1fe3rZddUiYmHpLuqMr2w1uYC9tyHHilwdpCASJMCpVfYAjroq
+         fFcgLF0t/NZVZF27vEWw14B2+IjJRQJk3hDW5xJ2Pp64jn1eNORYELOfyaJ2CJB148n/
+         O4kA==
+X-Gm-Message-State: APjAAAXeHniCelcfDKOTeWAvJFf6dmhnfH8mbXjhkIp1bIEH/tMaOhfM
+        KSS7MWagc8qukMJDw52pXD233Q==
+X-Google-Smtp-Source: APXvYqxTE6l94lMQvPrKbt98gsJjRf2C7/bNgx4rcK3DqoZQqkLrAbN7ZLlvkV3FhRrJelPcGbN3oQ==
+X-Received: by 2002:a05:600c:4105:: with SMTP id j5mr5278190wmi.28.1582717301440;
+        Wed, 26 Feb 2020 03:41:41 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:90fb:c510:3d8d:7d1b? ([2a01:e34:ed2f:f020:90fb:c510:3d8d:7d1b])
+        by smtp.googlemail.com with ESMTPSA id b21sm2632515wmd.37.2020.02.26.03.41.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Feb 2020 03:41:40 -0800 (PST)
 Subject: Re: [PATCH] thermal: rcar_gen3_thermal: Generate interrupt when
  temperature changes
 To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Kieran Bingham <kbingham@kernel.org>
 Cc:     linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 References: <20200212224917.737314-1-niklas.soderlund+renesas@ragnatech.se>
  <46d8fe77-57f1-83e3-33ae-5080c6de2424@kernel.org>
  <20200226112433.GD3165317@oden.dyn.berto.se>
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=kbingham@kernel.org; keydata=
- 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
-Organization: Ideas on Board
-Message-ID: <317d0a0d-8046-237b-9c22-7729e6053ab0@ideasonboard.com>
-Date:   Wed, 26 Feb 2020 11:35:45 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <7f14a0c4-9d44-f0b5-77f6-60431c22550e@linaro.org>
+Date:   Wed, 26 Feb 2020 12:41:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
 In-Reply-To: <20200226112433.GD3165317@oden.dyn.berto.se>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+
 Hi Niklas,
 
-On 26/02/2020 11:24, Niklas Söderlund wrote:
+On 26/02/2020 12:24, Niklas Söderlund wrote:
 > Hi Kieran,
-> 
-> Thanks for your feedback.
-> 
-> On 2020-02-26 09:05:22 +0000, Kieran Bingham wrote:
->> Hi Niklas,
->>
->> On 12/02/2020 22:49, Niklas Söderlund wrote:
->>> The desired behavior of the driver is to generate an interrupt and call
->>
->> s/behavior/behaviour/ but that's me being English, so you can ignore
->> that ... (at your peril ... :-D )
->>
-> 
-> I have a hard time as it is trying to spell the "other" version of the 
-> language I been exposed to since early years, throwing more 'u' at it 
-> will only add to my confusion ;-)
-> 
->>> thermal_zone_device_update() as soon as the temperature have changed
->>> more then one degree.
->>>
->>> When the set_trips operation was implemented it was believed that the
->>> trip window set by the framework would move around the current
->>> temperature and the hysteresis value described in devicetree. The
->>
->> Should the hysteresis value described in devicetree be a part of the
->> +-MCELCIUS(1) calculations? or is it determined that a one degree window
->> each side is sufficient to contain such hysteresis of the readings?
-> 
-> The hardware testers wanted a fixed 1 degree window.
 
-But my question is what is the value described in devicetree.
-Should it be involved in the calculation somewhere?
+[ ... ]
 
-I.e. if the devicetree specifies that the hysteresis of the hardware is
-(guessing) say "0.2 degree", does that mean that the 'window' must be at
-least that value.
-
-And picking on that purely as an example as I don't know the value or
-meaning of the one in DT, but therefore - if there was hardware that
-then had a 2 degree hysteresis, this fixed-1-degree window would have to
-be:
-
- +	low = temperature - min(MCELSIUS(1), MCELSIUS(hysteresis_val);
- +	high = temperature + min(MCELSIUS(1), MCELSIUS(hysteresis_val));
-
-
-Or perhaps I'm just mis-understanding the reference of the hysteresis
-value anyway.
-
-
-I see there is still a 'trips' section in the thermal documentation example.
-
-Should that be removed? or is it handled by core?
-
-
-
-
->>> behavior of the framework is however to set a window based on the trip
->>> points described in devicetree.
->>>
->>> Remove the set_trips operation which was not used correctly and update
->>> the temperatures that triggers interrupts directly from the interrupt
->>> handler.
->>>
 >>> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 >>
 >> Sounds good to me.
@@ -168,97 +141,16 @@ Should that be removed? or is it handled by core?
 > Thanks! Unfortunately the patch is already merged so it will be hard to 
 > add your tag.
 
-No problem, I saw it on linux-renesas-soc and was curious ;-)
---
-Kieran
+Where is it merged? I've it in my tree in the 'testing' branch about to
+move it to the linux-next branch. I can still add the reviewed-by.
+
+[ ... ]
 
 
-> 
->>
->>> ---
->>>  drivers/thermal/rcar_gen3_thermal.c | 24 ++++++++++++------------
->>>  1 file changed, 12 insertions(+), 12 deletions(-)
->>>
->>> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
->>> index 72877bdc072daaed..55d1736f532cdb33 100644
->>> --- a/drivers/thermal/rcar_gen3_thermal.c
->>> +++ b/drivers/thermal/rcar_gen3_thermal.c
->>> @@ -81,8 +81,6 @@ struct rcar_gen3_thermal_tsc {
->>>  	void __iomem *base;
->>>  	struct thermal_zone_device *zone;
->>>  	struct equation_coefs coef;
->>> -	int low;
->>> -	int high;
->>>  	int tj_t;
->>>  	int id; /* thermal channel id */
->>>  };
->>> @@ -204,12 +202,14 @@ static int rcar_gen3_thermal_mcelsius_to_temp(struct rcar_gen3_thermal_tsc *tsc,
->>>  	return INT_FIXPT(val);
->>>  }
->>>  
->>> -static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
->>> +static int rcar_gen3_thermal_update_range(struct rcar_gen3_thermal_tsc *tsc)
->>>  {
->>> -	struct rcar_gen3_thermal_tsc *tsc = devdata;
->>> +	int temperature, low, high;
->>>  
->>> -	low = clamp_val(low, -40000, 120000);
->>> -	high = clamp_val(high, -40000, 120000);
->>> +	rcar_gen3_thermal_get_temp(tsc, &temperature);
->>> +
->>> +	low = temperature - MCELSIUS(1);
->>> +	high = temperature + MCELSIUS(1);
->>>  
->>>  	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQTEMP1,
->>>  				rcar_gen3_thermal_mcelsius_to_temp(tsc, low));
->>> @@ -217,15 +217,11 @@ static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
->>>  	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQTEMP2,
->>>  				rcar_gen3_thermal_mcelsius_to_temp(tsc, high));
->>>  
->>> -	tsc->low = low;
->>> -	tsc->high = high;
->>> -
->>>  	return 0;
->>>  }
->>>  
->>>  static const struct thermal_zone_of_device_ops rcar_gen3_tz_of_ops = {
->>>  	.get_temp	= rcar_gen3_thermal_get_temp,
->>> -	.set_trips	= rcar_gen3_thermal_set_trips,
->>>  };
->>>  
->>>  static void rcar_thermal_irq_set(struct rcar_gen3_thermal_priv *priv, bool on)
->>> @@ -246,9 +242,11 @@ static irqreturn_t rcar_gen3_thermal_irq(int irq, void *data)
->>>  	for (i = 0; i < priv->num_tscs; i++) {
->>>  		status = rcar_gen3_thermal_read(priv->tscs[i], REG_GEN3_IRQSTR);
->>>  		rcar_gen3_thermal_write(priv->tscs[i], REG_GEN3_IRQSTR, 0);
->>> -		if (status)
->>> +		if (status) {
->>> +			rcar_gen3_thermal_update_range(priv->tscs[i]);
->>>  			thermal_zone_device_update(priv->tscs[i]->zone,
->>>  						   THERMAL_EVENT_UNSPECIFIED);
->>> +		}
->>>  	}
->>>  
->>>  	return IRQ_HANDLED;
->>> @@ -454,6 +452,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->>>  		if (ret < 0)
->>>  			goto error_unregister;
->>>  
->>> +		rcar_gen3_thermal_update_range(tsc);
->>> +
->>>  		dev_info(dev, "TSC%d: Loaded %d trip points\n", i, ret);
->>>  	}
->>>  
->>> @@ -492,7 +492,7 @@ static int __maybe_unused rcar_gen3_thermal_resume(struct device *dev)
->>>  		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
->>>  
->>>  		priv->thermal_init(tsc);
->>> -		rcar_gen3_thermal_set_trips(tsc, tsc->low, tsc->high);
->>> +		rcar_gen3_thermal_update_range(tsc);
->>>  	}
->>>  
->>>  	rcar_thermal_irq_set(priv, true);
->>>
->>
-> 
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
