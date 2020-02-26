@@ -2,103 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F45170003
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 14:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E1817021E
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 16:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727434AbgBZNbF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Feb 2020 08:31:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:35972 "EHLO foss.arm.com"
+        id S1727933AbgBZPRf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Feb 2020 10:17:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57056 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726700AbgBZNbE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 26 Feb 2020 08:31:04 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC7A831B;
-        Wed, 26 Feb 2020 05:31:03 -0800 (PST)
-Received: from e108754-lin.cambridge.arm.com (e108754-lin.cambridge.arm.com [10.1.198.53])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 84BAE3FA00;
-        Wed, 26 Feb 2020 05:31:01 -0800 (PST)
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-        maz@kernel.org, suzuki.poulose@arm.com, sudeep.holla@arm.com,
-        lukasz.luba@arm.com, valentin.schneider@arm.com,
-        dietmar.eggemann@arm.com, rjw@rjwysocki.net,
-        pkondeti@codeaurora.org, ionela.voinescu@arm.com
-Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v5 7/7] clocksource/drivers/arm_arch_timer: validate arch_timer_rate
-Date:   Wed, 26 Feb 2020 13:29:47 +0000
-Message-Id: <20200226132947.29738-8-ionela.voinescu@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200226132947.29738-1-ionela.voinescu@arm.com>
-References: <20200226132947.29738-1-ionela.voinescu@arm.com>
+        id S1727941AbgBZPRf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 26 Feb 2020 10:17:35 -0500
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0E15624687;
+        Wed, 26 Feb 2020 15:17:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582730254;
+        bh=QbvkJ7pUaSKaOk50O+V+6P1ajRDedKDnLBjdtDbWLMI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IrQfPqoLka7BEsWptwul43UPtO+sHb2/jj39k9KJXXnQHjhGjTZDSzpLpIkq+1897
+         mpT+jaXTivYwii9Fj68e+3DuyiCY2ca0gdVDiFfFEVa+xZNcJdWg+rQvxJntnZpp0p
+         Yz1RRZ2Kgr3M/F7dz6IXYXHOTe59jOjoCwZiQOOk=
+Received: by mail-qk1-f179.google.com with SMTP id z19so2940885qkj.5;
+        Wed, 26 Feb 2020 07:17:34 -0800 (PST)
+X-Gm-Message-State: APjAAAWZK4EJPTm4bq25wWqLgp48FdKYCswr5FO3e2FfTlkG+3hN7Xyu
+        yyhcnQHVJMnQF2E+262rZ4P86AFFiaRdd7vcnA==
+X-Google-Smtp-Source: APXvYqwOBeVkQzDCVQhRRroVuItJt7tbfzF8jBjBWGkighsyGpHKqVvv0RuR0fNZzggl6WhCT14noYZJeodCe/v9itA=
+X-Received: by 2002:ae9:f205:: with SMTP id m5mr6100523qkg.152.1582730253143;
+ Wed, 26 Feb 2020 07:17:33 -0800 (PST)
+MIME-Version: 1.0
+References: <20200220055250.196456-1-saravanak@google.com> <CANcMJZBQe5F=gbj6V2ybF-dK=kRsGZT2BX9CBJiBFoK=5Hg-kA@mail.gmail.com>
+ <CAGETcx88H+aFTt=Vp8Q1KVOZYEaD3D6=i5WN8tWmnBAs1YdY1g@mail.gmail.com> <CAGETcx_n=fZYaY5q6yZRJR9daTXm2Ryz5frfZr3n1BKf-pXCEQ@mail.gmail.com>
+In-Reply-To: <CAGETcx_n=fZYaY5q6yZRJR9daTXm2Ryz5frfZr3n1BKf-pXCEQ@mail.gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 26 Feb 2020 09:17:21 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJUp6+FA8MCvpetk9UMAk+GWm9naASE-ddi-FcMKkcwQA@mail.gmail.com>
+Message-ID: <CAL_JsqJUp6+FA8MCvpetk9UMAk+GWm9naASE-ddi-FcMKkcwQA@mail.gmail.com>
+Subject: Re: [PATCH v1] of: property: Add device link support for
+ power-domains and hwlocks
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Todd Kjos <tkjos@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Using an arch timer with a frequency of less than 1MHz can potentially
-result in incorrect functionality in systems that assume a reasonable
-rate of the arch timer of 1 to 50MHz, described as typical in the
-architecture specification.
+On Tue, Feb 25, 2020 at 3:46 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Thu, Feb 20, 2020 at 3:30 PM Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > On Thu, Feb 20, 2020 at 3:26 PM John Stultz <john.stultz@linaro.org> wrote:
+> > >
+> > > On Wed, Feb 19, 2020 at 9:53 PM Saravana Kannan <saravanak@google.com> wrote:
+> > > >
+> > > > Add support for creating device links out of more DT properties.
+> > > >
+> > > > To: lkml <linux-kernel@vger.kernel.org>
+> > > > To: John Stultz <john.stultz@linaro.org>
+> > > > To: Rob Herring <robh@kernel.org>
+> > >
+> > > Just as a heads up, git-send-email doesn't seem to pick up these To:
+> > > lines, so I had to dig this out of an archive.
+> >
+> > Weird! Left out the main person who'd care about this patch.
+> >
+> > >
+> > > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > > > Cc: Kevin Hilman <khilman@kernel.org>
+> > > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > Cc: Pavel Machek <pavel@ucw.cz>
+> > > > Cc: Len Brown <len.brown@intel.com>
+> > > > Cc: Todd Kjos <tkjos@google.com>
+> > > > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > > Cc: Liam Girdwood <lgirdwood@gmail.com>
+> > > > Cc: Mark Brown <broonie@kernel.org>
+> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > Cc: linux-pm@vger.kernel.org
+> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > ---
+> > > >  drivers/of/property.c | 4 ++++
+> > > >  1 file changed, 4 insertions(+)
+> > >
+> > > This does seem to work for me, allowing various clk drivers to be used
+> > > as modules! This removes the functional need for my recent driver core
+> > > patch series around the deferred_probe_timeout (though the cleanup
+> > > bits in there may still be worth while).
+> > >
+> > > Tested-by: John Stultz <john.stultz@linaro.org>
+> > >
+> > > Thanks for sending it out!
+> >
+> > Thanks for the Tested-by!
+> >
+> > Rob,
+> >
+> > Can you pick this up for the next rc?
 
-Therefore, warn if the arch timer rate is below 1MHz, which is
-considered atypical and worth emphasizing.
+You mean 5.7-rc1, right?
 
-Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Suggested-by: Valentin Schneider <valentin.schneider@arm.com>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>
----
- drivers/clocksource/arm_arch_timer.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+> Friendly reminder.
 
-diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
-index 9a5464c625b4..4faa930eabf8 100644
---- a/drivers/clocksource/arm_arch_timer.c
-+++ b/drivers/clocksource/arm_arch_timer.c
-@@ -885,6 +885,17 @@ static int arch_timer_starting_cpu(unsigned int cpu)
- 	return 0;
- }
- 
-+static int validate_timer_rate(void)
-+{
-+	if (!arch_timer_rate)
-+		return -EINVAL;
-+
-+	/* Arch timer frequency < 1MHz can cause trouble */
-+	WARN_ON(arch_timer_rate < 1000000);
-+
-+	return 0;
-+}
-+
- /*
-  * For historical reasons, when probing with DT we use whichever (non-zero)
-  * rate was probed first, and don't verify that others match. If the first node
-@@ -900,7 +911,7 @@ static void arch_timer_of_configure_rate(u32 rate, struct device_node *np)
- 		arch_timer_rate = rate;
- 
- 	/* Check the timer frequency. */
--	if (arch_timer_rate == 0)
-+	if (validate_timer_rate())
- 		pr_warn("frequency not available\n");
- }
- 
-@@ -1594,9 +1605,10 @@ static int __init arch_timer_acpi_init(struct acpi_table_header *table)
- 	 * CNTFRQ value. This *must* be correct.
- 	 */
- 	arch_timer_rate = arch_timer_get_cntfrq();
--	if (!arch_timer_rate) {
-+	ret = validate_timer_rate();
-+	if (ret) {
- 		pr_err(FW_BUG "frequency not available.\n");
--		return -EINVAL;
-+		return ret;
- 	}
- 
- 	arch_timer_uses_ppi = arch_timer_select_ppi();
--- 
-2.17.1
+No need to ping. You can check patchwork[1] to see where you are in the queue.
 
+Rob
+
+[1] https://patchwork.ozlabs.org/project/devicetree-bindings/list/
