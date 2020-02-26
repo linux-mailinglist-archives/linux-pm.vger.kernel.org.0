@@ -2,48 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 539CB16FB53
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 10:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3348416FBDC
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 11:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727912AbgBZJv7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Feb 2020 04:51:59 -0500
-Received: from mail27.static.mailgun.info ([104.130.122.27]:12298 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727803AbgBZJv6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 04:51:58 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1582710718; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=POFy3KliRKq8cq0QRv2JZ6k1sTr7/Med4NwvQ/3jSlA=; b=SKV9rUcpp6Sxu7YiTz7NRy91ncANc3LJd2BYccReMqUrQCHlAeKGbDU1ZOfMsu7YFIghAhhG
- uv2Mpo0OKARZu1ZqPbSaW4snTVVuLAgeU55Em2G1TorMvp5DBaZ/OdmSnL4RTLyp7aNnrnl8
- Enc5Nb4T5ycB9vnm7Cww9ur5UD4=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e563fb0.7fcf28283688-smtp-out-n02;
- Wed, 26 Feb 2020 09:51:44 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id ED25CC447A4; Wed, 26 Feb 2020 09:51:43 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from codeaurora.org (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pkondeti)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A2010C43383;
-        Wed, 26 Feb 2020 09:51:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A2010C43383
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=pkondeti@codeaurora.org
-Date:   Wed, 26 Feb 2020 15:21:34 +0530
-From:   Pavan Kondeti <pkondeti@codeaurora.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
+        id S1727532AbgBZKSu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Feb 2020 05:18:50 -0500
+Received: from foss.arm.com ([217.140.110.172]:33286 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726927AbgBZKSu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 26 Feb 2020 05:18:50 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9AEA21FB;
+        Wed, 26 Feb 2020 02:18:49 -0800 (PST)
+Received: from localhost (unknown [10.1.198.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B1DC3F9E6;
+        Wed, 26 Feb 2020 02:18:49 -0800 (PST)
+Date:   Wed, 26 Feb 2020 10:18:47 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+        catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
         maz@kernel.org, suzuki.poulose@arm.com, sudeep.holla@arm.com,
-        lukasz.luba@arm.com, valentin.schneider@arm.com,
         dietmar.eggemann@arm.com, rjw@rjwysocki.net, peterz@infradead.org,
         mingo@redhat.com, vincent.guittot@linaro.org,
         viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
@@ -51,42 +30,68 @@ Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
         linux-pm@vger.kernel.org
 Subject: Re: [PATCH v4 6/7] arm64: use activity monitors for frequency
  invariance
-Message-ID: <20200226095134.GM28029@codeaurora.org>
+Message-ID: <20200226101847.GA19513@arm.com>
 References: <20200224141142.25445-1-ionela.voinescu@arm.com>
  <20200224141142.25445-7-ionela.voinescu@arm.com>
+ <jhjmu97ygk9.fsf@arm.com>
+ <18604cef-1e26-96a6-38b3-ab03b1b53b48@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200224141142.25445-7-ionela.voinescu@arm.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <18604cef-1e26-96a6-38b3-ab03b1b53b48@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 24, 2020 at 02:11:41PM +0000, Ionela Voinescu wrote:
+Hi Valentin, Lukasz,
 
-[...]
+On Tuesday 25 Feb 2020 at 09:59:20 (+0000), Lukasz Luba wrote:
+[..]
+> On 2/24/20 6:40 PM, Valentin Schneider wrote:
+> > 
+> > Ionela Voinescu writes:
+> > > +static inline int
+> > 
+> > That should be bool, seeing what it returns.
+> > 
 
-> +static int __init init_amu_fie(void)
-> +{
-> +	cpumask_var_t valid_cpus;
-> +	bool have_policy = false;
-> +	int cpu;
-> +
-> +	if (!zalloc_cpumask_var(&valid_cpus, GFP_KERNEL) ||
-> +	    !zalloc_cpumask_var(&amu_fie_cpus, GFP_KERNEL))
-> +		return -ENOMEM;
+Will do!
 
-The patch looks good to me. one minor comment here. In an unlikely
-scenario, valid_cpus which is a temporary mask can get allocated
-but amu_fie_cpus may not. In that case, we have to free valid_cpus
-here. I have seen some static code inspection tools catching these
-type of errors. If you happen to rebase this series, fix this.
+[..]
+> > > 
+> > > +#ifndef arch_cpu_freq_counters
+> > > +static __always_inline
+> > > +bool arch_cpu_freq_counters(struct cpumask *cpus)
+> > > +{
+> > > +	return false;
+> > > +}
+> > > +#endif
+> > > 
+> > 
+> > Apologies for commenting on this only now, I had missed it in my earlier
+> > round of review.
+> > 
+> > I would've liked to keep this contained within arm64 stuff until we agreed
+> > on a more generic counter-driven FIE interface, but seems like we can't evade
+> > it due to the arch_topology situation.
+> > 
+> > Would it make sense to relocate this stub to arch_topology.h instead, at
+> > least for the time being? That way the only non-arm64 changes are condensed
+> > in arch_topology (even if it doesn't change much in terms of header files,
+> > since topology.h imports arch_topology.h)
+> 
+> Or make it as a 'weak' and place it just above the arch_set_freq_scale()
+> in arch_topology.c, not touching headers?
 
-Thanks,
-Pavan
+Yes, you guys are right, this works better nicely confined to
+arch_topology.c/h. As Lukasz suggested, I'll make
+arch_cpu_freq_counters (while here, it probably works better renamed to
+arch_freq_counters_available) a weak function in arch_topology.c with
+its strong definition in arm64/kernel/topology.c.
 
--- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+The diff is large(ish) so I'll push v5 directly with this change.
+
+Thank you both for the review,
+Ionela.
