@@ -2,264 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C4516FE5E
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 12:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1C016FF23
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 13:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgBZLzV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Feb 2020 06:55:21 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43108 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726810AbgBZLzV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 06:55:21 -0500
-Received: by mail-lj1-f194.google.com with SMTP id e3so1698576lja.10
-        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2020 03:55:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=fdeavgxgnxhsv/ZkcYCw8cApzXf34OmqZ4N7IntoRPU=;
-        b=zxgyvUeS0Xg94Ioy0XZqYGbUyyyj9B5L7d7THRh+Do+o1Akm/8RhR+ZeO3vHcA+ZiO
-         VVJ0hWrtrW8DH7xFfA+gBDzvNWvLbc4OCOTnP8zxV3lDr7ZtrMKgnF/UhD0gX7UniYbj
-         ynXWHzevC7bg0lhjTKrxXZWXvh9iHHrrGqEmnR1GtgvcyLyjnK/nKIrt6ZDsZ450zKG2
-         AHcTG09cCfCDjDhOzjBjInvZ5GYc+32UNPdCMt5InJYBwtPHDmxpblo9aOkyyOZ0QkzE
-         qC3dpd2zsY1hXIzleuXTh46lZ0ScTlE2vYMxzbHJP+ApZNMwYBmVkzSDO6WPdREdAuvP
-         jpwQ==
+        id S1726334AbgBZMhA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Feb 2020 07:37:00 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:25618 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726277AbgBZMg7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 07:36:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1582720618;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mLQQNZrIDdY7VQtLXKq4i6b4JRBJEoJcgInVPdxphBE=;
+        b=fP94T6G51rehPgKCOXaP1ctnlLp9hmHBi4kn8DL1nuMrSMOHQf72uydgKzkzfUipEnPebB
+        doD8HCtQjYd3c+dYHwg+BH99VywcqmUFLDMeKXLMrBGFrGDTH678k2dMviF5Y9AmCQKJKS
+        9ys9PYYcz/jxy808qH+iRys9vAkQ4Kc=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-34-dCTt-bejNZO3dN7__pgupA-1; Wed, 26 Feb 2020 07:36:56 -0500
+X-MC-Unique: dCTt-bejNZO3dN7__pgupA-1
+Received: by mail-wm1-f71.google.com with SMTP id d129so868039wmd.2
+        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2020 04:36:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=fdeavgxgnxhsv/ZkcYCw8cApzXf34OmqZ4N7IntoRPU=;
-        b=cSZrQG/PSNE2Fw4U5BR2kk6gRsdOVRfoqe5zEVj3vIMQBzSvLMk6r4X3IHbFGqs40E
-         b6sBMnZGMCR1iqcE+F1c3O29JDeXURukEurQBkBCzWaMd/6XD5okcAN7JWwE1PIwszrj
-         Fo9/ZI/The0FiPycNNwuMsVpm7ovWSHi8QN0yggyxsSMmO4lsfo9fn0xRlu2yVjKEpZJ
-         cZ3rJuECUZm4CiEmbxo73/ZWq4d2c+GJSNHZxtqQTIbhy5Iw21MwxdNdIYn6uNZaWoxx
-         UVLVGGLciktZoBUVfnkrwsA587MkijMslV/2n2mtjnb/loGn8A+RKahvsZPVisG7Y6Wt
-         2nPA==
-X-Gm-Message-State: APjAAAVg9BVhLgi+OfX1HE2ds/wPWSjy5+cOQyY47RjwFwOfrREGMBUR
-        Ie/HNwxkHNzLsxHQxqRHgIe99cIKQSE=
-X-Google-Smtp-Source: ADFU+vvChiyxf++IVTaw/rQSmqMNkeBEqPMgGM2bc0FbdOsCmGpXjt5uMhEprCpDiI6PRQa8jjuJcA==
-X-Received: by 2002:a2e:86c4:: with SMTP id n4mr2823346ljj.97.1582718117454;
-        Wed, 26 Feb 2020 03:55:17 -0800 (PST)
-Received: from localhost (h-200-138.A463.priv.bahnhof.se. [176.10.200.138])
-        by smtp.gmail.com with ESMTPSA id q8sm1064411lfn.90.2020.02.26.03.55.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2020 03:55:16 -0800 (PST)
-Date:   Wed, 26 Feb 2020 12:55:16 +0100
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH] thermal: rcar_gen3_thermal: Generate interrupt when
- temperature changes
-Message-ID: <20200226115516.GF3165317@oden.dyn.berto.se>
-References: <20200212224917.737314-1-niklas.soderlund+renesas@ragnatech.se>
- <46d8fe77-57f1-83e3-33ae-5080c6de2424@kernel.org>
- <20200226112433.GD3165317@oden.dyn.berto.se>
- <317d0a0d-8046-237b-9c22-7729e6053ab0@ideasonboard.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mLQQNZrIDdY7VQtLXKq4i6b4JRBJEoJcgInVPdxphBE=;
+        b=gEPoPlPtcbP/bCqQci7nJG1AguBaMrXJauAT8WHAgEML1lBQ0YReqGClaxW+6msGsD
+         DDRmAkYMuUekCPt4T9E9ostXN8Fbs/TqEIlMrhOLlhFdiM5v75gYRck90359MBY7cZ/K
+         PmAsF744dGVEHn+PhXcI/WWd3GKLlcly3RTRTfBWjS+33AW75pCbNDFt9OyubFF/DBlH
+         bYsLUzJcr/DZTQWHYl2lNZqid4Zp3p7QEPjUFPwXnJb0tn6+kuSEQbmdf2ylFLdTnyDG
+         TxOL7hzpwUw1Qx2YhmtWGwjC8/cJqpnQ8TexESGnSCXWy2XLMV8dPXZhRWtpDlfeQf2G
+         Heug==
+X-Gm-Message-State: APjAAAXla5p+om5yXpqnsAzgGv2sS+XxOe0dc2B0PLbOCGOlDPWH1KkV
+        +M+gmfDjm/GRfixBJUqGQYp2jrARHAu4HDihaJgTtvmF4TsmdbocyXRLo+HoFWdfbNDaKmpZmdK
+        hqk/EcZqjo4MibUXifHk=
+X-Received: by 2002:adf:db84:: with SMTP id u4mr5445124wri.317.1582720615611;
+        Wed, 26 Feb 2020 04:36:55 -0800 (PST)
+X-Google-Smtp-Source: APXvYqy5ICo88+idPnv1W3FdLp8LmZXS9GF40BSPKVmo0XvhKxtz7IvZH5grXF+HdEWLMOC8viQecA==
+X-Received: by 2002:adf:db84:: with SMTP id u4mr5445099wri.317.1582720615347;
+        Wed, 26 Feb 2020 04:36:55 -0800 (PST)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-fc7e-fd47-85c1-1ab3.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:fc7e:fd47:85c1:1ab3])
+        by smtp.gmail.com with ESMTPSA id v14sm3033007wrm.30.2020.02.26.04.36.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Feb 2020 04:36:54 -0800 (PST)
+Subject: Re: [PATCH] power: supply: axp288_fuel_gauge: Broaden vendor check
+ for Intel Compute Sticks.
+To:     Jeffery Miller <jmiller@neverware.com>, linux-pm@vger.kernel.org
+Cc:     jefferym@gmail.com
+References: <20200225225941.2038378-1-jmiller@neverware.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <e0340a1c-a60e-a7de-e12f-66f363b77096@redhat.com>
+Date:   Wed, 26 Feb 2020 13:36:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <317d0a0d-8046-237b-9c22-7729e6053ab0@ideasonboard.com>
+In-Reply-To: <20200225225941.2038378-1-jmiller@neverware.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Kieran,
+Hi,
 
-Thanks for your feedback.
+On 2/25/20 11:59 PM, Jeffery Miller wrote:
+> The Intel Compute Stick `STK1A32SC` can have a system vendor of
+> "Intel(R) Client Systems".
+> Broaden the Intel Compute Stick DMI checks so that they match "Intel
+> Corporation" as well as "Intel(R) Client Systems".
+> 
+> This fixes an issue where the STK1A32SC compute sticks were still
+> exposing a battery with the existing blacklist entry.
+> 
+> Signed-off-by: Jeffery Miller <jmiller@neverware.com>
 
-On 2020-02-26 11:35:45 +0000, Kieran Bingham wrote:
-> Hi Niklas,
-> 
-> On 26/02/2020 11:24, Niklas Söderlund wrote:
-> > Hi Kieran,
-> > 
-> > Thanks for your feedback.
-> > 
-> > On 2020-02-26 09:05:22 +0000, Kieran Bingham wrote:
-> >> Hi Niklas,
-> >>
-> >> On 12/02/2020 22:49, Niklas Söderlund wrote:
-> >>> The desired behavior of the driver is to generate an interrupt and call
-> >>
-> >> s/behavior/behaviour/ but that's me being English, so you can ignore
-> >> that ... (at your peril ... :-D )
-> >>
-> > 
-> > I have a hard time as it is trying to spell the "other" version of the 
-> > language I been exposed to since early years, throwing more 'u' at it 
-> > will only add to my confusion ;-)
-> > 
-> >>> thermal_zone_device_update() as soon as the temperature have changed
-> >>> more then one degree.
-> >>>
-> >>> When the set_trips operation was implemented it was believed that the
-> >>> trip window set by the framework would move around the current
-> >>> temperature and the hysteresis value described in devicetree. The
-> >>
-> >> Should the hysteresis value described in devicetree be a part of the
-> >> +-MCELCIUS(1) calculations? or is it determined that a one degree window
-> >> each side is sufficient to contain such hysteresis of the readings?
-> > 
-> > The hardware testers wanted a fixed 1 degree window.
-> 
-> But my question is what is the value described in devicetree.
-> Should it be involved in the calculation somewhere?
+Thank you for the patch. The patch looks good to me:
 
-Not for the window used to trigger and IRQ, the hysteresis is used with 
-the trip points. This change does not effect that part. This change adds 
-an interrupt if the temperature suddenly spikes more then 1 degree in 
-addition to the polling mode implemented in thermal core (described as 
-polling-delay-passive, polling-delay) which reads the temperature 
-periodically for the trip points.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-> 
-> I.e. if the devicetree specifies that the hysteresis of the hardware is
-> (guessing) say "0.2 degree", does that mean that the 'window' must be at
-> least that value.
-> 
-> And picking on that purely as an example as I don't know the value or
-> meaning of the one in DT, but therefore - if there was hardware that
-> then had a 2 degree hysteresis, this fixed-1-degree window would have to
-> be:
-> 
->  +	low = temperature - min(MCELSIUS(1), MCELSIUS(hysteresis_val);
->  +	high = temperature + min(MCELSIUS(1), MCELSIUS(hysteresis_val));
-> 
-> 
-> Or perhaps I'm just mis-understanding the reference of the hysteresis
-> value anyway.
-> 
-> 
-> I see there is still a 'trips' section in the thermal documentation example.
-> 
-> Should that be removed? or is it handled by core?
-
-It's handled by core. The trip points define different operations that 
-could happen if the temperature go above/bellow it. For the example in 
-the documentation it says if the temperature go above 90 with a 
-hysteresis of 2 we reached the critical stage and the SoC will be 
-powered off (I think the action can be specified in user space).
-
-> 
-> 
-> 
-> 
-> >>> behavior of the framework is however to set a window based on the trip
-> >>> points described in devicetree.
-> >>>
-> >>> Remove the set_trips operation which was not used correctly and update
-> >>> the temperatures that triggers interrupts directly from the interrupt
-> >>> handler.
-> >>>
-> >>> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> >>
-> >> Sounds good to me.
-> >>
-> >> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> > 
-> > Thanks! Unfortunately the patch is already merged so it will be hard to 
-> > add your tag.
-> 
-> No problem, I saw it on linux-renesas-soc and was curious ;-)
-> --
-> Kieran
-> 
-> 
-> > 
-> >>
-> >>> ---
-> >>>  drivers/thermal/rcar_gen3_thermal.c | 24 ++++++++++++------------
-> >>>  1 file changed, 12 insertions(+), 12 deletions(-)
-> >>>
-> >>> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> >>> index 72877bdc072daaed..55d1736f532cdb33 100644
-> >>> --- a/drivers/thermal/rcar_gen3_thermal.c
-> >>> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> >>> @@ -81,8 +81,6 @@ struct rcar_gen3_thermal_tsc {
-> >>>  	void __iomem *base;
-> >>>  	struct thermal_zone_device *zone;
-> >>>  	struct equation_coefs coef;
-> >>> -	int low;
-> >>> -	int high;
-> >>>  	int tj_t;
-> >>>  	int id; /* thermal channel id */
-> >>>  };
-> >>> @@ -204,12 +202,14 @@ static int rcar_gen3_thermal_mcelsius_to_temp(struct rcar_gen3_thermal_tsc *tsc,
-> >>>  	return INT_FIXPT(val);
-> >>>  }
-> >>>  
-> >>> -static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
-> >>> +static int rcar_gen3_thermal_update_range(struct rcar_gen3_thermal_tsc *tsc)
-> >>>  {
-> >>> -	struct rcar_gen3_thermal_tsc *tsc = devdata;
-> >>> +	int temperature, low, high;
-> >>>  
-> >>> -	low = clamp_val(low, -40000, 120000);
-> >>> -	high = clamp_val(high, -40000, 120000);
-> >>> +	rcar_gen3_thermal_get_temp(tsc, &temperature);
-> >>> +
-> >>> +	low = temperature - MCELSIUS(1);
-> >>> +	high = temperature + MCELSIUS(1);
-> >>>  
-> >>>  	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQTEMP1,
-> >>>  				rcar_gen3_thermal_mcelsius_to_temp(tsc, low));
-> >>> @@ -217,15 +217,11 @@ static int rcar_gen3_thermal_set_trips(void *devdata, int low, int high)
-> >>>  	rcar_gen3_thermal_write(tsc, REG_GEN3_IRQTEMP2,
-> >>>  				rcar_gen3_thermal_mcelsius_to_temp(tsc, high));
-> >>>  
-> >>> -	tsc->low = low;
-> >>> -	tsc->high = high;
-> >>> -
-> >>>  	return 0;
-> >>>  }
-> >>>  
-> >>>  static const struct thermal_zone_of_device_ops rcar_gen3_tz_of_ops = {
-> >>>  	.get_temp	= rcar_gen3_thermal_get_temp,
-> >>> -	.set_trips	= rcar_gen3_thermal_set_trips,
-> >>>  };
-> >>>  
-> >>>  static void rcar_thermal_irq_set(struct rcar_gen3_thermal_priv *priv, bool on)
-> >>> @@ -246,9 +242,11 @@ static irqreturn_t rcar_gen3_thermal_irq(int irq, void *data)
-> >>>  	for (i = 0; i < priv->num_tscs; i++) {
-> >>>  		status = rcar_gen3_thermal_read(priv->tscs[i], REG_GEN3_IRQSTR);
-> >>>  		rcar_gen3_thermal_write(priv->tscs[i], REG_GEN3_IRQSTR, 0);
-> >>> -		if (status)
-> >>> +		if (status) {
-> >>> +			rcar_gen3_thermal_update_range(priv->tscs[i]);
-> >>>  			thermal_zone_device_update(priv->tscs[i]->zone,
-> >>>  						   THERMAL_EVENT_UNSPECIFIED);
-> >>> +		}
-> >>>  	}
-> >>>  
-> >>>  	return IRQ_HANDLED;
-> >>> @@ -454,6 +452,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
-> >>>  		if (ret < 0)
-> >>>  			goto error_unregister;
-> >>>  
-> >>> +		rcar_gen3_thermal_update_range(tsc);
-> >>> +
-> >>>  		dev_info(dev, "TSC%d: Loaded %d trip points\n", i, ret);
-> >>>  	}
-> >>>  
-> >>> @@ -492,7 +492,7 @@ static int __maybe_unused rcar_gen3_thermal_resume(struct device *dev)
-> >>>  		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
-> >>>  
-> >>>  		priv->thermal_init(tsc);
-> >>> -		rcar_gen3_thermal_set_trips(tsc, tsc->low, tsc->high);
-> >>> +		rcar_gen3_thermal_update_range(tsc);
-> >>>  	}
-> >>>  
-> >>>  	rcar_thermal_irq_set(priv, true);
-> >>>
-> >>
-> > 
-> 
-
--- 
 Regards,
-Niklas Söderlund
+
+Hans
+
+
+
+
+
+> ---
+> 
+> I've tested this primarily with a 4.19 kernel on Intel Compute Sticks
+> with the "Intel(R) Client Systems" vendor.
+> 
+>   drivers/power/supply/axp288_fuel_gauge.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+> index e1bc4e6e6f30..f40fa0e63b6e 100644
+> --- a/drivers/power/supply/axp288_fuel_gauge.c
+> +++ b/drivers/power/supply/axp288_fuel_gauge.c
+> @@ -706,14 +706,14 @@ static const struct dmi_system_id axp288_fuel_gauge_blacklist[] = {
+>   	{
+>   		/* Intel Cherry Trail Compute Stick, Windows version */
+>   		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "Intel Corporation"),
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
+>   			DMI_MATCH(DMI_PRODUCT_NAME, "STK1AW32SC"),
+>   		},
+>   	},
+>   	{
+>   		/* Intel Cherry Trail Compute Stick, version without an OS */
+>   		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "Intel Corporation"),
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
+>   			DMI_MATCH(DMI_PRODUCT_NAME, "STK1A32SC"),
+>   		},
+>   	},
+> 
+
