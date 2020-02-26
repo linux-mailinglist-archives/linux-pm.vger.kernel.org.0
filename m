@@ -2,126 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1D416F58D
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 03:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B3516F8DE
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 08:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727809AbgBZCOD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 21:14:03 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:46020 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729558AbgBZCOA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 21:14:00 -0500
-Received: by mail-oi1-f194.google.com with SMTP id v19so1426033oic.12
-        for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2020 18:14:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nJC4mlslET9V3IuYmEEX9Cjes6kXcianVh7OiRR3yKs=;
-        b=d0RRnNpncoFvqVEOoPn57Cq0cQ6PP9iVVlgC459m4EF5RlkVaZq4Vyp5rsQf6f20qJ
-         pULtmfEK3Rjsw6M3LZ7+RAEf64JSLzN+gBP8dXqFagLo4ItQJSuBGBIysYwWLWcX2dUw
-         qBSF11x36vp5nfLUa3chKy7OyHBXhVu6ceBQT2DJISVIlsQ5MUNX4YQjtIMWz6C7H4/t
-         OI5a/ft8aQ+gGx+ar7p2TnQNMQVY/hogBsjShOxD1j5BFZk3IgBjKYOjMeTnny7ETs0a
-         AdQgP3XXeBX3AMMfl9Qms/YL+VskXMWz0wEmmvrv6spZdsuJEWKbAFEYOSoliE24xo7q
-         JZFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nJC4mlslET9V3IuYmEEX9Cjes6kXcianVh7OiRR3yKs=;
-        b=nTrRzlo+UHZIwwyEuOFzzvsRoK96/tlUlKZvOemGNszYMt9bIOjAciID9rvkeHtpgC
-         fG4c2c1oaLZEPN5BJcQeRQcTxZdas9uFiUzn1TdQJ4utWgq3+RyMZQ1urJ3KqZpwhEaQ
-         yjskAQqYWfufoXFD06jrpcXe+gguE752KR/qeQSnQFl7X+oJUTfS1rV6SJvN+oCCKKsV
-         /Fgl+B8EdHVeq0IvhhsqN8lCX4lS9/gKHiILxQn5JwfImxrJh66Go/EuP/v/ZpXgkcTN
-         M8zNBmrYYL8kPdIRqRnZugI1TPNv50FG4Bp3BjyJ56jvzpQpqGem7FpzZ5dXhvi9eJCM
-         cWIg==
-X-Gm-Message-State: APjAAAWRxiVVNsW3DDG5Qamae87N4FD0dwQlfhNg9x49HZDpi0EXUH4E
-        hIlvBIpwx8ioloIJytfF54OuoB+Whs98bMspSkDLBg==
-X-Google-Smtp-Source: APXvYqyyvLae4My4lNLNDs9nPDn8upLsZw9bgLJTlpOIxxkhcVnvBO6xnKhinNtsF6ILSLQo1EgLO08HJPbQisL58MQ=
-X-Received: by 2002:aca:c0c5:: with SMTP id q188mr1315752oif.169.1582683239774;
- Tue, 25 Feb 2020 18:13:59 -0800 (PST)
+        id S1727335AbgBZH65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Feb 2020 02:58:57 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:63484 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726587AbgBZH65 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 02:58:57 -0500
+X-AuditID: c0a8fbf4-473ff70000004419-e3-5e56253ff69e
+Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 89.74.17433.F35265E5; Wed, 26 Feb 2020 08:58:55 +0100 (CET)
+Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
+ WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
+ 14.03.0487.000; Wed, 26 Feb 2020 08:58:50 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>
+CC:     "rafael@kernel.org" <rafael@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "Laine, Markus" <Markus.Laine@fi.rohmeurope.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
+Subject: Re: [PATCH v4 9/9] power: supply: Support ROHM bd99954 charger
+Thread-Topic: [PATCH v4 9/9] power: supply: Support ROHM bd99954 charger
+Thread-Index: AQHV67lhdTml9IRASUqjFOfVB9Uut6gsBxOAgAEF5AA=
+Date:   Wed, 26 Feb 2020 07:58:49 +0000
+Message-ID: <cce763015445ead7fbe5aafd929c52dedd375167.camel@fi.rohmeurope.com>
+References: <cover.1582617178.git.matti.vaittinen@fi.rohmeurope.com>
+         <529dd6298be245051f333ab4d9264902bf889aa6.1582617178.git.matti.vaittinen@fi.rohmeurope.com>
+         <c187bb77-e804-93bd-64db-9418be58f191@infradead.org>
+In-Reply-To: <c187bb77-e804-93bd-64db-9418be58f191@infradead.org>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6C94D26BEAFBF94BBBA6AD24B017A118@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20200225050828.56458-1-john.stultz@linaro.org>
- <20200225050828.56458-4-john.stultz@linaro.org> <CAGETcx_x4O_M4OJvCSZNu_wroYoyog9nAW7OivS56qzEhFmnHg@mail.gmail.com>
-In-Reply-To: <CAGETcx_x4O_M4OJvCSZNu_wroYoyog9nAW7OivS56qzEhFmnHg@mail.gmail.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Tue, 25 Feb 2020 18:13:48 -0800
-Message-ID: <CALAqxLUMjF4vx0EAd0bQOixyP5SLZ0pESpC0TXoHbSTyTqQLYg@mail.gmail.com>
-Subject: Re: [PATCH v5 3/6] pinctrl: Remove use of driver_deferred_probe_check_state_continue()
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Todd Kjos <tkjos@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAJsWRmVeSWpSXmKPExsVyYMXvjbr2qmFxBvtOKFhMffiEzWL+kXOs
+        Fs2L17NZfLvSwWRxedccNovPvUcYLZZev8hkMWfpCRaLuV+mMlu8vTOdxaJ17xF2i9O7Sxx4
+        PNbMW8PosXPWXXaPzSu0PDat6mTz2D93DbvH501yAWxR3DZJiSVlwZnpefp2CdwZO5ZOYy64
+        IlKxfvc/5gbGCSJdjJwcEgImEl2/97GA2EICVxklFp5h7GLkArJPMErMPD0TyOHgYBOwkei6
+        yQ5SIyKQI7F6Uh8bSA2zwCMWieMzethAEsIC7hJfmnYwQhR5SJxY188EYVtJzDr9AKyZRUBV
+        4tiiCWA1vAJ+Ep8uPmWHWHabUWLvh19gDZwCjhJvFm4Da2AUkJXobHgHFmcWEJfY9Ow7K8TV
+        AhJL9pxnhrBFJV4+/gcVV5LY+/MhC8jRzAKaEut36UO0OkgcWX6dEcJWlJjS/ZAd4gZBiZMz
+        n7BMYBSbhWTDLITuWUi6ZyHpnoWkewEj6ypGidzEzJz0xJJUQ72i1FK9ovyMXCCVnJ+7iRES
+        4192MP4/5HmIkYmD8RCjJAeTkihvnnxYnBBfUn5KZUZicUZ8UWlOavEhRgkOZiUR3o1fQ+OE
+        eFMSK6tSi/JhUtIcLErivOoPJ8YKCYDsyk5NLUgtgsnKcHAoSfBOkgYaKliUmp5akZaZU4KQ
+        ZuLgBBnOJSVSnJqXklqUWFqSEQ9KH/HFwAQCkuIB2uukDNTOW1yQmAsUhWg9xajNMeHl3EXM
+        HEfmLl3ELMSSl5+XKiXOy6kCVCoAUppRmge36BWjOAejkjDvTCWgLA8w2cPNeQW0ggloxeo/
+        wSArShIRUlINjE1a14X8fS2uM8pXeMhGOU0JdPFpnRGarHDQpdRy/+1pnPMOlq7x7oqq6Q1o
+        kGTYwqr7YsFOvca0Weu0K29NLPObH7OtP7dOVeGV7fFbkr+uvDZ0Zf+bpJno78s6TzpkbUxe
+        3LlZj/tWGapvDjdT7+SNCzO0XLhUfMkUhwsqu7dou51fdzRSiaU4I9FQi7moOBEAFVnpXbMD
+        AAA=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 25, 2020 at 6:11 PM Saravana Kannan <saravanak@google.com> wrote:
-> On Mon, Feb 24, 2020 at 9:08 PM John Stultz <john.stultz@linaro.org> wrote:
-> >
-> > With the earlier sanity fixes to
-> > driver_deferred_probe_check_state() it should be usable for the
-> > pinctrl logic here.
-> >
-> > So tweak the logic to use driver_deferred_probe_check_state()
-> > instead of driver_deferred_probe_check_state_continue()
-> >
-> > Cc: Rob Herring <robh@kernel.org>
-> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > Cc: Kevin Hilman <khilman@kernel.org>
-> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > Cc: Pavel Machek <pavel@ucw.cz>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Todd Kjos <tkjos@google.com>
-> > Cc: Saravana Kannan <saravanak@google.com>
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Cc: Liam Girdwood <lgirdwood@gmail.com>
-> > Cc: Mark Brown <broonie@kernel.org>
-> > Cc: Thierry Reding <treding@nvidia.com>
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: linux-pm@vger.kernel.org
-> > Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> > Signed-off-by: John Stultz <john.stultz@linaro.org>
-> > ---
-> >  drivers/pinctrl/devicetree.c | 9 +++++----
-> >  1 file changed, 5 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/pinctrl/devicetree.c b/drivers/pinctrl/devicetree.c
-> > index 9357f7c46cf3..1ed20ac2243f 100644
-> > --- a/drivers/pinctrl/devicetree.c
-> > +++ b/drivers/pinctrl/devicetree.c
-> > @@ -127,11 +127,12 @@ static int dt_to_map_one_config(struct pinctrl *p,
-> >                 np_pctldev = of_get_next_parent(np_pctldev);
-> >                 if (!np_pctldev || of_node_is_root(np_pctldev)) {
-> >                         of_node_put(np_pctldev);
-> > +                       ret = driver_deferred_probe_check_state(p->dev);
-> >                         /* keep deferring if modules are enabled unless we've timed out */
-> > -                       if (IS_ENABLED(CONFIG_MODULES) && !allow_default)
-> > -                               return driver_deferred_probe_check_state_continue(p->dev);
-> > -
-> > -                       return driver_deferred_probe_check_state(p->dev);
-> > +                       if (IS_ENABLED(CONFIG_MODULES) && !allow_default &&
->
-> Is this IS_ENABLED(CONFIG_MODULES) still necessary? At the end of this
-> series, doesn't driver_deferred_probe_check_state() already return
-> -EPROBE_DEFER if modules are enabled and timeout hasn't happened?
->
-
-Yea, good point. With the reworked logic in v5, the
-IS_ENABLED(CONFIG_MODULES) check could go.
-
-thanks
--john
+SGVsbG8gUmFuZHksDQoNCk9uIFR1ZSwgMjAyMC0wMi0yNSBhdCAwODoyMSAtMDgwMCwgUmFuZHkg
+RHVubGFwIHdyb3RlOg0KPiBPbiAyLzI1LzIwIDEyOjU1IEFNLCBNYXR0aSBWYWl0dGluZW4gd3Jv
+dGU6DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcG93ZXIvc3VwcGx5L0tjb25maWcNCj4gPiBi
+L2RyaXZlcnMvcG93ZXIvc3VwcGx5L0tjb25maWcNCj4gPiBpbmRleCA4NzgxYzY3NGVkMDcuLjBi
+M2JhZDZmYzczNiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3Bvd2VyL3N1cHBseS9LY29uZmln
+DQo+ID4gKysrIGIvZHJpdmVycy9wb3dlci9zdXBwbHkvS2NvbmZpZw0KPiA+IEBAIC03MDIsNiAr
+NzAyLDE2IEBAIGNvbmZpZyBDSEFSR0VSX0JENzA1MjgNCj4gPiAgCSBpbmZvcm1hdGlvbiBhbmQg
+YWx0ZXJpbmcgY2hhcmdlciBjb25maWd1cmF0aW9ucyBmcm9tIGNoYXJnZXINCj4gPiAgCSBibG9j
+ayBvZiB0aGUgUk9ITSBCRDcwNTI4IFBvd2VyIE1hbmFnZW1lbnQgSUMuDQo+ID4gIA0KPiANCj4g
+SGksDQo+IA0KPiA+ICtjb25maWcgQ0hBUkdFUl9CRDk5OTU0DQo+ID4gKwl0cmlzdGF0ZSAiUk9I
+TSBiZDk5OTU0IGNoYXJnZXIgZHJpdmVyIg0KPiA+ICsJZGVwZW5kcyBvbiBJMkMNCj4gPiArCXNl
+bGVjdCBMSU5FQVJfUkFOR0VTDQo+ID4gKwlkZWZhdWx0IG4NCj4gDQo+IERyb3AgdGhlICJkZWZh
+dWx0IG4iLCBzaW5jZSBpdCBpcyBhbHJlYWR5IHRoZSBkZWZhdWx0Lg0KPiANCj4gPiArCWhlbHAN
+Cj4gPiArCSBTYXkgWSBoZXJlIHRvIGVuYWJsZSBzdXBwb3J0IGZvciBnZXR0aW5nIGJhdHRlcnkg
+YW5kIGNoYXJnZXINCj4gPiArCSBpbmZvcm1hdGlvbiBhbmQgYWx0ZXJpbmcgY2hhcmdlciBjb25m
+aWd1cmF0aW9ucyBmcm9tIHRoZSBST0hNDQo+ID4gKwkgQkQ5OTk1NCBjaGFyZ2VyIElDLg0KPiAN
+Cj4gUGxlYXNlIGluZGVudCB0aGUgMyBsaW5lcyBvZiBoZWxwIHRleHQgd2l0aCBvbmUgYWRkaXRp
+b25hbCBzcGFjZSAoMg0KPiB0b3RhbCkuDQo+IFNlZSBEb2N1bWVudGF0aW9uL3Byb2Nlc3MvY29k
+aW5nLXN0eWxlLnJzdDoNCj4gDQo+IDEwKSBLY29uZmlnIGNvbmZpZ3VyYXRpb24gZmlsZXMNCj4g
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiANCj4gRm9yIGFsbCBvZiB0aGUgS2Nv
+bmZpZyogY29uZmlndXJhdGlvbiBmaWxlcyB0aHJvdWdob3V0IHRoZSBzb3VyY2UNCj4gdHJlZSwN
+Cj4gdGhlIGluZGVudGF0aW9uIGlzIHNvbWV3aGF0IGRpZmZlcmVudC4gIExpbmVzIHVuZGVyIGEg
+YGBjb25maWdgYA0KPiBkZWZpbml0aW9uDQo+IGFyZSBpbmRlbnRlZCB3aXRoIG9uZSB0YWIsIHdo
+aWxlIGhlbHAgdGV4dCBpcyBpbmRlbnRlZCBhbiBhZGRpdGlvbmFsDQo+IHR3bw0KPiBzcGFjZXMu
+ICBFeGFtcGxlOjoNCj4gDQo+ICAgY29uZmlnIEFVRElUDQo+IAlib29sICJBdWRpdGluZyBzdXBw
+b3J0Ig0KPiAJZGVwZW5kcyBvbiBORVQNCj4gCWhlbHANCj4gCSAgRW5hYmxlIGF1ZGl0aW5nIGlu
+ZnJhc3RydWN0dXJlIHRoYXQgY2FuIGJlIHVzZWQgd2l0aCBhbm90aGVyDQo+IAkgIGtlcm5lbCBz
+dWJzeXN0ZW0sIHN1Y2ggYXMgU0VMaW51eCAod2hpY2ggcmVxdWlyZXMgdGhpcyBmb3INCj4gCSAg
+bG9nZ2luZyBvZiBhdmMgbWVzc2FnZXMgb3V0cHV0KS4gIERvZXMgbm90IGRvIHN5c3RlbS1jYWxs
+DQo+IAkgIGF1ZGl0aW5nIHdpdGhvdXQgQ09ORklHX0FVRElUU1lTQ0FMTC4NCj4gDQo+ID4gKw0K
+PiA+ICBjb25maWcgQ0hBUkdFUl9XSUxDTw0KPiA+ICAJdHJpc3RhdGUgIldpbGNvIEVDIGJhc2Vk
+IGNoYXJnZXIgZm9yIENocm9tZU9TIg0KPiA+ICAJZGVwZW5kcyBvbiBXSUxDT19FQw0KPiANCj4g
+dGhhbmtzLg0KDQpUaGFua3MgYWdhaW4gZm9yIHRoZSByZXZpZXcuIEknbGwgZml4IHRoZXNlIGZv
+ciB0aGUgbmV4dCB2ZXJzaW9uIDopDQoNCkJyLA0KCU1hdHRpIFZhaXR0aW5lbg0KDQo=
