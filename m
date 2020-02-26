@@ -2,56 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D91C816FCE6
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 12:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B7216FCE9
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 12:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727686AbgBZLEY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Feb 2020 06:04:24 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:38632 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727463AbgBZLEY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 06:04:24 -0500
-Received: by mail-wm1-f66.google.com with SMTP id a9so2547486wmj.3
-        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2020 03:04:22 -0800 (PST)
+        id S1727463AbgBZLEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Feb 2020 06:04:30 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40698 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727973AbgBZLE0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 06:04:26 -0500
+Received: by mail-wr1-f66.google.com with SMTP id r17so302852wrj.7
+        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2020 03:04:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qxSMSy0KeSHSnmfmzxCA8fCZhL5WkJv642hS2+p/iXs=;
-        b=jdMmd6p57s9T9BTkdnRuKCzYlX8V/mp9wKLj+xSR4sQ85knTGnynU+J+MWkInqs2G3
-         TuOxOkfik5PXGlBUnFPzJEE4FZQUtrvS1kQari9lhsZEx33vjY57Pv2TWD3gnunzn1uK
-         2lGKdc9aIHSaZghpF//01eQMTusQNhrQfGFDfMiQzr9u/E5eGkm+twh6I6jhMXdSnmFQ
-         UCY4tiRHf7WgClGpkoMbI9BS9fGDhLY7gU8P+9dTKlKg9FI8GPqR7SmJ+p2aq+FQtgcR
-         XqIaCN80VtwFWXsvx59xJIHqf5SQe+Kk5FmWfgddnqMWpkOy5wwrDF054l771/6qjUkc
-         XthA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=xZWhacWTD2BU+prP3lvYdDYqf9uP+69zqv/jCGbvIHQ=;
+        b=doJwSQugq3/coKedt8Wa7bs4/CIxdyAgyKWZXlgH3F732ITadyuo9mwtZtN9iN7Xxk
+         ouD/jvur1ugMssJTAkABgXfaaQAc+kkjTcmeR+4VIgSMJ7lm7KpW3qJAyzoaIHX8tdXn
+         j+GcE+Y9tvVVSRIOd05WzcQ15Yz1vyWtqRStczTHxjk3RZlineVOfv0rbs2ZlHC1MECP
+         y7F4/onFxzr29zSqd2ti9xyzPDj+DB44evaawsVYb5I91chI2plSm2Ms+Qn3lIgw6r5d
+         VWxwMDn3DaJIsaF6rvP8XlnGOvfm20JI6LDx0tY1TjxnvsAbDr4rpCDeB/1A9RapMzXy
+         MkpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qxSMSy0KeSHSnmfmzxCA8fCZhL5WkJv642hS2+p/iXs=;
-        b=J9Cn4PAdClpTuCW22cZH+i+LxHfq5ujM77S9wIm2vxoOP7NrtPinATu7j466DbhoWH
-         bRd4EZFYzZo0gkuJQrQVH5Q+AaMJKNGsmdMUdpfo71sOwBEX0wINXUCJlGRTqftTdVvD
-         shdrBRqR4MxwGC4IEchRd6kdFD7xRIDIrDj9/Tt0KoyPYb5U67HpvFln+/4Wr520RmUE
-         1hGVzkmACyvrK9L94g9BQQ77Vc4lo+Rn9NqBZ8gzl18/YGFPy/G3SZxGowomYgpSKAmK
-         xSItT/8+ZiSpZZ08HWdEhxrUxXRWXgcND5sciBYyA6P4Ej2ffJXb14bgQW97C53H2jnW
-         Nv6w==
-X-Gm-Message-State: APjAAAXkFsCtL8qSC/n+vMR65E3iIxLcQAbIrvDKcmChRCOeSVPRFANs
-        RUaMcep+22qPVlooVeodgBK3nw==
-X-Google-Smtp-Source: APXvYqzo1GIu2NTEmeUo+9/xgeAhx5xgSq3jnjXari1yIps6iOhQfLG8Hjj/EVYP231cndzzGUg9rQ==
-X-Received: by 2002:a7b:c019:: with SMTP id c25mr5070418wmb.126.1582715061914;
-        Wed, 26 Feb 2020 03:04:21 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xZWhacWTD2BU+prP3lvYdDYqf9uP+69zqv/jCGbvIHQ=;
+        b=dLb/WtlSvYLtFL3CEkuLeK8E+43SBaRmvO73HxfzGISllqHjf3gpJHlg/k4qpxI8nH
+         L3UcIBJ2mHS8To/rnKessPFbUn3d7CsdGXn/x75iYdm5YeG0W3hH3ucEwU0MRMfsx+39
+         AmMhtRmDdaJMNTmd5wOPNJNw+ocffv3+sXFIdYhgcwRiElZK8Wj1TqC3NJJDd5JfQTzW
+         wdABXQHRGRbcjFgAfpJZfay80UEJQbtAGB/sDeF5w91BHZ/xEfVmONCAel0udRYFJ6eO
+         kLWDfGwmKOFSOLJ3gU3LyEgEOq5tbekcmVzVGMimQ/CzOCyRLh/jPEb2+UEd+c5JcNFv
+         igNg==
+X-Gm-Message-State: APjAAAXA0vVX3nR3OExDlheIwFj34bSyTDYbCjFmD30XN3PxkRf2WQXg
+        lQ7CN9TpUUYOqT/xJDwW4zmF1g==
+X-Google-Smtp-Source: APXvYqyqpti78NZcTmxqOnL4JZBCBc9Xn3/oAwt4rD8e9V35Fnrl5tR8epuHHz7KrYeTIUdHjf+f+Q==
+X-Received: by 2002:adf:bbcf:: with SMTP id z15mr5018995wrg.266.1582715063018;
+        Wed, 26 Feb 2020 03:04:23 -0800 (PST)
 Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id h205sm2448176wmf.25.2020.02.26.03.04.20
+        by smtp.googlemail.com with ESMTPSA id h205sm2448176wmf.25.2020.02.26.03.04.22
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 26 Feb 2020 03:04:21 -0800 (PST)
+        Wed, 26 Feb 2020 03:04:22 -0800 (PST)
 From:   Georgi Djakov <georgi.djakov@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         georgi.djakov@linaro.org
-Subject: [PATCH 0/1] interconnect fix for 5.6
-Date:   Wed, 26 Feb 2020 13:04:19 +0200
-Message-Id: <20200226110420.5357-1-georgi.djakov@linaro.org>
+Subject: [PATCH 1/1] interconnect: Handle memory allocation errors
+Date:   Wed, 26 Feb 2020 13:04:20 +0200
+Message-Id: <20200226110420.5357-2-georgi.djakov@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200226110420.5357-1-georgi.djakov@linaro.org>
+References: <20200226110420.5357-1-georgi.djakov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -59,16 +61,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Greg,
-This is a fix for the current release. Please apply it to char-misc-linus
-when you get a chance.
+When we allocate memory, kasprintf() can fail and we must check its
+return value.
 
-Thanks,
-Georgi
-
-Georgi Djakov (1):
-  interconnect: Handle memory allocation errors
-
+Fixes: 05309830e1f8 ("interconnect: Add a name to struct icc_path")
+Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+---
  drivers/interconnect/core.c | 9 +++++++++
  1 file changed, 9 insertions(+)
 
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index f277e467156f..2c6515e3ecf1 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -445,6 +445,11 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+ 		path->name = kasprintf(GFP_KERNEL, "%s-%s",
+ 				       src_node->name, dst_node->name);
+ 
++	if (!path->name) {
++		kfree(path);
++		return ERR_PTR(-ENOMEM);
++	}
++
+ 	return path;
+ }
+ EXPORT_SYMBOL_GPL(of_icc_get);
+@@ -579,6 +584,10 @@ struct icc_path *icc_get(struct device *dev, const int src_id, const int dst_id)
+ 	}
+ 
+ 	path->name = kasprintf(GFP_KERNEL, "%s-%s", src->name, dst->name);
++	if (!path->name) {
++		kfree(path);
++		path = ERR_PTR(-ENOMEM);
++	}
+ out:
+ 	mutex_unlock(&icc_lock);
+ 	return path;
