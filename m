@@ -2,124 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E1817021E
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 16:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DB11702E2
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 16:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727933AbgBZPRf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Feb 2020 10:17:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57056 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727941AbgBZPRf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 26 Feb 2020 10:17:35 -0500
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0E15624687;
-        Wed, 26 Feb 2020 15:17:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582730254;
-        bh=QbvkJ7pUaSKaOk50O+V+6P1ajRDedKDnLBjdtDbWLMI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IrQfPqoLka7BEsWptwul43UPtO+sHb2/jj39k9KJXXnQHjhGjTZDSzpLpIkq+1897
-         mpT+jaXTivYwii9Fj68e+3DuyiCY2ca0gdVDiFfFEVa+xZNcJdWg+rQvxJntnZpp0p
-         Yz1RRZ2Kgr3M/F7dz6IXYXHOTe59jOjoCwZiQOOk=
-Received: by mail-qk1-f179.google.com with SMTP id z19so2940885qkj.5;
-        Wed, 26 Feb 2020 07:17:34 -0800 (PST)
-X-Gm-Message-State: APjAAAWZK4EJPTm4bq25wWqLgp48FdKYCswr5FO3e2FfTlkG+3hN7Xyu
-        yyhcnQHVJMnQF2E+262rZ4P86AFFiaRdd7vcnA==
-X-Google-Smtp-Source: APXvYqwOBeVkQzDCVQhRRroVuItJt7tbfzF8jBjBWGkighsyGpHKqVvv0RuR0fNZzggl6WhCT14noYZJeodCe/v9itA=
-X-Received: by 2002:ae9:f205:: with SMTP id m5mr6100523qkg.152.1582730253143;
- Wed, 26 Feb 2020 07:17:33 -0800 (PST)
-MIME-Version: 1.0
-References: <20200220055250.196456-1-saravanak@google.com> <CANcMJZBQe5F=gbj6V2ybF-dK=kRsGZT2BX9CBJiBFoK=5Hg-kA@mail.gmail.com>
- <CAGETcx88H+aFTt=Vp8Q1KVOZYEaD3D6=i5WN8tWmnBAs1YdY1g@mail.gmail.com> <CAGETcx_n=fZYaY5q6yZRJR9daTXm2Ryz5frfZr3n1BKf-pXCEQ@mail.gmail.com>
-In-Reply-To: <CAGETcx_n=fZYaY5q6yZRJR9daTXm2Ryz5frfZr3n1BKf-pXCEQ@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 26 Feb 2020 09:17:21 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJUp6+FA8MCvpetk9UMAk+GWm9naASE-ddi-FcMKkcwQA@mail.gmail.com>
-Message-ID: <CAL_JsqJUp6+FA8MCvpetk9UMAk+GWm9naASE-ddi-FcMKkcwQA@mail.gmail.com>
-Subject: Re: [PATCH v1] of: property: Add device link support for
- power-domains and hwlocks
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Todd Kjos <tkjos@google.com>,
+        id S1728454AbgBZPma (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Feb 2020 10:42:30 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35629 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727311AbgBZPma (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 10:42:30 -0500
+Received: by mail-ot1-f67.google.com with SMTP id r16so3375877otd.2;
+        Wed, 26 Feb 2020 07:42:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=oALkAv67EVsYWYHdpUzQk0H8ppF1xN73RMetofcDpiA=;
+        b=MomOWL05UeFBWTj3So9JNuhq102eawyuiGRWBLfnZZr9v0GlR3/qcJdPnHH5oqNF+e
+         drBM5Gc0ZqxF3U4zzCbgvTDgz3eNr+uMgSyvTeIr+gOwKvA4oeNGev6mynjbKeOVATqq
+         TZuiFo2djOQw+pF+U7mCpI7RiN+ePa54YfeYn24uhRVsdTUsUA/lcsXJc89Ea//pQC+F
+         3npgepbSoimgCN2b8fjqhrA5BNSGL/gWUomkXaC6UbVVgwNJddq8kOeUaqv5TSyTHwl5
+         6s1yfb2yWnARtBwWT3xbrlOl3rOaAxPTjEYjXSEOfPrQucaHXy0uLeRkQL+H0y06SUFx
+         +uWw==
+X-Gm-Message-State: APjAAAVWNOY3jYSX01IYt5OVy6AbsM7Fir9HFyPxgybVqZ+i1Apb9UTQ
+        LdG7wsev2/RoGAwvaNjT04KXYUv4UQ==
+X-Google-Smtp-Source: APXvYqydqZ6UJB5h2BMo//IMEZdjers3OTc7g4pogmYI9e5t7XqZpBlJBXDQT5Pgj8r+gCgYGwebzg==
+X-Received: by 2002:a9d:7c9a:: with SMTP id q26mr1908862otn.206.1582731749194;
+        Wed, 26 Feb 2020 07:42:29 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id w202sm931951oiw.0.2020.02.26.07.42.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Feb 2020 07:42:28 -0800 (PST)
+Received: (nullmailer pid 23994 invoked by uid 1000);
+        Wed, 26 Feb 2020 15:42:27 -0000
+Date:   Wed, 26 Feb 2020 09:42:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Sricharan R <sricharan@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: qcom: Add support for krait based socs
+Message-ID: <20200226154227.GA22249@bogus>
+References: <20200219205546.6800-1-ansuelsmth@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200219205546.6800-1-ansuelsmth@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 25, 2020 at 3:46 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> On Thu, Feb 20, 2020 at 3:30 PM Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > On Thu, Feb 20, 2020 at 3:26 PM John Stultz <john.stultz@linaro.org> wrote:
-> > >
-> > > On Wed, Feb 19, 2020 at 9:53 PM Saravana Kannan <saravanak@google.com> wrote:
-> > > >
-> > > > Add support for creating device links out of more DT properties.
-> > > >
-> > > > To: lkml <linux-kernel@vger.kernel.org>
-> > > > To: John Stultz <john.stultz@linaro.org>
-> > > > To: Rob Herring <robh@kernel.org>
-> > >
-> > > Just as a heads up, git-send-email doesn't seem to pick up these To:
-> > > lines, so I had to dig this out of an archive.
-> >
-> > Weird! Left out the main person who'd care about this patch.
-> >
-> > >
-> > > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > > > Cc: Kevin Hilman <khilman@kernel.org>
-> > > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > Cc: Pavel Machek <pavel@ucw.cz>
-> > > > Cc: Len Brown <len.brown@intel.com>
-> > > > Cc: Todd Kjos <tkjos@google.com>
-> > > > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > > Cc: Liam Girdwood <lgirdwood@gmail.com>
-> > > > Cc: Mark Brown <broonie@kernel.org>
-> > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > Cc: linux-pm@vger.kernel.org
-> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > > > ---
-> > > >  drivers/of/property.c | 4 ++++
-> > > >  1 file changed, 4 insertions(+)
-> > >
-> > > This does seem to work for me, allowing various clk drivers to be used
-> > > as modules! This removes the functional need for my recent driver core
-> > > patch series around the deferred_probe_timeout (though the cleanup
-> > > bits in there may still be worth while).
-> > >
-> > > Tested-by: John Stultz <john.stultz@linaro.org>
-> > >
-> > > Thanks for sending it out!
-> >
-> > Thanks for the Tested-by!
-> >
-> > Rob,
-> >
-> > Can you pick this up for the next rc?
+On Wed, Feb 19, 2020 at 09:55:45PM +0100, Ansuel Smith wrote:
+> In Certain QCOM SoCs like ipq8064, apq8064, msm8960, msm8974
+> that has KRAIT processors the voltage/current value of each OPP
+> varies based on the silicon variant in use.
+> 
+> The required OPP related data is determined based on
+> the efuse value. This is similar to the existing code for
+> kryo cores. So adding support for krait cores here.
+> 
+> Signed-off-by: Sricharan R <sricharan@codeaurora.org>
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/opp/qcom-nvmem-cpufreq.txt       |   3 +-
 
-You mean 5.7-rc1, right?
+If you respin, please split bindings to a separate patch.
 
-> Friendly reminder.
-
-No need to ping. You can check patchwork[1] to see where you are in the queue.
-
-Rob
-
-[1] https://patchwork.ozlabs.org/project/devicetree-bindings/list/
+>  drivers/cpufreq/Kconfig.arm                   |   2 +-
+>  drivers/cpufreq/cpufreq-dt-platdev.c          |   5 +
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c          | 181 ++++++++++++++++--
+>  4 files changed, 173 insertions(+), 18 deletions(-)
+> 
