@@ -2,79 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E1A170AC9
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 22:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE813170AE2
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 22:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727504AbgBZVrs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Feb 2020 16:47:48 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:46079 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727503AbgBZVrr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 16:47:47 -0500
-Received: by mail-ot1-f65.google.com with SMTP id 59so896477otp.12;
-        Wed, 26 Feb 2020 13:47:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UTmslN9q8kSwBcWhEIJNY/U1Xxha6MDPKoxaq0risEc=;
-        b=EgXxqWgs+A9N0rf2PIRtzYHF1ZTCV+YCqrB9t7MZM1YwMa34/KHbPBXx9+9Kkl3W+Q
-         lklNApFkILb2hmfppRDf6a3MJvDh3DpvZBj+rpM3puCjQ6CzxF4DvEYm/CQ7Bc0RZ9vQ
-         /rHEB1owPeVEeY/cqEHJaf+Hu6mK2nNvJGKWjKekWrfwpPqzfKHNDRIEPOPnMNGfzI1O
-         ntGeUngZfn8mSCE+iaasYS23sSuFUT8oifqQ8aIMiP5XV6Y1vX4kKCP4R7rMuDSKnpWU
-         5i/ftI28oECfpOIf+lPuNl/6TCgGmN9+SJg5T3XuQocx9dDH0ZOLfqgAJ6+WVf9V2Rgh
-         bkMg==
-X-Gm-Message-State: APjAAAXwIkjVN5gEv3NLVL0VDRcVf1l8TUarH560SyPvWhvmAyw03r6D
-        oP3jKJMqCPEy2Ln+Y3oqCUCiU7JC8M/vmTkL8F8=
-X-Google-Smtp-Source: APXvYqwbzFXeIj/jl4xZ31G9VSia8iaKygXmbc/nxomxgNxKOm738/8bVAuBII2Eqj6ZLhW5V3sEXoKtU4J1YvG9Le4=
-X-Received: by 2002:a05:6830:1651:: with SMTP id h17mr657127otr.167.1582753666933;
- Wed, 26 Feb 2020 13:47:46 -0800 (PST)
+        id S1727673AbgBZVxX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Feb 2020 16:53:23 -0500
+Received: from mga06.intel.com ([134.134.136.31]:9517 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727576AbgBZVxX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 26 Feb 2020 16:53:23 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 13:53:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,489,1574150400"; 
+   d="scan'208";a="350491286"
+Received: from jekeller-mobl1.amr.corp.intel.com (HELO [134.134.177.84]) ([134.134.177.84])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Feb 2020 13:53:21 -0800
+Subject: Re: [PATCH v5 13/19] x86/cpufeatures: Add flag to track whether MSR
+ IA32_FEAT_CTL is configured
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     TonyWWang-oc@zhaoxin.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, bp@alien8.de, bp@suse.de,
+        hpa@zytor.com, jacob.jun.pan@linux.intel.com,
+        jarkko.sakkinen@linux.intel.com, jmattson@google.com,
+        jolsa@redhat.com, joro@8bytes.org, kvm@vger.kernel.org,
+        lenb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-pm@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com,
+        namhyung@kernel.org, pbonzini@redhat.com, peterz@infradead.org,
+        rkrcmar@redhat.com, shuah@kernel.org, tglx@linutronix.de,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+References: <e741196d-52aa-0f5e-8f1e-a37ddf2e5025@intel.com>
+ <20200225221234.GL9245@linux.intel.com>
+ <1eaf6fbe-0adb-5074-3bc4-1e8327e0cdb3@intel.com>
+ <20200225232900.GO9245@linux.intel.com>
+ <5434303a-0742-3811-fd14-6445d296c0f0@intel.com>
+ <20200226004258.GP9245@linux.intel.com>
+ <a9c4b363-1569-f03e-6155-a869dd186ced@intel.com>
+ <df215c4c-82f0-5b15-57c3-d304fd94ff3b@intel.com>
+ <20200226205745.GQ9940@linux.intel.com>
+ <9a0a7373-f469-f2ae-c218-5821f805f0d8@intel.com>
+ <20200226212537.GR9940@linux.intel.com>
+From:   Jacob Keller <jacob.e.keller@intel.com>
+Organization: Intel Corporation
+Message-ID: <5f480e36-f6ed-e72d-2e18-96617b37958e@intel.com>
+Date:   Wed, 26 Feb 2020 13:53:21 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-References: <20200227013411.1.Ica3bb9fa898499d94e0b0a2bfa08ec46c89d84fa@changeid>
-In-Reply-To: <20200227013411.1.Ica3bb9fa898499d94e0b0a2bfa08ec46c89d84fa@changeid>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 26 Feb 2020 22:47:35 +0100
-Message-ID: <CAJZ5v0hX-DVLPQmjVAZkQUJy8gCBPTneJvaFHmjqqbCe66F_6w@mail.gmail.com>
-Subject: Re: [PATCH] intel_idle: Add Comet Lake support
-To:     Harry Pan <harry.pan@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Harry Pan <gs0622@gmail.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200226212537.GR9940@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Feb 26, 2020 at 6:34 PM Harry Pan <harry.pan@intel.com> wrote:
->
-> Add Comet Lake ID to enable intel_idle driver support.
-> This is required for PC10 and S0ix.
 
-That shouldn't be the case for Linux 5.6-rc as long as the ACPI tables
-expose C10 in _CST, so have you checked that?
 
-> Signed-off-by: Harry Pan <harry.pan@intel.com>
+On 2/26/2020 1:25 PM, Sean Christopherson wrote:
+> Arguably, setup_pku() should be a little less heavy handed in updating
+> cpufeatures for X86_FEATURE_OSPKE, but init_ia32_feat_ctl() should also be
+> more robust.
+> 
+
+Right.
+
+>> But it looks like rdmsr is global and not tied to a given CPU anyways?
+> 
+
+> For better or worse, the MSR is thread scoped.
+> 
+
+Ahh. Definitely not obvious at a glance.
+
+> I've reproduced the bug, should have a fix ready by EOD.
 >
-> ---
->
->  drivers/idle/intel_idle.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index 347b08b56042..3cf292b2b7f1 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -1086,6 +1086,8 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
->         INTEL_CPU_FAM6(KABYLAKE_L,              idle_cpu_skl),
->         INTEL_CPU_FAM6(KABYLAKE,                idle_cpu_skl),
->         INTEL_CPU_FAM6(SKYLAKE_X,               idle_cpu_skx),
-> +       INTEL_CPU_FAM6(COMETLAKE_L,             idle_cpu_skl),
-> +       INTEL_CPU_FAM6(COMETLAKE,               idle_cpu_skl),
->         INTEL_CPU_FAM6(XEON_PHI_KNL,            idle_cpu_knl),
->         INTEL_CPU_FAM6(XEON_PHI_KNM,            idle_cpu_knl),
->         INTEL_CPU_FAM6(ATOM_GOLDMONT,           idle_cpu_bxt),
-> --
-> 2.24.1
->
+
+Nice, glad to hear it.
+
+Thanks,
+Jake
