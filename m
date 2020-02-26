@@ -2,113 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF92E1708F7
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 20:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2A61709EC
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 21:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727260AbgBZTeN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Feb 2020 14:34:13 -0500
-Received: from smtp.gentoo.org ([140.211.166.183]:48504 "EHLO smtp.gentoo.org"
+        id S1727510AbgBZUlN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Feb 2020 15:41:13 -0500
+Received: from mga06.intel.com ([134.134.136.31]:5071 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727238AbgBZTeN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 26 Feb 2020 14:34:13 -0500
-Received: from naomi.gilbertsystems.net (d14-69-92-185.try.wideopenwest.com [69.14.185.92])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: floppym)
-        by smtp.gentoo.org (Postfix) with ESMTPSA id B4CCD34F2CC;
-        Wed, 26 Feb 2020 19:34:11 +0000 (UTC)
-From:   Mike Gilbert <floppym@gentoo.org>
-To:     shuah@kernel.org
-Cc:     linux-pm@vger.kernel.org, Mike Gilbert <floppym@gentoo.org>
-Subject: [PATCH v3] cpupower: avoid multiple definition with gcc -fno-common
-Date:   Wed, 26 Feb 2020 14:33:59 -0500
-Message-Id: <20200226193359.1308202-1-floppym@gentoo.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200224202029.877025-1-floppym@gentoo.org>
-References: <20200224202029.877025-1-floppym@gentoo.org>
+        id S1727350AbgBZUlN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 26 Feb 2020 15:41:13 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 12:41:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,489,1574150400"; 
+   d="scan'208";a="350475837"
+Received: from jekeller-mobl1.amr.corp.intel.com (HELO [134.134.177.84]) ([134.134.177.84])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Feb 2020 12:41:10 -0800
+Subject: Re: [PATCH v5 13/19] x86/cpufeatures: Add flag to track whether MSR
+ IA32_FEAT_CTL is configured
+From:   Jacob Keller <jacob.e.keller@intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     TonyWWang-oc@zhaoxin.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, bp@alien8.de, bp@suse.de,
+        hpa@zytor.com, jacob.jun.pan@linux.intel.com,
+        jarkko.sakkinen@linux.intel.com, jmattson@google.com,
+        jolsa@redhat.com, joro@8bytes.org, kvm@vger.kernel.org,
+        lenb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-pm@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com,
+        namhyung@kernel.org, pbonzini@redhat.com, peterz@infradead.org,
+        rkrcmar@redhat.com, shuah@kernel.org, tglx@linutronix.de,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+References: <20191221044513.21680-14-sean.j.christopherson@intel.com>
+ <e741196d-52aa-0f5e-8f1e-a37ddf2e5025@intel.com>
+ <20200225221234.GL9245@linux.intel.com>
+ <1eaf6fbe-0adb-5074-3bc4-1e8327e0cdb3@intel.com>
+ <20200225232900.GO9245@linux.intel.com>
+ <5434303a-0742-3811-fd14-6445d296c0f0@intel.com>
+ <20200226004258.GP9245@linux.intel.com>
+ <a9c4b363-1569-f03e-6155-a869dd186ced@intel.com>
+Organization: Intel Corporation
+Message-ID: <df215c4c-82f0-5b15-57c3-d304fd94ff3b@intel.com>
+Date:   Wed, 26 Feb 2020 12:41:09 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <a9c4b363-1569-f03e-6155-a869dd186ced@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Building cpupower with -fno-common in CFLAGS results in errors due to
-multiple definitions of the 'cpu_count' and 'start_time' variables.
+On 2/25/2020 4:58 PM, Jacob Keller wrote:
+> On 2/25/2020 4:42 PM, Sean Christopherson wrote>> So there's something
+> weird going on. Maybe "boot_cpu_has" in the
+>>> vmx_disabled_by_bios is wrong? Hmm.
+>>
+>> Hmm, perhaps a bug somewhere else is overwriting the cpufeatures bit for
+>> X86_FEATURE_VMX.  Let me see if I can reproduce from net-next.
+>>
+> 
+> If you have any further suggestions for debugging, I'm happy to help try
+> to figure this out. To my eyes, it looks like somehow bits get reset...
+> It's definitely not clear to me how this happens.
+> 
+> There is the get_cpu_caps call.. but that seems to correctly call
+> apply_forced_caps at the end.
+> 
+> That's all I have time for today.
+> 
+> Thanks,
+> Jake
+> 
 
-./utils/idle_monitor/snb_idle.o:./utils/idle_monitor/cpupower-monitor.h:28:
-multiple definition of `cpu_count';
-./utils/idle_monitor/nhm_idle.o:./utils/idle_monitor/cpupower-monitor.h:28:
-first defined here
-...
-./utils/idle_monitor/cpuidle_sysfs.o:./utils/idle_monitor/cpuidle_sysfs.c:22:
-multiple definition of `start_time';
-./utils/idle_monitor/amd_fam14h_idle.o:./utils/idle_monitor/amd_fam14h_idle.c:85:
-first defined here
+Hi,
 
-The -fno-common option will be enabled by default in GCC 10.
+I kept digging into this, and I added a further print to the get_cpu_cap
+function.
 
-Bug: https://bugs.gentoo.org/707462
-Signed-off-by: Mike Gilbert <floppym@gentoo.org>
----
- tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c  | 2 +-
- tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c    | 2 +-
- tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c | 2 ++
- tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h | 2 +-
- 4 files changed, 5 insertions(+), 3 deletions(-)
+It looks like get_cpu_cap is being called again *after*
+init_ia32_feat_ctl...
 
-diff --git a/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c b/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
-index 33dc34db4f3c..20f46348271b 100644
---- a/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
-+++ b/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
-@@ -82,7 +82,7 @@ static struct pci_access *pci_acc;
- static struct pci_dev *amd_fam14h_pci_dev;
- static int nbp1_entered;
- 
--struct timespec start_time;
-+static struct timespec start_time;
- static unsigned long long timediff;
- 
- #ifdef DEBUG
-diff --git a/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c b/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
-index 3c4cee160b0e..a65f7d011513 100644
---- a/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
-+++ b/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
-@@ -19,7 +19,7 @@ struct cpuidle_monitor cpuidle_sysfs_monitor;
- 
- static unsigned long long **previous_count;
- static unsigned long long **current_count;
--struct timespec start_time;
-+static struct timespec start_time;
- static unsigned long long timediff;
- 
- static int cpuidle_get_count_percent(unsigned int id, double *percent,
-diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-index 6d44fec55ad5..7c77045fef52 100644
---- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-+++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-@@ -27,6 +27,8 @@ struct cpuidle_monitor *all_monitors[] = {
- 0
- };
- 
-+int cpu_count;
-+
- static struct cpuidle_monitor *monitors[MONITORS_MAX];
- static unsigned int avail_monitors;
- 
-diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
-index 5b5eb1da0cce..c559d3115330 100644
---- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
-+++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
-@@ -25,7 +25,7 @@
- #endif
- #define CSTATE_DESC_LEN 60
- 
--int cpu_count;
-+extern int cpu_count;
- 
- /* Hard to define the right names ...: */
- enum power_range_e {
--- 
-2.25.1
+Digging further, I discovered this appears to be the call in setup_pku,
+which would only be enabled for systems which have X86_FEATURE_PKU
+enabled and supported. It's quite likely that test systems may not have
+had this feature, hence why it went undetected till now.
 
+Because of the extra get_cpu_cap call, the capabilities are reset. Since
+we never use setup_clear_cpu_cap or pass NULL to clear_cpu_cap, the code
+that sets the global cpu_caps_cleared bits is not run.
+
+It's not clear to me what the best fix for this is.
+
+Perhaps init_ia32_feat_ctl should be something run during
+early_identify_cpu, since it's really checking global status (rdmsr),
+and not per-CPU status. And then it could directly operate to call
+setup_clear_cpu_cap, which would properly clear the bit globally,
+ensuring that apply_forced_caps kicks in?
+
+Or this needs to somehow be run *after* setup_pku? But that doesn't feel
+very robust.
+
+Thanks,
+Jake
