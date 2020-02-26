@@ -2,92 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE1717031E
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 16:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9819170394
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 16:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728515AbgBZPu6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Feb 2020 10:50:58 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:45205 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728205AbgBZPu6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 10:50:58 -0500
-Received: by mail-ot1-f68.google.com with SMTP id 59so3327329otp.12;
-        Wed, 26 Feb 2020 07:50:57 -0800 (PST)
+        id S1728486AbgBZP7O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Feb 2020 10:59:14 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:51393 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728440AbgBZP7O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 10:59:14 -0500
+Received: by mail-il1-f198.google.com with SMTP id c12so4674746ilr.18
+        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2020 07:59:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XLG/HcpDoefwlDbSA6KkLlzoOTV7gKxlBKi85al1w9c=;
-        b=ELz6ZMZr0rtKQ2d7fLzJdm1LmTURZt4Azsc0C2oDviJpliY1ved5qP4QJBBXa9s4Z7
-         buTzqKGcciVBE5NuCzxLfhR+8fPaNz+MTJ+oHEj/K5RKc+JS9SyVDmlxjub7nMAwijLs
-         +xq3U7FAAZo3l0RNuAnubvyzjWH0fDt9pRzEz0dhe5ubJb45tpwW22LJIPm2aR3v4H9D
-         ZBCkt/+dcFjUSvxNW4o/9P0Hk9BOq+FF/k/yaJeGiqYZNo/HN7g+ypmj/HrzDgiEHBpy
-         Ewrq9wMv97A2Ow7lgFOjzoHjOaCDD7ViH73TsHO2zWr6V2tBRB1E/x5+KEnqbg84yKcx
-         JOOA==
-X-Gm-Message-State: APjAAAUMH5x0duMm5wo8HtiWwAqutEXIZMf/3vwRq2DLD91DlYtprq82
-        rXCueEX6jfwxIUOvqlH53g==
-X-Google-Smtp-Source: APXvYqzz9bkQxK085SBSKbtINgYFodulsnBaryzAcNMdYU2j6sh2uVsRdP6BGe4x3hIwiFVgNwCLpg==
-X-Received: by 2002:a05:6830:1e6b:: with SMTP id m11mr3726402otr.293.1582732257205;
-        Wed, 26 Feb 2020 07:50:57 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id s128sm923004oia.4.2020.02.26.07.50.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2020 07:50:56 -0800 (PST)
-Received: (nullmailer pid 3525 invoked by uid 1000);
-        Wed, 26 Feb 2020 15:50:55 -0000
-Date:   Wed, 26 Feb 2020 09:50:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Todd Kjos <tkjos@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, kernel-team@android.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] of: property: Add device link support for
- power-domains  and hwlocks
-Message-ID: <20200226155055.GA3403@bogus>
-References: <20200220055250.196456-1-saravanak@google.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Y1ebUHzTdnuJBounAIPYWFXHiCdLik50ghAjZZcergI=;
+        b=FtQO6SBWCKU4pcmqXpkIYhQfOQz4yiFge6AcdMK+V2gGjD49n7N04/QZHhjBSkLjqG
+         XFiwt1VDEy19dtoj3XkAfJNWhl6F/OERTfsOqr9QVqHvgf3m4AqoYP/vS5v9iFpdjZba
+         GEIJJDVKuGKVFtXV+MlgQzycETp7Jsea7HW2a1uwkuCMqxK/hWm4vE/xt3PWeikPLBcJ
+         f8AR2bK1aDrCXlcuJbywRFMiwU2w9rKqr6qR7sHMF0uHuNF7aEl17jO285k5CNJp5/7f
+         gll2xK84yJtfVux7YptKTxkzgIyakndzaxpl6S1/0B4GAvndpOloTVsNak6hdAbA3Zap
+         2mAw==
+X-Gm-Message-State: APjAAAXn9VN2YrqZDefcGtr0s/KtP5eQo/xJR1b3/7BVJmLqYNaoILdO
+        PnIyFwyRYh/rQ07rmlfHQP6u2sCigYyXm9/5/GKcoCVQonOb
+X-Google-Smtp-Source: APXvYqw6iqnJkkGXD5uez2BWl4BIo6Jlqc4yunnpKTvjaytEUJ4dAyrrbSfc68KNzaryHWw0Fq31Go8BGqHnwH3y392uN1e53A/g
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200220055250.196456-1-saravanak@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a02:880c:: with SMTP id r12mr5265816jai.131.1582732753994;
+ Wed, 26 Feb 2020 07:59:13 -0800 (PST)
+Date:   Wed, 26 Feb 2020 07:59:13 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000938a57059f7cafe4@google.com>
+Subject: KMSAN: uninit-value in snapshot_compat_ioctl
+From:   syzbot <syzbot+af962bf9e7e27bccd025@syzkaller.appspotmail.com>
+To:     glider@google.com, len.brown@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        pavel@ucw.cz, rjw@rjwysocki.net, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 19 Feb 2020 21:52:50 -0800, Saravana Kannan wrote:
-> Add support for creating device links out of more DT properties.
-> 
-> To: lkml <linux-kernel@vger.kernel.org>
-> To: John Stultz <john.stultz@linaro.org>
-> To: Rob Herring <robh@kernel.org>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Kevin Hilman <khilman@kernel.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Todd Kjos <tkjos@google.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
->  drivers/of/property.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+Hello,
 
-Applied, thanks.
+syzbot found the following crash on:
 
-Rob
+HEAD commit:    8bbbc5cf kmsan: don't compile memmove
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=11514265e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cd0e9a6b0e555cc3
+dashboard link: https://syzkaller.appspot.com/bug?extid=af962bf9e7e27bccd025
+compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
+userspace arch: i386
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a89109e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176f774ee00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+af962bf9e7e27bccd025@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in kmsan_check_memory+0xd/0x10 mm/kmsan/kmsan_hooks.c:413
+CPU: 1 PID: 11659 Comm: syz-executor923 Not tainted 5.6.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x1c9/0x220 lib/dump_stack.c:118
+ kmsan_report+0xf7/0x1e0 mm/kmsan/kmsan_report.c:118
+ kmsan_internal_check_memory+0x358/0x3d0 mm/kmsan/kmsan.c:457
+ kmsan_check_memory+0xd/0x10 mm/kmsan/kmsan_hooks.c:413
+ snapshot_compat_ioctl+0x559/0x650 kernel/power/user.c:422
+ __do_compat_sys_ioctl fs/ioctl.c:857 [inline]
+ __se_compat_sys_ioctl+0x57c/0xed0 fs/ioctl.c:808
+ __ia32_compat_sys_ioctl+0xd9/0x110 fs/ioctl.c:808
+ do_syscall_32_irqs_on arch/x86/entry/common.c:339 [inline]
+ do_fast_syscall_32+0x3c7/0x6e0 arch/x86/entry/common.c:410
+ entry_SYSENTER_compat+0x68/0x77 arch/x86/entry/entry_64_compat.S:139
+RIP: 0023:0xf7f70d99
+Code: 90 e8 0b 00 00 00 f3 90 0f ae e8 eb f9 8d 74 26 00 89 3c 24 c3 90 90 90 90 90 90 90 90 90 90 90 90 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 eb 0d 90 90 90 90 90 90 90 90 90 90 90 90
+RSP: 002b:00000000ffec145c EFLAGS: 00000213 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000080083313
+RDX: 0000000000000000 RSI: 00000000080ea078 RDI: 00000000ffec14b0
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+
+Uninit was stored to memory at:
+ kmsan_save_stack_with_flags mm/kmsan/kmsan.c:144 [inline]
+ kmsan_internal_chain_origin+0xad/0x130 mm/kmsan/kmsan.c:310
+ __msan_chain_origin+0x50/0x90 mm/kmsan/kmsan_instr.c:165
+ snapshot_compat_ioctl+0x5e0/0x650 kernel/power/user.c:422
+ __do_compat_sys_ioctl fs/ioctl.c:857 [inline]
+ __se_compat_sys_ioctl+0x57c/0xed0 fs/ioctl.c:808
+ __ia32_compat_sys_ioctl+0xd9/0x110 fs/ioctl.c:808
+ do_syscall_32_irqs_on arch/x86/entry/common.c:339 [inline]
+ do_fast_syscall_32+0x3c7/0x6e0 arch/x86/entry/common.c:410
+ entry_SYSENTER_compat+0x68/0x77 arch/x86/entry/entry_64_compat.S:139
+
+Local variable ----offset@snapshot_compat_ioctl created at:
+ get_current arch/x86/include/asm/current.h:15 [inline]
+ snapshot_compat_ioctl+0x324/0x650 kernel/power/user.c:418
+ get_current arch/x86/include/asm/current.h:15 [inline]
+ snapshot_compat_ioctl+0x324/0x650 kernel/power/user.c:418
+
+Bytes 0-7 of 8 are uninitialized
+Memory access of size 8 starts at ffff9946c156bd30
+=====================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
