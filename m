@@ -2,82 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E2516F460
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 01:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB65416F46F
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2020 01:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729583AbgBZAeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Feb 2020 19:34:23 -0500
-Received: from mail-qk1-f172.google.com ([209.85.222.172]:43603 "EHLO
-        mail-qk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728865AbgBZAeW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Feb 2020 19:34:22 -0500
-Received: by mail-qk1-f172.google.com with SMTP id p7so1025320qkh.10
-        for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2020 16:34:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=dcOce3PoshJ+NY86BbuLlniUku7fXlpuSXAZ8LGYJdw=;
-        b=egLSHHnk9JOP89pQ+k1B3mbni7p4N0tKpBslDS2rPS1BjzYxUw8Ton4W8ZeKUfaCCa
-         uybfbl+0gPLICpocoLH9Ag86nk2V29oEpjj4te8uRyqqzmMT3sIANuVIvIfi8Yyy3uAz
-         balr9ZS2hcpP86kln1EavIcj/mo28FKW0nZLM9uBkHpQrO1wbrf8tSO3wF5NRsqqfjb0
-         hBYHRaKdwbTjjodWlVbk6kk/4G6Hzbwrws8fCbSNtLGrb2LlkLxShUJlNfN1KytmPxDP
-         mrFEhKmlGeOcb70AJ6K3tdR6dCnyO289dGsdXrJzkOnadWsiaP35kJwXmACJ/OzlLRFk
-         hNvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=dcOce3PoshJ+NY86BbuLlniUku7fXlpuSXAZ8LGYJdw=;
-        b=KxsOxo1T9Zx4/2Xg0ZdSfQeLXtIx9DROUlJ4vzZLh6hP8DbAcwIXvTFoWdk9jJKWLE
-         6RApP84mZSEbTyOM240oGANJODfgWcvOZVFk/uPkYcTMUDNyRNOiwo1X7tPXjg/5V+Bm
-         wx0hypsg/9PFeiWh4vYTrQ14kkeKklYVSGNSW9L6Rd5L/OsKSOexTS8EaXXce9mVDQ5w
-         d8efS73kw8naDcwlXTczVWnmT4+tj87UO300LuclyDhyjEvbLpKT5W4vK4cHwwVSLpWG
-         9CENl3jzxGhz9YO9XiQMtUh3Oe3hPDrpHOOCgiGABS0G2pB0ftcs1Q+/t/JolZ22De9g
-         XdCQ==
-X-Gm-Message-State: APjAAAWou/GWc9iSgQwJ/rGsqKCy2nfIQyMrUsxzJr7Y4MsVLbEqQMvD
-        atmKVovW1SQks5UeKerV468yRQ==
-X-Google-Smtp-Source: APXvYqxpE+tID1QWX19eu18atq1kyUmwXoOU0fn0POXwu3rdeVE5y2Mb1HWpaN/jsxiDDo08DLz3lw==
-X-Received: by 2002:a37:9b45:: with SMTP id d66mr2147082qke.84.1582677259776;
-        Tue, 25 Feb 2020 16:34:19 -0800 (PST)
-Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id j4sm168618qkk.84.2020.02.25.16.34.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Feb 2020 16:34:19 -0800 (PST)
+        id S1729277AbgBZAlu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Feb 2020 19:41:50 -0500
+Received: from mga14.intel.com ([192.55.52.115]:32514 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728865AbgBZAlt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 25 Feb 2020 19:41:49 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Feb 2020 16:41:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,486,1574150400"; 
+   d="scan'208";a="230289859"
+Received: from jekeller-mobl1.amr.corp.intel.com (HELO [134.134.177.78]) ([134.134.177.78])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Feb 2020 16:41:47 -0800
+Subject: Re: [PATCH v5 13/19] x86/cpufeatures: Add flag to track whether MSR
+ IA32_FEAT_CTL is configured
+From:   Jacob Keller <jacob.e.keller@intel.com>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     TonyWWang-oc@zhaoxin.com, acme@kernel.org,
+        alexander.shishkin@linux.intel.com, bp@alien8.de, bp@suse.de,
+        hpa@zytor.com, jacob.jun.pan@linux.intel.com,
+        jarkko.sakkinen@linux.intel.com, jmattson@google.com,
+        jolsa@redhat.com, joro@8bytes.org, kvm@vger.kernel.org,
+        lenb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-pm@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com,
+        namhyung@kernel.org, pbonzini@redhat.com, peterz@infradead.org,
+        rkrcmar@redhat.com, shuah@kernel.org, tglx@linutronix.de,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+References: <20191221044513.21680-14-sean.j.christopherson@intel.com>
+ <e741196d-52aa-0f5e-8f1e-a37ddf2e5025@intel.com>
+ <20200225221234.GL9245@linux.intel.com>
+ <1eaf6fbe-0adb-5074-3bc4-1e8327e0cdb3@intel.com>
+ <20200225232900.GO9245@linux.intel.com>
+ <5434303a-0742-3811-fd14-6445d296c0f0@intel.com>
+Organization: Intel Corporation
+Message-ID: <ee8e2b4d-9448-48e0-feb9-410059577fe3@intel.com>
+Date:   Tue, 25 Feb 2020 16:41:47 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <5434303a-0742-3811-fd14-6445d296c0f0@intel.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Qian Cai <cai@lca.pw>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH -next] power/qos: fix a data race in pm_qos_*_value
-Date:   Tue, 25 Feb 2020 19:34:18 -0500
-Message-Id: <705D8B35-FBB5-4D32-AE63-DD4E773CEC1E@lca.pw>
-References: <CAJZ5v0jDjK63R4kbBb_aU7ZBXbCG_vfOW33aVBRbYV7hEOWYqA@mail.gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Marco Elver <elver@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-In-Reply-To: <CAJZ5v0jDjK63R4kbBb_aU7ZBXbCG_vfOW33aVBRbYV7hEOWYqA@mail.gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-X-Mailer: iPhone Mail (17D50)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 2/25/2020 3:54 PM, Jacob Keller wrote:
+> 
+> I reverted the suggested commit and added some prints:
+> 
+> [   26.056398] X86_FEATURE_MSR_IA32_FEAT_CTL is enabled
+> [   26.062426] X86_FEATURE_VMX is enabled
+> [   26.066923] kvm: disabled by bios
+> 
+> So the old code flow is finding KVM to be disabled, but both features
+> are set...
+> 
+> The code that sets this is run first:
+> 
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_LOCKED is set
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_INSIDE_SMX is unset
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX is unset
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: MSR locked by bios
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: VMX (outside TXT) disabled by BIOS
+>> Feb 25 15:46:05 jbrandeb-saw1 kernel: x86/cpu: disabling X86_FEATURE_VMX
+> 
+> But somehow... it is still set later...
+> 
+> So there's something weird going on. Maybe "boot_cpu_has" in the
+> vmx_disabled_by_bios is wrong? Hmm.
+> 
 
+I added even more pr_warns, giving me the following diff after reverting
+the suggested commit:
 
-> On Feb 25, 2020, at 7:10 PM, Rafael J. Wysocki <rafael@kernel.org> wrote:
->=20
-> The target_value field in struct pm_qos_constraints is used for
-> lockless access to the effective constraint value of a given QoS list,
-> so the readers of it cannot expect it to always reflect the most
-> recent effective constraint value.  However, they can and do expect it
-> to be equal to a valid effective constraint value computed at a
-> certain time in the past (event though it may not be the most recent
-> one), so add READ|WRITE_ONCE() annotations around the target_value
-> accesses to prevent the compiler from possibly causing that
-> expectation to be unmet by generating code in an exceptionally
-> convoluted way.
+> 
+> 
+> diff --git a/arch/x86/kernel/cpu/feat_ctl.c b/arch/x86/kernel/cpu/feat_ctl.c
+> index 0268185bef94..a86619acab80 100644
+> --- a/arch/x86/kernel/cpu/feat_ctl.c
+> +++ b/arch/x86/kernel/cpu/feat_ctl.c
+> @@ -97,13 +97,27 @@ void init_ia32_feat_ctl(struct cpuinfo_x86 *c)
+>         bool tboot = tboot_enabled();
+>         u64 msr;
+> 
+> +       pr_warn("before X86_FEATURE_MSR_IA32_FEAT_CTL is %s\n",
+> +                       cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL) ? "enabled" : "disabled");
+> +       pr_warn("before X86_FEATURE_VMX is %s\n",
+> +                       cpu_has(c, X86_FEATURE_VMX) ? "enabled" : "disabled");
+> +
+>         if (rdmsrl_safe(MSR_IA32_FEAT_CTL, &msr)) {
+>                 clear_cpu_cap(c, X86_FEATURE_VMX);
+>                 return;
+>         }
+> 
+> -       if (msr & FEAT_CTL_LOCKED)
+> +       pr_warn("FEAT_CTL_LOCKED is %s\n",
+> +                       msr & FEAT_CTL_LOCKED ? "set" : "unset");
+> +       pr_warn("FEAT_CTL_VMX_ENABLED_INSIDE_SMX is %s\n",
+> +                       msr & FEAT_CTL_VMX_ENABLED_INSIDE_SMX ? "set" : "unset");
+> +       pr_warn("FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX is %s\n",
+> +                       msr & FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX ? "set" : "unset");
+> +
+> +       if (msr & FEAT_CTL_LOCKED) {
+> +               pr_warn("MSR locked by bios\n");
+>                 goto update_caps;
+> +       }
+> 
+>         /*
+>          * Ignore whatever value BIOS left in the MSR to avoid enabling random
+> @@ -136,10 +150,16 @@ void init_ia32_feat_ctl(struct cpuinfo_x86 *c)
+>                 if (IS_ENABLED(CONFIG_KVM_INTEL))
+>                         pr_err_once("VMX (%s TXT) disabled by BIOS\n",
+>                                     tboot ? "inside" : "outside");
+> +               pr_warn("disabling X86_FEATURE_VMX\n");
+>                 clear_cpu_cap(c, X86_FEATURE_VMX);
+>         } else {
+>  #ifdef CONFIG_X86_VMX_FEATURE_NAMES
+>                 init_vmx_capabilities(c);
+>  #endif
+>         }
+> +
+> +       pr_warn("after X86_FEATURE_MSR_IA32_FEAT_CTL is %s\n",
+> +                       cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL) ? "enabled" : "disabled");
+> +       pr_warn("after X86_FEATURE_VMX is %s\n",
+> +                       cpu_has(c, X86_FEATURE_VMX) ? "enabled" : "disabled");
+>  }
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index a2e18e60c2db..550f8d556251 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2222,6 +2222,16 @@ static __init int vmx_disabled_by_bios(void)
+>  {
+>         u64 msr;
+> 
+> +       pr_warn("boot X86_FEATURE_MSR_IA32_FEAT_CTL is %s\n",
+> +                       boot_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ? "enabled" : "disabled");
+> +       pr_warn("boot X86_FEATURE_VMX is %s\n",
+> +                       boot_cpu_has(X86_FEATURE_VMX) ? "enabled" : "disabled");
+> +
+> +       pr_warn("this_cpu X86_FEATURE_MSR_IA32_FEAT_CTL is %s\n",
+> +                       this_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ? "enabled" : "disabled");
+> +       pr_warn("this_cpu X86_FEATURE_VMX is %s\n",
+> +                       this_cpu_has(X86_FEATURE_VMX) ? "enabled" : "disabled");
+> +
+>         rdmsrl(MSR_IA32_FEAT_CTL, msr);
+> 
+>         if (unlikely(!(msr & FEAT_CTL_LOCKED)))
 
-Perfect. I=E2=80=99ll send a v2 for that unless you would like to squash it i=
-n.=
+With this, I see the following output for each CPU, starting with boot CPU:
+
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: before X86_FEATURE_MSR_IA32_FEAT_CTL is disabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: before X86_FEATURE_VMX is enabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_LOCKED is set
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_INSIDE_SMX is unset
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX is unset
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: MSR locked by bios
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: VMX (outside TXT) disabled by BIOS
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: disabling X86_FEATURE_VMX
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: after X86_FEATURE_MSR_IA32_FEAT_CTL is enabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: after X86_FEATURE_VMX is disabled
+And for each of the SMP CPUs:
+
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: before X86_FEATURE_MSR_IA32_FEAT_CTL is disabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: before X86_FEATURE_VMX is enabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_LOCKED is set
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_INSIDE_SMX is unset
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX is unset
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: MSR locked by bios
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: disabling X86_FEATURE_VMX
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: after X86_FEATURE_MSR_IA32_FEAT_CTL is enabled
+> Feb 25 16:35:59 jbrandeb-saw1 kernel: x86/cpu: after X86_FEATURE_VMX is disabled
+
+But when we finally go to check kvm:
+
+> Feb 25 16:36:06 jbrandeb-saw1 kernel: boot X86_FEATURE_MSR_IA32_FEAT_CTL is enabled
+> Feb 25 16:36:06 jbrandeb-saw1 kernel: boot X86_FEATURE_VMX is enabled
+> Feb 25 16:36:06 jbrandeb-saw1 kernel: this_cpu X86_FEATURE_MSR_IA32_FEAT_CTL is enabled
+> Feb 25 16:36:06 jbrandeb-saw1 kernel: this_cpu X86_FEATURE_VMX is enabled
+
+I tried checking both boot and this_cpu, just in case.
+
+Somehow the things are being restored/re-enabled. I can't figure out
+where this even happens. At a glance it's not even obvious to me where
+the original features get set, and nothing seems to obviously set these
+flags....
+
+Thanks,
+Jake
+
