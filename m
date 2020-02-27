@@ -2,143 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B12170F9D
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 05:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604A5171017
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 06:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728358AbgB0EWq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Feb 2020 23:22:46 -0500
-Received: from mailout1.samsung.com ([203.254.224.24]:19815 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728341AbgB0EWp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Feb 2020 23:22:45 -0500
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200227042243epoutp018ab285010aecc75427059854d16ebceb~3J6BHTOMu3059730597epoutp014
-        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 04:22:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200227042243epoutp018ab285010aecc75427059854d16ebceb~3J6BHTOMu3059730597epoutp014
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1582777363;
-        bh=DKtRV6oNruS4ryi/QvX//Su7UQWSj/ubLBAPJNAZyf8=;
-        h=To:Cc:From:Subject:Date:References:From;
-        b=FK6vxPit7InpJWABEoaETi6g/pzU0LEvvz4K9Mn1u723qJkGknvOEaY+2vje32Kzc
-         zH+kO6b5nfrNQkMf4RqIAzbHdDT1yXzmWZGP551H9+BTNSDmcIgV/2qybz3egiapnI
-         T7CNoLNLyFDT0DezLsKWxL+OyhTZttPMcHN3+gvk=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200227042242epcas1p17ae5ceadbd297c77ee5625799847beed~3J6AeSkmx0751807518epcas1p1Y;
-        Thu, 27 Feb 2020 04:22:42 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 48Sff43gHCzMqYkZ; Thu, 27 Feb
-        2020 04:22:36 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        96.68.52419.904475E5; Thu, 27 Feb 2020 13:22:33 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200227042233epcas1p2541b00baa994f262d07c4dc65da99c1c~3J53i-ZMU0590005900epcas1p2c;
-        Thu, 27 Feb 2020 04:22:33 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200227042233epsmtrp17fb3780616652201c6735e78d35fa5fb~3J53h-Aq71529215292epsmtrp1V;
-        Thu, 27 Feb 2020 04:22:33 +0000 (GMT)
-X-AuditID: b6c32a37-5b7ff7000001ccc3-12-5e57440947b0
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        07.13.06569.804475E5; Thu, 27 Feb 2020 13:22:32 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200227042232epsmtip2eb9d48297a636dd4a86f348066c1e19d~3J53U4CSR2557025570epsmtip2E;
-        Thu, 27 Feb 2020 04:22:32 +0000 (GMT)
-To:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chanwoo Choi (samsung.com)" <chanwoo@kernel.org>,
-        "Chanwoo Choi (samsung.com)" <cw00.choi@samsung.com>,
-        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Subject: [GIT PULL] devfreq fixes for v5.6-rc4
-Organization: Samsung Electronics
-Message-ID: <c9cf6c14-2ff7-6809-2bc7-83ca7974c3b7@samsung.com>
-Date:   Thu, 27 Feb 2020 13:30:53 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1726207AbgB0FT0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 00:19:26 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:46273 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgB0FT0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 00:19:26 -0500
+Received: by mail-pf1-f193.google.com with SMTP id o24so700015pfp.13
+        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2020 21:19:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZP2jhJvp86yVLBWzdI2zrvme2g80v6ApFuAlAeSIwcE=;
+        b=pO5q61A0vgRls2tfv5TJcxuv8zMz4IKCLRFP1zAS5Amigja/75HNUVOXagNoD9QcKs
+         N2QpjrdRvT9rttoC9iPrZerD+2I39mTs4RQ6F05NNIZIN2zkkWUxvLytP9vG+SExp5W7
+         P8M8ytQO7c39DsWIkHmPyd3YcZuLSk0fkdy2s6EEmOnCRO8MYXpTxsagZsjgeBl/8234
+         /Oa2BrARMDSkYs3nUe9zn/YSEKgR3yOxqdKm4NzDvH/CbYuD44RGxE7zM/efbSibWOHN
+         zmLBdAMueF+OvX8oRGWXmpDoochVB7HCQ/tou8ylXID5zp3MqJieT6m68j7U+phH4HtS
+         7IGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZP2jhJvp86yVLBWzdI2zrvme2g80v6ApFuAlAeSIwcE=;
+        b=e39EItnQ2gCD3nVWy1Q+d7+2mqDi88Jq2E/jEXRlYa0Eur8L7VbYbc9qO/CnB4625J
+         Gf0u9PzDgV3gjvKxQE0HcBBWbBA5JlRnEu24A99nf/vslUUsR+401NEmyUixiOQSL9uh
+         kZ0aRncRSTAKyxPodaplrzMMgO5MxxUXGzRd1JrQfs2o89nFC4eXjMNqq2h+ItlmrQIg
+         cn3mWqIbpcF84d5/QMY8zcvJCIzjUnqC4syC3WVVEcyWJoXDPPgFZwTs38owOKnToPgj
+         dykfwGlEysQwH2kNAhfpwhD8pmWsyh2wCJRT0BQDhR8iheXGpI2ZjUDsmYJay9FFjdhy
+         luAQ==
+X-Gm-Message-State: APjAAAWUEDRcM/kdJyiBNcKrc1rE18zmkVBsWE2W0N60Xm12aoAFWXY1
+        5V2NcBkXvGrzfClLR9lAnR85GA==
+X-Google-Smtp-Source: APXvYqxvSTXg/y63EEPo3Ex9/cwdpbHih/WUeNLGyvSflaAvWNwceNo35Qt9XKCyYdcHlpLbbWsPbQ==
+X-Received: by 2002:a63:c30e:: with SMTP id c14mr2497552pgd.168.1582780765502;
+        Wed, 26 Feb 2020 21:19:25 -0800 (PST)
+Received: from localhost ([223.226.55.170])
+        by smtp.gmail.com with ESMTPSA id x7sm1164992pgp.0.2020.02.26.21.19.24
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 26 Feb 2020 21:19:24 -0800 (PST)
+Date:   Thu, 27 Feb 2020 10:49:23 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Artem Bityutskiy <dedekind1@gmail.com>
+Subject: Re: [PATCH] cpufreq: Fix policy initialization for internal governor
+ drivers
+Message-ID: <20200227051923.rh6xtq3t2bkoqroh@vireshk-i7>
+References: <3873122.F9s1CIEcb3@kreacher>
 MIME-Version: 1.0
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmvi6nS3icwbMrMhYTb1xhsbj+5Tmr
-        xeVdc9gsPvceYbS43biCzeLM6UusDmwem1Z1snlsudrO4tG3ZRWjx+dNcgEsUdk2GamJKalF
-        Cql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUDLlRTKEnNKgUIBicXF
-        Svp2NkX5pSWpChn5xSW2SqkFKTkFlgV6xYm5xaV56XrJ+blWhgYGRqZAhQnZGVcaLrAW3Oeq
-        uLqqna2B8SdHFyMnh4SAicTdYw9Yuxi5OIQEdjBKvPl3kAXC+cQoMf3ecajMN0aJrQd7mGBa
-        9hz4xQ6R2MsosWLbZqiW94wSK7/OB2rh4BARsJfo+JAJEmcWmMMk8WjSGjaQbjYBLYn9L26A
-        2cICehIvZ55nBLH5BRQlrv54DGbzCthJTGuYyA5iswioSrTenAJWLyoQJnFyWwtUjaDEyZlP
-        WEBsZgFxiVtP5jNB2PIS29/OYQZZLCFwgk1i8uozbBBnu0icPHAW6gVhiVfHt7BD2FISL/vb
-        oOxqiZUnj7BBNHcwSmzZf4EVImEssX/pZCaQz5gFNCXW79KHCCtK7Pw9lxFiMZ/Eu689YM9L
-        CPBKdLQJQZQoS1x+cBdqraTE4vZOqHM8JD60TmKewKg4C8k7s5C8MwvJO7MQFi9gZFnFKJZa
-        UJybnlpsWGCMHN2bGMEpU8t8B+OGcz6HGAU4GJV4eAuSwuKEWBPLiitzDzFKcDArifBu/Boa
-        J8SbklhZlVqUH19UmpNafIjRFBjaE5mlRJPzgek8ryTe0NTI2NjYwsTQzNTQUEmc92GkZpyQ
-        QHpiSWp2ampBahFMHxMHp1QDY1TnPLurxh3eHEGNy0J3ed63iMx7eV1ag9dQ/e5Frewl2jxZ
-        fpeFTvN0hcWfLl5ZIR7GcLPYY2/91PCfJ04oLt56pjVxVXdu2QeBM36ab+6/vWf/SPDQEgmd
-        iNeNJyKrL35enf5TTkFjve5hxdmfO5pnGJ7f1LP+7IXGf1na55L8bt8R13/+RYmlOCPRUIu5
-        qDgRACnc5YCvAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLLMWRmVeSWpSXmKPExsWy7bCSvC6HS3icwc1GW4uJN66wWFz/8pzV
-        4vKuOWwWn3uPMFrcblzBZnHm9CVWBzaPTas62Ty2XG1n8ejbsorR4/MmuQCWKC6blNSczLLU
-        In27BK6MKw0XWAvuc1VcXdXO1sD4k6OLkZNDQsBEYs+BX+xdjFwcQgK7GSWm7u9nhUhISky7
-        eJS5i5EDyBaWOHy4GKLmLaPEtqd32EDiIgL2Eh0fMkHizALzmCRO3l/EAtLLJqAlsf/FDTYQ
-        W1hAT+LlzPOMIDa/gKLE1R+PwWxeATuJaQ0T2UFsFgFVidabU8DqRQXCJHYuecwEUSMocXLm
-        E7CZzALqEn/mXWKGsMUlbj2ZzwRhy0tsfzuHeQKj4CwkLbOQtMxC0jILScsCRpZVjJKpBcW5
-        6bnFhgVGeanlesWJucWleel6yfm5mxjBkaCltYPxxIn4Q4wCHIxKPLwFSWFxQqyJZcWVuYcY
-        JTiYlUR4N34NjRPiTUmsrEotyo8vKs1JLT7EKM3BoiTOK59/LFJIID2xJDU7NbUgtQgmy8TB
-        KdXAuIDjI2Pn9tdCPn+vqD6siu/tzXQUD/gjqP7padDug14KFyJu/J3X2qpSmvux3OT02i2e
-        n2sTeud92Nc9bd1OqQN+b1cZ5CyPmHXOfcGjdedPWSTGWM1/ylKVKzB744TkEKXVLbINjy61
-        TxF9/7vgFQ9XcMdbXZdvit+aggTClgdu2HhgzeNdr5VYijMSDbWYi4oTATZbYUCAAgAA
-X-CMS-MailID: 20200227042233epcas1p2541b00baa994f262d07c4dc65da99c1c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200227042233epcas1p2541b00baa994f262d07c4dc65da99c1c
-References: <CGME20200227042233epcas1p2541b00baa994f262d07c4dc65da99c1c@epcas1p2.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3873122.F9s1CIEcb3@kreacher>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Rafael,
+On 26-02-20, 22:39, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Before commit 1e4f63aecb53 ("cpufreq: Avoid creating excessively
+> large stack frames") the initial value of the policy field in struct
+> cpufreq_policy set by the driver's ->init() callback was implicitly
+> passed from cpufreq_init_policy() to cpufreq_set_policy() if the
+> default governor was neither "performance" nor "powersave".  After
+> that commit, however, cpufreq_init_policy() must take that case into
+> consideration explicitly and handle it as appropriate, so make that
+> happen.
+> 
+> Fixes: 1e4f63aecb53 ("cpufreq: Avoid creating excessively large stack frames")
+> Link: https://lore.kernel.org/linux-pm/39fb762880c27da110086741315ca8b111d781cd.camel@gmail.com/
+> Reported-by: Artem Bityutskiy <dedekind1@gmail.com>
+> Cc: 5.4+ <stable@vger.kernel.org> # 5.4+
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> Note that I'm going to fast-track this patch for 5.6-rc4 which means that
+> it will go into my linux-next branch as soon as it shows up in the lists.
+> 
+> Thanks and sorry for the breakage!
+> 
+> ---
+>  drivers/cpufreq/cpufreq.c |   14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> Index: linux-pm/drivers/cpufreq/cpufreq.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpufreq/cpufreq.c
+> +++ linux-pm/drivers/cpufreq/cpufreq.c
+> @@ -1076,9 +1076,17 @@ static int cpufreq_init_policy(struct cp
+>  			pol = policy->last_policy;
+>  		} else if (def_gov) {
+>  			pol = cpufreq_parse_policy(def_gov->name);
+> -		} else {
+> -			return -ENODATA;
+> +			/*
+> +			 * In case the default governor is neiter "performance"
+> +			 * nor "powersave", fall back to the initial policy
+> +			 * value set by the driver.
+> +			 */
+> +			if (pol == CPUFREQ_POLICY_UNKNOWN)
+> +				pol = policy->policy;
+>  		}
+> +		if (pol != CPUFREQ_POLICY_PERFORMANCE &&
+> +		    pol != CPUFREQ_POLICY_POWERSAVE)
+> +			return -ENODATA;
+>  	}
+>  
+>  	return cpufreq_set_policy(policy, gov, pol);
 
-This is devfreq-fixes pull request for v5.6-rc4. I add detailed description of
-this pull request on the following tag. Please pull devfreq with following updates.
-And this patch will be applied to stable tree.
-- tag name : devfreq-fixes-for-5.6-rc4
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Best Regards,
-Chanwoo Choi
-
-
-The following changes since commit f8788d86ab28f61f7b46eb6be375f8a726783636:
-
-  Linux 5.6-rc3 (2020-02-23 16:17:42 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-fixes-for-5.6-rc4
-
-for you to fetch changes up to 66d0e797bf095d407479c89952d42b1d96ef0a7f:
-
-  Revert "PM / devfreq: Modify the device name as devfreq(X) for sysfs" (2020-02-24 11:14:29 +0900)
-
-----------------------------------------------------------------
-
-Detailed description for this pull request:
-1. Revert "PM / devfreq: Modify the device name as devfreq(X) for sysfs"
-- This changes as devfreq(X) cause break some user space applications
-such as Android HAL from Unisoc and Hikey. In result, decide to revert it
-for preventing the HAL layer problem.
-
-----------------------------------------------------------------
-Orson Zhai (1):
-      Revert "PM / devfreq: Modify the device name as devfreq(X) for sysfs"
-
- drivers/devfreq/devfreq.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+-- 
+viresh
