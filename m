@@ -2,154 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BF617228B
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 16:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2461722CC
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 17:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729662AbgB0Pvi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 10:51:38 -0500
-Received: from foss.arm.com ([217.140.110.172]:53888 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729110AbgB0Pvh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 27 Feb 2020 10:51:37 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 55EE51FB;
-        Thu, 27 Feb 2020 07:51:37 -0800 (PST)
-Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9EA843F7B4;
-        Thu, 27 Feb 2020 07:51:35 -0800 (PST)
-From:   Douglas Raillard <douglas.raillard@arm.com>
-Subject: Re: [RFC PATCH v4 3/6] sched/cpufreq: Hook em_pd_get_higher_power()
- into get_next_freq()
-To:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org
-Cc:     dietmar.eggemann@arm.com, qperret@google.com,
-        linux-pm@vger.kernel.org
-References: <20200122173538.1142069-1-douglas.raillard@arm.com>
- <20200122173538.1142069-4-douglas.raillard@arm.com>
-Organization: ARM
-Message-ID: <5d732dc1-d343-24d2-bda9-072021a510ed@arm.com>
-Date:   Thu, 27 Feb 2020 15:51:34 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        id S1729174AbgB0QGc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 11:06:32 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:40562 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729134AbgB0QGc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 11:06:32 -0500
+Received: by mail-lj1-f195.google.com with SMTP id 143so3938043ljj.7;
+        Thu, 27 Feb 2020 08:06:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8aeAAGL1lN/mti66y5xOWWYla0SoqdV+XcmEKiiyHrQ=;
+        b=k1OJ5Kog27zuKwJHPC5y6tnPBYX5HF2ktRokz4/EhYbZyLw8rjnfQ32BqqC5E2eX/c
+         ATNlvZEpSrTeED5xQ0ecEYwJjjquqZEjEVDk9079Z6Fk0M8yicFeN+EtyqD970kUdowa
+         pLx4AzfK1XJG0bmG/VcP5AewgU2sIAR0+9+ypa0s13535oMKnbG1FDAh5h1IhnZvnPB5
+         aCmp3G91iD6KEMxaUFKIIgsju7Kc+Fuko82IBNEUtoXzKwgZRTyEjiE6/0fGX0Ct+H4D
+         ulkjg+KbA0Aj/ZcyiM6hz+9kxz0phQ+PHZLLFW1k7oswnzb113MuCi/t5Pd/C70DpEy+
+         M6Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8aeAAGL1lN/mti66y5xOWWYla0SoqdV+XcmEKiiyHrQ=;
+        b=Jk5UpLPjzNvvs5G3C+NMgUZGmBdAD4QkBcyTay6tFCLLdF2xcCmRaRrSxAFEE5oMe9
+         ob52IueJ2AJOApb5bGdXEwXnEOxLQiO632LoHWEFkuuZBQ2LOGhb8+BcJk4+ICpHd0yd
+         1B39lLC/4tUk4K3MV7ZUC4Zj8qchFuWEd48JJmSqNHMkZYafySYgY1skfJrXK8Syt2je
+         ug88pGUyFnUM+VkEX9LIO9nbuEDzn3q70WAjpVWAus1dbg0S9Y33YPzxSCWc02BvNMkk
+         S2k6ctBmBgyr8t62dULYGyGb0cOvzosoCYUUcbclH/6Uz7D0KD4AAanWYzJP7hsnuFZ2
+         PRDA==
+X-Gm-Message-State: ANhLgQ32kzWftzhibuyWCHoCmI7nHxbDULMKYZBURo4zzGasFubv4kCL
+        l1DOAV4WWg3BEMH54LerxavoDakfQHIWKcip14o=
+X-Google-Smtp-Source: ADFU+vtLvp5dq+6TDzZtWM2VvPfgxIDR+ELg2azdIqTGKxI6g2SIZep9LmGFxz0v2Bdx3XotYMzbsefl0IspdMoxK0U=
+X-Received: by 2002:a2e:8e91:: with SMTP id z17mr124172ljk.13.1582819588888;
+ Thu, 27 Feb 2020 08:06:28 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200122173538.1142069-4-douglas.raillard@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB-large
-Content-Transfer-Encoding: 7bit
+References: <2d0854b00d7f85e988aff4f8186e8ac5d8a9aff2.1581410798.git.baolin.wang7@gmail.com>
+In-Reply-To: <2d0854b00d7f85e988aff4f8186e8ac5d8a9aff2.1581410798.git.baolin.wang7@gmail.com>
+From:   Orson Zhai <orsonzhai@gmail.com>
+Date:   Fri, 28 Feb 2020 00:06:17 +0800
+Message-ID: <CA+H2tpFAZuPSH0EErLt0Lj=TKLVq3XwEox06tbGzFaquSpKa0w@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: Allow charger manager can be built as a module
+To:     Baolin Wang <baolin.wang7@gmail.com>
+Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lyra Zhang <zhang.lyra@gmail.com>,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Let's this thread be about util boosting vs energy boosting.
+Hi Sebastian and other guys here,
 
-Short recap of the conversation:
-
-Peter:
->>> (I have vague memories of this (the util boosting) being proposed
-earlier; it also avoids
->>> that double OPP iteration thing complained about elsewhere in this
->>> thread if I'm not mistaken).
->>
-
-Douglas:
->> It should be possible to get rid of the double iteration mentioned by
->> Quentin. Choosing to boost the util or the energy boils down to:
->>
->> 1) If you care more about predictable battery life (or energy bill) than
->> predictability of the boost feature, EM should be used.
->>
->> 2) If you don't have an EM or you care more about having a predictable
->> boost for a given workload, use util (or disable that boost).
->>
->> The rational is that with 1), you will get a different speed boost for a
->> given workload depending on the other things executing at the same time,
->> as the speed up is not linear with the task-related metric (util -
->> util_est). If you are already at high freq because of another workload,
->> the speed up will be small because the next 100Mhz will cost much more
->> than the same +100Mhz delta starting from a low OPP.
-
-Peter:
+On Tue, Feb 11, 2020 at 4:51 PM Baolin Wang <baolin.wang7@gmail.com> wrote:
 >
-> It's just that I'm not seeing how 1 actually works or provides that more
-> predictable battery life I suppose. We have this other sub-thread to
-> argue about that :-)
+> Allow charger manager can be built as a module like other charger
+> drivers.
+>
+What do you think about this patch?
+We want to set charger-manager as module in our project for new Android devices.
 
-Here is a more detailed version of util boost vs energy boost.
-The goal of what follows is to show that util-based boost gives predictable
-performance speedup, while energy-based boost gives predictable increase in
-energy consumption.
+-Orson
 
-In both cases, the boost value is computed as (util - ue.enqueued),
-and only its interpretation differs:
-* as an increase in util for util-based boost
-* as an OPP cost margin for the energy-based boost
-
-
-
-util(wload) = util_avg(wload)
-util_est_enqueued(wload)
-	| wload is enqueued = f(util_avg(wload))
-	| otherwise         = 0
-
-(wloadA + wloadB) denotes a "virtual" task that is running whenever either
-wloadA or wloadB is running.
-
-# Assuming wloadA and wloadB are attached to the same rq:
-util(wloadA + wloadB) = util(wloadA) + util(wloadB)
-
-# Assuming wloadA and wloadB do not preempt each other:
-util_est_enqueued(wloadA + wloadB) =
-	util_est_enqueued(wloadA) + util_est_enqueued(wloadB)
-
-# boostU(wload) is the increase of util due to the util-based boost.
-# boostE(wload) is the increase of *util* due to the energy-based boost.
-
-boostU(wload) 
-	| wload enqueued and util(wload) > util_est_enqueued(wload) =
-		util(wload) - util_est_enqueued(wload)
-	| otherwise = 0
-
-boostU(wloadA + wloadB) = util(wloadA + wloadB) -
-    util_est_enqueued(wloadA + wloadB)
-boostU(wloadA + wloadB) = util(wloadA) + util(wloadB) -
-    util_est_enqueued(wloadA) - util_est_enqueued(wloadB)
-boostU(wloadA + wloadB) = boostU(wloadA) + boostU(wloadB)
-
-# Now if we now intepret the same boost value as a freq energy cost margin:
-boostE(wload) 
-	| wload enqueued and util(wload) > util_est_enqueued(wload) =
-		apply_boostE(util(wload), util_est_enqueued(wload), map_util_freq(util(wload)))
-	| otherwise = 0
-
-# with:
-apply_boostE(util, util_est_enqueued, base_freq) = 
-	boost = util - util_est_enqueued
-	boosted_freq = freq_at(boost + cost_of(base_freq))
-	freq_delta = boosted_freq - base_freq
-	speedup = 1 + freq_delta / max_freq
-	return util * speedup
-
-Since freq_at(cost) function is not a linear function of cost
-and util(wloadA + wloadB) = util(wloadA) + util(wloadB),
-apply_boostE() is not a linear function of wload, which means:
-boostE(wloadA + wloadB) != boostE(wloadA) + boostE(wloadB)
-
-This means the speedup (util increase) given by boostE cannot be evaluated for
-one task without considering all other attached tasks on the same rq. Therefore
-the speedup introduced by boostE is not easily predictable.
-
-On the other hand, the increase in energy cost is linear in the workload for
-energy-based boost. but not linear for the util-based boost.
-
-That made me realize that to achieve that, EM_COST_MARGIN_SCALE needs to
-map to the highest cost in the system, not the highest cost of the
-current CPU, I will fix that.
-
-Also, util_est_enqueued is not linear in the general case when wloadA and
-wloadB preempt each-other. There could be ways of making that work but it's
-probably a better idea to move the logic at the task level and aggregate the
-flag at runqueue level. This will also allow the boost to work when the set of
-enqueued tasks varies, which is likely to happen in a real system.
-
+> Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
+> ---
+>  drivers/power/supply/Kconfig          |    2 +-
+>  include/linux/power/charger-manager.h |    7 +------
+>  2 files changed, 2 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 9a5591a..195bc04 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -480,7 +480,7 @@ config CHARGER_GPIO
+>           called gpio-charger.
+>
+>  config CHARGER_MANAGER
+> -       bool "Battery charger manager for multiple chargers"
+> +       tristate "Battery charger manager for multiple chargers"
+>         depends on REGULATOR
+>         select EXTCON
+>         help
+> diff --git a/include/linux/power/charger-manager.h b/include/linux/power/charger-manager.h
+> index ad19e68..40493b2 100644
+> --- a/include/linux/power/charger-manager.h
+> +++ b/include/linux/power/charger-manager.h
+> @@ -248,11 +248,6 @@ struct charger_manager {
+>         u64 charging_end_time;
+>  };
+>
+> -#ifdef CONFIG_CHARGER_MANAGER
+>  extern void cm_notify_event(struct power_supply *psy,
+> -                               enum cm_event_types type, char *msg);
+> -#else
+> -static inline void cm_notify_event(struct power_supply *psy,
+> -                               enum cm_event_types type, char *msg) { }
+> -#endif
+> +                           enum cm_event_types type, char *msg);
+>  #endif /* _CHARGER_MANAGER_H */
+> --
+> 1.7.9.5
+>
