@@ -2,115 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 770061728F3
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 20:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FD2172911
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 20:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729611AbgB0TvI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 14:51:08 -0500
-Received: from mail-pg1-f178.google.com ([209.85.215.178]:36342 "EHLO
-        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729441AbgB0TvI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 14:51:08 -0500
-Received: by mail-pg1-f178.google.com with SMTP id d9so232365pgu.3
-        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 11:51:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=WUtduz+x2cePfsO4xfh146VoV6zUUwL0cPHUHG3iKOU=;
-        b=0lEu428PzHEcnUAKyAstQDZe+NFPTzpgAvjhZe79dn8AjigZwUZYLjt35esJ+gDPdc
-         No3hTyGHF4Nu4xL4osqcc8vkB1e6XPJMCxazxyMQYhzkfRwQF9Sb2PM/CMUWpIJz5gIN
-         lHENrR33KX+lsu5UuzL5AFLoGZMg/IZANFszFKUVKz4ucAF2FjL5ugyS8zEpJvP3pRqf
-         +mSXgP6cpYI2N42gfgSnMnrICknB16tK+2F8PClfGkfhyRTYvGmMtV1NfiC72aT2x7KO
-         cwoLEJNcPPu0XuihUiSSlZwYLf649IFeOGu/LA1LlYef3Wi0mf2S8typw/AqAUvj4out
-         0+iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=WUtduz+x2cePfsO4xfh146VoV6zUUwL0cPHUHG3iKOU=;
-        b=FEfWMHSDvOOr8gjipQQsECe9vq0GR1DIIXRgOO7OL7lFBBmiK6ectV7OdzPr4pbbXd
-         EcKiNut/I9J6ObBkG0AbNNc8/JzgppCCRXCwA8BDBmEL/RrqOnTaorpyaCOYMiN7AHO8
-         pz0l/fMlv2pHcpxdmmjsjNU/OZxUP3oEyBQJncaV2qe2oDAsaiG6wpXNFIoHfsSHn4cg
-         yiod0Qu1OWSho4ChRxLaAzvTosyVvmQMhXzZDfo3OBpYBtlwF9iBK/1OF+1hdg4Hxs+7
-         eYV5RQqH/qD+MImVXXosJJTQi76oyXbs6Y+rGshFNOA4lq5o0DljSNooK7cqA1thIZoh
-         fCUg==
-X-Gm-Message-State: APjAAAVVbUTIEWXWUAtJaEZSERDbxv+kot4XkTMBSV4gbtGQBtBR816G
-        /cnf1jLIMsJ1uD7coachBEcLSN95Syk=
-X-Google-Smtp-Source: APXvYqwV3+P1eHmrmnS3/LB8wqSzcNBE4VCpbq6qPLWhKYr82bbEYfivHcelJbN8N38IR1TSqg37XQ==
-X-Received: by 2002:a62:790e:: with SMTP id u14mr633536pfc.174.1582833065620;
-        Thu, 27 Feb 2020 11:51:05 -0800 (PST)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s23sm6921441pjq.17.2020.02.27.11.51.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2020 11:51:05 -0800 (PST)
-Message-ID: <5e581da9.1c69fb81.d81fe.1ed0@mx.google.com>
-Date:   Thu, 27 Feb 2020 11:51:05 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1730669AbgB0T6g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 14:58:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55496 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729594AbgB0T6g (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 27 Feb 2020 14:58:36 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CA48924699;
+        Thu, 27 Feb 2020 19:58:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582833514;
+        bh=x3vROII1fesL5Z7wihX+F7A34FxrSIHnIzf7GM+zPQU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aiIz6iBHZl7rsJ4UGi3Jb2Bj0iBPC75Qn40xSaLvnPfRdMa3Kej+NqJOv+/Ixc8m7
+         3YwqMoPS0wfx/OmuIOEtqhX5zTtxyqHcEG5I7S9BchKPuXJOoE4G1dSZrv6IP4cJJY
+         8rEJav84fNde49QXjhO85ssR9qaEM2FN3mq/yk9E=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1j7PIm-008YY2-QX; Thu, 27 Feb 2020 19:58:32 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.6-rc3-67-g146605da90d7
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 6 builds: 0 failed,
- 6 passed (v5.6-rc3-67-g146605da90d7)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 27 Feb 2020 19:58:32 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
+        suzuki.poulose@arm.com, sudeep.holla@arm.com, lukasz.luba@arm.com,
+        valentin.schneider@arm.com, dietmar.eggemann@arm.com,
+        rjw@rjwysocki.net, pkondeti@codeaurora.org, peterz@infradead.org,
+        mingo@redhat.com, vincent.guittot@linaro.org,
+        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>
+Subject: Re: [PATCH v5 3/7] arm64/kvm: disable access to AMU registers from
+ kvm guests
+In-Reply-To: <20200226132947.29738-4-ionela.voinescu@arm.com>
+References: <20200226132947.29738-1-ionela.voinescu@arm.com>
+ <20200226132947.29738-4-ionela.voinescu@arm.com>
+Message-ID: <46b89d0c9704e0a0fb7a4ac2a1fb5b7a@kernel.org>
+X-Sender: maz@kernel.org
+User-Agent: Roundcube Webmail/1.3.10
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: ionela.voinescu@arm.com, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, suzuki.poulose@arm.com, sudeep.holla@arm.com, lukasz.luba@arm.com, valentin.schneider@arm.com, dietmar.eggemann@arm.com, rjw@rjwysocki.net, pkondeti@codeaurora.org, peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org, viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, james.morse@arm.com, julien.thierry.kdev@gmail.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 6 builds: 0 failed, 6 passed (v5.6-rc3-67-g146605da90d7)
+Hi Ionela,
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-6-rc3-67-g146605da90d7/
+On 2020-02-26 13:29, Ionela Voinescu wrote:
+> Access to the AMU counters should be disabled by default in kvm guests,
+> as information from the counters might reveal activity in other guests
+> or activity on the host.
+> 
+> Therefore, disable access to AMU registers from EL0 and EL1 in kvm
+> guests by:
+>  - Hiding the presence of the extension in the feature register
+>    (SYS_ID_AA64PFR0_EL1) on the VCPU.
+>  - Disabling access to the AMU registers before switching to the guest.
+>  - Trapping accesses and injecting an undefined instruction into the
+>    guest.
+> 
+> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
+> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: James Morse <james.morse@arm.com>
+> Cc: Julien Thierry <julien.thierry.kdev@gmail.com>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
 
-Tree: pm
-Branch: testing
-Git Describe: v5.6-rc3-67-g146605da90d7
-Git Commit: 146605da90d753b81f95829c7f13bfa02f46ccb1
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 6 unique architectures
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+A small comment below:
 
-Detailed per-defconfig build reports:
+[...]
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index 3e909b117f0c..44354c812783 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -1003,6 +1003,20 @@ static bool access_pmuserenr(struct kvm_vcpu
+> *vcpu, struct sys_reg_params *p,
+>  	{ SYS_DESC(SYS_PMEVTYPERn_EL0(n)),					\
+>  	  access_pmu_evtyper, reset_unknown, (PMEVTYPER0_EL0 + n), }
+> 
+> +static bool access_amu(struct kvm_vcpu *vcpu, struct sys_reg_params 
+> *p,
+> +			     const struct sys_reg_desc *r)
+> +{
+> +	kvm_inject_undefined(vcpu);
+> +
+> +	return false;
+> +}
+> +
+> +/* Macro to expand the AMU counter and type registers*/
+> +#define AMU_AMEVCNTR0_EL0(n) { SYS_DESC(SYS_AMEVCNTR0_EL0(n)), 
+> access_amu }
+> +#define AMU_AMEVTYPE0_EL0(n) { SYS_DESC(SYS_AMEVTYPE0_EL0(n)), 
+> access_amu }
+> +#define AMU_AMEVCNTR1_EL0(n) { SYS_DESC(SYS_AMEVCNTR1_EL0(n)), 
+> access_amu }
+> +#define AMU_AMEVTYPE1_EL0(n) { SYS_DESC(SYS_AMEVTYPE1_EL0(n)), 
+> access_amu }
+> +
+>  static bool trap_ptrauth(struct kvm_vcpu *vcpu,
+>  			 struct sys_reg_params *p,
+>  			 const struct sys_reg_desc *rd)
+> @@ -1078,8 +1092,10 @@ static u64 read_id_reg(const struct kvm_vcpu 
+> *vcpu,
+>  			 (u32)r->CRn, (u32)r->CRm, (u32)r->Op2);
+>  	u64 val = raz ? 0 : read_sanitised_ftr_reg(id);
+> 
+> -	if (id == SYS_ID_AA64PFR0_EL1 && !vcpu_has_sve(vcpu)) {
+> -		val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
+> +	if (id == SYS_ID_AA64PFR0_EL1) {
+> +		if (!vcpu_has_sve(vcpu))
+> +			val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
+> +		val &= ~(0xfUL << ID_AA64PFR0_AMU_SHIFT);
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+This will definitely conflict with some of the ongoing rework I have[1].
+I'm happy to provide this as a stable branch for you to rebase on top,
+or use an arm64 provided branch to rebase my stoff on top.
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+Just let me know how you want to proceed.
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
+Thanks,
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+         M.
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?h=kvm-arm64/debug-fixes-5.6&id=454fb7398d3626328f7f771c07d21e894e4e1a3b
+-- 
+Jazz is not dead. It just smells funny...
