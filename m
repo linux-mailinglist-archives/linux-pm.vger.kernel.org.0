@@ -2,84 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C83F1713E3
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 10:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD35171400
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 10:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728645AbgB0JRF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 04:17:05 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:39689 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728555AbgB0JRF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 04:17:05 -0500
-Received: by mail-wm1-f66.google.com with SMTP id c84so2475436wme.4
-        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 01:17:04 -0800 (PST)
+        id S1728637AbgB0JUQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 04:20:16 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:35530 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728504AbgB0JUP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 04:20:15 -0500
+Received: by mail-wm1-f65.google.com with SMTP id m3so2505651wmi.0
+        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 01:20:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=byYUcuzDUs6EI2f9ZAyw6JsIg3wiyl3GVfGmpZXFBGg=;
-        b=znc+w9PkEBnc+zTq9CxylE0W3IOsPMfyj0zzj9rfhzSqa6janRkZRYL48p3tGPMtZB
-         0oR+0ElyxD+M4ZsBvDNSeR7HJDq2K5CNbZxIJ7qpklwpm0Xr2Fn0E9TFiQNmh6jtJfg5
-         QZp4mTQU9f06enAb2YyJWJ4DgFLmrpyy9peHIdQpbHXgMxiCDMbBkAqe02sjC5jID3lh
-         OZVDWGrnDTKfX0iQNWWM9yyuEnqlZRhVXzr4nxpcm67c3J/b7GRxRv9klHWdcw6KsoeE
-         8Hdr+r55IVlqhwlg+jfucl7ZnsfbGGM0sQrk7+UvmcLQ09RR+sFZBPsfRtGYsvIjsb8A
-         HQHQ==
+        bh=Mir9btmNLIiL5W3Qkje401u95Kj4mPQNkvNp/j9WsTI=;
+        b=XQKheMwoQPNeg4kfXTN2ykfBU54xuIXWpjqFUJ1jRa6tVzUvlffE95oto+g+hpeLzv
+         wcONYXZGEetTCH2Ces8MyLknZaiAJr6OQGFSIxIBlnM/DPmk1SPR4Dz92fiH9fTU7QuB
+         xUOryziluHFw2BA+iZN73UTEM7dJ2j5SbQYJjSAIc4IW5n8vURRdlXWv3SFtKUxEUdiy
+         NQoS7wtxFwtWoTF3ZB6K5A7hA3SDAH0TIJbIT2C6Qy1MewRvPLgjvVwafHZV3d/mN2CL
+         xWqU1OXKk2sV15c0SIO8SfNvVRRVVG2oLwvkluitU+r8pk4IR6m8Ii/LYPjoa1xvQUbP
+         fqUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=byYUcuzDUs6EI2f9ZAyw6JsIg3wiyl3GVfGmpZXFBGg=;
-        b=Jj5lzE0V0XKjUR0Y33tRAMyKcr32IZ9dMyend6g4kiGjYGh/X4VgHqkYu14G+Tovzn
-         2igDQLBNS9L5uDZ2I4WGbXRka/g6bzwMbgydsiXGdpNLd7xFdqbc9qWGOMsjITKaEP+D
-         JKVrzncD4BYmCdfYeBKm+JhJx9VQm3rBgT49BT5HHpGIksG5+noK1Kl3MFuO6zD5LJq4
-         qZRLhhDe34ABauwcCbjQvtb/Q8GyveXmqeYV7Z8257pu8bmBvzz+8dtkMryKQMBRtDvG
-         lcIJupvYOEuZA/fsCiWQ5A9sgM+FoY5OvMPvyZuoe7SZUzrMxHJVE+02jcM4T/Fqaa6j
-         wKgg==
-X-Gm-Message-State: APjAAAW+UAtRyVC/bMSMgZg9Ecb4ERLwP0QNDQ+l3nXSZ5sWwqfcfCha
-        gjpnSZyy4NAYK/dwOhyOrSe/oAKGGWRqUQ==
-X-Google-Smtp-Source: APXvYqxawPiOKaKn88qM82HAWaYmFB3tLwYe0d+o9KWMRvOoNS4J9ny55LDYIKO79xtfY0CVYnrsmg==
-X-Received: by 2002:a05:600c:21c6:: with SMTP id x6mr3966652wmj.17.1582795023046;
-        Thu, 27 Feb 2020 01:17:03 -0800 (PST)
+        bh=Mir9btmNLIiL5W3Qkje401u95Kj4mPQNkvNp/j9WsTI=;
+        b=l+dbNso38bXe/5X0bxeN8YtDA7n8mjCyOxNOSUsrV28Ydo9d7u+u2C+9eciz0n9lW2
+         KA+oiaasIlxCOosPX7lu+TbAT6MF5QQES0g7j4e2I5KTsmW6P5efNmesQkc7cj6OqVi7
+         gWVSP9wmqO9ixGdMNN2vtuU85f0RyeAW4zLhXImCyfXL6dd8W7p6XCeKNBg+qA7m1K/o
+         aRuY30eIcyNpUGytVhth7ttvvXKhZy7Cj8QBx7uAOJ7HOtxnH2yze4OMaYOPgVJv7RI4
+         i1Wzud0nkV54ItK6h6ecA5zQ9wBfC0RYABiqEvrELQjcd+fSkJl/XUjvY3pvYHcV1XEv
+         uUTw==
+X-Gm-Message-State: APjAAAXs9gEGDglUfB9YMdkCLFrcCcFcZDJPNaS3+iHymFqOxCKm3x83
+        RQsTkIRdkOQZYWbJqoU7XNvTzw==
+X-Google-Smtp-Source: APXvYqyO2WQU3A/PCXZOgIvyUOQQAPcdGaGiTPPMziReqq3eP5HNpTVvss2oju4wyTR9pE0AjNl2xQ==
+X-Received: by 2002:a1c:9811:: with SMTP id a17mr4077300wme.8.1582795213557;
+        Thu, 27 Feb 2020 01:20:13 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:d916:1723:c1c1:22d? ([2a01:e34:ed2f:f020:d916:1723:c1c1:22d])
-        by smtp.googlemail.com with ESMTPSA id b16sm2185717wrq.14.2020.02.27.01.16.59
+        by smtp.googlemail.com with ESMTPSA id y139sm7082726wmd.24.2020.02.27.01.20.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Feb 2020 01:17:02 -0800 (PST)
-Subject: Re: [PATCH 2/7] docs: dt: fix several broken references due to
- renames
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Jyri Sarha <jsarha@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-gpio@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org
-References: <cover.1582361737.git.mchehab+huawei@kernel.org>
- <83c5df4acbbe0fa55a1d58d4c4a435b51cd2a7ad.1582361737.git.mchehab+huawei@kernel.org>
+        Thu, 27 Feb 2020 01:20:12 -0800 (PST)
+Subject: Re: [PATCH v11 12/17] cpuidle: Refactor and move out NVIDIA Tegra20
+ driver into drivers/cpuidle
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Jasper Korten <jja2000@gmail.com>,
+        David Heidelberg <david@ixit.cz>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200224224057.21877-1-digetx@gmail.com>
+ <20200224224057.21877-13-digetx@gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -135,12 +116,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <add18b30-6eec-9aba-a961-8ecfe9b32596@linaro.org>
-Date:   Thu, 27 Feb 2020 10:16:59 +0100
+Message-ID: <4ca623a1-b6e2-4f2f-cfea-e5d0747a5ec9@linaro.org>
+Date:   Thu, 27 Feb 2020 10:20:11 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <83c5df4acbbe0fa55a1d58d4c4a435b51cd2a7ad.1582361737.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20200224224057.21877-13-digetx@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -149,30 +130,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/02/2020 10:00, Mauro Carvalho Chehab wrote:
-> Several DT references got broken due to txt->yaml conversion.
+On 24/02/2020 23:40, Dmitry Osipenko wrote:
+> The driver's code is refactored in a way that will make it easy to
+> support Tegra30/114/124 SoCs by this unified driver later on. The
+> current functionality is equal to the old Tegra20 driver, only the
+> code's structure changed a tad. This is also a proper platform driver
+> now.
 > 
-> Those are auto-fixed by running:
-> 
-> 	scripts/documentation-file-ref-check --fix
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-
-[ ... ]
-
-> diff --git a/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
-> index d9fdf4809a49..f3e68ed03abf 100644
-> --- a/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
-> @@ -17,7 +17,7 @@ description: |+
->                  "brcm,bcm2711-avs-monitor", "syscon", "simple-mfd"
->  
->    Refer to the the bindings described in
-> -  Documentation/devicetree/bindings/mfd/syscon.txt
-> +  Documentation/devicetree/bindings/mfd/syscon.yaml
+> Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
 Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
+[ ... ]
 
 -- 
  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
