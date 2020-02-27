@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7271717C2
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 13:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FFB01717C3
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 13:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728986AbgB0MqV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 07:46:21 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:38993 "EHLO
+        id S1729079AbgB0MqY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 07:46:24 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:46731 "EHLO
         mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729076AbgB0MqV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 07:46:21 -0500
-Received: by mail-lf1-f68.google.com with SMTP id n30so1985452lfh.6
-        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 04:46:20 -0800 (PST)
+        with ESMTP id S1729076AbgB0MqY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 07:46:24 -0500
+Received: by mail-lf1-f68.google.com with SMTP id v6so1955497lfo.13
+        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 04:46:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NROpLkqIKQsmOxVfnI3TCB5D/se19mcdjX7Jsvn77Ws=;
-        b=zJlxUbiYhFoF+ODVDIvKjAu386tBZM5zdC9FOjCrrAN13EelHbSprIimZNdA9DUoAV
-         HkDCSE3OSDzA5dNryQ2b9btHIUkJRTlRng1zEMwkc+XwCHscftdZISwd1pqrl+BwtHqv
-         GlD8ZaB9R1oX1MDCPKIlITtO4YG6dJh7RZZAOXumSZkEOwCp3JhVK/bpllsEEQrzn8k2
-         o/gU2N6cqqB7dbSwPiqnkijOTNTasogux6I/C8ZWBKKFy9gM8lmYh4TTcTBQQJ/CxsrM
-         XWv6ndjECgFxLLJ/1x/6NU6gCzaV5JEcxLS17mV1i0dmQtSDVdQQ9/QeAcybUpkrhOLN
-         /DaA==
+        bh=ZPYRIg41YwW5y7gzBIFCCQYc7BuElmJfratXvS9/RTU=;
+        b=GRMBtDnuFIHhKQLNR5bYnf0YeAvzu8Lkr45VhsfqrQDfegayFVkGEDHxmkTQbBM127
+         d0GGkdb82XKNRJ+F0B/Y7uK2QtkhbkfZmBzDRNEW6o1VKKoUgSaYFLuKaD6kIzusy/rg
+         VlObzJ6OLnbrt7IhkbLN+nAxe8wDM2LT2gZCSH+4Pib6NlW6ItxKWAWYb2xtBk5FDUQT
+         KJMjc+wYUwfzW8jO13sOV78g6kTWdJn2sAcNBULDQIhQ5JwOsvghkPFsog4VDoMa2+3T
+         6TmnBYL2K1XcXcMwVwiBUOdbZUS2b4DvOfXDcQ1w17MtSe8UwPRJgNyllErCUf8gBaZw
+         iXKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NROpLkqIKQsmOxVfnI3TCB5D/se19mcdjX7Jsvn77Ws=;
-        b=hl5LLZMDlh3LkoEJBF3wLK6HyaAQ9cVbc4sVPuFmppT75RBloOvjsklZKllzvBL/1s
-         SyyuX6nAmPo5GlvlQFtpRciYYh3ayxhfJrOUdBlrF+xXA15vJoXRDAde8GUDHeVOSMV1
-         MzzgyQULp8ybfqpwCIDjKmuk8RAdV96o/5JbCOjn43tkCHdF424XgrbrVodRdOdJa+Ef
-         b5pHX1fpEMrnKUMEPS+fSeh5SjVAeeYKiuyylhD5eh88DuHOux5f5eveZ2w/MfDv2/iD
-         3V2OPyL0f8HyUnFMTzH1gkRnlEaufN3P+eciCokWsXEydk+TmIZj3FMoiXo90nr5Cmdz
-         Ulgg==
-X-Gm-Message-State: ANhLgQ3BRjHTf7ghvw6T7JJL5jwG580YZBMX7JyYF7U2BIrterxuFs/j
-        IC1hhnjY+KFS4pNX1Xa5nQISFil1jIQ=
-X-Google-Smtp-Source: ADFU+vu8QOXDccJ4lKeIOMwWimtNYjnsyBTcgqPyMEimE4UADfTmMgToy/05O3pHPo7qI+ThXa9XeA==
-X-Received: by 2002:ac2:4a66:: with SMTP id q6mr2085068lfp.16.1582807579162;
-        Thu, 27 Feb 2020 04:46:19 -0800 (PST)
+        bh=ZPYRIg41YwW5y7gzBIFCCQYc7BuElmJfratXvS9/RTU=;
+        b=fCBmk93Lu4ZqRsuzArzO6CamtOWAFWcNi3RLZ4+a3EH+jMSS9dSxPIsjs8/MEDTlJX
+         ruhptzbqyPDVIIbZM/fZRDXt7lQ4SiPAHBgWYee+GfdDk8A5yR4uRU3Rm4ziqH7ge+9/
+         CkygarTmmRvfTzfuc1BVrAqTYWMNK8bI7fohq/tHEXEi1gA3ncW69gbyjro0dq3uyeC8
+         PvNDjUQY75xb7SQZjZ0LOdFPozOJ3u1PPxLFA61BTbNTbtza2wX60xuQP9tA6dlHBLBK
+         QySRBDJkf5XrBKE+VeDS4Lqi9KDENVTYfK4fnMPBOZlXoKI1/7GkUM3Bl+4EYE1HwWkE
+         VphA==
+X-Gm-Message-State: ANhLgQ1+c7wO8E+qK4IieGP9K/bwPEVBk3Gx3GMzivg2pMCdZpazNAUR
+        SQ0f/Q90TDNWCfy9cppCNfbpRo9ONpw=
+X-Google-Smtp-Source: ADFU+vvy3xadzFJgMR579KvBJp97cg/u1LNr5iTXRd789EXBWJ1RL/VY1A+sJYMUch7iOHDB2kfK+w==
+X-Received: by 2002:a19:6445:: with SMTP id b5mr2044742lfj.187.1582807582480;
+        Thu, 27 Feb 2020 04:46:22 -0800 (PST)
 Received: from localhost.localdomain (h-158-174-22-210.NA.cust.bahnhof.se. [158.174.22.210])
-        by smtp.gmail.com with ESMTPSA id l16sm2669334lfh.74.2020.02.27.04.46.15
+        by smtp.gmail.com with ESMTPSA id l16sm2669334lfh.74.2020.02.27.04.46.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2020 04:46:17 -0800 (PST)
+        Thu, 27 Feb 2020 04:46:20 -0800 (PST)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
@@ -57,9 +57,9 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Benjamin Gaignard <benjamin.gaignard@st.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/4] cpuidle: psci: Fixup support for domain idle states being zero
-Date:   Thu, 27 Feb 2020 13:45:49 +0100
-Message-Id: <20200227124551.31860-3-ulf.hansson@linaro.org>
+Subject: [PATCH 3/4] cpuidle: psci: Split psci_dt_cpu_init_idle()
+Date:   Thu, 27 Feb 2020 13:45:50 +0100
+Message-Id: <20200227124551.31860-4-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200227124551.31860-1-ulf.hansson@linaro.org>
 References: <20200227124551.31860-1-ulf.hansson@linaro.org>
@@ -70,41 +70,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The current code intends to allow a PSCI PM domain to have none domain idle
-states defined in DT. However, a few minor things needs to be fixed to make
-this correctly supported, so let's do that.
+To make the code a bit more readable, but also to prepare some code to be
+re-used, let's move the OSI specific initialization out of the
+psci_dt_cpu_init_idle() and into a separate function.
 
-Reported-by: Benjamin Gaignard <benjamin.gaignard@st.com>
 Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/cpuidle/cpuidle-psci-domain.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/cpuidle/cpuidle-psci.c | 49 +++++++++++++++++++++-------------
+ 1 file changed, 30 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-index 423f03bbeb74..c34b12c4069a 100644
---- a/drivers/cpuidle/cpuidle-psci-domain.c
-+++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -49,6 +49,9 @@ static int __init psci_pd_parse_state_nodes(struct genpd_power_state *states,
- 	int i, ret;
- 	u32 psci_state, *psci_state_buf;
+diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+index edd7a54ef0d3..7b459f987c50 100644
+--- a/drivers/cpuidle/cpuidle-psci.c
++++ b/drivers/cpuidle/cpuidle-psci.c
+@@ -160,6 +160,32 @@ int __init psci_dt_parse_state_node(struct device_node *np, u32 *state)
+ 	return 0;
+ }
  
-+	if (!states)
++static int __init psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
++					    struct psci_cpuidle_data *data,
++					    unsigned int state_count, int cpu)
++{
++	/* Currently limit the hierarchical topology to be used in OSI mode. */
++	if (!psci_has_osi_support())
 +		return 0;
 +
- 	for (i = 0; i < state_count; i++) {
- 		ret = psci_dt_parse_state_node(to_of_node(states[i].fwnode),
- 					&psci_state);
-@@ -96,6 +99,9 @@ static void psci_pd_free_states(struct genpd_power_state *states,
- {
- 	int i;
- 
-+	if (!states)
-+		return;
++	data->dev = psci_dt_attach_cpu(cpu);
++	if (IS_ERR(data->dev))
++		return PTR_ERR(data->dev);
 +
- 	for (i = 0; i < state_count; i++)
- 		kfree(states[i].data);
- 	kfree(states);
++	/*
++	 * Using the deepest state for the CPU to trigger a potential selection
++	 * of a shared state for the domain, assumes the domain states are all
++	 * deeper states.
++	 */
++	if (data->dev) {
++		drv->states[state_count - 1].enter =
++			psci_enter_domain_idle_state;
++		psci_cpuidle_use_cpuhp = true;
++	}
++
++	return 0;
++}
++
+ static int __init psci_dt_cpu_init_idle(struct cpuidle_driver *drv,
+ 					struct device_node *cpu_node,
+ 					unsigned int state_count, int cpu)
+@@ -193,25 +219,10 @@ static int __init psci_dt_cpu_init_idle(struct cpuidle_driver *drv,
+ 		goto free_mem;
+ 	}
+ 
+-	/* Currently limit the hierarchical topology to be used in OSI mode. */
+-	if (psci_has_osi_support()) {
+-		data->dev = psci_dt_attach_cpu(cpu);
+-		if (IS_ERR(data->dev)) {
+-			ret = PTR_ERR(data->dev);
+-			goto free_mem;
+-		}
+-
+-		/*
+-		 * Using the deepest state for the CPU to trigger a potential
+-		 * selection of a shared state for the domain, assumes the
+-		 * domain states are all deeper states.
+-		 */
+-		if (data->dev) {
+-			drv->states[state_count - 1].enter =
+-				psci_enter_domain_idle_state;
+-			psci_cpuidle_use_cpuhp = true;
+-		}
+-	}
++	/* Initialize optional data, used for the hierarchical topology. */
++	ret = psci_dt_cpu_init_topology(drv, data, state_count, cpu);
++	if (ret < 0)
++		goto free_mem;
+ 
+ 	/* Idle states parsed correctly, store them in the per-cpu struct. */
+ 	data->psci_states = psci_states;
 -- 
 2.20.1
 
