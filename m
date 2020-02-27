@@ -2,109 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2461722CC
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 17:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B271723D2
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 17:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729174AbgB0QGc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 11:06:32 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:40562 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729134AbgB0QGc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 11:06:32 -0500
-Received: by mail-lj1-f195.google.com with SMTP id 143so3938043ljj.7;
-        Thu, 27 Feb 2020 08:06:29 -0800 (PST)
+        id S1730203AbgB0Qpv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 11:45:51 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:42593 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729970AbgB0Qpu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 11:45:50 -0500
+Received: by mail-lj1-f193.google.com with SMTP id d10so4207730ljl.9;
+        Thu, 27 Feb 2020 08:45:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8aeAAGL1lN/mti66y5xOWWYla0SoqdV+XcmEKiiyHrQ=;
-        b=k1OJ5Kog27zuKwJHPC5y6tnPBYX5HF2ktRokz4/EhYbZyLw8rjnfQ32BqqC5E2eX/c
-         ATNlvZEpSrTeED5xQ0ecEYwJjjquqZEjEVDk9079Z6Fk0M8yicFeN+EtyqD970kUdowa
-         pLx4AzfK1XJG0bmG/VcP5AewgU2sIAR0+9+ypa0s13535oMKnbG1FDAh5h1IhnZvnPB5
-         aCmp3G91iD6KEMxaUFKIIgsju7Kc+Fuko82IBNEUtoXzKwgZRTyEjiE6/0fGX0Ct+H4D
-         ulkjg+KbA0Aj/ZcyiM6hz+9kxz0phQ+PHZLLFW1k7oswnzb113MuCi/t5Pd/C70DpEy+
-         M6Sw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wVNFcIlBUE9RxinpT2V+KF01085Ap+cWrCWblxB3kzo=;
+        b=lo+lBayS6a01ISYJ7chK3YPXl8VJlAX+zC+JyxsrdKlxc54e7G9/IVxdFy+dbNJrLd
+         OjLppMBG9NAHXXqywhlJ6crXvV57lsMwk9f6YN+b3mddVt5a5aNY8Y4aUMm0AJSiepIg
+         WMr7TYua2I9JZSbtcwql76J/cLWQ61GLC2jwFcAMWkJyUjKKeoQiQmIR24yQMVyzWzdX
+         SLpcuFSIHDt2eZs5LmkqsPI3iItsXFxe9ZhqPK8Msk5Zz2Nvd0S6dRrO5NO8jzUx5ZHz
+         4rhRREC+MuW+JozkTC3Bu32df/mn5QSzr515Hv5K/GRgRnW/xhASukYfq3Ox4WuW/7Vv
+         v46g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8aeAAGL1lN/mti66y5xOWWYla0SoqdV+XcmEKiiyHrQ=;
-        b=Jk5UpLPjzNvvs5G3C+NMgUZGmBdAD4QkBcyTay6tFCLLdF2xcCmRaRrSxAFEE5oMe9
-         ob52IueJ2AJOApb5bGdXEwXnEOxLQiO632LoHWEFkuuZBQ2LOGhb8+BcJk4+ICpHd0yd
-         1B39lLC/4tUk4K3MV7ZUC4Zj8qchFuWEd48JJmSqNHMkZYafySYgY1skfJrXK8Syt2je
-         ug88pGUyFnUM+VkEX9LIO9nbuEDzn3q70WAjpVWAus1dbg0S9Y33YPzxSCWc02BvNMkk
-         S2k6ctBmBgyr8t62dULYGyGb0cOvzosoCYUUcbclH/6Uz7D0KD4AAanWYzJP7hsnuFZ2
-         PRDA==
-X-Gm-Message-State: ANhLgQ32kzWftzhibuyWCHoCmI7nHxbDULMKYZBURo4zzGasFubv4kCL
-        l1DOAV4WWg3BEMH54LerxavoDakfQHIWKcip14o=
-X-Google-Smtp-Source: ADFU+vtLvp5dq+6TDzZtWM2VvPfgxIDR+ELg2azdIqTGKxI6g2SIZep9LmGFxz0v2Bdx3XotYMzbsefl0IspdMoxK0U=
-X-Received: by 2002:a2e:8e91:: with SMTP id z17mr124172ljk.13.1582819588888;
- Thu, 27 Feb 2020 08:06:28 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wVNFcIlBUE9RxinpT2V+KF01085Ap+cWrCWblxB3kzo=;
+        b=GmZl1y+/grp2km6qcJ728ALIkXD5b3+jOxitgKzW0NsgxyFHtGE27QZozL12tlwBRq
+         GgsH63BrW0BAi6mAiwCMAOkJq17Z5vYnhlPy0siRlOeGN0MDbcusOnHZk+nIe4Rofkw0
+         rPWb24sdqetTKfyDvZ3Csn9yt0WrclBpheC3W2wprSBuTDtLCZqjvn2m++YqS/3W3sZE
+         BhcTEFN7puyTI/39BUDFr8fxkG6+xsJ50zEiXk92G1KRxVcoteO/BqmZz3lplCYpkeZD
+         JqTqKZgz2NS89boyh41MHeBX8rGrXnwMVmvaJVFTWlyy2AOGkd/Oij8RUUN6ETROeKVR
+         BrLQ==
+X-Gm-Message-State: ANhLgQ1GBI7BJv//aT8KZxsHD5zBbGSJE/DTJ0tZ9nI/OMn9l/13Qvg/
+        q4bCPrL+CigTI64MbrnZtmFChxlS
+X-Google-Smtp-Source: ADFU+vvl7Ppl4IgVJKzIc35yc7GsPEAc4o9RTr0Yf+7YCzTiSIFWHuhjs8G6wF6GCth9q9RI5/y+4g==
+X-Received: by 2002:a2e:9e19:: with SMTP id e25mr233139ljk.179.1582821947568;
+        Thu, 27 Feb 2020 08:45:47 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id i1sm3637987lji.71.2020.02.27.08.45.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Feb 2020 08:45:46 -0800 (PST)
+Subject: Re: [PATCH v11 14/17] cpuidle: tegra: Squash Tegra114 driver into the
+ common driver
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Jasper Korten <jja2000@gmail.com>,
+        David Heidelberg <david@ixit.cz>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200224224057.21877-1-digetx@gmail.com>
+ <20200224224057.21877-15-digetx@gmail.com>
+ <dcf45352-8ea3-6273-b4e8-0142f5d5e9f2@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <4f452e32-10c4-b906-7d22-dc8977962666@gmail.com>
+Date:   Thu, 27 Feb 2020 19:45:45 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-References: <2d0854b00d7f85e988aff4f8186e8ac5d8a9aff2.1581410798.git.baolin.wang7@gmail.com>
-In-Reply-To: <2d0854b00d7f85e988aff4f8186e8ac5d8a9aff2.1581410798.git.baolin.wang7@gmail.com>
-From:   Orson Zhai <orsonzhai@gmail.com>
-Date:   Fri, 28 Feb 2020 00:06:17 +0800
-Message-ID: <CA+H2tpFAZuPSH0EErLt0Lj=TKLVq3XwEox06tbGzFaquSpKa0w@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: Allow charger manager can be built as a module
-To:     Baolin Wang <baolin.wang7@gmail.com>
-Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lyra Zhang <zhang.lyra@gmail.com>,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <dcf45352-8ea3-6273-b4e8-0142f5d5e9f2@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian and other guys here,
+27.02.2020 12:21, Daniel Lezcano пишет:
+> On 24/02/2020 23:40, Dmitry Osipenko wrote:
+>> Tegra20/30/114/124 SoCs have common idling states, thus there is no much
+>> point in having separate drivers for a similar hardware. This patch moves
+>> Tegra114/124 arch/ drivers into the common driver without any functional
+>> changes. The CC6 state is kept disabled on Tegra114/124 because the core
+>> Tegra PM code needs some more work in order to support that state.
+>>
+>> Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+> 
+> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-On Tue, Feb 11, 2020 at 4:51 PM Baolin Wang <baolin.wang7@gmail.com> wrote:
->
-> Allow charger manager can be built as a module like other charger
-> drivers.
->
-What do you think about this patch?
-We want to set charger-manager as module in our project for new Android devices.
+Awesome, thank you :)
 
--Orson
-
-> Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
-> ---
->  drivers/power/supply/Kconfig          |    2 +-
->  include/linux/power/charger-manager.h |    7 +------
->  2 files changed, 2 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index 9a5591a..195bc04 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -480,7 +480,7 @@ config CHARGER_GPIO
->           called gpio-charger.
->
->  config CHARGER_MANAGER
-> -       bool "Battery charger manager for multiple chargers"
-> +       tristate "Battery charger manager for multiple chargers"
->         depends on REGULATOR
->         select EXTCON
->         help
-> diff --git a/include/linux/power/charger-manager.h b/include/linux/power/charger-manager.h
-> index ad19e68..40493b2 100644
-> --- a/include/linux/power/charger-manager.h
-> +++ b/include/linux/power/charger-manager.h
-> @@ -248,11 +248,6 @@ struct charger_manager {
->         u64 charging_end_time;
->  };
->
-> -#ifdef CONFIG_CHARGER_MANAGER
->  extern void cm_notify_event(struct power_supply *psy,
-> -                               enum cm_event_types type, char *msg);
-> -#else
-> -static inline void cm_notify_event(struct power_supply *psy,
-> -                               enum cm_event_types type, char *msg) { }
-> -#endif
-> +                           enum cm_event_types type, char *msg);
->  #endif /* _CHARGER_MANAGER_H */
-> --
-> 1.7.9.5
->
+@Thierry, could you please pick up the updated patches for linux-next +
+pick up the cpufreq series? Thanks in advance!
