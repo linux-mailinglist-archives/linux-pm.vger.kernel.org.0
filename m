@@ -2,45 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D14172283
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 16:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BF617228B
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 16:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729360AbgB0PvA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 10:51:00 -0500
-Received: from foss.arm.com ([217.140.110.172]:53876 "EHLO foss.arm.com"
+        id S1729662AbgB0Pvi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 10:51:38 -0500
+Received: from foss.arm.com ([217.140.110.172]:53888 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729217AbgB0PvA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 27 Feb 2020 10:51:00 -0500
+        id S1729110AbgB0Pvh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 27 Feb 2020 10:51:37 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A15CD30E;
-        Thu, 27 Feb 2020 07:50:59 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 55EE51FB;
+        Thu, 27 Feb 2020 07:51:37 -0800 (PST)
 Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 65A383F7B4;
-        Thu, 27 Feb 2020 07:50:58 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9EA843F7B4;
+        Thu, 27 Feb 2020 07:51:35 -0800 (PST)
 From:   Douglas Raillard <douglas.raillard@arm.com>
-Subject: Re: [RFC PATCH v4 0/6] sched/cpufreq: Make schedutil energy aware
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        qperret@google.com, Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [RFC PATCH v4 3/6] sched/cpufreq: Hook em_pd_get_higher_power()
+ into get_next_freq()
+To:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org
+Cc:     dietmar.eggemann@arm.com, qperret@google.com,
+        linux-pm@vger.kernel.org
 References: <20200122173538.1142069-1-douglas.raillard@arm.com>
- <CAJZ5v0hL9AbpgivRGtCtqQo4XRYdt=SDjD=_FAVZmKAi=+VvzA@mail.gmail.com>
- <d0155018-52e6-e1c9-a03d-1b9703b7a28a@arm.com>
- <20200210133051.GI14897@hirez.programming.kicks-ass.net>
- <278bff0c-6f49-5200-d7df-1c844de1c98c@arm.com>
- <20200213132024.GP14897@hirez.programming.kicks-ass.net>
+ <20200122173538.1142069-4-douglas.raillard@arm.com>
 Organization: ARM
-Message-ID: <a07d317b-7f68-f63f-bc9f-d829a3aa65b5@arm.com>
-Date:   Thu, 27 Feb 2020 15:50:57 +0000
+Message-ID: <5d732dc1-d343-24d2-bda9-072021a510ed@arm.com>
+Date:   Thu, 27 Feb 2020 15:51:34 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.3.1
 MIME-Version: 1.0
-In-Reply-To: <20200213132024.GP14897@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200122173538.1142069-4-douglas.raillard@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB-large
 Content-Transfer-Encoding: 7bit
@@ -49,85 +42,18 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Peter,
+Let's this thread be about util boosting vs energy boosting.
 
-On 2/13/20 1:20 PM, Peter Zijlstra wrote:
-> On Thu, Feb 13, 2020 at 11:55:32AM +0000, Douglas Raillard wrote:
->> On 2/10/20 1:30 PM, Peter Zijlstra wrote:
-> 
->>> So ARM64 will soon get x86-like power management if I read these here
->>> patches right:
->>>
->>>   https://lkml.kernel.org/r/20191218182607.21607-2-ionela.voinescu@arm.com
->>>
->>> And I'm thinking a part of Rafael's concerns will also apply to those
->>> platforms.
->>
->> AFAIU there is an important difference: ARM64 firmware should not end up
->> increasing frequency on its own, it should only cap the frequency. That
->> means that the situation stays the same for that boost:
->>
->> Let's say you let schedutil selecting a freq that is +2% more power
->> hungry. That will probably not be enough to make it jump to the next
->> OPP, so you end up not boosting. Now if there is a firmware that decides
->> for some reasons to cap frequency, it will be a similar situation.
-> 
-> The moment you give out OPP selection to a 3rd party (be it firmware or
-> a micro-controller) things are uncertain at best anyway.
-> 
-> Still, in general, if you give it higher input, it tends to at least
-> consider going faster -- which might be all you can ask for...
-> 
-> So I'm not exactly seeing what your argument is here.
+Short recap of the conversation:
 
-My point is that a +2% boost will give *up to* +2% increase in energy
-use. With or without a fancy firmware, having cost_margin > 0 does not
-mean you will always actually get a speedup.
-
->>> Right, so the condition 'util_avg > util_est' makes sense to trigger
->>> some sort of boost off of.
->>>
->>> What kind would make sense for these platforms? One possibility would be
->>> to instead of frobbing the energy margin, as you do here, to frob the C
->>> in get_next_freq().
->>
->> If I'm correct, changing the C value would be somewhat similar to the
->> relative boosting I had in a previous version. Maybe adding a fixed
->> offset would give more predictable results as was discussed with Vincent
->> Guittot. In any case, it would change the perceived util (like iowait
->> boost).
-> 
-> It depends a bit on what you change C into. If we do something trivial
-> like:
-> 		1.25 ; !(util_avg > util_est)
-> 	C := {
-> 		2    ;  (util_avg > util_est)
-> 
-> ie. a binary selection of constants, then yes, I suppose that is the
-> case.
-> 
-> But nothing stops us from making it more complicated; or having it
-> depend on the presence of EM data.
-
-The series currently fiddles with energy cost directly, but it's
-possible to have the exact same effect by fiddling with util if we have
-the function `(base_util, cost_margin) -> boosted_util`. It just that it
-forces to:
-1. map util to freq
-2. find a higher freq for the given cost_margin
-3. Map freq to util
-4. Re-inject the new util, which will eventually get remapped to a freq
-
-While it's easier to just do it directly:
-1. map util to freq
-2. find higher_freq for the given cost_margin
-3. Use the increased freq
-
-> 
->>> (I have vague memories of this being proposed earlier; it also avoids
+Peter:
+>>> (I have vague memories of this (the util boosting) being proposed
+earlier; it also avoids
 >>> that double OPP iteration thing complained about elsewhere in this
 >>> thread if I'm not mistaken).
 >>
+
+Douglas:
 >> It should be possible to get rid of the double iteration mentioned by
 >> Quentin. Choosing to boost the util or the energy boils down to:
 >>
@@ -143,26 +69,87 @@ While it's easier to just do it directly:
 >> util_est). If you are already at high freq because of another workload,
 >> the speed up will be small because the next 100Mhz will cost much more
 >> than the same +100Mhz delta starting from a low OPP.
-> 
+
+Peter:
+>
 > It's just that I'm not seeing how 1 actually works or provides that more
 > predictable battery life I suppose. We have this other sub-thread to
 > argue about that :-)
 
-Ok, I've posted the answer there, so this thread can focus on
-boost=(util - util_est_enqueued) logic, and the other one on how to make
-actual use of the boost value.
+Here is a more detailed version of util boost vs energy boost.
+The goal of what follows is to show that util-based boost gives predictable
+performance speedup, while energy-based boost gives predictable increase in
+energy consumption.
 
->>> That is; I'm thinking it is important (esp. now that we got frequency
->>> invariance sorted for x86), to have this patch also work for !EM
->>> architectures (as those ARM64-AMU things would be).
->>
->> For sure, that feature is supposed to help in cases that would be
->> impossible to pinpoint with hardware, since it has to know what tasks
->> execute.
-> 
-> OK, so I'm thinking we're agreeing that it would be good to have this
-> support !EM systems too.
-> 
+In both cases, the boost value is computed as (util - ue.enqueued),
+and only its interpretation differs:
+* as an increase in util for util-based boost
+* as an OPP cost margin for the energy-based boost
 
-Thanks,
-Douglas
+
+
+util(wload) = util_avg(wload)
+util_est_enqueued(wload)
+	| wload is enqueued = f(util_avg(wload))
+	| otherwise         = 0
+
+(wloadA + wloadB) denotes a "virtual" task that is running whenever either
+wloadA or wloadB is running.
+
+# Assuming wloadA and wloadB are attached to the same rq:
+util(wloadA + wloadB) = util(wloadA) + util(wloadB)
+
+# Assuming wloadA and wloadB do not preempt each other:
+util_est_enqueued(wloadA + wloadB) =
+	util_est_enqueued(wloadA) + util_est_enqueued(wloadB)
+
+# boostU(wload) is the increase of util due to the util-based boost.
+# boostE(wload) is the increase of *util* due to the energy-based boost.
+
+boostU(wload) 
+	| wload enqueued and util(wload) > util_est_enqueued(wload) =
+		util(wload) - util_est_enqueued(wload)
+	| otherwise = 0
+
+boostU(wloadA + wloadB) = util(wloadA + wloadB) -
+    util_est_enqueued(wloadA + wloadB)
+boostU(wloadA + wloadB) = util(wloadA) + util(wloadB) -
+    util_est_enqueued(wloadA) - util_est_enqueued(wloadB)
+boostU(wloadA + wloadB) = boostU(wloadA) + boostU(wloadB)
+
+# Now if we now intepret the same boost value as a freq energy cost margin:
+boostE(wload) 
+	| wload enqueued and util(wload) > util_est_enqueued(wload) =
+		apply_boostE(util(wload), util_est_enqueued(wload), map_util_freq(util(wload)))
+	| otherwise = 0
+
+# with:
+apply_boostE(util, util_est_enqueued, base_freq) = 
+	boost = util - util_est_enqueued
+	boosted_freq = freq_at(boost + cost_of(base_freq))
+	freq_delta = boosted_freq - base_freq
+	speedup = 1 + freq_delta / max_freq
+	return util * speedup
+
+Since freq_at(cost) function is not a linear function of cost
+and util(wloadA + wloadB) = util(wloadA) + util(wloadB),
+apply_boostE() is not a linear function of wload, which means:
+boostE(wloadA + wloadB) != boostE(wloadA) + boostE(wloadB)
+
+This means the speedup (util increase) given by boostE cannot be evaluated for
+one task without considering all other attached tasks on the same rq. Therefore
+the speedup introduced by boostE is not easily predictable.
+
+On the other hand, the increase in energy cost is linear in the workload for
+energy-based boost. but not linear for the util-based boost.
+
+That made me realize that to achieve that, EM_COST_MARGIN_SCALE needs to
+map to the highest cost in the system, not the highest cost of the
+current CPU, I will fix that.
+
+Also, util_est_enqueued is not linear in the general case when wloadA and
+wloadB preempt each-other. There could be ways of making that work but it's
+probably a better idea to move the logic at the task level and aggregate the
+flag at runqueue level. This will also allow the boost to work when the set of
+enqueued tasks varies, which is likely to happen in a real system.
+
