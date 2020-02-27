@@ -2,42 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DEF1712B7
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 09:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A25A41713BF
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 10:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728539AbgB0IoB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 03:44:01 -0500
-Received: from foss.arm.com ([217.140.110.172]:46996 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728440AbgB0IoB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 27 Feb 2020 03:44:01 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E20111FB;
-        Thu, 27 Feb 2020 00:43:57 -0800 (PST)
-Received: from [10.37.12.169] (unknown [10.37.12.169])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FF4C3F819;
-        Thu, 27 Feb 2020 00:43:52 -0800 (PST)
-Subject: Re: [PATCH v5 6/7] arm64: use activity monitors for frequency
- invariance
-To:     Ionela Voinescu <ionela.voinescu@arm.com>, catalin.marinas@arm.com,
-        will@kernel.org, mark.rutland@arm.com, maz@kernel.org,
-        suzuki.poulose@arm.com, sudeep.holla@arm.com,
-        valentin.schneider@arm.com, dietmar.eggemann@arm.com,
-        rjw@rjwysocki.net, pkondeti@codeaurora.org
-Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20200226132947.29738-1-ionela.voinescu@arm.com>
- <20200226132947.29738-7-ionela.voinescu@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <1da054d0-fef2-8a0b-b513-f2709b6d0208@arm.com>
-Date:   Thu, 27 Feb 2020 08:43:50 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728728AbgB0JJf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 04:09:35 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:54027 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728688AbgB0JJe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 04:09:34 -0500
+Received: by mail-wm1-f65.google.com with SMTP id f15so2577901wml.3
+        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 01:09:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9d5XsXCVGpg6qu/wTS2MkCO23Bkow9gwYLOhiOzvq0w=;
+        b=ZCYFGPMdIMqWIIqKs905YzODTI7e6WtmXFtj99H8vljntHp3TbOeemaufNUxrCcxqR
+         zeFq2wtOG1pRKgM6YEQb+srVxhh0gm8fUFAV4I5FKv8Pd8PpvlXKfUuH5hnzgJ2lG5V/
+         FbvYQaNnOgVGBMQTByNKHvWLJgm1E2FZn0FcBYpJ6pGwmjnaYNRnTs5CUr6SNm6qZ7Fl
+         e4xGl0NHpJj1geTjnEok9GQB+Cdbai1/jhX9J6L9AHnpjG3EvkL8j4xldGHV/YpWKqpq
+         IX/rOP0pJDNhIKu3tGx0Hlk1f1eoTmdHaAnh8Or+NRLkufWLDxQHh1aIXiLVTzzURIc1
+         BHXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=9d5XsXCVGpg6qu/wTS2MkCO23Bkow9gwYLOhiOzvq0w=;
+        b=DpOEnDrri46x33H/BgSqsBH3Je0SZIM2h2L9B+vtcw7j30URT2MPvf/a6xWsCRs6g7
+         Edqk8HU9UJfNkJcK1jvLBOm7kaSH4U6W9NbzL/hrQ2j/hK3JXsj/IhYCuscGTvXAMylk
+         8zV/20vLBWWpwydLoGOumZDu2iCjy7kjkCmd+T1muL4KnFwla0uvfrjD0+8U9zlgHVWI
+         8xrHHndYisxFj2r6iJGYczyXfqrLgirEywbsZk3mndnqCYJlnveUyQNPYXBu9W1L9boF
+         f34I7X9GCVm7ZEO4hbV8grbs3pd/Y3J+wrOy5k3OXcketemQtrrdr+3tCYZl1q+uoqhs
+         kRUg==
+X-Gm-Message-State: APjAAAVGziojYC/LhzEDyqqJhsGssxh6EaMekpXYoYgCy/Us9vgppCOn
+        gNnnI+9HlIUpqgFdCb3KCiArlQ==
+X-Google-Smtp-Source: APXvYqyizxMVKRa7iARTRCj9b9lQhnQiE423uIKYcNYgEbblwSjNt1oaqNF93lYCZsnbn2KPApPsOw==
+X-Received: by 2002:a7b:c5da:: with SMTP id n26mr3881431wmk.138.1582794571401;
+        Thu, 27 Feb 2020 01:09:31 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:d916:1723:c1c1:22d? ([2a01:e34:ed2f:f020:d916:1723:c1c1:22d])
+        by smtp.googlemail.com with ESMTPSA id b18sm7076628wru.50.2020.02.27.01.09.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Feb 2020 01:09:30 -0800 (PST)
+Subject: Re: [PATCH V16 1/5] dt-bindings: fsl: scu: add thermal binding
+To:     Anson Huang <Anson.Huang@nxp.com>, robh+dt@kernel.org,
+        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        aisheng.dong@nxp.com, linux@roeck-us.net,
+        srinivas.kandagatla@linaro.org, krzk@kernel.org,
+        fugang.duan@nxp.com, peng.fan@nxp.com, daniel.baluta@nxp.com,
+        bjorn.andersson@linaro.org, olof@lixom.net, dinguyen@kernel.org,
+        leonard.crestez@nxp.com, marcin.juszkiewicz@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+References: <1582330132-13461-1-git-send-email-Anson.Huang@nxp.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <41da5dc1-9d46-da71-4893-5c23e6e3d96a@linaro.org>
+Date:   Thu, 27 Feb 2020 10:09:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200226132947.29738-7-ionela.voinescu@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <1582330132-13461-1-git-send-email-Anson.Huang@nxp.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -45,349 +128,71 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 22/02/2020 01:08, Anson Huang wrote:
+> NXP i.MX8QXP is an ARMv8 SoC with a Cortex-M4 core inside as
+> system controller, the system controller is in charge of system
+> power, clock and thermal sensors etc. management, Linux kernel
+> has to communicate with system controller via MU (message unit)
+> IPC to get temperature from thermal sensors, this patch adds
+> binding doc for i.MX system controller thermal driver.
+> 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
 
+I'll will take patches 1, 2 and 3
 
-On 2/26/20 1:29 PM, Ionela Voinescu wrote:
-> The Frequency Invariance Engine (FIE) is providing a frequency
-> scaling correction factor that helps achieve more accurate
-> load-tracking.
-> 
-> So far, for arm and arm64 platforms, this scale factor has been
-> obtained based on the ratio between the current frequency and the
-> maximum supported frequency recorded by the cpufreq policy. The
-> setting of this scale factor is triggered from cpufreq drivers by
-> calling arch_set_freq_scale. The current frequency used in computation
-> is the frequency requested by a governor, but it may not be the
-> frequency that was implemented by the platform.
-> 
-> This correction factor can also be obtained using a core counter and a
-> constant counter to get information on the performance (frequency based
-> only) obtained in a period of time. This will more accurately reflect
-> the actual current frequency of the CPU, compared with the alternative
-> implementation that reflects the request of a performance level from
-> the OS.
-> 
-> Therefore, implement arch_scale_freq_tick to use activity monitors, if
-> present, for the computation of the frequency scale factor.
-> 
-> The use of AMU counters depends on:
->   - CONFIG_ARM64_AMU_EXTN - depents on the AMU extension being present
->   - CONFIG_CPU_FREQ - the current frequency obtained using counter
->     information is divided by the maximum frequency obtained from the
->     cpufreq policy.
-> 
-> While it is possible to have a combination of CPUs in the system with
-> and without support for activity monitors, the use of counters for
-> frequency invariance is only enabled for a CPU if all related CPUs
-> (CPUs in the same frequency domain) support and have enabled the core
-> and constant activity monitor counters. In this way, there is a clear
-> separation between the policies for which arch_set_freq_scale (cpufreq
-> based FIE) is used, and the policies for which arch_scale_freq_tick
-> (counter based FIE) is used to set the frequency scale factor. For
-> this purpose, a late_initcall_sync is registered to trigger validation
-> work for policies that will enable or disable the use of AMU counters
-> for frequency invariance. If CONFIG_CPU_FREQ is not defined, the use
-> of counters is enabled on all CPUs only if all possible CPUs correctly
-> support the necessary counters.
-> 
-> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
+Thanks!
+
+  -- Daniel
+
 > ---
->   arch/arm64/include/asm/topology.h |   9 ++
->   arch/arm64/kernel/cpufeature.c    |   4 +
->   arch/arm64/kernel/topology.c      | 180 ++++++++++++++++++++++++++++++
->   drivers/base/arch_topology.c      |  12 ++
->   include/linux/arch_topology.h     |   2 +
->   5 files changed, 207 insertions(+)
+> No change.
+> ---
+>  .../devicetree/bindings/arm/freescale/fsl,scu.txt        | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 > 
-> diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
-> index a4d945db95a2..21d4d40d6243 100644
-> --- a/arch/arm64/include/asm/topology.h
-> +++ b/arch/arm64/include/asm/topology.h
-> @@ -16,6 +16,15 @@ int pcibus_to_node(struct pci_bus *bus);
->   
->   #include <linux/arch_topology.h>
->   
-> +#ifdef CONFIG_ARM64_AMU_EXTN
-> +/*
-> + * Replace task scheduler's default counter-based
-> + * frequency-invariance scale factor setting.
-> + */
-> +void topology_scale_freq_tick(void);
-> +#define arch_scale_freq_tick topology_scale_freq_tick
-> +#endif /* CONFIG_ARM64_AMU_EXTN */
+> diff --git a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
+> index e07735a8..7f42cc3 100644
+> --- a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
+> +++ b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
+> @@ -166,6 +166,17 @@ Required properties:
+>                followed by "fsl,imx-sc-key";
+>  - linux,keycodes: See Documentation/devicetree/bindings/input/keys.txt
+>  
+> +Thermal bindings based on SCU Message Protocol
+> +------------------------------------------------------------
 > +
->   /* Replace task scheduler's default frequency-invariant accounting */
->   #define arch_scale_freq_capacity topology_get_freq_scale
->   
-> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> index 60cebc071603..b8ec6c544d32 100644
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@ -1241,12 +1241,16 @@ bool cpu_has_amu_feat(int cpu)
->   	return cpumask_test_cpu(cpu, &amu_cpus);
->   }
->   
-> +/* Initialize the use of AMU counters for frequency invariance */
-> +extern void init_cpu_freq_invariance_counters(void);
+> +Required properties:
+> +- compatible:			Should be :
+> +				  "fsl,imx8qxp-sc-thermal"
+> +				followed by "fsl,imx-sc-thermal";
 > +
->   static void cpu_amu_enable(struct arm64_cpu_capabilities const *cap)
->   {
->   	if (has_cpuid_feature(cap, SCOPE_LOCAL_CPU)) {
->   		pr_info("detected CPU%d: Activity Monitors Unit (AMU)\n",
->   			smp_processor_id());
->   		cpumask_set_cpu(smp_processor_id(), &amu_cpus);
-> +		init_cpu_freq_invariance_counters();
->   	}
->   }
->   
-> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> index fa9528dfd0ce..0801a0f3c156 100644
-> --- a/arch/arm64/kernel/topology.c
-> +++ b/arch/arm64/kernel/topology.c
-> @@ -14,6 +14,7 @@
->   #include <linux/acpi.h>
->   #include <linux/arch_topology.h>
->   #include <linux/cacheinfo.h>
-> +#include <linux/cpufreq.h>
->   #include <linux/init.h>
->   #include <linux/percpu.h>
->   
-> @@ -120,4 +121,183 @@ int __init parse_acpi_topology(void)
->   }
->   #endif
->   
-> +#ifdef CONFIG_ARM64_AMU_EXTN
->   
-> +#undef pr_fmt
-> +#define pr_fmt(fmt) "AMU: " fmt
+> +- #thermal-sensor-cells:	See Documentation/devicetree/bindings/thermal/thermal.txt
+> +				for a description.
 > +
-> +static DEFINE_PER_CPU_READ_MOSTLY(unsigned long, arch_max_freq_scale);
-> +static DEFINE_PER_CPU(u64, arch_const_cycles_prev);
-> +static DEFINE_PER_CPU(u64, arch_core_cycles_prev);
-> +static cpumask_var_t amu_fie_cpus;
+>  Example (imx8qxp):
+>  -------------
+>  aliases {
+> @@ -238,6 +249,11 @@ firmware {
+>  			compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
+>  			timeout-sec = <60>;
+>  		};
 > +
-> +/* Initialize counter reference per-cpu variables for the current CPU */
-> +void init_cpu_freq_invariance_counters(void)
-> +{
-> +	this_cpu_write(arch_core_cycles_prev,
-> +		       read_sysreg_s(SYS_AMEVCNTR0_CORE_EL0));
-> +	this_cpu_write(arch_const_cycles_prev,
-> +		       read_sysreg_s(SYS_AMEVCNTR0_CONST_EL0));
-> +}
-> +
-> +static int validate_cpu_freq_invariance_counters(int cpu)
-> +{
-> +	u64 max_freq_hz, ratio;
-> +
-> +	if (!cpu_has_amu_feat(cpu)) {
-> +		pr_debug("CPU%d: counters are not supported.\n", cpu);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (unlikely(!per_cpu(arch_const_cycles_prev, cpu) ||
-> +		     !per_cpu(arch_core_cycles_prev, cpu))) {
-> +		pr_debug("CPU%d: cycle counters are not enabled.\n", cpu);
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Convert maximum frequency from KHz to Hz and validate */
-> +	max_freq_hz = cpufreq_get_hw_max_freq(cpu) * 1000;
-> +	if (unlikely(!max_freq_hz)) {
-> +		pr_debug("CPU%d: invalid maximum frequency.\n", cpu);
-> +		return -EINVAL;
-> +	}
-> +
-> +	/*
-> +	 * Pre-compute the fixed ratio between the frequency of the constant
-> +	 * counter and the maximum frequency of the CPU.
-> +	 *
-> +	 *			      const_freq
-> +	 * arch_max_freq_scale =   ---------------- * SCHED_CAPACITY_SCALE²
-> +	 *			   cpuinfo_max_freq
-> +	 *
-> +	 * We use a factor of 2 * SCHED_CAPACITY_SHIFT -> SCHED_CAPACITY_SCALE²
-> +	 * in order to ensure a good resolution for arch_max_freq_scale for
-> +	 * very low arch timer frequencies (down to the KHz range which should
-> +	 * be unlikely).
-> +	 */
-> +	ratio = (u64)arch_timer_get_rate() << (2 * SCHED_CAPACITY_SHIFT);
-> +	ratio = div64_u64(ratio, max_freq_hz);
-> +	if (!ratio) {
-> +		WARN_ONCE(1, "System timer frequency too low.\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	per_cpu(arch_max_freq_scale, cpu) = (unsigned long)ratio;
-> +
-> +	return 0;
-> +}
-> +
-> +static inline bool
-> +enable_policy_freq_counters(int cpu, cpumask_var_t valid_cpus)
-> +{
-> +	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> +
-> +	if (!policy) {
-> +		pr_debug("CPU%d: No cpufreq policy found.\n", cpu);
-> +		return false;
-> +	}
-> +
-> +	if (cpumask_subset(policy->related_cpus, valid_cpus))
-> +		cpumask_or(amu_fie_cpus, policy->related_cpus,
-> +			   amu_fie_cpus);
-> +
-> +	cpufreq_cpu_put(policy);
-> +
-> +	return true;
-> +}
-> +
-> +static DEFINE_STATIC_KEY_FALSE(amu_fie_key);
-> +#define amu_freq_invariant() static_branch_unlikely(&amu_fie_key)
-> +
-> +static int __init init_amu_fie(void)
-> +{
-> +	cpumask_var_t valid_cpus;
-> +	bool have_policy = false;
-> +	int ret = 0;
-> +	int cpu;
-> +
-> +	if (!zalloc_cpumask_var(&valid_cpus, GFP_KERNEL))
-> +		return -ENOMEM;
-> +
-> +	if (!zalloc_cpumask_var(&amu_fie_cpus, GFP_KERNEL)) {
-> +		ret = -ENOMEM;
-> +		goto free_valid_mask;
-> +	}
-> +
-> +	for_each_present_cpu(cpu) {
-> +		if (validate_cpu_freq_invariance_counters(cpu))
-> +			continue;
-> +		cpumask_set_cpu(cpu, valid_cpus);
-> +		have_policy |= enable_policy_freq_counters(cpu, valid_cpus);
-> +	}
-> +
-> +	/*
-> +	 * If we are not restricted by cpufreq policies, we only enable
-> +	 * the use of the AMU feature for FIE if all CPUs support AMU.
-> +	 * Otherwise, enable_policy_freq_counters has already enabled
-> +	 * policy cpus.
-> +	 */
-> +	if (!have_policy && cpumask_equal(valid_cpus, cpu_present_mask))
-> +		cpumask_or(amu_fie_cpus, amu_fie_cpus, valid_cpus);
-> +
-> +	if (!cpumask_empty(amu_fie_cpus)) {
-> +		pr_info("CPUs[%*pbl]: counters will be used for FIE.",
-> +			cpumask_pr_args(amu_fie_cpus));
-> +		static_branch_enable(&amu_fie_key);
-> +	}
-> +
-> +free_valid_mask:
-> +	free_cpumask_var(valid_cpus);
-> +
-> +	return ret;
-> +}
-> +late_initcall_sync(init_amu_fie);
-> +
-> +bool arch_freq_counters_available(struct cpumask *cpus)
-> +{
-> +	return amu_freq_invariant() &&
-> +	       cpumask_subset(cpus, amu_fie_cpus);
-> +}
-> +
-> +void topology_scale_freq_tick(void)
-> +{
-> +	u64 prev_core_cnt, prev_const_cnt;
-> +	u64 core_cnt, const_cnt, scale;
-> +	int cpu = smp_processor_id();
-> +
-> +	if (!amu_freq_invariant())
-> +		return;
-> +
-> +	if (!cpumask_test_cpu(cpu, amu_fie_cpus))
-> +		return;
-> +
-> +	const_cnt = read_sysreg_s(SYS_AMEVCNTR0_CONST_EL0);
-> +	core_cnt = read_sysreg_s(SYS_AMEVCNTR0_CORE_EL0);
-> +	prev_const_cnt = this_cpu_read(arch_const_cycles_prev);
-> +	prev_core_cnt = this_cpu_read(arch_core_cycles_prev);
-> +
-> +	if (unlikely(core_cnt <= prev_core_cnt ||
-> +		     const_cnt <= prev_const_cnt))
-> +		goto store_and_exit;
-> +
-> +	/*
-> +	 *	    /\core    arch_max_freq_scale
-> +	 * scale =  ------- * --------------------
-> +	 *	    /\const   SCHED_CAPACITY_SCALE
-> +	 *
-> +	 * See validate_cpu_freq_invariance_counters() for details on
-> +	 * arch_max_freq_scale and the use of SCHED_CAPACITY_SHIFT.
-> +	 */
-> +	scale = core_cnt - prev_core_cnt;
-> +	scale *= this_cpu_read(arch_max_freq_scale);
-> +	scale = div64_u64(scale >> SCHED_CAPACITY_SHIFT,
-> +			  const_cnt - prev_const_cnt);
-> +
-> +	scale = min_t(unsigned long, scale, SCHED_CAPACITY_SCALE);
-> +	this_cpu_write(freq_scale, (unsigned long)scale);
-> +
-> +store_and_exit:
-> +	this_cpu_write(arch_core_cycles_prev, core_cnt);
-> +	this_cpu_write(arch_const_cycles_prev, const_cnt);
-> +}
-> +#endif /* CONFIG_ARM64_AMU_EXTN */
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 6119e11a9f95..8d63673c1689 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -21,6 +21,10 @@
->   #include <linux/sched.h>
->   #include <linux/smp.h>
->   
-> +__weak bool arch_freq_counters_available(struct cpumask *cpus)
-> +{
-> +	return false;
-> +}
->   DEFINE_PER_CPU(unsigned long, freq_scale) = SCHED_CAPACITY_SCALE;
->   
->   void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
-> @@ -29,6 +33,14 @@ void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
->   	unsigned long scale;
->   	int i;
->   
-> +	/*
-> +	 * If the use of counters for FIE is enabled, just return as we don't
-> +	 * want to update the scale factor with information from CPUFREQ.
-> +	 * Instead the scale factor will be updated from arch_scale_freq_tick.
-> +	 */
-> +	if (arch_freq_counters_available(cpus))
-> +		return;
-> +
->   	scale = (cur_freq << SCHED_CAPACITY_SHIFT) / max_freq;
->   
->   	for_each_cpu(i, cpus)
-> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> index 3015ecbb90b1..1ccdddb541a7 100644
-> --- a/include/linux/arch_topology.h
-> +++ b/include/linux/arch_topology.h
-> @@ -33,6 +33,8 @@ unsigned long topology_get_freq_scale(int cpu)
->   	return per_cpu(freq_scale, cpu);
->   }
->   
-> +bool arch_freq_counters_available(struct cpumask *cpus);
-> +
->   struct cpu_topology {
->   	int thread_id;
->   	int core_id;
+> +		tsens: thermal-sensor {
+> +			compatible = "fsl,imx8qxp-sc-thermal", "fsl,imx-sc-thermal";
+> +			#thermal-sensor-cells = <1>;
+> +		};
+>  	};
+>  };
+>  
 > 
 
 
-Looks good
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-Regards,
-Lukasz
