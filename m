@@ -2,129 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1C21721BC
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 16:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D14172283
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 16:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbgB0PAE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 10:00:04 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:34770 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729225AbgB0PAE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 10:00:04 -0500
-Received: by mail-lj1-f194.google.com with SMTP id x7so3812157ljc.1
-        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 07:00:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hxeWwBcREguPRl0YSA1dgvNqgcNAs0sxdnLT2TcjVKw=;
-        b=DKqDIIpoLHVG44IrAEf+PRHSTcuSWfXxD+2nA4ZhpMhTgNtxZdbDaqPGFFDw+AIADp
-         DeglF7v8V6yRy4zI355DozwcmtVhYZR1Jv7+oiNimsV+QjPzdgsM7oWJUt1R/XVEoViO
-         3d7Vpatif8yuhVEL2Ld1D5sSk8ecfgDl+KLKpxqM6VZh3GExDDdg4+rEhY1Bc038TJSw
-         Cc1slFgYx641oA0ubt+0ogIgg5uLSKald1Kn3c7wCbA0I3LEISHpCPYLH0MN8CgGZtJU
-         2fzyQvaHkQ/yVP7aZE6d2hIk0SpCqJw+wPuDgT9LO3ZU7VpdATq+8D5nBXGBVl/HO7Ye
-         dP9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hxeWwBcREguPRl0YSA1dgvNqgcNAs0sxdnLT2TcjVKw=;
-        b=duJRmn73VRD0qkbewN/vdnh+EsEkEIQxmrVsdZD0H1jO6oLh5bTjdLaxAfIUJMJgwF
-         Tp6Er00RZ5mNhq06lnLuh4K77PSc6gno5h2bPdwlQovDAM0Y+GInaRSVEgdnMnS6MdeJ
-         5Nm1VpeQSNbBTTainon5tujUBzr6a0WYcTAwSNTdIwkkN+2iTdZVb8MVn0vdMv8gVwLE
-         Y0nACn+ZvlAIJJ+rjhKorSBTZ0rIVEzX2kxwA3gqXj7vwSO4rI/N5E9jzNaXrGlEQLFA
-         JLZlHvA0UgTcjDSKwkJmTz4NL2/uUgU0fcXUHNAInVqFNaOFkJqg59asMNJS6xnzqAPz
-         muvg==
-X-Gm-Message-State: ANhLgQ2WnD5kjSAcYqWPcRo8ixNmfE3/4ojNGEGZJXWsmfuO00PY5czP
-        gTL0GpGMwhgObcofWRN1LEBVml4MSs3nMPCyaBvcTA==
-X-Google-Smtp-Source: ADFU+vtEkEqJMoxuvqwe9HyeeqaH1txbxfmCDLVTHZYAoZWVbLPzsQkGedE2YbfF1pCcxvkyjdjR7crgmlE2z2mN8mg=
-X-Received: by 2002:a2e:5304:: with SMTP id h4mr3074729ljb.75.1582815602132;
- Thu, 27 Feb 2020 07:00:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20200227124551.31860-1-ulf.hansson@linaro.org> <20200227124551.31860-5-ulf.hansson@linaro.org>
-In-Reply-To: <20200227124551.31860-5-ulf.hansson@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 27 Feb 2020 15:59:25 +0100
-Message-ID: <CAPDyKFqeHLeMrOEPg1p6WaLOApRzJbzNL343d2d43bEQxOAz5w@mail.gmail.com>
-Subject: Re: [PATCH 4/4] cpuidle: psci: Allow WFI to be the only state for the
- hierarchical topology
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lina Iyer <ilina@codeaurora.org>,
+        id S1729360AbgB0PvA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 10:51:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:53876 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729217AbgB0PvA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 27 Feb 2020 10:51:00 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A15CD30E;
+        Thu, 27 Feb 2020 07:50:59 -0800 (PST)
+Received: from [10.1.195.43] (e107049-lin.cambridge.arm.com [10.1.195.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 65A383F7B4;
+        Thu, 27 Feb 2020 07:50:58 -0800 (PST)
+From:   Douglas Raillard <douglas.raillard@arm.com>
+Subject: Re: [RFC PATCH v4 0/6] sched/cpufreq: Make schedutil energy aware
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        qperret@google.com, Linux PM <linux-pm@vger.kernel.org>
+References: <20200122173538.1142069-1-douglas.raillard@arm.com>
+ <CAJZ5v0hL9AbpgivRGtCtqQo4XRYdt=SDjD=_FAVZmKAi=+VvzA@mail.gmail.com>
+ <d0155018-52e6-e1c9-a03d-1b9703b7a28a@arm.com>
+ <20200210133051.GI14897@hirez.programming.kicks-ass.net>
+ <278bff0c-6f49-5200-d7df-1c844de1c98c@arm.com>
+ <20200213132024.GP14897@hirez.programming.kicks-ass.net>
+Organization: ARM
+Message-ID: <a07d317b-7f68-f63f-bc9f-d829a3aa65b5@arm.com>
+Date:   Thu, 27 Feb 2020 15:50:57 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
+MIME-Version: 1.0
+In-Reply-To: <20200213132024.GP14897@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB-large
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 27 Feb 2020 at 13:46, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> It's possible that only the WFI state is supported for the CPU, while also
-> a shared idle state exists for a group of CPUs.
->
-> When the hierarchical topology is used, the shared idle state may not be
-> compatible with arm,idle-state, rather with "domain-idle-state", which
-> makes dt_init_idle_driver() to return zero. This leads to that the
-> cpuidle-psci driver bails out during initialization, avoiding to register a
-> cpuidle driver and instead relies on the default architectural
-> back-end (called via cpu_do_idle()). In other words, the shared idle state
-> becomes unused.
->
-> Let's fix this behaviour, by allowing the dt_init_idle_driver() to return 0
-> and then continue with the initialization. If it turns out that the
-> hierarchical topology is used and we have some additional states to manage,
-> then continue with the cpuidle driver registration, otherwise bail out, as
-> we did before.
->
-> Reported-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-> Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  drivers/cpuidle/cpuidle-psci.c | 47 ++++++++++++++++++++++------------
->  1 file changed, 30 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> index 7b459f987c50..7699b2dab622 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -56,16 +56,19 @@ static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
->         u32 *states = data->psci_states;
->         struct device *pd_dev = data->dev;
->         u32 state;
-> -       int ret;
-> +       int ret = 0;
->
->         /* Do runtime PM to manage a hierarchical CPU toplogy. */
->         pm_runtime_put_sync_suspend(pd_dev);
->
->         state = psci_get_domain_state();
-> -       if (!state)
-> +       if (!state && states)
->                 state = states[idx];
->
-> -       ret = psci_enter_state(idx, state);
-> +       if (state)
-> +               ret = psci_cpu_suspend_enter(state);
+Hi Peter,
 
-Looks like I should set ret to idx, if ret == 0 - as to instruct
-cpuidle about what state we did enter. I will update that in the next
-revision, but awaiting for some comments first.
+On 2/13/20 1:20 PM, Peter Zijlstra wrote:
+> On Thu, Feb 13, 2020 at 11:55:32AM +0000, Douglas Raillard wrote:
+>> On 2/10/20 1:30 PM, Peter Zijlstra wrote:
+> 
+>>> So ARM64 will soon get x86-like power management if I read these here
+>>> patches right:
+>>>
+>>>   https://lkml.kernel.org/r/20191218182607.21607-2-ionela.voinescu@arm.com
+>>>
+>>> And I'm thinking a part of Rafael's concerns will also apply to those
+>>> platforms.
+>>
+>> AFAIU there is an important difference: ARM64 firmware should not end up
+>> increasing frequency on its own, it should only cap the frequency. That
+>> means that the situation stays the same for that boost:
+>>
+>> Let's say you let schedutil selecting a freq that is +2% more power
+>> hungry. That will probably not be enough to make it jump to the next
+>> OPP, so you end up not boosting. Now if there is a firmware that decides
+>> for some reasons to cap frequency, it will be a similar situation.
+> 
+> The moment you give out OPP selection to a 3rd party (be it firmware or
+> a micro-controller) things are uncertain at best anyway.
+> 
+> Still, in general, if you give it higher input, it tends to at least
+> consider going faster -- which might be all you can ask for...
+> 
+> So I'm not exactly seeing what your argument is here.
 
-> +       else
-> +               cpu_do_idle();
->
->         pm_runtime_get_sync(pd_dev);
->
+My point is that a +2% boost will give *up to* +2% increase in energy
+use. With or without a fancy firmware, having cost_margin > 0 does not
+mean you will always actually get a speedup.
 
-[...]
+>>> Right, so the condition 'util_avg > util_est' makes sense to trigger
+>>> some sort of boost off of.
+>>>
+>>> What kind would make sense for these platforms? One possibility would be
+>>> to instead of frobbing the energy margin, as you do here, to frob the C
+>>> in get_next_freq().
+>>
+>> If I'm correct, changing the C value would be somewhat similar to the
+>> relative boosting I had in a previous version. Maybe adding a fixed
+>> offset would give more predictable results as was discussed with Vincent
+>> Guittot. In any case, it would change the perceived util (like iowait
+>> boost).
+> 
+> It depends a bit on what you change C into. If we do something trivial
+> like:
+> 		1.25 ; !(util_avg > util_est)
+> 	C := {
+> 		2    ;  (util_avg > util_est)
+> 
+> ie. a binary selection of constants, then yes, I suppose that is the
+> case.
+> 
+> But nothing stops us from making it more complicated; or having it
+> depend on the presence of EM data.
 
-Kind regards
-Uffe
+The series currently fiddles with energy cost directly, but it's
+possible to have the exact same effect by fiddling with util if we have
+the function `(base_util, cost_margin) -> boosted_util`. It just that it
+forces to:
+1. map util to freq
+2. find a higher freq for the given cost_margin
+3. Map freq to util
+4. Re-inject the new util, which will eventually get remapped to a freq
+
+While it's easier to just do it directly:
+1. map util to freq
+2. find higher_freq for the given cost_margin
+3. Use the increased freq
+
+> 
+>>> (I have vague memories of this being proposed earlier; it also avoids
+>>> that double OPP iteration thing complained about elsewhere in this
+>>> thread if I'm not mistaken).
+>>
+>> It should be possible to get rid of the double iteration mentioned by
+>> Quentin. Choosing to boost the util or the energy boils down to:
+>>
+>> 1) If you care more about predictable battery life (or energy bill) than
+>> predictability of the boost feature, EM should be used.
+>>
+>> 2) If you don't have an EM or you care more about having a predictable
+>> boost for a given workload, use util (or disable that boost).
+>>
+>> The rational is that with 1), you will get a different speed boost for a
+>> given workload depending on the other things executing at the same time,
+>> as the speed up is not linear with the task-related metric (util -
+>> util_est). If you are already at high freq because of another workload,
+>> the speed up will be small because the next 100Mhz will cost much more
+>> than the same +100Mhz delta starting from a low OPP.
+> 
+> It's just that I'm not seeing how 1 actually works or provides that more
+> predictable battery life I suppose. We have this other sub-thread to
+> argue about that :-)
+
+Ok, I've posted the answer there, so this thread can focus on
+boost=(util - util_est_enqueued) logic, and the other one on how to make
+actual use of the boost value.
+
+>>> That is; I'm thinking it is important (esp. now that we got frequency
+>>> invariance sorted for x86), to have this patch also work for !EM
+>>> architectures (as those ARM64-AMU things would be).
+>>
+>> For sure, that feature is supposed to help in cases that would be
+>> impossible to pinpoint with hardware, since it has to know what tasks
+>> execute.
+> 
+> OK, so I'm thinking we're agreeing that it would be good to have this
+> support !EM systems too.
+> 
+
+Thanks,
+Douglas
