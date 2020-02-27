@@ -2,63 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A25A41713BF
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 10:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C83F1713E3
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 10:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728728AbgB0JJf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 04:09:35 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:54027 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728688AbgB0JJe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 04:09:34 -0500
-Received: by mail-wm1-f65.google.com with SMTP id f15so2577901wml.3
-        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 01:09:32 -0800 (PST)
+        id S1728645AbgB0JRF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 04:17:05 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:39689 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728555AbgB0JRF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 04:17:05 -0500
+Received: by mail-wm1-f66.google.com with SMTP id c84so2475436wme.4
+        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 01:17:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9d5XsXCVGpg6qu/wTS2MkCO23Bkow9gwYLOhiOzvq0w=;
-        b=ZCYFGPMdIMqWIIqKs905YzODTI7e6WtmXFtj99H8vljntHp3TbOeemaufNUxrCcxqR
-         zeFq2wtOG1pRKgM6YEQb+srVxhh0gm8fUFAV4I5FKv8Pd8PpvlXKfUuH5hnzgJ2lG5V/
-         FbvYQaNnOgVGBMQTByNKHvWLJgm1E2FZn0FcBYpJ6pGwmjnaYNRnTs5CUr6SNm6qZ7Fl
-         e4xGl0NHpJj1geTjnEok9GQB+Cdbai1/jhX9J6L9AHnpjG3EvkL8j4xldGHV/YpWKqpq
-         IX/rOP0pJDNhIKu3tGx0Hlk1f1eoTmdHaAnh8Or+NRLkufWLDxQHh1aIXiLVTzzURIc1
-         BHXw==
+        bh=byYUcuzDUs6EI2f9ZAyw6JsIg3wiyl3GVfGmpZXFBGg=;
+        b=znc+w9PkEBnc+zTq9CxylE0W3IOsPMfyj0zzj9rfhzSqa6janRkZRYL48p3tGPMtZB
+         0oR+0ElyxD+M4ZsBvDNSeR7HJDq2K5CNbZxIJ7qpklwpm0Xr2Fn0E9TFiQNmh6jtJfg5
+         QZp4mTQU9f06enAb2YyJWJ4DgFLmrpyy9peHIdQpbHXgMxiCDMbBkAqe02sjC5jID3lh
+         OZVDWGrnDTKfX0iQNWWM9yyuEnqlZRhVXzr4nxpcm67c3J/b7GRxRv9klHWdcw6KsoeE
+         8Hdr+r55IVlqhwlg+jfucl7ZnsfbGGM0sQrk7+UvmcLQ09RR+sFZBPsfRtGYsvIjsb8A
+         HQHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=9d5XsXCVGpg6qu/wTS2MkCO23Bkow9gwYLOhiOzvq0w=;
-        b=DpOEnDrri46x33H/BgSqsBH3Je0SZIM2h2L9B+vtcw7j30URT2MPvf/a6xWsCRs6g7
-         Edqk8HU9UJfNkJcK1jvLBOm7kaSH4U6W9NbzL/hrQ2j/hK3JXsj/IhYCuscGTvXAMylk
-         8zV/20vLBWWpwydLoGOumZDu2iCjy7kjkCmd+T1muL4KnFwla0uvfrjD0+8U9zlgHVWI
-         8xrHHndYisxFj2r6iJGYczyXfqrLgirEywbsZk3mndnqCYJlnveUyQNPYXBu9W1L9boF
-         f34I7X9GCVm7ZEO4hbV8grbs3pd/Y3J+wrOy5k3OXcketemQtrrdr+3tCYZl1q+uoqhs
-         kRUg==
-X-Gm-Message-State: APjAAAVGziojYC/LhzEDyqqJhsGssxh6EaMekpXYoYgCy/Us9vgppCOn
-        gNnnI+9HlIUpqgFdCb3KCiArlQ==
-X-Google-Smtp-Source: APXvYqyizxMVKRa7iARTRCj9b9lQhnQiE423uIKYcNYgEbblwSjNt1oaqNF93lYCZsnbn2KPApPsOw==
-X-Received: by 2002:a7b:c5da:: with SMTP id n26mr3881431wmk.138.1582794571401;
-        Thu, 27 Feb 2020 01:09:31 -0800 (PST)
+        bh=byYUcuzDUs6EI2f9ZAyw6JsIg3wiyl3GVfGmpZXFBGg=;
+        b=Jj5lzE0V0XKjUR0Y33tRAMyKcr32IZ9dMyend6g4kiGjYGh/X4VgHqkYu14G+Tovzn
+         2igDQLBNS9L5uDZ2I4WGbXRka/g6bzwMbgydsiXGdpNLd7xFdqbc9qWGOMsjITKaEP+D
+         JKVrzncD4BYmCdfYeBKm+JhJx9VQm3rBgT49BT5HHpGIksG5+noK1Kl3MFuO6zD5LJq4
+         qZRLhhDe34ABauwcCbjQvtb/Q8GyveXmqeYV7Z8257pu8bmBvzz+8dtkMryKQMBRtDvG
+         lcIJupvYOEuZA/fsCiWQ5A9sgM+FoY5OvMPvyZuoe7SZUzrMxHJVE+02jcM4T/Fqaa6j
+         wKgg==
+X-Gm-Message-State: APjAAAW+UAtRyVC/bMSMgZg9Ecb4ERLwP0QNDQ+l3nXSZ5sWwqfcfCha
+        gjpnSZyy4NAYK/dwOhyOrSe/oAKGGWRqUQ==
+X-Google-Smtp-Source: APXvYqxawPiOKaKn88qM82HAWaYmFB3tLwYe0d+o9KWMRvOoNS4J9ny55LDYIKO79xtfY0CVYnrsmg==
+X-Received: by 2002:a05:600c:21c6:: with SMTP id x6mr3966652wmj.17.1582795023046;
+        Thu, 27 Feb 2020 01:17:03 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:d916:1723:c1c1:22d? ([2a01:e34:ed2f:f020:d916:1723:c1c1:22d])
-        by smtp.googlemail.com with ESMTPSA id b18sm7076628wru.50.2020.02.27.01.09.29
+        by smtp.googlemail.com with ESMTPSA id b16sm2185717wrq.14.2020.02.27.01.16.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Feb 2020 01:09:30 -0800 (PST)
-Subject: Re: [PATCH V16 1/5] dt-bindings: fsl: scu: add thermal binding
-To:     Anson Huang <Anson.Huang@nxp.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        aisheng.dong@nxp.com, linux@roeck-us.net,
-        srinivas.kandagatla@linaro.org, krzk@kernel.org,
-        fugang.duan@nxp.com, peng.fan@nxp.com, daniel.baluta@nxp.com,
-        bjorn.andersson@linaro.org, olof@lixom.net, dinguyen@kernel.org,
-        leonard.crestez@nxp.com, marcin.juszkiewicz@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-References: <1582330132-13461-1-git-send-email-Anson.Huang@nxp.com>
+        Thu, 27 Feb 2020 01:17:02 -0800 (PST)
+Subject: Re: [PATCH 2/7] docs: dt: fix several broken references due to
+ renames
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Jyri Sarha <jsarha@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-gpio@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org
+References: <cover.1582361737.git.mchehab+huawei@kernel.org>
+ <83c5df4acbbe0fa55a1d58d4c4a435b51cd2a7ad.1582361737.git.mchehab+huawei@kernel.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -114,12 +135,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <41da5dc1-9d46-da71-4893-5c23e6e3d96a@linaro.org>
-Date:   Thu, 27 Feb 2020 10:09:29 +0100
+Message-ID: <add18b30-6eec-9aba-a961-8ecfe9b32596@linaro.org>
+Date:   Thu, 27 Feb 2020 10:16:59 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <1582330132-13461-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <83c5df4acbbe0fa55a1d58d4c4a435b51cd2a7ad.1582361737.git.mchehab+huawei@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -128,65 +149,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/02/2020 01:08, Anson Huang wrote:
-> NXP i.MX8QXP is an ARMv8 SoC with a Cortex-M4 core inside as
-> system controller, the system controller is in charge of system
-> power, clock and thermal sensors etc. management, Linux kernel
-> has to communicate with system controller via MU (message unit)
-> IPC to get temperature from thermal sensors, this patch adds
-> binding doc for i.MX system controller thermal driver.
+On 22/02/2020 10:00, Mauro Carvalho Chehab wrote:
+> Several DT references got broken due to txt->yaml conversion.
 > 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
-
-I'll will take patches 1, 2 and 3
-
-Thanks!
-
-  -- Daniel
-
-> ---
-> No change.
-> ---
->  .../devicetree/bindings/arm/freescale/fsl,scu.txt        | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+> Those are auto-fixed by running:
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> index e07735a8..7f42cc3 100644
-> --- a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> +++ b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-> @@ -166,6 +166,17 @@ Required properties:
->                followed by "fsl,imx-sc-key";
->  - linux,keycodes: See Documentation/devicetree/bindings/input/keys.txt
+> 	scripts/documentation-file-ref-check --fix
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+
+[ ... ]
+
+> diff --git a/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
+> index d9fdf4809a49..f3e68ed03abf 100644
+> --- a/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.yaml
+> @@ -17,7 +17,7 @@ description: |+
+>                  "brcm,bcm2711-avs-monitor", "syscon", "simple-mfd"
 >  
-> +Thermal bindings based on SCU Message Protocol
-> +------------------------------------------------------------
-> +
-> +Required properties:
-> +- compatible:			Should be :
-> +				  "fsl,imx8qxp-sc-thermal"
-> +				followed by "fsl,imx-sc-thermal";
-> +
-> +- #thermal-sensor-cells:	See Documentation/devicetree/bindings/thermal/thermal.txt
-> +				for a description.
-> +
->  Example (imx8qxp):
->  -------------
->  aliases {
-> @@ -238,6 +249,11 @@ firmware {
->  			compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
->  			timeout-sec = <60>;
->  		};
-> +
-> +		tsens: thermal-sensor {
-> +			compatible = "fsl,imx8qxp-sc-thermal", "fsl,imx-sc-thermal";
-> +			#thermal-sensor-cells = <1>;
-> +		};
->  	};
->  };
->  
-> 
+>    Refer to the the bindings described in
+> -  Documentation/devicetree/bindings/mfd/syscon.txt
+> +  Documentation/devicetree/bindings/mfd/syscon.yaml
+
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
 
 -- 
