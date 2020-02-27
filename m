@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD35171400
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 10:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2A317140F
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 10:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728637AbgB0JUQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 04:20:16 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:35530 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728504AbgB0JUP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 04:20:15 -0500
-Received: by mail-wm1-f65.google.com with SMTP id m3so2505651wmi.0
-        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 01:20:14 -0800 (PST)
+        id S1728654AbgB0JVm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 04:21:42 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51500 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728637AbgB0JVm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 04:21:42 -0500
+Received: by mail-wm1-f68.google.com with SMTP id t23so2639173wmi.1
+        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 01:21:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Mir9btmNLIiL5W3Qkje401u95Kj4mPQNkvNp/j9WsTI=;
-        b=XQKheMwoQPNeg4kfXTN2ykfBU54xuIXWpjqFUJ1jRa6tVzUvlffE95oto+g+hpeLzv
-         wcONYXZGEetTCH2Ces8MyLknZaiAJr6OQGFSIxIBlnM/DPmk1SPR4Dz92fiH9fTU7QuB
-         xUOryziluHFw2BA+iZN73UTEM7dJ2j5SbQYJjSAIc4IW5n8vURRdlXWv3SFtKUxEUdiy
-         NQoS7wtxFwtWoTF3ZB6K5A7hA3SDAH0TIJbIT2C6Qy1MewRvPLgjvVwafHZV3d/mN2CL
-         xWqU1OXKk2sV15c0SIO8SfNvVRRVVG2oLwvkluitU+r8pk4IR6m8Ii/LYPjoa1xvQUbP
-         fqUw==
+        bh=EQAkOvMGbmsmxw6AVy2qco0Z50CkDlXQrw3JScRgI40=;
+        b=GVyAHjMHWyYc/HYxGfYxlrPJNzQ+lUJvorePoHW/hFr6OpU11EX1HxzIxwCLBdppql
+         gzGmmgn1k78Zl645X06X0/Zg1fC2JClIOScEn4ihHPTkEzcCRxJf8W4gbEc15RxF6CGf
+         FaCuPM8ODrkK43LEwFp6v7vbawe01ULEmxNm7JI+73cbI1OFYTCrHQn272rGZXp8prg6
+         TcB8K7H9kHJ2Oc5MhEHmjZU4VJObHMOckAWfWPZxnARuE33ZAmMCV5oaJRmB4hT4mula
+         4Ul32e4HEmMv0TKv0PRz5PfxOTEjsGOL5toUyzQ7rPAH7gKJrS47i1cP4gtj39/YiWpt
+         M7Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Mir9btmNLIiL5W3Qkje401u95Kj4mPQNkvNp/j9WsTI=;
-        b=l+dbNso38bXe/5X0bxeN8YtDA7n8mjCyOxNOSUsrV28Ydo9d7u+u2C+9eciz0n9lW2
-         KA+oiaasIlxCOosPX7lu+TbAT6MF5QQES0g7j4e2I5KTsmW6P5efNmesQkc7cj6OqVi7
-         gWVSP9wmqO9ixGdMNN2vtuU85f0RyeAW4zLhXImCyfXL6dd8W7p6XCeKNBg+qA7m1K/o
-         aRuY30eIcyNpUGytVhth7ttvvXKhZy7Cj8QBx7uAOJ7HOtxnH2yze4OMaYOPgVJv7RI4
-         i1Wzud0nkV54ItK6h6ecA5zQ9wBfC0RYABiqEvrELQjcd+fSkJl/XUjvY3pvYHcV1XEv
-         uUTw==
-X-Gm-Message-State: APjAAAXs9gEGDglUfB9YMdkCLFrcCcFcZDJPNaS3+iHymFqOxCKm3x83
-        RQsTkIRdkOQZYWbJqoU7XNvTzw==
-X-Google-Smtp-Source: APXvYqyO2WQU3A/PCXZOgIvyUOQQAPcdGaGiTPPMziReqq3eP5HNpTVvss2oju4wyTR9pE0AjNl2xQ==
-X-Received: by 2002:a1c:9811:: with SMTP id a17mr4077300wme.8.1582795213557;
-        Thu, 27 Feb 2020 01:20:13 -0800 (PST)
+        bh=EQAkOvMGbmsmxw6AVy2qco0Z50CkDlXQrw3JScRgI40=;
+        b=Hs1P6UcKK2yk+dUaoWfHKBvX+14ecdavaQQbgOlD8OtgQqBCThwrP/Mk14xNtHD5qQ
+         3U2AAgUI1CIprlZZ26wgHLsGY7La07Bi/OUMlL+1+9U8aC2ZNxeXzBAa+rf9hA4Ah/YH
+         EW5j5xNuf0cd3dkcW1iFNmXSpI9ELFmub10LSksN+/WjsRRJ8EezZFxkJaey2u/AduGi
+         hNMd0RVwz70Vz35aWkb1ixThbZNWeyVUJT/6H2mgIKRBEpeg3YrmHPy992Ww7XkvlMIF
+         tw09wK9NhTCBNSVgSn3dy2EauKzco06rnWMDJCF/y4J9mXzQPChSO83Djf86jwRwQoT7
+         oT0g==
+X-Gm-Message-State: APjAAAXOYbEXP/3Dka37jJsoVK8zc73neeY3xTuI8z0rsLitT7j/CrFb
+        0gV2F3rhenzhjmgg/7svU2maiQ==
+X-Google-Smtp-Source: APXvYqywhs3A8OwOF9CmFmnoaSpvf3XIzy44+IUQDROpST60gxKY8CPm0XlgvsYzLErdmIas2KZ/Bw==
+X-Received: by 2002:a1c:9e89:: with SMTP id h131mr4051908wme.161.1582795299058;
+        Thu, 27 Feb 2020 01:21:39 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:d916:1723:c1c1:22d? ([2a01:e34:ed2f:f020:d916:1723:c1c1:22d])
-        by smtp.googlemail.com with ESMTPSA id y139sm7082726wmd.24.2020.02.27.01.20.12
+        by smtp.googlemail.com with ESMTPSA id d17sm6743971wmb.36.2020.02.27.01.21.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Feb 2020 01:20:12 -0800 (PST)
-Subject: Re: [PATCH v11 12/17] cpuidle: Refactor and move out NVIDIA Tegra20
- driver into drivers/cpuidle
+        Thu, 27 Feb 2020 01:21:38 -0800 (PST)
+Subject: Re: [PATCH v11 14/17] cpuidle: tegra: Squash Tegra114 driver into the
+ common driver
 To:     Dmitry Osipenko <digetx@gmail.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -60,7 +60,7 @@ To:     Dmitry Osipenko <digetx@gmail.com>,
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20200224224057.21877-1-digetx@gmail.com>
- <20200224224057.21877-13-digetx@gmail.com>
+ <20200224224057.21877-15-digetx@gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -116,12 +116,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <4ca623a1-b6e2-4f2f-cfea-e5d0747a5ec9@linaro.org>
-Date:   Thu, 27 Feb 2020 10:20:11 +0100
+Message-ID: <dcf45352-8ea3-6273-b4e8-0142f5d5e9f2@linaro.org>
+Date:   Thu, 27 Feb 2020 10:21:37 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200224224057.21877-13-digetx@gmail.com>
+In-Reply-To: <20200224224057.21877-15-digetx@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -131,18 +131,18 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 24/02/2020 23:40, Dmitry Osipenko wrote:
-> The driver's code is refactored in a way that will make it easy to
-> support Tegra30/114/124 SoCs by this unified driver later on. The
-> current functionality is equal to the old Tegra20 driver, only the
-> code's structure changed a tad. This is also a proper platform driver
-> now.
+> Tegra20/30/114/124 SoCs have common idling states, thus there is no much
+> point in having separate drivers for a similar hardware. This patch moves
+> Tegra114/124 arch/ drivers into the common driver without any functional
+> changes. The CC6 state is kept disabled on Tegra114/124 because the core
+> Tegra PM code needs some more work in order to support that state.
 > 
 > Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
 
 Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-[ ... ]
 
 -- 
  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
