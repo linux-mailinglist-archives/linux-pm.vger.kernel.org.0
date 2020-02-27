@@ -2,122 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E02F117284C
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 20:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 770061728F3
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 20:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729563AbgB0TEd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 14:04:33 -0500
-Received: from gateway21.websitewelcome.com ([192.185.45.38]:14031 "EHLO
-        gateway21.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729385AbgB0TEd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 14:04:33 -0500
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway21.websitewelcome.com (Postfix) with ESMTP id 27F83400CFD8F
-        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 13:04:32 -0600 (CST)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id 7OSWjfNuOXVkQ7OSWj0QWD; Thu, 27 Feb 2020 13:04:32 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=a4cGODhzoqFN7XGLNvkdgu9vu9YdHDnB4q9Ykb1Vc28=; b=jP1MdHKVsh/wfVAve847rc8Ls3
-        kR+ScU0Uk04FU9J/wDGSWCDwGFdVWrtTaAfyxk4nUV1UFAP9qNiS8ddxKw6kODNjFx/FhOYSX9fsz
-        1VEovtHNx5zZWaoOUqWYrZSKltm/DNXUt4H9ZpTPWufPNJC4rctUvxyrl+OQ4Wf7ovKoVaZ/+SWA+
-        KFXs9gQuSYptNOwVwJ7SQLFxMhe6w6SctRNe7vsmoRzxDG63HBFWbVQbhSlDcNV5sCFoaUDw07zjA
-        qScg/7rG08/iHVju0kdYY9QUVS1VriidIDn0w0ni9Tv6DzxEb1FUjtOQj4uSOrSCGKXgOh+sU9v5G
-        R5E8Um0g==;
-Received: from [201.162.168.186] (port=28892 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1j7OST-004Cgc-KG; Thu, 27 Feb 2020 13:04:30 -0600
-Date:   Thu, 27 Feb 2020 13:07:21 -0600
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] powercap: idle_inject: Replace zero-length array with
- flexible-array member
-Message-ID: <20200227190721.GA19083@embeddedor>
+        id S1729611AbgB0TvI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 14:51:08 -0500
+Received: from mail-pg1-f178.google.com ([209.85.215.178]:36342 "EHLO
+        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729441AbgB0TvI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 14:51:08 -0500
+Received: by mail-pg1-f178.google.com with SMTP id d9so232365pgu.3
+        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 11:51:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=WUtduz+x2cePfsO4xfh146VoV6zUUwL0cPHUHG3iKOU=;
+        b=0lEu428PzHEcnUAKyAstQDZe+NFPTzpgAvjhZe79dn8AjigZwUZYLjt35esJ+gDPdc
+         No3hTyGHF4Nu4xL4osqcc8vkB1e6XPJMCxazxyMQYhzkfRwQF9Sb2PM/CMUWpIJz5gIN
+         lHENrR33KX+lsu5UuzL5AFLoGZMg/IZANFszFKUVKz4ucAF2FjL5ugyS8zEpJvP3pRqf
+         +mSXgP6cpYI2N42gfgSnMnrICknB16tK+2F8PClfGkfhyRTYvGmMtV1NfiC72aT2x7KO
+         cwoLEJNcPPu0XuihUiSSlZwYLf649IFeOGu/LA1LlYef3Wi0mf2S8typw/AqAUvj4out
+         0+iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=WUtduz+x2cePfsO4xfh146VoV6zUUwL0cPHUHG3iKOU=;
+        b=FEfWMHSDvOOr8gjipQQsECe9vq0GR1DIIXRgOO7OL7lFBBmiK6ectV7OdzPr4pbbXd
+         EcKiNut/I9J6ObBkG0AbNNc8/JzgppCCRXCwA8BDBmEL/RrqOnTaorpyaCOYMiN7AHO8
+         pz0l/fMlv2pHcpxdmmjsjNU/OZxUP3oEyBQJncaV2qe2oDAsaiG6wpXNFIoHfsSHn4cg
+         yiod0Qu1OWSho4ChRxLaAzvTosyVvmQMhXzZDfo3OBpYBtlwF9iBK/1OF+1hdg4Hxs+7
+         eYV5RQqH/qD+MImVXXosJJTQi76oyXbs6Y+rGshFNOA4lq5o0DljSNooK7cqA1thIZoh
+         fCUg==
+X-Gm-Message-State: APjAAAVVbUTIEWXWUAtJaEZSERDbxv+kot4XkTMBSV4gbtGQBtBR816G
+        /cnf1jLIMsJ1uD7coachBEcLSN95Syk=
+X-Google-Smtp-Source: APXvYqwV3+P1eHmrmnS3/LB8wqSzcNBE4VCpbq6qPLWhKYr82bbEYfivHcelJbN8N38IR1TSqg37XQ==
+X-Received: by 2002:a62:790e:: with SMTP id u14mr633536pfc.174.1582833065620;
+        Thu, 27 Feb 2020 11:51:05 -0800 (PST)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id s23sm6921441pjq.17.2020.02.27.11.51.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2020 11:51:05 -0800 (PST)
+Message-ID: <5e581da9.1c69fb81.d81fe.1ed0@mx.google.com>
+Date:   Thu, 27 Feb 2020 11:51:05 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 201.162.168.186
-X-Source-L: No
-X-Exim-ID: 1j7OST-004Cgc-KG
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [201.162.168.186]:28892
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 7
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.6-rc3-67-g146605da90d7
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 6 builds: 0 failed,
+ 6 passed (v5.6-rc3-67-g146605da90d7)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The current codebase makes use of the zero-length array language
-extension to the C90 standard, but the preferred mechanism to declare
-variable-length types such as these ones is a flexible array member[1][2],
-introduced in C99:
+pm/testing build: 6 builds: 0 failed, 6 passed (v5.6-rc3-67-g146605da90d7)
 
-struct foo {
-        int stuff;
-        struct boo array[];
-};
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+6-rc3-67-g146605da90d7/
 
-By making use of the mechanism above, we will get a compiler warning
-in case the flexible array does not occur last in the structure, which
-will help us prevent some kind of undefined behavior bugs from being
-inadvertently introduced[3] to the codebase from now on.
+Tree: pm
+Branch: testing
+Git Describe: v5.6-rc3-67-g146605da90d7
+Git Commit: 146605da90d753b81f95829c7f13bfa02f46ccb1
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 6 unique architectures
 
-Also, notice that, dynamic memory allocations won't be affected by
-this change:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-"Flexible array members have incomplete type, and so the sizeof operator
-may not be applied. As a quirk of the original implementation of
-zero-length arrays, sizeof evaluates to zero."[1]
+Detailed per-defconfig build reports:
 
-Lastly, fix the following checkpatch warning:
-WARNING: Prefer 'unsigned long' over 'unsigned long int' as the int is unnecessary
-+	unsigned long int cpumask[];
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
-This issue was found with the help of Coccinelle.
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
-[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-[2] https://github.com/KSPP/linux/issues/21
-[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
 ---
- drivers/powercap/idle_inject.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-index cd1270614cc6..e9bbd3c42eef 100644
---- a/drivers/powercap/idle_inject.c
-+++ b/drivers/powercap/idle_inject.c
-@@ -67,7 +67,7 @@ struct idle_inject_device {
- 	struct hrtimer timer;
- 	unsigned int idle_duration_us;
- 	unsigned int run_duration_us;
--	unsigned long int cpumask[0];
-+	unsigned long cpumask[];
- };
- 
- static DEFINE_PER_CPU(struct idle_inject_thread, idle_inject_thread);
--- 
-2.25.0
-
+For more info write to <info@kernelci.org>
