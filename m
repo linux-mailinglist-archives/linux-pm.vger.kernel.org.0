@@ -2,150 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FD2172911
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 20:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3168F17297D
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2020 21:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730669AbgB0T6g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 14:58:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55496 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729594AbgB0T6g (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 27 Feb 2020 14:58:36 -0500
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA48924699;
-        Thu, 27 Feb 2020 19:58:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582833514;
-        bh=x3vROII1fesL5Z7wihX+F7A34FxrSIHnIzf7GM+zPQU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aiIz6iBHZl7rsJ4UGi3Jb2Bj0iBPC75Qn40xSaLvnPfRdMa3Kej+NqJOv+/Ixc8m7
-         3YwqMoPS0wfx/OmuIOEtqhX5zTtxyqHcEG5I7S9BchKPuXJOoE4G1dSZrv6IP4cJJY
-         8rEJav84fNde49QXjhO85ssR9qaEM2FN3mq/yk9E=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1j7PIm-008YY2-QX; Thu, 27 Feb 2020 19:58:32 +0000
+        id S1729409AbgB0UfC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 15:35:02 -0500
+Received: from mail-pj1-f43.google.com ([209.85.216.43]:38498 "EHLO
+        mail-pj1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729391AbgB0UfC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 15:35:02 -0500
+Received: by mail-pj1-f43.google.com with SMTP id j17so280125pjz.3
+        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2020 12:35:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ndi6NaIW9dgyrQq9bABIny8MS00xqMlr3q1Jp+aE9/Y=;
+        b=AJ48DkWeCz/AAJ8uuzFiF+wzLYJRrWHxVkwuhLJXXW5qVmmjIDfjxGbKoTIeFd7IRI
+         69NpCH8N0nV5To/oMlwYfDTREd8z4j0Q43cvEVYQzCZeEaJo/m4TI0dxXC35n4X+MObK
+         gWHzhrWwuJvTl8zEu1cMjeuPlCcA04mVurJ/InkiCsXxj0n6tUQYQuX8BwK5h1l+0F/r
+         15wtAODB3cT6POACe8mHnKGrKTsoipemSzsa+RJecCgQl2jKKRXWc50KBs4WzunSUq+a
+         RHunUsMPxq0GDTnb7A0dS/lXOMIf0GHs+dwx5yRQy17sQ4efZ/SUZpGZn2O/4Wjpq+1o
+         NVzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ndi6NaIW9dgyrQq9bABIny8MS00xqMlr3q1Jp+aE9/Y=;
+        b=kaW6Ly2rEPbZZANdWXMVExwPU8BeUF34/wSEt95pbsn06P1H+MsZTjjyTgAy7jn09Z
+         Flq6e0Lqe7nsqcGFnUW4sjVmUW/n7zRHFk/iLo0kxXbyPHM87VafS+09jHFadtm9oDt5
+         Ul1XXyyGUeWFybACHtOL8SAqKfSQCMIwp6YyUPoB7EtmSpD+yuCdpF+EokXWHmUNEB7y
+         4TDVPu8LuAennK6X3UiMwL53/xBqhqeRJAQXougq2vp2KB2E4JMB0HndwWTbocgCtVbZ
+         i0Oem6gI0ahhuktXkxnegLe3eQNCdAPTrx+1I51qPyaF3t3Qv3yN4PiYMHoMaUr2l0bg
+         Is8Q==
+X-Gm-Message-State: APjAAAX4SmSzQ8eIKyK9w9w8UasHiAxeb3Lv/Vg9HHQG73Gb6qWRFrlA
+        68HDUXAKIoft43S7TcjBZAlOVQ==
+X-Google-Smtp-Source: APXvYqyMI0SBTa/3bJfjR72s75rqX6+5rQpRQVvyQT1AJrtUTp/xSkPqVkbyxrxB5sF8AWH1w1JXtA==
+X-Received: by 2002:a17:90a:332e:: with SMTP id m43mr760613pjb.107.1582835699475;
+        Thu, 27 Feb 2020 12:34:59 -0800 (PST)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id q66sm8511055pfq.27.2020.02.27.12.34.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2020 12:34:58 -0800 (PST)
+Message-ID: <5e5827f2.1c69fb81.e1250.5cfa@mx.google.com>
+Date:   Thu, 27 Feb 2020 12:34:58 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 27 Feb 2020 19:58:32 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-        suzuki.poulose@arm.com, sudeep.holla@arm.com, lukasz.luba@arm.com,
-        valentin.schneider@arm.com, dietmar.eggemann@arm.com,
-        rjw@rjwysocki.net, pkondeti@codeaurora.org, peterz@infradead.org,
-        mingo@redhat.com, vincent.guittot@linaro.org,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>
-Subject: Re: [PATCH v5 3/7] arm64/kvm: disable access to AMU registers from
- kvm guests
-In-Reply-To: <20200226132947.29738-4-ionela.voinescu@arm.com>
-References: <20200226132947.29738-1-ionela.voinescu@arm.com>
- <20200226132947.29738-4-ionela.voinescu@arm.com>
-Message-ID: <46b89d0c9704e0a0fb7a4ac2a1fb5b7a@kernel.org>
-X-Sender: maz@kernel.org
-User-Agent: Roundcube Webmail/1.3.10
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: ionela.voinescu@arm.com, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, suzuki.poulose@arm.com, sudeep.holla@arm.com, lukasz.luba@arm.com, valentin.schneider@arm.com, dietmar.eggemann@arm.com, rjw@rjwysocki.net, pkondeti@codeaurora.org, peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org, viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, james.morse@arm.com, julien.thierry.kdev@gmail.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.6-rc3-67-g146605da90d7
+X-Kernelci-Report-Type: boot
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing boot: 58 boots: 2 failed,
+ 55 passed with 1 untried/unknown (v5.6-rc3-67-g146605da90d7)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ionela,
+pm/testing boot: 58 boots: 2 failed, 55 passed with 1 untried/unknown (v5.6=
+-rc3-67-g146605da90d7)
 
-On 2020-02-26 13:29, Ionela Voinescu wrote:
-> Access to the AMU counters should be disabled by default in kvm guests,
-> as information from the counters might reveal activity in other guests
-> or activity on the host.
-> 
-> Therefore, disable access to AMU registers from EL0 and EL1 in kvm
-> guests by:
->  - Hiding the presence of the extension in the feature register
->    (SYS_ID_AA64PFR0_EL1) on the VCPU.
->  - Disabling access to the AMU registers before switching to the guest.
->  - Trapping accesses and injecting an undefined instruction into the
->    guest.
-> 
-> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
-> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Julien Thierry <julien.thierry.kdev@gmail.com>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
+Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
+el/v5.6-rc3-67-g146605da90d7/
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+6-rc3-67-g146605da90d7/
 
-Acked-by: Marc Zyngier <maz@kernel.org>
+Tree: pm
+Branch: testing
+Git Describe: v5.6-rc3-67-g146605da90d7
+Git Commit: 146605da90d753b81f95829c7f13bfa02f46ccb1
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Tested: 50 unique boards, 15 SoC families, 3 builds out of 6
 
-A small comment below:
+Boot Regressions Detected:
 
-[...]
+arm64:
 
-> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> index 3e909b117f0c..44354c812783 100644
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@ -1003,6 +1003,20 @@ static bool access_pmuserenr(struct kvm_vcpu
-> *vcpu, struct sys_reg_params *p,
->  	{ SYS_DESC(SYS_PMEVTYPERn_EL0(n)),					\
->  	  access_pmu_evtyper, reset_unknown, (PMEVTYPER0_EL0 + n), }
-> 
-> +static bool access_amu(struct kvm_vcpu *vcpu, struct sys_reg_params 
-> *p,
-> +			     const struct sys_reg_desc *r)
-> +{
-> +	kvm_inject_undefined(vcpu);
-> +
-> +	return false;
-> +}
-> +
-> +/* Macro to expand the AMU counter and type registers*/
-> +#define AMU_AMEVCNTR0_EL0(n) { SYS_DESC(SYS_AMEVCNTR0_EL0(n)), 
-> access_amu }
-> +#define AMU_AMEVTYPE0_EL0(n) { SYS_DESC(SYS_AMEVTYPE0_EL0(n)), 
-> access_amu }
-> +#define AMU_AMEVCNTR1_EL0(n) { SYS_DESC(SYS_AMEVCNTR1_EL0(n)), 
-> access_amu }
-> +#define AMU_AMEVTYPE1_EL0(n) { SYS_DESC(SYS_AMEVTYPE1_EL0(n)), 
-> access_amu }
-> +
->  static bool trap_ptrauth(struct kvm_vcpu *vcpu,
->  			 struct sys_reg_params *p,
->  			 const struct sys_reg_desc *rd)
-> @@ -1078,8 +1092,10 @@ static u64 read_id_reg(const struct kvm_vcpu 
-> *vcpu,
->  			 (u32)r->CRn, (u32)r->CRm, (u32)r->Op2);
->  	u64 val = raz ? 0 : read_sanitised_ftr_reg(id);
-> 
-> -	if (id == SYS_ID_AA64PFR0_EL1 && !vcpu_has_sve(vcpu)) {
-> -		val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
-> +	if (id == SYS_ID_AA64PFR0_EL1) {
-> +		if (!vcpu_has_sve(vcpu))
-> +			val &= ~(0xfUL << ID_AA64PFR0_SVE_SHIFT);
-> +		val &= ~(0xfUL << ID_AA64PFR0_AMU_SHIFT);
+    defconfig:
+        gcc-8:
+          meson-g12b-a311d-khadas-vim3:
+              lab-baylibre: new failure (last pass: v5.6-rc3-52-g49d2c63e17=
+1c)
+          meson-gxl-s805x-libretech-ac:
+              lab-baylibre: new failure (last pass: v5.6-rc3-52-g49d2c63e17=
+1c)
 
-This will definitely conflict with some of the ongoing rework I have[1].
-I'm happy to provide this as a stable branch for you to rebase on top,
-or use an arm64 provided branch to rebase my stoff on top.
+Boot Failures Detected:
 
-Just let me know how you want to proceed.
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
 
-Thanks,
+arm64:
+    defconfig:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
 
-         M.
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?h=kvm-arm64/debug-fixes-5.6&id=454fb7398d3626328f7f771c07d21e894e4e1a3b
--- 
-Jazz is not dead. It just smells funny...
+---
+For more info write to <info@kernelci.org>
