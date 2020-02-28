@@ -2,91 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8178172EC6
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2020 03:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B691172F04
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2020 04:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730439AbgB1CUW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Feb 2020 21:20:22 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:42662 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730343AbgB1CUW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Feb 2020 21:20:22 -0500
-Received: from [10.18.91.106] (10.18.91.106) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Fri, 28 Feb
- 2020 10:20:47 +0800
-Subject: Re: [PATCH] dt-bindings: power: Fix dt_binding_check error
-To:     Rob Herring <robh@kernel.org>
-CC:     <devicetree@vger.kernel.org>, Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <linux-pm@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Victor Wan <victor.wan@amlogic.com>
-References: <1582269169-17557-1-git-send-email-jianxin.pan@amlogic.com>
- <20200226172702.GA6632@bogus>
-From:   Jianxin Pan <jianxin.pan@amlogic.com>
-Message-ID: <4f1d2562-31e1-0dfc-2c23-f208249848d6@amlogic.com>
-Date:   Fri, 28 Feb 2020 10:20:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
-MIME-Version: 1.0
-In-Reply-To: <20200226172702.GA6632@bogus>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.91.106]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
+        id S1730593AbgB1C7t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Feb 2020 21:59:49 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:34728 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730445AbgB1C7t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 27 Feb 2020 21:59:49 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6620A1A07C9;
+        Fri, 28 Feb 2020 03:59:47 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 8898C1A07B4;
+        Fri, 28 Feb 2020 03:59:31 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 4F690402DD;
+        Fri, 28 Feb 2020 10:59:18 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org, leonard.crestez@nxp.com, daniel.baluta@nxp.com,
+        aford173@gmail.com, shengjiu.wang@nxp.com, ping.bai@nxp.com,
+        jun.li@nxp.com, peng.fan@nxp.com, bjorn.andersson@linaro.org,
+        olof@lixom.net, dinguyen@kernel.org, marcin.juszkiewicz@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH V2 1/4] dt-bindings: thermal: imx8mm-thermal: Add binding doc for i.MX8MM
+Date:   Fri, 28 Feb 2020 10:53:30 +0800
+Message-Id: <1582858413-11906-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add thermal binding doc for Freescale's i.MX8MM Thermal Monitoring Unit.
 
-Hi Rob,
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+No change.
+---
+ .../devicetree/bindings/thermal/imx8mm-thermal.txt        | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
 
-Thanks for the ACK.
-I have resent it to Kevin for linux-amlogic and Stephen for linux-next.
-
-On 2020/2/27 1:27, Rob Herring wrote:
-> On Fri, Feb 21, 2020 at 03:12:48PM +0800, Jianxin Pan wrote:
->> Missing ';' in the end of secure-monitor example node.
->>
->> Fixes: f50b4108ede1 ("dt-bindings: power: add Amlogic secure power domains bindings")
->> Reported-by: Rob Herring<robh+dt@kernel.org>
-> 
-> space                     ^
-I fixed it in the resend version.
-> 
->> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
->> ---
->>  Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> This error isn't in my tree, so make sure it's applied where the 
-> referenced commit is.
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-> 
->>
->> diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->> index af32209..bc4e037 100644
->> --- a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->> +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->> @@ -36,5 +36,5 @@ examples:
->>              compatible = "amlogic,meson-a1-pwrc";
->>              #power-domain-cells = <1>;
->>          };
->> -    }
->> +    };
->>  
->> -- 
->> 2.7.4
->>
-> 
-> .
-> 
+diff --git a/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+new file mode 100644
+index 0000000..d09ae82
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+@@ -0,0 +1,15 @@
++* Thermal Monitoring Unit (TMU) on Freescale i.MX8MM SoC
++
++Required properties:
++- compatible : Must be "fsl,imx8mm-tmu".
++- reg : Address range of TMU registers.
++- clocks : TMU's clock source.
++- #thermal-sensor-cells : Should be 0. See ./thermal.txt for a description.
++
++Example:
++tmu: tmu@30260000 {
++	compatible = "fsl,imx8mm-tmu";
++	reg = <0x30260000 0x10000>;
++	clocks = <&clk IMX8MM_CLK_TMU_ROOT>;
++	#thermal-sensor-cells = <0>;
++};
+-- 
+2.7.4
 
