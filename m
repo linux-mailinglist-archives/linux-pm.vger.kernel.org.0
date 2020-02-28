@@ -2,94 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D15E31734F5
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2020 11:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2D9173542
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2020 11:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbgB1KGe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Feb 2020 05:06:34 -0500
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:42032 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726773AbgB1KGd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Feb 2020 05:06:33 -0500
-Received: by mail-vs1-f67.google.com with SMTP id w142so1567678vsw.9
-        for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2020 02:06:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=InyvFyZ/5bxCUOynjC6lpv2Fa6LG6T5vC6/2VR0weU4=;
-        b=PzeYbRw+1d4tOTIvVmv8WOwZUT7ugbzZaN4HN095qyoN60ncxY+KxLJ8CGXgVLtywZ
-         PzRRzd/Boh5BxVT39etHcbM/GVLwHGA/pQu/6qYEnkTyIFJat3gpBDHil+GfSjDlw+Ay
-         aoJJq++pc+C1M/2qjZU5snzG5JOccINZQy1w8m0FAiQIZ7OJQgxFofSAIQ33bRVM1A7u
-         BnHntdL/PwHIRGerTeue8Og1XlpoAC1B6ugfIIdOT0+QjYRp6nZwJBAjg5h9CJnqFGqZ
-         1OM8YHno56hD+I5HrsNOFAw6k/r+dvKDG4Ns9huXjUdfzR2u3lBvDX5S2RHQ825XsXLb
-         OwKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=InyvFyZ/5bxCUOynjC6lpv2Fa6LG6T5vC6/2VR0weU4=;
-        b=TYxrPXKHQvBhStQNWdZ5xHhxYhLJcbtrPJngpuwOChBhXhAw/Kd422DIan49xdQwSD
-         TP4d2sow5JaC8MEXpWggC/Gg9gOtRwkQVXmNKe8CdbYDd/aKt00nE3IXCNs1D4uF20BV
-         sJnrFcyycS4pmvepFU+EoqO+JbHjpXK27OLwoQMzwccXa60+GngNatNTnb4AaZU29miw
-         rvJM1u5uPhUBEmzd7kq0bcl8sPrE3OVSLcDazF3E3J+NBKZvVrU1PatoYqxDV/Tn+mm7
-         gRvOidapaO+wAwl5410uQOGBWE+9Gs21Glm4lfiYlV+2Xt+PjlwA81905gvkRGcKW9E3
-         phRw==
-X-Gm-Message-State: ANhLgQ14TqaMypy8CpkVGrRhHWV1ltrAucTLDX81WzBYFFu0ttmcGGc1
-        /v8t1DQk1yUID2Pqgr7bcdt7DMIxgvfGpPyNcScoGQ==
-X-Google-Smtp-Source: ADFU+vuZA1XQ4xbgMSEaWxgfM1zO76KhScqpXifMj+FzO5W8iDdZrT7Cbt3IZqF0CejkSumiQMSUNEHOKy8Pgn+JJ6Q=
-X-Received: by 2002:a05:6102:535:: with SMTP id m21mr1937391vsa.95.1582884391664;
- Fri, 28 Feb 2020 02:06:31 -0800 (PST)
-MIME-Version: 1.0
-References: <CGME20200228092342eucas1p1ead44fbfd9ab57c02ffa588ca9acb97a@eucas1p1.samsung.com>
- <20200228092331.21548-1-m.szyprowski@samsung.com>
-In-Reply-To: <20200228092331.21548-1-m.szyprowski@samsung.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Fri, 28 Feb 2020 15:36:20 +0530
-Message-ID: <CAHLCerN7aV82NTAoPT-ukNBJifySqSxfRogXP6ByMmJiV6nuCA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: exynos: Silence warning during deferred probe
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        id S1726738AbgB1K0J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Feb 2020 05:26:09 -0500
+Received: from foss.arm.com ([217.140.110.172]:36148 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726440AbgB1K0J (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 28 Feb 2020 05:26:09 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0806D4B2;
+        Fri, 28 Feb 2020 02:26:08 -0800 (PST)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1FBBF3F73B;
+        Fri, 28 Feb 2020 02:26:04 -0800 (PST)
+Date:   Fri, 28 Feb 2020 10:25:56 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        soc@kernel.org, Robert Richter <rrichter@marvell.com>,
+        Jon Loeliger <jdl@jdl.com>, Alexander Graf <graf@amazon.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        Mark Langsdorf <mlangsdo@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cornelia Huck <cohuck@redhat.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Eric Auger <eric.auger@redhat.com>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        James Morse <james.morse@arm.com>,
+        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>,
+        kvm@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [RFC PATCH 06/11] iommu: arm-smmu: Remove Calxeda secure mode
+ quirk
+Message-ID: <20200228102556.1dde016e@donnerap.cambridge.arm.com>
+In-Reply-To: <20200228100446.GA2395@willie-the-truck>
+References: <20200218171321.30990-1-robh@kernel.org>
+        <20200218171321.30990-7-robh@kernel.org>
+        <20200218172000.GF1133@willie-the-truck>
+        <CAL_JsqJn1kG6gah+4318NQfJ4PaS3x3woWEUh08+OTfOcD+1MQ@mail.gmail.com>
+        <20200228100446.GA2395@willie-the-truck>
+Organization: ARM
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 2:53 PM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
->
-> Don't confuse user with meaningless warning about the failure of
-> registering sensors in case of deferred probe.
->
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+On Fri, 28 Feb 2020 10:04:47 +0000
+Will Deacon <will@kernel.org> wrote:
 
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+Hi,
 
-> ---
->  drivers/thermal/samsung/exynos_tmu.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-> index fd4a17812f33..e9a90bc23b11 100644
-> --- a/drivers/thermal/samsung/exynos_tmu.c
-> +++ b/drivers/thermal/samsung/exynos_tmu.c
-> @@ -1094,7 +1094,9 @@ static int exynos_tmu_probe(struct platform_device *pdev)
->                                                     &exynos_sensor_ops);
->         if (IS_ERR(data->tzd)) {
->                 ret = PTR_ERR(data->tzd);
-> -               dev_err(&pdev->dev, "Failed to register sensor: %d\n", ret);
-> +               if (ret != -EPROBE_DEFER)
-> +                       dev_err(&pdev->dev, "Failed to register sensor: %d\n",
-> +                               ret);
->                 goto err_sclk;
->         }
->
-> --
-> 2.17.1
->
+> On Tue, Feb 25, 2020 at 04:01:54PM -0600, Rob Herring wrote:
+> > On Tue, Feb 18, 2020 at 11:20 AM Will Deacon <will@kernel.org> wrote:  
+> > >
+> > > On Tue, Feb 18, 2020 at 11:13:16AM -0600, Rob Herring wrote:  
+> > > > Cc: Will Deacon <will@kernel.org>
+> > > > Cc: Robin Murphy <robin.murphy@arm.com>
+> > > > Cc: Joerg Roedel <joro@8bytes.org>
+> > > > Cc: iommu@lists.linux-foundation.org
+> > > > Signed-off-by: Rob Herring <robh@kernel.org>
+> > > > ---
+> > > > Do not apply yet.  
+> > >
+> > > Pleeeeease? ;)
+> > >  
+> > > >  drivers/iommu/arm-smmu-impl.c | 43 -----------------------------------
+> > > >  1 file changed, 43 deletions(-)  
+> > >
+> > > Yes, I'm happy to get rid of this. Sadly, I don't think we can remove
+> > > anything from 'struct arm_smmu_impl' because most implementations fall
+> > > just short of perfect.
+> > >
+> > > Anyway, let me know when I can push the button and I'll queue this in
+> > > the arm-smmu tree.  
+> > 
+> > Seems we're leaving the platform support for now, but I think we never
+> > actually enabled SMMU support. It's not in the dts either in mainline
+> > nor the version I have which should be close to what shipped in
+> > firmware. So as long as Andre agrees, this one is good to apply.  
+> 
+> Andre? Can I queue this one for 5.7, please?
+
+I was wondering how much of a pain it is to keep it in? AFAICS there are other users of the "impl" indirection. If those goes away, I would be happy to let Calxeda go.
+But Eric had the magic DT nodes to get the SMMU working, and I used that before, with updating the DT either on flash or dynamically via U-Boot.
+
+So I don't know exactly *how* desperate you are with removing this, or if there are other reasons than "negative diffstat", but if possible I would like to keep it in.
+
+Cheers,
+Andre.
