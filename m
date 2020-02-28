@@ -2,112 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2D9173542
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2020 11:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DEB173547
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2020 11:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726738AbgB1K0J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Feb 2020 05:26:09 -0500
-Received: from foss.arm.com ([217.140.110.172]:36148 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726440AbgB1K0J (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 28 Feb 2020 05:26:09 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0806D4B2;
-        Fri, 28 Feb 2020 02:26:08 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1FBBF3F73B;
-        Fri, 28 Feb 2020 02:26:04 -0800 (PST)
-Date:   Fri, 28 Feb 2020 10:25:56 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        soc@kernel.org, Robert Richter <rrichter@marvell.com>,
-        Jon Loeliger <jdl@jdl.com>, Alexander Graf <graf@amazon.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Mark Langsdorf <mlangsdo@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Eric Auger <eric.auger@redhat.com>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        James Morse <james.morse@arm.com>,
-        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <joro@8bytes.org>,
-        kvm@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [RFC PATCH 06/11] iommu: arm-smmu: Remove Calxeda secure mode
- quirk
-Message-ID: <20200228102556.1dde016e@donnerap.cambridge.arm.com>
-In-Reply-To: <20200228100446.GA2395@willie-the-truck>
-References: <20200218171321.30990-1-robh@kernel.org>
-        <20200218171321.30990-7-robh@kernel.org>
-        <20200218172000.GF1133@willie-the-truck>
-        <CAL_JsqJn1kG6gah+4318NQfJ4PaS3x3woWEUh08+OTfOcD+1MQ@mail.gmail.com>
-        <20200228100446.GA2395@willie-the-truck>
-Organization: ARM
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        id S1726884AbgB1K0j convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 28 Feb 2020 05:26:39 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:37341 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726877AbgB1K0j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Feb 2020 05:26:39 -0500
+Received: by mail-oi1-f193.google.com with SMTP id q84so2390440oic.4;
+        Fri, 28 Feb 2020 02:26:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=/2wWBljI3pqok1pAzElv5E6shSe+mwLsPBa4DozoQaI=;
+        b=Fd69Mp45GlX1uhNQuRvxWdJvvO2AnUF1t0iYg7gn8x8Q4Fg3TnD1yxt2V/YasHGswX
+         LPjCBsWCc3MVmKqvKrhydwxZAe/UxQs4WAhMlgK5nRJ/V/0h9RO5WwVeJFFIakqAWO/m
+         Bs8MBk7xLlCz2D6P8cJ7h2D367/DE+ikB1Ev3OIWlvc2U/6lWT/9GW0Tho43nDrV8hzL
+         0Z8L3Qe7IXOQQz4eG6h9/1LAQek7bqQCUN6PHKDuSRezJmg26CnpgZZ7+R1QnQAlB2wH
+         XW8I01L+9iNxJFQk7/7JstJco6G8CzF5lXHPe1xRWKUTtHpDevw7r0eCKbHtUzqmUgxg
+         HmHA==
+X-Gm-Message-State: APjAAAXjTMX1MP0XpUCQQzLwXZzQGSNE99F5cFG0T+B9flsQJc87dXFD
+        DRNTz1rVrpoMt0GodJiN9pErXDfRJv1FseZ7MSU+bPlR
+X-Google-Smtp-Source: APXvYqwrCbXjL1lD9ksqBAXzUNh1E8EUx9WP7n/PhsY2yIVm+9bRMCsvdJBReO1eFWEDJocwVaco5snbr+73zbNykmI=
+X-Received: by 2002:a54:4e96:: with SMTP id c22mr2739283oiy.110.1582885598134;
+ Fri, 28 Feb 2020 02:26:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 28 Feb 2020 11:26:27 +0100
+Message-ID: <CAJZ5v0gWVkz7Denfz59r6xXbUjvXWOifEVO4T2tr7EZpWL3oJw@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.6-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 28 Feb 2020 10:04:47 +0000
-Will Deacon <will@kernel.org> wrote:
+Hi Linus,
 
-Hi,
+Please pull from the tag
 
-> On Tue, Feb 25, 2020 at 04:01:54PM -0600, Rob Herring wrote:
-> > On Tue, Feb 18, 2020 at 11:20 AM Will Deacon <will@kernel.org> wrote:  
-> > >
-> > > On Tue, Feb 18, 2020 at 11:13:16AM -0600, Rob Herring wrote:  
-> > > > Cc: Will Deacon <will@kernel.org>
-> > > > Cc: Robin Murphy <robin.murphy@arm.com>
-> > > > Cc: Joerg Roedel <joro@8bytes.org>
-> > > > Cc: iommu@lists.linux-foundation.org
-> > > > Signed-off-by: Rob Herring <robh@kernel.org>
-> > > > ---
-> > > > Do not apply yet.  
-> > >
-> > > Pleeeeease? ;)
-> > >  
-> > > >  drivers/iommu/arm-smmu-impl.c | 43 -----------------------------------
-> > > >  1 file changed, 43 deletions(-)  
-> > >
-> > > Yes, I'm happy to get rid of this. Sadly, I don't think we can remove
-> > > anything from 'struct arm_smmu_impl' because most implementations fall
-> > > just short of perfect.
-> > >
-> > > Anyway, let me know when I can push the button and I'll queue this in
-> > > the arm-smmu tree.  
-> > 
-> > Seems we're leaving the platform support for now, but I think we never
-> > actually enabled SMMU support. It's not in the dts either in mainline
-> > nor the version I have which should be close to what shipped in
-> > firmware. So as long as Andre agrees, this one is good to apply.  
-> 
-> Andre? Can I queue this one for 5.7, please?
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.6-rc4
 
-I was wondering how much of a pain it is to keep it in? AFAICS there are other users of the "impl" indirection. If those goes away, I would be happy to let Calxeda go.
-But Eric had the magic DT nodes to get the SMMU working, and I used that before, with updating the DT either on flash or dynamically via U-Boot.
+with top-most commit 189c6967fe61729fa7e9cdc32690b08fc7eebe41
 
-So I don't know exactly *how* desperate you are with removing this, or if there are other reasons than "negative diffstat", but if possible I would like to keep it in.
+ Merge branches 'pm-sleep' and 'pm-devfreq'
 
-Cheers,
-Andre.
+on top of commit f8788d86ab28f61f7b46eb6be375f8a726783636
+
+ Linux 5.6-rc3
+
+to receive power management fixes for 5.6-rc4.
+
+These fix a recent cpufreq initialization regression (Rafael Wysocki),
+revert a devfreq commit that made incompatible changes and broke
+user land on some systems (Orson Zhai), drop a stale reference to
+a document that has gone away recently (Jonathan Neuschäfer) and
+fix a typo in a hibernation code comment (Alexandre Belloni).
+
+Thanks!
+
+
+---------------
+
+Alexandre Belloni (1):
+      PM / hibernate: fix typo "reserverd_size" -> "reserved_size"
+
+Jonathan Neuschäfer (1):
+      Documentation: power: Drop reference to interface.rst
+
+Orson Zhai (1):
+      Revert "PM / devfreq: Modify the device name as devfreq(X) for sysfs"
+
+Rafael J. Wysocki (1):
+      cpufreq: Fix policy initialization for internal governor drivers
+
+---------------
+
+ Documentation/power/index.rst |  1 -
+ drivers/cpufreq/cpufreq.c     | 12 ++++++++++--
+ drivers/devfreq/devfreq.c     |  4 +---
+ kernel/power/snapshot.c       |  2 +-
+ 4 files changed, 12 insertions(+), 7 deletions(-)
