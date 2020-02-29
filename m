@@ -2,122 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEECE17490E
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Feb 2020 21:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FDA174967
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Feb 2020 21:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727365AbgB2UCE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Feb 2020 15:02:04 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:39106 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727349AbgB2UCE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Feb 2020 15:02:04 -0500
-Received: by mail-wm1-f68.google.com with SMTP id c84so6965911wme.4;
-        Sat, 29 Feb 2020 12:02:03 -0800 (PST)
+        id S1727240AbgB2Ure (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Feb 2020 15:47:34 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:44127 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726786AbgB2Ure (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Feb 2020 15:47:34 -0500
+Received: by mail-lf1-f68.google.com with SMTP id 7so4690231lfz.11
+        for <linux-pm@vger.kernel.org>; Sat, 29 Feb 2020 12:47:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=5HtXVHt8g2TngqQLkSV4rjhDAGaSXSD43YSdcP2E8DE=;
-        b=BGTE4xeWqaSXlX2J+uJwVmYWsT03oEBO4Jd0ECUO1GpmPi9OCLcmTmKD4QibJhbgFo
-         YyFF1lzdQBXKUg7Csmt/Zz7ieUDaC9xWAcxpIjUprhcxZDWUu4zvmgfOFzC2Y7nKqF+l
-         lCWmqu8kcfy5EpoXBQ6vfQ3XR9GHoVirpAYSz+HPf8Q4XLmtXqWAiMeXUYgiRGUtX622
-         peP3KVH825faU69qYaZvEkNHnM1JRHHbpFTjqNCZ8kF2RAIJx3Y4xTHp3oldTIQv7KOQ
-         QqLixyBT5/ELrj/0lDQ6QyXp0z6tEug98Eg/AcRkruReSiH0lcfbakIwGiShvtZAEth+
-         t0eQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=77yAkILi0z+2XYkMGpGropVZLKBtHqtDJgfn0DzU2/M=;
+        b=HhgTz73tibkpsZ+aXgzqTkZK4O7sdWljU1++J00M1yEPywqNEeTlDV+xrCFKDYPgo0
+         5CRWgxPs+acaZFk/MDAd65HY4DTSv9ttPMGWsEmKw1Su/Lotiz9YDV8cfoCzW1UY2CNT
+         Ci/CgGV3JCYEfYzE3XslRVVEl8BTIyKAuEUNeYhRbM6tufNWj9EGKHE59FS6FnZp45WU
+         JRxiofW9Cgd61l6ZPNwcB7IIq+haLgY06lNzIWAAM+uJjhL45cn/Y0ejKYuaxFVci2rv
+         FlAtUhY+AOOIOdPNS9pcduf6XZkrCjtz/4y+p4xyz1CSMoTUOx/29ycVG2l3RmVsOf1s
+         nWvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5HtXVHt8g2TngqQLkSV4rjhDAGaSXSD43YSdcP2E8DE=;
-        b=my8RMZbB2waV+eiV9e9hO1+x9+bKhN/S3vy0gHgd2iWr9QZoAnFKqzyqUSnfABmnSI
-         5+/GNPq18UFt+NGBS0gywOcY/Zjp5EKeTXjatjNBbzZoJZCI0EfabWfJCSoDEiCuNFrh
-         EU6QGjx87W3ysEpbOhcBJsReC+mocKBDSOR/X4JXMqRnoL7pvjE1u8Mbq/sd07wm6gzA
-         nYGU4W8FaXvOXw1XNSBRTemI2g9dXxv0RHWMX44XxajZMG3tH4CkYcxn2CE1IK9IbPXu
-         chPAs8I2md5VZc26O644WaSuO5hbA2ZG5ctEbtpbZ9Mc4ZhdohB/fL+BjDMMZoXN+mYw
-         Ab/A==
-X-Gm-Message-State: APjAAAWzoM5bmKZWYnSrjwv7EJA5KWkG+/VtyFKI2gAQeB/y9oIr7FUz
-        OLWipHe6Tl6/nYkbBVFFYjl5jRBe6D/fuA==
-X-Google-Smtp-Source: APXvYqxbFIq7i7LKjT21XwH6j2UsGVWt6/c8aIGMmDQZIOQQCTABOEMv0TFHJvBePC50BRN6G7NuKQ==
-X-Received: by 2002:a7b:cc82:: with SMTP id p2mr10605147wma.159.1583006523007;
-        Sat, 29 Feb 2020 12:02:03 -0800 (PST)
-Received: from dumbo (ip4da2e549.direct-adsl.nl. [77.162.229.73])
-        by smtp.gmail.com with ESMTPSA id b18sm18637473wru.50.2020.02.29.12.02.01
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=77yAkILi0z+2XYkMGpGropVZLKBtHqtDJgfn0DzU2/M=;
+        b=S9VesikOKnjr37YiQox3PmbnEsLcwunGmFsTO8Y7ppzsWgi8/CpC3WTXqpDLcSVX6l
+         j/s8TPTiYvnO5xapVttB1kB4GVR+9MSsYQdtoA1i7NvQuVYqBlANARYyMc3C9MxcrZuZ
+         Lpu7aGO/YaGldhQW20nKA7AFX5LtJaBSf6jb4WcaAal5TiglaMoFc1RCTdougXMUL8H6
+         QhNTprN+mWmnrLZOIUmFqqMkDxpGO232BeucSNKGawegr39geelkUMRiW+iVcnTdhZBK
+         /qlofvlPQRQKK2pXn9l/A9rXyLaKo/4aGEP7f4MJKgNh4HYAo5FEDrSbbx1JX/Gxehdh
+         LAcQ==
+X-Gm-Message-State: ANhLgQ0HIftF9ojX9b6xC2QOv4ROqUn9I0L7lQLHseSLtXvdQ000CGLK
+        ImpB8AvrZxnEAsLnGMmA9gCcEw==
+X-Google-Smtp-Source: ADFU+vvxOMrLE7UWc4U3sOBjnDpIeT0PYDzHTREPFV2scLdct95ot/Vnpu3+gjhoqT4JmATJ8gbLaQ==
+X-Received: by 2002:a19:8c4d:: with SMTP id i13mr6100887lfj.42.1583009252289;
+        Sat, 29 Feb 2020 12:47:32 -0800 (PST)
+Received: from localhost.localdomain (c-5ac9225c.014-348-6c756e10.bbcust.telenor.se. [92.34.201.90])
+        by smtp.gmail.com with ESMTPSA id r25sm8524026lfn.36.2020.02.29.12.47.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Feb 2020 12:02:02 -0800 (PST)
-Date:   Sat, 29 Feb 2020 21:02:00 +0100
-From:   Domenico Andreoli <domenico.andreoli@linux.com>
-To:     "Darrick J. Wong" <darrick.wong@oracle.com>
-Cc:     linux-pm@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, mkleinsoft@gmail.com, hch@lst.de,
-        akpm@linux-foundation.org, rjw@rjwysocki.net, len.brown@intel.com,
-        pavel@ucw.cz
-Subject: Re: [PATCH] hibernate: unlock swap bdev for writing when uswsusp is
- active
-Message-ID: <20200229200200.GA10970@dumbo>
-References: <20200229170825.GX8045@magnolia>
- <20200229180716.GA31323@dumbo>
- <20200229183820.GA8037@magnolia>
+        Sat, 29 Feb 2020 12:47:31 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH] thermal: Rephrase the Kconfig text for thermal
+Date:   Sat, 29 Feb 2020 21:45:27 +0100
+Message-Id: <20200229204527.143796-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200229183820.GA8037@magnolia>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Feb 29, 2020 at 10:38:20AM -0800, Darrick J. Wong wrote:
-> On Sat, Feb 29, 2020 at 07:07:16PM +0100, Domenico Andreoli wrote:
-> > On Sat, Feb 29, 2020 at 09:08:25AM -0800, Darrick J. Wong wrote:
-> > > From: Darrick J. Wong <darrick.wong@oracle.com>
-> > > 
-> > > It turns out that there /is/ one use case for programs being able to
-> > > write to swap devices, and that is the userspace hibernation code.  The
-> > > uswsusp ioctls allow userspace to lease parts of swap devices, so turn
-> > > S_SWAPFILE off when invoking suspend.
-> > > 
-> > > Fixes: 1638045c3677 ("mm: set S_SWAPFILE on blockdev swap devices")
-> > > Reported-by: Domenico Andreoli <domenico.andreoli@linux.com>
-> > > Reported-by: Marian Klein <mkleinsoft@gmail.com>
-> > 
-> > I also tested it yesterday but was not satisfied, unfortunately I did
-> > not come with my comment in time.
-> > 
-> > Yes, I confirm that the uswsusp works again but also checked that
-> > swap_relockall() is not triggered at all and therefore after the first
-> > hibernation cycle the S_SWAPFILE bit remains cleared and the whole
-> > swap_relockall() is useless.
-> > 
-> > I'm not sure this patch should be merged in the current form.
-> 
-> NNGGHHGGHGH /me is rapidly losing his sanity and will soon just revert
-> the whole security feature because I'm getting fed up with people
-> yelling at me *while I'm on vacation* trying to *restore* my sanity.  I
-> really don't want to be QAing userspace-directed hibernation right now.
+The thermal subsystem may have relied on sysfs in 2008 when it
+was introduced, but these days the thermal zones will more often
+than not come from the hardware descriptions and not from sysfs.
 
-Maybe we could proceed with the first patch to amend the regression and
-postpone the improved fix to a later patch? Don't loose sanity for this.
+Drop the "Generic" phrases as well: there are no non-generic
+drivers that I know of, the thermal framework is by definition
+generic.
 
-> ...right, the patch is broken because we have to relock the swapfiles in
-> whatever code executes after we jump back to the restored kernel, not in
-> the one that's doing the restoring.  Does this help?
+Reword a bit and fix some grammar.
 
-I made a few unsuccessful attempts in kernel/power/hibernate.c and
-eventually I'm switching to qemu to speed up the test cycle.
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/thermal/Kconfig | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-> OTOH, maybe we should just leave the swapfiles unlocked after resume.
-> Userspace has clearly demonstrated the one usecase for writing to the
-> swapfile, which means anyone could have jumped in while uswsusp was
-> running and written whatever crap they wanted to the parts of the swap
-> file that weren't leased for the hibernate image.
-
-Essentially, if the hibernation is supported the swapfile is not totally
-safe. Maybe user-space hibernation should be a separate option.
-
-> 
-> --D
-
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index 5a05db5438d6..a88aa0f6c5a8 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -1,17 +1,18 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ #
+-# Generic thermal sysfs drivers configuration
++# Generic thermal drivers configuration
+ #
+ 
+ menuconfig THERMAL
+-	bool "Generic Thermal sysfs driver"
++	bool "Thermal drivers"
+ 	help
+-	  Generic Thermal Sysfs driver offers a generic mechanism for
++	  Thermal drivers offers a generic mechanism for
+ 	  thermal management. Usually it's made up of one or more thermal
+-	  zone and cooling device.
++	  zones and cooling devices.
+ 	  Each thermal zone contains its own temperature, trip points,
+-	  cooling devices.
+-	  All platforms with ACPI thermal support can use this driver.
++	  and cooling devices.
++	  All platforms with ACPI or Open Firmware thermal support can use
++	  this driver.
+ 	  If you want this support, you should say Y here.
+ 
+ if THERMAL
 -- 
-rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
-ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
+2.24.1
+
