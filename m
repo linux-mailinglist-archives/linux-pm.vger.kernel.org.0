@@ -2,113 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 037D7174FF0
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Mar 2020 22:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FFC17508D
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Mar 2020 23:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726592AbgCAVfs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Mar 2020 16:35:48 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:45351 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726525AbgCAVfr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Mar 2020 16:35:47 -0500
-Received: by mail-oi1-f195.google.com with SMTP id v19so8372591oic.12;
-        Sun, 01 Mar 2020 13:35:47 -0800 (PST)
+        id S1726527AbgCAWSs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Mar 2020 17:18:48 -0500
+Received: from mail-il1-f194.google.com ([209.85.166.194]:40369 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbgCAWSs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Mar 2020 17:18:48 -0500
+Received: by mail-il1-f194.google.com with SMTP id g6so6383507ilc.7
+        for <linux-pm@vger.kernel.org>; Sun, 01 Mar 2020 14:18:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=idl6CAZ4ITJuBYPn9L4mQrfqGQ3iPRLrH1VIVeU0Djc=;
+        b=f02XpK2ejCZoNah0VS/D/BTPPXjnnwlxaKHbPLZ1gNzdM8WoIRfmLM97gRYrrkNYzb
+         /4UEOO6pkK9VGFzE/xMp8jBkDU7yhZBwVQMTYnUPS6N5I0l3ISvaWhDH1glPSAAsCRCS
+         8YaVQcO/YyHQfzdaQOdKtLXt4hhcm3zjX+xPo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oyE5Vq1uGiCQC0izukDlQ84tv/Yn0CZvAVoYGB9H9JA=;
-        b=GBPBjI47d9t/tivEhqGG9+sADGiJNuAua35AxK2W6WivFNcMrmnRBhEu580hwKj0bL
-         RC0B6u8UUAU+J+Ev/5ec2YSC0fVVLA2cabHjtGcidcXzWicL2TCOmDbii0lWl+/w2tQ9
-         DwoEvbYl+Tzy1OfOsuxxJY/6EJEe+o8wwQftr6056rPJqMu1FgVL6/QjJgXoiEjEQU5h
-         OXrdvpUg5qklJLBm8P82c76s3xm3z4Cq3UT/zCryf19PQLtu/E+i2Yvc09Tv6EsK37dC
-         +lunhe/uuwKzymlcvuXBOITnq+ksHbffu3Oll/ANeX5efJBDvF90y7zppeJ0Srfdzo2x
-         0Dhg==
-X-Gm-Message-State: APjAAAU0d1J/4T++CRMfw4Y5JOCwblkGO9CDN62HCeaw7o0F9oAOtTO7
-        WJrigfc/SP2vgQtUkqX63dQgRiuGaU4Rt3/r0Pk=
-X-Google-Smtp-Source: APXvYqwc36SK4tls9i2nd0gdJfBh8IhAkEVLekPBpOVDM5r7DGtogpYivNmpwoiVXWcwTZcRq+oniU0slts/j2CITUc=
-X-Received: by 2002:aca:4d82:: with SMTP id a124mr10088079oib.103.1583098547283;
- Sun, 01 Mar 2020 13:35:47 -0800 (PST)
+        bh=idl6CAZ4ITJuBYPn9L4mQrfqGQ3iPRLrH1VIVeU0Djc=;
+        b=e70OO81s98cHzNEwmdGN49A0a100+qi2+m8AiZwcrKw8gWdrobTNhgOlwROwefJSFd
+         G9xSH1D/8sNEzX+z98OnQ3gYzDFT2UC71rYAozXz46q1YVdZ09A9nn98spfa2PBDRHhV
+         nt5zgpo3LNey8NPhZyQZ+8r50hrsZig0xFag9iZNcZNa4UesCpwWAEjq1yTjNVOvof4I
+         RHOIu5tALphqhtJWEIGmfMeHbLPChcmsgmW/QvJpcxb1Y3BSg8VQxy7ZkNSRJ/gWZWEJ
+         eh83U1XAD6hSK4I78cc+YBfcWGJ6nDipuHXda89tu3t8YFx7bvmz2yJ4SC3cFRUUqPBe
+         NZGg==
+X-Gm-Message-State: APjAAAXerxVno1tqDoauy5bhu9aiPkUmq8IehdOeSCGtGjSMukGwQ0om
+        0k2ipE+/x2lfGfdl7VQAHgO88BNVoFnlyBLmmoWYwg==
+X-Google-Smtp-Source: APXvYqwLnS0nfF1/cQS73Q2LPYiqa+EUG8rSDYv9Fre1Q/MkLceZD9/brJKRSb0IQJQPd3q9fUNP9keq8GFm1k6ZCHQ=
+X-Received: by 2002:a92:3cd7:: with SMTP id j84mr15067873ilf.176.1583101127203;
+ Sun, 01 Mar 2020 14:18:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20200229170825.GX8045@magnolia> <20200229180716.GA31323@dumbo>
- <20200229183820.GA8037@magnolia> <20200229200200.GA10970@dumbo>
-In-Reply-To: <20200229200200.GA10970@dumbo>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 1 Mar 2020 22:35:36 +0100
-Message-ID: <CAJZ5v0iHaZyfuTnqJyM6u=UU=+W6yRuM_Q6iUvB2UudANuwfgA@mail.gmail.com>
-Subject: Re: [PATCH] hibernate: unlock swap bdev for writing when uswsusp is active
-To:     Domenico Andreoli <domenico.andreoli@linux.com>
-Cc:     "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-fsdevel@vger.kernel.org, mkleinsoft@gmail.com,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
+References: <20200228174630.8989-1-madhuparnabhowmik10@gmail.com>
+ <CAJZ5v0jhw+cVm=ViiOtZgKr+a1L_PbeVPNXpsPbgghUvMPODSA@mail.gmail.com>
+ <C2E57D31-A459-4F5F-8ECF-484FBB26C065@joelfernandes.org> <CAJZ5v0jTSKd_23fJhM+XUmFX_yTjcD+c_s1Jvi3HA1EmXPkzZw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jTSKd_23fJhM+XUmFX_yTjcD+c_s1Jvi3HA1EmXPkzZw@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sun, 1 Mar 2020 17:18:36 -0500
+Message-ID: <CAEXW_YRL0kum5yVm+9V8i_PK2FcHfPeUOxJKZ+T8P3zqhATxJg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drivers: base: power: main: Use built-in RCU list checking
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Amol Grover <frextrite@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Feb 29, 2020 at 9:02 PM Domenico Andreoli
-<domenico.andreoli@linux.com> wrote:
+On Sun, Mar 1, 2020 at 4:23 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> On Sat, Feb 29, 2020 at 10:38:20AM -0800, Darrick J. Wong wrote:
-> > On Sat, Feb 29, 2020 at 07:07:16PM +0100, Domenico Andreoli wrote:
-> > > On Sat, Feb 29, 2020 at 09:08:25AM -0800, Darrick J. Wong wrote:
-> > > > From: Darrick J. Wong <darrick.wong@oracle.com>
-> > > >
-> > > > It turns out that there /is/ one use case for programs being able to
-> > > > write to swap devices, and that is the userspace hibernation code.  The
-> > > > uswsusp ioctls allow userspace to lease parts of swap devices, so turn
-> > > > S_SWAPFILE off when invoking suspend.
-> > > >
-> > > > Fixes: 1638045c3677 ("mm: set S_SWAPFILE on blockdev swap devices")
-> > > > Reported-by: Domenico Andreoli <domenico.andreoli@linux.com>
-> > > > Reported-by: Marian Klein <mkleinsoft@gmail.com>
-> > >
-> > > I also tested it yesterday but was not satisfied, unfortunately I did
-> > > not come with my comment in time.
-> > >
-> > > Yes, I confirm that the uswsusp works again but also checked that
-> > > swap_relockall() is not triggered at all and therefore after the first
-> > > hibernation cycle the S_SWAPFILE bit remains cleared and the whole
-> > > swap_relockall() is useless.
-> > >
-> > > I'm not sure this patch should be merged in the current form.
+> On Sun, Mar 1, 2020 at 9:53 PM <joel@joelfernandes.org> wrote:
 > >
-> > NNGGHHGGHGH /me is rapidly losing his sanity and will soon just revert
-> > the whole security feature because I'm getting fed up with people
-> > yelling at me *while I'm on vacation* trying to *restore* my sanity.  I
-> > really don't want to be QAing userspace-directed hibernation right now.
+> >
+> >
+> > On March 1, 2020 3:12:53 PM EST, "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > >On Fri, Feb 28, 2020 at 6:47 PM <madhuparnabhowmik10@gmail.com> wrote:
+> > >>
+> > >> From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+> > >>
+> > >> This patch passes the cond argument to list_for_each_entry_rcu()
+> > >> to fix the following false-positive lockdep warnings:
+> > >>
+> > >> [  330.302784] =============================
+> > >> [  330.302789] WARNING: suspicious RCU usage
+> > >> [  330.302796] 5.6.0-rc1+ #5 Not tainted
+> > >> [  330.302801] -----------------------------
+> > >> [  330.302808] drivers/base/power/main.c:326 RCU-list traversed in
+> > >non-reader section!!
+> > >>
+> > >> [  330.303303] =============================
+> > >> [  330.303307] WARNING: suspicious RCU usage
+> > >> [  330.303311] 5.6.0-rc1+ #5 Not tainted
+> > >> [  330.303315] -----------------------------
+> > >> [  330.303319] drivers/base/power/main.c:1698 RCU-list traversed in
+> > >non-reader section!!
+> > >>
+> > >> [  331.934969] =============================
+> > >> [  331.934971] WARNING: suspicious RCU usage
+> > >> [  331.934973] 5.6.0-rc1+ #5 Not tainted
+> > >> [  331.934975] -----------------------------
+> > >> [  331.934977] drivers/base/power/main.c:1238 RCU-list traversed in
+> > >non-reader section!!
+> > >>
+> > >> [  332.467772] WARNING: suspicious RCU usage
+> > >> [  332.467775] 5.6.0-rc1+ #5 Not tainted
+> > >> [  332.467775] -----------------------------
+> > >> [  332.467778] drivers/base/power/main.c:269 RCU-list traversed in
+> > >non-reader section!!
+> > >
+> > >I don't see these warnings in the kernels run locally here.
+> > >
+> > >What do you do to get them?
+> > >
+> > >Joel, any comments here?
+> >
+> > You have to enable lockdep in your config. Does your setup have that?
 >
-> Maybe we could proceed with the first patch to amend the regression and
-> postpone the improved fix to a later patch? Don't loose sanity for this.
+> CONFIG_LOCK_DEBUGGING_SUPPORT=y
+> CONFIG_PROVE_LOCKING=y
+> CONFIG_DEBUG_SPINLOCK=y
+> CONFIG_DEBUG_LOCK_ALLOC=y
+> CONFIG_LOCKDEP=y
 
-I would concur here.
+This should be it. I am not sure what else Madhuparna did to trigger
+it. Madhuparna, could you elaborate?
 
-> > ...right, the patch is broken because we have to relock the swapfiles in
-> > whatever code executes after we jump back to the restored kernel, not in
-> > the one that's doing the restoring.  Does this help?
->
-> I made a few unsuccessful attempts in kernel/power/hibernate.c and
-> eventually I'm switching to qemu to speed up the test cycle.
->
-> > OTOH, maybe we should just leave the swapfiles unlocked after resume.
-> > Userspace has clearly demonstrated the one usecase for writing to the
-> > swapfile, which means anyone could have jumped in while uswsusp was
-> > running and written whatever crap they wanted to the parts of the swap
-> > file that weren't leased for the hibernate image.
->
-> Essentially, if the hibernation is supported the swapfile is not totally
-> safe.
+thanks,
 
-But that's only the case with the userspace variant, isn't it?
-
-> Maybe user-space hibernation should be a separate option.
-
-That actually is not a bad idea at all in my view.
-
-Thanks!
+ - Joel
