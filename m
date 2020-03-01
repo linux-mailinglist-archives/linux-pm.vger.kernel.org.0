@@ -2,110 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A184174D91
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Mar 2020 14:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DEAF174DB2
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Mar 2020 15:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726465AbgCANyh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Mar 2020 08:54:37 -0500
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:34234 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725874AbgCANyh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Mar 2020 08:54:37 -0500
-Received: by mail-vk1-f196.google.com with SMTP id w67so2247153vkf.1
-        for <linux-pm@vger.kernel.org>; Sun, 01 Mar 2020 05:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4p3ea/93vVO3AS5Nk2JVeePiOdyOs8HUXKWbFRb7Ksw=;
-        b=VQu+9m3TVZBXWiuCW/69+JNNOucQrwjY+YC9TtY29U5TBfL3hxQe80JZBXno0Seggc
-         qSTxsFljwgZ1b2AK8p0Ha05DHE4ebJGmQttyqmqh1roBtAJ6YMGEsmXCLnsLWV0jXOn3
-         jat4muoLvWi6dEOycIrmkPbZGViyHTjQg6xWPaJtUJdJt0oLeTK8EpK4DYXk5dR4oAI9
-         qwf6IekSmR1MiUjb3R/wLf3LfyE4ptDTGqoMOepZffotKDS5jch5i8abWm3ZT0PEG089
-         aCA3E9o8SKLK8VsCL3KlH1FDpO5k5/9QW9OUGT0nx+lJCG+jHMyc10FNqgNTLrDqMcOB
-         nu8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4p3ea/93vVO3AS5Nk2JVeePiOdyOs8HUXKWbFRb7Ksw=;
-        b=hZ73SieknTmHRsPphOVrYe5kMly7FLIljmjoVk6Sk3cP8+xg3PP+k7/LTrHaH1zgaU
-         5VhinMi/7oWQTVwgZlgVG/RxPvFC93++Cll0W1HJE/OHbVuQIg+w68tlxbk169dWp64P
-         QExGebbaSZMotebN3e0MZbgVE/7Ax+LXsvXXApy42NDFF3YzNW5pyXt2ivKgGu6NX0Jn
-         el3aEjKG/edmeXFOM6nRd9k/FCS2zoQ1dgw6BDLl8R9u6Fxvs7G0QZNx8KUfhWm9wVIL
-         KiJxcPyxTVKcXnz6c8tDI7twTZVqXc5unRWho0JRHdadw+15eLsE36qGqjWpl/1H8yDy
-         j1hw==
-X-Gm-Message-State: ANhLgQ36CR3oIE3OhPrDx87z/WA+3yNdhKiVSibOqoDlRiaft21d3QFz
-        hHpTqN194MZipUFvQ0C+/WuzNZOTlQpZin34nEM3mQ==
-X-Google-Smtp-Source: ADFU+vtyKNi2NBK3A4Jk6IXT5Ag4VKXG3PE84eY3507ibdyko3BtKPfOyqM9xkKIc/gx0to3rWSP7PEFB2fxtIp9kjI=
-X-Received: by 2002:ac5:c7a9:: with SMTP id d9mr7036811vkn.79.1583070875758;
- Sun, 01 Mar 2020 05:54:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20200229204527.143796-1-linus.walleij@linaro.org>
-In-Reply-To: <20200229204527.143796-1-linus.walleij@linaro.org>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Sun, 1 Mar 2020 19:24:24 +0530
-Message-ID: <CAHLCerPmxgXbMGrkJ6O1FuAE_JCv0zHnjNuXJ0fVy66t-87qPg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: Rephrase the Kconfig text for thermal
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726536AbgCAOhD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Mar 2020 09:37:03 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:42626 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725945AbgCAOhD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 1 Mar 2020 09:37:03 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E3A42200C18;
+        Sun,  1 Mar 2020 15:37:01 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3AB4B200B50;
+        Sun,  1 Mar 2020 15:36:56 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 28FC6402D5;
+        Sun,  1 Mar 2020 22:36:49 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH] thermal: imx_thermal: Use __maybe_unused instead of CONFIG_PM_SLEEP
+Date:   Sun,  1 Mar 2020 22:30:56 +0800
+Message-Id: <1583073056-32297-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Mar 1, 2020 at 2:17 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> The thermal subsystem may have relied on sysfs in 2008 when it
-> was introduced, but these days the thermal zones will more often
-> than not come from the hardware descriptions and not from sysfs.
->
-> Drop the "Generic" phrases as well: there are no non-generic
-> drivers that I know of, the thermal framework is by definition
-> generic.
->
-> Reword a bit and fix some grammar.
->
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Use __maybe_unused for power management related functions instead
+of #if CONFIG_PM_SLEEP to simply the code.
 
-Acked-by: Amit Kucheria <amit.kucheria@linaro.org>
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+ drivers/thermal/imx_thermal.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-> ---
->  drivers/thermal/Kconfig | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 5a05db5438d6..a88aa0f6c5a8 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -1,17 +1,18 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  #
-> -# Generic thermal sysfs drivers configuration
-> +# Generic thermal drivers configuration
->  #
->
->  menuconfig THERMAL
-> -       bool "Generic Thermal sysfs driver"
-> +       bool "Thermal drivers"
->         help
-> -         Generic Thermal Sysfs driver offers a generic mechanism for
-> +         Thermal drivers offers a generic mechanism for
->           thermal management. Usually it's made up of one or more thermal
-> -         zone and cooling device.
-> +         zones and cooling devices.
->           Each thermal zone contains its own temperature, trip points,
-> -         cooling devices.
-> -         All platforms with ACPI thermal support can use this driver.
-> +         and cooling devices.
-> +         All platforms with ACPI or Open Firmware thermal support can use
-> +         this driver.
->           If you want this support, you should say Y here.
->
->  if THERMAL
-> --
-> 2.24.1
->
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index bb6754a..e75dda5 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -878,8 +878,7 @@ static int imx_thermal_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_PM_SLEEP
+-static int imx_thermal_suspend(struct device *dev)
++static int __maybe_unused imx_thermal_suspend(struct device *dev)
+ {
+ 	struct imx_thermal_data *data = dev_get_drvdata(dev);
+ 	struct regmap *map = data->tempmon;
+@@ -900,7 +899,7 @@ static int imx_thermal_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int imx_thermal_resume(struct device *dev)
++static int __maybe_unused imx_thermal_resume(struct device *dev)
+ {
+ 	struct imx_thermal_data *data = dev_get_drvdata(dev);
+ 	struct regmap *map = data->tempmon;
+@@ -918,7 +917,6 @@ static int imx_thermal_resume(struct device *dev)
+ 
+ 	return 0;
+ }
+-#endif
+ 
+ static SIMPLE_DEV_PM_OPS(imx_thermal_pm_ops,
+ 			 imx_thermal_suspend, imx_thermal_resume);
+-- 
+2.7.4
+
