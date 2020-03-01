@@ -2,81 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC8C174D82
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Mar 2020 14:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A184174D91
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Mar 2020 14:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbgCAN0o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Mar 2020 08:26:44 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37884 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725787AbgCAN0n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Mar 2020 08:26:43 -0500
-Received: by mail-pg1-f195.google.com with SMTP id z12so4031332pgl.4
-        for <linux-pm@vger.kernel.org>; Sun, 01 Mar 2020 05:26:43 -0800 (PST)
+        id S1726465AbgCANyh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Mar 2020 08:54:37 -0500
+Received: from mail-vk1-f196.google.com ([209.85.221.196]:34234 "EHLO
+        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725874AbgCANyh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Mar 2020 08:54:37 -0500
+Received: by mail-vk1-f196.google.com with SMTP id w67so2247153vkf.1
+        for <linux-pm@vger.kernel.org>; Sun, 01 Mar 2020 05:54:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=1su01q6KFmll99qzXEcg9FRrNXepwO4Dn/UlCMlPU6k=;
-        b=BU/Yt0NSo8hEjIq03x2ijsSo0ghx2MscCo+4tSyzTRpenVGdm9z0MjlP5FK7kBNoZR
-         Lwr7LjDJ0NqCCssJqySMvIdrBRxtvFL3732z2kuHYB1FesYGWGP3jkRk508n3yKzOiHB
-         2SlEQo8ZY0p2M7oV0oSCTmSaxeXUzvPpreX7NvZIIVRnqjVARC1MzJf0GY0L9kBDhOJn
-         RTtSHOCDFBjJM5ImMCpGVwi3HMDk46Aq6ZYsDfIB6t6DY/7FfYDIPtCoYoFK45N4tlS8
-         oT9VWF+ev7QAIGm4CDca7Mksz9fd7+aSs2sM5CMUGSfvVjOTVNFxVz5GxMl04Bq/BzOK
-         ZsHg==
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4p3ea/93vVO3AS5Nk2JVeePiOdyOs8HUXKWbFRb7Ksw=;
+        b=VQu+9m3TVZBXWiuCW/69+JNNOucQrwjY+YC9TtY29U5TBfL3hxQe80JZBXno0Seggc
+         qSTxsFljwgZ1b2AK8p0Ha05DHE4ebJGmQttyqmqh1roBtAJ6YMGEsmXCLnsLWV0jXOn3
+         jat4muoLvWi6dEOycIrmkPbZGViyHTjQg6xWPaJtUJdJt0oLeTK8EpK4DYXk5dR4oAI9
+         qwf6IekSmR1MiUjb3R/wLf3LfyE4ptDTGqoMOepZffotKDS5jch5i8abWm3ZT0PEG089
+         aCA3E9o8SKLK8VsCL3KlH1FDpO5k5/9QW9OUGT0nx+lJCG+jHMyc10FNqgNTLrDqMcOB
+         nu8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=1su01q6KFmll99qzXEcg9FRrNXepwO4Dn/UlCMlPU6k=;
-        b=jiGVAafvivkWLWa1grI8uSNHMkvzzIc8kqD0QUGLa2nzufTgcQtt4h4XiTvoSnmqwg
-         aDnQV60tTcbBIbb+0kHJScIAC9jAipjEuCv8H27+wfbSczWdn/qE3blhJlxLRGpe4c06
-         +KXlZktF4geptpKKDfWcqaTO/K0QuGxq35wpRbP/UCzPPXGyx6suZWCGs4p/qtVRsfPQ
-         BtwrW5bMrtMIQXRtjqY+WM5+iRadeRVKiVHgHWsfUaPhvs+zNHNjo/AZ+nzZQblJo0dw
-         vk76Y3zoElFnhUX6fCZsbXIMU88LE7RjWbpZPqczvbxKK6evQ2Jai/x8laS/kE58zklZ
-         IYAg==
-X-Gm-Message-State: APjAAAXJ1+qbEhYoBc47sJV4aIgYd8fQYt1W+z+anINQFlwONB4cSUsa
-        b4WezqTgi+ei7Q1Fu285yMM=
-X-Google-Smtp-Source: APXvYqyCHxKHHKz7A0SOsnAONlCfYpbKIpBMxJk7gu/FxW6k0vKaYTmDAdq2Wy7ioX5w31ypcDcdYw==
-X-Received: by 2002:a63:fe43:: with SMTP id x3mr14958262pgj.119.1583069202898;
-        Sun, 01 Mar 2020 05:26:42 -0800 (PST)
-Received: from localhost ([43.224.245.179])
-        by smtp.gmail.com with ESMTPSA id w17sm12445333pfg.33.2020.03.01.05.26.41
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 01 Mar 2020 05:26:42 -0800 (PST)
-From:   qiwuchen55@gmail.com
-To:     rjw@rjwysocki.net, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, chenqiwu <chenqiwu@xiaomi.com>
-Subject: [PATCH] cpufreq: fix a mem leak caused by policy->max_freq_req in cpufreq_policy_free()
-Date:   Sun,  1 Mar 2020 21:26:38 +0800
-Message-Id: <1583069198-21060-1-git-send-email-qiwuchen55@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4p3ea/93vVO3AS5Nk2JVeePiOdyOs8HUXKWbFRb7Ksw=;
+        b=hZ73SieknTmHRsPphOVrYe5kMly7FLIljmjoVk6Sk3cP8+xg3PP+k7/LTrHaH1zgaU
+         5VhinMi/7oWQTVwgZlgVG/RxPvFC93++Cll0W1HJE/OHbVuQIg+w68tlxbk169dWp64P
+         QExGebbaSZMotebN3e0MZbgVE/7Ax+LXsvXXApy42NDFF3YzNW5pyXt2ivKgGu6NX0Jn
+         el3aEjKG/edmeXFOM6nRd9k/FCS2zoQ1dgw6BDLl8R9u6Fxvs7G0QZNx8KUfhWm9wVIL
+         KiJxcPyxTVKcXnz6c8tDI7twTZVqXc5unRWho0JRHdadw+15eLsE36qGqjWpl/1H8yDy
+         j1hw==
+X-Gm-Message-State: ANhLgQ36CR3oIE3OhPrDx87z/WA+3yNdhKiVSibOqoDlRiaft21d3QFz
+        hHpTqN194MZipUFvQ0C+/WuzNZOTlQpZin34nEM3mQ==
+X-Google-Smtp-Source: ADFU+vtyKNi2NBK3A4Jk6IXT5Ag4VKXG3PE84eY3507ibdyko3BtKPfOyqM9xkKIc/gx0to3rWSP7PEFB2fxtIp9kjI=
+X-Received: by 2002:ac5:c7a9:: with SMTP id d9mr7036811vkn.79.1583070875758;
+ Sun, 01 Mar 2020 05:54:35 -0800 (PST)
+MIME-Version: 1.0
+References: <20200229204527.143796-1-linus.walleij@linaro.org>
+In-Reply-To: <20200229204527.143796-1-linus.walleij@linaro.org>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Sun, 1 Mar 2020 19:24:24 +0530
+Message-ID: <CAHLCerPmxgXbMGrkJ6O1FuAE_JCv0zHnjNuXJ0fVy66t-87qPg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Rephrase the Kconfig text for thermal
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: chenqiwu <chenqiwu@xiaomi.com>
+On Sun, Mar 1, 2020 at 2:17 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> The thermal subsystem may have relied on sysfs in 2008 when it
+> was introduced, but these days the thermal zones will more often
+> than not come from the hardware descriptions and not from sysfs.
+>
+> Drop the "Generic" phrases as well: there are no non-generic
+> drivers that I know of, the thermal framework is by definition
+> generic.
+>
+> Reword a bit and fix some grammar.
+>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-There is a mem leak in cpufreq_policy_free() that the resource of
-policy->max_freq_req pointer is not free.
+Acked-by: Amit Kucheria <amit.kucheria@linaro.org>
 
-Signed-off-by: chenqiwu <chenqiwu@xiaomi.com>
----
- drivers/cpufreq/cpufreq.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index cbe6c94..6756f7a 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1280,6 +1280,8 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
- 		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
- 					     CPUFREQ_REMOVE_POLICY, policy);
- 		freq_qos_remove_request(policy->max_freq_req);
-+		kfree(policy->max_freq_req);
-+		policy->max_freq_req = NULL;
- 	}
- 
- 	freq_qos_remove_request(policy->min_freq_req);
--- 
-1.9.1
-
+> ---
+>  drivers/thermal/Kconfig | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 5a05db5438d6..a88aa0f6c5a8 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -1,17 +1,18 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  #
+> -# Generic thermal sysfs drivers configuration
+> +# Generic thermal drivers configuration
+>  #
+>
+>  menuconfig THERMAL
+> -       bool "Generic Thermal sysfs driver"
+> +       bool "Thermal drivers"
+>         help
+> -         Generic Thermal Sysfs driver offers a generic mechanism for
+> +         Thermal drivers offers a generic mechanism for
+>           thermal management. Usually it's made up of one or more thermal
+> -         zone and cooling device.
+> +         zones and cooling devices.
+>           Each thermal zone contains its own temperature, trip points,
+> -         cooling devices.
+> -         All platforms with ACPI thermal support can use this driver.
+> +         and cooling devices.
+> +         All platforms with ACPI or Open Firmware thermal support can use
+> +         this driver.
+>           If you want this support, you should say Y here.
+>
+>  if THERMAL
+> --
+> 2.24.1
+>
