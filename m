@@ -2,91 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A357B174991
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Feb 2020 23:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64228174A92
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Mar 2020 01:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727180AbgB2WNL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Feb 2020 17:13:11 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:37256 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727170AbgB2WNL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Feb 2020 17:13:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=qaft5TU1yxXKKuYNsJoRBGojYQzg8g2jogl+anXhnKQ=; b=aaHzDW0eJaKTaR8mp/hXCbfK9F
-        hJAy5dl3JfqRObZdusXFfbhRIjSkPzDYYOMnmtt0mPnK7Qqm62S5HiKHUDeueEKFUjZtYSa71JXkG
-        79bTGhQc/6JPQG8rxwweqANYwo1jqcELbVcDw37ssiM3R3RM3ghkiN5picjS7Gj97jtNhp0PAbZaj
-        Z7vEOUiccnhRiEyQTQz6q7+FigzBhFK+TOEBWdl2diOHhIojzhINXx58wZpKcOTxYAovHVDVUEbI8
-        j+4CkjdgLmYbu6hjtjOG6thjWfrmGlygWSjhaGp6CaKiAVphMh4wWcR+bayIsSfhk33kj4/8BdI7r
-        pslWNW2A==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j8AMA-0005YE-Uv; Sat, 29 Feb 2020 22:13:11 +0000
-Subject: Re: [PATCH] thermal: Rephrase the Kconfig text for thermal
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org
-References: <20200229204527.143796-1-linus.walleij@linaro.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <3e91a244-042d-f19e-0f31-ac7301a49196@infradead.org>
-Date:   Sat, 29 Feb 2020 14:13:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1727205AbgCAAs2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Feb 2020 19:48:28 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56275 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726786AbgCAAs2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 29 Feb 2020 19:48:28 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48VPlW5nYLz9sPk;
+        Sun,  1 Mar 2020 11:48:23 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1583023705;
+        bh=4nRI6rwZRJmJBCSa2D7NMwK+7ECxFcV3Jplu7f2M8vI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bQndGde94p9FyOTmTOsKt5AnSDdUQoxCwxy7l9+8ZpBXs+oyYGsT/USUpwwCYFUeB
+         OAs2OK8w6ainF6Hb1E0AJ3CtUFbC/Gb0BjAl8V8sCSxedVthQ/5mF0cXHyhWH3URuy
+         548JnLhcYrDjKtEwM62cZV7xhRlwqKtlLRSnogfOpYniYaEqqhZXM/iY1dM+4u/X/N
+         6kc5DIlzx4Xg9x6Gdes2FktrED8OwRU/yMDa6+PP8t50g89z4T4PxnCkpVeVv3S4db
+         oEtYHaxZc1SvKAmmMUypMuz3UqBveSsmjCegll5CS64Xsw+gfj6rEWt1n7xZ+786FC
+         OU6eoFzkoU47Q==
+Date:   Sun, 1 Mar 2020 11:47:50 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kevin Hilman <khilman@baylibre.com>
+Cc:     Carlo Caione <carlo@caione.org>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        linux-amlogic@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        "Neil Armstrong" <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        "Jian Hu" <jian.hu@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: Re: [PATCH] soc: amlogic: fix compile failure with
+ MESON_SECURE_PM_DOMAINS & !MESON_SM
+Message-ID: <20200301114750.7d270124@canb.auug.org.au>
+In-Reply-To: <7hzhd19vuj.fsf@baylibre.com>
+References: <1581955933-69832-1-git-send-email-jianxin.pan@amlogic.com>
+        <20200218080743.07e58c6e@canb.auug.org.au>
+        <20200218092229.0448d266@canb.auug.org.au>
+        <20200224101654.530f1837@canb.auug.org.au>
+        <7hzhd19vuj.fsf@baylibre.com>
 MIME-Version: 1.0
-In-Reply-To: <20200229204527.143796-1-linus.walleij@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/Kf1.E4dLddnNTqvZx6GlV0A";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2/29/20 12:45 PM, Linus Walleij wrote:
-> The thermal subsystem may have relied on sysfs in 2008 when it
-> was introduced, but these days the thermal zones will more often
-> than not come from the hardware descriptions and not from sysfs.
-> 
-> Drop the "Generic" phrases as well: there are no non-generic
-> drivers that I know of, the thermal framework is by definition
-> generic.
-> 
-> Reword a bit and fix some grammar.
-> 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  drivers/thermal/Kconfig | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 5a05db5438d6..a88aa0f6c5a8 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -1,17 +1,18 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  #
-> -# Generic thermal sysfs drivers configuration
-> +# Generic thermal drivers configuration
->  #
->  
->  menuconfig THERMAL
-> -	bool "Generic Thermal sysfs driver"
-> +	bool "Thermal drivers"
->  	help
-> -	  Generic Thermal Sysfs driver offers a generic mechanism for
-> +	  Thermal drivers offers a generic mechanism for
+--Sig_/Kf1.E4dLddnNTqvZx6GlV0A
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-preferably:               offer
+Hi Kevin,
 
->  	  thermal management. Usually it's made up of one or more thermal
-> -	  zone and cooling device.
-> +	  zones and cooling devices.
+On Sat, 29 Feb 2020 17:55:32 +0100 Kevin Hilman <khilman@baylibre.com> wrot=
+e:
+>
+> I've fixed up the trailer whitespace an queued this up now, so should
+> show up in linux next shortly.
 
+Thanks.
 
--- 
-~Randy
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/Kf1.E4dLddnNTqvZx6GlV0A
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5bBjYACgkQAVBC80lX
+0Gw+KAgAhjy4Z4V15rVXk29DVizB7BmoTp0AHlbwyBOXdg1fqDDAgpSapQv/aaTF
+t/kpWrI8HPqJIV33mTw9Y4ihIwM3w3hurf1Z3fal9lem4IITW6hlcuXG8jm1I0Zh
+rMlvimE+P9nv7UYTDqgQx0+v7nw3Y0kxJTkkoRbtPMOBeX/mq3oEMqHmvyTRzjjf
++uqsMBh50kotDakasWPX47i7cULdhXg3BUd/lPYg7n1wJ179GLOl0F83CLmbeCtK
+D5PxpxIZmQEvgFModR81zi8NPz46WCa1WeSQ0edqS2AYBe8p6FWYyEeBCmU2b2ER
+xjSTCdXBgNDI8gD67V0Tx7Qs1++sjA==
+=V59f
+-----END PGP SIGNATURE-----
+
+--Sig_/Kf1.E4dLddnNTqvZx6GlV0A--
