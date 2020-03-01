@@ -2,80 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCBE174F6D
-	for <lists+linux-pm@lfdr.de>; Sun,  1 Mar 2020 21:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE92B174F77
+	for <lists+linux-pm@lfdr.de>; Sun,  1 Mar 2020 21:13:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725945AbgCAUJj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Mar 2020 15:09:39 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:46255 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725895AbgCAUJj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Mar 2020 15:09:39 -0500
-Received: by mail-ot1-f65.google.com with SMTP id g96so7611398otb.13
-        for <linux-pm@vger.kernel.org>; Sun, 01 Mar 2020 12:09:39 -0800 (PST)
+        id S1726146AbgCAUNG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Mar 2020 15:13:06 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:36937 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726050AbgCAUNG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Mar 2020 15:13:06 -0500
+Received: by mail-oi1-f194.google.com with SMTP id 5so2697774oiy.4;
+        Sun, 01 Mar 2020 12:13:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MtD4IYwYS7GzofXx2+a8VRKjZpPgD2sFbmNmLzogN9M=;
-        b=dz3IyhN5C16rDH2td5yrJTlvx5Vv7nRvyAxwusQ7gpwneLGYj+Goqjzd6PKLtNiDK+
-         by3/vmr3coHCeRv0RMvkkCw/M5xKRWO9XHGZ/QBP1ti4yjlw+Y8WlUW3LhX1E1oWEb9f
-         pdKnMWWcEnXpvsv3pD5fzlBhpfseiP8zahtJoomKtRmevwDLbBk+qtPVAtP4cMGQbS4I
-         ZgFLwNxnpglxdyJ56MYI9roRKvEgaPdikQO+VL5Gc0j4Hqz7zo4ajcdJ80lIjryrX9Qy
-         HBEDvgO1QgXSbbaz6g+eZVOv/0DxT0f7DhK701J7jslxzzI80N9O96ezikhU93XpIYbS
-         +zeA==
-X-Gm-Message-State: ANhLgQ1To6sVsgCHNMleNZ9wrgbnX6s7BqF+ty/I8cNighhej9KmoE4q
-        XrC/iMfjztdPAsBE1DXLvyePQdS2HkLrttFTBrSgXg==
-X-Google-Smtp-Source: ADFU+vsgTnwoQJsl2QX+sR58R5F1jdB0HHzyxcAj/Ey8vzvvMa38N6Ez+MLzl5vIIiQGcKf9/0U/fmlPelMSqJ9XZNk=
-X-Received: by 2002:a05:6830:110:: with SMTP id i16mr2126749otp.189.1583093378645;
- Sun, 01 Mar 2020 12:09:38 -0800 (PST)
+        bh=EFSBXCeJ1jB8KcQMkp6NN1TRtUlXUbslxnRcWQMIR6I=;
+        b=he73iD3UgVGkFxGZI4jh1kZswVamv7f8BTzZWf6eR5iF5ZeVryLEv2aO4JbY+XxXRD
+         Gyp5kV+Z2y9k5J3njjuj8MwG4T6lWegl5/Z6ChA2gzzd6vuBp5sCo+vs742QGioyjogj
+         VOaGWryoS+4bj11YQgBOb1EnPUmcFLJQuPyOuyMLd3Dz8SUCOSPSKruJW+BeJQIbjtVo
+         DEFld/Mt9ylGQpVVWj8IYZk8hvyCO3sncioLddSbVTg5Budz7Qo9TPP1HhG1AdKmzhEZ
+         1Ak0MxbmjAP+/mWR8t9Ls3DdmOyMLLS+3JXgCTD3P3G2jz/cun8idJQOuPUUEBx3Hv61
+         Ku2A==
+X-Gm-Message-State: APjAAAXSj4NJ4oqBkR877QzqEis5Mki9oBkSKsCIswnYc2RJFGoUpBbc
+        ezT3aZoVhJKJJUjQLjdWq31zbffZs0QZxY7Mt88=
+X-Google-Smtp-Source: APXvYqxbxPHmtfRGPpPP1hveHtyD20S1Jgyu5yQkA7cDSv5uULtoifR1CJMcxL/u/2XdY7RWZkl38PW9OoOvYdgqVlM=
+X-Received: by 2002:aca:c044:: with SMTP id q65mr4390997oif.68.1583093583908;
+ Sun, 01 Mar 2020 12:13:03 -0800 (PST)
 MIME-Version: 1.0
-References: <1583069198-21060-1-git-send-email-qiwuchen55@gmail.com>
-In-Reply-To: <1583069198-21060-1-git-send-email-qiwuchen55@gmail.com>
+References: <20200228174630.8989-1-madhuparnabhowmik10@gmail.com>
+In-Reply-To: <20200228174630.8989-1-madhuparnabhowmik10@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 1 Mar 2020 21:09:27 +0100
-Message-ID: <CAJZ5v0jqGm-u-inJ4R-Qd=muqyKHxDOGAdtgaaxMq6BHa6Wwnw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: fix a mem leak caused by policy->max_freq_req in cpufreq_policy_free()
-To:     qiwuchen55@gmail.com
+Date:   Sun, 1 Mar 2020 21:12:53 +0100
+Message-ID: <CAJZ5v0jhw+cVm=ViiOtZgKr+a1L_PbeVPNXpsPbgghUvMPODSA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drivers: base: power: main: Use built-in RCU list checking
+To:     madhuparnabhowmik10@gmail.com,
+        Joel Fernandes <joel@joelfernandes.org>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        chenqiwu <chenqiwu@xiaomi.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        frextrite@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org, paulmck@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Mar 1, 2020 at 2:26 PM <qiwuchen55@gmail.com> wrote:
+On Fri, Feb 28, 2020 at 6:47 PM <madhuparnabhowmik10@gmail.com> wrote:
 >
-> From: chenqiwu <chenqiwu@xiaomi.com>
+> From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 >
-> There is a mem leak in cpufreq_policy_free() that the resource of
-> policy->max_freq_req pointer is not free.
+> This patch passes the cond argument to list_for_each_entry_rcu()
+> to fix the following false-positive lockdep warnings:
+>
+> [  330.302784] =============================
+> [  330.302789] WARNING: suspicious RCU usage
+> [  330.302796] 5.6.0-rc1+ #5 Not tainted
+> [  330.302801] -----------------------------
+> [  330.302808] drivers/base/power/main.c:326 RCU-list traversed in non-reader section!!
+>
+> [  330.303303] =============================
+> [  330.303307] WARNING: suspicious RCU usage
+> [  330.303311] 5.6.0-rc1+ #5 Not tainted
+> [  330.303315] -----------------------------
+> [  330.303319] drivers/base/power/main.c:1698 RCU-list traversed in non-reader section!!
+>
+> [  331.934969] =============================
+> [  331.934971] WARNING: suspicious RCU usage
+> [  331.934973] 5.6.0-rc1+ #5 Not tainted
+> [  331.934975] -----------------------------
+> [  331.934977] drivers/base/power/main.c:1238 RCU-list traversed in non-reader section!!
+>
+> [  332.467772] WARNING: suspicious RCU usage
+> [  332.467775] 5.6.0-rc1+ #5 Not tainted
+> [  332.467775] -----------------------------
+> [  332.467778] drivers/base/power/main.c:269 RCU-list traversed in non-reader section!!
 
-That's incorrect AFAICS.
+I don't see these warnings in the kernels run locally here.
 
-Thanks!
+What do you do to get them?
 
-> Signed-off-by: chenqiwu <chenqiwu@xiaomi.com>
+Joel, any comments here?
+
+>
+> Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 > ---
->  drivers/cpufreq/cpufreq.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/base/power/main.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index cbe6c94..6756f7a 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1280,6 +1280,8 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
->                 blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
->                                              CPUFREQ_REMOVE_POLICY, policy);
->                 freq_qos_remove_request(policy->max_freq_req);
-> +               kfree(policy->max_freq_req);
-> +               policy->max_freq_req = NULL;
->         }
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index 0e99a760aebd..742c05f3c1e7 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -266,7 +266,8 @@ static void dpm_wait_for_suppliers(struct device *dev, bool async)
+>          * callbacks freeing the link objects for the links in the list we're
+>          * walking.
+>          */
+> -       list_for_each_entry_rcu(link, &dev->links.suppliers, c_node)
+> +       list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+> +                               device_links_read_lock_held())
+>                 if (READ_ONCE(link->status) != DL_STATE_DORMANT)
+>                         dpm_wait(link->supplier, async);
 >
->         freq_qos_remove_request(policy->min_freq_req);
+> @@ -323,7 +324,8 @@ static void dpm_wait_for_consumers(struct device *dev, bool async)
+>          * continue instead of trying to continue in parallel with its
+>          * unregistration).
+>          */
+> -       list_for_each_entry_rcu(link, &dev->links.consumers, s_node)
+> +       list_for_each_entry_rcu(link, &dev->links.consumers, s_node,
+> +                                device_links_read_lock_held())
+>                 if (READ_ONCE(link->status) != DL_STATE_DORMANT)
+>                         dpm_wait(link->consumer, async);
+>
+> @@ -1235,7 +1237,8 @@ static void dpm_superior_set_must_resume(struct device *dev)
+>
+>         idx = device_links_read_lock();
+>
+> -       list_for_each_entry_rcu(link, &dev->links.suppliers, c_node)
+> +       list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+> +                                device_links_read_lock_held())
+>                 link->supplier->power.must_resume = true;
+>
+>         device_links_read_unlock(idx);
+> @@ -1695,7 +1698,8 @@ static void dpm_clear_superiors_direct_complete(struct device *dev)
+>
+>         idx = device_links_read_lock();
+>
+> -       list_for_each_entry_rcu(link, &dev->links.suppliers, c_node) {
+> +       list_for_each_entry_rcu(link, &dev->links.suppliers, c_node,
+> +                                device_links_read_lock_held()) {
+>                 spin_lock_irq(&link->supplier->power.lock);
+>                 link->supplier->power.direct_complete = false;
+>                 spin_unlock_irq(&link->supplier->power.lock);
 > --
-> 1.9.1
+> 2.17.1
 >
