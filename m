@@ -2,62 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3093F1754AD
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 08:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E9A1754EE
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 08:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgCBHkG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Mar 2020 02:40:06 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:39849 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726204AbgCBHkG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Mar 2020 02:40:06 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1j8fgG-0001hP-PY; Mon, 02 Mar 2020 08:40:00 +0100
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1j8fgC-00006c-3J; Mon, 02 Mar 2020 08:39:56 +0100
-Date:   Mon, 2 Mar 2020 08:39:56 +0100
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        id S1727059AbgCBH4T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Mar 2020 02:56:19 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:46186 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725446AbgCBH4T (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Mar 2020 02:56:19 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id BDACF200F0E;
+        Mon,  2 Mar 2020 08:56:17 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 18EFF200F14;
+        Mon,  2 Mar 2020 08:56:12 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 7DEBB40299;
+        Mon,  2 Mar 2020 15:56:05 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
         amit.kucheria@verdurent.com, shawnguo@kernel.org,
         s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Linux-imx@nxp.com
-Subject: Re: [PATCH] thermal: imx_thermal: Use __maybe_unused instead of
- CONFIG_PM_SLEEP
-Message-ID: <20200302073956.dyjphjfpoqkq4w2j@pengutronix.de>
-References: <1583073056-32297-1-git-send-email-Anson.Huang@nxp.com>
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH V2] thermal: imx_thermal: Use __maybe_unused instead of CONFIG_PM_SLEEP
+Date:   Mon,  2 Mar 2020 15:50:10 +0800
+Message-Id: <1583135410-7496-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1583073056-32297-1-git-send-email-Anson.Huang@nxp.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Mar 01, 2020 at 10:30:56PM +0800, Anson Huang wrote:
-> Use __maybe_unused for power management related functions instead
-> of #if CONFIG_PM_SLEEP to simply the code.
+Use __maybe_unused for power management related functions instead
+of #if CONFIG_PM_SLEEP to simplify the code.
 
-s/simply/simplify/
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+Reviewed-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
+---
+Changes since V1:
+	- fix typo of commit message, simply->simplify.
+---
+ drivers/thermal/imx_thermal.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Other than that looks good to me.
-
-Best regards
-Uwe
-
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index bb6754a..e75dda5 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -878,8 +878,7 @@ static int imx_thermal_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_PM_SLEEP
+-static int imx_thermal_suspend(struct device *dev)
++static int __maybe_unused imx_thermal_suspend(struct device *dev)
+ {
+ 	struct imx_thermal_data *data = dev_get_drvdata(dev);
+ 	struct regmap *map = data->tempmon;
+@@ -900,7 +899,7 @@ static int imx_thermal_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int imx_thermal_resume(struct device *dev)
++static int __maybe_unused imx_thermal_resume(struct device *dev)
+ {
+ 	struct imx_thermal_data *data = dev_get_drvdata(dev);
+ 	struct regmap *map = data->tempmon;
+@@ -918,7 +917,6 @@ static int imx_thermal_resume(struct device *dev)
+ 
+ 	return 0;
+ }
+-#endif
+ 
+ static SIMPLE_DEV_PM_OPS(imx_thermal_pm_ops,
+ 			 imx_thermal_suspend, imx_thermal_resume);
 -- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+2.7.4
+
