@@ -2,101 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B771752A4
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 05:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8AC71752DF
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 05:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbgCBEXi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 Mar 2020 23:23:38 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44238 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726960AbgCBEXi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Mar 2020 23:23:38 -0500
-Received: by mail-pg1-f193.google.com with SMTP id a14so4744117pgb.11
-        for <linux-pm@vger.kernel.org>; Sun, 01 Mar 2020 20:23:38 -0800 (PST)
+        id S1726829AbgCBEvM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 Mar 2020 23:51:12 -0500
+Received: from mail-il1-f194.google.com ([209.85.166.194]:34153 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726805AbgCBEvL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 Mar 2020 23:51:11 -0500
+Received: by mail-il1-f194.google.com with SMTP id n11so3145025ild.1;
+        Sun, 01 Mar 2020 20:51:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=lg+E5eHGxFbLp+eF4wTMF7bFywHujeredhQKubPaWes=;
-        b=l66FDgfYLHI7EUix2Aiqym+m2ZMNUT+Y8VEgpOrJUEOT/aZGa1B7r4iA98ATTpwf9j
-         KhZsvQ4NIw04r8qNg7czctPRTWfNeLIO2xmhT0YCrJ7CrvCGuYspk+sjG3ud3J9OFxip
-         fcxRpi7k3ZCyuU4uR4fwYbaOadUfgHAr2QorgrCQFQgQh/PAImAwnlO89dbqjU/NLejR
-         w5/20AOljurdNOmAmZfeVnCNKnlyD7l4WShmI6H+sk4awXeolzxZY2mgyV79uRmu4Ykq
-         2YzghEX75EsC6VDpVgS08sVBVu59ZAyuUjNQeBZTw84TPAsLI4v0gKemYX/MrTD+9mwz
-         1rNQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=alTTveLKTo1elfmHPHzMWxdGHAT1S7u6JKso3Pkl1Tg=;
+        b=bo6FxVVkuiQi2qqGiBTcsY5WIEzeaUkzfWe1ycgrelgG6CrmG4P0xHFu8Dzz3vWHHm
+         sihKM0osjGRfph4Pou1nw/mMJdkE+s54Za0DjZpapvJXDrJ0F/KPGzEU/T7S7i0LeOGU
+         TWujb6cRE13rIbohViCRvfIwZj/9iDjVJovveFUX5hN99TINU3L4ToaFyFhKUVV1ha+/
+         ZYyaYtzul2ywZ4ourfUAGyYIkp9uDlHlUJJfVTfnmttJLpBhYxLNcEeFNImssOZyIMtk
+         Za9QLLO8oS72jPpcK263FwYula9/47t9vGTQbx+W1RckMg55kevzGZbaG767uD+R7Lz8
+         g/bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lg+E5eHGxFbLp+eF4wTMF7bFywHujeredhQKubPaWes=;
-        b=W1KPMHqmg31cSoAbPp6moVjSRATccN961R8VVmPVRguGyCnaN54Zzp3X9y0YRsloTj
-         0L7PKXgY6BiZdDpI1Brm3n6PPX8IsaQ6j4K57DmbXWFaSDu4t1FS2tW8xVGtOJcYa2hy
-         Ki9ZWMbCvefACSmy+ZU5EYrhelDngrv56G+4Zka9/+GP5vswhpSRg2cC+AclUxoQHzXb
-         ep7r5SzJz+wZbWsaiXGpCJKnummSQ45wdWm+TOS+Wb+lJoOLdDFTGpU6wComRSIkS3h5
-         qoG6pXmuPWtfwDwciK1JxqNkVJ8wi7oCDxaXtHO9OSkdCsi2tfRW3Z66Glat7fUiMSw8
-         NgoA==
-X-Gm-Message-State: APjAAAX8WlkhmNOHa8M0QP8DAIKbmp9rCs2sKFR11eNxtFRBqRqZPDTw
-        sDyaA+4LmNT6kXOTUp1WVuwRtw==
-X-Google-Smtp-Source: APXvYqwfgRJZfsTclE5xGz9OlvpRNhORqGihbZ0X5SACoRN9a8WvoQPuHfi9UK6f6oGd2jWI7KhwoQ==
-X-Received: by 2002:a63:dd06:: with SMTP id t6mr15894338pgg.384.1583123017453;
-        Sun, 01 Mar 2020 20:23:37 -0800 (PST)
-Received: from localhost ([122.167.24.230])
-        by smtp.gmail.com with ESMTPSA id z17sm6972051pfk.110.2020.03.01.20.23.36
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 01 Mar 2020 20:23:36 -0800 (PST)
-Date:   Mon, 2 Mar 2020 09:53:34 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     qiwuchen55@gmail.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        chenqiwu <chenqiwu@xiaomi.com>
-Subject: Re: [PATCH] cpufreq: fix a mem leak caused by policy->max_freq_req
- in cpufreq_policy_free()
-Message-ID: <20200302042334.rrmizz3apjes6zwd@vireshk-i7>
-References: <1583069198-21060-1-git-send-email-qiwuchen55@gmail.com>
- <CAJZ5v0jqGm-u-inJ4R-Qd=muqyKHxDOGAdtgaaxMq6BHa6Wwnw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=alTTveLKTo1elfmHPHzMWxdGHAT1S7u6JKso3Pkl1Tg=;
+        b=izjZ88WSHifieH+NAlZBrhiy2NVwcWCvgVpqt1ryKtcv6jCFxnkOtYzI7lSKgCuUSW
+         TFna8+1+9B9pHljKjVTTb1MwBgfYiWJlmgYDFT/q7TS6B/ccv6hpZNUC+VDl90g6ul2P
+         zX0Hs4S+ju2Z7JETAwbxmKku8h4sm3+4XTYsXMyYGz0BMDl5xaECpr/z1rQhOj26UKN4
+         xCmJBPbuJWa6yDnoOYgxBn4G2BcWAbra3eIu8CKDwzybwTNeD27uIMtKBwk0iw6/jIMQ
+         SFl8ZzmI/lcPTMCpmm6/Uwrer/Pw0gw9NAMev3jSjU7xVjCghGZ/Rj6AcBqs/IrZSLpb
+         p+MQ==
+X-Gm-Message-State: APjAAAUJYKGhlOTeEdsrvFNjh9I1dmClqe5VgWEC5dHtDKWUensOC0Zg
+        0St2OlVj+P/VIH0wNHUlYyxqVYY/7wc+FmXxo6dsYMcY/Vs=
+X-Google-Smtp-Source: APXvYqxtkZqTWghmGlHaI6suboZ+vFHyCwxVH29YA9XEB9zgnrHkTQ9/Aw28bLyE37Wz+pvOuUAzjnYI2+hTkjM80l0=
+X-Received: by 2002:a92:489a:: with SMTP id j26mr15961954ilg.226.1583124671019;
+ Sun, 01 Mar 2020 20:51:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jqGm-u-inJ4R-Qd=muqyKHxDOGAdtgaaxMq6BHa6Wwnw@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20200229170825.GX8045@magnolia> <20200229180716.GA31323@dumbo>
+ <20200229183820.GA8037@magnolia> <20200229200200.GA10970@dumbo> <CAJZ5v0iHaZyfuTnqJyM6u=UU=+W6yRuM_Q6iUvB2UudANuwfgA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iHaZyfuTnqJyM6u=UU=+W6yRuM_Q6iUvB2UudANuwfgA@mail.gmail.com>
+From:   Marian Klein <mkleinsoft@gmail.com>
+Date:   Mon, 2 Mar 2020 04:51:00 +0000
+Message-ID: <CAA0DKYoFR6WhFLLCYO1GPYHGNZ_mi1773LXoXiC=aByvDF1e2w@mail.gmail.com>
+Subject: Re: [PATCH] hibernate: unlock swap bdev for writing when uswsusp is active
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Domenico Andreoli <domenico.andreoli@linux.com>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-fsdevel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-03-20, 21:09, Rafael J. Wysocki wrote:
-> On Sun, Mar 1, 2020 at 2:26 PM <qiwuchen55@gmail.com> wrote:
-> >
-> > From: chenqiwu <chenqiwu@xiaomi.com>
-> >
-> > There is a mem leak in cpufreq_policy_free() that the resource of
-> > policy->max_freq_req pointer is not free.
-> 
-> That's incorrect AFAICS.
+Hi Darrick
 
-+1
+If security is a concern, maybe it should in kernel config
+( CONFIG_ENABLE_HIBERNATION  =  Y/N )
+For the security hardened server systems with no hibernation need you
+simply configure it to N.
 
+Also the concern the other process can hijack s2disk is unlikely. You
+have to realized all processors except for one
+are down (See dmesg bellow.) by the time the snapshot image is being  written.
+So you can disable scheduler time sharing on this only one processor
+when you get snapshot request and no other process can jump in.
+
+I think you can allow (unlock) writing ONLY to  device specified in
+kernel parameter
+resume=/dev/<swap_device>  and
+only when CONFIG_ENABLE_HIBERNATION  =  Y  and there is only one CPU
+active (CPU0) and
+time sharing scheduler is down and user group from another kernel
+parameter snapshot_gid invoked snapshot.
+For me secure enough. If any rogue  program pretended to be legitimate
+user space hibernation
+program it would have to go via actual hibernation cycle (powering off
+computer) and that would be obvious to user if that was not triggered
+by him
+or configured by him to trigger automatically.
+It is no way a program secretly could write to resume/swap device.
+
+For normal users often the security is less of concern as they know
+who works with their laptop , etc.
+
+
+[ 1243.100159] Disabling non-boot CPUs ...
+[ 1243.101448] smpboot: CPU 1 is now offline
+[ 1243.103291] smpboot: CPU 2 is now offline
+[ 1243.104851] smpboot: CPU 3 is now offline
+[ 1243.106522] smpboot: CPU 4 is now offline
+[ 1243.108200] smpboot: CPU 5 is now offline
+[ 1243.109928] smpboot: CPU 6 is now offline
+[ 1243.111501] smpboot: CPU 7 is now offline
+[ 1243.113364] PM: Creating hibernation image:
+[ 1243.597752] PM: Need to copy 161991 pages
+[ 1243.597756] PM: Normal pages needed: 161991 + 1024, available pages: 3967507
+[ 1244.202907] PM: Hibernation image created (161991 pages copied)
+
+On Sun, 1 Mar 2020 at 21:35, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Sat, Feb 29, 2020 at 9:02 PM Domenico Andreoli
+> <domenico.andreoli@linux.com> wrote:
+> >
+> > On Sat, Feb 29, 2020 at 10:38:20AM -0800, Darrick J. Wong wrote:
+> > > On Sat, Feb 29, 2020 at 07:07:16PM +0100, Domenico Andreoli wrote:
+> > > > On Sat, Feb 29, 2020 at 09:08:25AM -0800, Darrick J. Wong wrote:
+> > > > > From: Darrick J. Wong <darrick.wong@oracle.com>
+> > > > >
+> > > > > It turns out that there /is/ one use case for programs being able to
+> > > > > write to swap devices, and that is the userspace hibernation code.  The
+> > > > > uswsusp ioctls allow userspace to lease parts of swap devices, so turn
+> > > > > S_SWAPFILE off when invoking suspend.
+> > > > >
+> > > > > Fixes: 1638045c3677 ("mm: set S_SWAPFILE on blockdev swap devices")
+> > > > > Reported-by: Domenico Andreoli <domenico.andreoli@linux.com>
+> > > > > Reported-by: Marian Klein <mkleinsoft@gmail.com>
+> > > >
+> > > > I also tested it yesterday but was not satisfied, unfortunately I did
+> > > > not come with my comment in time.
+> > > >
+> > > > Yes, I confirm that the uswsusp works again but also checked that
+> > > > swap_relockall() is not triggered at all and therefore after the first
+> > > > hibernation cycle the S_SWAPFILE bit remains cleared and the whole
+> > > > swap_relockall() is useless.
+> > > >
+> > > > I'm not sure this patch should be merged in the current form.
+> > >
+> > > NNGGHHGGHGH /me is rapidly losing his sanity and will soon just revert
+> > > the whole security feature because I'm getting fed up with people
+> > > yelling at me *while I'm on vacation* trying to *restore* my sanity.  I
+> > > really don't want to be QAing userspace-directed hibernation right now.
+> >
+> > Maybe we could proceed with the first patch to amend the regression and
+> > postpone the improved fix to a later patch? Don't loose sanity for this.
+>
+> I would concur here.
+>
+> > > ...right, the patch is broken because we have to relock the swapfiles in
+> > > whatever code executes after we jump back to the restored kernel, not in
+> > > the one that's doing the restoring.  Does this help?
+> >
+> > I made a few unsuccessful attempts in kernel/power/hibernate.c and
+> > eventually I'm switching to qemu to speed up the test cycle.
+> >
+> > > OTOH, maybe we should just leave the swapfiles unlocked after resume.
+> > > Userspace has clearly demonstrated the one usecase for writing to the
+> > > swapfile, which means anyone could have jumped in while uswsusp was
+> > > running and written whatever crap they wanted to the parts of the swap
+> > > file that weren't leased for the hibernate image.
+> >
+> > Essentially, if the hibernation is supported the swapfile is not totally
+> > safe.
+>
+> But that's only the case with the userspace variant, isn't it?
+>
+> > Maybe user-space hibernation should be a separate option.
+>
+> That actually is not a bad idea at all in my view.
+>
 > Thanks!
-> 
-> > Signed-off-by: chenqiwu <chenqiwu@xiaomi.com>
-> > ---
-> >  drivers/cpufreq/cpufreq.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index cbe6c94..6756f7a 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -1280,6 +1280,8 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
-> >                 blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
-> >                                              CPUFREQ_REMOVE_POLICY, policy);
-> >                 freq_qos_remove_request(policy->max_freq_req);
-> > +               kfree(policy->max_freq_req);
-> > +               policy->max_freq_req = NULL;
-
-Memory for both min_freq_req and max_freq_req is allocated together
-and so we don't need to free max_freq_req separately.
-
--- 
-viresh
