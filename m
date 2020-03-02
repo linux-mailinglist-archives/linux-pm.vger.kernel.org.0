@@ -2,61 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A94D175689
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 10:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0FC1756EA
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 10:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726728AbgCBJCN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Mar 2020 04:02:13 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47281 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726674AbgCBJCN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Mar 2020 04:02:13 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1j8gxk-0002Vr-67; Mon, 02 Mar 2020 10:02:08 +0100
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1j8gxj-0003CI-P0; Mon, 02 Mar 2020 10:02:07 +0100
-Date:   Mon, 2 Mar 2020 10:02:07 +0100
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Linux-imx@nxp.com
-Subject: Re: [PATCH V3] thermal: imx_thermal: Use __maybe_unused instead of
- CONFIG_PM_SLEEP
-Message-ID: <20200302090207.v3qkjhfbmzpjybu5@pengutronix.de>
-References: <1583139266-23615-1-git-send-email-Anson.Huang@nxp.com>
+        id S1727426AbgCBJXG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Mar 2020 04:23:06 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:56626 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726382AbgCBJXF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Mar 2020 04:23:05 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0229N1sO087046;
+        Mon, 2 Mar 2020 03:23:01 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1583140981;
+        bh=EN0Dk2LYuFwCwIullgFBLCxgS4RYp5ZL1N4I2VeJ7C4=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=wN51pkEkS8BjnL5hSOFowd9XkLW3DOn2DbHoZxqncY7BBCDmxnVtY/kW4JE09vB08
+         GhKqqooSn1wbKC95T0OS+9Agj5IRaDLOFpzLvZ+JEK4YeiPiFS0iKkC4uV05OzV8XH
+         +0eXHYo9kgeWiNmftF3/uQBtMCcNen/NukCg93Os=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0229N1iv124318
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 2 Mar 2020 03:23:01 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 2 Mar
+ 2020 03:23:01 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Mon, 2 Mar 2020 03:23:00 -0600
+Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0229Mw01071647;
+        Mon, 2 Mar 2020 03:22:59 -0600
+Subject: Re: [PATCH] cpufreq: ti-cpufreq: Add support for OPP_PLUS
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rjw@rjwysocki.net>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Lokesh Vutla <lokeshvutla@ti.com>
+References: <20200228144529.14548-1-t-kristo@ti.com>
+ <20200302041933.uuoa5kbvgtde37oq@vireshk-i7>
+From:   Tero Kristo <t-kristo@ti.com>
+Message-ID: <99717846-743e-ba87-9dda-4cf39d562518@ti.com>
+Date:   Mon, 2 Mar 2020 11:22:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1583139266-23615-1-git-send-email-Anson.Huang@nxp.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+In-Reply-To: <20200302041933.uuoa5kbvgtde37oq@vireshk-i7>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 02, 2020 at 04:54:26PM +0800, Anson Huang wrote:
-> Use __maybe_unused for power management related functions instead
-> of #if CONFIG_PM_SLEEP to simplify the code.
+On 02/03/2020 06:19, Viresh Kumar wrote:
+> On 28-02-20, 16:45, Tero Kristo wrote:
+>> From: Lokesh Vutla <lokeshvutla@ti.com>
+>>
+>> DRA762 SoC introduces OPP_PLUS which runs at 1.8GHz. Add
+>> support for this OPP in ti-cpufreq driver.
+>>
+>> Acked-by: Dave Gerlach <d-gerlach@ti.com>
+>> Signed-off-by: Lokesh Vutla <lokeshvutla@ti.com>
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> ---
+>>   drivers/cpufreq/ti-cpufreq.c | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
+>> index 557cb513bf7f..d62b6b21325a 100644
+>> --- a/drivers/cpufreq/ti-cpufreq.c
+>> +++ b/drivers/cpufreq/ti-cpufreq.c
+>> @@ -25,11 +25,14 @@
+>>   
+>>   #define DRA7_EFUSE_HAS_OD_MPU_OPP		11
+>>   #define DRA7_EFUSE_HAS_HIGH_MPU_OPP		15
+>> +#define DRA76_EFUSE_HAS_PLUS_MPU_OPP		18
+>>   #define DRA7_EFUSE_HAS_ALL_MPU_OPP		2
+>> +#define DRA76_EFUSE_HAS_ALL_MPU_OPP		24
+>>   
+>>   #define DRA7_EFUSE_NOM_MPU_OPP			BIT(0)
+>>   #define DRA7_EFUSE_OD_MPU_OPP			BIT(1)
+>>   #define DRA7_EFUSE_HIGH_MPU_OPP			BIT(2)
+>> +#define DRA76_EFUSE_PLUS_MPU_OPP		BIT(3)
+>>   
+>>   #define OMAP3_CONTROL_DEVICE_STATUS		0x4800244C
+>>   #define OMAP3_CONTROL_IDCODE			0x4830A204
+>> @@ -80,6 +83,9 @@ static unsigned long dra7_efuse_xlate(struct ti_cpufreq_data *opp_data,
+>>   	 */
+>>   
+>>   	switch (efuse) {
+>> +	case DRA76_EFUSE_HAS_PLUS_MPU_OPP:
+>> +	case DRA76_EFUSE_HAS_ALL_MPU_OPP:
+>> +		calculated_efuse |= DRA76_EFUSE_PLUS_MPU_OPP;
+>>   	case DRA7_EFUSE_HAS_ALL_MPU_OPP:
+>>   	case DRA7_EFUSE_HAS_HIGH_MPU_OPP:
+>>   		calculated_efuse |= DRA7_EFUSE_HIGH_MPU_OPP;
 > 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> This is already merged, why sending it again ?
 
-Best regards
-Uwe
+Oops sorry, seems I was looking at stale local upstream branch when 
+checking what is still missing upstream. Please ignore.
 
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+-Tero
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
