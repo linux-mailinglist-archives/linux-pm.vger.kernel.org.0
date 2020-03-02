@@ -2,67 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00599175651
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 09:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA2A175654
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 09:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725446AbgCBIyk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Mar 2020 03:54:40 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:37065 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726313AbgCBIyj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Mar 2020 03:54:39 -0500
-Received: by mail-wm1-f66.google.com with SMTP id a141so9817646wme.2
-        for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2020 00:54:37 -0800 (PST)
+        id S1727075AbgCBIy7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Mar 2020 03:54:59 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:42582 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727054AbgCBIy7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Mar 2020 03:54:59 -0500
+Received: by mail-wr1-f65.google.com with SMTP id z11so2681697wro.9
+        for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2020 00:54:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4YZfjsCvu9CwlHj80welQEfPEMnEw2It7DS5iksYhjk=;
-        b=Vr7vwpmmJG6nBUUVQQEiP9d41XX8zkAvjQgronn8qFZBnmQ34xiDkBtc0/JYorZk8q
-         vaHsryoa7/NzV61ajMC29PXQxHiVKHkgOVzW/01D02YMhY1wmOSs+Tf43+tIzNI8HzDK
-         kA887ScYVaQN+gsPUSV18kD/lpskyM7bw4yfSlJj7LqD56eD3av+z2xdb9NvemdUqy6h
-         mGkJoXcPx6MBHx7T5AqJRTnDyyHoqc/d/bW0W9MYH077MHob3FMgF3bJ65a68fCDL7X0
-         zoIgzjuUuDz/ZqB9SvnSo1qL75zMDApAfx9B45Cc7XNXp+BLCr5eAPNGhckMSet9Kutb
-         HdfQ==
+        bh=L1nS4UqYQY7gUrmSJqgI+ZfgfAS5sKoT2W5V1L1fhDM=;
+        b=LclrF88rR36aRriBuwqAJiLoyojOoynOOmJx9wa84Ky5XkPqaWN7NrtE/pr8IyWzNK
+         j2N6zG4d7TOWOQeyF4UIa/oa6GYCEJ9tbOKH0nyWN6BYvxGpvYGt8JCvGsgFKXiEnOzS
+         wvu/pMG26JEy1Q8CGAutKansNIjpU8QdOR+FO9Dp/l6xJZtRrJbks4Gj1WwgUn1d4zPM
+         WOvUySOO+k2ET7SDCxyK3JD8fVPUAWVCZQcwiQh+LnB8WX0HBM9d1GqoWCAn5BXt9/U0
+         YzYyw4svCaqiywsosUhr681P5WOhHoCPGGvKBXCGVnxW1Et8Tol3gFE0hszHN7vnn3AM
+         gj7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=4YZfjsCvu9CwlHj80welQEfPEMnEw2It7DS5iksYhjk=;
-        b=W9JVOTY7KzhAZU+MyLKvZl6NrmvhBRBkXfS4k0xlMqqqD6soOCqGPr7beVEHSPYA5m
-         gLGk/t0do7EoUg2K5ilIr/N4HPtMU9/IPxZ3vResbR/l0Ev9OhPNBoBP5fiWVlQSUmPp
-         GUWIltLVPei3I5niHfkoy1mdPdJ+JsT4gb1gzcIYT6yM56a0TmyiEyn0ExayLMhG+cCY
-         P0YK2uU7LwLGj7rkDMZ6zaGBy44+lsKL48WaV/8+l/HCngxB/IunF+/PAnWiiBK30n9e
-         CUAFRa0mNLVtyBi57IoZ6oGQa6S3w5hhId7k9INiDZsltM08NDnGMf4WXNnNDcbG2GtN
-         tDdg==
-X-Gm-Message-State: APjAAAVAffkAgu5qB5z0QBzM74rZ6O9Wqat8+7zIh1b59RIlEW70B4mL
-        R6LUGHHXXus/z9WRv6TXLdQLOg==
-X-Google-Smtp-Source: APXvYqz1OP/Lyc6kYL9qNLNkpWtWb14MuhY9UNvE9kM6L21XpD4c37aQiI21RoaosqYxKWqZSeOOHQ==
-X-Received: by 2002:a05:600c:2:: with SMTP id g2mr18307807wmc.18.1583139276372;
-        Mon, 02 Mar 2020 00:54:36 -0800 (PST)
+        bh=L1nS4UqYQY7gUrmSJqgI+ZfgfAS5sKoT2W5V1L1fhDM=;
+        b=YweKeTmkrR3Z199iSgctzO6lKARm33clDSc60LP4+tb8GB40uLqVHVVOGBAq0ywk1B
+         srfOb10RM0mqaT12JHpMWUerDqSVYGbPY0p9Mmt9Od5XI/Lnq2YPRpHfz4CTzJ9wYd5a
+         re46RLzkG3/XcLMbecTOowsIfUnlrfhVwopBs82RpCcNX3VGy/+Oswy10+FhW521A9Ql
+         IHdKFZN+iyXTAfQ2rj0z+A7C8iRRbmRuGhe3HTXQRWUQF8bAQwrV+2yME+vxJZnRcqSg
+         t1hVLxvsBdrWlRRgWkG42mv22gGMnhfLLGRmPzncqPYyVCiDDNpjnEuX/yn6s1Q+UXNF
+         t7cg==
+X-Gm-Message-State: APjAAAVQqi6pADGk42MBYmiAHObQLkYSlx0rqJy01+wooM+FAlAhajjo
+        6OQS5hW/CUsDdimhLphTjz+y2A==
+X-Google-Smtp-Source: APXvYqyGP4JrvVrxopbIq+dcHe5bf4MQHuJoIwoQGgJJs3i/D6ZtyWQuOaq2ciKzgYmnsgkNvtIAIg==
+X-Received: by 2002:adf:9282:: with SMTP id 2mr22295473wrn.124.1583139297422;
+        Mon, 02 Mar 2020 00:54:57 -0800 (PST)
 Received: from ?IPv6:2a01:e34:ed2f:f020:4810:160f:ae1a:893f? ([2a01:e34:ed2f:f020:4810:160f:ae1a:893f])
-        by smtp.googlemail.com with ESMTPSA id z5sm8913587wml.48.2020.03.02.00.54.35
+        by smtp.googlemail.com with ESMTPSA id c14sm10694805wro.36.2020.03.02.00.54.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Mar 2020 00:54:35 -0800 (PST)
-Subject: Re: [PATCH V2] thermal: imx_thermal: Use __maybe_unused instead of
- CONFIG_PM_SLEEP
-To:     Anson Huang <anson.huang@nxp.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-References: <1583135410-7496-1-git-send-email-Anson.Huang@nxp.com>
- <20200302080700.ubnboqklhbva7bas@pengutronix.de>
- <DB3PR0402MB3916DC28A21BE0B9B8BFFC25F5E70@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+        Mon, 02 Mar 2020 00:54:56 -0800 (PST)
+Subject: Re: [PATCH] thermal: imx_sc_thermal: Align imx sc thermal msg structs
+ to 4
+To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+References: <1583117485-30922-1-git-send-email-Anson.Huang@nxp.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -118,12 +109,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <c5ecab57-cc38-762c-ae06-fed0433e0246@linaro.org>
-Date:   Mon, 2 Mar 2020 09:54:34 +0100
+Message-ID: <7c593d4b-5072-2c14-1f5c-4d76d1b5ea94@linaro.org>
+Date:   Mon, 2 Mar 2020 09:54:55 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <DB3PR0402MB3916DC28A21BE0B9B8BFFC25F5E70@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+In-Reply-To: <1583117485-30922-1-git-send-email-Anson.Huang@nxp.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -132,30 +123,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/03/2020 09:26, Anson Huang wrote:
-> Hi, Uwe
+On 02/03/2020 03:51, Anson Huang wrote:
+> The i.MX SCU API strongly assumes that messages are composed out
+> of 4-bytes words but some of our message structs have odd sizeofs,
+> use __packed __aligned(4) to avoid potential oopses.
 > 
-> 
->> Subject: Re: [PATCH V2] thermal: imx_thermal: Use __maybe_unused instead
->> of CONFIG_PM_SLEEP
->>
->> On Mon, Mar 02, 2020 at 03:50:10PM +0800, Anson Huang wrote:
->>> Use __maybe_unused for power management related functions instead of
->>> #if CONFIG_PM_SLEEP to simplify the code.
->>>
->>> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
->>> Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
->>
->> IMHO translating my "otherwise looks fine" in a "Reviewed-by" is a bit bold.
->> Please don't assume this.
-> 
-> OK, will keep it in mind next time, thanks.
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
 
-When applying a patch, now we add the link to the lkml archive
-automatically. I can't apply this patch if the Reviewed-by is not accepted.
-
-Or the Reviewed-by tag is confirmed or a V3 without the Reviewed-by must
-be resent.
+Applied, thanks
 
 
 -- 
