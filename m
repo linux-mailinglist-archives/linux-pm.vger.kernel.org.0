@@ -2,127 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43ED51760A7
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 18:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E76917617E
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 18:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727439AbgCBRCd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Mar 2020 12:02:33 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:35185 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727359AbgCBRCd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Mar 2020 12:02:33 -0500
-Received: by mail-ot1-f67.google.com with SMTP id v10so3157624otp.2;
-        Mon, 02 Mar 2020 09:02:32 -0800 (PST)
+        id S1727231AbgCBRqt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Mar 2020 12:46:49 -0500
+Received: from mail-vk1-f195.google.com ([209.85.221.195]:43029 "EHLO
+        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727126AbgCBRqt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Mar 2020 12:46:49 -0500
+Received: by mail-vk1-f195.google.com with SMTP id o2so44587vka.10
+        for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2020 09:46:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wRqcBb5NeC8MFmcr1zGXioEPHZAa7v+ogkQOpmNZPmY=;
+        b=bhPvEOjmCSdagKL7wbSNn+LctUqd1mSHmEn2xDEvGzkuiK6UcHtyC+lxQPBpQlis9b
+         MH79TeTlsFO7qPTBa6z4411JqMqW02pV/UZzr7nzeLdlB06ZAyi+pqcIdU9APksPYo90
+         nUEWiNOWR0xD7j7ZSZMY7pDlZNRy4e+PnpIbfx6SKAz25tzKMc0nQ5KgTJhLyI0UbjFR
+         H3wO7m6+wqBA2WjrG8+3fwWwHTSsGKwniZhDKBbmB9ntCpx4qOEDeojx6XTsRw3deXyz
+         rGSuijN9djreVn1bWwoVZMSunjpo6Cp14oV/CsDb92SZz4nWSLWY6P94qaqIttgdND+9
+         GVoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3E3fWxDEv9ZHfmOkcec5gIIJeOvKCzK/ypdiNkYfC8Q=;
-        b=PU5YSgJM0v8gIGcwJCuVXvlgu5Cm9dRRs4HeH+ZE1UYmKTrqSHRrSeIklZmnd41AF8
-         TiM+ovRk8Esx/fBCyLAR6jMKwit0RuIXMzXXNfNE+ZF5RmWwxHLLH1bor53s4fn+IMbF
-         9B/CfH1QAeIEhW+oAg96abRDPoiPlPYVXSt0COj3g2zrWOdlY9pBYbW+lLHl/yti71h5
-         Vpjr4HD9YzUGHZUwvoSUeTjk51WC4jHfpWa3LQ51Ypr7JvmrDtSDYYVTiTZuNcp2qdwz
-         FIRA6C4Uvesg70p2NBCTIZCLujXKyaclBHDL9CFoyOwKJzMTq1NAk5QHWi+Tdc6NInl5
-         MPtA==
-X-Gm-Message-State: ANhLgQ2AagbWnLnObH29eBzcxI/w2JG5nx/sU13i0gXrTcNmcR2HJFkA
-        Ee/ALzUBKxbKduUDYlRaQAeFis6BDAb/c3woLS0=
-X-Google-Smtp-Source: ADFU+vtrrwRitcEkkYBbTuh1knba7jp5gALhcQEhCs5xZDWVZPrBv0NBfHT14a2k5mSe4rTQlRheR8mZvBJynFnoa78=
-X-Received: by 2002:a9d:67d7:: with SMTP id c23mr125593otn.262.1583168552404;
- Mon, 02 Mar 2020 09:02:32 -0800 (PST)
+        bh=wRqcBb5NeC8MFmcr1zGXioEPHZAa7v+ogkQOpmNZPmY=;
+        b=CnTjyWP/Kh3s5srW+1VJSrueJeyK7zTV1XEgbX84vTO7MRhNeC6UWScoIsU62/l6yv
+         ta9wWxRsxk4vyWoAkSrVBgyuYi5P6Z7EoahkgxIQj0zAZrTJA8O6J4b6jNUCK5X0FJbi
+         6NgYcrkSjRINvWBmYb7dElGVGdJKmWjy6tTT0Ma/fylj3BNMJX3iBcI+FyL2sti6H/7+
+         nNsUVA/8V9Zm5clbukerMWHTcYzcaR9VNChwadgp9jLOqap/d+RmELn41BzCWjSQ5rHu
+         6PU/nA8OsbVj6+DAsbIYx2rRcU65Aa6ieeqRUlkJFzzpcgJrO2eIKwFqCL984gFezsil
+         f+qQ==
+X-Gm-Message-State: ANhLgQ3sK+Z8kIuKGwosB+sl9AhsVLQRe0TIultMWlUYrG6lgJzjpEZg
+        tjLy73S2zPy5DmoCOzTQ7B0fJCsjs0QHouJf7xURVA==
+X-Google-Smtp-Source: ADFU+vvI4v1XSZF009wAi9uAcVVON3h+bKuIxN4MJslrz6LFmkBZ04IXzw5whl+Td9/Njl7w5J59jkiRYYRU3oMTDDU=
+X-Received: by 2002:a1f:5385:: with SMTP id h127mr542849vkb.56.1583171207966;
+ Mon, 02 Mar 2020 09:46:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20200228174630.8989-1-madhuparnabhowmik10@gmail.com>
- <CAJZ5v0jhw+cVm=ViiOtZgKr+a1L_PbeVPNXpsPbgghUvMPODSA@mail.gmail.com>
- <C2E57D31-A459-4F5F-8ECF-484FBB26C065@joelfernandes.org> <CAJZ5v0jTSKd_23fJhM+XUmFX_yTjcD+c_s1Jvi3HA1EmXPkzZw@mail.gmail.com>
- <CAEXW_YRL0kum5yVm+9V8i_PK2FcHfPeUOxJKZ+T8P3zqhATxJg@mail.gmail.com> <CAD=jOEZ3vdNC4qTMxptaXLjs7i8TCTYjeiv9vXhcapLSkrr9RQ@mail.gmail.com>
-In-Reply-To: <CAD=jOEZ3vdNC4qTMxptaXLjs7i8TCTYjeiv9vXhcapLSkrr9RQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 2 Mar 2020 18:02:21 +0100
-Message-ID: <CAJZ5v0hee4FxeVub_ZkAYn9z8q1_ZLA_AcmTtS-w39VzSe0UxA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drivers: base: power: main: Use built-in RCU list checking
-To:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Amol Grover <frextrite@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
+References: <20200219183231.50985-1-balejs@google.com> <20200229005131.GB9813@google.com>
+ <20200229184300.GA484762@carbon.DHCP.thefacebook.com> <20200301162003.GA186618@google.com>
+ <20200302165330.GA505299@carbon.DHCP.thefacebook.com>
+In-Reply-To: <20200302165330.GA505299@carbon.DHCP.thefacebook.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 2 Mar 2020 09:46:36 -0800
+Message-ID: <CAJuCfpEk4gz9YKVuRBW4E-Up_LSGWCSpyJft4y+rOjyPSa08Zg@mail.gmail.com>
+Subject: Re: [PATCH] cgroup-v1: freezer: optionally killable freezer
+To:     Roman Gushchin <guro@fb.com>
+Cc:     Marco Ballesio <balejs@google.com>, Tejun Heo <tj@kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Li Zefan <lizefan@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, rjw@rjwysocki.net,
+        pavel@ucw.cz, len.brown@intel.com, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org, Minchan Kim <minchan@google.com>,
+        Daniel Colascione <dancol@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 2, 2020 at 1:34 PM Madhuparna Bhowmik
-<madhuparnabhowmik10@gmail.com> wrote:
+On Mon, Mar 2, 2020 at 8:53 AM Roman Gushchin <guro@fb.com> wrote:
 >
+> On Sun, Mar 01, 2020 at 08:20:03AM -0800, Marco Ballesio wrote:
+> > On Sat, Feb 29, 2020 at 10:43:00AM -0800, Roman Gushchin wrote:
+> > > On Fri, Feb 28, 2020 at 04:51:31PM -0800, Marco Ballesio wrote:
+> > > > Hi all,
+> > > >
+> > > > did anyone have time to look into my proposal and, in case, are there
+> > > > any suggestions, ideas or comments about it?
+> > >
+> > > Hello, Marco!
+> > >
+> > > I'm sorry, somehow I missed the original letter.
+> > >
+> > > In general the cgroup v1 interface is considered frozen. Are there any particular
+> > > reasons why you want to extend the v1 freezer rather than use the v2 version of it?
+> > >
+> > > You don't even need to fully convert to cgroup v2 in order to do it, some v1
+> > > controllers can still be used.
+> > >
+> > > Thanks!
+> > >
+> > > Roman
+> >
+> > Hi Roman,
+> >
+> > When compared with backports of v2 features and their dependency chains, this
+> > patch would be easier to carry in Android common. The potential is to have
+> > killability for frozen processes on hw currently in use.
 >
+
+Hi Roman,
+
+> I see...
 >
-> On Mon, 2 Mar, 2020, 3:48 AM Joel Fernandes, <joel@joelfernandes.org> wrote:
->>
->> On Sun, Mar 1, 2020 at 4:23 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->> >
->> > On Sun, Mar 1, 2020 at 9:53 PM <joel@joelfernandes.org> wrote:
->> > >
->> > >
->> > >
->> > > On March 1, 2020 3:12:53 PM EST, "Rafael J. Wysocki" <rafael@kernel.org> wrote:
->> > > >On Fri, Feb 28, 2020 at 6:47 PM <madhuparnabhowmik10@gmail.com> wrote:
->> > > >>
->> > > >> From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
->> > > >>
->> > > >> This patch passes the cond argument to list_for_each_entry_rcu()
->> > > >> to fix the following false-positive lockdep warnings:
->> > > >>
->> > > >> [  330.302784] =============================
->> > > >> [  330.302789] WARNING: suspicious RCU usage
->> > > >> [  330.302796] 5.6.0-rc1+ #5 Not tainted
->> > > >> [  330.302801] -----------------------------
->> > > >> [  330.302808] drivers/base/power/main.c:326 RCU-list traversed in
->> > > >non-reader section!!
->> > > >>
->> > > >> [  330.303303] =============================
->> > > >> [  330.303307] WARNING: suspicious RCU usage
->> > > >> [  330.303311] 5.6.0-rc1+ #5 Not tainted
->> > > >> [  330.303315] -----------------------------
->> > > >> [  330.303319] drivers/base/power/main.c:1698 RCU-list traversed in
->> > > >non-reader section!!
->> > > >>
->> > > >> [  331.934969] =============================
->> > > >> [  331.934971] WARNING: suspicious RCU usage
->> > > >> [  331.934973] 5.6.0-rc1+ #5 Not tainted
->> > > >> [  331.934975] -----------------------------
->> > > >> [  331.934977] drivers/base/power/main.c:1238 RCU-list traversed in
->> > > >non-reader section!!
->> > > >>
->> > > >> [  332.467772] WARNING: suspicious RCU usage
->> > > >> [  332.467775] 5.6.0-rc1+ #5 Not tainted
->> > > >> [  332.467775] -----------------------------
->> > > >> [  332.467778] drivers/base/power/main.c:269 RCU-list traversed in
->> > > >non-reader section!!
->> > > >
->> > > >I don't see these warnings in the kernels run locally here.
->> > > >
->> > > >What do you do to get them?
->> > > >
->> > > >Joel, any comments here?
->> > >
->> > > You have to enable lockdep in your config. Does your setup have that?
->> >
->> > CONFIG_LOCK_DEBUGGING_SUPPORT=y
->> > CONFIG_PROVE_LOCKING=y
->> > CONFIG_DEBUG_SPINLOCK=y
->> > CONFIG_DEBUG_LOCK_ALLOC=y
->> > CONFIG_LOCKDEP=y
->>
->>
-> I had CONFIG_PROVE_RCU_LIST = y and I think these warnings were triggered when I had closed my laptop (like just close without shutting down).
+> The implementation looks good to me, but I really not sure if adding new control files
+> to cgroup v1 is a good idea at this point. Are there any plans in the Android world
+> to move forward to cgroup v2? If not, why not?
 
-OK, so let's define a macro for that in this file to avoid code duplication.
+There are plans to prototype that and gradually move from cgroups v1
+to v2 at least for some cgroup controllers (the ones that can use
+unified hierarchy). Creating an additional per-process cgroup v2
+hierarchy only for freezer would be a high price to pay today. In the
+future when we migrate some controllers to v2 the price will be
+amortized and we will probably be able to do that.
 
-And analogously in the second patch.
+> If there are any specific issues/dependencies, let's discuss and resolve them.
+>
+> Thanks!
+>
+> Roman
 
-Thanks!
+Thanks,
+Suren.
