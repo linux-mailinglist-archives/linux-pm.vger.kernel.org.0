@@ -2,151 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F358175B0C
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 13:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FDF175CDC
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Mar 2020 15:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgCBM6d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Mar 2020 07:58:33 -0500
-Received: from mail-pl1-f180.google.com ([209.85.214.180]:36315 "EHLO
-        mail-pl1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727421AbgCBM6d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Mar 2020 07:58:33 -0500
-Received: by mail-pl1-f180.google.com with SMTP id g12so2153644plo.3
-        for <linux-pm@vger.kernel.org>; Mon, 02 Mar 2020 04:58:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=3oty/bS7tzv9P9li9h7QnAeHhWblqUINxBhCenWdx2Q=;
-        b=q9BBLdEiier6m+lZj4RHTYOzGiUbDfzRa9w+HEHDYr/f2ozzPBfG2NYv/GA/zUHvoQ
-         CKA6Ae5nUhvoYKMpq/swSJVd6/kfmTvnQCgzM1Tz9J5GOjy2aRoOU637HB7KzvP9pFQP
-         SF128+cJ8PyXW2LF60WdhqTpx3hZQoxb4YddjYKmYe9iQoLsZZxozO2mTu4SAzx6X/pI
-         zXchXvPITGZoYvYXkzTZfLLHHIusvUuI+cJKX88v/u1S9JMVVzuVJJPkdAquZ9VDC9qJ
-         eWYIX/4S0mImIDNu4xIahI7z2ZrRIB3PHbO2BRqwplOaphZspdSubHI9crII8Dco6TCU
-         ODIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=3oty/bS7tzv9P9li9h7QnAeHhWblqUINxBhCenWdx2Q=;
-        b=uRloVshJjAh0YfepvJGNHQX016tKusunCJKJCgegaoM/3ZNXR8JPuH6h462d7/wv4w
-         TNQgGnLrXnQ9Oe5pk9DWW3SLUaWUHGestkq9kH/dbU4ftKQ/mxcp1H9gkIhirjpqE38P
-         6ZrCBTXgK9ngFFQcI8I2yPmKqwnCT8Ty1xYN+cJiWnrCWP+1I5E8m2tNV19zjjI+jSZm
-         yzKYfWJct7rj8XDgPa3f+gBchW8AO5SPb5A4iK3EvHAPyNppqCQAcAUv/xAnolDSWzOz
-         5TwzaLo1BevDL28nR9lWFaErEzbMB7T/aBY1xBstjXhxamr7lD0/Kw3ZhxLBvO7htQkT
-         i1MA==
-X-Gm-Message-State: APjAAAUGJfsyVB/xKOUbkWsVf55BYr3/DG5QGSnNaR3v4ASoCykOu9HG
-        7684yjQgyZfwWS8KYSUKxVYm7wXNU/I=
-X-Google-Smtp-Source: APXvYqxIiw5z/2MfKMOp8TGWGSiyH+GuLFcaoNa51H7z/zlPAzUxKaW3mPqof+JDp0iZAyT9ukO1FQ==
-X-Received: by 2002:a17:90a:3266:: with SMTP id k93mr20778280pjb.23.1583153911866;
-        Mon, 02 Mar 2020 04:58:31 -0800 (PST)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k24sm18278408pgm.61.2020.03.02.04.58.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2020 04:58:31 -0800 (PST)
-Message-ID: <5e5d02f7.1c69fb81.5ebe0.f8fb@mx.google.com>
-Date:   Mon, 02 Mar 2020 04:58:31 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1727085AbgCBOX2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Mar 2020 09:23:28 -0500
+Received: from foss.arm.com ([217.140.110.172]:33320 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726969AbgCBOX2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Mar 2020 09:23:28 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D20BE2F;
+        Mon,  2 Mar 2020 06:23:27 -0800 (PST)
+Received: from localhost (e108754-lin.cambridge.arm.com [10.1.198.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 72AF63F534;
+        Mon,  2 Mar 2020 06:23:27 -0800 (PST)
+Date:   Mon, 2 Mar 2020 14:23:26 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     will@kernel.org, mark.rutland@arm.com, maz@kernel.org,
+        suzuki.poulose@arm.com, sudeep.holla@arm.com, lukasz.luba@arm.com,
+        valentin.schneider@arm.com, dietmar.eggemann@arm.com,
+        rjw@rjwysocki.net, pkondeti@codeaurora.org, peterz@infradead.org,
+        mingo@redhat.com, vincent.guittot@linaro.org,
+        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 1/7] arm64: add support for the AMU extension v1
+Message-ID: <20200302142326.GA15709@arm.com>
+References: <20200226132947.29738-1-ionela.voinescu@arm.com>
+ <20200226132947.29738-2-ionela.voinescu@arm.com>
+ <20200228103234.GA3904776@arrakis.emea.arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.6-rc4-56-gf99f4dfcc7da
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 23 runs,
- 0 regressions (v5.6-rc4-56-gf99f4dfcc7da)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200228103234.GA3904776@arrakis.emea.arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 23 runs, 0 regressions (v5.6-rc4-56-gf99f4dfcc7da)
+Hi Catalin,
 
-Test results summary
---------------------
+On Friday 28 Feb 2020 at 10:32:34 (+0000), Catalin Marinas wrote:
+> Hi Ionela,
+> 
+> On Wed, Feb 26, 2020 at 01:29:41PM +0000, Ionela Voinescu wrote:
+> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > index dbc22d684627..49f0c436928f 100644
+> > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > @@ -318,6 +318,15 @@
+> >  			Format: <a>,<b>
+> >  			See also Documentation/input/joydev/joystick.rst
+> >  
+> > +	amu=		[ARM64]
+> > +			Enables or disables detection, enablement and access to
+> > +			counter registers of the Activity Monitors Unit (AMU).
+> > +			Format: amu=[0/1/on/off/y/n]
+> > +			amu=[0/off/n] ensures access to AMU's counter registers
+> > +				      is not attempted.
+> > +			amu=[1/on/y] (default) enables detection and access to
+> > +				     AMU's counter registers.
+> 
+> Is the only reason for this parameter to be able to disable the feature
+> if the firmware doesn't support it? According to the Kconfig entry, you
+> may see weird behaviour, firmware lock-up. Is the user supposed to try
+> again with amu=0?
+> 
+> I'm not particularly fond of adding kernel parameters to work around
+> broken firmware. We have other architecture features (e.g. PtrAuth) that
+> need enabling at EL3 but we don't have such parameters. If it's likely
+> that we hit this issue in practice, I'd rather have the firmware
+> describing the presence of AMU via some DT entry. But I'd rather not
+> bother at all, just get the vendors to update their firmware.
+> 
 
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig        | results
-----+------------------------------+--------+-----------------------+------=
-----+------------------+--------
-1   | bcm2711-rpi-4-b              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 1/1    =
+The firmware is supposed to do three actions for the kernel to be able
+to use the counters: enable access to EL2/EL1, enable the counters and
+save/restore the counters before/after core-off.
 
-2   | bcm2837-rpi-3-b              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
+Improper firmware support can trigger different issues: kernel/firmware
+lockup/panic, invalid counter values (0, non-monotonic). Some of them
+might be less likely (firmware lockups), and some might just be due to
+present but improper support(save/restore) and therefore more likely.
 
-3   | hifive-unleashed-a00         | riscv  | lab-baylibre          | gcc-8=
-    | defconfig        | 1/1    =
+The users of the counters, for example frequency invariance [6/7], does
+some validation for this, but unfortunately not all conditions can be
+fully mitigated - validate and bail out if some condition is not
+accomplished - for example the save and restore functionality. This
+might result in improper scale values after idle.
 
-4   | meson-g12a-sei510            | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
+Therefore, the amu kernel parameter is not only there if the firmware
+does not support AMU, but it's also there if the firmware support is
+broken/improper. The kernel parameter was added at Suzuki's
+recommendation to be able to bypass its use in single kernels that are
+meant to run on multiple platforms. I also believe this is nice to have
+even for platforms that properly support AMU, but they might not want
+the use of the feature in the kernel.
 
-5   | meson-g12a-u200              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
+> If we drop this parameter, patch 1 would need to change. Otherwise the
+> patches look fine.
+> 
 
-6   | meson-g12a-x96-max           | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
+This being said, I agree this was added as a 'just in case' and not as
+support for a likely scenario, therefore, I don't fully disagree to drop
+it for now.
 
-7   | meson-g12b-odroid-n2         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
+Let me know what you think. If you'd still rather I drop it, I can do that
+and rebase on top of Marc's changes and push v6.
 
-8   | meson-gxbb-p200              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-9   | meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-10  | meson-gxl-s805x-p241         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-11  | meson-gxl-s905d-p230         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-12  | meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-13  | meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-14  | meson-gxm-khadas-vim2        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-15  | meson-sm1-khadas-vim3l       | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-16  | meson-sm1-sei610             | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-17  | qemu_arm64-virt-gicv2        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-18  | qemu_arm64-virt-gicv3        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-19  | qemu_x86_64                  | x86_64 | lab-baylibre          | gcc-8=
-    | x86_64_defconfig | 5/5    =
-
-20  | rk3399-puma-haikou           | arm64  | lab-theobroma-systems | gcc-8=
-    | defconfig        | 5/5    =
-
-21  | sun50i-a64-pine64-plus       | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-22  | sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-23  | sun50i-h6-pine-h64-model-b   | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.6-rc4-56-gf99f4dfcc7da
-  URL:      git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.g=
-it
-  SHA:      f99f4dfcc7da2a275bf6c1c864a829afab018816=20
+Thanks,
+Ionela.
