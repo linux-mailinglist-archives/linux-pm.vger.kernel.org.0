@@ -2,99 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4BBA177531
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 12:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEE61776C7
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 14:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727896AbgCCLSC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 06:18:02 -0500
-Received: from mail-pf1-f175.google.com ([209.85.210.175]:35879 "EHLO
-        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727869AbgCCLSC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 06:18:02 -0500
-Received: by mail-pf1-f175.google.com with SMTP id i13so1309119pfe.3
-        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 03:18:00 -0800 (PST)
+        id S1728468AbgCCNRf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Mar 2020 08:17:35 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:54545 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728124AbgCCNRf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 08:17:35 -0500
+Received: by mail-wm1-f67.google.com with SMTP id i9so1733810wml.4;
+        Tue, 03 Mar 2020 05:17:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6LpPu+7mzHDbzzNZ3vNWrKJy3N6+UnYE5W0wfZ5TDvA=;
-        b=X9DQytk52qZ6DQRmc5okitpNMgHqG6s8o4bhvGC/XRa0ECQDG91tyC0uTDPgvD5O1k
-         AUuMxfLAJyrLqXfrAp5dKlhSuhJd+75XMDpEpOhrHrfJ3hNdoOJBM9SxQNB3jHDPbsD8
-         DhiRPCC1dISZWIga0LihFWuRrO+DF9g8G3LAFp5NaoxJuVYG6DS7xohhSh+k7UWyF562
-         YPqgCzzzuUmbeQKhJvCRRs0x4f4+fnOrjIpvEtN8uYJfnHqRy6MgFt55MQn41GYLpstR
-         fMeTQE2yvj0EyS4Bx0uHfr0FdNMEMZDwY5XPTrtOrDQpG/auu4hOrJn2TkWWAD4aZ+Pr
-         r/pA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x1haolJvTMTs4qAKKQpFP8pY7Ez4bO8I0NW3W3vGhjY=;
+        b=OuocMO5bejjzlYN7dgw8I+8i7eYd2hQHN4Z6zRclkIyqy204aGYP9hBgL0OfmqkUs2
+         VwkGfDLA7OjW5W7CCKViNtEZZaKACTs29/be0YTbgm/2tmmJdc+zsgurpV68PSrI4n0y
+         qZGu/h11pBgohxtCnuw9NS+/rL/fghbF5xQ9vGE6m3ZCWB4kYe1/SQko1ja8UCdmqBMb
+         wMtj0pF8zR9m+qrZJof85tZdKOtQBz+s9o0hc2wRsHqnPExf3XHgaNSMhvoJxkLgV23j
+         plKLYqojWrxfJGa8HkPldn1PPKxCakR7AHxQ8v1Qd88GfCwh9lu8b/GzjTgtAxKvVLgD
+         qWIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6LpPu+7mzHDbzzNZ3vNWrKJy3N6+UnYE5W0wfZ5TDvA=;
-        b=NOVjwPOW6B877YsKEWUBkUlHqMxjyYDC74pxq1XdXdpDtEqroBboXurWJHGsY5IYUx
-         9Hr/Fbfvb3cIthIrsq8/FKm+WzALSztzwvDMAIZ0JizH637bnqLV+RSUKeylEAEuZSvD
-         AzuPKrmyYXQBL79E4dCbQbZdMsyKLdCcWAVRMxFYKi3vQtqvecYh4OOUr/BWmbfh49py
-         nuG++rBlUhCE0LZ9vkyuo0G19WJd9E3p8RPgS/L9PKIdwXwHbCwkXbTb5XQHBeULENPO
-         2TliB5umalCFTSfJaoHx0eRJ0x04gn9yCeDsHIUf9w3An0lSeMMk0ShlfnAXPLxieD4i
-         e7hg==
-X-Gm-Message-State: ANhLgQ3+ROHxN6ZGkC//ZLd207ybShab1bbbjA5ivK7dcseuT4qM0pcb
-        IJ02HB2Z8KXkur2ZBPPA8GHC0Q==
-X-Google-Smtp-Source: ADFU+vtX4ocvGPjD4lCipeCvf6Ndh/Qq0CPh8PdfYnJjc4X0n5KlKRfZpxjGrKkVvOS0v1sBH1rFJA==
-X-Received: by 2002:a63:4103:: with SMTP id o3mr3271939pga.199.1583234279527;
-        Tue, 03 Mar 2020 03:17:59 -0800 (PST)
-Received: from localhost ([122.167.24.230])
-        by smtp.gmail.com with ESMTPSA id d4sm2138730pjg.19.2020.03.03.03.17.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Mar 2020 03:17:58 -0800 (PST)
-Date:   Tue, 3 Mar 2020 16:47:56 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 0/3] Convert i.MX6Q cpufreq to use nvmem API
-Message-ID: <20200303111756.eikekt7vg2js7emw@vireshk-i7>
-References: <1583201690-16068-1-git-send-email-peng.fan@nxp.com>
- <20200303054547.4wpnzmgnuo7jd2qa@vireshk-i7>
- <AM0PR04MB4481FDAD041F6476FFFC0F6788E40@AM0PR04MB4481.eurprd04.prod.outlook.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x1haolJvTMTs4qAKKQpFP8pY7Ez4bO8I0NW3W3vGhjY=;
+        b=gjspNOzcHZj56hjMed/8JCTBxZsPZwpCkIM7lgp/4uPNljMOpLKG23PiDi8c7VQGzw
+         kmVUGdn8vlhkZGlXz23YIDt5SvsArRHgjn02dB3vMBJqOtdvtHs3w3+eROtKQb1LrzuC
+         AgZWYREP4zY2MFxYoAY/xFjHhP3ngMhotxOYQrkOi6naU+ZDwQ/lJX01tRrCEV5EEQSN
+         bi0tMn718w52MGdWq2nmvma9qlK2nMJdBHEWsREWlLg26S46aL8sOMk0fSoyhOt47xoq
+         ClqUzO9yNJwiO6KrSYAOpIAjT7UQ3aR1Cu4gEfGQrbrhIJx1eIK/sOnAXzdF7u0mow/D
+         73nw==
+X-Gm-Message-State: ANhLgQ2Slm0ctOd3oKSXotO7GLcXNDMmzPivSscGjq7sayVWFBG1x7DM
+        g19vBjvnXcuHGbRkbzmclbfxyvN5NtkjszSKuVM=
+X-Google-Smtp-Source: ADFU+vtrqxh9biAxeykoHsq+WDr8PQuEooauex3an4mdH3DhWCElhBl6tZ0babeoVFgVsf3/xOOvr2qyvHAvbWS8TDs=
+X-Received: by 2002:a1c:9e51:: with SMTP id h78mr4179705wme.44.1583241453088;
+ Tue, 03 Mar 2020 05:17:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM0PR04MB4481FDAD041F6476FFFC0F6788E40@AM0PR04MB4481.eurprd04.prod.outlook.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20200302205700.29746-1-daniel.baluta@oss.nxp.com>
+ <20200302205700.29746-3-daniel.baluta@oss.nxp.com> <CAFQqKeUSf_KJ3MBumZTEEUc+kUdLnL5y=kvQ2x75FziJUECqpA@mail.gmail.com>
+In-Reply-To: <CAFQqKeUSf_KJ3MBumZTEEUc+kUdLnL5y=kvQ2x75FziJUECqpA@mail.gmail.com>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Tue, 3 Mar 2020 15:17:21 +0200
+Message-ID: <CAEnQRZBOpYASGTuBQ2Fz6Lg=L5otR2r8yr=XhsWSCHjmaB_L8w@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] ASoC: SOF: Use multi PM domains helpers
+To:     "Sridharan, Ranjani" <ranjani.sridharan@intel.com>
+Cc:     Daniel Baluta <daniel.baluta@oss.nxp.com>, rjw@rjwysocki.net,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        linux-pm@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>, khilman@kernel.org,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Paul Olaru <paul.olaru@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "S.j. Wang" <shengjiu.wang@nxp.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-03-20, 06:16, Peng Fan wrote:
-> Hi Viresh,
-> 
-> > Subject: Re: [PATCH 0/3] Convert i.MX6Q cpufreq to use nvmem API
-> > 
-> > On 03-03-20, 10:14, peng.fan@nxp.com wrote:
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > Use nvmem API is better compared with direclty accessing OCOTP registers.
-> > > nvmem could handle OCOTP clk, defer probe.
-> > >
-> > > Patch 1/3 is dts changes to add nvmem related properties Patch 2/3 is
-> > > a bug fix Patch 3/3 is convert to nvmem API
-> > 
-> > Should I apply patch 2 and 3 ? And you can take 1/3 via ARM Soc tree as this
-> > shouldn't break anything.
-> 
-> Please take patch 2 and 3. Without patch 1, it just use legacy method,
-> not break things.
+On Mon, Mar 2, 2020 at 11:26 PM Sridharan, Ranjani
+<ranjani.sridharan@intel.com> wrote:
+>
+>
+>
+> On Mon, Mar 2, 2020 at 1:00 PM Daniel Baluta <daniel.baluta@oss.nxp.com> wrote:
+>>
+>> From: Daniel Baluta <daniel.baluta@nxp.com>
+>>
+>> Use dev_multi_pm_attach / dev_multi_pm_detach instead of the hardcoded
+>> version.
+>>
+>> Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
+>> ---
+>>  sound/soc/sof/imx/imx8.c | 54 +++++-----------------------------------
+>>  1 file changed, 6 insertions(+), 48 deletions(-)
+>>
+>> diff --git a/sound/soc/sof/imx/imx8.c b/sound/soc/sof/imx/imx8.c
+>> index b692752b2178..ca740538a2d5 100644
+>> --- a/sound/soc/sof/imx/imx8.c
+>> +++ b/sound/soc/sof/imx/imx8.c
+>> @@ -51,10 +51,7 @@ struct imx8_priv {
+>>         struct imx_sc_ipc *sc_ipc;
+>>
+>>         /* Power domain handling */
+>> -       int num_domains;
+>> -       struct device **pd_dev;
+>> -       struct device_link **link;
+>> -
+>> +       struct dev_multi_pm_domain_data *mpd;
+>>  };
+>>
+>>  static void imx8_get_reply(struct snd_sof_dev *sdev)
+>> @@ -207,7 +204,6 @@ static int imx8_probe(struct snd_sof_dev *sdev)
+>>         struct resource res;
+>>         u32 base, size;
+>>         int ret = 0;
+>> -       int i;
+>>
+>>         priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+>>         if (!priv)
+>> @@ -218,39 +214,9 @@ static int imx8_probe(struct snd_sof_dev *sdev)
+>>         priv->sdev = sdev;
+>>
+>>         /* power up device associated power domains */
+>> -       priv->num_domains = of_count_phandle_with_args(np, "power-domains",
+>> -                                                      "#power-domain-cells");
+>> -       if (priv->num_domains < 0) {
+>> -               dev_err(sdev->dev, "no power-domains property in %pOF\n", np);
+>> -               return priv->num_domains;
+>> -       }
+>> -
+>> -       priv->pd_dev = devm_kmalloc_array(&pdev->dev, priv->num_domains,
+>> -                                         sizeof(*priv->pd_dev), GFP_KERNEL);
+>> -       if (!priv->pd_dev)
+>> -               return -ENOMEM;
+>> -
+>> -       priv->link = devm_kmalloc_array(&pdev->dev, priv->num_domains,
+>> -                                       sizeof(*priv->link), GFP_KERNEL);
+>> -       if (!priv->link)
+>> -               return -ENOMEM;
+>> -
+>> -       for (i = 0; i < priv->num_domains; i++) {
+>> -               priv->pd_dev[i] = dev_pm_domain_attach_by_id(&pdev->dev, i);
+>> -               if (IS_ERR(priv->pd_dev[i])) {
+>> -                       ret = PTR_ERR(priv->pd_dev[i]);
+>> -                       goto exit_unroll_pm;
+>> -               }
+>> -               priv->link[i] = device_link_add(&pdev->dev, priv->pd_dev[i],
+>> -                                               DL_FLAG_STATELESS |
+>> -                                               DL_FLAG_PM_RUNTIME |
+>> -                                               DL_FLAG_RPM_ACTIVE);
+>> -               if (!priv->link[i]) {
+>> -                       ret = -ENOMEM;
+>> -                       dev_pm_domain_detach(priv->pd_dev[i], false);
+>> -                       goto exit_unroll_pm;
+>> -               }
+>> -       }
+>> +       priv->mpd = dev_multi_pm_attach(&pdev->dev);
+>> +       if (IS_ERR(priv->mpd))
+>> +               return PTR_ERR(priv->mpd);
+>>
+>>         ret = imx_scu_get_handle(&priv->sc_ipc);
+>>         if (ret) {
+>> @@ -329,25 +295,17 @@ static int imx8_probe(struct snd_sof_dev *sdev)
+>>  exit_pdev_unregister:
+>>         platform_device_unregister(priv->ipc_dev);
+>>  exit_unroll_pm:
+>
+> Can we also rename the label to exit_pm_detach maybe? It is no longer an unroll anymore right?
 
-Applied. Thanks.
-
--- 
-viresh
+Sure, will do in v2.
