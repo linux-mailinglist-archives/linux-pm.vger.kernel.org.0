@@ -2,212 +2,235 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 600D717841D
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 21:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7453A178440
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 21:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731887AbgCCUg0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 15:36:26 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:37027 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731886AbgCCUg0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 15:36:26 -0500
-Received: by mail-lj1-f193.google.com with SMTP id q23so5076182ljm.4
-        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 12:36:24 -0800 (PST)
+        id S1731845AbgCCUqN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Mar 2020 15:46:13 -0500
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:38650 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728176AbgCCUqN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 15:46:13 -0500
+Received: by mail-vs1-f68.google.com with SMTP id r18so3352921vso.5
+        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 12:46:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7PinDvT3vaZ+q6CFmJPa7CF8xALNvmK8t7KJc3O4ca4=;
-        b=Fq/sp9HG47oR3mlEYYx860yS6y7Je9qVstoba2QSh8hz5l2dwmaB6g1W8Zk+yDHKzo
-         1qmVSw2rUW2hmBPDL+w2zNpuAAZ8uwSywAn3K6o3SPEznX1iHxralqz2M+rB5FnYlN7/
-         +OIDlP1SWny1pE5E8KQrWDkImEI/q7miYGDO0zz2JYVBbjJkoruHX5FRHM8RdYu5jFY7
-         nsX1gCXhQewE0swh1cr5Sk+B4srQFVwSeBgahNvVvvVxuda36+DCxOVHHc0cCgdwVr8c
-         0C3XZJEUdNwCWDAbp1hj6NVeL4kjQ62RTtg0zmYRmxAOucjwocHHMxEkQOT0Th0CTJgy
-         XkHA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7L4eJdYzEWt9OU7Eb6955CnoA1Bc4Uk+/BMUtBI5Efw=;
+        b=EajGJc2UriF5GG1JUfXsGdRCrJrlHHOSrWyfJ88FE1mCrdqfTUHe44b+g5uDWOWE1P
+         OHAPcvPTYYVHavrAPdMA7YfBas8pD2G6Q0qt/RVqbzRGZ/+crz3s2RFuJKtOVgHGIgFs
+         uE6ekqsvvRTNIRqD1vs+x/nVKEsgbiJ+y9HXufoGQ7ETMPTCYXe8q+GPsGpv0QO+kgzi
+         k0oUKOf9qRGCy2ND98qTJssy8yVPIbe07vuHwwdIU2bMY/6pDKyJNXq4YFQgdPwiJAEt
+         Tr3yNrqTGMta2JPQtHizVe+3rjTu5CW+Orf+2vU8yELfXOQdomU9M5ukneMjkg70HfQC
+         GlFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7PinDvT3vaZ+q6CFmJPa7CF8xALNvmK8t7KJc3O4ca4=;
-        b=Qv6jSr6bLoewBSubu6xcTooR0hDDPp7R38ezdU+/h6NwLnFS6N0xuNuV9n05fXquzy
-         lbezGq2LBI/3AHi4WHl1uUIyCoKxY7o2Hs71W1oxYfuPIS6vTVpfL3oDvHjJBzuyDJOJ
-         tUDpMfW4aDWWZYWBgEjCpbOrIaVgcGlCHQegDqLJAAk8GyCyqvV61+JqeNOR0+gq4CKi
-         faGvepBVZps2WKMvpfF7CDYefOpWn02CxjiyWrbbOKLcBfqnoZbvAw9NsEKNxnlyhstn
-         CPkDkg85Kx7ubhvv+8+o+jyzg8BB6gsGO8vDj3DTqPcufNKbZKyrYAAsM5zlYVOnVYue
-         MSJA==
-X-Gm-Message-State: ANhLgQ3hYz/y9mLfFiYHVkdvRUy+mzd0LLlZD9ugOqPi2FzydRioEW+7
-        eBD8JTKCcawpwUQUXKffBgvjYA==
-X-Google-Smtp-Source: ADFU+vt6uuUl+iUGLAMABwb54VVP9bXXM8EH32uRgtLikEC1RAhEd/mfOswBvrjjq1aT9X1OAg20ig==
-X-Received: by 2002:a2e:9e4c:: with SMTP id g12mr3324423ljk.15.1583267783555;
-        Tue, 03 Mar 2020 12:36:23 -0800 (PST)
-Received: from localhost.localdomain (h-158-174-22-210.NA.cust.bahnhof.se. [158.174.22.210])
-        by smtp.gmail.com with ESMTPSA id t195sm1339532lff.0.2020.03.03.12.36.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 12:36:23 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7L4eJdYzEWt9OU7Eb6955CnoA1Bc4Uk+/BMUtBI5Efw=;
+        b=KNxW3fFCUm7FCGUOKXk77fq18kmMZUF7n/6TMEAHix+yfA4C/fwhEOVw2rW0GVwBMY
+         bEXMZgJXrdoFy6H6XwVfqR/lI05eo7Nt4fihjQixIytextMYWkuHOHlbesMZmjbL34dk
+         iqzqraHD/Ff8KaQ6qY5NXuLGXej4RM/LeAjJ/mwkLuYslrYygzoItf774VX3Q7iuOuUk
+         AP0F/L5RV7P1JPSbZGjyF22wv1Zs7RUW5JJhdjXEm4ocPXu6Wztp+2IxWmJj4mTPC1V4
+         0W1Wiv5hLr7MAhReVohatptUA2tX+GojCn449/CPErhzla8sTfYq7aKWdjoAM+Qz0REK
+         g55Q==
+X-Gm-Message-State: ANhLgQ0BEp1eTanEE49JjVngOmFd9GwC4Qrel/WTPwk3IK1mjrgxaNAl
+        qY3ZDI8zxa+IDFdhiB1cpcxKMO9Nd1dlmCxtWoFPNw==
+X-Google-Smtp-Source: ADFU+vs5Geo/nfXYUy3+nQ5/6sjz1pvP6CtSd2BjNvOeDErJnDZvTjqTBd0O+W+/8FOZxGqhfYYRBraBqmjwiLn2eTA=
+X-Received: by 2002:a67:800e:: with SMTP id b14mr2363089vsd.191.1583268371719;
+ Tue, 03 Mar 2020 12:46:11 -0800 (PST)
+MIME-Version: 1.0
+References: <20200303150749.30566-1-ulf.hansson@linaro.org>
+ <20200303150749.30566-4-ulf.hansson@linaro.org> <20200303170232.GA26191@bogus>
+In-Reply-To: <20200303170232.GA26191@bogus>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>,
+Date:   Tue, 3 Mar 2020 21:45:35 +0100
+Message-ID: <CAPDyKFrgbnDR2q2Aw7HPhosBprgR43ohXmNMLya_bRry4GqtoQ@mail.gmail.com>
+Subject: Re: [PATCH 3/7] dt-bindings: power: Convert domain-idle-states
+ bindings to json-schema
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        DTML <devicetree@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Lina Iyer <ilina@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 4/4] cpuidle: psci: Allow WFI to be the only state for the hierarchical topology
-Date:   Tue,  3 Mar 2020 21:35:59 +0100
-Message-Id: <20200303203559.23995-5-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200303203559.23995-1-ulf.hansson@linaro.org>
-References: <20200303203559.23995-1-ulf.hansson@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's possible that only the WFI state is supported for the CPU, while also
-a shared idle state exists for a group of CPUs.
+On Tue, 3 Mar 2020 at 18:02, Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Mar 03, 2020 at 04:07:45PM +0100, Ulf Hansson wrote:
+> > While converting to the json-schema, let's also take the opportunity to
+> > further specify/clarify some more details about the DT binding.
+> >
+> > For example, let's define the label where to put the states nodes, set a
+> > pattern for nodename of the state nodes and finally add an example.
+> >
+> > Fixes: a3f048b5424e ("dt: psci: Update DT bindings to support hierarchical PSCI states")
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >  .../devicetree/bindings/arm/psci.yaml         |  2 +-
+> >  .../bindings/power/domain-idle-state.txt      | 33 ---------
+> >  .../bindings/power/domain-idle-state.yaml     | 67 +++++++++++++++++++
+> >  .../bindings/power/power-domain.yaml          | 22 +++---
+> >  .../bindings/power/power_domain.txt           |  2 +-
+> >  5 files changed, 79 insertions(+), 47 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/power/domain-idle-state.txt
+> >  create mode 100644 Documentation/devicetree/bindings/power/domain-idle-state.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/arm/psci.yaml b/Documentation/devicetree/bindings/arm/psci.yaml
+> > index 540211a080d4..0bc3c43a525a 100644
+> > --- a/Documentation/devicetree/bindings/arm/psci.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/psci.yaml
+> > @@ -123,7 +123,7 @@ properties:
+> >        to mandate it.
+> >
+> >        [3] Documentation/devicetree/bindings/power/power_domain.txt
+> > -      [4] Documentation/devicetree/bindings/power/domain-idle-state.txt
+> > +      [4] Documentation/devicetree/bindings/power/domain-idle-state.yaml
+> >
+> >    power-domains:
+> >      $ref: '/schemas/types.yaml#/definitions/phandle-array'
+> > diff --git a/Documentation/devicetree/bindings/power/domain-idle-state.txt b/Documentation/devicetree/bindings/power/domain-idle-state.txt
+> > deleted file mode 100644
+> > index eefc7ed22ca2..000000000000
+> > --- a/Documentation/devicetree/bindings/power/domain-idle-state.txt
+> > +++ /dev/null
+> > @@ -1,33 +0,0 @@
+> > -PM Domain Idle State Node:
+> > -
+> > -A domain idle state node represents the state parameters that will be used to
+> > -select the state when there are no active components in the domain.
+> > -
+> > -The state node has the following parameters -
+> > -
+> > -- compatible:
+> > -     Usage: Required
+> > -     Value type: <string>
+> > -     Definition: Must be "domain-idle-state".
+> > -
+> > -- entry-latency-us
+> > -     Usage: Required
+> > -     Value type: <prop-encoded-array>
+> > -     Definition: u32 value representing worst case latency in
+> > -                 microseconds required to enter the idle state.
+> > -                 The exit-latency-us duration may be guaranteed
+> > -                 only after entry-latency-us has passed.
+> > -
+> > -- exit-latency-us
+> > -     Usage: Required
+> > -     Value type: <prop-encoded-array>
+> > -     Definition: u32 value representing worst case latency
+> > -                 in microseconds required to exit the idle state.
+> > -
+> > -- min-residency-us
+> > -     Usage: Required
+> > -     Value type: <prop-encoded-array>
+> > -     Definition: u32 value representing minimum residency duration
+> > -                 in microseconds after which the idle state will yield
+> > -                 power benefits after overcoming the overhead in entering
+> > -i                the idle state.
+> > diff --git a/Documentation/devicetree/bindings/power/domain-idle-state.yaml b/Documentation/devicetree/bindings/power/domain-idle-state.yaml
+> > new file mode 100644
+> > index 000000000000..27da43076b85
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/power/domain-idle-state.yaml
+> > @@ -0,0 +1,67 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/power/domain-idle-state.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: PM Domain Idle States binding description
+> > +
+> > +maintainers:
+> > +  - Ulf Hansson <ulf.hansson@linaro.org>
+> > +
+> > +description:
+> > +  A domain idle state node represents the state parameters that will be used to
+> > +  select the state when there are no active components in the PM domain.
+> > +
+> > +properties:
+> > +  $nodename:
+> > +    const: domain-idle-states
+> > +
+> > +patternProperties:
+> > +  "^(cpu|cluster|domain)-":
+> > +    type: object
+> > +    description:
+> > +      Each state node represents a domain idle state description.
+> > +
+> > +    properties:
+> > +      compatible:
+> > +        const: domain-idle-state
+> > +
+> > +      entry-latency-us:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+>
+> You don't need a type because the core schema defines it for all
+> standard units.
 
-When the hierarchical topology is used, the shared idle state may not be
-compatible with arm,idle-state, rather with "domain-idle-state", which
-makes dt_init_idle_driver() to return zero. This leads to that the
-cpuidle-psci driver bails out during initialization, avoiding to register a
-cpuidle driver and instead relies on the default architectural back-end
-(called via cpu_do_idle()). In other words, the shared idle state becomes
-unused.
+Okay, I noticed some skips this, but wanted rather to clear and fuzzy.
 
-Let's fix this behaviour, by allowing the dt_init_idle_driver() to return 0
-and then continue with the initialization. If it turns out that the
-hierarchical topology is used and we have some additional states to manage,
-then continue with the cpuidle driver registration, otherwise bail out as
-before.
+In any case, yes, let's remove it.
 
-Reported-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
+>
+> > +        description:
+> > +          The worst case latency in microseconds required to enter the idle
+> > +          state. Note that, the exit-latency-us duration may be guaranteed only
+> > +          after the entry-latency-us has passed.
+> > +
+> > +      exit-latency-us:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        description:
+> > +          The worst case latency in microseconds required to exit the idle
+> > +          state.
+> > +
+> > +      min-residency-us:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        description:
+> > +          The minimum residency duration in microseconds after which the idle
+> > +          state will yield power benefits, after overcoming the overhead while
+> > +          entering the idle state.
+> > +
+> > +    required:
+> > +      - compatible
+> > +      - entry-latency-us
+> > +      - exit-latency-us
+> > +      - min-residency-us
+>
+>        additionalProperties: false
+>
+> Do we have cases of adding additional properties?
 
-Changes in v2:
-	- Convert the error code returned from psci_cpu_suspend_enter() into an
-	expected error code by cpuidle core.
+I might, but I am not sure what's the correct way to deal with that.
 
----
- drivers/cpuidle/cpuidle-psci.c | 48 +++++++++++++++++++++-------------
- 1 file changed, 30 insertions(+), 18 deletions(-)
+What I am wondering about is the "arm,psci-suspend-param" property,
+currently defined as part of the PSCI bindings (psci.yaml).
 
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index bae9140a65a5..ae0fabec2742 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -56,16 +56,19 @@ static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
- 	u32 *states = data->psci_states;
- 	struct device *pd_dev = data->dev;
- 	u32 state;
--	int ret;
-+	int ret = 0;
- 
- 	/* Do runtime PM to manage a hierarchical CPU toplogy. */
- 	pm_runtime_put_sync_suspend(pd_dev);
- 
- 	state = psci_get_domain_state();
--	if (!state)
-+	if (!state && states)
- 		state = states[idx];
- 
--	ret = psci_enter_state(idx, state);
-+	if (state)
-+		ret = psci_cpu_suspend_enter(state) ? -1 : idx;
-+	else
-+		cpu_do_idle();
- 
- 	pm_runtime_get_sync(pd_dev);
- 
-@@ -180,7 +183,7 @@ static int __init psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
- 	drv->states[state_count - 1].enter = psci_enter_domain_idle_state;
- 	psci_cpuidle_use_cpuhp = true;
- 
--	return 0;
-+	return 1;
- }
- 
- static int __init psci_dt_cpu_init_idle(struct cpuidle_driver *drv,
-@@ -192,6 +195,13 @@ static int __init psci_dt_cpu_init_idle(struct cpuidle_driver *drv,
- 	struct device_node *state_node;
- 	struct psci_cpuidle_data *data = per_cpu_ptr(&psci_cpuidle_data, cpu);
- 
-+	/*
-+	 * Special case when WFI is the only state, as we may still need to
-+	 * initialize data, if the hierarchical topology is used.
-+	 */
-+	if (!state_count)
-+		return psci_dt_cpu_init_topology(drv, data, 1, cpu);
-+
- 	state_count++; /* Add WFI state too */
- 	psci_states = kcalloc(state_count, sizeof(*psci_states), GFP_KERNEL);
- 	if (!psci_states)
-@@ -223,7 +233,7 @@ static int __init psci_dt_cpu_init_idle(struct cpuidle_driver *drv,
- 
- 	/* Idle states parsed correctly, store them in the per-cpu struct. */
- 	data->psci_states = psci_states;
--	return 0;
-+	return state_count;
- 
- free_mem:
- 	kfree(psci_states);
-@@ -282,33 +292,35 @@ static int __init psci_idle_init_cpu(int cpu)
- 		return -ENOMEM;
- 
- 	drv->cpumask = (struct cpumask *)cpumask_of(cpu);
-+	drv->state_count = 1;
- 
- 	/*
--	 * Initialize idle states data, starting at index 1, since
--	 * by default idle state 0 is the quiescent state reached
--	 * by the cpu by executing the wfi instruction.
--	 *
--	 * If no DT idle states are detected (ret == 0) let the driver
--	 * initialization fail accordingly since there is no reason to
--	 * initialize the idle driver if only wfi is supported, the
--	 * default archictectural back-end already executes wfi
--	 * on idle entry.
-+	 * Initialize idle states data, starting at index 1, since by default
-+	 * idle state 0 is the quiescent state reached by the cpu by executing
-+	 * the wfi instruction. If no DT idle states are detected (ret == 0),
-+	 * we may still use the hierarchical topology.
- 	 */
- 	ret = dt_init_idle_driver(drv, psci_idle_state_match, 1);
--	if (ret <= 0) {
--		ret = ret ? : -ENODEV;
-+	if (ret < 0)
- 		goto out_kfree_drv;
--	}
- 
- 	/*
- 	 * Initialize PSCI idle states.
- 	 */
- 	ret = psci_cpu_init_idle(drv, cpu, ret);
--	if (ret) {
-+	if (ret < 0) {
- 		pr_err("CPU %d failed to PSCI idle\n", cpu);
- 		goto out_kfree_drv;
- 	}
- 
-+	/* If there are no idle states to manage, but the wfi state and we also
-+	 * don't use the hierarchical topology, let the driver initialization
-+	 * fail. Instead, let's rely on the default architectural back-end to
-+	 * execute wfi on idle entry.
-+	 */
-+	if (!ret)
-+		goto out_kfree_drv;
-+
- 	ret = cpuidle_register(drv, NULL);
- 	if (ret)
- 		goto out_kfree_drv;
--- 
-2.20.1
+I am not sure that's correct to define it as a PSCI binding. Shouldn't
+it rather be a part of the idle state bindings (idle-states.yaml) and
+the domain idle states binding ($subject patch)?
 
+What do you think?
+
+In any case, we probably want to fix this on top, if we should care.
+
+>
+> I can fix these up when applying.
+
+Thanks a lot!
+
+Kind regards
+Uffe
