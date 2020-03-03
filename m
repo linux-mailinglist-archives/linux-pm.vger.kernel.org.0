@@ -2,166 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEE61776C7
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 14:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A151776D1
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 14:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728468AbgCCNRf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 08:17:35 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:54545 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728124AbgCCNRf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 08:17:35 -0500
-Received: by mail-wm1-f67.google.com with SMTP id i9so1733810wml.4;
-        Tue, 03 Mar 2020 05:17:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x1haolJvTMTs4qAKKQpFP8pY7Ez4bO8I0NW3W3vGhjY=;
-        b=OuocMO5bejjzlYN7dgw8I+8i7eYd2hQHN4Z6zRclkIyqy204aGYP9hBgL0OfmqkUs2
-         VwkGfDLA7OjW5W7CCKViNtEZZaKACTs29/be0YTbgm/2tmmJdc+zsgurpV68PSrI4n0y
-         qZGu/h11pBgohxtCnuw9NS+/rL/fghbF5xQ9vGE6m3ZCWB4kYe1/SQko1ja8UCdmqBMb
-         wMtj0pF8zR9m+qrZJof85tZdKOtQBz+s9o0hc2wRsHqnPExf3XHgaNSMhvoJxkLgV23j
-         plKLYqojWrxfJGa8HkPldn1PPKxCakR7AHxQ8v1Qd88GfCwh9lu8b/GzjTgtAxKvVLgD
-         qWIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x1haolJvTMTs4qAKKQpFP8pY7Ez4bO8I0NW3W3vGhjY=;
-        b=gjspNOzcHZj56hjMed/8JCTBxZsPZwpCkIM7lgp/4uPNljMOpLKG23PiDi8c7VQGzw
-         kmVUGdn8vlhkZGlXz23YIDt5SvsArRHgjn02dB3vMBJqOtdvtHs3w3+eROtKQb1LrzuC
-         AgZWYREP4zY2MFxYoAY/xFjHhP3ngMhotxOYQrkOi6naU+ZDwQ/lJX01tRrCEV5EEQSN
-         bi0tMn718w52MGdWq2nmvma9qlK2nMJdBHEWsREWlLg26S46aL8sOMk0fSoyhOt47xoq
-         ClqUzO9yNJwiO6KrSYAOpIAjT7UQ3aR1Cu4gEfGQrbrhIJx1eIK/sOnAXzdF7u0mow/D
-         73nw==
-X-Gm-Message-State: ANhLgQ2Slm0ctOd3oKSXotO7GLcXNDMmzPivSscGjq7sayVWFBG1x7DM
-        g19vBjvnXcuHGbRkbzmclbfxyvN5NtkjszSKuVM=
-X-Google-Smtp-Source: ADFU+vtrqxh9biAxeykoHsq+WDr8PQuEooauex3an4mdH3DhWCElhBl6tZ0babeoVFgVsf3/xOOvr2qyvHAvbWS8TDs=
-X-Received: by 2002:a1c:9e51:: with SMTP id h78mr4179705wme.44.1583241453088;
- Tue, 03 Mar 2020 05:17:33 -0800 (PST)
-MIME-Version: 1.0
-References: <20200302205700.29746-1-daniel.baluta@oss.nxp.com>
- <20200302205700.29746-3-daniel.baluta@oss.nxp.com> <CAFQqKeUSf_KJ3MBumZTEEUc+kUdLnL5y=kvQ2x75FziJUECqpA@mail.gmail.com>
-In-Reply-To: <CAFQqKeUSf_KJ3MBumZTEEUc+kUdLnL5y=kvQ2x75FziJUECqpA@mail.gmail.com>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Tue, 3 Mar 2020 15:17:21 +0200
-Message-ID: <CAEnQRZBOpYASGTuBQ2Fz6Lg=L5otR2r8yr=XhsWSCHjmaB_L8w@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/2] ASoC: SOF: Use multi PM domains helpers
-To:     "Sridharan, Ranjani" <ranjani.sridharan@intel.com>
-Cc:     Daniel Baluta <daniel.baluta@oss.nxp.com>, rjw@rjwysocki.net,
-        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        linux-pm@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>, khilman@kernel.org,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Paul Olaru <paul.olaru@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "S.j. Wang" <shengjiu.wang@nxp.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729123AbgCCNSf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Mar 2020 08:18:35 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:17737 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729001AbgCCNSf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 08:18:35 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1583241514; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=WkXswGhgmp3qK3AzpKAlr4hUIybmjLb6Z1Mxala9W+8=; b=PZHJm6D79RlrNNlekARbCOjonNGOjkX/WLN3ro23Qhew/W9hHGuoZD4pON3w/jScsTLAMt/S
+ AfiWQe53cbp+wgPjaZpuUklY9RpOf/+i987H+Oiq826zgjgFiQYI3Nx+PQUjpiAPKpZvx1xZ
+ YI1SW4SfpRxvCG/QtMycGhnlSiU=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e5e5929.7f951ab87ae8-smtp-out-n01;
+ Tue, 03 Mar 2020 13:18:33 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id C3D2EC4479F; Tue,  3 Mar 2020 13:18:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from okukatla1-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: okukatla)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2AF56C433A2;
+        Tue,  3 Mar 2020 13:18:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2AF56C433A2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=okukatla@codeaurora.org
+From:   Odelu Kukatla <okukatla@codeaurora.org>
+To:     georgi.djakov@linaro.org, daidavid1@codeaurora.org,
+        bjorn.andersson@linaro.org, evgreen@google.com
+Cc:     sboyd@kernel.org, ilina@codeaurora.org, seansw@qti.qualcomm.com,
+        elder@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm-owner@vger.kernel.org,
+        Odelu Kukatla <okukatla@codeaurora.org>
+Subject: [v5, 0/3] Add SC7180 interconnect provider driver
+Date:   Tue,  3 Mar 2020 18:48:10 +0530
+Message-Id: <1583241493-21212-1-git-send-email-okukatla@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 2, 2020 at 11:26 PM Sridharan, Ranjani
-<ranjani.sridharan@intel.com> wrote:
->
->
->
-> On Mon, Mar 2, 2020 at 1:00 PM Daniel Baluta <daniel.baluta@oss.nxp.com> wrote:
->>
->> From: Daniel Baluta <daniel.baluta@nxp.com>
->>
->> Use dev_multi_pm_attach / dev_multi_pm_detach instead of the hardcoded
->> version.
->>
->> Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
->> ---
->>  sound/soc/sof/imx/imx8.c | 54 +++++-----------------------------------
->>  1 file changed, 6 insertions(+), 48 deletions(-)
->>
->> diff --git a/sound/soc/sof/imx/imx8.c b/sound/soc/sof/imx/imx8.c
->> index b692752b2178..ca740538a2d5 100644
->> --- a/sound/soc/sof/imx/imx8.c
->> +++ b/sound/soc/sof/imx/imx8.c
->> @@ -51,10 +51,7 @@ struct imx8_priv {
->>         struct imx_sc_ipc *sc_ipc;
->>
->>         /* Power domain handling */
->> -       int num_domains;
->> -       struct device **pd_dev;
->> -       struct device_link **link;
->> -
->> +       struct dev_multi_pm_domain_data *mpd;
->>  };
->>
->>  static void imx8_get_reply(struct snd_sof_dev *sdev)
->> @@ -207,7 +204,6 @@ static int imx8_probe(struct snd_sof_dev *sdev)
->>         struct resource res;
->>         u32 base, size;
->>         int ret = 0;
->> -       int i;
->>
->>         priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
->>         if (!priv)
->> @@ -218,39 +214,9 @@ static int imx8_probe(struct snd_sof_dev *sdev)
->>         priv->sdev = sdev;
->>
->>         /* power up device associated power domains */
->> -       priv->num_domains = of_count_phandle_with_args(np, "power-domains",
->> -                                                      "#power-domain-cells");
->> -       if (priv->num_domains < 0) {
->> -               dev_err(sdev->dev, "no power-domains property in %pOF\n", np);
->> -               return priv->num_domains;
->> -       }
->> -
->> -       priv->pd_dev = devm_kmalloc_array(&pdev->dev, priv->num_domains,
->> -                                         sizeof(*priv->pd_dev), GFP_KERNEL);
->> -       if (!priv->pd_dev)
->> -               return -ENOMEM;
->> -
->> -       priv->link = devm_kmalloc_array(&pdev->dev, priv->num_domains,
->> -                                       sizeof(*priv->link), GFP_KERNEL);
->> -       if (!priv->link)
->> -               return -ENOMEM;
->> -
->> -       for (i = 0; i < priv->num_domains; i++) {
->> -               priv->pd_dev[i] = dev_pm_domain_attach_by_id(&pdev->dev, i);
->> -               if (IS_ERR(priv->pd_dev[i])) {
->> -                       ret = PTR_ERR(priv->pd_dev[i]);
->> -                       goto exit_unroll_pm;
->> -               }
->> -               priv->link[i] = device_link_add(&pdev->dev, priv->pd_dev[i],
->> -                                               DL_FLAG_STATELESS |
->> -                                               DL_FLAG_PM_RUNTIME |
->> -                                               DL_FLAG_RPM_ACTIVE);
->> -               if (!priv->link[i]) {
->> -                       ret = -ENOMEM;
->> -                       dev_pm_domain_detach(priv->pd_dev[i], false);
->> -                       goto exit_unroll_pm;
->> -               }
->> -       }
->> +       priv->mpd = dev_multi_pm_attach(&pdev->dev);
->> +       if (IS_ERR(priv->mpd))
->> +               return PTR_ERR(priv->mpd);
->>
->>         ret = imx_scu_get_handle(&priv->sc_ipc);
->>         if (ret) {
->> @@ -329,25 +295,17 @@ static int imx8_probe(struct snd_sof_dev *sdev)
->>  exit_pdev_unregister:
->>         platform_device_unregister(priv->ipc_dev);
->>  exit_unroll_pm:
->
-> Can we also rename the label to exit_pm_detach maybe? It is no longer an unroll anymore right?
+Add driver to support scaling of the on-chip interconnects on
+the SC7180-based platforms.
 
-Sure, will do in v2.
+v5:
+ - Addressed review comments (Georgi/Matthias)
+ 
+v4:
+ - Addressed review comments (Sibi/Matthias)
+
+v3:
+ - Addressed review comments (Stephen/Rob)
+ - Switched the dt-bindings to dual-license.
+ - Sorted DT nodes by their addresses.
+ - Rebased to linux-next
+
+v2:
+ - Addressed review comments (Sibi/Georgi)
+ - Added local ids for nodes.
+
+Depends on:
+Consolidate interconnect RPMh support: https://patchwork.kernel.org/patch/11411959/
+
+Odelu Kukatla (3):
+  dt-bindings: interconnect: Add Qualcomm SC7180 DT bindings
+  interconnect: qcom: Add SC7180 interconnect provider driver
+  arm64: dts: sc7180: Add interconnect provider DT nodes
+
+ .../bindings/interconnect/qcom,sc7180.yaml         |  85 +++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |  96 +++
+ drivers/interconnect/qcom/Kconfig                  |  10 +
+ drivers/interconnect/qcom/Makefile                 |   2 +
+ drivers/interconnect/qcom/sc7180.c                 | 641 +++++++++++++++++++++
+ drivers/interconnect/qcom/sc7180.h                 | 149 +++++
+ include/dt-bindings/interconnect/qcom,sc7180.h     | 161 ++++++
+ 7 files changed, 1144 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml
+ create mode 100644 drivers/interconnect/qcom/sc7180.c
+ create mode 100644 drivers/interconnect/qcom/sc7180.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sc7180.h
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
