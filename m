@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB03178444
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 21:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF95717844E
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 21:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731953AbgCCUr0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 15:47:26 -0500
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:37543 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730274AbgCCUr0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 15:47:26 -0500
-Received: by mail-vk1-f196.google.com with SMTP id t192so12817vkb.4
-        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 12:47:24 -0800 (PST)
+        id S1731990AbgCCUuq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Mar 2020 15:50:46 -0500
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:36078 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731603AbgCCUup (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 15:50:45 -0500
+Received: by mail-ua1-f68.google.com with SMTP id y3so1695414uae.3
+        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 12:50:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=H8LzC1FkDwsheob6ti11k957HeWZgskHzijDc9F3t1w=;
-        b=iTZkdrGA7NLhytKTFhNkpSopPcJQivDis2tK/K84C2BmU7f//AGarD3Oi4ul4ZA5p2
-         7ovMAz3duyVE7c7Gv9VYoR3nLxlVYWx4rLEXsVN6WEQivNege4qeNkPtMcAlLt76rsWq
-         Sinub/FqaZUGTX7YrfSxoqY9xjrIuQ2ylwK2Ohy8yi57pBWR94i6Ve/S0VZ5O8r1AekV
-         VNQBsdRAjRQoyvR3/N/mMB+VTBIWZpZm/vQA3UOfuXMwRP146yoUc9A+iJ8H80IJ4sZI
-         tdqKkxfsSVRdT0cgM7rQ7gytnqS22pY9sB8LGDZRbK1CwwGcRn3E7ApDCfhnm4bvqcm6
-         Mz1A==
+        bh=XD3hDQ0araAq5zv8njvI5qg6v85AS493J1Kabe5n9XU=;
+        b=WQs8CSKCVyivgzPN2r8nm7npkTrOFE4qfJa67otUlcSCrwaKSlDrF3gGH8TEf+fF84
+         v/9skIV1L0DMfuSSIQZjLFKzht8F/ZGa+MgsCy08Bx+vWOgIqBpxJ/PDPdFuev8VqNyA
+         h41lMLtPkCTJOhtkGYI7uguOfjiLVSYgoZMlkhibAvlNRLKb6mtXn/YHo9rJuDgJ+Uny
+         i00XJnN1ZkX4aEaM8574pbADLLmr065IX3iexNFRyOCjEx8Hq1B13jzs7IFm8K61v/Oj
+         6ZXxP3hlFdm4pJYpgHUOC5+zIERiPT/vE9AGPanw3vpwqL5GPZDR4HF/ypGuwGF88vIc
+         R8fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=H8LzC1FkDwsheob6ti11k957HeWZgskHzijDc9F3t1w=;
-        b=cHNe53/ZtZ5tO5kCd6u2u5pZWaLu7bvzMwCgYFfhpa8uhEV8vaegJU2BGF2WnGBOiI
-         S8VlGCE93XIxx14u03QPWLxXXRnh6XN0XCp1FyDH2TcnkFZQofm7OVE4Luq2MNBPKxFl
-         N85nIZ0EwuvuW2MbaAU0AGvtpE/Bk1PaT1h9NuW2ruE7/dr89r8yWvjiTRYYz9rkCMzJ
-         dLXjuVGQpPUfkU1XIg5a1iPOqhk2F3OMwGiErXRuR9DiDAPC/FLHk68tuXYTlagbi9X1
-         0GRCC5INvBcW1PBpD29yECaGGQK7OJRiVAntBxJFzh1yf9Vw1/F120fKA2HSY+qMCzpr
-         ambg==
-X-Gm-Message-State: ANhLgQ0ESLGi4obAq6zj4h1eBAf/E2bjgY9gCH75+wDsl2TqWPt241gK
-        dErkGyeespWkpWYjtcKaXr9N7alIi2lxim0q5KPxpw==
-X-Google-Smtp-Source: ADFU+vuERFMpkWbnyw88Lrbiz3fboR9TvgiMmam5QelmxN9WhhxeUBTbt3kTGF03KMhQ35qpLPhxK03B5kLIBCnDqzw=
-X-Received: by 2002:ac5:c844:: with SMTP id g4mr3978713vkm.25.1583268443466;
- Tue, 03 Mar 2020 12:47:23 -0800 (PST)
+        bh=XD3hDQ0araAq5zv8njvI5qg6v85AS493J1Kabe5n9XU=;
+        b=T8L6kLmsZjE/vmg+lk4b2EJrHcwwAKmSIGLA3xR9ydHD4EGPz2qmJiWn44rkxWg6xP
+         bRyNUeS17lWcU0JBx0ehvoBPGm29MX91NaKVg1FxIyBuhXuS6Gfz7IVxjfAsGuElRt+Q
+         YQ/MT4rcGgyB0y3fAdVSaAzXdEscYytJOXSjvhfVzMtHoWVbb928hZwyqczndURoVKJS
+         TTQ9B74b2p/Orvp397zbXP8U1+4JE1Ttu0FIPfdtCQ0Lr5UAJnpGy+YHMoPN/muOSccB
+         WxuJlTZohcnaJLAq2VJECBJ7HWy0iqgSXnAAHb9CSbyshqidcWpi1uv7ecLDsjnryrxL
+         uFvA==
+X-Gm-Message-State: ANhLgQ3tbGIk2AIkzRsBGrPfU3hU0x0WksC/wABMff50IGsrr+OKAntj
+        HLAguWzCOvAvRd+C9FDieBodIDT7dmD7WZDVS25XFA==
+X-Google-Smtp-Source: ADFU+vuNcnNmh6x5IJ5M2yTWp4kLMylcBxLsMM68UQIba35vDPyCmNWmxoJ2HjjVcEPSIT6lr5mW0JrpuYGpEQbi/z0=
+X-Received: by 2002:ab0:7802:: with SMTP id x2mr3988409uaq.100.1583268644577;
+ Tue, 03 Mar 2020 12:50:44 -0800 (PST)
 MIME-Version: 1.0
 References: <20200303150749.30566-1-ulf.hansson@linaro.org>
- <20200303150749.30566-5-ulf.hansson@linaro.org> <20200303170348.GB26191@bogus>
-In-Reply-To: <20200303170348.GB26191@bogus>
+ <20200303150749.30566-6-ulf.hansson@linaro.org> <20200303170641.GC26191@bogus>
+In-Reply-To: <20200303170641.GC26191@bogus>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 3 Mar 2020 21:46:47 +0100
-Message-ID: <CAPDyKFpcpjaouXeFOm+Fj+9x7KeaRyBYLY+5oDVLYnmkV93hTg@mail.gmail.com>
-Subject: Re: [PATCH 4/7] dt-bindings: power: Extend nodename pattern for
- power-domain providers
+Date:   Tue, 3 Mar 2020 21:50:08 +0100
+Message-ID: <CAPDyKFrzy=88fPgesS0_S45rr4SdWthQRcjwnqJzRcMBKCo4=A@mail.gmail.com>
+Subject: Re: [PATCH 5/7] dt-bindings: arm: Fixup the DT bindings for
+ hierarchical PSCI states
 To:     Rob Herring <robh@kernel.org>
 Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
@@ -67,52 +67,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 3 Mar 2020 at 18:04, Rob Herring <robh@kernel.org> wrote:
+On Tue, 3 Mar 2020 at 18:06, Rob Herring <robh@kernel.org> wrote:
 >
-> On Tue, Mar 03, 2020 at 04:07:46PM +0100, Ulf Hansson wrote:
-> > The existing binding requires the nodename to have a '@', which is a bit
-> > limiting for the wider use case. Therefore, let's extend the pattern to
-> > allow either '@' or '-'.
->
-> That's fine, but...
->
-> > Additionally, let's update one of the examples to show how the updated
-> > pattern could be used.
+> On Tue, Mar 03, 2020 at 04:07:47PM +0100, Ulf Hansson wrote:
+> > The hierarchical topology with power-domain should be described through
+> > child nodes, rather than as currently described in the PSCI root node. Fix
+> > this by adding a patternProperties with a corresponding reference to the
+> > power-domain DT binding.
+> >
+> > Additionally, update the example to conform to the new pattern, but also to
+> > the adjusted domain-idle-state DT binding.
 > >
 > > Fixes: a3f048b5424e ("dt: psci: Update DT bindings to support hierarchical PSCI states")
 > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > > ---
-> >  Documentation/devicetree/bindings/power/power-domain.yaml | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> >  .../devicetree/bindings/arm/psci.yaml         | 33 +++++++++----------
+> >  1 file changed, 15 insertions(+), 18 deletions(-)
 > >
-> > diff --git a/Documentation/devicetree/bindings/power/power-domain.yaml b/Documentation/devicetree/bindings/power/power-domain.yaml
-> > index 207e63ae10f9..dc232759013e 100644
-> > --- a/Documentation/devicetree/bindings/power/power-domain.yaml
-> > +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
-> > @@ -25,7 +25,7 @@ description: |+
+> > diff --git a/Documentation/devicetree/bindings/arm/psci.yaml b/Documentation/devicetree/bindings/arm/psci.yaml
+> > index 0bc3c43a525a..cae668b61265 100644
+> > --- a/Documentation/devicetree/bindings/arm/psci.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/psci.yaml
+> > @@ -102,11 +102,15 @@ properties:
+> >        [1] Kernel documentation - ARM idle states bindings
+> >          Documentation/devicetree/bindings/arm/idle-states.yaml
 > >
-> >  properties:
-> >    $nodename:
-> > -    pattern: "^(power-controller|power-domain)(@.*)?$"
-> > +    pattern: "^(power-controller|power-domain)([@-].*)?$"
-> >
-> >    domain-idle-states:
-> >      $ref: /schemas/types.yaml#/definitions/phandle-array
-> > @@ -71,13 +71,13 @@ required:
-> >
-> >  examples:
-> >    - |
-> > -    power: power-controller@12340000 {
-> > -        compatible = "foo,power-controller";
-> > +    power: power-domain-foo {
-> > +        compatible = "foo,power-domain";
-> >          reg = <0x12340000 0x1000>;
+> > -  "#power-domain-cells":
+> > -    description:
+> > -      The number of cells in a PM domain specifier as per binding in [3].
+> > -      Must be 0 as to represent a single PM domain.
+> > +required:
+> > +  - compatible
+> > +  - method
 >
-> When you have 'reg' you should have a unit-address.
+> No need to move this.
 
-Yes, of course, thanks!
+Okay.
+
+>
+> >
+> > +patternProperties:
+> > +  "^(power-controller|power-domain)([@-].*)?$":
+> > +    $ref: "../power/power-domain.yaml#"
+>
+> This has to be under an 'allOf' or the rest of the properties are
+> ignored.
+
+Sure, I had the feeling that something was missing. Thanks for reviewing!
 
 [...]
+
+Looks like I should a v2 of the series, or do you prefer to apply some
+of the patches before I resend?
 
 Kind regards
 Uffe
