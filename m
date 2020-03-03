@@ -2,150 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CD61771BC
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 10:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0C917720D
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 10:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727974AbgCCJC5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 04:02:57 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:53934 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727049AbgCCJC5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 04:02:57 -0500
-Received: by mail-wm1-f67.google.com with SMTP id g134so799156wme.3
-        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 01:02:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=B1QblP7nlvPoNJZA/tUgIvHTmiBly/VSI1OGHQaKg+M=;
-        b=OwKTbi1blcqQFKiDiaZ7M8YGUpnC5WkQLBl9WWGtLYHog/QtZ04RdAQnMLSMHZtb2M
-         s6xrnO5ChC5bT7HUh4U/TxnmJezcfnoKV+qAeWzn9BW+1nGx5jHYxKtlSgGt6nXA9we0
-         eCRpYfcICgUJ0hZ0BubEXvr1dZ71Pe/7VytqXE3dZ51nW2DI6P9B+l3NKpO+ZmW8JZYq
-         0f3TIU47wOMrCaHt31bcmNjkobvrQmlDT7qfG+g+usS2oqjsi1WOmNf5W8mqZodX8p4Z
-         yCQ3mSNy39s75qRrSToJtqeH5wvGTtVcVFUWGovkpQPiv25Eim2dTVqhvaPHYQ8aosqg
-         Np3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=B1QblP7nlvPoNJZA/tUgIvHTmiBly/VSI1OGHQaKg+M=;
-        b=dJdNbjKExfjgf15S+a76X/pMIRCO65w+ZNXNUw1++Zyren34cDdfWHN0IlX3u3unfY
-         J3gx09VZSOn+4xADGRNdOHlH8WGOX7GQUpTuPLcxfZvtjBJu80xFc9LUFYZquwVzyIZm
-         IJIKUkJaqWUZUtDMKR0q9U1/lvrKjWZ0WZIhnnq5uE5nlPonCoJk9m9vUBvI/b4sedoO
-         nlsuUoobF1GD3eH4EQF4UqGAWITlZkJDDGkeo80HJsmra+f08lcD88/XBcyHekJ6yl0g
-         2zJRUDREmqjQHeKhmAEPaGEIpx8JtF8CV9kkAuzoO0LH2GZLC0ijKdcZpyhKDHV2qjH0
-         t0/Q==
-X-Gm-Message-State: ANhLgQ3zKB+WQe4F3EX+F2H0AdUz6Ieo/pnToCNX1paQu8Y96xn5SAeN
-        jmeHCa4w5aYmSVnkatOfuIC2Pw==
-X-Google-Smtp-Source: ADFU+vvrfaX7BjMx5oSgNO9L53mjK70aWOuTuKyuwy/dDbSeKMXjVOtrYR0cJi11GINNNvfVwzOk8g==
-X-Received: by 2002:a1c:4d3:: with SMTP id 202mr3313975wme.172.1583226174464;
-        Tue, 03 Mar 2020 01:02:54 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:995:2d3a:cb24:4f79? ([2a01:e34:ed2f:f020:995:2d3a:cb24:4f79])
-        by smtp.googlemail.com with ESMTPSA id d17sm2737694wmb.36.2020.03.03.01.02.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Mar 2020 01:02:54 -0800 (PST)
-Subject: Re: [PATCH v2] thermal: qoriq: fix a compiling issue
-To:     andy.tang@nxp.com, rui.zhang@intel.com, edubezval@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200303084641.35687-1-andy.tang@nxp.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
- sXvtg3ehTOoyD0oFjKkHaia1Zpa1m/gnNdT/WvTveLfGA1gH+yGes2Sr53Ht8hWYZFYMZc8V
- 2pbSKh8wepq4g8r5YI1XUy9YbcTdj5mVrTklyGWA49NOeJz2QbfytMT3DJmk40LqwK6CCSU0
- 9Ed8n0a+vevmQoRZJEd3Y1qXn2XHys0F6OHCC+VLENqNNZXdZE9E+b3FFW0lk49oLTzLRNIq
- 0wHeR1H54RffhLQAor2+4kSSu8mW5qB0n5Eb/zXJZZ/bRiXmT8kNg85UdYhvf03ZAsp3qxcr
- xMfMsC7m3+ADOtW90rNNLZnRvjhsYNrGIKH8Ub0UKXFXibHbafSuq7RqyRQzt01Ud8CAtq+w
- P9EftUysLtovGpLSpGDO5zQ++4ZGVygdYFr318aGDqCljKAKZ9hYgRimPBToDedho1S1uE6F
- 6YiBFnI3ry9+/KUnEP6L8Sfezwy7fp2JUNkUr41QF76nz43tl7oersrLxHzj2dYfWUAZWXva
- wW4IKF5sOPFMMgxoOJovSWqwh1b7hqI+nDlD3mmVMd20VyE9W7AgTIsvDxWUnMPvww5iExlY
- eIC0Wj9K4UqSYBOHcUPrVOKTcsBVPQA6SAMJlt82/v5l4J0pSQARAQABzSpEYW5pZWwgTGV6
- Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz7Cwa4EEwEIAEECGwEFCwkIBwIGFQoJ
- CAsCBBYCAwECHgECF4ACGQEWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXAkeagUJDRnjhwAh
- CRCP9LjScWdVJxYhBCTWJvJTvp6H5s5b9I/0uNJxZ1Un69gQAJK0ODuKzYl0TvHPU8W7uOeu
- U7OghN/DTkG6uAkyqW+iIVi320R5QyXN1Tb6vRx6+yZ6mpJRW5S9fO03wcD8Sna9xyZacJfO
- UTnpfUArs9FF1pB3VIr95WwlVoptBOuKLTCNuzoBTW6jQt0sg0uPDAi2dDzf+21t/UuF7I3z
- KSeVyHuOfofonYD85FkQJN8lsbh5xWvsASbgD8bmfI87gEbt0wq2ND5yuX+lJK7FX4lMO6gR
- ZQ75g4KWDprOO/w6ebRxDjrH0lG1qHBiZd0hcPo2wkeYwb1sqZUjQjujlDhcvnZfpDGR4yLz
- 5WG+pdciQhl6LNl7lctNhS8Uct17HNdfN7QvAumYw5sUuJ+POIlCws/aVbA5+DpmIfzPx5Ak
- UHxthNIyqZ9O6UHrVg7SaF3rvqrXtjtnu7eZ3cIsfuuHrXBTWDsVwub2nm1ddZZoC530BraS
- d7Y7eyKs7T4mGwpsi3Pd33Je5aC/rDeF44gXRv3UnKtjq2PPjaG/KPG0fLBGvhx0ARBrZLsd
- 5CTDjwFA4bo+pD13cVhTfim3dYUnX1UDmqoCISOpzg3S4+QLv1bfbIsZ3KDQQR7y/RSGzcLE
- z164aDfuSvl+6Myb5qQy1HUQ0hOj5Qh+CzF3CMEPmU1v9Qah1ThC8+KkH/HHjPPulLn7aMaK
- Z8t6h7uaAYnGzjMEXZLIEhYJKwYBBAHaRw8BAQdAGdRDglTydmxI03SYiVg95SoLOKT5zZW1
- 7Kpt/5zcvt3CwhsEGAEIACAWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXZLIEgIbAgCvCRCP
- 9LjScWdVJ40gBBkWCAAdFiEEbinX+DPdhovb6oob3uarTi9/eqYFAl2SyBIAIQkQ3uarTi9/
- eqYWIQRuKdf4M92Gi9vqihve5qtOL396pnZGAP0c3VRaj3RBEOUGKxHzcu17ZUnIoJLjpHdk
- NfBnWU9+UgD/bwTxE56Wd8kQZ2e2UTy4BM8907FsJgAQLL4tD2YZggwWIQQk1ibyU76eh+bO
- W/SP9LjScWdVJ5CaD/0YQyfUzjpR1GnCSkbaLYTEUsyaHuWPI/uSpKTtcbttpYv+QmYsIwD9
- 8CeH3zwY0Xl/1fE9Hy59z6Vxv9YVapLx0nPDOA1zDVNq2MnutxHb8t+Imjz4ERCxysqtfYrv
- gao3E/h0c8SEeh+bh5MkjwmU8CwZ3doWyiVdULKESe7/Gs5OuhFzaDVPCpWdsKdCAGyUuP/+
- qRWwKGVpWP0Rrt6MTK24Ibeu3xEZO8c3XOEXH5d9nf6YRqBEIizAecoCr00E9c+6BlRS0AqR
- OQC3/Mm7rWtco3+WOridqVXkko9AcZ8AiM5nu0F8AqYGKg0y7vkL2LOP8us85L0p57MqIR1u
- gDnITlTY0x4RYRWJ9+k7led5WsnWlyv84KNzbDqQExTm8itzeZYW9RvbTS63r/+FlcTa9Cz1
- 5fW3Qm0BsyECvpAD3IPLvX9jDIR0IkF/BQI4T98LQAkYX1M/UWkMpMYsL8tLObiNOWUl4ahb
- PYi5Yd8zVNYuidXHcwPAUXqGt3Cs+FIhihH30/Oe4jL0/2ZoEnWGOexIFVFpue0jdqJNiIvA
- F5Wpx+UiT5G8CWYYge5DtHI3m5qAP9UgPuck3N8xCihbsXKX4l8bdHfziaJuowief7igeQs/
- WyY9FnZb0tl29dSa7PdDKFWu+B+ZnuIzsO5vWMoN6hMThTl1DxS+jc7ATQRb/8z6AQgAvSkg
- 5w7dVCSbpP6nXc+i8OBz59aq8kuL3YpxT9RXE/y45IFUVuSc2kuUj683rEEgyD7XCf4QKzOw
- +XgnJcKFQiACpYAowhF/XNkMPQFspPNM1ChnIL5KWJdTp0DhW+WBeCnyCQ2pzeCzQlS/qfs3
- dMLzzm9qCDrrDh/aEegMMZFO+reIgPZnInAcbHj3xUhz8p2dkExRMTnLry8XXkiMu9WpchHy
- XXWYxXbMnHkSRuT00lUfZAkYpMP7La2UudC/Uw9WqGuAQzTqhvE1kSQe0e11Uc+PqceLRHA2
- bq/wz0cGriUrcCrnkzRmzYLoGXQHqRuZazMZn2/pSIMZdDxLbwARAQABwsGNBBgBCAAgFiEE
- JNYm8lO+nofmzlv0j/S40nFnVScFAlv/zPoCGwwAIQkQj/S40nFnVScWIQQk1ibyU76eh+bO
- W/SP9LjScWdVJ/g6EACFYk+OBS7pV9KZXncBQYjKqk7Kc+9JoygYnOE2wN41QN9Xl0Rk3wri
- qO7PYJM28YjK3gMT8glu1qy+Ll1bjBYWXzlsXrF4szSqkJpm1cCxTmDOne5Pu6376dM9hb4K
- l9giUinI4jNUCbDutlt+Cwh3YuPuDXBAKO8YfDX2arzn/CISJlk0d4lDca4Cv+4yiJpEGd/r
- BVx2lRMUxeWQTz+1gc9ZtbRgpwoXAne4iw3FlR7pyg3NicvR30YrZ+QOiop8psWM2Fb1PKB9
- 4vZCGT3j2MwZC50VLfOXC833DBVoLSIoL8PfTcOJOcHRYU9PwKW0wBlJtDVYRZ/CrGFjbp2L
- eT2mP5fcF86YMv0YGWdFNKDCOqOrOkZVmxai65N9d31k8/O9h1QGuVMqCiOTULy/h+FKpv5q
- t35tlzA2nxPOX8Qj3KDDqVgQBMYJRghZyj5+N6EKAbUVa9Zq8xT6Ms2zz/y7CPW74G1GlYWP
- i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
- X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
- fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <e62c49e7-9929-1546-0e39-07bfd0615b17@linaro.org>
-Date:   Tue, 3 Mar 2020 10:02:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1725818AbgCCJKE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Mar 2020 04:10:04 -0500
+Received: from mga09.intel.com ([134.134.136.24]:59453 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727972AbgCCJKE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 3 Mar 2020 04:10:04 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Mar 2020 01:10:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,510,1574150400"; 
+   d="scan'208";a="232207666"
+Received: from cliew10-mobl.gar.corp.intel.com (HELO M5530.gar.corp.intel.com) ([10.255.138.251])
+  by fmsmga007.fm.intel.com with ESMTP; 03 Mar 2020 01:10:00 -0800
+From:   Harry Pan <harry.pan@intel.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     gs0622@gmail.com, Harry Pan <harry.pan@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH v3] intel_idle: Add Comet Lake support
+Date:   Tue,  3 Mar 2020 17:09:57 +0800
+Message-Id: <20200303170948.1.I108734f38ade020c3e5da825839dca11d2a2ff87@changeid>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200227013411.1.Ica3bb9fa898499d94e0b0a2bfa08ec46c89d84fa@changeid>
+References: <20200227013411.1.Ica3bb9fa898499d94e0b0a2bfa08ec46c89d84fa@changeid>
 MIME-Version: 1.0
-In-Reply-To: <20200303084641.35687-1-andy.tang@nxp.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/03/2020 09:46, andy.tang@nxp.com wrote:
-> From: Yuantian Tang <andy.tang@nxp.com>
-> 
-> Qoriq thermal driver is used by both PowerPC and ARM architecture.
-> When built for PowerPC architecture, it reports error:
-> undefined reference to `.__devm_regmap_init_mmio_clk'
-> To fix it, select config REGMAP_MMIO.
-> 
-> Fixes: 4316237bd627 (thermal: qoriq: Convert driver to use regmap API)
-> 
-> Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
-> ---
-> v2:
-> 	- add Fixes tag
-> 
->  drivers/thermal/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 5a05db5438d6..5a0df0e54ce3 100644
+Add a general C-state table in order to support Comet Lake.
 
-Applied, thanks
+Signed-off-by: Harry Pan <harry.pan@intel.com>
 
+---
 
+ drivers/idle/intel_idle.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index d55606608ac8..05bce595fafe 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -1067,6 +1067,11 @@ static const struct idle_cpu idle_cpu_dnv = {
+ 	.use_acpi = true,
+ };
+ 
++static const struct idle_cpu idle_cpu_cml = {
++	.state_table = skl_cstates,
++	.disable_promotion_to_c1e = true,
++};
++
+ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+ 	INTEL_CPU_FAM6(NEHALEM_EP,		idle_cpu_nhx),
+ 	INTEL_CPU_FAM6(NEHALEM,			idle_cpu_nehalem),
+@@ -1105,6 +1110,8 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+ 	INTEL_CPU_FAM6(ATOM_GOLDMONT_PLUS,	idle_cpu_bxt),
+ 	INTEL_CPU_FAM6(ATOM_GOLDMONT_D,		idle_cpu_dnv),
+ 	INTEL_CPU_FAM6(ATOM_TREMONT_D,		idle_cpu_dnv),
++	INTEL_CPU_FAM6(COMETLAKE_L,		idle_cpu_cml),
++	INTEL_CPU_FAM6(COMETLAKE,		idle_cpu_cml),
+ 	{}
+ };
+ 
 -- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.24.1
 
