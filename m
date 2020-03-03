@@ -2,149 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8721782E1
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 20:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FD317833D
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 20:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730653AbgCCTKq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 14:10:46 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:44592 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728467AbgCCTKq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 14:10:46 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 023Ir0pJ186991;
-        Tue, 3 Mar 2020 19:10:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=itPWarMeQA3WmAwT6OL429iQpx9zdaE7TABEZnL1AeY=;
- b=oGUxG/wye0sJ7/60kqz5tDpZV6ld71MSDmMepDYW2PdPff3FWmMnqtrzpMeRY2S/iolL
- UGLQl9AU2nyuspF6EN9P2Jgv6TXQK/ZjxtIlyOTXGwTTPaRivx9kqTSqcknTnKM4ycnS
- XSp7QABER8uQwSmS6jPnu8SPWM6pK11AyU0j53wHnvZ/knr1ZOUHQSk1B9kgnxyL41Vk
- HhrewsDsOP6+A2KOJ/RN71PDSTANb9penoNJzozj/Y9eekZ9Nevokak5HcH4GR6lHvDF
- nrnAdpfHT/Kk2aS0Hv2rTPdTj7SuAlfq935rPOR4zU0c4m1Yf0PJzfgBC0mLGtIqSOrC NQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2yghn356pq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 Mar 2020 19:10:27 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 023Iqg3F124836;
-        Tue, 3 Mar 2020 19:10:27 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2yg1rmwtyb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 Mar 2020 19:10:26 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 023JAOS7006589;
-        Tue, 3 Mar 2020 19:10:25 GMT
-Received: from localhost (/67.169.218.210)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 03 Mar 2020 11:10:24 -0800
-Date:   Tue, 3 Mar 2020 11:10:23 -0800
-From:   "Darrick J. Wong" <darrick.wong@oracle.com>
-To:     linux-pm@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     domenico.andreoli@linux.com, mkleinsoft@gmail.com, hch@lst.de,
-        akpm@linux-foundation.org, rjw@rjwysocki.net, len.brown@intel.com,
-        pavel@ucw.cz, viro@zeniv.linux.org.uk
-Subject: [PATCH] vfs: partially revert "don't allow writes to swap files"
-Message-ID: <20200303191023.GD8037@magnolia>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=940
- suspectscore=0 malwarescore=0 adultscore=0 spamscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003030124
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 spamscore=0
- impostorscore=0 mlxscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 clxscore=1015 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2003030124
+        id S1729138AbgCCTlp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Mar 2020 14:41:45 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:33209 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730939AbgCCTlp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 14:41:45 -0500
+Received: by mail-pj1-f67.google.com with SMTP id o21so52639pjs.0;
+        Tue, 03 Mar 2020 11:41:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=nELp/JsIU8Whx16SjmYjwVpYKQX+kqJ7/7LVzOVJkmo=;
+        b=vZPrj14uv3brvCc5Zu4zoCn5pF7y85BGE0/vRBHEKsRUwrqxCy77nkHfvV66kJ4vpo
+         yF7PHSNtCOlkU4XQcyRIgXI2BiZzQexki5PUHzjuXl9gF78LwYLC1AcNS0qaAffcLuMD
+         lakqLTcF7mnyMDz8mEfRyeZ2/tZ8PICJlzM9oYSeYjJ0ZdtgZN+CbGgQxDtPm2I08V+3
+         8XGPl7OkBY5u8QnnrHTXDwYMadY7nKaSLLhIE7zmrJH+j0+K5cl1rcLkP8iWz/oSmzQ9
+         9CzwFdLxwC16gQKYIRyFPb90uC21gVPa1tsxnWdMav0cKE/MfXRSvZK4mZlgdULptVnA
+         xCmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=nELp/JsIU8Whx16SjmYjwVpYKQX+kqJ7/7LVzOVJkmo=;
+        b=nTpbEJjDQ6+Uc9XS01GzfP2c2Cn9KDsjhP+pVez9K0I5dV+/60tsY9ruakjZXCH6Kh
+         dOe1htDUyehFOXSQjI/xm5eh2FFnve+4dkcsTkFeZF5tT1iAHtnNxFXCkWQODOlDp63Q
+         KxWjxGR+30q//+gFZU/Ugfj/IJN5rWGZrMOYiy/bYy1yYw5KINOa8YR9GMt2QX04ZQRU
+         hCy/KWfFFcMRke3k0Zkpez//ELP+ohc4gauE4UC8kTEG9cXQmmGBJgOqPMr7SyKgJajz
+         lO8/wVNZU7ZKjospUdDzZ+gLcwkIXhcchbLer32gfaopwy5j76BbbkPRtqvABxK+f6AY
+         Mrtw==
+X-Gm-Message-State: ANhLgQ1k7w3DibQRDxEuXsSei+GELGENJNIy5bEZ0/zB1tJGMWm7fY2y
+        +YdLIYnL/KqVxUmfN7jJ6jMwoMM=
+X-Google-Smtp-Source: ADFU+vssPo5v9dRFhOkIA1Dbts1aFq2on91LBCVkSuAiPbQX5egOR8N8CD0FO2dxqsABmXgPcfi+2g==
+X-Received: by 2002:a17:90a:eb0b:: with SMTP id j11mr127353pjz.145.1583264504055;
+        Tue, 03 Mar 2020 11:41:44 -0800 (PST)
+Received: from madhuparna-HP-Notebook.nitk.ac.in ([2402:3a80:1ee0:eafa:280b:b5cb:5e89:a52d])
+        by smtp.gmail.com with ESMTPSA id w2sm25279628pfw.43.2020.03.03.11.41.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2020 11:41:42 -0800 (PST)
+From:   madhuparnabhowmik10@gmail.com
+To:     rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joel@joelfernandes.org, frextrite@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org, paulmck@kernel.org,
+        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+Subject: [PATCH 1/2] drivers: base: power: main.c: Use built-in RCU list checking
+Date:   Wed,  4 Mar 2020 01:11:30 +0530
+Message-Id: <20200303194130.24617-1-madhuparnabhowmik10@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Darrick J. Wong <darrick.wong@oracle.com>
+From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 
-In commit dc617f29dbe5 we tried to prevent userspace programs from
-writing to active swap devices.  However, it turns out that userspace
-hibernation requires the ability to write the hibernation image to a
-swap device, so revert the write path checks.
+This patch passes the cond argument to list_for_each_entry_rcu()
+to fix the following false-positive lockdep warnings:
+(with CONFIG_PROVE_RCU_LIST = y)
 
-Fixes: dc617f29dbe5 ("vfs: don't allow writes to swap files")
-Reported-by: Domenico Andreoli <domenico.andreoli@linux.com>
-Reported-by: Marian Klein <mkleinsoft@gmail.com>
-Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
+[  330.302784] =============================
+[  330.302789] WARNING: suspicious RCU usage
+[  330.302796] 5.6.0-rc1+ #5 Not tainted
+[  330.302801] -----------------------------
+[  330.302808] drivers/base/power/main.c:326 RCU-list traversed in non-reader section!!
+
+[  330.303303] =============================
+[  330.303307] WARNING: suspicious RCU usage
+[  330.303311] 5.6.0-rc1+ #5 Not tainted
+[  330.303315] -----------------------------
+[  330.303319] drivers/base/power/main.c:1698 RCU-list traversed in non-reader section!!
+
+[  331.934969] =============================
+[  331.934971] WARNING: suspicious RCU usage
+[  331.934973] 5.6.0-rc1+ #5 Not tainted
+[  331.934975] -----------------------------
+[  331.934977] drivers/base/power/main.c:1238 RCU-list traversed in non-reader section!!
+
+[  332.467772] WARNING: suspicious RCU usage
+[  332.467775] 5.6.0-rc1+ #5 Not tainted
+[  332.467775] -----------------------------
+[  332.467778] drivers/base/power/main.c:269 RCU-list traversed in non-reader section!!
+
+Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 ---
- fs/block_dev.c |    3 ---
- mm/filemap.c   |    3 ---
- mm/memory.c    |    4 ----
- mm/mmap.c      |    8 ++------
- 4 files changed, 2 insertions(+), 16 deletions(-)
+ drivers/base/power/main.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/fs/block_dev.c b/fs/block_dev.c
-index 69bf2fb6f7cd..08b088dac1f0 100644
---- a/fs/block_dev.c
-+++ b/fs/block_dev.c
-@@ -2001,9 +2001,6 @@ ssize_t blkdev_write_iter(struct kiocb *iocb, struct iov_iter *from)
- 	if (bdev_read_only(I_BDEV(bd_inode)))
- 		return -EPERM;
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index 0e99a760aebd..6d1dee7051eb 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -40,6 +40,10 @@
  
--	if (IS_SWAPFILE(bd_inode))
--		return -ETXTBSY;
--
- 	if (!iov_iter_count(from))
- 		return 0;
+ typedef int (*pm_callback_t)(struct device *);
  
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 1784478270e1..d1b8cd15b2bf 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2920,9 +2920,6 @@ inline ssize_t generic_write_checks(struct kiocb *iocb, struct iov_iter *from)
- 	loff_t count;
- 	int ret;
++#define list_for_each_entry_rcu_locked(pos, head, member) \
++	list_for_each_entry_rcu(pos, head, member, \
++			device_links_read_lock_held())
++
+ /*
+  * The entries in the dpm_list list are in a depth first order, simply
+  * because children are guaranteed to be discovered after parents, and
+@@ -266,7 +270,7 @@ static void dpm_wait_for_suppliers(struct device *dev, bool async)
+ 	 * callbacks freeing the link objects for the links in the list we're
+ 	 * walking.
+ 	 */
+-	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node)
++	list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node)
+ 		if (READ_ONCE(link->status) != DL_STATE_DORMANT)
+ 			dpm_wait(link->supplier, async);
  
--	if (IS_SWAPFILE(inode))
--		return -ETXTBSY;
--
- 	if (!iov_iter_count(from))
- 		return 0;
+@@ -323,7 +327,7 @@ static void dpm_wait_for_consumers(struct device *dev, bool async)
+ 	 * continue instead of trying to continue in parallel with its
+ 	 * unregistration).
+ 	 */
+-	list_for_each_entry_rcu(link, &dev->links.consumers, s_node)
++	list_for_each_entry_rcu_locked(link, &dev->links.consumers, s_node)
+ 		if (READ_ONCE(link->status) != DL_STATE_DORMANT)
+ 			dpm_wait(link->consumer, async);
  
-diff --git a/mm/memory.c b/mm/memory.c
-index 0bccc622e482..e908490f7034 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2357,10 +2357,6 @@ static vm_fault_t do_page_mkwrite(struct vm_fault *vmf)
+@@ -1235,7 +1239,7 @@ static void dpm_superior_set_must_resume(struct device *dev)
  
- 	vmf->flags = FAULT_FLAG_WRITE|FAULT_FLAG_MKWRITE;
+ 	idx = device_links_read_lock();
  
--	if (vmf->vma->vm_file &&
--	    IS_SWAPFILE(vmf->vma->vm_file->f_mapping->host))
--		return VM_FAULT_SIGBUS;
--
- 	ret = vmf->vma->vm_ops->page_mkwrite(vmf);
- 	/* Restore original flags so that caller is not surprised */
- 	vmf->flags = old_flags;
-diff --git a/mm/mmap.c b/mm/mmap.c
-index d681a20eb4ea..77d086139e13 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1461,12 +1461,8 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
- 		case MAP_SHARED_VALIDATE:
- 			if (flags & ~flags_mask)
- 				return -EOPNOTSUPP;
--			if (prot & PROT_WRITE) {
--				if (!(file->f_mode & FMODE_WRITE))
--					return -EACCES;
--				if (IS_SWAPFILE(file->f_mapping->host))
--					return -ETXTBSY;
--			}
-+			if ((prot&PROT_WRITE) && !(file->f_mode&FMODE_WRITE))
-+				return -EACCES;
+-	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node)
++	list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node)
+ 		link->supplier->power.must_resume = true;
  
- 			/*
- 			 * Make sure we don't allow writing to an append-only
+ 	device_links_read_unlock(idx);
+@@ -1695,7 +1699,7 @@ static void dpm_clear_superiors_direct_complete(struct device *dev)
+ 
+ 	idx = device_links_read_lock();
+ 
+-	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node) {
++	list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node) {
+ 		spin_lock_irq(&link->supplier->power.lock);
+ 		link->supplier->power.direct_complete = false;
+ 		spin_unlock_irq(&link->supplier->power.lock);
+-- 
+2.17.1
+
