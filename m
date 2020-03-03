@@ -2,141 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4483B1777BB
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 14:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFB21777CC
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 14:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727862AbgCCNs6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 08:48:58 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:34314 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbgCCNs6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 08:48:58 -0500
-Received: by mail-qk1-f193.google.com with SMTP id 11so3436895qkd.1;
-        Tue, 03 Mar 2020 05:48:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eeNzn8H18FzPdQesLxTltwdmSd8JJDcXIg9kUyzHqWE=;
-        b=WUhEHc5vql7ujIsEF3YHXKRSPLmhv/fLYpNQcZJljQqi4gtjdwhw6AbZIFvY082EsT
-         LrzFJH1uw3wD4vcFMkziFsHeadM0WGFkWAPGsvoHm1sEwZKWYU3jvijiuYlmS3FbEl4W
-         ATccS1Mzp8UkXzZkfb+SMX8fJnqeOUKNbFudgw329WdafEFjgsmDO2FD1P098aeK+ji5
-         WK9shX1psrjhZS0EvBjaqf/AoNNd/A033bf4uZh+I6Br1UBnip1h0bBG/Ow9RG7V8BOm
-         mHQe0xu2/SZnPvFdU/16fTcMa1lqkxZeGdhawwAOQOSEgGOYqdCTXIaSGZfX2Kfsw9qs
-         3BXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=eeNzn8H18FzPdQesLxTltwdmSd8JJDcXIg9kUyzHqWE=;
-        b=kUT3WBau0N+T4qPDx6qqH1Kh0cS0El8jW8BiqKl9iIUmrIah1kbFDCTKWRKm4agmjR
-         e0p6RtOZyuTpFkI42aicvZbzwQDoiL4lFACs2dlYpmRG77GKP5H9DoGoGLmagcw38RGZ
-         WVHNtAQGLg9R2QR2KAxg/Td/wl9LzyXfbUzJShvgUmus5Q4AMaFgy8soYkwCqaxfy0Da
-         JTQsGEEhHL6nGLg3cSOJ0RDBMtzGYoSHEhd/KLz/ddmh8IPobp0Ydk+4JyQVg75X6Elk
-         fJ+1jmLAwyTvM9y2Tsld1bV7BnTvRSa7lR1l9drZxz9PKrhd3xbTq9h+VxuTuefs7rTU
-         S/Aw==
-X-Gm-Message-State: ANhLgQ1KKp5MbzJ8Ilq7hZkWgtk2wYVJfT5t5Uf5FvS1J0RQYoA6eU0F
-        1MmqCW5WC3ODmU46N+9hL58=
-X-Google-Smtp-Source: ADFU+vv+/21QpMv7FaTPOu9N6rpSb7Pfkdm41cSmaitTrxEEzsg2WiPzIAFx1GdV88BpbsT9EbLvQw==
-X-Received: by 2002:a05:620a:806:: with SMTP id s6mr4315267qks.235.1583243337163;
-        Tue, 03 Mar 2020 05:48:57 -0800 (PST)
-Received: from localhost ([2620:10d:c091:500::7f70])
-        by smtp.gmail.com with ESMTPSA id e7sm3321488qtp.0.2020.03.03.05.48.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 05:48:56 -0800 (PST)
-Date:   Tue, 3 Mar 2020 08:48:55 -0500
-From:   Tejun Heo <tj@kernel.org>
-To:     Marco Ballesio <balejs@google.com>
-Cc:     guro@fb.com, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lizefan@huawei.com, hannes@cmpxchg.org, corbet@lwn.net,
-        rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
-        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
-        minchan@google.com, surenb@google.com, dancol@google.com
-Subject: Re: [PATCH] cgroup-v1: freezer: optionally killable freezer
-Message-ID: <20200303134855.GA186184@mtj.thefacebook.com>
-References: <20200219183231.50985-1-balejs@google.com>
+        id S1728998AbgCCNwL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Mar 2020 08:52:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40386 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728592AbgCCNwL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 3 Mar 2020 08:52:11 -0500
+Received: from mail.kernel.org (tmo-101-56.customers.d1-online.com [80.187.101.56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 564A420857;
+        Tue,  3 Mar 2020 13:52:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583243530;
+        bh=vWl+nyAmbI4wwUurGPGeToUMpjxhS/tUqKAcmoxzrmA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hGPvVm2KU1VYOPmeajB9lSJDKiZkWTK51OoSe9Bz1HlrIO5+Ia0l2qaG0OmN4JELs
+         Rx5PQUo3NOSBlUXOxlp0H9qD8/wn11i1+F9PizOYrRm2hPp1OzxXw/NPdmL7/WAEYF
+         XwLPnKmq0DK3NZnn3oc+v6TkLgPv5IaVzzj9CcTA=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1j97xw-001YXN-1v; Tue, 03 Mar 2020 14:52:08 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2 1/5] docs: cpufreq: fix a broken reference
+Date:   Tue,  3 Mar 2020 14:52:02 +0100
+Message-Id: <0bda11fd334238a21e429355616caff26e99cc77.1583243272.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <cover.1583243272.git.mchehab+huawei@kernel.org>
+References: <cover.1583243272.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200219183231.50985-1-balejs@google.com>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+The old cpufreq docs got moved. Let's also update its
+pointer inside Kconfig.x86.
 
-On Wed, Feb 19, 2020 at 10:32:31AM -0800, Marco Ballesio wrote:
-> @@ -94,6 +94,18 @@ The following cgroupfs files are created by cgroup freezer.
->    Shows the parent-state.  0 if none of the cgroup's ancestors is
->    frozen; otherwise, 1.
->  
-> +* freezer.killable: Read-write
-> +
-> +  When read, returns the killable state of a cgroup - "1" if frozen
-> +  tasks will respond to fatal signals, or "0" if they won't.
-> +
-> +  When written, this property sets the killable state of the cgroup.
-> +  A value equal to "1" will switch the state of all frozen tasks in
-> +  the cgroup to TASK_INTERRUPTIBLE (similarly to cgroup v2) and will
-> +  make them react to fatal signals. A value of "0" will switch the
-> +  state of frozen tasks to TASK_UNINTERRUPTIBLE and they won't respond
-> +  to signals unless thawed or unfrozen.
+Fixes: 78a0abeca1bd ("Documentation: cpufreq: Move legacy driver documentation")
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ drivers/cpufreq/Kconfig.x86 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As Roman said, I'm not too sure about adding a new cgroup1 freezer
-interface at this point. If we do this, *maybe* a mount option would
-be more minimal?
-
-> diff --git a/kernel/freezer.c b/kernel/freezer.c
-> index dc520f01f99d..92de1bfe62cf 100644
-> --- a/kernel/freezer.c
-> +++ b/kernel/freezer.c
-> @@ -42,6 +42,9 @@ bool freezing_slow_path(struct task_struct *p)
->  	if (test_tsk_thread_flag(p, TIF_MEMDIE))
->  		return false;
->  
-> +	if (cgroup_freezer_killable(p) && fatal_signal_pending(p))
-> +		return false;
-> +
->  	if (pm_nosig_freezing || cgroup_freezing(p))
->  		return true;
->  
-> @@ -63,7 +66,12 @@ bool __refrigerator(bool check_kthr_stop)
->  	pr_debug("%s entered refrigerator\n", current->comm);
->  
->  	for (;;) {
-> -		set_current_state(TASK_UNINTERRUPTIBLE);
-> +		bool killable = cgroup_freezer_killable(current);
-> +
-> +		if (killable)
-> +			set_current_state(TASK_INTERRUPTIBLE);
-> +		else
-> +			set_current_state(TASK_UNINTERRUPTIBLE);
->  
->  		spin_lock_irq(&freezer_lock);
->  		current->flags |= PF_FROZEN;
-> @@ -75,6 +83,16 @@ bool __refrigerator(bool check_kthr_stop)
->  		if (!(current->flags & PF_FROZEN))
->  			break;
->  		was_frozen = true;
-> +
-> +		/*
-> +		 * Now we're sure that there is no pending fatal signal.
-> +		 * Clear TIF_SIGPENDING to not get out of schedule()
-> +		 * immediately (if there is a non-fatal signal pending), and
-> +		 * put the task into sleep.
-> +		 */
-
-and this looks really racy to me. What happens if this task gets a
-fatal signal here? We clear TIF_SIGPENDING and go to sleep?
-
-> +		if (killable)
-> +			clear_thread_flag(TIF_SIGPENDING);
-> +
->  		schedule();
->  	}
-
-Thanks.
-
+diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
+index a6528388952e..62502d0e4c33 100644
+--- a/drivers/cpufreq/Kconfig.x86
++++ b/drivers/cpufreq/Kconfig.x86
+@@ -25,7 +25,7 @@ config X86_PCC_CPUFREQ
+ 	  This driver adds support for the PCC interface.
+ 
+ 	  For details, take a look at:
+-	  <file:Documentation/cpu-freq/pcc-cpufreq.txt>.
++	  <file:Documentation/admin-guide/pm/cpufreq_drivers.rst>.
+ 
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called pcc-cpufreq.
 -- 
-tejun
+2.24.1
+
