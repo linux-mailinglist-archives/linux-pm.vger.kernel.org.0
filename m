@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3421777CE
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 14:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA0C1777CD
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 14:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728771AbgCCNwL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1728592AbgCCNwL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 3 Mar 2020 08:52:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40370 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:40400 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725932AbgCCNwL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1728771AbgCCNwL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Tue, 3 Mar 2020 08:52:11 -0500
 Received: from mail.kernel.org (tmo-101-56.customers.d1-online.com [80.187.101.56])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4DD1620675;
+        by mail.kernel.org (Postfix) with ESMTPSA id 6DA1520863;
         Tue,  3 Mar 2020 13:52:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1583243530;
-        bh=oSAwJuwZZke99vm8rocsC6A/BaGIh2GI4Jpuuu+iYYY=;
+        bh=qre5Srpv8e+MQkCQYm247Dm06mD+ohXCbI5QHRiOw9Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WxnENgzxwpXsmE3dtubVuBr9/LU6NSl+HbofJ79fS7inJ2vHZvsx+oUvF+ICTsB4P
-         hUUTN4p4anj0+UoOAQxj+eXT9JsQ/hkb5f07gv50OX2EuUammhXSXLP3sgDvYVSI4b
-         zYdiq+QwJ0jPigAsscEk/0K1FqKMWBUwo9WExpAs=
+        b=qpgjGLMQr+ot+masC++0MfH4MY5+p7SzB77fhn66eyXimMn/F9h/6pkREe5Ha2lEs
+         LE/smT81nLmYolkwzGZ21UvvKirldeXIns7C+UUqJMqNkUb7zhe1rbdIHrSUVc94NF
+         MWYbY5K3E6cpM2Fa3JNK0MMepYjkKH6f/SN1DatI=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1j97xw-001YXR-3Y; Tue, 03 Mar 2020 14:52:08 +0100
+        id 1j97xw-001YXV-5C; Tue, 03 Mar 2020 14:52:08 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
         linux-doc@vger.kernel.org
-Subject: [PATCH v2 2/5] docs: cpu-freq: convert index.txt to ReST
-Date:   Tue,  3 Mar 2020 14:52:03 +0100
-Message-Id: <7aed5eca5b3501328bc715c70613c21497467368.1583243272.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 3/5] docs: cpu-freq: convert core.txt to ReST
+Date:   Tue,  3 Mar 2020 14:52:04 +0100
+Message-Id: <e7bf15f0974aa509f494091d91f6b8d6f4562ff6.1583243272.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.1583243272.git.mchehab+huawei@kernel.org>
 References: <cover.1583243272.git.mchehab+huawei@kernel.org>
@@ -46,76 +46,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-most of the stuff there can be re-used with ReST format,
-but we need to add an empty TOC and remove the existing
-entries, as the following conversion patches will be re-adding
-them, as they're converted.
+- Add a SPDX header;
+- Adjust the  document title, based on the original contents of
+  cpu-freq/index.txt;
+- Use lists where needed;
+- Comment out the existing text-only index;
+- use ``foo`` to mark a literal expression with asterisk;
+- Adjust some title marks;
+- Add table markups;
+- Add notes markups;
+- Some whitespace fixes and new line breaks;
+- Add it to cpu-freq/index.rst.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- Documentation/cpu-freq/index.rst | 35 ++++++++++++++++++++
- Documentation/cpu-freq/index.txt | 56 --------------------------------
- Documentation/index.rst          |  1 +
- 3 files changed, 36 insertions(+), 56 deletions(-)
- create mode 100644 Documentation/cpu-freq/index.rst
- delete mode 100644 Documentation/cpu-freq/index.txt
+ Documentation/cpu-freq/{core.txt => core.rst} | 65 ++++++++++---------
+ Documentation/cpu-freq/index.rst              |  2 +
+ 2 files changed, 35 insertions(+), 32 deletions(-)
+ rename Documentation/cpu-freq/{core.txt => core.rst} (69%)
 
-diff --git a/Documentation/cpu-freq/index.rst b/Documentation/cpu-freq/index.rst
-new file mode 100644
-index 000000000000..1bff3dfddd23
---- /dev/null
-+++ b/Documentation/cpu-freq/index.rst
-@@ -0,0 +1,35 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==============================================================================
-+Linux CPUFreq - CPU frequency and voltage scaling code in the Linux(TM) kernel
-+==============================================================================
-+
-+Author: Dominik Brodowski  <linux@brodo.de>
-+
-+   Clock scaling allows you to change the clock speed of the CPUs on the
-+   fly. This is a nice method to save battery power, because the lower
-+   the clock speed, the less power the CPU consumes.
-+
-+
-+.. toctree::
-+   :maxdepth: 1
-+
-+Mailing List
-+------------
-+There is a CPU frequency changing CVS commit and general list where
-+you can report bugs, problems or submit patches. To post a message,
-+send an email to linux-pm@vger.kernel.org.
-+
-+Links
-+-----
-+the FTP archives:
-+* ftp://ftp.linux.org.uk/pub/linux/cpufreq/
-+
-+how to access the CVS repository:
-+* http://cvs.arm.linux.org.uk/
-+
-+the CPUFreq Mailing list:
-+* http://vger.kernel.org/vger-lists.html#linux-pm
-+
-+Clock and voltage scaling for the SA-1100:
-+* http://www.lartmaker.nl/projects/scaling
-diff --git a/Documentation/cpu-freq/index.txt b/Documentation/cpu-freq/index.txt
-deleted file mode 100644
-index c15e75386a05..000000000000
---- a/Documentation/cpu-freq/index.txt
-+++ /dev/null
-@@ -1,56 +0,0 @@
+diff --git a/Documentation/cpu-freq/core.txt b/Documentation/cpu-freq/core.rst
+similarity index 69%
+rename from Documentation/cpu-freq/core.txt
+rename to Documentation/cpu-freq/core.rst
+index ed577d9c154b..33cb90bd1d8f 100644
+--- a/Documentation/cpu-freq/core.txt
++++ b/Documentation/cpu-freq/core.rst
+@@ -1,31 +1,23 @@
 -     CPU frequency and voltage scaling code in the Linux(TM) kernel
--
--
++.. SPDX-License-Identifier: GPL-2.0
+ 
++=============================================================
++General description of the CPUFreq core and CPUFreq notifiers
++=============================================================
+ 
 -		         L i n u x    C P U F r e q
--
--
--
++Authors:
++	- Dominik Brodowski  <linux@brodo.de>
++	- David Kimdon <dwhedon@debian.org>
++	- Rafael J. Wysocki <rafael.j.wysocki@intel.com>
++	- Viresh Kumar <viresh.kumar@linaro.org>
+ 
+-			  C P U F r e q    C o r e
++.. Contents:
+ 
 -
 -		    Dominik Brodowski  <linux@brodo.de>
+-		     David Kimdon <dwhedon@debian.org>
+-		Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+-		   Viresh Kumar <viresh.kumar@linaro.org>
 -
 -
 -
@@ -124,57 +103,90 @@ index c15e75386a05..000000000000
 -            the clock speed, the less power the CPU consumes.
 -
 -
--
--Documents in this directory:
------------------------------
--
--amd-powernow.txt -	AMD powernow driver specific file.
--
--core.txt	-	General description of the CPUFreq core and
--			of CPUFreq notifiers.
--
--cpu-drivers.txt -	How to implement a new cpufreq processor driver.
--
--cpufreq-nforce2.txt -	nVidia nForce2 platform specific file.
--
--cpufreq-stats.txt -	General description of sysfs cpufreq stats.
--
--index.txt	-	File index, Mailing list and Links (this document)
--
--pcc-cpufreq.txt -	PCC cpufreq driver specific file.
--
--
--Mailing List
--------------
--There is a CPU frequency changing CVS commit and general list where
--you can report bugs, problems or submit patches. To post a message,
--send an email to linux-pm@vger.kernel.org.
--
--Links
-------
--the FTP archives:
--* ftp://ftp.linux.org.uk/pub/linux/cpufreq/
--
--how to access the CVS repository:
--* http://cvs.arm.linux.org.uk/
--
--the CPUFreq Mailing list:
--* http://vger.kernel.org/vger-lists.html#linux-pm
--
--Clock and voltage scaling for the SA-1100:
--* http://www.lartmaker.nl/projects/scaling
-diff --git a/Documentation/index.rst b/Documentation/index.rst
-index e99d0bd2589d..4cf37ad1cd1d 100644
---- a/Documentation/index.rst
-+++ b/Documentation/index.rst
-@@ -99,6 +99,7 @@ needed).
-    accounting/index
-    block/index
-    cdrom/index
-+   cpu-freq/index
-    ide/index
-    fb/index
-    fpga/index
+-Contents:
+----------
+-1.  CPUFreq core and interfaces
+-2.  CPUFreq notifiers
+-3.  CPUFreq Table Generation with Operating Performance Point (OPP)
++   1.  CPUFreq core and interfaces
++   2.  CPUFreq notifiers
++   3.  CPUFreq Table Generation with Operating Performance Point (OPP)
+ 
+ 1. General Information
+-=======================
++======================
+ 
+ The CPUFreq core code is located in drivers/cpufreq/cpufreq.c. This
+ cpufreq code offers a standardized interface for the CPUFreq
+@@ -63,7 +55,7 @@ The phase is specified in the second argument to the notifier.  The phase is
+ CPUFREQ_CREATE_POLICY when the policy is first created and it is
+ CPUFREQ_REMOVE_POLICY when the policy is removed.
+ 
+-The third argument, a void *pointer, points to a struct cpufreq_policy
++The third argument, a ``void *pointer``, points to a struct cpufreq_policy
+ consisting of several values, including min, max (the lower and upper
+ frequencies (in kHz) of the new policy).
+ 
+@@ -80,10 +72,13 @@ CPUFREQ_POSTCHANGE.
+ 
+ The third argument is a struct cpufreq_freqs with the following
+ values:
+-cpu	- number of the affected CPU
+-old	- old frequency
+-new	- new frequency
+-flags	- flags of the cpufreq driver
++
++=====	===========================
++cpu	number of the affected CPU
++old	old frequency
++new	new frequency
++flags	flags of the cpufreq driver
++=====	===========================
+ 
+ 3. CPUFreq Table Generation with Operating Performance Point (OPP)
+ ==================================================================
+@@ -94,9 +89,12 @@ dev_pm_opp_init_cpufreq_table -
+ 	the OPP layer's internal information about the available frequencies
+ 	into a format readily providable to cpufreq.
+ 
+-	WARNING: Do not use this function in interrupt context.
++	.. Warning::
++
++	   Do not use this function in interrupt context.
++
++	Example::
+ 
+-	Example:
+ 	 soc_pm_init()
+ 	 {
+ 		/* Do things */
+@@ -106,7 +104,10 @@ dev_pm_opp_init_cpufreq_table -
+ 		/* Do other things */
+ 	 }
+ 
+-	NOTE: This function is available only if CONFIG_CPU_FREQ is enabled in
+-	addition to CONFIG_PM_OPP.
++	.. note::
+ 
+-dev_pm_opp_free_cpufreq_table - Free up the table allocated by dev_pm_opp_init_cpufreq_table
++	   This function is available only if CONFIG_CPU_FREQ is enabled in
++	   addition to CONFIG_PM_OPP.
++
++dev_pm_opp_free_cpufreq_table
++	Free up the table allocated by dev_pm_opp_init_cpufreq_table
+diff --git a/Documentation/cpu-freq/index.rst b/Documentation/cpu-freq/index.rst
+index 1bff3dfddd23..53501c58f41d 100644
+--- a/Documentation/cpu-freq/index.rst
++++ b/Documentation/cpu-freq/index.rst
+@@ -14,6 +14,8 @@ Author: Dominik Brodowski  <linux@brodo.de>
+ .. toctree::
+    :maxdepth: 1
+ 
++   core
++
+ Mailing List
+ ------------
+ There is a CPU frequency changing CVS commit and general list where
 -- 
 2.24.1
 
