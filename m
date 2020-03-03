@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03BEF1779F4
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 16:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1400C1779F7
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 16:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729171AbgCCPH7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 10:07:59 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:42353 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729176AbgCCPH7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 10:07:59 -0500
-Received: by mail-lf1-f65.google.com with SMTP id t21so1998894lfe.9
-        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 07:07:58 -0800 (PST)
+        id S1729487AbgCCPIB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Mar 2020 10:08:01 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:40274 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729176AbgCCPIB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 10:08:01 -0500
+Received: by mail-lf1-f66.google.com with SMTP id p5so3040395lfc.7
+        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 07:08:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=f9Z9RNVVgVoDIqftNG2lvo/XggBGLbBYVP8IgzDMszc=;
-        b=BSPGSq+HX2g9M4ZlxaDoemDr8Dz6O+eSQs7Uf1rceEG2bgyvCwbjnVMj4gIZxtkyf2
-         Rj0QvE2AGrJz81Nd00mPtfww6yy1l3TXEHbUNwhc5Ui65lz1pGmM3BFAnb/DWXv3fZqD
-         TMq0+rA0l/NXxviYxxVo8wGV585FrX0PQWFhAUh4W/kelp4v7YFvcElzWVGq/+rz7KQc
-         nHN8hIg2v8t+gRBMErWzfsp9cCrKGtxGhpCeX0d1rYPFJ3H9mQbXdzpsdAWqNK2VDdex
-         QPvjOXGLbxOEa0xITt05GwPXoWWMWkWoMQX4U/cQXOLb5t6z7+RIOJpA4o43MFsp9nm0
-         OBeA==
+        bh=B30v3NBJ89pTZvCRAyGguiMnt+PH3RI+BA4eDrldRLY=;
+        b=k/Z9gXXqNlqfswOQwls9gp/b1woar1i2f5V8G/kc56ZdmRjSnj8PGdrlMoAhZe/J5Y
+         K3fnFzs2hsZawrNoqYblo5+8ztsKhuNfmaaKe6W30Yncrf1lUS1bi/qcTsTX+uQTxnZf
+         GBWAQSh35JRJkc3KU8ZbmX420ykXl8bYoMw4i9nc0egLBhA/s25pvvJQUb0KcUGUuklf
+         uw5itk1tZg8MnPhLaM153kWr6hd9P2c1H7Gbpe+/JRrvEeP3P/kX3HD6eg89gpryUjp7
+         pabbouy0baZYlRoExtpecn9l0khYWrqTkAMHIGsEMDkKI9lrpD/5duiHzSScjUnRrWXc
+         bUUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=f9Z9RNVVgVoDIqftNG2lvo/XggBGLbBYVP8IgzDMszc=;
-        b=DcccucR0MRdgynca2QE++J7rEhvrqdth9KmkECvDzHs9mGM+GFYeTw8avlu2SWyCho
-         XR8UuNlOuUeN5A2ORLDMwsXXK+LDey6KUt40WwjIgi2EzzkD2X9KoeELZtMxW0HBPVtj
-         EcoardQty+UxR1K9ihI5i7i+tj31N9KWzd8duuerESmsFLAbx8odTXLuYuu7jHmekefA
-         SPgIuJCDelQjaGTeyX1iDmDgxJZu6wSPTtG9w+MG+JJVuKGfg8cCmXmYKWLhb4UKGakn
-         4ffihnTIooBeQx9VhHw41sLuDgWs+W0Zzj3mn3ze3xx4FsSIp+uDoxdPaBQJWNjPel7v
-         IR9g==
-X-Gm-Message-State: ANhLgQ0uQysVJJcEdwCL6mxWvgunH90RuipEDKenCx1u4bQCTP0QprK9
-        Hs2BQBFB4BakG58tgEdSa5SKSQ==
-X-Google-Smtp-Source: ADFU+vuSEKODHBkzB2d1lf+KfhiTMnwxEHTiiFLZyi65LbNLma9/oxtjmtdonRIpOtHBUTQL8dBbEg==
-X-Received: by 2002:ac2:5328:: with SMTP id f8mr3028680lfh.47.1583248077205;
-        Tue, 03 Mar 2020 07:07:57 -0800 (PST)
+        bh=B30v3NBJ89pTZvCRAyGguiMnt+PH3RI+BA4eDrldRLY=;
+        b=Uo5UkFXmPpnr5ic34p5RnVjLyz71b6E/ZMMyGktJuOzJpS8OM28Vc4J8lABbZmslpt
+         dfupW1C9tifOP5Pp52gt36YBnXcLtSRZEmpCSjlJZg7+peQeamJxCc4+dO+zbFlOz4k0
+         dYwDYt3ybMFcxH1HXgAna+xKfeNR/41WRTPLPWwhb+ni7HACMaZC5OjuYWim+3+kfmqH
+         wu9JeoYXFGsvtcTAKwVv1c31yJxCqqx3SG0UCiimXnDifbmmRhm+U9xTDi99PSXz1tHQ
+         6UuRqyTjrLK8Ux2P2VPM64YxMC843pGCi9yusrxyMoljK0uelXoEP3GMdzaJtjjXasVi
+         577g==
+X-Gm-Message-State: ANhLgQ1hzhCnAmZCjnD8bgZYyKkGAfT2aCE1W1nXTyHL3cqeGTaXCRIt
+        rpZJA2qRd3QflTb7CQ/Ycbu/vw==
+X-Google-Smtp-Source: ADFU+vsNa2Cmu28UnbH+m7iPEgdhqmX6OprzfWRZhA31z6e3MSYvdgClxx8aL3JsLOL6vHbmRtGbDg==
+X-Received: by 2002:a05:6512:304c:: with SMTP id b12mr2036672lfb.196.1583248079201;
+        Tue, 03 Mar 2020 07:07:59 -0800 (PST)
 Received: from localhost.localdomain (h-158-174-22-210.NA.cust.bahnhof.se. [158.174.22.210])
-        by smtp.gmail.com with ESMTPSA id n189sm12143135lfa.14.2020.03.03.07.07.55
+        by smtp.gmail.com with ESMTPSA id n189sm12143135lfa.14.2020.03.03.07.07.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 07:07:56 -0800 (PST)
+        Tue, 03 Mar 2020 07:07:58 -0800 (PST)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Sudeep Holla <sudeep.holla@arm.com>,
@@ -57,9 +57,9 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Benjamin Gaignard <benjamin.gaignard@st.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH 1/7] dt-bindings: arm: Correct links to idle states definitions
-Date:   Tue,  3 Mar 2020 16:07:43 +0100
-Message-Id: <20200303150749.30566-2-ulf.hansson@linaro.org>
+Subject: [PATCH 2/7] dt-bindings: arm: Fix cpu compatibles in the hierarchical example for PSCI
+Date:   Tue,  3 Mar 2020 16:07:44 +0100
+Message-Id: <20200303150749.30566-3-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200303150749.30566-1-ulf.hansson@linaro.org>
 References: <20200303150749.30566-1-ulf.hansson@linaro.org>
@@ -70,54 +70,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The arm,idle-state DT bindings recently got converted to the json-schema,
-but some links are still pointing to the old, non-existing, txt file. Let's
-update the links to fix this.
-
-Fixes: baac82fe06db ("dt-bindings: arm: Convert arm,idle-state binding to DT schema")
+Fixes: a3f048b5424e ("dt: psci: Update DT bindings to support hierarchical PSCI states")
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- Documentation/devicetree/bindings/arm/cpus.yaml               | 2 +-
- Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt | 2 +-
- Documentation/devicetree/bindings/arm/psci.yaml               | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/arm/psci.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index f61a5a13fb42..31b391a24b70 100644
---- a/Documentation/devicetree/bindings/arm/cpus.yaml
-+++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -226,7 +226,7 @@ properties:
-     $ref: '/schemas/types.yaml#/definitions/phandle-array'
-     description: |
-       List of phandles to idle state nodes supported
--      by this cpu (see ./idle-states.txt).
-+      by this cpu (see ./idle-states.yaml).
- 
-   capacity-dmips-mhz:
-     $ref: '/schemas/types.yaml#/definitions/uint32'
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt b/Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
-index 06df04cc827a..6ce0b212ec6d 100644
---- a/Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
-+++ b/Documentation/devicetree/bindings/arm/msm/qcom,idle-state.txt
-@@ -81,4 +81,4 @@ Example:
- 		};
- 	};
- 
--[1]. Documentation/devicetree/bindings/arm/idle-states.txt
-+[1]. Documentation/devicetree/bindings/arm/idle-states.yaml
 diff --git a/Documentation/devicetree/bindings/arm/psci.yaml b/Documentation/devicetree/bindings/arm/psci.yaml
-index 8ef85420b2ab..f8218e60e3e2 100644
+index f8218e60e3e2..540211a080d4 100644
 --- a/Documentation/devicetree/bindings/arm/psci.yaml
 +++ b/Documentation/devicetree/bindings/arm/psci.yaml
-@@ -100,7 +100,7 @@ properties:
-       bindings in [1]) must specify this property.
+@@ -199,7 +199,7 @@ examples:
  
-       [1] Kernel documentation - ARM idle states bindings
--        Documentation/devicetree/bindings/arm/idle-states.txt
-+        Documentation/devicetree/bindings/arm/idle-states.yaml
+       CPU0: cpu@0 {
+         device_type = "cpu";
+-        compatible = "arm,cortex-a53", "arm,armv8";
++        compatible = "arm,cortex-a53";
+         reg = <0x0>;
+         enable-method = "psci";
+         power-domains = <&CPU_PD0>;
+@@ -208,7 +208,7 @@ examples:
  
-   "#power-domain-cells":
-     description:
+       CPU1: cpu@1 {
+         device_type = "cpu";
+-        compatible = "arm,cortex-a57", "arm,armv8";
++        compatible = "arm,cortex-a53";
+         reg = <0x100>;
+         enable-method = "psci";
+         power-domains = <&CPU_PD1>;
 -- 
 2.20.1
 
