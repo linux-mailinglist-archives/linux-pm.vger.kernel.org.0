@@ -2,152 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B00177B9A
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 17:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C30177C90
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 18:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729973AbgCCQJ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 11:09:58 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:55662 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729537AbgCCQJ6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 11:09:58 -0500
-Received: by mail-pj1-f65.google.com with SMTP id a18so1533567pjs.5;
-        Tue, 03 Mar 2020 08:09:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PW2q1O1LawBhjKs2T037lJZGZjX7nCN1iWTrJRayolM=;
-        b=KCka3Q2wKj2xVhjSXAi8XIkgJ9mhNXB/kTDBT1C1NuPxqIl8xXd6pVByb9ojoZejpw
-         8TespAE8VKuf17GKiCRf6WiTmkKqznh4jQbzVppjBC3HK01CGZj/FjZHdhM9sRT7IPKz
-         52ALAGynVBSMhGEuE2ueaEumNrG6kvlIlTwrkOAhhr6IpG3iG9iA2vmVnrGZbs7z8LcR
-         99WgjY3WQyyqVBwQmWUxjBY+MFbULrzfoy1MpNME4AnJ/5qvU1+LzPfYgY/e/+0HKm+K
-         KK7Tx4FruMouiQ9+DhneMzPHoZTM0iuvYfFemkH4JPOPsPYGiM0l1DLAX3J2wzfsnRg8
-         XfmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PW2q1O1LawBhjKs2T037lJZGZjX7nCN1iWTrJRayolM=;
-        b=pYeovKXJ+HPlH/3vs7SxYliN1WDqVaP1a+VntqVn7kOymwTkJDfdoS6qbNZyo3leJS
-         NJ1+bKGK0nMhE4k4HcCNARd1p4wJVni3EjuyQhMYuYbsPdkv839EMyxPvOeP9/dW83Qy
-         tfaRTEYlge1lHFfOKyEB+9AtPfDnO7vn6JAxB1d4jL6wkteloGn8Ek/tY+3lA4b7kV6s
-         BBH2EPspH5j+6SQFTLK32hshtsS9+27Q357c94fkKRSJ2E/tensKmcoLSCiC9qUWxeC+
-         VWiGB2Fgl86qGjO05kyi1Fu4pWM0zmDxY4S8fC1b2FdBhuQskDRg+0Yn0NAfuDmoGmNx
-         klrw==
-X-Gm-Message-State: ANhLgQ2rSyhZCm2Vdxhl69qZzaTOJdGCDWHuWn/Q660WnbH1qZHSQbiq
-        TzRG9UOLYUr8LWVN12fZzQ==
-X-Google-Smtp-Source: ADFU+vvU5CjB5y9u06eyei85NMjbw5qrIk3jyjI8+yUjUqJ73mj64gxiHt9qRLQ+G4XUWNomDb87UQ==
-X-Received: by 2002:a17:90a:aa83:: with SMTP id l3mr4747518pjq.5.1583251797089;
-        Tue, 03 Mar 2020 08:09:57 -0800 (PST)
-Received: from madhuparna-HP-Notebook ([112.79.49.138])
-        by smtp.gmail.com with ESMTPSA id x65sm12449591pfd.34.2020.03.03.08.09.19
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 03 Mar 2020 08:09:56 -0800 (PST)
-From:   Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
-X-Google-Original-From: Madhuparna Bhowmik <change_this_user_name@gmail.com>
-Date:   Tue, 3 Mar 2020 21:39:06 +0530
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Amol Grover <frextrite@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH 1/2] drivers: base: power: main: Use built-in RCU list
- checking
-Message-ID: <20200303160810.GA5486@madhuparna-HP-Notebook>
-References: <20200228174630.8989-1-madhuparnabhowmik10@gmail.com>
- <CAJZ5v0jhw+cVm=ViiOtZgKr+a1L_PbeVPNXpsPbgghUvMPODSA@mail.gmail.com>
- <C2E57D31-A459-4F5F-8ECF-484FBB26C065@joelfernandes.org>
- <CAJZ5v0jTSKd_23fJhM+XUmFX_yTjcD+c_s1Jvi3HA1EmXPkzZw@mail.gmail.com>
- <CAEXW_YRL0kum5yVm+9V8i_PK2FcHfPeUOxJKZ+T8P3zqhATxJg@mail.gmail.com>
- <CAD=jOEZ3vdNC4qTMxptaXLjs7i8TCTYjeiv9vXhcapLSkrr9RQ@mail.gmail.com>
- <CAJZ5v0hee4FxeVub_ZkAYn9z8q1_ZLA_AcmTtS-w39VzSe0UxA@mail.gmail.com>
+        id S1730437AbgCCQ6v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Mar 2020 11:58:51 -0500
+Received: from foss.arm.com ([217.140.110.172]:49756 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727077AbgCCQ6u (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 3 Mar 2020 11:58:50 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E68952F;
+        Tue,  3 Mar 2020 08:58:49 -0800 (PST)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.71])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C2583F534;
+        Tue,  3 Mar 2020 08:58:47 -0800 (PST)
+Date:   Tue, 3 Mar 2020 16:58:45 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     will@kernel.org, mark.rutland@arm.com, maz@kernel.org,
+        suzuki.poulose@arm.com, sudeep.holla@arm.com, lukasz.luba@arm.com,
+        valentin.schneider@arm.com, dietmar.eggemann@arm.com,
+        rjw@rjwysocki.net, pkondeti@codeaurora.org, peterz@infradead.org,
+        mingo@redhat.com, vincent.guittot@linaro.org,
+        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 1/7] arm64: add support for the AMU extension v1
+Message-ID: <20200303165845.GF823373@arrakis.emea.arm.com>
+References: <20200226132947.29738-1-ionela.voinescu@arm.com>
+ <20200226132947.29738-2-ionela.voinescu@arm.com>
+ <20200228103234.GA3904776@arrakis.emea.arm.com>
+ <20200302142326.GA15709@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hee4FxeVub_ZkAYn9z8q1_ZLA_AcmTtS-w39VzSe0UxA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200302142326.GA15709@arm.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 02, 2020 at 06:02:21PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Mar 2, 2020 at 1:34 PM Madhuparna Bhowmik
-> <madhuparnabhowmik10@gmail.com> wrote:
-> >
-> >
-> >
-> > On Mon, 2 Mar, 2020, 3:48 AM Joel Fernandes, <joel@joelfernandes.org> wrote:
-> >>
-> >> On Sun, Mar 1, 2020 at 4:23 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >> >
-> >> > On Sun, Mar 1, 2020 at 9:53 PM <joel@joelfernandes.org> wrote:
-> >> > >
-> >> > >
-> >> > >
-> >> > > On March 1, 2020 3:12:53 PM EST, "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> >> > > >On Fri, Feb 28, 2020 at 6:47 PM <madhuparnabhowmik10@gmail.com> wrote:
-> >> > > >>
-> >> > > >> From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
-> >> > > >>
-> >> > > >> This patch passes the cond argument to list_for_each_entry_rcu()
-> >> > > >> to fix the following false-positive lockdep warnings:
-> >> > > >>
-> >> > > >> [  330.302784] =============================
-> >> > > >> [  330.302789] WARNING: suspicious RCU usage
-> >> > > >> [  330.302796] 5.6.0-rc1+ #5 Not tainted
-> >> > > >> [  330.302801] -----------------------------
-> >> > > >> [  330.302808] drivers/base/power/main.c:326 RCU-list traversed in
-> >> > > >non-reader section!!
-> >> > > >>
-> >> > > >> [  330.303303] =============================
-> >> > > >> [  330.303307] WARNING: suspicious RCU usage
-> >> > > >> [  330.303311] 5.6.0-rc1+ #5 Not tainted
-> >> > > >> [  330.303315] -----------------------------
-> >> > > >> [  330.303319] drivers/base/power/main.c:1698 RCU-list traversed in
-> >> > > >non-reader section!!
-> >> > > >>
-> >> > > >> [  331.934969] =============================
-> >> > > >> [  331.934971] WARNING: suspicious RCU usage
-> >> > > >> [  331.934973] 5.6.0-rc1+ #5 Not tainted
-> >> > > >> [  331.934975] -----------------------------
-> >> > > >> [  331.934977] drivers/base/power/main.c:1238 RCU-list traversed in
-> >> > > >non-reader section!!
-> >> > > >>
-> >> > > >> [  332.467772] WARNING: suspicious RCU usage
-> >> > > >> [  332.467775] 5.6.0-rc1+ #5 Not tainted
-> >> > > >> [  332.467775] -----------------------------
-> >> > > >> [  332.467778] drivers/base/power/main.c:269 RCU-list traversed in
-> >> > > >non-reader section!!
-> >> > > >
-> >> > > >I don't see these warnings in the kernels run locally here.
-> >> > > >
-> >> > > >What do you do to get them?
-> >> > > >
-> >> > > >Joel, any comments here?
-> >> > >
-> >> > > You have to enable lockdep in your config. Does your setup have that?
-> >> >
-> >> > CONFIG_LOCK_DEBUGGING_SUPPORT=y
-> >> > CONFIG_PROVE_LOCKING=y
-> >> > CONFIG_DEBUG_SPINLOCK=y
-> >> > CONFIG_DEBUG_LOCK_ALLOC=y
-> >> > CONFIG_LOCKDEP=y
-> >>
-> >>
-> > I had CONFIG_PROVE_RCU_LIST = y and I think these warnings were triggered when I had closed my laptop (like just close without shutting down).
+On Mon, Mar 02, 2020 at 02:23:26PM +0000, Ionela Voinescu wrote:
+> On Friday 28 Feb 2020 at 10:32:34 (+0000), Catalin Marinas wrote:
+> > On Wed, Feb 26, 2020 at 01:29:41PM +0000, Ionela Voinescu wrote:
+> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > > index dbc22d684627..49f0c436928f 100644
+> > > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > > @@ -318,6 +318,15 @@
+> > >  			Format: <a>,<b>
+> > >  			See also Documentation/input/joydev/joystick.rst
+> > >  
+> > > +	amu=		[ARM64]
+> > > +			Enables or disables detection, enablement and access to
+> > > +			counter registers of the Activity Monitors Unit (AMU).
+> > > +			Format: amu=[0/1/on/off/y/n]
+> > > +			amu=[0/off/n] ensures access to AMU's counter registers
+> > > +				      is not attempted.
+> > > +			amu=[1/on/y] (default) enables detection and access to
+> > > +				     AMU's counter registers.
+> > 
+> > Is the only reason for this parameter to be able to disable the feature
+> > if the firmware doesn't support it? According to the Kconfig entry, you
+> > may see weird behaviour, firmware lock-up. Is the user supposed to try
+> > again with amu=0?
+> > 
+> > I'm not particularly fond of adding kernel parameters to work around
+> > broken firmware. We have other architecture features (e.g. PtrAuth) that
+> > need enabling at EL3 but we don't have such parameters. If it's likely
+> > that we hit this issue in practice, I'd rather have the firmware
+> > describing the presence of AMU via some DT entry. But I'd rather not
+> > bother at all, just get the vendors to update their firmware.
 > 
-> OK, so let's define a macro for that in this file to avoid code duplication.
-> 
-> And analogously in the second patch.
->
-Sure, I will do it and send the patch soon.
+> The firmware is supposed to do three actions for the kernel to be able
+> to use the counters: enable access to EL2/EL1, enable the counters and
+> save/restore the counters before/after core-off.
+[...]
+> Therefore, the amu kernel parameter is not only there if the firmware
+> does not support AMU, but it's also there if the firmware support is
+> broken/improper. The kernel parameter was added at Suzuki's
+> recommendation to be able to bypass its use in single kernels that are
+> meant to run on multiple platforms.
 
-> Thanks!
+Single kernel images are supposed to run on multiple platforms while
+using the same command line arguments.
+
+There are many other ways firmware can screw up but I'm not keen on
+working on such assumption and preemptively adding options to ignore CPU
+features.
+
+> I also believe this is nice to have even for platforms that properly
+> support AMU, but they might not want the use of the feature in the
+> kernel.
+
+Are there any downsides to this feature? If you want it for testing
+purposes, i.e. different scheduler behaviour, fine by me but I'd change
+the text in the Kconfig to not even imply that firmware is allowed to be
+broken as we have a workaround in the kernel.
+
+> > If we drop this parameter, patch 1 would need to change. Otherwise the
+> > patches look fine.
+> 
+> This being said, I agree this was added as a 'just in case' and not as
+> support for a likely scenario, therefore, I don't fully disagree to drop
+> it for now.
+
+If you need it for testing different scheduler behaviours, maybe
+big.LITTLE where AMU is only supported on some CPUs, than keep it. If
+it's only on the assumption that the firmware may be broken, please
+remove it.
+
+Thanks.
+
+-- 
+Catalin
