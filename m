@@ -2,123 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34696177AC8
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 16:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B00177B9A
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 17:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730111AbgCCPnr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 10:43:47 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:45679 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729755AbgCCPnq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 10:43:46 -0500
-Received: by mail-ed1-f65.google.com with SMTP id h62so4891241edd.12
-        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 07:43:45 -0800 (PST)
+        id S1729973AbgCCQJ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Mar 2020 11:09:58 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:55662 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729537AbgCCQJ6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 11:09:58 -0500
+Received: by mail-pj1-f65.google.com with SMTP id a18so1533567pjs.5;
+        Tue, 03 Mar 2020 08:09:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wUChkrPr5ljfTasjojcfSOHYLssa67n/JsN8CgfdAHE=;
-        b=K9XNUJGroYRdDR1ux6pXF7oQJcGzvpLxnCKPCsX26C0Tu9hC5HuWWrFU7srbEOJOL+
-         Jk8ookxlAbji14BsL73PDTTF5eIJrpdAnDiCpyDiRGGvFozH6M+B80Uy/Fe1JxlrrsXH
-         GRW1RIhoPUEdNvwHY5SmG3qe3uwWBJBypBRAE=
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PW2q1O1LawBhjKs2T037lJZGZjX7nCN1iWTrJRayolM=;
+        b=KCka3Q2wKj2xVhjSXAi8XIkgJ9mhNXB/kTDBT1C1NuPxqIl8xXd6pVByb9ojoZejpw
+         8TespAE8VKuf17GKiCRf6WiTmkKqznh4jQbzVppjBC3HK01CGZj/FjZHdhM9sRT7IPKz
+         52ALAGynVBSMhGEuE2ueaEumNrG6kvlIlTwrkOAhhr6IpG3iG9iA2vmVnrGZbs7z8LcR
+         99WgjY3WQyyqVBwQmWUxjBY+MFbULrzfoy1MpNME4AnJ/5qvU1+LzPfYgY/e/+0HKm+K
+         KK7Tx4FruMouiQ9+DhneMzPHoZTM0iuvYfFemkH4JPOPsPYGiM0l1DLAX3J2wzfsnRg8
+         XfmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wUChkrPr5ljfTasjojcfSOHYLssa67n/JsN8CgfdAHE=;
-        b=CiUbZlcQvgHW/m43Z3vcugxOTKA3V7ubY/iaG8Uw6v9EVOnws3IRRyJ6ZGBAtzC4B9
-         mdqQNWk35Lk7c1cDBtPtOM2J5SBKGewr8RzMawlPdQDH89ejldN5Mk1FvIREkPI8spT4
-         5iLamMVE40+7oXmYVQTiQHuQQWdP3fQ9l6e7pxYKOoANHW36238dgOMP7Lg8WM0SYVfv
-         LkYdPSTJoPDD9nSuBQH20pRgrwlPDa3OoysOROhxmRmqxxZaOiwoNIXM+aIW4L0W7tfc
-         Q1NOrjzWcPTQUnz7YTA/jnWl4qcAxQ1ICE9qHf6Eg3YjdkFlHtgN/7rHH5RKemXG16g+
-         d8bQ==
-X-Gm-Message-State: ANhLgQ3xoPP6r5vi/kdHlSlu4/MtbyhSbYFN/Jde+J6UU3nNCfn65RF7
-        dgcBAetQbO6MT+c950jGuCNVFq1s3vU=
-X-Google-Smtp-Source: ADFU+vtYE6P3YOb7uJDHrzNRrfL45SHHON2N6LQ9V6I7jorD4fO0uScDrdMaeqPUlbCsnroKcyUKEA==
-X-Received: by 2002:a17:906:1cd8:: with SMTP id i24mr4138255ejh.354.1583250225184;
-        Tue, 03 Mar 2020 07:43:45 -0800 (PST)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id q5sm303300edw.34.2020.03.03.07.43.44
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Mar 2020 07:43:45 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id 6so3779348wmi.5
-        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 07:43:44 -0800 (PST)
-X-Received: by 2002:a7b:c416:: with SMTP id k22mr4837344wmi.88.1583250223087;
- Tue, 03 Mar 2020 07:43:43 -0800 (PST)
-MIME-Version: 1.0
-References: <20200228000105.165012-1-thgarnie@chromium.org>
- <202003022100.54CEEE60F@keescook> <20200303095514.GA2596@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200303095514.GA2596@hirez.programming.kicks-ass.net>
-From:   Thomas Garnier <thgarnie@chromium.org>
-Date:   Tue, 3 Mar 2020 07:43:31 -0800
-X-Gmail-Original-Message-ID: <CAJcbSZH1oON2VC2U8HjfC-6=M-xn5eU+JxHG2575iMpVoheKdA@mail.gmail.com>
-Message-ID: <CAJcbSZH1oON2VC2U8HjfC-6=M-xn5eU+JxHG2575iMpVoheKdA@mail.gmail.com>
-Subject: Re: [PATCH v11 00/11] x86: PIE support to extend KASLR randomization
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Thomas Hellstrom <thellstrom@vmware.com>,
-        "VMware, Inc." <pv-drivers@vmware.com>,
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PW2q1O1LawBhjKs2T037lJZGZjX7nCN1iWTrJRayolM=;
+        b=pYeovKXJ+HPlH/3vs7SxYliN1WDqVaP1a+VntqVn7kOymwTkJDfdoS6qbNZyo3leJS
+         NJ1+bKGK0nMhE4k4HcCNARd1p4wJVni3EjuyQhMYuYbsPdkv839EMyxPvOeP9/dW83Qy
+         tfaRTEYlge1lHFfOKyEB+9AtPfDnO7vn6JAxB1d4jL6wkteloGn8Ek/tY+3lA4b7kV6s
+         BBH2EPspH5j+6SQFTLK32hshtsS9+27Q357c94fkKRSJ2E/tensKmcoLSCiC9qUWxeC+
+         VWiGB2Fgl86qGjO05kyi1Fu4pWM0zmDxY4S8fC1b2FdBhuQskDRg+0Yn0NAfuDmoGmNx
+         klrw==
+X-Gm-Message-State: ANhLgQ2rSyhZCm2Vdxhl69qZzaTOJdGCDWHuWn/Q660WnbH1qZHSQbiq
+        TzRG9UOLYUr8LWVN12fZzQ==
+X-Google-Smtp-Source: ADFU+vvU5CjB5y9u06eyei85NMjbw5qrIk3jyjI8+yUjUqJ73mj64gxiHt9qRLQ+G4XUWNomDb87UQ==
+X-Received: by 2002:a17:90a:aa83:: with SMTP id l3mr4747518pjq.5.1583251797089;
+        Tue, 03 Mar 2020 08:09:57 -0800 (PST)
+Received: from madhuparna-HP-Notebook ([112.79.49.138])
+        by smtp.gmail.com with ESMTPSA id x65sm12449591pfd.34.2020.03.03.08.09.19
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 03 Mar 2020 08:09:56 -0800 (PST)
+From:   Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+X-Google-Original-From: Madhuparna Bhowmik <change_this_user_name@gmail.com>
+Date:   Tue, 3 Mar 2020 21:39:06 +0530
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Cao jin <caoj.fnst@cn.fujitsu.com>,
-        Allison Randal <allison@lohutok.net>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Amol Grover <frextrite@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH 1/2] drivers: base: power: main: Use built-in RCU list
+ checking
+Message-ID: <20200303160810.GA5486@madhuparna-HP-Notebook>
+References: <20200228174630.8989-1-madhuparnabhowmik10@gmail.com>
+ <CAJZ5v0jhw+cVm=ViiOtZgKr+a1L_PbeVPNXpsPbgghUvMPODSA@mail.gmail.com>
+ <C2E57D31-A459-4F5F-8ECF-484FBB26C065@joelfernandes.org>
+ <CAJZ5v0jTSKd_23fJhM+XUmFX_yTjcD+c_s1Jvi3HA1EmXPkzZw@mail.gmail.com>
+ <CAEXW_YRL0kum5yVm+9V8i_PK2FcHfPeUOxJKZ+T8P3zqhATxJg@mail.gmail.com>
+ <CAD=jOEZ3vdNC4qTMxptaXLjs7i8TCTYjeiv9vXhcapLSkrr9RQ@mail.gmail.com>
+ <CAJZ5v0hee4FxeVub_ZkAYn9z8q1_ZLA_AcmTtS-w39VzSe0UxA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hee4FxeVub_ZkAYn9z8q1_ZLA_AcmTtS-w39VzSe0UxA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 3, 2020 at 1:55 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Mar 02, 2020 at 09:02:15PM -0800, Kees Cook wrote:
-> > On Thu, Feb 27, 2020 at 04:00:45PM -0800, Thomas Garnier wrote:
-> > > Minor changes based on feedback and rebase from v10.
-> > >
-> > > Splitting the previous serie in two. This part contains assembly code
-> > > changes required for PIE but without any direct dependencies with the
-> > > rest of the patchset.
-> > >
-> > > Note: Using objtool to detect non-compliant PIE relocations is not yet
-> > > possible as this patchset only includes the simplest PIE changes.
-> > > Additional changes are needed in kvm, xen and percpu code.
-> > >
-> > > Changes:
-> > >  - patch v11 (assembly);
-> > >    - Fix comments on x86/entry/64.
-> > >    - Remove KASLR PIE explanation on all commits.
-> > >    - Add note on objtool not being possible at this stage of the patchset.
+On Mon, Mar 02, 2020 at 06:02:21PM +0100, Rafael J. Wysocki wrote:
+> On Mon, Mar 2, 2020 at 1:34 PM Madhuparna Bhowmik
+> <madhuparnabhowmik10@gmail.com> wrote:
 > >
-> > This moves us closer to PIE in a clean first step. I think these patches
-> > look good to go, and unblock the work in kvm, xen, and percpu code. Can
-> > one of the x86 maintainers pick this series up?
+> >
+> >
+> > On Mon, 2 Mar, 2020, 3:48 AM Joel Fernandes, <joel@joelfernandes.org> wrote:
+> >>
+> >> On Sun, Mar 1, 2020 at 4:23 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >> >
+> >> > On Sun, Mar 1, 2020 at 9:53 PM <joel@joelfernandes.org> wrote:
+> >> > >
+> >> > >
+> >> > >
+> >> > > On March 1, 2020 3:12:53 PM EST, "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> >> > > >On Fri, Feb 28, 2020 at 6:47 PM <madhuparnabhowmik10@gmail.com> wrote:
+> >> > > >>
+> >> > > >> From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+> >> > > >>
+> >> > > >> This patch passes the cond argument to list_for_each_entry_rcu()
+> >> > > >> to fix the following false-positive lockdep warnings:
+> >> > > >>
+> >> > > >> [  330.302784] =============================
+> >> > > >> [  330.302789] WARNING: suspicious RCU usage
+> >> > > >> [  330.302796] 5.6.0-rc1+ #5 Not tainted
+> >> > > >> [  330.302801] -----------------------------
+> >> > > >> [  330.302808] drivers/base/power/main.c:326 RCU-list traversed in
+> >> > > >non-reader section!!
+> >> > > >>
+> >> > > >> [  330.303303] =============================
+> >> > > >> [  330.303307] WARNING: suspicious RCU usage
+> >> > > >> [  330.303311] 5.6.0-rc1+ #5 Not tainted
+> >> > > >> [  330.303315] -----------------------------
+> >> > > >> [  330.303319] drivers/base/power/main.c:1698 RCU-list traversed in
+> >> > > >non-reader section!!
+> >> > > >>
+> >> > > >> [  331.934969] =============================
+> >> > > >> [  331.934971] WARNING: suspicious RCU usage
+> >> > > >> [  331.934973] 5.6.0-rc1+ #5 Not tainted
+> >> > > >> [  331.934975] -----------------------------
+> >> > > >> [  331.934977] drivers/base/power/main.c:1238 RCU-list traversed in
+> >> > > >non-reader section!!
+> >> > > >>
+> >> > > >> [  332.467772] WARNING: suspicious RCU usage
+> >> > > >> [  332.467775] 5.6.0-rc1+ #5 Not tainted
+> >> > > >> [  332.467775] -----------------------------
+> >> > > >> [  332.467778] drivers/base/power/main.c:269 RCU-list traversed in
+> >> > > >non-reader section!!
+> >> > > >
+> >> > > >I don't see these warnings in the kernels run locally here.
+> >> > > >
+> >> > > >What do you do to get them?
+> >> > > >
+> >> > > >Joel, any comments here?
+> >> > >
+> >> > > You have to enable lockdep in your config. Does your setup have that?
+> >> >
+> >> > CONFIG_LOCK_DEBUGGING_SUPPORT=y
+> >> > CONFIG_PROVE_LOCKING=y
+> >> > CONFIG_DEBUG_SPINLOCK=y
+> >> > CONFIG_DEBUG_LOCK_ALLOC=y
+> >> > CONFIG_LOCKDEP=y
+> >>
+> >>
+> > I had CONFIG_PROVE_RCU_LIST = y and I think these warnings were triggered when I had closed my laptop (like just close without shutting down).
+> 
+> OK, so let's define a macro for that in this file to avoid code duplication.
+> 
+> And analogously in the second patch.
 >
-> But,... do we still need this in the light of that fine-grained kaslr
-> stuff?
->
-> What is the actual value of this PIE crud in the face of that?
+Sure, I will do it and send the patch soon.
 
-If I remember well, it makes it easier/better but I haven't seen a
-recent update on that. Is that accurate Kees?
+> Thanks!
