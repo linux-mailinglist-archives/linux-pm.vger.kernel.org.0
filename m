@@ -2,215 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A198F177387
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 11:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BBA177531
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 12:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728321AbgCCKLM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 05:11:12 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:29528 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727412AbgCCKLM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 05:11:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1583230271;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0lKGMZz2mVXzfjH8foE9O3JFOJlrljIc2oxkVwn7z1E=;
-        b=eRS9e4E0vFXoWHEL7Lf37P4+9E09SG+E0UN53Hi6+guk3p1l11qDtH44PTjB2UIHl7q2Ef
-        t7czCS3LBQJ2k5m1mSqNXiKP69Mkr86m5n8LUnLsAAPZ3xqQD/VYvahloNFBgkyhlpdDQh
-        /LpQv3TP15UwEM6ClRs4BfA7XERf71U=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-189-xIBK81OONcSBN0Nfdi6Juw-1; Tue, 03 Mar 2020 05:11:07 -0500
-X-MC-Unique: xIBK81OONcSBN0Nfdi6Juw-1
-Received: by mail-wm1-f70.google.com with SMTP id w12so457257wmc.3
-        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 02:11:06 -0800 (PST)
+        id S1727896AbgCCLSC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Mar 2020 06:18:02 -0500
+Received: from mail-pf1-f175.google.com ([209.85.210.175]:35879 "EHLO
+        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727869AbgCCLSC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 06:18:02 -0500
+Received: by mail-pf1-f175.google.com with SMTP id i13so1309119pfe.3
+        for <linux-pm@vger.kernel.org>; Tue, 03 Mar 2020 03:18:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=6LpPu+7mzHDbzzNZ3vNWrKJy3N6+UnYE5W0wfZ5TDvA=;
+        b=X9DQytk52qZ6DQRmc5okitpNMgHqG6s8o4bhvGC/XRa0ECQDG91tyC0uTDPgvD5O1k
+         AUuMxfLAJyrLqXfrAp5dKlhSuhJd+75XMDpEpOhrHrfJ3hNdoOJBM9SxQNB3jHDPbsD8
+         DhiRPCC1dISZWIga0LihFWuRrO+DF9g8G3LAFp5NaoxJuVYG6DS7xohhSh+k7UWyF562
+         YPqgCzzzuUmbeQKhJvCRRs0x4f4+fnOrjIpvEtN8uYJfnHqRy6MgFt55MQn41GYLpstR
+         fMeTQE2yvj0EyS4Bx0uHfr0FdNMEMZDwY5XPTrtOrDQpG/auu4hOrJn2TkWWAD4aZ+Pr
+         r/pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0lKGMZz2mVXzfjH8foE9O3JFOJlrljIc2oxkVwn7z1E=;
-        b=EL13XFu4CwUIBcaqNqKXAdrn3JssEHEVyAOvdolX6hjb2LjIO1s/OTmqGw2bMvD4jG
-         JRnKP3Bag2Bec7Pr2ySbslSrSZzTMfFpaQRvZqxeax624277xGDz7+wJqdRm3wiMloRA
-         o4+j4D7YXFKyHSzEfUiJjX6ibRlxhOqNf3/fUueRy/lf0JLNwhYgoNybsAdYzmaAUeF3
-         rnz7XwXtPVtXwRBmBws2APuXumWX7bgOvCSmwOnOuQx1W3gytpkmSLo6P9HJBjA2YCKM
-         2Btlv11wugcrRYAuQ9/vy/DZorU8ian+gprqoNX/9a4pss1bH34fHrp/DfDpmuUvF0ZW
-         F0EA==
-X-Gm-Message-State: ANhLgQ0/QaKEw2oFJmpfsiFAOiaBMYh42GXP2dDBGdz7u4vyUq0TAO1q
-        UKDauLJUz+o0tzp4HpWJTqPMZBnxO5btJi7HHXNitQJqSpVBzdQ+Vv5JVFvv2b+qLAYugXs0uA/
-        YGeQFAPRsmCijYbBmyXk=
-X-Received: by 2002:a7b:c5cd:: with SMTP id n13mr3568985wmk.172.1583230264530;
-        Tue, 03 Mar 2020 02:11:04 -0800 (PST)
-X-Google-Smtp-Source: ADFU+vupO8zpDPGI2M251ftAIAreBbyyhVWtPWzvaf5Z4LtEpAgdcTDnuje0fNmPeffLysPi04uEaw==
-X-Received: by 2002:a7b:c5cd:: with SMTP id n13mr3568951wmk.172.1583230264185;
-        Tue, 03 Mar 2020 02:11:04 -0800 (PST)
-Received: from kherbst.pingu.com ([2a02:8308:b0be:6900:482c:9537:40:83ba])
-        by smtp.gmail.com with ESMTPSA id w206sm3315371wmg.11.2020.03.03.02.11.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 02:11:03 -0800 (PST)
-From:   Karol Herbst <kherbst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Karol Herbst <kherbst@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lyude Paul <lyude@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mika Westerberg <mika.westerberg@intel.com>,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
-Subject: [PATCH v6] pci: prevent putting nvidia GPUs into lower device states on certain intel bridges
-Date:   Tue,  3 Mar 2020 11:10:52 +0100
-Message-Id: <20200303101052.133631-1-kherbst@redhat.com>
-X-Mailer: git-send-email 2.24.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=6LpPu+7mzHDbzzNZ3vNWrKJy3N6+UnYE5W0wfZ5TDvA=;
+        b=NOVjwPOW6B877YsKEWUBkUlHqMxjyYDC74pxq1XdXdpDtEqroBboXurWJHGsY5IYUx
+         9Hr/Fbfvb3cIthIrsq8/FKm+WzALSztzwvDMAIZ0JizH637bnqLV+RSUKeylEAEuZSvD
+         AzuPKrmyYXQBL79E4dCbQbZdMsyKLdCcWAVRMxFYKi3vQtqvecYh4OOUr/BWmbfh49py
+         nuG++rBlUhCE0LZ9vkyuo0G19WJd9E3p8RPgS/L9PKIdwXwHbCwkXbTb5XQHBeULENPO
+         2TliB5umalCFTSfJaoHx0eRJ0x04gn9yCeDsHIUf9w3An0lSeMMk0ShlfnAXPLxieD4i
+         e7hg==
+X-Gm-Message-State: ANhLgQ3+ROHxN6ZGkC//ZLd207ybShab1bbbjA5ivK7dcseuT4qM0pcb
+        IJ02HB2Z8KXkur2ZBPPA8GHC0Q==
+X-Google-Smtp-Source: ADFU+vtX4ocvGPjD4lCipeCvf6Ndh/Qq0CPh8PdfYnJjc4X0n5KlKRfZpxjGrKkVvOS0v1sBH1rFJA==
+X-Received: by 2002:a63:4103:: with SMTP id o3mr3271939pga.199.1583234279527;
+        Tue, 03 Mar 2020 03:17:59 -0800 (PST)
+Received: from localhost ([122.167.24.230])
+        by smtp.gmail.com with ESMTPSA id d4sm2138730pjg.19.2020.03.03.03.17.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 03 Mar 2020 03:17:58 -0800 (PST)
+Date:   Tue, 3 Mar 2020 16:47:56 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 0/3] Convert i.MX6Q cpufreq to use nvmem API
+Message-ID: <20200303111756.eikekt7vg2js7emw@vireshk-i7>
+References: <1583201690-16068-1-git-send-email-peng.fan@nxp.com>
+ <20200303054547.4wpnzmgnuo7jd2qa@vireshk-i7>
+ <AM0PR04MB4481FDAD041F6476FFFC0F6788E40@AM0PR04MB4481.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM0PR04MB4481FDAD041F6476FFFC0F6788E40@AM0PR04MB4481.eurprd04.prod.outlook.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fixes state transitions of Nvidia Pascal GPUs from D3cold into higher device
-states.
+On 03-03-20, 06:16, Peng Fan wrote:
+> Hi Viresh,
+> 
+> > Subject: Re: [PATCH 0/3] Convert i.MX6Q cpufreq to use nvmem API
+> > 
+> > On 03-03-20, 10:14, peng.fan@nxp.com wrote:
+> > > From: Peng Fan <peng.fan@nxp.com>
+> > >
+> > > Use nvmem API is better compared with direclty accessing OCOTP registers.
+> > > nvmem could handle OCOTP clk, defer probe.
+> > >
+> > > Patch 1/3 is dts changes to add nvmem related properties Patch 2/3 is
+> > > a bug fix Patch 3/3 is convert to nvmem API
+> > 
+> > Should I apply patch 2 and 3 ? And you can take 1/3 via ARM Soc tree as this
+> > shouldn't break anything.
+> 
+> Please take patch 2 and 3. Without patch 1, it just use legacy method,
+> not break things.
 
-v2: convert to pci_dev quirk
-    put a proper technical explanation of the issue as a in-code comment
-v3: disable it only for certain combinations of intel and nvidia hardware
-v4: simplify quirk by setting flag on the GPU itself
-v5: restructure quirk to make it easier to add new IDs
-    fix whitespace issues
-    fix potential NULL pointer access
-    update the quirk documentation
-v6: move quirk into nouveau
+Applied. Thanks.
 
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-Cc: Mika Westerberg <mika.westerberg@intel.com>
-Cc: linux-pci@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: nouveau@lists.freedesktop.org
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=205623
----
- drivers/gpu/drm/nouveau/nouveau_drm.c | 56 +++++++++++++++++++++++++++
- drivers/pci/pci.c                     |  8 ++++
- include/linux/pci.h                   |  1 +
- 3 files changed, 65 insertions(+)
-
-diff --git a/drivers/gpu/drm/nouveau/nouveau_drm.c b/drivers/gpu/drm/nouveau/nouveau_drm.c
-index 2cd83849600f..51d3a7ba7731 100644
---- a/drivers/gpu/drm/nouveau/nouveau_drm.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_drm.c
-@@ -618,6 +618,59 @@ nouveau_drm_device_fini(struct drm_device *dev)
- 	kfree(drm);
- }
- 
-+/*
-+ * On some Intel PCIe bridge controllers doing a
-+ * D0 -> D3hot -> D3cold -> D0 sequence causes Nvidia GPUs to not reappear.
-+ * Skipping the intermediate D3hot step seems to make it work again. Thise is
-+ * probably caused by not meeting the expectation the involved AML code has
-+ * when the GPU is put into D3hot state before invoking it.
-+ *
-+ * This leads to various manifestations of this issue:
-+ *  - AML code execution to power on the GPU hits an infinite loop (as the
-+ *    code waits on device memory to change).
-+ *  - kernel crashes, as all PCI reads return -1, which most code isn't able
-+ *    to handle well enough.
-+ *
-+ * In all cases dmesg will contain at least one line like this:
-+ * 'nouveau 0000:01:00.0: Refused to change power state, currently in D3'
-+ * followed by a lot of nouveau timeouts.
-+ *
-+ * In the \_SB.PCI0.PEG0.PG00._OFF code deeper down writes bit 0x80 to the not
-+ * documented PCI config space register 0x248 of the Intel PCIe bridge
-+ * controller (0x1901) in order to change the state of the PCIe link between
-+ * the PCIe port and the GPU. There are alternative code paths using other
-+ * registers, which seem to work fine (executed pre Windows 8):
-+ *  - 0xbc bit 0x20 (publicly available documentation claims 'reserved')
-+ *  - 0xb0 bit 0x10 (link disable)
-+ * Changing the conditions inside the firmware by poking into the relevant
-+ * addresses does resolve the issue, but it seemed to be ACPI private memory
-+ * and not any device accessible memory at all, so there is no portable way of
-+ * changing the conditions.
-+ * On a XPS 9560 that means bits [0,3] on \CPEX need to be cleared.
-+ *
-+ * The only systems where this behavior can be seen are hybrid graphics laptops
-+ * with a secondary Nvidia Maxwell, Pascal or Turing GPU. Its unclear wheather
-+ * this issue only occurs in combination with listed Intel PCIe bridge
-+ * controllers and the mentioned GPUs or other devices as well.
-+ *
-+ * documentation on the PCIe bridge controller can be found in the
-+ * "7th Generation Intel® Processor Families for H Platforms Datasheet Volume 2"
-+ * Section "12 PCI Express* Controller (x16) Registers"
-+ */
-+
-+static void quirk_broken_nv_runpm(struct pci_dev *dev)
-+{
-+	struct pci_dev *bridge = pci_upstream_bridge(dev);
-+
-+	if (!bridge || bridge->vendor != PCI_VENDOR_ID_INTEL)
-+		return;
-+
-+	switch (bridge->device) {
-+	case 0x1901:
-+		dev->parent_d3cold = 1;
-+	}
-+}
-+
- static int nouveau_drm_probe(struct pci_dev *pdev,
- 			     const struct pci_device_id *pent)
- {
-@@ -699,6 +752,7 @@ static int nouveau_drm_probe(struct pci_dev *pdev,
- 	if (ret)
- 		goto fail_drm_dev_init;
- 
-+	quirk_broken_nv_runpm(pdev);
- 	return 0;
- 
- fail_drm_dev_init:
-@@ -737,6 +791,8 @@ nouveau_drm_remove(struct pci_dev *pdev)
- {
- 	struct drm_device *dev = pci_get_drvdata(pdev);
- 
-+	/* revert our workaround */
-+	pdev->parent_d3cold = false;
- 	nouveau_drm_device_remove(dev);
- }
- 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 951099279192..6ece05723fa2 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -860,6 +860,14 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
- 	   || (state == PCI_D2 && !dev->d2_support))
- 		return -EIO;
- 
-+	/*
-+	 * Power management can be disabled for certain devices as they don't
-+	 * come back up later on runtime_resume. We rely on platform means to
-+	 * cut power consumption instead (e.g. ACPI).
-+	 */
-+	if (state != PCI_D0 && dev->parent_d3cold)
-+		return 0;
-+
- 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
- 	if (pmcsr == (u16) ~0) {
- 		pci_err(dev, "can't change power state from %s to %s (config space inaccessible)\n",
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 930fab293073..3e5938b91966 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -340,6 +340,7 @@ struct pci_dev {
- 	unsigned int	no_d3cold:1;	/* D3cold is forbidden */
- 	unsigned int	bridge_d3:1;	/* Allow D3 for bridge */
- 	unsigned int	d3cold_allowed:1;	/* D3cold is allowed by user */
-+	unsigned int	parent_d3cold:1;	/* power manage the parent instead */
- 	unsigned int	mmio_always_on:1;	/* Disallow turning off io/mem
- 						   decoding during BAR sizing */
- 	unsigned int	wakeup_prepared:1;
 -- 
-2.24.1
-
+viresh
