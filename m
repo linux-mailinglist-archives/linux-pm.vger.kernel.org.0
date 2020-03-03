@@ -2,112 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B8B176A04
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 02:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B880176A85
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Mar 2020 03:21:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgCCB2u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Mar 2020 20:28:50 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:46776 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726755AbgCCB2u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Mar 2020 20:28:50 -0500
-Received: by mail-ot1-f67.google.com with SMTP id g96so1349051otb.13;
-        Mon, 02 Mar 2020 17:28:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eet9lZNdchN33q+dEpaXmuVlgsvcHvBcNPBCflfSjxo=;
-        b=f8mwstks/wkvSrxETMQDFJhZ+G7HdALKjPZlig4vEiHnVktAJiSdsd3OJbT+3SRleb
-         eGSuHz/hPQ2CLOlae37xYRo1PFAHUegsjyRHFb2XhaI518ynOi5mNc8YwTrZEubjQanS
-         OJ2YcaOCREdRz9v5Pj7gD+TogSMo6KCQK2yK7fzdtrSuaEVQr82piWHOlvMfRCc7wej8
-         DGDotukOv2BfJiCHT7rqmwJjwFonx57xGXWA3lrXOaRiwLuTi1tbicXhi1/4sgH8Qqla
-         2nV4l4wZvou82kppJMWEq6W9Ny67I5TK5fGTdFEU0j/62wCR76A1/1swV/Mx3Wx/WUg8
-         Vvgg==
-X-Gm-Message-State: ANhLgQ0nFU6MCjvGYQJs9Hedg1/QhbtYDTSX1jUC6cWpOvXTiRjxErRv
-        dx1dxmnGicDmqycrU4IOiQ==
-X-Google-Smtp-Source: ADFU+vvoin64lIvmLgeV8610QkmyYB0ZPZYEy2jhHQOrLVViftZhZeuOjY2eOqe7Pu/6/ZOSTijj1w==
-X-Received: by 2002:a05:6830:145:: with SMTP id j5mr1531326otp.242.1583198929345;
-        Mon, 02 Mar 2020 17:28:49 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id k16sm712675otp.52.2020.03.02.17.28.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2020 17:28:48 -0800 (PST)
-Received: (nullmailer pid 8615 invoked by uid 1000);
-        Tue, 03 Mar 2020 01:28:47 -0000
-Date:   Mon, 2 Mar 2020 19:28:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vkoul@kernel.org, daniel.lezcano@linaro.org,
-        bjorn.andersson@linaro.org, sivaa@codeaurora.org,
-        Andy Gross <agross@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dt-bindings: thermal: tsens: Add entry for sc7180
- tsens to binding
-Message-ID: <20200303012847.GA8556@bogus>
-References: <cover.1582871139.git.amit.kucheria@linaro.org>
- <8309e39737c480b0835454cbc6db345c5a27ecd4.1582871139.git.amit.kucheria@linaro.org>
+        id S1726942AbgCCCVL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Mar 2020 21:21:11 -0500
+Received: from mail-eopbgr70052.outbound.protection.outlook.com ([40.107.7.52]:38137
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726859AbgCCCVK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 2 Mar 2020 21:21:10 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jDjCHQqJBrEqxtWxDNzUyN/a9sCSCuFasUf1LnezEYFJSr6xb8s0oYyA/XkqafOxCrsgxXYIIBlmmTJDrw6KrcETaJt22vKNJlkBGGlG6RFVJNGqTqvj0CWUwepV59eZp8bn7AJcZdJLlNg96hjHnEx5M1HZl+2ToprKba2vghGhJga/dS3L0DQ2Ej9Hea1sa45V17V4oB8+TK4nuU7yyys4Uo9xT/OedsBvMoONMsejmLr9GJmOeIUAA45SFIVfo4sfILezqw6YBvSLSV0Vl2sJUqNHYKJ4XlzTxzKH99aZ6VDMsXW2ClxJC12/o8bqvtHT03mTxU5W7uAcvcRj3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ApoxnE+7GTMgREW8eu4JqW5FNpwlkH/KHHDvdbtOE5M=;
+ b=dHsFy/WT/VGGmAOLgXANSnA6ZkaQYcSHMztbI4oPGGAw7ql5l/8IuDB/ZTRbSrd1LkW9un8CDjRPGxyU5CJUcAyiNeMOlS+eD/navK6UMQFEueZMrgpJ0rU0UQaPp/yP7R4y/0eTlUOy7oMytA/KlODVGWJ6/ZwWVvzZ9k7eO1or9NrMimXo6hN3V95DeyHRSvdvajM5m3khzB5YVORS5l6/64zi+0OH8kNx54GSRJTPsTqGGs9+oaP/Y+T/iMZF8w820hHcYIJ3ehBWW7vaz8GCJ/Zh3A8G65ZARS8p7E0RdTBjfA6XFYmAe4M37jZbrRvK0cJYWYImtZWb4jHg9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ApoxnE+7GTMgREW8eu4JqW5FNpwlkH/KHHDvdbtOE5M=;
+ b=NAjgJSPMBDZlyaqPtA7EaHeuqQ5vKlY+wHXBoLDHI2oV9tSXoErTaeUDaqE7gl4bf1dqobwegehYf6ADUGAWhtmZ50pT6NGPnzftmaze25+3nUQIxmzJmx48F2QvXQ9CNdMWjmWIf+3RdCZSDzwsIoBKDHDZLz70S0V1EM1KyX8=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=peng.fan@nxp.com; 
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
+ AM0PR04MB5283.eurprd04.prod.outlook.com (20.176.215.90) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2772.19; Tue, 3 Mar 2020 02:21:05 +0000
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::91e2:17:b3f4:d422]) by AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::91e2:17:b3f4:d422%3]) with mapi id 15.20.2772.019; Tue, 3 Mar 2020
+ 02:21:05 +0000
+From:   peng.fan@nxp.com
+To:     viresh.kumar@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        Anson.Huang@nxp.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH 0/3] Convert i.MX6Q cpufreq to use nvmem API
+Date:   Tue,  3 Mar 2020 10:14:47 +0800
+Message-Id: <1583201690-16068-1-git-send-email-peng.fan@nxp.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0018.APCP153.PROD.OUTLOOK.COM (2603:1096::28) To
+ AM0PR04MB4481.eurprd04.prod.outlook.com (2603:10a6:208:70::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8309e39737c480b0835454cbc6db345c5a27ecd4.1582871139.git.amit.kucheria@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.66) by SG2P153CA0018.APCP153.PROD.OUTLOOK.COM (2603:1096::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.2814.1 via Frontend Transport; Tue, 3 Mar 2020 02:21:01 +0000
+X-Mailer: git-send-email 2.7.4
+X-Originating-IP: [119.31.174.66]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: c2baa6eb-8d74-433a-156e-08d7bf1986f1
+X-MS-TrafficTypeDiagnostic: AM0PR04MB5283:|AM0PR04MB5283:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM0PR04MB5283337F8D4E1A3968E2FA7188E40@AM0PR04MB5283.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
+X-Forefront-PRVS: 03319F6FEF
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(366004)(346002)(376002)(39860400002)(136003)(199004)(189003)(69590400007)(36756003)(66476007)(66556008)(66946007)(2616005)(956004)(52116002)(6486002)(6506007)(5660300002)(6512007)(6666004)(9686003)(16526019)(26005)(8676002)(186003)(478600001)(8936002)(4744005)(7416002)(4326008)(2906002)(316002)(86362001)(81156014)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB5283;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+Received-SPF: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ekH41jHyXN0igscOxIVJgyBw3BDW6k2qN8vP5NoD3ckNdDvN+c6VS329QREjRkJK3W1Su0KI6fE0CfqkgZ734tyVcmRQELrARDbF6JEVE9cSBDrcFScjSwKwHTR02UB9KyE/u27yUo1KbQCkNj4NspPF/P/mhvJ+In3+7+4P9lJq8ub2AAP6T2slsc29oxf9AyNEbogzJnIwH23VFQc5v9hW6taN6envNuvOf9LuRtEo8Pa1h6rIXJED4UD1iQKlreMFY7M4MzshlQmfS4dPRhnnKqcRVGaM3Lbr79nKbwtQJ0ryvWEklKNY/RYeEuHcosVAxpxe/k3i1NhGX6dJOidzHAAQXVznd+L1D9UxaJuquS2NBW4UN2+6p2mU34gH7HQ91zV14xIPm5OEalb+G5NjD3/Y7/N1zqfua2L1qRRfxMX/QzbjxoBzI/zNJRbaZc1qmCMhEvcZr4mbMAO1fjogYylqheEKY0VHmCQs7Vpoej99VX8aXKiob3n/7cd3
+X-MS-Exchange-AntiSpam-MessageData: ijboTv6KsbF9/a4BKYW/AI0toUVaNOG3aq9REOs/RSauqBRGw8oYryYPwG+NE8AgWIjbnJ63sXWLjCBzItGZS6fOli7g14PNzxZto3Xry5e4HuSaK0gw/rTGll5BXpxoWhzdVkH02Mgif+r26B575w==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2baa6eb-8d74-433a-156e-08d7bf1986f1
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2020 02:21:05.8616
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6gScQPUapxuE2uHUo+3/Jg4ow9MTqCkHDY5vnqNR5dRfkie0+OEIAcQYCWhZgT/iv8TUOZkbNoEyabl8cQFr7A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5283
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 28 Feb 2020 12:02:40 +0530, Amit Kucheria wrote:
-> The qcom-tsens binding requires a SoC-specific and a TSENS
-> family-specific binding to be specified in the compatible string.
-> 
-> Since qcom,sc7180-tsens is not listed in the YAML binding, we see the
-> following warnings in 'make dtbs_check'. Fix them.
-> 
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c263000: compatible: ['qcom,sc7180-tsens',
-> 'qcom,tsens-v2'] is not valid under any of the given schemas (Possible
-> causes of the failure):
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
-> ['qcom,msm8916-tsens', 'qcom,msm8974-tsens']
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
-> ['qcom,msm8976-tsens', 'qcom,qcs404-tsens']
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c263000: compatible:0: 'qcom,sc7180-tsens' is not one of
-> ['qcom,msm8996-tsens', 'qcom,msm8998-tsens', 'qcom,sdm845-tsens']
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c263000: compatible:1: 'qcom,tsens-v0_1' was expected
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c263000: compatible:1: 'qcom,tsens-v1' was expected
-> 
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c265000: compatible: ['qcom,sc7180-tsens',
-> 'qcom,tsens-v2'] is not valid under any of the given schemas (Possible
-> causes of the failure):
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c265000: compatible:0: 'qcom,sc7180-tsens' is not one of
-> ['qcom,msm8916-tsens', 'qcom,msm8974-tsens']
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c265000: compatible:0: 'qcom,sc7180-tsens' is not one of
-> ['qcom,msm8976-tsens', 'qcom,qcs404-tsens']
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c265000: compatible:0: 'qcom,sc7180-tsens' is not one of
-> ['qcom,msm8996-tsens', 'qcom,msm8998-tsens', 'qcom,sdm845-tsens']
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c265000: compatible:1: 'qcom,tsens-v0_1' was expected
-> builds/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml:
-> thermal-sensor@c265000: compatible:1: 'qcom,tsens-v1' was expected
-> 
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> Reviewed-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+From: Peng Fan <peng.fan@nxp.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Use nvmem API is better compared with direclty accessing OCOTP registers.
+nvmem could handle OCOTP clk, defer probe.
+
+Patch 1/3 is dts changes to add nvmem related properties
+Patch 2/3 is a bug fix
+Patch 3/3 is convert to nvmem API
+
+Peng Fan (3):
+  ARM: dts: imx: add nvmem property for cpu0
+  cpufreq: imx6q: fix error handling
+  cpufreq: imx6q: read OCOTP through nvmem for imx6q
+
+ arch/arm/boot/dts/imx6dl.dtsi   |  2 ++
+ arch/arm/boot/dts/imx6q.dtsi    |  2 ++
+ arch/arm/boot/dts/imx6qdl.dtsi  |  7 ++++
+ arch/arm/boot/dts/imx6sl.dtsi   |  9 ++++++
+ arch/arm/boot/dts/imx6sll.dtsi  |  6 ++++
+ arch/arm/boot/dts/imx6sx.dtsi   |  6 ++++
+ drivers/cpufreq/imx6q-cpufreq.c | 72 +++++++++++++++++++++++------------------
+ 7 files changed, 73 insertions(+), 31 deletions(-)
+
+-- 
+2.16.4
+
