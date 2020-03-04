@@ -2,80 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 948901793DD
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 16:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0E31793F7
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 16:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387505AbgCDPp6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 10:45:58 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:48602 "EHLO
+        id S2387459AbgCDPsM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 10:48:12 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:51026 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729758AbgCDPp6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 10:45:58 -0500
+        with ESMTP id S1729754AbgCDPsI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 10:48:08 -0500
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 024Fcxht136784;
-        Wed, 4 Mar 2020 15:45:33 GMT
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 024Fd1U0136814;
+        Wed, 4 Mar 2020 15:48:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
  : subject : message-id : references : mime-version : content-type :
  in-reply-to; s=corp-2020-01-29;
- bh=5R0S7uIbNZ//QmYKr6djkngdjgqrJsZKHvkfc8zEFoo=;
- b=HVNocEWcrpek7+5OjIjM1SQOqL1ZOdOl5/HF7VD/T479MNSOd0oCg5A9R5RasrBYGf03
- zCWfiKThvqT71ZleEvkydgqqrkwn5Ci7ntCaI26TKsjfGzZt6HgaSzV3Py+szSyKjbPZ
- avkYPUp9E+/S6KoNW9yIBSqR9xch+PsQrvV1WfYdMPF0zOqufFmJhZP4mfNuuUJgUPvW
- f7LoSowUWA5N5UMmhXh4M13pm9pfy1xr+U7dkmyYfi+zAAYZJOVyobwVd8xRqMioy+Vz
- Hf6ZXMB8AmoRtk9/bqBazkFk0kV+LG1jv4eZC+Q0pLQ32i2YPBhGJZuQAmJ475Fyl4n8 aQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2yghn3aw73-1
+ bh=4pIPpk9UM2GlyA237h0AGb6LahzrQQPr44APCEOTTpQ=;
+ b=LFhKRlBGN+2VcurWuONe3fjFrn0Trzk3NVNEMsdjo2Iy9ob04uv9sWAmzjIVLl9k/i/9
+ 4yZcWainsZHYjc1VfuEyjFDG3nRRnyj59HfRPXZNp8QlMpIVQdHtEaEgd0HFWiblO5AI
+ o4JSYxnqM0DTbuUidqo/DLxYlPLLFtDMyjZi4wdfSDwhcKkMTFRE/inOPw+PP2O7fPQG
+ kl6wVkHPzZHuCqcPVrYY7EdHP8vdgz/oS6bSGT7rrsdp5hjVwKJFK2qmHITmX5rFtnaP
+ Bj4xePR+ZvcEO8JgRIvIJkTk9Davk40Rxj5x+vlt5qpAyX2A9U8Hv45Nf5LCxTM7p4Py mw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2yghn3awr0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Mar 2020 15:45:32 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 024Fgphw173547;
-        Wed, 4 Mar 2020 15:45:32 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2yg1rrb65j-1
+        Wed, 04 Mar 2020 15:48:04 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 024Fiipj086123;
+        Wed, 4 Mar 2020 15:48:03 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 2yg1p7s7bn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Mar 2020 15:45:31 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 024FjSWa014082;
-        Wed, 4 Mar 2020 15:45:28 GMT
+        Wed, 04 Mar 2020 15:48:03 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 024Fm2n9006238;
+        Wed, 4 Mar 2020 15:48:02 GMT
 Received: from localhost (/67.169.218.210)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 04 Mar 2020 07:45:27 -0800
-Date:   Wed, 4 Mar 2020 07:45:26 -0800
+        with ESMTP ; Wed, 04 Mar 2020 07:48:02 -0800
+Date:   Wed, 4 Mar 2020 07:48:01 -0800
 From:   "Darrick J. Wong" <darrick.wong@oracle.com>
-To:     Domenico Andreoli <domenico.andreoli@linux.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-fsdevel@vger.kernel.org, mkleinsoft@gmail.com,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH] hibernate: Allow uswsusp to write to swap
-Message-ID: <20200304154526.GH8036@magnolia>
-References: <20200229170825.GX8045@magnolia>
- <20200229180716.GA31323@dumbo>
- <20200229183820.GA8037@magnolia>
- <20200229200200.GA10970@dumbo>
- <CAJZ5v0iHaZyfuTnqJyM6u=UU=+W6yRuM_Q6iUvB2UudANuwfgA@mail.gmail.com>
- <20200303190212.GC8037@magnolia>
- <9E4A0457-39B1-45E2-AEA2-22C730BF2C4F@gmail.com>
- <20200304011840.GD1752567@magnolia>
- <20200304082327.GA14236@dumbo>
+To:     akpm@linux-foundation.org
+Cc:     linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] vfs: partially revert "don't allow writes to swap files"
+Message-ID: <20200304154801.GE8037@magnolia>
+References: <20200303191023.GD8037@magnolia>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200304082327.GA14236@dumbo>
+In-Reply-To: <20200303191023.GD8037@magnolia>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
- suspectscore=0 malwarescore=0 adultscore=0 spamscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 mlxscore=0 spamscore=0 adultscore=0 bulkscore=0
+ suspectscore=1 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2001150001 definitions=main-2003040115
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 spamscore=0
  impostorscore=0 mlxscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 clxscore=1015 suspectscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1015 suspectscore=1
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
  definitions=main-2003040115
 Sender: linux-pm-owner@vger.kernel.org
@@ -83,52 +69,90 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 04, 2020 at 09:23:27AM +0100, Domenico Andreoli wrote:
-> From: Domenico Andreoli <domenico.andreoli@linux.com>
+On Tue, Mar 03, 2020 at 11:10:23AM -0800, Darrick J. Wong wrote:
+> From: Darrick J. Wong <darrick.wong@oracle.com>
 > 
-> It turns out that there is one use case for programs being able to
-> write to swap devices, and that is the userspace hibernation code.
-
-You might want to start a separate thread for this... :)
-
-> Quick fix: disable the S_SWAPFILE check if hibernation is configured.
+> In commit dc617f29dbe5 we tried to prevent userspace programs from
+> writing to active swap devices.  However, it turns out that userspace
+> hibernation requires the ability to write the hibernation image to a
+> swap device, so revert the write path checks.
 > 
-> Fixes: 1638045c3677 ("mm: set S_SWAPFILE on blockdev swap devices")
-
-Also, this should be
-
-Fixes: dc617f29dbe5 ("vfs: don't allow writes to swap files")
-
-since we still want to set S_SWAPFILE on active swap devices.
-
+> Fixes: dc617f29dbe5 ("vfs: don't allow writes to swap files")
 > Reported-by: Domenico Andreoli <domenico.andreoli@linux.com>
 > Reported-by: Marian Klein <mkleinsoft@gmail.com>
-> Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
-> 
+> Signed-off-by: Darrick J. Wong <darrick.wong@oracle.com>
+
+self-NAK, Domenico Andreoli has taken this on.  Andrew, could you please
+drop this patch from your queue?
+
+--D
+
 > ---
->  fs/block_dev.c |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  fs/block_dev.c |    3 ---
+>  mm/filemap.c   |    3 ---
+>  mm/memory.c    |    4 ----
+>  mm/mmap.c      |    8 ++------
+>  4 files changed, 2 insertions(+), 16 deletions(-)
 > 
-> Index: b/fs/block_dev.c
-> ===================================================================
+> diff --git a/fs/block_dev.c b/fs/block_dev.c
+> index 69bf2fb6f7cd..08b088dac1f0 100644
 > --- a/fs/block_dev.c
 > +++ b/fs/block_dev.c
-> @@ -2001,7 +2001,8 @@ ssize_t blkdev_write_iter(struct kiocb *
+> @@ -2001,9 +2001,6 @@ ssize_t blkdev_write_iter(struct kiocb *iocb, struct iov_iter *from)
 >  	if (bdev_read_only(I_BDEV(bd_inode)))
 >  		return -EPERM;
 >  
 > -	if (IS_SWAPFILE(bd_inode))
-> +	/* uswsusp needs to write to the swap */
-> +	if (IS_SWAPFILE(bd_inode) && !IS_ENABLED(CONFIG_HIBERNATION))
-
-...&& hibernation_available() ?  That way we can configure this
-dynamically.
-
-Thanks for taking this on, I'll go self-NAK the revert patch I sent
-yesterday.
-
---D
-
->  		return -ETXTBSY;
->  
+> -		return -ETXTBSY;
+> -
 >  	if (!iov_iter_count(from))
+>  		return 0;
+>  
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 1784478270e1..d1b8cd15b2bf 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -2920,9 +2920,6 @@ inline ssize_t generic_write_checks(struct kiocb *iocb, struct iov_iter *from)
+>  	loff_t count;
+>  	int ret;
+>  
+> -	if (IS_SWAPFILE(inode))
+> -		return -ETXTBSY;
+> -
+>  	if (!iov_iter_count(from))
+>  		return 0;
+>  
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 0bccc622e482..e908490f7034 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -2357,10 +2357,6 @@ static vm_fault_t do_page_mkwrite(struct vm_fault *vmf)
+>  
+>  	vmf->flags = FAULT_FLAG_WRITE|FAULT_FLAG_MKWRITE;
+>  
+> -	if (vmf->vma->vm_file &&
+> -	    IS_SWAPFILE(vmf->vma->vm_file->f_mapping->host))
+> -		return VM_FAULT_SIGBUS;
+> -
+>  	ret = vmf->vma->vm_ops->page_mkwrite(vmf);
+>  	/* Restore original flags so that caller is not surprised */
+>  	vmf->flags = old_flags;
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index d681a20eb4ea..77d086139e13 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -1461,12 +1461,8 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+>  		case MAP_SHARED_VALIDATE:
+>  			if (flags & ~flags_mask)
+>  				return -EOPNOTSUPP;
+> -			if (prot & PROT_WRITE) {
+> -				if (!(file->f_mode & FMODE_WRITE))
+> -					return -EACCES;
+> -				if (IS_SWAPFILE(file->f_mapping->host))
+> -					return -ETXTBSY;
+> -			}
+> +			if ((prot&PROT_WRITE) && !(file->f_mode&FMODE_WRITE))
+> +				return -EACCES;
+>  
+>  			/*
+>  			 * Make sure we don't allow writing to an append-only
