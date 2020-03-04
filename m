@@ -2,116 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFC3178E71
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 11:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9675178ED2
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 11:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387396AbgCDKbe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 05:31:34 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:44817 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726137AbgCDKbe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 05:31:34 -0500
-Received: from 79.184.237.41.ipv4.supernova.orange.pl (79.184.237.41) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id f2ea0c19e76830b0; Wed, 4 Mar 2020 11:31:32 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH] cpuidle-haltpoll: allow force loading on hosts without the REALTIME hint
-Date:   Wed, 04 Mar 2020 11:31:31 +0100
-Message-ID: <2118832.28snYOIflM@kreacher>
-In-Reply-To: <75d483b5-8edf-efb1-9642-ca367e2f1423@maciej.szmigiero.name>
-References: <20200221174331.1480468-1-mail@maciej.szmigiero.name> <75d483b5-8edf-efb1-9642-ca367e2f1423@maciej.szmigiero.name>
+        id S2387780AbgCDKsR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 05:48:17 -0500
+Received: from foss.arm.com ([217.140.110.172]:60782 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726137AbgCDKsR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Mar 2020 05:48:17 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96E2F30E;
+        Wed,  4 Mar 2020 02:48:16 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA4713F534;
+        Wed,  4 Mar 2020 02:48:14 -0800 (PST)
+Date:   Wed, 4 Mar 2020 10:48:12 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] PM / Domains: Allow no domain-idle-states DT
+ property in genpd when parsing
+Message-ID: <20200304104812.GB25004@bogus>
+References: <20200303203559.23995-1-ulf.hansson@linaro.org>
+ <20200303203559.23995-2-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200303203559.23995-2-ulf.hansson@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, February 28, 2020 6:10:18 PM CET Maciej S. Szmigiero wrote:
-> A friendly ping here.
-> 
-> Maciej
-> 
-> On 21.02.2020 18:43, Maciej S. Szmigiero wrote:
-> > From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> > 
-> > Before commit 1328edca4a14 ("cpuidle-haltpoll: Enable kvm guest polling
-> > when dedicated physical CPUs are available") the cpuidle-haltpoll driver
-> > could also be used in scenarios when the host does not advertise the
-> > KVM_HINTS_REALTIME hint.
-> > 
-> > While the behavior introduced by the aforementioned commit makes sense as
-> > the default there are cases where the old behavior is desired, for example,
-> > when other kernel changes triggered by presence by this hint are unwanted,
-> > for some workloads where the latency benefit from polling overweights the
-> > loss from idle CPU capacity that otherwise would be available, or just when
-> > running under older Qemu versions that lack this hint.
-> > 
-> > Let's provide a typical "force" module parameter that allows restoring the
-> > old behavior.
-> > 
-> > Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> > ---
-> >  drivers/cpuidle/cpuidle-haltpoll.c | 12 +++++++++++-
-> >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-> > index b0ce9bc78113..07e5b36076bb 100644
-> > --- a/drivers/cpuidle/cpuidle-haltpoll.c
-> > +++ b/drivers/cpuidle/cpuidle-haltpoll.c
-> > @@ -18,6 +18,11 @@
-> >  #include <linux/kvm_para.h>
-> >  #include <linux/cpuidle_haltpoll.h>
-> >  
-> > +static bool force __read_mostly;
-> > +module_param(force, bool, 0444);
-> > +MODULE_PARM_DESC(force,
-> > +		 "Load even if the host does not provide the REALTIME hint");
+On Tue, Mar 03, 2020 at 09:35:56PM +0100, Ulf Hansson wrote:
+> Commit 2c361684803e ("PM / Domains: Don't treat zero found compatible idle
+> states as an error"), moved of_genpd_parse_idle_states() towards allowing
+> none compatible idle state to be found for the device node, rather than
+> returning an error code.
+>
+> However, it didn't consider that the "domain-idle-states" DT property may
+> be missing as it's optional, which makes of_count_phandle_with_args() to
+> return -ENOENT. Let's fix this to make the behaviour consistent.
+>
 
-Why not to say "Load unconditionally" here?
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 
-As is, one needs to know what "the REALTIME hint" is to understand it.
-
-> > +
-> >  static struct cpuidle_device __percpu *haltpoll_cpuidle_devices;
-> >  static enum cpuhp_state haltpoll_hp_state;
-> >  
-> > @@ -90,6 +95,11 @@ static void haltpoll_uninit(void)
-> >  	haltpoll_cpuidle_devices = NULL;
-> >  }
-> >  
-> > +static bool haltpool_want(void)
-> > +{
-> > +	return kvm_para_has_hint(KVM_HINTS_REALTIME) || force;
-> > +}
-> > +
-> >  static int __init haltpoll_init(void)
-> >  {
-> >  	int ret;
-> > @@ -102,7 +112,7 @@ static int __init haltpoll_init(void)
-> >  	cpuidle_poll_state_init(drv);
-> >  
-> >  	if (!kvm_para_available() ||
-> > -		!kvm_para_has_hint(KVM_HINTS_REALTIME))
-> > +	    !haltpool_want())
-
-And you don't need to break this line.
-
-> >  		return -ENODEV;
-> >  
-> >  	ret = cpuidle_register_driver(drv);
-> > 
-> 
-> 
-
-Thanks!
-
-
-
+--
+Regards,
+Sudeep
