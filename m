@@ -2,98 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F0E178F98
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 12:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F28178F9B
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 12:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387488AbgCDLdB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 06:33:01 -0500
-Received: from vps-vb.mhejs.net ([37.28.154.113]:57462 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729256AbgCDLdA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Mar 2020 06:33:00 -0500
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1j9SGj-0000pl-Un; Wed, 04 Mar 2020 12:32:53 +0100
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Joao Martins <joao.m.martins@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] cpuidle-haltpoll: allow force loading on hosts without the REALTIME hint
-Date:   Wed,  4 Mar 2020 12:32:48 +0100
-Message-Id: <20200304113248.1143057-1-mail@maciej.szmigiero.name>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1729261AbgCDLfH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 06:35:07 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:39221 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726440AbgCDLfH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 06:35:07 -0500
+Received: by mail-ed1-f65.google.com with SMTP id m13so1908007edb.6;
+        Wed, 04 Mar 2020 03:35:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=DPVszP3963wNdExcgJRPDsGAe8NIh4E9G99F11CZ+qc=;
+        b=XdUQLmI/IVWiEXuPBYH7fvfVsR01GI/hoVyjziqRLy5X3xiB77BReI0dcgMcRrUu5D
+         dOVMapahG8pFdUqHjOYIYWHLGaR60G1q/+fDuNWoHAafyJ8J5+Mbvh6EZcNWIvSlFrIq
+         KOJwQd+cNNk8u48jEySS4ZYTJz7NkcBEPhjjpkB0uK0yt1Un2FVzC0KR4RZCfEJ70Ll2
+         iyMov+IBO0AMKwuw/CVkwO7xE836se0c7Mn98M+SJ9Gq5bOZHvNhKXN/OUADOtVExvNX
+         pMlgPNsRtA03fwhCK9s42j3CfcfIg+QZS0TJJ19KILHjmKrHsTjVWxLSy1acw4rHkrgT
+         8Ufg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=DPVszP3963wNdExcgJRPDsGAe8NIh4E9G99F11CZ+qc=;
+        b=YMM8blcEs685TRS4mV1tG8CnXrl/szBJvXuyyKY6PJ/q53O5gsYUWwctEUq+mct5Cj
+         bBLV1B2ey4ObHW7jIHWnTWE4uMVMxRRWA8e/4DSCUeNMZpY8nd+hQq6cTS7echCta3b6
+         MKx5pDu7tDP1I5B0yhfk6cqeoeXoDMCldqyTeXn5un79/6dw+tIhavNVMoabP2bOQtjb
+         KiIm6HWgTABEtgT9TSkYb26w/uiWXBJFZgfzn0zh29AogSrhnJFJy1rDuHv+So23m242
+         g3arxH2HnqDWT/WcXyQcWUZSV+rnFl3QmwxJOUZz053TBLnLA5vS01LCoXNo/4JXFvO5
+         YuQg==
+X-Gm-Message-State: ANhLgQ2CECE1fj1vCpohDPZXR0EzTsJXK6+B15JD6zHc5lggB3fZZqbU
+        zl14gK05jc03b/dV1XVRplQ=
+X-Google-Smtp-Source: ADFU+vvrwiVGnfIJe5IcbqtO7UovqUrHErJ78bJvdOvfQb4axpxC72rr8v7LZuQXP9axGJeBad+iuA==
+X-Received: by 2002:a17:906:1be2:: with SMTP id t2mr2128366ejg.357.1583321703821;
+        Wed, 04 Mar 2020 03:35:03 -0800 (PST)
+Received: from felia.fritz.box ([2001:16b8:2d16:4100:3093:39f0:d3ca:23c6])
+        by smtp.gmail.com with ESMTPSA id n4sm273434edv.26.2020.03.04.03.35.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2020 03:35:03 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Yangtao Li <tiny.windzz@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Rob Herring <robh@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Joe Perches <joe@perches.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: update ALLWINNER CPUFREQ DRIVER entry
+Date:   Wed,  4 Mar 2020 12:34:52 +0100
+Message-Id: <20200304113452.10201-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+Commit b30d8cf5e171 ("dt-bindings: opp: Convert Allwinner H6 OPP to a
+schema") converted in Documentation/devicetree/bindings/opp/ the file
+sun50i-nvmem-cpufreq.txt to allwinner,sun50i-h6-operating-points.yaml.
 
-Before commit 1328edca4a14 ("cpuidle-haltpoll: Enable kvm guest polling
-when dedicated physical CPUs are available") the cpuidle-haltpoll driver
-could also be used in scenarios when the host does not advertise the
-KVM_HINTS_REALTIME hint.
+Since then, ./scripts/get_maintainer.pl --self-test complains:
 
-While the behavior introduced by the aforementioned commit makes sense as
-the default there are cases where the old behavior is desired, for example,
-when other kernel changes triggered by presence by this hint are unwanted,
-for some workloads where the latency benefit from polling overweights the
-loss from idle CPU capacity that otherwise would be available, or just when
-running under older Qemu versions that lack this hint.
+  warning: no file matches \
+  F: Documentation/devicetree/bindings/opp/sun50i-nvmem-cpufreq.txt
 
-Let's provide a typical "force" module parameter that allows restoring the
-old behavior.
+Adjust the file pattern and while at it, add the two maintainers mentioned
+in the yaml file to the ALLWINNER CPUFREQ DRIVER entry.
 
-Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- drivers/cpuidle/cpuidle-haltpoll.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+Maxime, Chen-Yu, Yangtao, please ack.
+Rob, please pick this patch.
 
-Changes from v1:
-Make the module parameter description more general, don't unnecessarily
-break a line in haltpoll_init().
+ MAINTAINERS | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-index b0ce9bc78113..db124bc1ca2c 100644
---- a/drivers/cpuidle/cpuidle-haltpoll.c
-+++ b/drivers/cpuidle/cpuidle-haltpoll.c
-@@ -18,6 +18,10 @@
- #include <linux/kvm_para.h>
- #include <linux/cpuidle_haltpoll.h>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6158a143a13e..8e5ed8737966 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -691,9 +691,11 @@ F:	drivers/staging/media/allegro-dvt/
  
-+static bool force __read_mostly;
-+module_param(force, bool, 0444);
-+MODULE_PARM_DESC(force, "Load unconditionally");
-+
- static struct cpuidle_device __percpu *haltpoll_cpuidle_devices;
- static enum cpuhp_state haltpoll_hp_state;
+ ALLWINNER CPUFREQ DRIVER
+ M:	Yangtao Li <tiny.windzz@gmail.com>
++M:	Chen-Yu Tsai <wens@csie.org>
++M:	Maxime Ripard <mripard@kernel.org>
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/opp/sun50i-nvmem-cpufreq.txt
++F:	Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml
+ F:	drivers/cpufreq/sun50i-cpufreq-nvmem.c
  
-@@ -90,6 +94,11 @@ static void haltpoll_uninit(void)
- 	haltpoll_cpuidle_devices = NULL;
- }
- 
-+static bool haltpool_want(void)
-+{
-+	return kvm_para_has_hint(KVM_HINTS_REALTIME) || force;
-+}
-+
- static int __init haltpoll_init(void)
- {
- 	int ret;
-@@ -101,8 +110,7 @@ static int __init haltpoll_init(void)
- 
- 	cpuidle_poll_state_init(drv);
- 
--	if (!kvm_para_available() ||
--		!kvm_para_has_hint(KVM_HINTS_REALTIME))
-+	if (!kvm_para_available() || !haltpool_want())
- 		return -ENODEV;
- 
- 	ret = cpuidle_register_driver(drv);
+ ALLWINNER CRYPTO DRIVERS
+-- 
+2.17.1
+
