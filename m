@@ -2,26 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE742178F37
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 12:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D0F178F4E
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 12:08:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgCDLGJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 06:06:09 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:51309 "EHLO
+        id S1729366AbgCDLIC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 06:08:02 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:45242 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729232AbgCDLGJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 06:06:09 -0500
+        with ESMTP id S1729286AbgCDLIB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 06:08:01 -0500
 Received: from 79.184.237.41.ipv4.supernova.orange.pl (79.184.237.41) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 23ba990a84e430d4; Wed, 4 Mar 2020 12:06:06 +0100
+ id 2bd8be21abd0c5ba; Wed, 4 Mar 2020 12:07:58 +0100
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powercap: idle_inject: Replace zero-length array with flexible-array member
-Date:   Wed, 04 Mar 2020 12:06:06 +0100
-Message-ID: <2823796.V19jU70VZq@kreacher>
-In-Reply-To: <20200227190721.GA19083@embeddedor>
-References: <20200227190721.GA19083@embeddedor>
+To:     madhuparnabhowmik10@gmail.com
+Cc:     pavel@ucw.cz, len.brown@intel.com, gregkh@linuxfoundation.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joel@joelfernandes.org, frextrite@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org, paulmck@kernel.org
+Subject: Re: [PATCH 1/2] drivers: base: power: main.c: Use built-in RCU list checking
+Date:   Wed, 04 Mar 2020 12:07:58 +0100
+Message-ID: <1643853.WSYDh8IRHD@kreacher>
+In-Reply-To: <20200303194130.24617-1-madhuparnabhowmik10@gmail.com>
+References: <20200303194130.24617-1-madhuparnabhowmik10@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -30,60 +33,97 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday, February 27, 2020 8:07:21 PM CET Gustavo A. R. Silva wrote:
-> The current codebase makes use of the zero-length array language
-> extension to the C90 standard, but the preferred mechanism to declare
-> variable-length types such as these ones is a flexible array member[1][2],
-> introduced in C99:
+On Tuesday, March 3, 2020 8:41:30 PM CET madhuparnabhowmik10@gmail.com wrote:
+> From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 > 
-> struct foo {
->         int stuff;
->         struct boo array[];
-> };
+> This patch passes the cond argument to list_for_each_entry_rcu()
+> to fix the following false-positive lockdep warnings:
+> (with CONFIG_PROVE_RCU_LIST = y)
 > 
-> By making use of the mechanism above, we will get a compiler warning
-> in case the flexible array does not occur last in the structure, which
-> will help us prevent some kind of undefined behavior bugs from being
-> inadvertently introduced[3] to the codebase from now on.
+> [  330.302784] =============================
+> [  330.302789] WARNING: suspicious RCU usage
+> [  330.302796] 5.6.0-rc1+ #5 Not tainted
+> [  330.302801] -----------------------------
+> [  330.302808] drivers/base/power/main.c:326 RCU-list traversed in non-reader section!!
 > 
-> Also, notice that, dynamic memory allocations won't be affected by
-> this change:
+> [  330.303303] =============================
+> [  330.303307] WARNING: suspicious RCU usage
+> [  330.303311] 5.6.0-rc1+ #5 Not tainted
+> [  330.303315] -----------------------------
+> [  330.303319] drivers/base/power/main.c:1698 RCU-list traversed in non-reader section!!
 > 
-> "Flexible array members have incomplete type, and so the sizeof operator
-> may not be applied. As a quirk of the original implementation of
-> zero-length arrays, sizeof evaluates to zero."[1]
+> [  331.934969] =============================
+> [  331.934971] WARNING: suspicious RCU usage
+> [  331.934973] 5.6.0-rc1+ #5 Not tainted
+> [  331.934975] -----------------------------
+> [  331.934977] drivers/base/power/main.c:1238 RCU-list traversed in non-reader section!!
 > 
-> Lastly, fix the following checkpatch warning:
-> WARNING: Prefer 'unsigned long' over 'unsigned long int' as the int is unnecessary
-> +	unsigned long int cpumask[];
+> [  332.467772] WARNING: suspicious RCU usage
+> [  332.467775] 5.6.0-rc1+ #5 Not tainted
+> [  332.467775] -----------------------------
+> [  332.467778] drivers/base/power/main.c:269 RCU-list traversed in non-reader section!!
 > 
-> This issue was found with the help of Coccinelle.
-> 
-> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> [2] https://github.com/KSPP/linux/issues/21
-> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 > ---
->  drivers/powercap/idle_inject.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/base/power/main.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-> index cd1270614cc6..e9bbd3c42eef 100644
-> --- a/drivers/powercap/idle_inject.c
-> +++ b/drivers/powercap/idle_inject.c
-> @@ -67,7 +67,7 @@ struct idle_inject_device {
->  	struct hrtimer timer;
->  	unsigned int idle_duration_us;
->  	unsigned int run_duration_us;
-> -	unsigned long int cpumask[0];
-> +	unsigned long cpumask[];
->  };
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index 0e99a760aebd..6d1dee7051eb 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -40,6 +40,10 @@
 >  
->  static DEFINE_PER_CPU(struct idle_inject_thread, idle_inject_thread);
+>  typedef int (*pm_callback_t)(struct device *);
+>  
+> +#define list_for_each_entry_rcu_locked(pos, head, member) \
+> +	list_for_each_entry_rcu(pos, head, member, \
+> +			device_links_read_lock_held())
+> +
+>  /*
+>   * The entries in the dpm_list list are in a depth first order, simply
+>   * because children are guaranteed to be discovered after parents, and
+> @@ -266,7 +270,7 @@ static void dpm_wait_for_suppliers(struct device *dev, bool async)
+>  	 * callbacks freeing the link objects for the links in the list we're
+>  	 * walking.
+>  	 */
+> -	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node)
+> +	list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node)
+>  		if (READ_ONCE(link->status) != DL_STATE_DORMANT)
+>  			dpm_wait(link->supplier, async);
+>  
+> @@ -323,7 +327,7 @@ static void dpm_wait_for_consumers(struct device *dev, bool async)
+>  	 * continue instead of trying to continue in parallel with its
+>  	 * unregistration).
+>  	 */
+> -	list_for_each_entry_rcu(link, &dev->links.consumers, s_node)
+> +	list_for_each_entry_rcu_locked(link, &dev->links.consumers, s_node)
+>  		if (READ_ONCE(link->status) != DL_STATE_DORMANT)
+>  			dpm_wait(link->consumer, async);
+>  
+> @@ -1235,7 +1239,7 @@ static void dpm_superior_set_must_resume(struct device *dev)
+>  
+>  	idx = device_links_read_lock();
+>  
+> -	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node)
+> +	list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node)
+>  		link->supplier->power.must_resume = true;
+>  
+>  	device_links_read_unlock(idx);
+> @@ -1695,7 +1699,7 @@ static void dpm_clear_superiors_direct_complete(struct device *dev)
+>  
+>  	idx = device_links_read_lock();
+>  
+> -	list_for_each_entry_rcu(link, &dev->links.suppliers, c_node) {
+> +	list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node) {
+>  		spin_lock_irq(&link->supplier->power.lock);
+>  		link->supplier->power.direct_complete = false;
+>  		spin_unlock_irq(&link->supplier->power.lock);
 > 
 
-Applied as 5.7 material, thanks!
+Applied along with the [2/2] (with updated changelogs) as 5.7 material.
+
+Thanks!
 
 
 
