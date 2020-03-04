@@ -2,75 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D4A179BAA
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 23:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A92179C0C
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 23:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388462AbgCDWUs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 17:20:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41504 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388026AbgCDWUs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Mar 2020 17:20:48 -0500
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 61945214D8;
-        Wed,  4 Mar 2020 22:20:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583360447;
-        bh=35qO3hdBPY9XEjY8+pJst4gIXbSd1Nc+th/XaxS/Oa4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WSA0tBMIOTRH8hEsIX+MJ/yoUaOno2LswbdSzPiPUjbnb3vGFwfHvM0OXOYKD+K5Q
-         /ukqU/vslEKim/Gj6dkjpQpE7zhJ8ZNfUXqfSKdmxMj6QtB0VoaRlUBFdn/lOGSFP3
-         N4u8K76HycFJRpPNivBb0Jzz/wuAWFe78eJPa6rc=
-Received: by mail-qk1-f176.google.com with SMTP id m9so3356189qke.4;
-        Wed, 04 Mar 2020 14:20:47 -0800 (PST)
-X-Gm-Message-State: ANhLgQ1NKnh+4N+8wb4vc3X1CzvX9lEG2/CA+n04HeU/8dTuF/gsD+UE
-        mkcNhlU3R2kDRDpNkUi+WTH0S7nz2Dv0X/5a0g==
-X-Google-Smtp-Source: ADFU+vvr04r+5wCdzyL6uorYqvlzIlyYxQ3F6iY/L1Osbi5Ca+523kWnCA03Oki4mxIGr2E8cLcEd0RstjX7DQE2aa4=
-X-Received: by 2002:a37:2cc6:: with SMTP id s189mr3610073qkh.223.1583360446462;
- Wed, 04 Mar 2020 14:20:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20200304212600.6172-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20200304212600.6172-1-lukas.bulwahn@gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 4 Mar 2020 16:20:35 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKGhpdvrNGbq+yYeM=goOwNUewHYStT8b2PNiBVz+4JPw@mail.gmail.com>
-Message-ID: <CAL_JsqKGhpdvrNGbq+yYeM=goOwNUewHYStT8b2PNiBVz+4JPw@mail.gmail.com>
-Subject: Re: [PATCH v2] MAINTAINERS: update ALLWINNER CPUFREQ DRIVER entry
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Yangtao Li <tiny.windzz@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S2387931AbgCDWzz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 17:55:55 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:46881 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725875AbgCDWzz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 17:55:55 -0500
+Received: from 2.general.alexhung.us.vpn ([10.172.65.255] helo=canonical.com)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <alex.hung@canonical.com>)
+        id 1j9cvL-0007N9-Ky; Wed, 04 Mar 2020 22:55:32 +0000
+From:   Alex Hung <alex.hung@canonical.com>
+To:     corbet@lwn.net, rjw@rjwysocki.net, len.brown@intel.com,
+        pavel@ucw.cz, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        hpa@zytor.com, x86@kernel.org, mchehab+samsung@kernel.org,
+        jpoimboe@redhat.com, akpm@linux-foundation.org,
+        pawan.kumar.gupta@linux.intel.com, jgross@suse.com,
+        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, alex.hung@canonical.com
+Subject: [PATCH][RESEND] acpi/x86: add a kernel parameter to disable ACPI BGRT
+Date:   Wed,  4 Mar 2020 15:55:29 -0700
+Message-Id: <20200304225529.6706-1-alex.hung@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 4, 2020 at 3:26 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->
-> Commit b30d8cf5e171 ("dt-bindings: opp: Convert Allwinner H6 OPP to a
-> schema") converted in Documentation/devicetree/bindings/opp/ the file
-> sun50i-nvmem-cpufreq.txt to allwinner,sun50i-h6-operating-points.yaml.
->
-> Since then, ./scripts/get_maintainer.pl --self-test complains:
->
->   warning: no file matches \
->   F: Documentation/devicetree/bindings/opp/sun50i-nvmem-cpufreq.txt
->
-> Adjust the file pattern in the ALLWINNER CPUFREQ DRIVER entry.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Changes to v1:
->   - do not include new maintainers because it is not needed.
->
-> Maxime, Chen-Yu, Yangtao, please ack.
-> Rob, please pick this patch.
+BGRT is for displaying seamless OEM logo from booting to login screen;
+however, this mechanism does not always work well on all configurations
+and the OEM logo can be displayed multiple times. This looks worse than
+without BGRT enabled.
 
-Applied.
+This patch adds a kernel parameter to disable BGRT in boot time. This is
+easier than re-compiling a kernel with CONFIG_ACPI_BGRT disabled.
 
-Rob
+Signed-off-by: Alex Hung <alex.hung@canonical.com>
+---
+
+ * Resend to include linux-acpi emailing list
+
+ Documentation/admin-guide/kernel-parameters.txt |  3 +++
+ arch/x86/kernel/acpi/boot.c                     | 10 +++++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index ffff776..55c5b2f 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -442,6 +442,9 @@
+ 	bert_disable	[ACPI]
+ 			Disable BERT OS support on buggy BIOSes.
+ 
++	bgrt_disable	[ACPI][X86]
++			Disable BGRT to avoid flickering OEM logo.
++
+ 	bttv.card=	[HW,V4L] bttv (bt848 + bt878 based grabber cards)
+ 	bttv.radio=	Most important insmod options are available as
+ 			kernel args too.
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 04205ce..d1757ce 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -45,6 +45,7 @@ EXPORT_SYMBOL(acpi_disabled);
+ #define PREFIX			"ACPI: "
+ 
+ int acpi_noirq;				/* skip ACPI IRQ initialization */
++int acpi_nobgrt;			/* skip ACPI BGRT */
+ int acpi_pci_disabled;		/* skip ACPI PCI scan and IRQ initialization */
+ EXPORT_SYMBOL(acpi_pci_disabled);
+ 
+@@ -1619,7 +1620,7 @@ int __init acpi_boot_init(void)
+ 	acpi_process_madt();
+ 
+ 	acpi_table_parse(ACPI_SIG_HPET, acpi_parse_hpet);
+-	if (IS_ENABLED(CONFIG_ACPI_BGRT))
++	if (IS_ENABLED(CONFIG_ACPI_BGRT) && !acpi_nobgrt)
+ 		acpi_table_parse(ACPI_SIG_BGRT, acpi_parse_bgrt);
+ 
+ 	if (!acpi_noirq)
+@@ -1671,6 +1672,13 @@ static int __init parse_acpi(char *arg)
+ }
+ early_param("acpi", parse_acpi);
+ 
++static int __init parse_acpi_bgrt(char *arg)
++{
++	acpi_nobgrt = true;
++	return 0;
++}
++early_param("bgrt_disable", parse_acpi_bgrt);
++
+ /* FIXME: Using pci= for an ACPI parameter is a travesty. */
+ static int __init parse_pci(char *arg)
+ {
+-- 
+2.7.4
+
