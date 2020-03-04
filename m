@@ -2,215 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B59178D78
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 10:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A5E178DA4
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 10:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729049AbgCDJd2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 04:33:28 -0500
-Received: from mga11.intel.com ([192.55.52.93]:14299 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728916AbgCDJd2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Mar 2020 04:33:28 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Mar 2020 01:33:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,513,1574150400"; 
-   d="scan'208";a="352054757"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 04 Mar 2020 01:33:24 -0800
-Received: by lahna (sSMTP sendmail emulation); Wed, 04 Mar 2020 11:33:24 +0200
-Date:   Wed, 4 Mar 2020 11:33:24 +0200
-From:   Mika Westerberg <mika.westerberg@intel.com>
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lyude Paul <lyude@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
-Subject: Re: [PATCH v6] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-Message-ID: <20200304093324.GI2540@lahna.fi.intel.com>
-References: <20200303101052.133631-1-kherbst@redhat.com>
+        id S1729148AbgCDJl5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 4 Mar 2020 04:41:57 -0500
+Received: from terminus.zytor.com ([198.137.202.136]:57959 "EHLO
+        mail.zytor.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729126AbgCDJl5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Mar 2020 04:41:57 -0500
+Received: from [IPv6:2601:646:8600:3281:d841:929b:f37:3a31] ([IPv6:2601:646:8600:3281:d841:929b:f37:3a31])
+        (authenticated bits=0)
+        by mail.zytor.com (8.15.2/8.15.2) with ESMTPSA id 0249eM5n306088
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Wed, 4 Mar 2020 01:40:22 -0800
+Authentication-Results: mail.zytor.com; dkim=permerror (bad message/signature format)
+From:   "H. Peter Anvin" <hpa@zytor.com>
+Message-Id: <202003040940.0249eM5n306088@mail.zytor.com>
+Date:   Wed, 04 Mar 2020 01:40:15 -0800
+User-Agent: K-9 Mail for Android
+In-Reply-To: <202003031314.1AFFC0E@keescook>
+References: <20200228000105.165012-1-thgarnie@chromium.org> <202003022100.54CEEE60F@keescook> <20200303095514.GA2596@hirez.programming.kicks-ass.net> <CAJcbSZH1oON2VC2U8HjfC-6=M-xn5eU+JxHG2575iMpVoheKdA@mail.gmail.com> <6e7e4191612460ba96567c16b4171f2d2f91b296.camel@linux.intel.com> <202003031314.1AFFC0E@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200303101052.133631-1-kherbst@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8BIT
+Subject: Re: [PATCH v11 00/11] x86: PIE support to extend KASLR randomization
+To:     Kees Cook <keescook@chromium.org>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>
+CC:     Thomas Garnier <thgarnie@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Hellstrom <thellstrom@vmware.com>,
+        "VMware, Inc." <pv-drivers@vmware.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Cao jin <caoj.fnst@cn.fujitsu.com>,
+        Allison Randal <allison@lohutok.net>, Linux.Crypto@zytor.com
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Mailing List <linux-crypto@vger.kernel.org>,LKML <linux-kernel@vger.kernel.org>,virtualization@lists.linux-foundation.org,Linux PM list <linux-pm@vger.kernel.org>
+From: hpa@zytor.com
+Message-ID: <F35C8DBD-9AC3-46F2-9043-6CB9A4FDDDC9@zytor.com>
 
-On Tue, Mar 03, 2020 at 11:10:52AM +0100, Karol Herbst wrote:
-> Fixes state transitions of Nvidia Pascal GPUs from D3cold into higher device
-> states.
+On March 3, 2020 1:19:22 PM PST, Kees Cook <keescook@chromium.org> wrote:
+>On Tue, Mar 03, 2020 at 01:01:26PM -0800, Kristen Carlson Accardi
+>wrote:
+>> On Tue, 2020-03-03 at 07:43 -0800, Thomas Garnier wrote:
+>> > On Tue, Mar 3, 2020 at 1:55 AM Peter Zijlstra
+><peterz@infradead.org>
+>> > wrote:
+>> > > On Mon, Mar 02, 2020 at 09:02:15PM -0800, Kees Cook wrote:
+>> > > > On Thu, Feb 27, 2020 at 04:00:45PM -0800, Thomas Garnier wrote:
+>> > > > > Minor changes based on feedback and rebase from v10.
+>> > > > > 
+>> > > > > Splitting the previous serie in two. This part contains
+>> > > > > assembly code
+>> > > > > changes required for PIE but without any direct dependencies
+>> > > > > with the
+>> > > > > rest of the patchset.
+>> > > > > 
+>> > > > > Note: Using objtool to detect non-compliant PIE relocations
+>is
+>> > > > > not yet
+>> > > > > possible as this patchset only includes the simplest PIE
+>> > > > > changes.
+>> > > > > Additional changes are needed in kvm, xen and percpu code.
+>> > > > > 
+>> > > > > Changes:
+>> > > > >  - patch v11 (assembly);
+>> > > > >    - Fix comments on x86/entry/64.
+>> > > > >    - Remove KASLR PIE explanation on all commits.
+>> > > > >    - Add note on objtool not being possible at this stage of
+>> > > > > the patchset.
+>> > > > 
+>> > > > This moves us closer to PIE in a clean first step. I think
+>these
+>> > > > patches
+>> > > > look good to go, and unblock the work in kvm, xen, and percpu
+>> > > > code. Can
+>> > > > one of the x86 maintainers pick this series up?
+>> > > 
+>> > > But,... do we still need this in the light of that fine-grained
+>> > > kaslr
+>> > > stuff?
+>> > > 
+>> > > What is the actual value of this PIE crud in the face of that?
+>> > 
+>> > If I remember well, it makes it easier/better but I haven't seen a
+>> > recent update on that. Is that accurate Kees?
+>> 
+>> I believe this patchset is valuable if people are trying to brute
+>force
+>> guess the kernel location, but not so awesome in the event of
+>> infoleaks. In the case of the current fgkaslr implementation, we only
+>> randomize within the existing text segment memory area - so with PIE
+>> the text segment base can move around more, but within that it
+>wouldn't
+>> strengthen anything. So, if you have an infoleak, you learn the base
+>> instantly, and are just left with the same extra protection you get
+>> without PIE.
+>
+>Right -- PIE improves both non- and fg- KASLR similarly, in the sense
+>that the possible entropy for base offset is expanded. It also opens
+>the
+>door to doing even more crazy things. (e.g. why keep the kernel text
+>all
+>in one contiguous chunk?)
+>
+>And generally speaking, it seems a nice improvement to me, as it gives
+>the kernel greater addressing flexibility.
 
-I think it is good to explain bit more here why this fix is needed.
+The difference in entropy between fgkaslr and extending the kernel to the PIC memory model (which is the real thing this is doing) is immense:
 
-> v2: convert to pci_dev quirk
->     put a proper technical explanation of the issue as a in-code comment
-> v3: disable it only for certain combinations of intel and nvidia hardware
-> v4: simplify quirk by setting flag on the GPU itself
-> v5: restructure quirk to make it easier to add new IDs
->     fix whitespace issues
->     fix potential NULL pointer access
->     update the quirk documentation
-> v6: move quirk into nouveau
+The current kASLR has maybe 9 bits of entropy. PIC-model could extend that by at most 16 bits at considerable cost in performance and complexity. Fgkaslr would provide many kilobits worth of entropy; the limiting factor would be the random number source used! With a valid RNG, no two boots across all the computers in the world across all time would have an infinitesimal probability of ever being the same; never mind the infoleak issue.
 
-This information typically goes under the '---' line.
+In addition to the combinatorics, fgkaslr pushes randomization right as well as left, so even for the address of any one individual function you get a gain of 15-17 bits.
 
-> Signed-off-by: Karol Herbst <kherbst@redhat.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Lyude Paul <lyude@redhat.com>
-> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> Cc: Mika Westerberg <mika.westerberg@intel.com>
+"More is better" is a truism, but so is Amdahl's Law.
 
-I have few minor comments but regardless,
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: nouveau@lists.freedesktop.org
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=205623
-> ---
->  drivers/gpu/drm/nouveau/nouveau_drm.c | 56 +++++++++++++++++++++++++++
->  drivers/pci/pci.c                     |  8 ++++
->  include/linux/pci.h                   |  1 +
->  3 files changed, 65 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_drm.c b/drivers/gpu/drm/nouveau/nouveau_drm.c
-> index 2cd83849600f..51d3a7ba7731 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_drm.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_drm.c
-> @@ -618,6 +618,59 @@ nouveau_drm_device_fini(struct drm_device *dev)
->  	kfree(drm);
->  }
->  
-> +/*
-> + * On some Intel PCIe bridge controllers doing a
-> + * D0 -> D3hot -> D3cold -> D0 sequence causes Nvidia GPUs to not reappear.
-> + * Skipping the intermediate D3hot step seems to make it work again. Thise is
-                                                                        ^^^^^
-Thise -> This
-
-> + * probably caused by not meeting the expectation the involved AML code has
-> + * when the GPU is put into D3hot state before invoking it.
-> + *
-> + * This leads to various manifestations of this issue:
-> + *  - AML code execution to power on the GPU hits an infinite loop (as the
-> + *    code waits on device memory to change).
-> + *  - kernel crashes, as all PCI reads return -1, which most code isn't able
-> + *    to handle well enough.
-> + *
-> + * In all cases dmesg will contain at least one line like this:
-> + * 'nouveau 0000:01:00.0: Refused to change power state, currently in D3'
-> + * followed by a lot of nouveau timeouts.
-> + *
-> + * In the \_SB.PCI0.PEG0.PG00._OFF code deeper down writes bit 0x80 to the not
-> + * documented PCI config space register 0x248 of the Intel PCIe bridge
-> + * controller (0x1901) in order to change the state of the PCIe link between
-> + * the PCIe port and the GPU. There are alternative code paths using other
-> + * registers, which seem to work fine (executed pre Windows 8):
-> + *  - 0xbc bit 0x20 (publicly available documentation claims 'reserved')
-> + *  - 0xb0 bit 0x10 (link disable)
-> + * Changing the conditions inside the firmware by poking into the relevant
-> + * addresses does resolve the issue, but it seemed to be ACPI private memory
-> + * and not any device accessible memory at all, so there is no portable way of
-> + * changing the conditions.
-> + * On a XPS 9560 that means bits [0,3] on \CPEX need to be cleared.
-> + *
-> + * The only systems where this behavior can be seen are hybrid graphics laptops
-> + * with a secondary Nvidia Maxwell, Pascal or Turing GPU. Its unclear wheather
-                                                             ^^^         ^^^^^^^^
-Its -> It's
-wheather -> whether
-
-> + * this issue only occurs in combination with listed Intel PCIe bridge
-> + * controllers and the mentioned GPUs or other devices as well.
-> + *
-> + * documentation on the PCIe bridge controller can be found in the
-> + * "7th Generation Intel® Processor Families for H Platforms Datasheet Volume 2"
-> + * Section "12 PCI Express* Controller (x16) Registers"
-> + */
-> +
-> +static void quirk_broken_nv_runpm(struct pci_dev *dev)
-> +{
-> +	struct pci_dev *bridge = pci_upstream_bridge(dev);
-> +
-> +	if (!bridge || bridge->vendor != PCI_VENDOR_ID_INTEL)
-> +		return;
-> +
-> +	switch (bridge->device) {
-> +	case 0x1901:
-> +		dev->parent_d3cold = 1;
-
-I think it is better to add
-
-		break;
-
-here.
-
-> +	}
-> +}
-> +
->  static int nouveau_drm_probe(struct pci_dev *pdev,
->  			     const struct pci_device_id *pent)
->  {
-> @@ -699,6 +752,7 @@ static int nouveau_drm_probe(struct pci_dev *pdev,
->  	if (ret)
->  		goto fail_drm_dev_init;
->  
-> +	quirk_broken_nv_runpm(pdev);
->  	return 0;
->  
->  fail_drm_dev_init:
-> @@ -737,6 +791,8 @@ nouveau_drm_remove(struct pci_dev *pdev)
->  {
->  	struct drm_device *dev = pci_get_drvdata(pdev);
->  
-> +	/* revert our workaround */
-> +	pdev->parent_d3cold = false;
->  	nouveau_drm_device_remove(dev);
->  }
->  
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 951099279192..6ece05723fa2 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -860,6 +860,14 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
->  	   || (state == PCI_D2 && !dev->d2_support))
->  		return -EIO;
->  
-> +	/*
-> +	 * Power management can be disabled for certain devices as they don't
-> +	 * come back up later on runtime_resume. We rely on platform means to
-> +	 * cut power consumption instead (e.g. ACPI).
-> +	 */
-> +	if (state != PCI_D0 && dev->parent_d3cold)
-> +		return 0;
-> +
->  	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
->  	if (pmcsr == (u16) ~0) {
->  		pci_err(dev, "can't change power state from %s to %s (config space inaccessible)\n",
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 930fab293073..3e5938b91966 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -340,6 +340,7 @@ struct pci_dev {
->  	unsigned int	no_d3cold:1;	/* D3cold is forbidden */
->  	unsigned int	bridge_d3:1;	/* Allow D3 for bridge */
->  	unsigned int	d3cold_allowed:1;	/* D3cold is allowed by user */
-> +	unsigned int	parent_d3cold:1;	/* power manage the parent instead */
-
-Just to be consistent with the other comments, start with a capital
-letter:
-
-	unsigned int	parent_d3cold:1;	/* Power manage the parent instead */
+-- 
+Sent from my Android device with K-9 Mail. Please excuse my brevity.
