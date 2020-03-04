@@ -2,49 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B592178782
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 02:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002A2178C88
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 09:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727903AbgCDBTH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Mar 2020 20:19:07 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:39166 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727865AbgCDBTG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Mar 2020 20:19:06 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0241ISxD160798;
-        Wed, 4 Mar 2020 01:18:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=grLuKDPTTFY0CmV/uGsgmrfHgzipPlLVNFedH9mbqOQ=;
- b=ny4V7bm43w4QYIt4xeIHCfBvGatAsW5PxgHRmTdnAu1Kt0nf3PMa6IvlW65OrPLJFapd
- JEYHWJ3oMFIjw+mHTnyocSvyk6C+7C+RQg8T1v9LPRPniRn4sph88SGchJdHG94k0CwD
- 07xkaCxu94IicIqzNEvYqWVxUxbLGDy5abjcWqKzaurvZRFqqu1UjRBsqo+MwXJDlJja
- oFeh1dPEQsZGp3wntMtn0cy32NnvpmHLVtlBQGGFJ0gu5WG6k4hJ8uQWso5CfxAIz/oJ
- YyNbOuSKwWSk0ZHwlXigcdzEoVBnv7DAqV/ZGlHc72umcfXA6IYh7+3cEeGlTeLEglpw mQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 2yffwqty8w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Mar 2020 01:18:47 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0241GcLM177298;
-        Wed, 4 Mar 2020 01:18:47 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 2yg1en9r3h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Mar 2020 01:18:46 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0241IgMb000659;
-        Wed, 4 Mar 2020 01:18:42 GMT
-Received: from localhost (/10.159.225.108)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 04 Mar 2020 01:18:42 +0000
-Date:   Tue, 3 Mar 2020 17:18:40 -0800
-From:   "Darrick J. Wong" <darrick.wong@oracle.com>
-To:     Domenico Andreoli <domenico.andreoli.it@gmail.com>
+        id S1728539AbgCDI0f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 03:26:35 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:52812 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726137AbgCDI0e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 03:26:34 -0500
+Received: by mail-wm1-f65.google.com with SMTP id p9so897817wmc.2;
+        Wed, 04 Mar 2020 00:26:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:resent-from:resent-date:resent-message-id:resent-to:date
+         :from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=cew+TTcIlK2By1bAt5CHCB+JbVcMMEPMguJwF68q6nc=;
+        b=EkGDq+M902cBO3hGsFctGZEpXVHP36fXlc32Rl6xk16tnjw64LxLDxz/lFLgINWm/Z
+         C/yaFDEEmhgPZrTbzxQxuWJgXybNi3qjCD8WeW/5tMCCcxizyM0H/RCPzPEfcPl+IQdU
+         Pi75F8tVezaToHcvKCuiy5VrC+9NrUMxtsBwek7s2aVSzYwMEF74j3KcggLoFr1GQEyp
+         eZgjsohxI6JBj1BXccjYALKFUFbBoxPWDTnvChlhwUa5Gk4mNW0cMXtbzKB54z/i5FYt
+         Wo0h/9JXjsZ4dxpZJC+nkULdUwyZ5ZkJTmv3quOP6BIpWW6bMH7n1MF5GkATpZt/VgNr
+         MQJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:resent-from:resent-date:resent-message-id
+         :resent-to:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cew+TTcIlK2By1bAt5CHCB+JbVcMMEPMguJwF68q6nc=;
+        b=JZyecqF9DsjFsheVmMiWDButvkhMynxq6+dhimaOa0R2cg4nxANLAD7k4jii9q37jk
+         8XjQe8NOfxeahrWVLtJ3tS5ugjQtnCdZMa3AJM4HqW1syizM2uNgWgo8RgGC19kn/H+H
+         /Gtb8TKbp5j0dPkyJBWheOCH2uuYaT8Uv7tg7rCivIAtPOCgMIHwWm3rbC00FW91qTwq
+         E+4VxHRsm1CXqdUgmBoYEjKLUWSW5XOUQxjSCGzEqwiNF3h1oyi+IKRqDsuvoTFTLJmt
+         9M/Dhf7s6WXGXPJrI6b/S6hc8sUuO3sK4MVQCUezSB5IIcyGwPERwdBdArPuPkByeJ7E
+         cOCQ==
+X-Gm-Message-State: ANhLgQ0ZKG+oEyjdIUospA8CSaVLNpRHOpHj8BQ3gNgHX1gUfvNMdmGf
+        oLXTRTZAxyha+CFIan8czhs=
+X-Google-Smtp-Source: ADFU+vu7adAidQTk9w40n9EY1EUCejzXdBQ6wWbVxorNNvSm/fXI6OMtAlZDLhyHCq1lsHgvoY8Dxg==
+X-Received: by 2002:a1c:4c0c:: with SMTP id z12mr2387419wmf.63.1583310392885;
+        Wed, 04 Mar 2020 00:26:32 -0800 (PST)
+Received: from dumbo ([83.137.6.114])
+        by smtp.gmail.com with ESMTPSA id j14sm38671237wrn.32.2020.03.04.00.26.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2020 00:26:32 -0800 (PST)
+Date:   Wed, 4 Mar 2020 09:23:27 +0100
+From:   Domenico Andreoli <domenico.andreoli@linux.com>
+To:     "Darrick J. Wong" <darrick.wong@oracle.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Domenico Andreoli <domenico.andreoli@linux.com>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Memory Management List <linux-mm@kvack.org>,
         linux-fsdevel@vger.kernel.org, mkleinsoft@gmail.com,
@@ -52,9 +57,8 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH] hibernate: unlock swap bdev for writing when uswsusp is
- active
-Message-ID: <20200304011840.GD1752567@magnolia>
+Subject: [PATCH] hibernate: Allow uswsusp to write to swap
+Message-ID: <20200304082327.GA14236@dumbo>
 References: <20200229170825.GX8045@magnolia>
  <20200229180716.GA31323@dumbo>
  <20200229183820.GA8037@magnolia>
@@ -62,151 +66,44 @@ References: <20200229170825.GX8045@magnolia>
  <CAJZ5v0iHaZyfuTnqJyM6u=UU=+W6yRuM_Q6iUvB2UudANuwfgA@mail.gmail.com>
  <20200303190212.GC8037@magnolia>
  <9E4A0457-39B1-45E2-AEA2-22C730BF2C4F@gmail.com>
+ <20200304011840.GD1752567@magnolia>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9E4A0457-39B1-45E2-AEA2-22C730BF2C4F@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
- mlxlogscore=999 malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2003040007
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9549 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 spamscore=0
- impostorscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0 suspectscore=0
- phishscore=0 clxscore=1011 bulkscore=0 adultscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2003040007
+In-Reply-To: <20200304011840.GD1752567@magnolia>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 03, 2020 at 10:51:22PM +0000, Domenico Andreoli wrote:
-> 
-> 
-> On March 3, 2020 7:02:12 PM UTC, "Darrick J. Wong" <darrick.wong@oracle.com> wrote:
-> >On Sun, Mar 01, 2020 at 10:35:36PM +0100, Rafael J. Wysocki wrote:
-> >> On Sat, Feb 29, 2020 at 9:02 PM Domenico Andreoli
-> >> <domenico.andreoli@linux.com> wrote:
-> >> >
-> >> > On Sat, Feb 29, 2020 at 10:38:20AM -0800, Darrick J. Wong wrote:
-> >> > > On Sat, Feb 29, 2020 at 07:07:16PM +0100, Domenico Andreoli
-> >wrote:
-> >> > > > On Sat, Feb 29, 2020 at 09:08:25AM -0800, Darrick J. Wong
-> >wrote:
-> >> > > > > From: Darrick J. Wong <darrick.wong@oracle.com>
-> >> > > > >
-> >> > > > > It turns out that there /is/ one use case for programs being
-> >able to
-> >> > > > > write to swap devices, and that is the userspace hibernation
-> >code.  The
-> >> > > > > uswsusp ioctls allow userspace to lease parts of swap
-> >devices, so turn
-> >> > > > > S_SWAPFILE off when invoking suspend.
-> >> > > > >
-> >> > > > > Fixes: 1638045c3677 ("mm: set S_SWAPFILE on blockdev swap
-> >devices")
-> >> > > > > Reported-by: Domenico Andreoli <domenico.andreoli@linux.com>
-> >> > > > > Reported-by: Marian Klein <mkleinsoft@gmail.com>
-> >> > > >
-> >> > > > I also tested it yesterday but was not satisfied, unfortunately
-> >I did
-> >> > > > not come with my comment in time.
-> >> > > >
-> >> > > > Yes, I confirm that the uswsusp works again but also checked
-> >that
-> >> > > > swap_relockall() is not triggered at all and therefore after
-> >the first
-> >> > > > hibernation cycle the S_SWAPFILE bit remains cleared and the
-> >whole
-> >> > > > swap_relockall() is useless.
-> >> > > >
-> >> > > > I'm not sure this patch should be merged in the current form.
-> >> > >
-> >> > > NNGGHHGGHGH /me is rapidly losing his sanity and will soon just
-> >revert
-> >> > > the whole security feature because I'm getting fed up with people
-> >> > > yelling at me *while I'm on vacation* trying to *restore* my
-> >sanity.  I
-> >> > > really don't want to be QAing userspace-directed hibernation
-> >right now.
-> >> >
-> >> > Maybe we could proceed with the first patch to amend the regression
-> >and
-> >> > postpone the improved fix to a later patch? Don't loose sanity for
-> >this.
-> >> 
-> >> I would concur here.
-> >> 
-> >> > > ...right, the patch is broken because we have to relock the
-> >swapfiles in
-> >> > > whatever code executes after we jump back to the restored kernel,
-> >not in
-> >> > > the one that's doing the restoring.  Does this help?
-> >> >
-> >> > I made a few unsuccessful attempts in kernel/power/hibernate.c and
-> >> > eventually I'm switching to qemu to speed up the test cycle.
-> >> >
-> >> > > OTOH, maybe we should just leave the swapfiles unlocked after
-> >resume.
-> >> > > Userspace has clearly demonstrated the one usecase for writing to
-> >the
-> >> > > swapfile, which means anyone could have jumped in while uswsusp
-> >was
-> >> > > running and written whatever crap they wanted to the parts of the
-> >swap
-> >> > > file that weren't leased for the hibernate image.
-> >> >
-> >> > Essentially, if the hibernation is supported the swapfile is not
-> >totally
-> >> > safe.
-> >> 
-> >> But that's only the case with the userspace variant, isn't it?
-> >
-> >Yes.
-> >
-> >> > Maybe user-space hibernation should be a separate option.
-> >> 
-> >> That actually is not a bad idea at all in my view.
-> >
-> >The trouble with kconfig options is that the distros will be pressued
-> >into setting CONFIG_HIBERNATE_USERSPACE=y to avoid regressing their
-> >uswsusp users, which makes the added security code pointless.  As this
-> 
-> True but there are not only distros otherwise the kernel would not
-> have any option at all.
-> 
-> It's actually very nice that if hibernation is disabled no userspace
-> is ever allowed to write to the swap.
-> 
-> >has clearly sucked me into a conflict that I don't have the resources
-> >to
-> >pursue, I'm going to revert the write patch checks and move on with
-> >life.
-> 
-> I don't see the need of reverting anything, I can deal with these
-> issues if you are busy on something else.
+From: Domenico Andreoli <domenico.andreoli@linux.com>
 
-If you want to work on the patch, please do!  Starting from the revert
-patch I sent earlier, I /think/ only the first chunk (the one that
-touches blkdev_write_iter) of that patch actually has to be applied to
-re-enable uswsusp.  That could probably be turned into:
+It turns out that there is one use case for programs being able to
+write to swap devices, and that is the userspace hibernation code.
 
-	if (IS_SWAPFILE(...) && !IS_ENABLED(HIBERNATION))
-		return -ETXTBSY;
+Quick fix: disable the S_SWAPFILE check if hibernation is configured.
 
-Though perhaps a better thing to check here rather than the Kconfig
-option is whether or not the system is locked out against hibernation?
-e.g.,
+Fixes: 1638045c3677 ("mm: set S_SWAPFILE on blockdev swap devices")
+Reported-by: Domenico Andreoli <domenico.andreoli@linux.com>
+Reported-by: Marian Klein <mkleinsoft@gmail.com>
+Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
 
-	if (IS_SWAPFILE(...) && !hibernation_available())
-		return -EXTBSY;
+---
+ fs/block_dev.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---D
-
-> >
-> >--D
-> >
-> >> Thanks!
+Index: b/fs/block_dev.c
+===================================================================
+--- a/fs/block_dev.c
++++ b/fs/block_dev.c
+@@ -2001,7 +2001,8 @@ ssize_t blkdev_write_iter(struct kiocb *
+ 	if (bdev_read_only(I_BDEV(bd_inode)))
+ 		return -EPERM;
+ 
+-	if (IS_SWAPFILE(bd_inode))
++	/* uswsusp needs to write to the swap */
++	if (IS_SWAPFILE(bd_inode) && !IS_ENABLED(CONFIG_HIBERNATION))
+ 		return -ETXTBSY;
+ 
+ 	if (!iov_iter_count(from))
