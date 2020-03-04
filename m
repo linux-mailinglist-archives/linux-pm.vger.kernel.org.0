@@ -2,108 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F1E178F64
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 12:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F0E178F98
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 12:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387751AbgCDLLU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 06:11:20 -0500
-Received: from cloudserver094114.home.pl ([79.96.170.134]:54922 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387488AbgCDLLU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 06:11:20 -0500
-Received: from 79.184.237.41.ipv4.supernova.orange.pl (79.184.237.41) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 4026649b143df0dc; Wed, 4 Mar 2020 12:11:18 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Alex Hung <alex.hung@canonical.com>
-Cc:     corbet@lwn.net, len.brown@intel.com, pavel@ucw.cz,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        x86@kernel.org, mchehab+samsung@kernel.org, jpoimboe@redhat.com,
-        akpm@linux-foundation.org, pawan.kumar.gupta@linux.intel.com,
-        jgross@suse.com, linux-doc@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] acpi/x86: add a kernel parameter to disable ACPI BGRT
-Date:   Wed, 04 Mar 2020 12:11:18 +0100
-Message-ID: <2428308.KOkiRdoaOj@kreacher>
-In-Reply-To: <20200227233836.5797-1-alex.hung@canonical.com>
-References: <20200227233836.5797-1-alex.hung@canonical.com>
+        id S2387488AbgCDLdB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 06:33:01 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:57462 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729256AbgCDLdA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Mar 2020 06:33:00 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1j9SGj-0000pl-Un; Wed, 04 Mar 2020 12:32:53 +0100
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Joao Martins <joao.m.martins@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] cpuidle-haltpoll: allow force loading on hosts without the REALTIME hint
+Date:   Wed,  4 Mar 2020 12:32:48 +0100
+Message-Id: <20200304113248.1143057-1-mail@maciej.szmigiero.name>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, February 28, 2020 12:38:36 AM CET Alex Hung wrote:
-> BGRT is for displaying seamless OEM logo from booting to login screen;
-> however, this mechanism does not always work well on all configurations
-> and the OEM logo can be displayed multiple times. This looks worse than
-> without BGRT enabled.
-> 
-> This patch adds a kernel parameter to disable BGRT in boot time. This is
-> easier than re-compiling a kernel with CONFIG_ACPI_BGRT disabled.
-> 
-> Signed-off-by: Alex Hung <alex.hung@canonical.com>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt |  3 +++
->  arch/x86/kernel/acpi/boot.c                     | 10 +++++++++-
->  2 files changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index ffff776..55c5b2f 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -442,6 +442,9 @@
->  	bert_disable	[ACPI]
->  			Disable BERT OS support on buggy BIOSes.
->  
-> +	bgrt_disable	[ACPI][X86]
-> +			Disable BGRT to avoid flickering OEM logo.
-> +
->  	bttv.card=	[HW,V4L] bttv (bt848 + bt878 based grabber cards)
->  	bttv.radio=	Most important insmod options are available as
->  			kernel args too.
-> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-> index 04205ce..d1757ce 100644
-> --- a/arch/x86/kernel/acpi/boot.c
-> +++ b/arch/x86/kernel/acpi/boot.c
-> @@ -45,6 +45,7 @@ EXPORT_SYMBOL(acpi_disabled);
->  #define PREFIX			"ACPI: "
->  
->  int acpi_noirq;				/* skip ACPI IRQ initialization */
-> +int acpi_nobgrt;			/* skip ACPI BGRT */
->  int acpi_pci_disabled;		/* skip ACPI PCI scan and IRQ initialization */
->  EXPORT_SYMBOL(acpi_pci_disabled);
->  
-> @@ -1619,7 +1620,7 @@ int __init acpi_boot_init(void)
->  	acpi_process_madt();
->  
->  	acpi_table_parse(ACPI_SIG_HPET, acpi_parse_hpet);
-> -	if (IS_ENABLED(CONFIG_ACPI_BGRT))
-> +	if (IS_ENABLED(CONFIG_ACPI_BGRT) && !acpi_nobgrt)
->  		acpi_table_parse(ACPI_SIG_BGRT, acpi_parse_bgrt);
->  
->  	if (!acpi_noirq)
-> @@ -1671,6 +1672,13 @@ static int __init parse_acpi(char *arg)
->  }
->  early_param("acpi", parse_acpi);
->  
-> +static int __init parse_acpi_bgrt(char *arg)
-> +{
-> +	acpi_nobgrt = true;
-> +	return 0;
-> +}
-> +early_param("bgrt_disable", parse_acpi_bgrt);
-> +
->  /* FIXME: Using pci= for an ACPI parameter is a travesty. */
->  static int __init parse_pci(char *arg)
->  {
-> 
+From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 
-It would be good to resend this with a CC to linux-acpi in case somebody on
-that list is interested.
+Before commit 1328edca4a14 ("cpuidle-haltpoll: Enable kvm guest polling
+when dedicated physical CPUs are available") the cpuidle-haltpoll driver
+could also be used in scenarios when the host does not advertise the
+KVM_HINTS_REALTIME hint.
 
+While the behavior introduced by the aforementioned commit makes sense as
+the default there are cases where the old behavior is desired, for example,
+when other kernel changes triggered by presence by this hint are unwanted,
+for some workloads where the latency benefit from polling overweights the
+loss from idle CPU capacity that otherwise would be available, or just when
+running under older Qemu versions that lack this hint.
 
+Let's provide a typical "force" module parameter that allows restoring the
+old behavior.
 
+Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+---
+ drivers/cpuidle/cpuidle-haltpoll.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
+Changes from v1:
+Make the module parameter description more general, don't unnecessarily
+break a line in haltpoll_init().
+
+diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+index b0ce9bc78113..db124bc1ca2c 100644
+--- a/drivers/cpuidle/cpuidle-haltpoll.c
++++ b/drivers/cpuidle/cpuidle-haltpoll.c
+@@ -18,6 +18,10 @@
+ #include <linux/kvm_para.h>
+ #include <linux/cpuidle_haltpoll.h>
+ 
++static bool force __read_mostly;
++module_param(force, bool, 0444);
++MODULE_PARM_DESC(force, "Load unconditionally");
++
+ static struct cpuidle_device __percpu *haltpoll_cpuidle_devices;
+ static enum cpuhp_state haltpoll_hp_state;
+ 
+@@ -90,6 +94,11 @@ static void haltpoll_uninit(void)
+ 	haltpoll_cpuidle_devices = NULL;
+ }
+ 
++static bool haltpool_want(void)
++{
++	return kvm_para_has_hint(KVM_HINTS_REALTIME) || force;
++}
++
+ static int __init haltpoll_init(void)
+ {
+ 	int ret;
+@@ -101,8 +110,7 @@ static int __init haltpoll_init(void)
+ 
+ 	cpuidle_poll_state_init(drv);
+ 
+-	if (!kvm_para_available() ||
+-		!kvm_para_has_hint(KVM_HINTS_REALTIME))
++	if (!kvm_para_available() || !haltpool_want())
+ 		return -ENODEV;
+ 
+ 	ret = cpuidle_register_driver(drv);
