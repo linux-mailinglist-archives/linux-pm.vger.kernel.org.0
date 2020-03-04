@@ -2,83 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F4117178FF0
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 12:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716A3179016
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 13:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387762AbgCDL5h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 06:57:37 -0500
-Received: from mga06.intel.com ([134.134.136.31]:45980 "EHLO mga06.intel.com"
+        id S1728953AbgCDMMz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 07:12:55 -0500
+Received: from foss.arm.com ([217.140.110.172]:33446 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387488AbgCDL5h (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Mar 2020 06:57:37 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Mar 2020 03:57:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,514,1574150400"; 
-   d="scan'208";a="243928110"
-Received: from pgsmsx107.gar.corp.intel.com ([10.221.44.105])
-  by orsmga006.jf.intel.com with ESMTP; 04 Mar 2020 03:57:34 -0800
-Received: from pgsmsx102.gar.corp.intel.com ([169.254.6.223]) by
- PGSMSX107.gar.corp.intel.com ([169.254.7.43]) with mapi id 14.03.0439.000;
- Wed, 4 Mar 2020 19:57:33 +0800
-From:   "Pan, Harry" <harry.pan@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     LKML <linux-kernel@vger.kernel.org>, Harry Pan <gs0622@gmail.com>,
-        "Jacob Pan" <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3] intel_idle: Add Comet Lake support
-Thread-Topic: [PATCH v3] intel_idle: Add Comet Lake support
-Thread-Index: AQHV8TuIsnm0plXkJ0qxTNV1fBgP1Kg3rPoAgACovO0=
-Date:   Wed, 4 Mar 2020 11:57:33 +0000
-Message-ID: <F8C6368A-1537-482B-8FE5-350A18D936A8@intel.com>
-References: <20200227013411.1.Ica3bb9fa898499d94e0b0a2bfa08ec46c89d84fa@changeid>
- <20200303170948.1.I108734f38ade020c3e5da825839dca11d2a2ff87@changeid>,<CAJZ5v0j+bx5fh1wv738MNoui_SaZ-c21rDnZkWOqi_GCVg5stQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j+bx5fh1wv738MNoui_SaZ-c21rDnZkWOqi_GCVg5stQ@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726502AbgCDMMz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Mar 2020 07:12:55 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D02731B;
+        Wed,  4 Mar 2020 04:12:54 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 15F823F534;
+        Wed,  4 Mar 2020 04:12:52 -0800 (PST)
+Date:   Wed, 4 Mar 2020 12:12:51 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 3/4] cpuidle: psci: Split psci_dt_cpu_init_idle()
+Message-ID: <20200304121250.GD25004@bogus>
+References: <20200303203559.23995-1-ulf.hansson@linaro.org>
+ <20200303203559.23995-4-ulf.hansson@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200303203559.23995-4-ulf.hansson@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgUmFmYWVsLA0KDQpZZXMsIEkgc2tpcHBlZCBpdCBjb25zaWRlcmluZyB0byBhbGlnbiBDTUwt
-VSBWMCBhbmQgQTAgc3RlcHBpbmcgdy8gdGhlIHNhbWUgdGFibGU7IEkgc2VudCB2NCBmb3IgeW91
-ciByZXZpZXcuDQoNCkluIHRoZSBvdGhlciBoYW5kLCBJIGFtIHByb3Bvc2luZyB1c2luZyBfQ1NU
-IGFzIGxvbmcgdGVybSBwbGFuIGluIENyT1MgZGV2IHRlYW1zLg0KDQoNClNpbmNlcmVseSwNCkhh
-cnJ5DQoNCj4gT24gTWFyIDQsIDIwMjAsIGF0IDE3OjUzLCBSYWZhZWwgSi4gV3lzb2NraSA8cmFm
-YWVsQGtlcm5lbC5vcmc+IHdyb3RlOg0KPiANCj4g77u/T24gVHVlLCBNYXIgMywgMjAyMCBhdCAx
-MDoxMCBBTSBIYXJyeSBQYW4gPGhhcnJ5LnBhbkBpbnRlbC5jb20+IHdyb3RlOg0KPj4gDQo+PiBB
-ZGQgYSBnZW5lcmFsIEMtc3RhdGUgdGFibGUgaW4gb3JkZXIgdG8gc3VwcG9ydCBDb21ldCBMYWtl
-Lg0KPj4gDQo+PiBTaWduZWQtb2ZmLWJ5OiBIYXJyeSBQYW4gPGhhcnJ5LnBhbkBpbnRlbC5jb20+
-DQo+PiANCj4+IC0tLQ0KPj4gDQo+PiBkcml2ZXJzL2lkbGUvaW50ZWxfaWRsZS5jIHwgNyArKysr
-KysrDQo+PiAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspDQo+PiANCj4+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL2lkbGUvaW50ZWxfaWRsZS5jIGIvZHJpdmVycy9pZGxlL2ludGVsX2lkbGUu
-Yw0KPj4gaW5kZXggZDU1NjA2NjA4YWM4Li4wNWJjZTU5NWZhZmUgMTAwNjQ0DQo+PiAtLS0gYS9k
-cml2ZXJzL2lkbGUvaW50ZWxfaWRsZS5jDQo+PiArKysgYi9kcml2ZXJzL2lkbGUvaW50ZWxfaWRs
-ZS5jDQo+PiBAQCAtMTA2Nyw2ICsxMDY3LDExIEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgaWRsZV9j
-cHUgaWRsZV9jcHVfZG52ID0gew0KPj4gICAgICAgIC51c2VfYWNwaSA9IHRydWUsDQo+PiB9Ow0K
-Pj4gDQo+PiArc3RhdGljIGNvbnN0IHN0cnVjdCBpZGxlX2NwdSBpZGxlX2NwdV9jbWwgPSB7DQo+
-PiArICAgICAgIC5zdGF0ZV90YWJsZSA9IHNrbF9jc3RhdGVzLA0KPj4gKyAgICAgICAuZGlzYWJs
-ZV9wcm9tb3Rpb25fdG9fYzFlID0gdHJ1ZSwNCj4gDQo+IC51c2VfYWNwaSA9IHRydWUsDQo+IA0K
-PiBtaXNzaW5nPyAgT3RoZXJ3aXNlIHlvdSBjYW4ganVzdCB1c2UgaWRsZV9jcHVfc2tsIGFzIGlz
-LCBjYW4ndCB5b3U/DQo+IA0KPj4gK307DQo+PiArDQo+PiBzdGF0aWMgY29uc3Qgc3RydWN0IHg4
-Nl9jcHVfaWQgaW50ZWxfaWRsZV9pZHNbXSBfX2luaXRjb25zdCA9IHsNCj4+ICAgICAgICBJTlRF
-TF9DUFVfRkFNNihORUhBTEVNX0VQLCAgICAgICAgICAgICAgaWRsZV9jcHVfbmh4KSwNCj4+ICAg
-ICAgICBJTlRFTF9DUFVfRkFNNihORUhBTEVNLCAgICAgICAgICAgICAgICAgaWRsZV9jcHVfbmVo
-YWxlbSksDQo+PiBAQCAtMTEwNSw2ICsxMTEwLDggQEAgc3RhdGljIGNvbnN0IHN0cnVjdCB4ODZf
-Y3B1X2lkIGludGVsX2lkbGVfaWRzW10gX19pbml0Y29uc3QgPSB7DQo+PiAgICAgICAgSU5URUxf
-Q1BVX0ZBTTYoQVRPTV9HT0xETU9OVF9QTFVTLCAgICAgIGlkbGVfY3B1X2J4dCksDQo+PiAgICAg
-ICAgSU5URUxfQ1BVX0ZBTTYoQVRPTV9HT0xETU9OVF9ELCAgICAgICAgIGlkbGVfY3B1X2Rudiks
-DQo+PiAgICAgICAgSU5URUxfQ1BVX0ZBTTYoQVRPTV9UUkVNT05UX0QsICAgICAgICAgIGlkbGVf
-Y3B1X2RudiksDQo+PiArICAgICAgIElOVEVMX0NQVV9GQU02KENPTUVUTEFLRV9MLCAgICAgICAg
-ICAgICBpZGxlX2NwdV9jbWwpLA0KPj4gKyAgICAgICBJTlRFTF9DUFVfRkFNNihDT01FVExBS0Us
-ICAgICAgICAgICAgICAgaWRsZV9jcHVfY21sKSwNCj4+ICAgICAgICB7fQ0KPj4gfTsNCj4+IA0K
-Pj4gLS0NCj4+IDIuMjQuMQ0KPj4gDQo=
+On Tue, Mar 03, 2020 at 09:35:58PM +0100, Ulf Hansson wrote:
+> To make the code a bit more readable, but also to prepare some code to be
+> re-used, let's move the OSI specific initialization out of the
+> psci_dt_cpu_init_idle() and into a separate function.
+>
+> Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
+
+Not sure if this fixes anything but I am fine to have this if next one is
+a real fix.
+
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>
+> Changes in v2:
+> 	- Adopted suggestions from Stephen to use IS_ERR_OR_NULL and
+> 	PTR_ERR_OR_ZERO, which further clarified the code.
+>
+> ---
+>  drivers/cpuidle/cpuidle-psci.c | 46 ++++++++++++++++++++--------------
+>  1 file changed, 27 insertions(+), 19 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+> index edd7a54ef0d3..bae9140a65a5 100644
+> --- a/drivers/cpuidle/cpuidle-psci.c
+> +++ b/drivers/cpuidle/cpuidle-psci.c
+> @@ -160,6 +160,29 @@ int __init psci_dt_parse_state_node(struct device_node *np, u32 *state)
+>  	return 0;
+>  }
+>
+> +static int __init psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
+> +					    struct psci_cpuidle_data *data,
+> +					    unsigned int state_count, int cpu)
+> +{
+> +	/* Currently limit the hierarchical topology to be used in OSI mode. */
+> +	if (!psci_has_osi_support())
+> +		return 0;
+> +
+> +	data->dev = psci_dt_attach_cpu(cpu);
+> +	if (IS_ERR_OR_NULL(data->dev))
+> +		return PTR_ERR_OR_ZERO(data->dev);
+> +
+
+This is what I was asking to do before this was merged when I meant to drop
+if(data->dev) check. So happy to see it :)
+
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
+--
+Regards,
+Sudeep
