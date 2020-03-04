@@ -2,77 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3549317966D
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 18:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1931796DA
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 18:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726915AbgCDRMy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 12:12:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43584 "EHLO mail.kernel.org"
+        id S1727804AbgCDRhe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 12:37:34 -0500
+Received: from mga01.intel.com ([192.55.52.88]:31243 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726748AbgCDRMy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Mar 2020 12:12:54 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7108221775;
-        Wed,  4 Mar 2020 17:12:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583341973;
-        bh=fGZO8IiDt6IouMRYJcdwHaQ/Nli/lNDUQPVQ+t4fUJE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QGSNA6SCwIwmnoXq6unuaIbYou3KDT8LlCwlB35VykB+lCFs9M3ouwd7ho1ObbzG1
-         vc2rDlHbd4UG0eRfdCIbaSZIhpjLDBquwL0RNFqYK5keUyYUConYjvrxEeaIgYynhV
-         0tLrwmAprP16lTXMmQO0oYYSp1tAww5C173kUmMw=
-Date:   Wed, 4 Mar 2020 18:12:52 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Todd Kjos <tkjos@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 0/6] driver core: Improve and cleanup
- driver_deferred_probe_check_state()
-Message-ID: <20200304171252.GA1852336@kroah.com>
-References: <20200225050828.56458-1-john.stultz@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200225050828.56458-1-john.stultz@linaro.org>
+        id S1727656AbgCDRhe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Mar 2020 12:37:34 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Mar 2020 09:37:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,514,1574150400"; 
+   d="scan'208";a="229399961"
+Received: from ayeshakh-mobl.amr.corp.intel.com ([10.252.205.163])
+  by orsmga007.jf.intel.com with ESMTP; 04 Mar 2020 09:37:32 -0800
+Message-ID: <b524cb9c2c61bf90087ad7174a84b754143d376a.camel@linux.intel.com>
+Subject: Re: [RFC PATCH v2 0/2] Introduce multi PM domains helpers
+From:   Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+To:     Daniel Baluta <daniel.baluta@oss.nxp.com>, rjw@rjwysocki.net,
+        len.brown@intel.com
+Cc:     aisheng.dong@nxp.com, pierre-louis.bossart@linux.intel.com,
+        ulf.hansson@linaro.org, linux-pm@vger.kernel.org,
+        gregkh@linuxfoundation.org, s.hauer@pengutronix.de,
+        alsa-devel@alsa-project.org, daniel.baluta@nxp.com,
+        linux-kernel@vger.kernel.org, paul.olaru@nxp.com,
+        khilman@kernel.org, linux-imx@nxp.com, kernel@pengutronix.de,
+        shawnguo@kernel.org, festevam@gmail.com, shengjiu.wang@nxp.com,
+        linux-arm-kernel@lists.infradead.org
+Date:   Wed, 04 Mar 2020 09:37:32 -0800
+In-Reply-To: <20200304121943.28989-1-daniel.baluta@oss.nxp.com>
+References: <20200304121943.28989-1-daniel.baluta@oss.nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 25, 2020 at 05:08:22AM +0000, John Stultz wrote:
-> This series goal is to improve and cleanup the
-> driver_deferred_probe_check_state() code in the driver core.
+On Wed, 2020-03-04 at 14:19 +0200, Daniel Baluta wrote:
+> From: Daniel Baluta <daniel.baluta@nxp.com>
 > 
-> This series is useful for being able to support modules
-> dependencies which may be loaded by userland, far after
-> late_initcall is done. For instance, this series allows us to
-> successfully use various clk drivers as modules on the db845c
-> board. And without it, those drivers have to be statically built
-> in to work.
+> i.MX8QXP/i.MX8QM has IPs that need multiple power domains to be up
+> in order to work. In order to help drivers, we introduce multi PM
+> domains helpers that are able to activate/deactivate multi PM
+> domains.
 > 
-> Since I first sent out this patch, Saravana suggested an
-> alternative approach which also works for our needs, and is a
-> bit simpler:
->  https://lore.kernel.org/lkml/20200220055250.196456-1-saravanak@google.com/T/#u
+> First patch introduces the helpers and second patch demonstrates how
+> a driver can use them instead of hardcoding the PM domains handling.
 > 
-> However, while that patch provides the functionality we need,
-> I still suspect the driver_deferred_probe_check_state() code
-> could benefit from the cleanup in this patch, as the existing
-> logic is somewhat muddy.
+> Changes since v1: (addressed Ranjani's comments)
+> 	- enhanced description for dev_multi_pm_attach return value
+> 	- renamed exit_unroll_pm label to exit_detach_pm
+> 
+> Daniel Baluta (2):
+>   PM / domains: Introduce multi PM domains helpers
+>   ASoC: SOF: Use multi PM domains helpers
+Both patches LGTM. Thanks Daniel.
 
-This looks much better, thanks for sticking with it, all now queued up.
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 
-greg k-h
