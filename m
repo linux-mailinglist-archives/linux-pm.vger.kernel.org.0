@@ -2,113 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 682DB178C94
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 09:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A19B178D4E
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 10:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728702AbgCDIeP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 03:34:15 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55898 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728301AbgCDIeO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 03:34:14 -0500
-Received: by mail-wm1-f65.google.com with SMTP id 6so918895wmi.5;
-        Wed, 04 Mar 2020 00:34:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=nayxdGYrrbMcrJKKUbiZVGz59/2NTLulIF1ZtrT47ek=;
-        b=cA910Sct3AMljocPVycm3ISQnbULt2Dp+2t4oFbXMzpoCb+1ao26K70iGqKD+FitKL
-         /2nZ7tcj36mMW2mPY6Em4FDY4RrodpTwHOcxTICDOeB2aML7yK8Mgdi1ViKJSd4NqNUP
-         Nu6LH0bFO5TyeYKkL8KS8I0WwBz+i3srnfYET7saaRhPFh5DKT6RjqbXcXc5TsboBem3
-         wPMlEkYa/bjdcd2V3Ww5j+AvmrMrD1SvIs7ZmRyZ0mG3x/X7sSYQg8Z7K1cMbgfOTmUQ
-         Ko2jRDVflT4LeXsZemovrNYMqBa3fgBL2i8zxAMR4zvWeilQcdgGLuucGuSDxEGI5GrR
-         rPig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nayxdGYrrbMcrJKKUbiZVGz59/2NTLulIF1ZtrT47ek=;
-        b=LA2qQFOLHBhWGP0G8QvnZdtgQAZ9C6btWHJDFkD+C4KdARyoibCQwbQhyPhPVm09GG
-         YJIGBhhlYw1zM73VmJY1OCn2Zgrhcpy9UmG0P33yaXjrRLwVDgGEjlcjR3U9u7DzD7Dq
-         0iYDrfGrQQuSjE+kEUMvUjQg8BGUyOsFO/uzqW0MBkttq0nAlNsb+cD7/Ku3bzSm0eVU
-         3cZclwBxzkvVJHp+1tEIVrTBvSTH5zMJbF0L0O6q1HVZ0gNIrCwXQh3XjIYq39xAwPUE
-         r74vNbDvwzZNRqLH604m1vEgk/K9GWZJkQtGjgjdcC030nLcHpaAsVSysast41j+govF
-         Otzg==
-X-Gm-Message-State: ANhLgQ1kNIqHqzdJP23LdNSPk0J/nWnZsKrzNEF89PAw5dHTIaTGSBEb
-        rtFAKNYN5K8XWw/+w8fUpEI=
-X-Google-Smtp-Source: ADFU+vsXmm1DvvLyrlqHs80fl4XcTC+zghUs61AIKoiW7wsI1tA9IZuzEY5ZKMXvbLStbZ+Dj59Dlg==
-X-Received: by 2002:a05:600c:3ce:: with SMTP id z14mr2566093wmd.106.1583310851550;
-        Wed, 04 Mar 2020 00:34:11 -0800 (PST)
-Received: from dumbo ([83.137.6.114])
-        by smtp.gmail.com with ESMTPSA id z16sm37081963wrp.33.2020.03.04.00.34.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 00:34:10 -0800 (PST)
-Date:   Wed, 4 Mar 2020 09:34:08 +0100
-From:   Domenico Andreoli <domenico.andreoli.it@gmail.com>
-To:     "Darrick J. Wong" <darrick.wong@oracle.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-fsdevel@vger.kernel.org, mkleinsoft@gmail.com,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S1725283AbgCDJWT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 04:22:19 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:52224 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387644AbgCDJWT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 04:22:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Xz1gqS8mHQf0FeXfh5Zn6ODmAjqLlTi3e7QpQPXzA9Q=; b=LDG8TcPSz6KerDK5RXGKXHL0+s
+        nd+daixZ03zWZPBsZex2W0SE2BU+bLdvHBFIbasjYsjLE9O6AcvIE4aklaE3c2rh36+IES5zOiJKo
+        CZHk/ZIgcOCzatmD7F0LvmIA2106SZonTNmKrjs8DuOvT6kzu3GSWHE0zWKaxMKARsPaQGewBXixa
+        ItobUKdK8g+0ymqN8mZ30rSgQf5HEI0PdCrTHBXpOW9woanZqUxWXgFDIr91oXYH//OaNr2XpNsGu
+        Foq59USFJcUjcKrB2RUG0sl7wBvbaaaFVwnCCFfz9rz8IvgRMTSRUVdUbDAj+EcyeoS8xmPTFub7+
+        KssVL8pg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j9QDl-0008ML-Jr; Wed, 04 Mar 2020 09:21:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CDE6B30066E;
+        Wed,  4 Mar 2020 10:19:37 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 407052011CA98; Wed,  4 Mar 2020 10:21:36 +0100 (CET)
+Date:   Wed, 4 Mar 2020 10:21:36 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Thomas Garnier <thgarnie@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Hellstrom <thellstrom@vmware.com>,
+        "VMware, Inc." <pv-drivers@vmware.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH] hibernate: unlock swap bdev for writing when uswsusp is
- active
-Message-ID: <20200304083408.GA14584@dumbo>
-References: <20200229170825.GX8045@magnolia>
- <20200229180716.GA31323@dumbo>
- <20200229183820.GA8037@magnolia>
- <20200229200200.GA10970@dumbo>
- <CAJZ5v0iHaZyfuTnqJyM6u=UU=+W6yRuM_Q6iUvB2UudANuwfgA@mail.gmail.com>
- <20200303190212.GC8037@magnolia>
- <9E4A0457-39B1-45E2-AEA2-22C730BF2C4F@gmail.com>
- <20200304011840.GD1752567@magnolia>
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Slaby <jslaby@suse.cz>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Cao jin <caoj.fnst@cn.fujitsu.com>,
+        Allison Randal <allison@lohutok.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Linux PM list <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v11 00/11] x86: PIE support to extend KASLR randomization
+Message-ID: <20200304092136.GI2596@hirez.programming.kicks-ass.net>
+References: <20200228000105.165012-1-thgarnie@chromium.org>
+ <202003022100.54CEEE60F@keescook>
+ <20200303095514.GA2596@hirez.programming.kicks-ass.net>
+ <CAJcbSZH1oON2VC2U8HjfC-6=M-xn5eU+JxHG2575iMpVoheKdA@mail.gmail.com>
+ <6e7e4191612460ba96567c16b4171f2d2f91b296.camel@linux.intel.com>
+ <202003031314.1AFFC0E@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200304011840.GD1752567@magnolia>
+In-Reply-To: <202003031314.1AFFC0E@keescook>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 03, 2020 at 05:18:40PM -0800, Darrick J. Wong wrote:
-> On Tue, Mar 03, 2020 at 10:51:22PM +0000, Domenico Andreoli wrote:
+On Tue, Mar 03, 2020 at 01:19:22PM -0800, Kees Cook wrote:
+> On Tue, Mar 03, 2020 at 01:01:26PM -0800, Kristen Carlson Accardi wrote:
+> > On Tue, 2020-03-03 at 07:43 -0800, Thomas Garnier wrote:
+> > > On Tue, Mar 3, 2020 at 1:55 AM Peter Zijlstra <peterz@infradead.org>
+
+> > > > But,... do we still need this in the light of that fine-grained
+> > > > kaslr
+> > > > stuff?
+> > > > 
+> > > > What is the actual value of this PIE crud in the face of that?
+> > > 
+> > > If I remember well, it makes it easier/better but I haven't seen a
+> > > recent update on that. Is that accurate Kees?
 > > 
-> > I don't see the need of reverting anything, I can deal with these
-> > issues if you are busy on something else.
+> > I believe this patchset is valuable if people are trying to brute force
+> > guess the kernel location, but not so awesome in the event of
+> > infoleaks. In the case of the current fgkaslr implementation, we only
+> > randomize within the existing text segment memory area - so with PIE
+> > the text segment base can move around more, but within that it wouldn't
+> > strengthen anything. So, if you have an infoleak, you learn the base
+> > instantly, and are just left with the same extra protection you get
+> > without PIE.
 > 
-> If you want to work on the patch, please do!  Starting from the revert
-> patch I sent earlier, I /think/ only the first chunk (the one that
-> touches blkdev_write_iter) of that patch actually has to be applied to
-> re-enable uswsusp.  That could probably be turned into:
-> 
-> 	if (IS_SWAPFILE(...) && !IS_ENABLED(HIBERNATION))
-> 		return -ETXTBSY;
+> Right -- PIE improves both non- and fg- KASLR similarly, in the sense
+> that the possible entropy for base offset is expanded. It also opens the
+> door to doing even more crazy things. 
 
-I've just sent such patch, I don't know how it will play with the whole
-revert of yesterday and that akpm has already taken in his tree.
+So I'm really confused. I see it increases the aslr range, but I'm still
+not sure why we care in the face of fgkaslr. Current kaslr is completely
+broken because the hardware leaks more bits than we currently have, even
+without the kernel itself leaking an address.
 
-Ideally this should go in 5.6-rc and also in stable kernels > 5.2.
+But leaking a single address is not a problem with fgkaslr.
 
-> 
-> Though perhaps a better thing to check here rather than the Kconfig
-> option is whether or not the system is locked out against hibernation?
-> e.g.,
-> 
-> 	if (IS_SWAPFILE(...) && !hibernation_available())
-> 		return -EXTBSY;
+> (e.g. why keep the kernel text all
+> in one contiguous chunk?)
 
-This is the kind of improved fix I'm going to prepare for a coming
-merge window.
+Dear gawd, please no. Also, we're limited to 2G text, that's just not a
+lot of room. I'm really going to object when people propose we introduce
+direct PLT for x86.
 
-Regards,
-Domenico
+> And generally speaking, it seems a nice improvement to me, as it gives
+> the kernel greater addressing flexibility.
 
--- 
-rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
-ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
+But at what cost; it does unspeakable ugly to the asm. And didn't a
+kernel compiled with the extended PIE range produce a measurably slower
+kernel due to all the ugly?
+
+So maybe I'm slow, but please spell out the benefit, because I'm not
+seeing it.
