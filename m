@@ -2,81 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F14D17956E
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 17:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D939B179648
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 18:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729675AbgCDQfc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 11:35:32 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:43444 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726263AbgCDQfc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 11:35:32 -0500
-Received: from [10.18.90.110] (10.18.90.110) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.1591.10; Thu, 5 Mar 2020
- 00:36:00 +0800
-Subject: Re: [PATCH v2] dt-bindings: power: Fix dt_binding_check error
-To:     Kevin Hilman <khilman@baylibre.com>, Rob Herring <robh@kernel.org>
-CC:     <linux-amlogic@lists.infradead.org>, SoC Team <soc@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        <devicetree@vger.kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <1583164448-83438-1-git-send-email-jianxin.pan@amlogic.com>
- <20200302201554.GA22028@bogus> <7h5zflrfp3.fsf@baylibre.com>
-From:   Jianxin Pan <jianxin.pan@amlogic.com>
-Message-ID: <b1fc2451-7eec-aa03-3d4d-3a7ae186105c@amlogic.com>
-Date:   Thu, 5 Mar 2020 00:35:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1727804AbgCDRGz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 12:06:55 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:52685 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727709AbgCDRGy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 12:06:54 -0500
+Received: by mail-wm1-f68.google.com with SMTP id p9so2981079wmc.2;
+        Wed, 04 Mar 2020 09:06:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=eAvOIF6AGY3vlZ1kzI6VwMQbeJQz/suMmkKBmXk6J8Y=;
+        b=UzWuKWhwSTJKSKcktovi82mOWChrc/f0KtLo4X5rUYd9T9r93VZEsjULHytd8lrxv5
+         YIjTecmQzPuwr7GMOVXPUDzk7lTvc126GlJ12boC1Sz8lUEzTYLgcL4e4+ZzBgZnaXgV
+         yJnsaPX9X5VH511KEtLXIvytDFOzksJdNlA9OVlQIJHT1qYZpqldWsMilzD7CoLwojYe
+         dUPg13pM6AO6vwLFYzO4RMgsvkXMOQwQ7VjuWB5iu3uobCoFQICIbneHO+1KAYyyzoAT
+         rs+eqJyYPk72BAxEhnWCrgwDElzuYrpfn0wpJMW+tKXYEHArAEXOCq/oElUgKrHDfO1x
+         49+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition:user-agent;
+        bh=eAvOIF6AGY3vlZ1kzI6VwMQbeJQz/suMmkKBmXk6J8Y=;
+        b=kCRGx/qbvGHvOIExprw0DDgkP+eOmEhGn+Aq946pDkC+5ITaDABqXsREVseqztX9bj
+         imCTr/cd3ElcID1uCdt9MhKJkePYFyHBcGR0uYm9vtAGCVSYCIR5A8uTk6Tfh3DNfiyI
+         n1q05AtsU523nCq8bRaRxpUdcQ2KlwJaA8k/YJftyN/tzQ4CnA1PWtLu6XIv1j0n45Jn
+         BG6FxGm6e1n4PUG3G/6yNmsTnvHby5DuF2e7fcvay4kpaKC5XvH9+3fY6Vsf2NkDZVZ1
+         CQY5OlNqDLJxlS1t71GsB64Ah4WWZ7oBkAQ3q7NyGGrRBuUvlMJI/6WZ1+R0erHK7U0B
+         k2KQ==
+X-Gm-Message-State: ANhLgQ10xC8+0hoqQtyHTo3rg3tLU5Lz5s6NqdtfvnMzIX3D2WC9qxyO
+        Cav+OHza28a77rtmWqiMeM0=
+X-Google-Smtp-Source: ADFU+vs1u9SfcjF5RGIglTQpijbTZfS8yfBBuwrm2uVF6l/ojNbTblWiBQyIEcYPkcSSRfs4nBBHBQ==
+X-Received: by 2002:a1c:c906:: with SMTP id f6mr4622479wmb.16.1583341611386;
+        Wed, 04 Mar 2020 09:06:51 -0800 (PST)
+Received: from dumbo ([83.137.6.114])
+        by smtp.gmail.com with ESMTPSA id o8sm4841231wmh.15.2020.03.04.09.06.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2020 09:06:50 -0800 (PST)
+Date:   Wed, 4 Mar 2020 18:06:46 +0100
+From:   Domenico Andreoli <domenico.andreoli@linux.com>
+To:     "Darrick J. Wong" <darrick.wong@oracle.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-fsdevel@vger.kernel.org, mkleinsoft@gmail.com,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Subject: [PATCH v2] hibernate: Allow uswsusp to write to swap
+Message-ID: <20200304170646.GA31552@dumbo>
 MIME-Version: 1.0
-In-Reply-To: <7h5zflrfp3.fsf@baylibre.com>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.90.110]
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020/3/3 16:43, Kevin Hilman wrote:
-> Rob Herring <robh@kernel.org> writes:
-> 
->> On Mon, 2 Mar 2020 23:54:08 +0800, Jianxin Pan wrote:
->>> Missing ';' in the end of secure-monitor example node.
->>>
->>> Fixes: 165b5fb294e8 ("dt-bindings: power: add Amlogic secure power domains bindings")
->>> Reported-by: Rob Herring <robh+dt@kernel.org>
->>> Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
->>> ---
->>>  Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>
->> Please add Acked-by/Reviewed-by tags when posting new versions. However,
->> there's no need to repost patches *only* to add the tags. The upstream
->> maintainer will do that for acks received on the version they apply.
->>
->> If a tag was not added on purpose, please state why and what changed.
-> 
-> I've (re)added these tags:
-> 
->   Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
->   Acked-by: Rob Herring <robh@kernel.org>
-> 
-> when applying this time.
-> 
-> Jianxin, please collect the tags in the future and add when you send
-> follow-up versions.
-OK, I will do it next time, thanks for your time.
-> 
-> Thanks,
-> 
-> Kevin
-> 
-> .
-> 
+From: Domenico Andreoli <domenico.andreoli@linux.com>
 
+It turns out that there is one use case for programs being able to
+write to swap devices, and that is the userspace hibernation code.
+
+Quick fix: disable the S_SWAPFILE check if hibernation is configured.
+
+Fixes: dc617f29dbe5 ("vfs: don't allow writes to swap files")
+Reported-by: Domenico Andreoli <domenico.andreoli@linux.com>
+Reported-by: Marian Klein <mkleinsoft@gmail.com>
+Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
+
+v2:
+ - use hibernation_available() instead of IS_ENABLED(CONFIG_HIBERNATE)
+ - make Fixes: point to the right commit
+
+---
+ fs/block_dev.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+Index: b/fs/block_dev.c
+===================================================================
+--- a/fs/block_dev.c
++++ b/fs/block_dev.c
+@@ -34,6 +34,7 @@
+ #include <linux/task_io_accounting_ops.h>
+ #include <linux/falloc.h>
+ #include <linux/uaccess.h>
++#include <linux/suspend.h>
+ #include "internal.h"
+ 
+ struct bdev_inode {
+@@ -2001,7 +2002,8 @@ ssize_t blkdev_write_iter(struct kiocb *
+ 	if (bdev_read_only(I_BDEV(bd_inode)))
+ 		return -EPERM;
+ 
+-	if (IS_SWAPFILE(bd_inode))
++	/* uswsusp needs write permission to the swap */
++	if (IS_SWAPFILE(bd_inode) && !hibernation_available())
+ 		return -ETXTBSY;
+ 
+ 	if (!iov_iter_count(from))
