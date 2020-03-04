@@ -2,41 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18AAB17902A
+	by mail.lfdr.de (Postfix) with ESMTP id B6E7417902B
 	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 13:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388017AbgCDMUF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 07:20:05 -0500
+        id S2388036AbgCDMUI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 07:20:08 -0500
 Received: from mail-eopbgr20044.outbound.protection.outlook.com ([40.107.2.44]:25568
         "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387919AbgCDMUF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 4 Mar 2020 07:20:05 -0500
+        id S2388011AbgCDMUG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Mar 2020 07:20:06 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ncUDBi1bOTMyZh78q79r8Z2YQ9Q05zIyNW5Iap6Pje6k/X7nU1VJpVAfpswBuy+z+4Y4Efun8QwJhSoNb8R4Y7C6eUYQEtbCJwUPqUsgYrsKH3B9IppHN8+HkHV03g8QXiqIDUUdNJj3BZEjM665m6ESIiXxvTn0lGQxt3cf0TVSP+CSX3et2+yN9+s2zcfFvJVSEuQY+m1PKkf/ioReOUCEd0R/l7QiP5enw91tizgdB/R8h1Ri61pUdPXDMuo6NsL9LoRvwGfVz4FWtG48Elhwph3W/V0uCQ1rE1iEdmuGiSh7MIYxce3+LfycAHy9aPpWR7ljLYOw/VhGkNh0bQ==
+ b=DKtL7WOwhQHoYZoOHPJaA2vGz2yz6DWZOQfYGermLhwQ5XMWYZ2GvUVCehSBsBq43u4VDBW8ttJvnpqfWMqB5R3n0nzDcSvIWdOSst8bpKuXqf98okiV60MRsOubYSThn6LtPs1whaRQ8rnaV7oYLhr1NKGU3jcSkWW0XJ2G+hdRW2QzmhKhnme5TRUWkSfPIstg7SQ7WVeFrzlU9uBmKq7pnL/0ZdJzk9wr9hqNGvXGBnkYuUB7o0f34Zv23gN13b9VAFP/FtH49q57KOPO56yhxB7aHLGNwGO1+9KoMCNkc1bWDTV/F5b7z7OG4Kb4L4cG12BvlxqBnZIe0SG3sQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S+2+YcbOFXrLMdikxPZWSbBvO15JELWvJtDNYg8/PgI=;
- b=aojs2Zg7GyYo0Z1PUyXXwi4/S+vkIkpqon2QHyyBVJqhBjoL+VGYeDt6/EeD08/bCPMkPCdVj22Dnl8zPtqKsRQuzFco8+Uf10Wz4ndXiTvCF6U5LkCv4uoaWAa3NP7Pl3vkAvNgA6E6zm0v73e5021MHutT2xhQv3DTo3YukHGeb6zlfdokWP1mYIgWsQvE6E6HXWXW+TleT3j8tzySDWmbuFvFYcrPT5ygiVECzA6gH28jQJN8wDsNwiedaukErDNVWHhao0WeO2K8xKs2hQXojg3bNSK9sbNPUjtmkKlwqiOQG3iKbnrZ6fZkI6OEIlBP3oKABJV1DeLwde1FPw==
+ bh=/d50D3BY7IdVsv7PjKW8OSKb4KcfS2vi56zitjmwUuk=;
+ b=jKnJV6DPLUu9eMFi6lZW0umWsVQhr0jeOCyRacFOGjbJbFSGNDazA86IGKXuNHOflVbHf0Qkrs3meBadC3MZyNUhGOMJoqC5k/0UZ2cUM+rA3a4L8rrB+OGkx5FPpivVJEXEqdVx5qW0dglZKnZ0bZaxGWYO8JDp5lZ0bgxPILPFNsqlcMJDafukiycHPlg9X3vR9+EIsJ/weFhMZkSS4hvy9t7zpy012h/ZWeyiZ3jrO/gI1ypf6T1iMCg2KwvySr/JPlyWyU+lrC8+8PTVMAc3RqYE9ITMLmqd/wfzt54Yzn67M13+bxOdRnUdSK/lo4sx1dkkmk+ibdcEaUzvFA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S+2+YcbOFXrLMdikxPZWSbBvO15JELWvJtDNYg8/PgI=;
- b=ZhXRmCqHotEgiBuWKovDvU5eDfChQt1oGZ3ZIeK7wHqZvvuUW7ggzUgnzMjYkv6qo9+f0PcNO36MOb7gpQXXn/sm4Q1ITK+bWhCwyQjBvajRS0nY1F3Oz64CONQJa27x+84UDMbCAhyB9MKhqrspNKt6TX0SrEtD+t4pW/ZVxOQ=
+ bh=/d50D3BY7IdVsv7PjKW8OSKb4KcfS2vi56zitjmwUuk=;
+ b=E87aimer9Ln0YDhWNLl7TG363L2xdZCBuBfsk/qjd7WxNX8Mq5G+oOrGCSB62rxb3WUCYsDkDv/3WSy5a9BMAn9CKKkLXicmYQbO9woE04nXO4JRWHYsVkX2sJbp2J9lJgDxmuHd/EHYzPlz5h49PcOnw0v4T6qpiAeLC+Zm3DQ=
 Authentication-Results: spf=none (sender IP is )
  smtp.mailfrom=daniel.baluta@oss.nxp.com; 
 Received: from VI1PR0402MB3839.eurprd04.prod.outlook.com (52.134.16.147) by
  VI1PR0402MB2718.eurprd04.prod.outlook.com (10.175.21.143) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2772.15; Wed, 4 Mar 2020 12:20:01 +0000
+ 15.20.2772.15; Wed, 4 Mar 2020 12:20:02 +0000
 Received: from VI1PR0402MB3839.eurprd04.prod.outlook.com
  ([fe80::35d0:31bc:91d9:ceb0]) by VI1PR0402MB3839.eurprd04.prod.outlook.com
  ([fe80::35d0:31bc:91d9:ceb0%7]) with mapi id 15.20.2772.019; Wed, 4 Mar 2020
- 12:20:00 +0000
+ 12:20:02 +0000
 From:   Daniel Baluta <daniel.baluta@oss.nxp.com>
 To:     rjw@rjwysocki.net, len.brown@intel.com,
         ranjani.sridharan@linux.intel.com
@@ -49,9 +49,9 @@ Cc:     daniel.baluta@oss.nxp.com, aisheng.dong@nxp.com,
         paul.olaru@nxp.com, linux-imx@nxp.com, kernel@pengutronix.de,
         shawnguo@kernel.org, shengjiu.wang@nxp.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [RFC PATCH v2 1/2] PM / domains: Introduce multi PM domains helpers
-Date:   Wed,  4 Mar 2020 14:19:42 +0200
-Message-Id: <20200304121943.28989-2-daniel.baluta@oss.nxp.com>
+Subject: [RFC PATCH v2 2/2] ASoC: SOF: Use multi PM domains helpers
+Date:   Wed,  4 Mar 2020 14:19:43 +0200
+Message-Id: <20200304121943.28989-3-daniel.baluta@oss.nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200304121943.28989-1-daniel.baluta@oss.nxp.com>
 References: <20200304121943.28989-1-daniel.baluta@oss.nxp.com>
@@ -61,33 +61,33 @@ X-ClientProxiedBy: AM4PR0701CA0034.eurprd07.prod.outlook.com
  (2603:10a6:803:21::19)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from fsr-ub1864-103.ro-buh02.nxp.com (89.37.124.34) by AM4PR0701CA0034.eurprd07.prod.outlook.com (2603:10a6:200:42::44) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.5 via Frontend Transport; Wed, 4 Mar 2020 12:19:59 +0000
+Received: from fsr-ub1864-103.ro-buh02.nxp.com (89.37.124.34) by AM4PR0701CA0034.eurprd07.prod.outlook.com (2603:10a6:200:42::44) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.5 via Frontend Transport; Wed, 4 Mar 2020 12:20:00 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [89.37.124.34]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: b0b22574-91fe-4b8f-c4d8-08d7c0365c3b
+X-MS-Office365-Filtering-Correlation-Id: 27a47d09-46f1-43e5-5177-08d7c0365d5a
 X-MS-TrafficTypeDiagnostic: VI1PR0402MB2718:|VI1PR0402MB2718:
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VI1PR0402MB2718E53EB176DC48C10EBDDDB8E50@VI1PR0402MB2718.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-Microsoft-Antispam-PRVS: <VI1PR0402MB27181BDE634862A7FF2EB32FB8E50@VI1PR0402MB2718.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:525;
 X-Forefront-PRVS: 0332AACBC3
 X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(376002)(136003)(396003)(346002)(199004)(189003)(6666004)(1076003)(6506007)(86362001)(2906002)(81166006)(81156014)(52116002)(316002)(44832011)(7416002)(8676002)(8936002)(5660300002)(186003)(66946007)(66476007)(2616005)(956004)(66556008)(16526019)(6512007)(26005)(6486002)(4326008)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB2718;H:VI1PR0402MB3839.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:0;MX:1;
 Received-SPF: None (protection.outlook.com: oss.nxp.com does not designate
  permitted sender hosts)
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DdfbkkJdDVm7tUy0GdwMu+9xOGQRkbFx9ZmrPR1HJftfMWzA5lDwvb1Z6e/1XGkvRMNbZdM18RwE2hGLH3YJhcxRgAKUJb52LZSfWAzFeNjxGIzjL44aTdNwLHL3DE04X34mGsD3nG6z6Dyp04zHKKbYPRUID+GyzwxqbAmdY1TWRo6pW0IifS9Po4L6fmx/U1J3EPLIb0QXp1xZH+59lcggO8dSmF+QaR/KV7qaogSbrkE88JtBFSim4xAIGBgFFJZzKpM06Nldspjy9J2c1XpZ+XtAOl2WuywOBgH6xUM8bXPIoAzW7xHeBHjVVawI4tySczbmRADST6r0dn05QgTSndKZHM8rW0KrPaaF+AcMVJe/jNL5TeSHJH9u/zx/+PrRmKgPjNZUh7v/0b3S+tuvdN7qnwSbwSrMG+Qsuz7cvzUdBBEeQEtBOBFD5TVH
-X-MS-Exchange-AntiSpam-MessageData: vlh1p5704/f1KRz4qhgzYNe+G9C5OVHCPkygaGYT+Zw8fX5/BbFs0cjHUCbyGHxhpgKeaEK8o+BzlzfLUmS8yksysLV7c9lpsxDvYWbxBwKk69ueD9tbiANvVNu86D+Q74gkKBVzqpJN8vfR2STZVg==
+X-Microsoft-Antispam-Message-Info: u/OMS8GlYNkgEJvfzn7dbWuIVljx8kAVvN9YZbIT6c190c6+uQ4WFJ7fNdnYEbjd95tMJ5TL+295nTLw0jbG3zjo+kEi58MH0nkYTfPfiMB7mW0gXOn8LSNopFYblgauPPyE0XGu0lnFg6i+2XTBa/fu4I+o7K43vOta1anp6umchJ7DND72hnE6Vt9Uz2rplRH4pZLIFMfphQB3xxbTlGQEvn/x4PTUAlE0tCUSR9f9OHvFK8CUMYsyFoKVRy8XpdtNcHLQTC86Z1ReKGGnx7sEvSh5WTXOE4DMGWvkav+dQfNAA5frh78n58imj4PXt0KN8hVOvRa93BmPeONmj6j1uBarBtSKOqaYoTFvKAU4WMBSicaUKUwOHnZWDGopjHqZA/PKLchrNXSongICTsqUpT37/jvQyfTlRAVT9LJp0aKFOleHYB3nNto7NKzr
+X-MS-Exchange-AntiSpam-MessageData: EzxOF2FQ+GmwE9ibs0o13Ycsfu+R3WRHMUVe5T8raJWfmqk3PzMDhdrCOOuBXtElnSujJrotNDkb84OhyBCox2/QgT7YJYttdlF9P/FpCLyZv05bGYhYTr2zgVUyWeC3aWQ9FOhVK6OjAAfFQoMF/A==
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0b22574-91fe-4b8f-c4d8-08d7c0365c3b
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2020 12:20:00.6910
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27a47d09-46f1-43e5-5177-08d7c0365d5a
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2020 12:20:02.5160
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aFEmq7kyZuoV/FO0wPmy/sF5gsO/D4UyyvRMgP9QZrAXQyHEc4nMhglYeYrOs+e4lUWpP0fy9KX6o97cLM5F0w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: HzqPNcpiguY0RScVMLCwLmJcUC/fMLZOnCbvjBXC31Nzi3HOQQsQ2Ww2Obgrk2rQP+F5ZyA2fyQCQRBEDYJITg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2718
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -96,181 +96,127 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Daniel Baluta <daniel.baluta@nxp.com>
 
-This patch introduces helpers support for multi PM domains.
-
-API consists of:
-
-1) dev_multi_pm_attach - powers up all PM domains associated with a given
-device. Because we can attach one PM domain per device, we create
-virtual devices (children of initial device) and associate PM domains
-one per virtual device.
-
-2) dev_multi_pm_detach - detaches all virtual devices from PM domains
-attached with.
+Use dev_multi_pm_attach / dev_multi_pm_detach instead of the hardcoded
+version.
 
 Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
 ---
- drivers/base/power/common.c | 93 +++++++++++++++++++++++++++++++++++++
- include/linux/pm_domain.h   | 19 ++++++++
- 2 files changed, 112 insertions(+)
+ sound/soc/sof/imx/imx8.c | 60 ++++++----------------------------------
+ 1 file changed, 9 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
-index bbddb267c2e6..6d1f142833b1 100644
---- a/drivers/base/power/common.c
-+++ b/drivers/base/power/common.c
-@@ -228,3 +228,96 @@ void dev_pm_domain_set(struct device *dev, struct dev_pm_domain *pd)
- 	device_pm_check_callbacks(dev);
- }
- EXPORT_SYMBOL_GPL(dev_pm_domain_set);
-+
-+/**
-+ * dev_multi_pm_attach - power up device associated power domains
-+ * @dev: The device used to lookup the PM domains
-+ *
-+ * Parse device's OF node to find all PM domains specifiers. For each power
-+ * domain found, create a virtual device and associate it with the
-+ * current power domain.
-+ *
-+ * This function should typically be invoked by a driver during the
-+ * probe phase, in the case its device requires power management through
-+ * multiple PM domains.
-+ *
-+ * Returns a pointer to @dev_multi_pm_domain_data if successfully attached PM
-+ * domains, NULL when the device doesn't need a PM domain or when single
-+ * power-domains exists for it, else an ERR_PTR() in case of
-+ * failures.
-+ */
-+struct dev_multi_pm_domain_data *dev_multi_pm_attach(struct device *dev)
-+{
-+	struct dev_multi_pm_domain_data *mpd, *retp;
-+	int num_domains;
-+	int i;
-+
-+	num_domains = of_count_phandle_with_args(dev->of_node, "power-domains",
-+						 "#power-domain-cells");
-+	if (num_domains < 2)
-+		return NULL;
-+
-+	mpd = devm_kzalloc(dev, GFP_KERNEL, sizeof(*mpd));
-+	if (!mpd)
-+		return ERR_PTR(-ENOMEM);
-+
-+	mpd->dev = dev;
-+	mpd->num_domains = num_domains;
-+
-+	mpd->virt_devs = devm_kmalloc_array(dev, mpd->num_domains,
-+					    sizeof(*mpd->virt_devs),
-+					    GFP_KERNEL);
-+	if (!mpd->virt_devs)
-+		return ERR_PTR(-ENOMEM);
-+
-+	mpd->links = devm_kmalloc_array(dev, mpd->num_domains,
-+					sizeof(*mpd->links), GFP_KERNEL);
-+	if (!mpd->links)
-+		return ERR_PTR(-ENOMEM);
-+
-+	for (i = 0; i < mpd->num_domains; i++) {
-+		mpd->virt_devs[i] = dev_pm_domain_attach_by_id(dev, i);
-+		if (IS_ERR(mpd->virt_devs[i])) {
-+			retp = (struct dev_multi_pm_domain_data *)
-+				mpd->virt_devs[i];
-+			goto exit_unroll_pm;
-+		}
-+		mpd->links[i] = device_link_add(dev, mpd->virt_devs[i],
-+						DL_FLAG_STATELESS |
-+						DL_FLAG_PM_RUNTIME |
-+						DL_FLAG_RPM_ACTIVE);
-+		if (!mpd->links[i]) {
-+			retp = ERR_PTR(-ENOMEM);
-+			dev_pm_domain_detach(mpd->virt_devs[i], false);
-+			goto exit_unroll_pm;
-+		}
-+	}
-+	return mpd;
-+
-+exit_unroll_pm:
-+	while (--i >= 0) {
-+		device_link_del(mpd->links[i]);
-+		dev_pm_domain_detach(mpd->virt_devs[i], false);
-+	}
-+
-+	return retp;
-+}
-+EXPORT_SYMBOL(dev_multi_pm_attach);
-+
-+/**
-+ * dev_multi_pm_detach - Detach a device from its PM domains.
-+ * Each multi power domain is attached to a virtual children device
-+ *
-+ * @mpd: multi power domains data, contains the association between
-+ * virtul device and PM domain
-+ */
-+void dev_multi_pm_detach(struct dev_multi_pm_domain_data *mpd)
-+{
-+	int i;
-+
-+	for (i = 0; i < mpd->num_domains; i++) {
-+		device_link_del(mpd->links[i]);
-+		dev_pm_domain_detach(mpd->virt_devs[i], false);
-+	}
-+}
-+EXPORT_SYMBOL(dev_multi_pm_detach);
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 9ec78ee53652..5bcb35150af2 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -183,6 +183,13 @@ struct generic_pm_domain_data {
- 	void *data;
+diff --git a/sound/soc/sof/imx/imx8.c b/sound/soc/sof/imx/imx8.c
+index b692752b2178..2e7635b697cf 100644
+--- a/sound/soc/sof/imx/imx8.c
++++ b/sound/soc/sof/imx/imx8.c
+@@ -51,10 +51,7 @@ struct imx8_priv {
+ 	struct imx_sc_ipc *sc_ipc;
+ 
+ 	/* Power domain handling */
+-	int num_domains;
+-	struct device **pd_dev;
+-	struct device_link **link;
+-
++	struct dev_multi_pm_domain_data *mpd;
  };
  
-+struct dev_multi_pm_domain_data {
-+	struct device *dev; /* parent device */
-+	struct device **virt_devs; /* virtual children links */
-+	struct device_link **links; /*  links parent <-> virtual children */
-+	int num_domains;
-+};
-+
- #ifdef CONFIG_PM_GENERIC_DOMAINS
- static inline struct generic_pm_domain_data *to_gpd_data(struct pm_domain_data *pdd)
- {
-@@ -369,18 +376,27 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
+ static void imx8_get_reply(struct snd_sof_dev *sdev)
+@@ -207,7 +204,6 @@ static int imx8_probe(struct snd_sof_dev *sdev)
+ 	struct resource res;
+ 	u32 base, size;
+ 	int ret = 0;
+-	int i;
  
- #ifdef CONFIG_PM
- int dev_pm_domain_attach(struct device *dev, bool power_on);
-+struct dev_multi_pm_domain_data *dev_multi_pm_attach(struct device *dev);
- struct device *dev_pm_domain_attach_by_id(struct device *dev,
- 					  unsigned int index);
- struct device *dev_pm_domain_attach_by_name(struct device *dev,
- 					    const char *name);
- void dev_pm_domain_detach(struct device *dev, bool power_off);
- int dev_pm_domain_start(struct device *dev);
-+void dev_multi_pm_detach(struct dev_multi_pm_domain_data *mpd);
- void dev_pm_domain_set(struct device *dev, struct dev_pm_domain *pd);
-+
- #else
- static inline int dev_pm_domain_attach(struct device *dev, bool power_on)
+ 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+@@ -218,45 +214,15 @@ static int imx8_probe(struct snd_sof_dev *sdev)
+ 	priv->sdev = sdev;
+ 
+ 	/* power up device associated power domains */
+-	priv->num_domains = of_count_phandle_with_args(np, "power-domains",
+-						       "#power-domain-cells");
+-	if (priv->num_domains < 0) {
+-		dev_err(sdev->dev, "no power-domains property in %pOF\n", np);
+-		return priv->num_domains;
+-	}
+-
+-	priv->pd_dev = devm_kmalloc_array(&pdev->dev, priv->num_domains,
+-					  sizeof(*priv->pd_dev), GFP_KERNEL);
+-	if (!priv->pd_dev)
+-		return -ENOMEM;
+-
+-	priv->link = devm_kmalloc_array(&pdev->dev, priv->num_domains,
+-					sizeof(*priv->link), GFP_KERNEL);
+-	if (!priv->link)
+-		return -ENOMEM;
+-
+-	for (i = 0; i < priv->num_domains; i++) {
+-		priv->pd_dev[i] = dev_pm_domain_attach_by_id(&pdev->dev, i);
+-		if (IS_ERR(priv->pd_dev[i])) {
+-			ret = PTR_ERR(priv->pd_dev[i]);
+-			goto exit_unroll_pm;
+-		}
+-		priv->link[i] = device_link_add(&pdev->dev, priv->pd_dev[i],
+-						DL_FLAG_STATELESS |
+-						DL_FLAG_PM_RUNTIME |
+-						DL_FLAG_RPM_ACTIVE);
+-		if (!priv->link[i]) {
+-			ret = -ENOMEM;
+-			dev_pm_domain_detach(priv->pd_dev[i], false);
+-			goto exit_unroll_pm;
+-		}
+-	}
++	priv->mpd = dev_multi_pm_attach(&pdev->dev);
++	if (IS_ERR(priv->mpd))
++		return PTR_ERR(priv->mpd);
+ 
+ 	ret = imx_scu_get_handle(&priv->sc_ipc);
+ 	if (ret) {
+ 		dev_err(sdev->dev, "Cannot obtain SCU handle (err = %d)\n",
+ 			ret);
+-		goto exit_unroll_pm;
++		goto exit_detach_pm;
+ 	}
+ 
+ 	priv->ipc_dev = platform_device_register_data(sdev->dev, "imx-dsp",
+@@ -264,7 +230,7 @@ static int imx8_probe(struct snd_sof_dev *sdev)
+ 						      pdev, sizeof(*pdev));
+ 	if (IS_ERR(priv->ipc_dev)) {
+ 		ret = PTR_ERR(priv->ipc_dev);
+-		goto exit_unroll_pm;
++		goto exit_detach_pm;
+ 	}
+ 
+ 	priv->dsp_ipc = dev_get_drvdata(&priv->ipc_dev->dev);
+@@ -328,26 +294,18 @@ static int imx8_probe(struct snd_sof_dev *sdev)
+ 
+ exit_pdev_unregister:
+ 	platform_device_unregister(priv->ipc_dev);
+-exit_unroll_pm:
+-	while (--i >= 0) {
+-		device_link_del(priv->link[i]);
+-		dev_pm_domain_detach(priv->pd_dev[i], false);
+-	}
+-
++exit_detach_pm:
++	dev_multi_pm_detach(priv->mpd);
+ 	return ret;
+ }
+ 
+ static int imx8_remove(struct snd_sof_dev *sdev)
  {
+ 	struct imx8_priv *priv = (struct imx8_priv *)sdev->private;
+-	int i;
+ 
+ 	platform_device_unregister(priv->ipc_dev);
+ 
+-	for (i = 0; i < priv->num_domains; i++) {
+-		device_link_del(priv->link[i]);
+-		dev_pm_domain_detach(priv->pd_dev[i], false);
+-	}
++	dev_multi_pm_detach(priv->mpd);
+ 
  	return 0;
  }
-+
-+struct dev_multi_pm_domain_data *dev_multi_pm_attach(struct device *dev)
-+{
-+	return NULL;
-+}
-+
- static inline struct device *dev_pm_domain_attach_by_id(struct device *dev,
- 							unsigned int index)
- {
-@@ -396,6 +412,9 @@ static inline int dev_pm_domain_start(struct device *dev)
- {
- 	return 0;
- }
-+
-+void dev_multi_pm_detach(struct dev_multi_pm_domain_data *mpd) {}
-+
- static inline void dev_pm_domain_set(struct device *dev,
- 				     struct dev_pm_domain *pd) {}
- #endif
 -- 
 2.17.1
 
