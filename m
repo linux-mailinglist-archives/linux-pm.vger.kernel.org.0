@@ -2,125 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA6B179030
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 13:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9D017903E
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Mar 2020 13:23:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729118AbgCDMUu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 07:20:50 -0500
-Received: from mail-ua1-f67.google.com ([209.85.222.67]:35374 "EHLO
-        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728969AbgCDMUu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 07:20:50 -0500
-Received: by mail-ua1-f67.google.com with SMTP id c4so527561uaq.2
-        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2020 04:20:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kqkG/bhqrYT0KI1bQ7LTANEUR/JJcWsfoTV7hOjxbYk=;
-        b=mJIGctIoq6J7/fX0YIeKjPMmUkNgZRPXylwKm2DvLr5ssq89k+ZxCUgm9DWAtg4VNN
-         pcEQ2mEv5P6qw7sb1i788ajaBrcAJPv2xZqD+qEoZE9PlKOjbsAMBVkDYat1tXguAsrb
-         5ZQ74b7neMNKy4b6+6MqegiUaWYxw2dCvAD6fdseLxkI45U26Usjl4O1VhDUAeXJiTZA
-         7CNDMG+szzAHk/0BaA1rOgTK7JlrQxqlJH+KI1AlsyJ9P/7MhfKho01LeOTmI7UVAGrd
-         wWYW9VD64wFvrclyNKKKAfPFB8dPthsPhdoBv0yYnbrmCWxmbij8pbPvAenawz+EshWP
-         OYdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kqkG/bhqrYT0KI1bQ7LTANEUR/JJcWsfoTV7hOjxbYk=;
-        b=TjV7I5F3t5Ed35AgNOvo95QI9S6luVxv/HLhlDuJ1g28qpBPoHKv2/k9cDMuKUhnSi
-         58AxWet8dtF6wrax2CaBYCKEyH0HQNGTT/VSR8qEgH5IZblgq1Y6ndg4T9PnB03R0GWD
-         R1VlujCWARWH1leTZVgJMy02cNnZFhbW4viaFRJr5zCsKbL+zKVeDPl8IH8iz+TN5z+b
-         DQFPc/bkQkpFzAzPgTQ3nH1pRlqnFT7vBiiFwMkWZmKxZJsdrRLz9mNf5lL/wHf7S5wP
-         cvubQ6xc+mPFxpaGqlnWQztURMMOWMTN8bK3XcVjIMUyoavnCKgsOsidQndjiwRmqscW
-         5JGQ==
-X-Gm-Message-State: ANhLgQ1nJPXWMseF+pE+xizoGfkfouIhesRj2bhIfCdikTwOKwgDaCus
-        RthDVIcV1kYHcBwBkxYI/niylnJA+bKRI95p4tZYlw==
-X-Google-Smtp-Source: ADFU+vsoYL2SwwLyTOmmzRjMZQmnCIyUFDxkpiyZH9m9IHmHIRtOrB+VwoBC0ztP1VD8t+WEykeA5UXfnN9itygk2jI=
-X-Received: by 2002:ab0:24d2:: with SMTP id k18mr1286564uan.104.1583324449448;
- Wed, 04 Mar 2020 04:20:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20200303203559.23995-1-ulf.hansson@linaro.org>
- <20200303203559.23995-4-ulf.hansson@linaro.org> <20200304121250.GD25004@bogus>
-In-Reply-To: <20200304121250.GD25004@bogus>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 4 Mar 2020 13:20:13 +0100
-Message-ID: <CAPDyKFo15UPXh5uGHa98Wgg+HHuo5D4cdEUucP9Yiw9JtLhKCw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] cpuidle: psci: Split psci_dt_cpu_init_idle()
-To:     Sudeep Holla <sudeep.holla@arm.com>
+        id S2387801AbgCDMXQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Mar 2020 07:23:16 -0500
+Received: from foss.arm.com ([217.140.110.172]:33616 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387776AbgCDMXQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 4 Mar 2020 07:23:16 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4C6331B;
+        Wed,  4 Mar 2020 04:23:15 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B76E3F534;
+        Wed,  4 Mar 2020 04:23:14 -0800 (PST)
+Date:   Wed, 4 Mar 2020 12:23:12 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Lina Iyer <ilina@codeaurora.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 4/4] cpuidle: psci: Allow WFI to be the only state for
+ the hierarchical topology
+Message-ID: <20200304122312.GE25004@bogus>
+References: <20200303203559.23995-1-ulf.hansson@linaro.org>
+ <20200303203559.23995-5-ulf.hansson@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200303203559.23995-5-ulf.hansson@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 4 Mar 2020 at 13:12, Sudeep Holla <sudeep.holla@arm.com> wrote:
+The $subject is bit confusing. IIUC, if there are no idle states to
+manage including hierarchical domain states you will not register the driver
+right ? If so, you are not allowing WFI to be the only state, hence my
+concern with $subject.
+
+On Tue, Mar 03, 2020 at 09:35:59PM +0100, Ulf Hansson wrote:
+> It's possible that only the WFI state is supported for the CPU, while also
+> a shared idle state exists for a group of CPUs.
 >
-> On Tue, Mar 03, 2020 at 09:35:58PM +0100, Ulf Hansson wrote:
-> > To make the code a bit more readable, but also to prepare some code to be
-> > re-used, let's move the OSI specific initialization out of the
-> > psci_dt_cpu_init_idle() and into a separate function.
-> >
-> > Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
+> When the hierarchical topology is used, the shared idle state may not be
+> compatible with arm,idle-state, rather with "domain-idle-state", which
+> makes dt_init_idle_driver() to return zero. This leads to that the
+> cpuidle-psci driver bails out during initialization, avoiding to register a
+> cpuidle driver and instead relies on the default architectural back-end
+> (called via cpu_do_idle()). In other words, the shared idle state becomes
+> unused.
 >
-> Not sure if this fixes anything but I am fine to have this if next one is
-> a real fix.
-
-Yep, that's what I had in mind as well.
-
+> Let's fix this behaviour, by allowing the dt_init_idle_driver() to return 0
+> and then continue with the initialization. If it turns out that the
+> hierarchical topology is used and we have some additional states to manage,
+> then continue with the cpuidle driver registration, otherwise bail out as
+> before.
 >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >
-> > Changes in v2:
-> >       - Adopted suggestions from Stephen to use IS_ERR_OR_NULL and
-> >       PTR_ERR_OR_ZERO, which further clarified the code.
-> >
-> > ---
-> >  drivers/cpuidle/cpuidle-psci.c | 46 ++++++++++++++++++++--------------
-> >  1 file changed, 27 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > index edd7a54ef0d3..bae9140a65a5 100644
-> > --- a/drivers/cpuidle/cpuidle-psci.c
-> > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > @@ -160,6 +160,29 @@ int __init psci_dt_parse_state_node(struct device_node *np, u32 *state)
-> >       return 0;
-> >  }
-> >
-> > +static int __init psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
-> > +                                         struct psci_cpuidle_data *data,
-> > +                                         unsigned int state_count, int cpu)
-> > +{
-> > +     /* Currently limit the hierarchical topology to be used in OSI mode. */
-> > +     if (!psci_has_osi_support())
-> > +             return 0;
-> > +
-> > +     data->dev = psci_dt_attach_cpu(cpu);
-> > +     if (IS_ERR_OR_NULL(data->dev))
-> > +             return PTR_ERR_OR_ZERO(data->dev);
-> > +
+> Reported-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
 >
-> This is what I was asking to do before this was merged when I meant to drop
-> if(data->dev) check. So happy to see it :)
-
-I probably didn't get you point well enough. Sorry.
-
+> Changes in v2:
+> 	- Convert the error code returned from psci_cpu_suspend_enter() into an
+> 	expected error code by cpuidle core.
 >
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/cpuidle/cpuidle-psci.c | 48 +++++++++++++++++++++-------------
+>  1 file changed, 30 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+> index bae9140a65a5..ae0fabec2742 100644
+> --- a/drivers/cpuidle/cpuidle-psci.c
+> +++ b/drivers/cpuidle/cpuidle-psci.c
+> @@ -56,16 +56,19 @@ static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
+>  	u32 *states = data->psci_states;
+>  	struct device *pd_dev = data->dev;
+>  	u32 state;
+> -	int ret;
+> +	int ret = 0;
+>
+>  	/* Do runtime PM to manage a hierarchical CPU toplogy. */
+>  	pm_runtime_put_sync_suspend(pd_dev);
+>
+>  	state = psci_get_domain_state();
+> -	if (!state)
+> +	if (!state && states)
+>  		state = states[idx];
+>
+> -	ret = psci_enter_state(idx, state);
+> +	if (state)
+> +		ret = psci_cpu_suspend_enter(state) ? -1 : idx;
+> +	else
+> +		cpu_do_idle();
 
-Thanks!
+May be, I haven't followed this completely yet, but I don't want to be
+in the position to replicated default arch idle hook. Just use the one
+that exist by simply not registering the driver.
 
-Kind regards
-Uffe
+--
+Regards,
+Sudeep
