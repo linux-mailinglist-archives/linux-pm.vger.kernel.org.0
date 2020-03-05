@@ -2,157 +2,284 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3890117A91C
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2020 16:43:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C49617AA41
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2020 17:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726887AbgCEPn2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Mar 2020 10:43:28 -0500
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:39291 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726007AbgCEPn1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Mar 2020 10:43:27 -0500
-Received: by mail-ua1-f66.google.com with SMTP id z26so2224719uap.6
-        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2020 07:43:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BtkP4rjLPJJ3tMCB0I86aLFGaPPlP5RT1g3Fl+k0ezY=;
-        b=lKqr2+6Y70nMAQIyJl5JRc7tIiLa+hzIz7tEvf/tovFCfmf+e7RuHwdMVi4tryYNTD
-         +pymGTN4XbCQi1CQ2PWP9jPf1sDURpvJEBqC59VhPJF1ZTtb8ifBnbcHDu7/o3b8UX+/
-         BupJMhndJtlKuYaGJ/ZOifRB1mOciw3bd+8KEN2jkk5w0PbDET9x7GDPdVZcHA4HMCSU
-         DIrYETeAQerh3c1CrVA3ipFhiuj7XLqCfmLKdZLc/gC2IxdYCTgy6CmtM3Qa7kLf6ltZ
-         yiKe1i/cC5h5GYiBTHxi3IJSLiLC9sGHsOuncMXK3UHEnqsauLAX3vSUQXR1vMznxLBR
-         Q4YA==
+        id S1726222AbgCEQM2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Mar 2020 11:12:28 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:60419 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726004AbgCEQM2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Mar 2020 11:12:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1583424746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RfAp+QEMnxTnSpjbGYRyc5CB4JP8k7vpqPIomYHh+V8=;
+        b=AbVKKSqmWy+ZiZyMOVaojV4+QqfSzg9ouz/xBchzX2qfErfWWucn0d6qi62b9ZfQ5S8wex
+        P60Hbc0T6t3MQfuIiiwz2Wt+oRCBmgo+HuMzw7XNfLFbxwrKRvNBoW3Hxfexw4ExEte3VD
+        yYQ59tMFDdNYN49qANugtkV6S26ysdE=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-189-JJCbMq2oP6WLd5J_3iUOiQ-1; Thu, 05 Mar 2020 11:12:21 -0500
+X-MC-Unique: JJCbMq2oP6WLd5J_3iUOiQ-1
+Received: by mail-qv1-f72.google.com with SMTP id g11so3326994qvl.3
+        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2020 08:12:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BtkP4rjLPJJ3tMCB0I86aLFGaPPlP5RT1g3Fl+k0ezY=;
-        b=sae8iZZXGHVkkI5ixJf2L7X7u/P8gi+lzsyZaw5gK/RwF2e5/tfMUy7jZtji2FDN6G
-         LBdLaGuVJvmJSE5tR7T3YYRY/5BrmzKXn+NE7fDSOhnqZ8Tx7zZ8J56U6Fm/7pTDxo5d
-         9wld9yH79ficbms6uAJK64B367mTJjpFdaMrs9k9aCG/uiMEWPSKcbQbMiPv0AhAu492
-         3g3AHVnVqBMQXyeDSfRWRRqhUMiM6WJs1jx7cs4t0aG9r87rJhoV4VdsxEbV52/t6am4
-         zBShVcucaqEzht1GxDANiuxdKk9ZmNbpY49S9lVUYM3ODOUvuYYP3S6sv2+E9X5fI8Rm
-         +vUQ==
-X-Gm-Message-State: ANhLgQ2wFyFQ4cjGioejg+hxUEIlWrPkJp5fRKMCEcWJY3YrVtQUyq/Q
-        eh/YQn1FOuvmTbldi7qC76hc0rNflvWfwKprGlm/nw==
-X-Google-Smtp-Source: ADFU+vtnAS2M6fsz0X4CPT/qujFk6wJUPdYM8Pmr5JuuT0heSqdLkpUK6njwODFUJ11mFbZK5GofJhtZiCjNvuUC940=
-X-Received: by 2002:ab0:7518:: with SMTP id m24mr4824318uap.60.1583423006775;
- Thu, 05 Mar 2020 07:43:26 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RfAp+QEMnxTnSpjbGYRyc5CB4JP8k7vpqPIomYHh+V8=;
+        b=G5/sSWIRc2Exh/SjZMdXXvkyQBtANb4Ck4pIZuU+u6EkeXrNh5ydSoLhPJ1BSH1Lg6
+         3iPQGDYM+oQtD/scGYyJ/1URGGn98Uw2OyllzM5In55gb+KBrpgYpCK3PzBnFFvhA0eu
+         rbt+VihrwS1dAYOzcni5YNA8/lRVvww04nwwYmS4rCwRIyTtbUcf5aYQiJmUjGx+eUYE
+         XsTwe/AXW0u4NAivwpyi+c/Yjk9BhrHPQmcSPvCM7p0Q37o00l0aVk8fQNN7YkMSlHWZ
+         QDNsyWRGMjRujateVy3bf+yu2KrGSJ6KuEBZ99PGRxvb9RJNqihyWjv2cxIuXR2CfFRj
+         PLiw==
+X-Gm-Message-State: ANhLgQ2ChVxi8kzMV8CamT0hI8Gyhq1YBJsFS51V7HGWTCgT2Kiw1UDh
+        8ysrIxZ/OkKJBwi+1fbxbidQQPq4rSGZ52qZmlcDWlyENG7rJguEfvSMYmStnpOiAftS0X8+ML7
+        XUjomxDGpJaKH8aaKp0pZtDS/+N79kPQGWWc=
+X-Received: by 2002:ac8:735a:: with SMTP id q26mr7887415qtp.286.1583424741120;
+        Thu, 05 Mar 2020 08:12:21 -0800 (PST)
+X-Google-Smtp-Source: ADFU+vtI0DaYbPJTTjYz+0cU0CzTU3WBaRpIc/MxzYtluJjxUhYaSvH7/RNYoOEGro4prZPyjY8QVzAQdKVHn5xeTbU=
+X-Received: by 2002:ac8:735a:: with SMTP id q26mr7887385qtp.286.1583424740750;
+ Thu, 05 Mar 2020 08:12:20 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1582528977.git.amit.kucheria@linaro.org>
- <59d24f8ec98e29d119c5cbdb2abe6d4644cc51cf.1582528977.git.amit.kucheria@linaro.org>
- <20200224184003.GA3607@bogus> <CAHLCerP1_xESMbLuSBsVz1XkrA0j_okbX+SxbefVSo4ttvX_fg@mail.gmail.com>
- <CAL_JsqK_8MbxwKb9D4U0Cfv1m61zHWku4hJwiLaeOO6wkS8WCQ@mail.gmail.com>
-In-Reply-To: <CAL_JsqK_8MbxwKb9D4U0Cfv1m61zHWku4hJwiLaeOO6wkS8WCQ@mail.gmail.com>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Thu, 5 Mar 2020 21:13:15 +0530
-Message-ID: <CAHLCerOeSx2hkB5QUhj_iK1sU=X9EWFLVgof2XsLhhy3CmbpNg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 3/3] dt-bindings: thermal: Add yaml bindings for
- thermal zones
-To:     Rob Herring <robh@kernel.org>
+References: <20200303101052.133631-1-kherbst@redhat.com> <20200304093324.GI2540@lahna.fi.intel.com>
+In-Reply-To: <20200304093324.GI2540@lahna.fi.intel.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Thu, 5 Mar 2020 17:11:57 +0100
+Message-ID: <CACO55ts7VGUJoSM_X_huZ0o68+P6SaWgFKbQzkw=-F+Kh5WfcA@mail.gmail.com>
+Subject: Re: [PATCH v6] pci: prevent putting nvidia GPUs into lower device
+ states on certain intel bridges
+To:     Mika Westerberg <mika.westerberg@intel.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lyude Paul <lyude@redhat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 5, 2020 at 9:08 PM Rob Herring <robh@kernel.org> wrote:
+On Wed, Mar 4, 2020 at 10:33 AM Mika Westerberg
+<mika.westerberg@intel.com> wrote:
 >
-> On Thu, Mar 5, 2020 at 6:50 AM Amit Kucheria <amit.kucheria@linaro.org> wrote:
-> >
-> > On Tue, Feb 25, 2020 at 12:10 AM Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Mon, 24 Feb 2020 12:55:37 +0530, Amit Kucheria wrote:
-> > > > As part of moving the thermal bindings to YAML, split it up into 3
-> > > > bindings: thermal sensors, cooling devices and thermal zones.
-> > > >
-> > > > The thermal-zone binding is a software abstraction to capture the
-> > > > properties of each zone - how often they should be checked, the
-> > > > temperature thresholds (trips) at which mitigation actions need to be
-> > > > taken and the level of mitigation needed at those thresholds.
-> > > >
-> > > > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> > > > ---
-> > > >  .../bindings/thermal/thermal-zones.yaml       | 302 ++++++++++++++++++
-> > > >  1 file changed, 302 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> > > >
-> > >
-> > > My bot found errors running 'make dt_binding_check' on your patch:
-> > >
-> > > Documentation/devicetree/bindings/display/simple-framebuffer.example.dts:21.16-37.11: Warning (chosen_node_is_root): /example-0/chosen: chosen node must be at root node
-> >
-> > This one isn't due to my patch, I believe.
+> Hi,
 >
-> Right, that's the one known warning...
+> On Tue, Mar 03, 2020 at 11:10:52AM +0100, Karol Herbst wrote:
+> > Fixes state transitions of Nvidia Pascal GPUs from D3cold into higher d=
+evice
+> > states.
 >
-> > > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/thermal-zones.example.dt.yaml: thermal-sensor@c263000: interrupt-names: ['uplow'] is too short
-> > > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/thermal-zones.example.dt.yaml: thermal-sensor@c263000: interrupts: [[0, 506, 4]] is too short
-> > > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/thermal-zones.example.dt.yaml: thermal-sensor@c265000: interrupt-names: ['uplow'] is too short
-> > > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/thermal-zones.example.dt.yaml: thermal-sensor@c265000: interrupts: [[0, 507, 4]] is too short
-> >
-> > Fixed. Just for my information, did the check somehow figure out that
-> > this (incomplete) example needed the qcom-tsens.yaml binding (based on
-> > compatible string?) and then apply those rules to throw this error?
+> I think it is good to explain bit more here why this fix is needed.
 >
-> Yes. And setting DT_SCHEMA_FILES did change that to only check with
-> the specified schema file. However, that's now changed in linux-next
-> such that examples are always checked by all schemas and
-> DT_SCHEMA_FILES just limits which bindings to build and check.
 
-DT_SCHEMA_FILES doesn't seem to take wildcards. Individual yaml files
-worked fine.
+is something like this fine?
 
-$ make -k -j`nproc` ARCH=arm64 CROSS_COMPILE="ccache
-aarch64-linux-gnu-" O=~/work/builds/build-aarch64/ dt_binding_check
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/thermal*.yaml
-make[1]: Entering directory '/home/amit/work/builds/build-aarch64'
-make[2]: Circular
-Documentation/devicetree/bindings/processed-schema.yaml <-
-Documentation/devicetree/bindings/thermal/thermal-sensor.example.dt.yaml
-dependency dropped.
-make[2]: Circular
-Documentation/devicetree/bindings/thermal/thermal-zones.example.dt.yaml
-<- Documentation/devicetree/bindings/processed-schema.yaml dependency
-dropped.
-make[2]: Circular
-Documentation/devicetree/bindings/thermal/thermal-cooling-devices.example.dt.yaml
-<- Documentation/devicetree/bindings/processed-schema.yaml dependency
-dropped.
-  SCHEMA  Documentation/devicetree/bindings/processed-schema.yaml
-Traceback (most recent call last):
-  File "/home/amit/.local/bin/dt-mk-schema", line 7, in <module>
-    exec(compile(f.read(), __file__, 'exec'))
-  File "/home/amit/work/sources/tools-dt-schema.git/tools/dt-mk-schema",
-line 32, in <module>
-    schemas = dtschema.process_schemas(args.schemas, core_schema=(not
-args.useronly))
-  File "/home/amit/work/sources/tools-dt-schema.git/dtschema/lib.py",
-line 475, in process_schemas
-    sch = process_schema(os.path.abspath(filename))
-  File "/home/amit/work/sources/tools-dt-schema.git/dtschema/lib.py",
-line 435, in process_schema
-    DTValidator.check_schema(schema)
-  File "/home/amit/work/sources/tools-dt-schema.git/dtschema/lib.py",
-line 582, in check_schema
-    meta_schema = cls.resolver.resolve_from_url(schema['$schema'])
-TypeError: list indices must be integers or slices, not str
-make[2]: *** [/home/amit/work/sources/linux-amit.git/Documentation/devicetree/bindings/Makefile:34:
-Documentation/devicetree/bindings/processed-schema.yaml] Error 1
-make[2]: Target '__build' not remade because of errors.
-make[1]: *** [/home/amit/work/sources/linux-amit.git/Makefile:1262:
-dt_binding_check] Error 2
-make[1]: Leaving directory '/home/amit/work/builds/build-aarch64'
-make: *** [Makefile:179: sub-make] Error 2
-make: Target 'dt_binding_check' not remade because of errors.
+Fixes the infamous 'runpm' bug many users are facing on Laptops with Nvidia
+Pascal GPUs by skipping PCI power state changes on the GPU.
+
+It's still unknown why this issue exists, but this is a reliable workaround
+and solves a very annoying issue for user having to choose between a
+crashing kernel or higher power consumption of their Laptops.
+
+> > v2: convert to pci_dev quirk
+> >     put a proper technical explanation of the issue as a in-code commen=
+t
+> > v3: disable it only for certain combinations of intel and nvidia hardwa=
+re
+> > v4: simplify quirk by setting flag on the GPU itself
+> > v5: restructure quirk to make it easier to add new IDs
+> >     fix whitespace issues
+> >     fix potential NULL pointer access
+> >     update the quirk documentation
+> > v6: move quirk into nouveau
+>
+> This information typically goes under the '---' line.
+>
+> > Signed-off-by: Karol Herbst <kherbst@redhat.com>
+> > Cc: Bjorn Helgaas <bhelgaas@google.com>
+> > Cc: Lyude Paul <lyude@redhat.com>
+> > Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+> > Cc: Mika Westerberg <mika.westerberg@intel.com>
+>
+> I have few minor comments but regardless,
+>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>
+> > Cc: linux-pci@vger.kernel.org
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: dri-devel@lists.freedesktop.org
+> > Cc: nouveau@lists.freedesktop.org
+> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=3D205623
+> > ---
+> >  drivers/gpu/drm/nouveau/nouveau_drm.c | 56 +++++++++++++++++++++++++++
+> >  drivers/pci/pci.c                     |  8 ++++
+> >  include/linux/pci.h                   |  1 +
+> >  3 files changed, 65 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/nouveau/nouveau_drm.c b/drivers/gpu/drm/no=
+uveau/nouveau_drm.c
+> > index 2cd83849600f..51d3a7ba7731 100644
+> > --- a/drivers/gpu/drm/nouveau/nouveau_drm.c
+> > +++ b/drivers/gpu/drm/nouveau/nouveau_drm.c
+> > @@ -618,6 +618,59 @@ nouveau_drm_device_fini(struct drm_device *dev)
+> >       kfree(drm);
+> >  }
+> >
+> > +/*
+> > + * On some Intel PCIe bridge controllers doing a
+> > + * D0 -> D3hot -> D3cold -> D0 sequence causes Nvidia GPUs to not reap=
+pear.
+> > + * Skipping the intermediate D3hot step seems to make it work again. T=
+hise is
+>                                                                         ^=
+^^^^
+> Thise -> This
+>
+> > + * probably caused by not meeting the expectation the involved AML cod=
+e has
+> > + * when the GPU is put into D3hot state before invoking it.
+> > + *
+> > + * This leads to various manifestations of this issue:
+> > + *  - AML code execution to power on the GPU hits an infinite loop (as=
+ the
+> > + *    code waits on device memory to change).
+> > + *  - kernel crashes, as all PCI reads return -1, which most code isn'=
+t able
+> > + *    to handle well enough.
+> > + *
+> > + * In all cases dmesg will contain at least one line like this:
+> > + * 'nouveau 0000:01:00.0: Refused to change power state, currently in =
+D3'
+> > + * followed by a lot of nouveau timeouts.
+> > + *
+> > + * In the \_SB.PCI0.PEG0.PG00._OFF code deeper down writes bit 0x80 to=
+ the not
+> > + * documented PCI config space register 0x248 of the Intel PCIe bridge
+> > + * controller (0x1901) in order to change the state of the PCIe link b=
+etween
+> > + * the PCIe port and the GPU. There are alternative code paths using o=
+ther
+> > + * registers, which seem to work fine (executed pre Windows 8):
+> > + *  - 0xbc bit 0x20 (publicly available documentation claims 'reserved=
+')
+> > + *  - 0xb0 bit 0x10 (link disable)
+> > + * Changing the conditions inside the firmware by poking into the rele=
+vant
+> > + * addresses does resolve the issue, but it seemed to be ACPI private =
+memory
+> > + * and not any device accessible memory at all, so there is no portabl=
+e way of
+> > + * changing the conditions.
+> > + * On a XPS 9560 that means bits [0,3] on \CPEX need to be cleared.
+> > + *
+> > + * The only systems where this behavior can be seen are hybrid graphic=
+s laptops
+> > + * with a secondary Nvidia Maxwell, Pascal or Turing GPU. Its unclear =
+wheather
+>                                                              ^^^         =
+^^^^^^^^
+> Its -> It's
+> wheather -> whether
+>
+> > + * this issue only occurs in combination with listed Intel PCIe bridge
+> > + * controllers and the mentioned GPUs or other devices as well.
+> > + *
+> > + * documentation on the PCIe bridge controller can be found in the
+> > + * "7th Generation Intel=C2=AE Processor Families for H Platforms Data=
+sheet Volume 2"
+> > + * Section "12 PCI Express* Controller (x16) Registers"
+> > + */
+> > +
+> > +static void quirk_broken_nv_runpm(struct pci_dev *dev)
+> > +{
+> > +     struct pci_dev *bridge =3D pci_upstream_bridge(dev);
+> > +
+> > +     if (!bridge || bridge->vendor !=3D PCI_VENDOR_ID_INTEL)
+> > +             return;
+> > +
+> > +     switch (bridge->device) {
+> > +     case 0x1901:
+> > +             dev->parent_d3cold =3D 1;
+>
+> I think it is better to add
+>
+>                 break;
+>
+> here.
+>
+> > +     }
+> > +}
+> > +
+> >  static int nouveau_drm_probe(struct pci_dev *pdev,
+> >                            const struct pci_device_id *pent)
+> >  {
+> > @@ -699,6 +752,7 @@ static int nouveau_drm_probe(struct pci_dev *pdev,
+> >       if (ret)
+> >               goto fail_drm_dev_init;
+> >
+> > +     quirk_broken_nv_runpm(pdev);
+> >       return 0;
+> >
+> >  fail_drm_dev_init:
+> > @@ -737,6 +791,8 @@ nouveau_drm_remove(struct pci_dev *pdev)
+> >  {
+> >       struct drm_device *dev =3D pci_get_drvdata(pdev);
+> >
+> > +     /* revert our workaround */
+> > +     pdev->parent_d3cold =3D false;
+> >       nouveau_drm_device_remove(dev);
+> >  }
+> >
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index 951099279192..6ece05723fa2 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -860,6 +860,14 @@ static int pci_raw_set_power_state(struct pci_dev =
+*dev, pci_power_t state)
+> >          || (state =3D=3D PCI_D2 && !dev->d2_support))
+> >               return -EIO;
+> >
+> > +     /*
+> > +      * Power management can be disabled for certain devices as they d=
+on't
+> > +      * come back up later on runtime_resume. We rely on platform mean=
+s to
+> > +      * cut power consumption instead (e.g. ACPI).
+> > +      */
+> > +     if (state !=3D PCI_D0 && dev->parent_d3cold)
+> > +             return 0;
+> > +
+> >       pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+> >       if (pmcsr =3D=3D (u16) ~0) {
+> >               pci_err(dev, "can't change power state from %s to %s (con=
+fig space inaccessible)\n",
+> > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > index 930fab293073..3e5938b91966 100644
+> > --- a/include/linux/pci.h
+> > +++ b/include/linux/pci.h
+> > @@ -340,6 +340,7 @@ struct pci_dev {
+> >       unsigned int    no_d3cold:1;    /* D3cold is forbidden */
+> >       unsigned int    bridge_d3:1;    /* Allow D3 for bridge */
+> >       unsigned int    d3cold_allowed:1;       /* D3cold is allowed by u=
+ser */
+> > +     unsigned int    parent_d3cold:1;        /* power manage the paren=
+t instead */
+>
+> Just to be consistent with the other comments, start with a capital
+> letter:
+>
+>         unsigned int    parent_d3cold:1;        /* Power manage the paren=
+t instead */
+>
+
