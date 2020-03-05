@@ -2,284 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C49617AA41
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2020 17:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5604317AA72
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2020 17:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726222AbgCEQM2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Mar 2020 11:12:28 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:60419 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726004AbgCEQM2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Mar 2020 11:12:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1583424746;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RfAp+QEMnxTnSpjbGYRyc5CB4JP8k7vpqPIomYHh+V8=;
-        b=AbVKKSqmWy+ZiZyMOVaojV4+QqfSzg9ouz/xBchzX2qfErfWWucn0d6qi62b9ZfQ5S8wex
-        P60Hbc0T6t3MQfuIiiwz2Wt+oRCBmgo+HuMzw7XNfLFbxwrKRvNBoW3Hxfexw4ExEte3VD
-        yYQ59tMFDdNYN49qANugtkV6S26ysdE=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-189-JJCbMq2oP6WLd5J_3iUOiQ-1; Thu, 05 Mar 2020 11:12:21 -0500
-X-MC-Unique: JJCbMq2oP6WLd5J_3iUOiQ-1
-Received: by mail-qv1-f72.google.com with SMTP id g11so3326994qvl.3
-        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2020 08:12:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RfAp+QEMnxTnSpjbGYRyc5CB4JP8k7vpqPIomYHh+V8=;
-        b=G5/sSWIRc2Exh/SjZMdXXvkyQBtANb4Ck4pIZuU+u6EkeXrNh5ydSoLhPJ1BSH1Lg6
-         3iPQGDYM+oQtD/scGYyJ/1URGGn98Uw2OyllzM5In55gb+KBrpgYpCK3PzBnFFvhA0eu
-         rbt+VihrwS1dAYOzcni5YNA8/lRVvww04nwwYmS4rCwRIyTtbUcf5aYQiJmUjGx+eUYE
-         XsTwe/AXW0u4NAivwpyi+c/Yjk9BhrHPQmcSPvCM7p0Q37o00l0aVk8fQNN7YkMSlHWZ
-         QDNsyWRGMjRujateVy3bf+yu2KrGSJ6KuEBZ99PGRxvb9RJNqihyWjv2cxIuXR2CfFRj
-         PLiw==
-X-Gm-Message-State: ANhLgQ2ChVxi8kzMV8CamT0hI8Gyhq1YBJsFS51V7HGWTCgT2Kiw1UDh
-        8ysrIxZ/OkKJBwi+1fbxbidQQPq4rSGZ52qZmlcDWlyENG7rJguEfvSMYmStnpOiAftS0X8+ML7
-        XUjomxDGpJaKH8aaKp0pZtDS/+N79kPQGWWc=
-X-Received: by 2002:ac8:735a:: with SMTP id q26mr7887415qtp.286.1583424741120;
-        Thu, 05 Mar 2020 08:12:21 -0800 (PST)
-X-Google-Smtp-Source: ADFU+vtI0DaYbPJTTjYz+0cU0CzTU3WBaRpIc/MxzYtluJjxUhYaSvH7/RNYoOEGro4prZPyjY8QVzAQdKVHn5xeTbU=
-X-Received: by 2002:ac8:735a:: with SMTP id q26mr7887385qtp.286.1583424740750;
- Thu, 05 Mar 2020 08:12:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20200303101052.133631-1-kherbst@redhat.com> <20200304093324.GI2540@lahna.fi.intel.com>
-In-Reply-To: <20200304093324.GI2540@lahna.fi.intel.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Thu, 5 Mar 2020 17:11:57 +0100
-Message-ID: <CACO55ts7VGUJoSM_X_huZ0o68+P6SaWgFKbQzkw=-F+Kh5WfcA@mail.gmail.com>
-Subject: Re: [PATCH v6] pci: prevent putting nvidia GPUs into lower device
- states on certain intel bridges
-To:     Mika Westerberg <mika.westerberg@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lyude Paul <lyude@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
+        id S1726170AbgCEQXZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Mar 2020 11:23:25 -0500
+Received: from foss.arm.com ([217.140.110.172]:50828 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725990AbgCEQXZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 5 Mar 2020 11:23:25 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B16D30E;
+        Thu,  5 Mar 2020 08:23:25 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8755F3F534;
+        Thu,  5 Mar 2020 08:23:23 -0800 (PST)
+Date:   Thu, 5 Mar 2020 16:23:21 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau <nouveau@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 4/4] cpuidle: psci: Allow WFI to be the only state for
+ the hierarchical topology
+Message-ID: <20200305162321.GB53631@bogus>
+References: <20200303203559.23995-1-ulf.hansson@linaro.org>
+ <20200303203559.23995-5-ulf.hansson@linaro.org>
+ <20200304122312.GE25004@bogus>
+ <CAPDyKFpcN-p6sKqB0ujHAY29qPSg7qpSjYGymPaJ4W8jgCKGcg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpcN-p6sKqB0ujHAY29qPSg7qpSjYGymPaJ4W8jgCKGcg@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 4, 2020 at 10:33 AM Mika Westerberg
-<mika.westerberg@intel.com> wrote:
+On Thu, Mar 05, 2020 at 03:17:42PM +0100, Ulf Hansson wrote:
+> On Wed, 4 Mar 2020 at 13:23, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > The $subject is bit confusing. IIUC, if there are no idle states to
+> > manage including hierarchical domain states you will not register the driver
+> > right ? If so, you are not allowing WFI to be the only state, hence my
+> > concern with $subject.
 >
-> Hi,
->
-> On Tue, Mar 03, 2020 at 11:10:52AM +0100, Karol Herbst wrote:
-> > Fixes state transitions of Nvidia Pascal GPUs from D3cold into higher d=
-evice
-> > states.
->
-> I think it is good to explain bit more here why this fix is needed.
+> I agree that's not so clear, but it wasn't easy to fit everything I
+> wanted to say in one line. :-)
 >
 
-is something like this fine?
+No worries, just wanted to clarified. Looking at the patch, lot of things
+got clarified but thought we can always improve.
 
-Fixes the infamous 'runpm' bug many users are facing on Laptops with Nvidia
-Pascal GPUs by skipping PCI power state changes on the GPU.
-
-It's still unknown why this issue exists, but this is a reliable workaround
-and solves a very annoying issue for user having to choose between a
-crashing kernel or higher power consumption of their Laptops.
-
-> > v2: convert to pci_dev quirk
-> >     put a proper technical explanation of the issue as a in-code commen=
-t
-> > v3: disable it only for certain combinations of intel and nvidia hardwa=
-re
-> > v4: simplify quirk by setting flag on the GPU itself
-> > v5: restructure quirk to make it easier to add new IDs
-> >     fix whitespace issues
-> >     fix potential NULL pointer access
-> >     update the quirk documentation
-> > v6: move quirk into nouveau
+> Is this below better and okay for you?
 >
-> This information typically goes under the '---' line.
->
-> > Signed-off-by: Karol Herbst <kherbst@redhat.com>
-> > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > Cc: Lyude Paul <lyude@redhat.com>
-> > Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> > Cc: Mika Westerberg <mika.westerberg@intel.com>
->
-> I have few minor comments but regardless,
->
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
->
-> > Cc: linux-pci@vger.kernel.org
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: dri-devel@lists.freedesktop.org
-> > Cc: nouveau@lists.freedesktop.org
-> > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=3D205623
-> > ---
-> >  drivers/gpu/drm/nouveau/nouveau_drm.c | 56 +++++++++++++++++++++++++++
-> >  drivers/pci/pci.c                     |  8 ++++
-> >  include/linux/pci.h                   |  1 +
-> >  3 files changed, 65 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/nouveau/nouveau_drm.c b/drivers/gpu/drm/no=
-uveau/nouveau_drm.c
-> > index 2cd83849600f..51d3a7ba7731 100644
-> > --- a/drivers/gpu/drm/nouveau/nouveau_drm.c
-> > +++ b/drivers/gpu/drm/nouveau/nouveau_drm.c
-> > @@ -618,6 +618,59 @@ nouveau_drm_device_fini(struct drm_device *dev)
-> >       kfree(drm);
-> >  }
-> >
-> > +/*
-> > + * On some Intel PCIe bridge controllers doing a
-> > + * D0 -> D3hot -> D3cold -> D0 sequence causes Nvidia GPUs to not reap=
-pear.
-> > + * Skipping the intermediate D3hot step seems to make it work again. T=
-hise is
->                                                                         ^=
-^^^^
-> Thise -> This
->
-> > + * probably caused by not meeting the expectation the involved AML cod=
-e has
-> > + * when the GPU is put into D3hot state before invoking it.
-> > + *
-> > + * This leads to various manifestations of this issue:
-> > + *  - AML code execution to power on the GPU hits an infinite loop (as=
- the
-> > + *    code waits on device memory to change).
-> > + *  - kernel crashes, as all PCI reads return -1, which most code isn'=
-t able
-> > + *    to handle well enough.
-> > + *
-> > + * In all cases dmesg will contain at least one line like this:
-> > + * 'nouveau 0000:01:00.0: Refused to change power state, currently in =
-D3'
-> > + * followed by a lot of nouveau timeouts.
-> > + *
-> > + * In the \_SB.PCI0.PEG0.PG00._OFF code deeper down writes bit 0x80 to=
- the not
-> > + * documented PCI config space register 0x248 of the Intel PCIe bridge
-> > + * controller (0x1901) in order to change the state of the PCIe link b=
-etween
-> > + * the PCIe port and the GPU. There are alternative code paths using o=
-ther
-> > + * registers, which seem to work fine (executed pre Windows 8):
-> > + *  - 0xbc bit 0x20 (publicly available documentation claims 'reserved=
-')
-> > + *  - 0xb0 bit 0x10 (link disable)
-> > + * Changing the conditions inside the firmware by poking into the rele=
-vant
-> > + * addresses does resolve the issue, but it seemed to be ACPI private =
-memory
-> > + * and not any device accessible memory at all, so there is no portabl=
-e way of
-> > + * changing the conditions.
-> > + * On a XPS 9560 that means bits [0,3] on \CPEX need to be cleared.
-> > + *
-> > + * The only systems where this behavior can be seen are hybrid graphic=
-s laptops
-> > + * with a secondary Nvidia Maxwell, Pascal or Turing GPU. Its unclear =
-wheather
->                                                              ^^^         =
-^^^^^^^^
-> Its -> It's
-> wheather -> whether
->
-> > + * this issue only occurs in combination with listed Intel PCIe bridge
-> > + * controllers and the mentioned GPUs or other devices as well.
-> > + *
-> > + * documentation on the PCIe bridge controller can be found in the
-> > + * "7th Generation Intel=C2=AE Processor Families for H Platforms Data=
-sheet Volume 2"
-> > + * Section "12 PCI Express* Controller (x16) Registers"
-> > + */
-> > +
-> > +static void quirk_broken_nv_runpm(struct pci_dev *dev)
-> > +{
-> > +     struct pci_dev *bridge =3D pci_upstream_bridge(dev);
-> > +
-> > +     if (!bridge || bridge->vendor !=3D PCI_VENDOR_ID_INTEL)
-> > +             return;
-> > +
-> > +     switch (bridge->device) {
-> > +     case 0x1901:
-> > +             dev->parent_d3cold =3D 1;
->
-> I think it is better to add
->
->                 break;
->
-> here.
->
-> > +     }
-> > +}
-> > +
-> >  static int nouveau_drm_probe(struct pci_dev *pdev,
-> >                            const struct pci_device_id *pent)
-> >  {
-> > @@ -699,6 +752,7 @@ static int nouveau_drm_probe(struct pci_dev *pdev,
-> >       if (ret)
-> >               goto fail_drm_dev_init;
-> >
-> > +     quirk_broken_nv_runpm(pdev);
-> >       return 0;
-> >
-> >  fail_drm_dev_init:
-> > @@ -737,6 +791,8 @@ nouveau_drm_remove(struct pci_dev *pdev)
-> >  {
-> >       struct drm_device *dev =3D pci_get_drvdata(pdev);
-> >
-> > +     /* revert our workaround */
-> > +     pdev->parent_d3cold =3D false;
-> >       nouveau_drm_device_remove(dev);
-> >  }
-> >
-> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > index 951099279192..6ece05723fa2 100644
-> > --- a/drivers/pci/pci.c
-> > +++ b/drivers/pci/pci.c
-> > @@ -860,6 +860,14 @@ static int pci_raw_set_power_state(struct pci_dev =
-*dev, pci_power_t state)
-> >          || (state =3D=3D PCI_D2 && !dev->d2_support))
-> >               return -EIO;
-> >
-> > +     /*
-> > +      * Power management can be disabled for certain devices as they d=
-on't
-> > +      * come back up later on runtime_resume. We rely on platform mean=
-s to
-> > +      * cut power consumption instead (e.g. ACPI).
-> > +      */
-> > +     if (state !=3D PCI_D0 && dev->parent_d3cold)
-> > +             return 0;
-> > +
-> >       pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> >       if (pmcsr =3D=3D (u16) ~0) {
-> >               pci_err(dev, "can't change power state from %s to %s (con=
-fig space inaccessible)\n",
-> > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > index 930fab293073..3e5938b91966 100644
-> > --- a/include/linux/pci.h
-> > +++ b/include/linux/pci.h
-> > @@ -340,6 +340,7 @@ struct pci_dev {
-> >       unsigned int    no_d3cold:1;    /* D3cold is forbidden */
-> >       unsigned int    bridge_d3:1;    /* Allow D3 for bridge */
-> >       unsigned int    d3cold_allowed:1;       /* D3cold is allowed by u=
-ser */
-> > +     unsigned int    parent_d3cold:1;        /* power manage the paren=
-t instead */
->
-> Just to be consistent with the other comments, start with a capital
-> letter:
->
->         unsigned int    parent_d3cold:1;        /* Power manage the paren=
-t instead */
+> "cpuidle: psci: Update condition when avoiding driver registration".
 >
 
+Definitely better than $subject :)
+
+> >
+> > On Tue, Mar 03, 2020 at 09:35:59PM +0100, Ulf Hansson wrote:
+> > > It's possible that only the WFI state is supported for the CPU, while also
+> > > a shared idle state exists for a group of CPUs.
+> > >
+> > > When the hierarchical topology is used, the shared idle state may not be
+> > > compatible with arm,idle-state, rather with "domain-idle-state", which
+> > > makes dt_init_idle_driver() to return zero. This leads to that the
+> > > cpuidle-psci driver bails out during initialization, avoiding to register a
+> > > cpuidle driver and instead relies on the default architectural back-end
+> > > (called via cpu_do_idle()). In other words, the shared idle state becomes
+> > > unused.
+> > >
+> > > Let's fix this behaviour, by allowing the dt_init_idle_driver() to return 0
+> > > and then continue with the initialization. If it turns out that the
+> > > hierarchical topology is used and we have some additional states to manage,
+> > > then continue with the cpuidle driver registration, otherwise bail out as
+> > > before.
+> > >
+> > > Reported-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> > > Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ---
+> > >
+> > > Changes in v2:
+> > >       - Convert the error code returned from psci_cpu_suspend_enter() into an
+> > >       expected error code by cpuidle core.
+> > >
+> > > ---
+> > >  drivers/cpuidle/cpuidle-psci.c | 48 +++++++++++++++++++++-------------
+> > >  1 file changed, 30 insertions(+), 18 deletions(-)
+> > >
+> > > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+> > > index bae9140a65a5..ae0fabec2742 100644
+> > > --- a/drivers/cpuidle/cpuidle-psci.c
+> > > +++ b/drivers/cpuidle/cpuidle-psci.c
+> > > @@ -56,16 +56,19 @@ static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
+> > >       u32 *states = data->psci_states;
+> > >       struct device *pd_dev = data->dev;
+> > >       u32 state;
+> > > -     int ret;
+> > > +     int ret = 0;
+> > >
+> > >       /* Do runtime PM to manage a hierarchical CPU toplogy. */
+> > >       pm_runtime_put_sync_suspend(pd_dev);
+> > >
+> > >       state = psci_get_domain_state();
+> > > -     if (!state)
+> > > +     if (!state && states)
+> > >               state = states[idx];
+> > >
+> > > -     ret = psci_enter_state(idx, state);
+> > > +     if (state)
+> > > +             ret = psci_cpu_suspend_enter(state) ? -1 : idx;
+> > > +     else
+> > > +             cpu_do_idle();
+> >
+> > May be, I haven't followed this completely yet, but I don't want to be
+> > in the position to replicated default arch idle hook. Just use the one
+> > that exist by simply not registering the driver.
+>
+> That doesn't work for the configuration I am solving.
+>
+> Assume this scenario: We have WFI and a domain/cluster idle state.
+> From the cpuidle governor point of view, it always selects the WFI
+> state, which means idx is zero.
+>
+
+OK. The only state that cluster can enter when CPUs are in WFI are
+cluster WFI and most hardware can handle it automatically. I don't see
+the need to do any extra work for that.
+
+> Then, after we have called pm_runtime_put_sync_suspend() a few lines
+> above, we may potentially have a "domain state" to use, instead of the
+> WFI state.
+>
+
+Are they any platforms with this potential "domain state" to use with
+CPU WFI. I want to understand this better.
+
+> In this case, if we would have called psci_enter_state(), that would
+> lead us to calling cpu_do_idle() from the __CPU_PM_CPU_IDLE_ENTER()
+> macro, becuase idx is zero. In other words, the domain state would
+> become unused.
+>
+
+For a domain state to become unused with WFI, it needs to be available
+and I am not 100% sure of that.
+
+> Hope this clarifies what goes on here?
+>
+
+Yes.
+
+--
+Regards,
+Sudeep
