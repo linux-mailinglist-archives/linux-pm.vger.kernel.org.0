@@ -2,84 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3F5179E4A
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2020 04:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E99817A0B2
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2020 08:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725810AbgCEDgQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Mar 2020 22:36:16 -0500
-Received: from mail-pf1-f174.google.com ([209.85.210.174]:41194 "EHLO
-        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725807AbgCEDgQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Mar 2020 22:36:16 -0500
-Received: by mail-pf1-f174.google.com with SMTP id z65so1558177pfz.8
-        for <linux-pm@vger.kernel.org>; Wed, 04 Mar 2020 19:36:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=rRJKrlBzP0EbQs9P4zGCM7CwADxAkqgF7137+PF1zgc=;
-        b=xCSsAfTByNZf/ufzn3gjUTfWksehvyWuxndz1H/lLxmkeUerJpExfxpZKsxJXhOiUU
-         SNHkGi4HTk165JkfyYR/KmxxkkyxovDfqcdT/gU6/RpELURCeryxZ4KYuleQlw4lNGha
-         8YqjWW3pz+xszIWVhiXteh/ZieVw2azr/781lbPunr8HuQ3C2Wt0fTJ20G1t8PC5yDvz
-         gFXU/Ou+bT13gTvsra9TIkLcdntRZZRhRb2nBhW/sfl/P19OWxpQ/sI5DTuTrMyck5W3
-         a8zV5dmKzEG4nV2Vwsq2dMjcEkhxpgPUq6GXePX2yVBD2sZ4ZLAAAfvi0kue1ZGa1xGK
-         F8gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=rRJKrlBzP0EbQs9P4zGCM7CwADxAkqgF7137+PF1zgc=;
-        b=iVf9Uju0QTxeM7qyzsFvjxC2wg22tbehX31/SJm9BNy1rd7F9mz4/I7wWIOyochA7o
-         jYI4KNg5raPVp/aUMK4m+9BVUIrqy9g705g+PzL/aM+51EIWTDPoPwJO1R+oq6O/zkxq
-         WwAnU8nCSlkZZ5jicpMM28Q08Q9qEfqwbGsxwrjMgLdMcZGaPGgsf0WYctLxbE2hSZ4K
-         320UzJDpnS3h4ghKdvaHP0gY0oY8NjtY5Fs8G1AoF1rVG6S1Gq6WBrdu7lPK4QjRwZVJ
-         4nIL7HTMa/6P/pYK1M9yZBXoxLyMyJ8nWWFlGz7seDprtGTdEXDuPDSGqpBUXMQMcVEK
-         f18A==
-X-Gm-Message-State: ANhLgQ0ZT76Yekn+47HO7f8U7zu90Uw9bKqCJZ6UwaEXIp3v4z8+zY02
-        LkaS4vK4ARREKVs7j5p5rbu/KGDMjoY=
-X-Google-Smtp-Source: ADFU+vt/qyK7p3F+r+cqK2AeVbGaHD1ejYTl64UxxNdW9cr8aeEl8NFfLtuT/J0SOVRAF5RsRTUrvQ==
-X-Received: by 2002:a63:7f09:: with SMTP id a9mr5379154pgd.375.1583379373514;
-        Wed, 04 Mar 2020 19:36:13 -0800 (PST)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id r13sm4040241pjp.14.2020.03.04.19.36.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 19:36:12 -0800 (PST)
-Message-ID: <5e6073ac.1c69fb81.fb0c5.be7c@mx.google.com>
-Date:   Wed, 04 Mar 2020 19:36:12 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726090AbgCEHuE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Mar 2020 02:50:04 -0500
+Received: from mga11.intel.com ([192.55.52.93]:62923 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725914AbgCEHuE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 5 Mar 2020 02:50:04 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Mar 2020 23:50:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,517,1574150400"; 
+   d="scan'208";a="234335912"
+Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.138.71]) ([10.249.138.71])
+  by orsmga008.jf.intel.com with ESMTP; 04 Mar 2020 23:50:01 -0800
+Subject: Re: [cpufreq] 909c0e9cc1: fwq.fwq.med 210.0% improvement
+To:     kernel test robot <rong.a.chen@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org, lkp@lists.01.org,
+        Rafael Wysocki <rafael@kernel.org>
+References: <20200305013509.GF5972@shao2-debian>
+From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+Message-ID: <951b0986-bb35-d9a5-1639-0a8cdb3dcd04@intel.com>
+Date:   Thu, 5 Mar 2020 08:50:00 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.6-rc4-67-ga76a126302eb
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-Subject: pm/testing sleep: 1 runs, 0 regressions (v5.6-rc4-67-ga76a126302eb)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20200305013509.GF5972@shao2-debian>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 1 runs, 0 regressions (v5.6-rc4-67-ga76a126302eb)
+On 3/5/2020 2:35 AM, kernel test robot wrote:
+> Greeting,
+>
+> FYI, we noticed a 210.0% improvement of fwq.fwq.med due to commit:
 
-Test results summary
---------------------
-
-run | platform         | arch  | lab           | compiler | defconfig | res=
-ults
-----+------------------+-------+---------------+----------+-----------+----=
-----
-1   | rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig | 11/=
-11  =
+Well, that sounds impressive. :-)
 
 
+>
+> commit: 909c0e9cc11ba39fa5a660583b25c2431cf54deb ("cpufreq: intel_pstate: Use passive mode by default without HWP")
+> https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git intel_pstate-passive
+>
+> in testcase: fwq
+> on test machine: 16 threads Intel(R) Xeon(R) CPU D-1541 @ 2.10GHz with 48G memory
+> with following parameters:
+>
+> 	nr_task: 100%
+> 	samples: 100000ss
+> 	iterations: 18x
+> 	cpufreq_governor: powersave
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.6-rc4-67-ga76a126302eb
-  URL:      git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.g=
-it
-  SHA:      a76a126302eb84e78d7d3fc9c7e69487fb97e8e4=20
+The governor should be schedutil, though, unless it is explicitly set to 
+powersave in the test environment.
+
+Is that the case?
+
+
