@@ -2,103 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAC217A200
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2020 10:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E98417A31F
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2020 11:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725880AbgCEJHX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Mar 2020 04:07:23 -0500
-Received: from foss.arm.com ([217.140.110.172]:45250 "EHLO foss.arm.com"
+        id S1725897AbgCEK3r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Mar 2020 05:29:47 -0500
+Received: from sauhun.de ([88.99.104.3]:46070 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727121AbgCEJHV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 5 Mar 2020 04:07:21 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8C7634B2;
-        Thu,  5 Mar 2020 01:07:20 -0800 (PST)
-Received: from e108754-lin.cambridge.arm.com (e108754-lin.cambridge.arm.com [10.1.198.53])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 117C43F534;
-        Thu,  5 Mar 2020 01:07:17 -0800 (PST)
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-        maz@kernel.org, suzuki.poulose@arm.com, sudeep.holla@arm.com,
-        lukasz.luba@arm.com, valentin.schneider@arm.com,
-        dietmar.eggemann@arm.com, rjw@rjwysocki.net,
-        pkondeti@codeaurora.org, ionela.voinescu@arm.com
-Cc:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v6 7/7] clocksource/drivers/arm_arch_timer: validate arch_timer_rate
-Date:   Thu,  5 Mar 2020 09:06:27 +0000
-Message-Id: <20200305090627.31908-8-ionela.voinescu@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200305090627.31908-1-ionela.voinescu@arm.com>
-References: <20200305090627.31908-1-ionela.voinescu@arm.com>
+        id S1725877AbgCEK3r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 5 Mar 2020 05:29:47 -0500
+Received: from localhost (p54B330C6.dip0.t-ipconnect.de [84.179.48.198])
+        by pokefinder.org (Postfix) with ESMTPSA id 2827D2C1F28;
+        Thu,  5 Mar 2020 11:29:45 +0100 (CET)
+Date:   Thu, 5 Mar 2020 11:29:44 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH v2] MAINTAINERS: Add entry for Renesas R-Car thermal
+ drivers
+Message-ID: <20200305102944.GB1079@ninjato>
+References: <20200305012721.425330-1-niklas.soderlund@ragnatech.se>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uZ3hkaAS1mZxFaxD"
+Content-Disposition: inline
+In-Reply-To: <20200305012721.425330-1-niklas.soderlund@ragnatech.se>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Using an arch timer with a frequency of less than 1MHz can potentially
-result in incorrect functionality in systems that assume a reasonable
-rate of the arch timer of 1 to 50MHz, described as typical in the
-architecture specification.
 
-Therefore, warn if the arch timer rate is below 1MHz, which is
-considered atypical and worth emphasizing.
+--uZ3hkaAS1mZxFaxD
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Suggested-by: Valentin Schneider <valentin.schneider@arm.com>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>
----
- drivers/clocksource/arm_arch_timer.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+On Thu, Mar 05, 2020 at 02:27:21AM +0100, Niklas S=C3=B6derlund wrote:
+> From: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
+>=20
+> Add an entry to make myself a maintainer of the Renesas R-Car thermal
+> drivers.
+>=20
+> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.=
+se>
+> Acked-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
-index 9a5464c625b4..4faa930eabf8 100644
---- a/drivers/clocksource/arm_arch_timer.c
-+++ b/drivers/clocksource/arm_arch_timer.c
-@@ -885,6 +885,17 @@ static int arch_timer_starting_cpu(unsigned int cpu)
- 	return 0;
- }
- 
-+static int validate_timer_rate(void)
-+{
-+	if (!arch_timer_rate)
-+		return -EINVAL;
-+
-+	/* Arch timer frequency < 1MHz can cause trouble */
-+	WARN_ON(arch_timer_rate < 1000000);
-+
-+	return 0;
-+}
-+
- /*
-  * For historical reasons, when probing with DT we use whichever (non-zero)
-  * rate was probed first, and don't verify that others match. If the first node
-@@ -900,7 +911,7 @@ static void arch_timer_of_configure_rate(u32 rate, struct device_node *np)
- 		arch_timer_rate = rate;
- 
- 	/* Check the timer frequency. */
--	if (arch_timer_rate == 0)
-+	if (validate_timer_rate())
- 		pr_warn("frequency not available\n");
- }
- 
-@@ -1594,9 +1605,10 @@ static int __init arch_timer_acpi_init(struct acpi_table_header *table)
- 	 * CNTFRQ value. This *must* be correct.
- 	 */
- 	arch_timer_rate = arch_timer_get_cntfrq();
--	if (!arch_timer_rate) {
-+	ret = validate_timer_rate();
-+	if (ret) {
- 		pr_err(FW_BUG "frequency not available.\n");
--		return -EINVAL;
-+		return ret;
- 	}
- 
- 	arch_timer_uses_ppi = arch_timer_select_ppi();
--- 
-2.17.1
+Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
+
+--uZ3hkaAS1mZxFaxD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5g1JQACgkQFA3kzBSg
+KbajlQ//b4MNrVjNMK4uIbG1cHHevQCpPHow3g2p9EY8p8M24cjL+KrwH1Wt0Kun
+IBqSlhNIhHc5wgDgS7PU/8z4h/gFAvtZ9xZcvF8seQVBosPwo1nJ7BXRrBn48m4h
+WVEiai6AKkQcYK4mBc9sbWfEYkQX8vqy9iAgRVTlDutZ2wwRGWQ47YeAsqiboMu/
+r7NiWPcuWNtAM2rAweP+FAfabTFMjQksrMg6ObF6U00RGghFIVbppRNjkzIhvq4R
+o+Z6QseSbxUfF4mkse8w7YUMXCRrqC8XYgU0Ax1boRBi8Ktlbpzw/P/aQegbB1dO
+oK3/rbkVd6BLWyi9DbtqUwgHBdhaHhDZdkGnduh4YZ6yq4qDzrOpAYR59+4Ym9n7
+ZF7ijQ5BqlvLE6k0X2IN4PnNkk0gQEAMBfxe9CsxOVgxFshEDMeP7CS/WU5ti7AZ
+pcNU1fjeq2LIPCCL27tN7G+H8Vtz1dVqzq8EWEtsVn04cP2Y7aFmOmsc8O5co3Ti
+Dk1yT43OhhsiLqUljpAZztohAWRcRUOMnywqf3PYhycvgPGtN76VLezYspXWUC6Z
+v0fMLY330FjBRqh/INoEWObjNICJf8/GzG+dnsHqm31F+v/LlXPZADR70EvWY/v8
+WqHQqWeY0DK2xXi1o8v5yLcEsOGeSfLQy6IJ8uf7wHzWOK/8pVk=
+=ZmPk
+-----END PGP SIGNATURE-----
+
+--uZ3hkaAS1mZxFaxD--
