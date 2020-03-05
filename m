@@ -2,78 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E98417A31F
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2020 11:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B5D17A341
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Mar 2020 11:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725897AbgCEK3r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Mar 2020 05:29:47 -0500
-Received: from sauhun.de ([88.99.104.3]:46070 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725877AbgCEK3r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 5 Mar 2020 05:29:47 -0500
-Received: from localhost (p54B330C6.dip0.t-ipconnect.de [84.179.48.198])
-        by pokefinder.org (Postfix) with ESMTPSA id 2827D2C1F28;
-        Thu,  5 Mar 2020 11:29:45 +0100 (CET)
-Date:   Thu, 5 Mar 2020 11:29:44 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH v2] MAINTAINERS: Add entry for Renesas R-Car thermal
- drivers
-Message-ID: <20200305102944.GB1079@ninjato>
-References: <20200305012721.425330-1-niklas.soderlund@ragnatech.se>
+        id S1726874AbgCEKen (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Mar 2020 05:34:43 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:45765 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727002AbgCEKem (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Mar 2020 05:34:42 -0500
+Received: by mail-lf1-f67.google.com with SMTP id b13so4144846lfb.12
+        for <linux-pm@vger.kernel.org>; Thu, 05 Mar 2020 02:34:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=fz2DAL/hCVOBzgx+g45rdprPzuuFcQsUW1ZHNo4nDuWKCX/fmtcJFi6lbSs9P/RfJA
+         lAVCHt1fNQbO92SbHey4yazD8D+BRVnEqK7PVKp1rcMy40FqhDMG89bJ58GSzMbwvj8U
+         zAnHbCvHz8cMGM9KEggtHMrJgl6JBjlHSjxVfYCRhwYPKx+Jjq/D+Io2Qn9ywDnb1vG6
+         OscJGDR+ktAt1dSFKcBwqG0UklQUo5kR+xK1xD7ZN4ey+k79Dp/cQzpwPp4ZcFKOa/hp
+         HQXr9qb2tQ0y+avLLK+wgv/3Axz+CmJlkglRa4MPyv4tObLkJ7AkbgA7LI04c8TOXAVI
+         wgbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=TY0ouYWZJT6ZzCX+vMnbHgDsWc6sG2v4gDPXs7HRI4cj20+HCevGuEDiGV0R305eXU
+         cGOyDRAPgHlAfxRscaGINjwGrs0HmFrEEarmf0Q9+DOEBaKz4c0M8xZQVLuS7U8KkZJo
+         hoBSGdealVy8IUpkuOlskw3yP4sz4lFKaekyTrN0LIO3Ld7INUaifcPQAGpcxX6ZL9QY
+         ETpI3WOtdvLvmXbT4GRcs/uPallsygDay/T5tsnX+pVSACJ9Q7sxslukqcSlG4J1u08i
+         cEFGontJtD/inhCFBs3temr5SWQJbHIE0s26zsgjP+i4OR1Kh1ffyUSs13bFmGQUqY2q
+         PSsg==
+X-Gm-Message-State: ANhLgQ3/5cljgtgkBBaRI9QvRf3GpWA+6p2vkVSfDSjPq5rtH6TQW/rV
+        xJSEXXGQZVOUHr2Ejsci6IPyZjAfCXbwLMNM6To=
+X-Google-Smtp-Source: ADFU+vt4p78g3SCPLp2SkhMI2bIlerfed0N6TLid+L8CMxk399v6WJ1kSPdTuUyeuRHmX7GoHE72hDaaexbZ9WYxFUU=
+X-Received: by 2002:a19:c714:: with SMTP id x20mr5096973lff.107.1583404479393;
+ Thu, 05 Mar 2020 02:34:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uZ3hkaAS1mZxFaxD"
-Content-Disposition: inline
-In-Reply-To: <20200305012721.425330-1-niklas.soderlund@ragnatech.se>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:ab3:5d10:0:0:0:0:0 with HTTP; Thu, 5 Mar 2020 02:34:38 -0800 (PST)
+Reply-To: ayishagddafio@mail.ru
+From:   AISHA GADDAFI <mahasaliou4444@gmail.com>
+Date:   Thu, 5 Mar 2020 02:34:38 -0800
+Message-ID: <CAKHB8qf7CPHeUuxPD-D07960Jx9qxdLt6hBH1AJUj0AYDreUzA@mail.gmail.com>
+Subject: Lieber Freund (Assalamu Alaikum),?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+--=20
+Lieber Freund (Assalamu Alaikum),
 
---uZ3hkaAS1mZxFaxD
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
+Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
+Mutter und eine Witwe
+mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
+hen
+Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
 
-On Thu, Mar 05, 2020 at 02:27:21AM +0100, Niklas S=C3=B6derlund wrote:
-> From: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
->=20
-> Add an entry to make myself a maintainer of the Renesas R-Car thermal
-> drivers.
->=20
-> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.=
-se>
-> Acked-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
+f=C3=BCnfhunderttausend
+United State Dollar ($ 27.500.000.00) und ich brauche eine
+vertrauensw=C3=BCrdige Investition
+Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
+jedoch
+M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
+von
+Investitionsprojekten in Ihrem Land
+Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
+bauen.
 
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
+n und
+Unternehmensgewinn zu verhandeln
+Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
 
+Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
+antworten Sie bitte dringend
+Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
+.
 
---uZ3hkaAS1mZxFaxD
-Content-Type: application/pgp-signature; name="signature.asc"
+Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
+esse (
+ayishagddafio@mail.ru ) zur weiteren Diskussion.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5g1JQACgkQFA3kzBSg
-KbajlQ//b4MNrVjNMK4uIbG1cHHevQCpPHow3g2p9EY8p8M24cjL+KrwH1Wt0Kun
-IBqSlhNIhHc5wgDgS7PU/8z4h/gFAvtZ9xZcvF8seQVBosPwo1nJ7BXRrBn48m4h
-WVEiai6AKkQcYK4mBc9sbWfEYkQX8vqy9iAgRVTlDutZ2wwRGWQ47YeAsqiboMu/
-r7NiWPcuWNtAM2rAweP+FAfabTFMjQksrMg6ObF6U00RGghFIVbppRNjkzIhvq4R
-o+Z6QseSbxUfF4mkse8w7YUMXCRrqC8XYgU0Ax1boRBi8Ktlbpzw/P/aQegbB1dO
-oK3/rbkVd6BLWyi9DbtqUwgHBdhaHhDZdkGnduh4YZ6yq4qDzrOpAYR59+4Ym9n7
-ZF7ijQ5BqlvLE6k0X2IN4PnNkk0gQEAMBfxe9CsxOVgxFshEDMeP7CS/WU5ti7AZ
-pcNU1fjeq2LIPCCL27tN7G+H8Vtz1dVqzq8EWEtsVn04cP2Y7aFmOmsc8O5co3Ti
-Dk1yT43OhhsiLqUljpAZztohAWRcRUOMnywqf3PYhycvgPGtN76VLezYspXWUC6Z
-v0fMLY330FjBRqh/INoEWObjNICJf8/GzG+dnsHqm31F+v/LlXPZADR70EvWY/v8
-WqHQqWeY0DK2xXi1o8v5yLcEsOGeSfLQy6IJ8uf7wHzWOK/8pVk=
-=ZmPk
------END PGP SIGNATURE-----
-
---uZ3hkaAS1mZxFaxD--
+Freundliche Gr=C3=BC=C3=9Fe
+Frau Aisha Al-Qaddafi
