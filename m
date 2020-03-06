@@ -2,154 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B5917BC32
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 12:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C358E17BC4B
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 13:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbgCFLxu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Mar 2020 06:53:50 -0500
-Received: from foss.arm.com ([217.140.110.172]:60272 "EHLO foss.arm.com"
+        id S1726182AbgCFMGu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Mar 2020 07:06:50 -0500
+Received: from foss.arm.com ([217.140.110.172]:60366 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726026AbgCFLxu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 6 Mar 2020 06:53:50 -0500
+        id S1726162AbgCFMGu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 6 Mar 2020 07:06:50 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4756F31B;
-        Fri,  6 Mar 2020 03:53:49 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF38D31B;
+        Fri,  6 Mar 2020 04:06:49 -0800 (PST)
 Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EFEAA3F6C4;
-        Fri,  6 Mar 2020 03:53:46 -0800 (PST)
-Date:   Fri, 6 Mar 2020 11:53:41 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A8CC3F6C4;
+        Fri,  6 Mar 2020 04:06:48 -0800 (PST)
+Date:   Fri, 6 Mar 2020 12:06:46 +0000
 From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-        maz@kernel.org, suzuki.poulose@arm.com, lukasz.luba@arm.com,
-        valentin.schneider@arm.com, dietmar.eggemann@arm.com,
-        rjw@rjwysocki.net, pkondeti@codeaurora.org, peterz@infradead.org,
-        mingo@redhat.com, vincent.guittot@linaro.org,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 6/7] arm64: use activity monitors for frequency
- invariance
-Message-ID: <20200306115341.GA44221@bogus>
-References: <20200305090627.31908-1-ionela.voinescu@arm.com>
- <20200305090627.31908-7-ionela.voinescu@arm.com>
+To:     Benjamin Gaignard <benjamin.gaignard@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 4/4] cpuidle: psci: Allow WFI to be the only state for
+ the hierarchical topology
+Message-ID: <20200306120646.GB44221@bogus>
+References: <20200303203559.23995-1-ulf.hansson@linaro.org>
+ <20200303203559.23995-5-ulf.hansson@linaro.org>
+ <20200304122312.GE25004@bogus>
+ <CAPDyKFpcN-p6sKqB0ujHAY29qPSg7qpSjYGymPaJ4W8jgCKGcg@mail.gmail.com>
+ <20200305162321.GB53631@bogus>
+ <CAPDyKFogjPG+mRsfPaxN7RjB7TQL9=qHNzA=K_t0F6M6Q9-TuA@mail.gmail.com>
+ <20200306100431.GA16541@bogus>
+ <CA+M3ks764moVU2h9iZJuN6B-e4wBUMymBfPnob_zraf50xqezA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20200305090627.31908-7-ionela.voinescu@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+M3ks764moVU2h9iZJuN6B-e4wBUMymBfPnob_zraf50xqezA@mail.gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 05, 2020 at 09:06:26AM +0000, Ionela Voinescu wrote:
-> The Frequency Invariance Engine (FIE) is providing a frequency
-> scaling correction factor that helps achieve more accurate
-> load-tracking.
+On Fri, Mar 06, 2020 at 11:47:40AM +0100, Benjamin Gaignard wrote:
+> Le ven. 6 mars 2020 à 11:04, Sudeep Holla <sudeep.holla@arm.com> a écrit :
+> >
+> > On Fri, Mar 06, 2020 at 10:28:10AM +0100, Ulf Hansson wrote:
+> > > On Thu, 5 Mar 2020 at 17:23, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > > >
+> >
+> > [...]
+> >
+> > > > OK. The only state that cluster can enter when CPUs are in WFI are
+> > > > cluster WFI and most hardware can handle it automatically. I don't see
+> > > > the need to do any extra work for that.
+> > >
+> > > This isn't about cluster WFI, but about deeper cluster states, such as
+> > > a cluster-clock-gated-state and a cluster-power-off-state. It's an ST
+> > > platform, which Benjamin is working on.
+> > >
+> >
+> > Then definitely something is completely wrong. You can't enter deeper
+> > cluster states(clock-gated and power-off to be specific) with CPU in
+> > just WFI state. So, if the attempt here is to enter those states, I
+> > disagree with the change.
+> >
+> > Benjamin, please share the complete hierarchical topology for your platform.
 >
-> So far, for arm and arm64 platforms, this scale factor has been
-> obtained based on the ratio between the current frequency and the
-> maximum supported frequency recorded by the cpufreq policy. The
-> setting of this scale factor is triggered from cpufreq drivers by
-> calling arch_set_freq_scale. The current frequency used in computation
-> is the frequency requested by a governor, but it may not be the
-> frequency that was implemented by the platform.
->
-> This correction factor can also be obtained using a core counter and a
-> constant counter to get information on the performance (frequency based
-> only) obtained in a period of time. This will more accurately reflect
-> the actual current frequency of the CPU, compared with the alternative
-> implementation that reflects the request of a performance level from
-> the OS.
->
-> Therefore, implement arch_scale_freq_tick to use activity monitors, if
-> present, for the computation of the frequency scale factor.
->
-> The use of AMU counters depends on:
->  - CONFIG_ARM64_AMU_EXTN - depents on the AMU extension being present
->  - CONFIG_CPU_FREQ - the current frequency obtained using counter
->    information is divided by the maximum frequency obtained from the
->    cpufreq policy.
->
-> While it is possible to have a combination of CPUs in the system with
-> and without support for activity monitors, the use of counters for
-> frequency invariance is only enabled for a CPU if all related CPUs
-> (CPUs in the same frequency domain) support and have enabled the core
-> and constant activity monitor counters. In this way, there is a clear
-> separation between the policies for which arch_set_freq_scale (cpufreq
-> based FIE) is used, and the policies for which arch_scale_freq_tick
-> (counter based FIE) is used to set the frequency scale factor. For
-> this purpose, a late_initcall_sync is registered to trigger validation
-> work for policies that will enable or disable the use of AMU counters
-> for frequency invariance. If CONFIG_CPU_FREQ is not defined, the use
-> of counters is enabled on all CPUs only if all possible CPUs correctly
-> support the necessary counters.
->
-> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  arch/arm64/include/asm/topology.h |   9 ++
->  arch/arm64/kernel/cpufeature.c    |   4 +
->  arch/arm64/kernel/topology.c      | 180 ++++++++++++++++++++++++++++++
->  drivers/base/arch_topology.c      |  12 ++
->  include/linux/arch_topology.h     |   2 +
->  5 files changed, 207 insertions(+)
->
+> The platform is stm32mp157 SoC which embedded two Cortex A7 in one cluster.
 
-[...]
+Hang on a minute, is this the same platform where you wanted high
+resolution timer and were hacking moving dirty tricks around[1]. Now I think
+you have landed here.
 
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 6119e11a9f95..8d63673c1689 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -21,6 +21,10 @@
->  #include <linux/sched.h>
->  #include <linux/smp.h>
->
-> +__weak bool arch_freq_counters_available(struct cpumask *cpus)
-> +{
-> +	return false;
-> +}
->  DEFINE_PER_CPU(unsigned long, freq_scale) = SCHED_CAPACITY_SCALE;
->
->  void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
-> @@ -29,6 +33,14 @@ void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
->  	unsigned long scale;
->  	int i;
->
-> +	/*
-> +	 * If the use of counters for FIE is enabled, just return as we don't
-> +	 * want to update the scale factor with information from CPUFREQ.
-> +	 * Instead the scale factor will be updated from arch_scale_freq_tick.
-> +	 */
-> +	if (arch_freq_counters_available(cpus))
-> +		return;
-> +
->  	scale = (cur_freq << SCHED_CAPACITY_SHIFT) / max_freq;
->
->  	for_each_cpu(i, cpus)
-> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> index 3015ecbb90b1..1ccdddb541a7 100644
-> --- a/include/linux/arch_topology.h
-> +++ b/include/linux/arch_topology.h
-> @@ -33,6 +33,8 @@ unsigned long topology_get_freq_scale(int cpu)
->  	return per_cpu(freq_scale, cpu);
->  }
->
-> +bool arch_freq_counters_available(struct cpumask *cpus);
-> +
->  struct cpu_topology {
->  	int thread_id;
->  	int core_id;
+> I would like to be able to put the system in a state where clocks of CPUs and
+> hardware blocks are gated. In this state local timer are off.
 
-Sorry for the delay. The arch_topology part looks fine to me. For that part:
+Sure, please create a deeper CPU state than WFI and enter so that the CPU
+state is saved and restored correctly. What is the problem doing that ?
 
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+> The platform should be allowed to go in this state when the devices
+> within the power domain are pm_runtime_suspend and the CPUs in WFI.
+
+Nope, we don't save and restore state when we enter/exit WFI. And hence
+we can't allow deeper idle states in the hierarchy. No more discussion
+on that.
+
+> In DT I have one system power domain where the hardware blocks (i2,
+> uart; spi, etc..) are attached + a power per CPU.
+
+You really need a CPU idle state here.
 
 --
 Regards,
 Sudeep
+
+[1] https://lore.kernel.org/linux-arm-kernel/a42dd20677cddd8d09ea91a369a4e10b@www.loen.fr/
