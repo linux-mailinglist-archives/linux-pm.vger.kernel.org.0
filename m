@@ -2,145 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A9817C686
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 20:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6815517C65C
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 20:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726083AbgCFTwR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Mar 2020 14:52:17 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:41159 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726300AbgCFTwR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 14:52:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1583524337;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7wshUEfGJ0oCbRrCm+psHycgVdvMv8N6eiO1mp9WFHQ=;
-        b=QnNNdWHApszNn9tSSprKo/y2RZLed6Td5sdpcCmmmj33n0tORFo6+qIK6h0lZfb1KHHlDu
-        ArVQ1eCIqwViufxHkqJu/xxxX5uzqwzw4BJgXDyOlTIdU0KFQvHDqIDGPZnXEWiNk81LFX
-        2YyAu1b1C3EgqxRYegXFrkt4kBIx9XI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-235-ZbozAVvCPia2fE25-rWBtQ-1; Fri, 06 Mar 2020 14:52:13 -0500
-X-MC-Unique: ZbozAVvCPia2fE25-rWBtQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F2F7F800053;
-        Fri,  6 Mar 2020 19:52:11 +0000 (UTC)
-Received: from fuller.cnet (ovpn-116-16.gru2.redhat.com [10.97.116.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6295B10027AB;
-        Fri,  6 Mar 2020 19:52:11 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 2562842FE410; Fri,  6 Mar 2020 06:56:17 -0300 (-03)
-Date:   Fri, 6 Mar 2020 06:56:17 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH] cpuidle-haltpoll: allow force loading on hosts without
- the REALTIME hint
-Message-ID: <20200306095617.GD32190@fuller.cnet>
-References: <20200221174331.1480468-1-mail@maciej.szmigiero.name>
- <114f7b8d-6f88-222a-d1fa-abcfc0e6a1f2@maciej.szmigiero.name>
+        id S1726271AbgCFTdP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Mar 2020 14:33:15 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:37024 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725922AbgCFTdO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 14:33:14 -0500
+Received: by mail-pl1-f193.google.com with SMTP id b8so1271710plx.4;
+        Fri, 06 Mar 2020 11:33:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=z3KT8EeBZ4kaVLgnDAz4UiYDB1f5ZpcHkzDsT+BdSZk=;
+        b=rxSdDrqzraT4uwdK4VFCE5tw55F0ImCJ4F37HWzATRmaxytGqnISM36ath42eIQYyS
+         rBxO7a6vHaGFt06R6XSFwSP1nK647qwCkhSGR3uLvqqK0Zl6BgHyntKqbDXBoqlJf96k
+         mwsBKxGe3/qFV7x7SqiCwoCNzEaFRucueRUkHjxI/aduFKiKdxl109Pf5SL+vws6BKUK
+         +eMM7neFp8TqrDj96iPZM2jdRCKC3rsRpjxGUVUmlbD2WmHYrE+Ns/PpMw6e2BZbL4rF
+         kDtclqHTx03ggdYNn8/LVa11NjdycrQMnWIfiK/oLXyIG2vM3XUsWAvm3PMHLW5RPo/O
+         WW0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=z3KT8EeBZ4kaVLgnDAz4UiYDB1f5ZpcHkzDsT+BdSZk=;
+        b=gCmpp87GTQqwQXl65UfJp9nS9h6YuVB5ivacdhRDBxl1sT5OJJTibJPw3Gq2hbyPvF
+         UVEKg3nealg/mUZ92R7jgOOHuPQy3Jv4pJevwMcRVVgQGFjIaZCz5n/uXVF8FcZG3ATK
+         lrFbL1s9mXH//6zrIwXZRZ3/qQ3qX7ZGddBqyUTDefn+bGaDDDmcAK1BWT37i/iFuC+Y
+         vdWGy5HzjHRY6wDgiw3cavll8qb2Ni7HdYhu6HCF2diO5pJvwWMdc+Nir995GGZq34q4
+         8BaOwhL99gVz0qcMWQ7BPgGKFhOhUBC2fkdxTkSO5usnODjv6akYYxYS3JGdYBexNx7k
+         ekeg==
+X-Gm-Message-State: ANhLgQ0LgpLAN/JIMq4X+5waFi9omsLKILTSrAzuKBEAB0kEqZdChKTd
+        q9F0oxyFrLG/DlYPL8dzYcs=
+X-Google-Smtp-Source: ADFU+vsT3WVYwhpJooawROdOiTWGvCsUv6cL9HuV5P5d1U/LqQqpNY07JVvpUBPh8/8LLWwZnSFs9Q==
+X-Received: by 2002:a17:90a:ef17:: with SMTP id k23mr5138094pjz.139.1583523193162;
+        Fri, 06 Mar 2020 11:33:13 -0800 (PST)
+Received: from dtor-ws ([2620:15c:202:201:3c2a:73a9:c2cf:7f45])
+        by smtp.gmail.com with ESMTPSA id a7sm10093043pjo.11.2020.03.06.11.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2020 11:33:12 -0800 (PST)
+Date:   Fri, 6 Mar 2020 11:33:10 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, daniel.baluta@nxp.com,
+        linux@rempel-privat.de, gregkh@linuxfoundation.org,
+        tglx@linutronix.de, m.felsch@pengutronix.de,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de,
+        enric.balletbo@collabora.com, ronald@innovation.ch,
+        krzk@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Linux-imx@nxp.com
+Subject: Re: [PATCH 3/5] input: keyboard: add COMPILE_TEST support for
+ KEYBOARD_IMX_SC_KEY
+Message-ID: <20200306193310.GI217608@dtor-ws>
+References: <1583509356-8265-1-git-send-email-Anson.Huang@nxp.com>
+ <1583509356-8265-3-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <114f7b8d-6f88-222a-d1fa-abcfc0e6a1f2@maciej.szmigiero.name>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <1583509356-8265-3-git-send-email-Anson.Huang@nxp.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 24, 2020 at 09:10:18PM +0100, Maciej S. Szmigiero wrote:
-> (CC'ing also Marcelo as the cpuidle-haltpoll driver author and the KVM ML).
+On Fri, Mar 06, 2020 at 11:42:34PM +0800, Anson Huang wrote:
+> Add COMPILE_TEST support to i.MX SC keyboard driver for better compile
+> testing coverage.
+> 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 
-Hi Maciej,
+Applied, thank you.
 
-> On 21.02.2020 18:43, Maciej S. Szmigiero wrote:
-> > From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> > 
-> > Before commit 1328edca4a14 ("cpuidle-haltpoll: Enable kvm guest polling
-> > when dedicated physical CPUs are available") the cpuidle-haltpoll driver
-> > could also be used in scenarios when the host does not advertise the
-> > KVM_HINTS_REALTIME hint.
-> > 
-> > While the behavior introduced by the aforementioned commit makes sense as
-> > the default 
+> ---
+>  drivers/input/keyboard/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
+> index 4706ff0..81e26f6 100644
+> --- a/drivers/input/keyboard/Kconfig
+> +++ b/drivers/input/keyboard/Kconfig
+> @@ -467,7 +467,7 @@ config KEYBOARD_IMX
+>  
+>  config KEYBOARD_IMX_SC_KEY
+>  	tristate "IMX SCU Key Driver"
+> -	depends on IMX_SCU
+> +	depends on IMX_SCU || COMPILE_TEST
+>  	help
+>  	  This is the system controller key driver for NXP i.MX SoCs with
+>  	  system controller inside.
+> -- 
+> 2.7.4
+> 
 
-It makes sense for the pCPU overcommitted case only.
-
-> > there are cases where the old behavior is desired, for example,
-> > when other kernel changes triggered by presence by this hint are unwanted,
-> > for some workloads where the latency benefit from polling overweights the
-> > loss from idle CPU capacity that otherwise would be available, or just when
-> > running under older Qemu versions that lack this hint.
-> > 
-> > Let's provide a typical "force" module parameter that allows restoring the
-> > old behavior.
-> > 
-> > Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-
-I would rather: 
-
-1) Switch back to the default non-overcommitted case.
-
-or even better (but requires more investment)
-
-2) Make on the flight dynamic configuration (after all pCPU
-overcommitment=true/false is a property that changes during
-the day, depending on system load).
-
-But its up to Paolo to decide, really.
-
-> > ---
-> >  drivers/cpuidle/cpuidle-haltpoll.c | 12 +++++++++++-
-> >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-> > index b0ce9bc78113..07e5b36076bb 100644
-> > --- a/drivers/cpuidle/cpuidle-haltpoll.c
-> > +++ b/drivers/cpuidle/cpuidle-haltpoll.c
-> > @@ -18,6 +18,11 @@
-> >  #include <linux/kvm_para.h>
-> >  #include <linux/cpuidle_haltpoll.h>
-> >  
-> > +static bool force __read_mostly;
-> > +module_param(force, bool, 0444);
-> > +MODULE_PARM_DESC(force,
-> > +		 "Load even if the host does not provide the REALTIME hint");
-> > +
-> >  static struct cpuidle_device __percpu *haltpoll_cpuidle_devices;
-> >  static enum cpuhp_state haltpoll_hp_state;
-> >  
-> > @@ -90,6 +95,11 @@ static void haltpoll_uninit(void)
-> >  	haltpoll_cpuidle_devices = NULL;
-> >  }
-> >  
-> > +static bool haltpool_want(void)
-> > +{
-> > +	return kvm_para_has_hint(KVM_HINTS_REALTIME) || force;
-> > +}
-> > +
-> >  static int __init haltpoll_init(void)
-> >  {
-> >  	int ret;
-> > @@ -102,7 +112,7 @@ static int __init haltpoll_init(void)
-> >  	cpuidle_poll_state_init(drv);
-> >  
-> >  	if (!kvm_para_available() ||
-> > -		!kvm_para_has_hint(KVM_HINTS_REALTIME))
-> > +	    !haltpool_want())
-> >  		return -ENODEV;
-> >  
-> >  	ret = cpuidle_register_driver(drv);
-> > 
-
+-- 
+Dmitry
