@@ -2,98 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD4317B47E
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 03:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A22B17B4DF
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 04:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726436AbgCFCe1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Mar 2020 21:34:27 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:35962 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726191AbgCFCe1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Mar 2020 21:34:27 -0500
-Received: by mail-pj1-f67.google.com with SMTP id l41so429700pjb.1;
-        Thu, 05 Mar 2020 18:34:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=Ke0lWEigG8BKBEid+QNLchybndRR9eW4hf0oFbUv1Ok=;
-        b=HoOHi/Q9IQaGvD1oqtpyHKSzG1rhsHQW4xqqEouDilS3n/XjOsULN02JVajiwx6Y51
-         Q4vS9KDRYMOsxxrGhUq9S25hw6JtifKCdjzCis8U92xiyN81Ih0Z3Ee5nYW+dYC8jkJ7
-         JytS7r2U1kpez5gUM5NEp0w1t/8DfXZABx9JliexMIiuuKTS8/7L/IrRDARnVbyup8IY
-         TG6UpDGYloowOoEFEqdJ3tXbNejbMMTikCSz7143fwXs5rSCke3ILMn+CE/9uWhVgKsJ
-         0i9osjVtFidAGmYjbWlvUJLg+01+ZUBwwD6PLRoCvYrSarreC9Omi/t4dDoZjpbOlX9z
-         7W3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Ke0lWEigG8BKBEid+QNLchybndRR9eW4hf0oFbUv1Ok=;
-        b=VlvqYyRaZHOBq6PJ7M5RevvUlnn4lI6zfvszow65Y2moTGs357I+PqQPAHnziUnNpa
-         mZgPMABEWiGiCNJRUXNV9rzCpIqXREFGc0+l51COx/A7dp9IIYNLOGqb06tWLQPc67aL
-         OM/X4pCyvzGIUwmOd+Z88RGHdm/an/iTq3OEBaeCML7Vz+ipqwax5yL4q8RFHhaoOUJk
-         5DkSsY/jEFzoGc5W5n9U/sHgo9YBMIvwayFVf1pOhDfear7x8E5QIEvBAJse0y75z72X
-         Ia5zYf2sKCvjj7O9wzZ2MKgJk9vTDQnuW0Nx/i29o4+KtgrkmUPMK+0w8IhCHStB76Gs
-         syTg==
-X-Gm-Message-State: ANhLgQ10V/oRARnhGun2WhlKFieozBjqCtmhsBcr+5HClwoCzNDm3ZFN
-        cNUllokIwkS6hr7T458JjA8=
-X-Google-Smtp-Source: ADFU+vsQfL+VUXcvJczGHkI11eMow7FWyFX82DecUQwjEAShJFar53/sKfD43LyxO7kC4kfR3sZTCg==
-X-Received: by 2002:a17:90b:1953:: with SMTP id nk19mr1186304pjb.98.1583462066207;
-        Thu, 05 Mar 2020 18:34:26 -0800 (PST)
-Received: from sh03840pcu.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id r133sm5530709pgr.29.2020.03.05.18.34.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 05 Mar 2020 18:34:25 -0800 (PST)
-From:   Baolin Wang <baolin.wang7@gmail.com>
-To:     sre@kernel.org
-Cc:     baolin.wang7@gmail.com, orsonzhai@gmail.com, zhang.lyra@gmail.com,
-        saravanak@google.com, kernel-team@android.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] power: supply: Allow charger manager can be built as a module
-Date:   Fri,  6 Mar 2020 10:34:10 +0800
-Message-Id: <5e098be25c70e07c37e743f84a901f6f756090e0.1583461755.git.baolin.wang7@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        id S1726378AbgCFD35 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Mar 2020 22:29:57 -0500
+Received: from mga14.intel.com ([192.55.52.115]:2171 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726358AbgCFD34 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 5 Mar 2020 22:29:56 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Mar 2020 19:29:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,520,1574150400"; 
+   d="scan'208";a="439984539"
+Received: from yhuang-dev.sh.intel.com (HELO yhuang-dev) ([10.239.159.23])
+  by fmsmga005.fm.intel.com with ESMTP; 05 Mar 2020 19:29:54 -0800
+From:   "Huang\, Ying" <ying.huang@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Rong Chen <rong.a.chen@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list\:ACPI COMPONENT ARCHITECTURE \(ACPICA\)" 
+        <devel@acpica.org>, Linux PM <linux-pm@vger.kernel.org>,
+        <lkp@lists.01.org>, Andi Kleen <andi.kleen@intel.com>
+Subject: Re: [LKP] Re: [cpufreq] 909c0e9cc1: fwq.fwq.med 210.0% improvement
+References: <20200305013509.GF5972@shao2-debian>
+        <951b0986-bb35-d9a5-1639-0a8cdb3dcd04@intel.com>
+        <cbe4887c-d54a-c4aa-e4bf-981b5fcc291d@intel.com>
+        <CAJZ5v0g2vzYQ04GyrpubLx2+B0O4SDbqoTDCvhnSyaj1j1xswA@mail.gmail.com>
+Date:   Fri, 06 Mar 2020 11:29:53 +0800
+In-Reply-To: <CAJZ5v0g2vzYQ04GyrpubLx2+B0O4SDbqoTDCvhnSyaj1j1xswA@mail.gmail.com>
+        (Rafael J. Wysocki's message of "Thu, 5 Mar 2020 10:05:48 +0100")
+Message-ID: <87zhcuyxce.fsf@yhuang-dev.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ascii
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Allow charger manager can be built as a module like other charger
-drivers.
+Hi, Rafael,
 
-Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
----
-Changes from v1:
- - Use IS_ENABLED() instead.
----
- drivers/power/supply/Kconfig          | 2 +-
- include/linux/power/charger-manager.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+"Rafael J. Wysocki" <rafael@kernel.org> writes:
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 9a5591a..195bc04 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -480,7 +480,7 @@ config CHARGER_GPIO
- 	  called gpio-charger.
- 
- config CHARGER_MANAGER
--	bool "Battery charger manager for multiple chargers"
-+	tristate "Battery charger manager for multiple chargers"
- 	depends on REGULATOR
- 	select EXTCON
- 	help
-diff --git a/include/linux/power/charger-manager.h b/include/linux/power/charger-manager.h
-index ad19e68..ae94dce 100644
---- a/include/linux/power/charger-manager.h
-+++ b/include/linux/power/charger-manager.h
-@@ -248,7 +248,7 @@ struct charger_manager {
- 	u64 charging_end_time;
- };
- 
--#ifdef CONFIG_CHARGER_MANAGER
-+#if IS_ENABLED(CONFIG_CHARGER_MANAGER)
- extern void cm_notify_event(struct power_supply *psy,
- 				enum cm_event_types type, char *msg);
- #else
--- 
-1.9.1
+> On Thu, Mar 5, 2020 at 9:18 AM Rong Chen <rong.a.chen@intel.com> wrote:
+>>
+>>
+>>
+>> On 3/5/20 3:50 PM, Rafael J. Wysocki wrote:
+>> > On 3/5/2020 2:35 AM, kernel test robot wrote:
+>> >> Greeting,
+>> >>
+>> >> FYI, we noticed a 210.0% improvement of fwq.fwq.med due to commit:
+>> >
+>> > Well, that sounds impressive. :-)
+>> >
+>> >
+>> >>
+>> >> commit: 909c0e9cc11ba39fa5a660583b25c2431cf54deb ("cpufreq:
+>> >> intel_pstate: Use passive mode by default without HWP")
+>> >> https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git
+>> >> intel_pstate-passive
+>> >>
+>> >> in testcase: fwq
+>> >> on test machine: 16 threads Intel(R) Xeon(R) CPU D-1541 @ 2.10GHz
+>> >> with 48G memory
+>> >> with following parameters:
+>> >>
+>> >>     nr_task: 100%
+>> >>     samples: 100000ss
+>> >>     iterations: 18x
+>> >>     cpufreq_governor: powersave
+>> >
+>> > The governor should be schedutil, though, unless it is explicitly set
+>> > to powersave in the test environment.
+>> >
+>> > Is that the case?
+>> >
+>> >
+>>
+>> Hi Rafael,
+>>
+>> Yes, we set to powersave for this test.
+>
+> I wonder why this is done?  Is there any particular technical reason
+> for doing that?
 
+fwq is a noise benchmark to measure the hardware and software noise
+level.  More information could be found in the following document.
+
+https://asc.llnl.gov/sequoia/benchmarks/FTQ_summary_v1.1.pdf
+
+In 0day, to measure the noise introduced by power management, we will
+run fwq with the performance and powersave governors.  Do you think this
+is reasonable?  Or we should use some other governors?
+
+Best Regards,
+Huang, Ying
