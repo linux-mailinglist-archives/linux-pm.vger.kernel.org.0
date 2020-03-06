@@ -2,158 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 683CD17BCC9
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 13:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E8C17BD5D
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 13:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726054AbgCFMdL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Mar 2020 07:33:11 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:44276 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726025AbgCFMdL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 07:33:11 -0500
-Received: by mail-qk1-f193.google.com with SMTP id f198so2052140qke.11
-        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2020 04:33:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8jme23MILbS+eEi/mucEfUohC7POgRPBqp0gcQEH/IE=;
-        b=xIv9xUeUtBuT7AeM6fG/sie44A14iRH6e5e3eKDBgdda7spKXVwKn/1WwVmuU1uuV8
-         DrU0xsBSkqYXoFLEqNd+XAqmcnTMQ6QHekzp8Ru0+urbvSqC8lZ3NKtdYLCtApdQFqQa
-         rO0SqXaslSzrTAMgZm4KNuVcoWOl9pOWYBzPVEXqREon5t23S67nZ1igNzt8RprdOjVF
-         sWOJOTBUAnBNul7O/aqQ98AKTZjVv3iJoB3S5ubcsCQtRPT3g2tUR0zyrg952xQE/IoD
-         cph0urfOlDSmQveRL1upLqXTMHXQps3z4UUjzfpp6gW5zX6sx5Lfxi15bVLg2hR5kiLa
-         tDGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8jme23MILbS+eEi/mucEfUohC7POgRPBqp0gcQEH/IE=;
-        b=sNTFT9SPEORfA4uhjRfIOpTXOHi9RVjVvCe0E0vsa2mHtng/uqZutKhWczd4T49Y32
-         9J4K9l4Bqamkeo7ZNiAK6Vnr7alTs4IduHY8NrJZ54kvoGhfqv214GGtY1vaHevfg/+6
-         wzmO44oXpfhoprlmZFe1uvBsifLrZHzEbgd1GJ2zrl1zNbZOF0daTf4wes1S8qTB8Qck
-         09VY/v84Aisc8ZBYfa0DoBIg0+CETPLQdvoT04k3YOpJEUK7xyiSQ+ZWwQ1VoCB0qPYk
-         na42fRv64wLAI08tx95lFKvHzXWUcy7yc3rLeOaYO6e8zLF8euFtLsVN+Ql5n3sRSjIf
-         d3GQ==
-X-Gm-Message-State: ANhLgQ0NWGmAVsZ8wPWURYONsECTVn3thDHSoDCkTyPJV8O3KujJ0/EN
-        +xbJdtdAym3eq4j8+4sh/U5hLP15Ze7FEnHk5yK43g==
-X-Google-Smtp-Source: ADFU+vtnTdD+C52gOY5/bNyK5t7jRps/5HdzKnVhovJ39crWl3aPsIOQ9ygdHTvD51dOT3oHDu1anOJNOgnBPbmqZyA=
-X-Received: by 2002:a05:620a:14b1:: with SMTP id x17mr2582656qkj.219.1583497990177;
- Fri, 06 Mar 2020 04:33:10 -0800 (PST)
+        id S1726314AbgCFM6D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Mar 2020 07:58:03 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:35928 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726171AbgCFM6D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 07:58:03 -0500
+X-Greylist: delayed 593 seconds by postgrey-1.27 at vger.kernel.org; Fri, 06 Mar 2020 07:58:01 EST
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 3596F80307C2;
+        Fri,  6 Mar 2020 12:48:07 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id e-Q1VTnmsfw8; Fri,  6 Mar 2020 15:48:05 +0300 (MSK)
+From:   <Sergey.Semin@baikalelectronics.ru>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paul.burton@imgtec.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, <linux-mips@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 00/22] mips: Prepare MIPS-arch code for Baikal-T1 SoC support
+Date:   Fri, 6 Mar 2020 15:46:43 +0300
 MIME-Version: 1.0
-References: <20200303203559.23995-1-ulf.hansson@linaro.org>
- <20200303203559.23995-5-ulf.hansson@linaro.org> <20200304122312.GE25004@bogus>
- <CAPDyKFpcN-p6sKqB0ujHAY29qPSg7qpSjYGymPaJ4W8jgCKGcg@mail.gmail.com>
- <20200305162321.GB53631@bogus> <CAPDyKFogjPG+mRsfPaxN7RjB7TQL9=qHNzA=K_t0F6M6Q9-TuA@mail.gmail.com>
- <20200306100431.GA16541@bogus> <CA+M3ks764moVU2h9iZJuN6B-e4wBUMymBfPnob_zraf50xqezA@mail.gmail.com>
- <20200306120646.GB44221@bogus>
-In-Reply-To: <20200306120646.GB44221@bogus>
-From:   Benjamin Gaignard <benjamin.gaignard@linaro.org>
-Date:   Fri, 6 Mar 2020 13:32:59 +0100
-Message-ID: <CA+M3ks7+P=CjvUE28boANhrR6bhzLzyjBLovzWL_LjwL3UqmzQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] cpuidle: psci: Allow WFI to be the only state for
- the hierarchical topology
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Message-Id: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Le ven. 6 mars 2020 =C3=A0 13:06, Sudeep Holla <sudeep.holla@arm.com> a =C3=
-=A9crit :
->
-> On Fri, Mar 06, 2020 at 11:47:40AM +0100, Benjamin Gaignard wrote:
-> > Le ven. 6 mars 2020 =C3=A0 11:04, Sudeep Holla <sudeep.holla@arm.com> a=
- =C3=A9crit :
-> > >
-> > > On Fri, Mar 06, 2020 at 10:28:10AM +0100, Ulf Hansson wrote:
-> > > > On Thu, 5 Mar 2020 at 17:23, Sudeep Holla <sudeep.holla@arm.com> wr=
-ote:
-> > > > >
-> > >
-> > > [...]
-> > >
-> > > > > OK. The only state that cluster can enter when CPUs are in WFI ar=
-e
-> > > > > cluster WFI and most hardware can handle it automatically. I don'=
-t see
-> > > > > the need to do any extra work for that.
-> > > >
-> > > > This isn't about cluster WFI, but about deeper cluster states, such=
- as
-> > > > a cluster-clock-gated-state and a cluster-power-off-state. It's an =
-ST
-> > > > platform, which Benjamin is working on.
-> > > >
-> > >
-> > > Then definitely something is completely wrong. You can't enter deeper
-> > > cluster states(clock-gated and power-off to be specific) with CPU in
-> > > just WFI state. So, if the attempt here is to enter those states, I
-> > > disagree with the change.
-> > >
-> > > Benjamin, please share the complete hierarchical topology for your pl=
-atform.
-> >
-> > The platform is stm32mp157 SoC which embedded two Cortex A7 in one clus=
-ter.
->
-> Hang on a minute, is this the same platform where you wanted high
-> resolution timer and were hacking moving dirty tricks around[1]. Now I th=
-ink
-> you have landed here.
+From: Serge Semin <fancer.lancer@gmail.com>
 
-yes it has been fixed in this commit:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/a=
-rch/arm/kernel/time.c?h=3Dv5.6-rc4&id=3D022eb8ae8b5ee8c5c813923c69b5ebb1e96=
-12c4c
+This is a first patchset of a series of about 25 ones, which are intended to
+add the full Baikal-T1 SoC [1] support to the Linux kernel. Since they will
+concern various kernel subsystems, I decided to split the whole work up into
+the patchesets in accordance with the subsystems/devices their changes are
+introduced for. Nearly 2/3 of the work is already done and will be sent out
+very soon. While the rest of the changes specifically related to the fast-speed
+interfaces (DW 12G PHY, PCIe, SATA, xGBE, GMAC, USB, DDRC, IC) are still in
+refactoring and preparation for integration into the mainline kernel. Hopefully
+I'll finish them up in the next two-three months, and submit them straight
+away.
 
->
-> > I would like to be able to put the system in a state where clocks of CP=
-Us and
-> > hardware blocks are gated. In this state local timer are off.
->
-> Sure, please create a deeper CPU state than WFI and enter so that the CPU
-> state is saved and restored correctly. What is the problem doing that ?
+Getting back to this patchset. As the subject states this is intended to
+prepare the MIPS-arch and generic kernel code for further Baikal-T1 SoC
+platform support integration (note the Baikal-T1 SoC platform code will be
+submitted last after the whole series of patchsets as a closure of the
+submission process). First of all the patchset starts with a set of changes
+to the dt-bindings kernel concerning MIPS CPC and CDMM nodes as being described
+by the trivial device bindings. In addition we updated the vendors prefix
+schema with Baikal Electronics JSC prefix so being further committed device
+drivers would be correctly accepted by the checkpatch-script.
 
-This state stop the clocks for all the hardware blocks and not only the CPU=
-s
-so we can't go on it while devices aren't suspended.
-I may have missed something but I don't believe that I could add this kind =
-of
-conditions in a cpu idle state, right ?
-In this state I need to be able to enable the wake up sources because
-it is the only
-for hardware block used as broadcast timer to wake up the system.
+Then I found out that dtc-compiler integrated into the kernel doesn't support
+all the possible values of the 'reg'-property used to define the i2c-slave
+devices address. It may have 10-bits and own-slave flags, so the compiler has
+to deal with them. Even though the patch might be better to be integrated into
+the mainline dtc repo I decided to send it to the kernel first.
 
->
-> > The platform should be allowed to go in this state when the devices
-> > within the power domain are pm_runtime_suspend and the CPUs in WFI.
->
-> Nope, we don't save and restore state when we enter/exit WFI. And hence
-> we can't allow deeper idle states in the hierarchy. No more discussion
-> on that.
+While I was working with the MIPS architecture code, I discovered, that there
+is a bug in the Coherency Manager v2 error causes declaration and the errors
+handler lacked of CM2  L2 ECC/parity errors support. So the fixes are here in
+the patchset.
 
->
-> > In DT I have one system power domain where the hardware blocks (i2,
-> > uart; spi, etc..) are attached + a power per CPU.
->
-> You really need a CPU idle state here.
->
-> --
-> Regards,
-> Sudeep
->
-> [1] https://lore.kernel.org/linux-arm-kernel/a42dd20677cddd8d09ea91a369a4=
-e10b@www.loen.fr/
+Baikal-T1 SoC is based on the MIPS P5600 Warrior IP-core, which itself has
+MIPS32 Release 5 architecture. Even though on ISA level it doesn't differ much
+from the MIPS32 Release 2 release, there are still some peculiarities, which
+make it's justified to add the direct MIPS32r5 support into the kernel (see
+the specific patch for details). In addition seeing there is more than one
+real chip based on the MIPS P5600 core on the market, it would be good to have
+the direct P5600 CPU config in the MIPS-arch.
+
+There were some issues we discovered while were working with MIPS-arch code.
+So the cleanups and fixes are introduced in this patchset. First of all the
+Write-Merge CPU feature hasn't been handled in a generic way. Even if a
+platform defined the writecombine flag as _CACHE_UNCACHED_ACCELERATED, the
+feature might have been disabled in the CP0 register. We either enable it or
+leave it as is in accordance with the knowledge of whether the corresponding
+platform really supports it. Secondly Memory Accessibility Attribute Registers
+(MAAR) haven't been properly initialized when Extended Physical Address (XPA)
+mode was enabled. Thirdly since some of the platforms may have a very strict
+limitations on the IO-memory access instructions. For instance Baikal-T1 SoC
+IO-memory can be accessed by the lw/sw instructions only. In this case
+for early-printk and CPS-debug code we suggest to use the instructions in
+accordance with the UART-registers offset (lb/sb if offset = 0, lh/sh
+if offset = 1 and so on). Fourthly in case if CPUFREQ feature is enabled
+and frequency of the CPU is changed by the reference clock alteration, we
+must make sure that MIPS r4k timer related services are properly updated
+when CPU-frequency changes. It concerns udelay lpj adjustment, MIPS timer
+clockevent frequency update. In addition when CPU reference frequency changes
+it isn't recommended to use the timer as clocksource at all, since currently
+the subsystem isn't tolerant to the unstable clock sources. So in this case
+we suggest to use the r4k timer for clocksourcing only as a last resort.
+Fifthly we discovered a bug in a method of CPUFREQ boost feature enable
+procedure and fixed it in one of the patches within this patchset. And finally
+there are a few fixups/cleanups we suggest to integrate into the MIPS FDC
+and CDMM related code (see the patches for details).
+
+This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
+commit 98d54f81e36b ("Linux 5.6-rc4").
+
+[1] http://www.baikalelectronics.com/products/168/
+
+P.S. Sorry for the previous emails burst. I forgot to start the series with
+this cover-letter and the corporate smtp broke the transmission in the middle
+anyway. Please don't pay attention to them. Here is the proper emails
+resubmission.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paul.burton@imgtec.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Frank Rowand <frowand.list@gmail.com>
+cc: Tony Lindgren <tony@atomide.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jslaby@suse.com>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (22):
+  dt-bindings: Permit platform devices in the trivial-devices bindings
+  dt-bindings: Add MIPS CPC controller as a trivial devices
+  dt-bindings: Add MIPS CDMM controller as a trivial device
+  dt-bindings: Add vendor prefix for Baikal Electronics, JSC
+  mips: cm: Fix an invalid error code of INTVN_*_ERR
+  mips: cm: Add L2 ECC/parity errors reporting
+  mips: Add MIPS32 Release 5 support
+  mips: Add MIPS Warrior P5600 support
+  mips: Fix cpu_has_mips64r1/2 activation for MIPS32 CPUs
+  mips: Add CP0 Write Merge config support
+  mips: Add CONFIG/CONFIG6 reg fields macro
+  mips: MAAR: Use more precise address mask
+  mips: MAAR: Add XPA mode support
+  mips: early_printk_8250: Use offset-sized IO-mem accessors
+  mips: Use offset-sized IO-mem accessors in CPS debug printout
+  mips: cdmm: Add mti,mips-cdmm dtb node support
+  bus: cdmm: Add MIPS R5 arch support
+  tty: mips_ejtag_fdc: Mark expected switch fall-through
+  mips: Add udelay lpj numbers adjustment
+  mips: csrc-r4k: Decrease r4k-clocksource rating if CPU_FREQ enabled
+  mips: cevt-r4k: Update the r4k-clockevent frequency in sync with CPU
+  cpufreq: Return zero on success in boost sw setting
+
+ .../bindings/power/mti,mips-cpc.txt           |  8 ---
+ .../devicetree/bindings/trivial-devices.yaml  | 12 ++--
+ .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+ arch/mips/Kconfig                             | 62 ++++++++++++++--
+ arch/mips/Makefile                            |  2 +
+ arch/mips/include/asm/asmmacro.h              | 18 ++---
+ arch/mips/include/asm/compiler.h              |  5 ++
+ arch/mips/include/asm/cpu-features.h          | 34 ++++++---
+ arch/mips/include/asm/cpu-info.h              |  2 +-
+ arch/mips/include/asm/cpu-type.h              |  6 +-
+ arch/mips/include/asm/cpu.h                   | 11 +--
+ arch/mips/include/asm/fpu.h                   |  4 +-
+ arch/mips/include/asm/hazards.h               |  8 ++-
+ arch/mips/include/asm/maar.h                  | 17 ++++-
+ arch/mips/include/asm/mipsregs.h              | 33 ++++++++-
+ arch/mips/include/asm/module.h                |  4 ++
+ arch/mips/include/asm/stackframe.h            |  2 +-
+ arch/mips/include/asm/switch_to.h             |  8 +--
+ arch/mips/kernel/cevt-r4k.c                   | 44 ++++++++++++
+ arch/mips/kernel/cps-vec-ns16550.S            | 18 ++++-
+ arch/mips/kernel/cpu-probe.c                  | 60 ++++++++++++++++
+ arch/mips/kernel/csrc-r4k.c                   |  4 ++
+ arch/mips/kernel/early_printk_8250.c          | 34 ++++++++-
+ arch/mips/kernel/entry.S                      |  6 +-
+ arch/mips/kernel/mips-cm.c                    | 66 +++++++++++++++--
+ arch/mips/kernel/proc.c                       |  2 +
+ arch/mips/kernel/r4k_fpu.S                    | 14 ++--
+ arch/mips/kernel/spram.c                      |  4 +-
+ arch/mips/kernel/time.c                       | 70 +++++++++++++++++++
+ arch/mips/kvm/vz.c                            |  6 +-
+ arch/mips/lib/csum_partial.S                  |  6 +-
+ arch/mips/mm/c-r4k.c                          |  7 +-
+ arch/mips/mm/init.c                           |  8 ++-
+ arch/mips/mm/sc-mips.c                        |  7 +-
+ drivers/bus/Kconfig                           |  2 +-
+ drivers/bus/mips_cdmm.c                       | 15 ++++
+ drivers/cpufreq/cpufreq.c                     |  2 +-
+ drivers/tty/mips_ejtag_fdc.c                  |  1 +
+ 38 files changed, 529 insertions(+), 85 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/mti,mips-cpc.txt
+
+-- 
+2.25.1
+
