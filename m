@@ -2,72 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2A617C22C
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 16:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DED1717C241
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 16:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727178AbgCFPt2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Mar 2020 10:49:28 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:53162 "EHLO inva020.nxp.com"
+        id S1726368AbgCFPzy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Mar 2020 10:55:54 -0500
+Received: from foss.arm.com ([217.140.110.172]:35806 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727080AbgCFPtX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 6 Mar 2020 10:49:23 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C86941A0BC7;
-        Fri,  6 Mar 2020 16:49:21 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 79CDC1A0BCF;
-        Fri,  6 Mar 2020 16:49:05 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id C9ADD402F3;
-        Fri,  6 Mar 2020 23:48:51 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, dmitry.torokhov@gmail.com,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, wim@linux-watchdog.org,
-        linux@roeck-us.net, daniel.baluta@nxp.com, linux@rempel-privat.de,
-        gregkh@linuxfoundation.org, tglx@linutronix.de,
-        m.felsch@pengutronix.de, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, enric.balletbo@collabora.com, ronald@innovation.ch,
-        krzk@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH 5/5] thermal: add COMPILE_TEST support for IMX_SC_THERMAL
-Date:   Fri,  6 Mar 2020 23:42:36 +0800
-Message-Id: <1583509356-8265-5-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1583509356-8265-1-git-send-email-Anson.Huang@nxp.com>
-References: <1583509356-8265-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1725935AbgCFPzx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 6 Mar 2020 10:55:53 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4465630E;
+        Fri,  6 Mar 2020 07:55:53 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA6CF3F237;
+        Fri,  6 Mar 2020 07:55:51 -0800 (PST)
+Date:   Fri, 6 Mar 2020 15:55:45 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Benjamin Gaignard <benjamin.gaignard@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 4/4] cpuidle: psci: Allow WFI to be the only state for
+ the hierarchical topology
+Message-ID: <20200306155545.GA18983@bogus>
+References: <20200305162321.GB53631@bogus>
+ <CAPDyKFogjPG+mRsfPaxN7RjB7TQL9=qHNzA=K_t0F6M6Q9-TuA@mail.gmail.com>
+ <20200306100431.GA16541@bogus>
+ <CA+M3ks764moVU2h9iZJuN6B-e4wBUMymBfPnob_zraf50xqezA@mail.gmail.com>
+ <20200306120646.GB44221@bogus>
+ <CA+M3ks7+P=CjvUE28boANhrR6bhzLzyjBLovzWL_LjwL3UqmzQ@mail.gmail.com>
+ <20200306134119.GB47929@bogus>
+ <CA+M3ks5XBFcJqQozA=k6nU2XawRYT_qKnLW9t_GdkoRGNEd1yA@mail.gmail.com>
+ <20200306144951.GA11624@bogus>
+ <CA+M3ks6=gRj-5Qfe93+2BbECY=cGuj189MQu3yDnib-SbSM7Og@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+M3ks6=gRj-5Qfe93+2BbECY=cGuj189MQu3yDnib-SbSM7Og@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add COMPILE_TEST support to i.MX SC thermal driver for better compile
-testing coverage.
+On Fri, Mar 06, 2020 at 04:35:32PM +0100, Benjamin Gaignard wrote:
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
- drivers/thermal/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[...]
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 91af271..55c7641 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -254,7 +254,7 @@ config IMX_THERMAL
- 
- config IMX_SC_THERMAL
- 	tristate "Temperature sensor driver for NXP i.MX SoCs with System Controller"
--	depends on IMX_SCU
-+	depends on IMX_SCU || COMPILE_TEST
- 	depends on OF
- 	help
- 	  Support for Temperature Monitor (TEMPMON) found on NXP i.MX SoCs with
--- 
-2.7.4
+>
+> CPU power domains are subdomains of the system power domain
 
+Yes, that is platform specific.
+
+> so they can vote for the targeting power domain.
+>
+
+Not when they are in WFI, it can't be powered down. I am going to say one
+last time, add a CPU level state to workaround whatever you are trying to
+and please stop hacking the psci domain like in the $subject patch.
+
+If it was not any clear before, NACK.
+
+--
+Regards,
+Sudeep
