@@ -2,119 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A59B317C8AA
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Mar 2020 00:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFCD17C934
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Mar 2020 00:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726231AbgCFXEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Mar 2020 18:04:30 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:54634 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726185AbgCFXEa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 18:04:30 -0500
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1jAM0Y-0005gY-Ev; Sat, 07 Mar 2020 00:03:54 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id C92FA104088; Sat,  7 Mar 2020 00:03:52 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Anchal Agarwal <anchalag@amazon.com>, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        boris.ostrovsky@oracle.com, jgross@suse.com,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org, kamatam@amazon.com,
-        sstabellini@kernel.org, konrad.wilk@oracle.com,
-        roger.pau@citrix.com, axboe@kernel.dk, davem@davemloft.net,
-        rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
-        peterz@infradead.org, eduval@amazon.com, sblbir@amazon.com,
-        anchalag@amazon.com, xen-devel@lists.xenproject.org,
-        vkuznets@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk,
-        fllinden@amaozn.com, benh@kernel.crashing.org
-Subject: Re: [RFC PATCH v3 07/12] genirq: Shutdown irq chips in suspend/resume during hibernation
-In-Reply-To: <e782c510916c8c05dc95ace151aba4eced207b31.1581721799.git.anchalag@amazon.com>
-Date:   Sat, 07 Mar 2020 00:03:52 +0100
-Message-ID: <87ftelaxwn.fsf@nanos.tec.linutronix.de>
+        id S1726462AbgCFXzv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Mar 2020 18:55:51 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:45497 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726237AbgCFXzu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 18:55:50 -0500
+Received: by mail-pl1-f193.google.com with SMTP id b22so1496217pls.12
+        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2020 15:55:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=android.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=iy66Xc3T8EGl5ApJul/VUh4hjHhsU3+FU6jK2rSraPw=;
+        b=JusjcdkAfTlIEOeg8mV4ChS+MtHqZ9MHCDVAs4ZUlmcQM64RsWbr9y/nwhnpw0jkkG
+         Mdr+VZIL6Vi/oDO+DP0ybCmiArZDwCCGkU2YRJ5kIT0tS6PGXuQTo4GdPAfKnUOznUS/
+         L4rPmPL07WDHK/xjfRB8nxgPfxnCteajWdrfBHhwdneV2UjAoHsFhWKpyAfXTPlBF7yb
+         mj32MyepfyqiLRuhnMaRPuK584dw9JAhVeb8biV6d4xxRCiRJUlcHp9go8uzmO//WhUi
+         f0WMSi2pjAWBBtqFJHZChWogsZUUIf2LLxp8LjaU9QG3x6m7J7VScgupV+ILwFaDKiL2
+         js9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=iy66Xc3T8EGl5ApJul/VUh4hjHhsU3+FU6jK2rSraPw=;
+        b=d4Vgjgly+oQQwUZC6NZBLe42gIoz0aXQJnhvCOuD47F/vf/06vyJCPXBP4lHIi9vgU
+         BPkTCt62DQx1uU2zcRrt8IaUI05Vm+GeSUbSTiDZpdjhHLkf65+lWFDOzs/mci+GRNw8
+         sXAOPi9k+J2A4uQGJHJCgPvED1yY3rSyxmOxok3HaheUzBhQ6UkpOKoHYG+5PwdVDq7m
+         OcEBNmYZ0yv9Y6Zqay+REAIbeMAckbzDU64t59SzN2fN8KaaAlpahhCdRHjge205Jkg1
+         y9T85GiUiABQyQb22Ay4pvFTM93gtJSpWWVrWgdyT1uqZwe68P5YqWHtcXTA9SzkR5Sl
+         OkOg==
+X-Gm-Message-State: ANhLgQ3OJLHMJo8MRL/aBVM7Pre43lkoqALbTyz2+X7I7US2AnaXR68G
+        cxXxNyKkyXaezVq5MftHsL7Chg==
+X-Google-Smtp-Source: ADFU+vtA0JLUpUrvRB8/URuMofw7zZLIpVDABYK+ucoeQeRBBorcDOV0QycC7SaSPAT1kqla8wgfOw==
+X-Received: by 2002:a17:90a:2ec7:: with SMTP id h7mr6358221pjs.107.1583538949817;
+        Fri, 06 Mar 2020 15:55:49 -0800 (PST)
+Received: from localhost ([2620:15c:211:0:fb21:5c58:d6bc:4bef])
+        by smtp.gmail.com with ESMTPSA id f8sm36597168pfn.2.2020.03.06.15.55.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2020 15:55:49 -0800 (PST)
+Date:   Fri, 6 Mar 2020 15:55:48 -0800
+From:   Sandeep Patil <sspatil@android.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Dan Murphy <dmurphy@ti.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v4 2/4] power_supply: Add additional health properties to
+ the header
+Message-ID: <20200306235548.GA187098@google.com>
+References: <20200116175039.1317-1-dmurphy@ti.com>
+ <20200116175039.1317-3-dmurphy@ti.com>
+ <20200117010658.iqs2zpwl6bsomkuo@earth.universe>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200117010658.iqs2zpwl6bsomkuo@earth.universe>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Anchal Agarwal <anchalag@amazon.com> writes:
+Hi Sebastian,
 
-> There are no pm handlers for the legacy devices, so during tear down
-> stale event channel <> IRQ mapping may still remain in the image and
-> resume may fail. To avoid adding much code by implementing handlers for
-> legacy devices, add a new irq_chip flag IRQCHIP_SHUTDOWN_ON_SUSPEND which
-> when enabled on an irq-chip e.g xen-pirq, it will let core suspend/resume
-> irq code to shutdown and restart the active irqs. PM suspend/hibernation
-> code will rely on this.
-> Without this, in PM hibernation, information about the event channel
-> remains in hibernation image, but there is no guarantee that the same
-> event channel numbers are assigned to the devices when restoring the
-> system. This may cause conflict like the following and prevent some
-> devices from being restored correctly.
+On Fri, Jan 17, 2020 at 02:06:58AM +0100, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Thu, Jan 16, 2020 at 11:50:37AM -0600, Dan Murphy wrote:
+> > Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
+> > 
+> > Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> > ---
+> 
+> Looks good. But I will not merge it without a user and have comments
+> for the driver.
 
-The above is just an agglomeration of words and acronyms and some of
-these sentences do not even make sense. Anyone who is not aware of event
-channels and whatever XENisms you talk about will be entirely
-confused. Changelogs really need to be understandable for mere mortals
-and there is no space restriction so acronyms can be written out.
+Android has been looking for these properties for a while now [1].
+It was added[2] when we saw that the manufacturers were implementing these
+properties in the driver. I didn't know the properties were absent upstream
+until yesterday. Somebody pointed out in our ongoing effort to make sure
+all core kernel changes that android depends on are present upstream.
 
-Something like this:
+I think those values are also propagated in application facing APIs in
+Android (but I am not sure yet, let me know if that's something you want
+to find out).
 
-  Many legacy device drivers do not implement power management (PM)
-  functions which means that interrupts requested by these drivers stay
-  in active state when the kernel is hibernated.
+I wanted to chime in and present you a 'user' for this if that helps.
 
-  This does not matter on bare metal and on most hypervisors because the
-  interrupt is restored on resume without any noticable side effects as
-  it stays connected to the same physical or virtual interrupt line.
+Cc: kernel-team@android.com
 
-  The XEN interrupt mechanism is different as it maintains a mapping
-  between the Linux interrupt number and a XEN event channel. If the
-  interrupt stays active on hibernation this mapping is preserved but
-  there is unfortunately no guarantee that on resume the same event
-  channels are reassigned to these devices. This can result in event
-  channel conflicts which prevent the affected devices from being
-  restored correctly.
+- ssp
 
-  One way to solve this would be to add the necessary power management
-  functions to all affected legacy device drivers, but that's a
-  questionable effort which does not provide any benefits on non-XEN
-  environments.
+1. https://android.googlesource.com/platform/system/core/+/refs/heads/master/healthd/BatteryMonitor.cpp#162
+2. https://android-review.googlesource.com/c/platform/system/core/+/414481
 
-  The least intrusive and most efficient solution is to provide a
-  mechanism which allows the core interrupt code to tear down these
-  interrupts on hibernation and bring them back up again on resume. This
-  allows the XEN event channel mechanism to assign an arbitrary event
-  channel on resume without affecting the functionality of these
-  devices.
-  
-  Fortunately all these device interrupts are handled by a dedicated XEN
-  interrupt chip so the chip can be marked that all interrupts connected
-  to it are handled this way. This is pretty much in line with the other
-  interrupt chip specific quirks, e.g. IRQCHIP_MASK_ON_SUSPEND.
+> 
+> -- Sebastian
+> 
+> >  Documentation/ABI/testing/sysfs-class-power | 2 +-
+> >  drivers/power/supply/power_supply_sysfs.c   | 2 +-
+> >  include/linux/power_supply.h                | 3 +++
+> >  3 files changed, 5 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+> > index bf3b48f022dc..9f3fd01a9373 100644
+> > --- a/Documentation/ABI/testing/sysfs-class-power
+> > +++ b/Documentation/ABI/testing/sysfs-class-power
+> > @@ -190,7 +190,7 @@ Description:
+> >  		Valid values: "Unknown", "Good", "Overheat", "Dead",
+> >  			      "Over voltage", "Unspecified failure", "Cold",
+> >  			      "Watchdog timer expire", "Safety timer expire",
+> > -			      "Over current"
+> > +			      "Over current", "Warm", "Cool", "Hot"
+> >  
+> >  What:		/sys/class/power_supply/<supply_name>/precharge_current
+> >  Date:		June 2017
+> > diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+> > index f37ad4eae60b..d0d549611794 100644
+> > --- a/drivers/power/supply/power_supply_sysfs.c
+> > +++ b/drivers/power/supply/power_supply_sysfs.c
+> > @@ -61,7 +61,7 @@ static const char * const power_supply_charge_type_text[] = {
+> >  static const char * const power_supply_health_text[] = {
+> >  	"Unknown", "Good", "Overheat", "Dead", "Over voltage",
+> >  	"Unspecified failure", "Cold", "Watchdog timer expire",
+> > -	"Safety timer expire", "Over current"
+> > +	"Safety timer expire", "Over current", "Warm", "Cool", "Hot"
+> >  };
+> >  
+> >  static const char * const power_supply_technology_text[] = {
+> > diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> > index 28413f737e7d..bd0d3225f245 100644
+> > --- a/include/linux/power_supply.h
+> > +++ b/include/linux/power_supply.h
+> > @@ -61,6 +61,9 @@ enum {
+> >  	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
+> >  	POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE,
+> >  	POWER_SUPPLY_HEALTH_OVERCURRENT,
+> > +	POWER_SUPPLY_HEALTH_WARM,
+> > +	POWER_SUPPLY_HEALTH_COOL,
+> > +	POWER_SUPPLY_HEALTH_HOT,
+> >  };
+> >  
+> >  enum {
+> > -- 
+> > 2.25.0
+> > 
 
-  Add a new quirk flag IRQCHIP_SHUTDOWN_ON_SUSPEND and add support for
-  it the core interrupt suspend/resume paths.
 
-Hmm?
-
-> Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-
-Not that I care much, but now that I've written both the patch and the
-changelog you might change that attribution slightly. For completeness
-sake:
-
- Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-
-Thanks,
-
-        tglx
