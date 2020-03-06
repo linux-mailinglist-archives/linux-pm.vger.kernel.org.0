@@ -2,71 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA18B17B9AF
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 10:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F3A17B9C6
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 11:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726185AbgCFJ52 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Mar 2020 04:57:28 -0500
-Received: from mga11.intel.com ([192.55.52.93]:49249 "EHLO mga11.intel.com"
+        id S1726079AbgCFKEl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Mar 2020 05:04:41 -0500
+Received: from foss.arm.com ([217.140.110.172]:58854 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726054AbgCFJ51 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 6 Mar 2020 04:57:27 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 01:57:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,521,1574150400"; 
-   d="scan'208";a="234750863"
-Received: from unknown (HELO linuxpc.iind.intel.com) ([10.223.107.108])
-  by orsmga008.jf.intel.com with ESMTP; 06 Mar 2020 01:57:25 -0800
-From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-To:     rui.zhang@intel.com, srinivas.pandruvada@linux.intel.com,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Sumeet R Pawnikar <sumeet.r.pawnikar@intel.com>
-Subject: [PATCH] thermal: int340x: processor_thermal: Add Tiger Lake support
-Date:   Fri,  6 Mar 2020 15:33:44 +0530
-Message-Id: <1583489024-29209-1-git-send-email-sumeet.r.pawnikar@intel.com>
-X-Mailer: git-send-email 1.7.9.5
+        id S1726026AbgCFKEl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 6 Mar 2020 05:04:41 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5298C31B;
+        Fri,  6 Mar 2020 02:04:40 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C16CB3F6C4;
+        Fri,  6 Mar 2020 02:04:38 -0800 (PST)
+Date:   Fri, 6 Mar 2020 10:04:31 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 4/4] cpuidle: psci: Allow WFI to be the only state for
+ the hierarchical topology
+Message-ID: <20200306100431.GA16541@bogus>
+References: <20200303203559.23995-1-ulf.hansson@linaro.org>
+ <20200303203559.23995-5-ulf.hansson@linaro.org>
+ <20200304122312.GE25004@bogus>
+ <CAPDyKFpcN-p6sKqB0ujHAY29qPSg7qpSjYGymPaJ4W8jgCKGcg@mail.gmail.com>
+ <20200305162321.GB53631@bogus>
+ <CAPDyKFogjPG+mRsfPaxN7RjB7TQL9=qHNzA=K_t0F6M6Q9-TuA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFogjPG+mRsfPaxN7RjB7TQL9=qHNzA=K_t0F6M6Q9-TuA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Sumeet R Pawnikar <sumeet.r.pawnikar@intel.com>
+On Fri, Mar 06, 2020 at 10:28:10AM +0100, Ulf Hansson wrote:
+> On Thu, 5 Mar 2020 at 17:23, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
 
-Added new PCI id for Tiger Lake processor thermal device along with
-MMIO RAPL support.
+[...]
 
-Signed-off-by: Sumeet R Pawnikar <sumeet.r.pawnikar@intel.com>
----
- .../int340x_thermal/processor_thermal_device.c     |    5 +++++
- 1 file changed, 5 insertions(+)
+> > OK. The only state that cluster can enter when CPUs are in WFI are
+> > cluster WFI and most hardware can handle it automatically. I don't see
+> > the need to do any extra work for that.
+>
+> This isn't about cluster WFI, but about deeper cluster states, such as
+> a cluster-clock-gated-state and a cluster-power-off-state. It's an ST
+> platform, which Benjamin is working on.
+>
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-index b1fd345..297db1d 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-@@ -45,6 +45,9 @@
- /* JasperLake thermal reporting device */
- #define PCI_DEVICE_ID_PROC_JSL_THERMAL	0x4503
- 
-+/* TigerLake thermal reporting device */
-+#define PCI_DEVICE_ID_PROC_TGL_THERMAL	0x9A03
-+
- #define DRV_NAME "proc_thermal"
- 
- struct power_config {
-@@ -728,6 +731,8 @@ static int proc_thermal_resume(struct device *dev)
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_PROC_ICL_THERMAL),
- 		.driver_data = (kernel_ulong_t)&rapl_mmio_hsw, },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_PROC_JSL_THERMAL)},
-+	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_PROC_TGL_THERMAL),
-+		.driver_data = (kernel_ulong_t)&rapl_mmio_hsw, },
- 	{ 0, },
- };
- 
--- 
-1.7.9.5
+Then definitely something is completely wrong. You can't enter deeper
+cluster states(clock-gated and power-off to be specific) with CPU in
+just WFI state. So, if the attempt here is to enter those states, I
+disagree with the change.
 
+Benjamin, please share the complete hierarchical topology for your platform.
+
+> >
+> > > Then, after we have called pm_runtime_put_sync_suspend() a few lines
+> > > above, we may potentially have a "domain state" to use, instead of the
+> > > WFI state.
+> > >
+> >
+> > Are they any platforms with this potential "domain state" to use with
+> > CPU WFI. I want to understand this better.
+> >
+> > > In this case, if we would have called psci_enter_state(), that would
+> > > lead us to calling cpu_do_idle() from the __CPU_PM_CPU_IDLE_ENTER()
+> > > macro, becuase idx is zero. In other words, the domain state would
+> > > become unused.
+> > >
+> >
+> > For a domain state to become unused with WFI, it needs to be available
+> > and I am not 100% sure of that.
+>
+> With these changes from the series, we can fully conform to the
+> hierarchical DT bindings for PSCI.
+>
+
+Theoretically may be, but may not confirm to the hardware states.
+
+> I am not sure I understand your concern, is there a cost involved by
+> applying this?
+>
+
+Yes as mentioned above.
+
+--
+Regards,
+Sudeep
