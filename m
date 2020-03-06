@@ -2,197 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8C917B93C
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 10:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D86417B9A0
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 10:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726047AbgCFJ2t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Mar 2020 04:28:49 -0500
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:39194 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726010AbgCFJ2t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 04:28:49 -0500
-Received: by mail-vk1-f196.google.com with SMTP id t129so423917vkg.6
-        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2020 01:28:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7Uj9oI6tu66o5KdxabEEJ4D+YiA5a1Q+BJTb2luSNcQ=;
-        b=DenLu73w0pgDvKrkV7VAWE04gTk2AsRRYd9hYXO+WfNOsiWBAJAHS6bZ0CNVke7cgp
-         vq8irHlt5gTE055tv0isFXdxLY1u+5p6RQPZror7DGgKm8aoy44gdFyKNR+YJn57Apt+
-         ovXgn5LEoxnevUbVKBBQKITLqmSy9aUS1QRVtfVlbGxgdq3NVPwLY7kjVDb9M4+cEbsq
-         NTKdDzngd+X63GRvSwgWbpzgFJz56kVRysVt/wFkQzQS3uRhnEMHi0bqN3c8FHGqVZgB
-         NNVuMVLXW0nnVCvOkDtDz6F3QnunwjhXlHJrhWv3g1mK2Heb2ZSaLG7F6njWTLqKsAgs
-         GA/Q==
+        id S1726054AbgCFJy4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Mar 2020 04:54:56 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45021 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726010AbgCFJy4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 04:54:56 -0500
+Received: by mail-ot1-f65.google.com with SMTP id v22so1811625otq.11;
+        Fri, 06 Mar 2020 01:54:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7Uj9oI6tu66o5KdxabEEJ4D+YiA5a1Q+BJTb2luSNcQ=;
-        b=ZFDdYiktiNI7mQ8cEUqia+pIujL7Nn7Zd+7pej7T66OeM521YOHSYqEU/7PEs/mxxi
-         Is681MT1CRw3o6EP15zERtM0dm6Z5zyHNJd6jzWMZji3G2CHxILKy25XS41+UxZFhbZb
-         3hN1qxc2+qg7k3J3ZfJNMV1JH1eOtNQ/YEy+y1487gNQMjbNIUYlImcbkm4bNG4rsebN
-         Oql9F96MeGgosPLcwT/iOzeMmIYBegqxYQnOO5qosJWEaRBrDgPoM+2Sbcv0xWMCDEVV
-         IKST0BzCvwSiv9JMPeMbOrvU3qMbxAZOCkTNDYG0nY11euYP+1TOfsQEnIhX4lHKft+j
-         O9eA==
-X-Gm-Message-State: ANhLgQ0Y3PALe5RT+Um9vokWIjUAhy6rz8GDL+RarUfjvzOBXBmcQoXb
-        L4ra626jN4mqv2m/NrLfrBtaoC6hQKBM0xJ45JBlnA==
-X-Google-Smtp-Source: ADFU+vv8UKh1vyIbgYVlSFMWmsGQxBqD2HsVwUWdSdsT42KhPJNVRxavtARhKC7lTZg56H3qge5wRtQpPb+akWmJGNs=
-X-Received: by 2002:a1f:78c5:: with SMTP id t188mr1090540vkc.43.1583486927414;
- Fri, 06 Mar 2020 01:28:47 -0800 (PST)
+        bh=ZddTJZL3AntI4PKGAxsh5Sq6ETyogrz2w07vElT0QyA=;
+        b=myQZfbTYFblT4k5wbPCbvmTxRfJrK050gUAYN2V1aTUjHUbkJCOPlYCc5+RRtlhyGF
+         d+jvWoAk4cspOSUe93oyORYRzVF9x0UYslJ4xYYVKWuDLnPbjmaoZFvxGRFtJZqdSt28
+         0prI1oCA6ozyBFRTzDRCh+1YSXN9H1MVtLWGLpGVB8Be/X1fy4uVXHAuccM2cHxsX8Rc
+         PF/GB22jIqcu62rG1Xfr7+TWaf11meifixlu0zB8wn7GRdy+W0GhEKl1cfjsXiueGm1B
+         JLp29EyDC++4SZw4GyYavwLLvkWeWv10T5M7cFqCxlGISSWRA09vgpTatSAh7YPbMI5d
+         1l1A==
+X-Gm-Message-State: ANhLgQ3uBugUfHFWMDuUJg295WfzAxMG5dArW4T33OyRENcP1uHh9HPD
+        jQ1k3taq2iHc81V6nIvQk7ud6aI6SrMYq5JXgxUATg==
+X-Google-Smtp-Source: ADFU+vtqRXDBI3R0DZ+1xYRefdIX7rKVaaXBMQIFjIo+Fbyy9C/VEwHjIb8g6CYzSBwDU+IQDzxlfDndhYrUBX/vp6M=
+X-Received: by 2002:a9d:67d7:: with SMTP id c23mr1822295otn.262.1583488493901;
+ Fri, 06 Mar 2020 01:54:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20200303203559.23995-1-ulf.hansson@linaro.org>
- <20200303203559.23995-5-ulf.hansson@linaro.org> <20200304122312.GE25004@bogus>
- <CAPDyKFpcN-p6sKqB0ujHAY29qPSg7qpSjYGymPaJ4W8jgCKGcg@mail.gmail.com> <20200305162321.GB53631@bogus>
-In-Reply-To: <20200305162321.GB53631@bogus>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 6 Mar 2020 10:28:10 +0100
-Message-ID: <CAPDyKFogjPG+mRsfPaxN7RjB7TQL9=qHNzA=K_t0F6M6Q9-TuA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] cpuidle: psci: Allow WFI to be the only state for
- the hierarchical topology
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20200305013509.GF5972@shao2-debian> <951b0986-bb35-d9a5-1639-0a8cdb3dcd04@intel.com>
+ <cbe4887c-d54a-c4aa-e4bf-981b5fcc291d@intel.com> <CAJZ5v0g2vzYQ04GyrpubLx2+B0O4SDbqoTDCvhnSyaj1j1xswA@mail.gmail.com>
+ <87zhcuyxce.fsf@yhuang-dev.intel.com>
+In-Reply-To: <87zhcuyxce.fsf@yhuang-dev.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 6 Mar 2020 10:54:42 +0100
+Message-ID: <CAJZ5v0g3f1Rf0HFLH+hWkbW6q0_E1RjhX2AeUxa_DHfJRQj7Qw@mail.gmail.com>
+Subject: Re: [LKP] Re: [cpufreq] 909c0e9cc1: fwq.fwq.med 210.0% improvement
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rong Chen <rong.a.chen@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux PM <linux-pm@vger.kernel.org>, lkp@lists.01.org,
+        Andi Kleen <andi.kleen@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 5 Mar 2020 at 17:23, Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Fri, Mar 6, 2020 at 4:29 AM Huang, Ying <ying.huang@intel.com> wrote:
 >
-> On Thu, Mar 05, 2020 at 03:17:42PM +0100, Ulf Hansson wrote:
-> > On Wed, 4 Mar 2020 at 13:23, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > The $subject is bit confusing. IIUC, if there are no idle states to
-> > > manage including hierarchical domain states you will not register the driver
-> > > right ? If so, you are not allowing WFI to be the only state, hence my
-> > > concern with $subject.
-> >
-> > I agree that's not so clear, but it wasn't easy to fit everything I
-> > wanted to say in one line. :-)
-> >
+> Hi, Rafael,
 >
-> No worries, just wanted to clarified. Looking at the patch, lot of things
-> got clarified but thought we can always improve.
+> "Rafael J. Wysocki" <rafael@kernel.org> writes:
 >
-> > Is this below better and okay for you?
+> > On Thu, Mar 5, 2020 at 9:18 AM Rong Chen <rong.a.chen@intel.com> wrote:
+> >>
+> >>
+> >>
+> >> On 3/5/20 3:50 PM, Rafael J. Wysocki wrote:
+> >> > On 3/5/2020 2:35 AM, kernel test robot wrote:
+> >> >> Greeting,
+> >> >>
+> >> >> FYI, we noticed a 210.0% improvement of fwq.fwq.med due to commit:
+> >> >
+> >> > Well, that sounds impressive. :-)
+> >> >
+> >> >
+> >> >>
+> >> >> commit: 909c0e9cc11ba39fa5a660583b25c2431cf54deb ("cpufreq:
+> >> >> intel_pstate: Use passive mode by default without HWP")
+> >> >> https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git
+> >> >> intel_pstate-passive
+> >> >>
+> >> >> in testcase: fwq
+> >> >> on test machine: 16 threads Intel(R) Xeon(R) CPU D-1541 @ 2.10GHz
+> >> >> with 48G memory
+> >> >> with following parameters:
+> >> >>
+> >> >>     nr_task: 100%
+> >> >>     samples: 100000ss
+> >> >>     iterations: 18x
+> >> >>     cpufreq_governor: powersave
+> >> >
+> >> > The governor should be schedutil, though, unless it is explicitly set
+> >> > to powersave in the test environment.
+> >> >
+> >> > Is that the case?
+> >> >
+> >> >
+> >>
+> >> Hi Rafael,
+> >>
+> >> Yes, we set to powersave for this test.
 > >
-> > "cpuidle: psci: Update condition when avoiding driver registration".
-> >
+> > I wonder why this is done?  Is there any particular technical reason
+> > for doing that?
 >
-> Definitely better than $subject :)
+> fwq is a noise benchmark to measure the hardware and software noise
+> level.  More information could be found in the following document.
+>
+> https://asc.llnl.gov/sequoia/benchmarks/FTQ_summary_v1.1.pdf
+>
+> In 0day, to measure the noise introduced by power management, we will
+> run fwq with the performance and powersave governors.  Do you think this
+> is reasonable?  Or we should use some other governors?
 
-Great, then I switch to that.
+I think that the schedutil governor should be tested too if present.
 
->
-> > >
-> > > On Tue, Mar 03, 2020 at 09:35:59PM +0100, Ulf Hansson wrote:
-> > > > It's possible that only the WFI state is supported for the CPU, while also
-> > > > a shared idle state exists for a group of CPUs.
-> > > >
-> > > > When the hierarchical topology is used, the shared idle state may not be
-> > > > compatible with arm,idle-state, rather with "domain-idle-state", which
-> > > > makes dt_init_idle_driver() to return zero. This leads to that the
-> > > > cpuidle-psci driver bails out during initialization, avoiding to register a
-> > > > cpuidle driver and instead relies on the default architectural back-end
-> > > > (called via cpu_do_idle()). In other words, the shared idle state becomes
-> > > > unused.
-> > > >
-> > > > Let's fix this behaviour, by allowing the dt_init_idle_driver() to return 0
-> > > > and then continue with the initialization. If it turns out that the
-> > > > hierarchical topology is used and we have some additional states to manage,
-> > > > then continue with the cpuidle driver registration, otherwise bail out as
-> > > > before.
-> > > >
-> > > > Reported-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-> > > > Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
-> > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > ---
-> > > >
-> > > > Changes in v2:
-> > > >       - Convert the error code returned from psci_cpu_suspend_enter() into an
-> > > >       expected error code by cpuidle core.
-> > > >
-> > > > ---
-> > > >  drivers/cpuidle/cpuidle-psci.c | 48 +++++++++++++++++++++-------------
-> > > >  1 file changed, 30 insertions(+), 18 deletions(-)
-> > > >
-> > > > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > > > index bae9140a65a5..ae0fabec2742 100644
-> > > > --- a/drivers/cpuidle/cpuidle-psci.c
-> > > > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > > > @@ -56,16 +56,19 @@ static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
-> > > >       u32 *states = data->psci_states;
-> > > >       struct device *pd_dev = data->dev;
-> > > >       u32 state;
-> > > > -     int ret;
-> > > > +     int ret = 0;
-> > > >
-> > > >       /* Do runtime PM to manage a hierarchical CPU toplogy. */
-> > > >       pm_runtime_put_sync_suspend(pd_dev);
-> > > >
-> > > >       state = psci_get_domain_state();
-> > > > -     if (!state)
-> > > > +     if (!state && states)
-> > > >               state = states[idx];
-> > > >
-> > > > -     ret = psci_enter_state(idx, state);
-> > > > +     if (state)
-> > > > +             ret = psci_cpu_suspend_enter(state) ? -1 : idx;
-> > > > +     else
-> > > > +             cpu_do_idle();
-> > >
-> > > May be, I haven't followed this completely yet, but I don't want to be
-> > > in the position to replicated default arch idle hook. Just use the one
-> > > that exist by simply not registering the driver.
-> >
-> > That doesn't work for the configuration I am solving.
-> >
-> > Assume this scenario: We have WFI and a domain/cluster idle state.
-> > From the cpuidle governor point of view, it always selects the WFI
-> > state, which means idx is zero.
-> >
->
-> OK. The only state that cluster can enter when CPUs are in WFI are
-> cluster WFI and most hardware can handle it automatically. I don't see
-> the need to do any extra work for that.
-
-This isn't about cluster WFI, but about deeper cluster states, such as
-a cluster-clock-gated-state and a cluster-power-off-state. It's an ST
-platform, which Benjamin is working on.
-
->
-> > Then, after we have called pm_runtime_put_sync_suspend() a few lines
-> > above, we may potentially have a "domain state" to use, instead of the
-> > WFI state.
-> >
->
-> Are they any platforms with this potential "domain state" to use with
-> CPU WFI. I want to understand this better.
->
-> > In this case, if we would have called psci_enter_state(), that would
-> > lead us to calling cpu_do_idle() from the __CPU_PM_CPU_IDLE_ENTER()
-> > macro, becuase idx is zero. In other words, the domain state would
-> > become unused.
-> >
->
-> For a domain state to become unused with WFI, it needs to be available
-> and I am not 100% sure of that.
-
-With these changes from the series, we can fully conform to the
-hierarchical DT bindings for PSCI.
-
-I am not sure I understand your concern, is there a cost involved by
-applying this?
-
-Kind regards
-Uffe
+Also note that for the intel_pstate driver "powersave" may mean
+different things depending on the current operation mode of the
+driver.  If scaling_driver is "intel_pstate", then "powersave" is the
+driver's built-in algorithm.  If scaling_driver is "intel_cpufreq",
+though, "powersave" means running at the minimum frequency all the
+time.
