@@ -2,23 +2,22 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E8C17BD5D
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 13:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D400317BD83
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Mar 2020 14:04:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726314AbgCFM6D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Mar 2020 07:58:03 -0500
-Received: from mail.baikalelectronics.com ([87.245.175.226]:35928 "EHLO
+        id S1726307AbgCFND7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Mar 2020 08:03:59 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:36126 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726171AbgCFM6D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 07:58:03 -0500
-X-Greylist: delayed 593 seconds by postgrey-1.27 at vger.kernel.org; Fri, 06 Mar 2020 07:58:01 EST
+        with ESMTP id S1726054AbgCFND7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 08:03:59 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 3596F80307C2;
-        Fri,  6 Mar 2020 12:48:07 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 6ABDD8030703;
+        Fri,  6 Mar 2020 13:03:56 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id e-Q1VTnmsfw8; Fri,  6 Mar 2020 15:48:05 +0300 (MSK)
+        with ESMTP id EJm72VqUZvCq; Fri,  6 Mar 2020 16:03:51 +0300 (MSK)
 From:   <Sergey.Semin@baikalelectronics.ru>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
@@ -29,23 +28,21 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
         Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paul.burton@imgtec.com>,
+        Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, <linux-mips@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 00/22] mips: Prepare MIPS-arch code for Baikal-T1 SoC support
-Date:   Fri, 6 Mar 2020 15:46:43 +0300
+Subject: [PATCH 0/4] syscon: Alter syscon and reboot-mode drivers
+Date:   Fri, 6 Mar 2020 16:03:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-Message-Id: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+Message-Id: <20200306130356.6ABDD8030703@mail.baikalelectronics.ru>
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -54,81 +51,31 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Serge Semin <fancer.lancer@gmail.com>
 
-This is a first patchset of a series of about 25 ones, which are intended to
-add the full Baikal-T1 SoC [1] support to the Linux kernel. Since they will
-concern various kernel subsystems, I decided to split the whole work up into
-the patchesets in accordance with the subsystems/devices their changes are
-introduced for. Nearly 2/3 of the work is already done and will be sent out
-very soon. While the rest of the changes specifically related to the fast-speed
-interfaces (DW 12G PHY, PCIe, SATA, xGBE, GMAC, USB, DDRC, IC) are still in
-refactoring and preparation for integration into the mainline kernel. Hopefully
-I'll finish them up in the next two-three months, and submit them straight
-away.
+A lot of custom functionality can be tuned by means of a syscon-registers
+placed in Baikal-T1 CCU memory space (though in documentation they are
+called system devices registers). While in most of the case the syscon
+registers usage will be distributed between corresponding subsystem drivers
+(thanks to pretty much coherent design of the registers fields), there are
+some peculiarities we should reflect in the generic syscon code.
 
-Getting back to this patchset. As the subject states this is intended to
-prepare the MIPS-arch and generic kernel code for further Baikal-T1 SoC
-platform support integration (note the Baikal-T1 SoC platform code will be
-submitted last after the whole series of patchsets as a closure of the
-submission process). First of all the patchset starts with a set of changes
-to the dt-bindings kernel concerning MIPS CPC and CDMM nodes as being described
-by the trivial device bindings. In addition we updated the vendors prefix
-schema with Baikal Electronics JSC prefix so being further committed device
-drivers would be correctly accepted by the checkpatch-script.
+First of all seeing there is an map endiannes config acceptable by the syscon
+it would be justified to add the corresponding properties declared in the
+mfd/syscon.yaml bindings file. Don't really know why this hasn't been done
+before.
 
-Then I found out that dtc-compiler integrated into the kernel doesn't support
-all the possible values of the 'reg'-property used to define the i2c-slave
-devices address. It may have 10-bits and own-slave flags, so the compiler has
-to deal with them. Even though the patch might be better to be integrated into
-the mainline dtc repo I decided to send it to the kernel first.
+Then as it's going to be general in the framework of the Baikal-T1 SoC support
+integration into the kernel, we suggest to replace the legacy text-based
+syscon-reboot-mode dts-bindings file with yaml-based one.
 
-While I was working with the MIPS architecture code, I discovered, that there
-is a bug in the Coherency Manager v2 error causes declaration and the errors
-handler lacked of CM2  L2 ECC/parity errors support. So the fixes are here in
-the patchset.
-
-Baikal-T1 SoC is based on the MIPS P5600 Warrior IP-core, which itself has
-MIPS32 Release 5 architecture. Even though on ISA level it doesn't differ much
-from the MIPS32 Release 2 release, there are still some peculiarities, which
-make it's justified to add the direct MIPS32r5 support into the kernel (see
-the specific patch for details). In addition seeing there is more than one
-real chip based on the MIPS P5600 core on the market, it would be good to have
-the direct P5600 CPU config in the MIPS-arch.
-
-There were some issues we discovered while were working with MIPS-arch code.
-So the cleanups and fixes are introduced in this patchset. First of all the
-Write-Merge CPU feature hasn't been handled in a generic way. Even if a
-platform defined the writecombine flag as _CACHE_UNCACHED_ACCELERATED, the
-feature might have been disabled in the CP0 register. We either enable it or
-leave it as is in accordance with the knowledge of whether the corresponding
-platform really supports it. Secondly Memory Accessibility Attribute Registers
-(MAAR) haven't been properly initialized when Extended Physical Address (XPA)
-mode was enabled. Thirdly since some of the platforms may have a very strict
-limitations on the IO-memory access instructions. For instance Baikal-T1 SoC
-IO-memory can be accessed by the lw/sw instructions only. In this case
-for early-printk and CPS-debug code we suggest to use the instructions in
-accordance with the UART-registers offset (lb/sb if offset = 0, lh/sh
-if offset = 1 and so on). Fourthly in case if CPUFREQ feature is enabled
-and frequency of the CPU is changed by the reference clock alteration, we
-must make sure that MIPS r4k timer related services are properly updated
-when CPU-frequency changes. It concerns udelay lpj adjustment, MIPS timer
-clockevent frequency update. In addition when CPU reference frequency changes
-it isn't recommended to use the timer as clocksource at all, since currently
-the subsystem isn't tolerant to the unstable clock sources. So in this case
-we suggest to use the r4k timer for clocksourcing only as a last resort.
-Fifthly we discovered a bug in a method of CPUFREQ boost feature enable
-procedure and fixed it in one of the patches within this patchset. And finally
-there are a few fixups/cleanups we suggest to integrate into the MIPS FDC
-and CDMM related code (see the patches for details).
+Finally seeing the syscon-reboot-mode devices are mostly used in conjuction
+with just syscon-reboot device (in particular Baikal-T1 CCU WDT RCR register is
+preserved during any type of reboots) and for several other reasons (see the
+commit message for details), we suggest to add the 'regmap' property support
+to the syscon-reboot-mode driver. This would eliminate the requirement of
+placing the syscon-reboot-mode dts-node in the syscon sub-nodes area.
 
 This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
 commit 98d54f81e36b ("Linux 5.6-rc4").
-
-[1] http://www.baikalelectronics.com/products/168/
-
-P.S. Sorry for the previous emails burst. I forgot to start the series with
-this cover-letter and the corporate smtp broke the transmission in the middle
-anyway. Please don't pay attention to them. Here is the proper emails
-resubmission.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
@@ -138,83 +85,31 @@ Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
 Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
 Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paul.burton@imgtec.com>
+Cc: Paul Burton <paulburton@kernel.org>
 Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>
 Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-cc: Tony Lindgren <tony@atomide.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jslaby@suse.com>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
+Cc: Mark Rutland <mark.rutland@arm.com>
 Cc: devicetree@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 
-Serge Semin (22):
-  dt-bindings: Permit platform devices in the trivial-devices bindings
-  dt-bindings: Add MIPS CPC controller as a trivial devices
-  dt-bindings: Add MIPS CDMM controller as a trivial device
-  dt-bindings: Add vendor prefix for Baikal Electronics, JSC
-  mips: cm: Fix an invalid error code of INTVN_*_ERR
-  mips: cm: Add L2 ECC/parity errors reporting
-  mips: Add MIPS32 Release 5 support
-  mips: Add MIPS Warrior P5600 support
-  mips: Fix cpu_has_mips64r1/2 activation for MIPS32 CPUs
-  mips: Add CP0 Write Merge config support
-  mips: Add CONFIG/CONFIG6 reg fields macro
-  mips: MAAR: Use more precise address mask
-  mips: MAAR: Add XPA mode support
-  mips: early_printk_8250: Use offset-sized IO-mem accessors
-  mips: Use offset-sized IO-mem accessors in CPS debug printout
-  mips: cdmm: Add mti,mips-cdmm dtb node support
-  bus: cdmm: Add MIPS R5 arch support
-  tty: mips_ejtag_fdc: Mark expected switch fall-through
-  mips: Add udelay lpj numbers adjustment
-  mips: csrc-r4k: Decrease r4k-clocksource rating if CPU_FREQ enabled
-  mips: cevt-r4k: Update the r4k-clockevent frequency in sync with CPU
-  cpufreq: Return zero on success in boost sw setting
+Serge Semin (4):
+  dt-bindings: syscon: Add syscon endian properties support
+  dt-bindings: power: reset: Replace SYSCON reboot-mode legacy bindings
+    with YAML-based one
+  dt-bindings: power: reset: Add regmap support to the SYSCON
+    reboot-mode bindings
+  power: reset: syscon-reboot-mode: Add regmap dts-property support
 
- .../bindings/power/mti,mips-cpc.txt           |  8 ---
- .../devicetree/bindings/trivial-devices.yaml  | 12 ++--
- .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
- arch/mips/Kconfig                             | 62 ++++++++++++++--
- arch/mips/Makefile                            |  2 +
- arch/mips/include/asm/asmmacro.h              | 18 ++---
- arch/mips/include/asm/compiler.h              |  5 ++
- arch/mips/include/asm/cpu-features.h          | 34 ++++++---
- arch/mips/include/asm/cpu-info.h              |  2 +-
- arch/mips/include/asm/cpu-type.h              |  6 +-
- arch/mips/include/asm/cpu.h                   | 11 +--
- arch/mips/include/asm/fpu.h                   |  4 +-
- arch/mips/include/asm/hazards.h               |  8 ++-
- arch/mips/include/asm/maar.h                  | 17 ++++-
- arch/mips/include/asm/mipsregs.h              | 33 ++++++++-
- arch/mips/include/asm/module.h                |  4 ++
- arch/mips/include/asm/stackframe.h            |  2 +-
- arch/mips/include/asm/switch_to.h             |  8 +--
- arch/mips/kernel/cevt-r4k.c                   | 44 ++++++++++++
- arch/mips/kernel/cps-vec-ns16550.S            | 18 ++++-
- arch/mips/kernel/cpu-probe.c                  | 60 ++++++++++++++++
- arch/mips/kernel/csrc-r4k.c                   |  4 ++
- arch/mips/kernel/early_printk_8250.c          | 34 ++++++++-
- arch/mips/kernel/entry.S                      |  6 +-
- arch/mips/kernel/mips-cm.c                    | 66 +++++++++++++++--
- arch/mips/kernel/proc.c                       |  2 +
- arch/mips/kernel/r4k_fpu.S                    | 14 ++--
- arch/mips/kernel/spram.c                      |  4 +-
- arch/mips/kernel/time.c                       | 70 +++++++++++++++++++
- arch/mips/kvm/vz.c                            |  6 +-
- arch/mips/lib/csum_partial.S                  |  6 +-
- arch/mips/mm/c-r4k.c                          |  7 +-
- arch/mips/mm/init.c                           |  8 ++-
- arch/mips/mm/sc-mips.c                        |  7 +-
- drivers/bus/Kconfig                           |  2 +-
- drivers/bus/mips_cdmm.c                       | 15 ++++
- drivers/cpufreq/cpufreq.c                     |  2 +-
- drivers/tty/mips_ejtag_fdc.c                  |  1 +
- 38 files changed, 529 insertions(+), 85 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/mti,mips-cpc.txt
+ .../devicetree/bindings/mfd/syscon.yaml       | 14 +++++
+ .../power/reset/syscon-reboot-mode.txt        | 35 -----------
+ .../power/reset/syscon-reboot-mode.yaml       | 58 +++++++++++++++++++
+ drivers/power/reset/syscon-reboot-mode.c      | 11 +++-
+ 4 files changed, 80 insertions(+), 38 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml
 
 -- 
 2.25.1
