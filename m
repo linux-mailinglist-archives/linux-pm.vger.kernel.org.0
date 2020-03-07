@@ -2,152 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFCD17C934
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Mar 2020 00:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE8717C983
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Mar 2020 01:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726462AbgCFXzv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Mar 2020 18:55:51 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:45497 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726237AbgCFXzu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 18:55:50 -0500
-Received: by mail-pl1-f193.google.com with SMTP id b22so1496217pls.12
-        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2020 15:55:50 -0800 (PST)
+        id S1726271AbgCGAOi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Mar 2020 19:14:38 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:37130 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726240AbgCGAOh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Mar 2020 19:14:37 -0500
+Received: by mail-io1-f68.google.com with SMTP id k4so3833902ior.4
+        for <linux-pm@vger.kernel.org>; Fri, 06 Mar 2020 16:14:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=android.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=iy66Xc3T8EGl5ApJul/VUh4hjHhsU3+FU6jK2rSraPw=;
-        b=JusjcdkAfTlIEOeg8mV4ChS+MtHqZ9MHCDVAs4ZUlmcQM64RsWbr9y/nwhnpw0jkkG
-         Mdr+VZIL6Vi/oDO+DP0ybCmiArZDwCCGkU2YRJ5kIT0tS6PGXuQTo4GdPAfKnUOznUS/
-         L4rPmPL07WDHK/xjfRB8nxgPfxnCteajWdrfBHhwdneV2UjAoHsFhWKpyAfXTPlBF7yb
-         mj32MyepfyqiLRuhnMaRPuK584dw9JAhVeb8biV6d4xxRCiRJUlcHp9go8uzmO//WhUi
-         f0WMSi2pjAWBBtqFJHZChWogsZUUIf2LLxp8LjaU9QG3x6m7J7VScgupV+ILwFaDKiL2
-         js9g==
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=qHW39RVm7bhWzHPvxHxpEyDEco8gsFv/J35u+/IoltA=;
+        b=J79Zz33ccEHtFjCmy9lqmtpwTUvJI7SNKysWkS0rgJ7VSULB0xWC3T/IZbHYf/Luhg
+         NOJbQKNg9RQdTxHqlkXNm/RKY3MsZmRAzD0Hvgs2LmdlkYLR6HaRxFVaObdn0TsO1hYC
+         K0om2DWVwl0rO0VzQnz2T8brn8vLec/IV5+Lo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=iy66Xc3T8EGl5ApJul/VUh4hjHhsU3+FU6jK2rSraPw=;
-        b=d4Vgjgly+oQQwUZC6NZBLe42gIoz0aXQJnhvCOuD47F/vf/06vyJCPXBP4lHIi9vgU
-         BPkTCt62DQx1uU2zcRrt8IaUI05Vm+GeSUbSTiDZpdjhHLkf65+lWFDOzs/mci+GRNw8
-         sXAOPi9k+J2A4uQGJHJCgPvED1yY3rSyxmOxok3HaheUzBhQ6UkpOKoHYG+5PwdVDq7m
-         OcEBNmYZ0yv9Y6Zqay+REAIbeMAckbzDU64t59SzN2fN8KaaAlpahhCdRHjge205Jkg1
-         y9T85GiUiABQyQb22Ay4pvFTM93gtJSpWWVrWgdyT1uqZwe68P5YqWHtcXTA9SzkR5Sl
-         OkOg==
-X-Gm-Message-State: ANhLgQ3OJLHMJo8MRL/aBVM7Pre43lkoqALbTyz2+X7I7US2AnaXR68G
-        cxXxNyKkyXaezVq5MftHsL7Chg==
-X-Google-Smtp-Source: ADFU+vtA0JLUpUrvRB8/URuMofw7zZLIpVDABYK+ucoeQeRBBorcDOV0QycC7SaSPAT1kqla8wgfOw==
-X-Received: by 2002:a17:90a:2ec7:: with SMTP id h7mr6358221pjs.107.1583538949817;
-        Fri, 06 Mar 2020 15:55:49 -0800 (PST)
-Received: from localhost ([2620:15c:211:0:fb21:5c58:d6bc:4bef])
-        by smtp.gmail.com with ESMTPSA id f8sm36597168pfn.2.2020.03.06.15.55.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2020 15:55:49 -0800 (PST)
-Date:   Fri, 6 Mar 2020 15:55:48 -0800
-From:   Sandeep Patil <sspatil@android.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Dan Murphy <dmurphy@ti.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v4 2/4] power_supply: Add additional health properties to
- the header
-Message-ID: <20200306235548.GA187098@google.com>
-References: <20200116175039.1317-1-dmurphy@ti.com>
- <20200116175039.1317-3-dmurphy@ti.com>
- <20200117010658.iqs2zpwl6bsomkuo@earth.universe>
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=qHW39RVm7bhWzHPvxHxpEyDEco8gsFv/J35u+/IoltA=;
+        b=MHSPdM9smo089R2r+QD48JRSHWA9bXnkyZF792SNFawISAbLBTCvNu/vLC7Ae6JdoT
+         DyHvMq0p0fSyEYM4doe0cz9EMln7UPc76jVoeG1nATCVorBf7Fd9IxR+O5KM0Am738tu
+         Cfvbwq1RXT/58PdAxyxyQPsJJuQ0/2fLKYmkEpe1C94pEJlGptpAjNWa0pmYDJWbnl3e
+         E0LXGvSjikRZj0wtA06InP0asFXK8KAzqX/b+UC6t29aQGLYVSzq3B+/6AUKXxRpD9R8
+         RrwasQ+LnejjErgD1odYNLeoC2Y4/UGPFigRuqABGfVob/iQtxy3A4rM1nQcM4gm93oY
+         SAgg==
+X-Gm-Message-State: ANhLgQ1RTb5U7OULV+Mqn7YOkhNuope34mCHcFA9Ldla/UJWdwNGu+E4
+        D25DxeAYRonE/nZbjcCcAG4DkQ==
+X-Google-Smtp-Source: ADFU+vsNFvIN9+G70hap688bVJo6dmQDejdpJW3FaYIdBZVo1714EoetqS+XDMy7CdNflLVK6xzBWw==
+X-Received: by 2002:a02:ce95:: with SMTP id y21mr5632116jaq.115.1583540077080;
+        Fri, 06 Mar 2020 16:14:37 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id o5sm4629011ils.78.2020.03.06.16.14.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Mar 2020 16:14:36 -0800 (PST)
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Mike Gilbert <floppym@gentoo.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas Renninger <trenn@suse.de>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] cpupower update for Linux 5.6-rc6
+Message-ID: <fcbb3dc4-38ae-8361-bd6b-a00ae00c189c@linuxfoundation.org>
+Date:   Fri, 6 Mar 2020 17:14:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200117010658.iqs2zpwl6bsomkuo@earth.universe>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: multipart/mixed;
+ boundary="------------8783B7F020BFEFD5BCAAC3F8"
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+This is a multi-part message in MIME format.
+--------------8783B7F020BFEFD5BCAAC3F8
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jan 17, 2020 at 02:06:58AM +0100, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Thu, Jan 16, 2020 at 11:50:37AM -0600, Dan Murphy wrote:
-> > Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
-> > 
-> > Signed-off-by: Dan Murphy <dmurphy@ti.com>
-> > ---
-> 
-> Looks good. But I will not merge it without a user and have comments
-> for the driver.
+Hi Rafael,
 
-Android has been looking for these properties for a while now [1].
-It was added[2] when we saw that the manufacturers were implementing these
-properties in the driver. I didn't know the properties were absent upstream
-until yesterday. Somebody pointed out in our ongoing effort to make sure
-all core kernel changes that android depends on are present upstream.
+Please pull the following cpupower update for Linux 5.6-rc6.
 
-I think those values are also propagated in application facing APIs in
-Android (but I am not sure yet, let me know if that's something you want
-to find out).
+This cpupower update for Linux 5.6-rc6 consists of a fix from
+Mike Gilbert for build failures when -fno-common is enabled.
+-fno-common will be default in gcc v10.
 
-I wanted to chime in and present you a 'user' for this if that helps.
+Diff is attached.
 
-Cc: kernel-team@android.com
-
-- ssp
-
-1. https://android.googlesource.com/platform/system/core/+/refs/heads/master/healthd/BatteryMonitor.cpp#162
-2. https://android-review.googlesource.com/c/platform/system/core/+/414481
-
-> 
-> -- Sebastian
-> 
-> >  Documentation/ABI/testing/sysfs-class-power | 2 +-
-> >  drivers/power/supply/power_supply_sysfs.c   | 2 +-
-> >  include/linux/power_supply.h                | 3 +++
-> >  3 files changed, 5 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-> > index bf3b48f022dc..9f3fd01a9373 100644
-> > --- a/Documentation/ABI/testing/sysfs-class-power
-> > +++ b/Documentation/ABI/testing/sysfs-class-power
-> > @@ -190,7 +190,7 @@ Description:
-> >  		Valid values: "Unknown", "Good", "Overheat", "Dead",
-> >  			      "Over voltage", "Unspecified failure", "Cold",
-> >  			      "Watchdog timer expire", "Safety timer expire",
-> > -			      "Over current"
-> > +			      "Over current", "Warm", "Cool", "Hot"
-> >  
-> >  What:		/sys/class/power_supply/<supply_name>/precharge_current
-> >  Date:		June 2017
-> > diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> > index f37ad4eae60b..d0d549611794 100644
-> > --- a/drivers/power/supply/power_supply_sysfs.c
-> > +++ b/drivers/power/supply/power_supply_sysfs.c
-> > @@ -61,7 +61,7 @@ static const char * const power_supply_charge_type_text[] = {
-> >  static const char * const power_supply_health_text[] = {
-> >  	"Unknown", "Good", "Overheat", "Dead", "Over voltage",
-> >  	"Unspecified failure", "Cold", "Watchdog timer expire",
-> > -	"Safety timer expire", "Over current"
-> > +	"Safety timer expire", "Over current", "Warm", "Cool", "Hot"
-> >  };
-> >  
-> >  static const char * const power_supply_technology_text[] = {
-> > diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> > index 28413f737e7d..bd0d3225f245 100644
-> > --- a/include/linux/power_supply.h
-> > +++ b/include/linux/power_supply.h
-> > @@ -61,6 +61,9 @@ enum {
-> >  	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
-> >  	POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE,
-> >  	POWER_SUPPLY_HEALTH_OVERCURRENT,
-> > +	POWER_SUPPLY_HEALTH_WARM,
-> > +	POWER_SUPPLY_HEALTH_COOL,
-> > +	POWER_SUPPLY_HEALTH_HOT,
-> >  };
-> >  
-> >  enum {
-> > -- 
-> > 2.25.0
-> > 
+thanks,
+-- Shuah
 
 
+----------------------------------------------------------------
+The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
+
+   Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux 
+tags/linux-cpupower-5.6-rc6
+
+for you to fetch changes up to 2de7fb60a4740135e03cf55c1982e393ccb87b6b:
+
+   cpupower: avoid multiple definition with gcc -fno-common (2020-03-02 
+08:53:34 -0700)
+
+----------------------------------------------------------------
+linux-cpupower-5.6-rc6
+
+This cpupower update for Linux 5.6-rc6 consists of a fix from
+Mike Gilbert for build failures when -fno-common is enabled.
+-fno-common will be default in gcc v10.
+
+----------------------------------------------------------------
+Mike Gilbert (1):
+       cpupower: avoid multiple definition with gcc -fno-common
+
+  tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c  | 2 +-
+  tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c    | 2 +-
+  tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c | 2 ++
+  tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h | 2 +-
+  4 files changed, 5 insertions(+), 3 deletions(-)
+----------------------------------------------------------------
+
+--------------8783B7F020BFEFD5BCAAC3F8
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-cpupower-5.6-rc6.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-cpupower-5.6-rc6.diff"
+
+diff --git a/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c b/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
+index 33dc34db4f3c..20f46348271b 100644
+--- a/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
++++ b/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
+@@ -82,7 +82,7 @@ static struct pci_access *pci_acc;
+ static struct pci_dev *amd_fam14h_pci_dev;
+ static int nbp1_entered;
+ 
+-struct timespec start_time;
++static struct timespec start_time;
+ static unsigned long long timediff;
+ 
+ #ifdef DEBUG
+diff --git a/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c b/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
+index 3c4cee160b0e..a65f7d011513 100644
+--- a/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
++++ b/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
+@@ -19,7 +19,7 @@ struct cpuidle_monitor cpuidle_sysfs_monitor;
+ 
+ static unsigned long long **previous_count;
+ static unsigned long long **current_count;
+-struct timespec start_time;
++static struct timespec start_time;
+ static unsigned long long timediff;
+ 
+ static int cpuidle_get_count_percent(unsigned int id, double *percent,
+diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
+index 6d44fec55ad5..7c77045fef52 100644
+--- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
++++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
+@@ -27,6 +27,8 @@ struct cpuidle_monitor *all_monitors[] = {
+ 0
+ };
+ 
++int cpu_count;
++
+ static struct cpuidle_monitor *monitors[MONITORS_MAX];
+ static unsigned int avail_monitors;
+ 
+diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
+index 5b5eb1da0cce..c559d3115330 100644
+--- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
++++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.h
+@@ -25,7 +25,7 @@
+ #endif
+ #define CSTATE_DESC_LEN 60
+ 
+-int cpu_count;
++extern int cpu_count;
+ 
+ /* Hard to define the right names ...: */
+ enum power_range_e {
+
+--------------8783B7F020BFEFD5BCAAC3F8--
