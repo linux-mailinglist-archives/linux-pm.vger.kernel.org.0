@@ -2,24 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9032817CA52
-	for <lists+linux-pm@lfdr.de>; Sat,  7 Mar 2020 02:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0539217CA71
+	for <lists+linux-pm@lfdr.de>; Sat,  7 Mar 2020 02:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726245AbgCGBcn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Mar 2020 20:32:43 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:40950 "EHLO inva020.nxp.com"
+        id S1726733AbgCGBcp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Mar 2020 20:32:45 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:41048 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726231AbgCGBcm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 6 Mar 2020 20:32:42 -0500
+        id S1726368AbgCGBcp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 6 Mar 2020 20:32:45 -0500
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 1CCD21A0DC9;
-        Sat,  7 Mar 2020 02:32:40 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6FDE21A0DC5;
+        Sat,  7 Mar 2020 02:32:42 +0100 (CET)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 304A41A0DCB;
-        Sat,  7 Mar 2020 02:32:20 +0100 (CET)
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 66C5E1A0DD9;
+        Sat,  7 Mar 2020 02:32:23 +0100 (CET)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id BB7F9402E2;
-        Sat,  7 Mar 2020 09:32:06 +0800 (SGT)
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 1AAD9402FC;
+        Sat,  7 Mar 2020 09:32:09 +0800 (SGT)
 From:   Anson Huang <Anson.Huang@nxp.com>
 To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, dmitry.torokhov@gmail.com,
@@ -36,86 +36,49 @@ To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-watchdog@vger.kernel.org
 Cc:     Linux-imx@nxp.com
-Subject: [PATCH V2 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
-Date:   Sat,  7 Mar 2020 09:25:53 +0800
-Message-Id: <1583544359-515-1-git-send-email-Anson.Huang@nxp.com>
+Subject: [PATCH V2 2/7] firmware: imx: add COMPILE_TEST support
+Date:   Sat,  7 Mar 2020 09:25:54 +0800
+Message-Id: <1583544359-515-2-git-send-email-Anson.Huang@nxp.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1583544359-515-1-git-send-email-Anson.Huang@nxp.com>
+References: <1583544359-515-1-git-send-email-Anson.Huang@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add stubs for those i.MX SCU APIs to make those modules depending
-on IMX_SCU can pass build when COMPILE_TEST is enabled.
+Add COMPILE_TEST support to i.MX SCU drivers for better compile
+testing coverage.
 
 Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 ---
-new patch.
+no change.
 ---
- include/linux/firmware/imx/ipc.h | 11 +++++++++++
- include/linux/firmware/imx/sci.h | 19 +++++++++++++++++++
- 2 files changed, 30 insertions(+)
+ drivers/firmware/imx/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/firmware/imx/ipc.h b/include/linux/firmware/imx/ipc.h
-index 8910574..3fff0e2 100644
---- a/include/linux/firmware/imx/ipc.h
-+++ b/include/linux/firmware/imx/ipc.h
-@@ -34,6 +34,7 @@ struct imx_sc_rpc_msg {
- 	uint8_t func;
- };
+diff --git a/drivers/firmware/imx/Kconfig b/drivers/firmware/imx/Kconfig
+index 1d2e5b8..116707a 100644
+--- a/drivers/firmware/imx/Kconfig
++++ b/drivers/firmware/imx/Kconfig
+@@ -12,7 +12,7 @@ config IMX_DSP
  
-+#ifdef CONFIG_IMX_SCU
- /*
-  * This is an function to send an RPC message over an IPC channel.
-  * It is called by client-side SCFW API function shims.
-@@ -55,4 +56,14 @@ int imx_scu_call_rpc(struct imx_sc_ipc *ipc, void *msg, bool have_resp);
-  * @return Returns an error code (0 = success, failed if < 0)
-  */
- int imx_scu_get_handle(struct imx_sc_ipc **ipc);
-+#else
-+static inline int imx_scu_call_rpc(struct imx_sc_ipc *ipc, void *msg, bool have_resp)
-+{
-+	return 0;
-+}
-+static inline int imx_scu_get_handle(struct imx_sc_ipc **ipc)
-+{
-+	return 0;
-+}
-+#endif
- #endif /* _SC_IPC_H */
-diff --git a/include/linux/firmware/imx/sci.h b/include/linux/firmware/imx/sci.h
-index 17ba4e4..4688b60 100644
---- a/include/linux/firmware/imx/sci.h
-+++ b/include/linux/firmware/imx/sci.h
-@@ -16,8 +16,27 @@
- #include <linux/firmware/imx/svc/misc.h>
- #include <linux/firmware/imx/svc/pm.h>
+ config IMX_SCU
+ 	bool "IMX SCU Protocol driver"
+-	depends on IMX_MBOX
++	depends on IMX_MBOX || COMPILE_TEST
+ 	help
+ 	  The System Controller Firmware (SCFW) is a low-level system function
+ 	  which runs on a dedicated Cortex-M core to provide power, clock, and
+@@ -24,6 +24,6 @@ config IMX_SCU
  
-+#ifdef CONFIG_IMX_SCU
- int imx_scu_enable_general_irq_channel(struct device *dev);
- int imx_scu_irq_register_notifier(struct notifier_block *nb);
- int imx_scu_irq_unregister_notifier(struct notifier_block *nb);
- int imx_scu_irq_group_enable(u8 group, u32 mask, u8 enable);
-+#else
-+static inline int imx_scu_enable_general_irq_channel(struct device *dev)
-+{
-+	return 0;
-+}
-+static inline int imx_scu_irq_register_notifier(struct notifier_block *nb)
-+{
-+	return 0;
-+}
-+static inline int imx_scu_irq_unregister_notifier(struct notifier_block *nb)
-+{
-+	return 0;
-+}
-+static inline int imx_scu_irq_group_enable(u8 group, u32 mask, u8 enable)
-+{
-+	return 0;
-+}
-+#endif
- #endif /* _SC_SCI_H */
+ config IMX_SCU_PD
+ 	bool "IMX SCU Power Domain driver"
+-	depends on IMX_SCU
++	depends on IMX_SCU || COMPILE_TEST
+ 	help
+ 	  The System Controller Firmware (SCFW) based power domain driver.
 -- 
 2.7.4
 
