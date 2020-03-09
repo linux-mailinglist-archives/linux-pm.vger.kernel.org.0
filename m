@@ -2,202 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 070D917E163
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2020 14:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5289417E16C
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2020 14:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgCINk1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Mar 2020 09:40:27 -0400
-Received: from mail-eopbgr40047.outbound.protection.outlook.com ([40.107.4.47]:8975
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726427AbgCINk0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 9 Mar 2020 09:40:26 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lYnVjA3zP0uVnB8rHCxVNQe+5QyodIUayaujkMu6VnwRsaaWMcNA3yCwtciDCTdV98+OGCC2nP7eFIEKKJDdlJYLZ23KTqX0Uwd8oXJCwm3tF+8FKnojmzrJVvG1pAbxfDGyoYGEGS1YPK1PGWMPSmmu1jomsAfSoTtUchFiahE+ko1nS321pFFaLl3Zdft0Y+fpdnzdP7BYAd8u0oII/4sbXqdgT+jkQ/K2774Ku2xbgHth2QUne+KNpLk0Jl+s+7uJ4VgVGAUzQ5oPH0kNFirkyjjNRcReQFMKRKmVgekTcuqK/KH0rR7Z6e+3t51D/GjByps5AeCed7BvaMSjKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KMidsTvdLF3grg+vGMKuvpMmjkv8LS6hXSx26cqDJXk=;
- b=QpSY8l9FHO/wc3hjsJmg6B2bOt/moSWfNCea4GiTKBgf4K7nbkSaIG4Dbchh+u7CDwCm3KABrQXTxh23Ksg76fjaQbWFNCU26ge23LzIqz8yAI65oPgi4V2mS/Z9FoN+gCsDxVCZxNEOI8cuyDjbRtvQASEtBRXWjfZzL2l48FAV0AuOG7geNxz1+nzvKhK1x8mMLBNnVTt394v9VkW9JtEdfaUpotLlxnixwUeDPR4E0ToT96y5UTbOxU6LI2Y0DO5nhG2syLMv/CCMcA0gYWFUZ251reD2oxvzvArJKq+d5apfv8YMl+bskzWjHV3Wpp25mDZEGB4OBQ8aiDbsqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KMidsTvdLF3grg+vGMKuvpMmjkv8LS6hXSx26cqDJXk=;
- b=GcjkwchOxIzhFiZTSy+HdEn4sER+0yjIqpCG93T959cq6B5yvBcFaATIpgNJT5MPeCN2lJg5d/NEq9/Z9v+bPS1ilzBgauSyNpA13SYOtYgko5rYogcO+Svh3Sra2ZY+oXGjHmLvkLC94eTt0POQRGWwStXleLzAo55vK4pXxeg=
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
- AM0PR04MB6659.eurprd04.prod.outlook.com (20.179.255.152) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2793.11; Mon, 9 Mar 2020 13:40:18 +0000
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::548f:4941:d4eb:4c11]) by AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::548f:4941:d4eb:4c11%6]) with mapi id 15.20.2793.013; Mon, 9 Mar 2020
- 13:40:18 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Anson Huang <anson.huang@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux@rempel-privat.de" <linux@rempel-privat.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "m.felsch@pengutronix.de" <m.felsch@pengutronix.de>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "ronald@innovation.ch" <ronald@innovation.ch>,
-        "krzk@kernel.org" <krzk@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
-Thread-Topic: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
-Thread-Index: AQHV9av6lP0y7UryDUCSkdoJ2q6AXKhARRTA
-Date:   Mon, 9 Mar 2020 13:40:18 +0000
-Message-ID: <AM0PR04MB4481F087AC3CDA691300710288FE0@AM0PR04MB4481.eurprd04.prod.outlook.com>
-References: <1583714300-19085-1-git-send-email-Anson.Huang@nxp.com>
-In-Reply-To: <1583714300-19085-1-git-send-email-Anson.Huang@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peng.fan@nxp.com; 
-x-originating-ip: [119.31.174.68]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: de9658cf-a8b4-490b-12b4-08d7c42f67f1
-x-ms-traffictypediagnostic: AM0PR04MB6659:|AM0PR04MB6659:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR04MB665911A08592AAC8535CF9B288FE0@AM0PR04MB6659.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1360;
-x-forefront-prvs: 0337AFFE9A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(396003)(366004)(39860400002)(376002)(346002)(199004)(189003)(8936002)(9686003)(55016002)(7416002)(4326008)(2906002)(86362001)(66946007)(6506007)(5660300002)(966005)(81156014)(81166006)(7696005)(71200400001)(316002)(76116006)(44832011)(478600001)(33656002)(52536014)(66476007)(66446008)(8676002)(186003)(66556008)(26005)(64756008)(110136005)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB6659;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1PoFkMa15tZ46KLhGlyo8zb94cPa2Upb+OL0q3ee4X0V0YqwKW+AQxl6FSzVG4v6mKfhW1mLh7C+KdoQO0d4dfoWflV4vdEo25Utb7TeEDGEoi1E9xdRI0AIGcAkh9Kk6Ravpd/TXTAHCaOCAvvDi1tMcP9W++/6mZ9GzVTSUvF1WSp3AJG96njWkBc99H2Aho4S0zWFyn6Z3GaF2bfCcgsxbun8ReGZVqIiZAVnOECEI2MT4vN4JleGIhnGmiksZwVHG79cNYoDKNi8vswD7hiBQTvJa5tpi2FlHtHfl1zU8BvOMlDVSMSot+Nv08nooePpVF+Kh78n///rxfcKfRUaqLhPF91WeoJ6T12TI1IqpjEKkUbgE9ym8SveOobiB8Pfd0tFS6f+TaGYitrFv4ZDvns8fMcB/yY+d50dzQDRVv/6xahZHznJArPoEVmnDbHBgEnEGHJN+qGSDbsfQq3zN92EIXEPYIu28EsuU91lPmn3c30K9oVIBqRtMaHWpK7JOvDlRtbvB1j1abU1IFMVwCE0jgtAOmqQ2LzeXxAkolUKazlQt9IKx1v+JqksBMKIQOkLtDcajuXUuBJ5aw==
-x-ms-exchange-antispam-messagedata: pq6kPcSrFhIFN19wWcF2MPiJKUHgunIozl4hXG9thhhS73JNDw9pyNrv6q2TMk9ufBeXJ9IbZaZ1ZW8IIQY+40ukMaV9smeK+FlgxGtC9SrWuBZDTVIatkSTFWxq17/nCn8ZOOJ5iDEmWcgR1kiVNQ==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de9658cf-a8b4-490b-12b4-08d7c42f67f1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2020 13:40:18.0814
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ESZRSNZMHriNm9xIi4xELVmoB4YRXTHo1mspcwwexasFf9vwa5SUQSPh1ypwMGGeCb3PCXU7ABBoTuGs1t0JQg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6659
+        id S1726536AbgCINlk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Mar 2020 09:41:40 -0400
+Received: from foss.arm.com ([217.140.110.172]:52334 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726518AbgCINlk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 9 Mar 2020 09:41:40 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A01830E;
+        Mon,  9 Mar 2020 06:41:39 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.37.12.74])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6F7213F67D;
+        Mon,  9 Mar 2020 06:41:28 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com
+Cc:     Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com,
+        javi.merino@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
+        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, qperret@google.com, bsegall@google.com,
+        mgorman@suse.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, kernel@pengutronix.de, khilman@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
+        lorenzo.pieralisi@arm.com, lukasz.luba@arm.com,
+        patrick.bellasi@matbug.net, orjan.eide@arm.com,
+        rdunlap@infradead.org
+Subject: [PATCH v4 0/4] Add support for devices in the Energy Model
+Date:   Mon,  9 Mar 2020 13:41:13 +0000
+Message-Id: <20200309134117.2331-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> Subject: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
+Hi all,
 
-I have one patch pending reviewing.
-https://patchwork.kernel.org/patch/11395247/
+This patch set introduces support for devices in the Energy Model (EM)
+framework. It will unify the power model for thermal subsystem and make it
+simpler. The 1st patch refactors EM framework and adds support for devices.
+The 2nd patch changes dev_pm_opp_of_register_em() in OPP/OF which now should
+take as an argument struct device pointer. It touches a few trees
+(OMAP, NXP, Mediatek) updating their CPUfreq drivers to the new interface.
+Patch 3/4 changes thermal devfreq cooling removing old code for calculating
+local power table. It simplifies the code and uses EM for requested power
+calculation. Last patch 4/4 adds EM to Panfrost driver.
 
-Thanks,
-Peng.
+The patch set is based on linux-next tag next-20200306.
 
->=20
-> Add stubs for those i.MX SCU APIs to make those modules depending on
-> IMX_SCU can pass build when COMPILE_TEST is enabled.
->=20
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
-> Changes since V2:
-> 	- return error for stubs.
-> ---
->  include/linux/firmware/imx/ipc.h | 11 +++++++++++
-> include/linux/firmware/imx/sci.h | 19 +++++++++++++++++++
->  2 files changed, 30 insertions(+)
->=20
-> diff --git a/include/linux/firmware/imx/ipc.h
-> b/include/linux/firmware/imx/ipc.h
-> index 8910574..9e3d808 100644
-> --- a/include/linux/firmware/imx/ipc.h
-> +++ b/include/linux/firmware/imx/ipc.h
-> @@ -34,6 +34,7 @@ struct imx_sc_rpc_msg {
->  	uint8_t func;
->  };
->=20
-> +#ifdef CONFIG_IMX_SCU
->  /*
->   * This is an function to send an RPC message over an IPC channel.
->   * It is called by client-side SCFW API function shims.
-> @@ -55,4 +56,14 @@ int imx_scu_call_rpc(struct imx_sc_ipc *ipc, void *msg=
-,
-> bool have_resp);
->   * @return Returns an error code (0 =3D success, failed if < 0)
->   */
->  int imx_scu_get_handle(struct imx_sc_ipc **ipc);
-> +#else
-> +static inline int imx_scu_call_rpc(struct imx_sc_ipc *ipc, void *msg,
-> +bool have_resp) {
-> +	return -ENOENT;
-> +}
-> +static inline int imx_scu_get_handle(struct imx_sc_ipc **ipc) {
-> +	return -ENOENT;
-> +}
-> +#endif
->  #endif /* _SC_IPC_H */
-> diff --git a/include/linux/firmware/imx/sci.h
-> b/include/linux/firmware/imx/sci.h
-> index 17ba4e4..022129b 100644
-> --- a/include/linux/firmware/imx/sci.h
-> +++ b/include/linux/firmware/imx/sci.h
-> @@ -16,8 +16,27 @@
->  #include <linux/firmware/imx/svc/misc.h>  #include
-> <linux/firmware/imx/svc/pm.h>
->=20
-> +#ifdef CONFIG_IMX_SCU
->  int imx_scu_enable_general_irq_channel(struct device *dev);  int
-> imx_scu_irq_register_notifier(struct notifier_block *nb);  int
-> imx_scu_irq_unregister_notifier(struct notifier_block *nb);  int
-> imx_scu_irq_group_enable(u8 group, u32 mask, u8 enable);
-> +#else
-> +static inline int imx_scu_enable_general_irq_channel(struct device
-> +*dev) {
-> +	return -ENOENT;
-> +}
-> +static inline int imx_scu_irq_register_notifier(struct notifier_block
-> +*nb) {
-> +	return -ENOENT;
-> +}
-> +static inline int imx_scu_irq_unregister_notifier(struct notifier_block
-> +*nb) {
-> +	return -ENOENT;
-> +}
-> +static inline int imx_scu_irq_group_enable(u8 group, u32 mask, u8
-> +enable) {
-> +	return -ENOENT;
-> +}
-> +#endif
->  #endif /* _SC_SCI_H */
-> --
-> 2.7.4
+Changes:
+v4:
+- devfreq cooling: added two new registration functions, which will take care
+  of registering EM for the device and simplify drivers code
+  (suggested by Robin and Rob)
+- Energy Model: changed unregistering code, added kref to track usage, added
+  code freeing tables, added helper function
+- added return value to function dev_pm_opp_of_register_em() and updated
+  CPUFreq drivers code, added debug prints in case of failure (which might
+  help in case CPU cooling was expecting EM)
+- updated comments in devfreq cooling removing statement that only
+  simple_ondemand devfreq governor is supported to work with power extensions
+- fixed spelling in the documentation (reported by Randy)
+v3 [3]:
+- added back the cpumask 'cpus' in the em_perf_domain due potential cache misses
+- removed _is_cpu_em() since there is no need for it
+- changed function name from em_pd_energy() to em_cpu_energy(), which is
+  optimized for usage from the scheduler making some assumptions and not
+  validating arguments to speed-up, there is a comment stressing that it should
+  be used only for CPUs em_perf_domain
+- changed em_get_pd() to em_pd_get() which is now aligned with em_cpu_get()
+  naming
+- Energy Model: add code which checks if the EM is already registered for the
+  devfreq device
+- extended comment in em_cpu_get() describing the need for this function
+- fixed build warning reported on x86 by kbuild test robot in devfreq_cooling.c
+- updated documentation in the energy-model.rst
+- changed print messages from 'energy_model' to 'EM'
+- changed dev_warn to dev_dbg, should calm down test scripts in case the
+  platform has OPPs less efficient in the OPP table (some of them are there for
+  cooling reasons, we shouldn't warn in this case, debug info is enough)
+v2 [2]:
+- changed EM API em_register_perf_domain() adding cpumask_t pointer
+  as last argument (which was discussed with Dietmar and Quentin)
+- removed dependency on PM_OPP, thanks to the cpumask_t argument
+- removed enum em_type and em->type dependent code
+- em_get_pd() can handle CPU device as well as devfreq device
+- updated EM documentation
+- in devfreq cooling added code which prevents from race condition with
+  devfreq governors which are trying to use OPPs while thermal is in the middle
+  of disabling them.
+- in devfreq cooling added code which updates state of the devfreq device to
+  avoid working on stale data when governor has not updated it for a long time
+- in devfreq cooling added backward compatibility frequency table for drivers
+  which did not provide EM
+- added Steven's Reviewed-by to trace code in thermal
+- added another CPUFreq driver which needs to be updated to the new API
+
+The v1 can be found here [1].
+
+Regards,
+Lukasz Luba
+
+[1] https://lkml.org/lkml/2020/1/16/619
+[2] https://lkml.org/lkml/2020/2/6/377
+[3] https://lkml.org/lkml/2020/2/21/1910
+
+Lukasz Luba (4):
+  PM / EM: add devices to Energy Model
+  OPP: change parameter to device pointer in dev_pm_opp_of_register_em()
+  thermal: devfreq_cooling: Refactor code and switch to use Energy Model
+  drm/panfrost: Register devfreq cooling and attempt to add Energy Model
+
+ Documentation/power/energy-model.rst        | 133 ++---
+ Documentation/scheduler/sched-energy.rst    |   2 +-
+ drivers/cpufreq/cpufreq-dt.c                |   4 +-
+ drivers/cpufreq/imx6q-cpufreq.c             |   7 +-
+ drivers/cpufreq/mediatek-cpufreq.c          |   5 +-
+ drivers/cpufreq/omap-cpufreq.c              |   6 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c           |   4 +-
+ drivers/cpufreq/scmi-cpufreq.c              |  13 +-
+ drivers/cpufreq/scpi-cpufreq.c              |   4 +-
+ drivers/cpufreq/vexpress-spc-cpufreq.c      |   4 +-
+ drivers/gpu/drm/panfrost/panfrost_devfreq.c |   2 +-
+ drivers/opp/of.c                            |  57 ++-
+ drivers/thermal/cpufreq_cooling.c           |  10 +-
+ drivers/thermal/devfreq_cooling.c           | 506 +++++++++++---------
+ include/linux/devfreq_cooling.h             |  39 +-
+ include/linux/energy_model.h                | 111 +++--
+ include/linux/pm_opp.h                      |  15 +-
+ include/trace/events/thermal.h              |  19 +-
+ kernel/power/energy_model.c                 | 463 ++++++++++++++----
+ kernel/sched/fair.c                         |   2 +-
+ kernel/sched/topology.c                     |   4 +-
+ 21 files changed, 909 insertions(+), 501 deletions(-)
+
+-- 
+2.17.1
 
