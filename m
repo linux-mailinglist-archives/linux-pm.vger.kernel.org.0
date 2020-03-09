@@ -2,225 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 529CB17DF83
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2020 13:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0C717E013
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2020 13:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbgCIMIs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Mar 2020 08:08:48 -0400
-Received: from mx3.freesources.org ([195.34.172.217]:38256 "EHLO
-        mx3.freesources.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726383AbgCIMIs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Mar 2020 08:08:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=freesources.org; s=20160526; h=Content-Type:In-Reply-To:MIME-Version:Date:
-        Message-ID:Subject:References:Cc:To:From:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=2bq9N0JBtYGfmrsWl9n1OWu9oAmgUDVz0l6/kVZttzE=; b=M62Lkd1gO3B4OuFBhaph5pcQ4
-        lXht9PmvriLivZG6NW5n1m9sK4yDdVtbnErcnZh+FAY/lgOdqoJtjmsarnE+EehWV+VbECpnkXsZa
-        iaKROevUTRAtqKosdiR+Nf9m4+7yLcVLA93uwFlVRbniUY9nOo/8INbNDNqWCfo3ZFBxk=;
-Received: from ip4d14f93d.dynamic.kabel-deutschland.de ([77.20.249.61] helo=[192.168.178.60])
-        by mx3.freesources.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <jonas@freesources.org>)
-        id 1jBHD9-0006LR-Ts; Mon, 09 Mar 2020 12:08:43 +0000
-From:   Jonas Meurer <jonas@freesources.org>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Tim Dittler <tim.dittler@systemli.org>
-References: <8a91f5f0-2180-a7f2-1c22-49b2038e1fbd@freesources.org>
-Autocrypt: addr=jonas@freesources.org; prefer-encrypt=mutual; keydata=
- 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
- 2SCIHpzHfm/mpRL2
-Subject: Re: RFH with debugging suspend issues
-Message-ID: <efee087b-756d-046b-f161-192682772ee3@freesources.org>
-Date:   Mon, 9 Mar 2020 13:08:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726640AbgCIMUU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Mar 2020 08:20:20 -0400
+Received: from mail-eopbgr20052.outbound.protection.outlook.com ([40.107.2.52]:39296
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726442AbgCIMUT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 9 Mar 2020 08:20:19 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BFphMUX3SMR6owq7r49H/e3a51QD/hF+hiduKPt7yJPvZjmDUgqY4L5q7fUcxwvc4BRZNcm1Y83Mt2qdDfqWMk0Z0e+zpja6nAwabzu1H+RIERMDT1FeBHFhZV/TmlZSBUBgvNjHREQ+7nO2JXEqi5NCe1yugnW2ZR3KdfSB0QRxlzGpEg89lrljVN1c8ZTbTrsH48zs7v3ZnWRVqflY899BnydBl+SMw3q9ThsapOjiYx7PNbX9oq2PIJXG9z+LZ4rfSx+vEM30Ea6FDhICgDIdxuTKVwtNtMNmxMkSNosg6bQrjcw/XZagpUVkss0+3ortd2NwU1HlNuADj36LSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aXUBHp6mXq14jGibTQXvuZyQpL+5M0pw2w+qjMrh9H0=;
+ b=XVMSwgBRk2M/vUWYZzxnO2sc7k3mW+wd56/GSRhVrF/dIkiqhQaBB6bNiaD6yVzpGLvbPMGDX4QTc6BaNOCIcsTPnC/ZuVfJb6+LgDvWzD3YZ5KM/VZZSZkKnd/RUzomEsJqEEVcfD0GdCNOQRy18FOVnq87zWQJNxJpFjUGr5VjE/Nftl5aTGvWl3d9EvDE+7qvZMeudbJx2UF/PxbfmghM3QFgexPCOrBFBoikFdQxRow2hQF+cR+8g+eEoSX2JLMwmD2LjWHkiMyvC+lyGfAplGR25E9aTj+S9D/qzI3QuSgfSQLmBA3IC5TbgdvLSwNLB22I3DyfU3BRAqMDqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aXUBHp6mXq14jGibTQXvuZyQpL+5M0pw2w+qjMrh9H0=;
+ b=Ga4cPinVR60LBPQfwyMFeZflYNuKEdi/A4ZiYwBJBBLmSOGFD6jPKDFX0NDzxx7HChZ1p1AOChyG7DFUDp2OTgu5o3UdKOERenkfe71ZtXIBs3t0VCFrNqOlGbAUgoLr32U+AkQB7YZBBPWCTX2ekb1/4WlpBQH5kAvxEprrX4U=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
+ DB3PR0402MB3818.eurprd04.prod.outlook.com (52.134.71.29) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2793.17; Mon, 9 Mar 2020 12:20:14 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::e44d:fa34:a0af:d96]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::e44d:fa34:a0af:d96%5]) with mapi id 15.20.2793.013; Mon, 9 Mar 2020
+ 12:20:14 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux@rempel-privat.de" <linux@rempel-privat.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "m.felsch@pengutronix.de" <m.felsch@pengutronix.de>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "ronald@innovation.ch" <ronald@innovation.ch>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
+Thread-Topic: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
+Thread-Index: AQHV9av62LAReQhoZkKZ9LnT5dFdbahAGiGAgAAUKRA=
+Date:   Mon, 9 Mar 2020 12:20:14 +0000
+Message-ID: <DB3PR0402MB3916FA1EA54CF342E21350BEF5FE0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <1583714300-19085-1-git-send-email-Anson.Huang@nxp.com>
+ <20200309110609.GE3563@piout.net>
+In-Reply-To: <20200309110609.GE3563@piout.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anson.huang@nxp.com; 
+x-originating-ip: [119.31.174.68]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 69461a82-7002-4b9f-f77d-08d7c4243894
+x-ms-traffictypediagnostic: DB3PR0402MB3818:|DB3PR0402MB3818:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB3PR0402MB3818DC3BD33B2F51E0B6A503F5FE0@DB3PR0402MB3818.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 0337AFFE9A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(376002)(366004)(136003)(346002)(396003)(189003)(199004)(316002)(33656002)(26005)(186003)(54906003)(7696005)(4744005)(86362001)(81156014)(81166006)(66446008)(76116006)(8936002)(5660300002)(66556008)(8676002)(64756008)(66476007)(478600001)(66946007)(71200400001)(52536014)(2906002)(6506007)(7416002)(6916009)(4326008)(9686003)(44832011)(55016002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3818;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: uhVYfGwZJdGlYYDAPuWsuGL2loB+BcmIX0NP+WXWa2X/nmRUahYSzt8VATW5G1amkxi1Wp7mteKiTZ7B3BxI+b2FWkwiYjX2zmYopLeTFlfIhG1eW3j0XrsUENR6IxckpkuFwoJc85yIHLDmUQXGti2tIS6M2nCuo3nGHjcbj9suNs+ZUSLNPUh2xejlzoXWA+9C5RM8zFGYppoW6VjE9BHmFoCciyYfqjiftV6Iw05W4cZCk4/TNI+ijIcNX1XVuyewhVhN6u1XsqRJbznWJci8Vgq8i39wGhsL/Ao46VzFkf2kpRFlMLR2KkqYheT1Ta8ByLlBQZDVv5gP+jD9qnXzvo6MaucsE+ufJhp+q9u7TCUMW2AcoyuEJwUIQvbyAsJ9ocwP7KPIK/5hYS1pirh7bdSVvF+uZS+F7SR1mHLjlb/7PM1LQhZBu15N0tu/
+x-ms-exchange-antispam-messagedata: TuLX2sfxP8NEiOolHPdFaeiww7l+BeKxMXTMTa/jCWT4cPtwZhOCF/dL1GInzHFEXD5PSFPsAep+2R4ypL/jLJtDWIalpX8d3m98AMjbO5+Aci2aTKm83okypYlHZBwNobq8+u9kfg0SINEtuEQ8dQ==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <8a91f5f0-2180-a7f2-1c22-49b2038e1fbd@freesources.org>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="CDHeYxDIFns2gQiv797qmG8geZKszeHfM"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69461a82-7002-4b9f-f77d-08d7c4243894
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2020 12:20:14.2018
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 42RyDOXBI3wjM+iIMF6/YHiRBIq0gk57cKyOJPcJIbp7um3Zf9DyWx52bMArn3fDOEuezGrE3pY7sHewsiY6Wg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3818
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---CDHeYxDIFns2gQiv797qmG8geZKszeHfM
-Content-Type: multipart/mixed; boundary="qLZDMs1N5LwWmY1xMk3wGfrrhPrJ0pQJO";
- protected-headers="v1"
-From: Jonas Meurer <jonas@freesources.org>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Tim Dittler <tim.dittler@systemli.org>
-Message-ID: <efee087b-756d-046b-f161-192682772ee3@freesources.org>
-Subject: Re: RFH with debugging suspend issues
-References: <8a91f5f0-2180-a7f2-1c22-49b2038e1fbd@freesources.org>
-In-Reply-To: <8a91f5f0-2180-a7f2-1c22-49b2038e1fbd@freesources.org>
-
---qLZDMs1N5LwWmY1xMk3wGfrrhPrJ0pQJO
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-Hello again,
-
-Jonas Meurer:
-> I'm searching for help with debugging a suspend issue:
->=20
-> Apparently, on some devices (Lenovo laptops in particular), the kernel
-> causes a I/O operation on the root filesystem when suspending the syste=
-m
-> - even though the final sync[1] is disabled thanks to setting
-> `/sys/power/sync_on_suspend` to 0, see my corresponding patch that got
-> accepted in Linux 5.6[2].
->=20
-> My current guess it that some hardware-specific firmware is loaded
-> during system suspend. But unfortunately, so far I failed to find what
-> exactly it is despite following the 01.org debugging documentation[3].
-> Maybe you can help me shed some light on it?
-
-I finally succeeded in reliably tracking this down to firmware loading.
-With kernel boot parameters `initcall_debug ignore_loglevel`, the last
-logs before my system freezes are:
-
-PM: suspend entry (deep)
-(NULL device *): firmware: direct-loading firmware regulatory.db
-(NULL device *): firmware: direct-loading firmware regulatory.db.p7s
-(NULL device *): firmware: direct-loading firmware iwlwifi-8000C-36.ucode=
-
-
-If I blacklist all modules that cause the kernel to load firmware (for
-me, that's cfg80211, iwlwifi and some bluetooth modules), then the issue
-is gone.
-
-So without further investigation I could imagine three possible solutions=
-:
-
-1. Provide all firmware files to the kernel from the chroot. That
-   probably means to copy the firmware files to initramfs and to make
-   the kernel aware of the new firmware path at
-   `/sys/module/firmware_class/parameters/path`.
-2. Find a way to manually trigger the firmware loading operation before
-   we luksSuspend the LUKS devices.
-3. Find a way do disable direct-loading of firmware by the kernel during
-   suspend.
-
-Maybe someone with more inside knowledge could comment on whether
-options 2 or 3 are possible at all and if not, whether kernel patches to
-implement them would be acceptable.
-
-Cheers
- jonas
-
-PS: Inside our Debian cryptsetup-suspend project, we track this issue at
-    https://salsa.debian.org/mejo/cryptsetup-suspend/issues/38
-
-
---qLZDMs1N5LwWmY1xMk3wGfrrhPrJ0pQJO--
-
---CDHeYxDIFns2gQiv797qmG8geZKszeHfM
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEELIzSg9Pv30M4kOeDUmLn/0kQSf4FAl5mMcgACgkQUmLn/0kQ
-Sf6uyA//Yz2q+1UfB2EQTGZoqLqSuF0FeEeh3cbNU3aQW6FpdCCDb0rH5nZiLAEE
-wvjszVPLAXBUPFl+KCix1vSpYbXh61LXrAllOXLvQbm93Lxawu0glwZq0sgj+Jwo
-4VcYyYGxbn8X6oBgRPwxin/CPGg1diDLQ9kOlC+9DPGnvNDfz/nWTMzrL3FA6MSF
-6DCkY9my9Q8kjIxo6I43V75+acTjyeAMjeUv/3+DRq9otM7+qnLOrNurldqsqHt7
-7cKHrDWcEdY+ay0iITwUamK+Ut/2/vbVnlDOZArUP+R2kpJ/d2WOXZofYZ30UxbJ
-sa0gYV2/nExSBHgClaLkAcDLLz3M5zuvRGTlwMKzqVOa4Qrn0XhXguNfd9umCHpz
-eEhr/XTsYuJ73KeC+mspW8E60h7r2cidzceDZZI+wBt1np/kCTjehnXxfL0d+ffN
-YlmKcoPGn4Q7rprZ8B1EXa0EaiJUh6tvzuim/VljAZCqSRfsyV4EaQBrixqcgfa9
-G6+Z1oUiyYYGHF0Rsgkj7VmAq88cYeNPl3DDVN1N1K47j+t396HPT7WZSEvz2ajv
-pTgS0jer84wwUySnDYHaUKCmxfVi0K6NN/K88SrnNAnZYVXJ9N5DsqikH14HOv8R
-/qQwKbglBXuN+Y/dm/TM6NAvqOAQSxH6l/BuBdL5q2396rOfB2g=
-=4MSq
------END PGP SIGNATURE-----
-
---CDHeYxDIFns2gQiv797qmG8geZKszeHfM--
+SGksIEFsZXhhbmRyZQ0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggVjMgMS83XSBmaXJtd2FyZTog
+aW14OiBBZGQgc3R1YnMgZm9yICFDT05GSUdfSU1YX1NDVQ0KPiBjYXNlDQo+IA0KPiBPbiAwOS8w
+My8yMDIwIDA4OjM4OjE0KzA4MDAsIEFuc29uIEh1YW5nIHdyb3RlOg0KPiA+IEFkZCBzdHVicyBm
+b3IgdGhvc2UgaS5NWCBTQ1UgQVBJcyB0byBtYWtlIHRob3NlIG1vZHVsZXMgZGVwZW5kaW5nIG9u
+DQo+ID4gSU1YX1NDVSBjYW4gcGFzcyBidWlsZCB3aGVuIENPTVBJTEVfVEVTVCBpcyBlbmFibGVk
+Lg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogQW5zb24gSHVhbmcgPEFuc29uLkh1YW5nQG54cC5j
+b20+DQo+ID4gLS0tDQo+ID4gQ2hhbmdlcyBzaW5jZSBWMjoNCj4gPiAJLSByZXR1cm4gZXJyb3Ig
+Zm9yIHN0dWJzLg0KPiANCj4gSSdtIG5vdCBzdXJlIHdoeSB5b3UgYXJlIHNlbmRpbmcgdjMgd2l0
+aCB0aGUgc3R1YnMgYXMgd2UgZGV0ZXJtaW5lZCB0aGF0DQo+IDIvNyBpcyBlbm91Z2ggdG8gY29t
+cGlsZSBhbGwgdGhlIGRyaXZlcnMgd2l0aCBDT01QSUxFX1RFU1QuDQoNCkl0IGlzIGp1c3QgYmVj
+YXVzZSBJIGFtIE5PVCBzdXJlIHdoaWNoIGFwcHJvYWNoIG1haW50YWluZXIgcHJlZmVyLCB0aGUg
+VjMgaXMgdG8NCmFkZHJlc3MgdGhlIGNvbW1lbnQgb2YgVjIuIElmIGV2ZXJ5b25lIGFncmVlIHRo
+YXQgMi83IGlzIGVub3VnaCwgdGhlbiBJIHRoaW5rIElNWF9TQ1UNCm1haW50YWluZXIgY2FuIGp1
+c3QgcGljayB1cCBWMSBwYXRjaCBzZXJpZXMsIHNvcnJ5IGZvciB0aGUgY29uZnVzaW9uLg0KDQpU
+aGFua3MsDQpBbnNvbg0KIA0K
