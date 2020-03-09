@@ -2,119 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D7317E6BB
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2020 19:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F6217EC2F
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2020 23:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727610AbgCIST3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Mar 2020 14:19:29 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:33991 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727604AbgCIST2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Mar 2020 14:19:28 -0400
-Received: by mail-pg1-f196.google.com with SMTP id t3so5093953pgn.1;
-        Mon, 09 Mar 2020 11:19:27 -0700 (PDT)
+        id S1726698AbgCIWhX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Mar 2020 18:37:23 -0400
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:15790 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726536AbgCIWhX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Mar 2020 18:37:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZUgRxVNWWI4/X6MpRA1miIl6BKxEX3f9Er1YPxkTvvw=;
-        b=sNlPIoM2gt3GGdSuObomrqoffsAtxhxZft2ETl+N3lZ3JSsCVtomAdJeaNPkTfheFa
-         dzxMu8ssE23gZE1OxWJNZ+9Hf25JLpasSBaBdGGq+lY4kZHw/HCniVudCE2Aaozjad7L
-         A8AQC+hDjh+vOvWgARydrt917tpg7seq13OcylBlfc0LT86PMepy+F+tkYc9mzbybEOn
-         S/jxBlUMHRG5Lu//z3iUZDoUrnAQtczHnWp8BBBzHs/avjK67sKc/0ROBmcZUg4IzzUx
-         2O0ctvHZor8KZ5oNC0Uxta9UOSkSJaY7BP1zdgX3G/b5qyfWyeLiYL9t5K4YNuB60gSk
-         vKtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZUgRxVNWWI4/X6MpRA1miIl6BKxEX3f9Er1YPxkTvvw=;
-        b=sbSThMvcRuPzgi5//HM3Y1XVqmAMxwttBRIUMTHkbgQNHEZ2yd9BXBsy0LIcSr5tPZ
-         w8/ln1HgYB5saCmtGge7Qfevf1f6g5QsisgWgifUsnP1MYq6M0x1nj4M6Dc3nvwIGW+o
-         0v6K9+aHQUPjFo9iEULC93mG8lZm1TOsrNakOcvGswN5uWMm++KLCqlBTTg5SoYzxXbx
-         KHmZ+L0aMUS/5q+2F69cdDGJ9RlUdayhUPra99wFGlscNw+3mLJ5965z/NYqxCxfiZuk
-         +xG1u9Z+dxaQ1xWlJvj/jGc2zIa2qL2pOsCnCCjQxcEnt+FkQ/UScwRYy7hulZwnzkve
-         riOw==
-X-Gm-Message-State: ANhLgQ3WzHe1AF+iE2Gx53KOHRe+Du2E+6wRUpt5bQfErSPncHi4f8Yi
-        RlZDGr0MBwaHUYkDXrZBlS0=
-X-Google-Smtp-Source: ADFU+vuOgWAHVSJ7870Wsdc6jp9jt1VM/hwbVvbgrPsGlhP3zO4qktaIEgcY6kj2q1SiRmCkNaL7zA==
-X-Received: by 2002:a63:6841:: with SMTP id d62mr16700934pgc.86.1583777967062;
-        Mon, 09 Mar 2020 11:19:27 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c190sm1023630pga.35.2020.03.09.11.19.24
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 09 Mar 2020 11:19:25 -0700 (PDT)
-Date:   Mon, 9 Mar 2020 11:19:24 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Anson Huang <Anson.Huang@nxp.com>, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        dmitry.torokhov@gmail.com, a.zummo@towertech.it,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, wim@linux-watchdog.org,
-        daniel.baluta@nxp.com, gregkh@linuxfoundation.org,
-        linux@rempel-privat.de, tglx@linutronix.de,
-        m.felsch@pengutronix.de, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, ronald@innovation.ch, krzk@kernel.org,
-        robh@kernel.org, leonard.crestez@nxp.com, aisheng.dong@nxp.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Linux-imx@nxp.com
-Subject: Re: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
-Message-ID: <20200309181924.GA27218@roeck-us.net>
-References: <1583714300-19085-1-git-send-email-Anson.Huang@nxp.com>
- <20200309110609.GE3563@piout.net>
- <1ad38cdb-bf0d-1c19-b233-15a5857bd6fa@roeck-us.net>
- <20200309164705.GG3563@piout.net>
- <20200309171012.GA24802@roeck-us.net>
- <20200309171556.GH3563@piout.net>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1583793442; x=1615329442;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nm/K+hs17EKcRVzHSvMbu0ne+AtNnO2mJL12xgMBEqU=;
+  b=M1BvI8m/KpYo1UUyoqj2zpbeLR31a2EWnp8puAlgmUTUwsPyi3R+LQmq
+   l/4dGTVquB+ed3eWGPWyUFPld5UxroxCobwDiOzRucs4v7Ki2f1iioOeo
+   T42/FP9oG1CtqKWwH2a7auLc9n2MQ8KMBsObXIwsAo3IRX1bildxeyFnL
+   E=;
+IronPort-SDR: NHag6RFlU2mvRcJeDLBg74Cs4Z7ht0ObfH2JR56T3a1uxhtCZDsJ8DmJX73OAE6jYthefr21k9
+ 1hhjxqoVWmpQ==
+X-IronPort-AV: E=Sophos;i="5.70,534,1574121600"; 
+   d="scan'208";a="31596269"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2a-53356bf6.us-west-2.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 09 Mar 2020 22:37:20 +0000
+Received: from EX13MTAUEE002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2a-53356bf6.us-west-2.amazon.com (Postfix) with ESMTPS id 72D19A2582;
+        Mon,  9 Mar 2020 22:37:18 +0000 (UTC)
+Received: from EX13D08UEE003.ant.amazon.com (10.43.62.118) by
+ EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Mon, 9 Mar 2020 22:37:03 +0000
+Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
+ EX13D08UEE003.ant.amazon.com (10.43.62.118) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Mon, 9 Mar 2020 22:37:03 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
+ Server id 15.0.1367.3 via Frontend Transport; Mon, 9 Mar 2020 22:37:02 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id CBD26408BA; Mon,  9 Mar 2020 22:37:02 +0000 (UTC)
+Date:   Mon, 9 Mar 2020 22:37:02 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
+        <x86@kernel.org>, <boris.ostrovsky@oracle.com>, <jgross@suse.com>,
+        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
+        <kamatam@amazon.com>, <sstabellini@kernel.org>,
+        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <fllinden@amaozn.com>,
+        <benh@kernel.crashing.org>
+Subject: Re: [EXTERNAL][RFC PATCH v3 07/12] genirq: Shutdown irq chips in
+ suspend/resume during hibernation
+Message-ID: <20200309223702.GA8513@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <e782c510916c8c05dc95ace151aba4eced207b31.1581721799.git.anchalag@amazon.com>
+ <87ftelaxwn.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200309171556.GH3563@piout.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <87ftelaxwn.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 09, 2020 at 06:30:54PM +0100, Alexandre Belloni wrote:
-> On 09/03/2020 10:10:12-0700, Guenter Roeck wrote:
-> > On Mon, Mar 09, 2020 at 05:47:05PM +0100, Alexandre Belloni wrote:
-> > > On 09/03/2020 06:27:06-0700, Guenter Roeck wrote:
-> > > > On 3/9/20 4:06 AM, Alexandre Belloni wrote:
-> > > > > On 09/03/2020 08:38:14+0800, Anson Huang wrote:
-> > > > >> Add stubs for those i.MX SCU APIs to make those modules depending
-> > > > >> on IMX_SCU can pass build when COMPILE_TEST is enabled.
-> > > > >>
-> > > > >> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> > > > >> ---
-> > > > >> Changes since V2:
-> > > > >> 	- return error for stubs.
-> > > > > 
-> > > > > I'm not sure why you are sending v3 with the stubs as we determined that
-> > > > > 2/7 is enough to compile all the drivers with COMPILE_TEST.
-> > > > > 
-> > > > > 
-> > > > 2/7 alone is not sufficient. With only 2/7, one can explicitly configure
-> > > > IMX_SCU=n, COMPILE_TEST=y, and get lots of compile failures. Granted,
-> > > > one should not do that, but 0day does (I don't know if that is the result
-> > > > of RANDCONFIG), and I am not looking forward having to deal with the
-> > > > fallout.
-> > > > 
-> > > 
-> > > How would that be possible if the drivers all depend on IMX_SCU?
-> > > 
-> > That dependency is being changed to IMX_SCU || COMPILE_TEST
-> > as part of the series.
-> > 
+On Sat, Mar 07, 2020 at 12:03:52AM +0100, Thomas Gleixner wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
 > 
-> Yes, my point is that those patches should not be applied at all, only
-> 2/7.
-
-Ah, now I get it. Sorry, I missed that part. You are correct, that would
-be sufficient, and I would very much prefer that approach.
-
+> 
+> 
+> Anchal Agarwal <anchalag@amazon.com> writes:
+> 
+> > There are no pm handlers for the legacy devices, so during tear down
+> > stale event channel <> IRQ mapping may still remain in the image and
+> > resume may fail. To avoid adding much code by implementing handlers for
+> > legacy devices, add a new irq_chip flag IRQCHIP_SHUTDOWN_ON_SUSPEND which
+> > when enabled on an irq-chip e.g xen-pirq, it will let core suspend/resume
+> > irq code to shutdown and restart the active irqs. PM suspend/hibernation
+> > code will rely on this.
+> > Without this, in PM hibernation, information about the event channel
+> > remains in hibernation image, but there is no guarantee that the same
+> > event channel numbers are assigned to the devices when restoring the
+> > system. This may cause conflict like the following and prevent some
+> > devices from being restored correctly.
+> 
+> The above is just an agglomeration of words and acronyms and some of
+> these sentences do not even make sense. Anyone who is not aware of event
+> channels and whatever XENisms you talk about will be entirely
+> confused. Changelogs really need to be understandable for mere mortals
+> and there is no space restriction so acronyms can be written out.
+> 
+I don't understand what does not makes sense here. Of course the one you
+described is more elaborate and explanatory and I agree I just wrote a short 
+one from perspective of PM hibernation related to Xen domU. 
+All I explained was why teardown is needed, what is the solution and 
+what will happen if we do not clear those mappings. 
+> Something like this:
+> 
+>   Many legacy device drivers do not implement power management (PM)
+>   functions which means that interrupts requested by these drivers stay
+>   in active state when the kernel is hibernated.
+> 
+>   This does not matter on bare metal and on most hypervisors because the
+>   interrupt is restored on resume without any noticable side effects as
+>   it stays connected to the same physical or virtual interrupt line.
+> 
+>   The XEN interrupt mechanism is different as it maintains a mapping
+>   between the Linux interrupt number and a XEN event channel. If the
+>   interrupt stays active on hibernation this mapping is preserved but
+>   there is unfortunately no guarantee that on resume the same event
+>   channels are reassigned to these devices. This can result in event
+>   channel conflicts which prevent the affected devices from being
+>   restored correctly.
+> 
+>   One way to solve this would be to add the necessary power management
+>   functions to all affected legacy device drivers, but that's a
+>   questionable effort which does not provide any benefits on non-XEN
+>   environments.
+> 
+>   The least intrusive and most efficient solution is to provide a
+>   mechanism which allows the core interrupt code to tear down these
+>   interrupts on hibernation and bring them back up again on resume. This
+>   allows the XEN event channel mechanism to assign an arbitrary event
+>   channel on resume without affecting the functionality of these
+>   devices.
+> 
+>   Fortunately all these device interrupts are handled by a dedicated XEN
+>   interrupt chip so the chip can be marked that all interrupts connected
+>   to it are handled this way. This is pretty much in line with the other
+>   interrupt chip specific quirks, e.g. IRQCHIP_MASK_ON_SUSPEND.
+> 
+>   Add a new quirk flag IRQCHIP_SHUTDOWN_ON_SUSPEND and add support for
+>   it the core interrupt suspend/resume paths.
+> 
+> Hmm?
+> 
+Sure.
+> > Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
+> > Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> 
+> Not that I care much, but now that I've written both the patch and the
+> changelog you might change that attribution slightly. For completeness
+> sake:
+> 
+Why not. That's mandated now :)
+>  Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> 
+> Thanks,
+> 
+>         tglx
 Thanks,
-Guenter
+Anchal
