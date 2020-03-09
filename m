@@ -2,90 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A2817DC47
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2020 10:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2392617DCB9
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2020 10:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725956AbgCIJVi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 9 Mar 2020 05:21:38 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:36723 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725796AbgCIJVi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Mar 2020 05:21:38 -0400
-Received: by mail-oi1-f195.google.com with SMTP id t24so9472333oij.3;
-        Mon, 09 Mar 2020 02:21:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cW5QRu/WQLX7HG/+uT7JbwnBxTD9IJb8uwxzlsc003A=;
-        b=BANk64tp4JYSPTJpon2r3Pr2USpsXoXwYHs+9jbEsLJRyWyia6KUG+b4bUy7fR4HJD
-         ruDuUi7hAHz1p55cutg/SejjhSAcbuwWeGAo2DyJJTPkNBVwqBvrYldxMr8LVTG/pIGT
-         5Gmt0OQpz6uqwbSXpPn1g3+WlXumI+kbvKyFv2q9cpA7Z4xeAHLGLtQ9MdZdLEU8nA50
-         GsL4m7de7zhczX80GQsikUj7Oe6jLrWefsWcuhZLUW0CtlBNiDZ5qYnxUoiMiojSK03j
-         GUPp5MChy3IHXR++BEUOfCMGZ83xmq6Nlcf+ExhecO6sHqqRB42OksNRcKqs8TVHQXt5
-         EUHA==
-X-Gm-Message-State: ANhLgQ3vFTCW448xz13sVU9MF4EeyX+E4C4ZgmNzTPOQVGu6gBsgpE4k
-        FvdGkj43RomTmR0ve4TGL2v/Wg+CqrMDDhv4WLU=
-X-Google-Smtp-Source: ADFU+vtbOXPyRFXaIDFk8cCnkW2knsMp8Sqc7CbW2cu0aR3vXAMSmqmgZ8onL4mKFmGV/6odqwEBcjQBfTTlYHMNcO0=
-X-Received: by 2002:aca:5ed4:: with SMTP id s203mr6496923oib.102.1583745697858;
- Mon, 09 Mar 2020 02:21:37 -0700 (PDT)
+        id S1726609AbgCIJyV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Mar 2020 05:54:21 -0400
+Received: from esa1.hc3370-68.iphmx.com ([216.71.145.142]:26457 "EHLO
+        esa1.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726692AbgCIJyR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Mar 2020 05:54:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1583747657;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=zNNy4OU4z799DFnGrpM43KDZz+dFPqGX2kfMxUq+JC4=;
+  b=a2U6IkVKlgzZQeI6bAG58NAgwPUmz/xvCmc2INJPLS9UORxO3QzZDiBG
+   KLP7WfyJgOmS66F3vi6G/gqoMZnZKlwHodzzE+yPIIOEdv8D72JoewyEo
+   8i6ZnSn/POJvtcsdu5/lpLwucrzK/k9tdP1RtDxpcXKQybT7df0qLASaT
+   U=;
+Authentication-Results: esa1.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none; spf=None smtp.pra=roger.pau@citrix.com; spf=Pass smtp.mailfrom=roger.pau@citrix.com; spf=None smtp.helo=postmaster@mail.citrix.com
+Received-SPF: None (esa1.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  roger.pau@citrix.com) identity=pra; client-ip=162.221.158.21;
+  receiver=esa1.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="roger.pau@citrix.com";
+  x-conformance=sidf_compatible
+Received-SPF: Pass (esa1.hc3370-68.iphmx.com: domain of
+  roger.pau@citrix.com designates 162.221.158.21 as permitted
+  sender) identity=mailfrom; client-ip=162.221.158.21;
+  receiver=esa1.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="roger.pau@citrix.com";
+  x-conformance=sidf_compatible; x-record-type="v=spf1";
+  x-record-text="v=spf1 ip4:209.167.231.154 ip4:178.63.86.133
+  ip4:195.66.111.40/30 ip4:85.115.9.32/28 ip4:199.102.83.4
+  ip4:192.28.146.160 ip4:192.28.146.107 ip4:216.52.6.88
+  ip4:216.52.6.188 ip4:162.221.158.21 ip4:162.221.156.83
+  ip4:168.245.78.127 ~all"
+Received-SPF: None (esa1.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@mail.citrix.com) identity=helo;
+  client-ip=162.221.158.21; receiver=esa1.hc3370-68.iphmx.com;
+  envelope-from="roger.pau@citrix.com";
+  x-sender="postmaster@mail.citrix.com";
+  x-conformance=sidf_compatible
+IronPort-SDR: do3ZdpTCHyvaP5/SysNyQ6OvX1Aj0Ge4f7a/KYeItfaoREnOoclQ+3UyK3UmAERmfHfgoT/FiQ
+ LR9MObLUIfhV2BPRhBPXshsMWzuwO3v4tN81Aoi937geQXN+15Jjn0MKQSjxZacs9yopW4nPAZ
+ uDUMrTz2AwTvII9JUzZilZZKcERwlF4UumWQAdnHNAvCe+/bSVdDDablLPGbDI7n3on4l9R4+J
+ +es1+SHgHi13FosRMxuLOY1+8VoFhR3maY5sz1tdbvfoZ26Su//Y7lr5QmSGj1zs92DuWGF43J
+ BJY=
+X-SBRS: 2.7
+X-MesageID: 13805261
+X-Ironport-Server: esa1.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.158.21
+X-Policy: $RELAYED
+X-IronPort-AV: E=Sophos;i="5.70,532,1574139600"; 
+   d="scan'208";a="13805261"
+Date:   Mon, 9 Mar 2020 10:54:07 +0100
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     Anchal Agarwal <anchalag@amazon.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
+        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <fllinden@amaozn.com>,
+        <benh@kernel.crashing.org>
+Subject: Re: [RFC PATCH v3 06/12] xen-blkfront: add callbacks for PM suspend
+ and hibernation
+Message-ID: <20200309095245.GY24458@Air-de-Roger.citrite.net>
+References: <cover.1581721799.git.anchalag@amazon.com>
+ <890c404c585d7790514527f0c021056a7be6e748.1581721799.git.anchalag@amazon.com>
+ <20200221142445.GZ4679@Air-de-Roger>
+ <20200306184033.GA25358@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
 MIME-Version: 1.0
-References: <20200306110025.24747-1-geert+renesas@glider.be> <20200308163543.GD2975348@oden.dyn.berto.se>
-In-Reply-To: <20200308163543.GD2975348@oden.dyn.berto.se>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 9 Mar 2020 10:21:25 +0100
-Message-ID: <CAMuHMdWprMpoyQuDFCs+R4NJR87FVnufQNqxmJGTiJXK_v5C6Q@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: r8a77961: Add thermal nodes
-To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200306184033.GA25358@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+X-ClientProxiedBy: AMSPEX02CAS02.citrite.net (10.69.22.113) To
+ AMSPEX02CL01.citrite.net (10.69.22.125)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Niklas,
+On Fri, Mar 06, 2020 at 06:40:33PM +0000, Anchal Agarwal wrote:
+> On Fri, Feb 21, 2020 at 03:24:45PM +0100, Roger Pau Monné wrote:
+> > On Fri, Feb 14, 2020 at 11:25:34PM +0000, Anchal Agarwal wrote:
+> > >  	blkfront_gather_backend_features(info);
+> > >  	/* Reset limits changed by blk_mq_update_nr_hw_queues(). */
+> > >  	blkif_set_queue_limits(info);
+> > > @@ -2046,6 +2063,9 @@ static int blkif_recover(struct blkfront_info *info)
+> > >  		kick_pending_request_queues(rinfo);
+> > >  	}
+> > >  
+> > > +	if (frozen)
+> > > +		return 0;
+> > 
+> > I have to admit my memory is fuzzy here, but don't you need to
+> > re-queue requests in case the backend has different limits of indirect
+> > descriptors per request for example?
+> > 
+> > Or do we expect that the frontend is always going to be resumed on the
+> > same backend, and thus features won't change?
+> > 
+> So to understand your question better here, AFAIU the  maximum number of indirect 
+> grefs is fixed by the backend, but the frontend can issue requests with any 
+> number of indirect segments as long as it's less than the number provided by 
+> the backend. So by your question you mean this max number of MAX_INDIRECT_SEGMENTS 
+> 256 on backend can change ?
 
-On Sun, Mar 8, 2020 at 5:35 PM Niklas Söderlund
-<niklas.soderlund@ragnatech.se> wrote:
-> On 2020-03-06 12:00:25 +0100, Geert Uytterhoeven wrote:
-> > Add a device node for the Thermal Sensor/Chip Internal Voltage Monitor
-> > in the R-Car M3-W+ (R8A77961) SoC, and describe the thermal zones.
-> >
-> > According to the R-Car Gen3 Hardware Manual Errata for Revision 2.00 of
-> > Jan 31, 2020, the thermal parameters for R-Car M3-W+ are the same as for
-> > R-Car M3-W.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Yes, number of indirect descriptors supported by the backend can
+change, because you moved to a different backend, or because the
+maximum supported by the backend has changed. It's also possible to
+resume on a backend that has no indirect descriptors support at all.
 
-> > --- a/arch/arm64/boot/dts/renesas/r8a77961.dtsi
-> > +++ b/arch/arm64/boot/dts/renesas/r8a77961.dtsi
+> > > @@ -2625,6 +2671,62 @@ static void blkif_release(struct gendisk *disk, fmode_t mode)
+> > >  	mutex_unlock(&blkfront_mutex);
+> > >  }
+> > >  
+> > > +static int blkfront_freeze(struct xenbus_device *dev)
+> > > +{
+> > > +	unsigned int i;
+> > > +	struct blkfront_info *info = dev_get_drvdata(&dev->dev);
+> > > +	struct blkfront_ring_info *rinfo;
+> > > +	/* This would be reasonable timeout as used in xenbus_dev_shutdown() */
+> > > +	unsigned int timeout = 5 * HZ;
+> > > +	int err = 0;
+> > > +
+> > > +	info->connected = BLKIF_STATE_FREEZING;
+> > > +
+> > > +	blk_mq_freeze_queue(info->rq);
+> > > +	blk_mq_quiesce_queue(info->rq);
+> > 
+> > Don't you need to also drain the queue and make sure it's empty?
+> > 
+> blk_mq_freeze_queue and blk_mq_quiesce_queue should take care of running HW queues synchronously
+> and making sure all the ongoing dispatches have finished. Did I understand your question right?
 
-> > @@ -785,6 +799,7 @@
-> >                       status = "disabled";
-> >               };
-> >
-> > +
->
-> This don't looks like it's needed :-) With this fixed,
->
-> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Can you please add some check to that end? (ie: that there are no
+pending requests on any queue?)
 
-Thanks, queued in renesas-devel for v5.7, with the above fixed.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks, Roger.
