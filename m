@@ -2,88 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2F317E2EB
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2020 15:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E457B17E4BA
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Mar 2020 17:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727026AbgCIO5Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Mar 2020 10:57:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45770 "EHLO mail.kernel.org"
+        id S1726758AbgCIQZF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Mar 2020 12:25:05 -0400
+Received: from mail.manjaro.org ([176.9.38.148]:44346 "EHLO mail.manjaro.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726967AbgCIO5Z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 9 Mar 2020 10:57:25 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5A1F421655;
-        Mon,  9 Mar 2020 14:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583765844;
-        bh=lKI8Yb8uZ3tBIe9X4wlAKYTXm/yXMD/FBLCurx3Ybds=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JhpMNSKzrpZSjcFxvL6Ii+nhacGswhk8gehCkK+Eu0AsQMpo2Bf4KZRdeAeibLrmQ
-         ZdB2DECIG4CtwARIQU1ytrj8fN+cvZyyaVFv7Ld7bc3gbmHuRdtqgIF6y5bY05dnbq
-         ztSx+ssyOK9hjHm0wZi1g0s/VeSN+lZ/Nuqla/dI=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1jBJqM-00BJCg-Ig; Mon, 09 Mar 2020 14:57:22 +0000
+        id S1727146AbgCIQZF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 9 Mar 2020 12:25:05 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.manjaro.org (Postfix) with ESMTP id 30EC03702399;
+        Mon,  9 Mar 2020 17:04:21 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at manjaro.org
+Received: from mail.manjaro.org ([127.0.0.1])
+        by localhost (manjaro.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id n1f4Bhx4d8nd; Mon,  9 Mar 2020 17:04:18 +0100 (CET)
+From:   Tobias Schramm <t.schramm@manjaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tobias Schramm <t.schramm@manjaro.org>
+Subject: [PATCH v2 0/2] Add support for CellWise cw2015 fuel gauge
+Date:   Mon,  9 Mar 2020 17:03:44 +0100
+Message-Id: <20200309160346.2203680-1-t.schramm@manjaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 09 Mar 2020 14:57:22 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-        suzuki.poulose@arm.com, sudeep.holla@arm.com, lukasz.luba@arm.com,
-        valentin.schneider@arm.com, dietmar.eggemann@arm.com,
-        rjw@rjwysocki.net, pkondeti@codeaurora.org, peterz@infradead.org,
-        mingo@redhat.com, vincent.guittot@linaro.org,
-        viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>
-Subject: Re: [PATCH v5 3/7] arm64/kvm: disable access to AMU registers from
- kvm guests
-In-Reply-To: <20200309142529.GB13343@arm.com>
-References: <20200226132947.29738-1-ionela.voinescu@arm.com>
- <20200226132947.29738-4-ionela.voinescu@arm.com>
- <46b89d0c9704e0a0fb7a4ac2a1fb5b7a@kernel.org>
- <20200309142529.GB13343@arm.com>
-Message-ID: <e3c164afe9fdefe2a01ddbdf34e437a2@kernel.org>
-X-Sender: maz@kernel.org
-User-Agent: Roundcube Webmail/1.3.10
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: ionela.voinescu@arm.com, catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, suzuki.poulose@arm.com, sudeep.holla@arm.com, lukasz.luba@arm.com, valentin.schneider@arm.com, dietmar.eggemann@arm.com, rjw@rjwysocki.net, pkondeti@codeaurora.org, peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org, viresh.kumar@linaro.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, james.morse@arm.com, julien.thierry.kdev@gmail.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-03-09 14:25, Ionela Voinescu wrote:
+This patchset adds support for the CellWise cw2015 fuel gauge.
 
-Hi Ionela,
+The CellWise cw2015 fuel gauge is a shuntless, single-cell Li-Ion fuel
+gauge. It is used in the pine64 Pinebook Pro laptop.
 
-[now with everyone on cc...]
+This is v2 of a patchset I sent in late 2019. Took me some time to get
+around to prepare a v2 but here it is.
 
->> This will definitely conflict with some of the ongoing rework I 
->> have[1].
->> I'm happy to provide this as a stable branch for you to rebase on top,
->> or use an arm64 provided branch to rebase my stoff on top.
->> 
->> Just let me know how you want to proceed.
->> 
-> 
-> Catalin added the AMU patches on top of 5.6-rc3 at [1].
-> Is this okay as a base branch for your patches?
+I've kept the cellwise,bat-config-info property in the device tree. Its
+content describes characteristics of the battery built into a device. The
+exact format is unknown and not publicly documented. It is likely composed
+of some key parameters of the battery (chemistry, voltages,
+design capacity) and parameters for tuning the internal state of charge
+approximation function.
 
-Sure, no problem. I still need to respin those...
+In general I'm not 100 % sure about my json-schema binding for the gauge.
+It is my first time ever writing a json-schema binding and I'm not sure
+whether properties like power-supplies or monitored-battery need to be
+added to a separate, common schema for power supplies or not.
 
-Thanks,
 
-         M.
+Best regards,
+
+Tobias Schramm
+
+Changelog:
+ v2:
+  * Change subject to "Add support for CellWise cw2015 fuel gauge"
+  * Rewrite bindings as json-schema
+  * Use default power-supplies handling
+  * Use regmap for register access
+  * Use standard simple-battery node
+  * Replace printk/pr_* by dev_{dbg,info,warn,err}
+  * Use cancel_delayed_work_sync in remove
+  * General code cleanup
+
+Tobias Schramm (2):
+  dt-bindings: power: supply: cw2015_battery: add device tree binding
+    documentation
+  power: supply: add CellWise cw2015 fuel gauge driver
+
+ .../bindings/power/supply/cw2015_battery.yaml |  84 ++
+ MAINTAINERS                                   |   6 +
+ drivers/power/supply/Kconfig                  |   6 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/cw2015_battery.c         | 891 ++++++++++++++++++
+ 5 files changed, 988 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
+ create mode 100644 drivers/power/supply/cw2015_battery.c
+
 -- 
-Jazz is not dead. It just smells funny...
+2.24.1
+
