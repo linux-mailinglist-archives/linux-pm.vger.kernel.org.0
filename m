@@ -2,137 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2950517F0E4
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 08:04:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6212017F0FD
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 08:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726205AbgCJHEu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Mar 2020 03:04:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43084 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726199AbgCJHEu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Mar 2020 03:04:50 -0400
-Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 090892468A;
-        Tue, 10 Mar 2020 07:04:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583823889;
-        bh=EEzHE5+Ej4Ntn//ujeATmWKpJYLdDKimf0zxr2e+Ajw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EXymqZ1VrUNLGskZXVzQs/HQA/VJBZJ0xkP996JzXmIt7G+I/x6DrvhfVjW7S25Vz
-         NQanULMljX2/3hH4IHyhrsmLLIjAJ55AL0CWASIuMmpdh30lz+IRyGlNZeesoYYBBs
-         bDh2ShGU7wyW9b/prVufhTopqGjse/s0uunD5Wj0=
-Date:   Tue, 10 Mar 2020 15:04:38 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, aisheng.dong@nxp.com,
-        linux@roeck-us.net, srinivas.kandagatla@linaro.org,
-        krzk@kernel.org, fugang.duan@nxp.com, peng.fan@nxp.com,
-        daniel.baluta@nxp.com, bjorn.andersson@linaro.org, olof@lixom.net,
-        dinguyen@kernel.org, leonard.crestez@nxp.com,
-        marcin.juszkiewicz@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Linux-imx@nxp.com
-Subject: Re: [PATCH V16 5/5] arm64: dts: imx: add i.MX8QXP thermal support
-Message-ID: <20200310070437.GC17772@dragon>
-References: <1582330132-13461-1-git-send-email-Anson.Huang@nxp.com>
- <1582330132-13461-5-git-send-email-Anson.Huang@nxp.com>
+        id S1726307AbgCJHZ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Mar 2020 03:25:29 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:51032 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726252AbgCJHZ3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Mar 2020 03:25:29 -0400
+Received: by mail-wm1-f66.google.com with SMTP id a5so114877wmb.0
+        for <linux-pm@vger.kernel.org>; Tue, 10 Mar 2020 00:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=CZOZ6zJl7K+CX7mG44VkFRrQ+i68m5YSb/XRoNfw+DM=;
+        b=dTDGHazafxaCYTqNsDJY+Aqy4X2eNC+o7FBx+BWqJ5HvYm7/lZ3CFwl7cog/MZ67/j
+         QLj3tFUEjhy/Z9o+3fq7vmbGh9aJxCidvYLdBC66qEZta+KHd3hP7s8N+n2Oo4HimrGU
+         vpw7XsPZnjm28BdcV7yxfU0Ckw2gV36VxQf2jGXTWfGlaP0PQgrtgFR/8+oGjWuIzlbL
+         LH4v9KlIspKSELNW0uxdzzZw2vKS907Ty34+8nxjvzZh1gOzHPD+EoM9MISniGHsZSU+
+         nner1gEELwWRZHkpcRbyZW2xdq/tT+AcZC6uRiPrVIk+4vfwI8ptChCoFT/4ysFMVgG8
+         LCsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=CZOZ6zJl7K+CX7mG44VkFRrQ+i68m5YSb/XRoNfw+DM=;
+        b=hjo+T+t5izNb27A3w/v09Zf4mu3maQp5AhesoBg4+GD515va0CMhYWVZh5O+1+qWkj
+         Bo83+uc9XgIkTEcUIZMRW5bZNNO/oGrGIcqYF9m/wWnT+bu43fnueVMiAsplTLZ0ouIT
+         oUANVFveQ6yAP3PDILxKNtqGOV9/HHWS7Hycf088zUTtJDC/x7o1dFYIpRIILjPpF7uR
+         ue6Bgf5a+YW8rGYnwvvclVCB3B83W0BcOOb9wImukJ6+h9+RSit6ipOlaX2algeamdtL
+         lqWPe8GNy38W+BmwzA7BVPRMT7NAbnsgDda5xG4xO5t9sz9CMIBCWsLYCW3mDlcBLGap
+         1DMQ==
+X-Gm-Message-State: ANhLgQ2Iro7UL+PS6OyUU+6altd9gysTBsMBC/ZM2X9IMaD+QA/drP0l
+        BfO5Y+2SZD2Br2kBMLhTOkYPRc+aICYtadGyD8o=
+X-Google-Smtp-Source: ADFU+vthuoRWKPNBJz1KgApp621Zdh2ICmMl0UKRYNBBGAgAmi/P7vtgeW71oO24r5AuzIiJlEY7nUHtriiyYG9MBBU=
+X-Received: by 2002:a05:600c:218a:: with SMTP id e10mr575223wme.112.1583825126600;
+ Tue, 10 Mar 2020 00:25:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1582330132-13461-5-git-send-email-Anson.Huang@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Received: by 2002:adf:ab0b:0:0:0:0:0 with HTTP; Tue, 10 Mar 2020 00:25:25
+ -0700 (PDT)
+Reply-To: azizdake0@gmail.com
+From:   Aziz Dake <palwil75@gmail.com>
+Date:   Tue, 10 Mar 2020 00:25:25 -0700
+Message-ID: <CAJncpkT54Cxc7Gz3gDSpJH3pHpyJ6z-ugr=d-E01zXisBKy6bg@mail.gmail.com>
+Subject: From Honourable Barrister Aziz Dake,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Feb 22, 2020 at 08:08:52AM +0800, Anson Huang wrote:
-> Add i.MX8QXP CPU thermal zone support.
-> 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
-> No change.
-> ---
->  arch/arm64/boot/dts/freescale/imx8qxp.dtsi | 36 ++++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> index fb5f752..0a14fe4 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> @@ -11,6 +11,7 @@
->  #include <dt-bindings/input/input.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/pinctrl/pads-imx8qxp.h>
-> +#include <dt-bindings/thermal/thermal.h>
->  
->  / {
->  	interrupt-parent = <&gic>;
-> @@ -189,6 +190,11 @@
->  			compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
->  			timeout-sec = <60>;
->  		};
-> +
-> +		tsens: thermal-sensor {
-> +			compatible = "fsl,imx8qxp-sc-thermal", "fsl,imx-sc-thermal";
-> +			#thermal-sensor-cells = <1>;
-> +		};
->  	};
->  
->  	timer {
-> @@ -586,4 +592,34 @@
->  			#clock-cells = <1>;
->  		};
->  	};
-> +
-> +	thermal_zones: thermal-zones {
-> +		cpu-thermal0 {
-> +			polling-delay-passive = <250>;
-> +			polling-delay = <2000>;
-> +			thermal-sensors = <&tsens IMX_SC_R_SYSTEM>;
+Attn: Sir/Madam
 
-newline
+I am Honourable Barrister Aziz the personal resident Attorney here in
+Burkina Faso to Late Mr. Muammar Muhammad Abu Minyar al-Gaddafi of
+Libya c. 1942 =E2=80=93 20 October 2011.
 
-> +			trips {
-> +				cpu_alert0: trip0 {
-> +					temperature = <107000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
+My client Late Mr. Muammar Muhammad Abu Minyar al-Gaddafi c. 1942 =E2=80=93=
+ 20
+October 2011, was having a deposit sum of {thirty million four Hundred
+thousand united state dollars} only ($30.4M USD) with a security
+finance firm affiliated with African development bank here in Burkina
+Faso.
 
-newline
+With the above explanation=E2=80=99s I want to move this money from Burkina
+Faso to your country, affidavit on your name, but note that this is a
+deal between me and you and should not be related to anybody until the
+deal is over for security reasons, please if interested reply as soon
+as possible.
 
-> +				cpu_crit0: trip1 {
-> +					temperature = <127000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-
-newline
-
-I fixed them up and applied the patch.
-
-Shawn
-
-> +			cooling-maps {
-> +				map0 {
-> +					trip = <&cpu_alert0>;
-> +					cooling-device =
-> +						<&A35_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +						<&A35_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +						<&A35_2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> +						<&A35_3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> +				};
-> +			};
-> +		};
-> +	};
->  };
-> -- 
-> 2.7.4
-> 
+Thanks,
+Honourable Barrister Aziz Dake.
