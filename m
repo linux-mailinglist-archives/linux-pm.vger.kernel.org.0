@@ -2,116 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C10FB180B22
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 23:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 395CE180B86
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 23:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726325AbgCJWDU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Mar 2020 18:03:20 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:34156 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726283AbgCJWDU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Mar 2020 18:03:20 -0400
-Received: by mail-wm1-f68.google.com with SMTP id x3so1760259wmj.1
-        for <linux-pm@vger.kernel.org>; Tue, 10 Mar 2020 15:03:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=dYEP1uE4NnVFr/AeDKddTWSxJgA20EPFg2G+JAahXU0=;
-        b=I20JsyOJIesiZZQ8aV/IdyM+r4UI4cQUwV9OU88GjMqXQdcGxyWCcTu+TKnMpQTwzR
-         8zsRR1Ku3VvKEiqj1/PL8R5Nrk6wcQBvAnxyWKr7fOA7HdZ08IH0zfDTMBnRXrE4sv+B
-         1FJbyCwTIoyCOqD2c6zdL2IiWQINHKswybaSp4LQ7NJ/mx5atiVaaCA7KJmFqkI1NxgO
-         ZLyx0BgypSHUQzKXHvqeJWj1ZAU41f5jkODNqWwySdRgLuSbY/bjut3UAN1jCydVdFW5
-         4q0nzPNiNsFhSQ2UmsMYO7SYzoSm7Xv0C8TZTspbL4HFRap19/7Ybum6IG+LQMJ662fW
-         FIwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=dYEP1uE4NnVFr/AeDKddTWSxJgA20EPFg2G+JAahXU0=;
-        b=GTbOtx+sS1z9G0QVTeNXFege5ka15SGMfxluHFrISW0VOOWVZeDOoG/gtD/ldq194/
-         pf7NqA2szJ68MbwodFnmCxTjUvpGCELTNmpUO6KnDh8WA5+tLxXGQ1YFZLOM+qyqaEJK
-         k4uZAKV1TOThecoS4ExBCPwCEmoUOak3rgmjj/l3vM/hZ50/4AaTNBVp8rAMqLcquNnl
-         GIotbet01b8Es1x8RixxhLKrebIwW6SIdEbA0Kem7jinxJjeDf9rJNk8WwK6NdUBeMAl
-         oQP8sCEgBG0g+23iQBJ88Ek6mfQi/9f81FamXdlg24s5cScKSCcODAkL69HB5Bzr6iMP
-         qCtA==
-X-Gm-Message-State: ANhLgQ1U+J2ElEDGjuSOYl+p7SwNtPckLbktNVLEWlrHSULHTES9VeJQ
-        +dLeWf7Brnax6B95GBvJ1TF9Jw==
-X-Google-Smtp-Source: ADFU+vsFsnumgp9VoOGVYqCrNLZ5ay6csw80CWgZBfUy0rM6bs6wjkEgt0Ofqq4WtgfmKA4Ub4RhiQ==
-X-Received: by 2002:a1c:4e14:: with SMTP id g20mr3853268wmh.143.1583877798471;
-        Tue, 10 Mar 2020 15:03:18 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id w67sm1892315wmb.41.2020.03.10.15.03.17
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 10 Mar 2020 15:03:17 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Jianxin Pan <jianxin.pan@amlogic.com>,
-        "open list\:ARM\/Amlogic Meson..." 
-        <linux-amlogic@lists.infradead.org>, SoC Team <soc@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        devicetree@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "open list\:THERMAL" <linux-pm@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "moderated list\:ARM\/FREESCALE IMX \/ MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2] dt-bindings: power: Fix dt_binding_check error
-In-Reply-To: <CAL_JsqJAxfL_Q3HYHk_8VeefdXnhYT7kcPe3F5Gzk1Vfj+xtww@mail.gmail.com>
-References: <1583164448-83438-1-git-send-email-jianxin.pan@amlogic.com> <7hsgiqra5x.fsf@baylibre.com> <CAL_JsqJAxfL_Q3HYHk_8VeefdXnhYT7kcPe3F5Gzk1Vfj+xtww@mail.gmail.com>
-Date:   Tue, 10 Mar 2020 15:03:15 -0700
-Message-ID: <7h36afn9zw.fsf@baylibre.com>
+        id S1727753AbgCJW0G convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 10 Mar 2020 18:26:06 -0400
+Received: from mail.fireflyinternet.com ([109.228.58.192]:58034 "EHLO
+        fireflyinternet.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727582AbgCJW0G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Mar 2020 18:26:06 -0400
+X-Default-Received-SPF: pass (skip=forwardok (res=PASS)) x-ip-name=78.156.65.138;
+Received: from localhost (unverified [78.156.65.138]) 
+        by fireflyinternet.com (Firefly Internet (M1)) with ESMTP (TLS) id 20515138-1500050 
+        for multiple; Tue, 10 Mar 2020 22:26:02 +0000
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20200310214203.26459-3-currojerez@riseup.net>
+References: <20200310214203.26459-1-currojerez@riseup.net> <20200310214203.26459-3-currojerez@riseup.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
+From:   Chris Wilson <chris@chris-wilson.co.uk>
+Subject: Re: [Intel-gfx] [PATCH 02/10] drm/i915: Adjust PM QoS response frequency based on GPU load.
+To:     Francisco Jerez <currojerez@riseup.net>,
+        intel-gfx@lists.freedesktop.org, linux-pm@vger.kernel.org
+Message-ID: <158387916218.28297.4489489879582782488@build.alporthouse.com>
+User-Agent: alot/0.8.1
+Date:   Tue, 10 Mar 2020 22:26:02 +0000
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rob Herring <robh+dt@kernel.org> writes:
+Quoting Francisco Jerez (2020-03-10 21:41:55)
+> diff --git a/drivers/gpu/drm/i915/gt/intel_lrc.c b/drivers/gpu/drm/i915/gt/intel_lrc.c
+> index b9b3f78f1324..a5d7a80b826d 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_lrc.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_lrc.c
+> @@ -1577,6 +1577,11 @@ static void execlists_submit_ports(struct intel_engine_cs *engine)
+>         /* we need to manually load the submit queue */
+>         if (execlists->ctrl_reg)
+>                 writel(EL_CTRL_LOAD, execlists->ctrl_reg);
+> +
+> +       if (execlists_num_ports(execlists) > 1 &&
+pending[1] is always defined, the minimum submission is one slot, with
+pending[1] as the sentinel NULL.
 
-> On Mon, Mar 2, 2020 at 10:31 AM Kevin Hilman <khilman@baylibre.com> wrote:
->>
->> Hi Jianxin,
->>
->> Jianxin Pan <jianxin.pan@amlogic.com> writes:
->>
->> > Missing ';' in the end of secure-monitor example node.
->> >
->> > Fixes: 165b5fb294e8 ("dt-bindings: power: add Amlogic secure power domains bindings")
->> > Reported-by: Rob Herring <robh+dt@kernel.org>
->> > Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
->> > ---
->> >  Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml | 2 +-
->> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> >
->> > diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->> > index af32209..bc4e037 100644
->> > --- a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->> > +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
->> > @@ -36,5 +36,5 @@ examples:
->> >              compatible = "amlogic,meson-a1-pwrc";
->> >              #power-domain-cells = <1>;
->> >          };
->> > -    }
->> > +    };
->>
->> Thanks for the fix.  Queued for v5.7.
->>
->> @Arnd, @Olof: you can ignore this one.  I requested Jianxin to send to
->> you thinking this was a fix for something you already queued, but it's
->> not.  I'll handle it.
->
-> Someone has what needs fixing queued in linux-next, but this fix is
-> still not there. Somehow it seems like features show up in linux-next
-> faster than fixes for SoC tree...
+> +           execlists->pending[1] &&
+> +           !atomic_xchg(&execlists->overload, 1))
+> +               intel_gt_pm_active_begin(&engine->i915->gt);
 
-The fix (this patch) is queued in my 'for-next' branch which I pushed
-yesterday.  I guess it missed next-20200310 but should be in tomorrow.
+engine->gt
 
-Kevin
+>  }
+>  
+>  static bool ctx_single_port_submission(const struct intel_context *ce)
+> @@ -2213,6 +2218,12 @@ cancel_port_requests(struct intel_engine_execlists * const execlists)
+>         clear_ports(execlists->inflight, ARRAY_SIZE(execlists->inflight));
+>  
+>         WRITE_ONCE(execlists->active, execlists->inflight);
+> +
+> +       if (atomic_xchg(&execlists->overload, 0)) {
+> +               struct intel_engine_cs *engine =
+> +                       container_of(execlists, typeof(*engine), execlists);
+> +               intel_gt_pm_active_end(&engine->i915->gt);
+> +       }
+>  }
+>  
+>  static inline void
+> @@ -2386,6 +2397,9 @@ static void process_csb(struct intel_engine_cs *engine)
+>                         /* port0 completed, advanced to port1 */
+>                         trace_ports(execlists, "completed", execlists->active);
+>  
+> +                       if (atomic_xchg(&execlists->overload, 0))
+> +                               intel_gt_pm_active_end(&engine->i915->gt);
+
+So this looses track if we preempt a dual-ELSP submission with a
+single-ELSP submission (and never go back to dual).
+
+If you move this to the end of the loop and check
+
+if (!execlists->active[1] && atomic_xchg(&execlists->overload, 0))
+	intel_gt_pm_active_end(engine->gt);
+
+so that it covers both preemption/promotion and completion.
+
+However, that will fluctuate quite rapidly. (And runs the risk of
+exceeding the sentinel.)
+
+An alternative approach would be to couple along
+schedule_in/schedule_out
+
+atomic_set(overload, -1);
+
+__execlists_schedule_in:
+	if (!atomic_fetch_inc(overload)
+		intel_gt_pm_active_begin(engine->gt);
+__execlists_schedule_out:
+	if (!atomic_dec_return(overload)
+		intel_gt_pm_active_end(engine->gt);
+
+which would mean we are overloaded as soon as we try to submit an
+overlapping ELSP.
 
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic.git/log/?h=for-next
+The metric feels very multiple client (game + display server, or
+saturated transcode) centric. In the endless kernel world, we expect
+100% engine utilisation from a single context, and never a dual-ELSP
+submission. They are also likely to want to avoid being throttled to
+converse TDP for the CPU.
+
+Should we also reduce the overload for the number of clients who are
+waiting for interrupts from the GPU, so that their wakeup latency is not
+impacted?
+-Chris
