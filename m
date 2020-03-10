@@ -2,109 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2A2180A7B
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 22:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16602180AC6
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 22:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbgCJVay (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Mar 2020 17:30:54 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:50788 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726265AbgCJVax (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Mar 2020 17:30:53 -0400
+        id S1727671AbgCJVqX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Mar 2020 17:46:23 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:49172 "EHLO mx1.riseup.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726283AbgCJVqX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 10 Mar 2020 17:46:23 -0400
+Received: from bell.riseup.net (unknown [10.0.1.178])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 48cTDt3K6CzFf4g;
+        Tue, 10 Mar 2020 14:46:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1583876782; bh=O5+NjN6hGYqQ8zt6klZcMvOoagUZx5TzRHwqC4TnZ+A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=c4r/5+v5XyJo5L99TJH//nPYIDT9uYB5/eSgIaGslsbllbZdzHilWDFLtEwwEMNgQ
+         9vKAh3EA71v6n3qw3R2uSOWMpHWKwoQB3aA+DfZ+qQh+SEGRXnEiNmxZGRxRPZzrgL
+         6vXE8XjJYZxezDRoCsG49jpm/W475z0Tv7kYosXk=
+X-Riseup-User-ID: 4BCCD02C88EA505C44278F96B11C2B57C95CC107B9A24E6EB5454AFBA229E47C
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 95993293E8E
-Received: by earth.universe (Postfix, from userid 1000)
-        id 6BF9A3C0C82; Tue, 10 Mar 2020 22:30:50 +0100 (CET)
-Date:   Tue, 10 Mar 2020 22:30:50 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sandeep Patil <sspatil@android.com>
-Cc:     Dan Murphy <dmurphy@ti.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v4 2/4] power_supply: Add additional health properties to
- the header
-Message-ID: <20200310213050.si7gcr2wbmjgr7jf@earth.universe>
-References: <20200116175039.1317-1-dmurphy@ti.com>
- <20200116175039.1317-3-dmurphy@ti.com>
- <20200117010658.iqs2zpwl6bsomkuo@earth.universe>
- <20200306235548.GA187098@google.com>
+         by bell.riseup.net (Postfix) with ESMTPSA id 48cTDs6tfPzJrlc;
+        Tue, 10 Mar 2020 14:46:21 -0700 (PDT)
+From:   Francisco Jerez <currojerez@riseup.net>
+To:     linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [RFC] GPU-bound energy efficiency improvements for the intel_pstate driver (v2).
+Date:   Tue, 10 Mar 2020 14:41:53 -0700
+Message-Id: <20200310214203.26459-1-currojerez@riseup.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="35joe23zra66xihb"
-Content-Disposition: inline
-In-Reply-To: <20200306235548.GA187098@google.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This is my second take on improving the energy efficiency of the
+intel_pstate driver under IO-bound conditions.  The problem and
+approach to solve it are roughly the same as in my previous series [1]
+at a high level:
 
---35joe23zra66xihb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In IO-bound scenarios (by definition) the throughput of the system
+doesn't improve with increasing CPU frequency beyond the threshold
+value at which the IO device becomes the bottleneck, however with the
+current governors (whether HWP is in use or not) the CPU frequency
+tends to oscillate with the load, often with an amplitude far into the
+turbo range, leading to severely reduced energy efficiency, which is
+particularly problematic when a limited TDP budget is shared among a
+number of cores running some multithreaded workload, or among a CPU
+core and an integrated GPU.
 
-Hi Sandeep,
+Improving the energy efficiency of the CPU improves the throughput of
+the system in such TDP-limited conditions.  See [4] for some
+preliminary benchmark results from a Razer Blade Stealth 13 Late
+2019/LY320 laptop with an Intel ICL processor and integrated graphics,
+including throughput results that range up to a ~15% improvement and
+performance-per-watt results up to a ~43% improvement (estimated via
+RAPL).  Particularly the throughput results may vary substantially
+from one platform to another depending on the TDP budget and the
+balance of load between CPU and GPU.
 
-On Fri, Mar 06, 2020 at 03:55:48PM -0800, Sandeep Patil wrote:
-> On Fri, Jan 17, 2020 at 02:06:58AM +0100, Sebastian Reichel wrote:
-> > Hi,
-> >=20
-> > On Thu, Jan 16, 2020 at 11:50:37AM -0600, Dan Murphy wrote:
-> > > Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
-> > >=20
-> > > Signed-off-by: Dan Murphy <dmurphy@ti.com>
-> > > ---
-> >=20
-> > Looks good. But I will not merge it without a user and have comments
-> > for the driver.
->=20
-> Android has been looking for these properties for a while now [1].
-> It was added[2] when we saw that the manufacturers were implementing these
-> properties in the driver. I didn't know the properties were absent upstre=
-am
-> until yesterday. Somebody pointed out in our ongoing effort to make sure
-> all core kernel changes that android depends on are present upstream.
->=20
-> I think those values are also propagated in application facing APIs in
-> Android (but I am not sure yet, let me know if that's something you want
-> to find out).
->=20
-> I wanted to chime in and present you a 'user' for this if that helps.
+One of the main differences relative to my previous version is that
+the trade-off between energy efficiency and frequency ramp-up latency
+is now exposed to device drivers through a new PM QoS class [It would
+make sense to expose it to userspace too eventually but that's beyond
+the purpose of this series].  The new PM QoS class provides a latency
+target to CPUFREQ governors which gives them permission to filter out
+CPU frequency oscillations with a period significantly shorter than
+the specified target, whenever doing so leads to improved energy
+efficiency.
 
-With user I meant an upstream kernel driver, which exposes the
-values. But thanks for the pointer. This should be mentioned in
-the patch description, also the fact that the status values are
-directly taken from JEITA spec.
+This series takes advantage of the new PM QoS class from the i915
+driver whenever the driver determines that the GPU has become a
+bottleneck for an extended period of time.  At that point it places a
+PM QoS ramp-up latency target which causes CPUFREQ to limit the CPU to
+a reasonably energy-efficient frequency able to at least achieve the
+required amount of work in a time window approximately equal to the
+ramp-up latency target (since any longer-term energy efficiency
+optimization would potentially violate the latency target).  This
+seems more effective than clamping the CPU frequency to a fixed value
+directly from various subsystems, since the CPU is a shared resource,
+so the frequency bound needs to consider the load and latency
+requirements of all independent workloads running on the same CPU core
+in order to avoid performance degradation in a multitasking, possibly
+virtualized environment.
 
-> Cc: kernel-team@android.com
->=20
-> - ssp
->=20
-> 1. https://android.googlesource.com/platform/system/core/+/refs/heads/mas=
-ter/healthd/BatteryMonitor.cpp#162
-> 2. https://android-review.googlesource.com/c/platform/system/core/+/414481
+The main limitation of this PM QoS approach is that whenever multiple
+clients request different ramp-up latency targets, only the strictest
+(lowest latency) one will apply system-wide, potentially leading to
+suboptimal energy efficiency for the less latency-sensitive clients,
+(though it won't artificially limit the CPU throughput of the most
+latency-sensitive clients as a result of the PM QoS requests placed by
+less latency-sensitive ones).  In order to address this limitation I'm
+working on a more complicated solution which integrates with the task
+scheduler in order to provide response latency control with process
+granularity (pretty much in the spirit of PELT).  One of the
+alternatives Rafael and I were discussing was to expose that through a
+third cgroup clamp on top of the MIN and MAX utilization clamps, but
+I'm open to any other possibilities regarding what the interface
+should look like.  Either way the current (scheduling-unaware) PM
+QoS-based interface should provide most of the benefit except in
+heavily multitasking environments.
 
--- Sebastian
+A branch with this series in testable form can be found here [2],
+based on linux-next from a few days ago.  Another important difference
+with respect to my previous revision is that the present one targets
+HWP systems (though for the moment it's only enabled by default on
+ICL, even though that can be overridden through the kernel command
+line).  I have WIP code that uses the same governor in order to
+provide a similar benefit on non-HWP systems (like my previous
+revision), which can be found in this branch for reference [3] -- I'm
+planning to finish that up and send it as follow-up to this series
+assuming people are happy with the overall approach.
 
---35joe23zra66xihb
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks in advance for any review feed-back and test reports.
 
------BEGIN PGP SIGNATURE-----
+[PATCH 01/10] PM: QoS: Add CPU_RESPONSE_FREQUENCY global PM QoS limit.
+[PATCH 02/10] drm/i915: Adjust PM QoS response frequency based on GPU load.
+[PATCH 03/10] OPTIONAL: drm/i915: Expose PM QoS control parameters via debugfs.
+[PATCH 04/10] Revert "cpufreq: intel_pstate: Drop ->update_util from pstate_funcs"
+[PATCH 05/10] cpufreq: intel_pstate: Implement VLP controller statistics and status calculation.
+[PATCH 06/10] cpufreq: intel_pstate: Implement VLP controller target P-state range estimation.
+[PATCH 07/10] cpufreq: intel_pstate: Implement VLP controller for HWP parts.
+[PATCH 08/10] cpufreq: intel_pstate: Enable VLP controller based on ACPI FADT profile and CPUID.
+[PATCH 09/10] OPTIONAL: cpufreq: intel_pstate: Add tracing of VLP controller status.
+[PATCH 10/10] OPTIONAL: cpufreq: intel_pstate: Expose VLP controller parameters via debugfs.
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl5oBwcACgkQ2O7X88g7
-+pqdpw/+Lcc4W0PsvkYpEfn0QKMOTsIdEV/XS+BPufOCcHNwB+J8VhlmicgdEpf6
-2zviAP4z/u6yz72Tb1zgQlJVplBlfmxYoWgWjUUYbscZ0YQNTFDanOyUHjyw9I5b
-S6Sx9z1jAbWkQk5tb5novx/eXpwYq/AScfKDAuwIqN+Aid8OXRB6vHi56nVCEuWH
-bQkt7CdHQCa6wodzcN5TEShhzXi3nMNHpAXHg1MRzyijzNEnH16G88vVtHfhflxw
-4zzSrGWVyyZAzqK8ap1tXEIOhTFvev4hSm69fUDPB5fF1rc43pTY78jzRcFbx+Qe
-0TBaJwP9pkaCxMEY4qJdNEIO8UnzL7Wcu76XrWEvcXJg/jFXzNo6p64lA+sfDoMl
-UFxh1WsAFLF3rAO0d5vj5pHojIZ0IAmp82ruzJEFPqmlGslSZ8bmbgFz4+bqc3J9
-45toClOMeAbp8QZvd8cVI+OriVGpjcOGaUtjbVSul9T2sWnqs7UuHgtyNI6oYRU3
-zpEkwk80aZAgb9MSpicykzBH8zTXaSDIKN6nhcWlcceyBGiD2VTZ9DRpxcgyD27y
-GMEo4kMf1W++TELOIhwJsB7MzHNc8e1nLcBK9TTy5YNDAqvMs/YWjVfYfy0VpfMh
-bm4wW6p52ufDicRSq2AwUl65InaRKRY3XRIVzfVe4bg8PihKD8E=
-=OK1D
------END PGP SIGNATURE-----
+[1] https://marc.info/?l=linux-pm&m=152221943320908&w=2
+[2] https://github.com/curro/linux/commits/intel_pstate-vlp-v2-hwp-only
+[3] https://github.com/curro/linux/commits/intel_pstate-vlp-v2
+[4] http://people.freedesktop.org/~currojerez/intel_pstate-vlp-v2/benchmark-comparison-ICL.log
 
---35joe23zra66xihb--
