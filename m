@@ -2,185 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03308180ACF
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 22:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10FB180B22
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 23:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727687AbgCJVqZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Mar 2020 17:46:25 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:49240 "EHLO mx1.riseup.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727551AbgCJVqZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Mar 2020 17:46:25 -0400
-Received: from bell.riseup.net (unknown [10.0.1.178])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 48cTDw5FF6zFf4j;
-        Tue, 10 Mar 2020 14:46:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1583876784; bh=zzzl2/tHeTCBj7TTDdp7xZuK24u3SUbkYH2qozKcfxA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MDlpam7CaEcA3Cq/AOVIEhepcmg7wlREWnqqxVv4NWx8mswp8ykYRHIAZzmvkQDYq
-         MapvujMeR1yTiGpQLdPe9Anm30BnoKhJKrdsNfav9Z6OSiFYnKQjYf8Cmv74I/uZSA
-         6UMALvGwR7JAEuJEY8Fg79StzhYeBYghq6qY22+k=
-X-Riseup-User-ID: 5CE1B4FF9DF4CA22973D9FEF3FBB8CDD822CDE418BBD681102E554E4656EB1F0
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by bell.riseup.net (Postfix) with ESMTPSA id 48cTDw2jwRzJsFM;
-        Tue, 10 Mar 2020 14:46:24 -0700 (PDT)
-From:   Francisco Jerez <currojerez@riseup.net>
-To:     linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Fengguang Wu <fengguang.wu@intel.com>,
-        Julia Lawall <julia.lawall@lip6.fr>
-Subject: [PATCH 10/10] OPTIONAL: cpufreq: intel_pstate: Expose VLP controller parameters via debugfs.
-Date:   Tue, 10 Mar 2020 14:42:03 -0700
-Message-Id: <20200310214203.26459-11-currojerez@riseup.net>
-In-Reply-To: <20200310214203.26459-1-currojerez@riseup.net>
-References: <20200310214203.26459-1-currojerez@riseup.net>
+        id S1726325AbgCJWDU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Mar 2020 18:03:20 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:34156 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726283AbgCJWDU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Mar 2020 18:03:20 -0400
+Received: by mail-wm1-f68.google.com with SMTP id x3so1760259wmj.1
+        for <linux-pm@vger.kernel.org>; Tue, 10 Mar 2020 15:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=dYEP1uE4NnVFr/AeDKddTWSxJgA20EPFg2G+JAahXU0=;
+        b=I20JsyOJIesiZZQ8aV/IdyM+r4UI4cQUwV9OU88GjMqXQdcGxyWCcTu+TKnMpQTwzR
+         8zsRR1Ku3VvKEiqj1/PL8R5Nrk6wcQBvAnxyWKr7fOA7HdZ08IH0zfDTMBnRXrE4sv+B
+         1FJbyCwTIoyCOqD2c6zdL2IiWQINHKswybaSp4LQ7NJ/mx5atiVaaCA7KJmFqkI1NxgO
+         ZLyx0BgypSHUQzKXHvqeJWj1ZAU41f5jkODNqWwySdRgLuSbY/bjut3UAN1jCydVdFW5
+         4q0nzPNiNsFhSQ2UmsMYO7SYzoSm7Xv0C8TZTspbL4HFRap19/7Ybum6IG+LQMJ662fW
+         FIwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=dYEP1uE4NnVFr/AeDKddTWSxJgA20EPFg2G+JAahXU0=;
+        b=GTbOtx+sS1z9G0QVTeNXFege5ka15SGMfxluHFrISW0VOOWVZeDOoG/gtD/ldq194/
+         pf7NqA2szJ68MbwodFnmCxTjUvpGCELTNmpUO6KnDh8WA5+tLxXGQ1YFZLOM+qyqaEJK
+         k4uZAKV1TOThecoS4ExBCPwCEmoUOak3rgmjj/l3vM/hZ50/4AaTNBVp8rAMqLcquNnl
+         GIotbet01b8Es1x8RixxhLKrebIwW6SIdEbA0Kem7jinxJjeDf9rJNk8WwK6NdUBeMAl
+         oQP8sCEgBG0g+23iQBJ88Ek6mfQi/9f81FamXdlg24s5cScKSCcODAkL69HB5Bzr6iMP
+         qCtA==
+X-Gm-Message-State: ANhLgQ1U+J2ElEDGjuSOYl+p7SwNtPckLbktNVLEWlrHSULHTES9VeJQ
+        +dLeWf7Brnax6B95GBvJ1TF9Jw==
+X-Google-Smtp-Source: ADFU+vsFsnumgp9VoOGVYqCrNLZ5ay6csw80CWgZBfUy0rM6bs6wjkEgt0Ofqq4WtgfmKA4Ub4RhiQ==
+X-Received: by 2002:a1c:4e14:: with SMTP id g20mr3853268wmh.143.1583877798471;
+        Tue, 10 Mar 2020 15:03:18 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id w67sm1892315wmb.41.2020.03.10.15.03.17
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 10 Mar 2020 15:03:17 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Jianxin Pan <jianxin.pan@amlogic.com>,
+        "open list\:ARM\/Amlogic Meson..." 
+        <linux-amlogic@lists.infradead.org>, SoC Team <soc@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        devicetree@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "open list\:THERMAL" <linux-pm@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "moderated list\:ARM\/FREESCALE IMX \/ MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2] dt-bindings: power: Fix dt_binding_check error
+In-Reply-To: <CAL_JsqJAxfL_Q3HYHk_8VeefdXnhYT7kcPe3F5Gzk1Vfj+xtww@mail.gmail.com>
+References: <1583164448-83438-1-git-send-email-jianxin.pan@amlogic.com> <7hsgiqra5x.fsf@baylibre.com> <CAL_JsqJAxfL_Q3HYHk_8VeefdXnhYT7kcPe3F5Gzk1Vfj+xtww@mail.gmail.com>
+Date:   Tue, 10 Mar 2020 15:03:15 -0700
+Message-ID: <7h36afn9zw.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is not required for the controller to work but has proven very
-useful for debugging and testing of alternative heuristic parameters,
-which may offer a better trade-off between energy efficiency and
-latency.  A warning is printed out which should taint the kernel for
-the non-standard calibration of the heuristic to be obvious in bug
-reports.
+Rob Herring <robh+dt@kernel.org> writes:
 
-v2: Use DEFINE_DEBUGFS_ATTRIBUTE rather than DEFINE_SIMPLE_ATTRIBUTE
-    for debugfs files (Julia).  Add realtime statistic threshold and
-    averaging frequency parameters.
+> On Mon, Mar 2, 2020 at 10:31 AM Kevin Hilman <khilman@baylibre.com> wrote:
+>>
+>> Hi Jianxin,
+>>
+>> Jianxin Pan <jianxin.pan@amlogic.com> writes:
+>>
+>> > Missing ';' in the end of secure-monitor example node.
+>> >
+>> > Fixes: 165b5fb294e8 ("dt-bindings: power: add Amlogic secure power domains bindings")
+>> > Reported-by: Rob Herring <robh+dt@kernel.org>
+>> > Signed-off-by: Jianxin Pan <jianxin.pan@amlogic.com>
+>> > ---
+>> >  Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml | 2 +-
+>> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>> >
+>> > diff --git a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+>> > index af32209..bc4e037 100644
+>> > --- a/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+>> > +++ b/Documentation/devicetree/bindings/power/amlogic,meson-sec-pwrc.yaml
+>> > @@ -36,5 +36,5 @@ examples:
+>> >              compatible = "amlogic,meson-a1-pwrc";
+>> >              #power-domain-cells = <1>;
+>> >          };
+>> > -    }
+>> > +    };
+>>
+>> Thanks for the fix.  Queued for v5.7.
+>>
+>> @Arnd, @Olof: you can ignore this one.  I requested Jianxin to send to
+>> you thinking this was a fix for something you already queued, but it's
+>> not.  I'll handle it.
+>
+> Someone has what needs fixing queued in linux-next, but this fix is
+> still not there. Somehow it seems like features show up in linux-next
+> faster than fixes for SoC tree...
 
-Signed-off-by: Francisco Jerez <currojerez@riseup.net>
-Signed-off-by: Fengguang Wu <fengguang.wu@intel.com>
-Signed-off-by: Julia Lawall <julia.lawall@lip6.fr>
----
- drivers/cpufreq/intel_pstate.c | 92 ++++++++++++++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
+The fix (this patch) is queued in my 'for-next' branch which I pushed
+yesterday.  I guess it missed next-20200310 but should be in tomorrow.
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index c4558a131660..ab893a211746 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -1030,6 +1030,94 @@ static void intel_pstate_update_limits(unsigned int cpu)
- 	mutex_unlock(&intel_pstate_driver_lock);
- }
- 
-+/************************** debugfs begin ************************/
-+static void intel_pstate_reset_vlp(struct cpudata *cpu);
-+
-+static int vlp_param_set(void *data, u64 val)
-+{
-+	unsigned int cpu;
-+
-+	*(u32 *)data = val;
-+	for_each_possible_cpu(cpu) {
-+		if (all_cpu_data[cpu])
-+			intel_pstate_reset_vlp(all_cpu_data[cpu]);
-+	}
-+
-+	WARN_ONCE(1, "Unsupported P-state VLP parameter update via debugging interface");
-+
-+	return 0;
-+}
-+
-+static int vlp_param_get(void *data, u64 *val)
-+{
-+	*val = *(u32 *)data;
-+	return 0;
-+}
-+DEFINE_DEBUGFS_ATTRIBUTE(fops_vlp_param, vlp_param_get, vlp_param_set,
-+			 "%llu\n");
-+
-+static struct dentry *debugfs_parent;
-+
-+struct vlp_param {
-+	char *name;
-+	void *value;
-+	struct dentry *dentry;
-+};
-+
-+static struct vlp_param vlp_files[] = {
-+	{"vlp_sample_interval_ms", &vlp_params.sample_interval_ms, },
-+	{"vlp_setpoint_0_pml", &vlp_params.setpoint_0_pml, },
-+	{"vlp_setpoint_aggr_pml", &vlp_params.setpoint_aggr_pml, },
-+	{"vlp_avg_hz", &vlp_params.avg_hz, },
-+	{"vlp_realtime_gain_pml", &vlp_params.realtime_gain_pml, },
-+	{"vlp_debug", &vlp_params.debug, },
-+	{NULL, NULL, }
-+};
-+
-+static void intel_pstate_update_util_hwp_vlp(struct update_util_data *data,
-+					     u64 time, unsigned int flags);
-+
-+static void intel_pstate_debug_expose_params(void)
-+{
-+	int i;
-+
-+	if (pstate_funcs.update_util != intel_pstate_update_util_hwp_vlp)
-+		return;
-+
-+	debugfs_parent = debugfs_create_dir("pstate_snb", NULL);
-+	if (IS_ERR_OR_NULL(debugfs_parent))
-+		return;
-+
-+	for (i = 0; vlp_files[i].name; i++) {
-+		struct dentry *dentry;
-+
-+		dentry = debugfs_create_file_unsafe(vlp_files[i].name, 0660,
-+						    debugfs_parent,
-+						    vlp_files[i].value,
-+						    &fops_vlp_param);
-+		if (!IS_ERR(dentry))
-+			vlp_files[i].dentry = dentry;
-+	}
-+}
-+
-+static void intel_pstate_debug_hide_params(void)
-+{
-+	int i;
-+
-+	if (IS_ERR_OR_NULL(debugfs_parent))
-+		return;
-+
-+	for (i = 0; vlp_files[i].name; i++) {
-+		debugfs_remove(vlp_files[i].dentry);
-+		vlp_files[i].dentry = NULL;
-+	}
-+
-+	debugfs_remove(debugfs_parent);
-+	debugfs_parent = NULL;
-+}
-+
-+/************************** debugfs end ************************/
-+
- /************************** sysfs begin ************************/
- #define show_one(file_name, object)					\
- 	static ssize_t show_##file_name					\
-@@ -2970,6 +3058,8 @@ static int intel_pstate_register_driver(struct cpufreq_driver *driver)
- 
- 	global.min_perf_pct = min_perf_pct_min();
- 
-+	intel_pstate_debug_expose_params();
-+
- 	return 0;
- }
- 
-@@ -2978,6 +3068,8 @@ static int intel_pstate_unregister_driver(void)
- 	if (hwp_active)
- 		return -EBUSY;
- 
-+	intel_pstate_debug_hide_params();
-+
- 	cpufreq_unregister_driver(intel_pstate_driver);
- 	intel_pstate_driver_cleanup();
- 
--- 
-2.22.1
+Kevin
 
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-amlogic.git/log/?h=for-next
