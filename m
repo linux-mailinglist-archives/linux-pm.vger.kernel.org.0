@@ -2,29 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB5A180ACC
+	by mail.lfdr.de (Postfix) with ESMTP id 81277180ACD
 	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 22:46:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727506AbgCJVqY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Mar 2020 17:46:24 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:49240 "EHLO mx1.riseup.net"
+        id S1727673AbgCJVqZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Mar 2020 17:46:25 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:49224 "EHLO mx1.riseup.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727551AbgCJVqY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1727687AbgCJVqY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Tue, 10 Mar 2020 17:46:24 -0400
 Received: from bell.riseup.net (unknown [10.0.1.178])
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 48cTDw0378zFf59;
+        by mx1.riseup.net (Postfix) with ESMTPS id 48cTDw1Tq3zFdmM;
         Tue, 10 Mar 2020 14:46:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1583876784; bh=ltwuhymiRp0VE2eGHyBbW5dhX5HoTXYQ8tBDbkFknOM=;
+        t=1583876784; bh=stbRd6S/nM+SmSD6AtycsqKYC18n7tohdkTgbGMLfTg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BEQDPbgw4AFgInKuxEXiyG6FyPYZvsQhtCWhvbRFbNd1QwRwlwiaAucd5RGHSlcvb
-         +nwClGR6I18+Jef9P791Em/n0bngfm31Vd/R9TnNzvW8T/65UHLhtjtIAp30kxszpe
-         6xw6eKaGNg5QyLmzoVaZm/E2rOBI3pWsPvGibZFg=
-X-Riseup-User-ID: 27D01099CFA45474A2CF5CDB74DB5D1B94D423BF3BF6EE795CB3C483527536A2
+        b=sHx5S/kDQQsB4kBIeSgf+XlR9aeF4xQSC2VmxxtIolgRZFthiRcCT+E+j8vjwxApz
+         Iu63iX3UWlCavj9nknOwkguhQtwh/EjY7jBaTOoWBFDopQcAz0T7kNMajLpC7j+DBX
+         L91bx6doFKUMQ08OxBoFRh4TeBlwPlDAyd+KnNO4=
+X-Riseup-User-ID: 97FBB299D1AA66348E4076D3E7B7381D8F06234A9706F0A2D772C9261D8C0D82
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by bell.riseup.net (Postfix) with ESMTPSA id 48cTDv5PBzzJs07;
+         by bell.riseup.net (Postfix) with ESMTPSA id 48cTDv6tL4zJrlc;
         Tue, 10 Mar 2020 14:46:23 -0700 (PDT)
 From:   Francisco Jerez <currojerez@riseup.net>
 To:     linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org
@@ -32,9 +32,9 @@ Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
         "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 07/10] cpufreq: intel_pstate: Implement VLP controller for HWP parts.
-Date:   Tue, 10 Mar 2020 14:42:00 -0700
-Message-Id: <20200310214203.26459-8-currojerez@riseup.net>
+Subject: [PATCH 08/10] cpufreq: intel_pstate: Enable VLP controller based on ACPI FADT profile and CPUID.
+Date:   Tue, 10 Mar 2020 14:42:01 -0700
+Message-Id: <20200310214203.26459-9-currojerez@riseup.net>
 In-Reply-To: <20200310214203.26459-1-currojerez@riseup.net>
 References: <20200310214203.26459-1-currojerez@riseup.net>
 MIME-Version: 1.0
@@ -44,142 +44,128 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This implements a simple variably low-pass-filtering governor in
-control of the HWP MIN/MAX PERF range based on the previously
-introduced get_vlp_target_range().  See "cpufreq: intel_pstate:
-Implement VLP controller target P-state range estimation." for the
-rationale.
+For the moment the VLP controller is only enabled on ICL platforms
+other than server FADT profiles in order to reduce the validation
+effort of the initial submission.  It should work on any other
+processors that support HWP though (and soon enough on non-HWP too):
+In order to override the default behavior (e.g. to test on other
+platforms) the VLP controller can be forcefully enabled or disabled by
+passing "intel_pstate=vlp" or "intel_pstate=no_vlp" respectively in
+the kernel command line.
+
+v2: Handle HWP VLP controller.
 
 Signed-off-by: Francisco Jerez <currojerez@riseup.net>
 ---
- drivers/cpufreq/intel_pstate.c | 79 +++++++++++++++++++++++++++++++++-
- 1 file changed, 77 insertions(+), 2 deletions(-)
+ .../admin-guide/kernel-parameters.txt         |  5 ++++
+ Documentation/admin-guide/pm/intel_pstate.rst |  7 ++++++
+ drivers/cpufreq/intel_pstate.c                | 25 +++++++++++++++++--
+ 3 files changed, 35 insertions(+), 2 deletions(-)
 
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 0c9894247015..9bc55fc2752e 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1828,6 +1828,11 @@
+ 			per_cpu_perf_limits
+ 			  Allow per-logical-CPU P-State performance control limits using
+ 			  cpufreq sysfs interface
++			vlp
++			  Force use of VLP P-state controller.  Overrides selection
++			  derived from ACPI FADT profile.
++			no_vlp
++			  Prevent use of VLP P-state controller (see "vlp" parameter).
+ 
+ 	intremap=	[X86-64, Intel-IOMMU]
+ 			on	enable Interrupt Remapping (default)
+diff --git a/Documentation/admin-guide/pm/intel_pstate.rst b/Documentation/admin-guide/pm/intel_pstate.rst
+index 67e414e34f37..da6b64812848 100644
+--- a/Documentation/admin-guide/pm/intel_pstate.rst
++++ b/Documentation/admin-guide/pm/intel_pstate.rst
+@@ -669,6 +669,13 @@ of them have to be prepended with the ``intel_pstate=`` prefix.
+ 	Use per-logical-CPU P-State limits (see `Coordination of P-state
+ 	Limits`_ for details).
+ 
++``vlp``
++	Force use of VLP P-state controller.  Overrides selection derived
++	from ACPI FADT profile.
++
++``no_vlp``
++	Prevent use of VLP P-state controller (see "vlp" parameter).
++
+ 
+ Diagnostics and Tuning
+ ======================
 diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index cecadfec8bc1..a01eed40d897 100644
+index a01eed40d897..050cc8f03c26 100644
 --- a/drivers/cpufreq/intel_pstate.c
 +++ b/drivers/cpufreq/intel_pstate.c
-@@ -1905,6 +1905,20 @@ static void intel_pstate_reset_vlp(struct cpudata *cpu)
- 	vlp->gain = max(1, div_fp(1000, vlp_params.setpoint_0_pml));
- 	vlp->target.p_base = 0;
- 	vlp->stats.last_response_frequency_hz = vlp_params.avg_hz;
-+
-+	if (hwp_active) {
-+		const uint32_t p0 = max(cpu->pstate.min_pstate,
-+					cpu->min_perf_ratio);
-+		const uint32_t p1 = max_t(uint32_t, p0, cpu->max_perf_ratio);
-+		const uint64_t hwp_req = (READ_ONCE(cpu->hwp_req_cached) &
-+					  ~(HWP_MAX_PERF(~0L) |
-+					    HWP_MIN_PERF(~0L) |
-+					    HWP_DESIRED_PERF(~0L))) |
-+					 HWP_MIN_PERF(p0) | HWP_MAX_PERF(p1);
-+
-+		wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, hwp_req);
-+		cpu->hwp_req_cached = hwp_req;
-+	}
- }
+@@ -3029,6 +3029,7 @@ static int intel_pstate_update_status(const char *buf, size_t size)
  
- /**
-@@ -2222,6 +2236,46 @@ static void intel_pstate_adjust_pstate(struct cpudata *cpu)
- 		fp_toint(cpu->iowait_boost * 100));
- }
+ static int no_load __initdata;
+ static int no_hwp __initdata;
++static int vlp __initdata = -1;
+ static int hwp_only __initdata;
+ static unsigned int force_load __initdata;
  
-+static void intel_pstate_adjust_pstate_range(struct cpudata *cpu,
-+					     const unsigned int range[])
-+{
-+	const int from = cpu->hwp_req_cached;
-+	unsigned int p0, p1, p_min, p_max;
-+	struct sample *sample;
-+	uint64_t hwp_req;
-+
-+	update_turbo_state();
-+
-+	p0 = max(cpu->pstate.min_pstate, cpu->min_perf_ratio);
-+	p1 = max_t(unsigned int, p0, cpu->max_perf_ratio);
-+	p_min = clamp_t(unsigned int, range[0], p0, p1);
-+	p_max = clamp_t(unsigned int, range[1], p0, p1);
-+
-+	trace_cpu_frequency(p_max * cpu->pstate.scaling, cpu->cpu);
-+
-+	hwp_req = (READ_ONCE(cpu->hwp_req_cached) &
-+		   ~(HWP_MAX_PERF(~0L) | HWP_MIN_PERF(~0L) |
-+		     HWP_DESIRED_PERF(~0L))) |
-+		  HWP_MIN_PERF(vlp_params.debug & 2 ? p0 : p_min) |
-+		  HWP_MAX_PERF(vlp_params.debug & 4 ? p1 : p_max);
-+
-+	if (hwp_req != cpu->hwp_req_cached) {
-+		wrmsrl(MSR_HWP_REQUEST, hwp_req);
-+		cpu->hwp_req_cached = hwp_req;
-+	}
-+
-+	sample = &cpu->sample;
-+	trace_pstate_sample(mul_ext_fp(100, sample->core_avg_perf),
-+			    fp_toint(sample->busy_scaled),
-+			    from,
-+			    hwp_req,
-+			    sample->mperf,
-+			    sample->aperf,
-+			    sample->tsc,
-+			    get_avg_frequency(cpu),
-+			    fp_toint(cpu->iowait_boost * 100));
-+}
-+
- static void intel_pstate_update_util(struct update_util_data *data, u64 time,
- 				     unsigned int flags)
+@@ -3193,6 +3194,7 @@ static inline void intel_pstate_request_control_from_smm(void) {}
+ #endif /* CONFIG_ACPI */
+ 
+ #define INTEL_PSTATE_HWP_BROADWELL	0x01
++#define INTEL_PSTATE_HWP_VLP		0x02
+ 
+ #define ICPU_HWP(model, hwp_mode) \
+ 	{ X86_VENDOR_INTEL, 6, model, X86_FEATURE_HWP, hwp_mode }
+@@ -3200,12 +3202,15 @@ static inline void intel_pstate_request_control_from_smm(void) {}
+ static const struct x86_cpu_id hwp_support_ids[] __initconst = {
+ 	ICPU_HWP(INTEL_FAM6_BROADWELL_X, INTEL_PSTATE_HWP_BROADWELL),
+ 	ICPU_HWP(INTEL_FAM6_BROADWELL_D, INTEL_PSTATE_HWP_BROADWELL),
++	ICPU_HWP(INTEL_FAM6_ICELAKE, INTEL_PSTATE_HWP_VLP),
++	ICPU_HWP(INTEL_FAM6_ICELAKE_L, INTEL_PSTATE_HWP_VLP),
+ 	ICPU_HWP(X86_MODEL_ANY, 0),
+ 	{}
+ };
+ 
+ static int __init intel_pstate_init(void)
  {
-@@ -2260,6 +2314,22 @@ static void intel_pstate_update_util(struct update_util_data *data, u64 time,
- 		intel_pstate_adjust_pstate(cpu);
- }
++	bool use_vlp = vlp == 1;
+ 	const struct x86_cpu_id *id;
+ 	int rc;
  
-+/**
-+ * Implementation of the cpufreq update_util hook based on the VLP
-+ * controller (see get_vlp_target_range()).
-+ */
-+static void intel_pstate_update_util_hwp_vlp(struct update_util_data *data,
-+					     u64 time, unsigned int flags)
-+{
-+	struct cpudata *cpu = container_of(data, struct cpudata, update_util);
+@@ -3222,8 +3227,19 @@ static int __init intel_pstate_init(void)
+ 			pstate_funcs.update_util = intel_pstate_update_util;
+ 		} else {
+ 			hwp_active++;
+-			pstate_funcs.update_util = intel_pstate_update_util_hwp;
+-			hwp_mode_bdw = id->driver_data;
 +
-+	if (update_vlp_sample(cpu, time, flags)) {
-+		const struct vlp_target_range *target =
-+			get_vlp_target_range(cpu);
-+		intel_pstate_adjust_pstate_range(cpu, target->value);
-+	}
-+}
++			if (vlp < 0 && !intel_pstate_acpi_pm_profile_server() &&
++			    (id->driver_data & INTEL_PSTATE_HWP_VLP)) {
++				/* Enable VLP controller by default. */
++				use_vlp = true;
++			}
 +
- static struct pstate_funcs core_funcs = {
- 	.get_max = core_get_max_pstate,
- 	.get_max_physical = core_get_max_pstate_physical,
-@@ -2389,6 +2459,9 @@ static int intel_pstate_init_cpu(unsigned int cpunum)
- 
- 	intel_pstate_get_cpu_pstates(cpu);
- 
-+	if (pstate_funcs.update_util == intel_pstate_update_util_hwp_vlp)
-+		intel_pstate_reset_vlp(cpu);
++			pstate_funcs.update_util = use_vlp ?
++				intel_pstate_update_util_hwp_vlp :
++				intel_pstate_update_util_hwp;
 +
- 	pr_debug("controlling: cpu %d\n", cpunum);
++			hwp_mode_bdw = (id->driver_data &
++					INTEL_PSTATE_HWP_BROADWELL);
+ 			intel_pstate.attr = hwp_cpufreq_attrs;
+ 			goto hwp_cpu_matched;
+ 		}
+@@ -3301,6 +3317,11 @@ static int __init intel_pstate_setup(char *str)
+ 	if (!strcmp(str, "per_cpu_perf_limits"))
+ 		per_cpu_limits = true;
  
- 	return 0;
-@@ -2398,7 +2471,8 @@ static void intel_pstate_set_update_util_hook(unsigned int cpu_num)
- {
- 	struct cpudata *cpu = all_cpu_data[cpu_num];
- 
--	if (hwp_active && !hwp_boost)
-+	if (hwp_active && !hwp_boost &&
-+	    pstate_funcs.update_util != intel_pstate_update_util_hwp_vlp)
- 		return;
- 
- 	if (cpu->update_util_set)
-@@ -2526,7 +2600,8 @@ static int intel_pstate_set_policy(struct cpufreq_policy *policy)
- 		 * was turned off, in that case we need to clear the
- 		 * update util hook.
- 		 */
--		if (!hwp_boost)
-+		if (!hwp_boost && pstate_funcs.update_util !=
-+				  intel_pstate_update_util_hwp_vlp)
- 			intel_pstate_clear_update_util_hook(policy->cpu);
- 		intel_pstate_hwp_set(policy->cpu);
- 	}
++	if (!strcmp(str, "vlp"))
++		vlp = 1;
++	if (!strcmp(str, "no_vlp"))
++		vlp = 0;
++
+ #ifdef CONFIG_ACPI
+ 	if (!strcmp(str, "support_acpi_ppc"))
+ 		acpi_ppc = true;
 -- 
 2.22.1
 
