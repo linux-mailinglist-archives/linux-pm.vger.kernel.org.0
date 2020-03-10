@@ -2,29 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CDF180ACB
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 22:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81729180ACA
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 22:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727141AbgCJVqY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1727691AbgCJVqY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 10 Mar 2020 17:46:24 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:49224 "EHLO mx1.riseup.net"
+Received: from mx1.riseup.net ([198.252.153.129]:49230 "EHLO mx1.riseup.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727673AbgCJVqY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1727506AbgCJVqY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Tue, 10 Mar 2020 17:46:24 -0400
 Received: from bell.riseup.net (unknown [10.0.1.178])
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 48cTDv2v8HzFf6D;
+        by mx1.riseup.net (Postfix) with ESMTPS id 48cTDv48vSzFf6s;
         Tue, 10 Mar 2020 14:46:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1583876783; bh=Jz4j4rXwmY24uT7RUVUWzIpW3YCyx81EGlePfYaHr9U=;
+        t=1583876783; bh=0yX01JJFStKAYRhSVlYvPVR/0Is5p2IQSnPOaQhexy0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ahBzDH/lbNIX7yWW3BIUwwu26RLDxx9fEW/+/NmT2TS61OKnvx91T4khRyCf8qY68
-         EpVR/IoSjGWaGToHXlNS8g4K2JJferjdALjhm4EZB2K+5JjQrxIl2xNDGxmSVm1urt
-         S8NlxoIfHDUZ2/qPY5jnHHfT2a8GsJO+EKFymWSc=
-X-Riseup-User-ID: C7F74CCE029929C25DCF61978D0E953392C596615385353591C57293F5D3D979
+        b=c1z0yYRywJe0yR/iqrAH57P7MVw0ePcf/4aZfypegv7+hwutrt7Djffd5gCFBn9rX
+         mPZhHgYYWpxZGLkR+LIAeRnB8dizURZpcd57A89SPM8n4ve+tsqkxPCK+p84Str5rF
+         Vio4YgXUNyjBONNcxItsVZx4f2/i7rnk8oAg3jvY=
+X-Riseup-User-ID: 7730B927CA4233461DB3793177BE823CBE662ADA5D87858D0448C0AEBCA798FD
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by bell.riseup.net (Postfix) with ESMTPSA id 48cTDv11mnzJs07;
+         by bell.riseup.net (Postfix) with ESMTPSA id 48cTDv2QLDzJrlc;
         Tue, 10 Mar 2020 14:46:23 -0700 (PDT)
 From:   Francisco Jerez <currojerez@riseup.net>
 To:     linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org
@@ -32,9 +32,9 @@ Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
         "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 04/10] Revert "cpufreq: intel_pstate: Drop ->update_util from pstate_funcs"
-Date:   Tue, 10 Mar 2020 14:41:57 -0700
-Message-Id: <20200310214203.26459-5-currojerez@riseup.net>
+Subject: [PATCH 05/10] cpufreq: intel_pstate: Implement VLP controller statistics and status calculation.
+Date:   Tue, 10 Mar 2020 14:41:58 -0700
+Message-Id: <20200310214203.26459-6-currojerez@riseup.net>
 In-Reply-To: <20200310214203.26459-1-currojerez@riseup.net>
 References: <20200310214203.26459-1-currojerez@riseup.net>
 MIME-Version: 1.0
@@ -44,100 +44,312 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This reverts commit c4f3f70cacba2fa19545389a12d09b606d2ad1cf.  A
-future commit will introduce a new update_util implementation, so the
-pstate_funcs table entry is going to be useful.
+The goal of the helper code introduced here is to compute two
+informational data structures: struct vlp_input_stats aggregating
+various scheduling and PM statistics gathered in every call of the
+update_util() hook, and struct vlp_status_sample which contains status
+information derived from the former indicating whether the system is
+likely to have an IO or CPU bottleneck.  This will be used as main
+heuristic input by the new variably low-pass filtering controller (AKA
+VLP) that will assist the HWP at finding a reasonably energy-efficient
+P-state given the additional information available to the kernel about
+I/O utilization and scheduling behavior.
 
 Signed-off-by: Francisco Jerez <currojerez@riseup.net>
 ---
- drivers/cpufreq/intel_pstate.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/cpufreq/intel_pstate.c | 230 +++++++++++++++++++++++++++++++++
+ 1 file changed, 230 insertions(+)
 
 diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 7fa869004cf0..8cb5bf419b40 100644
+index 8cb5bf419b40..12ee350db2a9 100644
 --- a/drivers/cpufreq/intel_pstate.c
 +++ b/drivers/cpufreq/intel_pstate.c
-@@ -277,6 +277,7 @@ static struct cpudata **all_cpu_data;
-  * @get_scaling:	Callback to get frequency scaling factor
-  * @get_val:		Callback to convert P state to actual MSR write value
-  * @get_vid:		Callback to get VID data for Atom platforms
-+ * @update_util:	Active mode utilization update callback.
-  *
-  * Core and Atom CPU models have different way to get P State limits. This
-  * structure is used to store those callbacks.
-@@ -290,6 +291,8 @@ struct pstate_funcs {
- 	int (*get_aperf_mperf_shift)(void);
- 	u64 (*get_val)(struct cpudata*, int pstate);
- 	void (*get_vid)(struct cpudata *);
-+	void (*update_util)(struct update_util_data *data, u64 time,
-+			    unsigned int flags);
+@@ -19,6 +19,7 @@
+ #include <linux/list.h>
+ #include <linux/cpu.h>
+ #include <linux/cpufreq.h>
++#include <linux/debugfs.h>
+ #include <linux/sysfs.h>
+ #include <linux/types.h>
+ #include <linux/fs.h>
+@@ -33,6 +34,8 @@
+ #include <asm/cpufeature.h>
+ #include <asm/intel-family.h>
+ 
++#include "../../kernel/sched/sched.h"
++
+ #define INTEL_PSTATE_SAMPLING_INTERVAL	(10 * NSEC_PER_MSEC)
+ 
+ #define INTEL_CPUFREQ_TRANSITION_LATENCY	20000
+@@ -59,6 +62,11 @@ static inline int32_t mul_fp(int32_t x, int32_t y)
+ 	return ((int64_t)x * (int64_t)y) >> FRAC_BITS;
+ }
+ 
++static inline int rnd_fp(int32_t x)
++{
++	return (x + (1 << (FRAC_BITS - 1))) >> FRAC_BITS;
++}
++
+ static inline int32_t div_fp(s64 x, s64 y)
+ {
+ 	return div64_s64((int64_t)x << FRAC_BITS, y);
+@@ -169,6 +177,49 @@ struct vid_data {
+ 	int32_t ratio;
+ };
+ 
++/**
++ * Scheduling and PM statistics gathered by update_vlp_sample() at
++ * every call of the VLP update_state() hook, used as heuristic
++ * inputs.
++ */
++struct vlp_input_stats {
++	int32_t realtime_count;
++	int32_t io_wait_count;
++	uint32_t max_response_frequency_hz;
++	uint32_t last_response_frequency_hz;
++};
++
++enum vlp_status {
++	VLP_BOTTLENECK_IO = 1 << 0,
++	/*
++	 * XXX - Add other status bits here indicating a CPU or TDP
++	 * bottleneck.
++	 */
++};
++
++/**
++ * Heuristic status information calculated by get_vlp_status_sample()
++ * from struct vlp_input_stats above, indicating whether the system
++ * has a potential IO or latency bottleneck.
++ */
++struct vlp_status_sample {
++	enum vlp_status value;
++	int32_t realtime_avg;
++};
++
++/**
++ * struct vlp_data - VLP controller parameters and state.
++ * @sample_interval_ns:	 Update interval in ns.
++ * @sample_frequency_hz: Reciprocal of the update interval in Hz.
++ */
++struct vlp_data {
++	s64 sample_interval_ns;
++	int32_t sample_frequency_hz;
++
++	struct vlp_input_stats stats;
++	struct vlp_status_sample status;
++};
++
+ /**
+  * struct global_params - Global parameters, mostly tunable via sysfs.
+  * @no_turbo:		Whether or not to use turbo P-states.
+@@ -239,6 +290,7 @@ struct cpudata {
+ 
+ 	struct pstate_data pstate;
+ 	struct vid_data vid;
++	struct vlp_data vlp;
+ 
+ 	u64	last_update;
+ 	u64	last_sample_time;
+@@ -268,6 +320,18 @@ struct cpudata {
+ 
+ static struct cpudata **all_cpu_data;
+ 
++/**
++ * struct vlp_params - VLP controller static configuration
++ * @sample_interval_ms:	     Update interval in ms.
++ * @avg*_hz:		     Exponential averaging frequencies of the various
++ *			     low-pass filters as an integer in Hz.
++ */
++struct vlp_params {
++	int sample_interval_ms;
++	int avg_hz;
++	int debug;
++};
++
+ /**
+  * struct pstate_funcs - Per CPU model specific callbacks
+  * @get_max:		Callback to get maximum non turbo effective P state
+@@ -296,6 +360,11 @@ struct pstate_funcs {
  };
  
  static struct pstate_funcs pstate_funcs __read_mostly;
-@@ -1877,6 +1880,7 @@ static struct pstate_funcs core_funcs = {
- 	.get_turbo = core_get_turbo_pstate,
- 	.get_scaling = core_get_scaling,
- 	.get_val = core_get_val,
-+	.update_util = intel_pstate_update_util,
- };
++static struct vlp_params vlp_params __read_mostly = {
++	.sample_interval_ms = 10,
++	.avg_hz = 2,
++	.debug = 0,
++};
  
- static const struct pstate_funcs silvermont_funcs = {
-@@ -1887,6 +1891,7 @@ static const struct pstate_funcs silvermont_funcs = {
- 	.get_val = atom_get_val,
- 	.get_scaling = silvermont_get_scaling,
- 	.get_vid = atom_get_vid,
-+	.update_util = intel_pstate_update_util,
- };
- 
- static const struct pstate_funcs airmont_funcs = {
-@@ -1897,6 +1902,7 @@ static const struct pstate_funcs airmont_funcs = {
- 	.get_val = atom_get_val,
- 	.get_scaling = airmont_get_scaling,
- 	.get_vid = atom_get_vid,
-+	.update_util = intel_pstate_update_util,
- };
- 
- static const struct pstate_funcs knl_funcs = {
-@@ -1907,6 +1913,7 @@ static const struct pstate_funcs knl_funcs = {
- 	.get_aperf_mperf_shift = knl_get_aperf_mperf_shift,
- 	.get_scaling = core_get_scaling,
- 	.get_val = core_get_val,
-+	.update_util = intel_pstate_update_util,
- };
- 
- #define ICPU(model, policy) \
-@@ -2013,9 +2020,7 @@ static void intel_pstate_set_update_util_hook(unsigned int cpu_num)
- 	/* Prevent intel_pstate_update_util() from using stale data. */
- 	cpu->sample.time = 0;
- 	cpufreq_add_update_util_hook(cpu_num, &cpu->update_util,
--				     (hwp_active ?
--				      intel_pstate_update_util_hwp :
--				      intel_pstate_update_util));
-+				     pstate_funcs.update_util);
- 	cpu->update_util_set = true;
+ static int hwp_active __read_mostly;
+ static int hwp_mode_bdw __read_mostly;
+@@ -1793,6 +1862,167 @@ static inline int32_t get_target_pstate(struct cpudata *cpu)
+ 	return target;
  }
  
-@@ -2584,6 +2589,7 @@ static void __init copy_cpu_funcs(struct pstate_funcs *funcs)
- 	pstate_funcs.get_scaling = funcs->get_scaling;
- 	pstate_funcs.get_val   = funcs->get_val;
- 	pstate_funcs.get_vid   = funcs->get_vid;
-+	pstate_funcs.update_util = funcs->update_util;
- 	pstate_funcs.get_aperf_mperf_shift = funcs->get_aperf_mperf_shift;
- }
- 
-@@ -2750,8 +2756,11 @@ static int __init intel_pstate_init(void)
- 	id = x86_match_cpu(hwp_support_ids);
- 	if (id) {
- 		copy_cpu_funcs(&core_funcs);
--		if (!no_hwp) {
-+		if (no_hwp) {
-+			pstate_funcs.update_util = intel_pstate_update_util;
-+		} else {
- 			hwp_active++;
-+			pstate_funcs.update_util = intel_pstate_update_util_hwp;
- 			hwp_mode_bdw = id->driver_data;
- 			intel_pstate.attr = hwp_cpufreq_attrs;
- 			goto hwp_cpu_matched;
++/**
++ * Initialize the struct vlp_data of the specified CPU to the defaults
++ * calculated from @vlp_params.
++ */
++static void intel_pstate_reset_vlp(struct cpudata *cpu)
++{
++	struct vlp_data *vlp = &cpu->vlp;
++
++	vlp->sample_interval_ns = vlp_params.sample_interval_ms * NSEC_PER_MSEC;
++	vlp->sample_frequency_hz = max(1u, (uint32_t)MSEC_PER_SEC /
++					   vlp_params.sample_interval_ms);
++	vlp->stats.last_response_frequency_hz = vlp_params.avg_hz;
++}
++
++/**
++ * Fixed point representation with twice the usual number of
++ * fractional bits.
++ */
++#define DFRAC_BITS 16
++#define DFRAC_ONE (1 << DFRAC_BITS)
++#define DFRAC_MAX_INT (0u - (uint32_t)DFRAC_ONE)
++
++/**
++ * Fast but rather inaccurate piecewise-linear approximation of a
++ * fixed-point inverse exponential:
++ *
++ *  exp2n(p) = int_tofp(1) * 2 ^ (-p / DFRAC_ONE) + O(1)
++ *
++ * The error term should be lower in magnitude than 0.044.
++ */
++static int32_t exp2n(uint32_t p)
++{
++	if (p < 32 * DFRAC_ONE) {
++		/* Interpolate between 2^-floor(p) and 2^-ceil(p). */
++		const uint32_t floor_p = p >> DFRAC_BITS;
++		const uint32_t ceil_p = (p + DFRAC_ONE - 1) >> DFRAC_BITS;
++		const uint64_t frac_p = p - (floor_p << DFRAC_BITS);
++
++		return ((int_tofp(1) >> floor_p) * (DFRAC_ONE - frac_p) +
++			(ceil_p >= 32 ? 0 : int_tofp(1) >> ceil_p) * frac_p) >>
++			DFRAC_BITS;
++	}
++
++	/* Short-circuit to avoid overflow. */
++	return 0;
++}
++
++/**
++ * Calculate the exponential averaging weight for a new sample based
++ * on the requested averaging frequency @hz and the delay since the
++ * last update.
++ */
++static int32_t get_last_sample_avg_weight(struct cpudata *cpu, unsigned int hz)
++{
++	/*
++	 * Approximate, but saves several 64-bit integer divisions
++	 * below and should be fully evaluated at compile-time.
++	 * Causes the exponential averaging to have an effective base
++	 * of 1.90702343749, which has little functional implications
++	 * as long as the hz parameter is scaled accordingly.
++	 */
++	const uint32_t ns_per_s_shift = order_base_2(NSEC_PER_SEC);
++	const uint64_t delta_ns = cpu->sample.time - cpu->last_sample_time;
++
++	return exp2n(min((uint64_t)DFRAC_MAX_INT,
++			 (hz * delta_ns) >> (ns_per_s_shift - DFRAC_BITS)));
++}
++
++/**
++ * Calculate some status information heuristically based on the struct
++ * vlp_input_stats statistics gathered by the update_state() hook.
++ */
++static const struct vlp_status_sample *get_vlp_status_sample(
++	struct cpudata *cpu, const int32_t po)
++{
++	struct vlp_data *vlp = &cpu->vlp;
++	struct vlp_input_stats *stats = &vlp->stats;
++	struct vlp_status_sample *last_status = &vlp->status;
++
++	/*
++	 * Calculate the VLP_BOTTLENECK_IO state bit, which indicates
++	 * whether some IO device driver has requested a PM response
++	 * frequency bound, typically due to the device being under
++	 * close to full utilization, which should cause the
++	 * controller to make a more conservative trade-off between
++	 * latency and energy usage, since performance isn't
++	 * guaranteed to scale further with increasing CPU frequency
++	 * whenever the system is close to IO-bound.
++	 *
++	 * Note that the maximum achievable response frequency is
++	 * limited by the sampling frequency of the controller,
++	 * response frequency requests greater than that will be
++	 * promoted to infinity (i.e. no low-pass filtering) in order
++	 * to avoid violating the response frequency constraint
++	 * provided via PM QoS.
++	 */
++	const bool bottleneck_io = stats->max_response_frequency_hz <
++				   vlp->sample_frequency_hz;
++
++	/*
++	 * Calculate the realtime statistic that tracks the
++	 * exponentially-averaged rate of occurrence of
++	 * latency-sensitive events (like wake-ups from IO wait).
++	 */
++	const uint64_t delta_ns = cpu->sample.time - cpu->last_sample_time;
++	const int32_t realtime_sample =
++		div_fp((uint64_t)(stats->realtime_count +
++				  (bottleneck_io ? 0 : stats->io_wait_count)) *
++		       NSEC_PER_SEC,
++		       100 * delta_ns);
++	const int32_t alpha = get_last_sample_avg_weight(cpu,
++							 vlp_params.avg_hz);
++	const int32_t realtime_avg = realtime_sample +
++		mul_fp(alpha, last_status->realtime_avg - realtime_sample);
++
++	/* Consume the input statistics. */
++	stats->io_wait_count = 0;
++	stats->realtime_count = 0;
++	if (bottleneck_io)
++		stats->last_response_frequency_hz =
++			stats->max_response_frequency_hz;
++	stats->max_response_frequency_hz = 0;
++
++	/* Update the state of the controller. */
++	last_status->realtime_avg = realtime_avg;
++	last_status->value = (bottleneck_io ? VLP_BOTTLENECK_IO : 0);
++
++	/* Update state used for tracing. */
++	cpu->sample.busy_scaled = int_tofp(stats->max_response_frequency_hz);
++	cpu->iowait_boost = realtime_avg;
++
++	return last_status;
++}
++
++/**
++ * Collect some scheduling and PM statistics in response to an
++ * update_state() call.
++ */
++static bool update_vlp_sample(struct cpudata *cpu, u64 time, unsigned int flags)
++{
++	struct vlp_input_stats *stats = &cpu->vlp.stats;
++
++	/* Update PM QoS request. */
++	const uint32_t resp_hz = cpu_response_frequency_qos_limit();
++
++	stats->max_response_frequency_hz = !resp_hz ? UINT_MAX :
++		max(stats->max_response_frequency_hz, resp_hz);
++
++	/* Update scheduling statistics. */
++	if ((flags & SCHED_CPUFREQ_IOWAIT))
++		stats->io_wait_count++;
++
++	if (cpu_rq(cpu->cpu)->rt.rt_nr_running)
++		stats->realtime_count++;
++
++	/* Return whether a P-state update is due. */
++	return smp_processor_id() == cpu->cpu &&
++		time - cpu->sample.time >= cpu->vlp.sample_interval_ns &&
++		intel_pstate_sample(cpu, time);
++}
++
+ static int intel_pstate_prepare_request(struct cpudata *cpu, int pstate)
+ {
+ 	int min_pstate = max(cpu->pstate.min_pstate, cpu->min_perf_ratio);
 -- 
 2.22.1
 
