@@ -2,124 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A6618020D
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 16:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3945E18043A
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 18:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726403AbgCJPjz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Mar 2020 11:39:55 -0400
-Received: from muru.com ([72.249.23.125]:59498 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726315AbgCJPjz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Mar 2020 11:39:55 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id BA38D810A;
-        Tue, 10 Mar 2020 15:40:40 +0000 (UTC)
-Date:   Tue, 10 Mar 2020 08:39:51 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     "Arthur D." <spinal.by@gmail.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Merlijn Wajer <merlijn@wizzup.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: Re: [PATCH 1/3] RFC: power: supply: cpcap-battery: Add helper for
- rough capacity
-Message-ID: <20200310153951.GR37466@atomide.com>
-References: <20200119201124.29620-1-tony@atomide.com>
- <20200121095712.GC6934@amd>
- <db73a651-afc4-5c3d-0610-ccb13b8cc0d3@wizzup.org>
- <20200121222547.GA17712@duo.ucw.cz>
- <20200123160257.GX5885@atomide.com>
- <op.0g8ykrhnhxa7s4@supervisor.net28>
+        id S1727211AbgCJRCI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Mar 2020 13:02:08 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:33336 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726898AbgCJRCI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Mar 2020 13:02:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1583859728;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s059DjlnEcczveYufFN5KML3mixHomqVeP5rihntnzg=;
+        b=ZGrHpdN8j7gWr7oIcn1lefMV7GJ7jq2wf361IMF4fwgFRn3k76DY66OweP/W88yWrk+RPm
+        DwbL83d4JjlEcY0SOYftdbPHAf7Qv8vIlobqVN52cS3JAPQqnfHfLw4Lusp0KsgomBeopv
+        /mpbhOvdHmSn0PflZbjfxtGhAzU+/Gg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-273-4GdUry3_MQmA2UOKZTRSrg-1; Tue, 10 Mar 2020 13:02:02 -0400
+X-MC-Unique: 4GdUry3_MQmA2UOKZTRSrg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B929E1937FC1;
+        Tue, 10 Mar 2020 17:02:00 +0000 (UTC)
+Received: from fuller.cnet (ovpn-116-43.gru2.redhat.com [10.97.116.43])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E37E75D9CA;
+        Tue, 10 Mar 2020 17:01:59 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 8C1FE42FE412; Tue, 10 Mar 2020 10:50:06 -0300 (-03)
+Date:   Tue, 10 Mar 2020 10:50:06 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH] cpuidle-haltpoll: allow force loading on hosts without
+ the REALTIME hint
+Message-ID: <20200310135006.GA6397@fuller.cnet>
+References: <20200221174331.1480468-1-mail@maciej.szmigiero.name>
+ <75d483b5-8edf-efb1-9642-ca367e2f1423@maciej.szmigiero.name>
+ <2118832.28snYOIflM@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <op.0g8ykrhnhxa7s4@supervisor.net28>
+In-Reply-To: <2118832.28snYOIflM@kreacher>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Arthur D. <spinal.by@gmail.com> [200310 04:55]:
-> Hi, Tony.
+On Wed, Mar 04, 2020 at 11:31:31AM +0100, Rafael J. Wysocki wrote:
+> On Friday, February 28, 2020 6:10:18 PM CET Maciej S. Szmigiero wrote:
+> > A friendly ping here.
+> > 
+> > Maciej
+> > 
+> > On 21.02.2020 18:43, Maciej S. Szmigiero wrote:
+> > > From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+> > > 
+> > > Before commit 1328edca4a14 ("cpuidle-haltpoll: Enable kvm guest polling
+> > > when dedicated physical CPUs are available") the cpuidle-haltpoll driver
+> > > could also be used in scenarios when the host does not advertise the
+> > > KVM_HINTS_REALTIME hint.
+> > > 
+> > > While the behavior introduced by the aforementioned commit makes sense as
+> > > the default there are cases where the old behavior is desired, for example,
+> > > when other kernel changes triggered by presence by this hint are unwanted,
+> > > for some workloads where the latency benefit from polling overweights the
+> > > loss from idle CPU capacity that otherwise would be available, or just when
+> > > running under older Qemu versions that lack this hint.
+> > > 
+> > > Let's provide a typical "force" module parameter that allows restoring the
+> > > old behavior.
+> > > 
+> > > Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> > > ---
+> > >  drivers/cpuidle/cpuidle-haltpoll.c | 12 +++++++++++-
+> > >  1 file changed, 11 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+> > > index b0ce9bc78113..07e5b36076bb 100644
+> > > --- a/drivers/cpuidle/cpuidle-haltpoll.c
+> > > +++ b/drivers/cpuidle/cpuidle-haltpoll.c
+> > > @@ -18,6 +18,11 @@
+> > >  #include <linux/kvm_para.h>
+> > >  #include <linux/cpuidle_haltpoll.h>
+> > >  
+> > > +static bool force __read_mostly;
+> > > +module_param(force, bool, 0444);
+> > > +MODULE_PARM_DESC(force,
+> > > +		 "Load even if the host does not provide the REALTIME hint");
 > 
-> I used the kernel with the patch serieas applied for a while.
+> Why not to say "Load unconditionally" here?
+
+Makes sense to me.
+
+> As is, one needs to know what "the REALTIME hint" is to understand it.
 > 
-> What I expected from the userspace perspective was having
-> /sys/class/power_supply/battery/capacity undefined until
-> kernel calculates more or less accurate values for it.
+> > > +
+> > >  static struct cpuidle_device __percpu *haltpoll_cpuidle_devices;
+> > >  static enum cpuhp_state haltpoll_hp_state;
+> > >  
+> > > @@ -90,6 +95,11 @@ static void haltpoll_uninit(void)
+> > >  	haltpoll_cpuidle_devices = NULL;
+> > >  }
+> > >  
+> > > +static bool haltpool_want(void)
+> > > +{
+> > > +	return kvm_para_has_hint(KVM_HINTS_REALTIME) || force;
+> > > +}
+> > > +
+> > >  static int __init haltpoll_init(void)
+> > >  {
+> > >  	int ret;
+> > > @@ -102,7 +112,7 @@ static int __init haltpoll_init(void)
+> > >  	cpuidle_poll_state_init(drv);
+> > >  
+> > >  	if (!kvm_para_available() ||
+> > > -		!kvm_para_has_hint(KVM_HINTS_REALTIME))
+> > > +	    !haltpool_want())
 > 
-> Until then, the userspace should estimate percentage on its own
-> using voltage and current values provided by the kernel.
-> Like it's already done with bq27200 on Nokia N900.
+> And you don't need to break this line.
 > 
-> Right now the values which the kernel provides with
-> /sys/class/power_supply/battery/capacity after a system boot
-> are confusing.
-
-OK yeah I like the idea of not showing anything until userspace
-as configured estimated high and low values.
-
-> The user can see the battery plugin doesn't change its gauge
-> gradually like it was done with previous kernel versions.
-> Sometimes it gets suddenly empty, sometimes it changes from empty
-> to half full. And it always reports "battery full" in advance -
-> when the battery is being charged with relatively high current.
+> > >  		return -ENODEV;
+> > >  
+> > >  	ret = cpuidle_register_driver(drv);
+> > > 
+> > 
+> > 
 > 
-> The following part of mail dedicated to what I think should be fixed
-> in the commits.
+> Thanks!
 > 
-> 1) RFC: power: supply: cpcap-battery: Add helper for rough capacity
 > 
-> CPCAP_CAP(POWER_SUPPLY_CAPACITY_LEVEL_FULL, 4200000 - 18000, 100)
->
-> This line seems wrong, because Droid4 full battery is 4.35V, not 4.2V.
 
-Hmm yeah this is now configurable and defaults to 4.2V so we
-should use the confgured value. The reason we default to 4.2V
-now is because we suspect that if left connected to the charger
-at higher than 4.2V the battery ages faster.
-
-> 2.1) RFC: power: supply: cpcap-battery: Implement capacity percentage
-> 
-> val->intval = (ddata->config.info.charge_full_design - delta) * 100;
-> val->intval /= ddata->config.info.charge_full_design;
-> 
-> IMHO, charge_full_design should never be used in battery charge
-> percentage calculations. Li-ion batteries loose their capacity
-> with age. Therefore such calculations are likely to always be wrong.
-> 
-> I'd prefer to have the full charge value to be dynamically calculated by
-> the kernel with a formula like this:
-> charge_full = high->counter_uah - low->counter_uah;
-
-OK makes sense. I guess we can assuem if both are set to the
-the same number like 0 on boot, there's no estimate available.
-
-> This which will give us accurate estimation for the battery charge, esti-
-> mated time left on the battery and so on. It would be good, if we allow
-> the userspace to store the full charge value between reboots and to feed
-> it to the kernel after, so it could start providing accurated data faster:
-> the battery should only go full or empty once and we are ready.
-
-Yes userspace is the only place that can eventually generate accurate
-estimate based on battery wear, temperature etc.
-
-> I'd like to mention explicitly: I think the kernel should return -ENODATA
-> for capacity values until the battery is "calibrated". By "calibration"
-> I mean having high and low counter_uah values initialized with the data
-> collected when the battery went a full charge or discharge cycle (from
-> empty to full or vice versa).
-
-Yes I like this idea. That leaves out the need for poor estimates
-in the kernel.
-
-I guess we should have the following new properties:
-
-POWER_SUPPLY_PROP_CHARGE_COUNTER_FULL
-POWER_SUPPLY_PROP_CHARGE_COUNTER_EMPTY
-
-And these would be 0 on boot and then userspace can
-update these based on battery data.
-
-Regards,
-
-Tony
