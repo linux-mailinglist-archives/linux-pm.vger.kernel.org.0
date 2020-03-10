@@ -2,154 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FFF17F505
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 11:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE4C17F530
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 11:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726170AbgCJK1a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Mar 2020 06:27:30 -0400
-Received: from mail-pf1-f169.google.com ([209.85.210.169]:45815 "EHLO
-        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725845AbgCJK13 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Mar 2020 06:27:29 -0400
-Received: by mail-pf1-f169.google.com with SMTP id 2so6257543pfg.12
-        for <linux-pm@vger.kernel.org>; Tue, 10 Mar 2020 03:27:29 -0700 (PDT)
+        id S1726353AbgCJKkc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Mar 2020 06:40:32 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45924 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725845AbgCJKkc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Mar 2020 06:40:32 -0400
+Received: by mail-lj1-f193.google.com with SMTP id e18so13490963ljn.12
+        for <linux-pm@vger.kernel.org>; Tue, 10 Mar 2020 03:40:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=BloQpTlc4KGZ6OIBeKqCAFV50yJWBwYpjb4VkeOtEz0=;
-        b=CuPpQjSRQhDi6KqHmehB5yP+xH/DwC25HiM7LCmcnUEy//LORidHvB59Q8zBXccvF2
-         pYwf55fMBr2WfkL/bmJbHzK67uo7LH6bbj0dAM/5WcSHMad9xVh+6s/xLG7CZkB5FC1C
-         sn9/j9MleXvrRlYMKHGHycSHgs5TU/0Dvk303g28FEgoGg7ZzSbyQ6tQu5gRS38HN6qJ
-         +2iIM/wMPEf8tnahxAWyQ5ZZgm4eJvM5a/zaC0PkdS5FLlBpQfEfTrUDoBP3f73KjqSy
-         darurHrExiUOhhZAiimCy8h4QxyxYuAoIyhJiOCVAq/ovGUcUbCHo3GGU6oOKaO3tYcP
-         sk6g==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=VOmLbFg4f7m0VWnyO1xDaH/AZNMu+kPMNjgBVvsbMM4=;
+        b=XmPV7pmfeVwv3eR7FYLArkOxNj27Kv2v7Sx7iRQrmZdzWxfxlm1/2+6ROU4I24Rih4
+         sfMG2dff10ReM0skBVyIR8ywsuBgmcvdt12e2ZCTI4Qo81wWI1tCCP6jUdZkGjLPQ50P
+         C2QGEB9K3G/dqaRMfDNWxuHMFPrymb3R5agvF0Agm+VQuOdUfUNHoEj/9ksEQ9gUlLxo
+         gzqwva0Zs4/SDsB2Rmj4itCDw/94E8QchLWRxf8WuPigcg2aybGDW82RNXqaWGSTHjDk
+         n8qThSPy6zFIN95KirHptSJJ8TZgWB1sm61UPdbxfwz5KxBBZLhuMi4nL8GQ5ebHturv
+         M2nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=BloQpTlc4KGZ6OIBeKqCAFV50yJWBwYpjb4VkeOtEz0=;
-        b=DRZ7Ow1jm+tZP7Z4NWMB1Gori08dl4VTl9VcZ/9ob0IajcqbrxkraDcBdzxvcGv4oK
-         0EohZf6om53HjwUuVJKJTKjfBwe6pl+hGIPXXuRNIQWu7hPsnQI7gHLSLfISoYm39Tlo
-         fqWOyzM+KRx9VmN5zKmpjbNASsJguoamAedq+ORvGSWMSf6VIY8TcKUgD7jANmvr4R7y
-         FYW8psc8TkJ8/VUV8aK7QaymMVAXrzPRUfgMvbcrRRVbJSADpcsWOhZcYVikK9gZoHms
-         k/kVYSNXi9qojVDtO9bUZ0bss0H6nCBwnHSpp5Ob5sp0cJ3gMx5oO13nYAI3mqQPp75G
-         +cFw==
-X-Gm-Message-State: ANhLgQ2h8GGxijipxD0J+2wKrosa6gfNf7OBmu2O2K5t1ylT7lcEAbwT
-        kb98YrwSA7mfvqsjgcE8pZWqrQ==
-X-Google-Smtp-Source: ADFU+vuSnq03Dj27UmpNyGF/iDv8/xjoDBQkO6msQrOG7nitIzYvu83dDxx7yejc6+dQSLKnftmgRg==
-X-Received: by 2002:a63:ce0a:: with SMTP id y10mr19712823pgf.44.1583836049122;
-        Tue, 10 Mar 2020 03:27:29 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i72sm19729778pgd.88.2020.03.10.03.27.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VOmLbFg4f7m0VWnyO1xDaH/AZNMu+kPMNjgBVvsbMM4=;
+        b=QkMrrAjoncvV+Ox4Dj9AUMrTCSrbLaGCpc09/mL9pSPSRFieQQfxLhikWePJnD8Umm
+         JNnKynkKbBFRH2e0J+dJQFVSfeGIFwt/maFv9VzSUZciVs4ymP+cnRjs8X1JZMj7fQoW
+         MI1ftt76klu7IwdkgPD+yIx2xaBrqLL9CNiBur4nXHXzV0drKNnEmefvnbnc4ee0dHiB
+         AFbqb3vCbOCK82FvYhVbYiukeFJoUzMNHHT1ZPUwwMheY2tqVF2yKpjn3/5brMdJbj+5
+         8qDWmMe6uV5zboEEbQLUhi8sxbX8gTOsOIUTHI5Z7akJdyDVR7SEUdbwWS11u4dsadFs
+         +lrA==
+X-Gm-Message-State: ANhLgQ1q7xcg5PQ1aSDY1iUbaINUOfxrBwXd0PWtl0Hm9m8Myulz+8n9
+        xAujmGej+lPcTWQESskFnmuCqw==
+X-Google-Smtp-Source: ADFU+vt0BFBJbAznVQSE1PNl5MnrDZymFS2judAVRaRDmr4mbgXWDTWu7QcpSCh+5klHcSq6m8dkfw==
+X-Received: by 2002:a2e:8654:: with SMTP id i20mr12334652ljj.248.1583836829816;
+        Tue, 10 Mar 2020 03:40:29 -0700 (PDT)
+Received: from uffe-XPS13.ideon.se ([85.235.10.227])
+        by smtp.gmail.com with ESMTPSA id j6sm3414632lfb.13.2020.03.10.03.40.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 03:27:28 -0700 (PDT)
-Message-ID: <5e676b90.1c69fb81.9f49b.57b9@mx.google.com>
-Date:   Tue, 10 Mar 2020 03:27:28 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 10 Mar 2020 03:40:28 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
+Subject: [PATCH v3 1/2] PM / Domains: Allow no domain-idle-states DT property in genpd when parsing
+Date:   Tue, 10 Mar 2020 11:40:23 +0100
+Message-Id: <20200310104023.4018-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <0002-cpuidle-psci-Split-psci_dt_cpu_init_idle.patch>
+References: <0002-cpuidle-psci-Split-psci_dt_cpu_init_idle.patch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.6-rc5-83-gabcd59902c64
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 24 runs,
- 0 regressions (v5.6-rc5-83-gabcd59902c64)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 24 runs, 0 regressions (v5.6-rc5-83-gabcd59902c64)
+Commit 2c361684803e ("PM / Domains: Don't treat zero found compatible idle
+states as an error"), moved of_genpd_parse_idle_states() towards allowing
+none compatible idle state to be found for the device node, rather than
+returning an error code.
 
-Test results summary
---------------------
+However, it didn't consider that the "domain-idle-states" DT property may
+be missing as it's optional, which makes of_count_phandle_with_args() to
+return -ENOENT. Let's fix this to make the behaviour consistent.
 
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig        | results
-----+------------------------------+--------+-----------------------+------=
-----+------------------+--------
-1   | bcm2711-rpi-4-b              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
+Reported-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+Fixes: 2c361684803e ("PM / Domains: Don't treat zero found compatible idle states as an error")
+Cc: <stable@vger.kernel.org>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
 
-2   | bcm2837-rpi-3-b              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
+Changes in v3:
+	- Resending with reviewed-tags added.
 
-3   | hifive-unleashed-a00         | riscv  | lab-baylibre          | gcc-8=
-    | defconfig        | 1/1    =
+---
+ drivers/base/power/domain.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-4   | imx8mn-ddr4-evk              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 959d6d5eb000..0a01df608849 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2653,7 +2653,7 @@ static int genpd_iterate_idle_states(struct device_node *dn,
+ 
+ 	ret = of_count_phandle_with_args(dn, "domain-idle-states", NULL);
+ 	if (ret <= 0)
+-		return ret;
++		return ret == -ENOENT ? 0 : ret;
+ 
+ 	/* Loop over the phandles until all the requested entry is found */
+ 	of_for_each_phandle(&it, ret, dn, "domain-idle-states", NULL, 0) {
+-- 
+2.20.1
 
-5   | meson-g12a-sei510            | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-6   | meson-g12a-u200              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-7   | meson-g12a-x96-max           | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-8   | meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-9   | meson-g12b-odroid-n2         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-10  | meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-11  | meson-gxl-s905d-p230         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-12  | meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-13  | meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-14  | meson-gxm-khadas-vim2        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-15  | meson-gxm-q200               | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-16  | meson-sm1-khadas-vim3l       | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-17  | meson-sm1-sei610             | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-18  | qemu_arm64-virt-gicv2        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-19  | qemu_arm64-virt-gicv3        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-20  | qemu_x86_64                  | x86_64 | lab-baylibre          | gcc-8=
-    | x86_64_defconfig | 5/5    =
-
-21  | rk3399-puma-haikou           | arm64  | lab-theobroma-systems | gcc-8=
-    | defconfig        | 5/5    =
-
-22  | sun50i-a64-pine64-plus       | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-23  | sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-24  | sun50i-h6-pine-h64-model-b   | arm64  | lab-baylibre          | gcc-8=
-    | defconfig        | 5/5    =
-
-
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.6-rc5-83-gabcd59902c64
-  URL:      git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.g=
-it
-  SHA:      abcd59902c6467999041971af4ab14f30a2b3780=20
