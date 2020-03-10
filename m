@@ -2,29 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 004A0180AC8
+	by mail.lfdr.de (Postfix) with ESMTP id 8B098180AC7
 	for <lists+linux-pm@lfdr.de>; Tue, 10 Mar 2020 22:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727677AbgCJVqY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Mar 2020 17:46:24 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:49184 "EHLO mx1.riseup.net"
+        id S1726283AbgCJVqX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Mar 2020 17:46:23 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:49194 "EHLO mx1.riseup.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726733AbgCJVqX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1727506AbgCJVqX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Tue, 10 Mar 2020 17:46:23 -0400
 Received: from bell.riseup.net (unknown [10.0.1.178])
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 48cTDt53WnzFf56;
+        by mx1.riseup.net (Postfix) with ESMTPS id 48cTDt6gqJzFdkG;
         Tue, 10 Mar 2020 14:46:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1583876782; bh=x6cAIXPzlQJJ1FEmSzTDuMyrZ/621gTCGn5sj7HNE1s=;
+        t=1583876783; bh=JOWEXfrb9UFLH74QE5/WubqsiwOn7tHuUTjmrbOGpZQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QwxoGYVERuVlEo8SG/MbDnITXtREUzWy7I2n5RXmF7UIfMHf7SD+dvdH2ykAPxEY3
-         DLEFB/5TCMruFongfqkFR5feO66QK5fJyR7tyI8+0R6m9jH52AsK3BvSDaQKKQ3qhQ
-         Vk7TIOdu42D0cWoJf2oQbkxnseSePq89bI+b39rI=
-X-Riseup-User-ID: 04B7BD3E2701800EA3348DB9A10F00A0673674E61C3EC69C9978ABF3E94FEBB4
+        b=PBy4iS8PUU5iVlG5k0ycH3oBaAc/XqVNoOh8MY5HHxA2Vkntb6binK6Wf72gpRvO2
+         /4P1BY2MHQtXYsnhABzgvb/+OMB7+JiR2CmpUyCvjrDjj6mQnpcfdz5UFSTFRQM7B1
+         02aFINuYN8SVJlZSmK1KHrNop0teNBwmG/bl6O9A=
+X-Riseup-User-ID: E9D8C4D7DC82611EFFCC156B3BA45C28F31077F6DF96799252081EE137E3455D
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by bell.riseup.net (Postfix) with ESMTPSA id 48cTDt36kwzJsFM;
+         by bell.riseup.net (Postfix) with ESMTPSA id 48cTDt4mw5zJsJ5;
         Tue, 10 Mar 2020 14:46:22 -0700 (PDT)
 From:   Francisco Jerez <currojerez@riseup.net>
 To:     linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org
@@ -32,9 +32,9 @@ Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
         "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 01/10] PM: QoS: Add CPU_RESPONSE_FREQUENCY global PM QoS limit.
-Date:   Tue, 10 Mar 2020 14:41:54 -0700
-Message-Id: <20200310214203.26459-2-currojerez@riseup.net>
+Subject: [PATCH 02/10] drm/i915: Adjust PM QoS response frequency based on GPU load.
+Date:   Tue, 10 Mar 2020 14:41:55 -0700
+Message-Id: <20200310214203.26459-3-currojerez@riseup.net>
 In-Reply-To: <20200310214203.26459-1-currojerez@riseup.net>
 References: <20200310214203.26459-1-currojerez@riseup.net>
 MIME-Version: 1.0
@@ -44,310 +44,275 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The purpose of this PM QoS limit is to give device drivers additional
-control over the latency/energy efficiency trade-off made by the PM
-subsystem (particularly the CPUFREQ governor).  It allows device
-drivers to set a lower bound on the response latency of PM (defined as
-the time it takes from wake-up to the CPU reaching a certain
-steady-state level of performance [e.g. the nominal frequency] in
-response to a step-function load).  It reports to PM the minimum
-ramp-up latency considered of use to the application, and explicitly
-requests PM to filter out oscillations faster than the specified
-frequency.  It is somewhat complementary to the current
-CPU_DMA_LATENCY PM QoS class which can be understood as specifying an
-upper latency bound on the CPU wake-up time, instead of a lower bound
-on the CPU frequency ramp-up time.
-
-Note that even though this provides a latency constraint it's
-represented as its reciprocal in Hz units for computational efficiency
-(since it would take a 64-bit division to compute the number of cycles
-elapsed from a time increment in nanoseconds and a time bound, while a
-frequency can simply be multiplied with the time increment).
-
-This implements a MAX constraint so that the strictest (highest
-response frequency) request is honored.  This means that PM won't
-provide any guarantee that frequencies greater than the specified
-bound will be filtered, since that might be incompatible with the
-constraints specified by another more latency-sensitive application (A
-more fine-grained result could be achieved with a scheduling-based
-interface).  The default value needs to be equal to zero (best effort)
-for it to behave as identity of the MAX operation.
+This allows CPUFREQ governors to realize when the system becomes
+non-CPU-bound due to GPU rendering activity, and cause them to respond
+more conservatively to the workload by limiting their response
+frequency: CPU energy usage will be reduced when there isn't a good
+chance for system performance to scale with CPU frequency due to the
+GPU bottleneck.  This leaves additional TDP budget available for the
+GPU to reach higher frequencies, which is translated into an
+improvement in graphics performance to the extent that the workload
+remains TDP-limited (Most non-trivial graphics benchmarks out there
+improve significantly in the TDP-constrained platforms where this is
+currently enabled, see the cover letter for some numbers).  If the
+workload isn't (anymore) TDP-limited performance should stay roughly
+constant, but energy usage will be divided by a similar factor.
 
 Signed-off-by: Francisco Jerez <currojerez@riseup.net>
 ---
- include/linux/pm_qos.h       |   9 +++
- include/trace/events/power.h |  33 ++++----
- kernel/power/qos.c           | 141 ++++++++++++++++++++++++++++++++++-
- 3 files changed, 165 insertions(+), 18 deletions(-)
+ drivers/gpu/drm/i915/gt/intel_engine_cs.c    |   1 +
+ drivers/gpu/drm/i915/gt/intel_engine_types.h |   7 ++
+ drivers/gpu/drm/i915/gt/intel_gt_pm.c        | 107 +++++++++++++++++++
+ drivers/gpu/drm/i915/gt/intel_gt_pm.h        |   3 +
+ drivers/gpu/drm/i915/gt/intel_gt_types.h     |  12 +++
+ drivers/gpu/drm/i915/gt/intel_lrc.c          |  14 +++
+ 6 files changed, 144 insertions(+)
 
-diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-index 4a69d4af3ff8..b522e2194c05 100644
---- a/include/linux/pm_qos.h
-+++ b/include/linux/pm_qos.h
-@@ -28,6 +28,7 @@ enum pm_qos_flags_status {
- #define PM_QOS_LATENCY_ANY_NS	((s64)PM_QOS_LATENCY_ANY * NSEC_PER_USEC)
+diff --git a/drivers/gpu/drm/i915/gt/intel_engine_cs.c b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+index 53ac3f00909a..16ebdfa1dfc9 100644
+--- a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
++++ b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+@@ -504,6 +504,7 @@ void intel_engine_init_execlists(struct intel_engine_cs *engine)
  
- #define PM_QOS_CPU_LATENCY_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
-+#define PM_QOS_CPU_RESPONSE_FREQUENCY_DEFAULT_VALUE 0
- #define PM_QOS_RESUME_LATENCY_DEFAULT_VALUE	PM_QOS_LATENCY_ANY
- #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT	PM_QOS_LATENCY_ANY
- #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS	PM_QOS_LATENCY_ANY_NS
-@@ -162,6 +163,14 @@ static inline void cpu_latency_qos_update_request(struct pm_qos_request *req,
- static inline void cpu_latency_qos_remove_request(struct pm_qos_request *req) {}
- #endif
+ 	execlists->queue_priority_hint = INT_MIN;
+ 	execlists->queue = RB_ROOT_CACHED;
++	atomic_set(&execlists->overload, 0);
+ }
  
-+s32 cpu_response_frequency_qos_limit(void);
-+bool cpu_response_frequency_qos_request_active(struct pm_qos_request *req);
-+void cpu_response_frequency_qos_add_request(struct pm_qos_request *req,
-+					    s32 value);
-+void cpu_response_frequency_qos_update_request(struct pm_qos_request *req,
-+					       s32 new_value);
-+void cpu_response_frequency_qos_remove_request(struct pm_qos_request *req);
+ static void cleanup_status_page(struct intel_engine_cs *engine)
+diff --git a/drivers/gpu/drm/i915/gt/intel_engine_types.h b/drivers/gpu/drm/i915/gt/intel_engine_types.h
+index 80cdde712842..1b17b2f0c7a3 100644
+--- a/drivers/gpu/drm/i915/gt/intel_engine_types.h
++++ b/drivers/gpu/drm/i915/gt/intel_engine_types.h
+@@ -266,6 +266,13 @@ struct intel_engine_execlists {
+ 	 */
+ 	u8 csb_head;
+ 
++	/**
++	 * @overload: whether at least two execlist ports are
++	 * currently submitted to the hardware, indicating that CPU
++	 * latency isn't critical in order to maintain the GPU busy.
++	 */
++	atomic_t overload;
 +
- #ifdef CONFIG_PM
- enum pm_qos_flags_status __dev_pm_qos_flags(struct device *dev, s32 mask);
- enum pm_qos_flags_status dev_pm_qos_flags(struct device *dev, s32 mask);
-diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-index af5018aa9517..7e4b52e8ca3a 100644
---- a/include/trace/events/power.h
-+++ b/include/trace/events/power.h
-@@ -359,45 +359,48 @@ DEFINE_EVENT(power_domain, power_domain_target,
- );
+ 	I915_SELFTEST_DECLARE(struct st_preempt_hang preempt_hang;)
+ };
  
- /*
-- * CPU latency QoS events used for global CPU latency QoS list updates
-+ * CPU latency/response frequency QoS events used for global CPU PM
-+ * QoS list updates.
-  */
--DECLARE_EVENT_CLASS(cpu_latency_qos_request,
-+DECLARE_EVENT_CLASS(pm_qos_request,
+diff --git a/drivers/gpu/drm/i915/gt/intel_gt_pm.c b/drivers/gpu/drm/i915/gt/intel_gt_pm.c
+index 8b653c0f5e5f..f1f859e89a8f 100644
+--- a/drivers/gpu/drm/i915/gt/intel_gt_pm.c
++++ b/drivers/gpu/drm/i915/gt/intel_gt_pm.c
+@@ -107,6 +107,102 @@ void intel_gt_pm_init_early(struct intel_gt *gt)
+ 	intel_wakeref_init(&gt->wakeref, gt->uncore->rpm, &wf_ops);
+ }
  
--	TP_PROTO(s32 value),
-+	TP_PROTO(const char *name, s32 value),
- 
--	TP_ARGS(value),
-+	TP_ARGS(name, value),
- 
- 	TP_STRUCT__entry(
-+		__string(name,			 name		)
- 		__field( s32,                    value          )
- 	),
- 
- 	TP_fast_assign(
-+		__assign_str(name, name);
- 		__entry->value = value;
- 	),
- 
--	TP_printk("CPU_DMA_LATENCY value=%d",
--		  __entry->value)
-+	TP_printk("pm_qos_class=%s value=%d",
-+		  __get_str(name), __entry->value)
- );
- 
--DEFINE_EVENT(cpu_latency_qos_request, pm_qos_add_request,
-+DEFINE_EVENT(pm_qos_request, pm_qos_add_request,
- 
--	TP_PROTO(s32 value),
-+	TP_PROTO(const char *name, s32 value),
- 
--	TP_ARGS(value)
-+	TP_ARGS(name, value)
- );
- 
--DEFINE_EVENT(cpu_latency_qos_request, pm_qos_update_request,
-+DEFINE_EVENT(pm_qos_request, pm_qos_update_request,
- 
--	TP_PROTO(s32 value),
-+	TP_PROTO(const char *name, s32 value),
- 
--	TP_ARGS(value)
-+	TP_ARGS(name, value)
- );
- 
--DEFINE_EVENT(cpu_latency_qos_request, pm_qos_remove_request,
-+DEFINE_EVENT(pm_qos_request, pm_qos_remove_request,
- 
--	TP_PROTO(s32 value),
-+	TP_PROTO(const char *name, s32 value),
- 
--	TP_ARGS(value)
-+	TP_ARGS(name, value)
- );
- 
- /*
-diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index 32927682bcc4..018491fecaac 100644
---- a/kernel/power/qos.c
-+++ b/kernel/power/qos.c
-@@ -271,7 +271,7 @@ void cpu_latency_qos_add_request(struct pm_qos_request *req, s32 value)
- 		return;
- 	}
- 
--	trace_pm_qos_add_request(value);
-+	trace_pm_qos_add_request("CPU_DMA_LATENCY", value);
- 
- 	req->qos = &cpu_latency_constraints;
- 	cpu_latency_qos_apply(req, PM_QOS_ADD_REQ, value);
-@@ -297,7 +297,7 @@ void cpu_latency_qos_update_request(struct pm_qos_request *req, s32 new_value)
- 		return;
- 	}
- 
--	trace_pm_qos_update_request(new_value);
-+	trace_pm_qos_update_request("CPU_DMA_LATENCY", new_value);
- 
- 	if (new_value == req->node.prio)
- 		return;
-@@ -323,7 +323,7 @@ void cpu_latency_qos_remove_request(struct pm_qos_request *req)
- 		return;
- 	}
- 
--	trace_pm_qos_remove_request(PM_QOS_DEFAULT_VALUE);
-+	trace_pm_qos_remove_request("CPU_DMA_LATENCY", PM_QOS_DEFAULT_VALUE);
- 
- 	cpu_latency_qos_apply(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
- 	memset(req, 0, sizeof(*req));
-@@ -424,6 +424,141 @@ static int __init cpu_latency_qos_init(void)
- late_initcall(cpu_latency_qos_init);
- #endif /* CONFIG_CPU_IDLE */
- 
-+/* Definitions related to the CPU response frequency QoS. */
-+
-+static struct pm_qos_constraints cpu_response_frequency_constraints = {
-+	.list = PLIST_HEAD_INIT(cpu_response_frequency_constraints.list),
-+	.target_value = PM_QOS_CPU_RESPONSE_FREQUENCY_DEFAULT_VALUE,
-+	.default_value = PM_QOS_CPU_RESPONSE_FREQUENCY_DEFAULT_VALUE,
-+	.no_constraint_value = PM_QOS_CPU_RESPONSE_FREQUENCY_DEFAULT_VALUE,
-+	.type = PM_QOS_MAX,
-+};
-+
 +/**
-+ * cpu_response_frequency_qos_limit - Return current system-wide CPU
-+ *				      response frequency QoS limit.
-+ */
-+s32 cpu_response_frequency_qos_limit(void)
-+{
-+	return pm_qos_read_value(&cpu_response_frequency_constraints);
-+}
-+EXPORT_SYMBOL_GPL(cpu_response_frequency_qos_limit);
-+
-+/**
-+ * cpu_response_frequency_qos_request_active - Check the given PM QoS request.
-+ * @req: PM QoS request to check.
++ * Time increment until the most immediate PM QoS response frequency
++ * update.
 + *
-+ * Return: 'true' if @req has been added to the CPU response frequency
-+ * QoS list, 'false' otherwise.
-+ */
-+bool cpu_response_frequency_qos_request_active(struct pm_qos_request *req)
-+{
-+	return req->qos == &cpu_response_frequency_constraints;
-+}
-+EXPORT_SYMBOL_GPL(cpu_response_frequency_qos_request_active);
-+
-+static void cpu_response_frequency_qos_apply(struct pm_qos_request *req,
-+					     enum pm_qos_req_action action,
-+					     s32 value)
-+{
-+	int ret = pm_qos_update_target(req->qos, &req->node, action, value);
-+
-+	if (ret > 0)
-+		wake_up_all_idle_cpus();
-+}
-+
-+/**
-+ * cpu_response_frequency_qos_add_request - Add new CPU response
-+ *					    frequency QoS request.
-+ * @req: Pointer to a preallocated handle.
-+ * @value: Requested constraint value.
++ * May be in the future (return value > 0) if the GPU is currently
++ * active but we haven't updated the PM QoS request to reflect a
++ * bottleneck yet.  May be in the past (return value < 0) if the GPU
++ * isn't fully utilized and we've already reset the PM QoS request to
++ * the default value.  May be zero if a PM QoS request update is due.
 + *
-+ * Use @value to initialize the request handle pointed to by @req,
-+ * insert it as a new entry to the CPU response frequency QoS list and
-+ * recompute the effective QoS constraint for that list.
-+ *
-+ * Callers need to save the handle for later use in updates and removal of the
-+ * QoS request represented by it.
++ * The time increment returned by this function decreases linearly
++ * with time until it reaches either zero or a configurable limit.
 + */
-+void cpu_response_frequency_qos_add_request(struct pm_qos_request *req,
-+					    s32 value)
++static int32_t time_to_rf_qos_update_ns(struct intel_gt *gt)
 +{
-+	if (!req)
-+		return;
++	const uint64_t t1 = ktime_get_ns();
++	const uint64_t dt1 = gt->rf_qos.delay_max_ns;
 +
-+	if (cpu_response_frequency_qos_request_active(req)) {
-+		WARN(1, KERN_ERR "%s called for already added request\n",
-+		     __func__);
-+		return;
++	if (atomic_read_acquire(&gt->rf_qos.active_count)) {
++		const uint64_t t0 = atomic64_read(&gt->rf_qos.time_set_ns);
++
++		return min(dt1, t0 <= t1 ? 0 : t0 - t1);
++	} else {
++		const uint64_t t0 = atomic64_read(&gt->rf_qos.time_clear_ns);
++		const unsigned int shift = gt->rf_qos.delay_slope_shift;
++
++		return -(int32_t)(t1 <= t0 ? 1 :
++				  min(dt1, (t1 - t0) << shift));
 +	}
-+
-+	trace_pm_qos_add_request("CPU_RESPONSE_FREQUENCY", value);
-+
-+	req->qos = &cpu_response_frequency_constraints;
-+	cpu_response_frequency_qos_apply(req, PM_QOS_ADD_REQ, value);
 +}
-+EXPORT_SYMBOL_GPL(cpu_response_frequency_qos_add_request);
 +
 +/**
-+ * cpu_response_frequency_qos_update_request - Modify existing CPU
-+ *					       response frequency QoS
-+ *					       request.
-+ * @req : QoS request to update.
-+ * @new_value: New requested constraint value.
-+ *
-+ * Use @new_value to update the QoS request represented by @req in the
-+ * CPU response frequency QoS list along with updating the effective
-+ * constraint value for that list.
++ * Perform a delayed PM QoS response frequency update.
 + */
-+void cpu_response_frequency_qos_update_request(struct pm_qos_request *req,
-+					       s32 new_value)
++static void intel_gt_rf_qos_update(struct intel_gt *gt)
 +{
-+	if (!req)
-+		return;
++	const uint32_t dt = max(0, time_to_rf_qos_update_ns(gt));
 +
-+	if (!cpu_response_frequency_qos_request_active(req)) {
-+		WARN(1, KERN_ERR "%s called for unknown object\n", __func__);
-+		return;
-+	}
-+
-+	trace_pm_qos_update_request("CPU_RESPONSE_FREQUENCY", new_value);
-+
-+	if (new_value == req->node.prio)
-+		return;
-+
-+	cpu_response_frequency_qos_apply(req, PM_QOS_UPDATE_REQ, new_value);
++	timer_reduce(&gt->rf_qos.timer, jiffies + nsecs_to_jiffies(dt));
 +}
-+EXPORT_SYMBOL_GPL(cpu_response_frequency_qos_update_request);
 +
 +/**
-+ * cpu_response_frequency_qos_remove_request - Remove existing CPU
-+ *					       response frequency QoS
-+ *					       request.
-+ * @req: QoS request to remove.
-+ *
-+ * Remove the CPU response frequency QoS request represented by @req
-+ * from the CPU response frequency QoS list along with updating the
-+ * effective constraint value for that list.
++ * Timer that fires once the delay used to switch the PM QoS response
++ * frequency request has elapsed.
 + */
-+void cpu_response_frequency_qos_remove_request(struct pm_qos_request *req)
++static void intel_gt_rf_qos_timeout(struct timer_list *timer)
 +{
-+	if (!req)
-+		return;
++	struct intel_gt *gt = container_of(timer, struct intel_gt,
++					   rf_qos.timer);
++	const int32_t dt = time_to_rf_qos_update_ns(gt);
 +
-+	if (!cpu_response_frequency_qos_request_active(req)) {
-+		WARN(1, KERN_ERR "%s called for unknown object\n", __func__);
-+		return;
-+	}
++	if (dt == 0)
++		cpu_response_frequency_qos_update_request(
++			&gt->rf_qos.req, gt->rf_qos.target_hz);
++	else
++		cpu_response_frequency_qos_update_request(
++			&gt->rf_qos.req, PM_QOS_DEFAULT_VALUE);
 +
-+	trace_pm_qos_remove_request("CPU_RESPONSE_FREQUENCY",
-+				    PM_QOS_DEFAULT_VALUE);
-+
-+	cpu_response_frequency_qos_apply(req, PM_QOS_REMOVE_REQ,
-+					 PM_QOS_DEFAULT_VALUE);
-+	memset(req, 0, sizeof(*req));
++	if (dt > 0)
++		intel_gt_rf_qos_update(gt);
 +}
-+EXPORT_SYMBOL_GPL(cpu_response_frequency_qos_remove_request);
 +
- /* Definitions related to the frequency QoS below. */
++/**
++ * Report the beginning of a period of GPU utilization to PM.
++ *
++ * May trigger a more energy-efficient response mode in CPU PM, but
++ * only after a certain delay has elapsed so we don't have a negative
++ * impact on the CPU ramp-up latency except after the GPU has been
++ * continuously utilized for a long enough period of time.
++ */
++void intel_gt_pm_active_begin(struct intel_gt *gt)
++{
++	const uint32_t dt = abs(time_to_rf_qos_update_ns(gt));
++
++	atomic64_set(&gt->rf_qos.time_set_ns, ktime_get_ns() + dt);
++
++	if (!atomic_fetch_inc_release(&gt->rf_qos.active_count))
++		intel_gt_rf_qos_update(gt);
++}
++
++/**
++ * Report the end of a period of GPU utilization to PM.
++ *
++ * Must be called once after each call to intel_gt_pm_active_begin().
++ */
++void intel_gt_pm_active_end(struct intel_gt *gt)
++{
++	const uint32_t dt = abs(time_to_rf_qos_update_ns(gt));
++	const unsigned int shift = gt->rf_qos.delay_slope_shift;
++
++	atomic64_set(&gt->rf_qos.time_clear_ns, ktime_get_ns() - (dt >> shift));
++
++	if (!atomic_dec_return_release(&gt->rf_qos.active_count))
++		intel_gt_rf_qos_update(gt);
++}
++
+ void intel_gt_pm_init(struct intel_gt *gt)
+ {
+ 	/*
+@@ -116,6 +212,14 @@ void intel_gt_pm_init(struct intel_gt *gt)
+ 	 */
+ 	intel_rc6_init(&gt->rc6);
+ 	intel_rps_init(&gt->rps);
++
++	cpu_response_frequency_qos_add_request(&gt->rf_qos.req,
++					       PM_QOS_DEFAULT_VALUE);
++
++	gt->rf_qos.delay_max_ns = 250000;
++	gt->rf_qos.delay_slope_shift = 0;
++	gt->rf_qos.target_hz = 2;
++	timer_setup(&gt->rf_qos.timer, intel_gt_rf_qos_timeout, 0);
+ }
  
- /**
+ static bool reset_engines(struct intel_gt *gt)
+@@ -170,6 +274,9 @@ static void gt_sanitize(struct intel_gt *gt, bool force)
+ 
+ void intel_gt_pm_fini(struct intel_gt *gt)
+ {
++	del_timer_sync(&gt->rf_qos.timer);
++	cpu_response_frequency_qos_remove_request(&gt->rf_qos.req);
++
+ 	intel_rc6_fini(&gt->rc6);
+ }
+ 
+diff --git a/drivers/gpu/drm/i915/gt/intel_gt_pm.h b/drivers/gpu/drm/i915/gt/intel_gt_pm.h
+index 60f0e2fbe55c..43f1d45fb0db 100644
+--- a/drivers/gpu/drm/i915/gt/intel_gt_pm.h
++++ b/drivers/gpu/drm/i915/gt/intel_gt_pm.h
+@@ -58,6 +58,9 @@ int intel_gt_resume(struct intel_gt *gt);
+ void intel_gt_runtime_suspend(struct intel_gt *gt);
+ int intel_gt_runtime_resume(struct intel_gt *gt);
+ 
++void intel_gt_pm_active_begin(struct intel_gt *gt);
++void intel_gt_pm_active_end(struct intel_gt *gt);
++
+ static inline bool is_mock_gt(const struct intel_gt *gt)
+ {
+ 	return I915_SELFTEST_ONLY(gt->awake == -ENODEV);
+diff --git a/drivers/gpu/drm/i915/gt/intel_gt_types.h b/drivers/gpu/drm/i915/gt/intel_gt_types.h
+index 96890dd12b5f..4bc80c55e6f0 100644
+--- a/drivers/gpu/drm/i915/gt/intel_gt_types.h
++++ b/drivers/gpu/drm/i915/gt/intel_gt_types.h
+@@ -10,6 +10,7 @@
+ #include <linux/list.h>
+ #include <linux/mutex.h>
+ #include <linux/notifier.h>
++#include <linux/pm_qos.h>
+ #include <linux/spinlock.h>
+ #include <linux/types.h>
+ 
+@@ -97,6 +98,17 @@ struct intel_gt {
+ 	 * Reserved for exclusive use by the kernel.
+ 	 */
+ 	struct i915_address_space *vm;
++
++	struct {
++		struct pm_qos_request req;
++		struct timer_list timer;
++		uint32_t target_hz;
++		uint32_t delay_max_ns;
++		uint32_t delay_slope_shift;
++		atomic64_t time_set_ns;
++		atomic64_t time_clear_ns;
++		atomic_t active_count;
++	} rf_qos;
+ };
+ 
+ enum intel_gt_scratch_field {
+diff --git a/drivers/gpu/drm/i915/gt/intel_lrc.c b/drivers/gpu/drm/i915/gt/intel_lrc.c
+index b9b3f78f1324..a5d7a80b826d 100644
+--- a/drivers/gpu/drm/i915/gt/intel_lrc.c
++++ b/drivers/gpu/drm/i915/gt/intel_lrc.c
+@@ -1577,6 +1577,11 @@ static void execlists_submit_ports(struct intel_engine_cs *engine)
+ 	/* we need to manually load the submit queue */
+ 	if (execlists->ctrl_reg)
+ 		writel(EL_CTRL_LOAD, execlists->ctrl_reg);
++
++	if (execlists_num_ports(execlists) > 1 &&
++	    execlists->pending[1] &&
++	    !atomic_xchg(&execlists->overload, 1))
++		intel_gt_pm_active_begin(&engine->i915->gt);
+ }
+ 
+ static bool ctx_single_port_submission(const struct intel_context *ce)
+@@ -2213,6 +2218,12 @@ cancel_port_requests(struct intel_engine_execlists * const execlists)
+ 	clear_ports(execlists->inflight, ARRAY_SIZE(execlists->inflight));
+ 
+ 	WRITE_ONCE(execlists->active, execlists->inflight);
++
++	if (atomic_xchg(&execlists->overload, 0)) {
++		struct intel_engine_cs *engine =
++			container_of(execlists, typeof(*engine), execlists);
++		intel_gt_pm_active_end(&engine->i915->gt);
++	}
+ }
+ 
+ static inline void
+@@ -2386,6 +2397,9 @@ static void process_csb(struct intel_engine_cs *engine)
+ 			/* port0 completed, advanced to port1 */
+ 			trace_ports(execlists, "completed", execlists->active);
+ 
++			if (atomic_xchg(&execlists->overload, 0))
++				intel_gt_pm_active_end(&engine->i915->gt);
++
+ 			/*
+ 			 * We rely on the hardware being strongly
+ 			 * ordered, that the breadcrumb write is
 -- 
 2.22.1
 
