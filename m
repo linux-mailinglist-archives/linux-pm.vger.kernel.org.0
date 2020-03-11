@@ -2,154 +2,285 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A463718156B
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 11:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 565AD1815A4
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 11:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728514AbgCKKAr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Mar 2020 06:00:47 -0400
-Received: from mga05.intel.com ([192.55.52.43]:21772 "EHLO mga05.intel.com"
+        id S1726387AbgCKKSe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Mar 2020 06:18:34 -0400
+Received: from mga18.intel.com ([134.134.136.126]:54003 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728444AbgCKKAr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 11 Mar 2020 06:00:47 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S1725976AbgCKKSd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 11 Mar 2020 06:18:33 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Mar 2020 03:00:46 -0700
-X-IronPort-AV: E=Sophos;i="5.70,540,1574150400"; 
-   d="scan'208";a="231643406"
-Received: from pkosiack-mobl2.ger.corp.intel.com (HELO [10.252.21.27]) ([10.252.21.27])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 11 Mar 2020 03:00:44 -0700
-Subject: Re: [Intel-gfx] [PATCH 02/10] drm/i915: Adjust PM QoS response
- frequency based on GPU load.
-To:     Chris Wilson <chris@chris-wilson.co.uk>,
-        Francisco Jerez <currojerez@riseup.net>,
-        intel-gfx@lists.freedesktop.org, linux-pm@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
-References: <20200310214203.26459-1-currojerez@riseup.net>
- <20200310214203.26459-3-currojerez@riseup.net>
- <158387916218.28297.4489489879582782488@build.alporthouse.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-Message-ID: <ac5fdd3c-bf47-60d3-edef-82d451266dcb@linux.intel.com>
-Date:   Wed, 11 Mar 2020 10:00:41 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Mar 2020 03:18:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,518,1574150400"; 
+   d="scan'208";a="322094690"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2020 03:18:28 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jByRa-008i07-Ca; Wed, 11 Mar 2020 12:18:30 +0200
+Date:   Wed, 11 Mar 2020 12:18:30 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tobias Schramm <t.schramm@manjaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] power: supply: add CellWise cw2015 fuel gauge
+ driver
+Message-ID: <20200311101830.GE1922688@smile.fi.intel.com>
+References: <20200311093043.3636807-1-t.schramm@manjaro.org>
+ <20200311093043.3636807-4-t.schramm@manjaro.org>
 MIME-Version: 1.0
-In-Reply-To: <158387916218.28297.4489489879582782488@build.alporthouse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200311093043.3636807-4-t.schramm@manjaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Mar 11, 2020 at 10:30:43AM +0100, Tobias Schramm wrote:
+> This patch adds a driver for the CellWise cw2015 fuel gauge.
+> 
+> The CellWise cw2015 is a shuntless, single-cell Li-Ion fuel gauge used
+> in the pine64 Pinebook Pro laptop and some Raspberry Pi UPS HATs.
 
-On 10/03/2020 22:26, Chris Wilson wrote:
-> Quoting Francisco Jerez (2020-03-10 21:41:55)
->> diff --git a/drivers/gpu/drm/i915/gt/intel_lrc.c b/drivers/gpu/drm/i915/gt/intel_lrc.c
->> index b9b3f78f1324..a5d7a80b826d 100644
->> --- a/drivers/gpu/drm/i915/gt/intel_lrc.c
->> +++ b/drivers/gpu/drm/i915/gt/intel_lrc.c
->> @@ -1577,6 +1577,11 @@ static void execlists_submit_ports(struct intel_engine_cs *engine)
->>          /* we need to manually load the submit queue */
->>          if (execlists->ctrl_reg)
->>                  writel(EL_CTRL_LOAD, execlists->ctrl_reg);
->> +
->> +       if (execlists_num_ports(execlists) > 1 &&
-> pending[1] is always defined, the minimum submission is one slot, with
-> pending[1] as the sentinel NULL.
-> 
->> +           execlists->pending[1] &&
->> +           !atomic_xchg(&execlists->overload, 1))
->> +               intel_gt_pm_active_begin(&engine->i915->gt);
-> 
-> engine->gt
-> 
->>   }
->>   
->>   static bool ctx_single_port_submission(const struct intel_context *ce)
->> @@ -2213,6 +2218,12 @@ cancel_port_requests(struct intel_engine_execlists * const execlists)
->>          clear_ports(execlists->inflight, ARRAY_SIZE(execlists->inflight));
->>   
->>          WRITE_ONCE(execlists->active, execlists->inflight);
->> +
->> +       if (atomic_xchg(&execlists->overload, 0)) {
->> +               struct intel_engine_cs *engine =
->> +                       container_of(execlists, typeof(*engine), execlists);
->> +               intel_gt_pm_active_end(&engine->i915->gt);
->> +       }
->>   }
->>   
->>   static inline void
->> @@ -2386,6 +2397,9 @@ static void process_csb(struct intel_engine_cs *engine)
->>                          /* port0 completed, advanced to port1 */
->>                          trace_ports(execlists, "completed", execlists->active);
->>   
->> +                       if (atomic_xchg(&execlists->overload, 0))
->> +                               intel_gt_pm_active_end(&engine->i915->gt);
-> 
-> So this looses track if we preempt a dual-ELSP submission with a
-> single-ELSP submission (and never go back to dual).
-> 
-> If you move this to the end of the loop and check
-> 
-> if (!execlists->active[1] && atomic_xchg(&execlists->overload, 0))
-> 	intel_gt_pm_active_end(engine->gt);
-> 
-> so that it covers both preemption/promotion and completion.
-> 
-> However, that will fluctuate quite rapidly. (And runs the risk of
-> exceeding the sentinel.)
-> 
-> An alternative approach would be to couple along
-> schedule_in/schedule_out
-> 
-> atomic_set(overload, -1);
-> 
-> __execlists_schedule_in:
-> 	if (!atomic_fetch_inc(overload)
-> 		intel_gt_pm_active_begin(engine->gt);
-> __execlists_schedule_out:
-> 	if (!atomic_dec_return(overload)
-> 		intel_gt_pm_active_end(engine->gt);
-> 
-> which would mean we are overloaded as soon as we try to submit an
-> overlapping ELSP.
+Thank you for an update!
+My comments below.
 
-Putting it this low-level into submission code also would not work well 
-with GuC.
+...
 
-How about we try to keep some accounting one level higher, as the i915 
-scheduler is passing requests on to the backend for execution?
+> +	/* wait for gauge to become ready */
+> +	for (i = 0; i < CW2015_READ_TRIES; i++) {
+> +		ret = regmap_read(cw_bat->regmap, CW2015_REG_SOC, &reg_val);
+> +		if (ret)
+> +			return ret;
+> +		/* SoC must not be more than 100% */
+> +		else if (reg_val <= 100)
+> +			break;
+> +
+> +		msleep(100);
+> +	}
 
-Or number of runnable contexts, if the distinction between contexts and 
-requests is better for this purpose.
+Have you considered to use regmap_read_poll_timeout()?
 
-Problematic bit in going one level higher though is that the exit point 
-is less precisely coupled to the actual state. Or maybe with aggressive 
-engine retire we have nowadays it wouldn't be a problem.
+> +
+> +	if (i >= CW2015_READ_TRIES) {
+> +		reg_val = CW2015_MODE_SLEEP;
+> +		regmap_write(cw_bat->regmap, CW2015_REG_MODE, reg_val);
+> +		dev_err(cw_bat->dev,
+> +			"Gauge did not become ready after profile upload");
+> +		return -ETIMEDOUT;
+> +	}
 
-Regards,
+...
 
-Tvrtko
+> +		if (memcmp(bat_info, cw_bat->bat_profile,
+> +				CW2015_SIZE_BATINFO)) {
 
-> 
-> 
-> The metric feels very multiple client (game + display server, or
-> saturated transcode) centric. In the endless kernel world, we expect
-> 100% engine utilisation from a single context, and never a dual-ELSP
-> submission. They are also likely to want to avoid being throttled to
-> converse TDP for the CPU.
-> 
-> Should we also reduce the overload for the number of clients who are
-> waiting for interrupts from the GPU, so that their wakeup latency is not
-> impacted?
-> -Chris
-> _______________________________________________
-> Intel-gfx mailing list
-> Intel-gfx@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/intel-gfx
-> 
+I think it's pretty much okay to have this on one line, disregard 80 limit
+(it's only 1 extra).
+
+...
+
+> +static int cw_get_soc(struct cw_battery *cw_bat)
+> +{
+> +	unsigned int soc;
+> +	int ret;
+> +
+> +	ret = regmap_read(cw_bat->regmap, CW2015_REG_SOC, &soc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (soc > 100) {
+
+> +		int max_error_cycles = CW2015_BAT_SOC_ERROR_MS /
+> +					cw_bat->poll_interval_ms;
+
+The following looks better
+
+		int max_error_cycles =
+			CW2015_BAT_SOC_ERROR_MS / cw_bat->poll_interval_ms;
+
+Applies to all similar places in the code.
+
+> +		dev_err(cw_bat->dev, "Invalid SoC %d%%", soc);
+> +		cw_bat->read_errors++;
+> +		if (cw_bat->read_errors > max_error_cycles) {
+> +			dev_warn(cw_bat->dev,
+> +				"Too many invalid SoC reports, resetting gauge");
+> +			cw_power_on_reset(cw_bat);
+> +			cw_bat->read_errors = 0;
+> +		}
+> +		return cw_bat->soc;
+> +	}
+> +	cw_bat->read_errors = 0;
+> +
+> +	/* Reset gauge if stuck while charging */
+
+> +	if (cw_bat->status == POWER_SUPPLY_STATUS_CHARGING &&
+> +			soc == cw_bat->soc) {
+
+A bit strange indentation, and honestly I would leave it on one line, but it's up to you.
+
+> +		int max_stuck_cycles = CW2015_BAT_CHARGING_STUCK_MS /
+> +					cw_bat->poll_interval_ms;
+> +
+> +		cw_bat->charge_stuck_cnt++;
+> +		if (cw_bat->charge_stuck_cnt > max_stuck_cycles) {
+> +			dev_warn(cw_bat->dev,
+> +				"SoC stuck @%u%%, resetting gauge", soc);
+> +			cw_power_on_reset(cw_bat);
+> +			cw_bat->charge_stuck_cnt = 0;
+> +		}
+> +	} else {
+> +		cw_bat->charge_stuck_cnt = 0;
+> +	}
+> +
+> +	/* Ignore voltage dips during charge */
+
+> +	if (cw_bat->charger_attached &&
+> +			HYSTERESIS(soc, cw_bat->soc, 0, 3)) {
+
+This is pretty much one line (77), check your editor settings and update all
+similar places in the code.
+
+> +		soc = cw_bat->soc;
+> +	}
+> +
+> +	/* Ignore voltage spikes during discharge */
+> +	if (!cw_bat->charger_attached &&
+> +			HYSTERESIS(soc, cw_bat->soc, 3, 0)) {
+> +		soc = cw_bat->soc;
+> +	}
+> +
+> +	return soc;
+> +}
+
+...
+
+> +	cw_bat =
+> +		container_of(delay_work, struct cw_battery, battery_delay_work);
+
+It will be better to read if it would be one line.
+
+...
+
+> +static bool cw_battery_valid_time_to_empty(struct cw_battery *cw_bat)
+> +{
+> +	return cw_bat->time_to_empty > 0 &&
+> +		cw_bat->time_to_empty < CW2015_MASK_SOC &&
+> +		cw_bat->status == POWER_SUPPLY_STATUS_DISCHARGING;
+
+Fix indentation to be all 'c':s in one column.
+
+> +}
+
+...
+
+> +static int cw2015_parse_properties(struct cw_battery *cw_bat)
+> +{
+> +	struct device *dev = cw_bat->dev;
+> +	int length;
+> +	u32 value;
+> +	int ret;
+> +
+
+> +	length = device_property_read_u8_array(dev, "cellwise,battery-profile",
+> +						NULL, 0);
+
+device_property_count_u8();
+
+> +	if (length) {
+> +		if (length != CW2015_SIZE_BATINFO) {
+> +			dev_err(cw_bat->dev, "battery-profile must be %d bytes",
+> +				CW2015_SIZE_BATINFO);
+> +			return -EINVAL;
+> +		}
+> +
+> +		cw_bat->bat_profile =
+> +			devm_kzalloc(dev, CW2015_SIZE_BATINFO, GFP_KERNEL);
+
+Replace with length (so, you will have one point of validation), and put on
+one line.
+
+> +		if (!cw_bat->bat_profile) {
+> +			dev_err(cw_bat->dev,
+> +				"Failed to allocate memory for battery config info");
+> +			return -ENOMEM;
+> +		}
+> +
+> +		ret = device_property_read_u8_array(dev,
+> +						"cellwise,battery-profile",
+> +						cw_bat->bat_profile,
+
+> +						CW2015_SIZE_BATINFO);
+
+length.
+
+> +		if (ret)
+> +			return ret;
+> +	} else {
+> +		dev_warn(cw_bat->dev,
+> +			"No battery-profile found, rolling with current flash contents");
+> +	}
+> +
+> +	cw_bat->poll_interval_ms = CW2015_DEFAULT_POLL_INTERVAL_MS;
+
+> +	ret = device_property_read_u32_array(dev,
+> +						"cellwise,monitor-interval-ms",
+
+It's fine to have it on one line.
+
+> +						&value, 1);
+> +	if (ret >= 0) {
+> +		dev_dbg(cw_bat->dev, "Overriding default monitor-interval with %u ms",
+> +			value);
+> +		cw_bat->poll_interval_ms = value;
+> +	}
+> +
+> +	return 0;
+> +}
+
+...
+
+> +	regmap_reg_range(CW2015_REG_BATINFO,
+> +				CW2015_REG_BATINFO + CW2015_SIZE_BATINFO - 1),
+
+Indentation issue. Check all similar places.
+
+...
+
+> +	cw_bat->rk_bat = devm_power_supply_register(&client->dev,
+> +		&cw2015_bat_desc, &psy_cfg);
+> +	if (IS_ERR(cw_bat->rk_bat)) {
+> +		dev_err(cw_bat->dev, "Failed to register power supply");
+
+> +		return -1;
+
+Do not shadow an error code.
+
+> +	}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
