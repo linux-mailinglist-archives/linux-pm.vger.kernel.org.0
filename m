@@ -2,109 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E114181055
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 07:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A850A181059
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 07:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726713AbgCKGDh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Mar 2020 02:03:37 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:33422 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725958AbgCKGDg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Mar 2020 02:03:36 -0400
-Received: by mail-pj1-f65.google.com with SMTP id o21so1133353pjs.0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Mar 2020 23:03:33 -0700 (PDT)
+        id S1726198AbgCKGGV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Mar 2020 02:06:21 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38799 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726160AbgCKGGV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Mar 2020 02:06:21 -0400
+Received: by mail-pf1-f194.google.com with SMTP id z5so690169pfn.5
+        for <linux-pm@vger.kernel.org>; Tue, 10 Mar 2020 23:06:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=zKMeRF7HddfnHVb8kWv4OBPengz0IeuN3e5fJnxthh4=;
-        b=XY/Wn/PtObZyN+lUZ0ITV6i54XXummuNQunhHm89lzSahh96SL/vERmPc5DQ13Oxdr
-         rX9EFR2Vu0qciNxUbD4Gy2F+6xaVPnp0Q1CHBeOhco8qhPdXAX35rWc9w+w05/J9dcmq
-         MyYz1ZNma8kkOdAF7d8HY2nGgg9Hp+n6QQQzfErjgYsmTBvqTXjuVOtwwAhFuS2GK0nt
-         MM/Q8ZyhQ0lbShT8+DX/YmjscF0JEO7KHOlN4L8MbcFgdD5rhHDm+m+oUEg0ktaDVehi
-         dia4FG7fmZ0bp8XqcThxy5zkJgqwAekU+OU90QhNkJ0YBMsy7atRMBx91QEEnLsJbaF0
-         IQmg==
+        bh=VD15hEVyVLaO06R8soxT+wdeQAWi6jWDprT4gENa4Pk=;
+        b=BXuEks7icu5+J5qHi20hsEXmiCS9E/ow1l+ZYZM9dxF94vzf71w5/CXBQ/elTEp2KY
+         sK8PCWAC3CzcAsApi7PogMStwLY/F4bznDnaXJEdBmhw68CVuyf9vg0GSasdNXWi1ZwT
+         7hT/PuFLEvpc89BNSLsKiNMtvhjH4ARqGRItPC1FZ5eS88OofdfR+fvzxCiIw9RNVbBH
+         DKPTCJAE4h7KiuM6zOg9g0+3oavV1W+RM5RX6EcvpwmUgcS5BSDXSw+8pyqe4yxY6HxW
+         YO+gCM+xBLjl9wjlLUpYgIyOjYjSmeSVRwCpR+CVEmmjBcyduqs/JiHWgwd69myM0ZN/
+         bKMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zKMeRF7HddfnHVb8kWv4OBPengz0IeuN3e5fJnxthh4=;
-        b=E3TtXhDGi5U4Gu/FcUEmQM/2Rv06rbShVbehn2xbYWfz2HuBqkECrNFt+J5fMNx0VB
-         mNRY9HJwfQtAXju9LDz/TXipH+YV7gifPO3fkmXNSwxlouNKir8K3CxvFav4uZpUPN20
-         J2aL55fQ0E30cUZtKu+BX9f9OGc7J8qNpWvR5dGVbppCvIdqxRSc7XEYHeyb8EB4fqGf
-         jArvGUqFWEe6v8fFoLxTQy9MHooUmKAnGvgqYqE04mxZVIOg5pnGb5aE337ONoT75+o8
-         HXkhdTb4q8cRD+CJoYxAyz40bkdzFoPGIv8ahClaCrGBJdMTNlOeZZauHKVUGKQ55eKV
-         OfDw==
-X-Gm-Message-State: ANhLgQ3st08vNPSpDNPBpwEgVQTVIPsdeQ4/wae1SmIKD2ijIypEfNJr
-        Egly36b3y+9SpSwwQYxqOPS1jw==
-X-Google-Smtp-Source: ADFU+vv2VGjfxeyu1ttxNqb7u11XkmIE28Oo4Hsp+hyTV5zUueINr9oVpMPKaqCQ7o66UFKyy/Iirg==
-X-Received: by 2002:a17:90a:32c1:: with SMTP id l59mr1766500pjb.36.1583906613321;
-        Tue, 10 Mar 2020 23:03:33 -0700 (PDT)
+        bh=VD15hEVyVLaO06R8soxT+wdeQAWi6jWDprT4gENa4Pk=;
+        b=jneB6F0R3+bBKkTAtWngNnpire4SSOP5jdVhXIsv3MmSGz8a/Zdg35jfHjScbzJ11W
+         DZccirSZfLoVKmKv18HsFDkMIuHGqLOgtKUl8Srju1tPl7Zt9Gc48+JJo09q1xNCeFyT
+         5FZn7PNoPFJMTHB+ZVtPwhylv72LAu6VCWhqdE35rcSmjAQEJ5iChNktlTDnRPagZidE
+         TjSCWHQ8Mp/e5Jtk7/eTVeE7td0DUs9jOvSm4/vFyVEIi+qCwZQBb0ApJYAz9seeAkAD
+         F+RPtK3thg90rdKdS7wwgZXQefQm+VUVSaYIGv5X/VtvTV94sEbrgMpir7gVDjoU8OoM
+         PvIA==
+X-Gm-Message-State: ANhLgQ1Pc7aui9Fji7+PB1algGbVfhs8qV1QxXwJBgctLvP6c/Q+hW1X
+        Um4KB4Uymr3gbEghZvBb6lcKSw==
+X-Google-Smtp-Source: ADFU+vtUcWmiYBhCHp72xQGkMofh54beImT2nmLF78jXNh6JeBSFkkPXyzzpZemY6U8GEERnxtK6Bg==
+X-Received: by 2002:a63:a055:: with SMTP id u21mr1300692pgn.100.1583906780227;
+        Tue, 10 Mar 2020 23:06:20 -0700 (PDT)
 Received: from localhost ([122.171.122.128])
-        by smtp.gmail.com with ESMTPSA id x72sm11377214pfc.156.2020.03.10.23.03.32
+        by smtp.gmail.com with ESMTPSA id i5sm31347131pfo.173.2020.03.10.23.06.19
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 Mar 2020 23:03:32 -0700 (PDT)
-Date:   Wed, 11 Mar 2020 11:33:30 +0530
+        Tue, 10 Mar 2020 23:06:19 -0700 (PDT)
+Date:   Wed, 11 Mar 2020 11:36:16 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     rjw@rjwysocki.net, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, abel.vesa@nxp.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Linux-imx@nxp.com
-Subject: Re: [PATCH] cpufreq: imx-cpufreq-dt: Correct i.MX8MP's market
- segment fuse location
-Message-ID: <20200311060330.ecvdlvflahdbptsi@vireshk-i7>
-References: <1583819296-7763-1-git-send-email-Anson.Huang@nxp.com>
+To:     "andrew-sh.cheng" <andrew-sh.cheng@mediatek.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>, Nishanth Menon <nm@ti.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fan Chen =?utf-8?B?KOmZs+WHoSk=?= <fan.chen@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [v5, PATCH 4/5] cpufreq: mediatek: add opp notification for SVS
+ support
+Message-ID: <20200311060616.62nh7sfwtjwvrjfr@vireshk-i7>
+References: <1574769046-28449-1-git-send-email-andrew-sh.cheng@mediatek.com>
+ <1574769046-28449-5-git-send-email-andrew-sh.cheng@mediatek.com>
+ <20191127083619.etocnhpyyut3hzwq@vireshk-i7>
+ <1575874588.13494.4.camel@mtksdaap41>
+ <20191210064319.f4ksrxozp3gv4xry@vireshk-i7>
+ <1583827865.4840.1.camel@mtksdaap41>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1583819296-7763-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1583827865.4840.1.camel@mtksdaap41>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-03-20, 13:48, Anson Huang wrote:
-> i.MX8MP's market segment fuse field is bit[6:5], correct it.
-> 
-> Fixes: 83fe39ad0a48 ("cpufreq: imx-cpufreq-dt: Add i.MX8MP support")
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
->  drivers/cpufreq/imx-cpufreq-dt.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/imx-cpufreq-dt.c b/drivers/cpufreq/imx-cpufreq-dt.c
-> index 0e29d88..de206d2 100644
-> --- a/drivers/cpufreq/imx-cpufreq-dt.c
-> +++ b/drivers/cpufreq/imx-cpufreq-dt.c
-> @@ -19,6 +19,8 @@
->  #define IMX8MN_OCOTP_CFG3_SPEED_GRADE_MASK	(0xf << 8)
->  #define OCOTP_CFG3_MKT_SEGMENT_SHIFT    6
->  #define OCOTP_CFG3_MKT_SEGMENT_MASK     (0x3 << 6)
-> +#define IMX8MP_OCOTP_CFG3_MKT_SEGMENT_SHIFT    5
-> +#define IMX8MP_OCOTP_CFG3_MKT_SEGMENT_MASK     (0x3 << 5)
->  
->  /* cpufreq-dt device registered by imx-cpufreq-dt */
->  static struct platform_device *cpufreq_dt_pdev;
-> @@ -45,7 +47,13 @@ static int imx_cpufreq_dt_probe(struct platform_device *pdev)
->  	else
->  		speed_grade = (cell_value & OCOTP_CFG3_SPEED_GRADE_MASK)
->  			      >> OCOTP_CFG3_SPEED_GRADE_SHIFT;
-> -	mkt_segment = (cell_value & OCOTP_CFG3_MKT_SEGMENT_MASK) >> OCOTP_CFG3_MKT_SEGMENT_SHIFT;
-> +
-> +	if (of_machine_is_compatible("fsl,imx8mp"))
-> +		mkt_segment = (cell_value & IMX8MP_OCOTP_CFG3_MKT_SEGMENT_MASK)
-> +			       >> IMX8MP_OCOTP_CFG3_MKT_SEGMENT_SHIFT;
-> +	else
-> +		mkt_segment = (cell_value & OCOTP_CFG3_MKT_SEGMENT_MASK)
-> +			       >> OCOTP_CFG3_MKT_SEGMENT_SHIFT;
->  
->  	/*
->  	 * Early samples without fuses written report "0 0" which may NOT
-> -- 
+On 10-03-20, 16:11, andrew-sh.cheng wrote:
+> On Tue, 2019-12-10 at 14:43 +0800, Viresh Kumar wrote:
+> > On 09-12-19, 14:56, andrew-sh.cheng wrote:
+> > > On Wed, 2019-11-27 at 14:06 +0530, Viresh Kumar wrote:
+> > > > On 26-11-19, 19:50, Andrew-sh.Cheng wrote:
+> > > > > +		if (!IS_ERR(opp_item))
+> > > > > +			dev_pm_opp_put(opp_item);
+> > > > > +		else
+> > > > > +			freq = 0;
+> > > > > +
+> > > > 
+> > > > What is the purpose of the above code ?
+> > > When dev_pm_opp_find_freq_ceil() doesn't find matching opp item, freq
+> > > value won't be set.
+> > > Set it as 0 for below checking
+> > > > 
+> > > > > +		/* case of current opp is disabled */
+> > > > > +		if (freq == 0 || freq != info->opp_freq) {
+> > > > > +			// find an enable opp item
+> > > > > +			freq = 1;
+> > > > > +			opp_item = dev_pm_opp_find_freq_ceil(info->cpu_dev,
+> > > > > +							     &freq);
+> > > > > +			if (!IS_ERR(opp_item)) {
+> > > > > +				dev_pm_opp_put(opp_item);
+> > > > > +				policy = cpufreq_cpu_get(info->opp_cpu);
+> > > > > +				if (policy) {
+> > > > > +					cpufreq_driver_target(policy,
+> > > > > +						freq / 1000,
+> > > > > +						CPUFREQ_RELATION_L);
+> > > > 
+> > > > Why don't you simply call this instead of all the code in the else
+> > > > block ?
+> > > These else code is used to check "current opp item is disabled or not".
+> > > If not, do nothing.
+> > > If current opp item is disabled, need to find an not-disabled opp item,
+> > > and set frequency to it.
+> > 
+> > Right. So this notifier helper of yours receive the opp which is getting
+> > disabled, why don't you compare its frequency directly to see if the current OPP
+> > is getting disabled ?
+> Sorry to overlook your question.
+> This is because when the opp is disabled,
+> we cannot use dev_pm_opp_get_freq() to get frequency of that opp.
+> There is a check:
+> 	if (IS_ERR_OR_NULL(opp) || !opp->available) {
 
-Applied. Thanks.
+I think we can remove the available check here, as we are jut trying
+to find frequency of an OPP we already have. Send a patch for that
+please.
+
+> 		pr_err("%s: Invalid parameters\n", __func__);
+> 		return 0;
+> 
+> > 
+> 
 
 -- 
 viresh
