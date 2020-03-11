@@ -2,279 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5211C181DEF
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 17:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1C9181E25
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 17:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730092AbgCKQdB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Mar 2020 12:33:01 -0400
-Received: from bin-mail-out-06.binero.net ([195.74.38.229]:22635 "EHLO
-        bin-mail-out-06.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729852AbgCKQdB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Mar 2020 12:33:01 -0400
-X-Halon-ID: eaf4c149-63b5-11ea-aa6d-005056917f90
-Authorized-sender: niklas@soderlund.pp.se
-Received: from bismarck.berto.se (p4fca2392.dip0.t-ipconnect.de [79.202.35.146])
-        by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
-        id eaf4c149-63b5-11ea-aa6d-005056917f90;
-        Wed, 11 Mar 2020 17:32:49 +0100 (CET)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH] dt-bindings: thermal: rcar-thermal: Convert bindings to json-schema
-Date:   Wed, 11 Mar 2020 17:32:21 +0100
-Message-Id: <20200311163221.1761949-1-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.25.1
+        id S1730031AbgCKQnH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Mar 2020 12:43:07 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:39450 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726314AbgCKQnH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Mar 2020 12:43:07 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02BGh3DL008631;
+        Wed, 11 Mar 2020 11:43:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1583944983;
+        bh=5r7Nvl/xrjYQj1VqSKcuLORKIAOHb4UzYX18VU3KmRY=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Mpyr2LRJ+oX88+/vZHIWWMQMZwQ6JtIxsMPBDSYCopXvJ8+xtktMxuUMgf7JLpUHG
+         3DBRdyvVVjIX9iKvLBuMSFnFpuvDA0605pswoaapKr2Sj4hAXFVUyQUkxo/z8HemwQ
+         vzVNTWHxByVFzm32roGk2xKozmHacW0GHTRzPXg0=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02BGh3wj080363
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 11 Mar 2020 11:43:03 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 11
+ Mar 2020 11:43:02 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 11 Mar 2020 11:43:02 -0500
+Received: from [128.247.75.135] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02BGh2o7084185;
+        Wed, 11 Mar 2020 11:43:02 -0500
+Subject: Re: [EXTERNAL] Re: [PATCH v4 2/4] power_supply: Add additional health
+ properties to the header
+To:     Dan Murphy <dmurphy@ti.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sandeep Patil <sspatil@android.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-team@android.com>
+References: <20200116175039.1317-1-dmurphy@ti.com>
+ <20200116175039.1317-3-dmurphy@ti.com>
+ <20200117010658.iqs2zpwl6bsomkuo@earth.universe>
+ <20200306235548.GA187098@google.com>
+ <20200310213050.si7gcr2wbmjgr7jf@earth.universe>
+ <de919edb-79b3-82ec-f55c-31a127d6c751@ti.com>
+From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Message-ID: <66b2ac86-8513-b540-8a2c-c2ebef4124dd@ti.com>
+Date:   Wed, 11 Mar 2020 11:43:00 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <de919edb-79b3-82ec-f55c-31a127d6c751@ti.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert Renesas R-Car Thermal bindings documentation to json-schema.
+Sebastian
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- .../bindings/thermal/rcar-thermal.txt         |  78 ----------
- .../bindings/thermal/rcar-thermal.yaml        | 139 ++++++++++++++++++
- 2 files changed, 139 insertions(+), 78 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/thermal/rcar-thermal.txt
- create mode 100644 Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
+On 3/11/20 6:29 AM, Dan Murphy wrote:
+> Sebastian
+>
+> On 3/10/20 4:30 PM, Sebastian Reichel wrote:
+>> Hi Sandeep,
+>>
+>> On Fri, Mar 06, 2020 at 03:55:48PM -0800, Sandeep Patil wrote:
+>>> On Fri, Jan 17, 2020 at 02:06:58AM +0100, Sebastian Reichel wrote:
+>>>> Hi,
+>>>>
+>>>> On Thu, Jan 16, 2020 at 11:50:37AM -0600, Dan Murphy wrote:
+>>>>> Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
+>>>>>
+>>>>> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+>>>>> ---
+>>>> Looks good. But I will not merge it without a user and have comments
+>>>> for the driver.
+>>> Android has been looking for these properties for a while now [1].
+>>> It was added[2] when we saw that the manufacturers were implementing 
+>>> these
+>>> properties in the driver. I didn't know the properties were absent 
+>>> upstream
+>>> until yesterday. Somebody pointed out in our ongoing effort to make 
+>>> sure
+>>> all core kernel changes that android depends on are present upstream.
+>>>
+>>> I think those values are also propagated in application facing APIs in
+>>> Android (but I am not sure yet, let me know if that's something you 
+>>> want
+>>> to find out).
+>>>
+>>> I wanted to chime in and present you a 'user' for this if that helps.
+>> With user I meant an upstream kernel driver, which exposes the
+>> values. But thanks for the pointer. This should be mentioned in
+>> the patch description, also the fact that the status values are
+>> directly taken from JEITA spec.
+>
+> I mentioned the JEITA in the cover letter but I guess you would like 
+> the description in the commit message as well
+>
+> Dan
+>
+>
+I have added a note mentioning that the properties are taken from the 
+JEITA spec in the commit message and listing the bq2515x_charger driver 
+as a user. I am waiting for feedback on my other patches in the series 
+before sending you v5 patches.
 
-diff --git a/Documentation/devicetree/bindings/thermal/rcar-thermal.txt b/Documentation/devicetree/bindings/thermal/rcar-thermal.txt
-deleted file mode 100644
-index 196112d23b1edef2..0000000000000000
---- a/Documentation/devicetree/bindings/thermal/rcar-thermal.txt
-+++ /dev/null
-@@ -1,78 +0,0 @@
--* Renesas R-Car Thermal
--
--Required properties:
--- compatible		: "renesas,thermal-<soctype>",
--			   "renesas,rcar-gen2-thermal" (with thermal-zone) or
--			   "renesas,rcar-thermal" (without thermal-zone) as
--                           fallback except R-Car V3M/E3/D3 and RZ/G2E.
--			  Examples with soctypes are:
--			    - "renesas,thermal-r8a73a4" (R-Mobile APE6)
--			    - "renesas,thermal-r8a7743" (RZ/G1M)
--			    - "renesas,thermal-r8a7744" (RZ/G1N)
--			    - "renesas,thermal-r8a774c0" (RZ/G2E)
--			    - "renesas,thermal-r8a7779" (R-Car H1)
--			    - "renesas,thermal-r8a7790" (R-Car H2)
--			    - "renesas,thermal-r8a7791" (R-Car M2-W)
--			    - "renesas,thermal-r8a7792" (R-Car V2H)
--			    - "renesas,thermal-r8a7793" (R-Car M2-N)
--			    - "renesas,thermal-r8a77970" (R-Car V3M)
--			    - "renesas,thermal-r8a77990" (R-Car E3)
--			    - "renesas,thermal-r8a77995" (R-Car D3)
--- reg			: Address range of the thermal registers.
--			  The 1st reg will be recognized as common register
--			  if it has "interrupts".
--
--Option properties:
--
--- interrupts		: If present should contain 3 interrupts for
--                          R-Car V3M/E3/D3 and RZ/G2E or 1 interrupt otherwise.
--
--Example (non interrupt support):
--
--thermal@ffc48000 {
--	compatible = "renesas,thermal-r8a7779", "renesas,rcar-thermal";
--	reg = <0xffc48000 0x38>;
--};
--
--Example (interrupt support):
--
--thermal@e61f0000 {
--	compatible = "renesas,thermal-r8a73a4", "renesas,rcar-thermal";
--	reg = <0xe61f0000 0x14
--		0xe61f0100 0x38
--		0xe61f0200 0x38
--		0xe61f0300 0x38>;
--	interrupts = <0 69 IRQ_TYPE_LEVEL_HIGH>;
--};
--
--Example (with thermal-zone):
--
--thermal-zones {
--	cpu_thermal: cpu-thermal {
--		polling-delay-passive	= <1000>;
--		polling-delay		= <5000>;
--
--		thermal-sensors = <&thermal>;
--
--		trips {
--			cpu-crit {
--				temperature	= <115000>;
--				hysteresis	= <0>;
--				type		= "critical";
--			};
--		};
--		cooling-maps {
--		};
--	};
--};
--
--thermal: thermal@e61f0000 {
--	compatible =	"renesas,thermal-r8a7790",
--			"renesas,rcar-gen2-thermal",
--			"renesas,rcar-thermal";
--	reg = <0 0xe61f0000 0 0x14>, <0 0xe61f0100 0 0x38>;
--	interrupts = <0 69 IRQ_TYPE_LEVEL_HIGH>;
--	clocks = <&mstp5_clks R8A7790_CLK_THERMAL>;
--	power-domains = <&cpg_clocks>;
--	#thermal-sensor-cells = <0>;
--};
-diff --git a/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
-new file mode 100644
-index 0000000000000000..d2f4f1b063ac07b0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
-@@ -0,0 +1,139 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright (C) 2020 Renesas Electronics Corp.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/rcar-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas R-Car Thermal
-+
-+maintainers:
-+  - Niklas Söderlund <niklas.soderlund@ragnatech.se>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - renesas,thermal-r8a73a4 # R-Mobile APE6
-+              - renesas,thermal-r8a7779 # R-Car H1
-+          - const: renesas,rcar-thermal # Generic without thermal-zone
-+      - items:
-+          - enum:
-+              - renesas,thermal-r8a7743 # RZ/G1M
-+              - renesas,thermal-r8a7744 # RZ/G1N
-+          - const: renesas,rcar-gen2-thermal # Generic thermal-zone
-+      - items:
-+          - enum:
-+              - renesas,thermal-r8a7790 # R-Car H2
-+              - renesas,thermal-r8a7791 # R-Car M2-W
-+              - renesas,thermal-r8a7792 # R-Car V2H
-+              - renesas,thermal-r8a7793 # R-Car M2-N
-+          - const: renesas,rcar-gen2-thermal # Generic thermal-zone
-+          - const: renesas,rcar-thermal # Generic without thermal-zone
-+      - items:
-+          - enum:
-+              - renesas,thermal-r8a774c0 # RZ/G2E
-+              - renesas,thermal-r8a77970 # R-Car V3M
-+              - renesas,thermal-r8a77990 # R-Car E3
-+              - renesas,thermal-r8a77995 # R-Car D3
-+  reg:
-+    description:
-+      Address ranges of the thermal registers. If more then one range is given
-+      the first one must be the common registers followed by each sensor
-+      according the the datasheet.
-+    minItems: 1
-+    maxItems: 4
-+
-+  interrupts:
-+    minItems: 1
-+    maxItems: 3
-+
-+  clocks:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - renesas,thermal-r8a73a4 # R-Mobile APE6
-+          - renesas,thermal-r8a7779 # R-Car H1
-+then:
-+  required:
-+    - compatible
-+    - reg
-+else:
-+  required:
-+    - compatible
-+    - reg
-+    - interrupts
-+    - clocks
-+    - power-domains
-+    - resets
-+
-+examples:
-+  # Example (non interrupt support)
-+  - |
-+    thermal@ffc48000 {
-+            compatible = "renesas,thermal-r8a7779", "renesas,rcar-thermal";
-+            reg = <0xffc48000 0x38>;
-+    };
-+
-+  # Example (interrupt support)
-+  - |
-+    #include <dt-bindings/clock/r8a73a4-clock.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    thermal@e61f0000 {
-+            compatible = "renesas,thermal-r8a73a4", "renesas,rcar-thermal";
-+            reg = <0 0xe61f0000 0 0x14>, <0 0xe61f0100 0 0x38>,
-+                  <0 0xe61f0200 0 0x38>, <0 0xe61f0300 0 0x38>;
-+            interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&mstp5_clks R8A73A4_CLK_THERMAL>;
-+            power-domains = <&pd_c5>;
-+    };
-+
-+  # Example (with thermal-zone)
-+  - |
-+    #include <dt-bindings/clock/r8a7790-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a7790-sysc.h>
-+
-+    thermal: thermal@e61f0000 {
-+      compatible = "renesas,thermal-r8a7790",
-+                   "renesas,rcar-gen2-thermal",
-+                   "renesas,rcar-thermal";
-+            reg = <0 0xe61f0000 0 0x10>, <0 0xe61f0100 0 0x38>;
-+            interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&cpg CPG_MOD 522>;
-+            power-domains = <&sysc R8A7790_PD_ALWAYS_ON>;
-+            resets = <&cpg 522>;
-+            #thermal-sensor-cells = <0>;
-+    };
-+
-+    thermal-zones {
-+            cpu_thermal: cpu-thermal {
-+                    polling-delay-passive = <1000>;
-+                    polling-delay = <5000>;
-+
-+                    thermal-sensors = <&thermal>;
-+
-+                    trips {
-+                            cpu-crit {
-+                                    temperature = <115000>;
-+                                    hysteresis = <0>;
-+                                    type = "critical";
-+                            };
-+                    };
-+                    cooling-maps {
-+                    };
-+            };
-+    };
--- 
-2.25.1
+Ricardo
 
