@@ -2,118 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1C9181E25
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 17:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D895181F22
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 18:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730031AbgCKQnH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Mar 2020 12:43:07 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:39450 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726314AbgCKQnH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Mar 2020 12:43:07 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02BGh3DL008631;
-        Wed, 11 Mar 2020 11:43:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1583944983;
-        bh=5r7Nvl/xrjYQj1VqSKcuLORKIAOHb4UzYX18VU3KmRY=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=Mpyr2LRJ+oX88+/vZHIWWMQMZwQ6JtIxsMPBDSYCopXvJ8+xtktMxuUMgf7JLpUHG
-         3DBRdyvVVjIX9iKvLBuMSFnFpuvDA0605pswoaapKr2Sj4hAXFVUyQUkxo/z8HemwQ
-         vzVNTWHxByVFzm32roGk2xKozmHacW0GHTRzPXg0=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02BGh3wj080363
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 11 Mar 2020 11:43:03 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 11
- Mar 2020 11:43:02 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 11 Mar 2020 11:43:02 -0500
-Received: from [128.247.75.135] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02BGh2o7084185;
-        Wed, 11 Mar 2020 11:43:02 -0500
-Subject: Re: [EXTERNAL] Re: [PATCH v4 2/4] power_supply: Add additional health
- properties to the header
-To:     Dan Murphy <dmurphy@ti.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sandeep Patil <sspatil@android.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-team@android.com>
-References: <20200116175039.1317-1-dmurphy@ti.com>
- <20200116175039.1317-3-dmurphy@ti.com>
- <20200117010658.iqs2zpwl6bsomkuo@earth.universe>
- <20200306235548.GA187098@google.com>
- <20200310213050.si7gcr2wbmjgr7jf@earth.universe>
- <de919edb-79b3-82ec-f55c-31a127d6c751@ti.com>
-From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-Message-ID: <66b2ac86-8513-b540-8a2c-c2ebef4124dd@ti.com>
-Date:   Wed, 11 Mar 2020 11:43:00 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1730486AbgCKRVB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Mar 2020 13:21:01 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:36505 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730211AbgCKRVB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Mar 2020 13:21:01 -0400
+Received: by mail-wm1-f66.google.com with SMTP id g62so3044387wme.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Mar 2020 10:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SRfkpp8M+7DY995ACFm0LV6S5x+iBdswbTCPLyuUHNI=;
+        b=gOSVv67gnHdiMys+M2xzhT5wvai2z320rCOPgcpkhbLpV97jJhkGTuNoAzU4NUZhAo
+         D4palYQ2HwAZ0OS3zCphC/Z0UmVcpqQChJKRV5WtqbpmM2Kk7ou5Arh8pFC1dF14OA91
+         YvbixzwQXk0u70G8Vh3zfpM+OulqR1vgcCxX7taDdz9nUBV0g31sMZ8Zdkh6mRxlcsTs
+         k7ViITXmIF2ThUhrJgslCTsg0VI0hsyFU4EZ42e60p4lK9bRT13xdjNMu02BkpZZYGSu
+         25CT18gafLV+OXQYAtWsVnW1Dg750/te3dKsDP4gIz5GRrHCxF6Gkn1WB+iu3pXgLxlZ
+         kF8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SRfkpp8M+7DY995ACFm0LV6S5x+iBdswbTCPLyuUHNI=;
+        b=lI9SNDL1Mxly+P9rq+aVaSZw46s2y7R8aqxx+iTG+1AK0td0yFp2cUvszgX/Zj5MWZ
+         06FSi5CilXXHfCzacqwjlUB1clZDdezyBiwjHbe4r+iKFeH9BuIBMvRKTAj0Av+gN5Ye
+         MwD8yw307TYr6mvwgljDuR2fXAVzMEbSTSet4pwlNFqsZBrUezKeTulnj7kSooxK3tCG
+         XKAKo64W2PFrBxQAujb1Wd5LokutNtnS2EJR4uBCr4C+0r8HrTHvz6vYC3V3D4E5LSEe
+         id4NAHhE6QhcQXZsfpRSzqBTbRD0DRWtCrm1KL75ZeawxMzy7QXVMZ5HJOhwiAjSasrp
+         m8iA==
+X-Gm-Message-State: ANhLgQ2ymId3isdw3tbig/Ak4b7FiJJ5u20ngLDgKvHaTLDTjLAR/6qK
+        VaEMfIZ3uSrU1+4y5Njc29rMxw==
+X-Google-Smtp-Source: ADFU+vtyzrRH95ggJTx87H/Dqq0PyilzrpER8xm/uf21w2cDs3NqJfLQfLdt9s5fY783+V17fSdyig==
+X-Received: by 2002:a1c:a78a:: with SMTP id q132mr4716824wme.107.1583947259380;
+        Wed, 11 Mar 2020 10:20:59 -0700 (PDT)
+Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
+        by smtp.gmail.com with ESMTPSA id d18sm8611115wrq.22.2020.03.11.10.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2020 10:20:58 -0700 (PDT)
+Date:   Wed, 11 Mar 2020 17:20:56 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Tobias Schramm <t.schramm@manjaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] dt-bindings: power: supply: add cw2015_battery
+ bindings
+Message-ID: <20200311172056.wjn3574zrfqxipw6@holly.lan>
+References: <20200311093043.3636807-1-t.schramm@manjaro.org>
+ <20200311093043.3636807-3-t.schramm@manjaro.org>
 MIME-Version: 1.0
-In-Reply-To: <de919edb-79b3-82ec-f55c-31a127d6c751@ti.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200311093043.3636807-3-t.schramm@manjaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sebastian
+On Wed, Mar 11, 2020 at 10:30:42AM +0100, Tobias Schramm wrote:
+> This patch adds the dts binding schema for the cw2015 fuel gauge.
+> 
+> Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+> ---
+>  .../bindings/power/supply/cw2015_battery.yaml | 83 +++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml b/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
+> new file mode 100644
+> index 000000000000..647dbc6e136e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
+> @@ -0,0 +1,83 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/cw2015_battery.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Battery driver for CW2015 shuntless fule gauge by CellWise.
 
-On 3/11/20 6:29 AM, Dan Murphy wrote:
-> Sebastian
->
-> On 3/10/20 4:30 PM, Sebastian Reichel wrote:
->> Hi Sandeep,
->>
->> On Fri, Mar 06, 2020 at 03:55:48PM -0800, Sandeep Patil wrote:
->>> On Fri, Jan 17, 2020 at 02:06:58AM +0100, Sebastian Reichel wrote:
->>>> Hi,
->>>>
->>>> On Thu, Jan 16, 2020 at 11:50:37AM -0600, Dan Murphy wrote:
->>>>> Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
->>>>>
->>>>> Signed-off-by: Dan Murphy <dmurphy@ti.com>
->>>>> ---
->>>> Looks good. But I will not merge it without a user and have comments
->>>> for the driver.
->>> Android has been looking for these properties for a while now [1].
->>> It was added[2] when we saw that the manufacturers were implementing 
->>> these
->>> properties in the driver. I didn't know the properties were absent 
->>> upstream
->>> until yesterday. Somebody pointed out in our ongoing effort to make 
->>> sure
->>> all core kernel changes that android depends on are present upstream.
->>>
->>> I think those values are also propagated in application facing APIs in
->>> Android (but I am not sure yet, let me know if that's something you 
->>> want
->>> to find out).
->>>
->>> I wanted to chime in and present you a 'user' for this if that helps.
->> With user I meant an upstream kernel driver, which exposes the
->> values. But thanks for the pointer. This should be mentioned in
->> the patch description, also the fact that the status values are
->> directly taken from JEITA spec.
->
-> I mentioned the JEITA in the cover letter but I guess you would like 
-> the description in the commit message as well
->
-> Dan
->
->
-I have added a note mentioning that the properties are taken from the 
-JEITA spec in the commit message and listing the bq2515x_charger driver 
-as a user. I am waiting for feedback on my other patches in the series 
-before sending you v5 patches.
+s/fule/fuel/
 
-Ricardo
 
+> +
+> +maintainers:
+> +  - Tobias Schramm <t.schramm@manjaro.org>
+> +
+> +description: |
+> +  The driver can utilize information from a simple-battery linked via a
+> +  phandle in monitored-battery. If specified the driver uses the
+> +  charge-full-design-microamp-hours property of the battery.
+> +
+> +properties:
+> +  compatible:
+> +    const: cellwise,cw2015
+> +
+> +  reg:
+> +    items:
+> +      - description: i2c address
+> +
+> +  cellwise,battery-profile:
+> +    description: |
+> +      This property specifies characteristics of the battery used. The format
+> +      of this binary blob is kept secret by CellWise. The only way to obtain
+> +      it is to mail two batteries to a test facility of CellWise and receive
+> +      back a test report with the binary blob.
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#definitions/uint8-array
+> +    items:
+> +      - minItems: 64
+> +        maxItems: 64
+> +
+> +  cellwise,monitor-interval-ms:
+> +    description:
+> +      Specifies the interval in milliseconds gauge values are polled at
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  power-supplies:
+> +    description:
+> +      Specifies supplies used for charging the battery connected to this gauge
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/phandle-array
+> +      - minItems: 1
+> +        maxItems: 8 # Should be enough
+
+Is it necessary to set a maximum? power_supply.txt is still a text file
+but there is no mention of a maximum there.
+
+
+Daniel.
