@@ -2,83 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBC5180DFE
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 03:37:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44793180E6D
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 04:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727506AbgCKCfU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Mar 2020 22:35:20 -0400
-Received: from mga11.intel.com ([192.55.52.93]:55255 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727307AbgCKCfU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 10 Mar 2020 22:35:20 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Mar 2020 19:35:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,539,1574150400"; 
-   d="scan'208";a="415415067"
-Received: from orsmsx107.amr.corp.intel.com ([10.22.240.5])
-  by orsmga005.jf.intel.com with ESMTP; 10 Mar 2020 19:35:19 -0700
-Received: from orsmsx110.amr.corp.intel.com ([169.254.10.107]) by
- ORSMSX107.amr.corp.intel.com ([169.254.1.106]) with mapi id 14.03.0439.000;
- Tue, 10 Mar 2020 19:35:19 -0700
-From:   "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
-To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "currojerez@riseup.net" <currojerez@riseup.net>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
-CC:     "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>
-Subject: Re: [RFC] GPU-bound energy efficiency improvements for the
- intel_pstate driver (v2).
-Thread-Topic: [RFC] GPU-bound energy efficiency improvements for the
- intel_pstate driver (v2).
-Thread-Index: AQHV9yVeF22XkZfUYkCaOD2IBrMsDqhDInMA
-Date:   Wed, 11 Mar 2020 02:35:18 +0000
-Message-ID: <b8a09ef0c52dd02954b43b441dc3d1612837138c.camel@intel.com>
-References: <20200310214203.26459-1-currojerez@riseup.net>
-In-Reply-To: <20200310214203.26459-1-currojerez@riseup.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.3 (3.34.3-1.fc31) 
-x-originating-ip: [10.254.113.10]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3C1D5212DFBC1549AFB627D95300C7F3@intel.com>
-Content-Transfer-Encoding: base64
+        id S1727995AbgCKDYr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Mar 2020 23:24:47 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:36867 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727591AbgCKDYr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Mar 2020 23:24:47 -0400
+Received: by mail-vs1-f65.google.com with SMTP id o24so414680vsp.4
+        for <linux-pm@vger.kernel.org>; Tue, 10 Mar 2020 20:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0CaP0wmRgm/BeB7X7G0uC38j94dJCuNhBHwKXDeM8MY=;
+        b=CtPgrXa2cnSfiHSesbp0ZgIPKUi/e/8l6UQAKfhwBQeoYmLZENk2RTJeifkVDa4N2f
+         6TtIjeG759VrQk6UUS9OiVg5AhhTraLWaiYKRvJawx2Nu8X7hZSWYY36zxVFRzYyC/u9
+         CzSzh16ZRuZ92L+OvQ7dIu+0DnNo8kd2T144U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0CaP0wmRgm/BeB7X7G0uC38j94dJCuNhBHwKXDeM8MY=;
+        b=KLNTl3SlFDyUjkChaSFpSl33j+ASM1xjFJV6NS0OM0rEQyfVEAYaYZJ2ZjZQ6Yzcfo
+         5Mpbsw8fiXB5dlw7WWC3xijFmow0pTG8mEOQ1xuzzcjev/RjtvLP4xr8zQCy9PnLG8/D
+         wIzaz5d7cDa/D/WCM5P/E5cfz//rAfwwhf161EOJe85aJDABrXjEvlcblTHCQbWnIbu5
+         w/XHCy6mMyyB2hps0NSxUD47lyyjTIrbWbQY7VM0O/kefVd9KzhyN//p1ykgBJxLcy4M
+         61DN7OZJMB6Xm5mwpb+xkMEtvCxeOhFpbPRH4HtF/LJKDShYDGhxIUciMe3GxwFIWlbM
+         lZkA==
+X-Gm-Message-State: ANhLgQ2PK44lY+12h57bfHc+jMHgddU4uwUj1buc4uPxlxp46KyVEEHE
+        Q97DNAywXQqcFAOtxplxb9NRvhvL3RJMt/srxzcs5g==
+X-Google-Smtp-Source: ADFU+vvzY+bxois87ERnhOsmkCaLgyI2emx+UgxVfcr4o9pfSIalK4aZScMpftN+vS9C9nrgv5qWlZCt5m4WJIdzyeE=
+X-Received: by 2002:a67:3201:: with SMTP id y1mr765745vsy.54.1583897084227;
+ Tue, 10 Mar 2020 20:24:44 -0700 (PDT)
 MIME-Version: 1.0
+References: <1583835040-19157-1-git-send-email-hsin-hsiung.wang@mediatek.com> <1583835040-19157-4-git-send-email-hsin-hsiung.wang@mediatek.com>
+In-Reply-To: <1583835040-19157-4-git-send-email-hsin-hsiung.wang@mediatek.com>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Wed, 11 Mar 2020 11:24:33 +0800
+Message-ID: <CANMq1KDF32v-YnFRcz8BT6tnD0yq2OOBy9t-R09yA+4zNUZj3A@mail.gmail.com>
+Subject: Re: [PATCH v9 3/5] mfd: Add support for the MediaTek MT6358 PMIC
+To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <rfontana@redhat.com>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Ran Bi <ran.bi@mediatek.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-rtc@vger.kernel.org,
+        srv_heupstream <srv_heupstream@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gVHVlLCAyMDIwLTAzLTEwIGF0IDE0OjQxIC0wNzAwLCBGcmFuY2lzY28gSmVyZXogd3JvdGU6
-DQo+IA0KDQpbLi4uXQ0KDQo+IFRoYW5rcyBpbiBhZHZhbmNlIGZvciBhbnkgcmV2aWV3IGZlZWQt
-YmFjayBhbmQgdGVzdCByZXBvcnRzLg0KPiANCj4gW1BBVENIIDAxLzEwXSBQTTogUW9TOiBBZGQg
-Q1BVX1JFU1BPTlNFX0ZSRVFVRU5DWSBnbG9iYWwgUE0gUW9TDQo+IGxpbWl0Lg0KPiBbUEFUQ0gg
-MDIvMTBdIGRybS9pOTE1OiBBZGp1c3QgUE0gUW9TIHJlc3BvbnNlIGZyZXF1ZW5jeSBiYXNlZCBv
-biBHUFUNCj4gbG9hZC4NCj4gW1BBVENIIDAzLzEwXSBPUFRJT05BTDogZHJtL2k5MTU6IEV4cG9z
-ZSBQTSBRb1MgY29udHJvbCBwYXJhbWV0ZXJzDQo+IHZpYSBkZWJ1Z2ZzLg0KPiBbUEFUQ0ggMDQv
-MTBdIFJldmVydCAiY3B1ZnJlcTogaW50ZWxfcHN0YXRlOiBEcm9wIC0+dXBkYXRlX3V0aWwgZnJv
-bQ0KPiBwc3RhdGVfZnVuY3MiDQo+IFtQQVRDSCAwNS8xMF0gY3B1ZnJlcTogaW50ZWxfcHN0YXRl
-OiBJbXBsZW1lbnQgVkxQIGNvbnRyb2xsZXINCj4gc3RhdGlzdGljcyBhbmQgc3RhdHVzIGNhbGN1
-bGF0aW9uLg0KPiBbUEFUQ0ggMDYvMTBdIGNwdWZyZXE6IGludGVsX3BzdGF0ZTogSW1wbGVtZW50
-IFZMUCBjb250cm9sbGVyIHRhcmdldA0KPiBQLXN0YXRlIHJhbmdlIGVzdGltYXRpb24uDQo+IFtQ
-QVRDSCAwNy8xMF0gY3B1ZnJlcTogaW50ZWxfcHN0YXRlOiBJbXBsZW1lbnQgVkxQIGNvbnRyb2xs
-ZXIgZm9yIEhXUA0KPiBwYXJ0cy4NCj4gW1BBVENIIDA4LzEwXSBjcHVmcmVxOiBpbnRlbF9wc3Rh
-dGU6IEVuYWJsZSBWTFAgY29udHJvbGxlciBiYXNlZCBvbg0KPiBBQ1BJIEZBRFQgcHJvZmlsZSBh
-bmQgQ1BVSUQuDQo+IFtQQVRDSCAwOS8xMF0gT1BUSU9OQUw6IGNwdWZyZXE6IGludGVsX3BzdGF0
-ZTogQWRkIHRyYWNpbmcgb2YgVkxQDQo+IGNvbnRyb2xsZXIgc3RhdHVzLg0KPiBbUEFUQ0ggMTAv
-MTBdIE9QVElPTkFMOiBjcHVmcmVxOiBpbnRlbF9wc3RhdGU6IEV4cG9zZSBWTFAgY29udHJvbGxl
-cg0KPiBwYXJhbWV0ZXJzIHZpYSBkZWJ1Z2ZzLg0KPiANCkRvIHlvdSBoYXZlIGRlYnVnIHBhdGNo
-IChZb3UgZG9uJ3QgdG8gc3VibWl0IGFzIGEgcGF0Y2gpLCB3aGljaCB3aWxsDQphbGxvdyBtZSB0
-byBkeW5hbWljYWxseSBkaXNhYmxlL2VuYWJsZSBhbGwgdGhlc2UgY2hhbmdlcz8gSSB3YW50IHRv
-DQpjb21wYXJlIGFuZCBkbyBzb21lIG1lYXN1cmVtZW50cy4NCg0KVGhhbmtzLA0KU3Jpbml2YXMg
-DQoNCj4gWzFdIGh0dHBzOi8vbWFyYy5pbmZvLz9sPWxpbnV4LXBtJm09MTUyMjIxOTQzMzIwOTA4
-Jnc9Mg0KPiBbMl0gDQo+IGh0dHBzOi8vZ2l0aHViLmNvbS9jdXJyby9saW51eC9jb21taXRzL2lu
-dGVsX3BzdGF0ZS12bHAtdjItaHdwLW9ubHkNCj4gWzNdIGh0dHBzOi8vZ2l0aHViLmNvbS9jdXJy
-by9saW51eC9jb21taXRzL2ludGVsX3BzdGF0ZS12bHAtdjINCj4gWzRdIA0KPiBodHRwOi8vcGVv
-cGxlLmZyZWVkZXNrdG9wLm9yZy9+Y3Vycm9qZXJlei9pbnRlbF9wc3RhdGUtdmxwLXYyL2JlbmNo
-bWFyay1jb21wYXJpc29uLUlDTC5sb2cNCj4gDQo=
+Thanks, much better. Just one issue left.
+
+On Tue, Mar 10, 2020 at 6:10 PM Hsin-Hsiung Wang
+<hsin-hsiung.wang@mediatek.com> wrote:
+>
+> This adds support for the MediaTek MT6358 PMIC. This is a
+> multifunction device with the following sub modules:
+>
+> - Regulator
+> - RTC
+> - Codec
+> - Interrupt
+>
+> It is interfaced to the host controller using SPI interface
+> by a proprietary hardware called PMIC wrapper or pwrap.
+> MT6358 MFD is a child device of the pwrap.
+>
+> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+> ---
+>  drivers/mfd/Makefile                 |   2 +-
+>  drivers/mfd/mt6358-irq.c             | 238 +++++++++++++++++++++++++++++
+>  drivers/mfd/mt6397-core.c            |  55 ++++++-
+>  include/linux/mfd/mt6358/core.h      | 158 ++++++++++++++++++++
+>  include/linux/mfd/mt6358/registers.h | 282 +++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/mt6397/core.h      |   3 +
+>  6 files changed, 733 insertions(+), 5 deletions(-)
+>  create mode 100644 drivers/mfd/mt6358-irq.c
+>  create mode 100644 include/linux/mfd/mt6358/core.h
+>  create mode 100644 include/linux/mfd/mt6358/registers.h
+>
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index b83f172..9af1414 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -238,7 +238,7 @@ obj-$(CONFIG_INTEL_SOC_PMIC)        += intel-soc-pmic.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)     += intel_soc_pmic_bxtwc.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)     += intel_soc_pmic_chtwc.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)  += intel_soc_pmic_chtdc_ti.o
+> -mt6397-objs    := mt6397-core.o mt6397-irq.o
+> +mt6397-objs                    := mt6397-core.o mt6397-irq.o mt6358-irq.o
+>  obj-$(CONFIG_MFD_MT6397)       += mt6397.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_MRFLD)     += intel_soc_pmic_mrfld.o
+>
+> diff --git a/drivers/mfd/mt6358-irq.c b/drivers/mfd/mt6358-irq.c
+> new file mode 100644
+> index 0000000..0b99a39
+> --- /dev/null
+> +++ b/drivers/mfd/mt6358-irq.c
+> @@ -0,0 +1,238 @@
+> [snip]
+> +static irqreturn_t mt6358_irq_handler(int irq, void *data)
+> +{
+> +       struct mt6397_chip *chip = data;
+> +       struct pmic_irq_data *mt6358_irq_data = chip->irq_data;
+> +       unsigned int bit, i, top_irq_status;
+> +       int ret;
+> +
+> +       ret = regmap_read(chip->regmap,
+> +                         mt6358_irq_data->top_int_status_reg,
+> +                         &top_irq_status);
+> +       if (ret) {
+> +               dev_err(chip->dev,
+> +                       "Failed to read status from the device, ret=%d\n", ret);
+> +               return IRQ_NONE;
+> +       }
+> +
+> +       for (i = 0; i < mt6358_irq_data->num_top; i++) {
+> +               for (i = 0; i < mt6358_irq_data->num_top; i++) {
+
+Only one loop needed.
+
+> +                       bit = BIT(mt6358_ints[i].top_offset);
+> +                       if (top_irq_status & bit) {
+> +                               mt6358_irq_sp_handler(chip, i);
+> +                               top_irq_status &= ~bit;
+> +                               if (!top_irq_status)
+> +                                       break;
+> +                       }
+> +               }
+> +       }
+> +
+> +       return IRQ_HANDLED;
+> +}
+> +
+> +static int pmic_irq_domain_map(struct irq_domain *d, unsigned int irq,
+> +                              irq_hw_number_t hw)
+> +{
+> +       struct mt6397_chip *mt6397 = d->host_data;
+> +
+> +       irq_set_chip_data(irq, mt6397);
+> +       irq_set_chip_and_handler(irq, &mt6358_irq_chip, handle_level_irq);
+> +       irq_set_nested_thread(irq, 1);
+> +       irq_set_noprobe(irq);
+> +
+> +       return 0;
+> +}
+> [snip]
