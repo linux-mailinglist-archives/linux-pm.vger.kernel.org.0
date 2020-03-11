@@ -2,165 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BAE1812E6
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 09:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 953131812EF
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 09:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728547AbgCKI1L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Mar 2020 04:27:11 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:39477 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728554AbgCKI1L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Mar 2020 04:27:11 -0400
-Received: by mail-lj1-f194.google.com with SMTP id f10so1293566ljn.6
-        for <linux-pm@vger.kernel.org>; Wed, 11 Mar 2020 01:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NWQU7YCcR/s5BfakGwEM5MbP1hNswxlqWffpTanXogY=;
-        b=J2DX4Bveq98DNDNLQytIzyqNO5U/1AlZAea10CrmXpFd7AVX90yX5Tdtt+c1ZwmWBZ
-         fnvYHqNq/BJufaeH84JB+sQjUiXLFXeaTifVEvrmHuiDonL/w9rW4NDoo9gCju2Dl/uo
-         92ROgYAY+nNd2sqIH4YekmH8HwlZ6JuBBRQsWxmOiiilOB9ivaFB5mgwNHFSOq6GqvmG
-         XYAEumikhY4sYyW8zmTqNh2JpUimiMOYo4K1+CWkHjkpq5kQobVPWERlz52TuW7OzqND
-         D5qGNapWdFpE4kihUbV51Sbe3VJveaBctzaZgQREo6+0ZclVJVf1bdwNSMkGk2rPCgpc
-         fFEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NWQU7YCcR/s5BfakGwEM5MbP1hNswxlqWffpTanXogY=;
-        b=ZfLQVZ9pnUvf/WVtym7JMmdRCi31pMte5K1XI39tF9rHGoaL8KK41vXayvdGeyq94i
-         BqcHMypqyr44efLvCzLoBkt2KFxHpJZhRt39Re4koLtebAcrDqWSO5iG77xZyu+mWMF5
-         a90/vvIO/u/FrM0OcyWaGSz6OjvRhqTtKSuecavWwbLk5kWjjiCgDZxk3AcIOZn6C1v6
-         gf+iQgODUh0pR+IiAZqyAUCynxnt39aCg34OJkes0KVrMUbQTDlEyg+jrDbHFEFIkRV2
-         NV1M+5GDFWTHVHoKF1xqz5bhEwhHsOqfdXnX01FPQf3rI2/M8KTxUeRtfvoCGdIllTy4
-         wgLQ==
-X-Gm-Message-State: ANhLgQ2v7OtTYw00pdwUI1qyGpJV3VBPt8hH43mljqZasstM011AW7It
-        9tjBBZNBv9b6kZYNQiSIKB84+MX+QKiBf3f2yqRWnA==
-X-Google-Smtp-Source: ADFU+vvaBLQx0v3t5e1U81RlRAcTudqkB2UQUvNAnj10TA+zBwZty+uumu0htJHaLHRRaMeDZa+YsS6rF0AAu8Ma6cs=
-X-Received: by 2002:a2e:a0cc:: with SMTP id f12mr1365444ljm.154.1583915228511;
- Wed, 11 Mar 2020 01:27:08 -0700 (PDT)
+        id S1728146AbgCKIbA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Mar 2020 04:31:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55944 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726198AbgCKIbA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 11 Mar 2020 04:31:00 -0400
+Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C91AC20848;
+        Wed, 11 Mar 2020 08:30:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583915459;
+        bh=rIWT9c23MTBVlaTh1Eb6lpf59lA1osIAXiNlIrkeg/U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PmrV3SBmAO/5xRR+ybHP68yc0R7xxRl/oaiqY1r4hJ8wa9wRJUgPn1CQKEA9GHKVi
+         UA9LjjCVNtrwB+IJCS7PWZOgeeI5Br2yGlnux0CRVoPfmpPJkdPRvYXPkXeCwcZI1s
+         /cxWTtSI/ddBabdOgeSrp1Hzg7Vwmg6IJtKTd9Fk=
+Date:   Wed, 11 Mar 2020 16:30:52 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     peng.fan@nxp.com
+Cc:     viresh.kumar@linaro.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        Anson.Huang@nxp.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] ARM: dts: imx: add nvmem property for cpu0
+Message-ID: <20200311083052.GD29269@dragon>
+References: <1583201690-16068-1-git-send-email-peng.fan@nxp.com>
+ <1583201690-16068-2-git-send-email-peng.fan@nxp.com>
 MIME-Version: 1.0
-References: <cover.1583412540.git.amit.kucheria@linaro.org> <93466e6c031c0084de09bd6b448556a6c5080880.1583412540.git.amit.kucheria@linaro.org>
-In-Reply-To: <93466e6c031c0084de09bd6b448556a6c5080880.1583412540.git.amit.kucheria@linaro.org>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 11 Mar 2020 09:26:56 +0100
-Message-ID: <CAKfTPtBXaVww5fdU5HpWWH1-H3dKr2s=Uvdr==wf669BtKnyvQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: thermal: Add yaml bindings for
- thermal sensors
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1583201690-16068-2-git-send-email-peng.fan@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 5 Mar 2020 at 13:56, Amit Kucheria <amit.kucheria@linaro.org> wrote:
->
-> As part of moving the thermal bindings to YAML, split it up into 3
-> bindings: thermal sensors, cooling devices and thermal zones.
->
-> The property #thermal-sensor-cells is required in each device that acts
-> as a thermal sensor. It is used to uniquely identify the instance of the
-> thermal sensor inside the system.
->
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+On Tue, Mar 03, 2020 at 10:14:48AM +0800, peng.fan@nxp.com wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add nvmem related property for cpu0, then nvmem API could be used
+> to read cpu speed grading to avoid directly read OCOTP registers
+> mapped which could not handle defer probe.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  .../bindings/thermal/thermal-sensor.yaml      | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
->
-> diff --git a/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml b/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
-> new file mode 100644
-> index 0000000000000..920ee7667591d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
-> @@ -0,0 +1,72 @@
-> +# SPDX-License-Identifier: (GPL-2.0)
-> +# Copyright 2020 Linaro Ltd.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/thermal-sensor.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  arch/arm/boot/dts/imx6dl.dtsi  | 2 ++
+>  arch/arm/boot/dts/imx6q.dtsi   | 2 ++
+>  arch/arm/boot/dts/imx6qdl.dtsi | 7 +++++++
+>  arch/arm/boot/dts/imx6sl.dtsi  | 9 +++++++++
+>  arch/arm/boot/dts/imx6sll.dtsi | 6 ++++++
+>  arch/arm/boot/dts/imx6sx.dtsi  | 6 ++++++
+>  6 files changed, 32 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/imx6dl.dtsi b/arch/arm/boot/dts/imx6dl.dtsi
+> index 4b3a128d9260..055f1d875bac 100644
+> --- a/arch/arm/boot/dts/imx6dl.dtsi
+> +++ b/arch/arm/boot/dts/imx6dl.dtsi
+> @@ -44,6 +44,8 @@
+>  			arm-supply = <&reg_arm>;
+>  			pu-supply = <&reg_pu>;
+>  			soc-supply = <&reg_soc>;
+> +			nvmem-cells = <&cpu_speed_grade>;
+> +			nvmem-cell-names = "speed_grade";
+>  		};
+>  
+>  		cpu@1 {
+> diff --git a/arch/arm/boot/dts/imx6q.dtsi b/arch/arm/boot/dts/imx6q.dtsi
+> index 0fad13f9d336..d3ba9d4a1290 100644
+> --- a/arch/arm/boot/dts/imx6q.dtsi
+> +++ b/arch/arm/boot/dts/imx6q.dtsi
+> @@ -49,6 +49,8 @@
+>  			arm-supply = <&reg_arm>;
+>  			pu-supply = <&reg_pu>;
+>  			soc-supply = <&reg_soc>;
+> +			nvmem-cells = <&cpu_speed_grade>;
+> +			nvmem-cell-names = "speed_grade";
+>  		};
+>  
+>  		cpu1: cpu@1 {
+> diff --git a/arch/arm/boot/dts/imx6qdl.dtsi b/arch/arm/boot/dts/imx6qdl.dtsi
+> index 70fb8b56b1d7..982f546b0b89 100644
+> --- a/arch/arm/boot/dts/imx6qdl.dtsi
+> +++ b/arch/arm/boot/dts/imx6qdl.dtsi
+> @@ -1165,6 +1165,13 @@
+>  				compatible = "fsl,imx6q-ocotp", "syscon";
+>  				reg = <0x021bc000 0x4000>;
+>  				clocks = <&clks IMX6QDL_CLK_IIM>;
 > +
-> +title: Thermal sensor binding
-> +
-> +maintainers:
-> +  - Amit Kucheria <amitk@kernel.org>
-> +
-> +description: |
-> +  Thermal management is achieved in devicetree by describing the sensor hardware
-> +  and the software abstraction of thermal zones required to take appropriate
-> +  action to mitigate thermal overloads.
-> +
-> +  The following node types are used to completely describe a thermal management
-> +  system in devicetree:
-> +   - thermal-sensor: device that measures temperature, has SoC-specific bindings
-> +   - cooling-device: device used to dissipate heat either passively or artively
 
-typo: s/artively/actively/
+Please drop such newline.  Do not really think they are necessary.
 
-> +   - thermal-zones: a container of the following node types used to describe all
-> +     thermal data for the platform
+Shawn
+
+> +				#address-cells = <1>;
+> +				#size-cells = <1>;
 > +
-> +  This binding describes the thermal-sensor.
+> +				cpu_speed_grade: speed-grade@10 {
+> +					reg = <0x10 4>;
+> +				};
+>  			};
+>  
+>  			tzasc@21d0000 { /* TZASC1 */
+> diff --git a/arch/arm/boot/dts/imx6sl.dtsi b/arch/arm/boot/dts/imx6sl.dtsi
+> index c8ec46fe8302..de943341e4f2 100644
+> --- a/arch/arm/boot/dts/imx6sl.dtsi
+> +++ b/arch/arm/boot/dts/imx6sl.dtsi
+> @@ -74,6 +74,8 @@
+>  			arm-supply = <&reg_arm>;
+>  			pu-supply = <&reg_pu>;
+>  			soc-supply = <&reg_soc>;
+> +			nvmem-cells = <&cpu_speed_grade>;
+> +			nvmem-cell-names = "speed_grade";
+>  		};
+>  	};
+>  
+> @@ -953,6 +955,13 @@
+>  				compatible = "fsl,imx6sl-ocotp", "syscon";
+>  				reg = <0x021bc000 0x4000>;
+>  				clocks = <&clks IMX6SL_CLK_OCOTP>;
 > +
-> +  Thermal sensor devices provide temperature sensing capabilities on thermal
-> +  zones. Typical devices are I2C ADC converters and bandgaps. Thermal sensor
-> +  devices may control one or more internal sensors.
+> +				#address-cells = <1>;
+> +				#size-cells = <1>;
 > +
-> +properties:
-> +  "#thermal-sensor-cells":
-> +    description:
-> +      Used to uniquely identify a thermal sensor instance within an IC. Will be
-> +      0 on sensor nodes with only a single sensor and at least 1 on nodes
-> +      containing several internal sensors.
-> +    enum: [0, 1]
+> +				cpu_speed_grade: speed-grade@10 {
+> +					reg = <0x10 4>;
+> +				};
+>  			};
+>  
+>  			audmux: audmux@21d8000 {
+> diff --git a/arch/arm/boot/dts/imx6sll.dtsi b/arch/arm/boot/dts/imx6sll.dtsi
+> index 797f850492fe..6b7fb3cec9f6 100644
+> --- a/arch/arm/boot/dts/imx6sll.dtsi
+> +++ b/arch/arm/boot/dts/imx6sll.dtsi
+> @@ -72,6 +72,8 @@
+>  				 <&clks IMX6SLL_CLK_PLL1_SYS>;
+>  			clock-names = "arm", "pll2_pfd2_396m", "step",
+>  				      "pll1_sw", "pll1_sys";
+> +			nvmem-cells = <&cpu_speed_grade>;
+> +			nvmem-cell-names = "speed_grade";
+>  		};
+>  	};
+>  
+> @@ -791,6 +793,10 @@
+>  				reg = <0x021bc000 0x4000>;
+>  				clocks = <&clks IMX6SLL_CLK_OCOTP>;
+>  
+> +				cpu_speed_grade: speed-grade@10 {
+> +					reg = <0x10 4>;
+> +				};
 > +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  				tempmon_calib: calib@38 {
+>  					reg = <0x38 4>;
+>  				};
+> diff --git a/arch/arm/boot/dts/imx6sx.dtsi b/arch/arm/boot/dts/imx6sx.dtsi
+> index e47d346a3543..63aa19d81b42 100644
+> --- a/arch/arm/boot/dts/imx6sx.dtsi
+> +++ b/arch/arm/boot/dts/imx6sx.dtsi
+> @@ -87,6 +87,8 @@
+>  				      "pll1_sw", "pll1_sys";
+>  			arm-supply = <&reg_arm>;
+>  			soc-supply = <&reg_soc>;
+> +			nvmem-cells = <&cpu_speed_grade>;
+> +			nvmem-cell-names = "speed_grade";
+>  		};
+>  	};
+>  
+> @@ -1058,6 +1060,10 @@
+>  				reg = <0x021bc000 0x4000>;
+>  				clocks = <&clks IMX6SX_CLK_OCOTP>;
+>  
+> +				cpu_speed_grade: speed-grade@10 {
+> +					reg = <0x10 4>;
+> +				};
 > +
-> +    // Example 1: SDM845 TSENS
-> +    soc: soc@0 {
-> +            #address-cells = <2>;
-> +            #size-cells = <2>;
-> +
-> +            /* ... */
-> +
-> +            tsens0: thermal-sensor@c263000 {
-> +                    compatible = "qcom,sdm845-tsens", "qcom,tsens-v2";
-> +                    reg = <0 0x0c263000 0 0x1ff>, /* TM */
-> +                          <0 0x0c222000 0 0x1ff>; /* SROT */
-> +                    #qcom,sensors = <13>;
-> +                    interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>,
-> +                                 <GIC_SPI 508 IRQ_TYPE_LEVEL_HIGH>;
-> +                    interrupt-names = "uplow", "critical";
-> +                    #thermal-sensor-cells = <1>;
-> +            };
-> +
-> +            tsens1: thermal-sensor@c265000 {
-> +                    compatible = "qcom,sdm845-tsens", "qcom,tsens-v2";
-> +                    reg = <0 0x0c265000 0 0x1ff>, /* TM */
-> +                          <0 0x0c223000 0 0x1ff>; /* SROT */
-> +                    #qcom,sensors = <8>;
-> +                    interrupts = <GIC_SPI 507 IRQ_TYPE_LEVEL_HIGH>,
-> +                                 <GIC_SPI 509 IRQ_TYPE_LEVEL_HIGH>;
-> +                    interrupt-names = "uplow", "critical";
-> +                    #thermal-sensor-cells = <1>;
-> +            };
-> +    };
-> +...
-> --
-> 2.20.1
->
+>  				tempmon_calib: calib@38 {
+>  					reg = <0x38 4>;
+>  				};
+> -- 
+> 2.16.4
+> 
