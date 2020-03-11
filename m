@@ -2,86 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C8D181026
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 06:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E114181055
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 07:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725813AbgCKFkB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 11 Mar 2020 01:40:01 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:44424 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726808AbgCKFj7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Mar 2020 01:39:59 -0400
-Received: from mail-pf1-f198.google.com ([209.85.210.198])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1jBu60-00010r-MO
-        for linux-pm@vger.kernel.org; Wed, 11 Mar 2020 05:39:56 +0000
-Received: by mail-pf1-f198.google.com with SMTP id n28so631763pfq.4
-        for <linux-pm@vger.kernel.org>; Tue, 10 Mar 2020 22:39:56 -0700 (PDT)
+        id S1726713AbgCKGDh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Mar 2020 02:03:37 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:33422 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725958AbgCKGDg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Mar 2020 02:03:36 -0400
+Received: by mail-pj1-f65.google.com with SMTP id o21so1133353pjs.0
+        for <linux-pm@vger.kernel.org>; Tue, 10 Mar 2020 23:03:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zKMeRF7HddfnHVb8kWv4OBPengz0IeuN3e5fJnxthh4=;
+        b=XY/Wn/PtObZyN+lUZ0ITV6i54XXummuNQunhHm89lzSahh96SL/vERmPc5DQ13Oxdr
+         rX9EFR2Vu0qciNxUbD4Gy2F+6xaVPnp0Q1CHBeOhco8qhPdXAX35rWc9w+w05/J9dcmq
+         MyYz1ZNma8kkOdAF7d8HY2nGgg9Hp+n6QQQzfErjgYsmTBvqTXjuVOtwwAhFuS2GK0nt
+         MM/Q8ZyhQ0lbShT8+DX/YmjscF0JEO7KHOlN4L8MbcFgdD5rhHDm+m+oUEg0ktaDVehi
+         dia4FG7fmZ0bp8XqcThxy5zkJgqwAekU+OU90QhNkJ0YBMsy7atRMBx91QEEnLsJbaF0
+         IQmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:content-transfer-encoding:mime-version
-         :subject:message-id:date:cc:to;
-        bh=AOCeiUbKOe352C/aohVtyBG5IWxGKuU4vLbtikjfpHA=;
-        b=aipPBGOMPonMqFlMOWQplWVqgwlfWDE5snv3dQURiJN8ypglGoIvH9/kiQMlEjwJmC
-         DCiJ99tJtSPBQ94/P44coklCcqUGZxZ2rEUnTaKVccV7ZRaMY4GdBJQETcoYopWzefwd
-         VEPeZPxpNzAlIo2q8AEtUIB8ZgI7CjWkFOAohBUUGLyilpmMbgQlNvbsjSvxzxcqmP6w
-         WcehzuifRFvhRqUNNIeatAt7LvYATKeybQKXlmARE+76dEeBtuL27p9+5xNrDLJ27+ra
-         n7gQILSBTBxtrfbGpHJSdfEpGYoOee8rjcgZdLGJ1HdpthTiftPAdoAey79WctwEWYxK
-         FXrw==
-X-Gm-Message-State: ANhLgQ31aRQGDv/gf0/E7UPzpOZN08ekbgIgO0AheugBDu2ceKRcyb61
-        VHv4fH46o60y1UQG903IHjDYB7Z3NalhbKpE6lzi+IjqGTNT6KZpl2omywb9j53NnlobeMGpzgW
-        6+NoRbtqr/OQfh/Cn4aC5PqvwEuj9rsUP9V38
-X-Received: by 2002:a17:90a:8806:: with SMTP id s6mr1648155pjn.141.1583905195077;
-        Tue, 10 Mar 2020 22:39:55 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vt0a0SUxBe1e595qJlnWjlfrE18/8t7FWXJGpvnpzzGvSDiyrJbMuT65nTcOkYcr2N4wbWcUw==
-X-Received: by 2002:a17:90a:8806:: with SMTP id s6mr1648127pjn.141.1583905194644;
-        Tue, 10 Mar 2020 22:39:54 -0700 (PDT)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id p7sm38408052pfb.135.2020.03.10.22.39.52
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zKMeRF7HddfnHVb8kWv4OBPengz0IeuN3e5fJnxthh4=;
+        b=E3TtXhDGi5U4Gu/FcUEmQM/2Rv06rbShVbehn2xbYWfz2HuBqkECrNFt+J5fMNx0VB
+         mNRY9HJwfQtAXju9LDz/TXipH+YV7gifPO3fkmXNSwxlouNKir8K3CxvFav4uZpUPN20
+         J2aL55fQ0E30cUZtKu+BX9f9OGc7J8qNpWvR5dGVbppCvIdqxRSc7XEYHeyb8EB4fqGf
+         jArvGUqFWEe6v8fFoLxTQy9MHooUmKAnGvgqYqE04mxZVIOg5pnGb5aE337ONoT75+o8
+         HXkhdTb4q8cRD+CJoYxAyz40bkdzFoPGIv8ahClaCrGBJdMTNlOeZZauHKVUGKQ55eKV
+         OfDw==
+X-Gm-Message-State: ANhLgQ3st08vNPSpDNPBpwEgVQTVIPsdeQ4/wae1SmIKD2ijIypEfNJr
+        Egly36b3y+9SpSwwQYxqOPS1jw==
+X-Google-Smtp-Source: ADFU+vv2VGjfxeyu1ttxNqb7u11XkmIE28Oo4Hsp+hyTV5zUueINr9oVpMPKaqCQ7o66UFKyy/Iirg==
+X-Received: by 2002:a17:90a:32c1:: with SMTP id l59mr1766500pjb.36.1583906613321;
+        Tue, 10 Mar 2020 23:03:33 -0700 (PDT)
+Received: from localhost ([122.171.122.128])
+        by smtp.gmail.com with ESMTPSA id x72sm11377214pfc.156.2020.03.10.23.03.32
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 Mar 2020 22:39:54 -0700 (PDT)
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: 8BIT
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3608.60.0.2.5\))
-Subject: Thunderbolt, direct-complete and long suspend/resume time of
- Suspend-to-idle
-Message-Id: <02700895-048F-4EA1-9E18-4883E83AE210@canonical.com>
-Date:   Wed, 11 Mar 2020 13:39:51 +0800
-Cc:     "Shih-Yuan Lee (FourDollars)" <sylee@canonical.com>,
-        Tiffany <tiffany.wang@canonical.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-To:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-X-Mailer: Apple Mail (2.3608.60.0.2.5)
+        Tue, 10 Mar 2020 23:03:32 -0700 (PDT)
+Date:   Wed, 11 Mar 2020 11:33:30 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     rjw@rjwysocki.net, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, abel.vesa@nxp.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Linux-imx@nxp.com
+Subject: Re: [PATCH] cpufreq: imx-cpufreq-dt: Correct i.MX8MP's market
+ segment fuse location
+Message-ID: <20200311060330.ecvdlvflahdbptsi@vireshk-i7>
+References: <1583819296-7763-1-git-send-email-Anson.Huang@nxp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1583819296-7763-1-git-send-email-Anson.Huang@nxp.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 10-03-20, 13:48, Anson Huang wrote:
+> i.MX8MP's market segment fuse field is bit[6:5], correct it.
+> 
+> Fixes: 83fe39ad0a48 ("cpufreq: imx-cpufreq-dt: Add i.MX8MP support")
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+>  drivers/cpufreq/imx-cpufreq-dt.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/imx-cpufreq-dt.c b/drivers/cpufreq/imx-cpufreq-dt.c
+> index 0e29d88..de206d2 100644
+> --- a/drivers/cpufreq/imx-cpufreq-dt.c
+> +++ b/drivers/cpufreq/imx-cpufreq-dt.c
+> @@ -19,6 +19,8 @@
+>  #define IMX8MN_OCOTP_CFG3_SPEED_GRADE_MASK	(0xf << 8)
+>  #define OCOTP_CFG3_MKT_SEGMENT_SHIFT    6
+>  #define OCOTP_CFG3_MKT_SEGMENT_MASK     (0x3 << 6)
+> +#define IMX8MP_OCOTP_CFG3_MKT_SEGMENT_SHIFT    5
+> +#define IMX8MP_OCOTP_CFG3_MKT_SEGMENT_MASK     (0x3 << 5)
+>  
+>  /* cpufreq-dt device registered by imx-cpufreq-dt */
+>  static struct platform_device *cpufreq_dt_pdev;
+> @@ -45,7 +47,13 @@ static int imx_cpufreq_dt_probe(struct platform_device *pdev)
+>  	else
+>  		speed_grade = (cell_value & OCOTP_CFG3_SPEED_GRADE_MASK)
+>  			      >> OCOTP_CFG3_SPEED_GRADE_SHIFT;
+> -	mkt_segment = (cell_value & OCOTP_CFG3_MKT_SEGMENT_MASK) >> OCOTP_CFG3_MKT_SEGMENT_SHIFT;
+> +
+> +	if (of_machine_is_compatible("fsl,imx8mp"))
+> +		mkt_segment = (cell_value & IMX8MP_OCOTP_CFG3_MKT_SEGMENT_MASK)
+> +			       >> IMX8MP_OCOTP_CFG3_MKT_SEGMENT_SHIFT;
+> +	else
+> +		mkt_segment = (cell_value & OCOTP_CFG3_MKT_SEGMENT_MASK)
+> +			       >> OCOTP_CFG3_MKT_SEGMENT_SHIFT;
+>  
+>  	/*
+>  	 * Early samples without fuses written report "0 0" which may NOT
+> -- 
 
-I am currently investigating long suspend and resume time of suspend-to-idle.
-It's because Thunderbolt bridges need to wait for 1100ms [1] for runtime-resume on system suspend, and also for system resume.
+Applied. Thanks.
 
-I made a quick hack to the USB driver and xHCI driver to support direct-complete, but I failed to do so for the parent PCIe bridge as it always disables the direct-complete [2], since device_may_wakeup() returns true for the device:
-
-	/* Avoid direct_complete to let wakeup_path propagate. */
-		if (device_may_wakeup(dev) || dev->power.wakeup_path)
-			dev->power.direct_complete = false;
-
-Once the direct-complete is disabled, system suspend/resume is used hence the delay in [1] is making the resume really slow. 
-So how do we make suspend-to-idle faster? I have some ideas but I am not sure if they are feasible:
-- Make PM core know the runtime_suspend() already use the same wakeup as suspend(), so it doesn't need to use device_may_wakeup() check to determine direct-complete.
-- Remove the DPM_FLAG_NEVER_SKIP flag in pcieport driver, and use pm_request_resume() in its complete() callback to prevent blocking the resume process.
-- Reduce the 1100ms delay. Maybe someone knows the values used in macOS and Windows...
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/pci.c#n4621
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/power/main.c#n1748
-
-Kai-Heng
+-- 
+viresh
