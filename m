@@ -2,107 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCBD18249B
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 23:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290E31824BA
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 23:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729626AbgCKWS7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Mar 2020 18:18:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53112 "EHLO mail.kernel.org"
+        id S1729870AbgCKWXK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Mar 2020 18:23:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56518 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729328AbgCKWS7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 11 Mar 2020 18:18:59 -0400
+        id S1729506AbgCKWXK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 11 Mar 2020 18:23:10 -0400
 Received: from jupiter.universe (dyndsl-037-138-186-138.ewe-ip-backbone.de [37.138.186.138])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B08C520575;
-        Wed, 11 Mar 2020 22:18:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 575762074F;
+        Wed, 11 Mar 2020 22:23:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583965138;
-        bh=uN0EJfxB926vAIL9U8wcBm3Xwf+Zv5Hg2uC/q6DUe9I=;
+        s=default; t=1583965389;
+        bh=kYAYe7rvFYpsfEZhSQulLoAH7GNlApiSAp32ZQAPNws=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vvmzBbVCrsuXf7GEoXVgARY7+LxGRp6ukQN+JzzKg+RfYKTd7NDdV6fbJGD4Q+4Zb
-         xWKdD5CeKU42P2oeJ1nj+Ky/9eean8XAc1UuHq81tXfBQe94lqBOkB91NzAvkiiJ/B
-         bV9uPoi7/fHACmzCs5MJdM5Mudlvm61dEvlufJJs=
+        b=Ua3j/5yQYxywGt4+z+NzcnktKXxTHcwQmvZ2o8AJFXy3XxrVRi5cWJL6RoqLHkIIU
+         iVXF9b1mq7Uy6mbNa9S4Ep1u5UGFE0yhAx/BTI/24yDZQtjCf1Dqh9y9YL1RnPQX6b
+         PknAq++W1R3wMFU2trebjPgwlYiEW+fPOk2Cs2z8=
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id CD0E24800FC; Wed, 11 Mar 2020 23:18:56 +0100 (CET)
-Date:   Wed, 11 Mar 2020 23:18:56 +0100
+        id 82A714800FC; Wed, 11 Mar 2020 23:23:07 +0100 (CET)
+Date:   Wed, 11 Mar 2020 23:23:07 +0100
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Baolin Wang <baolin.wang7@gmail.com>
-Cc:     Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] power: supply: Allow charger manager can be built as
- a module
-Message-ID: <20200311221856.yh2vr3fybwm3krfc@jupiter.universe>
-References: <5e098be25c70e07c37e743f84a901f6f756090e0.1583461755.git.baolin.wang7@gmail.com>
- <20200306204712.dgomi52jzyakylky@earth.universe>
- <CADBw62owL-G_B7pU87sH2U+0vCNEG9rkMRpHZXL5_9YZcvQfxg@mail.gmail.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: twl4030: Use scnprintf() for avoiding potential
+ buffer overflow
+Message-ID: <20200311222307.bmj7e5fzxmhfvzp5@jupiter.universe>
+References: <20200311090818.20797-1-tiwai@suse.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ajojohcuwaygc775"
+        protocol="application/pgp-signature"; boundary="jwmb5qa3gisdthfp"
 Content-Disposition: inline
-In-Reply-To: <CADBw62owL-G_B7pU87sH2U+0vCNEG9rkMRpHZXL5_9YZcvQfxg@mail.gmail.com>
+In-Reply-To: <20200311090818.20797-1-tiwai@suse.de>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ajojohcuwaygc775
+--jwmb5qa3gisdthfp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Mar 09, 2020 at 11:20:41AM +0800, Baolin Wang wrote:
-> On Sat, Mar 7, 2020 at 4:47 AM Sebastian Reichel <sre@kernel.org> wrote:
-> > On Fri, Mar 06, 2020 at 10:34:10AM +0800, Baolin Wang wrote:
-> > > Allow charger manager can be built as a module like other charger
-> > > drivers.
-> > >
-> > > Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
-> > > ---
-> >
-> > Thanks, queued. I do not like this driver, but its the best we have
-> > at the moment.
+On Wed, Mar 11, 2020 at 10:08:18AM +0100, Takashi Iwai wrote:
+> Since snprintf() returns the would-be-output size instead of the
+> actual output size, the succeeding calls may go beyond the given
+> buffer limit.  Fix it by replacing with scnprintf().
 >=20
-> Thanks. I understood your concern, do you have any plan to re-design
-> the charger manager driver in kernel? Or do you have some thoughts
-> about re-designing it? Now we have some out of tree code to use the
-> old charger manger, and we'd like to change to the new charger manger
-> driver and upstream them.
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> ---
 
-I don't have anything ready yet and not enough time unfortunately.
-The proper way would be to have something equivialent to charger-manager
-in the power-supply core. The core should be able to monitor batteries
-and handle connected chargers automatically.  Also there shouldn't be
-any DT entry for the software managing the charger, since DT is about
-hardware.
+Thanks, queued.
 
 -- Sebastian
 
---ajojohcuwaygc775
+>  drivers/power/supply/twl4030_charger.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/suppl=
+y/twl4030_charger.c
+> index 648ab80288c9..1bc49b2e12e8 100644
+> --- a/drivers/power/supply/twl4030_charger.c
+> +++ b/drivers/power/supply/twl4030_charger.c
+> @@ -726,10 +726,10 @@ twl4030_bci_mode_show(struct device *dev,
+> =20
+>  	for (i =3D 0; i < ARRAY_SIZE(modes); i++)
+>  		if (mode =3D=3D i)
+> -			len +=3D snprintf(buf+len, PAGE_SIZE-len,
+> +			len +=3D scnprintf(buf+len, PAGE_SIZE-len,
+>  					"[%s] ", modes[i]);
+>  		else
+> -			len +=3D snprintf(buf+len, PAGE_SIZE-len,
+> +			len +=3D scnprintf(buf+len, PAGE_SIZE-len,
+>  					"%s ", modes[i]);
+>  	buf[len-1] =3D '\n';
+>  	return len;
+> --=20
+> 2.16.4
+>=20
+
+--jwmb5qa3gisdthfp
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl5pY9AACgkQ2O7X88g7
-+pqIIw/+OyAwCPmBxCOrmqKB/CxvHVZgBJCgJXNyVj8tBQHqtteGDqw10tEzpWI1
-A3B89gB0j/kEW3REgvzm1L9aFHGPcG6tfjBmnXanaqKgzb4vbZuKwks5g1OwFHsF
-j06oDex6FQ39W0ve17NG+FUZwVN5v9MvUcKhtJDOnZ6KOqfuZT6cPP8NX5rmTsI/
-kDEle70hiAOwxGWC+JPifxtre47NL+OS9J30lw0BULgrs+8lYHIASlfilQE0LI+H
-gYUcVQdT/zTtFpFjFK8OpGAP2uTYaojx7SISdjR1Wwg7ghZ+t/iyWNIdP0ix0BYZ
-mx8hPv/8TiIy41hB1Xxyc+q8Vzee7I0P7H3242g3TWYaJYuh7NO9qegNKQaiM0wH
-O67c1UOz+ausgha/WGO7gZpXpDgBxzUOu4up38O0kAicfhaD0V3l8HTA9AWhcdbh
-kXpllhDJKEZbTLLOqRQ0scuJWt0IBQ53ES2dh0noV+g4mTCUswsgt+Xxqv5z/+Mx
-qmU1zEcruMsQvmQ4Lwk7X363INgNDOQSK4cbx8u4iou3VdYICBaah7AKabK1aqCl
-ZLQ1AP3d3PTUUd9wTGSHIWCpB6Nb8+ZkKKC4T1M6Xf+AUVKSXYOVQMxKWYqpDZAN
-7lw4kjR8SFlon0N0s6hOLRcF+B3oRhhtgoWPTFESsti7tEopOUM=
-=j3t3
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl5pZMsACgkQ2O7X88g7
++prUBg//ZswrDd49Xt1D0oK0sII4SWX616u7e6jeYH/JK54wYeCX3vu2gRS2YdfD
+z4rjThWvEFnKRh/qhmjC0mlT2s4OkC80IAbX6kSEc/svo8/jsHX7rP1JUqkhrply
+rl62jhX6ffi7ZbcwT0i9Zl7wBUHDitSkJGv6UXGIZfzyI9Y/IW3rtJOKVCSpdvKO
+QGj2tEmEQb1+EDlIRAv4YA+gK1bHRpKrvRWJQD9xXBPBuwPBd+duB4DaA7ULOZAi
+fwdR+w5f/9yMpp2s7oCi4I44d3U8s0rBp5FuDfKASAIQQU4WwnO1V0FR2mlrpc0O
+ei6KDjMtQHSpFK+VPKt4Faa1p9r3Vrl8xl3/F9+MFtkStpEM7r2pqtRIREl8sAQg
+VQbwT8+Wnw/ryza5JUAzs9/WXwO4GtEiD4ErHT+SbLh/EDFMEq6E5XYeUK1jjU6k
+vtNwVyiX8waJTmcUXZSZzd0F14IFVNWw3Yprthc7tS9ChrRFynrMK3azksBCkUJH
+iYwYnILdpg6WHCWhZiCcXdM0Tp/8EiWThJyVsOOnXCXT+fR4fc0y4RtUX4iUHf8X
+maweABHXLg654VrJTUO/Y4g8OrbaLyzbF/5s4y+lxMVd/kwS8YmbawORdsWPKKs0
+hdc2hCviBfGFFgluY49OgoDkgaeJGpX1/8+9UndXqRUHRQs0c0k=
+=ij59
 -----END PGP SIGNATURE-----
 
---ajojohcuwaygc775--
+--jwmb5qa3gisdthfp--
