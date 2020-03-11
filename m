@@ -2,150 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D895181F22
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 18:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8041181FE2
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Mar 2020 18:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730486AbgCKRVB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Mar 2020 13:21:01 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:36505 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730211AbgCKRVB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Mar 2020 13:21:01 -0400
-Received: by mail-wm1-f66.google.com with SMTP id g62so3044387wme.1
-        for <linux-pm@vger.kernel.org>; Wed, 11 Mar 2020 10:21:00 -0700 (PDT)
+        id S1730505AbgCKRqx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Mar 2020 13:46:53 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:45306 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730235AbgCKRqx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Mar 2020 13:46:53 -0400
+Received: by mail-lj1-f196.google.com with SMTP id e18so3294447ljn.12
+        for <linux-pm@vger.kernel.org>; Wed, 11 Mar 2020 10:46:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SRfkpp8M+7DY995ACFm0LV6S5x+iBdswbTCPLyuUHNI=;
-        b=gOSVv67gnHdiMys+M2xzhT5wvai2z320rCOPgcpkhbLpV97jJhkGTuNoAzU4NUZhAo
-         D4palYQ2HwAZ0OS3zCphC/Z0UmVcpqQChJKRV5WtqbpmM2Kk7ou5Arh8pFC1dF14OA91
-         YvbixzwQXk0u70G8Vh3zfpM+OulqR1vgcCxX7taDdz9nUBV0g31sMZ8Zdkh6mRxlcsTs
-         k7ViITXmIF2ThUhrJgslCTsg0VI0hsyFU4EZ42e60p4lK9bRT13xdjNMu02BkpZZYGSu
-         25CT18gafLV+OXQYAtWsVnW1Dg750/te3dKsDP4gIz5GRrHCxF6Gkn1WB+iu3pXgLxlZ
-         kF8A==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mlpzXRhsMRDH1YY7GqVuVp0TT22uI+TLEFO2W2lrSms=;
+        b=bkrnUftXBQZT9mtbI/EX+cveDpBLPJw5YgtyI66gzgie3phE0v0QHsOzjvTZVZ9Sk5
+         LZ2SeHAHTgtVv59iU8D+Q7y72uG/GpzZXa2WL2mVl0sVqSY9OOVxXTrzzW8TJ3QRqwR9
+         D3x7FIW1oNXUbRu0geCKaQRCITuGpqDhunFslSWLg1b6t8soT29RKgj1UEZczzHuamxP
+         yr+uoZzFijDhwi/CPUOKKeXaPBi1t9Y7X22XObnK9HSc8gmO1V2npZZUMOpOPRT7DKRu
+         Erbbj3Pp4Dkg6QYdOABx0A91KfBGxJP1nWbHQGaUBWPLpbU60f66M0QrmL1Q2AQsT5hk
+         kJMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SRfkpp8M+7DY995ACFm0LV6S5x+iBdswbTCPLyuUHNI=;
-        b=lI9SNDL1Mxly+P9rq+aVaSZw46s2y7R8aqxx+iTG+1AK0td0yFp2cUvszgX/Zj5MWZ
-         06FSi5CilXXHfCzacqwjlUB1clZDdezyBiwjHbe4r+iKFeH9BuIBMvRKTAj0Av+gN5Ye
-         MwD8yw307TYr6mvwgljDuR2fXAVzMEbSTSet4pwlNFqsZBrUezKeTulnj7kSooxK3tCG
-         XKAKo64W2PFrBxQAujb1Wd5LokutNtnS2EJR4uBCr4C+0r8HrTHvz6vYC3V3D4E5LSEe
-         id4NAHhE6QhcQXZsfpRSzqBTbRD0DRWtCrm1KL75ZeawxMzy7QXVMZ5HJOhwiAjSasrp
-         m8iA==
-X-Gm-Message-State: ANhLgQ2ymId3isdw3tbig/Ak4b7FiJJ5u20ngLDgKvHaTLDTjLAR/6qK
-        VaEMfIZ3uSrU1+4y5Njc29rMxw==
-X-Google-Smtp-Source: ADFU+vtyzrRH95ggJTx87H/Dqq0PyilzrpER8xm/uf21w2cDs3NqJfLQfLdt9s5fY783+V17fSdyig==
-X-Received: by 2002:a1c:a78a:: with SMTP id q132mr4716824wme.107.1583947259380;
-        Wed, 11 Mar 2020 10:20:59 -0700 (PDT)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id d18sm8611115wrq.22.2020.03.11.10.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2020 10:20:58 -0700 (PDT)
-Date:   Wed, 11 Mar 2020 17:20:56 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Tobias Schramm <t.schramm@manjaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] dt-bindings: power: supply: add cw2015_battery
- bindings
-Message-ID: <20200311172056.wjn3574zrfqxipw6@holly.lan>
-References: <20200311093043.3636807-1-t.schramm@manjaro.org>
- <20200311093043.3636807-3-t.schramm@manjaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mlpzXRhsMRDH1YY7GqVuVp0TT22uI+TLEFO2W2lrSms=;
+        b=shsGZLdy5h2DiqPfxgdxp2L2N6t4KesntNVdTtfkpObYsmK2S7o7E04eQjk78YeM5m
+         sCP4mic3h8SbKtqsjuDfwwC77ohjFiuS+afjyJjpyrOQRl5tCFGMcdHGofz1FK91uIhp
+         nQRGUl7SB90012K7mI7Tc3nvD56Nbt5VJArnot4u75b2wMtgvGndeoG3fbSthVrNHm2E
+         ZsdTU6kYTgNBc64TWPUH+EqusMZIuqVXRWxzTkBUHjsr4MBwMa8msIp2Zhr6QHmTZo9f
+         VwRDy9PyhWZAPJ/cLgiwctCcY7fp9E2mp5INAZ6Xnnfebq4oSmZbSUZSNrO5xKZd6/Db
+         kBmg==
+X-Gm-Message-State: ANhLgQ1SVYCUF6oWXpNDhpIJo8iRINWJzrN//EGQ+qDTtHK3o0+1wq0c
+        OKfUf+sfa44cZ1lbRmnDOWd7VoiMnhpMTl6idwMFLA==
+X-Google-Smtp-Source: ADFU+vuv+Ke3zgGZnAERPw2KandsCR0n/RBp6MbjM/E+G39q41RYqt5YG3ZNzNUI16R+eGmxfkbQj35WzkWRmnMEg4Q=
+X-Received: by 2002:a2e:800a:: with SMTP id j10mr2690722ljg.23.1583948811038;
+ Wed, 11 Mar 2020 10:46:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200311093043.3636807-3-t.schramm@manjaro.org>
+References: <20200219183231.50985-1-balejs@google.com> <20200303134855.GA186184@mtj.thefacebook.com>
+In-Reply-To: <20200303134855.GA186184@mtj.thefacebook.com>
+From:   Daniel Colascione <dancol@google.com>
+Date:   Wed, 11 Mar 2020 10:46:15 -0700
+Message-ID: <CAKOZuevzE=0Oa8gn--rkVJ8t69S+o2vK--pki65XXg6EVuOhMQ@mail.gmail.com>
+Subject: Re: [PATCH] cgroup-v1: freezer: optionally killable freezer
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Marco Ballesio <balejs@google.com>, Roman Gushchin <guro@fb.com>,
+        cgroups@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>, lizefan@huawei.com,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, rjw@rjwysocki.net,
+        Pavel Machek <pavel@ucw.cz>, len.brown@intel.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Minchan Kim <minchan@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 11, 2020 at 10:30:42AM +0100, Tobias Schramm wrote:
-> This patch adds the dts binding schema for the cw2015 fuel gauge.
-> 
-> Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
-> ---
->  .../bindings/power/supply/cw2015_battery.yaml | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml b/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
-> new file mode 100644
-> index 000000000000..647dbc6e136e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/cw2015_battery.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Battery driver for CW2015 shuntless fule gauge by CellWise.
+On Tue, Mar 3, 2020 at 5:48 AM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Wed, Feb 19, 2020 at 10:32:31AM -0800, Marco Ballesio wrote:
+> > @@ -94,6 +94,18 @@ The following cgroupfs files are created by cgroup freezer.
+> >    Shows the parent-state.  0 if none of the cgroup's ancestors is
+> >    frozen; otherwise, 1.
+> >
+> > +* freezer.killable: Read-write
+> > +
+> > +  When read, returns the killable state of a cgroup - "1" if frozen
+> > +  tasks will respond to fatal signals, or "0" if they won't.
+> > +
+> > +  When written, this property sets the killable state of the cgroup.
+> > +  A value equal to "1" will switch the state of all frozen tasks in
+> > +  the cgroup to TASK_INTERRUPTIBLE (similarly to cgroup v2) and will
+> > +  make them react to fatal signals. A value of "0" will switch the
+> > +  state of frozen tasks to TASK_UNINTERRUPTIBLE and they won't respond
+> > +  to signals unless thawed or unfrozen.
+>
+> As Roman said, I'm not too sure about adding a new cgroup1 freezer
+> interface at this point. If we do this, *maybe* a mount option would
+> be more minimal?
 
-s/fule/fuel/
-
-
-> +
-> +maintainers:
-> +  - Tobias Schramm <t.schramm@manjaro.org>
-> +
-> +description: |
-> +  The driver can utilize information from a simple-battery linked via a
-> +  phandle in monitored-battery. If specified the driver uses the
-> +  charge-full-design-microamp-hours property of the battery.
-> +
-> +properties:
-> +  compatible:
-> +    const: cellwise,cw2015
-> +
-> +  reg:
-> +    items:
-> +      - description: i2c address
-> +
-> +  cellwise,battery-profile:
-> +    description: |
-> +      This property specifies characteristics of the battery used. The format
-> +      of this binary blob is kept secret by CellWise. The only way to obtain
-> +      it is to mail two batteries to a test facility of CellWise and receive
-> +      back a test report with the binary blob.
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#definitions/uint8-array
-> +    items:
-> +      - minItems: 64
-> +        maxItems: 64
-> +
-> +  cellwise,monitor-interval-ms:
-> +    description:
-> +      Specifies the interval in milliseconds gauge values are polled at
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  power-supplies:
-> +    description:
-> +      Specifies supplies used for charging the battery connected to this gauge
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#/definitions/phandle-array
-> +      - minItems: 1
-> +        maxItems: 8 # Should be enough
-
-Is it necessary to set a maximum? power_supply.txt is still a text file
-but there is no mention of a maximum there.
-
-
-Daniel.
+I'd still prefer a cgroup flag. A mount option is a bigger
+compatibility risk and isn't really any simpler than another cgroup
+flag. A mount option will affect anything using the cgroup mount
+point, potentially turning non-killable frozen processes into killable
+ones unexpectedly. (Sure, you could mount multiple times, but only one
+location is canonical, and that's the one that's going to get the flag
+flipped.) A per-cgroup flag allows people to opt into the new behavior
+only in specific contexts, so it's safer.
