@@ -2,55 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DE2182EB6
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 12:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D92182ECC
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 12:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbgCLLMG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 07:12:06 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:43489 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726641AbgCLLMF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 07:12:05 -0400
-Received: by mail-wr1-f65.google.com with SMTP id b2so657232wrj.10
-        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 04:12:03 -0700 (PDT)
+        id S1727146AbgCLLQH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 07:16:07 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:51608 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726000AbgCLLQG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 07:16:06 -0400
+Received: by mail-wm1-f67.google.com with SMTP id a132so5655238wme.1
+        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 04:16:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yKVMhGEhHj2nAvWVxK/ozTDgieqKZsKk3C5oNd2q3Mc=;
-        b=rMsUEwK5b57qYCS0YtjFicxSGjju0PHMOEO6LbfrtwixQXZWUMmNw8tLz2nmCAzlGI
-         JYpc50qaz/WsVbrs0/ZNvUC65ZwvXuFADfekz9Lsk1Qo6tPvoxS4XUpjhQGjlu8nNdfK
-         q92CjZSOqgmz7ZQUInDsSV8MZHuzY72bm7BjZkICBRF2SXelBJGCLyBrGqlDbrlqRxlX
-         ZKSX8FS02qHDZZPQX5NdAOMahl/1qdhH2ZnkqZtUM/87XWX3QPFCmImELjrBzS7ANPsM
-         ceO16sYaMf7ipiCLspxciTCWiHnhNIG4JASPwD6ruPcUkmnSGOFbTQOTCG0eVM6OxObv
-         ff5g==
+        bh=+PxMuIwKtl+ixE2AtSYTfhWGbQ9gMTjf02fTm60ZP7c=;
+        b=jr1m+7HLMmM5PiITqiOg987W2zJYyNfP43CKovuiaXcsfbva+cKmLEYZGL62WVHdxm
+         6arz+z6ljhVBLaKM3JJwLWaQ+6oFVdhRCCqN1qhYYztT2NNyR2FbIj+6EB5YuF0b4KzV
+         V9ouTe3vHADqNZdxpjG5dys+AoFYxMyc2VuEaoLfhu7zoGyTeU3CAX6kUkmCRYfR/uwI
+         OoLyfy5bzFVzBNvcE3bC0oLqKUmzwwEh+yUFknti7vz9umR9MrMZIlU73mP7T/plgA5m
+         rN35VG1sfSrI7M6BeubprVJr7un3Y1jK5OwHFtgn8WcM6kjEgX170h//CLxoIynE6RRu
+         zynA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=yKVMhGEhHj2nAvWVxK/ozTDgieqKZsKk3C5oNd2q3Mc=;
-        b=ImHaw7mZOj6FqcwqwL/m+zKibfnfTP5hlZykB/+ClPv1pFvj3JdA6/AlYOT7/9n1ug
-         XyvrO9j2CspCCgyaG/KSLE7IjDgfioW3Bsks7UBy7IHW1bwyktF9AaYal/OqwQe61ZYr
-         0cnFpoDkwM1EjQvI/Dp1gKHFS5gopc5JEUv1MSHK/o7YPJwbEwKA6Vjhgf7gJejCb3qS
-         OqYEe/EB99FwMtk9Q1v6LCPhPkPeApg1jO87CKtZXTRxWUNFB8dBtd7OMoClci0fYztO
-         E9hW43+LYwKiry7W7a4aCL+JIPKVRBhVia1DpS/4pkrDe5Bq7F/6YddomXHu0dk65Ziu
-         LCJg==
-X-Gm-Message-State: ANhLgQ10qdYyVz08jYKyHl7b2OwRdqw9bA1BLp2OOozypFNGe93X3s3X
-        5He9zpkrryuTRfRcxa57NiOhuw==
-X-Google-Smtp-Source: ADFU+vvuhEJ1A6Ra0+pNYlmAUpQkagno2JoCT+VM1Wvj7haaQO4gvg3G3raCXzYU9XoLla9HfBvCkw==
-X-Received: by 2002:adf:e68b:: with SMTP id r11mr9872626wrm.138.1584011523138;
-        Thu, 12 Mar 2020 04:12:03 -0700 (PDT)
+        bh=+PxMuIwKtl+ixE2AtSYTfhWGbQ9gMTjf02fTm60ZP7c=;
+        b=PrHx9bQbfXVjrwMeERFpx8QlB3oaiAclKi1rfytm1Pj16dDgdRsqxHL2NyliqeCAIQ
+         /X7BXDtfSjnAvoPllx2hGbAEcHwVPCNi+XegtBSAcxXbgjHv0++EfQXS2D4u8Pr36RqC
+         gLden/MawCLQDqTKFGD0cSV3DCZEm12wL06XAVBeKQ+wXHJ/V4azp8zsgjAkekKLzLtS
+         6bDyF1REEy54H5wtwAPdcJ5HcN65aS1AtVn1Z5MtxTU3FEmYMXHCMYCHR1Hi590W2j3M
+         GAkCEwHjVRUt0FwLcfGpw1YBTcNC97lM3jEbvTN+ZoFChg0dIePzjiMtHgRmeF8VjFuY
+         y7oA==
+X-Gm-Message-State: ANhLgQ1aayAq9vXJtCxYsRiNpUD2aRRpfMrgdcx/atpgQHw4kC7qC3rS
+        Qc41CLqeF/aO2A4aTS/7yijIXA==
+X-Google-Smtp-Source: ADFU+vtOa09vIvlIBcshskPiSoJnGoQkpo7Z6zli2NVBiOgUphWPT5Ln6EesZ7BTe4/eKq0G78qxUQ==
+X-Received: by 2002:a1c:7209:: with SMTP id n9mr4316836wmc.188.1584011764077;
+        Thu, 12 Mar 2020 04:16:04 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f? ([2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f])
-        by smtp.googlemail.com with ESMTPSA id u20sm12214644wmj.14.2020.03.12.04.12.02
+        by smtp.googlemail.com with ESMTPSA id o3sm13013857wme.36.2020.03.12.04.16.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2020 04:12:02 -0700 (PDT)
-Subject: Re: [PATCH] thermal: add COMPILE_TEST support for i.MX8MM
-To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-References: <1583509057-8197-1-git-send-email-Anson.Huang@nxp.com>
+        Thu, 12 Mar 2020 04:16:03 -0700 (PDT)
+Subject: Re: [PATCH 0/2] thermal: Add support for Renesas R-Car M3-W+
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <20200306105503.24267-1-geert+renesas@glider.be>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -106,12 +109,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <7808e8ca-2b2f-05cc-8b34-c2d36a30b4dd@linaro.org>
-Date:   Thu, 12 Mar 2020 12:12:01 +0100
+Message-ID: <05f4b69f-e54a-0f86-d0ac-b44a86158b4b@linaro.org>
+Date:   Thu, 12 Mar 2020 12:16:02 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <1583509057-8197-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <20200306105503.24267-1-geert+renesas@glider.be>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -120,32 +123,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/03/2020 16:37, Anson Huang wrote:
-> Add COMPILE_TEST support to i.MX8MM thermal driver for better compile
-> testing coverage.
+On 06/03/2020 11:55, Geert Uytterhoeven wrote:
+> 	Hi,
 > 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
+> This patch series adds support for the Thermal Sensor/Chip Internal
+> Voltage Monitor in the R-Car M3-W+ (R8A77961) SoC.
+> 
+> It has been tested on a Salvator-XS development board with R-Car M3-W+.
+> 
+> Geert Uytterhoeven (2):
+>   dt-bindings: thermal: rcar-gen3-thermal: Add r8a77961 support
+>   thermal: rcar_gen3_thermal: Add r8a77961 support
+> 
+>  .../devicetree/bindings/thermal/rcar-gen3-thermal.txt         | 1 +
+>  drivers/thermal/rcar_gen3_thermal.c                           | 4 ++++
+>  2 files changed, 5 insertions(+)
 
 Applied, thanks
-
->  drivers/thermal/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 4d6753f..91af271 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -265,7 +265,7 @@ config IMX_SC_THERMAL
->  
->  config IMX8MM_THERMAL
->  	tristate "Temperature sensor driver for Freescale i.MX8MM SoC"
-> -	depends on ARCH_MXC
-> +	depends on ARCH_MXC || COMPILE_TEST
->  	depends on OF
->  	help
->  	  Support for Thermal Monitoring Unit (TMU) found on Freescale i.MX8MM SoC.
-> 
 
 
 -- 
