@@ -2,94 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80C8A182D2C
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 11:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56ACA182D47
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 11:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726194AbgCLKMm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 06:12:42 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:43152 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725978AbgCLKMm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 06:12:42 -0400
-Received: by mail-pg1-f196.google.com with SMTP id u12so2833366pgb.10
-        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 03:12:41 -0700 (PDT)
+        id S1726720AbgCLKRe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 06:17:34 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:35213 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726023AbgCLKRe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 06:17:34 -0400
+Received: by mail-wm1-f67.google.com with SMTP id m3so5588162wmi.0
+        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 03:17:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=g2ic8RCgE8xfXSotQsLJPMX+SIIxXdgAWghsG0UmqWY=;
-        b=G+UNAh6wj/c0SGz5GhPSr+VYq88055m5ZZtvU0lGNrZyPFoDBu4p2FqlJVbHL/0EUl
-         6ARFETg2dQqDIZvvCsZcC4vZgzQ/u3QoEqcHtqMHvJUDVrmr3IDXqXgtNF8Jk2zJj0Bo
-         SkAT9oTLszdsWdZwcJ1HgX6P1ICWSXNQdtu/iGNnBZyYFIPlEeqB33DuXHZ9T1e6nCNm
-         qsdslFvy+BKwlPpw7fWakLpmb321bPsUvyvoOvrkrCz7G/hpLnLamMC3W3UN4XnrgEoL
-         SJ/l+N9kwwd6BEVVF+n3HteQBjQY1arEZRxvnFSreA83IHR9Q9hU6IEvl6EZDs+yDaji
-         uUcg==
+         :content-disposition:in-reply-to;
+        bh=JSh5SwgggaNNIP1rhJKmLIM4vESq/2xFcSyTZp+7Nus=;
+        b=Rx+1EGWt2dGF/rxSvLT7XGg2rRWc3yl5MrGHM3fODfxN+My4zCiGC9aeKEjXVaY/C/
+         +LHCPygIqp9eoxc+JZrBWd7bE5FY7+BnkvLH11AHW/mdG41YmsLhn15hx0GwjkuK1X/F
+         ewTFglT3n/TGbE1lgqU0mwv3vp++G2D3agpGYFaUIaiCmkzvLOJ1Ohco+rUjxj5WO/8d
+         SytvKXLoXZb7b1MkmlzgHZ4b6ixTjOpbOkiacoaqMAlyG6heH8taLU8p2f7qFn5Khhr6
+         E7im34jcZgsPPAc4GqZdIJrpbekoOOBrxw8QTkhyx32epfHsyD4B2w6iVmJgKc36a6Ns
+         ejHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=g2ic8RCgE8xfXSotQsLJPMX+SIIxXdgAWghsG0UmqWY=;
-        b=eP+vnUyMjNm4rXE14mHYnqfDeBzZRSdF72l1riWOxEAyhw5vV535NttIEMYCh4Qkri
-         RumiZz4rdx7yXA+F42AqvlOrwe/EKXTnmG9dAP1KkEM8b+E1kqFLnB1I9NpmAqoaA9rT
-         K0YbIYuzMBEb3WDqvkkiA8uAF6XkTeot0NXaPAZHuzfKHw8hwO/ejrKJEpwDZvlokYuU
-         DC3uPi5pmXQemvJa07udq8e/Vo9IJts6He3fRprnPmMip00X9PdhGAQsO00dAWe+85KQ
-         T60HmbKUqPYAt297OVTxhqPegn8+G1BBFHoCx7lwLvraMihLFNr0+ZAZ7bTldw/WsxDh
-         E1UA==
-X-Gm-Message-State: ANhLgQ0km+exOWMjOUdFgLv23BAIcGrE+it/E7m8SubFaz7eGdY/pvHL
-        etM6ZwlYEzDo7Q/NQjMuge4t/g==
-X-Google-Smtp-Source: ADFU+vsNpY0Hm54zBz9SHVmV3vmk513jLZGv0nsBMg1SxW2mhGr4zvQGzyTXRNQMCzGHjdW03YDzuA==
-X-Received: by 2002:a63:b216:: with SMTP id x22mr6869446pge.198.1584007960467;
-        Thu, 12 Mar 2020 03:12:40 -0700 (PDT)
-Received: from localhost ([122.171.122.128])
-        by smtp.gmail.com with ESMTPSA id k5sm8173410pju.29.2020.03.12.03.12.39
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 12 Mar 2020 03:12:39 -0700 (PDT)
-Date:   Thu, 12 Mar 2020 15:42:32 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Sricharan R <sricharan@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+         :mime-version:content-disposition:in-reply-to;
+        bh=JSh5SwgggaNNIP1rhJKmLIM4vESq/2xFcSyTZp+7Nus=;
+        b=EpWW5UDKXTjeA9qHNDZ/Z76cAgWoBwFdNGz+5XG/NSDCWAU/PvyrjOSJH8q8zRZyNt
+         z0lbAzE/s+3EDhhLIa+aN9svwyEWz8pZmmP57TD/PbElWytG+af/zw28ZMmnjBWiLejE
+         YQ9HCKRRsLaibKjJbOX8F2fawgFo5/Bn2ZaLhjrlUlMM2T/C4x+sWG2L378zJP2so4bO
+         fuxz1T0QGpJqwAJTXkgu1Q86olQKxNfK4Hh2lNw8JqqizG8mIT3ep+dyFZYf5HOAGfTU
+         pOiBwW0ptLZ1ler0ir70Y6CBlWeDw7/kLyacce2UdRM3mYBC0qEFboAtXosTcE8Q+b2L
+         A2sQ==
+X-Gm-Message-State: ANhLgQ1ZmnW4WvEIhvKuBlDi2qSST/50jwwchrrgtjiS67Ci0my0W8k3
+        hXSANfad/LkzqsWmYy0Avrga0w==
+X-Google-Smtp-Source: ADFU+vtd22zCvQBt96HNv1FNfip491J3yg6bOcH1BHTeiIr8TJOxKRCIuR11VfvzANE3XDLrYVJOCw==
+X-Received: by 2002:a1c:f009:: with SMTP id a9mr4167566wmb.73.1584008252629;
+        Thu, 12 Mar 2020 03:17:32 -0700 (PDT)
+Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
+        by smtp.gmail.com with ESMTPSA id f4sm18901766wrt.24.2020.03.12.03.17.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2020 03:17:31 -0700 (PDT)
+Date:   Thu, 12 Mar 2020 10:17:29 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Tobias Schramm <t.schramm@manjaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: qcom: Add support for krait based socs
-Message-ID: <20200312101232.fmjs3zjl3gud5myh@vireshk-i7>
-References: <20200219205546.6800-1-ansuelsmth@gmail.com>
+        Maxime Ripard <mripard@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] dt-bindings: power: supply: add cw2015_battery
+ bindings
+Message-ID: <20200312101729.ppqhco2j3p66dnqz@holly.lan>
+References: <20200311093043.3636807-1-t.schramm@manjaro.org>
+ <20200311093043.3636807-3-t.schramm@manjaro.org>
+ <20200311172056.wjn3574zrfqxipw6@holly.lan>
+ <bd1bea1c-e42b-8ccc-7fbb-2ed268f1b1a5@manjaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200219205546.6800-1-ansuelsmth@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <bd1bea1c-e42b-8ccc-7fbb-2ed268f1b1a5@manjaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-02-20, 21:55, Ansuel Smith wrote:
-> In Certain QCOM SoCs like ipq8064, apq8064, msm8960, msm8974
-> that has KRAIT processors the voltage/current value of each OPP
-> varies based on the silicon variant in use.
+On Thu, Mar 12, 2020 at 12:17:55AM +0100, Tobias Schramm wrote:
+> Hi Daniel,
 > 
-> The required OPP related data is determined based on
-> the efuse value. This is similar to the existing code for
-> kryo cores. So adding support for krait cores here.
+> thanks for reviewing. The typo will be fixed for v4.
 > 
-> Signed-off-by: Sricharan R <sricharan@codeaurora.org>
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  .../bindings/opp/qcom-nvmem-cpufreq.txt       |   3 +-
->  drivers/cpufreq/Kconfig.arm                   |   2 +-
->  drivers/cpufreq/cpufreq-dt-platdev.c          |   5 +
->  drivers/cpufreq/qcom-cpufreq-nvmem.c          | 181 ++++++++++++++++--
->  4 files changed, 173 insertions(+), 18 deletions(-)
+> >> +  power-supplies:
+> >> +    description:
+> >> +      Specifies supplies used for charging the battery connected to this gauge
+> >> +    allOf:
+> >> +      - $ref: /schemas/types.yaml#/definitions/phandle-array
+> >> +      - minItems: 1
+> >> +        maxItems: 8 # Should be enough
+> > 
+> > Is it necessary to set a maximum? power_supply.txt is still a text file
+> > but there is no mention of a maximum there.
+> > 
+> I think so? Removing maxItems and running dtbs_check on a dts with more
+> than one supply phandle in the power-supplies property results in an error:
+> linux/arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dt.yaml:
+> cw2015@62: power-supplies: [[142], [50]] is too long
 
-Can someone from Qcom team review this ?
+Interesting. I saw the "Should be enough" comment replicated in several
+YAML bindings (with varying degress of paranoia about how much "enough" is).
+There are also several that simply set minItems without setting
+maxItems, perhaps they have just never been any DTs that test those
+bindings with more than one item.
 
--- 
-viresh
+
+Daniel.
