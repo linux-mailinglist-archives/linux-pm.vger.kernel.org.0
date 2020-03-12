@@ -2,61 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AC21832F2
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 15:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6930818350E
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 16:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727425AbgCLO1f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 10:27:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57314 "EHLO mail.kernel.org"
+        id S1727059AbgCLPgL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 11:36:11 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:34268 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727340AbgCLO1f (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 12 Mar 2020 10:27:35 -0400
-Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 095EE20650;
-        Thu, 12 Mar 2020 14:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584023254;
-        bh=NBfZaoPVGopy564X9jgj14gpTLz9p4AtaD57fbxxlBg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q/VzJofeHWyEZaMZ4TO3oapRN+d4deZwCz/ZgR9waOARWpnw4C+EdWAQXMvbGxxNi
-         fjFr/M1u+iH9Yys4vFp8Oc3vZPpIA9Cf2x6INiJFNJymPQ4zeovLQOGz8g7mp4jqxg
-         Rsj+433EcZYFxIp9Qg8SYcEkI+zfwKS0RaAczCck=
-Date:   Thu, 12 Mar 2020 22:27:22 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org, leonard.crestez@nxp.com, daniel.baluta@nxp.com,
-        peng.fan@nxp.com, aford173@gmail.com, ping.bai@nxp.com,
-        jun.li@nxp.com, shengjiu.wang@nxp.com, bjorn.andersson@linaro.org,
-        olof@lixom.net, vkoul@kernel.org, dinguyen@kernel.org,
-        marcin.juszkiewicz@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Linux-imx@nxp.com
-Subject: Re: [PATCH V2 RESEND 4/4] arm64: dts: imx8mm: Add thermal zone
- support
-Message-ID: <20200312142721.GC1249@dragon>
-References: <1582947862-11073-1-git-send-email-Anson.Huang@nxp.com>
- <1582947862-11073-4-git-send-email-Anson.Huang@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1582947862-11073-4-git-send-email-Anson.Huang@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1726731AbgCLPgL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 12 Mar 2020 11:36:11 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0EF14200F9E;
+        Thu, 12 Mar 2020 16:36:09 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0298C2001B8;
+        Thu, 12 Mar 2020 16:36:09 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 4D605203C1;
+        Thu, 12 Mar 2020 16:36:08 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        dAN cARPENTER <DAN.CARPENTER@ORACLE.COM>
+Cc:     mYUNGjOO hAM <MYUNGJOO.HAM@SAMSUNG.COM>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Adam Ford <aford173@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <vireshk@kernel.org>, linux-imx@nxp.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] PM / devfreq: Fix handling dev_pm_qos_remove_request result
+Date:   Thu, 12 Mar 2020 17:36:06 +0200
+Message-Id: <06fc3c3d0a8bca1bce104ca9d6a7d5ff94bdf9ab.1584027085.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Feb 29, 2020 at 11:44:22AM +0800, Anson Huang wrote:
-> Add thermal zone and tmu node to support i.MX8MM thermal
-> driver, ONLY cpu thermal zone is supported, and cpu cooling
-> is also added.
-> 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+The dev_pm_qos_remove_request function can return 1 if
+"aggregated constraint value has changed" so only negative values should
+be reported as errors.
 
-Applied, thanks.
+Fixes: 27dbc542f651 ("PM / devfreq: Use PM QoS for sysfs min/max_freq")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/devfreq/devfreq.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+Changes since v1:
+* Add fixes and cc: stable, drop empty line in message.
+Link to v1: https://patchwork.kernel.org/patch/11433131/
+
+I'm not sure this meet that stable kernel standard of "real bug that
+bothers people" because all this fixes is a spurious dev_warn on device
+removal. But Sasha Levin's script seem to collect a lot of low-priority
+fixes anyway.
+
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 5c481ad1cfc7..6fecd11dafdd 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -703,17 +703,17 @@ static void devfreq_dev_release(struct device *dev)
+ 		dev_warn(dev->parent,
+ 			"Failed to remove min_freq notifier: %d\n", err);
+ 
+ 	if (dev_pm_qos_request_active(&devfreq->user_max_freq_req)) {
+ 		err = dev_pm_qos_remove_request(&devfreq->user_max_freq_req);
+-		if (err)
++		if (err < 0)
+ 			dev_warn(dev->parent,
+ 				"Failed to remove max_freq request: %d\n", err);
+ 	}
+ 	if (dev_pm_qos_request_active(&devfreq->user_min_freq_req)) {
+ 		err = dev_pm_qos_remove_request(&devfreq->user_min_freq_req);
+-		if (err)
++		if (err < 0)
+ 			dev_warn(dev->parent,
+ 				"Failed to remove min_freq request: %d\n", err);
+ 	}
+ 
+ 	if (devfreq->profile->exit)
+-- 
+2.17.1
+
