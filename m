@@ -2,71 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8828A183A2F
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 21:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B45183A9C
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 21:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbgCLUFu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 16:05:50 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:38630 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726114AbgCLUFu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 16:05:50 -0400
-Received: by mail-oi1-f193.google.com with SMTP id k21so6869381oij.5;
-        Thu, 12 Mar 2020 13:05:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3bLRRYxvg8WPmScDUsmez1LtGKNh4mFSL/Bbm2FXoLA=;
-        b=Z7FW3RydYJRFKMqlEOowzkzI190sEVYreFMGRGNbc5AXKUethBTxJwwvhJXb2cYAT4
-         +GY8ZFpau5pn1F8OMcedypHweKHPvFvWvD2HF7igIG6Aj9tn8sUtG8ejFWqyqYdkhyqY
-         eu9Mi8BAHGJtmaY+J3+kY5zu5gmYwspM8AzPngLzWaQCMtkCBqeY2/755y+S2bthzLYV
-         JFmgV9jeKU2tTHU+hfr9spuQiUplYSmWZf6rvVlUbNrmMx9FnPDrv6ritNO10W8NDYH/
-         PFNxFGAjmX1SGd75qbQxWOnlExxA/8To3ioa1GAM6I+gIbvtbeTtfcEob2kkgZlzGHA5
-         zBEg==
-X-Gm-Message-State: ANhLgQ1lXizsxXzFRDgI2nJD3tQj4WxUpmV/537Kz/o7QCL3HdfwQl0z
-        /ZOMsaW9gMLVU+JetZDlIA==
-X-Google-Smtp-Source: ADFU+vtzzZijf6zInIIlPCXBjx0bL4ZmzsWAe8jak76tyZW9bq0xAEQSMkZ9c7An/Wms8LmVvpct7Q==
-X-Received: by 2002:a05:6808:3cb:: with SMTP id o11mr3876127oie.11.1584043549644;
-        Thu, 12 Mar 2020 13:05:49 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h2sm806253otm.44.2020.03.12.13.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 13:05:48 -0700 (PDT)
-Received: (nullmailer pid 18639 invoked by uid 1000);
-        Thu, 12 Mar 2020 20:05:47 -0000
-Date:   Thu, 12 Mar 2020 15:05:47 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        id S1726594AbgCLU0z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 16:26:55 -0400
+Received: from foss.arm.com ([217.140.110.172]:41204 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725268AbgCLU0z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 12 Mar 2020 16:26:55 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C496731B;
+        Thu, 12 Mar 2020 13:26:54 -0700 (PDT)
+Received: from [10.37.12.40] (unknown [10.37.12.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 517403F67D;
+        Thu, 12 Mar 2020 13:26:52 -0700 (PDT)
+Subject: Re: [PATCH v2] thermal: devfreq_cooling: Use PM QoS to set frequency
+ limits
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Zhang Rui <rui.zhang@intel.com>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: rcar-gen3-thermal: Add
- r8a77961 support
-Message-ID: <20200312200547.GA18576@bogus>
-References: <20200306105503.24267-1-geert+renesas@glider.be>
- <20200306105503.24267-2-geert+renesas@glider.be>
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Eduardo Valentin <edubezval@gmail.com>
+References: <CGME20200116231233epcas1p363ab7e3ad2966d0ae7bac11e33aa6b83@epcas1p3.samsung.com>
+ <20200116151219.v2.1.I146403d05b9ec82f48b807efd416a57f545b447a@changeid>
+ <d73e67eb-4f2d-dc4b-c718-929a964d3640@samsung.com>
+ <20200312003519.GD144492@google.com>
+ <f09ad5b3-c997-187a-d637-cc7cdcb282f9@arm.com>
+ <20200312175701.GE144492@google.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <40e0af31-d6dd-d51e-ce48-46dfe85e67da@arm.com>
+Date:   Thu, 12 Mar 2020 20:26:50 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200306105503.24267-2-geert+renesas@glider.be>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200312175701.GE144492@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri,  6 Mar 2020 11:55:02 +0100, Geert Uytterhoeven wrote:
-> Document R-Car M3-W+ (R8A77961) SoC bindings.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
 
-Acked-by: Rob Herring <robh@kernel.org>
+On 3/12/20 5:57 PM, Matthias Kaehlcke wrote:
+> Hi Lukasz,
+> 
+> thanks for the review!
+> 
+> I'll rebase and send v3. Hopefully it doesn't cause too much extra
+> work for your changes.
+
+No worries, your change is really needed. It will simply the code
+that I am working on (can be found here [1]). I don't have
+deal with the race with devfreq governor now.
+
+Thank you for working on it.
+
+Lukasz
+
+[1] https://lkml.org/lkml/2020/3/9/475
