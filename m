@@ -2,58 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D92182ECC
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 12:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62458182ED4
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 12:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727146AbgCLLQH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 07:16:07 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:51608 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726000AbgCLLQG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 07:16:06 -0400
-Received: by mail-wm1-f67.google.com with SMTP id a132so5655238wme.1
-        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 04:16:04 -0700 (PDT)
+        id S1726299AbgCLLSf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 07:18:35 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:46936 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726044AbgCLLSf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 07:18:35 -0400
+Received: by mail-wr1-f66.google.com with SMTP id n15so6870123wrw.13
+        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 04:18:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+PxMuIwKtl+ixE2AtSYTfhWGbQ9gMTjf02fTm60ZP7c=;
-        b=jr1m+7HLMmM5PiITqiOg987W2zJYyNfP43CKovuiaXcsfbva+cKmLEYZGL62WVHdxm
-         6arz+z6ljhVBLaKM3JJwLWaQ+6oFVdhRCCqN1qhYYztT2NNyR2FbIj+6EB5YuF0b4KzV
-         V9ouTe3vHADqNZdxpjG5dys+AoFYxMyc2VuEaoLfhu7zoGyTeU3CAX6kUkmCRYfR/uwI
-         OoLyfy5bzFVzBNvcE3bC0oLqKUmzwwEh+yUFknti7vz9umR9MrMZIlU73mP7T/plgA5m
-         rN35VG1sfSrI7M6BeubprVJr7un3Y1jK5OwHFtgn8WcM6kjEgX170h//CLxoIynE6RRu
-         zynA==
+        bh=PAtBEWkNOh5BdP8Bu8hZOuPZ1rcVZzdy14mW4FwwTe8=;
+        b=ON6y0CbPLojWppVHGSbSOLFZ4LD9yOkSdCEWYDNT49XkJetkbU3D26Rfb1cr6A0mIX
+         wPLcCxvf3s2fxISRh1lNv5X25Mai1Mc3Zdpa6eSo8iT8YtcZE/NKEygW8j2CauO8PDVr
+         E36aMVJms1I8MpwSAXDgidoxiH76EMRBtsZgbhlS8l2d/wgyWAf391k504dF2/RhE6OU
+         jBwWk+9a2pNiu7WpxWbfF0zCby5ItIUb/I2esdRGLbsXVEWVE1rx1DUEeNC6+u5glSLQ
+         BcgRg8c5YP7XL7lQldlfdt3zMhfbb9UrXrtsJLziJZ3a7tMCRWeeSuyNKEaAnKB59/jD
+         b1cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=+PxMuIwKtl+ixE2AtSYTfhWGbQ9gMTjf02fTm60ZP7c=;
-        b=PrHx9bQbfXVjrwMeERFpx8QlB3oaiAclKi1rfytm1Pj16dDgdRsqxHL2NyliqeCAIQ
-         /X7BXDtfSjnAvoPllx2hGbAEcHwVPCNi+XegtBSAcxXbgjHv0++EfQXS2D4u8Pr36RqC
-         gLden/MawCLQDqTKFGD0cSV3DCZEm12wL06XAVBeKQ+wXHJ/V4azp8zsgjAkekKLzLtS
-         6bDyF1REEy54H5wtwAPdcJ5HcN65aS1AtVn1Z5MtxTU3FEmYMXHCMYCHR1Hi590W2j3M
-         GAkCEwHjVRUt0FwLcfGpw1YBTcNC97lM3jEbvTN+ZoFChg0dIePzjiMtHgRmeF8VjFuY
-         y7oA==
-X-Gm-Message-State: ANhLgQ1aayAq9vXJtCxYsRiNpUD2aRRpfMrgdcx/atpgQHw4kC7qC3rS
-        Qc41CLqeF/aO2A4aTS/7yijIXA==
-X-Google-Smtp-Source: ADFU+vtOa09vIvlIBcshskPiSoJnGoQkpo7Z6zli2NVBiOgUphWPT5Ln6EesZ7BTe4/eKq0G78qxUQ==
-X-Received: by 2002:a1c:7209:: with SMTP id n9mr4316836wmc.188.1584011764077;
-        Thu, 12 Mar 2020 04:16:04 -0700 (PDT)
+        bh=PAtBEWkNOh5BdP8Bu8hZOuPZ1rcVZzdy14mW4FwwTe8=;
+        b=KIklumXkG/Zyc9d8kgVYCWIGnY7NpcNzDqZikPgLlPRFcH9MLaMydDrwvPLxa0fN5j
+         6E9+M7ja7yP4oUxoCpTdODgWd4IYgNPVcRU34JJ9I2DO7GyxiAmPLENEgc+H3SEhPkTS
+         qeavKLzhx/d+2tkMWoo1fZhrcPeuDO7O7CI40/gtx0Cpy2/lp2ttQoQGoIrnKL+I1dOb
+         zUZTb0ypBgbmX7PDcZy9PvdcBWbS9g/NrV6m3fcARkihIn3fMiDb2Zali+Xi5zsk0yUn
+         DkrYST+u7D326tw54+VFckBApRLTuYIxiM/07U9Tu4sxfTSGfcze+JMUjPmtzpb6v9Bj
+         3ywA==
+X-Gm-Message-State: ANhLgQ0b25aRkXKnB1Kp62twOh7NP2rBbFMOdc0tEcjuROm4hkYCigl4
+        V8z9ZvOOy/sxMjuOWcR417/vZw==
+X-Google-Smtp-Source: ADFU+vvkQkdjVBN1V4mDG2xlvhfCyoT71WrXUgF8B8GgicTA4ZSKEq5oQzAzIKNSXE/a6AqkDIhI4w==
+X-Received: by 2002:adf:ed86:: with SMTP id c6mr11084730wro.53.1584011912176;
+        Thu, 12 Mar 2020 04:18:32 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f? ([2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f])
-        by smtp.googlemail.com with ESMTPSA id o3sm13013857wme.36.2020.03.12.04.16.02
+        by smtp.googlemail.com with ESMTPSA id n1sm29876912wrj.77.2020.03.12.04.18.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2020 04:16:03 -0700 (PDT)
-Subject: Re: [PATCH 0/2] thermal: Add support for Renesas R-Car M3-W+
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-References: <20200306105503.24267-1-geert+renesas@glider.be>
+        Thu, 12 Mar 2020 04:18:31 -0700 (PDT)
+Subject: Re: [PATCH] thermal: imx: Remove unused includes
+To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+References: <1583762668-12099-1-git-send-email-Anson.Huang@nxp.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -109,12 +108,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <05f4b69f-e54a-0f86-d0ac-b44a86158b4b@linaro.org>
-Date:   Thu, 12 Mar 2020 12:16:02 +0100
+Message-ID: <7f06031d-b4ee-009d-a294-fdde6c95e898@linaro.org>
+Date:   Thu, 12 Mar 2020 12:18:30 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200306105503.24267-1-geert+renesas@glider.be>
+In-Reply-To: <1583762668-12099-1-git-send-email-Anson.Huang@nxp.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -123,23 +122,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/03/2020 11:55, Geert Uytterhoeven wrote:
-> 	Hi,
+On 09/03/2020 15:04, Anson Huang wrote:
+> Remove unused includes to simplify the code.
 > 
-> This patch series adds support for the Thermal Sensor/Chip Internal
-> Voltage Monitor in the R-Car M3-W+ (R8A77961) SoC.
-> 
-> It has been tested on a Salvator-XS development board with R-Car M3-W+.
-> 
-> Geert Uytterhoeven (2):
->   dt-bindings: thermal: rcar-gen3-thermal: Add r8a77961 support
->   thermal: rcar_gen3_thermal: Add r8a77961 support
-> 
->  .../devicetree/bindings/thermal/rcar-gen3-thermal.txt         | 1 +
->  drivers/thermal/rcar_gen3_thermal.c                           | 4 ++++
->  2 files changed, 5 insertions(+)
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 
 Applied, thanks
+
+> ---
+>  drivers/thermal/imx_thermal.c | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+> index e75dda5..d2fa301 100644
+> --- a/drivers/thermal/imx_thermal.c
+> +++ b/drivers/thermal/imx_thermal.c
+> @@ -3,24 +3,17 @@
+>  // Copyright 2013 Freescale Semiconductor, Inc.
+>  
+>  #include <linux/clk.h>
+> -#include <linux/cpu.h>
+>  #include <linux/cpufreq.h>
+>  #include <linux/cpu_cooling.h>
+>  #include <linux/delay.h>
+> -#include <linux/device.h>
+> -#include <linux/init.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+> -#include <linux/kernel.h>
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> -#include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> -#include <linux/slab.h>
+>  #include <linux/thermal.h>
+> -#include <linux/types.h>
+>  #include <linux/nvmem-consumer.h>
+>  
+>  #define REG_SET		0x4
+> 
 
 
 -- 
