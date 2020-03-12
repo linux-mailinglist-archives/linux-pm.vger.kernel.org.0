@@ -2,54 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6230182EF2
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 12:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A30EB182F01
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 12:24:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727023AbgCLLVi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 07:21:38 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:39416 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726023AbgCLLVi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 07:21:38 -0400
-Received: by mail-wm1-f68.google.com with SMTP id f7so5824431wml.4
-        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 04:21:36 -0700 (PDT)
+        id S1726725AbgCLLYT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 07:24:19 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:46715 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726310AbgCLLYS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 07:24:18 -0400
+Received: by mail-wr1-f67.google.com with SMTP id n15so6894043wrw.13
+        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 04:24:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:references:from:autocrypt:message-id:date:user-agent
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=pWUzddhX/AOXVACmUO+pXuK3ISXKKIrklNwYlHA2MBE=;
-        b=y9t4h3WBY3aIBCnZzhHh+Oy3ygEBIoH1EaMHJyMNn2a5JOgO0SHkle3Avrb5AnMZkK
-         MPYOa8La8TTDi/n2a4BDB88a49ZbvceGnm+H2TeYFoDrzxPGzpnHGLxcER5gan+ie9dQ
-         MJPw6D745Q1EUr2kX8P7pmoSrFwCrOp4YhFKeSgf9m6+xDgHa47ZvVevuUBmLrNLe51T
-         CN7CckEZMB8nZP2qSRR59mcBw/lrclCcsgNXsEeXeV8l0/o0AIbZiV6AOs/bp4tiWEI5
-         Kyjsya4Rzt9HzoqyoAV4ic8VoQARNaXaMUrIaXLYQKFqhQPgDH9qvjDb+R2bEr0aZpKA
-         sNGw==
+        bh=GFmNKQyMSZMwZUCnsk2pyKF7rtWxqi2AMD/Ce8iu334=;
+        b=BZ9RRCO7J1gCZUSAUfurnrudPNRoqhHqdna+O3owBnlsNEA1BTPEO5tXQtN2UWJQex
+         iOJabv12bn2j3Nccci5IaWgYZpRMKYUmOnVDsCm4Ji76aLP4wvvPma10muW9MOc08OHS
+         VrL12iUgE8EozfD4I637VWtJif7Bb6+ZnXrwyNjnjxji8yX0oGS03mzGlmd+79IahV/w
+         AhODGNiOxQbbBQef0kpGfd4/QGB0XwzxTpSFLk7vtX6pR2YUsiH7fkA4XHLNlfVEyU9R
+         DUvoePovM8UdcYIAIWVHoBelhKBsU1kke4nSx6hPm+2ia5/QnukCIvOMakbYgSv73zWI
+         cMIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=pWUzddhX/AOXVACmUO+pXuK3ISXKKIrklNwYlHA2MBE=;
-        b=ZuL89MQVfiwBqaKj+YgB/QCA+cb8vHR7gENnxX/UfUEBDQhzaQW5PzOJkIySl9pnou
-         6Bh3vlHVNoDXvAxez3Zk7lOLOz9IS8tc68SRZ8tu2nqJyrcqjLQg+PAOdNZKwcwZyeRV
-         46RulapimQLIlT4y5pSR+8gp8ahaL+44I0/4WJ2OcC0msJAHCPvmbM0Pr/oNzSNkUc/b
-         FK+/k/QQL8z8SgOvj6aKhehhodjJCxJqXKEX56+Sf4X0Hi5SUDhvSTOGCZUjJqDRuVDi
-         0ruerBEvTIJFeOGnpdvpAp6X1bssAYq80EPMeDHjti8R0k2wGxMYIW3brg3J9CnmhAuk
-         MT3A==
-X-Gm-Message-State: ANhLgQ1nAKgUhN4oRCvjQoPV90mompvuBnHS0sryOpJN2zH/f6TOZeOz
-        wAPXCUAnaENc46fNwByiE8daAgZ9Ke8=
-X-Google-Smtp-Source: ADFU+vtgvHeu+goRQk4HuGdibRkCa4BNFmWpMusj4lseIDlvo25X+a7g3CaIhhMeO9RSSDzHMjYhQQ==
-X-Received: by 2002:a7b:c05a:: with SMTP id u26mr4337346wmc.74.1584012095853;
-        Thu, 12 Mar 2020 04:21:35 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=GFmNKQyMSZMwZUCnsk2pyKF7rtWxqi2AMD/Ce8iu334=;
+        b=M7vej5lshJL6aXXhbM3IlRuMJe/CjK4UZkn5AI3ahFYg8NOR/yK/tTTl81AbgE7Wrt
+         Aah6CAYH1g8SMU6d6/b8gpoxVyr0S/O2IK8m4W52iU/8X8vWkpicOHazRt1OXachByrg
+         QIUes4hucg/TRaGqFcgqjrRCcJPwYzFYnLt7xaKM1DpglFUCpkDtgD4lAFilGjGvDH9k
+         ybLt46ChLfpiiDf/yWM52OQP1z7ZhRUzVMQb4ONjKzs8quCKDkO9DjUYBW/zGFeV0uUD
+         knfxatthVGhAhffk7GvhMuqMPZ3qQCk6QTiWNwZm3B1FG9yWLAX8Z94WnRRRkX10J+0z
+         KjtA==
+X-Gm-Message-State: ANhLgQ3sFqRa9lWk3FUxg6lesPuaRSDUMmmEVlWlqlrKluwWANN8JYu6
+        0Cns6vQgvxsGSD4Yc4MQ78QkHg==
+X-Google-Smtp-Source: ADFU+vuAAFF/o2WgExiRQPfrS5IN5zyWXfAyr8mpXgg/I3/uRsx9fM4Ay67mnUYfMv8N3bHWcuh98Q==
+X-Received: by 2002:a05:6000:189:: with SMTP id p9mr10507281wrx.391.1584012254155;
+        Thu, 12 Mar 2020 04:24:14 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f? ([2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f])
-        by smtp.googlemail.com with ESMTPSA id i1sm57279358wrs.18.2020.03.12.04.21.34
+        by smtp.googlemail.com with ESMTPSA id m187sm12108022wme.16.2020.03.12.04.24.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2020 04:21:35 -0700 (PDT)
-Subject: Re: [PATCH] thermal: rcar_thermal: Handle probe error gracefully
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>, linux-pm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-References: <20200310114709.1483860-1-niklas.soderlund+renesas@ragnatech.se>
+        Thu, 12 Mar 2020 04:24:13 -0700 (PDT)
+Subject: Re: [PATCH 1/2] thermal: qoriq: Use devm_add_action_or_reset() to
+ handle all cleanups
+To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+References: <1583903252-2058-1-git-send-email-Anson.Huang@nxp.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -105,12 +107,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <fcc43b2a-c21d-febf-f709-9511cbff0983@linaro.org>
-Date:   Thu, 12 Mar 2020 12:21:34 +0100
+Message-ID: <c4c2d976-4fe6-bdf3-e110-90d1600566a3@linaro.org>
+Date:   Thu, 12 Mar 2020 12:24:12 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200310114709.1483860-1-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <1583903252-2058-1-git-send-email-Anson.Huang@nxp.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -119,36 +121,93 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/03/2020 12:47, Niklas Söderlund wrote:
-> If the common register memory resource is not available the driver needs
-> to fail gracefully to disable PM. Instead of returning the error
-> directly store it in ret and use the already existing error path.
-> 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+On 11/03/2020 06:07, Anson Huang wrote:
+> Use devm_add_action_or_reset() to handle all cleanups of failure in
+> .probe and .remove, then .remove callback can be dropped.
 
-Applied, thanks
+Is this change compatible with the tristate?
 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 > ---
->  drivers/thermal/rcar_thermal.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  drivers/thermal/qoriq_thermal.c | 35 ++++++++++++++---------------------
+>  1 file changed, 14 insertions(+), 21 deletions(-)
 > 
-> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-> index 8f1aafa2044e5ba7..4a48d1d2a31c9250 100644
-> --- a/drivers/thermal/rcar_thermal.c
-> +++ b/drivers/thermal/rcar_thermal.c
-> @@ -521,8 +521,10 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->  			res = platform_get_resource(pdev, IORESOURCE_MEM,
->  						    mres++);
->  			common->base = devm_ioremap_resource(dev, res);
-> -			if (IS_ERR(common->base))
-> -				return PTR_ERR(common->base);
-> +			if (IS_ERR(common->base)) {
-> +				ret = PTR_ERR(common->base);
-> +				goto error_unregister;
-> +			}
+> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+> index 874bc46..67a8d84 100644
+> --- a/drivers/thermal/qoriq_thermal.c
+> +++ b/drivers/thermal/qoriq_thermal.c
+> @@ -228,6 +228,14 @@ static const struct regmap_access_table qoriq_rd_table = {
+>  	.n_yes_ranges	= ARRAY_SIZE(qoriq_yes_ranges),
+>  };
 >  
->  			idle = 0; /* polling delay is not needed */
->  		}
+> +static void qoriq_tmu_action(void *p)
+> +{
+> +	struct qoriq_tmu_data *data = p;
+> +
+> +	regmap_write(data->regmap, REGS_TMR, TMR_DISABLE);
+> +	clk_disable_unprepare(data->clk);
+> +}
+> +
+>  static int qoriq_tmu_probe(struct platform_device *pdev)
+>  {
+>  	int ret;
+> @@ -278,6 +286,10 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> +	ret = devm_add_action_or_reset(dev, qoriq_tmu_action, data);
+> +	if (ret)
+> +		return ret;
+> +
+>  	/* version register offset at: 0xbf8 on both v1 and v2 */
+>  	ret = regmap_read(data->regmap, REGS_IPBRR(0), &ver);
+>  	if (ret) {
+> @@ -290,35 +302,17 @@ static int qoriq_tmu_probe(struct platform_device *pdev)
+>  
+>  	ret = qoriq_tmu_calibration(dev, data);	/* TMU calibration */
+>  	if (ret < 0)
+> -		goto err;
+> +		return ret;
+>  
+>  	ret = qoriq_tmu_register_tmu_zone(dev, data);
+>  	if (ret < 0) {
+>  		dev_err(dev, "Failed to register sensors\n");
+> -		ret = -ENODEV;
+> -		goto err;
+> +		return ret;
+>  	}
+>  
+>  	platform_set_drvdata(pdev, data);
+>  
+>  	return 0;
+> -
+> -err:
+> -	clk_disable_unprepare(data->clk);
+> -
+> -	return ret;
+> -}
+> -
+> -static int qoriq_tmu_remove(struct platform_device *pdev)
+> -{
+> -	struct qoriq_tmu_data *data = platform_get_drvdata(pdev);
+> -
+> -	/* Disable monitoring */
+> -	regmap_write(data->regmap, REGS_TMR, TMR_DISABLE);
+> -
+> -	clk_disable_unprepare(data->clk);
+> -
+> -	return 0;
+>  }
+>  
+>  static int __maybe_unused qoriq_tmu_suspend(struct device *dev)
+> @@ -365,7 +359,6 @@ static struct platform_driver qoriq_tmu = {
+>  		.of_match_table	= qoriq_tmu_match,
+>  	},
+>  	.probe	= qoriq_tmu_probe,
+> -	.remove	= qoriq_tmu_remove,
+>  };
+>  module_platform_driver(qoriq_tmu);
+>  
 > 
 
 
