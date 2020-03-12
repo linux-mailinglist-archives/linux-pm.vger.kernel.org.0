@@ -2,58 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21EF9182E64
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 11:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB044182E71
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 12:01:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726731AbgCLK5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 06:57:30 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:39785 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726310AbgCLK53 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 06:57:29 -0400
-Received: by mail-wr1-f66.google.com with SMTP id r15so6828785wrx.6
-        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 03:57:29 -0700 (PDT)
+        id S1726302AbgCLLBC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 07:01:02 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:41621 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726567AbgCLLBC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 07:01:02 -0400
+Received: by mail-wr1-f65.google.com with SMTP id s14so6837554wrt.8
+        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 04:01:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=llHCx/FpKwa12EPnI5qYZXhh3e9dX6KKu710hUHPbKA=;
-        b=QG284q8GTdRdzt6unR2axewQ3H1ePVsEHT6hJMyuKH220h1dx37q77uJ0yLq+42yEm
-         WnSWR3NCHXdibd08xVgYan5Oxy8+HhFZtdtJyJ7uuw58FWgFe1geDOX5JHczRlcAtym7
-         MVFi/Gogy0h8yXKf1/W6mukYjaYIO6GYKJ0x+lWmlq2R9BuHYzTRn0RLemUOYaf4C9tn
-         oCHytikhHJ2W4FYDclxvUTZiT4WObSjJAx4YJd+6sFo1Krv9wVBhnRpd3E0CgAzStaaD
-         Cl69UWWuhlTRlJmCN+7aVnVkf5WTpWUDQfN9XA1u1n6NFhjxteZvQ5u1Wm2kqrcsz2d+
-         mu1Q==
+        bh=znqUGmDCxVbX3i83yv1LPKkL5/RdRLvb+vGnWoYei2g=;
+        b=F6J5IOX10gQ+LPEoHCY9P8JthL7j1cvqIVpBooDuLjaqpX8C3kxx754ao3qX3ckd26
+         +OpPRuNGvdMs2pKjk8jMYekoycMrIq+Ae/aDI9Q+Gub4CM8nRMSPDx1arLJdlnhOrcoL
+         paibkbgcKDkh6DpALj/Tjq1qN+E7O9LfK1TQ01edE+KazSZCa/uorSg8PaIGgIB/HnDH
+         Fac4r/pz9KjnhejmbS1pgQ1MU3A21N93VQEQ6EA8ub44/wxtkyW68a9LBCXIR9cpk2FV
+         RZf2sOWvJuzE0xtURCMiWrfugXTAobFdNqmhfIfh/FiiaPq4aal9K8fcdxfxNl5F4ntN
+         rWeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=llHCx/FpKwa12EPnI5qYZXhh3e9dX6KKu710hUHPbKA=;
-        b=U1xQ7HEZqhT+oRRe6ywU09x6pMJ6KuIGXMUiDpCMaWzbu9n/nu+4V7Gujf4xJ2a+MI
-         p/PEApA3tk17yQCZ7it+AXS7jRxaXBlqs22vpZ151Nv81yBvVlLujygWi0/fzirmHBXf
-         X6d7XqwtoYxB7Dyke0Q6Vu7uu+nnzgwRGfk9KjJ6758SYkQFyQkVPEwJaEcu0L5M/DVo
-         J/WAWHY3qe5aZWYNFYYXSGXoEuAkr2roz/eZpfX7ESkyy6PrR87mzl4NEKRtW6F3oSkw
-         tsheCTAgd1JkmMCjHSQMw260PGekd+QLRhoupcrOYSs1Wqm+6/Z0zNeZciMa+n/ZLEwD
-         JBnw==
-X-Gm-Message-State: ANhLgQ3NL6ge5UL7wMY0A4ePzZT5cWEHw62/HjIexNB1CzEAlmqur4sH
-        c7ktI+HIk5jrlSkdaapuimzwkQ==
-X-Google-Smtp-Source: ADFU+vskFOzKMlECJbTOxtLG4xctrItfUWgdoeW+cjvJ3u+62JyiqbojgX5MxBdQ07A61ZqycEsk1g==
-X-Received: by 2002:adf:a2d9:: with SMTP id t25mr10186847wra.84.1584010648342;
-        Thu, 12 Mar 2020 03:57:28 -0700 (PDT)
+        bh=znqUGmDCxVbX3i83yv1LPKkL5/RdRLvb+vGnWoYei2g=;
+        b=HBOV3XvosDBGvkGWQFfvjNsJVUWWbrdvmPR4jASTDDNBlH1TGshgNqSvFCBuJAwiuZ
+         aNtCe8/GsCvT5GbZDeEvgr6mqKDOBZ23zWbu60BmXGiHPCIs8rLK1BjQnw/QIp8/541l
+         0BxTMC/j6ljsY7pz21mWTySSvjoJckzZKDXEQxntJJR+u3NW2BwHKmiEJ7+vBNjiO1v/
+         q1kwUUqh/yG0GZRX7yqiN/N167JwPgi8oJY0Sp6jX20bBtbbFLdEcffmi8wgF6mbV+nu
+         LXMbbyQMoOaHvWNGTf9oiPmkgU22c7v2ORKkjU26hsEPfa8464KWtMdEFbuhibquJ9Wo
+         9kKA==
+X-Gm-Message-State: ANhLgQ1ujR581zJtn1AbtJhJnj+zlZXYeotLHXNZY5K3lLP+jIxEhQhp
+        NL0vZOiSuQihNB5dWx4j0OHGww==
+X-Google-Smtp-Source: ADFU+vteDdHWgx1gUzWThJKQSOprIOkNr41TK5/nvNI/6Ct+u/DwM4AX322iNtcez073YJYPm3Xt7g==
+X-Received: by 2002:adf:b641:: with SMTP id i1mr10431365wre.18.1584010859471;
+        Thu, 12 Mar 2020 04:00:59 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f? ([2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f])
-        by smtp.googlemail.com with ESMTPSA id x5sm12554098wrv.67.2020.03.12.03.57.27
+        by smtp.googlemail.com with ESMTPSA id i67sm53009872wri.50.2020.03.12.04.00.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2020 03:57:27 -0700 (PDT)
-Subject: Re: [PATCH] thermal: exynos: Silence warning during deferred probe
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-References: <CGME20200228092342eucas1p1ead44fbfd9ab57c02ffa588ca9acb97a@eucas1p1.samsung.com>
- <20200228092331.21548-1-m.szyprowski@samsung.com>
+        Thu, 12 Mar 2020 04:00:58 -0700 (PDT)
+Subject: Re: [PATCH V2 RESEND 1/4] dt-bindings: thermal: imx8mm-thermal: Add
+ binding doc for i.MX8MM
+To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org, leonard.crestez@nxp.com, daniel.baluta@nxp.com,
+        peng.fan@nxp.com, aford173@gmail.com, ping.bai@nxp.com,
+        jun.li@nxp.com, shengjiu.wang@nxp.com, bjorn.andersson@linaro.org,
+        olof@lixom.net, vkoul@kernel.org, dinguyen@kernel.org,
+        marcin.juszkiewicz@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+References: <1582947862-11073-1-git-send-email-Anson.Huang@nxp.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -109,12 +115,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <67204259-0c4f-5b25-a324-c31fb8172414@linaro.org>
-Date:   Thu, 12 Mar 2020 11:57:26 +0100
+Message-ID: <cac20a14-a8ec-e7af-9c6e-be62fb29db89@linaro.org>
+Date:   Thu, 12 Mar 2020 12:00:56 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200228092331.21548-1-m.szyprowski@samsung.com>
+In-Reply-To: <1582947862-11073-1-git-send-email-Anson.Huang@nxp.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -123,33 +129,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/02/2020 10:23, Marek Szyprowski wrote:
-> Don't confuse user with meaningless warning about the failure of
-> registering sensors in case of deferred probe.
+On 29/02/2020 04:44, Anson Huang wrote:
+> Add thermal binding doc for Freescale's i.MX8MM Thermal Monitoring Unit.
 > 
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Applied, thanks
+Applied 1/4 and 2/4.
 
+Thanks
+
+
+ ---
+> No change.
 > ---
->  drivers/thermal/samsung/exynos_tmu.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  .../devicetree/bindings/thermal/imx8mm-thermal.txt        | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
 > 
-> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-> index fd4a17812f33..e9a90bc23b11 100644
-> --- a/drivers/thermal/samsung/exynos_tmu.c
-> +++ b/drivers/thermal/samsung/exynos_tmu.c
-> @@ -1094,7 +1094,9 @@ static int exynos_tmu_probe(struct platform_device *pdev)
->  						    &exynos_sensor_ops);
->  	if (IS_ERR(data->tzd)) {
->  		ret = PTR_ERR(data->tzd);
-> -		dev_err(&pdev->dev, "Failed to register sensor: %d\n", ret);
-> +		if (ret != -EPROBE_DEFER)
-> +			dev_err(&pdev->dev, "Failed to register sensor: %d\n",
-> +				ret);
->  		goto err_sclk;
->  	}
->  
+> diff --git a/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+> new file mode 100644
+> index 0000000..d09ae82
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+> @@ -0,0 +1,15 @@
+> +* Thermal Monitoring Unit (TMU) on Freescale i.MX8MM SoC
+> +
+> +Required properties:
+> +- compatible : Must be "fsl,imx8mm-tmu".
+> +- reg : Address range of TMU registers.
+> +- clocks : TMU's clock source.
+> +- #thermal-sensor-cells : Should be 0. See ./thermal.txt for a description.
+> +
+> +Example:
+> +tmu: tmu@30260000 {
+> +	compatible = "fsl,imx8mm-tmu";
+> +	reg = <0x30260000 0x10000>;
+> +	clocks = <&clk IMX8MM_CLK_TMU_ROOT>;
+> +	#thermal-sensor-cells = <0>;
+> +};
 > 
 
 
