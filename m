@@ -2,64 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB044182E71
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 12:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DE2182EB6
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 12:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726302AbgCLLBC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 07:01:02 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:41621 "EHLO
+        id S1726752AbgCLLMG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 07:12:06 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43489 "EHLO
         mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726567AbgCLLBC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 07:01:02 -0400
-Received: by mail-wr1-f65.google.com with SMTP id s14so6837554wrt.8
-        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 04:01:00 -0700 (PDT)
+        with ESMTP id S1726641AbgCLLMF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 07:12:05 -0400
+Received: by mail-wr1-f65.google.com with SMTP id b2so657232wrj.10
+        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 04:12:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=znqUGmDCxVbX3i83yv1LPKkL5/RdRLvb+vGnWoYei2g=;
-        b=F6J5IOX10gQ+LPEoHCY9P8JthL7j1cvqIVpBooDuLjaqpX8C3kxx754ao3qX3ckd26
-         +OpPRuNGvdMs2pKjk8jMYekoycMrIq+Ae/aDI9Q+Gub4CM8nRMSPDx1arLJdlnhOrcoL
-         paibkbgcKDkh6DpALj/Tjq1qN+E7O9LfK1TQ01edE+KazSZCa/uorSg8PaIGgIB/HnDH
-         Fac4r/pz9KjnhejmbS1pgQ1MU3A21N93VQEQ6EA8ub44/wxtkyW68a9LBCXIR9cpk2FV
-         RZf2sOWvJuzE0xtURCMiWrfugXTAobFdNqmhfIfh/FiiaPq4aal9K8fcdxfxNl5F4ntN
-         rWeg==
+        bh=yKVMhGEhHj2nAvWVxK/ozTDgieqKZsKk3C5oNd2q3Mc=;
+        b=rMsUEwK5b57qYCS0YtjFicxSGjju0PHMOEO6LbfrtwixQXZWUMmNw8tLz2nmCAzlGI
+         JYpc50qaz/WsVbrs0/ZNvUC65ZwvXuFADfekz9Lsk1Qo6tPvoxS4XUpjhQGjlu8nNdfK
+         q92CjZSOqgmz7ZQUInDsSV8MZHuzY72bm7BjZkICBRF2SXelBJGCLyBrGqlDbrlqRxlX
+         ZKSX8FS02qHDZZPQX5NdAOMahl/1qdhH2ZnkqZtUM/87XWX3QPFCmImELjrBzS7ANPsM
+         ceO16sYaMf7ipiCLspxciTCWiHnhNIG4JASPwD6ruPcUkmnSGOFbTQOTCG0eVM6OxObv
+         ff5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=znqUGmDCxVbX3i83yv1LPKkL5/RdRLvb+vGnWoYei2g=;
-        b=HBOV3XvosDBGvkGWQFfvjNsJVUWWbrdvmPR4jASTDDNBlH1TGshgNqSvFCBuJAwiuZ
-         aNtCe8/GsCvT5GbZDeEvgr6mqKDOBZ23zWbu60BmXGiHPCIs8rLK1BjQnw/QIp8/541l
-         0BxTMC/j6ljsY7pz21mWTySSvjoJckzZKDXEQxntJJR+u3NW2BwHKmiEJ7+vBNjiO1v/
-         q1kwUUqh/yG0GZRX7yqiN/N167JwPgi8oJY0Sp6jX20bBtbbFLdEcffmi8wgF6mbV+nu
-         LXMbbyQMoOaHvWNGTf9oiPmkgU22c7v2ORKkjU26hsEPfa8464KWtMdEFbuhibquJ9Wo
-         9kKA==
-X-Gm-Message-State: ANhLgQ1ujR581zJtn1AbtJhJnj+zlZXYeotLHXNZY5K3lLP+jIxEhQhp
-        NL0vZOiSuQihNB5dWx4j0OHGww==
-X-Google-Smtp-Source: ADFU+vteDdHWgx1gUzWThJKQSOprIOkNr41TK5/nvNI/6Ct+u/DwM4AX322iNtcez073YJYPm3Xt7g==
-X-Received: by 2002:adf:b641:: with SMTP id i1mr10431365wre.18.1584010859471;
-        Thu, 12 Mar 2020 04:00:59 -0700 (PDT)
+        bh=yKVMhGEhHj2nAvWVxK/ozTDgieqKZsKk3C5oNd2q3Mc=;
+        b=ImHaw7mZOj6FqcwqwL/m+zKibfnfTP5hlZykB/+ClPv1pFvj3JdA6/AlYOT7/9n1ug
+         XyvrO9j2CspCCgyaG/KSLE7IjDgfioW3Bsks7UBy7IHW1bwyktF9AaYal/OqwQe61ZYr
+         0cnFpoDkwM1EjQvI/Dp1gKHFS5gopc5JEUv1MSHK/o7YPJwbEwKA6Vjhgf7gJejCb3qS
+         OqYEe/EB99FwMtk9Q1v6LCPhPkPeApg1jO87CKtZXTRxWUNFB8dBtd7OMoClci0fYztO
+         E9hW43+LYwKiry7W7a4aCL+JIPKVRBhVia1DpS/4pkrDe5Bq7F/6YddomXHu0dk65Ziu
+         LCJg==
+X-Gm-Message-State: ANhLgQ10qdYyVz08jYKyHl7b2OwRdqw9bA1BLp2OOozypFNGe93X3s3X
+        5He9zpkrryuTRfRcxa57NiOhuw==
+X-Google-Smtp-Source: ADFU+vvuhEJ1A6Ra0+pNYlmAUpQkagno2JoCT+VM1Wvj7haaQO4gvg3G3raCXzYU9XoLla9HfBvCkw==
+X-Received: by 2002:adf:e68b:: with SMTP id r11mr9872626wrm.138.1584011523138;
+        Thu, 12 Mar 2020 04:12:03 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f? ([2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f])
-        by smtp.googlemail.com with ESMTPSA id i67sm53009872wri.50.2020.03.12.04.00.57
+        by smtp.googlemail.com with ESMTPSA id u20sm12214644wmj.14.2020.03.12.04.12.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2020 04:00:58 -0700 (PDT)
-Subject: Re: [PATCH V2 RESEND 1/4] dt-bindings: thermal: imx8mm-thermal: Add
- binding doc for i.MX8MM
+        Thu, 12 Mar 2020 04:12:02 -0700 (PDT)
+Subject: Re: [PATCH] thermal: add COMPILE_TEST support for i.MX8MM
 To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org, leonard.crestez@nxp.com, daniel.baluta@nxp.com,
-        peng.fan@nxp.com, aford173@gmail.com, ping.bai@nxp.com,
-        jun.li@nxp.com, shengjiu.wang@nxp.com, bjorn.andersson@linaro.org,
-        olof@lixom.net, vkoul@kernel.org, dinguyen@kernel.org,
-        marcin.juszkiewicz@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        amit.kucheria@verdurent.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Linux-imx@nxp.com
-References: <1582947862-11073-1-git-send-email-Anson.Huang@nxp.com>
+References: <1583509057-8197-1-git-send-email-Anson.Huang@nxp.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -115,12 +106,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <cac20a14-a8ec-e7af-9c6e-be62fb29db89@linaro.org>
-Date:   Thu, 12 Mar 2020 12:00:56 +0100
+Message-ID: <7808e8ca-2b2f-05cc-8b34-c2d36a30b4dd@linaro.org>
+Date:   Thu, 12 Mar 2020 12:12:01 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <1582947862-11073-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1583509057-8197-1-git-send-email-Anson.Huang@nxp.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -129,45 +120,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/02/2020 04:44, Anson Huang wrote:
-> Add thermal binding doc for Freescale's i.MX8MM Thermal Monitoring Unit.
+On 06/03/2020 16:37, Anson Huang wrote:
+> Add COMPILE_TEST support to i.MX8MM thermal driver for better compile
+> testing coverage.
 > 
 > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-
-Applied 1/4 and 2/4.
-
-Thanks
-
-
- ---
-> No change.
 > ---
->  .../devicetree/bindings/thermal/imx8mm-thermal.txt        | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+
+Applied, thanks
+
+>  drivers/thermal/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
-> new file mode 100644
-> index 0000000..d09ae82
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
-> @@ -0,0 +1,15 @@
-> +* Thermal Monitoring Unit (TMU) on Freescale i.MX8MM SoC
-> +
-> +Required properties:
-> +- compatible : Must be "fsl,imx8mm-tmu".
-> +- reg : Address range of TMU registers.
-> +- clocks : TMU's clock source.
-> +- #thermal-sensor-cells : Should be 0. See ./thermal.txt for a description.
-> +
-> +Example:
-> +tmu: tmu@30260000 {
-> +	compatible = "fsl,imx8mm-tmu";
-> +	reg = <0x30260000 0x10000>;
-> +	clocks = <&clk IMX8MM_CLK_TMU_ROOT>;
-> +	#thermal-sensor-cells = <0>;
-> +};
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 4d6753f..91af271 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -265,7 +265,7 @@ config IMX_SC_THERMAL
+>  
+>  config IMX8MM_THERMAL
+>  	tristate "Temperature sensor driver for Freescale i.MX8MM SoC"
+> -	depends on ARCH_MXC
+> +	depends on ARCH_MXC || COMPILE_TEST
+>  	depends on OF
+>  	help
+>  	  Support for Thermal Monitoring Unit (TMU) found on Freescale i.MX8MM SoC.
 > 
 
 
