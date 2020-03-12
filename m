@@ -2,81 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 377B51839CA
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 20:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8828A183A2F
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 21:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726855AbgCLTsX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 15:48:23 -0400
-Received: from 7.mo2.mail-out.ovh.net ([188.165.48.182]:54747 "EHLO
-        7.mo2.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbgCLTsX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 15:48:23 -0400
-X-Greylist: delayed 2383 seconds by postgrey-1.27 at vger.kernel.org; Thu, 12 Mar 2020 15:48:22 EDT
-Received: from player773.ha.ovh.net (unknown [10.110.171.30])
-        by mo2.mail-out.ovh.net (Postfix) with ESMTP id 4C7531C7FC1
-        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 20:08:38 +0100 (CET)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player773.ha.ovh.net (Postfix) with ESMTPSA id D68D6107269FC;
-        Thu, 12 Mar 2020 19:08:31 +0000 (UTC)
-Date:   Thu, 12 Mar 2020 20:08:30 +0100
-From:   Stephen Kitt <steve@sk2.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: power/pm_qos_interface.rst: fix list
-Message-ID: <20200312200830.355dcb7e@heffalump.sk2.org>
-In-Reply-To: <20200312181925.1373195-1-steve@sk2.org>
-References: <20200312181925.1373195-1-steve@sk2.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726867AbgCLUFu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 16:05:50 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:38630 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726114AbgCLUFu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 16:05:50 -0400
+Received: by mail-oi1-f193.google.com with SMTP id k21so6869381oij.5;
+        Thu, 12 Mar 2020 13:05:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3bLRRYxvg8WPmScDUsmez1LtGKNh4mFSL/Bbm2FXoLA=;
+        b=Z7FW3RydYJRFKMqlEOowzkzI190sEVYreFMGRGNbc5AXKUethBTxJwwvhJXb2cYAT4
+         +GY8ZFpau5pn1F8OMcedypHweKHPvFvWvD2HF7igIG6Aj9tn8sUtG8ejFWqyqYdkhyqY
+         eu9Mi8BAHGJtmaY+J3+kY5zu5gmYwspM8AzPngLzWaQCMtkCBqeY2/755y+S2bthzLYV
+         JFmgV9jeKU2tTHU+hfr9spuQiUplYSmWZf6rvVlUbNrmMx9FnPDrv6ritNO10W8NDYH/
+         PFNxFGAjmX1SGd75qbQxWOnlExxA/8To3ioa1GAM6I+gIbvtbeTtfcEob2kkgZlzGHA5
+         zBEg==
+X-Gm-Message-State: ANhLgQ1lXizsxXzFRDgI2nJD3tQj4WxUpmV/537Kz/o7QCL3HdfwQl0z
+        /ZOMsaW9gMLVU+JetZDlIA==
+X-Google-Smtp-Source: ADFU+vtzzZijf6zInIIlPCXBjx0bL4ZmzsWAe8jak76tyZW9bq0xAEQSMkZ9c7An/Wms8LmVvpct7Q==
+X-Received: by 2002:a05:6808:3cb:: with SMTP id o11mr3876127oie.11.1584043549644;
+        Thu, 12 Mar 2020 13:05:49 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id h2sm806253otm.44.2020.03.12.13.05.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2020 13:05:48 -0700 (PDT)
+Received: (nullmailer pid 18639 invoked by uid 1000);
+        Thu, 12 Mar 2020 20:05:47 -0000
+Date:   Thu, 12 Mar 2020 15:05:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: rcar-gen3-thermal: Add
+ r8a77961 support
+Message-ID: <20200312200547.GA18576@bogus>
+References: <20200306105503.24267-1-geert+renesas@glider.be>
+ <20200306105503.24267-2-geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
- boundary="Sig_/ozT.y3x1WJF3zq_GrP9pdqU"; protocol="application/pgp-signature"
-X-Ovh-Tracer-Id: 9851061236247449005
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedugedruddvhedguddvfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvuffkjghfofggtgesghdtreerredtvdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejjeefrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200306105503.24267-2-geert+renesas@glider.be>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---Sig_/ozT.y3x1WJF3zq_GrP9pdqU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri,  6 Mar 2020 11:55:02 +0100, Geert Uytterhoeven wrote:
+> Document R-Car M3-W+ (R8A77961) SoC bindings.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-On Thu, 12 Mar 2020 19:19:25 +0100, Stephen Kitt <steve@sk2.org> wrote:
-> This adds a missing separator before a numbered list, fixing
->=20
-> 	Documentation/power/pm_qos_interface.rst:12: WARNING: Unexpected
-> indentation.
-
-... which is already fixed in linux-next, so please ignore this.
-
-Regards,
-
-Stephen
-
---Sig_/ozT.y3x1WJF3zq_GrP9pdqU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAl5qiK4ACgkQgNMC9Yht
-g5x8+w/9HVlg8qkEE8BKdlwrD+4MGgBiAMH+MG7OtLLlFxAfz/qOvSQuml2+ax3c
-K8d8ZrXgCuLWEltJRIKAhP+tBaacdlBreG0ovZMRLyejh/y9x0yJ28uf7GWcRzj0
-L1jUPT8umOkaikAqorY7hN7koNgkRRsTnP0eBHxn4Vh2j/Kma9iOGU7GSYVC5tKr
-BDtEgvn97H0i3bbWyr9Ve06IXVlqjca6Jl4+PxImbsCqYhlkLkBqS0jSvdVOSUVz
-AfQf5nldnCHmZZ+FKQa6BFeEtYJJVorwoWHLiNlt0UeAfWultRL9zUEZokjR9iWK
-ItBOoSWSEUjJB8KQMoecoZrR3i1s3HyycPKw9GjSHewFSup30aV10LeusoKpvTH7
-bg0xrt/WNZWzvMyMt2pnIG2yExxh5uRvkWUKfe86w9ZNSen3YVgOq21o9S0SwB9e
-Vxl6eW2VQ2eTpb8u9hXAodJPznZAI6a0S/zt4EMZRWkfQ/nCrcrz1KUIrNOjrzK6
-U/qzWG0xNnMdC6JW5nPkhEXVGq9Z8ySaNbaCV+nPcy8F7SE7e06M8ZkUqeGL/hxB
-jG+4KA5ltYf7DVHZJQ002I0CKCFNflHgm4CSS/7R4cZe7h3soays9aFbQuvHfeC4
-umz78pxgviXAlDQR3um4zOELVhYmylgGCSJWN/ToPl0zRot/QwU=
-=0+qz
------END PGP SIGNATURE-----
-
---Sig_/ozT.y3x1WJF3zq_GrP9pdqU--
+Acked-by: Rob Herring <robh@kernel.org>
