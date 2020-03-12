@@ -2,57 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A20182E3F
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 11:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EF9182E64
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 11:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbgCLKuj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 06:50:39 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:36438 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726567AbgCLKuj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 06:50:39 -0400
-Received: by mail-wr1-f67.google.com with SMTP id s5so6824130wrg.3
-        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 03:50:36 -0700 (PDT)
+        id S1726731AbgCLK5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 06:57:30 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:39785 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726310AbgCLK53 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 06:57:29 -0400
+Received: by mail-wr1-f66.google.com with SMTP id r15so6828785wrx.6
+        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 03:57:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0oTfpkffBRPhCDgSx9RwG3CEjZua2w+TS9rgfT94Gx4=;
-        b=ybRwjh0cHJAaYsBUekuNJkLizHG2Gto55KbE0BPQ7tzltvCmWb97SI+G1gkapOuTap
-         nJrscxzYS49j7dOygUYXMfKqZ//GDWYlN92DA/OaqOL54/ce6zJzVu6Halgjr+GNLCnp
-         kvlLJNmAhpIr5NqFFuA62Hw6UsZn4SivAfjF7Aw0vSCFvcE5LUj9UWWgnf3tJwhP/Q/b
-         yNEYTFAksIHo0pJsHi/KibrtsJAtTTrWXvvS45SRorFnJGiqcZNKvwy3n4UYhPotdbJf
-         5kEgXj2ejxlgZjLnMqGrGu/RUZbc1/ESkUAqv54rFDkMk6ni4RcwCPKND7ZgGLQZvcbH
-         HUhA==
+        bh=llHCx/FpKwa12EPnI5qYZXhh3e9dX6KKu710hUHPbKA=;
+        b=QG284q8GTdRdzt6unR2axewQ3H1ePVsEHT6hJMyuKH220h1dx37q77uJ0yLq+42yEm
+         WnSWR3NCHXdibd08xVgYan5Oxy8+HhFZtdtJyJ7uuw58FWgFe1geDOX5JHczRlcAtym7
+         MVFi/Gogy0h8yXKf1/W6mukYjaYIO6GYKJ0x+lWmlq2R9BuHYzTRn0RLemUOYaf4C9tn
+         oCHytikhHJ2W4FYDclxvUTZiT4WObSjJAx4YJd+6sFo1Krv9wVBhnRpd3E0CgAzStaaD
+         Cl69UWWuhlTRlJmCN+7aVnVkf5WTpWUDQfN9XA1u1n6NFhjxteZvQ5u1Wm2kqrcsz2d+
+         mu1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=0oTfpkffBRPhCDgSx9RwG3CEjZua2w+TS9rgfT94Gx4=;
-        b=lvFF4g/5ryAf7rDl6EszMxATAJXjW/YOyKNhO/ArnPzZPatx8jgz0mXSEOSF4SS5Am
-         w0q/vO0ELi+DH7GQoMBDMXFGKWBgkZqz5ou3Tj0Q24Tv3i/9SwteyCor4TEavGTRfKFk
-         U3OgAuE61icin69WxoDhmhu0fPKL5oQ6SGpc3ASaxGbESuYmzejV1wiE9qcMNE+ChtIC
-         Lwpab0HrvkjP16oNAyzN3cW1W4wwIDtV/MSL7PYPaPdeX9dAlGipmV+ef15vSkNiHWIM
-         4wm0qRuYE2YEoJESQLH+LKJ01QXp6AKcQLxBnFjPyKQ8yKG1iCsXzneEdEsJEn9/yOOX
-         4Cuw==
-X-Gm-Message-State: ANhLgQ0DYf/XvYNsnNK9VEmwCRVBHJw8GSXiQuAfcaY6mnJN1zCq13HB
-        gvGsNVlfAoECvUFXGrlGLjpo632XHRM=
-X-Google-Smtp-Source: ADFU+vtNJCTxoZwdJsJgUdCcXKLLRY7GRBSthsVCLGltbXDyqFN1KTNEBhohyGN0E/I5Z0389FD0fQ==
-X-Received: by 2002:adf:e9c4:: with SMTP id l4mr10489678wrn.421.1584010235687;
-        Thu, 12 Mar 2020 03:50:35 -0700 (PDT)
+        bh=llHCx/FpKwa12EPnI5qYZXhh3e9dX6KKu710hUHPbKA=;
+        b=U1xQ7HEZqhT+oRRe6ywU09x6pMJ6KuIGXMUiDpCMaWzbu9n/nu+4V7Gujf4xJ2a+MI
+         p/PEApA3tk17yQCZ7it+AXS7jRxaXBlqs22vpZ151Nv81yBvVlLujygWi0/fzirmHBXf
+         X6d7XqwtoYxB7Dyke0Q6Vu7uu+nnzgwRGfk9KjJ6758SYkQFyQkVPEwJaEcu0L5M/DVo
+         J/WAWHY3qe5aZWYNFYYXSGXoEuAkr2roz/eZpfX7ESkyy6PrR87mzl4NEKRtW6F3oSkw
+         tsheCTAgd1JkmMCjHSQMw260PGekd+QLRhoupcrOYSs1Wqm+6/Z0zNeZciMa+n/ZLEwD
+         JBnw==
+X-Gm-Message-State: ANhLgQ3NL6ge5UL7wMY0A4ePzZT5cWEHw62/HjIexNB1CzEAlmqur4sH
+        c7ktI+HIk5jrlSkdaapuimzwkQ==
+X-Google-Smtp-Source: ADFU+vskFOzKMlECJbTOxtLG4xctrItfUWgdoeW+cjvJ3u+62JyiqbojgX5MxBdQ07A61ZqycEsk1g==
+X-Received: by 2002:adf:a2d9:: with SMTP id t25mr10186847wra.84.1584010648342;
+        Thu, 12 Mar 2020 03:57:28 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f? ([2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f])
-        by smtp.googlemail.com with ESMTPSA id j15sm35544931wrp.85.2020.03.12.03.50.34
+        by smtp.googlemail.com with ESMTPSA id x5sm12554098wrv.67.2020.03.12.03.57.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2020 03:50:35 -0700 (PDT)
-Subject: Re: [PATCH v6 0/8] thermal: tsens: Handle critical interrupts
-To:     Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        bjorn.andersson@linaro.org, swboyd@chromium.org,
-        sivaa@codeaurora.org, Andy Gross <agross@kernel.org>
-Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-pm@vger.kernel.org
-References: <cover.1582548319.git.amit.kucheria@linaro.org>
+        Thu, 12 Mar 2020 03:57:27 -0700 (PDT)
+Subject: Re: [PATCH] thermal: exynos: Silence warning during deferred probe
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+References: <CGME20200228092342eucas1p1ead44fbfd9ab57c02ffa588ca9acb97a@eucas1p1.samsung.com>
+ <20200228092331.21548-1-m.szyprowski@samsung.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -108,12 +109,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <5c7153cf-903d-607a-a783-35a4db7d8500@linaro.org>
-Date:   Thu, 12 Mar 2020 11:50:34 +0100
+Message-ID: <67204259-0c4f-5b25-a324-c31fb8172414@linaro.org>
+Date:   Thu, 12 Mar 2020 11:57:26 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <cover.1582548319.git.amit.kucheria@linaro.org>
+In-Reply-To: <20200228092331.21548-1-m.szyprowski@samsung.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -122,77 +123,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 28/02/2020 10:23, Marek Szyprowski wrote:
+> Don't confuse user with meaningless warning about the failure of
+> registering sensors in case of deferred probe.
+> 
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-Hi Amit,
+Applied, thanks
 
-I tried to apply the series but I've got a plethora of warnings about
-WARNING: line over 80 characters from checkpatch.
-
-Also the log contains the Link, but actually it is not necessary as my
-scripts are automatically adding them so it ends up duplicated.
-
-Can you resend the series without these warnings and the Links?
-
-Thanks
-
-   -- Daniel
-
-On 24/02/2020 13:58, Amit Kucheria wrote:
-> TSENS IP v2.x supports critical interrupts and v2.3+ adds watchdog support
-> in case the FSM is stuck. Enable support in the driver.
+> ---
+>  drivers/thermal/samsung/exynos_tmu.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> This series was generated on top of v5.6-rc2.
-> 
-> Changes since v5:¬
->  - Introduce a function tsens_register_irq to handle uplow and critical
->    interrupt registration and reduce code duplication
->  - Clarify reason for patch 04
-> 
-> Changes from v4:
-> - Add back patch 1 from v3[*], I mistakenly didn't post it for v4.
-> - Remove spinlock from critical interrupt handling
-> - Change critical interrupt handler to fall thru watchdog bark handling to
->   handle critical interrupts too
-> 
-> [*] https://lore.kernel.org/linux-arm-msm/77dd80eb58f0db29a03097cb442d606f810a849a.1577976221.git.amit.kucheria@linaro.org/
-> 
-> Changes from v3:
-> - Remove the DTS changes that are already queued
-> - Fix review comments by Bjorn
-> - Fixup patch description to clarify that we don't use TSENS critical
->   interrupts in Linux, but need it for the watchdog support that uses the
->   same HW irq line.
-> - Separate kernel-doc fixes into a separate patch.
-> 
-> Changes from v2:
-> - Handle old DTBs w/o critical irq in the same way as fix sent for 5.5
-> 
-> Changes from v1:
-> - Make tsens_features non-const to allow run time detection of features
-> - Pass tsens_sensor around as a const
-> - Fix a bug to release dev pointer in success path
-> - Address review comments from Bjorn and Stephen (thanks for the review)
-> - Add msm8998 and msm8996 DTSI changes for critical interrupts
-> 
-> 
-> Amit Kucheria (8):
->   drivers: thermal: tsens: De-constify struct tsens_features
->   drivers: thermal: tsens: Pass around struct tsens_sensor as a constant
->   drivers: thermal: tsens: use simpler variables
->   drivers: thermal: tsens: Release device in success path
->   drivers: thermal: tsens: Add critical interrupt support
->   drivers: thermal: tsens: Add watchdog support
->   drivers: thermal: tsens: kernel-doc fixup
->   drivers: thermal: tsens: Remove unnecessary irq flag
-> 
->  drivers/thermal/qcom/tsens-8960.c   |   4 +-
->  drivers/thermal/qcom/tsens-common.c | 185 ++++++++++++++++++++++++----
->  drivers/thermal/qcom/tsens-v0_1.c   |   6 +-
->  drivers/thermal/qcom/tsens-v1.c     |   6 +-
->  drivers/thermal/qcom/tsens-v2.c     |  24 +++-
->  drivers/thermal/qcom/tsens.c        |  63 ++++++----
->  drivers/thermal/qcom/tsens.h        | 103 ++++++++++++++--
->  7 files changed, 320 insertions(+), 71 deletions(-)
+> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> index fd4a17812f33..e9a90bc23b11 100644
+> --- a/drivers/thermal/samsung/exynos_tmu.c
+> +++ b/drivers/thermal/samsung/exynos_tmu.c
+> @@ -1094,7 +1094,9 @@ static int exynos_tmu_probe(struct platform_device *pdev)
+>  						    &exynos_sensor_ops);
+>  	if (IS_ERR(data->tzd)) {
+>  		ret = PTR_ERR(data->tzd);
+> -		dev_err(&pdev->dev, "Failed to register sensor: %d\n", ret);
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(&pdev->dev, "Failed to register sensor: %d\n",
+> +				ret);
+>  		goto err_sclk;
+>  	}
+>  
 > 
 
 
