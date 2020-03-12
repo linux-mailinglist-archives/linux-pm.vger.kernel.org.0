@@ -2,110 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF27D183B25
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 22:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3F0183C5E
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 23:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgCLVOk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 17:14:40 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:34340 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726508AbgCLVOk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 17:14:40 -0400
-Received: by mail-ot1-f67.google.com with SMTP id j16so7876996otl.1;
-        Thu, 12 Mar 2020 14:14:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Hb+jggLgxrgsVbgn5UC+wajZRLswbi9I3/cHFEMhG5A=;
-        b=I0hcORIboNsydVKFvFAMTfb5QsiIeJ7AD9yPDv/N/8rOEpXFiNdtdy7YGGIWvbbTiI
-         5eHd85Uzo7iXn0mLlEZ+9CdN4FJieilTXU7jGW79nktR5j2u0uJcYr++J7SMMTqiVC/q
-         pzDuZwuIeYIpmTH0KNtx19JsLc61wKJIcw+J9wRAmBhOrPQKvyv3QApMHJutYeuJ+6Lo
-         eRjyCru7rEelSwfCt3CGvgsA0rV+iFkuyj3KhyDweT7kJJabOWkWqGkjYQl2/idAe/J7
-         r2IIWOnXxrYhs1F90q4oLDOFovT7mI7KS3T4cmG/iJbzGq6zGLuNxQ/sNii8EKiKDkp9
-         cdNw==
-X-Gm-Message-State: ANhLgQ3E8J4dOKaWISXbRZujgN4cleF9CEkZDKoGUN+cyiuJEl8B/snm
-        zadyFtit0znC7JYIbRe11g==
-X-Google-Smtp-Source: ADFU+vuljXtmuwnM4UV2KeJttRiC0WN1lGhphK05ESUgIzEivH+NonbDuzc8edu6d6mjGc5QIpJOag==
-X-Received: by 2002:a9d:c61:: with SMTP id 88mr7164473otr.144.1584047679639;
-        Thu, 12 Mar 2020 14:14:39 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v12sm1633771otp.75.2020.03.12.14.14.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 14:14:39 -0700 (PDT)
-Received: (nullmailer pid 27028 invoked by uid 1000);
-        Thu, 12 Mar 2020 21:14:38 -0000
-Date:   Thu, 12 Mar 2020 16:14:38 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sergey.Semin@baikalelectronics.ru
-Cc:     Sebastian Reichel <sre@kernel.org>,
+        id S1726809AbgCLWZD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 18:25:03 -0400
+Received: from mail.manjaro.org ([176.9.38.148]:58826 "EHLO mail.manjaro.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726715AbgCLWZD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 12 Mar 2020 18:25:03 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.manjaro.org (Postfix) with ESMTP id 212C037025E5;
+        Thu, 12 Mar 2020 23:25:01 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at manjaro.org
+Received: from mail.manjaro.org ([127.0.0.1])
+        by localhost (manjaro.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZTCbUDLXMtRJ; Thu, 12 Mar 2020 23:24:58 +0100 (CET)
+From:   Tobias Schramm <t.schramm@manjaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: power: reset: Add regmap support to the
- SYSCON reboot-mode bindings
-Message-ID: <20200312211438.GA21883@bogus>
-References: <20200306130341.9585-1-Sergey.Semin@baikalelectronics.ru>
- <20200306130402.1F4F0803079F@mail.baikalelectronics.ru>
+        Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tobias Schramm <t.schramm@manjaro.org>
+Subject: [PATCH v4 0/3] Add support for CellWise cw2015 fuel gauge
+Date:   Thu, 12 Mar 2020 23:24:45 +0100
+Message-Id: <20200312222448.25097-1-t.schramm@manjaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200306130402.1F4F0803079F@mail.baikalelectronics.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 06, 2020 at 04:03:40PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> Optional regmap property will be used to refer to a syscon-controller
-> having a reboot tolerant register mapped.
+This patchset adds support for the CellWise cw2015 fuel gauge.
 
-NAK. It should simply be a child node of the 'syscon-controller'.
+The CellWise cw2015 fuel gauge is a shuntless, single-cell Li-Ion fuel
+gauge. It is used in the pine64 Pinebook Pro laptop.
 
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> ---
->  .../bindings/power/reset/syscon-reboot-mode.yaml         | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml
-> index e09bb07b1abb..f47bf52ad983 100644
-> --- a/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.yaml
-> @@ -13,9 +13,8 @@ description: |
->    This driver gets reboot mode magic value from reboot-mode driver
->    and stores it in a SYSCON mapped register. Then the bootloader
->    can read it and take different action according to the magic
-> -  value stored. The SYSCON mapped register is retrieved from the
-> -  parental dt-node plus the offset. So the SYSCON reboot-mode node
-> -  should be represented as a sub-node of a "syscon", "simple-mfd" node.
-> +  value stored. The SYSCON mapped register is retrieved either from
-> +  the parental dt-node or from a regmap phandle plus the offset.
->  
->  properties:
->    compatible:
-> @@ -29,6 +28,10 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      description: Offset in the register map for the mode register (in bytes).
->  
-> +  regmap:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Phandle to the register map node.
-> +
->  patternProperties:
->    "^mode-.+":
->      $ref: /schemas/types.yaml#/definitions/uint32
-> -- 
-> 2.25.1
-> 
+This is v4 of the patchset. This version incorporates an additional review
+by Andy and a small spelling fix.
+
+I've kept the cellwise,battery-profile property in the device tree. Its
+content describes characteristics of the battery built into a device. The
+exact format is unknown and not publicly documented. It is likely
+comprised of some key parameters of the battery (chemistry, voltages,
+design capacity) and parameters for tuning the internal state of charge
+approximation function.
+Since v2 CellWise has confirmed to me that the only way to obtain the
+profile blob is to mail them batteries for testing. Thus we will need to
+keep that property.
+
+In general I'm not 100 % sure about my json-schema binding for the gauge.
+It is my first time ever writing a json-schema binding and I'm not sure
+whether properties like power-supplies or monitored-battery need to be
+added to a separate, common schema for power supplies or not.
+
+
+Best Regards,
+
+Tobias Schramm
+
+Changelog:
+ v2:
+  * Change subject to "Add support for CellWise cw2015 fuel gauge"
+  * Rewrite bindings as json-schema
+  * Use default power-supplies handling
+  * Use regmap for register access
+  * Use standard simple-battery node
+  * Replace printk/pr_* by dev_{dbg,info,warn,err}
+  * Use cancel_delayed_work_sync in remove
+  * General code cleanup
+ v3:
+  * Incorporate review by Andy
+  * Add cellwise vendor prefix
+  * Rename cellwise,bat-config-info property to cellwise,battery-profile
+  * Remove most state of charge post-processing
+  * Use fwnode interface
+  * General code cleanup
+  * Lots of code style fixes
+ v4:
+  * Implement additional changes requested by Andy
+  * Use fwnode inline wrappers
+  * Clean up waiting for gauge
+  * Minor code style fixes
+
+Tobias Schramm (3):
+  dt-bindings: Document cellwise vendor-prefix
+  dt-bindings: power: supply: add cw2015_battery bindings
+  power: supply: add CellWise cw2015 fuel gauge driver
+
+ .../bindings/power/supply/cw2015_battery.yaml |  83 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   6 +
+ drivers/power/supply/Kconfig                  |   8 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/cw2015_battery.c         | 759 ++++++++++++++++++
+ 6 files changed, 859 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
+ create mode 100644 drivers/power/supply/cw2015_battery.c
+
+-- 
+2.24.1
+
