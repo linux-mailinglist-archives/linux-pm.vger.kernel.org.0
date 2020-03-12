@@ -2,57 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62458182ED4
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 12:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6230182EF2
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 12:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbgCLLSf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 07:18:35 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:46936 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbgCLLSf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 07:18:35 -0400
-Received: by mail-wr1-f66.google.com with SMTP id n15so6870123wrw.13
-        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 04:18:32 -0700 (PDT)
+        id S1727023AbgCLLVi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Mar 2020 07:21:38 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:39416 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726023AbgCLLVi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Mar 2020 07:21:38 -0400
+Received: by mail-wm1-f68.google.com with SMTP id f7so5824431wml.4
+        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 04:21:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+        h=subject:to:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PAtBEWkNOh5BdP8Bu8hZOuPZ1rcVZzdy14mW4FwwTe8=;
-        b=ON6y0CbPLojWppVHGSbSOLFZ4LD9yOkSdCEWYDNT49XkJetkbU3D26Rfb1cr6A0mIX
-         wPLcCxvf3s2fxISRh1lNv5X25Mai1Mc3Zdpa6eSo8iT8YtcZE/NKEygW8j2CauO8PDVr
-         E36aMVJms1I8MpwSAXDgidoxiH76EMRBtsZgbhlS8l2d/wgyWAf391k504dF2/RhE6OU
-         jBwWk+9a2pNiu7WpxWbfF0zCby5ItIUb/I2esdRGLbsXVEWVE1rx1DUEeNC6+u5glSLQ
-         BcgRg8c5YP7XL7lQldlfdt3zMhfbb9UrXrtsJLziJZ3a7tMCRWeeSuyNKEaAnKB59/jD
-         b1cg==
+        bh=pWUzddhX/AOXVACmUO+pXuK3ISXKKIrklNwYlHA2MBE=;
+        b=y9t4h3WBY3aIBCnZzhHh+Oy3ygEBIoH1EaMHJyMNn2a5JOgO0SHkle3Avrb5AnMZkK
+         MPYOa8La8TTDi/n2a4BDB88a49ZbvceGnm+H2TeYFoDrzxPGzpnHGLxcER5gan+ie9dQ
+         MJPw6D745Q1EUr2kX8P7pmoSrFwCrOp4YhFKeSgf9m6+xDgHa47ZvVevuUBmLrNLe51T
+         CN7CckEZMB8nZP2qSRR59mcBw/lrclCcsgNXsEeXeV8l0/o0AIbZiV6AOs/bp4tiWEI5
+         Kyjsya4Rzt9HzoqyoAV4ic8VoQARNaXaMUrIaXLYQKFqhQPgDH9qvjDb+R2bEr0aZpKA
+         sNGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=PAtBEWkNOh5BdP8Bu8hZOuPZ1rcVZzdy14mW4FwwTe8=;
-        b=KIklumXkG/Zyc9d8kgVYCWIGnY7NpcNzDqZikPgLlPRFcH9MLaMydDrwvPLxa0fN5j
-         6E9+M7ja7yP4oUxoCpTdODgWd4IYgNPVcRU34JJ9I2DO7GyxiAmPLENEgc+H3SEhPkTS
-         qeavKLzhx/d+2tkMWoo1fZhrcPeuDO7O7CI40/gtx0Cpy2/lp2ttQoQGoIrnKL+I1dOb
-         zUZTb0ypBgbmX7PDcZy9PvdcBWbS9g/NrV6m3fcARkihIn3fMiDb2Zali+Xi5zsk0yUn
-         DkrYST+u7D326tw54+VFckBApRLTuYIxiM/07U9Tu4sxfTSGfcze+JMUjPmtzpb6v9Bj
-         3ywA==
-X-Gm-Message-State: ANhLgQ0b25aRkXKnB1Kp62twOh7NP2rBbFMOdc0tEcjuROm4hkYCigl4
-        V8z9ZvOOy/sxMjuOWcR417/vZw==
-X-Google-Smtp-Source: ADFU+vvkQkdjVBN1V4mDG2xlvhfCyoT71WrXUgF8B8GgicTA4ZSKEq5oQzAzIKNSXE/a6AqkDIhI4w==
-X-Received: by 2002:adf:ed86:: with SMTP id c6mr11084730wro.53.1584011912176;
-        Thu, 12 Mar 2020 04:18:32 -0700 (PDT)
+        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=pWUzddhX/AOXVACmUO+pXuK3ISXKKIrklNwYlHA2MBE=;
+        b=ZuL89MQVfiwBqaKj+YgB/QCA+cb8vHR7gENnxX/UfUEBDQhzaQW5PzOJkIySl9pnou
+         6Bh3vlHVNoDXvAxez3Zk7lOLOz9IS8tc68SRZ8tu2nqJyrcqjLQg+PAOdNZKwcwZyeRV
+         46RulapimQLIlT4y5pSR+8gp8ahaL+44I0/4WJ2OcC0msJAHCPvmbM0Pr/oNzSNkUc/b
+         FK+/k/QQL8z8SgOvj6aKhehhodjJCxJqXKEX56+Sf4X0Hi5SUDhvSTOGCZUjJqDRuVDi
+         0ruerBEvTIJFeOGnpdvpAp6X1bssAYq80EPMeDHjti8R0k2wGxMYIW3brg3J9CnmhAuk
+         MT3A==
+X-Gm-Message-State: ANhLgQ1nAKgUhN4oRCvjQoPV90mompvuBnHS0sryOpJN2zH/f6TOZeOz
+        wAPXCUAnaENc46fNwByiE8daAgZ9Ke8=
+X-Google-Smtp-Source: ADFU+vtgvHeu+goRQk4HuGdibRkCa4BNFmWpMusj4lseIDlvo25X+a7g3CaIhhMeO9RSSDzHMjYhQQ==
+X-Received: by 2002:a7b:c05a:: with SMTP id u26mr4337346wmc.74.1584012095853;
+        Thu, 12 Mar 2020 04:21:35 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f? ([2a01:e34:ed2f:f020:3880:fdc2:ef6b:879f])
-        by smtp.googlemail.com with ESMTPSA id n1sm29876912wrj.77.2020.03.12.04.18.30
+        by smtp.googlemail.com with ESMTPSA id i1sm57279358wrs.18.2020.03.12.04.21.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2020 04:18:31 -0700 (PDT)
-Subject: Re: [PATCH] thermal: imx: Remove unused includes
-To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-References: <1583762668-12099-1-git-send-email-Anson.Huang@nxp.com>
+        Thu, 12 Mar 2020 04:21:35 -0700 (PDT)
+Subject: Re: [PATCH] thermal: rcar_thermal: Handle probe error gracefully
+To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>, linux-pm@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <20200310114709.1483860-1-niklas.soderlund+renesas@ragnatech.se>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -108,12 +105,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <7f06031d-b4ee-009d-a294-fdde6c95e898@linaro.org>
-Date:   Thu, 12 Mar 2020 12:18:30 +0100
+Message-ID: <fcc43b2a-c21d-febf-f709-9511cbff0983@linaro.org>
+Date:   Thu, 12 Mar 2020 12:21:34 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <1583762668-12099-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <20200310114709.1483860-1-niklas.soderlund+renesas@ragnatech.se>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -122,46 +119,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/03/2020 15:04, Anson Huang wrote:
-> Remove unused includes to simplify the code.
+On 10/03/2020 12:47, Niklas Söderlund wrote:
+> If the common register memory resource is not available the driver needs
+> to fail gracefully to disable PM. Instead of returning the error
+> directly store it in ret and use the already existing error path.
 > 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
 Applied, thanks
 
 > ---
->  drivers/thermal/imx_thermal.c | 7 -------
->  1 file changed, 7 deletions(-)
+>  drivers/thermal/rcar_thermal.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-> index e75dda5..d2fa301 100644
-> --- a/drivers/thermal/imx_thermal.c
-> +++ b/drivers/thermal/imx_thermal.c
-> @@ -3,24 +3,17 @@
->  // Copyright 2013 Freescale Semiconductor, Inc.
+> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> index 8f1aafa2044e5ba7..4a48d1d2a31c9250 100644
+> --- a/drivers/thermal/rcar_thermal.c
+> +++ b/drivers/thermal/rcar_thermal.c
+> @@ -521,8 +521,10 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  			res = platform_get_resource(pdev, IORESOURCE_MEM,
+>  						    mres++);
+>  			common->base = devm_ioremap_resource(dev, res);
+> -			if (IS_ERR(common->base))
+> -				return PTR_ERR(common->base);
+> +			if (IS_ERR(common->base)) {
+> +				ret = PTR_ERR(common->base);
+> +				goto error_unregister;
+> +			}
 >  
->  #include <linux/clk.h>
-> -#include <linux/cpu.h>
->  #include <linux/cpufreq.h>
->  #include <linux/cpu_cooling.h>
->  #include <linux/delay.h>
-> -#include <linux/device.h>
-> -#include <linux/init.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
-> -#include <linux/kernel.h>
->  #include <linux/mfd/syscon.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> -#include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> -#include <linux/slab.h>
->  #include <linux/thermal.h>
-> -#include <linux/types.h>
->  #include <linux/nvmem-consumer.h>
->  
->  #define REG_SET		0x4
+>  			idle = 0; /* polling delay is not needed */
+>  		}
 > 
 
 
