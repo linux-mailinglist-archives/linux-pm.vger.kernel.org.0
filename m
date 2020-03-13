@@ -2,85 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C4F184D08
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 17:55:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82970184D4E
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 18:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726571AbgCMQzi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Mar 2020 12:55:38 -0400
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:55085 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726533AbgCMQzi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Mar 2020 12:55:38 -0400
-Received: by mail-pj1-f68.google.com with SMTP id np16so4434496pjb.4
-        for <linux-pm@vger.kernel.org>; Fri, 13 Mar 2020 09:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=xbZ4dSo0yJ+mEzE8KOiBQP+F7VWDBbmSG3yIbewX/cU=;
-        b=X2aAWYClYrEic+m4wO6Rkp+ungpARsa8Cf6E72AE5uVtHEG8VXD+e+sI9HFiOH4URs
-         vdNbBdO5fLjIQi5PwoKMQdiP6uxq8R0n9v18dPUHM6obDIj+xXn6MO+4jDPo4FWyliqZ
-         6nvZ6jY4ff4RRv5GHGGbeiLpQGBj7Wpa7LRkk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xbZ4dSo0yJ+mEzE8KOiBQP+F7VWDBbmSG3yIbewX/cU=;
-        b=GzPzz9fwLGRgHFruF6t7xceRr2VDJuvBfRrZjdiE8calY2mP5lF5SwUkgB9dwK+0wH
-         JJm2swwetT4CW/aryIaoDx0kCcxqVH/alSZVMgMkoUwQnRP5/xL+ztp+Dg9iMr/uVtlm
-         BULcVThoVDsjymWhU1UppSu7GU6xnP0kq2mjvSACH1BRpeQhymsEqTbjBKGpZqRIBuX9
-         IUsllF3RAcnUDFY49Ja/A1xZ0vXg8KXjtRgfBMYAjp/wgHyYDIxG4/kQfS1v3vBXPT07
-         /WeOFXAgscOpGHAxMjmsw9t9wsRvSffVZz6KX5DgUX+C/fxvN9U91Y/iu83eRXa4UC6A
-         85sQ==
-X-Gm-Message-State: ANhLgQ216udkNpJ54eUcciycdB/3Aeq4tHF/fAQqOE/+KU3QMdpp001B
-        nhoJP2DTLiZmo5O+mu63pPBNJQ==
-X-Google-Smtp-Source: ADFU+vsZXLGxVNcXxugjf7JZA+Vtpnh9QLR8E+B5WWdPb/xHZ7USp/t0BvIAE6rb8ObhgtQilCHFWQ==
-X-Received: by 2002:a17:90a:8:: with SMTP id 8mr10779352pja.130.1584118537308;
-        Fri, 13 Mar 2020 09:55:37 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id j24sm29314647pfi.55.2020.03.13.09.55.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Mar 2020 09:55:36 -0700 (PDT)
-Date:   Fri, 13 Mar 2020 09:55:35 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3] thermal: devfreq_cooling: Use PM QoS to set frequency
- limits
-Message-ID: <20200313165535.GI144492@google.com>
-References: <20200312113416.v3.1.I146403d05b9ec82f48b807efd416a57f545b447a@changeid>
+        id S1726442AbgCMRL7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Mar 2020 13:11:59 -0400
+Received: from foss.arm.com ([217.140.110.172]:33356 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726414AbgCMRL7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 13 Mar 2020 13:11:59 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5810B31B;
+        Fri, 13 Mar 2020 10:11:58 -0700 (PDT)
+Received: from [10.37.12.40] (unknown [10.37.12.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F1D6B3F534;
+        Fri, 13 Mar 2020 10:11:47 -0700 (PDT)
+Subject: Re: [PATCH v4 2/4] OPP: change parameter to device pointer in
+ dev_pm_opp_of_register_em()
+To:     Quentin Perret <qperret@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com, Morten.Rasmussen@arm.com,
+        Dietmar.Eggemann@arm.com, javi.merino@arm.com,
+        cw00.choi@samsung.com, b.zolnierkie@samsung.com, rjw@rjwysocki.net,
+        sudeep.holla@arm.com, viresh.kumar@linaro.org, nm@ti.com,
+        sboyd@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
+        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
+        orjan.eide@arm.com, rdunlap@infradead.org
+References: <20200309134117.2331-1-lukasz.luba@arm.com>
+ <20200309134117.2331-3-lukasz.luba@arm.com>
+ <20200313101524.GA150397@google.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <3ac8ebf8-9db0-d168-8b80-f7f5ba345f86@arm.com>
+Date:   Fri, 13 Mar 2020 17:11:45 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200312113416.v3.1.I146403d05b9ec82f48b807efd416a57f545b447a@changeid>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20200313101524.GA150397@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 11:34:20AM -0700, Matthias Kaehlcke wrote:
-> Now that devfreq supports limiting the frequency range of a device
-> through PM QoS make use of it instead of disabling OPPs that should
-> not be used.
-> 
-> The switch from disabling OPPs to PM QoS introduces a subtle behavioral
-> change in case of conflicting requests (min > max): PM QoS gives
-> precedence to the MIN_FREQUENCY request, while higher OPPs disabled
-> with dev_pm_opp_disable() would override MIN_FREQUENCY.
-> 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
-I just noticed that I forgot to add Chanwoo's 'Reviewed-by' tag from v2.
-Dunno if patchwork will allow this, but I can try:
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+On 3/13/20 10:15 AM, Quentin Perret wrote:
+> On Monday 09 Mar 2020 at 13:41:15 (+0000), Lukasz Luba wrote:
+>> diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
+>> index d2b5f062a07b..676b56424886 100644
+>> --- a/drivers/cpufreq/cpufreq-dt.c
+>> +++ b/drivers/cpufreq/cpufreq-dt.c
+>> @@ -275,7 +275,9 @@ static int cpufreq_init(struct cpufreq_policy *policy)
+>>   	policy->cpuinfo.transition_latency = transition_latency;
+>>   	policy->dvfs_possible_from_any_cpu = true;
+>>   
+>> -	dev_pm_opp_of_register_em(policy->cpus);
+>> +	ret = dev_pm_opp_of_register_em(cpu_dev, policy->cpus);
+>> +	if (ret)
+>> +		dev_dbg(cpu_dev, "Couldn't register Energy Model %d\n", ret);
+>>   
+>>   	return 0;
+> 
+> Ah, that answers my comment on patch 01. You're adding the error
+> messages here.
+> 
+> Isn't this more boilerplate for the drivers ? All they do is print the
+> same debug message. Maybe just move it inside dev_pm_opp_of_register_em
+> directly ?
+> 
+
+Agree. I could add a 'fail' label in dev_pm_opp_of_register_em
+something like:
+
+--------------------------------->8----------------
+dev_pm_opp_of_register_em
+...
+	nr_opp = dev_pm_opp_get_opp_count(dev);
+	if (nr_opp <= 0) {
+		ret = -EINVAL;
+		goto fail;
+	}
+
+...
+	ret = em_register_perf_domain()
+	if (ret)
+		goto fail;
+
+	return 0;
+
+fail:
+	dev_dbg(cpu_dev, "Couldn't register Energy Model %d\n", ret);
+	return ret
+------------------------8<-----------------
+
+Makes more sense, agree, thank you for your suggestion.
+
+I will remove this
+   if (ret)
+	dev_dbg(cpu_dev, "Couldn't register Energy Model %d\n", ret);
+from the cpufreq drivers.
+
+
+Regards,
+Lukasz
