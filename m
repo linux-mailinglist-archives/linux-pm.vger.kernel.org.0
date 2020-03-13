@@ -2,99 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 334E31841A9
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 08:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5441842B8
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 09:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726300AbgCMHrj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Mar 2020 03:47:39 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:52643 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726236AbgCMHrj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Mar 2020 03:47:39 -0400
-Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id CE83E100010;
-        Fri, 13 Mar 2020 07:47:34 +0000 (UTC)
-Date:   Fri, 13 Mar 2020 08:47:34 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Ran Bi <ran.bi@mediatek.com>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Richard Fontana <rfontana@redhat.com>,
-        Josef Friedl <josef.friedl@speed.at>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        srv_heupstream@mediatek.com
-Subject: Re: [PATCH v10 4/5] rtc: mt6397: Add support for the MediaTek MT6358
- RTC
-Message-ID: <20200313074734.GD3384@piout.net>
-References: <1583918223-22506-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1583918223-22506-5-git-send-email-hsin-hsiung.wang@mediatek.com>
- <20200312074407.GA3142@dell>
- <1584003477.6269.8.camel@mhfsdcap03>
- <20200313072230.GC3142@dell>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200313072230.GC3142@dell>
+        id S1726310AbgCMIez (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Mar 2020 04:34:55 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:38956 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726300AbgCMIez (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 13 Mar 2020 04:34:55 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3D4601A134F;
+        Fri, 13 Mar 2020 09:34:53 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 85CB91A1343;
+        Fri, 13 Mar 2020 09:34:47 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 6DDB4402D5;
+        Fri, 13 Mar 2020 16:34:40 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH] thermal: imx: Calling imx_thermal_unregister_legacy_cooling() in .remove
+Date:   Fri, 13 Mar 2020 16:28:14 +0800
+Message-Id: <1584088094-24857-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/03/2020 07:22:30+0000, Lee Jones wrote:
-> > > >  struct mt6397_rtc {
-> > > >  	struct device           *dev;
-> > > >  	struct rtc_device       *rtc_dev;
-> > > > @@ -74,6 +80,7 @@ struct mt6397_rtc {
-> > > >  	struct regmap           *regmap;
-> > > >  	int                     irq;
-> > > >  	u32                     addr_base;
-> > > > +	const struct mtk_rtc_data *data;
-> > > 
-> > > 'data' is a terrible variable name.
-> > > 
-> > > Why do you need to store this?
-> > > 
-> > > It's one variable which is used once AFAICT.
-> > 
-> > I would rename 'data' to 'config'.
-> > 
-> > This struct will be extended in future patches to achieve more PMIC chip
-> > compatibility.
-> 
-> On closer inspection, it looks like wrtgr (also not a great name for a
-> variable by the way) is a register address.  Is that correct?
-> Initially I thought it was a model number, which would have been a
-> suitable candidate for entry into OF .data.
-> 
-> However, describing register addresses in OF .data does not sound like
-> good practice.  It is usually used to identify a platform in the cases
-> where platforms cannot be otherwise dynamically interrogated for model
-> number via a register read.
-> 
-> Describing register maps via 'config' data is a slippery slope.
+imx_thermal_unregister_legacy_cooling() should be used for handling
+legacy cpufreq cooling cleanups in .remove callback instead of
+calling cpufreq_cooling_unregister() and cpufreq_cpu_put() directly,
+especially for !CONFIG_CPU_FREQ scenario, no operation needed for
+handling legacy cpufreq cooling cleanups at all.
 
-I'm not sure I get what you mean, there are dozens if not hundreds of
-drivers doing it exactly that way. What is the difference between having
-.data pointing to a register map and having .data containing a model
-number and then use that model number to get the register map?
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+ drivers/thermal/imx_thermal.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-of_device_id::data definitively isn't config data as the DT describes
-the hardware, not the configuration.
-
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index d2fa301..e761c9b 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -865,8 +865,7 @@ static int imx_thermal_remove(struct platform_device *pdev)
+ 		clk_disable_unprepare(data->thermal_clk);
+ 
+ 	thermal_zone_device_unregister(data->tz);
+-	cpufreq_cooling_unregister(data->cdev);
+-	cpufreq_cpu_put(data->policy);
++	imx_thermal_unregister_legacy_cooling(data);
+ 
+ 	return 0;
+ }
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
+
