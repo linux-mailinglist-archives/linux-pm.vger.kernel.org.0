@@ -2,56 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD8A184680
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 13:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD9C1846E9
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 13:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726216AbgCMMHX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Mar 2020 08:07:23 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:41093 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726395AbgCMMHX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Mar 2020 08:07:23 -0400
-Received: by mail-wr1-f66.google.com with SMTP id s14so11781304wrt.8
-        for <linux-pm@vger.kernel.org>; Fri, 13 Mar 2020 05:07:21 -0700 (PDT)
+        id S1726669AbgCMMcA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Mar 2020 08:32:00 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:34745 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726216AbgCMMcA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Mar 2020 08:32:00 -0400
+Received: by mail-wr1-f68.google.com with SMTP id z15so11860971wrl.1
+        for <linux-pm@vger.kernel.org>; Fri, 13 Mar 2020 05:31:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9/Bcd6qwUNn4qva18bEYWevO0dvh9c67JG56aKrCUDU=;
-        b=zvSNVtLVtwSV+BNzcy6pPgkURNzDdgsfWbuzKOq96veGk/+0iraX2gzFaJderacZlc
-         CDg04BWUFdUBRWthqjutxzn3cR7+PXVDDBU1Z43rwzX7tBVE9H7RDdmik2B0mloM2Vwe
-         OSbnLRDXUX59N1OFBi4whJ1SQRXeH3MBCW4E3pkPR9l3W8LlFLbBOiUYNUylglH1rXWo
-         AYQDj93P1lg2Sm/gC1FvUUgEXq5AlHSl+57gUulx2B+3hF8obycSqDGoEUODM8DecW6C
-         a7keymvBphtuGvfQjKVYW7DMNsOsqMyFTy5V9I0J1CY5oepc8WvPAMzMq++Z60d7r51S
-         mkAA==
+        bh=nkJTLjWp/ZvPZWaJtzZTNn9m69bxqKBFlhfJaMFnbMw=;
+        b=XRoPckVuNUtZmv/Cb5MFur3Ea3UulvDP2g99TSXf953Gh1SPRQeT6DFpIvMwpVIDG4
+         Z67R0VLBop2l4TRE/KPlXu8Dt+h8F8utzDIxjg7RoyBaLXqtMEfwBFKZL3BS4nbr+5ib
+         Ipob4oSPQH8YJgNdZlSfSt0QGiwZE6xoltIYLGYMDFj389MTRXLisq/3VhqlaY9PMoEK
+         8BRCmv9FTouaqkmW/dBshkW3dKtDilkTTVno5u05RKCWUd9Wsh22b9jmJeE3+SRzNi/U
+         Xi8eYMUb8bWyNQ0m61si5daI2CpoEuU2SYeCnkVr5lJKYVgemsijdbGK3yo3cwZSxh0Q
+         DwzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=9/Bcd6qwUNn4qva18bEYWevO0dvh9c67JG56aKrCUDU=;
-        b=qM3RJa/+XLckMQCR91whztjfynj5wjBoCsEXhgNRr3gb0lUCpugxcmaj96Y8D0lJWX
-         cnsd9H1LK7VPLwo+ZoF0cIDLqBEMmyjtM4Y9/XUdnyFOeX3raZXLjl1aXYvcFhMfFSDD
-         /CZV2gXqIDemD5at1BwML51s6uhNOaftAJudE1+TQzO/HF5oNmQToO1uwzet1dAAs5NJ
-         xCgV+a4iN5/Obb/M+0lT/MSZpUOQQQGn+Y5yqtKozgeI23eF9gH4bupENc/vqxxIQwxN
-         KDEMLZkXcG40wjFJrCpTAsn9JurWuQQ8IEm6Hr3aKWUWZUfX1Hi+L6SItKlXPl1UJt1Y
-         tmXg==
-X-Gm-Message-State: ANhLgQ0NGawQX1PusDQ1xYWlvEoFFbJtY7yM+EGFFdLa2e+UMFA/vXMm
-        0IAL3qZQp4/M0aQRW2ZObzgUWA==
-X-Google-Smtp-Source: ADFU+vvZ5aEJ3y7Vb2awEaAg+kJj6tljAPYMMXx120cBGz9smvGCBGqHZCiRe0nNluq8D4mD+n4KdQ==
-X-Received: by 2002:adf:f545:: with SMTP id j5mr17388487wrp.295.1584101240954;
-        Fri, 13 Mar 2020 05:07:20 -0700 (PDT)
+        bh=nkJTLjWp/ZvPZWaJtzZTNn9m69bxqKBFlhfJaMFnbMw=;
+        b=EQ0+M0I5l/w4B8gCL53FZ4ZLcsAajNPSnlsX73XtVt+zLUlzAya+0FPleNplt+5IfS
+         88q8YHfFwa2SPb6wxKQ81zt6FXOzew+5tTy6OpMZ4J60w+4Ewv4t9Dsj6cERR5CFQt3I
+         3zQjvv0gVBbKAZTwYAaiG9Gg8EFbwOEbkEWj2yumRipApFb9E1kUpLeB1jNcbgbFwq3Q
+         wQ8aTxypxLSwZfv3RlgADIiYIwfdcmFxkkP1BjMANEfmxrsljfb5/5S4VuMt+vQLqXl+
+         G36ClGjTLzV7p4jFLNlTJx8wkE51iESVDe/xY05Tjb4dSoTKYCqLA3a0W+PQxwygjgzH
+         Dg/g==
+X-Gm-Message-State: ANhLgQ2jKXglwkWH2U/B6aaRaX16WYoA92NWBDvoYZgYsjaRWmJjjnqH
+        +3OSorxiuRF+XD4gQ4od+vAtBg==
+X-Google-Smtp-Source: ADFU+vu6dcTKKhIsRtRu5AWKMxBh+Il5Nx3NH3Yy5uCwJJN9lazkuBAfHWNFO7rkGaVzqBqjRA27Yw==
+X-Received: by 2002:adf:9364:: with SMTP id 91mr17174282wro.223.1584102717997;
+        Fri, 13 Mar 2020 05:31:57 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:40fb:3990:3519:cc26? ([2a01:e34:ed2f:f020:40fb:3990:3519:cc26])
-        by smtp.googlemail.com with ESMTPSA id z6sm23937704wru.15.2020.03.13.05.07.19
+        by smtp.googlemail.com with ESMTPSA id l83sm17191214wmf.43.2020.03.13.05.31.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Mar 2020 05:07:20 -0700 (PDT)
-Subject: Re: [PATCH resend] thermal: imx: register as OF sensor
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@pengutronix.de, patchwork-lst@pengutronix.de
-References: <20200313110139.28558-1-l.stach@pengutronix.de>
+        Fri, 13 Mar 2020 05:31:57 -0700 (PDT)
+Subject: Re: [PATCH] thermal: imx: Calling
+ imx_thermal_unregister_legacy_cooling() in .remove
+To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+References: <1584088094-24857-1-git-send-email-Anson.Huang@nxp.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -107,12 +109,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <208912d8-b15c-278a-0c3b-174d9d82d9ef@linaro.org>
-Date:   Fri, 13 Mar 2020 13:07:19 +0100
+Message-ID: <58ad76cb-5187-cb59-87cb-e6b75051b46a@linaro.org>
+Date:   Fri, 13 Mar 2020 13:31:55 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200313110139.28558-1-l.stach@pengutronix.de>
+In-Reply-To: <1584088094-24857-1-git-send-email-Anson.Huang@nxp.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -121,75 +123,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/03/2020 12:01, Lucas Stach wrote:
-> To make the internal sensor usable with a thermal zone description
-> provided via DT, also register out device as a OF sensor.
+On 13/03/2020 09:28, Anson Huang wrote:
+> imx_thermal_unregister_legacy_cooling() should be used for handling
+> legacy cpufreq cooling cleanups in .remove callback instead of
+> calling cpufreq_cooling_unregister() and cpufreq_cpu_put() directly,
+> especially for !CONFIG_CPU_FREQ scenario, no operation needed for
+> handling legacy cpufreq cooling cleanups at all.
 > 
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 
-Are you calling the DT or non-DT at the same function unconditionally ?
-
+Applied, thanks
 
 > ---
->  drivers/thermal/imx_thermal.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
+>  drivers/thermal/imx_thermal.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
 > diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-> index bb6754a5342c..714be941fe6c 100644
+> index d2fa301..e761c9b 100644
 > --- a/drivers/thermal/imx_thermal.c
 > +++ b/drivers/thermal/imx_thermal.c
-> @@ -202,7 +202,7 @@ static struct thermal_soc_data thermal_imx7d_data = {
->  
->  struct imx_thermal_data {
->  	struct cpufreq_policy *policy;
-> -	struct thermal_zone_device *tz;
-> +	struct thermal_zone_device *tz, *sensor;
->  	struct thermal_cooling_device *cdev;
->  	enum thermal_device_mode mode;
->  	struct regmap *tempmon;
-> @@ -338,6 +338,13 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
->  	return 0;
->  }
->  
-> +static int imx_of_sensor_get_temp(void *data, int *temp)
-> +{
-> +	struct imx_thermal_data *thermal_data = data;
-> +
-> +	return imx_get_temp(thermal_data->tz, temp);
-> +}
-> +
->  static int imx_get_mode(struct thermal_zone_device *tz,
->  			enum thermal_device_mode *mode)
->  {
-> @@ -482,6 +489,10 @@ static struct thermal_zone_device_ops imx_tz_ops = {
->  	.set_trip_temp = imx_set_trip_temp,
->  };
->  
-> +static const struct thermal_zone_of_device_ops imx_tz_of_ops = {
-> +	.get_temp = imx_of_sensor_get_temp,
-> +};
-> +
->  static int imx_init_calib(struct platform_device *pdev, u32 ocotp_ana1)
->  {
->  	struct imx_thermal_data *data = platform_get_drvdata(pdev);
-> @@ -816,6 +827,9 @@ static int imx_thermal_probe(struct platform_device *pdev)
->  		goto clk_disable;
->  	}
->  
-> +	data->sensor = thermal_zone_of_sensor_register(&pdev->dev, 0, data,
-> +						       &imx_tz_of_ops);
-> +
->  	dev_info(&pdev->dev, "%s CPU temperature grade - max:%dC"
->  		 " critical:%dC passive:%dC\n", data->temp_grade,
->  		 data->temp_max / 1000, data->temp_critical / 1000,
-> @@ -871,6 +885,7 @@ static int imx_thermal_remove(struct platform_device *pdev)
->  	if (!IS_ERR(data->thermal_clk))
+> @@ -865,8 +865,7 @@ static int imx_thermal_remove(struct platform_device *pdev)
 >  		clk_disable_unprepare(data->thermal_clk);
 >  
-> +	thermal_zone_of_sensor_unregister(&pdev->dev, data->sensor);
 >  	thermal_zone_device_unregister(data->tz);
->  	cpufreq_cooling_unregister(data->cdev);
->  	cpufreq_cpu_put(data->policy);
+> -	cpufreq_cooling_unregister(data->cdev);
+> -	cpufreq_cpu_put(data->policy);
+> +	imx_thermal_unregister_legacy_cooling(data);
+>  
+>  	return 0;
+>  }
 > 
 
 
