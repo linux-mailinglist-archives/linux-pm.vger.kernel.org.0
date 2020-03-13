@@ -2,125 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E7B1842A2
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 09:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F07184353
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 10:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726310AbgCMIbR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Mar 2020 04:31:17 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:22807 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726230AbgCMIbR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Mar 2020 04:31:17 -0400
-X-UUID: 2120b3acc30d47e49fd3bd8032cb54b2-20200313
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=uadq0m8B7fzPLQ9yivfxpszXKt2Y0MnLJJvhYfcT86c=;
-        b=es0oC2DCWpi85tLVMMHXqJvn/N1ZThUznfcSkUMgTN8ELZGSUIDP8XHC33nRQ2Yr0NV1AOSOxyCSNCgVZJfBB4t659oeI7GO7AmU4p1HRnLY51XK5VGhJmrDipIobldNRjZ5lYzgQNzxyikbUdEAKA1xEU8Wp12eULFVaCRs1kM=;
-X-UUID: 2120b3acc30d47e49fd3bd8032cb54b2-20200313
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <ran.bi@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 2122994655; Fri, 13 Mar 2020 16:31:11 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs05n2.mediatek.inc
- (172.21.101.140) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 13 Mar
- 2020 16:30:04 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 13 Mar 2020 16:31:01 +0800
-Message-ID: <1584088256.16960.9.camel@mhfsdcap03>
-Subject: Re: [PATCH v10 4/5] rtc: mt6397: Add support for the MediaTek
- MT6358 RTC
-From:   Ran Bi <ran.bi@mediatek.com>
-To:     Lee Jones <lee.jones@linaro.org>
-CC:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        id S1726387AbgCMJKm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Mar 2020 05:10:42 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40417 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726365AbgCMJKl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Mar 2020 05:10:41 -0400
+Received: by mail-pl1-f196.google.com with SMTP id h11so3943339plk.7
+        for <linux-pm@vger.kernel.org>; Fri, 13 Mar 2020 02:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JtkM+yZ5+lxvRbR9JLka9INk2b+8sAQT2vc0MdMcdF0=;
+        b=R4Eg+CqTJ0CA4+mX+Q0HT1tcnR6NS4q4j5dn6d8VDy7Wz394wQUwvT/NaDJrrFoRkR
+         O4/q4o8nR8aYr9LiZjCjS7mE1Zfot+KRD4H1e72uNXjMpENOJ3vSrzA5e/rgHS2aYJt/
+         BaKX921yAoqhLuHWhyjVZwWDx6d1rQow8LiWogRoqoq5Ed1jrZ5gmHxTleTjyMQZ8CKs
+         T+ypxEPiziHju+YAqbmPXZgW3yTKrcT7Suk/VWNVnzOZBXvpyetDTnzJ6oSWvSHDjPYA
+         8QMe+yOkIm+I3kT1Poq2VSQAD5vtvUNRuCXLrRBzA4wiXWN3t1vy/UNExwtyBq89ThAc
+         hzzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JtkM+yZ5+lxvRbR9JLka9INk2b+8sAQT2vc0MdMcdF0=;
+        b=HRq1QPEbe0HCK3W3xiqa0qK3Dy4gri6/+C2wL+acLIbMaoKS1cSZqIr9HNQkzmnVqF
+         wdgOnLg/1eWEpIabOQY2nIzy2YFIaWRXMTTUutrBo1uq5WaV9r/nJVU2yKSfj1rQdXYi
+         yCV5ygAdMTZw1uTNQkyMjRTRv+p2iXLWROMbKmoOXvDIbzLZ9EmwEO/MsU9+U8nurgvV
+         cDJH0QvbLVqsg25BlQLCYPplrWqU9BspKljMeZYl2xWKmdhSrlTSULqao+buPxn30x9J
+         5oCIdthwmftQanl6659W+y9kIMfO1gWNuz+XLoTf1zH9HETh5SBt6XQl+q5S4E/EBIcc
+         Whlg==
+X-Gm-Message-State: ANhLgQ2iPbMjEiAKddFx8yO0bbUyx4pcCmxC8AbnjJ0hVhhukdvxrVJe
+        JwQhwPSdg6NPehqNUdLnE9UXsg==
+X-Google-Smtp-Source: ADFU+vueMkKxf9i4W6oJIJHRrSOEaNDdoKCVYBJIRGmkg6vmX/eRdo6zNqs5xJmNtBnSly4IqRo2Fg==
+X-Received: by 2002:a17:902:7485:: with SMTP id h5mr11624298pll.13.1584090640801;
+        Fri, 13 Mar 2020 02:10:40 -0700 (PDT)
+Received: from localhost ([122.171.122.128])
+        by smtp.gmail.com with ESMTPSA id c8sm4233902pfj.108.2020.03.13.02.10.39
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 13 Mar 2020 02:10:39 -0700 (PDT)
+Date:   Fri, 13 Mar 2020 14:40:38 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "andrew-sh.cheng" <andrew-sh.cheng@mediatek.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>, Nishanth Menon <nm@ti.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Richard Fontana" <rfontana@redhat.com>,
-        Josef Friedl <josef.friedl@speed.at>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        "linux-mediatek@lists.infradead.org" 
         <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        <srv_heupstream@mediatek.com>
-Date:   Fri, 13 Mar 2020 16:30:56 +0800
-In-Reply-To: <20200313072230.GC3142@dell>
-References: <1583918223-22506-1-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <1583918223-22506-5-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <20200312074407.GA3142@dell> <1584003477.6269.8.camel@mhfsdcap03>
-         <20200313072230.GC3142@dell>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fan Chen =?utf-8?B?KOmZs+WHoSk=?= <fan.chen@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [v5, PATCH 4/5] cpufreq: mediatek: add opp notification for SVS
+ support
+Message-ID: <20200313091038.q7q7exiowoah4nk4@vireshk-i7>
+References: <1574769046-28449-1-git-send-email-andrew-sh.cheng@mediatek.com>
+ <1574769046-28449-5-git-send-email-andrew-sh.cheng@mediatek.com>
+ <20191127083619.etocnhpyyut3hzwq@vireshk-i7>
+ <1575874588.13494.4.camel@mtksdaap41>
+ <20191210064319.f4ksrxozp3gv4xry@vireshk-i7>
+ <1583827865.4840.1.camel@mtksdaap41>
+ <20200311060616.62nh7sfwtjwvrjfr@vireshk-i7>
+ <1584084154.7753.3.camel@mtksdaap41>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1584084154.7753.3.camel@mtksdaap41>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTAzLTEzIGF0IDA3OjIyICswMDAwLCBMZWUgSm9uZXMgd3JvdGU6DQo+IE9u
-IFRodSwgMTIgTWFyIDIwMjAsIFJhbiBCaSB3cm90ZToNCj4gDQo+ID4gT24gVGh1LCAyMDIwLTAz
-LTEyIGF0IDA3OjQ0ICswMDAwLCBMZWUgSm9uZXMgd3JvdGU6DQo+ID4gPiBPbiBXZWQsIDExIE1h
-ciAyMDIwLCBIc2luLUhzaXVuZyBXYW5nIHdyb3RlOg0KPiA+ID4gDQo+ID4gPiA+IEZyb206IFJh
-biBCaSA8cmFuLmJpQG1lZGlhdGVrLmNvbT4NCj4gPiA+ID4gDQo+ID4gPiA+IFRoaXMgYWRkIHN1
-cHBvcnQgZm9yIHRoZSBNZWRpYVRlayBNVDYzNTggUlRDLiBEcml2ZXIgdXNpbmcNCj4gPiA+ID4g
-Y29tcGF0aWJsZSBkYXRhIHRvIHN0b3JlIGRpZmZlcmVudCBSVENfV1JUR1IgYWRkcmVzcyBvZmZz
-ZXQuDQo+ID4gPiA+IFRoaXMgcmVwbGFjZSBSVENfV1JUR1IgdG8gUlRDX1dSVEdSX01UNjMyMyBp
-biBtdDYzMjMtcG93ZXJvZmYNCj4gPiA+ID4gZHJpdmVyIHdoaWNoIG9ubHkgbmVlZGVkIGJ5IGFy
-bXY3IENQVSB3aXRob3V0IEFURi4NCj4gPiA+ID4gDQo+ID4gPiA+IFNpZ25lZC1vZmYtYnk6IFJh
-biBCaSA8cmFuLmJpQG1lZGlhdGVrLmNvbT4NCj4gPiA+ID4gU2lnbmVkLW9mZi1ieTogSHNpbi1I
-c2l1bmcgV2FuZyA8aHNpbi1oc2l1bmcud2FuZ0BtZWRpYXRlay5jb20+DQo+ID4gPiA+IC0tLQ0K
-PiA+ID4gPiAgZHJpdmVycy9wb3dlci9yZXNldC9tdDYzMjMtcG93ZXJvZmYuYyB8ICAyICstDQo+
-ID4gPiA+ICBkcml2ZXJzL3J0Yy9ydGMtbXQ2Mzk3LmMgICAgICAgICAgICAgIHwgMzIgKysrKysr
-KysrKysrKysrKysrKysrKysrLS0tLS0tLS0NCj4gPiA+ID4gIGluY2x1ZGUvbGludXgvbWZkL210
-NjM5Ny9ydGMuaCAgICAgICAgfCAgOSArKysrKysrKy0NCj4gPiA+ID4gIDMgZmlsZXMgY2hhbmdl
-ZCwgMzMgaW5zZXJ0aW9ucygrKSwgMTAgZGVsZXRpb25zKC0pDQo+ID4gPiA+IA0KPiA+IA0KPiA+
-IDwuLi4+DQo+ID4gDQo+ID4gPiA+ICANCj4gPiA+ID4gICNkZWZpbmUgUlRDX0lSUV9TVEEgICAg
-ICAgICAgICAweDAwMDINCj4gPiA+ID4gICNkZWZpbmUgUlRDX0lSUV9TVEFfQUwgICAgICAgICBC
-SVQoMCkNCj4gPiA+ID4gQEAgLTY1LDYgKzY3LDEwIEBADQo+ID4gPiA+ICAjZGVmaW5lIE1US19S
-VENfUE9MTF9ERUxBWV9VUyAgMTANCj4gPiA+ID4gICNkZWZpbmUgTVRLX1JUQ19QT0xMX1RJTUVP
-VVQgICAoamlmZmllc190b191c2VjcyhIWikpDQo+ID4gPiA+ICANCj4gPiA+ID4gK3N0cnVjdCBt
-dGtfcnRjX2RhdGEgew0KPiA+ID4gPiArCXUzMgkJCXdydGdyOw0KPiA+ID4gPiArfTsNCj4gPiA+
-IA0KPiA+ID4gRG8geW91IGV4cGVjdCB0byBhZGQgbW9yZSBwcm9wZXJ0aWVzIHRvIHRoaXMgc3Ry
-dWN0Pw0KPiA+ID4gDQo+ID4gPiBJZiBub3QsIGl0IHNlZW1zIGEgYml0IG92ZXJraWxsLg0KPiA+
-ID4gDQo+ID4gDQo+ID4gWWVzLCB3ZSB3b3VsZCBhZGQgbW9yZSBwcm9wZXJ0aWVzIGhlcmUgaW4g
-ZnV0dXJlIHBhdGNoZXMuDQo+ID4gDQo+ID4gPiA+ICBzdHJ1Y3QgbXQ2Mzk3X3J0YyB7DQo+ID4g
-PiA+ICAJc3RydWN0IGRldmljZSAgICAgICAgICAgKmRldjsNCj4gPiA+ID4gIAlzdHJ1Y3QgcnRj
-X2RldmljZSAgICAgICAqcnRjX2RldjsNCj4gPiA+ID4gQEAgLTc0LDYgKzgwLDcgQEAgc3RydWN0
-IG10NjM5N19ydGMgew0KPiA+ID4gPiAgCXN0cnVjdCByZWdtYXAgICAgICAgICAgICpyZWdtYXA7
-DQo+ID4gPiA+ICAJaW50ICAgICAgICAgICAgICAgICAgICAgaXJxOw0KPiA+ID4gPiAgCXUzMiAg
-ICAgICAgICAgICAgICAgICAgIGFkZHJfYmFzZTsNCj4gPiA+ID4gKwljb25zdCBzdHJ1Y3QgbXRr
-X3J0Y19kYXRhICpkYXRhOw0KPiA+ID4gDQo+ID4gPiAnZGF0YScgaXMgYSB0ZXJyaWJsZSB2YXJp
-YWJsZSBuYW1lLg0KPiA+ID4gDQo+ID4gPiBXaHkgZG8geW91IG5lZWQgdG8gc3RvcmUgdGhpcz8N
-Cj4gPiA+IA0KPiA+ID4gSXQncyBvbmUgdmFyaWFibGUgd2hpY2ggaXMgdXNlZCBvbmNlIEFGQUlD
-VC4NCj4gPiANCj4gPiBJIHdvdWxkIHJlbmFtZSAnZGF0YScgdG8gJ2NvbmZpZycuDQo+ID4gDQo+
-ID4gVGhpcyBzdHJ1Y3Qgd2lsbCBiZSBleHRlbmRlZCBpbiBmdXR1cmUgcGF0Y2hlcyB0byBhY2hp
-ZXZlIG1vcmUgUE1JQyBjaGlwDQo+ID4gY29tcGF0aWJpbGl0eS4NCj4gDQo+IE9uIGNsb3NlciBp
-bnNwZWN0aW9uLCBpdCBsb29rcyBsaWtlIHdydGdyIChhbHNvIG5vdCBhIGdyZWF0IG5hbWUgZm9y
-IGENCj4gdmFyaWFibGUgYnkgdGhlIHdheSkgaXMgYSByZWdpc3RlciBhZGRyZXNzLiAgSXMgdGhh
-dCBjb3JyZWN0Pw0KPiBJbml0aWFsbHkgSSB0aG91Z2h0IGl0IHdhcyBhIG1vZGVsIG51bWJlciwg
-d2hpY2ggd291bGQgaGF2ZSBiZWVuIGENCj4gc3VpdGFibGUgY2FuZGlkYXRlIGZvciBlbnRyeSBp
-bnRvIE9GIC5kYXRhLg0KPiANCj4gSG93ZXZlciwgZGVzY3JpYmluZyByZWdpc3RlciBhZGRyZXNz
-ZXMgaW4gT0YgLmRhdGEgZG9lcyBub3Qgc291bmQgbGlrZQ0KPiBnb29kIHByYWN0aWNlLiAgSXQg
-aXMgdXN1YWxseSB1c2VkIHRvIGlkZW50aWZ5IGEgcGxhdGZvcm0gaW4gdGhlIGNhc2VzDQo+IHdo
-ZXJlIHBsYXRmb3JtcyBjYW5ub3QgYmUgb3RoZXJ3aXNlIGR5bmFtaWNhbGx5IGludGVycm9nYXRl
-ZCBmb3IgbW9kZWwNCj4gbnVtYmVyIHZpYSBhIHJlZ2lzdGVyIHJlYWQuDQo+IA0KPiBEZXNjcmli
-aW5nIHJlZ2lzdGVyIG1hcHMgdmlhICdjb25maWcnIGRhdGEgaXMgYSBzbGlwcGVyeSBzbG9wZS4N
-Cj4gDQoNCndydGdyIGlzIGEgc3BlY2lhbCByZWdpc3RlciBjYWxsZWQgIndyaXRlIHRyaWdnZXIi
-IHdoaWNoIGNvdWxkIGFwcGx5IFJUQw0KcmVnaXN0ZXIgY2hhbmdlIGFmdGVyIHdyaXRlIDEgdG8g
-dGhpcyByZWdpc3Rlci4gSSBzdXBwb3NlIEkgY291bGQgcmVuYW1lDQppdCB0byAidHJpZ2dlciIu
-DQoNCk1vc3QgUlRDIHJlZ2lzdGVyIG9mZnNldCB3YXMgc2FtZSBiZXR3ZWVuIDYzOTcgYW5kIDYz
-NTggUE1JQyBjaGlwIGV4Y2VwdA0KdGhpcyB0cmlnZ2VyIHJlZ2lzdGVyLiBTbyBJIHdvdWxkIGxp
-a2UgdG8gc3RvcmUgdGhpcyBkaWZmZXJlbmNlIGludG8gT0YNCmRhdGEuIE90aGVyd2lzZSwgSSBu
-ZWVkIGEgbG9uZyBpZi1lbHNlIGNvbmRpdGlvbiBiYXNlZCBvbiBtb2RlbCBudW1iZXINCm9yIHJl
-Z2lzdGVyIHJlYWQuDQogDQo=
+On 13-03-20, 15:22, andrew-sh.cheng wrote:
+> I have something want to consult you.
+> For your previous comment, you suggest use read-write lock to replace
+> mutex lock.
+> Will it be more efficiently even when all are write lock?
+> (all lock region are "setting VProc voltage")
 
+The data to be protected here isn't the VProc voltage but the list of
+valid OPPs. My idea was if we can make the target() routine run a bit
+faster as it really matters as it is called from scheduler hot path.
+
+It won't be wrong to use the mutex the way you have used it right now,
+but I think the read lock is much faster, though the read/write lock
+is more beneficial in case where there are multiple readers and fewer
+writers. The target() routine gets called multiple times here, not
+in parallel, and the OPP change notifier won't be called so often.
+
+-- 
+viresh
