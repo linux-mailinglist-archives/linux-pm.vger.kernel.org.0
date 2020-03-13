@@ -2,205 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A7C1845FE
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 12:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E332184678
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 13:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbgCMLbg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Mar 2020 07:31:36 -0400
-Received: from mga11.intel.com ([192.55.52.93]:38617 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726492AbgCMLbg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 13 Mar 2020 07:31:36 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Mar 2020 04:31:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,548,1574150400"; 
-   d="scan'208";a="354351357"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 13 Mar 2020 04:31:28 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 13 Mar 2020 13:31:28 +0200
-Date:   Fri, 13 Mar 2020 13:31:28 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        "Shih-Yuan Lee (FourDollars)" <sylee@canonical.com>,
-        Tiffany <tiffany.wang@canonical.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: Thunderbolt, direct-complete and long suspend/resume time of
- Suspend-to-idle
-Message-ID: <20200313113128.GB2540@lahna.fi.intel.com>
-References: <02700895-048F-4EA1-9E18-4883E83AE210@canonical.com>
- <20200311103840.GB2540@lahna.fi.intel.com>
- <E3DA71C8-96A7-482E-B41F-8145979F88F4@canonical.com>
- <20200312081509.GI2540@lahna.fi.intel.com>
- <C687BE86-1CCB-417B-8546-77F76127B266@canonical.com>
- <20200312104158.GS2540@lahna.fi.intel.com>
- <452D9D7F-A4D1-4628-8E9B-D88E2C919D7A@canonical.com>
+        id S1726847AbgCMME4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Mar 2020 08:04:56 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:41399 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726834AbgCMME4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Mar 2020 08:04:56 -0400
+Received: by mail-ed1-f67.google.com with SMTP id m25so11547043edq.8
+        for <linux-pm@vger.kernel.org>; Fri, 13 Mar 2020 05:04:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=KVQaV5WPaAITEfXGJD3iw4zrtyye7kAolYp6oZ1quUI=;
+        b=GVZv6ChaXLEWYvbrWTdhS4i8fMw2qeJSXb/2JBjNdfMY6mhOggh6/Z5mOaWCYPz6Ad
+         PetuwUXpdI272XaInycenRqesHqQBmYhwOBAMPaM4DCpfbCev1WQekRbj0o7QM4YsMTi
+         FkvBwDPMqy4tbFaLyfxVfYKBPgeGMPLpoi1kp2ylMBm1/Ithj6eoLKXkBEzlhpA/ihLd
+         qL22Qiw9DAFKOJT6+N8KPo5aUP110lqB7mD++bhFrTZXbdce6Qd/U/JEnBbgdbSZBnq/
+         AaqJO9+Hx6eGmoHph7LwUFG+z4KSEcnIHB1QgOQ3JYmudJ1VcD4R91SoUMJraYGdukpk
+         vEcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KVQaV5WPaAITEfXGJD3iw4zrtyye7kAolYp6oZ1quUI=;
+        b=mtPFp2suaV9RG5PRXn0fIGUmKTxUUrqvY5PIhjwURf0SyAbDww7CSG145G8O+LEtYJ
+         m0EM0NK027wuq1AnIsVSfFMWF7hKOHXyGyzz9TtAe1d0JTnl9lTLphub2uXrKn5Q2j6J
+         7MM4sG+lwccG5lAo6TKaz0PdAA3cEzeYyzTTZnshmH4wZ5fY/Wd9b34XFLn3cEHPacv0
+         zAxGxMJrYtU/DCkYliskhvfEH4Z+VNe+cwFJ4QygjmZgM0TzBzPuK8Wlj2kbYQ90F8w8
+         YL+y4FkGcxuo6sarro3OaB+Cu/tlpe8jm5+V7G8uBgCkrGMNkQZ+vge9cFkxjiH/PRR5
+         Nwng==
+X-Gm-Message-State: ANhLgQ1/1uqrc3rce04bYW+mt3ne+Pf0DMFhj5xXxf4nwJM+1IK+kDKS
+        1M0GdcZval6l4ZXlUdGCVLesLyvU9Xc=
+X-Google-Smtp-Source: ADFU+vskqub7CpCaC/ugUWZs2oR/RvePIrTwC+6a82eCHZMWi25KAtvuE8JcxWJt62Qtis9Q1Vw0NQ==
+X-Received: by 2002:a17:906:76c6:: with SMTP id q6mr11068012ejn.176.1584101092902;
+        Fri, 13 Mar 2020 05:04:52 -0700 (PDT)
+Received: from [192.168.1.9] ([84.238.208.211])
+        by smtp.googlemail.com with ESMTPSA id v25sm4584220edx.89.2020.03.13.05.04.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Mar 2020 05:04:52 -0700 (PDT)
+Subject: Re: [PATCH -next 011/491] ARM/QUALCOMM SUPPORT: Use fallthrough;
+To:     Joe Perches <joe@perches.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-pm@vger.kernel.org
+References: <cover.1583896344.git.joe@perches.com>
+ <2e6818291503f032e7662f1fa45fb64c7751a7ae.1583896348.git.joe@perches.com>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Message-ID: <2ac47436-e13c-bc87-d661-e4a423c7ef5b@linaro.org>
+Date:   Fri, 13 Mar 2020 14:04:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <452D9D7F-A4D1-4628-8E9B-D88E2C919D7A@canonical.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <2e6818291503f032e7662f1fa45fb64c7751a7ae.1583896348.git.joe@perches.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 13, 2020 at 01:07:35PM +0800, Kai-Heng Feng wrote:
-> 
-> 
-> > On Mar 12, 2020, at 18:41, Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
-> > 
-> > On Thu, Mar 12, 2020 at 06:10:45PM +0800, Kai-Heng Feng wrote:
-> >> 
-> >> 
-> >>> On Mar 12, 2020, at 16:15, Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
-> >>> 
-> >>> On Thu, Mar 12, 2020 at 12:41:08PM +0800, Kai-Heng Feng wrote:
-> >>>> 
-> >>>> 
-> >>>>> On Mar 11, 2020, at 18:38, Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
-> >>>>> 
-> >>>>> On Wed, Mar 11, 2020 at 01:39:51PM +0800, Kai-Heng Feng wrote:
-> >>>>>> Hi,
-> >>>>>> 
-> >>>>>> I am currently investigating long suspend and resume time of suspend-to-idle.
-> >>>>>> It's because Thunderbolt bridges need to wait for 1100ms [1] for runtime-resume on system suspend, and also for system resume.
-> >>>>>> 
-> >>>>>> I made a quick hack to the USB driver and xHCI driver to support direct-complete, but I failed to do so for the parent PCIe bridge as it always disables the direct-complete [2], since device_may_wakeup() returns true for the device:
-> >>>>>> 
-> >>>>>> 	/* Avoid direct_complete to let wakeup_path propagate. */
-> >>>>>> 		if (device_may_wakeup(dev) || dev->power.wakeup_path)
-> >>>>>> 			dev->power.direct_complete = false;
-> >>>>> 
-> >>>>> You need to be careful here because otherwise you end up situation where
-> >>>>> the link is not properly trained and we tear down the whole tree of
-> >>>>> devices which is worse than waiting bit more for resume.
-> >>>> 
-> >>>> My idea is to direct-complete when there's no PCI or USB device
-> >>>> plugged into the TBT, and use pm_reuqest_resume() in complete() so it
-> >>>> won't block resume() or resume_noirq().
-> >>> 
-> >>> Before doing that..
-> >>> 
-> >>>>>> Once the direct-complete is disabled, system suspend/resume is used hence the delay in [1] is making the resume really slow. 
-> >>>>>> So how do we make suspend-to-idle faster? I have some ideas but I am not sure if they are feasible:
-> >>>>>> - Make PM core know the runtime_suspend() already use the same wakeup as suspend(), so it doesn't need to use device_may_wakeup() check to determine direct-complete.
-> >>>>>> - Remove the DPM_FLAG_NEVER_SKIP flag in pcieport driver, and use pm_request_resume() in its complete() callback to prevent blocking the resume process.
-> >>>>>> - Reduce the 1100ms delay. Maybe someone knows the values used in macOS and Windows...
-> >>>>> 
-> >>>>> Which system this is? ICL?
-> >>>> 
-> >>>> CML-H + Titan Ridge.
-> >>> 
-> >>> .. we should really understand this better because CML-H PCH root ports
-> >>> and Titan/Alpine Ridge downstream ports all support active link
-> >>> reporting so instead of the 1000+100ms you should see something like
-> >>> this:
-> >> 
-> >> Root port for discrete graphics:
-> >> # lspci -vvnn -s 00:01.0                    
-> >> 00:01.0 PCI bridge [0604]: Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor PCIe Controller (x16) [8086:1901] (rev 02) (prog-if 00 [Normal decode])
-> >>        Capabilities: [a0] Express (v2) Root Port (Slot+), MSI 00
-> >>                LnkCap: Port #2, Speed 8GT/s, Width x16, ASPM L0s L1, Exit Latency L0s <256ns, L1 <8us
-> >>                        ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
-> >>                LnkCtl: ASPM L0s L1 Enabled; RCB 64 bytes Disabled- CommClk+
-> >>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> > 
-> > Interesting, Titan Ridge is connected to the graphics slot, no? What
-> > system this is?
-> 
-> No, TBT connects to another port, which supports link active reporting.
-> This is just to show not all CML-H ports support that.
+Hi,
 
-Right.
-
-> >> Thunderbolt ports:
-> >> # lspci -vvvv -s 04:00
-> >> 04:00.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 2C 2018] [8086:15e7] (rev 06) (prog-if 00 [Normal decode])
-> >>        Capabilities: [c0] Express (v2) Downstream Port (Slot+), MSI 00
-> >>                LnkCap: Port #0, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L0s <64ns, L1 <1us
-> >>                        ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
-> >>                LnkCtl: ASPM L1 Enabled; Disabled- CommClk+
-> >>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> > 
-> > This one leads to the TBT NHI.
-> > 
-> >> # lspci -vvnn -s 04:01
-> >> 04:01.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 2C 2018] [8086:15e7] (rev 06) (prog-if 00 [Normal decode])
-> >>        Capabilities: [c0] Express (v2) Downstream Port (Slot+), MSI 00
-> >>                LnkCap: Port #1, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L0s <64ns, L1 <1us
-> >>                        ClockPM- Surprise- LLActRep+ BwNot+ ASPMOptComp+
-> >>                LnkCtl: ASPM L1 Enabled; Disabled- CommClk-
-> >>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> > 
-> > This one is one of the extension downstream ports and it supports active
-> > link reporting.
-> > 
-> >> # lspci -vvnn -s 04:02 
-> >> 04:02.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 2C 2018] [8086:15e7] (rev 06) (prog-if 00 [Normal decode])
-> >>        Capabilities: [c0] Express (v2) Downstream Port (Slot+), MSI 00
-> >>                LnkCap: Port #2, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L0s <64ns, L1 <1us
-> >>                        ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
-> >>                LnkCtl: ASPM L1 Enabled; Disabled- CommClk+
-> >>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-> > 
-> > This one leads to the xHCI.
-> > 
-> >> So both CML-H PCH and TBT ports report "LLActRep-".
-> > 
-> > So in pci_bridge_wait_for_secondary_bus() we only call
-> > pcie_wait_for_link_delay() if the port supports speeds higher than 5
-> > GT/s (gen2). Now if I read the above correct all the ports except the
-> > root port support 2.5 GT/s (gen1) speeds so we should go to the
-> > msleep(delay) branch and not call pcie_wait_for_link_delay() at all:
-> > 
-> >        if (pcie_get_speed_cap(dev) <= PCIE_SPEED_5_0GT) {
-> >                pci_dbg(dev, "waiting %d ms for downstream link\n", delay);
-> >                msleep(delay);
-> >        } else {
-> >                pci_dbg(dev, "waiting %d ms for downstream link, after activation\n",
-> >                        delay);
-> >                if (!pcie_wait_for_link_delay(dev, true, delay)) {
-> >                        /* Did not train, no need to wait any further */
-> >                        return;
-> >                }
-> >        }
-> > 
-> > Only explanation I have is that delay itself is set to 1000ms for some
-> > reason. Can you check if that's the case and then maybe check where that
-> > delay is coming from?
-> > 
-> >>> 1. Wait for the link + 100ms for the root port
-> >>> 2. Wait for the link + 100ms for the Titan Ridge downstream ports
-> >>>   (these are run paraller wrt all Titan Ridge downstream ports that have
-> >>>    something connected)
-> >>> 
-> >>> If there is a TBT device connected then 2. is repeated for it and so on.
-> >>> 
-> >>> So the 1000ms+ is really unexpected. Are you running mainline kernel and
-> >>> if so, can you share dmesg with CONFIG_PCI_DEBUG=y so we can see the
-> >>> delays there? Maybe also add some debugging to
-> >>> pcie_wait_for_link_delay() where it checks for the
-> >>> !pdev->link_active_reporting and waits for 1100ms.
-> >> 
-> >> I added the debug log in another thread and it does reach !pdev->link_active_reporting.
-> > 
-> > Hmm, based on the above that should not happen :-(
-> > 
-> >> Let me see if patch link active reporting for the ports in PCI quirks can help.
-> > 
-> > Let's first investigate bit more to understand what is going on.
-> > 
-> > I suggest to create kernel.org bugzilla about this. Please include full
-> > dmesg and 'sudo lspci -vv' output at least and of course the steps you
-> > use to reproduce this.
+On 3/11/20 6:51 AM, Joe Perches wrote:
+> Convert the various uses of fallthrough comments to fallthrough;
 > 
-> https://bugzilla.kernel.org/show_bug.cgi?id=206837
+> Done via script
+> Link: https://lore.kernel.org/lkml/b56602fcf79f849e733e7b521bb0e17895d390fa.1582230379.git.joe.com/
+> 
+> Signed-off-by: Joe Perches <joe@perches.com>
+> ---
+>  drivers/media/platform/qcom/venus/vdec.c |  2 +-
 
-Thanks!
+For the Venus bits:
+
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+
+>  drivers/phy/qualcomm/phy-qcom-usb-hs.c   |  2 +-
+>  drivers/pinctrl/qcom/pinctrl-spmi-gpio.c |  4 ++--
+>  drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c |  2 +-
+>  drivers/rpmsg/qcom_glink_native.c        |  4 ++--
+>  drivers/soc/qcom/socinfo.c               | 16 ++++++++--------
+>  drivers/thermal/qcom/tsens-v0_1.c        |  8 ++++----
+>  drivers/thermal/qcom/tsens-v1.c          |  4 ++--
+>  8 files changed, 21 insertions(+), 21 deletions(-)
+> 
+
+-- 
+regards,
+Stan
