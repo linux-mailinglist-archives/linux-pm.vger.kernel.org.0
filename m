@@ -2,104 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E68C1184566
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 12:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A7C1845FE
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 12:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726423AbgCMLBn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Mar 2020 07:01:43 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:49253 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726364AbgCMLBn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Mar 2020 07:01:43 -0400
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1jCi4T-00023f-3E; Fri, 13 Mar 2020 12:01:41 +0100
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@pengutronix.de, patchwork-lst@pengutronix.de
-Subject: [PATCH resend] thermal: imx: register as OF sensor
-Date:   Fri, 13 Mar 2020 12:01:39 +0100
-Message-Id: <20200313110139.28558-1-l.stach@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
+        id S1726520AbgCMLbg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Mar 2020 07:31:36 -0400
+Received: from mga11.intel.com ([192.55.52.93]:38617 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726492AbgCMLbg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 13 Mar 2020 07:31:36 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Mar 2020 04:31:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,548,1574150400"; 
+   d="scan'208";a="354351357"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 13 Mar 2020 04:31:28 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 13 Mar 2020 13:31:28 +0200
+Date:   Fri, 13 Mar 2020 13:31:28 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        "Shih-Yuan Lee (FourDollars)" <sylee@canonical.com>,
+        Tiffany <tiffany.wang@canonical.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: Thunderbolt, direct-complete and long suspend/resume time of
+ Suspend-to-idle
+Message-ID: <20200313113128.GB2540@lahna.fi.intel.com>
+References: <02700895-048F-4EA1-9E18-4883E83AE210@canonical.com>
+ <20200311103840.GB2540@lahna.fi.intel.com>
+ <E3DA71C8-96A7-482E-B41F-8145979F88F4@canonical.com>
+ <20200312081509.GI2540@lahna.fi.intel.com>
+ <C687BE86-1CCB-417B-8546-77F76127B266@canonical.com>
+ <20200312104158.GS2540@lahna.fi.intel.com>
+ <452D9D7F-A4D1-4628-8E9B-D88E2C919D7A@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <452D9D7F-A4D1-4628-8E9B-D88E2C919D7A@canonical.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To make the internal sensor usable with a thermal zone description
-provided via DT, also register out device as a OF sensor.
+On Fri, Mar 13, 2020 at 01:07:35PM +0800, Kai-Heng Feng wrote:
+> 
+> 
+> > On Mar 12, 2020, at 18:41, Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+> > 
+> > On Thu, Mar 12, 2020 at 06:10:45PM +0800, Kai-Heng Feng wrote:
+> >> 
+> >> 
+> >>> On Mar 12, 2020, at 16:15, Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+> >>> 
+> >>> On Thu, Mar 12, 2020 at 12:41:08PM +0800, Kai-Heng Feng wrote:
+> >>>> 
+> >>>> 
+> >>>>> On Mar 11, 2020, at 18:38, Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+> >>>>> 
+> >>>>> On Wed, Mar 11, 2020 at 01:39:51PM +0800, Kai-Heng Feng wrote:
+> >>>>>> Hi,
+> >>>>>> 
+> >>>>>> I am currently investigating long suspend and resume time of suspend-to-idle.
+> >>>>>> It's because Thunderbolt bridges need to wait for 1100ms [1] for runtime-resume on system suspend, and also for system resume.
+> >>>>>> 
+> >>>>>> I made a quick hack to the USB driver and xHCI driver to support direct-complete, but I failed to do so for the parent PCIe bridge as it always disables the direct-complete [2], since device_may_wakeup() returns true for the device:
+> >>>>>> 
+> >>>>>> 	/* Avoid direct_complete to let wakeup_path propagate. */
+> >>>>>> 		if (device_may_wakeup(dev) || dev->power.wakeup_path)
+> >>>>>> 			dev->power.direct_complete = false;
+> >>>>> 
+> >>>>> You need to be careful here because otherwise you end up situation where
+> >>>>> the link is not properly trained and we tear down the whole tree of
+> >>>>> devices which is worse than waiting bit more for resume.
+> >>>> 
+> >>>> My idea is to direct-complete when there's no PCI or USB device
+> >>>> plugged into the TBT, and use pm_reuqest_resume() in complete() so it
+> >>>> won't block resume() or resume_noirq().
+> >>> 
+> >>> Before doing that..
+> >>> 
+> >>>>>> Once the direct-complete is disabled, system suspend/resume is used hence the delay in [1] is making the resume really slow. 
+> >>>>>> So how do we make suspend-to-idle faster? I have some ideas but I am not sure if they are feasible:
+> >>>>>> - Make PM core know the runtime_suspend() already use the same wakeup as suspend(), so it doesn't need to use device_may_wakeup() check to determine direct-complete.
+> >>>>>> - Remove the DPM_FLAG_NEVER_SKIP flag in pcieport driver, and use pm_request_resume() in its complete() callback to prevent blocking the resume process.
+> >>>>>> - Reduce the 1100ms delay. Maybe someone knows the values used in macOS and Windows...
+> >>>>> 
+> >>>>> Which system this is? ICL?
+> >>>> 
+> >>>> CML-H + Titan Ridge.
+> >>> 
+> >>> .. we should really understand this better because CML-H PCH root ports
+> >>> and Titan/Alpine Ridge downstream ports all support active link
+> >>> reporting so instead of the 1000+100ms you should see something like
+> >>> this:
+> >> 
+> >> Root port for discrete graphics:
+> >> # lspci -vvnn -s 00:01.0                    
+> >> 00:01.0 PCI bridge [0604]: Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor PCIe Controller (x16) [8086:1901] (rev 02) (prog-if 00 [Normal decode])
+> >>        Capabilities: [a0] Express (v2) Root Port (Slot+), MSI 00
+> >>                LnkCap: Port #2, Speed 8GT/s, Width x16, ASPM L0s L1, Exit Latency L0s <256ns, L1 <8us
+> >>                        ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
+> >>                LnkCtl: ASPM L0s L1 Enabled; RCB 64 bytes Disabled- CommClk+
+> >>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+> > 
+> > Interesting, Titan Ridge is connected to the graphics slot, no? What
+> > system this is?
+> 
+> No, TBT connects to another port, which supports link active reporting.
+> This is just to show not all CML-H ports support that.
 
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
----
- drivers/thermal/imx_thermal.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+Right.
 
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index bb6754a5342c..714be941fe6c 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -202,7 +202,7 @@ static struct thermal_soc_data thermal_imx7d_data = {
- 
- struct imx_thermal_data {
- 	struct cpufreq_policy *policy;
--	struct thermal_zone_device *tz;
-+	struct thermal_zone_device *tz, *sensor;
- 	struct thermal_cooling_device *cdev;
- 	enum thermal_device_mode mode;
- 	struct regmap *tempmon;
-@@ -338,6 +338,13 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
- 	return 0;
- }
- 
-+static int imx_of_sensor_get_temp(void *data, int *temp)
-+{
-+	struct imx_thermal_data *thermal_data = data;
-+
-+	return imx_get_temp(thermal_data->tz, temp);
-+}
-+
- static int imx_get_mode(struct thermal_zone_device *tz,
- 			enum thermal_device_mode *mode)
- {
-@@ -482,6 +489,10 @@ static struct thermal_zone_device_ops imx_tz_ops = {
- 	.set_trip_temp = imx_set_trip_temp,
- };
- 
-+static const struct thermal_zone_of_device_ops imx_tz_of_ops = {
-+	.get_temp = imx_of_sensor_get_temp,
-+};
-+
- static int imx_init_calib(struct platform_device *pdev, u32 ocotp_ana1)
- {
- 	struct imx_thermal_data *data = platform_get_drvdata(pdev);
-@@ -816,6 +827,9 @@ static int imx_thermal_probe(struct platform_device *pdev)
- 		goto clk_disable;
- 	}
- 
-+	data->sensor = thermal_zone_of_sensor_register(&pdev->dev, 0, data,
-+						       &imx_tz_of_ops);
-+
- 	dev_info(&pdev->dev, "%s CPU temperature grade - max:%dC"
- 		 " critical:%dC passive:%dC\n", data->temp_grade,
- 		 data->temp_max / 1000, data->temp_critical / 1000,
-@@ -871,6 +885,7 @@ static int imx_thermal_remove(struct platform_device *pdev)
- 	if (!IS_ERR(data->thermal_clk))
- 		clk_disable_unprepare(data->thermal_clk);
- 
-+	thermal_zone_of_sensor_unregister(&pdev->dev, data->sensor);
- 	thermal_zone_device_unregister(data->tz);
- 	cpufreq_cooling_unregister(data->cdev);
- 	cpufreq_cpu_put(data->policy);
--- 
-2.20.1
+> >> Thunderbolt ports:
+> >> # lspci -vvvv -s 04:00
+> >> 04:00.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 2C 2018] [8086:15e7] (rev 06) (prog-if 00 [Normal decode])
+> >>        Capabilities: [c0] Express (v2) Downstream Port (Slot+), MSI 00
+> >>                LnkCap: Port #0, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L0s <64ns, L1 <1us
+> >>                        ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
+> >>                LnkCtl: ASPM L1 Enabled; Disabled- CommClk+
+> >>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+> > 
+> > This one leads to the TBT NHI.
+> > 
+> >> # lspci -vvnn -s 04:01
+> >> 04:01.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 2C 2018] [8086:15e7] (rev 06) (prog-if 00 [Normal decode])
+> >>        Capabilities: [c0] Express (v2) Downstream Port (Slot+), MSI 00
+> >>                LnkCap: Port #1, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L0s <64ns, L1 <1us
+> >>                        ClockPM- Surprise- LLActRep+ BwNot+ ASPMOptComp+
+> >>                LnkCtl: ASPM L1 Enabled; Disabled- CommClk-
+> >>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+> > 
+> > This one is one of the extension downstream ports and it supports active
+> > link reporting.
+> > 
+> >> # lspci -vvnn -s 04:02 
+> >> 04:02.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 2C 2018] [8086:15e7] (rev 06) (prog-if 00 [Normal decode])
+> >>        Capabilities: [c0] Express (v2) Downstream Port (Slot+), MSI 00
+> >>                LnkCap: Port #2, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L0s <64ns, L1 <1us
+> >>                        ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
+> >>                LnkCtl: ASPM L1 Enabled; Disabled- CommClk+
+> >>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+> > 
+> > This one leads to the xHCI.
+> > 
+> >> So both CML-H PCH and TBT ports report "LLActRep-".
+> > 
+> > So in pci_bridge_wait_for_secondary_bus() we only call
+> > pcie_wait_for_link_delay() if the port supports speeds higher than 5
+> > GT/s (gen2). Now if I read the above correct all the ports except the
+> > root port support 2.5 GT/s (gen1) speeds so we should go to the
+> > msleep(delay) branch and not call pcie_wait_for_link_delay() at all:
+> > 
+> >        if (pcie_get_speed_cap(dev) <= PCIE_SPEED_5_0GT) {
+> >                pci_dbg(dev, "waiting %d ms for downstream link\n", delay);
+> >                msleep(delay);
+> >        } else {
+> >                pci_dbg(dev, "waiting %d ms for downstream link, after activation\n",
+> >                        delay);
+> >                if (!pcie_wait_for_link_delay(dev, true, delay)) {
+> >                        /* Did not train, no need to wait any further */
+> >                        return;
+> >                }
+> >        }
+> > 
+> > Only explanation I have is that delay itself is set to 1000ms for some
+> > reason. Can you check if that's the case and then maybe check where that
+> > delay is coming from?
+> > 
+> >>> 1. Wait for the link + 100ms for the root port
+> >>> 2. Wait for the link + 100ms for the Titan Ridge downstream ports
+> >>>   (these are run paraller wrt all Titan Ridge downstream ports that have
+> >>>    something connected)
+> >>> 
+> >>> If there is a TBT device connected then 2. is repeated for it and so on.
+> >>> 
+> >>> So the 1000ms+ is really unexpected. Are you running mainline kernel and
+> >>> if so, can you share dmesg with CONFIG_PCI_DEBUG=y so we can see the
+> >>> delays there? Maybe also add some debugging to
+> >>> pcie_wait_for_link_delay() where it checks for the
+> >>> !pdev->link_active_reporting and waits for 1100ms.
+> >> 
+> >> I added the debug log in another thread and it does reach !pdev->link_active_reporting.
+> > 
+> > Hmm, based on the above that should not happen :-(
+> > 
+> >> Let me see if patch link active reporting for the ports in PCI quirks can help.
+> > 
+> > Let's first investigate bit more to understand what is going on.
+> > 
+> > I suggest to create kernel.org bugzilla about this. Please include full
+> > dmesg and 'sudo lspci -vv' output at least and of course the steps you
+> > use to reproduce this.
+> 
+> https://bugzilla.kernel.org/show_bug.cgi?id=206837
 
+Thanks!
