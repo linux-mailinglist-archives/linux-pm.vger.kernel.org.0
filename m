@@ -2,879 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D963183C62
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Mar 2020 23:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8E118402A
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 06:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726910AbgCLWZK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Mar 2020 18:25:10 -0400
-Received: from mail.manjaro.org ([176.9.38.148]:58958 "EHLO mail.manjaro.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726881AbgCLWZK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 12 Mar 2020 18:25:10 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.manjaro.org (Postfix) with ESMTP id 3A96337025D9;
-        Thu, 12 Mar 2020 23:25:07 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at manjaro.org
-Received: from mail.manjaro.org ([127.0.0.1])
-        by localhost (manjaro.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mE6qf7_MOoHF; Thu, 12 Mar 2020 23:25:01 +0100 (CET)
-From:   Tobias Schramm <t.schramm@manjaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tobias Schramm <t.schramm@manjaro.org>
-Subject: [PATCH v4 3/3] power: supply: add CellWise cw2015 fuel gauge driver
-Date:   Thu, 12 Mar 2020 23:24:48 +0100
-Message-Id: <20200312222448.25097-4-t.schramm@manjaro.org>
-In-Reply-To: <20200312222448.25097-1-t.schramm@manjaro.org>
-References: <20200312222448.25097-1-t.schramm@manjaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726365AbgCMFHp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 13 Mar 2020 01:07:45 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:39700 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726331AbgCMFHo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Mar 2020 01:07:44 -0400
+Received: from mail-pl1-f198.google.com ([209.85.214.198])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1jCcXt-0006dd-KH
+        for linux-pm@vger.kernel.org; Fri, 13 Mar 2020 05:07:41 +0000
+Received: by mail-pl1-f198.google.com with SMTP id g5so4775884plq.17
+        for <linux-pm@vger.kernel.org>; Thu, 12 Mar 2020 22:07:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=ncQzByjuwOcAKkawPEjHT5r1qKMEPZtwsVn5fEPFz1E=;
+        b=MH3743l8xECCTCbNeYnrdRIl9zwsZdGOx7aex/0i7VDAyJWSaNBhY2O8H/ESc+pyCd
+         oSy8l6PczZpCQ+8R78BOH1Op/iHaUntDYUsFI+pQ2GgU+ItxE0ohAfR9lWKGP3XQHQHk
+         Npq45X2Zw81zYbEH6/h52gbua/X5MBwLQGGFeDUQdoZHa0Y+MF1epRdGTMnFfO1DAN4w
+         3DNxPi3GabQ+VRllSiddsHPSht6xZrPdvOUfPEiC3SBeNmO+W4ZX5NFxSbcuC/IKNBBC
+         4YkMtNjCT/ygaKX3sLexigEFMlt4GfLxRO/Xx1oaG2WgEtbvOYcU9JrQMHQxGPhnW5of
+         DzLw==
+X-Gm-Message-State: ANhLgQ28RCu7cVjcgkXT41JH7+VVu2UtGIGnW2kVWsivYtlmbKw8vuJ5
+        FYYvNoeZLwULfvSC3F0KibwAgw2JKIl7g+jaa+In33fEJ/P8AZWkglRp0CFTfXsRSYtxzpXRXgm
+        Qes1qgzXDzxS/w/GhYs70i8k7uKKjeM9J72du
+X-Received: by 2002:a17:902:b497:: with SMTP id y23mr11533272plr.81.1584076059905;
+        Thu, 12 Mar 2020 22:07:39 -0700 (PDT)
+X-Google-Smtp-Source: ADFU+vuMJeZd+QaCu4khzw5Eqa7w9dixEYSS8h3WxUI+oPjopXK4CM4tuTtOTorwFo4uXVo0cOhpTg==
+X-Received: by 2002:a17:902:b497:: with SMTP id y23mr11533231plr.81.1584076059449;
+        Thu, 12 Mar 2020 22:07:39 -0700 (PDT)
+Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
+        by smtp.gmail.com with ESMTPSA id f69sm3931635pfa.124.2020.03.12.22.07.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 12 Mar 2020 22:07:38 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3608.60.0.2.5\))
+Subject: Re: Thunderbolt, direct-complete and long suspend/resume time of
+ Suspend-to-idle
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <20200312104158.GS2540@lahna.fi.intel.com>
+Date:   Fri, 13 Mar 2020 13:07:35 +0800
+Cc:     Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        "Shih-Yuan Lee (FourDollars)" <sylee@canonical.com>,
+        Tiffany <tiffany.wang@canonical.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <452D9D7F-A4D1-4628-8E9B-D88E2C919D7A@canonical.com>
+References: <02700895-048F-4EA1-9E18-4883E83AE210@canonical.com>
+ <20200311103840.GB2540@lahna.fi.intel.com>
+ <E3DA71C8-96A7-482E-B41F-8145979F88F4@canonical.com>
+ <20200312081509.GI2540@lahna.fi.intel.com>
+ <C687BE86-1CCB-417B-8546-77F76127B266@canonical.com>
+ <20200312104158.GS2540@lahna.fi.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+X-Mailer: Apple Mail (2.3608.60.0.2.5)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds a driver for the CellWise cw2015 fuel gauge.
 
-The CellWise cw2015 is a shuntless, single-cell Li-Ion fuel gauge used
-in the pine64 Pinebook Pro laptop and some Raspberry Pi UPS HATs.
 
-Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
----
- MAINTAINERS                           |   6 +
- drivers/power/supply/Kconfig          |   8 +
- drivers/power/supply/Makefile         |   1 +
- drivers/power/supply/cw2015_battery.c | 759 ++++++++++++++++++++++++++
- 4 files changed, 774 insertions(+)
- create mode 100644 drivers/power/supply/cw2015_battery.c
+> On Mar 12, 2020, at 18:41, Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+> 
+> On Thu, Mar 12, 2020 at 06:10:45PM +0800, Kai-Heng Feng wrote:
+>> 
+>> 
+>>> On Mar 12, 2020, at 16:15, Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+>>> 
+>>> On Thu, Mar 12, 2020 at 12:41:08PM +0800, Kai-Heng Feng wrote:
+>>>> 
+>>>> 
+>>>>> On Mar 11, 2020, at 18:38, Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+>>>>> 
+>>>>> On Wed, Mar 11, 2020 at 01:39:51PM +0800, Kai-Heng Feng wrote:
+>>>>>> Hi,
+>>>>>> 
+>>>>>> I am currently investigating long suspend and resume time of suspend-to-idle.
+>>>>>> It's because Thunderbolt bridges need to wait for 1100ms [1] for runtime-resume on system suspend, and also for system resume.
+>>>>>> 
+>>>>>> I made a quick hack to the USB driver and xHCI driver to support direct-complete, but I failed to do so for the parent PCIe bridge as it always disables the direct-complete [2], since device_may_wakeup() returns true for the device:
+>>>>>> 
+>>>>>> 	/* Avoid direct_complete to let wakeup_path propagate. */
+>>>>>> 		if (device_may_wakeup(dev) || dev->power.wakeup_path)
+>>>>>> 			dev->power.direct_complete = false;
+>>>>> 
+>>>>> You need to be careful here because otherwise you end up situation where
+>>>>> the link is not properly trained and we tear down the whole tree of
+>>>>> devices which is worse than waiting bit more for resume.
+>>>> 
+>>>> My idea is to direct-complete when there's no PCI or USB device
+>>>> plugged into the TBT, and use pm_reuqest_resume() in complete() so it
+>>>> won't block resume() or resume_noirq().
+>>> 
+>>> Before doing that..
+>>> 
+>>>>>> Once the direct-complete is disabled, system suspend/resume is used hence the delay in [1] is making the resume really slow. 
+>>>>>> So how do we make suspend-to-idle faster? I have some ideas but I am not sure if they are feasible:
+>>>>>> - Make PM core know the runtime_suspend() already use the same wakeup as suspend(), so it doesn't need to use device_may_wakeup() check to determine direct-complete.
+>>>>>> - Remove the DPM_FLAG_NEVER_SKIP flag in pcieport driver, and use pm_request_resume() in its complete() callback to prevent blocking the resume process.
+>>>>>> - Reduce the 1100ms delay. Maybe someone knows the values used in macOS and Windows...
+>>>>> 
+>>>>> Which system this is? ICL?
+>>>> 
+>>>> CML-H + Titan Ridge.
+>>> 
+>>> .. we should really understand this better because CML-H PCH root ports
+>>> and Titan/Alpine Ridge downstream ports all support active link
+>>> reporting so instead of the 1000+100ms you should see something like
+>>> this:
+>> 
+>> Root port for discrete graphics:
+>> # lspci -vvnn -s 00:01.0                    
+>> 00:01.0 PCI bridge [0604]: Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor PCIe Controller (x16) [8086:1901] (rev 02) (prog-if 00 [Normal decode])
+>>        Capabilities: [a0] Express (v2) Root Port (Slot+), MSI 00
+>>                LnkCap: Port #2, Speed 8GT/s, Width x16, ASPM L0s L1, Exit Latency L0s <256ns, L1 <8us
+>>                        ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
+>>                LnkCtl: ASPM L0s L1 Enabled; RCB 64 bytes Disabled- CommClk+
+>>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+> 
+> Interesting, Titan Ridge is connected to the graphics slot, no? What
+> system this is?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a6fbdf354d34..0260c89618f9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3885,6 +3885,12 @@ F:	arch/powerpc/include/uapi/asm/spu*.h
- F:	arch/powerpc/oprofile/*cell*
- F:	arch/powerpc/platforms/cell/
- 
-+CELLWISE CW2015 BATTERY DRIVER
-+M:	Tobias Schrammm <t.schramm@manjaro.org>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
-+F:	drivers/power/supply/cw2015_battery.c
-+
- CEPH COMMON CODE (LIBCEPH)
- M:	Ilya Dryomov <idryomov@gmail.com>
- M:	Jeff Layton <jlayton@kernel.org>
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 9a5591ab90d0..ac905ce60e47 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -116,6 +116,14 @@ config BATTERY_CPCAP
- 	  Say Y here to enable support for battery on Motorola
- 	  phones and tablets such as droid 4.
- 
-+config BATTERY_CW2015
-+	tristate "CW2015 Battery driver"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  Say Y here to enable support for the cellwise cw2015
-+	  battery fuel gauge (used in the Pinebook Pro & others)
-+
- config BATTERY_DS2760
- 	tristate "DS2760 battery driver (HP iPAQ & others)"
- 	depends on W1
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 6c7da920ea83..69727a10e835 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -24,6 +24,7 @@ obj-$(CONFIG_BATTERY_ACT8945A)	+= act8945a_charger.o
- obj-$(CONFIG_BATTERY_AXP20X)	+= axp20x_battery.o
- obj-$(CONFIG_CHARGER_AXP20X)	+= axp20x_ac_power.o
- obj-$(CONFIG_BATTERY_CPCAP)	+= cpcap-battery.o
-+obj-$(CONFIG_BATTERY_CW2015)	+= cw2015_battery.o
- obj-$(CONFIG_BATTERY_DS2760)	+= ds2760_battery.o
- obj-$(CONFIG_BATTERY_DS2780)	+= ds2780_battery.o
- obj-$(CONFIG_BATTERY_DS2781)	+= ds2781_battery.o
-diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
-new file mode 100644
-index 000000000000..c1c98f9cd62c
---- /dev/null
-+++ b/drivers/power/supply/cw2015_battery.c
-@@ -0,0 +1,759 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Fuel gauge driver for CellWise 2013 / 2015
-+ *
-+ * Copyright (C) 2012, RockChip
-+ * Copyright (C) 2020, Tobias Schramm
-+ *
-+ * Authors: xuhuicong <xhc@rock-chips.com>
-+ * Authors: Tobias Schramm <t.schramm@manjaro.org>
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/delay.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/power_supply.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <linux/time.h>
-+#include <linux/timekeeping.h>
-+#include <linux/workqueue.h>
-+
-+#define CW2015_SIZE_BATINFO		64
-+
-+#define CW2015_RESET_TRIES		5
-+
-+#define CW2015_REG_VERSION		0x00
-+#define CW2015_REG_VCELL		0x02
-+#define CW2015_REG_SOC			0x04
-+#define CW2015_REG_RRT_ALERT		0x06
-+#define CW2015_REG_CONFIG		0x08
-+#define CW2015_REG_MODE			0x0A
-+#define CW2015_REG_BATINFO		0x10
-+
-+#define CW2015_MODE_SLEEP_MASK		GENMASK(7, 6)
-+#define CW2015_MODE_SLEEP		(0x03 << 6)
-+#define CW2015_MODE_NORMAL		(0x00 << 6)
-+#define CW2015_MODE_QUICK_START		(0x03 << 4)
-+#define CW2015_MODE_RESTART		(0x0f << 0)
-+
-+#define CW2015_CONFIG_UPDATE_FLG	(0x01 << 1)
-+#define CW2015_ATHD(x)			((x) << 3)
-+#define CW2015_MASK_ATHD		GENMASK(7, 3)
-+#define CW2015_MASK_SOC			GENMASK(12, 0)
-+
-+/* reset gauge of no valid state of charge could be polled for 40s */
-+#define CW2015_BAT_SOC_ERROR_MS		(40 * MSEC_PER_SEC)
-+/* reset gauge if state of charge stuck for half an hour during charging */
-+#define CW2015_BAT_CHARGING_STUCK_MS	(1800 * MSEC_PER_SEC)
-+
-+/* poll interval from CellWise GPL Android driver example */
-+#define CW2015_DEFAULT_POLL_INTERVAL_MS		8000
-+
-+#define CW2015_AVERAGING_SAMPLES		3
-+
-+struct cw_battery {
-+	struct device *dev;
-+	struct workqueue_struct *battery_workqueue;
-+	struct delayed_work battery_delay_work;
-+	struct regmap *regmap;
-+	struct power_supply *rk_bat;
-+	struct power_supply_battery_info battery;
-+	u8 *bat_profile;
-+
-+	bool charger_attached;
-+	bool battery_changed;
-+
-+	int soc;
-+	int voltage_mv;
-+	int status;
-+	int time_to_empty;
-+	int charge_count;
-+
-+	u32 poll_interval_ms;
-+	u8 alert_level;
-+
-+	unsigned int read_errors;
-+	unsigned int charge_stuck_cnt;
-+};
-+
-+static int cw_read_word(struct cw_battery *cw_bat, u8 reg, u16 *val)
-+{
-+	__be16 value;
-+	int ret;
-+
-+	ret = regmap_bulk_read(cw_bat->regmap, reg, &value, sizeof(value));
-+	if (ret)
-+		return ret;
-+
-+	*val = be16_to_cpu(value);
-+	return 0;
-+}
-+
-+int cw_update_profile(struct cw_battery *cw_bat)
-+{
-+	int ret;
-+	unsigned int reg_val;
-+	u8 reset_val;
-+
-+	/* make sure gauge is not in sleep mode */
-+	ret = regmap_read(cw_bat->regmap, CW2015_REG_MODE, &reg_val);
-+	if (ret)
-+		return ret;
-+
-+	reset_val = reg_val;
-+	if ((reg_val & CW2015_MODE_SLEEP_MASK) == CW2015_MODE_SLEEP) {
-+		dev_err(cw_bat->dev,
-+			"Device is in sleep mode, can't update battery info");
-+		return -EINVAL;
-+	}
-+
-+	/* write new battery info */
-+	ret = regmap_raw_write(cw_bat->regmap, CW2015_REG_BATINFO,
-+				cw_bat->bat_profile,
-+				CW2015_SIZE_BATINFO);
-+	if (ret)
-+		return ret;
-+
-+	/* set config update flag  */
-+	reg_val |= CW2015_CONFIG_UPDATE_FLG;
-+	reg_val &= ~CW2015_MASK_ATHD;
-+	reg_val |= CW2015_ATHD(cw_bat->alert_level);
-+	ret = regmap_write(cw_bat->regmap, CW2015_REG_CONFIG, reg_val);
-+	if (ret)
-+		return ret;
-+
-+	/* reset gauge to apply new battery profile */
-+	reset_val &= ~CW2015_MODE_RESTART;
-+	reg_val = reset_val | CW2015_MODE_RESTART;
-+	ret = regmap_write(cw_bat->regmap, CW2015_REG_MODE, reg_val);
-+	if (ret)
-+		return ret;
-+
-+	/* wait for gauge to reset */
-+	msleep(20);
-+
-+	/* clear reset flag */
-+	ret = regmap_write(cw_bat->regmap, CW2015_REG_MODE, reset_val);
-+	if (ret)
-+		return ret;
-+
-+	/* wait for gauge to become ready */
-+	ret = regmap_read_poll_timeout(cw_bat->regmap, CW2015_REG_SOC,
-+					reg_val, reg_val <= 100,
-+					10 * USEC_PER_MSEC, 10 * USEC_PER_SEC);
-+	if(ret)
-+		dev_err(cw_bat->dev,
-+			"Gauge did not become ready after profile upload");
-+	else
-+		dev_dbg(cw_bat->dev, "Battery profile updated");
-+
-+	return ret;
-+}
-+
-+static int cw_init(struct cw_battery *cw_bat)
-+{
-+	int ret;
-+	unsigned int reg_val = CW2015_MODE_SLEEP;
-+
-+	if ((reg_val & CW2015_MODE_SLEEP_MASK) == CW2015_MODE_SLEEP) {
-+		reg_val = CW2015_MODE_NORMAL;
-+		ret = regmap_write(cw_bat->regmap, CW2015_REG_MODE, reg_val);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = regmap_read(cw_bat->regmap, CW2015_REG_CONFIG, &reg_val);
-+	if (ret)
-+		return ret;
-+
-+	if ((reg_val & CW2015_MASK_ATHD) != CW2015_ATHD(cw_bat->alert_level)) {
-+		dev_dbg(cw_bat->dev, "Setting new alert level");
-+		reg_val &= ~CW2015_MASK_ATHD;
-+		reg_val |= ~CW2015_ATHD(cw_bat->alert_level);
-+		ret = regmap_write(cw_bat->regmap, CW2015_REG_CONFIG, reg_val);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = regmap_read(cw_bat->regmap, CW2015_REG_CONFIG, &reg_val);
-+	if (ret)
-+		return ret;
-+
-+	if (!(reg_val & CW2015_CONFIG_UPDATE_FLG)) {
-+		dev_dbg(cw_bat->dev,
-+			"Battery profile not present, uploading battery profile");
-+		if (cw_bat->bat_profile) {
-+			ret = cw_update_profile(cw_bat);
-+			if (ret) {
-+				dev_err(cw_bat->dev,
-+					 "Failed to upload battery info\n");
-+				return ret;
-+			}
-+		} else {
-+			dev_warn(cw_bat->dev,
-+				"Have no battery profile for uploading, continuing without profile");
-+		}
-+	} else if (cw_bat->bat_profile) {
-+		u8 bat_info[CW2015_SIZE_BATINFO];
-+
-+		ret = regmap_raw_read(cw_bat->regmap, CW2015_REG_BATINFO,
-+					bat_info, CW2015_SIZE_BATINFO);
-+		if (ret) {
-+			dev_err(cw_bat->dev,
-+				 "Failed to read stored battery profile\n");
-+			return ret;
-+		}
-+
-+		if (memcmp(bat_info, cw_bat->bat_profile, CW2015_SIZE_BATINFO)) {
-+			dev_warn(cw_bat->dev, "Replacing stored battery profile");
-+			ret = cw_update_profile(cw_bat);
-+			if (ret)
-+				return ret;
-+		}
-+	} else {
-+		dev_warn(cw_bat->dev,
-+			"Can't check current battery profile, no profile provided");
-+	}
-+
-+	dev_dbg(cw_bat->dev, "Battery profile configured");
-+	return 0;
-+}
-+
-+static int cw_power_on_reset(struct cw_battery *cw_bat)
-+{
-+	int ret;
-+	unsigned char reset_val;
-+
-+	reset_val = CW2015_MODE_SLEEP;
-+	ret = regmap_write(cw_bat->regmap, CW2015_REG_MODE, reset_val);
-+	if (ret)
-+		return ret;
-+
-+	/* wait for gauge to enter sleep */
-+	msleep(20);
-+
-+	reset_val = CW2015_MODE_NORMAL;
-+	ret = regmap_write(cw_bat->regmap, CW2015_REG_MODE, reset_val);
-+	if (ret)
-+		return ret;
-+
-+	ret = cw_init(cw_bat);
-+	if (ret)
-+		return ret;
-+	return 0;
-+}
-+
-+#define HYSTERESIS(current, previous, up, down) \
-+	(((current) < (previous) + (up)) && ((current) > (previous) - (down)))
-+
-+static int cw_get_soc(struct cw_battery *cw_bat)
-+{
-+	unsigned int soc;
-+	int ret;
-+
-+	ret = regmap_read(cw_bat->regmap, CW2015_REG_SOC, &soc);
-+	if (ret)
-+		return ret;
-+
-+	if (soc > 100) {
-+		int max_error_cycles =
-+			CW2015_BAT_SOC_ERROR_MS / cw_bat->poll_interval_ms;
-+
-+		dev_err(cw_bat->dev, "Invalid SoC %d%%", soc);
-+		cw_bat->read_errors++;
-+		if (cw_bat->read_errors > max_error_cycles) {
-+			dev_warn(cw_bat->dev,
-+				"Too many invalid SoC reports, resetting gauge");
-+			cw_power_on_reset(cw_bat);
-+			cw_bat->read_errors = 0;
-+		}
-+		return cw_bat->soc;
-+	}
-+	cw_bat->read_errors = 0;
-+
-+	/* Reset gauge if stuck while charging */
-+	if (cw_bat->status == POWER_SUPPLY_STATUS_CHARGING && soc == cw_bat->soc) {
-+		int max_stuck_cycles =
-+			CW2015_BAT_CHARGING_STUCK_MS / cw_bat->poll_interval_ms;
-+
-+		cw_bat->charge_stuck_cnt++;
-+		if (cw_bat->charge_stuck_cnt > max_stuck_cycles) {
-+			dev_warn(cw_bat->dev,
-+				"SoC stuck @%u%%, resetting gauge", soc);
-+			cw_power_on_reset(cw_bat);
-+			cw_bat->charge_stuck_cnt = 0;
-+		}
-+	} else {
-+		cw_bat->charge_stuck_cnt = 0;
-+	}
-+
-+	/* Ignore voltage dips during charge */
-+	if (cw_bat->charger_attached && HYSTERESIS(soc, cw_bat->soc, 0, 3))
-+		soc = cw_bat->soc;
-+
-+	/* Ignore voltage spikes during discharge */
-+	if (!cw_bat->charger_attached && HYSTERESIS(soc, cw_bat->soc, 3, 0))
-+		soc = cw_bat->soc;
-+
-+	return soc;
-+}
-+
-+static int cw_get_voltage(struct cw_battery *cw_bat)
-+{
-+	int ret, i, voltage_mv;
-+	u16 reg_val;
-+	u32 avg = 0;
-+
-+	for (i = 0; i < CW2015_AVERAGING_SAMPLES; i++) {
-+		ret = cw_read_word(cw_bat, CW2015_REG_VCELL, &reg_val);
-+		if (ret)
-+			return ret;
-+
-+		avg += reg_val;
-+	}
-+	avg /= CW2015_AVERAGING_SAMPLES;
-+
-+	/*
-+	 * 305 uV per ADC step
-+	 * Use 312 / 1024  as efficient approximation of 305 / 1000
-+	 * Negligible error of 0.1%
-+	 */
-+	voltage_mv = avg * 312 / 1024;
-+
-+	dev_dbg(cw_bat->dev, "Read voltage: %d mV, raw=0x%04x\n",
-+		voltage_mv, reg_val);
-+	return voltage_mv;
-+}
-+
-+static int cw_get_time_to_empty(struct cw_battery *cw_bat)
-+{
-+	int ret;
-+	u16 value16;
-+
-+	ret = cw_read_word(cw_bat, CW2015_REG_RRT_ALERT, &value16);
-+	if (ret)
-+		return ret;
-+
-+	return value16 & CW2015_MASK_SOC;
-+}
-+
-+static void cw_update_charge_status(struct cw_battery *cw_bat)
-+{
-+	int ret;
-+
-+	ret = power_supply_am_i_supplied(cw_bat->rk_bat);
-+	if (ret < 0) {
-+		dev_warn(cw_bat->dev, "Failed to get supply state: %d", ret);
-+	} else {
-+		bool charger_attached;
-+
-+		charger_attached = !!ret;
-+		if (cw_bat->charger_attached != charger_attached) {
-+			cw_bat->battery_changed = true;
-+			if (charger_attached)
-+				cw_bat->charge_count++;
-+		}
-+		cw_bat->charger_attached = charger_attached;
-+	}
-+}
-+
-+static void cw_update_soc(struct cw_battery *cw_bat)
-+{
-+	int soc;
-+
-+	soc = cw_get_soc(cw_bat);
-+	if (soc < 0)
-+		dev_err(cw_bat->dev, "Failed to get SoC from gauge: %d", soc);
-+	else if (cw_bat->soc != soc) {
-+		cw_bat->soc = soc;
-+		cw_bat->battery_changed = true;
-+	}
-+}
-+
-+static void cw_update_voltage(struct cw_battery *cw_bat)
-+{
-+	int voltage_mv;
-+
-+	voltage_mv = cw_get_voltage(cw_bat);
-+	if (voltage_mv < 0)
-+		dev_err(cw_bat->dev, "Failed to get voltage from gauge: %d",
-+			voltage_mv);
-+	else
-+		cw_bat->voltage_mv = voltage_mv;
-+}
-+
-+static void cw_update_status(struct cw_battery *cw_bat)
-+{
-+	int status = POWER_SUPPLY_STATUS_DISCHARGING;
-+
-+	if (cw_bat->charger_attached) {
-+		if (cw_bat->soc >= 100)
-+			status = POWER_SUPPLY_STATUS_FULL;
-+		else
-+			status = POWER_SUPPLY_STATUS_CHARGING;
-+	}
-+
-+	if (cw_bat->status != status)
-+		cw_bat->battery_changed = true;
-+	cw_bat->status = status;
-+}
-+
-+static void cw_update_time_to_empty(struct cw_battery *cw_bat)
-+{
-+	int time_to_empty;
-+
-+	time_to_empty = cw_get_time_to_empty(cw_bat);
-+	if (time_to_empty < 0)
-+		dev_err(cw_bat->dev, "Failed to get time to empty from gauge: %d",
-+			time_to_empty);
-+	else if (cw_bat->time_to_empty != time_to_empty) {
-+		cw_bat->time_to_empty = time_to_empty;
-+		cw_bat->battery_changed = true;
-+	}
-+}
-+
-+static void cw_bat_work(struct work_struct *work)
-+{
-+	struct delayed_work *delay_work;
-+	struct cw_battery *cw_bat;
-+	int ret;
-+	unsigned int reg_val;
-+	int i = 0;
-+
-+	delay_work = to_delayed_work(work);
-+	cw_bat = container_of(delay_work, struct cw_battery, battery_delay_work);
-+	ret = regmap_read(cw_bat->regmap, CW2015_REG_MODE, &reg_val);
-+	if (ret) {
-+		dev_err(cw_bat->dev, "Failed to read mode from gauge: %d", ret);
-+	} else {
-+		if ((reg_val & CW2015_MODE_SLEEP_MASK) == CW2015_MODE_SLEEP) {
-+			for (i = 0; i < CW2015_RESET_TRIES; i++) {
-+				if (!cw_power_on_reset(cw_bat))
-+					break;
-+			}
-+		}
-+		cw_update_soc(cw_bat);
-+		cw_update_voltage(cw_bat);
-+		cw_update_charge_status(cw_bat);
-+		cw_update_status(cw_bat);
-+		cw_update_time_to_empty(cw_bat);
-+	}
-+	dev_dbg(cw_bat->dev, "charger_attached = %d", cw_bat->charger_attached);
-+	dev_dbg(cw_bat->dev, "status = %d", cw_bat->status);
-+	dev_dbg(cw_bat->dev, "soc = %d%%", cw_bat->soc);
-+	dev_dbg(cw_bat->dev, "voltage = %dmV", cw_bat->voltage_mv);
-+
-+	if (cw_bat->battery_changed)
-+		power_supply_changed(cw_bat->rk_bat);
-+	cw_bat->battery_changed = false;
-+
-+	queue_delayed_work(cw_bat->battery_workqueue,
-+			   &cw_bat->battery_delay_work,
-+			   msecs_to_jiffies(cw_bat->poll_interval_ms));
-+}
-+
-+static bool cw_battery_valid_time_to_empty(struct cw_battery *cw_bat)
-+{
-+	return	cw_bat->time_to_empty > 0 &&
-+		cw_bat->time_to_empty < CW2015_MASK_SOC &&
-+		cw_bat->status == POWER_SUPPLY_STATUS_DISCHARGING;
-+}
-+
-+static int cw_battery_get_property(struct power_supply *psy,
-+				   enum power_supply_property psp,
-+				   union power_supply_propval *val)
-+{
-+	int ret = 0;
-+	struct cw_battery *cw_bat;
-+
-+	cw_bat = power_supply_get_drvdata(psy);
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CAPACITY:
-+		val->intval = cw_bat->soc;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_STATUS:
-+		val->intval = cw_bat->status;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_PRESENT:
-+		val->intval = !!cw_bat->voltage_mv;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		val->intval = cw_bat->voltage_mv * 1000;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
-+		if (cw_battery_valid_time_to_empty(cw_bat))
-+			val->intval = cw_bat->time_to_empty;
-+		else
-+			val->intval = 0;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_TECHNOLOGY:
-+		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_CHARGE_COUNTER:
-+		val->intval = cw_bat->charge_count;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_CHARGE_FULL:
-+	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-+		if (cw_bat->battery.charge_full_design_uah > 0)
-+			val->intval = cw_bat->battery.charge_full_design_uah;
-+		else
-+			val->intval = 0;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+		if (cw_battery_valid_time_to_empty(cw_bat) &&
-+			cw_bat->battery.charge_full_design_uah > 0) {
-+			/* calculate remaining capacity */
-+			val->intval = cw_bat->battery.charge_full_design_uah;
-+			val->intval = val->intval * cw_bat->soc / 100;
-+
-+			/* estimate current based on time to empty */
-+			val->intval = 60 * val->intval / cw_bat->time_to_empty;
-+		} else {
-+			val->intval = 0;
-+		}
-+
-+		break;
-+
-+	default:
-+		break;
-+	}
-+	return ret;
-+}
-+
-+static enum power_supply_property cw_battery_properties[] = {
-+	POWER_SUPPLY_PROP_CAPACITY,
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW,
-+	POWER_SUPPLY_PROP_TECHNOLOGY,
-+	POWER_SUPPLY_PROP_CHARGE_COUNTER,
-+	POWER_SUPPLY_PROP_CHARGE_FULL,
-+	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+};
-+
-+static const struct power_supply_desc cw2015_bat_desc = {
-+	.name		= "cw2015-battery",
-+	.type		= POWER_SUPPLY_TYPE_BATTERY,
-+	.properties	= cw_battery_properties,
-+	.num_properties	= ARRAY_SIZE(cw_battery_properties),
-+	.get_property	= cw_battery_get_property,
-+};
-+
-+static int cw2015_parse_properties(struct cw_battery *cw_bat)
-+{
-+	struct device *dev = cw_bat->dev;
-+	int length;
-+	u32 value;
-+	int ret;
-+
-+	length = device_property_count_u8(dev, "cellwise,battery-profile");
-+	if (length) {
-+		if (length != CW2015_SIZE_BATINFO) {
-+			dev_err(cw_bat->dev, "battery-profile must be %d bytes",
-+				CW2015_SIZE_BATINFO);
-+			return -EINVAL;
-+		}
-+
-+		cw_bat->bat_profile = devm_kzalloc(dev, length, GFP_KERNEL);
-+		if (!cw_bat->bat_profile) {
-+			dev_err(cw_bat->dev,
-+				"Failed to allocate memory for battery config info");
-+			return -ENOMEM;
-+		}
-+
-+		ret = device_property_read_u8_array(dev,
-+						"cellwise,battery-profile",
-+						cw_bat->bat_profile,
-+						length);
-+		if (ret)
-+			return ret;
-+	} else {
-+		dev_warn(cw_bat->dev,
-+			"No battery-profile found, rolling with current flash contents");
-+	}
-+
-+	cw_bat->poll_interval_ms = CW2015_DEFAULT_POLL_INTERVAL_MS;
-+	ret = device_property_read_u32(dev, "cellwise,monitor-interval-ms", &value);
-+	if (ret >= 0) {
-+		dev_dbg(cw_bat->dev, "Overriding default monitor-interval with %u ms",
-+			value);
-+		cw_bat->poll_interval_ms = value;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct regmap_range regmap_ranges_rd_yes[] = {
-+	regmap_reg_range(CW2015_REG_VERSION, CW2015_REG_VERSION),
-+	regmap_reg_range(CW2015_REG_VCELL, CW2015_REG_CONFIG),
-+	regmap_reg_range(CW2015_REG_MODE, CW2015_REG_MODE),
-+	regmap_reg_range(CW2015_REG_BATINFO,
-+			CW2015_REG_BATINFO + CW2015_SIZE_BATINFO - 1),
-+};
-+
-+static const struct regmap_access_table regmap_rd_table = {
-+	.yes_ranges = regmap_ranges_rd_yes,
-+	.n_yes_ranges = 4,
-+};
-+
-+static const struct regmap_range regmap_ranges_wr_yes[] = {
-+	regmap_reg_range(CW2015_REG_RRT_ALERT, CW2015_REG_CONFIG),
-+	regmap_reg_range(CW2015_REG_MODE, CW2015_REG_MODE),
-+	regmap_reg_range(CW2015_REG_BATINFO,
-+			CW2015_REG_BATINFO + CW2015_SIZE_BATINFO - 1),
-+};
-+
-+static const struct regmap_access_table regmap_wr_table = {
-+	.yes_ranges = regmap_ranges_wr_yes,
-+	.n_yes_ranges = 3,
-+};
-+
-+static const struct regmap_range regmap_ranges_vol_yes[] = {
-+	regmap_reg_range(CW2015_REG_VCELL, CW2015_REG_SOC + 1),
-+};
-+
-+static const struct regmap_access_table regmap_vol_table = {
-+	.yes_ranges = regmap_ranges_vol_yes,
-+	.n_yes_ranges = 1,
-+};
-+
-+static const struct regmap_config cw2015_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.rd_table = &regmap_rd_table,
-+	.wr_table = &regmap_wr_table,
-+	.volatile_table = &regmap_vol_table,
-+	.max_register = CW2015_REG_BATINFO + CW2015_SIZE_BATINFO - 1,
-+};
-+
-+static int cw_bat_probe(struct i2c_client *client,
-+			const struct i2c_device_id *id)
-+{
-+	int ret;
-+	struct cw_battery *cw_bat;
-+	struct power_supply_config psy_cfg = { };
-+
-+	cw_bat = devm_kzalloc(&client->dev, sizeof(*cw_bat), GFP_KERNEL);
-+	if (!cw_bat)
-+		return -ENOMEM;
-+
-+	i2c_set_clientdata(client, cw_bat);
-+	cw_bat->dev = &client->dev;
-+	cw_bat->soc = 1;
-+
-+	ret = cw2015_parse_properties(cw_bat);
-+	if (ret) {
-+		dev_err(cw_bat->dev, "Failed to parse cw2015 properties");
-+		return ret;
-+	}
-+
-+	cw_bat->regmap = devm_regmap_init_i2c(client, &cw2015_regmap_config);
-+	if (IS_ERR(cw_bat->regmap)) {
-+		dev_err(cw_bat->dev, "Failed to allocate regmap: %ld",
-+			PTR_ERR(cw_bat->regmap));
-+		return PTR_ERR(cw_bat->regmap);
-+	}
-+
-+	ret = cw_init(cw_bat);
-+	if (ret) {
-+		dev_err(cw_bat->dev, "Init failed: %d", ret);
-+		return ret;
-+	}
-+
-+	psy_cfg.drv_data = cw_bat;
-+	psy_cfg.fwnode = dev_fwnode(cw_bat->dev);
-+
-+	cw_bat->rk_bat = devm_power_supply_register(&client->dev,
-+		&cw2015_bat_desc, &psy_cfg);
-+	if (IS_ERR(cw_bat->rk_bat)) {
-+		dev_err(cw_bat->dev, "Failed to register power supply");
-+		return PTR_ERR(cw_bat->rk_bat);
-+	}
-+
-+	ret = power_supply_get_battery_info(cw_bat->rk_bat, &cw_bat->battery);
-+	if (ret) {
-+		dev_warn(cw_bat->dev,
-+			"No monitored battery, some properties will be missing");
-+	}
-+
-+	cw_bat->battery_workqueue = create_singlethread_workqueue("rk_battery");
-+	INIT_DELAYED_WORK(&cw_bat->battery_delay_work, cw_bat_work);
-+	queue_delayed_work(cw_bat->battery_workqueue,
-+			   &cw_bat->battery_delay_work, msecs_to_jiffies(10));
-+	return 0;
-+}
-+
-+static int __maybe_unused cw_bat_suspend(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct cw_battery *cw_bat = i2c_get_clientdata(client);
-+
-+	cancel_delayed_work_sync(&cw_bat->battery_delay_work);
-+	return 0;
-+}
-+
-+static int __maybe_unused cw_bat_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct cw_battery *cw_bat = i2c_get_clientdata(client);
-+
-+	queue_delayed_work(cw_bat->battery_workqueue,
-+			   &cw_bat->battery_delay_work, 0);
-+	return 0;
-+}
-+
-+SIMPLE_DEV_PM_OPS(cw_bat_pm_ops, cw_bat_suspend, cw_bat_resume);
-+
-+static int cw_bat_remove(struct i2c_client *client)
-+{
-+	struct cw_battery *cw_bat = i2c_get_clientdata(client);
-+
-+	cancel_delayed_work_sync(&cw_bat->battery_delay_work);
-+	power_supply_put_battery_info(cw_bat->rk_bat, &cw_bat->battery);
-+	return 0;
-+}
-+
-+static const struct i2c_device_id cw_bat_id_table[] = {
-+	{ "cw2015", 0 },
-+	{ }
-+};
-+
-+static const struct of_device_id cw2015_of_match[] = {
-+	{ .compatible = "cellwise,cw2015" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, cw2015_of_match);
-+
-+static struct i2c_driver cw_bat_driver = {
-+	.driver = {
-+		.name = "cw2015",
-+		.pm = &cw_bat_pm_ops,
-+	},
-+	.probe = cw_bat_probe,
-+	.remove = cw_bat_remove,
-+	.id_table = cw_bat_id_table,
-+};
-+
-+module_i2c_driver(cw_bat_driver);
-+
-+MODULE_AUTHOR("xhc<xhc@rock-chips.com>");
-+MODULE_AUTHOR("Tobias Schramm <t.schramm@manjaro.org>");
-+MODULE_DESCRIPTION("cw2015/cw2013 battery driver");
-+MODULE_LICENSE("GPL");
--- 
-2.24.1
+No, TBT connects to another port, which supports link active reporting.
+This is just to show not all CML-H ports support that.
+
+> 
+>> Thunderbolt ports:
+>> # lspci -vvvv -s 04:00
+>> 04:00.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 2C 2018] [8086:15e7] (rev 06) (prog-if 00 [Normal decode])
+>>        Capabilities: [c0] Express (v2) Downstream Port (Slot+), MSI 00
+>>                LnkCap: Port #0, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L0s <64ns, L1 <1us
+>>                        ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
+>>                LnkCtl: ASPM L1 Enabled; Disabled- CommClk+
+>>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+> 
+> This one leads to the TBT NHI.
+> 
+>> # lspci -vvnn -s 04:01
+>> 04:01.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 2C 2018] [8086:15e7] (rev 06) (prog-if 00 [Normal decode])
+>>        Capabilities: [c0] Express (v2) Downstream Port (Slot+), MSI 00
+>>                LnkCap: Port #1, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L0s <64ns, L1 <1us
+>>                        ClockPM- Surprise- LLActRep+ BwNot+ ASPMOptComp+
+>>                LnkCtl: ASPM L1 Enabled; Disabled- CommClk-
+>>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+> 
+> This one is one of the extension downstream ports and it supports active
+> link reporting.
+> 
+>> # lspci -vvnn -s 04:02 
+>> 04:02.0 PCI bridge [0604]: Intel Corporation JHL7540 Thunderbolt 3 Bridge [Titan Ridge 2C 2018] [8086:15e7] (rev 06) (prog-if 00 [Normal decode])
+>>        Capabilities: [c0] Express (v2) Downstream Port (Slot+), MSI 00
+>>                LnkCap: Port #2, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L0s <64ns, L1 <1us
+>>                        ClockPM- Surprise- LLActRep- BwNot+ ASPMOptComp+
+>>                LnkCtl: ASPM L1 Enabled; Disabled- CommClk+
+>>                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+> 
+> This one leads to the xHCI.
+> 
+>> So both CML-H PCH and TBT ports report "LLActRep-".
+> 
+> So in pci_bridge_wait_for_secondary_bus() we only call
+> pcie_wait_for_link_delay() if the port supports speeds higher than 5
+> GT/s (gen2). Now if I read the above correct all the ports except the
+> root port support 2.5 GT/s (gen1) speeds so we should go to the
+> msleep(delay) branch and not call pcie_wait_for_link_delay() at all:
+> 
+>        if (pcie_get_speed_cap(dev) <= PCIE_SPEED_5_0GT) {
+>                pci_dbg(dev, "waiting %d ms for downstream link\n", delay);
+>                msleep(delay);
+>        } else {
+>                pci_dbg(dev, "waiting %d ms for downstream link, after activation\n",
+>                        delay);
+>                if (!pcie_wait_for_link_delay(dev, true, delay)) {
+>                        /* Did not train, no need to wait any further */
+>                        return;
+>                }
+>        }
+> 
+> Only explanation I have is that delay itself is set to 1000ms for some
+> reason. Can you check if that's the case and then maybe check where that
+> delay is coming from?
+> 
+>>> 1. Wait for the link + 100ms for the root port
+>>> 2. Wait for the link + 100ms for the Titan Ridge downstream ports
+>>>   (these are run paraller wrt all Titan Ridge downstream ports that have
+>>>    something connected)
+>>> 
+>>> If there is a TBT device connected then 2. is repeated for it and so on.
+>>> 
+>>> So the 1000ms+ is really unexpected. Are you running mainline kernel and
+>>> if so, can you share dmesg with CONFIG_PCI_DEBUG=y so we can see the
+>>> delays there? Maybe also add some debugging to
+>>> pcie_wait_for_link_delay() where it checks for the
+>>> !pdev->link_active_reporting and waits for 1100ms.
+>> 
+>> I added the debug log in another thread and it does reach !pdev->link_active_reporting.
+> 
+> Hmm, based on the above that should not happen :-(
+> 
+>> Let me see if patch link active reporting for the ports in PCI quirks can help.
+> 
+> Let's first investigate bit more to understand what is going on.
+> 
+> I suggest to create kernel.org bugzilla about this. Please include full
+> dmesg and 'sudo lspci -vv' output at least and of course the steps you
+> use to reproduce this.
+
+https://bugzilla.kernel.org/show_bug.cgi?id=206837
+
+Kai-Heng
 
