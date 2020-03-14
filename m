@@ -2,91 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3278018585D
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Mar 2020 03:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 073F4185972
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Mar 2020 03:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727123AbgCOCFU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 Mar 2020 22:05:20 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:45900 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgCOCFU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Mar 2020 22:05:20 -0400
-Received: by mail-lj1-f195.google.com with SMTP id e18so14764296ljn.12;
-        Sat, 14 Mar 2020 19:05:18 -0700 (PDT)
+        id S1726716AbgCOCzS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 Mar 2020 22:55:18 -0400
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:38517 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727016AbgCOCzS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Mar 2020 22:55:18 -0400
+Received: by mail-qv1-f66.google.com with SMTP id p60so6941128qva.5
+        for <linux-pm@vger.kernel.org>; Sat, 14 Mar 2020 19:55:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=6QvXfJZlpggMK4ANi6m9pBKzrWALkcbq78l8N8OifPg=;
-        b=OIJzVdRqmII3xpN14/wQN0Vvrs1lDoUVouTfyF1AzzfhS7PAX65NnJmEstFfAwHm0J
-         MEdvf9urGT/J4thuvj9vk11uUp5M1ygunTCQ40PysktE5qk6p49gkKWkoPYa8hbxlpZ+
-         8AHxeLhfVqkUX208e6r8trwKTkIzfc7jZVyFb0j7si5B/e5Q5XglfRDu7Lgva68dRazY
-         t3ksP3zdoG8z1pawPZeocy0I+666FiKRbaFcF5tdQuT+avWEfO4hptk359IUQ52E/0AL
-         Fyhc24SsfBPdJPaus75o3DysidczlxbECY0IAS4F8XJ5ZrpGp0mWMaE2ibqoijxKTHF0
-         TMKQ==
+        d=android.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=d5M5DPd0RI2rczhP4P91gPN3FdPDlZFf0L0WRN91en4=;
+        b=ftBgpQu/ef2KodsvtSBhktXBWOQD4w9838z0rkLa+o4/07RNwOHKopdPqSn8ckau9l
+         WdZEmfHBs4x2qhwM+8cgBdHQR2Esicxravh9cL1UcN4dDQCZhyytm+THZnb6xjdJR6PQ
+         Jte/OP6iyl2N5LeE/63/taq/zteoeqywc4lVRlzKTCsUgr12Y7mHT/yk4pMBlt5u2rGC
+         Btpa9qUhLSHJCcXsON5aVTv5XGoHLeCZMHo57RCdN39ZOB7fv6sslQFQ8FzJOHcSUlsY
+         e9Y94BBnVLDMSjA7RsS+toQmJEpyPhqa8jhVUPOv6F3bqIfJU5/p0gwhxwQdBzK9eoV7
+         twiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=6QvXfJZlpggMK4ANi6m9pBKzrWALkcbq78l8N8OifPg=;
-        b=DvpDYDkZQW5E0JKHHq0vb4oxewJIyQvPWFfQMo/8bD8oXXLgOVOSOL+PE/lTjdehQr
-         V4VC7LazQ5sJhE5W4SGYH3JG2I/FrUtNQYhUx2+C1ES/yF6QpNnwtNqwPutNBsNDn895
-         p3iLvfFNIcFZS2wiM2eXa4dBPZGCoGkQp+cai4WlQGgxp0AktTpH120ACcDuk1pA/6/P
-         x9SJl2sd/L1Yqkf5wqhujO85C9RBOQalq65EpFC5Uw0AJ5t5PcfYQj7p7JkDA4Xpdvnv
-         vpWrQ0ycD3XETabaluWtpVuCxkf4yN53TgaW51Nut+4g6T5O730dosOfPqGFOUVkJ6OJ
-         sHEg==
-X-Gm-Message-State: ANhLgQ0stTElPSOqFS/HY90FHYnOFE+8kKoFTtPcOvZ8ZJLaVg7Iprs0
-        KNhcM5G2lxsZvpyYguDvRqn/Rw7mxR4=
-X-Google-Smtp-Source: ADFU+vsLbPyHg/3H2qHGT2azKEXr7tZwXNK8qhcJh9SO/kwPkfqvtObR5asqoXdlrz1UQKhDfB3WlA==
-X-Received: by 2002:a5d:5290:: with SMTP id c16mr25043929wrv.235.1584230432390;
-        Sat, 14 Mar 2020 17:00:32 -0700 (PDT)
-Received: from localhost.localdomain (p5B3F731E.dip0.t-ipconnect.de. [91.63.115.30])
-        by smtp.gmail.com with ESMTPSA id 7sm11394469wmf.20.2020.03.14.17.00.31
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=d5M5DPd0RI2rczhP4P91gPN3FdPDlZFf0L0WRN91en4=;
+        b=PAQqqK3v2VeOiGf2xX5DO1Dse+xQi3MxcG6ifMiWCqWAF9kTio/cU8mqAMIYmdaaxj
+         UDC7vRo0eq2hJi5yrD8iLjHvGKSFNWmp5OSTw+LiNkrDIxCFh+MBfBSoHUU+t278f6d/
+         tkCN7h0iOnmXjQ/yBl4NzmnjUpJbFmzphzww88ZcHVPLkpEJDTXevg2fHYagnImFlgHl
+         Q5gEp4PH5hMlVsytKka6iE/X9M8DykBAkMko+EUoQ/8NXxMYj5+hRSLYg8t0lFpIM06g
+         2wA5QbecEVQBaTHHW9Rn8odr+LnYLL15Dv2mShBgYrpJLg/OQpstksOTVZVkRdAbUu+3
+         7wPA==
+X-Gm-Message-State: ANhLgQ3qIJKruorY3IK3pLjhJxDZmjDikQXOSp6ckUMeMMIkgRdNGOIb
+        IMJ/yuOGnaMXKJ3+7tq5mEeDWfb0juc=
+X-Google-Smtp-Source: ADFU+vus4vyzIYl9CFaEFiSMQ3/xkopLUxwv+ptaZRMSeLor25vsGi8XSvzH8is+QFcumbpMiK4Xpg==
+X-Received: by 2002:a62:1bd6:: with SMTP id b205mr17822879pfb.242.1584159158923;
+        Fri, 13 Mar 2020 21:12:38 -0700 (PDT)
+Received: from localhost (c-73-170-36-70.hsd1.ca.comcast.net. [73.170.36.70])
+        by smtp.gmail.com with ESMTPSA id g18sm14106109pfh.174.2020.03.13.21.12.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Mar 2020 17:00:31 -0700 (PDT)
-From:   Saravanan Sekar <sravanhome@gmail.com>
-To:     lee.jones@linaro.org, robh+dt@kernel.org, jic23@kernel.org,
-        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
-        Saravanan Sekar <sravanhome@gmail.com>
-Subject: [PATCH v2 5/5] MAINTAINERS: Add entry for mp2629 Battery Charger driver
-Date:   Sun, 15 Mar 2020 01:00:13 +0100
-Message-Id: <20200315000013.4440-6-sravanhome@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200315000013.4440-1-sravanhome@gmail.com>
-References: <20200315000013.4440-1-sravanhome@gmail.com>
+        Fri, 13 Mar 2020 21:12:38 -0700 (PDT)
+Date:   Fri, 13 Mar 2020 21:12:37 -0700
+From:   Sandeep Patil <sspatil@android.com>
+To:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Cc:     Dan Murphy <dmurphy@ti.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [EXTERNAL] Re: [PATCH v4 2/4] power_supply: Add additional
+ health properties to the header
+Message-ID: <20200314041237.GA121329@google.com>
+References: <20200116175039.1317-1-dmurphy@ti.com>
+ <20200116175039.1317-3-dmurphy@ti.com>
+ <20200117010658.iqs2zpwl6bsomkuo@earth.universe>
+ <20200306235548.GA187098@google.com>
+ <20200310213050.si7gcr2wbmjgr7jf@earth.universe>
+ <de919edb-79b3-82ec-f55c-31a127d6c751@ti.com>
+ <66b2ac86-8513-b540-8a2c-c2ebef4124dd@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <66b2ac86-8513-b540-8a2c-c2ebef4124dd@ti.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add MAINTAINERS entry for Monolithic Power Systems mp2629 Charger driver.
+On Wed, Mar 11, 2020 at 11:43:00AM -0500, Ricardo Rivera-Matos wrote:
+> Sebastian
+> 
+> On 3/11/20 6:29 AM, Dan Murphy wrote:
+> > Sebastian
+> > 
+> > On 3/10/20 4:30 PM, Sebastian Reichel wrote:
+> > > Hi Sandeep,
+> > > 
+> > > On Fri, Mar 06, 2020 at 03:55:48PM -0800, Sandeep Patil wrote:
+> > > > On Fri, Jan 17, 2020 at 02:06:58AM +0100, Sebastian Reichel wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > On Thu, Jan 16, 2020 at 11:50:37AM -0600, Dan Murphy wrote:
+> > > > > > Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
+> > > > > > 
+> > > > > > Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> > > > > > ---
+> > > > > Looks good. But I will not merge it without a user and have comments
+> > > > > for the driver.
+> > > > Android has been looking for these properties for a while now [1].
+> > > > It was added[2] when we saw that the manufacturers were
+> > > > implementing these
+> > > > properties in the driver. I didn't know the properties were
+> > > > absent upstream
+> > > > until yesterday. Somebody pointed out in our ongoing effort to
+> > > > make sure
+> > > > all core kernel changes that android depends on are present upstream.
+> > > > 
+> > > > I think those values are also propagated in application facing APIs in
+> > > > Android (but I am not sure yet, let me know if that's something
+> > > > you want
+> > > > to find out).
+> > > > 
+> > > > I wanted to chime in and present you a 'user' for this if that helps.
+> > > With user I meant an upstream kernel driver, which exposes the
+> > > values. But thanks for the pointer. This should be mentioned in
+> > > the patch description, also the fact that the status values are
+> > > directly taken from JEITA spec.
+> > 
+> > I mentioned the JEITA in the cover letter but I guess you would like the
+> > description in the commit message as well
+> > 
+> > Dan
+> > 
+> > 
+> I have added a note mentioning that the properties are taken from the JEITA
+> spec in the commit message and listing the bq2515x_charger driver as a user.
+> I am waiting for feedback on my other patches in the series before sending
+> you v5 patches.
 
-Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
----
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
+Ricardo, I'll appreciate if you CC me if/when you send the v5 and followup.
+I want to track this series so we can uncheck yet another out-of-tree
+dependency that Android has.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 32a95d162f06..0f82d5a7a614 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11358,10 +11358,15 @@ F:	drivers/tty/mxser.*
- MONOLITHIC POWER SYSTEM PMIC DRIVER
- M:	Saravanan Sekar <sravanhome@gmail.com>
- S:	Maintained
-+F:	Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
- F:	Documentation/devicetree/bindings/regulator/mps,mp*.yaml
-+F:	drivers/iio/adc/mp2629_adc.c
-+F:	drivers/mfd/mp2629.c
-+F:	drivers/power/supply/mp2629_charger.c
- F:	drivers/regulator/mp5416.c
- F:	drivers/regulator/mpq7920.c
- F:	drivers/regulator/mpq7920.h
-+F:	include/linux/mfd/mp2629.h
- 
- MR800 AVERMEDIA USB FM RADIO DRIVER
- M:	Alexey Klimov <klimov.linux@gmail.com>
--- 
-2.17.1
+Thanks for the quick followup.
 
+- ssp
