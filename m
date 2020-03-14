@@ -2,99 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 027A41858E7
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Mar 2020 03:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 337CC1858BB
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Mar 2020 03:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727935AbgCOCYO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 Mar 2020 22:24:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39074 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727693AbgCOCYN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 14 Mar 2020 22:24:13 -0400
-Received: from earth.universe (dyndsl-095-033-168-153.ewe-ip-backbone.de [95.33.168.153])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9510020788;
-        Sat, 14 Mar 2020 18:04:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584209051;
-        bh=UhPNJ294fjCXqVxkid7P8jGGC9UBtD1iMM/BKx+zfyA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lGMT6Zjq+9MI4uKGs/48pJCp19OHsF/Zxuy5tfnv7IWYCnZFUfpZRWijw01yV9kbg
-         xVQFYsqaBWqq5Oipuhuw7Cpp/V9wHrqgJe7hog3KYAE4rxhAXyW5/Bmr0jyx7VNNQg
-         BGS9zRLu90M7rF9Np84xdrydH/jWfNAzUHWEEolo=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 58A193C0C82; Sat, 14 Mar 2020 19:04:09 +0100 (CET)
-Date:   Sat, 14 Mar 2020 19:04:09 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Sergey Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: power: reset: Add regmap support to the
- SYSCON reboot-mode bindings
-Message-ID: <20200314180409.5nbnrajtf4q7rriu@earth.universe>
-References: <20200306130341.9585-1-Sergey.Semin@baikalelectronics.ru>
- <20200306130402.1F4F0803079F@mail.baikalelectronics.ru>
- <20200312211438.GA21883@bogus>
- <20200313130231.wrvvcttm7ofaxbfo@ubsrv2.baikal.int>
+        id S1727581AbgCOCWm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 Mar 2020 22:22:42 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:36220 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727398AbgCOCWm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Mar 2020 22:22:42 -0400
+Received: by mail-lj1-f193.google.com with SMTP id g12so14803331ljj.3;
+        Sat, 14 Mar 2020 19:22:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RT8FmRt2d7Rka6jKT65g4BGk8bfqytImFl8noTm1BK4=;
+        b=nI2UvQvxztyIygR3fKKCeZrdVW/FekgHfNldJp8F3ydIkwpt+zZY+KN2X0Y93bL06F
+         evZ8VRQvH7+1EQ9bdO5Nx0HtqB4A1ELb+Tqr8VSLjFANQiFu8V+kS6WtqqQy3BhW5J32
+         0EvbYgHHtfxgVVcjIKfd5FFhjGbo6FSLQ3eh4uDqz3oNGXoMAVLxlmBZkcRLlSD3+9Ss
+         ADhafAYswm4i6ga4uhEdmpRxp1dbt9H0y6ez5mo79FM/adAZZDe2Xc6KZMJYKi13G/EN
+         8lMD5UTACDed4J8M/diHShTxjJYXG/Ad3ZabrgZ+sBvGoiXB1/hBIR2J9OJGblPYvq/l
+         0iHQ==
+X-Gm-Message-State: ANhLgQ2lS/n8xmc0gi17+caNkTaiZXUDEIX/BY5rn+O25MyKsUqrA6v9
+        W5uEZU4u2WhOVuoxpZMcOlbqzPum
+X-Google-Smtp-Source: ADFU+vvbkxSkdqCqcPo+U3Yio95VswK+VbzKdme+wYLTCVgtcJgbzm90XyCTacwfZ7hhf0DuyIQPIQ==
+X-Received: by 2002:a17:906:3502:: with SMTP id r2mr16238993eja.67.1584211322632;
+        Sat, 14 Mar 2020 11:42:02 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.125])
+        by smtp.googlemail.com with ESMTPSA id g5sm4110658edn.9.2020.03.14.11.41.57
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 14 Mar 2020 11:42:01 -0700 (PDT)
+Date:   Sat, 14 Mar 2020 19:41:55 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/3] regulator: max14577: Add proper dt-compatible strings
+Message-ID: <20200314184155.GC17580@kozik-lap>
+References: <CGME20200220145134eucas1p288ae1910d3e8d12dc12f010ed0b07b45@eucas1p2.samsung.com>
+ <20200220145127.21273-1-m.szyprowski@samsung.com>
+ <20200220165614.GD3926@sirena.org.uk>
+ <964b8c4c-36ca-203d-e62b-4a8fc970e23d@samsung.com>
+ <20200221123813.GB5546@sirena.org.uk>
+ <b52332cd-1dec-fdfe-51fc-8605d94abe7d@samsung.com>
+ <20200221171342.GI5546@sirena.org.uk>
+ <61dc8192-e313-021f-9e23-928257a66984@samsung.com>
+ <20200224201256.GA8060@kozik-lap>
+ <791edb65-4471-3e54-6806-4af2876fea19@samsung.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lztyclr74vqeyf6d"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200313130231.wrvvcttm7ofaxbfo@ubsrv2.baikal.int>
+In-Reply-To: <791edb65-4471-3e54-6806-4af2876fea19@samsung.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Mar 06, 2020 at 02:51:22PM +0100, Marek Szyprowski wrote:
+> Hi Krzysztof,
+> 
+> On 24.02.2020 21:12, Krzysztof Kozlowski wrote:
+> > On Mon, Feb 24, 2020 at 03:08:05PM +0100, Marek Szyprowski wrote:
+> >> On 21.02.2020 18:13, Mark Brown wrote:
+> >>> On Fri, Feb 21, 2020 at 02:23:57PM +0100, Marek Szyprowski wrote:
+> >>>> On 21.02.2020 13:38, Mark Brown wrote:
+> >>>>> We could just remove the compatible strings from the binding
+> >>>>> documentation, they won't do any harm if we don't use them.
+> >>>> Frankly I have no strong opinion on this. I've just wanted to fix the
+> >>>> broken autoloading of the drivers compiled as modules.
+> >>> Shouldn't adding the relevant module table for the platform devices work
+> >>> just as well for that?  Possibly also deleting the of_compatible bits in
+> >>> the MFD as well, ISTR that's needed to make the platform device work.
+> >> Right. This will work too. MFD cells will match to their drivers by the
+> >> name and modalias strings will be correct. The question is which
+> >> approach is preffered? Krzysztof? I've checked other mfd drivers, but I
+> >> cannot find any pattern in this area.
+> > I would guess that adding MODULE_DEVICE_TABLE() for OF-matches in main
+> > MFD driver would fix the issue... otherwise the same problem we have
+> > with max77693 (also MUIC/extcon/regulator/charger).
+> 
+> Indeed, there is a same problem with max77963:
+> 
+> max77963-muic driver lacks compatible and has wrong platform modalias 
+> ("extcon-max77963"),
+> 
+> max77963-charger driver lacks compatible,
+> 
+> max77963-haptic driver lacks compatible.
+> 
+> > Some of these drivers (I guess only charger) bind to a OF node so they
+> > need a compatible. I think we added this to regulators and extcon for
+> > symmetry.
+> > Without this binding, the charger would need to read a specific child
+> > node from parent. This make them tightly coupled. It seems to me more
+> > robust for each component to bind to his own node, when needed.
+> 
+> Extcon would also need its node when support for it will be added to 
+> dwc2 driver. Having compatible strings in the nodes simplifies matching 
+> and makes it almost automatic.
+> 
+> > Another reason of adding compatibles was an idea of reusability of
+> > MFD children (between different MFD drivers or even standalone) but it
+> > never got implemented (children still depend on parent significantly).
+> 
+> So far, there is no such case.
+> 
+> > In general, I like the approach of children with compatibles but I will
+> > not argue against changing the drivers. They could really use some
+> > cleanup :)
+> > Long time I tried to remove the support for platform_data [1] - maybe
+> > let's continue?
+> >
+> > [1] https://lore.kernel.org/lkml/20170217200200.4521-1-krzk@kernel.org/
+> 
+> Cleanup of the driver is another story, completely independent of fixing 
+> this issue imho.
+> 
+> krzk: could you then specify if you are against or after the proposed 
+> changes?
 
---lztyclr74vqeyf6d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Since we already have compatibles and some of the children require them
+(charger), I vote in favor of this patch and for keeping compatibles.
 
-Hi,
+Best regards,
+Krzysztof
 
-On Fri, Mar 13, 2020 at 04:02:31PM +0300, Sergey Semin wrote:
-> On Thu, Mar 12, 2020 at 04:14:38PM -0500, Rob Herring wrote:
-> > On Fri, Mar 06, 2020 at 04:03:40PM +0300, Sergey.Semin@baikalelectronic=
-s.ru wrote:
-> > > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > Optional regmap property will be used to refer to a syscon-controller
-> > > having a reboot tolerant register mapped.
-> >=20
-> > NAK. It should simply be a child node of the 'syscon-controller'.
->=20
-> Hm, It's dilemma. The driver maintainer said ack, while you
-> disagree. So the code change will be merged while the doc-part
-> won't?
-
-FWIW I do not merge with bindings being NAK'd by Rob.
-
--- Sebastian
-
---lztyclr74vqeyf6d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl5tHI4ACgkQ2O7X88g7
-+poY6Q/8C31JO6yaOpuYy3gpP+cvQDk+qcMDKREcMJ2a0IweUsYQIjqb9YogeFYn
-AGXWI8mro35GAgPbKr79toHgily7PT+bMBSFZxqv0oHG6uQW7EPMxTTwIbpN5mk9
-3iJnWdp/gLXXqM8jvUh3nMOGeA+WXHorxpG9Tf0f2yGD7fhir7o3mIGNFaXjahgS
-I2uV16ESz6+10+fa2iCCPEfv6LBx/azfGDF9YmD0j61fn5V57S+nWbs8foLmucbC
-264b6O82tqYq9+tu+GEWL3E/2epVLLNMLpZZnptSK1F/F5qoQR2lBeZ3t0nS28rB
-zVRh7kVxs1KudZOITmLfF68AXdCASbuk9HMdL+qC1covhyQvEDjbJI3Npjb3kmyX
-O9LIrfBPxpnxuFDCsnKJedPcJ5lZqwGqnpttGdXGf1Nr0TWDBU8IwRVj0YoNF0xF
-QLCFq9O4s8n/DQXM8wpqi0hT1SFDJ6GaVagqgvaBURQsrJEweKX3Vrnzus3d0ocA
-1qx476q34aQINOL0VqjRuaCCo1VtT78p8DE9UKGa832eo2lu2i67gcCe0rFv2HC9
-K9JtpSJfVZfuUVy2bppD+K6f/0uofeZmcAFmzHfFmJXNREtsnv9JMzNwoRcvJiBa
-dQgjX0+DSis/TrOupSJp157LauxG79beDRJ2o14ly9c+uVDdMVc=
-=9xPE
------END PGP SIGNATURE-----
-
---lztyclr74vqeyf6d--
