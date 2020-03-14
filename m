@@ -2,110 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7C2185772
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Mar 2020 02:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4DD1857B0
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Mar 2020 02:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726675AbgCOBia (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 Mar 2020 21:38:30 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:64875 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726019AbgCOBia (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Mar 2020 21:38:30 -0400
-Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id a1b766df2c349fa1; Sat, 14 Mar 2020 10:38:29 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Alex Hung <alex.hung@canonical.com>
-Cc:     corbet@lwn.net, len.brown@intel.com, pavel@ucw.cz,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        x86@kernel.org, mchehab+samsung@kernel.org, jpoimboe@redhat.com,
-        akpm@linux-foundation.org, pawan.kumar.gupta@linux.intel.com,
-        jgross@suse.com, linux-doc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH][RESEND] acpi/x86: add a kernel parameter to disable ACPI BGRT
-Date:   Sat, 14 Mar 2020 10:38:28 +0100
-Message-ID: <7409530.ikv4aRezOy@kreacher>
-In-Reply-To: <20200304225529.6706-1-alex.hung@canonical.com>
-References: <20200304225529.6706-1-alex.hung@canonical.com>
+        id S1727097AbgCOBp5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 Mar 2020 21:45:57 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:42268 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726556AbgCOBp5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Mar 2020 21:45:57 -0400
+Received: by mail-ed1-f65.google.com with SMTP id b21so6952550edy.9;
+        Sat, 14 Mar 2020 18:45:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=oJNL3gJVarSfgnj/xZ8e1v4N3wwQZ3+G6UH5cn1DZKY=;
+        b=epp1F7RQF8dyE+jDoYIGqnJXXh3ngzWRGV7uzTbzk3TBCNgfaQaE8d4dP2ZLmY0DJ+
+         CqSokF0zE3/F9p9fRxEWpIMiAXrS/nCmyNHzSCTYQLcrYNzd7x5mfl90UwohECYXsfT/
+         T+cOD8uSccH4CUcKAp+o4BDtUl/fPJzpibrNPizUCc5kLAg8jOxbcszNVGkg7yL50sML
+         XWHS5I3LiyZZUDt2w7jvlfh5d8vZCDHfsE5tm1KoQYVXFSa5nJ92Prk7Xj1vWsCcdx5q
+         nTHX8yaD4nATlMCEq7WHQ5vQOa6lx5mcUGaDqjcV7+3e1HCe0KiC3s/YiNqLKt0rMpED
+         SxZw==
+X-Gm-Message-State: ANhLgQ0YjwXcGyf10wNoie90C2n2odVuDtz0YW+5EN9MCmd+CtcLW+Xg
+        AEAvenBETF7zE1U0DuWyu0acfLLf
+X-Google-Smtp-Source: ADFU+vsKOOL2UHib0/pNgwvknqu0ygBfBLObd+RRWf136IE+uExXy8WOyTcRRaS8oCCPzf515dqUtg==
+X-Received: by 2002:a17:906:9405:: with SMTP id q5mr16440276ejx.317.1584211552602;
+        Sat, 14 Mar 2020 11:45:52 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.125])
+        by smtp.googlemail.com with ESMTPSA id v17sm350384edb.27.2020.03.14.11.45.51
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 14 Mar 2020 11:45:51 -0700 (PDT)
+Date:   Sat, 14 Mar 2020 19:45:49 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH 3/3] power: charger: max14577: Add proper dt-compatible
+ strings
+Message-ID: <20200314184549.GA20063@kozik-lap>
+References: <20200220145127.21273-1-m.szyprowski@samsung.com>
+ <CGME20200220145135eucas1p1ba181cef65c7a4f91a254ee35e022f08@eucas1p1.samsung.com>
+ <20200220145127.21273-3-m.szyprowski@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200220145127.21273-3-m.szyprowski@samsung.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, March 4, 2020 11:55:29 PM CET Alex Hung wrote:
-> BGRT is for displaying seamless OEM logo from booting to login screen;
-> however, this mechanism does not always work well on all configurations
-> and the OEM logo can be displayed multiple times. This looks worse than
-> without BGRT enabled.
+On Thu, Feb 20, 2020 at 03:51:27PM +0100, Marek Szyprowski wrote:
+> Add device tree compatible strings and create proper modalias structures
+> to let this driver load automatically if compiled as module, because
+> max14577 MFD driver creates MFD cells with such compatible strings.
 > 
-> This patch adds a kernel parameter to disable BGRT in boot time. This is
-> easier than re-compiling a kernel with CONFIG_ACPI_BGRT disabled.
-> 
-> Signed-off-by: Alex Hung <alex.hung@canonical.com>
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
-> 
->  * Resend to include linux-acpi emailing list
-> 
->  Documentation/admin-guide/kernel-parameters.txt |  3 +++
->  arch/x86/kernel/acpi/boot.c                     | 10 +++++++++-
->  2 files changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index ffff776..55c5b2f 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -442,6 +442,9 @@
->  	bert_disable	[ACPI]
->  			Disable BERT OS support on buggy BIOSes.
->  
-> +	bgrt_disable	[ACPI][X86]
-> +			Disable BGRT to avoid flickering OEM logo.
-> +
->  	bttv.card=	[HW,V4L] bttv (bt848 + bt878 based grabber cards)
->  	bttv.radio=	Most important insmod options are available as
->  			kernel args too.
-> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-> index 04205ce..d1757ce 100644
-> --- a/arch/x86/kernel/acpi/boot.c
-> +++ b/arch/x86/kernel/acpi/boot.c
-> @@ -45,6 +45,7 @@ EXPORT_SYMBOL(acpi_disabled);
->  #define PREFIX			"ACPI: "
->  
->  int acpi_noirq;				/* skip ACPI IRQ initialization */
-> +int acpi_nobgrt;			/* skip ACPI BGRT */
->  int acpi_pci_disabled;		/* skip ACPI PCI scan and IRQ initialization */
->  EXPORT_SYMBOL(acpi_pci_disabled);
->  
-> @@ -1619,7 +1620,7 @@ int __init acpi_boot_init(void)
->  	acpi_process_madt();
->  
->  	acpi_table_parse(ACPI_SIG_HPET, acpi_parse_hpet);
-> -	if (IS_ENABLED(CONFIG_ACPI_BGRT))
-> +	if (IS_ENABLED(CONFIG_ACPI_BGRT) && !acpi_nobgrt)
->  		acpi_table_parse(ACPI_SIG_BGRT, acpi_parse_bgrt);
->  
->  	if (!acpi_noirq)
-> @@ -1671,6 +1672,13 @@ static int __init parse_acpi(char *arg)
->  }
->  early_param("acpi", parse_acpi);
->  
-> +static int __init parse_acpi_bgrt(char *arg)
-> +{
-> +	acpi_nobgrt = true;
-> +	return 0;
-> +}
-> +early_param("bgrt_disable", parse_acpi_bgrt);
-> +
->  /* FIXME: Using pci= for an ACPI parameter is a travesty. */
->  static int __init parse_pci(char *arg)
->  {
-> 
+>  drivers/power/supply/max14577_charger.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 
-Applied as 5.7 material, thanks!
+The approach is still being discussed (in patch #1) so this should be
+applied if patch #1 is also accepted. In such case:
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-
-
-
+Best regards,
+Krzysztof
