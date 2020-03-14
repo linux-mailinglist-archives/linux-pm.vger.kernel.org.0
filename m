@@ -2,86 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3399B185159
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Mar 2020 22:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7C2185772
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Mar 2020 02:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726681AbgCMVp4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Mar 2020 17:45:56 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:40877 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726480AbgCMVpz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Mar 2020 17:45:55 -0400
-Received: by mail-ot1-f66.google.com with SMTP id h17so11700845otn.7;
-        Fri, 13 Mar 2020 14:45:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IWJwxZI/fi+71hyjac5cwcxWIxN5PdXUwOvw7zPGV9A=;
-        b=cfOJpVwidcEA/rdgot38aH4yOYCA7fpqc/m/4t2DVG+5cF1wGosy1o3yeoEKMCgbZd
-         YKEuC9wjE3PqOUN6AGbLsaKjYSDbuUc8xz72qB32+EqAGrdR6aJC0ORlligF0kL4/I4j
-         lHzH62YJ+3MdQ6qf3jJFZ/Y1ph8zDtFmt4f3IsWOynoy4R1ZAvMFUklmHNhTyIaHfF4y
-         fPGW7Rt/Tb4LW2KLl7mp/QrSPoxXW0PUqcIm6YvxNZYX3MLVsbitRuepBtJTvWstSasn
-         MmjFRLdTJ8Te5oDzkVb413PFJMT+DiYo4ViIVup7fSotM0Ig5bwR0w39UxFiCacHShpF
-         Tr9w==
-X-Gm-Message-State: ANhLgQ08ZYI787HRl9nkzbTs6XhLut4w5di4vWbHGpzXWX2oBfFUxzA9
-        cGbYMg8o00UimxPf0Z+22g==
-X-Google-Smtp-Source: ADFU+vute7JWTg08hhBbrVBK3UeqalFgHU7teo6XMDCQ86zY987SkNKcL2RKFdqAQ3zgOaahfxPZ8w==
-X-Received: by 2002:a9d:1920:: with SMTP id j32mr12302370ota.221.1584135955148;
-        Fri, 13 Mar 2020 14:45:55 -0700 (PDT)
-Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.googlemail.com with ESMTPSA id h6sm11518707otq.63.2020.03.13.14.45.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2020 14:45:54 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: thermal: qcom-tsens: Remove redundant 'maxItems'
-Date:   Fri, 13 Mar 2020 16:45:52 -0500
-Message-Id: <20200313214552.845-2-robh@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200313214552.845-1-robh@kernel.org>
-References: <20200313214552.845-1-robh@kernel.org>
+        id S1726675AbgCOBia (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 Mar 2020 21:38:30 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:64875 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726019AbgCOBia (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Mar 2020 21:38:30 -0400
+Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
+ id a1b766df2c349fa1; Sat, 14 Mar 2020 10:38:29 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alex Hung <alex.hung@canonical.com>
+Cc:     corbet@lwn.net, len.brown@intel.com, pavel@ucw.cz,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        x86@kernel.org, mchehab+samsung@kernel.org, jpoimboe@redhat.com,
+        akpm@linux-foundation.org, pawan.kumar.gupta@linux.intel.com,
+        jgross@suse.com, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH][RESEND] acpi/x86: add a kernel parameter to disable ACPI BGRT
+Date:   Sat, 14 Mar 2020 10:38:28 +0100
+Message-ID: <7409530.ikv4aRezOy@kreacher>
+In-Reply-To: <20200304225529.6706-1-alex.hung@canonical.com>
+References: <20200304225529.6706-1-alex.hung@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There's no need to specify 'maxItems' with the same value as the number
-of entries in 'items'. A meta-schema update will catch future cases.
+On Wednesday, March 4, 2020 11:55:29 PM CET Alex Hung wrote:
+> BGRT is for displaying seamless OEM logo from booting to login screen;
+> however, this mechanism does not always work well on all configurations
+> and the OEM logo can be displayed multiple times. This looks worse than
+> without BGRT enabled.
+> 
+> This patch adds a kernel parameter to disable BGRT in boot time. This is
+> easier than re-compiling a kernel with CONFIG_ACPI_BGRT disabled.
+> 
+> Signed-off-by: Alex Hung <alex.hung@canonical.com>
+> ---
+> 
+>  * Resend to include linux-acpi emailing list
+> 
+>  Documentation/admin-guide/kernel-parameters.txt |  3 +++
+>  arch/x86/kernel/acpi/boot.c                     | 10 +++++++++-
+>  2 files changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index ffff776..55c5b2f 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -442,6 +442,9 @@
+>  	bert_disable	[ACPI]
+>  			Disable BERT OS support on buggy BIOSes.
+>  
+> +	bgrt_disable	[ACPI][X86]
+> +			Disable BGRT to avoid flickering OEM logo.
+> +
+>  	bttv.card=	[HW,V4L] bttv (bt848 + bt878 based grabber cards)
+>  	bttv.radio=	Most important insmod options are available as
+>  			kernel args too.
+> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+> index 04205ce..d1757ce 100644
+> --- a/arch/x86/kernel/acpi/boot.c
+> +++ b/arch/x86/kernel/acpi/boot.c
+> @@ -45,6 +45,7 @@ EXPORT_SYMBOL(acpi_disabled);
+>  #define PREFIX			"ACPI: "
+>  
+>  int acpi_noirq;				/* skip ACPI IRQ initialization */
+> +int acpi_nobgrt;			/* skip ACPI BGRT */
+>  int acpi_pci_disabled;		/* skip ACPI PCI scan and IRQ initialization */
+>  EXPORT_SYMBOL(acpi_pci_disabled);
+>  
+> @@ -1619,7 +1620,7 @@ int __init acpi_boot_init(void)
+>  	acpi_process_madt();
+>  
+>  	acpi_table_parse(ACPI_SIG_HPET, acpi_parse_hpet);
+> -	if (IS_ENABLED(CONFIG_ACPI_BGRT))
+> +	if (IS_ENABLED(CONFIG_ACPI_BGRT) && !acpi_nobgrt)
+>  		acpi_table_parse(ACPI_SIG_BGRT, acpi_parse_bgrt);
+>  
+>  	if (!acpi_noirq)
+> @@ -1671,6 +1672,13 @@ static int __init parse_acpi(char *arg)
+>  }
+>  early_param("acpi", parse_acpi);
+>  
+> +static int __init parse_acpi_bgrt(char *arg)
+> +{
+> +	acpi_nobgrt = true;
+> +	return 0;
+> +}
+> +early_param("bgrt_disable", parse_acpi_bgrt);
+> +
+>  /* FIXME: Using pci= for an ACPI parameter is a travesty. */
+>  static int __init parse_pci(char *arg)
+>  {
+> 
 
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Amit Kucheria <amit.kucheria@linaro.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 -
- 1 file changed, 1 deletion(-)
+Applied as 5.7 material, thanks!
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index c0ed030d0960..62b97a6d9b65 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -43,7 +43,6 @@ properties:
-           - const: qcom,tsens-v2
- 
-   reg:
--    maxItems: 2
-     items:
-       - description: TM registers
-       - description: SROT registers
--- 
-2.20.1
+
+
 
