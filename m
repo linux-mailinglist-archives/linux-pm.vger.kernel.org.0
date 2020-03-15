@@ -2,91 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EA1185C28
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Mar 2020 12:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B2C185DCD
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Mar 2020 16:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728330AbgCOLQf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Mar 2020 07:16:35 -0400
-Received: from asavdk4.altibox.net ([109.247.116.15]:47228 "EHLO
-        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728234AbgCOLQe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Mar 2020 07:16:34 -0400
-Received: from ravnborg.org (unknown [158.248.194.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk4.altibox.net (Postfix) with ESMTPS id 2A5268050C;
-        Sun, 15 Mar 2020 12:16:28 +0100 (CET)
-Date:   Sun, 15 Mar 2020 12:16:27 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Tobias Schramm <t.schramm@manjaro.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] power: supply: add CellWise cw2015 fuel gauge
- driver
-Message-ID: <20200315111627.GA21240@ravnborg.org>
-References: <20200312222448.25097-1-t.schramm@manjaro.org>
- <20200312222448.25097-4-t.schramm@manjaro.org>
- <20200313091124.GP1922688@smile.fi.intel.com>
- <fd75f94b-8e08-97da-a396-6df61c6fd89f@manjaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd75f94b-8e08-97da-a396-6df61c6fd89f@manjaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=XpTUx2N9 c=1 sm=1 tr=0
-        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10
-        a=z85fDJX7t83lHnj23ngA:9 a=CjuIK1q_8ugA:10
+        id S1728671AbgCOPO2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Mar 2020 11:14:28 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:43224 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728658AbgCOPO2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Mar 2020 11:14:28 -0400
+Received: by mail-wr1-f66.google.com with SMTP id b2so11826674wrj.10;
+        Sun, 15 Mar 2020 08:14:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=MCtPpHnUbydv9gcw0m5qsMshS01Auq8Za00j3T9ln10=;
+        b=VAXmvyDi77W2Q1ICz57RRn9OooContTpvFuwFXdLyFsV+gH/8nfbTsBQk7QXuxdpMR
+         g37LQlcZxxX/BhGbFezAmOpwcfC8E52sks00cHKgzVUs+ZK+AskMGiG/9w4Ha80Y9NBn
+         dRlHRBjozyrWIZvNG+rWU5joHdfFuEElYNPy9hS5Zi885twQ3MPSZaXF1vuu7wDSfYdX
+         7tUBd6bIuiAgzfkQSBe4JwnV7wvrBHHhaz3/hYQCpnFiTsb+k2Ol3MUzz0tO6VtcmGFG
+         kcPZ85x0JkbY4aEFBmsMcZMrcZtBaN6awgWR8AxKJKQ//tYVxT25/exqWyuA5kmsUXIg
+         3cZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=MCtPpHnUbydv9gcw0m5qsMshS01Auq8Za00j3T9ln10=;
+        b=OwvkG/T46q5DdELwuaPEvT9PIxczy9byThexqd4A+gqLC6v8b7GZW49eu4/UJoqIaU
+         2tUgWx/x3bmh4hUHvPUu04UxZa2btbqbSB80OeMoQtogkpGBFYVAVDCocqRZS0s18u8C
+         /1/UqKza5J5ichjJsrdX5eCh3FLe37Au14oeBFGPbpxQB4qHQc/27auAnJwmQrX2cAIz
+         TNvpWJ3N9zV9DgBwJxu44VeeOIQJjrUcjpdISm+P7qk4VjCoP4M7/H0ZgXH7kX7qru/8
+         jZypWN5Q2wLy4bRC3h+omkPG6j76DNex0pWJWfHvbBXv2yPFYV8uFciQfVa4YmJ2rjOL
+         10Fw==
+X-Gm-Message-State: ANhLgQ2cPYoaaz17+Nnw8du9Ie0lhM7OqfxVsrt0y6x7DMzSJ0OZxF+b
+        CVUppE/GdsHxBx83jsNHQAR2tq3mTKUbVw==
+X-Google-Smtp-Source: ADFU+vsvRZlztZYro9pFbHgdix1uzOzFmaeWXNUe0McqWXPLmj5Srb0UbuHH+HUXfxTELoEWuq5Rqw==
+X-Received: by 2002:a5d:498b:: with SMTP id r11mr5109680wrq.368.1584285265069;
+        Sun, 15 Mar 2020 08:14:25 -0700 (PDT)
+Received: from supervisor.net28 ([46.53.248.79])
+        by smtp.gmail.com with ESMTPSA id i67sm67746869wri.50.2020.03.15.08.14.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 15 Mar 2020 08:14:24 -0700 (PDT)
+From:   Arthur Demchenkov <spinal.by@gmail.com>
+To:     Tony Lindgren <tony@atomide.com>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Pavel Machek <pavel@ucw.cz>, sre@kernel.org,
+        linux-pm@vger.kernel.org, linux-omap@vger.kernel.org
+Cc:     Arthur Demchenkov <spinal.by@gmail.com>
+Subject: [PATCH 01/15] power: supply: cpcap-battery: Fix battery full status reporting
+Date:   Sun, 15 Mar 2020 18:11:52 +0300
+Message-Id: <20200315151206.30909-1-spinal.by@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Tobias.
+Don't report that the battery is fully charged if the charging current
+exceeds 100 mA.
 
-On Sun, Mar 15, 2020 at 12:00:35PM +0100, Tobias Schramm wrote:
-> Hi Andy,
-> 
-> thanks for your feedback. Please find my comments inline.
-> 
-> > 
-> >> +				dev_err(cw_bat->dev,
-> >> +					 "Failed to upload battery info\n");
-> > 
-> > Indentation of the second line.
-> > 
-> I've seen quite a few different indentation styles used in kernel
-> source. Personally I'd indent like this:
-> 
-> 		dev_warn(cw_bat->dev,
-> 			 "some long error message");
-> 
-> However coding-style.rst specifies that spaces are never to be used for
-> indentation. May I assume they are ok for alignment though?
+Signed-off-by: Arthur Demchenkov <spinal.by@gmail.com>
+---
+ drivers/power/supply/cpcap-battery.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Indent with tabs and align with spaces.
+diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
+index d7b3234ec264..34a9dbcd1a23 100644
+--- a/drivers/power/supply/cpcap-battery.c
++++ b/drivers/power/supply/cpcap-battery.c
+@@ -408,7 +408,8 @@ static bool cpcap_battery_full(struct cpcap_battery_ddata *ddata)
+ 	struct cpcap_battery_state_data *state = cpcap_battery_latest(ddata);
+ 
+ 	if (state->voltage >=
+-	    (ddata->config.bat.constant_charge_voltage_max_uv - 18000))
++	    (ddata->config.bat.constant_charge_voltage_max_uv - 18000) &&
++		state->current_ua > -100000)
+ 		return true;
+ 
+ 	return false;
+-- 
+2.11.0
 
-So this becomes
-
-< tab  >< tab  >dev_warn(cw_bat->dev,
-< tab  >< tab  ><tab    >_"some long error message");
-
-Where '_' represents a space.
-
-This is the recommend kernel practice.
-
-	Sam
