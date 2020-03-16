@@ -2,99 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 111CC186FC2
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 17:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3184C1871B3
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 18:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732063AbgCPQOM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Mar 2020 12:14:12 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:39802 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732033AbgCPQOM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Mar 2020 12:14:12 -0400
-Received: by mail-vs1-f65.google.com with SMTP id p7so9446221vso.6
-        for <linux-pm@vger.kernel.org>; Mon, 16 Mar 2020 09:14:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bBDCtFmVlmwok8vUzi26MlGBbPcfcb7XMIsVTqNi9do=;
-        b=FuH75nUp8oKLA+mUqWbx6oFCErjjg+2KD+mAVoj6DUeH1D9WGGPmT6ionb0S+43XxJ
-         8LPzfjMNU2tfB5CGcGqQ/iIbHV2+E2dFFIMjY7vOdzX4a4jWs6XlEErT1+tFM4dndAZB
-         tPBDur11ZisT8rmfI3RWzJHnq64KiuPD24AOyKz0v+b0aQoEigUVcsdp6nQHB0AT9yf3
-         r950MhLEK/ySxhdgpuohVDmsw2+MoIn7kaQsAUTpJnXAu+nIGhPfTKFh5RxLAV7QTlmr
-         9WqNrAsGpOItTVL4PoMpuFCUUe3KBo2Yo295TFO8Vm6OsMFyHRL7YOymzG54+mcVzrpv
-         ppTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bBDCtFmVlmwok8vUzi26MlGBbPcfcb7XMIsVTqNi9do=;
-        b=GDkOe7nlDHJB90ZwID3E0FYGH7doAtmVaPwGMjolaqfLpq2Ne9HM5BJ8ldobqlXOLq
-         NwdRCpww7NmFQiqSfXoVtWqdhnccgXVGrdvKW2kuECUnWwv3pSypP1a1yjCQozZf+N1F
-         /yVJXLi1PanWM78qknBLoX7szExILUYjO/sYdBcjruxSCrzOygVeEkIL9XA9ocmjhooJ
-         hl0EaTR0zFxkz2nkMIuWVmjS8rnnn7iuKngmCBn3xd1oDQxZ/1FZXvOMlo2NQUi0tejn
-         wj/s72DymyrK3ROrRsOh6kFryNBRNna1iEWBnV2bIxlX+Pf7FwAKO93qbLKy6KCwp8v3
-         kpdA==
-X-Gm-Message-State: ANhLgQ1VAlBfiyjqOlzZgGVBlJ1Y5ba1Q+fFAV6N5bmujbsxySl4F06F
-        rDU2yKs2DhBjhMuj/v6lkvZ6xMPh1yiXFzeavjlxuQ==
-X-Google-Smtp-Source: ADFU+vs3pLJTKaxFy4PgAmzkqT70xCVmTVF1ScAx8CX+A67toAj+a60XNOs30Hvy0izYq7eq1MsBLm7uLvTkG1O+5jA=
-X-Received: by 2002:a05:6102:104b:: with SMTP id h11mr369017vsq.182.1584375249809;
- Mon, 16 Mar 2020 09:14:09 -0700 (PDT)
+        id S1732092AbgCPR5h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Mar 2020 13:57:37 -0400
+Received: from mga05.intel.com ([192.55.52.43]:47106 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730437AbgCPR5h (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 16 Mar 2020 13:57:37 -0400
+IronPort-SDR: n+y/OKJvSlexX1nRMZ0Ma/aWMdKAkRDkxD60XyHK8S/cHib80mA1IDwIAwfs7eeodvjVSxjFmB
+ MvWDKS4LfuaQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2020 10:57:36 -0700
+IronPort-SDR: j8wuNIqUzoYgNWYxwl3ueqHUYlOL+gJeWxPuN/A9ZVoNxbhNuUq2tACWDBZv5Viuuw5ZF9nQ/H
+ 7yi1wewktCJg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,561,1574150400"; 
+   d="scan'208";a="443433276"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 16 Mar 2020 10:57:35 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jDtza-000F2h-Jf; Tue, 17 Mar 2020 01:57:34 +0800
+Date:   Tue, 17 Mar 2020 01:57:12 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 90f425b95754aa7c6e93f239ae73e7d250a58e98
+Message-ID: <5e6fbdf8.We5/hfv7mYwp3THB%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20200309045411.21859-1-andy.tang@nxp.com> <18c58e1b-583c-2308-ee60-a8923c2027ee@linaro.org>
-In-Reply-To: <18c58e1b-583c-2308-ee60-a8923c2027ee@linaro.org>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Mon, 16 Mar 2020 21:43:58 +0530
-Message-ID: <CAHLCerPBxe=Az=EexxYQkgvhRO40JT0qEhnAwqnGbeesiU-bnQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: thermal: make cooling-maps property optional
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Yuantian Tang <andy.tang@nxp.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 16, 2020 at 8:22 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 09/03/2020 05:54, andy.tang@nxp.com wrote:
-> > From: Yuantian Tang <andy.tang@nxp.com>
-> >
-> > Cooling-maps doesn't have to be a required property because there may
-> > be no cooling device on system, or there are no enough cooling devices for
-> > each thermal zone in multiple thermal zone cases since cooling devices
-> > can't be shared.
-> > So make this property optional to remove such limitations.
-> >
-> > For thermal zones with no cooling-maps, there could be critic trips
-> > that can trigger CPU reset or shutdown. So they still can take actions.
-> >
-> > Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 90f425b95754aa7c6e93f239ae73e7d250a58e98  Merge branch 'pnp' into linux-next
 
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+elapsed time: 491m
 
->
-> Amit, I'm about to pick this patch, it will collide with the yaml
-> conversion changes.
+configs tested: 152
+configs skipped: 0
 
-Thanks for the headsup. I can fixup v3 when I respin.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-However, I've always interpreted this binding as follows:
-- cooling-maps should be mandatory for active and passive trip types
-otherwise there will be no cooling
-- cooling-maps make no sense for critical trip type since we're
-invoking system shutdown
-- cooling-maps are optional for hot trip types.
+arm64                            allyesconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm                               allnoconfig
+arm                           efm32_defconfig
+arm                         at91_dt_defconfig
+arm                        shmobile_defconfig
+arm64                               defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                           sunxi_defconfig
+arm                        multi_v7_defconfig
+sparc                            allyesconfig
+riscv                               defconfig
+mips                      malta_kvm_defconfig
+m68k                       m5475evb_defconfig
+sh                  sh7785lcr_32bit_defconfig
+m68k                           sun3_defconfig
+parisc                           allyesconfig
+sh                            titan_defconfig
+powerpc                       ppc64_defconfig
+sparc                               defconfig
+powerpc                           allnoconfig
+i386                              allnoconfig
+i386                             alldefconfig
+i386                             allyesconfig
+i386                                defconfig
+ia64                             alldefconfig
+ia64                             allmodconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+ia64                                defconfig
+arm                              allmodconfig
+c6x                              allyesconfig
+c6x                        evmc6678_defconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+alpha                               defconfig
+csky                                defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+h8300                     edosk2674_defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                          multi_defconfig
+arc                              allyesconfig
+arc                                 defconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                             defconfig
+powerpc                          rhel-kconfig
+mips                      fuloong2e_defconfig
+mips                           32r2_defconfig
+mips                         64r6el_defconfig
+mips                             allmodconfig
+mips                              allnoconfig
+mips                             allyesconfig
+parisc                            allnoconfig
+parisc                generic-32bit_defconfig
+parisc                generic-64bit_defconfig
+x86_64               randconfig-a001-20200316
+x86_64               randconfig-a002-20200316
+x86_64               randconfig-a003-20200316
+i386                 randconfig-a001-20200316
+i386                 randconfig-a002-20200316
+i386                 randconfig-a003-20200316
+mips                 randconfig-a001-20200316
+alpha                randconfig-a001-20200316
+m68k                 randconfig-a001-20200316
+nds32                randconfig-a001-20200316
+parisc               randconfig-a001-20200316
+riscv                randconfig-a001-20200316
+h8300                randconfig-a001-20200316
+sparc64              randconfig-a001-20200316
+c6x                  randconfig-a001-20200316
+nios2                randconfig-a001-20200316
+microblaze           randconfig-a001-20200316
+csky                 randconfig-a001-20200316
+openrisc             randconfig-a001-20200316
+s390                 randconfig-a001-20200316
+sh                   randconfig-a001-20200316
+xtensa               randconfig-a001-20200316
+x86_64               randconfig-b001-20200316
+x86_64               randconfig-b002-20200316
+x86_64               randconfig-b003-20200316
+i386                 randconfig-b001-20200316
+i386                 randconfig-b002-20200316
+i386                 randconfig-b003-20200316
+x86_64               randconfig-d001-20200316
+x86_64               randconfig-d002-20200316
+x86_64               randconfig-d003-20200316
+i386                 randconfig-d001-20200316
+i386                 randconfig-d002-20200316
+i386                 randconfig-d003-20200316
+x86_64               randconfig-e001-20200316
+x86_64               randconfig-e002-20200316
+x86_64               randconfig-e003-20200316
+i386                 randconfig-e001-20200316
+i386                 randconfig-e002-20200316
+i386                 randconfig-e003-20200316
+x86_64               randconfig-f001-20200316
+x86_64               randconfig-f002-20200316
+x86_64               randconfig-f003-20200316
+i386                 randconfig-f001-20200316
+i386                 randconfig-f002-20200316
+i386                 randconfig-f003-20200316
+x86_64               randconfig-h001-20200316
+x86_64               randconfig-h002-20200316
+x86_64               randconfig-h003-20200316
+i386                 randconfig-h001-20200316
+i386                 randconfig-h002-20200316
+i386                 randconfig-h003-20200316
+arc                  randconfig-a001-20200316
+arm                  randconfig-a001-20200316
+arm64                randconfig-a001-20200316
+ia64                 randconfig-a001-20200316
+powerpc              randconfig-a001-20200316
+sparc                randconfig-a001-20200316
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+s390                             alldefconfig
+s390                             allmodconfig
+s390                              allnoconfig
+s390                             allyesconfig
+s390                          debug_defconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+sh                               allmodconfig
+sh                                allnoconfig
+sh                          rsk7269_defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                              fedora-25
+x86_64                                  kexec
+x86_64                                    lkp
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                               rhel-7.6
 
-Is this your understanding too?
-
-We should be able to enforce this in YAML.
-
-Regards,
-Amit
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
