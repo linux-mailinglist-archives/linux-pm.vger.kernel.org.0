@@ -2,87 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5480C1863AF
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 04:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5011863BF
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 04:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729552AbgCPDfC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Mar 2020 23:35:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57778 "EHLO mail.kernel.org"
+        id S1729714AbgCPDiI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Mar 2020 23:38:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59026 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729383AbgCPDfC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 15 Mar 2020 23:35:02 -0400
+        id S1729383AbgCPDiH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 15 Mar 2020 23:38:07 -0400
 Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E95A205ED;
-        Mon, 16 Mar 2020 03:34:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6CAEE205ED;
+        Mon, 16 Mar 2020 03:37:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584329701;
-        bh=r42/8/8azYLBlsApDX8O9MEW2SBamAdDhjr7m0WF5uA=;
+        s=default; t=1584329886;
+        bh=0VZ0auaUnnxnmEvkvSQZVjExN3L/Ybt8ODLBIb6CQ/U=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wLl7yHrTPgnRo2y9ZL1GfWAgFzWMel3NtzBUo/WChpeJW4HH9xBJ1bz7hce7OfUB6
-         a9jL3h/792H3sPHpVWi4pu8x2CpxPkDN1xQDUaRUILaL2Mk+kiDwmP+7g2bBik7RTL
-         kyJ1qLO3lC2gFx6143VQULpcEE/I8GzvBCSGzgzM=
-Date:   Mon, 16 Mar 2020 11:34:48 +0800
+        b=vE7+fh6ob4BmhTho9ZwlDoDnDIGReEj1f07eRH4bog7bDD6dIFkrc98DP7R5iGq7g
+         07MKoTtoCemvU4U+BklAP5n/9n0R78Ff8PMkEMgXvjzArTIxkaEs7ujgutpLOzD20r
+         9Ksj744AXEEe5vg1xLW2iCAyvvoIeZrBqJX0rU2s=
+Date:   Mon, 16 Mar 2020 11:37:53 +0800
 From:   Shawn Guo <shawnguo@kernel.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     Anson Huang <anson.huang@nxp.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux@rempel-privat.de" <linux@rempel-privat.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "m.felsch@pengutronix.de" <m.felsch@pengutronix.de>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "ronald@innovation.ch" <ronald@innovation.ch>,
-        "krzk@kernel.org" <krzk@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
-Message-ID: <20200316033447.GE17221@dragon>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        dmitry.torokhov@gmail.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, daniel.baluta@nxp.com,
+        gregkh@linuxfoundation.org, linux@rempel-privat.de,
+        tglx@linutronix.de, m.felsch@pengutronix.de,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de,
+        ronald@innovation.ch, krzk@kernel.org, robh@kernel.org,
+        leonard.crestez@nxp.com, aisheng.dong@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Linux-imx@nxp.com
+Subject: Re: [PATCH V3 2/7] firmware: imx: add COMPILE_TEST support
+Message-ID: <20200316033752.GF17221@dragon>
 References: <1583714300-19085-1-git-send-email-Anson.Huang@nxp.com>
- <AM0PR04MB4481F087AC3CDA691300710288FE0@AM0PR04MB4481.eurprd04.prod.outlook.com>
- <20200316005219.GD17221@dragon>
- <AM0PR04MB44819E4A9E027F1555C33D0B88F90@AM0PR04MB4481.eurprd04.prod.outlook.com>
- <20200316030744.GC17221@dragon>
- <AM0PR04MB44817A48746601EADA4E06BC88F90@AM0PR04MB4481.eurprd04.prod.outlook.com>
+ <1583714300-19085-2-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM0PR04MB44817A48746601EADA4E06BC88F90@AM0PR04MB4481.eurprd04.prod.outlook.com>
+In-Reply-To: <1583714300-19085-2-git-send-email-Anson.Huang@nxp.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 16, 2020 at 03:18:43AM +0000, Peng Fan wrote:
-> Just sent out. One more thing, I think all drivers depends on IMX_SCU should not
-> have COMPILE_TEST if we plan not to add dummy functions. I see you picked up
-> Anson's patch in imx/drivers branch, please check more.
+On Mon, Mar 09, 2020 at 08:38:15AM +0800, Anson Huang wrote:
+> Add COMPILE_TEST support to i.MX SCU drivers for better compile
+> testing coverage.
+> 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+> No change.
+> ---
+>  drivers/firmware/imx/Kconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/firmware/imx/Kconfig b/drivers/firmware/imx/Kconfig
+> index 1d2e5b8..116707a 100644
+> --- a/drivers/firmware/imx/Kconfig
+> +++ b/drivers/firmware/imx/Kconfig
+> @@ -12,7 +12,7 @@ config IMX_DSP
+>  
+>  config IMX_SCU
+>  	bool "IMX SCU Protocol driver"
+> -	depends on IMX_MBOX
+> +	depends on IMX_MBOX || COMPILE_TEST
+>  	help
+>  	  The System Controller Firmware (SCFW) is a low-level system function
+>  	  which runs on a dedicated Cortex-M core to provide power, clock, and
+> @@ -24,6 +24,6 @@ config IMX_SCU
+>  
+>  config IMX_SCU_PD
+>  	bool "IMX SCU Power Domain driver"
+> -	depends on IMX_SCU
+> +	depends on IMX_SCU || COMPILE_TEST
 
-Ha, yes. COMPILE_TEST should be dropped for IMX_SCU_PD in Anson's patch.
-Thanks for reminding.
+Just reminded by Peng, as we go without adding stubs for !IMX_SCU, any
+driver depending on IMX_SCU shouldn't have COMPILE_TEST.  I fixed it up
+by dropping COMPILE_TEST from IMX_SCU_PD.
 
 Shawn
+
+>  	help
+>  	  The System Controller Firmware (SCFW) based power domain driver.
+> -- 
+> 2.7.4
+> 
