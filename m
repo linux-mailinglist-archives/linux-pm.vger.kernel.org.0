@@ -2,110 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 570F2186CB6
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 14:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E0E186D9A
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 15:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731487AbgCPN5x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Mar 2020 09:57:53 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15852 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731466AbgCPN5x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Mar 2020 09:57:53 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02GDtXKj000761
-        for <linux-pm@vger.kernel.org>; Mon, 16 Mar 2020 09:57:51 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2yrrw9vueg-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-pm@vger.kernel.org>; Mon, 16 Mar 2020 09:57:51 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-pm@vger.kernel.org> from <psampat@linux.ibm.com>;
-        Mon, 16 Mar 2020 13:57:49 -0000
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 16 Mar 2020 13:57:46 -0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02GDvjDu15532088
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 16 Mar 2020 13:57:45 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9FC52A405B;
-        Mon, 16 Mar 2020 13:57:45 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 07F41A4060;
-        Mon, 16 Mar 2020 13:57:44 +0000 (GMT)
-Received: from pratiks-thinkpad.ibmuc.com (unknown [9.85.92.169])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 16 Mar 2020 13:57:43 +0000 (GMT)
-From:   Pratik Rajesh Sampat <psampat@linux.ibm.com>
-To:     linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, psampat@linux.ibm.com,
-        pratik.r.sampat@gmail.com, ego@linux.vnet.ibm.com, dja@axtens.net
-Subject: [PATCH] cpufreq: powernv: Fix frame-size-overflow in powernv_cpufreq_work_fn
-Date:   Mon, 16 Mar 2020 19:27:43 +0530
-X-Mailer: git-send-email 2.24.1
+        id S1731626AbgCPOnK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Mar 2020 10:43:10 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:53568 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731597AbgCPOnK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Mar 2020 10:43:10 -0400
+Received: by mail-pj1-f67.google.com with SMTP id l36so8472125pjb.3
+        for <linux-pm@vger.kernel.org>; Mon, 16 Mar 2020 07:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=googlenew;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=0T6eUZWJFpQZ/XJKy7vg1EXBeh3H+l+5vlhQNaC9i78=;
+        b=mjrRsnE2XY7JiAQDYEYP09KWRdNgG8/PGGq2UDz/ci+puu8+/esreB2Z8AyQ+K0o2g
+         GgB9pxwrVz/ebZFP2laHwIoGlW8PE+HbtGz8I3ijGVPotzy1Zc8BF3onxmPHuDj+2Igy
+         ULnn8qz6/HDqAx4b0yPlmLSmByXSd/PbILvkPuPpbg5aZr6wlGTMBLVwWPyWOebqclwO
+         Yb0BHwYdOWZd6lGrzzqmZJd0wBEJobHPmot+55IqkURXTTLW9ZK9Rv/oqA1jhnVI4LbW
+         BcGT0E9JafnLLGBbFV3NPu9aCXy6xKt25xf7l5wzmZT93PQjDfqai3eWnwuLC5zC7KAA
+         mB8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=0T6eUZWJFpQZ/XJKy7vg1EXBeh3H+l+5vlhQNaC9i78=;
+        b=Y2BEUgXRTro/l0EJyF0cJRY1+XC9UUlfj1JmGT4yQTxTS2fbOyjH4Cxb+T39mI6PFt
+         FXLXPkqBg6F57Z5Sqd3abgl1GcSb4wTujOpVK9CV9lLJTqaA3y0yk0fz+V2cOKfGhSKk
+         vLAT/enp6Ez+tyoC7dcrFnhX6VkMJWtVjddfnABYZM6fBpDGAJCBSEFw8ESIkCHpBLi+
+         xz6VWDQvv3z1NGAsf4tiwGenR1tbGogLicQcexMbft2jq5kXl1V9k5RK6VTADLATeTMN
+         yOIWl8XDnI8OwAd7SMk9vgyrLCJcQx+ChN568blI1TFJgddY4qrKs4n90XaZfZ04xH9y
+         QvVw==
+X-Gm-Message-State: ANhLgQ3DqLE+KVrPCuWP3+hDRR67fCZhhMZEtUnOZa4B8sQqXiP2oF27
+        LkvRYPZEKA7IZRFFcqgPZkEVmQ==
+X-Google-Smtp-Source: ADFU+vsc1UcVd0oS5FFxZM0ubaWJF/60SgDQyjjcOcJyqIsml2MBURYSJQs5xxaWHDhEhaqKRmAADw==
+X-Received: by 2002:a17:902:59dd:: with SMTP id d29mr9747644plj.246.1584369787990;
+        Mon, 16 Mar 2020 07:43:07 -0700 (PDT)
+Received: from Mindolluin.aristanetworks.com ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
+        by smtp.gmail.com with ESMTPSA id i2sm81524pjs.21.2020.03.16.07.43.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2020 07:43:07 -0700 (PDT)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Dmitry Safonov <dima@arista.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Jiri Slaby <jslaby@suse.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: [PATCHv2 46/50] power: Use show_stack_loglvl()
+Date:   Mon, 16 Mar 2020 14:39:12 +0000
+Message-Id: <20200316143916.195608-47-dima@arista.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200316143916.195608-1-dima@arista.com>
+References: <20200316143916.195608-1-dima@arista.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20031613-0008-0000-0000-0000035E25A7
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20031613-0009-0000-0000-00004A7F790A
-Message-Id: <20200316135743.57735-1-psampat@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-16_03:2020-03-12,2020-03-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- suspectscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0 spamscore=0
- bulkscore=0 phishscore=0 priorityscore=1501 impostorscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2003160065
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The patch avoids allocating cpufreq_policy on stack hence fixing frame
-size overflow in 'powernv_cpufreq_work_fn'
+Aligning with other watchdog messages just before panic - use
+KERN_EMERG.
 
-Fixes: 227942809b52 ("cpufreq: powernv: Restore cpu frequency to policy->cur on unthrottling")
-Signed-off-by: Pratik Rajesh Sampat <psampat@linux.ibm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Dmitry Safonov <dima@arista.com>
 ---
- drivers/cpufreq/powernv-cpufreq.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/base/power/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-index 56f4bc0d209e..20ee0661555a 100644
---- a/drivers/cpufreq/powernv-cpufreq.c
-+++ b/drivers/cpufreq/powernv-cpufreq.c
-@@ -902,6 +902,7 @@ static struct notifier_block powernv_cpufreq_reboot_nb = {
- void powernv_cpufreq_work_fn(struct work_struct *work)
- {
- 	struct chip *chip = container_of(work, struct chip, throttle);
-+	struct cpufreq_policy *policy;
- 	unsigned int cpu;
- 	cpumask_t mask;
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index 0e99a760aebd..9b8450eab02e 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -515,7 +515,7 @@ static void dpm_watchdog_handler(struct timer_list *t)
+ 	struct dpm_watchdog *wd = from_timer(wd, t, timer);
  
-@@ -916,12 +917,14 @@ void powernv_cpufreq_work_fn(struct work_struct *work)
- 	chip->restore = false;
- 	for_each_cpu(cpu, &mask) {
- 		int index;
--		struct cpufreq_policy policy;
- 
--		cpufreq_get_policy(&policy, cpu);
--		index = cpufreq_table_find_index_c(&policy, policy.cur);
--		powernv_cpufreq_target_index(&policy, index);
--		cpumask_andnot(&mask, &mask, policy.cpus);
-+		policy = cpufreq_cpu_get(cpu);
-+		if (!policy)
-+			continue;
-+		index = cpufreq_table_find_index_c(policy, policy->cur);
-+		powernv_cpufreq_target_index(policy, index);
-+		cpumask_andnot(&mask, &mask, policy->cpus);
-+		cpufreq_cpu_put(policy);
- 	}
- out:
- 	put_online_cpus();
+ 	dev_emerg(wd->dev, "**** DPM device timeout ****\n");
+-	show_stack(wd->tsk, NULL);
++	show_stack_loglvl(wd->tsk, NULL, KERN_EMERG);
+ 	panic("%s %s: unrecoverable failure\n",
+ 		dev_driver_string(wd->dev), dev_name(wd->dev));
+ }
 -- 
-2.24.1
+2.25.1
 
