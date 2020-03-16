@@ -2,137 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E74DF18614E
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 02:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24439186370
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 03:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729370AbgCPBaQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 Mar 2020 21:30:16 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:50618 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729334AbgCPBaQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 Mar 2020 21:30:16 -0400
-Received: by mail-wm1-f66.google.com with SMTP id a5so15879221wmb.0;
-        Sun, 15 Mar 2020 18:30:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:subject:references:date:mime-version
-         :content-transfer-encoding:from:message-id:in-reply-to:user-agent;
-        bh=khe4KFBHWIvVlXCYbcMcXc8nhkO4avLgz0CPmf17M5Q=;
-        b=kt2T6xGVcQouz1eJTSgdGpraxyjZgHRVpAFhL+9UK6pUJi/LxoePPqeVUbCplhqHbv
-         rUTlv4zEaWQb7X1wykqSZA79Q+wK5fBYIufqTjjkwwKTDIVpJzWTN09CAo87JUx2Qenf
-         xKIefbR6E7djE8A7us5AgAm9a4yJ7HiU87HYbkmcfrCK3HG8cl1zi8C4Y1zbPrS3li7b
-         EaOWnH2F+bt9KUo/ceH4LzOLLH82d0mSvLOUcm0alwywaijcHP74WjiYrXWIihNpSsrQ
-         rZoRyoJ6tnKD642zecXqjlzhNhsQz51SM1I7S+ySN08E8Bii9b6izJRHMnpHxiw54fue
-         RGkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:subject:references:date:mime-version
-         :content-transfer-encoding:from:message-id:in-reply-to:user-agent;
-        bh=khe4KFBHWIvVlXCYbcMcXc8nhkO4avLgz0CPmf17M5Q=;
-        b=K/uWWrmmRa2LBdVChQ1dkfwrv8pjkmEr3uRnlysmk8W5y41EpPiXiB3K3oBLXksG+l
-         IharAxfUyWUVYGG1f84/QFuGtAx4nIUP/CY8vzFkx3F8NS2b1msykCIZPHLRzDuvCN/Q
-         0eltO1I3KvhI1/e4LZsNe13X282Gor0ZQ/F7bfvGBrRySqqV0kIr7HJhqp54w/kz/k2R
-         IfxgnCfOPNzQAyhs/RNJCxcdym+hGti+13fYWSNhF40Xj1cCjDnrtrrNFUdNOUS3z/e5
-         kaN4ztllEpN3w8GhCIybEBwP77WKhFH4C7jErDDCOfA10Ht70a8/0pNZjMoOJJVlHSu/
-         Sycw==
-X-Gm-Message-State: ANhLgQ2j4w+IHZyhlZTRNrSLQdpvRICFrIFPaJyj3rzw9Ww2DI17sLs6
-        3RCItc9xPjIqJgmItYo7q8o=
-X-Google-Smtp-Source: ADFU+vu+2lwO/tEkZx52yGdLG/1jzSEekhIbcki43t41egXIEdiqD8fQSotzRh6OvTS8fQvuL4X3Ng==
-X-Received: by 2002:a05:600c:410b:: with SMTP id j11mr25275005wmi.86.1584322212681;
-        Sun, 15 Mar 2020 18:30:12 -0700 (PDT)
-Received: from supervisor.net28 ([46.53.248.79])
-        by smtp.gmail.com with ESMTPSA id q13sm40015063wrs.91.2020.03.15.18.30.11
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sun, 15 Mar 2020 18:30:11 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8; format=flowed; delsp=yes
-To:     "Tony Lindgren" <tony@atomide.com>
-Cc:     "Pavel Machek" <pavel@ucw.cz>,
-        "Merlijn Wajer" <merlijn@wizzup.org>, sre@kernel.org,
-        linux-pm@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCH 01/15] power: supply: cpcap-battery: Fix battery full
- status reporting
-References: <20200315151206.30909-1-spinal.by@gmail.com>
- <20200315185857.GA4914@amd> <op.0hjf7fb5hxa7s4@supervisor.net28>
- <20200315215949.GK37466@atomide.com>
-Date:   Mon, 16 Mar 2020 04:30:10 +0300
+        id S1729380AbgCPCv4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 Mar 2020 22:51:56 -0400
+Received: from mail-vi1eur05on2064.outbound.protection.outlook.com ([40.107.21.64]:6158
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729387AbgCPCv4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 15 Mar 2020 22:51:56 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KxTQXlKo5y/A16QkG4Mrm06hXnCMPGeHdPCuPtJnxh0AM5wI5kobPt1mtERK4/RlKSSMvmYlc+GXhiTzutXSro9Zvou5KDDXF/TU3uyeC8XMIbqGs4kCG9c9sUcjGEcGpe3nIbrWxmsOFry1bGlyAX7x//h/iYFWtQCUbkLeqmGjA4uw4oxR9snG62IiPGJTFzL7+wTPA67BevFtwYsJvgwB8Y88Q6uv0llHXVMf/9c+LF3dUcljKGjs5yIrseo/uINh+AW2WRRxtwwuXuH5Q+87RqSrf/N5rsImwnF154N35zzIck/01n3eBU51MXNNKEFeznnhjckgvhgtNCu18A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XwlZXbjAkYVUzXP6NN5n4UHDnIJDONemRm9g03ueQwI=;
+ b=QH/O1vPrPeJGiz2JDGhDHzmyCkYwwxKd1n1R8w7d4eW8DPmu/eYEiLMtmJ98RlbbINkJSfGsOnzYyn9zgSdnos01eUAbNrKzeCg6I3mkK7wO9MuxJlAf3DfzZZUnQfn+iOEf9SSErNbkWRHewEJettQwQom4Ey0hCis7KR8cSe3OBOydQjz4y1O/hahzBAk+TJBOtsQEPqBcZH9+1We8IlbwHFQTUAXSwmiEL7mpwps0j0utIufTcRavFYp3t0QiPaWNb6+OLnR6T4mByA1LDUcIdtWiKac7dlFvaY8lqIDqxgCELu223ISLtf+NGl2eFvZYoF/TiQpYfHwrPOdOKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XwlZXbjAkYVUzXP6NN5n4UHDnIJDONemRm9g03ueQwI=;
+ b=EnlynJnbe4Y5NwU0CRn4t5WaBjAbkvnwo+oEatOcUjyHOB6ttwPUXyqZnB/vLP6sMlYKL/j1xg/Lo+hdCr55uwj3sL0KdM2JDyp/sX1tJ3zRVEFKplq0EqRT1CwBUpZmOZUBjp223tUf15uGuSSAZI2VQjnttx+jWgrxpGIvS8o=
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
+ AM0PR04MB4434.eurprd04.prod.outlook.com (52.135.145.26) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2814.18; Mon, 16 Mar 2020 02:51:48 +0000
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::ad44:6b0d:205d:f8fc]) by AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::ad44:6b0d:205d:f8fc%7]) with mapi id 15.20.2814.019; Mon, 16 Mar 2020
+ 02:51:48 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Shawn Guo <shawnguo@kernel.org>
+CC:     Anson Huang <anson.huang@nxp.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux@rempel-privat.de" <linux@rempel-privat.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "m.felsch@pengutronix.de" <m.felsch@pengutronix.de>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "ronald@innovation.ch" <ronald@innovation.ch>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
+Thread-Topic: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
+Thread-Index: AQHV9av6lP0y7UryDUCSkdoJ2q6AXKhARRTAgAop3wCAACC+IA==
+Date:   Mon, 16 Mar 2020 02:51:47 +0000
+Message-ID: <AM0PR04MB44819E4A9E027F1555C33D0B88F90@AM0PR04MB4481.eurprd04.prod.outlook.com>
+References: <1583714300-19085-1-git-send-email-Anson.Huang@nxp.com>
+ <AM0PR04MB4481F087AC3CDA691300710288FE0@AM0PR04MB4481.eurprd04.prod.outlook.com>
+ <20200316005219.GD17221@dragon>
+In-Reply-To: <20200316005219.GD17221@dragon>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peng.fan@nxp.com; 
+x-originating-ip: [121.239.103.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 808b5ae8-4eb5-4f58-3b80-08d7c954f8a0
+x-ms-traffictypediagnostic: AM0PR04MB4434:|AM0PR04MB4434:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR04MB443457A914D259751E2EBBC988F90@AM0PR04MB4434.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 03449D5DD1
+x-forefront-antispam-report: SFV:NSPM;SFS:(10001)(10009020)(4636009)(136003)(366004)(396003)(376002)(346002)(39860400002)(199004)(44832011)(4326008)(7696005)(8936002)(8676002)(2906002)(55016002)(45080400002)(81156014)(64756008)(6506007)(66946007)(66446008)(9686003)(5660300002)(81166006)(86362001)(76116006)(66556008)(66476007)(52536014)(54906003)(7416002)(71200400001)(316002)(186003)(33656002)(6916009)(26005)(966005)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB4434;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ga5+ka3og3smxelogrUwYl8sqD346+bn35d1R7qVc7TVnZMrz9rM+XThxd48o6WlQwLPNtFfvHC8XOEeDX23KUC4TyOB29nG1iMnmcAQisnfbgntSRPlPKGqqaVCe1LICS6qHESO3rpRwCFGSReaza1ZN0+XyBh5o1vX3oV8kgVvESEjc0vTuW2+U8FJ28+AzozmTsP+7yg+hRWvXhwBuJb3o3bpaSwq0ifM1O5fJu/pOkBhIDP/F15S1o6ZHM7LDsFddnoLw47txSXlI6bnhyvE0rsJjYZhaUurtKn0Jfe04JN3XT6gUQmpetERtm2Lvu6mX05zBS3N4n5LDJIGasYQLxO/VX+hQky3X3MRbuptGGD+Nt5HYUpP7kAkZoh4KRZfbQNUUptb6oN6Qn23fysjsc++nNNBiOzDIvTkH6oeNomaH099E5vWKAp6t7pG6gi7q8LkcbyjvGiKDcpdyDzdmqdWhgQjBk5Q5rI7I3fAJAmC7GremUAZx5qIZBrBQueKJnwYDhqVSGJbMPRrtNJ9F8lnv3lOjxneB+1UjiPcc0GHOOtT5K4Debtbu8MdbAh5iyFhUF6XPHf94HzKigmwbt5OQJ7ewOaUiq39BVTGcyItzARqQJPSvy7i9IFW
+x-ms-exchange-antispam-messagedata: nv9f26/EN6MyI0Vk+jtwNfxJh3uevP7J3PBnSkcsyuDy6g9FC+y87u6NDVIO+erEf/24O9PWRgLbrYQwUpOLdPpkd6I20SEjrBsuhe8NboUHL2RjyDGtOr3qweDkEODMi2jqlGNLlOt9EE+/cvPPFg==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-From:   "Arthur D." <spinal.by@gmail.com>
-Message-ID: <op.0hjs4kk2hxa7s4@supervisor.net28>
-In-Reply-To: <20200315215949.GK37466@atomide.com>
-User-Agent: Opera Mail/12.16 (Linux)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 808b5ae8-4eb5-4f58-3b80-08d7c954f8a0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2020 02:51:48.0431
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wZiPBvZuAEjAaCBeAt/xM+CdmHtBfgu7mCRH/3DmTPCE3Awxe7xN4O4p4GW9nTJlO7spoqSpWaBliq3xd5Ie3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4434
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Tony.
+Hi Shawn,
 
-It seems like a misunderstanding here. There's no problem in detecting
-if the charging is in progress. The green led is switched off and
-the battery current sign is changed from "-" to "+" (which means
-that the battery is being discharged). So there's no need in additional
-checks. For cpcap-battery this situation seems like a battery stopped
-charging. And it doesn't matter if that was a user who disconnected
-the charger or it was done somewhere in a driver/firmware/hardware.
+> Subject: Re: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU
+> case
+>=20
+> On Mon, Mar 09, 2020 at 01:40:18PM +0000, Peng Fan wrote:
+> > > Subject: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU
+> > > case
+> >
+> > I have one patch pending reviewing.
+> > https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpat=
+c
+> >
+> hwork.kernel.org%2Fpatch%2F11395247%2F&amp;data=3D02%7C01%7Cpeng.f
+> an%40n
+> >
+> xp.com%7C995815002e2b490791e008d7c9445133%7C686ea1d3bc2b4c6fa9
+> 2cd99c5c
+> >
+> 301635%7C0%7C0%7C637199167574579419&amp;sdata=3DRM4Mtwl8LZ3ft9
+> 3uL3FQPcHT
+> > 9lPHSqBOgugozkcLvag%3D&amp;reserved=3D0
+>=20
+> I dropped that patch from my queue and picked patch #2 from this series a=
+s
+> the favor.
 
-The problem is that the charging current cant get to the point <100 mA,
-not talking about <50 mA. And that's why I set the value of 112 mA for
-the end of charge current: to help the kernel to detect this plateau and
-to stop the calibration cycle, so the userspace can get all the battery
-parameters I mentioned in the previous mail.
+I think dropping that patch might cause Linux-next build fail as previously=
+ showed,
+because IMX_SCU_SOC depends on COMPILE_TEST. If you drop that patch,
+also need to drop COMPILE_TEST from IMX_SCU_SOC.
 
-Please note, that the behaviour I mentioned was observed only when the
-conditions written in my last mail were met. The important one was:
-> 2) the display backlight is off
+ ld: drivers/soc/imx/soc-imx-scu.o: in function `.imx_scu_soc_probe':
+ soc-imx-scu.c:(.text.imx_scu_soc_probe+0x44): undefined reference to=20
+`.imx_scu_get_handle'
+ ld: soc-imx-scu.c:(.text.imx_scu_soc_probe+0x134): undefined reference=20
+ to `.imx_scu_call_rpc'
+ ld: soc-imx-scu.c:(.text.imx_scu_soc_probe+0x20c): undefined reference=20
+ to `.imx_scu_call_rpc'
+=20
+ Caused by commit
+=20
+   68c189e3a93c ("soc: imx: increase build coverage for imx8m soc=20
+ driver")
 
-Because when I unlocked the display the charging current was able
-to go below 112 mA. Of course I couldn't rely on something like this:
-the user should stay with backlight on to have the battery calibrated.
-Think about it: waiting for the charging current to drop from 100 mA
-to 50 mA can take dozens of minutes (it depends on the age of battery -
-the older the battery the longer it will take), and the user should
-force somehow the device to not switch off the display hightlight
-until the battery is calibrated.
+What do you prefer? I personally think dummy functions would be good.
 
-Of course it's unacceptable, so I decided to set the end of charge
-current limit to 112 mA. Which allows the user to just put the device
-on a table and to wait until it's fully charged without a need
-to interfere the charging process with some action from the user.
-
---
-Best regards, Spinal
-
-
->> Now about the chosen limits. For some reason the charging is
->> interrupted (and restarted after a while) when the following
->> conditions are met:
->> 1) the charging current is < 112 mA
->> 2) the display backlight is off
->>
->> This behaviour was observed in Maemo Leste with hildon-desktop
->> running. I tested these patches for several days, so I picked up
->> the parameters for optimal (from my point of view) work in practice
->> taking into account the current "features" of Droid 4 drivers.
->>
->> If we could somehow fix this behaviour (charging interruption),
->> I'd reconsider the end of charge current value to be 50 mA.
->
-> Hmm well we do have two chargers, the usb charger and the
-> unknown inductive charger for the pins on the back.
->
-> It would be best to keep cpcap-battery.c independent of the
-> chargers to avoid depndencies as the chargers do usually start
-> charging briefly always when connected.
->
-> Maybe just adding something like below would be enough of a check:
->
-> static int
-> cpcap_battery_get_counter_rate(struct cpcap_battery_ddata *ddata,
-> 			       int poll_time_ms);
->
-> And then based on the value being negative or positive you
-> would know if it's charging or not. I guess we could then
-> use this also for POWER_SUPPLY_PROP_CHARGE_NOW with poll_time_ms
-> value of 0. I think the charge counter is configure to poll
-> at 250 ms right now.
+Thanks,
+Peng.
+>=20
+> Shawn
