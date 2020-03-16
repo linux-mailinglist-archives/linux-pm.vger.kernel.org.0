@@ -2,110 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F118A186BBA
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 14:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B68D4186C10
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 14:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731054AbgCPNFl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Mar 2020 09:05:41 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:36212 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731033AbgCPNFl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Mar 2020 09:05:41 -0400
-Received: by mail-pg1-f193.google.com with SMTP id z4so3950672pgu.3
-        for <linux-pm@vger.kernel.org>; Mon, 16 Mar 2020 06:05:40 -0700 (PDT)
+        id S1731309AbgCPNaq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Mar 2020 09:30:46 -0400
+Received: from mail-pf1-f177.google.com ([209.85.210.177]:41082 "EHLO
+        mail-pf1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731193AbgCPNaq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Mar 2020 09:30:46 -0400
+Received: by mail-pf1-f177.google.com with SMTP id z65so9928650pfz.8
+        for <linux-pm@vger.kernel.org>; Mon, 16 Mar 2020 06:30:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=axtens.net; s=google;
-        h=from:to:subject:in-reply-to:references:date:message-id:mime-version;
-        bh=S3ylSoSVkSVtheK/F1qvWvf0XZ/cN1+4cUsuDfSQPrg=;
-        b=HC5iw9nsPFCCHJIQ4FigojhiQRRfcdyb6Qpgcbl9eWbw97vM6ByH1GNo0POUcLpnq8
-         W2526eX+MuNa5a/YiPRQpKhHy989nZbvMYd0iQ068YzwHi/XfEMOAHswjNqJkdwQO/xa
-         W0/LGixqd91m0pYY9vhfsXQG0Fssoiruwz8xI=
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=gGa87oNn/iWn7AelT0+st4JUfc9eV/HK3yAekv3ikj0=;
+        b=jAGVWhSfjn0cR3K7M7DpiPc6BQSClsQXF+5EkDj+7EDduBUxd9BRftapwTHlCiwIxy
+         +4xpjhwQ5TVS11aq0NcRYxU287YHByhhcebV1MCQQlBHs7hpSMfRbn16OirxJOZKbOvI
+         INhaqPoPwYtambr6Tv2ipTpO8/U69kIWgVMnW+KhDoUkpjbL3zPbwpx+uCbNHt+8Fncb
+         F8Yt+RDVIpmX5ywIjwPnHo59ACz+U6+K/TNzuv9m8YS8gzokkmF2q5es+nbAQGdriUJP
+         9egkYuNu5XgE/ZRMdlhDGbLZmo/YUd/ZNGh3RizN/xe1Yio9lXMxZepKpj9AVYAkvgp+
+         5Ceg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=S3ylSoSVkSVtheK/F1qvWvf0XZ/cN1+4cUsuDfSQPrg=;
-        b=dBm2cCsnQnMvDxqtQXfet4Vk9TLTXW+7Wu7Q0aSWl38rV7nRmN8kcGgpUCVoZxw8f7
-         C59HwsP2Ee0LuycdKJYoOiydmHGm77dLUT1YjlFd77htl4PKnLKjxK7UxxMWBOCdoemW
-         /xVvoImLq3k1ApUCn++pOQSH6N9nvqHNowk7SeKw6aCAbdUhhKEHQErWxfJ2p4EAc5Wm
-         VskTl4WqZPFLrm0RvuHZi8eQFG2LXjUc+kPVzr9xdz+NFqhw6+kEt2+Lt3qZJkfFgvzP
-         KxRIIibpSpWbiCEyKwWrHi0s2gbecuMdf1oOtBPeWk+doV4FYUE3nPSBjjvjWUjlzZO2
-         RyeQ==
-X-Gm-Message-State: ANhLgQ2L8cZ3tg09ifuD4d/3FOCLuXDVu59HsO3gxDcUttbQSCdVZ6jP
-        veH9rIu/LePgJHbKU8DUolgivg==
-X-Google-Smtp-Source: ADFU+vte8YprRXpiosPh6oK8UzgBCXexYDX8dInWwsIZfEzpUDJTBrqtjf9QP5Ukzx4PTdYLK6yJpw==
-X-Received: by 2002:a63:5506:: with SMTP id j6mr26894163pgb.43.1584363939827;
-        Mon, 16 Mar 2020 06:05:39 -0700 (PDT)
-Received: from localhost (2001-44b8-1113-6700-789d-cd2c-42e1-23af.static.ipv6.internode.on.net. [2001:44b8:1113:6700:789d:cd2c:42e1:23af])
-        by smtp.gmail.com with ESMTPSA id z15sm32281786pfg.152.2020.03.16.06.05.37
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=gGa87oNn/iWn7AelT0+st4JUfc9eV/HK3yAekv3ikj0=;
+        b=Qjy3WMnqP3BNj8j8ooqoMRZp3mdYtutHRFo9ywLELD3F74RRfwh15i6BlXOgJwKoI+
+         E4FT+IKzTFSfHIFrSIXcJUbkoym3qycdnA85MvFpIOG1E2u/supIgCfq1Ipu/j78mWeq
+         wRq1EoubLcYPCUhu3u4ndD+1QV7dfjbLOzPkQeSa5cLpO9pGbPhYL16t21e6NElCGfrz
+         BHk9KaVVKRXGBdTS8a7U7+9T83FiJv1DeHUx06rsgQ7O0/sT1YY1dkgL55vLWNNguMor
+         nYTrCn06R+fpGGwBFwqMr3O7vkxK5rhW3xXgmnmIQ0PLeCDm/Yrxo/NknbRi4T6hS0Ok
+         1ifA==
+X-Gm-Message-State: ANhLgQ0ix1asmtbHUBI2A+Mq3WRpK9ydYK6vY7KjAmTZc/DYOlbLTzfG
+        1hZdI/nlE5Wd/sZpQt5G4ASY+g==
+X-Google-Smtp-Source: ADFU+vsRAEgr3vIsSiUupA3snCKV9UgvQpRXzEMWfjRla4tU1lJXPhWZqJIq409R2bqUcv+6oFP8iQ==
+X-Received: by 2002:a63:ee02:: with SMTP id e2mr26268787pgi.183.1584365444723;
+        Mon, 16 Mar 2020 06:30:44 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id i4sm14228pfq.82.2020.03.16.06.30.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2020 06:05:38 -0700 (PDT)
-From:   Daniel Axtens <dja@axtens.net>
-To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, psampat@linux.ibm.com,
-        pratik.r.sampat@gmail.com, ego@linux.vnet.ibm.com
-Subject: Re: [PATCH] Fixes: 227942809b52 ("cpufreq: powernv: Restore cpu frequency to policy->cur on unthrottling")
-In-Reply-To: <20200306110549.25517-1-psampat@linux.ibm.com>
-References: <20200306110549.25517-1-psampat@linux.ibm.com>
-Date:   Tue, 17 Mar 2020 00:05:35 +1100
-Message-ID: <87v9n4o3fk.fsf@dja-thinkpad.axtens.net>
+        Mon, 16 Mar 2020 06:30:43 -0700 (PDT)
+Message-ID: <5e6f7f83.1c69fb81.87fc.00cd@mx.google.com>
+Date:   Mon, 16 Mar 2020 06:30:43 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.6-rc6-99-g90f425b95754
+X-Kernelci-Report-Type: boot
+Subject: pm/testing boot: 62 boots: 1 failed,
+ 60 passed with 1 untried/unknown (v5.6-rc6-99-g90f425b95754)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Pratik,
+pm/testing boot: 62 boots: 1 failed, 60 passed with 1 untried/unknown (v5.6=
+-rc6-99-g90f425b95754)
 
-Please could you resend this with a more meaningful subject line and
-move the Fixes: line to immediately above your signed-off-by?
+Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
+el/v5.6-rc6-99-g90f425b95754/
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+6-rc6-99-g90f425b95754/
 
-Thanks!
+Tree: pm
+Branch: testing
+Git Describe: v5.6-rc6-99-g90f425b95754
+Git Commit: 90f425b95754aa7c6e93f239ae73e7d250a58e98
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Tested: 54 unique boards, 13 SoC families, 3 builds out of 6
 
-Regards,
-Daniel
+Boot Regressions Detected:
 
-> The patch avoids allocating cpufreq_policy on stack hence fixing frame
-> size overflow in 'powernv_cpufreq_work_fn'
->
-> Signed-off-by: Pratik Rajesh Sampat <psampat@linux.ibm.com>
-> ---
->  drivers/cpufreq/powernv-cpufreq.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-> index 56f4bc0d209e..20ee0661555a 100644
-> --- a/drivers/cpufreq/powernv-cpufreq.c
-> +++ b/drivers/cpufreq/powernv-cpufreq.c
-> @@ -902,6 +902,7 @@ static struct notifier_block powernv_cpufreq_reboot_nb = {
->  void powernv_cpufreq_work_fn(struct work_struct *work)
->  {
->  	struct chip *chip = container_of(work, struct chip, throttle);
-> +	struct cpufreq_policy *policy;
->  	unsigned int cpu;
->  	cpumask_t mask;
->  
-> @@ -916,12 +917,14 @@ void powernv_cpufreq_work_fn(struct work_struct *work)
->  	chip->restore = false;
->  	for_each_cpu(cpu, &mask) {
->  		int index;
-> -		struct cpufreq_policy policy;
->  
-> -		cpufreq_get_policy(&policy, cpu);
-> -		index = cpufreq_table_find_index_c(&policy, policy.cur);
-> -		powernv_cpufreq_target_index(&policy, index);
-> -		cpumask_andnot(&mask, &mask, policy.cpus);
-> +		policy = cpufreq_cpu_get(cpu);
-> +		if (!policy)
-> +			continue;
-> +		index = cpufreq_table_find_index_c(policy, policy->cur);
-> +		powernv_cpufreq_target_index(policy, index);
-> +		cpumask_andnot(&mask, &mask, policy->cpus);
-> +		cpufreq_cpu_put(policy);
->  	}
->  out:
->  	put_online_cpus();
-> -- 
-> 2.17.1
+arm64:
+
+    defconfig:
+        gcc-8:
+          meson-gxbb-p200:
+              lab-baylibre: new failure (last pass: v5.6-rc4-56-gf99f4dfcc7=
+da)
+
+Boot Failure Detected:
+
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+---
+For more info write to <info@kernelci.org>
