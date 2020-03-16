@@ -2,80 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F6D186F8B
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 17:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 111CC186FC2
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 17:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731955AbgCPQC7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Mar 2020 12:02:59 -0400
-Received: from muru.com ([72.249.23.125]:60608 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731618AbgCPQC7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 16 Mar 2020 12:02:59 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id A658F80AA;
-        Mon, 16 Mar 2020 16:03:44 +0000 (UTC)
-Date:   Mon, 16 Mar 2020 09:02:55 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     "Arthur D." <spinal.by@gmail.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Merlijn Wajer <merlijn@wizzup.org>,
-        sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: Re: [PATCH 01/15] power: supply: cpcap-battery: Fix battery full
- status reporting
-Message-ID: <20200316160255.GL37466@atomide.com>
-References: <20200315151206.30909-1-spinal.by@gmail.com>
- <20200315185857.GA4914@amd>
- <op.0hjf7fb5hxa7s4@supervisor.net28>
- <20200315215949.GK37466@atomide.com>
- <op.0hjs4kk2hxa7s4@supervisor.net28>
+        id S1732063AbgCPQOM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Mar 2020 12:14:12 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:39802 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732033AbgCPQOM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Mar 2020 12:14:12 -0400
+Received: by mail-vs1-f65.google.com with SMTP id p7so9446221vso.6
+        for <linux-pm@vger.kernel.org>; Mon, 16 Mar 2020 09:14:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bBDCtFmVlmwok8vUzi26MlGBbPcfcb7XMIsVTqNi9do=;
+        b=FuH75nUp8oKLA+mUqWbx6oFCErjjg+2KD+mAVoj6DUeH1D9WGGPmT6ionb0S+43XxJ
+         8LPzfjMNU2tfB5CGcGqQ/iIbHV2+E2dFFIMjY7vOdzX4a4jWs6XlEErT1+tFM4dndAZB
+         tPBDur11ZisT8rmfI3RWzJHnq64KiuPD24AOyKz0v+b0aQoEigUVcsdp6nQHB0AT9yf3
+         r950MhLEK/ySxhdgpuohVDmsw2+MoIn7kaQsAUTpJnXAu+nIGhPfTKFh5RxLAV7QTlmr
+         9WqNrAsGpOItTVL4PoMpuFCUUe3KBo2Yo295TFO8Vm6OsMFyHRL7YOymzG54+mcVzrpv
+         ppTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bBDCtFmVlmwok8vUzi26MlGBbPcfcb7XMIsVTqNi9do=;
+        b=GDkOe7nlDHJB90ZwID3E0FYGH7doAtmVaPwGMjolaqfLpq2Ne9HM5BJ8ldobqlXOLq
+         NwdRCpww7NmFQiqSfXoVtWqdhnccgXVGrdvKW2kuECUnWwv3pSypP1a1yjCQozZf+N1F
+         /yVJXLi1PanWM78qknBLoX7szExILUYjO/sYdBcjruxSCrzOygVeEkIL9XA9ocmjhooJ
+         hl0EaTR0zFxkz2nkMIuWVmjS8rnnn7iuKngmCBn3xd1oDQxZ/1FZXvOMlo2NQUi0tejn
+         wj/s72DymyrK3ROrRsOh6kFryNBRNna1iEWBnV2bIxlX+Pf7FwAKO93qbLKy6KCwp8v3
+         kpdA==
+X-Gm-Message-State: ANhLgQ1VAlBfiyjqOlzZgGVBlJ1Y5ba1Q+fFAV6N5bmujbsxySl4F06F
+        rDU2yKs2DhBjhMuj/v6lkvZ6xMPh1yiXFzeavjlxuQ==
+X-Google-Smtp-Source: ADFU+vs3pLJTKaxFy4PgAmzkqT70xCVmTVF1ScAx8CX+A67toAj+a60XNOs30Hvy0izYq7eq1MsBLm7uLvTkG1O+5jA=
+X-Received: by 2002:a05:6102:104b:: with SMTP id h11mr369017vsq.182.1584375249809;
+ Mon, 16 Mar 2020 09:14:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <op.0hjs4kk2hxa7s4@supervisor.net28>
+References: <20200309045411.21859-1-andy.tang@nxp.com> <18c58e1b-583c-2308-ee60-a8923c2027ee@linaro.org>
+In-Reply-To: <18c58e1b-583c-2308-ee60-a8923c2027ee@linaro.org>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Mon, 16 Mar 2020 21:43:58 +0530
+Message-ID: <CAHLCerPBxe=Az=EexxYQkgvhRO40JT0qEhnAwqnGbeesiU-bnQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: thermal: make cooling-maps property optional
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Yuantian Tang <andy.tang@nxp.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Arthur D. <spinal.by@gmail.com> [200316 01:31]:
-> Hi, Tony.
-> 
-> It seems like a misunderstanding here. There's no problem in detecting
-> if the charging is in progress. The green led is switched off and
-> the battery current sign is changed from "-" to "+" (which means
-> that the battery is being discharged). So there's no need in additional
-> checks. For cpcap-battery this situation seems like a battery stopped
-> charging. And it doesn't matter if that was a user who disconnected
-> the charger or it was done somewhere in a driver/firmware/hardware.
-> 
-> The problem is that the charging current cant get to the point <100 mA,
-> not talking about <50 mA. And that's why I set the value of 112 mA for
-> the end of charge current: to help the kernel to detect this plateau and
-> to stop the calibration cycle, so the userspace can get all the battery
-> parameters I mentioned in the previous mail.
+On Mon, Mar 16, 2020 at 8:22 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 09/03/2020 05:54, andy.tang@nxp.com wrote:
+> > From: Yuantian Tang <andy.tang@nxp.com>
+> >
+> > Cooling-maps doesn't have to be a required property because there may
+> > be no cooling device on system, or there are no enough cooling devices for
+> > each thermal zone in multiple thermal zone cases since cooling devices
+> > can't be shared.
+> > So make this property optional to remove such limitations.
+> >
+> > For thermal zones with no cooling-maps, there could be critic trips
+> > that can trigger CPU reset or shutdown. So they still can take actions.
+> >
+> > Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
 
-OK I guess that's easy to change if we figure out something better :)
-Maybe add some define for it like CPCAP_BATTERY_FULL_CHARGE_CURRENT or
-similar?
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 
-> Please note, that the behaviour I mentioned was observed only when the
-> conditions written in my last mail were met. The important one was:
-> > 2) the display backlight is off
-> 
-> Because when I unlocked the display the charging current was able
-> to go below 112 mA. Of course I couldn't rely on something like this:
-> the user should stay with backlight on to have the battery calibrated.
-> Think about it: waiting for the charging current to drop from 100 mA
-> to 50 mA can take dozens of minutes (it depends on the age of battery -
-> the older the battery the longer it will take), and the user should
-> force somehow the device to not switch off the display hightlight
-> until the battery is calibrated.
-> 
-> Of course it's unacceptable, so I decided to set the end of charge
-> current limit to 112 mA. Which allows the user to just put the device
-> on a table and to wait until it's fully charged without a need
-> to interfere the charging process with some action from the user.
+>
+> Amit, I'm about to pick this patch, it will collide with the yaml
+> conversion changes.
 
-Yeah OK thanks.
+Thanks for the headsup. I can fixup v3 when I respin.
 
-Tony
+However, I've always interpreted this binding as follows:
+- cooling-maps should be mandatory for active and passive trip types
+otherwise there will be no cooling
+- cooling-maps make no sense for critical trip type since we're
+invoking system shutdown
+- cooling-maps are optional for hot trip types.
+
+Is this your understanding too?
+
+We should be able to enforce this in YAML.
+
+Regards,
+Amit
