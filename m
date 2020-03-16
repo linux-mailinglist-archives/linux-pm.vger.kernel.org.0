@@ -2,209 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DF3187448
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 21:54:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC12187480
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 22:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732544AbgCPUy1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Mar 2020 16:54:27 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:44182 "EHLO mx1.riseup.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732486AbgCPUy1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 16 Mar 2020 16:54:27 -0400
-Received: from bell.riseup.net (unknown [10.0.1.178])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 48h7pB5vsHzFfCB;
-        Mon, 16 Mar 2020 13:54:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1584392066; bh=0K7hTg742mmDbjHrmpW+Rw87i8fHIYp9ohLIcA2oYic=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=F7yY6w0xob02U5xjgOgwriomdpAnX8PUvQSGoTVmd3Fx+GU+uKNfH05hUoTXqD6J6
-         0QCoL/qE4i5OYSblF92R3rL4oCe61ovufr5SeOYpFwNofHEIjUEoXwexlwc2pGearK
-         L7D258ZXkRrpANBPytU+pLeC7w6dsvo8h1G13ZoM=
-X-Riseup-User-ID: 568B88FCE0CE610BD520357C12E9668B8BB3C06EAAF5D57F9AB23955D82D4428
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by bell.riseup.net (Postfix) with ESMTPSA id 48h7pB25x3zJrcF;
-        Mon, 16 Mar 2020 13:54:26 -0700 (PDT)
-From:   Francisco Jerez <currojerez@riseup.net>
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-pm@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Pandruvada\, Srinivas" <srinivas.pandruvada@intel.com>,
-        chris.p.wilson@intel.com
-Subject: Re: [Intel-gfx] [PATCH 02/10] drm/i915: Adjust PM QoS response frequency based on GPU load.
-In-Reply-To: <87sgic9008.fsf@riseup.net>
-References: <20200310214203.26459-1-currojerez@riseup.net> <20200310214203.26459-3-currojerez@riseup.net> <158387916218.28297.4489489879582782488@build.alporthouse.com> <ac5fdd3c-bf47-60d3-edef-82d451266dcb@linux.intel.com> <878sk6acqs.fsf@riseup.net> <36854a07-2dd5-694c-4b9d-a3eddf8e33f9@linux.intel.com> <87sgic9008.fsf@riseup.net>
-Date:   Mon, 16 Mar 2020 13:54:28 -0700
-Message-ID: <875zf481h7.fsf@riseup.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="==-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+        id S1732624AbgCPVLA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Mar 2020 17:11:00 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:36176 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732567AbgCPVLA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Mar 2020 17:11:00 -0400
+Received: by mail-wm1-f67.google.com with SMTP id g62so19710252wme.1
+        for <linux-pm@vger.kernel.org>; Mon, 16 Mar 2020 14:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=Sv8KUD8zPF4Ir+GRQ+QKJjcC2L7cu/aF4wlwHEeIJbo=;
+        b=IXEpOUTNHS7sZ6cutzPW+cVhG0NmA8wCbuEQntuI51hOagKIcgBHVb1EcSQDRq+WDJ
+         FezIotv1tQ8WGa+/JgCCGZhb1EXKMn+4PWQOjj0rPEQ2hMhZ8J+64FHw5NP+B/ptV3rw
+         FCskGY/RBo3sfYwH1tkSO7PdHL6sb4oDLOr7j1PV24LN9tCrJuKe2GRLY0zrBOMmBPsw
+         3dRXA5oIOahoNB3JKDiLTae0qxmhnRSi9FHlpVhMqcNZxaBsi4LRT80S5m0VrZXeNIL5
+         h8wn7uVHjmY0drDQIrmxQuLisJcI82Ju8EHhW2SGywECyk9sQQOhRHLmrOf2KTiZ3EOA
+         Ipsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Sv8KUD8zPF4Ir+GRQ+QKJjcC2L7cu/aF4wlwHEeIJbo=;
+        b=URtVJ+aOXjXPL+KHkimnohHZAm9/ZSgThlhQ4rsfkJPGCztvXKyk/HOvAOAXFu8y7E
+         2IfFAzDH6sOi/54KmoF5txC71abGpUm860EwBcEcrhw3AWBmjutpSNRLpHFtjoGFaEqG
+         1AiZ1lxbuZgkx5KsnHMXprfe0uF8a9f3KBj7UlD1v5O0z5/NY0Jh8lv0lhpSFxS5DHFx
+         dwVgdnMuh6w5Ub0SVUzAXkufHYz6IIvWsRUGAv4JPBeP3KwmRTKUOLxgR36uUeL4fAny
+         ySHKhFgx/SaD0ojszsDMXG8eoksAGck8P/OVgZ9hcZqsqZu5vlYZq2cFD9cAmrGWpUfW
+         oTiQ==
+X-Gm-Message-State: ANhLgQ1+JBrj6U6Z3mcrMHkGg1H1UeOUzklMsovsq/s9zeJAiaZijVwd
+        fQtBiqoiGb6HywVEMy5AccYeqQ==
+X-Google-Smtp-Source: ADFU+vvKMiYLVnpoVxVZzZk6U/ujuWCjK9IDJxDZEprSfFethkUU22Vk4uu56DNfOsGKvD1EVUA9Nw==
+X-Received: by 2002:a1c:a714:: with SMTP id q20mr1022374wme.148.1584393058478;
+        Mon, 16 Mar 2020 14:10:58 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:5511:ddba:ffbc:a3c4])
+        by smtp.gmail.com with ESMTPSA id q10sm884045wrx.12.2020.03.16.14.10.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2020 14:10:57 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rjw@rjwysocki.net
+Cc:     ulf.hansson@linaro.org, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@kernel.org
+Subject: [PATCH RFC] cpuidle: consolidate calls to time capture
+Date:   Mon, 16 Mar 2020 22:08:43 +0100
+Message-Id: <20200316210843.11678-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---==-=-=
-Content-Type: multipart/mixed; boundary="=-=-="
+A few years ago, we changed the code in cpuidle to replace ktime_get()
+by a local_clock() to get rid of potential seq lock in the path and an
+extra latency.
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Meanwhile, the code evolved and we are getting the time in some other
+places like the power domain governor and in the future break even
+deadline proposal.
 
-Francisco Jerez <currojerez@riseup.net> writes:
+Unfortunately, as the time must be compared across the CPU, we have no
+other option than using the ktime_get() again. Hopefully, we can
+factor out all the calls to local_clock() and ktime_get() into a
+single one when the CPU is entering idle as the value will be reuse in
+different places.
 
-> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com> writes:
->[...]
->> Some time ago we entertained the idea of GPU "load average", where that=
-=20
->> was defined as a count of runnable requests (so batch buffers). How=20
->> that, more generic metric, would behave here if used as an input signal=
-=20
->> really intrigues me. Sadly I don't have a patch ready to give to you and=
-=20
->> ask to please test it.
->>
->> Or maybe the key is count of runnable contexts as opposed to requests,=20
->> which would more match the ELSP[1] idea.
->>
->[..]
-> This patch takes the rather conservative approach of limiting the
-> application of the response frequency PM QoS request to the more
-> restrictive set of cases where we are most certain that CPU latency
-> shouldn't be an issue, in order to avoid regressions.  But it might be
-> that you find the additional energy efficiency benefit from the more
-> aggressive approach to be worth the cost to a few execlists submission
-> latency-sensitive applications.  I'm trying to get some numbers
-> comparing the two approaches now, will post them here once I have
-> results so we can make a more informed trade-off.
->
+We can assume the time to go through the code path distance is small
+enough between ktime_get() call in the cpuidle_enter() function and
+the other users inspecting the value.
 
-I got some results from the promised comparison between the dual-ELSP
-utilization approach used in this series and the more obvious
-alternative of keeping track of the time that any request (or context)
-is in flight.  As expected there are quite a few performance
-improvements (numbers relative to this approach), however most of them
-are either synthetic benchmarks or off-screen variants of benchmarks
-(the corresponding on-screen variant of each benchmark below doesn't
-show a significant improvement):
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/base/power/domain_governor.c | 4 +++-
+ drivers/cpuidle/cpuidle.c            | 6 +++---
+ include/linux/cpuidle.h              | 1 +
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
- synmark/OglCSDof:                                                         =
-             XXX =C2=B10.15% x18 ->   XXX =C2=B10.22% x12          d=3D1.15=
-% =C2=B10.18%       p=3D0.00%
- synmark/OglDeferred:                                                      =
-             XXX =C2=B10.31% x18 ->   XXX =C2=B10.15% x12          d=3D1.16=
-% =C2=B10.26%       p=3D0.00%
- synmark/OglTexFilterAniso:                                                =
-             XXX =C2=B10.18% x18 ->   XXX =C2=B10.21% x12          d=3D1.25=
-% =C2=B10.19%       p=3D0.00%
- synmark/OglPSPhong:                                                       =
-             XXX =C2=B10.43% x18 ->   XXX =C2=B10.29% x12          d=3D1.28=
-% =C2=B10.38%       p=3D0.00%
- synmark/OglBatch0:                                                        =
-             XXX =C2=B10.40% x18 ->   XXX =C2=B10.53% x12          d=3D1.29=
-% =C2=B10.46%       p=3D0.00%
- synmark/OglVSDiffuse8:                                                    =
-             XXX =C2=B10.49% x17 ->   XXX =C2=B10.25% x12          d=3D1.30=
-% =C2=B10.41%       p=3D0.00%
- synmark/OglVSTangent:                                                     =
-             XXX =C2=B10.53% x18 ->   XXX =C2=B10.31% x12          d=3D1.31=
-% =C2=B10.46%       p=3D0.00%
- synmark/OglGeomPoint:                                                     =
-             XXX =C2=B10.56% x18 ->   XXX =C2=B10.15% x12          d=3D1.48=
-% =C2=B10.44%       p=3D0.00%
- gputest/plot3d:                                                           =
-             XXX =C2=B10.16% x18 ->   XXX =C2=B10.11% x12          d=3D1.50=
-% =C2=B10.14%       p=3D0.00%
- gputest/tess_x32:                                                         =
-             XXX =C2=B10.15% x18 ->   XXX =C2=B10.06% x12          d=3D1.59=
-% =C2=B10.13%       p=3D0.00%
- synmark/OglTexFilterTri:                                                  =
-             XXX =C2=B10.15% x18 ->   XXX =C2=B10.19% x12          d=3D1.62=
-% =C2=B10.17%       p=3D0.00%
- synmark/OglBatch3:                                                        =
-             XXX =C2=B10.57% x18 ->   XXX =C2=B10.33% x12          d=3D1.70=
-% =C2=B10.49%       p=3D0.00%
- synmark/OglBatch1:                                                        =
-             XXX =C2=B10.41% x18 ->   XXX =C2=B10.34% x12          d=3D1.81=
-% =C2=B10.38%       p=3D0.00%
- synmark/OglShMapVsm:                                                      =
-             XXX =C2=B10.53% x18 ->   XXX =C2=B10.38% x12          d=3D1.81=
-% =C2=B10.48%       p=3D0.00%
- synmark/OglTexMem128:                                                     =
-             XXX =C2=B10.62% x18 ->   XXX =C2=B10.29% x12          d=3D1.87=
-% =C2=B10.52%       p=3D0.00%
- phoronix/x11perf/test=3DScrolling 500 x 500 px:                           =
-                XXX =C2=B10.35% x6 ->   XXX =C2=B10.56% x12          d=3D2.=
-23% =C2=B10.52%       p=3D0.00%
- phoronix/x11perf/test=3D500px Copy From Window To Window:                 =
-                XXX =C2=B10.00% x3 ->   XXX =C2=B10.74% x12          d=3D2.=
-41% =C2=B10.70%       p=3D0.01%
- gfxbench/gl_trex_off:                                                     =
-              XXX =C2=B10.04% x3 ->   XXX =C2=B10.34% x12          d=3D2.59=
-% =C2=B10.32%       p=3D0.00%
- synmark/OglBatch2:                                                        =
-             XXX =C2=B10.85% x18 ->   XXX =C2=B10.21% x12          d=3D2.87=
-% =C2=B10.67%       p=3D0.00%
- glbenchmark/GLB27_EgyptHD_inherited_C24Z16_FixedTime_Offscreen:           =
-              XXX =C2=B10.35% x3 ->   XXX =C2=B10.84% x12          d=3D3.03=
-% =C2=B10.81%       p=3D0.01%
- glbenchmark/GLB27_TRex_C24Z16_Offscreen:                                  =
-              XXX =C2=B10.23% x3 ->   XXX =C2=B10.32% x12          d=3D3.09=
-% =C2=B10.32%       p=3D0.00%
- synmark/OglCSCloth:                                                       =
-             XXX =C2=B10.60% x18 ->   XXX =C2=B10.29% x12          d=3D3.76=
-% =C2=B10.50%       p=3D0.00%
- phoronix/x11perf/test=3DCopy 500x500 From Pixmap To Pixmap:               =
-                XXX =C2=B10.44% x3 ->   XXX =C2=B10.70% x12          d=3D4.=
-31% =C2=B10.69%       p=3D0.00%
+diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
+index daa8c7689f7e..bee97f7b7b8d 100644
+--- a/drivers/base/power/domain_governor.c
++++ b/drivers/base/power/domain_governor.c
+@@ -279,8 +279,10 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
+ 		}
+ 	}
+ 
++	dev = per_cpu(cpuidle_devices, smp_processor_id());
++
+ 	/* The minimum idle duration is from now - until the next wakeup. */
+-	idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, ktime_get()));
++	idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, dev->idle_start));
+ 	if (idle_duration_ns <= 0)
+ 		return false;
+ 
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index c149d9e20dfd..9db14581759b 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -206,7 +206,7 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct cpuidle_driver *drv,
+ 
+ 	struct cpuidle_state *target_state = &drv->states[index];
+ 	bool broadcast = !!(target_state->flags & CPUIDLE_FLAG_TIMER_STOP);
+-	ktime_t time_start, time_end;
++	ktime_t time_end;
+ 
+ 	/*
+ 	 * Tell the time framework to switch to a broadcast timer because our
+@@ -228,14 +228,14 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct cpuidle_driver *drv,
+ 	sched_idle_set_state(target_state);
+ 
+ 	trace_cpu_idle_rcuidle(index, dev->cpu);
+-	time_start = ns_to_ktime(local_clock());
++	dev->idle_start = ktime_get();
+ 
+ 	stop_critical_timings();
+ 	entered_state = target_state->enter(dev, drv, index);
+ 	start_critical_timings();
+ 
+ 	sched_clock_idle_wakeup_event();
+-	time_end = ns_to_ktime(local_clock());
++	time_end = ktime_get();
+ 	trace_cpu_idle_rcuidle(PWR_EVENT_EXIT, dev->cpu);
+ 
+ 	/* The cpu is no longer idle or about to enter idle. */
+diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+index ec2ef63771f0..112494658e01 100644
+--- a/include/linux/cpuidle.h
++++ b/include/linux/cpuidle.h
+@@ -89,6 +89,7 @@ struct cpuidle_device {
+ 	unsigned int		poll_time_limit:1;
+ 	unsigned int		cpu;
+ 	ktime_t			next_hrtimer;
++	ktime_t			idle_start;
+ 
+ 	int			last_state_idx;
+ 	u64			last_residency_ns;
+-- 
+2.17.1
 
-There aren't as many regressions (numbers relative to upstream
-linux-next kernel), they're mostly 2D test-cases, however they are
-substantially worse in absolute value:
-
- phoronix/jxrendermark/rendering-test=3D12pt Text LCD/rendering-size=3D128x=
-128:              XXX =C2=B10.30% x26 ->  XXX =C2=B15.71% x26        d=3D-2=
-3.15% =C2=B13.11%       p=3D0.00%
- phoronix/jxrendermark/rendering-test=3DLinear Gradient Blend/rendering-siz=
-e=3D128x128:      XXX =C2=B10.30% x26 ->  XXX =C2=B14.32% x26        d=3D-2=
-1.34% =C2=B12.41%       p=3D0.00%
- phoronix/x11perf/test=3D500px Compositing From Pixmap To Window:          =
-               XXX =C2=B115.46% x26 -> XXX =C2=B112.76% x26       d=3D-19.0=
-5% =C2=B113.15%       p=3D0.00%
- phoronix/jxrendermark/rendering-test=3DTransformed Blit Bilinear/rendering=
--size=3D128x128:  XXX =C2=B10.20% x26 ->  XXX =C2=B13.82% x27         d=3D-=
-5.07% =C2=B12.57%       p=3D0.00%
- phoronix/gtkperf/gtk-test=3DGtkDrawingArea - Pixbufs:                     =
-                XXX =C2=B12.81% x26 ->  XXX =C2=B12.10% x26         d=3D-3.=
-59% =C2=B12.45%       p=3D0.00%
- warsow/benchsow:                                                          =
-              XXX =C2=B10.61% x26 ->  XXX =C2=B11.41% x27         d=3D-2.45=
-% =C2=B11.07%       p=3D0.00%
- synmark/OglTerrainFlyInst:                                                =
-              XXX =C2=B10.44% x25 ->  XXX =C2=B10.74% x25         d=3D-1.24=
-% =C2=B10.60%       p=3D0.00%
-
-There are some things we might be able to do to get some of the
-additional improvement we can see above without hurting
-latency-sensitive workloads, but it's going to take more effort, the
-present approach of using the dual-ELSP utilization seems like a good
-compromise to me for starters.
-
->[...]
-
---=-=-=--
-
---==-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEAREIAB0WIQST8OekYz69PM20/4aDmTidfVK/WwUCXm/nhAAKCRCDmTidfVK/
-W+mgAP9pnhAvLhgEBIpq9WrGKudZ96NiUo26cGioSAMMXkweSQD+KhCmK6fQg9Sf
-o7RPzJtoZEU1pp1MCyzIV2WHXFajaVc=
-=DMcu
------END PGP SIGNATURE-----
---==-=-=--
