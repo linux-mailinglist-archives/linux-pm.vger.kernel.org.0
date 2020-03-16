@@ -2,170 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 543931864E3
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 07:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA5D186596
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Mar 2020 08:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729386AbgCPGAi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Mar 2020 02:00:38 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:45801 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729363AbgCPGAh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Mar 2020 02:00:37 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200316060035epoutp03c78845a09374fece2f98605e8ffc672f~8s2meWeSJ1793017930epoutp03o
-        for <linux-pm@vger.kernel.org>; Mon, 16 Mar 2020 06:00:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200316060035epoutp03c78845a09374fece2f98605e8ffc672f~8s2meWeSJ1793017930epoutp03o
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1584338435;
-        bh=2Kv+w3PNCQWlj7hMQ3lPJvwlLeMJHkR1BiwXPydc7rw=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=SDO+TdYPcL+44Bmo9O1e8tSztlY20ABa79FfIaB2AMkdatblVSzchq+P4mSVu0J3q
-         dGknKAXVxKmc5qDWgkTYhGZcZlmPUGV0gcsqvZwyrk42Dpdon/SOG4uCD7g+eEhMBR
-         bWKRrtjUtPX6TATnxBUCOXDwAd0y3BTyPhls4Mm0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200316060033epcas1p25f9fcf0f932e4dcb8ed8d5a2639b5aa2~8s2lZHDLS0437604376epcas1p2t;
-        Mon, 16 Mar 2020 06:00:33 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.152]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 48glyk4dQlzMqYlm; Mon, 16 Mar
-        2020 06:00:30 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0C.8F.04140.9F51F6E5; Mon, 16 Mar 2020 15:00:25 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200316060024epcas1p22426fb960f9d63d3e54178e0a7f7161d~8s2cemkrD0437704377epcas1p2X;
-        Mon, 16 Mar 2020 06:00:24 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200316060024epsmtrp12481039a97564aae072b9d17e401300c~8s2cbFH2Y2667026670epsmtrp1j;
-        Mon, 16 Mar 2020 06:00:24 +0000 (GMT)
-X-AuditID: b6c32a36-412c19c00000102c-d6-5e6f15f9259a
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4D.EB.04024.8F51F6E5; Mon, 16 Mar 2020 15:00:24 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200316060024epsmtip2997fd94dd47d0296cf99fd7f3550fd78~8s2cM7Ch32560725607epsmtip2q;
-        Mon, 16 Mar 2020 06:00:24 +0000 (GMT)
-Subject: Re: [PATCH v2] PM / devfreq: Fix handling dev_pm_qos_remove_request
- result
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        dAN cARPENTER <DAN.CARPENTER@ORACLE.COM>
-Cc:     mYUNGjOO hAM <MYUNGJOO.HAM@SAMSUNG.COM>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Adam Ford <aford173@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <vireshk@kernel.org>, linux-imx@nxp.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <2b49cbce-7d3f-3c61-5ae8-98b5e7580553@samsung.com>
-Date:   Mon, 16 Mar 2020 15:09:12 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1729939AbgCPHYg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Mar 2020 03:24:36 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:44565 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729638AbgCPHYg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Mar 2020 03:24:36 -0400
+X-UUID: edeebb8b7704427090312173cae9ccee-20200316
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=SME2J3snLnpUKDZ+/mhvA9A9BXydvq2FK3+5529r+Aw=;
+        b=TEuM7M9480zmjH6HOjHEjnQC2v3iyUJKS1vHVOqQ4N0JqI67LVIPLJaknbBtkI2O81gvICQ8uvzTf+4E+LinJUlyXkSk9Tx+P65Y8EIo8p7w1npEbYmKrdygg1GCWKL9liNej+Y4IFX/SXNL9pnT+VRrChi6TPagiBGz9snH55Q=;
+X-UUID: edeebb8b7704427090312173cae9ccee-20200316
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 628648822; Mon, 16 Mar 2020 15:24:29 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 16 Mar 2020 15:22:50 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 16 Mar 2020 15:21:29 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v7 0/3] PM / AVS: SVS: Introduce SVS engine
+Date:   Mon, 16 Mar 2020 15:23:14 +0800
+Message-ID: <20200316072316.7156-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <06fc3c3d0a8bca1bce104ca9d6a7d5ff94bdf9ab.1584027085.git.leonard.crestez@nxp.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHJsWRmVeSWpSXmKPExsWy7bCmru5P0fw4g4tt3BZ3bp9mtnj9bzqL
-        xfnzG9gtzja9YbdYcfcjq8Wmx9dYLbp+rWS2+Nx7hNHi84bHjBa3G1ewWZw5fYnVYvODY2wO
-        PB6zGy6yeOycdZfdY9OqTjaPzUvqPTa+28Hk8fHpLRaPLVfbWTz6tqxi9Pi8SS6AMyrbJiM1
-        MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoZCWFssScUqBQ
-        QGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgWWBXnFibnFpXrpecn6ulaGBgZEpUGFCdkbnpMyC
-        P3wVd++INDBO5Oli5OSQEDCROP24kbWLkYtDSGAHo8S9B4+hnE+MEhMXfmCEcL4xSsw5f4cN
-        pqXx+U12iMReRonpqw4wQzjvGSXO3TrKCFIlLBAq0bRnLguILSIQKXF+434mkCJmgTdMEnfv
-        3WIGSbAJaEnsf3EDbCy/gKLE1R+PwZp5Bewk9vf8Barh4GARUJWYuiEbJCwqECZxclsLVImg
-        xMmZT8DmcwrESfzsWw1mMwuIS9x6Mp8JwpaX2P52DjPE1ZvYJY5MzQQZKSHgItH4mwUiLCzx
-        6vgWdghbSuJlfxuUXS2x8uQRNpCTJQQ6GCW27L/ACpEwlti/dDITyBxmAU2J9bv0IcKKEjt/
-        z2WEWMsn8e5rDyvEKl6JjjYhiBJlicsP7jJB2JISi9s72SYwKs1C8swsJA/MQvLALIRlCxhZ
-        VjGKpRYU56anFhsWGCFH9SZGcFrWMtvBuOiczyFGAQ5GJR5eibS8OCHWxLLiytxDjBIczEoi
-        vB012XFCvCmJlVWpRfnxRaU5qcWHGE2BQT2RWUo0OR+YM/JK4g1NjYyNjS1MDM1MDQ2VxHmn
-        Xs+JExJITyxJzU5NLUgtgulj4uCUamBc65f1/83aW0ELzuZNPf1xrd/FPeL6lQ8cp/31yllh
-        FOj6eU5Gr3LYjotSWh9PekuemjVl8b0TTrOqj/c9iDOOLcqOiTt3sMh2FVdwQOY8YYkTc5qr
-        uk2cnB6I2m20yM7I3FZZLtr/bd+WtuK/cUK5q8J39UyZ+ej2rYksxS1Ctkq2xRN37nulxFKc
-        kWioxVxUnAgAkhIITuEDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJIsWRmVeSWpSXmKPExsWy7bCSvO4P0fw4g0vH+S3u3D7NbPH633QW
-        i/PnN7BbnG16w26x4u5HVotNj6+xWnT9Wsls8bn3CKPF5w2PGS1uN65gszhz+hKrxeYHx9gc
-        eDxmN1xk8dg56y67x6ZVnWwem5fUe2x8t4PJ4+PTWyweW662s3j0bVnF6PF5k1wAZxSXTUpq
-        TmZZapG+XQJXRuekzII/fBV374g0ME7k6WLk5JAQMJFofH6TvYuRi0NIYDejxLIF39khEpIS
-        0y4eZe5i5ACyhSUOHy6GqHnLKNE9oZ0RpEZYIFSiac9cFhBbRCBSYvbfw8wgRcwCb5gk2va3
-        M4MkhAQ2Mkp8f+wFYrMJaEnsf3GDDcTmF1CUuPrjMdggXgE7if09f8GWsQioSkzdkA0SFhUI
-        k9i55DETRImgxMmZT8B2cQrESfzsWw1mMwuoS/yZd4kZwhaXuPVkPhOELS+x/e0c5gmMwrOQ
-        tM9C0jILScssJC0LGFlWMUqmFhTnpucWGxYY5qWW6xUn5haX5qXrJefnbmIER6iW5g7Gy0vi
-        DzEKcDAq8fBKpOXFCbEmlhVX5h5ilOBgVhLh7ajJjhPiTUmsrEotyo8vKs1JLT7EKM3BoiTO
-        +zTvWKSQQHpiSWp2ampBahFMlomDU6qBMd3k9STeP2eZjoqZJplU5s/Njlc9o8vtJKbL1q+e
-        s1jfceJim2P3RJa8j+Vw+um9rXmi74fafJPV5yzXG8Z3vPeIS3K868Ez5XFZ8zWGOUX73P4y
-        pHDcc1L9O23J549bi7KMg869PxL24sCq+Jo9i5fP8lKoVgsKfJPA2cOqZ7dEzfGsZSKPEktx
-        RqKhFnNRcSIAYOoAtMwCAAA=
-X-CMS-MailID: 20200316060024epcas1p22426fb960f9d63d3e54178e0a7f7161d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200312153613epcas1p14982cbd7b5e327f8a13a82c95b5bfce4
-References: <CGME20200312153613epcas1p14982cbd7b5e327f8a13a82c95b5bfce4@epcas1p1.samsung.com>
-        <06fc3c3d0a8bca1bce104ca9d6a7d5ff94bdf9ab.1584027085.git.leonard.crestez@nxp.com>
+Content-Type: text/plain
+X-TM-SNTS-SMTP: FAAF471B3CEBE181E2299E54C03D13A8F639F8379D2227AA0B0EE8D05A49E7012000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/13/20 12:36 AM, Leonard Crestez wrote:
-> The dev_pm_qos_remove_request function can return 1 if
-> "aggregated constraint value has changed" so only negative values should
-> be reported as errors.
-> 
-> Fixes: 27dbc542f651 ("PM / devfreq: Use PM QoS for sysfs min/max_freq")
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> Cc: stable@vger.kernel.org
-> ---
->  drivers/devfreq/devfreq.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> Changes since v1:
-> * Add fixes and cc: stable, drop empty line in message.
-> Link to v1: https://patchwork.kernel.org/patch/11433131/
-> 
-> I'm not sure this meet that stable kernel standard of "real bug that
-> bothers people" because all this fixes is a spurious dev_warn on device
-> removal. But Sasha Levin's script seem to collect a lot of low-priority
-> fixes anyway.
-> 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 5c481ad1cfc7..6fecd11dafdd 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -703,17 +703,17 @@ static void devfreq_dev_release(struct device *dev)
->  		dev_warn(dev->parent,
->  			"Failed to remove min_freq notifier: %d\n", err);
->  
->  	if (dev_pm_qos_request_active(&devfreq->user_max_freq_req)) {
->  		err = dev_pm_qos_remove_request(&devfreq->user_max_freq_req);
-> -		if (err)
-> +		if (err < 0)
->  			dev_warn(dev->parent,
->  				"Failed to remove max_freq request: %d\n", err);
->  	}
->  	if (dev_pm_qos_request_active(&devfreq->user_min_freq_req)) {
->  		err = dev_pm_qos_remove_request(&devfreq->user_min_freq_req);
-> -		if (err)
-> +		if (err < 0)
->  			dev_warn(dev->parent,
->  				"Failed to remove min_freq request: %d\n", err);
->  	}
->  
->  	if (devfreq->profile->exit)
-> 
+MS4gU1ZTIGRyaXZlciB1c2UgT1BQIGFkanVzdCBldmVudCBpbiBbMV0gdG8gdXBkYXRlIE9QUCB0
+YWJsZSB2b2x0YWdlIHBhcnQuDQoyLiBTVlMgZHRzIG5vZGUgcmVmZXJzIHRvIENQVSBvcHAgdGFi
+bGUgWzJdIGFuZCBHUFUgb3BwIHRhYmxlIFszXS4NCjMuIFNWUyBhbmQgdGhlcm1hbCBkdHMgdXNl
+IHRoZSBzYW1lIHRoZXJtYWwgZWZ1c2UgWzRdLg0KNC4gU1ZTIGR0cyBuZWVkcyBQTUlDIHJlZ3Vs
+YXRvciBbNV0uDQogDQpbMV0gaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wYXRjaC8xMTE5
+MzUxMy8NClsyXSBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMzA0OTM1Lw0K
+WzNdIGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcGF0Y2gvMTE0MjMwMDkvDQpbNF0gaHR0
+cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wYXRjaC8xMTMxNjQ5NS8NCls1XSBodHRwczovL3Bh
+dGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMjg0NjE3Lw0KDQpwZW5kaW5nIGRpc2N1c3Npb24g
+b24gdjc6DQotIFNWUyBzdWItbm9kZSBhcmNoaXRlY3R1cmUgcGVuZGluZyBkaXNjdXNzaW9uIGlu
+IGJlbG93IHBhdGNoLg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvcGF0Y2h3b3JrL3BhdGNoLzEx
+NzU5OTQvDQoNCmNoYW5nZXMgc2luY2UgdjY6DQotIHN2c19pc3JfaGFuZGxlcigpIGZ1bmN0aW9u
+IGlzIG1lcmdlZCBpbnRvIHN2c19pc3IoKS4NCi0gSW4gc3ZzX2lzcigpLCB3ZSBmaW5kIHdoaWNo
+IGJhbmsgZmlyZXMgaW50ZXJydXB0IGZpcnN0IGFuZCBjaGVjayB0aGlzIGJhbmsNCmlzIHN1c3Bl
+bmRlZCBvciBub3Qgc2Vjb25kbHkuDQotIFVzZSBtZW1kdXBfdXNlcl9udWwoKSBpbnN0ZWFkIG9m
+IGNvcHlfZnJvbV91c2VyKCkuDQotIFVzZSBVMzJfTUFYIGluc3RlYWQgb2YgIih1MzIpLTEuDQot
+IFNWUyBuZWVkcyB0byBkbyByZXN1bWUgYWZ0ZXIgdGhlcm1hbCByZXN1bWUgaW4gc3lzdGVtIHN1
+c3BlbmQgZmxvdy4NClRoZXJlZm9yZSwgY2hhbmdlIFNWUyBwbV9vcHMgdG8gcHJlcGFyZS9jb21w
+bGV0ZS4NCi0gQWRkIGhpZ2ggdGVtcGVyYXR1cmUgdm9sdGFnZXMgY29tcGVuc2F0aW9uIGNvZGVz
+Lg0KLSBBZGQgaXJxZmxhZ3MgaW4gInN0cnVjdCBzdnNfcGxhdGZvcm0iIGZvciBzdXBwb3J0aW5n
+IGRpZmZlcmVudCBTVlMgSFcgc2V0dGluZy4NCi0gU2V0IHNpZ25lZC1vZmYgdm9sdGFnZXMgdG8g
+c3lzdGVtIHdoZW4gc3lzdGVtIHN1c3BlbmQuDQotIEFkZCBTVlMgSFcgcmVzZXQgZmxhZyBmb3Ig
+ZnV0dXJlIFNWUyBIVyBzdXBwb3J0Lg0KLSBDb2Rpbmcgc3R5bGUgcmVmaW5lbWVudC4NCg0KUm9n
+ZXIgTHUgKDMpOg0KICBkdC1iaW5kaW5nczogc29jOiBhZGQgbXRrIHN2cyBkdC1iaW5kaW5ncw0K
+ICBhcm02NDogZHRzOiBtdDgxODM6IGFkZCBzdnMgZGV2aWNlIGluZm9ybWF0aW9uDQogIFBNIC8g
+QVZTOiBTVlM6IEludHJvZHVjZSBTVlMgZW5naW5lDQoNCiAuLi4vZGV2aWNldHJlZS9iaW5kaW5n
+cy9wb3dlci9tdGstc3ZzLnR4dCAgICAgfCAgIDc2ICsNCiBhcmNoL2FybTY0L2Jvb3QvZHRzL21l
+ZGlhdGVrL210ODE4My1ldmIuZHRzICAgfCAgIDE2ICsNCiBhcmNoL2FybTY0L2Jvb3QvZHRzL21l
+ZGlhdGVrL210ODE4My5kdHNpICAgICAgfCAgIDQxICsNCiBkcml2ZXJzL3Bvd2VyL2F2cy9LY29u
+ZmlnICAgICAgICAgICAgICAgICAgICAgfCAgIDEwICsNCiBkcml2ZXJzL3Bvd2VyL2F2cy9NYWtl
+ZmlsZSAgICAgICAgICAgICAgICAgICAgfCAgICAxICsNCiBkcml2ZXJzL3Bvd2VyL2F2cy9tdGtf
+c3ZzLmMgICAgICAgICAgICAgICAgICAgfCAyMDc0ICsrKysrKysrKysrKysrKysrDQogaW5jbHVk
+ZS9saW51eC9wb3dlci9tdGtfc3ZzLmggICAgICAgICAgICAgICAgIHwgICAyMyArDQogNyBmaWxl
+cyBjaGFuZ2VkLCAyMjQxIGluc2VydGlvbnMoKykNCiBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1l
+bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL210ay1zdnMudHh0DQogY3JlYXRlIG1v
+ZGUgMTAwNjQ0IGRyaXZlcnMvcG93ZXIvYXZzL210a19zdnMuYw0KIGNyZWF0ZSBtb2RlIDEwMDY0
+NCBpbmNsdWRlL2xpbnV4L3Bvd2VyL210a19zdnMuaA0KDQo=
 
-Applied it. Thanks.
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
