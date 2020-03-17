@@ -2,61 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD6318834F
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Mar 2020 13:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 977D71884E3
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Mar 2020 14:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726828AbgCQMLi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Mar 2020 08:11:38 -0400
-Received: from sonic307-2.consmr.mail.ne1.yahoo.com ([66.163.190.121]:39015
-        "EHLO sonic307-2.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726826AbgCQMLh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Mar 2020 08:11:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1584447096; bh=kcevCRoll2+Bsa3FDERpIV72LVcB1A4YV1b5N2AWYBk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=GNqfjO2RF+Awy5YSepXh/s9YmsCdcubt4wpHexTEPR8CJG9d9Dd9fQqcoJkVT0ILu/Ku4bnvjoxkaCJaICKnJZQQYAxHWZ7sotW8i+gxuirPBN2ptC1mcN1LrgOwzgVoBT1LbBuY7v7uxoaWOPgBLlkONoCUyVJGE5TILKUam+G393XKkY/3Ypz295vJBwmv2d7GeGFFMl3YzzM1mYDeltTW6CZElVXbD6prQlxFhgPsWENclSoz3k5ZQ5gkvF2Kwa3X89e+X5XrPEXyrmnAeMeCahD7uL073TB4lQiga+VkQWlgoI0Z3Ueds0xvJrKjk6bM6wjzpfPP2ZCvaVaodQ==
-X-YMail-OSG: MJW.iqcVM1kWbldJ6GaHhjTYpBQP4yD81p3D3IidKw2SRO_3qLxYTqc.7pX6QNZ
- KZsUkf3Xq5Wn8QiqH3Y5l2cER_tJNRjJCYyhWs5iq52D4N30ylC12N4FBcGDWCHUrUjoT_4WC1D3
- R1epjUUYntdj8Nk_he1A7q87btLbY_JiQyyXPczXpmon3.QXM8KYuXe9CzCl5eg7eE54pvWLb0ol
- rmPAfXrK3PcJQZKWEIF524qicNmU1luZkIS4DX6zog7EhmOOoBddGAbFl_q9Cd7qGg2mtzPlAN8O
- krUbQBmXcYPRd8XXD.PAhv.SEU5dHXIUtxin2OqxQl8YBNevAuGKZ.OmG5_VqFYp7xHrEK9RrZgn
- dh7oTrRZz5oRm0vAHPAW4FcPyRUVjERXY3i1egaBAGfxiwHwXI2xgQl9WvAW1apJZO4bwpRCQtsf
- gekm_am7zZMpMcUvARVjR0tRaMiv0OSQnUqztDykMX0nJpC98tjcmmYgCgXuLzrJWeS2XyvBgpEV
- tM4bDuRtQW2YoudCaPCiUpExOK328xpsikUY8_BXjtXPuIE.KY9KDd6VLZwC.A7h4zg3m6l0wzjx
- _TPJlAMNbWWg4PKKfQGss1lvY4cR0mfppMvAgqkl8NJfYQTW8ach82KNm39Jj6AZ2.mD48lUIr7q
- 9mfCTGYLTQ1Gs5uoEGhyDM2KGa5t3Pb0bZzcikC8lebn.HkY4YOqIPZcy3iaNF0CZAHjT2.7djrl
- KlIcZtfDL012EoP9PIIx4g8Omfg9SXIM4WF5zgakilU_XwTKXJSUTQnRGVkekYgt4JlMbGDqKSF2
- ACtivPpvvLbGvbq6nGZM_mYduEMiUfErn373knAACltVmuEQ11gOTJYXVRb7xVdRMTMLZUct0RNR
- O5DNiJ4MOAOJoXGZj.mRXLIwIxZa9B5E0AYNA9iLk0zM12dJvcHqy5OKNfacDf0_iijcDsHzx3bF
- YOiCyiFLkfzxvXN3ca0OPkuyZBUc3d0PvF1zCE_ZGAmo7umXOKsvdiEeqCD.kYNQsClQxV0sEwG6
- 59cX4KWhi.xXOHQ1BKZxe8ykEJ.JQXSFkdeH_sY7HFi8gfnjm5.EM0yDOSnZztywHj1gGaTtbhpM
- 16QDWrYtCCes9cmPOkEbqNTaEQDdKImJhK_Lb4YsNsp0_qAi3Pvrd_0aYphPHpkxV8YrqtRmG9Cs
- J..NzyIxX5pN165pNiZm.qu9raTa0i2sUIWnrnN8K2QDNIWO1rFT4WlKwJFc_owm8NG2cGJrgaza
- NjiRhXaDepl1rKPFh5VjBgg9llZSttaL_jCtz7zaLeRajW1R2pSin.A6mUIm7flXsYULyJovhPVd
- ULJ0ULhINy_scPTyYMOs2Ibh4m8TRnzLP
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Tue, 17 Mar 2020 12:11:36 +0000
-Date:   Tue, 17 Mar 2020 12:09:35 +0000 (UTC)
-From:   Stephen Li <stenn6@gabg.net>
-Reply-To: stephli947701@gmail.com
-Message-ID: <518482929.1810933.1584446975070@mail.yahoo.com>
-Subject: REF
+        id S1726730AbgCQNLM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Mar 2020 09:11:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37820 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726740AbgCQNK4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Mar 2020 09:10:56 -0400
+Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D6C3620770;
+        Tue, 17 Mar 2020 13:10:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584450656;
+        bh=YcuIoVrIQeXiuSD1j/Q1Lk0qQ1T1L/MGqpKL3q2kgPE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IcuEk5UvdTtgQPs7Io6jULVaHJVkCLU/zHbTq0oqrBwW/D/cKjSEoWtWxd+YhhLXk
+         B/FevolAtqO81SIqhZ/F73qyB/NPiLuKpSDQYQvO3t/qwbmLe/qamZUUhl28qWmSS2
+         8K5MJOGjJDqxW7WdgLywez4tn8tuWN4jpAQhG/3M=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jEBzh-0006S5-Kz; Tue, 17 Mar 2020 14:10:53 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Ben Peled <bpeled@marvell.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH 05/12] docs: dt: fix references to ap806-system-controller.txt
+Date:   Tue, 17 Mar 2020 14:10:44 +0100
+Message-Id: <cf60ef88712e4f46f4e4bf40b2c646451d921827.1584450500.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <cover.1584450500.git.mchehab+huawei@kernel.org>
+References: <cover.1584450500.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <518482929.1810933.1584446975070.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15342 YMailNodin Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+ap806-system-controller.txt was renamed to ap80x-system-controller.txt.
 
+Update its references accordingly.
 
-Greetings,
-I was searching through a local business directory when I found your
-profile. I am Soliciting On-Behalf of my private client who is
-interested in having a serious business investment in your country. If
-you have a valid business, investment or project he can invest
-back to me for more details. Your swift response is highly needed.
-Sincerely
-Stephen Li
-Please response back to me with is my private email below for more details
-stephli947701@gmail.com
+Fixes: 2537831bbc19 ("dt-bindings: ap80x: replace AP806 with AP80x")
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/devicetree/bindings/gpio/gpio-mvebu.txt        | 2 +-
+ Documentation/devicetree/bindings/thermal/armada-thermal.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-mvebu.txt b/Documentation/devicetree/bindings/gpio/gpio-mvebu.txt
+index 2e097b57f170..0fc6700ed800 100644
+--- a/Documentation/devicetree/bindings/gpio/gpio-mvebu.txt
++++ b/Documentation/devicetree/bindings/gpio/gpio-mvebu.txt
+@@ -14,7 +14,7 @@ Required properties:
+ 
+     "marvell,armada-8k-gpio" should be used for the Armada 7K and 8K
+     SoCs (either from AP or CP), see
+-    Documentation/devicetree/bindings/arm/marvell/ap806-system-controller.txt
++    Documentation/devicetree/bindings/arm/marvell/ap80x-system-controller.txt
+     for specific details about the offset property.
+ 
+ - reg: Address and length of the register set for the device. Only one
+diff --git a/Documentation/devicetree/bindings/thermal/armada-thermal.txt b/Documentation/devicetree/bindings/thermal/armada-thermal.txt
+index f3b441100890..b0bee7e42038 100644
+--- a/Documentation/devicetree/bindings/thermal/armada-thermal.txt
++++ b/Documentation/devicetree/bindings/thermal/armada-thermal.txt
+@@ -12,7 +12,7 @@ Required properties:
+ 
+ Note: these bindings are deprecated for AP806/CP110 and should instead
+ follow the rules described in:
+-Documentation/devicetree/bindings/arm/marvell/ap806-system-controller.txt
++Documentation/devicetree/bindings/arm/marvell/ap80x-system-controller.txt
+ Documentation/devicetree/bindings/arm/marvell/cp110-system-controller.txt
+ 
+ - reg: Device's register space.
+-- 
+2.24.1
+
