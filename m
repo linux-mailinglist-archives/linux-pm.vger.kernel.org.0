@@ -2,118 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6754818917E
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Mar 2020 23:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B26EE18925B
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 00:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727136AbgCQWap (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Mar 2020 18:30:45 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:35075 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727082AbgCQWao (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Mar 2020 18:30:44 -0400
-Received: by mail-pf1-f195.google.com with SMTP id u68so12747831pfb.2
-        for <linux-pm@vger.kernel.org>; Tue, 17 Mar 2020 15:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=axtens.net; s=google;
-        h=from:to:subject:in-reply-to:references:date:message-id:mime-version;
-        bh=wPJg6k1Sfn4B+Mn0ckVM+kQDp/J12ZPy70SP4OqLIKc=;
-        b=a4AYWaPYTV1Ov4C4bMzAohMy1SC9tLz+W2ucVsXcKXrISG2pEufjEu65pVsU1Ulzxc
-         SIInJL8CAWvEzvc4bd9aGw48Zr0Q1cHy+J5QxTenCh7Wo/xUBrzI0zUgcp71syQ4Ud38
-         jykLe4l8oLtY3FBM1DHX2IV9hs8tkHyakVKQw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=wPJg6k1Sfn4B+Mn0ckVM+kQDp/J12ZPy70SP4OqLIKc=;
-        b=DGyZUQFitGXva/nWH52vyDYp7Mn5yNnTp4eH0TUxVzWoptanxtmEuR3qkS3n2AH8uD
-         ybKKFeGJ5Uk0Vr9Og2ZND2R1afVIKRpeHyMgkOCmfLstSABr7wvfbx4qDYdCUyIO7n6A
-         z7BoVQ+kldj0mmdgS+W8gO14m+KDypXAAeiCv5q6zzPYZqO4X4csjW/sfkIPj/cysfn+
-         WAPOP1Frz0xOpT0jsSwvannlOmjOg+DmPlRWend+UEc8tJ6LJuB8TW1bjnsjR1bUw3fY
-         t3PstKmaLu2/RE/7ODpWa6H6BrU0XJvzxBamvjZkAmmfy1WtxivPvsji2oSHxiIOZy64
-         gbNQ==
-X-Gm-Message-State: ANhLgQ3JN8/+faTqEAhfiaO/Yxz7+YjdUvVDjS9ptR2ABqWNffZakpsy
-        /9qjvutUZ3AnY8bdohIimsTEGw==
-X-Google-Smtp-Source: ADFU+vtJ/d67T1c/j3elk3aQsSMEmbYNSCFaYEz7RmgX8uPiCI1o36kNu92JJiiS8LO+Qa1lkIqiog==
-X-Received: by 2002:a63:741c:: with SMTP id p28mr1255502pgc.402.1584484243489;
-        Tue, 17 Mar 2020 15:30:43 -0700 (PDT)
-Received: from localhost (2001-44b8-111e-5c00-11e1-e7cb-3c10-05d6.static.ipv6.internode.on.net. [2001:44b8:111e:5c00:11e1:e7cb:3c10:5d6])
-        by smtp.gmail.com with ESMTPSA id a2sm348002pjq.20.2020.03.17.15.30.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2020 15:30:42 -0700 (PDT)
-From:   Daniel Axtens <dja@axtens.net>
-To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, psampat@linux.ibm.com,
-        pratik.r.sampat@gmail.com, ego@linux.vnet.ibm.com
-Subject: Re: [PATCH] cpufreq: powernv: Fix frame-size-overflow in powernv_cpufreq_work_fn
-In-Reply-To: <20200316135743.57735-1-psampat@linux.ibm.com>
-References: <20200316135743.57735-1-psampat@linux.ibm.com>
-Date:   Wed, 18 Mar 2020 09:30:39 +1100
-Message-ID: <87fte6obqo.fsf@dja-thinkpad.axtens.net>
+        id S1726765AbgCQX7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Mar 2020 19:59:41 -0400
+Received: from mga04.intel.com ([192.55.52.120]:56036 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726680AbgCQX7l (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Mar 2020 19:59:41 -0400
+IronPort-SDR: M7LcisOeT+FHLeRI3bZH8N20JJBot5GRnGmwCEKqY+hj5k39BxfmVrs2GFQIRrhuZZLfR9Z7N7
+ oO6Fy7+G5NpA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2020 16:59:40 -0700
+IronPort-SDR: nydFe6WME0U7Kftf6hG2lY3kbmTmusYylPP5BcaWcfwG9mdu2/oXqaPy4Ryfh6P+iMAZHUd7Ze
+ C/iSplQHwUUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,565,1574150400"; 
+   d="scan'208";a="263206767"
+Received: from orsmsx102.amr.corp.intel.com ([10.22.225.129])
+  by orsmga002.jf.intel.com with ESMTP; 17 Mar 2020 16:59:40 -0700
+Received: from orsmsx151.amr.corp.intel.com (10.22.226.38) by
+ ORSMSX102.amr.corp.intel.com (10.22.225.129) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Tue, 17 Mar 2020 16:59:40 -0700
+Received: from orsmsx109.amr.corp.intel.com ([169.254.11.100]) by
+ ORSMSX151.amr.corp.intel.com ([169.254.7.134]) with mapi id 14.03.0439.000;
+ Tue, 17 Mar 2020 16:59:39 -0700
+From:   "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
+To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "currojerez@riseup.net" <currojerez@riseup.net>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
+CC:     "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>
+Subject: Re: [PATCH 07/10] cpufreq: intel_pstate: Implement VLP controller
+ for HWP parts.
+Thread-Topic: [PATCH 07/10] cpufreq: intel_pstate: Implement VLP controller
+ for HWP parts.
+Thread-Index: AQHV9yVZzfN0ydxLQk2N+RiJ1IPVFahN90kA
+Date:   Tue, 17 Mar 2020 23:59:39 +0000
+Message-ID: <40db3c86c68abfab406618e2424787c18c119c87.camel@intel.com>
+References: <20200310214203.26459-1-currojerez@riseup.net>
+         <20200310214203.26459-8-currojerez@riseup.net>
+In-Reply-To: <20200310214203.26459-8-currojerez@riseup.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.34.2 (3.34.2-1.fc31) 
+x-originating-ip: [10.135.36.221]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7B64E34E94D4384A9569063FFDA9EA9F@intel.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Pratik,
-
-Thanks.
-
-I have checked:
-
- - for matching puts/gets
- - that all the '.' to '->' conversions, aud uses of '&' check out
- - that the Snowpatch checks pass (https://patchwork.ozlabs.org/patch/1255580/)
-
-On that basis:
-
-Reviewed-by: Daniel Axtens <dja@axtens.net>
-
-Regards,
-Daniel
-
-> The patch avoids allocating cpufreq_policy on stack hence fixing frame
-> size overflow in 'powernv_cpufreq_work_fn'
->
-> Fixes: 227942809b52 ("cpufreq: powernv: Restore cpu frequency to policy->cur on unthrottling")
-> Signed-off-by: Pratik Rajesh Sampat <psampat@linux.ibm.com>
-> ---
->  drivers/cpufreq/powernv-cpufreq.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-> index 56f4bc0d209e..20ee0661555a 100644
-> --- a/drivers/cpufreq/powernv-cpufreq.c
-> +++ b/drivers/cpufreq/powernv-cpufreq.c
-> @@ -902,6 +902,7 @@ static struct notifier_block powernv_cpufreq_reboot_nb = {
->  void powernv_cpufreq_work_fn(struct work_struct *work)
->  {
->  	struct chip *chip = container_of(work, struct chip, throttle);
-> +	struct cpufreq_policy *policy;
->  	unsigned int cpu;
->  	cpumask_t mask;
->  
-> @@ -916,12 +917,14 @@ void powernv_cpufreq_work_fn(struct work_struct *work)
->  	chip->restore = false;
->  	for_each_cpu(cpu, &mask) {
->  		int index;
-> -		struct cpufreq_policy policy;
->  
-> -		cpufreq_get_policy(&policy, cpu);
-> -		index = cpufreq_table_find_index_c(&policy, policy.cur);
-> -		powernv_cpufreq_target_index(&policy, index);
-> -		cpumask_andnot(&mask, &mask, policy.cpus);
-> +		policy = cpufreq_cpu_get(cpu);
-> +		if (!policy)
-> +			continue;
-> +		index = cpufreq_table_find_index_c(policy, policy->cur);
-> +		powernv_cpufreq_target_index(policy, index);
-> +		cpumask_andnot(&mask, &mask, policy->cpus);
-> +		cpufreq_cpu_put(policy);
->  	}
->  out:
->  	put_online_cpus();
-> -- 
-> 2.24.1
+T24gVHVlLCAyMDIwLTAzLTEwIGF0IDE0OjQyIC0wNzAwLCBGcmFuY2lzY28gSmVyZXogd3JvdGU6
+DQo+IFRoaXMgaW1wbGVtZW50cyBhIHNpbXBsZSB2YXJpYWJseSBsb3ctcGFzcy1maWx0ZXJpbmcg
+Z292ZXJub3IgaW4NCj4gY29udHJvbCBvZiB0aGUgSFdQIE1JTi9NQVggUEVSRiByYW5nZSBiYXNl
+ZCBvbiB0aGUgcHJldmlvdXNseQ0KPiBpbnRyb2R1Y2VkIGdldF92bHBfdGFyZ2V0X3JhbmdlKCku
+ICBTZWUgImNwdWZyZXE6IGludGVsX3BzdGF0ZToNCj4gSW1wbGVtZW50IFZMUCBjb250cm9sbGVy
+IHRhcmdldCBQLXN0YXRlIHJhbmdlIGVzdGltYXRpb24uIiBmb3IgdGhlDQo+IHJhdGlvbmFsZS4N
+Cg0KSSBqdXN0IGdhdmUgYSB0cnkgb24gYSBwcmV0dHkgaWRsZSBzeXN0ZW0gd2l0aCBqdXN0IHN5
+c3RlbWQgcHJvY2Vzc2VzDQphbmQgdXN1YWwgYmFja2dyb3VuZCB0YXNrcyB3aXRoIG5vbW9kc2V0
+LiANCg0KSSBzZWUgdGhhdCB0aGVyZSBIV1AgbWluIGlzIGdldHRpbmcgY2hhbmdlZCBiZXR3ZWVu
+IDQtOC4gV2h5IGFyZQ0KY2hhbmdpbmcgSFdQIGR5bmFtaWMgcmFuZ2UgZXZlbiBvbiBhbiBpZGxl
+IHN5c3RlbSBydW5uaW5nIG5vIHdoZXJlDQpjbG9zZSB0byBURFA/DQoNClRoYW5rcywNClNyaW5p
+dmFzDQoNCg0KPiANCj4gU2lnbmVkLW9mZi1ieTogRnJhbmNpc2NvIEplcmV6IDxjdXJyb2plcmV6
+QHJpc2V1cC5uZXQ+DQo+IC0tLQ0KPiAgZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jIHwg
+NzkNCj4gKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLQ0KPiAgMSBmaWxlIGNoYW5n
+ZWQsIDc3IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jDQo+IGIvZHJpdmVycy9jcHVmcmVxL2ludGVs
+X3BzdGF0ZS5jDQo+IGluZGV4IGNlY2FkZmVjOGJjMS4uYTAxZWVkNDBkODk3IDEwMDY0NA0KPiAt
+LS0gYS9kcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMNCj4gKysrIGIvZHJpdmVycy9jcHVm
+cmVxL2ludGVsX3BzdGF0ZS5jDQo+IEBAIC0xOTA1LDYgKzE5MDUsMjAgQEAgc3RhdGljIHZvaWQg
+aW50ZWxfcHN0YXRlX3Jlc2V0X3ZscChzdHJ1Y3QNCj4gY3B1ZGF0YSAqY3B1KQ0KPiAgCXZscC0+
+Z2FpbiA9IG1heCgxLCBkaXZfZnAoMTAwMCwgdmxwX3BhcmFtcy5zZXRwb2ludF8wX3BtbCkpOw0K
+PiAgCXZscC0+dGFyZ2V0LnBfYmFzZSA9IDA7DQo+ICAJdmxwLT5zdGF0cy5sYXN0X3Jlc3BvbnNl
+X2ZyZXF1ZW5jeV9oeiA9IHZscF9wYXJhbXMuYXZnX2h6Ow0KPiArDQo+ICsJaWYgKGh3cF9hY3Rp
+dmUpIHsNCj4gKwkJY29uc3QgdWludDMyX3QgcDAgPSBtYXgoY3B1LT5wc3RhdGUubWluX3BzdGF0
+ZSwNCj4gKwkJCQkJY3B1LT5taW5fcGVyZl9yYXRpbyk7DQo+ICsJCWNvbnN0IHVpbnQzMl90IHAx
+ID0gbWF4X3QodWludDMyX3QsIHAwLCBjcHUtDQo+ID5tYXhfcGVyZl9yYXRpbyk7DQo+ICsJCWNv
+bnN0IHVpbnQ2NF90IGh3cF9yZXEgPSAoUkVBRF9PTkNFKGNwdS0NCj4gPmh3cF9yZXFfY2FjaGVk
+KSAmDQo+ICsJCQkJCSAgfihIV1BfTUFYX1BFUkYofjBMKSB8DQo+ICsJCQkJCSAgICBIV1BfTUlO
+X1BFUkYofjBMKSB8DQo+ICsJCQkJCSAgICBIV1BfREVTSVJFRF9QRVJGKH4wTCkpKSB8DQo+ICsJ
+CQkJCSBIV1BfTUlOX1BFUkYocDApIHwNCj4gSFdQX01BWF9QRVJGKHAxKTsNCj4gKw0KPiArCQl3
+cm1zcmxfb25fY3B1KGNwdS0+Y3B1LCBNU1JfSFdQX1JFUVVFU1QsIGh3cF9yZXEpOw0KPiArCQlj
+cHUtPmh3cF9yZXFfY2FjaGVkID0gaHdwX3JlcTsNCj4gKwl9DQo+ICB9DQo+ICANCj4gIC8qKg0K
+PiBAQCAtMjIyMiw2ICsyMjM2LDQ2IEBAIHN0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV9hZGp1c3Rf
+cHN0YXRlKHN0cnVjdA0KPiBjcHVkYXRhICpjcHUpDQo+ICAJCWZwX3RvaW50KGNwdS0+aW93YWl0
+X2Jvb3N0ICogMTAwKSk7DQo+ICB9DQo+ICANCj4gK3N0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV9h
+ZGp1c3RfcHN0YXRlX3JhbmdlKHN0cnVjdCBjcHVkYXRhICpjcHUsDQo+ICsJCQkJCSAgICAgY29u
+c3QgdW5zaWduZWQgaW50DQo+IHJhbmdlW10pDQo+ICt7DQo+ICsJY29uc3QgaW50IGZyb20gPSBj
+cHUtPmh3cF9yZXFfY2FjaGVkOw0KPiArCXVuc2lnbmVkIGludCBwMCwgcDEsIHBfbWluLCBwX21h
+eDsNCj4gKwlzdHJ1Y3Qgc2FtcGxlICpzYW1wbGU7DQo+ICsJdWludDY0X3QgaHdwX3JlcTsNCj4g
+Kw0KPiArCXVwZGF0ZV90dXJib19zdGF0ZSgpOw0KPiArDQo+ICsJcDAgPSBtYXgoY3B1LT5wc3Rh
+dGUubWluX3BzdGF0ZSwgY3B1LT5taW5fcGVyZl9yYXRpbyk7DQo+ICsJcDEgPSBtYXhfdCh1bnNp
+Z25lZCBpbnQsIHAwLCBjcHUtPm1heF9wZXJmX3JhdGlvKTsNCj4gKwlwX21pbiA9IGNsYW1wX3Qo
+dW5zaWduZWQgaW50LCByYW5nZVswXSwgcDAsIHAxKTsNCj4gKwlwX21heCA9IGNsYW1wX3QodW5z
+aWduZWQgaW50LCByYW5nZVsxXSwgcDAsIHAxKTsNCj4gKw0KPiArCXRyYWNlX2NwdV9mcmVxdWVu
+Y3kocF9tYXggKiBjcHUtPnBzdGF0ZS5zY2FsaW5nLCBjcHUtPmNwdSk7DQo+ICsNCj4gKwlod3Bf
+cmVxID0gKFJFQURfT05DRShjcHUtPmh3cF9yZXFfY2FjaGVkKSAmDQo+ICsJCSAgIH4oSFdQX01B
+WF9QRVJGKH4wTCkgfCBIV1BfTUlOX1BFUkYofjBMKSB8DQo+ICsJCSAgICAgSFdQX0RFU0lSRURf
+UEVSRih+MEwpKSkgfA0KPiArCQkgIEhXUF9NSU5fUEVSRih2bHBfcGFyYW1zLmRlYnVnICYgMiA/
+IHAwIDogcF9taW4pIHwNCj4gKwkJICBIV1BfTUFYX1BFUkYodmxwX3BhcmFtcy5kZWJ1ZyAmIDQg
+PyBwMSA6IHBfbWF4KTsNCj4gKw0KPiArCWlmIChod3BfcmVxICE9IGNwdS0+aHdwX3JlcV9jYWNo
+ZWQpIHsNCj4gKwkJd3Jtc3JsKE1TUl9IV1BfUkVRVUVTVCwgaHdwX3JlcSk7DQo+ICsJCWNwdS0+
+aHdwX3JlcV9jYWNoZWQgPSBod3BfcmVxOw0KPiArCX0NCj4gKw0KPiArCXNhbXBsZSA9ICZjcHUt
+PnNhbXBsZTsNCj4gKwl0cmFjZV9wc3RhdGVfc2FtcGxlKG11bF9leHRfZnAoMTAwLCBzYW1wbGUt
+PmNvcmVfYXZnX3BlcmYpLA0KPiArCQkJICAgIGZwX3RvaW50KHNhbXBsZS0+YnVzeV9zY2FsZWQp
+LA0KPiArCQkJICAgIGZyb20sDQo+ICsJCQkgICAgaHdwX3JlcSwNCj4gKwkJCSAgICBzYW1wbGUt
+Pm1wZXJmLA0KPiArCQkJICAgIHNhbXBsZS0+YXBlcmYsDQo+ICsJCQkgICAgc2FtcGxlLT50c2Ms
+DQo+ICsJCQkgICAgZ2V0X2F2Z19mcmVxdWVuY3koY3B1KSwNCj4gKwkJCSAgICBmcF90b2ludChj
+cHUtPmlvd2FpdF9ib29zdCAqIDEwMCkpOw0KPiArfQ0KPiArDQo+ICBzdGF0aWMgdm9pZCBpbnRl
+bF9wc3RhdGVfdXBkYXRlX3V0aWwoc3RydWN0IHVwZGF0ZV91dGlsX2RhdGEgKmRhdGEsDQo+IHU2
+NCB0aW1lLA0KPiAgCQkJCSAgICAgdW5zaWduZWQgaW50IGZsYWdzKQ0KPiAgew0KPiBAQCAtMjI2
+MCw2ICsyMzE0LDIyIEBAIHN0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV91cGRhdGVfdXRpbChzdHJ1
+Y3QNCj4gdXBkYXRlX3V0aWxfZGF0YSAqZGF0YSwgdTY0IHRpbWUsDQo+ICAJCWludGVsX3BzdGF0
+ZV9hZGp1c3RfcHN0YXRlKGNwdSk7DQo+ICB9DQo+ICANCj4gKy8qKg0KPiArICogSW1wbGVtZW50
+YXRpb24gb2YgdGhlIGNwdWZyZXEgdXBkYXRlX3V0aWwgaG9vayBiYXNlZCBvbiB0aGUgVkxQDQo+
+ICsgKiBjb250cm9sbGVyIChzZWUgZ2V0X3ZscF90YXJnZXRfcmFuZ2UoKSkuDQo+ICsgKi8NCj4g
+K3N0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV91cGRhdGVfdXRpbF9od3BfdmxwKHN0cnVjdCB1cGRh
+dGVfdXRpbF9kYXRhDQo+ICpkYXRhLA0KPiArCQkJCQkgICAgIHU2NCB0aW1lLCB1bnNpZ25lZCBp
+bnQNCj4gZmxhZ3MpDQo+ICt7DQo+ICsJc3RydWN0IGNwdWRhdGEgKmNwdSA9IGNvbnRhaW5lcl9v
+ZihkYXRhLCBzdHJ1Y3QgY3B1ZGF0YSwNCj4gdXBkYXRlX3V0aWwpOw0KPiArDQo+ICsJaWYgKHVw
+ZGF0ZV92bHBfc2FtcGxlKGNwdSwgdGltZSwgZmxhZ3MpKSB7DQo+ICsJCWNvbnN0IHN0cnVjdCB2
+bHBfdGFyZ2V0X3JhbmdlICp0YXJnZXQgPQ0KPiArCQkJZ2V0X3ZscF90YXJnZXRfcmFuZ2UoY3B1
+KTsNCj4gKwkJaW50ZWxfcHN0YXRlX2FkanVzdF9wc3RhdGVfcmFuZ2UoY3B1LCB0YXJnZXQtPnZh
+bHVlKTsNCj4gKwl9DQo+ICt9DQo+ICsNCj4gIHN0YXRpYyBzdHJ1Y3QgcHN0YXRlX2Z1bmNzIGNv
+cmVfZnVuY3MgPSB7DQo+ICAJLmdldF9tYXggPSBjb3JlX2dldF9tYXhfcHN0YXRlLA0KPiAgCS5n
+ZXRfbWF4X3BoeXNpY2FsID0gY29yZV9nZXRfbWF4X3BzdGF0ZV9waHlzaWNhbCwNCj4gQEAgLTIz
+ODksNiArMjQ1OSw5IEBAIHN0YXRpYyBpbnQgaW50ZWxfcHN0YXRlX2luaXRfY3B1KHVuc2lnbmVk
+IGludA0KPiBjcHVudW0pDQo+ICANCj4gIAlpbnRlbF9wc3RhdGVfZ2V0X2NwdV9wc3RhdGVzKGNw
+dSk7DQo+ICANCj4gKwlpZiAocHN0YXRlX2Z1bmNzLnVwZGF0ZV91dGlsID09DQo+IGludGVsX3Bz
+dGF0ZV91cGRhdGVfdXRpbF9od3BfdmxwKQ0KPiArCQlpbnRlbF9wc3RhdGVfcmVzZXRfdmxwKGNw
+dSk7DQo+ICsNCj4gIAlwcl9kZWJ1ZygiY29udHJvbGxpbmc6IGNwdSAlZFxuIiwgY3B1bnVtKTsN
+Cj4gIA0KPiAgCXJldHVybiAwOw0KPiBAQCAtMjM5OCw3ICsyNDcxLDggQEAgc3RhdGljIHZvaWQN
+Cj4gaW50ZWxfcHN0YXRlX3NldF91cGRhdGVfdXRpbF9ob29rKHVuc2lnbmVkIGludCBjcHVfbnVt
+KQ0KPiAgew0KPiAgCXN0cnVjdCBjcHVkYXRhICpjcHUgPSBhbGxfY3B1X2RhdGFbY3B1X251bV07
+DQo+ICANCj4gLQlpZiAoaHdwX2FjdGl2ZSAmJiAhaHdwX2Jvb3N0KQ0KPiArCWlmIChod3BfYWN0
+aXZlICYmICFod3BfYm9vc3QgJiYNCj4gKwkgICAgcHN0YXRlX2Z1bmNzLnVwZGF0ZV91dGlsICE9
+DQo+IGludGVsX3BzdGF0ZV91cGRhdGVfdXRpbF9od3BfdmxwKQ0KPiAgCQlyZXR1cm47DQo+ICAN
+Cj4gIAlpZiAoY3B1LT51cGRhdGVfdXRpbF9zZXQpDQo+IEBAIC0yNTI2LDcgKzI2MDAsOCBAQCBz
+dGF0aWMgaW50IGludGVsX3BzdGF0ZV9zZXRfcG9saWN5KHN0cnVjdA0KPiBjcHVmcmVxX3BvbGlj
+eSAqcG9saWN5KQ0KPiAgCQkgKiB3YXMgdHVybmVkIG9mZiwgaW4gdGhhdCBjYXNlIHdlIG5lZWQg
+dG8gY2xlYXIgdGhlDQo+ICAJCSAqIHVwZGF0ZSB1dGlsIGhvb2suDQo+ICAJCSAqLw0KPiAtCQlp
+ZiAoIWh3cF9ib29zdCkNCj4gKwkJaWYgKCFod3BfYm9vc3QgJiYgcHN0YXRlX2Z1bmNzLnVwZGF0
+ZV91dGlsICE9DQo+ICsJCQkJICBpbnRlbF9wc3RhdGVfdXBkYXRlX3V0aWxfaHdwX3ZscCkNCj4g
+IAkJCWludGVsX3BzdGF0ZV9jbGVhcl91cGRhdGVfdXRpbF9ob29rKHBvbGljeS0NCj4gPmNwdSk7
+DQo+ICAJCWludGVsX3BzdGF0ZV9od3Bfc2V0KHBvbGljeS0+Y3B1KTsNCj4gIAl9DQo=
