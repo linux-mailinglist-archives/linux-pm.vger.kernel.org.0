@@ -2,42 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D071877CF
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Mar 2020 03:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F491877D6
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Mar 2020 03:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726637AbgCQC3z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Mar 2020 22:29:55 -0400
-Received: from mail-eopbgr70052.outbound.protection.outlook.com ([40.107.7.52]:32375
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726024AbgCQC3y (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 16 Mar 2020 22:29:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JM87Bqi3mJ2JdfN4GyWdPOhkZLc3zjlIJ4gHsLdXq8ea01mdduXQ16rtGml+Onsg8JDWvVbiIayTDZYbYW8hQFGhJ81/p7Sia6VpeNHu0CBy85vtWikz8yNksYt9JDkMjTcUpMbwPVfIsKdi/1wn0W8VwKjK0x6A6+Qqh/BsT2T65UDd4As239uUSzaTlOranGtPV8kKC9noC78ivjXfcJabc6lP7hUAh11RzaGNfQMJVUPAQDvt5RKf+P3jAqTvkb/8LJFD4fBHpy2gTyGh/+8KSTDe8H1lo4DcTfYRzqBa+dWU/vaNdBURD9DUfuJHxE6kZ7wiWk2riCvg3JoDeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VyhN624LKViFmgvwxDtnhVpVnlhzLcCjnOIpPCdGnik=;
- b=YsU4FwqkPf79qer1GETTtzok3ZoE22pRKB/NoWCm/QlY2niLEljrvLY5sVvNrX9ZbbN8UUFDTeLzL5YusIwmYs3eN4tBSkfUEP/k6fZf3k//UkN2VIemri4hB+B8/Slpf/VQNNmv3aDDD85xKVjE9weWW1IXTK6ZidnLcoZBzYdlg1ts97MScpQa15Y3c3UshCcQA6xirGfSwwx+sif89tmIJSeIyFHbSLFzZWhSvlWiqQl7QVEe2sZy8QtoiUdMkS/3PTqrxLTewEntaWLDMhWEPf9OCXHQ/iF1YHBz6Nn0uChM8I9XEHg5OaqlPo4k5xwLGc07bLrx8epS/9MqTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VyhN624LKViFmgvwxDtnhVpVnlhzLcCjnOIpPCdGnik=;
- b=mdgNCDZciCKNwbIPHnWqxO+uKjM+cUQGTm1VSInufsDbiYlYYURwNm47aaBrBn5Z56ato+QPmNDDBl1cVcMgWgls/ulobqYeUC6MOv56KVbkema/dq17d+vZci02RyMTtOWVwJhS9RT9lauXFovwysU88/udOH9cTC2rsAwP20Q=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3867.eurprd04.prod.outlook.com (52.134.65.148) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2814.14; Tue, 17 Mar 2020 02:29:47 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b%7]) with mapi id 15.20.2814.021; Tue, 17 Mar 2020
- 02:29:47 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Peng Fan <peng.fan@nxp.com>,
+        id S1726678AbgCQCcx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Mar 2020 22:32:53 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:42529 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726343AbgCQCcx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Mar 2020 22:32:53 -0400
+Received: by mail-pl1-f196.google.com with SMTP id t3so8908914plz.9;
+        Mon, 16 Mar 2020 19:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FAaAv0KAtQ+g4TsuLnEC4E5T9EN4DSzcxghQTVvaPqw=;
+        b=WWx/4uLUu+gZLifjHan2oBAScWRAOvN5ihCO++2P3H897mATH/d5cdydNK7b37c5AB
+         SK4rr+8KMrQeWyzizz4mx6UEZlZR7ZgNYDXInGUNYR1iaMk3gPn2/5rVi0dPj/CdlUiL
+         ltuGB+Sd19jlo0aizVpGDjUpquzdNTNc+ntdbCXPd0TKJUC8oky3SWZDGAX1mmamRjOu
+         DYbH6Zmli8R2DxjRBek2OfN/RpHzdgvHlzJeKsNIGeqFIlzIRwf5aphWKdspRLPIDKsV
+         BWR04/ZzxhINSvNPji+xCrMsqdN08UMdbIntpMLt2WhroWX2k4mFWYS5LpPBjmqjd1Mw
+         etEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=FAaAv0KAtQ+g4TsuLnEC4E5T9EN4DSzcxghQTVvaPqw=;
+        b=EeF5YRMJX2me3iuLadmKFa0nGr0EkN2LamRtnepawdN5Kjp0X5yt2H/Ib/RtWrrCus
+         0PEzmJunfmFnpVxykbXqOtq4030L+REN/36/HXHYIKvT9MYIKQoeuepxxvvHmUBZb2ZY
+         dqM2jV6EfH1ZOZJaROwUJQUs2qmYG0VmxJskrAHtXq+DM75Dr4vZBVEiGpbc6KPEQklT
+         fNdDL6vefT559ohRvG4h2PCY76FHB3xMTTSew0xTAORELuPtOh0mwaHgfaGMymaM4b+0
+         OeCO1MqXoDxR7vuMwMy+nKlz/uEQ523RsLoLbsg/kGEkcs/HMT/MQB0E6tCATlXVcY8H
+         g+KQ==
+X-Gm-Message-State: ANhLgQ1zb8+DYiegV7ZEFA33Eal3cetwpVo8GM8k5DVVUMnBHBaOeXC6
+        c/PxvJW6ObaLONCicasFWzg=
+X-Google-Smtp-Source: ADFU+vu5uSPxzs7cH/nMK+GHPB1KRUFrsBapPgV1+Fa1nCOT0TBYHWvZflsk9z44akXMzEhLVEffFQ==
+X-Received: by 2002:a17:90a:232d:: with SMTP id f42mr2434700pje.185.1584412370784;
+        Mon, 16 Mar 2020 19:32:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l17sm722415pgi.71.2020.03.16.19.32.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2020 19:32:49 -0700 (PDT)
+Subject: Re: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
+To:     Peng Fan <peng.fan@nxp.com>, Anson Huang <anson.huang@nxp.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Shawn Guo <shawnguo@kernel.org>,
+Cc:     Shawn Guo <shawnguo@kernel.org>,
         "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>,
         "festevam@gmail.com" <festevam@gmail.com>,
@@ -47,7 +59,6 @@ CC:     Shawn Guo <shawnguo@kernel.org>,
         "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
         "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
         "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
         Daniel Baluta <daniel.baluta@nxp.com>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "linux@rempel-privat.de" <linux@rempel-privat.de>,
@@ -69,11 +80,6 @@ CC:     Shawn Guo <shawnguo@kernel.org>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
         dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
-Thread-Topic: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
-Thread-Index: AQHV9av62LAReQhoZkKZ9LnT5dFdbahARTIAgAopwQCAACFfgIAABHaAgAADEYCAAAR+AIAASuWQgAAKpACAAABIoIAABUuAgAABn+CAAAKDgIAABdZwgAEX1ICAAAL3IA==
-Date:   Tue, 17 Mar 2020 02:29:47 +0000
-Message-ID: <DB3PR0402MB39169D01DB4C505403ECD51DF5F60@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 References: <20200316005219.GD17221@dragon>
  <AM0PR04MB44819E4A9E027F1555C33D0B88F90@AM0PR04MB4481.eurprd04.prod.outlook.com>
  <20200316030744.GC17221@dragon>
@@ -87,97 +93,131 @@ References: <20200316005219.GD17221@dragon>
  <20200316091541.GI4518@piout.net>
  <DB3PR0402MB39169528B3FF39E23C7A90FCF5F90@DB3PR0402MB3916.eurprd04.prod.outlook.com>
  <AM0PR04MB4481A54C639FD1D45098302088F60@AM0PR04MB4481.eurprd04.prod.outlook.com>
-In-Reply-To: <AM0PR04MB4481A54C639FD1D45098302088F60@AM0PR04MB4481.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [119.31.174.68]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: e93b19d6-7b0e-4eac-93fe-08d7ca1b101a
-x-ms-traffictypediagnostic: DB3PR0402MB3867:|DB3PR0402MB3867:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB386728A60C8856F23104B5FCF5F60@DB3PR0402MB3867.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0345CFD558
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(396003)(136003)(376002)(346002)(366004)(199004)(66446008)(66556008)(9686003)(66946007)(64756008)(55016002)(66476007)(76116006)(81156014)(8676002)(186003)(81166006)(33656002)(44832011)(26005)(8936002)(71200400001)(54906003)(7696005)(316002)(110136005)(6506007)(53546011)(478600001)(5660300002)(52536014)(4326008)(86362001)(2906002)(7416002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3867;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VYW0obuP1+POcpEsrPkT2SRhaC9lFkKWA4tiTiP7f3TdxcwRLyaS/GDJNqhTVquKJYyIceadjt/USKsyHUYCuu/WGY8M6s5NSK4a6LFi03DbWgZ6GodSVbY9vqe331LLPlyManDwVM6bbIZG7m9cDyxy+RxKG0wNnJ1GYYD0wrINCKWAIsNOjzGcSI77VNZwWIGGz5sdcP9eTxfJ+lv0AN5ErxYH9aR4qkcJVlMY8KHzRS00sAnzrqQSJV44Dzpuxa/DBDg26mJgURF9kmHzEebnoHJH4DC/3u/zkYdqsXKMMTNa6GzxDf1PD3VLdfVnqPibsTVbAy0QRRNiTwpUYx1mMgxp5WNgoh0WNIxKpQ1lfTqHganZJE4pMBNq2qNJvq1BLW1ER9DXHxEdnUhvlFWg1Qfmpef8dkQCIhZs0EQE+zu1/IRLAVhhcpybkVNF
-x-ms-exchange-antispam-messagedata: 46a0/J6dg6QuUKol3OdZSu4xQCUW75MyhnHO/16uJygF1seK1OiPQLKJ3c4x21uxtR6mLJldA8BPaCXm24lCGXUlsSgwzPZQooGoTDSkps95O9ei13yYbiULTcxo+JJ/ykBMTERFNxwWUqxxtzdxMQ==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <b049be1c-1f3f-54fc-3c47-0873d95cb769@roeck-us.net>
+Date:   Mon, 16 Mar 2020 19:32:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e93b19d6-7b0e-4eac-93fe-08d7ca1b101a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2020 02:29:47.8829
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 41X2+2FQkQBnz8DlbWw4F3A7OngClCoypXyj3ynntn+ZI/1eQl6YTUQkD5VVwIdREQYS/aMPHFcwoepCWpxQJw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3867
+In-Reply-To: <AM0PR04MB4481A54C639FD1D45098302088F60@AM0PR04MB4481.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQoNCj4gU3ViamVjdDogUkU6IFtQQVRDSCBWMyAxLzddIGZpcm13YXJlOiBpbXg6IEFkZCBzdHVi
-cyBmb3IgIUNPTkZJR19JTVhfU0NVDQo+IGNhc2UNCj4gDQo+ID4gU3ViamVjdDogUkU6IFtQQVRD
-SCBWMyAxLzddIGZpcm13YXJlOiBpbXg6IEFkZCBzdHVicyBmb3INCj4gPiAhQ09ORklHX0lNWF9T
-Q1UgY2FzZQ0KPiA+DQo+ID4gSGksIEFsZXhhbmRyZQ0KPiA+DQo+ID4gPiAtLS0tLU9yaWdpbmFs
-IE1lc3NhZ2UtLS0tLQ0KPiA+ID4gRnJvbTogQWxleGFuZHJlIEJlbGxvbmkgPGFsZXhhbmRyZS5i
-ZWxsb25pQGJvb3RsaW4uY29tPg0KPiA+ID4gU2VudDogTW9uZGF5LCBNYXJjaCAxNiwgMjAyMCA1
-OjE2IFBNDQo+ID4gPiBUbzogQW5zb24gSHVhbmcgPGFuc29uLmh1YW5nQG54cC5jb20+DQo+ID4g
-PiBDYzogU2hhd24gR3VvIDxzaGF3bmd1b0BrZXJuZWwub3JnPjsgUGVuZyBGYW4gPHBlbmcuZmFu
-QG54cC5jb20+Ow0KPiA+ID4gcy5oYXVlckBwZW5ndXRyb25peC5kZTsga2VybmVsQHBlbmd1dHJv
-bml4LmRlOyBmZXN0ZXZhbUBnbWFpbC5jb207DQo+ID4gPiBkbWl0cnkudG9yb2tob3ZAZ21haWwu
-Y29tOyBhLnp1bW1vQHRvd2VydGVjaC5pdDsNCj4gPiBydWkuemhhbmdAaW50ZWwuY29tOw0KPiA+
-ID4gZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZzsgYW1pdC5rdWNoZXJpYUB2ZXJkdXJlbnQuY29t
-OyB3aW1AbGludXgtDQo+ID4gPiB3YXRjaGRvZy5vcmc7IGxpbnV4QHJvZWNrLXVzLm5ldDsgRGFu
-aWVsIEJhbHV0YQ0KPiA+ID4gPGRhbmllbC5iYWx1dGFAbnhwLmNvbT47IGdyZWdraEBsaW51eGZv
-dW5kYXRpb24ub3JnOw0KPiA+ID4gbGludXhAcmVtcGVsLXByaXZhdC5kZTsgdGdseEBsaW51dHJv
-bml4LmRlOyBtLmZlbHNjaEBwZW5ndXRyb25peC5kZTsNCj4gPiA+IGFuZHJpeS5zaGV2Y2hlbmtv
-QGxpbnV4LmludGVsLmNvbTsNCj4gPiA+IGFybmRAYXJuZGIuZGU7IHJvbmFsZEBpbm5vdmF0aW9u
-LmNoOyBrcnprQGtlcm5lbC5vcmc7DQo+ID4gPiByb2JoQGtlcm5lbC5vcmc7IExlb25hcmQgQ3Jl
-c3RleiA8bGVvbmFyZC5jcmVzdGV6QG54cC5jb20+OyBBaXNoZW5nDQo+ID4gPiBEb25nIDxhaXNo
-ZW5nLmRvbmdAbnhwLmNvbT47IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsN
-Cj4gPiA+IGxpbnV4LSBrZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eC1pbnB1dEB2Z2VyLmtl
-cm5lbC5vcmc7IGxpbnV4LQ0KPiA+ID4gcnRjQHZnZXIua2VybmVsLm9yZzsgbGludXgtcG1Admdl
-ci5rZXJuZWwub3JnOyBsaW51eC0NCj4gPiA+IHdhdGNoZG9nQHZnZXIua2VybmVsLm9yZzsgZGwt
-bGludXgtaW14IDxsaW51eC1pbXhAbnhwLmNvbT4NCj4gPiA+IFN1YmplY3Q6IFJlOiBbUEFUQ0gg
-VjMgMS83XSBmaXJtd2FyZTogaW14OiBBZGQgc3R1YnMgZm9yDQo+ID4gPiAhQ09ORklHX0lNWF9T
-Q1UgY2FzZQ0KPiA+ID4NCj4gPiA+IE9uIDE2LzAzLzIwMjAgMDk6MDg6NTMrMDAwMCwgQW5zb24g
-SHVhbmcgd3JvdGU6DQo+ID4gPiA+ID4gV2h5IGRvIHlvdSBhYnNvbHV0ZWx5IG5lZWQgdG8gY29t
-cGlsZSB0aGVtIGluZGVwZW5kZW50bHk/IEZyb20gYQ0KPiA+ID4gPiA+IGNvZGUgY292ZXJhZ2Ug
-cG9pbnQgb2YgdmlldywgaGF2aW5nOg0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gQ09NUElMRV9URVNU
-PXkNCj4gPiA+ID4gPiBDT05GSUdfSU1YX1NDVT15DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBpcyBl
-bm91Z2ggdG8gc2VsZWN0IGFuZCBjb21waWxlIHRoZSByZW1haW5pbmcgZHJpdmVycy4NCj4gPiA+
-ID4NCj4gPiA+ID4gV2hhdCBJIG1lYW50IGlzIGZvciBiZWxvdyBjYXNlLCBsaWtlIHVzaW5nIG90
-aGVyIGFyY2ggY29uZmlnIHdoaWNoDQo+ID4gPiA+IGRvZXMgTk9UIGhhdmUgQ09ORklHX0lNWF9T
-Q1Ugc2VsZWN0ZWQsIE9OTFkgd2l0aCBDT01QSUxFX1RFU1QNCj4gPiA+ID4gc2VsZWN0ZWQsIGFk
-ZGluZyBzdHVicyBmb3IgSU1YX1NDVSBBUElzIGNhbiBmaXggc3VjaCBzY2VuYXJpby4NCj4gPiA+
-ID4NCj4gPiA+ID4gQ09NUElMRV9URVNUPXkNCj4gPiA+ID4gQ09ORklHX0lNWF9TQ1U9bg0KPiA+
-ID4gPg0KPiA+ID4NCj4gPiA+IFdoeSBpcyB0aGF0IGFuIGlzc3VlPyBJZiB0aGV5IGRvbid0IGhh
-dmUgSU1YX1NDVSBzZWxlY3RlZCwgdGhlbiB0aGUNCj4gPiA+IG90aGVyIFNDVSBkcml2ZXIgYXJl
-IG5vdCBzZWxlY3RlZCBlaXRoZXIsIGhhdmluZyBzdHVicyBkb2Vzbid0DQo+ID4gPiBjaGFuZ2Ug
-dGhhdCB5b3Ugd2lsbCBoYXZlIHRvIHNlbGVjdCBhdCBsZWFzdCBvbmUgb3B0aW9uLiBQbGVhc2UN
-Cj4gPiA+IGV4cGxhaW4gd2hhdCBpcyB0aGUgaXNzdWUgdGhhdCBpcyBub3Qgc29sdmVkIGhlcmUu
-DQo+ID4NCj4gPiBPSywgd2hhdCBJIHRob3VnaHQgaXMgZXZlbiB3aXRob3V0IElNWF9TQ1Ugc2Vs
-ZWN0ZWQsIG90aGVyIFNDVSBkcml2ZXJzDQo+ID4gc3RpbGwgY2FuIGJlIHNlbGVjdGVkIGZvciBi
-dWlsZCB0ZXN0IGFmdGVyIGFkZGluZyAiQ09NUElMRV9URVNUIiB0bw0KPiA+IHRoZSBrY29uZmln
-LCBsaWtlIGJlbG93LCBpZiB3aXRob3V0IElNWF9TQ1UgQVBJIHN0dWJzLCB0aGUNCj4gPiAiQ09N
-UElMRV9URVNUIiBjYW4gTk9UIGJlIGFkZGVkIHRvIFNDVSBkcml2ZXJzIHRvIGVuYWJsZSBidWls
-ZCB0ZXN0LA0KPiA+IHNvIEkgdGhpbmsgdGhlIElNWF9TQ1UgQVBJIHN0dWJzIHNob3VsZCBiZSBh
-ZGRlZD8NCj4gDQo+IEZvcmdvdCB0byBtZW50aW9uLCB3aXRob3V0IHN0dWIgYXBpLCBmb3IgZHJp
-dmVycyB3aXRoICIgI2luY2x1ZGUNCj4gPGxpbnV4L2Zpcm13YXJlL2lteC9zY2kuaD4gIiB3aWxs
-IG1ldCBjb21waWxlIGVycm9yIHdpdGhvdXQNCj4gKyNpZmRlZiBDT05GSUdfSU1YX1NDVQ0KPiAr
-I2VuZGlmDQo+IA0KPiBTbyB3ZSBoYXZlIHRvIHVzZSBpZmRlZiBDT05GSUdfSU1YX1NDVSB0byBn
-dWFyZCB0aGUgaW5jbHVkZS4NCg0KVGhlIGlkZWEgaGVyZSBpcyB0aGF0IGFsbCBtb2R1bGVzIGRl
-cGVuZGluZyBvbiBJTVhfU0NVIHNob3VsZCBOT1QgYmUgZW5hYmxlZA0Kd2l0aG91dCBJTVhfU0NV
-IGVuYWJsZWQuIFNvIGl0IHNob3VsZCBiZSBmaW5lLg0KDQpBbnNvbg0K
+On 3/16/20 7:18 PM, Peng Fan wrote:
+>> Subject: RE: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU
+>> case
+>>
+>> Hi, Alexandre
+>>
+>>> -----Original Message-----
+>>> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>>> Sent: Monday, March 16, 2020 5:16 PM
+>>> To: Anson Huang <anson.huang@nxp.com>
+>>> Cc: Shawn Guo <shawnguo@kernel.org>; Peng Fan <peng.fan@nxp.com>;
+>>> s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com;
+>>> dmitry.torokhov@gmail.com; a.zummo@towertech.it;
+>> rui.zhang@intel.com;
+>>> daniel.lezcano@linaro.org; amit.kucheria@verdurent.com; wim@linux-
+>>> watchdog.org; linux@roeck-us.net; Daniel Baluta
+>>> <daniel.baluta@nxp.com>; gregkh@linuxfoundation.org;
+>>> linux@rempel-privat.de; tglx@linutronix.de; m.felsch@pengutronix.de;
+>>> andriy.shevchenko@linux.intel.com;
+>>> arnd@arndb.de; ronald@innovation.ch; krzk@kernel.org; robh@kernel.org;
+>>> Leonard Crestez <leonard.crestez@nxp.com>; Aisheng Dong
+>>> <aisheng.dong@nxp.com>; linux-arm-kernel@lists.infradead.org; linux-
+>>> kernel@vger.kernel.org; linux-input@vger.kernel.org; linux-
+>>> rtc@vger.kernel.org; linux-pm@vger.kernel.org; linux-
+>>> watchdog@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>
+>>> Subject: Re: [PATCH V3 1/7] firmware: imx: Add stubs for
+>>> !CONFIG_IMX_SCU case
+>>>
+>>> On 16/03/2020 09:08:53+0000, Anson Huang wrote:
+>>>>> Why do you absolutely need to compile them independently? From a
+>>>>> code coverage point of view, having:
+>>>>>
+>>>>> COMPILE_TEST=y
+>>>>> CONFIG_IMX_SCU=y
+>>>>>
+>>>>> is enough to select and compile the remaining drivers.
+>>>>
+>>>> What I meant is for below case, like using other arch config which
+>>>> does NOT have CONFIG_IMX_SCU selected, ONLY with COMPILE_TEST
+>>>> selected, adding stubs for IMX_SCU APIs can fix such scenario.
+>>>>
+>>>> COMPILE_TEST=y
+>>>> CONFIG_IMX_SCU=n
+>>>>
+>>>
+>>> Why is that an issue? If they don't have IMX_SCU selected, then the
+>>> other SCU driver are not selected either, having stubs doesn't change
+>>> that you will have to select at least one option. Please explain what
+>>> is the issue that is not solved here.
+>>
+>> OK, what I thought is even without IMX_SCU selected, other SCU drivers still
+>> can be selected for build test after adding "COMPILE_TEST" to the kconfig,
+>> like below, if without IMX_SCU API stubs, the "COMPILE_TEST" can NOT be
+>> added to SCU drivers to enable build test, so I think the IMX_SCU API stubs
+>> should be added?
+> 
+> Forgot to mention, without stub api, for drivers with
+> " #include <linux/firmware/imx/sci.h> " will met compile error without
+> +#ifdef CONFIG_IMX_SCU
+> +#endif
+> 
+> So we have to use ifdef CONFIG_IMX_SCU to guard the include.
+> 
+Add "depends on IMX_SCU" to the Kconfig entry for those drivers,
+and/or drop "COMPILE_TEST" from their Kconfig entry.
+
+Really, COMPILE_TEST is abused here. I start to understand those who
+advocate that it should be removed. This is an excellent case in point.
+
+Guenter
