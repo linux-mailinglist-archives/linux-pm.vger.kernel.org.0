@@ -2,200 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC814188E8E
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Mar 2020 21:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD4F188ED8
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Mar 2020 21:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbgCQUFl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Mar 2020 16:05:41 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:51744 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726864AbgCQUFk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Mar 2020 16:05:40 -0400
-Received: by mail-wm1-f66.google.com with SMTP id a132so681912wme.1
-        for <linux-pm@vger.kernel.org>; Tue, 17 Mar 2020 13:05:38 -0700 (PDT)
+        id S1726680AbgCQUTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Mar 2020 16:19:22 -0400
+Received: from mail-pj1-f54.google.com ([209.85.216.54]:34301 "EHLO
+        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726294AbgCQUTW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Mar 2020 16:19:22 -0400
+Received: by mail-pj1-f54.google.com with SMTP id q16so274222pje.1
+        for <linux-pm@vger.kernel.org>; Tue, 17 Mar 2020 13:19:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hikabzIRGhqkITxq8bAzYwuz3UKtaKfPYez8kodWVw0=;
-        b=XgxQPDj6uUAqO2Wl1Fa43peW4Ywxf9ZUgudtoP+Cwjxx4qZIObbksMS0h49FkmZcbw
-         WcoeWzLj3BV8J59c1a8JvC/ISrRoJ4ZxvuB23WT6Jly2IqTRkcXegIvKhUAB5rp+DDd8
-         Ecbj9v9gbIlFGZrCtnjyresvbCoXX7eIUr/0cZd39ob7pKA5ThefwkCPkmr18xGW0FES
-         aCZvZcm/ymdZaBba1KAIWtjM+Xda/b0qK0fNdSh+3gPd9ecjjh235l4Zgbm3X1QyL2/z
-         Rj1S9GPfY2r1scGiOPVnXoRZZXhzbAjdhTYDNmLpnbi7Wsf3mK4tRil+EHVCuO12TI1T
-         6FZg==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=XrKAAJJIb6DM0ea3T/bXana50sRBWWKUVXZelL27caQ=;
+        b=lNeUT8QbkF83xENXHrWavQ9XTE+LF1XD8LsgTS2NoH8rkgPs22A0sBFvDPxqmBlGfb
+         9rfDxWCRey2XrNrwG5n8HfBEmavHY+v3tvgqrdvtJs0Y4iLhNmUF4HaZ6ZfWSlGjhg3G
+         nX7IKu6FkvMJqlrKc6NKNidkvN8AKcgitOIw3m7z7jImx3/caCTWmCNiAG8n/YcRin15
+         4YQ0tVqwZ3vOtOUx7uZgbOy1PU6sxQ/ryYrpQIIiyjqi593+Mdup20W+ZYqy5u/q/H/Z
+         J66qOsywWPcSbSEOC+8Anletue1ftcBeNrwMA9T0I8ziViuRqDDZ9oJoqqL9PlllhzCp
+         e8XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=hikabzIRGhqkITxq8bAzYwuz3UKtaKfPYez8kodWVw0=;
-        b=iD3T9DqszSpwpv1/GgkOnjyAoq5qfPIVlFg5pFJNHGx6mjhxyvHSszVGX81yzhwGh+
-         2RYSh7UcGTiWsnZd6H9rc0jietp7A2DboqucqN3N3HJ/S0pH+as8DTCfsl55CruoI0jv
-         mP1ywYVIkeMm2ryvVXojsvVPQqnVhiwmRNGJCcC7ay5IObA1QuaFStc56i2PA/WPZLPs
-         ywn0htMEsQz5Vi2ZUv7Xmiw7HvIePaGdDlrY4bXAxx7FIOxqksv/wR7fuB/YK5PB8XJm
-         d1Yl6IlGubqD7bHTVIRbwiB4oqtD80KU/itPiTYv1gQG+NVCiaVe15oYLwmKT7BAWVND
-         AB6A==
-X-Gm-Message-State: ANhLgQ2WfzwLnUp8erFDR5rQFrFaMXAhgGayIALNhW6+VW65njRf+uAe
-        vLuonosZ88vIWsivqvM5A0myAw==
-X-Google-Smtp-Source: ADFU+vunZg0Giu+N9Z1nXa3Rjdae9Z/YpFWp81pil1dD7FVMQ9rRV4LFm2PddUhJzDj58h1gYZBqTQ==
-X-Received: by 2002:a1c:5fc4:: with SMTP id t187mr660239wmb.81.1584475537140;
-        Tue, 17 Mar 2020 13:05:37 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:bd37:618d:f415:31ea? ([2a01:e34:ed2f:f020:bd37:618d:f415:31ea])
-        by smtp.googlemail.com with ESMTPSA id i4sm6025788wrm.32.2020.03.17.13.05.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Mar 2020 13:05:36 -0700 (PDT)
-Subject: Re: [PATCH] thermal: hisilicon: Don't enable by default
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        kongxinwei <kong.kongxinwei@hisilicon.com>,
-        Wangtao <kevin.wangtao@hisilicon.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200317174130.23523-1-lkundrak@v3.sk>
- <1940ceca-c791-5fa6-c680-461a27c09ccf@linaro.org>
- <20200317192748.GB24359@furthur.local>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <8ed4c0bb-883e-7405-4f93-a58a4fec097d@linaro.org>
-Date:   Tue, 17 Mar 2020 21:05:33 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=XrKAAJJIb6DM0ea3T/bXana50sRBWWKUVXZelL27caQ=;
+        b=BdLcgS0wFgzRfvIySnVyqp32TT/BDTJ0CIRI4hFgzfyZDwRoLpmri6wLSbyXK986kJ
+         79Iy3/ZhRzUYci3mKZE/OH3zWII/8s243fgbl4rVnVSv0bW/tgDg+/6paQvibe37ierI
+         u+Ycn1fq1QIrsb8tHUYZe32Jls4e1bgD983ZIXtd/lTxeuGmL5EbyxLLWowuuygOGJ3s
+         Cd+qGqceBJ/M/NUE5CPHPh1sB4G3N11IpPmHfY2t4UcW/pQrpJVWXx/lyOJEkAx5izVJ
+         Ej5wLoONv/pRIcDB4GqEDMIOZNe3rmSgHhsQNjm675LnWFJW/75wApCUMChyB+QOq6Pa
+         0w6g==
+X-Gm-Message-State: ANhLgQ0IEeOKFQ1DMFYCDboScEUupk8zU/jguzQUbP5MQGRRtZXkbu6Z
+        17UdkEJZCT/V405ejPuDed/DjW8H8KI=
+X-Google-Smtp-Source: ADFU+vvfB0QL9B5auJbUMHRgvS4RD7kPCYNP7T61bN7RQdpnO8tQRu5cAkf++9CyqC7KTPDYvlBxUA==
+X-Received: by 2002:a17:90b:307:: with SMTP id ay7mr984263pjb.123.1584476361404;
+        Tue, 17 Mar 2020 13:19:21 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id z12sm4357623pfj.144.2020.03.17.13.19.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2020 13:19:20 -0700 (PDT)
+Message-ID: <5e7130c8.1c69fb81.1fb04.f47e@mx.google.com>
+Date:   Tue, 17 Mar 2020 13:19:20 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20200317192748.GB24359@furthur.local>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.6-rc6-99-g4a13723c325c
+X-Kernelci-Report-Type: boot
+Subject: pm/testing boot: 63 boots: 1 failed,
+ 62 passed (v5.6-rc6-99-g4a13723c325c)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/03/2020 20:27, Lubomir Rintel wrote:
-> On Tue, Mar 17, 2020 at 06:45:29PM +0100, Daniel Lezcano wrote:
->> On 17/03/2020 18:41, Lubomir Rintel wrote:
->>> Users are generally unlikely to have a HiSilicon thermal sensor.
->>
->> Why ?
-> 
-> Because most computers don't run on HiSilicon chips.
-> 
->> The thermal sensor is needed for the thermal mitigation.
-> 
-> If it's really needed, shouldn't ARCH_HISI depend on it?
-> 
-> In any case, I submitted this, because the driver enabled itself when I
-> turned on COMPILE_TEST, which was entirely unexpected.
+pm/testing boot: 63 boots: 1 failed, 62 passed (v5.6-rc6-99-g4a13723c325c)
 
-The COMPILE_TEST option's contextual help says:
+Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
+el/v5.6-rc6-99-g4a13723c325c/
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+6-rc6-99-g4a13723c325c/
 
-"If you are a developer and want to build everything available, say Y
-       here."
+Tree: pm
+Branch: testing
+Git Describe: v5.6-rc6-99-g4a13723c325c
+Git Commit: 4a13723c325ce2b444bec3aa5836854cc1f48390
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Tested: 55 unique boards, 14 SoC families, 3 builds out of 6
 
-> Unless I'm
-> mistaken, defaulting to off seems to be a standard practice for most
-> drivers, including thermal.
+Boot Failure Detected:
 
-The COMPILE_TEST option is there in order to increase the compilation
-test coverage (for example compile the drivers on a powerful x86 machine
-with different option combinations).
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
 
-> Would this be a better idea?
-> 
->   default y if ARCH_HISI
-> 
-> Thanks
-> Lubo
-> 
->>
->>> Like most other thermal drivers, don't build it by default/
->>>
->>> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
->>> ---
->>>  drivers/thermal/Kconfig | 1 -
->>>  1 file changed, 1 deletion(-)
->>>
->>> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
->>> index 02c3aa322a4a6..2062f8ec272b6 100644
->>> --- a/drivers/thermal/Kconfig
->>> +++ b/drivers/thermal/Kconfig
->>> @@ -233,7 +233,6 @@ config HISI_THERMAL
->>>  	depends on ARCH_HISI || COMPILE_TEST
->>>  	depends on HAS_IOMEM
->>>  	depends on OF
->>> -	default y
->>>  	help
->>>  	  Enable this to plug hisilicon's thermal sensor driver into the Linux
->>>  	  thermal framework. cpufreq is used as the cooling device to throttle
->>>
->>
->>
->> -- 
->>  <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->>
->> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->> <http://twitter.com/#!/linaroorg> Twitter |
->> <http://www.linaro.org/linaro-blog/> Blog
->>
-
-
--- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+---
+For more info write to <info@kernelci.org>
