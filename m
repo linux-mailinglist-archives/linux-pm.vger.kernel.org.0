@@ -2,105 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C3518892D
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Mar 2020 16:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F15E21889FF
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Mar 2020 17:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgCQP3A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Mar 2020 11:29:00 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:46647 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726019AbgCQP3A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Mar 2020 11:29:00 -0400
-Received: by mail-ot1-f65.google.com with SMTP id 111so21976844oth.13
-        for <linux-pm@vger.kernel.org>; Tue, 17 Mar 2020 08:28:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=emAY05bjeYY5Z+SsTfY1LZi/Lo2xoGD5YVrrYl9x09E=;
-        b=m/QBmAQj96LCZ+Hp4gwTDspCYHbn5kolqZwuPhv8AkSPxdLSQLzFkBHHjY/bgiu8+Z
-         2+Zs78+R3pw/gjeCIU/wnZsoYav7sRVBFm+/BSWDzCNSlkASt2orv26WxtkTbf/pRCoE
-         VNvGPaaTTTKHa8YIDts4Hu7d/MHNTAbkQ6jb6BChthdHw71b2uDP0fqttHN2JXu4FYR6
-         t9braptd/jeeuzWzuPoqxGBngtL6NuaN1whEKEBybtH2Om8/dwEbu5a/5Dpyv+GQxsfC
-         kHGpgkF4nSC5QaY4jHX+LTcabUPDV4ZZqUT+nL6qayCBagUZ+VkejNBOqobHeYqYZJlJ
-         owgg==
-X-Gm-Message-State: ANhLgQ12XkOy2vpxIlmhNQdvi6BQEQjCwwwX7jeeL5/qJ3BzVqwYCCSO
-        qNFnEY2UZywrM6Z3ItxX/yaftpwGzqGQg8P1Q8k3Fw==
-X-Google-Smtp-Source: ADFU+vsoH5Fvp6kQbKaY9XAaVV+Jzj65sdJV03KyDcQvRwcF92QHzUApB3DVqryVY4afUjuOXfv914uUyU/s/qVFyI8=
-X-Received: by 2002:a9d:1d07:: with SMTP id m7mr3940874otm.167.1584458938872;
- Tue, 17 Mar 2020 08:28:58 -0700 (PDT)
+        id S1726207AbgCQQQk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Mar 2020 12:16:40 -0400
+Received: from ns3.fnarfbargle.com ([103.4.19.87]:49418 "EHLO
+        ns3.fnarfbargle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726756AbgCQQQk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Mar 2020 12:16:40 -0400
+X-Greylist: delayed 1454 seconds by postgrey-1.27 at vger.kernel.org; Tue, 17 Mar 2020 12:16:38 EDT
+Received: from [10.8.0.1] (helo=srv.home ident=heh29112)
+        by ns3.fnarfbargle.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.84_2)
+        (envelope-from <brad@fnarfbargle.com>)
+        id 1jEEVc-0000jZ-V0; Tue, 17 Mar 2020 23:52:01 +0800
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fnarfbargle.com; s=mail;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject; bh=uFJ75ZP6ogQzqlLVM5kRMZ/OeGhF72Gu5uduYLklNJo=;
+        b=EacHN/gj9+7CXrtc6+GuUamMdi3ZDXpwzXHOXXTGj8feDNWyU4VEgC9fiSJvjtlzv0UlQeF0d4VUKb1vfe4ZKC0roQLp2umjspdI+8BZqPd5F35XzJpJjMn2a6r6A1PW9kZ9JvXWargCBk9DYIWxVCO5gRsVcIVutISYFWW8cWI=;
+Subject: Re: Regression: hibernation is broken since
+ e6bc9de714972cac34daa1dc1567ee48a47a9342
+To:     "Darrick J. Wong" <darrick.wong@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org
+References: <20200213172351.GA6747@dumbo> <20200213175753.GS6874@magnolia>
+ <20200213183515.GA8798@dumbo> <20200213193410.GB6868@magnolia>
+ <20200213194135.GF6870@magnolia> <20200214211523.GA32637@dumbo>
+ <20200222002319.GK9504@magnolia> <20200223190311.GA26811@dumbo>
+ <20200225202632.GE6748@magnolia>
+From:   Brad Campbell <brad@fnarfbargle.com>
+Message-ID: <f9fe045d-3613-7443-f634-f17e5630ded3@fnarfbargle.com>
+Date:   Tue, 17 Mar 2020 23:51:58 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-References: <8a91f5f0-2180-a7f2-1c22-49b2038e1fbd@freesources.org>
- <efee087b-756d-046b-f161-192682772ee3@freesources.org> <cfeff7f6-5a5c-433d-3906-2edae84f1ad9@freesources.org>
-In-Reply-To: <cfeff7f6-5a5c-433d-3906-2edae84f1ad9@freesources.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 Mar 2020 16:28:47 +0100
-Message-ID: <CAJZ5v0iGL04DdXHHE0+XYj8Mr9k9O2if9JD4NGjfSOxTf8Cxzw@mail.gmail.com>
-Subject: Re: RFH with debugging suspend issues
-To:     Jonas Meurer <jonas@freesources.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Tim Dittler <tim.dittler@systemli.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200225202632.GE6748@magnolia>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 4:26 PM Jonas Meurer <jonas@freesources.org> wrote:
->
-> Hello again,
->
-> sorry for Cc'ing you directly, Rafael. But I'm not sure whether anybody
-> reads the linux-pm mailinglist without beeing addressed directly ;)
+On 26/2/20 4:26 am, Darrick J. Wong wrote:
+> On Sun, Feb 23, 2020 at 08:03:11PM +0100, Domenico Andreoli wrote:
+>> On Fri, Feb 21, 2020 at 04:23:19PM -0800, Darrick J. Wong wrote:
+>>>
+>>> Ok, third try.  Does the following work?  This is a little more
+>>> selective in that it only disables the write protection on the swap
+>>> device/file that uswusp is going to write to.
+>>
+>> Yes it works but also verified that once the S_SWAPFILE bit is cleared
+>> it's never restored, therefore the protecton is gone after the first
+>> hibernation.
+> 
+> Ok, good.  Now can you try the third part, which ought to re-apply
+> S_SWAPFILE after a successful resume, please?  Assuming this works, I
+> think we're ready with a fixpatch.
+> 
 
-It's better to keep a public record of the conversations that happen at least.
+I just bumped up against it upgrading from 5.2 to 5.5 & a long bisection results in apparently the same point :
+# first bad commit: [dc617f29dbe5ef0c8ced65ce62c464af1daaab3d] vfs: don't allow writes to swap files
 
-> Maybe you can point us to a better place to ask for help here?
+Tested-By: Brad Campbell <lists2009@fnarfbargle.com>
 
-This is the right place, but I've been somewhat distracted lately.
-I'll get back to you later today or tomorrow, thanks!
+> --D
+> 
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index 1e99f7ac1d7e..add93e205850 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -458,6 +458,7 @@ extern void swap_free(swp_entry_t);
+>   extern void swapcache_free_entries(swp_entry_t *entries, int n);
+>   extern int free_swap_and_cache(swp_entry_t);
+>   extern int swap_type_of(dev_t, sector_t, struct block_device **);
+> +extern void swap_relockall(void);
+>   extern unsigned int count_swap_pages(int, int);
+>   extern sector_t map_swap_page(struct page *, struct block_device **);
+>   extern sector_t swapdev_block(int, pgoff_t);
+> diff --git a/kernel/power/user.c b/kernel/power/user.c
+> index 77438954cc2b..b11f7037ce5e 100644
+> --- a/kernel/power/user.c
+> +++ b/kernel/power/user.c
+> @@ -271,6 +271,8 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
+>   			break;
+>   		}
+>   		error = hibernation_restore(data->platform_support);
+> +		if (!error)
+> +			swap_relockall();
+>   		break;
+>   
+>   	case SNAPSHOT_FREE:
+> @@ -372,10 +374,17 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
+>   			 */
+>   			swdev = new_decode_dev(swap_area.dev);
+>   			if (swdev) {
+> +				struct block_device *bd;
+> +
+>   				offset = swap_area.offset;
+> -				data->swap = swap_type_of(swdev, offset, NULL);
+> +				data->swap = swap_type_of(swdev, offset, &bd);
+>   				if (data->swap < 0)
+>   					error = -ENODEV;
+> +
+> +				inode_lock(bd->bd_inode);
+> +				bd->bd_inode->i_flags &= ~S_SWAPFILE;
+> +				inode_unlock(bd->bd_inode);
+> +				bdput(bd);
+>   			} else {
+>   				data->swap = -1;
+>   				error = -EINVAL;
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index b2a2e45c9a36..a64dcba10db6 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -1799,6 +1799,32 @@ int swap_type_of(dev_t device, sector_t offset, struct block_device **bdev_p)
+>   	return -ENODEV;
+>   }
+>   
+> +/* Re-lock swap devices after resuming from userspace suspend. */
+> +void swap_relockall(void)
+> +{
+> +	int type;
+> +
+> +	spin_lock(&swap_lock);
+> +	for (type = 0; type < nr_swapfiles; type++) {
+> +		struct swap_info_struct *sis = swap_info[type];
+> +		struct block_device *bdev = bdgrab(sis->bdev);
+> +
+> +		/*
+> +		 * uswsusp only knows how to suspend to block devices, so we
+> +		 * can skip swap files.
+> +		 */
+> +		if (!(sis->flags & SWP_WRITEOK) ||
+> +		    !(sis->flags & SWP_BLKDEV))
+> +			continue;
+> +
+> +		inode_lock(bd->bd_inode);
+> +		bd->bd_inode->i_flags |= S_SWAPFILE;
+> +		inode_unlock(bd->bd_inode);
+> +		bdput(bd);
+> +	}
+> +	spin_unlock(&swap_lock);
+> +}
+> +
+>   /*
+>    * Get the (PAGE_SIZE) block corresponding to given offset on the swapdev
+>    * corresponding to given index in swap_info (swap type).
+> 
 
-
-> >> I'm searching for help with debugging a suspend issue:
-> >>
-> >> Apparently, on some devices (Lenovo laptops in particular), the kernel
-> >> causes a I/O operation on the root filesystem when suspending the system
-> >> - even though the final sync[1] is disabled thanks to setting
-> >> `/sys/power/sync_on_suspend` to 0, see my corresponding patch that got
-> >> accepted in Linux 5.6[2].
-> >>
-> >> My current guess it that some hardware-specific firmware is loaded
-> >> during system suspend. But unfortunately, so far I failed to find what
-> >> exactly it is despite following the 01.org debugging documentation[3].
-> >> Maybe you can help me shed some light on it?
-> >
-> > I finally succeeded in reliably tracking this down to firmware loading.
-> > With kernel boot parameters `initcall_debug ignore_loglevel`, the last
-> > logs before my system freezes are:
-> >
-> > PM: suspend entry (deep)
-> > (NULL device *): firmware: direct-loading firmware regulatory.db
-> > (NULL device *): firmware: direct-loading firmware regulatory.db.p7s
-> > (NULL device *): firmware: direct-loading firmware iwlwifi-8000C-36.ucode
-> >
-> > If I blacklist all modules that cause the kernel to load firmware (for
-> > me, that's cfg80211, iwlwifi and some bluetooth modules), then the issue
-> > is gone.
-> >
-> > So without further investigation I could imagine three possible solutions:
-> >
-> > 1. Provide all firmware files to the kernel from the chroot. That
-> >    probably means to copy the firmware files to initramfs and to make
-> >    the kernel aware of the new firmware path at
-> >    `/sys/module/firmware_class/parameters/path`.
-> > 2. Find a way to manually trigger the firmware loading operation before
-> >    we luksSuspend the LUKS devices.
-> > 3. Find a way do disable direct-loading of firmware by the kernel during
-> >    suspend.
-> >
-> > Maybe someone with more inside knowledge could comment on whether
-> > options 2 or 3 are possible at all and if not, whether kernel patches to
-> > implement them would be acceptable.
->
-> Any chance to get a comment on this?
