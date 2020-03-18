@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3AC189B37
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 12:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE82189B3C
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 12:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbgCRLuu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Mar 2020 07:50:50 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:41393 "EHLO
+        id S1726845AbgCRLvc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Mar 2020 07:51:32 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:43982 "EHLO
         mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726586AbgCRLut (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Mar 2020 07:50:49 -0400
-Received: by mail-lj1-f193.google.com with SMTP id o10so26644256ljc.8;
-        Wed, 18 Mar 2020 04:50:46 -0700 (PDT)
+        with ESMTP id S1726586AbgCRLvc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Mar 2020 07:51:32 -0400
+Received: by mail-lj1-f193.google.com with SMTP id r7so26657939ljp.10;
+        Wed, 18 Mar 2020 04:51:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zh5NDBblpbI+7tR1wpNxJ0+mQOL9i1LB8o9GdU6Et3A=;
-        b=sC+xwWgvY/NNnWZlUgHxVkGWk0UFrb4GytukJTtWjt1wXCvqNLHCa93JZAaGwgOwgT
-         PGQ3gwXyU2NU7RO6hDTW99O6KLf8TEBaM5/ua/pqTM7EQMOmSIvTsjmjue1JtC3rYUGb
-         8wNdKybHY3QV6a3+UTWoilsB+jIQCeT3qNfzN9JqGR40qY+OscSnosgn3YFDHoGaSoIp
-         3Tqk0p1TYZrP9l36wxVOm8ZJCwuBSJ2gPAgyRtW3OHfzNZn9q+8VhKnaRk3XA4rgmEc4
-         kezfzhq8ayg5dTJmWNpZE1wac0hNz2RtHj1j5WVQvYmFKeLdhJZO4+SFYGtRhDM3aWsk
-         uaZg==
-X-Gm-Message-State: ANhLgQ14GeCAScKpm8ZJT1+4uSrreVKEXiNoYvquox8C6Mnqb760v+o8
-        P2R06GoJeuPM2D2VmgLa3ADdDZaU
-X-Google-Smtp-Source: ADFU+vtVqa269j3tcXUJywRkqVk7Dzv9ilaD07jX2CPu2GumbQLgH8muD78B54djjKJnwojTjNRSRQ==
-X-Received: by 2002:a2e:a487:: with SMTP id h7mr2224072lji.127.1584532245481;
-        Wed, 18 Mar 2020 04:50:45 -0700 (PDT)
+        bh=QwdQ3iVZZgrPlZePwEbrctVN53vH0orT5NcOixtFYXo=;
+        b=ZrE7JFJVYJjDzSenoDDjUXVj2m8Vm9vtmSC9/sBi6BVQBM2L10KWZyvK7zw4xxywUZ
+         4uvVoV8f6H8mobYd/wSftig0b/w6OpfrYhrGgzuS/KH7PijIaSaM7EIBWQhGXH+c0XX4
+         6StBZvVv5d2jSu5NqZND+mhFfL7znUAs7Eis60SC7UdscCEUhS6Du0CWd8y8UtXbRxr8
+         lNJ8BnVtLdWWsgP1feKKLvf8kDPStH5ZnzjCkUiO/N7f289izCAgjWu/vi18eDd2/lPd
+         t/Z6x66wHF/WycwVvuZNTppm+wqa0XHQSvZsXPU+Udhu4S9OQwwv/3Rd6BhgJ846BABF
+         rD9w==
+X-Gm-Message-State: ANhLgQ3t8VReArFnMyEfyFEVBpoEXwVW1eF7VrJt6pnZO78dcqnx/BKz
+        x4trsp17HTX4l95UUeYvpeI=
+X-Google-Smtp-Source: ADFU+vv1mNVhj2Zlm7auffiBwuZNSblRykCkDkgP8+cbU9vVpLOiR58dz1HPvauuNrdkK3NhVpRTqg==
+X-Received: by 2002:a2e:97cf:: with SMTP id m15mr2108122ljj.30.1584532289046;
+        Wed, 18 Mar 2020 04:51:29 -0700 (PDT)
 Received: from localhost.localdomain (dc7t7ryyyyyyyyyyyyybt-3.rev.dnainternet.fi. [2001:14ba:16e1:b700::3])
-        by smtp.gmail.com with ESMTPSA id 9sm4868003ljf.0.2020.03.18.04.50.43
+        by smtp.gmail.com with ESMTPSA id p14sm4191329ljn.80.2020.03.18.04.51.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2020 04:50:44 -0700 (PDT)
-Date:   Wed, 18 Mar 2020 13:50:37 +0200
+        Wed, 18 Mar 2020 04:51:28 -0700 (PDT)
+Date:   Wed, 18 Mar 2020 13:51:22 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     Sebastian Reichel <sre@kernel.org>,
@@ -48,8 +48,9 @@ Cc:     Sebastian Reichel <sre@kernel.org>,
         linux-kernel@vger.kernel.org,
         Markus Laine <markus.laine@fi.rohmeurope.com>,
         Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
-Subject: [PATCH v5 3/9] drivers: base: add linear ranges helpers
-Message-ID: <f89f46b5a1e3d2582e6c1b61aaa2ccdc62d3ee2c.1584468798.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v5 4/9] power: supply: bd70528: rename linear_range to avoid
+ collision
+Message-ID: <24001f14f26002c138028c7550578c2b0f8175c8.1584468798.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1584468798.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -61,370 +62,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Many devices have control registers which control some measurable
-property. Often a register contains control field so that change in
-this field causes linear change in the controlled property. It is not
-a rare case that user wants to give 'meaningful' control values and
-driver needs to convert them to register field values. Even more
-often user wants to 'see' the currently set value - again in
-meaningful units - and driver needs to convert the values it reads
-from register to these meaningful units. Examples of this include:
-
-- regulators, voltage/current configurations
-- power, voltage/current configurations
-- clk(?) NCOs
-
-and maybe others I can't think of right now.
-
-Provide a linear_range helper which can do conversion from user value
-to register value 'selector'.
-
-The idea here is stolen from regulator framework and patches refactoring
-the regulator helpers to use this are following.
+Follow-up patches in this series will add a generic struct
+linear_range. Rename bd70528 internal struct to avoid collision.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
 
-No changes since v4 (rebased only)
+No changes since v4 (only rebased)
 
- drivers/base/Kconfig         |   3 +
- drivers/base/Makefile        |   1 +
- drivers/base/linear_ranges.c | 246 +++++++++++++++++++++++++++++++++++
- include/linux/linear_range.h |  48 +++++++
- 4 files changed, 298 insertions(+)
- create mode 100644 drivers/base/linear_ranges.c
- create mode 100644 include/linux/linear_range.h
+ drivers/power/supply/bd70528-charger.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-index 5f0bc74d2409..636b6fa8e499 100644
---- a/drivers/base/Kconfig
-+++ b/drivers/base/Kconfig
-@@ -209,4 +209,7 @@ config GENERIC_ARCH_TOPOLOGY
- 	  appropriate scaling, sysfs interface for reading capacity values at
- 	  runtime.
+diff --git a/drivers/power/supply/bd70528-charger.c b/drivers/power/supply/bd70528-charger.c
+index b8e1ec106627..3b820110ecfa 100644
+--- a/drivers/power/supply/bd70528-charger.c
++++ b/drivers/power/supply/bd70528-charger.c
+@@ -335,14 +335,14 @@ static int bd70528_get_present(struct bd70528_psy *bdpsy, int *val)
+ 	return 0;
+ }
  
-+config LINEAR_RANGES
-+	tristate
-+
- endmenu
-diff --git a/drivers/base/Makefile b/drivers/base/Makefile
-index 157452080f3d..dbb6c4f7ef07 100644
---- a/drivers/base/Makefile
-+++ b/drivers/base/Makefile
-@@ -23,6 +23,7 @@ obj-$(CONFIG_PINCTRL) += pinctrl.o
- obj-$(CONFIG_DEV_COREDUMP) += devcoredump.o
- obj-$(CONFIG_GENERIC_MSI_IRQ_DOMAIN) += platform-msi.o
- obj-$(CONFIG_GENERIC_ARCH_TOPOLOGY) += arch_topology.o
-+obj-$(CONFIG_LINEAR_RANGES) += linear_ranges.o
+-struct linear_range {
++struct bd70528_linear_range {
+ 	int min;
+ 	int step;
+ 	int vals;
+ 	int low_sel;
+ };
  
- obj-y			+= test/
+-static const struct linear_range current_limit_ranges[] = {
++static const struct bd70528_linear_range current_limit_ranges[] = {
+ 	{
+ 		.min = 5,
+ 		.step = 1,
+@@ -374,7 +374,7 @@ static const struct linear_range current_limit_ranges[] = {
+  * voltage for low temperatures. The driver currently only reads
+  * the charge current at room temperature. We do set both though.
+  */
+-static const struct linear_range warm_charge_curr[] = {
++static const struct bd70528_linear_range warm_charge_curr[] = {
+ 	{
+ 		.min = 10,
+ 		.step = 10,
+@@ -398,7 +398,7 @@ static const struct linear_range warm_charge_curr[] = {
+ #define MAX_WARM_CHG_CURR_SEL 0x1f
+ #define MIN_CHG_CURR_SEL 0x0
  
-diff --git a/drivers/base/linear_ranges.c b/drivers/base/linear_ranges.c
-new file mode 100644
-index 000000000000..d9e1559b0e7b
---- /dev/null
-+++ b/drivers/base/linear_ranges.c
-@@ -0,0 +1,246 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * linear_ranges.c -- helpers to map values in a linear range to range index
-+ *
-+ * Original idea borrowed from regulator framework
-+ *
-+ * It might be useful if we could support also inversely proportional ranges?
-+ * Copyright 2020 ROHM Semiconductors
-+ */
-+
-+#include <linux/errno.h>
-+#include <linux/export.h>
-+#include <linux/kernel.h>
-+#include <linux/linear_range.h>
-+
-+/**
-+ * linear_range_values_in_range - return the amount of values in a range
-+ *
-+ * @r:		pointer to linear range where values are counted
-+ *
-+ * Compute the amount of values in range pointed by @r. Note, values can
-+ * be all equal - range with selectors 0,...,2 with step 0 still contains
-+ * 3 values even though they are all equal.
-+ *
-+ * Return: the amount of values in range pointed by @r
-+ */
-+unsigned int linear_range_values_in_range(const struct linear_range *r)
-+{
-+	if (!r)
-+		return 0;
-+	return r->max_sel - r->min_sel + 1;
-+}
-+EXPORT_SYMBOL(linear_range_values_in_range);
-+
-+/**
-+ * linear_range_values_in_range_array - return the amount of values in ranges
-+ *
-+ * @r:		pointer to array of linear ranges where values are counted
-+ * @ranges:	amount of ranges we include in computation.
-+ *
-+ * Compute the amount of values in ranges pointed by @r. Note, values can
-+ * be all equal - range with selectors 0,...,2 with step 0 still contains
-+ * 3 values even though they are all equal.
-+ *
-+ * Return: the amount of values in first @ranges ranges pointed by @r
-+ */
-+unsigned int linear_range_values_in_range_array(const struct linear_range *r,
-+						int ranges)
-+{
-+	int i, values_in_range = 0;
-+
-+	for (i = 0; i < ranges; i++) {
-+		int values;
-+
-+		values = linear_range_values_in_range(&r[i]);
-+		if (!values)
-+			return values;
-+
-+		values_in_range += values;
-+	}
-+	return values_in_range;
-+}
-+EXPORT_SYMBOL(linear_range_values_in_range_array);
-+
-+/**
-+ * linear_range_get_max_value - return the largest value in a range
-+ *
-+ * @r:		pointer to linear range where value is looked from
-+ *
-+ * Return: the largest value in the given range
-+ */
-+unsigned int linear_range_get_max_value(const struct linear_range *r)
-+{
-+	return r->min + (r->max_sel - r->min_sel) * r->step;
-+}
-+EXPORT_SYMBOL(linear_range_get_max_value);
-+
-+/**
-+ * linear_range_get_value - fetch a value from given range
-+ *
-+ * @r:		pointer to linear range where value is looked from
-+ * @selector:	selector for which the value is searched
-+ * @val:	address where found value is updated
-+ *
-+ * Search given ranges for value which matches given selector.
-+ *
-+ * Return: 0 on success, -EINVAL given selector is not found from any of the
-+ * ranges.
-+ */
-+int linear_range_get_value(const struct linear_range *r, unsigned int selector,
-+			   unsigned int *val)
-+{
-+	if (r->min_sel > selector || r->max_sel < selector)
-+		return -EINVAL;
-+
-+	*val = r->min + (selector - r->min_sel) * r->step;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(linear_range_get_value);
-+
-+/**
-+ * linear_range_get_value_array - fetch a value from array of ranges
-+ *
-+ * @r:		pointer to array of linear ranges where value is looked from
-+ * @ranges:	amount of ranges in an array
-+ * @selector:	selector for which the value is searched
-+ * @val:	address where found value is updated
-+ *
-+ * Search through an array of ranges for value which matches given selector.
-+ *
-+ * Return: 0 on success, -EINVAL given selector is not found from any of the
-+ * ranges.
-+ */
-+int linear_range_get_value_array(const struct linear_range *r, int ranges,
-+				 unsigned int selector, unsigned int *val)
-+{
-+	int i;
-+
-+	for (i = 0; i < ranges; i++)
-+		if (r[i].min_sel <= selector && r[i].max_sel >= selector)
-+			return linear_range_get_value(&r[i], selector, val);
-+
-+	return -EINVAL;
-+}
-+EXPORT_SYMBOL(linear_range_get_value_array);
-+
-+/**
-+ * linear_range_get_selector_low - return linear range selector for value
-+ *
-+ * @r:		pointer to linear range where selector is looked from
-+ * @val:	value for which the selector is searched
-+ * @selector:	address where found selector value is updated
-+ * @found:	flag to indicate that given value was in the range
-+ *
-+ * Return selector which which range value is closest match for given
-+ * input value. Value is matching if it is equal or smaller than given
-+ * value. If given value is in the range, then @found is set true.
-+ *
-+ * Return: 0 on success, -EINVAL if range is invalid or does not contain
-+ * value smaller or equal to given value
-+ */
-+int linear_range_get_selector_low(const struct linear_range *r,
-+				  unsigned int val, unsigned int *selector,
-+				  bool *found)
-+{
-+	*found = false;
-+
-+	if (r->min > val)
-+		return -EINVAL;
-+
-+	if (linear_range_get_max_value(r) >= val)
-+		*found = true;
-+
-+	if (!r->step)
-+		*selector = r->min_sel;
-+	else
-+		*selector = (val - r->min) / r->step + r->min_sel;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(linear_range_get_selector_low);
-+
-+/**
-+ * linear_range_get_selector_low_array - return linear range selector for value
-+ *
-+ * @r:		pointer to array of linear ranges where selector is looked from
-+ * @ranges:	amount of ranges to scan from array
-+ * @val:	value for which the selector is searched
-+ * @selector:	address where found selector value is updated
-+ * @found:	flag to indicate that given value was in the range
-+ *
-+ * Scan array of ranges for selector which which range value matches given
-+ * input value. Value is matching if it is equal or smaller than given
-+ * value. If given value is found to be in a range scannins is stopped and
-+ * @found is set true. If a range with values smaller than given value is found
-+ * but the range max is being smaller than given value, then the ranges
-+ * biggest selector is updated to @selector but scanning ranges is continued
-+ * and @found is set to false.
-+ *
-+ * Return: 0 on success, -EINVAL if range array is invalid or does not contain
-+ * range with a value smaller or equal to given value
-+ */
-+int linear_range_get_selector_low_array(const struct linear_range *r,
-+					int ranges, unsigned int val,
-+					unsigned int *selector, bool *found)
-+{
-+	int i;
-+	int ret = -EINVAL;
-+
-+	for (i = 0; i < ranges; i++) {
-+		int tmpret;
-+
-+		tmpret = linear_range_get_selector_low(&r[i], val, selector,
-+						       found);
-+
-+		if (!tmpret)
-+			ret = 0;
-+
-+		if (*found)
-+			break;
-+	}
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL(linear_range_get_selector_low_array);
-+
-+/**
-+ * linear_range_get_selector_high - return linear range selector for value
-+ *
-+ * @r:		pointer to linear range where selector is looked from
-+ * @val:	value for which the selector is searched
-+ * @selector:	address where found selector value is updated
-+ * @found:	flag to indicate that given value was in the range
-+ *
-+ * Return selector which which range value is closest match for given
-+ * input value. Value is matching if it is equal or higher than given
-+ * value. If given value is in the range, then @found is set true.
-+ *
-+ * Return: 0 on success, -EINVAL if range is invalid or does not contain
-+ * value greater or equal to given value
-+ */
-+int linear_range_get_selector_high(const struct linear_range *r,
-+				   unsigned int val, unsigned int *selector,
-+				   bool *found)
-+{
-+	*found = false;
-+
-+	if (linear_range_get_max_value(r) < val)
-+		return -EINVAL;
-+
-+	if (r->min <= val) {
-+		*found = true;
-+	} else {
-+		*selector = r->min_sel;
-+		return 0;
-+	}
-+
-+	if (!r->step)
-+		*selector = r->max_sel;
-+	else
-+		*selector = DIV_ROUND_UP(val - r->min, r->step) + r->min_sel;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(linear_range_get_selector_high);
-diff --git a/include/linux/linear_range.h b/include/linux/linear_range.h
-new file mode 100644
-index 000000000000..534ca59a308a
---- /dev/null
-+++ b/include/linux/linear_range.h
-@@ -0,0 +1,48 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/* Copyright (C) 2020 ROHM Semiconductors */
-+
-+#ifndef LINEAR_RANGE_H
-+#define LINEAR_RANGE_H
-+
-+#include <linux/types.h>
-+
-+/**
-+ * struct linear_range - table of selector - value pairs
-+ *
-+ * Define a lookup-table for range of values. Intended to help when looking
-+ * for a register value matching certaing physical measure (like voltage).
-+ * Usable when increment of one in register always results a constant increment
-+ * of the physical measure (like voltage).
-+ *
-+ * @min:  Lowest value in range
-+ * @min_sel: Lowest selector for range
-+ * @max_sel: Highest selector for range
-+ * @step: Value step size
-+ */
-+struct linear_range {
-+	unsigned int min;
-+	unsigned int min_sel;
-+	unsigned int max_sel;
-+	unsigned int step;
-+};
-+
-+unsigned int linear_range_values_in_range(const struct linear_range *r);
-+unsigned int linear_range_values_in_range_array(const struct linear_range *r,
-+						int ranges);
-+unsigned int linear_range_get_max_value(const struct linear_range *r);
-+
-+int linear_range_get_value(const struct linear_range *r, unsigned int selector,
-+			   unsigned int *val);
-+int linear_range_get_value_array(const struct linear_range *r, int ranges,
-+				 unsigned int selector, unsigned int *val);
-+int linear_range_get_selector_low(const struct linear_range *r,
-+				  unsigned int val, unsigned int *selector,
-+				  bool *found);
-+int linear_range_get_selector_high(const struct linear_range *r,
-+				   unsigned int val, unsigned int *selector,
-+				   bool *found);
-+int linear_range_get_selector_low_array(const struct linear_range *r,
-+					int ranges, unsigned int val,
-+					unsigned int *selector, bool *found);
-+
-+#endif
+-static int find_value_for_selector_low(const struct linear_range *r,
++static int find_value_for_selector_low(const struct bd70528_linear_range *r,
+ 				       int selectors, unsigned int sel,
+ 				       unsigned int *val)
+ {
+@@ -420,7 +420,7 @@ static int find_value_for_selector_low(const struct linear_range *r,
+  * I guess it is enough if we use voltage/current which is closest (below)
+  * the requested?
+  */
+-static int find_selector_for_value_low(const struct linear_range *r,
++static int find_selector_for_value_low(const struct bd70528_linear_range *r,
+ 				       int selectors, unsigned int val,
+ 				       unsigned int *sel, bool *found)
+ {
 -- 
 2.21.0
 
