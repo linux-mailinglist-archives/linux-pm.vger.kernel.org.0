@@ -2,125 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77932189C94
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 14:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96C2189CA1
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 14:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726912AbgCRNIm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Mar 2020 09:08:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56670 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726767AbgCRNIl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Mar 2020 09:08:41 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CD8B720724;
-        Wed, 18 Mar 2020 13:08:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584536920;
-        bh=IK7Y5ZSmtcwGdd99YOsDwYG87YcJBtNmXMYebt4itiw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ao/O4jIgBcUwSCsqm5OQ5agm3YDTJ5N6RbEIYQECoGVoyxucRrKGyKpCerM8428XJ
-         aCpTzqj+I0NJC510y9k85ukfosiquOlCq2FBoibr8MH08Gx24pBrpOzPgvjCPF6mp/
-         eCzNrbj4EaMiVzYfLuTKgiRZ5B8eYc1rCeEr4U3c=
-Date:   Wed, 18 Mar 2020 14:08:38 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Markus Laine <markus.laine@fi.rohmeurope.com>,
-        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
-Subject: Re: [PATCH v4 3/9] drivers: base: add linear ranges helpers
-Message-ID: <20200318130838.GB2769584@kroah.com>
-References: <cover.1582617178.git.matti.vaittinen@fi.rohmeurope.com>
- <01ac2439f9d33ae405999065c5d28c368bad4a28.1582617178.git.matti.vaittinen@fi.rohmeurope.com>
+        id S1726980AbgCRNLb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Mar 2020 09:11:31 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44342 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726796AbgCRNLa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Mar 2020 09:11:30 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: alyssa)
+        with ESMTPSA id 1E0CF294B84
+Date:   Wed, 18 Mar 2020 09:11:14 -0400
+From:   Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com, Morten.Rasmussen@arm.com,
+        Dietmar.Eggemann@arm.com, javi.merino@arm.com,
+        cw00.choi@samsung.com, b.zolnierkie@samsung.com, rjw@rjwysocki.net,
+        sudeep.holla@arm.com, viresh.kumar@linaro.org, nm@ti.com,
+        sboyd@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, qperret@google.com, bsegall@google.com,
+        mgorman@suse.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, kernel@pengutronix.de, khilman@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, airlied@linux.ie, daniel@ffwll.ch,
+        liviu.dudau@arm.com, lorenzo.pieralisi@arm.com,
+        patrick.bellasi@matbug.net, orjan.eide@arm.com,
+        rdunlap@infradead.org, mka@chromium.org
+Subject: Re: [PATCH v5 5/5] drm/panfrost: Register devfreq cooling and
+ attempt to add Energy Model
+Message-ID: <20200318131114.GA1812@kevin>
+References: <20200318114548.19916-1-lukasz.luba@arm.com>
+ <20200318114548.19916-6-lukasz.luba@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BXVAT5kNtrzKuDFl"
 Content-Disposition: inline
-In-Reply-To: <01ac2439f9d33ae405999065c5d28c368bad4a28.1582617178.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <20200318114548.19916-6-lukasz.luba@arm.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Feb 25, 2020 at 10:53:01AM +0200, Matti Vaittinen wrote:
-> Many devices have control registers which control some measurable
-> property. Often a register contains control field so that change in
-> this field causes linear change in the controlled property. It is not
-> a rare case that user wants to give 'meaningful' control values and
-> driver needs to convert them to register field values. Even more
-> often user wants to 'see' the currently set value - again in
-> meaningful units - and driver needs to convert the values it reads
-> from register to these meaningful units. Examples of this include:
-> 
-> - regulators, voltage/current configurations
-> - power, voltage/current configurations
-> - clk(?) NCOs
-> 
-> and maybe others I can't think of right now.
-> 
-> Provide a linear_range helper which can do conversion from user value
-> to register value 'selector'.
-> 
-> The idea here is stolen from regulator framework and patches refactoring
-> the regulator helpers to use this are following.
-> 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+
+--BXVAT5kNtrzKuDFl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Reviewed-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+
+On Wed, Mar 18, 2020 at 11:45:48AM +0000, Lukasz Luba wrote:
+> Register devfreq cooling device and attempt to register Energy Model. This
+> will add the devfreq device to the Energy Model framework. It will create
+> a dedicated and unified data structures used i.e. in thermal framework.
+> The last NULL parameter indicates that the power model is simplified and
+> created based on DT 'dynamic-power-coefficient', voltage and frequency.
+>=20
+> Reviewed-by: Steven Price <steven.price@arm.com>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
-> 
-> Changes since rfc-v3:
->   - Kerneldoc fixes
->   - Corrected commit message typo meaningfull => meaningful
-> 
->  drivers/base/Kconfig         |   3 +
->  drivers/base/Makefile        |   1 +
->  drivers/base/linear_ranges.c | 246 +++++++++++++++++++++++++++++++++++
+>  drivers/gpu/drm/panfrost/panfrost_devfreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/dr=
+m/panfrost/panfrost_devfreq.c
+> index 413987038fbf..8759a73db153 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> @@ -105,7 +105,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfd=
+ev)
+>  	}
+>  	pfdev->devfreq.devfreq =3D devfreq;
+> =20
+> -	cooling =3D of_devfreq_cooling_register(dev->of_node, devfreq);
+> +	cooling =3D devfreq_cooling_em_register(devfreq, NULL);
+>  	if (IS_ERR(cooling))
+>  		DRM_DEV_INFO(dev, "Failed to register cooling device\n");
+>  	else
+> --=20
+> 2.17.1
+>=20
 
-Why in drivers/base/ ?
+--BXVAT5kNtrzKuDFl
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Why not in lib/ ?
+-----BEGIN PGP SIGNATURE-----
 
->  include/linux/linear_range.h |  48 +++++++
->  4 files changed, 298 insertions(+)
->  create mode 100644 drivers/base/linear_ranges.c
->  create mode 100644 include/linux/linear_range.h
-> 
-> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-> index 5f0bc74d2409..636b6fa8e499 100644
-> --- a/drivers/base/Kconfig
-> +++ b/drivers/base/Kconfig
-> @@ -209,4 +209,7 @@ config GENERIC_ARCH_TOPOLOGY
->  	  appropriate scaling, sysfs interface for reading capacity values at
->  	  runtime.
->  
-> +config LINEAR_RANGES
-> +	tristate
+iQIzBAABCgAdFiEEQ17gm7CvANAdqvY4/v5QWgr1WA0FAl5yHe0ACgkQ/v5QWgr1
+WA3gpxAAhQnRoPbq6S2+0Lb7C5bP7Ta67p3aDFRc/xxNEKsqRl5YcErm72knMqpa
+ojkyaIkecKFeI6D1QS9UpFtSDzHdq+HsBJSnSBsR8ND6GOlUv3ZQhl7dQAf37exS
+Kq64qQnpJfy/kcF5zStxtD145VJDXoX1By4AdnSg+kOuYi2HAKQ2SbQvYDd5ffk0
+9fe6YagwE/iaz2o5z0c2EO6nBjstSo91/AKx99MwW7IfgJmgMZCGE0Q4UTduryr2
+tFSBzWTStKCWxI2lDsrRQcF7KN4mZ2dZWgNFo4UU5tp36/kGHqKQ+Vzyaay8WWGU
+IHgjKW+vo9TH8QyayRCCljtl/iYUbhrEa9n6APCnmW6sNsxPuO6KbZ3vzMz6WkLJ
+/W1M+XIchveNFRZB7ku8DG4nLgISikgjMnPCO/F/y0NOQ8YaU7GeyeGj7yRom6LY
+e4Oz34cToBULP5m6B1b/KGu013TwkRqwAoc2qHAlB5TXBXm/zOdyLqPo1/pgul30
+H4+YKSUEl95b5w8URYnoKvf3sS0wocG4GvdC2pY8IOYRUNSmfsxiPW33Y7wcavgj
+WF9YUFO5mRV1b+2QppuWp2UIwSjC7Uuh2lCTFhK4hod+RptE5h1MoKmQa2jSegr8
+3uvfCXtDGQskJ+MDv9aUtGYTX14nPfwXUO3RPidKGgMF8r6W3to=
+=pczP
+-----END PGP SIGNATURE-----
 
-No help text at all???
-
-> +EXPORT_SYMBOL(linear_range_values_in_range);
-
-EXPORT_SYMBOL_GPL() for all of these?  I have to ask...
-
-> @@ -0,0 +1,48 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-
-Are you sure about the "or later"?  Again, I have to ask.
-
-> +/* Copyright (C) 2020 ROHM Semiconductors */
-> +
-> +#ifndef LINEAR_RANGE_H
-> +#define LINEAR_RANGE_H
-> +
-> +#include <linux/types.h>
-
-Why is this needed?
-
-thanks,
-
-greg k-h
+--BXVAT5kNtrzKuDFl--
