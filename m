@@ -2,97 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA18918A723
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 22:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E46518A910
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 00:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726747AbgCRVhM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Mar 2020 17:37:12 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:45640 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726619AbgCRVhM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Mar 2020 17:37:12 -0400
-Received: by mail-ot1-f68.google.com with SMTP id e9so185731otr.12
-        for <linux-pm@vger.kernel.org>; Wed, 18 Mar 2020 14:37:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X/LjTXDxpowMwP1P8geARIgSvCBTa/4IIeP31kPobGY=;
-        b=su+/5SEXQ1st0XO2L/GMdus793gRIqoNrLIEwD1w2mHlLohGOin4g6VmBZ/s25cVAQ
-         hWiWyYGz0kTJgraNWiA10ndm8k2+1e2ppxivjRE9M5qx4YVNTrTkRgeVnSC/xK8/qF+R
-         9AWWpn+EKp1NBY887n27pJqW8wuBC0I+4Ql5kUxBl3r2DboWEHgSKbgHDafgUZFNbNxJ
-         qiJeGZ31ym99YISkjMx4KLlEVHx/TsvijGhppFEYzZylZpdRwWlGieUPMKTQgM2AQ8Uu
-         cbWm+mgPsTSTNJt+ETXmB8RJrB2TLrIF0aFZ99A5AJoEvxlSG/H0QLkHbSja+OP6+1pq
-         Z7CA==
-X-Gm-Message-State: ANhLgQ1DbI84AVncUEi9zV8IlBqb53gnJvr3LFFXpSjsJTOipiXzxM4i
-        IE2jt/ibV1QCM7xdpnB8PWLxZkcwl6O70ErqYgG5pg==
-X-Google-Smtp-Source: ADFU+vvzPv5H2RYWiQCahYOtiEESGIsq6M9fCsen+LB7h5ZTrZLpKZXXYJ6s/HKEkbmnSYzISqMW2Y9WrVeMzROSQXk=
-X-Received: by 2002:a9d:649a:: with SMTP id g26mr5858475otl.266.1584567431742;
- Wed, 18 Mar 2020 14:37:11 -0700 (PDT)
+        id S1726912AbgCRXOi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Mar 2020 19:14:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40542 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726619AbgCRXOi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 18 Mar 2020 19:14:38 -0400
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7FD6120774;
+        Wed, 18 Mar 2020 23:14:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584573277;
+        bh=xnAd9aM1szJANZpOZYnjr6Q8kk/poW+SW49OK+6CBJA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XT6D3puNAvAMgfndY1UkiEwX/BXNrV8lHFBJbFQ6C2BuScL9EglKJPh0UK+mThH/x
+         ZWjeAMvPdxvDLboxeGLkF8+cEq1dA3mTBTmQy/kzA3izx6PCAZUUdcteK+FqeqN0yW
+         0xnfVXckdm1wnESB6PRDBbRdUELl3okC9iiHjEKU=
+Received: by mail-qk1-f170.google.com with SMTP id j2so247188qkl.7;
+        Wed, 18 Mar 2020 16:14:37 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ3UtG2Nn1hfO3OMVds5Yh0p1PH9+wp1p3qUtGRjEJKl+7gnDKJK
+        Kts/5yZzkVF9aaS+7v1oYW+PIB3O9y7VeV+NoQ==
+X-Google-Smtp-Source: ADFU+vuzTuEwzK4FnMMP68h9BVgs5HKeW7PynpJbTqVEa9tqOafe3uVDdXHxy4DHtPecBZfqcHfHBSgvLnWqgjn5B3c=
+X-Received: by 2002:a37:4a85:: with SMTP id x127mr338927qka.152.1584573276533;
+ Wed, 18 Mar 2020 16:14:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <8a91f5f0-2180-a7f2-1c22-49b2038e1fbd@freesources.org>
-In-Reply-To: <8a91f5f0-2180-a7f2-1c22-49b2038e1fbd@freesources.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 18 Mar 2020 22:37:00 +0100
-Message-ID: <CAJZ5v0iYojtO=FJR4PuB_XDcLKiE2xXUWTvON-jQJJa+OBw18Q@mail.gmail.com>
-Subject: Re: RFH with debugging suspend issues
-To:     Jonas Meurer <jonas@freesources.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Tim Dittler <tim.dittler@systemli.org>
+References: <20200306130341.9585-1-Sergey.Semin@baikalelectronics.ru>
+ <20200306130402.1F4F0803079F@mail.baikalelectronics.ru> <20200312211438.GA21883@bogus>
+ <20200313130231.wrvvcttm7ofaxbfo@ubsrv2.baikal.int>
+In-Reply-To: <20200313130231.wrvvcttm7ofaxbfo@ubsrv2.baikal.int>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 18 Mar 2020 17:14:25 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+W84r687zNV=2S-hj9=xbTQxkx9MpVNDTn6TOrBgiGUw@mail.gmail.com>
+Message-ID: <CAL_Jsq+W84r687zNV=2S-hj9=xbTQxkx9MpVNDTn6TOrBgiGUw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] dt-bindings: power: reset: Add regmap support to the
+ SYSCON reboot-mode bindings
+To:     Sergey Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 9, 2020 at 12:14 PM Jonas Meurer <jonas@freesources.org> wrote:
+On Fri, Mar 13, 2020 at 7:03 AM Sergey Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
 >
-> Hello,
+> On Thu, Mar 12, 2020 at 04:14:38PM -0500, Rob Herring wrote:
+> > On Fri, Mar 06, 2020 at 04:03:40PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> > > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > >
+> > > Optional regmap property will be used to refer to a syscon-controller
+> > > having a reboot tolerant register mapped.
+> >
+> > NAK. It should simply be a child node of the 'syscon-controller'.
 >
-> I'm searching for help with debugging a suspend issue:
+> Hm, It's dilemma. The driver maintainer said ack, while you disagree.)
+> So the code change will be merged while the doc-part won't? Lets discuss then
+> to settle the issue.
 >
-> Apparently, on some devices (Lenovo laptops in particular), the kernel
-> causes a I/O operation on the root filesystem when suspending the system
-> - even though the final sync[1] is disabled thanks to setting
-> `/sys/power/sync_on_suspend` to 0, see my corresponding patch that got
-> accepted in Linux 5.6[2].
+> Why 'syscon-reboot' can be out of syscon-controller node, while
+> 'syscon-reboot-mode' can't?
 
-And that's how it goes.  There is no guarantee whatever that there
-will be no I/O carried out during system-wide suspend without the
-sync.
+Look at the history and you will see one was reviewed by DT
+maintainers and one wasn't.
 
-> My current guess it that some hardware-specific firmware is loaded
-> during system suspend. But unfortunately, so far I failed to find what
-> exactly it is despite following the 01.org debugging documentation[3].
-> Maybe you can help me shed some light on it?
->
-> The problem I'm facing is the following:
->
-> When luksSuspending my LUKS encrypted root file system just before
-> running `echo mem >/sys/power/state` on a Lenovo Thinkpad, the kernel
-> suspend function freezes my system..
-> *BUT*: If I first run `echo mem >/sys/power/state` without luksSuspend,
-> and do the luksSuspend + system suspend thing after a successful first
-> system suspend, then my luksSuspend + system suspend succeeds reproducibly.
->
-> So apparently, at the first system suspend, something triggers a disk
-> I/O operation that isn't triggered at subsequent system suspends.
+> They both belong to the same usecase: save
+> cause id and reboot. So having similar properties-set and declaring their
+> nodes someplace nearby is natural.
 
-I'm not quite sure how you arrived at this conclusion.  Can you
-elaborate, please?
+Which is what I'm asking for. Where else in the tree does it make
+sense to locate the 'syscon-reboot-mode' node? Locate nodes where they
+logically belong.
 
-> Do you have an idea what that could be and how to further debug it?
+> According to the driver 'syscon-reboot'
+> can't lack the regmap property because it's mandatory, while here you refuse
+> to have even optional support. Additionally in most of the cases the
+> 'syscon-reboot' nodes aren't declared as a child of a system controller
+> node. Why 'syscon-reboot-mode' can't work in a similar way?
 
-Not really.
+There's plenty of bad or "don't follow current best practice" examples
+in the tree for all sorts of things. That is not a reason for doing
+something in a new binding or adding to an existing one.
 
-> To give some context: together with Tim (Cc'ed), I'm working on
-> automatically suspending encrypted LUKS devices during system suspend in
-> Debian. Our code basically uncompresses the initramfs image into a
-> ramfs, chroots into it, luks-suspends all encrypted LUKS devices and
-> sends the system to suspend mode. After resume, commands to unlock/
-> resume the suspended LUKS devices are executed.
-
-Sounds interesting. :-)
-
-Unfortunately, I'm not familiar with LUKS at all, so I cannot give you
-any useful advice on that particular topic.
+Rob
