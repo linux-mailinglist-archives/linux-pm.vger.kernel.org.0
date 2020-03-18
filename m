@@ -2,108 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92ED118A1FE
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 18:56:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C27AC18A1F5
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 18:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726704AbgCRR4Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Mar 2020 13:56:24 -0400
-Received: from www381.your-server.de ([78.46.137.84]:60514 "EHLO
-        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726506AbgCRR4Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Mar 2020 13:56:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=55s4KdzIkIbrPk24SHC9GIhNl5gysbT015bgWowvoYE=; b=B0xM0xac8I/sAY/v4Fy1CC5a1d
-        IUZx+cRKdtENa8HeY/f41HzkgA37T0SiEPmsCqf92GOSYBIC/wzXZYqA+T8PsPMfgqFcqjp3Ba8Ln
-        0alyli/aojkBt9KY391U0dtUsPQnTvXT9zIlVsCC5bgULlR+Uxb67nKnV7kq6t7zAznYkwAQCHP7G
-        43VPflDV+bY3NloMR7c8wyLSE9TFDydqTX4iua24yizb7Nzb276m9+6MQ3YcwfnvGWumM1ePBMphQ
-        yJkFBIhWW9oqEax/H4z+YZKFiaOBA0RlH0aPrSSF3OVZOaSwIFUvri2zVmlB5F9xyyYNUkcvWc7iC
-        fCTCrmUA==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www381.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <lars@metafoo.de>)
-        id 1jEcZr-0004ZL-PW; Wed, 18 Mar 2020 18:34:00 +0100
-Received: from [93.104.115.49] (helo=[192.168.178.20])
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1jEcZr-000P08-Fy; Wed, 18 Mar 2020 18:33:59 +0100
-Subject: Re: [PATCH 2/3] iio: dac: ad5686: add of_match_table
-To:     Michael Auchter <michael.auchter@ni.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
-Cc:     linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200318153434.62833-1-michael.auchter@ni.com>
- <20200318153434.62833-2-michael.auchter@ni.com>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-Message-ID: <b67c7147-e35c-2408-8324-c688af4e82b7@metafoo.de>
-Date:   Wed, 18 Mar 2020 18:33:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726647AbgCRRtm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Mar 2020 13:49:42 -0400
+Received: from mga04.intel.com ([192.55.52.120]:7041 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726506AbgCRRtm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 18 Mar 2020 13:49:42 -0400
+IronPort-SDR: 5jENlgvk3LRhdyJR6yfSTlpTMHk6475jXkVcYlTq37EIypp7S7sbK5NGs3wigvThNCaaAF9x5v
+ u90zD0FxWb8g==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2020 10:49:40 -0700
+IronPort-SDR: JqoRi7soQ2PLlVzhXNeyP1zo4aP5jiEgpLS62eZeWhNUXhm7KuCQqlvNCZKClaxVV+x/fX9BxX
+ kMKrRNVNF7CA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,568,1574150400"; 
+   d="scan'208";a="238256112"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Mar 2020 10:49:38 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jEcoz-000IgV-RH; Thu, 19 Mar 2020 01:49:37 +0800
+Date:   Thu, 19 Mar 2020 01:48:48 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ c03d064a440c2a5cbe3da782db05d3e18dc5ec3e
+Message-ID: <5e725f00.x1QanKGUdoru37AN%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20200318153434.62833-2-michael.auchter@ni.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25755/Wed Mar 18 14:14:00 2020)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/18/20 4:34 PM, Michael Auchter wrote:
-> Add of_match_table to this driver, so devices can be probed based on
-> device tree contents.
-> 
-> Signed-off-by: Michael Auchter <michael.auchter@ni.com>
-> ---
->   drivers/iio/dac/ad5696-i2c.c | 19 +++++++++++++++++++
->   1 file changed, 19 insertions(+)
-> 
-> diff --git a/drivers/iio/dac/ad5696-i2c.c b/drivers/iio/dac/ad5696-i2c.c
-> index f100a5fe4219..26818bccffa2 100644
-> --- a/drivers/iio/dac/ad5696-i2c.c
-> +++ b/drivers/iio/dac/ad5696-i2c.c
-> @@ -88,9 +88,28 @@ static const struct i2c_device_id ad5686_i2c_id[] = {
->   };
->   MODULE_DEVICE_TABLE(i2c, ad5686_i2c_id);
->   
-> +static const struct of_device_id ad5686_of_match[] = {
-> +	{ .compatible = "adi,ad5311r" },
-> +	{ .compatible = "adi,ad5671r" },
-> +	{ .compatible = "adi,ad5675r" },
-> +	{ .compatible = "adi,ad5691r" },
-> +	{ .compatible = "adi,ad5692r" },
-> +	{ .compatible = "adi,ad5693" },
-> +	{ .compatible = "adi,ad5693r" },
-> +	{ .compatible = "adi,ad5694" },
-> +	{ .compatible = "adi,ad5694r" },
-> +	{ .compatible = "adi,ad5695r" },
-> +	{ .compatible = "adi,ad5696" },
-> +	{ .compatible = "adi,ad5696r" },
-> +	{ .compatible = "adi,ad5338r" },
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: c03d064a440c2a5cbe3da782db05d3e18dc5ec3e  Merge branch 'pnp' into linux-next
 
-Same here, table should be ordered.
+elapsed time: 485m
 
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, ad5686_of_match);
-> +
->   static struct i2c_driver ad5686_i2c_driver = {
->   	.driver = {
->   		.name = "ad5696",
-> +		.of_match_table = of_match_ptr(ad5686_of_match),
->   	},
->   	.probe = ad5686_i2c_probe,
->   	.remove = ad5686_i2c_remove,
-> 
+configs tested: 164
+configs skipped: 0
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                         at91_dt_defconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm                        shmobile_defconfig
+arm                           sunxi_defconfig
+sparc                            allyesconfig
+nios2                         3c120_defconfig
+s390                             allmodconfig
+i386                             alldefconfig
+nios2                         10m50_defconfig
+sh                          rsk7269_defconfig
+sh                            titan_defconfig
+riscv                    nommu_virt_defconfig
+m68k                             allmodconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+ia64                             alldefconfig
+c6x                        evmc6678_defconfig
+c6x                              allyesconfig
+openrisc                    or1ksim_defconfig
+xtensa                          iss_defconfig
+xtensa                       common_defconfig
+openrisc                 simple_smp_defconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+h8300                     edosk2674_defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                       m5475evb_defconfig
+m68k                          multi_defconfig
+m68k                           sun3_defconfig
+arc                                 defconfig
+arc                              allyesconfig
+powerpc                          rhel-kconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+mips                           32r2_defconfig
+mips                         64r6el_defconfig
+mips                             allmodconfig
+mips                              allnoconfig
+mips                             allyesconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+parisc                            allnoconfig
+parisc                generic-64bit_defconfig
+parisc                generic-32bit_defconfig
+parisc                           allyesconfig
+i386                 randconfig-a003-20200318
+i386                 randconfig-a001-20200318
+x86_64               randconfig-a001-20200318
+x86_64               randconfig-a002-20200318
+i386                 randconfig-a002-20200318
+x86_64               randconfig-a003-20200318
+riscv                randconfig-a001-20200318
+m68k                 randconfig-a001-20200318
+nds32                randconfig-a001-20200318
+alpha                randconfig-a001-20200318
+parisc               randconfig-a001-20200318
+mips                 randconfig-a001-20200318
+h8300                randconfig-a001-20200318
+sparc64              randconfig-a001-20200318
+c6x                  randconfig-a001-20200318
+nios2                randconfig-a001-20200318
+microblaze           randconfig-a001-20200318
+csky                 randconfig-a001-20200318
+openrisc             randconfig-a001-20200318
+s390                 randconfig-a001-20200318
+sh                   randconfig-a001-20200318
+xtensa               randconfig-a001-20200318
+x86_64               randconfig-b001-20200318
+x86_64               randconfig-b002-20200318
+x86_64               randconfig-b003-20200318
+i386                 randconfig-b001-20200318
+i386                 randconfig-b002-20200318
+i386                 randconfig-b003-20200318
+x86_64               randconfig-c001-20200318
+x86_64               randconfig-c002-20200318
+x86_64               randconfig-c003-20200318
+i386                 randconfig-c001-20200318
+i386                 randconfig-c002-20200318
+i386                 randconfig-c003-20200318
+x86_64               randconfig-d001-20200318
+i386                 randconfig-d001-20200318
+i386                 randconfig-d003-20200318
+i386                 randconfig-d002-20200318
+x86_64               randconfig-d002-20200318
+x86_64               randconfig-d003-20200318
+x86_64               randconfig-e001-20200318
+x86_64               randconfig-e002-20200318
+x86_64               randconfig-e003-20200318
+i386                 randconfig-e001-20200318
+i386                 randconfig-e002-20200318
+i386                 randconfig-e003-20200318
+x86_64               randconfig-f001-20200318
+x86_64               randconfig-f002-20200318
+x86_64               randconfig-f003-20200318
+i386                 randconfig-f001-20200318
+i386                 randconfig-f002-20200318
+i386                 randconfig-f003-20200318
+x86_64               randconfig-g001-20200318
+x86_64               randconfig-g002-20200318
+x86_64               randconfig-g003-20200318
+i386                 randconfig-g001-20200318
+i386                 randconfig-g002-20200318
+i386                 randconfig-g003-20200318
+x86_64               randconfig-h001-20200318
+x86_64               randconfig-h002-20200318
+x86_64               randconfig-h003-20200318
+i386                 randconfig-h001-20200318
+i386                 randconfig-h002-20200318
+i386                 randconfig-h003-20200318
+arc                  randconfig-a001-20200318
+arm                  randconfig-a001-20200318
+arm64                randconfig-a001-20200318
+ia64                 randconfig-a001-20200318
+powerpc              randconfig-a001-20200318
+sparc                randconfig-a001-20200318
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+s390                             alldefconfig
+s390                              allnoconfig
+s390                             allyesconfig
+s390                          debug_defconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+sh                               allmodconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                                allnoconfig
+sparc                               defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
