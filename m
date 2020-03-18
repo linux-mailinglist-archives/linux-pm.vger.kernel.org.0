@@ -2,189 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02582189A33
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 12:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3110189AE5
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 12:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbgCRLE7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Mar 2020 07:04:59 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:35651 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726550AbgCRLE6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Mar 2020 07:04:58 -0400
-Received: by mail-wr1-f66.google.com with SMTP id h4so9142639wru.2
-        for <linux-pm@vger.kernel.org>; Wed, 18 Mar 2020 04:04:56 -0700 (PDT)
+        id S1726697AbgCRLn0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Mar 2020 07:43:26 -0400
+Received: from mail-pg1-f178.google.com ([209.85.215.178]:38359 "EHLO
+        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726586AbgCRLn0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Mar 2020 07:43:26 -0400
+Received: by mail-pg1-f178.google.com with SMTP id x7so13544202pgh.5
+        for <linux-pm@vger.kernel.org>; Wed, 18 Mar 2020 04:43:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KRvo2AnedhxVnlA+EvDsxLitXemLLTPkBYA0yM+Px8k=;
-        b=A3iniDuzEsg/eOraikmeaGfeS8BAtq8n/r2TJhOob3fbPinvCMJZqot6XhNJS7gjT8
-         SRLE8h4aTjWt5IqeosWSw3lPeqkEXNJAQF5T+dZ9yfz0egfdQCmrQ2mhITil1jwdTC6f
-         dwL/4CO/+fuA0E06AFPBet2Gw7rad+MQ+YT9QdlaAMR6syBuf+M/3BUv9BW02yXpzpiC
-         6DjMP3ycqR5UU0BVfehHtokqxSA2sJD4x9QNErf2bu80BuWMmVz2KzwoOpzMngRENa7D
-         Nx6/W0TPzG+zaneLuHou/yVpBnVbEeNYxf2H/wGwTJqLbRpwAkPTBIEWdezD8oWotxAC
-         lpwg==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=U84e4UOrgcVean29lMfv4/bbLeH6pd5tEHvZ+cvGo34=;
+        b=VTEfJOVDkzdOhs0FwoYMeaZuTTDsAFv17tLfsZ7WlVdrZ9TEnW2yZjOzQtSYnf2tWF
+         jiPxvYQH3OXXKT9joH4sosRwGnEG7V1mXFS2YzVhnXMflWFWGKVHgVcAOIhfOMSuUyzz
+         gFdI1bFvZ7PUMN7EEo67li4cnSzoBIWu6316BPXQ/WuzPC+1aXwQPc9vwHDN3QtbYvQf
+         iv49hx84NxbsLxb0l/EEq35mFJ86VgVOqQ7yF49VqLm6erKw8cUhtpUjBiplsosiVhQp
+         HXv+jv4fKjOk/0Kw68x+nNbXwhMYSwONAoJcXvgKf72nWpd5jrwRXGld2dZfTUWx+NoB
+         Ci+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=KRvo2AnedhxVnlA+EvDsxLitXemLLTPkBYA0yM+Px8k=;
-        b=O0we79CQWL8gBcpMPXaxM2qfkzNb4gQYcO+aVDoveGhJaR3e0/t+RBwYdLA4CKy4r3
-         gimYuOB6yn+kNaIWeTfGH/SP74O/iAZ6q/hIMlY4WvRU1hAhFzLqjgE3LAG2mBt7QDa1
-         wUlRf/1wYoQGppIJyH690xqHkkcjQAnGC7lk79qQEJ4LcPXl3u5PT6GzRIy7bkWDw/X7
-         BLNOmcGyxP+7I/ivGfoMZNKQ23PKbRDYPqhp8o5568yTECd8bkurQ+KZXS/Jp9MOHg/R
-         ftqFPFEtCVUzfOcW2mRV0Xx64Zr48mNlPNHIoCOJocxhsgztCJHOsUbiWZ/VtWnDiXXP
-         jCKw==
-X-Gm-Message-State: ANhLgQ1q6TI9Qgah3besXwRYUQfeK4stOwi0qP5wafQGUVH01NxD2+WM
-        JBEk2fGRfcXzc0B/iNdHjU7U7Q==
-X-Google-Smtp-Source: ADFU+vsEPKKXoNLrq+h0rJ8LJoWmrZKw/KUI31whkpkBF+U46kfttWy+6DZ/dB4m0yuOw1/R5LrALA==
-X-Received: by 2002:a5d:52d0:: with SMTP id r16mr4822813wrv.379.1584529495406;
-        Wed, 18 Mar 2020 04:04:55 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:bd37:618d:f415:31ea? ([2a01:e34:ed2f:f020:bd37:618d:f415:31ea])
-        by smtp.googlemail.com with ESMTPSA id b5sm8747529wrw.86.2020.03.18.04.04.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Mar 2020 04:04:54 -0700 (PDT)
-Subject: Re: [PATCH RFC] cpuidle: consolidate calls to time capture
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     ulf.hansson@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@kernel.org
-References: <20200316210843.11678-1-daniel.lezcano@linaro.org>
- <2605374.f08NWHE4iP@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
- sXvtg3ehTOoyD0oFjKkHaia1Zpa1m/gnNdT/WvTveLfGA1gH+yGes2Sr53Ht8hWYZFYMZc8V
- 2pbSKh8wepq4g8r5YI1XUy9YbcTdj5mVrTklyGWA49NOeJz2QbfytMT3DJmk40LqwK6CCSU0
- 9Ed8n0a+vevmQoRZJEd3Y1qXn2XHys0F6OHCC+VLENqNNZXdZE9E+b3FFW0lk49oLTzLRNIq
- 0wHeR1H54RffhLQAor2+4kSSu8mW5qB0n5Eb/zXJZZ/bRiXmT8kNg85UdYhvf03ZAsp3qxcr
- xMfMsC7m3+ADOtW90rNNLZnRvjhsYNrGIKH8Ub0UKXFXibHbafSuq7RqyRQzt01Ud8CAtq+w
- P9EftUysLtovGpLSpGDO5zQ++4ZGVygdYFr318aGDqCljKAKZ9hYgRimPBToDedho1S1uE6F
- 6YiBFnI3ry9+/KUnEP6L8Sfezwy7fp2JUNkUr41QF76nz43tl7oersrLxHzj2dYfWUAZWXva
- wW4IKF5sOPFMMgxoOJovSWqwh1b7hqI+nDlD3mmVMd20VyE9W7AgTIsvDxWUnMPvww5iExlY
- eIC0Wj9K4UqSYBOHcUPrVOKTcsBVPQA6SAMJlt82/v5l4J0pSQARAQABzSpEYW5pZWwgTGV6
- Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz7Cwa4EEwEIAEECGwEFCwkIBwIGFQoJ
- CAsCBBYCAwECHgECF4ACGQEWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXAkeagUJDRnjhwAh
- CRCP9LjScWdVJxYhBCTWJvJTvp6H5s5b9I/0uNJxZ1Un69gQAJK0ODuKzYl0TvHPU8W7uOeu
- U7OghN/DTkG6uAkyqW+iIVi320R5QyXN1Tb6vRx6+yZ6mpJRW5S9fO03wcD8Sna9xyZacJfO
- UTnpfUArs9FF1pB3VIr95WwlVoptBOuKLTCNuzoBTW6jQt0sg0uPDAi2dDzf+21t/UuF7I3z
- KSeVyHuOfofonYD85FkQJN8lsbh5xWvsASbgD8bmfI87gEbt0wq2ND5yuX+lJK7FX4lMO6gR
- ZQ75g4KWDprOO/w6ebRxDjrH0lG1qHBiZd0hcPo2wkeYwb1sqZUjQjujlDhcvnZfpDGR4yLz
- 5WG+pdciQhl6LNl7lctNhS8Uct17HNdfN7QvAumYw5sUuJ+POIlCws/aVbA5+DpmIfzPx5Ak
- UHxthNIyqZ9O6UHrVg7SaF3rvqrXtjtnu7eZ3cIsfuuHrXBTWDsVwub2nm1ddZZoC530BraS
- d7Y7eyKs7T4mGwpsi3Pd33Je5aC/rDeF44gXRv3UnKtjq2PPjaG/KPG0fLBGvhx0ARBrZLsd
- 5CTDjwFA4bo+pD13cVhTfim3dYUnX1UDmqoCISOpzg3S4+QLv1bfbIsZ3KDQQR7y/RSGzcLE
- z164aDfuSvl+6Myb5qQy1HUQ0hOj5Qh+CzF3CMEPmU1v9Qah1ThC8+KkH/HHjPPulLn7aMaK
- Z8t6h7uaAYnGzjMEXZLIEhYJKwYBBAHaRw8BAQdAGdRDglTydmxI03SYiVg95SoLOKT5zZW1
- 7Kpt/5zcvt3CwhsEGAEIACAWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXZLIEgIbAgCvCRCP
- 9LjScWdVJ40gBBkWCAAdFiEEbinX+DPdhovb6oob3uarTi9/eqYFAl2SyBIAIQkQ3uarTi9/
- eqYWIQRuKdf4M92Gi9vqihve5qtOL396pnZGAP0c3VRaj3RBEOUGKxHzcu17ZUnIoJLjpHdk
- NfBnWU9+UgD/bwTxE56Wd8kQZ2e2UTy4BM8907FsJgAQLL4tD2YZggwWIQQk1ibyU76eh+bO
- W/SP9LjScWdVJ5CaD/0YQyfUzjpR1GnCSkbaLYTEUsyaHuWPI/uSpKTtcbttpYv+QmYsIwD9
- 8CeH3zwY0Xl/1fE9Hy59z6Vxv9YVapLx0nPDOA1zDVNq2MnutxHb8t+Imjz4ERCxysqtfYrv
- gao3E/h0c8SEeh+bh5MkjwmU8CwZ3doWyiVdULKESe7/Gs5OuhFzaDVPCpWdsKdCAGyUuP/+
- qRWwKGVpWP0Rrt6MTK24Ibeu3xEZO8c3XOEXH5d9nf6YRqBEIizAecoCr00E9c+6BlRS0AqR
- OQC3/Mm7rWtco3+WOridqVXkko9AcZ8AiM5nu0F8AqYGKg0y7vkL2LOP8us85L0p57MqIR1u
- gDnITlTY0x4RYRWJ9+k7led5WsnWlyv84KNzbDqQExTm8itzeZYW9RvbTS63r/+FlcTa9Cz1
- 5fW3Qm0BsyECvpAD3IPLvX9jDIR0IkF/BQI4T98LQAkYX1M/UWkMpMYsL8tLObiNOWUl4ahb
- PYi5Yd8zVNYuidXHcwPAUXqGt3Cs+FIhihH30/Oe4jL0/2ZoEnWGOexIFVFpue0jdqJNiIvA
- F5Wpx+UiT5G8CWYYge5DtHI3m5qAP9UgPuck3N8xCihbsXKX4l8bdHfziaJuowief7igeQs/
- WyY9FnZb0tl29dSa7PdDKFWu+B+ZnuIzsO5vWMoN6hMThTl1DxS+jc7ATQRb/8z6AQgAvSkg
- 5w7dVCSbpP6nXc+i8OBz59aq8kuL3YpxT9RXE/y45IFUVuSc2kuUj683rEEgyD7XCf4QKzOw
- +XgnJcKFQiACpYAowhF/XNkMPQFspPNM1ChnIL5KWJdTp0DhW+WBeCnyCQ2pzeCzQlS/qfs3
- dMLzzm9qCDrrDh/aEegMMZFO+reIgPZnInAcbHj3xUhz8p2dkExRMTnLry8XXkiMu9WpchHy
- XXWYxXbMnHkSRuT00lUfZAkYpMP7La2UudC/Uw9WqGuAQzTqhvE1kSQe0e11Uc+PqceLRHA2
- bq/wz0cGriUrcCrnkzRmzYLoGXQHqRuZazMZn2/pSIMZdDxLbwARAQABwsGNBBgBCAAgFiEE
- JNYm8lO+nofmzlv0j/S40nFnVScFAlv/zPoCGwwAIQkQj/S40nFnVScWIQQk1ibyU76eh+bO
- W/SP9LjScWdVJ/g6EACFYk+OBS7pV9KZXncBQYjKqk7Kc+9JoygYnOE2wN41QN9Xl0Rk3wri
- qO7PYJM28YjK3gMT8glu1qy+Ll1bjBYWXzlsXrF4szSqkJpm1cCxTmDOne5Pu6376dM9hb4K
- l9giUinI4jNUCbDutlt+Cwh3YuPuDXBAKO8YfDX2arzn/CISJlk0d4lDca4Cv+4yiJpEGd/r
- BVx2lRMUxeWQTz+1gc9ZtbRgpwoXAne4iw3FlR7pyg3NicvR30YrZ+QOiop8psWM2Fb1PKB9
- 4vZCGT3j2MwZC50VLfOXC833DBVoLSIoL8PfTcOJOcHRYU9PwKW0wBlJtDVYRZ/CrGFjbp2L
- eT2mP5fcF86YMv0YGWdFNKDCOqOrOkZVmxai65N9d31k8/O9h1QGuVMqCiOTULy/h+FKpv5q
- t35tlzA2nxPOX8Qj3KDDqVgQBMYJRghZyj5+N6EKAbUVa9Zq8xT6Ms2zz/y7CPW74G1GlYWP
- i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
- X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
- fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <669fe03f-0d65-8ca9-53dc-1323e0397c53@linaro.org>
-Date:   Wed, 18 Mar 2020 12:04:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=U84e4UOrgcVean29lMfv4/bbLeH6pd5tEHvZ+cvGo34=;
+        b=gkF/pHdrxQFBSydEIgQdRU3K2+sgV6o6iMuBPpcee1tRY7nO23Ppv1295SBSu8vIRQ
+         FZ+TL5co+u9zp8LZpDp0JCPQx7PRDkVBLfy6IwenksNysuxLQPpx5AsQMl+dzO6OVA+5
+         TTf2CsafGuBlw+NYjD1hY1CBhPnU1HE98ufil6x3W99eY3zFH3w1NQOr7YnzGVSxtlZC
+         tK0GY6Ar8wOA9sPDpw3nPozf/mmXVSVoxhUthBRoWmBWo3XS+AEdDQ8zEgLT2urxq8m8
+         XjV22HIItjRF4ffA1Ryv8j3Vi/ExHRZsoOMdkrZmG5c1wRE1mOMDvo1NFuInwM8ZlzOt
+         A55Q==
+X-Gm-Message-State: ANhLgQ08bGE8rokh05N/0BGcwwTmBEul60HCc/PoqoEynd70Q71owwoe
+        XHZ4MW7IJLbXBJmoLcVzN1l+fA==
+X-Google-Smtp-Source: ADFU+vs2aFk7gKK9Qz9rI1WoNvpNsKWQqeo35MWHsKTcJmZLkhG8fm2sS7IFli5dZ7e1QPUMKXmy2g==
+X-Received: by 2002:a63:f447:: with SMTP id p7mr4199592pgk.326.1584531805411;
+        Wed, 18 Mar 2020 04:43:25 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id i2sm6345112pfr.151.2020.03.18.04.43.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2020 04:43:24 -0700 (PDT)
+Message-ID: <5e72095c.1c69fb81.a5057.61d2@mx.google.com>
+Date:   Wed, 18 Mar 2020 04:43:24 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <2605374.f08NWHE4iP@kreacher>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.6-rc6-102-gc03d064a440c
+X-Kernelci-Report-Type: boot
+Subject: pm/testing boot: 59 boots: 1 failed,
+ 57 passed with 1 untried/unknown (v5.6-rc6-102-gc03d064a440c)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing boot: 59 boots: 1 failed, 57 passed with 1 untried/unknown (v5.6=
+-rc6-102-gc03d064a440c)
 
-Hi Rafael,
+Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
+el/v5.6-rc6-102-gc03d064a440c/
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+6-rc6-102-gc03d064a440c/
 
-On 18/03/2020 11:17, Rafael J. Wysocki wrote:
-> On Monday, March 16, 2020 10:08:43 PM CET Daniel Lezcano wrote:
->> A few years ago, we changed the code in cpuidle to replace ktime_get()
->> by a local_clock() to get rid of potential seq lock in the path and an
->> extra latency.
->>
->> Meanwhile, the code evolved and we are getting the time in some other
->> places like the power domain governor and in the future break even
->> deadline proposal.
-> 
-> Hmm?
-> 
-> Have any patches been posted for that?
+Tree: pm
+Branch: testing
+Git Describe: v5.6-rc6-102-gc03d064a440c
+Git Commit: c03d064a440c2a5cbe3da782db05d3e18dc5ec3e
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Tested: 56 unique boards, 14 SoC families, 3 builds out of 6
 
-https://lkml.org/lkml/2020/3/11/1113
+Boot Regressions Detected:
 
-https://lkml.org/lkml/2020/3/13/466
+arm64:
 
-but there is no consensus yet if that has a benefit or not.
+    defconfig:
+        gcc-8:
+          meson-g12b-a311d-khadas-vim3:
+              lab-baylibre: new failure (last pass: v5.6-rc6-99-g4a13723c32=
+5c)
 
->> Unfortunately, as the time must be compared across the CPU, we have no
->> other option than using the ktime_get() again. Hopefully, we can
->> factor out all the calls to local_clock() and ktime_get() into a
->> single one when the CPU is entering idle as the value will be reuse in
->> different places.
-> 
-> So there are cases in which it is not necessary to synchronize the time
-> between CPUs and those would take the overhead unnecessarily.
-> 
-> This change looks premature to me at least.
+Boot Failure Detected:
 
-The idea is to call one time ktime_get() when entering idle and store
-the result in the struct cpuidle_device, so we have the information when
-we entered idle.
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
 
-Moreover, ktime_get() is called in do_idle() via:
-
-tick_nohz_idle_enter()
-  tick_nohz_start_idle()
-    ts->idle_entrytime = ktime_get();
-
-This is called at the first loop level. The idle loop is exiting and
-re-entering again without passing through tick_nohz_idle_enter() in the
-second loop level in case of interrupt processing, thus the
-idle_entrytime is not updated and the return of
-tick_nohz_get_sleep_length() will be greater than what is expected.
-
-May be we can consider ktime_get_mono_fast_ns() which is lockless with a
-particular care of the non-monotonic aspect if needed. Given the
-description at [1] the time jump could a few nanoseconds in case of NMI.
-
-The local_clock() can no be inspected across CPUs, the gap is too big
-and continues to increase during system lifetime.
-
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/time/timekeeping.c#n396
-
-
--- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+---
+For more info write to <info@kernelci.org>
