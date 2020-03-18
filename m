@@ -2,157 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B26EE18925B
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 00:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 099541893C0
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 02:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgCQX7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Mar 2020 19:59:41 -0400
-Received: from mga04.intel.com ([192.55.52.120]:56036 "EHLO mga04.intel.com"
+        id S1727148AbgCRBit (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Mar 2020 21:38:49 -0400
+Received: from mga05.intel.com ([192.55.52.43]:60775 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726680AbgCQX7l (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 17 Mar 2020 19:59:41 -0400
-IronPort-SDR: M7LcisOeT+FHLeRI3bZH8N20JJBot5GRnGmwCEKqY+hj5k39BxfmVrs2GFQIRrhuZZLfR9Z7N7
- oO6Fy7+G5NpA==
+        id S1726680AbgCRBit (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 17 Mar 2020 21:38:49 -0400
+IronPort-SDR: 9K2c7G8KQ2+FZAzmlZOkmwXY4ubWFtRknRQQ0CANj6dz71gL72F9IhrCY/j5EdAVjvX/rA05r1
+ 6piK6g464gOA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2020 16:59:40 -0700
-IronPort-SDR: nydFe6WME0U7Kftf6hG2lY3kbmTmusYylPP5BcaWcfwG9mdu2/oXqaPy4Ryfh6P+iMAZHUd7Ze
- C/iSplQHwUUQ==
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2020 18:38:48 -0700
+IronPort-SDR: PYIg8zsoqSoKaAuDhxEAo54cxF8/ki0flW1p44NGgwjs9eoKiWWqOUT4tG7SnV63LdAEfQ26KE
+ VB01UYqHuN6A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,565,1574150400"; 
-   d="scan'208";a="263206767"
-Received: from orsmsx102.amr.corp.intel.com ([10.22.225.129])
-  by orsmga002.jf.intel.com with ESMTP; 17 Mar 2020 16:59:40 -0700
-Received: from orsmsx151.amr.corp.intel.com (10.22.226.38) by
- ORSMSX102.amr.corp.intel.com (10.22.225.129) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Tue, 17 Mar 2020 16:59:40 -0700
-Received: from orsmsx109.amr.corp.intel.com ([169.254.11.100]) by
- ORSMSX151.amr.corp.intel.com ([169.254.7.134]) with mapi id 14.03.0439.000;
- Tue, 17 Mar 2020 16:59:39 -0700
-From:   "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
-To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "currojerez@riseup.net" <currojerez@riseup.net>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
-CC:     "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>
-Subject: Re: [PATCH 07/10] cpufreq: intel_pstate: Implement VLP controller
- for HWP parts.
-Thread-Topic: [PATCH 07/10] cpufreq: intel_pstate: Implement VLP controller
- for HWP parts.
-Thread-Index: AQHV9yVZzfN0ydxLQk2N+RiJ1IPVFahN90kA
-Date:   Tue, 17 Mar 2020 23:59:39 +0000
-Message-ID: <40db3c86c68abfab406618e2424787c18c119c87.camel@intel.com>
-References: <20200310214203.26459-1-currojerez@riseup.net>
-         <20200310214203.26459-8-currojerez@riseup.net>
-In-Reply-To: <20200310214203.26459-8-currojerez@riseup.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.2 (3.34.2-1.fc31) 
-x-originating-ip: [10.135.36.221]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7B64E34E94D4384A9569063FFDA9EA9F@intel.com>
-Content-Transfer-Encoding: base64
+   d="scan'208";a="279586774"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 17 Mar 2020 18:38:46 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jENfS-000BRk-36; Wed, 18 Mar 2020 09:38:46 +0800
+Date:   Wed, 18 Mar 2020 09:38:27 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 48c5a4c87535359453a3189abce4c7ef1977cd95
+Message-ID: <5e717b93.y/kbxr9x1qKsm7mS%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gVHVlLCAyMDIwLTAzLTEwIGF0IDE0OjQyIC0wNzAwLCBGcmFuY2lzY28gSmVyZXogd3JvdGU6
-DQo+IFRoaXMgaW1wbGVtZW50cyBhIHNpbXBsZSB2YXJpYWJseSBsb3ctcGFzcy1maWx0ZXJpbmcg
-Z292ZXJub3IgaW4NCj4gY29udHJvbCBvZiB0aGUgSFdQIE1JTi9NQVggUEVSRiByYW5nZSBiYXNl
-ZCBvbiB0aGUgcHJldmlvdXNseQ0KPiBpbnRyb2R1Y2VkIGdldF92bHBfdGFyZ2V0X3JhbmdlKCku
-ICBTZWUgImNwdWZyZXE6IGludGVsX3BzdGF0ZToNCj4gSW1wbGVtZW50IFZMUCBjb250cm9sbGVy
-IHRhcmdldCBQLXN0YXRlIHJhbmdlIGVzdGltYXRpb24uIiBmb3IgdGhlDQo+IHJhdGlvbmFsZS4N
-Cg0KSSBqdXN0IGdhdmUgYSB0cnkgb24gYSBwcmV0dHkgaWRsZSBzeXN0ZW0gd2l0aCBqdXN0IHN5
-c3RlbWQgcHJvY2Vzc2VzDQphbmQgdXN1YWwgYmFja2dyb3VuZCB0YXNrcyB3aXRoIG5vbW9kc2V0
-LiANCg0KSSBzZWUgdGhhdCB0aGVyZSBIV1AgbWluIGlzIGdldHRpbmcgY2hhbmdlZCBiZXR3ZWVu
-IDQtOC4gV2h5IGFyZQ0KY2hhbmdpbmcgSFdQIGR5bmFtaWMgcmFuZ2UgZXZlbiBvbiBhbiBpZGxl
-IHN5c3RlbSBydW5uaW5nIG5vIHdoZXJlDQpjbG9zZSB0byBURFA/DQoNClRoYW5rcywNClNyaW5p
-dmFzDQoNCg0KPiANCj4gU2lnbmVkLW9mZi1ieTogRnJhbmNpc2NvIEplcmV6IDxjdXJyb2plcmV6
-QHJpc2V1cC5uZXQ+DQo+IC0tLQ0KPiAgZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jIHwg
-NzkNCj4gKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLQ0KPiAgMSBmaWxlIGNoYW5n
-ZWQsIDc3IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jDQo+IGIvZHJpdmVycy9jcHVmcmVxL2ludGVs
-X3BzdGF0ZS5jDQo+IGluZGV4IGNlY2FkZmVjOGJjMS4uYTAxZWVkNDBkODk3IDEwMDY0NA0KPiAt
-LS0gYS9kcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0YXRlLmMNCj4gKysrIGIvZHJpdmVycy9jcHVm
-cmVxL2ludGVsX3BzdGF0ZS5jDQo+IEBAIC0xOTA1LDYgKzE5MDUsMjAgQEAgc3RhdGljIHZvaWQg
-aW50ZWxfcHN0YXRlX3Jlc2V0X3ZscChzdHJ1Y3QNCj4gY3B1ZGF0YSAqY3B1KQ0KPiAgCXZscC0+
-Z2FpbiA9IG1heCgxLCBkaXZfZnAoMTAwMCwgdmxwX3BhcmFtcy5zZXRwb2ludF8wX3BtbCkpOw0K
-PiAgCXZscC0+dGFyZ2V0LnBfYmFzZSA9IDA7DQo+ICAJdmxwLT5zdGF0cy5sYXN0X3Jlc3BvbnNl
-X2ZyZXF1ZW5jeV9oeiA9IHZscF9wYXJhbXMuYXZnX2h6Ow0KPiArDQo+ICsJaWYgKGh3cF9hY3Rp
-dmUpIHsNCj4gKwkJY29uc3QgdWludDMyX3QgcDAgPSBtYXgoY3B1LT5wc3RhdGUubWluX3BzdGF0
-ZSwNCj4gKwkJCQkJY3B1LT5taW5fcGVyZl9yYXRpbyk7DQo+ICsJCWNvbnN0IHVpbnQzMl90IHAx
-ID0gbWF4X3QodWludDMyX3QsIHAwLCBjcHUtDQo+ID5tYXhfcGVyZl9yYXRpbyk7DQo+ICsJCWNv
-bnN0IHVpbnQ2NF90IGh3cF9yZXEgPSAoUkVBRF9PTkNFKGNwdS0NCj4gPmh3cF9yZXFfY2FjaGVk
-KSAmDQo+ICsJCQkJCSAgfihIV1BfTUFYX1BFUkYofjBMKSB8DQo+ICsJCQkJCSAgICBIV1BfTUlO
-X1BFUkYofjBMKSB8DQo+ICsJCQkJCSAgICBIV1BfREVTSVJFRF9QRVJGKH4wTCkpKSB8DQo+ICsJ
-CQkJCSBIV1BfTUlOX1BFUkYocDApIHwNCj4gSFdQX01BWF9QRVJGKHAxKTsNCj4gKw0KPiArCQl3
-cm1zcmxfb25fY3B1KGNwdS0+Y3B1LCBNU1JfSFdQX1JFUVVFU1QsIGh3cF9yZXEpOw0KPiArCQlj
-cHUtPmh3cF9yZXFfY2FjaGVkID0gaHdwX3JlcTsNCj4gKwl9DQo+ICB9DQo+ICANCj4gIC8qKg0K
-PiBAQCAtMjIyMiw2ICsyMjM2LDQ2IEBAIHN0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV9hZGp1c3Rf
-cHN0YXRlKHN0cnVjdA0KPiBjcHVkYXRhICpjcHUpDQo+ICAJCWZwX3RvaW50KGNwdS0+aW93YWl0
-X2Jvb3N0ICogMTAwKSk7DQo+ICB9DQo+ICANCj4gK3N0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV9h
-ZGp1c3RfcHN0YXRlX3JhbmdlKHN0cnVjdCBjcHVkYXRhICpjcHUsDQo+ICsJCQkJCSAgICAgY29u
-c3QgdW5zaWduZWQgaW50DQo+IHJhbmdlW10pDQo+ICt7DQo+ICsJY29uc3QgaW50IGZyb20gPSBj
-cHUtPmh3cF9yZXFfY2FjaGVkOw0KPiArCXVuc2lnbmVkIGludCBwMCwgcDEsIHBfbWluLCBwX21h
-eDsNCj4gKwlzdHJ1Y3Qgc2FtcGxlICpzYW1wbGU7DQo+ICsJdWludDY0X3QgaHdwX3JlcTsNCj4g
-Kw0KPiArCXVwZGF0ZV90dXJib19zdGF0ZSgpOw0KPiArDQo+ICsJcDAgPSBtYXgoY3B1LT5wc3Rh
-dGUubWluX3BzdGF0ZSwgY3B1LT5taW5fcGVyZl9yYXRpbyk7DQo+ICsJcDEgPSBtYXhfdCh1bnNp
-Z25lZCBpbnQsIHAwLCBjcHUtPm1heF9wZXJmX3JhdGlvKTsNCj4gKwlwX21pbiA9IGNsYW1wX3Qo
-dW5zaWduZWQgaW50LCByYW5nZVswXSwgcDAsIHAxKTsNCj4gKwlwX21heCA9IGNsYW1wX3QodW5z
-aWduZWQgaW50LCByYW5nZVsxXSwgcDAsIHAxKTsNCj4gKw0KPiArCXRyYWNlX2NwdV9mcmVxdWVu
-Y3kocF9tYXggKiBjcHUtPnBzdGF0ZS5zY2FsaW5nLCBjcHUtPmNwdSk7DQo+ICsNCj4gKwlod3Bf
-cmVxID0gKFJFQURfT05DRShjcHUtPmh3cF9yZXFfY2FjaGVkKSAmDQo+ICsJCSAgIH4oSFdQX01B
-WF9QRVJGKH4wTCkgfCBIV1BfTUlOX1BFUkYofjBMKSB8DQo+ICsJCSAgICAgSFdQX0RFU0lSRURf
-UEVSRih+MEwpKSkgfA0KPiArCQkgIEhXUF9NSU5fUEVSRih2bHBfcGFyYW1zLmRlYnVnICYgMiA/
-IHAwIDogcF9taW4pIHwNCj4gKwkJICBIV1BfTUFYX1BFUkYodmxwX3BhcmFtcy5kZWJ1ZyAmIDQg
-PyBwMSA6IHBfbWF4KTsNCj4gKw0KPiArCWlmIChod3BfcmVxICE9IGNwdS0+aHdwX3JlcV9jYWNo
-ZWQpIHsNCj4gKwkJd3Jtc3JsKE1TUl9IV1BfUkVRVUVTVCwgaHdwX3JlcSk7DQo+ICsJCWNwdS0+
-aHdwX3JlcV9jYWNoZWQgPSBod3BfcmVxOw0KPiArCX0NCj4gKw0KPiArCXNhbXBsZSA9ICZjcHUt
-PnNhbXBsZTsNCj4gKwl0cmFjZV9wc3RhdGVfc2FtcGxlKG11bF9leHRfZnAoMTAwLCBzYW1wbGUt
-PmNvcmVfYXZnX3BlcmYpLA0KPiArCQkJICAgIGZwX3RvaW50KHNhbXBsZS0+YnVzeV9zY2FsZWQp
-LA0KPiArCQkJICAgIGZyb20sDQo+ICsJCQkgICAgaHdwX3JlcSwNCj4gKwkJCSAgICBzYW1wbGUt
-Pm1wZXJmLA0KPiArCQkJICAgIHNhbXBsZS0+YXBlcmYsDQo+ICsJCQkgICAgc2FtcGxlLT50c2Ms
-DQo+ICsJCQkgICAgZ2V0X2F2Z19mcmVxdWVuY3koY3B1KSwNCj4gKwkJCSAgICBmcF90b2ludChj
-cHUtPmlvd2FpdF9ib29zdCAqIDEwMCkpOw0KPiArfQ0KPiArDQo+ICBzdGF0aWMgdm9pZCBpbnRl
-bF9wc3RhdGVfdXBkYXRlX3V0aWwoc3RydWN0IHVwZGF0ZV91dGlsX2RhdGEgKmRhdGEsDQo+IHU2
-NCB0aW1lLA0KPiAgCQkJCSAgICAgdW5zaWduZWQgaW50IGZsYWdzKQ0KPiAgew0KPiBAQCAtMjI2
-MCw2ICsyMzE0LDIyIEBAIHN0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV91cGRhdGVfdXRpbChzdHJ1
-Y3QNCj4gdXBkYXRlX3V0aWxfZGF0YSAqZGF0YSwgdTY0IHRpbWUsDQo+ICAJCWludGVsX3BzdGF0
-ZV9hZGp1c3RfcHN0YXRlKGNwdSk7DQo+ICB9DQo+ICANCj4gKy8qKg0KPiArICogSW1wbGVtZW50
-YXRpb24gb2YgdGhlIGNwdWZyZXEgdXBkYXRlX3V0aWwgaG9vayBiYXNlZCBvbiB0aGUgVkxQDQo+
-ICsgKiBjb250cm9sbGVyIChzZWUgZ2V0X3ZscF90YXJnZXRfcmFuZ2UoKSkuDQo+ICsgKi8NCj4g
-K3N0YXRpYyB2b2lkIGludGVsX3BzdGF0ZV91cGRhdGVfdXRpbF9od3BfdmxwKHN0cnVjdCB1cGRh
-dGVfdXRpbF9kYXRhDQo+ICpkYXRhLA0KPiArCQkJCQkgICAgIHU2NCB0aW1lLCB1bnNpZ25lZCBp
-bnQNCj4gZmxhZ3MpDQo+ICt7DQo+ICsJc3RydWN0IGNwdWRhdGEgKmNwdSA9IGNvbnRhaW5lcl9v
-ZihkYXRhLCBzdHJ1Y3QgY3B1ZGF0YSwNCj4gdXBkYXRlX3V0aWwpOw0KPiArDQo+ICsJaWYgKHVw
-ZGF0ZV92bHBfc2FtcGxlKGNwdSwgdGltZSwgZmxhZ3MpKSB7DQo+ICsJCWNvbnN0IHN0cnVjdCB2
-bHBfdGFyZ2V0X3JhbmdlICp0YXJnZXQgPQ0KPiArCQkJZ2V0X3ZscF90YXJnZXRfcmFuZ2UoY3B1
-KTsNCj4gKwkJaW50ZWxfcHN0YXRlX2FkanVzdF9wc3RhdGVfcmFuZ2UoY3B1LCB0YXJnZXQtPnZh
-bHVlKTsNCj4gKwl9DQo+ICt9DQo+ICsNCj4gIHN0YXRpYyBzdHJ1Y3QgcHN0YXRlX2Z1bmNzIGNv
-cmVfZnVuY3MgPSB7DQo+ICAJLmdldF9tYXggPSBjb3JlX2dldF9tYXhfcHN0YXRlLA0KPiAgCS5n
-ZXRfbWF4X3BoeXNpY2FsID0gY29yZV9nZXRfbWF4X3BzdGF0ZV9waHlzaWNhbCwNCj4gQEAgLTIz
-ODksNiArMjQ1OSw5IEBAIHN0YXRpYyBpbnQgaW50ZWxfcHN0YXRlX2luaXRfY3B1KHVuc2lnbmVk
-IGludA0KPiBjcHVudW0pDQo+ICANCj4gIAlpbnRlbF9wc3RhdGVfZ2V0X2NwdV9wc3RhdGVzKGNw
-dSk7DQo+ICANCj4gKwlpZiAocHN0YXRlX2Z1bmNzLnVwZGF0ZV91dGlsID09DQo+IGludGVsX3Bz
-dGF0ZV91cGRhdGVfdXRpbF9od3BfdmxwKQ0KPiArCQlpbnRlbF9wc3RhdGVfcmVzZXRfdmxwKGNw
-dSk7DQo+ICsNCj4gIAlwcl9kZWJ1ZygiY29udHJvbGxpbmc6IGNwdSAlZFxuIiwgY3B1bnVtKTsN
-Cj4gIA0KPiAgCXJldHVybiAwOw0KPiBAQCAtMjM5OCw3ICsyNDcxLDggQEAgc3RhdGljIHZvaWQN
-Cj4gaW50ZWxfcHN0YXRlX3NldF91cGRhdGVfdXRpbF9ob29rKHVuc2lnbmVkIGludCBjcHVfbnVt
-KQ0KPiAgew0KPiAgCXN0cnVjdCBjcHVkYXRhICpjcHUgPSBhbGxfY3B1X2RhdGFbY3B1X251bV07
-DQo+ICANCj4gLQlpZiAoaHdwX2FjdGl2ZSAmJiAhaHdwX2Jvb3N0KQ0KPiArCWlmIChod3BfYWN0
-aXZlICYmICFod3BfYm9vc3QgJiYNCj4gKwkgICAgcHN0YXRlX2Z1bmNzLnVwZGF0ZV91dGlsICE9
-DQo+IGludGVsX3BzdGF0ZV91cGRhdGVfdXRpbF9od3BfdmxwKQ0KPiAgCQlyZXR1cm47DQo+ICAN
-Cj4gIAlpZiAoY3B1LT51cGRhdGVfdXRpbF9zZXQpDQo+IEBAIC0yNTI2LDcgKzI2MDAsOCBAQCBz
-dGF0aWMgaW50IGludGVsX3BzdGF0ZV9zZXRfcG9saWN5KHN0cnVjdA0KPiBjcHVmcmVxX3BvbGlj
-eSAqcG9saWN5KQ0KPiAgCQkgKiB3YXMgdHVybmVkIG9mZiwgaW4gdGhhdCBjYXNlIHdlIG5lZWQg
-dG8gY2xlYXIgdGhlDQo+ICAJCSAqIHVwZGF0ZSB1dGlsIGhvb2suDQo+ICAJCSAqLw0KPiAtCQlp
-ZiAoIWh3cF9ib29zdCkNCj4gKwkJaWYgKCFod3BfYm9vc3QgJiYgcHN0YXRlX2Z1bmNzLnVwZGF0
-ZV91dGlsICE9DQo+ICsJCQkJICBpbnRlbF9wc3RhdGVfdXBkYXRlX3V0aWxfaHdwX3ZscCkNCj4g
-IAkJCWludGVsX3BzdGF0ZV9jbGVhcl91cGRhdGVfdXRpbF9ob29rKHBvbGljeS0NCj4gPmNwdSk7
-DQo+ICAJCWludGVsX3BzdGF0ZV9od3Bfc2V0KHBvbGljeS0+Y3B1KTsNCj4gIAl9DQo=
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 48c5a4c87535359453a3189abce4c7ef1977cd95  Merge branch 'pnp' into bleeding-edge
+
+elapsed time: 484m
+
+configs tested: 151
+configs skipped: 0
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm64                            allyesconfig
+arm                              allyesconfig
+arm64                             allnoconfig
+arm                               allnoconfig
+arm                           efm32_defconfig
+arm                         at91_dt_defconfig
+arm                        shmobile_defconfig
+arm64                               defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                           sunxi_defconfig
+arm                        multi_v7_defconfig
+sparc                            allyesconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                             alldefconfig
+i386                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+ia64                             alldefconfig
+arm64                            allmodconfig
+arm                              allmodconfig
+nios2                         3c120_defconfig
+nios2                         10m50_defconfig
+c6x                        evmc6678_defconfig
+xtensa                          iss_defconfig
+c6x                              allyesconfig
+xtensa                       common_defconfig
+openrisc                 simple_smp_defconfig
+openrisc                    or1ksim_defconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+h8300                       h8s-sim_defconfig
+h8300                     edosk2674_defconfig
+m68k                       m5475evb_defconfig
+m68k                             allmodconfig
+h8300                    h8300h-sim_defconfig
+m68k                           sun3_defconfig
+m68k                          multi_defconfig
+arc                                 defconfig
+arc                              allyesconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+mips                             allyesconfig
+mips                         64r6el_defconfig
+mips                              allnoconfig
+mips                           32r2_defconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                generic-64bit_defconfig
+parisc                generic-32bit_defconfig
+parisc                           allyesconfig
+i386                 randconfig-a003-20200317
+i386                 randconfig-a001-20200317
+x86_64               randconfig-a001-20200317
+x86_64               randconfig-a003-20200317
+i386                 randconfig-a002-20200317
+x86_64               randconfig-a002-20200317
+riscv                randconfig-a001-20200317
+alpha                randconfig-a001-20200317
+nds32                randconfig-a001-20200317
+m68k                 randconfig-a001-20200317
+parisc               randconfig-a001-20200317
+mips                 randconfig-a001-20200317
+h8300                randconfig-a001-20200317
+sparc64              randconfig-a001-20200317
+c6x                  randconfig-a001-20200317
+nios2                randconfig-a001-20200317
+microblaze           randconfig-a001-20200317
+xtensa               randconfig-a001-20200317
+openrisc             randconfig-a001-20200317
+csky                 randconfig-a001-20200317
+sh                   randconfig-a001-20200317
+s390                 randconfig-a001-20200317
+x86_64               randconfig-b001-20200317
+x86_64               randconfig-b002-20200317
+x86_64               randconfig-b003-20200317
+i386                 randconfig-b001-20200317
+i386                 randconfig-b002-20200317
+i386                 randconfig-b003-20200317
+x86_64               randconfig-d001-20200317
+i386                 randconfig-d001-20200317
+i386                 randconfig-d003-20200317
+i386                 randconfig-d002-20200317
+x86_64               randconfig-d003-20200317
+x86_64               randconfig-d002-20200317
+x86_64               randconfig-f001-20200317
+i386                 randconfig-f002-20200317
+i386                 randconfig-f003-20200317
+i386                 randconfig-f001-20200317
+x86_64               randconfig-f002-20200317
+x86_64               randconfig-f003-20200317
+i386                 randconfig-g001-20200318
+i386                 randconfig-g003-20200318
+x86_64               randconfig-g003-20200318
+x86_64               randconfig-g002-20200318
+x86_64               randconfig-g001-20200318
+i386                 randconfig-g002-20200318
+x86_64               randconfig-h001-20200317
+i386                 randconfig-h001-20200317
+x86_64               randconfig-h002-20200317
+x86_64               randconfig-h003-20200317
+i386                 randconfig-h002-20200317
+i386                 randconfig-h003-20200317
+arc                  randconfig-a001-20200317
+ia64                 randconfig-a001-20200317
+arm                  randconfig-a001-20200317
+arm64                randconfig-a001-20200317
+sparc                randconfig-a001-20200317
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+s390                       zfcpdump_defconfig
+s390                          debug_defconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                             alldefconfig
+s390                                defconfig
+sh                          rsk7269_defconfig
+sh                               allmodconfig
+sh                            titan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                                allnoconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
