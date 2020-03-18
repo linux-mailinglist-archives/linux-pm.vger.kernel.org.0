@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E4618A4D2
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 21:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5505718A549
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 22:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728520AbgCRU4F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Mar 2020 16:56:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56776 "EHLO mail.kernel.org"
+        id S1728630AbgCRU4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Mar 2020 16:56:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57654 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728511AbgCRU4E (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Mar 2020 16:56:04 -0400
+        id S1727990AbgCRU4e (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 18 Mar 2020 16:56:34 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 72050208E4;
-        Wed, 18 Mar 2020 20:56:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1EA0120A8B;
+        Wed, 18 Mar 2020 20:56:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584564964;
+        s=default; t=1584564993;
         bh=EY5R1QC2UFt4ZgEOuanrzEih+GHs096R2FsqatSo/3w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PZQu2EPx0ypEEj28i3hXPq+/vcC8uTUZpEGsln4mBoLquKXpg23Lk9Edh1TqxokvL
-         F2uz2xeffuLYez9kUFrbGTDnr1g0lKUgmfZF/NOPQJReaID6DwaXhgiR0jpHyEtoDG
-         LGHJUqGgaEOZlQAdU7rsc+YvfmoI2+t+Omfp9NvA=
+        b=T3RBPz+ID1umAXgzfJ6OG960u2jYixGKR8yxfYWZ7LE/cvoqNbLT4gRoegbAjg8iR
+         GSzROn6Y5G7pWXypkW7RTe32v1f6kyCwXN1Jnb7ZBRnd/7hQbJOyxvMhNBSE4rNhYq
+         X/Qp4utsh0vFHR1GmJPURvstS/0RSDFHXMwlCU3w=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mike Gilbert <floppym@gentoo.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 07/28] cpupower: avoid multiple definition with gcc -fno-common
-Date:   Wed, 18 Mar 2020 16:55:34 -0400
-Message-Id: <20200318205555.17447-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 03/15] cpupower: avoid multiple definition with gcc -fno-common
+Date:   Wed, 18 Mar 2020 16:56:17 -0400
+Message-Id: <20200318205629.17750-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200318205555.17447-1-sashal@kernel.org>
-References: <20200318205555.17447-1-sashal@kernel.org>
+In-Reply-To: <20200318205629.17750-1-sashal@kernel.org>
+References: <20200318205629.17750-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
