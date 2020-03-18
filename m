@@ -2,90 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B85318973B
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 09:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CA6189912
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 11:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727503AbgCRIaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Mar 2020 04:30:55 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:36114 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727435AbgCRIaz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Mar 2020 04:30:55 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02I8UjQt041090;
-        Wed, 18 Mar 2020 03:30:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1584520245;
-        bh=fV9yPr0b7SrHBE3GyD+MrAKcyMNE/+5Bvz6TvlvJFcA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=VTZJnlaVB8IZoKUSb4BLXJG5VX4kvH8URvWkWcKY6eZhDKDZM9Yt/5hN8BAW6g/SA
-         R3WzqsE/wRhenjUoCoGnjscXL0+NUk90cDz9PTz7Ezcj7UWzggWfrqkiTxa7aAhOvd
-         6Ci1uIX+QixsyRrwiLXY/LJWK1xFmOz18SiQIRGE=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02I8Uj5G033893
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 18 Mar 2020 03:30:45 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 18
- Mar 2020 03:30:44 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 18 Mar 2020 03:30:44 -0500
-Received: from a0393675ula.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02I8UQ8I108598;
-        Wed, 18 Mar 2020 03:30:41 -0500
-From:   Keerthy <j-keerthy@ti.com>
-To:     <rui.zhang@intel.com>, <robh+dt@kernel.org>,
-        <daniel.lezcano@linaro.org>
-CC:     <j-keerthy@ti.com>, <amit.kucheria@verdurent.com>,
-        <t-kristo@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <mark.rutland@arm.com>
-Subject: [RESEND PATCH v4 4/4] arm64: dts: ti: am6: Add VTM node
-Date:   Wed, 18 Mar 2020 14:00:28 +0530
-Message-ID: <20200318083028.9984-5-j-keerthy@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200318083028.9984-1-j-keerthy@ti.com>
-References: <20200318083028.9984-1-j-keerthy@ti.com>
+        id S1726733AbgCRKRP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Mar 2020 06:17:15 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:41884 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726586AbgCRKRP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Mar 2020 06:17:15 -0400
+Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
+ id 8f5f7f5efe089b69; Wed, 18 Mar 2020 11:17:12 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     ulf.hansson@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@kernel.org
+Subject: Re: [PATCH RFC] cpuidle: consolidate calls to time capture
+Date:   Wed, 18 Mar 2020 11:17:12 +0100
+Message-ID: <2605374.f08NWHE4iP@kreacher>
+In-Reply-To: <20200316210843.11678-1-daniel.lezcano@linaro.org>
+References: <20200316210843.11678-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-VTM stands for voltage and thermal management. Add the vtm node and
-the associated thermal zones on the SoC.
+On Monday, March 16, 2020 10:08:43 PM CET Daniel Lezcano wrote:
+> A few years ago, we changed the code in cpuidle to replace ktime_get()
+> by a local_clock() to get rid of potential seq lock in the path and an
+> extra latency.
+> 
+> Meanwhile, the code evolved and we are getting the time in some other
+> places like the power domain governor and in the future break even
+> deadline proposal.
 
-Signed-off-by: Keerthy <j-keerthy@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Hmm?
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi
-index f4227e2743f2..e7ef96b621b3 100644
---- a/arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi
-@@ -89,4 +89,15 @@
- 		clocks = <&k3_clks 59 0>;
- 		clock-names = "gpio";
- 	};
-+
-+	vtm: thermal@42050000 {
-+		compatible = "ti,am654-vtm";
-+		reg = <0x42050000 0x25c>;
-+		power-domains = <&k3_pds 80 TI_SCI_PD_EXCLUSIVE>;
-+		#thermal-sensor-cells = <1>;
-+	};
-+
-+	thermal_zones: thermal-zones {
-+		#include "k3-am654-industrial-thermal.dtsi"
-+	};
- };
--- 
-2.17.1
+Have any patches been posted for that?
+
+> Unfortunately, as the time must be compared across the CPU, we have no
+> other option than using the ktime_get() again. Hopefully, we can
+> factor out all the calls to local_clock() and ktime_get() into a
+> single one when the CPU is entering idle as the value will be reuse in
+> different places.
+
+So there are cases in which it is not necessary to synchronize the time
+between CPUs and those would take the overhead unnecessarily.
+
+This change looks premature to me at least.
+
+Thanks!
+
+
 
