@@ -2,382 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8B8189AE6
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 12:43:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37888189AFB
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Mar 2020 12:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726664AbgCRLnf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Mar 2020 07:43:35 -0400
-Received: from mail-pl1-f177.google.com ([209.85.214.177]:35987 "EHLO
-        mail-pl1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726586AbgCRLnf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Mar 2020 07:43:35 -0400
-Received: by mail-pl1-f177.google.com with SMTP id g2so8568457plo.3
-        for <linux-pm@vger.kernel.org>; Wed, 18 Mar 2020 04:43:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=C7GgE541tC9UNOFWVFFAAUd0naeGlCDMQiCXGqpgwI4=;
-        b=Id1oeAiq7sIhPpXuzrk2MnBiWTuyOSt9LQfUKDJWovXIvzbrjR2BhJXxwQeCR+GRri
-         hGgZYwvglw/lL5ebJkItL1sg1I+Y9GTqxqGZPhxG5gPdt0KLPDgx8LSz8p7ujXqeODgN
-         pdVDYiSih7B1mIWs+6lKj6KhiU+AF6CK2VRf11dO+7D9MWUjONKaUR4TEm2qddcEui5x
-         bUeJ52GUlr0njHEtlrYRXiDeYN4hJKUXh0+M9RnmiO/tO/iQng+q+x+e/uvuMXZFlief
-         Zhmdrt0M0GbkmteepgMf+4TU2iRJWANxHAbkT9nXlJIzHR72+PG/AdswsCJzP76JUdbD
-         9bDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=C7GgE541tC9UNOFWVFFAAUd0naeGlCDMQiCXGqpgwI4=;
-        b=I+v+5l2Omw2GDpHy1rStekzDC6Kpp+XwuRwS9HsLnA6qrDHifPfZqkSy7G36MvBhJN
-         aDX0BynO/xSSUo6czsBm6dlu+PIZVIWvcMGHtfM9hnAxP+DonfBlU8orcntiCy0De/Eb
-         08eldxTArcR1zuPr3kJyrQZbZiIKAsYAQEzlzv2t1/PIoG2d17/LKXgYs/gOgfQY4+8m
-         HQLMvlrOpxO2Y29nLO8UP6nt1ECzrr1AbPd5WDWRPZWyatrvnHBf4RI/ih0QnlkBZTf1
-         glwg5TbFezjBPN9Hpesilt+CXhuMT00hwfyJz3j0/nBGJpfdSYa/lRl4G5JhOKruxU8K
-         CiUg==
-X-Gm-Message-State: ANhLgQ3SwPWjBwHZm1R3ZyRlyhaB32eZJHuMtNrX5BxlY7iEJn8YeT0X
-        Fwb1DLWvVWUDr/VzSbu6rhb7N23Jp4A=
-X-Google-Smtp-Source: ADFU+vsF5NtryloooVHHKFX9u4cYvlcLDmnq0uPO+yHh3j4p0uao6JH2Gr8v/EJuRqvmAGCisWo/4Q==
-X-Received: by 2002:a17:90a:1b42:: with SMTP id q60mr4300396pjq.84.1584531812562;
-        Wed, 18 Mar 2020 04:43:32 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y3sm2347968pfy.158.2020.03.18.04.43.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2020 04:43:31 -0700 (PDT)
-Message-ID: <5e720963.1c69fb81.e0eee.8569@mx.google.com>
-Date:   Wed, 18 Mar 2020 04:43:31 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.6-rc6-102-gc03d064a440c
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 59 runs,
- 0 regressions (v5.6-rc6-102-gc03d064a440c)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+        id S1727210AbgCRLqW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Mar 2020 07:46:22 -0400
+Received: from foss.arm.com ([217.140.110.172]:48860 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726586AbgCRLqW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 18 Mar 2020 07:46:22 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ABDB81FB;
+        Wed, 18 Mar 2020 04:46:21 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.37.12.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 04D633F534;
+        Wed, 18 Mar 2020 04:46:09 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com
+Cc:     Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com,
+        javi.merino@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
+        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, qperret@google.com, bsegall@google.com,
+        mgorman@suse.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, kernel@pengutronix.de, khilman@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
+        lorenzo.pieralisi@arm.com, lukasz.luba@arm.com,
+        patrick.bellasi@matbug.net, orjan.eide@arm.com,
+        rdunlap@infradead.org, mka@chromium.org
+Subject: [PATCH v5 0/5] Add support for devices in the Energy Model
+Date:   Wed, 18 Mar 2020 11:45:43 +0000
+Message-Id: <20200318114548.19916-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 59 runs, 0 regressions (v5.6-rc6-102-gc03d064a440c)
+Hi all,
+
+This patch set introduces support for devices in the Energy Model (EM)
+framework. It will unify the power model for thermal subsystem and make it
+simpler. The 1st patch refactors EM framework and adds support for devices.
+The 2nd patch changes dev_pm_opp_of_register_em() in OPP/OF which now should
+take as an argument struct device pointer. It touches a few trees
+(OMAP, NXP, Mediatek) updating their CPUfreq drivers to the new interface.
+Patch 4/5 changes thermal devfreq cooling removing old code for calculating
+local power table. It simplifies the code and uses EM for requested power
+calculation. Last patch 5/5 adds EM to Panfrost driver.
+
+The patch set is based on linux-next tag next-20200317. I have decided to add
+a pending patch developed by Matthias [5]. It introduces PM QoS limits in
+devfreq cooling, to not break the build test. When it lands into
+thermal/linux-next and then in linux-next, I'll drop it from this series.
+
+Changes:
+v5:
+- devfreq cooling: rebased on top of pending patch introducing PM QoS limits
+- devfreq cooling: added Matthias's patch to make this series build check pass
+- devfreq cooling: removed OPP disable code and switched to PM QoS
+- devfreq cooling: since thermal code always used a pointer to devfreq_dev_status,
+  switched to work on a local copy and avoid potential race when either busy_time or
+  total_time could change in the background
+- devfreq cooling: added _normalize_load() and handle all scenarios when
+  busy_time and total_time could have odd values (even raw counters)
+- Energy Model patch 2/4: removed prints from cpufreq drivers and added print inside
+  dev_pm_opp_of_register_em()
+- update patch 2/4 description to better reflect upcoming changes
+- collected ACK from Quentin for patch 1/4 and Reviewed-by from Steven for 4/4
+v4 [4]:
+- devfreq cooling: added two new registration functions, which will take care
+  of registering EM for the device and simplify drivers code
+  (suggested by Robin and Rob)
+- Energy Model: changed unregistering code, added kref to track usage, added
+  code freeing tables, added helper function
+- added return value to function dev_pm_opp_of_register_em() and updated
+  CPUFreq drivers code, added debug prints in case of failure
+- updated comments in devfreq cooling removing statement that only
+  simple_ondemand devfreq governor is supported to work with power extentions
+- fixed spelling in the documentation (reported by Randy)
+v3 [3]:
+- added back the cpumask 'cpus' in the em_perf_domain due potential cache misses
+- removed _is_cpu_em() since there is no need for it
+- changed function name from em_pd_energy() to em_cpu_energy(), which is
+  optimized for usage from the scheduler making some assumptions and not
+  validating arguments to speed-up, there is a comment stressing that it should
+  be used only for CPUs em_perf_domain
+- changed em_get_pd() to em_pd_get() which is now aligned with em_cpu_get()
+  naming
+- Energy Model: add code which checks if the EM is already registered for the
+  devfreq device
+- extended comment in em_cpu_get() describing the need for this function
+- fixed build warning reported on x86 by kbuild test robot in devfreq_cooling.c
+- updated documentation in the energy-model.rst
+- changed print messages from 'energy_model' to 'EM'
+- changed dev_warn to dev_dbg, should calm down test scripts in case the
+  platform has OPPs less efficient in the OPP table (some of them are there for
+  cooling reasons, we shouldn't warn in this case, debug info is enough)
+v2 [2]:
+- changed EM API em_register_perf_domain() adding cpumask_t pointer
+  as last argument (which was discussed with Dietmar and Quentin)
+- removed dependency on PM_OPP, thanks to the cpumask_t argument
+- removed enum em_type and em->type dependent code
+- em_get_pd() can handle CPU device as well as devfreq device
+- updated EM documentation
+- in devfreq cooling added code which prevents from race condition with
+  devfreq governors which are trying to use OPPs while thermal is in the middle
+  of disabling them.
+- in devfreq cooling added code which updates state of the devfreq device to
+  avoid working on stale data when governor has not updated it for a long time
+- in devfreq cooling added backward compatibility frequency table for drivers
+  which did not provide EM
+- added Steven's Reviewed-by to trace code in thermal
+- added another CPUFreq driver which needs to be updated to the new API
+
+The v1 can be found here [1].
+
+Regards,
+Lukasz Luba
+
+[1] https://lkml.org/lkml/2020/1/16/619
+[2] https://lkml.org/lkml/2020/2/6/377
+[3] https://lkml.org/lkml/2020/2/21/1910
+[4] https://lkml.org/lkml/2020/3/9/471
+[5] https://patchwork.kernel.org/patch/11435217/
+
+Lukasz Luba (4):
+  PM / EM: add devices to Energy Model
+  OPP: refactor dev_pm_opp_of_register_em() and update related drivers
+  thermal: devfreq_cooling: Refactor code and switch to use Energy Model
+  drm/panfrost: Register devfreq cooling and attempt to add Energy Model
+
+Matthias Kaehlcke (1):
+  thermal: devfreq_cooling: Use PM QoS to set frequency limits
+
+ Documentation/power/energy-model.rst        | 133 ++---
+ Documentation/scheduler/sched-energy.rst    |   2 +-
+ drivers/cpufreq/cpufreq-dt.c                |   2 +-
+ drivers/cpufreq/imx6q-cpufreq.c             |   2 +-
+ drivers/cpufreq/mediatek-cpufreq.c          |   2 +-
+ drivers/cpufreq/omap-cpufreq.c              |   2 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c           |   2 +-
+ drivers/cpufreq/scmi-cpufreq.c              |  13 +-
+ drivers/cpufreq/scpi-cpufreq.c              |   2 +-
+ drivers/cpufreq/vexpress-spc-cpufreq.c      |   2 +-
+ drivers/gpu/drm/panfrost/panfrost_devfreq.c |   2 +-
+ drivers/opp/of.c                            |  76 +--
+ drivers/thermal/cpufreq_cooling.c           |  12 +-
+ drivers/thermal/devfreq_cooling.c           | 536 ++++++++++----------
+ include/linux/devfreq_cooling.h             |  39 +-
+ include/linux/energy_model.h                | 111 ++--
+ include/linux/pm_opp.h                      |  15 +-
+ include/trace/events/thermal.h              |  19 +-
+ kernel/power/energy_model.c                 | 465 +++++++++++++----
+ kernel/sched/fair.c                         |   2 +-
+ kernel/sched/topology.c                     |   4 +-
+ 21 files changed, 901 insertions(+), 542 deletions(-)
+
+-- 
+2.17.1
 
-Test results summary
---------------------
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-1   | alpine-db                    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-2   | am335x-boneblack             | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-3   | at91-sama5d4_xplained        | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-4   | bcm2711-rpi-4-b              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-5   | bcm2836-rpi-2-b              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 0/1    =
-
-6   | bcm2837-rpi-3-b              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-7   | exynos4412-odroidx2          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-8   | exynos5250-snow              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-9   | exynos5422-odroidxu3         | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-10  | hifive-unleashed-a00         | riscv  | lab-baylibre          | gcc-8=
-    | defconfig          | 1/1    =
-
-11  | imx53-qsrb                   | arm    | lab-pengutronix       | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-12  | imx6dl-riotboard             | arm    | lab-pengutronix       | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-13  | imx6q-sabrelite              | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-14  | imx6q-sabrelite              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-15  | imx6ul-pico-hobbit           | arm    | lab-pengutronix       | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-16  | imx8mn-ddr4-evk              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-17  | meson-g12a-sei510            | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-18  | meson-g12a-u200              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-19  | meson-g12a-x96-max           | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-20  | meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-21  | meson-g12b-odroid-n2         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-22  | meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-23  | meson-gxl-s805x-p241         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-24  | meson-gxl-s905d-p230         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-25  | meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-26  | meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 4/4    =
-
-27  | meson-gxm-khadas-vim2        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-28  | meson-gxm-q200               | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-29  | meson-sm1-khadas-vim3l       | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-30  | meson-sm1-sei610             | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-31  | meson8b-odroidc1             | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-32  | minnowboard-turbot-E3826     | x86_64 | lab-collabora         | gcc-8=
-    | x86_64_defconfig   | 5/5    =
-
-33  | omap3-beagle-xm              | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-34  | omap4-panda                  | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-35  | omap4-panda                  | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-36  | qemu_arm-virt-gicv2          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-37  | qemu_arm-virt-gicv3          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-38  | qemu_arm64-virt-gicv2        | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-39  | qemu_arm64-virt-gicv3        | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-40  | qemu_x86_64                  | x86_64 | lab-collabora         | gcc-8=
-    | x86_64_defconfig   | 5/5    =
-
-41  | rk3288-rock2-square          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-42  | rk3288-veyron-jaq            | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 68/68  =
-
-43  | rk3399-gru-kevin             | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 85/88  =
-
-44  | rk3399-puma-haikou           | arm64  | lab-theobroma-systems | gcc-8=
-    | defconfig          | 5/5    =
-
-45  | sun4i-a10-olinuxino-lime     | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-46  | sun50i-a64-pine64-plus       | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-47  | sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-48  | sun50i-h6-pine-h64           | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-49  | sun50i-h6-pine-h64-model-b   | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-50  | sun5i-a13-olinuxino-micro    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-51  | sun7i-a20-cubieboard2        | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-52  | sun7i-a20-olinuxino-lime2    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-53  | sun8i-h2-plus...ch-all-h3-cc | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-54  | sun8i-h2-plus-orangepi-r1    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-55  | sun8i-h2-plus-orangepi-zero  | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-56  | sun8i-h3-libretech-all-h3-cc | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-57  | tegra124-jetson-tk1          | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-58  | tegra124-jetson-tk1          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-59  | tegra124-nyan-big            | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.6-rc6-102-gc03d064a440c
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      c03d064a440c2a5cbe3da782db05d3e18dc5ec3e =
-
-
-
-Test Failures
--------------
-     =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-2   | am335x-boneblack             | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc6-102-gc03d0=
-64a440c/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-am335x-boneblack=
-.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc6-102-gc03d0=
-64a440c/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-am335x-boneblack=
-.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/armel/baseline/rootfs.cpio.gz     =
-
-
-  dmesg - 3 tests: 2  PASS, 1 FAIL, 0 SKIP
-    * crit:
-        never passed
-        1 lines    =
-
-            =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-5   | bcm2836-rpi-2-b              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 0/1    =
-
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc6-102-gc03d0=
-64a440c/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-bcm2836-rpi-2-b=
-.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc6-102-gc03d0=
-64a440c/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-bcm2836-rpi-2-b=
-.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/armel/baseline/rootfs.cpio.gz  =
-
-
-  1 tests: 0 PASS, 1 FAIL, 0 SKIP
-    * login:
-        never passed   =
-
-         =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-7   | exynos4412-odroidx2          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc6-102-gc03d0=
-64a440c/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos4412-odro=
-idx2.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc6-102-gc03d0=
-64a440c/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos4412-odro=
-idx2.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/armel/baseline/rootfs.cpio.gz     =
-
-
-  dmesg - 3 tests: 2  PASS, 1 FAIL, 0 SKIP
-    * alert:
-        never passed
-        1 lines    =
-
-                                                                           =
-                                    =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-43  | rk3399-gru-kevin             | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 85/88  =
-
-
-  Results:     85 PASS, 3 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc6-102-gc03d0=
-64a440c/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc6-102-gc03d0=
-64a440c/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/arm64/baseline/rootfs.cpio.gz       =
-
-
-  bootrr - 84 tests: 81  PASS, 3 FAIL, 0 SKIP
-    * cros-ec-sensors-accel0-probed:
-        never passed
-    * cros-ec-sensors-accel1-probed:
-        never passed
-    * cros-ec-sensors-gyro0-probed:
-        never passed  =
-
-                                                     =20
