@@ -2,110 +2,362 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FCC18B135
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 11:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B899D18B13D
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 11:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgCSKYS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Mar 2020 06:24:18 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:44964 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727041AbgCSKYR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 06:24:17 -0400
-Received: by mail-pg1-f195.google.com with SMTP id 37so1015246pgm.11
-        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 03:24:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ejqis7jZWtiS2ZJTMrRUUKldwFIqOJuqqMCf3220n+4=;
-        b=hMfSKg1AkvvlQME8YGZu9tky0WqVsplrt7JrWxrTqFiKboOzIKmDiLwh38WSiez0Fx
-         vXZMCa3A7gMmUsjJPEhaooP1Ibtae1V2h41wqN/eazLKPEHSNnKKYuQf/0b0+zE5J8Wi
-         0I1L0Tle35xHNWanMkUymga3f0fTvI7mHSCwYYn58YQJAYcyHXN3zU8YKYvpx+e0vH6D
-         kWPR9rMXZVqj3BbI5CqtsWgQ9GYbokoBYeInrFcSgvNOeHJmSS/l1Sledp1LRbZm+RYk
-         mQqtoEoCncsJ7+Xu3Lk5JAWFh3UVJojPdtcpy+wOXJm/sOhMva0WyyI1C8WDvdOBA5JR
-         rxMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ejqis7jZWtiS2ZJTMrRUUKldwFIqOJuqqMCf3220n+4=;
-        b=eubTo79/bkISMhMfPmN9BLi1kefm80fKCSRBpmIJRV7KoKZ6iJw1Syx9d0bgjlHdX+
-         jytkJR0n0H3BRPZn1mQpWK2B2EzSY1P4mgzAEgYorxaNRTGLZdWSxDJBVT+Ezmp26oZw
-         L7JgyA12mkM/ADmELR3XJVYNeXAVBLQ/Uc/0JI6lq7QWMD8F3Sltrevu9/pWa0SGir1Y
-         h2dcjaAdBpSDeEJQw5fYgwH+hVcpuGgzu1xGRj6Cn010sXf6QjO/6kGV1B3h3BQH92nw
-         3t7Dj1NPmP6MO0389fBW1XMt2UY+HyMGThgn6nHOwktVLnrElqqqGZuAxNXE8EqQP/a+
-         jmGA==
-X-Gm-Message-State: ANhLgQ08t1ISQ9JAnd+9O3nnQugRLQa8dFix/dV23mY1XkOaktL4I/Ft
-        WHc9GX1rWuW84+bq/1uLvAz5RQ==
-X-Google-Smtp-Source: ADFU+vsfsrSDZTmHpVU3LAAmj3UlUBy/81zcWkCE3fx118L6TIcuQvcw29TgeFrn42KkMnYAVFhMaQ==
-X-Received: by 2002:aa7:8708:: with SMTP id b8mr3375903pfo.209.1584613454639;
-        Thu, 19 Mar 2020 03:24:14 -0700 (PDT)
-Received: from localhost ([122.171.118.46])
-        by smtp.gmail.com with ESMTPSA id i126sm1850038pfc.105.2020.03.19.03.24.13
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 19 Mar 2020 03:24:13 -0700 (PDT)
-Date:   Thu, 19 Mar 2020 15:54:11 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>, sboyd@kernel.org,
-        georgi.djakov@linaro.org, saravanak@google.com, nm@ti.com,
-        bjorn.andersson@linaro.org, agross@kernel.org,
-        david.brown@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org, mka@chromium.org,
-        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
-        ulf.hansson@linaro.org, linux-kernel-owner@vger.kernel.org
-Subject: Re: [RFC v3 00/10] DDR/L3 Scaling support on SDM845 and SC7180 SoCs
-Message-ID: <20200319102411.oivesngrk7gy7vtw@vireshk-i7>
-References: <20200127200350.24465-1-sibis@codeaurora.org>
- <19cf027ba87ade1b895ea90ac0fedbe2@codeaurora.org>
- <20200318034243.o2metmggzuah6cqw@vireshk-i7>
- <f6a7930a-4eaa-6982-88c6-b50773bee9d8@codeaurora.org>
- <ea4265f3f4b5a439d70d3c80bcc77b7f@codeaurora.org>
+        id S1727002AbgCSK0C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 06:26:02 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:61677 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726767AbgCSK0C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 06:26:02 -0400
+Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
+ id 510ce22fdf9eb956; Thu, 19 Mar 2020 11:25:56 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Francisco Jerez <currojerez@riseup.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>, linux-pm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>
+Subject: Re: [PATCHv2 01/10] PM: QoS: Add CPU_RESPONSE_FREQUENCY global PM QoS limit.
+Date:   Thu, 19 Mar 2020 11:25:56 +0100
+Message-ID: <6173226.NlFJlbPEpo@kreacher>
+In-Reply-To: <20200311192319.13406-1-currojerez@riseup.net>
+References: <87d09iae6f.fsf@riseup.net> <20200311192319.13406-1-currojerez@riseup.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea4265f3f4b5a439d70d3c80bcc77b7f@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-03-20, 15:41, Sibi Sankar wrote:
-> Viresh,
-> Saravana's example does show a device
-> with multiple opp tables but doesn't
-> need multiple opp table support to
-> land though (since it works fine with
-> the current implementation). I am more
-> interested  in understanding your/
-> Stephen's/Saravana's stance on adding
-> multiple opp-table support. Personally
-> I feel its inevitable, since multiple
-> qc drivers using interconnect opp-tables,
-> routinely need vote on multiple paths in
-> a non-trivial manner.
-
-The OPP core doesn't support multiple OPP tables for a device and I
-don't understand how it will. And so I have been waiting for a reply.
-
-> > 
-> > Could you please post a link to the discussion that you are referring to
-> > here?
-> > I looked at a few links posted in the cover letter as dependencies and
-> > it seems
-> > like the discussions are pending for *months* and not weeks but I
-> > might have looked
-> > at the wrong ones.
+On Wednesday, March 11, 2020 8:23:19 PM CET Francisco Jerez wrote:
+> The purpose of this PM QoS limit is to give device drivers additional
+> control over the latency/energy efficiency trade-off made by the PM
+> subsystem (particularly the CPUFREQ governor).  It allows device
+> drivers to set a lower bound on the response latency of PM (defined as
+> the time it takes from wake-up to the CPU reaching a certain
+> steady-state level of performance [e.g. the nominal frequency] in
+> response to a step-function load).  It reports to PM the minimum
+> ramp-up latency considered of use to the application, and explicitly
+> requests PM to filter out oscillations faster than the specified
+> frequency.  It is somewhat complementary to the current
+> CPU_DMA_LATENCY PM QoS class which can be understood as specifying an
+> upper latency bound on the CPU wake-up time, instead of a lower bound
+> on the CPU frequency ramp-up time.
 > 
-> https://lore.kernel.org/lkml/20200114103448.odnvqawnqb3twst5@vireshk-i7/
+> Note that even though this provides a latency constraint it's
+> represented as its reciprocal in Hz units for computational efficiency
+> (since it would take a 64-bit division to compute the number of cycles
+> elapsed from a time increment in nanoseconds and a time bound, while a
+> frequency can simply be multiplied with the time increment).
 > 
-> Rajendra,
-> Viresh is referring to ^^ one
+> This implements a MAX constraint so that the strictest (highest
+> response frequency) request is honored.  This means that PM won't
+> provide any guarantee that frequencies greater than the specified
+> bound will be filtered, since that might be incompatible with the
+> constraints specified by another more latency-sensitive application (A
+> more fine-grained result could be achieved with a scheduling-based
+> interface).  The default value needs to be equal to zero (best effort)
+> for it to behave as identity of the MAX operation.
+> 
+> v2: Drop wake_up_all_idle_cpus() call from
+>     cpu_response_frequency_qos_apply() (Peter).
+> 
+> Signed-off-by: Francisco Jerez <currojerez@riseup.net>
+> ---
+>  include/linux/pm_qos.h       |   9 +++
+>  include/trace/events/power.h |  33 +++++----
+>  kernel/power/qos.c           | 138 ++++++++++++++++++++++++++++++++++-
 
-Right, thanks.
+First, the documentation (Documentation/power/pm_qos_interface.rst) needs to be
+updated too to cover the new QoS category.
 
--- 
-viresh
+>  3 files changed, 162 insertions(+), 18 deletions(-)
+> 
+> diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+> index 4a69d4af3ff8..b522e2194c05 100644
+> --- a/include/linux/pm_qos.h
+> +++ b/include/linux/pm_qos.h
+> @@ -28,6 +28,7 @@ enum pm_qos_flags_status {
+>  #define PM_QOS_LATENCY_ANY_NS	((s64)PM_QOS_LATENCY_ANY * NSEC_PER_USEC)
+>  
+>  #define PM_QOS_CPU_LATENCY_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
+> +#define PM_QOS_CPU_RESPONSE_FREQUENCY_DEFAULT_VALUE 0
+
+I would call this PM_QOS_CPU_SCALING_RESPONSE_DEFAULT_VALUE and all of the
+API pieces accordingly.
+
+>  #define PM_QOS_RESUME_LATENCY_DEFAULT_VALUE	PM_QOS_LATENCY_ANY
+>  #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT	PM_QOS_LATENCY_ANY
+>  #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS	PM_QOS_LATENCY_ANY_NS
+> @@ -162,6 +163,14 @@ static inline void cpu_latency_qos_update_request(struct pm_qos_request *req,
+>  static inline void cpu_latency_qos_remove_request(struct pm_qos_request *req) {}
+>  #endif
+>  
+> +s32 cpu_response_frequency_qos_limit(void);
+
+For example
+
+cpu_scaling_response_qos_limit()
+
+> +bool cpu_response_frequency_qos_request_active(struct pm_qos_request *req);
+
+cpu_scaling_response_qos_request_active()
+
+and so on.
+
+> +void cpu_response_frequency_qos_add_request(struct pm_qos_request *req,
+> +					    s32 value);
+> +void cpu_response_frequency_qos_update_request(struct pm_qos_request *req,
+> +					       s32 new_value);
+> +void cpu_response_frequency_qos_remove_request(struct pm_qos_request *req);
+> +
+>  #ifdef CONFIG_PM
+>  enum pm_qos_flags_status __dev_pm_qos_flags(struct device *dev, s32 mask);
+>  enum pm_qos_flags_status dev_pm_qos_flags(struct device *dev, s32 mask);
+> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
+> index af5018aa9517..7e4b52e8ca3a 100644
+> --- a/include/trace/events/power.h
+> +++ b/include/trace/events/power.h
+> @@ -359,45 +359,48 @@ DEFINE_EVENT(power_domain, power_domain_target,
+>  );
+>  
+>  /*
+> - * CPU latency QoS events used for global CPU latency QoS list updates
+> + * CPU latency/response frequency QoS events used for global CPU PM
+> + * QoS list updates.
+>   */
+> -DECLARE_EVENT_CLASS(cpu_latency_qos_request,
+> +DECLARE_EVENT_CLASS(pm_qos_request,
+>  
+> -	TP_PROTO(s32 value),
+> +	TP_PROTO(const char *name, s32 value),
+>  
+> -	TP_ARGS(value),
+> +	TP_ARGS(name, value),
+>  
+>  	TP_STRUCT__entry(
+> +		__string(name,			 name		)
+>  		__field( s32,                    value          )
+>  	),
+>  
+>  	TP_fast_assign(
+> +		__assign_str(name, name);
+>  		__entry->value = value;
+>  	),
+>  
+> -	TP_printk("CPU_DMA_LATENCY value=%d",
+> -		  __entry->value)
+> +	TP_printk("pm_qos_class=%s value=%d",
+> +		  __get_str(name), __entry->value)
+>  );
+>  
+> -DEFINE_EVENT(cpu_latency_qos_request, pm_qos_add_request,
+> +DEFINE_EVENT(pm_qos_request, pm_qos_add_request,
+>  
+> -	TP_PROTO(s32 value),
+> +	TP_PROTO(const char *name, s32 value),
+>  
+> -	TP_ARGS(value)
+> +	TP_ARGS(name, value)
+>  );
+>  
+> -DEFINE_EVENT(cpu_latency_qos_request, pm_qos_update_request,
+> +DEFINE_EVENT(pm_qos_request, pm_qos_update_request,
+>  
+> -	TP_PROTO(s32 value),
+> +	TP_PROTO(const char *name, s32 value),
+>  
+> -	TP_ARGS(value)
+> +	TP_ARGS(name, value)
+>  );
+>  
+> -DEFINE_EVENT(cpu_latency_qos_request, pm_qos_remove_request,
+> +DEFINE_EVENT(pm_qos_request, pm_qos_remove_request,
+>  
+> -	TP_PROTO(s32 value),
+> +	TP_PROTO(const char *name, s32 value),
+>  
+> -	TP_ARGS(value)
+> +	TP_ARGS(name, value)
+>  );
+>  
+>  /*
+> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+> index 32927682bcc4..49f140aa5aa1 100644
+> --- a/kernel/power/qos.c
+> +++ b/kernel/power/qos.c
+> @@ -271,7 +271,7 @@ void cpu_latency_qos_add_request(struct pm_qos_request *req, s32 value)
+>  		return;
+>  	}
+>  
+> -	trace_pm_qos_add_request(value);
+> +	trace_pm_qos_add_request("CPU_DMA_LATENCY", value);
+>  
+>  	req->qos = &cpu_latency_constraints;
+>  	cpu_latency_qos_apply(req, PM_QOS_ADD_REQ, value);
+> @@ -297,7 +297,7 @@ void cpu_latency_qos_update_request(struct pm_qos_request *req, s32 new_value)
+>  		return;
+>  	}
+>  
+> -	trace_pm_qos_update_request(new_value);
+> +	trace_pm_qos_update_request("CPU_DMA_LATENCY", new_value);
+>  
+>  	if (new_value == req->node.prio)
+>  		return;
+> @@ -323,7 +323,7 @@ void cpu_latency_qos_remove_request(struct pm_qos_request *req)
+>  		return;
+>  	}
+>  
+> -	trace_pm_qos_remove_request(PM_QOS_DEFAULT_VALUE);
+> +	trace_pm_qos_remove_request("CPU_DMA_LATENCY", PM_QOS_DEFAULT_VALUE);
+>  
+>  	cpu_latency_qos_apply(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
+>  	memset(req, 0, sizeof(*req));
+> @@ -424,6 +424,138 @@ static int __init cpu_latency_qos_init(void)
+>  late_initcall(cpu_latency_qos_init);
+>  #endif /* CONFIG_CPU_IDLE */
+>  
+> +/* Definitions related to the CPU response frequency QoS. */
+> +
+> +static struct pm_qos_constraints cpu_response_frequency_constraints = {
+> +	.list = PLIST_HEAD_INIT(cpu_response_frequency_constraints.list),
+> +	.target_value = PM_QOS_CPU_RESPONSE_FREQUENCY_DEFAULT_VALUE,
+> +	.default_value = PM_QOS_CPU_RESPONSE_FREQUENCY_DEFAULT_VALUE,
+> +	.no_constraint_value = PM_QOS_CPU_RESPONSE_FREQUENCY_DEFAULT_VALUE,
+> +	.type = PM_QOS_MAX,
+> +};
+> +
+> +/**
+> + * cpu_response_frequency_qos_limit - Return current system-wide CPU
+> + *				      response frequency QoS limit.
+> + */
+> +s32 cpu_response_frequency_qos_limit(void)
+> +{
+> +	return pm_qos_read_value(&cpu_response_frequency_constraints);
+> +}
+> +EXPORT_SYMBOL_GPL(cpu_response_frequency_qos_limit);
+> +
+> +/**
+> + * cpu_response_frequency_qos_request_active - Check the given PM QoS request.
+> + * @req: PM QoS request to check.
+> + *
+> + * Return: 'true' if @req has been added to the CPU response frequency
+> + * QoS list, 'false' otherwise.
+> + */
+> +bool cpu_response_frequency_qos_request_active(struct pm_qos_request *req)
+> +{
+> +	return req->qos == &cpu_response_frequency_constraints;
+> +}
+> +EXPORT_SYMBOL_GPL(cpu_response_frequency_qos_request_active);
+> +
+> +static void cpu_response_frequency_qos_apply(struct pm_qos_request *req,
+> +					     enum pm_qos_req_action action,
+> +					     s32 value)
+> +{
+> +	pm_qos_update_target(req->qos, &req->node, action, value);
+> +}
+> +
+> +/**
+> + * cpu_response_frequency_qos_add_request - Add new CPU response
+> + *					    frequency QoS request.
+> + * @req: Pointer to a preallocated handle.
+> + * @value: Requested constraint value.
+> + *
+> + * Use @value to initialize the request handle pointed to by @req,
+> + * insert it as a new entry to the CPU response frequency QoS list and
+> + * recompute the effective QoS constraint for that list.
+> + *
+> + * Callers need to save the handle for later use in updates and removal of the
+> + * QoS request represented by it.
+> + */
+> +void cpu_response_frequency_qos_add_request(struct pm_qos_request *req,
+> +					    s32 value)
+> +{
+> +	if (!req)
+> +		return;
+> +
+> +	if (cpu_response_frequency_qos_request_active(req)) {
+> +		WARN(1, KERN_ERR "%s called for already added request\n",
+> +		     __func__);
+> +		return;
+> +	}
+> +
+> +	trace_pm_qos_add_request("CPU_RESPONSE_FREQUENCY", value);
+> +
+> +	req->qos = &cpu_response_frequency_constraints;
+> +	cpu_response_frequency_qos_apply(req, PM_QOS_ADD_REQ, value);
+> +}
+> +EXPORT_SYMBOL_GPL(cpu_response_frequency_qos_add_request);
+> +
+> +/**
+> + * cpu_response_frequency_qos_update_request - Modify existing CPU
+> + *					       response frequency QoS
+> + *					       request.
+> + * @req : QoS request to update.
+> + * @new_value: New requested constraint value.
+> + *
+> + * Use @new_value to update the QoS request represented by @req in the
+> + * CPU response frequency QoS list along with updating the effective
+> + * constraint value for that list.
+> + */
+> +void cpu_response_frequency_qos_update_request(struct pm_qos_request *req,
+> +					       s32 new_value)
+> +{
+> +	if (!req)
+> +		return;
+> +
+> +	if (!cpu_response_frequency_qos_request_active(req)) {
+> +		WARN(1, KERN_ERR "%s called for unknown object\n", __func__);
+> +		return;
+> +	}
+> +
+> +	trace_pm_qos_update_request("CPU_RESPONSE_FREQUENCY", new_value);
+> +
+> +	if (new_value == req->node.prio)
+> +		return;
+> +
+> +	cpu_response_frequency_qos_apply(req, PM_QOS_UPDATE_REQ, new_value);
+> +}
+> +EXPORT_SYMBOL_GPL(cpu_response_frequency_qos_update_request);
+> +
+> +/**
+> + * cpu_response_frequency_qos_remove_request - Remove existing CPU
+> + *					       response frequency QoS
+> + *					       request.
+> + * @req: QoS request to remove.
+> + *
+> + * Remove the CPU response frequency QoS request represented by @req
+> + * from the CPU response frequency QoS list along with updating the
+> + * effective constraint value for that list.
+> + */
+> +void cpu_response_frequency_qos_remove_request(struct pm_qos_request *req)
+> +{
+> +	if (!req)
+> +		return;
+> +
+> +	if (!cpu_response_frequency_qos_request_active(req)) {
+> +		WARN(1, KERN_ERR "%s called for unknown object\n", __func__);
+> +		return;
+> +	}
+> +
+> +	trace_pm_qos_remove_request("CPU_RESPONSE_FREQUENCY",
+> +				    PM_QOS_DEFAULT_VALUE);
+> +
+> +	cpu_response_frequency_qos_apply(req, PM_QOS_REMOVE_REQ,
+> +					 PM_QOS_DEFAULT_VALUE);
+> +	memset(req, 0, sizeof(*req));
+> +}
+> +EXPORT_SYMBOL_GPL(cpu_response_frequency_qos_remove_request);
+> +
+>  /* Definitions related to the frequency QoS below. */
+>  
+>  /**
+> 
+
+
+
+
