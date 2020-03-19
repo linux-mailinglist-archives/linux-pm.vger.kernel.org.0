@@ -2,95 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DB618AED1
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 09:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1063518B06B
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 10:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726785AbgCSIy6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Mar 2020 04:54:58 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:37533 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725887AbgCSIy6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 04:54:58 -0400
-Received: by mail-vs1-f67.google.com with SMTP id o3so1073830vsd.4
-        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 01:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BZy6E89ucoA1w97qJwvQQ5sgoUaCDGfmKMbJv5XOI10=;
-        b=XK/XCnLJJNQVJAFR9LEOpSM1poFBblp65fCGQDIRaF29of9VD4V1LOFmYaU5OEB+jt
-         w/+kared86CnwkNFscot3nEdyn0KBKBtEqJA07CHwRa/sLrSLIvW6oKScdiU2o/IUd7Y
-         D5g59E+R26xAa2a3oeh0tKhlxgLpRTh/1Gyx/ldySrv8h1VZ4Vq2e94mz5Q3gbe0hwz1
-         c/a1ZeuIPtygCbOC11Wu4hzhneZ47WX+/hU076c7+ax4UWRzlcVOaeDO3Yug1e35sOEg
-         nD425AlVpFB9bTvkKy3TJ0vAYR0hkHr+psjykByec+XQVmlI+81xcwDMR5Qw/2LqVP+z
-         sfwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BZy6E89ucoA1w97qJwvQQ5sgoUaCDGfmKMbJv5XOI10=;
-        b=K2Qs6ae857E6flMGy70Iek1gco60w3Hc5N2Iti3uLxpceG76rL/F9Y7gtFTulgCNso
-         V5CMzSha8uLAWqtaeoIipmZeevUsUQ2cJslj9fUrtTfhYf7uUnIR0KYlz0RdAHHQPLmR
-         kueLTN/wVSDhfLScg63zFJ652Of3CSu2AOx18QHZjNcB9SfEVn+mYMr2b5//q4JllOfk
-         wrFF9Lr53iQBZz7PKL4mUHzTBvcomtwlxH8RaTKvgjrJC2SNdr4gPnUyeRYQrFXbSvfw
-         6Ot/1r353blClBDPi5XfiRWvF1f6CXGm8FlFSlB3o3MmYYgNVGRbsR7JjqlPnRixnGmz
-         d/Zg==
-X-Gm-Message-State: ANhLgQ0q/YOhcQiGqNjgrtBaU5fdxhf1Z+SOGNpTSZqinbsxpqt2Fc/h
-        6pSIOixFf9SK/RrJxHD9jB8L+XDeQTkl/pYcnAQv8g==
-X-Google-Smtp-Source: ADFU+vs2DevNYypMycdkzht98FKAILtKLTB3SxtpJh4gYUWybbe0zhjS9orQtRSVxxWOews2rcT+N7y1BY22d3zG1bU=
-X-Received: by 2002:a67:69d5:: with SMTP id e204mr1084947vsc.159.1584608095560;
- Thu, 19 Mar 2020 01:54:55 -0700 (PDT)
+        id S1726983AbgCSJmZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 05:42:25 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:52943 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726955AbgCSJmY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 05:42:24 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1584610944; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=iz2nU03/8cnH2TUu7+7ztdtrDhkWYNP0IQa4F/BXqP4=; b=d5VoNCh0q2ppD512szBole6DhqhjKB5///q0mkFKiaEYlJP3p3d0b4KvJmnpLRS3a9kM2UFq
+ D6CZA0PFTB4hCSFJMMNZYOyn9DIoK5gy54qT1IZ8S/HWdQOBuy1CQOtVzrQJwZPdwCEH6Ztf
+ f2YDrNRStSiYInDzBVwYMQ5C2Jw=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e733e7f.7fec72c78a08-smtp-out-n01;
+ Thu, 19 Mar 2020 09:42:23 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 55451C44792; Thu, 19 Mar 2020 09:42:23 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.103] (unknown [106.51.30.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 08BB1C433CB;
+        Thu, 19 Mar 2020 09:42:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 08BB1C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [RFC v3 00/10] DDR/L3 Scaling support on SDM845 and SC7180 SoCs
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Sibi Sankar <sibis@codeaurora.org>
+Cc:     sboyd@kernel.org, georgi.djakov@linaro.org, saravanak@google.com,
+        nm@ti.com, bjorn.andersson@linaro.org, agross@kernel.org,
+        david.brown@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org, mka@chromium.org,
+        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
+        ulf.hansson@linaro.org
+References: <20200127200350.24465-1-sibis@codeaurora.org>
+ <19cf027ba87ade1b895ea90ac0fedbe2@codeaurora.org>
+ <20200318034243.o2metmggzuah6cqw@vireshk-i7>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <f6a7930a-4eaa-6982-88c6-b50773bee9d8@codeaurora.org>
+Date:   Thu, 19 Mar 2020 15:12:14 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-References: <1584606380-9972-1-git-send-email-Anson.Huang@nxp.com>
-In-Reply-To: <1584606380-9972-1-git-send-email-Anson.Huang@nxp.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Thu, 19 Mar 2020 14:24:44 +0530
-Message-ID: <CAHLCerODxv9jAhDPLHSHRVvsmPtBvj2X-CzFcFo1Vc7EZF+9og@mail.gmail.com>
-Subject: Re: [PATCH] thermal: imx_sc_thermal: Fix incorrect data type
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
-        Fabio Estevam <festevam@gmail.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        lakml <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, Linux-imx@nxp.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200318034243.o2metmggzuah6cqw@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 19, 2020 at 2:03 PM Anson Huang <Anson.Huang@nxp.com> wrote:
->
-> The temperature value passed from SCU could be negative value,
-> the data type should be signed instead of unsigned.
->
-> Fixes: ed0843633fee ("thermal: imx_sc: add i.MX system controller thermal support")
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+On 3/18/2020 9:12 AM, Viresh Kumar wrote:
+> On 18-03-20, 02:13, Sibi Sankar wrote:
+>> On 2020-01-28 01:33, Sibi Sankar wrote:
+>>> This RFC series aims to extend cpu based scaling support to L3/DDR on
+>>> SDM845 and SC7180 SoCs.
+>>>
+>>
+>> Hey Viresh/Saravana,
+>>
+>> Ping! Can you take a stab at reviewing
+>> the series, it has been on the list for
+>> a while now.
+> 
+> I believe this depends on Saravana's series on which I have raised
+> some doubts few weeks back ? I am still waiting for them to get
+> clarified by him.
 
-> ---
->  drivers/thermal/imx_sc_thermal.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
-> index dbb277a..a8723b1 100644
-> --- a/drivers/thermal/imx_sc_thermal.c
-> +++ b/drivers/thermal/imx_sc_thermal.c
-> @@ -30,8 +30,8 @@ struct req_get_temp {
->  } __packed __aligned(4);
->
->  struct resp_get_temp {
-> -       u16 celsius;
-> -       u8 tenths;
-> +       s16 celsius;
-> +       s8 tenths;
->  } __packed __aligned(4);
->
->  struct imx_sc_msg_misc_get_temp {
-> --
-> 2.7.4
->
+Could you please post a link to the discussion that you are referring to here?
+I looked at a few links posted in the cover letter as dependencies and it seems
+like the discussions are pending for *months* and not weeks but I might have looked
+at the wrong ones.
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
