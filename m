@@ -2,172 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B4018B23C
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 12:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C9B18B25D
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 12:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726589AbgCSLUe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Mar 2020 07:20:34 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:56054 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725787AbgCSLUe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 07:20:34 -0400
-Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 3e01ef312d312676; Thu, 19 Mar 2020 12:20:30 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Francisco Jerez <currojerez@riseup.net>
-Cc:     linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 08/10] cpufreq: intel_pstate: Enable VLP controller based on ACPI FADT profile and CPUID.
-Date:   Thu, 19 Mar 2020 12:20:30 +0100
-Message-ID: <20857636.Vd3SBqG6yQ@kreacher>
-In-Reply-To: <20200310214203.26459-9-currojerez@riseup.net>
-References: <20200310214203.26459-1-currojerez@riseup.net> <20200310214203.26459-9-currojerez@riseup.net>
+        id S1727014AbgCSLdh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 07:33:37 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:53818 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726982AbgCSLdh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 07:33:37 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1584617616; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=NtXkDJueiiPlFXmtYg+Cti7ZiR046Y1WCJSdQ1BCU3c=; b=ulemKkSqRA0kgxTMyUaorSmaqxGj8V4lr/vzuxWh3/ymDe8eeVtZqYVnAm881nGdZ6r8uiYm
+ QhpHACk+ODoL2F+cynBd8/UeeRtmnIQ8x/2VaIDg6ip1gBDarthYb87pNcRSrFEf8qIVhEmi
+ vBVVUtAjm+mBgPXzU1v2bXWRk7M=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e735888.7f70287633b0-smtp-out-n04;
+ Thu, 19 Mar 2020 11:33:28 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 10774C433D2; Thu, 19 Mar 2020 11:33:28 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.103] (unknown [49.207.61.30])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 89C53C433CB;
+        Thu, 19 Mar 2020 11:33:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 89C53C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [RFC v3 00/10] DDR/L3 Scaling support on SDM845 and SC7180 SoCs
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Sibi Sankar <sibis@codeaurora.org>, sboyd@kernel.org,
+        georgi.djakov@linaro.org, saravanak@google.com, nm@ti.com,
+        bjorn.andersson@linaro.org, agross@kernel.org,
+        david.brown@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org, mka@chromium.org,
+        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
+        ulf.hansson@linaro.org, linux-kernel-owner@vger.kernel.org
+References: <20200127200350.24465-1-sibis@codeaurora.org>
+ <19cf027ba87ade1b895ea90ac0fedbe2@codeaurora.org>
+ <20200318034243.o2metmggzuah6cqw@vireshk-i7>
+ <f6a7930a-4eaa-6982-88c6-b50773bee9d8@codeaurora.org>
+ <ea4265f3f4b5a439d70d3c80bcc77b7f@codeaurora.org>
+ <20200319102411.oivesngrk7gy7vtw@vireshk-i7>
+ <78d92969-0219-d140-d788-d1b14e643e90@codeaurora.org>
+ <20200319110805.glmuc2qvgcei3mon@vireshk-i7>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <53065b03-22d5-fb78-aa6f-e4711b8ffd3b@codeaurora.org>
+Date:   Thu, 19 Mar 2020 17:03:18 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20200319110805.glmuc2qvgcei3mon@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, March 10, 2020 10:42:01 PM CET Francisco Jerez wrote:
-> For the moment the VLP controller is only enabled on ICL platforms
-> other than server FADT profiles in order to reduce the validation
-> effort of the initial submission.  It should work on any other
-> processors that support HWP though (and soon enough on non-HWP too):
-> In order to override the default behavior (e.g. to test on other
-> platforms) the VLP controller can be forcefully enabled or disabled by
-> passing "intel_pstate=vlp" or "intel_pstate=no_vlp" respectively in
-> the kernel command line.
+
+On 3/19/2020 4:38 PM, Viresh Kumar wrote:
+> On 19-03-20, 16:23, Rajendra Nayak wrote:
+>>
+>>
+>> On 3/19/2020 3:54 PM, Viresh Kumar wrote:
+>> I thought this series indeed is proposing to add that support in OPP core?
+>> a.k.a "[RFC v3 06/10] opp: Allow multiple opp_tables to be mapped to a single device"
+>>
+>> These discussions are stalled for over 2 months now waiting on a response from Saravana.
+>> Viresh, whats the way forward here and how long do we plan on waiting for Saravanas response?
 > 
-> v2: Handle HWP VLP controller.
+> I agree and I am equally worried about it. So lets clear the air a bit
+> first. Can someone answer following :
 > 
-> Signed-off-by: Francisco Jerez <currojerez@riseup.net>
-> ---
->  .../admin-guide/kernel-parameters.txt         |  5 ++++
->  Documentation/admin-guide/pm/intel_pstate.rst |  7 ++++++
->  drivers/cpufreq/intel_pstate.c                | 25 +++++++++++++++++--
->  3 files changed, 35 insertions(+), 2 deletions(-)
+> - This series depends on the series from Saravana ? Right, so that
+>    needs to get merged/accepted first ?
 > 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 0c9894247015..9bc55fc2752e 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1828,6 +1828,11 @@
->  			per_cpu_perf_limits
->  			  Allow per-logical-CPU P-State performance control limits using
->  			  cpufreq sysfs interface
-> +			vlp
-> +			  Force use of VLP P-state controller.  Overrides selection
-> +			  derived from ACPI FADT profile.
-> +			no_vlp
-> +			  Prevent use of VLP P-state controller (see "vlp" parameter).
->  
->  	intremap=	[X86-64, Intel-IOMMU]
->  			on	enable Interrupt Remapping (default)
-> diff --git a/Documentation/admin-guide/pm/intel_pstate.rst b/Documentation/admin-guide/pm/intel_pstate.rst
-> index 67e414e34f37..da6b64812848 100644
-> --- a/Documentation/admin-guide/pm/intel_pstate.rst
-> +++ b/Documentation/admin-guide/pm/intel_pstate.rst
-> @@ -669,6 +669,13 @@ of them have to be prepended with the ``intel_pstate=`` prefix.
->  	Use per-logical-CPU P-State limits (see `Coordination of P-state
->  	Limits`_ for details).
->  
-> +``vlp``
-> +	Force use of VLP P-state controller.  Overrides selection derived
-> +	from ACPI FADT profile.
-> +
-> +``no_vlp``
-> +	Prevent use of VLP P-state controller (see "vlp" parameter).
-> +
->  
->  Diagnostics and Tuning
->  ======================
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index a01eed40d897..050cc8f03c26 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -3029,6 +3029,7 @@ static int intel_pstate_update_status(const char *buf, size_t size)
->  
->  static int no_load __initdata;
->  static int no_hwp __initdata;
-> +static int vlp __initdata = -1;
->  static int hwp_only __initdata;
->  static unsigned int force_load __initdata;
->  
-> @@ -3193,6 +3194,7 @@ static inline void intel_pstate_request_control_from_smm(void) {}
->  #endif /* CONFIG_ACPI */
->  
->  #define INTEL_PSTATE_HWP_BROADWELL	0x01
-> +#define INTEL_PSTATE_HWP_VLP		0x02
->  
->  #define ICPU_HWP(model, hwp_mode) \
->  	{ X86_VENDOR_INTEL, 6, model, X86_FEATURE_HWP, hwp_mode }
-> @@ -3200,12 +3202,15 @@ static inline void intel_pstate_request_control_from_smm(void) {}
->  static const struct x86_cpu_id hwp_support_ids[] __initconst = {
->  	ICPU_HWP(INTEL_FAM6_BROADWELL_X, INTEL_PSTATE_HWP_BROADWELL),
->  	ICPU_HWP(INTEL_FAM6_BROADWELL_D, INTEL_PSTATE_HWP_BROADWELL),
-> +	ICPU_HWP(INTEL_FAM6_ICELAKE, INTEL_PSTATE_HWP_VLP),
-> +	ICPU_HWP(INTEL_FAM6_ICELAKE_L, INTEL_PSTATE_HWP_VLP),
->  	ICPU_HWP(X86_MODEL_ANY, 0),
->  	{}
->  };
->  
->  static int __init intel_pstate_init(void)
->  {
-> +	bool use_vlp = vlp == 1;
->  	const struct x86_cpu_id *id;
->  	int rc;
->  
-> @@ -3222,8 +3227,19 @@ static int __init intel_pstate_init(void)
->  			pstate_funcs.update_util = intel_pstate_update_util;
->  		} else {
->  			hwp_active++;
-> -			pstate_funcs.update_util = intel_pstate_update_util_hwp;
-> -			hwp_mode_bdw = id->driver_data;
-> +
-> +			if (vlp < 0 && !intel_pstate_acpi_pm_profile_server() &&
-> +			    (id->driver_data & INTEL_PSTATE_HWP_VLP)) {
-> +				/* Enable VLP controller by default. */
-> +				use_vlp = true;
-> +			}
-> +
-> +			pstate_funcs.update_util = use_vlp ?
-> +				intel_pstate_update_util_hwp_vlp :
-> +				intel_pstate_update_util_hwp;
+> - If yes, then what is the way forward as Saravana isn't responding
+>    right now ..
 
-This basically is only good in a prototype in my view.
+sure, I understand there is a dependency, however refusing to review the approach
+(to add multiple OPPS tables per device) that this series is taking because of an outstanding
+question which, if I read it right is "We can not add multiple OPP tables for a single device right now"
+seems odd.
 
-There is an interface for selecting scaling algorithms in cpufreq already and
-in order to avoid confusion, that one needs to be extended instead of adding
-extra driver parameters for that.
+Its fine if you are not happy with the approach taken here and you can propose something else,
+but it looks inevitable that we would need something like this to be supported (multiple OPP tables per device)
+and hence the request to review the patches.
 
-I'm also a bit concerned about running all of the heavy computations in
-the scheduler context.
-
-> +
-> +			hwp_mode_bdw = (id->driver_data &
-> +					INTEL_PSTATE_HWP_BROADWELL);
->  			intel_pstate.attr = hwp_cpufreq_attrs;
->  			goto hwp_cpu_matched;
->  		}
-> @@ -3301,6 +3317,11 @@ static int __init intel_pstate_setup(char *str)
->  	if (!strcmp(str, "per_cpu_perf_limits"))
->  		per_cpu_limits = true;
->  
-> +	if (!strcmp(str, "vlp"))
-> +		vlp = 1;
-> +	if (!strcmp(str, "no_vlp"))
-> +		vlp = 0;
-> +
->  #ifdef CONFIG_ACPI
->  	if (!strcmp(str, "support_acpi_ppc"))
->  		acpi_ppc = true;
-> 
-
-
-
-
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
