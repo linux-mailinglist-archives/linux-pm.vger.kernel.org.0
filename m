@@ -2,382 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C8718B28B
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 12:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 077A418B2C5
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 12:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbgCSLtu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Mar 2020 07:49:50 -0400
-Received: from mail-pf1-f175.google.com ([209.85.210.175]:40508 "EHLO
-        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726188AbgCSLtu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 07:49:50 -0400
-Received: by mail-pf1-f175.google.com with SMTP id l184so1299718pfl.7
-        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 04:49:49 -0700 (PDT)
+        id S1727026AbgCSLz7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 07:55:59 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:36571 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726589AbgCSLz7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 07:55:59 -0400
+Received: by mail-wm1-f66.google.com with SMTP id g62so1889983wme.1
+        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 04:55:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=I4XA78Bd2Dq0bOkaphDszqE41TsYUYZxHYZOCy397go=;
-        b=0+X7Q5N5OXkrylixT1vaQJvLySyM7Eil9yiRgcUoS3K1ruaTwymEAgQKxURlKqVY0d
-         spde499i7kzGO0JrFBr0ExS9l/9wp+fZbx5a5GZvYIOPpEef+EAoy+7qnVFTBuut+SqQ
-         dPkHDyD3qB55J0wRW4hTmr9vVQKt26Uqg1RHm57O992IN0Fbl9pgJ4PmuBImVVYmmF6o
-         DxoBydTqQ8lfql+gmwhG6hYEKhwLi/N5FQtWe308YTvBbT4Buy9TPYlXRbauo9PxvSLz
-         iuma90BzFKmt/VwcIJBsJt/qvDVUNMmhgEvrGPll+xhleGzhZm0mUMJRsVqzMV+JKLc8
-         iIIw==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cudi9P8HlkG4etpTBbGtsxlC/P7Ku4/3Ch1toRpnrQU=;
+        b=B1Go1eVrp+YAnxp6yMKkty37/MmcSdW82gX3i0zLMqolbS7I4JzNolqflAsj4gSsdJ
+         b/pz8/OJPembmhjZaElN554UODiRnY3Z+Gm9kDWa9n14N4/Bo5Gl+pdo8k6ONcO5WqLv
+         ZHoyc6WBgCvjEnBIzRhn/JiLkvvR3h1mK8LDtUUO5lZaxx1cTvzLHVdirr56WNbmASWS
+         Mf4vzy+u5I27pZT83/r+7MlxTPDCaZLe7b2It5SVF10y3/38o+svU51T/Lboe1zVeUQh
+         U6brSHrzkHRz1/TJJc2KxP+abWn6q1YMVzJGXWt76rht2xFWTYydEXWs9a8EIkzzbTTd
+         hXDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=I4XA78Bd2Dq0bOkaphDszqE41TsYUYZxHYZOCy397go=;
-        b=Bl1QDRm5NgndmDvqqgI5lYyNvL8//7ZL5HTgU78i6WCTYV7qnZMijQYsiQCb/t0R+s
-         0lXSW/hALEaZnw17PpW4WoeV7lWVtwuVBR0NrrDz3RkucPB+zFVaWLrBC2Gzb2WKImEF
-         XSpR75w+VmdIJF1lPfnLmmYFCCgMtycVeBGwbBvEWPA1UJ6FbBHTJ9bFV4IsqWcZAuWG
-         FbAa7mgoy2wEXIhdSj60n4fuC64HtF/MxU65DLConzdiGXV6yodl8LM9hueEwcGriiYo
-         ephu8zyn0oSCGCFhMyvv5kg5wmve8DEjNtClNdslw8igUHWyFJ0nR2aZH7jYiF1BSrCC
-         7NAg==
-X-Gm-Message-State: ANhLgQ1PONmbx2K1jrIDyWQnu/h0qlInna5n9r4kMWAQFcziaUomGsOV
-        RfntLeWp9hUwQYB9EfYc+GYobhn4Fg0=
-X-Google-Smtp-Source: ADFU+vu2g9kmIjVqZadL2iqNDkXmm5NjfYf3xxwI3uz1gQYkInSjQvk0AazWqAHef8ZUbWMGOu2DVA==
-X-Received: by 2002:aa7:9e42:: with SMTP id z2mr3514328pfq.109.1584618588291;
-        Thu, 19 Mar 2020 04:49:48 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id m18sm2185234pgd.39.2020.03.19.04.49.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 04:49:47 -0700 (PDT)
-Message-ID: <5e735c5b.1c69fb81.fd7e.8ca3@mx.google.com>
-Date:   Thu, 19 Mar 2020 04:49:47 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=cudi9P8HlkG4etpTBbGtsxlC/P7Ku4/3Ch1toRpnrQU=;
+        b=OapXej45TzyQazUBBCj7vOqo61r0ZZEmKAbT93B94iZzwsYwigouJ1CZ6fe5OxeT+i
+         7/SA7eUVuV0G75vJfVy5anXRdk98h8Ne2bwo0C2JNUiaSFEUEAhnpOXL+5g+xFeuH7sJ
+         YBqTQ/nhKwlHnsgbeeIsa5PLTYhx+uhQMbKAQIsKfHA6EcHrcEt78S82wn22BzmFjTDA
+         cPed8jxks5PIRP5/3Xi4OpxZLVUTwwrydg3kVpSg8T2rgfWd/IGmivHqEQ2PLmasD9AK
+         6Gt7Sqok/wu+rHVDC5N98eZ3jPytreqTs5Vylgb3DHqZX98y+c+DBNW3dCKZK3pjTdM2
+         pTRQ==
+X-Gm-Message-State: ANhLgQ2VE4P4nKKgTrKjhuap3poRyQzZDsU2TCg/6yxDpcIBIgkXQAji
+        jPWdQlaWh2GA8xgnlCWR0heaqQ==
+X-Google-Smtp-Source: ADFU+vvsMLtvkLKFmONPsXKe/V+ti4VGgCY6Xc7r1R+43v7vArDEQyW90r6n0oopUsT8ykqNTZJnFQ==
+X-Received: by 2002:a1c:196:: with SMTP id 144mr3441513wmb.100.1584618954861;
+        Thu, 19 Mar 2020 04:55:54 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:5d64:ea6:49bd:69d7? ([2a01:e34:ed2f:f020:5d64:ea6:49bd:69d7])
+        by smtp.googlemail.com with ESMTPSA id t126sm3049344wmb.27.2020.03.19.04.55.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Mar 2020 04:55:54 -0700 (PDT)
+Subject: Re: [PATCH] thermal: imx_sc_thermal: Fix incorrect data type
+To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+References: <1584606380-9972-1-git-send-email-Anson.Huang@nxp.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <bde3c414-384c-e2e8-7591-3c30d6cc3bd6@linaro.org>
+Date:   Thu, 19 Mar 2020 12:55:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.6-rc6-100-g37da629c357d
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 59 runs,
- 0 regressions (v5.6-rc6-100-g37da629c357d)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <1584606380-9972-1-git-send-email-Anson.Huang@nxp.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 59 runs, 0 regressions (v5.6-rc6-100-g37da629c357d)
+On 19/03/2020 09:26, Anson Huang wrote:
+> The temperature value passed from SCU could be negative value,
+> the data type should be signed instead of unsigned.
+> 
+> Fixes: ed0843633fee ("thermal: imx_sc: add i.MX system controller thermal support")
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+
+Applied, thanks
+
+> ---
+>  drivers/thermal/imx_sc_thermal.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
+> index dbb277a..a8723b1 100644
+> --- a/drivers/thermal/imx_sc_thermal.c
+> +++ b/drivers/thermal/imx_sc_thermal.c
+> @@ -30,8 +30,8 @@ struct req_get_temp {
+>  } __packed __aligned(4);
+>  
+>  struct resp_get_temp {
+> -	u16 celsius;
+> -	u8 tenths;
+> +	s16 celsius;
+> +	s8 tenths;
+>  } __packed __aligned(4);
+>  
+>  struct imx_sc_msg_misc_get_temp {
+> 
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-Test results summary
---------------------
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-1   | alpine-db                    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-2   | am335x-boneblack             | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-3   | at91-sama5d4_xplained        | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-4   | bcm2711-rpi-4-b              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-5   | bcm2836-rpi-2-b              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 0/1    =
-
-6   | bcm2837-rpi-3-b              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-7   | exynos4412-odroidx2          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-8   | exynos5250-snow              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-9   | exynos5422-odroidxu3         | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-10  | hifive-unleashed-a00         | riscv  | lab-baylibre          | gcc-8=
-    | defconfig          | 1/1    =
-
-11  | imx53-qsrb                   | arm    | lab-pengutronix       | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-12  | imx6dl-riotboard             | arm    | lab-pengutronix       | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-13  | imx6q-sabrelite              | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-14  | imx6q-sabrelite              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-15  | imx6ul-pico-hobbit           | arm    | lab-pengutronix       | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-16  | imx8mn-ddr4-evk              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-17  | meson-g12a-sei510            | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-18  | meson-g12a-u200              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-19  | meson-g12a-x96-max           | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-20  | meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-21  | meson-g12b-odroid-n2         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-22  | meson-gxl-s805x-libretech-ac | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-23  | meson-gxl-s805x-p241         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-24  | meson-gxl-s905d-p230         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-25  | meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-26  | meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-27  | meson-gxm-khadas-vim2        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-28  | meson-gxm-q200               | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-29  | meson-sm1-khadas-vim3l       | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-30  | meson-sm1-sei610             | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-31  | meson8b-odroidc1             | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-32  | omap3-beagle-xm              | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-33  | omap4-panda                  | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-34  | omap4-panda                  | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-35  | qemu_arm-virt-gicv2          | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-36  | qemu_arm-virt-gicv3          | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-37  | qemu_arm64-virt-gicv2        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-38  | qemu_arm64-virt-gicv2        | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-39  | qemu_arm64-virt-gicv3        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-40  | qemu_arm64-virt-gicv3        | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-41  | qemu_x86_64                  | x86_64 | lab-baylibre          | gcc-8=
-    | x86_64_defconfig   | 5/5    =
-
-42  | rk3288-rock2-square          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-43  | rk3288-veyron-jaq            | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 68/68  =
-
-44  | rk3399-gru-kevin             | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 85/88  =
-
-45  | rk3399-puma-haikou           | arm64  | lab-theobroma-systems | gcc-8=
-    | defconfig          | 5/5    =
-
-46  | sun4i-a10-olinuxino-lime     | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-47  | sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-48  | sun50i-h6-pine-h64           | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-49  | sun50i-h6-pine-h64-model-b   | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-50  | sun5i-a13-olinuxino-micro    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-51  | sun7i-a20-cubieboard2        | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-52  | sun7i-a20-olinuxino-lime2    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-53  | sun8i-h2-plus...ch-all-h3-cc | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-54  | sun8i-h2-plus-orangepi-r1    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-55  | sun8i-h2-plus-orangepi-zero  | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-56  | sun8i-h3-libretech-all-h3-cc | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-57  | tegra124-jetson-tk1          | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-58  | tegra124-jetson-tk1          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-59  | tegra124-nyan-big            | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.6-rc6-100-g37da629c357d
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      37da629c357d0ce08072f1532fae2091e467ae42 =
-
-
-
-Test Failures
--------------
-     =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-2   | am335x-boneblack             | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc6-100-g37da6=
-29c357d/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-am335x-boneblack=
-.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc6-100-g37da6=
-29c357d/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-am335x-boneblack=
-.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/armel/baseline/rootfs.cpio.gz     =
-
-
-  dmesg - 3 tests: 2  PASS, 1 FAIL, 0 SKIP
-    * crit:
-        never passed
-        1 lines    =
-
-            =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-5   | bcm2836-rpi-2-b              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 0/1    =
-
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc6-100-g37da6=
-29c357d/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-bcm2836-rpi-2-b=
-.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc6-100-g37da6=
-29c357d/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-bcm2836-rpi-2-b=
-.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/armel/baseline/rootfs.cpio.gz  =
-
-
-  1 tests: 0 PASS, 1 FAIL, 0 SKIP
-    * login:
-        never passed   =
-
-         =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-7   | exynos4412-odroidx2          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc6-100-g37da6=
-29c357d/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos4412-odro=
-idx2.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc6-100-g37da6=
-29c357d/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos4412-odro=
-idx2.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/armel/baseline/rootfs.cpio.gz     =
-
-
-  dmesg - 3 tests: 2  PASS, 1 FAIL, 0 SKIP
-    * alert:
-        never passed
-        1 lines    =
-
-                                                                           =
-                                       =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-44  | rk3399-gru-kevin             | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 85/88  =
-
-
-  Results:     85 PASS, 3 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc6-100-g37da6=
-29c357d/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc6-100-g37da6=
-29c357d/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/arm64/baseline/rootfs.cpio.gz       =
-
-
-  bootrr - 84 tests: 81  PASS, 3 FAIL, 0 SKIP
-    * cros-ec-sensors-accel0-probed:
-        never passed
-    * cros-ec-sensors-accel1-probed:
-        never passed
-    * cros-ec-sensors-gyro0-probed:
-        never passed  =
-
-                                                  =20
