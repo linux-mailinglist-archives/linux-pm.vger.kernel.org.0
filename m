@@ -2,75 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBDA18B0C1
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 11:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0DD18B0F5
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 11:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725767AbgCSKBf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Mar 2020 06:01:35 -0400
-Received: from sonic312-25.consmr.mail.ir2.yahoo.com ([77.238.178.96]:40374
-        "EHLO sonic312-25.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726976AbgCSKBf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 06:01:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1584612092; bh=7bAj2aTmdt2qZuhBQReQcDKGCSJd8LlC9EcZcjUJr8M=; h=Date:From:Reply-To:Subject:References:From:Subject; b=b4DIOGzB6N3ueDrov3FYiLwLMLy9xmhUlQMzmLzkNLfjW4ZaQwFskoTUj0Eto2AtxgGQ72lWrxvnnULGrAQhTecVLIA15sdvTed6Io9MZ/QH3yzRWOzlzRo243XLh3fOI6SJxQJPBrgSJLJxNVwp+A5za0h3pEVy0ZTOzIi6+FaFNgYpHVnCJlqBWG5WTpHtVMqSB0GyayqycoWpYo/VeAcLhgpDgnL+Z/ql9idP+yVVFNLWk3RtatE9ollYKTVOfUnC9TXA9FWWHbk8QchzCS5n11vl/beDlC3+blnn0e7RcxGmilgHyJB9Sig/6bfl2rHBDCIfWMpXNFjx7HHn/w==
-X-YMail-OSG: XsKmVsAVM1m1_ndx0E9KcHxvxNm88TsqbzjBdLwhYCW3pnU_._fRzGx40mJN15b
- AGakuO5KprAeLZIPi20BarkrKva.7BiJYkJkrPNH7qGQi.nEckRsF9XdfEBDEer0A_8V3bkKeV4v
- PzABkkjI5jcoMUns8UYdf8ggJYNA021mfwHL8nWmXG0nqPNsfDkDAgH_Z0u3cXhqMDqxv28DIcMQ
- vvxRmhFEyLDK6egOJRIFcpgB8CLzGqytMizRS4aU6ujh5LVS7IhZoKpRQqQG8hmzlIhRw.VL7lzq
- ECpD4SG.qKmTsejzbY9AIR6RUp7SYCC8Q.KysRntB84lCR1MUnQ0Rr2_l1mvh6I7pbmCiOowW9jb
- FZvPaqqa5oo50LUQeaXQYZsMaRgu5NJExRkPEOHJbUTCdV5Kx7MEL4cmhJzO0f7cw5XIeZkBELXN
- trYYpSL.wrKfQyvRoN_L9ThOfGdi7sc3gY1BFBxD4jq.6DDA.ePxvWlkrO53mx.ELY7kZZXXiayr
- tw3rIWkHy1mjJw0TMe1rE16TBxZVAyPJeTMXtDsj1EiAXBiifanYfVgGI5sH58_qKFpPum390JRO
- k.LlBIrAcGQ.DOVv26dVmALLbFip7qBKtbLPKG1j6Oe4No8ewGuP._xxw3JqjPiwNDNDkn2JDhnS
- ZgpHIoD9OlooGG8bo4_dfMfdvDz9ls7dwPqROIH_8atCimsQNidH4vjbfHsXoM69Jfzdh8pLQsQY
- 9DQpSbHIZ3f19oBROR4LBmO4aFy75WD5vsI0wapb5Rl_BDdkD8uN35Y6esH4broaUqa.o9XJ6o12
- PSKBUttvsOJy3BjLHWbJdjvy8a0Q7XxClit2AkPr5AeZKi43y3HKhcOtr1tEI0Vdg.ttw1SVwvfM
- bzK1SDs6cpjVnmCV3sAdKZcxZTqErRCQrOk_2TAEYXd67ajNrtLNiPUwSUBVEFcPLSjcfyOqsr_P
- sp8bjlo1c9VCi6Qfh6mTmLhpimJQWXtHpIucar88ipHqDDgRyNI5As0O5TgE6zv_s76fERaLuYTU
- 4E3Bu1TWUtfd._kDQLTS5xiIfwPjeHZTIPlS83A1KtyJB0EdIXlLEHxRe4Zg.esoIrR.91AlV4Wo
- hew2SPbSQqGBJYubCuKQ6gv7b1b5tgeM6CNTgA3C7ncqSpX1ibjyAPS0jDvSODC2pzZlduYYLDVK
- R0B5dbZAQBi0ezvH7eJpFZ.ZknR6kisimhq79B328xnY_W4KuGAZMjqAJTYCneMoJWcHX2d56RNy
- ThZ25FjPQylzxZQKtlWRuuxqSuyP0xg5NXhrNPBu_dKGc1yV.JpvxBnn1G_81RkNWPwmEAD22UmP
- a1w--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ir2.yahoo.com with HTTP; Thu, 19 Mar 2020 10:01:32 +0000
-Date:   Thu, 19 Mar 2020 10:01:30 +0000 (UTC)
-From:   Suleiman Abubaker <suleimanabubaker84612@gmail.com>
-Reply-To: suleimanabubaker@mail.com
-Message-ID: <515971425.1359819.1584612090282@mail.yahoo.com>
-Subject: Helo
+        id S1726936AbgCSKL0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 06:11:26 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:10909 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725768AbgCSKL0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 06:11:26 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1584612685; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=M1HzhVB6T9UZUN6Oig36KI7SQdXHk/1MM2NC6JmVWog=;
+ b=YrHOULcD/Q4lswZjbvoK+GxOzq/d64CaG4mkcAlVyHMpQ68jdd2il12Bs5nMrypOa+JtROPJ
+ Rm/xVHU8kpqCBMOYYunA4zQ9WiZVkMdedCKtT4/pEOJMJIEK8Z4pIubvJ/oiiTMa5Ts5fFhS
+ N7fwnDjOjDd+NE6/OxFlqvzSkX4=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e734544.7f13f5a2f8f0-smtp-out-n05;
+ Thu, 19 Mar 2020 10:11:16 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6BBB9C4478F; Thu, 19 Mar 2020 10:11:16 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id AA8B3C433D2;
+        Thu, 19 Mar 2020 10:11:15 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-References: <515971425.1359819.1584612090282.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15471 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:74.0) Gecko/20100101 Firefox/74.0
-To:     unlisted-recipients:; (no To-header on input)
+Date:   Thu, 19 Mar 2020 15:41:15 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, sboyd@kernel.org,
+        georgi.djakov@linaro.org, saravanak@google.com, nm@ti.com,
+        bjorn.andersson@linaro.org, agross@kernel.org,
+        david.brown@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org, mka@chromium.org,
+        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
+        ulf.hansson@linaro.org, linux-kernel-owner@vger.kernel.org
+Subject: Re: [RFC v3 00/10] DDR/L3 Scaling support on SDM845 and SC7180 SoCs
+In-Reply-To: <f6a7930a-4eaa-6982-88c6-b50773bee9d8@codeaurora.org>
+References: <20200127200350.24465-1-sibis@codeaurora.org>
+ <19cf027ba87ade1b895ea90ac0fedbe2@codeaurora.org>
+ <20200318034243.o2metmggzuah6cqw@vireshk-i7>
+ <f6a7930a-4eaa-6982-88c6-b50773bee9d8@codeaurora.org>
+Message-ID: <ea4265f3f4b5a439d70d3c80bcc77b7f@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 2020-03-19 15:12, Rajendra Nayak wrote:
+> On 3/18/2020 9:12 AM, Viresh Kumar wrote:
+>> On 18-03-20, 02:13, Sibi Sankar wrote:
+>>> On 2020-01-28 01:33, Sibi Sankar wrote:
+>>>> This RFC series aims to extend cpu based scaling support to L3/DDR 
+>>>> on
+>>>> SDM845 and SC7180 SoCs.
+>>>> 
+>>> 
+>>> Hey Viresh/Saravana,
+>>> 
+>>> Ping! Can you take a stab at reviewing
+>>> the series, it has been on the list for
+>>> a while now.
+>> 
+>> I believe this depends on Saravana's series on which I have raised
+>> some doubts few weeks back ? I am still waiting for them to get
+>> clarified by him.
 
+Viresh,
+Saravana's example does show a device
+with multiple opp tables but doesn't
+need multiple opp table support to
+land though (since it works fine with
+the current implementation). I am more
+interested  in understanding your/
+Stephen's/Saravana's stance on adding
+multiple opp-table support. Personally
+I feel its inevitable, since multiple
+qc drivers using interconnect opp-tables,
+routinely need vote on multiple paths in
+a non-trivial manner.
 
+> 
+> Could you please post a link to the discussion that you are referring 
+> to here?
+> I looked at a few links posted in the cover letter as dependencies and 
+> it seems
+> like the discussions are pending for *months* and not weeks but I
+> might have looked
+> at the wrong ones.
 
+https://lore.kernel.org/lkml/20200114103448.odnvqawnqb3twst5@vireshk-i7/
 
+Rajendra,
+Viresh is referring to ^^ one
 
-
-Dear Friend,
-
-I am. Mr. Suleiman Abubaker, Manager Auditing and Accountancy Department,Bank of Africa in (B.O.A) Burkina Faso
-
-i am writing to seek for your highly esteemed consent/assistance in a lasting business relationship of mutual benefit involving $18. Million Usd for investment in your country, under a joint venture partnership.
-
-Thank you for accommodating my inquiry, as i look forward to hear from you on this business collaboration and meeting with you soon.
-
-
-(1)Your Full name:..........................
-(2)Your Age.................................
-(3)Occupation:.................................
-(4)Mobile phone number:.....................
-(5)Your Country..........................
-
-Waiting to hear from you.
-
-Your's truly,
-
-Mr. Suleiman Abubaker,
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
