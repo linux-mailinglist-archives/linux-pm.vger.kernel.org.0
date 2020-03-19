@@ -2,147 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B5618AB17
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 04:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9463218AD60
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 08:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726735AbgCSDUP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Mar 2020 23:20:15 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:41651 "EHLO ozlabs.org"
+        id S1726986AbgCSHja (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 03:39:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58188 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726596AbgCSDUP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Mar 2020 23:20:15 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726589AbgCSHja (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 19 Mar 2020 03:39:30 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48jXGK5lGkz9sPF;
-        Thu, 19 Mar 2020 14:20:09 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584588011;
-        bh=Ai9OhofFDo+Kuv8/Q1oIJL9PA57GRqNhOuVclO2kkAQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=s+c8gZbnoR5P6CdeA8jyGK9OfV1C3G7SUDQ7Nas7JVbCu+DqEBYmrEDotfFuTR5H/
-         J4ND90uHfyIyRgUygj2rR9q/zPgXuk7hg9JY/wPf2s7QQWtQpOvu7t9CohWybgd/T7
-         AIEX+YN3astnwwL4hmok5SGbKEHdx/BQ6I5KbNxst7Uai3hVNM9vaeVBvtx3DLNBm7
-         iTisZ82te70xQFnole+4mgCg48iJXRU/CcEVODRUDx8+6UQvW90kAZ0uDhyEURIra8
-         06cWKyldIT1cccLPRjZT1zk5tPGasgfNYYO00YWNutYavRkU1CY5Yu5aFrFvdcX786
-         d+tMcdQAZcGTw==
-Date:   Thu, 19 Mar 2020 14:20:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: linux-next: Tree for Mar 18 (drivers/base/power/sysfs.c)
-Message-ID: <20200319142002.7382ed70@canb.auug.org.au>
-In-Reply-To: <1c7d78ba-55ae-6f8c-9a4f-13aca32f59de@infradead.org>
-References: <20200318220920.48df2e76@canb.auug.org.au>
-        <1c7d78ba-55ae-6f8c-9a4f-13aca32f59de@infradead.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id B2B2420722;
+        Thu, 19 Mar 2020 07:39:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584603569;
+        bh=B+kuIQBeqbL5y1IBvD1kqR+vLTh4kU6kglLn21OfosA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=slBOoSo8jU7XWJNyt9HMs/D7BU5N4d1RWZrIl/AtrtSC/WcoQIO4czzdaSRiPFznN
+         jR87nNzz6pcQWRv5f/53sFP9ybja1lCun4m25ZukioZGVcLoZgl07Ri1GbYQraNWtn
+         Jy6NBOaOFzZYF0WuHE0s2ki/s3IxdldCRotalTZw=
+Date:   Thu, 19 Mar 2020 08:39:27 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     stable <stable@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Android Kernel Team <kernel-team@android.com>
+Subject: Re: [PATCH v1 0/6] Fix device links functional breakage in 4.19.99
+Message-ID: <20200319073927.GA3442166@kroah.com>
+References: <20200317065452.236670-1-saravanak@google.com>
+ <CAGETcx-uZ3YJHCYqFm3so8-woTvL3SSDY2deNonthTetcE+mXQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OzymEXv09uqzpaSswDv9a8x";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGETcx-uZ3YJHCYqFm3so8-woTvL3SSDY2deNonthTetcE+mXQ@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---Sig_/OzymEXv09uqzpaSswDv9a8x
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Wed, Mar 18, 2020 at 12:10:43PM -0700, Saravana Kannan wrote:
+> On Mon, Mar 16, 2020 at 11:54 PM Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > As mentioned in an earlier email thread [1], 4.19.99 broke the ability
+> > to create stateful and stateless device links between the same set of
+> > devices when it pulled in a valid bug fix [2]. While the fix was valid,
+> > it removes a functionality that was present before the bug fix.
+> >
+> > This patch series attempts to fix that by pulling in more patches from
+> > upstream. I've just done compilation testing so far. But wanted to send
+> > out a v1 to see if this patch list was acceptable before I fixed up the
+> > commit text format to match what's needed for stable mailing list.
+> >
+> > Some of the patches are new functionality, but for a first pass, it was
+> > easier to pull these in than try and fix the conflicts. If these patches
+> > are okay to pull into stable, then all I need to do is fix the commit
+> > text.
+> 
+> I took a closer look at all the patches. Everyone of them is a bug fix
+> except Patch 4/6. But Patch 4/6 is a fairly minimal change and I think
+> it's easier/cleaner to just pick it up too instead of trying to
+> resolve merge conflicts in the stable branch.
+> 
+> 1/6 - Fixes what appears to be a memory leak bug in upstream.
+> 2/6 - Fixes error in initial state of the device link if it's created
+> under some circumstances.
+> 3/6 - Fixes a ref count bug in upstream. Looks like it can lead to memory leaks?
+> 4/6 - Adds a minor feature to kick off a probe attempt of a consumer
+> 5/6 - Fixes the break in functionality that happened in 4.19.99
+> 6/6 - Fixes bug in 5/6 (upstream bug)
+> 
+> Greg
+> 
+> Do these patches look okay for you to pull into 4.19 stable? If so,
+> please let me know if you need me to send v2 with commit fix up.
+> 
+> The only fix up needed is to these patches at this point is changing
+> "(cherry picked from commit ...)" with "[ Upstream commit ... ]". The
+> SHAs themselves are the correct SHAs from upstream.
 
-Hi Randy,
+These all look good to me, now all queued up, thanks.
 
-On Wed, 18 Mar 2020 09:14:29 -0700 Randy Dunlap <rdunlap@infradead.org> wro=
-te:
->
-> on i386:
->=20
-> ../drivers/base/power/sysfs.c: In function =E2=80=98dpm_sysfs_change_owne=
-r=E2=80=99:
-> ../drivers/base/power/sysfs.c:708:44: error: passing argument 2 of =E2=80=
-=98sysfs_group_change_owner=E2=80=99 from incompatible pointer type [-Werro=
-r=3Dincompatible-pointer-types]
->   rc =3D sysfs_group_change_owner(&dev->kobj, &pm_attr_group, kuid, kgid);
->                                             ^
-> In file included from ../include/linux/kobject.h:20:0,
->                  from ../include/linux/device.h:17,
->                  from ../drivers/base/power/sysfs.c:3:
-> ../include/linux/sysfs.h:576:19: note: expected =E2=80=98const struct att=
-ribute_group **=E2=80=99 but argument is of type =E2=80=98const struct attr=
-ibute_group *=E2=80=99
->  static inline int sysfs_group_change_owner(struct kobject *kobj,
->                    ^~~~~~~~~~~~~~~~~~~~~~~~
-> ../drivers/base/power/sysfs.c:714:16: error: passing argument 2 of =E2=80=
-=98sysfs_group_change_owner=E2=80=99 from incompatible pointer type [-Werro=
-r=3Dincompatible-pointer-types]
->     &dev->kobj, &pm_runtime_attr_group, kuid, kgid);
->                 ^
-> In file included from ../include/linux/kobject.h:20:0,
->                  from ../include/linux/device.h:17,
->                  from ../drivers/base/power/sysfs.c:3:
-> ../include/linux/sysfs.h:576:19: note: expected =E2=80=98const struct att=
-ribute_group **=E2=80=99 but argument is of type =E2=80=98const struct attr=
-ibute_group *=E2=80=99
->  static inline int sysfs_group_change_owner(struct kobject *kobj,
->                    ^~~~~~~~~~~~~~~~~~~~~~~~
-> ../drivers/base/power/sysfs.c:720:45: error: passing argument 2 of =E2=80=
-=98sysfs_group_change_owner=E2=80=99 from incompatible pointer type [-Werro=
-r=3Dincompatible-pointer-types]
->    rc =3D sysfs_group_change_owner(&dev->kobj, &pm_wakeup_attr_group,
->                                              ^
-> In file included from ../include/linux/kobject.h:20:0,
->                  from ../include/linux/device.h:17,
->                  from ../drivers/base/power/sysfs.c:3:
-> ../include/linux/sysfs.h:576:19: note: expected =E2=80=98const struct att=
-ribute_group **=E2=80=99 but argument is of type =E2=80=98const struct attr=
-ibute_group *=E2=80=99
->  static inline int sysfs_group_change_owner(struct kobject *kobj,
->                    ^~~~~~~~~~~~~~~~~~~~~~~~
-> ../drivers/base/power/sysfs.c:732:16: error: passing argument 2 of =E2=80=
-=98sysfs_group_change_owner=E2=80=99 from incompatible pointer type [-Werro=
-r=3Dincompatible-pointer-types]
->     &dev->kobj, &pm_qos_latency_tolerance_attr_group, kuid,
->                 ^
-> In file included from ../include/linux/kobject.h:20:0,
->                  from ../include/linux/device.h:17,
->                  from ../drivers/base/power/sysfs.c:3:
-> ../include/linux/sysfs.h:576:19: note: expected =E2=80=98const struct att=
-ribute_group **=E2=80=99 but argument is of type =E2=80=98const struct attr=
-ibute_group *=E2=80=99
->  static inline int sysfs_group_change_owner(struct kobject *kobj,
->                    ^~~~~~~~~~~~~~~~~~~~~~~~
-
-Caused by commitCONFIG_SYSFS
-
-  303a42769c4c ("sysfs: add sysfs_group{s}_change_owner()")
-
-from the net-next tree.
-
-The CONFIG_SYSFS declaration of sysfs_group_change_owner() is different
-from the !CONFIG_SYSFS version.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/OzymEXv09uqzpaSswDv9a8x
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5y5OIACgkQAVBC80lX
-0GxRxwf/bZRlfZbDsOLE5GMYUz6Wd9HdJhOP8f3ZeuKS/Q3m+rYVHI6bc83jwgA2
-8oqocs60tkJ1XwIrDQ7ue77QnTJZGYxL/8kiPavtszwZYB+SrmVhH5bHKmkKssks
-aSmz4NpNNo00yhU9TE7pXs4VdXN0ejc59lkDgD0gGS6YBUHAjgQJBkODUak1mjV1
-VboVQb/HPIp1LCx2+r0vriZOUqxtxBTcxMZeIeFIWzQNsx4wSh6SX+hoITNcbwIz
-855QOgv6ebOYNlSTFxHNrGPziHz/W9xDltsicKy3PcEBizn7uHkJgBNN/Yd8QZWt
-KOa02FeHTmuBvecjJ7rzpnF0afaxNQ==
-=Xfd+
------END PGP SIGNATURE-----
-
---Sig_/OzymEXv09uqzpaSswDv9a8x--
+greg k-h
