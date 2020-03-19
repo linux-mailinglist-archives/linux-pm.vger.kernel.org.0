@@ -2,124 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B69018C023
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 20:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE2818BFD6
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 20:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726589AbgCSTMm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Mar 2020 15:12:42 -0400
-Received: from gateway20.websitewelcome.com ([192.185.51.6]:32953 "EHLO
-        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725787AbgCSTMm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 15:12:42 -0400
-X-Greylist: delayed 1370 seconds by postgrey-1.27 at vger.kernel.org; Thu, 19 Mar 2020 15:12:41 EDT
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 1EC53400FF475
-        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 12:33:12 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id F0DgjvLhs1s2xF0Dgjdkas; Thu, 19 Mar 2020 13:48:40 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=salDAP8ehHVtnoEEty5Lr7QuUQoBYqHUOZ9uNY3e1ZY=; b=QwtrUKuoVfkrES4TwRleFDy94M
-        aJ+tp9jr48joTJd7HG7UVcgVKan0i4lpwYXgJwGeGTcQ7OjColOH7y4UmQ+M0fqY+hFAHnxI21cZF
-        fe6Gn/BrMbtq/RjHIeKxorufNWKHE0psCAHvzo7E56VvIYal0JmyFttYgsMe0cON2FMNnY2kfW6tD
-        MvyKLNrso7A20RyREcX1ug3bbdBHhalPL3iYaGdmrjLWF+Emwp6jI+sHeqkXQbqfYGWU3ZAueTJSJ
-        PWlrePfL66XsmFAF6sDHlHIVYVDCGpCykzuVwpuPmRKvdo3UuUYtiYZ23qVgGgdEch0QnGghSc85M
-        qOasqU0w==;
-Received: from cablelink-189-218-116-241.hosts.intercable.net ([189.218.116.241]:51748 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1jF0De-000G3A-Om; Thu, 19 Mar 2020 13:48:38 -0500
-Date:   Thu, 19 Mar 2020 13:48:38 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] thermal: qcom: tsens.h: Replace zero-length array with
- flexible-array member
-Message-ID: <20200319184838.GA25767@embeddedor.com>
+        id S1726936AbgCSTEJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 15:04:09 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:36020 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726589AbgCSTEJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 15:04:09 -0400
+Received: by mail-lf1-f66.google.com with SMTP id s1so2571895lfd.3;
+        Thu, 19 Mar 2020 12:04:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sgZCorxsVnTvMnes1NBcLuKHRh0Qa0L3u8aGTG6FYwc=;
+        b=uQM7ZfU3n6b37nTVfw5pkFRD9VUrTf5REPsD7In3xwXkR4rR+XfhCdyWywKLG4jkp7
+         bzEBrzvzXE9eQfCE7os7IBlQy2vmgMKk8r4bErZJ3WOtmTs4NgXK2QCpZ+OP8wZd25bM
+         xwFRItXPV+iheXNXbWafVHQWFtVOiZK7KzeYs2hAEYGdJKFfUfHJI8xd1Uerj1Y5oI4t
+         4DmZ1MF4MpjjGFS9xqab1u9uur0l966Iv8v1K5qAHM+X6Z08LLIf/ab/OP+/5CLC/+bK
+         fW4Hr62cmiRG2N2GlpK6d15o01jvGQsdRW+EFLoq7VnvZZaxbXU67SS0wexdqAU4pArz
+         jX+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sgZCorxsVnTvMnes1NBcLuKHRh0Qa0L3u8aGTG6FYwc=;
+        b=r7VyICMWwyWOTFXJ+CresqiGaLThH/9AAx979q5Y3Yb/XlZYo0nguKt0TXiz+xrF5K
+         xUNGf1iy8pYEWR6Kgz/IwhQziYgMRf2Tx1F5GmjhUu+WcRZjdNyMXGyOl62D8bS9KGaS
+         HYTEuxKpldjMOSdfkBF9eAbVGfC6l/Erh6AqziR/oSCb6Njuv8ktl+SoUQjbjypVSS3l
+         ILRk4szJqaaJ5BBo/12RLD/OZMDk1HVRbXEIct5yG5ipznaZGre5MomwO4Uyj6pNt1yn
+         y45AjtHhnOf6nEocWJQDhLzi+xHr4V7g63nsr++3sG5JgnMf6PHEGCPcYtJjI362d7Ix
+         Upkg==
+X-Gm-Message-State: ANhLgQ22d1E2tontaYWY7jQUcCn0FFYBgEzOePTwj4tyUZGUdaijOaFn
+        mDtDyeYykSLD4Jg2xFJ2lpo=
+X-Google-Smtp-Source: ADFU+vv9qm41IoQ1F0DtI3bwr/YdLm8G9mCfDH78R2ugb73eNTXYC86SoKiRm6tO4+5o2V7MdCbSQQ==
+X-Received: by 2002:a05:6512:10d2:: with SMTP id k18mr2928860lfg.72.1584644646595;
+        Thu, 19 Mar 2020 12:04:06 -0700 (PDT)
+Received: from localhost.localdomain (94-29-39-224.dynamic.spd-mgts.ru. [94.29.39.224])
+        by smtp.gmail.com with ESMTPSA id k14sm2025380lfg.96.2020.03.19.12.04.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Mar 2020 12:04:05 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Jasper Korten <jja2000@gmail.com>,
+        David Heidelberg <david@ixit.cz>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v8 00/12] NVIDIA Tegra20 CPUFreq driver major update
+Date:   Thu, 19 Mar 2020 22:02:17 +0300
+Message-Id: <20200319190229.32200-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.218.116.241
-X-Source-L: No
-X-Exim-ID: 1jF0De-000G3A-Om
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: cablelink-189-218-116-241.hosts.intercable.net (embeddedor) [189.218.116.241]:51748
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 7
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The current codebase makes use of the zero-length array language
-extension to the C90 standard, but the preferred mechanism to declare
-variable-length types such as these ones is a flexible array member[1][2],
-introduced in C99:
+Hello,
 
-struct foo {
-        int stuff;
-        struct boo array[];
-};
+This series moves intermediate-clk handling from tegra20-cpufreq into
+tegra-clk driver. This allows us to switch to generic cpufreq-dt driver
+which brings voltage scaling, per-hardware OPPs and Tegra30 support out
+of the box. All boards need to adopt CPU OPPs in their device-trees in
+order to get cpufreq support.
 
-By making use of the mechanism above, we will get a compiler warning
-in case the flexible array does not occur last in the structure, which
-will help us prevent some kind of undefined behavior bugs from being
-inadvertently introduced[3] to the codebase from now on.
+Changelog:
 
-Also, notice that, dynamic memory allocations won't be affected by
-this change:
+v8: - Rebased on a recent linux-next because Thierry merged the cpuidle
+      series first and now there is one minor conflict.
 
-"Flexible array members have incomplete type, and so the sizeof operator
-may not be applied. As a quirk of the original implementation of
-zero-length arrays, sizeof evaluates to zero."[1]
+    - Added tested-by from Nicolas Chauvet who was one of the first
+      testers of the series.
 
-This issue was found with the help of Coccinelle.
+v7: - Added acks from Peter De Schrijver.
 
-[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-[2] https://github.com/KSPP/linux/issues/21
-[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+    - Added tested-by from Marcel Ziswiler, Peter Geis, Jasper Korten and
+      David Heidelberg who tested these patches on Apalis/Colibri devboards,
+      Ouya, TF300T and Nexus 7 devices respectively.
 
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/thermal/qcom/tsens.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+    - Rebased series on top of recent linux-next.
 
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index e24a865fbc34..92503712596a 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -488,7 +488,7 @@ struct tsens_priv {
- 	struct dentry			*debug_root;
- 	struct dentry			*debug;
- 
--	struct tsens_sensor		sensor[0];
-+	struct tsens_sensor		sensor[];
- };
- 
- char *qfprom_read(struct device *dev, const char *cname);
+v6: - Dropped "cpufreq: dt-platdev: Blacklist NVIDIA Tegra20 and Tegra30 SoCs"
+      patch from the series since Viresh picked up that patch separately.
+
+    - Added two new patches to this series:
+
+        ARM: tegra: Switch CPU to PLLP on resume from LP1 on Tegra30/114/124
+        ARM: tegra: Don't enable PLLX while resuming from LP1 on Tegra30
+
+      Previously these patches were sent out separately from this series,
+      but it should be more consistent to include them into the series since
+      they directly relate to enabling of the cpufreq driver on Tegra30.
+
+v5: - The "Use generic cpufreq-dt driver (Tegra30 supported now)" patch
+      is separated now into two patches by factoring out the blacklisting
+      of cpufreq-dt-platdev into a standalone patch. This is done in a
+      response to request from Jon Hunter to fix the warning splats during
+      boot that are coming from OPP core because OPPs are unavailable. The
+      OPPs will become available once tegra20-cpufreq driver will be updated
+      to support the cpufreq-dt.
+
+v4: - Updated CCLK diagram in the "Add custom CCLK implementation" patch.
+
+    - <linux/cpu.h> is now included in the "Use generic cpufreq-dt driver"
+      patch, for consistency.
+
+    - Returned value of get_cpu_device() is now checked in the "Use generic
+      cpufreq-dt driver" patch, for consistency as well.
+
+v3: - The "Add custom CCLK implementation" patch was updated in accordance
+      to the comments from Peter De Schrijver. We will not use the clock
+      skipper.
+
+    - Re added OPPs for T30 Beaver board because Thierry has that board ;)
+
+    - Added r-b for the "DT binding" patch from Rob Herring.
+
+v2: - Kept modularity of the tegra20-cpufreq as was requested by Viresh Kumar
+      in a review comment to v1.
+
+    - Added acks from Viresh Kumar.
+
+    - Added tested-by from Nicolas Chauvet to the "trimslice" patch.
+      Nicolas told me on IRC that it works fine.
+
+    - Fixed compilation of the "Add custom CCLK implementation" patch. The
+      error happened because v1 was based on top of yet unreviewed/unapplied
+      patch "clk: tegra: divider: Support enable-bit for Super clocks".
+      Thanks to Peter Geis for reporting the problem.
+
+    - Replaced Tegra30 "beaver" board with "cardhu-a04" because turned out
+      that's what NVIDIA uses in the testing farm.
+
+Dmitry Osipenko (12):
+  clk: tegra: Add custom CCLK implementation
+  clk: tegra: pll: Add pre/post rate-change hooks
+  clk: tegra: cclk: Add helpers for handling PLLX rate changes
+  clk: tegra20: Use custom CCLK implementation
+  clk: tegra30: Use custom CCLK implementation
+  ARM: tegra: Switch CPU to PLLP on resume from LP1 on Tegra30/114/124
+  ARM: tegra: Don't enable PLLX while resuming from LP1 on Tegra30
+  dt-bindings: cpufreq: Add binding for NVIDIA Tegra20/30
+  cpufreq: tegra20: Use generic cpufreq-dt driver (Tegra30 supported
+    now)
+  ARM: tegra: Create tegra20-cpufreq platform device on Tegra30
+  ARM: dts: tegra30: beaver: Set up voltage regulators for DVFS
+  ARM: dts: tegra30: beaver: Add CPU Operating Performance Points
+
+ .../cpufreq/nvidia,tegra20-cpufreq.txt        |  56 +++++
+ arch/arm/boot/dts/tegra30-beaver.dts          |  40 +++-
+ arch/arm/mach-tegra/sleep-tegra30.S           |  16 +-
+ arch/arm/mach-tegra/tegra.c                   |   4 +
+ drivers/clk/tegra/Makefile                    |   1 +
+ drivers/clk/tegra/clk-pll.c                   |  12 +-
+ drivers/clk/tegra/clk-tegra-super-cclk.c      | 212 +++++++++++++++++
+ drivers/clk/tegra/clk-tegra20.c               |   7 +-
+ drivers/clk/tegra/clk-tegra30.c               |   6 +-
+ drivers/clk/tegra/clk.h                       |  19 +-
+ drivers/cpufreq/Kconfig.arm                   |   6 +-
+ drivers/cpufreq/tegra20-cpufreq.c             | 217 +++++-------------
+ 12 files changed, 415 insertions(+), 181 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+ create mode 100644 drivers/clk/tegra/clk-tegra-super-cclk.c
+
 -- 
-2.23.0
+2.25.1
 
