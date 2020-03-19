@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4614618BFF5
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 20:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB93818BFFC
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 20:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbgCSTEY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Mar 2020 15:04:24 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45534 "EHLO
+        id S1727743AbgCSTE0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 15:04:26 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:36155 "EHLO
         mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727605AbgCSTES (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 15:04:18 -0400
-Received: by mail-lj1-f194.google.com with SMTP id y17so3738483ljk.12;
-        Thu, 19 Mar 2020 12:04:15 -0700 (PDT)
+        with ESMTP id S1727634AbgCSTET (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 15:04:19 -0400
+Received: by mail-lj1-f194.google.com with SMTP id g12so3798190ljj.3;
+        Thu, 19 Mar 2020 12:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QuRqkZzuBA2/gmQ7xtdmACyr3vk58NcEc2vx8jtn50U=;
-        b=fgDbP8zsUAW9bA62o3tLbYLIVEbM2eTutxjzwU3WD7St4VHgYg6sc3FbITh2C1JgJ1
-         DIkXLFmvcV8rb6MQgtt2svBglbhbtkJVwK3X3rItTf6xPcPlKk6Bv6HznqLmPT3eZWkt
-         0Q+k1X62dpHvSIFnda1AdpsbIySHIrKRxEZMcnJ9Qh8pHXH3ovG464TFpb0wVFtTIX2I
-         AyYcJHwC0sExsxh2uyFX8VBDQ16yq39jEJ79q9XZ9xVCiSJyBc2Jx2BLIe1fc5qQ3wY8
-         BSusDPzzRov1m5N3QvM35ET8xF1LACtVdUjEkc3jhDZmFTMS23ak2dKVpOXxhqoRUEwY
-         GvoQ==
+        bh=xuQCFAUGgCNgfRWuRofqyV6Hacg6YekuN6dbxQCNP6M=;
+        b=RY2paf91r5jWzSsQNP0zg+H0SLHwnzcSyzLAd6c0M+q22ayiEhFdHhwEH6NgeZaIoo
+         lm7T7ath6xuVnESAC8jjH9rQCs52R70pEXBGdgstnEWQePXZo359EqVl+VL94Jc2zfNP
+         pFfFbPBeUZIA3DU/RxsfgqwnKMFT2Zeg9jYrMWsWjsUzLgHI5jmc4b1wAwOQwTp2x5YU
+         YnWTziG6x5/aTumOvNYJbvOgn1PsObQaOxcSucSxWPUiKxdvL49vzeyQPJqwhC7+UU2w
+         hUqIx1ns5LkZLkmXWWMooozHfUZi+ibu1hBEh+EmfbZ3+Fjo/f3ikxxyJDIwn24LDjvq
+         sBDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QuRqkZzuBA2/gmQ7xtdmACyr3vk58NcEc2vx8jtn50U=;
-        b=H+BoippxQhAlY+EmTat5nFJcZyWk7oEdODyXrkRnIpZeV8QvoGnVRHjqpg9cu0XvWu
-         iCQf2z3j71cnvOX9B925c/3CjtVqj99ZhgXKQ908BN0FkJrJBzKQ+G0DDhNGVpQxRybw
-         KlNW/cKphg5Fvi2Guc46eapNZSrpBKwwJ77dSdABH4B/iqms4UzohCuoER95OfH+vHYg
-         9nFw8S6/YmTqY2rH4QtHOadD0n4dpMcYmwEcPtWhC4o/6YJI1jULa+EcFalsx3WHkRyi
-         xdqjHswDSlYtFpo0/ZBpgzi3pmpluEZS3LJdM2sHK/6KtSKgAyuQkQcBE4C53qRsTeBm
-         fU1w==
-X-Gm-Message-State: ANhLgQ0lAZNJj5NDfc+m5sVfg/OmhM43efcqRYa/U9J+NOofdAz0anto
-        baRxbJGxDBqQc595gS1PvLo=
-X-Google-Smtp-Source: ADFU+vsyNXvrrCmF9RHJb8MzXpeuDppLJbR+WLUOx2J32CGevDmUiS8+zyoVSdTm79PbsRfRxQS9cw==
-X-Received: by 2002:a05:651c:1190:: with SMTP id w16mr3019696ljo.119.1584644654870;
-        Thu, 19 Mar 2020 12:04:14 -0700 (PDT)
+        bh=xuQCFAUGgCNgfRWuRofqyV6Hacg6YekuN6dbxQCNP6M=;
+        b=blDl6PVVEaWXO44i7giNqBSKBABfIdj/Y/3JV+RV8HhFHsDB5QCyXdCxmVycFnJ5HQ
+         Beh/hRYhEnR+EzFTk2YsBQz2d2MxloRQtE8t3BtsTQ1wbxUnC+IOFKQ6RB4T0EUzAe04
+         2Be0ROIxc8v7vgpK9VZ2ZhscZ7LIYI5eI1QjvvuflPbu2Z+GeGNlVlgTZNz5M+GwfWLb
+         5OJ67i7Tpm6wbIXngTL0WRcj5VniNM+l2UyhysVBKwrA5xkHPDgWtfAhI9h6E79SsMQr
+         D2z65wfIB5zXI1W91GOJOv/ckfmeGEEJGNmvPEBmIsN8ZdaZFSWqr+DN4K0cAiTo7WWd
+         Prsg==
+X-Gm-Message-State: ANhLgQ2D+bIGcmIGU2JWZxaiL57SA0DwxYDJHaESu/9IxUPLNlgMth8U
+        1lhFSah+f7P7gPMfJFb9pi0=
+X-Google-Smtp-Source: ADFU+vuAcWsH2NpVCmk1A29yzI5t9CR3MACNcvLowJJ5OPnvquLwIHYssOw/2X3SNkhRKIDFN3uADQ==
+X-Received: by 2002:a05:651c:2007:: with SMTP id s7mr3146298ljo.214.1584644656425;
+        Thu, 19 Mar 2020 12:04:16 -0700 (PDT)
 Received: from localhost.localdomain (94-29-39-224.dynamic.spd-mgts.ru. [94.29.39.224])
-        by smtp.gmail.com with ESMTPSA id k14sm2025380lfg.96.2020.03.19.12.04.13
+        by smtp.gmail.com with ESMTPSA id k14sm2025380lfg.96.2020.03.19.12.04.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 12:04:14 -0700 (PDT)
+        Thu, 19 Mar 2020 12:04:15 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -61,9 +61,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         David Heidelberg <david@ixit.cz>
 Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v8 06/12] ARM: tegra: Switch CPU to PLLP on resume from LP1 on Tegra30/114/124
-Date:   Thu, 19 Mar 2020 22:02:23 +0300
-Message-Id: <20200319190229.32200-7-digetx@gmail.com>
+Subject: [PATCH v8 07/12] ARM: tegra: Don't enable PLLX while resuming from LP1 on Tegra30
+Date:   Thu, 19 Mar 2020 22:02:24 +0300
+Message-Id: <20200319190229.32200-8-digetx@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200319190229.32200-1-digetx@gmail.com>
 References: <20200319190229.32200-1-digetx@gmail.com>
@@ -74,11 +74,11 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The early-resume code shall not switch CPU to PLLX because PLLX
-configuration could be unstable or PLLX should be simply disabled if
-CPU enters into suspend running off some other PLL (the case if CPUFREQ
-driver is active). The actual burst policy is restored by the clock
-drivers.
+PLLX may be kept disabled if cpufreq driver selects some other clock for
+CPU. In that case PLLX will be disabled later in the resume path by the
+CLK driver, which also can enable PLLX if necessary by itself. Thus there
+is no need to enable PLLX early during resume. Tegra114/124 CLK drivers do
+not manage PLLX on resume and thus they are left untouched by this patch.
 
 Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
 Tested-by: Peter Geis <pgwipeout@gmail.com>
@@ -88,27 +88,41 @@ Tested-by: David Heidelberg <david@ixit.cz>
 Tested-by: Nicolas Chauvet <kwizart@gmail.com>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/mach-tegra/sleep-tegra30.S | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ arch/arm/mach-tegra/sleep-tegra30.S | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/mach-tegra/sleep-tegra30.S b/arch/arm/mach-tegra/sleep-tegra30.S
-index e7bcf7dc4675..9942265ed650 100644
+index 9942265ed650..2667bcdb5dc6 100644
 --- a/arch/arm/mach-tegra/sleep-tegra30.S
 +++ b/arch/arm/mach-tegra/sleep-tegra30.S
-@@ -398,11 +398,8 @@ _pll_m_c_x_done:
- 	ldr	r4, [r5, #0x1C]		@ restore SCLK_BURST
- 	str	r4, [r0, #CLK_RESET_SCLK_BURST]
+@@ -361,7 +361,6 @@ _no_pll_iddq_exit:
  
--	cmp	r10, #TEGRA30
--	movweq	r4, #:lower16:((1 << 28) | (0x8))	@ burst policy is PLLX
--	movteq	r4, #:upper16:((1 << 28) | (0x8))
--	movwne	r4, #:lower16:((1 << 28) | (0xe))
--	movtne	r4, #:upper16:((1 << 28) | (0xe))
-+	movw	r4, #:lower16:((1 << 28) | (0x4))	@ burst policy is PLLP
-+	movt	r4, #:upper16:((1 << 28) | (0x4))
- 	str	r4, [r0, #CLK_RESET_CCLK_BURST]
+ 	pll_enable r1, r0, CLK_RESET_PLLM_BASE, CLK_RESET_PLLM_MISC
+ 	pll_enable r1, r0, CLK_RESET_PLLC_BASE, CLK_RESET_PLLC_MISC
+-	pll_enable r1, r0, CLK_RESET_PLLX_BASE, CLK_RESET_PLLX_MISC
  
- 	/* Restore pad power state to normal */
+ _pll_m_c_x_done:
+ 	pll_enable r1, r0, CLK_RESET_PLLP_BASE, CLK_RESET_PLLP_MISC
+@@ -371,12 +370,18 @@ _pll_m_c_x_done:
+ 	pll_locked r1, r0, CLK_RESET_PLLP_BASE
+ 	pll_locked r1, r0, CLK_RESET_PLLA_BASE
+ 	pll_locked r1, r0, CLK_RESET_PLLC_BASE
+-	pll_locked r1, r0, CLK_RESET_PLLX_BASE
+ 
++	/*
++	 * CPUFreq driver could select other PLL for CPU. PLLX will be
++	 * enabled by the Tegra30 CLK driver on an as-needed basis, see
++	 * tegra30_cpu_clock_resume().
++	 */
+ 	tegra_get_soc_id TEGRA_APB_MISC_BASE, r1
+ 	cmp	r1, #TEGRA30
+ 	beq	1f
+ 
++	pll_locked r1, r0, CLK_RESET_PLLX_BASE
++
+ 	ldr	r1, [r0, #CLK_RESET_PLLP_BASE]
+ 	bic	r1, r1, #(1<<31)	@ disable PllP bypass
+ 	str	r1, [r0, #CLK_RESET_PLLP_BASE]
 -- 
 2.25.1
 
