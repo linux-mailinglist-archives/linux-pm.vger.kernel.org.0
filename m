@@ -2,94 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1063518B06B
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 10:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BAD18B08D
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 10:55:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726983AbgCSJmZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Mar 2020 05:42:25 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:52943 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726955AbgCSJmY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 05:42:24 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584610944; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=iz2nU03/8cnH2TUu7+7ztdtrDhkWYNP0IQa4F/BXqP4=; b=d5VoNCh0q2ppD512szBole6DhqhjKB5///q0mkFKiaEYlJP3p3d0b4KvJmnpLRS3a9kM2UFq
- D6CZA0PFTB4hCSFJMMNZYOyn9DIoK5gy54qT1IZ8S/HWdQOBuy1CQOtVzrQJwZPdwCEH6Ztf
- f2YDrNRStSiYInDzBVwYMQ5C2Jw=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e733e7f.7fec72c78a08-smtp-out-n01;
- Thu, 19 Mar 2020 09:42:23 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 55451C44792; Thu, 19 Mar 2020 09:42:23 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.103] (unknown [106.51.30.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 08BB1C433CB;
-        Thu, 19 Mar 2020 09:42:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 08BB1C433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [RFC v3 00/10] DDR/L3 Scaling support on SDM845 and SC7180 SoCs
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Sibi Sankar <sibis@codeaurora.org>
-Cc:     sboyd@kernel.org, georgi.djakov@linaro.org, saravanak@google.com,
-        nm@ti.com, bjorn.andersson@linaro.org, agross@kernel.org,
-        david.brown@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org, mka@chromium.org,
-        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
-        ulf.hansson@linaro.org
-References: <20200127200350.24465-1-sibis@codeaurora.org>
- <19cf027ba87ade1b895ea90ac0fedbe2@codeaurora.org>
- <20200318034243.o2metmggzuah6cqw@vireshk-i7>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <f6a7930a-4eaa-6982-88c6-b50773bee9d8@codeaurora.org>
-Date:   Thu, 19 Mar 2020 15:12:14 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1726366AbgCSJzj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 05:55:39 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:60081 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725601AbgCSJzj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 05:55:39 -0400
+X-UUID: 9c69e65bf7eb479ba168f56035bcefd6-20200319
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=eAP4t7CT+ZTox+ouHvAMB5H/l5cIuHdf3USlLwvMS5Y=;
+        b=QMda1ivHKhmHnwkgcaNtNeO1yh1njvp+wW35NXTUjPpcjjN23eUHikVShDmWKAtWEWLyTEhIy6WkJNdrF7NZ0F6Uj9IejrC7X0bjp8PtqMfkgukftYR7hQTZ5Ml9nGiYLWpdaYOIz7Tly2a/rEreeAtgOiDjB5dcY1GAOmmG5Uc=;
+X-UUID: 9c69e65bf7eb479ba168f56035bcefd6-20200319
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <henry.yen@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 688613099; Thu, 19 Mar 2020 17:55:30 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 19 Mar 2020 17:52:26 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 19 Mar 2020 17:52:16 +0800
+From:   Henry Yen <henry.yen@mediatek.com>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Steven Liu <steven.liu@mediatek.com>,
+        Henry Yen <henry.yen@mediatek.com>,
+        Michael Kao <michael.kao@mediatek.com>
+Subject: [PATCH 0/2] Add Mediatek thermal driver for MT7622
+Date:   Thu, 19 Mar 2020 17:54:51 +0800
+Message-ID: <1584611693-3553-1-git-send-email-henry.yen@mediatek.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-In-Reply-To: <20200318034243.o2metmggzuah6cqw@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-TM-SNTS-SMTP: CE5A3A715436CF45EA217465AFB9DE324815F7979766A429500461C9CCCC66552000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+TWVkaWF0ZWsgb3ducyB0d28gdGhlcm1hbCBzeXN0ZW1zLCB3aGljaCBhcmUgYWxtb3N0IHRoZSBz
+YW1lIGV4Y2VwdCBmb3INCnRoZSB3YXkgb2YgcmVhZGluZyBjYWxpYnJhdGlvbiBkYXRhIGFuZCBj
+b252ZXJ0aW5nIHRlbXBlcmF0dXJlLg0KTVQ4MTczLCBNVDI3MDEsIE1UMjcxMiBhbmQgTVQ4MTgz
+IGJlbG9uZ3MgdG8gdmVyc2lvbiAxIHRoZXJtYWwgc3lzdGVtLA0KYW5kIE1UNzYyMiBiZWxvbmdz
+IHRvIHZlcnNpb24gMi4gVGhlIGN1cnJlbnQgY29kZSBoYXMgYWxyZWFkeSBzdXBwb3J0ZWQNCnZl
+cnNpb24gMSBzeXN0ZW0uIFRoZW4gdGhpcyBwYXRjaHNldCBhZGRzIHRoZSBzdXBwb3J0IGZvciBh
+bm90aGVyDQpwbGF0Zm9ybSAoZS5nLiwgTVQ3NjIyIFNvQykuDQoNCg0KSGVucnkgWWVuICgyKToN
+CiAgdGhlcm1hbDogbWVkaWF0ZWs6IHByZXBhcmUgdG8gYWRkIHN1cHBvcnQgZm9yIG90aGVyIHBs
+YXRmb3Jtcw0KICB0aGVybWFsOiBtZWRpYXRlazogYWRkIHRzZW5zb3Igc3VwcG9ydCBmb3IgTVQ3
+NjIyIFNvQw0KDQogZHJpdmVycy90aGVybWFsL210a190aGVybWFsLmMgfCAyNDQgKysrKysrKysr
+KysrKysrKysrKysrKysrKystLS0tLS0tLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxODkgaW5zZXJ0aW9u
+cygrKSwgNTUgZGVsZXRpb25zKC0pDQoNCi0tIA0KMi4xNy4xDQo=
 
-On 3/18/2020 9:12 AM, Viresh Kumar wrote:
-> On 18-03-20, 02:13, Sibi Sankar wrote:
->> On 2020-01-28 01:33, Sibi Sankar wrote:
->>> This RFC series aims to extend cpu based scaling support to L3/DDR on
->>> SDM845 and SC7180 SoCs.
->>>
->>
->> Hey Viresh/Saravana,
->>
->> Ping! Can you take a stab at reviewing
->> the series, it has been on the list for
->> a while now.
-> 
-> I believe this depends on Saravana's series on which I have raised
-> some doubts few weeks back ? I am still waiting for them to get
-> clarified by him.
-
-Could you please post a link to the discussion that you are referring to here?
-I looked at a few links posted in the cover letter as dependencies and it seems
-like the discussions are pending for *months* and not weeks but I might have looked
-at the wrong ones.
-
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
