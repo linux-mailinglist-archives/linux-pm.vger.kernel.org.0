@@ -2,561 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D1C18C17C
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 21:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B40018C198
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 21:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727141AbgCSUfH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Mar 2020 16:35:07 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:35796 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbgCSUfF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 16:35:05 -0400
-Received: by mail-wm1-f67.google.com with SMTP id m3so3978859wmi.0;
-        Thu, 19 Mar 2020 13:35:04 -0700 (PDT)
+        id S1727064AbgCSUnL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 16:43:11 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:37654 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726864AbgCSUnL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 16:43:11 -0400
+Received: by mail-wr1-f68.google.com with SMTP id w10so4925402wrm.4
+        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 13:43:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ziVyD9FCJN4HG2z3+da7r9GM//DAxlOZcLamqBGLWB0=;
-        b=eKxP82kaHZyJ2eOg0JyFtYiy2cKsXjY0adzjQEVq23qlXCkR2f6z8Gy7qYqEbd/kaH
-         6qhu/kx3rkL71nTzrj47WuHu3E4jqdTmRm6l5Nv2x1y189f7GZmuwuK5w5A9VtROo0hM
-         miCaFOijdFJ3JIA6MIjvsqjAkkaH3g9I3PKQMntQSZmptg70T+idWOPaGJVyJtfoBWJy
-         vOACXlbUGDdynVBTAmpW0ouxh1ImCDRtaWXrbIYbN70SIAT5iChKU4IwnKgywwzIQVnH
-         CmPeQ2ByVTARCZELAiZ7iNOSet7dqUbhExQCVAVtiebHOnF+YEwYLMSW/y1DaJg/LBtU
-         dsvg==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=O6r0t1yicjzQKqceseu/FWsfoa3NWDobxww0hSFYqkQ=;
+        b=yvtIjvHStFiF4KuJi0iDEtxiTLcQD3xVIwY1g+2ZvEg6cVydL80/QoSCLTIwjXvIdA
+         OSUxatb1oQLmUeGvgiXlo2WmezOdH/4dkAxbp3BjhXoQoaWdpToJ4nH4XIoufTCtz6+7
+         +eD1tMtGEtag0vsX8VHPocNiM+XHT2JH70yjLLzp1ZRY5+LcMDjGex4nvMSVo0aZAlP2
+         HN6fVlwJ/YLJeb0cKY/UoeDBVaSVpV0BzNhMq/tXK5Owhk825aG4wM69GQILCJ2VBvsl
+         ZX6tvz8YQHR6I7IgjElc+f9r358NMxiIYaZLeq+l26BZaPcHho7A5PEpF/nRkbAYIUPd
+         fWvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ziVyD9FCJN4HG2z3+da7r9GM//DAxlOZcLamqBGLWB0=;
-        b=N8dGE+DsAp01BI3n9pCEt824lJoDiaLBt8Jcns5zzgwJGUZxjiLe44cxIwcTABqyTi
-         i0WVLzCkBG3E7dFUZ03txlaOG/etsaUEQOOpEw1xnsr1smTU8hhmHjIEXyftxylODcbq
-         AvayHEDgM3sgI2yHGKaWbCnY8Gl5XOSYrTUAwpO6cr4Dz3rKrjGHnfYAKvkzBeN/LAHj
-         y52kDYKkjFHSgS+jPbthiFcC1ArFDZPGVqBxO4eccwPgSiihXhrhnu48BsgF75lneKTC
-         Tuyll0/iHQVq1/3K27FE4cjQGpqdnanE81bxIDciplynd+yZq0rUbVZsOZ/MBNNGt/ct
-         oNRw==
-X-Gm-Message-State: ANhLgQ0nAPyvmbjNosiMZ/Fl4iLBOckEgrpL/SqL1kSpShWvxk5lyYnE
-        /h5wc/F2NPs2L3sR4r52YgQ=
-X-Google-Smtp-Source: ADFU+vsUytrUAI2t+cc3E1j9XRtenXcuMyKcFRE0qTNjCbNH+P0lzplaW3CcIr8Evw/umHjSzkzxnA==
-X-Received: by 2002:a1c:ba06:: with SMTP id k6mr5553945wmf.136.1584650103166;
-        Thu, 19 Mar 2020 13:35:03 -0700 (PDT)
-Received: from localhost.localdomain (p200300F13710ED00428D5CFFFEB99DB8.dip0.t-ipconnect.de. [2003:f1:3710:ed00:428d:5cff:feb9:9db8])
-        by smtp.googlemail.com with ESMTPSA id r9sm4744968wma.47.2020.03.19.13.35.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 13:35:02 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     yuq825@gmail.com, dri-devel@lists.freedesktop.org
-Cc:     airlied@linux.ie, daniel@ffwll.ch, linux-kernel@vger.kernel.org,
-        tomeu.vizoso@collabora.com, robh@kernel.org, steven.price@arm.com,
-        alyssa.rosenzweig@collabora.com, linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, wens@csie.org,
-        linux-pm@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v4 2/2] drm/lima: Add optional devfreq and cooling device support
-Date:   Thu, 19 Mar 2020 21:34:27 +0100
-Message-Id: <20200319203427.2259891-3-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.25.2
-In-Reply-To: <20200319203427.2259891-1-martin.blumenstingl@googlemail.com>
-References: <20200319203427.2259891-1-martin.blumenstingl@googlemail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=O6r0t1yicjzQKqceseu/FWsfoa3NWDobxww0hSFYqkQ=;
+        b=lMZU8U8QQVMU4BHaLCJE7dm1jHTCVKNvZ+qdUisEbk/i+YTPS9MScmYfCSF4EDiRu3
+         LU9uRr4cpgx05ApkyOUVoCDSw8sYqLJs9JPmBj06fWOcwo1ixp17FEx6EZthIIaThLZ+
+         wDjbuLPLvcB/Dw1MwIWyQvFYX35Sse3rSf/9IZQ1udX3TXsIFCPHxXgrrBS2LHUPHDe0
+         4WnkYQ7JLs2+LTbTdHPKSut0Gywey+fY6gKqm4CmaTk8A7pt/bxFhMdY03eQ+FOvEYGh
+         mWZeK7Q3VzIbS+txBzUFGMLKjm1ubzidraxReZ3u1jlION4cula26+/z6mtnT+czL+g/
+         kOoA==
+X-Gm-Message-State: ANhLgQ0PQzmJhvYLzUt8la62Dcabn/xabr8tchI9ZmvPZqLhcf1xLwHz
+        3YK3LPlVNESnIjRlAEJH76iPMw==
+X-Google-Smtp-Source: ADFU+vuAz2a0bwYa5cVKGTguXIY0DHOO5Upst7FBVbcyhwcjT5etcnkeaRKEPW5GlwOiYukAx+oRuw==
+X-Received: by 2002:a5d:6044:: with SMTP id j4mr6132682wrt.232.1584650588717;
+        Thu, 19 Mar 2020 13:43:08 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:6dd6:dc1a:136d:210e? ([2a01:e34:ed2f:f020:6dd6:dc1a:136d:210e])
+        by smtp.googlemail.com with ESMTPSA id u8sm4821511wrn.69.2020.03.19.13.43.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Mar 2020 13:43:07 -0700 (PDT)
+Subject: Re: [PATCH] thermal: qcom: tsens.h: Replace zero-length array with
+ flexible-array member
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200319184838.GA25767@embeddedor.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
+ sXvtg3ehTOoyD0oFjKkHaia1Zpa1m/gnNdT/WvTveLfGA1gH+yGes2Sr53Ht8hWYZFYMZc8V
+ 2pbSKh8wepq4g8r5YI1XUy9YbcTdj5mVrTklyGWA49NOeJz2QbfytMT3DJmk40LqwK6CCSU0
+ 9Ed8n0a+vevmQoRZJEd3Y1qXn2XHys0F6OHCC+VLENqNNZXdZE9E+b3FFW0lk49oLTzLRNIq
+ 0wHeR1H54RffhLQAor2+4kSSu8mW5qB0n5Eb/zXJZZ/bRiXmT8kNg85UdYhvf03ZAsp3qxcr
+ xMfMsC7m3+ADOtW90rNNLZnRvjhsYNrGIKH8Ub0UKXFXibHbafSuq7RqyRQzt01Ud8CAtq+w
+ P9EftUysLtovGpLSpGDO5zQ++4ZGVygdYFr318aGDqCljKAKZ9hYgRimPBToDedho1S1uE6F
+ 6YiBFnI3ry9+/KUnEP6L8Sfezwy7fp2JUNkUr41QF76nz43tl7oersrLxHzj2dYfWUAZWXva
+ wW4IKF5sOPFMMgxoOJovSWqwh1b7hqI+nDlD3mmVMd20VyE9W7AgTIsvDxWUnMPvww5iExlY
+ eIC0Wj9K4UqSYBOHcUPrVOKTcsBVPQA6SAMJlt82/v5l4J0pSQARAQABzSpEYW5pZWwgTGV6
+ Y2FubyA8ZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZz7Cwa4EEwEIAEECGwEFCwkIBwIGFQoJ
+ CAsCBBYCAwECHgECF4ACGQEWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXAkeagUJDRnjhwAh
+ CRCP9LjScWdVJxYhBCTWJvJTvp6H5s5b9I/0uNJxZ1Un69gQAJK0ODuKzYl0TvHPU8W7uOeu
+ U7OghN/DTkG6uAkyqW+iIVi320R5QyXN1Tb6vRx6+yZ6mpJRW5S9fO03wcD8Sna9xyZacJfO
+ UTnpfUArs9FF1pB3VIr95WwlVoptBOuKLTCNuzoBTW6jQt0sg0uPDAi2dDzf+21t/UuF7I3z
+ KSeVyHuOfofonYD85FkQJN8lsbh5xWvsASbgD8bmfI87gEbt0wq2ND5yuX+lJK7FX4lMO6gR
+ ZQ75g4KWDprOO/w6ebRxDjrH0lG1qHBiZd0hcPo2wkeYwb1sqZUjQjujlDhcvnZfpDGR4yLz
+ 5WG+pdciQhl6LNl7lctNhS8Uct17HNdfN7QvAumYw5sUuJ+POIlCws/aVbA5+DpmIfzPx5Ak
+ UHxthNIyqZ9O6UHrVg7SaF3rvqrXtjtnu7eZ3cIsfuuHrXBTWDsVwub2nm1ddZZoC530BraS
+ d7Y7eyKs7T4mGwpsi3Pd33Je5aC/rDeF44gXRv3UnKtjq2PPjaG/KPG0fLBGvhx0ARBrZLsd
+ 5CTDjwFA4bo+pD13cVhTfim3dYUnX1UDmqoCISOpzg3S4+QLv1bfbIsZ3KDQQR7y/RSGzcLE
+ z164aDfuSvl+6Myb5qQy1HUQ0hOj5Qh+CzF3CMEPmU1v9Qah1ThC8+KkH/HHjPPulLn7aMaK
+ Z8t6h7uaAYnGzjMEXZLIEhYJKwYBBAHaRw8BAQdAGdRDglTydmxI03SYiVg95SoLOKT5zZW1
+ 7Kpt/5zcvt3CwhsEGAEIACAWIQQk1ibyU76eh+bOW/SP9LjScWdVJwUCXZLIEgIbAgCvCRCP
+ 9LjScWdVJ40gBBkWCAAdFiEEbinX+DPdhovb6oob3uarTi9/eqYFAl2SyBIAIQkQ3uarTi9/
+ eqYWIQRuKdf4M92Gi9vqihve5qtOL396pnZGAP0c3VRaj3RBEOUGKxHzcu17ZUnIoJLjpHdk
+ NfBnWU9+UgD/bwTxE56Wd8kQZ2e2UTy4BM8907FsJgAQLL4tD2YZggwWIQQk1ibyU76eh+bO
+ W/SP9LjScWdVJ5CaD/0YQyfUzjpR1GnCSkbaLYTEUsyaHuWPI/uSpKTtcbttpYv+QmYsIwD9
+ 8CeH3zwY0Xl/1fE9Hy59z6Vxv9YVapLx0nPDOA1zDVNq2MnutxHb8t+Imjz4ERCxysqtfYrv
+ gao3E/h0c8SEeh+bh5MkjwmU8CwZ3doWyiVdULKESe7/Gs5OuhFzaDVPCpWdsKdCAGyUuP/+
+ qRWwKGVpWP0Rrt6MTK24Ibeu3xEZO8c3XOEXH5d9nf6YRqBEIizAecoCr00E9c+6BlRS0AqR
+ OQC3/Mm7rWtco3+WOridqVXkko9AcZ8AiM5nu0F8AqYGKg0y7vkL2LOP8us85L0p57MqIR1u
+ gDnITlTY0x4RYRWJ9+k7led5WsnWlyv84KNzbDqQExTm8itzeZYW9RvbTS63r/+FlcTa9Cz1
+ 5fW3Qm0BsyECvpAD3IPLvX9jDIR0IkF/BQI4T98LQAkYX1M/UWkMpMYsL8tLObiNOWUl4ahb
+ PYi5Yd8zVNYuidXHcwPAUXqGt3Cs+FIhihH30/Oe4jL0/2ZoEnWGOexIFVFpue0jdqJNiIvA
+ F5Wpx+UiT5G8CWYYge5DtHI3m5qAP9UgPuck3N8xCihbsXKX4l8bdHfziaJuowief7igeQs/
+ WyY9FnZb0tl29dSa7PdDKFWu+B+ZnuIzsO5vWMoN6hMThTl1DxS+jc7ATQRb/8z6AQgAvSkg
+ 5w7dVCSbpP6nXc+i8OBz59aq8kuL3YpxT9RXE/y45IFUVuSc2kuUj683rEEgyD7XCf4QKzOw
+ +XgnJcKFQiACpYAowhF/XNkMPQFspPNM1ChnIL5KWJdTp0DhW+WBeCnyCQ2pzeCzQlS/qfs3
+ dMLzzm9qCDrrDh/aEegMMZFO+reIgPZnInAcbHj3xUhz8p2dkExRMTnLry8XXkiMu9WpchHy
+ XXWYxXbMnHkSRuT00lUfZAkYpMP7La2UudC/Uw9WqGuAQzTqhvE1kSQe0e11Uc+PqceLRHA2
+ bq/wz0cGriUrcCrnkzRmzYLoGXQHqRuZazMZn2/pSIMZdDxLbwARAQABwsGNBBgBCAAgFiEE
+ JNYm8lO+nofmzlv0j/S40nFnVScFAlv/zPoCGwwAIQkQj/S40nFnVScWIQQk1ibyU76eh+bO
+ W/SP9LjScWdVJ/g6EACFYk+OBS7pV9KZXncBQYjKqk7Kc+9JoygYnOE2wN41QN9Xl0Rk3wri
+ qO7PYJM28YjK3gMT8glu1qy+Ll1bjBYWXzlsXrF4szSqkJpm1cCxTmDOne5Pu6376dM9hb4K
+ l9giUinI4jNUCbDutlt+Cwh3YuPuDXBAKO8YfDX2arzn/CISJlk0d4lDca4Cv+4yiJpEGd/r
+ BVx2lRMUxeWQTz+1gc9ZtbRgpwoXAne4iw3FlR7pyg3NicvR30YrZ+QOiop8psWM2Fb1PKB9
+ 4vZCGT3j2MwZC50VLfOXC833DBVoLSIoL8PfTcOJOcHRYU9PwKW0wBlJtDVYRZ/CrGFjbp2L
+ eT2mP5fcF86YMv0YGWdFNKDCOqOrOkZVmxai65N9d31k8/O9h1QGuVMqCiOTULy/h+FKpv5q
+ t35tlzA2nxPOX8Qj3KDDqVgQBMYJRghZyj5+N6EKAbUVa9Zq8xT6Ms2zz/y7CPW74G1GlYWP
+ i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
+ X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
+ fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
+Message-ID: <dc2d025f-0d26-b91c-975a-6c815a7682ef@linaro.org>
+Date:   Thu, 19 Mar 2020 21:43:05 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
+In-Reply-To: <20200319184838.GA25767@embeddedor.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Most platforms with a Mali-400 or Mali-450 GPU also have support for
-changing the GPU clock frequency. Add devfreq support so the GPU clock
-rate is updated based on the actual GPU usage when the
-"operating-points-v2" property is present in the board.dts.
+On 19/03/2020 19:48, Gustavo A. R. Silva wrote:
+> The current codebase makes use of the zero-length array language
+> extension to the C90 standard, but the preferred mechanism to declare
+> variable-length types such as these ones is a flexible array member[1][2],
+> introduced in C99:
+> 
+> struct foo {
+>         int stuff;
+>         struct boo array[];
+> };
+> 
+> By making use of the mechanism above, we will get a compiler warning
+> in case the flexible array does not occur last in the structure, which
+> will help us prevent some kind of undefined behavior bugs from being
+> inadvertently introduced[3] to the codebase from now on.
+> 
+> Also, notice that, dynamic memory allocations won't be affected by
+> this change:
+> 
+> "Flexible array members have incomplete type, and so the sizeof operator
+> may not be applied. As a quirk of the original implementation of
+> zero-length arrays, sizeof evaluates to zero."[1]
+> 
+> This issue was found with the help of Coccinelle.
+> 
+> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> [2] https://github.com/KSPP/linux/issues/21
+> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 
-The actual devfreq code is taken from panfrost_devfreq.c and modified so
-it matches what the lima hardware needs:
-- a call to dev_pm_opp_set_clkname() during initialization because there
-  are two clocks on Mali-4x0 IPs. "core" is the one that actually clocks
-  the GPU so we need to control it using devfreq.
-- locking when reading or writing the devfreq statistics because (unlike
-  than panfrost) we have multiple PP and GP IRQs which may finish jobs
-  concurrently.
+Applied, thanks
 
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- drivers/gpu/drm/lima/Kconfig        |   2 +
- drivers/gpu/drm/lima/Makefile       |   3 +-
- drivers/gpu/drm/lima/lima_devfreq.c | 234 ++++++++++++++++++++++++++++
- drivers/gpu/drm/lima/lima_devfreq.h |  41 +++++
- drivers/gpu/drm/lima/lima_device.c  |   4 +
- drivers/gpu/drm/lima/lima_device.h  |   3 +
- drivers/gpu/drm/lima/lima_drv.c     |  14 +-
- drivers/gpu/drm/lima/lima_sched.c   |   7 +
- drivers/gpu/drm/lima/lima_sched.h   |   3 +
- 9 files changed, 308 insertions(+), 3 deletions(-)
- create mode 100644 drivers/gpu/drm/lima/lima_devfreq.c
- create mode 100644 drivers/gpu/drm/lima/lima_devfreq.h
+> ---
+>  drivers/thermal/qcom/tsens.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+> index e24a865fbc34..92503712596a 100644
+> --- a/drivers/thermal/qcom/tsens.h
+> +++ b/drivers/thermal/qcom/tsens.h
+> @@ -488,7 +488,7 @@ struct tsens_priv {
+>  	struct dentry			*debug_root;
+>  	struct dentry			*debug;
+>  
+> -	struct tsens_sensor		sensor[0];
+> +	struct tsens_sensor		sensor[];
+>  };
+>  
+>  char *qfprom_read(struct device *dev, const char *cname);
+> 
 
-diff --git a/drivers/gpu/drm/lima/Kconfig b/drivers/gpu/drm/lima/Kconfig
-index d589f09d04d9..fa1d4f5df31e 100644
---- a/drivers/gpu/drm/lima/Kconfig
-+++ b/drivers/gpu/drm/lima/Kconfig
-@@ -10,5 +10,7 @@ config DRM_LIMA
-        depends on OF
-        select DRM_SCHED
-        select DRM_GEM_SHMEM_HELPER
-+       select PM_DEVFREQ
-+       select DEVFREQ_GOV_SIMPLE_ONDEMAND
-        help
- 	 DRM driver for ARM Mali 400/450 GPUs.
-diff --git a/drivers/gpu/drm/lima/Makefile b/drivers/gpu/drm/lima/Makefile
-index a85444b0a1d4..5e5c29875e9c 100644
---- a/drivers/gpu/drm/lima/Makefile
-+++ b/drivers/gpu/drm/lima/Makefile
-@@ -14,6 +14,7 @@ lima-y := \
- 	lima_sched.o \
- 	lima_ctx.o \
- 	lima_dlbu.o \
--	lima_bcast.o
-+	lima_bcast.o \
-+	lima_devfreq.o
- 
- obj-$(CONFIG_DRM_LIMA) += lima.o
-diff --git a/drivers/gpu/drm/lima/lima_devfreq.c b/drivers/gpu/drm/lima/lima_devfreq.c
-new file mode 100644
-index 000000000000..8c4d21d07529
---- /dev/null
-+++ b/drivers/gpu/drm/lima/lima_devfreq.c
-@@ -0,0 +1,234 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2020 Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-+ *
-+ * Based on panfrost_devfreq.c:
-+ *   Copyright 2019 Collabora ltd.
-+ */
-+#include <linux/clk.h>
-+#include <linux/devfreq.h>
-+#include <linux/devfreq_cooling.h>
-+#include <linux/device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_opp.h>
-+#include <linux/property.h>
-+
-+#include "lima_device.h"
-+#include "lima_devfreq.h"
-+
-+static void lima_devfreq_update_utilization(struct lima_devfreq *devfreq)
-+{
-+	ktime_t now, last;
-+
-+	now = ktime_get();
-+	last = devfreq->time_last_update;
-+
-+	if (devfreq->busy_count > 0)
-+		devfreq->busy_time += ktime_sub(now, last);
-+	else
-+		devfreq->idle_time += ktime_sub(now, last);
-+
-+	devfreq->time_last_update = now;
-+}
-+
-+static int lima_devfreq_target(struct device *dev, unsigned long *freq,
-+			       u32 flags)
-+{
-+	struct dev_pm_opp *opp;
-+	int err;
-+
-+	opp = devfreq_recommended_opp(dev, freq, flags);
-+	if (IS_ERR(opp))
-+		return PTR_ERR(opp);
-+	dev_pm_opp_put(opp);
-+
-+	err = dev_pm_opp_set_rate(dev, *freq);
-+	if (err)
-+		return err;
-+
-+	return 0;
-+}
-+
-+static void lima_devfreq_reset(struct lima_devfreq *devfreq)
-+{
-+	devfreq->busy_time = 0;
-+	devfreq->idle_time = 0;
-+	devfreq->time_last_update = ktime_get();
-+}
-+
-+static int lima_devfreq_get_dev_status(struct device *dev,
-+				       struct devfreq_dev_status *status)
-+{
-+	struct lima_device *ldev = dev_get_drvdata(dev);
-+	struct lima_devfreq *devfreq = &ldev->devfreq;
-+	unsigned long irqflags;
-+
-+	status->current_frequency = clk_get_rate(ldev->clk_gpu);
-+
-+	spin_lock_irqsave(&devfreq->lock, irqflags);
-+
-+	lima_devfreq_update_utilization(devfreq);
-+
-+	status->total_time = ktime_to_ns(ktime_add(devfreq->busy_time,
-+						   devfreq->idle_time));
-+	status->busy_time = ktime_to_ns(devfreq->busy_time);
-+
-+	lima_devfreq_reset(devfreq);
-+
-+	spin_unlock_irqrestore(&devfreq->lock, irqflags);
-+
-+	dev_dbg(ldev->dev, "busy %lu total %lu %lu %% freq %lu MHz\n",
-+		status->busy_time, status->total_time,
-+		status->busy_time / (status->total_time / 100),
-+		status->current_frequency / 1000 / 1000);
-+
-+	return 0;
-+}
-+
-+static struct devfreq_dev_profile lima_devfreq_profile = {
-+	.polling_ms = 50, /* ~3 frames */
-+	.target = lima_devfreq_target,
-+	.get_dev_status = lima_devfreq_get_dev_status,
-+};
-+
-+void lima_devfreq_fini(struct lima_device *ldev)
-+{
-+	struct lima_devfreq *devfreq = &ldev->devfreq;
-+
-+	if (devfreq->cooling) {
-+		devfreq_cooling_unregister(devfreq->cooling);
-+		devfreq->cooling = NULL;
-+	}
-+
-+	if (devfreq->devfreq) {
-+		devm_devfreq_remove_device(&ldev->pdev->dev,
-+					   devfreq->devfreq);
-+		devfreq->devfreq = NULL;
-+	}
-+
-+	if (devfreq->opp_of_table_added) {
-+		dev_pm_opp_of_remove_table(&ldev->pdev->dev);
-+		devfreq->opp_of_table_added = false;
-+	}
-+
-+	if (devfreq->regulators_opp_table) {
-+		dev_pm_opp_put_regulators(devfreq->regulators_opp_table);
-+		devfreq->regulators_opp_table = NULL;
-+	}
-+
-+	if (devfreq->clkname_opp_table) {
-+		dev_pm_opp_put_clkname(devfreq->clkname_opp_table);
-+		devfreq->clkname_opp_table = NULL;
-+	}
-+}
-+
-+int lima_devfreq_init(struct lima_device *ldev)
-+{
-+	struct thermal_cooling_device *cooling;
-+	struct device *dev = &ldev->pdev->dev;
-+	struct opp_table *opp_table;
-+	struct devfreq *devfreq;
-+	struct lima_devfreq *ldevfreq = &ldev->devfreq;
-+	struct dev_pm_opp *opp;
-+	unsigned long cur_freq;
-+	int ret;
-+
-+	if (!device_property_present(dev, "operating-points-v2"))
-+		/* Optional, continue without devfreq */
-+		return 0;
-+
-+	spin_lock_init(&ldevfreq->lock);
-+
-+	opp_table = dev_pm_opp_set_clkname(dev, "core");
-+	if (IS_ERR(opp_table)) {
-+		ret = PTR_ERR(opp_table);
-+		goto err_fini;
-+	}
-+
-+	ldevfreq->clkname_opp_table = opp_table;
-+
-+	opp_table = dev_pm_opp_set_regulators(dev,
-+					      (const char *[]){ "mali" },
-+					      1);
-+	if (IS_ERR(opp_table)) {
-+		ret = PTR_ERR(opp_table);
-+
-+		/* Continue if the optional regulator is missing */
-+		if (ret != -ENODEV)
-+			goto err_fini;
-+	} else {
-+		ldevfreq->regulators_opp_table = opp_table;
-+	}
-+
-+	ret = dev_pm_opp_of_add_table(dev);
-+	if (ret)
-+		goto err_fini;
-+	ldevfreq->opp_of_table_added = true;
-+
-+	lima_devfreq_reset(ldevfreq);
-+
-+	cur_freq = clk_get_rate(ldev->clk_gpu);
-+
-+	opp = devfreq_recommended_opp(dev, &cur_freq, 0);
-+	if (IS_ERR(opp)) {
-+		ret = PTR_ERR(opp);
-+		goto err_fini;
-+	}
-+
-+	lima_devfreq_profile.initial_freq = cur_freq;
-+	dev_pm_opp_put(opp);
-+
-+	devfreq = devm_devfreq_add_device(dev, &lima_devfreq_profile,
-+					  DEVFREQ_GOV_SIMPLE_ONDEMAND, NULL);
-+	if (IS_ERR(devfreq)) {
-+		dev_err(dev, "Couldn't initialize GPU devfreq\n");
-+		ret = PTR_ERR(devfreq);
-+		goto err_fini;
-+	}
-+
-+	ldevfreq->devfreq = devfreq;
-+
-+	cooling = of_devfreq_cooling_register(dev->of_node, devfreq);
-+	if (IS_ERR(cooling))
-+		dev_info(dev, "Failed to register cooling device\n");
-+	else
-+		ldevfreq->cooling = cooling;
-+
-+	return 0;
-+
-+err_fini:
-+	lima_devfreq_fini(ldev);
-+	return ret;
-+}
-+
-+void lima_devfreq_record_busy(struct lima_devfreq *devfreq)
-+{
-+	unsigned long irqflags;
-+
-+	if (!devfreq->devfreq)
-+		return;
-+
-+	spin_lock_irqsave(&devfreq->lock, irqflags);
-+
-+	lima_devfreq_update_utilization(devfreq);
-+
-+	devfreq->busy_count++;
-+
-+	spin_unlock_irqrestore(&devfreq->lock, irqflags);
-+}
-+
-+void lima_devfreq_record_idle(struct lima_devfreq *devfreq)
-+{
-+	unsigned long irqflags;
-+
-+	if (!devfreq->devfreq)
-+		return;
-+
-+	spin_lock_irqsave(&devfreq->lock, irqflags);
-+
-+	lima_devfreq_update_utilization(devfreq);
-+
-+	WARN_ON(--devfreq->busy_count < 0);
-+
-+	spin_unlock_irqrestore(&devfreq->lock, irqflags);
-+}
-diff --git a/drivers/gpu/drm/lima/lima_devfreq.h b/drivers/gpu/drm/lima/lima_devfreq.h
-new file mode 100644
-index 000000000000..8d71ba9fb22a
---- /dev/null
-+++ b/drivers/gpu/drm/lima/lima_devfreq.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright 2020 Martin Blumenstingl <martin.blumenstingl@googlemail.com> */
-+
-+#ifndef __LIMA_DEVFREQ_H__
-+#define __LIMA_DEVFREQ_H__
-+
-+#include <linux/spinlock.h>
-+#include <linux/ktime.h>
-+
-+struct devfreq;
-+struct opp_table;
-+struct thermal_cooling_device;
-+
-+struct lima_device;
-+
-+struct lima_devfreq {
-+	struct devfreq *devfreq;
-+	struct opp_table *clkname_opp_table;
-+	struct opp_table *regulators_opp_table;
-+	struct thermal_cooling_device *cooling;
-+	bool opp_of_table_added;
-+
-+	ktime_t busy_time;
-+	ktime_t idle_time;
-+	ktime_t time_last_update;
-+	int busy_count;
-+	/*
-+	 * Protect busy_time, idle_time, time_last_update and busy_count
-+	 * because these can be updated concurrently, for example by the GP
-+	 * and PP interrupts.
-+	 */
-+	spinlock_t lock;
-+};
-+
-+int lima_devfreq_init(struct lima_device *ldev);
-+void lima_devfreq_fini(struct lima_device *ldev);
-+
-+void lima_devfreq_record_busy(struct lima_devfreq *devfreq);
-+void lima_devfreq_record_idle(struct lima_devfreq *devfreq);
-+
-+#endif
-diff --git a/drivers/gpu/drm/lima/lima_device.c b/drivers/gpu/drm/lima/lima_device.c
-index 19829b543024..7f1f7a1c03e5 100644
---- a/drivers/gpu/drm/lima/lima_device.c
-+++ b/drivers/gpu/drm/lima/lima_device.c
-@@ -214,6 +214,8 @@ static int lima_init_gp_pipe(struct lima_device *dev)
- 	struct lima_sched_pipe *pipe = dev->pipe + lima_pipe_gp;
- 	int err;
- 
-+	pipe->ldev = dev;
-+
- 	err = lima_sched_pipe_init(pipe, "gp");
- 	if (err)
- 		return err;
-@@ -244,6 +246,8 @@ static int lima_init_pp_pipe(struct lima_device *dev)
- 	struct lima_sched_pipe *pipe = dev->pipe + lima_pipe_pp;
- 	int err, i;
- 
-+	pipe->ldev = dev;
-+
- 	err = lima_sched_pipe_init(pipe, "pp");
- 	if (err)
- 		return err;
-diff --git a/drivers/gpu/drm/lima/lima_device.h b/drivers/gpu/drm/lima/lima_device.h
-index 31158d86271c..d6c0f8b8f7e8 100644
---- a/drivers/gpu/drm/lima/lima_device.h
-+++ b/drivers/gpu/drm/lima/lima_device.h
-@@ -8,6 +8,7 @@
- #include <linux/delay.h>
- 
- #include "lima_sched.h"
-+#include "lima_devfreq.h"
- 
- enum lima_gpu_id {
- 	lima_gpu_mali400 = 0,
-@@ -94,6 +95,8 @@ struct lima_device {
- 
- 	u32 *dlbu_cpu;
- 	dma_addr_t dlbu_dma;
-+
-+	struct lima_devfreq devfreq;
- };
- 
- static inline struct lima_device *
-diff --git a/drivers/gpu/drm/lima/lima_drv.c b/drivers/gpu/drm/lima/lima_drv.c
-index 2daac64d8955..d9f64e52ae9e 100644
---- a/drivers/gpu/drm/lima/lima_drv.c
-+++ b/drivers/gpu/drm/lima/lima_drv.c
-@@ -10,6 +10,7 @@
- #include <drm/drm_prime.h>
- #include <drm/lima_drm.h>
- 
-+#include "lima_device.h"
- #include "lima_drv.h"
- #include "lima_gem.h"
- #include "lima_vm.h"
-@@ -306,18 +307,26 @@ static int lima_pdev_probe(struct platform_device *pdev)
- 	if (err)
- 		goto err_out1;
- 
-+	err = lima_devfreq_init(ldev);
-+	if (err) {
-+		dev_err(&pdev->dev, "Fatal error during devfreq init\n");
-+		goto err_out2;
-+	}
-+
- 	/*
- 	 * Register the DRM device with the core and the connectors with
- 	 * sysfs.
- 	 */
- 	err = drm_dev_register(ddev, 0);
- 	if (err < 0)
--		goto err_out2;
-+		goto err_out3;
- 
- 	return 0;
- 
--err_out2:
-+err_out3:
- 	lima_device_fini(ldev);
-+err_out2:
-+	lima_devfreq_fini(ldev);
- err_out1:
- 	drm_dev_put(ddev);
- err_out0:
-@@ -331,6 +340,7 @@ static int lima_pdev_remove(struct platform_device *pdev)
- 	struct drm_device *ddev = ldev->ddev;
- 
- 	drm_dev_unregister(ddev);
-+	lima_devfreq_fini(ldev);
- 	lima_device_fini(ldev);
- 	drm_dev_put(ddev);
- 	lima_sched_slab_fini();
-diff --git a/drivers/gpu/drm/lima/lima_sched.c b/drivers/gpu/drm/lima/lima_sched.c
-index 3886999b4533..d937d626b892 100644
---- a/drivers/gpu/drm/lima/lima_sched.c
-+++ b/drivers/gpu/drm/lima/lima_sched.c
-@@ -5,6 +5,7 @@
- #include <linux/slab.h>
- #include <linux/xarray.h>
- 
-+#include "lima_devfreq.h"
- #include "lima_drv.h"
- #include "lima_sched.h"
- #include "lima_vm.h"
-@@ -214,6 +215,8 @@ static struct dma_fence *lima_sched_run_job(struct drm_sched_job *job)
- 	 */
- 	ret = dma_fence_get(task->fence);
- 
-+	lima_devfreq_record_busy(&pipe->ldev->devfreq);
-+
- 	pipe->current_task = task;
- 
- 	/* this is needed for MMU to work correctly, otherwise GP/PP
-@@ -285,6 +288,8 @@ static void lima_sched_timedout_job(struct drm_sched_job *job)
- 	pipe->current_vm = NULL;
- 	pipe->current_task = NULL;
- 
-+	lima_devfreq_record_idle(&pipe->ldev->devfreq);
-+
- 	drm_sched_resubmit_jobs(&pipe->base);
- 	drm_sched_start(&pipe->base, true);
- }
-@@ -364,5 +369,7 @@ void lima_sched_pipe_task_done(struct lima_sched_pipe *pipe)
- 	} else {
- 		pipe->task_fini(pipe);
- 		dma_fence_signal(task->fence);
-+
-+		lima_devfreq_record_idle(&pipe->ldev->devfreq);
- 	}
- }
-diff --git a/drivers/gpu/drm/lima/lima_sched.h b/drivers/gpu/drm/lima/lima_sched.h
-index d64393fb50a9..19bbc5214cf2 100644
---- a/drivers/gpu/drm/lima/lima_sched.h
-+++ b/drivers/gpu/drm/lima/lima_sched.h
-@@ -6,6 +6,7 @@
- 
- #include <drm/gpu_scheduler.h>
- 
-+struct lima_device;
- struct lima_vm;
- 
- struct lima_sched_task {
-@@ -44,6 +45,8 @@ struct lima_sched_pipe {
- 	u32 fence_seqno;
- 	spinlock_t fence_lock;
- 
-+	struct lima_device *ldev;
-+
- 	struct lima_sched_task *current_task;
- 	struct lima_vm *current_vm;
- 
+
 -- 
-2.25.2
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
