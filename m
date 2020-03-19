@@ -2,99 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E46518A910
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 00:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B5618AB17
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 04:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726912AbgCRXOi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Mar 2020 19:14:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40542 "EHLO mail.kernel.org"
+        id S1726735AbgCSDUP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Mar 2020 23:20:15 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:41651 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726619AbgCRXOi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 18 Mar 2020 19:14:38 -0400
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726596AbgCSDUP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 18 Mar 2020 23:20:15 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7FD6120774;
-        Wed, 18 Mar 2020 23:14:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584573277;
-        bh=xnAd9aM1szJANZpOZYnjr6Q8kk/poW+SW49OK+6CBJA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XT6D3puNAvAMgfndY1UkiEwX/BXNrV8lHFBJbFQ6C2BuScL9EglKJPh0UK+mThH/x
-         ZWjeAMvPdxvDLboxeGLkF8+cEq1dA3mTBTmQy/kzA3izx6PCAZUUdcteK+FqeqN0yW
-         0xnfVXckdm1wnESB6PRDBbRdUELl3okC9iiHjEKU=
-Received: by mail-qk1-f170.google.com with SMTP id j2so247188qkl.7;
-        Wed, 18 Mar 2020 16:14:37 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ3UtG2Nn1hfO3OMVds5Yh0p1PH9+wp1p3qUtGRjEJKl+7gnDKJK
-        Kts/5yZzkVF9aaS+7v1oYW+PIB3O9y7VeV+NoQ==
-X-Google-Smtp-Source: ADFU+vuzTuEwzK4FnMMP68h9BVgs5HKeW7PynpJbTqVEa9tqOafe3uVDdXHxy4DHtPecBZfqcHfHBSgvLnWqgjn5B3c=
-X-Received: by 2002:a37:4a85:: with SMTP id x127mr338927qka.152.1584573276533;
- Wed, 18 Mar 2020 16:14:36 -0700 (PDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48jXGK5lGkz9sPF;
+        Thu, 19 Mar 2020 14:20:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1584588011;
+        bh=Ai9OhofFDo+Kuv8/Q1oIJL9PA57GRqNhOuVclO2kkAQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=s+c8gZbnoR5P6CdeA8jyGK9OfV1C3G7SUDQ7Nas7JVbCu+DqEBYmrEDotfFuTR5H/
+         J4ND90uHfyIyRgUygj2rR9q/zPgXuk7hg9JY/wPf2s7QQWtQpOvu7t9CohWybgd/T7
+         AIEX+YN3astnwwL4hmok5SGbKEHdx/BQ6I5KbNxst7Uai3hVNM9vaeVBvtx3DLNBm7
+         iTisZ82te70xQFnole+4mgCg48iJXRU/CcEVODRUDx8+6UQvW90kAZ0uDhyEURIra8
+         06cWKyldIT1cccLPRjZT1zk5tPGasgfNYYO00YWNutYavRkU1CY5Yu5aFrFvdcX786
+         d+tMcdQAZcGTw==
+Date:   Thu, 19 Mar 2020 14:20:02 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: linux-next: Tree for Mar 18 (drivers/base/power/sysfs.c)
+Message-ID: <20200319142002.7382ed70@canb.auug.org.au>
+In-Reply-To: <1c7d78ba-55ae-6f8c-9a4f-13aca32f59de@infradead.org>
+References: <20200318220920.48df2e76@canb.auug.org.au>
+        <1c7d78ba-55ae-6f8c-9a4f-13aca32f59de@infradead.org>
 MIME-Version: 1.0
-References: <20200306130341.9585-1-Sergey.Semin@baikalelectronics.ru>
- <20200306130402.1F4F0803079F@mail.baikalelectronics.ru> <20200312211438.GA21883@bogus>
- <20200313130231.wrvvcttm7ofaxbfo@ubsrv2.baikal.int>
-In-Reply-To: <20200313130231.wrvvcttm7ofaxbfo@ubsrv2.baikal.int>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 18 Mar 2020 17:14:25 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+W84r687zNV=2S-hj9=xbTQxkx9MpVNDTn6TOrBgiGUw@mail.gmail.com>
-Message-ID: <CAL_Jsq+W84r687zNV=2S-hj9=xbTQxkx9MpVNDTn6TOrBgiGUw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] dt-bindings: power: reset: Add regmap support to the
- SYSCON reboot-mode bindings
-To:     Sergey Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/OzymEXv09uqzpaSswDv9a8x";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 13, 2020 at 7:03 AM Sergey Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
+--Sig_/OzymEXv09uqzpaSswDv9a8x
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi Randy,
+
+On Wed, 18 Mar 2020 09:14:29 -0700 Randy Dunlap <rdunlap@infradead.org> wro=
+te:
 >
-> On Thu, Mar 12, 2020 at 04:14:38PM -0500, Rob Herring wrote:
-> > On Fri, Mar 06, 2020 at 04:03:40PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> > > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > >
-> > > Optional regmap property will be used to refer to a syscon-controller
-> > > having a reboot tolerant register mapped.
-> >
-> > NAK. It should simply be a child node of the 'syscon-controller'.
->
-> Hm, It's dilemma. The driver maintainer said ack, while you disagree.)
-> So the code change will be merged while the doc-part won't? Lets discuss then
-> to settle the issue.
->
-> Why 'syscon-reboot' can be out of syscon-controller node, while
-> 'syscon-reboot-mode' can't?
+> on i386:
+>=20
+> ../drivers/base/power/sysfs.c: In function =E2=80=98dpm_sysfs_change_owne=
+r=E2=80=99:
+> ../drivers/base/power/sysfs.c:708:44: error: passing argument 2 of =E2=80=
+=98sysfs_group_change_owner=E2=80=99 from incompatible pointer type [-Werro=
+r=3Dincompatible-pointer-types]
+>   rc =3D sysfs_group_change_owner(&dev->kobj, &pm_attr_group, kuid, kgid);
+>                                             ^
+> In file included from ../include/linux/kobject.h:20:0,
+>                  from ../include/linux/device.h:17,
+>                  from ../drivers/base/power/sysfs.c:3:
+> ../include/linux/sysfs.h:576:19: note: expected =E2=80=98const struct att=
+ribute_group **=E2=80=99 but argument is of type =E2=80=98const struct attr=
+ibute_group *=E2=80=99
+>  static inline int sysfs_group_change_owner(struct kobject *kobj,
+>                    ^~~~~~~~~~~~~~~~~~~~~~~~
+> ../drivers/base/power/sysfs.c:714:16: error: passing argument 2 of =E2=80=
+=98sysfs_group_change_owner=E2=80=99 from incompatible pointer type [-Werro=
+r=3Dincompatible-pointer-types]
+>     &dev->kobj, &pm_runtime_attr_group, kuid, kgid);
+>                 ^
+> In file included from ../include/linux/kobject.h:20:0,
+>                  from ../include/linux/device.h:17,
+>                  from ../drivers/base/power/sysfs.c:3:
+> ../include/linux/sysfs.h:576:19: note: expected =E2=80=98const struct att=
+ribute_group **=E2=80=99 but argument is of type =E2=80=98const struct attr=
+ibute_group *=E2=80=99
+>  static inline int sysfs_group_change_owner(struct kobject *kobj,
+>                    ^~~~~~~~~~~~~~~~~~~~~~~~
+> ../drivers/base/power/sysfs.c:720:45: error: passing argument 2 of =E2=80=
+=98sysfs_group_change_owner=E2=80=99 from incompatible pointer type [-Werro=
+r=3Dincompatible-pointer-types]
+>    rc =3D sysfs_group_change_owner(&dev->kobj, &pm_wakeup_attr_group,
+>                                              ^
+> In file included from ../include/linux/kobject.h:20:0,
+>                  from ../include/linux/device.h:17,
+>                  from ../drivers/base/power/sysfs.c:3:
+> ../include/linux/sysfs.h:576:19: note: expected =E2=80=98const struct att=
+ribute_group **=E2=80=99 but argument is of type =E2=80=98const struct attr=
+ibute_group *=E2=80=99
+>  static inline int sysfs_group_change_owner(struct kobject *kobj,
+>                    ^~~~~~~~~~~~~~~~~~~~~~~~
+> ../drivers/base/power/sysfs.c:732:16: error: passing argument 2 of =E2=80=
+=98sysfs_group_change_owner=E2=80=99 from incompatible pointer type [-Werro=
+r=3Dincompatible-pointer-types]
+>     &dev->kobj, &pm_qos_latency_tolerance_attr_group, kuid,
+>                 ^
+> In file included from ../include/linux/kobject.h:20:0,
+>                  from ../include/linux/device.h:17,
+>                  from ../drivers/base/power/sysfs.c:3:
+> ../include/linux/sysfs.h:576:19: note: expected =E2=80=98const struct att=
+ribute_group **=E2=80=99 but argument is of type =E2=80=98const struct attr=
+ibute_group *=E2=80=99
+>  static inline int sysfs_group_change_owner(struct kobject *kobj,
+>                    ^~~~~~~~~~~~~~~~~~~~~~~~
 
-Look at the history and you will see one was reviewed by DT
-maintainers and one wasn't.
+Caused by commitCONFIG_SYSFS
 
-> They both belong to the same usecase: save
-> cause id and reboot. So having similar properties-set and declaring their
-> nodes someplace nearby is natural.
+  303a42769c4c ("sysfs: add sysfs_group{s}_change_owner()")
 
-Which is what I'm asking for. Where else in the tree does it make
-sense to locate the 'syscon-reboot-mode' node? Locate nodes where they
-logically belong.
+from the net-next tree.
 
-> According to the driver 'syscon-reboot'
-> can't lack the regmap property because it's mandatory, while here you refuse
-> to have even optional support. Additionally in most of the cases the
-> 'syscon-reboot' nodes aren't declared as a child of a system controller
-> node. Why 'syscon-reboot-mode' can't work in a similar way?
+The CONFIG_SYSFS declaration of sysfs_group_change_owner() is different
+from the !CONFIG_SYSFS version.
 
-There's plenty of bad or "don't follow current best practice" examples
-in the tree for all sorts of things. That is not a reason for doing
-something in a new binding or adding to an existing one.
+--=20
+Cheers,
+Stephen Rothwell
 
-Rob
+--Sig_/OzymEXv09uqzpaSswDv9a8x
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5y5OIACgkQAVBC80lX
+0GxRxwf/bZRlfZbDsOLE5GMYUz6Wd9HdJhOP8f3ZeuKS/Q3m+rYVHI6bc83jwgA2
+8oqocs60tkJ1XwIrDQ7ue77QnTJZGYxL/8kiPavtszwZYB+SrmVhH5bHKmkKssks
+aSmz4NpNNo00yhU9TE7pXs4VdXN0ejc59lkDgD0gGS6YBUHAjgQJBkODUak1mjV1
+VboVQb/HPIp1LCx2+r0vriZOUqxtxBTcxMZeIeFIWzQNsx4wSh6SX+hoITNcbwIz
+855QOgv6ebOYNlSTFxHNrGPziHz/W9xDltsicKy3PcEBizn7uHkJgBNN/Yd8QZWt
+KOa02FeHTmuBvecjJ7rzpnF0afaxNQ==
+=Xfd+
+-----END PGP SIGNATURE-----
+
+--Sig_/OzymEXv09uqzpaSswDv9a8x--
