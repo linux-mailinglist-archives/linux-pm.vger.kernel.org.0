@@ -2,148 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE62318B1AD
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 11:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D3D18B1C7
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Mar 2020 11:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbgCSKpv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Mar 2020 06:45:51 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:50753 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbgCSKpv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 06:45:51 -0400
-Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 805a210eedc396b3; Thu, 19 Mar 2020 11:45:50 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Francisco Jerez <currojerez@riseup.net>
-Cc:     linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 04/10] Revert "cpufreq: intel_pstate: Drop ->update_util from pstate_funcs"
-Date:   Thu, 19 Mar 2020 11:45:49 +0100
-Message-ID: <1617795.m7tDuoAjBp@kreacher>
-In-Reply-To: <20200310214203.26459-5-currojerez@riseup.net>
-References: <20200310214203.26459-1-currojerez@riseup.net> <20200310214203.26459-5-currojerez@riseup.net>
+        id S1727083AbgCSKyF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 06:54:05 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:30001 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727091AbgCSKyD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 06:54:03 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1584615242; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=G1xcrA3VxHhne2SYFlZHYK1yCSX3CDOuVGju3yHGiP4=; b=XT7HwtfyMBNhfCGB8EdHpLc5VYpLQ+zQGrVW5KamUZGLFeukrSFzMI4jWD+4PUodmEk4Bdf4
+ RnysL9ElYF4Pm4vBxAehG7HDcYlVzy6/8CZ7gWKM6rS6Zap+p/I2t20ZiDkt3iRCGsHXn5Qn
+ c7j03VmExgRpv3Xbkat1cknw1nM=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e734f3f.7f655465e7a0-smtp-out-n01;
+ Thu, 19 Mar 2020 10:53:51 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 9DBD8C44791; Thu, 19 Mar 2020 10:53:51 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.103] (unknown [106.51.30.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 00C85C433CB;
+        Thu, 19 Mar 2020 10:53:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 00C85C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [RFC v3 00/10] DDR/L3 Scaling support on SDM845 and SC7180 SoCs
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Sibi Sankar <sibis@codeaurora.org>
+Cc:     sboyd@kernel.org, georgi.djakov@linaro.org, saravanak@google.com,
+        nm@ti.com, bjorn.andersson@linaro.org, agross@kernel.org,
+        david.brown@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org, mka@chromium.org,
+        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
+        ulf.hansson@linaro.org, linux-kernel-owner@vger.kernel.org
+References: <20200127200350.24465-1-sibis@codeaurora.org>
+ <19cf027ba87ade1b895ea90ac0fedbe2@codeaurora.org>
+ <20200318034243.o2metmggzuah6cqw@vireshk-i7>
+ <f6a7930a-4eaa-6982-88c6-b50773bee9d8@codeaurora.org>
+ <ea4265f3f4b5a439d70d3c80bcc77b7f@codeaurora.org>
+ <20200319102411.oivesngrk7gy7vtw@vireshk-i7>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <78d92969-0219-d140-d788-d1b14e643e90@codeaurora.org>
+Date:   Thu, 19 Mar 2020 16:23:32 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20200319102411.oivesngrk7gy7vtw@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, March 10, 2020 10:41:57 PM CET Francisco Jerez wrote:
-> This reverts commit c4f3f70cacba2fa19545389a12d09b606d2ad1cf.  A
-> future commit will introduce a new update_util implementation, so the
-> pstate_funcs table entry is going to be useful.
 
-This basically means that you want to introduce a new scaling algorithm.
 
-In my view that needs to be exposed via scaling_governor so users can
-switch over between this and the existing ones (powersave and performance).
-
-That would require the cpufreq core to be updated somewhat to recognize
-an additional CPUFREQ_POLICY_ value, but that should be perfectly doable.
-
-And ->
-
-> Signed-off-by: Francisco Jerez <currojerez@riseup.net>
-> ---
->  drivers/cpufreq/intel_pstate.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
+On 3/19/2020 3:54 PM, Viresh Kumar wrote:
+> On 19-03-20, 15:41, Sibi Sankar wrote:
+>> Viresh,
+>> Saravana's example does show a device
+>> with multiple opp tables but doesn't
+>> need multiple opp table support to
+>> land though (since it works fine with
+>> the current implementation). I am more
+>> interested  in understanding your/
+>> Stephen's/Saravana's stance on adding
+>> multiple opp-table support. Personally
+>> I feel its inevitable, since multiple
+>> qc drivers using interconnect opp-tables,
+>> routinely need vote on multiple paths in
+>> a non-trivial manner.
 > 
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 7fa869004cf0..8cb5bf419b40 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -277,6 +277,7 @@ static struct cpudata **all_cpu_data;
->   * @get_scaling:	Callback to get frequency scaling factor
->   * @get_val:		Callback to convert P state to actual MSR write value
->   * @get_vid:		Callback to get VID data for Atom platforms
-> + * @update_util:	Active mode utilization update callback.
->   *
->   * Core and Atom CPU models have different way to get P State limits. This
->   * structure is used to store those callbacks.
-> @@ -290,6 +291,8 @@ struct pstate_funcs {
->  	int (*get_aperf_mperf_shift)(void);
->  	u64 (*get_val)(struct cpudata*, int pstate);
->  	void (*get_vid)(struct cpudata *);
-> +	void (*update_util)(struct update_util_data *data, u64 time,
-> +			    unsigned int flags);
->  };
->  
->  static struct pstate_funcs pstate_funcs __read_mostly;
-> @@ -1877,6 +1880,7 @@ static struct pstate_funcs core_funcs = {
->  	.get_turbo = core_get_turbo_pstate,
->  	.get_scaling = core_get_scaling,
->  	.get_val = core_get_val,
-> +	.update_util = intel_pstate_update_util,
->  };
->  
->  static const struct pstate_funcs silvermont_funcs = {
-> @@ -1887,6 +1891,7 @@ static const struct pstate_funcs silvermont_funcs = {
->  	.get_val = atom_get_val,
->  	.get_scaling = silvermont_get_scaling,
->  	.get_vid = atom_get_vid,
-> +	.update_util = intel_pstate_update_util,
->  };
->  
->  static const struct pstate_funcs airmont_funcs = {
-> @@ -1897,6 +1902,7 @@ static const struct pstate_funcs airmont_funcs = {
->  	.get_val = atom_get_val,
->  	.get_scaling = airmont_get_scaling,
->  	.get_vid = atom_get_vid,
-> +	.update_util = intel_pstate_update_util,
->  };
->  
->  static const struct pstate_funcs knl_funcs = {
-> @@ -1907,6 +1913,7 @@ static const struct pstate_funcs knl_funcs = {
->  	.get_aperf_mperf_shift = knl_get_aperf_mperf_shift,
->  	.get_scaling = core_get_scaling,
->  	.get_val = core_get_val,
-> +	.update_util = intel_pstate_update_util,
->  };
->  
->  #define ICPU(model, policy) \
-> @@ -2013,9 +2020,7 @@ static void intel_pstate_set_update_util_hook(unsigned int cpu_num)
->  	/* Prevent intel_pstate_update_util() from using stale data. */
->  	cpu->sample.time = 0;
->  	cpufreq_add_update_util_hook(cpu_num, &cpu->update_util,
-> -				     (hwp_active ?
-> -				      intel_pstate_update_util_hwp :
-> -				      intel_pstate_update_util));
+> The OPP core doesn't support multiple OPP tables for a device and I
+> don't understand how it will. And so I have been waiting for a reply.
 
--> it should be possible to extend this code to install an update_util matching
-the scaling algo chosen by the user.
+I thought this series indeed is proposing to add that support in OPP core?
+a.k.a "[RFC v3 06/10] opp: Allow multiple opp_tables to be mapped to a single device"
 
-> +				     pstate_funcs.update_util);
->  	cpu->update_util_set = true;
->  }
->  
-> @@ -2584,6 +2589,7 @@ static void __init copy_cpu_funcs(struct pstate_funcs *funcs)
->  	pstate_funcs.get_scaling = funcs->get_scaling;
->  	pstate_funcs.get_val   = funcs->get_val;
->  	pstate_funcs.get_vid   = funcs->get_vid;
-> +	pstate_funcs.update_util = funcs->update_util;
->  	pstate_funcs.get_aperf_mperf_shift = funcs->get_aperf_mperf_shift;
->  }
->  
-> @@ -2750,8 +2756,11 @@ static int __init intel_pstate_init(void)
->  	id = x86_match_cpu(hwp_support_ids);
->  	if (id) {
->  		copy_cpu_funcs(&core_funcs);
-> -		if (!no_hwp) {
-> +		if (no_hwp) {
-> +			pstate_funcs.update_util = intel_pstate_update_util;
-> +		} else {
->  			hwp_active++;
-> +			pstate_funcs.update_util = intel_pstate_update_util_hwp;
->  			hwp_mode_bdw = id->driver_data;
->  			intel_pstate.attr = hwp_cpufreq_attrs;
->  			goto hwp_cpu_matched;
 > 
+>>>
+>>> Could you please post a link to the discussion that you are referring to
+>>> here?
+>>> I looked at a few links posted in the cover letter as dependencies and
+>>> it seems
+>>> like the discussions are pending for *months* and not weeks but I
+>>> might have looked
+>>> at the wrong ones.
+>>
+>> https://lore.kernel.org/lkml/20200114103448.odnvqawnqb3twst5@vireshk-i7/
+>>
+>> Rajendra,
+>> Viresh is referring to ^^ one
+> 
+> Right, thanks.
+
+These discussions are stalled for over 2 months now waiting on a response from Saravana.
+Viresh, whats the way forward here and how long do we plan on waiting for Saravanas response?
 
 
-
-
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
