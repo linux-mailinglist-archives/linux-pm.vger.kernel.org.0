@@ -2,85 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D944118DB42
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Mar 2020 23:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A9A18DB63
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Mar 2020 23:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727154AbgCTWiX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Mar 2020 18:38:23 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:43941 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726855AbgCTWiW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Mar 2020 18:38:22 -0400
-Received: by mail-io1-f66.google.com with SMTP id n21so7639493ioo.10;
-        Fri, 20 Mar 2020 15:38:21 -0700 (PDT)
+        id S1727582AbgCTW4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Mar 2020 18:56:36 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:42346 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727282AbgCTW4f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Mar 2020 18:56:35 -0400
+Received: by mail-io1-f65.google.com with SMTP id q128so7696820iof.9;
+        Fri, 20 Mar 2020 15:56:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qSFUyWECzAXW0HX43CgH2zDgAz8AxAWVffEW3w/kp5o=;
-        b=oPRpCt+c35KS/HB2OnqzfwEBwfyAfZmsFwPRVh4v+jzWw/+7/K1VWXQdcsEcWLi0vl
-         C5OEd/4f2TTyeBDGR1/iDp5p89j/7r0AiOfnJof8AzVP78fhgL2InJ765EQfwXy5BWRN
-         Ny9h1mul29iNSQdzkj2/JabhHSrhCbmje46E9ON9MgWJoUTBy6zL4p8SsF4G+OwTRgWy
-         h5sPp+OxE6ZeH+2T2zCpD4LkzoP5g/ALphIjgkEgzQo+ssqRLI4I1ZDjQCg7VQkVWpex
-         MWjrbkyDr+aZP1ZJiOIMbfSE2ZQ04RSNcRzKvjZFMZqxcFJK2kUVUm6i6NrKN1W2a0jL
-         wQAw==
-X-Gm-Message-State: ANhLgQ2wWkurAKT6sayLxoxlP/7EDSktQE4jXQbhzrmomGHIGeUnp48+
-        lO/2zdvNjQWxG6jK5EpD4Q==
-X-Google-Smtp-Source: ADFU+vtdBLoVFwGWQgsKmCoa9A7999apEHu+ZaZVMplwZDVgvWAW6SOKN3FTPrzrV0mrY+rEp0Ct5g==
-X-Received: by 2002:a6b:7504:: with SMTP id l4mr9722601ioh.184.1584743901517;
-        Fri, 20 Mar 2020 15:38:21 -0700 (PDT)
+        bh=Lwcjdkfu56Ps5KeJNV/bbYNr993lvtt9wQjpi7hvu/o=;
+        b=MbL6rTcfJYFgXWUUwSGXKvYZGJ+gde7PlIRt5STeXNJtcLe8DCD2ZaHkMWF53fSqOo
+         +Mx1x9QS1CllYG9yNoPMKlgHgzpxqC0480b6PUiZ23hcR0rERgZq2G9nIiZU4p5Q1QSY
+         OnmpCgTptQeamMWgCti8a9za3/7KzhmrA1s0nuzvFAXH05llb9+A31D5LKTOj8fN875a
+         uwglv5QrCn0wqJRQJBPegYikvrgvGI7K6JiLQUPHMQ3BGwW++t4PfAWdH1BRZ4uyFDDy
+         OrbTm/aNjPwwfcrBnOMmTpvZrylCCDp4YUrShZuLUxMwAm3Mx/uLxFqvv+mFmMjsKrcJ
+         T9jQ==
+X-Gm-Message-State: ANhLgQ3pp50ZiOAD9Uwf3jfH9aCwpssupBe7E3iUrR1EOcpoahZy5ogP
+        sqznea2BTH7xJNnqXPVmtlB3WTA=
+X-Google-Smtp-Source: ADFU+vst4fYbKhEbWEQ6y4E2xPnfEbBGpi6R4S8PRy3f65rUNbMunmOd7RJQhP/rbMVxptFzDw6Hng==
+X-Received: by 2002:a02:b897:: with SMTP id p23mr10655513jam.120.1584744994695;
+        Fri, 20 Mar 2020 15:56:34 -0700 (PDT)
 Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id n29sm2386822ila.86.2020.03.20.15.38.19
+        by smtp.gmail.com with ESMTPSA id u188sm2433372ilc.59.2020.03.20.15.56.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2020 15:38:20 -0700 (PDT)
-Received: (nullmailer pid 26889 invoked by uid 1000);
-        Fri, 20 Mar 2020 22:38:18 -0000
-Date:   Fri, 20 Mar 2020 16:38:18 -0600
+        Fri, 20 Mar 2020 15:56:33 -0700 (PDT)
+Received: (nullmailer pid 24999 invoked by uid 1000);
+        Fri, 20 Mar 2020 22:56:32 -0000
+Date:   Fri, 20 Mar 2020 16:56:32 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com,
-        Sebastian Reichel <sre@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Markus Laine <markus.laine@fi.rohmeurope.com>,
-        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
-Subject: Re: [PATCH v5 2/9] dt_bindings: ROHM BD99954 Charger
-Message-ID: <20200320223818.GA26851@bogus>
-References: <cover.1584468798.git.matti.vaittinen@fi.rohmeurope.com>
- <a697e85a2c21758e00a28ca64b6e55ff7fb2f7d0.1584468798.git.matti.vaittinen@fi.rohmeurope.com>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     rui.zhang@intel.com, ulf.hansson@linaro.org,
+        daniel.lezcano@linaro.org, bjorn.andersson@linaro.org,
+        agross@kernel.org, robh@kernel.org, amit.kucheria@verdurent.com,
+        mark.rutland@arm.com, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch v5 5/6] dt-bindings: power: Extend RPMh power controller
+ binding to describe thermal warming device
+Message-ID: <20200320225632.GA24944@bogus>
+References: <20200320014107.26087-1-thara.gopinath@linaro.org>
+ <20200320014107.26087-6-thara.gopinath@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a697e85a2c21758e00a28ca64b6e55ff7fb2f7d0.1584468798.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <20200320014107.26087-6-thara.gopinath@linaro.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 18 Mar 2020 13:49:47 +0200, Matti Vaittinen wrote:
-> The ROHM BD99954 is a Battery Management LSI for 1-4 cell Lithium-Ion
-> secondary battery. Intended to be used in space-constraint equipment such
-> as Low profile Notebook PC, Tablets and other applications. BD99954
-> provides a Dual-source Battery Charger, two port BC1.2 detection and a
-> Battery Monitor.
+On Thu, 19 Mar 2020 21:41:06 -0400, Thara Gopinath wrote:
+> RPMh power controller hosts mx domain that can be used as thermal warming
+> device. Add #cooling-cells property to the power domain provider node to
+> indicate this.
 > 
-> Document the DT bindings for BD99954
-> 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 > ---
 > 
+> v3->v4:
+> 	- Removed subnode to indicate that mx power domain is a warming
+> 	  device. Instead #cooling-cells is used as a power domain
+> 	  provider property to indicate if the provider hosts a power
+> 	  domain that can be used as a warming device.
 > 
-> Changes since v4:
->  - change compatible name and file name accordingly
->  - Fix the title
+> v4->v5:
+> 	Moved the property from .txt format to .yaml format.
 > 
-> 
-> 
->  .../bindings/power/supply/rohm,bd99954.yaml   | 155 ++++++++++++++++++
->  1 file changed, 155 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+>  Documentation/devicetree/bindings/power/qcom,rpmpd.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
