@@ -2,89 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F23B018C6CD
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Mar 2020 06:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C98DB18C702
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Mar 2020 06:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbgCTFXN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Mar 2020 01:23:13 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:35292 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726897AbgCTFXN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Mar 2020 01:23:13 -0400
-Received: by mail-qk1-f194.google.com with SMTP id d8so5764763qka.2
-        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 22:23:12 -0700 (PDT)
+        id S1726704AbgCTFaN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Mar 2020 01:30:13 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45676 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726470AbgCTFaM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Mar 2020 01:30:12 -0400
+Received: by mail-oi1-f196.google.com with SMTP id 9so5274589oiq.12
+        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 22:30:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:reply-to:organization:content-transfer-encoding;
-        bh=QnlRKFwb6riwoS45t1kwNYmNbBxnCagIRb1lQuIyqno=;
-        b=PLaMcinLzMdgtH+ixV2oIxXQ1ZTqyBNyptoc5To7KwuCm+LKJY6OSFIt8z1LX5XE84
-         +7U260xQbjvw8ZH2SoD4X/VHVzPfRfW1G4Jp+KhRD5AoN5jc6mBhNJJ00eSH0YhAC71n
-         mxqaMyjCl44LN4/CWt7aKa+8SsCBshC7YaFSqRcjGhF+sh9QuJGxrv6E2qkgcG5QXoIs
-         /SwqbsiMetRT+rVJbs3f3HMPWDiegYAw/dp6H54pzARWrba3WyYdXdukDAx/X1eMi96O
-         jj+sutBUrNYjDOwSsYs4tIOKGYtX9goOhA3WN+WLps0lZH+B9+LkRqrTEmJhve/IKgcA
-         Wfkg==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+thAp6yyX7UKE9dtUxDENsQxMtVNf3sefwYHyrkPjH0=;
+        b=EZIUuPizsyWJamEo8OnXltTQLT0zbEnN7i0eoveXQdd8aAXB0sTHgk0h0j2aPv3xdl
+         PvlcmCU9Qqo6UPCU0YGJjPZHZklXi0mnfTFFSMmLJO2+8XQJhgG2+SrUYGqJLbRUs34w
+         MHA/fMaS5ydEyWuSCzaNeVFjEQP3llaZOTs2mjgeihPn7LkbpRz5ycvSOPlzm6gBjn0W
+         OaxQcy9AeArJqrxxJWa3gm8Z8TuZZTaY8qlWeFQ/x5EcXXheQhyOAhxkq6P9XBi6DkuI
+         q84xSlpwp6t9y/DeFQzUxsQx2V8ge6Z5qW1kL9lgqfzvKq4NqI8zeJih0o6Bvzr7ePwC
+         XgPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:reply-to:organization
-         :content-transfer-encoding;
-        bh=QnlRKFwb6riwoS45t1kwNYmNbBxnCagIRb1lQuIyqno=;
-        b=ED1p5stpeul7QHv38YGdxy4FSO5xXL93/DbPdAtlFC2FVdbLRNPPsk9K8kJGHJXJ1w
-         0HV776giEuYvpZG0+3URS3ywm8UrlmTVj+z8ce9Ntg9ohZY2WIHGFdwv9lFjAQ/18u5k
-         /DjAOr1TNPoUp8BplHURwiqWK3GdLyhO39ZFklV6/1djycilpuUMiMpNtIbHW3q4f/w+
-         nhgaw0fZS7FSNfWtj4HnUhhcQXpk8qBZcM1vWQLan0WKcuqJiOaC6QuFKB1rgYnRLVXN
-         cJ8BnLT5ICH+HbrdJN3t/P+LiukTpFzJU/vqUfO1ZUsUa2azjVzTswxLkGYPyMGFPxL8
-         B7hw==
-X-Gm-Message-State: ANhLgQ3J4hIOQfE7tFYCSIjf4h4rBOXeixvC9H2Pg4srgrC27r0ZSkhS
-        FPY8qGa4HtF8X4QE0DaMsPhlQdeF
-X-Google-Smtp-Source: ADFU+vuRKhpPOOvXNA8xLTQIFiz+iOWawg0I6rbUVNcDz4U8lKrN3dT+9wGpfy7kyiFEjKo2Dsztdg==
-X-Received: by 2002:a37:64d6:: with SMTP id y205mr6445652qkb.346.1584681791770;
-        Thu, 19 Mar 2020 22:23:11 -0700 (PDT)
-Received: from localhost.localdomain (h96-61-82-19.cntcnh.dsl.dynamic.tds.net. [96.61.82.19])
-        by smtp.gmail.com with ESMTPSA id w134sm3273383qka.127.2020.03.19.22.23.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 22:23:11 -0700 (PDT)
-From:   Len Brown <lenb@kernel.org>
-To:     linux-pm@vger.kernel.org
-Cc:     Len Brown <len.brown@intel.com>
-Subject: [PATCH 10/10] turbostat: update version
-Date:   Fri, 20 Mar 2020 01:22:48 -0400
-Message-Id: <aa8a1afd103becda28dced0385bdaf9b6065e0bf.1584679387.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <081c54323b27d8d4b40df6b2375b9e1f6846d827.1584679387.git.len.brown@intel.com>
-References: <081c54323b27d8d4b40df6b2375b9e1f6846d827.1584679387.git.len.brown@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+thAp6yyX7UKE9dtUxDENsQxMtVNf3sefwYHyrkPjH0=;
+        b=rN645eV7TBCHPf880PdOInGMni79gYDXkrsduuvF3rawx8XQTNjvtxb7FB5bBuHXoy
+         jlTeSNiKZGj5pNDPy+lwj0LPe0LsZlhGWgfoJOYLsNDSxBvEpRPa5v80T+p5KC/mtcHs
+         3CVSFjnJpWyM9wYH+rrNUVJJK5uVYD+jnivWlfbBevF08IELuyYO593bOJku20QB1zn7
+         lD+a13h1UXePxTsJX4GoZIYHEoZCcXHnRh/6ZJv+Dn9dR+WiE2M5Gwq90w4r025pjv5o
+         MH908cXcIt/eAc7sd+3vhMIHMT4AJ6BHhgC33OWPyb3kUWNgl3hcfp7AO5wHq+i6/bIO
+         r5PQ==
+X-Gm-Message-State: ANhLgQ0wsOAPFhPHiNXDnPcrlIF7YPvTVZ/bz60sIa42ZrLxmLZLkYiB
+        nnpt1jR18unVPzIXVxBHF/CWUfZdbCplhVGBS/0iEA==
+X-Google-Smtp-Source: ADFU+vs9ry2XYsgdK4314uO1jxo2AlhedtLaVepDUfyzcjwnRtJPqD/97uig5eK0Wc99bItxHnujbp8fjRWMCAR3xjM=
+X-Received: by 2002:aca:f541:: with SMTP id t62mr5236270oih.172.1584682212108;
+ Thu, 19 Mar 2020 22:30:12 -0700 (PDT)
 MIME-Version: 1.0
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
-Content-Transfer-Encoding: 8bit
+References: <20200317065452.236670-1-saravanak@google.com> <CAGETcx-uZ3YJHCYqFm3so8-woTvL3SSDY2deNonthTetcE+mXQ@mail.gmail.com>
+ <20200319073927.GA3442166@kroah.com>
+In-Reply-To: <20200319073927.GA3442166@kroah.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 19 Mar 2020 22:29:36 -0700
+Message-ID: <CAGETcx-3oeJOvpCYj==RJuBU9HP8F0ZNr0YLvUHGHF52b=F7HA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/6] Fix device links functional breakage in 4.19.99
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable <stable@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Len Brown <len.brown@intel.com>
+On Thu, Mar 19, 2020 at 12:39 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Mar 18, 2020 at 12:10:43PM -0700, Saravana Kannan wrote:
+> > On Mon, Mar 16, 2020 at 11:54 PM Saravana Kannan <saravanak@google.com> wrote:
+> > >
+> > > As mentioned in an earlier email thread [1], 4.19.99 broke the ability
+> > > to create stateful and stateless device links between the same set of
+> > > devices when it pulled in a valid bug fix [2]. While the fix was valid,
+> > > it removes a functionality that was present before the bug fix.
+> > >
+> > > This patch series attempts to fix that by pulling in more patches from
+> > > upstream. I've just done compilation testing so far. But wanted to send
+> > > out a v1 to see if this patch list was acceptable before I fixed up the
+> > > commit text format to match what's needed for stable mailing list.
+> > >
+> > > Some of the patches are new functionality, but for a first pass, it was
+> > > easier to pull these in than try and fix the conflicts. If these patches
+> > > are okay to pull into stable, then all I need to do is fix the commit
+> > > text.
+> >
+> > I took a closer look at all the patches. Everyone of them is a bug fix
+> > except Patch 4/6. But Patch 4/6 is a fairly minimal change and I think
+> > it's easier/cleaner to just pick it up too instead of trying to
+> > resolve merge conflicts in the stable branch.
+> >
+> > 1/6 - Fixes what appears to be a memory leak bug in upstream.
+> > 2/6 - Fixes error in initial state of the device link if it's created
+> > under some circumstances.
+> > 3/6 - Fixes a ref count bug in upstream. Looks like it can lead to memory leaks?
+> > 4/6 - Adds a minor feature to kick off a probe attempt of a consumer
+> > 5/6 - Fixes the break in functionality that happened in 4.19.99
+> > 6/6 - Fixes bug in 5/6 (upstream bug)
+> >
+> > Greg
+> >
+> > Do these patches look okay for you to pull into 4.19 stable? If so,
+> > please let me know if you need me to send v2 with commit fix up.
+> >
+> > The only fix up needed is to these patches at this point is changing
+> > "(cherry picked from commit ...)" with "[ Upstream commit ... ]". The
+> > SHAs themselves are the correct SHAs from upstream.
+>
+> These all look good to me, now all queued up, thanks.
 
-A stitch in time saves nine.
+Awesome, thanks!
 
-Signed-off-by: Len Brown <len.brown@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index c9e299e99c2f..399b2c3b095c 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -5394,7 +5394,7 @@ int get_and_dump_counters(void)
- }
- 
- void print_version() {
--	fprintf(outf, "turbostat version 19.08.31"
-+	fprintf(outf, "turbostat version 20.03.19"
- 		" - Len Brown <lenb@kernel.org>\n");
- }
- 
--- 
-2.20.1
-
+-Saravana
