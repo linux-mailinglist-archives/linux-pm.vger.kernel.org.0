@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B040A18C6CA
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Mar 2020 06:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C34B318C6CB
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Mar 2020 06:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726894AbgCTFXK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Mar 2020 01:23:10 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:45414 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726867AbgCTFXK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Mar 2020 01:23:10 -0400
-Received: by mail-qt1-f195.google.com with SMTP id z8so3964574qto.12
-        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 22:23:08 -0700 (PDT)
+        id S1726867AbgCTFXL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Mar 2020 01:23:11 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:42422 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726896AbgCTFXL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Mar 2020 01:23:11 -0400
+Received: by mail-qk1-f193.google.com with SMTP id e11so5704298qkg.9
+        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 22:23:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:reply-to:organization:content-transfer-encoding;
-        bh=wi1k/IuAlSMQ0sD08Rluy7qCovjgpl4TLmxMEPLrgCI=;
-        b=VcRrHxEKrxJc/jUHv0LxovHX/jrDt9JvcdzvUkkOBTe34rVhONiUz+oFX4sXEuN+U4
-         zInN9aPQxkAcQ7+Uw+c2abwNgIKI0QlmziNccqEzAQxvpkGUTXwikzEhk5bnDHvVP0cu
-         q4/H1tx406b34If84wjUcfBhk4HjQzf5cWuUt3tlhi7C9T2luQAU8gvJUdd+4SKFLUeC
-         d4bF9Fcrdq05qbOYFd1kE4Dd9lv11Fmogyzvvqq0pnM67O3kTzcgz07csXgjN817BBQm
-         /XIuyrhnkulpB1AyxVsk1CjCdY7Q97iMdd165QCAz/NmtpM+RRp+H1x/4zOJqgjFiMZk
-         Yeig==
+        bh=u7fqq9R71dpjrIomT6zK23AIJpwrHJ8YljxAyx/5uGE=;
+        b=jkojP7/6Z74ittioC6CuL9IA58uzMms85+h5WFmdz1dcak1f62IoZqz0MSu+sUbLwe
+         M02GMMmqVyDUiAzua7eygmWlY2mw01WxuyOUqUlKFJR0uDSpSvHM6TJBFOGE5VcI+3TJ
+         aMAbMkbeE0vvnctCy6BOE5srmjDrFpr6Re5MCkwi9BnyCAfLdKN22P2AkCyCHqvhg0v/
+         whJUoKQwIFjxSsLxg+CiAYPejqUSO+Tof/zJaBDoIzTGR1noySaiGRhJgPnEdTJzOFdq
+         MpTvuU5az4ZDFzOP8WJ+XGKtdEzbK7VBSeOJync47uVqFnzZujrsMIipGqdnrRYqn0EH
+         8wxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:reply-to:organization
          :content-transfer-encoding;
-        bh=wi1k/IuAlSMQ0sD08Rluy7qCovjgpl4TLmxMEPLrgCI=;
-        b=VuJKmV9WSoRJdLRpatSv9x0dd7/XsmwovEnAYYihIRYJPAlF5AGtBnn4kHGpK8NF2c
-         v6yGvbR09wjecoUP46lb+iEjIgnCAlovnZcVSoUB+peGd+NeCBxfFKFRnaqZ8a0RIdLk
-         q+9DBIl+5NDuhP5qXLdLy0+WUjYzrxpEj3JVy4XASANjNlEfNWkCywZ0qB5Lh7lzwTPx
-         M9hhhlbgzNIg88Wokj187W7aG3+OJHTrwTtZ+SDcV/Z+cgVD1cuYT9dtcrXsiBSbbLtz
-         +81nTiVzWWCaclDZAmbuvmO4Hiig6pij/LnbZqz8N77UjN6uwTowggL5IHVWD3bKerWT
-         Ting==
-X-Gm-Message-State: ANhLgQ1AiR3NC2blZGMOAKoLdhn6MEpDueEEMXaJ0osGVLc3ObNy6Gyl
-        /YHc9inssITNOgezPQonVN7n621e
-X-Google-Smtp-Source: ADFU+vtJ1CVSTuSYNL+DFPTnyAU+7CLu5HOGMumxbON5+pljo2V015tolTCoJKCCjNzpuV7NYQMQgg==
-X-Received: by 2002:ac8:3656:: with SMTP id n22mr6553067qtb.296.1584681788095;
-        Thu, 19 Mar 2020 22:23:08 -0700 (PDT)
+        bh=u7fqq9R71dpjrIomT6zK23AIJpwrHJ8YljxAyx/5uGE=;
+        b=qBkq57i9g/D5j78mdZtvnb4KKEcHc3ZQtSkIlWm2oAIDfRun+TsTWxh+A+d6hY28IQ
+         oYdf2KXnTdySUJT3GbE8vqmxf39OnDJekDJsMMjNzjVOBmMwPtWzVmSeBDM0l5xkVAKs
+         5yjp9T4NXjbC0AIDd/xk6T2dL3ZMqUqrPu9V2o3A4+paVv6lb6t+ZTk1YMN1OUdhOaur
+         oH8Dqmv57tlClSHgsV8Oo/c+twVpa3yijXYzPM5RZUd7vftVh/a9mRDmeGaBLskzz5Nz
+         tzhMYa82RIj62B2DTn0Gb01d1Y29EUeUSrDfRqLlB/Z4JlO+0XnCu+nQ+qCmqECKsc0L
+         FcBA==
+X-Gm-Message-State: ANhLgQ3kWYQlnVsgPahGWNVMSYFNl3s3rPG9gGBhdd2WF8IRyQLBSwrl
+        Pn7CTSiMgrr492aqGupElpelTLTk
+X-Google-Smtp-Source: ADFU+vvr7aSsEmtlu/c15Ja2pR/bvLD/2a90hXcnpvFJeizMx7L0aX3LNz9tqWb/lJPin0SYYz6Z6w==
+X-Received: by 2002:a37:393:: with SMTP id 141mr6307468qkd.393.1584681789394;
+        Thu, 19 Mar 2020 22:23:09 -0700 (PDT)
 Received: from localhost.localdomain (h96-61-82-19.cntcnh.dsl.dynamic.tds.net. [96.61.82.19])
-        by smtp.gmail.com with ESMTPSA id w134sm3273383qka.127.2020.03.19.22.23.06
+        by smtp.gmail.com with ESMTPSA id w134sm3273383qka.127.2020.03.19.22.23.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 22:23:07 -0700 (PDT)
+        Thu, 19 Mar 2020 22:23:08 -0700 (PDT)
 From:   Len Brown <lenb@kernel.org>
 To:     linux-pm@vger.kernel.org
 Cc:     Len Brown <len.brown@intel.com>
-Subject: [PATCH 07/10] tools/power turbostat: Fix missing SYS_LPI counter on some Chromebooks
-Date:   Fri, 20 Mar 2020 01:22:45 -0400
-Message-Id: <1f81c5efc020314b2db30d77efe228b7e117750d.1584679387.git.len.brown@intel.com>
+Subject: [PATCH 08/10] tools/power turbostat: Fix 32-bit capabilities warning
+Date:   Fri, 20 Mar 2020 01:22:46 -0400
+Message-Id: <fcaa681c03ea82193e60d7f2cdfd94fbbcd4cae9.1584679387.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <081c54323b27d8d4b40df6b2375b9e1f6846d827.1584679387.git.len.brown@intel.com>
 References: <081c54323b27d8d4b40df6b2375b9e1f6846d827.1584679387.git.len.brown@intel.com>
@@ -65,81 +65,98 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Len Brown <len.brown@intel.com>
 
-Some Chromebook BIOS' do not export an ACPI LPIT, which is how
-Linux finds the residency counter for CPU and SYSTEM low power states,
-that is exports in /sys/devices/system/cpu/cpuidle/*residency_us
-
-When these sysfs attributes are missing, check the debugfs attrubte
-from the pmc_core driver, which accesses the same counter value.
+warning: `turbostat' uses 32-bit capabilities (legacy support in use)
 
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ tools/power/x86/turbostat/Makefile    |  2 +-
+ tools/power/x86/turbostat/turbostat.c | 46 +++++++++++++++++----------
+ 2 files changed, 31 insertions(+), 17 deletions(-)
 
+diff --git a/tools/power/x86/turbostat/Makefile b/tools/power/x86/turbostat/Makefile
+index 13f1e8b9ac52..2b6551269e43 100644
+--- a/tools/power/x86/turbostat/Makefile
++++ b/tools/power/x86/turbostat/Makefile
+@@ -16,7 +16,7 @@ override CFLAGS +=	-D_FORTIFY_SOURCE=2
+ 
+ %: %.c
+ 	@mkdir -p $(BUILD_OUTPUT)
+-	$(CC) $(CFLAGS) $< -o $(BUILD_OUTPUT)/$@ $(LDFLAGS)
++	$(CC) $(CFLAGS) $< -o $(BUILD_OUTPUT)/$@ $(LDFLAGS) -lcap
+ 
+ .PHONY : clean
+ clean :
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 761146c4f9bc..3ecbf709a48c 100644
+index 3ecbf709a48c..77f89371ec5f 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -304,6 +304,10 @@ int *irqs_per_cpu;		/* indexed by cpu_num */
+@@ -30,7 +30,7 @@
+ #include <sched.h>
+ #include <time.h>
+ #include <cpuid.h>
+-#include <linux/capability.h>
++#include <sys/capability.h>
+ #include <errno.h>
+ #include <math.h>
  
- void setup_all_buffers(void);
+@@ -3150,28 +3150,42 @@ void check_dev_msr()
+ 			err(-5, "no /dev/cpu/0/msr, Try \"# modprobe msr\" ");
+ }
  
-+char *sys_lpi_file;
-+char *sys_lpi_file_sysfs = "/sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us";
-+char *sys_lpi_file_debugfs = "/sys/kernel/debug/pmc_core/slp_s0_residency_usec";
+-void check_permissions()
++/*
++ * check for CAP_SYS_RAWIO
++ * return 0 on success
++ * return 1 on fail
++ */
++int check_for_cap_sys_rawio(void)
+ {
+-	struct __user_cap_header_struct cap_header_data;
+-	cap_user_header_t cap_header = &cap_header_data;
+-	struct __user_cap_data_struct cap_data_data;
+-	cap_user_data_t cap_data = &cap_data_data;
+-	extern int capget(cap_user_header_t hdrp, cap_user_data_t datap);
+-	int do_exit = 0;
+-	char pathname[32];
++	cap_t caps;
++	cap_flag_value_t cap_flag_value;
+ 
+-	/* check for CAP_SYS_RAWIO */
+-	cap_header->pid = getpid();
+-	cap_header->version = _LINUX_CAPABILITY_VERSION;
+-	if (capget(cap_header, cap_data) < 0)
+-		err(-6, "capget(2) failed");
++	caps = cap_get_proc();
++	if (caps == NULL)
++		err(-6, "cap_get_proc\n");
+ 
+-	if ((cap_data->effective & (1 << CAP_SYS_RAWIO)) == 0) {
+-		do_exit++;
++	if (cap_get_flag(caps, CAP_SYS_RAWIO, CAP_EFFECTIVE, &cap_flag_value))
++		err(-6, "cap_get\n");
 +
- int cpu_is_not_present(int cpu)
- {
- 	return !CPU_ISSET_S(cpu, cpu_present_setsize, cpu_present_set);
-@@ -2916,8 +2920,6 @@ int snapshot_gfx_mhz(void)
-  *
-  * record snapshot of
-  * /sys/devices/system/cpu/cpuidle/low_power_idle_cpu_residency_us
-- *
-- * return 1 if config change requires a restart, else return 0
-  */
- int snapshot_cpu_lpi_us(void)
- {
-@@ -2941,17 +2943,14 @@ int snapshot_cpu_lpi_us(void)
- /*
-  * snapshot_sys_lpi()
-  *
-- * record snapshot of
-- * /sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us
-- *
-- * return 1 if config change requires a restart, else return 0
-+ * record snapshot of sys_lpi_file
-  */
- int snapshot_sys_lpi_us(void)
- {
- 	FILE *fp;
- 	int retval;
++	if (cap_flag_value != CAP_SET) {
+ 		warnx("capget(CAP_SYS_RAWIO) failed,"
+ 			" try \"# setcap cap_sys_rawio=ep %s\"", progname);
++		return 1;
+ 	}
  
--	fp = fopen_or_die("/sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us", "r");
-+	fp = fopen_or_die(sys_lpi_file, "r");
- 
- 	retval = fscanf(fp, "%lld", &cpuidle_cur_sys_lpi_us);
- 	if (retval != 1) {
-@@ -4946,10 +4945,16 @@ void process_cpuid()
- 	else
- 		BIC_NOT_PRESENT(BIC_CPU_LPI);
- 
--	if (!access("/sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us", R_OK))
-+	if (!access(sys_lpi_file_sysfs, R_OK)) {
-+		sys_lpi_file = sys_lpi_file_sysfs;
- 		BIC_PRESENT(BIC_SYS_LPI);
--	else
-+	} else if (!access(sys_lpi_file_debugfs, R_OK)) {
-+		sys_lpi_file = sys_lpi_file_debugfs;
-+		BIC_PRESENT(BIC_SYS_LPI);
-+	} else {
-+		sys_lpi_file_sysfs = NULL;
- 		BIC_NOT_PRESENT(BIC_SYS_LPI);
-+	}
- 
- 	if (!quiet)
- 		decode_misc_feature_control();
++	if (cap_free(caps) == -1)
++		err(-6, "cap_free\n");
++
++	return 0;
++}
++void check_permissions(void)
++{
++	int do_exit = 0;
++	char pathname[32];
++
++	/* check for CAP_SYS_RAWIO */
++	do_exit += check_for_cap_sys_rawio();
++
+ 	/* test file permissions */
+ 	sprintf(pathname, "/dev/cpu/%d/msr", base_cpu);
+ 	if (euidaccess(pathname, R_OK)) {
 -- 
 2.20.1
 
