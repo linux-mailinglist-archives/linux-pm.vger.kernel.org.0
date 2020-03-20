@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6168118C4AA
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Mar 2020 02:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F7818C4AF
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Mar 2020 02:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727265AbgCTBlL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Mar 2020 21:41:11 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:35293 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727207AbgCTBlL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 21:41:11 -0400
-Received: by mail-qk1-f195.google.com with SMTP id d8so5429117qka.2
-        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 18:41:10 -0700 (PDT)
+        id S1727392AbgCTBlO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Mar 2020 21:41:14 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:41499 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727380AbgCTBlO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Mar 2020 21:41:14 -0400
+Received: by mail-qk1-f193.google.com with SMTP id q188so82967qke.8
+        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 18:41:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eZP0u8ITunLiIIRvSTm1UDhFa2x+FOEr9rW1o7749xQ=;
-        b=ch9QVTq4I67QoriwHaevg8GW7hXScd11/w/CBbCQ7WxRxps1cAMVtSS6fHp9gCncIZ
-         S78U66ED8dfSrlv95xnu/Eyg5Z1Mnlg1sOfTgqTrxCmMGsPf3W9IGy1vAKNiIgXXbA0d
-         BOSCBXlTGB66Kt8TKlqT4G9y43hVCO20Q8pvNBDnbJ/D3tbRjTlGGxl1CsWfy4+gj/kJ
-         /ozhlhuSfH2+lcIEEdWAeQ+NDIBRv6Oks/lBViT0vCDcqDj1P4UZuev0K9cK5pMdvkIO
-         wTO66o7+GMiKoRws/uakv1R3YiPY+SK0oZRTwUToFigy5QhCfpAASMlt2MywZ3943Avs
-         TJ9w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=eW/OFJFoFR7v20uQTXTPh54Gfwm5+Kkq94S8j8KRbyc=;
+        b=KHAAHrhj23E533BBgqVy2TKK9CkcDC+OiwALUwXvFo6SAi2TVKs1mJB2WM2g78Mz6K
+         SH/hEEVBv5Y/WYM3+X5xyw1FJGPxEUlGxbd6NNOwmDpuyPWp92lwuI8U17HEADuXTbZ9
+         tmCPLEI1tftEfJRlRIBot9aYl60W4ZdMhhrO5xS8nxxi14JlOS/mMusF2gDpc9QwFiO8
+         ujIKx79Ob+MgNtBJHwRv/Nyycj3yhy/sh6f06kdZsCIYTSQzyusrpvVFEthtiBdHJ/Yz
+         iUFL7ZufL460bMxi9slNvBYv7269HUi7Taz/6OtXN7BSuqhCoGJZMeuul74pHhwn8HCC
+         eRzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eZP0u8ITunLiIIRvSTm1UDhFa2x+FOEr9rW1o7749xQ=;
-        b=SPJXgB7e8Tbd8aVew4gl/XKKpBIZ9kmm0cqCxR+iWnACownN8VKNke1/FDCEfb1bsK
-         yoC0XLdTLoSdB+3h0WBj3XeaD10XAgLHND5I7RPc7wctHVdJTKBOo5vKl7T2lMcFTJ7b
-         waNVHDMOfkW2gOtjIg4165wxvZ+/cJj7PCGIEmIfIVwKM0w008OZV/loLpOjkKDv7bbZ
-         k6Rz2cqjhXEwFcvT9HD0cTX1lLpxghXnoMM7LAmrC7zbrjYW/XiwrzHhnAWqlhX4nIti
-         +pb3tWI+hrAaWIP+xcnqVxeVAwqVpTlfMU26kbCgBFXPraFl6C/d4dQgGnPHspxf7S8a
-         p8Lg==
-X-Gm-Message-State: ANhLgQ0n0Q32KfRYzysrmyK3yIJGMMawrHUDdhJQKOt0933/S2D8YJwo
-        928zim4TpogXXC7kG7jRpryVtg==
-X-Google-Smtp-Source: ADFU+vtHoEjmxDMNZ3DTXsUDWYUwN7WHrNIVQU4FEmg3Vg32kJaDK07DIpk0aYZpGhtYL0mspWm+WA==
-X-Received: by 2002:a37:4bd1:: with SMTP id y200mr4044290qka.205.1584668469530;
-        Thu, 19 Mar 2020 18:41:09 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=eW/OFJFoFR7v20uQTXTPh54Gfwm5+Kkq94S8j8KRbyc=;
+        b=Dc1RjmKKuHpUHaLaBA9xtdSKpUwCa8YBZHJ6DBXbijsESoyVy5MJdV1PHEOLH/t5vM
+         d861s09XT04wD21tDfG3XRnEtjKK31Adb0ZwTteOeu7ktfBD4xR2Onrx8Z3f/zSWyCBY
+         l0c39/NXfT48fpoDWzeHdnOnYWwMcJFlG62TZvoTSCjJe3+ERR0fOfHb3xA7gqv6I0bd
+         jYgn9LHwkVBykcqehViQo4ULdy1xuUr9p67CC+UF0fMof1YxpyenaSwNW1ZDtMLSGekk
+         R35wyMhCiWeNOlB+7XDSWsRozlnE7rMFFg2Qr7iqizC3pbsyxloVpQs1cO758s6eX/nN
+         GF8g==
+X-Gm-Message-State: ANhLgQ2pm5VWmDMILBO1eDuhGTPGaVScvqETq4j2KwLSYMtTOiRmBtHL
+        T8lN5F25PjRw3y79mQrXLRxXNg==
+X-Google-Smtp-Source: ADFU+vupj+aipcr9NvAb73NIy/bo48Y/CMGZJQO1EeS20z8InsstfuNlICLQGUkvjfuN2dcNGNPp7w==
+X-Received: by 2002:a05:620a:4e:: with SMTP id t14mr5845072qkt.122.1584668471016;
+        Thu, 19 Mar 2020 18:41:11 -0700 (PDT)
 Received: from pop-os.fios-router.home (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.googlemail.com with ESMTPSA id 2sm2706287qtp.33.2020.03.19.18.41.08
+        by smtp.googlemail.com with ESMTPSA id 2sm2706287qtp.33.2020.03.19.18.41.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 18:41:08 -0700 (PDT)
+        Thu, 19 Mar 2020 18:41:10 -0700 (PDT)
 From:   Thara Gopinath <thara.gopinath@linaro.org>
 To:     rui.zhang@intel.com, ulf.hansson@linaro.org,
         daniel.lezcano@linaro.org, bjorn.andersson@linaro.org,
@@ -52,10 +52,12 @@ Cc:     amit.kucheria@verdurent.com, mark.rutland@arm.com,
         rjw@rjwysocki.net, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [Patch v5 0/6] Introduce Power domain based warming device driver
-Date:   Thu, 19 Mar 2020 21:41:01 -0400
-Message-Id: <20200320014107.26087-1-thara.gopinath@linaro.org>
+Subject: [Patch v5 1/6] PM/Domains: Add support for retrieving genpd performance states information
+Date:   Thu, 19 Mar 2020 21:41:02 -0400
+Message-Id: <20200320014107.26087-2-thara.gopinath@linaro.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200320014107.26087-1-thara.gopinath@linaro.org>
+References: <20200320014107.26087-1-thara.gopinath@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -63,98 +65,117 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Certain resources modeled as a generic power domain in linux kernel can be
-used to warm up the SoC (mx power domain on sdm845) if the temperature
-falls below certain threshold. These power domains can be considered as
-thermal warming devices.  (opposite of thermal cooling devices).
+Add two new APIs in the genpd framework, dev_pm_genpd_get_performance_state
+to return the current performance state of a power domain and
+dev_pm_genpd_performance_state_count to return the total number of
+performance states supported by a power domain. Since the genpd framework
+does not maintain a count of number of performance states supported by a
+power domain, introduce a new callback(.get_performance_state_count) that
+can be used to retrieve this information from power domain drivers.
 
-In kernel, these warming devices can be modeled as a thermal cooling
-device. Since linux kernel today has no instance of a resource modeled as
-a power domain acting as a thermal warming device, a generic power domain
-based thermal warming device driver that can be used pan-Socs is the
-approach taken in this patch series. Since thermal warming devices can be
-thought of as the mirror opposite of thermal cooling devices, this patch
-series re-uses thermal cooling device framework. To use these power
-domains as warming devices require further tweaks in the thermal framework
-which are out of scope of this patch series. These tweaks have been posted
-as a separate series[1].
+These APIs are added to aid the implementation of a power domain as a
+warming device. Linux kernel cooling device framework(into which warming
+device can be plugged in) requires during initialization to be provided
+with the maximum number of states that can be supported. When a power
+domain acts as a warming device, the max state is the max number of
+perfomrance states supported by the power domain. The cooling device
+framework implements API to retrieve the current state of the cooling
+device. This in turn translates to the current performance state of the
+power domain.
 
-The first patch in this series extends the genpd framework to export out
-the performance states of a power domain so that when a power domain is
-modeled as a cooling device, the number of possible states and current
-state of the cooling device can be retrieved from the genpd framework.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+---
+ drivers/base/power/domain.c | 37 +++++++++++++++++++++++++++++++++++++
+ include/linux/pm_domain.h   | 13 +++++++++++++
+ 2 files changed, 50 insertions(+)
 
-The second patch implements the newly added genpd callback for Qualcomm
-RPMH power domain driver which hosts the mx power domain.
-
-The third patch introduces a new cooling device register API that allows
-a parent to be specified for the cooling device.
-
-The fourth patch introduces the generic power domain warming device
-driver.
-
-The fifth patch extends Qualcomm RPMh power controller driver to register
-mx power domain as a thermal warming device in the kernel.
-
-The sixth patch describes the dt binding extensions for mx power domain to
-be a thermal warming device.
-
-The seventh patch introduces the DT entreis for sdm845 to register mx
-power domain as a thermal warming device.
-
-v1->v2:
-	- Rename the patch series from "qcom: Model RPMH power domains as
-	  thermal cooling devices" to "Introduce Power domain based
-	  thermal warming devices" as it is more appropriate.
-	- Introduce a new patch(patch 3) describing the dt-bindings for
-	  generic power domain warming device.
-	- Patch specific changes mentioned in respective patches.
-
-v2->v3:
-	- Changed power domain warming device from a virtual device node
-	  entry in DT to being a subnode of power domain controller
-	  binding following Rob's review comments.
-	- Implemented Ulf's review comments.
-	- The changes above introduced two new patches (patch 3 and 4)
-v3->v4:
-	- Dropped late_init hook in cooling device ops. Instead introduced
-	  a new cooling device register API that allows to define a parent
-	  for the cooling device.
-	- Patch specific changes mentioned in respective patches. 
-
-v4->v5:
-	- Dropped the patch that introduced the cooling device register
-	  API with parent as per review comments from Ulf. 
-	- Patch specific changes mentioned in respective patches.
-
-1. https://lkml.org/lkml/2019/9/18/1180
-
-Thara Gopinath (6):
-  PM/Domains: Add support for retrieving genpd performance states
-    information
-  soc: qcom: rpmhpd: Introduce function to retrieve power domain
-    performance state count
-  thermal: Add generic power domain warming device driver.
-  soc: qcom: Extend RPMh power controller driver to register warming
-    devices.
-  dt-bindings: power: Extend RPMh power controller binding to describe
-    thermal warming device
-  arm64: dts: qcom: Indicate rpmhpd hosts a power domain that can be
-    used as a warming device.
-
- .../devicetree/bindings/power/qcom,rpmpd.yaml |   3 +
- arch/arm64/boot/dts/qcom/sdm845.dtsi          |   1 +
- drivers/base/power/domain.c                   |  37 ++++
- drivers/soc/qcom/rpmhpd.c                     |  46 ++++-
- drivers/thermal/Kconfig                       |  10 ++
- drivers/thermal/Makefile                      |   2 +
- drivers/thermal/pd_warming.c                  | 168 ++++++++++++++++++
- include/linux/pd_warming.h                    |  29 +++
- include/linux/pm_domain.h                     |  13 ++
- 9 files changed, 308 insertions(+), 1 deletion(-)
- create mode 100644 drivers/thermal/pd_warming.c
- create mode 100644 include/linux/pd_warming.h
-
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 959d6d5eb000..d0297c48fa79 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -408,6 +408,43 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
+ 
++int dev_pm_genpd_get_performance_state(struct device *dev)
++{
++	struct generic_pm_domain *genpd;
++	unsigned int state;
++
++	genpd = dev_to_genpd_safe(dev);
++	if (IS_ERR(genpd))
++		return -ENODEV;
++
++	genpd_lock(genpd);
++	state = genpd->performance_state;
++	genpd_unlock(genpd);
++
++	return state;
++}
++EXPORT_SYMBOL_GPL(dev_pm_genpd_get_performance_state);
++
++int dev_pm_genpd_performance_state_count(struct device *dev)
++{
++	struct generic_pm_domain *genpd;
++	int count;
++
++	genpd = dev_to_genpd_safe(dev);
++	if (IS_ERR(genpd))
++		return -ENODEV;
++
++	if (unlikely(!genpd->get_performance_state_count))
++		return -EINVAL;
++
++	genpd_lock(genpd);
++	count = genpd->get_performance_state_count(genpd);
++	genpd_unlock(genpd);
++
++	return count;
++}
++EXPORT_SYMBOL_GPL(dev_pm_genpd_performance_state_count);
++
+ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+ {
+ 	unsigned int state_idx = genpd->state_idx;
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index 9ec78ee53652..7d415350380f 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -117,6 +117,7 @@ struct generic_pm_domain {
+ 						 struct dev_pm_opp *opp);
+ 	int (*set_performance_state)(struct generic_pm_domain *genpd,
+ 				     unsigned int state);
++	int (*get_performance_state_count)(struct generic_pm_domain *genpd);
+ 	struct gpd_dev_ops dev_ops;
+ 	s64 max_off_time_ns;	/* Maximum allowed "suspended" time. */
+ 	bool max_off_time_changed;
+@@ -204,6 +205,8 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+ 		  struct dev_power_governor *gov, bool is_off);
+ int pm_genpd_remove(struct generic_pm_domain *genpd);
+ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
++int dev_pm_genpd_get_performance_state(struct device *dev);
++int dev_pm_genpd_performance_state_count(struct device *dev);
+ 
+ extern struct dev_power_governor simple_qos_governor;
+ extern struct dev_power_governor pm_domain_always_on_gov;
+@@ -251,6 +254,16 @@ static inline int dev_pm_genpd_set_performance_state(struct device *dev,
+ 	return -ENOTSUPP;
+ }
+ 
++static inline int dev_pm_genpd_get_performance_state(struct device *dev)
++{
++	return -ENOTSUPP;
++}
++
++static inline int dev_pm_genpd_performance_state_count(struct device *dev)
++{
++	return -ENOTSUPP;
++}
++
+ #define simple_qos_governor		(*(struct dev_power_governor *)(NULL))
+ #define pm_domain_always_on_gov		(*(struct dev_power_governor *)(NULL))
+ #endif
 -- 
 2.20.1
 
