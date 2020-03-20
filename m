@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E0B18C6C4
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Mar 2020 06:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5911B18C6C5
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Mar 2020 06:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbgCTFXC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Mar 2020 01:23:02 -0400
-Received: from mail-qv1-f67.google.com ([209.85.219.67]:34896 "EHLO
-        mail-qv1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725883AbgCTFXC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Mar 2020 01:23:02 -0400
-Received: by mail-qv1-f67.google.com with SMTP id q73so2373328qvq.2
-        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 22:23:01 -0700 (PDT)
+        id S1726876AbgCTFXE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Mar 2020 01:23:04 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:46861 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726867AbgCTFXE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Mar 2020 01:23:04 -0400
+Received: by mail-qk1-f196.google.com with SMTP id f28so5661294qkk.13
+        for <linux-pm@vger.kernel.org>; Thu, 19 Mar 2020 22:23:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:reply-to:organization:content-transfer-encoding;
-        bh=mfq+jbDtLvNFwCkgXQFFx1U0KzFwGmwWgMQRhdX+ggg=;
-        b=SiaamRppyc1pLmbvwUZdKMI9A+G+P0pUeZNdCNotkhO9Ph+cxbI/2RIqzeYJQiHMaC
-         Ak1/14+8II800sgaDW8dJqJV1WE7m47icjWzBG0OunkehJPkOGYUswnL+0UI03r9XzJH
-         84uXz0SgxNxrNs98o0dpNrKkE3NSmSsUTTPHiruO0ham/BENaLX+thR75Vbx1uPZdSy1
-         rIiP2Q5OTfmK5K3g06rwu9wAzLZJGVwpMu/n+/8e9GnR+0RAyiLdsnLp6IkSOXyrDrxG
-         LyQsMq5jwpBZ6/YXE/iJqu0d51a+xmhNakc2Ld5Jz9BqJHkIZVPakN+6h/vBHXPJfsBj
-         ZCaA==
+        bh=vCUT5im7xTqActkIFgeHwLZTn4xMUQygaqCeyzYMBSA=;
+        b=u1cFAocf7Txeo5HIC/0UJtMiqn3LSQaTRez8P1syZI9Vwnei2CJ42e91FXG017LELF
+         HV8Pzn0jxm19eNZVQAaBop5xJxEMbmvLJXofT3Erd5Th/5dXrTqfvitaYuHmdJH58s87
+         IYV5sos7uPx8Js2FP8kPp41i0esLfHddLtumgPtcvOEUsZrCh186omNyuKvrvbJN05hB
+         jv92b8O2OdSsDWPWbUVSlLfN4BNB0lSii0sTGZCLPZqo8IZ+Qcv1czvfQWWvGL/WPwj9
+         V6VtOe4Jvc1ivh45WrGf/o20wqD6FgWBN3Fng/oJK99mAOjCNgjnZ770l8uP8yON/uzB
+         Pxgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:reply-to:organization
          :content-transfer-encoding;
-        bh=mfq+jbDtLvNFwCkgXQFFx1U0KzFwGmwWgMQRhdX+ggg=;
-        b=O1sPN7D4QNibQwAgXSwR6qBfofzdLhoIby4tFJKGjVpawILjZFhzfY8AkROkX2ZF1B
-         BYyKoayN4iVM4KzfbIVrniGXkiXMGVWSS0lFzX+i0Qc9MSBpls5RKlNNKuo5kjqwbqGg
-         CXxi5kq7ni2ku5s43b9Ql8y05sCEYMss3p325xfJq66zq5WfEqj2sSeTXuD94oOMCALF
-         Q+PaA+c9SquSL99fiXXEZGEKb53nUi9D0V5lpwj/cZpNDssTAfscdBDT+g3o+aRIedI9
-         ykAzwlXGfYJX1L0Hf6kizAkIkFenzTM8GAQOn1yDra5pSMGxvOF+H87IG1nt0GlgiqGW
-         faXw==
-X-Gm-Message-State: ANhLgQ0GXGb1k5lgreQ/fDrvTCzEoi0ITagykskS8B6pC+50SDelJMxe
-        EZF5uVvN/EPKWv4CDD6It7YiB8Li
-X-Google-Smtp-Source: ADFU+vtg2u8l3emT7GpQ2m/BkbMMXLs9pVFHi7/EGAP3N6di6XnZaw7fB7mHVm2G0jJyj7aiGQMnhQ==
-X-Received: by 2002:a0c:9b95:: with SMTP id o21mr6571501qve.175.1584681780729;
-        Thu, 19 Mar 2020 22:23:00 -0700 (PDT)
+        bh=vCUT5im7xTqActkIFgeHwLZTn4xMUQygaqCeyzYMBSA=;
+        b=UUCFiJJ3MNH8IQDhjNTcaZhdESX6O30vh1jFnsOIF1EA7UD5Zlr2k/f8AVag6nNRDi
+         TZ897R0/gaUlpgbETyx8xDtmJ4VmeztqVWDQdI2Mkly/IA/UNKJa7FIu28dBPSTcTfy/
+         TBcC1XaXAH5ue/DKpGezXZ0OMUYIbCe/pLsAKdhVVluo1tpBUwieZJkFyCJn5SeooVDc
+         y9Ig4Qotg6gc9QnKaHU4vKqE9r46w4kWWDXKyNzVVH0hefAoAoCA7Dz7a0OQIeepH2lp
+         puuVAnWeq5cZZPix8H3MgyhhXdqQG/Geyy9voazx00IsyJVu/WcRWWJs01HC2y5KIFg5
+         LmzA==
+X-Gm-Message-State: ANhLgQ1cmRA1TohJ3TbReEIF8llvb17jphyeSCFQq/JXqD7Dlx6Lp/7r
+        qUkuzdvwGmUkyYRADo05YEOIOB6N
+X-Google-Smtp-Source: ADFU+vuyin1z80RAd0gXCntOC/1uwCzHauJKRu0c3/skEwVOFF/L8S+RxfVugIkJb3qohQDu+bhMRw==
+X-Received: by 2002:ae9:c312:: with SMTP id n18mr2448354qkg.472.1584681781915;
+        Thu, 19 Mar 2020 22:23:01 -0700 (PDT)
 Received: from localhost.localdomain (h96-61-82-19.cntcnh.dsl.dynamic.tds.net. [96.61.82.19])
-        by smtp.gmail.com with ESMTPSA id w134sm3273383qka.127.2020.03.19.22.22.59
+        by smtp.gmail.com with ESMTPSA id w134sm3273383qka.127.2020.03.19.22.23.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 22:23:00 -0700 (PDT)
+        Thu, 19 Mar 2020 22:23:01 -0700 (PDT)
 From:   Len Brown <lenb@kernel.org>
 To:     linux-pm@vger.kernel.org
-Cc:     Chen Yu <yu.c.chen@intel.com>, Rui Zhang <rui.zhang@intel.com>,
-        Len Brown <len.brown@intel.com>
-Subject: [PATCH 01/10] tools/power turbostat: Support Cometlake
-Date:   Fri, 20 Mar 2020 01:22:39 -0400
-Message-Id: <081c54323b27d8d4b40df6b2375b9e1f6846d827.1584679387.git.len.brown@intel.com>
+Cc:     Len Brown <len.brown@intel.com>
+Subject: [PATCH 02/10] tools/power turbostat: Fix gcc build warnings
+Date:   Fri, 20 Mar 2020 01:22:40 -0400
+Message-Id: <d8d005ba6afa502ca37ced5782f672c4d2fc1515.1584679387.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200320052248.13037-1-lenb@kernel.org>
-References: <20200320052248.13037-1-lenb@kernel.org>
+In-Reply-To: <081c54323b27d8d4b40df6b2375b9e1f6846d827.1584679387.git.len.brown@intel.com>
+References: <081c54323b27d8d4b40df6b2375b9e1f6846d827.1584679387.git.len.brown@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Reply-To: Len Brown <lenb@kernel.org>
 Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
@@ -64,30 +64,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Chen Yu <yu.c.chen@intel.com>
+From: Len Brown <len.brown@intel.com>
 
-From a turbostat point of view, Cometlake is like Kabylake.
+Warning: ‘__builtin_strncpy’ specified bound 20 equals destination size
+	[-Wstringop-truncation]
 
-Suggested-by: Rui Zhang <rui.zhang@intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+reduce param to strncpy, to guarantee that a null byte is always copied
+into destination buffer.
+
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/power/x86/turbostat/turbostat.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 31c1ca0bb3ee..dd5ac9f52ac5 100644
+index dd5ac9f52ac5..fa95a8ca5565 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -4610,6 +4610,8 @@ unsigned int intel_model_duplicates(unsigned int model)
- 	case INTEL_FAM6_SKYLAKE:
- 	case INTEL_FAM6_KABYLAKE_L:
- 	case INTEL_FAM6_KABYLAKE:
-+	case INTEL_FAM6_COMETLAKE_L:
-+	case INTEL_FAM6_COMETLAKE:
- 		return INTEL_FAM6_SKYLAKE_L;
+@@ -5325,9 +5325,9 @@ int add_counter(unsigned int msr_num, char *path, char *name,
+ 	}
  
- 	case INTEL_FAM6_ICELAKE_L:
+ 	msrp->msr_num = msr_num;
+-	strncpy(msrp->name, name, NAME_BYTES);
++	strncpy(msrp->name, name, NAME_BYTES - 1);
+ 	if (path)
+-		strncpy(msrp->path, path, PATH_BYTES);
++		strncpy(msrp->path, path, PATH_BYTES - 1);
+ 	msrp->width = width;
+ 	msrp->type = type;
+ 	msrp->format = format;
 -- 
 2.20.1
 
