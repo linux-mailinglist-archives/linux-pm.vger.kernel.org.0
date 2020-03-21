@@ -2,31 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D0918E166
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Mar 2020 13:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D92818E163
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Mar 2020 13:53:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbgCUMx3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Mar 2020 08:53:29 -0400
-Received: from mail.manjaro.org ([176.9.38.148]:37078 "EHLO mail.manjaro.org"
+        id S1727427AbgCUMxc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Mar 2020 08:53:32 -0400
+Received: from mail.manjaro.org ([176.9.38.148]:37122 "EHLO mail.manjaro.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726192AbgCUMx3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 21 Mar 2020 08:53:29 -0400
+        id S1727296AbgCUMxc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 21 Mar 2020 08:53:32 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.manjaro.org (Postfix) with ESMTP id BA73237E5074;
-        Sat, 21 Mar 2020 13:53:27 +0100 (CET)
+        by mail.manjaro.org (Postfix) with ESMTP id B42AC37E5074;
+        Sat, 21 Mar 2020 13:53:30 +0100 (CET)
 X-Virus-Scanned: Debian amavisd-new at manjaro.org
 Received: from mail.manjaro.org ([127.0.0.1])
         by localhost (manjaro.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tcVmSE4T3BKl; Sat, 21 Mar 2020 13:53:25 +0100 (CET)
+        with ESMTP id zo-t32rK0CpE; Sat, 21 Mar 2020 13:53:25 +0100 (CET)
 From:   Tobias Schramm <t.schramm@manjaro.org>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Sebastian Reichel <sre@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tobias Schramm <t.schramm@manjaro.org>
-Subject: [PATCH v6 0/3] Add support for CellWise cw2015 fuel gauge
-Date:   Sat, 21 Mar 2020 13:52:38 +0100
-Message-Id: <20200321125241.3072123-1-t.schramm@manjaro.org>
+        Tobias Schramm <t.schramm@manjaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 1/3] dt-bindings: Document cellwise vendor-prefix
+Date:   Sat, 21 Mar 2020 13:52:39 +0100
+Message-Id: <20200321125241.3072123-2-t.schramm@manjaro.org>
+In-Reply-To: <20200321125241.3072123-1-t.schramm@manjaro.org>
+References: <20200321125241.3072123-1-t.schramm@manjaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -34,82 +37,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patchset adds support for the CellWise cw2015 fuel gauge.
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The CellWise cw2015 fuel gauge is a shuntless, single-cell Li-Ion fuel
-gauge. It is used in the pine64 Pinebook Pro laptop.
-
-This is v6 of the patchset. This version fixes binding issues found
-by Rob.
-
-I've kept the cellwise,battery-profile property in the device tree. Its
-content describes characteristics of the battery built into a device. The
-exact format is unknown and not publicly documented. It is likely
-comprised of some key parameters of the battery (chemistry, voltages,
-design capacity) and parameters for tuning the internal state of charge
-approximation function.
-Since v2 CellWise has confirmed to me that the only way to obtain the
-profile blob is to mail them batteries for testing. Thus we will need to
-keep that property.
-
-In general I'm not 100 % sure about my json-schema binding for the gauge.
-It is my first time ever writing a json-schema binding and I'm not sure
-whether properties like power-supplies or monitored-battery need to be
-added to a separate, common schema for power supplies or not.
-
-
-Best Regards,
-
-Tobias Schramm
-
-Changelog:
- v2:
-  * Change subject to "Add support for CellWise cw2015 fuel gauge"
-  * Rewrite bindings as json-schema
-  * Use default power-supplies handling
-  * Use regmap for register access
-  * Use standard simple-battery node
-  * Replace printk/pr_* by dev_{dbg,info,warn,err}
-  * Use cancel_delayed_work_sync in remove
-  * General code cleanup
- v3:
-  * Incorporate review by Andy
-  * Add cellwise vendor prefix
-  * Rename cellwise,bat-config-info property to cellwise,battery-profile
-  * Remove most state of charge post-processing
-  * Use fwnode interface
-  * General code cleanup
-  * Lots of code style fixes
- v4:
-  * Implement additional changes requested by Andy
-  * Use fwnode inline wrappers
-  * Clean up waiting for gauge
-  * Minor code style fixes
- v5:
-  * Clean up includes
-  * Handle errors during device property parsing
-  * Refactor device property parsing
-  * Replace i2c->probe by i2c->probe_new 
-  * More code style fixes
- v6:
-  * Fix bindings according to review by Rob
-
-
-Tobias Schramm (3):
-  dt-bindings: Document cellwise vendor-prefix
-  dt-bindings: power: supply: add cw2015_battery bindings
-  power: supply: add CellWise cw2015 fuel gauge driver
-
- .../bindings/power/supply/cw2015_battery.yaml |  82 ++
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- MAINTAINERS                                   |   6 +
- drivers/power/supply/Kconfig                  |  11 +
- drivers/power/supply/Makefile                 |   1 +
- drivers/power/supply/cw2015_battery.c         | 749 ++++++++++++++++++
- 6 files changed, 851 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/cw2015_battery.yaml
- create mode 100644 drivers/power/supply/cw2015_battery.c
-
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 9e67944bec9c..af3d1aed8118 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -177,6 +177,8 @@ patternProperties:
+     description: Cadence Design Systems Inc.
+   "^cdtech,.*":
+     description: CDTech(H.K.) Electronics Limited
++  "^cellwise,.*":
++    description: CellWise Microelectronics Co., Ltd
+   "^ceva,.*":
+     description: Ceva, Inc.
+   "^chipidea,.*":
 -- 
 2.24.1
 
