@@ -2,90 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A7918E372
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Mar 2020 18:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D4A18E3DF
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Mar 2020 20:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727631AbgCURqW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Mar 2020 13:46:22 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:39226 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726961AbgCURqV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Mar 2020 13:46:21 -0400
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1jFiBn-0007G4-JJ; Sat, 21 Mar 2020 18:45:39 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id E02A21040D4; Sat, 21 Mar 2020 18:45:38 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        platform-driver-x86@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        Brian Cain <bcain@codeaurora.org>,
-        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geoff Levand <geoff@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Davidlohr Bueso <dbueso@suse.de>
-Subject: Re: [patch V3 00/20] Lock ordering documentation and annotation for lockdep
-In-Reply-To: <20200321171902.xxlnpikc65wd3b4m@linux-p48b>
-References: <20200321112544.878032781@linutronix.de> <20200321171902.xxlnpikc65wd3b4m@linux-p48b>
-Date:   Sat, 21 Mar 2020 18:45:38 +0100
-Message-ID: <87mu89r48t.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+        id S1727634AbgCUTPG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Mar 2020 15:15:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39188 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727428AbgCUTPG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 21 Mar 2020 15:15:06 -0400
+Subject: Re: [GIT PULL] turbostat version 20.03.20
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584818106;
+        bh=X6cLDmZep6N2MpMLqEt0HiSjaHs6tK386GRraOG1k2g=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=J1VOG6L+oOZc7LMnFFFgUk9TRM3KnGwTa19ZM3gOYA9EEumb8RFqVTrKzoZHToECV
+         aYq1TUU5GMvyEg+14mtkj5rHhOzqVpuTUoLQJupnEKNoxyNstBW/+1d6huiNqhJitA
+         7ZbmUebyqnQglq1cg0P7RatCMa3Pk1znGigQFt0Q=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJvTdKmNJkx+aeHDcrqRG=0JDfaut5tj4w0oOojGWTjx9tY3qQ@mail.gmail.com>
+References: <CAJvTdKmNJkx+aeHDcrqRG=0JDfaut5tj4w0oOojGWTjx9tY3qQ@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJvTdKmNJkx+aeHDcrqRG=0JDfaut5tj4w0oOojGWTjx9tY3qQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
+X-PR-Tracked-Commit-Id: b95fffb9b4afa8b9aa4a389ec7a0c578811eaf42
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6c1bae744d5a15108c412336d95f3c4e5db6aff4
+Message-Id: <158481810606.2095.279138460899577791.pr-tracker-bot@kernel.org>
+Date:   Sat, 21 Mar 2020 19:15:06 +0000
+To:     Len Brown <lenb@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Davidlohr Bueso <dave@stgolabs.net> writes:
+The pull request you sent on Sat, 21 Mar 2020 12:41:59 -0400:
 
-> On Sat, 21 Mar 2020, Thomas Gleixner wrote:
->
->>This is the third and hopefully final version of this work. The second one
->>can be found here:
->
-> Would you rather I send in a separate series with the kvm changes, or
-> should I just send a v2 with the fixes here again?
+> git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
 
-Send a separate series please. These nested threads are hard to follow.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6c1bae744d5a15108c412336d95f3c4e5db6aff4
 
-Thanks,
+Thank you!
 
-        tglx
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
