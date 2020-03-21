@@ -2,51 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F22DA18E169
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Mar 2020 13:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B8D18E186
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Mar 2020 14:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbgCUM51 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Mar 2020 08:57:27 -0400
-Received: from mail.manjaro.org ([176.9.38.148]:37516 "EHLO mail.manjaro.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726192AbgCUM50 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 21 Mar 2020 08:57:26 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.manjaro.org (Postfix) with ESMTP id 598A837E507D;
-        Sat, 21 Mar 2020 13:57:25 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at manjaro.org
-Received: from mail.manjaro.org ([127.0.0.1])
-        by localhost (manjaro.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id o75kpYDVcgR2; Sat, 21 Mar 2020 13:57:23 +0100 (CET)
-Subject: Re: [PATCH v5 2/3] dt-bindings: power: supply: add cw2015_battery
- bindings
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200315191914.118565-1-t.schramm@manjaro.org>
- <20200315191914.118565-3-t.schramm@manjaro.org>
- <20200320223108.GB32311@bogus>
-From:   Tobias Schramm <t.schramm@manjaro.org>
-Message-ID: <05c068f5-9621-9879-b500-0a2dc242eefb@manjaro.org>
-Date:   Sat, 21 Mar 2020 13:57:38 +0100
+        id S1727008AbgCUNXH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Mar 2020 09:23:07 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:38630 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726192AbgCUNXH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Mar 2020 09:23:07 -0400
+Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1jFe4i-0003bB-3f; Sat, 21 Mar 2020 14:22:04 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 6F881FFC8D; Sat, 21 Mar 2020 14:22:03 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geoff Levand <geoff@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        platform-driver-x86@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [patch V3 12/20] powerpc/ps3: Convert half completion to rcuwait
+In-Reply-To: <20200321113241.930037873@linutronix.de>
+References: <20200321112544.878032781@linutronix.de> <20200321113241.930037873@linutronix.de>
+Date:   Sat, 21 Mar 2020 14:22:03 +0100
+Message-ID: <87v9mxrgg4.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20200320223108.GB32311@bogus>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US-large
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rob,
+Thomas Gleixner <tglx@linutronix.de> writes:
 
-thanks for the review. I've just sent out v6 addressing the issues you
-have found.
+> From: Thomas Gleixner <tglx@linutronix.de>
 
-Tobias
+That's obviously bogus and wants to be:
+
+From: Peter Zijlstra (Intel) <peterz@infradead.org>
 
