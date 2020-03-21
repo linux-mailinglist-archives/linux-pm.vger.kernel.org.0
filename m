@@ -2,122 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF3518DDE7
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Mar 2020 05:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6192F18DF1D
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Mar 2020 10:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725840AbgCUEy6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Mar 2020 00:54:58 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:40041 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725440AbgCUEy6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Mar 2020 00:54:58 -0400
-Received: by mail-qt1-f196.google.com with SMTP id c9so61216qtw.7
-        for <linux-pm@vger.kernel.org>; Fri, 20 Mar 2020 21:54:57 -0700 (PDT)
+        id S1727085AbgCUJ1o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Mar 2020 05:27:44 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:39965 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728214AbgCUJ1o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Mar 2020 05:27:44 -0400
+Received: by mail-wr1-f68.google.com with SMTP id f3so10261106wrw.7;
+        Sat, 21 Mar 2020 02:27:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:reply-to:organization:content-transfer-encoding;
-        bh=I/XnTtEOOERi3D2WEAN9amBfI5sIcheB3m2CASX7uDY=;
-        b=uS0Y50q14fFyvj5jjSDnOsup71IOkOiHI2cXxChidgRYAF6PGOUzAwKC0ZNL2dhlj8
-         7SqcmQlIB32eLx1S/BCfR6Dh23h8gWW+UIMOfkWmflK07efyRoickcAXPhSg2cLkl0bw
-         qLJ00WlaPlPO5XZK5IodXnWK8RjdXaaHlKw103/0InvnI2GdV0VPBButdXyP7a53lyIO
-         rDNUZAX/mVX+fI7d4LGT2zo8egn/QRFJ92fqp7KqlHJ1OfVNcIKcZxWdFXkyKGiNoGsP
-         1WOf8n8MDuaP3g625kuxMcNjc4dwI//T/MFGcjggyCznTrQtZqS3XtzNTCsqj2SjZzws
-         y9Pg==
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=jIPT36F0dTY6bP/ENRWpZvdT+1C7xjAjzp5qPtZLNQs=;
+        b=LNwheuTHavqHvWTE7iMHIo+Z4/RvA00DcrC9VYcYkzhhU3TejrH6w7aAzw7dnl9kYI
+         PHvathUfZVAike6uFd4kSG5FprZmktZEq//4fA1pzL2cnqASfM+Pn34kGHa4Gq/c6iBg
+         9vIVNkL2YbEOXzB+6ZWtHzwjJpcs3OMYLXhqTkfpGk+O2xtECUl4HhtEBNQJ1nBcGhhm
+         9LbLMgi+PtTtdmGvXPcLsmWUzpoSQodzGWr0NvmGc/ifFVDmcL4FmHZ7v5MqRJ4r0CoL
+         ZnBJizMjLLbSTC/pSC10HzAvFCAfxkOWLeenqyptDFE5lIa2pLyVJfaajnr5ll1lTaQA
+         nwww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:reply-to:organization
-         :content-transfer-encoding;
-        bh=I/XnTtEOOERi3D2WEAN9amBfI5sIcheB3m2CASX7uDY=;
-        b=EGH6VFbNOSM6alCuLRZF2kTK4SVhTU0gxqAhpVk9JlGn3V23BfIdtuotUFvyNuXfZS
-         LM+gWioQI20CFmcjn3X6+vrCvdtg0Sf8k9kH1uZUY6S5e+k+Pf+7+lvpClh+ngBqOfbT
-         FaDEdPpF+utO0qvB6p3i2egxbkVSAcjnU2AOd+3xOb3VlTdLhQymyKcJDW4DIR827Q7n
-         BSxQBNUvh3zXgKP4R9QAn6mduId4caelDmpIEeKGVIDQYzD+Q+nma5t6ToK9qmQF01cX
-         38/uW7Dg7ziPi/MVuPZGlLih8RXdPp0rV1olXew+Jopjp/c87uZG33HZaWiuHrOybzxv
-         d8pQ==
-X-Gm-Message-State: ANhLgQ0Iap1JpAxPXIjS8cOYywfvXBj4eiQzY1GADmMJBaoWB9H5/fCd
-        Oe9dHupKMvRs06LZXN5efqWpzGcf
-X-Google-Smtp-Source: ADFU+vu8wYY6/gfQ2QTaNt5bA8tscRivI34WWaQC/BcvquQHN8fGM6Cl8qIK/xNqfSlOPvOt4zWkfQ==
-X-Received: by 2002:ac8:24a7:: with SMTP id s36mr11867794qts.357.1584766496487;
-        Fri, 20 Mar 2020 21:54:56 -0700 (PDT)
-Received: from localhost.localdomain (h96-61-82-19.cntcnh.dsl.dynamic.tds.net. [96.61.82.19])
-        by smtp.gmail.com with ESMTPSA id 128sm6132081qki.103.2020.03.20.21.54.55
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=jIPT36F0dTY6bP/ENRWpZvdT+1C7xjAjzp5qPtZLNQs=;
+        b=rTm7jyT7hJDKPbofU8CG83GD7oL6GUoO2wDGsgJ/hLb21/Q5ba8OXLpSUzLZfbz7wc
+         lXA0yVK5kNTBXWRi7LyvLIR5r9oR6QoQrTdi5mdbsASdBG5OVYO7mPZJdPRMkUmoHuoy
+         C0M+3N/ND2YEedBN7wmZbS74Gbcqjn59EWaHfLmaZJjW2JR1IISV610Q7zDfe2paf/MR
+         0/PD0uJ3HjYvTJYKyMOahjoYWdrq1EHFB6vI4iFtH1O0UDVOUfeD8QBSEK4ak4+FqpT6
+         8d1mcAGx7H20krY4PeOTWcqBMZD51EBBFvD+XHixh9cf+XVD4JXQHaSRS24RkESO1aIC
+         04kg==
+X-Gm-Message-State: ANhLgQ3MxIVd9wqJIXv4pbWfKQJA/uZma1isiTMctgHGt2m8Iq4txQkv
+        v/siTrx4n0YdlCNqt4vizoY=
+X-Google-Smtp-Source: ADFU+vv+PtqUiwElJCMMpIq4d7WeO6iJseKC0LNjVV4sd1m0IP4cFu0cPgiGjzjP5UwlRnfWRsejCg==
+X-Received: by 2002:adf:fa8d:: with SMTP id h13mr16405315wrr.155.1584782862249;
+        Sat, 21 Mar 2020 02:27:42 -0700 (PDT)
+Received: from macmini.local (181.4.199.77.rev.sfr.net. [77.199.4.181])
+        by smtp.gmail.com with ESMTPSA id n6sm11549130wmn.13.2020.03.21.02.27.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2020 21:54:55 -0700 (PDT)
-From:   Len Brown <lenb@kernel.org>
-To:     linux-pm@vger.kernel.org
-Cc:     Len Brown <len.brown@intel.com>,
-        Antti Laakso <antti.laakso@linux.intel.com>
-Subject: [PATCH v2 09/10] tools/power turbostat: Print cpuidle information
-Date:   Sat, 21 Mar 2020 00:54:37 -0400
-Message-Id: <abdcbdb265264f736df316622a695ad30019c05f.1584766216.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <081c54323b27d8d4b40df6b2375b9e1f6846d827.1584766216.git.len.brown@intel.com>
-References: <081c54323b27d8d4b40df6b2375b9e1f6846d827.1584766216.git.len.brown@intel.com>
+        Sat, 21 Mar 2020 02:27:41 -0700 (PDT)
+Date:   Sat, 21 Mar 2020 09:27:40 +0000
+From:   Willy Wolff <willy.mh.wolff.ml@gmail.com>
+To:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J.Wysocki" <rjw@rjwysocki.net>
+Subject: [PATCH] thermal/drivers/cpufreq_cooling: Fix return of
+ cpufreq_set_cur_state
+Message-ID: <20200321092740.7vvwfxsebcrznydh@macmini.local>
 MIME-Version: 1.0
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Len Brown <len.brown@intel.com>
+The function freq_qos_update_request returns 0 or 1 describing update
+effectiveness, and a negative error code on failure. However,
+cpufreq_set_cur_state returns 0 on success or an error code otherwise.
 
-Print cpuidle driver and governor.
-
-Originally-by: Antti Laakso <antti.laakso@linux.intel.com>
-Signed-off-by: Len Brown <len.brown@intel.com>
+Signed-off-by: Willy Wolff <willy.mh.wolff.ml@gmail.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ drivers/thermal/cpufreq_cooling.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 77f89371ec5f..05dbe23570d4 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -3503,6 +3503,23 @@ dump_cstate_pstate_config_info(unsigned int family, unsigned int model)
- 	dump_nhm_cst_cfg();
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index fe83d7a210d4..af55ac08e1bd 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -431,6 +431,7 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+ 				 unsigned long state)
+ {
+ 	struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
++	int ret;
+ 
+ 	/* Request state should be less than max_level */
+ 	if (WARN_ON(state > cpufreq_cdev->max_level))
+@@ -442,8 +443,9 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+ 
+ 	cpufreq_cdev->cpufreq_state = state;
+ 
+-	return freq_qos_update_request(&cpufreq_cdev->qos_req,
+-				get_state_freq(cpufreq_cdev, state));
++	ret = freq_qos_update_request(&cpufreq_cdev->qos_req,
++				      get_state_freq(cpufreq_cdev, state));
++	return ret < 0 ? ret : 0;
  }
  
-+static void dump_sysfs_file(char *path)
-+{
-+	FILE *input;
-+	char cpuidle_buf[64];
-+
-+	input = fopen(path, "r");
-+	if (input == NULL) {
-+		if (debug)
-+			fprintf(outf, "NSFOD %s\n", path);
-+		return;
-+	}
-+	if (!fgets(cpuidle_buf, sizeof(cpuidle_buf), input))
-+		err(1, "%s: failed to read file", path);
-+	fclose(input);
-+
-+	fprintf(outf, "%s: %s", strrchr(path, '/') + 1, cpuidle_buf);
-+}
- static void
- dump_sysfs_cstate_config(void)
- {
-@@ -3516,6 +3533,15 @@ dump_sysfs_cstate_config(void)
- 	if (!DO_BIC(BIC_sysfs))
- 		return;
- 
-+	if (access("/sys/devices/system/cpu/cpuidle", R_OK)) {
-+		fprintf(outf, "cpuidle not loaded\n");
-+		return;
-+	}
-+
-+	dump_sysfs_file("/sys/devices/system/cpu/cpuidle/current_driver");
-+	dump_sysfs_file("/sys/devices/system/cpu/cpuidle/current_governor");
-+	dump_sysfs_file("/sys/devices/system/cpu/cpuidle/current_governor_ro");
-+
- 	for (state = 0; state < 10; ++state) {
- 
- 		sprintf(path, "/sys/devices/system/cpu/cpu%d/cpuidle/state%d/name",
+ /* Bind cpufreq callbacks to thermal cooling device ops */
 -- 
 2.20.1
 
