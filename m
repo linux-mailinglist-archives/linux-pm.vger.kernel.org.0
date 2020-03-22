@@ -2,129 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A67118E51D
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Mar 2020 23:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FC118E596
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Mar 2020 01:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728101AbgCUWVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Mar 2020 18:21:13 -0400
-Received: from muru.com ([72.249.23.125]:32912 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727258AbgCUWVN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 21 Mar 2020 18:21:13 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 953FC810E;
-        Sat, 21 Mar 2020 22:21:58 +0000 (UTC)
-Date:   Sat, 21 Mar 2020 15:21:08 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     "Arthur D." <spinal.by@gmail.com>
-Cc:     Merlijn Wajer <merlijn@wizzup.org>, Pavel Machek <pavel@ucw.cz>,
-        sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: Re: [PATCH 06/15] power: supply: cpcap-battery: Initialize with user
- provided data
-Message-ID: <20200321222108.GX37466@atomide.com>
-References: <20200315151206.30909-1-spinal.by@gmail.com>
- <20200315151206.30909-6-spinal.by@gmail.com>
- <20200321145405.GW37466@atomide.com>
- <op.0huns9h5hxa7s4@supervisor.net28>
+        id S1728134AbgCVAdu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Mar 2020 20:33:50 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:42311 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727296AbgCVAdt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Mar 2020 20:33:49 -0400
+Received: by mail-pl1-f193.google.com with SMTP id t3so4217759plz.9;
+        Sat, 21 Mar 2020 17:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7vtokbDa+jk1IkonfP+8mmd2hW8UtwtfycemouqpA58=;
+        b=oQWBdTR+X3bLAxH7mWuUmReG4nhWYPsCJk2Z1KIJm8pHRtvh5jWm8LCHAns4W69yk3
+         qlDuhUFe3djichyEuX9Ap/QLBV5CVQRsLqUu+r85O55n+4zAX0S1jBw7IsdEOkdtMr4F
+         kp9bsXMnc96iuLEWbEvLltzdHxqS/076V7mHJ9xJvlNyX3aWK0x7J78P25xCuPWtRYxM
+         kGDJt+EHiU2gafP0Ig+PBTjbXLA6pa8KH0e44VjPBbwv4VGtvLHe5MgJ2RcpIqHeod84
+         uiHS5dbbANbeSkyVUs9t1zVZCkWZb+x4q3iJrhWWAiCGFV1CJoPgiqFMLG5Hg3gTqtz1
+         BVwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7vtokbDa+jk1IkonfP+8mmd2hW8UtwtfycemouqpA58=;
+        b=mffB+HxHew0JD5W+DdztyLL2xSKTqTAxwaVMBqgC1n5i78NYeDMdPMbAkazpZFT17A
+         K3nnU/ZgC5nM6tNx9jlnypz4+EXudSQWB60nlMetty9qdQd+5zZo7HOUQgVlJwsU6OJc
+         Myk/zXAMHlBs6bz3DiQ2nisgtD086QtmEjiGrlf2G3EdhYRfOmemP9cta9O0vjvr77dy
+         vBgerx0hIMjGF/B5edeRXofi86V/UJ8ne24gCfWlqePfFK3ASFhPETsK1h6FGuxVJIhU
+         UaEsTJWcAV0aIWVpEV2xMMTywR7dc4W1wuZwcVjKxQvCcIHzkN7e+mqxCLG+GPpfvvef
+         tdwQ==
+X-Gm-Message-State: ANhLgQ37M/iCo0C/r8c+9ans7fu+5bSpcljLgTyfg2yJpMZza0vtV2fy
+        uzdZPC3xIDmITfLy3XZlMwDO7exqHRdTBKla8Cs=
+X-Google-Smtp-Source: ADFU+vvlcJsq0qZwh0rRxotLSFhizYNl6shFx+yGRqYpgQ8SRvchb+bxeEDw1Oq6Rs+N8EMqUfFLnYu3LLSHHpRN/nc=
+X-Received: by 2002:a17:902:8d92:: with SMTP id v18mr15819898plo.18.1584837228226;
+ Sat, 21 Mar 2020 17:33:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <op.0huns9h5hxa7s4@supervisor.net28>
+References: <20200318153434.62833-1-michael.auchter@ni.com> <20200318153434.62833-2-michael.auchter@ni.com>
+In-Reply-To: <20200318153434.62833-2-michael.auchter@ni.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 22 Mar 2020 02:33:37 +0200
+Message-ID: <CAHp75VdJ-rUGsuMi=ufLrFs9Tj5fsbqPcqJSypHBx6SuPZWD7g@mail.gmail.com>
+Subject: Re: [PATCH 2/3] iio: dac: ad5686: add of_match_table
+To:     Michael Auchter <michael.auchter@ni.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Stefan Popa <stefan.popa@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Arthur D. <spinal.by@gmail.com> [200321 22:09]:
-> Hi.
-> 
-> > Hmm I'm getting -EINVAL when I do echo 1600000 > charge_now but yet the
-> > value does get updated?
-> 
-> Hm. I'm getting "Permission denied" when trying to do this.
-> Anyway, charge_now value is not supposed to be initialized by the user.
-> Only charge_full should be writable.
+On Wed, Mar 18, 2020 at 5:56 PM Michael Auchter <michael.auchter@ni.com> wrote:
+>
+> Add of_match_table to this driver, so devices can be probed based on
+> device tree contents.
 
-Sorry I meant writing to charge_full :) Anyways, looks like echo -n works
-with no errors:
+> +               .of_match_table = of_match_ptr(ad5686_of_match),
 
-# echo 1305000 > charge_full
-bash: echo: write error: Invalid argument
-# echo -n 1305000 > charge_full
+There is no need to use of_match_ptr().
+Didn't you get a compiler warning for !OF case?
 
-> > And I'm still not seeing capacity show up after that though even with
-> > full battery.. I think we should be able to calculate it if either a
-> > high or
-> > low value has been seen?
-> 
-> There are two steps needed to calibrate the battery: to hit the "fully
-> charged"
-> state and to hit "battery empty" state. When the both states were hit the
-> driver
-> will initialize charge_full value. And it will start reporting correct
-> charge_now
-> and capacity (battery charge percentage) values.
-
-Hmm OK. So far no luck triggering that though.
-
-> Once the charge_full value is calculated it's recommended to be saved by the
-> user
-> to a permanent storage between reboots.
-> 
-> Saving/restoring the value can be done in init scripts.
-> 
-> For saving the calibration value just use the command like:
-> cat /sys/class/power_supply/battery/charge_full > /battery_cf
-> 
-> To restore (after device reboot or power on):
-> cat /battery_cf > /sys/class/power_supply/battery/charge_full
-
-OK
-
-> This will allow the kernel to do fast calibration. I.e. you will
-> only need to fully charge _OR_ fully discharge the battery to start
-> seeing correct charge_now and capacity values.
-
-OK
-
-> > Also, we should have the driver default to using the charge_full_design
-> > value if nothing is written from userspace and we see a high or low
-> > value.
-> 
-> I'd prefer to have charge_full value undefined until the battery is
-> calibrated.
-> This way the userspace can estimate current battery capacity using voltage
-> as a
-> fallback for uncalibrated battery. The voltage estimation will be  way more
-> accurate than having charge_full = charge_full_design on pretty old Droid 4
-> batteries. For example, my battery after calibration has about 1000 mAh,
-> while charge_full_design is 1740000.
-
-OK
-
-> > Maybe some pessimistic estimate could be used instead of just using
-> > charge_full_design if no value is initialized from the userspace?
-> > Something like (charge_full_design / 4) * 3 maybe?
-> 
-> It's better to rely on voltage estimated percentage.
-> In Maemo Leste we patched upower to use the following formula, which gives
-> pretty
-> good results:
-> 
-> percentage = (voltage - voltage_empty) / (voltage_full - voltage_empty) *
-> 100
-> 
-> Actually, the formula we use is a bit more complicated.
-
-OK
-
-> If you're curious, here's how it's actually done:
-> https://github.com/maemo-leste/upower/blob/master/src/linux/up-device-supply.c#L756
-
-Thanks, I'll give the calibration another try. Maybe I did not wait low
-enough, I think I went down to 3.3V.
-
-Regards,
-
-Tony
+-- 
+With Best Regards,
+Andy Shevchenko
