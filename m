@@ -2,125 +2,307 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8078518F434
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 13:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C5D18F492
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 13:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727608AbgCWMPr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Mar 2020 08:15:47 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:37010 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727384AbgCWMPr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Mar 2020 08:15:47 -0400
-X-UUID: 10e5c13d7f7b4fa48d2ad273c04ace85-20200323
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=6afKyor9AgACuTa8Oqf4MptvrGy9B10niDpAuK601p8=;
-        b=Mrh0SgYK2mztGt3Sfq9lLr6Ow8t3HhXjV2eiphMsnsOwBoM1NKtuL4dOa9JWbT2T4Y1p7v2Wkl2DG9rKxt3EeglYhrR3qvMg5A5Ev8tEfVTWGzAdAHPL3P9WmEwWhfCuEdwDj9AvvziCX+DI6XThTO7AXV5IOHfe7XEBpjXjFqY=;
-X-UUID: 10e5c13d7f7b4fa48d2ad273c04ace85-20200323
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
-        (envelope-from <michael.kao@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 2045009876; Mon, 23 Mar 2020 20:15:41 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 23 Mar 2020 20:15:38 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 23 Mar 2020 20:15:38 +0800
-From:   Michael Kao <michael.kao@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, <hsinyi@chromium.org>,
-        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>,
-        <michael.kao@mediatek.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [v4,6/7] thermal: mediatek: add another get_temp ops for thermal sensors
-Date:   Mon, 23 Mar 2020 20:15:36 +0800
-Message-ID: <20200323121537.22697-7-michael.kao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200323121537.22697-1-michael.kao@mediatek.com>
-References: <20200323121537.22697-1-michael.kao@mediatek.com>
+        id S1728189AbgCWM3q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Mar 2020 08:29:46 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:33633 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727663AbgCWM3p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Mar 2020 08:29:45 -0400
+Received: by mail-wr1-f68.google.com with SMTP id a25so16858724wrd.0;
+        Mon, 23 Mar 2020 05:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=jyZpX9epTT5FK26pIiLWMLzpnn3Jdo8Hr6anKqJcGcw=;
+        b=gIuqhKNEOVf/0ds6bvlJfibBZ/uq8oeegLDsjM8ysEkzss60Sj7NW02h+CzV7R7YtO
+         NorILoY3Lsr2cWfYI6u7F22pRI2f2hJQXrNY+gDmnJLA9wzIJsaApD7qtmFdWquFjyNF
+         jh8DUlHRTuUmdw5LcF5TWfTUizHi2vUecaflIqcW3xsF4s/c4sexXjOVBZ7fniI2S+O8
+         oukUIZAE4f/TgvmXS+H40SZkpjcACUS1Qf/4G9T1DgHM8EONOOXqoxso6PikIdATjLFV
+         LvmR8bN4zrx6HvxUpzCNKFtW4tWh261SWti2Ks9xzb9c9Vp5KA0Z+ZoCyA3NLxP5m9//
+         XZQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=jyZpX9epTT5FK26pIiLWMLzpnn3Jdo8Hr6anKqJcGcw=;
+        b=Dl7LfKy536bhYySdQ5HQjVGF15gIJtBTmIApXvlpxidbCK964TZVwevulqxA/+IdUN
+         pHK8flQoLxpSQ18Fvxy5o8ib6lcsGMZYH1/WVSmZ1CG39UTUAzfkpB/72RZ8Q1Kb6KdS
+         uzh2DUTSRqkWkzRyrZl2nb2gr70Ps1l3GOx20RciHvTLBBFVNYkFVTeMv2N6BP//qDuF
+         hgozuuvN6eXbLsL2849l92fh8hEbGS7/FEuKas/tOpBohhRidEbU6vZGaeEcRzTZxW5s
+         lnu4SOsgMrCOpm8addmafiKKR4iCtJB5XN+1iMKSQhhSwhmbd7eDe95+cmKh13a2coxk
+         Aexw==
+X-Gm-Message-State: ANhLgQ0fbqrWYZrTxdKbsSZO4SqmeJMeJJd1HaNopbAc5BVXEU4+DOxm
+        bJW1PLqRIGjq7ONwdZ5n1nl+vcwF89A=
+X-Google-Smtp-Source: ADFU+vtQGEjlFOAt2D+GeG74pcl8SIAg2SZC4JDLC+7uS/LmizkLIzwEdaebDvPhBOHnpAEgP0VACw==
+X-Received: by 2002:adf:ea03:: with SMTP id q3mr29035890wrm.267.1584966582764;
+        Mon, 23 Mar 2020 05:29:42 -0700 (PDT)
+Received: from [192.168.0.104] (p5B3F66B0.dip0.t-ipconnect.de. [91.63.102.176])
+        by smtp.gmail.com with ESMTPSA id j2sm7049484wrs.64.2020.03.23.05.29.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Mar 2020 05:29:41 -0700 (PDT)
+Subject: Re: [PATCH v4 4/5] power: supply: Add support for mps mp2629 battery
+ charger
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald <pmeerw@pmeerw.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <20200322224626.13160-1-sravanhome@gmail.com>
+ <20200322224626.13160-5-sravanhome@gmail.com>
+ <CAHp75Vf0iAV1g5GV8XoewNEMnGee=_Wkgz=8Y_ym8UPdsb6eFQ@mail.gmail.com>
+From:   saravanan sekar <sravanhome@gmail.com>
+Message-ID: <9e105e70-a572-aff4-df91-a620e82d3436@gmail.com>
+Date:   Mon, 23 Mar 2020 13:29:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <CAHp75Vf0iAV1g5GV8XoewNEMnGee=_Wkgz=8Y_ym8UPdsb6eFQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-UHJvdmlkZSB0aGVybWFsIHpvbmUgdG8gcmVhZCB0aGVybWFsIHNlbnNvcg0KaW4gdGhlIFNvQy4g
-V2UgY2FuIHJlYWQgYWxsIHRoZSB0aGVybWFsIHNlbnNvcnMNCnZhbHVlIGluIHRoZSBTb0MgYnkg
-dGhlIG5vZGUgL3N5cy9jbGFzcy90aGVybWFsLw0KDQpJbiBtdGtfdGhlcm1hbF9iYW5rX3RlbXBl
-cmF0dXJlLCByZXR1cm4gLUVBR0FJTiBpbnN0ZWFkIG9mIC1FQUNDRVNTDQpvbiB0aGUgZmlyc3Qg
-cmVhZCBvZiBzZW5zb3IgdGhhdCBvZnRlbiBhcmUgYm9ndXMgdmFsdWVzLg0KVGhpcyBjYW4gYXZv
-aWQgZm9sbG93aW5nIHdhcm5pbmcgb24gYm9vdDoNCg0KICB0aGVybWFsIHRoZXJtYWxfem9uZTY6
-IGZhaWxlZCB0byByZWFkIG91dCB0aGVybWFsIHpvbmUgKC0xMykNCg0KU2lnbmVkLW9mZi1ieTog
-TWljaGFlbCBLYW8gPG1pY2hhZWwua2FvQG1lZGlhdGVrLmNvbT4NClNpZ25lZC1vZmYtYnk6IEhz
-aW4tWWkgV2FuZyA8aHNpbnlpQGNocm9taXVtLm9yZz4NCi0tLQ0KIGRyaXZlcnMvdGhlcm1hbC9t
-dGtfdGhlcm1hbC5jIHwgNzQgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0NCiAx
-IGZpbGUgY2hhbmdlZCwgNjcgaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkNCg0KZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvdGhlcm1hbC9tdGtfdGhlcm1hbC5jIGIvZHJpdmVycy90aGVybWFsL210
-a190aGVybWFsLmMNCmluZGV4IDZiN2VmMTk5M2Q3ZS4uOWVhY2E0MzI5MjBlIDEwMDY0NA0KLS0t
-IGEvZHJpdmVycy90aGVybWFsL210a190aGVybWFsLmMNCisrKyBiL2RyaXZlcnMvdGhlcm1hbC9t
-dGtfdGhlcm1hbC5jDQpAQCAtMjI1LDYgKzIyNSwxMSBAQCBlbnVtIHsNCiANCiBzdHJ1Y3QgbXRr
-X3RoZXJtYWw7DQogDQorc3RydWN0IG10a190aGVybWFsX3pvbmUgew0KKwlzdHJ1Y3QgbXRrX3Ro
-ZXJtYWwgKm10Ow0KKwlpbnQgaWQ7DQorfTsNCisNCiBzdHJ1Y3QgdGhlcm1hbF9iYW5rX2NmZyB7
-DQogCXVuc2lnbmVkIGludCBudW1fc2Vuc29yczsNCiAJY29uc3QgaW50ICpzZW5zb3JzOw0KQEAg
-LTYwNyw3ICs2MTIsNyBAQCBzdGF0aWMgaW50IG10a190aGVybWFsX2JhbmtfdGVtcGVyYXR1cmUo
-c3RydWN0IG10a190aGVybWFsX2JhbmsgKmJhbmspDQogCQkgKiBub3QgaW1tZWRpYXRlbHkgc2h1
-dCBkb3duLg0KIAkJICovDQogCQlpZiAodGVtcCA+IDIwMDAwMCkNCi0JCQl0ZW1wID0gMDsNCisJ
-CQl0ZW1wID0gLUVBR0FJTjsNCiANCiAJCWlmICh0ZW1wID4gbWF4KQ0KIAkJCW1heCA9IHRlbXA7
-DQpAQCAtNjE4LDcgKzYyMyw4IEBAIHN0YXRpYyBpbnQgbXRrX3RoZXJtYWxfYmFua190ZW1wZXJh
-dHVyZShzdHJ1Y3QgbXRrX3RoZXJtYWxfYmFuayAqYmFuaykNCiANCiBzdGF0aWMgaW50IG10a19y
-ZWFkX3RlbXAodm9pZCAqZGF0YSwgaW50ICp0ZW1wZXJhdHVyZSkNCiB7DQotCXN0cnVjdCBtdGtf
-dGhlcm1hbCAqbXQgPSBkYXRhOw0KKwlzdHJ1Y3QgbXRrX3RoZXJtYWxfem9uZSAqdHogPSBkYXRh
-Ow0KKwlzdHJ1Y3QgbXRrX3RoZXJtYWwgKm10ID0gdHotPm10Ow0KIAlpbnQgaTsNCiAJaW50IHRl
-bXBtYXggPSBJTlRfTUlOOw0KIA0KQEAgLTYzNywxMCArNjQzLDQ0IEBAIHN0YXRpYyBpbnQgbXRr
-X3JlYWRfdGVtcCh2b2lkICpkYXRhLCBpbnQgKnRlbXBlcmF0dXJlKQ0KIAlyZXR1cm4gMDsNCiB9
-DQogDQorc3RhdGljIGludCBtdGtfcmVhZF9zZW5zb3JfdGVtcCh2b2lkICpkYXRhLCBpbnQgKnRl
-bXBlcmF0dXJlKQ0KK3sNCisJc3RydWN0IG10a190aGVybWFsX3pvbmUgKnR6ID0gZGF0YTsNCisJ
-c3RydWN0IG10a190aGVybWFsICptdCA9IHR6LT5tdDsNCisJY29uc3Qgc3RydWN0IG10a190aGVy
-bWFsX2RhdGEgKmNvbmYgPSBtdC0+Y29uZjsNCisJaW50IGlkID0gdHotPmlkIC0gMTsNCisJaW50
-IHRlbXAgPSBJTlRfTUlOOw0KKwl1MzIgcmF3Ow0KKw0KKwlpZiAoaWQgPCAwKQ0KKwkJcmV0dXJu
-ICAtRUFDQ0VTOw0KKw0KKwlyYXcgPSByZWFkbChtdC0+dGhlcm1hbF9iYXNlICsgY29uZi0+bXNy
-W2lkXSk7DQorDQorCXRlbXAgPSByYXdfdG9fbWNlbHNpdXMobXQsIGlkLCByYXcpOw0KKw0KKwkv
-Kg0KKwkgKiBUaGUgZmlyc3QgcmVhZCBvZiBhIHNlbnNvciBvZnRlbiBjb250YWlucyB2ZXJ5IGhp
-Z2ggYm9ndXMNCisJICogdGVtcGVyYXR1cmUgdmFsdWUuIEZpbHRlciB0aGVzZSBvdXQgc28gdGhh
-dCB0aGUgc3lzdGVtIGRvZXMNCisJICogbm90IGltbWVkaWF0ZWx5IHNodXQgZG93bi4NCisJICov
-DQorDQorCWlmICh0ZW1wID4gMjAwMDAwKQ0KKwkJcmV0dXJuICAtRUFHQUlOOw0KKw0KKwkqdGVt
-cGVyYXR1cmUgPSB0ZW1wOw0KKw0KKwlyZXR1cm4gMDsNCit9DQorDQogc3RhdGljIGNvbnN0IHN0
-cnVjdCB0aGVybWFsX3pvbmVfb2ZfZGV2aWNlX29wcyBtdGtfdGhlcm1hbF9vcHMgPSB7DQogCS5n
-ZXRfdGVtcCA9IG10a19yZWFkX3RlbXAsDQogfTsNCiANCitzdGF0aWMgY29uc3Qgc3RydWN0IHRo
-ZXJtYWxfem9uZV9vZl9kZXZpY2Vfb3BzIG10a190aGVybWFsX3NlbnNvcl9vcHMgPSB7DQorCS5n
-ZXRfdGVtcCA9IG10a19yZWFkX3NlbnNvcl90ZW1wLA0KK307DQorDQogc3RhdGljIHZvaWQgbXRr
-X3RoZXJtYWxfaW5pdF9iYW5rKHN0cnVjdCBtdGtfdGhlcm1hbCAqbXQsIGludCBudW0sDQogCQkJ
-CSAgdTMyIGFwbWl4ZWRfcGh5c19iYXNlLCB1MzIgYXV4YWRjX3BoeXNfYmFzZSwNCiAJCQkJICBp
-bnQgY3RybF9pZCkNCkBAIC04NzMsNiArOTEzLDcgQEAgc3RhdGljIGludCBtdGtfdGhlcm1hbF9w
-cm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KIAlzdHJ1Y3QgcmVzb3VyY2UgKnJl
-czsNCiAJdTY0IGF1eGFkY19waHlzX2Jhc2UsIGFwbWl4ZWRfcGh5c19iYXNlOw0KIAlzdHJ1Y3Qg
-dGhlcm1hbF96b25lX2RldmljZSAqdHpkZXY7DQorCXN0cnVjdCBtdGtfdGhlcm1hbF96b25lICp0
-ejsNCiANCiAJbXQgPSBkZXZtX2t6YWxsb2MoJnBkZXYtPmRldiwgc2l6ZW9mKCptdCksIEdGUF9L
-RVJORUwpOw0KIAlpZiAoIW10KQ0KQEAgLTk1NCwxMSArOTk1LDMwIEBAIHN0YXRpYyBpbnQgbXRr
-X3RoZXJtYWxfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCiANCiAJcGxhdGZv
-cm1fc2V0X2RydmRhdGEocGRldiwgbXQpOw0KIA0KLQl0emRldiA9IGRldm1fdGhlcm1hbF96b25l
-X29mX3NlbnNvcl9yZWdpc3RlcigmcGRldi0+ZGV2LCAwLCBtdCwNCi0JCQkJCQkgICAgICZtdGtf
-dGhlcm1hbF9vcHMpOw0KLQlpZiAoSVNfRVJSKHR6ZGV2KSkgew0KLQkJcmV0ID0gUFRSX0VSUih0
-emRldik7DQotCQlnb3RvIGVycl9kaXNhYmxlX2Nsa19wZXJpX3RoZXJtOw0KKwlmb3IgKGkgPSAw
-OyBpIDwgbXQtPmNvbmYtPm51bV9zZW5zb3JzICsgMTsgaSsrKSB7DQorCQl0eiA9IGttYWxsb2Mo
-c2l6ZW9mKCp0eiksIEdGUF9LRVJORUwpOw0KKwkJaWYgKCF0eikNCisJCQlyZXR1cm4gLUVOT01F
-TTsNCisNCisJCXR6LT5tdCA9IG10Ow0KKwkJdHotPmlkID0gaTsNCisNCisJCXR6ZGV2ID0gZGV2
-bV90aGVybWFsX3pvbmVfb2Zfc2Vuc29yX3JlZ2lzdGVyKCZwZGV2LT5kZXYsIGksDQorCQkJCQkJ
-CSAgICAgdHosIChpID09IDApID8NCisJCQkJJm10a190aGVybWFsX29wcyA6ICZtdGtfdGhlcm1h
-bF9zZW5zb3Jfb3BzKTsNCisNCisJCWlmIChJU19FUlIodHpkZXYpKSB7DQorCQkJaWYgKFBUUl9F
-UlIodHpkZXYpID09IC1FTk9ERVYpIHsNCisJCQkJZGV2X3dhcm4oJnBkZXYtPmRldiwNCisJCQkJ
-CSAic2Vuc29yICVkIG5vdCByZWdpc3RlcmVkIGluIHRoZXJtYWwgem9uZSBpbiBkdFxuIiwNCisJ
-CQkJCSBpKTsNCisJCQkJY29udGludWU7DQorCQkJfQ0KKwkJCWlmIChQVFJfRVJSKHR6ZGV2KSA9
-PSAtRUFDQ0VTKSB7DQorCQkJCXJldCA9IFBUUl9FUlIodHpkZXYpOw0KKwkJCQlnb3RvIGVycl9k
-aXNhYmxlX2Nsa19wZXJpX3RoZXJtOw0KKwkJCX0NCisJCX0NCiAJfQ0KIA0KIAlyZXR1cm4gMDsN
-Ci0tIA0KMi4xOC4wDQo=
+Hi Andy,
+
+On 23/03/20 12:26 am, Andy Shevchenko wrote:
+> On Mon, Mar 23, 2020 at 12:47 AM Saravanan Sekar <sravanhome@gmail.com> wrote:
+>> The mp2629 provides switching-mode battery charge management for
+>> single-cell Li-ion or Li-polymer battery. Driver supports the
+>> access/control input source and battery charging parameters.
+> ...
+>
+>> +#include <linux/module.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/of_device.h>
+> Do you need this one?
+>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/iio/consumer.h>
+>> +#include <linux/iio/types.h>
+>> +#include <linux/power_supply.h>
+>> +#include <linux/workqueue.h>
+>> +#include <linux/regmap.h>
+> Perhaps put them in order?
+>
+>> +#include <linux/mfd/core.h>
+> How this is being used?
+>
+>> +#include <linux/mfd/mp2629.h>
+> ...
+>
+>> +#define MP2629_MASK_INPUT_TYPE         0xe0
+>> +#define MP2629_MASK_CHARGE_TYPE                0x18
+>> +#define MP2629_MASK_CHARGE_CTRL                0x30
+>> +#define MP2629_MASK_WDOG_CTRL          0x30
+>> +#define MP2629_MASK_IMPEDANCE          0xf0
+> GENMASK()?
+>
+> ...
+>
+>> +       struct regmap_field *regmap_fields[TERM_CURRENT + 1];
+> Hmm... Why not to have a definition to cover + 1?
+>
+> ...
+>
+>> +static int mp2629_get_prop(struct mp2629_charger *charger,
+>> +                          enum mp2629_field fld,
+>> +                          union power_supply_propval *val)
+>> +{
+>> +       int ret;
+>> +       unsigned int rval;
+>> +
+>> +       ret = regmap_field_read(charger->regmap_fields[fld], &rval);
+>> +       if (!ret)
+>> +               val->intval = (rval * props[fld].step) + props[fld].min;
+>> +
+>> +       return ret;
+> Why not to use standard pattern, i.e.
+>
+>    if (ret)
+>      return ret;
+>    ...
+>    return 0;
+>
+> ?
+>
+>> +}
+> ...
+>
+>> +static int mp2629_charger_battery_set_prop(struct power_supply *psy,
+>> +                                       enum power_supply_property psp,
+>> +                                       const union power_supply_propval *val)
+>> +{
+>> +       struct mp2629_charger *charger = dev_get_drvdata(psy->dev.parent);
+>> +       int ret;
+> You may replace it with in-place return statements.
+>
+>> +
+>> +       switch (psp) {
+>> +       case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+>> +               ret = mp2629_set_prop(charger, TERM_CURRENT, val);
+>> +               break;
+>> +
+>> +       case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+>> +               ret = mp2629_set_prop(charger, PRECHARGE, val);
+>> +               break;
+>> +
+>> +       case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+>> +               ret = mp2629_set_prop(charger, CHARGE_VLIM, val);
+>> +               break;
+>> +
+>> +       case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+>> +               ret = mp2629_set_prop(charger, CHARGE_ILIM, val);
+>> +               break;
+>> +
+>> +       default:
+>> +               return -EINVAL;
+>> +       }
+>> +
+>> +       return ret;
+> ...and drop this completely.
+>
+>> +}
+> ...
+>
+>> +       case POWER_SUPPLY_PROP_ONLINE:
+>> +               ret = regmap_read(charger->regmap, MP2629_REG_STATUS, &rval);
+>> +               if (!ret)
+>> +                       val->intval = !!(rval & MP2629_MASK_INPUT_TYPE);
+>> +               break;
+> Traditional pattern?
+>
+> ...
+>
+>> +static int mp2629_charger_usb_set_prop(struct power_supply *psy,
+>> +                               enum power_supply_property psp,
+>> +                               const union power_supply_propval *val)
+>> +{
+>> +       struct mp2629_charger *charger = dev_get_drvdata(psy->dev.parent);
+>> +       int ret;
+> No need to have it.
+>
+>> +       switch (psp) {
+>> +       case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
+>> +               ret = mp2629_set_prop(charger, INPUT_VLIM, val);
+>> +               break;
+>> +
+>> +       case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+>> +               ret = mp2629_set_prop(charger, INPUT_ILIM, val);
+>> +               break;
+>> +
+>> +       default:
+>> +               return -EINVAL;
+>> +       }
+>> +
+>> +       return ret;
+>> +}
+> ...
+>
+>> +       return (psp == POWER_SUPPLY_PROP_PRECHARGE_CURRENT ||
+>> +               psp == POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT ||
+>> +               psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT ||
+>> +               psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE);
+> Redundant parentheses.
+> Ditto for similar cases in the driver.
+>
+> ...
+>
+>> +static ssize_t batt_impedance_compensation_show(struct device *dev,
+>> +                                          struct device_attribute *attr,
+>> +                                          char *buf)
+>> +{
+>> +       struct mp2629_charger *charger = dev_get_drvdata(dev->parent);
+>> +       unsigned int rval;
+>> +       int ret;
+>> +
+>> +       ret = regmap_read(charger->regmap, MP2629_REG_IMPEDANCE_COMP, &rval);
+>> +       if (ret < 0)
+> ' < 0' is not needed.
+> Ditto for other cases.
+>
+>> +               return ret;
+>> +
+>> +       rval = (rval >> 4) * 10;
+>> +
+>> +       return scnprintf(buf, PAGE_SIZE, "%d mohm\n", rval);
+> Simple sprintf().
+>
+>> +}
+> ...
+>
+>> +static ssize_t batt_impedance_compensation_store(struct device *dev,
+>> +                                           struct device_attribute *attr,
+>> +                                           const char *buf,
+>> +                                           size_t count)
+>> +{
+>> +       struct mp2629_charger *charger = dev_get_drvdata(dev->parent);
+>> +       long val;
+>> +       int ret;
+>> +
+>> +       ret = kstrtol(buf, 10, &val);
+>> +       if (ret < 0)
+> No need to check for negative only.
+>
+>> +               return ret;
+>> +
+>> +       if (val < 0 && val > 140)
+>> +               return -ERANGE;
+> And what the point then to use l instead of ul or even uint variant of
+> the conversion above?
+>
+>> +       /* multiples of 10 mohm so round off */
+>> +       val = val / 10;
+>> +       ret = regmap_update_bits(charger->regmap, MP2629_REG_IMPEDANCE_COMP,
+>> +                                       MP2629_MASK_IMPEDANCE, val << 4);
+>> +       if (ret < 0)
+>> +               return ret;
+>> +
+>> +       return count;
+>> +}
+> ...
+>
+>> +static int mp2629_charger_probe(struct platform_device *pdev)
+>> +{
+>> +       struct device *dev = &pdev->dev;
+>> +       void **pdata = pdev->dev.platform_data;
+> Why void?
+> Why **?
+> Why not to use dev_get_platdata()?
+> Why do we need platform data at all?
+
+
+I have to pass regmap (address) from mfd driver to its children, as per 
+review comment previous patch, mfd driver structure should not be 
+directly accessed in children.
+Please suggest if any other better way
+
+>> +       struct mp2629_charger *charger;
+>> +       struct power_supply_config psy_cfg = {0};
+>> +       int ret, i;
+>> +       charger->regmap = *pdata;
+>> +       regmap_update_bits(charger->regmap, MP2629_REG_INTERRUPT,
+>> +                               GENMASK(6, 5), (BIT(6) | BIT(5)));
+> Too many parentheses.
+>
+>> +}
+> --
+> With Best Regards,
+> Andy Shevchenko
+
+Thanks,
+Saravanan
 
