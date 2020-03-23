@@ -2,123 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DAF18EFC8
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 07:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D432318F43E
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 13:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbgCWG1u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Mar 2020 02:27:50 -0400
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:37943 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbgCWG1t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Mar 2020 02:27:49 -0400
-Received: by mail-pj1-f66.google.com with SMTP id m15so5624135pje.3
-        for <linux-pm@vger.kernel.org>; Sun, 22 Mar 2020 23:27:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=n/HCueWdrh+q88CLQpAx+GQrh5dwQAskGxxiMWlQgLg=;
-        b=V3AP4GKIO+Asf2XKJGCw75TgSbLVE826hx+tYstv2yeh2VsI9o834Erj9MNyO5g3yy
-         IuNF35UZYqmQhmetX8ILT8HPS1PY9NekyxsUt+wmgMoKD+Qn4tDhFTQ6j+8Qg0nccnZC
-         UApXgGpKfUNtyiZcwlEoUM4x4UGn0HF3vVKumLvb6zUscJel3H+RIxBqaMV50JGIws4F
-         kZQDJqB6JMyLIHm4sNqvmQE7jggGqXKezKSI34uaPhnUONmqx7ynHHOaRcpMJWYreliw
-         a7ImSgsaYpLDBRSuYI0lYDbYmcRanRCCOXCwarJo93n6XeCBYi6vQkAfo3SgAuNlR6AP
-         Fb8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=n/HCueWdrh+q88CLQpAx+GQrh5dwQAskGxxiMWlQgLg=;
-        b=J5fj8isiNB5M1iyBS/BdWWZ0jEuPItiNruh97Ln2H8lucm15OTIfJuD0X3XOxnm1h2
-         0hs/21Pa4ZYSINEL6f4ZH/WcLtVj/w3Oyce5dvMqJMQGfPblYqxknXPFBfbK7i4nZRTy
-         h4HOY4YXNAddFVGkNUt/mqA/EGwjNsXPSzQ4PdyF+DLi5pVvyRieWsWjZSAWR1RI90pf
-         A6lErDywoaD1PbdrTUZkGX3va8wBVD2JowRRV2/3P+4o0lqLRQTxyJkkND63DGpUjoGS
-         /LJNce1+qFF7UqzyzXLfXGM5moIL6EZpKVTkUad5M2CEZGRTaZeVF6egkBZfQ3fPaT1V
-         hT5g==
-X-Gm-Message-State: ANhLgQ1I73wVTQQ2VRqYu2EAzlKyCEeltw7ReRwXPgVqV5iQ7ozLtyRp
-        4x/fw4fzR1c3U5seyaqESAEdIw==
-X-Google-Smtp-Source: ADFU+vsDImZQjTuV+7okSIUo5WA2OcoeBFMPuWCXE7H86TnumXt90nNhKUzmK2oa10G/SapbR/EUMQ==
-X-Received: by 2002:a17:902:8303:: with SMTP id bd3mr20881326plb.171.1584944868495;
-        Sun, 22 Mar 2020 23:27:48 -0700 (PDT)
-Received: from localhost ([122.171.118.46])
-        by smtp.gmail.com with ESMTPSA id f129sm1141919pfb.190.2020.03.22.23.27.46
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 22 Mar 2020 23:27:47 -0700 (PDT)
-Date:   Mon, 23 Mar 2020 11:57:45 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq/arm changes for 5.7
-Message-ID: <20200323062745.wt6i5lpvgjnor7sn@vireshk-i7>
+        id S1727447AbgCWMPp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Mar 2020 08:15:45 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:54031 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727377AbgCWMPo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Mar 2020 08:15:44 -0400
+X-UUID: df17da0d8b6345b7aeef52b08729b011-20200323
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=t4KDU3gSGbmIBW1rfyL1Ets87sk3PSbQi3QOVB4Qbp0=;
+        b=m4wa/aWu/KVS6/eZ2BS+RbH2oPKQiHlKWukwP93/jOan0aFMkJFqWdRHEE05Z+qilQgu/Jn2hSP/q7rf1DM0r220s4TOsF+Kx35YugPkp0hdDU1Rf7j3vpvvO4Ds3q7geOnJeLNxkHQhOxP831NbO8vdtnvjfcyAGvXk/QQhLyo=;
+X-UUID: df17da0d8b6345b7aeef52b08729b011-20200323
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <michael.kao@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1546018266; Mon, 23 Mar 2020 20:15:40 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 23 Mar 2020 20:14:29 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 23 Mar 2020 20:15:38 +0800
+From:   Michael Kao <michael.kao@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, <hsinyi@chromium.org>,
+        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <michael.kao@mediatek.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [v4,2/7] arm64: dts: mt8183: add dynamic power coefficients
+Date:   Mon, 23 Mar 2020 20:15:32 +0800
+Message-ID: <20200323121537.22697-3-michael.kao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20200323121537.22697-1-michael.kao@mediatek.com>
+References: <20200323121537.22697-1-michael.kao@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
-
-This pull request contains:
-
-- update to imx cpufreq drivers to improve their support (Anson Huang,
-  Christoph Niedermaier, and Peng Fan).
-
-- Update to qcom cpufreq to support other krait based SoCs (Ansuel
-  Smith).
-
-- Update ti cpufreq driver to support OPP_PLUS (Lokesh Vutla).
-
-- Update cpufreq-dt driver to allow platfoem specific intermediate
-  callbacks (Peng Fan).
-
---
-viresh
-
--------------------------8<-------------------------
-
-The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
-
-  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
-
-for you to fetch changes up to a8811ec764f95a04ba82f6f457e28c5e9e36e36b:
-
-  cpufreq: qcom: Add support for krait based socs (2020-03-20 09:59:57 +0530)
-
-----------------------------------------------------------------
-Anson Huang (3):
-      cpufreq: imx-cpufreq-dt: Add "cpu-supply" property check
-      cpufreq: imx-cpufreq-dt: Correct i.MX8MP's market segment fuse location
-      cpufreq: imx6q-cpufreq: Improve the logic of -EPROBE_DEFER handling
-
-Ansuel Smith (1):
-      cpufreq: qcom: Add support for krait based socs
-
-Christoph Niedermaier (1):
-      cpufreq: imx6q: Fixes unwanted cpu overclocking on i.MX6ULL
-
-Lokesh Vutla (1):
-      cpufreq: ti-cpufreq: Add support for OPP_PLUS
-
-Peng Fan (3):
-      cpufreq: imx6q: fix error handling
-      cpufreq: imx6q: read OCOTP through nvmem for imx6q
-      cpufreq: dt: Allow platform specific intermediate callbacks
-
- .../devicetree/bindings/opp/qcom-nvmem-cpufreq.txt |   3 +-
- drivers/cpufreq/Kconfig.arm                        |   2 +-
- drivers/cpufreq/cpufreq-dt-platdev.c               |   5 +
- drivers/cpufreq/cpufreq-dt.c                       |   4 +
- drivers/cpufreq/cpufreq-dt.h                       |   4 +
- drivers/cpufreq/imx-cpufreq-dt.c                   |  13 +-
- drivers/cpufreq/imx6q-cpufreq.c                    |  71 ++++----
- drivers/cpufreq/qcom-cpufreq-nvmem.c               | 191 +++++++++++++++++++--
- drivers/cpufreq/ti-cpufreq.c                       |   7 +
- 9 files changed, 251 insertions(+), 49 deletions(-)
+RnJvbTogIm1pY2hhZWwua2FvIiA8bWljaGFlbC5rYW9AbWVkaWF0ZWsuY29tPg0KDQpBZGQgZHlu
+YW1pYyBwb3dlciBjb2VmZmljaWVudHMgZm9yIGFsbCBjb3JlcyBhbmQgdXBkYXRlIHRob3NlIG9m
+DQpDUFUwIGFuZCBDUFU0Lg0KDQpTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEthbyA8bWljaGFlbC5r
+YW9AbWVkaWF0ZWsuY29tPg0KLS0tDQogYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgx
+ODMuZHRzaSB8IDggKysrKysrKysNCiAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspDQoN
+CmRpZmYgLS1naXQgYS9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My5kdHNpIGIv
+YXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMuZHRzaQ0KaW5kZXggNTlmOTcyMTdh
+YWE4Li4yZTI1MjdjMzM2OWEgMTAwNjQ0DQotLS0gYS9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlh
+dGVrL210ODE4My5kdHNpDQorKysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4
+My5kdHNpDQpAQCAtNzUsNiArNzUsNyBAQA0KIAkJCXJlZyA9IDwweDAwMD47DQogCQkJZW5hYmxl
+LW1ldGhvZCA9ICJwc2NpIjsNCiAJCQljYXBhY2l0eS1kbWlwcy1taHogPSA8NzQxPjsNCisJCQlk
+eW5hbWljLXBvd2VyLWNvZWZmaWNpZW50ID0gPDg0PjsNCiAJCX07DQogDQogCQljcHUxOiBjcHVA
+MSB7DQpAQCAtODMsNiArODQsNyBAQA0KIAkJCXJlZyA9IDwweDAwMT47DQogCQkJZW5hYmxlLW1l
+dGhvZCA9ICJwc2NpIjsNCiAJCQljYXBhY2l0eS1kbWlwcy1taHogPSA8NzQxPjsNCisJCQlkeW5h
+bWljLXBvd2VyLWNvZWZmaWNpZW50ID0gPDg0PjsNCiAJCX07DQogDQogCQljcHUyOiBjcHVAMiB7
+DQpAQCAtOTEsNiArOTMsNyBAQA0KIAkJCXJlZyA9IDwweDAwMj47DQogCQkJZW5hYmxlLW1ldGhv
+ZCA9ICJwc2NpIjsNCiAJCQljYXBhY2l0eS1kbWlwcy1taHogPSA8NzQxPjsNCisJCQlkeW5hbWlj
+LXBvd2VyLWNvZWZmaWNpZW50ID0gPDg0PjsNCiAJCX07DQogDQogCQljcHUzOiBjcHVAMyB7DQpA
+QCAtOTksNiArMTAyLDcgQEANCiAJCQlyZWcgPSA8MHgwMDM+Ow0KIAkJCWVuYWJsZS1tZXRob2Qg
+PSAicHNjaSI7DQogCQkJY2FwYWNpdHktZG1pcHMtbWh6ID0gPDc0MT47DQorCQkJZHluYW1pYy1w
+b3dlci1jb2VmZmljaWVudCA9IDw4ND47DQogCQl9Ow0KIA0KIAkJY3B1NDogY3B1QDEwMCB7DQpA
+QCAtMTA3LDYgKzExMSw3IEBADQogCQkJcmVnID0gPDB4MTAwPjsNCiAJCQllbmFibGUtbWV0aG9k
+ID0gInBzY2kiOw0KIAkJCWNhcGFjaXR5LWRtaXBzLW1oeiA9IDwxMDI0PjsNCisJCQlkeW5hbWlj
+LXBvd2VyLWNvZWZmaWNpZW50ID0gPDIxMT47DQogCQl9Ow0KIA0KIAkJY3B1NTogY3B1QDEwMSB7
+DQpAQCAtMTE1LDYgKzEyMCw3IEBADQogCQkJcmVnID0gPDB4MTAxPjsNCiAJCQllbmFibGUtbWV0
+aG9kID0gInBzY2kiOw0KIAkJCWNhcGFjaXR5LWRtaXBzLW1oeiA9IDwxMDI0PjsNCisJCQlkeW5h
+bWljLXBvd2VyLWNvZWZmaWNpZW50ID0gPDIxMT47DQogCQl9Ow0KIA0KIAkJY3B1NjogY3B1QDEw
+MiB7DQpAQCAtMTIzLDYgKzEyOSw3IEBADQogCQkJcmVnID0gPDB4MTAyPjsNCiAJCQllbmFibGUt
+bWV0aG9kID0gInBzY2kiOw0KIAkJCWNhcGFjaXR5LWRtaXBzLW1oeiA9IDwxMDI0PjsNCisJCQlk
+eW5hbWljLXBvd2VyLWNvZWZmaWNpZW50ID0gPDIxMT47DQogCQl9Ow0KIA0KIAkJY3B1NzogY3B1
+QDEwMyB7DQpAQCAtMTMxLDYgKzEzOCw3IEBADQogCQkJcmVnID0gPDB4MTAzPjsNCiAJCQllbmFi
+bGUtbWV0aG9kID0gInBzY2kiOw0KIAkJCWNhcGFjaXR5LWRtaXBzLW1oeiA9IDwxMDI0PjsNCisJ
+CQlkeW5hbWljLXBvd2VyLWNvZWZmaWNpZW50ID0gPDIxMT47DQogCQl9Ow0KIAl9Ow0KIA0KLS0g
+DQoyLjE4LjANCg==
 
