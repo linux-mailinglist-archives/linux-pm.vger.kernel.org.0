@@ -2,266 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C72FF19006B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 22:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DF319009F
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 22:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726263AbgCWVe3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Mar 2020 17:34:29 -0400
-Received: from mail-pg1-f169.google.com ([209.85.215.169]:38424 "EHLO
-        mail-pg1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726203AbgCWVe3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Mar 2020 17:34:29 -0400
-Received: by mail-pg1-f169.google.com with SMTP id x7so7887583pgh.5
-        for <linux-pm@vger.kernel.org>; Mon, 23 Mar 2020 14:34:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=aGWfoImEdAk0am+80Pavz3sWDVROkWPMkfsifY3Xz3c=;
-        b=CRHriKrYrlsbbnU5QaS0T8rm9O4pOHUbBNrBiPRu1R0HAzVWwG4+m0fQekM7yEvdge
-         dWvLFs9S9FVj43sevIFYyVhRfEaQPyINanwnsTqY2wTGTPuqjsYJk7FSlNEDmOUeYdVJ
-         Y758uBzHGbbqrGRnrddJ3PfnmrmXU6RwDIayHbhHmqJtJlf1JwD5oT50hLbax3fZukUy
-         Ha+1uineuqpNN8VW5EZafWLfAMv7Z/D6rAqgxx2sAHnF9u6ksFiugPeYVx/da+sKiXXc
-         M4dk66RoNhgHyd7GqMCsVkQQlBTa8cbYA7LSAyAOcid4RSczHsRpkXJmLGcwptO0T6EL
-         sQAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=aGWfoImEdAk0am+80Pavz3sWDVROkWPMkfsifY3Xz3c=;
-        b=R7sFMWy5YdcGYZDtN9qF8JKP2yAYEdVq3Xwp7vVUhpbhZZE9h/1dJRMp98oNeub1dI
-         sMIsdJ7l+NdT0BRFkWGLHxhN1DBvMjRNF9XX26rKIcjtLz6Bt1PU94Ai+AdtmYmSPEP/
-         9pCLiAlvEdV/CdEblhKF64mUiG/FnXoDnnH+raP1ZGli0yj8Aajbdmrlg6CPRvZULbgf
-         bfW1QFGah4EYM8H7OqK15A4coyoLZ6pPZtOTVS+mqMKrM1YgmcwXNyqJyrW6tUMYQ1rw
-         eWMMBF0LUcv4L0c2k2zxBkJYI64X20U7nFUCNFIgAZgPBpTtSbF/LmxF6j0oywo2GACN
-         /u+A==
-X-Gm-Message-State: ANhLgQ1c4jG5peJdHgWTukWSFmJQWwXuWRSpH1Jto0GmgZA6rIrWsSTj
-        /jkQJhmZSpqvVCwuacusHVd4bg==
-X-Google-Smtp-Source: ADFU+vubFpfmT0QEJnmishZ8hBiZxLLWATrHOt5tZnEEtA/gzLhSZK7/oobi63pr3KLEyOd3eKy3rQ==
-X-Received: by 2002:aa7:999e:: with SMTP id k30mr25601324pfh.235.1584999268097;
-        Mon, 23 Mar 2020 14:34:28 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f15sm12102839pfq.100.2020.03.23.14.34.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2020 14:34:26 -0700 (PDT)
-Message-ID: <5e792b62.1c69fb81.1c037.bdd3@mx.google.com>
-Date:   Mon, 23 Mar 2020 14:34:26 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726203AbgCWVrB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Mar 2020 17:47:01 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:47803 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727126AbgCWVrB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Mar 2020 17:47:01 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585000020; h=Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Message-ID: Date: Subject: In-Reply-To: References: Cc:
+ To: From: Reply-To: Sender;
+ bh=ZNpFv8n1vyNtNLXdZYwI5uo1FnppFNp10NWp9MPwYDo=; b=EDqgOrVku1rdHgYQityFnsU1t/yQQ0YoZMNIT1OM7TjMM992Xfm58Wp7qe1kY82vXXYcJ4Dw
+ 0m0juwbVq4I/8HupCf0QWhCQyRx8NhC2kPc/ZvSNoSPH2RAitZ85e40NW4fgBr/NW8AWZjrd
+ pp96o1XWArXmxamaaF+uRoJYYt8=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e792e33.7f2b61a663b0-smtp-out-n02;
+ Mon, 23 Mar 2020 21:46:27 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 31ABCC44798; Mon, 23 Mar 2020 21:46:24 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from BCAIN (104-54-226-75.lightspeed.austtx.sbcglobal.net [104.54.226.75])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bcain)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0630CC433CB;
+        Mon, 23 Mar 2020 21:46:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0630CC433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=bcain@codeaurora.org
+Reply-To: <bcain@codeaurora.org>
+From:   "Brian Cain" <bcain@codeaurora.org>
+To:     "'Thomas Gleixner'" <tglx@linutronix.de>,
+        "'LKML'" <linux-kernel@vger.kernel.org>
+Cc:     "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Ingo Molnar'" <mingo@kernel.org>,
+        "'Sebastian Siewior'" <bigeasy@linutronix.de>,
+        "'Linus Torvalds'" <torvalds@linux-foundation.org>,
+        "'Joel Fernandes'" <joel@joelfernandes.org>,
+        "'Oleg Nesterov'" <oleg@redhat.com>,
+        "'Davidlohr Bueso'" <dave@stgolabs.net>,
+        "'kbuild test robot'" <lkp@intel.com>,
+        <linux-hexagon@vger.kernel.org>,
+        "'Logan Gunthorpe'" <logang@deltatee.com>,
+        "'Bjorn Helgaas'" <bhelgaas@google.com>,
+        "'Kurt Schwemmer'" <kurt.schwemmer@microsemi.com>,
+        <linux-pci@vger.kernel.org>,
+        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
+        "'Felipe Balbi'" <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        "'Kalle Valo'" <kvalo@codeaurora.org>,
+        "'David S. Miller'" <davem@davemloft.net>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        "'Darren Hart'" <dvhart@infradead.org>,
+        "'Andy Shevchenko'" <andy@infradead.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        "'Zhang Rui'" <rui.zhang@intel.com>,
+        "'Rafael J. Wysocki'" <rafael.j.wysocki@intel.com>,
+        <linux-pm@vger.kernel.org>, "'Len Brown'" <lenb@kernel.org>,
+        <linux-acpi@vger.kernel.org>, "'Nick Hu'" <nickhu@andestech.com>,
+        "'Greentime Hu'" <green.hu@gmail.com>,
+        "'Vincent Chen'" <deanbo422@gmail.com>,
+        "'Guo Ren'" <guoren@kernel.org>, <linux-csky@vger.kernel.org>,
+        "'Tony Luck'" <tony.luck@intel.com>,
+        "'Fenghua Yu'" <fenghua.yu@intel.com>,
+        <linux-ia64@vger.kernel.org>, "'Michal Simek'" <monstr@monstr.eu>,
+        "'Michael Ellerman'" <mpe@ellerman.id.au>,
+        "'Arnd Bergmann'" <arnd@arndb.de>,
+        "'Geoff Levand'" <geoff@infradead.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        "'Paul E . McKenney'" <paulmck@kernel.org>,
+        "'Jonathan Corbet'" <corbet@lwn.net>,
+        "'Randy Dunlap'" <rdunlap@infradead.org>,
+        "'Davidlohr Bueso'" <dbueso@suse.de>
+References: <20200321112544.878032781@linutronix.de> <20200321113241.531525286@linutronix.de>
+In-Reply-To: <20200321113241.531525286@linutronix.de>
+Subject: RE: [patch V3 08/20] hexagon: Remove mm.h from asm/uaccess.h
+Date:   Mon, 23 Mar 2020 16:46:17 -0500
+Message-ID: <0cc301d6015c$7e756490$7b602db0$@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.6-rc7-113-gc6e2eb7ccc3d
-X-Kernelci-Report-Type: test
-Subject: pm/testing sleep: 7 runs, 0 regressions (v5.6-rc7-113-gc6e2eb7ccc3d)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-us
+Thread-Index: AQHqwg4Cse+u7XkWseF638AEhQYwggGRIliZqCCrVyA=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 7 runs, 0 regressions (v5.6-rc7-113-gc6e2eb7ccc3d)
+> -----Original Message-----
+> From: Thomas Gleixner <tglx@linutronix.de>
+...
+> Subject: [patch V3 08/20] hexagon: Remove mm.h from asm/uaccess.h
+> 
+> From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> 
+> The defconfig compiles without linux/mm.h. With mm.h included the include
+> chain leands to:
+> |   CC      kernel/locking/percpu-rwsem.o
+> | In file included from include/linux/huge_mm.h:8,
+> |                  from include/linux/mm.h:567,
+> |                  from arch/hexagon/include/asm/uaccess.h:,
+> |                  from include/linux/uaccess.h:11,
+> |                  from include/linux/sched/task.h:11,
+> |                  from include/linux/sched/signal.h:9,
+> |                  from include/linux/rcuwait.h:6,
+> |                  from include/linux/percpu-rwsem.h:8,
+> |                  from kernel/locking/percpu-rwsem.c:6:
+> | include/linux/fs.h:1422:29: error: array type has incomplete element type
+> 'struct percpu_rw_semaphore'
+> |  1422 |  struct percpu_rw_semaphore rw_sem[SB_FREEZE_LEVELS];
+> 
+> once rcuwait.h includes linux/sched/signal.h.
+> 
+> Remove the linux/mm.h include.
+> 
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Brian Cain <bcain@codeaurora.org>
+> Cc: linux-hexagon@vger.kernel.org
+> ---
+> V3: New patch
+> ---
+>  arch/hexagon/include/asm/uaccess.h | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/hexagon/include/asm/uaccess.h
+> b/arch/hexagon/include/asm/uaccess.h
+> index 00cb38faad0c4..c1019a736ff13 100644
+> --- a/arch/hexagon/include/asm/uaccess.h
+> +++ b/arch/hexagon/include/asm/uaccess.h
+> @@ -10,7 +10,6 @@
+>  /*
+>   * User space memory access functions
+>   */
+> -#include <linux/mm.h>
+>  #include <asm/sections.h>
+> 
+>  /*
+> --
+> 2.26.0.rc2
+> 
 
-Test results summary
---------------------
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
-
-2   | exynos5422-odroidxu3 | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 21/21  =
-
-3   | imx6q-sabrelite      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-4   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-5   | rk3288-veyron-jaq    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 21/21  =
-
-6   | rk3399-gru-kevin     | arm64 | lab-collabora | gcc-8    | defconfig  =
-        | 11/11  =
-
-7   | tegra124-nyan-big    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 2/2    =
-
-
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.6-rc7-113-gc6e2eb7ccc3d
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      c6e2eb7ccc3d252115a7d8cba393770ec7366063 =
-
-
-
-Test Failures
--------------
-  =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
-
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc7-113-gc6e2e=
-b7ccc3d/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc7-113-gc6e2e=
-b7ccc3d/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0306.1/armhf/rootfs.cpio.gz  =
-
-
-  1 tests: 0 PASS, 1 FAIL, 0 SKIP
-    * login:
-        never passed   =
-
-         =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-3   | imx6q-sabrelite      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-
-  Results:     1 PASS, 20 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc7-113-gc6e2e=
-b7ccc3d/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-imx6q-sabrelite.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc7-113-gc6e2e=
-b7ccc3d/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-imx6q-sabrelite.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0306.1/armhf/rootfs.cpio.gz  =
-
-
-  21 tests: 1 PASS, 20 FAIL, 0 SKIP
-    * rtcwake-mem-1:
-        never passed
-    * rtcwake-mem-2:
-        never passed
-    * rtcwake-mem-3:
-        never passed
-    * rtcwake-mem-4:
-        never passed
-    * rtcwake-mem-5:
-        never passed
-    * rtcwake-mem-6:
-        never passed
-    * rtcwake-mem-7:
-        never passed
-    * rtcwake-mem-8:
-        never passed
-    * rtcwake-mem-9:
-        never passed
-    * rtcwake-mem-10:
-        never passed
-    * rtcwake-freeze-1:
-        never passed
-    * rtcwake-freeze-2:
-        never passed
-    * rtcwake-freeze-3:
-        never passed
-    * rtcwake-freeze-4:
-        never passed
-    * rtcwake-freeze-5:
-        never passed
-    * rtcwake-freeze-6:
-        never passed
-    * rtcwake-freeze-7:
-        never passed
-    * rtcwake-freeze-8:
-        never passed
-    * rtcwake-freeze-9:
-        never passed
-    * rtcwake-freeze-10:
-        never passed   =
-
-      =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-4   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-
-  Results:     1 PASS, 20 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc7-113-gc6e2e=
-b7ccc3d/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squar=
-e.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc7-113-gc6e2e=
-b7ccc3d/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squar=
-e.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0306.1/armhf/rootfs.cpio.gz  =
-
-
-  21 tests: 1 PASS, 20 FAIL, 0 SKIP
-    * rtcwake-mem-1:
-        never passed
-    * rtcwake-mem-2:
-        never passed
-    * rtcwake-mem-3:
-        never passed
-    * rtcwake-mem-4:
-        never passed
-    * rtcwake-mem-5:
-        never passed
-    * rtcwake-mem-6:
-        never passed
-    * rtcwake-mem-7:
-        never passed
-    * rtcwake-mem-8:
-        never passed
-    * rtcwake-mem-9:
-        never passed
-    * rtcwake-mem-10:
-        never passed
-    * rtcwake-freeze-1:
-        never passed
-    * rtcwake-freeze-2:
-        never passed
-    * rtcwake-freeze-3:
-        never passed
-    * rtcwake-freeze-4:
-        never passed
-    * rtcwake-freeze-5:
-        never passed
-    * rtcwake-freeze-6:
-        never passed
-    * rtcwake-freeze-7:
-        never passed
-    * rtcwake-freeze-8:
-        never passed
-    * rtcwake-freeze-9:
-        never passed
-    * rtcwake-freeze-10:
-        never passed   =
-
-              =20
+Acked-by: Brian Cain <bcain@codeaurora.org>
