@@ -2,107 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6739D18FA07
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 17:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A880718FA47
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 17:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727491AbgCWQis (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Mar 2020 12:38:48 -0400
-Received: from mga12.intel.com ([192.55.52.136]:30481 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727234AbgCWQis (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 23 Mar 2020 12:38:48 -0400
-IronPort-SDR: Rriv0Z8hJsGqsw3IoOkPAtgtiPO6JHB23PHs7p4zPBv+48a/GJlbM73vt8QMk6fMAwnqRW4mjh
- p3JleAiIVMMg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2020 09:38:46 -0700
-IronPort-SDR: BNtv86v3w8JwvH4wJojnjAtNBR5zND3RBh/ddNAj1/0KWdAuOS7J1X36McxoHrFDWlrsVZa05+
- xW30ri8rHyMA==
-X-IronPort-AV: E=Sophos;i="5.72,297,1580803200"; 
-   d="scan'208";a="269933222"
-Received: from smtp.ostc.intel.com ([10.54.29.231])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2020 09:38:45 -0700
-Received: from localhost (mtg-dev.jf.intel.com [10.54.74.10])
-        by smtp.ostc.intel.com (Postfix) with ESMTP id E3150636B;
-        Mon, 23 Mar 2020 16:38:43 +0000 (UTC)
-Date:   Mon, 23 Mar 2020 09:38:44 -0700
-From:   mark gross <mgross@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        linux-edac@vger.kernel.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto <linux-crypto@vger.kernel.org>
-Subject: Re: [patch 08/22] ACPI: Convert to new X86 CPU match macros
-Message-ID: <20200323163844.GB123290@mtg-dev.jf.intel.com>
-Reply-To: mgross@linux.intel.com
-References: <20200320131345.635023594@linutronix.de>
- <20200320131509.467730627@linutronix.de>
- <CAHp75VcK3tL0YayjF=CSkSkHiOpg2zOV3rdkXQWJmLZ9fmevpg@mail.gmail.com>
- <87bloqpy1x.fsf@nanos.tec.linutronix.de>
+        id S1727458AbgCWQqj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Mar 2020 12:46:39 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:51306 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727278AbgCWQqi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Mar 2020 12:46:38 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02NGdco9186287;
+        Mon, 23 Mar 2020 16:46:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=xIkVKKepSD4KNu1aqqoEYqEwnwnwCu2Wtd7BZmR8TdA=;
+ b=iG9Z2fpTzkpqOgA3Pza40NnJ61/aY6kM4y61Qp/BtoXUhCg1A8XzdUG3y5ddIV6IyfgO
+ Rv+FrEnEwqv1ImGStj0gjFHgk92BKL6/KsidBgzFCh2Y5H89xVkCeSNl1MPCA0uScdVu
+ NK9IH9U/JAaYciUOYLxT1qf2+PDUt1fT31DXOVIvfm92J4VvgFTQXtgU2n04WCsFvyn4
+ D5TKD+TlaghiGWe7BdhTqI09pJmBBlI3/B+LImOReSfnPhqb8zprp3170fE9IqtYtzcw
+ EdT8LS6tD83UrR90FfZDPc4LHw/sS5xxaiXzUlguMrXuUFYWhzg50jr1XqEgapGDZVfb jA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 2ywabqyrr6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Mar 2020 16:46:21 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02NGS03k161670;
+        Mon, 23 Mar 2020 16:46:20 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 2yxw7fv2sw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Mar 2020 16:46:20 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 02NGkIev015749;
+        Mon, 23 Mar 2020 16:46:18 GMT
+Received: from localhost (/67.169.218.210)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 23 Mar 2020 09:46:18 -0700
+Date:   Mon, 23 Mar 2020 09:46:17 -0700
+From:   "Darrick J. Wong" <darrick.wong@oracle.com>
+To:     xfs <linux-xfs@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, linux-mm@kvack.org
+Cc:     domenico.andreoli@linux.com, rafael@kernel.org,
+        mkleinsoft@gmail.com, hch@lst.de, akpm@linux-foundation.org,
+        len.brown@intel.com, pavel@ucw.cz
+Subject: [ANNOUNCE] xfs-linux: vfs-for-next updated to 56939e014a6c
+Message-ID: <20200323164617.GA29332@magnolia>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87bloqpy1x.fsf@nanos.tec.linutronix.de>
 User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9569 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999 spamscore=0
+ adultscore=0 phishscore=0 suspectscore=0 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003230089
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9569 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
+ lowpriorityscore=0 malwarescore=0 phishscore=0 priorityscore=1501
+ clxscore=1015 adultscore=0 mlxscore=0 mlxlogscore=999 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003230089
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 20, 2020 at 09:32:26PM +0100, Thomas Gleixner wrote:
-> Andy Shevchenko <andy.shevchenko@gmail.com> writes:
-> 
-> > On Fri, Mar 20, 2020 at 3:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >>
-> >> The new macro set has a consistent namespace and uses C99 initializers
-> >> instead of the grufty C89 ones.
-> >>
-> >> Rename the local macro wrapper to X86_MATCH for consistency. It stays for
-> >> readability sake.
-> >
-> >> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT,     NULL),
-> >> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_AIRMONT,        NULL),
-> >
-> >> -#define ICPU(model)    { X86_VENDOR_INTEL, 6, model, X86_FEATURE_ANY, }
-> >> +#define X86_MATCH(model)       X86_MATCH_INTEL_FAM6_MODEL(model, NULL)
-> >
-> > Maybe we can do a generic macro to avoid all these ', NULL' repetitions?
-> 
-> I opted for having the data argument everywhere to keep the macro maze
-> small. And we have enough places where data is actually used.
-+1
+Hi folks,
 
---mark
+The vfs-for-next branch of the xfs-linux repository at:
 
-> Thanks,
-> 
->         tglx
+	git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git
+
+has just been updated.
+
+Patches often get missed, so please check if your outstanding patches
+were in this update. If they have not been in this update, please
+resubmit them to linux-xfs@vger.kernel.org so they can be picked up in
+the next update.  Granted, I'm only doing this to clean up after my own
+bad patches. ;)
+
+The new head of the vfs-for-next branch is commit:
+
+56939e014a6c hibernate: Allow uswsusp to write to swap
+
+New Commits:
+
+Domenico Andreoli (1):
+      [56939e014a6c] hibernate: Allow uswsusp to write to swap
+
+
+Code Diffstat:
+
+ fs/block_dev.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
