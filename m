@@ -2,171 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D037918F6FB
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 15:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D57DE18F7C2
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 15:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725830AbgCWOdY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Mar 2020 10:33:24 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:37845 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbgCWOdX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Mar 2020 10:33:23 -0400
-Received: by mail-wr1-f66.google.com with SMTP id w10so17376458wrm.4
-        for <linux-pm@vger.kernel.org>; Mon, 23 Mar 2020 07:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Milo3Dq+6c2R+aK9LY7ntaaHcSlRbnbJfFLiNohi5cw=;
-        b=b+vGQLuJn4gt4zQzt9/RER5Is6ZMunFA8si6eujrPXnDc9XShjSCMhChpx2aJP3r90
-         UQg9Kp8z29VyPBCQCXsKc5Iqjnq/k3Tqxl58CGiRXybgJ8PVWtNZ6+iEj7zwi9iyy+A5
-         7KSLm2XEeJDXuPgWkyaxg+4xZxblpRAZLo63rvX3YQ0tB0czhY8Z1RBWncZloK64ZoSu
-         1U86IaSV6apAFgpBA79V9ApCCX+xZQdZW9RrqnmyLLsf2H2cCemCmvyChJZBpIlu2Fba
-         hR4lKzIlL7lE0KKsA5MKLpnqS5xFtedh+Zn4qSMqrYhenIkUXr74u+XBLSsMBioVPBNy
-         Xc7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=Milo3Dq+6c2R+aK9LY7ntaaHcSlRbnbJfFLiNohi5cw=;
-        b=FhQcQJgA4z5mDPnGfwR5m7wdSHksa5IU6XHjmc0EvQ+nLA2TepuLYEI69XKk9mx12T
-         dPmARznu1QKPnww2YVOvLWEuBiM058KKza0ejIJ94bVHJ/SMNZmISEAclNAx+ch4eho0
-         mrVZL4PCSJa+mxdGQoVoy5tSVWM645yfDi2ftgcO/kmRiviilUuLZgXWFQ66SHhto5Fk
-         kPd1CgQqjF+9Dcs3Q7H4qWLVrqmTpvyeZmEscmCmNojsVUSmxa5eqGxO8gclCji0E+6z
-         R2CCs5LiPDrytoaePTNNOgMyiu8PgnJ5h8Kbhi8Uwnl4TOHOAkRNQV2xU28DmFz5Rc7f
-         c8QA==
-X-Gm-Message-State: ANhLgQ1gjVFWPspr2LHn4Kfo1AuUm7HJaFfGpG5EM+fFg8DxvpP/r5+P
-        CChJdbV8ETvr1NRLpKF6RJc32Q==
-X-Google-Smtp-Source: ADFU+vuLbEfigFrOFcEj7mabwtcC6K4IthLOH+qosvGHwdT54e+ycamq+m7/t6ClouPvXfAnevsrYg==
-X-Received: by 2002:adf:dd06:: with SMTP id a6mr19854297wrm.189.1584973999729;
-        Mon, 23 Mar 2020 07:33:19 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:d702:b4a5:b331:1282? ([2a01:e34:ed2f:f020:d702:b4a5:b331:1282])
-        by smtp.googlemail.com with ESMTPSA id a64sm14277411wmh.39.2020.03.23.07.33.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Mar 2020 07:33:19 -0700 (PDT)
-Subject: Re: [PATCH] thermal: imx8mm: Fix build warning of incorrect argument
+        id S1725816AbgCWOyj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Mar 2020 10:54:39 -0400
+Received: from mail-eopbgr40040.outbound.protection.outlook.com ([40.107.4.40]:18661
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725710AbgCWOyj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 23 Mar 2020 10:54:39 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IPQBHWhp6sRL+89xEIlDiuwhe1d0k12pPwtVAAj/Rw3PlphIKpwhejia9lSFASYzLKS5fmiDBA47Wb7/T3avmjkoLlOIlD+dVPaXbXqgKj/XVjNJFCYMf6R/f8vV50YrF5mt19E33O3l/gPO2B+TNAkMveRBGiB/AnTHE3nBQo0RrWpPrXX439sAbylGcOxr+CvyTen9VE/La5oRRTVneHD7D4cjPvPhvxwXKanAi0DsTXcRhflCsqZs4PehyUyXFIk6FUO9rXEt2rOuEr638kOXl1GbBw9dJnXPrpPMO68PrqrvsFdCc4vr93S4hlQ9mQnKlWgUckj1vJlMQ6LF5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YrHWuPWR/Jj7H+EBKnCNV4IIKtLfYebb43wNU+QaX84=;
+ b=Xji9VUlobFhBcMzvG8LuR1c0lMpmRZuSt/r2LAlaoeiXxzpAH9leyRb5tZdyLIzN1Fo8nOnYrOrqO8ijOsimA/aq+mGb0jBnOT/wAE8hY5ToBlCxhcpz7bGUWrFuutKOGgReqypk8X+H+Rbi021QPXsDNML7Buwr8s3o/RehaEidYsKT925SbT7QAm4guezVIHkDb3qQ6tSat601kY4kfhCU8VkSGNf/QaI/KT4aP3y6wpiZoBTAxV+9O3A1PpR2gIyoXxW/9pNH8GOjvMU3g8OEIx1qXAelmoFBz+Z/jLUcXB1vw9J3xPYVrsYGp8N4UNIrTbu1OL16yQ78BNXCgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YrHWuPWR/Jj7H+EBKnCNV4IIKtLfYebb43wNU+QaX84=;
+ b=llQBe+5/kQgJXCm7JrmuZuai8cD+OH2qj70BDEKakqH5cNWqUzFt6iplfk5Y+3DIzc0x5nuMN/8BaBQ7tST5xXwqVcmOhx/zVd4g196pPWVKnoBDLcUHb76ql2H2YVFHl+vsrOLCHu+GNZlzyZ6jEDmbcZrghvbRHCVdzn/obAI=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
+ DB3PR0402MB3849.eurprd04.prod.outlook.com (52.134.71.16) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2814.21; Mon, 23 Mar 2020 14:53:56 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::3143:c46:62e4:8a8b]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::3143:c46:62e4:8a8b%7]) with mapi id 15.20.2835.021; Mon, 23 Mar 2020
+ 14:53:56 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH] thermal: imx8mm: Fix build warning of incorrect argument
  type
-To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
+Thread-Topic: [PATCH] thermal: imx8mm: Fix build warning of incorrect argument
+ type
+Thread-Index: AQHWAR8IqER7H1rXjEuQj4zN1DgcyqhWPb2AgAAEhLA=
+Date:   Mon, 23 Mar 2020 14:53:55 +0000
+Message-ID: <DB3PR0402MB39164815DDDB8F94507E36B4F5F00@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 References: <1584973156-25734-1-git-send-email-Anson.Huang@nxp.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <8f1f2d2b-33bc-b5e0-ad06-78f7ce54f2b7@linaro.org>
-Date:   Mon, 23 Mar 2020 15:33:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <1584973156-25734-1-git-send-email-Anson.Huang@nxp.com>
-Content-Type: text/plain; charset=utf-8
+ <8f1f2d2b-33bc-b5e0-ad06-78f7ce54f2b7@linaro.org>
+In-Reply-To: <8f1f2d2b-33bc-b5e0-ad06-78f7ce54f2b7@linaro.org>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anson.huang@nxp.com; 
+x-originating-ip: [183.192.13.100]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 3848308c-8d57-4087-25ed-08d7cf3a02ea
+x-ms-traffictypediagnostic: DB3PR0402MB3849:|DB3PR0402MB3849:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB3PR0402MB3849CB25DB97FEC3864836A1F5F00@DB3PR0402MB3849.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1247;
+x-forefront-prvs: 0351D213B3
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(396003)(136003)(366004)(376002)(199004)(7696005)(53546011)(26005)(86362001)(186003)(8936002)(110136005)(316002)(81166006)(44832011)(66446008)(64756008)(7416002)(33656002)(52536014)(71200400001)(66556008)(66946007)(76116006)(6506007)(81156014)(66476007)(4326008)(9686003)(55016002)(2906002)(5660300002)(8676002)(478600001)(32563001)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3849;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: PCT6tAfCLrXw3p1gPxWH/PD+Lh97yvZArh02PSGebWeZvFrkVB9LGLRLx2lbGN7TQhBDJilmOMU3DnvUNCfbGV1RBoDH81v/prT8iwT4aAZbl3ZeRaieid0O10Qcn9cRCaY1CJososRppQaHy/2gAfmc3gxpoUEq4T/4+UiZhKDR91U7DNNHoQAIUbauhu1SQ18V7+Xt3jTSnA/feTcfW0zJn9RZUa0BExluAIkOJJXR6+oGOlOw+8/bYasy+4cHKli/CjEyQD+g4VIoN4olmXobtHykBVxUIyViK2jixwsZ2BSRiv8wJkKIIn9IXboVx2twc3LAl6QdPYTB4e9ECqmwgU11QPQkcgr9W8CDELz6JqNYGlcG7Fyk/lTYgxPVOqicmaNEX3LPrI35qT/dDAP9ksyoh5ubSKirrw81wLoDARsCaDPj8DOBu8B1dGZc29VFLsbRy+wEY+AFUR/28Zj1QaaMwrAGnIUN7HNsWY3ULq6TGTHQ4cwJZ10zuA7i3N17TN1lZyWzq32Xv7oTww==
+x-ms-exchange-antispam-messagedata: oBr/L6KLDUunYQs5AeoMCOmT7g4Eo/XexJhSlFa6xDzWUW1pKcDlW5wsWK72aawhs6ed9Wu9gTU8Q3sATVrE7Q7QBzZPPWhe7tl45sRH3096gNMsrFhSBGemC4XxbLHRuuDL2O7xL6uIH6X+W28/cg==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3848308c-8d57-4087-25ed-08d7cf3a02ea
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2020 14:53:55.8567
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2kAlPlzYna444ABtGCxCkzZ2+xvm2HV6sYOqlixmtCmNAzkbWMDPHjBp7T94+wDM7xq7C+VID2UkxesLpumw4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3849
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/03/2020 15:19, Anson Huang wrote:
-> Fix below sparse warning:
-> 
-> drivers/thermal/imx8mm_thermal.c:82:36: sparse: sparse: incorrect type in argument 2 (different address spaces), expected unsigned long const volatile *addr
-> drivers/thermal/imx8mm_thermal.c:82:36: sparse: expected unsigned long const volatile *addr
-> 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
->  drivers/thermal/imx8mm_thermal.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
-> index c32308b..0d60f8d 100644
-> --- a/drivers/thermal/imx8mm_thermal.c
-> +++ b/drivers/thermal/imx8mm_thermal.c
-> @@ -75,15 +75,14 @@ static int imx8mp_tmu_get_temp(void *data, int *temp)
->  {
->  	struct tmu_sensor *sensor = data;
->  	struct imx8mm_tmu *tmu = sensor->priv;
-> +	unsigned long val;
->  	bool ready;
-> -	u32 val;
->  
-> -	ready = test_bit(probe_status_offset(sensor->hw_id),
-> -			 tmu->base + TRITSR);
-> +	val = readl_relaxed(tmu->base + TRITSR);
-> +	ready = test_bit(probe_status_offset(sensor->hw_id), &val);
->  	if (!ready)
->  		return -EAGAIN;
-
-Doesn't this patch also fix a bug because the read was done after
-testing the bit? :)
-
-> -	val = readl_relaxed(tmu->base + TRITSR);
->  	val = sensor->hw_id ? FIELD_GET(TRITSR_TEMP1_VAL_MASK, val) :
->  	      FIELD_GET(TRITSR_TEMP0_VAL_MASK, val);
->  	if (val & SIGN_BIT) /* negative */
-> 
-
-
--- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+SGksIERhbmllbA0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIHRoZXJtYWw6IGlteDhtbTogRml4
+IGJ1aWxkIHdhcm5pbmcgb2YgaW5jb3JyZWN0DQo+IGFyZ3VtZW50IHR5cGUNCj4gDQo+IE9uIDIz
+LzAzLzIwMjAgMTU6MTksIEFuc29uIEh1YW5nIHdyb3RlOg0KPiA+IEZpeCBiZWxvdyBzcGFyc2Ug
+d2FybmluZzoNCj4gPg0KPiA+IGRyaXZlcnMvdGhlcm1hbC9pbXg4bW1fdGhlcm1hbC5jOjgyOjM2
+OiBzcGFyc2U6IHNwYXJzZTogaW5jb3JyZWN0IHR5cGUNCj4gPiBpbiBhcmd1bWVudCAyIChkaWZm
+ZXJlbnQgYWRkcmVzcyBzcGFjZXMpLCBleHBlY3RlZCB1bnNpZ25lZCBsb25nIGNvbnN0DQo+ID4g
+dm9sYXRpbGUgKmFkZHINCj4gPiBkcml2ZXJzL3RoZXJtYWwvaW14OG1tX3RoZXJtYWwuYzo4Mjoz
+Njogc3BhcnNlOiBleHBlY3RlZCB1bnNpZ25lZCBsb25nDQo+ID4gY29uc3Qgdm9sYXRpbGUgKmFk
+ZHINCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEFuc29uIEh1YW5nIDxBbnNvbi5IdWFuZ0BueHAu
+Y29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL3RoZXJtYWwvaW14OG1tX3RoZXJtYWwuYyB8IDcg
+KysrLS0tLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9u
+cygtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdGhlcm1hbC9pbXg4bW1fdGhlcm1h
+bC5jDQo+ID4gYi9kcml2ZXJzL3RoZXJtYWwvaW14OG1tX3RoZXJtYWwuYw0KPiA+IGluZGV4IGMz
+MjMwOGIuLjBkNjBmOGQgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy90aGVybWFsL2lteDhtbV90
+aGVybWFsLmMNCj4gPiArKysgYi9kcml2ZXJzL3RoZXJtYWwvaW14OG1tX3RoZXJtYWwuYw0KPiA+
+IEBAIC03NSwxNSArNzUsMTQgQEAgc3RhdGljIGludCBpbXg4bXBfdG11X2dldF90ZW1wKHZvaWQg
+KmRhdGEsIGludA0KPiA+ICp0ZW1wKSAgew0KPiA+ICAJc3RydWN0IHRtdV9zZW5zb3IgKnNlbnNv
+ciA9IGRhdGE7DQo+ID4gIAlzdHJ1Y3QgaW14OG1tX3RtdSAqdG11ID0gc2Vuc29yLT5wcml2Ow0K
+PiA+ICsJdW5zaWduZWQgbG9uZyB2YWw7DQo+ID4gIAlib29sIHJlYWR5Ow0KPiA+IC0JdTMyIHZh
+bDsNCj4gPg0KPiA+IC0JcmVhZHkgPSB0ZXN0X2JpdChwcm9iZV9zdGF0dXNfb2Zmc2V0KHNlbnNv
+ci0+aHdfaWQpLA0KPiA+IC0JCQkgdG11LT5iYXNlICsgVFJJVFNSKTsNCj4gPiArCXZhbCA9IHJl
+YWRsX3JlbGF4ZWQodG11LT5iYXNlICsgVFJJVFNSKTsNCj4gPiArCXJlYWR5ID0gdGVzdF9iaXQo
+cHJvYmVfc3RhdHVzX29mZnNldChzZW5zb3ItPmh3X2lkKSwgJnZhbCk7DQo+ID4gIAlpZiAoIXJl
+YWR5KQ0KPiA+ICAJCXJldHVybiAtRUFHQUlOOw0KPiANCj4gRG9lc24ndCB0aGlzIHBhdGNoIGFs
+c28gZml4IGEgYnVnIGJlY2F1c2UgdGhlIHJlYWQgd2FzIGRvbmUgYWZ0ZXIgdGVzdGluZyB0aGUN
+Cj4gYml0PyA6KQ0KDQpZZXPwn5iKIFByZXZpb3VzIHBhdGNoIHJlYWRzIHRoZSByZWdpc3RlciB0
+d2ljZSBhdCBkaWZmZXJlbnQgdGltZSwgbWF5IGNhdXNlIGENCnN5bmMgaXNzdWUgb2YgY2hlY2tp
+bmcgdGhlIHJlYWR5IGJpdCBhbmQgcmVhZGluZyB0aGUgdGVtcGVyYXR1cmUgdXNpbmcgcmVnaXN0
+ZXINCnZhbHVlcyByZWFkIGF0IGRpZmZlcmVudCB0aW1lLg0KDQpEbyBJIG5lZWQgdG8gaW1wcm92
+ZSB0aGUgY29tbWl0IGxvZz8gSSBndWVzcyBubyBuZWVkPw0KDQpUaGFua3MsDQpBbnNvbiANCg==
