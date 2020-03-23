@@ -2,113 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B8E18F6D9
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 15:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D037918F6FB
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 15:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725830AbgCWO1L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Mar 2020 10:27:11 -0400
-Received: from mail-vi1eur05on2088.outbound.protection.outlook.com ([40.107.21.88]:56448
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725710AbgCWO1K (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 23 Mar 2020 10:27:10 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ak3QL1mWpvTrOJjMUFhb+oq9yXiuXXpYV6vRaOVVRi6Mo4iH2/IyZCVjVElMXLzhiTrlwUYA+7SmuX+kVCPik1datZrkkqssT9t/ASWsVCKTFs/tSoD20fS5q7OeWxQ8E/GZvVagjHs78vDRQjztdhXPhj9YWvjTJGMYcb6D+VRnc7/UYlMWSjAvkRkDSlK4n+Tidvex2HIECa6Xy4wnSXUmDzNlHuvV9PRfXcQqlLoZwwOnlBOMOsKiXO/RUqv503eplmb+wN5S+7zlhGDEbdosqUyv4g9RX5sRZLvuFrt+eVBcRkFjwJ2nObb5kcPsiDdnnTG/pOSGW7kVe4xvEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EkmnU8GffRjmH68GP4oWaUsiK16+2vCNv89n62n4mBM=;
- b=GFCnfTDxf+IJstNcFBlDM4hAKZwi86dsKBIwObWEvbyZiqsJS/JxX1tTG3ym6LjIhDY8lH8nlXGtzdyynUBaZQVQsYgtpHkMYrCGNiBRUHZKP3fk30JLEBxCKCgEVx9JplK4iuOEU8ezRMy6Wl2dJhw/4Glue/bOcB/227nHH+hPPBmvxiSvjOIjLwZK2Wep2qRXdYQjsxVp5gj3A+AKtAtem6NYIVHQiRYkMHS5DIQstta110w0Dxtt8ubyYc5nn8lBZKWd9sVqHW/IaEPUvqVqW16l6vavOkYmqdCQ+jjldCOgMe4JQM/TKSAa0yQiQywn47UC1qwQ03+OimpMyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EkmnU8GffRjmH68GP4oWaUsiK16+2vCNv89n62n4mBM=;
- b=iLKAdACTQ070FHDukf27vDPDHvUk/f9lpBfx9C/+UNtqSsnuBKUROlNLno+j48cUa4XR69oTQELJjN8zX6hBHfZKLTG1eeT1wEV3IA8DCwFVq6XklkkqSkyIlaHFZykNMGhLvd84sY3zU5XyaEvPkKHpWWQ0W5ok2qHoSmSytEQ=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3913.eurprd04.prod.outlook.com (52.134.65.143) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2835.18; Mon, 23 Mar 2020 14:27:06 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b%7]) with mapi id 15.20.2835.021; Mon, 23 Mar 2020
- 14:27:06 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH V3 2/3] thermal: imx8mm: Add i.MX8MP support
-Thread-Topic: [PATCH V3 2/3] thermal: imx8mm: Add i.MX8MP support
-Thread-Index: AQHWAQ+PMwlXAHkCzkSegBP0Of4mRKhWN38AgAAEZRA=
-Date:   Mon, 23 Mar 2020 14:27:05 +0000
-Message-ID: <DB3PR0402MB3916CA154E7D1FDED469B8DEF5F00@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <1584966504-21719-1-git-send-email-Anson.Huang@nxp.com>
- <1584966504-21719-2-git-send-email-Anson.Huang@nxp.com>
- <644b108e-596c-64d6-9693-80ac7f706dc7@linaro.org>
-In-Reply-To: <644b108e-596c-64d6-9693-80ac7f706dc7@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [183.192.13.100]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 19c2e8f3-428f-479c-5cd5-08d7cf364348
-x-ms-traffictypediagnostic: DB3PR0402MB3913:|DB3PR0402MB3913:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB3913155857D432E8890EE023F5F00@DB3PR0402MB3913.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-forefront-prvs: 0351D213B3
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(39860400002)(366004)(136003)(346002)(396003)(199004)(7696005)(186003)(8936002)(26005)(81156014)(52536014)(76116006)(86362001)(478600001)(8676002)(66476007)(66556008)(64756008)(81166006)(66446008)(5660300002)(7416002)(33656002)(66946007)(316002)(55016002)(71200400001)(2906002)(44832011)(6506007)(53546011)(4326008)(4744005)(9686003)(110136005)(32563001)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3913;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YO9LEJCvdpwAh/Icu50w2mD/wP4ATbDZWV8xlRpRH7NDdaBk5BPlJoZFROo9tlqL77Ps9hVSCXCulHsMAbd/3cXYtO5g2HLll3qqhe4iows2VZI6aNZZ/Sr8oeTp2czWHkmFY5i91DmF7y1TfpR3c9gMixuLgig0VWghzEvT3Ip1nilFu5VMEuoW5j19EmQJwJC0xHWqV4px9KC6Ad4rx1T8nkHaAyaqEok/shO4WGfOWIMM7E6/i0ZZRHfXPu/J2zB1SdMCVB/Xg+AYSrrep4zeBf53JZPLQ0jS8CbTgsuSgUvubUiHp+U21awgeMUys9MQVGVMmWJQ9LlkQFjTmrGV9dW8pObjhulE58r7xtRoefJIZI1PGe4fD9MEbQKWdr5ejKa360OuAZ8CHibg+uP2pz2WkDWnTY6slvKg37ELETyLmUik9YiEuyD5Cs/3UjWGFdE4AsSR6oHRye4T+2NH7s7ltsAvQHWJF+kRksiG9HYq+YTums/YruNxuOwwH2pZljqfw0YSOBFCu1znZg==
-x-ms-exchange-antispam-messagedata: Qzl17yqdBCN1x+21ylCnUGBI9lZ7DD314RptBkguiYB/OegTiFCGkv9ELh/AFzzN5ub8sRt4B+ZnRvlu49hGCSa0pMtv2Yf+BgArGuvQMBVY0R+yZkl1YNIikk5m8k97nlHADE5pkizPoXAUaiKoag==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1725830AbgCWOdY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Mar 2020 10:33:24 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37845 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbgCWOdX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Mar 2020 10:33:23 -0400
+Received: by mail-wr1-f66.google.com with SMTP id w10so17376458wrm.4
+        for <linux-pm@vger.kernel.org>; Mon, 23 Mar 2020 07:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Milo3Dq+6c2R+aK9LY7ntaaHcSlRbnbJfFLiNohi5cw=;
+        b=b+vGQLuJn4gt4zQzt9/RER5Is6ZMunFA8si6eujrPXnDc9XShjSCMhChpx2aJP3r90
+         UQg9Kp8z29VyPBCQCXsKc5Iqjnq/k3Tqxl58CGiRXybgJ8PVWtNZ6+iEj7zwi9iyy+A5
+         7KSLm2XEeJDXuPgWkyaxg+4xZxblpRAZLo63rvX3YQ0tB0czhY8Z1RBWncZloK64ZoSu
+         1U86IaSV6apAFgpBA79V9ApCCX+xZQdZW9RrqnmyLLsf2H2cCemCmvyChJZBpIlu2Fba
+         hR4lKzIlL7lE0KKsA5MKLpnqS5xFtedh+Zn4qSMqrYhenIkUXr74u+XBLSsMBioVPBNy
+         Xc7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Milo3Dq+6c2R+aK9LY7ntaaHcSlRbnbJfFLiNohi5cw=;
+        b=FhQcQJgA4z5mDPnGfwR5m7wdSHksa5IU6XHjmc0EvQ+nLA2TepuLYEI69XKk9mx12T
+         dPmARznu1QKPnww2YVOvLWEuBiM058KKza0ejIJ94bVHJ/SMNZmISEAclNAx+ch4eho0
+         mrVZL4PCSJa+mxdGQoVoy5tSVWM645yfDi2ftgcO/kmRiviilUuLZgXWFQ66SHhto5Fk
+         kPd1CgQqjF+9Dcs3Q7H4qWLVrqmTpvyeZmEscmCmNojsVUSmxa5eqGxO8gclCji0E+6z
+         R2CCs5LiPDrytoaePTNNOgMyiu8PgnJ5h8Kbhi8Uwnl4TOHOAkRNQV2xU28DmFz5Rc7f
+         c8QA==
+X-Gm-Message-State: ANhLgQ1gjVFWPspr2LHn4Kfo1AuUm7HJaFfGpG5EM+fFg8DxvpP/r5+P
+        CChJdbV8ETvr1NRLpKF6RJc32Q==
+X-Google-Smtp-Source: ADFU+vuLbEfigFrOFcEj7mabwtcC6K4IthLOH+qosvGHwdT54e+ycamq+m7/t6ClouPvXfAnevsrYg==
+X-Received: by 2002:adf:dd06:: with SMTP id a6mr19854297wrm.189.1584973999729;
+        Mon, 23 Mar 2020 07:33:19 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:d702:b4a5:b331:1282? ([2a01:e34:ed2f:f020:d702:b4a5:b331:1282])
+        by smtp.googlemail.com with ESMTPSA id a64sm14277411wmh.39.2020.03.23.07.33.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Mar 2020 07:33:19 -0700 (PDT)
+Subject: Re: [PATCH] thermal: imx8mm: Fix build warning of incorrect argument
+ type
+To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+References: <1584973156-25734-1-git-send-email-Anson.Huang@nxp.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <8f1f2d2b-33bc-b5e0-ad06-78f7ce54f2b7@linaro.org>
+Date:   Mon, 23 Mar 2020 15:33:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19c2e8f3-428f-479c-5cd5-08d7cf364348
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2020 14:27:05.9164
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: H4BI4CfvMlcMIPDJxDA4tG3HagDUkdmlSYeqVM3BGEXrV9owp1ZWETXuFJrPyXBPBrlF2rFQosvFRmCFoz4PaA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3913
+In-Reply-To: <1584973156-25734-1-git-send-email-Anson.Huang@nxp.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksIERhbmllbA0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggVjMgMi8zXSB0aGVybWFsOiBpbXg4
-bW06IEFkZCBpLk1YOE1QIHN1cHBvcnQNCj4gDQo+IE9uIDIzLzAzLzIwMjAgMTM6MjgsIEFuc29u
-IEh1YW5nIHdyb3RlOg0KPiA+IGkuTVg4TVAgc2hhcmVzIHNhbWUgVE1VIHdpdGggaS5NWDhNTSwg
-dGhlIG9ubHkgZGlmZmVyZW5jZSBpcyBpLk1YOE1QDQo+ID4gaGFzIHR3byB0aGVybWFsIHNlbnNv
-cnMgd2hpbGUgaS5NWDhNTSBPTkxZIGhhcyBvbmUsIGFkZCBtdWx0aXBsZQ0KPiA+IHNlbnNvcnMg
-c3VwcG9ydCBmb3IgaS5NWDhNTSBUTVUgZHJpdmVyLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTog
-QW5zb24gSHVhbmcgPEFuc29uLkh1YW5nQG54cC5jb20+DQo+ID4gLS0tDQo+ID4gQ2hhbmdlcyBz
-aW5jZSBWMjoNCj4gPiAJLSBGaXggYnVpbGQgd2FybmluZyBhYm91dCB0ZXN0X2JpdCBzZWNvbmQg
-YXJndW1lbnQgdHlwZS4NCj4gPiAtLS0NCj4gDQo+IFBsZWFzZSwganVzdCBzZW5kIGEgZml4IG9u
-IHRvcCBvZiB0aGlzIHBhdGNoIGJlY2F1c2UgdGhlIHNlcmllcyBpcyBhbHJlYWR5DQo+IG1lcmdl
-ZC4NCg0KRG9uZS4gU29ycnkgdGhhdCBJIGRpZCBOT1QgcmVjZWl2ZSB0aGUgbWFpbCBvZiBwYXRj
-aCBtZXJnZWQsIGp1c3Qgc2VudCBhIG5ldyBwYXRjaA0Kb24gdG9wIG9mIGl0Lg0KDQpUaGFua3Ms
-DQpBbnNvbg0K
+On 23/03/2020 15:19, Anson Huang wrote:
+> Fix below sparse warning:
+> 
+> drivers/thermal/imx8mm_thermal.c:82:36: sparse: sparse: incorrect type in argument 2 (different address spaces), expected unsigned long const volatile *addr
+> drivers/thermal/imx8mm_thermal.c:82:36: sparse: expected unsigned long const volatile *addr
+> 
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+>  drivers/thermal/imx8mm_thermal.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+> index c32308b..0d60f8d 100644
+> --- a/drivers/thermal/imx8mm_thermal.c
+> +++ b/drivers/thermal/imx8mm_thermal.c
+> @@ -75,15 +75,14 @@ static int imx8mp_tmu_get_temp(void *data, int *temp)
+>  {
+>  	struct tmu_sensor *sensor = data;
+>  	struct imx8mm_tmu *tmu = sensor->priv;
+> +	unsigned long val;
+>  	bool ready;
+> -	u32 val;
+>  
+> -	ready = test_bit(probe_status_offset(sensor->hw_id),
+> -			 tmu->base + TRITSR);
+> +	val = readl_relaxed(tmu->base + TRITSR);
+> +	ready = test_bit(probe_status_offset(sensor->hw_id), &val);
+>  	if (!ready)
+>  		return -EAGAIN;
+
+Doesn't this patch also fix a bug because the read was done after
+testing the bit? :)
+
+> -	val = readl_relaxed(tmu->base + TRITSR);
+>  	val = sensor->hw_id ? FIELD_GET(TRITSR_TEMP1_VAL_MASK, val) :
+>  	      FIELD_GET(TRITSR_TEMP0_VAL_MASK, val);
+>  	if (val & SIGN_BIT) /* negative */
+> 
+
+
+-- 
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
