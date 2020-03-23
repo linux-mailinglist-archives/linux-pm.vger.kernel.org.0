@@ -2,300 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5711318EE2C
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 03:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0878118EE66
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 04:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727096AbgCWCzE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 22 Mar 2020 22:55:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52444 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727050AbgCWCzD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 22 Mar 2020 22:55:03 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A325C20722;
-        Mon, 23 Mar 2020 02:55:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584932101;
-        bh=N0k6o8c8KvYw0g3jcUDhN/MPud7VOyTsnr0yHrUxgUw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=g9VPl4eajjddjNIOPzBfeSyOtL9KQiSn/FZzz7hTPVSKlmvRnqj3azUI4CLLkZJvc
-         uYirLjF1H+fdvZlmKyt2AxGT61givxo81nRhOvH91ViOca/11r46Ug+bKaoJ8lwwc0
-         hRh7PEZEFJGW9zuLBEKdZoD1kcl6jFPVucBD+M6Y=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 72D1C35226BE; Sun, 22 Mar 2020 19:55:01 -0700 (PDT)
-Date:   Sun, 22 Mar 2020 19:55:01 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        platform-driver-x86@vger.kernel.org,
+        id S1727149AbgCWDRi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 22 Mar 2020 23:17:38 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:32964 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727144AbgCWDRh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 22 Mar 2020 23:17:37 -0400
+Received: by mail-pf1-f195.google.com with SMTP id j1so4107524pfe.0
+        for <linux-pm@vger.kernel.org>; Sun, 22 Mar 2020 20:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=S4TZKS6d2y1eHYS1jppzyvKAfOVpYJMMu/Ehs0CdOMQ=;
+        b=oy7AW0C4+1A9gMD6L/aMJGFCcFb+ub8nHaXwstcdSZj5UK6Y9WQ+dSQInkxvWPGAPd
+         atYUGcC2fqdoRJ5YsVK179OZ8nyM4/echB2BWEutHssW5MMyq+XlnYsUpmOhpLTqfDe0
+         nZdhu3YAprzsDcw9cwUm4ew/BH48l3O8LeP5Z98f/MBoKh9wzaJAVlX81QDORw+nHcly
+         oD8AtOmIWuqEKOsIQjTVUuvkn8DmmB9MmBjHGq26desmsW8C2XiUVKTM9o8W2INzwbNI
+         9ywlGUZukQU4tME2lDsrM9IwxRuRXqyaj/L/y08Dom3IA9VSqBYnFVfekVnEPpbR4srm
+         wnuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=S4TZKS6d2y1eHYS1jppzyvKAfOVpYJMMu/Ehs0CdOMQ=;
+        b=jGiYzfQI+zDLECGa8LhQpzwJQNn4+wRc3x25o51DMPoJ+EdIrSY/fjB6d+tHvFnoRk
+         0h4GWFwqW0e9OWFKOo1/o0mz56m2+AHnzC/+n2ryieyuVNUb1ydaV5O3bhDjQHfUi9lL
+         kIICNMtumSU2CxNzZ1IiElVVgLx8e6X1WmCwCbj3UCRjrbap4W/5bLP7maM+EVIv0ecb
+         yCib9EM9hji4ymWqqIubV5hoQUKMWGvZwsWDEtNbd7eqnC+IRc5yToLBRcQTrsQvy7a9
+         sPT3EBkeV26wn20VYYjEwyD3mVQ35uhmVbmkWSXcO60LSXv6EcYdd+JYKr2didxXFaNf
+         f9TQ==
+X-Gm-Message-State: ANhLgQ2btynIPQe54JqLSAP92J9esr+uuPPso7fQYBAueVbcXK0YNZhf
+        aY+zKkLR3zDxROb9Mt2Fq75WfQ==
+X-Google-Smtp-Source: ADFU+vves3/aQr7oLsJhGchZWXzKMdM3mh+P/th94kW7rLjU1R6jxUU6OV6sQnzpH/J+h5YTyQdu4g==
+X-Received: by 2002:aa7:988f:: with SMTP id r15mr22672571pfl.252.1584933455399;
+        Sun, 22 Mar 2020 20:17:35 -0700 (PDT)
+Received: from localhost ([122.171.118.46])
+        by smtp.gmail.com with ESMTPSA id i4sm2741719pjg.4.2020.03.22.20.17.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 22 Mar 2020 20:17:34 -0700 (PDT)
+Date:   Mon, 23 Mar 2020 08:47:24 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Willy Wolff <willy.mh.wolff.ml@gmail.com>
+Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        Brian Cain <bcain@codeaurora.org>,
-        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geoff Levand <geoff@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, Davidlohr Bueso <dbueso@suse.de>
-Subject: Re: [patch V3 13/20] Documentation: Add lock ordering and nesting
- documentation
-Message-ID: <20200323025501.GE3199@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200321112544.878032781@linutronix.de>
- <20200321113242.026561244@linutronix.de>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J.Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [PATCH] thermal/drivers/cpufreq_cooling: Fix return of
+ cpufreq_set_cur_state
+Message-ID: <20200323031724.xnbr6wmbzwpwutn4@vireshk-i7>
+References: <20200321092740.7vvwfxsebcrznydh@macmini.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200321113242.026561244@linutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200321092740.7vvwfxsebcrznydh@macmini.local>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Mar 21, 2020 at 12:25:57PM +0100, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
+On 21-03-20, 09:27, Willy Wolff wrote:
+> The function freq_qos_update_request returns 0 or 1 describing update
+> effectiveness, and a negative error code on failure. However,
+> cpufreq_set_cur_state returns 0 on success or an error code otherwise.
 > 
-> The kernel provides a variety of locking primitives. The nesting of these
-> lock types and the implications of them on RT enabled kernels is nowhere
-> documented.
-> 
-> Add initial documentation.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: "Paul E . McKenney" <paulmck@kernel.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Davidlohr Bueso <dave@stgolabs.net>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Willy Wolff <willy.mh.wolff.ml@gmail.com>
 > ---
-> V3: Addressed review comments from Paul, Jonathan, Davidlohr
-> V2: Addressed review comments from Randy
-> ---
->  Documentation/locking/index.rst     |    1 
->  Documentation/locking/locktypes.rst |  299 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 300 insertions(+)
->  create mode 100644 Documentation/locking/locktypes.rst
+>  drivers/thermal/cpufreq_cooling.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> --- a/Documentation/locking/index.rst
-> +++ b/Documentation/locking/index.rst
-> @@ -7,6 +7,7 @@ locking
->  .. toctree::
->      :maxdepth: 1
+> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> index fe83d7a210d4..af55ac08e1bd 100644
+> --- a/drivers/thermal/cpufreq_cooling.c
+> +++ b/drivers/thermal/cpufreq_cooling.c
+> @@ -431,6 +431,7 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+>  				 unsigned long state)
+>  {
+>  	struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
+> +	int ret;
 >  
-> +    locktypes
->      lockdep-design
->      lockstat
->      locktorture
-> --- /dev/null
-> +++ b/Documentation/locking/locktypes.rst
-> @@ -0,0 +1,299 @@
+>  	/* Request state should be less than max_level */
+>  	if (WARN_ON(state > cpufreq_cdev->max_level))
+> @@ -442,8 +443,9 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+>  
+>  	cpufreq_cdev->cpufreq_state = state;
+>  
+> -	return freq_qos_update_request(&cpufreq_cdev->qos_req,
+> -				get_state_freq(cpufreq_cdev, state));
+> +	ret = freq_qos_update_request(&cpufreq_cdev->qos_req,
+> +				      get_state_freq(cpufreq_cdev, state));
+> +	return ret < 0 ? ret : 0;
+>  }
+>  
+>  /* Bind cpufreq callbacks to thermal cooling device ops */
 
-[ . . . Adding your example execution sequences . . . ]
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-> +PREEMPT_RT kernels preserve all other spinlock_t semantics:
-> +
-> + - Tasks holding a spinlock_t do not migrate.  Non-PREEMPT_RT kernels
-> +   avoid migration by disabling preemption.  PREEMPT_RT kernels instead
-> +   disable migration, which ensures that pointers to per-CPU variables
-> +   remain valid even if the task is preempted.
-> +
-> + - Task state is preserved across spinlock acquisition, ensuring that the
-> +   task-state rules apply to all kernel configurations.  Non-PREEMPT_RT
-> +   kernels leave task state untouched.  However, PREEMPT_RT must change
-> +   task state if the task blocks during acquisition.  Therefore, it saves
-> +   the current task state before blocking and the corresponding lock wakeup
-> +   restores it.
-> +
-> +   Other types of wakeups would normally unconditionally set the task state
-> +   to RUNNING, but that does not work here because the task must remain
-> +   blocked until the lock becomes available.  Therefore, when a non-lock
-> +   wakeup attempts to awaken a task blocked waiting for a spinlock, it
-> +   instead sets the saved state to RUNNING.  Then, when the lock
-> +   acquisition completes, the lock wakeup sets the task state to the saved
-> +   state, in this case setting it to RUNNING.
-
-In the normal case where the task sleeps through the entire lock
-acquisition, the sequence of events is as follows:
-
-     state = UNINTERRUPTIBLE
-     lock()
-       block()
-         real_state = state
-         state = SLEEPONLOCK
-
-                               lock wakeup
-                                 state = real_state == UNINTERRUPTIBLE
-
-This sequence of events can occur when the task acquires spinlocks
-on its way to sleeping, for example, in a call to wait_event().
-
-The non-lock wakeup can occur when a wakeup races with this wait_event(),
-which can result in the following sequence of events:
-
-     state = UNINTERRUPTIBLE
-     lock()
-       block()
-         real_state = state
-         state = SLEEPONLOCK
-
-                             non lock wakeup
-                                 real_state = RUNNING
-
-                               lock wakeup
-                                 state = real_state == RUNNING
-
-Without this real_state subterfuge, the wakeup might be lost.
-
-[ . . . and continuing where I left off earlier . . . ]
-
-> +bit spinlocks
-> +-------------
-> +
-> +Bit spinlocks are problematic for PREEMPT_RT as they cannot be easily
-> +substituted by an RT-mutex based implementation for obvious reasons.
-> +
-> +The semantics of bit spinlocks are preserved on PREEMPT_RT kernels and the
-> +caveats vs. raw_spinlock_t apply.
-> +
-> +Some bit spinlocks are substituted by regular spinlock_t for PREEMPT_RT but
-> +this requires conditional (#ifdef'ed) code changes at the usage site while
-> +the spinlock_t substitution is simply done by the compiler and the
-> +conditionals are restricted to header files and core implementation of the
-> +locking primitives and the usage sites do not require any changes.
-
-PREEMPT_RT cannot substitute bit spinlocks because a single bit is
-too small to accommodate an RT-mutex.  Therefore, the semantics of bit
-spinlocks are preserved on PREEMPT_RT kernels, so that the raw_spinlock_t
-caveats also apply to bit spinlocks.
-
-Some bit spinlocks are replaced with regular spinlock_t for PREEMPT_RT
-using conditional (#ifdef'ed) code changes at the usage site.
-In contrast, usage-site changes are not needed for the spinlock_t
-substitution.  Instead, conditionals in header files and the core locking
-implemementation enable the compiler to do the substitution transparently.
-
-
-> +Lock type nesting rules
-> +=======================
-> +
-> +The most basic rules are:
-> +
-> +  - Lock types of the same lock category (sleeping, spinning) can nest
-> +    arbitrarily as long as they respect the general lock ordering rules to
-> +    prevent deadlocks.
-
-  - Lock types in the same category (sleeping, spinning) can nest
-     arbitrarily as long as they respect the general deadlock-avoidance
-     ordering rules.
-
-[ Give or take lockdep eventually complaining about too-deep nesting,
-  but that is probably not worth mentioning here.  Leave that caveat
-  to the lockdep documentation. ]
-
-> +  - Sleeping lock types cannot nest inside spinning lock types.
-> +
-> +  - Spinning lock types can nest inside sleeping lock types.
-> +
-> +These rules apply in general independent of CONFIG_PREEMPT_RT.
-
-These constraints apply both in CONFIG_PREEMPT_RT and otherwise.
-
-> +As PREEMPT_RT changes the lock category of spinlock_t and rwlock_t from
-> +spinning to sleeping this has obviously restrictions how they can nest with
-> +raw_spinlock_t.
-> +
-> +This results in the following nest ordering:
-
-The fact that PREEMPT_RT changes the lock category of spinlock_t and
-rwlock_t from spinning to sleeping means that they cannot be acquired
-while holding a raw spinlock.  This results in the following nesting
-ordering:
-
-> +  1) Sleeping locks
-> +  2) spinlock_t and rwlock_t
-> +  3) raw_spinlock_t and bit spinlocks
-> +
-> +Lockdep is aware of these constraints to ensure that they are respected.
-
-Lockdep will complain if these constraints are violated, both in
-CONFIG_PREEMPT_RT and otherwise.
-
-
-> +Owner semantics
-> +===============
-> +
-> +Most lock types in the Linux kernel have strict owner semantics, i.e. the
-> +context (task) which acquires a lock has to release it.
-
-The aforementioned lock types have strict owner semantics: The context
-(task) that acquired the lock must release it.
-
-> +There are two exceptions:
-> +
-> +  - semaphores
-> +  - rwsems
-> +
-> +semaphores have no owner semantics for historical reason, and as such
-> +trylock and release operations can be called from any context. They are
-> +often used for both serialization and waiting purposes. That's generally
-> +discouraged and should be replaced by separate serialization and wait
-> +mechanisms, such as mutexes and completions.
-
-semaphores lack owner semantics for historical reasons, so their trylock
-and release operations may be called from any context. They are often
-used for both serialization and waiting, but new use cases should
-instead use separate serialization and wait mechanisms, such as mutexes
-and completions.
-
-> +rwsems have grown interfaces which allow non owner release for special
-> +purposes. This usage is problematic on PREEMPT_RT because PREEMPT_RT
-> +substitutes all locking primitives except semaphores with RT-mutex based
-> +implementations to provide priority inheritance for all lock types except
-> +the truly spinning ones. Priority inheritance on ownerless locks is
-> +obviously impossible.
-> +
-> +For now the rwsem non-owner release excludes code which utilizes it from
-> +being used on PREEMPT_RT enabled kernels. In same cases this can be
-> +mitigated by disabling portions of the code, in other cases the complete
-> +functionality has to be disabled until a workable solution has been found.
-
-rwsems have grown special-purpose interfaces that allow non-owner release.
-This non-owner release prevents PREEMPT_RT from substituting RT-mutex
-implementations, for example, by defeating priority inheritance.
-After all, if the lock has no owner, whose priority should be boosted?
-As a result, PREEMPT_RT does not currently support rwsem, which in turn
-means that code using it must therefore be disabled until a workable
-solution presents itself.
-
-[ Note: Not as confident as I would like to be in the above. ]
-
-							Thanx, Paul
+-- 
+viresh
