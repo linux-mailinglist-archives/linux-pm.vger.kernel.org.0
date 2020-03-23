@@ -2,114 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E29E190021
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 22:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A293C19002D
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Mar 2020 22:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726971AbgCWVQ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Mar 2020 17:16:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33282 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726203AbgCWVQ1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 23 Mar 2020 17:16:27 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E43AD2073E;
-        Mon, 23 Mar 2020 21:16:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584998187;
-        bh=lAcPaGMeuTbQ0e60tGnw6ov4e5Q5aILJQN/wYj3AAMk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=z5xnYgUgdU2DIBDs8HEZaSJH752225z4W2JUWCZZIukzeTeclguBbUyeCUXDTX9I8
-         56K0xXKFuMxB2oxCqLne3IK+sazlamo7gKkDX4NAYNCTIwlU+bNmXO0p1L/aH5bs+1
-         CFPOr47ciju93GlG08d1OyFZizI1aN3zdH+eNNxc=
-Received: by mail-qt1-f180.google.com with SMTP id f20so13149902qtq.6;
-        Mon, 23 Mar 2020 14:16:26 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ1+8lGd7B0mnyiOmqvoggfla72NQPnqp9c/0D/Lol8BN2BPjJfy
-        lRGWyAiiokq0/hMdw1pIryXDSfx+69F03WXlhg==
-X-Google-Smtp-Source: ADFU+vum708OpcpjRaJMVDkorGVUHHFISsRaDWFsZpbGSzR6ZkKzsCsNyMn7et2Npg4zVfxkp3GAuYA09s21/oTFXis=
-X-Received: by 2002:aed:3461:: with SMTP id w88mr23486218qtd.143.1584998186039;
- Mon, 23 Mar 2020 14:16:26 -0700 (PDT)
+        id S1726643AbgCWVTZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Mar 2020 17:19:25 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:41996 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbgCWVTY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Mar 2020 17:19:24 -0400
+Received: by mail-pg1-f193.google.com with SMTP id h8so7851985pgs.9
+        for <linux-pm@vger.kernel.org>; Mon, 23 Mar 2020 14:19:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=nFFq1NJ+zuCWICzbnMUATikCUkOp4SrSQIe/H28va1w=;
+        b=BsRs9+jbTUtNxbnpFkcWScy78n0Kvnkr2KBOTELS7bvyu0qQGB5BoqOWbXC9FNyUQB
+         LN6rR57B6Eo6XszGvYdBljMek7AvR5WWTCSjGdSU7IyQ1nAU02pVFEkMDMR2sa3IvvMj
+         kWtayJDiffFCnsPbIR4CRJOsRzZ1sbDkjS9phOF+kYlgBCmWJ9ZdMi4lDLad7onnFt0X
+         FRu990WIa0BUs9se2UWUAJF0gtk1tTI7NV48U5O0N7fnG6RccJaubM+pHMZD6vQ8hJzw
+         8a8tKIpkn86jxV+YKCVi5p/C6rvsD5xq+8zsDawP2E14QNZHgWNGuonyw0QZxOjgPm2n
+         9iaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=nFFq1NJ+zuCWICzbnMUATikCUkOp4SrSQIe/H28va1w=;
+        b=MQRmnY+fDurz/6iPU7bSxHdQEO6p5Bn+VNK5Z25hqty9QoRnpeBySnkHv96DeCx/6s
+         6auVgVTpqI6MbrXbATi9MvDkw2JdpHbNVG86P5GYPUldgRQ9R24YVgVKg5VZVj3PN+RN
+         CBLMpDzBm242T70W0c2H2TiM0s0xh+l8kjwaP64p7vPYC02ncTg6RTK5J7rs9PFVwoHQ
+         6/kmFutOck5G4Qv2v7l15wKA4c/C7juIMccIUHa3mArjpgAjwhCeHTeS9zOyZNDdDq8Z
+         4y4wRaMbn0dZ3laN+/OfjVJfAQIxn2Awa9d0GYzn06rbgzqCsPICh6lGCRQVx5ZtYIzv
+         7ogw==
+X-Gm-Message-State: ANhLgQ1zJU4nCF/aRHdVLMdO4fsRy8kKvYk/wR+uMmBgot8T9LuT7M09
+        lcYtK8Ysoiq8LTz9haoCpY7DC29KfsA=
+X-Google-Smtp-Source: ADFU+vs6w8kct1tcThb+jzogdABq0ciYSYoD+UF6ChWt7nEGXWVeMVQCXScb1CQ8JPgAQJE9oCbx1g==
+X-Received: by 2002:a65:4806:: with SMTP id h6mr21853952pgs.295.1584998361963;
+        Mon, 23 Mar 2020 14:19:21 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a19sm14495739pfk.110.2020.03.23.14.19.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2020 14:19:21 -0700 (PDT)
+Message-ID: <5e7927d9.1c69fb81.46ad8.4de1@mx.google.com>
+Date:   Mon, 23 Mar 2020 14:19:21 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <cover.1583412540.git.amit.kucheria@linaro.org>
- <8a0cfe9e3018f7996c1563035bee76048941beb4.1583412540.git.amit.kucheria@linaro.org>
- <20200311144933.GA21587@bogus> <CAHLCerN99eKOofxcCuvNwjNGbJfB7BzoPGAPCtXHNQdN9w8Bcw@mail.gmail.com>
-In-Reply-To: <CAHLCerN99eKOofxcCuvNwjNGbJfB7BzoPGAPCtXHNQdN9w8Bcw@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 23 Mar 2020 15:16:14 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ6T3LVbKueGn53dZmR=caD2AR7yLX9gffmOc9VwF9kXQ@mail.gmail.com>
-Message-ID: <CAL_JsqJ6T3LVbKueGn53dZmR=caD2AR7yLX9gffmOc9VwF9kXQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] dt-bindings: thermal: Add yaml bindings for
- thermal zones
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.6-rc7-113-gc6e2eb7ccc3d
+X-Kernelci-Report-Type: boot
+Subject: pm/testing boot: 63 boots: 1 failed,
+ 60 passed with 2 untried/unknown (v5.6-rc7-113-gc6e2eb7ccc3d)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 23, 2020 at 2:46 PM Amit Kucheria <amit.kucheria@linaro.org> wrote:
->
-> Hi Rob,
->
-> Thanks for the review.
->
-> On Wed, Mar 11, 2020 at 8:19 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Thu, Mar 05, 2020 at 06:26:43PM +0530, Amit Kucheria wrote:
-> > > As part of moving the thermal bindings to YAML, split it up into 3
-> > > bindings: thermal sensors, cooling devices and thermal zones.
-> > >
-> > > The thermal-zone binding is a software abstraction to capture the
-> > > properties of each zone - how often they should be checked, the
-> > > temperature thresholds (trips) at which mitigation actions need to be
-> > > taken and the level of mitigation needed at those thresholds.
+pm/testing boot: 63 boots: 1 failed, 60 passed with 2 untried/unknown (v5.6=
+-rc7-113-gc6e2eb7ccc3d)
 
-[...]
+Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
+el/v5.6-rc7-113-gc6e2eb7ccc3d/
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+6-rc7-113-gc6e2eb7ccc3d/
 
-> > > +          trips:
-> > > +            type: object
-> > > +            description:
-> > > +              This node describes a set of points in the temperature domain at
-> > > +              which the thermal framework needs to takes action. The actions to
-> > > +              be taken are defined in another node called cooling-maps.
-> > > +
-> > > +            patternProperties:
-> > > +              "^[a-zA-Z][a-zA-Z0-9,+\\._]{0,63}$":
-> >
-> > Drop ',', '+', '.', and ideally '_'. Probably need to add '-'.
->
-> Dropping underscore flags a lot of DTs in dtbs_check. Do you want me
-> to go fix them or can we live with the underscore. Is there some
-> document I should read on why underscore isn't desirable?
+Tree: pm
+Branch: testing
+Git Describe: v5.6-rc7-113-gc6e2eb7ccc3d
+Git Commit: c6e2eb7ccc3d252115a7d8cba393770ec7366063
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Tested: 55 unique boards, 14 SoC families, 3 builds out of 6
 
-Just convention. dtc will warn (with W=2), but we probably should
-document that better. Anyways, fine to leave '_' here.
+Boot Regressions Detected:
 
+arm64:
 
-> > > +            /* ... */
-> > > +
-> > > +            gpu-thermal-top {
-> >
-> > This one is not going to match (which should cause an error).
->
-> Good catch. Unfortunately, this isn't getting caught. Nor is the
-> 12-char limitation before -thermal in the thermal zone name. I can't
-> figure out why.
+    defconfig:
+        gcc-8:
+          meson-g12b-a311d-khadas-vim3:
+              lab-baylibre: new failure (last pass: v5.6-rc6-104-g5e3ada361=
+a7a)
+          meson-gxl-s805x-p241:
+              lab-baylibre: new failure (last pass: v5.6-rc6-104-g5e3ada361=
+a7a)
 
-That's because this schema has to be included by another schema which
-matches on a parent node containing 'thermal-zones'. If
-'thermal-zones' can be at the root node, then you should rework this
-such that you have $nodename: {const: thermal-zones} as a top-level
-property.
+Boot Failure Detected:
 
-Rob
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+---
+For more info write to <info@kernelci.org>
