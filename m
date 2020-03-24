@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 960C6190781
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 09:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76FC819078B
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 09:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726231AbgCXI2Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Mar 2020 04:28:24 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:40535 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726190AbgCXI2Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Mar 2020 04:28:24 -0400
-Received: by mail-lf1-f65.google.com with SMTP id j17so12459901lfe.7;
-        Tue, 24 Mar 2020 01:28:21 -0700 (PDT)
+        id S1726231AbgCXI3x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Mar 2020 04:29:53 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:36399 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726818AbgCXI3x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Mar 2020 04:29:53 -0400
+Received: by mail-lj1-f194.google.com with SMTP id g12so17632853ljj.3;
+        Tue, 24 Mar 2020 01:29:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kRJg84VU9tp6u6sQPu2G+yAX+4Ye9aKZ4f3szcmB6vE=;
-        b=ueMOHo0BAHnbYXpUe4LEiO2S3DCcjy75XpBqWcMtqaTq7W7HYxSNRktG3IIDYcnkDg
-         78DF0nTr7zrL948ytcuc/ZVwY9SLy8ERH00DDYn83Sk0izLzqXgPtpcnCcrZ7SBMw4vQ
-         DhuEXMyzWwD+SNzmZ5nv/2uKGk3F1jsUWRUBV09AWYQAx2oX/9NOohgZtL2FC16jzrMO
-         d8i8FWrldN4N9kWBXQNEo4d/YCyyu3w199w2yzIjGa3hXeaMHbBO7lC96kRTgfKEPTT3
-         Bl+tE9O79AXlz5xWYoapxosP7jRjvU5MArtVC5wJoUOW0yfCs0b+37R8r9ty/zZHI+SE
-         MYdA==
-X-Gm-Message-State: ANhLgQ2yhfmUpShp+455L0Vm2Ez0VoWYKUUFentmxI9kzR4EQSYIic2t
-        Ai/4x7i00WDLRdUhFh0RmXo=
-X-Google-Smtp-Source: ADFU+vtI4InlVmw+OQgIHWxu3hpikd74MhMKUAVtY0A9WnHehR88WKu5TGH1ZxrtwYh2HzGuviBr5g==
-X-Received: by 2002:a05:6512:2012:: with SMTP id a18mr4616022lfb.208.1585038500978;
-        Tue, 24 Mar 2020 01:28:20 -0700 (PDT)
+        bh=Rf+TTBRwt+6Mxo/SUu2JurGbdvhhccOInYE3eynxihQ=;
+        b=aLeYuwt56aj39QSbYhpJMYDRcUtGnXicjpoC6G5eO/nxMCALszUOqtNbB/PG6UI74S
+         1WVYVIcWKhCAfi2PEv/sBDci3Tb6jnIFqKIwfppZesUbgiePhqxIRMgC4pyY11dAtvi+
+         xT0ObdGP6mn3iC1IR49sA5RThJCGeXZA5Tl4CNNb9BQqpl3Eu8kBGih4O0ZwgxG8mriQ
+         w/MMsdSUSv+XTI+VEJK5bC049jnDU6f9rOdAsph4SjdMQn7Q+ksIfovhFp5yjFI0wAd0
+         aZlRFUXwTvySlAV99N9E+oSIZiYwsTFMazv0HedQhlPTTV0T4Rn/A7rB/Vc4jiQvgbzo
+         Zz1g==
+X-Gm-Message-State: ANhLgQ041hFdzOwXJAkfaHCura/KFKuJw/et55jfeWFLqNbnd6te/otl
+        EjLod52RQKp5TmRSbheEULQ=
+X-Google-Smtp-Source: ADFU+vtrDM8pgc5lGptwcmiC2lLYTXxmEVQ3k58yGucjhGATbnKucTTiZzlhu9NFGexm4Xx6Lv47ZA==
+X-Received: by 2002:a2e:a368:: with SMTP id i8mr15127922ljn.10.1585038589370;
+        Tue, 24 Mar 2020 01:29:49 -0700 (PDT)
 Received: from localhost.localdomain (dc7t7ryyyyyyyyyyyyybt-3.rev.dnainternet.fi. [2001:14ba:16e1:b700::3])
-        by smtp.gmail.com with ESMTPSA id r2sm9362176lfn.92.2020.03.24.01.28.18
+        by smtp.gmail.com with ESMTPSA id j21sm9495268lji.93.2020.03.24.01.29.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 01:28:20 -0700 (PDT)
-Date:   Tue, 24 Mar 2020 10:28:12 +0200
+        Tue, 24 Mar 2020 01:29:48 -0700 (PDT)
+Date:   Tue, 24 Mar 2020 10:29:41 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -69,8 +69,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Vladimir Oltean <olteanv@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>
-Subject: [PATCH v6 02/10] dt_bindings: ROHM BD99954 Charger
-Message-ID: <7a977e37124324a33b202ac6ffaa128b40044076.1584977512.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v6 04/10] lib/test_linear_ranges: add a test for the
+ 'linear_ranges'
+Message-ID: <0f5400617480787b415a1955c914c05445c30028.1584977512.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1584977512.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -82,182 +83,281 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The ROHM BD99954 is a Battery Management LSI for 1-4 cell Lithium-Ion
-secondary battery. Intended to be used in space-constraint equipment such
-as Low profile Notebook PC, Tablets and other applications. BD99954
-provides a Dual-source Battery Charger, two port BC1.2 detection and a
-Battery Monitor.
-
-Document the DT bindings for BD99954
+    Add a KUnit test for the linear_ranges helper.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/power/supply/rohm,bd99954.yaml   | 155 ++++++++++++++++++
- 1 file changed, 155 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+ lib/Kconfig.debug        |  11 ++
+ lib/Makefile             |   1 +
+ lib/test_linear_ranges.c | 228 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 240 insertions(+)
+ create mode 100644 lib/test_linear_ranges.c
 
-diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 69def4a9df00..32f355db4163 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2053,6 +2053,17 @@ config LIST_KUNIT_TEST
+ 
+ 	  If unsure, say N.
+ 
++config LINEAR_RANGES_TEST
++	tristate "KUnit test for linear_ranges"
++	depends on KUNIT
++	help
++	  This builds the linear_ranges unit test, which runs on boot.
++	  Tests the linear_ranges logic correctness.
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index 18c3d313872e..200aa1780f92 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -301,3 +301,4 @@ obj-$(CONFIG_OBJAGG) += objagg.o
+ 
+ # KUnit tests
+ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
++obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+diff --git a/lib/test_linear_ranges.c b/lib/test_linear_ranges.c
 new file mode 100644
-index 000000000000..7e0f73a898c7
+index 000000000000..676e0b8abcdd
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
-@@ -0,0 +1,155 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/rohm,bd99954.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/lib/test_linear_ranges.c
+@@ -0,0 +1,228 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit test for the linear_ranges helper.
++ *
++ * Copyright (C) 2020, ROHM Semiconductors.
++ * Author: Matti Vaittinen <matti.vaittien@fi.rohmeurope.com>
++ */
++#include <kunit/test.h>
 +
-+title: ROHM BD99954 Battery charger
++#include <linux/linear_range.h>
 +
-+maintainers:
-+  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-+  - Markus Laine <markus.laine@fi.rohmeurope.com>
-+  - Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
++/* First things first. I deeply dislike unit-tests. I have seen all the hell
++ * breaking loose when people who think the unit tests are "the silver bullet"
++ * to kill bugs get to decide how a company should implement testing strategy...
++ *
++ * Believe me, it may get _really_ ridiculous. It is tempting to think that
++ * walking through all the possible execution branches will nail down 100% of
++ * bugs. This may lead to ideas about demands to get certain % of "test
++ * coverage" - measured as line coverage. And that is one of the worst things
++ * you can do.
++ *
++ * Ask people to provide line coverage and they do. I've seen clever tools
++ * which generate test cases to test the existing functions - and by default
++ * these tools expect code to be correct and just generate checks which are
++ * passing when ran against current code-base. Run this generator and you'll get
++ * tests that do not test code is correct but just verify nothing changes.
++ * Problem is that testing working code is pointless. And if it is not
++ * working, your test must not assume it is working. You won't catch any bugs
++ * by such tests. What you can do is to generate a huge amount of tests.
++ * Especially if you were are asked to proivde 100% line-coverage x_x. So what
++ * does these tests - which are not finding any bugs now - do?
++ *
++ * They add inertia to every future development. I think it was Terry Pratchet
++ * who wrote someone having same impact as thick syrup has to chronometre.
++ * Excessive amount of unit-tests have this effect to development. If you do
++ * actually find _any_ bug from code in such environment and try fixing it...
++ * ...chances are you also need to fix the test cases. In sunny day you fix one
++ * test. But I've done refactoring which resulted 500+ broken tests (which had
++ * really zero value other than proving to managers that we do do "quality")...
++ *
++ * After this being said - there are situations where UTs can be handy. If you
++ * have algorithms which take some input and should produce output - then you
++ * can implement few, carefully selected simple UT-cases which test this. I've
++ * previously used this for example for netlink and device-tree data parsing
++ * functions. Feed some data examples to functions and verify the output is as
++ * expected. I am not covering all the cases but I will see the logic should be
++ * working.
++ *
++ * Here we also do some minor testing. I don't want to go through all branches
++ * or test more or less obvious things - but I want to see the main logic is
++ * working. And I definitely don't want to add 500+ test cases that break when
++ * some simple fix is done x_x. So - let's only add few, well selected tests
++ * which ensure as much logic is good as possible.
++ */
 +
-+description: |
-+  The ROHM BD99954 is a Battery Management LSI for 1-4 cell Lithium-Ion
-+  secondary battery intended to be used in space-constraint equipment such
-+  as Low profile Notebook PC, Tablets and other applications. BD99954
-+  provides a Dual-source Battery Charger, two port BC1.2 detection and a
-+  Battery Monitor.
++/*
++ * Test Range 1:
++ * selectors:	2	3	4	5	6
++ * values (5):	10	20	30	40	50
++ *
++ * Test Range 2:
++ * selectors:	7	8	9	10
++ * values (4):	100	150	200	250
++ */
 +
++#define RANGE1_MIN 10
++#define RANGE1_MIN_SEL 2
++#define RANGE1_STEP 10
 +
-+properties:
-+  compatible:
-+    const: rohm,bd99954
-+#
-+#    The battery charging profile of BD99954.
-+#
-+#    Curve (1) represents charging current.
-+#    Curve (2) represents battery voltage.
-+#
-+#    The BD99954 data sheet divides charging to three phases.
-+#    a) Trickle-charge with constant current (8).
-+#    b) pre-charge with constant current (6)
-+#    c) fast-charge with:
-+#       First a constant current (5) phase (CC)
-+#       Then constant voltage (CV) phase (after the battery voltage has reached
-+#       target level - until charging current has dropped to termination
-+#       level (7)
-+#
-+#     V ^                                                        ^ I
-+#       .                                                        .
-+#       .                                                        .
-+# (4)- -.- - - - - - - - - - - - - -  +++++++++++++++++++++++++++.
-+#       .                            /                           .
-+#       .                     ++++++/++ - - - - - - - - - - - - -.- - (5)
-+#       .                     +    /  +                          .
-+#       .                     +   -   --                         .
-+#       .                     +  -     +                         .
-+#       .                     +.-      -:                        .
-+#       .                    .+         +`                       .
-+#       .                  .- +       | `/                       .
-+#       .               .."   +          .:                      .
-+#       .             -"      +           --                     .
-+#       .    (2)  ..."        +       |    :-                    .
-+#       .    ...""            +             -:                   .
-+# (3)- -.-.""- - - - -+++++++++ - - - - - - -.:- - - - - - - - - .- - (6)
-+#       .             +                       `:.                .
-+#       .             +               |         -:               .
-+#       .             +                           -:             .
-+#       .             +                             ..           .
-+#       .   (1)       +               |               "+++- - - -.- - (7)
-+#       -++++++++++++++- - - - - - - - - - - - - - - - - + - - - .- - (8)
-+#       .                                                +       -
-+#       -------------------------------------------------+++++++++-->
-+#       |             |       |   CC   |      CV         |
-+#       | --trickle-- | -pre- | ---------fast----------- |
-+#
-+#   The charger uses the following battery properties
-+# - trickle-charge-current-microamp:
-+#     Current used at trickle-charge phase (8 in above chart)
-+#     minimum: 64000
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+# - precharge-current-microamp:
-+#     Current used at pre-charge phase (6 in above chart)
-+#     minimum: 64000
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+# - constant-charge-current-max-microamp
-+#     Current used at fast charge constant current phase (5 in above chart)
-+#     minimum: 64000
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+# - constant-charge-voltage-max-microvolt
-+#     The constant voltage used in fast charging phase (4 in above chart)
-+#     minimum: 2560000
-+#     maximum: 19200000
-+#     multipleOf: 16000
-+# - precharge-upper-limit-microvolt
-+#     charging mode is changed from trickle charging to pre-charging
-+#     when battery voltage exceeds this limit voltage (3 in above chart)
-+#     minimum: 2048000
-+#     maximum: 19200000
-+#     multipleOf: 64000
-+# - re-charge-voltage-microvolt
-+#     minimum: 2560000
-+#     maximum: 19200000
-+#     multipleOf: 16000
-+#     re-charging is automatically started when battry has been discharging
-+#     to the point where the battery voltage drops below this limit
-+# - over-voltage-threshold-microvolt
-+#     battery is expected to be faulty if battery voltage exceeds this limit.
-+#     Charger will then enter to a "battery faulty" -state
-+#     minimum: 2560000
-+#     maximum: 19200000
-+#     multipleOf: 16000
-+# - charge-term-current-microamp
-+#     minimum: 0
-+#     maximum: 1024000
-+#     multipleOf: 64000
-+#     a charge cycle terminates when the battery voltage is above recharge
-+#     threshold, and the current is below this setting (7 in above chart)
-+#   See also Documentation/devicetree/bindings/power/supply/battery.txt
++/* 2, 3, 4, 5, 6 */
++static const unsigned int range1_sels[] = { RANGE1_MIN_SEL, RANGE1_MIN_SEL + 1,
++					    RANGE1_MIN_SEL + 2,
++					    RANGE1_MIN_SEL + 3,
++					    RANGE1_MIN_SEL + 4 };
++/* 10, 20, 30, 40, 50 */
++static const unsigned int range1_vals[] = { RANGE1_MIN, RANGE1_MIN +
++					    RANGE1_STEP,
++					    RANGE1_MIN + RANGE1_STEP * 2,
++					    RANGE1_MIN + RANGE1_STEP * 3,
++					    RANGE1_MIN + RANGE1_STEP * 4 };
 +
-+  monitored-battery:
-+    description:
-+      phandle of battery characteristics devicetree node
++#define RANGE2_MIN 100
++#define RANGE2_MIN_SEL 7
++#define RANGE2_STEP 50
 +
-+  rohm,vsys-regulation-microvolt:
-+    description: system specific lower limit for system voltage.
-+    minimum: 2560000
-+    maximum: 19200000
-+    multipleOf: 64000
++/*  7, 8, 9, 10 */
++static const unsigned int range2_sels[] = { RANGE2_MIN_SEL, RANGE2_MIN_SEL + 1,
++					    RANGE2_MIN_SEL + 2,
++					    RANGE2_MIN_SEL + 3 };
++/* 100, 150, 200, 250 */
++static const unsigned int range2_vals[] = { RANGE2_MIN, RANGE2_MIN +
++					    RANGE2_STEP,
++					    RANGE2_MIN + RANGE2_STEP * 2,
++					    RANGE2_MIN + RANGE2_STEP * 3 };
 +
-+  rohm,vbus-input-current-limit-microamp:
-+    description: system specific VBUS input current limit (in microamps).
-+    minimum: 32000
-+    maximum: 16352000
-+    multipleOf: 32000
++#define RANGE1_NUM_VALS (ARRAY_SIZE(range1_vals))
++#define RANGE2_NUM_VALS (ARRAY_SIZE(range2_vals))
++#define RANGE_NUM_VALS (RANGE1_NUM_VALS + RANGE2_NUM_VALS)
 +
-+  rohm,vcc-input-current-limit-microamp:
-+    description: system specific VCC/VACP input current limit (in microamps).
-+    minimum: 32000
-+    maximum: 16352000
-+    multipleOf: 32000
++#define RANGE1_MAX_SEL (RANGE1_MIN_SEL + RANGE1_NUM_VALS - 1)
++#define RANGE1_MAX_VAL (range1_vals[RANGE1_NUM_VALS - 1])
 +
-+required:
-+  - compatible
++#define RANGE2_MAX_SEL (RANGE2_MIN_SEL + RANGE2_NUM_VALS - 1)
++#define RANGE2_MAX_VAL (range2_vals[RANGE2_NUM_VALS - 1])
 +
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        charger@9 {
-+            compatible = "rohm,bd99954";
-+            monitored-battery = <&battery>;
-+            reg = <0x9>;
-+            interrupt-parent = <&gpio1>;
-+            interrupts = <29 8>;
-+            rohm,vsys-regulation-microvolt = <8960000>;
-+            rohm,vbus-input-current-limit-microamp = <1472000>;
-+            rohm,vcc-input-current-limit-microamp = <1472000>;
-+        };
-+    };
++#define SMALLEST_SEL RANGE1_MIN_SEL
++#define SMALLEST_VAL RANGE1_MIN
++
++static struct linear_range testr[] = {
++	{
++		.min = RANGE1_MIN,
++		.min_sel = RANGE1_MIN_SEL,
++		.max_sel = RANGE1_MAX_SEL,
++		.step = RANGE1_STEP,
++	}, {
++		.min = RANGE2_MIN,
++		.min_sel = RANGE2_MIN_SEL,
++		.max_sel = RANGE2_MAX_SEL,
++		.step = RANGE2_STEP
++	},
++};
++
++static void range_test_get_value(struct kunit *test)
++{
++	int ret, i;
++	unsigned int sel, val;
++
++	for (i = 0; i < RANGE1_NUM_VALS; i++) {
++		sel = range1_sels[i];
++		ret = linear_range_get_value_array(&testr[0], 2, sel, &val);
++		KUNIT_EXPECT_EQ(test, 0, ret);
++		KUNIT_EXPECT_EQ(test, val, range1_vals[i]);
++	}
++	for (i = 0; i < RANGE2_NUM_VALS; i++) {
++		sel = range2_sels[i];
++		ret = linear_range_get_value_array(&testr[0], 2, sel, &val);
++		KUNIT_EXPECT_EQ(test, 0, ret);
++		KUNIT_EXPECT_EQ(test, val, range2_vals[i]);
++	}
++	ret = linear_range_get_value_array(&testr[0], 2, sel + 1, &val);
++	KUNIT_EXPECT_NE(test, 0, ret);
++}
++
++static void range_test_get_selector_high(struct kunit *test)
++{
++	int ret, i;
++	unsigned int sel;
++	bool found;
++
++	for (i = 0; i < RANGE1_NUM_VALS; i++) {
++		ret = linear_range_get_selector_high(&testr[0], range1_vals[i],
++						     &sel, &found);
++		KUNIT_EXPECT_EQ(test, 0, ret);
++		KUNIT_EXPECT_EQ(test, sel, range1_sels[i]);
++		KUNIT_EXPECT_TRUE(test, found);
++	}
++
++	ret = linear_range_get_selector_high(&testr[0], RANGE1_MAX_VAL + 1,
++					     &sel, &found);
++	KUNIT_EXPECT_LE(test, ret, 0);
++
++	ret = linear_range_get_selector_high(&testr[0], RANGE1_MIN - 1,
++					     &sel, &found);
++	KUNIT_EXPECT_EQ(test, 0, ret);
++	KUNIT_EXPECT_FALSE(test, found);
++	KUNIT_EXPECT_EQ(test, sel, range1_sels[0]);
++}
++
++static void range_test_get_value_amount(struct kunit *test)
++{
++	int ret;
++
++	ret = linear_range_values_in_range_array(&testr[0], 2);
++	KUNIT_EXPECT_EQ(test, (int)RANGE_NUM_VALS, ret);
++}
++
++static void range_test_get_selector_low(struct kunit *test)
++{
++	int i, ret;
++	unsigned int sel;
++	bool found;
++
++	for (i = 0; i < RANGE1_NUM_VALS; i++) {
++		ret = linear_range_get_selector_low_array(&testr[0], 2,
++							  range1_vals[i], &sel,
++							  &found);
++		KUNIT_EXPECT_EQ(test, 0, ret);
++		KUNIT_EXPECT_EQ(test, sel, range1_sels[i]);
++		KUNIT_EXPECT_TRUE(test, found);
++	}
++	for (i = 0; i < RANGE2_NUM_VALS; i++) {
++		ret = linear_range_get_selector_low_array(&testr[0], 2,
++							  range2_vals[i], &sel,
++							  &found);
++		KUNIT_EXPECT_EQ(test, 0, ret);
++		KUNIT_EXPECT_EQ(test, sel, range2_sels[i]);
++		KUNIT_EXPECT_TRUE(test, found);
++	}
++
++	/*
++	 * Seek value greater than range max => get_selector_*_low should
++	 * return Ok - but set found to false as value is not in range
++	 */
++	ret = linear_range_get_selector_low_array(&testr[0], 2,
++					range2_vals[RANGE2_NUM_VALS - 1] + 1,
++					&sel, &found);
++
++	KUNIT_EXPECT_EQ(test, 0, ret);
++	KUNIT_EXPECT_EQ(test, sel, range2_sels[RANGE2_NUM_VALS - 1]);
++	KUNIT_EXPECT_FALSE(test, found);
++}
++
++static struct kunit_case range_test_cases[] = {
++	KUNIT_CASE(range_test_get_value_amount),
++	KUNIT_CASE(range_test_get_selector_high),
++	KUNIT_CASE(range_test_get_selector_low),
++	KUNIT_CASE(range_test_get_value),
++	{},
++};
++
++static struct kunit_suite range_test_module = {
++	.name = "linear-ranges-test",
++	.test_cases = range_test_cases,
++};
++
++kunit_test_suites(&range_test_module);
++
++MODULE_LICENSE("GPL");
 -- 
 2.21.0
 
