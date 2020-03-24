@@ -2,257 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3C71902D1
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 01:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5794190311
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 01:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727662AbgCXAXs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Mar 2020 20:23:48 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:34790 "EHLO mx1.riseup.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727421AbgCXAXr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 23 Mar 2020 20:23:47 -0400
-Received: from capuchin.riseup.net (unknown [10.0.1.176])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 48mX6V68p5zFfDn;
-        Mon, 23 Mar 2020 17:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1585009427; bh=j3tEYauAWbUt5Bq++cpnAQ+veQjVlo2mGqdGEuOWYKk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=USfHRYgLYPRPRWwXRxMZO4/jltoUyXFAgt9hxtbxfyeDBdN22P1SSbO8BGP0sCB+w
-         HakEITw2akvBHVsPv9BeV8UAlS5U35vEBBVMHlxl/wKSE4DVmGI9It89QoDEuLtPvk
-         M1DmAgt9i97nwNxQqyKfVYH1vzfJiZslF098tonI=
-X-Riseup-User-ID: B5C8B4D6D4F8EF314D93C054F7DD521F0FBF81974486F66161F89FD676186F50
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by capuchin.riseup.net (Postfix) with ESMTPSA id 48mX6V3CGtz8tJk;
-        Mon, 23 Mar 2020 17:23:46 -0700 (PDT)
-From:   Francisco Jerez <currojerez@riseup.net>
-To:     "Pandruvada\, Srinivas" <srinivas.pandruvada@intel.com>,
-        "Brown\, Len" <len.brown@intel.com>,
-        "linux-pm\@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "intel-gfx\@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
-Cc:     "Vivi\, Rodrigo" <rodrigo.vivi@intel.com>,
-        "peterz\@infradead.org" <peterz@infradead.org>,
-        "rjw\@rjwysocki.net" <rjw@rjwysocki.net>
-Subject: Re: [RFC] GPU-bound energy efficiency improvements for the intel_pstate driver (v2).
-In-Reply-To: <5a7aa1cef880ee5ac3ffe2055745c26f8d124b68.camel@intel.com>
-References: <20200310214203.26459-1-currojerez@riseup.net> <5a7aa1cef880ee5ac3ffe2055745c26f8d124b68.camel@intel.com>
-Date:   Mon, 23 Mar 2020 17:23:51 -0700
-Message-ID: <87blom4n3c.fsf@riseup.net>
+        id S1727030AbgCXAwG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Mar 2020 20:52:06 -0400
+Received: from mail-eopbgr20055.outbound.protection.outlook.com ([40.107.2.55]:62793
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726986AbgCXAwG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 23 Mar 2020 20:52:06 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JGN3N/Jy/SjCVX6efEp6aNFaJrlgsZ3zR4m7yMANnO/7E0xhup6PBmK18k5XGd0XngUJQ8DymJ7P24hyBOpsNiAlxvLeV0SfNxIA6gsjeddRnnHZaUNySAu5bpw/Gqb6TFN3YloOurQJN6PcU1vkWKDx+Uyt8wDpYUFRCB6iBSY2QSUZRjx3BH8+xluzTLcRftGYMPLt1Fye9twlrRns5ojF1zjqP3/0ITboUjLadqac/1t4yNdFhI6E8jr2gmYUB/p+LTBCnB3XOkw3X88ajb5RIhxHGwcSOwtBlx2jX0VBb/ttR3YFCW1zSetjKbgOHgSEJgWUIWUqswXPcWXLkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ekRiOP5+uDcT0buFROQWK90bLw7SVOf4P1GWSugBm+4=;
+ b=n/8a34RjSWlUGMff0yukK6sn7UDRoEQDptxfdxlcBrxQCnF10N1IKo3dOYxOFzx3w2bESzIvqLpWYSpZ+xGRkjWIoTv5V0Ny6XDVAB9HDjyhOOmVZ3Lacp4eJoj2CLIOI20ltNw4F8IgNuoQxDXzSw+6M+CU1O93kmq31SX7O38wo9s/60GE3EyfHWQFOcCal+X0WHckmSeQuX72qFzVbS7ivJaaOLp+l7O4Kx5foUICpsDlChCE+WvQEGPXFn6AkTNcCM1Ms23/jick0IjympElgeU1/BXx2qnOdFDdMpsYzHVZGJyhYZTNRyAalhcntyj7YOK+KVX+7c7jhOtmIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ekRiOP5+uDcT0buFROQWK90bLw7SVOf4P1GWSugBm+4=;
+ b=KrsQC9UUX4q9YsRNHbxMdGh8FUZx01wXln4EWJRnlJfAZ6Nqd3R1gEagWUr/iF/ha5wboFy7ysivtHpvYv7M23RSukj1cGzvVBCg+InkYIFe2CpZk/TF94cjpAhzv1NhwZegxBkSyiUvuDhRC3xvbXklV2tJ8g5fC5BKsjYumGw=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
+ DB3PR0402MB3914.eurprd04.prod.outlook.com (52.134.71.157) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2835.18; Tue, 24 Mar 2020 00:52:01 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::3143:c46:62e4:8a8b]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::3143:c46:62e4:8a8b%7]) with mapi id 15.20.2835.021; Tue, 24 Mar 2020
+ 00:52:01 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH V3 2/3] thermal: imx8mm: Add i.MX8MP support
+Thread-Topic: [PATCH V3 2/3] thermal: imx8mm: Add i.MX8MP support
+Thread-Index: AQHWAQ+PMwlXAHkCzkSegBP0Of4mRKhWN38AgACy3VA=
+Date:   Tue, 24 Mar 2020 00:52:01 +0000
+Message-ID: <DB3PR0402MB39163E02D851A95D843B1465F5F10@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <1584966504-21719-1-git-send-email-Anson.Huang@nxp.com>
+ <1584966504-21719-2-git-send-email-Anson.Huang@nxp.com>
+ <644b108e-596c-64d6-9693-80ac7f706dc7@linaro.org>
+In-Reply-To: <644b108e-596c-64d6-9693-80ac7f706dc7@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anson.huang@nxp.com; 
+x-originating-ip: [183.192.13.100]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: fd79f8e9-185c-49dd-751c-08d7cf8d9079
+x-ms-traffictypediagnostic: DB3PR0402MB3914:|DB3PR0402MB3914:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB3PR0402MB3914928FD8763E2295637C26F5F10@DB3PR0402MB3914.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-forefront-prvs: 03524FBD26
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(136003)(396003)(346002)(39860400002)(366004)(33656002)(110136005)(7696005)(4326008)(52536014)(55016002)(9686003)(478600001)(5660300002)(44832011)(186003)(316002)(26005)(71200400001)(4744005)(76116006)(6506007)(53546011)(64756008)(7416002)(66946007)(66476007)(66556008)(66446008)(81166006)(81156014)(2906002)(86362001)(8676002)(8936002)(921003)(32563001)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3914;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MA8ua5c76kn4Wqcb4M+HBlHHxn342mRLpN9bh4SXLT7TP5GNl56yUeXpPu3ytbcxEzYsTJupHLr/yVyJYeD6KM1of48vzcN3BN+UvcRFg+95m9zLYEgzGkefb5k37Fh6hYYFNNaiGleQZGh14REOSDunVjWBWn5uZszv5mvKdpgG2KGQcgWrWb2a0sbRXtpjcwHZUi+iIZjqabXU8+SI5+sZ/RgoQ6gVGswA90a6D8I/rcHt5fijO3EOqXhXtPCUwjqsw4d6ySWR8q2pZD/DdUVuBjKazGBoQ9zZmiKfKHEM7x32N50n8mFiKLPiUC6AJQn8WJDryC7n5E0t8RyviJ+jj6quTgG3rv0xk+LiY5+ZsY0iWUOXtB+V60c/uOBpYd+2sSYG8hIDKFK+pSx/ioOHHkaVx7zjWabRDo3Adw+zF5E2cBPqW7/FJQqjX8QwUGK5aw75qMjzz99N3UJcYuaiv01ptMXb03oc6Ex5IGxoeAMY9wvI5fhqip4goAJ1vGPJLYhAZm4hfg73jvJvqQ==
+x-ms-exchange-antispam-messagedata: mE0ScmSpE9xJOOLhxPecFFjbtHnow+ffC6Thh5zThMxA0DJ5UHD2Q1emK0TNjlinYzaEH368E2hyCeIZSBJSlhpDH+hlJtBlggyMQFOoDanxPYHA8NPiZXsQQCiA4S8fR6Bd8Ql4O/orhSMZjsry5Q==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="==-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd79f8e9-185c-49dd-751c-08d7cf8d9079
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2020 00:52:01.6622
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aNoKTDtxd5jq91qG48Y7RgpjRydbU/GaFu4ejAm74+Y8YaYNRvU5T5J3Lf0kQWqpO8g0e3rTo8nVro+et6LppQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3914
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---==-=-=
-Content-Type: multipart/mixed; boundary="=-=-="
-
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-"Pandruvada, Srinivas" <srinivas.pandruvada@intel.com> writes:
-
-> Hi Francisco,
->
-> On Tue, 2020-03-10 at 14:41 -0700, Francisco Jerez wrote:
->> This is my second take on improving the energy efficiency of the
->> intel_pstate driver under IO-bound conditions.  The problem and
->> approach to solve it are roughly the same as in my previous series
->> [1]
->> at a high level:
->>=20
->> In IO-bound scenarios (by definition) the throughput of the system
->> doesn't improve with increasing CPU frequency beyond the threshold
->> value at which the IO device becomes the bottleneck, however with the
->> current governors (whether HWP is in use or not) the CPU frequency
->> tends to oscillate with the load, often with an amplitude far into
->> the
->> turbo range, leading to severely reduced energy efficiency, which is
->> particularly problematic when a limited TDP budget is shared among a
->> number of cores running some multithreaded workload, or among a CPU
->> core and an integrated GPU.
->>=20
->> Improving the energy efficiency of the CPU improves the throughput of
->> the system in such TDP-limited conditions.  See [4] for some
->> preliminary benchmark results from a Razer Blade Stealth 13 Late
->> 2019/LY320 laptop with an Intel ICL processor and integrated
->> graphics,
->> including throughput results that range up to a ~15% improvement and
->> performance-per-watt results up to a ~43% improvement (estimated via
->> RAPL).  Particularly the throughput results may vary substantially
->> from one platform to another depending on the TDP budget and the
->> balance of load between CPU and GPU.
->>=20
->
-> You changed the EPP to 0 intentionally or unintentionally. We know that
-> all energy optimization will be disabled with this change.=20
-> This test was done on an ICL system.
->
-
-Hmm, that's bad, and fully unintentional.  It's probably a side effect
-of intel_pstate_reset_vlp() running before intel_pstate_hwp_set(), which
-could cause it to use an uninitialized value of hwp_req_cached (zero?).
-I'll fix it in v3.  Thanks a lot for pointing this out.
-
->
-> Basically without your patches on top of linux-next: EPP =3D 0x80
-> $sudo rdmsr -a 0x774
-> 80002704
-> 80002704
-> 80002704
-> 80002704
-> 80002704
-> 80002704
-> 80002704
-> 80002704
->
->
-> After your patches
->
-> $sudo rdmsr -a 0x774
-> 2704
-> 2704
-> 2704
-> 2704
-> 2704
-> 2704
-> 2704
-> 2704
->
-> I added some prints, basically you change the EPP at startup before
-> regular HWP request update path and update on top. So boot up EPP is
-> overwritten.
->
->
-> [    5.867476] intel_pstate_reset_vlp hwp_req cached:0
-> [    5.872426] intel_pstate_reset_vlp hwp_req:404
-> [    5.881645] intel_pstate_reset_vlp hwp_req cached:0
-> [    5.886634] intel_pstate_reset_vlp hwp_req:404
-> [    5.895819] intel_pstate_reset_vlp hwp_req cached:0
-> [    5.900958] intel_pstate_reset_vlp hwp_req:404
-> [    5.910321] intel_pstate_reset_vlp hwp_req cached:0
-> [    5.915406] intel_pstate_reset_vlp hwp_req:404
-> [    5.924623] intel_pstate_reset_vlp hwp_req cached:0
-> [    5.929564] intel_pstate_reset_vlp hwp_req:404
-> [    5.944039] intel_pstate_reset_vlp hwp_req cached:0
-> [    5.951672] intel_pstate_reset_vlp hwp_req:404
-> [    5.966157] intel_pstate_reset_vlp hwp_req cached:0
-> [    5.973808] intel_pstate_reset_vlp hwp_req:404
-> [    5.988223] intel_pstate_reset_vlp hwp_req cached:0
-> [    5.995823] intel_pstate_reset_vlp hwp_req:404
-> [    6.010062] intel_pstate: HWP enabled
->
-> Thanks,
-> Srinivas
->
->
->
->> One of the main differences relative to my previous version is that
->> the trade-off between energy efficiency and frequency ramp-up latency
->> is now exposed to device drivers through a new PM QoS class [It would
->> make sense to expose it to userspace too eventually but that's beyond
->> the purpose of this series].  The new PM QoS class provides a latency
->> target to CPUFREQ governors which gives them permission to filter out
->> CPU frequency oscillations with a period significantly shorter than
->> the specified target, whenever doing so leads to improved energy
->> efficiency.
->>=20
->> This series takes advantage of the new PM QoS class from the i915
->> driver whenever the driver determines that the GPU has become a
->> bottleneck for an extended period of time.  At that point it places a
->> PM QoS ramp-up latency target which causes CPUFREQ to limit the CPU
->> to
->> a reasonably energy-efficient frequency able to at least achieve the
->> required amount of work in a time window approximately equal to the
->> ramp-up latency target (since any longer-term energy efficiency
->> optimization would potentially violate the latency target).  This
->> seems more effective than clamping the CPU frequency to a fixed value
->> directly from various subsystems, since the CPU is a shared resource,
->> so the frequency bound needs to consider the load and latency
->> requirements of all independent workloads running on the same CPU
->> core
->> in order to avoid performance degradation in a multitasking, possibly
->> virtualized environment.
->>=20
->> The main limitation of this PM QoS approach is that whenever multiple
->> clients request different ramp-up latency targets, only the strictest
->> (lowest latency) one will apply system-wide, potentially leading to
->> suboptimal energy efficiency for the less latency-sensitive clients,
->> (though it won't artificially limit the CPU throughput of the most
->> latency-sensitive clients as a result of the PM QoS requests placed
->> by
->> less latency-sensitive ones).  In order to address this limitation
->> I'm
->> working on a more complicated solution which integrates with the task
->> scheduler in order to provide response latency control with process
->> granularity (pretty much in the spirit of PELT).  One of the
->> alternatives Rafael and I were discussing was to expose that through
->> a
->> third cgroup clamp on top of the MIN and MAX utilization clamps, but
->> I'm open to any other possibilities regarding what the interface
->> should look like.  Either way the current (scheduling-unaware) PM
->> QoS-based interface should provide most of the benefit except in
->> heavily multitasking environments.
->>=20
->> A branch with this series in testable form can be found here [2],
->> based on linux-next from a few days ago.  Another important
->> difference
->> with respect to my previous revision is that the present one targets
->> HWP systems (though for the moment it's only enabled by default on
->> ICL, even though that can be overridden through the kernel command
->> line).  I have WIP code that uses the same governor in order to
->> provide a similar benefit on non-HWP systems (like my previous
->> revision), which can be found in this branch for reference [3] -- I'm
->> planning to finish that up and send it as follow-up to this series
->> assuming people are happy with the overall approach.
->>=20
->> Thanks in advance for any review feed-back and test reports.
->>=20
->> [PATCH 01/10] PM: QoS: Add CPU_RESPONSE_FREQUENCY global PM QoS
->> limit.
->> [PATCH 02/10] drm/i915: Adjust PM QoS response frequency based on GPU
->> load.
->> [PATCH 03/10] OPTIONAL: drm/i915: Expose PM QoS control parameters
->> via debugfs.
->> [PATCH 04/10] Revert "cpufreq: intel_pstate: Drop ->update_util from
->> pstate_funcs"
->> [PATCH 05/10] cpufreq: intel_pstate: Implement VLP controller
->> statistics and status calculation.
->> [PATCH 06/10] cpufreq: intel_pstate: Implement VLP controller target
->> P-state range estimation.
->> [PATCH 07/10] cpufreq: intel_pstate: Implement VLP controller for HWP
->> parts.
->> [PATCH 08/10] cpufreq: intel_pstate: Enable VLP controller based on
->> ACPI FADT profile and CPUID.
->> [PATCH 09/10] OPTIONAL: cpufreq: intel_pstate: Add tracing of VLP
->> controller status.
->> [PATCH 10/10] OPTIONAL: cpufreq: intel_pstate: Expose VLP controller
->> parameters via debugfs.
->>=20
->> [1] https://marc.info/?l=3Dlinux-pm&m=3D152221943320908&w=3D2
->> [2]=20
->> https://github.com/curro/linux/commits/intel_pstate-vlp-v2-hwp-only
->> [3] https://github.com/curro/linux/commits/intel_pstate-vlp-v2
->> [4]=20
->> http://people.freedesktop.org/~currojerez/intel_pstate-vlp-v2/benchmark-=
-comparison-ICL.log
->>=20
-
---=-=-=--
-
---==-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEAREIAB0WIQST8OekYz69PM20/4aDmTidfVK/WwUCXnlTFwAKCRCDmTidfVK/
-WyB8AP45y6UztyOz1db82FUstiIvscZdjd6aBmBXWgxNCrr8DgD9FuUnx14MbXhb
-UzYeKpumE0ljPcmeRFRcRk/tLy+cZ54=
-=z9+a
------END PGP SIGNATURE-----
---==-=-=--
+SGksIFNoYXduDQoNCj4gU3ViamVjdDogUmU6IFtQQVRDSCBWMyAyLzNdIHRoZXJtYWw6IGlteDht
+bTogQWRkIGkuTVg4TVAgc3VwcG9ydA0KPiANCj4gT24gMjMvMDMvMjAyMCAxMzoyOCwgQW5zb24g
+SHVhbmcgd3JvdGU6DQo+ID4gaS5NWDhNUCBzaGFyZXMgc2FtZSBUTVUgd2l0aCBpLk1YOE1NLCB0
+aGUgb25seSBkaWZmZXJlbmNlIGlzIGkuTVg4TVANCj4gPiBoYXMgdHdvIHRoZXJtYWwgc2Vuc29y
+cyB3aGlsZSBpLk1YOE1NIE9OTFkgaGFzIG9uZSwgYWRkIG11bHRpcGxlDQo+ID4gc2Vuc29ycyBz
+dXBwb3J0IGZvciBpLk1YOE1NIFRNVSBkcml2ZXIuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBB
+bnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4gPiAtLS0NCj4gPiBDaGFuZ2VzIHNp
+bmNlIFYyOg0KPiA+IAktIEZpeCBidWlsZCB3YXJuaW5nIGFib3V0IHRlc3RfYml0IHNlY29uZCBh
+cmd1bWVudCB0eXBlLg0KPiA+IC0tLQ0KPiANCj4gUGxlYXNlLCBqdXN0IHNlbmQgYSBmaXggb24g
+dG9wIG9mIHRoaXMgcGF0Y2ggYmVjYXVzZSB0aGUgc2VyaWVzIGlzIGFscmVhZHkNCj4gbWVyZ2Vk
+Lg0KDQpUaGUgcGF0Y2ggMS8zLCAyLzMgYXJlIG1lcmdlZCwgd2lsbCB5b3UgcGljayB1cCB0aGUg
+My8zPw0KDQpUaGFua3MsDQpBbnNvbg0K
