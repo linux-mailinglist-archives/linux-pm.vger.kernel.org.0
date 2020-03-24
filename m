@@ -2,145 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 990261913DD
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 16:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07FA71913F7
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 16:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728004AbgCXPGV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Mar 2020 11:06:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51268 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727736AbgCXPGV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Mar 2020 11:06:21 -0400
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2BAC520775;
-        Tue, 24 Mar 2020 15:06:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585062380;
-        bh=8pIS4vs8NHSn+hwQhqH3u3RNHDcaAGCJDHvJt0tjNa4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fc+aeEH5arhksV19znprIHLe75k2fAW9cwMJmmeIORp/Pe8rgRiFxpGXCq0aafd0T
-         Fvm/XvCFvYRxQBeqWqjjC+JfnLqguSbXh8UhE1TU4rEnzeTDxYbod/sM84Hl92iRlr
-         JMstjao+AeVl6QpFGL2frE+DycngLxvZOPG59jqo=
-Received: by mail-qk1-f179.google.com with SMTP id k13so7796136qki.2;
-        Tue, 24 Mar 2020 08:06:20 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ3nWe7ULCSNnoAzpx/XfxCX3iuPJge3LiMzggjfmzGBU1q/6xkO
-        GVVsj280NZw84dI0n84bPWC9LAkWNzXW9ZedLQ==
-X-Google-Smtp-Source: ADFU+vtg882wc2BN6wL0hT6KIwxPK3ki0huHjsWp/kB5sbJP9A444Ldp1mPmpZWwv6Ts7ombMhx35L3vr0Yc8fv7dGw=
-X-Received: by 2002:a37:4a85:: with SMTP id x127mr26564313qka.152.1585062379195;
- Tue, 24 Mar 2020 08:06:19 -0700 (PDT)
+        id S1727621AbgCXPOY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Mar 2020 11:14:24 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:54632 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727555AbgCXPOY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Mar 2020 11:14:24 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02OFELjc055861;
+        Tue, 24 Mar 2020 10:14:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1585062861;
+        bh=l7ghfWCYstg4OWQmwbil6bEMOSOomOvQuKwzXl0urrs=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=xi2+9VO8c3ngMb6vQYu9llOVBDCazzgFvrzKYmmt8XgAIoCTbODzcy+OxdsTy7Q4X
+         H2oxJlPSfYpWyW5JvNqINkYhxYoTk8SPWFGsGi4CPoIKJfTithz8HwduXZYJ1xugYt
+         MjnOh8o331QR4X4xfM84yjdPg6tUlrpNBIBFH/gA=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02OFELBd096857
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 24 Mar 2020 10:14:21 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 24
+ Mar 2020 10:14:21 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 24 Mar 2020 10:14:21 -0500
+Received: from [10.250.43.45] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02OFEKMv045692;
+        Tue, 24 Mar 2020 10:14:21 -0500
+Subject: Re: [RESEND PATCH v5 0/3] BQ25150/155 Charger
+To:     <sre@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dmurphy@ti.com>
+References: <20200304174025.31655-1-r-rivera-matos@ti.com>
+From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Message-ID: <eb5f0818-21c7-1b84-b0c9-904bce9721be@ti.com>
+Date:   Tue, 24 Mar 2020 10:14:20 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <cover.1583412540.git.amit.kucheria@linaro.org>
- <8a0cfe9e3018f7996c1563035bee76048941beb4.1583412540.git.amit.kucheria@linaro.org>
- <20200311144933.GA21587@bogus> <CAHLCerN99eKOofxcCuvNwjNGbJfB7BzoPGAPCtXHNQdN9w8Bcw@mail.gmail.com>
- <CAL_JsqJ6T3LVbKueGn53dZmR=caD2AR7yLX9gffmOc9VwF9kXQ@mail.gmail.com> <CAP245DWgg7KsV9sMXmS571dAAy-cvDy4Q_9vi_KGxoOQ5VBU7w@mail.gmail.com>
-In-Reply-To: <CAP245DWgg7KsV9sMXmS571dAAy-cvDy4Q_9vi_KGxoOQ5VBU7w@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 24 Mar 2020 09:06:07 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKhK-yz+iqe6G+-c0pt9mJSsW8hMnTiWdRh3_+1PeG=dg@mail.gmail.com>
-Message-ID: <CAL_JsqKhK-yz+iqe6G+-c0pt9mJSsW8hMnTiWdRh3_+1PeG=dg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] dt-bindings: thermal: Add yaml bindings for
- thermal zones
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200304174025.31655-1-r-rivera-matos@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 4:33 AM Amit Kucheria <amit.kucheria@linaro.org> wrote:
->
-> On Tue, Mar 24, 2020 at 2:46 AM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Mon, Mar 23, 2020 at 2:46 PM Amit Kucheria <amit.kucheria@linaro.org> wrote:
-> > >
-> > > Hi Rob,
-> > >
-> > > Thanks for the review.
-> > >
-> > > On Wed, Mar 11, 2020 at 8:19 PM Rob Herring <robh@kernel.org> wrote:
-> > > >
-> > > > On Thu, Mar 05, 2020 at 06:26:43PM +0530, Amit Kucheria wrote:
-> > > > > As part of moving the thermal bindings to YAML, split it up into 3
-> > > > > bindings: thermal sensors, cooling devices and thermal zones.
-> > > > >
-> > > > > The thermal-zone binding is a software abstraction to capture the
-> > > > > properties of each zone - how often they should be checked, the
-> > > > > temperature thresholds (trips) at which mitigation actions need to be
-> > > > > taken and the level of mitigation needed at those thresholds.
-> >
->
-> [...]
->
-> >
-> > > > > +            /* ... */
-> > > > > +
-> > > > > +            gpu-thermal-top {
-> > > >
-> > > > This one is not going to match (which should cause an error).
-> > >
-> > > Good catch. Unfortunately, this isn't getting caught. Nor is the
-> > > 12-char limitation before -thermal in the thermal zone name. I can't
-> > > figure out why.
-> >
-> > That's because this schema has to be included by another schema which
-> > matches on a parent node containing 'thermal-zones'. If
-> > 'thermal-zones' can be at the root node, then you should rework this
-> > such that you have $nodename: {const: thermal-zones} as a top-level
-> > property.
->
-> I've done all the change requested in the review(see attached patch),
-> including moving to
->
-> properties:
->    $nodename:
->        const: thermal-zones
->
-> but that generates a bunch of errors similar to:
->
-> /home/amit/work/builds/build-aarch64/Documentation/devicetree/bindings/arm/zte.example.dt.yaml:
-> /: $nodename:0: 'thermal-zones' was expected
-> /home/amit/work/builds/build-aarch64/Documentation/devicetree/bindings/arm/psci.example.dt.yaml:
-> /: $nodename:0: 'thermal-zones' was expected
-> /home/amit/work/builds/build-aarch64/Documentation/devicetree/bindings/arm/sunxi.example.dt.yaml:
-> /: $nodename:0: 'thermal-zones' was expected
-> /home/amit/work/builds/build-aarch64/Documentation/devicetree/bindings/arm/sprd/sprd.example.dt.yaml:
-> /: $nodename:0: 'thermal-zones' was expected
-> /home/amit/work/builds/build-aarch64/Documentation/devicetree/bindings/arm/calxeda.example.dt.yaml:
-> /: $nodename:0: 'thermal-zones' was expected
-> /home/amit/work/builds/build-aarch64/Documentation/devicetree/bindings/arm/ti/ti,davinci.example.dt.yaml:
-> /: $nodename:0: 'thermal-zones' was expected
-> /home/amit/work/builds/build-aarch64/Documentation/devicetree/bindings/arm/spear.example.dt.yaml:
-> /: $nodename:0: 'thermal-zones' was expected
-> /home/amit/work/builds/build-aarch64/Documentation/devicetree/bindings/arm/ti/nspire.example.dt.yaml:
-> /: $nodename:0: 'thermal-zones' was expected
->
-> It seems like dtc is expecting every node to have a thermal-zones node?
->
-> Looking at other root nodes such as cpus.yaml, the main difference I
-> noticed was the absence of the "select: true" property. However, if I
-> remove that, we go back to the schema not being applied.
+bump
 
-'select: true' should be dropped. It will be applied to any
-'thermal-zones' nodes. The generated 'select' will use $nodename if
-compatible is not present for the schema.
-
-I tested that putting an error in the example works.
-
-> You mentioned that the thermal-zones schema needs to included by
-> another schema. What did you mean by that?
-
-Nevermind, I wasn't thinking that it's a top-level node. If it was a
-child node, then you'd want to include it from the parent schemas.
-
-Rob
+On 3/4/20 11:40 AM, Ricardo Rivera-Matos wrote:
+> Hello,
+>
+> This v5 series picks up on the development that Dan Murphy <dmurphy@ti.com> began with the power_supply framework and bq2515x_charger driver. This series incorporates the changes suggested by Sebastien Reichel <sre@kernel.org> in v4.
+>
+> Datasheets for these devices can be found at:
+> http://www.ti.com/lit/ds/symlink/bq25150.pdf
+> http://www.ti.com/lit/ds/symlink/bq25155.pdf
+>
+> Thanks, Ricardo
+>
+> Dan Murphy (1):
+>    power_supply: Add additional health properties to the header
+>
+> Ricardo Rivera-Matos (2):
+>    Add the bindings for the bq25150 and bq25155 500mA charging ICs from
+>      Texas Instruments.
+>    power: supply: bq25150 introduce the bq25150
+>
+>   Documentation/ABI/testing/sysfs-class-power   |    2 +-
+>   .../bindings/power/supply/bq2515x.yaml        |   99 ++
+>   drivers/power/supply/Kconfig                  |    8 +
+>   drivers/power/supply/Makefile                 |    1 +
+>   drivers/power/supply/bq2515x_charger.c        | 1170 +++++++++++++++++
+>   drivers/power/supply/power_supply_sysfs.c     |    2 +-
+>   include/linux/power_supply.h                  |    3 +
+>   7 files changed, 1283 insertions(+), 2 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+>   create mode 100644 drivers/power/supply/bq2515x_charger.c
+>
