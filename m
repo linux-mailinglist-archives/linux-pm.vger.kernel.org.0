@@ -2,199 +2,257 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 025C21901DD
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 00:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3C71902D1
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 01:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726986AbgCWX3i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Mar 2020 19:29:38 -0400
-Received: from mga17.intel.com ([192.55.52.151]:26048 "EHLO mga17.intel.com"
+        id S1727662AbgCXAXs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Mar 2020 20:23:48 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:34790 "EHLO mx1.riseup.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725990AbgCWX3i (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 23 Mar 2020 19:29:38 -0400
-IronPort-SDR: gtXbS3E1zQXRj+62/l2bjcXuuO2TMCap7FwP+7uYqVOtA4Fwz4rs7y/Dnue+gX90NpHt6+fJqC
- ZI6LunpcYV4Q==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2020 16:29:37 -0700
-IronPort-SDR: AKE/ER+NpCE423g+9qyweL9EbNXjW+gY79y4nT4bEtJrIPX/2oIXqPfBLrtt4rY+1cYFDBOLSY
- JWM6t2K9NDdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,298,1580803200"; 
-   d="scan'208";a="292737280"
-Received: from orsmsx110.amr.corp.intel.com ([10.22.240.8])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Mar 2020 16:29:37 -0700
-Received: from orsmsx160.amr.corp.intel.com (10.22.226.43) by
- ORSMSX110.amr.corp.intel.com (10.22.240.8) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Mon, 23 Mar 2020 16:29:36 -0700
-Received: from orsmsx110.amr.corp.intel.com ([169.254.10.144]) by
- ORSMSX160.amr.corp.intel.com ([169.254.13.166]) with mapi id 14.03.0439.000;
- Mon, 23 Mar 2020 16:29:36 -0700
-From:   "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
-To:     "Brown, Len" <len.brown@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "currojerez@riseup.net" <currojerez@riseup.net>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
-CC:     "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>
-Subject: Re: [RFC] GPU-bound energy efficiency improvements for the
- intel_pstate driver (v2).
-Thread-Topic: [RFC] GPU-bound energy efficiency improvements for the
- intel_pstate driver (v2).
-Thread-Index: AQHV9yVeF22XkZfUYkCaOD2IBrMsDqhXXN8A
-Date:   Mon, 23 Mar 2020 23:29:35 +0000
-Message-ID: <5a7aa1cef880ee5ac3ffe2055745c26f8d124b68.camel@intel.com>
-References: <20200310214203.26459-1-currojerez@riseup.net>
-In-Reply-To: <20200310214203.26459-1-currojerez@riseup.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.2 (3.34.2-1.fc31) 
-x-originating-ip: [10.134.90.138]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0BF866207E63F942BFF6A86F12CC5D62@intel.com>
-Content-Transfer-Encoding: base64
+        id S1727421AbgCXAXr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 23 Mar 2020 20:23:47 -0400
+Received: from capuchin.riseup.net (unknown [10.0.1.176])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 48mX6V68p5zFfDn;
+        Mon, 23 Mar 2020 17:23:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1585009427; bh=j3tEYauAWbUt5Bq++cpnAQ+veQjVlo2mGqdGEuOWYKk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=USfHRYgLYPRPRWwXRxMZO4/jltoUyXFAgt9hxtbxfyeDBdN22P1SSbO8BGP0sCB+w
+         HakEITw2akvBHVsPv9BeV8UAlS5U35vEBBVMHlxl/wKSE4DVmGI9It89QoDEuLtPvk
+         M1DmAgt9i97nwNxQqyKfVYH1vzfJiZslF098tonI=
+X-Riseup-User-ID: B5C8B4D6D4F8EF314D93C054F7DD521F0FBF81974486F66161F89FD676186F50
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by capuchin.riseup.net (Postfix) with ESMTPSA id 48mX6V3CGtz8tJk;
+        Mon, 23 Mar 2020 17:23:46 -0700 (PDT)
+From:   Francisco Jerez <currojerez@riseup.net>
+To:     "Pandruvada\, Srinivas" <srinivas.pandruvada@intel.com>,
+        "Brown\, Len" <len.brown@intel.com>,
+        "linux-pm\@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "intel-gfx\@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
+Cc:     "Vivi\, Rodrigo" <rodrigo.vivi@intel.com>,
+        "peterz\@infradead.org" <peterz@infradead.org>,
+        "rjw\@rjwysocki.net" <rjw@rjwysocki.net>
+Subject: Re: [RFC] GPU-bound energy efficiency improvements for the intel_pstate driver (v2).
+In-Reply-To: <5a7aa1cef880ee5ac3ffe2055745c26f8d124b68.camel@intel.com>
+References: <20200310214203.26459-1-currojerez@riseup.net> <5a7aa1cef880ee5ac3ffe2055745c26f8d124b68.camel@intel.com>
+Date:   Mon, 23 Mar 2020 17:23:51 -0700
+Message-ID: <87blom4n3c.fsf@riseup.net>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="==-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgRnJhbmNpc2NvLA0KDQpPbiBUdWUsIDIwMjAtMDMtMTAgYXQgMTQ6NDEgLTA3MDAsIEZyYW5j
-aXNjbyBKZXJleiB3cm90ZToNCj4gVGhpcyBpcyBteSBzZWNvbmQgdGFrZSBvbiBpbXByb3Zpbmcg
-dGhlIGVuZXJneSBlZmZpY2llbmN5IG9mIHRoZQ0KPiBpbnRlbF9wc3RhdGUgZHJpdmVyIHVuZGVy
-IElPLWJvdW5kIGNvbmRpdGlvbnMuICBUaGUgcHJvYmxlbSBhbmQNCj4gYXBwcm9hY2ggdG8gc29s
-dmUgaXQgYXJlIHJvdWdobHkgdGhlIHNhbWUgYXMgaW4gbXkgcHJldmlvdXMgc2VyaWVzDQo+IFsx
-XQ0KPiBhdCBhIGhpZ2ggbGV2ZWw6DQo+IA0KPiBJbiBJTy1ib3VuZCBzY2VuYXJpb3MgKGJ5IGRl
-ZmluaXRpb24pIHRoZSB0aHJvdWdocHV0IG9mIHRoZSBzeXN0ZW0NCj4gZG9lc24ndCBpbXByb3Zl
-IHdpdGggaW5jcmVhc2luZyBDUFUgZnJlcXVlbmN5IGJleW9uZCB0aGUgdGhyZXNob2xkDQo+IHZh
-bHVlIGF0IHdoaWNoIHRoZSBJTyBkZXZpY2UgYmVjb21lcyB0aGUgYm90dGxlbmVjaywgaG93ZXZl
-ciB3aXRoIHRoZQ0KPiBjdXJyZW50IGdvdmVybm9ycyAod2hldGhlciBIV1AgaXMgaW4gdXNlIG9y
-IG5vdCkgdGhlIENQVSBmcmVxdWVuY3kNCj4gdGVuZHMgdG8gb3NjaWxsYXRlIHdpdGggdGhlIGxv
-YWQsIG9mdGVuIHdpdGggYW4gYW1wbGl0dWRlIGZhciBpbnRvDQo+IHRoZQ0KPiB0dXJibyByYW5n
-ZSwgbGVhZGluZyB0byBzZXZlcmVseSByZWR1Y2VkIGVuZXJneSBlZmZpY2llbmN5LCB3aGljaCBp
-cw0KPiBwYXJ0aWN1bGFybHkgcHJvYmxlbWF0aWMgd2hlbiBhIGxpbWl0ZWQgVERQIGJ1ZGdldCBp
-cyBzaGFyZWQgYW1vbmcgYQ0KPiBudW1iZXIgb2YgY29yZXMgcnVubmluZyBzb21lIG11bHRpdGhy
-ZWFkZWQgd29ya2xvYWQsIG9yIGFtb25nIGEgQ1BVDQo+IGNvcmUgYW5kIGFuIGludGVncmF0ZWQg
-R1BVLg0KPiANCj4gSW1wcm92aW5nIHRoZSBlbmVyZ3kgZWZmaWNpZW5jeSBvZiB0aGUgQ1BVIGlt
-cHJvdmVzIHRoZSB0aHJvdWdocHV0IG9mDQo+IHRoZSBzeXN0ZW0gaW4gc3VjaCBURFAtbGltaXRl
-ZCBjb25kaXRpb25zLiAgU2VlIFs0XSBmb3Igc29tZQ0KPiBwcmVsaW1pbmFyeSBiZW5jaG1hcmsg
-cmVzdWx0cyBmcm9tIGEgUmF6ZXIgQmxhZGUgU3RlYWx0aCAxMyBMYXRlDQo+IDIwMTkvTFkzMjAg
-bGFwdG9wIHdpdGggYW4gSW50ZWwgSUNMIHByb2Nlc3NvciBhbmQgaW50ZWdyYXRlZA0KPiBncmFw
-aGljcywNCj4gaW5jbHVkaW5nIHRocm91Z2hwdXQgcmVzdWx0cyB0aGF0IHJhbmdlIHVwIHRvIGEg
-fjE1JSBpbXByb3ZlbWVudCBhbmQNCj4gcGVyZm9ybWFuY2UtcGVyLXdhdHQgcmVzdWx0cyB1cCB0
-byBhIH40MyUgaW1wcm92ZW1lbnQgKGVzdGltYXRlZCB2aWENCj4gUkFQTCkuICBQYXJ0aWN1bGFy
-bHkgdGhlIHRocm91Z2hwdXQgcmVzdWx0cyBtYXkgdmFyeSBzdWJzdGFudGlhbGx5DQo+IGZyb20g
-b25lIHBsYXRmb3JtIHRvIGFub3RoZXIgZGVwZW5kaW5nIG9uIHRoZSBURFAgYnVkZ2V0IGFuZCB0
-aGUNCj4gYmFsYW5jZSBvZiBsb2FkIGJldHdlZW4gQ1BVIGFuZCBHUFUuDQo+IA0KDQpZb3UgY2hh
-bmdlZCB0aGUgRVBQIHRvIDAgaW50ZW50aW9uYWxseSBvciB1bmludGVudGlvbmFsbHkuIFdlIGtu
-b3cgdGhhdA0KYWxsIGVuZXJneSBvcHRpbWl6YXRpb24gd2lsbCBiZSBkaXNhYmxlZCB3aXRoIHRo
-aXMgY2hhbmdlLiANClRoaXMgdGVzdCB3YXMgZG9uZSBvbiBhbiBJQ0wgc3lzdGVtLg0KDQoNCkJh
-c2ljYWxseSB3aXRob3V0IHlvdXIgcGF0Y2hlcyBvbiB0b3Agb2YgbGludXgtbmV4dDogRVBQID0g
-MHg4MA0KJHN1ZG8gcmRtc3IgLWEgMHg3NzQNCjgwMDAyNzA0DQo4MDAwMjcwNA0KODAwMDI3MDQN
-CjgwMDAyNzA0DQo4MDAwMjcwNA0KODAwMDI3MDQNCjgwMDAyNzA0DQo4MDAwMjcwNA0KDQoNCkFm
-dGVyIHlvdXIgcGF0Y2hlcw0KDQokc3VkbyByZG1zciAtYSAweDc3NA0KMjcwNA0KMjcwNA0KMjcw
-NA0KMjcwNA0KMjcwNA0KMjcwNA0KMjcwNA0KMjcwNA0KDQpJIGFkZGVkIHNvbWUgcHJpbnRzLCBi
-YXNpY2FsbHkgeW91IGNoYW5nZSB0aGUgRVBQIGF0IHN0YXJ0dXAgYmVmb3JlDQpyZWd1bGFyIEhX
-UCByZXF1ZXN0IHVwZGF0ZSBwYXRoIGFuZCB1cGRhdGUgb24gdG9wLiBTbyBib290IHVwIEVQUCBp
-cw0Kb3ZlcndyaXR0ZW4uDQoNCg0KWyAgICA1Ljg2NzQ3Nl0gaW50ZWxfcHN0YXRlX3Jlc2V0X3Zs
-cCBod3BfcmVxIGNhY2hlZDowDQpbICAgIDUuODcyNDI2XSBpbnRlbF9wc3RhdGVfcmVzZXRfdmxw
-IGh3cF9yZXE6NDA0DQpbICAgIDUuODgxNjQ1XSBpbnRlbF9wc3RhdGVfcmVzZXRfdmxwIGh3cF9y
-ZXEgY2FjaGVkOjANClsgICAgNS44ODY2MzRdIGludGVsX3BzdGF0ZV9yZXNldF92bHAgaHdwX3Jl
-cTo0MDQNClsgICAgNS44OTU4MTldIGludGVsX3BzdGF0ZV9yZXNldF92bHAgaHdwX3JlcSBjYWNo
-ZWQ6MA0KWyAgICA1LjkwMDk1OF0gaW50ZWxfcHN0YXRlX3Jlc2V0X3ZscCBod3BfcmVxOjQwNA0K
-WyAgICA1LjkxMDMyMV0gaW50ZWxfcHN0YXRlX3Jlc2V0X3ZscCBod3BfcmVxIGNhY2hlZDowDQpb
-ICAgIDUuOTE1NDA2XSBpbnRlbF9wc3RhdGVfcmVzZXRfdmxwIGh3cF9yZXE6NDA0DQpbICAgIDUu
-OTI0NjIzXSBpbnRlbF9wc3RhdGVfcmVzZXRfdmxwIGh3cF9yZXEgY2FjaGVkOjANClsgICAgNS45
-Mjk1NjRdIGludGVsX3BzdGF0ZV9yZXNldF92bHAgaHdwX3JlcTo0MDQNClsgICAgNS45NDQwMzld
-IGludGVsX3BzdGF0ZV9yZXNldF92bHAgaHdwX3JlcSBjYWNoZWQ6MA0KWyAgICA1Ljk1MTY3Ml0g
-aW50ZWxfcHN0YXRlX3Jlc2V0X3ZscCBod3BfcmVxOjQwNA0KWyAgICA1Ljk2NjE1N10gaW50ZWxf
-cHN0YXRlX3Jlc2V0X3ZscCBod3BfcmVxIGNhY2hlZDowDQpbICAgIDUuOTczODA4XSBpbnRlbF9w
-c3RhdGVfcmVzZXRfdmxwIGh3cF9yZXE6NDA0DQpbICAgIDUuOTg4MjIzXSBpbnRlbF9wc3RhdGVf
-cmVzZXRfdmxwIGh3cF9yZXEgY2FjaGVkOjANClsgICAgNS45OTU4MjNdIGludGVsX3BzdGF0ZV9y
-ZXNldF92bHAgaHdwX3JlcTo0MDQNClsgICAgNi4wMTAwNjJdIGludGVsX3BzdGF0ZTogSFdQIGVu
-YWJsZWQNCg0KVGhhbmtzLA0KU3Jpbml2YXMNCg0KDQoNCj4gT25lIG9mIHRoZSBtYWluIGRpZmZl
-cmVuY2VzIHJlbGF0aXZlIHRvIG15IHByZXZpb3VzIHZlcnNpb24gaXMgdGhhdA0KPiB0aGUgdHJh
-ZGUtb2ZmIGJldHdlZW4gZW5lcmd5IGVmZmljaWVuY3kgYW5kIGZyZXF1ZW5jeSByYW1wLXVwIGxh
-dGVuY3kNCj4gaXMgbm93IGV4cG9zZWQgdG8gZGV2aWNlIGRyaXZlcnMgdGhyb3VnaCBhIG5ldyBQ
-TSBRb1MgY2xhc3MgW0l0IHdvdWxkDQo+IG1ha2Ugc2Vuc2UgdG8gZXhwb3NlIGl0IHRvIHVzZXJz
-cGFjZSB0b28gZXZlbnR1YWxseSBidXQgdGhhdCdzIGJleW9uZA0KPiB0aGUgcHVycG9zZSBvZiB0
-aGlzIHNlcmllc10uICBUaGUgbmV3IFBNIFFvUyBjbGFzcyBwcm92aWRlcyBhIGxhdGVuY3kNCj4g
-dGFyZ2V0IHRvIENQVUZSRVEgZ292ZXJub3JzIHdoaWNoIGdpdmVzIHRoZW0gcGVybWlzc2lvbiB0
-byBmaWx0ZXIgb3V0DQo+IENQVSBmcmVxdWVuY3kgb3NjaWxsYXRpb25zIHdpdGggYSBwZXJpb2Qg
-c2lnbmlmaWNhbnRseSBzaG9ydGVyIHRoYW4NCj4gdGhlIHNwZWNpZmllZCB0YXJnZXQsIHdoZW5l
-dmVyIGRvaW5nIHNvIGxlYWRzIHRvIGltcHJvdmVkIGVuZXJneQ0KPiBlZmZpY2llbmN5Lg0KPiAN
-Cj4gVGhpcyBzZXJpZXMgdGFrZXMgYWR2YW50YWdlIG9mIHRoZSBuZXcgUE0gUW9TIGNsYXNzIGZy
-b20gdGhlIGk5MTUNCj4gZHJpdmVyIHdoZW5ldmVyIHRoZSBkcml2ZXIgZGV0ZXJtaW5lcyB0aGF0
-IHRoZSBHUFUgaGFzIGJlY29tZSBhDQo+IGJvdHRsZW5lY2sgZm9yIGFuIGV4dGVuZGVkIHBlcmlv
-ZCBvZiB0aW1lLiAgQXQgdGhhdCBwb2ludCBpdCBwbGFjZXMgYQ0KPiBQTSBRb1MgcmFtcC11cCBs
-YXRlbmN5IHRhcmdldCB3aGljaCBjYXVzZXMgQ1BVRlJFUSB0byBsaW1pdCB0aGUgQ1BVDQo+IHRv
-DQo+IGEgcmVhc29uYWJseSBlbmVyZ3ktZWZmaWNpZW50IGZyZXF1ZW5jeSBhYmxlIHRvIGF0IGxl
-YXN0IGFjaGlldmUgdGhlDQo+IHJlcXVpcmVkIGFtb3VudCBvZiB3b3JrIGluIGEgdGltZSB3aW5k
-b3cgYXBwcm94aW1hdGVseSBlcXVhbCB0byB0aGUNCj4gcmFtcC11cCBsYXRlbmN5IHRhcmdldCAo
-c2luY2UgYW55IGxvbmdlci10ZXJtIGVuZXJneSBlZmZpY2llbmN5DQo+IG9wdGltaXphdGlvbiB3
-b3VsZCBwb3RlbnRpYWxseSB2aW9sYXRlIHRoZSBsYXRlbmN5IHRhcmdldCkuICBUaGlzDQo+IHNl
-ZW1zIG1vcmUgZWZmZWN0aXZlIHRoYW4gY2xhbXBpbmcgdGhlIENQVSBmcmVxdWVuY3kgdG8gYSBm
-aXhlZCB2YWx1ZQ0KPiBkaXJlY3RseSBmcm9tIHZhcmlvdXMgc3Vic3lzdGVtcywgc2luY2UgdGhl
-IENQVSBpcyBhIHNoYXJlZCByZXNvdXJjZSwNCj4gc28gdGhlIGZyZXF1ZW5jeSBib3VuZCBuZWVk
-cyB0byBjb25zaWRlciB0aGUgbG9hZCBhbmQgbGF0ZW5jeQ0KPiByZXF1aXJlbWVudHMgb2YgYWxs
-IGluZGVwZW5kZW50IHdvcmtsb2FkcyBydW5uaW5nIG9uIHRoZSBzYW1lIENQVQ0KPiBjb3JlDQo+
-IGluIG9yZGVyIHRvIGF2b2lkIHBlcmZvcm1hbmNlIGRlZ3JhZGF0aW9uIGluIGEgbXVsdGl0YXNr
-aW5nLCBwb3NzaWJseQ0KPiB2aXJ0dWFsaXplZCBlbnZpcm9ubWVudC4NCj4gDQo+IFRoZSBtYWlu
-IGxpbWl0YXRpb24gb2YgdGhpcyBQTSBRb1MgYXBwcm9hY2ggaXMgdGhhdCB3aGVuZXZlciBtdWx0
-aXBsZQ0KPiBjbGllbnRzIHJlcXVlc3QgZGlmZmVyZW50IHJhbXAtdXAgbGF0ZW5jeSB0YXJnZXRz
-LCBvbmx5IHRoZSBzdHJpY3Rlc3QNCj4gKGxvd2VzdCBsYXRlbmN5KSBvbmUgd2lsbCBhcHBseSBz
-eXN0ZW0td2lkZSwgcG90ZW50aWFsbHkgbGVhZGluZyB0bw0KPiBzdWJvcHRpbWFsIGVuZXJneSBl
-ZmZpY2llbmN5IGZvciB0aGUgbGVzcyBsYXRlbmN5LXNlbnNpdGl2ZSBjbGllbnRzLA0KPiAodGhv
-dWdoIGl0IHdvbid0IGFydGlmaWNpYWxseSBsaW1pdCB0aGUgQ1BVIHRocm91Z2hwdXQgb2YgdGhl
-IG1vc3QNCj4gbGF0ZW5jeS1zZW5zaXRpdmUgY2xpZW50cyBhcyBhIHJlc3VsdCBvZiB0aGUgUE0g
-UW9TIHJlcXVlc3RzIHBsYWNlZA0KPiBieQ0KPiBsZXNzIGxhdGVuY3ktc2Vuc2l0aXZlIG9uZXMp
-LiAgSW4gb3JkZXIgdG8gYWRkcmVzcyB0aGlzIGxpbWl0YXRpb24NCj4gSSdtDQo+IHdvcmtpbmcg
-b24gYSBtb3JlIGNvbXBsaWNhdGVkIHNvbHV0aW9uIHdoaWNoIGludGVncmF0ZXMgd2l0aCB0aGUg
-dGFzaw0KPiBzY2hlZHVsZXIgaW4gb3JkZXIgdG8gcHJvdmlkZSByZXNwb25zZSBsYXRlbmN5IGNv
-bnRyb2wgd2l0aCBwcm9jZXNzDQo+IGdyYW51bGFyaXR5IChwcmV0dHkgbXVjaCBpbiB0aGUgc3Bp
-cml0IG9mIFBFTFQpLiAgT25lIG9mIHRoZQ0KPiBhbHRlcm5hdGl2ZXMgUmFmYWVsIGFuZCBJIHdl
-cmUgZGlzY3Vzc2luZyB3YXMgdG8gZXhwb3NlIHRoYXQgdGhyb3VnaA0KPiBhDQo+IHRoaXJkIGNn
-cm91cCBjbGFtcCBvbiB0b3Agb2YgdGhlIE1JTiBhbmQgTUFYIHV0aWxpemF0aW9uIGNsYW1wcywg
-YnV0DQo+IEknbSBvcGVuIHRvIGFueSBvdGhlciBwb3NzaWJpbGl0aWVzIHJlZ2FyZGluZyB3aGF0
-IHRoZSBpbnRlcmZhY2UNCj4gc2hvdWxkIGxvb2sgbGlrZS4gIEVpdGhlciB3YXkgdGhlIGN1cnJl
-bnQgKHNjaGVkdWxpbmctdW5hd2FyZSkgUE0NCj4gUW9TLWJhc2VkIGludGVyZmFjZSBzaG91bGQg
-cHJvdmlkZSBtb3N0IG9mIHRoZSBiZW5lZml0IGV4Y2VwdCBpbg0KPiBoZWF2aWx5IG11bHRpdGFz
-a2luZyBlbnZpcm9ubWVudHMuDQo+IA0KPiBBIGJyYW5jaCB3aXRoIHRoaXMgc2VyaWVzIGluIHRl
-c3RhYmxlIGZvcm0gY2FuIGJlIGZvdW5kIGhlcmUgWzJdLA0KPiBiYXNlZCBvbiBsaW51eC1uZXh0
-IGZyb20gYSBmZXcgZGF5cyBhZ28uICBBbm90aGVyIGltcG9ydGFudA0KPiBkaWZmZXJlbmNlDQo+
-IHdpdGggcmVzcGVjdCB0byBteSBwcmV2aW91cyByZXZpc2lvbiBpcyB0aGF0IHRoZSBwcmVzZW50
-IG9uZSB0YXJnZXRzDQo+IEhXUCBzeXN0ZW1zICh0aG91Z2ggZm9yIHRoZSBtb21lbnQgaXQncyBv
-bmx5IGVuYWJsZWQgYnkgZGVmYXVsdCBvbg0KPiBJQ0wsIGV2ZW4gdGhvdWdoIHRoYXQgY2FuIGJl
-IG92ZXJyaWRkZW4gdGhyb3VnaCB0aGUga2VybmVsIGNvbW1hbmQNCj4gbGluZSkuICBJIGhhdmUg
-V0lQIGNvZGUgdGhhdCB1c2VzIHRoZSBzYW1lIGdvdmVybm9yIGluIG9yZGVyIHRvDQo+IHByb3Zp
-ZGUgYSBzaW1pbGFyIGJlbmVmaXQgb24gbm9uLUhXUCBzeXN0ZW1zIChsaWtlIG15IHByZXZpb3Vz
-DQo+IHJldmlzaW9uKSwgd2hpY2ggY2FuIGJlIGZvdW5kIGluIHRoaXMgYnJhbmNoIGZvciByZWZl
-cmVuY2UgWzNdIC0tIEknbQ0KPiBwbGFubmluZyB0byBmaW5pc2ggdGhhdCB1cCBhbmQgc2VuZCBp
-dCBhcyBmb2xsb3ctdXAgdG8gdGhpcyBzZXJpZXMNCj4gYXNzdW1pbmcgcGVvcGxlIGFyZSBoYXBw
-eSB3aXRoIHRoZSBvdmVyYWxsIGFwcHJvYWNoLg0KPiANCj4gVGhhbmtzIGluIGFkdmFuY2UgZm9y
-IGFueSByZXZpZXcgZmVlZC1iYWNrIGFuZCB0ZXN0IHJlcG9ydHMuDQo+IA0KPiBbUEFUQ0ggMDEv
-MTBdIFBNOiBRb1M6IEFkZCBDUFVfUkVTUE9OU0VfRlJFUVVFTkNZIGdsb2JhbCBQTSBRb1MNCj4g
-bGltaXQuDQo+IFtQQVRDSCAwMi8xMF0gZHJtL2k5MTU6IEFkanVzdCBQTSBRb1MgcmVzcG9uc2Ug
-ZnJlcXVlbmN5IGJhc2VkIG9uIEdQVQ0KPiBsb2FkLg0KPiBbUEFUQ0ggMDMvMTBdIE9QVElPTkFM
-OiBkcm0vaTkxNTogRXhwb3NlIFBNIFFvUyBjb250cm9sIHBhcmFtZXRlcnMNCj4gdmlhIGRlYnVn
-ZnMuDQo+IFtQQVRDSCAwNC8xMF0gUmV2ZXJ0ICJjcHVmcmVxOiBpbnRlbF9wc3RhdGU6IERyb3Ag
-LT51cGRhdGVfdXRpbCBmcm9tDQo+IHBzdGF0ZV9mdW5jcyINCj4gW1BBVENIIDA1LzEwXSBjcHVm
-cmVxOiBpbnRlbF9wc3RhdGU6IEltcGxlbWVudCBWTFAgY29udHJvbGxlcg0KPiBzdGF0aXN0aWNz
-IGFuZCBzdGF0dXMgY2FsY3VsYXRpb24uDQo+IFtQQVRDSCAwNi8xMF0gY3B1ZnJlcTogaW50ZWxf
-cHN0YXRlOiBJbXBsZW1lbnQgVkxQIGNvbnRyb2xsZXIgdGFyZ2V0DQo+IFAtc3RhdGUgcmFuZ2Ug
-ZXN0aW1hdGlvbi4NCj4gW1BBVENIIDA3LzEwXSBjcHVmcmVxOiBpbnRlbF9wc3RhdGU6IEltcGxl
-bWVudCBWTFAgY29udHJvbGxlciBmb3IgSFdQDQo+IHBhcnRzLg0KPiBbUEFUQ0ggMDgvMTBdIGNw
-dWZyZXE6IGludGVsX3BzdGF0ZTogRW5hYmxlIFZMUCBjb250cm9sbGVyIGJhc2VkIG9uDQo+IEFD
-UEkgRkFEVCBwcm9maWxlIGFuZCBDUFVJRC4NCj4gW1BBVENIIDA5LzEwXSBPUFRJT05BTDogY3B1
-ZnJlcTogaW50ZWxfcHN0YXRlOiBBZGQgdHJhY2luZyBvZiBWTFANCj4gY29udHJvbGxlciBzdGF0
-dXMuDQo+IFtQQVRDSCAxMC8xMF0gT1BUSU9OQUw6IGNwdWZyZXE6IGludGVsX3BzdGF0ZTogRXhw
-b3NlIFZMUCBjb250cm9sbGVyDQo+IHBhcmFtZXRlcnMgdmlhIGRlYnVnZnMuDQo+IA0KPiBbMV0g
-aHR0cHM6Ly9tYXJjLmluZm8vP2w9bGludXgtcG0mbT0xNTIyMjE5NDMzMjA5MDgmdz0yDQo+IFsy
-XSANCj4gaHR0cHM6Ly9naXRodWIuY29tL2N1cnJvL2xpbnV4L2NvbW1pdHMvaW50ZWxfcHN0YXRl
-LXZscC12Mi1od3Atb25seQ0KPiBbM10gaHR0cHM6Ly9naXRodWIuY29tL2N1cnJvL2xpbnV4L2Nv
-bW1pdHMvaW50ZWxfcHN0YXRlLXZscC12Mg0KPiBbNF0gDQo+IGh0dHA6Ly9wZW9wbGUuZnJlZWRl
-c2t0b3Aub3JnL35jdXJyb2plcmV6L2ludGVsX3BzdGF0ZS12bHAtdjIvYmVuY2htYXJrLWNvbXBh
-cmlzb24tSUNMLmxvZw0KPiANCg==
+--==-=-=
+Content-Type: multipart/mixed; boundary="=-=-="
+
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+"Pandruvada, Srinivas" <srinivas.pandruvada@intel.com> writes:
+
+> Hi Francisco,
+>
+> On Tue, 2020-03-10 at 14:41 -0700, Francisco Jerez wrote:
+>> This is my second take on improving the energy efficiency of the
+>> intel_pstate driver under IO-bound conditions.  The problem and
+>> approach to solve it are roughly the same as in my previous series
+>> [1]
+>> at a high level:
+>>=20
+>> In IO-bound scenarios (by definition) the throughput of the system
+>> doesn't improve with increasing CPU frequency beyond the threshold
+>> value at which the IO device becomes the bottleneck, however with the
+>> current governors (whether HWP is in use or not) the CPU frequency
+>> tends to oscillate with the load, often with an amplitude far into
+>> the
+>> turbo range, leading to severely reduced energy efficiency, which is
+>> particularly problematic when a limited TDP budget is shared among a
+>> number of cores running some multithreaded workload, or among a CPU
+>> core and an integrated GPU.
+>>=20
+>> Improving the energy efficiency of the CPU improves the throughput of
+>> the system in such TDP-limited conditions.  See [4] for some
+>> preliminary benchmark results from a Razer Blade Stealth 13 Late
+>> 2019/LY320 laptop with an Intel ICL processor and integrated
+>> graphics,
+>> including throughput results that range up to a ~15% improvement and
+>> performance-per-watt results up to a ~43% improvement (estimated via
+>> RAPL).  Particularly the throughput results may vary substantially
+>> from one platform to another depending on the TDP budget and the
+>> balance of load between CPU and GPU.
+>>=20
+>
+> You changed the EPP to 0 intentionally or unintentionally. We know that
+> all energy optimization will be disabled with this change.=20
+> This test was done on an ICL system.
+>
+
+Hmm, that's bad, and fully unintentional.  It's probably a side effect
+of intel_pstate_reset_vlp() running before intel_pstate_hwp_set(), which
+could cause it to use an uninitialized value of hwp_req_cached (zero?).
+I'll fix it in v3.  Thanks a lot for pointing this out.
+
+>
+> Basically without your patches on top of linux-next: EPP =3D 0x80
+> $sudo rdmsr -a 0x774
+> 80002704
+> 80002704
+> 80002704
+> 80002704
+> 80002704
+> 80002704
+> 80002704
+> 80002704
+>
+>
+> After your patches
+>
+> $sudo rdmsr -a 0x774
+> 2704
+> 2704
+> 2704
+> 2704
+> 2704
+> 2704
+> 2704
+> 2704
+>
+> I added some prints, basically you change the EPP at startup before
+> regular HWP request update path and update on top. So boot up EPP is
+> overwritten.
+>
+>
+> [    5.867476] intel_pstate_reset_vlp hwp_req cached:0
+> [    5.872426] intel_pstate_reset_vlp hwp_req:404
+> [    5.881645] intel_pstate_reset_vlp hwp_req cached:0
+> [    5.886634] intel_pstate_reset_vlp hwp_req:404
+> [    5.895819] intel_pstate_reset_vlp hwp_req cached:0
+> [    5.900958] intel_pstate_reset_vlp hwp_req:404
+> [    5.910321] intel_pstate_reset_vlp hwp_req cached:0
+> [    5.915406] intel_pstate_reset_vlp hwp_req:404
+> [    5.924623] intel_pstate_reset_vlp hwp_req cached:0
+> [    5.929564] intel_pstate_reset_vlp hwp_req:404
+> [    5.944039] intel_pstate_reset_vlp hwp_req cached:0
+> [    5.951672] intel_pstate_reset_vlp hwp_req:404
+> [    5.966157] intel_pstate_reset_vlp hwp_req cached:0
+> [    5.973808] intel_pstate_reset_vlp hwp_req:404
+> [    5.988223] intel_pstate_reset_vlp hwp_req cached:0
+> [    5.995823] intel_pstate_reset_vlp hwp_req:404
+> [    6.010062] intel_pstate: HWP enabled
+>
+> Thanks,
+> Srinivas
+>
+>
+>
+>> One of the main differences relative to my previous version is that
+>> the trade-off between energy efficiency and frequency ramp-up latency
+>> is now exposed to device drivers through a new PM QoS class [It would
+>> make sense to expose it to userspace too eventually but that's beyond
+>> the purpose of this series].  The new PM QoS class provides a latency
+>> target to CPUFREQ governors which gives them permission to filter out
+>> CPU frequency oscillations with a period significantly shorter than
+>> the specified target, whenever doing so leads to improved energy
+>> efficiency.
+>>=20
+>> This series takes advantage of the new PM QoS class from the i915
+>> driver whenever the driver determines that the GPU has become a
+>> bottleneck for an extended period of time.  At that point it places a
+>> PM QoS ramp-up latency target which causes CPUFREQ to limit the CPU
+>> to
+>> a reasonably energy-efficient frequency able to at least achieve the
+>> required amount of work in a time window approximately equal to the
+>> ramp-up latency target (since any longer-term energy efficiency
+>> optimization would potentially violate the latency target).  This
+>> seems more effective than clamping the CPU frequency to a fixed value
+>> directly from various subsystems, since the CPU is a shared resource,
+>> so the frequency bound needs to consider the load and latency
+>> requirements of all independent workloads running on the same CPU
+>> core
+>> in order to avoid performance degradation in a multitasking, possibly
+>> virtualized environment.
+>>=20
+>> The main limitation of this PM QoS approach is that whenever multiple
+>> clients request different ramp-up latency targets, only the strictest
+>> (lowest latency) one will apply system-wide, potentially leading to
+>> suboptimal energy efficiency for the less latency-sensitive clients,
+>> (though it won't artificially limit the CPU throughput of the most
+>> latency-sensitive clients as a result of the PM QoS requests placed
+>> by
+>> less latency-sensitive ones).  In order to address this limitation
+>> I'm
+>> working on a more complicated solution which integrates with the task
+>> scheduler in order to provide response latency control with process
+>> granularity (pretty much in the spirit of PELT).  One of the
+>> alternatives Rafael and I were discussing was to expose that through
+>> a
+>> third cgroup clamp on top of the MIN and MAX utilization clamps, but
+>> I'm open to any other possibilities regarding what the interface
+>> should look like.  Either way the current (scheduling-unaware) PM
+>> QoS-based interface should provide most of the benefit except in
+>> heavily multitasking environments.
+>>=20
+>> A branch with this series in testable form can be found here [2],
+>> based on linux-next from a few days ago.  Another important
+>> difference
+>> with respect to my previous revision is that the present one targets
+>> HWP systems (though for the moment it's only enabled by default on
+>> ICL, even though that can be overridden through the kernel command
+>> line).  I have WIP code that uses the same governor in order to
+>> provide a similar benefit on non-HWP systems (like my previous
+>> revision), which can be found in this branch for reference [3] -- I'm
+>> planning to finish that up and send it as follow-up to this series
+>> assuming people are happy with the overall approach.
+>>=20
+>> Thanks in advance for any review feed-back and test reports.
+>>=20
+>> [PATCH 01/10] PM: QoS: Add CPU_RESPONSE_FREQUENCY global PM QoS
+>> limit.
+>> [PATCH 02/10] drm/i915: Adjust PM QoS response frequency based on GPU
+>> load.
+>> [PATCH 03/10] OPTIONAL: drm/i915: Expose PM QoS control parameters
+>> via debugfs.
+>> [PATCH 04/10] Revert "cpufreq: intel_pstate: Drop ->update_util from
+>> pstate_funcs"
+>> [PATCH 05/10] cpufreq: intel_pstate: Implement VLP controller
+>> statistics and status calculation.
+>> [PATCH 06/10] cpufreq: intel_pstate: Implement VLP controller target
+>> P-state range estimation.
+>> [PATCH 07/10] cpufreq: intel_pstate: Implement VLP controller for HWP
+>> parts.
+>> [PATCH 08/10] cpufreq: intel_pstate: Enable VLP controller based on
+>> ACPI FADT profile and CPUID.
+>> [PATCH 09/10] OPTIONAL: cpufreq: intel_pstate: Add tracing of VLP
+>> controller status.
+>> [PATCH 10/10] OPTIONAL: cpufreq: intel_pstate: Expose VLP controller
+>> parameters via debugfs.
+>>=20
+>> [1] https://marc.info/?l=3Dlinux-pm&m=3D152221943320908&w=3D2
+>> [2]=20
+>> https://github.com/curro/linux/commits/intel_pstate-vlp-v2-hwp-only
+>> [3] https://github.com/curro/linux/commits/intel_pstate-vlp-v2
+>> [4]=20
+>> http://people.freedesktop.org/~currojerez/intel_pstate-vlp-v2/benchmark-=
+comparison-ICL.log
+>>=20
+
+--=-=-=--
+
+--==-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEAREIAB0WIQST8OekYz69PM20/4aDmTidfVK/WwUCXnlTFwAKCRCDmTidfVK/
+WyB8AP45y6UztyOz1db82FUstiIvscZdjd6aBmBXWgxNCrr8DgD9FuUnx14MbXhb
+UzYeKpumE0ljPcmeRFRcRk/tLy+cZ54=
+=z9+a
+-----END PGP SIGNATURE-----
+--==-=-=--
