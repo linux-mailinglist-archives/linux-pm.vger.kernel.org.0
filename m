@@ -2,135 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD73519186A
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 19:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E983919190E
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 19:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727523AbgCXSFR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Mar 2020 14:05:17 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:43165 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727314AbgCXSFR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Mar 2020 14:05:17 -0400
-Received: by mail-il1-f196.google.com with SMTP id g15so8511425ilj.10;
-        Tue, 24 Mar 2020 11:05:16 -0700 (PDT)
+        id S1727468AbgCXS0S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Mar 2020 14:26:18 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:36645 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727443AbgCXS0S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Mar 2020 14:26:18 -0400
+Received: by mail-qk1-f196.google.com with SMTP id d11so20367676qko.3;
+        Tue, 24 Mar 2020 11:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VKDCXEZ42UY913CTtFDT6Viou96lkFeyc6FJl6g05Vg=;
+        b=AkI4Xkx1tlFJcJ9dNLecf4+W/yiyVYQzQJjxQEP3fsUyxtJlsDPsp2922A08nOHUqt
+         Raz6pWjrCl2Hhym8BGoSwUNuuPSH9d7vYfRnfoGLRBR/CRLOXfi4zD6n1d5fSUpIvQFH
+         G5SdqFXcT/F1KCp2Jmv8aiswNEn5y/cJFvk9n9q+ccGDLGwlnioNCKkDSHsNmzL95JtU
+         pURc9Y4b8prbYmhRvfO+VUUnf+r33J9ni46guh0TYipbbdvAZhJ7v5nxJcAVMvEu04Wz
+         kEBSWZbCndALY8ZvcfA6P1KQIOyEPipSsEPBC1fuESUBy2/Xy1bELlSr4o1v/OGJeB1M
+         HkyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=f9FwT4hBATnVfznxi1cnrb0F4y7CCgXvMmx9RvvvTuk=;
-        b=HQFyIs64REozGG698aB7gxXHmc92rNPosEpkNH5SrahMuIhYpfZSvr9aVIw6uoqlZk
-         9ImqfjsiST5bg4Q0oVynq1uB8aJrEnIS1d+ikgPmXEiBvPk1aXIhE8LkWCmjZT+Rj2ln
-         skE/NKiNIWz16/da1dtjBPsNWSXYKWLk/3GANp0xht7OqPggVawDoA9Q44ryktbPCEyv
-         EKQI2Z5z7OtL5JT9DKq5OFINe9hb9JAWF0XXnkJQVtHZTLm1VvydguVbMYrysIsYdRRE
-         qMET8ENLXm9XKCe1Qomx9F0+HBFyqP8BVkdZSH7UF4wpiOua5sWDNVqY1fn6OR8CgpOI
-         eFXA==
-X-Gm-Message-State: ANhLgQ034nJwvC4HvNYcEb+/8EIUf7YcPQ0olCFQNlH3h+OFBoEYswMq
-        0fo4ErOOzFXABXNn6k2oJw==
-X-Google-Smtp-Source: ADFU+vtWYXZGcZ5Xm5GdMRAWBGF58PhfvWP3D92WD4x1uhj4RylpNyqfXK314CqkENzaR4qEWKuXbQ==
-X-Received: by 2002:a92:8316:: with SMTP id f22mr703764ild.169.1585073116525;
-        Tue, 24 Mar 2020 11:05:16 -0700 (PDT)
-Received: from xps15.herring.priv ([64.188.179.250])
-        by smtp.googlemail.com with ESMTPSA id h12sm5348493iob.22.2020.03.24.11.05.15
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=VKDCXEZ42UY913CTtFDT6Viou96lkFeyc6FJl6g05Vg=;
+        b=YK4zi2vsEO8fslwdFCmHmI44nU73DBTi5VB68l9zG+KPb/Bn+HzE8mLoj66fQ4CbKT
+         V5rKgLIe43efmAT6PrI083fz6nAf7OkdQyUuVKlkpzr57ga9pBzHOUi6vfn10Su5+g5S
+         +UO594/OVoJ/fMHgNiH1RPuexbewUlDquIvrHDvtURtW4o5ptByqkoDlHgFv6uDuV8xc
+         0yOaYIoCpGzDkI1v48iwPtA9/zXwy96HKZ0BpTYqrtCCUWZ2B99czqp88AfmBgIUMXLJ
+         vFD4BCpScYARiHhvkgclYj/CoeXgQda4Ykh/63flEkfl3Iv8nziUW9e3G0pYvusoEXtE
+         2t3Q==
+X-Gm-Message-State: ANhLgQ04MVZBMeaWRp2YDl8SmMzX5PYQXt/8mecEQ7St1nL0U/50l8jj
+        dcmkp7HCqUHLF3n4WyY0VM10rYHqGeo=
+X-Google-Smtp-Source: ADFU+vtMSJC8sWVJYJ3arOh+M32uZq0yu5b1h8oEMGbdpbxd7Z3KHLEAw55hEBb1joWKeLW3rp8Z0g==
+X-Received: by 2002:a37:a208:: with SMTP id l8mr26130803qke.302.1585074377272;
+        Tue, 24 Mar 2020 11:26:17 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::19c2])
+        by smtp.gmail.com with ESMTPSA id m65sm13998087qke.109.2020.03.24.11.26.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 11:05:15 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: thermal: tsens: Set 'additionalProperties: false'
-Date:   Tue, 24 Mar 2020 12:05:13 -0600
-Message-Id: <20200324180513.3882-2-robh@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200324180513.3882-1-robh@kernel.org>
-References: <20200324180513.3882-1-robh@kernel.org>
+        Tue, 24 Mar 2020 11:26:16 -0700 (PDT)
+Date:   Tue, 24 Mar 2020 14:26:15 -0400
+From:   Tejun Heo <tj@kernel.org>
+To:     Marco Ballesio <balejs@google.com>
+Cc:     Daniel Colascione <dancol@google.com>,
+        Roman Gushchin <guro@fb.com>, cgroups@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>, lizefan@huawei.com,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, rjw@rjwysocki.net,
+        Pavel Machek <pavel@ucw.cz>, len.brown@intel.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Minchan Kim <minchan@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: Re: [PATCH] cgroup-v1: freezer: optionally killable freezer
+Message-ID: <20200324182615.GF162390@mtj.duckdns.org>
+References: <20200219183231.50985-1-balejs@google.com>
+ <20200303134855.GA186184@mtj.thefacebook.com>
+ <CAKOZuevzE=0Oa8gn--rkVJ8t69S+o2vK--pki65XXg6EVuOhMQ@mail.gmail.com>
+ <20200320201038.GB79184@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200320201038.GB79184@google.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Ensure the node only contains the properties listed in the schema by
-setting 'additionalProperties: false'. Doing this requires reworking the
-interrupt properties schemas so that they are defined in the main
-'properties' section.
+Hello,
 
-Fixes: a877e768f655 ("dt-bindings: thermal: tsens: Convert over to a yaml schema")
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Amit Kucheria <amit.kucheria@linaro.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/thermal/qcom-tsens.yaml          | 28 ++++++++++++-------
- 1 file changed, 18 insertions(+), 10 deletions(-)
+On Fri, Mar 20, 2020 at 01:10:38PM -0700, Marco Ballesio wrote:
+> It might also be desirable for userland to have a way to modify the behavior of
+> an already mounted v1 freezer.
+> 
+> Tejun, would it be acceptable to have a flag but disable it by default, hiding
+> it behind a kernel configuration option?
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index 7a38d2116059..3492447e42e9 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -46,6 +46,18 @@ properties:
-       - description: TM registers
-       - description: SROT registers
- 
-+  interrupts:
-+    minItems: 1
-+    items:
-+      - description: Combined interrupt if upper or lower threshold crossed
-+      - description: Interrupt if critical threshold crossed
-+
-+  interrupt-names:
-+    minItems: 1
-+    items:
-+      - const: uplow
-+      - const: critical
-+
-   nvmem-cells:
-     minItems: 1
-     maxItems: 2
-@@ -88,22 +100,16 @@ allOf:
-     then:
-       properties:
-         interrupts:
--          items:
--            - description: Combined interrupt if upper or lower threshold crossed
-+          maxItems: 1
-         interrupt-names:
--          items:
--            - const: uplow
-+          maxItems: 1
- 
-     else:
-       properties:
-         interrupts:
--          items:
--            - description: Combined interrupt if upper or lower threshold crossed
--            - description: Interrupt if critical threshold crossed
-+          minItems: 2
-         interrupt-names:
--          items:
--            - const: uplow
--            - const: critical
-+          minItems: 2
- 
- required:
-   - compatible
-@@ -113,6 +119,8 @@ required:
-   - interrupt-names
-   - "#thermal-sensor-cells"
- 
-+additionalProperties: false
-+
- examples:
-   - |
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
+Given how dead-end this is, I'm not sure this needs to be upstream. Can you give
+me some rationales?
+
+Thanks.
+
 -- 
-2.20.1
-
+tejun
