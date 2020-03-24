@@ -2,113 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECCB190391
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 03:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 847FB1905CA
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 07:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727213AbgCXCaL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Mar 2020 22:30:11 -0400
-Received: from mail-vk1-f194.google.com ([209.85.221.194]:40476 "EHLO
-        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726824AbgCXCaK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Mar 2020 22:30:10 -0400
-Received: by mail-vk1-f194.google.com with SMTP id k63so4414905vka.7
-        for <linux-pm@vger.kernel.org>; Mon, 23 Mar 2020 19:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E654FjdUEQHUs8slsoY39LXgqQlQcst7HtR/NPfu2ZU=;
-        b=PyFnFDvHAMFtZOHiL4JFSEvTOpBWyVQ8WX+T2B9tTPB+q275MbxkOqKZ1+ISeFb6gm
-         jaPo5MDrjePiqUG7HWMGP09fCnGlt0kCqsLJhlkJmER/XMa8VnA0R6gso4cAOjV2jLGz
-         VYvcp5LP370pkMyIxuP1Mv0Q+YZEdohyHkUywWz8WjASqHjz0/mJqw/AN3ZwBe7h3/iw
-         WFMiQ+fo5taKM6gEd0Wji7LTUqKGVjCMhp2afWe9qHBhtdfipHQ5zzl7+vqh151bIXi3
-         ylbM+X9UsC7TJ+3N6DunPFxwvzmUjf21SJPrLEuJZuWoYmMFdWgX8tiwFCVEdZgkAyBu
-         RwAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E654FjdUEQHUs8slsoY39LXgqQlQcst7HtR/NPfu2ZU=;
-        b=BF0utGmx9h8CZpsm2ILdEL7TfHiRkBVxpXyTzEHOj8UrbbLXv/eJW92B8ZvGLl3uLI
-         F1r+E6N1PRk2VJjD6vjT3+SqVLDhimCNH7morkZPSdtZJzSG1NfBgtszahx8okTPosm7
-         jK3vS3o5lQRSSWLj6BNzXFWJv8ZjCLyovdnF1IAKNqs1xSKgHa+PmjzbDvC8yh4FK7kE
-         m4yp8nwImL3Yt/65x5NwA/PE0ZvbrxMIJJmMUE8gbAH4TkCca5BszDdycRRvE8J7YxIz
-         vTkKySUzCkrlWYmCdUKkqCLt3+G76nkXo5QZdNgbJJlcJef4lY0dQPhmNMqXvpPP0dJf
-         h2nA==
-X-Gm-Message-State: ANhLgQ05iR8k4L4cO1zeeuB82nkol0C1SAYwzTrjw+T5lzDg/oJhX4gw
-        VfiNStJXbzgcSL8uRkJG+WCXl+jxufxKbN8IM0nPmg==
-X-Google-Smtp-Source: ADFU+vsNWDf85t42CDUfiM9Il8e3f8zk6wDs/cv9jsrMiNAdLh8PJOcpCzY0DfTq5I6U3WH+HvpaRN6WK1qTQVgkdRo=
-X-Received: by 2002:a1f:ee05:: with SMTP id m5mr17038079vkh.9.1585017006589;
- Mon, 23 Mar 2020 19:30:06 -0700 (PDT)
+        id S1725922AbgCXGev (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Mar 2020 02:34:51 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37645 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725867AbgCXGev (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 24 Mar 2020 02:34:51 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48mhLc62Rfz9sNg;
+        Tue, 24 Mar 2020 17:34:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1585031689;
+        bh=5Hd5RUwA/dvRMS4WLUeTFYytdcYhONFN7COAZjGe2ZI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=R/8QvpMMOGOvB2SBheePKyqG/9FNKIhpvV3+NXp9oPbPnr+y+Y9FqYq/qftTI81jX
+         TTJJBApqrx7RsVt31sowNMafRKvD2AdB1McUZOqNkhjOrbUDKQ4uFGYqGY+3NNmW+x
+         k3eTAln+cKrDkMswlglr1RXo3ZPV/4XxBtcWZk29BLubGPvsLjOC2YdR8r3L7kBnU7
+         oEWw0zshCBZBDWXfTfThCWaOdaJEN3hX1YetFcGXhaw2RJaAFWMo9XQUwJUVJbMvNh
+         6m6AF1IIRf+LiR/B/PGMPJmkjY9mKTdM574qdqMbpLSCmHceo+yklU7l2SgL/O7khS
+         m8Yv54tJrC0tg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pratik Rajesh Sampat <psampat@linux.ibm.com>
+Cc:     linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, pratik.r.sampat@gmail.com,
+        ego@linux.vnet.ibm.com, dja@axtens.net
+Subject: Re: [PATCH] cpufreq: powernv: Fix frame-size-overflow in powernv_cpufreq_work_fn
+In-Reply-To: <1921198.IfoiWgUDIW@kreacher>
+References: <20200316135743.57735-1-psampat@linux.ibm.com> <1921198.IfoiWgUDIW@kreacher>
+Date:   Tue, 24 Mar 2020 17:34:56 +1100
+Message-ID: <87h7yexnu7.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20200321193107.21590-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20200321193107.21590-1-daniel.lezcano@linaro.org>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Tue, 24 Mar 2020 08:00:00 +0530
-Message-ID: <CAHLCerPheqrD4Qkxsy1LmdLP1OTVb2pZkKMVCA0dK3CL9xfGKA@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/cpufreq_cooling: Remove abusing WARN_ON
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "open list:THERMAL/CPU_COOLING" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Mar 22, 2020 at 1:01 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+"Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
+> On Monday, March 16, 2020 2:57:43 PM CET Pratik Rajesh Sampat wrote:
+>> The patch avoids allocating cpufreq_policy on stack hence fixing frame
+>> size overflow in 'powernv_cpufreq_work_fn'
+>> 
+>> Fixes: 227942809b52 ("cpufreq: powernv: Restore cpu frequency to policy->cur on unthrottling")
+>> Signed-off-by: Pratik Rajesh Sampat <psampat@linux.ibm.com>
 >
-> The WARN_ON macros are used at the entry functions state2power() and
-> set_cur_state().
+> Any objections or concerns here?
 >
-> state2power() is called with the max_state retrieved from
-> get_max_state which returns cpufreq_cdev->max_level, then it check if
-> max_state is > cpufreq_cdev->max_level. The test does not really makes
-> sense but let's assume we want to make sure to catch an error if the
-> code evolves. However the WARN_ON is overkill.
->
-> set_cur_state() is also called from userspace if we write to the
-> sysfs. It is easy to see a stack dumped by just writing to sysfs
-> /sys/class/thermal/cooling_device0/cur_state a value greater than
-> "max_level". A bit scary. Returing -EINVAL is enough.
->
-> Remove these WARN_ON.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> If not, I'll queue it up.
 
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+I have it in my testing branch, but if you pick it up I can drop it.
 
-> ---
->  drivers/thermal/cpufreq_cooling.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> index af55ac08e1bd..d66791a71320 100644
-> --- a/drivers/thermal/cpufreq_cooling.c
-> +++ b/drivers/thermal/cpufreq_cooling.c
-> @@ -273,7 +273,7 @@ static int cpufreq_state2power(struct thermal_cooling_device *cdev,
->         struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
->
->         /* Request state should be less than max_level */
-> -       if (WARN_ON(state > cpufreq_cdev->max_level))
-> +       if (state > cpufreq_cdev->max_level)
->                 return -EINVAL;
->
->         num_cpus = cpumask_weight(cpufreq_cdev->policy->cpus);
-> @@ -434,7 +434,7 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
->         int ret;
->
->         /* Request state should be less than max_level */
-> -       if (WARN_ON(state > cpufreq_cdev->max_level))
-> +       if (state > cpufreq_cdev->max_level)
->                 return -EINVAL;
->
->         /* Check if the old cooling action is same as new cooling action */
-> --
-> 2.17.1
->
+cheers
+
+>> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
+>> index 56f4bc0d209e..20ee0661555a 100644
+>> --- a/drivers/cpufreq/powernv-cpufreq.c
+>> +++ b/drivers/cpufreq/powernv-cpufreq.c
+>> @@ -902,6 +902,7 @@ static struct notifier_block powernv_cpufreq_reboot_nb = {
+>>  void powernv_cpufreq_work_fn(struct work_struct *work)
+>>  {
+>>  	struct chip *chip = container_of(work, struct chip, throttle);
+>> +	struct cpufreq_policy *policy;
+>>  	unsigned int cpu;
+>>  	cpumask_t mask;
+>>  
+>> @@ -916,12 +917,14 @@ void powernv_cpufreq_work_fn(struct work_struct *work)
+>>  	chip->restore = false;
+>>  	for_each_cpu(cpu, &mask) {
+>>  		int index;
+>> -		struct cpufreq_policy policy;
+>>  
+>> -		cpufreq_get_policy(&policy, cpu);
+>> -		index = cpufreq_table_find_index_c(&policy, policy.cur);
+>> -		powernv_cpufreq_target_index(&policy, index);
+>> -		cpumask_andnot(&mask, &mask, policy.cpus);
+>> +		policy = cpufreq_cpu_get(cpu);
+>> +		if (!policy)
+>> +			continue;
+>> +		index = cpufreq_table_find_index_c(policy, policy->cur);
+>> +		powernv_cpufreq_target_index(policy, index);
+>> +		cpumask_andnot(&mask, &mask, policy->cpus);
+>> +		cpufreq_cpu_put(policy);
+>>  	}
+>>  out:
+>>  	put_online_cpus();
+>> 
