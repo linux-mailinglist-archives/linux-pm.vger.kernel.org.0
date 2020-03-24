@@ -2,241 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88268190633
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 08:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D62E6190688
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 08:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726129AbgCXHYG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Mar 2020 03:24:06 -0400
-Received: from mga05.intel.com ([192.55.52.43]:63249 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726094AbgCXHYG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Mar 2020 03:24:06 -0400
-IronPort-SDR: NCKQGsZPiZt1lpx6VO595YIoH9g6P/6/TSJBvW9pI3akErlDajhvnM8WmscjskQwS3b9CvP5Uw
- 57HBWE3s9cCA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 00:24:05 -0700
-IronPort-SDR: judfSNTvNxTdpvjPcD8R8mkue8RpDADIlgExBXDzpwgrH8WxWJg3pP3AGMDnT02aJUbxe84iOn
- aIt59wFkaCPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,299,1580803200"; 
-   d="scan'208";a="238135100"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 24 Mar 2020 00:24:04 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jGdut-000FUd-EG; Tue, 24 Mar 2020 15:24:03 +0800
-Date:   Tue, 24 Mar 2020 15:23:42 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- c6e2eb7ccc3d252115a7d8cba393770ec7366063
-Message-ID: <5e79b57e.SAyMKQnUhAfZgGUz%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726094AbgCXHpQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Mar 2020 03:45:16 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:39325 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725951AbgCXHpQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Mar 2020 03:45:16 -0400
+Received: by mail-wr1-f68.google.com with SMTP id p10so7736876wrt.6;
+        Tue, 24 Mar 2020 00:45:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=qci9XDXfWr/HtNuJb/URwHsIBl1KAyOcw5r2EEPe4OA=;
+        b=I3k6E4kTXlpEyCG4zZax4of4JG0UshTfnuN0hOhs9x2tVgT294w7YwJRMn17L8INL7
+         YgCAdR7Nfhp8wHsxc5z2PP6Z8/T5E5WFKoWSxgprrh/D+g3B56t8OVoXqJKYWBvshMtY
+         3jfIV75jC9FZBMLXBYFgqH06uFGA6FcqO3R1PWaxfKt/rCIWiIbE2Pg8V9r6csuAwhOm
+         24z3LD5bzaOmXqYGEeau9zekMiZf06Ig1Mz1qZXTLzjGRqe3NNNGn9NldYcCKXPsTVYh
+         7fCJZNTtPctupBnkQsCZTp9p6HoWZncj4jcWLb1uFG4lm5gnjEEffEQGactchwNTNfoq
+         DK4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=qci9XDXfWr/HtNuJb/URwHsIBl1KAyOcw5r2EEPe4OA=;
+        b=lX0UPMt3xvvsFi7gKv3GQmEripuhonMZsYL1Bc+dc3azn4gsz+lFhbyAQQMIqC/USj
+         4tNP2RhsH+RotpMqh1+SPLwQ5aTqc3tDix41vgB17y5uBTlgx8VaUe9NZVETsgk9KQaz
+         T/jbpKV7xFEEK6loWEMlA0jRs03+VkVgXmAcVotOM6M9aTTKn8s5eztheO7exGEfMLf3
+         Y6GLmHLUR3sPnmdSYweSopse5RMtyLSsCF60fU9EvSbDJzE+4MdZT5KZyWadxaNlDeRR
+         8uZ9DoZLCuJ3593fwXnsCJrmqK21X5tfAGEw+Gm3ooy9sVkNL4ciyct1WvBlLcZNU6df
+         K73g==
+X-Gm-Message-State: ANhLgQ3FYHaWKx8/6KDm2qfIG5UmJHiNUrsnp+bb/Caa6m5VblYAmy3v
+        okexZsMHLYvSaJeu1cST+LL/ObZF
+X-Google-Smtp-Source: ADFU+vuf7kJDz9bLjRXO6tfvufZAxHskal0rnkpg5yX5WMWq9CUG50AtkiQT21qDpvbo3C0DYAsUPQ==
+X-Received: by 2002:adf:fc4c:: with SMTP id e12mr31792310wrs.265.1585035913925;
+        Tue, 24 Mar 2020 00:45:13 -0700 (PDT)
+Received: from macbook-pro.local (181.4.199.77.rev.sfr.net. [77.199.4.181])
+        by smtp.gmail.com with ESMTPSA id z19sm6456766wrg.28.2020.03.24.00.45.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2020 00:45:13 -0700 (PDT)
+Date:   Tue, 24 Mar 2020 07:45:12 +0000
+From:   Willy Wolff <willy.mh.wolff.ml@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J.Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [PATCH] thermal/drivers/cpufreq_cooling: Fix return of
+ cpufreq_set_cur_state
+Message-ID: <20200324074512.toikwgebhwbfo5xs@macbook-pro.local>
+References: <20200321092740.7vvwfxsebcrznydh@macmini.local>
+ <CAHLCerOFg30GEaQgV=4ccgA1fG6P3OTgaG33pw-3YCtuD5mSmA@mail.gmail.com>
+ <b30a2e5b-5fa6-9761-efe1-d3b5396ceaaa@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b30a2e5b-5fa6-9761-efe1-d3b5396ceaaa@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: c6e2eb7ccc3d252115a7d8cba393770ec7366063  Merge branch 'pnp' into linux-next
+Many thanks.
 
-elapsed time: 886m
-
-configs tested: 181
-configs skipped: 0
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm                           efm32_defconfig
-arm                         at91_dt_defconfig
-arm                        shmobile_defconfig
-arm64                               defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                           sunxi_defconfig
-arm                        multi_v7_defconfig
-sparc                            allyesconfig
-sparc64                             defconfig
-riscv                          rv32_defconfig
-xtensa                       common_defconfig
-arc                              allyesconfig
-i386                              allnoconfig
-m68k                          multi_defconfig
-i386                             allyesconfig
-i386                             alldefconfig
-i386                                defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                                defconfig
-c6x                              allyesconfig
-c6x                        evmc6678_defconfig
-nios2                         10m50_defconfig
-nios2                         3c120_defconfig
-openrisc                    or1ksim_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                          iss_defconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                       m5475evb_defconfig
-m68k                           sun3_defconfig
-arc                                 defconfig
-powerpc                          rhel-kconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-parisc                            allnoconfig
-parisc                generic-64bit_defconfig
-parisc                generic-32bit_defconfig
-parisc                           allyesconfig
-i386                 randconfig-a002-20200323
-i386                 randconfig-a001-20200323
-x86_64               randconfig-a002-20200323
-x86_64               randconfig-a001-20200323
-i386                 randconfig-a003-20200323
-x86_64               randconfig-a003-20200323
-x86_64               randconfig-a001-20200322
-x86_64               randconfig-a002-20200322
-x86_64               randconfig-a003-20200322
-i386                 randconfig-a001-20200322
-i386                 randconfig-a002-20200322
-i386                 randconfig-a003-20200322
-mips                 randconfig-a001-20200323
-nds32                randconfig-a001-20200323
-m68k                 randconfig-a001-20200323
-parisc               randconfig-a001-20200323
-alpha                randconfig-a001-20200323
-riscv                randconfig-a001-20200323
-h8300                randconfig-a001-20200323
-microblaze           randconfig-a001-20200323
-nios2                randconfig-a001-20200323
-c6x                  randconfig-a001-20200323
-sparc64              randconfig-a001-20200323
-c6x                  randconfig-a001-20200322
-h8300                randconfig-a001-20200322
-microblaze           randconfig-a001-20200322
-nios2                randconfig-a001-20200322
-sparc64              randconfig-a001-20200322
-s390                 randconfig-a001-20200323
-xtensa               randconfig-a001-20200323
-csky                 randconfig-a001-20200323
-openrisc             randconfig-a001-20200323
-sh                   randconfig-a001-20200323
-x86_64               randconfig-b001-20200323
-x86_64               randconfig-b002-20200323
-x86_64               randconfig-b003-20200323
-i386                 randconfig-b001-20200323
-i386                 randconfig-b002-20200323
-i386                 randconfig-b003-20200323
-x86_64               randconfig-c001-20200323
-x86_64               randconfig-c002-20200323
-x86_64               randconfig-c003-20200323
-i386                 randconfig-c001-20200323
-i386                 randconfig-c002-20200323
-i386                 randconfig-c003-20200323
-x86_64               randconfig-d001-20200323
-x86_64               randconfig-d002-20200323
-x86_64               randconfig-d003-20200323
-i386                 randconfig-d001-20200323
-i386                 randconfig-d002-20200323
-i386                 randconfig-d003-20200323
-x86_64               randconfig-e001-20200323
-x86_64               randconfig-e002-20200323
-x86_64               randconfig-e003-20200323
-i386                 randconfig-e001-20200323
-i386                 randconfig-e002-20200323
-i386                 randconfig-e003-20200323
-x86_64               randconfig-f001-20200323
-x86_64               randconfig-f002-20200323
-x86_64               randconfig-f003-20200323
-i386                 randconfig-f001-20200323
-i386                 randconfig-f002-20200323
-i386                 randconfig-f003-20200323
-x86_64               randconfig-f001-20200324
-x86_64               randconfig-f002-20200324
-x86_64               randconfig-f003-20200324
-i386                 randconfig-f001-20200324
-i386                 randconfig-f002-20200324
-i386                 randconfig-f003-20200324
-x86_64               randconfig-g001-20200323
-x86_64               randconfig-g002-20200323
-x86_64               randconfig-g003-20200323
-i386                 randconfig-g001-20200323
-i386                 randconfig-g002-20200323
-i386                 randconfig-g003-20200323
-x86_64               randconfig-h002-20200323
-i386                 randconfig-h003-20200323
-i386                 randconfig-h001-20200323
-i386                 randconfig-h002-20200323
-x86_64               randconfig-h001-20200323
-x86_64               randconfig-h003-20200323
-arm                  randconfig-a001-20200323
-powerpc              randconfig-a001-20200323
-arm64                randconfig-a001-20200323
-ia64                 randconfig-a001-20200323
-sparc                randconfig-a001-20200323
-arc                  randconfig-a001-20200323
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                       zfcpdump_defconfig
-s390                          debug_defconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                             alldefconfig
-s390                                defconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                            titan_defconfig
-sparc                               defconfig
-sparc64                          allmodconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On Mon, Mar 23, 2020 at 10:08:38PM +0100, Daniel Lezcano wrote:
+>On 23/03/2020 22:05, Amit Kucheria wrote:
+>> Hi Willy,
+>>
+>> On Sat, Mar 21, 2020 at 2:57 PM Willy Wolff <willy.mh.wolff.ml@gmail.com> wrote:
+>>>
+>>> The function freq_qos_update_request returns 0 or 1 describing update
+>>> effectiveness, and a negative error code on failure. However,
+>>> cpufreq_set_cur_state returns 0 on success or an error code otherwise.
+>>>
+>>
+>> Please improve the commit message with context from your earlier bug
+>> report thread and a summary of how the problem shows up.
+>
+>I've improved the commit message when applied:
+>
+>https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/commit/?h=testing&id=ff44f672d74178b3be19d41a169b98b3e391d4ce
+>
+>>> Signed-off-by: Willy Wolff <willy.mh.wolff.ml@gmail.com>
+>>> ---
+>>>  drivers/thermal/cpufreq_cooling.c | 6 ++++--
+>>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+>>> index fe83d7a210d4..af55ac08e1bd 100644
+>>> --- a/drivers/thermal/cpufreq_cooling.c
+>>> +++ b/drivers/thermal/cpufreq_cooling.c
+>>> @@ -431,6 +431,7 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+>>>                                  unsigned long state)
+>>>  {
+>>>         struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
+>>> +       int ret;
+>>>
+>>>         /* Request state should be less than max_level */
+>>>         if (WARN_ON(state > cpufreq_cdev->max_level))
+>>> @@ -442,8 +443,9 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+>>>
+>>>         cpufreq_cdev->cpufreq_state = state;
+>>>
+>>> -       return freq_qos_update_request(&cpufreq_cdev->qos_req,
+>>> -                               get_state_freq(cpufreq_cdev, state));
+>>> +       ret = freq_qos_update_request(&cpufreq_cdev->qos_req,
+>>> +                                     get_state_freq(cpufreq_cdev, state));
+>>> +       return ret < 0 ? ret : 0;
+>>>  }
+>>>
+>>>  /* Bind cpufreq callbacks to thermal cooling device ops */
+>>> --
+>>> 2.20.1
+>>>
+>
+>
+>-- 
+> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+>Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+><http://twitter.com/#!/linaroorg> Twitter |
+><http://www.linaro.org/linaro-blog/> Blog
+>
