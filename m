@@ -2,109 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A181914EE
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 16:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1BA19150D
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 16:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728911AbgCXPiu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Mar 2020 11:38:50 -0400
-Received: from mga17.intel.com ([192.55.52.151]:39337 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728895AbgCXPit (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Mar 2020 11:38:49 -0400
-IronPort-SDR: BEFFkdBFxk7mRHJWpm9/RHq3IgnTmzEXOBWsUrH6m8vuJAnWduQl+Zg4o4BMZ5/r5DzjqYcVmW
- I0MuydOxiWPg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 08:38:48 -0700
-IronPort-SDR: OH9LOnbiL4v4JZEOKEB/asPk1R/gzlJCOgYYDD8Y/4+mtRjZPj4rORMZ9Y6HhOwPh9gE+I4cRC
- Soiz8Ghm/JHg==
-X-IronPort-AV: E=Sophos;i="5.72,300,1580803200"; 
-   d="scan'208";a="238262386"
-Received: from spandruv-mobl.amr.corp.intel.com ([10.134.90.138])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 08:38:47 -0700
-Message-ID: <406e39aa9890d4d518a2259b539858d82f4d6e18.camel@linux.intel.com>
-Subject: Re: [cpufreq] 06c4d00466: will-it-scale.per_process_ops -53.4%
- regression
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        kernel test robot <rong.a.chen@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto <linux-crypto@vger.kernel.org>, lkp@lists.01.org
-Date:   Tue, 24 Mar 2020 08:38:46 -0700
-In-Reply-To: <CAHp75VeeKZLeZ8E3Py7LECN54SPFHaRgkxrMzBYQWXM8x+4JhA@mail.gmail.com>
-References: <20200320131509.564059710@linutronix.de>
-         <20200324060124.GC11705@shao2-debian>
-         <CAHp75VeeKZLeZ8E3Py7LECN54SPFHaRgkxrMzBYQWXM8x+4JhA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.2 (3.34.2-1.fc31) 
+        id S1728206AbgCXPk2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Mar 2020 11:40:28 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:43734 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727216AbgCXPk2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Mar 2020 11:40:28 -0400
+Received: by mail-ot1-f65.google.com with SMTP id a6so17347217otb.10;
+        Tue, 24 Mar 2020 08:40:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x91Gn6ctV7uAtmkacQ15CXSKd6r2ddccL8V3P9sMjNA=;
+        b=pfMj7row9sTrv4thwk7KfT+caqwHdG3s0euotqjGzU/BWsPbKbqETn4/g4QA0SwOnw
+         phHxte+faIoNTkFkvpxllaze69d464k7Q28h33EKHRCogupdQwfpGaWLbFFhwRLXUySN
+         +K5MO+KB57qvUERrTle7Bbws7rUYWXvDhU80Lg5y8ORS9cAsCRhvYJ2QxIENESqS6d5W
+         9xswU66yaQPNaEYHymbzuTa6lSWXSP/sG5FTqHuO7q//bZrSfe/RPOikCCf/eu3kxCPh
+         33zwkZNI4fU9csqKcTLfCF9Ul7hQu2B0s1vtQSL/GLBeH1EVz7FWFwYardutuTFpaK4g
+         xYmA==
+X-Gm-Message-State: ANhLgQ13gTc1DZVMqob/dBWdpFQT5XWnWUgr2nMpzjh6OhsgltX8FIQ7
+        JRQkI60XIz3iGjAVU+0fRjbRAlT5FLUSZPrslATkUA==
+X-Google-Smtp-Source: ADFU+vtOOAmaA25O7ZsrbfelAo4/GiymbQ4narnzwPJk3U/bOgQJEAOi/z87tKAKA8y4280wJe3a3HGwWFYAk+n4Vj8=
+X-Received: by 2002:a9d:1d07:: with SMTP id m7mr21308652otm.167.1585064427356;
+ Tue, 24 Mar 2020 08:40:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20200323181245.GJ4288@osiris>
+In-Reply-To: <20200323181245.GJ4288@osiris>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 24 Mar 2020 16:40:16 +0100
+Message-ID: <CAJZ5v0hzf=kQBcR=K2KL1kEVtA6oLPtLDaeeaVuWMPsXomhJHw@mail.gmail.com>
+Subject: Re: s390: removal of hibernate support
+To:     Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2020-03-24 at 12:24 +0200, Andy Shevchenko wrote:
-> On Tue, Mar 24, 2020 at 8:02 AM kernel test robot <
-> rong.a.chen@intel.com> wrote:
-> > Greeting,
-> > 
-> > FYI, we noticed a -53.4% regression of will-it-
-> > scale.per_process_ops due to commit:
-> > commit: 06c4d00466eb374841bc84c39af19b3161ff6917 ("[patch 09/22]
-> > cpufreq: Convert to new X86 CPU match macros")
-> > url: 
-> > https://github.com/0day-ci/linux/commits/Thomas-Gleixner/x86-devicetable-Move-x86-specific-macro-out-of-generic-code/20200321-031729
-> > base: 
-> > https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git
-> > linux-next
-> > 
-> > in testcase: will-it-scale
-> > on test machine: 4 threads Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz
-> > with 8G memory
-> > with following parameters:
-> 
-> drivers/cpufreq/speedstep-centrino.c change missed the terminator,
-> perhaps it's a culprit, because I don't believe removing dups and
-> reordering lines may affect this.
-> Can you restore terminator there and re-test?
+Hi,
 
-This is a Ivy Bridge. So if it has to do anything cpufreq then it is
-not loading the cpufreq driver (intel_pstate or acpi_cpufreq).
-What is
- cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+On Mon, Mar 23, 2020 at 7:12 PM Heiko Carstens
+<heiko.carstens@de.ibm.com> wrote:
+>
+> Hi Rafael,
+>
+> we are going to remove hibernate support on s390, since it is
+> - broken since many years
+> - there is no real use case which justifies keeping and maintaining
+>   the code
+>
+> See also https://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git/commit/?h=features&id=394216275c7d503d966317da9a01ad6626a6091d
+>
+> This in turn allows also to remove s390 specific hooks in generic
+> power management code (see patch below). The patch below is currently
+> also on the same features branch.
+> I silently assume(d) that you don't mind to get rid of otherwise dead
+> code, or do you have any objections?
+>
+> From 086b2d78375cffe58f5341359bebec0650793811 Mon Sep 17 00:00:00 2001
+> From: Heiko Carstens <heiko.carstens@de.ibm.com>
+> Date: Wed, 18 Mar 2020 20:55:20 +0100
+> Subject: [PATCH] PM: remove s390 specific callbacks
+>
+> ARCH_SAVE_PAGE_KEYS has been introduced in order to be able to save
+> and restore s390 specific storage keys into a hibernation image.
+> With hibernation support removed from s390 there is no point in
+> keeping the callbacks.
+>
+> Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
+> Acked-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+> Signed-off-by: Heiko Carstens <heiko.carstens@de.ibm.com>
+> Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
 
+Can I take this patch or would it be better to route it differently?
 
-> 
-
+> ---
+>  include/linux/suspend.h | 34 ----------------------------------
+>  kernel/power/Kconfig    |  3 ---
+>  kernel/power/snapshot.c | 18 ------------------
+>  3 files changed, 55 deletions(-)
+>
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 2b2055b035ee..4fcc6fd0cbd6 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -566,38 +566,4 @@ static inline void queue_up_suspend_work(void) {}
+>
+>  #endif /* !CONFIG_PM_AUTOSLEEP */
+>
+> -#ifdef CONFIG_ARCH_SAVE_PAGE_KEYS
+> -/*
+> - * The ARCH_SAVE_PAGE_KEYS functions can be used by an architecture
+> - * to save/restore additional information to/from the array of page
+> - * frame numbers in the hibernation image. For s390 this is used to
+> - * save and restore the storage key for each page that is included
+> - * in the hibernation image.
+> - */
+> -unsigned long page_key_additional_pages(unsigned long pages);
+> -int page_key_alloc(unsigned long pages);
+> -void page_key_free(void);
+> -void page_key_read(unsigned long *pfn);
+> -void page_key_memorize(unsigned long *pfn);
+> -void page_key_write(void *address);
+> -
+> -#else /* !CONFIG_ARCH_SAVE_PAGE_KEYS */
+> -
+> -static inline unsigned long page_key_additional_pages(unsigned long pages)
+> -{
+> -       return 0;
+> -}
+> -
+> -static inline int  page_key_alloc(unsigned long pages)
+> -{
+> -       return 0;
+> -}
+> -
+> -static inline void page_key_free(void) {}
+> -static inline void page_key_read(unsigned long *pfn) {}
+> -static inline void page_key_memorize(unsigned long *pfn) {}
+> -static inline void page_key_write(void *address) {}
+> -
+> -#endif /* !CONFIG_ARCH_SAVE_PAGE_KEYS */
+> -
+>  #endif /* _LINUX_SUSPEND_H */
+> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> index 7cbfbeacd68a..c208566c844b 100644
+> --- a/kernel/power/Kconfig
+> +++ b/kernel/power/Kconfig
+> @@ -80,9 +80,6 @@ config HIBERNATION
+>
+>           For more information take a look at <file:Documentation/power/swsusp.rst>.
+>
+> -config ARCH_SAVE_PAGE_KEYS
+> -       bool
+> -
+>  config PM_STD_PARTITION
+>         string "Default resume partition"
+>         depends on HIBERNATION
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index ddade80ad276..e99d13b0b8fc 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -1744,9 +1744,6 @@ int hibernate_preallocate_memory(void)
+>         count += highmem;
+>         count -= totalreserve_pages;
+>
+> -       /* Add number of pages required for page keys (s390 only). */
+> -       size += page_key_additional_pages(saveable);
+> -
+>         /* Compute the maximum number of saveable pages to leave in memory. */
+>         max_size = (count - (size + PAGES_FOR_IO)) / 2
+>                         - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
+> @@ -2075,8 +2072,6 @@ static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)
+>                 buf[j] = memory_bm_next_pfn(bm);
+>                 if (unlikely(buf[j] == BM_END_OF_MAP))
+>                         break;
+> -               /* Save page key for data page (s390 only). */
+> -               page_key_read(buf + j);
+>         }
+>  }
+>
+> @@ -2226,9 +2221,6 @@ static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm)
+>                 if (unlikely(buf[j] == BM_END_OF_MAP))
+>                         break;
+>
+> -               /* Extract and buffer page key for data page (s390 only). */
+> -               page_key_memorize(buf + j);
+> -
+>                 if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j]))
+>                         memory_bm_set_bit(bm, buf[j]);
+>                 else
+> @@ -2623,11 +2615,6 @@ int snapshot_write_next(struct snapshot_handle *handle)
+>                 if (error)
+>                         return error;
+>
+> -               /* Allocate buffer for page keys. */
+> -               error = page_key_alloc(nr_copy_pages);
+> -               if (error)
+> -                       return error;
+> -
+>                 hibernate_restore_protection_begin();
+>         } else if (handle->cur <= nr_meta_pages + 1) {
+>                 error = unpack_orig_pfns(buffer, &copy_bm);
+> @@ -2649,8 +2636,6 @@ int snapshot_write_next(struct snapshot_handle *handle)
+>                 }
+>         } else {
+>                 copy_last_highmem_page();
+> -               /* Restore page key for data page (s390 only). */
+> -               page_key_write(handle->buffer);
+>                 hibernate_restore_protect_page(handle->buffer);
+>                 handle->buffer = get_buffer(&orig_bm, &ca);
+>                 if (IS_ERR(handle->buffer))
+> @@ -2673,9 +2658,6 @@ int snapshot_write_next(struct snapshot_handle *handle)
+>  void snapshot_write_finalize(struct snapshot_handle *handle)
+>  {
+>         copy_last_highmem_page();
+> -       /* Restore page key for data page (s390 only). */
+> -       page_key_write(handle->buffer);
+> -       page_key_free();
+>         hibernate_restore_protect_page(handle->buffer);
+>         /* Do that only if we have loaded the image entirely */
+>         if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages) {
+> --
+> 2.17.1
+>
