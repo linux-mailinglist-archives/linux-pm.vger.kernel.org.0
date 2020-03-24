@@ -2,88 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E983919190E
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 19:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2B219198D
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Mar 2020 19:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727468AbgCXS0S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Mar 2020 14:26:18 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:36645 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727443AbgCXS0S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Mar 2020 14:26:18 -0400
-Received: by mail-qk1-f196.google.com with SMTP id d11so20367676qko.3;
-        Tue, 24 Mar 2020 11:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VKDCXEZ42UY913CTtFDT6Viou96lkFeyc6FJl6g05Vg=;
-        b=AkI4Xkx1tlFJcJ9dNLecf4+W/yiyVYQzQJjxQEP3fsUyxtJlsDPsp2922A08nOHUqt
-         Raz6pWjrCl2Hhym8BGoSwUNuuPSH9d7vYfRnfoGLRBR/CRLOXfi4zD6n1d5fSUpIvQFH
-         G5SdqFXcT/F1KCp2Jmv8aiswNEn5y/cJFvk9n9q+ccGDLGwlnioNCKkDSHsNmzL95JtU
-         pURc9Y4b8prbYmhRvfO+VUUnf+r33J9ni46guh0TYipbbdvAZhJ7v5nxJcAVMvEu04Wz
-         kEBSWZbCndALY8ZvcfA6P1KQIOyEPipSsEPBC1fuESUBy2/Xy1bELlSr4o1v/OGJeB1M
-         HkyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=VKDCXEZ42UY913CTtFDT6Viou96lkFeyc6FJl6g05Vg=;
-        b=YK4zi2vsEO8fslwdFCmHmI44nU73DBTi5VB68l9zG+KPb/Bn+HzE8mLoj66fQ4CbKT
-         V5rKgLIe43efmAT6PrI083fz6nAf7OkdQyUuVKlkpzr57ga9pBzHOUi6vfn10Su5+g5S
-         +UO594/OVoJ/fMHgNiH1RPuexbewUlDquIvrHDvtURtW4o5ptByqkoDlHgFv6uDuV8xc
-         0yOaYIoCpGzDkI1v48iwPtA9/zXwy96HKZ0BpTYqrtCCUWZ2B99czqp88AfmBgIUMXLJ
-         vFD4BCpScYARiHhvkgclYj/CoeXgQda4Ykh/63flEkfl3Iv8nziUW9e3G0pYvusoEXtE
-         2t3Q==
-X-Gm-Message-State: ANhLgQ04MVZBMeaWRp2YDl8SmMzX5PYQXt/8mecEQ7St1nL0U/50l8jj
-        dcmkp7HCqUHLF3n4WyY0VM10rYHqGeo=
-X-Google-Smtp-Source: ADFU+vtMSJC8sWVJYJ3arOh+M32uZq0yu5b1h8oEMGbdpbxd7Z3KHLEAw55hEBb1joWKeLW3rp8Z0g==
-X-Received: by 2002:a37:a208:: with SMTP id l8mr26130803qke.302.1585074377272;
-        Tue, 24 Mar 2020 11:26:17 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::19c2])
-        by smtp.gmail.com with ESMTPSA id m65sm13998087qke.109.2020.03.24.11.26.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 11:26:16 -0700 (PDT)
-Date:   Tue, 24 Mar 2020 14:26:15 -0400
-From:   Tejun Heo <tj@kernel.org>
-To:     Marco Ballesio <balejs@google.com>
-Cc:     Daniel Colascione <dancol@google.com>,
-        Roman Gushchin <guro@fb.com>, cgroups@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>, lizefan@huawei.com,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, rjw@rjwysocki.net,
-        Pavel Machek <pavel@ucw.cz>, len.brown@intel.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-pm@vger.kernel.org, Minchan Kim <minchan@google.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH] cgroup-v1: freezer: optionally killable freezer
-Message-ID: <20200324182615.GF162390@mtj.duckdns.org>
-References: <20200219183231.50985-1-balejs@google.com>
- <20200303134855.GA186184@mtj.thefacebook.com>
- <CAKOZuevzE=0Oa8gn--rkVJ8t69S+o2vK--pki65XXg6EVuOhMQ@mail.gmail.com>
- <20200320201038.GB79184@google.com>
+        id S1727955AbgCXS6p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Mar 2020 14:58:45 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:38154 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727630AbgCXS6p (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 24 Mar 2020 14:58:45 -0400
+Received: from zn.tnic (p200300EC2F0BC80080B0BF5C4664F3C7.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:c800:80b0:bf5c:4664:f3c7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9A7121EC0CDC;
+        Tue, 24 Mar 2020 19:58:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1585076322;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lIsYy50HXEV0jz9brVxw6K/8V+POkTYJ1qZEO3jtQOg=;
+        b=UbGUgZ69w4Pss5KZcP0C5ESSPwJnCZ+xLrK8REFRMm8MOCwnwgNDcPNNugDTJ+7KIwZSFC
+        e/kJWtYxyIsXtyDUQzsUBRadkW8G4F6hrSbBvbtrMmiWK9xxBgpLZNe84h3kMcq6J81FTB
+        cG1Lotv4gFJ5JLaB6VJMHXCySgkcsMI=
+Date:   Tue, 24 Mar 2020 19:58:36 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        linux-edac@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org
+Subject: [PATCH 23/22] x86/smpboot: Remove the last ICPU() macro
+Message-ID: <20200324185836.GI22931@zn.tnic>
+References: <20200320131345.635023594@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200320201038.GB79184@google.com>
+In-Reply-To: <20200320131345.635023594@linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+---
+From: Borislav Petkov <bp@suse.de>
 
-On Fri, Mar 20, 2020 at 01:10:38PM -0700, Marco Ballesio wrote:
-> It might also be desirable for userland to have a way to modify the behavior of
-> an already mounted v1 freezer.
-> 
-> Tejun, would it be acceptable to have a flag but disable it by default, hiding
-> it behind a kernel configuration option?
+Now all is using the shiny new macros.
 
-Given how dead-end this is, I'm not sure this needs to be upstream. Can you give
-me some rationales?
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+---
+ arch/x86/kernel/smpboot.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-Thanks.
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index fe3ab9632f3b..3b9bf8c7e29d 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1849,24 +1849,25 @@ static bool slv_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
+ #include <asm/cpu_device_id.h>
+ #include <asm/intel-family.h>
+ 
+-#define ICPU(model) \
+-	{X86_VENDOR_INTEL, 6, model, X86_FEATURE_APERFMPERF, 0}
++#define X86_MATCH(model)					\
++	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6,		\
++		INTEL_FAM6_##model, X86_FEATURE_APERFMPERF, NULL)
+ 
+ static const struct x86_cpu_id has_knl_turbo_ratio_limits[] = {
+-	ICPU(INTEL_FAM6_XEON_PHI_KNL),
+-	ICPU(INTEL_FAM6_XEON_PHI_KNM),
++	X86_MATCH(XEON_PHI_KNL),
++	X86_MATCH(XEON_PHI_KNM),
+ 	{}
+ };
+ 
+ static const struct x86_cpu_id has_skx_turbo_ratio_limits[] = {
+-	ICPU(INTEL_FAM6_SKYLAKE_X),
++	X86_MATCH(SKYLAKE_X),
+ 	{}
+ };
+ 
+ static const struct x86_cpu_id has_glm_turbo_ratio_limits[] = {
+-	ICPU(INTEL_FAM6_ATOM_GOLDMONT),
+-	ICPU(INTEL_FAM6_ATOM_GOLDMONT_D),
+-	ICPU(INTEL_FAM6_ATOM_GOLDMONT_PLUS),
++	X86_MATCH(ATOM_GOLDMONT),
++	X86_MATCH(ATOM_GOLDMONT_D),
++	X86_MATCH(ATOM_GOLDMONT_PLUS),
+ 	{}
+ };
+ 
+-- 
+2.21.0
+
 
 -- 
-tejun
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
