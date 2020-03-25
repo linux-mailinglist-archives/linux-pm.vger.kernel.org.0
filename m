@@ -2,128 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DAE192593
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 11:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BDC192552
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 11:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726206AbgCYK3p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Mar 2020 06:29:45 -0400
-Received: from mailgate1.rohmeurope.com ([87.129.152.131]:47664 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbgCYK3o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Mar 2020 06:29:44 -0400
-X-Greylist: delayed 901 seconds by postgrey-1.27 at vger.kernel.org; Wed, 25 Mar 2020 06:29:43 EDT
-X-AuditID: c0a8fbf4-473ff70000004419-ec-5e7b2f11fcf7
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id E5.71.17433.11F2B7E5; Wed, 25 Mar 2020 11:14:41 +0100 (CET)
-Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0487.000; Wed, 25 Mar 2020 11:14:35 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "brendanhiggins@google.com" <brendanhiggins@google.com>,
-        "olteanv@gmail.com" <olteanv@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "talgi@mellanox.com" <talgi@mellanox.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davidgow@google.com" <davidgow@google.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "yamada.masahiro@socionext.com" <yamada.masahiro@socionext.com>,
-        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
-        "bp@suse.de" <bp@suse.de>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "krzk@kernel.org" <krzk@kernel.org>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-        "zaslonko@linux.ibm.com" <zaslonko@linux.ibm.com>,
-        "Laine, Markus" <Markus.Laine@fi.rohmeurope.com>,
-        "vincenzo.frascino@arm.com" <vincenzo.frascino@arm.com>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "uwe@kleine-koenig.org" <uwe@kleine-koenig.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v6 09/10] power: supply: Support ROHM bd99954 charger
-Thread-Topic: [PATCH v6 09/10] power: supply: Support ROHM bd99954 charger
-Thread-Index: AQHWAbbAyLpT1a+wPEGvvo/J38Wk46hXbxYAgAARjYCAABHKgIABdcUA
-Date:   Wed, 25 Mar 2020 10:14:35 +0000
-Message-ID: <f3490f4e7900e463540330665ecf99737070fedd.camel@fi.rohmeurope.com>
-References: <cover.1584977512.git.matti.vaittinen@fi.rohmeurope.com>
-         <1bf2431b80489ae412e774519a92616a9aa2bcca.1584977512.git.matti.vaittinen@fi.rohmeurope.com>
-         <20200324095024.GE1922688@smile.fi.intel.com>
-         <03f7053576e60632d7ac3bc074afe5d8d63e3714.camel@fi.rohmeurope.com>
-         <20200324115653.GI1922688@smile.fi.intel.com>
-In-Reply-To: <20200324115653.GI1922688@smile.fi.intel.com>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [62.78.225.252]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <95FE951F5583494DB6C37EDE94106DDA@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        id S1726109AbgCYKVT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Mar 2020 06:21:19 -0400
+Received: from foss.arm.com ([217.140.110.172]:46010 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727450AbgCYKVT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 25 Mar 2020 06:21:19 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A925631B;
+        Wed, 25 Mar 2020 03:21:18 -0700 (PDT)
+Received: from [10.37.12.110] (unknown [10.37.12.110])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CE563F52E;
+        Wed, 25 Mar 2020 03:21:16 -0700 (PDT)
+Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: Add yaml bindings for
+ thermal cooling-devices
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        swboyd@chromium.org, mka@chromium.org, daniel.lezcano@linaro.org,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+References: <cover.1585117436.git.amit.kucheria@linaro.org>
+ <1ee4240e29edefc36b5d410d4792971c2bb4c5d5.1585117436.git.amit.kucheria@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <a89df770-eeb9-e4f2-2a46-ee4389720597@arm.com>
+Date:   Wed, 25 Mar 2020 10:21:14 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Tf1AUVRzv7e7tPtCt5YC510WYV9poCNL0x6txir9qrdGJUWccZwJXWTkC
-        7pi9PUX5I8KDySNHROnq5u5wjvg5BOedJSGnzHnVETMQlYBlCWEO0ASmFEM42C6bwl/72e/n
-        13sz3wdJfRdjhAUWWZQsQpGJjqd6WxaDWxIyynK2Ln6eij2d7TQ+WeEi8MLcLMCnT23CQ6Nn
-        SFw3fovGrrrvAPYMOigcOx+gcH10QIePN3TSuHo6BQ8OBhj8z48fEPjs/WYC/9DtofG9k1GA
-        G0eGCOxpjFG4oXkjDoTmCfznDReFK8NRBoddTTrcf0nGH3nDDA4F60g8cvcnAoeXFigc/vUe
-        wF//tQCy1vHtvnbAX2i9TvBfun9h+C96N/DngnY+1LKZb+iZIvhg2wmar23y6/gbwz00PzMw
-        wPCxjxcpvsbfC3hfXzZ/xdvO8LddV4m3E/et2XZAkA/vKsi3ZLy6f405NvI7UdKhL20MOuhy
-        cCfBCeIg4l5CQ61OQsV67hpAgfPPOUG8gmMALU34FQJCmtuGnNcZVZPEvYX+nRkFqobkfBBN
-        9H2vU38e4yIUqg/5lpMSue2o5aZKqI43UXNVmNbw66jCESXVUIrbgH47VaaOWW4n+qzCQWrF
-        /QR6v9IDVCKOewVdc9QtZwLuaXSifGYZk5wBBW/P67QbcOjTnkFSw8loamLp//l6dHG+g1K7
-        SG4T6uzO0KxZaCz8M63h9ehs9TijnSEB9X1yi6oBBveqBveK273K7V7ldq9ynwO6NoCKhYKi
-        fEEWM9Ml0Z4uWc3FyuegtTgItE2c6wIPItsjgIAgAp6EhCmZdaWV5egfP2DNO2oWbOZcyV4k
-        2iIAQdKUxIbE0hw9myccPSZK1ofUU5AyGdjnx0+/o+fUrkJRLBGlh2wKhCbEOtTQBEnMF0sP
-        FRTJKzQB49TweGOSTbTkiZJgl8256q7k2pRlUam1Sq8rXbGzthKhWJlq1m/BC7BmyusnYdTb
-        6Cf1lMVqEY0GtmmLIuVUqdlueVQ0DQwQmBLZnSq7VnmOj3KmlQpCqch3H1ErZGGFMpYD4u8n
-        Us58NXvhvcz7naPv7kmtv3wzraX2w2xMO3HyN9aUB8NtW4/vXrh05WDX4uE70osdkbnJSCDL
-        V1X2bOueyavxtd69gns4jZRh4NiOqsqlyW5jqyG8TgqM7XvNko4KrdV5XalySUV2IbX/jWea
-        +3MmzMa7u/4Yk+lZ5sjLHdBE2cxC5mZSsgn/AayVSkJLBAAA
+In-Reply-To: <1ee4240e29edefc36b5d410d4792971c2bb4c5d5.1585117436.git.amit.kucheria@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQpPbiBUdWUsIDIwMjAtMDMtMjQgYXQgMTM6NTYgKzAyMDAsIGFuZHJpeS5zaGV2Y2hlbmtvQGxp
-bnV4LmludGVsLmNvbQ0Kd3JvdGU6DQo+IE9uIFR1ZSwgTWFyIDI0LCAyMDIwIGF0IDEwOjUzOjA5
-QU0gKzAwMDAsIFZhaXR0aW5lbiwgTWF0dGkgd3JvdGU6DQo+ID4gT24gVHVlLCAyMDIwLTAzLTI0
-IGF0IDExOjUwICswMjAwLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6DQo+ID4gPiBPbiBUdWUsIE1h
-ciAyNCwgMjAyMCBhdCAxMDozMjoxOUFNICswMjAwLCBNYXR0aSBWYWl0dGluZW4gd3JvdGU6DQo+
-IA0KPiAuLi4NCj4gDQo+ID4gPiA+ICsJZm9yIChpID0gZmZzKHRtcCk7IGk7IGkgPSBmZnModG1w
-KSkgew0KPiA+ID4gDQo+ID4gPiBOSUggb2YgZm9yX2VhY2hfc2V0X2JpdCgpLg0KPiA+IA0KPiA+
-IFdoYXQgZG9lcyB0aGUgTklIIHN0YW5kIGZvcj8NCj4gDQo+IE5vdCBJbnZlbnRlZCBIZXJlIHN5
-bmRyb21lIDotKQ0KDQpBaC4gSSBkZWZpbml0ZWx5IHBsZWFkIGd1aWx0eSBmb3IgdGhhdCBpbiBn
-ZW5lcmFsLiBPciBldmVuIE5JQk0gKE5vdA0KSW52ZW50ZWQgQnkgTWUpIDpdIEJ1dCBhdCB0aGlz
-IHRpbWUgZm9yX2VhY2hfc2V0X2JpdCgpIGp1c3QgZGlkbid0IGNvbWUNCnRvIG15IG1pbmQgLSBh
-bmQgSSB1c2VkIGZmcygpIC0gZXZlbiB0aG91Z2ggdGhhdCdzIG5vdCBpbnZlbnRlZCBieSBtZQ0K
-ZWl0aGVyIDspDQoNCkkganVzdCBtb2RpZmllZCB0aGUgZHJpdmVyIHRvIHVzZSBmb3JfZWFjaF9z
-ZXRfYml0KCkgYW5kIHlvdSB3ZXJlDQpjb3JyZWN0LiBSZXN1bHQgaXMgX211Y2hfIHByZXR0aWVy
-LiBUaGFua3MhIFRoYXQnbGwgYmUgZml4ZWQgaW4gdjcuDQoNCj4gLi4uDQo+IA0KPiA+ID4gPiAr
-CWlmICghZGV2LT5wbGF0Zm9ybV9kYXRhKSB7DQo+ID4gPiANCj4gPiA+IGRldl9nZXRfcGxhdGRh
-dGEoKQ0KPiA+ID4gDQo+ID4gPiA+ICsJCXJldCA9IGJkOTk5NXhfZndfcHJvYmUoYmQpOw0KPiA+
-ID4gPiArCQlpZiAocmV0IDwgMCkgew0KPiA+ID4gPiArCQkJZGV2X2VycihkZXYsICJDYW5ub3Qg
-cmVhZCBkZXZpY2UNCj4gPiA+ID4gcHJvcGVydGllcy5cbiIpOw0KPiA+ID4gPiArCQkJcmV0dXJu
-IHJldDsNCj4gPiA+ID4gKwkJfQ0KPiA+ID4gPiArCX0gZWxzZSB7DQo+ID4gPiA+ICsJCXJldHVy
-biAtRU5PREVWOw0KPiA+ID4gDQo+ID4gPiBTbywgZXhpc3RpbmcgcGxhdGZvcm0gZGF0YSBsZWFk
-cyB0byBhbiBlcnJvcj8hDQo+ID4gDQo+ID4gWWVzLiBBcyBjdXJyZW50bHkgd2Ugb25seSB1c2Ug
-RFQuIElmIHNvbWVvbmUgbmVlZHMgcGxhdGRhdGEgdGhleQ0KPiA+IG5lZWQNCj4gPiB0byBpbXBy
-b3ZlIHRoZSBkcml2ZXINCj4gDQo+IEkgdGhpbmsgdGhlIGlkZWEgdG8gYXZvaWQgcGxhdGZvcm0g
-ZGF0YSBpbiBuZXcgY29kZSBhcyBtdWNoIGFzDQo+IHBvc3NpYmxlLg0KPiBBbmQgaXQncyB1bnVz
-dWFsIHRvIGhhdmUgc29tZWJvZHkgdG8gdXNlIHRoaXMgZHJpdmVyIHdpdGgNCj4gcGxhdGZvcm1f
-ZGF0YSBzZXQuDQo+IFdoeSBub3Qgc2ltcGxlIGlnbm9yZSBpdD8NCg0KQmVjYXVzZSBpZiBzb21l
-b25lIF9pc18gdXNpbmcgcGxhdGZvcm0gZGF0YSBoZXJlIChhbmQgd2Ugc3RpbGwgcHJvdmlkZQ0K
-dGhpcyBtZWNoYW5pc20pIC0gdGhlbiB3ZSBzaG91bGQgaW5mb3JtIGhpbSB0aGF0IGhlJ3MgZG9p
-bmcgc29tZXRoaW5nDQp3aGljaCBpcyBub3QgY29ycmVjdC4NCg0KQmVzdCBSZWdhcmRzDQoJTWF0
-dGkNCg==
+Hi Amit,
+
+On 3/25/20 6:34 AM, Amit Kucheria wrote:
+> As part of moving the thermal bindings to YAML, split it up into 3
+> bindings: thermal sensors, cooling devices and thermal zones.
+> 
+> The property #cooling-cells is required in each device that acts as a
+> cooling device - whether active or passive. So any device that can
+> throttle its performance to passively reduce heat dissipation (e.g.
+> cpus, gpus) and any device that can actively dissipate heat at different
+> levels (e.g. fans) will contain this property.
+> 
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> ---
+>   .../thermal/thermal-cooling-devices.yaml      | 116 ++++++++++++++++++
+>   1 file changed, 116 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml b/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> new file mode 100644
+> index 000000000000..b5599f7859f8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> @@ -0,0 +1,116 @@
+> +# SPDX-License-Identifier: (GPL-2.0)
+> +# Copyright 2020 Linaro Ltd.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/thermal-cooling-devices.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Thermal cooling device binding
+> +
+> +maintainers:
+> +  - Amit Kucheria <amitk@kernel.org>
+> +
+> +description: |
+> +  Thermal management is achieved in devicetree by describing the sensor hardware
+> +  and the software abstraction of cooling devices and thermal zones required to
+> +  take appropriate action to mitigate thermal overload.
+> +
+> +  The following node types are used to completely describe a thermal management
+> +  system in devicetree:
+> +   - thermal-sensor: device that measures temperature, has SoC-specific bindings
+> +   - cooling-device: device used to dissipate heat either passively or artively
+> +   - thermal-zones: a container of the following node types used to describe all
+> +     thermal data for the platform
+> +
+> +  This binding describes the cooling devices.
+> +
+> +  There are essentially two ways to provide control on power dissipation:
+> +    - Passive cooling: by means of regulating device performance. A typical
+> +      passive cooling mechanism is a CPU that has dynamic voltage and frequency
+> +      scaling (DVFS), and uses lower frequencies as cooling states.
+> +    - Active cooling: by means of activating devices in order to remove the
+> +      dissipated heat, e.g. regulating fan speeds.
+> +
+> +  Any cooling device has a range of cooling states (i.e. different levels of
+> +  heat dissipation). They also have a way to determine the state of cooling in
+> +  which the device is. For example, a fan's cooling states correspond to the
+> +  different fan speeds possible. Cooling states are referred to by single
+> +  unsigned integers, where larger numbers mean greater heat dissipation. The
+> +  precise set of cooling states associated with a device should be defined in
+> +  a particular device's binding.
+
+[snip]
+
+> +
+> +    thermal-zones {
+> +            cpu0-thermal {
+> +                    polling-delay-passive = <250>;
+> +                    polling-delay = <1000>;
+> +
+> +                    thermal-sensors = <&tsens0 1>;
+> +
+> +                    trips {
+> +                            cpu0_alert0: trip-point0 {
+> +                                    temperature = <90000>;
+> +                                    hysteresis = <2000>;
+> +                                    type = "passive";
+> +                            };
+> +                    };
+> +
+> +                    cooling-maps {
+> +                            map0 {
+> +                                    trip = <&cpu0_alert0>;
+> +                                    cooling-device = <&CPU0 THERMAL_NO_LIMIT
+> +                                                            THERMAL_NO_LIMIT>;
+
+Maybe add something like this, to better reflect the description:
+
+			trip = <&cpu0_alert0>;
+			/* Corresponds to 1000MHz in OPP table */
+			cooling-device = <&CPU0 5 5>;
+
+This is less confusing than THERMAL_NO_LIMIT.
+			
+Regards,
+Lukasz
