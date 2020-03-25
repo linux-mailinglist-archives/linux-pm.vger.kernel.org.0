@@ -2,169 +2,292 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 300CA191DA0
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 00:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E20191E12
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 01:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726943AbgCXXpf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Mar 2020 19:45:35 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:51672 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726212AbgCXXpe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Mar 2020 19:45:34 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200324234531epoutp02ca4da0406592f91630e858fc8a18d0d8~-YitIbUUx2106321063epoutp02J
-        for <linux-pm@vger.kernel.org>; Tue, 24 Mar 2020 23:45:31 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200324234531epoutp02ca4da0406592f91630e858fc8a18d0d8~-YitIbUUx2106321063epoutp02J
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1585093531;
-        bh=cPEoOT/55PEypTYCIUSKLWGTHMtlhHI38aByhNhavak=;
-        h=To:Cc:From:Subject:Date:References:From;
-        b=LCg3k/VaobUVwGxAtSlpG91rfqc3lB+IKcEvzv+UUsg5rixUi3cXwE/JOxmtukue6
-         KADmGxqJBox3faue4JxEV4cswl6iJ1+J1BRszsZw9MHB2U7k9jej7C81gidfOAfrKG
-         5k+8PaesVv5koXzB6BDL/WcZpObS5DQaCKxMjef0=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20200324234531epcas1p371d8fb08a69a80adcc4477882f184339~-Yispv3zk0669306693epcas1p3z;
-        Tue, 24 Mar 2020 23:45:31 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 48n7Cq6P9dzMqYkb; Tue, 24 Mar
-        2020 23:45:27 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        57.BE.04160.79B9A7E5; Wed, 25 Mar 2020 08:45:27 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200324234525epcas1p28f4150423112c61645bc19e3742b22bf~-YinjJiAD2642926429epcas1p2K;
-        Tue, 24 Mar 2020 23:45:25 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200324234525epsmtrp2e8f852ef0442b6026956bc62258e8caf~-YiniXXCc0725607256epsmtrp2q;
-        Tue, 24 Mar 2020 23:45:25 +0000 (GMT)
-X-AuditID: b6c32a38-2afff70000001040-a1-5e7a9b9761c2
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B4.D0.04024.59B9A7E5; Wed, 25 Mar 2020 08:45:25 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200324234525epsmtip2f2d68676863e37f5bca41ed04ee36409~-YinXQP581161211612epsmtip2D;
-        Tue, 24 Mar 2020 23:45:25 +0000 (GMT)
-To:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chanwoo Choi (samsung.com)" <cw00.choi@samsung.com>,
-        "Chanwoo Choi (samsung.com)" <chanwoo@kernel.org>,
-        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Subject: [GIT PULL] devfreq next for v5.7
-Organization: Samsung Electronics
-Message-ID: <21bd6b76-5a3e-96c1-4184-49e96ea5f594@samsung.com>
-Date:   Wed, 25 Mar 2020 08:54:21 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1727277AbgCYA2O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Mar 2020 20:28:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51700 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727103AbgCYA2N (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 24 Mar 2020 20:28:13 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 954EA206F8;
+        Wed, 25 Mar 2020 00:28:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585096091;
+        bh=EIB4psQiicWyBHK1xib2qJY5nR2j8FLOWc8y1NLiBAI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=FovNZdkSctBXV5lafbQcX+Ej9wZG7UsrCCuMHXx2oA0wS9t18Dd3dwPhTTYckcJJQ
+         m2GRrN5OxbovkLoZNpu4ZLngU+C7TcI02VmUDKg5NNMnsw/kIqzECLpp9fpIvm/YB+
+         y+RLg1x1ncKHeKB1RupgozuHVzSmbq1COMmILmbY=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 62D773522AC8; Tue, 24 Mar 2020 17:28:11 -0700 (PDT)
+Date:   Tue, 24 Mar 2020 17:28:11 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        platform-driver-x86@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geoff Levand <geoff@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [patch V3 13/20] Documentation: Add lock ordering and nesting
+ documentation
+Message-ID: <20200325002811.GO19865@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200323025501.GE3199@paulmck-ThinkPad-P72>
+ <87r1xhz6qp.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAJsWRmVeSWpSXmKPExsWy7bCmge702VVxBrMPsVlMvHGFxeL6l+es
-        Fmeb3rBbXN41h83ic+8RRovbjSvYLM6cvsTqwO6xaVUnm8eWq+0sHn1bVjF6fN4kF8ASlW2T
-        kZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3SBkkJZYk4p
-        UCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAskCvODG3uDQvXS85P9fK0MDAyBSoMCE7492q
-        fvaCuwIVnd+XMDYwLuLtYuTkkBAwkVjy9Bh7FyMXh5DADkaJW529bBDOJ0aJVzc3QznfGCXa
-        73QywrS8+rgSqmUvo8Tkr49ZIZz3jBI7erqBHA4OEQF7iY4PmSBxZoGTTBLXzn5mBulmE9CS
-        2P/iBhuILSygKXF7zicmEJtfQFHi6o/HYBt4Bewk1q17zwpiswioSlx8swGsV1QgTOLkthao
-        GkGJkzOfsIDYzALiEreezGeCsOUltr+dwwyyWELgMptEz9JPLCAHSQi4SNz4LgTxgbDEq+Nb
-        2CFsKYnP7/ayQdjVEitPHmGD6O1glNiy/wIrRMJYYv/SyUwgc5iBjl6/Sx8irCix8/dcRoi9
-        fBLvvvawQqzilehog1qlLHH5wV0mCFtSYnF7J9QqD4mj+3ezTmBUnIXkm1lIvpmF5JtZCIsX
-        MLKsYhRLLSjOTU8tNiwwQY7tTYzg1KllsYNxzzmfQ4wCHIxKPLwNjyvjhFgTy4orcw8xSnAw
-        K4nwbk6tiBPiTUmsrEotyo8vKs1JLT7EaAoM7InMUqLJ+cC0nlcSb2hqZGxsbGFiaGZqaKgk
-        zjv1ek6ckEB6YklqdmpqQWoRTB8TB6dUA2O982IHhf+yK3bwrzxT8al6B1e3gO/fOWYunKZM
-        s4oNDn8NDAnv81lXF/Jl6aGwmrsLg0w11mhOYG6ovrzTLMRxyvLX6jfnLXP8MPcx68wPjk+X
-        HONZmDLtc9W3pI1PrSvny2fUvba49/JBixmnZ0DQjtXuhy8eVjpf57TiynP1/qSgs37X1AuU
-        WIozEg21mIuKEwHFcdM0swMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrILMWRmVeSWpSXmKPExsWy7bCSvO7U2VVxBofXGVpMvHGFxeL6l+es
-        Fmeb3rBbXN41h83ic+8RRovbjSvYLM6cvsTqwO6xaVUnm8eWq+0sHn1bVjF6fN4kF8ASxWWT
-        kpqTWZZapG+XwJXxblU/e8FdgYrO70sYGxgX8XYxcnJICJhIvPq4kr2LkYtDSGA3o8SEx1dY
-        IRKSEtMuHmXuYuQAsoUlDh8uhqh5yyhxquEiO0hcRMBeouNDJkg5s8BpJok1dxxBbDYBLYn9
-        L26wgdjCApoSt+d8YgKx+QUUJa7+eMwIYvMK2EmsW/cebBWLgKrExTcbmEFsUYEwiZ1LHjNB
-        1AhKnJz5hAVivrrEn3mXmCFscYlbT+YzQdjyEtvfzmGewCg4C0nLLCQts5C0zELSsoCRZRWj
-        ZGpBcW56brFhgWFearlecWJucWleul5yfu4mRnBEaGnuYLy8JP4QowAHoxIPr9bDyjgh1sSy
-        4srcQ4wSHMxKIrybUyvihHhTEiurUovy44tKc1KLDzFKc7AoifM+zTsWKSSQnliSmp2aWpBa
-        BJNl4uCUamBMTj/7kuP7pjq7JYtNuI6cjqstCPoqzSAgFL7tkNijLZ2X0hxnG50KKDZ+F8ts
-        97YqTfrzz/x/snYLM6M0TqQt2KUWtLv0mhcT4687payaKb7Xnz2wP68/2em9d4VR5CWDjtzd
-        2zluPSzwlK3/W6T6+NcuwXbLdJabU+wrI61v2VYf4Lx1rVmJpTgj0VCLuag4EQBmtjwmhAIA
-        AA==
-X-CMS-MailID: 20200324234525epcas1p28f4150423112c61645bc19e3742b22bf
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200324234525epcas1p28f4150423112c61645bc19e3742b22bf
-References: <CGME20200324234525epcas1p28f4150423112c61645bc19e3742b22bf@epcas1p2.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87r1xhz6qp.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Rafael,
+On Wed, Mar 25, 2020 at 12:13:34AM +0100, Thomas Gleixner wrote:
+> Paul,
+> 
+> "Paul E. McKenney" <paulmck@kernel.org> writes:
+> > On Sat, Mar 21, 2020 at 12:25:57PM +0100, Thomas Gleixner wrote:
+> > In the normal case where the task sleeps through the entire lock
+> > acquisition, the sequence of events is as follows:
+> >
+> >      state = UNINTERRUPTIBLE
+> >      lock()
+> >        block()
+> >          real_state = state
+> >          state = SLEEPONLOCK
+> >
+> >                                lock wakeup
+> >                                  state = real_state == UNINTERRUPTIBLE
+> >
+> > This sequence of events can occur when the task acquires spinlocks
+> > on its way to sleeping, for example, in a call to wait_event().
+> >
+> > The non-lock wakeup can occur when a wakeup races with this wait_event(),
+> > which can result in the following sequence of events:
+> >
+> >      state = UNINTERRUPTIBLE
+> >      lock()
+> >        block()
+> >          real_state = state
+> >          state = SLEEPONLOCK
+> >
+> >                              non lock wakeup
+> >                                  real_state = RUNNING
+> >
+> >                                lock wakeup
+> >                                  state = real_state == RUNNING
+> >
+> > Without this real_state subterfuge, the wakeup might be lost.
+> 
+> I added this with a few modifications which reflect the actual
+> implementation. Conceptually the same.
 
-This is devfreq-next pull request for v5.7-rc1. I add detailed description of
-this pull request on the following tag. Please pull devfreq with following updates.
-- tag name : devfreq-next-for-5.7
+Looks good!
 
-Best Regards,
-Chanwoo Choi
+> > rwsems have grown special-purpose interfaces that allow non-owner release.
+> > This non-owner release prevents PREEMPT_RT from substituting RT-mutex
+> > implementations, for example, by defeating priority inheritance.
+> > After all, if the lock has no owner, whose priority should be boosted?
+> > As a result, PREEMPT_RT does not currently support rwsem, which in turn
+> > means that code using it must therefore be disabled until a workable
+> > solution presents itself.
+> >
+> > [ Note: Not as confident as I would like to be in the above. ]
+> 
+> I'm not confident either especially not after looking at the actual
+> code.
+> 
+> In fact I feel really stupid because the rw_semaphore reader non-owner
+> restriction on RT simply does not exist anymore and my history biased
+> memory tricked me.
 
-The following changes since commit 16fbf79b0f83bc752cee8589279f1ebfe57b3b6e:
+I guess I am glad that it is not just me.  ;-)
 
-  Linux 5.6-rc7 (2020-03-22 18:31:56 -0700)
+> The first rw_semaphore implementation of RT was simple and restricted
+> the reader side to a single reader to support PI on both the reader and
+> the writer side. That obviosuly did not scale well and made mmap_sem
+> heavy use cases pretty unhappy.
+> 
+> The short interlude with multi-reader boosting turned out to be a failed
+> experiment - Steven might still disagree though :)
+> 
+> At some point we gave up and I myself (sic!) reimplemented the RT
+> variant of rw_semaphore with a reader biased mechanism.
+> 
+> The reader never holds the underlying rt_mutex accross the read side
+> critical section. It merily increments the reader count and drops it on
+> release.
+> 
+> The only time a reader takes the rt_mutex is when it blocks on a
+> writer. Writers hold the rt_mutex across the write side critical section
+> to allow incoming readers to boost them. Once the writer releases the
+> rw_semaphore it unlocks the rt_mutex which is then handed off to the
+> readers. They increment the reader count and then drop the rt_mutex
+> before continuing in the read side critical section.
+> 
+> So while I changed the implementation it did obviously not occur to me
+> that this also lifted the non-owner release restriction. Nobody else
+> noticed either. So we kept dragging this along in both memory and
+> implementation. Both will be fixed now :)
+> 
+> The owner semantics of down/up_read() are only enforced by lockdep. That
+> applies to both RT and !RT. The up/down_read_non_owner() variants are
+> just there to tell lockdep about it.
+> 
+> So, I picked up your other suggestions with slight modifications and
+> adjusted the owner, semaphore and rw_semaphore docs accordingly.
+> 
+> Please have a close look at the patch below (applies on tip core/locking).
+> 
+> Thanks,
+> 
+>         tglx, who is searching a brown paperbag
 
-are available in the Git repository at:
+Sorry, used all the ones here over the past few days.  :-/
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.7
+Please see below for a wordsmithing patch to be applied on top of
+or merged into the patch in your email.
 
-for you to fetch changes up to 7a51320ecd394202d80131ad7837a72ca2213e64:
+							Thanx, Paul
 
-  PM / devfreq: Get rid of some doc warnings (2020-03-25 08:35:03 +0900)
+------------------------------------------------------------------------
 
-----------------------------------------------------------------
+commit e38c64ce8db45e2b0a19082f1e1f988c3b25fb81
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Tue Mar 24 17:23:36 2020 -0700
 
-Detailed description for this pull request:
-1. Update devfreq code with minor issue:
-- Remove unneeded extern keyword from devfreq header file.
+    Documentation: Wordsmith lock ordering and nesting documentation
+    
+    This commit is strictly wordsmithing with no (intended) semantic
+    changes.
+    
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-- Change to DEVFREQ_GOV_UPDATE_INTERNAL event name because
-  old DEVFREQ_GOV_INTERNAL name doesn't specify exactly what to do.
-
-- Fix handling code of return value of dev_pm_qos_remove_request().
-
-- Use constant name for userspace governor with DEVFREQ_GOV_USERSPACE.
-
-- Get rid of doc warnings and  fix typo.
-
-----------------------------------------------------------------
-
-Chanwoo Choi (2):
-      PM / devfreq: Remove unneeded extern keyword
-      PM / devfreq: Change to DEVFREQ_GOV_UPDATE_INTERVAL event name
-
-Christophe JAILLET (1):
-      PM / devfreq: Fix a typo in a comment
-
-Leonard Crestez (1):
-      PM / devfreq: Fix handling dev_pm_qos_remove_request result
-
-Mauro Carvalho Chehab (1):
-      PM / devfreq: Get rid of some doc warnings
-
-pierre Kuo (1):
-      PM / devfreq: Use constant name of userspace governor
-
- drivers/devfreq/devfreq.c                 |  14 ++--
- drivers/devfreq/governor.h                |  21 +++---
- drivers/devfreq/governor_simpleondemand.c |   4 +-
- drivers/devfreq/governor_userspace.c      |   2 +-
- drivers/devfreq/tegra30-devfreq.c         |   4 +-
- include/linux/devfreq.h                   | 106 +++++++++++++++---------------
- 6 files changed, 74 insertions(+), 77 deletions(-)
+diff --git a/Documentation/locking/locktypes.rst b/Documentation/locking/locktypes.rst
+index ca7bf84..8eb52e9 100644
+--- a/Documentation/locking/locktypes.rst
++++ b/Documentation/locking/locktypes.rst
+@@ -94,7 +94,7 @@ interrupt handlers and soft interrupts.  This conversion allows spinlock_t
+ and rwlock_t to be implemented via RT-mutexes.
+ 
+ 
+-sempahore
++semaphore
+ =========
+ 
+ semaphore is a counting semaphore implementation.
+@@ -103,17 +103,17 @@ Semaphores are often used for both serialization and waiting, but new use
+ cases should instead use separate serialization and wait mechanisms, such
+ as mutexes and completions.
+ 
+-sempahores and PREEMPT_RT
++semaphores and PREEMPT_RT
+ ----------------------------
+ 
+-PREEMPT_RT does not change the sempahore implementation. That's impossible
+-due to the counting semaphore semantics which have no concept of owners.
+-The lack of an owner conflicts with priority inheritance. After all an
+-unknown owner cannot be boosted. As a consequence blocking on semaphores
+-can be subject to priority inversion.
++PREEMPT_RT does not change the semaphore implementation because counting
++semaphores have no concept of owners, thus preventing PREEMPT_RT from
++providing priority inheritance for semaphores.  After all, an unknown
++owner cannot be boosted. As a consequence, blocking on semaphores can
++result in priority inversion.
+ 
+ 
+-rw_sempahore
++rw_semaphore
+ ============
+ 
+ rw_semaphore is a multiple readers and single writer lock mechanism.
+@@ -125,13 +125,13 @@ rw_semaphore complies by default with the strict owner semantics, but there
+ exist special-purpose interfaces that allow non-owner release for readers.
+ These work independent of the kernel configuration.
+ 
+-rw_sempahore and PREEMPT_RT
++rw_semaphore and PREEMPT_RT
+ ---------------------------
+ 
+-PREEMPT_RT kernels map rw_sempahore to a separate rt_mutex-based
++PREEMPT_RT kernels map rw_semaphore to a separate rt_mutex-based
+ implementation, thus changing the fairness:
+ 
+- Because an rw_sempaphore writer cannot grant its priority to multiple
++ Because an rw_semaphore writer cannot grant its priority to multiple
+  readers, a preempted low-priority reader will continue holding its lock,
+  thus starving even high-priority writers.  In contrast, because readers
+  can grant their priority to a writer, a preempted low-priority writer will
+@@ -158,7 +158,7 @@ critical section is tiny, thus avoiding RT-mutex overhead.
+ spinlock_t
+ ----------
+ 
+-The semantics of spinlock_t change with the state of CONFIG_PREEMPT_RT.
++The semantics of spinlock_t change with the state of PREEMPT_RT.
+ 
+ On a non PREEMPT_RT enabled kernel spinlock_t is mapped to raw_spinlock_t
+ and has exactly the same semantics.
+@@ -196,7 +196,7 @@ PREEMPT_RT kernels preserve all other spinlock_t semantics:
+    kernels leave task state untouched.  However, PREEMPT_RT must change
+    task state if the task blocks during acquisition.  Therefore, it saves
+    the current task state before blocking and the corresponding lock wakeup
+-   restores it::
++   restores it, as shown below::
+ 
+     task->state = TASK_INTERRUPTIBLE
+      lock()
+@@ -333,7 +333,7 @@ The most basic rules are:
+ 
+   - Spinning lock types can nest inside sleeping lock types.
+ 
+-These constraints apply both in CONFIG_PREEMPT_RT and otherwise.
++These constraints apply both in PREEMPT_RT and otherwise.
+ 
+ The fact that PREEMPT_RT changes the lock category of spinlock_t and
+ rwlock_t from spinning to sleeping means that they cannot be acquired while
+@@ -344,4 +344,4 @@ holding a raw spinlock.  This results in the following nesting ordering:
+   3) raw_spinlock_t and bit spinlocks
+ 
+ Lockdep will complain if these constraints are violated, both in
+-CONFIG_PREEMPT_RT and otherwise.
++PREEMPT_RT and otherwise.
