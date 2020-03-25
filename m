@@ -2,199 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A9519318F
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 21:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A52819322A
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 21:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727328AbgCYUBI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Mar 2020 16:01:08 -0400
-Received: from mga04.intel.com ([192.55.52.120]:2557 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727236AbgCYUBH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 25 Mar 2020 16:01:07 -0400
-IronPort-SDR: xKI36SgO1X0av6ZOhbv6yPt0FzuxrTBCabo/drt4/Xmc0EdJfYbB5sqminMBnFPO6VaaRwXJ2B
- 6LhJtJRGCkUg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 13:01:07 -0700
-IronPort-SDR: zVq/Att6Uu5yl9CDPc1ISstWbbaeh5I5G8sKWDiCSekpT7xPA3zOzjBPSFSuJOfsZto/zO/sGQ
- fED0zoQ5ksTA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,305,1580803200"; 
-   d="scan'208";a="240725939"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 25 Mar 2020 13:01:05 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jHCD2-0007qo-GQ; Thu, 26 Mar 2020 04:01:04 +0800
-Date:   Thu, 26 Mar 2020 04:00:25 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 99c1ea0e723ac7f61e663f5f54ca51b0b731adda
-Message-ID: <5e7bb859.69jWWW9PslKAeulf%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1727417AbgCYUtJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Mar 2020 16:49:09 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42523 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727376AbgCYUtI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Mar 2020 16:49:08 -0400
+Received: (qmail 11099 invoked by uid 500); 25 Mar 2020 16:49:07 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 25 Mar 2020 16:49:07 -0400
+Date:   Wed, 25 Mar 2020 16:49:07 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Qais Yousef <qais.yousef@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+cc:     Oliver Neukum <oneukum@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+In-Reply-To: <20200325150017.xhabucfo3v6i234o@e107158-lin>
+Message-ID: <Pine.LNX.4.44L0.2003251631360.1724-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 99c1ea0e723ac7f61e663f5f54ca51b0b731adda  Merge branch 'acpi-pm' into bleeding-edge
+On Wed, 25 Mar 2020, Qais Yousef wrote:
 
-elapsed time: 480m
+> Thanks for all the hints Alan.
+> 
+> I think I figured it out, the below patch seems to fix it for me. Looking
+> at other drivers resume functions it seems we're missing the
+> pm_runtime_disable()->set_active()->enable() dance. Doing that fixes the
+> warning and the dev_err() in driver/base/power.
 
-configs tested: 139
-configs skipped: 0
+Ah, yes.  This should have been added years ago; guess I forgot.  :-(
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> I don't see xhci-plat.c doing that, I wonder if it needs it too.
+> 
+> I'm not well versed about the details and the rules here. So my fix could be
+> a hack, though it does seem the right thing to do.
+> 
+> I wonder why the power core doesn't handle this transparently..
 
-arm64                            allyesconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm                              allmodconfig
-arm64                             allnoconfig
-arm                               allnoconfig
-arm                           efm32_defconfig
-arm                         at91_dt_defconfig
-arm                        shmobile_defconfig
-arm64                               defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                           sunxi_defconfig
-arm                        multi_v7_defconfig
-sparc                            allyesconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                             alldefconfig
-i386                                defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                             alldefconfig
-nios2                         3c120_defconfig
-nios2                         10m50_defconfig
-c6x                        evmc6678_defconfig
-xtensa                          iss_defconfig
-c6x                              allyesconfig
-xtensa                       common_defconfig
-openrisc                 simple_smp_defconfig
-openrisc                    or1ksim_defconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                       h8s-sim_defconfig
-h8300                     edosk2674_defconfig
-m68k                       m5475evb_defconfig
-m68k                             allmodconfig
-h8300                    h8300h-sim_defconfig
-m68k                           sun3_defconfig
-m68k                          multi_defconfig
-arc                                 defconfig
-arc                              allyesconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-mips                             allyesconfig
-mips                         64r6el_defconfig
-mips                              allnoconfig
-mips                           32r2_defconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                generic-64bit_defconfig
-parisc                generic-32bit_defconfig
-parisc                           allyesconfig
-i386                 randconfig-a002-20200325
-x86_64               randconfig-a002-20200325
-i386                 randconfig-a001-20200325
-x86_64               randconfig-a001-20200325
-i386                 randconfig-a003-20200325
-x86_64               randconfig-a003-20200325
-mips                 randconfig-a001-20200325
-nds32                randconfig-a001-20200325
-m68k                 randconfig-a001-20200325
-parisc               randconfig-a001-20200325
-alpha                randconfig-a001-20200325
-riscv                randconfig-a001-20200325
-h8300                randconfig-a001-20200325
-microblaze           randconfig-a001-20200325
-nios2                randconfig-a001-20200325
-c6x                  randconfig-a001-20200325
-sparc64              randconfig-a001-20200325
-s390                 randconfig-a001-20200325
-xtensa               randconfig-a001-20200325
-csky                 randconfig-a001-20200325
-openrisc             randconfig-a001-20200325
-sh                   randconfig-a001-20200325
-x86_64               randconfig-c003-20200325
-i386                 randconfig-c002-20200325
-x86_64               randconfig-c001-20200325
-x86_64               randconfig-c002-20200325
-i386                 randconfig-c003-20200325
-i386                 randconfig-c001-20200325
-i386                 randconfig-f001-20200325
-i386                 randconfig-f003-20200325
-i386                 randconfig-f002-20200325
-x86_64               randconfig-f002-20200325
-x86_64               randconfig-f003-20200325
-x86_64               randconfig-f001-20200325
-x86_64               randconfig-h002-20200325
-x86_64               randconfig-h003-20200325
-i386                 randconfig-h003-20200325
-i386                 randconfig-h001-20200325
-x86_64               randconfig-h001-20200325
-i386                 randconfig-h002-20200325
-arm                  randconfig-a001-20200325
-arm64                randconfig-a001-20200325
-ia64                 randconfig-a001-20200325
-sparc                randconfig-a001-20200325
-arc                  randconfig-a001-20200325
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-s390                       zfcpdump_defconfig
-s390                          debug_defconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                             alldefconfig
-s390                                defconfig
-sh                          rsk7269_defconfig
-sh                               allmodconfig
-sh                            titan_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                                allnoconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
+Initially, we didn't want the PM core to do this automatically because
+we thought some devices might want to remain runtime-suspended
+following a system resume, and only the device driver would know what 
+to do.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Raphael, now that we have the direct_complete mechanism, can we revisit 
+this?  Should the PM core automatically call pm_runtime_set_active() if 
+dev->power.direct_complete isn't set?  Perhaps in device_resume_early() 
+prior to the pm_runtime_enable() call?
+
+It's possible we discussed this and decided against it at the time when 
+direct_complete was added, but if so I don't remember what was said.
+
+Alan Stern
+
+> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+> index 7addfc2cbadc..eb92c8092fae 100644
+> --- a/drivers/usb/host/ohci-platform.c
+> +++ b/drivers/usb/host/ohci-platform.c
+> @@ -299,6 +299,10 @@ static int ohci_platform_resume(struct device *dev)
+>         }
+> 
+>         ohci_resume(hcd, false);
+> +
+> +       pm_runtime_disable(dev);
+> +       pm_runtime_set_active(dev);
+> +       pm_runtime_enable(dev);
+>         return 0;
+>  }
+>  #endif /* CONFIG_PM_SLEEP */
+> 
+> 
+> Thanks
+> 
+> --
+> Qais Yousef
+
+
