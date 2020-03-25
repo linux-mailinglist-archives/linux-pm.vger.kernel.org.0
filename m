@@ -2,348 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F244A192C39
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 16:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F64192C7A
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 16:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbgCYPW4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Mar 2020 11:22:56 -0400
-Received: from comms.puri.sm ([159.203.221.185]:33646 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727721AbgCYPWz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 25 Mar 2020 11:22:55 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 95FA3DFA1F;
-        Wed, 25 Mar 2020 08:22:54 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id JmE3ovJBVZ1C; Wed, 25 Mar 2020 08:22:53 -0700 (PDT)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     linux-imx@nxp.com, leonard.crestez@nxp.com,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com
-Cc:     linux-pm@vger.kernel.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [RFC] PM / devfreq: add busfreq governor
-Date:   Wed, 25 Mar 2020 16:22:24 +0100
-Message-Id: <20200325152224.6613-1-martin.kepplinger@puri.sm>
-Content-Transfer-Encoding: 8bit
+        id S1727837AbgCYP2h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Mar 2020 11:28:37 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:45707 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727820AbgCYP2g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Mar 2020 11:28:36 -0400
+Received: by mail-lf1-f65.google.com with SMTP id v4so2114036lfo.12
+        for <linux-pm@vger.kernel.org>; Wed, 25 Mar 2020 08:28:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MAfXLeK4jv3GCXZEXdtxljvjsSAfg9wpjX0t8Ep/xn0=;
+        b=aDW1feaQrj/vQbwncf35ZAbIJQv6QoVYZCbKz9TCT9fUH98JKwEEaGp+U3VA4/RSxj
+         M2U1pJCxnd/u57YPJBO93DEX2pyVd5yTcvNeo3knsXJMSZXsjuSwyZbLvyiU1biwWm6p
+         CGrF1GW7glPm10woi2K7MCSpOd6gPGxgfI5wUW4egp3qRlpv0tElS6C3iexVg400nWrW
+         jFLalqO3PixJa/k6GxgaWExvLfeARawYBJhoYg6e2BCtnChUG8KMqaG1szJeWQ2KoZpY
+         BHHVvBAmrzGU9sAO4d+K7uYZ0ONthZXN1RMD0zzJ5xLy4buThs8hGRL8hQeUor+yr0S0
+         i15A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MAfXLeK4jv3GCXZEXdtxljvjsSAfg9wpjX0t8Ep/xn0=;
+        b=Cr2Lzs59apLk7CWSG624XGzXK7iwZ2RfQRHbBfvBlwNInw7dZ6iTEx3TdcfW5sm8u+
+         uWd/CO+0ydCW/MPhiYswYgFaI+5gh1mdFQDga82kDvJ5W4ZFkbGcxWO/+UCl+agmr7qw
+         hNU5oZMIFoVeKjzJY8s3qlaT1o+Gvz4r92jaByi77XkjjAcZxmJNCnj9Z8fdTiOqWaY6
+         51pGCwvTaMQZgbGVZcjHHkZ4L+PEY1ncE/9ZNtzRL2Zlqd6QbMUx1WKJmGXi9fv1pWN1
+         Ln59AAFmsSwz8SKU5XQM4UxpLifl4IE+ncls6a4zyiURg+MJpn3CvLslrikLoXikQCis
+         d+9A==
+X-Gm-Message-State: ANhLgQ3ihAQ9266m/fQXW6KJ/3TtK9WDVFCaFrTauTTtOVdOkGlygo71
+        9iRU5vR3CBJmdcOHpKYfguMGidxhDrsfVRzlmsMxQA==
+X-Google-Smtp-Source: ADFU+vvPsxfhLZkuw1zm3DaRk4jDzbr+V6wKm8OS63ckoV6lXpkrggY1jnKk/LQr1ujMiOa33DUQuJWItnCXDLsD8jE=
+X-Received: by 2002:ac2:43a8:: with SMTP id t8mr2721177lfl.82.1585150114380;
+ Wed, 25 Mar 2020 08:28:34 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1585117436.git.amit.kucheria@linaro.org>
+ <1ee4240e29edefc36b5d410d4792971c2bb4c5d5.1585117436.git.amit.kucheria@linaro.org>
+ <a89df770-eeb9-e4f2-2a46-ee4389720597@arm.com>
+In-Reply-To: <a89df770-eeb9-e4f2-2a46-ee4389720597@arm.com>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Wed, 25 Mar 2020 20:58:23 +0530
+Message-ID: <CAP245DX04zTMhNep46MNB7yhxnBshX0bb7sQmaSq_6KScvH2jg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: Add yaml bindings for
+ thermal cooling-devices
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A devfreq governor to be used by drivers to request ("get") a frequency
-setting they need. Currently only "HIGH" (performance) is available.
+On Wed, Mar 25, 2020 at 3:51 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> Hi Amit,
+>
+> On 3/25/20 6:34 AM, Amit Kucheria wrote:
+> > As part of moving the thermal bindings to YAML, split it up into 3
+> > bindings: thermal sensors, cooling devices and thermal zones.
+> >
+> > The property #cooling-cells is required in each device that acts as a
+> > cooling device - whether active or passive. So any device that can
+> > throttle its performance to passively reduce heat dissipation (e.g.
+> > cpus, gpus) and any device that can actively dissipate heat at different
+> > levels (e.g. fans) will contain this property.
+> >
+> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> > ---
+> >   .../thermal/thermal-cooling-devices.yaml      | 116 ++++++++++++++++++
+> >   1 file changed, 116 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml b/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> > new file mode 100644
+> > index 000000000000..b5599f7859f8
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> > @@ -0,0 +1,116 @@
+> > +# SPDX-License-Identifier: (GPL-2.0)
+> > +# Copyright 2020 Linaro Ltd.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/thermal/thermal-cooling-devices.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Thermal cooling device binding
+> > +
+> > +maintainers:
+> > +  - Amit Kucheria <amitk@kernel.org>
+> > +
+> > +description: |
+> > +  Thermal management is achieved in devicetree by describing the sensor hardware
+> > +  and the software abstraction of cooling devices and thermal zones required to
+> > +  take appropriate action to mitigate thermal overload.
+> > +
+> > +  The following node types are used to completely describe a thermal management
+> > +  system in devicetree:
+> > +   - thermal-sensor: device that measures temperature, has SoC-specific bindings
+> > +   - cooling-device: device used to dissipate heat either passively or artively
+> > +   - thermal-zones: a container of the following node types used to describe all
+> > +     thermal data for the platform
+> > +
+> > +  This binding describes the cooling devices.
+> > +
+> > +  There are essentially two ways to provide control on power dissipation:
+> > +    - Passive cooling: by means of regulating device performance. A typical
+> > +      passive cooling mechanism is a CPU that has dynamic voltage and frequency
+> > +      scaling (DVFS), and uses lower frequencies as cooling states.
+> > +    - Active cooling: by means of activating devices in order to remove the
+> > +      dissipated heat, e.g. regulating fan speeds.
+> > +
+> > +  Any cooling device has a range of cooling states (i.e. different levels of
+> > +  heat dissipation). They also have a way to determine the state of cooling in
+> > +  which the device is. For example, a fan's cooling states correspond to the
+> > +  different fan speeds possible. Cooling states are referred to by single
+> > +  unsigned integers, where larger numbers mean greater heat dissipation. The
+> > +  precise set of cooling states associated with a device should be defined in
+> > +  a particular device's binding.
+>
+> [snip]
+>
+> > +
+> > +    thermal-zones {
+> > +            cpu0-thermal {
+> > +                    polling-delay-passive = <250>;
+> > +                    polling-delay = <1000>;
+> > +
+> > +                    thermal-sensors = <&tsens0 1>;
+> > +
+> > +                    trips {
+> > +                            cpu0_alert0: trip-point0 {
+> > +                                    temperature = <90000>;
+> > +                                    hysteresis = <2000>;
+> > +                                    type = "passive";
+> > +                            };
+> > +                    };
+> > +
+> > +                    cooling-maps {
+> > +                            map0 {
+> > +                                    trip = <&cpu0_alert0>;
+> > +                                    cooling-device = <&CPU0 THERMAL_NO_LIMIT
+> > +                                                            THERMAL_NO_LIMIT>;
+>
+> Maybe add something like this, to better reflect the description:
+>
+>                         trip = <&cpu0_alert0>;
+>                         /* Corresponds to 1000MHz in OPP table */
+>                         cooling-device = <&CPU0 5 5>;
+>
+> This is less confusing than THERMAL_NO_LIMIT.
 
-ATTENTION: This is a first draft to serve merely as a basis for discussions!
-ONLY USE FOR TESTING!
----
+Thanks for the review.
 
-I wanted to get early feedback on an idea that AFAIK is not yet available
-in the kernel (but something similar via "busfreq" in NXP's tree):
-
-Let drivers request high (dram) frequencies at runtime if they know they need
-them. In our case the display stack on imx8mq would be the first user,
-looking like so: #include <linux/devfreq.h> and:
-
-	--- a/drivers/gpu/drm/bridge/nwl-dsi.c
-	+++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-	@@ -1116,6 +1117,9 @@ static int imx8mq_dsi_poweron(struct nwl_dsi *dsi)
-			ret = reset_control_deassert(dsi->rstc);
-	 
-	+       devfreq_busfreq_request(DEVFREQ_BUSFREQ_HIGH);
-	+
-		return ret;
-	@@ -1125,6 +1129,10 @@ static int imx8mq_dsi_poweroff(struct nwl_dsi *dsi)
-		if (dsi->rstc)
-			ret = reset_control_assert(dsi->rstc);
-	+
-	+       devfreq_busfreq_release(DEVFREQ_BUSFREQ_HIGH);
-	+
-		return ret;
-
-
-Could be called in pm_runtime() calls too.
-
-_If_ the idea of such or a similar governor is viable, there are at least
-some problems with this implemenation still:
-
-* The governor saves its data as a global variable (which I don't yet like)
-  but the driver (user) API becomes minimal.
-
-* the name: In order to add to the devfreq/busfreq confusion, I named the
-  devfreq governor "busfreq" -.-
-  I just wanted to grab NXPs' attention because they do something similar
-  in their tree.
-
-* ATM we switch between "performace" and "powersave, which is
-  not bad at all, but still limited in case a driver would really only
-  need a medium frequecy for a device to work. doable?
-
-* I doubt locking is done correctly and the code is overall of bad quality
-  still. Again, It's a first idea.
-
-I'm glad about any thought or feedback,
-
-thanks,
-                                   martin
-
-
-
-
- drivers/devfreq/Kconfig            |   5 +
- drivers/devfreq/Makefile           |   1 +
- drivers/devfreq/governor_busfreq.c | 172 +++++++++++++++++++++++++++++
- include/linux/devfreq.h            |  22 ++++
- 4 files changed, 200 insertions(+)
- create mode 100644 drivers/devfreq/governor_busfreq.c
-
-diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index fc2ea336ef4b..3575cbdcd29e 100644
---- a/drivers/devfreq/Kconfig
-+++ b/drivers/devfreq/Kconfig
-@@ -74,6 +74,11 @@ config DEVFREQ_GOV_PASSIVE
- 	  through sysfs entries. The passive governor recommends that
- 	  devfreq device uses the OPP table to get the frequency/voltage.
- 
-+config DEVFREQ_GOV_BUSFREQ
-+	tristate "Busfreq"
-+	help
-+	  Sets the frequency that compatible drivers request it to set.
-+
- comment "DEVFREQ Drivers"
- 
- config ARM_EXYNOS_BUS_DEVFREQ
-diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-index 61d0edee16f7..657b0b6d92c4 100644
---- a/drivers/devfreq/Makefile
-+++ b/drivers/devfreq/Makefile
-@@ -6,6 +6,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PERFORMANCE)	+= governor_performance.o
- obj-$(CONFIG_DEVFREQ_GOV_POWERSAVE)	+= governor_powersave.o
- obj-$(CONFIG_DEVFREQ_GOV_USERSPACE)	+= governor_userspace.o
- obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
-+obj-$(CONFIG_DEVFREQ_GOV_BUSFREQ)	+= governor_busfreq.o
- 
- # DEVFREQ Drivers
- obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
-diff --git a/drivers/devfreq/governor_busfreq.c b/drivers/devfreq/governor_busfreq.c
-new file mode 100644
-index 000000000000..e12d64e9a09b
---- /dev/null
-+++ b/drivers/devfreq/governor_busfreq.c
-@@ -0,0 +1,172 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ *  linux/drivers/devfreq/governor_busfreq.c
-+ *
-+ *  Copyright (C) 2020 Purism SPC
-+ */
-+
-+#include <linux/slab.h>
-+#include <linux/device.h>
-+#include <linux/devfreq.h>
-+#include <linux/pm.h>
-+#include <linux/mutex.h>
-+#include <linux/module.h>
-+#include "governor.h"
-+
-+struct busfreq_data {
-+	unsigned long user_frequency;
-+	bool valid;
-+	struct devfreq *df;
-+	unsigned int high_count;
-+};
-+
-+static struct busfreq_data *bfdata = NULL;
-+
-+static int devfreq_busfreq_func(struct devfreq *df, unsigned long *freq)
-+{
-+	if (bfdata->valid)
-+		*freq = bfdata->user_frequency;
-+	else
-+		*freq = df->previous_freq; /* No user freq specified yet */
-+
-+	return 0;
-+}
-+
-+int devfreq_busfreq_request(unsigned long freq)
-+{
-+	struct devfreq *devfreq;
-+	int err = 0;
-+
-+	if (!bfdata) {
-+		pr_info("%s: governor not available\n", __func__);
-+		return -ENODEV;
-+	}
-+
-+	if (freq != DEVFREQ_BUSFREQ_HIGH) {
-+		pr_err("%s: undefined frequency\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	if (freq == DEVFREQ_BUSFREQ_HIGH)
-+		bfdata->high_count++;
-+
-+	devfreq = bfdata->df;
-+
-+	mutex_lock(&devfreq->lock);
-+
-+	bfdata->user_frequency = freq;
-+	bfdata->valid = true;
-+	err = update_devfreq(devfreq); /* calls our get_target_freq */
-+	if (err)
-+		dev_err(&devfreq->dev, "update_devfreq failed: %d\n", err);
-+
-+	mutex_unlock(&devfreq->lock);
-+
-+	return err;
-+}
-+EXPORT_SYMBOL(devfreq_busfreq_request);
-+
-+void devfreq_busfreq_release(unsigned long freq)
-+{
-+	struct devfreq *devfreq;
-+	int err = 0;
-+
-+	if (!bfdata) {
-+		pr_info("%s: governor not available\n", __func__);
-+		return;
-+	}
-+
-+	if (freq != DEVFREQ_BUSFREQ_HIGH) {
-+		pr_err("%s: undefined frequency\n", __func__);
-+		return;
-+	}
-+
-+	if (freq == DEVFREQ_BUSFREQ_HIGH && bfdata->high_count > 0)
-+		bfdata->high_count--;
-+
-+	if (bfdata->high_count)
-+		return;
-+
-+	devfreq = bfdata->df;
-+
-+	mutex_lock(&devfreq->lock);
-+
-+	bfdata->user_frequency = DEVFREQ_BUSFREQ_LOW;
-+	bfdata->valid = true;
-+	err = update_devfreq(devfreq); /* calls our get_target_freq */
-+	if (err)
-+		dev_err(&devfreq->dev, "update_devfreq failed: %d\n", err);
-+
-+	mutex_unlock(&devfreq->lock);
-+}
-+EXPORT_SYMBOL(devfreq_busfreq_release);
-+
-+static int busfreq_init(struct devfreq *devfreq)
-+{
-+	int err = 0;
-+
-+	bfdata = kzalloc(sizeof(struct busfreq_data),
-+		      GFP_KERNEL);
-+	if (!bfdata) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+	bfdata->valid = false;
-+	devfreq->data = bfdata;
-+	bfdata->df = devfreq;
-+
-+out:
-+	return err;
-+}
-+
-+static void busfreq_exit(struct devfreq *devfreq)
-+{
-+	if (bfdata)
-+		kfree(bfdata);
-+
-+	devfreq->data = NULL;
-+}
-+
-+static int devfreq_busfreq_handler(struct devfreq *devfreq,
-+				   unsigned int event, void *data)
-+{
-+	int ret = 0;
-+
-+	switch (event) {
-+	case DEVFREQ_GOV_START:
-+		ret = busfreq_init(devfreq);
-+		break;
-+	case DEVFREQ_GOV_STOP:
-+		busfreq_exit(devfreq);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static struct devfreq_governor devfreq_busfreq = {
-+	.name = "busfreq",
-+	.get_target_freq = devfreq_busfreq_func,
-+	.event_handler = devfreq_busfreq_handler,
-+};
-+
-+static int __init devfreq_busfreq_init(void)
-+{
-+	return devfreq_add_governor(&devfreq_busfreq);
-+}
-+subsys_initcall(devfreq_busfreq_init);
-+
-+static void __exit devfreq_busfreq_exit(void)
-+{
-+	int ret;
-+
-+	ret = devfreq_remove_governor(&devfreq_busfreq);
-+	if (ret)
-+		pr_err("%s: failed remove governor %d\n", __func__, ret);
-+
-+	return;
-+}
-+module_exit(devfreq_busfreq_exit);
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index 678391c1bb0f..df1bf6928d87 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -23,6 +23,7 @@
- #define DEVFREQ_GOV_POWERSAVE		"powersave"
- #define DEVFREQ_GOV_USERSPACE		"userspace"
- #define DEVFREQ_GOV_PASSIVE		"passive"
-+#define DEVFREQ_GOV_BUSFREQ		"busfreq"
- 
- /* DEVFREQ notifier interface */
- #define DEVFREQ_TRANSITION_NOTIFIER	(0)
-@@ -310,6 +311,27 @@ struct devfreq_passive_data {
- };
- #endif
- 
-+/*
-+ * "powersave" by default
-+ * giving drivers the option to require "performance"
-+ */
-+#define DEVFREQ_BUSFREQ_HIGH			ULONG_MAX
-+#define DEVFREQ_BUSFREQ_LOW			0
-+#if IS_ENABLED(CONFIG_DEVFREQ_GOV_BUSFREQ)
-+extern int devfreq_busfreq_request(unsigned long freq);
-+extern void devfreq_busfreq_release(unsigned long freq);
-+#else
-+static inline int devfreq_busfreq_request(unsigned long freq)
-+{
-+	return -ENOSYS;
-+}
-+
-+static inline void devfreq_busfreq_release(unsigned long freq)
-+{
-+	return;
-+}
-+#endif
-+
- #else /* !CONFIG_PM_DEVFREQ */
- static inline struct devfreq *devfreq_add_device(struct device *dev,
- 					  struct devfreq_dev_profile *profile,
--- 
-2.20.1
-
+Will fix.
