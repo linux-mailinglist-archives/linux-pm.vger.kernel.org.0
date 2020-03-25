@@ -2,25 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84951192911
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 14:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC13192977
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 14:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727298AbgCYNAb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Mar 2020 09:00:31 -0400
-Received: from mailgate1.rohmeurope.com ([87.129.152.131]:51274 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726969AbgCYNAb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Mar 2020 09:00:31 -0400
-X-AuditID: c0a8fbf4-473ff70000004419-13-5e7b55ec4e15
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 9D.22.17433.CE55B7E5; Wed, 25 Mar 2020 14:00:28 +0100 (CET)
-Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0487.000; Wed, 25 Mar 2020 14:00:22 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "andriy.shevchenko@linux.intel.com" 
+        id S1727389AbgCYNUk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Mar 2020 09:20:40 -0400
+Received: from mga05.intel.com ([192.55.52.43]:58786 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727290AbgCYNUk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 25 Mar 2020 09:20:40 -0400
+IronPort-SDR: uUkrfYZf/U74xuzKblAGZ7r7nqNzMe8yLo9FgYOWKfPadnu7Byo9eXgz3tA3Mqq2M6CoUFSgD1
+ /o+f/MovJ4/A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 06:20:39 -0700
+IronPort-SDR: q4jygQ88msBkLt0I3jnpcRrGOpIldQMYrEWtr3aZWFcuq3fwhlPz8D7KOD8ThR7Xpd+h2X36Cg
+ HfkAhqqJUapA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,304,1580803200"; 
+   d="scan'208";a="235935013"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga007.jf.intel.com with ESMTP; 25 Mar 2020 06:20:31 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jH5xR-00CpGR-1Q; Wed, 25 Mar 2020 15:20:33 +0200
+Date:   Wed, 25 Mar 2020 15:20:33 +0200
+From:   "andriy.shevchenko@linux.intel.com" 
         <andriy.shevchenko@linux.intel.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
         "brendanhiggins@google.com" <brendanhiggins@google.com>,
@@ -53,101 +64,134 @@ CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "uwe@kleine-koenig.org" <uwe@kleine-koenig.org>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>
 Subject: Re: [PATCH v6 09/10] power: supply: Support ROHM bd99954 charger
-Thread-Topic: [PATCH v6 09/10] power: supply: Support ROHM bd99954 charger
-Thread-Index: AQHWAbbAyLpT1a+wPEGvvo/J38Wk46hXbxYAgAAMuoCAAaNYgIAACT8AgAAOHAA=
-Date:   Wed, 25 Mar 2020 13:00:21 +0000
-Message-ID: <d533c18dcd7b4d4ca453661b3f9495a840b3313b.camel@fi.rohmeurope.com>
+Message-ID: <20200325132033.GY1922688@smile.fi.intel.com>
 References: <cover.1584977512.git.matti.vaittinen@fi.rohmeurope.com>
-         <1bf2431b80489ae412e774519a92616a9aa2bcca.1584977512.git.matti.vaittinen@fi.rohmeurope.com>
-         <20200324095024.GE1922688@smile.fi.intel.com>
-         <20200324103557.GH1922688@smile.fi.intel.com>
-         <4d75bfeab55c04cc3ca751cf7c364c812848e9ed.camel@fi.rohmeurope.com>
-         <20200325120956.GW1922688@smile.fi.intel.com>
-In-Reply-To: <20200325120956.GW1922688@smile.fi.intel.com>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [62.78.225.252]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8458127121B9DC4B8A7B83B56FAB4226@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+ <1bf2431b80489ae412e774519a92616a9aa2bcca.1584977512.git.matti.vaittinen@fi.rohmeurope.com>
+ <20200324095024.GE1922688@smile.fi.intel.com>
+ <20200324103557.GH1922688@smile.fi.intel.com>
+ <4d75bfeab55c04cc3ca751cf7c364c812848e9ed.camel@fi.rohmeurope.com>
+ <20200325120956.GW1922688@smile.fi.intel.com>
+ <d533c18dcd7b4d4ca453661b3f9495a840b3313b.camel@fi.rohmeurope.com>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf0wbZRjH995d7w62mlsp9l2HIl22Baab80fyahYz/cMcbjFsczHRCLvJ
-        SZvBlVxbBacRt0loKxEcXaVCWcr4IWkstOgYtKzWSkBN6yayoTglI4sFh3FbhjCyecdtg7/u
-        uef7/Tzf902el8Y1/ZSeNglWXhS4UgOZTkQ7bwUf+3v/4cLHxy5tQk0BP4lqj7gxNH/jH4Dq
-        P8lF5y4ex5FrcopEbtdPADUljxFouKebQC3xhAodbQ2QyDmdhZLJbgrdHK3BUMNiB4Z+7m8i
-        0fXaOEBtF85hqKltmECtHZtQd2gOQ1cn3AT6KBKnUMTdrkI/DFjRieYIhUJBF44uXPsVQ5Hb
-        8wSKXLoO0NC/82BnNuv3+gHb+8U4xp7x/E6xX0c3sieDNjbUmce2hlMYG+yyk+yn7T4VOzEW
-        JtnZRIJihz+7RbB1vihgvSN72LPNfoq94v4WK8h4bfWOg5z17X2mEmHbcwdWG/3xo1R5e06F
-        L1KvqgJ9jzhAGg2Zp2Br6D+VA6TTGuYXALt6W+7+DAM4FR4nHYCmSWYHdIxTMqBldsGF2YtA
-        9uCMl4aXR84vAauYGAFbQl5MdmUw+bDzD1mQiZdgR3WEVOqXof9aIyHXBLMR2n+0A7lWS317
-        9TFKSV7E4J2Id8mUxjwLA8nBJRNgHoL2qtmlAJzRweCVOZVyBwaeCidxpc6Eqcu37/Zz4Om5
-        Lwn5BjiTCwP92xR0J2ypcRBKnQMbnJOUcoa1cKRxiqgDOs+KBM8y7VlBe1bQnhX0SaDqArCM
-        M5WWcFZ++1aRt20VzcYy6fOmuSwIlF280QfuxPJjAKNBDKyjMUOmOrTncKHmgYPm4kojZzEW
-        ibZS3hIDkMYNWnWIryjUqIu5ynd50XxPWk8TBp1682T9GxpGzjrE8+W8eE/NomkDVDtfkYau
-        FfkSvuItU6l1WcboNHl4ul5r4YViXuRsVmORvC1FFmldZGmNlPv+PglXW8q5MqmroN+DLXRd
-        qtmH0/HmNh+uIQSzwOt16s/lJEa2Gm3C/aBpoKOBIUN9Vh60RnqQ9+dMSxGYFFHieUeOsHLL
-        kr4KRD+cyTux5eH12q/CA9nZ1XZOwFKLtQszxxNObTg/pwdUOT94cTwvt/0mufCoVfWE++nM
-        Iwc2DG42few/PzGU9WdBz0xP6sycftXrv32HvbeuczS98sm+idreQ42uUSHa9uDA7qn604GG
-        /VcDib2eGteru/96IVk8+M0GNMSOFex6/hkDYTFy2/Nw0cL9D9Cl1mZNBAAA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d533c18dcd7b4d4ca453661b3f9495a840b3313b.camel@fi.rohmeurope.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-V2VsbCwgR29vZCBtb3JuaW5nIEFuZHkgOikNCg0KT24gV2VkLCAyMDIwLTAzLTI1IGF0IDE0OjA5
-ICswMjAwLCBhbmRyaXkuc2hldmNoZW5rb0BsaW51eC5pbnRlbC5jb20NCndyb3RlOg0KPiBPbiBX
-ZWQsIE1hciAyNSwgMjAyMCBhdCAxMTozNjo0NkFNICswMDAwLCBWYWl0dGluZW4sIE1hdHRpIHdy
-b3RlOg0KPiA+IE9uIFR1ZSwgMjAyMC0wMy0yNCBhdCAxMjozNSArMDIwMCwgQW5keSBTaGV2Y2hl
-bmtvIHdyb3RlOg0KPiA+ID4gT24gVHVlLCBNYXIgMjQsIDIwMjAgYXQgMTE6NTA6MjRBTSArMDIw
-MCwgQW5keSBTaGV2Y2hlbmtvIHdyb3RlOg0KPiA+ID4gPiBPbiBUdWUsIE1hciAyNCwgMjAyMCBh
-dCAxMDozMjoxOUFNICswMjAwLCBNYXR0aSBWYWl0dGluZW4NCj4gPiA+ID4gd3JvdGU6DQo+ID4g
-PiA+ID4gKyNpbmNsdWRlIDxsaW51eC9hY3BpLmg+DQo+ID4gPiA+ID4gKyNpbmNsdWRlIDxsaW51
-eC9vZi5oPg0KPiA+ID4gPiANCj4gPiA+ID4gSSBkaWRuJ3QgZmluZCBhbnkgZXZpZGVuY2Ugb2Yg
-dXNlIG9mIHRob3NlIHR3bywgb3RoZXJ3aXNlLA0KPiA+ID4gPiBtaXNzZWQNCj4gPiA+ID4gcHJv
-cGVydHkuaA0KPiA+ID4gPiBhbmQgcGVyaGFwcyBtb2RfZGV2aWNldGFibGUuaC4NCj4gDQo+IC4u
-Lg0KPiANCj4gPiA+ID4gPiArTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgYmQ5OTk1eF9vZl9tYXRj
-aCk7DQo+ID4gPiA+ID4gK01PRFVMRV9ERVZJQ0VfVEFCTEUoYWNwaSwgYmQ5OTk1eF9hY3BpX21h
-dGNoKTsNCj4gPiA+IA0KPiA+ID4gSSBoYXZlIHRvIGFkZCBzaW5jZSB5b3UgYXJlIHVzaW5nIHRo
-b3NlIG1hY3JvcyB3aXRob3V0IGlmZGVmZmVyeSwNCj4gPiA+IHlvdQ0KPiA+ID4gc2hvdWxkDQo+
-ID4gPiBnZXQgd2FybmluZyBpbiAhQUNQSSBhbmQvb3IgIU9GIGNhc2VzLg0KPiA+ID4gDQo+ID4g
-PiBTbywgZHJvcCB0aG9zZSBvZl9tYXRjaF9wdHIoKSAvIEFDUElfUFRSKCkgYW5kIHRodXMgYWJv
-dmUNCj4gPiA+IGhlYWRlcnMuDQo+ID4gDQo+ID4gU29ycnkgYnV0IEkgZG9uJ3QgZm9sbG93IDov
-IEkgZGlkIGRyb3Agd2hvbGUgQUNQSSB0YWJsZSBhcyB0aGUNCj4gPiBiYXR0ZXJ5DQo+ID4gaW5m
-b3JtYXRpb24gaXMgbm90IGZldGNoZWQgZnJvbSBBQ1BJIGFueXdheXMuDQo+IA0KPiBPa2F5LCBs
-ZXQncyBmb3JnZXQgdGhlbiBhYm91dCBBQ1BJIGJpdHMuDQo+IA0KPiA+IEJ1dCBJIGRvbid0IGtu
-b3cgd2hhdCB5b3UNCj4gPiBtZWFuIGJ5IGRyb3BwaW5nIHRoZSBvZl9tYXRjaF9wdHI/DQo+IA0K
-PiBMaXRlcmFsbHkgZG8gbm90IHVzZSB0aGlzIG1hY3JvLiBPdGhlcndpc2UgeW91IG1ha2UgYSBk
-ZXBlbmRlbmN5IHRvDQo+IE9GIHdoaWNoDQo+IHNob3VsZCBiZSB0aGVuIGluIHRoZSBLY29uZmln
-IGxpa2UNCj4gDQo+IAlkZXBlbmQgb24gT0YgfHwgQ09NUElMRV9URVNUDQo+IA0KDQpIbW0uLi4g
-V2h5IGlzIHRoYXQ/IEluIG9mLmggd2UgaGF2ZSAjaWZuZGVmIENPTkZJR19PRiBzZWN0aW9uIHdo
-aWNoDQpkZWZpbmVzOg0KDQojZGVmaW5lIG9mX21hdGNoX3B0cihfcHRyKQlOVUxMDQoNClNvLCB0
-aGlzIG1hY3JvIGlzIHdlbGwgZGVmaW5lZCBldmVuIGlmICFDT05GSUdfT0YsIHJpZ2h0Pw0KDQoN
-Cj4gYnV0IGluIHRoaXMgY2FzZSB5b3Ugd2lsbCBnZXQgY29tcGlsZXIgd2FybmluZyB3aXRob3V0
-IHVnbHkgaWZkZWZmZXJ5DQo+IGFyb3VuZA0KPiBPRiBJRCB0YWJsZSAoYXMgeW91IHBvaW50ZWQg
-YmVsb3cgeW91IGRpZG4ndCB0ZXN0IHRoYXQgc2NlbmFyaW8pLg0KPiANCj4gPiBJIGZvciBzdXJl
-IG5lZWQgdGhlIG9mX2RldmljZV9pZCBhcw0KPiA+IGluIG1hbnkgY2FzZXMgYm90aCB0aGUgZGV2
-aWNlIG1hdGNoaW5nIGFuZCBtb2R1bGUgbWF0Y2hpbmcgYXJlIGRvbmUNCj4gPiBiYXNlZCBvbiAg
-b2ZfbWF0Y2hfdGFibGUgYW5kIG9mX2RldmljZV9pZC4NCj4gPiANCj4gPiBJIGFkbWl0IEkgZGlk
-bid0IHRyeSBjb21waWxpbmcgdGhlICFPRiBjb25maWcuIEFyZSB5b3Ugc3VnZ2VzdGluZyBJDQo+
-ID4gc2hvdWxkIHB1dCB0aGUgb2ZfZGV2aWNlX2lkIGFycmF5IGFuZCBwb3B1bGF0aW5nIHRoZSBv
-Zl9tYXRjaF90YWJsZQ0KPiA+IGluDQo+ID4gI2lmZGVmIENPTkZJR19PRj8gT3IgbWF5YmUgeW91
-IHN1Z2dlc3QgdGhhdCBJIHdpbGwgcHV0IG9mX2RldmljZV9pZA0KPiA+IGFycmF5IGluICNpZmRl
-ZiBDT05GSUdfT0YgYW5kIHVzZSBvZl9tYXRjaF9wdHIoKSB3aGVuIHBvcHVsYXRpbmcNCj4gPiB0
-aGUNCj4gPiBvZl9tYXRjaF90YWJsZSBwb2ludGVyPyBJIGd1ZXNzIHRoYXQgd291bGQgbWFrZSBz
-ZW5zZS4gSSdsbCBkbyB0aGF0DQo+ID4gLQ0KPiA+IGNhbiB5b3UgcGxlYXNlIGV4cGxhaW4gaWYg
-dGhpcyB3YXMgbm90IHdoYXQgeW91IG1lYW50Lg0KPiANCj4gT25lIG9mIHVzIG5lZWRzIGEgbW9y
-bmluZyBjb3ZmZWZlLCBJIHRoaW5rIDotKQ0KDQpTbyBpbiAhQ09ORklHX09GIGNhc2Ugd2Ugd2ls
-bCBoYXZlDQoub2ZfbWF0Y2hfdGFibGUgPSBvZl9tYXRjaF9wdHIoYmQ5OTk1eF9vZl9tYXRjaCks
-DQpwcmVwcm9jZXNzZWQgdG8gZm9ybQ0KLm9mX21hdGNoX3RhYmxlID0gTlVMTCwNCg0KcmlnaHQ/
-IFNvIHdpdGggdGhpcyBtYWNybyB3ZSBjYW4gb21pdCBpbnRyb2R1Y3Rpb24gb2YgYmQ5OTk1eF9v
-Zl9tYXRjaA0Kd2hlbiAhQ09ORklHX09GIC0gbWVhbmluZyB3ZSBvbmx5IGJ1aWxkICNpZmRlZmZl
-cnkgYXJvdW5mIHRoZSBtYXRjaA0KdGFibGUgYW5kIG5vdCBhcm91bmQgdGhpcyBhc3NpZ25tZW50
-Lg0KDQpTbyBJJ2xsIGp1c3QgZG8gDQoNCiNpZmRlZiBDT05GSUdfT0YgICANCnN0YXRpYyBjb25z
-dCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIGJkOTk5NXhfb2ZfbWF0Y2hbXSA9IHsNCiAgICAgICAgeyAu
-Y29tcGF0aWJsZSA9ICJyb2htLGJkOTk5NTQiLCB9LA0KICAgICAgICB7IH0NCn07ICAgICAgICAg
-IA0KTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgYmQ5OTk1eF9vZl9tYXRjaCk7DQojZW5kaWYNCg0K
-YW5kIGxldCB0aGUNCiNkZWZpbmUgb2ZfbWF0Y2hfcHRyKF9wdHIpCU5VTEwNCmZpeCBhc3NpZ25t
-ZW50DQoub2ZfbWF0Y2hfdGFibGUgPSBvZl9tYXRjaF9wdHIoYmQ5OTk1eF9vZl9tYXRjaCksDQoN
-CndoZW4gIUNPTkZJR19PRi4NCg0KQnIsDQoJTWF0dGkNCg==
+On Wed, Mar 25, 2020 at 01:00:21PM +0000, Vaittinen, Matti wrote:
+> Well, Good morning Andy :)
+> 
+> On Wed, 2020-03-25 at 14:09 +0200, andriy.shevchenko@linux.intel.com
+> wrote:
+> > On Wed, Mar 25, 2020 at 11:36:46AM +0000, Vaittinen, Matti wrote:
+> > > On Tue, 2020-03-24 at 12:35 +0200, Andy Shevchenko wrote:
+> > > > On Tue, Mar 24, 2020 at 11:50:24AM +0200, Andy Shevchenko wrote:
+> > > > > On Tue, Mar 24, 2020 at 10:32:19AM +0200, Matti Vaittinen
+> > > > > wrote:
+> > > > > > +#include <linux/acpi.h>
+> > > > > > +#include <linux/of.h>
+> > > > > 
+> > > > > I didn't find any evidence of use of those two, otherwise,
+> > > > > missed
+> > > > > property.h
+> > > > > and perhaps mod_devicetable.h.
+> > 
+> > ...
+> > 
+> > > > > > +MODULE_DEVICE_TABLE(of, bd9995x_of_match);
+> > > > > > +MODULE_DEVICE_TABLE(acpi, bd9995x_acpi_match);
+> > > > 
+> > > > I have to add since you are using those macros without ifdeffery,
+> > > > you
+> > > > should
+> > > > get warning in !ACPI and/or !OF cases.
+> > > > 
+> > > > So, drop those of_match_ptr() / ACPI_PTR() and thus above
+> > > > headers.
+> > > 
+> > > Sorry but I don't follow :/ I did drop whole ACPI table as the
+> > > battery
+> > > information is not fetched from ACPI anyways.
+> > 
+> > Okay, let's forget then about ACPI bits.
+> > 
+> > > But I don't know what you
+> > > mean by dropping the of_match_ptr?
+> > 
+> > Literally do not use this macro. Otherwise you make a dependency to
+> > OF which
+> > should be then in the Kconfig like
+> > 
+> > 	depend on OF || COMPILE_TEST
+> > 
+> 
+> Hmm... Why is that? In of.h we have #ifndef CONFIG_OF section which
+> defines:
+> 
+> #define of_match_ptr(_ptr)	NULL
+> 
+> So, this macro is well defined even if !CONFIG_OF, right?
+
+Because your driver makes nonsense in non-OF cases AFAICS, did I miss anything?
+
+> > but in this case you will get compiler warning without ugly ifdeffery
+> > around
+> > OF ID table (as you pointed below you didn't test that scenario).
+> > 
+> > > I for sure need the of_device_id as
+> > > in many cases both the device matching and module matching are done
+> > > based on  of_match_table and of_device_id.
+> > > 
+> > > I admit I didn't try compiling the !OF config. Are you suggesting I
+> > > should put the of_device_id array and populating the of_match_table
+> > > in
+> > > #ifdef CONFIG_OF? Or maybe you suggest that I will put of_device_id
+> > > array in #ifdef CONFIG_OF and use of_match_ptr() when populating
+> > > the
+> > > of_match_table pointer? I guess that would make sense. I'll do that
+> > > -
+> > > can you please explain if this was not what you meant.
+> > 
+> > One of us needs a morning covfefe, I think :-)
+> 
+> So in !CONFIG_OF case we will have
+> .of_match_table = of_match_ptr(bd9995x_of_match),
+> preprocessed to form
+> .of_match_table = NULL,
+> 
+> right? So with this macro we can omit introduction of bd9995x_of_match
+> when !CONFIG_OF - meaning we only build #ifdeffery arounf the match
+> table and not around this assignment.
+> 
+> So I'll just do 
+> 
+> #ifdef CONFIG_OF   
+> static const struct of_device_id bd9995x_of_match[] = {
+>         { .compatible = "rohm,bd99954", },
+>         { }
+> };          
+> MODULE_DEVICE_TABLE(of, bd9995x_of_match);
+> #endif
+
+But why?
+
+You really uglify the code with ifdeffery, make a dependency to OF (yes, you
+will have to have of.h include) only because of that silly
+macro and save 64 bytes of memory footprint.
+
+> and let the
+> #define of_match_ptr(_ptr)	NULL
+> fix assignment
+> .of_match_table = of_match_ptr(bd9995x_of_match),
+> 
+> when !CONFIG_OF.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
