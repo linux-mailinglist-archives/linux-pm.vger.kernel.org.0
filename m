@@ -2,453 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D981933B8
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 23:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EA71933CB
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 23:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727374AbgCYWZj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Mar 2020 18:25:39 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:12856 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727358AbgCYWZj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Mar 2020 18:25:39 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200325222535epoutp02d78d245b4d3bb93fb73319df1aab4777~-rGMyWEkS0231902319epoutp02Z
-        for <linux-pm@vger.kernel.org>; Wed, 25 Mar 2020 22:25:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200325222535epoutp02d78d245b4d3bb93fb73319df1aab4777~-rGMyWEkS0231902319epoutp02Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1585175135;
-        bh=9wq2wZa21opTQIEIbtz6cMxVkcxQ7EqnavTSS59fUyI=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=rQYeXEKAySa7ig4sBPGii7DcNPa1a9KLnzFfSPw1z0/Sq0lEiIOrRVVmI08pzi9aG
-         m1L+3PLaryDdjjDA0nU1buuYieD9OADll8xoHk44mzVYsZzk2gGZ6mPW/0rMjtTJgr
-         pqPchMUtFAKpQV6w675mRVzf2LQ4zedLKCnzkk3E=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200325222535epcas1p258023413124dfc9e3f5620bd60ae5d32~-rGMJK77h1248512485epcas1p2w;
-        Wed, 25 Mar 2020 22:25:35 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.156]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 48njP90qxvzMqYkY; Wed, 25 Mar
-        2020 22:25:33 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1F.76.04140.D5ADB7E5; Thu, 26 Mar 2020 07:25:33 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20200325222532epcas1p3524ecbc4a79ae9b758dd3ae0de6450b4~-rGJyU4mC1200412004epcas1p3_;
-        Wed, 25 Mar 2020 22:25:32 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200325222532epsmtrp28eb7f93807a355173c458addd8d83fd1~-rGJxpwxC1869718697epsmtrp2Q;
-        Wed, 25 Mar 2020 22:25:32 +0000 (GMT)
-X-AuditID: b6c32a36-fbbff7000000102c-fd-5e7bda5dfbd6
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5C.82.04024.C5ADB7E5; Thu, 26 Mar 2020 07:25:32 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200325222532epsmtip232e63301a26acb9ad61d71bc9bad8cc5~-rGJh_9T_3039830398epsmtip2g;
-        Wed, 25 Mar 2020 22:25:32 +0000 (GMT)
+        id S1727374AbgCYWfh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Mar 2020 18:35:37 -0400
+Received: from mail-eopbgr70085.outbound.protection.outlook.com ([40.107.7.85]:11726
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727358AbgCYWfh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 25 Mar 2020 18:35:37 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g/qBksX7tF2mG72iLDusoivYVXllgGkb+rfaqs4V3Nktp1MixxItXYqTIbF4gAw0YVDOIJXMDi5mCxCj2NUHbxgl/lH4ahGlQpiaJtgxDB51Qsw428FRD0foaWJJihWqIvlzTtjQQhagji2YBcEOvIWsKoTm/q3uTTLdMGoNCp5yIUypNbc47vrRCOiyIjj5Yh9vXOob3V3U1QW02JEFu5W02ijqti2SwBlruj79/FdbAoNCBbEJXuKthd8hLk5GsBZkTDVv+r3dpR82hO2eFrUG5cgIvnULbvT/U9vYKN2cj0BkYC5sJ6AA0rWqSaSAfoqZc0S/N5jLc44rVKK1ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gXv46KmuTSQchMPtJIjU7rZsGJOkEjXcXjCjrO0qCTU=;
+ b=gm6QWb/umoSrIAJWlJBed5tb3uIiatc5NXNbPVd0YkulCkuiBGtnKC+ffcIqxHRWrnJ9URiFg6btACemFDxY8EXz4uEmiwp8+i8/2eqJ/iGpJHbm2/j9FZkH8K8YTArPqwn5EnTd2i3ZPhkdcw+iOkJA9U5hhCoqr1krmfzPHJAaYC0SSJK2/eg4d9HCPgoFS95/ommk1irRC7+sg2M7RKiBFDK3f9mtGgiSLLyGBDUHIDJBHNcbQf8Ka8fl78++Lyu8U+1Co1fdJD1ZmJVW/7pl57OcdIHSBJjL4broUcF7867qVPI/I5v+1VqlDvRwL6sXfqFLisaIdA5FKuasOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gXv46KmuTSQchMPtJIjU7rZsGJOkEjXcXjCjrO0qCTU=;
+ b=XeX0SklV40hnPvQT6DM4HcMrqPOWvathh9W8Q+4uBqFQ7RO8lZ5zCI5wVwZYo9grGleXfeIBABJWaddQ+iezSxA1KKGgSl8loIWgpZkF7T8RgnrtNKzNLsY1GC3om8/VPvUObu1t4V3HMvw8shN8cUkBdgxpZaMjl+HGG2Ic30k=
+Received: from VI1PR04MB6941.eurprd04.prod.outlook.com (52.133.244.87) by
+ VI1PR04MB5598.eurprd04.prod.outlook.com (20.178.204.94) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2835.19; Wed, 25 Mar 2020 22:35:32 +0000
+Received: from VI1PR04MB6941.eurprd04.prod.outlook.com
+ ([fe80::289c:fdf8:faf0:3200]) by VI1PR04MB6941.eurprd04.prod.outlook.com
+ ([fe80::289c:fdf8:faf0:3200%2]) with mapi id 15.20.2835.023; Wed, 25 Mar 2020
+ 22:35:32 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
+        "cw00.choi@samsung.com" <cw00.choi@samsung.com>
+CC:     dl-linux-imx <linux-imx@nxp.com>,
+        "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
+        "kyungmin.park@samsung.com" <kyungmin.park@samsung.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
 Subject: Re: [RFC] PM / devfreq: add busfreq governor
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>, linux-imx@nxp.com,
-        leonard.crestez@nxp.com, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com
-Cc:     linux-pm@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <f84228bc-9d37-acad-1784-0312f89afecb@samsung.com>
-Date:   Thu, 26 Mar 2020 07:34:32 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
-MIME-Version: 1.0
-In-Reply-To: <20200325152224.6613-1-martin.kepplinger@puri.sm>
+Thread-Topic: [RFC] PM / devfreq: add busfreq governor
+Thread-Index: AQHWArlFUBHgTyrcLE+9J+iVDNgu5w==
+Date:   Wed, 25 Mar 2020 22:35:32 +0000
+Message-ID: <VI1PR04MB694176CC6B96EF2E612C552FEECE0@VI1PR04MB6941.eurprd04.prod.outlook.com>
+References: <20200325152224.6613-1-martin.kepplinger@puri.sm>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRju286OR2t1PKa+jS7ziIKmueOazUoJkpIMGwT9KHIe9LCJu7Ez
-        reUPTbNSM7po1Eq7e1nQRZe3Ek3FEipKk0IZSBlJF6OslCJr2zHy3/M+7/O+D8/3vYSYOo/L
-        iByTjbOaWAONB2AtvVGK2L0jBRmKsk5M/aT4o5+6wf1Foi7/2ShWT1X2IfXgWIOfevRgA74J
-        T70z2SZKfd02glKPu5wodapppQbbnbtRz7HZnFXOmbLM2TkmXRKdtlO7WatKUDCxTKJ6HS03
-        sUYuiU7ZrondkmPwmNPyfNaQ56E0LM/TcckbreY8GyfXm3lbEs1Zsg2WRMsanjXyeSbdmiyz
-        cT2jUMSrPMLMXP37M7cwy5P0/S9aI4tQc3I58ieAXAsPWorxchRAUGQbgsrSakwoviKofVYq
-        FoofCGqGB/F/IwNlN+ZUnQgqSk6LhOIzgmvDH8ReVRCpghJnr2/xUrIKwdnpDszbEJPL4dfE
-        FZ8IJ6Oha+KVb+0SMgyGZ96gckQQUjIZ3DUaL42REVDvvCjx4mByFwy0HEJeLCUDYeDcuG+l
-        v0c+fb0fF9aHwsj4RZGAV0Hrpwu+CEC+w+HP6Fs/IUIKzA4fEgk4CN4/dM3xMpia7JyLWQCN
-        A324MHwUgavrmURoKKHrujcy4XGIglsdcQIdBu2/apBgvBgmvx+TeCVASuHoYUqQhMPQmHvO
-        dhlcPVKGn0C0Y14cx7wIjnkRHP/NLiHMiUI4C2/UcTxjiZ//203Id5jRCW3oytPtPYgkEL1I
-        ejuxIIOSsPm83diDgBDTS6XN3P4MSprN2g9wVrPWmmfg+B6k8rz2SbEsOMvsOXOTTcuo4pVK
-        pXotk6BiGDpUWv3SkEGROtbG5XKchbP+mxMR/rIitBCcfefsj0+Hp6QE1krXbcMdoysKuyXW
-        Tb/Tcz8aqa5qUaQupq40Yjpt0nWK/0bdHjqRc9NSO1SR2V7fsa+kafXWlst3NTH5jzo+FBQv
-        xyqzqjaPT9R1F9JRC+Qhxh3uwXq9qdK9bLG++fme+xVnrt7bhvdXURviZLPpoX0zUXYa4/Us
-        Ey228uxfbRnoAa4DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplkeLIzCtJLcpLzFFi42LZdlhJXjfmVnWcQdMXRYuzTW/YLVbc/chq
-        0fVrJbPF594jjBaXHqxgt7jduILNgc1j47sdTB6Pdtxi9OjbsorR4/MmuQCWKC6blNSczLLU
-        In27BK6MV9PWsxSc9au4sl2tgXGzXRcjJ4eEgInEyc7VLF2MXBxCArsZJc4uamKHSEhKTLt4
-        lLmLkQPIFpY4fLgYouYto8S1h2dZQGqEBUwlmlcdZgNJiAhMYZTYdmcJM0iCWUBG4veLRcwQ
-        HRMZJR5svcsGkmAT0JLY/+IGmM0voChx9cdjRpANvAJ2EnfnBoCEWQRUJZavms8KYosKhEns
-        XPKYCcTmFRCUODnzCdhiTqDy70uPsUHsUpf4M+8S1F5xiVtP5jNB2PIS29/OYZ7AKDwLSfss
-        JC2zkLTMQtKygJFlFaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZGcORoae5gvLwk/hCj
-        AAejEg/vBsvqOCHWxLLiytxDjBIczEoivJtTK+KEeFMSK6tSi/Lji0pzUosPMUpzsCiJ8z7N
-        OxYpJJCeWJKanZpakFoEk2Xi4JRqYCxUENgg9Gz7moXrvWcy+F1XeF8u8EX8V5v3urL5K2Z+
-        kTu/XOhO+LcsqwOrt15cKvX89onAODmz6HfK++MMX5nGC7W4Zb85qL1cb2eic7Pbwn2T433e
-        vVi7LvvZ8qf3G496/ZU76RNenHy8NTqPTYn9SXV921y/Nl6F4+5qv+WPXjx3vkXvmq4SS3FG
-        oqEWc1FxIgBq59X6mAIAAA==
-X-CMS-MailID: 20200325222532epcas1p3524ecbc4a79ae9b758dd3ae0de6450b4
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200325152302epcas1p3ba57cfef70d9d8b8dff6d9e2bb09b321
-References: <CGME20200325152302epcas1p3ba57cfef70d9d8b8dff6d9e2bb09b321@epcas1p3.samsung.com>
-        <20200325152224.6613-1-martin.kepplinger@puri.sm>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [92.121.36.198]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 5c9c0832-b79b-4940-a60f-08d7d10cd3f2
+x-ms-traffictypediagnostic: VI1PR04MB5598:|VI1PR04MB5598:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB5598CFC41A234C4CE0C63A85EECE0@VI1PR04MB5598.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0353563E2B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(39860400002)(136003)(346002)(366004)(376002)(81166006)(33656002)(81156014)(8676002)(8936002)(5660300002)(52536014)(186003)(71200400001)(26005)(6506007)(53546011)(7696005)(110136005)(316002)(9686003)(64756008)(66446008)(66476007)(2906002)(54906003)(86362001)(66946007)(55016002)(966005)(76116006)(4326008)(44832011)(478600001)(91956017)(66556008);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5598;H:VI1PR04MB6941.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cK+g1ajkva+YPAgPMWR+4Uu+nxuOFmoyKWvGcLzxzq1px9F7E8YQ0uygCedBmztPcVJcF7gWXjV+65o1+Ifx0+zuaV0+wAE+WFyKGDuENNxDMx5NtWJuzlr89Vqkt65H/p8GdPkTCCRzK5aOgk8zww40Rk2RghDAUBhFxM8jWKqKo8BtWkmItYBjrNqPys5oh84fGgEvcT15bejRdXdd2sNnbVmJlQKzGT+YI2l0R+kV0NToxmMw9yabClTlgMVWLcKebmXL7ZQ2NQdK3N3ECFEgQ6cwgVdJnJmXRrOYkUsfFBXpXAm/7rVuvudqJdBbdxHUo6Qsomds1h23FJOmsOezgyuHKm3080Htnq+1LLQrlClIY72c/M0uFLnc4rU98mi9rCZ76UXIfe8aT860BImAHtW0YYAAgJ/2hMRnL5CLb00FRo5NL3oc155vfmhCkH6idUEi60cDTpOg1wgQwKdjWBGOC8s8UMQOK28ObJqnw3MPIGdc5DmRLpmy+wKC+Mogdp7M4OUntQOqtu7r0Q==
+x-ms-exchange-antispam-messagedata: u2yrehfjpO0sYm1sQcV33wA8paMBfLIocUz4MKORhe3HKw+VrpH+LGVYPzJQmrUZnobsh8HmqDntgm5TpOXn1QvD1UPxUjSkMxkNkPE7g0rynb0WxrDx1cvsTt1m6bkoIL8GMXCgLXVSUVJYL1VdQw==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c9c0832-b79b-4940-a60f-08d7d10cd3f2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2020 22:35:32.0647
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WlbmUATkQ0J83C8hMSRvzUT01Rz1l4dF4LtcY5vnIQ9f6HAHbYEWUfRp8X+cVMckVVLh8CYPa1/B3d79bMGwbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5598
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Martin,
-
-On 3/26/20 12:22 AM, Martin Kepplinger wrote:
-> A devfreq governor to be used by drivers to request ("get") a frequency
-> setting they need. Currently only "HIGH" (performance) is available.
-> 
-> ATTENTION: This is a first draft to serve merely as a basis for discussions!
-> ONLY USE FOR TESTING!
-> ---
-> 
-> I wanted to get early feedback on an idea that AFAIK is not yet available
-> in the kernel (but something similar via "busfreq" in NXP's tree):
-> 
-> Let drivers request high (dram) frequencies at runtime if they know they need
-> them. In our case the display stack on imx8mq would be the first user,
-> looking like so: #include <linux/devfreq.h> and:
-> 
-> 	--- a/drivers/gpu/drm/bridge/nwl-dsi.c
-> 	+++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-> 	@@ -1116,6 +1117,9 @@ static int imx8mq_dsi_poweron(struct nwl_dsi *dsi)
-> 			ret = reset_control_deassert(dsi->rstc);
-> 	 
-> 	+       devfreq_busfreq_request(DEVFREQ_BUSFREQ_HIGH);
-
-It seems that the nwl-dsi.c requires the minimum frequency to DRAM driver
-in order to guarantee the at least performance.
-
-The devfreq framework already support this feature via PM QoS.
-You can refer to following the merged patches[1][2]
-
-[1] 05d7ae15cfb1 ("PM / devfreq: Add PM QoS support")
-[2] 27dbc542f651 ("PM / devfreq: Use PM QoS for sysfs min/max_freq")
-
-
-> 	+
-> 		return ret;
-> 	@@ -1125,6 +1129,10 @@ static int imx8mq_dsi_poweroff(struct nwl_dsi *dsi)
-> 		if (dsi->rstc)
-> 			ret = reset_control_assert(dsi->rstc);
-> 	+
-> 	+       devfreq_busfreq_release(DEVFREQ_BUSFREQ_HIGH);
-
-ditto.
-
-> 	+
-> 		return ret;
-> 
-> 
-> Could be called in pm_runtime() calls too.
-> 
-> _If_ the idea of such or a similar governor is viable, there are at least
-> some problems with this implemenation still:
-> 
-> * The governor saves its data as a global variable (which I don't yet like)
->   but the driver (user) API becomes minimal.
-> 
-> * the name: In order to add to the devfreq/busfreq confusion, I named the
->   devfreq governor "busfreq" -.-
->   I just wanted to grab NXPs' attention because they do something similar
->   in their tree.
-> 
-> * ATM we switch between "performace" and "powersave, which is
->   not bad at all, but still limited in case a driver would really only
->   need a medium frequecy for a device to work. doable?
-> 
-> * I doubt locking is done correctly and the code is overall of bad quality
->   still. Again, It's a first idea.
-> 
-> I'm glad about any thought or feedback,
-> 
-> thanks,
->                                    martin
-> 
-> 
-> 
-> 
->  drivers/devfreq/Kconfig            |   5 +
->  drivers/devfreq/Makefile           |   1 +
->  drivers/devfreq/governor_busfreq.c | 172 +++++++++++++++++++++++++++++
->  include/linux/devfreq.h            |  22 ++++
->  4 files changed, 200 insertions(+)
->  create mode 100644 drivers/devfreq/governor_busfreq.c
-> 
-> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> index fc2ea336ef4b..3575cbdcd29e 100644
-> --- a/drivers/devfreq/Kconfig
-> +++ b/drivers/devfreq/Kconfig
-> @@ -74,6 +74,11 @@ config DEVFREQ_GOV_PASSIVE
->  	  through sysfs entries. The passive governor recommends that
->  	  devfreq device uses the OPP table to get the frequency/voltage.
->  
-> +config DEVFREQ_GOV_BUSFREQ
-> +	tristate "Busfreq"
-> +	help
-> +	  Sets the frequency that compatible drivers request it to set.
-> +
->  comment "DEVFREQ Drivers"
->  
->  config ARM_EXYNOS_BUS_DEVFREQ
-> diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-> index 61d0edee16f7..657b0b6d92c4 100644
-> --- a/drivers/devfreq/Makefile
-> +++ b/drivers/devfreq/Makefile
-> @@ -6,6 +6,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PERFORMANCE)	+= governor_performance.o
->  obj-$(CONFIG_DEVFREQ_GOV_POWERSAVE)	+= governor_powersave.o
->  obj-$(CONFIG_DEVFREQ_GOV_USERSPACE)	+= governor_userspace.o
->  obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
-> +obj-$(CONFIG_DEVFREQ_GOV_BUSFREQ)	+= governor_busfreq.o
-
-governor_busfreq.c seems that change the clock rate according to
-the user requirement. On that, governor_busfreq only uses
-two frequencies level like the high and low frequencies.
-
-I think that it is possible to be implemented by using following combination:
-- NXP DRM devfreq driver with userspace governor + PMQoS on nwl-dsi.c
-
-IMO, instead of governor_busfreq.c, better to add the NXP's DRM devfreq driver.
-
->  
->  # DEVFREQ Drivers
->  obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
-> diff --git a/drivers/devfreq/governor_busfreq.c b/drivers/devfreq/governor_busfreq.c
-> new file mode 100644
-> index 000000000000..e12d64e9a09b
-> --- /dev/null
-> +++ b/drivers/devfreq/governor_busfreq.c
-> @@ -0,0 +1,172 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + *  linux/drivers/devfreq/governor_busfreq.c
-> + *
-> + *  Copyright (C) 2020 Purism SPC
-> + */
-> +
-> +#include <linux/slab.h>
-> +#include <linux/device.h>
-> +#include <linux/devfreq.h>
-> +#include <linux/pm.h>
-> +#include <linux/mutex.h>
-> +#include <linux/module.h>
-> +#include "governor.h"
-> +
-> +struct busfreq_data {
-> +	unsigned long user_frequency;
-> +	bool valid;
-> +	struct devfreq *df;
-> +	unsigned int high_count;
-> +};
-> +
-> +static struct busfreq_data *bfdata = NULL;
-> +
-> +static int devfreq_busfreq_func(struct devfreq *df, unsigned long *freq)
-> +{
-> +	if (bfdata->valid)
-> +		*freq = bfdata->user_frequency;
-> +	else
-> +		*freq = df->previous_freq; /* No user freq specified yet */
-> +
-> +	return 0;
-> +}
-> +
-> +int devfreq_busfreq_request(unsigned long freq)
-> +{
-> +	struct devfreq *devfreq;
-> +	int err = 0;
-> +
-> +	if (!bfdata) {
-> +		pr_info("%s: governor not available\n", __func__);
-> +		return -ENODEV;
-> +	}
-> +
-> +	if (freq != DEVFREQ_BUSFREQ_HIGH) {
-> +		pr_err("%s: undefined frequency\n", __func__);
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (freq == DEVFREQ_BUSFREQ_HIGH)
-> +		bfdata->high_count++;
-> +
-> +	devfreq = bfdata->df;
-> +
-> +	mutex_lock(&devfreq->lock);
-> +
-> +	bfdata->user_frequency = freq;
-> +	bfdata->valid = true;
-> +	err = update_devfreq(devfreq); /* calls our get_target_freq */
-> +	if (err)
-> +		dev_err(&devfreq->dev, "update_devfreq failed: %d\n", err);
-> +
-> +	mutex_unlock(&devfreq->lock);
-> +
-> +	return err;
-> +}
-> +EXPORT_SYMBOL(devfreq_busfreq_request);
-> +
-> +void devfreq_busfreq_release(unsigned long freq)
-> +{
-> +	struct devfreq *devfreq;
-> +	int err = 0;
-> +
-> +	if (!bfdata) {
-> +		pr_info("%s: governor not available\n", __func__);
-> +		return;
-> +	}
-> +
-> +	if (freq != DEVFREQ_BUSFREQ_HIGH) {
-> +		pr_err("%s: undefined frequency\n", __func__);
-> +		return;
-> +	}
-> +
-> +	if (freq == DEVFREQ_BUSFREQ_HIGH && bfdata->high_count > 0)
-> +		bfdata->high_count--;
-> +
-> +	if (bfdata->high_count)
-> +		return;
-> +
-> +	devfreq = bfdata->df;
-> +
-> +	mutex_lock(&devfreq->lock);
-> +
-> +	bfdata->user_frequency = DEVFREQ_BUSFREQ_LOW;
-> +	bfdata->valid = true;
-> +	err = update_devfreq(devfreq); /* calls our get_target_freq */
-> +	if (err)
-> +		dev_err(&devfreq->dev, "update_devfreq failed: %d\n", err);
-> +
-> +	mutex_unlock(&devfreq->lock);
-> +}
-> +EXPORT_SYMBOL(devfreq_busfreq_release);
-> +
-> +static int busfreq_init(struct devfreq *devfreq)
-> +{
-> +	int err = 0;
-> +
-> +	bfdata = kzalloc(sizeof(struct busfreq_data),
-> +		      GFP_KERNEL);
-> +	if (!bfdata) {
-> +		err = -ENOMEM;
-> +		goto out;
-> +	}
-> +	bfdata->valid = false;
-> +	devfreq->data = bfdata;
-> +	bfdata->df = devfreq;
-> +
-> +out:
-> +	return err;
-> +}
-> +
-> +static void busfreq_exit(struct devfreq *devfreq)
-> +{
-> +	if (bfdata)
-> +		kfree(bfdata);
-> +
-> +	devfreq->data = NULL;
-> +}
-> +
-> +static int devfreq_busfreq_handler(struct devfreq *devfreq,
-> +				   unsigned int event, void *data)
-> +{
-> +	int ret = 0;
-> +
-> +	switch (event) {
-> +	case DEVFREQ_GOV_START:
-> +		ret = busfreq_init(devfreq);
-> +		break;
-> +	case DEVFREQ_GOV_STOP:
-> +		busfreq_exit(devfreq);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static struct devfreq_governor devfreq_busfreq = {
-> +	.name = "busfreq",
-> +	.get_target_freq = devfreq_busfreq_func,
-> +	.event_handler = devfreq_busfreq_handler,
-> +};
-> +
-> +static int __init devfreq_busfreq_init(void)
-> +{
-> +	return devfreq_add_governor(&devfreq_busfreq);
-> +}
-> +subsys_initcall(devfreq_busfreq_init);
-> +
-> +static void __exit devfreq_busfreq_exit(void)
-> +{
-> +	int ret;
-> +
-> +	ret = devfreq_remove_governor(&devfreq_busfreq);
-> +	if (ret)
-> +		pr_err("%s: failed remove governor %d\n", __func__, ret);
-> +
-> +	return;
-> +}
-> +module_exit(devfreq_busfreq_exit);
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index 678391c1bb0f..df1bf6928d87 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -23,6 +23,7 @@
->  #define DEVFREQ_GOV_POWERSAVE		"powersave"
->  #define DEVFREQ_GOV_USERSPACE		"userspace"
->  #define DEVFREQ_GOV_PASSIVE		"passive"
-> +#define DEVFREQ_GOV_BUSFREQ		"busfreq"
->  
->  /* DEVFREQ notifier interface */
->  #define DEVFREQ_TRANSITION_NOTIFIER	(0)
-> @@ -310,6 +311,27 @@ struct devfreq_passive_data {
->  };
->  #endif
->  
-> +/*
-> + * "powersave" by default
-> + * giving drivers the option to require "performance"
-> + */
-> +#define DEVFREQ_BUSFREQ_HIGH			ULONG_MAX
-> +#define DEVFREQ_BUSFREQ_LOW			0
-> +#if IS_ENABLED(CONFIG_DEVFREQ_GOV_BUSFREQ)
-> +extern int devfreq_busfreq_request(unsigned long freq);
-> +extern void devfreq_busfreq_release(unsigned long freq);
-> +#else
-> +static inline int devfreq_busfreq_request(unsigned long freq)
-> +{
-> +	return -ENOSYS;
-> +}
-> +
-> +static inline void devfreq_busfreq_release(unsigned long freq)
-> +{
-> +	return;
-> +}
-> +#endif
-> +
->  #else /* !CONFIG_PM_DEVFREQ */
->  static inline struct devfreq *devfreq_add_device(struct device *dev,
->  					  struct devfreq_dev_profile *profile,
-> 
-
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+On 2020-03-25 5:23 PM, Martin Kepplinger wrote:=0A=
+> A devfreq governor to be used by drivers to request ("get") a frequency=
+=0A=
+> setting they need. Currently only "HIGH" (performance) is available.=0A=
+> =0A=
+> ATTENTION: This is a first draft to serve merely as a basis for discussio=
+ns!=0A=
+> ONLY USE FOR TESTING!=0A=
+> ---=0A=
+> =0A=
+> I wanted to get early feedback on an idea that AFAIK is not yet available=
+=0A=
+> in the kernel (but something similar via "busfreq" in NXP's tree):=0A=
+=0A=
+Kernel already provides soc-agnostic mechanism via pm_qos and =0A=
+interconnect frameworks. The interconnect framework is more powerful =0A=
+because devices express requests in kbps and provides can make better =0A=
+decisions based on that.=0A=
+=0A=
+> Let drivers request high (dram) frequencies at runtime if they know they =
+need=0A=
+> them. In our case the display stack on imx8mq would be the first user,=0A=
+> looking like so: #include <linux/devfreq.h> and:=0A=
+> =0A=
+> 	--- a/drivers/gpu/drm/bridge/nwl-dsi.c=0A=
+> 	+++ b/drivers/gpu/drm/bridge/nwl-dsi.c=0A=
+> 	@@ -1116,6 +1117,9 @@ static int imx8mq_dsi_poweron(struct nwl_dsi *dsi)=
+=0A=
+> 			ret =3D reset_control_deassert(dsi->rstc);=0A=
+> 	=0A=
+> 	+       devfreq_busfreq_request(DEVFREQ_BUSFREQ_HIGH);=0A=
+> 	+=0A=
+> 		return ret;=0A=
+> 	@@ -1125,6 +1129,10 @@ static int imx8mq_dsi_poweroff(struct nwl_dsi *ds=
+i)=0A=
+> 		if (dsi->rstc)=0A=
+> 			ret =3D reset_control_assert(dsi->rstc);=0A=
+> 	+=0A=
+> 	+       devfreq_busfreq_release(DEVFREQ_BUSFREQ_HIGH);=0A=
+> 	+=0A=
+> 		return ret;=0A=
+> =0A=
+> =0A=
+> Could be called in pm_runtime() calls too.=0A=
+> =0A=
+> _If_ the idea of such or a similar governor is viable, there are at least=
+=0A=
+> some problems with this implemenation still:=0A=
+There's an older RFC which I have to resend which adds support an =0A=
+interconnect provider for imx which then makes PM_QOS_MIN_FREQ requests =0A=
+to devfreq. It has several advantages:=0A=
+=0A=
+https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=3D203215=
+=0A=
+=0A=
+> * The governor saves its data as a global variable (which I don't yet lik=
+e)=0A=
+>    but the driver (user) API becomes minimal.=0A=
+> =0A=
+> * the name: In order to add to the devfreq/busfreq confusion, I named the=
+=0A=
+>    devfreq governor "busfreq" -.-=0A=
+>    I just wanted to grab NXPs' attention because they do something simila=
+r=0A=
+>    in their tree.=0A=
+=0A=
+Interconnect API already exists and is not SOC-specific.=0A=
+=0A=
+> =0A=
+> * ATM we switch between "performace" and "powersave, which is=0A=
+>    not bad at all, but still limited in case a driver would really only=
+=0A=
+>    need a medium frequecy for a device to work. doable?=0A=
+=0A=
+Interconnect requests are made for *bandwdith* and the provider can =0A=
+compute minimum frequency based on that. This means that if a video =0A=
+device at low resolution requires bandwidth that can be satisfied by a =0A=
+"medium" frequency it will work as expected.=0A=
+=0A=
+> =0A=
+> * I doubt locking is done correctly and the code is overall of bad qualit=
+y=0A=
+>    still. Again, It's a first idea.=0A=
+=0A=
