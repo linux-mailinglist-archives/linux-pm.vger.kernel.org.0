@@ -2,51 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C5B191E48
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 01:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BD1191E49
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 01:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727113AbgCYAzl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Mar 2020 20:55:41 -0400
+        id S1727272AbgCYAzm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Mar 2020 20:55:42 -0400
 Received: from cmta20.telus.net ([209.171.16.93]:53900 "EHLO cmta20.telus.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727261AbgCYAzk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 24 Mar 2020 20:55:40 -0400
+        id S1727261AbgCYAzm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 24 Mar 2020 20:55:42 -0400
 Received: from dougxps ([173.180.45.4])
         by cmsmtp with SMTP
-        id GuFxjJjQxYkAEGuFyj2TCO; Tue, 24 Mar 2020 18:50:55 -0600
+        id GuFxjJjQxYkAEGuG1j2TCz; Tue, 24 Mar 2020 18:50:57 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1585097455; bh=vYUYZhWdzni3k9yF0sT6VpET+CBSIDMl//6cnXP+1wg=;
+        t=1585097457; bh=j9RFKTQoSGY61y7r0J6PzzK0nsonqMQrYL7QPAPYdIw=;
         h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=1pIxDudeOrDjFkNP5XxaFejmkvlZ+E1cQoMVR9cr8qIIbbNmvwxQ0LDCiiWXYkmnp
-         dWXwdoeW/nkYgMbmTMxhfy76b+dQK9nIY+9u+FhA7yVUaIzRJfLRNENys9z4oKyf8P
-         eVklh30GXWfyjg5xhFMAczkr3XNQsqTYxYrsZSBRfG/aQXfodoUwxPzz167hw6rpac
-         2rMLkxD6qViWdKruWqNtbNOiziGPyj8vPY0wVMTcJLN3LvWIvSUln0+XXijGeEy5cy
-         PODH4MVvNwBCdUsOuN6CGpUKb5/GBVLEhcYMhrKj07pfU/EN7On8I8vFO6MyOghQJS
-         KIWvLtawdpkzw==
+        b=q/ndEDck/WxUr9MrP4FqIR3kyVyssRXAm2nbURYkG5D301VGfGgTd4unW5sPOyyvF
+         JN2fNuLes5jbqAF530yUNw/u+txLsuMTwjUyoWpabp1PICzZx5XH6i08G3o9b9MxKh
+         Valiit2Xllfr303Mze0pHOUZAOiN0huSDqA7sNcxLJdlGRrMW9Dz0GzsLHj1guvKWj
+         ehty3nzRvbDRO5bnroeCgrc+wqFIRtCNCZO3d1sAtSvUJqlA5god5MgThLfklTr9AN
+         WLxkBVKtYTU3tVtnyJ3cq9HzvlnROyYZ6fnUURrx23U9O4xY/RASmoN2mm6+2kWwl5
+         KEew66GQQ9KVA==
 X-Telus-Authed: none
 X-Authority-Analysis: v=2.3 cv=caqsUULM c=1 sm=1 tr=0
  a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
  a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=kj9zAlcOel0A:10 a=QyXUC8HyAAAA:8 a=ctVjbXThj1diqwFriuMA:9 a=CjuIK1q_8ugA:10
+ a=kj9zAlcOel0A:10 a=QyXUC8HyAAAA:8 a=8DlHCjrKwYeYp1394FkA:9 a=CjuIK1q_8ugA:10
 From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Len Brown'" <lenb@kernel.org>, <linux-pm@vger.kernel.org>
-Cc:     "'Len Brown'" <len.brown@intel.com>,
-        "'Antti Laakso'" <antti.laakso@linux.intel.com>
-References: <081c54323b27d8d4b40df6b2375b9e1f6846d827.1584766216.git.len.brown@intel.com> <abdcbdb265264f736df316622a695ad30019c05f.1584766216.git.len.brown@intel.com>
-In-Reply-To: <abdcbdb265264f736df316622a695ad30019c05f.1584766216.git.len.brown@intel.com>
-Subject: RE: [PATCH v2 09/10] tools/power turbostat: Print cpuidle information
-Date:   Tue, 24 Mar 2020 17:50:52 -0700
-Message-ID: <003101d6023f$70975750$51c605f0$@net>
+To:     "'Len Brown'" <lenb@kernel.org>
+Cc:     "'Len Brown'" <len.brown@intel.com>, <linux-pm@vger.kernel.org>
+References: <081c54323b27d8d4b40df6b2375b9e1f6846d827.1584679387.git.len.brown@intel.com> <fcaa681c03ea82193e60d7f2cdfd94fbbcd4cae9.1584679387.git.len.brown@intel.com>
+In-Reply-To: <fcaa681c03ea82193e60d7f2cdfd94fbbcd4cae9.1584679387.git.len.brown@intel.com>
+Subject: RE: [PATCH 08/10] tools/power turbostat: Fix 32-bit capabilities warning
+Date:   Tue, 24 Mar 2020 17:50:56 -0700
+Message-ID: <003201d6023f$71aff340$550fd9c0$@net>
 MIME-Version: 1.0
 Content-Type: text/plain;
         charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdX/POAWdEVxnJZVR9KcDWu6dcP75QDAEhWQ
+Thread-Index: AdX+d6bI97s341oqQlad2c6zK3sz5wDxymmw
 Content-Language: en-ca
-X-CMAE-Envelope: MS4wfIcErS4gDKgkzEza4VkbIt2lttvNoDXqC9Hn0y/aimn0zkPB5xJXj0YQN6aif/EtkJvxb+uzekn2RWCVxHfdKbxuSBw76mXCSOwiAdAdOZ1ZVBN19/jy
- AptOk/OLRie9kYLwxL4XWJg24xGMGvUUI2fQmIGIXgU94NjMH2srU6u2Nm1tn9y9jZFcCdunjClWANTzzUepHHzpxOQ9RKruhVhOVFkO/aSmAwDuI0Ggo4V0
- 7C0CKO1BYzAkTEHwmkZSYv6pB6iPvy9bi5xcfC+CqrA=
+X-CMAE-Envelope: MS4wfCxmvds0xSU/OdjXTno06lCx9md0whhd5nLhBiSf/VrFrjnV3wl2rkABtYw69E7CgWa/WZLkPPUZN/djU2fxBFRxzZgbtO4kLPTzo31Rmu6QYBj5eTUe
+ YIM5iw8Qz2bSSyU6QMxBPU2Cz8bs5sG2B4FmePWzdRpSXox/EWw3lsBhwx8Ouuyca0xRxBO8Pf4vKy0PbIR2XSaYPGPK1u0q/Nf+nbe6GZWsiFOLbVrtKrKq
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -54,56 +52,27 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Len,
 
-On 2020.03.20 21:55 Len Brown wrote:
+On 2020.03.24 22:23 Len Brown wrote:
 
 > From: Len Brown <len.brown@intel.com>
 >
-> Print cpuidle driver and governor.
-> 
-> Originally-by: Antti Laakso <antti.laakso@linux.intel.com>
+> warning: `turbostat' uses 32-bit capabilities (legacy support in use)
+>
 > Signed-off-by: Len Brown <len.brown@intel.com>
 > ---
-> tools/power/x86/turbostat/turbostat.c | 26 ++++++++++++++++++++++++++
-> 1 file changed, 26 insertions(+)
->
-> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-> index 77f89371ec5f..05dbe23570d4 100644
-> --- a/tools/power/x86/turbostat/turbostat.c
-> +++ b/tools/power/x86/turbostat/turbostat.c
+>  tools/power/x86/turbostat/Makefile    |  2 +-
+>  tools/power/x86/turbostat/turbostat.c | 46 +++++++++++++++++----------
+>  2 files changed, 31 insertions(+), 17 deletions(-)
+
+...
+
+> +#include <sys/capability.h>
 
 
-... 
+This seems to require a package, libcap-dev, to be installed.
+I never needed it before.
+Just F.Y.I.
 
-> 
-> static void
-> dump_sysfs_cstate_config(void)
-> {
-> @@ -3516,6 +3533,15 @@ dump_sysfs_cstate_config(void)
-> 	if (!DO_BIC(BIC_sysfs))
-> 		return;
-
-I do not understand why this information needs to be
-a function of the --show options and not solely a
-function of the --quiet option.
-
-My reasoning is that I almost always want all the information
-possible in the start spew of stuff, and if I don't I'll
-use --quiet option. However, I rarely show more than
-about 6 columns at a time resulting in intermittent inclusion
-of this information.
-
-> 
-> +	if (access("/sys/devices/system/cpu/cpuidle", R_OK)) {
-> +		fprintf(outf, "cpuidle not loaded\n");
-> +		return;
-> +	}
-> +
-> +	dump_sysfs_file("/sys/devices/system/cpu/cpuidle/current_driver");
-> +	dump_sysfs_file("/sys/devices/system/cpu/cpuidle/current_governor");
-> +	dump_sysfs_file("/sys/devices/system/cpu/cpuidle/current_governor_ro");
-> +
->  	for (state = 0; state < 10; ++state) {
->  
-> 		sprintf(path, "/sys/devices/system/cpu/cpu%d/cpuidle/state%d/name",
+... Doug
 
 
