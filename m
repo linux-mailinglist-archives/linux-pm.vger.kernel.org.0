@@ -2,210 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2E31928E2
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 13:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84951192911
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Mar 2020 14:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727275AbgCYMvW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Mar 2020 08:51:22 -0400
-Received: from mga06.intel.com ([134.134.136.31]:41398 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726820AbgCYMvW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 25 Mar 2020 08:51:22 -0400
-IronPort-SDR: ReFhl/8dJkKl3Sh4AR0pR/HAJ9Q9dDdK7HMBtQ3jMzTs9OtfNB00nDQK4UWi03VQOXhuQnjasy
- LmMvNeFaC44w==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Mar 2020 05:51:21 -0700
-IronPort-SDR: 4UGOnkfEhu4Ai8WJKJ2ypyQu+d+OroBtb+6YtpHLTuRjp98guUTsQehfiURK8bHRpDek9WlnAC
- deR7pdkEcGQw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,304,1580803200"; 
-   d="scan'208";a="448255548"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga006.fm.intel.com with ESMTP; 25 Mar 2020 05:51:18 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jH5VA-00Couf-OH; Wed, 25 Mar 2020 14:51:20 +0200
-Date:   Wed, 25 Mar 2020 14:51:20 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     a.hajda@samsung.com, artem.bityutskiy@linux.intel.com,
-        balbi@kernel.org, broonie@kernel.org, fntoth@gmail.com,
-        grant.likely@arm.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        peter.ujfalusi@ti.com, rafael@kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
- can't be satisfied
-Message-ID: <20200325125120.GX1922688@smile.fi.intel.com>
-References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
- <20200325032901.29551-1-saravanak@google.com>
+        id S1727298AbgCYNAb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Mar 2020 09:00:31 -0400
+Received: from mailgate1.rohmeurope.com ([87.129.152.131]:51274 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726969AbgCYNAb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Mar 2020 09:00:31 -0400
+X-AuditID: c0a8fbf4-473ff70000004419-13-5e7b55ec4e15
+Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 9D.22.17433.CE55B7E5; Wed, 25 Mar 2020 14:00:28 +0100 (CET)
+Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
+ WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
+ 14.03.0487.000; Wed, 25 Mar 2020 14:00:22 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "brendanhiggins@google.com" <brendanhiggins@google.com>,
+        "olteanv@gmail.com" <olteanv@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "talgi@mellanox.com" <talgi@mellanox.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davidgow@google.com" <davidgow@google.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "yamada.masahiro@socionext.com" <yamada.masahiro@socionext.com>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
+        "bp@suse.de" <bp@suse.de>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+        "zaslonko@linux.ibm.com" <zaslonko@linux.ibm.com>,
+        "Laine, Markus" <Markus.Laine@fi.rohmeurope.com>,
+        "vincenzo.frascino@arm.com" <vincenzo.frascino@arm.com>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "uwe@kleine-koenig.org" <uwe@kleine-koenig.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v6 09/10] power: supply: Support ROHM bd99954 charger
+Thread-Topic: [PATCH v6 09/10] power: supply: Support ROHM bd99954 charger
+Thread-Index: AQHWAbbAyLpT1a+wPEGvvo/J38Wk46hXbxYAgAAMuoCAAaNYgIAACT8AgAAOHAA=
+Date:   Wed, 25 Mar 2020 13:00:21 +0000
+Message-ID: <d533c18dcd7b4d4ca453661b3f9495a840b3313b.camel@fi.rohmeurope.com>
+References: <cover.1584977512.git.matti.vaittinen@fi.rohmeurope.com>
+         <1bf2431b80489ae412e774519a92616a9aa2bcca.1584977512.git.matti.vaittinen@fi.rohmeurope.com>
+         <20200324095024.GE1922688@smile.fi.intel.com>
+         <20200324103557.GH1922688@smile.fi.intel.com>
+         <4d75bfeab55c04cc3ca751cf7c364c812848e9ed.camel@fi.rohmeurope.com>
+         <20200325120956.GW1922688@smile.fi.intel.com>
+In-Reply-To: <20200325120956.GW1922688@smile.fi.intel.com>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [62.78.225.252]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8458127121B9DC4B8A7B83B56FAB4226@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200325032901.29551-1-saravanak@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf0wbZRjH995d7w62mlsp9l2HIl22Baab80fyahYz/cMcbjFsczHRCLvJ
+        SZvBlVxbBacRt0loKxEcXaVCWcr4IWkstOgYtKzWSkBN6yayoTglI4sFh3FbhjCyecdtg7/u
+        uef7/Tzf902el8Y1/ZSeNglWXhS4UgOZTkQ7bwUf+3v/4cLHxy5tQk0BP4lqj7gxNH/jH4Dq
+        P8lF5y4ex5FrcopEbtdPADUljxFouKebQC3xhAodbQ2QyDmdhZLJbgrdHK3BUMNiB4Z+7m8i
+        0fXaOEBtF85hqKltmECtHZtQd2gOQ1cn3AT6KBKnUMTdrkI/DFjRieYIhUJBF44uXPsVQ5Hb
+        8wSKXLoO0NC/82BnNuv3+gHb+8U4xp7x/E6xX0c3sieDNjbUmce2hlMYG+yyk+yn7T4VOzEW
+        JtnZRIJihz+7RbB1vihgvSN72LPNfoq94v4WK8h4bfWOg5z17X2mEmHbcwdWG/3xo1R5e06F
+        L1KvqgJ9jzhAGg2Zp2Br6D+VA6TTGuYXALt6W+7+DAM4FR4nHYCmSWYHdIxTMqBldsGF2YtA
+        9uCMl4aXR84vAauYGAFbQl5MdmUw+bDzD1mQiZdgR3WEVOqXof9aIyHXBLMR2n+0A7lWS317
+        9TFKSV7E4J2Id8mUxjwLA8nBJRNgHoL2qtmlAJzRweCVOZVyBwaeCidxpc6Eqcu37/Zz4Om5
+        Lwn5BjiTCwP92xR0J2ypcRBKnQMbnJOUcoa1cKRxiqgDOs+KBM8y7VlBe1bQnhX0SaDqArCM
+        M5WWcFZ++1aRt20VzcYy6fOmuSwIlF280QfuxPJjAKNBDKyjMUOmOrTncKHmgYPm4kojZzEW
+        ibZS3hIDkMYNWnWIryjUqIu5ynd50XxPWk8TBp1682T9GxpGzjrE8+W8eE/NomkDVDtfkYau
+        FfkSvuItU6l1WcboNHl4ul5r4YViXuRsVmORvC1FFmldZGmNlPv+PglXW8q5MqmroN+DLXRd
+        qtmH0/HmNh+uIQSzwOt16s/lJEa2Gm3C/aBpoKOBIUN9Vh60RnqQ9+dMSxGYFFHieUeOsHLL
+        kr4KRD+cyTux5eH12q/CA9nZ1XZOwFKLtQszxxNObTg/pwdUOT94cTwvt/0mufCoVfWE++nM
+        Iwc2DG42few/PzGU9WdBz0xP6sycftXrv32HvbeuczS98sm+idreQ42uUSHa9uDA7qn604GG
+        /VcDib2eGteru/96IVk8+M0GNMSOFex6/hkDYTFy2/Nw0cL9D9Cl1mZNBAAA
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 08:29:01PM -0700, Saravana Kannan wrote:
-> On Tue, Mar 24, 2020 at 5:38 AM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > Consider the following scenario.
-> > 
-> > The main driver of USB OTG controller (dwc3-pci), which has the following
-> > functional dependencies on certain platform:
-> > - ULPI (tusb1210)
-> > - extcon (tested with extcon-intel-mrfld)
-> > 
-> > Note, that first driver, tusb1210, is available at the moment of
-> > dwc3-pci probing, while extcon-intel-mrfld is built as a module and
-> > won't appear till user space does something about it.
-> > 
-> > This is depicted by kernel configuration excerpt:
-> > 
-> >	CONFIG_PHY_TUSB1210=y
-> >	CONFIG_USB_DWC3=y
-> >	CONFIG_USB_DWC3_ULPI=y
-> >	CONFIG_USB_DWC3_DUAL_ROLE=y
-> >	CONFIG_USB_DWC3_PCI=y
-> >	CONFIG_EXTCON_INTEL_MRFLD=m
-> > 
-> > In the Buildroot environment the modules are probed by alphabetical ordering
-> > of their modaliases. The latter comes to the case when USB OTG driver will be
-> > probed first followed by extcon one.
-> > 
-> > So, if the platform anticipates extcon device to be appeared, in the above case
-> > we will get deferred probe of USB OTG, because of ordering.
-> > 
-> > Since current implementation, done by the commit 58b116bce136 ("drivercore:
-> > deferral race condition fix") counts the amount of triggered deferred probe,
-> > we never advance the situation -- the change makes it to be an infinite loop.
-> 
-> Hi Andy,
-> 
-> I'm trying to understand this sequence of steps. Sorry if the questions
-> are stupid -- I'm not very familiar with USB/PCI stuff.
-
-Thank you for looking into this. My answer below.
-
-As a first thing I would like to tell that there is another example of bad
-behaviour of deferred probe with no relation to USB. The proposed change also
-fixes that one (however, less possible to find in real life).
-
-> > ---8<---8<---
-> > 
-> > [   22.187127] driver_deferred_probe_trigger <<< 1
-> > 
-> > ...here is the late initcall triggers deferred probe...
-> > 
-> > [   22.191725] platform dwc3.0.auto: deferred_probe_work_func in deferred list
-> > 
-> > ...dwc3.0.auto is the only device in the deferred list...
-> 
-> Ok, dwc3.0.auto is the only unprobed device at this point?
-
-Correct.
-
-> > [   22.198727] platform dwc3.0.auto: deferred_probe_work_func 1 <<< counter 1
-> > 
-> > ...the counter before mutex is unlocked is kept the same...
-> > 
-> > [   22.205663] platform dwc3.0.auto: Retrying from deferred list
-> > 
-> > ...mutes has been unlocked, we try to re-probe the driver...
-> > 
-> > [   22.211487] bus: 'platform': driver_probe_device: matched device dwc3.0.auto with driver dwc3
-> > [   22.220060] bus: 'platform': really_probe: probing driver dwc3 with device dwc3.0.auto
-> > [   22.238735] bus: 'ulpi': driver_probe_device: matched device dwc3.0.auto.ulpi with driver tusb1210
-> > [   22.247743] bus: 'ulpi': really_probe: probing driver tusb1210 with device dwc3.0.auto.ulpi
-> > [   22.256292] driver: 'tusb1210': driver_bound: bound to device 'dwc3.0.auto.ulpi'
-> > [   22.263723] driver_deferred_probe_trigger <<< 2
-> > 
-> > ...the dwc3.0.auto probes ULPI, we got successful bound and bumped counter...
-> > 
-> > [   22.268304] bus: 'ulpi': really_probe: bound device dwc3.0.auto.ulpi to driver tusb1210
-> 
-> So where did this dwc3.0.auto.ulpi come from?
-
-> Looks like the device is created by dwc3_probe() through this call flow:
-> dwc3_probe() -> dwc3_core_init() -> dwc3_core_ulpi_init() ->
-> dwc3_ulpi_init() -> ulpi_register_interface() -> ulpi_register()
-
-Correct.
-
-> > [   22.276697] platform dwc3.0.auto: Driver dwc3 requests probe deferral
-> 
-> Can you please point me to which code patch actually caused the probe
-> deferral?
-
-Sure, it's in drd.c.
-
-if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
-  edev = extcon_get_extcon_dev(name);
-  if (!edev)
-    return ERR_PTR(-EPROBE_DEFER);
-  return edev;
-}
-
-> > ...but extcon driver is still missing...
-> > 
-> > [   22.283174] platform dwc3.0.auto: Added to deferred list
-> > [   22.288513] platform dwc3.0.auto: driver_deferred_probe_add_trigger local counter: 1 new counter 2
-> 
-> I'm not fully aware of all the USB implications, but if extcon is
-> needed, why can't that check be done before we add and probe the ulpi
-> device? That'll avoid this whole "fake" probing and avoid the counter
-> increase. And avoid the need for this patch that's touching the code
-> code that's already a bit delicate.
-
-> Also, with my limited experience with all the possible drivers in the
-> kernel, it's weird that the ulpi device is added and probed before we
-> make sure the parent device (dwc3.0.auto) can actually probe
-> successfully.
-
-As I said above the deferred probe trigger has flaw on its own.
-Even if we fix for USB case, there is (and probably will be) others.
-
-> Most of the platform device code I've seen in systems with OF (device
-> tree) add the child devices towards the end of the parent's probe
-> function.
-
-> > ...and since we had a successful probe, we got counter mismatch...
-> > 
-> > [   22.297490] driver_deferred_probe_trigger <<< 3
-> > [   22.302074] platform dwc3.0.auto: deferred_probe_work_func 2 <<< counter 3
-> > 
-> > ...at the end we have a new counter and loop repeats again, see 22.198727...
-> > 
-> > ---8<---8<---
-> > 
-> > Revert of the commit helps, but it is probably not helpful for the initially
-> > found regression. Artem Bityutskiy suggested to use counter of the successful
-> > probes instead. This fixes above mentioned case and shouldn't prevent driver
-> > to reprobe deferred ones.
-> > 
-> > Under "successful probe" we understand the state when a driver of the certain
-> > device is being kept bound after deferred probe trigger cycle. For instance,
-> > in the above mentioned case probing of tusb1210 is not successful because dwc3
-> > driver unbinds device dwc3.0.auto.ulpi. The atomic_dec() call is used to keep
-> > track of this. The amount of bindings is always great than or equal to the
-> > amount of unbindings as guaranteed by design of the driver binding mechanism.
-> 
-> The unbindings count can increase for other unrelated drivers unbinding
-> too. Wouldn't it? Seems a bit fragile and racy in a fashion similar to
-> the issue the original patch was trying to fix.
-
-Yes, it's (unlikely) possible (*), but it will give one more iteration per such
-case. It's definitely better than infinite loop. Do you agree?
-
-*) It means during probe you have _intensive_ removing, of course you may keep
-kernel busy with iterations, but it has no practical sense. DoS attacks more
-effective in different ways.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+V2VsbCwgR29vZCBtb3JuaW5nIEFuZHkgOikNCg0KT24gV2VkLCAyMDIwLTAzLTI1IGF0IDE0OjA5
+ICswMjAwLCBhbmRyaXkuc2hldmNoZW5rb0BsaW51eC5pbnRlbC5jb20NCndyb3RlOg0KPiBPbiBX
+ZWQsIE1hciAyNSwgMjAyMCBhdCAxMTozNjo0NkFNICswMDAwLCBWYWl0dGluZW4sIE1hdHRpIHdy
+b3RlOg0KPiA+IE9uIFR1ZSwgMjAyMC0wMy0yNCBhdCAxMjozNSArMDIwMCwgQW5keSBTaGV2Y2hl
+bmtvIHdyb3RlOg0KPiA+ID4gT24gVHVlLCBNYXIgMjQsIDIwMjAgYXQgMTE6NTA6MjRBTSArMDIw
+MCwgQW5keSBTaGV2Y2hlbmtvIHdyb3RlOg0KPiA+ID4gPiBPbiBUdWUsIE1hciAyNCwgMjAyMCBh
+dCAxMDozMjoxOUFNICswMjAwLCBNYXR0aSBWYWl0dGluZW4NCj4gPiA+ID4gd3JvdGU6DQo+ID4g
+PiA+ID4gKyNpbmNsdWRlIDxsaW51eC9hY3BpLmg+DQo+ID4gPiA+ID4gKyNpbmNsdWRlIDxsaW51
+eC9vZi5oPg0KPiA+ID4gPiANCj4gPiA+ID4gSSBkaWRuJ3QgZmluZCBhbnkgZXZpZGVuY2Ugb2Yg
+dXNlIG9mIHRob3NlIHR3bywgb3RoZXJ3aXNlLA0KPiA+ID4gPiBtaXNzZWQNCj4gPiA+ID4gcHJv
+cGVydHkuaA0KPiA+ID4gPiBhbmQgcGVyaGFwcyBtb2RfZGV2aWNldGFibGUuaC4NCj4gDQo+IC4u
+Lg0KPiANCj4gPiA+ID4gPiArTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgYmQ5OTk1eF9vZl9tYXRj
+aCk7DQo+ID4gPiA+ID4gK01PRFVMRV9ERVZJQ0VfVEFCTEUoYWNwaSwgYmQ5OTk1eF9hY3BpX21h
+dGNoKTsNCj4gPiA+IA0KPiA+ID4gSSBoYXZlIHRvIGFkZCBzaW5jZSB5b3UgYXJlIHVzaW5nIHRo
+b3NlIG1hY3JvcyB3aXRob3V0IGlmZGVmZmVyeSwNCj4gPiA+IHlvdQ0KPiA+ID4gc2hvdWxkDQo+
+ID4gPiBnZXQgd2FybmluZyBpbiAhQUNQSSBhbmQvb3IgIU9GIGNhc2VzLg0KPiA+ID4gDQo+ID4g
+PiBTbywgZHJvcCB0aG9zZSBvZl9tYXRjaF9wdHIoKSAvIEFDUElfUFRSKCkgYW5kIHRodXMgYWJv
+dmUNCj4gPiA+IGhlYWRlcnMuDQo+ID4gDQo+ID4gU29ycnkgYnV0IEkgZG9uJ3QgZm9sbG93IDov
+IEkgZGlkIGRyb3Agd2hvbGUgQUNQSSB0YWJsZSBhcyB0aGUNCj4gPiBiYXR0ZXJ5DQo+ID4gaW5m
+b3JtYXRpb24gaXMgbm90IGZldGNoZWQgZnJvbSBBQ1BJIGFueXdheXMuDQo+IA0KPiBPa2F5LCBs
+ZXQncyBmb3JnZXQgdGhlbiBhYm91dCBBQ1BJIGJpdHMuDQo+IA0KPiA+IEJ1dCBJIGRvbid0IGtu
+b3cgd2hhdCB5b3UNCj4gPiBtZWFuIGJ5IGRyb3BwaW5nIHRoZSBvZl9tYXRjaF9wdHI/DQo+IA0K
+PiBMaXRlcmFsbHkgZG8gbm90IHVzZSB0aGlzIG1hY3JvLiBPdGhlcndpc2UgeW91IG1ha2UgYSBk
+ZXBlbmRlbmN5IHRvDQo+IE9GIHdoaWNoDQo+IHNob3VsZCBiZSB0aGVuIGluIHRoZSBLY29uZmln
+IGxpa2UNCj4gDQo+IAlkZXBlbmQgb24gT0YgfHwgQ09NUElMRV9URVNUDQo+IA0KDQpIbW0uLi4g
+V2h5IGlzIHRoYXQ/IEluIG9mLmggd2UgaGF2ZSAjaWZuZGVmIENPTkZJR19PRiBzZWN0aW9uIHdo
+aWNoDQpkZWZpbmVzOg0KDQojZGVmaW5lIG9mX21hdGNoX3B0cihfcHRyKQlOVUxMDQoNClNvLCB0
+aGlzIG1hY3JvIGlzIHdlbGwgZGVmaW5lZCBldmVuIGlmICFDT05GSUdfT0YsIHJpZ2h0Pw0KDQoN
+Cj4gYnV0IGluIHRoaXMgY2FzZSB5b3Ugd2lsbCBnZXQgY29tcGlsZXIgd2FybmluZyB3aXRob3V0
+IHVnbHkgaWZkZWZmZXJ5DQo+IGFyb3VuZA0KPiBPRiBJRCB0YWJsZSAoYXMgeW91IHBvaW50ZWQg
+YmVsb3cgeW91IGRpZG4ndCB0ZXN0IHRoYXQgc2NlbmFyaW8pLg0KPiANCj4gPiBJIGZvciBzdXJl
+IG5lZWQgdGhlIG9mX2RldmljZV9pZCBhcw0KPiA+IGluIG1hbnkgY2FzZXMgYm90aCB0aGUgZGV2
+aWNlIG1hdGNoaW5nIGFuZCBtb2R1bGUgbWF0Y2hpbmcgYXJlIGRvbmUNCj4gPiBiYXNlZCBvbiAg
+b2ZfbWF0Y2hfdGFibGUgYW5kIG9mX2RldmljZV9pZC4NCj4gPiANCj4gPiBJIGFkbWl0IEkgZGlk
+bid0IHRyeSBjb21waWxpbmcgdGhlICFPRiBjb25maWcuIEFyZSB5b3Ugc3VnZ2VzdGluZyBJDQo+
+ID4gc2hvdWxkIHB1dCB0aGUgb2ZfZGV2aWNlX2lkIGFycmF5IGFuZCBwb3B1bGF0aW5nIHRoZSBv
+Zl9tYXRjaF90YWJsZQ0KPiA+IGluDQo+ID4gI2lmZGVmIENPTkZJR19PRj8gT3IgbWF5YmUgeW91
+IHN1Z2dlc3QgdGhhdCBJIHdpbGwgcHV0IG9mX2RldmljZV9pZA0KPiA+IGFycmF5IGluICNpZmRl
+ZiBDT05GSUdfT0YgYW5kIHVzZSBvZl9tYXRjaF9wdHIoKSB3aGVuIHBvcHVsYXRpbmcNCj4gPiB0
+aGUNCj4gPiBvZl9tYXRjaF90YWJsZSBwb2ludGVyPyBJIGd1ZXNzIHRoYXQgd291bGQgbWFrZSBz
+ZW5zZS4gSSdsbCBkbyB0aGF0DQo+ID4gLQ0KPiA+IGNhbiB5b3UgcGxlYXNlIGV4cGxhaW4gaWYg
+dGhpcyB3YXMgbm90IHdoYXQgeW91IG1lYW50Lg0KPiANCj4gT25lIG9mIHVzIG5lZWRzIGEgbW9y
+bmluZyBjb3ZmZWZlLCBJIHRoaW5rIDotKQ0KDQpTbyBpbiAhQ09ORklHX09GIGNhc2Ugd2Ugd2ls
+bCBoYXZlDQoub2ZfbWF0Y2hfdGFibGUgPSBvZl9tYXRjaF9wdHIoYmQ5OTk1eF9vZl9tYXRjaCks
+DQpwcmVwcm9jZXNzZWQgdG8gZm9ybQ0KLm9mX21hdGNoX3RhYmxlID0gTlVMTCwNCg0KcmlnaHQ/
+IFNvIHdpdGggdGhpcyBtYWNybyB3ZSBjYW4gb21pdCBpbnRyb2R1Y3Rpb24gb2YgYmQ5OTk1eF9v
+Zl9tYXRjaA0Kd2hlbiAhQ09ORklHX09GIC0gbWVhbmluZyB3ZSBvbmx5IGJ1aWxkICNpZmRlZmZl
+cnkgYXJvdW5mIHRoZSBtYXRjaA0KdGFibGUgYW5kIG5vdCBhcm91bmQgdGhpcyBhc3NpZ25tZW50
+Lg0KDQpTbyBJJ2xsIGp1c3QgZG8gDQoNCiNpZmRlZiBDT05GSUdfT0YgICANCnN0YXRpYyBjb25z
+dCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIGJkOTk5NXhfb2ZfbWF0Y2hbXSA9IHsNCiAgICAgICAgeyAu
+Y29tcGF0aWJsZSA9ICJyb2htLGJkOTk5NTQiLCB9LA0KICAgICAgICB7IH0NCn07ICAgICAgICAg
+IA0KTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgYmQ5OTk1eF9vZl9tYXRjaCk7DQojZW5kaWYNCg0K
+YW5kIGxldCB0aGUNCiNkZWZpbmUgb2ZfbWF0Y2hfcHRyKF9wdHIpCU5VTEwNCmZpeCBhc3NpZ25t
+ZW50DQoub2ZfbWF0Y2hfdGFibGUgPSBvZl9tYXRjaF9wdHIoYmQ5OTk1eF9vZl9tYXRjaCksDQoN
+CndoZW4gIUNPTkZJR19PRi4NCg0KQnIsDQoJTWF0dGkNCg==
