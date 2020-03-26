@@ -2,222 +2,289 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5166194044
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 14:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EDF019408D
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 14:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727729AbgCZNst (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 09:48:49 -0400
-Received: from mail-eopbgr10080.outbound.protection.outlook.com ([40.107.1.80]:48558
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727444AbgCZNss (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 26 Mar 2020 09:48:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tgqy24BmzozvGQTMibtjgJY0iHTS1xZkK4dproG9vVU=;
- b=w73oKZRbtwEVmC3Z3oar/bTAy9QfE081eORk4HcjnKscV6gWSGxZ2XJ9QMgY5IXf6mIvGOXkCEVVJihdqV7k0FC0UBdGIdKtIyi4jABh7eAgjOLgNImQ0kAuqprHFkKQ5byO4QiLiglh9TPSrXN8uNLnMZWY3shzWFBEgNMdJFk=
-Received: from DB3PR0102CA0021.eurprd01.prod.exchangelabs.com
- (2603:10a6:8::34) by AM0PR08MB3490.eurprd08.prod.outlook.com
- (2603:10a6:208:e4::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.19; Thu, 26 Mar
- 2020 13:48:43 +0000
-Received: from DB5EUR03FT046.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:8:0:cafe::8c) by DB3PR0102CA0021.outlook.office365.com
- (2603:10a6:8::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.19 via Frontend
- Transport; Thu, 26 Mar 2020 13:48:43 +0000
-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; vger.kernel.org; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;vger.kernel.org; dmarc=bestguesspass
- action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DB5EUR03FT046.mail.protection.outlook.com (10.152.21.230) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2856.17 via Frontend Transport; Thu, 26 Mar 2020 13:48:43 +0000
-Received: ("Tessian outbound e13acb17570e:v48"); Thu, 26 Mar 2020 13:48:43 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 183e9a8fb6d4ddef
-X-CR-MTA-TID: 64aa7808
-Received: from 1e3552f4845c.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 2574BCEB-31F7-4458-96AC-41B83FCFAD2E.1;
-        Thu, 26 Mar 2020 13:48:38 +0000
-Received: from EUR03-DB5-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 1e3552f4845c.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Thu, 26 Mar 2020 13:48:37 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ftc/0uyVaNK9Q4O8nCTO6f15x1A75/QqwwfePcNAUHeWMyJrbG5aBurxV92h/sK9xXoEG/0wWaX/N1HRo4UHaUmNkL2VF5P4idmaQYJUUhsXySxIlao9LhkSSxdz5UEpX2lsyjzxN3SqGi0ajG38fG25BbwDUetKkUStKIM50sHXkvHHJEixOdRoLDZoU7W2G3/pmRwoO6gGvN8uOScHwWZFgkRrY5eT3+OFX30IaRlKMmoYaECV9E7Wr3PxzT/dU7I+1nAZEb61CL8rxEnBBgwuOrLzRzDzwZ0henW+naS+uBz0QVNG2X/6Qt7aPKzmRBCllHhU5cYxyNpnxe8d4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tgqy24BmzozvGQTMibtjgJY0iHTS1xZkK4dproG9vVU=;
- b=juyRheNSlad73kbkw+1MNnOWey+VXg4qJBXL1qTLVqyQKlrN4BpzVGq2doe7kl5/VzmlGjDaOPOJ8d6oQjZW5MRBQD2v/8IeaVk+nMBSM3Tgis2FmiMRg9eggMRQu9D6muEwMloLTfJ2kI2+c9rwT8pkH+OfQnzu7jJfaeF4JHMsXwDLsLQlkfqmoAmPdXFUoeUZMuoPsod3pGewCdVC+gBn15R87t9BKhpt/vkIc558EQhY+h3qr3Zpn4fZfYFXatYMvI3Cb8xQe1vM9hC6LPgNVdlBV7YjU7n6frtV7kt9HpLKpS1dpjdjfuQgyEghYaWwXJqsQPvS1BY8Nvdb/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tgqy24BmzozvGQTMibtjgJY0iHTS1xZkK4dproG9vVU=;
- b=w73oKZRbtwEVmC3Z3oar/bTAy9QfE081eORk4HcjnKscV6gWSGxZ2XJ9QMgY5IXf6mIvGOXkCEVVJihdqV7k0FC0UBdGIdKtIyi4jABh7eAgjOLgNImQ0kAuqprHFkKQ5byO4QiLiglh9TPSrXN8uNLnMZWY3shzWFBEgNMdJFk=
-Authentication-Results-Original: spf=none (sender IP is )
- smtp.mailfrom=Grant.Likely@arm.com; 
-Received: from DB8PR08MB4010.eurprd08.prod.outlook.com (20.179.10.207) by
- DB8PR08MB4569.eurprd08.prod.outlook.com (20.179.12.150) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2835.20; Thu, 26 Mar 2020 13:48:36 +0000
-Received: from DB8PR08MB4010.eurprd08.prod.outlook.com
- ([fe80::4521:d746:9e7:4ae3]) by DB8PR08MB4010.eurprd08.prod.outlook.com
- ([fe80::4521:d746:9e7:4ae3%5]) with mapi id 15.20.2835.023; Thu, 26 Mar 2020
- 13:48:36 +0000
-Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
- can't be satisfied
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mark Brown <broonie@kernel.org>, Ferry Toth <fntoth@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Android Kernel Team <kernel-team@android.com>,
-        nd <nd@arm.com>
-References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
- <20200325032901.29551-1-saravanak@google.com>
- <20200325125120.GX1922688@smile.fi.intel.com>
- <CAGETcx_TGw24UqX7pXZePyskrao6zwnKTq8mBk9g_7jokqAqkA@mail.gmail.com>
- <CAJZ5v0jB1hqzYK8ezjf1_1yMCudNXNS-CsrUJQcmL4W5mBD6fQ@mail.gmail.com>
- <20200326115730.GQ1922688@smile.fi.intel.com>
-From:   Grant Likely <grant.likely@arm.com>
-Message-ID: <73f75a7d-dd5d-30d3-0acc-549d87a5ab1c@arm.com>
-Date:   Thu, 26 Mar 2020 13:48:33 +0000
+        id S1726359AbgCZNzh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 09:55:37 -0400
+Received: from mout01.posteo.de ([185.67.36.65]:51159 "EHLO mout01.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727732AbgCZNzh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 26 Mar 2020 09:55:37 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 35D06160065
+        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 14:55:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1585230934; bh=x4jYAka8aP1YBwXjiPv/wSh1i4s7WuNfZrX9rKaquus=;
+        h=Subject:To:Cc:From:Autocrypt:Date:From;
+        b=AbZ/DUJ+Iv0L+PCRC/xeSKj3Z6aD3uvlpRO+PJnihvRIWEqPkd9aBxlZ/YqjptG1H
+         FX888uu17aUZdMH8uMyaXJaIGF8tHf78pPUV0BGAhmeDIM8gg+72vWVI3Z8hOtFiCS
+         a8Ki1YmWdxCdhyI/xttD/PYtS9MJ5+qzoVex0C0lgveLm0eFXGj+aULosuLJRUJxYD
+         kxD1ILPtQ1MD/j7tVJ21N+WWFpJMK+N8oz8bslIrCdGC53sFXBGifENvByQNUlN/NR
+         3B12fznr6NqkHfahtTYmLk4ss7Uip2m0Yh4knevVX0qMOBI8UvLCLTcruvCzV01qRy
+         LB3GbYldQMHjg==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 48p62921xjz6tm9;
+        Thu, 26 Mar 2020 14:55:28 +0100 (CET)
+Subject: Re: [PATCH 0/8] interconnect: Add imx support via devfreq
+To:     Leonard Crestez <leonard.crestez@nxp.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Angus Ainslie <angus@akkea.ca>,
+        Silvano di Ninno <silvano.dininno@nxp.com>,
+        linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <cover.1585188174.git.leonard.crestez@nxp.com>
+From:   Martin Kepplinger <martink@posteo.de>
+Autocrypt: addr=martink@posteo.de; keydata=
+ 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
+Message-ID: <1ae21355-df95-44e5-b8f6-14af7aa4fcc3@posteo.de>
+Date:   Thu, 26 Mar 2020 14:55:27 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.6.0
-In-Reply-To: <20200326115730.GQ1922688@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+MIME-Version: 1.0
+In-Reply-To: <cover.1585188174.git.leonard.crestez@nxp.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0415.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:a0::19) To DB8PR08MB4010.eurprd08.prod.outlook.com
- (2603:10a6:10:ab::15)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.16.141] (92.40.174.0) by LO2P265CA0415.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:a0::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.18 via Frontend Transport; Thu, 26 Mar 2020 13:48:35 +0000
-X-Originating-IP: [92.40.174.0]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 4813b717-eeeb-41f8-c729-08d7d18c660c
-X-MS-TrafficTypeDiagnostic: DB8PR08MB4569:|AM0PR08MB3490:
-X-Microsoft-Antispam-PRVS: <AM0PR08MB34905447BBB94F7621626ABC95CF0@AM0PR08MB3490.eurprd08.prod.outlook.com>
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;OLM:8882;
-X-Forefront-PRVS: 0354B4BED2
-X-Forefront-Antispam-Report-Untrusted: SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(136003)(366004)(346002)(39860400002)(316002)(16576012)(110136005)(8936002)(4326008)(478600001)(44832011)(16526019)(8676002)(81166006)(81156014)(26005)(186003)(36756003)(66476007)(86362001)(52116002)(31696002)(54906003)(31686004)(7416002)(55236004)(53546011)(956004)(2616005)(6486002)(2906002)(5660300002)(66556008)(66946007);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR08MB4569;H:DB8PR08MB4010.eurprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;
-Received-SPF: None (protection.outlook.com: arm.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: 9yqaJZzzShC31io2yPFeiUXm135ZovrAz3UMAvcTiEJvR1+ZDsdpmpSPqGg3GCFvoNv+U2Nkf70BsDPgopCHLynLZxGyWaNfJR3X7fOIfHDuFxWzEc5RzKxAshZacAAGQqL8tWSJ9iIOKQEGEKYpuT/lBif3nhXO4152eLHaGDp+HilyE+/XBhszxJcUtoj2BxHdyE4MHXkgn+OyNNTY0A3Yg6RKxn+2NVuB8m59tO5bo1fONuwfrzYC7BHu65Z2VqOb2KHqUCmHXNaeUkc+C5sGwBd4hknC7Kvwsy+kFksurxOCUXHpTgdfnxC/+AAOo+PTdGJEdsoMhQEsbbWhEk4onRwqtIRb9RYdcH+o3Of2u95aPv0iPMnfKeAmAx97/501XkDNux9f2obsABcfzBz0GX15UQa/qDOJp80mqfrg/RjZMiVFqhgSCGmCaZ/O
-X-MS-Exchange-AntiSpam-MessageData: VHvMD/vszstIuq99Co6E5unkYuXbKz603ysmAlWIqJepV+5pgOdZfKeTjnKKePXvHaBaKax5mKm3eccruTsRxPvvtIkRbU5REdfhXMsf9w8GMf5nTWhcHelws4liSx8EvsNcygOYLW4US9v54gBXvw==
-X-MS-Exchange-Transport-Forked: True
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR08MB4569
-Original-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=Grant.Likely@arm.com; 
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR03FT046.eop-EUR03.prod.protection.outlook.com
-X-Forefront-Antispam-Report: CIP:63.35.35.123;IPV:CAL;SCL:-1;CTRY:IE;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(396003)(136003)(39860400002)(346002)(376002)(46966005)(450100002)(356004)(82740400003)(4326008)(2906002)(81156014)(81166006)(47076004)(316002)(8936002)(16526019)(8676002)(16576012)(54906003)(110136005)(26005)(336012)(186003)(86362001)(26826003)(956004)(2616005)(44832011)(70586007)(6486002)(36756003)(31686004)(478600001)(70206006)(31696002)(5660300002)(53546011);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR08MB3490;H:64aa7808-outbound-1.mta.getcheckrecipient.com;FPR:;SPF:Pass;LANG:en;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 01674478-0f7b-4648-d2de-08d7d18c61fc
-X-Forefront-PRVS: 0354B4BED2
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UwSPyFJBdFvFMUdt7JD/Lo0V+XkXJ0CCyhMuPs+Z6JxbTiQZZn0BYlXByEHJClwhQ2c1N3TOxLAY+YbCl2/F5Aao/YkFPZGiBAovVCZxBlvYwrcmJTMqYSqn8IcLjzSXsHQPpnwQGfgw4Kg0hYx2KRwTLEftr1uFFVVFLIL2qD1xXZvgD2bf0N/fD6IkvF0WyDAYv+zKtw252LFgs5BVme+/RPJJ6VqRtTeG43J25U6cpC1/VvOqq/Zq7rdI1Vpc1SIc7bWYkBcje/bSMeId4ptsdNlcMefTV/9eo2QKMJCO1uBVPiUR8aw/R/9NlzJxZeQMV2jo6ejgN/ffn/io9KyEHi/qsAhPMj7TnTzy28TIKyDLl4b8dPxskFKrG0CoFzEGRFbKs2RBUEQtiEXfFSvN/Lat8wVTOMKT3ZNNnkkic1sxIKPL5fQ4GrA5/zQ3MjE8T8LewMjJU+efHD1dboKrdgvFByOwqQe8FWqnrjfCb+HSJeObTlt1JriEnghCIeIsjLw0vu4C16OB1APg6w==
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2020 13:48:43.3634
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4813b717-eeeb-41f8-c729-08d7d18c660c
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR08MB3490
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 26/03/2020 11:57, Andy Shevchenko wrote:
-> On Thu, Mar 26, 2020 at 09:39:40AM +0100, Rafael J. Wysocki wrote:
->> On Wed, Mar 25, 2020 at 11:09 PM Saravana Kannan <saravanak@google.com> wrote:
->>> On Wed, Mar 25, 2020 at 5:51 AM Andy Shevchenko
->>> <andriy.shevchenko@linux.intel.com> wrote:
+On 26.03.20 03:16, Leonard Crestez wrote:
+> This series adds interconnect scaling support for imx8m series chips. It uses a
+> per-SOC interconnect provider layered on top of multiple instances of devfreq
+> for scalable nodes along the interconnect.
 > 
->>>> Yes, it's (unlikely) possible (*), but it will give one more iteration per such
->>>> case. It's definitely better than infinite loop. Do you agree?
->>>
->>> Sorry I wasn't being clear (I was in a rush). I'm saying this patch
->>> can reintroduce the bug where the deferred probe isn't triggered when
->>> it should be.
->>>
->>> Let's take a simple execution flow.
->>>
->>> probe_okay is at 10.
->>>
->>> Thread-A
->>>    really_probe(Device-A)
->>>      local_probe_okay_count = 10
->>>      Device-A probe function is running...
->>>
->>> Thread-B
->>>    really_probe(Device-B)
->>>      Device-B probes successfully.
->>>      probe_okay incremented to 11
->>>
->>> Thread-C
->>>    Device-C (which had bound earlier) is unbound (say module is
->>> unloaded or a million other reasons).
->>>    probe_okay is decremented to 10.
->>>
->>> Thread-A continues
->>>    Device-A probe function returns -EPROBE_DEFER
->>>    driver_deferred_probe_add_trigger() doesn't do anything because
->>>      local_probe_okay_count == probe_okay
->>>    But Device-A might have deferred probe waiting on Device-B.
->>>    Device-A never probes.
->>>
->>>> *) It means during probe you have _intensive_ removing, of course you may keep
->>>> kernel busy with iterations, but it has no practical sense. DoS attacks more
->>>> effective in different ways.
->>>
->>> I wasn't worried about DoS attacks. More of a functional correctness
->>> issue what I explained above.
->>
->> The code is functionally incorrect as is already AFAICS.
->>
->>> Anyway, if your issue and similar issues can be handles in driver core
->>> in a clean way without breaking other cases, I don't have any problem
->>> with that. Just that, I think the current solution breaks other cases.
->>
->> OK, so the situation right now is that commit 58b116bce136 has
->> introduced a regression and so it needs to be fixed or reverted.  The
->> cases that were previously broken and were unbroken by that commit
->> don't matter here, so you cannot argue that they would be "broken".
->>
->> It looks to me like the original issue fixed by the commit in question
->> needs to be addressed differently, so I would vote for reverting it
->> and starting over.
+> Existing qcom interconnect providers mostly translate bandwidth requests into
+> firmware calls but equivalent firmware on imx8m is much thinner. Scaling
+> support for individual nodes is implemented as distinct devfreq drivers
+> instead.
 > 
-> I think Saravana's example is not fully correct as I had responded to his mail.
-> I would like to hear Grant, but seems he is busy with something and didn't reply.
+> The imx interconnect provider doesn't communicate with devfreq directly
+> but rather computes "minimum frequencies" for nodes along the path and
+> creates dev_pm_qos requests.
+> 
+> Since there is no single devicetree node that can represent the
+> "interconnect" the main NOC is picked as the "interconnect provider" and
+> will probe the interconnect platform device if #interconnect-cells is
+> present. This avoids introducing "virtual" devices but it means that DT
+> bindings of main NOC includes properties for both devfreq and
+> interconnect.
+> 
+> Only the ddrc and main noc are scalable right now but more can be added.
+> 
+> Also available on a github branch (with various unrelated changes):
+> 	https://github.com/cdleonard/linux/tree/next
+> Testing currently requires NXP branch of atf+uboot
+> 
+> Martin: I believe you should be able to use this to control DRAM
+> frequency from video by just adding interconnect consumer code to
+> nwl-dsi. Sample code:
+> 	https://github.com/cdleonard/linux/commit/43772762aa5045f1ce5623740f9a4baef988d083
+> 	https://github.com/cdleonard/linux/commit/7b601e981b1f517b5d98b43bde292972ded13086
+> 
 
-Sadly I don't look much like a kernel developer these days. The last 
-code change I committed to the kernel was over 4 years ago.
+Thanks for updating this series Leonard! A few questions for my
+understanding before trying to test:
 
-g.
+Isn't the ddrc_opp_table missing in these additions to the DT? That's
+what I want to scale after all.
+
+If I want to keep calling the "request", now icc_set_bw(), in nwl-dsi:
+I'd add an "interconnects" property to the node, but what would be my
+interconnect master? i.e.: interconnects = <&noc master? &noc
+IMX8MQ_ICS_DRAM>; At least it's not obvious to me from
+interconnect/imx/imx8mq.c
+
+the interconnect framework seems to be powerful indeed, but I still need
+to fully wrap my head around it.
+
+thanks for the help so far,
+
+                               martin
+
+
+> Changes since RFCv6:
+> * Replace scalable-nodes stuff with just a fsl,ddrc property. Future
+> scalable nodes can be added as additional phandles on the NOC
+> * Allow building interconnect drivers as modules
+> * Handle icc_provider_del errors in imx_icc_unregister (like EBUSY).
+> * Rename imx-devfreq to imx-bus, similar to exynos-bus
+> * Explain why imx bus clock enabling is not required
+> * All dependencies accepted (some time ago).
+> Link: https://patchwork.kernel.org/cover/11244421/
+> 
+> Changes since RFCv5:
+> * Replace scanning for interconnect-node-id with explicit
+> scalable-nodes/scalable-node-ids property on NoC.
+> * Now passes make `dtbs_check`
+> * Remove struct imx_icc_provider
+> * Switch to of_icc_xlate_onecell
+> * Use of_find_device_by_node to fetch QoS target, this causes fewer probe
+> deferrals, removes dependency on devfreq API and even allows reloading ddrc
+> module at runtime
+> * Add imx_icc_node_destroy helper
+> * Remove 0/1 on DEFINE_BUS_SLAVE/MASTER which created spurious links
+> Link: https://patchwork.kernel.org/cover/11222015/
+> 
+> Changes since RFCv4:
+> * Drop icc proxy nonsense
+> * Make devfreq driver for NOC probe the ICC driver if
+> #interconnect-cells is present
+> * Move NOC support to interconnect series and rename the node in DT
+> * Add support for all chips at once, differences are not intereseting
+> and there is more community interest for 8mq than 8mm.
+> Link: https://patchwork.kernel.org/cover/11111865/
+> 
+> Changes since RFCv3:
+> * Remove the virtual "icc" node and add devfreq nodes as proxy providers
+> * Fix build on 32-bit arm (reported by kbuilt test robot)
+> * Remove ARCH_MXC_ARM64 (never existed in upstream)
+> * Remove _numlinks, calculate instead
+> * Replace __BUSFREQ_H header guard
+> * Improve commit message and comment spelling
+> * Fix checkpatch issues
+> Link to RFCv3: https://patchwork.kernel.org/cover/11078671/
+> 
+> Changes since RFCv2 and initial work by Alexandre Bailon:
+> * Relying on devfreq and dev_pm_qos instead of CLK
+> * No more "platform opp" stuff
+> * No more special suspend handling: use suspend-opp on devfreq instead
+> * Replace all mentions of "busfreq" with "interconnect"
+> Link to v2: https://patchwork.kernel.org/cover/11021563/
+> 
+> Leonard Crestez (8):
+>   dt-bindings: interconnect: Add bindings for imx8m noc
+>   PM / devfreq: Add generic imx bus scaling driver
+>   PM / devfreq: imx: Register interconnect device
+>   interconnect: Add imx core driver
+>   interconnect: imx: Add platform driver for imx8mm
+>   interconnect: imx: Add platform driver for imx8mq
+>   interconnect: imx: Add platform driver for imx8mn
+>   arm64: dts: imx8m: Add NOC nodes
+> 
+>  .../bindings/interconnect/fsl,imx8m-noc.yaml  | 138 ++++++++
+>  arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  24 ++
+>  arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  24 ++
+>  arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  24 ++
+>  drivers/devfreq/Kconfig                       |   9 +
+>  drivers/devfreq/Makefile                      |   1 +
+>  drivers/devfreq/imx-bus.c                     | 181 +++++++++++
+>  drivers/interconnect/Kconfig                  |   1 +
+>  drivers/interconnect/Makefile                 |   1 +
+>  drivers/interconnect/imx/Kconfig              |  17 +
+>  drivers/interconnect/imx/Makefile             |   9 +
+>  drivers/interconnect/imx/imx.c                | 298 ++++++++++++++++++
+>  drivers/interconnect/imx/imx.h                |  62 ++++
+>  drivers/interconnect/imx/imx8mm.c             | 108 +++++++
+>  drivers/interconnect/imx/imx8mn.c             |  97 ++++++
+>  drivers/interconnect/imx/imx8mq.c             | 106 +++++++
+>  include/dt-bindings/interconnect/imx8mm.h     |  49 +++
+>  include/dt-bindings/interconnect/imx8mn.h     |  41 +++
+>  include/dt-bindings/interconnect/imx8mq.h     |  48 +++
+>  19 files changed, 1238 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+>  create mode 100644 drivers/devfreq/imx-bus.c
+>  create mode 100644 drivers/interconnect/imx/Kconfig
+>  create mode 100644 drivers/interconnect/imx/Makefile
+>  create mode 100644 drivers/interconnect/imx/imx.c
+>  create mode 100644 drivers/interconnect/imx/imx.h
+>  create mode 100644 drivers/interconnect/imx/imx8mm.c
+>  create mode 100644 drivers/interconnect/imx/imx8mn.c
+>  create mode 100644 drivers/interconnect/imx/imx8mq.c
+>  create mode 100644 include/dt-bindings/interconnect/imx8mm.h
+>  create mode 100644 include/dt-bindings/interconnect/imx8mn.h
+>  create mode 100644 include/dt-bindings/interconnect/imx8mq.h
+> 
