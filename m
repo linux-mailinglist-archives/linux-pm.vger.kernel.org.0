@@ -2,188 +2,324 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 298FF1947CC
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 20:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 684DC194802
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 20:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728317AbgCZTrg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 15:47:36 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:33792 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726067AbgCZTrf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 15:47:35 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 26so8266847wmk.1
-        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 12:47:33 -0700 (PDT)
+        id S1727879AbgCZT4N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 15:56:13 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:37283 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727446AbgCZT4M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 15:56:12 -0400
+Received: by mail-oi1-f194.google.com with SMTP id u20so1960097oic.4
+        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 12:56:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=P2ImsJYr74PJaUgD3J3NAZhPhQAV+PdgcrC1vpkJ5Co=;
-        b=Ttq7+2fdQWMW+Jb4KGIx7RANeLxPbevpZth/muivMtfHyA4o6PVQNR0swJyOOkW4Mb
-         V8r7HoYHh7cja8bZrZZ6uRz4Q2ygrCmlDyWPHHv81w4Qxla4YFB1hlcommmCRhpWY8XN
-         xmP1Iekda/XajlIIRvmH5EV641mHa84hf8vu1/UtcL5mB2zJmM7ohUwV2w/2zCpYH3a2
-         5ceOKbRrCUmsgzkxmpx338SJSAniOA8287nR+82EjNyT+e1k0mvq2X0JtZkL9sVALAi3
-         Z6uTzNACDGy1xwYD9vgByzRHrk/ZqeeGjzGU4Q30i1I3fw9t7ZMnLSOAdh/CHuSQBCt/
-         aJhQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v7QzDUhfwhoGkLZ3zOdU9l1vGMKm29JvohHiM8YvFao=;
+        b=BujfbLdPFBmzFoZbb00nCNM0ZruUKmCKibDCfwIAlqWJtdycm4MywllZGQGIHWKq7B
+         fcclCvY3YwQvgvNkzQsGDtzbD9eGUV6q1es4smHMC/mIYSfGtHYFJ2dw1vD+E//eNEG1
+         HiwDbnis+MgYiUlA8yoBU1rADvjJtgTgumyaWDHPBlouI939SiRloAq9uJN5eQ3mdB6p
+         x+4EckDe1RF6WXRLO9PwkYpUqrITHPlskET+DScWgmW0RQSbX5i24PGXm1jcDp12KzQx
+         iNu9V22UQ3WEY4yHQpeSRcDH3W88TUOdQxT2yzPeewuWYgpBv1PwTLDKR5liNqTTBGM3
+         c19w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=P2ImsJYr74PJaUgD3J3NAZhPhQAV+PdgcrC1vpkJ5Co=;
-        b=BYreayQPhNovdi1TaR+5G5P66Xxxtg5SVpSm0F7XZrKw8mpRZvvJop2BMU/Aw4LSk7
-         HhbH71l8aPG3mhwmJVQRW0DNbCPD3vxJe/TEWRE/am9ncRtIYJVE5u5ol13avDsnFp9t
-         iCaUzRhH+MnQLzZQpEXP04S5EL7fj3H+ALFmpFKc+d+e4Cn9Y8hsEyR7Pql3G6jyUjVm
-         9ag02skpe78IzkIJglZuAdXzM9Fs8z/ieyRmTJUV9RnXMbaWj3Hp61B7+hkyGHIcHE34
-         430Wor5w5z3D7IFLRDm3c7elxGP+qwf9zJZL+vLFr9GLF+XwS2hMmOZTDEBNOTUCQH+9
-         /9Jg==
-X-Gm-Message-State: ANhLgQ1le8wj2hWWZbvfJlVyOsC6Elgj16GMVB2cZtA/5TiVzVgYvQeT
-        II96iIyt7XmDBymfjkScIic9sD53f7s=
-X-Google-Smtp-Source: ADFU+vtXpO2y+IEsOr4/AaRKmVwvn3RneiauaoZqp6pUwnE1GdKFwb9FYdwRY8mDaWX7r07ATAxnHQ==
-X-Received: by 2002:adf:dd8f:: with SMTP id x15mr11763514wrl.201.1585252052923;
-        Thu, 26 Mar 2020 12:47:32 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:d702:b4a5:b331:1282? ([2a01:e34:ed2f:f020:d702:b4a5:b331:1282])
-        by smtp.googlemail.com with ESMTPSA id l4sm3686557wru.1.2020.03.26.12.47.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Mar 2020 12:47:32 -0700 (PDT)
-Subject: Re: [PATCH] powercap/drivers/idle_inject: Specify idle state max
- latency
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200326144630.15011-1-daniel.lezcano@linaro.org>
- <CAJZ5v0iDuv0doOzFd140A17fhLKsdgZXbc_XMOuhUeDt70Jz+g@mail.gmail.com>
- <bb21941a-69ff-36fe-05dd-8f3eb63326dc@linaro.org>
- <CAJZ5v0ghHFJCfG5vxE=O6+bD4neyvyF2WD6ASGptBaptm2-5Ow@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <2d8bcc54-e1f9-3d7b-e31a-8463c28dfecd@linaro.org>
-Date:   Thu, 26 Mar 2020 20:47:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v7QzDUhfwhoGkLZ3zOdU9l1vGMKm29JvohHiM8YvFao=;
+        b=KFdOhMK1icXL03ZvuxdqolGr5beH3fW3taxBXxFFESciEaAw712wkRmLnDlDZtQvzq
+         Oy5m3PxboK6ETddhyqxBB6tfOJF0r/oh1aJo3VHaHOyM8jf3aJ7bRwmWBzCyGbrtqNZD
+         6oGnJJO3NGL5iskobZEaaAoPpgg2UzMQdJmBH7HbsGohtGA19D8Vry0Rkkq9nv9KRn8p
+         cG510gauNufERgdcL1xW3XrKpBWj77Ip2XTfCZZNjIL6gzRhw3KJM+Qgz6dVmpngjcw5
+         jZuhVknImQRzPAQ2PIaH1FNFMAzuxileXfdjdBC5oYBDMGxAg5YzhP592ZiaZuWl/DJ9
+         vGew==
+X-Gm-Message-State: ANhLgQ390v0xI9sh9fQlzGIlZ/+WtQVx14SiNEFrhtCBgSH/F+Rc7igA
+        nLZt+zMW8+hCsjF7OCaJ02Co4IzIg7whe4UjUgTc0A==
+X-Google-Smtp-Source: ADFU+vuWVAeBxu9vm7NWou8KbIUNngFj9VIP9GdvfAIZd/0l2EIzprBFVrvbFEzn6tBQH/wl8pa9nO0qss/DHbpFyJc=
+X-Received: by 2002:aca:849:: with SMTP id 70mr1553894oii.30.1585252571292;
+ Thu, 26 Mar 2020 12:56:11 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0ghHFJCfG5vxE=O6+bD4neyvyF2WD6ASGptBaptm2-5Ow@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
+ <20200325032901.29551-1-saravanak@google.com> <20200325125120.GX1922688@smile.fi.intel.com>
+ <CAGETcx_TGw24UqX7pXZePyskrao6zwnKTq8mBk9g_7jokqAqkA@mail.gmail.com> <20200326115431.GP1922688@smile.fi.intel.com>
+In-Reply-To: <20200326115431.GP1922688@smile.fi.intel.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 26 Mar 2020 12:55:34 -0700
+Message-ID: <CAGETcx_3+YH_LmNUCAAk1OaXk6noHEXxcE+ckkoBqKJJhtpDjQ@mail.gmail.com>
+Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
+ can't be satisfied
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andrzej Hajda <a.hajda@samsung.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mark Brown <broonie@kernel.org>, Ferry Toth <fntoth@gmail.com>,
+        grant.likely@arm.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/03/2020 20:37, Rafael J. Wysocki wrote:
-> On Thu, Mar 26, 2020 at 8:20 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 26/03/2020 20:14, Rafael J. Wysocki wrote:
->>> On Thu, Mar 26, 2020 at 3:48 PM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> Currently the idle injection framework uses the play_idle()
->>>> function which puts the current CPU in an idle state. The
->>>> idle state is the deepest one, as specified by the latency
->>>> constraint when calling the subsequent play_idle_precise()
->>>> function with the INT_MAX.
->>>>
->>>> The idle_injection is used by the cpuidle_cooling device
->>>> which computes the idle / run duration to mitigate the
->>>> temperature by injecting idle cycles. The cooling device has
->>>> no control on the depth of the idle state.
->>>>
->>>> Allow finer control of the idle injection mechanism by
->>>> allowing to specify the latency for the idle state. Thus the
->>>> cooling device has the ability to have a guarantee on the
->>>> exit latency of the idle states it is injecting.
->>>>
->>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>>> --- drivers/powercap/idle_inject.c | 27
->>>> ++++++++++++++++++++++++++- include/linux/idle_inject.h    |
->>>> 6 ++++++ 2 files changed, 32 insertions(+), 1 deletion(-)
->>
->> [ ... ]
->>
->>>> + +void idle_inject_set_latency(struct idle_inject_device
->>>> *ii_dev, +                            unsigned int
->>>> latency_ns); + +unsigned int idle_inject_get_latency(struct
->>>> idle_inject_device *ii_dev); + #endif /* __IDLE_INJECT_H__ */
->>>> --
->>>
->>> I would like to see a user of idle_inject_get_latency() before
->>> this goes in.
->>
->> Do you mean a user for the set/get or the get only? If the
->> latter, there is no user yet I just added it to have an usual
->> get/set helpers, if that hurts, I can resend by removing it. If
->> the former, there is a patch I'm about to send which depends on
->> the 'set'.
+On Thu, Mar 26, 2020 at 4:54 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> So I wouldn't add the "get" thing at all if it has no users.
+> On Wed, Mar 25, 2020 at 03:08:29PM -0700, Saravana Kannan wrote:
+> > On Wed, Mar 25, 2020 at 5:51 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Tue, Mar 24, 2020 at 08:29:01PM -0700, Saravana Kannan wrote:
+> > > > On Tue, Mar 24, 2020 at 5:38 AM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > > > > Consider the following scenario.
+> > > > >
+> > > > > The main driver of USB OTG controller (dwc3-pci), which has the following
+> > > > > functional dependencies on certain platform:
+> > > > > - ULPI (tusb1210)
+> > > > > - extcon (tested with extcon-intel-mrfld)
+> > > > >
+> > > > > Note, that first driver, tusb1210, is available at the moment of
+> > > > > dwc3-pci probing, while extcon-intel-mrfld is built as a module and
+> > > > > won't appear till user space does something about it.
+> > > > >
+> > > > > This is depicted by kernel configuration excerpt:
+> > > > >
+> > > > >     CONFIG_PHY_TUSB1210=y
+> > > > >     CONFIG_USB_DWC3=y
+> > > > >     CONFIG_USB_DWC3_ULPI=y
+> > > > >     CONFIG_USB_DWC3_DUAL_ROLE=y
+> > > > >     CONFIG_USB_DWC3_PCI=y
+> > > > >     CONFIG_EXTCON_INTEL_MRFLD=m
+> > > > >
+> > > > > In the Buildroot environment the modules are probed by alphabetical ordering
+> > > > > of their modaliases. The latter comes to the case when USB OTG driver will be
+> > > > > probed first followed by extcon one.
+> > > > >
+> > > > > So, if the platform anticipates extcon device to be appeared, in the above case
+> > > > > we will get deferred probe of USB OTG, because of ordering.
+> > > > >
+> > > > > Since current implementation, done by the commit 58b116bce136 ("drivercore:
+> > > > > deferral race condition fix") counts the amount of triggered deferred probe,
+> > > > > we never advance the situation -- the change makes it to be an infinite loop.
+> > > >
+> > > > Hi Andy,
+> > > >
+> > > > I'm trying to understand this sequence of steps. Sorry if the questions
+> > > > are stupid -- I'm not very familiar with USB/PCI stuff.
+> > >
+> > > Thank you for looking into this. My answer below.
+> > >
+> > > As a first thing I would like to tell that there is another example of bad
+> > > behaviour of deferred probe with no relation to USB. The proposed change also
+> > > fixes that one (however, less possible to find in real life).
+> >
+> > Unless I see what the other issue is, I can't speak for the unknown.
+>
+> Okay, let's talk about other case (actually it's the one which I had noticed
+> approximately at the time when culprit patch made the kernel).
+>
+> For some debugging purposes I have been using pin control table in board code.
+>
+> Since I would like to boot kernel on different systems I have some tables for
+> non-existing pin control device. Pin control framework returns -EPROBE_DEFER
+> when trying to probe device with attached table for wrong pin control. This is
+> fine, the problem is that *any* successfully probed device, which happens in
+> the deferred probe initcall will desynchronize existing counter. As a result ->
+> infinite loop. For the record, I didn't realize and didn't investigate that
+> time the issue and now I can confirm that this is a culprit which is fixed by
+> this patch.
+>
+> > > > > ---8<---8<---
+> > > > >
+> > > > > [   22.187127] driver_deferred_probe_trigger <<< 1
+> > > > >
+> > > > > ...here is the late initcall triggers deferred probe...
+> > > > >
+> > > > > [   22.191725] platform dwc3.0.auto: deferred_probe_work_func in deferred list
+> > > > >
+> > > > > ...dwc3.0.auto is the only device in the deferred list...
+> > > >
+> > > > Ok, dwc3.0.auto is the only unprobed device at this point?
+> > >
+> > > Correct.
+> > >
+> > > > > [   22.198727] platform dwc3.0.auto: deferred_probe_work_func 1 <<< counter 1
+> > > > >
+> > > > > ...the counter before mutex is unlocked is kept the same...
+> > > > >
+> > > > > [   22.205663] platform dwc3.0.auto: Retrying from deferred list
+> > > > >
+> > > > > ...mutes has been unlocked, we try to re-probe the driver...
+> > > > >
+> > > > > [   22.211487] bus: 'platform': driver_probe_device: matched device dwc3.0.auto with driver dwc3
+> > > > > [   22.220060] bus: 'platform': really_probe: probing driver dwc3 with device dwc3.0.auto
+> > > > > [   22.238735] bus: 'ulpi': driver_probe_device: matched device dwc3.0.auto.ulpi with driver tusb1210
+> > > > > [   22.247743] bus: 'ulpi': really_probe: probing driver tusb1210 with device dwc3.0.auto.ulpi
+> > > > > [   22.256292] driver: 'tusb1210': driver_bound: bound to device 'dwc3.0.auto.ulpi'
+> > > > > [   22.263723] driver_deferred_probe_trigger <<< 2
+> > > > >
+> > > > > ...the dwc3.0.auto probes ULPI, we got successful bound and bumped counter...
+> > > > >
+> > > > > [   22.268304] bus: 'ulpi': really_probe: bound device dwc3.0.auto.ulpi to driver tusb1210
+> > > >
+> > > > So where did this dwc3.0.auto.ulpi come from?
+> > >
+> > > > Looks like the device is created by dwc3_probe() through this call flow:
+> > > > dwc3_probe() -> dwc3_core_init() -> dwc3_core_ulpi_init() ->
+> > > > dwc3_ulpi_init() -> ulpi_register_interface() -> ulpi_register()
+> > >
+> > > Correct.
+> > >
+> > > > > [   22.276697] platform dwc3.0.auto: Driver dwc3 requests probe deferral
+> > > >
+> > > > Can you please point me to which code patch actually caused the probe
+> > > > deferral?
+> > >
+> > > Sure, it's in drd.c.
+> > >
+> > > if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+> > >   edev = extcon_get_extcon_dev(name);
+> > >   if (!edev)
+> > >     return ERR_PTR(-EPROBE_DEFER);
+> > >   return edev;
+> > > }
+> >
+> > Thanks for the confirmations and pointers. I assume
+> > "linux,extcon-name" is a property that's obtained from ACPI? Because I
+> > couldn't find a relevant reference to it elsewhere in the kernel.
+>
+> Yes.
+>
+> > > > > ...but extcon driver is still missing...
+> > > > >
+> > > > > [   22.283174] platform dwc3.0.auto: Added to deferred list
+> > > > > [   22.288513] platform dwc3.0.auto: driver_deferred_probe_add_trigger local counter: 1 new counter 2
+> > > >
+> > > > I'm not fully aware of all the USB implications, but if extcon is
+> > > > needed, why can't that check be done before we add and probe the ulpi
+> > > > device? That'll avoid this whole "fake" probing and avoid the counter
+> > > > increase. And avoid the need for this patch that's touching the code
+> > > > code that's already a bit delicate.
+> > >
+> > > > Also, with my limited experience with all the possible drivers in the
+> > > > kernel, it's weird that the ulpi device is added and probed before we
+> > > > make sure the parent device (dwc3.0.auto) can actually probe
+> > > > successfully.
+> > >
+> > > As I said above the deferred probe trigger has flaw on its own.
+> >
+> > Definitely agree. I'm not saying deferred probe is perfect.
+> >
+> > > Even if we fix for USB case, there is (and probably will be) others.
+> > >
+> > > > Most of the platform device code I've seen in systems with OF (device
+> > > > tree) add the child devices towards the end of the parent's probe
+> > > > function.
+>
+> I realized also that your fix won't work if we change extcon to be compiled in
+> and ULPI to be a module. So, any driver with two or more strict dependencies
+> one of which is satisfied and one is not will end up in this infinite loop.
+>
+> > > > > ...and since we had a successful probe, we got counter mismatch...
+> > > > >
+> > > > > [   22.297490] driver_deferred_probe_trigger <<< 3
+> > > > > [   22.302074] platform dwc3.0.auto: deferred_probe_work_func 2 <<< counter 3
+> > > > >
+> > > > > ...at the end we have a new counter and loop repeats again, see 22.198727...
+> > > > >
+> > > > > ---8<---8<---
+> > > > >
+> > > > > Revert of the commit helps, but it is probably not helpful for the initially
+> > > > > found regression. Artem Bityutskiy suggested to use counter of the successful
+> > > > > probes instead. This fixes above mentioned case and shouldn't prevent driver
+> > > > > to reprobe deferred ones.
+> > > > >
+> > > > > Under "successful probe" we understand the state when a driver of the certain
+> > > > > device is being kept bound after deferred probe trigger cycle. For instance,
+> > > > > in the above mentioned case probing of tusb1210 is not successful because dwc3
+> > > > > driver unbinds device dwc3.0.auto.ulpi. The atomic_dec() call is used to keep
+> > > > > track of this. The amount of bindings is always great than or equal to the
+> > > > > amount of unbindings as guaranteed by design of the driver binding mechanism.
+> > > >
+> > > > The unbindings count can increase for other unrelated drivers unbinding
+> > > > too. Wouldn't it? Seems a bit fragile and racy in a fashion similar to
+> > > > the issue the original patch was trying to fix.
+> > >
+> > > Yes, it's (unlikely) possible (*), but it will give one more iteration per such
+> > > case. It's definitely better than infinite loop. Do you agree?
+> >
+> > Sorry I wasn't being clear (I was in a rush). I'm saying this patch
+> > can reintroduce the bug where the deferred probe isn't triggered when
+> > it should be.
+>
+> I don't think so. If I'm not mistaken we still have one more cycle to trigger probe.
+>
+> > Let's take a simple execution flow.
+> >
+> > probe_okay is at 10.
+> >
+> > Thread-A
+> >   really_probe(Device-A)
+> >     local_probe_okay_count = 10
+> >     Device-A probe function is running...
+> >
+> > Thread-B
+> >   really_probe(Device-B)
+> >     Device-B probes successfully.
+> >     probe_okay incremented to 11
+>
+> And probe trigger task is called. It goes to the loop because counters are not the same.
 
-Ok
+Good point. But Device-A is still not in any of the deferred probed
+lists at this point AFAICU. So even the retriggered iteration can
+complete before Device-A is back on the deferred probe list?
 
-> Also it would be better to send this patch along with the other
-> one depending on it.
+>
+> > Thread-C
+> >   Device-C (which had bound earlier) is unbound (say module is
+> > unloaded or a million other reasons).
+> >   probe_okay is decremented to 10.
+>
+>
+> > Thread-A continues
+> >   Device-A probe function returns -EPROBE_DEFER
+> >   driver_deferred_probe_add_trigger() doesn't do anything because
+> >     local_probe_okay_count == probe_okay
+> >   But Device-A might have deferred probe waiting on Device-B.
+> >   Device-A never probes.
+>
+> See above.
 
-Sure will resend along with the other patches.
+I think the key to fixing the original issue that commit 58b116bce136
+fixes is to make sure the thread that has a device getting deferred is
+the one that re-triggers the deferred probe if it sees another device
+having probed successfully.
 
+> > > *) It means during probe you have _intensive_ removing, of course you may keep
+> > > kernel busy with iterations, but it has no practical sense. DoS attacks more
+> > > effective in different ways.
+> >
+> > I wasn't worried about DoS attacks. More of a functional correctness
+> > issue what I explained above.
+> >
+> > Anyway, if your issue and similar issues can be handles in driver core
+> > in a clean way without breaking other cases, I don't have any problem
+> > with that. Just that, I think the current solution breaks other cases.
+>
+> > As an alternate solution, assuming "linux,extcon-name" is coming
+> > from some firmware, you might want to look into the fw_devlink
+> > feature.
+>
+> Let's forget about USB. Don't be fixed on it. It one of the particular case out
+> of others. I'm not going to comment USB particularities, sorry. It seems to me
+> as not related.
 
+Ok, but just FYI, fw_devlink helps a lot with avoiding deferred probe
+issues. Has helped a ton with Android on ARM.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+-Saravana
