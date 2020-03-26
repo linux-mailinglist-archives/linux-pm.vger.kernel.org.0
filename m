@@ -2,95 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D67193B4A
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 09:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC4C193C07
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 10:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726292AbgCZIs3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 04:48:29 -0400
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:44049 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbgCZIs0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 04:48:26 -0400
-Received: by mail-ua1-f68.google.com with SMTP id r47so1811116uad.11
-        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 01:48:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=Pdr09OqDCxaS6kxdInvAosUxxNdqt0/Zh3BWLp90rxfdNcAPsph15NKZwd3wfkTZTm
-         qzQYChmx5W0Wunv9vhngHdS0RD7uZckQcl7zXz0ZE3YDojFtAhH1J5pO8oT3+LG+KbJY
-         4Jc32I//Avw2fBLqn517aKbpsoLMnr2AW7fdDLiYNfvwRRxa0cfsz9cT666ZRznaYr8c
-         nIWfvA92h5j2xxP0adZimNVVbWfOh1Lavv7XpupLul+4QVrL9KD5UJt5Qd1hWXt4mJ1+
-         zEI3s10R2ZDgBkDWd2Z7LD3ZPOg143zf/aOSxDFeNWYbhSJM23B/gF3l4zgKWowp/eWP
-         cqKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=sxWv3+eaWaJHz9G77TS/oyYaD0mHNh4BSTrgTKnsnEgGzAdq40RfM7vVFMQPU8OLzM
-         D6Al6wdydyiYuCLeep7nv5muO0BDJfH+V2u5l4WRc8pdxTiqMmCRyjPgKojWAGG/Xz+c
-         QLr5j/89FbNRQfq8WAkRFLrC3SDSlQLTiK4pvpUz+oStbZIlEvorVVBPtRdgE2cMJnKY
-         ADz9Kxma7ZMJ6W//WQA6wnxS/kT4Q3Ej9MZHm3wAWmcdw2cfsRhOSJh5cKhkOXCNSbsA
-         k3ORYzX/z+86d5SgMW9nfytBWHCHA1EqMkKzb3/qBMzn3dUb/KLO5+MRCrNhkk+CvQ5G
-         0EKA==
-X-Gm-Message-State: ANhLgQ2PfCytWjLkI15mwV158Kn6g4Oc9t4a/4Mykxn4dXHVaBcztSBw
-        hBhwS0OExIv2wsDL0h4T5pSJDIOwqMJyzA9nOUI=
-X-Google-Smtp-Source: ADFU+vvlSdadq2T7Z94wxYdWR5tXm/x0xyQKdNjDSej6ZA3g+2eAIJg/KE5hL6EFaeqRsV685uu1jR6jbddsIMmQjjY=
-X-Received: by 2002:ab0:4502:: with SMTP id r2mr5697400uar.63.1585212504163;
- Thu, 26 Mar 2020 01:48:24 -0700 (PDT)
+        id S1727843AbgCZJg6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 05:36:58 -0400
+Received: from mailbackend.panix.com ([166.84.1.89]:59246 "EHLO
+        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727842AbgCZJg5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 05:36:57 -0400
+Received: from xps-7390.lan (ip68-111-223-64.sd.sd.cox.net [68.111.223.64])
+        by mailbackend.panix.com (Postfix) with ESMTPSA id 48p0Hp5BJQz1SvC;
+        Thu, 26 Mar 2020 05:36:54 -0400 (EDT)
+Date:   Thu, 26 Mar 2020 02:36:53 -0700 (PDT)
+From:   "Kenneth R. Crudup" <kenny@panix.com>
+Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
+To:     Zhang Rui <rui.zhang@intel.com>
+cc:     linux-pm@lists.linux-foundation.org, rafael.j.wysocki@intel.com,
+        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com,
+        "Kenneth R. Crudup" <kenny@panix.com>
+Subject: Re: Why do I sometimes "lose" the "psys" RAPL counter?
+In-Reply-To: <alpine.DEB.2.21.2003260225200.2971@xps-7390>
+Message-ID: <alpine.DEB.2.21.2003260234210.26874@xps-7390>
+References: <alpine.DEB.2.21.2003252212220.2971@xps-7390>  <691eb7a6efd7a954295f234a70f548fd0c81e2f8.camel@intel.com>  <alpine.DEB.2.21.2003252353370.2971@xps-7390> <7e1562ce93b83a685aa54dd2ae5a5b36c5737cb6.camel@intel.com>
+ <alpine.DEB.2.21.2003260225200.2971@xps-7390>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Received: by 2002:a67:fc57:0:0:0:0:0 with HTTP; Thu, 26 Mar 2020 01:48:22
- -0700 (PDT)
-Reply-To: ayishagddafio@mail.ru
-From:   Aisha Gddafi <aishagddafi68@gmail.com>
-Date:   Thu, 26 Mar 2020 01:48:22 -0700
-Message-ID: <CAKJgomEP0JjR9hPqgC-4BcDKN6zxZXyezTPi7OmekyWZNQH0mg@mail.gmail.com>
-Subject: Lieber Freund (Assalamu Alaikum),?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---=20
-Lieber Freund (Assalamu Alaikum),
 
-Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
-Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
-Mutter und eine Witwe
-mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
-hen
-Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
+(++Srinivas and the right(? other?) linux-pm mailing list)
 
-Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
-f=C3=BCnfhunderttausend
-United State Dollar ($ 27.500.000.00) und ich brauche eine
-vertrauensw=C3=BCrdige Investition
-Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
-jedoch
-M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
-von
-Investitionsprojekten in Ihrem Land
-Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
-bauen.
+On Thu, 26 Mar 2020, Zhang Rui wrote:
 
-Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
-n und
-Unternehmensgewinn zu verhandeln
-Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
+> what does "rdmsr 0x64D" return when there are 3 fixed counters?
 
-Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
-antworten Sie bitte dringend
-Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
-.
+$ sudo rdmsr 0x64D
+56bcb63e
+$ dmesg | fgrep RAPL
+[    1.762354] RAPL PMU: API unit is 2^-32 Joules, 3 fixed counters, 655360 ms ovfl timer
+[    1.762359] RAPL PMU: hw unit of domain pp0-core 2^-14 Joules
+[    1.762363] RAPL PMU: hw unit of domain package 2^-14 Joules
+[    1.762365] RAPL PMU: hw unit of domain pp1-gpu 2^-14 Joules
+[    3.179900] intel_rapl_common: Found RAPL domain package
+[    4.053170] intel_rapl_common: Found RAPL domain package
+[    4.055152] intel_rapl_common: Found RAPL domain core
+[    4.057066] intel_rapl_common: Found RAPL domain uncore
+$
 
-Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
-esse (
-ayishagddafio@mail.ru ) zur weiteren Diskussion.
+> if it returns 0, which I think it is the case, does reading the msr
+> from other cpus return non-zero value, by using rdmsr -p parameter?
 
-Freundliche Gr=C3=BC=C3=9Fe
-Frau Aisha Al-Qaddafi
+Well, it didn't, but why not?
+
+CPU 0 MSR 0x64d value: 57a289a6
+CPU 1 MSR 0x64d value: 57a28bf7
+CPU 2 MSR 0x64d value: 57a28e15
+CPU 3 MSR 0x64d value: 57a28f3b
+CPU 4 MSR 0x64d value: 57a28fe8
+CPU 5 MSR 0x64d value: 57a2912a
+CPU 6 MSR 0x64d value: 57a2923d
+CPU 7 MSR 0x64d value: 57a29327
+
+> > > if that is not the problem, please attach the output of "grep .
+> > > /sys/class/powercap/intel-rapl*/name" in both cases.
+
+Here's the "3 counters case" (same running kernel as above):
+
+$ sudo egrep -r . /sys/class/powercap/intel-rapl*/name
+/sys/class/powercap/intel-rapl:0:0/name:core
+/sys/class/powercap/intel-rapl:0:1/name:uncore
+/sys/class/powercap/intel-rapl:0/name:package-0
+/sys/class/powercap/intel-rapl-mmio:0/name:package-0
+$
+
+As soon as I get "4 counters" numbers I'll resend with those values.
+
+	-Kenny
+
+-- 
+Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
