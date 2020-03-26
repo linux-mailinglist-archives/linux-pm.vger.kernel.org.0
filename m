@@ -2,230 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3B019460A
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 19:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB9C1946BD
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 19:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726267AbgCZSHZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 14:07:25 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:38953 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727851AbgCZSHZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 14:07:25 -0400
-Received: by mail-vs1-f65.google.com with SMTP id j128so4489067vsd.6
-        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 11:07:22 -0700 (PDT)
+        id S1727719AbgCZSqG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 14:46:06 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:36420 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726340AbgCZSqG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 14:46:06 -0400
+Received: by mail-ot1-f65.google.com with SMTP id l23so7042486otf.3
+        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 11:46:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=S+88eV5gK0LljhqKdZ1yGcysPszYlI5kB6q6EVwjYtM=;
-        b=iajwo6ojaH6PQ0M+kFhP3CIwc4WeldtAB8KkVDaqEJ2XOiscCgtWqKrv9JgYGGrzCN
-         9HdQjVQDYrEB0Tpwu/BZBGrA+jNrpOZ5/jUEOE9t1h6DXRmYGPEbeHF4k7AwRlraXoPf
-         nkYRKiOHMLvzeuAXL9m/nvB/Uo76yXnDU+Dw8=
+        bh=DSaPi1qX32z4R5hBNdjTSka9jPbPxfHe58KpVQ2pneg=;
+        b=BYXAsHe9fDFiKQbkaEpYLrNdYpxCE2v5G6VFQHxCpBGHPCnN03bKIX0cr1VCAEu9Rg
+         0u0HgwpXi3GMGR9xw+I0FW42IlN/vuGOf9rb7J7W1mod/M2cK7tigZBbXm1OrZVZ5nF5
+         /ch76GZA+uxnx8Lv/5fIAE2nNlMg51xb2mLdTQV6oCrQ3rjG/1emnwYN5Ds+69xK8u6s
+         0ZQsdzsKiK7YSCcC0K9lvBJW742xWWN0ONeh5y/5Sfjg8CpsPRwf27PTuXTfV5HFD+34
+         l3TsxMQNM64kOstFhVSyTwfwxVG4Ux2OvdfP4KjKmtzL/f7ykX3qIRwtmt/hL+HXMQQM
+         EdXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=S+88eV5gK0LljhqKdZ1yGcysPszYlI5kB6q6EVwjYtM=;
-        b=nrtaUxddJgZztY5i++V/EgmoxnxKPT+ai/3OGfmUonT3/1zhHXaCVcJwThiWgkHqdj
-         1fd6OCEzAAdRN+bgNZQpA4UKRpjIPKw67dKaLx0NwQZexmlZXK4HipAbn9L2CKZWTKD1
-         itgL0f1xExtbYRfdVpyOuJ+A4ajGBGzwUZMHgU6dBZSCVfAytdeBfZ31lTgfwYXaAkq6
-         hTlNb4D6J5BBwDyXAxOu31NZRO8NOMwedOBlfb6tqaURH4ivLeZHPNuzY0OWfu5xigAL
-         oNLLHL9dQ4tHW7zlAq4MasL0wpGSNnrsC+6Kz/YLSUkWUW1FRTWwelcpbOK8gpWalG6B
-         TvrQ==
-X-Gm-Message-State: ANhLgQ0H2uKTNDF9pu4c9K/Ndr17RDY36lReWFLLWQkGcuTSC0uWL97m
-        0Nmb4fFti3i63QqkmjSIfxDtZqi4SQo=
-X-Google-Smtp-Source: ADFU+vtJD5xiZI4Fx8bVkcJ5HxKMjRcXMF3i4w7ol99vn/03/ucPDHEZ3eugoOUhq7jnLjK89MRWRQ==
-X-Received: by 2002:a67:a409:: with SMTP id n9mr8249972vse.18.1585246041236;
-        Thu, 26 Mar 2020 11:07:21 -0700 (PDT)
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com. [209.85.217.46])
-        by smtp.gmail.com with ESMTPSA id o130sm1356346vke.28.2020.03.26.11.07.19
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Mar 2020 11:07:20 -0700 (PDT)
-Received: by mail-vs1-f46.google.com with SMTP id r7so1594859vsg.7
-        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 11:07:19 -0700 (PDT)
-X-Received: by 2002:a67:1e46:: with SMTP id e67mr8011826vse.106.1585246038937;
- Thu, 26 Mar 2020 11:07:18 -0700 (PDT)
+        bh=DSaPi1qX32z4R5hBNdjTSka9jPbPxfHe58KpVQ2pneg=;
+        b=IVxfvZkDw+CR/AqE+xtJdvc3QAXwr7sVN2qeWrgcvGJ2IW94/g0dXoAWReX+3HmKmH
+         rORwnRw1qgUaR1o5YLAxOUJkp4FhxQB2Mz0i/2JQhZTVM47kziSk2LEs2/BpNgK2n60T
+         Wnllzgv/IhBDbe+6kDG8Jb+vUphoS7GBWmxLyFI4sF+4Xe6lL+PdYUaP+UvGX6zHaKam
+         MIv6Up1t/iPILLs93lSshQYZZb08WgMMBAQXM7zPMU2+u2OfsJYxAg+cYW2O7O+iXYUr
+         lr8duxe5SWDt9VzFnaAU6X6ejmhXOlhfJyc62kvTTLisFmIquvMNf+GPgqkYL9FhVgDM
+         80Mg==
+X-Gm-Message-State: ANhLgQ0fZ3o6ivHQ5L74p9Yxko6p0TrL4pWCnrP7MagL8VBsxuHSIGjB
+        ocjdUZhtJFOMXzDGnGmj1wFWlGnvmJA9uKXFZ/Ukqw==
+X-Google-Smtp-Source: ADFU+vtzg+a7ZQexHtE4pMNO2X9rdMsKebqldlLPwKcI7thZoZW5JdSClsEyMSIJZH29yvaoRdaCI/72/CgZLGRMZrE=
+X-Received: by 2002:a9d:42f:: with SMTP id 44mr7376213otc.236.1585248364557;
+ Thu, 26 Mar 2020 11:46:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190218140210.14631-1-rplsssn@codeaurora.org> <20190218140210.14631-2-rplsssn@codeaurora.org>
-In-Reply-To: <20190218140210.14631-2-rplsssn@codeaurora.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 26 Mar 2020 11:07:07 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XmBQb8yfx14T-tMQ68F-h=3UHog744b3X3JZViu15+4g@mail.gmail.com>
-Message-ID: <CAD=FV=XmBQb8yfx14T-tMQ68F-h=3UHog744b3X3JZViu15+4g@mail.gmail.com>
-Subject: Re: [PATCH RESEND v1 1/2] drivers: qcom: rpmh-rsc: clear active mode
- configuration for wake TCS
-To:     Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-soc@vger.kernel.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
+ <20200325032901.29551-1-saravanak@google.com> <20200325125120.GX1922688@smile.fi.intel.com>
+ <CAGETcx_TGw24UqX7pXZePyskrao6zwnKTq8mBk9g_7jokqAqkA@mail.gmail.com> <CAJZ5v0jB1hqzYK8ezjf1_1yMCudNXNS-CsrUJQcmL4W5mBD6fQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jB1hqzYK8ezjf1_1yMCudNXNS-CsrUJQcmL4W5mBD6fQ@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 26 Mar 2020 11:45:28 -0700
+Message-ID: <CAGETcx8kqBsqMLm4gqY83dd0mSxucVbk7VWGXu4dKqya9nsbsg@mail.gmail.com>
+Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
+ can't be satisfied
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mark Brown <broonie@kernel.org>, Ferry Toth <fntoth@gmail.com>,
+        grant.likely@arm.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        "Raju P.L.S.S.S.N" <rplsssn@codeaurora.org>,
-        Maulik Shah <mkshah@codeaurora.org>
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Android Kernel Team <kernel-team@android.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi
-
-On Mon, 18 Feb 2019 19:32:09 Raju P.L.S.S.S.N <rplsssn@codeaurora.org> wrote:
+On Thu, Mar 26, 2020 at 1:39 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> For RSCs that have sleep & wake TCS but no dedicated active TCS, wake
-> TCS can be re-purposed to send active requests. Once the active requests
-> are sent and response is received, the active mode configuration needs
-> to be cleared so that controller can use wake TCS for sending wake
-> requests.
+> On Wed, Mar 25, 2020 at 11:09 PM Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > On Wed, Mar 25, 2020 at 5:51 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
 >
-> Signed-off-by: Raju P.L.S.S.S.N <rplsssn@codeaurora.org>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
->  drivers/soc/qcom/rpmh-rsc.c | 77 ++++++++++++++++++++++++++-----------
->  1 file changed, 54 insertions(+), 23 deletions(-)
+> [cut]
 >
-> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-> index 75bd9a83aef0..6cc7f219ce48 100644
-> --- a/drivers/soc/qcom/rpmh-rsc.c
-> +++ b/drivers/soc/qcom/rpmh-rsc.c
-> @@ -201,6 +201,42 @@ static const struct tcs_request *get_req_from_tcs(struct rsc_drv *drv,
->         return NULL;
->  }
+> > >
+> > > Yes, it's (unlikely) possible (*), but it will give one more iteration per such
+> > > case. It's definitely better than infinite loop. Do you agree?
+> >
+> > Sorry I wasn't being clear (I was in a rush). I'm saying this patch
+> > can reintroduce the bug where the deferred probe isn't triggered when
+> > it should be.
+> >
+> > Let's take a simple execution flow.
+> >
+> > probe_okay is at 10.
+> >
+> > Thread-A
+> >   really_probe(Device-A)
+> >     local_probe_okay_count = 10
+> >     Device-A probe function is running...
+> >
+> > Thread-B
+> >   really_probe(Device-B)
+> >     Device-B probes successfully.
+> >     probe_okay incremented to 11
+> >
+> > Thread-C
+> >   Device-C (which had bound earlier) is unbound (say module is
+> > unloaded or a million other reasons).
+> >   probe_okay is decremented to 10.
+> >
+> > Thread-A continues
+> >   Device-A probe function returns -EPROBE_DEFER
+> >   driver_deferred_probe_add_trigger() doesn't do anything because
+> >     local_probe_okay_count == probe_okay
+> >   But Device-A might have deferred probe waiting on Device-B.
+> >   Device-A never probes.
+> >
+> > > *) It means during probe you have _intensive_ removing, of course you may keep
+> > > kernel busy with iterations, but it has no practical sense. DoS attacks more
+> > > effective in different ways.
+> >
+> > I wasn't worried about DoS attacks. More of a functional correctness
+> > issue what I explained above.
 >
-> +static void __tcs_trigger(struct rsc_drv *drv, int tcs_id, bool trigger)
-
-nit: can you rename this to __tcs_set_trigger() so it's a little more
-obvious that the last value means trigger/untrigger?
-
-It'd also be nice to really understand why it has to be structured
-this way.  It's weird that the two options are "untrigger + retrigger"
-and "untrigger"
-
-
-> +{
-> +       u32 enable;
-> +
-> +       /*
-> +        * HW req: Clear the DRV_CONTROL and enable TCS again
-> +        * While clearing ensure that the AMC mode trigger is cleared
-> +        * and then the mode enable is cleared.
-> +        */
-> +       enable = read_tcs_reg(drv, RSC_DRV_CONTROL, tcs_id, 0);
-> +       enable &= ~TCS_AMC_MODE_TRIGGER;
-> +       write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
-> +       enable &= ~TCS_AMC_MODE_ENABLE;
-> +       write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
-> +
-> +       if (trigger) {
-> +               /* Enable the AMC mode on the TCS and then trigger the TCS */
-> +               enable = TCS_AMC_MODE_ENABLE;
-> +               write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
-> +               enable |= TCS_AMC_MODE_TRIGGER;
-> +               write_tcs_reg_sync(drv, RSC_DRV_CONTROL, tcs_id, enable);
-> +       }
-> +}
-> +
-> +static inline void enable_tcs_irq(struct rsc_drv *drv, int tcs_id, bool enable)
-> +{
-> +       u32 data;
-> +
-> +       data = read_tcs_reg(drv, RSC_DRV_IRQ_ENABLE, 0, 0);
-> +       if (enable)
-> +               data |= BIT(tcs_id);
-> +       else
-> +               data &= ~BIT(tcs_id);
-> +       write_tcs_reg(drv, RSC_DRV_IRQ_ENABLE, 0, data);
-> +}
-> +
->  /**
->   * tcs_tx_done: TX Done interrupt handler
->   */
-> @@ -237,6 +273,21 @@ static irqreturn_t tcs_tx_done(int irq, void *p)
->                 }
+> The code is functionally incorrect as is already AFAICS.
 >
->                 trace_rpmh_tx_done(drv, i, req, err);
-> +
-> +               /*
-> +                * if wake tcs was re-purposed for sending active
-> +                * votes, clear AMC trigger & enable modes and
-> +                * disable interrupt for this TCS
-> +                */
-> +               if (!drv->tcs[ACTIVE_TCS].num_tcs) {
-> +                       __tcs_trigger(drv, i, false);
+> > Anyway, if your issue and similar issues can be handles in driver core
+> > in a clean way without breaking other cases, I don't have any problem
+> > with that. Just that, I think the current solution breaks other cases.
+>
+> OK, so the situation right now is that commit 58b116bce136 has
+> introduced a regression and so it needs to be fixed or reverted.  The
+> cases that were previously broken and were unbroken by that commit
+> don't matter here, so you cannot argue that they would be "broken".
+>
+> It looks to me like the original issue fixed by the commit in question
+> needs to be addressed differently, so I would vote for reverting it
+> and starting over.
 
-I assume that the reason that the code originally didn't try to
-"untrigger" in the interrupt handler is that it's slow (it uses
-write_tcs_reg_sync).  If that's true then maybe you shouldn't do the
-untrigger here for the case when you're on a borrowed TCS.  Can't you
-just do the untrigger later when you reprogram the TCS for someone
-else's use?
+I'm fine with whatever approach. My only point is that code that's
+been there for 5+ years might be preventing that race in a multitude
+of platforms. So I'm just reviewing to make sure fixes aren't
+introducing regressions. I'm all for anyone cleaning up/redoing
+deferred probe.
 
+> > As an alternate solution, assuming "linux,extcon-name" is coming
+> > from some firmware, you might want to look into the fw_devlink
+> > feature.
+>
+> That would be a workaround for a driver core issue, though, wouldn't it?
 
-> +                       /*
-> +                        * Disable interrupt for this TCS to avoid being
-> +                        * spammed with interrupts coming when the solver
-> +                        * sends its wake votes.
-> +                        */
-> +                       enable_tcs_irq(drv, i, false);
+I'm not saying don't fix it in the driver core if it can be done
+without adding regressions.
 
-Should you be doing this under the spinlock?  You're doing a
-read-modify-write of the RSC_DRV_IRQ_ENABLE register which seems like
-it could race with someone trying to enable an IRQ if the borrowed TCS
-type has more than one TCS (so you could be trying to start a transfer
-on one TCS while one is finishing on another).
+> > That feature allows driver core to add device links from firmware
+> > information. If you can get that feature to create device links from
+> > your dwc3.0.auto (or its parent pci_dev?) to the extcon supplier
+> > device, all of this can be sidestepped and your dwc3.0.auto's (or the
+> > dwc pci_dev's) probe will be triggered only after extcon is probed.
+> >
+> > I have very little familiarity with PCI/ACPI. I spent about an hour or
+> > two poking at ACPI scan/property code. The relationship between a
+> > pci_dev and an acpi_device is a bit confusing to me because I see:
+> >
+> > static int dwc3_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+> > {
+> >         struct property_entry *p = (struct property_entry *)id->driver_data;
+> >         struct dwc3_pci         *dwc;
+> >         struct resource         res[2];
+> >         int                     ret;
+> >         struct device           *dev = &pci->dev;
+> > ....
+> >         dwc->dwc3 = platform_device_alloc("dwc3", PLATFORM_DEVID_AUTO);
+> > ....
+> >         ACPI_COMPANION_SET(&dwc->dwc3->dev, ACPI_COMPANION(dev));
+> >
+> > And ACPI_COMPANION returns an acpi_device by looking at dev->fwnode.
+> > So how the heck is a pci_device.dev.fwnode pointing to an
+> > acpi_device.fwnode?
+>
+> acpi_device is an of_node counterpart (or it is an fwnode itself if you will).
 
-It would be somewhat hard for this to happen, but I don't _think_ it's
-impossible.  Specifically:
+If I understand correctly, you are saying it's similar to struct
+device_node for OF -- as in, a data struct that stores the unpacked
+ACPI firmware data. That helps me understand what is going on with
+ACPI_COMPANION_SET() in the PCI driver.
 
-1. Two threads can call rpmh_write() at the same time.
+But then, why does it have a "struct device dev" field embedded in it?
+Does the acpi_device.dev ever get registered with driver core?
 
-2. Both threads call into rpmh_rsc_send_data() w/out holding any locks.
-
-3. Both threads call into tcs_write() w/out holding any locks.
-
-4. Both threads call get_tcs_for_msg() w/out holding any locks.
-
-5. Both threads notice they need to borrow the wake TCS.
-
-6. Both threads call rpmh_rsc_invalidate().  There are locks in here,
-but nothing stops both threads from returning 0 (not -EAGAIN) since
-nobody has claimed the wake TCS by setting 'tcs_in_use' yet.
-
-Assuming that there are more than one wake TCSs it is possible that
-both transfers can be happening at the same time and I believe it's
-even possible (though you'd need crazy timing) for one thread to hit
-the interrupt handler and finish at the same time that the other
-thread starts.
-
-
-Assuming we care about the case of having zero-active TCS and
-more-than-one-wake TCS, it'd be nice to fix.  If we don't care about
-this case, it should be documented in the code.  Funny enough, most of
-the time having zero-active TCS and more-than-one-wake TCS doesn't buy
-us much with the current code because the 2nd thread will return
--EAGAIN from rpmh_rsc_invalidate() assuming that the 1st thread
-manages to set "tcs_in_use" before the 2nd thread gets there.
-
-
-Overall the locking involved with borrowing a wake TCS is really
-tricky if you want to close all corner cases.  I need to constantly
-refer to my series adding documentation to have any chance here.
-
-https://lore.kernel.org/r/20200311161104.RFT.v2.5.I52653eb85d7dc8981ee0dafcd0b6cc0f273e9425@changeid
-
-I'd love review feedback on that!  Some of this stuff maybe becomes
-easier to understand if we don't have Maulik's flushing series and we
-can always assume that writing active TCSs and writing sleep/wake TCSs
-never happen at the same time (I think traditionally sleep/wake TCSs
-only get written from special PM code when we know nothing else is
-running).
-
-
--Doug
+Thanks,
+Saravana
