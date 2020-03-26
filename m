@@ -2,111 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2206F193A84
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 09:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D36193B00
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 09:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbgCZIN0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 04:13:26 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:36474 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbgCZIN0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 04:13:26 -0400
-Received: by mail-oi1-f194.google.com with SMTP id k18so4761212oib.3
-        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 01:13:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8yWiNTkGKZSkyU0D2fa4NiZkbrlvij8oc4xZ09Ks1BI=;
-        b=VgTEVTJ9E0x68uA1PxeR9qNMMalLMLssiR9S6ZqLqCvLatWeV0VKe2SkQeT7HMT9mN
-         CUs4k797KBar24THnpLLffYylbX226/YVehff6Q/ln18MWAcBUNwZkEhuOFTnih9Tn32
-         r1g0w61rC1nMoSCzuUDfvoK7LzM4C6TQBApvQSWncNzPhPPq6+JLbSnLa63IClbN85rb
-         BCLSFaYyXC1QznrdeBWGxXl4jo1EcdsgKXvGrCMlfEEcpdMxeoZFhUeRm3ePFeijOKLI
-         rnvEHx8z9t2bSIFYi/HC2FAR2x1YjIem3rXtLMn6Rg92p5b0+gz2qmnbWeRP8bHL9BzM
-         sw0Q==
-X-Gm-Message-State: ANhLgQ0PBpYDG5yT0IM1mpTkwZXCvDhTe5e5ZaNAF/QvPWz2Rmpy5qLc
-        98ozhdRiRHoFxW8ExECpwyc0vK8z87neoBhYhyA=
-X-Google-Smtp-Source: ADFU+vtfA1qtDc/qkD7u/j/mSXj6XFyzVPXxJVHJD5W9bS77GMTKSK0wTKYJRpkzgtBjzEfM6YavsXRW4aM0AMzTIjc=
-X-Received: by 2002:aca:f07:: with SMTP id 7mr968862oip.68.1585210405414; Thu,
- 26 Mar 2020 01:13:25 -0700 (PDT)
+        id S1727880AbgCZIeW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 04:34:22 -0400
+Received: from mga04.intel.com ([192.55.52.120]:44735 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727866AbgCZIeV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 26 Mar 2020 04:34:21 -0400
+IronPort-SDR: RVr/sKGyhxIMdz6HpIaaMhZpfgGs268wiRdrLx+0F/vTNiomitmxvpQm9rcyLdfPmw+VnHiadS
+ Pn7Gy77wADBw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 01:34:21 -0700
+IronPort-SDR: nly9xD30xpsmGWYFWXpCQfSK56dqJFIPOST3nuhEheHKExNfIQ5XgPc3HXfYowGvGJpdixXyaW
+ B8k9bFVtCr9w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,307,1580803200"; 
+   d="scan'208";a="446919804"
+Received: from shao2-debian.sh.intel.com (HELO localhost) ([10.239.13.3])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Mar 2020 01:34:13 -0700
+Date:   Thu, 26 Mar 2020 16:33:55 +0800
+From:   kernel test robot <rong.a.chen@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-edac@vger.kernel.org,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto <linux-crypto@vger.kernel.org>, lkp@lists.01.org
+Subject: Re: [cpufreq] 06c4d00466: will-it-scale.per_process_ops -53.4%
+ regression
+Message-ID: <20200326083355.GO11705@shao2-debian>
+References: <20200320131509.564059710@linutronix.de>
+ <20200324060124.GC11705@shao2-debian>
+ <CAHp75VeeKZLeZ8E3Py7LECN54SPFHaRgkxrMzBYQWXM8x+4JhA@mail.gmail.com>
+ <43a4189a-7153-18e8-4657-4a4400002c05@intel.com>
+ <87zhc4ybbt.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-References: <alpine.DEB.2.21.2003252212220.2971@xps-7390> <alpine.DEB.2.21.2003252229520.2971@xps-7390>
-In-Reply-To: <alpine.DEB.2.21.2003252229520.2971@xps-7390>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 26 Mar 2020 09:13:14 +0100
-Message-ID: <CAJZ5v0iWVhQtTn2tFVXA5mHgzgmK+dGm=GC0=fiqJknP+We6KA@mail.gmail.com>
-Subject: Re: Why do I sometimes "lose" the "psys" RAPL counter?
-To:     "Kenneth R. Crudup" <kenny@panix.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87zhc4ybbt.fsf@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+Srinivas
-
-On Thu, Mar 26, 2020 at 6:46 AM Kenneth R. Crudup <kenny@panix.com> wrote:
->
->
-> (Re-sent, as I think I had the wrong mailing list address before)
->
-> I'm running Linus' latest master of today (and have seen this for a while
-> now). I've got an IceLake CPU (i7-1065G7 running on a Dell 7390 2-in-1, but
-> I'm pretty sure I've seen issue this on my HP Spectre 13 with a 9th-gen CPU).
->
-> Sometimes when I boot, I get 4 RAPL "fixed counters" and sometimes I only
-> get 3, and it's always the "psys" domain that's missing when it does. See
-> attached output from various dmesg runs (and a snippet below).
->
-> Is this a bug?
-> Do you know what may cause this?
->
-> If you need more info to help me help you guys with this (if it's truly an
-> issue), please let me know.
->
+On Wed, Mar 25, 2020 at 11:32:06AM +0100, Thomas Gleixner wrote:
+> Rong Chen <rong.a.chen@intel.com> writes:
+> > On 3/24/20 6:24 PM, Andy Shevchenko wrote:
+> >> On Tue, Mar 24, 2020 at 8:02 AM kernel test robot <rong.a.chen@intel.com> wrote:
+> >>> Greeting,
+> >>>
+> >>> FYI, we noticed a -53.4% regression of will-it-scale.per_process_ops due to commit:
+> >>> commit: 06c4d00466eb374841bc84c39af19b3161ff6917 ("[patch 09/22] cpufreq: Convert to new X86 CPU match macros")
+> >>> url: https://github.com/0day-ci/linux/commits/Thomas-Gleixner/x86-devicetable-Move-x86-specific-macro-out-of-generic-code/20200321-031729
+> >>> base: https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git linux-next
+> >>>
+> >>> in testcase: will-it-scale
+> >>> on test machine: 4 threads Intel(R) Core(TM) i3-3220 CPU @ 3.30GHz with 8G memory
+> >>> with following parameters:
+> >>
+> >> drivers/cpufreq/speedstep-centrino.c change missed the terminator,
+> >> perhaps it's a culprit, because I don't believe removing dups and
+> >> reordering lines may affect this.
+> >> Can you restore terminator there and re-test?
+> >>
+> >
+> > I have retested with the change, but it has no effect on the performance.
+> 
+> Bah. The binary equivalence testing detected this, but I obvioulsy
+> missed it. Delta fix below.
+> 
 > Thanks,
->
->         -Kenny
->
-> ----
-> Mar 22 05:02:48 xps-7390 kernel: [    0.756890] RAPL PMU: API unit is 2^-32 Joules, 3 fixed counters, 655360 ms ovfl timer
-> Mar 22 05:02:48 xps-7390 kernel: [    0.756892] RAPL PMU: hw unit of domain pp0-core 2^-14 Joules
-> Mar 22 05:02:48 xps-7390 kernel: [    0.756893] RAPL PMU: hw unit of domain package 2^-14 Joules
-> Mar 22 05:02:48 xps-7390 kernel: [    0.756894] RAPL PMU: hw unit of domain pp1-gpu 2^-14 Joules
-> Mar 22 05:02:48 xps-7390 kernel: [    2.178267] intel_rapl_common: Found RAPL domain package
-> Mar 22 05:02:48 xps-7390 kernel: [    3.056499] intel_rapl_common: Found RAPL domain package
-> Mar 22 05:02:48 xps-7390 kernel: [    3.058417] intel_rapl_common: Found RAPL domain core
-> Mar 22 05:02:48 xps-7390 kernel: [    3.062290] intel_rapl_common: Found RAPL domain uncore
-> Mar 22 05:17:50 xps-7390 kernel: [    1.770794] RAPL PMU: API unit is 2^-32 Joules, 3 fixed counters, 655360 ms ovfl timer
-> Mar 22 05:17:50 xps-7390 kernel: [    1.770799] RAPL PMU: hw unit of domain pp0-core 2^-14 Joules
-> Mar 22 05:17:50 xps-7390 kernel: [    1.770802] RAPL PMU: hw unit of domain package 2^-14 Joules
-> Mar 22 05:17:50 xps-7390 kernel: [    1.770814] RAPL PMU: hw unit of domain pp1-gpu 2^-14 Joules
-> Mar 22 05:17:50 xps-7390 kernel: [    3.176324] intel_rapl_common: Found RAPL domain package
-> Mar 22 05:17:50 xps-7390 kernel: [    4.060045] intel_rapl_common: Found RAPL domain package
-> Mar 22 05:17:50 xps-7390 kernel: [    4.061739] intel_rapl_common: Found RAPL domain core
-> Mar 22 05:17:50 xps-7390 kernel: [    4.063129] intel_rapl_common: Found RAPL domain uncore
-> Mar 22 05:28:05 xps-7390 kernel: [    1.770320] RAPL PMU: API unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
-> Mar 22 05:28:05 xps-7390 kernel: [    1.770326] RAPL PMU: hw unit of domain pp0-core 2^-14 Joules
-> Mar 22 05:28:05 xps-7390 kernel: [    1.770329] RAPL PMU: hw unit of domain package 2^-14 Joules
-> Mar 22 05:28:05 xps-7390 kernel: [    1.770332] RAPL PMU: hw unit of domain pp1-gpu 2^-14 Joules
-> Mar 22 05:28:05 xps-7390 kernel: [    1.770335] RAPL PMU: hw unit of domain psys 2^-14 Joules
-> Mar 22 05:28:05 xps-7390 kernel: [    3.148050] intel_rapl_common: Found RAPL domain package
-> Mar 22 05:28:05 xps-7390 kernel: [    4.043621] intel_rapl_common: Found RAPL domain package
-> Mar 22 05:28:05 xps-7390 kernel: [    4.045295] intel_rapl_common: Found RAPL domain core
-> Mar 22 05:28:05 xps-7390 kernel: [    4.046823] intel_rapl_common: Found RAPL domain uncore
-> Mar 22 05:37:11 xps-7390 kernel: [    1.635660] RAPL PMU: API unit is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
-> Mar 22 05:37:11 xps-7390 kernel: [    1.635667] RAPL PMU: hw unit of domain pp0-core 2^-14 Joules
-> Mar 22 05:37:11 xps-7390 kernel: [    1.635670] RAPL PMU: hw unit of domain package 2^-14 Joules
-> Mar 22 05:37:11 xps-7390 kernel: [    1.635673] RAPL PMU: hw unit of domain pp1-gpu 2^-14 Joules
-> Mar 22 05:37:11 xps-7390 kernel: [    1.635676] RAPL PMU: hw unit of domain psys 2^-14 Joules
-> Mar 22 05:37:11 xps-7390 kernel: [    3.043397] intel_rapl_common: Found RAPL domain package
-> Mar 22 05:37:11 xps-7390 kernel: [    4.043265] intel_rapl_common: Found RAPL domain package
-> Mar 22 05:37:11 xps-7390 kernel: [    4.045524] intel_rapl_common: Found RAPL domain core
-> Mar 22 05:37:11 xps-7390 kernel: [    4.048153] intel_rapl_common: Found RAPL domain uncore
-> ----
->
->
-> --
-> Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
+> 
+>         tglx
+> 
+> 8<--------------
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2727,7 +2727,7 @@ static inline void intel_pstate_request_
+>  
+>  #define X86_MATCH_HWP(model, hwp_mode)					\
+>  	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6, INTEL_FAM6_##model, \
+> -					   X86_FEATURE_APERFMPERF, hwp_mode)
+> +					   X86_FEATURE_HWP, hwp_mode)
+>  
+>  static const struct x86_cpu_id hwp_support_ids[] __initconst = {
+>  	X86_MATCH_HWP(BROADWELL_X,	INTEL_PSTATE_HWP_BROADWELL),
+
+Hi Thomas,
+
+The patch can fix the regression:
+
+commit: 
+  06c4d00466 ("cpufreq: Convert to new X86 CPU match macros")
+  d369f9be1a ("the fix patch")
+
+06c4d00466eb3748  d369f9be1ad1e22da4e8f03557  testcase/testparams/testbox
+----------------  --------------------------  ---------------------------
+         %stddev      change         %stddev
+             \          |                \  
+     93200             114%     199599        will-it-scale/performance-process-16-read2-ucode=0x21/lkp-ivb-d02
+     93200             114%     199599        GEO-MEAN will-it-scale.per_process_ops
+
+Best Regards,
+Rong Chen
