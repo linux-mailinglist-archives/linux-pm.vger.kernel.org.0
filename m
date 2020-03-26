@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 217BC194B85
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 23:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C061194BB4
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 23:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727548AbgCZW2Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 18:28:25 -0400
-Received: from mail-pg1-f169.google.com ([209.85.215.169]:46332 "EHLO
-        mail-pg1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727122AbgCZW2Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 18:28:25 -0400
-Received: by mail-pg1-f169.google.com with SMTP id k191so3592661pgc.13
-        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 15:28:23 -0700 (PDT)
+        id S1727352AbgCZWnT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 18:43:19 -0400
+Received: from mail-pj1-f46.google.com ([209.85.216.46]:55538 "EHLO
+        mail-pj1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726296AbgCZWnT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 18:43:19 -0400
+Received: by mail-pj1-f46.google.com with SMTP id mj6so3061643pjb.5
+        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 15:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=aMJn0FbSvRWjK9mp1f1WMmwey+IK3Yg4cNNKDdl61VA=;
-        b=hdk8NiPTBiGBV/bmFWqbapBqxUC4z624pSmEmLJ0lPsuP2wWLOq9xgBI1GzJ2ICREF
-         iajakU+lMYnU5B2nUKL+dM1Ysge7QJZ/66mzYVLwOe9mbDs2dCgimERa8iqdBem98l2/
-         kOXc1AbjnL5npxIt1u5YtgvcnuLu3VvUQa6KouG6rsPpbJIfC5Ama1yw4REzsAy8wulV
-         tBuI8W6WmVtVtjNK8yFjcj8HWdZ6QlVwXD5UX8oUwRdFsWg7vitreFp1JkE4L2a0TG6z
-         IBIkiZ3vTYlijjLDlCsDxBqEY9L/n080Yg8s1l+aQcgq2GLvh4RJP0F1POSivdYsthLc
-         nnuQ==
+        bh=ZDnMtyf6BLmOswg/Tyyl8GzNXDwaXNhfEjpPrfXDPMM=;
+        b=j6aJ43Cr2HQAovoF0bLgCVSg23JXSQwBtHJBegA/LnFM39YhjaeghetYa5zcosW4jJ
+         soQwQ/LdL5+uoe0XdJQCmQIEthnjZ4ApcvrY6jiiIl84VN/AhHfnf2kPjN5XauJs0lSS
+         AFN+pYRY9r/BWl08GBpWL5saJu/xYo6cfyId+0+0ZVN73OnUvzGs9oNlgzAPsZEeZtyZ
+         HnoeUi48I38RPVr7Fe9GQ/IZgfiyiblA3K+oW45uhPMNKb1v1YZvXCS0SxdzZx5EolcA
+         kydylPA5oLpA1r5QjKrGx3sszP5TSoQkUpnMwlc3RWZ5z5+2w+4NGUx4pYH1ZR3LrmV7
+         H7rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=aMJn0FbSvRWjK9mp1f1WMmwey+IK3Yg4cNNKDdl61VA=;
-        b=NUMw/mgV8Aa6QNOuX4CxZDcnt1rcFovF4UXGJaI26KoEWWnhMQndD6jobAY9IA62Po
-         PQdBPZ9dGTijC+orVmspy70ihmBsMLkNsyBXkcyWkuYBpAg1mtQpiPzDqLwh4SSofNDy
-         lAHGKgramejTK6K+/SRhqllBogQxXMa/hJ97YYZJtuDpk0L95c95GYe8MkkzuPlacGMw
-         KI8FkijJQFwLvgOpXD8AJJml8jOcBAOftBKrGM7r4S5IHVoFjO5KRYBEm7Gvdg1LWZDG
-         9QFn3dBfFRgYSM2NZkdvh30KSEjusoxs1cjTIpSbFlq/OZIU6HLmjjQ0CXAL+2fs/27c
-         m1PQ==
-X-Gm-Message-State: ANhLgQ32jbeU5lwOyJ34AmHydkMc1Ad6tKg9izBoBM0qCAu7A2ahg6g6
-        dXgq5HBUaaQLd+yZLeY+bO0DP1mYLmw=
-X-Google-Smtp-Source: ADFU+vsRqux+hi0HfuyHa1oh4xOlSr2FPA3VF3sNxUMfpiAeYJcKS2oM7BoAeKTHA3qs+NASQxrx2Q==
-X-Received: by 2002:a65:62c7:: with SMTP id m7mr10917524pgv.380.1585261703162;
-        Thu, 26 Mar 2020 15:28:23 -0700 (PDT)
+        bh=ZDnMtyf6BLmOswg/Tyyl8GzNXDwaXNhfEjpPrfXDPMM=;
+        b=jEcGIQPmUaIpnwM9uhfw4X1M4DvolSSU3rlMRS42FZXDfXfugf9DpNohVRabyy+Oz4
+         f4TIMFRJkI3SZ+NuCuKMJa/PB2LYvaaqwFMXGer4XVm1IIBhlbdf7ur8JRAafEafENVt
+         sun5cdECbTJe0zHZmBAJk/+fJftRFHskKPXm/eAt8TpiuJ5qBEnLWxj5hCpP3igbSeqj
+         EyOXEsIeK5ZAUU+zUShZdub5APgrjXz953BduAJzM7oI/SXhKuWVP7wU5bLbJOHoY1M9
+         +aOA39XCBSkP9P3XrDFPWpLq8bcxZl+518dZhPBiqvRfDlP4PDlx70XwPkn+KDhRetlu
+         uNbg==
+X-Gm-Message-State: ANhLgQ33cesCraSBUi8OKgfzi4p9vpMa7LgspGDZVGJWoZHbSORVVypc
+        7oegbu2488BHnnJW/8TuNHd76g==
+X-Google-Smtp-Source: ADFU+vsseBQU3q/M56vj+cnpTUi48HVaXUAMtf8HJ5gdR2sE1mPBFzGr/YCqmu5GLTmWkf3N/X8ElA==
+X-Received: by 2002:a17:90b:4c84:: with SMTP id my4mr2460046pjb.3.1585262597281;
+        Thu, 26 Mar 2020 15:43:17 -0700 (PDT)
 Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q71sm2384184pjb.5.2020.03.26.15.28.22
+        by smtp.gmail.com with ESMTPSA id p22sm2467532pgn.73.2020.03.26.15.43.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2020 15:28:22 -0700 (PDT)
-Message-ID: <5e7d2c86.1c69fb81.16be6.84a8@mx.google.com>
-Date:   Thu, 26 Mar 2020 15:28:22 -0700 (PDT)
+        Thu, 26 Mar 2020 15:43:16 -0700 (PDT)
+Message-ID: <5e7d3004.1c69fb81.877e1.906a@mx.google.com>
+Date:   Thu, 26 Mar 2020 15:43:16 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -53,8 +53,7 @@ X-Kernelci-Kernel: v5.6-rc7-129-g8b4ddf47b7b4
 X-Kernelci-Report-Type: test
 X-Kernelci-Branch: testing
 X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 59 runs,
- 0 regressions (v5.6-rc7-129-g8b4ddf47b7b4)
+Subject: pm/testing sleep: 7 runs, 0 regressions (v5.6-rc7-129-g8b4ddf47b7b4)
 To:     rafael@kernel.org, linux-pm@vger.kernel.org,
         kernel-build-reports@lists.linaro.org
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -63,195 +62,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 59 runs, 0 regressions (v5.6-rc7-129-g8b4ddf47b7b4)
+pm/testing sleep: 7 runs, 0 regressions (v5.6-rc7-129-g8b4ddf47b7b4)
 
 Test results summary
 --------------------
 
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-1   | alpine-db                    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
+run | platform             | arch  | lab           | compiler | defconfig  =
+        | results
+----+----------------------+-------+---------------+----------+------------=
+--------+--------
+1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
+fconfig | 0/1    =
 
-2   | am335x-boneblack             | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 4/5    =
+2   | exynos5422-odroidxu3 | arm   | lab-collabora | gcc-8    | multi_v7_de=
+fconfig | 21/21  =
 
-3   | at91-sama5d4_xplained        | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
+3   | imx6q-sabrelite      | arm   | lab-collabora | gcc-8    | multi_v7_de=
+fconfig | 1/21   =
 
-4   | bcm2711-rpi-4-b              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
+4   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
+fconfig | 1/21   =
 
-5   | bcm2836-rpi-2-b              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 0/1    =
+5   | rk3288-veyron-jaq    | arm   | lab-collabora | gcc-8    | multi_v7_de=
+fconfig | 21/21  =
 
-6   | bcm2837-rpi-3-b              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
+6   | rk3399-gru-kevin     | arm64 | lab-collabora | gcc-8    | defconfig  =
+        | 11/11  =
 
-7   | exynos4412-odroidx2          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-8   | exynos5422-odroidxu3         | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-9   | hifive-unleashed-a00         | riscv  | lab-baylibre          | gcc-8=
-    | defconfig          | 1/1    =
-
-10  | hip07-d05                    | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 3/5    =
-
-11  | imx53-qsrb                   | arm    | lab-pengutronix       | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-12  | imx6dl-riotboard             | arm    | lab-pengutronix       | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-13  | imx6q-sabrelite              | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-14  | imx6q-sabrelite              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-15  | imx6ul-pico-hobbit           | arm    | lab-pengutronix       | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-16  | imx8mn-ddr4-evk              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-17  | meson-g12a-sei510            | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-18  | meson-g12a-u200              | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-19  | meson-g12a-x96-max           | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-20  | meson-g12b-a311d-khadas-vim3 | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-21  | meson-g12b-odroid-n2         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-22  | meson-gxl-s805x-p241         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-23  | meson-gxl-s905d-p230         | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-24  | meson-gxl-s905x-khadas-vim   | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-25  | meson-gxl-s905x-libretech-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-26  | meson-gxm-khadas-vim2        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-27  | meson-gxm-q200               | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-28  | meson-sm1-khadas-vim3l       | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-29  | meson-sm1-sei610             | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-30  | minnowboard-turbot-E3826     | x86_64 | lab-collabora         | gcc-8=
-    | x86_64_defconfig   | 5/5    =
-
-31  | omap3-beagle-xm              | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-32  | omap4-panda                  | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-33  | omap4-panda                  | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-34  | qemu_arm-virt-gicv2          | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-35  | qemu_arm-virt-gicv2          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-36  | qemu_arm-virt-gicv3          | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-37  | qemu_arm-virt-gicv3          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-38  | qemu_arm64-virt-gicv2        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-39  | qemu_arm64-virt-gicv2        | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-40  | qemu_arm64-virt-gicv3        | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-41  | qemu_arm64-virt-gicv3        | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-42  | qemu_x86_64                  | x86_64 | lab-baylibre          | gcc-8=
-    | x86_64_defconfig   | 5/5    =
-
-43  | qemu_x86_64                  | x86_64 | lab-collabora         | gcc-8=
-    | x86_64_defconfig   | 5/5    =
-
-44  | rk3288-rock2-square          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-45  | rk3288-veyron-jaq            | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 68/68  =
-
-46  | rk3399-gru-kevin             | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 85/88  =
-
-47  | rk3399-puma-haikou           | arm64  | lab-theobroma-systems | gcc-8=
-    | defconfig          | 5/5    =
-
-48  | sun50i-h5-lib...ch-all-h3-cc | arm64  | lab-baylibre          | gcc-8=
-    | defconfig          | 5/5    =
-
-49  | sun50i-h6-pine-h64           | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 5/5    =
-
-50  | sun5i-a13-olinuxino-micro    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-51  | sun7i-a20-cubieboard2        | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-52  | sun7i-a20-olinuxino-lime2    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-53  | sun8i-h2-plus...ch-all-h3-cc | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-54  | sun8i-h2-plus-orangepi-r1    | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-55  | sun8i-h2-plus-orangepi-zero  | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-56  | sun8i-h3-libretech-all-h3-cc | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-57  | tegra124-jetson-tk1          | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-58  | tegra124-jetson-tk1          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
-
-59  | tegra124-nyan-big            | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 5/5    =
+7   | tegra124-nyan-big    | arm   | lab-collabora | gcc-8    | multi_v7_de=
+fconfig | 2/2    =
 
 
 
-  Test:     baseline
+  Test:     sleep
   Tree:     pm
   Branch:   testing
   Describe: v5.6-rc7-129-g8b4ddf47b7b4
@@ -263,57 +106,27 @@ ler | defconfig          | results
 
 Test Failures
 -------------
-     =
+  =
 
 
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-2   | am335x-boneblack             | arm    | lab-baylibre          | gcc-8=
-    | multi_v7_defconfig | 4/5    =
-
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc7-129-g8b4dd=
-f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-am335x-boneblack=
-.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc7-129-g8b4dd=
-f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-am335x-boneblack=
-.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/armel/baseline/rootfs.cpio.gz     =
-
-
-  dmesg - 3 tests: 2  PASS, 1 FAIL, 0 SKIP
-    * crit:
-        never passed
-        1 lines    =
-
-            =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-5   | bcm2836-rpi-2-b              | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 0/1    =
+run | platform             | arch  | lab           | compiler | defconfig  =
+        | results
+----+----------------------+-------+---------------+----------+------------=
+--------+--------
+1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
+fconfig | 0/1    =
 
 
   Results:     0 PASS, 1 FAIL, 0 SKIP
   Full config: multi_v7_defconfig
   Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
   Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc7-129-g8b4dd=
-f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-bcm2836-rpi-2-b=
-.txt
+f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.txt
   HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc7-129-g8b4dd=
-f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-bcm2836-rpi-2-b=
-.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/armel/baseline/rootfs.cpio.gz  =
+f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
+0325.0/armhf/rootfs.cpio.gz  =
 
 
   1 tests: 0 PASS, 1 FAIL, 0 SKIP
@@ -323,91 +136,132 @@ f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-bcm2836-rpi-2-b=
          =
 
 
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-7   | exynos4412-odroidx2          | arm    | lab-collabora         | gcc-8=
-    | multi_v7_defconfig | 4/5    =
+run | platform             | arch  | lab           | compiler | defconfig  =
+        | results
+----+----------------------+-------+---------------+----------+------------=
+--------+--------
+3   | imx6q-sabrelite      | arm   | lab-collabora | gcc-8    | multi_v7_de=
+fconfig | 1/21   =
 
 
-  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Results:     1 PASS, 20 FAIL, 0 SKIP
   Full config: multi_v7_defconfig
   Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
   Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc7-129-g8b4dd=
-f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos4412-odro=
-idx2.txt
+f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-imx6q-sabrelite.txt
   HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc7-129-g8b4dd=
-f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-exynos4412-odro=
-idx2.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/armel/baseline/rootfs.cpio.gz     =
+f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-imx6q-sabrelite.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
+0325.0/armhf/rootfs.cpio.gz  =
 
 
-  dmesg - 3 tests: 2  PASS, 1 FAIL, 0 SKIP
-    * alert:
+  21 tests: 1 PASS, 20 FAIL, 0 SKIP
+    * rtcwake-mem-1:
         never passed
-        1 lines    =
+    * rtcwake-mem-2:
+        never passed
+    * rtcwake-mem-3:
+        never passed
+    * rtcwake-mem-4:
+        never passed
+    * rtcwake-mem-5:
+        never passed
+    * rtcwake-mem-6:
+        never passed
+    * rtcwake-mem-7:
+        never passed
+    * rtcwake-mem-8:
+        never passed
+    * rtcwake-mem-9:
+        never passed
+    * rtcwake-mem-10:
+        never passed
+    * rtcwake-freeze-1:
+        never passed
+    * rtcwake-freeze-2:
+        never passed
+    * rtcwake-freeze-3:
+        never passed
+    * rtcwake-freeze-4:
+        never passed
+    * rtcwake-freeze-5:
+        never passed
+    * rtcwake-freeze-6:
+        never passed
+    * rtcwake-freeze-7:
+        never passed
+    * rtcwake-freeze-8:
+        never passed
+    * rtcwake-freeze-9:
+        never passed
+    * rtcwake-freeze-10:
+        never passed   =
 
-            =
+      =
 
 
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-10  | hip07-d05                    | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 3/5    =
+run | platform             | arch  | lab           | compiler | defconfig  =
+        | results
+----+----------------------+-------+---------------+----------+------------=
+--------+--------
+4   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
+fconfig | 1/21   =
 
 
-  Results:     3 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Results:     1 PASS, 20 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
   Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc7-129-g8b4dd=
-f47b7b4/arm64/defconfig/gcc-8/lab-collabora/baseline-hip07-d05.txt
+f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squar=
+e.txt
   HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc7-129-g8b4dd=
-f47b7b4/arm64/defconfig/gcc-8/lab-collabora/baseline-hip07-d05.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/arm64/baseline/rootfs.cpio.gz     =
+f47b7b4/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squar=
+e.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
+0325.0/armhf/rootfs.cpio.gz  =
 
 
-  dmesg - 3 tests: 1  PASS, 2 FAIL, 0 SKIP
-    * alert:
+  21 tests: 1 PASS, 20 FAIL, 0 SKIP
+    * rtcwake-mem-1:
         never passed
-        11 lines
-    * emerg:
+    * rtcwake-mem-2:
         never passed
-        2 lines    =
-
-                                                                           =
-                                    =
-
-
-run | platform                     | arch   | lab                   | compi=
-ler | defconfig          | results
-----+------------------------------+--------+-----------------------+------=
-----+--------------------+--------
-46  | rk3399-gru-kevin             | arm64  | lab-collabora         | gcc-8=
-    | defconfig          | 85/88  =
-
-
-  Results:     85 PASS, 3 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc7-129-g8b4dd=
-f47b7b4/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc7-129-g8b4dd=
-f47b7b4/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.html
-  Rootfs:      https://storage.kernelci.org/images/rootfs/buildroot/kci-201=
-9.02-9-g25091c539382/arm64/baseline/rootfs.cpio.gz       =
-
-
-  bootrr - 84 tests: 81  PASS, 3 FAIL, 0 SKIP
-    * cros-ec-sensors-accel0-probed:
+    * rtcwake-mem-3:
         never passed
-    * cros-ec-sensors-accel1-probed:
+    * rtcwake-mem-4:
         never passed
-    * cros-ec-sensors-gyro0-probed:
-        never passed  =
+    * rtcwake-mem-5:
+        never passed
+    * rtcwake-mem-6:
+        never passed
+    * rtcwake-mem-7:
+        never passed
+    * rtcwake-mem-8:
+        never passed
+    * rtcwake-mem-9:
+        never passed
+    * rtcwake-mem-10:
+        never passed
+    * rtcwake-freeze-1:
+        never passed
+    * rtcwake-freeze-2:
+        never passed
+    * rtcwake-freeze-3:
+        never passed
+    * rtcwake-freeze-4:
+        never passed
+    * rtcwake-freeze-5:
+        never passed
+    * rtcwake-freeze-6:
+        never passed
+    * rtcwake-freeze-7:
+        never passed
+    * rtcwake-freeze-8:
+        never passed
+    * rtcwake-freeze-9:
+        never passed
+    * rtcwake-freeze-10:
+        never passed   =
 
-                                            =20
+              =20
