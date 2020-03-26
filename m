@@ -2,506 +2,299 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41187193E49
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 12:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2CB193E54
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 12:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728144AbgCZLua (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 07:50:30 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46914 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728150AbgCZLu3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 07:50:29 -0400
-Received: by mail-pg1-f194.google.com with SMTP id k191so2721973pgc.13
-        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 04:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=eahJs5G9Mdp7rh5p/I+k7vqH+FYkCW5jQz7h0JzvSYE=;
-        b=ld2nwTE4rMisCwbNHb7yUIP2doQ7eYTtqakpMDUOWRL/3+bVkTn4LgPD3M4NsPc8O2
-         U+LO9YmBiZT4owUtv4ids8kH8liDKBfo8YI3c8LHjcZv3+lz0PBtPKmFpb4vc0pdWS4c
-         u7x0ozSNUV0Xsp9a8TkKhVhCVAxhTFSwUOULGhEA3bznCA4Ru8IDhFZuFs4NdDGLiipJ
-         akXN84GrcHH9gkLN/jJcVtqFl9SbwFJdziIgKTlDq5fdBt/y7ypE64QswcY78DSzndDf
-         WbuqnkRuGtuhqXnJ5KkaEcfXb7xIOXvRKQy2Mpog6yGNSdvg/R0PUKwJNaF/LWeg/yHU
-         unFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eahJs5G9Mdp7rh5p/I+k7vqH+FYkCW5jQz7h0JzvSYE=;
-        b=mFOSt3w7aroeBjQyyLiFn1SfomVPi9mo5q5+BmSeMiXKI+FBHxlzumCl1bbf5IoDFG
-         kyCJKvmnyGs5g6uhe7AOwLHhqx/DNoGor0qiqmDPnYCs65oOEr8xGqtDTgYrTBlzRPjT
-         ypI/4PWaTucPiB7xm0aeocNGKQyhOvqI4eF4PZkAK2wng54t2GtZ/XQJXhMnhdkyzGFl
-         ttXauQKdM44c2U7wJNKWJ0gMXZkTEAr05ZHufN8CyeL2yea1spa/S9tgDtlwDXVwEscN
-         h1sR9HDk0JwVNt/VqOEYfOrQgjMqep4tUpzKRZ5tk413bcULuKM53DMddebEmdbh+iEx
-         9mxw==
-X-Gm-Message-State: ANhLgQ2j3PJt2yM74P0nB27JPQ0Tr5L8Nt0lBSY0qWlW9hPN6qiJY6I3
-        xzh1SRi2VoQrnf+j5VVc5PCwaQ==
-X-Google-Smtp-Source: ADFU+vvprQ2//Xmt7vRhZyfPWsz4Wn3K6tH3zXOpvAnyFCnbpAFAq5YL7JRvr/M6BzqtQxC5bbcgxg==
-X-Received: by 2002:a63:8048:: with SMTP id j69mr8254402pgd.410.1585223426833;
-        Thu, 26 Mar 2020 04:50:26 -0700 (PDT)
-Received: from localhost ([122.171.118.46])
-        by smtp.gmail.com with ESMTPSA id 6sm1494245pfx.69.2020.03.26.04.50.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 26 Mar 2020 04:50:25 -0700 (PDT)
-Date:   Thu, 26 Mar 2020 17:20:23 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, will@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, talho@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bbasu@nvidia.com, mperttunen@nvidia.com
-Subject: Re: [TEGRA194_CPUFREQ Patch 2/3] cpufreq: Add Tegra194 cpufreq driver
-Message-ID: <20200326115023.xy3n5bl7uetuw7mx@vireshk-i7>
-References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
- <1575394348-17649-2-git-send-email-sumitg@nvidia.com>
+        id S1728120AbgCZLyd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 07:54:33 -0400
+Received: from mga09.intel.com ([134.134.136.24]:17708 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728119AbgCZLyd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 26 Mar 2020 07:54:33 -0400
+IronPort-SDR: ClBkefjfjSY7kS6ppOYPNNpye5QswmI/atflNMFQVJxlKd7wb4RnbJ6CaRhLKqRGFNNCZu4jt0
+ bcgdcRCsKzvQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 04:54:32 -0700
+IronPort-SDR: HPP8N9irDUvrN4UGIlZE/JlclTiU3u4/4AB6azYpsXYbswOFaesETfzKyLHtpkQIu4tQARxKGB
+ kgfwRLckm0Ng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,308,1580803200"; 
+   d="scan'208";a="238783813"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga007.fm.intel.com with ESMTP; 26 Mar 2020 04:54:29 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jHR5j-00D6qq-LQ; Thu, 26 Mar 2020 13:54:31 +0200
+Date:   Thu, 26 Mar 2020 13:54:31 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     a.hajda@samsung.com, artem.bityutskiy@linux.intel.com,
+        balbi@kernel.org, Mark Brown <broonie@kernel.org>,
+        fntoth@gmail.com, grant.likely@arm.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, peter.ujfalusi@ti.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Android Kernel Team <kernel-team@android.com>
+Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
+ can't be satisfied
+Message-ID: <20200326115431.GP1922688@smile.fi.intel.com>
+References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
+ <20200325032901.29551-1-saravanak@google.com>
+ <20200325125120.GX1922688@smile.fi.intel.com>
+ <CAGETcx_TGw24UqX7pXZePyskrao6zwnKTq8mBk9g_7jokqAqkA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1575394348-17649-2-git-send-email-sumitg@nvidia.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <CAGETcx_TGw24UqX7pXZePyskrao6zwnKTq8mBk9g_7jokqAqkA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-12-19, 23:02, Sumit Gupta wrote:
-> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
-> new file mode 100644
-> index 0000000..9df12f4
-> --- /dev/null
-> +++ b/drivers/cpufreq/tegra194-cpufreq.c
-> @@ -0,0 +1,423 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved
-> + */
-> +
-> +#include <linux/cpu.h>
-> +#include <linux/cpufreq.h>
-> +#include <linux/delay.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +#include <asm/smp_plat.h>
-> +
-> +#include <soc/tegra/bpmp.h>
-> +#include <soc/tegra/bpmp-abi.h>
-> +
-> +#define KHZ                     1000
-> +#define REF_CLK_MHZ             408 /* 408 MHz */
-> +#define US_DELAY                2000
-> +#define US_DELAY_MIN            2
-> +#define CPUFREQ_TBL_STEP_HZ     (50 * KHZ * KHZ)
-> +#define MAX_CNT                 ~0U
-> +
-> +/* cpufreq transisition latency */
-> +#define TEGRA_CPUFREQ_TRANSITION_LATENCY (300 * 1000) /* unit in nanoseconds */
-> +
-> +enum cluster {
-> +	CLUSTER0,
-> +	CLUSTER1,
-> +	CLUSTER2,
-> +	CLUSTER3,
+On Wed, Mar 25, 2020 at 03:08:29PM -0700, Saravana Kannan wrote:
+> On Wed, Mar 25, 2020 at 5:51 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Tue, Mar 24, 2020 at 08:29:01PM -0700, Saravana Kannan wrote:
+> > > On Tue, Mar 24, 2020 at 5:38 AM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > > > Consider the following scenario.
+> > > >
+> > > > The main driver of USB OTG controller (dwc3-pci), which has the following
+> > > > functional dependencies on certain platform:
+> > > > - ULPI (tusb1210)
+> > > > - extcon (tested with extcon-intel-mrfld)
+> > > >
+> > > > Note, that first driver, tusb1210, is available at the moment of
+> > > > dwc3-pci probing, while extcon-intel-mrfld is built as a module and
+> > > > won't appear till user space does something about it.
+> > > >
+> > > > This is depicted by kernel configuration excerpt:
+> > > >
+> > > >     CONFIG_PHY_TUSB1210=y
+> > > >     CONFIG_USB_DWC3=y
+> > > >     CONFIG_USB_DWC3_ULPI=y
+> > > >     CONFIG_USB_DWC3_DUAL_ROLE=y
+> > > >     CONFIG_USB_DWC3_PCI=y
+> > > >     CONFIG_EXTCON_INTEL_MRFLD=m
+> > > >
+> > > > In the Buildroot environment the modules are probed by alphabetical ordering
+> > > > of their modaliases. The latter comes to the case when USB OTG driver will be
+> > > > probed first followed by extcon one.
+> > > >
+> > > > So, if the platform anticipates extcon device to be appeared, in the above case
+> > > > we will get deferred probe of USB OTG, because of ordering.
+> > > >
+> > > > Since current implementation, done by the commit 58b116bce136 ("drivercore:
+> > > > deferral race condition fix") counts the amount of triggered deferred probe,
+> > > > we never advance the situation -- the change makes it to be an infinite loop.
+> > >
+> > > Hi Andy,
+> > >
+> > > I'm trying to understand this sequence of steps. Sorry if the questions
+> > > are stupid -- I'm not very familiar with USB/PCI stuff.
+> >
+> > Thank you for looking into this. My answer below.
+> >
+> > As a first thing I would like to tell that there is another example of bad
+> > behaviour of deferred probe with no relation to USB. The proposed change also
+> > fixes that one (however, less possible to find in real life).
+> 
+> Unless I see what the other issue is, I can't speak for the unknown.
 
-All these have same CPUs ? Or big little kind of stuff ? How come they
-have different frequency tables ?
+Okay, let's talk about other case (actually it's the one which I had noticed
+approximately at the time when culprit patch made the kernel).
 
-> +	MAX_CLUSTERS,
-> +};
-> +
-> +struct tegra194_cpufreq_data {
-> +	void __iomem *regs;
-> +	size_t num_clusters;
-> +	struct cpufreq_frequency_table **tables;
-> +};
-> +
-> +static DEFINE_MUTEX(cpufreq_lock);
-> +
-> +struct tegra_cpu_ctr {
-> +	u32 cpu;
-> +	u32 delay;
-> +	u32 coreclk_cnt, last_coreclk_cnt;
-> +	u32 refclk_cnt, last_refclk_cnt;
-> +};
-> +
-> +static struct workqueue_struct *read_counters_wq;
-> +struct read_counters_work {
-> +	struct work_struct work;
-> +	struct tegra_cpu_ctr c;
-> +};
-> +
-> +static enum cluster get_cpu_cluster(u8 cpu)
-> +{
-> +	return MPIDR_AFFINITY_LEVEL(cpu_logical_map(cpu), 1);
-> +}
-> +
-> +/*
-> + * Read per-core Read-only system register NVFREQ_FEEDBACK_EL1.
-> + * The register provides frequency feedback information to
-> + * determine the average actual frequency a core has run at over
-> + * a period of time.
-> + *	[31:0] PLLP counter: Counts at fixed frequency (408 MHz)
-> + *	[63:32] Core clock counter: counts on every core clock cycle
-> + *			where the core is architecturally clocking
-> + */
-> +static u64 read_freq_feedback(void)
-> +{
-> +	u64 val = 0;
-> +
-> +	asm volatile("mrs %0, s3_0_c15_c0_5" : "=r" (val) : );
-> +
-> +	return val;
-> +}
-> +
-> +u16 map_freq_to_ndiv(struct mrq_cpu_ndiv_limits_response *nltbl, u32 freq)
-> +{
-> +	return DIV_ROUND_UP(freq * nltbl->pdiv * nltbl->mdiv,
-> +			    nltbl->ref_clk_hz / KHZ);
-> +}
-> +
-> +static inline u32 map_ndiv_to_freq(struct mrq_cpu_ndiv_limits_response
-> +				   *nltbl, u16 ndiv)
-> +{
-> +	return nltbl->ref_clk_hz / KHZ * ndiv / (nltbl->pdiv * nltbl->mdiv);
-> +}
-> +
-> +static void tegra_read_counters(struct work_struct *work)
-> +{
-> +	struct read_counters_work *read_counters_work;
-> +	struct tegra_cpu_ctr *c;
-> +	u64 val;
-> +
-> +	/*
-> +	 * ref_clk_counter(32 bit counter) runs on constant clk,
-> +	 * pll_p(408MHz).
-> +	 * It will take = 2 ^ 32 / 408 MHz to overflow ref clk counter
-> +	 *              = 10526880 usec = 10.527 sec to overflow
-> +	 *
-> +	 * Like wise core_clk_counter(32 bit counter) runs on core clock.
-> +	 * It's synchronized to crab_clk (cpu_crab_clk) which runs at
-> +	 * freq of cluster. Assuming max cluster clock ~2000MHz,
-> +	 * It will take = 2 ^ 32 / 2000 MHz to overflow core clk counter
-> +	 *              = ~2.147 sec to overflow
-> +	 */
-> +	read_counters_work = container_of(work, struct read_counters_work,
-> +					  work);
-> +	c = &read_counters_work->c;
-> +
-> +	val = read_freq_feedback();
-> +	c->last_refclk_cnt = lower_32_bits(val);
-> +	c->last_coreclk_cnt = upper_32_bits(val);
-> +	udelay(c->delay);
-> +	val = read_freq_feedback();
-> +	c->refclk_cnt = lower_32_bits(val);
-> +	c->coreclk_cnt = upper_32_bits(val);
-> +}
-> +
-> +/*
-> + * Return instantaneous cpu speed
-> + * Instantaneous freq is calculated as -
-> + * -Takes sample on every query of getting the freq.
-> + *	- Read core and ref clock counters;
-> + *	- Delay for X us
-> + *	- Read above cycle counters again
-> + *	- Calculates freq by subtracting current and previous counters
-> + *	  divided by the delay time or eqv. of ref_clk_counter in delta time
-> + *	- Return Kcycles/second, freq in KHz
-> + *
-> + *	delta time period = x sec
-> + *			  = delta ref_clk_counter / (408 * 10^6) sec
-> + *	freq in Hz = cycles/sec
-> + *		   = (delta cycles / x sec
-> + *		   = (delta cycles * 408 * 10^6) / delta ref_clk_counter
-> + *	in KHz	   = (delta cycles * 408 * 10^3) / delta ref_clk_counter
-> + *
-> + * @cpu - logical cpu whose freq to be updated
-> + * Returns freq in KHz on success, 0 if cpu is offline
-> + */
-> +static unsigned int tegra194_get_speed_common(u32 cpu, u32 delay)
-> +{
-> +	struct read_counters_work read_counters_work;
-> +	struct tegra_cpu_ctr c;
-> +	u32 delta_refcnt;
-> +	u32 delta_ccnt;
-> +	u32 rate_mhz;
-> +
-> +	read_counters_work.c.cpu = cpu;
-> +	read_counters_work.c.delay = delay;
-> +	INIT_WORK_ONSTACK(&read_counters_work.work, tegra_read_counters);
-> +	queue_work_on(cpu, read_counters_wq, &read_counters_work.work);
-> +	flush_work(&read_counters_work.work);
+For some debugging purposes I have been using pin control table in board code.
 
-Why can't this be done in current context ?
+Since I would like to boot kernel on different systems I have some tables for
+non-existing pin control device. Pin control framework returns -EPROBE_DEFER
+when trying to probe device with attached table for wrong pin control. This is
+fine, the problem is that *any* successfully probed device, which happens in
+the deferred probe initcall will desynchronize existing counter. As a result ->
+infinite loop. For the record, I didn't realize and didn't investigate that
+time the issue and now I can confirm that this is a culprit which is fixed by
+this patch.
 
-> +	c = read_counters_work.c;
-> +
-> +	if (c.coreclk_cnt < c.last_coreclk_cnt)
-> +		delta_ccnt = c.coreclk_cnt + (MAX_CNT - c.last_coreclk_cnt);
-> +	else
-> +		delta_ccnt = c.coreclk_cnt - c.last_coreclk_cnt;
-> +	if (!delta_ccnt)
-> +		return 0;
-> +
-> +	/* ref clock is 32 bits */
-> +	if (c.refclk_cnt < c.last_refclk_cnt)
-> +		delta_refcnt = c.refclk_cnt + (MAX_CNT - c.last_refclk_cnt);
-> +	else
-> +		delta_refcnt = c.refclk_cnt - c.last_refclk_cnt;
-> +	if (!delta_refcnt) {
-> +		pr_debug("cpufreq: %d is idle, delta_refcnt: 0\n", cpu);
-> +		return 0;
-> +	}
-> +	rate_mhz = ((unsigned long)(delta_ccnt * REF_CLK_MHZ)) / delta_refcnt;
-> +
-> +	return (rate_mhz * KHZ); /* in KHz */
-> +}
-> +
-> +static unsigned int tegra194_get_speed(u32 cpu)
-> +{
-> +	return tegra194_get_speed_common(cpu, US_DELAY);
-> +}
-> +
-> +static unsigned int tegra194_fast_get_speed(u32 cpu)
-> +{
-> +	return tegra194_get_speed_common(cpu, US_DELAY_MIN);
+> > > > ---8<---8<---
+> > > >
+> > > > [   22.187127] driver_deferred_probe_trigger <<< 1
+> > > >
+> > > > ...here is the late initcall triggers deferred probe...
+> > > >
+> > > > [   22.191725] platform dwc3.0.auto: deferred_probe_work_func in deferred list
+> > > >
+> > > > ...dwc3.0.auto is the only device in the deferred list...
+> > >
+> > > Ok, dwc3.0.auto is the only unprobed device at this point?
+> >
+> > Correct.
+> >
+> > > > [   22.198727] platform dwc3.0.auto: deferred_probe_work_func 1 <<< counter 1
+> > > >
+> > > > ...the counter before mutex is unlocked is kept the same...
+> > > >
+> > > > [   22.205663] platform dwc3.0.auto: Retrying from deferred list
+> > > >
+> > > > ...mutes has been unlocked, we try to re-probe the driver...
+> > > >
+> > > > [   22.211487] bus: 'platform': driver_probe_device: matched device dwc3.0.auto with driver dwc3
+> > > > [   22.220060] bus: 'platform': really_probe: probing driver dwc3 with device dwc3.0.auto
+> > > > [   22.238735] bus: 'ulpi': driver_probe_device: matched device dwc3.0.auto.ulpi with driver tusb1210
+> > > > [   22.247743] bus: 'ulpi': really_probe: probing driver tusb1210 with device dwc3.0.auto.ulpi
+> > > > [   22.256292] driver: 'tusb1210': driver_bound: bound to device 'dwc3.0.auto.ulpi'
+> > > > [   22.263723] driver_deferred_probe_trigger <<< 2
+> > > >
+> > > > ...the dwc3.0.auto probes ULPI, we got successful bound and bumped counter...
+> > > >
+> > > > [   22.268304] bus: 'ulpi': really_probe: bound device dwc3.0.auto.ulpi to driver tusb1210
+> > >
+> > > So where did this dwc3.0.auto.ulpi come from?
+> >
+> > > Looks like the device is created by dwc3_probe() through this call flow:
+> > > dwc3_probe() -> dwc3_core_init() -> dwc3_core_ulpi_init() ->
+> > > dwc3_ulpi_init() -> ulpi_register_interface() -> ulpi_register()
+> >
+> > Correct.
+> >
+> > > > [   22.276697] platform dwc3.0.auto: Driver dwc3 requests probe deferral
+> > >
+> > > Can you please point me to which code patch actually caused the probe
+> > > deferral?
+> >
+> > Sure, it's in drd.c.
+> >
+> > if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+> >   edev = extcon_get_extcon_dev(name);
+> >   if (!edev)
+> >     return ERR_PTR(-EPROBE_DEFER);
+> >   return edev;
+> > }
+> 
+> Thanks for the confirmations and pointers. I assume
+> "linux,extcon-name" is a property that's obtained from ACPI? Because I
+> couldn't find a relevant reference to it elsewhere in the kernel.
 
-Why is this required specially here ? Why can't you work with normal
-delay ?
+Yes.
 
-> +}
-> +
-> +static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
-> +{
-> +	struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
-> +	int cluster = get_cpu_cluster(policy->cpu);
-> +
-> +	if (cluster >= data->num_clusters)
-> +		return -EINVAL;
-> +
-> +	policy->cur = tegra194_fast_get_speed(policy->cpu); /* boot freq */
-> +
-> +	/* set same policy for all cpus */
-> +	cpumask_copy(policy->cpus, cpu_possible_mask);
+> > > > ...but extcon driver is still missing...
+> > > >
+> > > > [   22.283174] platform dwc3.0.auto: Added to deferred list
+> > > > [   22.288513] platform dwc3.0.auto: driver_deferred_probe_add_trigger local counter: 1 new counter 2
+> > >
+> > > I'm not fully aware of all the USB implications, but if extcon is
+> > > needed, why can't that check be done before we add and probe the ulpi
+> > > device? That'll avoid this whole "fake" probing and avoid the counter
+> > > increase. And avoid the need for this patch that's touching the code
+> > > code that's already a bit delicate.
+> >
+> > > Also, with my limited experience with all the possible drivers in the
+> > > kernel, it's weird that the ulpi device is added and probed before we
+> > > make sure the parent device (dwc3.0.auto) can actually probe
+> > > successfully.
+> >
+> > As I said above the deferred probe trigger has flaw on its own.
+> 
+> Definitely agree. I'm not saying deferred probe is perfect.
+> 
+> > Even if we fix for USB case, there is (and probably will be) others.
+> >
+> > > Most of the platform device code I've seen in systems with OF (device
+> > > tree) add the child devices towards the end of the parent's probe
+> > > function.
 
-You are copying cpu_possible_mask mask here, and so this routine will
-get called only once.
+I realized also that your fix won't work if we change extcon to be compiled in
+and ULPI to be a module. So, any driver with two or more strict dependencies
+one of which is satisfied and one is not will end up in this infinite loop.
 
-I still don't understand the logic behind clusters and frequency
-tables.
+> > > > ...and since we had a successful probe, we got counter mismatch...
+> > > >
+> > > > [   22.297490] driver_deferred_probe_trigger <<< 3
+> > > > [   22.302074] platform dwc3.0.auto: deferred_probe_work_func 2 <<< counter 3
+> > > >
+> > > > ...at the end we have a new counter and loop repeats again, see 22.198727...
+> > > >
+> > > > ---8<---8<---
+> > > >
+> > > > Revert of the commit helps, but it is probably not helpful for the initially
+> > > > found regression. Artem Bityutskiy suggested to use counter of the successful
+> > > > probes instead. This fixes above mentioned case and shouldn't prevent driver
+> > > > to reprobe deferred ones.
+> > > >
+> > > > Under "successful probe" we understand the state when a driver of the certain
+> > > > device is being kept bound after deferred probe trigger cycle. For instance,
+> > > > in the above mentioned case probing of tusb1210 is not successful because dwc3
+> > > > driver unbinds device dwc3.0.auto.ulpi. The atomic_dec() call is used to keep
+> > > > track of this. The amount of bindings is always great than or equal to the
+> > > > amount of unbindings as guaranteed by design of the driver binding mechanism.
+> > >
+> > > The unbindings count can increase for other unrelated drivers unbinding
+> > > too. Wouldn't it? Seems a bit fragile and racy in a fashion similar to
+> > > the issue the original patch was trying to fix.
+> >
+> > Yes, it's (unlikely) possible (*), but it will give one more iteration per such
+> > case. It's definitely better than infinite loop. Do you agree?
+> 
+> Sorry I wasn't being clear (I was in a rush). I'm saying this patch
+> can reintroduce the bug where the deferred probe isn't triggered when
+> it should be.
 
-> +
-> +	policy->freq_table = data->tables[cluster];
-> +	policy->cpuinfo.transition_latency = TEGRA_CPUFREQ_TRANSITION_LATENCY;
-> +
-> +	return 0;
-> +}
-> +
-> +static void set_cpu_ndiv(void *data)
-> +{
-> +	struct cpufreq_frequency_table *tbl = data;
-> +	u64 ndiv_val = (u64)tbl->driver_data;
-> +
-> +	asm volatile("msr s3_0_c15_c0_4, %0" : : "r" (ndiv_val));
-> +}
-> +
-> +static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
-> +				       unsigned int index)
-> +{
-> +	struct cpufreq_frequency_table *tbl = policy->freq_table + index;
-> +	static struct cpufreq_freqs freqs;
-> +
-> +	mutex_lock(&cpufreq_lock);
+I don't think so. If I'm not mistaken we still have one more cycle to trigger probe.
 
-No need of lock here.
+> Let's take a simple execution flow.
+> 
+> probe_okay is at 10.
+> 
+> Thread-A
+>   really_probe(Device-A)
+>     local_probe_okay_count = 10
+>     Device-A probe function is running...
+> 
+> Thread-B
+>   really_probe(Device-B)
+>     Device-B probes successfully.
+>     probe_okay incremented to 11
 
-> +	freqs.old = policy->cur;
-> +	freqs.new = tbl->frequency;
-> +
-> +	cpufreq_freq_transition_begin(policy, &freqs);
-> +	on_each_cpu_mask(policy->cpus, set_cpu_ndiv, tbl, true);
+And probe trigger task is called. It goes to the loop because counters are not the same.
 
-When CPUs share clock line, why is this required for every CPU ?
+> Thread-C
+>   Device-C (which had bound earlier) is unbound (say module is
+> unloaded or a million other reasons).
+>   probe_okay is decremented to 10.
 
-> +	cpufreq_freq_transition_end(policy, &freqs, 0);
-> +
-> +	mutex_unlock(&cpufreq_lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct cpufreq_driver tegra194_cpufreq_driver = {
-> +	.name = "tegra194",
-> +	.flags = CPUFREQ_STICKY | CPUFREQ_CONST_LOOPS |
-> +		CPUFREQ_NEED_INITIAL_FREQ_CHECK | CPUFREQ_ASYNC_NOTIFICATION,
+ 
+> Thread-A continues
+>   Device-A probe function returns -EPROBE_DEFER
+>   driver_deferred_probe_add_trigger() doesn't do anything because
+>     local_probe_okay_count == probe_okay
+>   But Device-A might have deferred probe waiting on Device-B.
+>   Device-A never probes.
 
-Why Async here ? I am really confused if I am not able to understand
-the driver or you :)
+See above.
 
-> +	.verify = cpufreq_generic_frequency_table_verify,
-> +	.target_index = tegra194_cpufreq_set_target,
-> +	.get = tegra194_get_speed,
-> +	.init = tegra194_cpufreq_init,
-> +	.attr = cpufreq_generic_attr,
-> +};
-> +
-> +static void tegra194_cpufreq_free_resources(void)
-> +{
-> +	flush_workqueue(read_counters_wq);
-> +	destroy_workqueue(read_counters_wq);
-> +}
-> +
-> +static struct cpufreq_frequency_table *init_freq_table
+> > *) It means during probe you have _intensive_ removing, of course you may keep
+> > kernel busy with iterations, but it has no practical sense. DoS attacks more
+> > effective in different ways.
+> 
+> I wasn't worried about DoS attacks. More of a functional correctness
+> issue what I explained above.
+> 
+> Anyway, if your issue and similar issues can be handles in driver core
+> in a clean way without breaking other cases, I don't have any problem
+> with that. Just that, I think the current solution breaks other cases.
 
-Don't break line here, rather break after above *.
+> As an alternate solution, assuming "linux,extcon-name" is coming
+> from some firmware, you might want to look into the fw_devlink
+> feature.
 
-> +		(struct platform_device *pdev, struct tegra_bpmp *bpmp,
-> +		 unsigned int cluster_id)
-> +{
-> +	struct cpufreq_frequency_table *opp_table;
-
-Please name it freq_table :)
-
-> +	struct mrq_cpu_ndiv_limits_response resp;
-> +	unsigned int num_freqs, ndiv, delta_ndiv;
-> +	struct mrq_cpu_ndiv_limits_request req;
-> +	struct tegra_bpmp_message msg;
-> +	u16 freq_table_step_size;
-> +	int err, index;
-> +
-> +	memset(&req, 0, sizeof(req));
-> +	req.cluster_id = cluster_id;
-> +
-> +	memset(&msg, 0, sizeof(msg));
-> +	msg.mrq = MRQ_CPU_NDIV_LIMITS;
-> +	msg.tx.data = &req;
-> +	msg.tx.size = sizeof(req);
-> +	msg.rx.data = &resp;
-> +	msg.rx.size = sizeof(resp);
-> +
-> +	err = tegra_bpmp_transfer(bpmp, &msg);
-> +	if (err)
-> +		return ERR_PTR(err);
-> +
-> +	/*
-> +	 * Make sure frequency table step is a multiple of mdiv to match
-> +	 * vhint table granularity.
-> +	 */
-> +	freq_table_step_size = resp.mdiv *
-> +			DIV_ROUND_UP(CPUFREQ_TBL_STEP_HZ, resp.ref_clk_hz);
-> +
-> +	dev_dbg(&pdev->dev, "cluster %d: frequency table step size: %d\n",
-> +		cluster_id, freq_table_step_size);
-> +
-> +	delta_ndiv = resp.ndiv_max - resp.ndiv_min;
-> +
-> +	if (unlikely(delta_ndiv == 0))
-> +		num_freqs = 1;
-> +	else
-> +		/* We store both ndiv_min and ndiv_max hence the +1 */
-> +		num_freqs = delta_ndiv / freq_table_step_size + 1;
-> +
-> +	num_freqs += (delta_ndiv % freq_table_step_size) ? 1 : 0;
-> +
-> +	opp_table = devm_kcalloc(&pdev->dev, num_freqs + 1, sizeof(*opp_table),
-> +				 GFP_KERNEL);
-> +	if (!opp_table)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	for (index = 0, ndiv = resp.ndiv_min;
-> +			ndiv < resp.ndiv_max;
-> +			index++, ndiv += freq_table_step_size) {
-> +		opp_table[index].driver_data = ndiv;
-> +		opp_table[index].frequency = map_ndiv_to_freq(&resp, ndiv);
-> +	}
-> +
-> +	opp_table[index].driver_data = resp.ndiv_max;
-> +	opp_table[index++].frequency = map_ndiv_to_freq(&resp, resp.ndiv_max);
-> +	opp_table[index].frequency = CPUFREQ_TABLE_END;
-> +
-> +	return opp_table;
-> +}
-> +
-> +static int tegra194_cpufreq_probe(struct platform_device *pdev)
-> +{
-> +	struct tegra194_cpufreq_data *data;
-> +	struct tegra_bpmp *bpmp;
-> +	int err, i;
-> +
-> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->num_clusters = MAX_CLUSTERS;
-> +	data->tables = devm_kcalloc(&pdev->dev, data->num_clusters,
-> +				    sizeof(*data->tables), GFP_KERNEL);
-> +	if (!data->tables)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	read_counters_wq = alloc_workqueue("read_counters_wq", __WQ_LEGACY, 1);
-> +	if (!read_counters_wq) {
-> +		dev_err(&pdev->dev, "fail to create_workqueue\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	bpmp = of_tegra_bpmp_get();
-> +	if (IS_ERR(bpmp)) {
-> +		err = PTR_ERR(bpmp);
-> +		goto err_free_res;
-> +	}
-> +
-> +	for (i = 0; i < data->num_clusters; i++) {
-> +		data->tables[i] = init_freq_table(pdev, bpmp, i);
-> +		if (IS_ERR(data->tables[i])) {
-> +			err = PTR_ERR(data->tables[i]);
-> +			goto put_bpmp;
-> +		}
-> +	}
-> +
-> +	tegra_bpmp_put(bpmp);
-> +
-> +	tegra194_cpufreq_driver.driver_data = data;
-> +
-> +	err = cpufreq_register_driver(&tegra194_cpufreq_driver);
-> +	if (err)
-> +		goto err_free_res;
-> +
-> +	return err;
-> +
-> +put_bpmp:
-> +	tegra_bpmp_put(bpmp);
-> +err_free_res:
-> +	tegra194_cpufreq_free_resources();
-> +	return err;
-> +}
-> +
-> +static int tegra194_cpufreq_remove(struct platform_device *pdev)
-> +{
-> +	cpufreq_unregister_driver(&tegra194_cpufreq_driver);
-> +	tegra194_cpufreq_free_resources();
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver tegra194_cpufreq_platform_driver = {
-> +	.driver = {
-> +		.name = "tegra194-cpufreq",
-> +	},
-> +	.probe = tegra194_cpufreq_probe,
-> +	.remove = tegra194_cpufreq_remove,
-> +};
-> +
-> +static int __init tegra_cpufreq_init(void)
-
-I seem to be forgetting this, but should we use __init with modules or
-not ?
+Let's forget about USB. Don't be fixed on it. It one of the particular case out
+of others. I'm not going to comment USB particularities, sorry. It seems to me
+as not related.
 
 -- 
-viresh
+With Best Regards,
+Andy Shevchenko
+
+
