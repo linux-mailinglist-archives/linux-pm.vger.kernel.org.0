@@ -2,119 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4651C194115
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 15:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C49F3194137
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 15:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727763AbgCZORL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 10:17:11 -0400
-Received: from mail-eopbgr80080.outbound.protection.outlook.com ([40.107.8.80]:9447
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727751AbgCZORL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 26 Mar 2020 10:17:11 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bjlQa9HgI+twreTv1Hv6oJmaNjbki1o2sjaxpm9de3dHOHNHO8hiHXZLXr6iPUWUSWmqcteY0WpnOJzDmgYVpVeRDP+Q5Unl/Za6dEm64C4KLnWDSKZqDwFoZE0K5w80I5pi3yaalRMmMNbkHoQJ0Cqr3j8Y24MsYROpJtpa2GIABlWz5ogKALfykt4OIsh7DlXTeSRIghzaSpkI5MukH0DWt4jIqXPx9GNNrpqfh+GsAsO8jTqdMgFh8+Cg1kOqLK0F75j9Sgf9JIMe0d3WtRBuie5Q3F78OsOF+rzoPYUIz3k3nL2OERpLKVtoNJOh1UaxL03j23wwAHvsXKmkrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1xRMCs5XdbSctT6VGReAGpgj7mfw20McXX7MyGgey5c=;
- b=Z5UWfAPuenbdb/E2l0YmqgigiAxXQZXSYrisQtU22Gyu93/yrmLGD4mh9WBnrCzXy6KkCkM5HoUR6/Z2ridw1zUNu7u44MSnsaUOok2VniI7ly+wqLuL7cMSdT2nT47VoaepSuGt5MlfTuRw2biHYIHBnQwGicoQ71uVa812kHh4R3/A7yQEhaMtWPh8WkBJiclnlgBmUx9A24uEnogwE5844tl727T9yqokz8Ug+x8/N7DvQDb4Y7hx5CXW+C2c0+wCAyZeW0pZcqB0FYH+3E5YW7ihfGPjEOReHQhKu/8KJeP7FrzD86dB7v+BS21mj4sVsBS5M0i89aJbgEEUPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1xRMCs5XdbSctT6VGReAGpgj7mfw20McXX7MyGgey5c=;
- b=pwpUmBWd1E60RkmOcXNYhJEPM1fneMG6ZMadb7VbVSMwtMQmE4y1wg0rSB1rwYyjtCqUUQMNLapmdU/SmGhdg3HXrpGBUo4NdbSWiPSMSk7p4HktaLzn+DuKFcplV9fji0g/L7YodWOKvSC01nnF5MnbMTaBHoggT62jOT/MpsQ=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3865.eurprd04.prod.outlook.com (52.134.73.19) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2835.22; Thu, 26 Mar 2020 14:17:05 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b%7]) with mapi id 15.20.2835.023; Thu, 26 Mar 2020
- 14:17:05 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH] thermal: imx: Add missing of_node_put()
-Thread-Topic: [PATCH] thermal: imx: Add missing of_node_put()
-Thread-Index: AQHWAzBAgRLyKlHtTk2Dsujd2fCjGqha6SaAgAABlyA=
-Date:   Thu, 26 Mar 2020 14:17:05 +0000
-Message-ID: <DB3PR0402MB3916F370C524F3F8CE590167F5CF0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <1585200445-16461-1-git-send-email-Anson.Huang@nxp.com>
- <8325cde9-02f3-b913-b020-4c98d19936f4@linaro.org>
-In-Reply-To: <8325cde9-02f3-b913-b020-4c98d19936f4@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [119.31.174.68]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: ba938f9a-0f00-4771-59fb-08d7d1905c86
-x-ms-traffictypediagnostic: DB3PR0402MB3865:|DB3PR0402MB3865:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB3865D6D42F57C637AFD29BBDF5CF0@DB3PR0402MB3865.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1923;
-x-forefront-prvs: 0354B4BED2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(396003)(376002)(346002)(366004)(39860400002)(2906002)(66556008)(66476007)(66446008)(55016002)(8676002)(316002)(64756008)(66946007)(5660300002)(86362001)(7416002)(71200400001)(9686003)(110136005)(7696005)(33656002)(52536014)(26005)(81166006)(44832011)(478600001)(4326008)(76116006)(53546011)(81156014)(8936002)(6506007)(186003)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3865;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qSWLBoj/p6fNgEdU3KD7xRMF16qBlT+xNQkHhuae6EvlAvTEXzi6xZ8iT8K/SvYP71Q3aQco2MCmUdegW0nLQCoZlZPnGQ667GO3BqIlyafUHD9qmjSAlzKmXx82axKBF9qgQcn0F/3J0wJyssVhYSon0OZZ5Sj8cuvKM4Jpm3i5ofO7flgJTnKKRZOXgaTWgkrmYV70UpSrLVSzLUN0LJvLVb0lt2FD+1JkfzAZtM4cctco31K/qrDZIKDaQej4dTAXe2evut4b9DiQuCDSPDZILro7tKeRtcVbjTppUsUiSpLZHuklntis6TJGgnho0ZpjdYad1c0wl7a0IMmdUvXL/C+2Ig5iPrHlWNDRC6DNBN1eN2Sxt2d0pBPuoOp2WdCVrB1+RQmzc8avZgDdEujwDGwrEeeOZxwmvsHqafRokjGHyOgTguI8Kqv7t7WYm3GasKn0d6mHYgQZOPPWyOwUyeA+KqGpiMv14pQqsZKnrka0SY9d64bf0kxoudqW
-x-ms-exchange-antispam-messagedata: gE/0lHS7dG4g/Pamo49kCnc32z8NiJAq1jqQJ71iYRS122shG4KV32FCvtYQnocMXlwJmaVidBjAUIa/9xIDMIW1JLLSJMJiM8U5VmamuEfn1XgYffs4aqTfDwAqvjddIuHWYMAujFW71ejNw6k62A==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727875AbgCZOXw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 10:23:52 -0400
+Received: from mga17.intel.com ([192.55.52.151]:20673 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727869AbgCZOXw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 26 Mar 2020 10:23:52 -0400
+IronPort-SDR: V0OKcmgpwP/pm9ybSEtswjlXlaHLMcFnWJ9I/r1d98RDV0rInFcCc8x8pwCSd7tSOVNYBBbVHe
+ LJ1LkCADYgdQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 07:23:52 -0700
+IronPort-SDR: DimBgg8sUOWeCGBgqUZj9R2clPDodmlm9rZiNKMrLL1pxw1LeFXbUuozHmbhQTCfV3CMJHQYBN
+ K49CAPxNv3hw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,308,1580803200"; 
+   d="scan'208";a="265882920"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga002.jf.intel.com with ESMTP; 26 Mar 2020 07:23:48 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jHTQE-00D99J-Dv; Thu, 26 Mar 2020 16:23:50 +0200
+Date:   Thu, 26 Mar 2020 16:23:50 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Grant Likely <grant.likely@arm.com>
+Cc:     Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mark Brown <broonie@kernel.org>, Ferry Toth <fntoth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        nd <nd@arm.com>
+Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
+ can't be satisfied
+Message-ID: <20200326142350.GW1922688@smile.fi.intel.com>
+References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
+ <20200325032901.29551-1-saravanak@google.com>
+ <20200325125120.GX1922688@smile.fi.intel.com>
+ <CAGETcx_TGw24UqX7pXZePyskrao6zwnKTq8mBk9g_7jokqAqkA@mail.gmail.com>
+ <CAJZ5v0jB1hqzYK8ezjf1_1yMCudNXNS-CsrUJQcmL4W5mBD6fQ@mail.gmail.com>
+ <ca661616-f5bf-d92f-9173-172792797b16@ti.com>
+ <20200326120323.GR1922688@smile.fi.intel.com>
+ <6c04af00-adc8-6be2-b7fd-b4a875524563@arm.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba938f9a-0f00-4771-59fb-08d7d1905c86
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Mar 2020 14:17:05.1840
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PdiKLiBjDF0tPqWcat0h528FQDWxOa7XzkFRdS2vDhi9MUjAyRLFuQrWtjGggFYdqgZwb+5Qf36hHBV22s0i2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3865
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c04af00-adc8-6be2-b7fd-b4a875524563@arm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksIERhbmllbA0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIHRoZXJtYWw6IGlteDogQWRkIG1p
-c3Npbmcgb2Zfbm9kZV9wdXQoKQ0KPiANCj4gT24gMjYvMDMvMjAyMCAwNjoyNywgQW5zb24gSHVh
-bmcgd3JvdGU6DQo+ID4gQWZ0ZXIgZmluaXNoaW5nIHVzaW5nIGNwdSBub2RlIGdvdCBmcm9tIG9m
-X2dldF9jcHVfbm9kZSgpLA0KPiA+IG9mX25vZGVfcHV0KCkgbmVlZHMgdG8gYmUgY2FsbGVkLg0K
-PiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogQW5zb24gSHVhbmcgPEFuc29uLkh1YW5nQG54cC5jb20+
-IC0tLQ0KPiA+IGRyaXZlcnMvdGhlcm1hbC9pbXhfdGhlcm1hbC5jIHwgMTAgKysrKysrKy0tLSAx
-IGZpbGUgY2hhbmdlZCwgNw0KPiA+IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+ID4N
-Cj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90aGVybWFsL2lteF90aGVybWFsLmMNCj4gPiBiL2Ry
-aXZlcnMvdGhlcm1hbC9pbXhfdGhlcm1hbC5jIGluZGV4IGU3NjFjOWIuLmY3Yjk3MGQgMTAwNjQ0
-IC0tLQ0KPiA+IGEvZHJpdmVycy90aGVybWFsL2lteF90aGVybWFsLmMgKysrIGIvZHJpdmVycy90
-aGVybWFsL2lteF90aGVybWFsLmMNCj4gQEANCj4gPiAtNjQ5LDcgKzY0OSw3IEBAIE1PRFVMRV9E
-RVZJQ0VfVEFCTEUob2YsIG9mX2lteF90aGVybWFsX21hdGNoKTsNCj4gc3RhdGljDQo+ID4gaW50
-IGlteF90aGVybWFsX3JlZ2lzdGVyX2xlZ2FjeV9jb29saW5nKHN0cnVjdCBpbXhfdGhlcm1hbF9k
-YXRhICpkYXRhKQ0KPiA+IHsgc3RydWN0IGRldmljZV9ub2RlICpucDsgLQlpbnQgcmV0OyArCWlu
-dCByZXQgPSAwOw0KPiA+DQo+ID4gZGF0YS0+cG9saWN5ID0gY3B1ZnJlcV9jcHVfZ2V0KDApOyBp
-ZiAoIWRhdGEtPnBvbGljeSkgeyBAQCAtNjY0LDExDQo+ID4gKzY2NCwxNSBAQCBzdGF0aWMgaW50
-IGlteF90aGVybWFsX3JlZ2lzdGVyX2xlZ2FjeV9jb29saW5nKHN0cnVjdA0KPiA+IGlteF90aGVy
-bWFsX2RhdGEgKmRhdGEpIGlmIChJU19FUlIoZGF0YS0+Y2RldikpIHsgcmV0ID0NCj4gPiBQVFJf
-RVJSKGRhdGEtPmNkZXYpOyBjcHVmcmVxX2NwdV9wdXQoZGF0YS0+cG9saWN5KTsgLQ0KPiAJcmV0
-dXJuDQo+ID4gcmV0OyArCQkJZ290byBwdXRfbm9kZTsgfSB9DQo+ID4NCj4gPiAtCXJldHVybiAw
-OyArcHV0X25vZGU6ICsJaWYgKG5wKSArCQlvZl9ub2RlX3B1dChucCk7DQo+IA0KPiBvZl9ub2Rl
-X3B1dCgpIGlzIGFscmVhZHkgY2hlY2tpbmcgaWYgJ25wJyBpcyBOVUxMLg0KDQpPSywgSSB3aWxs
-IHJlbW92ZSB0aGUgY2hlY2tpbmcgb2YgaWYgJ25wJyBpcyBOVUxMLg0KDQpUaGFua3MsDQpBbnNv
-bg0K
+On Thu, Mar 26, 2020 at 01:45:50PM +0000, Grant Likely wrote:
+> On 26/03/2020 12:03, Andy Shevchenko wrote:
+> > On Thu, Mar 26, 2020 at 11:45:18AM +0200, Peter Ujfalusi wrote:
+> > > On 26/03/2020 10.39, Rafael J. Wysocki wrote:
+> > > > On Wed, Mar 25, 2020 at 11:09 PM Saravana Kannan <saravanak@google.com> wrote:
+> > > > > On Wed, Mar 25, 2020 at 5:51 AM Andy Shevchenko
+> > > > > <andriy.shevchenko@linux.intel.com> wrote:
+> > 
+> > ...
+> > 
+> > > > OK, so the situation right now is that commit 58b116bce136 has
+> > > > introduced a regression and so it needs to be fixed or reverted.  The
+> > > > cases that were previously broken and were unbroken by that commit
+> > > > don't matter here, so you cannot argue that they would be "broken".
+> > > 
+> > > commit 58b116bce136 is from 2014 and the whole ULPI support for dwc3
+> > > came in a year later.
+> > > While I agree that 58b116bce136 fail to handle came a year later, but
+> > > technically it did not introduced a regression.
+> > > 
+> > > The revert on the other hand is going to introduce a regression as
+> > > things were working fine since 2014. Not sure why the dwc3 issue got
+> > > this long to be noticed as the 58b116bce136 was already in kernel when
+> > > the ULPI support was added...
+> > 
+> > I dare to say that is luck based on people's laziness to figure out the root
+> > cause. As I pointed out in email to Saravana the issue is not limited to USB
+> > case and, if my memory doesn't trick me out, I suffered from it approximately
+> > in ~2014-2015 with pin control tables.
+> 
+> I've not been involved in this for a very long time, but from our past
+> conversations and the description that is given here I still feel that this
+> problem is a design bug on the dwc3 driver dependencies rather than a
+> failure with driver core. dwc3 is doing something rather convoluted and it
+> would be worth reevaluating how probe failures are unwound on that
+> particular driver stack.
+
+I disagree. Have you chance to look into another example I gave to Saravana?
+
+The unbalanced increment is fragile per se, because you can't guarantee that
+it will be no unsynchronization between probed successfully (unrelated!) and
+deferred drivers.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
