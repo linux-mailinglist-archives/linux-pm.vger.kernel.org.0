@@ -2,52 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 408B0193CC6
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 11:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B064193D5B
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 11:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726298AbgCZKPI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 06:15:08 -0400
-Received: from mailbackend.panix.com ([166.84.1.89]:61592 "EHLO
-        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726292AbgCZKPI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 06:15:08 -0400
-Received: from xps-7390.lan (ip68-111-223-64.sd.sd.cox.net [68.111.223.64])
-        by mailbackend.panix.com (Postfix) with ESMTPSA id 48p17r6KsRz1V4G;
-        Thu, 26 Mar 2020 06:15:04 -0400 (EDT)
-Date:   Thu, 26 Mar 2020 03:15:03 -0700 (PDT)
-From:   "Kenneth R. Crudup" <kenny@panix.com>
-Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
-To:     Zhang Rui <rui.zhang@intel.com>
-cc:     linux-pm@lists.linux-foundation.org, rafael.j.wysocki@intel.com,
-        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com,
-        "Kenneth R. Crudup" <kenny@panix.com>
-Subject: Re: Why do I sometimes "lose" the "psys" RAPL counter?
-In-Reply-To: <alpine.DEB.2.21.2003260237130.26874@xps-7390>
-Message-ID: <alpine.DEB.2.21.2003260311030.2844@xps-7390>
-References: <alpine.DEB.2.21.2003252212220.2971@xps-7390>  <691eb7a6efd7a954295f234a70f548fd0c81e2f8.camel@intel.com>  <alpine.DEB.2.21.2003252353370.2971@xps-7390>  <7e1562ce93b83a685aa54dd2ae5a5b36c5737cb6.camel@intel.com> <c9a24dfbc765c9c19d87094e5b2044f33431e501.camel@intel.com>
- <alpine.DEB.2.21.2003260237130.26874@xps-7390>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1727928AbgCZK4h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 06:56:37 -0400
+Received: from mail-lf1-f42.google.com ([209.85.167.42]:40924 "EHLO
+        mail-lf1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727688AbgCZK4h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 06:56:37 -0400
+Received: by mail-lf1-f42.google.com with SMTP id j17so4397497lfe.7
+        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 03:56:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=47qXZzwAbKRjmlZIR98ky/JOV75sfZwm8sWlwjShF8c=;
+        b=EGCqvfJE6vR1DAd9s5QD9Lz37cQED2VqxH8++YisKkjfp+p7F8m2Y71LDftQBpb/2n
+         i5VgyFZ9WS8uu99Tqbsk26tLxx8VfPW2OQl5zqQ8Y7AtEKez9H72KpmrpqdZ9HDTCCX4
+         /7w+vI3ihA0ONx8vYXi6P9G41+zT2cquEvOCqPZhp1QKQcGeoXiYyDVE/vplychWsqje
+         P79LblH0YEbwBPDoDKyXQd6hF8RY5vEk5YhEJ1efuYiLPVx4yd+X/chm+hWLcGnZ0BWN
+         iVID2OyJ58JpmCSQjz4O+fKvPfnXg4za+xEf7Upx9Cx5aS+GNZRwLpNMFjJP14qQc5yU
+         HIJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=47qXZzwAbKRjmlZIR98ky/JOV75sfZwm8sWlwjShF8c=;
+        b=gXIMjC1NE4n4f/tWq0UFLFT9I5RrNomsLl+vOhUc821hh70444Or1bbNVZbkaRqxEC
+         cGf8KAf88AvJBGxlUdBbY3GuuXjG7uAQWGho5aovn10FwvdhjHNGFqq1AHL1hCe4dUGO
+         0JjCBOrUQUMdpHogZ48E3ZBvJvvAdQppiKRq15YAAyjHQetre9JY678fzsH9OhAeHKZM
+         Y/YTgyCGSYFn0k3p0aMbOBvtgsFlKmZ9KbceXYnPtLis9RL6D3EmLNJYimv5UqRV8wTm
+         ODn+SzMXgW+T2FImgNKIBMaIqlhGj2/96wd98QSZkUihb0ZzRWBaznKgHchBAh3VD4/J
+         /rbg==
+X-Gm-Message-State: ANhLgQ3KlR1Ss9LvuENRqgChGjNzz/bzNw0Wdxy5g2ufFQCQvFjq8ATr
+        +GU4bNKj0XDc/VMTLoXDvy+S+g==
+X-Google-Smtp-Source: ADFU+vvS1OdyK1KZuc0v+FzxWV0LS3mwrT/slQOOveM59Ax919FAfDjO8Iw+zFw0NGknj1fhGBUQFg==
+X-Received: by 2002:a19:4cc2:: with SMTP id z185mr5441924lfa.0.1585220194880;
+        Thu, 26 Mar 2020 03:56:34 -0700 (PDT)
+Received: from localhost.localdomain (h-158-174-22-210.NA.cust.bahnhof.se. [158.174.22.210])
+        by smtp.gmail.com with ESMTPSA id z17sm1214653ljm.19.2020.03.26.03.56.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Mar 2020 03:56:34 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH 0/2] dt-bindings: A few updates to PSCI and power-domain bindings
+Date:   Thu, 26 Mar 2020 11:56:24 +0100
+Message-Id: <20200326105626.6369-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Recent updates to the PSCI and the power-domain DT bindings, deserves some
+additional improvements on top. This series takes care of this.
 
-So I just tested a few shutdown vs. reboot cycles, and if I reboot, I only
-get three counters. If I shutdown, then restart, I get 4 counters (including
-the "psys domain" one).
+Ulf Hansson (2):
+  dt-bindings: arm: Add some constraints for PSCI nodes
+  dt-bindings: power: Fix example for power-domain
 
-I tried it on a few kernels, including the oldest one that comes with my
-distro (5.3.0-40-generic) where all the RAPL stuff is made as modules.
-
-So, maybe we're not "clearing" (wild guess here) the "psys" RAPL on a reboot,
-something that would happen on a cold boot? (I'm afraid to say the "B-word",
-as that would mean it's a Dell issue so I won't hold my breath waiting for
-a fix).
-
-	-Kenny
+ .../devicetree/bindings/arm/psci.yaml         |  5 ++++
+ .../bindings/power/power-domain.yaml          | 28 +++++++++----------
+ 2 files changed, 19 insertions(+), 14 deletions(-)
 
 -- 
-Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
+2.20.1
+
