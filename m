@@ -2,266 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8B7193555
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 02:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2311935AA
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 03:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727593AbgCZBng (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Mar 2020 21:43:36 -0400
-Received: from mail-pl1-f180.google.com ([209.85.214.180]:44570 "EHLO
-        mail-pl1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727561AbgCZBnf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Mar 2020 21:43:35 -0400
-Received: by mail-pl1-f180.google.com with SMTP id h11so1521668plr.11
-        for <linux-pm@vger.kernel.org>; Wed, 25 Mar 2020 18:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=+tNo4SYfs6XqblFA7HgFFMes7vb2qMgYQcQMJGpz3gw=;
-        b=n+vFklgp/BaXWro7EUFxrJH0iwPd7RmawzIa5RqMt7zz1XS7TI3Y3eGk8sjP6xEgQl
-         fd4N3O5lAApRX1eoLLFj24Df19AB931ZGp1wxvHqyTaO57RYWXMV29//IBRF34hqzxZF
-         oy2VIMN480nZlYrf2SGzkCJpZ5ZFxmZRzVTczzC2dERIFnp8HHTSBnsSQ37Lhh5z/T6V
-         cMo9wbP4E9JNbZ6wq2h+R/f/8OZaTt8oFsB6TP85Zv4egnuA2EULJiy1WyR5UPu5bTe2
-         n78PmpYheWl/+SVdv3H1yXwsX4I4duMM12bA95NoVXXYzS/Qt186zR7Sl4LZWs9iAXLI
-         NGcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=+tNo4SYfs6XqblFA7HgFFMes7vb2qMgYQcQMJGpz3gw=;
-        b=E197iEj8pQ0dy9adxzh1gd5AG+PNt0JXB7NH7B3Zp/ehF1mLZWqxz81HBf26wbYuGk
-         oJUvZqBfNBjhVt+kAQQJe7oCPGBXQzEvjNYxizsP5N/X40GiYoGld/DIejuOE8SRNUTm
-         u1qaJzEsA3abALwZOd+26zQJGRlqE7eSecJjP/z5+BNIzZl+SpwXIozze8WxntMKmO4c
-         HCn5MIO0LU9AZdCC8nCamtBeEAxJ9/sCfScxihCFf/IYthIk0VpFH9tjXvJegLVmJUu4
-         JivZnPwWSWXHnDydmqjb1ITHFgQ69jNIxaWzwNiNWGlutnQjN8vFbDl+mWPvzuHGOkll
-         P7MQ==
-X-Gm-Message-State: ANhLgQ1yFneIX/vsK3qs/4TeEM9BETVoiuzyfjlu6JA0lCEeg82OxzQG
-        49JSomLNfIca0zGad43UbphFPl4bA/g=
-X-Google-Smtp-Source: ADFU+vsacYSDcMB8RmEkbglmmxof+LuC9a3dqJx7Dqr78P9MwlMf84lo66YIxgzfeK5yo0d9ccjlgQ==
-X-Received: by 2002:a17:90a:cb87:: with SMTP id a7mr441164pju.114.1585187013350;
-        Wed, 25 Mar 2020 18:43:33 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id z11sm339027pfa.149.2020.03.25.18.43.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2020 18:43:32 -0700 (PDT)
-Message-ID: <5e7c08c4.1c69fb81.588e4.1fbf@mx.google.com>
-Date:   Wed, 25 Mar 2020 18:43:32 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.6-rc7-121-ga4c3e5efdcaf
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing sleep: 7 runs, 0 regressions (v5.6-rc7-121-ga4c3e5efdcaf)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+        id S1727706AbgCZCQb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Mar 2020 22:16:31 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:37264 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727592AbgCZCQ1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 25 Mar 2020 22:16:27 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 9FE2C1A078A;
+        Thu, 26 Mar 2020 03:16:25 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 923B41A0785;
+        Thu, 26 Mar 2020 03:16:25 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 80CBB203CD;
+        Thu, 26 Mar 2020 03:16:24 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Martin Kepplinger <martink@posteo.de>
+Cc:     =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Angus Ainslie <angus@akkea.ca>,
+        Silvano di Ninno <silvano.dininno@nxp.com>,
+        linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/8] interconnect: Add imx support via devfreq
+Date:   Thu, 26 Mar 2020 04:16:12 +0200
+Message-Id: <cover.1585188174.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 7 runs, 0 regressions (v5.6-rc7-121-ga4c3e5efdcaf)
+This series adds interconnect scaling support for imx8m series chips. It uses a
+per-SOC interconnect provider layered on top of multiple instances of devfreq
+for scalable nodes along the interconnect.
 
-Test results summary
---------------------
+Existing qcom interconnect providers mostly translate bandwidth requests into
+firmware calls but equivalent firmware on imx8m is much thinner. Scaling
+support for individual nodes is implemented as distinct devfreq drivers
+instead.
 
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
+The imx interconnect provider doesn't communicate with devfreq directly
+but rather computes "minimum frequencies" for nodes along the path and
+creates dev_pm_qos requests.
 
-2   | exynos5422-odroidxu3 | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 21/21  =
+Since there is no single devicetree node that can represent the
+"interconnect" the main NOC is picked as the "interconnect provider" and
+will probe the interconnect platform device if #interconnect-cells is
+present. This avoids introducing "virtual" devices but it means that DT
+bindings of main NOC includes properties for both devfreq and
+interconnect.
 
-3   | imx6q-sabrelite      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
+Only the ddrc and main noc are scalable right now but more can be added.
 
-4   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
+Also available on a github branch (with various unrelated changes):
+	https://github.com/cdleonard/linux/tree/next
+Testing currently requires NXP branch of atf+uboot
 
-5   | rk3288-veyron-jaq    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 21/21  =
+Martin: I believe you should be able to use this to control DRAM
+frequency from video by just adding interconnect consumer code to
+nwl-dsi. Sample code:
+	https://github.com/cdleonard/linux/commit/43772762aa5045f1ce5623740f9a4baef988d083
+	https://github.com/cdleonard/linux/commit/7b601e981b1f517b5d98b43bde292972ded13086
 
-6   | rk3399-gru-kevin     | arm64 | lab-collabora | gcc-8    | defconfig  =
-        | 11/11  =
+Changes since RFCv6:
+* Replace scalable-nodes stuff with just a fsl,ddrc property. Future
+scalable nodes can be added as additional phandles on the NOC
+* Allow building interconnect drivers as modules
+* Handle icc_provider_del errors in imx_icc_unregister (like EBUSY).
+* Rename imx-devfreq to imx-bus, similar to exynos-bus
+* Explain why imx bus clock enabling is not required
+* All dependencies accepted (some time ago).
+Link: https://patchwork.kernel.org/cover/11244421/
 
-7   | tegra124-nyan-big    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 2/2    =
+Changes since RFCv5:
+* Replace scanning for interconnect-node-id with explicit
+scalable-nodes/scalable-node-ids property on NoC.
+* Now passes make `dtbs_check`
+* Remove struct imx_icc_provider
+* Switch to of_icc_xlate_onecell
+* Use of_find_device_by_node to fetch QoS target, this causes fewer probe
+deferrals, removes dependency on devfreq API and even allows reloading ddrc
+module at runtime
+* Add imx_icc_node_destroy helper
+* Remove 0/1 on DEFINE_BUS_SLAVE/MASTER which created spurious links
+Link: https://patchwork.kernel.org/cover/11222015/
 
+Changes since RFCv4:
+* Drop icc proxy nonsense
+* Make devfreq driver for NOC probe the ICC driver if
+#interconnect-cells is present
+* Move NOC support to interconnect series and rename the node in DT
+* Add support for all chips at once, differences are not intereseting
+and there is more community interest for 8mq than 8mm.
+Link: https://patchwork.kernel.org/cover/11111865/
 
+Changes since RFCv3:
+* Remove the virtual "icc" node and add devfreq nodes as proxy providers
+* Fix build on 32-bit arm (reported by kbuilt test robot)
+* Remove ARCH_MXC_ARM64 (never existed in upstream)
+* Remove _numlinks, calculate instead
+* Replace __BUSFREQ_H header guard
+* Improve commit message and comment spelling
+* Fix checkpatch issues
+Link to RFCv3: https://patchwork.kernel.org/cover/11078671/
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.6-rc7-121-ga4c3e5efdcaf
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      a4c3e5efdcaf10511f1f8e03f59133fa32bddff1 =
+Changes since RFCv2 and initial work by Alexandre Bailon:
+* Relying on devfreq and dev_pm_qos instead of CLK
+* No more "platform opp" stuff
+* No more special suspend handling: use suspend-opp on devfreq instead
+* Replace all mentions of "busfreq" with "interconnect"
+Link to v2: https://patchwork.kernel.org/cover/11021563/
 
+Leonard Crestez (8):
+  dt-bindings: interconnect: Add bindings for imx8m noc
+  PM / devfreq: Add generic imx bus scaling driver
+  PM / devfreq: imx: Register interconnect device
+  interconnect: Add imx core driver
+  interconnect: imx: Add platform driver for imx8mm
+  interconnect: imx: Add platform driver for imx8mq
+  interconnect: imx: Add platform driver for imx8mn
+  arm64: dts: imx8m: Add NOC nodes
 
+ .../bindings/interconnect/fsl,imx8m-noc.yaml  | 138 ++++++++
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  24 ++
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  24 ++
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  24 ++
+ drivers/devfreq/Kconfig                       |   9 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/imx-bus.c                     | 181 +++++++++++
+ drivers/interconnect/Kconfig                  |   1 +
+ drivers/interconnect/Makefile                 |   1 +
+ drivers/interconnect/imx/Kconfig              |  17 +
+ drivers/interconnect/imx/Makefile             |   9 +
+ drivers/interconnect/imx/imx.c                | 298 ++++++++++++++++++
+ drivers/interconnect/imx/imx.h                |  62 ++++
+ drivers/interconnect/imx/imx8mm.c             | 108 +++++++
+ drivers/interconnect/imx/imx8mn.c             |  97 ++++++
+ drivers/interconnect/imx/imx8mq.c             | 106 +++++++
+ include/dt-bindings/interconnect/imx8mm.h     |  49 +++
+ include/dt-bindings/interconnect/imx8mn.h     |  41 +++
+ include/dt-bindings/interconnect/imx8mq.h     |  48 +++
+ 19 files changed, 1238 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+ create mode 100644 drivers/devfreq/imx-bus.c
+ create mode 100644 drivers/interconnect/imx/Kconfig
+ create mode 100644 drivers/interconnect/imx/Makefile
+ create mode 100644 drivers/interconnect/imx/imx.c
+ create mode 100644 drivers/interconnect/imx/imx.h
+ create mode 100644 drivers/interconnect/imx/imx8mm.c
+ create mode 100644 drivers/interconnect/imx/imx8mn.c
+ create mode 100644 drivers/interconnect/imx/imx8mq.c
+ create mode 100644 include/dt-bindings/interconnect/imx8mm.h
+ create mode 100644 include/dt-bindings/interconnect/imx8mn.h
+ create mode 100644 include/dt-bindings/interconnect/imx8mq.h
 
-Test Failures
--------------
-  =
+-- 
+2.17.1
 
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
-
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc7-121-ga4c3e=
-5efdcaf/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc7-121-ga4c3e=
-5efdcaf/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0325.0/armhf/rootfs.cpio.gz  =
-
-
-  1 tests: 0 PASS, 1 FAIL, 0 SKIP
-    * login:
-        never passed   =
-
-         =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-3   | imx6q-sabrelite      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-
-  Results:     1 PASS, 20 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc7-121-ga4c3e=
-5efdcaf/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-imx6q-sabrelite.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc7-121-ga4c3e=
-5efdcaf/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-imx6q-sabrelite.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0325.0/armhf/rootfs.cpio.gz  =
-
-
-  21 tests: 1 PASS, 20 FAIL, 0 SKIP
-    * rtcwake-mem-1:
-        never passed
-    * rtcwake-mem-2:
-        never passed
-    * rtcwake-mem-3:
-        never passed
-    * rtcwake-mem-4:
-        never passed
-    * rtcwake-mem-5:
-        never passed
-    * rtcwake-mem-6:
-        never passed
-    * rtcwake-mem-7:
-        never passed
-    * rtcwake-mem-8:
-        never passed
-    * rtcwake-mem-9:
-        never passed
-    * rtcwake-mem-10:
-        never passed
-    * rtcwake-freeze-1:
-        never passed
-    * rtcwake-freeze-2:
-        never passed
-    * rtcwake-freeze-3:
-        never passed
-    * rtcwake-freeze-4:
-        never passed
-    * rtcwake-freeze-5:
-        never passed
-    * rtcwake-freeze-6:
-        never passed
-    * rtcwake-freeze-7:
-        never passed
-    * rtcwake-freeze-8:
-        never passed
-    * rtcwake-freeze-9:
-        never passed
-    * rtcwake-freeze-10:
-        never passed   =
-
-      =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-4   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-
-  Results:     1 PASS, 20 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.6-rc7-121-ga4c3e=
-5efdcaf/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squar=
-e.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.6-rc7-121-ga4c3e=
-5efdcaf/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squar=
-e.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0325.0/armhf/rootfs.cpio.gz  =
-
-
-  21 tests: 1 PASS, 20 FAIL, 0 SKIP
-    * rtcwake-mem-1:
-        never passed
-    * rtcwake-mem-2:
-        never passed
-    * rtcwake-mem-3:
-        never passed
-    * rtcwake-mem-4:
-        never passed
-    * rtcwake-mem-5:
-        never passed
-    * rtcwake-mem-6:
-        never passed
-    * rtcwake-mem-7:
-        never passed
-    * rtcwake-mem-8:
-        never passed
-    * rtcwake-mem-9:
-        never passed
-    * rtcwake-mem-10:
-        never passed
-    * rtcwake-freeze-1:
-        never passed
-    * rtcwake-freeze-2:
-        never passed
-    * rtcwake-freeze-3:
-        never passed
-    * rtcwake-freeze-4:
-        never passed
-    * rtcwake-freeze-5:
-        never passed
-    * rtcwake-freeze-6:
-        never passed
-    * rtcwake-freeze-7:
-        never passed
-    * rtcwake-freeze-8:
-        never passed
-    * rtcwake-freeze-9:
-        never passed
-    * rtcwake-freeze-10:
-        never passed   =
-
-              =20
