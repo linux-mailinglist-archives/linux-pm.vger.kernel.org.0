@@ -2,219 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A2E19477E
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 20:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358B0194784
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 20:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726340AbgCZTgX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 15:36:23 -0400
-Received: from mga18.intel.com ([134.134.136.126]:43693 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726067AbgCZTgX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 26 Mar 2020 15:36:23 -0400
-IronPort-SDR: /dQug0m96zPkPn7aPYzTmSJCdBp6SuW+c8G48uOSjTV7/3f++JMOYlVa6Z2JETTxPdxB54z4Og
- A1dYHFtLfh+g==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 12:36:22 -0700
-IronPort-SDR: +iWALKo9+plMNZUnHVBC9QzyWsw0Fy1YyUmoO0L/ZSr/aIVQNy1CqCGFxHBRnwC5CmhjCf+sAx
- GGjjWsd34oDg==
-X-IronPort-AV: E=Sophos;i="5.72,309,1580803200"; 
-   d="scan'208";a="238895630"
-Received: from spandruv-mobl.amr.corp.intel.com ([10.212.244.78])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 12:36:21 -0700
-Message-ID: <707c44fc116e37fdf8edd6543aadf8426f590799.camel@linux.intel.com>
-Subject: Re: Why do I sometimes "lose" the "psys" RAPL counter?
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Kenneth R. Crudup" <kenny@panix.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Date:   Thu, 26 Mar 2020 12:36:20 -0700
-In-Reply-To: <20200326181641.291505803E3@linux.intel.com>
-References: <20200326181641.291505803E3@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.2 (3.34.2-1.fc31) 
+        id S1728069AbgCZThe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 15:37:34 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:46980 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726067AbgCZThe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 15:37:34 -0400
+Received: by mail-oi1-f195.google.com with SMTP id q204so6600566oia.13;
+        Thu, 26 Mar 2020 12:37:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OQejYhkmJ8jpMQwP4np5/qfbpLG+c7Y/YgNN9D4Afuk=;
+        b=bOKPLVf2Kxy+k9BiM2WIBR6i8oY2iE5Q98V9vwGLgMgDErNKZALvT0YzWkDH4pALms
+         ildQnzfzIczfdpFModRwSOsYR0G3kqfECg0AIAh5EDZ8ZksElT2JEK+XsloEkC43vPnP
+         PDrgurzbsddgI8bdoQ0HRb/ZKxqN7LLuJzyRpsZBoZJXoXH8ovF3h3AC5I7IMsl1elnE
+         DYzXuPV8mLU+LyNRSaK7g++2Inrxg/GFlxxS7S76x1ecTsHvEr2ML2GAU2aHvTHQQ/3J
+         wfP2C9QlLkwxmV2Vlbm5opTuy3odHTZFQZnlvQewIkUITHzfHXyZJdlmpvmpq/Equw8o
+         ytGQ==
+X-Gm-Message-State: ANhLgQ3+f3LKHT5UQKWm4OJTxyL0VU3+hfJhvHT2IRG8wY9/4UxwL8Mx
+        UKAlwZmUNFw/sfZ/+IA1c6RlT9pZ/k9Hus9D2t0=
+X-Google-Smtp-Source: ADFU+vvEZ/iZqdJiCJri8T3uuYRSdtllmwAZLQvwiAy+tAT0vyGcMSRRnwD384RTgRhlUh8bZass889rIRaKdFwVuXY=
+X-Received: by 2002:aca:f07:: with SMTP id 7mr1415179oip.68.1585251453248;
+ Thu, 26 Mar 2020 12:37:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20200326144630.15011-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0iDuv0doOzFd140A17fhLKsdgZXbc_XMOuhUeDt70Jz+g@mail.gmail.com> <bb21941a-69ff-36fe-05dd-8f3eb63326dc@linaro.org>
+In-Reply-To: <bb21941a-69ff-36fe-05dd-8f3eb63326dc@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 26 Mar 2020 20:37:21 +0100
+Message-ID: <CAJZ5v0ghHFJCfG5vxE=O6+bD4neyvyF2WD6ASGptBaptm2-5Ow@mail.gmail.com>
+Subject: Re: [PATCH] powercap/drivers/idle_inject: Specify idle state max latency
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2020-03-26 at 11:16 -0700, Kenneth R. Crudup wrote:
-> I'm assuming by now you've seen the other emails fully answering
-> yours and Zhang's questions?
+On Thu, Mar 26, 2020 at 8:20 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 26/03/2020 20:14, Rafael J. Wysocki wrote:
+> > On Thu, Mar 26, 2020 at 3:48 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> Currently the idle injection framework uses the play_idle()
+> >> function which puts the current CPU in an idle state. The idle
+> >> state is the deepest one, as specified by the latency constraint
+> >> when calling the subsequent play_idle_precise() function with the
+> >> INT_MAX.
+> >>
+> >> The idle_injection is used by the cpuidle_cooling device which
+> >> computes the idle / run duration to mitigate the temperature by
+> >> injecting idle cycles. The cooling device has no control on the
+> >> depth of the idle state.
+> >>
+> >> Allow finer control of the idle injection mechanism by allowing
+> >> to specify the latency for the idle state. Thus the cooling
+> >> device has the ability to have a guarantee on the exit latency of
+> >> the idle states it is injecting.
+> >>
+> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org> ---
+> >> drivers/powercap/idle_inject.c | 27 ++++++++++++++++++++++++++-
+> >> include/linux/idle_inject.h    |  6 ++++++ 2 files changed, 32
+> >> insertions(+), 1 deletion(-)
+>
+> [ ... ]
+>
+> >> + +void idle_inject_set_latency(struct idle_inject_device
+> >> *ii_dev, +                            unsigned int latency_ns);
+> >> + +unsigned int idle_inject_get_latency(struct idle_inject_device
+> >> *ii_dev); + #endif /* __IDLE_INJECT_H__ */ --
+> >
+> > I would like to see a user of idle_inject_get_latency() before this
+> > goes in.
+>
+> Do you mean a user for the set/get or the get only? If the latter,
+> there is no user yet I just added it to have an usual get/set helpers,
+> if that hurts, I can resend by removing it. If the former, there is a
+> patch I'm about to send which depends on the 'set'.
 
-I tried on the Dell 7390 2-in-1 and see the behavior you reported.
-The problem is that the energy counter is 0 during probe (msr 0x64d is
-0), which is not correct. So you rmmod intel_rapl_msr and modprobe
-again, you will see psys domain.
-Even the counter values are not correct. The delta between two reads of
-energy_uj is less than the package domain energy_uj delta.
-So psys domain is not useful on this system.
+So I wouldn't add the "get" thing at all if it has no users.
 
-Sent again as the original email was not plain text.
-
-Thanks,
-Srinivas
-
-> 
-> 
-> 
-> -- 
-> Sent from my Tab S4
-> 
-> 
-> -------- Original message --------
-> From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Date: 3/26/20 08:23 (GMT-08:00)
-> To: "Rafael J. Wysocki" <rafael@kernel.org>, "Kenneth R. Crudup" <
-> kenny@panix.com>
-> Cc: Linux PM <linux-pm@vger.kernel.org>
-> Subject: Re: Why do I sometimes "lose" the "psys" RAPL counter?
-> 
-> On Thu, 2020-03-26 at 09:13 +0100, Rafael J. Wysocki wrote:
-> > +Srinivas
-> > 
-> > On Thu, Mar 26, 2020 at 6:46 AM Kenneth R. Crudup <kenny@panix.com>
-> > wrote:
-> > > 
-> > > (Re-sent, as I think I had the wrong mailing list address before)
-> > > 
-> > > I'm running Linus' latest master of today (and have seen this for
-> a
-> > > while
-> > > now). I've got an IceLake CPU (i7-1065G7 running on a Dell 7390
-> 2-
-> > > in-1, but
-> > > I'm pretty sure I've seen issue this on my HP Spectre 13 with a
-> > > 9th-gen CPU).
-> > > 
-> > > Sometimes when I boot, I get 4 RAPL "fixed counters" and
-> sometimes
-> > > I only
-> > > get 3, and it's always the "psys" domain that's missing when it
-> > > does. See
-> > > attached output from various dmesg runs (and a snippet below).
-> When you say counters, where is this missing from:
-> 1. /sys/class/powercap/intel-rapl/intel-rapl:1
-> 2. /sys/bus/event_source/devices/power/events/
-> 3. Both of the above folders
-> 
-> Also what do you see?
-> rdmsr 0x65c
-> rdmsr 0x64d
-> 
-> Thanks,
-> Srinivas
-> 
-> 
-> > > 
-> > > Is this a bug?
-> > > Do you know what may cause this?
-> > > 
-> > > If you need more info to help me help you guys with this (if it's
-> > > truly an
-> > > issue), please let me know.
-> > > 
-> > > Thanks,
-> > > 
-> > >         -Kenny
-> > > 
-> > > ----
-> > > Mar 22 05:02:48 xps-7390 kernel: [    0.756890] RAPL PMU: API
-> unit
-> > > is 2^-32 Joules, 3 fixed counters, 655360 ms ovfl timer
-> > > Mar 22 05:02:48 xps-7390 kernel: [    0.756892] RAPL PMU: hw unit
-> > > of domain pp0-core 2^-14 Joules
-> > > Mar 22 05:02:48 xps-7390 kernel: [    0.756893] RAPL PMU: hw unit
-> > > of domain package 2^-14 Joules
-> > > Mar 22 05:02:48 xps-7390 kernel: [    0.756894] RAPL PMU: hw unit
-> > > of domain pp1-gpu 2^-14 Joules
-> > > Mar 22 05:02:48 xps-7390 kernel: [    2.178267]
-> intel_rapl_common:
-> > > Found RAPL domain package
-> > > Mar 22 05:02:48 xps-7390 kernel: [    3.056499]
-> intel_rapl_common:
-> > > Found RAPL domain package
-> > > Mar 22 05:02:48 xps-7390 kernel: [    3.058417]
-> intel_rapl_common:
-> > > Found RAPL domain core
-> > > Mar 22 05:02:48 xps-7390 kernel: [    3.062290]
-> intel_rapl_common:
-> > > Found RAPL domain uncore
-> > > Mar 22 05:17:50 xps-7390 kernel: [    1.770794] RAPL PMU: API
-> unit
-> > > is 2^-32 Joules, 3 fixed counters, 655360 ms ovfl timer
-> > > Mar 22 05:17:50 xps-7390 kernel: [    1.770799] RAPL PMU: hw unit
-> > > of domain pp0-core 2^-14 Joules
-> > > Mar 22 05:17:50 xps-7390 kernel: [    1.770802] RAPL PMU: hw unit
-> > > of domain package 2^-14 Joules
-> > > Mar 22 05:17:50 xps-7390 kernel: [    1.770814] RAPL PMU: hw unit
-> > > of domain pp1-gpu 2^-14 Joules
-> > > Mar 22 05:17:50 xps-7390 kernel: [    3.176324]
-> intel_rapl_common:
-> > > Found RAPL domain package
-> > > Mar 22 05:17:50 xps-7390 kernel: [    4.060045]
-> intel_rapl_common:
-> > > Found RAPL domain package
-> > > Mar 22 05:17:50 xps-7390 kernel: [    4.061739]
-> intel_rapl_common:
-> > > Found RAPL domain core
-> > > Mar 22 05:17:50 xps-7390 kernel: [    4.063129]
-> intel_rapl_common:
-> > > Found RAPL domain uncore
-> > > Mar 22 05:28:05 xps-7390 kernel: [    1.770320] RAPL PMU: API
-> unit
-> > > is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
-> > > Mar 22 05:28:05 xps-7390 kernel: [    1.770326] RAPL PMU: hw unit
-> > > of domain pp0-core 2^-14 Joules
-> > > Mar 22 05:28:05 xps-7390 kernel: [    1.770329] RAPL PMU: hw unit
-> > > of domain package 2^-14 Joules
-> > > Mar 22 05:28:05 xps-7390 kernel: [    1.770332] RAPL PMU: hw unit
-> > > of domain pp1-gpu 2^-14 Joules
-> > > Mar 22 05:28:05 xps-7390 kernel: [    1.770335] RAPL PMU: hw unit
-> > > of domain psys 2^-14 Joules
-> > > Mar 22 05:28:05 xps-7390 kernel: [    3.148050]
-> intel_rapl_common:
-> > > Found RAPL domain package
-> > > Mar 22 05:28:05 xps-7390 kernel: [    4.043621]
-> intel_rapl_common:
-> > > Found RAPL domain package
-> > > Mar 22 05:28:05 xps-7390 kernel: [    4.045295]
-> intel_rapl_common:
-> > > Found RAPL domain core
-> > > Mar 22 05:28:05 xps-7390 kernel: [    4.046823]
-> intel_rapl_common:
-> > > Found RAPL domain uncore
-> > > Mar 22 05:37:11 xps-7390 kernel: [    1.635660] RAPL PMU: API
-> unit
-> > > is 2^-32 Joules, 4 fixed counters, 655360 ms ovfl timer
-> > > Mar 22 05:37:11 xps-7390 kernel: [    1.635667] RAPL PMU: hw unit
-> > > of domain pp0-core 2^-14 Joules
-> > > Mar 22 05:37:11 xps-7390 kernel: [    1.635670] RAPL PMU: hw unit
-> > > of domain package 2^-14 Joules
-> > > Mar 22 05:37:11 xps-7390 kernel: [    1.635673] RAPL PMU: hw unit
-> > > of domain pp1-gpu 2^-14 Joules
-> > > Mar 22 05:37:11 xps-7390 kernel: [    1.635676] RAPL PMU: hw unit
-> > > of domain psys 2^-14 Joules
-> > > Mar 22 05:37:11 xps-7390 kernel: [    3.043397]
-> intel_rapl_common:
-> > > Found RAPL domain package
-> > > Mar 22 05:37:11 xps-7390 kernel: [    4.043265]
-> intel_rapl_common:
-> > > Found RAPL domain package
-> > > Mar 22 05:37:11 xps-7390 kernel: [    4.045524]
-> intel_rapl_common:
-> > > Found RAPL domain core
-> > > Mar 22 05:37:11 xps-7390 kernel: [    4.048153]
-> intel_rapl_common:
-> > > Found RAPL domain uncore
-> > > ----
-> > > 
-> > > 
-> > > --
-> > > Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting,
-> > > Silicon Valley
-> 
-
+Also it would be better to send this patch along with the other one
+depending on it.
