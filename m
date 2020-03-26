@@ -2,289 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDF019408D
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 14:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF52C1940F5
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 15:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726359AbgCZNzh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 09:55:37 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:51159 "EHLO mout01.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727732AbgCZNzh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 26 Mar 2020 09:55:37 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 35D06160065
-        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 14:55:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1585230934; bh=x4jYAka8aP1YBwXjiPv/wSh1i4s7WuNfZrX9rKaquus=;
-        h=Subject:To:Cc:From:Autocrypt:Date:From;
-        b=AbZ/DUJ+Iv0L+PCRC/xeSKj3Z6aD3uvlpRO+PJnihvRIWEqPkd9aBxlZ/YqjptG1H
-         FX888uu17aUZdMH8uMyaXJaIGF8tHf78pPUV0BGAhmeDIM8gg+72vWVI3Z8hOtFiCS
-         a8Ki1YmWdxCdhyI/xttD/PYtS9MJ5+qzoVex0C0lgveLm0eFXGj+aULosuLJRUJxYD
-         kxD1ILPtQ1MD/j7tVJ21N+WWFpJMK+N8oz8bslIrCdGC53sFXBGifENvByQNUlN/NR
-         3B12fznr6NqkHfahtTYmLk4ss7Uip2m0Yh4knevVX0qMOBI8UvLCLTcruvCzV01qRy
-         LB3GbYldQMHjg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 48p62921xjz6tm9;
-        Thu, 26 Mar 2020 14:55:28 +0100 (CET)
-Subject: Re: [PATCH 0/8] interconnect: Add imx support via devfreq
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Angus Ainslie <angus@akkea.ca>,
-        Silvano di Ninno <silvano.dininno@nxp.com>,
-        linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <cover.1585188174.git.leonard.crestez@nxp.com>
-From:   Martin Kepplinger <martink@posteo.de>
-Autocrypt: addr=martink@posteo.de; keydata=
- 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
-Message-ID: <1ae21355-df95-44e5-b8f6-14af7aa4fcc3@posteo.de>
-Date:   Thu, 26 Mar 2020 14:55:27 +0100
+        id S1727899AbgCZOGl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 10:06:41 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:53004 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727887AbgCZOGl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 10:06:41 -0400
+Received: by mail-wm1-f65.google.com with SMTP id z18so6611091wmk.2
+        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 07:06:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nkNzxi3g+0tYIhDtCnYGTEVFo1Tvrp1jB9HlC2wfDNE=;
+        b=zIBDANP4GgSgU3s25aTZakLydTimZa3G5vB1cE2zZce1X3In8n6ZsusIKeuVjQLIDj
+         VlGo7SvvXbes+A93F1gdtbtBRRZSNCD5N+UfoZMtxVqEzLbD8O8OLIk7l4NcK0RvzQWc
+         ILXT9FvUgBoIpxKmdFzqwAnBo9Bk1ehY0wCeEYx6t65VJTL2SMRkVsJl8PIt2qyNnJPb
+         eOYSMoPfz9AVSVf56TeHS3JKBNLskVhD7BWzM/9XBJzvP2naQuBstLtajL35Fn3HgPqw
+         N0QGg+zpJZJaSRJKIwgcmAXhszhb6w1CLjPEHV/OKI+kWxZRMOlz92IZDJUglJHkCW98
+         kUgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=nkNzxi3g+0tYIhDtCnYGTEVFo1Tvrp1jB9HlC2wfDNE=;
+        b=sixKYMwkzJ7t/7wT5ZRXNk459Ofr+VOX2UlJo4O6/f69GPFdHZkEtGoX+8k+8m/tu6
+         7nwiFTWkojsYR78ToNbiOVipcsy2cbV87YYzQs51SwqCdH9tjeHgxuymTdZlP8s9SXAe
+         nEAd8kapJszZkRJ47mnBduNPX6MTR9zC9ry1swYaLhIaEz6i5WOdXColZoooNIb9ZhIG
+         yOELd1zK2EqPrT6snFpTsf6CwT8ubWAjMGTV1jr8tF0rHrmpw1icnBUsfECKe4racZZ4
+         pNr7Z0BWFEM0dTPqXz1Lpli7fza6oipbnhdrBCM+8ZHJ+n/8q4jiHOBi/kt5fYaNVqkK
+         QOZA==
+X-Gm-Message-State: ANhLgQ0tpVwGlH1PQWZybroTkBbzd4ohX7vesPpL0ZPZFXqimTr24ZZJ
+        PtdTbBdGSjpMOOjjryK4pdMTaw==
+X-Google-Smtp-Source: ADFU+vuZmGro1uxPYVpKjOVBgALBYdXUEATAJoDZZVOPB658ACXYqf+VR9Of0GHKJW7B3lfsrPNtIQ==
+X-Received: by 2002:a05:600c:295e:: with SMTP id n30mr152362wmd.106.1585231599302;
+        Thu, 26 Mar 2020 07:06:39 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:d702:b4a5:b331:1282? ([2a01:e34:ed2f:f020:d702:b4a5:b331:1282])
+        by smtp.googlemail.com with ESMTPSA id w204sm3800979wma.1.2020.03.26.07.06.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Mar 2020 07:06:38 -0700 (PDT)
+Subject: Re: [PATCH] thermal: imx: Add missing of_node_put()
+To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+References: <1585200445-16461-1-git-send-email-Anson.Huang@nxp.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <8325cde9-02f3-b913-b020-4c98d19936f4@linaro.org>
+Date:   Thu, 26 Mar 2020 15:06:37 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <cover.1585188174.git.leonard.crestez@nxp.com>
+In-Reply-To: <1585200445-16461-1-git-send-email-Anson.Huang@nxp.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26.03.20 03:16, Leonard Crestez wrote:
-> This series adds interconnect scaling support for imx8m series chips. It uses a
-> per-SOC interconnect provider layered on top of multiple instances of devfreq
-> for scalable nodes along the interconnect.
-> 
-> Existing qcom interconnect providers mostly translate bandwidth requests into
-> firmware calls but equivalent firmware on imx8m is much thinner. Scaling
-> support for individual nodes is implemented as distinct devfreq drivers
-> instead.
-> 
-> The imx interconnect provider doesn't communicate with devfreq directly
-> but rather computes "minimum frequencies" for nodes along the path and
-> creates dev_pm_qos requests.
-> 
-> Since there is no single devicetree node that can represent the
-> "interconnect" the main NOC is picked as the "interconnect provider" and
-> will probe the interconnect platform device if #interconnect-cells is
-> present. This avoids introducing "virtual" devices but it means that DT
-> bindings of main NOC includes properties for both devfreq and
-> interconnect.
-> 
-> Only the ddrc and main noc are scalable right now but more can be added.
-> 
-> Also available on a github branch (with various unrelated changes):
-> 	https://github.com/cdleonard/linux/tree/next
-> Testing currently requires NXP branch of atf+uboot
-> 
-> Martin: I believe you should be able to use this to control DRAM
-> frequency from video by just adding interconnect consumer code to
-> nwl-dsi. Sample code:
-> 	https://github.com/cdleonard/linux/commit/43772762aa5045f1ce5623740f9a4baef988d083
-> 	https://github.com/cdleonard/linux/commit/7b601e981b1f517b5d98b43bde292972ded13086
-> 
+On 26/03/2020 06:27, Anson Huang wrote:
+> After finishing using cpu node got from of_get_cpu_node(),
+> of_node_put() needs to be called.
+>
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com> ---
+> drivers/thermal/imx_thermal.c | 10 +++++++--- 1 file changed, 7
+> insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thermal/imx_thermal.c
+> b/drivers/thermal/imx_thermal.c index e761c9b..f7b970d 100644 ---
+> a/drivers/thermal/imx_thermal.c +++
+> b/drivers/thermal/imx_thermal.c @@ -649,7 +649,7 @@
+> MODULE_DEVICE_TABLE(of, of_imx_thermal_match); static int
+> imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
+> { struct device_node *np; -	int ret; +	int ret = 0;
+>
+> data->policy = cpufreq_cpu_get(0); if (!data->policy) { @@ -664,11
+> +664,15 @@ static int imx_thermal_register_legacy_cooling(struct
+> imx_thermal_data *data) if (IS_ERR(data->cdev)) { ret =
+> PTR_ERR(data->cdev); cpufreq_cpu_put(data->policy); -			return
+> ret; +			goto put_node; } }
+>
+> -	return 0; +put_node: +	if (np) +		of_node_put(np);
 
-Thanks for updating this series Leonard! A few questions for my
-understanding before trying to test:
+of_node_put() is already checking if 'np' is NULL.
 
-Isn't the ddrc_opp_table missing in these additions to the DT? That's
-what I want to scale after all.
-
-If I want to keep calling the "request", now icc_set_bw(), in nwl-dsi:
-I'd add an "interconnects" property to the node, but what would be my
-interconnect master? i.e.: interconnects = <&noc master? &noc
-IMX8MQ_ICS_DRAM>; At least it's not obvious to me from
-interconnect/imx/imx8mq.c
-
-the interconnect framework seems to be powerful indeed, but I still need
-to fully wrap my head around it.
-
-thanks for the help so far,
-
-                               martin
+> + +	return ret; }
+>
+> static void imx_thermal_unregister_legacy_cooling(struct
+> imx_thermal_data *data)
+>
 
 
-> Changes since RFCv6:
-> * Replace scalable-nodes stuff with just a fsl,ddrc property. Future
-> scalable nodes can be added as additional phandles on the NOC
-> * Allow building interconnect drivers as modules
-> * Handle icc_provider_del errors in imx_icc_unregister (like EBUSY).
-> * Rename imx-devfreq to imx-bus, similar to exynos-bus
-> * Explain why imx bus clock enabling is not required
-> * All dependencies accepted (some time ago).
-> Link: https://patchwork.kernel.org/cover/11244421/
-> 
-> Changes since RFCv5:
-> * Replace scanning for interconnect-node-id with explicit
-> scalable-nodes/scalable-node-ids property on NoC.
-> * Now passes make `dtbs_check`
-> * Remove struct imx_icc_provider
-> * Switch to of_icc_xlate_onecell
-> * Use of_find_device_by_node to fetch QoS target, this causes fewer probe
-> deferrals, removes dependency on devfreq API and even allows reloading ddrc
-> module at runtime
-> * Add imx_icc_node_destroy helper
-> * Remove 0/1 on DEFINE_BUS_SLAVE/MASTER which created spurious links
-> Link: https://patchwork.kernel.org/cover/11222015/
-> 
-> Changes since RFCv4:
-> * Drop icc proxy nonsense
-> * Make devfreq driver for NOC probe the ICC driver if
-> #interconnect-cells is present
-> * Move NOC support to interconnect series and rename the node in DT
-> * Add support for all chips at once, differences are not intereseting
-> and there is more community interest for 8mq than 8mm.
-> Link: https://patchwork.kernel.org/cover/11111865/
-> 
-> Changes since RFCv3:
-> * Remove the virtual "icc" node and add devfreq nodes as proxy providers
-> * Fix build on 32-bit arm (reported by kbuilt test robot)
-> * Remove ARCH_MXC_ARM64 (never existed in upstream)
-> * Remove _numlinks, calculate instead
-> * Replace __BUSFREQ_H header guard
-> * Improve commit message and comment spelling
-> * Fix checkpatch issues
-> Link to RFCv3: https://patchwork.kernel.org/cover/11078671/
-> 
-> Changes since RFCv2 and initial work by Alexandre Bailon:
-> * Relying on devfreq and dev_pm_qos instead of CLK
-> * No more "platform opp" stuff
-> * No more special suspend handling: use suspend-opp on devfreq instead
-> * Replace all mentions of "busfreq" with "interconnect"
-> Link to v2: https://patchwork.kernel.org/cover/11021563/
-> 
-> Leonard Crestez (8):
->   dt-bindings: interconnect: Add bindings for imx8m noc
->   PM / devfreq: Add generic imx bus scaling driver
->   PM / devfreq: imx: Register interconnect device
->   interconnect: Add imx core driver
->   interconnect: imx: Add platform driver for imx8mm
->   interconnect: imx: Add platform driver for imx8mq
->   interconnect: imx: Add platform driver for imx8mn
->   arm64: dts: imx8m: Add NOC nodes
-> 
->  .../bindings/interconnect/fsl,imx8m-noc.yaml  | 138 ++++++++
->  arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  24 ++
->  arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  24 ++
->  arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  24 ++
->  drivers/devfreq/Kconfig                       |   9 +
->  drivers/devfreq/Makefile                      |   1 +
->  drivers/devfreq/imx-bus.c                     | 181 +++++++++++
->  drivers/interconnect/Kconfig                  |   1 +
->  drivers/interconnect/Makefile                 |   1 +
->  drivers/interconnect/imx/Kconfig              |  17 +
->  drivers/interconnect/imx/Makefile             |   9 +
->  drivers/interconnect/imx/imx.c                | 298 ++++++++++++++++++
->  drivers/interconnect/imx/imx.h                |  62 ++++
->  drivers/interconnect/imx/imx8mm.c             | 108 +++++++
->  drivers/interconnect/imx/imx8mn.c             |  97 ++++++
->  drivers/interconnect/imx/imx8mq.c             | 106 +++++++
->  include/dt-bindings/interconnect/imx8mm.h     |  49 +++
->  include/dt-bindings/interconnect/imx8mn.h     |  41 +++
->  include/dt-bindings/interconnect/imx8mq.h     |  48 +++
->  19 files changed, 1238 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
->  create mode 100644 drivers/devfreq/imx-bus.c
->  create mode 100644 drivers/interconnect/imx/Kconfig
->  create mode 100644 drivers/interconnect/imx/Makefile
->  create mode 100644 drivers/interconnect/imx/imx.c
->  create mode 100644 drivers/interconnect/imx/imx.h
->  create mode 100644 drivers/interconnect/imx/imx8mm.c
->  create mode 100644 drivers/interconnect/imx/imx8mn.c
->  create mode 100644 drivers/interconnect/imx/imx8mq.c
->  create mode 100644 include/dt-bindings/interconnect/imx8mm.h
->  create mode 100644 include/dt-bindings/interconnect/imx8mn.h
->  create mode 100644 include/dt-bindings/interconnect/imx8mq.h
-> 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
