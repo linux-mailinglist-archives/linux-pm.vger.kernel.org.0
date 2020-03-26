@@ -2,158 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15352193B35
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 09:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D67193B4A
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 09:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726298AbgCZIjw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 04:39:52 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:34513 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726210AbgCZIjw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 04:39:52 -0400
-Received: by mail-oi1-f196.google.com with SMTP id d3so215719oic.1;
-        Thu, 26 Mar 2020 01:39:51 -0700 (PDT)
+        id S1726292AbgCZIs3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 04:48:29 -0400
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:44049 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726318AbgCZIs0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 Mar 2020 04:48:26 -0400
+Received: by mail-ua1-f68.google.com with SMTP id r47so1811116uad.11
+        for <linux-pm@vger.kernel.org>; Thu, 26 Mar 2020 01:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=Pdr09OqDCxaS6kxdInvAosUxxNdqt0/Zh3BWLp90rxfdNcAPsph15NKZwd3wfkTZTm
+         qzQYChmx5W0Wunv9vhngHdS0RD7uZckQcl7zXz0ZE3YDojFtAhH1J5pO8oT3+LG+KbJY
+         4Jc32I//Avw2fBLqn517aKbpsoLMnr2AW7fdDLiYNfvwRRxa0cfsz9cT666ZRznaYr8c
+         nIWfvA92h5j2xxP0adZimNVVbWfOh1Lavv7XpupLul+4QVrL9KD5UJt5Qd1hWXt4mJ1+
+         zEI3s10R2ZDgBkDWd2Z7LD3ZPOg143zf/aOSxDFeNWYbhSJM23B/gF3l4zgKWowp/eWP
+         cqKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lRX7PLl1mEjB6H0fmMXyLD2J+FG3OvK9KawnS67f2j8=;
-        b=N1V1c2BsEqE7WYM3otZ/2it1bHYCJx2zxNtIMek1oeYGeSbL3BXxtPiPMjp2ec3Ya1
-         bim+QIZn8+JbEAJ+P5duvJEWGsDApXxZkwYdPQuJ9nPL2WPiCfbbD47yBKnz55la9nj6
-         tuRUdNaIoZ/BM/x20E9NaAE0188Qr/J/esNxAtT4EPc/V/IqIbBfWLq+U6++HD60EPIE
-         3UyeccSSgHn3FH1eRJIRH+J9cckzXjKrvYWYqWH64BgRhipOco51EyEwKBI9cv9jwGrP
-         b0egJgwiKhcGaPklDn4oYZo9LTEghY55IHTGSIEkEcQYWbCAkLxuHM+TdAh0qTpnw0ap
-         6u6A==
-X-Gm-Message-State: ANhLgQ25nwdBWQ8RjzeDgf8nIOeVe7MxOhrnnc2IbyYzdVKu/yZoBg/Y
-        eeuP/b6guGdixCb763ctgl6yF9lCwkM6dXH0VmQ=
-X-Google-Smtp-Source: ADFU+vsFeJkfPdBQXQpadxQd3zK1Np02OpHncJ5FVmppX4AHFdLoVJeQj3CcEqmMCkuJRnVthKUJM1QSY979jFx3uew=
-X-Received: by 2002:aca:5155:: with SMTP id f82mr1082932oib.103.1585211991269;
- Thu, 26 Mar 2020 01:39:51 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=sxWv3+eaWaJHz9G77TS/oyYaD0mHNh4BSTrgTKnsnEgGzAdq40RfM7vVFMQPU8OLzM
+         D6Al6wdydyiYuCLeep7nv5muO0BDJfH+V2u5l4WRc8pdxTiqMmCRyjPgKojWAGG/Xz+c
+         QLr5j/89FbNRQfq8WAkRFLrC3SDSlQLTiK4pvpUz+oStbZIlEvorVVBPtRdgE2cMJnKY
+         ADz9Kxma7ZMJ6W//WQA6wnxS/kT4Q3Ej9MZHm3wAWmcdw2cfsRhOSJh5cKhkOXCNSbsA
+         k3ORYzX/z+86d5SgMW9nfytBWHCHA1EqMkKzb3/qBMzn3dUb/KLO5+MRCrNhkk+CvQ5G
+         0EKA==
+X-Gm-Message-State: ANhLgQ2PfCytWjLkI15mwV158Kn6g4Oc9t4a/4Mykxn4dXHVaBcztSBw
+        hBhwS0OExIv2wsDL0h4T5pSJDIOwqMJyzA9nOUI=
+X-Google-Smtp-Source: ADFU+vvlSdadq2T7Z94wxYdWR5tXm/x0xyQKdNjDSej6ZA3g+2eAIJg/KE5hL6EFaeqRsV685uu1jR6jbddsIMmQjjY=
+X-Received: by 2002:ab0:4502:: with SMTP id r2mr5697400uar.63.1585212504163;
+ Thu, 26 Mar 2020 01:48:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
- <20200325032901.29551-1-saravanak@google.com> <20200325125120.GX1922688@smile.fi.intel.com>
- <CAGETcx_TGw24UqX7pXZePyskrao6zwnKTq8mBk9g_7jokqAqkA@mail.gmail.com>
-In-Reply-To: <CAGETcx_TGw24UqX7pXZePyskrao6zwnKTq8mBk9g_7jokqAqkA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 26 Mar 2020 09:39:40 +0100
-Message-ID: <CAJZ5v0jB1hqzYK8ezjf1_1yMCudNXNS-CsrUJQcmL4W5mBD6fQ@mail.gmail.com>
-Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
- can't be satisfied
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mark Brown <broonie@kernel.org>, Ferry Toth <fntoth@gmail.com>,
-        grant.likely@arm.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>
+Received: by 2002:a67:fc57:0:0:0:0:0 with HTTP; Thu, 26 Mar 2020 01:48:22
+ -0700 (PDT)
+Reply-To: ayishagddafio@mail.ru
+From:   Aisha Gddafi <aishagddafi68@gmail.com>
+Date:   Thu, 26 Mar 2020 01:48:22 -0700
+Message-ID: <CAKJgomEP0JjR9hPqgC-4BcDKN6zxZXyezTPi7OmekyWZNQH0mg@mail.gmail.com>
+Subject: Lieber Freund (Assalamu Alaikum),?
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 25, 2020 at 11:09 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> On Wed, Mar 25, 2020 at 5:51 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
+--=20
+Lieber Freund (Assalamu Alaikum),
 
-[cut]
+Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
+Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
+Mutter und eine Witwe
+mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
+hen
+Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
 
-> >
-> > Yes, it's (unlikely) possible (*), but it will give one more iteration per such
-> > case. It's definitely better than infinite loop. Do you agree?
->
-> Sorry I wasn't being clear (I was in a rush). I'm saying this patch
-> can reintroduce the bug where the deferred probe isn't triggered when
-> it should be.
->
-> Let's take a simple execution flow.
->
-> probe_okay is at 10.
->
-> Thread-A
->   really_probe(Device-A)
->     local_probe_okay_count = 10
->     Device-A probe function is running...
->
-> Thread-B
->   really_probe(Device-B)
->     Device-B probes successfully.
->     probe_okay incremented to 11
->
-> Thread-C
->   Device-C (which had bound earlier) is unbound (say module is
-> unloaded or a million other reasons).
->   probe_okay is decremented to 10.
->
-> Thread-A continues
->   Device-A probe function returns -EPROBE_DEFER
->   driver_deferred_probe_add_trigger() doesn't do anything because
->     local_probe_okay_count == probe_okay
->   But Device-A might have deferred probe waiting on Device-B.
->   Device-A never probes.
->
-> > *) It means during probe you have _intensive_ removing, of course you may keep
-> > kernel busy with iterations, but it has no practical sense. DoS attacks more
-> > effective in different ways.
->
-> I wasn't worried about DoS attacks. More of a functional correctness
-> issue what I explained above.
+Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
+f=C3=BCnfhunderttausend
+United State Dollar ($ 27.500.000.00) und ich brauche eine
+vertrauensw=C3=BCrdige Investition
+Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
+jedoch
+M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
+von
+Investitionsprojekten in Ihrem Land
+Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
+bauen.
 
-The code is functionally incorrect as is already AFAICS.
+Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
+n und
+Unternehmensgewinn zu verhandeln
+Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
 
-> Anyway, if your issue and similar issues can be handles in driver core
-> in a clean way without breaking other cases, I don't have any problem
-> with that. Just that, I think the current solution breaks other cases.
+Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
+antworten Sie bitte dringend
+Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
+.
 
-OK, so the situation right now is that commit 58b116bce136 has
-introduced a regression and so it needs to be fixed or reverted.  The
-cases that were previously broken and were unbroken by that commit
-don't matter here, so you cannot argue that they would be "broken".
+Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
+esse (
+ayishagddafio@mail.ru ) zur weiteren Diskussion.
 
-It looks to me like the original issue fixed by the commit in question
-needs to be addressed differently, so I would vote for reverting it
-and starting over.
-
-> As an alternate solution, assuming "linux,extcon-name" is coming
-> from some firmware, you might want to look into the fw_devlink
-> feature.
-
-That would be a workaround for a driver core issue, though, wouldn't it?
-
-> That feature allows driver core to add device links from firmware
-> information. If you can get that feature to create device links from
-> your dwc3.0.auto (or its parent pci_dev?) to the extcon supplier
-> device, all of this can be sidestepped and your dwc3.0.auto's (or the
-> dwc pci_dev's) probe will be triggered only after extcon is probed.
->
-> I have very little familiarity with PCI/ACPI. I spent about an hour or
-> two poking at ACPI scan/property code. The relationship between a
-> pci_dev and an acpi_device is a bit confusing to me because I see:
->
-> static int dwc3_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
-> {
->         struct property_entry *p = (struct property_entry *)id->driver_data;
->         struct dwc3_pci         *dwc;
->         struct resource         res[2];
->         int                     ret;
->         struct device           *dev = &pci->dev;
-> ....
->         dwc->dwc3 = platform_device_alloc("dwc3", PLATFORM_DEVID_AUTO);
-> ....
->         ACPI_COMPANION_SET(&dwc->dwc3->dev, ACPI_COMPANION(dev));
->
-> And ACPI_COMPANION returns an acpi_device by looking at dev->fwnode.
-> So how the heck is a pci_device.dev.fwnode pointing to an
-> acpi_device.fwnode?
-
-acpi_device is an of_node counterpart (or it is an fwnode itself if you will).
-
-Thanks!
+Freundliche Gr=C3=BC=C3=9Fe
+Frau Aisha Al-Qaddafi
