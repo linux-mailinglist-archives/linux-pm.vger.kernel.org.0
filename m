@@ -2,34 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6A11944A1
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 17:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 599F11945C2
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Mar 2020 18:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727766AbgCZQv4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 Mar 2020 12:51:56 -0400
-Received: from mga09.intel.com ([134.134.136.24]:36661 "EHLO mga09.intel.com"
+        id S1726340AbgCZRr3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 Mar 2020 13:47:29 -0400
+Received: from mga02.intel.com ([134.134.136.20]:24017 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727354AbgCZQvz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 26 Mar 2020 12:51:55 -0400
-IronPort-SDR: f4wiyenU79Im531BDqS3uvegVj7FNkuus8m6j49bVxrP8lMZIDEON9h/A8IrxGUkXz/r4E3tOG
- phDAO/gZ8CPw==
+        id S1726260AbgCZRr3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 26 Mar 2020 13:47:29 -0400
+IronPort-SDR: XVCY0YJ8OVdC0oZA+qecrALSFzJHOYxW41Qc/fhL4B5NLTXhEb8geS7Uw+YnLDHTB0aW3rA0pU
+ CZe/RXGdvLUg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 09:51:55 -0700
-IronPort-SDR: +9+Bb3R6kKxkXPjTJ1SfzRi+zRENtHp947BkCeDhnuyrfA9qeKoOghjYjoD/giGbYZB0zarSMX
- tCWjmugrRbnQ==
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 10:47:28 -0700
+IronPort-SDR: /9Mch0sTAXIZmgMS9wHyoh9oSUrvPC8OuVMYkbCJIDWODvYg4uoXOwGCou4XMiH8hN5skBX9bJ
+ B5u3chFPcjow==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.72,309,1580803200"; 
-   d="scan'208";a="265930241"
+   d="scan'208";a="394087896"
 Received: from otc-chromeosbuild-1.jf.intel.com ([10.54.30.83])
-  by orsmga002.jf.intel.com with ESMTP; 26 Mar 2020 09:51:54 -0700
+  by orsmga004.jf.intel.com with ESMTP; 26 Mar 2020 10:47:28 -0700
 From:   Azhar Shaikh <azhar.shaikh@intel.com>
 To:     lenb@kernel.org, linux-pm@vger.kernel.org
 Cc:     azhar.shaikh@intel.com
-Subject: [PATCH] turbostat: Update the field name for PkgC10
-Date:   Thu, 26 Mar 2020 09:52:01 -0700
-Message-Id: <20200326165201.28588-1-azhar.shaikh@intel.com>
+Subject: [PATCH v2] tools/power turbostat: Update the field name for PkgC10
+Date:   Thu, 26 Mar 2020 10:47:35 -0700
+Message-Id: <20200326174735.29636-1-azhar.shaikh@intel.com>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -41,6 +41,9 @@ Make it unifrom as other package C state field names.
 
 Signed-off-by: Azhar Shaikh <azhar.shaikh@intel.com>
 ---
+Changes in v2:
+  - Update the title
+
  tools/power/x86/turbostat/turbostat.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
