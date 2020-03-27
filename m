@@ -2,135 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EDE195643
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 12:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CED2195676
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 12:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbgC0LYf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Mar 2020 07:24:35 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:51224 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726465AbgC0LYf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 07:24:35 -0400
-Received: by mail-wm1-f67.google.com with SMTP id c187so11054966wme.1
-        for <linux-pm@vger.kernel.org>; Fri, 27 Mar 2020 04:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=NEKo1+Ks52CKrgqp13o2semhHLME73XljK+CspwLPrY=;
-        b=Jtw4HczpGtExse/Jed/9i2XrjLsmX3A8SK85csRKWjvyV7FYnyDWaK8osGBUNIh4IT
-         SXyF2Inx9f76wiysMcdpRB24m3bU94HFjU9zXmvZsK+rxp96pezRZeLD4AKgMLcX7I6t
-         AE0n5YdCM9yiRHauKSO14tA1SwGtP39L7lbsBOvqC2Tl5xCDaXZBKDcBwmNEd9k+gA0a
-         K6Fxy5inzLVO95/7z3fX98ZxfcOv5+WuZo3Bl8ZPbXBlA5aswDEs0VuqqwPmkMCfayvV
-         6j4uOqJZcjd38vtVnCaXo6geSVe/5BMRbzNACDHgTCBtqfua9IxT+Yq/ksnegy9Xw7X+
-         A8eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=NEKo1+Ks52CKrgqp13o2semhHLME73XljK+CspwLPrY=;
-        b=CysC2HAfmvmsrEyhHPt4ef19HY5q/cErupmXnD710TV+I8KgdTu8dl2nQnpm5X84wB
-         g9zpPHLsGWN+jSMFvyasACG3FmvlYesuVJrIP8adXi/DRDZF/dNswNbvCCuo70UJg3t6
-         FV+0IWKOo0SG4uFcNW1AxEEFOZdOy4MLTykTJL+5D9dH1ILmmzbqUwKRSEj2fq7CYRv3
-         V2ZQTEWvlfLdmpXmY+A2MPqD3UHyOG8hsiXNH35f01cYX/jbUj4lpCzRdjCSKzKxYpJg
-         pe4jP99JYCJrxhXs5VLzb8Egs/xzX857OKhbeW/dE4WtsJGM/oeQrw/PHn2xW8RrCdAd
-         Wg2Q==
-X-Gm-Message-State: ANhLgQ3UobOtDNr4A73FSr1gm1ZSeNKURn5C1jbxzXAaIg2BZWiN+zO9
-        Yp7cx2ytFZGGdgpxPLfIpSdjdg==
-X-Google-Smtp-Source: ADFU+vukihyFjfwUuPh25SnSXHqq3y8g/HlHxFrHniP9gGajGvwecjChMSKb0wlOCy8D3fuAaLaRiA==
-X-Received: by 2002:a7b:c408:: with SMTP id k8mr4876391wmi.11.1585308272376;
-        Fri, 27 Mar 2020 04:24:32 -0700 (PDT)
-Received: from dell ([95.149.164.95])
-        by smtp.gmail.com with ESMTPSA id q17sm8213043wrp.11.2020.03.27.04.24.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 04:24:31 -0700 (PDT)
-Date:   Fri, 27 Mar 2020 11:25:23 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     saravanan sekar <sravanhome@gmail.com>
-Cc:     robh+dt@kernel.org, jic23@kernel.org, knaack.h@gmx.de,
-        lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] mfd: mp2629: Add support for mps battery charger
-Message-ID: <20200327112523.GC3383@dell>
-References: <20200322224626.13160-1-sravanhome@gmail.com>
- <20200322224626.13160-3-sravanhome@gmail.com>
- <20200327075541.GF603801@dell>
- <a6098b6a-2b2f-5279-f9fc-85201b9aabde@gmail.com>
- <20200327102221.GA3383@dell>
- <a679aba5-4cfb-1b6c-8cb0-dab3a644f3e7@gmail.com>
+        id S1726739AbgC0Lgx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Mar 2020 07:36:53 -0400
+Received: from honk.sigxcpu.org ([24.134.29.49]:42364 "EHLO honk.sigxcpu.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726360AbgC0Lgx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 27 Mar 2020 07:36:53 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by honk.sigxcpu.org (Postfix) with ESMTP id 87BA5FB03;
+        Fri, 27 Mar 2020 12:36:49 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
+Received: from honk.sigxcpu.org ([127.0.0.1])
+        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 0BdVK_tdadbL; Fri, 27 Mar 2020 12:36:47 +0100 (CET)
+Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
+        id 6456A40514; Fri, 27 Mar 2020 12:36:46 +0100 (CET)
+Date:   Fri, 27 Mar 2020 12:36:46 +0100
+From:   Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
+To:     Martin Kepplinger <martink@posteo.de>
+Cc:     Leonard Crestez <leonard.crestez@nxp.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Silvano di Ninno <silvano.dininno@nxp.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        kernel@pengutronix.de, Fabio Estevam <fabio.estevam@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>
+Subject: Re: [PATCH 0/8] interconnect: Add imx support via devfreq
+Message-ID: <20200327113646.GA93181@bogon.m.sigxcpu.org>
+References: <cover.1585188174.git.leonard.crestez@nxp.com>
+ <1ae21355-df95-44e5-b8f6-14af7aa4fcc3@posteo.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a679aba5-4cfb-1b6c-8cb0-dab3a644f3e7@gmail.com>
+In-Reply-To: <1ae21355-df95-44e5-b8f6-14af7aa4fcc3@posteo.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 27 Mar 2020, saravanan sekar wrote:
-> On 27/03/20 11:22 am, Lee Jones wrote:
-> > Saravanan, Jonathan,
+Hi Martin,
+On Thu, Mar 26, 2020 at 02:55:27PM +0100, Martin Kepplinger wrote:
+> On 26.03.20 03:16, Leonard Crestez wrote:
+> > This series adds interconnect scaling support for imx8m series chips. It uses a
+> > per-SOC interconnect provider layered on top of multiple instances of devfreq
+> > for scalable nodes along the interconnect.
 > > 
-> > On Fri, 27 Mar 2020, saravanan sekar wrote:
-> > > On 27/03/20 8:55 am, Lee Jones wrote:
-> > > > On Sun, 22 Mar 2020, Saravanan Sekar wrote:
-> > > > 
-> > > > > mp2629 is a highly-integrated switching-mode battery charge management
-> > > > > device for single-cell Li-ion or Li-polymer battery.
-> > > > > 
-> > > > > Add MFD core enables chip access for ADC driver for battery readings,
-> > > > > and a power supply battery-charger driver
-> > > > > 
-> > > > > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-> > > > > ---
-> > > > >    drivers/mfd/Kconfig        |   9 +++
-> > > > >    drivers/mfd/Makefile       |   2 +
-> > > > >    drivers/mfd/mp2629.c       | 116 +++++++++++++++++++++++++++++++++++++
-> > > > >    include/linux/mfd/mp2629.h |  22 +++++++
-> > > > >    4 files changed, 149 insertions(+)
-> > > > >    create mode 100644 drivers/mfd/mp2629.c
-> > > > >    create mode 100644 include/linux/mfd/mp2629.h
-
-[...]
-
-> > > > > +#ifndef __MP2629_H__
-> > > > > +#define __MP2629_H__
-> > > > > +
-> > > > > +#include <linux/types.h>
-> > > > > +
-> > > > > +struct device;
-> > > > > +struct regmap;
-> > > > Why not just add the includes?
-> > > Some more shared enum added in ADC driver
-> > Sorry?
+> > Existing qcom interconnect providers mostly translate bandwidth requests into
+> > firmware calls but equivalent firmware on imx8m is much thinner. Scaling
+> > support for individual nodes is implemented as distinct devfreq drivers
+> > instead.
+> > 
+> > The imx interconnect provider doesn't communicate with devfreq directly
+> > but rather computes "minimum frequencies" for nodes along the path and
+> > creates dev_pm_qos requests.
+> > 
+> > Since there is no single devicetree node that can represent the
+> > "interconnect" the main NOC is picked as the "interconnect provider" and
+> > will probe the interconnect platform device if #interconnect-cells is
+> > present. This avoids introducing "virtual" devices but it means that DT
+> > bindings of main NOC includes properties for both devfreq and
+> > interconnect.
+> > 
+> > Only the ddrc and main noc are scalable right now but more can be added.
+> > 
+> > Also available on a github branch (with various unrelated changes):
+> > 	https://github.com/cdleonard/linux/tree/next
+> > Testing currently requires NXP branch of atf+uboot
+> > 
+> > Martin: I believe you should be able to use this to control DRAM
+> > frequency from video by just adding interconnect consumer code to
+> > nwl-dsi. Sample code:
+> > 	https://github.com/cdleonard/linux/commit/43772762aa5045f1ce5623740f9a4baef988d083
+> > 	https://github.com/cdleonard/linux/commit/7b601e981b1f517b5d98b43bde292972ded13086
+> > 
 > 
-> I misunderstood your previous question that you are asking to remove this
-> mp2629.h file
+> Thanks for updating this series Leonard! A few questions for my
+> understanding before trying to test:
 > 
-> "No user here. (Hint: Use forward declaration of struct device instead)" -
-> review comments on V1 from Andy Shevchenko.
-> So remove the includes
+> Isn't the ddrc_opp_table missing in these additions to the DT? That's
+> what I want to scale after all.
+> 
+> If I want to keep calling the "request", now icc_set_bw(), in nwl-dsi:
+> I'd add an "interconnects" property to the node, but what would be my
+> interconnect master? i.e.: interconnects = <&noc master? &noc
+> IMX8MQ_ICS_DRAM>; At least it's not obvious to me from
+> interconnect/imx/imx8mq.c
 
-So Andy has reviewed, but you still don't have him on Cc?
+The NWL DSI host controller is fed by DCSS or mxsfb so any bandwidth
+requirements should (as far as I understand things) go into the display
+controller driver since that's what fetches from RAM.
+Cheers,
+ -- Guido
 
-How are we meant to continue the discussion?
-
-As a general rule I'm not a fan of forward declarations.
-
-I think they should be avoided if at all possible.
-
-> > > > > +struct mp2629_info {
-> > > > > +	struct device *dev;
-> > > > > +	struct regmap *regmap;
-> > > > > +};
-> > > > > +
-> > > > > +#endif
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> 
+> the interconnect framework seems to be powerful indeed, but I still need
+> to fully wrap my head around it.
+> 
+> thanks for the help so far,
+> 
+>                                martin
+> 
+> 
+> > Changes since RFCv6:
+> > * Replace scalable-nodes stuff with just a fsl,ddrc property. Future
+> > scalable nodes can be added as additional phandles on the NOC
+> > * Allow building interconnect drivers as modules
+> > * Handle icc_provider_del errors in imx_icc_unregister (like EBUSY).
+> > * Rename imx-devfreq to imx-bus, similar to exynos-bus
+> > * Explain why imx bus clock enabling is not required
+> > * All dependencies accepted (some time ago).
+> > Link: https://patchwork.kernel.org/cover/11244421/
+> > 
+> > Changes since RFCv5:
+> > * Replace scanning for interconnect-node-id with explicit
+> > scalable-nodes/scalable-node-ids property on NoC.
+> > * Now passes make `dtbs_check`
+> > * Remove struct imx_icc_provider
+> > * Switch to of_icc_xlate_onecell
+> > * Use of_find_device_by_node to fetch QoS target, this causes fewer probe
+> > deferrals, removes dependency on devfreq API and even allows reloading ddrc
+> > module at runtime
+> > * Add imx_icc_node_destroy helper
+> > * Remove 0/1 on DEFINE_BUS_SLAVE/MASTER which created spurious links
+> > Link: https://patchwork.kernel.org/cover/11222015/
+> > 
+> > Changes since RFCv4:
+> > * Drop icc proxy nonsense
+> > * Make devfreq driver for NOC probe the ICC driver if
+> > #interconnect-cells is present
+> > * Move NOC support to interconnect series and rename the node in DT
+> > * Add support for all chips at once, differences are not intereseting
+> > and there is more community interest for 8mq than 8mm.
+> > Link: https://patchwork.kernel.org/cover/11111865/
+> > 
+> > Changes since RFCv3:
+> > * Remove the virtual "icc" node and add devfreq nodes as proxy providers
+> > * Fix build on 32-bit arm (reported by kbuilt test robot)
+> > * Remove ARCH_MXC_ARM64 (never existed in upstream)
+> > * Remove _numlinks, calculate instead
+> > * Replace __BUSFREQ_H header guard
+> > * Improve commit message and comment spelling
+> > * Fix checkpatch issues
+> > Link to RFCv3: https://patchwork.kernel.org/cover/11078671/
+> > 
+> > Changes since RFCv2 and initial work by Alexandre Bailon:
+> > * Relying on devfreq and dev_pm_qos instead of CLK
+> > * No more "platform opp" stuff
+> > * No more special suspend handling: use suspend-opp on devfreq instead
+> > * Replace all mentions of "busfreq" with "interconnect"
+> > Link to v2: https://patchwork.kernel.org/cover/11021563/
+> > 
+> > Leonard Crestez (8):
+> >   dt-bindings: interconnect: Add bindings for imx8m noc
+> >   PM / devfreq: Add generic imx bus scaling driver
+> >   PM / devfreq: imx: Register interconnect device
+> >   interconnect: Add imx core driver
+> >   interconnect: imx: Add platform driver for imx8mm
+> >   interconnect: imx: Add platform driver for imx8mq
+> >   interconnect: imx: Add platform driver for imx8mn
+> >   arm64: dts: imx8m: Add NOC nodes
+> > 
+> >  .../bindings/interconnect/fsl,imx8m-noc.yaml  | 138 ++++++++
+> >  arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  24 ++
+> >  arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  24 ++
+> >  arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  24 ++
+> >  drivers/devfreq/Kconfig                       |   9 +
+> >  drivers/devfreq/Makefile                      |   1 +
+> >  drivers/devfreq/imx-bus.c                     | 181 +++++++++++
+> >  drivers/interconnect/Kconfig                  |   1 +
+> >  drivers/interconnect/Makefile                 |   1 +
+> >  drivers/interconnect/imx/Kconfig              |  17 +
+> >  drivers/interconnect/imx/Makefile             |   9 +
+> >  drivers/interconnect/imx/imx.c                | 298 ++++++++++++++++++
+> >  drivers/interconnect/imx/imx.h                |  62 ++++
+> >  drivers/interconnect/imx/imx8mm.c             | 108 +++++++
+> >  drivers/interconnect/imx/imx8mn.c             |  97 ++++++
+> >  drivers/interconnect/imx/imx8mq.c             | 106 +++++++
+> >  include/dt-bindings/interconnect/imx8mm.h     |  49 +++
+> >  include/dt-bindings/interconnect/imx8mn.h     |  41 +++
+> >  include/dt-bindings/interconnect/imx8mq.h     |  48 +++
+> >  19 files changed, 1238 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> >  create mode 100644 drivers/devfreq/imx-bus.c
+> >  create mode 100644 drivers/interconnect/imx/Kconfig
+> >  create mode 100644 drivers/interconnect/imx/Makefile
+> >  create mode 100644 drivers/interconnect/imx/imx.c
+> >  create mode 100644 drivers/interconnect/imx/imx.h
+> >  create mode 100644 drivers/interconnect/imx/imx8mm.c
+> >  create mode 100644 drivers/interconnect/imx/imx8mn.c
+> >  create mode 100644 drivers/interconnect/imx/imx8mq.c
+> >  create mode 100644 include/dt-bindings/interconnect/imx8mm.h
+> >  create mode 100644 include/dt-bindings/interconnect/imx8mn.h
+> >  create mode 100644 include/dt-bindings/interconnect/imx8mq.h
+> > 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
