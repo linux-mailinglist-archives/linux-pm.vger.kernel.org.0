@@ -2,91 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 089C31957CC
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 14:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B7A195A0A
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 16:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbgC0NRg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Mar 2020 09:17:36 -0400
-Received: from mga02.intel.com ([134.134.136.20]:21831 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726540AbgC0NRg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 27 Mar 2020 09:17:36 -0400
-IronPort-SDR: L3FMgNOVANyHEQQiPzXQhFrbkzFIQCjoWtIX2Qg8y4aH782rDqh01j72yvoIvk+LM+Ikdyrff1
- kDfLyNJUXXXQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2020 06:17:33 -0700
-IronPort-SDR: foPMD2FQZikaok3kV3miyDyHBAn9vtjKjrQOARBpQeXz1M1HoYXgX+pifcg3RUnnUJWKPYwPWZ
- kXueVak/Ae3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,312,1580803200"; 
-   d="scan'208";a="394373114"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga004.jf.intel.com with ESMTP; 27 Mar 2020 06:17:31 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1jHore-00DQJZ-2a; Fri, 27 Mar 2020 15:17:34 +0200
-Date:   Fri, 27 Mar 2020 15:17:34 +0200
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     saravanan sekar <sravanhome@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald <pmeerw@pmeerw.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v4 2/5] mfd: mp2629: Add support for mps battery charger
-Message-ID: <20200327131734.GV1922688@smile.fi.intel.com>
-References: <20200322224626.13160-1-sravanhome@gmail.com>
- <20200322224626.13160-3-sravanhome@gmail.com>
- <20200327075541.GF603801@dell>
- <a6098b6a-2b2f-5279-f9fc-85201b9aabde@gmail.com>
- <20200327102221.GA3383@dell>
- <a679aba5-4cfb-1b6c-8cb0-dab3a644f3e7@gmail.com>
- <20200327112523.GC3383@dell>
- <45f68c40-8e50-e0a2-a89a-b5a164d6b75c@gmail.com>
- <CAHp75VcAq-CwsXccbLVxEwGjZjNhdcbMyM-Y-=SEbmexBidCHw@mail.gmail.com>
- <0f344b03-ce5e-4a31-5268-6db4266b352e@gmail.com>
+        id S1726540AbgC0Pjv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Mar 2020 11:39:51 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:40756 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726454AbgC0Pjv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 11:39:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Glkd4Poyiz/H8tXZD3WNk7OjbV0plFdAnFSLYOWflAc=; b=VgTMqvN2GhS2F+72hyoHVuZIfX
+        mhBVu6xa3IcAdST9Cl0/hifX2ny7hpNRkDFP8nXFXLJThYqqs7C+01rfd9ExVqdAxLZZxw5pTkWcA
+        137UWX2ptUugqk3vk01Ftkd0r3JSRbor9iRK7rfMNvytND51qtx8uGRiLLxPmbBL3rfwGEfif8yDA
+        cBOb20gEAU3/Iido5GZpPkMocn/q6Zz4jx9AZj/hEHoFKzSnLcEP2odZqjMdTGnjVEFoq1Regkck6
+        7KYY3sJsBK9M8GdIcrKLr4nb1hma+xy1NHoKIi8EoRzUkDWfLHmVvbAN+g9p5xNPoWeQ/Pa9dx3kc
+        mjp2goMQ==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jHr5I-0006ZA-AP; Fri, 27 Mar 2020 15:39:48 +0000
+Subject: Re: [PATCH] PM / sleep: Add pm_debug_messages boot command control
+To:     Chen Yu <yu.c.chen@intel.com>, linux-pm@vger.kernel.org
+Cc:     Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20200327111141.14324-1-yu.c.chen@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <a9843786-e7da-2c3c-30e2-c4887e9af4c6@infradead.org>
+Date:   Fri, 27 Mar 2020 08:39:44 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f344b03-ce5e-4a31-5268-6db4266b352e@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200327111141.14324-1-yu.c.chen@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 02:03:30PM +0100, saravanan sekar wrote:
-> On 27/03/20 1:56 pm, Andy Shevchenko wrote:
-> > On Fri, Mar 27, 2020 at 2:41 PM saravanan sekar <sravanhome@gmail.com> wrote:
-> > > On 27/03/20 12:25 pm, Lee Jones wrote:
-> > > > On Fri, 27 Mar 2020, saravanan sekar wrote:
-> > > > > On 27/03/20 11:22 am, Lee Jones wrote:
-> > > > So Andy has reviewed, but you still don't have him on Cc?
-> > > Sorry one of his hint made me removed him in CC unknowingly.
-> > > 
-> > > "For the future, hint:
-> > >           scripts/get_maintainer.pl --git --git-min-percent=67 ..."
-> > > 
-> > Perhaps I have to elaborate. The above hint for the initial submit.
-> > Then the rule of thumb: Include reviewers into Cc (to the patches they
-> > have reviewed), because you can't know their intention and maybe they
-> > want to follow a development.
-> Thanks for more details. Between Lee has not recommended "forward
-> declarations", the review comment
-> you gave on my V1 patch (more info on previous email). Hope you agree with
-> the same.
+On 3/27/20 4:11 AM, Chen Yu wrote:
+> Debug messages from the system suspend/hibernation infrastructure
+> is disabled by default, and can only be enabled after the system
+> has boot up via /sys/power/pm_debug_messages. This makes the hibernation
+> resume hard to track as it involves system boot up across hibernation.
+> There's no chance for software_resume() to track the resume process,
+> eg.
+> 
+> Turning on the pm_debug_messages during boot up by appending
+> 'pm_debug_message'.
 
-I think so.
+Please add that command line option to
+Documentation/admin-guide/kernel-parameters.txt.
+Thanks.
+
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> ---
+>  kernel/power/main.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index 69b7a8aeca3b..1da3d7c15e03 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -535,6 +535,13 @@ static ssize_t pm_debug_messages_store(struct kobject *kobj,
+>  
+>  power_attr(pm_debug_messages);
+>  
+> +static int __init pm_debug_message_setup(char *str)
+> +{
+> +	pm_debug_messages_on = true;
+> +	return 1;
+> +}
+> +__setup("pm_debug_message", pm_debug_message_setup);
+> +
+>  /**
+>   * __pm_pr_dbg - Print a suspend debug message to the kernel log.
+>   * @defer: Whether or not to use printk_deferred() to print the message.
+> 
+
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
