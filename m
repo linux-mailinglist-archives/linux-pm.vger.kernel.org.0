@@ -2,80 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75259195614
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 12:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EDE195643
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 12:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726465AbgC0LNa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Mar 2020 07:13:30 -0400
-Received: from mga06.intel.com ([134.134.136.31]:65535 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726217AbgC0LNa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 27 Mar 2020 07:13:30 -0400
-IronPort-SDR: 5mjP/eToJptF8XXS5ET8vWaZummJ0kMenL1I1P/2o0XsuxHnDZzcqfsS+D8G5YyICgox8m3sbx
- POOqDJW9xEqw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2020 04:13:29 -0700
-IronPort-SDR: 1TMMu0bX7LuJ4UwoUGRyHRf7VQ5nlu/6g+WiYeRMJZo1fivt+FUk4Ryr2Nt3AW5nK7X87H6Ptg
- Iu4ikqUsaBqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,312,1580803200"; 
-   d="scan'208";a="247854794"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by orsmga003.jf.intel.com with ESMTP; 27 Mar 2020 04:13:27 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        Chen Yu <yu.c.chen@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH] PM / sleep: Add pm_debug_messages boot command control
-Date:   Fri, 27 Mar 2020 19:11:41 +0800
-Message-Id: <20200327111141.14324-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726758AbgC0LYf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Mar 2020 07:24:35 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:51224 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726465AbgC0LYf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 07:24:35 -0400
+Received: by mail-wm1-f67.google.com with SMTP id c187so11054966wme.1
+        for <linux-pm@vger.kernel.org>; Fri, 27 Mar 2020 04:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=NEKo1+Ks52CKrgqp13o2semhHLME73XljK+CspwLPrY=;
+        b=Jtw4HczpGtExse/Jed/9i2XrjLsmX3A8SK85csRKWjvyV7FYnyDWaK8osGBUNIh4IT
+         SXyF2Inx9f76wiysMcdpRB24m3bU94HFjU9zXmvZsK+rxp96pezRZeLD4AKgMLcX7I6t
+         AE0n5YdCM9yiRHauKSO14tA1SwGtP39L7lbsBOvqC2Tl5xCDaXZBKDcBwmNEd9k+gA0a
+         K6Fxy5inzLVO95/7z3fX98ZxfcOv5+WuZo3Bl8ZPbXBlA5aswDEs0VuqqwPmkMCfayvV
+         6j4uOqJZcjd38vtVnCaXo6geSVe/5BMRbzNACDHgTCBtqfua9IxT+Yq/ksnegy9Xw7X+
+         A8eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=NEKo1+Ks52CKrgqp13o2semhHLME73XljK+CspwLPrY=;
+        b=CysC2HAfmvmsrEyhHPt4ef19HY5q/cErupmXnD710TV+I8KgdTu8dl2nQnpm5X84wB
+         g9zpPHLsGWN+jSMFvyasACG3FmvlYesuVJrIP8adXi/DRDZF/dNswNbvCCuo70UJg3t6
+         FV+0IWKOo0SG4uFcNW1AxEEFOZdOy4MLTykTJL+5D9dH1ILmmzbqUwKRSEj2fq7CYRv3
+         V2ZQTEWvlfLdmpXmY+A2MPqD3UHyOG8hsiXNH35f01cYX/jbUj4lpCzRdjCSKzKxYpJg
+         pe4jP99JYCJrxhXs5VLzb8Egs/xzX857OKhbeW/dE4WtsJGM/oeQrw/PHn2xW8RrCdAd
+         Wg2Q==
+X-Gm-Message-State: ANhLgQ3UobOtDNr4A73FSr1gm1ZSeNKURn5C1jbxzXAaIg2BZWiN+zO9
+        Yp7cx2ytFZGGdgpxPLfIpSdjdg==
+X-Google-Smtp-Source: ADFU+vukihyFjfwUuPh25SnSXHqq3y8g/HlHxFrHniP9gGajGvwecjChMSKb0wlOCy8D3fuAaLaRiA==
+X-Received: by 2002:a7b:c408:: with SMTP id k8mr4876391wmi.11.1585308272376;
+        Fri, 27 Mar 2020 04:24:32 -0700 (PDT)
+Received: from dell ([95.149.164.95])
+        by smtp.gmail.com with ESMTPSA id q17sm8213043wrp.11.2020.03.27.04.24.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2020 04:24:31 -0700 (PDT)
+Date:   Fri, 27 Mar 2020 11:25:23 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     saravanan sekar <sravanhome@gmail.com>
+Cc:     robh+dt@kernel.org, jic23@kernel.org, knaack.h@gmx.de,
+        lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] mfd: mp2629: Add support for mps battery charger
+Message-ID: <20200327112523.GC3383@dell>
+References: <20200322224626.13160-1-sravanhome@gmail.com>
+ <20200322224626.13160-3-sravanhome@gmail.com>
+ <20200327075541.GF603801@dell>
+ <a6098b6a-2b2f-5279-f9fc-85201b9aabde@gmail.com>
+ <20200327102221.GA3383@dell>
+ <a679aba5-4cfb-1b6c-8cb0-dab3a644f3e7@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a679aba5-4cfb-1b6c-8cb0-dab3a644f3e7@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Debug messages from the system suspend/hibernation infrastructure
-is disabled by default, and can only be enabled after the system
-has boot up via /sys/power/pm_debug_messages. This makes the hibernation
-resume hard to track as it involves system boot up across hibernation.
-There's no chance for software_resume() to track the resume process,
-eg.
+On Fri, 27 Mar 2020, saravanan sekar wrote:
+> On 27/03/20 11:22 am, Lee Jones wrote:
+> > Saravanan, Jonathan,
+> > 
+> > On Fri, 27 Mar 2020, saravanan sekar wrote:
+> > > On 27/03/20 8:55 am, Lee Jones wrote:
+> > > > On Sun, 22 Mar 2020, Saravanan Sekar wrote:
+> > > > 
+> > > > > mp2629 is a highly-integrated switching-mode battery charge management
+> > > > > device for single-cell Li-ion or Li-polymer battery.
+> > > > > 
+> > > > > Add MFD core enables chip access for ADC driver for battery readings,
+> > > > > and a power supply battery-charger driver
+> > > > > 
+> > > > > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+> > > > > ---
+> > > > >    drivers/mfd/Kconfig        |   9 +++
+> > > > >    drivers/mfd/Makefile       |   2 +
+> > > > >    drivers/mfd/mp2629.c       | 116 +++++++++++++++++++++++++++++++++++++
+> > > > >    include/linux/mfd/mp2629.h |  22 +++++++
+> > > > >    4 files changed, 149 insertions(+)
+> > > > >    create mode 100644 drivers/mfd/mp2629.c
+> > > > >    create mode 100644 include/linux/mfd/mp2629.h
 
-Turning on the pm_debug_messages during boot up by appending
-'pm_debug_message'.
+[...]
 
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Len Brown <lenb@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- kernel/power/main.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+> > > > > +#ifndef __MP2629_H__
+> > > > > +#define __MP2629_H__
+> > > > > +
+> > > > > +#include <linux/types.h>
+> > > > > +
+> > > > > +struct device;
+> > > > > +struct regmap;
+> > > > Why not just add the includes?
+> > > Some more shared enum added in ADC driver
+> > Sorry?
+> 
+> I misunderstood your previous question that you are asking to remove this
+> mp2629.h file
+> 
+> "No user here. (Hint: Use forward declaration of struct device instead)" -
+> review comments on V1 from Andy Shevchenko.
+> So remove the includes
 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 69b7a8aeca3b..1da3d7c15e03 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -535,6 +535,13 @@ static ssize_t pm_debug_messages_store(struct kobject *kobj,
- 
- power_attr(pm_debug_messages);
- 
-+static int __init pm_debug_message_setup(char *str)
-+{
-+	pm_debug_messages_on = true;
-+	return 1;
-+}
-+__setup("pm_debug_message", pm_debug_message_setup);
-+
- /**
-  * __pm_pr_dbg - Print a suspend debug message to the kernel log.
-  * @defer: Whether or not to use printk_deferred() to print the message.
+So Andy has reviewed, but you still don't have him on Cc?
+
+How are we meant to continue the discussion?
+
+As a general rule I'm not a fan of forward declarations.
+
+I think they should be avoided if at all possible.
+
+> > > > > +struct mp2629_info {
+> > > > > +	struct device *dev;
+> > > > > +	struct regmap *regmap;
+> > > > > +};
+> > > > > +
+> > > > > +#endif
+
 -- 
-2.17.1
-
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
