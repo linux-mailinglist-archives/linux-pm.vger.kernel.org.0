@@ -2,94 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B7A195A0A
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 16:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DD9195A1D
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 16:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbgC0Pjv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Mar 2020 11:39:51 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:40756 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726454AbgC0Pjv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 11:39:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Glkd4Poyiz/H8tXZD3WNk7OjbV0plFdAnFSLYOWflAc=; b=VgTMqvN2GhS2F+72hyoHVuZIfX
-        mhBVu6xa3IcAdST9Cl0/hifX2ny7hpNRkDFP8nXFXLJThYqqs7C+01rfd9ExVqdAxLZZxw5pTkWcA
-        137UWX2ptUugqk3vk01Ftkd0r3JSRbor9iRK7rfMNvytND51qtx8uGRiLLxPmbBL3rfwGEfif8yDA
-        cBOb20gEAU3/Iido5GZpPkMocn/q6Zz4jx9AZj/hEHoFKzSnLcEP2odZqjMdTGnjVEFoq1Regkck6
-        7KYY3sJsBK9M8GdIcrKLr4nb1hma+xy1NHoKIi8EoRzUkDWfLHmVvbAN+g9p5xNPoWeQ/Pa9dx3kc
-        mjp2goMQ==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jHr5I-0006ZA-AP; Fri, 27 Mar 2020 15:39:48 +0000
-Subject: Re: [PATCH] PM / sleep: Add pm_debug_messages boot command control
-To:     Chen Yu <yu.c.chen@intel.com>, linux-pm@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20200327111141.14324-1-yu.c.chen@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <a9843786-e7da-2c3c-30e2-c4887e9af4c6@infradead.org>
-Date:   Fri, 27 Mar 2020 08:39:44 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1726758AbgC0Pnv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Mar 2020 11:43:51 -0400
+Received: from sauhun.de ([88.99.104.3]:39010 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726518AbgC0Pnv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 27 Mar 2020 11:43:51 -0400
+Received: from localhost (p54B3358F.dip0.t-ipconnect.de [84.179.53.143])
+        by pokefinder.org (Postfix) with ESMTPSA id 1F17E2C08B2;
+        Fri, 27 Mar 2020 16:43:48 +0100 (CET)
+Date:   Fri, 27 Mar 2020 16:43:45 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+Cc:     linux-i2c@vger.kernel.org, Derek Basehore <dbasehore@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] i2c: enable async suspend/resume on i2c devices
+Message-ID: <20200327154345.GA3971@ninjato>
+References: <20200327151951.18111-1-ricardo.canuelo@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <20200327111141.14324-1-yu.c.chen@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YZ5djTAD1cGYuMQK"
+Content-Disposition: inline
+In-Reply-To: <20200327151951.18111-1-ricardo.canuelo@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/27/20 4:11 AM, Chen Yu wrote:
-> Debug messages from the system suspend/hibernation infrastructure
-> is disabled by default, and can only be enabled after the system
-> has boot up via /sys/power/pm_debug_messages. This makes the hibernation
-> resume hard to track as it involves system boot up across hibernation.
-> There's no chance for software_resume() to track the resume process,
-> eg.
-> 
-> Turning on the pm_debug_messages during boot up by appending
-> 'pm_debug_message'.
 
-Please add that command line option to
-Documentation/admin-guide/kernel-parameters.txt.
-Thanks.
+--YZ5djTAD1cGYuMQK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+On Fri, Mar 27, 2020 at 04:19:51PM +0100, Ricardo Ca=C3=B1uelo wrote:
+> This enables the async suspend property for i2c devices. This reduces
+> the suspend/resume time considerably on platforms with multiple i2c
+> devices (such as a trackpad or touchscreen).
+>=20
+> (am from https://patchwork.ozlabs.org/patch/949922/)
+>=20
+> Signed-off-by: Derek Basehore <dbasehore@chromium.org>
+> Reviewed-on: https://chromium-review.googlesource.com/1152411
+> Tested-by: Venkateswarlu V Vinjamuri <venkateswarlu.v.vinjamuri@intel.com>
+> Reviewed-by: Venkateswarlu V Vinjamuri <venkateswarlu.v.vinjamuri@intel.c=
+om>
+> Reviewed-by: Justin TerAvest <teravest@chromium.org>
+> Signed-off-by: Guenter Roeck <groeck@chromium.org>
+> Signed-off-by: Ricardo Ca=C3=B1uelo <ricardo.canuelo@collabora.com>
 > ---
->  kernel/power/main.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index 69b7a8aeca3b..1da3d7c15e03 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -535,6 +535,13 @@ static ssize_t pm_debug_messages_store(struct kobject *kobj,
->  
->  power_attr(pm_debug_messages);
->  
-> +static int __init pm_debug_message_setup(char *str)
-> +{
-> +	pm_debug_messages_on = true;
-> +	return 1;
-> +}
-> +__setup("pm_debug_message", pm_debug_message_setup);
-> +
->  /**
->   * __pm_pr_dbg - Print a suspend debug message to the kernel log.
->   * @defer: Whether or not to use printk_deferred() to print the message.
-> 
 
+Adding linux-pm to CC. I don't know much about internals of async
+suspend. Is there a guide like "what every maintainer needs to know
+about"?
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> This patch was originally created for chromeos some time ago and I'm
+> evaluating if it's a good candidate for upstreaming.
+>=20
+> By the looks of it I think it was done with chromebooks in mind, but
+> AFAICT this would impact every i2c client in every platform, so I'd like
+> to know your opinion about it.
+>=20
+> As far as I know there was no further investigation or testing on it, so
+> I don't know if it was tested on any other hardware.
+>=20
+> Best,
+> Ricardo
+>=20
+>  drivers/i2c/i2c-core-base.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index cefad0881942..643bc0fe0281 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -769,6 +769,7 @@ i2c_new_client_device(struct i2c_adapter *adap, struc=
+t i2c_board_info const *inf
+>  	client->dev.of_node =3D of_node_get(info->of_node);
+>  	client->dev.fwnode =3D info->fwnode;
+> =20
+> +	device_enable_async_suspend(&client->dev);
+>  	i2c_dev_set_name(adap, client, info);
+> =20
+>  	if (info->properties) {
+> --=20
+> 2.18.0
+>=20
+
+--YZ5djTAD1cGYuMQK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl5+HywACgkQFA3kzBSg
+KbZk8Q//aQwuwBSXd1/62Rw4lg2C2KusB9AvoeB12oQM2KBFTu4Fdv3bRHSbzI04
++xvEiBjHU7d5p+xhUihNCxFieNzob1XUAsfbeAj4kdc8jyeROuGkMwmVfUrp7ELw
+7fA7A6B7B9v2q1pUmfps7X5e9uq1jJ1HUZWdPAyQASNSUG6S48pxEIApsj3YSveB
+ui0cgweyq40BjmJZwOT2JA0f3QZK6O4BcLpo4ILiYW8rCpub3T77VdJ7JGa2++8g
+W7DMgJRnf+rM2lmKPsEoUrV1nNVGPzQ3xMIsyrM+00MEw3pX/cfrrcLtEaJJrPhI
+gy5pyy6oNMo1dIuurYpesH2HOKU1iwrT9WHz3zOlhRrfT54P2KoLdCIhlQ5YbBfo
+Fakq6V2eOpFTgqIDJ4uZHbHIQ92QojQm/aNV+E7q12lN18y7wz2PnQDpVSGyAAEU
+0tesmwv238xl8wWhZgmtrhSf2nxl0F1pmYjzLyfnggW31xVB0q3YTLgeloaLeTFP
+socKNEVulcHb8VuC5wnLGij2BtRF5TPUaQA38cy0aC6IpDixhjkmMR7l1pHlh+dj
+EZcxzPxcb6AEEPbCgvBvkTZIfmaGPT5s/FRaHjmNo5OLpgy5EicMtl7pHYhlOA5K
+0FcxE8aMUseEja04QChybCfG7QjWcucSIRBbSdQJPrUE4TxMt/E=
+=hV3Y
+-----END PGP SIGNATURE-----
+
+--YZ5djTAD1cGYuMQK--
