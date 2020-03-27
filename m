@@ -2,160 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3971960B4
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 22:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4237C1960E9
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 23:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727600AbgC0VuP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Mar 2020 17:50:15 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:35399 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727548AbgC0VuP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 17:50:15 -0400
-Received: by mail-wm1-f65.google.com with SMTP id f74so3172438wmf.0;
-        Fri, 27 Mar 2020 14:50:14 -0700 (PDT)
+        id S1727732AbgC0WPw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Mar 2020 18:15:52 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:40444 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727726AbgC0WPv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 18:15:51 -0400
+Received: by mail-pg1-f194.google.com with SMTP id t24so5240731pgj.7
+        for <linux-pm@vger.kernel.org>; Fri, 27 Mar 2020 15:15:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=UPYvtOj75J2/EwYyRdsACxnYCpxt8+KWK2M/XYoASio=;
-        b=pdZXvd9Su0kL4ajBpbQhIkICRXk2LvR6We+EPwTHlA28wJaFShzFPgUbQyfbIvQYzS
-         qCb2jxZWlZtGMMB3i0soOBxEFuDWb5OOmYFnzDsUdohbwTn78iISXAdr1A3RR2TZyIA9
-         6sQXZhxryqyw/L1N0zaEiV4vTw3auzSzz/W4Y7T62olfteXivjxc24cBLIRiFW3e59tc
-         nJ88HMCApPVEI103oSLypkeNgbqgajMKdi5VBM0GM50k7Z80YAtNVZYzDg8s1zHxQokt
-         a7Via6LDcTS7TX2h9m2eJe+ZSFgE4aAMInaO7jb6oU23HjKwVQkFvxVy6+caePWjWE8r
-         zoxw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TEwTFJQjvV6Mx5spN7GpwpVz8q19VnSJjUr5y2zOQf4=;
+        b=p9SBNdR+ETIPSTXcv5EhsgX4tSQOTcZTMdhoZo/8WYUG+a++O1VV0uJ6+modK5pxzh
+         HMITDpSbUK0bPjS+gKppaVH4D6idOVczgD3d/rfavsXFgmDbsSJQAGgO9g/wkbGj3kMn
+         PnoH2d0IKUqvRfBtogvE07RRc5sijJBwuAmz6F4pNACVZD6o+Mc83UJ+FzcaLxBAqyQI
+         JEzwo+ApKOBsJjORG+54L5O8FR8LRtj8oNjw+d2rQkVunVbiKXhFKn+DoUdiBKTsd6HE
+         98xUG1mGuTYvcEEnUlVpqZitjoQ4FiNZPwhkJiMYBdyB98fu1AMII5hzw/KR4Tjb14iI
+         4KSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=UPYvtOj75J2/EwYyRdsACxnYCpxt8+KWK2M/XYoASio=;
-        b=ilAKCsV6fL3V1JbOYYZ3Dy4c8ywmX+BlYPZfMFYLDveJrpayr9b97numhWPMr2EawY
-         dVmZpyV5H0bvGDwQj2JKZycU0q8uLKrdinNSEcJ9VD9pWsA8sJDA4vpOVpCeV1iGUBJp
-         qyLJj1+RUqUoWffnJciohJHO57OGC2wbScFu7mITDK6YsTp0qLVW1nwDFYrinOiQN2uU
-         tVWAkPHeY+QnwrutDq3lfR9TVKmFs3GEolRaPG2qvHwLMb5YZ1LWT7NmMKHwG3Rc82xT
-         btuWlQGPvNuCKaM1jZwmj8OqLbxKtH2ddb7h750ksejb9ywImaYCKccHzRKkzguMd+Q1
-         Kwrw==
-X-Gm-Message-State: ANhLgQ2go0q9UYo2tmCC6mhoYVeFMC9+IXDiiSQ4AoSWI7fS/Q++68QP
-        KkNThrLs8wo3eRvkFrxkEei1f7UxF74=
-X-Google-Smtp-Source: ADFU+vvVtGIYGBhSlwePa09L/Ha1FQ2QJKkWLyhkmtaIy0xTyRFUFl97hefC/dNNhN9s8W0M89esSw==
-X-Received: by 2002:a1c:56d5:: with SMTP id k204mr869388wmb.13.1585345812891;
-        Fri, 27 Mar 2020 14:50:12 -0700 (PDT)
-Received: from [192.168.0.104] (p5B3F7536.dip0.t-ipconnect.de. [91.63.117.54])
-        by smtp.gmail.com with ESMTPSA id a2sm10228275wrp.13.2020.03.27.14.50.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Mar 2020 14:50:11 -0700 (PDT)
-Subject: Re: [PATCH v4 1/5] dt-bindings: mfd: add document bindings for mp2629
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     robh+dt@kernel.org, jic23@kernel.org, knaack.h@gmx.de,
-        lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20200322224626.13160-1-sravanhome@gmail.com>
- <20200322224626.13160-2-sravanhome@gmail.com> <20200327080013.GG603801@dell>
-From:   saravanan sekar <sravanhome@gmail.com>
-Message-ID: <d449b567-bd5c-168d-83af-5ba38771f75a@gmail.com>
-Date:   Fri, 27 Mar 2020 22:50:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TEwTFJQjvV6Mx5spN7GpwpVz8q19VnSJjUr5y2zOQf4=;
+        b=J0e9+ZH/JKaBrGsdU180K1XFLxOJ/PGMVTM/hX1yfgyYGfriQ9y6IIy+xhnC83d/9S
+         mwtJ9FFRegcvk0Dl5DKB72gocMy/scab1Gs+npNm15dlYtdmyIlYQkZ1Xo4bD9yzVTXe
+         KtqVaOBDhc0egRdd0Pbn3xnxSpI7i3qU3KjKB4mmYVWY5rrLaRUiZ0QFo/eqHTet2qJP
+         6oU45rUqhv7fSphfp6KDqgJexp/024spigx+6tIxepVJxHJBSuO7Yke60/Va5Uleb7ay
+         w3RrW0YySs0iTm3WHCXrlsKqHBYjuDSJM3hba0Za5Bgk+yNreq1l6YTx7qg0i88b4nbd
+         OxrA==
+X-Gm-Message-State: ANhLgQ3a3eOnnX+o9paZRZGT626S0P+fG7ouNxWgmRW620xqmHKUAP/Z
+        MhtDgpus0PpZ+sTbg+JQSQXHJw==
+X-Google-Smtp-Source: ADFU+vud/GGU22qfW9z9qf0DG+nmWdPXJx314vADEi1cJKcHiCmBXY49eDWGGyDc8y3g/2VXMAR/aw==
+X-Received: by 2002:a63:a65:: with SMTP id z37mr1441563pgk.31.1585347348852;
+        Fri, 27 Mar 2020 15:15:48 -0700 (PDT)
+Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id r4sm4564372pgp.53.2020.03.27.15.15.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2020 15:15:47 -0700 (PDT)
+Date:   Fri, 27 Mar 2020 15:15:45 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     rui.zhang@intel.com, ulf.hansson@linaro.org,
+        daniel.lezcano@linaro.org, agross@kernel.org, robh@kernel.org,
+        amit.kucheria@verdurent.com, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch v5 2/6] soc: qcom: rpmhpd: Introduce function to retrieve
+ power domain performance state count
+Message-ID: <20200327221545.GF5063@builder>
+References: <20200320014107.26087-1-thara.gopinath@linaro.org>
+ <20200320014107.26087-3-thara.gopinath@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20200327080013.GG603801@dell>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200320014107.26087-3-thara.gopinath@linaro.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lee,
+On Thu 19 Mar 18:41 PDT 2020, Thara Gopinath wrote:
 
-On 27/03/20 9:00 am, Lee Jones wrote:
-> On Sun, 22 Mar 2020, Saravanan Sekar wrote:
->
->> Add device tree binding information for mp2629 mfd driver.
->>
->> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
->> ---
->>   .../devicetree/bindings/mfd/mps,mp2629.yaml   | 60 +++++++++++++++++++
->>   1 file changed, 60 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/mfd/mps,mp2629.yaml b/Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
->> new file mode 100644
->> index 000000000000..314309ea91ac
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
->> @@ -0,0 +1,60 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mfd/mps,mp2629.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> Are these links supposed to work?
-Not really, but as far my understanding needed for dt-bindings check
->> +title: MP2629 Battery Charger PMIC from Monolithic Power System.
->> +
->> +maintainers:
->> +  - Saravanan Sekar <sravanhome@gmail.com>
->> +
->> +description: |
->> +  MP2629 is an PMIC providing battery charging and power supply for smartphones,
-> s/an/a/
->
->> +  wireless camera and portable devices. Chip is contrlled over I2C.
-> Spell check!
->
->> +  The MFD device handles battery charger controller and ADC IIO device for
->> +  battery, system voltage
-> MFD isn't a thing.  We made it up.  Please describe it as it is in the datasheet.
->
->> +properties:
->> +  compatible:
->> +    const: mps,mp2629
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  interrupt-controller: true
->> +
->> +  "#interrupt-cells":
->> +    const: 2
->> +    description:
->> +      The first cell is the IRQ number, the second cell is the trigger type.
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - interrupt-controller
->> +  - "#interrupt-cells"
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +    #include <dt-bindings/input/linux-event-codes.h>
->> +    i2c {
-> i2c@0x????????
+> Populate .get_performace_state_count in genpd ops to retrieve the count of
+> performance states supported by a rpmh power domain.
+> 
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> ---
+>  drivers/soc/qcom/rpmhpd.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
+> index 4d264d0672c4..7142409a3b77 100644
+> --- a/drivers/soc/qcom/rpmhpd.c
+> +++ b/drivers/soc/qcom/rpmhpd.c
+> @@ -341,6 +341,13 @@ static unsigned int rpmhpd_get_performance_state(struct generic_pm_domain *genpd
+>  	return dev_pm_opp_get_level(opp);
+>  }
+>  
+> +static int rpmhpd_performance_states_count(struct generic_pm_domain *domain)
+> +{
+> +	struct rpmhpd *pd = domain_to_rpmhpd(domain);
+> +
+> +	return pd->level_count;
+> +}
+> +
+>  static int rpmhpd_update_level_mapping(struct rpmhpd *rpmhpd)
+>  {
+>  	int i;
+> @@ -429,6 +436,8 @@ static int rpmhpd_probe(struct platform_device *pdev)
+>  		rpmhpds[i]->pd.power_on = rpmhpd_power_on;
+>  		rpmhpds[i]->pd.set_performance_state = rpmhpd_set_performance_state;
+>  		rpmhpds[i]->pd.opp_to_performance_state = rpmhpd_get_performance_state;
+> +		rpmhpds[i]->pd.get_performance_state_count =
+> +					rpmhpd_performance_states_count;
 
-Its a I2C controller node, I don't think address is needed. Mention like 
-this my previous other driver patches,
+I would prefer if you ignore the 80-char limit here and leave the line
+unwrapped.
 
-dt_binding_check is also passed
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +
->> +        pmic@4b {
->> +            compatible = "mps,mp2629";
->> +            reg = <0x4b>;
->> +
->> +            interrupt-controller;
->> +            interrupt-parent = <&gpio2>;
->> +            #interrupt-cells = <2>;
->> +            interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
->> +        };
->> +    };
+Regards,
+Bjorn
+
+>  		pm_genpd_init(&rpmhpds[i]->pd, NULL, true);
+>  
+>  		data->domains[i] = &rpmhpds[i]->pd;
+> -- 
+> 2.20.1
+> 
