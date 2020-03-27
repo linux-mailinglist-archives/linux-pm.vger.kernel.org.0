@@ -2,53 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DF01952E5
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 09:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CAAA1954AA
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 10:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727252AbgC0Ib7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Mar 2020 04:31:59 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:35721 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726115AbgC0Ib7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 04:31:59 -0400
-Received: by mail-wm1-f66.google.com with SMTP id f74so393324wmf.0
-        for <linux-pm@vger.kernel.org>; Fri, 27 Mar 2020 01:31:57 -0700 (PDT)
+        id S1727349AbgC0J7u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Mar 2020 05:59:50 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:44812 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727252AbgC0J7t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 05:59:49 -0400
+Received: by mail-lj1-f194.google.com with SMTP id p14so9507517lji.11
+        for <linux-pm@vger.kernel.org>; Fri, 27 Mar 2020 02:59:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=/8e1khbt3xy4ZUf34DU6Fxze93y8M47+3udr0iQSRsI=;
-        b=LHWAWHzmrgJi6sjgnjoGfbv7/nunVx19vgyHo/Iys+J47ldqjn8fGNWukWARkju+5I
-         vxbxj1NSvZ3VbfxweyHPqh6Dl1Ho/ppvvxSzYAun432P1qgCZD6dOCKJFmKI6uwd6wc0
-         o5bjDLooHalwWV9R8YtQ62qyeotsUIkiZl85Z4bpwT5LcRPhRZZXVI8vDevR0jT6RL/A
-         dNFry0CzpNV4ae7f5kjFirmvM+Lw7yrn81OFB0G15fzV2kHfMmi9DVpiOd4BQsfTBM74
-         jIUN9CTbrlLpgMk3oecrzVR0NLzrIAKFVi7HJ2Yuxpy5IyW5hHCabCi2m9dSFDAUUPsP
-         N1nw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iT9ew65Ai4POSw9apePAlYbX2sb+iJXvkgJnQxpRw0g=;
+        b=cWW3YcpEyyYutTrNo9KR9HBH3E1bK+HR2Lj5S1ufOBfKm/JNDbVKgSTehtTbK/piG7
+         AKjHnGwyvO2icmwsa3kFw6Zy9abidGdYmBJm7RwikCnCpiGoaqgq5m3bGu0GFONHPovH
+         s0c/WvnYnPEvbNXNyKweaiea++yeq0zcHNyQfUxojaI3SyGLY4+iyWjDQ0x68SaY8Drf
+         JMetNVWiEP6KTRh7NjcfaAuyl0sKbJRnuDYUHwbVm3S17ouQgtixys00HdZ8IS96Ovz4
+         pek6sQ78KGlTRqT5w9MPDkgc2TCFzKlFMmuVNKZoTHdy8naS5UOmiEGTokrk8DVStpkg
+         Jd4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=/8e1khbt3xy4ZUf34DU6Fxze93y8M47+3udr0iQSRsI=;
-        b=ehX+WDoZC2yxB7LcpyPjNMxjB2wJR+22Edr74a5G38Xgfhug7czK6cMBRRu5XyuFzJ
-         H4r+vLclRi5RGlsrO3QBpmVgt9COCUBiUEWPHs0s5X72felNjwRpqn0wolNHUvmOF7M+
-         dmiw4SPTbAXckIK/ArNb5x/tqPjuqqb6bDlImIWb2tSdML9ep7y0BxTes9YL5QuOmJ1O
-         /gn17ev/xVqmXKTlA5/qDO1MyCCKarZqMS7wNNN6kvuSKu0tUmTrU5gc8bBVol76dJap
-         7ooOGfFxSplxUpdZqpTpyouEUAfIbi+JWYFegjC6hvVOynUyNSWei0H+Wvu2XJNzyT6N
-         Hw1Q==
-X-Gm-Message-State: ANhLgQ0ROeS7QsOSeWUnReA4N5qVnzKNybgUqwm+gwhfSvfClDuEDPHS
-        36D5c/OX8JzCHFqDV6Q+yU8eHw==
-X-Google-Smtp-Source: ADFU+vshlFLkzjFGLqZWToyKEwofbRxD/jsH8lC+uHzFVX7qI4umf//ndsbal5w8KkGL0SIvWV2zCg==
-X-Received: by 2002:a7b:cc81:: with SMTP id p1mr4129403wma.158.1585297917089;
-        Fri, 27 Mar 2020 01:31:57 -0700 (PDT)
-Received: from dell ([95.149.164.95])
-        by smtp.gmail.com with ESMTPSA id w67sm7008731wmb.41.2020.03.27.01.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 01:31:56 -0700 (PDT)
-Date:   Fri, 27 Mar 2020 08:32:46 +0000
-From:   Lee Jones <lee.jones@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iT9ew65Ai4POSw9apePAlYbX2sb+iJXvkgJnQxpRw0g=;
+        b=QGkkXKhtvMUexQF4z8CQ+NKH+3gIbg2CxsBieSisO8YYDMAKvOIXBXjzAmL0qDEIhK
+         NZfmAEaQzpq6/FCto9q6qSaL29yOuI69BtAR3GrDsMZXDovmMgEC8n4zSqv4QV2rJbV6
+         wB1QQrgkTNf+KKX2vU2UTkQHtE37JJThUPge2kqgdf5LdK9aYdXubG/2duhoxGUloIQW
+         4E2sK3CAcuE7KslJEHMlPPv+WUhEu3cNiwxH88PIqPYymVj9PL7NmzpndndYASMKK3pa
+         IjtMQ13rp7uJZuhCpM59IZY9evDVF0ZzSfIS09dOjBMIv79+AfbN+kkWEzk/Bnu1S7Cp
+         wdug==
+X-Gm-Message-State: AGi0PuaSe+KuSU2n+FEXmaEch4zR3cgqiFXYqpaAbbu6rea0W0Us4C/4
+        zYHyIgqpF3DFBMGaXuIX5syx8wr8HJQqIKYD5TPctQ==
+X-Google-Smtp-Source: ADFU+vsFTyW5diEMQrZ6oc8ojCeBX7BYjVmipZYNTS3SNNq4tTiZwvSWUqKgPn07Ht2NDQ7OLG9B8uptAVDDcyFhwxQ=
+X-Received: by 2002:a2e:9605:: with SMTP id v5mr7685010ljh.258.1585303186378;
+ Fri, 27 Mar 2020 02:59:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200325220542.19189-1-robh@kernel.org> <20200325220542.19189-4-robh@kernel.org>
+In-Reply-To: <20200325220542.19189-4-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Mar 2020 10:59:35 +0100
+Message-ID: <CACRpkdbWeKjd6B2mLz3+7LOxSGP9FqSz6YRp_YHx+2qHkJVFCQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] dt-bindings: Clean-up schema errors due to missing
+ 'addtionalProperties: false'
 To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Brian Masney <masneyb@onstation.org>,
@@ -59,8 +62,8 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jonathan Cameron <jic23@kernel.org>,
         Kevin Hilman <khilman@baylibre.com>,
         Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
         Mark Brown <broonie@kernel.org>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -70,34 +73,29 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Stephen Boyd <sboyd@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Zhang Rui <rui.zhang@intel.com>,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: Clean-up schema errors due to missing
- 'addtionalProperties: false'
-Message-ID: <20200327083246.GJ603801@dell>
-References: <20200325220542.19189-1-robh@kernel.org>
- <20200325220542.19189-4-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200325220542.19189-4-robh@kernel.org>
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        linux-media@vger.kernel.org,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 25 Mar 2020, Rob Herring wrote:
+On Wed, Mar 25, 2020 at 11:05 PM Rob Herring <robh@kernel.org> wrote:
 
 > Numerous schemas are missing 'additionalProperties: false' statements which
 > ensures a binding doesn't have any extra undocumented properties or child
 > nodes. Fixing this reveals various missing properties, so let's fix all
 > those occurrences.
-> 
+>
 > Cc: Stephen Boyd <sboyd@kernel.org>
 > Cc: Linus Walleij <linus.walleij@linaro.org>
 > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
@@ -121,27 +119,15 @@ On Wed, 25 Mar 2020, Rob Herring wrote:
 > Cc: linux-gpio@vger.kernel.org
 > Cc: linux-arm-kernel@lists.infradead.org
 > Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-iio@vger.kernel.org
+> Cc: linux-iio@vger.kernel.org.
 > Cc: linux-media@vger.kernel.org
 > Cc: linux-amlogic@lists.infradead.org
 > Cc: netdev@vger.kernel.org
 > Cc: linux-pm@vger.kernel.org
 > Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/clock/fsl,plldig.yaml |  3 +++
->  .../gpio/socionext,uniphier-gpio.yaml         |  2 ++
->  .../bindings/gpu/arm,mali-bifrost.yaml        |  6 ++---
->  .../bindings/gpu/arm,mali-midgard.yaml        |  3 +++
->  .../bindings/iio/adc/adi,ad7192.yaml          |  1 -
->  .../bindings/iio/pressure/bmp085.yaml         |  3 +++
->  .../media/amlogic,meson-gx-ao-cec.yaml        |  9 +++++---
 
->  .../bindings/mfd/rohm,bd71828-pmic.yaml       |  3 +++
+Sorry for errors caused by me,
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Yours,
+Linus Walleij
