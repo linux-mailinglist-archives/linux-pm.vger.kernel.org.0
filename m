@@ -2,177 +2,310 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F1F1951DD
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 08:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A183D19525F
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 08:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725956AbgC0H1Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Mar 2020 03:27:25 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:45359 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725942AbgC0H1Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 03:27:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585294044;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=eV/qAe+qkqLXHJwq0/oBSIudlDw3V3l9wrqYSL9XOT8=;
-        b=CdJxkk4z6qHgyMiUGK7TXprqwLoZnUpCC+iKKh7xa6wkyQ/kIuYr3m8vfbmdgT243EFqrU
-        RjrG/+JyEg6A46XuL7r6CsZaQ2a1+X0J5ORHmv8r6k2O9PHjf3+LEP9pxEjDfsfSmcga9v
-        TVInvfqdOjp8+8gN0JnikkbsdVERkMI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-142-nkrC-1WAN4Ke0EVEMVutTA-1; Fri, 27 Mar 2020 03:27:17 -0400
-X-MC-Unique: nkrC-1WAN4Ke0EVEMVutTA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A9D92800D50;
-        Fri, 27 Mar 2020 07:27:16 +0000 (UTC)
-Received: from olysonek-rh (unknown [10.40.192.144])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4CF995DA81;
-        Fri, 27 Mar 2020 07:27:15 +0000 (UTC)
-From:   olysonek@redhat.com (=?utf-8?Q?Ond=C5=99ej_Lyson=C4=9Bk?=)
-To:     len.brown@intel.com, linux-pm@vger.kernel.org
-Cc:     olysonek@redhat.com
-Subject: x86_energy_perf_policy fails with Input/output error in a VM
-Date:   Fri, 27 Mar 2020 08:27:12 +0100
-Message-ID: <flspncygsvj.fsf@redhat.com>
+        id S1726418AbgC0Hy5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Mar 2020 03:54:57 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:43120 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726133AbgC0Hy4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 03:54:56 -0400
+Received: by mail-wr1-f66.google.com with SMTP id m11so4340639wrx.10
+        for <linux-pm@vger.kernel.org>; Fri, 27 Mar 2020 00:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=xUFFKgN3GfGwUoYxNVOvMRouA9N+GmIsWjhSsoKFX5E=;
+        b=Y3cEWhLcIOHEPTL/VkoGr5rmc2Y51cZVjR78PzBKRezoNIZvm5eHjjNQUgRpZin8GZ
+         Z1d0WpYywAPdqlpPgLJM8M5Sh3JeSh+WIoW2weDwLhqoUcjZo+tvHfDH/x1c11ABky5O
+         oEca0QR4lk/RKLO79mNgjPvRE1AL5spkEsGJPB6hCf0HY359JwyjQq5+zXCCHRuRhAfP
+         2Q8HPvqrvTxd0F5CqJC2J+kxaJ3jnCqZkJaa/pcmekjFJS013iuo25wMnzaZd2l1bA9/
+         jG3OxrmO2pHlA5Ny5H1gE60EraNsNzqVJSUeDOC65+V+7pKGqhaHUVJScP7ECzPPv0bb
+         XkmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=xUFFKgN3GfGwUoYxNVOvMRouA9N+GmIsWjhSsoKFX5E=;
+        b=TwCcyxDqs2/wDAPbrY6dbF4SqldDfCSYyDFQFECVXOieQRVdZcI6ipLAOwI1v/JENm
+         f9+Q6P9IAaRW5XLOz8L874MOw+AbBAPGVla5aDZkGNMIMsAmrguGudxhaOIIGTKQEKVA
+         EP1+lNxFmWytTsnRyUY3R8bdtzBWraUiRf6ESzSWkP7dwflphF3AlUKwvfAluxpQHYPF
+         dshXbwIlSNTq4QhS/3yBgxWOZeS55uuwiZK2shuZL7hbmj8IwutRz0aeURkToyFsJuqK
+         IzyyU/CHyas0GAYhZKveBBHpL8DHqhstfTeT1ZdcCRxkd5aChQkfUibRXzcnd3h6bdUJ
+         ydig==
+X-Gm-Message-State: ANhLgQ0kn0MaI5XkI6aFFyX7Eb8iUeq15PC9CRstkiAdWnaCzlZH868C
+        2F5I3jk2GClMCCFGeoONbwwUaA==
+X-Google-Smtp-Source: ADFU+vvNRH9b0uC33Fh+bPHVkYEbnbN5ACvModpHREVazC0tcnSTCxv7KBdulAOvR2/d/NScx9s/QQ==
+X-Received: by 2002:adf:f7cb:: with SMTP id a11mr13341425wrq.79.1585295692174;
+        Fri, 27 Mar 2020 00:54:52 -0700 (PDT)
+Received: from dell ([95.149.164.95])
+        by smtp.gmail.com with ESMTPSA id k9sm7684467wrd.74.2020.03.27.00.54.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2020 00:54:51 -0700 (PDT)
+Date:   Fri, 27 Mar 2020 07:55:41 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Saravanan Sekar <sravanhome@gmail.com>
+Cc:     robh+dt@kernel.org, jic23@kernel.org, knaack.h@gmx.de,
+        lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] mfd: mp2629: Add support for mps battery charger
+Message-ID: <20200327075541.GF603801@dell>
+References: <20200322224626.13160-1-sravanhome@gmail.com>
+ <20200322224626.13160-3-sravanhome@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200322224626.13160-3-sravanhome@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Sun, 22 Mar 2020, Saravanan Sekar wrote:
 
-I've encountered an issue with x86_energy_perf_policy. If I run it on a
-machine that I'm told is a qemu-kvm virtual machine running inside a
-privileged container, I get the following error:
+> mp2629 is a highly-integrated switching-mode battery charge management
+> device for single-cell Li-ion or Li-polymer battery.
+> 
+> Add MFD core enables chip access for ADC driver for battery readings,
+> and a power supply battery-charger driver
+> 
+> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+> ---
+>  drivers/mfd/Kconfig        |   9 +++
+>  drivers/mfd/Makefile       |   2 +
+>  drivers/mfd/mp2629.c       | 116 +++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/mp2629.h |  22 +++++++
+>  4 files changed, 149 insertions(+)
+>  create mode 100644 drivers/mfd/mp2629.c
+>  create mode 100644 include/linux/mfd/mp2629.h
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 3c547ed575e6..6614e5cff881 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -434,6 +434,15 @@ config MFD_MC13XXX_I2C
+>  	help
+>  	  Select this if your MC13xxx is connected via an I2C bus.
+>  
+> +config MFD_MP2629
+> +	bool "Monolithic power system MP2629 ADC and Battery charger"
+> +	depends on I2C
+> +	select REGMAP_I2C
+> +	help
+> +	  Select this option to enable support for monolithic power system
+> +	  battery charger. This provides ADC, thermal, battery charger power
+> +	  management functions on the systems.
+> +
+>  config MFD_MXS_LRADC
+>  	tristate "Freescale i.MX23/i.MX28 LRADC"
+>  	depends on ARCH_MXS || COMPILE_TEST
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index f935d10cbf0f..d6c210f96d02 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -170,6 +170,8 @@ obj-$(CONFIG_MFD_MAX8925)	+= max8925.o
+>  obj-$(CONFIG_MFD_MAX8997)	+= max8997.o max8997-irq.o
+>  obj-$(CONFIG_MFD_MAX8998)	+= max8998.o max8998-irq.o
+>  
+> +obj-$(CONFIG_MFD_MP2629)	+= mp2629.o
+> +
+>  pcf50633-objs			:= pcf50633-core.o pcf50633-irq.o
+>  obj-$(CONFIG_MFD_PCF50633)	+= pcf50633.o
+>  obj-$(CONFIG_PCF50633_ADC)	+= pcf50633-adc.o
+> diff --git a/drivers/mfd/mp2629.c b/drivers/mfd/mp2629.c
+> new file mode 100644
+> index 000000000000..41a4082387ce
+> --- /dev/null
+> +++ b/drivers/mfd/mp2629.c
+> @@ -0,0 +1,116 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * MP2629 MFD Driver for ADC and battery charger
 
-x86_energy_perf_policy: /dev/cpu/0/msr offset 0x1ad read failed: Input/outp=
-ut error
+s/MFD Driver/parent driver/
 
-I get the same error in a Digital Ocean droplet, so that might be a
-similar environment.
+> + * Copyright 2020 Monolithic Power Systems, Inc
+> + *
+> + * Author: Saravanan Sekar <sravanhome@gmail.com>
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/i2c.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
+> +#include <linux/irq.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/mp2629.h>
 
-I created the following patch which is intended to give a more
-user-friendly message. It's based on a patch for turbostat from Prarit
-Bhargava that was posted some time ago. The patch is "[v2] turbostat:
-Running on virtual machine is not supported" [1].
+Alphabetical please.
 
-Given my limited knowledge of the topic, I can't say with confidence
-that this is the right solution, though (that's why this is not an
-official patch submission). Also, I'm not sure what the convention with
-exit codes is in this tool. Also, instead of the error message, perhaps
-the tool should just not print anything in this case, which is how it
-behaves in a "regular" VM?
+> +enum {
+> +	MP2629_MFD_ADC,
+> +	MP2629_MFD_CHARGER,
+> +	MP2629_MFD_MAX
+> +};
+> +
+> +static struct resource mp2629_irq_rsrc[] = {
+> +	{
+> +		.flags = IORESOURCE_IRQ,
+> +	},
+> +};
+> +
+> +static struct mfd_cell mp2629mfd[] = {
+> +	[MP2629_MFD_ADC] = {
+> +		.name = "mp2629_adc",
+> +		.of_compatible = "mps,mp2629_adc",
+> +	},
+> +	[MP2629_MFD_CHARGER] = {
+> +		.name = "mp2629_charger",
+> +		.of_compatible = "mps,mp2629_charger",
+> +		.resources = mp2629_irq_rsrc,
+> +		.num_resources = ARRAY_SIZE(mp2629_irq_rsrc),
+> +	}
+> +};
+> +
+> +static const struct regmap_config mp2629_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = 0x17,
+> +};
+> +
+> +static int mp2629_probe(struct i2c_client *client)
+> +{
+> +	struct mp2629_info *info;
 
-[1] https://patchwork.kernel.org/patch/9868587/
+All this ddata instead of info.
 
-Thanks.
+> +	struct resource	*resources;
+> +	int ret;
+> +	int i;
+> +
+> +	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
+> +	if (!info)
+> +		return -ENOMEM;
+> +
+> +	info->dev = &client->dev;
+> +	i2c_set_clientdata(client, info);
+> +
+> +	info->regmap = devm_regmap_init_i2c(client, &mp2629_regmap_config);
+> +	if (IS_ERR(info->regmap)) {
+> +		dev_err(info->dev, "Failed to allocate regmap!\n");
+> +		return PTR_ERR(info->regmap);
+> +	}
+> +
+> +	for (i = 0; i < MP2629_MFD_MAX; i++) {
+> +		mp2629mfd[i].platform_data = &info->regmap;
+> +		mp2629mfd[i].pdata_size = sizeof(info->regmap);
 
-Ond=C5=99ej Lyson=C4=9Bk
+You don't need to store this in platform data as well.
 
-diff --git a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.=
-c b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-index 3fe1eed900d4..ff6c6661f075 100644
---- a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-+++ b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-@@ -622,6 +622,57 @@ void cmdline(int argc, char **argv)
- 	}
- }
-=20
-+/*
-+ * Open a file, and exit on failure
-+ */
-+FILE *fopen_or_die(const char *path, const char *mode)
-+{
-+	FILE *filep =3D fopen(path, "r");
-+
-+	if (!filep)
-+		err(1, "%s: open failed", path);
-+	return filep;
-+}
-+
-+void err_on_hypervisor(void)
-+{
-+	FILE *cpuinfo;
-+	char *flags, *hypervisor;
-+	char *buffer;
-+
-+	/* On VMs /proc/cpuinfo contains a "flags" entry for hypervisor */
-+	cpuinfo =3D fopen_or_die("/proc/cpuinfo", "ro");
-+
-+	buffer =3D malloc(4096);
-+	if (!buffer) {
-+		fclose(cpuinfo);
-+		err(-ENOMEM, "buffer malloc fail");
-+	}
-+
-+	if (!fread(buffer, 1024, 1, cpuinfo)) {
-+		fclose(cpuinfo);
-+		free(buffer);
-+		err(1, "Reading /proc/cpuinfo failed");
-+	}
-+
-+	flags =3D strstr(buffer, "flags");
-+	rewind(cpuinfo);
-+	fseek(cpuinfo, flags - buffer, SEEK_SET);
-+	if (!fgets(buffer, 4096, cpuinfo)) {
-+		fclose(cpuinfo);
-+		free(buffer);
-+		err(1, "Reading /proc/cpuinfo failed");
-+	}
-+	fclose(cpuinfo);
-+
-+	hypervisor =3D strstr(buffer, "hypervisor");
-+
-+	free(buffer);
-+
-+	if (hypervisor)
-+		err(-1,
-+		    "not supported on this virtual machine");
-+}
-=20
- int get_msr(int cpu, int offset, unsigned long long *msr)
- {
-@@ -635,8 +686,10 @@ int get_msr(int cpu, int offset, unsigned long long *m=
-sr)
- 		err(-1, "%s open failed, try chown or chmod +r /dev/cpu/*/msr, or run as=
- root", pathname);
-=20
- 	retval =3D pread(fd, msr, sizeof(*msr), offset);
--	if (retval !=3D sizeof(*msr))
-+	if (retval !=3D sizeof(*msr)) {
-+		err_on_hypervisor();
- 		err(-1, "%s offset 0x%llx read failed", pathname, (unsigned long long)of=
-fset);
-+	}
-=20
- 	if (debug > 1)
- 		fprintf(stderr, "get_msr(cpu%d, 0x%X, 0x%llX)\n", cpu, offset, *msr);
-@@ -1086,18 +1139,6 @@ int update_cpu_msrs(int cpu)
- 	return 0;
- }
-=20
--/*
-- * Open a file, and exit on failure
-- */
--FILE *fopen_or_die(const char *path, const char *mode)
--{
--	FILE *filep =3D fopen(path, "r");
--
--	if (!filep)
--		err(1, "%s: open failed", path);
--	return filep;
--}
--
- unsigned int get_pkg_num(int cpu)
- {
- 	FILE *fp;
---=20
+You already have it in device data (ddata [currently 'info']).
 
+> +		resources = (struct resource *)mp2629mfd[i].resources;
+> +		if (resources) {
+> +			resources[0].start = client->irq;
+> +			resources[0].end = client->irq;
+> +		}
+
+You don't need to store this separately either.
+
+Just fetch it from the parent in the child device driver.
+
+It will look something like (untested, off the top of my head):
+
+  platform_get_irq(to_platform_device(pdev->dev.parent), 0);
+
+> +	}
+> +
+> +	ret = devm_mfd_add_devices(info->dev, PLATFORM_DEVID_NONE, mp2629mfd,
+> +				ARRAY_SIZE(mp2629mfd), NULL,
+> +				0, NULL);
+> +	if (ret)
+> +		dev_err(info->dev, "Failed to add mfd %d\n", ret);
+
+"Failed to register sub-devices"
+
+> +	return ret;
+> +}
+> +
+> +static const struct of_device_id mp2629_of_match[] = {
+> +	{ .compatible = "mps,mp2629"},
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, mp2629_of_match);
+> +
+> +static const struct i2c_device_id mp2629_id[] = {
+> +	{ "mp2629", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, mp2629_id);
+
+You're already using .probe_new - this can be removed.
+
+> +static struct i2c_driver mp2629_driver = {
+> +	.driver = {
+> +		.name = "mp2629",
+> +		.of_match_table = mp2629_of_match,
+> +	},
+> +	.probe_new	= mp2629_probe,
+> +	.id_table	= mp2629_id,
+> +};
+> +module_i2c_driver(mp2629_driver);
+> +
+> +MODULE_AUTHOR("Saravanan Sekar <sravanhome@gmail.com>");
+> +MODULE_DESCRIPTION("MP2629 Battery charger mfd driver");
+
+"parent driver"
+
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/mp2629.h b/include/linux/mfd/mp2629.h
+> new file mode 100644
+> index 000000000000..371e44330ba8
+> --- /dev/null
+> +++ b/include/linux/mfd/mp2629.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * mp2629.h  - register definitions for mp2629 charger
+
+Remove the filename.
+
+s/mp2629/MP2629/
+
+> + * Copyright 2020 Monolithic Power Systems, Inc
+> + *
+
+Superfluous '\n'.
+
+> + */
+> +
+> +#ifndef __MP2629_H__
+> +#define __MP2629_H__
+> +
+> +#include <linux/types.h>
+> +
+> +struct device;
+> +struct regmap;
+
+Why not just add the includes?
+
+> +struct mp2629_info {
+> +	struct device *dev;
+> +	struct regmap *regmap;
+> +};
+> +
+> +#endif
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
