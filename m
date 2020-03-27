@@ -2,212 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1E71960EF
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 23:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941B2196130
+	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 23:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727677AbgC0WRs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Mar 2020 18:17:48 -0400
-Received: from mga12.intel.com ([192.55.52.136]:57254 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727655AbgC0WRs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 27 Mar 2020 18:17:48 -0400
-IronPort-SDR: YI4tzouxuGGFUT03vwsWxZKonHwQyhy1oiWYrp9FGvtZKzEGEm0ONgG31Qe4ohkg+NjOum+KX9
- HSbeDMX9XWdA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2020 15:17:47 -0700
-IronPort-SDR: KFxo7lkyO+Orq/gXt8O9gV+xVXTclzAzgzNwhAfUMRcFzo+Fd9u5d0zV2eoY/n+yV1VqnQK85h
- V6xf8ycMoQcg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,314,1580803200"; 
-   d="scan'208";a="239219460"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Mar 2020 15:17:45 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jHxIO-000GkC-T8; Sat, 28 Mar 2020 06:17:44 +0800
-Date:   Sat, 28 Mar 2020 06:17:38 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 19b2b1eeb3782fd90bcd2600672b8079fbab94d1
-Message-ID: <5e7e7b82.CkEU9Tt+ALrc52uM%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1727585AbgC0Wd3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Mar 2020 18:33:29 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:40553 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727774AbgC0Wd2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 18:33:28 -0400
+Received: by mail-pj1-f65.google.com with SMTP id kx8so4332051pjb.5
+        for <linux-pm@vger.kernel.org>; Fri, 27 Mar 2020 15:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=d/KauctItzFcz4MTqqd1vUXD0AkHqsSbhj7pDruk56s=;
+        b=MWJ1hSHBbc9XdAiP8isr7WdcCfHrTAeSAsfLsPttskj8ru14jpS6XSJExEd+D7+x4n
+         4OHW2Cs8ZTnFhZHBE2sVlbg2ZypZVkj4l/D59p5XFsqhZYu3WD2zx2F7zy2h5dX/Ug6u
+         yNX6pRubA0w24iXYco8yZAHRcurEHhYjqV2aH/zKx0uxz5fXGBddmYF0NAkVL10Q95AA
+         sp26mugVpC/waCWnzEzrhSSABUDGc3ZoS3JoFYu/kWGJruy2KDEB9+8dD7VCQbG7Ybz8
+         7bUrhQUowP+5vlnF03HfBpMlnoh9Zp7Zp6/T3laPaky46OLqvH2R5fy4I9UWglSN9dZf
+         0TOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=d/KauctItzFcz4MTqqd1vUXD0AkHqsSbhj7pDruk56s=;
+        b=nhhV2kBGN5i61LqygDdBK23OcKJPwUIJafg30/P5kwL5zrvaEOgIypvoSO63I4UKyi
+         tf7w/yIPRr7TdD41A3A5o553cDUPxyykNznuT6toYfGzILI/VxwNic1/8oVRPqV0CI+8
+         V5Q5hInENzb3PmSpqpayLB/2lOgXHJMdGZ+h3E4YmAubyVa46vhlaTOrAzeQLgzhFsJa
+         iMnRfBKmxmh05hSt5iZsNlS/k6LQJRkv6tdgo79ZyRClbAMZha+6zNdsMktIihmXkox3
+         1hK6VG5qJXhQl5eJT45qNw+2kfeo5Se2OCKRBweFXzJ4rq2fdOJns4oeiSBb0aS6BmMr
+         L+Qg==
+X-Gm-Message-State: ANhLgQ12uKaSNaSWdj6OCaK9XswzTZDN59/etahGKn8g1d8k72MRAaeR
+        xAMO4Z1dovTeR0XB8ZBCW+RDGg==
+X-Google-Smtp-Source: ADFU+vssCeEO2fNVLOHh9lVPMb7g8Vyce8f9YZ3fpI0mEUsCWO+pn45g3L8i2nWBTgIMNEM/YhFfUg==
+X-Received: by 2002:a17:90a:1b4f:: with SMTP id q73mr1577559pjq.188.1585348405138;
+        Fri, 27 Mar 2020 15:33:25 -0700 (PDT)
+Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id c9sm4451481pjr.47.2020.03.27.15.33.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2020 15:33:24 -0700 (PDT)
+Date:   Fri, 27 Mar 2020 15:33:22 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     rui.zhang@intel.com, ulf.hansson@linaro.org,
+        daniel.lezcano@linaro.org, agross@kernel.org, robh@kernel.org,
+        amit.kucheria@verdurent.com, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch v5 1/6] PM/Domains: Add support for retrieving genpd
+ performance states information
+Message-ID: <20200327223322.GG5063@builder>
+References: <20200320014107.26087-1-thara.gopinath@linaro.org>
+ <20200320014107.26087-2-thara.gopinath@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20200320014107.26087-2-thara.gopinath@linaro.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 19b2b1eeb3782fd90bcd2600672b8079fbab94d1  Merge branch 'intel_pstate-passive' into bleeding-edge
+On Thu 19 Mar 18:41 PDT 2020, Thara Gopinath wrote:
 
-elapsed time: 591m
+> Add two new APIs in the genpd framework, dev_pm_genpd_get_performance_state
+> to return the current performance state of a power domain and
+> dev_pm_genpd_performance_state_count to return the total number of
+> performance states supported by a power domain. Since the genpd framework
+> does not maintain a count of number of performance states supported by a
+> power domain, introduce a new callback(.get_performance_state_count) that
+> can be used to retrieve this information from power domain drivers.
+> 
+> These APIs are added to aid the implementation of a power domain as a
+> warming device. Linux kernel cooling device framework(into which warming
+> device can be plugged in) requires during initialization to be provided
+> with the maximum number of states that can be supported. When a power
+> domain acts as a warming device, the max state is the max number of
+> perfomrance states supported by the power domain. The cooling device
+> framework implements API to retrieve the current state of the cooling
+> device. This in turn translates to the current performance state of the
+> power domain.
+> 
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 
-configs tested: 152
-configs skipped: 0
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm64                             allnoconfig
-arm                               allnoconfig
-arm                           efm32_defconfig
-arm                         at91_dt_defconfig
-arm                        shmobile_defconfig
-arm64                               defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                           sunxi_defconfig
-arm                        multi_v7_defconfig
-sparc                            allyesconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                             alldefconfig
-i386                                defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                             alldefconfig
-nios2                         3c120_defconfig
-nios2                         10m50_defconfig
-c6x                        evmc6678_defconfig
-xtensa                          iss_defconfig
-c6x                              allyesconfig
-xtensa                       common_defconfig
-openrisc                 simple_smp_defconfig
-openrisc                    or1ksim_defconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                       h8s-sim_defconfig
-h8300                     edosk2674_defconfig
-m68k                       m5475evb_defconfig
-m68k                             allmodconfig
-h8300                    h8300h-sim_defconfig
-m68k                           sun3_defconfig
-m68k                          multi_defconfig
-arc                                 defconfig
-arc                              allyesconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-mips                             allyesconfig
-mips                         64r6el_defconfig
-mips                              allnoconfig
-mips                           32r2_defconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                generic-64bit_defconfig
-parisc                generic-32bit_defconfig
-parisc                           allyesconfig
-i386                 randconfig-a002-20200327
-i386                 randconfig-a001-20200327
-x86_64               randconfig-a002-20200327
-x86_64               randconfig-a001-20200327
-i386                 randconfig-a003-20200327
-x86_64               randconfig-a003-20200327
-nds32                randconfig-a001-20200327
-m68k                 randconfig-a001-20200327
-parisc               randconfig-a001-20200327
-alpha                randconfig-a001-20200327
-riscv                randconfig-a001-20200327
-h8300                randconfig-a001-20200327
-microblaze           randconfig-a001-20200327
-nios2                randconfig-a001-20200327
-c6x                  randconfig-a001-20200327
-sparc64              randconfig-a001-20200327
-s390                 randconfig-a001-20200327
-xtensa               randconfig-a001-20200327
-csky                 randconfig-a001-20200327
-openrisc             randconfig-a001-20200327
-sh                   randconfig-a001-20200327
-i386                 randconfig-b003-20200327
-i386                 randconfig-b001-20200327
-x86_64               randconfig-b003-20200327
-i386                 randconfig-b002-20200327
-x86_64               randconfig-b002-20200327
-x86_64               randconfig-b001-20200327
-x86_64               randconfig-c003-20200327
-x86_64               randconfig-c001-20200327
-i386                 randconfig-c002-20200327
-x86_64               randconfig-c002-20200327
-i386                 randconfig-c003-20200327
-i386                 randconfig-c001-20200327
-i386                 randconfig-d003-20200327
-i386                 randconfig-d001-20200327
-x86_64               randconfig-d002-20200327
-x86_64               randconfig-d001-20200327
-i386                 randconfig-d002-20200327
-x86_64               randconfig-d003-20200327
-x86_64               randconfig-e001-20200327
-x86_64               randconfig-e003-20200327
-i386                 randconfig-e002-20200327
-i386                 randconfig-e003-20200327
-i386                 randconfig-e001-20200327
-x86_64               randconfig-e002-20200327
-i386                 randconfig-f001-20200327
-i386                 randconfig-f003-20200327
-i386                 randconfig-f002-20200327
-x86_64               randconfig-f002-20200327
-x86_64               randconfig-f001-20200327
-i386                 randconfig-g003-20200327
-x86_64               randconfig-g002-20200327
-i386                 randconfig-g001-20200327
-i386                 randconfig-g002-20200327
-x86_64               randconfig-g001-20200327
-x86_64               randconfig-g003-20200327
-x86_64               randconfig-h003-20200327
-i386                 randconfig-h003-20200327
-i386                 randconfig-h001-20200327
-x86_64               randconfig-h001-20200327
-i386                 randconfig-h002-20200327
-arm                  randconfig-a001-20200327
-ia64                 randconfig-a001-20200327
-sparc                randconfig-a001-20200327
-arc                  randconfig-a001-20200327
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-s390                       zfcpdump_defconfig
-s390                          debug_defconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                             alldefconfig
-s390                                defconfig
-sh                          rsk7269_defconfig
-sh                               allmodconfig
-sh                            titan_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                                allnoconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  drivers/base/power/domain.c | 37 +++++++++++++++++++++++++++++++++++++
+>  include/linux/pm_domain.h   | 13 +++++++++++++
+>  2 files changed, 50 insertions(+)
+> 
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 959d6d5eb000..d0297c48fa79 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -408,6 +408,43 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state)
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
+>  
+> +int dev_pm_genpd_get_performance_state(struct device *dev)
+> +{
+> +	struct generic_pm_domain *genpd;
+> +	unsigned int state;
+> +
+> +	genpd = dev_to_genpd_safe(dev);
+> +	if (IS_ERR(genpd))
+> +		return -ENODEV;
+> +
+> +	genpd_lock(genpd);
+> +	state = genpd->performance_state;
+> +	genpd_unlock(genpd);
+> +
+> +	return state;
+> +}
+> +EXPORT_SYMBOL_GPL(dev_pm_genpd_get_performance_state);
+> +
+> +int dev_pm_genpd_performance_state_count(struct device *dev)
+> +{
+> +	struct generic_pm_domain *genpd;
+> +	int count;
+> +
+> +	genpd = dev_to_genpd_safe(dev);
+> +	if (IS_ERR(genpd))
+> +		return -ENODEV;
+> +
+> +	if (unlikely(!genpd->get_performance_state_count))
+> +		return -EINVAL;
+> +
+> +	genpd_lock(genpd);
+> +	count = genpd->get_performance_state_count(genpd);
+> +	genpd_unlock(genpd);
+> +
+> +	return count;
+> +}
+> +EXPORT_SYMBOL_GPL(dev_pm_genpd_performance_state_count);
+> +
+>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>  {
+>  	unsigned int state_idx = genpd->state_idx;
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 9ec78ee53652..7d415350380f 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -117,6 +117,7 @@ struct generic_pm_domain {
+>  						 struct dev_pm_opp *opp);
+>  	int (*set_performance_state)(struct generic_pm_domain *genpd,
+>  				     unsigned int state);
+> +	int (*get_performance_state_count)(struct generic_pm_domain *genpd);
+>  	struct gpd_dev_ops dev_ops;
+>  	s64 max_off_time_ns;	/* Maximum allowed "suspended" time. */
+>  	bool max_off_time_changed;
+> @@ -204,6 +205,8 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>  		  struct dev_power_governor *gov, bool is_off);
+>  int pm_genpd_remove(struct generic_pm_domain *genpd);
+>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
+> +int dev_pm_genpd_get_performance_state(struct device *dev);
+> +int dev_pm_genpd_performance_state_count(struct device *dev);
+>  
+>  extern struct dev_power_governor simple_qos_governor;
+>  extern struct dev_power_governor pm_domain_always_on_gov;
+> @@ -251,6 +254,16 @@ static inline int dev_pm_genpd_set_performance_state(struct device *dev,
+>  	return -ENOTSUPP;
+>  }
+>  
+> +static inline int dev_pm_genpd_get_performance_state(struct device *dev)
+> +{
+> +	return -ENOTSUPP;
+> +}
+> +
+> +static inline int dev_pm_genpd_performance_state_count(struct device *dev)
+> +{
+> +	return -ENOTSUPP;
+> +}
+> +
+>  #define simple_qos_governor		(*(struct dev_power_governor *)(NULL))
+>  #define pm_domain_always_on_gov		(*(struct dev_power_governor *)(NULL))
+>  #endif
+> -- 
+> 2.20.1
+> 
