@@ -2,33 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA7819683F
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Mar 2020 18:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 549131968A6
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Mar 2020 19:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbgC1RvW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 28 Mar 2020 13:51:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51474 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725807AbgC1RvW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 28 Mar 2020 13:51:22 -0400
-Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 874EE20714;
-        Sat, 28 Mar 2020 17:51:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585417881;
-        bh=R6KoaEnQ216q4GA1ys0ah1T7EU57N7ZOKvH4fWy6MDE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X+t8Haw8bRSHyIODxOddObNMHHzTC4A/gIgrmlA8G4FJX+96HIPkjD0njXTo8iIJH
-         7v6ti+BJudpolLJZIuyhN1qhDYPTiVIGizpZqnN/K/5receeAFe1iHybrtzyRn/eSg
-         tZafwQty9zCxiOMZgtwgMjZCqHtPzSktGtbBYMAA=
-Date:   Sat, 28 Mar 2020 17:51:16 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Saravanan Sekar <sravanhome@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S1727009AbgC1So2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Mar 2020 14:44:28 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:40248 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725882AbgC1So2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Mar 2020 14:44:28 -0400
+Received: by mail-pg1-f195.google.com with SMTP id t24so6431050pgj.7;
+        Sat, 28 Mar 2020 11:44:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AEgBW9QQu99a2sai4d1Uz2IOeiRHB8mBntj4/oX3if8=;
+        b=ouDCjhKFXNz0qHg97LSTL9LtxoMEHHt5XmMHY0O3JWTXTX6KVUoBbbKGEaRoe4suqH
+         Bgodh/bhOWuh+Uw5ZYeUQDC/rlML9443WQkuM+KCmxxhjELg+7MhD0Lq4BubKI4pnMJo
+         ZfzaEEDCyNKntZ4F6dUb4Vs7Vd7wELm98oGUZpswTvhm/Q/HA/SIavwXKsKEUe8xWMC5
+         veV78phgOYhrh7JtLFf0oynNemIhylY0qL9bQa33NeSOWpUu5C2XlY98iV+luNSHwaoY
+         omgLIxik4AauciZPkWxYN3o5K2+dsH2puaV0rjGc9TgHCkoqYwbi0M9EoN+qXpWdHwjE
+         0FQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AEgBW9QQu99a2sai4d1Uz2IOeiRHB8mBntj4/oX3if8=;
+        b=dlULcW7kqArkv4j7DbmJHfUyFt4GbrAIHzZoQXfR5O0KPH5B5AnwTAcncNaFqFEVpX
+         E06XRhfASd74n30kpgSPaPpHVmBaBLt+px8+yi8pR7hgadhBmUQCTHhKh1tNu1WMoqhI
+         lDCteVz/OpqrfBGWA/RbIUR3ff2nD+Sx9UV0M/JPG8cQhJ+SRpI1r4rrer1+FSjPyjmt
+         VeEqSsRWljlBN2KVDVSN3aycD6igJwP4ma3Mvrl0g2YhdQdJPnONRNf7PjBI/HyGtcMX
+         EQD63CYD89GYsxCokQz3zNESrVGi8rfUyaKRbrjrep+wPSwdFUH98NHgOSjYWMJnmHSV
+         MNAw==
+X-Gm-Message-State: ANhLgQ0zqf6VJTpoj7dsR+EApo/YZ7PAutSsnW6U+DNXAiGhilaWc+z2
+        uSUMvyc/sLqWtu8CQdiYr6SPqoo11DKGOgLdJ4w=
+X-Google-Smtp-Source: ADFU+vuLh8bWhofnY0uetIzib0+lVHRoBH+mcX9y4a5vGukmUlw/9WY99xY/uiIsg6cXSU/IMm9zO7gbPWfER27vvoc=
+X-Received: by 2002:a05:6a00:2b4:: with SMTP id q20mr5459087pfs.36.1585421066788;
+ Sat, 28 Mar 2020 11:44:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200328001154.17313-1-sravanhome@gmail.com> <20200328001154.17313-5-sravanhome@gmail.com>
+ <CAHp75VefP3oPyRJ=Z9Y5Wv3rSc-nJdKFLJ60YLdUbP5dFikS+w@mail.gmail.com> <36892440-99b2-10e8-1d7c-dd8c97e03a39@gmail.com>
+In-Reply-To: <36892440-99b2-10e8-1d7c-dd8c97e03a39@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 28 Mar 2020 20:44:14 +0200
+Message-ID: <CAHp75VdAfiSjkHhTnghZ__WAJCJTGSWBprJBPNmpkxZTjZuVgQ@mail.gmail.com>
+Subject: Re: [PATCH v5 4/5] power: supply: Add support for mps mp2629 battery charger
+To:     saravanan sekar <sravanhome@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
         Hartmut Knaack <knaack.h@gmx.de>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Peter Meerwald <pmeerw@pmeerw.net>,
@@ -37,68 +59,48 @@ Cc:     Saravanan Sekar <sravanhome@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-iio <linux-iio@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v5 3/5] iio: adc: mp2629: Add support for mp2629 ADC
- driver
-Message-ID: <20200328175116.13c2bae3@archlinux>
-In-Reply-To: <CAHp75Vd+m=1eaDY1JLvtNKbBPXsaTFmpewG=Vn+v-=+GMBCs2w@mail.gmail.com>
-References: <20200328001154.17313-1-sravanhome@gmail.com>
-        <20200328001154.17313-4-sravanhome@gmail.com>
-        <CAHp75Vd+m=1eaDY1JLvtNKbBPXsaTFmpewG=Vn+v-=+GMBCs2w@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 28 Mar 2020 12:52:11 +0200
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On Sat, Mar 28, 2020 at 1:29 PM saravanan sekar <sravanhome@gmail.com> wrote:
+> On 28/03/20 12:02 pm, Andy Shevchenko wrote:
+> > On Sat, Mar 28, 2020 at 2:12 AM Saravanan Sekar <sravanhome@gmail.com> wrote:
 
-> On Sat, Mar 28, 2020 at 2:12 AM Saravanan Sekar <sravanhome@gmail.com> wrote:
+...
+
+> >> +       val->intval = (rval * props[fld].step) + props[fld].min;
+> > Too many parentheses.
 > >
-> > Add support for 8-bit resolution ADC readings for input power
-> > supply and battery charging measurement. Provides voltage, current
-> > readings to mp2629 power supply driver.  
-> 
-> ...
-> 
-> > +               ret = regmap_read(info->regmap, chan->address, &rval);
-> > +               if (ret < 0)  
-> 
-> ' < 0' is not needed for regmap call.
-> 
-> ..
-> 
-> > +               case MP2629_INPUT_CURRENT:
-> > +                       *val = 133;
-> > +                       *val2 = 10;
-> > +                       return IIO_VAL_FRACTIONAL;
-> > +
-> > +               default:
-> > +                       return -EINVAL;
-> > +               }
-> > +
-> > +       default:
-> > +               return -EINVAL;
-> > +       }  
-> 
-> > +
-> > +       return 0;  
-> 
-> Do you really need this? Looks to me as dead code.
-> 
-> ...
-> 
-> > +       indio_dev->name = dev_name(dev);  
-> 
-> Shouldn't be this a part number?
-> I heard something, so, I might be mistaken, but I hope maintainers
-> will help here.
+> > ...
+> >
+> >> +       return ((psp == POWER_SUPPLY_PROP_PRECHARGE_CURRENT) ||
+> >> +               (psp == POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT) ||
+> >> +               (psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT) ||
+> >> +               (psp == POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE));
+> > Ditto.
+> I think I misunderstood you previous review comment "Redundant
+> parentheses", no sure what is the expectation
 
-It should indeed.  I have a nasty habit of missing this in
-review so thanks for pointing it out!
+(At least) surrounding pair is not needed, return (a == b) || (c == d);
 
-Jonathan
+> > ...
+> >
+> >> +       return ((psp == POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT) ||
+> >> +               (psp == POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT));
+> > Ditto.
 
+...
+
+> >> +       struct power_supply_config psy_cfg = {NULL};
+> > { 0 }
+> >
+> NULL to make compiler happy.
+
+Hmm... Can you share warning / error compiler issued in 0 case?
+
+-- 
+With Best Regards,
+Andy Shevchenko
