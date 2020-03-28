@@ -2,191 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D586196696
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Mar 2020 15:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3321966C3
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Mar 2020 15:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726373AbgC1OPW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 28 Mar 2020 10:15:22 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:43131 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726045AbgC1OPW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Mar 2020 10:15:22 -0400
-Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 03b47b1560be92d4; Sat, 28 Mar 2020 15:15:19 +0100
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Qais Yousef <qais.yousef@arm.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-Date:   Sat, 28 Mar 2020 15:15:18 +0100
-Message-ID: <10243663.e30Z2V8kAt@kreacher>
-In-Reply-To: <Pine.LNX.4.44L0.2003271515480.29819-100000@netrider.rowland.org>
-References: <Pine.LNX.4.44L0.2003271515480.29819-100000@netrider.rowland.org>
+        id S1726403AbgC1Og4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Mar 2020 10:36:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54826 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726209AbgC1Og4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 28 Mar 2020 10:36:56 -0400
+Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C6C5420716;
+        Sat, 28 Mar 2020 14:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585406214;
+        bh=AWdBYh99FDHxI0k2K+e0lUAvGRN3tYo0uPU7p+6s9S4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aCE5lAg7ZAbFB2QqZWTO9Ytqpq8Ek03zf1FWXpzOU9ExxA4j43AiZfyVgmo72rCfg
+         ZeUvMskWeunoUn8xCBTM3TFDQbHnWmPfupuFiJcb0rQrgSJSo5zPsBJIfQF+hNmQ9O
+         oeukZzXIDGLvt3/BRLGaaSIptKHaZ5+x+xiXJVrQ=
+Date:   Sat, 28 Mar 2020 14:36:49 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     saravanan sekar <sravanhome@gmail.com>, robh+dt@kernel.org,
+        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
+        sre@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] mfd: mp2629: Add support for mps battery charger
+Message-ID: <20200328143649.2a428bee@archlinux>
+In-Reply-To: <20200327102221.GA3383@dell>
+References: <20200322224626.13160-1-sravanhome@gmail.com>
+        <20200322224626.13160-3-sravanhome@gmail.com>
+        <20200327075541.GF603801@dell>
+        <a6098b6a-2b2f-5279-f9fc-85201b9aabde@gmail.com>
+        <20200327102221.GA3383@dell>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, March 27, 2020 9:45:09 PM CET Alan Stern wrote:
-> On Thu, 26 Mar 2020, Qais Yousef wrote:
+On Fri, 27 Mar 2020 10:22:21 +0000
+Lee Jones <lee.jones@linaro.org> wrote:
+
+> Saravanan, Jonathan,
 > 
-> > On 03/25/20 22:28, Rafael J. Wysocki wrote:
-> > > On Wed, Mar 25, 2020 at 9:49 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> On Fri, 27 Mar 2020, saravanan sekar wrote:
+> > On 27/03/20 8:55 am, Lee Jones wrote:  
+> > > On Sun, 22 Mar 2020, Saravanan Sekar wrote:
+> > >   
+> > > > mp2629 is a highly-integrated switching-mode battery charge management
+> > > > device for single-cell Li-ion or Li-polymer battery.
+> > > > 
+> > > > Add MFD core enables chip access for ADC driver for battery readings,
+> > > > and a power supply battery-charger driver
+> > > > 
+> > > > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+> > > > ---
+> > > >   drivers/mfd/Kconfig        |   9 +++
+> > > >   drivers/mfd/Makefile       |   2 +
+> > > >   drivers/mfd/mp2629.c       | 116 +++++++++++++++++++++++++++++++++++++
+> > > >   include/linux/mfd/mp2629.h |  22 +++++++
+> > > >   4 files changed, 149 insertions(+)
+> > > >   create mode 100644 drivers/mfd/mp2629.c
+> > > >   create mode 100644 include/linux/mfd/mp2629.h  
 > 
-> > > > Raphael, now that we have the direct_complete mechanism, can we revisit
-> > > > this?  Should the PM core automatically call pm_runtime_set_active() if
-> > > > dev->power.direct_complete isn't set?  Perhaps in device_resume_early()
-> > > > prior to the pm_runtime_enable() call?
-> > > >
-> > > > It's possible we discussed this and decided against it at the time when
-> > > > direct_complete was added, but if so I don't remember what was said.
+> [...]
+> 
+> > > > +static int mp2629_probe(struct i2c_client *client)
+> > > > +{
+> > > > +	struct mp2629_info *info;  
+> > > Call this ddata instead of info.  
+> > Not sure the reason, I will do.  
+> 
+> Because this is device data.  Info is too loose of a definition.
+> 
+> > > > +	struct resource	*resources;
+> > > > +	int ret;
+> > > > +	int i;
+> > > > +
+> > > > +	info = devm_kzalloc(&client->dev, sizeof(*info), GFP_KERNEL);
+> > > > +	if (!info)
+> > > > +		return -ENOMEM;
+> > > > +
+> > > > +	info->dev = &client->dev;
+> > > > +	i2c_set_clientdata(client, info);
+> > > > +
+> > > > +	info->regmap = devm_regmap_init_i2c(client, &mp2629_regmap_config);
+> > > > +	if (IS_ERR(info->regmap)) {
+> > > > +		dev_err(info->dev, "Failed to allocate regmap!\n");
+> > > > +		return PTR_ERR(info->regmap);
+> > > > +	}
+> > > > +
+> > > > +	for (i = 0; i < MP2629_MFD_MAX; i++) {
+> > > > +		mp2629mfd[i].platform_data = &info->regmap;
+> > > > +		mp2629mfd[i].pdata_size = sizeof(info->regmap);  
+> > > You don't need to store this in platform data as well.
 > > > 
-> > > Me neither. :-)
-> > > 
-> > > That said complexity has grown since then and there are the
-> > > DPM_FLAG_SMART_SUSPEND and DPM_FLAG_LEAVE_SUSPENDED flags that can be
-> > > used to control that behavior to some extent.
-> > > 
-> > > Setting DPM_FLAG_SMART_SUSPEND alone, in particular, causes
-> > > pm_runtime_set_active() to be called at the noirq stage of device
-> > > resume either by the core or by bus types (e.g. PCI) etc.
-> > > 
-> > > It looks like ohci-platform might use DPM_FLAG_SMART_SUSPEND, but I
-> > > need to take a closer look at that (possibly later this week).
+> > > You already have it in device data (ddata [currently 'info']).  
 > > 
-> > Okay I take it this was root caused correctly and now it's a question of which
-> > is a better fix.
+> > "The IIO parts seems fine (minor comments inline) but I'm not keep on
+> > directly accessing the internals of the mfd device info structure.
+> > To my mind that should be opaque to the child drivers so as to provide
+> > clear structure to any such accesses.
+> > 
+> > This mess in layering with the children directly using the parents
+> > regmap is a little concerning. It means that the 3 drivers
+> > really aren't very well separated and can't really be reviewed
+> > independently (not a good thing)."
+> > 
+> > This is the review comments form Jonathan on V2, not to access parent data
+> > structure directly.
+> > Am I misunderstood his review comments? please suggest the better option to
+> > follow as like in V2
+> > or V2 + some improvements or V4 + improvements?  
 > 
-> Indeed.
+> I will take this up with Jonathan separately if necessary.
 > 
-> Raphael, I've been going over the PM core code, trying to figure out
-> what it's really doing.  It's kind of a mess.
-
-Well, sorry about that. 
-
-> A large part of the problem is related to an inconsistency between the
-> documentation and the code.  include/linux/pm.h says that
-> DPM_FLAG_SMART_SUSPEND tells bus types and PM domains about what the
-> driver wants.  This strongly implies that the PM core will ignore
-> SMART_SUSPEND.  But in fact the core does check that flag and takes its
-> own actions if the device has no subsystem-level callbacks!
-
-Right, which is because in those cases there is no "middle layer" between
-the driver and the core and if you want the driver to work both with
-something like genpd or the ACPI PM domain and without anything like that,
-the core needs to take those actions for consistency.
-
-> Furthermore, the PM core's actions don't seem to make sense.  If the
-> flag is set and the device is runtime-suspended when the system sleep
-> begins, the core will skip issuing the suspend_late and suspend_noirq
-> callbacks to the driver.  But it doesn't skip issuing the suspend
-> callback!  I can't figure that out.
-
-That's because if the core gets to executing ->suspend_late, PM-runtime has
-been disabled for the device and if the device is runtime-suspended at that
-point, so (at least if SMART_SUSPEND is set for the device) there is no reason
-to do anything more to it.
-
-> Furthermore, the decisions about
-> whether to skip the resume_noirq, resume_early, and resume callbacks
-> are based on different criteria from the decisions on the suspend side.
-
-Right, because there are drivers that don't want devices to stay in suspend
-after system resume even though they have been left in suspend by it.
-
-Arguably, they could be left in suspend and then resumed after the completion
-of system suspend, but that would add quite a bit of latency if the device
-needs to be accessed right after the system suspend is complete.
-
-> That's not all: The SMART_SUSPEND decisions completely ignore the value
-> of DPM_FLAG_NEVER_SKIP!  NEVER_SKIP affects only the direct_completion
-> pathway.
-
-As documented AFAICS.
-
-> SMART_SUSPEND seems to have two different meanings.  (1) If the device 
-> is already in runtime suspend when a system sleep starts, skip the 
-> suspend_late and suspend_noirq callbacks.  (2) Under certain (similar) 
-> circumstances, skip the resume callbacks.  The documentation only 
-> mentions (1) but the code also handles (2).
-
-That's because (2) is the THAW case and I was distracted before I got
-to documenting it properly.  Sorry.
-
-The problem is that if you leave the device in runtime suspend, calling
-->freeze_late() or ->freeze_noirq() on it is not useful and if you have
-skipped those, running the corresponding "thaw" callbacks is not useful
-either (what would they do, specifically?).
-
-There is a whole problem of whether or not devices should be left in
-runtime suspend during hibernation and I have not had a chance to get
-to the bottom of that yet.
-
-> Other things in there also seem strange.  device_prepare() does a
-> WARN_ON if either SMART_SUSPEND or LEAVE_SUSPENDED is set and the
-> device is not runtime-PM-enabled.  That's understandable, but it's also
-> racy.
-
-I guess you mean the check in device_prepare().
-
-> A system sleep can begin at any time; how can a driver know when
-> it is safe to disable a device's runtime PM briefly?
-
-Well, fair enough, but then I'm not sure if there is a good place for this
-check at all, because drivers can briefly disable PM-runtime at any time in
-theory.
-
-> When device_prepare() calculates the power.direct_complete flag, it
-> checks to see whether the device is currently in runtime suspend in
-> some cases but not in others, as in the code added by your commit
-> c62ec4610c40 ("PM / core:  Fix direct_complete handling for devices
-> with no callbacks").  Since the runtime-PM state is going to checked in
-> __device_suspend() anyway, we shouldn't need to check it here at all.
-
-I guess the point is that in theory the device can be runtime-suspended
-between device_prepare() and _device_suspend(), is by checking the status
-in the former, we lose the opportunity to leave it in suspend if that
-happens.
-
-OK, fair enough.
-
-> At a couple of points in the code, THAW and RESTORE events are each
-> treatedly specially, with no explanation.
-
-Right, which is related to the kind of work in progress situation regarding
-the flags and hibernation mentioned above.  Again, sorry about that.
-
-> The power.may_skip_resume flag is used in only one place, when 
-> LEAVE_SUSPENDED is set and there are subsystem-level callbacks.  In 
-> particular, it is _not_ used by dev_pm_may_skip_resume().  That seems 
-> highly suspicious at best.
-
-That's because it's for the middle-layer (subsystem-level) code to let the
-core know that skipping the resume would be OK.
-
-The core doesn't need that flag when it decides by itself.
-
-> I think it would be worthwhile to expend some serious effort
-> straightening all this stuff out.  Perhaps we could start with a more
-> explicit description of what is supposed to happen at each step.  
-> (Things to be careful about include phrases like "leave suspended",
-> which is not the same as "don't call the resume callbacks", even though
-> the two are easily conflated.)
+> For your FYI (and Jonathan if he's Cc'ed), it's very common for a
+> child of an MFD to acquire resources from their parent.  That is the
+> point of a lot of MFDs, to obtain and register shared resources and
+> pass them onto their offspring.  There are 10's of examples of this.
 > 
-> What do you think?
+> Things like Regmaps aren't platform data, they are device/driver data,
+> which is usually passed though platform_set_drvdata().
+> 
 
-I am certainly not going to reject any help. :-)
+Fair enough.  It seemed a bit messy to have full visibility of the
+parent driver structures just to access one element.
 
-Also, I'm not against clarifying anything that is not clear enough.
+What I was actually meaning to suggest was a couple of wrapper functions,
+not passing the regmap separately, but I guess that doesn't really make
+any difference.  
 
-Cheers!
+So a read / write wrapper that just takes an abstract ddata pointer.
 
+Fair enough if you think that's an unnecessary bit of abstraction.
 
+Jonathan
+
+> [...]
+> 
+> > > > + */
+> > > > +
+> > > > +#ifndef __MP2629_H__
+> > > > +#define __MP2629_H__
+> > > > +
+> > > > +#include <linux/types.h>
+> > > > +
+> > > > +struct device;
+> > > > +struct regmap;  
+> > > Why not just add the includes?  
+> > Some more shared enum added in ADC driver  
+> 
+> Sorry?
+> 
+> > > > +struct mp2629_info {
+> > > > +	struct device *dev;
+> > > > +	struct regmap *regmap;
+> > > > +};
+> > > > +
+> > > > +#endif  
+> 
 
