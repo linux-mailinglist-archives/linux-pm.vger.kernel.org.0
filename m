@@ -2,105 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B046B19618E
-	for <lists+linux-pm@lfdr.de>; Fri, 27 Mar 2020 23:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB947196242
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Mar 2020 01:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727585AbgC0Wy6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 Mar 2020 18:54:58 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:42344 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727749AbgC0Wy6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 18:54:58 -0400
-Received: by mail-pg1-f196.google.com with SMTP id h8so5287174pgs.9
-        for <linux-pm@vger.kernel.org>; Fri, 27 Mar 2020 15:54:57 -0700 (PDT)
+        id S1726212AbgC1AMG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 Mar 2020 20:12:06 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45431 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726134AbgC1AMF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 Mar 2020 20:12:05 -0400
+Received: by mail-wr1-f65.google.com with SMTP id t7so13812882wrw.12;
+        Fri, 27 Mar 2020 17:12:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HU2M5O3jCfLj94Hwufwd4XPsJBSwx4R/uG7JulaLujI=;
-        b=YPdf51gGhsv5lOIYljUemnb/IoF4tLDIRzFJhjUoZ86UQMM8TttCZzXcTOBm97T8WG
-         GPAqsxP1v+5nFHf8EGUipD6IfGNrA1mSxdt0qWuTSZbbuB2DU1n7FL1zw+p1duoTY3B8
-         0kfrv3XzLbhyl4C7XnCgzJm1RHGY8y56waHMloM9d6gPDIYjKr/WXIJiuEZ2qXyw21hA
-         TRIy3sE3NFD1+QwN9qoSYlsDNGlH0c2jKCxzybtFbEf7vUOhHoytaHpKut3gHnc0BfQ5
-         OOX7Ke/fjwPS/IxP8XNtO8H3tlAAHG8ThSqH5rYQBtZjolHaESuhqtXayy0SH+ch2xtB
-         jiBw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=ETNuk5HoFRvajcPB5SGInXBPTRaocJmabwQ1Y7pZBVg=;
+        b=szKTbn7Jiys934mZuxreqLLDFQrlEVHV/AofHqRdBXdaHFq6+Pua50d4ivqc9PL5qg
+         zZ+YfUqR/nYf3ck6yyOt1vOjn6w1UdkKL2+UgdJk8totMH2ndHqWQqZAR2CTBr+jIetc
+         4GLiuTqXtcX1xgMUyEEUxmfWk/EK7SRca4o6l8wrIaaYvrbmczx0mJUBqeH85RDzwcaB
+         nlR9RdemOAKNJObKVj7xNvbsDOUtZwNR+aAIouAQWrCjgO3tbzdb2nfb10VH7MXQr+i7
+         NSKQwq1Jo6gST/SBpnTP4OE2EDg4Y+XLLM7u66a3QGtyc+OGNMIt7QhVt0RtYGC4PiwU
+         7k+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HU2M5O3jCfLj94Hwufwd4XPsJBSwx4R/uG7JulaLujI=;
-        b=YgTSceLkXzCLpRFyMNbH4Ip3CxiO4XOsp89frEz4+Fyj5XDvW8xcF+RhIR+oussJtn
-         aRIIHQbjuFQY2xr0rt+M8MSXLmPTCQoTS39aaAoAnBnhcXmxWd7a/Uc9zbCHVLdd/RpJ
-         XEWSAuexxNc8SEhmMKN9GXhsumpMiv2/OR2dx7Kxy4BUQClBRjRwBhm0Z52GLIokAqaK
-         gADQh5ocSGN+Pnj3J5vGZDW9JKQuyjOgnyZeDBt6LQGv6OY/oshK39P5uuJPPg1AG3zj
-         244n2rPAtup2PqUAaGmsHicHZmrL8NUQUDC2liSuFR7cDARtYvuoQR7GPUvgL8c2uive
-         FlbQ==
-X-Gm-Message-State: ANhLgQ16yNgPdtDi2Ras5FAs5+8iwBCS/JtvEZYwMh00FwG38xtycgk+
-        UsJh1IHNwuEAk8AH2zBNHBRtFQ==
-X-Google-Smtp-Source: ADFU+vsJ5hSRbz6fduTj02IdL1Xzy2YBpy7LH6U+C7LpI1fAMwXLyOa9O45EJ3aIiGe9q26cEeMZ9Q==
-X-Received: by 2002:a62:75d0:: with SMTP id q199mr1560271pfc.72.1585349697006;
-        Fri, 27 Mar 2020 15:54:57 -0700 (PDT)
-Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id d3sm4543941pjz.2.2020.03.27.15.54.55
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ETNuk5HoFRvajcPB5SGInXBPTRaocJmabwQ1Y7pZBVg=;
+        b=kZFTonwd8zOhLEs9bEjyv54o74S0U9DrVp+2baSrvHmNBH6Bw42y4oUFFZ+gIpyAz0
+         HprWTlYwm9HA/vQSoprv7wXVxqsSAfhIORD3oR9/+Ec5vi1mF5UJ9NpL++gGW9eDgA66
+         dxFHlFKnGiEILEYl6XIr6zQ5AA2P70kU9dFXvDxk0rx+nUu92l3UNUmBbydXtkz5X6kY
+         /SSwMk7mxrEaVvZorS4yEUjervD7spr076OW1yXC6K7ZvwWq10L3/Pbu9SFvQNCOyFFC
+         xWd41XKKJ6ZdP9S8TYJU+Z/yklK6EZ/uidD0dX5LF5y/B6fo92DwoegBQgKO5J3Om5pR
+         PQ2w==
+X-Gm-Message-State: ANhLgQ0KED/oyICmHeneUYxfEUdFf2TVpGdyFsWlWkYLzsBNkPGMZh2q
+        I1Su8z97wjnOzGmehP6YtGqvcBXsZpc=
+X-Google-Smtp-Source: ADFU+vvGP/WBIzxxjjBTJSg0UHtTPuXBpCde+gIzwWpVYnjVPJ1UEIOppTESL3dr3zDiVzMU6zZgtg==
+X-Received: by 2002:adf:a387:: with SMTP id l7mr2086993wrb.250.1585354323958;
+        Fri, 27 Mar 2020 17:12:03 -0700 (PDT)
+Received: from localhost.localdomain (p5B3F7536.dip0.t-ipconnect.de. [91.63.117.54])
+        by smtp.gmail.com with ESMTPSA id 61sm11237956wrn.82.2020.03.27.17.12.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 15:54:56 -0700 (PDT)
-Date:   Fri, 27 Mar 2020 15:54:54 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     rui.zhang@intel.com, ulf.hansson@linaro.org,
-        daniel.lezcano@linaro.org, agross@kernel.org, robh@kernel.org,
-        amit.kucheria@verdurent.com, mark.rutland@arm.com,
-        rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Patch v5 6/6] arm64: dts: qcom: Indicate rpmhpd hosts a power
- domain that can be used as a warming device.
-Message-ID: <20200327225454.GI5063@builder>
-References: <20200320014107.26087-1-thara.gopinath@linaro.org>
- <20200320014107.26087-7-thara.gopinath@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200320014107.26087-7-thara.gopinath@linaro.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+        Fri, 27 Mar 2020 17:12:03 -0700 (PDT)
+From:   Saravanan Sekar <sravanhome@gmail.com>
+To:     lee.jones@linaro.org, andy.shevchenko@gmail.com,
+        robh+dt@kernel.org, jic23@kernel.org, knaack.h@gmx.de,
+        lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        Saravanan Sekar <sravanhome@gmail.com>
+Subject: [PATCH v5 0/5] Add battery charger driver support for MP2629
+Date:   Sat, 28 Mar 2020 01:11:49 +0100
+Message-Id: <20200328001154.17313-1-sravanhome@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu 19 Mar 18:41 PDT 2020, Thara Gopinath wrote:
+changes in v5:
+ - removed platfrom data stored in mfd and directly accessed mfd struct in child
+ - fixed spell check and capitalization in mfd and documentation
 
-> RPMh hosts mx power domain that can be used to warm up the SoC.  Indicate
-> this by using #cooling-cells property.
-> 
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+changes in v4:
+ - fixed capitalization in mfg Kconfig and documentation
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+changes in v3:
+ - regmap for children passed using platform data and remove mfd driver info
+   access directly from children
 
-> ---
-> 
-> v3->v4:
-> 	- Removed subnode to indicate that mx power domain is a warming
-> 	  device. Instead #cooling-cells is used as a power domain
-> 	  provider property to indicate if the provider hosts a power
-> 	  domain that can be used as a warming device.
-> 
->  arch/arm64/boot/dts/qcom/sdm845.dtsi | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index fe35d37a11cc..0d878b2ca351 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -3703,6 +3703,7 @@
->  			rpmhpd: power-controller {
->  				compatible = "qcom,sdm845-rpmhpd";
->  				#power-domain-cells = <1>;
-> +				#cooling-cells = <2>;
->  				operating-points-v2 = <&rpmhpd_opp_table>;
->  
->  				rpmhpd_opp_table: opp-table {
-> -- 
-> 2.20.1
-> 
+changes in v2:
+ - removed EXPORT_SYMBOL of register set/get helper
+ - regmap bit filed used, fixed other review comments
+
+This patch series add support for Battery charger control driver for Monolithic
+Power System's MP2629 chipset, includes MFD driver for ADC battery & input
+power supply measurement and battery charger control driver.
+
+Thanks,
+Saravanan
+
+Saravanan Sekar (5):
+  dt-bindings: mfd: add document bindings for mp2629
+  mfd: mp2629: Add support for mps battery charger
+  iio: adc: mp2629: Add support for mp2629 ADC driver
+  power: supply: Add support for mps mp2629 battery charger
+  MAINTAINERS: Add entry for mp2629 Battery Charger driver
+
+ .../devicetree/bindings/mfd/mps,mp2629.yaml   |  60 ++
+ MAINTAINERS                                   |   5 +
+ drivers/iio/adc/Kconfig                       |  10 +
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/mp2629_adc.c                  | 209 ++++++
+ drivers/mfd/Kconfig                           |   9 +
+ drivers/mfd/Makefile                          |   2 +
+ drivers/mfd/mp2629.c                          |  86 +++
+ drivers/power/supply/Kconfig                  |  10 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/mp2629_charger.c         | 686 ++++++++++++++++++
+ include/linux/mfd/mp2629.h                    |  29 +
+ 12 files changed, 1108 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
+ create mode 100644 drivers/iio/adc/mp2629_adc.c
+ create mode 100644 drivers/mfd/mp2629.c
+ create mode 100644 drivers/power/supply/mp2629_charger.c
+ create mode 100644 include/linux/mfd/mp2629.h
+
+-- 
+2.17.1
+
