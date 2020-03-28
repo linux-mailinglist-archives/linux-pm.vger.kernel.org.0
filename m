@@ -2,69 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81ECD19651A
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Mar 2020 11:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5135A196521
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Mar 2020 11:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726045AbgC1KlH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 28 Mar 2020 06:41:07 -0400
-Received: from mga02.intel.com ([134.134.136.20]:24251 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725973AbgC1KlH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 28 Mar 2020 06:41:07 -0400
-IronPort-SDR: hBg2sFQHt1JubBncDNw55azrPrybNHMWrBnlIG0FTxnX4fe5ih5vfaYyRuY/lPpn/EM8IF1/r+
- Q0eYptqAbkQw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2020 03:41:06 -0700
-IronPort-SDR: Ty0aWSLn7xpvRb45MfRsnCppMnFf+6knk25yfjfkwR5OCsTTF24GCKsio6GBkmz3/D3rLsgV3l
- Dk6wYFjpylZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,316,1580803200"; 
-   d="scan'208";a="271856236"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Mar 2020 03:41:02 -0700
-Date:   Sat, 28 Mar 2020 18:39:50 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-pm@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH] PM / sleep: Add pm_debug_messages boot command control
-Message-ID: <20200328103949.GA16999@chenyu-office.sh.intel.com>
-References: <20200327111141.14324-1-yu.c.chen@intel.com>
- <a9843786-e7da-2c3c-30e2-c4887e9af4c6@infradead.org>
+        id S1726265AbgC1Kpn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Mar 2020 06:45:43 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:36120 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726045AbgC1Kpn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 28 Mar 2020 06:45:43 -0400
+Received: by mail-pf1-f194.google.com with SMTP id i13so5863071pfe.3;
+        Sat, 28 Mar 2020 03:45:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RukT/AsNxTsj07Q4HN6VwGWP+3cVI4PVAl2WbnFXBpI=;
+        b=vd+Cb+zMmgqs2ObKAxYxSs8+PITxbH9LgVigA4nV84ah1k2O37DyEWAgzgQROXuvsn
+         MZg8neG+WdTywOz4UrCRhe9YAqBkjWSCyExR487PzLTSrajIkABCAkHgzxI95f2/vMtp
+         W5UyB0h4GQWv/EcLrGBf8NkRnJy4Gra75wav6gui+NtZQHvIlP78j8l1dtBrwkWltATO
+         JM2vHGhGtxK1l9Y0z/SudM2PkyP3g1i8GlE5xaX5zP5vpGyx7nxaWn41fr8/z5J0+csh
+         2+fPzsk773RtPV6WM5LWCH5W6FHeEZ0WlJ1XR4QlFvkIsKIG/K65bg3Q5/6YVbshUACr
+         B20Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RukT/AsNxTsj07Q4HN6VwGWP+3cVI4PVAl2WbnFXBpI=;
+        b=eNdfsmIAMSpTMClbbfooVHgsQpzF7wPohM41cGRczs7D84FBS1etYnX6CC/CterISW
+         aWuWwlujyhy0GBTzP5uCqv/tnyo9sHOgAbLfzE+fl6+N4zy2VEYiho4F7+EHya/uPhzi
+         kHZ295E3KKlRqMbZc+7dELd7OoB/EFMKfC+KAbATHT/sVT9Fj0VNs8z+SZlpQMqt7tFh
+         hXylJ1vbIFs/lpGxCnh/5zWKMKAIdeiCIK+j7ir8KAJb0svufQJlG8WRUaMPbr0z9GHq
+         MlZg4uLwkQAYgbeBi80KbC5dpux//JxTKv/r1uWgLv2nl6MKrug41LCiqSr0ZolvOF2y
+         4sFQ==
+X-Gm-Message-State: ANhLgQ0v/oRZsF74qfG1g2XO/1ei5gR6FRcupN0VqpkuF2MI5OxQjq0F
+        UvEFVdMh/DPfadSgbA2tf33SiE3V0lO0u85RCOY=
+X-Google-Smtp-Source: ADFU+vu2zqVAQGh1j/qEr7LmshE0N+ohFw4ESZyZiR1C2rZjMfayj2Sg/HcofZVHte/2UykmaKsNC1qTOn9LXOdqtcQ=
+X-Received: by 2002:a63:798a:: with SMTP id u132mr3905322pgc.203.1585392342491;
+ Sat, 28 Mar 2020 03:45:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a9843786-e7da-2c3c-30e2-c4887e9af4c6@infradead.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200328001154.17313-1-sravanhome@gmail.com> <20200328001154.17313-3-sravanhome@gmail.com>
+In-Reply-To: <20200328001154.17313-3-sravanhome@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 28 Mar 2020 12:45:31 +0200
+Message-ID: <CAHp75Vdc4MxMnmd_h6eFfZAji=4fir7x7bq2MX1q50nAQ1eJ=Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] mfd: mp2629: Add support for mps battery charger
+To:     Saravanan Sekar <sravanhome@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald <pmeerw@pmeerw.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Randy,
-On Fri, Mar 27, 2020 at 08:39:44AM -0700, Randy Dunlap wrote:
-> On 3/27/20 4:11 AM, Chen Yu wrote:
-> > Debug messages from the system suspend/hibernation infrastructure
-> > is disabled by default, and can only be enabled after the system
-> > has boot up via /sys/power/pm_debug_messages. This makes the hibernation
-> > resume hard to track as it involves system boot up across hibernation.
-> > There's no chance for software_resume() to track the resume process,
-> > eg.
-> > 
-> > Turning on the pm_debug_messages during boot up by appending
-> > 'pm_debug_message'.
-> 
-> Please add that command line option to
-> Documentation/admin-guide/kernel-parameters.txt.
-> Thanks.
-> 
-Thanks for pointing it out, I'll add it in the v2 patch.
-Thanks,
-Chenyu
-> ~Randy
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+On Sat, Mar 28, 2020 at 2:12 AM Saravanan Sekar <sravanhome@gmail.com> wrote:
+>
+> mp2629 is a highly-integrated switching-mode battery charge management
+> device for single-cell Li-ion or Li-polymer battery.
+>
+> Add MFD core enables chip access for ADC driver for battery readings,
+> and a power supply battery-charger driver
+
+...
+
+> +#ifndef __MP2629_H__
+> +#define __MP2629_H__
+
+> +#include <linux/device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/types.h>
+
+None of these header is in use here.
+
+struct device;
+struct regmap;
+
+would be enough.
+
+> +struct mp2629_info {
+> +       struct device *dev;
+> +       struct regmap *regmap;
+> +};
+> +
+> +#endif
+
+-- 
+With Best Regards,
+Andy Shevchenko
