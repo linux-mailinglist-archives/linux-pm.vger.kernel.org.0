@@ -2,63 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B81771967F0
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Mar 2020 18:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA7819683F
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Mar 2020 18:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725988AbgC1RM3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 28 Mar 2020 13:12:29 -0400
-Received: from mga06.intel.com ([134.134.136.31]:1452 "EHLO mga06.intel.com"
+        id S1726265AbgC1RvW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 28 Mar 2020 13:51:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51474 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725882AbgC1RM3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 28 Mar 2020 13:12:29 -0400
-IronPort-SDR: tKpjoKWF8QF0UlxPO4su3BobyXKNYzOk/s2aL55Mx4Pp+FRHvV+Iv46+7fZxSZq4TvzYxP/VyO
- QrcZflvB+ygA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2020 10:12:28 -0700
-IronPort-SDR: l2qLCoZVo79Nv40mqmyeBvuQInvD62LVYbO6MY5SF+2AXukMbY/KbowImJsZ0RJZcfQIQ8aqah
- QIdb8lYQEifQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,317,1580803200"; 
-   d="scan'208";a="449346569"
-Received: from fmsmsx105.amr.corp.intel.com ([10.18.124.203])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Mar 2020 10:12:27 -0700
-Received: from fmsmsx163.amr.corp.intel.com (10.18.125.72) by
- FMSMSX105.amr.corp.intel.com (10.18.124.203) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Sat, 28 Mar 2020 10:12:27 -0700
-Received: from fmsmsx101.amr.corp.intel.com ([169.254.1.121]) by
- fmsmsx163.amr.corp.intel.com ([169.254.6.106]) with mapi id 14.03.0439.000;
- Sat, 28 Mar 2020 10:12:27 -0700
-From:   "Brown, Len" <len.brown@intel.com>
-To:     =?utf-8?B?T25kxZllaiBMeXNvbsSbaw==?= <olysonek@redhat.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: x86_energy_perf_policy fails with Input/output error in a VM
-Thread-Topic: x86_energy_perf_policy fails with Input/output error in a VM
-Thread-Index: AQHWBAkrgu7Leekdz0CsCGY/NSUrP6hePqdQ
-Date:   Sat, 28 Mar 2020 17:12:26 +0000
-Message-ID: <1A7043D5F58CCB44A599DFD55ED4C94881B93DF1@fmsmsx101.amr.corp.intel.com>
-References: <flspncygsvj.fsf@redhat.com>
-In-Reply-To: <flspncygsvj.fsf@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.1.200.108]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1725807AbgC1RvW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 28 Mar 2020 13:51:22 -0400
+Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 874EE20714;
+        Sat, 28 Mar 2020 17:51:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585417881;
+        bh=R6KoaEnQ216q4GA1ys0ah1T7EU57N7ZOKvH4fWy6MDE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=X+t8Haw8bRSHyIODxOddObNMHHzTC4A/gIgrmlA8G4FJX+96HIPkjD0njXTo8iIJH
+         7v6ti+BJudpolLJZIuyhN1qhDYPTiVIGizpZqnN/K/5receeAFe1iHybrtzyRn/eSg
+         tZafwQty9zCxiOMZgtwgMjZCqHtPzSktGtbBYMAA=
+Date:   Sat, 28 Mar 2020 17:51:16 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Saravanan Sekar <sravanhome@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald <pmeerw@pmeerw.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v5 3/5] iio: adc: mp2629: Add support for mp2629 ADC
+ driver
+Message-ID: <20200328175116.13c2bae3@archlinux>
+In-Reply-To: <CAHp75Vd+m=1eaDY1JLvtNKbBPXsaTFmpewG=Vn+v-=+GMBCs2w@mail.gmail.com>
+References: <20200328001154.17313-1-sravanhome@gmail.com>
+        <20200328001154.17313-4-sravanhome@gmail.com>
+        <CAHp75Vd+m=1eaDY1JLvtNKbBPXsaTFmpewG=Vn+v-=+GMBCs2w@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-VGhhbmtzIGZvciB0aGUgbm90ZSwNCg0KSSBhZ3JlZSB0aGF0IGlzIHVuZnJpZW5kbHkgaG93IHRo
-ZSB0b29sIHRlbGxzIHRoZSB1c2VyIHRoYXQgaXQgaXMgbm90IHBvc3NpYmxlIGZvciBpdCB0byBy
-dW4gaW4gYSBWTSBndWVzdC4NCklmIHBlb3BsZSBhcmUgcnVubmluZyBpbnRvIHRoYXQsIGFuZCB3
-ZSBjYW4gbWFrZSBpdCBtb3JlIGdyYWNlZnVsLCB3ZSBzaG91bGQuDQoNCklzIHBhcnNpbmcgL3By
-b2MvY3B1aW5mbyBhIHVuaXZlcnNhbC9yZWxpYWJsZSB3YXkgdG8gZGV0ZWN0IHRoaXMgc2l0dWF0
-aW9uPw0KDQoNCg==
+On Sat, 28 Mar 2020 12:52:11 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+
+> On Sat, Mar 28, 2020 at 2:12 AM Saravanan Sekar <sravanhome@gmail.com> wrote:
+> >
+> > Add support for 8-bit resolution ADC readings for input power
+> > supply and battery charging measurement. Provides voltage, current
+> > readings to mp2629 power supply driver.  
+> 
+> ...
+> 
+> > +               ret = regmap_read(info->regmap, chan->address, &rval);
+> > +               if (ret < 0)  
+> 
+> ' < 0' is not needed for regmap call.
+> 
+> ..
+> 
+> > +               case MP2629_INPUT_CURRENT:
+> > +                       *val = 133;
+> > +                       *val2 = 10;
+> > +                       return IIO_VAL_FRACTIONAL;
+> > +
+> > +               default:
+> > +                       return -EINVAL;
+> > +               }
+> > +
+> > +       default:
+> > +               return -EINVAL;
+> > +       }  
+> 
+> > +
+> > +       return 0;  
+> 
+> Do you really need this? Looks to me as dead code.
+> 
+> ...
+> 
+> > +       indio_dev->name = dev_name(dev);  
+> 
+> Shouldn't be this a part number?
+> I heard something, so, I might be mistaken, but I hope maintainers
+> will help here.
+
+It should indeed.  I have a nasty habit of missing this in
+review so thanks for pointing it out!
+
+Jonathan
+
