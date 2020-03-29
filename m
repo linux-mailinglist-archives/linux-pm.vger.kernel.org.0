@@ -2,71 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E934196DC4
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 15:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20F2196DCF
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 16:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728110AbgC2N4q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Mar 2020 09:56:46 -0400
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:44548 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727903AbgC2N4p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 09:56:45 -0400
-Received: by mail-oi1-f171.google.com with SMTP id v134so13327309oie.11;
-        Sun, 29 Mar 2020 06:56:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xc/YsL22+xvtRonmC6Bol59woO+qBjPIQufFfO9npSM=;
-        b=bj4O/Z4/SlexbgiYzMTWApxSZRp7pLkurxSJ+5l7y9lZvxSBkaoTG7bHPL7i/5vc4t
-         nAEqzPpTUgNMf8/7ZBgr7fwa2ynjA6+tEKatO1TxZ/HYidZQpGoXhYMMsVtRjt+mQEqg
-         krnwKo6//SgFdhqo5ZvCTZ9PlOL5K+cT4SOOMCIW6prjMOI1cIlK7BpRlRatcSDjlC8j
-         M4EI2qpFYTjUlCkXNrEOeTnr+iPQkCFHtaspDoMMwRyPHVBG8XtmI78TeGIB4AGZciq0
-         nsOHmz+ijA7Sw7XhnnGZlO2zgInnPjqaId4rCrpRol3pY5OVfmK4YtllqUaXXVGvRcp5
-         NzwA==
-X-Gm-Message-State: ANhLgQ000O6rqJZk07rMoSki3Go0yPCec82bLLYnypfkEiBt5q+LDSxf
-        Dgi2Y8XHrnAq4foAwWVAcJHWdSeCQhpddzlXuJk=
-X-Google-Smtp-Source: ADFU+vuAPXvZuTFrPg0P26FMXoSrwWtTlPV65QUUwTX5E8ZDQPZw4waandbicfWWTX3OHlLtZAcfPi1cVmjZh5d9ts0=
-X-Received: by 2002:aca:5155:: with SMTP id f82mr5003191oib.103.1585490203653;
- Sun, 29 Mar 2020 06:56:43 -0700 (PDT)
+        id S1728169AbgC2OIH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Mar 2020 10:08:07 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:62184 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727903AbgC2OIH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 10:08:07 -0400
+Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
+ id f063bb686b1bb6c4; Sun, 29 Mar 2020 16:08:05 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Erik Kaneda <erik.kaneda@intel.com>
+Cc:     kbuild test robot <lkp@intel.com>, linux-pm@vger.kernel.org,
+        devel@acpica.org, linux-acpi@vger.kernel.org
+Subject: Re: [pm:bleeding-edge] BUILD REGRESSION b50a778aa5b714166355ef7f4a1992e4073393fc
+Date:   Sun, 29 Mar 2020 16:08:04 +0200
+Message-ID: <3863805.FxIobF6Dnx@kreacher>
+In-Reply-To: <5e7fb83b.mzs1XRDjQiEqx806%lkp@intel.com>
+References: <5e7fb83b.mzs1XRDjQiEqx806%lkp@intel.com>
 MIME-Version: 1.0
-References: <10243663.e30Z2V8kAt@kreacher> <Pine.LNX.4.44L0.2003281432130.9749-100000@netrider.rowland.org>
- <CAJZ5v0igUZnqFLcOhruDSNjv0HqCsy64tmYWyTX98xEc9cH14g@mail.gmail.com>
-In-Reply-To: <CAJZ5v0igUZnqFLcOhruDSNjv0HqCsy64tmYWyTX98xEc9cH14g@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 29 Mar 2020 15:56:32 +0200
-Message-ID: <CAJZ5v0horQNK4EBnNyFAz1gCe=SKJ_f9-5yiMeP=Scq31gscQg@mail.gmail.com>
-Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Qais Yousef <qais.yousef@arm.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Mar 29, 2020 at 11:16 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
+On Saturday, March 28, 2020 9:48:59 PM CEST kbuild test robot wrote:
+> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+> branch HEAD: b50a778aa5b714166355ef7f4a1992e4073393fc  Merge branch 'acpica-next' into bleeding-edge
+> 
+> Regressions in current branch:
+> 
+> drivers/acpi/acpica/dswload2.c:476:3: warning: syntax error [syntaxError]
+> 
+> Error ids grouped by kconfigs:
+> 
+> recent_errors
+> `-- x86_64-allyesconfig
+>     `-- drivers-acpi-acpica-dswload2.c:warning:syntax-error-syntaxError
 
-[cut]
+This looks like a script went south.
 
-> >
-> > But if SMART_SUSPEND is set and the device is runtime-suspended, why
-> > issue the ->suspend callback?
->
-> The driver itself or the middle-layer may want to resume the device.
->
-> Arguably, it may do that in ->prepare() too,
+It should be fixed in my tree now.
 
-Not really.
 
-The problem is that that device_prepare() is executed synchronously
-for all devices, so if multiple devices needed to be resumed, the
-latency would accumulate if that happened in device_prepare().
 
-Cheers!
