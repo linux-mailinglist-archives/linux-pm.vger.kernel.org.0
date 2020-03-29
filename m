@@ -2,161 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14832196D86
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 14:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E934196DC4
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 15:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728185AbgC2Mt0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Mar 2020 08:49:26 -0400
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:35005 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727951AbgC2Mt0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 08:49:26 -0400
-Received: by mail-ua1-f66.google.com with SMTP id a6so5267935uao.2
-        for <linux-pm@vger.kernel.org>; Sun, 29 Mar 2020 05:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=BKv2gz0DsjMaF/Mz7s/wYq0JAaZxqtaW8p9A6zy8BFw=;
-        b=OV6apK94OvbjCTyL09DesQB0SGgOwrppqY2YP/LjETv74YzrTmpIDpOJvWHmExwB5h
-         LEoKJC806ZLIUlLPiq3RkMBDaGuD8ZCBKoxvdDFoObgNlAKC0np2EsVRE/zgl3K3wXha
-         gyT7VJMqwPu3Q31eiNmUmfT93kaqIlzUT2abneF2X/hIuNkAGpfmJexsRq6+MbVRc4US
-         XfzakhQbczj1TwgBERsCHFHtbguGFH5fiSqeXMMym9U5wctQjZJOFfEO6D3rBoLsjQv+
-         suHSUhgH38T9k3dspbM2gHSZlz+0qPi1Mjx23D80lVdRUZzJwlggKN525bcgVLQGAYqH
-         YMfw==
+        id S1728110AbgC2N4q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Mar 2020 09:56:46 -0400
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:44548 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727903AbgC2N4p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 09:56:45 -0400
+Received: by mail-oi1-f171.google.com with SMTP id v134so13327309oie.11;
+        Sun, 29 Mar 2020 06:56:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BKv2gz0DsjMaF/Mz7s/wYq0JAaZxqtaW8p9A6zy8BFw=;
-        b=nBxrchVCp8iINpJtdhLCXXiPVvH73EmFEKnLGwMxyKfRVcJkv9S22lJ7G3Z8bLTGDT
-         8wJBHRWOXJjKD/UCX2yqJ7O79ohpw58xyBppB4/XEcKlJiOhjitdgr9W4Vhnkp3m0m3X
-         dbAZ3NM1PRBgLTpX38gA70aU9XJYfHIi9oyBaVpg3/4oMJ4u9jVAEv5hePflwTvuzU+r
-         KKOIRVKpQYMuanUSYZHlPH1ER7iI3OEktHRha6dv7ZaFAODGUx6BtL+xlIMN8nEu74T+
-         MohQ08Uo33LdbN2UKtML9Eb8P+AMmGJoZbf7JZ8VfyZAnYa3Km6E1MIPScXmeu6ez1Qe
-         i0sw==
-X-Gm-Message-State: AGi0PuY8aBpoH3rkSIsPmvV3c1nFWKtIp2HD15ArxfUoOt5JTU1iSepK
-        hxRpBSnNLvWRT6VTA5uAfoykN7hPsGahyq5U5EvFt0v5/jR0qQ==
-X-Google-Smtp-Source: APiQypIsvN8DwSOa1DIIz7+YdpInfhwNZ+d14wjLvIXeAdQOQVTDA/uPRVxymSqmuAcTfP5nsyfk8CXNY8UbA5IjZWk=
-X-Received: by 2002:ab0:2b97:: with SMTP id q23mr4929382uar.74.1585486163437;
- Sun, 29 Mar 2020 05:49:23 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=xc/YsL22+xvtRonmC6Bol59woO+qBjPIQufFfO9npSM=;
+        b=bj4O/Z4/SlexbgiYzMTWApxSZRp7pLkurxSJ+5l7y9lZvxSBkaoTG7bHPL7i/5vc4t
+         nAEqzPpTUgNMf8/7ZBgr7fwa2ynjA6+tEKatO1TxZ/HYidZQpGoXhYMMsVtRjt+mQEqg
+         krnwKo6//SgFdhqo5ZvCTZ9PlOL5K+cT4SOOMCIW6prjMOI1cIlK7BpRlRatcSDjlC8j
+         M4EI2qpFYTjUlCkXNrEOeTnr+iPQkCFHtaspDoMMwRyPHVBG8XtmI78TeGIB4AGZciq0
+         nsOHmz+ijA7Sw7XhnnGZlO2zgInnPjqaId4rCrpRol3pY5OVfmK4YtllqUaXXVGvRcp5
+         NzwA==
+X-Gm-Message-State: ANhLgQ000O6rqJZk07rMoSki3Go0yPCec82bLLYnypfkEiBt5q+LDSxf
+        Dgi2Y8XHrnAq4foAwWVAcJHWdSeCQhpddzlXuJk=
+X-Google-Smtp-Source: ADFU+vuAPXvZuTFrPg0P26FMXoSrwWtTlPV65QUUwTX5E8ZDQPZw4waandbicfWWTX3OHlLtZAcfPi1cVmjZh5d9ts0=
+X-Received: by 2002:aca:5155:: with SMTP id f82mr5003191oib.103.1585490203653;
+ Sun, 29 Mar 2020 06:56:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200327151951.18111-1-ricardo.canuelo@collabora.com>
- <20200327154345.GA3971@ninjato> <CAGAzgsqJznZi83ijxCgQg463Q4AnwiNX-a0Q9+Og9MW5OJ4Vew@mail.gmail.com>
-In-Reply-To: <CAGAzgsqJznZi83ijxCgQg463Q4AnwiNX-a0Q9+Og9MW5OJ4Vew@mail.gmail.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Sun, 29 Mar 2020 09:49:10 -0300
-Message-ID: <CAAEAJfCzquaiCkjxXYOJRH8tpGRkHJBSWnFD--S=C7uAvHwqUg@mail.gmail.com>
-Subject: Re: [PATCH] i2c: enable async suspend/resume on i2c devices
-To:     "dbasehore ." <dbasehore@chromium.org>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
-        linux-i2c@vger.kernel.org, Guenter Roeck <groeck@chromium.org>,
+References: <10243663.e30Z2V8kAt@kreacher> <Pine.LNX.4.44L0.2003281432130.9749-100000@netrider.rowland.org>
+ <CAJZ5v0igUZnqFLcOhruDSNjv0HqCsy64tmYWyTX98xEc9cH14g@mail.gmail.com>
+In-Reply-To: <CAJZ5v0igUZnqFLcOhruDSNjv0HqCsy64tmYWyTX98xEc9cH14g@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 29 Mar 2020 15:56:32 +0200
+Message-ID: <CAJZ5v0horQNK4EBnNyFAz1gCe=SKJ_f9-5yiMeP=Scq31gscQg@mail.gmail.com>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        USB list <linux-usb@vger.kernel.org>,
         Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel@collabora.com
+        Kernel development list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Derek,
-
-On Fri, 27 Mar 2020 at 17:26, dbasehore . <dbasehore@chromium.org> wrote:
->
-> On Fri, Mar 27, 2020 at 8:43 AM Wolfram Sang <wsa@the-dreams.de> wrote:
-> >
-> > On Fri, Mar 27, 2020 at 04:19:51PM +0100, Ricardo Ca=C3=B1uelo wrote:
-> > > This enables the async suspend property for i2c devices. This reduces
-> > > the suspend/resume time considerably on platforms with multiple i2c
-> > > devices (such as a trackpad or touchscreen).
-> > >
-> > > (am from https://patchwork.ozlabs.org/patch/949922/)
-> > >
-> > > Signed-off-by: Derek Basehore <dbasehore@chromium.org>
-> > > Reviewed-on: https://chromium-review.googlesource.com/1152411
-> > > Tested-by: Venkateswarlu V Vinjamuri <venkateswarlu.v.vinjamuri@intel=
-.com>
-> > > Reviewed-by: Venkateswarlu V Vinjamuri <venkateswarlu.v.vinjamuri@int=
-el.com>
-> > > Reviewed-by: Justin TerAvest <teravest@chromium.org>
-> > > Signed-off-by: Guenter Roeck <groeck@chromium.org>
-> > > Signed-off-by: Ricardo Ca=C3=B1uelo <ricardo.canuelo@collabora.com>
-> > > ---
-> >
-> > Adding linux-pm to CC. I don't know much about internals of async
-> > suspend. Is there a guide like "what every maintainer needs to know
-> > about"?
->
-> For more details, you can look at the function dpm_resume in the
-> drivers/base/power/main.c file and follow from there.
->
-> I can't find anything in Documentation/, so here's a short overview:
-> Async devices have suspend/resume callbacks scheduled via
-> async_schedule at every step (normal, late, noirq, etc.) for
-> suspending/resuming devices. We wait for all device callbacks to
-> complete at the end of each of these steps before moving onto the next
-> one. This means that you won't have a resume_early callback running
-> when you start the normal device resume callbacks.
->
-> The async callbacks still wait individually for children on suspend
-> and parents on resume to complete their own callbacks before calling
-> their own. Because some dependencies may not be tracked by the
-> parent/child graph (or other unknown reasons), async is off by
-> default.
->
-> Enabling async is a confirmation that all dependencies to other
-> devices are properly tracked, whether through the parent/child
-> relationship or otherwise.
+On Sun, Mar 29, 2020 at 11:16 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
 
-Have you noticed the async sysfs attribute [1]?
-
-Given this allows userspace to enable the async suspend/resume,
-wouldn't it be simpler to just do that in userspace, on the
-platforms you want to target (e.g. Apollolake Chromebook devices, and so on=
-) ?
-
-Thanks,
-Ezequiel
-
-[1] Documentation/ABI/testing/sysfs-devices-power
+[cut]
 
 > >
-> > > This patch was originally created for chromeos some time ago and I'm
-> > > evaluating if it's a good candidate for upstreaming.
-> > >
-> > > By the looks of it I think it was done with chromebooks in mind, but
-> > > AFAICT this would impact every i2c client in every platform, so I'd l=
-ike
-> > > to know your opinion about it.
-> > >
-> > > As far as I know there was no further investigation or testing on it,=
- so
-> > > I don't know if it was tested on any other hardware.
-> > >
-> > > Best,
-> > > Ricardo
-> > >
-> > >  drivers/i2c/i2c-core-base.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.=
-c
-> > > index cefad0881942..643bc0fe0281 100644
-> > > --- a/drivers/i2c/i2c-core-base.c
-> > > +++ b/drivers/i2c/i2c-core-base.c
-> > > @@ -769,6 +769,7 @@ i2c_new_client_device(struct i2c_adapter *adap, s=
-truct i2c_board_info const *inf
-> > >       client->dev.of_node =3D of_node_get(info->of_node);
-> > >       client->dev.fwnode =3D info->fwnode;
-> > >
-> > > +     device_enable_async_suspend(&client->dev);
-> > >       i2c_dev_set_name(adap, client, info);
-> > >
-> > >       if (info->properties) {
-> > > --
-> > > 2.18.0
-> > >
+> > But if SMART_SUSPEND is set and the device is runtime-suspended, why
+> > issue the ->suspend callback?
+>
+> The driver itself or the middle-layer may want to resume the device.
+>
+> Arguably, it may do that in ->prepare() too,
+
+Not really.
+
+The problem is that that device_prepare() is executed synchronously
+for all devices, so if multiple devices needed to be resumed, the
+latency would accumulate if that happened in device_prepare().
+
+Cheers!
