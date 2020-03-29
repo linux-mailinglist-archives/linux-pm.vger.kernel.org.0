@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B11C4196E66
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 18:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8A1196E6A
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 18:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728041AbgC2QXG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Mar 2020 12:23:06 -0400
-Received: from ip-78-45-52-129.net.upcbroadband.cz ([78.45.52.129]:52632 "EHLO
+        id S1728301AbgC2QXP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Mar 2020 12:23:15 -0400
+Received: from ip-78-45-52-129.net.upcbroadband.cz ([78.45.52.129]:52648 "EHLO
         ixit.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728301AbgC2QXG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 29 Mar 2020 12:23:06 -0400
+        id S1728330AbgC2QXP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 29 Mar 2020 12:23:15 -0400
 Received: from localhost.localdomain (227.146.230.94.awnet.cz [94.230.146.227])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 50CB9249A1;
-        Sun, 29 Mar 2020 18:23:04 +0200 (CEST)
+        by ixit.cz (Postfix) with ESMTPSA id 8F89E249A1;
+        Sun, 29 Mar 2020 18:23:12 +0200 (CEST)
 From:   David Heidelberg <david@ixit.cz>
 To:     Sebastian Reichel <sre@kernel.org>,
         Jonghwa Lee <jonghwa3.lee@samsung.com>,
@@ -28,10 +28,11 @@ To:     Sebastian Reichel <sre@kernel.org>,
         mika.westerberg@linux.intel.com, ramakrishna.pallala@intel.com,
         Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     David Heidelberg <david@ixit.cz>
-Subject: [PATCH 8/9] power: supply: smb347-charger: Replace mutex with IRQ disable/enable
-Date:   Sun, 29 Mar 2020 18:21:27 +0200
-Message-Id: <20200329162128.218584-9-david@ixit.cz>
+Cc:     David Heidelberg <david@ixit.cz>, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH 9/9] arm: dts: qcom: apq8064-nexus7: Add smb345 charger node
+Date:   Sun, 29 Mar 2020 18:21:28 +0200
+Message-Id: <20200329162128.218584-10-david@ixit.cz>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200329161552.215075-1-david@ixit.cz>
 References: <20200329161552.215075-1-david@ixit.cz>
@@ -42,131 +43,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
+Add smb345 charger node to Nexus 7 2013 DTS.
+Proper charger initialization also prevents battery from overcharging.
 
-Rather properly disable/enable IRQ than use mutex.
-This patch makes code easier to follow.
+Original author: Vinay Simha BN <simhavcs@gmail.com>
 
-Tested-by: David Heidelberg <david@ixit.cz>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
- drivers/power/supply/smb347-charger.c | 38 ++++++++++++++-------------
- 1 file changed, 20 insertions(+), 18 deletions(-)
+ .../boot/dts/qcom-apq8064-asus-nexus7-flo.dts | 22 ++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/smb347-charger.c b/drivers/power/supply/smb347-charger.c
-index ce2ebfe601d6..60a0ca2d6d74 100644
---- a/drivers/power/supply/smb347-charger.c
-+++ b/drivers/power/supply/smb347-charger.c
-@@ -16,7 +16,6 @@
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/i2c.h>
--#include <linux/mutex.h>
- #include <linux/power_supply.h>
- #include <linux/power/smb347-charger.h>
- #include <linux/regmap.h>
-@@ -122,7 +121,6 @@
+diff --git a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
+index a701d4bac320..9f14216a22f1 100644
+--- a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
++++ b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
+@@ -3,6 +3,7 @@
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/input/input.h>
+ #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
++#include <dt-bindings/power/summit,smb347-charger.h>
+ / {
+ 	model = "Asus Nexus7(flo)";
+ 	compatible = "asus,nexus7-flo", "qcom,apq8064";
+@@ -293,11 +294,30 @@ eeprom@52 {
+ 					pagesize = <32>;
+ 				};
  
- /**
-  * struct smb347_charger - smb347 charger instance
-- * @lock: protects concurrent access to online variables
-  * @dev: pointer to device
-  * @regmap: pointer to driver regmap
-  * @mains: power_supply instance for AC/DC power
-@@ -134,7 +132,6 @@
-  * @pdata: pointer to platform data
-  */
- struct smb347_charger {
--	struct mutex		lock;
- 	struct device		*dev;
- 	struct regmap		*regmap;
- 	struct power_supply	*mains;
-@@ -243,11 +240,9 @@ static int smb347_update_ps_status(struct smb347_charger *smb)
- 	if (smb->pdata->use_usb)
- 		usb = !(val & IRQSTAT_E_USBIN_UV_STAT);
+-				bq27541@55 {
++				bat: battery@55 {
+ 					compatible = "ti,bq27541";
+ 					reg = <0x55>;
++					power-supplies = <&power_supply>;
+ 				};
  
--	mutex_lock(&smb->lock);
- 	ret = smb->mains_online != dc || smb->usb_online != usb;
- 	smb->mains_online = dc;
- 	smb->usb_online = usb;
--	mutex_unlock(&smb->lock);
- 
- 	return ret;
- }
-@@ -263,13 +258,7 @@ static int smb347_update_ps_status(struct smb347_charger *smb)
-  */
- static bool smb347_is_ps_online(struct smb347_charger *smb)
- {
--	bool ret;
--
--	mutex_lock(&smb->lock);
--	ret = smb->usb_online || smb->mains_online;
--	mutex_unlock(&smb->lock);
--
--	return ret;
-+	return smb->usb_online || smb->mains_online;
- }
- 
- /**
-@@ -303,14 +292,13 @@ static int smb347_charging_set(struct smb347_charger *smb, bool enable)
- 		return 0;
- 	}
- 
--	mutex_lock(&smb->lock);
- 	if (smb->charging_enabled != enable) {
- 		ret = regmap_update_bits(smb->regmap, CMD_A, CMD_A_CHG_ENABLED,
- 					 enable ? CMD_A_CHG_ENABLED : 0);
- 		if (!ret)
- 			smb->charging_enabled = enable;
- 	}
--	mutex_unlock(&smb->lock);
++				power_supply: charger@6a {
++					compatible = "summit,smb345";
++					reg = <0x6a>;
 +
- 	return ret;
- }
- 
-@@ -995,9 +983,9 @@ static int smb347_get_charging_status(struct smb347_charger *smb,
- 	return status;
- }
- 
--static int smb347_get_property(struct power_supply *psy,
--			       enum power_supply_property prop,
--			       union power_supply_propval *val)
-+static int smb347_get_property_locked(struct power_supply *psy,
-+				      enum power_supply_property prop,
-+				      union power_supply_propval *val)
- {
- 	struct smb347_charger *smb = power_supply_get_drvdata(psy);
- 	int ret;
-@@ -1064,6 +1052,21 @@ static int smb347_get_property(struct power_supply *psy,
- 	return 0;
- }
- 
-+static int smb347_get_property(struct power_supply *psy,
-+			       enum power_supply_property prop,
-+			       union power_supply_propval *val)
-+{
-+	struct smb347_charger *smb = power_supply_get_drvdata(psy);
-+	struct i2c_client *client = to_i2c_client(smb->dev);
-+	int ret;
++					interrupt-parent = <&tlmm_pinmux>;
++					interrupts = <23 IRQ_TYPE_EDGE_BOTH>;
 +
-+	disable_irq(client->irq);
-+	ret = smb347_get_property_locked(psy, prop, val);
-+	enable_irq(client->irq);
++					summit,max-chg-curr = <1800000>;
++					summit,usb-curr-limit = <500000>;
 +
-+	return ret;
-+}
++					summit,chip-temp-threshold = <110>;
 +
- static enum power_supply_property smb347_properties[] = {
- 	POWER_SUPPLY_PROP_STATUS,
- 	POWER_SUPPLY_PROP_CHARGE_TYPE,
-@@ -1241,7 +1244,6 @@ static int smb347_probe(struct i2c_client *client,
- 
- 	i2c_set_clientdata(client, smb);
- 
--	mutex_init(&smb->lock);
- 	smb->dev = &client->dev;
- 	smb->id = id->driver_data;
++					summit,enable-usb-charging;
++					summit,enable-otg-charging;
++
++					summit,enable-chg-ctrl =
++						<SMB3XX_CHG_ENABLE_SW>;
++				};
+ 			};
+ 		};
  
 -- 
 2.25.0
