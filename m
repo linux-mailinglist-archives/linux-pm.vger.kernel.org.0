@@ -2,27 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A20F2196DCF
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 16:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9B6196DD5
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 16:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728169AbgC2OIH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Mar 2020 10:08:07 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:62184 "EHLO
+        id S1728221AbgC2OLk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Mar 2020 10:11:40 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:43412 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727903AbgC2OIH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 10:08:07 -0400
+        with ESMTP id S1728112AbgC2OLk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 10:11:40 -0400
 Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id f063bb686b1bb6c4; Sun, 29 Mar 2020 16:08:05 +0200
+ id 0f53fe2481d82a5e; Sun, 29 Mar 2020 16:11:18 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Erik Kaneda <erik.kaneda@intel.com>
-Cc:     kbuild test robot <lkp@intel.com>, linux-pm@vger.kernel.org,
-        devel@acpica.org, linux-acpi@vger.kernel.org
-Subject: Re: [pm:bleeding-edge] BUILD REGRESSION b50a778aa5b714166355ef7f4a1992e4073393fc
-Date:   Sun, 29 Mar 2020 16:08:04 +0200
-Message-ID: <3863805.FxIobF6Dnx@kreacher>
-In-Reply-To: <5e7fb83b.mzs1XRDjQiEqx806%lkp@intel.com>
-References: <5e7fb83b.mzs1XRDjQiEqx806%lkp@intel.com>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH] PM: sleep: core: Drop racy and redundant checks from device_prepare()
+Date:   Sun, 29 Mar 2020 16:11:18 +0200
+Message-ID: <1792393.Ra5xgIVOUU@kreacher>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -31,23 +29,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Saturday, March 28, 2020 9:48:59 PM CEST kbuild test robot wrote:
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-> branch HEAD: b50a778aa5b714166355ef7f4a1992e4073393fc  Merge branch 'acpica-next' into bleeding-edge
-> 
-> Regressions in current branch:
-> 
-> drivers/acpi/acpica/dswload2.c:476:3: warning: syntax error [syntaxError]
-> 
-> Error ids grouped by kconfigs:
-> 
-> recent_errors
-> `-- x86_64-allyesconfig
->     `-- drivers-acpi-acpica-dswload2.c:warning:syntax-error-syntaxError
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This looks like a script went south.
+Alan Stern points out that the WARN_ON() check in device_prepare()
+is racy (because the PM-runtime API can be disabled briefly for any
+device at any time and system suspend can start at any time too) and
+the pm_runtime_suspended() check in the computation of the
+direct_complete flag value is redundant (because it will be
+repeated later anyway).
 
-It should be fixed in my tree now.
+Drop both these checks accordingly.
+
+Reported-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/base/power/main.c |    7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+Index: linux-pm/drivers/base/power/main.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/main.c
++++ linux-pm/drivers/base/power/main.c
+@@ -1922,10 +1922,6 @@ static int device_prepare(struct device
+ 	if (dev->power.syscore)
+ 		return 0;
+ 
+-	WARN_ON(!pm_runtime_enabled(dev) &&
+-		dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND |
+-					      DPM_FLAG_LEAVE_SUSPENDED));
+-
+ 	/*
+ 	 * If a device's parent goes into runtime suspend at the wrong time,
+ 	 * it won't be possible to resume the device.  To prevent this we
+@@ -1973,8 +1969,7 @@ unlock:
+ 	 */
+ 	spin_lock_irq(&dev->power.lock);
+ 	dev->power.direct_complete = state.event == PM_EVENT_SUSPEND &&
+-		((pm_runtime_suspended(dev) && ret > 0) ||
+-		 dev->power.no_pm_callbacks) &&
++		(ret > 0 || dev->power.no_pm_callbacks) &&
+ 		!dev_pm_test_driver_flags(dev, DPM_FLAG_NEVER_SKIP);
+ 	spin_unlock_irq(&dev->power.lock);
+ 	return 0;
 
 
 
