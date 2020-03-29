@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9B3196E62
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 18:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 428C9196E64
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 18:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728359AbgC2QWn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Mar 2020 12:22:43 -0400
-Received: from ip-78-45-52-129.net.upcbroadband.cz ([78.45.52.129]:52582 "EHLO
+        id S1728373AbgC2QW7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Mar 2020 12:22:59 -0400
+Received: from ip-78-45-52-129.net.upcbroadband.cz ([78.45.52.129]:52594 "EHLO
         ixit.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728041AbgC2QWm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 29 Mar 2020 12:22:42 -0400
+        id S1728041AbgC2QW7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 29 Mar 2020 12:22:59 -0400
 Received: from localhost.localdomain (227.146.230.94.awnet.cz [94.230.146.227])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id E4B16249A1;
-        Sun, 29 Mar 2020 18:22:38 +0200 (CEST)
+        by ixit.cz (Postfix) with ESMTPSA id 4C3D7249A1;
+        Sun, 29 Mar 2020 18:22:55 +0200 (CEST)
 From:   David Heidelberg <david@ixit.cz>
 To:     Sebastian Reichel <sre@kernel.org>,
         Jonghwa Lee <jonghwa3.lee@samsung.com>,
@@ -29,9 +29,9 @@ To:     Sebastian Reichel <sre@kernel.org>,
         Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     David Heidelberg <david@ixit.cz>
-Subject: [PATCH 6/9] power: supply: smb347-charger: Support SMB345 and SMB358
-Date:   Sun, 29 Mar 2020 18:21:25 +0200
-Message-Id: <20200329162128.218584-7-david@ixit.cz>
+Subject: [PATCH 7/9] power: supply: smb347-charger: Remove virtual smb347-battery
+Date:   Sun, 29 Mar 2020 18:21:26 +0200
+Message-Id: <20200329162128.218584-8-david@ixit.cz>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200329161552.215075-1-david@ixit.cz>
 References: <20200329161552.215075-1-david@ixit.cz>
@@ -42,273 +42,357 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Tested SMB345 on Nexus 7 2013. Works.
+smb347 is a charger and not a battery driver, and that power-supply core
+now supports monitored-battery. So the 'fake' battery doesn't do anything
+useful for us, and thus, it should be removed.
 
-Based on:
-- https://patchwork.kernel.org/patch/4922431/
-- https://patchwork.ozlabs.org/patch/666877/
+Transfer this functionality into smb347-mains and smb347-usb.
 
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
 Signed-off-by: David Heidelberg <david@ixit.cz>
 ---
- drivers/power/supply/Kconfig          |   6 +-
- drivers/power/supply/smb347-charger.c | 109 ++++++++++++++------------
- 2 files changed, 62 insertions(+), 53 deletions(-)
+ drivers/power/supply/smb347-charger.c | 212 ++++++++------------------
+ 1 file changed, 60 insertions(+), 152 deletions(-)
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index f3424fdce341..2581ed8aff5a 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -598,12 +598,12 @@ config CHARGER_BQ25890
- 	  Say Y to enable support for the TI BQ25890 battery charger.
- 
- config CHARGER_SMB347
--	tristate "Summit Microelectronics SMB347 Battery Charger"
-+	tristate "Summit Microelectronics SMB3XX Battery Charger"
- 	depends on I2C
- 	select REGMAP_I2C
- 	help
--	  Say Y to include support for Summit Microelectronics SMB347
--	  Battery Charger.
-+	  Say Y to include support for Summit Microelectronics SMB345,
-+	  SMB347 or SMB358 Battery Charger.
- 
- config CHARGER_TPS65090
- 	tristate "TPS65090 battery charger driver"
 diff --git a/drivers/power/supply/smb347-charger.c b/drivers/power/supply/smb347-charger.c
-index 852d2ab566e0..0cbd0743fd91 100644
+index 0cbd0743fd91..ce2ebfe601d6 100644
 --- a/drivers/power/supply/smb347-charger.c
 +++ b/drivers/power/supply/smb347-charger.c
-@@ -128,6 +128,7 @@
+@@ -127,7 +127,6 @@
+  * @regmap: pointer to driver regmap
   * @mains: power_supply instance for AC/DC power
   * @usb: power_supply instance for USB power
-  * @battery: power_supply instance for battery
-+ * @id: SMB charger ID
+- * @battery: power_supply instance for battery
+  * @id: SMB charger ID
   * @mains_online: is AC/DC input connected
   * @usb_online: is USB input connected
-  * @charging_enabled: is charging enabled
-@@ -140,64 +141,61 @@ struct smb347_charger {
+@@ -140,7 +139,6 @@ struct smb347_charger {
+ 	struct regmap		*regmap;
  	struct power_supply	*mains;
  	struct power_supply	*usb;
- 	struct power_supply	*battery;
-+	unsigned int		id;
+-	struct power_supply	*battery;
+ 	unsigned int		id;
  	bool			mains_online;
  	bool			usb_online;
- 	bool			charging_enabled;
- 	const struct smb347_charger_platform_data *pdata;
- };
- 
--/* Fast charge current in uA */
--static const unsigned int fcc_tbl[] = {
--	700000,
--	900000,
--	1200000,
--	1500000,
--	1800000,
--	2000000,
--	2200000,
--	2500000,
-+enum smb_charger_chipid {
-+	SMB345,
-+	SMB347,
-+	SMB358,
-+	NUM_CHIP_TYPES,
- };
- 
-+/* Fast charge current in uA */
-+static const unsigned int fcc_tbl[NUM_CHIP_TYPES][8] = {
-+	[SMB345] = {  200000,  450000,  600000,  900000,
-+		     1300000, 1500000, 1800000, 2000000 },
-+	[SMB347] = {  700000,  900000, 1200000, 1500000,
-+		     1800000, 2000000, 2200000, 2500000 },
-+	[SMB358] = {  200000,  450000,  600000,  900000,
-+		     1300000, 1500000, 1800000, 2000000 },
-+};
- /* Pre-charge current in uA */
--static const unsigned int pcc_tbl[] = {
--	100000,
--	150000,
--	200000,
--	250000,
-+static const unsigned int pcc_tbl[NUM_CHIP_TYPES][4] = {
-+	[SMB345] = { 150000, 250000, 350000, 450000 },
-+	[SMB347] = { 100000, 150000, 200000, 250000 },
-+	[SMB358] = { 150000, 250000, 350000, 450000 },
- };
- 
- /* Termination current in uA */
--static const unsigned int tc_tbl[] = {
--	37500,
--	50000,
--	100000,
--	150000,
--	200000,
--	250000,
--	500000,
--	600000,
-+static const unsigned int tc_tbl[NUM_CHIP_TYPES][8] = {
-+	[SMB345] = {  30000,  40000,  60000,  80000,
-+		     100000, 125000, 150000, 200000 },
-+	[SMB347] = {  37500,  50000, 100000, 150000,
-+		     200000, 250000, 500000, 600000 },
-+	[SMB358] = {  30000,  40000,  60000,  80000,
-+		     100000, 125000, 150000, 200000 },
- };
- 
- /* Input current limit in uA */
--static const unsigned int icl_tbl[] = {
--	300000,
--	500000,
--	700000,
--	900000,
--	1200000,
--	1500000,
--	1800000,
--	2000000,
--	2200000,
--	2500000,
-+static const unsigned int icl_tbl[NUM_CHIP_TYPES][10] = {
-+	[SMB345] = {  300000,  500000,  700000, 1000000, 1500000,
-+		     1800000, 2000000, 2000000, 2000000, 2000000 },
-+	[SMB347] = {  300000,  500000,  700000,  900000, 1200000,
-+		     1500000, 1800000, 2000000, 2200000, 2500000 },
-+	[SMB358] = {  300000,  500000,  700000, 1000000, 1500000,
-+		     1800000, 2000000, 2000000, 2000000, 2000000 },
- };
- 
- /* Charge current compensation in uA */
--static const unsigned int ccc_tbl[] = {
--	250000,
--	700000,
--	900000,
--	1200000,
-+static const unsigned int ccc_tbl[NUM_CHIP_TYPES][4] = {
-+	[SMB345] = {  200000,  450000,  600000,  900000 },
-+	[SMB347] = {  250000,  700000,  900000, 1200000 },
-+	[SMB358] = {  200000,  450000,  600000,  900000 },
- };
- 
- /* Convert register value to current using lookup table */
-@@ -352,10 +350,11 @@ static int smb347_start_stop_charging(struct smb347_charger *smb)
- 
- static int smb347_set_charge_current(struct smb347_charger *smb)
- {
-+	unsigned int id = smb->id;
- 	int ret;
- 
- 	if (smb->pdata->max_charge_current) {
--		ret = current_to_hw(fcc_tbl, ARRAY_SIZE(fcc_tbl),
-+		ret = current_to_hw(fcc_tbl[id], ARRAY_SIZE(fcc_tbl[id]),
- 				    smb->pdata->max_charge_current);
- 		if (ret < 0)
- 			return ret;
-@@ -368,7 +367,7 @@ static int smb347_set_charge_current(struct smb347_charger *smb)
- 	}
- 
- 	if (smb->pdata->pre_charge_current) {
--		ret = current_to_hw(pcc_tbl, ARRAY_SIZE(pcc_tbl),
-+		ret = current_to_hw(pcc_tbl[id], ARRAY_SIZE(pcc_tbl[id]),
- 				    smb->pdata->pre_charge_current);
- 		if (ret < 0)
- 			return ret;
-@@ -381,7 +380,7 @@ static int smb347_set_charge_current(struct smb347_charger *smb)
- 	}
- 
- 	if (smb->pdata->termination_current) {
--		ret = current_to_hw(tc_tbl, ARRAY_SIZE(tc_tbl),
-+		ret = current_to_hw(tc_tbl[id], ARRAY_SIZE(tc_tbl[id]),
- 				    smb->pdata->termination_current);
- 		if (ret < 0)
- 			return ret;
-@@ -397,10 +396,11 @@ static int smb347_set_charge_current(struct smb347_charger *smb)
- 
- static int smb347_set_current_limits(struct smb347_charger *smb)
- {
-+	unsigned int id = smb->id;
- 	int ret;
- 
- 	if (smb->pdata->mains_current_limit) {
--		ret = current_to_hw(icl_tbl, ARRAY_SIZE(icl_tbl),
-+		ret = current_to_hw(icl_tbl[id], ARRAY_SIZE(icl_tbl[id]),
- 				    smb->pdata->mains_current_limit);
- 		if (ret < 0)
- 			return ret;
-@@ -413,7 +413,7 @@ static int smb347_set_current_limits(struct smb347_charger *smb)
- 	}
- 
- 	if (smb->pdata->usb_hc_current_limit) {
--		ret = current_to_hw(icl_tbl, ARRAY_SIZE(icl_tbl),
-+		ret = current_to_hw(icl_tbl[id], ARRAY_SIZE(icl_tbl[id]),
- 				    smb->pdata->usb_hc_current_limit);
- 		if (ret < 0)
- 			return ret;
-@@ -463,6 +463,7 @@ static int smb347_set_voltage_limits(struct smb347_charger *smb)
- 
- static int smb347_set_temp_limits(struct smb347_charger *smb)
- {
-+	unsigned int id = smb->id;
- 	bool enable_therm_monitor = false;
- 	int ret = 0;
- 	int val;
-@@ -587,7 +588,7 @@ static int smb347_set_temp_limits(struct smb347_charger *smb)
- 	}
- 
- 	if (smb->pdata->charge_current_compensation) {
--		val = current_to_hw(ccc_tbl, ARRAY_SIZE(ccc_tbl),
-+		val = current_to_hw(ccc_tbl[id], ARRAY_SIZE(ccc_tbl[id]),
- 				    smb->pdata->charge_current_compensation);
- 		if (val < 0)
- 			return val;
-@@ -883,6 +884,7 @@ static int smb347_irq_init(struct smb347_charger *smb,
-  */
- static int get_const_charge_current(struct smb347_charger *smb)
- {
-+	unsigned int id = smb->id;
- 	int ret, intval;
- 	unsigned int v;
- 
-@@ -898,10 +900,12 @@ static int get_const_charge_current(struct smb347_charger *smb)
- 	 * and we can detect which table to use from bit 5.
+@@ -743,7 +741,10 @@ static irqreturn_t smb347_interrupt(int irq, void *data)
  	 */
- 	if (v & 0x20) {
--		intval = hw_to_current(fcc_tbl, ARRAY_SIZE(fcc_tbl), v & 7);
-+		intval = hw_to_current(fcc_tbl[id],
-+				       ARRAY_SIZE(fcc_tbl[id]), v & 7);
- 	} else {
- 		v >>= 3;
--		intval = hw_to_current(pcc_tbl, ARRAY_SIZE(pcc_tbl), v & 7);
-+		intval = hw_to_current(pcc_tbl[id],
-+				       ARRAY_SIZE(pcc_tbl[id]), v & 7);
+ 	if (stat_c & STAT_C_CHARGER_ERROR) {
+ 		dev_err(smb->dev, "charging stopped due to charger error\n");
+-		power_supply_changed(smb->battery);
++		if (smb->pdata->use_mains)
++			power_supply_changed(smb->mains);
++		if (smb->pdata->use_usb)
++			power_supply_changed(smb->usb);
+ 		handled = true;
  	}
  
+@@ -753,8 +754,12 @@ static irqreturn_t smb347_interrupt(int irq, void *data)
+ 	 * disabled by the hardware.
+ 	 */
+ 	if (irqstat_c & (IRQSTAT_C_TERMINATION_IRQ | IRQSTAT_C_TAPER_IRQ)) {
+-		if (irqstat_c & IRQSTAT_C_TERMINATION_STAT)
+-			power_supply_changed(smb->battery);
++		if (irqstat_c & IRQSTAT_C_TERMINATION_STAT) {
++			if (smb->pdata->use_mains)
++				power_supply_changed(smb->mains);
++			if (smb->pdata->use_usb)
++				power_supply_changed(smb->usb);
++		}
+ 		dev_dbg(smb->dev, "going to HW maintenance mode\n");
+ 		handled = true;
+ 	}
+@@ -768,7 +773,10 @@ static irqreturn_t smb347_interrupt(int irq, void *data)
+ 
+ 		if (irqstat_d & IRQSTAT_D_CHARGE_TIMEOUT_STAT)
+ 			dev_warn(smb->dev, "charging stopped due to timeout\n");
+-		power_supply_changed(smb->battery);
++		if (smb->pdata->use_mains)
++			power_supply_changed(smb->mains);
++		if (smb->pdata->use_usb)
++			power_supply_changed(smb->usb);
+ 		handled = true;
+ 	}
+ 
+@@ -936,95 +944,19 @@ static int get_const_charge_voltage(struct smb347_charger *smb)
  	return intval;
-@@ -1317,6 +1321,7 @@ static int smb347_probe(struct i2c_client *client,
- 
- 	mutex_init(&smb->lock);
- 	smb->dev = &client->dev;
-+	smb->id = id->driver_data;
- 
- 	smb->regmap = devm_regmap_init_i2c(client, &smb347_regmap);
- 	if (IS_ERR(smb->regmap))
-@@ -1391,13 +1396,17 @@ static int smb347_remove(struct i2c_client *client)
  }
  
- static const struct i2c_device_id smb347_id[] = {
--	{ "smb347", 0 },
--	{ }
-+	{ "smb345", SMB345 },
-+	{ "smb347", SMB347 },
-+	{ "smb358", SMB358 },
-+	{}
- };
- MODULE_DEVICE_TABLE(i2c, smb347_id);
+-static int smb347_mains_get_property(struct power_supply *psy,
+-				     enum power_supply_property prop,
+-				     union power_supply_propval *val)
+-{
+-	struct smb347_charger *smb = power_supply_get_drvdata(psy);
+-	int ret;
+-
+-	switch (prop) {
+-	case POWER_SUPPLY_PROP_ONLINE:
+-		val->intval = smb->mains_online;
+-		break;
+-
+-	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+-		ret = get_const_charge_voltage(smb);
+-		if (ret < 0)
+-			return ret;
+-		else
+-			val->intval = ret;
+-		break;
+-
+-	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+-		ret = get_const_charge_current(smb);
+-		if (ret < 0)
+-			return ret;
+-		else
+-			val->intval = ret;
+-		break;
+-
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static enum power_supply_property smb347_mains_properties[] = {
+-	POWER_SUPPLY_PROP_ONLINE,
+-	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
+-	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
+-};
+-
+-static int smb347_usb_get_property(struct power_supply *psy,
+-				   enum power_supply_property prop,
+-				   union power_supply_propval *val)
+-{
+-	struct smb347_charger *smb = power_supply_get_drvdata(psy);
+-	int ret;
+-
+-	switch (prop) {
+-	case POWER_SUPPLY_PROP_ONLINE:
+-		val->intval = smb->usb_online;
+-		break;
+-
+-	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+-		ret = get_const_charge_voltage(smb);
+-		if (ret < 0)
+-			return ret;
+-		else
+-			val->intval = ret;
+-		break;
+-
+-	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+-		ret = get_const_charge_current(smb);
+-		if (ret < 0)
+-			return ret;
+-		else
+-			val->intval = ret;
+-		break;
+-
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+-static enum power_supply_property smb347_usb_properties[] = {
+-	POWER_SUPPLY_PROP_ONLINE,
+-	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
+-	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
+-};
+-
+-static int smb347_get_charging_status(struct smb347_charger *smb)
++static int smb347_get_charging_status(struct smb347_charger *smb,
++				      struct power_supply *psy)
+ {
+ 	int ret, status;
+ 	unsigned int val;
  
- static const struct of_device_id smb3xx_of_match[] = {
-+	{ .compatible = "summit,smb345" },
- 	{ .compatible = "summit,smb347" },
-+	{ .compatible = "summit,smb358" },
- 	{},
+-	if (!smb347_is_ps_online(smb))
+-		return POWER_SUPPLY_STATUS_DISCHARGING;
++	if (psy->desc->type == POWER_SUPPLY_TYPE_USB) {
++		if (!smb->usb_online)
++			return POWER_SUPPLY_STATUS_DISCHARGING;
++	} else {
++		if (!smb->mains_online)
++			return POWER_SUPPLY_STATUS_DISCHARGING;
++	}
+ 
+ 	ret = regmap_read(smb->regmap, STAT_C, &val);
+ 	if (ret < 0)
+@@ -1063,29 +995,29 @@ static int smb347_get_charging_status(struct smb347_charger *smb)
+ 	return status;
+ }
+ 
+-static int smb347_battery_get_property(struct power_supply *psy,
+-				       enum power_supply_property prop,
+-				       union power_supply_propval *val)
++static int smb347_get_property(struct power_supply *psy,
++			       enum power_supply_property prop,
++			       union power_supply_propval *val)
+ {
+ 	struct smb347_charger *smb = power_supply_get_drvdata(psy);
+-	const struct smb347_charger_platform_data *pdata = smb->pdata;
+ 	int ret;
+ 
+-	ret = smb347_update_ps_status(smb);
+-	if (ret < 0)
+-		return ret;
+-
+ 	switch (prop) {
+ 	case POWER_SUPPLY_PROP_STATUS:
+-		ret = smb347_get_charging_status(smb);
++		ret = smb347_get_charging_status(smb, psy);
+ 		if (ret < 0)
+ 			return ret;
+ 		val->intval = ret;
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+-		if (!smb347_is_ps_online(smb))
+-			return -ENODATA;
++		if (psy->desc->type == POWER_SUPPLY_TYPE_USB) {
++			if (!smb->usb_online)
++				return -ENODATA;
++		} else {
++			if (!smb->mains_online)
++				return -ENODATA;
++		}
+ 
+ 		/*
+ 		 * We handle trickle and pre-charging the same, and taper
+@@ -1104,24 +1036,25 @@ static int smb347_battery_get_property(struct power_supply *psy,
+ 		}
+ 		break;
+ 
+-	case POWER_SUPPLY_PROP_TECHNOLOGY:
+-		val->intval = pdata->battery_info.technology;
+-		break;
+-
+-	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+-		val->intval = pdata->battery_info.voltage_min_design;
+-		break;
+-
+-	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
+-		val->intval = pdata->battery_info.voltage_max_design;
++	case POWER_SUPPLY_PROP_ONLINE:
++		if (psy->desc->type == POWER_SUPPLY_TYPE_USB)
++			val->intval = smb->usb_online;
++		else
++			val->intval = smb->mains_online;
+ 		break;
+ 
+-	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+-		val->intval = pdata->battery_info.charge_full_design;
++	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
++		ret = get_const_charge_voltage(smb);
++		if (ret < 0)
++			return ret;
++		val->intval = ret;
+ 		break;
+ 
+-	case POWER_SUPPLY_PROP_MODEL_NAME:
+-		val->strval = pdata->battery_info.name;
++	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
++		ret = get_const_charge_current(smb);
++		if (ret < 0)
++			return ret;
++		val->intval = ret;
+ 		break;
+ 
+ 	default:
+@@ -1131,14 +1064,12 @@ static int smb347_battery_get_property(struct power_supply *psy,
+ 	return 0;
+ }
+ 
+-static enum power_supply_property smb347_battery_properties[] = {
++static enum power_supply_property smb347_properties[] = {
+ 	POWER_SUPPLY_PROP_STATUS,
+ 	POWER_SUPPLY_PROP_CHARGE_TYPE,
+-	POWER_SUPPLY_PROP_TECHNOLOGY,
+-	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
+-	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
+-	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+-	POWER_SUPPLY_PROP_MODEL_NAME,
++	POWER_SUPPLY_PROP_ONLINE,
++	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
++	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
  };
- MODULE_DEVICE_TABLE(of, smb3xx_of_match);
+ 
+ static bool smb347_volatile_reg(struct device *dev, unsigned int reg)
+@@ -1276,32 +1207,23 @@ static const struct regmap_config smb347_regmap = {
+ static const struct power_supply_desc smb347_mains_desc = {
+ 	.name		= "smb347-mains",
+ 	.type		= POWER_SUPPLY_TYPE_MAINS,
+-	.get_property	= smb347_mains_get_property,
+-	.properties	= smb347_mains_properties,
+-	.num_properties	= ARRAY_SIZE(smb347_mains_properties),
++	.get_property	= smb347_get_property,
++	.properties	= smb347_properties,
++	.num_properties	= ARRAY_SIZE(smb347_properties),
+ };
+ 
+ static const struct power_supply_desc smb347_usb_desc = {
+ 	.name		= "smb347-usb",
+ 	.type		= POWER_SUPPLY_TYPE_USB,
+-	.get_property	= smb347_usb_get_property,
+-	.properties	= smb347_usb_properties,
+-	.num_properties	= ARRAY_SIZE(smb347_usb_properties),
+-};
+-
+-static const struct power_supply_desc smb347_battery_desc = {
+-	.name		= "smb347-battery",
+-	.type		= POWER_SUPPLY_TYPE_BATTERY,
+-	.get_property	= smb347_battery_get_property,
+-	.properties	= smb347_battery_properties,
+-	.num_properties	= ARRAY_SIZE(smb347_battery_properties),
++	.get_property	= smb347_get_property,
++	.properties	= smb347_properties,
++	.num_properties	= ARRAY_SIZE(smb347_properties),
+ };
+ 
+ static int smb347_probe(struct i2c_client *client,
+ 			const struct i2c_device_id *id)
+ {
+-	static char *battery[] = { "smb347-battery" };
+-	struct power_supply_config mains_usb_cfg = {}, battery_cfg = {};
++	struct power_supply_config mains_usb_cfg = {};
+ 	struct device *dev = &client->dev;
+ 	struct smb347_charger *smb;
+ 	int ret;
+@@ -1331,8 +1253,6 @@ static int smb347_probe(struct i2c_client *client,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	mains_usb_cfg.supplied_to = battery;
+-	mains_usb_cfg.num_supplicants = ARRAY_SIZE(battery);
+ 	mains_usb_cfg.drv_data = smb;
+ 	mains_usb_cfg.of_node = dev->of_node;
+ 	if (smb->pdata->use_mains) {
+@@ -1352,17 +1272,6 @@ static int smb347_probe(struct i2c_client *client,
+ 		}
+ 	}
+ 
+-	battery_cfg.drv_data = smb;
+-	smb->battery = power_supply_register(dev, &smb347_battery_desc,
+-					     &battery_cfg);
+-	if (IS_ERR(smb->battery)) {
+-		if (smb->pdata->use_usb)
+-			power_supply_unregister(smb->usb);
+-		if (smb->pdata->use_mains)
+-			power_supply_unregister(smb->mains);
+-		return PTR_ERR(smb->battery);
+-	}
+-
+ 	/*
+ 	 * Interrupt pin is optional. If it is connected, we setup the
+ 	 * interrupt support here.
+@@ -1387,7 +1296,6 @@ static int smb347_remove(struct i2c_client *client)
+ 	if (client->irq)
+ 		smb347_irq_disable(smb);
+ 
+-	power_supply_unregister(smb->battery);
+ 	if (smb->pdata->use_usb)
+ 		power_supply_unregister(smb->usb);
+ 	if (smb->pdata->use_mains)
 -- 
 2.25.0
 
