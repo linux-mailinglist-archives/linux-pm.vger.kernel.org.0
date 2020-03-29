@@ -2,95 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0A6196CE7
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 13:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E61B196D4E
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Mar 2020 14:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727998AbgC2LRV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Mar 2020 07:17:21 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:42588 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726087AbgC2LRV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 07:17:21 -0400
-Received: by mail-pl1-f193.google.com with SMTP id e1so5510417plt.9;
-        Sun, 29 Mar 2020 04:17:20 -0700 (PDT)
+        id S1728096AbgC2MbT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Mar 2020 08:31:19 -0400
+Received: from mail-wr1-f50.google.com ([209.85.221.50]:46686 "EHLO
+        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727901AbgC2MbT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 08:31:19 -0400
+Received: by mail-wr1-f50.google.com with SMTP id j17so17501993wru.13;
+        Sun, 29 Mar 2020 05:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uKtR+5w7WQys8ZLticdbGtlBPUvMy1PtG4ZxAo5yrO8=;
-        b=J323auRWlF9o7SQj0lMxjvfYi4xcJSj9vs7cZj0Y+aBaps3F3n3P6WGEV1AJrZNfna
-         YRbaHlXQ720eOA9HVcX6lzpObjt3MSbCIwCdzDcaUxTTa6bI0s8SgCtQNHev93p52s4H
-         nzufCQOFgMC5EzfpG4j2HXAnXzy+VgJsh9gNcUxKtk/vvYeWb73k4xhLVFSV7bsy6iy2
-         Htznd+1/zmoLQ2MENk2mXE9VzqwMY6p2R3tWeIUnnTfs6qfhPAK33jMGj+Akc/QRISPW
-         bonKvyKYGN6p8IkaXgL9phmZxBvry+urn++5xZ+y6L6BdC720mv818dx1ox/HV+k5eHM
-         zT2w==
+        h=from:to:cc:subject:date:message-id;
+        bh=DLCZrMaHPWvggXWGu2AXl1Ge3rACIAAO1GldAOLGL4c=;
+        b=D8GnJcapGvU+PH3ZGmoLH0c0D7CaY3o1I9yCeVLNijTY653KJ6m1smTyZk0kI7LbiZ
+         le1syhZ99k5PTKiGbVPIUzG1K751wEzAqMhJPngYRoGqI1xYrJxqJj5R/97HKJURHPLt
+         nXsEyFobsd3z8Pqyi8AH6gG6ksHgtV3S1/DVDk+0wJMcBYNjmq+qVLiSReNYZGC0ETAR
+         h5KIHN7yHs0LfSmR/1fXIJlYfFtKEu5O6L+i8OUnYWv+77Blm/WX9MwO+kPJ7rskvc6d
+         lcUuv5OeFglESH+3XV26F1vYODWrSO8WOfWQf+9SiSdT5J4mon7vo9yNjjLn9AJC3jVB
+         vb+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uKtR+5w7WQys8ZLticdbGtlBPUvMy1PtG4ZxAo5yrO8=;
-        b=aRxQkyBmZWcbCksS5c/INZmLXq9+QYL9NfRdZcvQTiRjfXdRui/CRf+UA3/H2wiTV1
-         9Cs2AQQFKdgUrdr2nnDNLYzZW6xUli2SjO1h3G6NGd+dRHVKkmnxuKWTzMmFz+Kqh6oi
-         lEhiC7G+658CJ0VZmk7ft+JLi5TJSAMftG/AUldxAO7hRhAlU/0ga/vUsUz80mspkzLq
-         FZBUqJCJunrf6pNEbhAY6cRV0aEWWB5LwxvivUu+4PRYDbE/Lx8sS27wUjRF4lu9y39E
-         iUcDwy/hjDn42UTkeU1dnNF6vYTVQ1aq2hGcVekvuNZI4TvKXHueTr9KA6HlLh0Wtguo
-         Btdw==
-X-Gm-Message-State: ANhLgQ3B8NNjUTbaqYI9QVu9u7CvHFc4gdLKtj4AR+DF8NxyE7YYej7p
-        S+QUsNqSi6X0hLlGk8SjyHv2IORB8uy0nc7YMyQ=
-X-Google-Smtp-Source: ADFU+vvQE6KqrhJdYUsrklNm0AJtJVflTVU+/YJx9BrHWpwMyDeakevgTa1EnSsrYSC3YCH5EEn8L3lKoRvUSaolbs4=
-X-Received: by 2002:a17:902:5acb:: with SMTP id g11mr8051127plm.18.1585480639948;
- Sun, 29 Mar 2020 04:17:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200328001154.17313-1-sravanhome@gmail.com> <20200328001154.17313-5-sravanhome@gmail.com>
- <CAHp75VefP3oPyRJ=Z9Y5Wv3rSc-nJdKFLJ60YLdUbP5dFikS+w@mail.gmail.com>
- <36892440-99b2-10e8-1d7c-dd8c97e03a39@gmail.com> <CAHp75VdAfiSjkHhTnghZ__WAJCJTGSWBprJBPNmpkxZTjZuVgQ@mail.gmail.com>
- <3d811222-68fa-0992-eeeb-97d1c6d09608@gmail.com>
-In-Reply-To: <3d811222-68fa-0992-eeeb-97d1c6d09608@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 29 Mar 2020 14:17:08 +0300
-Message-ID: <CAHp75VdbRB109uZZ7HHNzgx68RtRsi64Re554bLtNiytRV3GGw@mail.gmail.com>
-Subject: Re: [PATCH v5 4/5] power: supply: Add support for mps mp2629 battery charger
-To:     saravanan sekar <sravanhome@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald <pmeerw@pmeerw.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=DLCZrMaHPWvggXWGu2AXl1Ge3rACIAAO1GldAOLGL4c=;
+        b=AyoSzHU84YpJYbvM+APfR0gpGnXgMQwWWDXeIGiXlKKUBVt3E3Vc9xyGgqNTRqQxjc
+         OJonSYMh0DbkbyibVBJFx7c74TEOCDn6u6+u9pNVcdn2rRfiS9TEmeHTOAK51aJQXVhg
+         sYVCCXz7MevmnK5ckXJtk6MgDKFhO9eRuD9D23TOB1tNzCoiZbGDddksd1yU67BNzIbr
+         PG63AQGXuYDHDaan1ya5Jc28RLspHjiTvll1i5SWm79BRQGVsx+0EoGJfN6T90QZ9cwa
+         znxyUrQUVtTl3LhvSqhR2Bzvg7X2goj3HPevhPASdOOgS9Ll25Ufy09Ii5rAycJUX/EQ
+         KqVA==
+X-Gm-Message-State: ANhLgQ0oSw7bvDZJWkHQVx9HpaSscqkJ9MEjR8h4kU8qOckZxQY9Ai2D
+        rPAJZzR0L/QDOsMzdWumS5LG2NUl01M=
+X-Google-Smtp-Source: ADFU+vvVzVBCsunK/Zx2Of6dHq6E4OhDh0yMUD+R2tH7v0oSXW4vgJzSeigjFx8xx0BdhhRqATnYTw==
+X-Received: by 2002:adf:ce90:: with SMTP id r16mr9913638wrn.237.1585485077208;
+        Sun, 29 Mar 2020 05:31:17 -0700 (PDT)
+Received: from localhost.localdomain (p5B3F6BD9.dip0.t-ipconnect.de. [91.63.107.217])
+        by smtp.gmail.com with ESMTPSA id f9sm17259108wrc.71.2020.03.29.05.31.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Mar 2020 05:31:16 -0700 (PDT)
+From:   Saravanan Sekar <sravanhome@gmail.com>
+To:     lee.jones@linaro.org, andy.shevchenko@gmail.com,
+        robh+dt@kernel.org, jic23@kernel.org, knaack.h@gmx.de,
+        lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        Saravanan Sekar <sravanhome@gmail.com>
+Subject: [PATCH v6 0/5] Add battery charger driver support for MP2629
+Date:   Sun, 29 Mar 2020 14:31:05 +0200
+Message-Id: <20200329123110.26482-1-sravanhome@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Mar 29, 2020 at 1:34 PM saravanan sekar <sravanhome@gmail.com> wrote:
-> On 28/03/20 7:44 pm, Andy Shevchenko wrote:
-> > On Sat, Mar 28, 2020 at 1:29 PM saravanan sekar <sravanhome@gmail.com> wrote:
-> >> On 28/03/20 12:02 pm, Andy Shevchenko wrote:
-> >>> On Sat, Mar 28, 2020 at 2:12 AM Saravanan Sekar <sravanhome@gmail.com> wrote:
+changes in v6:
+ - removed includes types.h in mfd, of_device.h in adc.
+ - fixed review comments parentheses, err check, kstrtouint
 
-...
+changes in v5:
+ - removed platfrom data stored in mfd and directly accessed mfd struct in child
+ - fixed spell check and capitalization in mfd and documentation
 
-> >>>> +       struct power_supply_config psy_cfg = {NULL};
-> >>> { 0 }
-> >>>
-> >> NULL to make compiler happy.
-> > Hmm... Can you share warning / error compiler issued in 0 case?
-> >
-> Please see the 0-day warning.
->
-> "Reported-by: kbuild test robot <lkp@intel.com>
-> sparse warnings: (new ones prefixed by >>)
->  >> drivers/power/supply/mp2629_charger.c:584:47: sparse: sparse: Using
-> plain integer as NULL pointer"
+changes in v4:
+ - fixed capitalization in mfg Kconfig and documentation
 
-I see. Grepping the code shows that for this certain structure other
-drivers are using simple '{}'. Can you align with them?
+changes in v3:
+ - regmap for children passed using platform data and remove mfd driver info
+   access directly from children
+
+changes in v2:
+ - removed EXPORT_SYMBOL of register set/get helper
+ - regmap bit filed used, fixed other review comments
+
+This patch series add support for Battery charger control driver for Monolithic
+Power System's MP2629 chipset, includes MFD driver for ADC battery & input
+power supply measurement and battery charger control driver.
+
+Thanks,
+Saravanan
+
+Saravanan Sekar (5):
+  dt-bindings: mfd: add document bindings for mp2629
+  mfd: mp2629: Add support for mps battery charger
+  iio: adc: mp2629: Add support for mp2629 ADC driver
+  power: supply: Add support for mps mp2629 battery charger
+  MAINTAINERS: Add entry for mp2629 Battery Charger driver
+
+ .../devicetree/bindings/mfd/mps,mp2629.yaml   |  60 ++
+ MAINTAINERS                                   |   5 +
+ drivers/iio/adc/Kconfig                       |  10 +
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/mp2629_adc.c                  | 207 ++++++
+ drivers/mfd/Kconfig                           |   9 +
+ drivers/mfd/Makefile                          |   2 +
+ drivers/mfd/mp2629.c                          |  86 +++
+ drivers/power/supply/Kconfig                  |  10 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/mp2629_charger.c         | 687 ++++++++++++++++++
+ include/linux/mfd/mp2629.h                    |  28 +
+ 12 files changed, 1106 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
+ create mode 100644 drivers/iio/adc/mp2629_adc.c
+ create mode 100644 drivers/mfd/mp2629.c
+ create mode 100644 drivers/power/supply/mp2629_charger.c
+ create mode 100644 include/linux/mfd/mp2629.h
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
+
