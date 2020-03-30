@@ -2,96 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D8919802F
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 17:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EE51980D2
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 18:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729664AbgC3PvK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 11:51:10 -0400
-Received: from mga04.intel.com ([192.55.52.120]:28872 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729319AbgC3PvK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Mar 2020 11:51:10 -0400
-IronPort-SDR: 4cCNJFXRPaIFB4ZrkXZDReYAm9WLQ5+0QgDJZCD2X3hnw71EEp1o6OxrLePWNsi/lERvmaffRs
- d2hxdTZ1PBdw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2020 08:51:10 -0700
-IronPort-SDR: awTv6nzme+vK11LpjmDAMs4bOM7/vA4lfqwerJ7UrVIY8AfRTdsQaudxE3DtL/bVtlwdLdOYGe
- tv/jiVIoUnkw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,324,1580803200"; 
-   d="scan'208";a="294617225"
-Received: from nzehfroo-mobl.amr.corp.intel.com (HELO spandruv-mobl3.jf.intel.com) ([10.135.21.18])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Mar 2020 08:51:09 -0700
-Message-ID: <7583412585916da6bb23d9352257c7768c509388.camel@linux.intel.com>
-Subject: Re: Why do I sometimes "lose" the "psys" RAPL counter?
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        "Kenneth R. Crudup" <kenny@panix.com>
-Cc:     linux-pm@lists.linux-foundation.org, rafael.j.wysocki@intel.com,
-        linux-pm@vger.kernel.org, "Liang, Kan" <kan.liang@intel.com>
-Date:   Mon, 30 Mar 2020 08:51:08 -0700
-In-Reply-To: <b772ca4f2c08cca65da9cf09b4a61157854669af.camel@intel.com>
-References: <alpine.DEB.2.21.2003252212220.2971@xps-7390>
-         <691eb7a6efd7a954295f234a70f548fd0c81e2f8.camel@intel.com>
-         <alpine.DEB.2.21.2003252353370.2971@xps-7390>
-         <7e1562ce93b83a685aa54dd2ae5a5b36c5737cb6.camel@intel.com>
-         <c9a24dfbc765c9c19d87094e5b2044f33431e501.camel@intel.com>
-         <alpine.DEB.2.21.2003260237130.26874@xps-7390>
-         <alpine.DEB.2.21.2003260311030.2844@xps-7390>
-         <b772ca4f2c08cca65da9cf09b4a61157854669af.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
+        id S1727826AbgC3QSz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 12:18:55 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:35846 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727437AbgC3QSy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 12:18:54 -0400
+Received: by mail-oi1-f195.google.com with SMTP id k18so16178107oib.3
+        for <linux-pm@vger.kernel.org>; Mon, 30 Mar 2020 09:18:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wfE74zLiZg+xrx3FvqZ/j+HBsHlEv6O/xxR+I/7ZTsE=;
+        b=Q4k0qN1sIOzhhsBRr7bwQjw7SDD6NKuoqcjleBHKUIxC9/P59aC8Pus7VEVtq0eslL
+         FqMIg9NNzTEerskeyFSxlOy7jlnQckLv0Cg0StkTZEuBO56Ojd+wQhQTID5Q7htHaMzc
+         KMkjAMGGmQSJz9YpIJ5VuTayuC3moeGoem1XhiwCRHMFhtq1f/HTT0ipARtl+O+rMPVJ
+         6FooPPK5HGe0JrpRa8Xl+kN0mbU7MV701vh0YFmqmzkbfvQfWvTyn7i+Rf4k2MMl3hsO
+         4CxDJo5Sv9d4b3oHOSQHvlseMX6NPXmzKjwYQd4WMfsC1Obt4TUZ7UDAwP+tkOBvZlLD
+         BBFQ==
+X-Gm-Message-State: ANhLgQ2hHxqIvb70NBAR5g3SQ+fQSdeZuSf02zaJds688H2ySsEQnQxa
+        hC48DiKjaPIiAJMJxjiT0BbXI24GfFcLGDvL9Qk=
+X-Google-Smtp-Source: ADFU+vsxC68jKwGAYQHNv/eComvYxUYuQVtTiALDOtrzH8GQ+5Q4bUpiC2X4ti3M8iKiycljzMU3JwFHujO/vJO9IFY=
+X-Received: by 2002:aca:5155:: with SMTP id f82mr47894oib.103.1585585133940;
+ Mon, 30 Mar 2020 09:18:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <CA+-Ga+e+LYW42jR3nGt+p8mxwT92Q1EwJvSrJpXHWbNA=shiaA@mail.gmail.com>
+In-Reply-To: <CA+-Ga+e+LYW42jR3nGt+p8mxwT92Q1EwJvSrJpXHWbNA=shiaA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 30 Mar 2020 18:18:42 +0200
+Message-ID: <CAJZ5v0jdf_Scdnm=WT0Q3swZ1QA-BbBzc_=dndSe5y3Js59-=Q@mail.gmail.com>
+Subject: Re: suspend to ram order of operations
+To:     pdev embedded <pdev.embedded@gmail.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2020-03-30 at 17:55 +0800, Zhang Rui wrote:
-> CC Kan.
-> 
-> By checking the RAPL PMU code, it is possible that rdmsr_safe fails
-> when reading MSR_PLATFORM_ENERGY_STATUS.
-> But we don't have any debug message showing the exact failure reason.
-> 
-> can you please apply the patch attached and see why psys probe fails?
-I could reproduce this. This fails because the Psys MSR read 0. Also
-the counter values are not correct as the incremental values are less
-than package energy counter values.
+On Mon, Mar 30, 2020 at 11:16 AM pdev embedded <pdev.embedded@gmail.com> wrote:
+>
+> In reading through the archives, I found the discussion of sys_sync()
+> and making the call optional, but I am still searching for a discussion
+> of why the operations are ordered the way they are.
+> 1.) (optionally) sys_sync
+> 2.) freeze user space
+> 3.) freeze kernel threads
+>
+> On an embedded system running Android where there are user space
+> processes (not under wakelock control) that generate a lot of IO,
+> freezing user space first helps reduce the time taken by sys_sync().
+> I believe this is because buffers are no longer being continually dirtied.
+>
+> What was the rationale for the ordering of operations when suspending to ram?
 
-Thanks,
-Srinivas
+The freezing of user space and the freezing of kernel threads were one
+operation to start with and filesystems could not be frozen before
+that.
 
-> 
-> thanks,
-> rui
-> 
-> On Thu, 2020-03-26 at 03:15 -0700, Kenneth R. Crudup wrote:
-> > So I just tested a few shutdown vs. reboot cycles, and if I reboot,
-> > I
-> > only
-> > get three counters. If I shutdown, then restart, I get 4 counters
-> > (including
-> > the "psys domain" one).
-> > 
-> > I tried it on a few kernels, including the oldest one that comes
-> > with
-> > my
-> > distro (5.3.0-40-generic) where all the RAPL stuff is made as
-> > modules.
-> > 
-> > So, maybe we're not "clearing" (wild guess here) the "psys" RAPL on
-> > a
-> > reboot,
-> > something that would happen on a cold boot? (I'm afraid to say the
-> > "B-word",
-> > as that would mean it's a Dell issue so I won't hold my breath
-> > waiting for
-> > a fix).
-> > 
-> > 	-Kenny
-> > 
+IIRC, nobody argued for an ordering change, so it stayed the way it had been.
 
+> If there is a lot of user-space filesystem activity, would
+> it not result in fewer dirty filesystem pages if enter_state()
+> ordered the operations as:
+> 1.) freeze user space
+> 2.) sys_sync
+> 3.) freeze kernel threads
+>
+> What am I missing?
+
+Probably the fact that you don't need the sync at all if suspend is
+reliable enough.
+
+Or if you want to be extra safe, it is better to trigger the sync from
+user space on a regular basis IMO.
