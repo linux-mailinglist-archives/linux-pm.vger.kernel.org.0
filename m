@@ -2,51 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C4C198772
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 00:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47301198777
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 00:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729197AbgC3WfK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 18:35:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49426 "EHLO mail.kernel.org"
+        id S1729878AbgC3WfL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 18:35:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49446 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728876AbgC3WfK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1729060AbgC3WfK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Mon, 30 Mar 2020 18:35:10 -0400
-Subject: Re: [GIT PULL] Power management updates for v5.7-rc1
+Subject: Re: [GIT PULL] ACPI updates for v5.7-rc1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585607709;
-        bh=jMq2T4Mf2LkqrJuXK6f8uYcGgFriY9O6ThWQhMT60Cc=;
+        s=default; t=1585607710;
+        bh=7IBOz4ePh/jjgfmw3X/FQZqGRPMvQmJNyVifg+HBytY=;
         h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=F8+nmvF9JiOBOVz5RIDcByDgZ66cTXCtTBcFr0BfImBPKdY9bY3JE0eEovylIm9WL
-         gGRzOLQJgkTNc/NwwnNeYth4FjZ3dQSeXW7v0K4WyEGKk4RKDuMk6TwJ555nhEan7o
-         Kmx4lefVodLfCflxmGg+mRywxK9tIqyL3JyMqSfE=
+        b=HkqyKkM9rsA4QRdy0qixISBiD7fGB/r26nNSA72sFpblStfpZaqXvDp0AhsNzXH8p
+         IMXKQe1ArtIph+dmAmlexNC47pRdgJLG5uc5sS32WksOUfmTRjIdQN2xcrsdIvY1DM
+         SovMlLIxa89MnQ/XpG9h0I9EOdSn0xtnwqmC8CqI=
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0g=DNuHWVqxgJunTDm0bwPXTfo02gEZLy+eAfZJptVNkQ@mail.gmail.com>
-References: <CAJZ5v0g=DNuHWVqxgJunTDm0bwPXTfo02gEZLy+eAfZJptVNkQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0ja_cmfL2Rwj-k-__B2QjH8kY-t2pM1Tg+yP0A=6kMYSg@mail.gmail.com>
+References: <CAJZ5v0ja_cmfL2Rwj-k-__B2QjH8kY-t2pM1Tg+yP0A=6kMYSg@mail.gmail.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0g=DNuHWVqxgJunTDm0bwPXTfo02gEZLy+eAfZJptVNkQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.7-rc1
-X-PR-Tracked-Commit-Id: 2409000a0cad2242fd4e2578f761f97069625478
+X-PR-Tracked-Message-Id: <CAJZ5v0ja_cmfL2Rwj-k-__B2QjH8kY-t2pM1Tg+yP0A=6kMYSg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+ acpi-5.7-rc1
+X-PR-Tracked-Commit-Id: 1da28f032305383a664e5711ba07b7957901a72e
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 49835c15a55225e9b3ff9cc9317135b334ea2d49
-Message-Id: <158560770946.3567.616164261452066926.pr-tracker-bot@kernel.org>
-Date:   Mon, 30 Mar 2020 22:35:09 +0000
+X-PR-Merge-Commit-Id: 6d90508121fd0c92c276ec731ad6109bf2986cc6
+Message-Id: <158560771002.3567.6314103050384706394.pr-tracker-bot@kernel.org>
+Date:   Mon, 30 Mar 2020 22:35:10 +0000
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+        Linux PM <linux-pm@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Mon, 30 Mar 2020 17:20:48 +0200:
+The pull request you sent on Mon, 30 Mar 2020 17:25:41 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.7-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.7-rc1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/49835c15a55225e9b3ff9cc9317135b334ea2d49
+https://git.kernel.org/torvalds/c/6d90508121fd0c92c276ec731ad6109bf2986cc6
 
 Thank you!
 
