@@ -2,76 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2FC19779C
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 11:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F93D197819
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 11:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727714AbgC3JQm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 05:16:42 -0400
-Received: from mail-yb1-f181.google.com ([209.85.219.181]:39935 "EHLO
-        mail-yb1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727276AbgC3JQm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 05:16:42 -0400
-Received: by mail-yb1-f181.google.com with SMTP id h205so8642554ybg.6
-        for <linux-pm@vger.kernel.org>; Mon, 30 Mar 2020 02:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=ih5Z51ea9CdLOkgrinM9yKV4FR/mbNeIlMKvCb0jTPs=;
-        b=HB05v7mPPv+NmyFaktVrQ5MNwPOo6xzpTi6s07NfSIajOLzN8cj4x0w0WMeyk+3hKk
-         HaHwyUmJ/xtMFG4W3X4SMcS4t2r9ePicWK9+e9hY03+EqjYItp0JxPicIvM6uDTOkKhn
-         pa+ZFiPfr6ipekqx13G5roFZOZg0pWy78PxNEm6OpW9wpsxsfgKbWygU4qRQSLVjIKeL
-         acBSEikCLULPybgzp9gcQH8MC8eOy+VhDhTKwPM22VEWlijApbmeJrvt/BWpJdPR272K
-         oUGhw0rQDw1aZJPm7TGaRdfP2QzchqGUi/mZT1EBSWvpZb6HPPLWAPhGJcURUcg2Lpbt
-         6p8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=ih5Z51ea9CdLOkgrinM9yKV4FR/mbNeIlMKvCb0jTPs=;
-        b=l39NfCFYkE+n4s3Tv3nFv/XMI6SVWtRN5y/2K0Hg27PMw4TN5xipuHE0nm9ub2MeVp
-         aroq2CcNTlnwV1RlUgq7ttXQFseZQ7TPPJk1qB2m2dyWEmWkE1Ax9CM8VP7ExN3d4Vco
-         JaEwH+dralt4w4rN+YVLWyasPeaMGlwDJRSbn+mVpZZcJLqVIu+pYSPYi4Jw+cliSUX5
-         ladBeWcO8ppo7JJo83BcHe1VJ+tZ1zZqapkKZ8ZOEi/5E/lL26ciMdyagttQI0ZO2Vpu
-         6f/nCRLp/nw/+rzvBuwILjnT2M6GCf+LZPccLAXXEOj1yI4Tx8TDTwZSZOU16jS04xfx
-         rtaw==
-X-Gm-Message-State: ANhLgQ3YFG0VPiJUpP6r3yoNCYpVssKmb84qzTT8Q7iXOWGgh7kAr94E
-        LHdMaBvX+0+/uPClFaJ1sdkUJt3dzoVUUjKKT9YuoeOp
-X-Google-Smtp-Source: ADFU+vtqL10eA4+th9gLtHeby+XK0cFP4LJjzpU2lCa0L1sijXak8/73WX6+P/5wv4DtB7yEHch+4LsI9tu4mqAxqNw=
-X-Received: by 2002:a25:ce8b:: with SMTP id x133mr17926650ybe.241.1585559800452;
- Mon, 30 Mar 2020 02:16:40 -0700 (PDT)
-MIME-Version: 1.0
-From:   pdev embedded <pdev.embedded@gmail.com>
-Date:   Mon, 30 Mar 2020 11:16:28 +0200
-Message-ID: <CA+-Ga+e+LYW42jR3nGt+p8mxwT92Q1EwJvSrJpXHWbNA=shiaA@mail.gmail.com>
-Subject: suspend to ram order of operations
-To:     linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1727874AbgC3Jz7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 05:55:59 -0400
+Received: from mga11.intel.com ([192.55.52.93]:39181 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727376AbgC3Jz7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 30 Mar 2020 05:55:59 -0400
+IronPort-SDR: FvnJtyr/RAAiLylN0YcWMFJh9LfTIsE1dUY+9nD1vEKHAVOVJ0l4uvSD805zmQlTkmkXBAWTik
+ 0nqDO0XP9ofA==
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2020 02:55:58 -0700
+IronPort-SDR: lD6nmQAjHR3xTM/q2XCw6dZ0gbs4L4F6PIMlI74bTOYIc0u7gidKXclstRN2384I2/2Bj0lbae
+ 9A1XUTPj9EbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,323,1580803200"; 
+   d="scan'208,223";a="421877155"
+Received: from yongxinj-mobl.ccr.corp.intel.com ([10.249.172.44])
+  by orsmga005.jf.intel.com with ESMTP; 30 Mar 2020 02:55:56 -0700
+Message-ID: <b772ca4f2c08cca65da9cf09b4a61157854669af.camel@intel.com>
+Subject: Re: Why do I sometimes "lose" the "psys" RAPL counter?
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     "Kenneth R. Crudup" <kenny@panix.com>
+Cc:     linux-pm@lists.linux-foundation.org, rafael.j.wysocki@intel.com,
+        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com,
+        "Liang, Kan" <kan.liang@intel.com>
+Date:   Mon, 30 Mar 2020 17:55:55 +0800
+In-Reply-To: <alpine.DEB.2.21.2003260311030.2844@xps-7390>
+References: <alpine.DEB.2.21.2003252212220.2971@xps-7390>
+          <691eb7a6efd7a954295f234a70f548fd0c81e2f8.camel@intel.com>
+          <alpine.DEB.2.21.2003252353370.2971@xps-7390>
+          <7e1562ce93b83a685aa54dd2ae5a5b36c5737cb6.camel@intel.com>
+         <c9a24dfbc765c9c19d87094e5b2044f33431e501.camel@intel.com>
+         <alpine.DEB.2.21.2003260237130.26874@xps-7390>
+         <alpine.DEB.2.21.2003260311030.2844@xps-7390>
+Content-Type: multipart/mixed; boundary="=-pfcN7GSNiH0ohNpEuG43"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In reading through the archives, I found the discussion of sys_sync()
-and making the call optional, but I am still searching for a discussion
-of why the operations are ordered the way they are.
-1.) (optionally) sys_sync
-2.) freeze user space
-3.) freeze kernel threads
 
-On an embedded system running Android where there are user space
-processes (not under wakelock control) that generate a lot of IO,
-freezing user space first helps reduce the time taken by sys_sync().
-I believe this is because buffers are no longer being continually dirtied.
+--=-pfcN7GSNiH0ohNpEuG43
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-What was the rationale for the ordering of operations when suspending to ram?
+CC Kan.
 
-If there is a lot of user-space filesystem activity, would
-it not result in fewer dirty filesystem pages if enter_state()
-ordered the operations as:
-1.) freeze user space
-2.) sys_sync
-3.) freeze kernel threads
+By checking the RAPL PMU code, it is possible that rdmsr_safe fails
+when reading MSR_PLATFORM_ENERGY_STATUS.
+But we don't have any debug message showing the exact failure reason.
 
-What am I missing?
+can you please apply the patch attached and see why psys probe fails?
 
-Thank you
--Peter
+thanks,
+rui
+
+On Thu, 2020-03-26 at 03:15 -0700, Kenneth R. Crudup wrote:
+> So I just tested a few shutdown vs. reboot cycles, and if I reboot, I
+> only
+> get three counters. If I shutdown, then restart, I get 4 counters
+> (including
+> the "psys domain" one).
+> 
+> I tried it on a few kernels, including the oldest one that comes with
+> my
+> distro (5.3.0-40-generic) where all the RAPL stuff is made as
+> modules.
+> 
+> So, maybe we're not "clearing" (wild guess here) the "psys" RAPL on a
+> reboot,
+> something that would happen on a cold boot? (I'm afraid to say the
+> "B-word",
+> as that would mean it's a Dell issue so I won't hold my breath
+> waiting for
+> a fix).
+> 
+> 	-Kenny
+> 
+
+--=-pfcN7GSNiH0ohNpEuG43
+Content-Disposition: attachment;
+	filename="0001-Debug-patch-to-check-psys-RAPL-DOMAIN-registration.patch"
+Content-Type: text/x-patch;
+	name="0001-Debug-patch-to-check-psys-RAPL-DOMAIN-registration.patch";
+	charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+RnJvbSA1NjJiZDRlNzI4NGViYzU2YWM2MDQzNDY2Y2NmMWM1N2RmZjMzMDAyIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBaaGFuZyBSdWkgPHJ1aS56aGFuZ0BpbnRlbC5jb20+CkRhdGU6
+IFN1biwgMjkgTWFyIDIwMjAgMTQ6MjY6MTggKzA4MDAKU3ViamVjdDogW1BBVENIXSBEZWJ1ZyBw
+YXRjaCB0byBjaGVjayBwc3lzIFJBUEwgRE9NQUlOIHJlZ2lzdHJhdGlvbi4KClNpZ25lZC1vZmYt
+Ynk6IFpoYW5nIFJ1aSA8cnVpLnpoYW5nQGludGVsLmNvbT4KLS0tCiBkcml2ZXJzL3Bvd2VyY2Fw
+L2ludGVsX3JhcGxfY29tbW9uLmMgfCAzICsrKwogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9u
+cygrKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9jb21tb24uYyBi
+L2RyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9jb21tb24uYwppbmRleCA3MzI1N2NmMTA3ZDku
+LmI4M2I4MDMxNTQ4MSAxMDA2NDQKLS0tIGEvZHJpdmVycy9wb3dlcmNhcC9pbnRlbF9yYXBsX2Nv
+bW1vbi5jCisrKyBiL2RyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9jb21tb24uYwpAQCAtMTA5
+NiwxMiArMTA5NiwxNCBAQCBpbnQgcmFwbF9hZGRfcGxhdGZvcm1fZG9tYWluKHN0cnVjdCByYXBs
+X2lmX3ByaXYgKnByaXYpCiAJcmEucmVnID0gcHJpdi0+cmVnc1tSQVBMX0RPTUFJTl9QTEFURk9S
+TV1bUkFQTF9ET01BSU5fUkVHX1NUQVRVU107CiAJcmEubWFzayA9IH4wOwogCXJldCA9IHByaXYt
+PnJlYWRfcmF3KDAsICZyYSk7CisJcHJpbnRrKCJwbGF0Zm9ybV9kb21haW46IHJlYWQgcmVnIDB4
+JXgsIHJldHVybiAweCV4LCByZXQgJWRcbiIsIHJhLnJlZywgcmEudmFsdWUsIHJldCk7CiAJaWYg
+KHJldCB8fCAhcmEudmFsdWUpCiAJCXJldHVybiAtRU5PREVWOwogCiAJcmEucmVnID0gcHJpdi0+
+cmVnc1tSQVBMX0RPTUFJTl9QTEFURk9STV1bUkFQTF9ET01BSU5fUkVHX0xJTUlUXTsKIAlyYS5t
+YXNrID0gfjA7CiAJcmV0ID0gcHJpdi0+cmVhZF9yYXcoMCwgJnJhKTsKKwlwcmludGsoInBsYXRm
+b3JtX2RvbWFpbjogcmVhZCByZWcgMHgleCwgcmV0dXJuIDB4JXgsIHJldCAlZFxuIiwgcmEucmVn
+LCByYS52YWx1ZSwgcmV0KTsKIAlpZiAocmV0IHx8ICFyYS52YWx1ZSkKIAkJcmV0dXJuIC1FTk9E
+RVY7CiAKQEAgLTExMjgsNiArMTEzMCw3IEBAIGludCByYXBsX2FkZF9wbGF0Zm9ybV9kb21haW4o
+c3RydWN0IHJhcGxfaWZfcHJpdiAqcHJpdikKIAogCWlmIChJU19FUlIocG93ZXJfem9uZSkpIHsK
+IAkJa2ZyZWUocmQpOworCQlwcmludGsoImZhaWxlZCB0byByZWdpc3RlciBwbGF0Zm9ybSBkb21h
+aW5cbiIpOwogCQlyZXR1cm4gUFRSX0VSUihwb3dlcl96b25lKTsKIAl9CiAKLS0gCjIuMTcuMQoK
+
+
+
+--=-pfcN7GSNiH0ohNpEuG43--
+
