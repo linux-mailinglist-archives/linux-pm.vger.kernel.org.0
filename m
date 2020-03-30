@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 430CD1971F0
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 03:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3371971EE
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 03:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727986AbgC3BJh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Mar 2020 21:09:37 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:43310 "EHLO
+        id S1728113AbgC3BJi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Mar 2020 21:09:38 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44882 "EHLO
         mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727549AbgC3BJh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 21:09:37 -0400
-Received: by mail-lj1-f196.google.com with SMTP id g27so16238725ljn.10;
+        with ESMTP id S1727926AbgC3BJi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 21:09:38 -0400
+Received: by mail-lj1-f196.google.com with SMTP id p14so16282742lji.11;
         Sun, 29 Mar 2020 18:09:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Udu7OKRG+/CbZ2nQefBdE74UpfG/AooeTF97o8fdi2s=;
-        b=D3O0fT0ZWBVmquYl71TWwdVjHQ7cP8VMkn59W72GwzYWFpkXgmLhldngem2Q7G5LpL
-         cOQWy3LBZ5tp1YCHoFaVGwdZUwA6cgq0+kVLIHlT1zbhR729s+VwR9PSvzONITqzM2dK
-         YnPKkVFHzDDns8BYeJwFpJFFTQyPXuFzJIfu6skP092aTHfMhRCmN0OHYozPmTtJUNG1
-         Mcy2RuSsuWWHa3DB9jpG0h58EEz5/uBh4YViAEUGTl2B6ClktNH6YsPPyUWncMdLSPsa
-         Mr5W/PUrO/Nk3ICrA7QxbyayrSYswOy1pjU9rKgORmN1V99uplJ07Jd+hUs3MdOTVb6+
-         4rIQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=SyPm2KUzhH4yj1dDse11pz3n8NBqlBEAYiobqyRVKu0=;
+        b=KP9TxrfH1Yf2u0M+Qtac+pS0JF1w7wo582/b4iHBGbtBNizsLtp/XIKOhtjx1hlfvL
+         R6t/LkbP+19Yq1EXACCNsU+pkMNzVT4AiHeHn/0lr4pEKcJuPzvoFZ/wxAPjKYR757Ho
+         a5PvbKFSiO3kOk24Yvx2hSWeACsEowJuj/Ub6d7ov70sS9Xbv9XPLdDICyRYEbiAUBj6
+         S4NuHgx2bM/09Q8WZ8qLgPNP0j9TzqOJajKK7y0Gm0gcGh4ZHlNMhv7R4N872aiyRql6
+         k5NMBWn9V+dwJ5HXs/lF6jcJ7NZaXjejWFecR//GK+8G8bhe2w94UnhZdEuzhkiLYSCx
+         P4LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Udu7OKRG+/CbZ2nQefBdE74UpfG/AooeTF97o8fdi2s=;
-        b=cAahNmn1Y9tE1alMX22lceEIeJJjGB3C08rEvyjFCJxK1kXiDpU4xEQr67sp7t0xv3
-         NMWfDh4V8mD505INg+QD+/+EPgVcLEoP+9MFp7d/p6vNpZ1Xa1bLlDOg90I5ZVbBbtgH
-         G3WlG5eJR3sYjx4NiBhRHGTEzGzqSDR5KmMuFHmbnnwwnQLT5mz+ZY6MCQCpfoeCvnaf
-         zzJUXX9Vwt0yY2csd/trHpQJLwsvHen48r7SHLp646cNQH+87iFawL6TaH6l0opcUPYF
-         akw+QZsI426gCbxKZDsbK7s/vWE3VTxtB19wTcQ5+Fetf1wqhZjTKiTeLVIOkL1ARNiT
-         p4LQ==
-X-Gm-Message-State: AGi0PubWok03P8kUy14fkzkhtNas3IrTbYe1kn0c9JHYMYrnxYEbokKA
-        Kxj9h3LWf7jbrYCf2S5lGlM=
-X-Google-Smtp-Source: APiQypKO9tO+QHLLk4JgIJ/tZL0Ry6Gmfgs/koA0hVjTlWYp+VFlA7h+920qGDYBL3bwmOdrhVGlEA==
-X-Received: by 2002:a2e:a173:: with SMTP id u19mr5855125ljl.67.1585530574240;
-        Sun, 29 Mar 2020 18:09:34 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=SyPm2KUzhH4yj1dDse11pz3n8NBqlBEAYiobqyRVKu0=;
+        b=DXGYEOOeLGdyw2vJ43owk79mJ5pwzlsfJhHie/45RCYRNYNG0Snuvuu/fpAWTqyItu
+         6Z3EL6uTkpfrM+cGYZCGvb5vgRBgaPEo/sMd8p+qNZvDBQny88mWmdhu9FUc4I+BKWlo
+         q5pj7jHpY6Njmst++PnEBtieqSz6ljYrKGUQMlT9BiecA+zKs9k2Ig7dRWKD0mpbvARz
+         /T3meIDsipDfC4qQnEzPxw4/MFbfx/pM2UZFzqS6G4qu0Ls25YfD6x+wpLdOgkjziLke
+         cHN2w+e4F+NIegqx1gkZcRMigiq9UBKw+JaANVNyk8Zo3CicNsyuKYvo5UiAzz8V7ngp
+         NpVQ==
+X-Gm-Message-State: AGi0Pub6TotPWsZaT+CN+Ran+pGkO6s1JFM9WMhAnPXyXXDOR7quyot/
+        cJjT23/eNPxgQGejn7z/Dew=
+X-Google-Smtp-Source: APiQypLbylsFxaY2bHTyqNbB0g8en9J+rivsuZCDeT0HmvlMHYmh+tF0t5nYIOiPUvnJQ/+pK6AF9A==
+X-Received: by 2002:a05:651c:310:: with SMTP id a16mr5341055ljp.275.1585530575210;
+        Sun, 29 Mar 2020 18:09:35 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.gmail.com with ESMTPSA id f23sm2449005lja.60.2020.03.29.18.09.32
+        by smtp.gmail.com with ESMTPSA id f23sm2449005lja.60.2020.03.29.18.09.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2020 18:09:33 -0700 (PDT)
+        Sun, 29 Mar 2020 18:09:34 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -53,106 +53,49 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v2 00/22] Introduce memory interconnect for NVIDIA Tegra SoCs
-Date:   Mon, 30 Mar 2020 04:08:42 +0300
-Message-Id: <20200330010904.27643-1-digetx@gmail.com>
+Subject: [PATCH v2 01/22] dt-bindings: memory: tegra20: mc: Document new interconnect property
+Date:   Mon, 30 Mar 2020 04:08:43 +0300
+Message-Id: <20200330010904.27643-2-digetx@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200330010904.27643-1-digetx@gmail.com>
+References: <20200330010904.27643-1-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+Memory controller is interconnected with memory clients and with the
+external memory controller. Document new interconnect property which
+turns memory controller into interconnect provider.
 
-This series brings initial support for memory interconnect to Tegra20 and
-Tegra30 SoCs. The interconnect provides are quite generic and should be
-suitable for all Tegra SoCs, but currently support is added only for these
-two generations of Tegra SoCs.
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ .../bindings/memory-controllers/nvidia,tegra20-mc.txt          | 3 +++
+ 1 file changed, 3 insertions(+)
 
-For the starter only display controllers are getting interconnect API
-support, others could be supported later on. The display controllers
-have the biggest demand for interconnect API right now because dynamic
-memory frequency scaling can't be done safely without taking into account
-bandwidth requirement from the displays.
-
-(!) Please note that the EMC patches are made on top of the other EMC
-    patches [1][2] that I was sending out recently.
-
-[1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=164165
-[2] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=165451
-
-Changelog:
-
-v2: - Instead of a single dma-mem interconnect path, the paths are now
-      defined per memory client.
-
-    - The EMC provider now uses #interconnect-cells=<0>.
-
-    - Dropped Tegra124 because there is no enough information about how to
-      properly calculate required EMC clock rate for it and I don't have
-      hardware for testing. Somebody else will have to work on it.
-
-    - Moved interconnect providers code into drivers/memory/tegra/*.
-
-    - Added "Create tegra20-devfreq device" patch because interconnect
-      is not very usable without the devfreq memory auto-scaling since
-      memory freq will be fixed to the display's requirement.
-
-Artur Świgoń (1):
-  interconnect: Relax requirement in of_icc_get_from_provider()
-
-Dmitry Osipenko (21):
-  dt-bindings: memory: tegra20: mc: Document new interconnect property
-  dt-bindings: memory: tegra20: emc: Document new interconnect property
-  dt-bindings: memory: tegra30: mc: Document new interconnect property
-  dt-bindings: memory: tegra30: emc: Document new interconnect property
-  dt-bindings: host1x: Document new interconnect properties
-  dt-bindings: memory: tegra20: Add memory client IDs
-  dt-bindings: memory: tegra30: Add memory client IDs
-  ARM: tegra: Add interconnect properties to Tegra20 device-tree
-  ARM: tegra: Add interconnect properties to Tegra30 device-tree
-  memory: tegra: Register as interconnect provider
-  memory: tegra20-emc: Use devm_platform_ioremap_resource
-  memory: tegra20-emc: Continue probing if timings are missing in
-    device-tree
-  memory: tegra20-emc: Register as interconnect provider
-  memory: tegra20-emc: Create tegra20-devfreq device
-  memory: tegra30-emc: Continue probing if timings are missing in
-    device-tree
-  memory: tegra30-emc: Register as interconnect provider
-  drm/tegra: dc: Support memory bandwidth management
-  drm/tegra: dc: Tune up high priority request controls for Tegra20
-  drm/tegra: dc: Extend debug stats with total number of events
-  ARM: tegra: Enable interconnect API in tegra_defconfig
-  ARM: multi_v7_defconfig: Enable interconnect API
-
- .../display/tegra/nvidia,tegra20-host1x.txt   |  68 +++++
- .../memory-controllers/nvidia,tegra20-emc.txt |   2 +
- .../memory-controllers/nvidia,tegra20-mc.txt  |   3 +
- .../nvidia,tegra30-emc.yaml                   |   6 +
- .../memory-controllers/nvidia,tegra30-mc.yaml |   5 +
- arch/arm/boot/dts/tegra20.dtsi                |  22 +-
- arch/arm/boot/dts/tegra30.dtsi                |  23 +-
- arch/arm/configs/multi_v7_defconfig           |   1 +
- arch/arm/configs/tegra_defconfig              |   1 +
- drivers/gpu/drm/tegra/dc.c                    | 289 +++++++++++++++++-
- drivers/gpu/drm/tegra/dc.h                    |  13 +
- drivers/gpu/drm/tegra/drm.c                   |  19 ++
- drivers/gpu/drm/tegra/plane.c                 |   1 +
- drivers/gpu/drm/tegra/plane.h                 |   4 +-
- drivers/interconnect/core.c                   |  11 +-
- drivers/memory/tegra/mc.c                     | 118 +++++++
- drivers/memory/tegra/mc.h                     |   8 +
- drivers/memory/tegra/tegra20-emc.c            | 161 ++++++++--
- drivers/memory/tegra/tegra30-emc.c            | 144 ++++++++-
- include/dt-bindings/memory/tegra20-mc.h       |  53 ++++
- include/dt-bindings/memory/tegra30-mc.h       |  67 ++++
- include/soc/tegra/mc.h                        |   3 +
- 22 files changed, 975 insertions(+), 47 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt
+index e55328237df4..739b7c6f2e26 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt
++++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra20-mc.txt
+@@ -16,6 +16,8 @@ Required properties:
+   IOMMU specifier needed to encode an address. GART supports only a single
+   address space that is shared by all devices, therefore no additional
+   information needed for the address encoding.
++- #interconnect-cells : Should be 1. This cell represents memory client.
++  The assignments may be found in header file <dt-bindings/memory/tegra20-mc.h>.
+ 
+ Example:
+ 	mc: memory-controller@7000f000 {
+@@ -27,6 +29,7 @@ Example:
+ 		interrupts = <GIC_SPI 77 0x04>;
+ 		#reset-cells = <1>;
+ 		#iommu-cells = <0>;
++		#interconnect-cells = <1>;
+ 	};
+ 
+ 	video-codec@6001a000 {
 -- 
 2.25.1
 
