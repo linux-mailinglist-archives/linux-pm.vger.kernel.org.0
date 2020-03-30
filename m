@@ -2,87 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 577251973C5
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 07:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D7C1973E5
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 07:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728120AbgC3FTZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 01:19:25 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:12647 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727706AbgC3FTZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 01:19:25 -0400
-X-UUID: 0f20d00ab22441028f7c2718f3f30338-20200330
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=PiWLw0TeG7GcgBMd5OgryJCpKyO8lgrXQHDKaqgPG58=;
-        b=H51wOSB4E8IfmA8XEkPuCE4rb6zVrbPrgRG7NerAS16eswoZuZgmsBARj6W8ThUSXXAKCZSRNlHf77IQsb1QfsjsVqVy/q4wIKsHIie6dIkpwrxtcPhdUfv/zkse4bpy1kBhyRdQzj5lKUEL6gxH2Rw8LIgDyt6AsteDnWyAONc=;
-X-UUID: 0f20d00ab22441028f7c2718f3f30338-20200330
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <henryc.chen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 5589251; Mon, 30 Mar 2020 13:19:15 +0800
-Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 30 Mar 2020 13:19:12 +0800
-Received: from [172.21.77.4] (172.21.77.4) by mtkcas09.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 30 Mar 2020 13:19:11 +0800
-Message-ID: <1585545553.32635.10.camel@mtksdaap41>
-Subject: Re: [PATCH V4 11/13] dt-bindings: regulator: add DVFSRC regulator
- dt-bindings
-From:   Henry Chen <henryc.chen@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Viresh Kumar" <vireshk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ryan Case <ryandcase@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Nicolas Boichat" <drinkcat@google.com>,
-        Fan Chen <fan.chen@mediatek.com>,
-        James Liao <jamesjj.liao@mediatek.com>,
-        Arvin Wang <arvin.wang@mediatek.com>,
-        "Mike Turquette" <mturquette@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>
-Date:   Mon, 30 Mar 2020 13:19:13 +0800
-In-Reply-To: <20200324203833.GL7039@sirena.org.uk>
-References: <1584092066-24425-1-git-send-email-henryc.chen@mediatek.com>
-         <1584092066-24425-12-git-send-email-henryc.chen@mediatek.com>
-         <20200324203833.GL7039@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1728593AbgC3Fd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 01:33:58 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:41097 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726772AbgC3Fd6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 01:33:58 -0400
+Received: by mail-qk1-f193.google.com with SMTP id q188so17758286qke.8;
+        Sun, 29 Mar 2020 22:33:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=TvWzKkYFcT/K0oIgPGrhoik5wBx/4H13zpvGqzjSYkE=;
+        b=FklpY26XWLIPwB2xNmljWmzrY6KioJytzALrAqFR8/uz/IDUwXIZz8yxfJgZ8h1jPu
+         1U7WypEfu6NedFNeG9VVZ8Xj/1FZrFPUmU5l/OQV3aygioko88YG4v9ci/3OjLHzbfQ+
+         +CpYZBQ0kXDB3vVMNTkuvaVIQDYdoyb37FVCVg1VXcipEBs/ku/WGJ/6RpXnRiEkiwlo
+         wGB+PFDQt3w3YcztdFx3+vg7Fak0yV0pA15LloY/mP8wvK3+3V4aYwKwxK1hx6VqK3Yk
+         79QFcWj9WdLOiCMWqfQsf+bigAVVY4xb3dyYTBKwfqGP9cAMQmnBbUzhIef1fjq2lnSD
+         Hsvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=TvWzKkYFcT/K0oIgPGrhoik5wBx/4H13zpvGqzjSYkE=;
+        b=d1zIWofqeWhs2iIhJszPrX65kW+0JY4MlilIvcN4fy+C9JlI8EquX+Jen6rYiIbf5g
+         vDERKzg5i1/N0z2lZZub+qBwEEQYUalGTzYgGdD9xiW6KLKP6dcNuSxqeqpFctx0BMKg
+         gCEedtKR/p8D4hNPE287oUJk2soar05vWlUES2r3lwFdA++YJ/2Nu0GgzVpJjXMoGlMp
+         KWGfiEMQEFMGAoZ1H2S8FMNKqQaVBRYyJ6iTmwaCKizAxO3UsdWI4FuBS/fmcRROiHmw
+         KjpGk/RGN6YE5gT8uAY0UUe3GDKVHFrsU3m0S7c7SZj1TirI/vBloheMSaN2L2o6EJvk
+         QSdg==
+X-Gm-Message-State: ANhLgQ0TqCJ3JJ9jhpZ56L3js8keBnXIraZUW1nuyG7AQAk+ydiJHCKm
+        Z73gFMH5Eo51P/zH2xZBqPsQAcap+O8=
+X-Google-Smtp-Source: ADFU+vsl+Mls90arlqKr2QZj0zBIml+lQgHGpmSH6avRTtpcwpX1lPy2hIJg3y3OV5tlWqDqqHe+EA==
+X-Received: by 2002:a37:4fd0:: with SMTP id d199mr10029700qkb.121.1585546437276;
+        Sun, 29 Mar 2020 22:33:57 -0700 (PDT)
+Received: from localhost.localdomain (c-73-39-36-110.hsd1.dc.comcast.net. [73.39.36.110])
+        by smtp.gmail.com with ESMTPSA id q44sm10797571qtq.11.2020.03.29.22.33.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Mar 2020 22:33:56 -0700 (PDT)
+Date:   Mon, 30 Mar 2020 01:33:55 -0400
+From:   Geordan Neukum <gneukum1@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     gneukum1@gmail.com
+Subject: [PATCH] power: supply: max17042_battery: Add support for the TTE_NOW
+ prop
+Message-ID: <20200330053352.GA28178@localhost.localdomain>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgTWFyaywNCk9uIFR1ZSwgMjAyMC0wMy0yNCBhdCAyMDozOCArMDAwMCwgTWFyayBCcm93biB3
-cm90ZToNCj4gT24gRnJpLCBNYXIgMTMsIDIwMjAgYXQgMDU6MzQ6MjRQTSArMDgwMCwgSGVucnkg
-Q2hlbiB3cm90ZToNCj4gDQo+ID4gKy0gcmVndWxhdG9yIDogVGhlIERWRlNSQyByZWd1bGF0b3Ig
-aXMgbW9kZWxsZWQgYXMgYSBzdWJkZXZpY2Ugb2YgdGhlIERWRlNSQy4NCj4gPiArCUJlY2F1c2Ug
-RFZGU1JDIGNhbiByZXF1ZXN0IHBvd2VyIGRpcmVjdGx5IHZpYSByZWdpc3RlciByZWFkL3dyaXRl
-LCBsaWtlcw0KPiA+ICsJdmNvcmUgd2hpY2ggaXMgYSBjb3JlIHBvd2VyIG9mIG10ODE4My4gQXMg
-c3VjaCwgdGhlIERWRlNSQyByZWd1bGF0b3INCj4gPiArCXJlcXVpcmVzIHRoYXQgRFZGU1JDIG5v
-ZGVzIGJlIHByZXNlbnQuIHNoYWxsIGNvbnRhaW4gb25seSBvbmUgb2YgdGhlDQo+ID4gKwlmb2xs
-b3dpbmc6ICJtZWRpYXRlayxtdDgxODMtZHZmc3JjLXJlZ3VsYXRvciINCj4gDQo+IFdoeSBkbyB3
-ZSBldmVuIG5lZWQgYSBjb21wYXRpYmxlIGhlcmUgLSBpdCdzIG5vdCBhZGRpbmcgYW55IG5ldw0K
-PiBpbmZvcm1hdGlvbiB0byB0aGUgcGFyZW50IG10ODE4MyBub2RlLCB0aGUgY29tcGF0aWJsZSBp
-cyBtYWlubHkgZm9yIHRoZQ0KPiB3YXkgTGludXggZGl2aWRlcyB0aGluZ3MgdXAgcmF0aGVyIHRo
-YW4gYSBkZXNjcmlwdGlvbiBvZiB0aGUgaGFyZHdhcmUuDQo+IFdlIGNvdWxkIGp1c3Qgc2F5IHRo
-YXQgdGhlIHJlZ3VsYXRvciBub2RlIGFsd2F5cyBoYXMgYSBwYXJ0aWN1bGFyIG5hbWUNCj4gaW5z
-dGVhZC4NClNvcnJ5LCBub3QgcXVpdGUgc3VyZSB3aGF0IHlvdSBtZWFuLCBiZWNhdXNlIEkgdGhp
-bmsgRFZGU1JDIGlzIGENCnJlZ3VsYXRvciBwcm92aWRlciB0aGF0IGNhbiBwcm92aWRlIHZjb3Jl
-IHZvbHRhZ2UgY29udHJvbCBvbiBtdDgxODMsIGFuZA0KaXQgY2FuIHByb3ZpZGUgbW9yZSBwb3dl
-ciBjb250cm9sIGluIHRoZSBuZXh0IGdlbmVyYXRpb24gTWVkaWF0ZWsgU09DLg0KSGVyZSBJIGFk
-ZCBhIHN1Yi1ub2RlIHRvIGRlc2NyaWJlIGl0LiBPciBzaG91bGQgSSBtb3ZlIHRoaXMgbm9kZSB0
-bw0KcmVndWxhdG9yIGZvbGRlcj8gDQoNCj4gDQo+IEl0J3MgYWxzbyBub3QgcXVpdGUgdHJ1ZSB0
-aGF0IGl0IGNvbnRhaW5zICJvbmx5IiB0aGUgY29tcGF0aWJsZSAtIGl0DQo+IGFsc28gYWxsb3dz
-IHRoZSByZWd1bGF0b3IgY29uc3RyYWludHMgdG8gYmUgZGVmaW5lZC4NCg0K
+The max170{42,47,50,55} family of fuel gauges all provide time-to-empty
+estimation. As such, let's export this as a property.
+
+Signed-off-by: Geordan Neukum <gneukum1@gmail.com>
+---
+ drivers/power/supply/max17042_battery.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
+index 69ec4295d55d..f284547913d6 100644
+--- a/drivers/power/supply/max17042_battery.c
++++ b/drivers/power/supply/max17042_battery.c
+@@ -87,6 +87,7 @@ static enum power_supply_property max17042_battery_props[] = {
+ 	POWER_SUPPLY_PROP_SCOPE,
+ 	POWER_SUPPLY_PROP_CURRENT_NOW,
+ 	POWER_SUPPLY_PROP_CURRENT_AVG,
++	POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW,
+ };
+
+ static int max17042_get_temperature(struct max17042_chip *chip, int *temp)
+@@ -411,6 +412,13 @@ static int max17042_get_property(struct power_supply *psy,
+ 			return -EINVAL;
+ 		}
+ 		break;
++	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
++		ret = regmap_read(map, MAX17042_TTE, &data);
++		if (ret < 0)
++			return ret;
++
++		val->intval = data * 5625 / 1000;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+--
+2.18.1
 
