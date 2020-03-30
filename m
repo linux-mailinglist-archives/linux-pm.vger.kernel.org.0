@@ -2,127 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B86E41970B5
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 00:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430CD1971F0
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 03:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729154AbgC2WHX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Mar 2020 18:07:23 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34358 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729247AbgC2WHW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 18:07:22 -0400
-Received: by mail-wr1-f66.google.com with SMTP id 65so18970384wrl.1
-        for <linux-pm@vger.kernel.org>; Sun, 29 Mar 2020 15:07:20 -0700 (PDT)
+        id S1727986AbgC3BJh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Mar 2020 21:09:37 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:43310 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727549AbgC3BJh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 21:09:37 -0400
+Received: by mail-lj1-f196.google.com with SMTP id g27so16238725ljn.10;
+        Sun, 29 Mar 2020 18:09:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=1LHaTJUSb6YlKNJo8uEXGOXHLnntD8wG0lKLYJJal8o=;
-        b=ncVvgdoulw7o7+hBR1P2C+5Gs5JoBGlqRw0Sy1xicTm6q81nvOAS+m7a5UAWRL9hRH
-         yEbh65k8Qx8xlZhH0t43wKusHLa9vKtTn3P+o7chr1k8b9HOg212dwNDe5UIqqTkPvM5
-         NjK59RhAv/AjjS9C+ePeOxUTr8KWfjEGW0BnrhZMLZGYwJHih6Qa7NlJ/q3h/TBv2CvI
-         qzt8o6Axgo5Rp3OXRAuFzRgZOB7AaPhJpa0QD51Rx0V4DJiIolUALmRUp3al9xzVNBGD
-         TgMdtaHIkMZxLrKJPW3dDuRzt6b6bi9q5B+CInP1E93ReaqlZkh762PlTAokY1xMgBP/
-         HxFw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Udu7OKRG+/CbZ2nQefBdE74UpfG/AooeTF97o8fdi2s=;
+        b=D3O0fT0ZWBVmquYl71TWwdVjHQ7cP8VMkn59W72GwzYWFpkXgmLhldngem2Q7G5LpL
+         cOQWy3LBZ5tp1YCHoFaVGwdZUwA6cgq0+kVLIHlT1zbhR729s+VwR9PSvzONITqzM2dK
+         YnPKkVFHzDDns8BYeJwFpJFFTQyPXuFzJIfu6skP092aTHfMhRCmN0OHYozPmTtJUNG1
+         Mcy2RuSsuWWHa3DB9jpG0h58EEz5/uBh4YViAEUGTl2B6ClktNH6YsPPyUWncMdLSPsa
+         Mr5W/PUrO/Nk3ICrA7QxbyayrSYswOy1pjU9rKgORmN1V99uplJ07Jd+hUs3MdOTVb6+
+         4rIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=1LHaTJUSb6YlKNJo8uEXGOXHLnntD8wG0lKLYJJal8o=;
-        b=tH89z5Db8QtMoBchc0qDRyedyXOMY6i4jjOcWmOBV2qGdJflCpXRDYKp3PVIFfnWWe
-         aqZMo259wqStqXNBQJzm+KoHEdoBM3vj36Lr18Nb+OJWvacajjfqfLt7ZatZQMs6a6+4
-         ZEJtGDO4h2fS9wbWIjaU07NVro8Vrz2QjEkg4Xp3iWIAhfnIbpWHXXueen8lCH9E/iC5
-         CIoA4UHCzg25B8EJGldrT3v7SnytLYhVeSlD4e+DJJ7TI0nGehtKAlcWMOme3pl5Fpuz
-         L/4XXDq084nUgUfiOwUDZFFycR7puISawxPW2AgvgVes4PBysA2GZGlTJLkY+9PQywCt
-         ChKA==
-X-Gm-Message-State: ANhLgQ1SetKqKo+Caky9jylgrems3C26/IdylCe5NSna1PRoWve152P1
-        4q4TudTDiLNPQMlQ/H8+m+Ii+g==
-X-Google-Smtp-Source: ADFU+vuZAg1AC05bxtW27+WzlliBGq0FOpLpXh2o2GNXEgxWNashf38ZSEyqqKofOBjuURsc40gIDw==
-X-Received: by 2002:a5d:4d07:: with SMTP id z7mr11842551wrt.92.1585519639340;
-        Sun, 29 Mar 2020 15:07:19 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e34:ed2f:f020:78b1:4459:6959:42d0])
-        by smtp.gmail.com with ESMTPSA id j188sm20026740wmj.36.2020.03.29.15.07.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Udu7OKRG+/CbZ2nQefBdE74UpfG/AooeTF97o8fdi2s=;
+        b=cAahNmn1Y9tE1alMX22lceEIeJJjGB3C08rEvyjFCJxK1kXiDpU4xEQr67sp7t0xv3
+         NMWfDh4V8mD505INg+QD+/+EPgVcLEoP+9MFp7d/p6vNpZ1Xa1bLlDOg90I5ZVbBbtgH
+         G3WlG5eJR3sYjx4NiBhRHGTEzGzqSDR5KmMuFHmbnnwwnQLT5mz+ZY6MCQCpfoeCvnaf
+         zzJUXX9Vwt0yY2csd/trHpQJLwsvHen48r7SHLp646cNQH+87iFawL6TaH6l0opcUPYF
+         akw+QZsI426gCbxKZDsbK7s/vWE3VTxtB19wTcQ5+Fetf1wqhZjTKiTeLVIOkL1ARNiT
+         p4LQ==
+X-Gm-Message-State: AGi0PubWok03P8kUy14fkzkhtNas3IrTbYe1kn0c9JHYMYrnxYEbokKA
+        Kxj9h3LWf7jbrYCf2S5lGlM=
+X-Google-Smtp-Source: APiQypKO9tO+QHLLk4JgIJ/tZL0Ry6Gmfgs/koA0hVjTlWYp+VFlA7h+920qGDYBL3bwmOdrhVGlEA==
+X-Received: by 2002:a2e:a173:: with SMTP id u19mr5855125ljl.67.1585530574240;
+        Sun, 29 Mar 2020 18:09:34 -0700 (PDT)
+Received: from localhost.localdomain (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
+        by smtp.gmail.com with ESMTPSA id f23sm2449005lja.60.2020.03.29.18.09.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2020 15:07:18 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org, robh@kernel.org
-Cc:     daniel.lezcano@linaro.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-pm@vger.kernel.org (open list:CPU IDLE TIME MANAGEMENT FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list),
-        linux-arm-kernel@lists.infradead.org (open list:CPUIDLE DRIVER - ARM
-        PSCI)
-Subject: [PATCH 4/4] thermal: cpuidle: Register cpuidle cooling device
-Date:   Mon, 30 Mar 2020 00:03:20 +0200
-Message-Id: <20200329220324.8785-4-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200329220324.8785-1-daniel.lezcano@linaro.org>
-References: <20200329220324.8785-1-daniel.lezcano@linaro.org>
+        Sun, 29 Mar 2020 18:09:33 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 00/22] Introduce memory interconnect for NVIDIA Tegra SoCs
+Date:   Mon, 30 Mar 2020 04:08:42 +0300
+Message-Id: <20200330010904.27643-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The cpuidle driver can be used as a cooling device by injecting idle
-cycles. The DT binding for the idle state added an optional
+Hello,
 
-When the property is set, register the cpuidle driver with the idle
-state node pointer as a cooling device. The thermal framework will do
-the association automatically with the thermal zone via the
-cooling-device defined in the device tree cooling-maps section.
+This series brings initial support for memory interconnect to Tegra20 and
+Tegra30 SoCs. The interconnect provides are quite generic and should be
+suitable for all Tegra SoCs, but currently support is added only for these
+two generations of Tegra SoCs.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/cpuidle/cpuidle-arm.c  | 5 +++++
- drivers/cpuidle/cpuidle-psci.c | 5 +++++
- 2 files changed, 10 insertions(+)
+For the starter only display controllers are getting interconnect API
+support, others could be supported later on. The display controllers
+have the biggest demand for interconnect API right now because dynamic
+memory frequency scaling can't be done safely without taking into account
+bandwidth requirement from the displays.
 
-diff --git a/drivers/cpuidle/cpuidle-arm.c b/drivers/cpuidle/cpuidle-arm.c
-index 9e5156d39627..2406ac0ae134 100644
---- a/drivers/cpuidle/cpuidle-arm.c
-+++ b/drivers/cpuidle/cpuidle-arm.c
-@@ -8,6 +8,7 @@
- 
- #define pr_fmt(fmt) "CPUidle arm: " fmt
- 
-+#include <linux/cpu_cooling.h>
- #include <linux/cpuidle.h>
- #include <linux/cpumask.h>
- #include <linux/cpu_pm.h>
-@@ -124,6 +125,10 @@ static int __init arm_idle_init_cpu(int cpu)
- 	if (ret)
- 		goto out_kfree_drv;
- 
-+	ret = cpuidle_cooling_register(drv);
-+	if (ret)
-+		pr_err("Failed to register the idle cooling device: %d\n", ret);
-+
- 	return 0;
- 
- out_kfree_drv:
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index edd7a54ef0d3..8e805bff646f 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -9,6 +9,7 @@
- #define pr_fmt(fmt) "CPUidle PSCI: " fmt
- 
- #include <linux/cpuhotplug.h>
-+#include <linux/cpu_cooling.h>
- #include <linux/cpuidle.h>
- #include <linux/cpumask.h>
- #include <linux/cpu_pm.h>
-@@ -305,6 +306,10 @@ static int __init psci_idle_init_cpu(int cpu)
- 	if (ret)
- 		goto out_kfree_drv;
- 
-+	ret = cpuidle_cooling_register(drv);
-+	if (ret)
-+		pr_err("Failed to register the idle cooling device: %d\n", ret);
-+
- 	return 0;
- 
- out_kfree_drv:
+(!) Please note that the EMC patches are made on top of the other EMC
+    patches [1][2] that I was sending out recently.
+
+[1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=164165
+[2] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=165451
+
+Changelog:
+
+v2: - Instead of a single dma-mem interconnect path, the paths are now
+      defined per memory client.
+
+    - The EMC provider now uses #interconnect-cells=<0>.
+
+    - Dropped Tegra124 because there is no enough information about how to
+      properly calculate required EMC clock rate for it and I don't have
+      hardware for testing. Somebody else will have to work on it.
+
+    - Moved interconnect providers code into drivers/memory/tegra/*.
+
+    - Added "Create tegra20-devfreq device" patch because interconnect
+      is not very usable without the devfreq memory auto-scaling since
+      memory freq will be fixed to the display's requirement.
+
+Artur Świgoń (1):
+  interconnect: Relax requirement in of_icc_get_from_provider()
+
+Dmitry Osipenko (21):
+  dt-bindings: memory: tegra20: mc: Document new interconnect property
+  dt-bindings: memory: tegra20: emc: Document new interconnect property
+  dt-bindings: memory: tegra30: mc: Document new interconnect property
+  dt-bindings: memory: tegra30: emc: Document new interconnect property
+  dt-bindings: host1x: Document new interconnect properties
+  dt-bindings: memory: tegra20: Add memory client IDs
+  dt-bindings: memory: tegra30: Add memory client IDs
+  ARM: tegra: Add interconnect properties to Tegra20 device-tree
+  ARM: tegra: Add interconnect properties to Tegra30 device-tree
+  memory: tegra: Register as interconnect provider
+  memory: tegra20-emc: Use devm_platform_ioremap_resource
+  memory: tegra20-emc: Continue probing if timings are missing in
+    device-tree
+  memory: tegra20-emc: Register as interconnect provider
+  memory: tegra20-emc: Create tegra20-devfreq device
+  memory: tegra30-emc: Continue probing if timings are missing in
+    device-tree
+  memory: tegra30-emc: Register as interconnect provider
+  drm/tegra: dc: Support memory bandwidth management
+  drm/tegra: dc: Tune up high priority request controls for Tegra20
+  drm/tegra: dc: Extend debug stats with total number of events
+  ARM: tegra: Enable interconnect API in tegra_defconfig
+  ARM: multi_v7_defconfig: Enable interconnect API
+
+ .../display/tegra/nvidia,tegra20-host1x.txt   |  68 +++++
+ .../memory-controllers/nvidia,tegra20-emc.txt |   2 +
+ .../memory-controllers/nvidia,tegra20-mc.txt  |   3 +
+ .../nvidia,tegra30-emc.yaml                   |   6 +
+ .../memory-controllers/nvidia,tegra30-mc.yaml |   5 +
+ arch/arm/boot/dts/tegra20.dtsi                |  22 +-
+ arch/arm/boot/dts/tegra30.dtsi                |  23 +-
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ arch/arm/configs/tegra_defconfig              |   1 +
+ drivers/gpu/drm/tegra/dc.c                    | 289 +++++++++++++++++-
+ drivers/gpu/drm/tegra/dc.h                    |  13 +
+ drivers/gpu/drm/tegra/drm.c                   |  19 ++
+ drivers/gpu/drm/tegra/plane.c                 |   1 +
+ drivers/gpu/drm/tegra/plane.h                 |   4 +-
+ drivers/interconnect/core.c                   |  11 +-
+ drivers/memory/tegra/mc.c                     | 118 +++++++
+ drivers/memory/tegra/mc.h                     |   8 +
+ drivers/memory/tegra/tegra20-emc.c            | 161 ++++++++--
+ drivers/memory/tegra/tegra30-emc.c            | 144 ++++++++-
+ include/dt-bindings/memory/tegra20-mc.h       |  53 ++++
+ include/dt-bindings/memory/tegra30-mc.h       |  67 ++++
+ include/soc/tegra/mc.h                        |   3 +
+ 22 files changed, 975 insertions(+), 47 deletions(-)
+
 -- 
-2.17.1
+2.25.1
 
