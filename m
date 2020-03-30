@@ -2,229 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 596B41987DD
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 01:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D4E1987F6
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 01:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729060AbgC3XMk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 19:12:40 -0400
-Received: from mga03.intel.com ([134.134.136.65]:20425 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728880AbgC3XMk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Mar 2020 19:12:40 -0400
-IronPort-SDR: TIq3/iEmMa/Qv2ryt9KRV5A90YX+PJDmn35nezMmLfbo/t9Lv/3328qykNvePTRPdjQ7yXVuZa
- 76KHsDWE8NyA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2020 16:12:39 -0700
-IronPort-SDR: I6lZqY0XRB1PzN0MRRBeVARtXBbO2zUQ6EirkcD8iixARL1T+cNhPxv5AxatrRuTm01D076G9u
- 1/DqW5mIA2vQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,326,1580803200"; 
-   d="scan'208";a="283800468"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Mar 2020 16:12:37 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jJ3a8-0009Qv-N7; Tue, 31 Mar 2020 07:12:36 +0800
-Date:   Tue, 31 Mar 2020 07:12:34 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 61fafa3ac67beab5d2e0bf439da2523bd035cb0e
-Message-ID: <5e827ce2.1P61BurqHloJv3G0%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1729424AbgC3XUL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 19:20:11 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:38181 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728880AbgC3XUK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 19:20:10 -0400
+Received: by mail-lj1-f194.google.com with SMTP id w1so19985406ljh.5;
+        Mon, 30 Mar 2020 16:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bE6xbA64+4/+ypbO6EikqEyAaX3P7FX1UfeFwnlD2zU=;
+        b=QBoARub8KAADOXu16KRfIrYxWSYJPJxny8zQJqUx5TWyKDx7Rl5lqGkpZ7fRmRQ5k2
+         u2L/X2gOIW3uHGoq2AG/Vzs+RCdQ1o0VDP4RBd8b7oIe9JDj1Sa4ZSSqHzHQVMbn9zVn
+         IJgsbDLH2TI/CQ7V8lqcD1WBqiEuqaNsXnmMgHlMnUqQrhcepiigtN3LqM9ZfoniLc+B
+         dL/RsqQ3wBv1nbCl2L51IkumLx57cPNEHssWxhTayVBVLT0DRPHFPxDbGOoXbZy0mYJD
+         wZ+2fSmBNUCGyQ832yeJ8leecDzKOj/zgWg1fe8AF6Z9xSxZXgwW80ZrwXgZi+GTwzpj
+         m44Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bE6xbA64+4/+ypbO6EikqEyAaX3P7FX1UfeFwnlD2zU=;
+        b=EyAcuMCzlK3WAMBfeo+3bu9Yc/OD0/dlbt/jaUa0vVurOU+ZVfvHY5awP/JyTp0qYa
+         AY0ZDyP93Ml3ylInE8jI6rxzuhd41WiQh+R+TTH9I9dYzAh58Cm/loQ8Ebb03RBuwV2y
+         sAvLtZRKzufB+ZH+PZuOHM8W1yb2n9Jbp51/bV4com9wdXL2ycBi/iMBxcVfQG3W1GWQ
+         MJhn4ryLBYhbzXyZfngAwLvD2wHHrWU6Cj/is3hBeF07NwR9Fm4moVhh2ROmZp7EBzU0
+         up1GJdsDagG3yycbedLNGleFfn84tzUAJqONHfJcii9qMj0iEkFDRtSDQwiZjiE/8O9x
+         5gDw==
+X-Gm-Message-State: AGi0PuZOAtVynqY0MsSB9G72D5Wb2Zd2zaNOXBnMMrwzPY57qNc5TT1C
+        x9TKjJZDLctad5jSVP3jfLw=
+X-Google-Smtp-Source: APiQypLdU3aIWu9z86/NX1JqxLKQ+dBdMwQ2HRs5P+XZUJ86A5j43R6srXcrdFpxTzks4w0GObR7fQ==
+X-Received: by 2002:a2e:81cc:: with SMTP id s12mr8513672ljg.90.1585610406263;
+        Mon, 30 Mar 2020 16:20:06 -0700 (PDT)
+Received: from localhost.localdomain (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
+        by smtp.gmail.com with ESMTPSA id h3sm8773187lfk.30.2020.03.30.16.20.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2020 16:20:05 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/5] NVIDIA Tegra devfreq drivers improvements
+Date:   Tue, 31 Mar 2020 02:16:12 +0300
+Message-Id: <20200330231617.17079-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 61fafa3ac67beab5d2e0bf439da2523bd035cb0e  Merge branches 'acpi-cppc' and 'intel_pstate-passive' into testing
+Hello,
 
-elapsed time: 484m
+This series contains minor patches that I was going to send out a month or
+two ago, but completely forgot about. More importantly, it also contains new
+patches that are needed in order to address an upcoming problem in regards
+to adding interconnect API support for NVIDIA Tegra [1].
 
-configs tested: 169
-configs skipped: 0
+[1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=167480
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The problem lies in clk_round_rate(), which rounds clock rate based on the
+min/max clk limits imposed by active clk users. This is not suitable for
+the Tegra devfreq drivers because they use clk_round_rate() for building
+OPP table, and thus, nothing should limit the clk rate, otherwise the OPP
+table values are erroneously getting limited to the clk's limits.
 
-arm64                            allyesconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm                               allnoconfig
-arm                              allmodconfig
-arm                           efm32_defconfig
-arm                         at91_dt_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                               defconfig
-sparc                            allyesconfig
-um                           x86_64_defconfig
-ia64                                defconfig
-powerpc                             defconfig
-i386                              allnoconfig
-i386                             alldefconfig
-i386                             allyesconfig
-i386                                defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-nios2                         3c120_defconfig
-nios2                         10m50_defconfig
-c6x                        evmc6678_defconfig
-xtensa                          iss_defconfig
-c6x                              allyesconfig
-xtensa                       common_defconfig
-openrisc                 simple_smp_defconfig
-openrisc                    or1ksim_defconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                       m5475evb_defconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-arc                                 defconfig
-arc                              allyesconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-parisc                            allnoconfig
-parisc                           allyesconfig
-parisc                generic-32bit_defconfig
-parisc                generic-64bit_defconfig
-x86_64               randconfig-a001-20200330
-x86_64               randconfig-a002-20200330
-x86_64               randconfig-a003-20200330
-i386                 randconfig-a001-20200330
-i386                 randconfig-a002-20200330
-i386                 randconfig-a003-20200330
-riscv                randconfig-a001-20200330
-mips                 randconfig-a001-20200330
-m68k                 randconfig-a001-20200330
-parisc               randconfig-a001-20200330
-alpha                randconfig-a001-20200330
-nds32                randconfig-a001-20200330
-c6x                  randconfig-a001-20200330
-h8300                randconfig-a001-20200330
-microblaze           randconfig-a001-20200330
-nios2                randconfig-a001-20200330
-sparc64              randconfig-a001-20200330
-csky                 randconfig-a001-20200330
-openrisc             randconfig-a001-20200330
-s390                 randconfig-a001-20200330
-sh                   randconfig-a001-20200330
-xtensa               randconfig-a001-20200330
-csky                 randconfig-a001-20200331
-openrisc             randconfig-a001-20200331
-s390                 randconfig-a001-20200331
-sh                   randconfig-a001-20200331
-xtensa               randconfig-a001-20200331
-x86_64               randconfig-b001-20200330
-x86_64               randconfig-b002-20200330
-x86_64               randconfig-b003-20200330
-i386                 randconfig-b001-20200330
-i386                 randconfig-b002-20200330
-i386                 randconfig-b003-20200330
-x86_64               randconfig-c001-20200330
-x86_64               randconfig-c002-20200330
-x86_64               randconfig-c003-20200330
-i386                 randconfig-c001-20200330
-i386                 randconfig-c002-20200330
-i386                 randconfig-c003-20200330
-x86_64               randconfig-d001-20200330
-x86_64               randconfig-d002-20200330
-x86_64               randconfig-d003-20200330
-i386                 randconfig-d001-20200330
-i386                 randconfig-d002-20200330
-i386                 randconfig-d003-20200330
-x86_64               randconfig-e001-20200330
-i386                 randconfig-e002-20200330
-x86_64               randconfig-e003-20200330
-i386                 randconfig-e003-20200330
-x86_64               randconfig-e002-20200330
-i386                 randconfig-e001-20200330
-x86_64               randconfig-f001-20200330
-x86_64               randconfig-f002-20200330
-x86_64               randconfig-f003-20200330
-i386                 randconfig-f001-20200330
-i386                 randconfig-f002-20200330
-i386                 randconfig-f003-20200330
-x86_64               randconfig-g001-20200330
-x86_64               randconfig-g002-20200330
-x86_64               randconfig-g003-20200330
-i386                 randconfig-g001-20200330
-i386                 randconfig-g002-20200330
-i386                 randconfig-g003-20200330
-x86_64               randconfig-h001-20200330
-x86_64               randconfig-h002-20200330
-x86_64               randconfig-h003-20200330
-i386                 randconfig-h001-20200330
-i386                 randconfig-h002-20200330
-i386                 randconfig-h003-20200330
-arc                  randconfig-a001-20200330
-arm                  randconfig-a001-20200330
-arm64                randconfig-a001-20200330
-ia64                 randconfig-a001-20200330
-powerpc              randconfig-a001-20200330
-sparc                randconfig-a001-20200330
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                            titan_defconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                             i386_defconfig
-um                                  defconfig
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                               rhel-7.6
+Dmitry Osipenko (5):
+  PM / devfreq: tegra: Add Dmitry as a maintainer
+  clk: Introduce clk_round_rate_unboundly()
+  PM / devfreq: tegra20: Use clk_round_rate_unboundly()
+  PM / devfreq: tegra30: Use clk_round_rate_unboundly()
+  PM / devfreq: tegra30: Make CPUFreq notifier to take into account
+    boosting
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ MAINTAINERS                       |  9 ++++++
+ drivers/clk/clk.c                 | 49 ++++++++++++++++++++++++-------
+ drivers/devfreq/tegra20-devfreq.c |  4 +--
+ drivers/devfreq/tegra30-devfreq.c |  6 ++--
+ include/linux/clk.h               | 18 ++++++++++++
+ 5 files changed, 70 insertions(+), 16 deletions(-)
+
+-- 
+2.25.1
+
