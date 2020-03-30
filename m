@@ -2,91 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 535E619823D
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 19:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF34198286
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 19:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729335AbgC3RYm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 13:24:42 -0400
-Received: from mga14.intel.com ([192.55.52.115]:9708 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729258AbgC3RYm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Mar 2020 13:24:42 -0400
-IronPort-SDR: LZW4YUZWP6x5AjKPuSwUbf7rMS8XjYbfEUiK1x5bN/atnFHIOKvCQWxcl8POnPoYczOyAgu8UG
- ohc+hXShLsEA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2020 10:24:41 -0700
-IronPort-SDR: khEsAdfQ04GnUcVnWdSUII4a7icC2ARyfKpe9a3E8IN6sFpeiSQJS8QR5d6IU4j8PAaPonk3FW
- wTm72Hn1eCIQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,325,1580803200"; 
-   d="scan'208";a="242091499"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2020 10:24:37 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jIy9P-00EGgo-L6; Mon, 30 Mar 2020 20:24:39 +0300
-Date:   Mon, 30 Mar 2020 20:24:39 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Gayatri Kammela <gayatri.kammela@intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Alex Hung <alex.hung@canonical.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Mika Westerberg <mika.westerberg@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Prestopine, Charles D" <charles.d.prestopine@intel.com>,
-        "5 . 6+" <stable@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v2 1/3] ACPI: fix: Update Tiger Lake ACPI device IDs
-Message-ID: <20200330172439.GB1922688@smile.fi.intel.com>
-References: <cover.1585343507.git.gayatri.kammela@intel.com>
- <9359b8e261d69983b1eed2b8e53ef9eabfdfdd51.1585343507.git.gayatri.kammela@intel.com>
- <CAJZ5v0j8OaqM6k52Ar9sYn0Ea_u9+MBB0rcMWv6vGBt5jXCQBQ@mail.gmail.com>
+        id S1727302AbgC3RkL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 13:40:11 -0400
+Received: from mailbackend.panix.com ([166.84.1.89]:55321 "EHLO
+        mailbackend.panix.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726403AbgC3RkK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 13:40:10 -0400
+Received: from [192.168.128.0] (71-136-136-204.lightspeed.sntcca.sbcglobal.net [71.136.136.204])
+        by mailbackend.panix.com (Postfix) with ESMTPSA id 48rfqT479wz1kTy;
+        Mon, 30 Mar 2020 13:40:04 -0400 (EDT)
+Date:   Mon, 30 Mar 2020 10:40:03 -0700 (PDT)
+From:   "Kenneth R. Crudup" <kenny@panix.com>
+Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+cc:     Zhang Rui <rui.zhang@intel.com>,
+        linux-pm@lists.linux-foundation.org, rafael.j.wysocki@intel.com,
+        linux-pm@vger.kernel.org, "Liang, Kan" <kan.liang@intel.com>
+Subject: Re: Why do I sometimes "lose" the "psys" RAPL counter?
+In-Reply-To: <7583412585916da6bb23d9352257c7768c509388.camel@linux.intel.com>
+Message-ID: <alpine.DEB.2.21.2003301037470.3728@xps-7390>
+References: <alpine.DEB.2.21.2003252212220.2971@xps-7390>  <691eb7a6efd7a954295f234a70f548fd0c81e2f8.camel@intel.com>  <alpine.DEB.2.21.2003252353370.2971@xps-7390>  <7e1562ce93b83a685aa54dd2ae5a5b36c5737cb6.camel@intel.com>  <c9a24dfbc765c9c19d87094e5b2044f33431e501.camel@intel.com>
+  <alpine.DEB.2.21.2003260237130.26874@xps-7390>  <alpine.DEB.2.21.2003260311030.2844@xps-7390>  <b772ca4f2c08cca65da9cf09b4a61157854669af.camel@intel.com> <7583412585916da6bb23d9352257c7768c509388.camel@linux.intel.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0j8OaqM6k52Ar9sYn0Ea_u9+MBB0rcMWv6vGBt5jXCQBQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 30, 2020 at 06:43:35PM +0200, Rafael J. Wysocki wrote:
-> On Fri, Mar 27, 2020 at 10:34 PM Gayatri Kammela
-> <gayatri.kammela@intel.com> wrote:
 
-> > -       {"INT1044"},
-> > -       {"INT1047"},
-> > +       {"INTC1040"},
-> > +       {"INTC1043"},
-> > +       {"INTC1044"},
-> > +       {"INTC1047"},
-> >         {"INT3400"},
-> >         {"INT3401", INT3401_DEVICE},
-> >         {"INT3402"},
-> > --
-> 
-> I can take this along with the other two patches in the series if that
-> is fine by Andy and Rui.
+On Mon, 30 Mar 2020, Srinivas Pandruvada wrote:
 
-One nit is to fix the ordering to be alphanumeric or close enough
-(I admit in some cases it might require unneeded churn) to that.
+> I could reproduce this. This fails because the Psys MSR read 0. Also
+> the counter values are not correct as the incremental values are less
+> than package energy counter values.
 
-Otherwise,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+OK, so the very night I'd asked this question, Dell put out a BIOS update
+(BIOS 1.3.1 03/02/2020) that seems to have fixed this issue; I have not
+had a missing "psys" domain since updating. Srinivas, can you update the
+XPS 7390 you have to this BIOS version and verify this is fixed?
+
+Thanks,
+
+	-Kenny
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Silicon Valley
