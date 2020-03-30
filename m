@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B44A61971C2
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 03:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8111971C7
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 03:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728576AbgC3BKA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Mar 2020 21:10:00 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:33182 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728280AbgC3BJ7 (ORCPT
+        id S1728451AbgC3BKa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Mar 2020 21:10:30 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:33697 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728391AbgC3BJ7 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 21:09:59 -0400
-Received: by mail-lj1-f195.google.com with SMTP id f20so16336312ljm.0;
-        Sun, 29 Mar 2020 18:09:57 -0700 (PDT)
+Received: by mail-lf1-f66.google.com with SMTP id x200so5559416lff.0;
+        Sun, 29 Mar 2020 18:09:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PzPcH2Zw8s/lvusSJ+NeMT9K6QE3NO3BQ3OrhGxd84A=;
-        b=dAAbaMon+3/bSqoIuYfuwHx2KG8hghvSLrRSU22QfeV59mfGE+K6Fbxqmy75QxyRCz
-         vzG5MdQuMDqHNheti6KOwuAC/+GF7vBVf/jEwWYS0JpHBODi64d+2WUXzJ80dVgPaNbe
-         E2DmsKwTAP1jGTMw1ptNsZIEqJS4WhOcV9lNCgeUkDl9yc9Qhfifpe56l1OBc8mmkQVV
-         /NvfFxStOa1MuTM+BiVP1h8E8A+35d/0zkbSj9rlEX3Q2stjrqJdoJTxDE5PJap/Nf7q
-         zK7VvXq/44tRZFis67kdqpwYT1THGvNz40nr1jawM5e5NgNtwBdl8KhlaQDO66t+wvDQ
-         tlww==
+        bh=9E7zI2IZnXV4YyjveISOsemm9R4xu7EUE6WXPbYZj5s=;
+        b=SHY9Z0NgudDm+L5mpyLB00o4AL/yhAoKr3QhYv/uGqvjwF4WtUVJvJNV4sfPZp4VYL
+         gQ+u862RKGhEHlNflC6XRFa34GlMpKu7biU4hVlvoZHgIlYg9/0jNqr8zWTVgN/fD+G5
+         17chke2o76960p5eSNsbEF2fvD5ycrj+Ev4wEpl/k4OCU+JO65D6adaYNKF82XQjdMeV
+         EiVy40M+MMGcC82Z4m+p9h1t5h+REMeOl+LLhVgSz8MDVIJD/RaihQmdSsD7ssnUvOwN
+         i71Pw9XhUawf2Zz+MNMEz+qWo1g2srkUAlnyP1M/sFKBa8wCE+AB2T33wYureSb1X/K7
+         BkDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PzPcH2Zw8s/lvusSJ+NeMT9K6QE3NO3BQ3OrhGxd84A=;
-        b=qDnu+kPWV/9ND+LKejEZmAqor6MfzIhuWpFppmsiCp3RGCOW9TsKaHsV4+VjMjYdYd
-         cCAZZ/Ay3YM21d9A1dL/Vmxd+5uykj5XmnVzK8A7IHMYnSk2Rj+kJMKCkEuMeQE8iWVb
-         0IZ0R6VJNUd3Dv+xluudgsxI68nABjhjj9SvAtWqHDue8O+eJ7UVHczpv7BmHt6wF0qK
-         Q+yXIITQDlUEWCmRwYs/0PxUOgKzmFwmdQre0UlgTtrhUAWiVk8looe9S9sT17ELQdjY
-         44ruHFIvrIrNGeT86Fqvmq33Ccka1MWcdEsOKwB3r3SS87mQWpiqTYZ06K8/DK9skHzR
-         ny/Q==
-X-Gm-Message-State: AGi0PubxDCJkYL5oYiRk7eCnVCo8DKFJttw5pyfuSfY+8thAhEYjg6af
-        fCIX+G1uhFxy0wNqQSEvonM=
-X-Google-Smtp-Source: APiQypIYV+VJ2BotiGVJkdVXlprPFDGmyLuF/8w8UIlmHETYi4iZ9H/wP0ZGxE/ac47Mtz3QpiVAvg==
-X-Received: by 2002:a2e:9b41:: with SMTP id o1mr5726081ljj.145.1585530596562;
-        Sun, 29 Mar 2020 18:09:56 -0700 (PDT)
+        bh=9E7zI2IZnXV4YyjveISOsemm9R4xu7EUE6WXPbYZj5s=;
+        b=bSgyBvoQ3aqIYUz/pAQHTl2cdrglX780L9RTCIPv8hruxwYym5Z/GNzAtmY4Qy4FB7
+         3y7vg4sDO7afm68xhpsMEcZDduz3Grb5pSaV6mKJz2wgyeXc7lLflpgvjEPM703Oc87q
+         kkb/+DD7367rGj3dmzh5AXGa1lDKQ4P5QcAX6PXpVHugbC/b6qOLwKWRu8htWDZ/d7Gc
+         1TcifQS2e0fw+QHyI2M5Mo//KSbekhu6azpqfen7Z444kJhul86JzWP23AyUJ1UT7byw
+         ZyRLP6U8FwWPt6IyMNdRPFlCHIJfwNkcluc7noIeDGGe5a8QJWPl11+MhafcRQ7nNgve
+         pLkw==
+X-Gm-Message-State: AGi0PubzB084BeULJoK/piyiELUqTDd9kO2naTG+aGbjWVTygtEBrV6s
+        ygRqhXh3Q04m0/03yUu2vf8=
+X-Google-Smtp-Source: APiQypJb/KYN7Ausy9RzxNHKtBOMbGpnF36P6KkLPqb8j8gQzwiIUSVwL00ZzzFM4pP1djvb07ArDg==
+X-Received: by 2002:a05:6512:31d3:: with SMTP id j19mr6551417lfe.178.1585530597501;
+        Sun, 29 Mar 2020 18:09:57 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.gmail.com with ESMTPSA id f23sm2449005lja.60.2020.03.29.18.09.55
+        by smtp.gmail.com with ESMTPSA id f23sm2449005lja.60.2020.03.29.18.09.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2020 18:09:55 -0700 (PDT)
+        Sun, 29 Mar 2020 18:09:57 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -53,9 +53,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v2 21/22] ARM: tegra: Enable interconnect API in tegra_defconfig
-Date:   Mon, 30 Mar 2020 04:09:03 +0300
-Message-Id: <20200330010904.27643-22-digetx@gmail.com>
+Subject: [PATCH v2 22/22] ARM: multi_v7_defconfig: Enable interconnect API
+Date:   Mon, 30 Mar 2020 04:09:04 +0300
+Message-Id: <20200330010904.27643-23-digetx@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200330010904.27643-1-digetx@gmail.com>
 References: <20200330010904.27643-1-digetx@gmail.com>
@@ -66,26 +66,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Tegra now has interconnect providers that are used for memory bandwidth
-allocation.
+NVIDIA Tegra now has interconnect providers that are used for memory
+bandwidth allocation.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/configs/tegra_defconfig | 1 +
+ arch/arm/configs/multi_v7_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
-index aa94369bdd0f..0029259a6bf5 100644
---- a/arch/arm/configs/tegra_defconfig
-+++ b/arch/arm/configs/tegra_defconfig
-@@ -268,6 +268,7 @@ CONFIG_AK8975=y
- CONFIG_PWM=y
- CONFIG_PWM_TEGRA=y
- CONFIG_PHY_TEGRA_XUSB=y
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index f8e45351c3f9..658b5c1892eb 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -1085,6 +1085,7 @@ CONFIG_FSI_MASTER_ASPEED=m
+ CONFIG_FSI_SCOM=m
+ CONFIG_FSI_SBEFIFO=m
+ CONFIG_FSI_OCC=m
 +CONFIG_INTERCONNECT=y
- CONFIG_EXT2_FS=y
- CONFIG_EXT2_FS_XATTR=y
- CONFIG_EXT2_FS_POSIX_ACL=y
+ CONFIG_EXT4_FS=y
+ CONFIG_AUTOFS4_FS=y
+ CONFIG_MSDOS_FS=y
 -- 
 2.25.1
 
