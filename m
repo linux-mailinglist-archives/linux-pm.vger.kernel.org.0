@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D4E1987F6
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 01:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF0D19880B
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 01:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729424AbgC3XUL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1728880AbgC3XUL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Mon, 30 Mar 2020 19:20:11 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:38181 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728880AbgC3XUK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 19:20:10 -0400
-Received: by mail-lj1-f194.google.com with SMTP id w1so19985406ljh.5;
-        Mon, 30 Mar 2020 16:20:07 -0700 (PDT)
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:42880 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729416AbgC3XUL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 19:20:11 -0400
+Received: by mail-lf1-f65.google.com with SMTP id s13so4540043lfb.9;
+        Mon, 30 Mar 2020 16:20:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bE6xbA64+4/+ypbO6EikqEyAaX3P7FX1UfeFwnlD2zU=;
-        b=QBoARub8KAADOXu16KRfIrYxWSYJPJxny8zQJqUx5TWyKDx7Rl5lqGkpZ7fRmRQ5k2
-         u2L/X2gOIW3uHGoq2AG/Vzs+RCdQ1o0VDP4RBd8b7oIe9JDj1Sa4ZSSqHzHQVMbn9zVn
-         IJgsbDLH2TI/CQ7V8lqcD1WBqiEuqaNsXnmMgHlMnUqQrhcepiigtN3LqM9ZfoniLc+B
-         dL/RsqQ3wBv1nbCl2L51IkumLx57cPNEHssWxhTayVBVLT0DRPHFPxDbGOoXbZy0mYJD
-         wZ+2fSmBNUCGyQ832yeJ8leecDzKOj/zgWg1fe8AF6Z9xSxZXgwW80ZrwXgZi+GTwzpj
-         m44Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=hd+GxFPF+8hho6CBQXdH83p86n3Jd+YmZTEKLeLjMb8=;
+        b=QORySsmgvTEO1feHYrPNFS4qWrx3whUQWc++vY1RTbj5i5xpxoPXs5xfOUqUFtA3dc
+         jIcFNJ85XWi2X9ZoXg7hV9zLlbRJUkq41YQn2H5TvQDLzy1PWKhu+pz1WfMHLuFqz/It
+         UHkfiIqB3k1NQqfB8mn0p4djxejTdtfVijw4rU0gSqZb/CK1WEy5Orj9iXehhH6V+Mv4
+         IH8lnQ3xZqBV7ou6OGbmXIcPucD+vKmB0O62RAHtpAorJZplsvdA7uUjTMa1k3CxTNZg
+         PdQ1q0kG7uwtJHcYSk6VuTbIpNRlWQLtXKWWZiCHG3P5M2VYqNdn91lwZpQxt+CH6Bc0
+         VhtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bE6xbA64+4/+ypbO6EikqEyAaX3P7FX1UfeFwnlD2zU=;
-        b=EyAcuMCzlK3WAMBfeo+3bu9Yc/OD0/dlbt/jaUa0vVurOU+ZVfvHY5awP/JyTp0qYa
-         AY0ZDyP93Ml3ylInE8jI6rxzuhd41WiQh+R+TTH9I9dYzAh58Cm/loQ8Ebb03RBuwV2y
-         sAvLtZRKzufB+ZH+PZuOHM8W1yb2n9Jbp51/bV4com9wdXL2ycBi/iMBxcVfQG3W1GWQ
-         MJhn4ryLBYhbzXyZfngAwLvD2wHHrWU6Cj/is3hBeF07NwR9Fm4moVhh2ROmZp7EBzU0
-         up1GJdsDagG3yycbedLNGleFfn84tzUAJqONHfJcii9qMj0iEkFDRtSDQwiZjiE/8O9x
-         5gDw==
-X-Gm-Message-State: AGi0PuZOAtVynqY0MsSB9G72D5Wb2Zd2zaNOXBnMMrwzPY57qNc5TT1C
-        x9TKjJZDLctad5jSVP3jfLw=
-X-Google-Smtp-Source: APiQypLdU3aIWu9z86/NX1JqxLKQ+dBdMwQ2HRs5P+XZUJ86A5j43R6srXcrdFpxTzks4w0GObR7fQ==
-X-Received: by 2002:a2e:81cc:: with SMTP id s12mr8513672ljg.90.1585610406263;
-        Mon, 30 Mar 2020 16:20:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=hd+GxFPF+8hho6CBQXdH83p86n3Jd+YmZTEKLeLjMb8=;
+        b=hjpL9bHMkOUXZZRwY+oIHPRYTKqq7l86aCnISlpMGTF/92yUTZYSmcRcevYi2vGJt/
+         PVt+ulfYivo5cy2Npw9yxdmZlXBeoTu9vbJNqPXQGy81fVazCqzfNZcZPULbNKV3YaVu
+         3l0fCRHbaoVkUQ2OszQ+0L/OTR8r4V6Xc6Xl1vniybyMpSY8rK9x9Mg3RL+cMF0ZjlhH
+         S/wbM+Yu50wvgjf5QX6q726qcNRsvkSMPw/U3TfhtYRlSF6VFbhy8Br6wsSlQX7U/Dxc
+         6XgRgKtbzmRERJx+AAKTUmHX9NygvRq81hGwIM8mpKotLCNRO5k/517IGRV1+fpGsCpG
+         fCMQ==
+X-Gm-Message-State: AGi0Pubqco7HCy3JxT5TUlJ/3mFW4EAoVSRBu8c89D21oXNvdbnwUmSE
+        tK7IGTIsQnvZtwEDUMlYY54=
+X-Google-Smtp-Source: APiQypJ8GI4Ws4gjb0C95juBDkonn9dxIKlQX14nsbSgzON1oOygnU+xyOFnht8x6AbgBPZIYd8DWA==
+X-Received: by 2002:ac2:5446:: with SMTP id d6mr9489356lfn.62.1585610407282;
+        Mon, 30 Mar 2020 16:20:07 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.gmail.com with ESMTPSA id h3sm8773187lfk.30.2020.03.30.16.20.04
+        by smtp.gmail.com with ESMTPSA id h3sm8773187lfk.30.2020.03.30.16.20.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2020 16:20:05 -0700 (PDT)
+        Mon, 30 Mar 2020 16:20:06 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -54,10 +54,12 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/5] NVIDIA Tegra devfreq drivers improvements
-Date:   Tue, 31 Mar 2020 02:16:12 +0300
-Message-Id: <20200330231617.17079-1-digetx@gmail.com>
+Subject: [PATCH v1 1/5] PM / devfreq: tegra: Add Dmitry as a maintainer
+Date:   Tue, 31 Mar 2020 02:16:13 +0300
+Message-Id: <20200330231617.17079-2-digetx@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200330231617.17079-1-digetx@gmail.com>
+References: <20200330231617.17079-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -65,36 +67,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+I was contributing to the NVIDIA Tegra20+ devfreq drivers recently and
+want to help keep them working and evolving in the future.
 
-This series contains minor patches that I was going to send out a month or
-two ago, but completely forgot about. More importantly, it also contains new
-patches that are needed in order to address an upcoming problem in regards
-to adding interconnect API support for NVIDIA Tegra [1].
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ MAINTAINERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-[1] https://patchwork.ozlabs.org/project/linux-tegra/list/?series=167480
-
-The problem lies in clk_round_rate(), which rounds clock rate based on the
-min/max clk limits imposed by active clk users. This is not suitable for
-the Tegra devfreq drivers because they use clk_round_rate() for building
-OPP table, and thus, nothing should limit the clk rate, otherwise the OPP
-table values are erroneously getting limited to the clk's limits.
-
-Dmitry Osipenko (5):
-  PM / devfreq: tegra: Add Dmitry as a maintainer
-  clk: Introduce clk_round_rate_unboundly()
-  PM / devfreq: tegra20: Use clk_round_rate_unboundly()
-  PM / devfreq: tegra30: Use clk_round_rate_unboundly()
-  PM / devfreq: tegra30: Make CPUFreq notifier to take into account
-    boosting
-
- MAINTAINERS                       |  9 ++++++
- drivers/clk/clk.c                 | 49 ++++++++++++++++++++++++-------
- drivers/devfreq/tegra20-devfreq.c |  4 +--
- drivers/devfreq/tegra30-devfreq.c |  6 ++--
- include/linux/clk.h               | 18 ++++++++++++
- 5 files changed, 70 insertions(+), 16 deletions(-)
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8b8abe756ae0..9e8b0779f6df 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10931,6 +10931,15 @@ F:	include/linux/memblock.h
+ F:	mm/memblock.c
+ F:	Documentation/core-api/boot-time-mm.rst
+ 
++MEMORY FREQUENCY SCALING DRIVERS FOR NVIDIA TEGRA
++M:	Dmitry Osipenko <digetx@gmail.com>
++L:	linux-pm@vger.kernel.org
++L:	linux-tegra@vger.kernel.org
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mzx/devfreq.git
++S:	Maintained
++F:	drivers/devfreq/tegra20-devfreq.c
++F:	drivers/devfreq/tegra30-devfreq.c
++
+ MEMORY MANAGEMENT
+ M:	Andrew Morton <akpm@linux-foundation.org>
+ L:	linux-mm@kvack.org
 -- 
 2.25.1
 
