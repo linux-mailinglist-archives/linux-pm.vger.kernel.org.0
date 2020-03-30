@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C554F198807
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 01:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 850A11987FD
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 01:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729398AbgC3XU3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 19:20:29 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:44732 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729421AbgC3XUM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 19:20:12 -0400
-Received: by mail-lf1-f65.google.com with SMTP id j188so15709213lfj.11;
-        Mon, 30 Mar 2020 16:20:10 -0700 (PDT)
+        id S1729925AbgC3XUQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 19:20:16 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:46998 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729866AbgC3XUO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 19:20:14 -0400
+Received: by mail-lj1-f196.google.com with SMTP id r7so12330979ljg.13;
+        Mon, 30 Mar 2020 16:20:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wQq+QxtzNjE/EJiMAC6ATxubC+X+EZVUzsWLxM6NceQ=;
-        b=NrxMUjkwmImgyUTl5qRgdSMu08UoO9c982K4nBQEknn83NqOxeWk4PScIBdyL9DN2x
-         rXwNIFqdLxuLXDMJZ9Ifw8Qv63zZdo/zLFsCzLVlzm7fDwZaKGkkjiEiQyziXuwBwSTz
-         b/hiSA9nO7dB19ubxjg9UkEBVQ6zR9OwKXUfJNDun35SJ7GpexWHgIAgKkjVInYgaKLy
-         NvI6DM2TJMb1taxA0/SYgnioOlGP8IbgM9j4kEEjUKuWpgkMs2pV5JmAI/aqWJWQHmHw
-         crNWCuLD53uTbyCNw6J8P11xaH2fS6aKOj/h4yjLpZC72j2la0vnwbvj0E1d8wcpMo6Q
-         7kKQ==
+        bh=eWJ17QgfjQfYiVMNjS2RpFaBaWnfXYsQ7FwOrGsFKas=;
+        b=EQqyEmao78riDA6NReH2DsSK7cavfmOdi1B49u8sq6YJVWVdAF0ti65/n3Ro/AO6q9
+         aEOeJHVyR4u1JEPVahsssJbZPFuDUmX8J0FwF3FLZxd0B69c5BF/QmhxiGssVUIHssd1
+         qVfSG0pbwWQ/bWG5f5YkNLJuxYrA4ZywlH09s7eHrudjcZUaotsKt5Asce51mSK5GH/u
+         qdUJhqv8cWPzO8i//mVej3l/WW2qiY6x45D3fB2+zT3dWtLxzClu/6S8G0EiA/PY38oW
+         CQ7msb/t7VED1S4AMxs3EBXyvc22658JPC5CYMoXo3dqluZymECNEEzAB4jVblXXgnlS
+         GXvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wQq+QxtzNjE/EJiMAC6ATxubC+X+EZVUzsWLxM6NceQ=;
-        b=eqAXdUi/s+KVUQcxBr8YcgwaIeUzp3fngxbdDjaZhQbTxJHjt9DLcfp2bHTGLROJBz
-         ucKN7mPbKjF1yaQKQaoSm3sn2yIn3rZ0Qdz+xN0GA+a0gNPXbYQfhcdEHYc85aA0JTav
-         Ipi2wzgEAQHifz0+lBzvOA01ygS8K9UzKc9br0LnMKhZlIp4oVRtyIU3t+flN8mgeGCD
-         cDVzMrV5UZNGXAvbnibIp09SU/F1U1BXpXyl/IEgGUuMjzv7TA2mZTjUu1hyzRwH5CJE
-         z/5SvKMzOaAMdcfMWrV6sKwwlmDh0Z59cMt9uCjLZ3GQAMA4TiKj8oXNNROukC/l3diX
-         xT6g==
-X-Gm-Message-State: AGi0Puazima4Swv8tRAacflxkdVlzHNC39GrPCwTmtLwpB8XLzaY0tW6
-        sGo5BDAUYZKBInMarCdZFTI=
-X-Google-Smtp-Source: APiQypL0Mzbqohu2BKii5CfejZZEmHzmTR6LuLXcqmuU4DiwUBOmIbUVMfpowI815cwo9lQb/XgB1A==
-X-Received: by 2002:a05:6512:3127:: with SMTP id p7mr9306654lfd.108.1585610409582;
-        Mon, 30 Mar 2020 16:20:09 -0700 (PDT)
+        bh=eWJ17QgfjQfYiVMNjS2RpFaBaWnfXYsQ7FwOrGsFKas=;
+        b=trqStLzJ4gnWibUUV0N+dC8p1EjyI7XOiuc1OgAQF4/QS7LHCC7JMTK3tRPuq07Hdb
+         6GL5rXE6uc/gNVEbMpM/3znyw4WjR/djxuwfb/tgj6q9WVuRT/RPlnRGW3mQKDbge2/H
+         a6qNEB28uR55vqGdlMecC5XSGW6S6QweBg0ZHCpOIPzlAPXqt8wDnuVKsIcLcpUJDHGE
+         BS9+x60PdwDCJWQrSyhM0/wd9QevAZMvPyaX+n1T4KQpBm2HtU94BA8qdF7rDatkeyLk
+         vK+ZqvQ/z5PiMkwatHEJho5n7C57X0cSQWUsM8UKyhcOr6yf0etGawuuycnlTkrpoVtW
+         gymA==
+X-Gm-Message-State: AGi0PubUm9aYm9va3m+HSjZ5la+qQLlLP8eW7UgN2b7WvqaQIRav/9gs
+        u1GBWMxPrDXNoKENuaPKjUA=
+X-Google-Smtp-Source: APiQypKc1S6eO3KhpVEEF2gpYXrf5kNQ9F72l1NV6q4EuPc+dFdAPBfecepxyHyWrWW2xk5fLNSN5g==
+X-Received: by 2002:a2e:8290:: with SMTP id y16mr8412523ljg.186.1585610410601;
+        Mon, 30 Mar 2020 16:20:10 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.gmail.com with ESMTPSA id h3sm8773187lfk.30.2020.03.30.16.20.08
+        by smtp.gmail.com with ESMTPSA id h3sm8773187lfk.30.2020.03.30.16.20.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2020 16:20:09 -0700 (PDT)
+        Mon, 30 Mar 2020 16:20:10 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -54,9 +54,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/5] PM / devfreq: tegra20: Use clk_round_rate_unboundly()
-Date:   Tue, 31 Mar 2020 02:16:15 +0300
-Message-Id: <20200330231617.17079-4-digetx@gmail.com>
+Subject: [PATCH v1 4/5] PM / devfreq: tegra30: Use clk_round_rate_unboundly()
+Date:   Tue, 31 Mar 2020 02:16:16 +0300
+Message-Id: <20200330231617.17079-5-digetx@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200330231617.17079-1-digetx@gmail.com>
 References: <20200330231617.17079-1-digetx@gmail.com>
@@ -83,26 +83,31 @@ active clk users.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/devfreq/tegra20-devfreq.c | 4 ++--
+ drivers/devfreq/tegra30-devfreq.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/devfreq/tegra20-devfreq.c b/drivers/devfreq/tegra20-devfreq.c
-index ff82bac9ee4e..1bb10ef11dfe 100644
---- a/drivers/devfreq/tegra20-devfreq.c
-+++ b/drivers/devfreq/tegra20-devfreq.c
-@@ -149,10 +149,10 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+index 28b2c7ca416e..34f6291e880c 100644
+--- a/drivers/devfreq/tegra30-devfreq.c
++++ b/drivers/devfreq/tegra30-devfreq.c
+@@ -834,7 +834,7 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
  
- 	tegra->regs = mc->regs;
+ 	reset_control_deassert(tegra->reset);
  
--	max_rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
-+	max_rate = clk_round_rate_unboundly(tegra->emc_clock, ULONG_MAX);
+-	rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
++	rate = clk_round_rate_unboundly(tegra->emc_clock, ULONG_MAX);
+ 	if (rate < 0) {
+ 		dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
+ 		return rate;
+@@ -849,7 +849,7 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+ 	}
  
- 	for (rate = 0; rate <= max_rate; rate++) {
+ 	for (rate = 0; rate <= tegra->max_freq * KHZ; rate++) {
 -		rate = clk_round_rate(tegra->emc_clock, rate);
 +		rate = clk_round_rate_unboundly(tegra->emc_clock, rate);
  
- 		err = dev_pm_opp_add(&pdev->dev, rate, 0);
- 		if (err) {
+ 		if (rate < 0) {
+ 			dev_err(&pdev->dev,
 -- 
 2.25.1
 
