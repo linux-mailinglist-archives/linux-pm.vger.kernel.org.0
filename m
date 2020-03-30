@@ -2,126 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 956CB19850D
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 22:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52C2198608
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 23:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728000AbgC3UC5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 16:02:57 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39754 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727745AbgC3UC4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 16:02:56 -0400
-Received: by mail-wr1-f68.google.com with SMTP id p10so23231920wrt.6;
-        Mon, 30 Mar 2020 13:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lUoPyqpOq6RP3wBIxyXoInQVTdgsWS5bkgCqjwXu9nU=;
-        b=fF3lDVd0+nOdf+SmI3pdq4CKWRPLEbKg+Iddc3FCIGFItLiFnhUd9ww8ytaaQzoVWm
-         isPZdjckh/nSC1WxgrhgigRTHzwEOPtTRnjBlYsbAEQTTi+NEA31IxAKVM32weUbryu7
-         Fsl/jare2y6apJbP5hmgKtocnok1+DZCqU0qb5dT/jo/FlsvvXBiY9pRyTx3HE4LCiBv
-         SupTvFWu7Jn5rcGOLaaUgrIaspQXX2WK3mAmQ9HHiQwHZVZ3Yx3gkDzfaZ7AXhWxLbm4
-         q7gWsytDf8liDhZ+vCwAgw7ioTuol++Gj+8BOWBSLTm36A32ULVHpPm2J9BUSVlLRVvv
-         o7mw==
+        id S1728445AbgC3VGl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 17:06:41 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:47076 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728370AbgC3VGl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 17:06:41 -0400
+Received: by mail-il1-f193.google.com with SMTP id i75so10037685ild.13;
+        Mon, 30 Mar 2020 14:06:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lUoPyqpOq6RP3wBIxyXoInQVTdgsWS5bkgCqjwXu9nU=;
-        b=jlF9TbFUUlew41f0yQ+mVRXEot8zFj4r4UjqJmwiolF3KwXrRWWIf9Gt7WK0rWyKpP
-         l3S8Z9+KIOP9hG+COWoLP4Exdnovo/vjGgvh/LQCEzSRBJ6HifLqjRzre3tHNnX8bkWJ
-         QUBJfw7qpSXOhDPmubAEf+1/ncUZ5/V1nxL1X5Coe6D0jWjcu2OfY1yYHB9j2mcbGzg8
-         rGzV8Kd8e2MZfXO93E0p4rFbGPU1Nm3q87QnyoY7DE3T5dzbnDxyt4VGkep88S+1iDAN
-         r9TuUmL6AKVLAl/JaOAkqYbJC7oiZFmIZnEXc0ThPqtBiYpwthjutaKqoDyCWZcNBUo8
-         ueqQ==
-X-Gm-Message-State: ANhLgQ3oJgKGm2MeqSgh8Bp90ah/IrcHo7jeF+F0loIJnrvGsQL064lM
-        VMsMU0m5Dio42cUp72VOaYmRi6Qj3bgKzXuAhWg=
-X-Google-Smtp-Source: ADFU+vtQlK+r3Yrpq43PZR2UUtb2/43lw4wmabJo+l6BQcrfH3L3MQhoDPa7agHgdNMp3nuYxd0qACHoAz+25H8MyNg=
-X-Received: by 2002:adf:ecc3:: with SMTP id s3mr16006565wro.32.1585598573917;
- Mon, 30 Mar 2020 13:02:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=iABZKege7HQoVsTkUe4qgetZccJxeCXO7Xustigvp68=;
+        b=nCkJceQYz63KMbp3As7XA/tB0F6HvC/2jrCVBKk1rnMzofyKp8XoOCATHV4Jnmi9+I
+         tCMtPzA0HSJRPqHFgg8JlWUg1ZzZ94Wokr91YhNuHNiy+ym+9mIf3uvtBoNqrDly0Efa
+         gcEvnecXGen2B+/9fdF/Y5UWNfjQ1rah7eC8DlbHRCJXArWOppEiLkvVsHoVpOPFPG65
+         hNgbOj85wGsd9kBCFI0fr0/eXjpO/J1Ic+juYjl/rPhEhx9Bu+TjXCmylEo9FONEkNGG
+         NUIxyBLLjAqwBqUoU8dBXr+VOFUeke/14z8hqGot3MQBtxHwmumSaHHXeoS9xQohGKnt
+         lixw==
+X-Gm-Message-State: ANhLgQ1zChRFEy3fmJ+S5pP8lo/knjKNv8x3GEROEv4sLrq1gG2oEkH7
+        9jc8CDOg8q8eVthvt5Nb8w==
+X-Google-Smtp-Source: ADFU+vs8rOfTPzeHqxue1CIuQVubIJ6JXVW/4a/numdBTmarNRQ+n//nuGNMsVS7Iv2pbFNYaL9Qeg==
+X-Received: by 2002:a92:3d84:: with SMTP id k4mr13569581ilf.47.1585602399401;
+        Mon, 30 Mar 2020 14:06:39 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id z2sm5200482ilp.21.2020.03.30.14.06.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2020 14:06:38 -0700 (PDT)
+Received: (nullmailer pid 9284 invoked by uid 1000);
+        Mon, 30 Mar 2020 21:06:37 -0000
+Date:   Mon, 30 Mar 2020 15:06:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Ben Peled <bpeled@marvell.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 05/12] docs: dt: fix references to
+ ap806-system-controller.txt
+Message-ID: <20200330210637.GA9233@bogus>
+References: <cover.1584450500.git.mchehab+huawei@kernel.org>
+ <cf60ef88712e4f46f4e4bf40b2c646451d921827.1584450500.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-References: <20200324122023.9649-1-andriy.shevchenko@linux.intel.com>
- <20200324122023.9649-3-andriy.shevchenko@linux.intel.com> <CAJZ5v0gg=V8uDd4afJ3MULsgKYvWajKJioANk4jj7xEhBzrRrQ@mail.gmail.com>
- <CA+G9fYvFnXqSnoQSJ-DkQvAFv87iWmhH6dT1N79qrq=Aeuv4rw@mail.gmail.com>
- <028b636f-6e0f-c36a-aa4e-6a16d936fc6a@arm.com> <20200330095707.GA10432@bogus>
- <0a374eaa-92b3-0201-f357-4181542c98b6@arm.com> <CAHp75VdBm8ZYOMWmQEA8LD6uGcJ0sZ=M6n3MSYxmO6UkXbu+-A@mail.gmail.com>
- <f2706518-def8-1566-149f-00fc1d8cc19f@arm.com>
-In-Reply-To: <f2706518-def8-1566-149f-00fc1d8cc19f@arm.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Mon, 30 Mar 2020 13:02:43 -0700
-Message-ID: <CANcMJZBEiXaw5=VW1tjShkULa0YdcKxAgudaBKhrgyRFe7HacQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] driver core: Replace open-coded list_last_entry()
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cf60ef88712e4f46f4e4bf40b2c646451d921827.1584450500.git.mchehab+huawei@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 30, 2020 at 6:30 AM Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2020-03-30 2:11 pm, Andy Shevchenko wrote:
-> > On Mon, Mar 30, 2020 at 3:49 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> >> On 2020-03-30 11:13 am, Sudeep Holla wrote:
-> >>> On Fri, Mar 27, 2020 at 07:40:25PM +0000, Robin Murphy wrote:
-> >
-> > ...
-> >
-> >> AFAICS the difference is down to whether deferred_probe_timeout has
-> >> expired or not - I'm not familiar enough with this code to know
-> >> *exactly* what the difference is supposed to represent, nor which change
-> >> has actually pushed the Juno case from one state to the other (other
-> >> than it almost certainly can't be $SUBJECT - if this series is to blame
-> >> at all I'd assume it would be down to patch #1/3, but there's a bunch of
-> >> other rework previously queued in -next that is probably also interacting)
-> >
-> > JFYI: patch #1/3 wasn't applied.
->
-> OK, so if anyone's invested enough to want to investigate, it must be
-> something in John's earlier changes here:
->
-> https://lore.kernel.org/lkml/20200225050828.56458-1-john.stultz@linaro.org/
+On Tue, 17 Mar 2020 14:10:44 +0100, Mauro Carvalho Chehab wrote:
+> ap806-system-controller.txt was renamed to ap80x-system-controller.txt.
+> 
+> Update its references accordingly.
+> 
+> Fixes: 2537831bbc19 ("dt-bindings: ap80x: replace AP806 with AP80x")
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/gpio/gpio-mvebu.txt        | 2 +-
+>  Documentation/devicetree/bindings/thermal/armada-thermal.txt | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
 
-Hey all,
-  Sorry, I just got a heads up about this thread.
+Applied, thanks.
 
-So yea, it looks like the change is due likely to the first patch in
-my series. Previously, after initcall_done, (since
-deferred_probe_timeout was -1 unless manually specified) if the driver
-wasn't already loaded we'd print "ignoring dependency for device,
-assuming no driver" and return ENODEV.
-
-Now, if modules are enabled (as without modules enabled, I believe
-you'd see the same behavior as previous), we wait 30 seconds  (for
-userspace to load any posssible modules that meet that dependency) and
-then the driver_deferred_probe_timeout fires and we print "deferred
-probe timeout, ignoring dependency".
-
-It seems the issue here is the first message was printed with
-dev_warn() and the second with dev_WARN() which provides the scary
-backtrace.
-
-I think functionally as mentioned above, there's no real behavioral
-change here. But please correct me if that's wrong.
-
-Since we are more likely to see the second message now, maybe we
-should make both print via dev_warn()?
-
-I'll spin up a patch.
-
-thanks
--john
+Rob
