@@ -2,126 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F93D197819
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 11:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58DD19782C
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 11:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727874AbgC3Jz7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 05:55:59 -0400
-Received: from mga11.intel.com ([192.55.52.93]:39181 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727376AbgC3Jz7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Mar 2020 05:55:59 -0400
-IronPort-SDR: FvnJtyr/RAAiLylN0YcWMFJh9LfTIsE1dUY+9nD1vEKHAVOVJ0l4uvSD805zmQlTkmkXBAWTik
- 0nqDO0XP9ofA==
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2020 02:55:58 -0700
-IronPort-SDR: lD6nmQAjHR3xTM/q2XCw6dZ0gbs4L4F6PIMlI74bTOYIc0u7gidKXclstRN2384I2/2Bj0lbae
- 9A1XUTPj9EbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,323,1580803200"; 
-   d="scan'208,223";a="421877155"
-Received: from yongxinj-mobl.ccr.corp.intel.com ([10.249.172.44])
-  by orsmga005.jf.intel.com with ESMTP; 30 Mar 2020 02:55:56 -0700
-Message-ID: <b772ca4f2c08cca65da9cf09b4a61157854669af.camel@intel.com>
-Subject: Re: Why do I sometimes "lose" the "psys" RAPL counter?
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Kenneth R. Crudup" <kenny@panix.com>
-Cc:     linux-pm@lists.linux-foundation.org, rafael.j.wysocki@intel.com,
-        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com,
-        "Liang, Kan" <kan.liang@intel.com>
-Date:   Mon, 30 Mar 2020 17:55:55 +0800
-In-Reply-To: <alpine.DEB.2.21.2003260311030.2844@xps-7390>
-References: <alpine.DEB.2.21.2003252212220.2971@xps-7390>
-          <691eb7a6efd7a954295f234a70f548fd0c81e2f8.camel@intel.com>
-          <alpine.DEB.2.21.2003252353370.2971@xps-7390>
-          <7e1562ce93b83a685aa54dd2ae5a5b36c5737cb6.camel@intel.com>
-         <c9a24dfbc765c9c19d87094e5b2044f33431e501.camel@intel.com>
-         <alpine.DEB.2.21.2003260237130.26874@xps-7390>
-         <alpine.DEB.2.21.2003260311030.2844@xps-7390>
-Content-Type: multipart/mixed; boundary="=-pfcN7GSNiH0ohNpEuG43"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
+        id S1728736AbgC3J64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 05:58:56 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:51271 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727874AbgC3J64 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 05:58:56 -0400
+Received: by mail-pj1-f66.google.com with SMTP id w9so7345114pjh.1
+        for <linux-pm@vger.kernel.org>; Mon, 30 Mar 2020 02:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=DmLiFkHsrWw2W5ZST6R5SB9z1KVD8jOd9o3JzW6oIFE=;
+        b=RfpjGEAPHLupfgmWfSQ0PuZKGf0nWWJdmQO8TLKYdatCIZWUWsMbicPfiCWdhjzmtt
+         tkG9oSExzxFJsrh94ePID+mtrKKw+Dp/sYMbu2FBt96Glike/oRu2svpLZlZRwf02s9W
+         SMehH13DY6bOrwQUYrPdK7azSjLe1PbbZqIM7fMYdU0tfRz9xg0OuPpL7vJXpZnIVu9v
+         vnq2M7JoOwHlB6ruSaG46Kx1jjEGoP6eZDOi322WHfO1CNzUB1aHwCJe6AP9eVphI5F1
+         ASilehCzBCUH1I3oO4vBsZ//qB1mW3OA4ANGtxCSM/Rht6mLDFIz3UB016yW67EUJ6m2
+         wAkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DmLiFkHsrWw2W5ZST6R5SB9z1KVD8jOd9o3JzW6oIFE=;
+        b=LXRa986SxFhwqgm8A4+6Sk4o9oH/ntGORPpMgY25vx40GK/HeJmskWDK9vC2tCihym
+         u6amf8LCB/h44E0WWaUMBn8gx70a9ONigQ94DHFnurXurQAkwwrc1AY2ZRW0S4xRS+8J
+         sAx7JfPf7YP+fZb9Emk8UR/fEX2SiYwgLsFCnJitFSf+9YauoAMrtJR3TDubz3vYI1ci
+         Ge8S13KQ4M7pnt3TSt0o/7DlUB820vn3cB3N0stZKE+uKt4gz3m1ZRFyQdt6L6MKw79S
+         fL6tUFL8H2Asp6R+q/vfT49R1TTtuE12bD3VEEFxQIpyslKAWzem51cPJAYYnoP99aVS
+         dHOA==
+X-Gm-Message-State: AGi0PubfvqJk4slQgGrRoob3adelHpcaBLtJA8StIexFJNUnq+n1HuOk
+        MDnYWZe98N809hjnUf7q8l+z4w==
+X-Google-Smtp-Source: APiQypLnKZ3xN9AFDHzHFAAPbbpb9oinpHGq2sYaHpvUcthVDaY7ujqFyrSQVJ37Az6cWG5GYnkfzg==
+X-Received: by 2002:a17:902:b60d:: with SMTP id b13mr2894873pls.324.1585562335553;
+        Mon, 30 Mar 2020 02:58:55 -0700 (PDT)
+Received: from localhost ([122.171.118.46])
+        by smtp.gmail.com with ESMTPSA id r9sm5074256pfg.2.2020.03.30.02.58.53
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 30 Mar 2020 02:58:54 -0700 (PDT)
+Date:   Mon, 30 Mar 2020 15:28:52 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, robh@kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        "open list:THERMAL/CPU_COOLING" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/4] thermal/drivers/cpuidle_cooling: Change the
+ registration function
+Message-ID: <20200330095852.rn2kxxenykm74664@vireshk-i7>
+References: <20200329220324.8785-1-daniel.lezcano@linaro.org>
+ <20200329220324.8785-3-daniel.lezcano@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200329220324.8785-3-daniel.lezcano@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---=-pfcN7GSNiH0ohNpEuG43
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-CC Kan.
-
-By checking the RAPL PMU code, it is possible that rdmsr_safe fails
-when reading MSR_PLATFORM_ENERGY_STATUS.
-But we don't have any debug message showing the exact failure reason.
-
-can you please apply the patch attached and see why psys probe fails?
-
-thanks,
-rui
-
-On Thu, 2020-03-26 at 03:15 -0700, Kenneth R. Crudup wrote:
-> So I just tested a few shutdown vs. reboot cycles, and if I reboot, I
-> only
-> get three counters. If I shutdown, then restart, I get 4 counters
-> (including
-> the "psys domain" one).
+On 30-03-20, 00:03, Daniel Lezcano wrote:
+> Today, there is no user for the cpuidle cooling device. The targetted
+> platform is ARM and ARM64.
 > 
-> I tried it on a few kernels, including the oldest one that comes with
-> my
-> distro (5.3.0-40-generic) where all the RAPL stuff is made as
-> modules.
+> The cpuidle and the cpufreq cooling device are based on the device tree.
 > 
-> So, maybe we're not "clearing" (wild guess here) the "psys" RAPL on a
-> reboot,
-> something that would happen on a cold boot? (I'm afraid to say the
-> "B-word",
-> as that would mean it's a Dell issue so I won't hold my breath
-> waiting for
-> a fix).
+> As the cpuidle cooling device can have its own configuration depending
+> on the platform and the available idle states. The DT node description
+> will give the optional properties to set the cooling device up.
 > 
-> 	-Kenny
+> Do no longer rely on the CPU node which is prone to error and will
+> lead to a confusion in the DT because the cpufreq cooling device is
+> also using it. Let initialize the cpuidle cooling device with the DT
+> binding.
 > 
+> This was tested on:
+>  - hikey960
+>  - hikey6220
+>  - rock960
+>  - db845c
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/cpuidle_cooling.c | 58 +++++++++++++++++++++++++------
+>  include/linux/cpu_cooling.h       |  7 ----
+>  2 files changed, 47 insertions(+), 18 deletions(-)
 
---=-pfcN7GSNiH0ohNpEuG43
-Content-Disposition: attachment;
-	filename="0001-Debug-patch-to-check-psys-RAPL-DOMAIN-registration.patch"
-Content-Type: text/x-patch;
-	name="0001-Debug-patch-to-check-psys-RAPL-DOMAIN-registration.patch";
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-RnJvbSA1NjJiZDRlNzI4NGViYzU2YWM2MDQzNDY2Y2NmMWM1N2RmZjMzMDAyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBaaGFuZyBSdWkgPHJ1aS56aGFuZ0BpbnRlbC5jb20+CkRhdGU6
-IFN1biwgMjkgTWFyIDIwMjAgMTQ6MjY6MTggKzA4MDAKU3ViamVjdDogW1BBVENIXSBEZWJ1ZyBw
-YXRjaCB0byBjaGVjayBwc3lzIFJBUEwgRE9NQUlOIHJlZ2lzdHJhdGlvbi4KClNpZ25lZC1vZmYt
-Ynk6IFpoYW5nIFJ1aSA8cnVpLnpoYW5nQGludGVsLmNvbT4KLS0tCiBkcml2ZXJzL3Bvd2VyY2Fw
-L2ludGVsX3JhcGxfY29tbW9uLmMgfCAzICsrKwogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9u
-cygrKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9jb21tb24uYyBi
-L2RyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9jb21tb24uYwppbmRleCA3MzI1N2NmMTA3ZDku
-LmI4M2I4MDMxNTQ4MSAxMDA2NDQKLS0tIGEvZHJpdmVycy9wb3dlcmNhcC9pbnRlbF9yYXBsX2Nv
-bW1vbi5jCisrKyBiL2RyaXZlcnMvcG93ZXJjYXAvaW50ZWxfcmFwbF9jb21tb24uYwpAQCAtMTA5
-NiwxMiArMTA5NiwxNCBAQCBpbnQgcmFwbF9hZGRfcGxhdGZvcm1fZG9tYWluKHN0cnVjdCByYXBs
-X2lmX3ByaXYgKnByaXYpCiAJcmEucmVnID0gcHJpdi0+cmVnc1tSQVBMX0RPTUFJTl9QTEFURk9S
-TV1bUkFQTF9ET01BSU5fUkVHX1NUQVRVU107CiAJcmEubWFzayA9IH4wOwogCXJldCA9IHByaXYt
-PnJlYWRfcmF3KDAsICZyYSk7CisJcHJpbnRrKCJwbGF0Zm9ybV9kb21haW46IHJlYWQgcmVnIDB4
-JXgsIHJldHVybiAweCV4LCByZXQgJWRcbiIsIHJhLnJlZywgcmEudmFsdWUsIHJldCk7CiAJaWYg
-KHJldCB8fCAhcmEudmFsdWUpCiAJCXJldHVybiAtRU5PREVWOwogCiAJcmEucmVnID0gcHJpdi0+
-cmVnc1tSQVBMX0RPTUFJTl9QTEFURk9STV1bUkFQTF9ET01BSU5fUkVHX0xJTUlUXTsKIAlyYS5t
-YXNrID0gfjA7CiAJcmV0ID0gcHJpdi0+cmVhZF9yYXcoMCwgJnJhKTsKKwlwcmludGsoInBsYXRm
-b3JtX2RvbWFpbjogcmVhZCByZWcgMHgleCwgcmV0dXJuIDB4JXgsIHJldCAlZFxuIiwgcmEucmVn
-LCByYS52YWx1ZSwgcmV0KTsKIAlpZiAocmV0IHx8ICFyYS52YWx1ZSkKIAkJcmV0dXJuIC1FTk9E
-RVY7CiAKQEAgLTExMjgsNiArMTEzMCw3IEBAIGludCByYXBsX2FkZF9wbGF0Zm9ybV9kb21haW4o
-c3RydWN0IHJhcGxfaWZfcHJpdiAqcHJpdikKIAogCWlmIChJU19FUlIocG93ZXJfem9uZSkpIHsK
-IAkJa2ZyZWUocmQpOworCQlwcmludGsoImZhaWxlZCB0byByZWdpc3RlciBwbGF0Zm9ybSBkb21h
-aW5cbiIpOwogCQlyZXR1cm4gUFRSX0VSUihwb3dlcl96b25lKTsKIAl9CiAKLS0gCjIuMTcuMQoK
-
-
-
---=-pfcN7GSNiH0ohNpEuG43--
-
+-- 
+viresh
