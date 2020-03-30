@@ -2,107 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F19B197979
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 12:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DC21979C7
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 12:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729012AbgC3Knm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 06:43:42 -0400
-Received: from mga09.intel.com ([134.134.136.24]:26454 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728912AbgC3Knm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 30 Mar 2020 06:43:42 -0400
-IronPort-SDR: 9vD//3wRp0uiwiAWTFBn2VEfbc04iqkKNRVwgobCD24G/KasMYrH4tHI5ZZjIqPs6cELvTcNtD
- lcd3MON3X/hw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2020 03:43:41 -0700
-IronPort-SDR: wwUk+Jwnmz7vf91weyeKOqaGAh9J/oT3rFSilVdm0crTq+p/bvI0oy+69NMMUJGR3TGHDRKVQt
- zBxK7pVfY7Sw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,324,1580803200"; 
-   d="scan'208";a="294549884"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Mar 2020 03:43:38 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jIrtM-00EAdz-DH; Mon, 30 Mar 2020 13:43:40 +0300
-Date:   Mon, 30 Mar 2020 13:43:40 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        fntoth@gmail.com, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: Re: [PATCH v2 3/3] driver core: Replace open-coded
- list_last_entry()
-Message-ID: <20200330104340.GO1922688@smile.fi.intel.com>
-References: <20200324122023.9649-1-andriy.shevchenko@linux.intel.com>
- <20200324122023.9649-3-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0gg=V8uDd4afJ3MULsgKYvWajKJioANk4jj7xEhBzrRrQ@mail.gmail.com>
- <CA+G9fYvFnXqSnoQSJ-DkQvAFv87iWmhH6dT1N79qrq=Aeuv4rw@mail.gmail.com>
- <028b636f-6e0f-c36a-aa4e-6a16d936fc6a@arm.com>
- <20200330095707.GA10432@bogus>
+        id S1729715AbgC3Kwr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 06:52:47 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:37040 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729307AbgC3Kwr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 06:52:47 -0400
+Received: by mail-pg1-f195.google.com with SMTP id a32so8479803pga.4
+        for <linux-pm@vger.kernel.org>; Mon, 30 Mar 2020 03:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=I2bZK+Edwp7f1bl38ZDsYZ8gkHoLOp7N+SgwKjOSdbsqnWhmYlKKFyWTTwwdBuA4Vg
+         rwBHnP7ed1EksF/Uo6wi0daOtai1jA53B5b9RrMCwInP8fTj6xlf+N87Jxy7Sxa+QbUF
+         l2GP0Lv6JzwuZiPJAzgKXNfvaR6mAHzPBfBvakflfZ8B4h5bL4zPFQy+qXgn4TFvbTXz
+         A1ohkR077EumDiarvC1dhS/fXXyUHKbnnxfkdMVlwSlZiAQJvL50ZQklv05R+GT0yrBC
+         3q/4vjuGZ1FGpK3Ogg0O4Ce18OqauZECfFoMpKCzkd0qt9LKtlmIkWUwZqPjuntycFFN
+         I7DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=AJu25dYZ0cUn7mhSNd2ov5owGakT+/ddDpjFPESF9YJGrDnw8Lq3oeokf3htEbglxH
+         pPJaOFInCrme+huLapPwQrEXXzoiYvloLpbdMGLjE5/xxcjpfNLE7tCVGn3JrS6ly7pI
+         RsE3DSYfiwVbuOv3MAc50qV1CaW+j0Lhyvo4Ef4+FWDN8QE+rLwCdm08gwAG0CSzjbzw
+         71tPej/zQaC/5ju+V+QWRJzeoJOJF2dmO4D45nifhQ7BxtnH12lai9et9RF/7yS1XlBQ
+         rJkwVQJGaaxaqBCqLqfotznT4ZzU2cm+YJA2FSaOvUmEZmRiOsC0oAbrbJztuygM7B8M
+         CryA==
+X-Gm-Message-State: ANhLgQ2ugZ8DgTf5Df471Gmfjt4EpHB3KamFbsSVPpNGMgYP9yjMoApZ
+        b09WdQKnVoGQTyKKN1NRgo/8M55hrJYNJXUlvMMAV/Qr
+X-Google-Smtp-Source: APiQypIWKERkhJyfw3nllppwlKx4Kg5tACX7YV91IKVmdYpKGJw8tan3l05zjbxOy64C+jzvYjD6e0YtF987t4KsIjw=
+X-Received: by 2002:a67:e24c:: with SMTP id w12mr8442912vse.153.1585565563772;
+ Mon, 30 Mar 2020 03:52:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200330095707.GA10432@bogus>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Received: by 2002:a67:c005:0:0:0:0:0 with HTTP; Mon, 30 Mar 2020 03:52:43
+ -0700 (PDT)
+Reply-To: maryalice00.12@postribe.com
+From:   Maryalice Williams <maryalicewilliams730@gmail.com>
+Date:   Mon, 30 Mar 2020 08:52:43 -0200
+Message-ID: <CAKwdjsr+YKgJk7z-UHX7Zo55cx5RUN3-bw03sWcArP4vbM2B5g@mail.gmail.com>
+Subject: Reply For More Details.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Mar 30, 2020 at 11:13:21AM +0100, Sudeep Holla wrote:
-> On Fri, Mar 27, 2020 at 07:40:25PM +0000, Robin Murphy wrote:
-> > On 2020-03-27 5:56 pm, Naresh Kamboju wrote:
-> > > The kernel warning noticed on arm64 juno-r2 device running linux
-> > > next-20200326 and next-20200327
-> >
-> > I suspect this is the correct expected behaviour manifesting. If you're
-> > using the upstream juno-r2.dts, the power domain being waited for here is
-> > provided by SCPI, however unless you're using an SCP firmware from at least
-> > 3 years ago you won't actually have SCPI since they switched it to the newer
-> > SCMI protocol, which is not yet supported upstream for Juno. See what
-> > happened earlier in the log:
-> >
-> > [    2.741206] scpi_protocol scpi: incorrect or no SCP firmware found
-> > [    2.747586] scpi_protocol: probe of scpi failed with error -110
-> >
-> > Thus this is the "waiting for a dependency which will never appear" case,
-> > for which I assume the warning is intentional,
-> 
-> Is that the case ?
-> 
-> Previously we used to get the warning:
-> "amba xx: ignoring dependency for device, assuming no driver"
-> 
-> Now we have the kernel warning in addition to the above.
-> 
-> > since the system is essentially broken (i.e. the hardware/firmware doesn't
-> > actually match what the DT describes).
-> >
-> 
-> Not sure if we can term it as "essentially broken". Definitely not 100%
-> functional but not broken if the situation like on Juno where SCP firmware
-> is fundamental for all OSPM but not essential for boot and other minimum
-> set of functionality.
-> 
-> Either way I am not against the warning, just wanted to get certain things
-> clarified myself.
-
-How this warning related to the patch in the subject? Does revert of the patch
-gives you no warning? (I will be very surprised).
-
 -- 
-With Best Regards,
-Andy Shevchenko
+My dear,
 
+I am Mrs Maryalice Williams, I want to send you donation of two
+million seven hundred thousand Dollars ($2.7M) for volunteer projects
+in your country due to my ill health that could not permit me. Kindly
+reply for more details, and also send me the following details, as per
+below, your full Name ..........,  Address...........,
+Age...............,  Occupation ...............
 
+Remain blessed,
+Mrs. Maryalice Williams.
