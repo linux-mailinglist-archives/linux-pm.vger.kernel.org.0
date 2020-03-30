@@ -2,86 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C52C2198608
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 23:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A538D198767
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 00:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728445AbgC3VGl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 17:06:41 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:47076 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728370AbgC3VGl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 17:06:41 -0400
-Received: by mail-il1-f193.google.com with SMTP id i75so10037685ild.13;
-        Mon, 30 Mar 2020 14:06:39 -0700 (PDT)
+        id S1729471AbgC3W3j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 18:29:39 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:35695 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729430AbgC3W3i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 18:29:38 -0400
+Received: by mail-pl1-f193.google.com with SMTP id c12so4493680plz.2
+        for <linux-pm@vger.kernel.org>; Mon, 30 Mar 2020 15:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=O8vQmmg7hNSl880dzS5U4D8ylPA2t24t6PDXIkjFhyw=;
+        b=enaoigUVvJO5lyNNbZ/eEngJDp3NLSbXaOW8jZMXRUmub8ne5NS0p2geytGwCNQhNo
+         XgeGgxBkDSUWgWGKpRxnhHWbYuC+j6er51oCUnB/RC16US6Q+bgZj2EVcsUFu4QdmJKz
+         VNedjGXM3sPPcxywmqhCVBX9zf2x5RN+C5cPU59YLceEVi8oVO9idqlgMe8G0fipax4l
+         OThjTm38AALbmpbzI/QhQM9SxvoafBFBUMqK0mC4pzNkrxdCOZNZQDs/Y7JhASw8hKIv
+         4NB+RAvstoycLWvAu/duRBk1nRUqYutikF6uLdIJ7WqN8UoEs/7TFZkf0Y5vuEOk88NH
+         vx0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=iABZKege7HQoVsTkUe4qgetZccJxeCXO7Xustigvp68=;
-        b=nCkJceQYz63KMbp3As7XA/tB0F6HvC/2jrCVBKk1rnMzofyKp8XoOCATHV4Jnmi9+I
-         tCMtPzA0HSJRPqHFgg8JlWUg1ZzZ94Wokr91YhNuHNiy+ym+9mIf3uvtBoNqrDly0Efa
-         gcEvnecXGen2B+/9fdF/Y5UWNfjQ1rah7eC8DlbHRCJXArWOppEiLkvVsHoVpOPFPG65
-         hNgbOj85wGsd9kBCFI0fr0/eXjpO/J1Ic+juYjl/rPhEhx9Bu+TjXCmylEo9FONEkNGG
-         NUIxyBLLjAqwBqUoU8dBXr+VOFUeke/14z8hqGot3MQBtxHwmumSaHHXeoS9xQohGKnt
-         lixw==
-X-Gm-Message-State: ANhLgQ1zChRFEy3fmJ+S5pP8lo/knjKNv8x3GEROEv4sLrq1gG2oEkH7
-        9jc8CDOg8q8eVthvt5Nb8w==
-X-Google-Smtp-Source: ADFU+vs8rOfTPzeHqxue1CIuQVubIJ6JXVW/4a/numdBTmarNRQ+n//nuGNMsVS7Iv2pbFNYaL9Qeg==
-X-Received: by 2002:a92:3d84:: with SMTP id k4mr13569581ilf.47.1585602399401;
-        Mon, 30 Mar 2020 14:06:39 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id z2sm5200482ilp.21.2020.03.30.14.06.37
+         :mime-version:content-disposition:in-reply-to;
+        bh=O8vQmmg7hNSl880dzS5U4D8ylPA2t24t6PDXIkjFhyw=;
+        b=NLCMBodrBToEZ5CQ4tEzjau/0mkRXHdBJrIEko3nlGFRu8YnxFZdn9py0VXsOXD8r4
+         NZliUfjOCOGg0nuiBvsOAqBUnoAAv7tunQdUWJMyaNs7aiKk8dzMN1CgWoCyVICn7M3j
+         ALum5clMmo9z2k3nFKAe07smYK1QezDKaJBo/bowdaRFKLcb/G3lAyj+EJTmpFNHTBHX
+         504yMXiWtu7OsEET6oHzwn+U6hLPRf0t/Av2C54x6M4HgyYLwr9pItG1npDJwc5gcGZL
+         fPtABQBfC1oStphob82bBKrdyLpiTxiV4FlfW2RA3ceDotpRsNUzrMOZlthey3g4xny0
+         FJ1Q==
+X-Gm-Message-State: AGi0PuYdVk+KhL6Qje0A0W6ssT6VOXRBfYIY2jzx8JIYx7seQJTJNcAn
+        9MZbEAVvgth6L2lMxYrD7PrgaQ==
+X-Google-Smtp-Source: APiQypIuHql86lAYhHEvBXzOmE/e8Yj/bcnvY6jji2FWWAq4h5Q8oF0rrqf1mUeI/PTcQXDLTyv2kA==
+X-Received: by 2002:a17:90a:8087:: with SMTP id c7mr346640pjn.148.1585607376669;
+        Mon, 30 Mar 2020 15:29:36 -0700 (PDT)
+Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id v42sm10448437pgn.6.2020.03.30.15.29.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2020 14:06:38 -0700 (PDT)
-Received: (nullmailer pid 9284 invoked by uid 1000);
-        Mon, 30 Mar 2020 21:06:37 -0000
-Date:   Mon, 30 Mar 2020 15:06:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Ben Peled <bpeled@marvell.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 05/12] docs: dt: fix references to
- ap806-system-controller.txt
-Message-ID: <20200330210637.GA9233@bogus>
-References: <cover.1584450500.git.mchehab+huawei@kernel.org>
- <cf60ef88712e4f46f4e4bf40b2c646451d921827.1584450500.git.mchehab+huawei@kernel.org>
+        Mon, 30 Mar 2020 15:29:36 -0700 (PDT)
+Date:   Mon, 30 Mar 2020 15:29:33 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     rui.zhang@intel.com, ulf.hansson@linaro.org,
+        daniel.lezcano@linaro.org, agross@kernel.org, robh@kernel.org,
+        amit.kucheria@verdurent.com, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch v5 4/6] soc: qcom: Extend RPMh power controller driver to
+ register warming devices.
+Message-ID: <20200330222933.GC215915@minitux>
+References: <20200320014107.26087-1-thara.gopinath@linaro.org>
+ <20200320014107.26087-5-thara.gopinath@linaro.org>
+ <20200327225345.GH5063@builder>
+ <f20b4940-11ad-82b1-6ece-661a1b033df8@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cf60ef88712e4f46f4e4bf40b2c646451d921827.1584450500.git.mchehab+huawei@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <f20b4940-11ad-82b1-6ece-661a1b033df8@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 17 Mar 2020 14:10:44 +0100, Mauro Carvalho Chehab wrote:
-> ap806-system-controller.txt was renamed to ap80x-system-controller.txt.
+On Mon 30 Mar 07:53 PDT 2020, Thara Gopinath wrote:
+> On 3/27/20 6:53 PM, Bjorn Andersson wrote:
+> > On Thu 19 Mar 18:41 PDT 2020, Thara Gopinath wrote:
+[..]
+> > > +static int __init rpmhpd_init_warming_device(void)
+> > > +{
+> > > +	size_t num_pds;
+> > > +	struct rpmhpd **rpmhpds;
+> > > +	int i;
+> > > +
+> > > +	if (!global_desc)
+> > > +		return -EINVAL;
+> > > +
+> > > +	rpmhpds = global_desc->rpmhpds;
+> > > +	num_pds = global_desc->num_pds;
+> > > +
+> > > +	if (!of_find_property(rpmhpds[0]->dev->of_node, "#cooling-cells", NULL))
+> > > +		return 0;
+> > > +
+> > > +	for (i = 0; i < num_pds; i++)
+> > > +		if (rpmhpds[i]->is_warming_dev)
+> > > +			of_pd_warming_register(rpmhpds[i]->dev, i);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +late_initcall(rpmhpd_init_warming_device);
+> > 
+> > ...why can't this be done in rpmhpd_probe()?
+> > 
+> > In particular with the recent patches from John Stultz to allow rpmhpd
+> > to be built as a module I don't think there's any guarantees that
+> > rpmh_probe() will have succeeded before rpmhpd_init_warming_device()
+> > executes.
 > 
-> Update its references accordingly.
-> 
-> Fixes: 2537831bbc19 ("dt-bindings: ap80x: replace AP806 with AP80x")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  Documentation/devicetree/bindings/gpio/gpio-mvebu.txt        | 2 +-
->  Documentation/devicetree/bindings/thermal/armada-thermal.txt | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> It is to take care of boot order.
+
+Understood.
+
+> So this has to happen after the thermal framework is initialized. Thermal
+> framework is initialized with core_initcall. Can I move the rpmhpd init as a
+> postcore_initcall ? Then I can get rid of this separate function and keep it
+> as part of probe.
 > 
 
-Applied, thanks.
+So I presume the problem is that if this is called from probe, you might
+of_pd_warming_register(), which ends up in
+__thermal_cooling_device_register() before thermal_init() has been
+invoked? 
 
-Rob
+Which is bad because e.g. thermal_class is not yet initialized.
+
+
+I don't want to rely on the order of initcalls for things to work, so
+could we make this more robust by having
+thermal_of_cooling_device_register() return -EPROBE_DEFER is
+thermal_init() isn't done?
+
+Regards,
+Bjorn
