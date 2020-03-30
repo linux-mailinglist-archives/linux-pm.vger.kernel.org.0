@@ -2,113 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC30B197FD7
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 17:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611A2198001
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 17:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729358AbgC3PjR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 Mar 2020 11:39:17 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:33215 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725978AbgC3PjR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 11:39:17 -0400
-Received: by mail-io1-f66.google.com with SMTP id o127so18236276iof.0;
-        Mon, 30 Mar 2020 08:39:16 -0700 (PDT)
+        id S1728939AbgC3PnS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 Mar 2020 11:43:18 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:46536 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728669AbgC3PnS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 Mar 2020 11:43:18 -0400
+Received: by mail-io1-f67.google.com with SMTP id i3so9070204ioo.13;
+        Mon, 30 Mar 2020 08:43:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=EZ1nff7YVijHzSQUa7ruR5O25OH0APmgrgDxrtZq5h4=;
-        b=haURtfDgYWITnFVn96lwrRuVtQnC5N/kbofVhztHQCFCGrAwuHFYXJnZ6JkdPML/lp
-         HSeSLtnKRkV5O/mWayOXOKUIFtF1LoqX8kbULjX2Zm0VfVYGjwRgeq4NhSk5dq/yDgqy
-         CUZ15w5ejBWEEIkqYWTi+sflqH58RGYIAl3iFKkfSdSwKK+KihL3Ts+5KeMS1M+w4TbZ
-         XJW9NrUQh3SrbJ8I4P5sLfphTcJI5ufVkSGXkwGURG8dFuYsFP78bKPxJc48U9+VDnIZ
-         3dK8DrHqRPAvNNgwk0WhTgQa3nFuwkNaaqrdd1GihWkWQDYe1Hyz1a4e6EXuE6aks+Tz
-         seeg==
-X-Gm-Message-State: ANhLgQ25l+XwpCgSNqxYMZxO3C3pu69htFr+B0jH7miJJ4Z7VJ90Ntjf
-        TvFRC7gkBg5P9XUwzJO/5g==
-X-Google-Smtp-Source: ADFU+vtAbJIIRWynygDv7+bYMc+vjWB5ZJKEe6w3jC9R106pug4ci8qV3wN4dQNxIjcAu3fiI/HPww==
-X-Received: by 2002:a5d:9a06:: with SMTP id s6mr8991926iol.165.1585582756185;
-        Mon, 30 Mar 2020 08:39:16 -0700 (PDT)
+        bh=QZTacSjnasNg1ss/HrVdMsonrOQ5SdqkzGymGMFrIvk=;
+        b=IWJdc6Iw0CF8+zFvuY5CMBBV0Vk7pD/hhWJ7NCqJ7KNbX3mJFx3FDfYQBCYX+Se0tc
+         +e7sfvnAcqKy8CyJrU2Mx5DNgBCzZ6L4YsyJZrGH6dFkAkO0TfSNXyfG6ZLxCY4MHuXT
+         Xg0xrmaeFk8Pi+oF7gIja8kTq52oyESZ2eMUDhJg0Pvw8ekFOOZ1P6P24IBrawvICJrv
+         OiHDGXM8NUJ4nBoDKJ5qrLuSLV3bLoAmgH42hcsOsFKs1g3enm5xKhr+oxy3towwT/Mm
+         lA0OHIKtAYBzE8d2nbIKzzwiDZLIu7gQCaEoDS4Yu4p7fCBauKhhgHC0N29lbcog8osk
+         RrHg==
+X-Gm-Message-State: ANhLgQ3Wv4n7AnjVDzQ5EH/iJ+cyeAlL77KWyGBt4iyZAthlcNoIE0v0
+        gJncq5Bx6Nu5lAD1TgBZfw==
+X-Google-Smtp-Source: ADFU+vtagkVVM5xB3qhxbp6YHISoiVCmO7s0zBShZgPAMIst11fqDk7nV5IgjtgFY3XrZiCTtdijqQ==
+X-Received: by 2002:a5d:8d0e:: with SMTP id p14mr2838387ioj.0.1585582995052;
+        Mon, 30 Mar 2020 08:43:15 -0700 (PDT)
 Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id u77sm5012485ili.35.2020.03.30.08.39.13
+        by smtp.gmail.com with ESMTPSA id b4sm5022641ilg.58.2020.03.30.08.43.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2020 08:39:15 -0700 (PDT)
-Received: (nullmailer pid 20530 invoked by uid 1000);
-        Mon, 30 Mar 2020 15:39:12 -0000
-Date:   Mon, 30 Mar 2020 09:39:12 -0600
+        Mon, 30 Mar 2020 08:43:14 -0700 (PDT)
+Received: (nullmailer pid 26197 invoked by uid 1000);
+        Mon, 30 Mar 2020 15:43:11 -0000
+Date:   Mon, 30 Mar 2020 09:43:11 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Martin Kepplinger <martink@posteo.de>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Sebastian Reichel <sre@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Angus Ainslie <angus@akkea.ca>,
-        Silvano di Ninno <silvano.dininno@nxp.com>,
-        linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/8] dt-bindings: interconnect: Add bindings for imx8m noc
-Message-ID: <20200330153912.GA20064@bogus>
-References: <cover.1585188174.git.leonard.crestez@nxp.com>
- <b7a93b75a3ea57aadeeda766a0b729a4bc97ccc9.1585188174.git.leonard.crestez@nxp.com>
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: Re: [RFC] dt-bindings.yaml: power: supply: add bindings for TI
+ bq24296/7
+Message-ID: <20200330154311.GA24776@bogus>
+References: <7d7602574b5eda80bd1d40f79854ba3670201c6e.1585510588.git.hns@goldelico.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b7a93b75a3ea57aadeeda766a0b729a4bc97ccc9.1585188174.git.leonard.crestez@nxp.com>
+In-Reply-To: <7d7602574b5eda80bd1d40f79854ba3670201c6e.1585510588.git.hns@goldelico.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 26 Mar 2020 04:16:13 +0200, Leonard Crestez wrote:
-> Add initial dt bindings for the interconnects inside i.MX chips.
-> Multiple external IPs are involved but SOC integration means the
-> software controllable interfaces are very similar.
+On Sun, 29 Mar 2020 21:36:29 +0200, "H. Nikolaus Schaller" wrote:
+> This is an attempt to define a schema for the bq24296/7
+> charger and power supply controllers with battery monitoring
+> and OTG booster.
 > 
-> Main NOC node acts as interconnect provider if #interconnect-cells is
-> present. Currently there is a single imx interconnect provider for the
-> whole SOC.
+> We model it as a dual regulator because it can generate
+> a VSYS (with controllable voltage) and optionally an
+> OTG voltage either from the battery or from external power
+> supply.
 > 
-> Other pieces of scalable interconnects can be present, each with their
-> own OPP table.
+> This scheme works well with e.g. the dwc3 setup of the
+> OMAP5 to turn on OTG regulator on demand.
 > 
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> The DT should provide a reference to a monitored battery
+> description so that initial and operation parameters
+> of the battery can be specified to control the charger
+> parameters.
+> 
+> To support different initial charging current for USB
+> and AC charger mode, an optional gpio should be provided
+> that the driver can use to set defaults.
+> 
+> A driver is available and working for several years,
+> but the bindings should be clarified first.
+> 
+> The example shows what we are successfully using for
+> the working system.
+> 
+> Since the omap5 Pyra Handheld is not yet in the DTS tree,
+> there would be no explicit user of this driver. So
+> the plan is to submit a full patch set for the Pyra
+> later.
+> 
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 > ---
->  .../bindings/interconnect/fsl,imx8m-noc.yaml  | 138 ++++++++++++++++++
->  1 file changed, 138 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+>  .../bindings/power/supply/bq2429x.yaml        | 122 ++++++++++++++++++
+>  1 file changed, 122 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/bq2429x.yaml
 > 
 
 My bot found errors running 'make dt_binding_check' on your patch:
 
-Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml:  while parsing a block mapping
-  in "<unicode string>", line 4, column 1
-did not find expected key
-  in "<unicode string>", line 79, column 9
-Documentation/devicetree/bindings/Makefile:12: recipe for target 'Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.example.dts' failed
-make[1]: *** [Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.example.dts] Error 1
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/bq2429x.yaml: properties:monitored-battery: [{'description': 'phandle to the battery node'}, {'allOf': [{'$ref': '/schemas/types.yaml#/definitions/phandle'}]}, {'enum': [{'voltage-max-design-microvolt': [{'default': 4200000}]}, {'voltage-min-design-microvolt': [{'default': 3200000}]}, {'constant-charge-current-max-microamp': [{'default': 'as defined by boot loader'}]}, {'precharge-current-microamp': [{'default': 128000}]}, {'charge-term-current-microamp': [{'default': 128000}]}]}] is not of type 'object', 'boolean'
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/bq2429x.yaml: properties:dc-det-gpios: {'items': [{'description': 'gpio for detecting two different DC sources'}, {'default': 'use usb-input-current-microamp only'}]} is not valid under any of the given schemas (Possible causes of the failure):
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/bq2429x.yaml: properties:dc-det-gpios: 'maxItems' is a required property
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/bq2429x.yaml: properties:dc-det-gpios:items: [{'description': 'gpio for detecting two different DC sources'}, {'default': 'use usb-input-current-microamp only'}] is not valid under any of the given schemas (Possible causes of the failure):
+		/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/bq2429x.yaml: properties:dc-det-gpios:items: [{'description': 'gpio for detecting two different DC sources'}, {'default': 'use usb-input-current-microamp only'}] is not of type 'object'
+		/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/bq2429x.yaml: properties:dc-det-gpios:items:1:default: 'use usb-input-current-microamp only' is not of type 'integer'
+
+
+Documentation/devicetree/bindings/Makefile:12: recipe for target 'Documentation/devicetree/bindings/power/supply/bq2429x.example.dts' failed
+make[1]: *** [Documentation/devicetree/bindings/power/supply/bq2429x.example.dts] Error 1
 make[1]: *** Waiting for unfinished jobs....
+warning: no schema found in file: Documentation/devicetree/bindings/power/supply/bq2429x.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/bq2429x.yaml: ignoring, error in schema: properties: monitored-battery
 Makefile:1262: recipe for target 'dt_binding_check' failed
 make: *** [dt_binding_check] Error 2
 
-See https://patchwork.ozlabs.org/patch/1261720
+See https://patchwork.ozlabs.org/patch/1263547
 
 If you already ran 'make dt_binding_check' and didn't see the above
 error(s), then make sure dt-schema is up to date:
