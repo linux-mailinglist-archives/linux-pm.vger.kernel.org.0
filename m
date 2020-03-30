@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7E91971BF
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 03:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EE91971A9
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Mar 2020 03:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728546AbgC3BJ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 29 Mar 2020 21:09:58 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:42913 "EHLO
+        id S1728571AbgC3BKA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 29 Mar 2020 21:10:00 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:35046 "EHLO
         mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728504AbgC3BJ5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 21:09:57 -0400
-Received: by mail-lj1-f193.google.com with SMTP id q19so16239520ljp.9;
-        Sun, 29 Mar 2020 18:09:54 -0700 (PDT)
+        with ESMTP id S1728496AbgC3BJ6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 29 Mar 2020 21:09:58 -0400
+Received: by mail-lj1-f193.google.com with SMTP id k21so16333361ljh.2;
+        Sun, 29 Mar 2020 18:09:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=stlNTWc9aUdJpsj0CRgkxaVzFvCy4PtSWcEihJg934I=;
-        b=GmV6d+mK8slNNEw6qzIvmLHNGh+x/WLd+YD7Hh9dEx+Uu8C+gPQTkll8G4/5FnuBB1
-         68o56wo7QLyaEo/25iN8MEb/UH7dEmIrID/nxhAX1fNh3xMFGXSqv638b11xdqGPePCL
-         0GrrQqS4zely6Zu+cCsBAb02zIifUAvduno4Ebk/3o2E0CeTce2kpCG6zTkzDqWBNzLZ
-         hGYFCPgfJMP1K+n9Iac34mAr0wKHbVbKMdGvfUoZTa/FxCxBrhKvNq4s96Ycm5K92udv
-         wLq5Y4kIe/Hh309g/9VVGDubPvFEbst++6UqovUJwnjJjOYXn1b6t6pJUjsMHzqQ3sFh
-         MzWQ==
+        bh=vPqDxoQDIqKqbTClKBTFY/GuSR/u7mIa4tRLiNa4khw=;
+        b=b2Wk9D3nd02S1yBEw9VfNDHynpLIG1M19fnbYk4/jKvJE6gnNPd6fx/N9rmAc3h1WJ
+         0W4cIvLJs4zAoKqlmKnVdTm/7JOiI2jcLsTRUwkogWpygEHuBr7tnXXjJKfMFhu8jCzi
+         YNL7hvXCo/KE3R0Er5Z7L0GQKBMAtnPchxE9PvlT2PvaEMODvg/pRIs15ZIS8BfaXRGD
+         7qCFNCiqYt3gQNpoHKhM8w1hg292Gntwo2n6q4Cw4K3lczlaaHnH9gTmwB2oxgsIKVAj
+         voa3vghwgz+YfoFB1PGPeHCDGheL2yfhAk0ebY3wbFhZODm3AdVX9swEnK1snhMnnzA5
+         G39A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=stlNTWc9aUdJpsj0CRgkxaVzFvCy4PtSWcEihJg934I=;
-        b=YoMwIPT1gn8fIY1vl+WeScddeKNiywGj6qc66cYsowo0CzRtOuolmdhPQofY8+/Txz
-         yOBtxJ080kA3Aog/12ZC7WZwIRE7+0+rc4UYJL+SSJqq+k/fZc4nAlrbbKdLSCB1TTWf
-         jpS5KMJ/3vvcAbiIFEfSnGcF+IeHWx0fmXnnu5Rwrj1Rt7zbM+8d4mGPcCFHuhSMIbid
-         7e/yq9xI5GPamIh5pzW/0+HPSh1QjpgYl/Wn3wxbyljxZ4qOR2vxpsEbj9lO+mJNoK8Z
-         gLy9QG+Tm2DNU9M6tZUmbRJ4pvc6nfZHGtaAfEjzL31EJVl5fkOHu6pyJl4zYyBvOMhs
-         QnjQ==
-X-Gm-Message-State: AGi0PuaxKLlhHjsQeWlWn3Rz8mKtnrMgPeBvd0gFWmE3aiqu9VLdvThi
-        324XAdGJ+S1yjcF5toWomHo=
-X-Google-Smtp-Source: APiQypKsysMvdXjN0pdMwS7t/sXNKen7udhhcltvbAzFnJQTm+jBxHPcXJ1OcZOvorh0PVEvp3TerQ==
-X-Received: by 2002:a2e:9acd:: with SMTP id p13mr5425374ljj.131.1585530594184;
-        Sun, 29 Mar 2020 18:09:54 -0700 (PDT)
+        bh=vPqDxoQDIqKqbTClKBTFY/GuSR/u7mIa4tRLiNa4khw=;
+        b=U+MSYHN1RurowozjbCw9o9b2SBdqN0fn65m5n44spwJt52qpDkZAnbnV/MAt34AStS
+         c8uKasm4KnwU/CMyg9NrbgmDd0LUCEYC4RS388lCdSG1Stjri4xoF2fDtWxegnxc+fvM
+         w4X0JUShJFzn1PoferHvg47NV3epqQTtA2rFcMIok+Aw5JxoMVA9B2dsrtfbtRwNiNWg
+         Cvi0E6munGHW1GR7E+Yt/QMjNtQTu+NSYYw1WJf3rfnvpkoSYPcbEVDCwTjTXOvDa1jU
+         7nHi/fsB+nzVhtZdicR8RjSFT4yp282Cijxw5ER/CdV80EaMoLRnWx8yEI4CZ3WhL2nY
+         MGWg==
+X-Gm-Message-State: AGi0PuZtC5s+NAzpJLlsccWBMM/sWQChDQhHErk7al2HW45cI/3OwOjF
+        bBUwGk0K0u99ayTxT1ccHkQ=
+X-Google-Smtp-Source: APiQypJKpYIkMoYh3zusIktDsInbffTBT2Ewun8AAXofUfmOfattVIpgibKPpUp/ustF4Zz22EcaHQ==
+X-Received: by 2002:a2e:740e:: with SMTP id p14mr5716504ljc.290.1585530595270;
+        Sun, 29 Mar 2020 18:09:55 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.gmail.com with ESMTPSA id f23sm2449005lja.60.2020.03.29.18.09.53
+        by smtp.gmail.com with ESMTPSA id f23sm2449005lja.60.2020.03.29.18.09.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2020 18:09:53 -0700 (PDT)
+        Sun, 29 Mar 2020 18:09:54 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -53,9 +53,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v2 19/22] drm/tegra: dc: Tune up high priority request controls for Tegra20
-Date:   Mon, 30 Mar 2020 04:09:01 +0300
-Message-Id: <20200330010904.27643-20-digetx@gmail.com>
+Subject: [PATCH v2 20/22] drm/tegra: dc: Extend debug stats with total number of events
+Date:   Mon, 30 Mar 2020 04:09:02 +0300
+Message-Id: <20200330010904.27643-21-digetx@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200330010904.27643-1-digetx@gmail.com>
 References: <20200330010904.27643-1-digetx@gmail.com>
@@ -66,43 +66,86 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Tegra20 has a high-priority-request control that allows to configure
-when display's memory client should perform read requests with a higher
-priority (Tegra30+ uses other means like Latency Allowance).
-
-This patch changes the controls configuration in order to get a more
-aggressive memory prefetching, which allows to reliably avoid FIFO
-underflow when running on a lower memory frequency. This allow us
-safely drop the memory bandwidth requirement by about two times in a
-most popular use-cases (only one display active, video overlay inactive,
-no scaling is done).
+It's useful to know the total number of underflow events and currently
+the debug stats are getting reset each time CRTC is being disabled. Let's
+account the overall number of events that doesn't get reset.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/gpu/drm/tegra/dc.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/tegra/dc.c | 10 ++++++++++
+ drivers/gpu/drm/tegra/dc.h |  5 +++++
+ 2 files changed, 15 insertions(+)
 
 diff --git a/drivers/gpu/drm/tegra/dc.c b/drivers/gpu/drm/tegra/dc.c
-index b540ac6ffdc4..564af302a965 100644
+index 564af302a965..7112f80ff9e8 100644
 --- a/drivers/gpu/drm/tegra/dc.c
 +++ b/drivers/gpu/drm/tegra/dc.c
-@@ -1980,12 +1980,12 @@ static void tegra_crtc_atomic_enable(struct drm_crtc *crtc,
- 		tegra_dc_writel(dc, value, DC_CMD_INT_POLARITY);
+@@ -1616,6 +1616,11 @@ static int tegra_dc_show_stats(struct seq_file *s, void *data)
+ 	seq_printf(s, "underflow: %lu\n", dc->stats.underflow);
+ 	seq_printf(s, "overflow: %lu\n", dc->stats.overflow);
  
- 		/* initialize timer */
--		value = CURSOR_THRESHOLD(0) | WINDOW_A_THRESHOLD(0x20) |
--			WINDOW_B_THRESHOLD(0x20) | WINDOW_C_THRESHOLD(0x20);
-+		value = CURSOR_THRESHOLD(0) | WINDOW_A_THRESHOLD(0x70) |
-+			WINDOW_B_THRESHOLD(0x30) | WINDOW_C_THRESHOLD(0x70);
- 		tegra_dc_writel(dc, value, DC_DISP_DISP_MEM_HIGH_PRIORITY);
++	seq_printf(s, "frames total: %lu\n", dc->stats.frames_total);
++	seq_printf(s, "vblank total: %lu\n", dc->stats.vblank_total);
++	seq_printf(s, "underflow total: %lu\n", dc->stats.underflow_total);
++	seq_printf(s, "overflow total: %lu\n", dc->stats.overflow_total);
++
+ 	return 0;
+ }
  
--		value = CURSOR_THRESHOLD(0) | WINDOW_A_THRESHOLD(1) |
--			WINDOW_B_THRESHOLD(1) | WINDOW_C_THRESHOLD(1);
-+		value = CURSOR_THRESHOLD(0) | WINDOW_A_THRESHOLD(0) |
-+			WINDOW_B_THRESHOLD(0) | WINDOW_C_THRESHOLD(0);
- 		tegra_dc_writel(dc, value, DC_DISP_DISP_MEM_HIGH_PRIORITY_TIMER);
+@@ -2187,6 +2192,7 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
+ 		/*
+ 		dev_dbg(dc->dev, "%s(): frame end\n", __func__);
+ 		*/
++		dc->stats.frames_total++;
+ 		dc->stats.frames++;
+ 	}
  
- 		value = VBLANK_INT | WIN_A_UF_INT | WIN_B_UF_INT | WIN_C_UF_INT |
+@@ -2195,6 +2201,7 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
+ 		dev_dbg(dc->dev, "%s(): vertical blank\n", __func__);
+ 		*/
+ 		drm_crtc_handle_vblank(&dc->base);
++		dc->stats.vblank_total++;
+ 		dc->stats.vblank++;
+ 	}
+ 
+@@ -2202,6 +2209,7 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
+ 		/*
+ 		dev_dbg(dc->dev, "%s(): underflow\n", __func__);
+ 		*/
++		dc->stats.underflow_total++;
+ 		dc->stats.underflow++;
+ 	}
+ 
+@@ -2209,11 +2217,13 @@ static irqreturn_t tegra_dc_irq(int irq, void *data)
+ 		/*
+ 		dev_dbg(dc->dev, "%s(): overflow\n", __func__);
+ 		*/
++		dc->stats.overflow_total++;
+ 		dc->stats.overflow++;
+ 	}
+ 
+ 	if (status & HEAD_UF_INT) {
+ 		dev_dbg_ratelimited(dc->dev, "%s(): head underflow\n", __func__);
++		dc->stats.underflow_total++;
+ 		dc->stats.underflow++;
+ 	}
+ 
+diff --git a/drivers/gpu/drm/tegra/dc.h b/drivers/gpu/drm/tegra/dc.h
+index 3a0ff57c5169..3eb4eddc2288 100644
+--- a/drivers/gpu/drm/tegra/dc.h
++++ b/drivers/gpu/drm/tegra/dc.h
+@@ -41,6 +41,11 @@ struct tegra_dc_stats {
+ 	unsigned long vblank;
+ 	unsigned long underflow;
+ 	unsigned long overflow;
++
++	unsigned long frames_total;
++	unsigned long vblank_total;
++	unsigned long underflow_total;
++	unsigned long overflow_total;
+ };
+ 
+ struct tegra_windowgroup_soc {
 -- 
 2.25.1
 
