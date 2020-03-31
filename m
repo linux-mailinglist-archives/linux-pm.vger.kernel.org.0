@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C9419A089
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 23:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE68C19A08C
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 23:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731219AbgCaVOl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Mar 2020 17:14:41 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:33879 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728245AbgCaVOl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Mar 2020 17:14:41 -0400
-Received: by mail-il1-f196.google.com with SMTP id t11so20951703ils.1;
-        Tue, 31 Mar 2020 14:14:40 -0700 (PDT)
+        id S1728428AbgCaVQJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Mar 2020 17:16:09 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:40001 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727852AbgCaVQJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Mar 2020 17:16:09 -0400
+Received: by mail-il1-f195.google.com with SMTP id j9so20985253ilr.7;
+        Tue, 31 Mar 2020 14:16:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ur4QLOO6ETHe1iKnFSuoEo5LlRhA8voSUwSZFKweEfA=;
-        b=m/ej2v/wQmNiHPz4belShNWYZmFZMfVQXDacQ6FK4pIdo2U8voxMG81ZFE7X37+BS+
-         2Ti1n/7PG7eK/146Q1YGNoPDZhITvnz99li7Yl5PatV5aI5WtwVFK48tcHG+iEqKmWTx
-         h2nVZyKyQLsUJ8UZxNKT0kMD547vDpLuqYSewHmagDbV/InBmNV8yzhVSzB+A9dlG1k+
-         WgV8FAbvd7ggjpmOEmimWjIbX6gS9oD1SFAWwjE+lWUkOzdImAvxsY7sT6SgfJ5IpDk2
-         inhWMGciXDYE6PlF42w1O686cfyxqeH9OINf4s9Qd043Psiv10mg02u9bsaddGyvVBIE
-         kmdw==
-X-Gm-Message-State: ANhLgQ3dNhuEF1+wcL2u/0+GcGLk/gR7VJQ6rnORBIG3vwYL/J/uXvul
-        FXc4tOcpX0uJIV42bpnvZPS+PKk=
-X-Google-Smtp-Source: ADFU+vt6HVqwj8TXAvOZUoaPceHnbmSiHRZAsxIT9WXjZtz31OhRrYnYw3D5uWVwb8e2FCEc99SPNA==
-X-Received: by 2002:a92:b0e:: with SMTP id b14mr19624612ilf.176.1585689280450;
-        Tue, 31 Mar 2020 14:14:40 -0700 (PDT)
+        bh=75TI3oMqfxdvTiM30wyrqU7RxJWCU7Dag+WXdArhdRY=;
+        b=lgZeIKE9c/1oJdRlj7KOmPciuKBnngQFlkw1A2CEGzOm+P0EfURdjMQt0HpWSzmt5M
+         Zld0u9F1vZz94b0lX3m6CWGvWDtGeb3KsfeSw7DzuLhjGlbX2tOHq8qzS+BA/weRwsNO
+         h0UmC1dFXD891AjaLRmXkgeMb86Le/Pzso4mlYwAHea5f8gZqAHw+9p0+FHxgyv/Tajm
+         EuZERKScPvGCyevSpibVi0p6A4h2DT4mXsEzXrqTv5G4fXndjBeA8+ho6pz0yW8bKTLR
+         n68mXw5RN2xG3RQpC7llHBtPjHFa3KyqJSo1i85YWsNCWQNyYuEvm2nFZIfpKBDsy55/
+         CQKg==
+X-Gm-Message-State: ANhLgQ2gk+w4t0aSWpF2hCcuLLlZ1vs8WP9w56HWOMw64lDw4vI0x9WP
+        Iwl0EXrCjqBrMGehQU8d9A==
+X-Google-Smtp-Source: ADFU+vtmMaqqJYnrnpnYolbC1/MXnHTVfsU7k1L1goBqozYm9WUdt58dS4gm3Diw7upoKxGAjJnsWQ==
+X-Received: by 2002:a92:4849:: with SMTP id v70mr17830928ila.279.1585689367856;
+        Tue, 31 Mar 2020 14:16:07 -0700 (PDT)
 Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id k9sm12982iov.12.2020.03.31.14.14.39
+        by smtp.gmail.com with ESMTPSA id z13sm13287ioh.16.2020.03.31.14.16.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2020 14:14:40 -0700 (PDT)
-Received: (nullmailer pid 32031 invoked by uid 1000);
-        Tue, 31 Mar 2020 21:14:38 -0000
-Date:   Tue, 31 Mar 2020 15:14:38 -0600
+        Tue, 31 Mar 2020 14:16:07 -0700 (PDT)
+Received: (nullmailer pid 3855 invoked by uid 1000);
+        Tue, 31 Mar 2020 21:16:06 -0000
+Date:   Tue, 31 Mar 2020 15:16:05 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Amit Kucheria <amit.kucheria@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
@@ -43,34 +43,36 @@ Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Amit Kucheria <amit.kucheria@verdurent.com>,
         Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: thermal: Add yaml bindings for
- thermal sensors
-Message-ID: <20200331211438.GA31917@bogus>
+Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: Add yaml bindings for
+ thermal cooling-devices
+Message-ID: <20200331211605.GA3795@bogus>
 References: <cover.1585117436.git.amit.kucheria@linaro.org>
- <93466e6c031c0084de09bd6b448556a6c5080880.1585117436.git.amit.kucheria@linaro.org>
+ <1ee4240e29edefc36b5d410d4792971c2bb4c5d5.1585117436.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <93466e6c031c0084de09bd6b448556a6c5080880.1585117436.git.amit.kucheria@linaro.org>
+In-Reply-To: <1ee4240e29edefc36b5d410d4792971c2bb4c5d5.1585117436.git.amit.kucheria@linaro.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 25 Mar 2020 12:04:52 +0530, Amit Kucheria wrote:
+On Wed, 25 Mar 2020 12:04:53 +0530, Amit Kucheria wrote:
 > As part of moving the thermal bindings to YAML, split it up into 3
 > bindings: thermal sensors, cooling devices and thermal zones.
 > 
-> The property #thermal-sensor-cells is required in each device that acts
-> as a thermal sensor. It is used to uniquely identify the instance of the
-> thermal sensor inside the system.
+> The property #cooling-cells is required in each device that acts as a
+> cooling device - whether active or passive. So any device that can
+> throttle its performance to passively reduce heat dissipation (e.g.
+> cpus, gpus) and any device that can actively dissipate heat at different
+> levels (e.g. fans) will contain this property.
 > 
 > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 > ---
->  .../bindings/thermal/thermal-sensor.yaml      | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
+>  .../thermal/thermal-cooling-devices.yaml      | 116 ++++++++++++++++++
+>  1 file changed, 116 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
