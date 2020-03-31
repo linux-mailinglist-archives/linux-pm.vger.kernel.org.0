@@ -2,144 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E33FD198DEF
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 10:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C70198E6A
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Mar 2020 10:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730049AbgCaIGy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Mar 2020 04:06:54 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:63129 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726528AbgCaIGy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Mar 2020 04:06:54 -0400
-X-Originating-IP: 86.202.105.35
-Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 4C28F24000A;
-        Tue, 31 Mar 2020 08:06:48 +0000 (UTC)
-Date:   Tue, 31 Mar 2020 10:06:48 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        id S1730130AbgCaI2w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Mar 2020 04:28:52 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:21491 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729425AbgCaI2w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Mar 2020 04:28:52 -0400
+X-UUID: 584be1c871564c06a9d56d07a69b8b36-20200331
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=lct8ONGAtomUDA235lfpqdPWwE+ccWyMYtlhfefuNEw=;
+        b=fhgoRdVA04IHF6lAAK9IgHpqMIzX5IRTPw7acBwTeZCsft327eHia5QKroqFECPoCyOWXfCdfxL0KUejX8kDvRJmpVzV819cWmgY3iJDAb1+DzOnrQvRQJu2Ho6ChKPyiKsDFIkLPHdwhYYMsny77AWdDtK4C0A8SQCxrE93qEo=;
+X-UUID: 584be1c871564c06a9d56d07a69b8b36-20200331
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
+        (envelope-from <hsin-hsiung.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 561797964; Tue, 31 Mar 2020 16:28:46 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 31 Mar 2020 16:28:41 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 31 Mar 2020 16:28:40 +0800
+Message-ID: <1585643322.27082.3.camel@mtksdaap41>
+Subject: Re: [PATCH v11 3/5] mfd: Add support for the MediaTek MT6358 PMIC
+From:   Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>
+To:     Nicolas Boichat <drinkcat@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Sean Wang <sean.wang@mediatek.com>,
+        "Sean Wang" <sean.wang@mediatek.com>,
         Sebastian Reichel <sre@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
+        "Eddie Huang" <eddie.huang@mediatek.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Kate Stewart <kstewart@linuxfoundation.org>,
         Richard Fontana <rfontana@redhat.com>,
         Frank Wunderlich <frank-w@public-files.de>,
-        Josef Friedl <josef.friedl@speed.at>,
+        "Josef Friedl" <josef.friedl@speed.at>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ran Bi <ran.bi@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        srv_heupstream@mediatek.com
-Subject: Re: [PATCH v11 4/5] rtc: mt6397: Add support for the MediaTek MT6358
- RTC
-Message-ID: <20200331080648.GH846876@piout.net>
+        "Ran Bi" <ran.bi@mediatek.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>
+Date:   Tue, 31 Mar 2020 16:28:42 +0800
+In-Reply-To: <CANMq1KBqeUHj0gKcknPDvgzRzGMt26pq-_rt_ZM89phCHO9jqQ@mail.gmail.com>
 References: <1585627657-3265-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1585627657-3265-5-git-send-email-hsin-hsiung.wang@mediatek.com>
+         <1585627657-3265-4-git-send-email-hsin-hsiung.wang@mediatek.com>
+         <CANMq1KBqeUHj0gKcknPDvgzRzGMt26pq-_rt_ZM89phCHO9jqQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1585627657-3265-5-git-send-email-hsin-hsiung.wang@mediatek.com>
+X-TM-SNTS-SMTP: 66156411AC7C6987A565DE837C979D90C593ABB3BD713E9063DE777D8BE22B722000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/03/2020 12:07:36+0800, Hsin-Hsiung Wang wrote:
-> From: Ran Bi <ran.bi@mediatek.com>
-> 
-> This add support for the MediaTek MT6358 RTC. Driver using
-> compatible data to store different RTC_WRTGR address offset.
-> This replace RTC_WRTGR to RTC_WRTGR_MT6323 in mt6323-poweroff
-> driver which only needed by armv7 CPU without ATF.
-> 
-> Signed-off-by: Ran Bi <ran.bi@mediatek.com>
-> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-> ---
->  drivers/power/reset/mt6323-poweroff.c |  2 +-
->  drivers/rtc/rtc-mt6397.c              | 23 +++++++++++++++++++----
->  include/linux/mfd/mt6397/rtc.h        |  9 ++++++++-
->  3 files changed, 28 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/power/reset/mt6323-poweroff.c b/drivers/power/reset/mt6323-poweroff.c
-> index 1caf43d..0532803 100644
-> --- a/drivers/power/reset/mt6323-poweroff.c
-> +++ b/drivers/power/reset/mt6323-poweroff.c
-> @@ -30,7 +30,7 @@ static void mt6323_do_pwroff(void)
->  	int ret;
->  
->  	regmap_write(pwrc->regmap, pwrc->base + RTC_BBPU, RTC_BBPU_KEY);
-> -	regmap_write(pwrc->regmap, pwrc->base + RTC_WRTGR, 1);
-> +	regmap_write(pwrc->regmap, pwrc->base + RTC_WRTGR_MT6323, 1);
->  
->  	ret = regmap_read_poll_timeout(pwrc->regmap,
->  					pwrc->base + RTC_BBPU, val,
-> diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
-> index cda238d..7f3dfd2 100644
-> --- a/drivers/rtc/rtc-mt6397.c
-> +++ b/drivers/rtc/rtc-mt6397.c
-> @@ -9,6 +9,7 @@
->  #include <linux/mfd/mt6397/core.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
-> +#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
->  #include <linux/rtc.h>
-> @@ -20,7 +21,7 @@ static int mtk_rtc_write_trigger(struct mt6397_rtc *rtc)
->  	int ret;
->  	u32 data;
->  
-> -	ret = regmap_write(rtc->regmap, rtc->addr_base + RTC_WRTGR, 1);
-> +	ret = regmap_write(rtc->regmap, rtc->addr_base + rtc->data->wrtgr, 1);
->  	if (ret < 0)
->  		return ret;
->  
-> @@ -269,6 +270,8 @@ static int mtk_rtc_probe(struct platform_device *pdev)
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->  	rtc->addr_base = res->start;
->  
-> +	rtc->data = of_device_get_match_data(&pdev->dev);
-> +
->  	rtc->irq = platform_get_irq(pdev, 0);
->  	if (rtc->irq < 0)
->  		return rtc->irq;
-> @@ -325,10 +328,22 @@ static int mt6397_rtc_resume(struct device *dev)
->  static SIMPLE_DEV_PM_OPS(mt6397_pm_ops, mt6397_rtc_suspend,
->  			mt6397_rtc_resume);
->  
-> +static const struct mtk_rtc_data mt6358_rtc_data = {
-> +	.wrtgr = RTC_WRTGR_MT6358,
-> +};
-> +
-> +static const struct mtk_rtc_data mt6397_rtc_data = {
-> +	.wrtgr = RTC_WRTGR_MT6397,
-> +};
-> +
->  static const struct of_device_id mt6397_rtc_of_match[] = {
-> -	{ .compatible = "mediatek,mt6323-rtc", },
-> -	{ .compatible = "mediatek,mt6397-rtc", },
-> -	{ }
-> +	{ .compatible = "mediatek,mt6323-rtc",
-> +		.data = &mt6397_rtc_data, },
-> +	{ .compatible = "mediatek,mt6358-rtc",
-> +		.data = &mt6358_rtc_data, },
-> +	{ .compatible = "mediatek,mt6397-rtc",
-> +		.data = &mt6397_rtc_data, },
+SGksIFNpcnMNCg0KT24gVHVlLCAyMDIwLTAzLTMxIGF0IDE1OjM2ICswODAwLCBOaWNvbGFzIEJv
+aWNoYXQgd3JvdGU6DQo+IE9uIFR1ZSwgTWFyIDMxLCAyMDIwIGF0IDEyOjA3IFBNIEhzaW4tSHNp
+dW5nIFdhbmcNCj4gPGhzaW4taHNpdW5nLndhbmdAbWVkaWF0ZWsuY29tPiB3cm90ZToNCj4gPg0K
+PiA+IFRoaXMgYWRkcyBzdXBwb3J0IGZvciB0aGUgTWVkaWFUZWsgTVQ2MzU4IFBNSUMuIFRoaXMg
+aXMgYQ0KPiA+IG11bHRpZnVuY3Rpb24gZGV2aWNlIHdpdGggdGhlIGZvbGxvd2luZyBzdWIgbW9k
+dWxlczoNCj4gPg0KPiA+IC0gUmVndWxhdG9yDQo+ID4gLSBSVEMNCj4gPiAtIENvZGVjDQo+ID4g
+LSBJbnRlcnJ1cHQNCj4gPg0KPiA+IEl0IGlzIGludGVyZmFjZWQgdG8gdGhlIGhvc3QgY29udHJv
+bGxlciB1c2luZyBTUEkgaW50ZXJmYWNlDQo+ID4gYnkgYSBwcm9wcmlldGFyeSBoYXJkd2FyZSBj
+YWxsZWQgUE1JQyB3cmFwcGVyIG9yIHB3cmFwLg0KPiA+IE1UNjM1OCBNRkQgaXMgYSBjaGlsZCBk
+ZXZpY2Ugb2YgdGhlIHB3cmFwLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogSHNpbi1Ic2l1bmcg
+V2FuZyA8aHNpbi1oc2l1bmcud2FuZ0BtZWRpYXRlay5jb20+DQo+ID4gUmV2aWV3ZWQtYnk6IE5p
+Y29sYXMgQm9pY2hhdCA8ZHJpbmtjYXRAY2hyb21pdW0ub3JnPg0KPiANCj4gVGhpcyBpcyBtaXNz
+aW5nIGEgZmV3IGNvbW1lbnRzIGZyb20gTGVlIEpvbmVzIG9uIHYxMCwgYWN0dWFsbHksIHJlcGVh
+dGVkIGJlbG93Og0KPiBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExNDMxMjM5
+LyMyMzI0NDA0MQ0KPiANCg0KU28gc29ycnkgZm9yIG1pc3NpbmcgdGhpcyBjb21tZW50Lkkgd2ls
+bCByZXBseSBpdCBsYXRlci4NClRoYW5rcyBhIGxvdC4NCg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJz
+L21mZC9NYWtlZmlsZSAgICAgICAgICAgICAgICAgfCAgIDIgKy0NCj4gPiAgZHJpdmVycy9tZmQv
+bXQ2MzU4LWlycS5jICAgICAgICAgICAgIHwgMjM2ICsrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrDQo+ID4gIGRyaXZlcnMvbWZkL210NjM5Ny1jb3JlLmMgICAgICAgICAgICB8ICA1NSArKysr
+KystDQo+ID4gIGluY2x1ZGUvbGludXgvbWZkL210NjM1OC9jb3JlLmggICAgICB8IDE1OCArKysr
+KysrKysrKysrKysrKysrKw0KPiA+ICBpbmNsdWRlL2xpbnV4L21mZC9tdDYzNTgvcmVnaXN0ZXJz
+LmggfCAyODIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gPiAgaW5jbHVk
+ZS9saW51eC9tZmQvbXQ2Mzk3L2NvcmUuaCAgICAgIHwgICAzICsNCj4gPiAgNiBmaWxlcyBjaGFu
+Z2VkLCA3MzEgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4gPiAgY3JlYXRlIG1vZGUg
+MTAwNjQ0IGRyaXZlcnMvbWZkL210NjM1OC1pcnEuYw0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
+aW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L2NvcmUuaA0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
+aW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L3JlZ2lzdGVycy5oDQo+ID4NCj4gPiBkaWZmIC0tZ2l0
+IGEvZHJpdmVycy9tZmQvTWFrZWZpbGUgYi9kcml2ZXJzL21mZC9NYWtlZmlsZQ0KPiA+IGluZGV4
+IGI4M2YxNzIuLjlhZjE0MTQgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9tZmQvTWFrZWZpbGUN
+Cj4gPiArKysgYi9kcml2ZXJzL21mZC9NYWtlZmlsZQ0KPiA+IEBAIC0yMzgsNyArMjM4LDcgQEAg
+b2JqLSQoQ09ORklHX0lOVEVMX1NPQ19QTUlDKSAgICAgICAgKz0gaW50ZWwtc29jLXBtaWMubw0K
+PiA+ICBvYmotJChDT05GSUdfSU5URUxfU09DX1BNSUNfQlhUV0MpICAgICArPSBpbnRlbF9zb2Nf
+cG1pY19ieHR3Yy5vDQo+ID4gIG9iai0kKENPTkZJR19JTlRFTF9TT0NfUE1JQ19DSFRXQykgICAg
+ICs9IGludGVsX3NvY19wbWljX2NodHdjLm8NCj4gPiAgb2JqLSQoQ09ORklHX0lOVEVMX1NPQ19Q
+TUlDX0NIVERDX1RJKSAgKz0gaW50ZWxfc29jX3BtaWNfY2h0ZGNfdGkubw0KPiA+IC1tdDYzOTct
+b2JqcyAgICA6PSBtdDYzOTctY29yZS5vIG10NjM5Ny1pcnEubw0KPiA+ICttdDYzOTctb2JqcyAg
+ICAgICAgICAgICAgICAgICAgOj0gbXQ2Mzk3LWNvcmUubyBtdDYzOTctaXJxLm8gbXQ2MzU4LWly
+cS5vDQo+ID4gIG9iai0kKENPTkZJR19NRkRfTVQ2Mzk3KSAgICAgICArPSBtdDYzOTcubw0KPiA+
+ICBvYmotJChDT05GSUdfSU5URUxfU09DX1BNSUNfTVJGTEQpICAgICArPSBpbnRlbF9zb2NfcG1p
+Y19tcmZsZC5vDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9tZmQvbXQ2MzU4LWlycS5j
+IGIvZHJpdmVycy9tZmQvbXQ2MzU4LWlycS5jDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4g
+PiBpbmRleCAwMDAwMDAwLi4wMjJlNWY1DQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL2Ry
+aXZlcnMvbWZkL210NjM1OC1pcnEuYw0KPiA+IEBAIC0wLDAgKzEsMjM2IEBADQo+ID4gKy8vIFNQ
+RFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ID4gKy8vDQo+ID4gKy8vIENvcHlyaWdo
+dCAoYykgMjAxOSBNZWRpYVRlayBJbmMuDQo+IA0KPiAyMDIwDQo+IA0KPiA+ICsNCj4gPiArI2lu
+Y2x1ZGUgPGxpbnV4L2ludGVycnVwdC5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvbWZkL210NjM1
+OC9jb3JlLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9tZmQvbXQ2MzU4L3JlZ2lzdGVycy5oPg0K
+PiA+ICsjaW5jbHVkZSA8bGludXgvbWZkL210NjM5Ny9jb3JlLmg+DQo+ID4gKyNpbmNsdWRlIDxs
+aW51eC9tb2R1bGUuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L29mLmg+DQo+ID4gKyNpbmNsdWRl
+IDxsaW51eC9vZl9kZXZpY2UuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L29mX2lycS5oPg0KPiA+
+ICsjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51
+eC9yZWdtYXAuaD4NCj4gPiArDQo+ID4gK3N0YXRpYyBzdHJ1Y3QgaXJxX3RvcF90IG10NjM1OF9p
+bnRzW10gPSB7DQo+ID4gKyAgICAgICBNVDYzNThfVE9QX0dFTihCVUNLKSwNCj4gPiArICAgICAg
+IE1UNjM1OF9UT1BfR0VOKExETyksDQo+ID4gKyAgICAgICBNVDYzNThfVE9QX0dFTihQU0MpLA0K
+PiA+ICsgICAgICAgTVQ2MzU4X1RPUF9HRU4oU0NLKSwNCj4gPiArICAgICAgIE1UNjM1OF9UT1Bf
+R0VOKEJNKSwNCj4gPiArICAgICAgIE1UNjM1OF9UT1BfR0VOKEhLKSwNCj4gPiArICAgICAgIE1U
+NjM1OF9UT1BfR0VOKEFVRCksDQo+ID4gKyAgICAgICBNVDYzNThfVE9QX0dFTihNSVNDKSwNCj4g
+PiArfTsNCj4gPiArDQo+ID4gK3N0YXRpYyB2b2lkIHBtaWNfaXJxX2VuYWJsZShzdHJ1Y3QgaXJx
+X2RhdGEgKmRhdGEpDQo+ID4gK3sNCj4gPiArICAgICAgIHVuc2lnbmVkIGludCBod2lycSA9IGly
+cWRfdG9faHdpcnEoZGF0YSk7DQo+ID4gKyAgICAgICBzdHJ1Y3QgbXQ2Mzk3X2NoaXAgKmNoaXAg
+PSBpcnFfZGF0YV9nZXRfaXJxX2NoaXBfZGF0YShkYXRhKTsNCj4gPiArICAgICAgIHN0cnVjdCBw
+bWljX2lycV9kYXRhICppcnFkID0gY2hpcC0+aXJxX2RhdGE7DQo+ID4gKw0KPiA+ICsgICAgICAg
+aXJxZC0+ZW5hYmxlX2h3aXJxW2h3aXJxXSA9IHRydWU7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0
+YXRpYyB2b2lkIHBtaWNfaXJxX2Rpc2FibGUoc3RydWN0IGlycV9kYXRhICpkYXRhKQ0KPiA+ICt7
+DQo+ID4gKyAgICAgICB1bnNpZ25lZCBpbnQgaHdpcnEgPSBpcnFkX3RvX2h3aXJxKGRhdGEpOw0K
+PiA+ICsgICAgICAgc3RydWN0IG10NjM5N19jaGlwICpjaGlwID0gaXJxX2RhdGFfZ2V0X2lycV9j
+aGlwX2RhdGEoZGF0YSk7DQo+ID4gKyAgICAgICBzdHJ1Y3QgcG1pY19pcnFfZGF0YSAqaXJxZCA9
+IGNoaXAtPmlycV9kYXRhOw0KPiA+ICsNCj4gPiArICAgICAgIGlycWQtPmVuYWJsZV9od2lycVto
+d2lycV0gPSBmYWxzZTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIHZvaWQgcG1pY19pcnFf
+bG9jayhzdHJ1Y3QgaXJxX2RhdGEgKmRhdGEpDQo+ID4gK3sNCj4gPiArICAgICAgIHN0cnVjdCBt
+dDYzOTdfY2hpcCAqY2hpcCA9IGlycV9kYXRhX2dldF9pcnFfY2hpcF9kYXRhKGRhdGEpOw0KPiA+
+ICsNCj4gPiArICAgICAgIG11dGV4X2xvY2soJmNoaXAtPmlycWxvY2spOw0KPiA+ICt9DQo+ID4g
+Kw0KPiA+ICtzdGF0aWMgdm9pZCBwbWljX2lycV9zeW5jX3VubG9jayhzdHJ1Y3QgaXJxX2RhdGEg
+KmRhdGEpDQo+ID4gK3sNCj4gPiArICAgICAgIHVuc2lnbmVkIGludCBpLCB0b3BfZ3AsIGdwX29m
+ZnNldCwgZW5fcmVnLCBpbnRfcmVncywgc2hpZnQ7DQo+ID4gKyAgICAgICBzdHJ1Y3QgbXQ2Mzk3
+X2NoaXAgKmNoaXAgPSBpcnFfZGF0YV9nZXRfaXJxX2NoaXBfZGF0YShkYXRhKTsNCj4gPiArICAg
+ICAgIHN0cnVjdCBwbWljX2lycV9kYXRhICppcnFkID0gY2hpcC0+aXJxX2RhdGE7DQo+ID4gKw0K
+PiA+ICsgICAgICAgZm9yIChpID0gMDsgaSA8IGlycWQtPm51bV9wbWljX2lycXM7IGkrKykgew0K
+PiA+ICsgICAgICAgICAgICAgICBpZiAoaXJxZC0+ZW5hYmxlX2h3aXJxW2ldID09IGlycWQtPmNh
+Y2hlX2h3aXJxW2ldKQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIGNvbnRpbnVlOw0KPiA+
+ICsNCj4gPiArICAgICAgICAgICAgICAgLyogRmluZCBvdXQgdGhlIElSUSBncm91cCAqLw0KPiA+
+ICsgICAgICAgICAgICAgICB0b3BfZ3AgPSAwOw0KPiA+ICsgICAgICAgICAgICAgICB3aGlsZSAo
+KHRvcF9ncCArIDEpIDwgaXJxZC0+bnVtX3RvcCAmJg0KPiA+ICsgICAgICAgICAgICAgICAgICAg
+ICAgaSA+PSBtdDYzNThfaW50c1t0b3BfZ3AgKyAxXS5od2lycV9iYXNlKQ0KPiA+ICsgICAgICAg
+ICAgICAgICAgICAgICAgIHRvcF9ncCsrOw0KPiA+ICsNCj4gPiArICAgICAgICAgICAgICAgLyog
+RmluZCB0aGUgaXJxIHJlZ2lzdGVycyAqLw0KPiANCj4gRnJvbSBMZWUgSm9uZXM6ICdOaXQ6ICJJ
+UlEiJw0KPiANCj4gPiArICAgICAgICAgICAgICAgZ3Bfb2Zmc2V0ID0gaSAtIG10NjM1OF9pbnRz
+W3RvcF9ncF0uaHdpcnFfYmFzZTsNCj4gPiArICAgICAgICAgICAgICAgaW50X3JlZ3MgPSBncF9v
+ZmZzZXQgLyBNVDYzNThfUkVHX1dJRFRIOw0KPiA+ICsgICAgICAgICAgICAgICBzaGlmdCA9IGdw
+X29mZnNldCAlIE1UNjM1OF9SRUdfV0lEVEg7DQo+ID4gKyAgICAgICAgICAgICAgIGVuX3JlZyA9
+IG10NjM1OF9pbnRzW3RvcF9ncF0uZW5fcmVnICsNCj4gPiArICAgICAgICAgICAgICAgICAgICAg
+ICAgKG10NjM1OF9pbnRzW3RvcF9ncF0uZW5fcmVnX3NoaWZ0ICogaW50X3JlZ3MpOw0KPiA+ICsN
+Cj4gWy4uLl0NCj4gPiArc3RhdGljIGNvbnN0IHN0cnVjdCBpcnFfZG9tYWluX29wcyBtdDYzNThf
+aXJxX2RvbWFpbl9vcHMgPSB7DQo+ID4gKyAgICAgICAubWFwID0gcG1pY19pcnFfZG9tYWluX21h
+cCwNCj4gPiArICAgICAgIC54bGF0ZSA9IGlycV9kb21haW5feGxhdGVfdHdvY2VsbCwNCj4gPiAr
+fTsNCj4gPiArDQo+ID4gK2ludCBtdDYzNThfaXJxX2luaXQoc3RydWN0IG10NjM5N19jaGlwICpj
+aGlwKQ0KPiA+ICt7DQo+ID4gKyAgICAgICBpbnQgaSwgaiwgcmV0Ow0KPiA+ICsgICAgICAgc3Ry
+dWN0IHBtaWNfaXJxX2RhdGEgKmlycWQ7DQo+ID4gKw0KPiA+ICsgICAgICAgaXJxZCA9IGRldm1f
+a3phbGxvYyhjaGlwLT5kZXYsIHNpemVvZihzdHJ1Y3QgcG1pY19pcnFfZGF0YSAqKSwNCj4gDQo+
+IEZyb20gTGVlIEpvbmVzOiAnc2l6ZW9mKCppcnFkKScNCj4gDQo+ID4gKyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIEdGUF9LRVJORUwpOw0KPiA+ICsgICAgICAgaWYgKCFpcnFkKQ0KPiA+ICsg
+ICAgICAgICAgICAgICByZXR1cm4gLUVOT01FTTsNCj4gPiArDQo+ID4gKyAgICAgICBjaGlwLT5p
+cnFfZGF0YSA9IGlycWQ7DQo+ID4gKw0KPiBbLi4uXQ0KPiA+IEBAIC0xNTQsMTkgKzE4NCwzMyBA
+QCBzdGF0aWMgaW50IG10NjM5N19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0K
+PiA+ICAgICAgICAgaWYgKHBtaWMtPmlycSA8PSAwKQ0KPiA+ICAgICAgICAgICAgICAgICByZXR1
+cm4gcG1pYy0+aXJxOw0KPiA+DQo+ID4gLSAgICAgICByZXQgPSBtdDYzOTdfaXJxX2luaXQocG1p
+Yyk7DQo+ID4gLSAgICAgICBpZiAocmV0KQ0KPiA+IC0gICAgICAgICAgICAgICByZXR1cm4gcmV0
+Ow0KPiA+IC0NCj4gPiAgICAgICAgIHN3aXRjaCAocG1pYy0+Y2hpcF9pZCkgew0KPiA+ICAgICAg
+ICAgY2FzZSBNVDYzMjNfQ0hJUF9JRDoNCj4gPiArICAgICAgICAgICAgICAgcmV0ID0gbXQ2Mzk3
+X2lycV9pbml0KHBtaWMpOw0KPiA+ICsgICAgICAgICAgICAgICBpZiAocmV0KQ0KPiA+ICsgICAg
+ICAgICAgICAgICAgICAgICAgIHJldHVybiByZXQ7DQo+ID4gKw0KPiA+ICAgICAgICAgICAgICAg
+ICByZXQgPSBkZXZtX21mZF9hZGRfZGV2aWNlcygmcGRldi0+ZGV2LCBQTEFURk9STV9ERVZJRF9O
+T05FLA0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBtdDYz
+MjNfZGV2cywgQVJSQVlfU0laRShtdDYzMjNfZGV2cyksDQo+ID4gICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIE5VTEwsIDAsIHBtaWMtPmlycV9kb21haW4pOw0KPiA+
+ICAgICAgICAgICAgICAgICBicmVhazsNCj4gPg0KPiA+ICsgICAgICAgY2FzZSBNVDYzNThfQ0hJ
+UF9JRDoNCj4gPiArICAgICAgICAgICAgICAgcmV0ID0gbXQ2MzU4X2lycV9pbml0KHBtaWMpOw0K
+PiA+ICsgICAgICAgICAgICAgICBpZiAocmV0KQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAg
+IHJldHVybiByZXQ7DQo+ID4gKw0KPiA+ICsgICAgICAgICAgICAgICByZXQgPSBkZXZtX21mZF9h
+ZGRfZGV2aWNlcygmcGRldi0+ZGV2LCBQTEFURk9STV9ERVZJRF9OT05FLA0KPiA+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBtdDYzNThfZGV2cywgQVJSQVlfU0la
+RShtdDYzNThfZGV2cyksDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIE5VTEwsIDAsIHBtaWMtPmlycV9kb21haW4pOw0KPiA+ICsgICAgICAgICAgICAgICBi
+cmVhazsNCj4gDQo+IEZyb20gTGVlIEpvbmVzOiAiSW4gYSBzdWJzZXF1ZW50IHBhdGNoIHlvdSBj
+YW4gY2hvb3NlIHRoZSBjb3JyZWN0DQo+IG10WFhYWF9kZXZzIHN0cnVjdHVyZSB0byBwYXNzIGFu
+ZCBjYWxsIGRldm1fbWZkX2FkZF9kZXZpY2VzKCkgb25seQ0KPiBvbmNlIGJlbG93IHRoZSBzd2l0
+Y2goKS4iDQo+IA0KPiBDYW4geW91IGxvb2sgaW50byB0aGF0IGFzIGEgZm9sbG93LXVwIHBhdGNo
+Pw0KPiANCj4gDQo+ID4gKw0KPiA+ICAgICAgICAgY2FzZSBNVDYzOTFfQ0hJUF9JRDoNCj4gPiAg
+ICAgICAgIGNhc2UgTVQ2Mzk3X0NISVBfSUQ6DQo+ID4gKyAgICAgICAgICAgICAgIHJldCA9IG10
+NjM5N19pcnFfaW5pdChwbWljKTsNCj4gPiArICAgICAgICAgICAgICAgaWYgKHJldCkNCj4gPiAr
+ICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPiA+ICsNCj4gPiAgICAgICAgICAg
+ICAgICAgcmV0ID0gZGV2bV9tZmRfYWRkX2RldmljZXMoJnBkZXYtPmRldiwgUExBVEZPUk1fREVW
+SURfTk9ORSwNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+bXQ2Mzk3X2RldnMsIEFSUkFZX1NJWkUobXQ2Mzk3X2RldnMpLA0KPiA+ICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBOVUxMLCAwLCBwbWljLT5pcnFfZG9tYWluKTsN
+Cj4gDQo+IFtzbmlwXQ0KDQo=
 
-This is weirdly indented.
-
-Else,
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
