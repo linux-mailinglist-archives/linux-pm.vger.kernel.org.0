@@ -2,73 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF49919A8BB
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Apr 2020 11:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8678219A8CC
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Apr 2020 11:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726205AbgDAJhp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Apr 2020 05:37:45 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:41506 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726063AbgDAJho (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Apr 2020 05:37:44 -0400
-Received: by mail-ot1-f68.google.com with SMTP id f52so25228250otf.8;
-        Wed, 01 Apr 2020 02:37:44 -0700 (PDT)
+        id S1731680AbgDAJoE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Apr 2020 05:44:04 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:46153 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731608AbgDAJoD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Apr 2020 05:44:03 -0400
+Received: by mail-oi1-f193.google.com with SMTP id q204so21580958oia.13;
+        Wed, 01 Apr 2020 02:44:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=M7FYiSC7chEEgx3CNQ8a2NbFdzSKSvDwTgv1YpBUVP0=;
-        b=U9OhkD1KsACu9RTMq+Dn93FVxrdQIjAHwtYKQaDpvD3pa9p+xvvAydekoR39p6tUhg
-         h+692NDD2ulHwKwWiJDOOsaKuhu1n3KhYlVkMavLpNp0bT4FlLz70hBBbktN9cEbKrwg
-         gvq/xsp2lz4oZ/wgjJj5Hk4UzfYQUizYDYwqKe0WwjGLoa5D8jFLGl3SIKb9TAeHtEPi
-         WMUcpe0VCdXxJk/lKAyW2KhLSBdcShvBZKGfLuu5ySbPD20yiqxIfEhQ5hrIa+gh4Znr
-         bH/OE6xCIZYk6UBul+9SP/dtATIWX3UC7rnml2TVBnzpIKXp6pTyV5HKvsDEPuOqUT2g
-         vFcA==
-X-Gm-Message-State: ANhLgQ0MUJ/z4kKaw1t8MbVxeVcAuG40zeJ7eej6r1EB84SD61uD1Mnx
-        Hu9n7sMiHjf2Ux/KJDzr84emIgOA6jnsvozkZw4=
-X-Google-Smtp-Source: ADFU+vsbXgO7cUlq4NWlNLviAvtT6GXBALW9CVJiqCLwIpBGn87lAQkIkBpdW86gWYY98wkXVhVYjYHm9MhM8Ops5KU=
-X-Received: by 2002:a9d:7402:: with SMTP id n2mr16640011otk.262.1585733863976;
- Wed, 01 Apr 2020 02:37:43 -0700 (PDT)
+        bh=Tc/XOc5/LK1Q2z5fURAPBVNdJRpf3W6JCMUDG26GjAA=;
+        b=ppLeAwfEvUJnGL9KZATgfL72F6SWFf6GmzF2TwLZ1/r05alfHZ8ArydD2z8ryt1VKy
+         PMmxoeHjVekvT+U5bBiG6mVxfWiaPL2O4wQ5J3J55e3U8YEE1bY6nyisx7PcQW9K1chs
+         1RhSGVwJ7C0O1Bp5c9LgYAJ6Ft06x3CpBnKnN9k/SksL2etKhXQkdpTxvojZT6DkZgtn
+         dJo6y+oHWxY1/P8crUXyR+tbhBIQMs0Hf+366aaWaamB+GXs6Pm0+A0AK1PmVk2fdwC1
+         f3az4ajEWHbrT0oGTax/6VM3htyNFVP913+TbobQdH2o++7HRRy0cpH/itvjLHUs2rna
+         NXpw==
+X-Gm-Message-State: AGi0PuZGyYdO8ItbzDAtrqbFX5Z07GJdalhc3/nA1iRd2rxL92a/rgXt
+        bnOEss7hSShztx/KAwt8PwBdfy7AYo+W0/Yw3LE=
+X-Google-Smtp-Source: APiQypIx6BXDtcLC1NIBjcSQ0pUhumEFfmetRvP19HCeojek7ZuEzadWynK1exhfGc0EyDZD28JGUbNTXHpM7N81smI=
+X-Received: by 2002:aca:2209:: with SMTP id b9mr2183308oic.103.1585734243209;
+ Wed, 01 Apr 2020 02:44:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <1585670125-45987-1-git-send-email-decui@microsoft.com>
-In-Reply-To: <1585670125-45987-1-git-send-email-decui@microsoft.com>
+References: <20200329144640.20536-1-yu.c.chen@intel.com>
+In-Reply-To: <20200329144640.20536-1-yu.c.chen@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 1 Apr 2020 11:37:32 +0200
-Message-ID: <CAJZ5v0ijmuZ6GPpnrRoBbbYGiqDbu5HpPcSRD-bdfko7SeJ+mQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: Propagate the return value of hibernation_restore()
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Wed, 1 Apr 2020 11:43:51 +0200
+Message-ID: <CAJZ5v0gV2Tn_CQoJiuR92gjJ8-xjzLPY8esAkxgy=W8YkvUNyg@mail.gmail.com>
+Subject: Re: [PATCH][v2] PM / sleep: Add pm_debug_messages boot command control
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 5:56 PM Dexuan Cui <decui@microsoft.com> wrote:
+On Sun, Mar 29, 2020 at 4:48 PM Chen Yu <yu.c.chen@intel.com> wrote:
 >
-> If hibernation_restore() fails, the 'error' should not be zero.
+> Debug messages from the system suspend/hibernation infrastructure
+> is disabled by default, and can only be enabled after the system
+> has boot up via /sys/power/pm_debug_messages. This makes the hibernation
+> resume hard to track as it involves system boot up across hibernation.
+> There's no chance for software_resume() to track the resume process,
+> eg.
 >
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> Turning on the pm_debug_messages during boot up by appending
+> 'pm_debug_message'.
+>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 > ---
->  kernel/power/hibernate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v2: According to Randy's suggestion, add the command line
+>     option to Documentation/admin-guide/kernel-parameters.txt
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 3 +++
+>  kernel/power/main.c                             | 7 +++++++
+>  2 files changed, 10 insertions(+)
 >
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index 6dbeedb..86aba87 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -678,7 +678,7 @@ static int load_image_and_restore(void)
->         error = swsusp_read(&flags);
->         swsusp_close(FMODE_READ);
->         if (!error)
-> -               hibernation_restore(flags & SF_PLATFORM_MODE);
-> +               error = hibernation_restore(flags & SF_PLATFORM_MODE);
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index c07815d230bc..105ec73743d7 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -3698,6 +3698,9 @@
+>                         Override pmtimer IOPort with a hex value.
+>                         e.g. pmtmr=0x508
 >
->         pr_err("Failed to load image, recovering.\n");
->         swsusp_free();
-> --
+> +       pm_debug_message        [SUSPEND,KNL]
+> +                       Enable suspend/resume debug messages during boot up.
+> +
+>         pnp.debug=1     [PNP]
+>                         Enable PNP debug messages (depends on the
+>                         CONFIG_PNP_DEBUG_MESSAGES option).  Change at run-time
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index 69b7a8aeca3b..1da3d7c15e03 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -535,6 +535,13 @@ static ssize_t pm_debug_messages_store(struct kobject *kobj,
+>
+>  power_attr(pm_debug_messages);
+>
+> +static int __init pm_debug_message_setup(char *str)
+> +{
+> +       pm_debug_messages_on = true;
+> +       return 1;
+> +}
+> +__setup("pm_debug_message", pm_debug_message_setup);
 
-Applied as 5.7-rc material, thanks!
+I'd call this "pm_debug_messages" (just like the sysfs knob) and
+rename the rest accordingly.
+
+> +
+>  /**
+>   * __pm_pr_dbg - Print a suspend debug message to the kernel log.
+>   * @defer: Whether or not to use printk_deferred() to print the message.
+> --
