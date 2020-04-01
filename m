@@ -2,150 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B69219A262
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Apr 2020 01:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8D719A2CF
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Apr 2020 02:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731478AbgCaXUf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 Mar 2020 19:20:35 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:47124 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731450AbgCaXUe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Mar 2020 19:20:34 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200331232032epoutp02b69282807622f652f61b3d6cf712a622~Bht4duhCT0450504505epoutp022
-        for <linux-pm@vger.kernel.org>; Tue, 31 Mar 2020 23:20:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200331232032epoutp02b69282807622f652f61b3d6cf712a622~Bht4duhCT0450504505epoutp022
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1585696832;
-        bh=Ykc51i8hr0AncU8IY+n1mU9alBghALWWelj6pYw7wT8=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=GbksPALQYDbyuDVhQCba/AjdCK+F2JEAMKWVpG8p3Tt1tD6Toq1s8QxqbjNI5gSn5
-         0RgsOJ5ya1KDaOcBbb+1WvTrquOZU7yhskk088pyJBR17DpDG0MKbytJLXR8GonkME
-         S0/G/RbAQ20Dnf70Psq5dikp4IbRjHtB/oAYTeq0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200331232031epcas1p198ac5d860533e73152c178ceb5a8b4d6~Bht3uqVc91864018640epcas1p10;
-        Tue, 31 Mar 2020 23:20:31 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 48sQKn0WwbzMqYm1; Tue, 31 Mar
-        2020 23:20:29 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CE.1F.04140.A30D38E5; Wed,  1 Apr 2020 08:20:26 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200331232025epcas1p242a0b7a24c7a68d679ae6b42a40e3985~BhtyRVhZH3036430364epcas1p2I;
-        Tue, 31 Mar 2020 23:20:25 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200331232025epsmtrp1b84b8180cf280a74e93bbd400b0d6324~BhtyQa0M02638126381epsmtrp1I;
-        Tue, 31 Mar 2020 23:20:25 +0000 (GMT)
-X-AuditID: b6c32a36-fbbff7000000102c-57-5e83d03a5b87
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D6.75.04024.930D38E5; Wed,  1 Apr 2020 08:20:25 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200331232025epsmtip29ebcd9c061df67d3a392e4649743f696~BhtyAla7I2561625616epsmtip24;
-        Tue, 31 Mar 2020 23:20:25 +0000 (GMT)
-Subject: Re: [PATCH v1 5/5] PM / devfreq: tegra30: Make CPUFreq notifier to
- take into account boosting
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <afcc9f80-c102-da42-8f7f-9b66417a9d4d@samsung.com>
-Date:   Wed, 1 Apr 2020 08:29:31 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1731553AbgDAAW4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 Mar 2020 20:22:56 -0400
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:35496 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729514AbgDAAW4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 Mar 2020 20:22:56 -0400
+Received: by mail-pj1-f68.google.com with SMTP id g9so1859644pjp.0
+        for <linux-pm@vger.kernel.org>; Tue, 31 Mar 2020 17:22:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=android.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0o2sV67Co/BBx0wQ4CH55gP8jkBwRSr+2tVUKNJ+jjs=;
+        b=WO+ozxIIDjv27brvR7QvEowOsM567l0YbO2zH0gREDzz8YZrcRPYUZ1V1ZPiOl3NfE
+         1EaDjS+UlqeOO7OB5Yd/lEZQKIpjeHMjsQPi/V0FK6RcTFGYN1joylj1uA8zmjk9JoY0
+         4srtd/tCSlN1MTJV2QRYOYqxk/xfRkSy35AILPNtkOl6ho6qt4Ix3UkaPF8iecDSFbro
+         kq8+lqj7uW9i+RE5rNwRra9PQaClmxoQo9ArJX72Z9usw4uJcX7GsS4vntuwxjs+J+aw
+         iPulgCUfwRmovAjXdFqTWyLVkSl36vOYQp/J488xiS2HANCxmT8RN5ywrd8LxelYB+LQ
+         e8jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0o2sV67Co/BBx0wQ4CH55gP8jkBwRSr+2tVUKNJ+jjs=;
+        b=VXfhtE1cLMx15V/c+zRgHpOCzZXhPRP6JO9gQjLxum3wxaWx7XfOisN5Fu07Ejpm4m
+         WR/v5vj8UWF+KAkzcvOMuQhmO8W6OZrKtaFiTpVtSxX5iLgPg0Vt/l+CU8Ybr5X+5s0I
+         +nFP5cRcEKhEWBTgnthXrgtVKZapvX44broPX+LuJeEsQYKmTU/Ce1eF2FNWweGMvU8z
+         RSb8CIZt2yovFbOGBgMfxnyEV2TyG68adWQQ25xYByyJe8/OU66qJ6pcBAqrEBEGfCAh
+         E0QX9dKLJlAdRJ0qskITIQMpcvMnwl6ZS1zCz/nWMG/K9ChQCqMAs9XLb7clajoVrdqi
+         BRpw==
+X-Gm-Message-State: AGi0PubHeFAgkiq26dgCjo6LkPubk6dSoY/oyZntcRzbOZvzjTcjet2a
+        ujMv8zIEh3RnG/UEtgf5PsF8Rg==
+X-Google-Smtp-Source: APiQypKuzqy2/q3VbEGna+2WnnSYjgThOwQnOXSMdNxZiSgHa5xgjTxdBLOAa4VjYDpVIPuyUNxudQ==
+X-Received: by 2002:a17:90a:2103:: with SMTP id a3mr1623468pje.181.1585700573639;
+        Tue, 31 Mar 2020 17:22:53 -0700 (PDT)
+Received: from localhost (c-73-170-36-70.hsd1.ca.comcast.net. [73.170.36.70])
+        by smtp.gmail.com with ESMTPSA id z8sm205317pju.33.2020.03.31.17.22.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2020 17:22:52 -0700 (PDT)
+Date:   Tue, 31 Mar 2020 17:22:51 -0700
+From:   Sandeep Patil <sspatil@android.com>
+To:     Dan Murphy <dmurphy@ti.com>
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 2/4] power_supply: Add additional health properties to
+ the header
+Message-ID: <20200401002251.GA177505@google.com>
+References: <20200116175039.1317-1-dmurphy@ti.com>
+ <20200116175039.1317-3-dmurphy@ti.com>
+ <20200117010658.iqs2zpwl6bsomkuo@earth.universe>
+ <20200306235548.GA187098@google.com>
+ <6b947adc-a176-5fa0-1382-8b08ec3f8b09@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <20200330231617.17079-6-digetx@gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPJsWRmVeSWpSXmKPExsWy7bCmga7VheY4g5erxCxWf3zMaNEyaxGL
-        xdmmN+wWH3vusVpc3jWHzeJz7xFGi84vs9gsLp5ytbjduILN4t+1jSwWP3fNY3Hg9nh/o5Xd
-        Y+esu+wem1Z1snn0Nr9j8+jbsorR4/MmuQC2qGybjNTElNQihdS85PyUzLx0WyXv4HjneFMz
-        A0NdQ0sLcyWFvMTcVFslF58AXbfMHKDzlBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkF
-        KTkFlgV6xYm5xaV56XrJ+blWhgYGRqZAhQnZGRNaWlgKHnBU9Lxay9TAOI+9i5GTQ0LAROJy
-        wxTWLkYuDiGBHYwSpxc1s0A4nxgl5n1qZIJwvjFKHF64A65l78fbUIm9jBLbJj9nh3DeM0p8
-        +LaXDaRKWCBDYumWE2BVIgKLmSReb57LApJgFiiR2D3xCBOIzSagJbH/xQ2wBn4BRYmrPx4z
-        gti8AnYSBw9dA4uzCKhIfHr6A6xeVCBM4uS2FqgaQYmTM5+AzeQUMJNon/uHGWK+uMStJ/OZ
-        IGx5ie1v5zCDHCEh0M8ucfZOIyPEDy4Ss7e0QP0jLPHq+BYoW0riZX8blF0tsfLkETaI5g5G
-        iS37L7BCJIwl9i+dDLSBA2iDpsT6XfoQYUWJnb/nMkIs5pN497WHFaREQoBXoqNNCKJEWeLy
-        g7tMELakxOL2TrYJjEqzkLwzC8kLs5C8MAth2QJGllWMYqkFxbnpqcWGBUbI8b2JEZx4tcx2
-        MC4653OIUYCDUYmHV8GqOU6INbGsuDL3EKMEB7OSCC+bf0OcEG9KYmVValF+fFFpTmrxIUZT
-        YGhPZJYSTc4HZoW8knhDUyNjY2MLE0MzU0NDJXHeqddz4oQE0hNLUrNTUwtSi2D6mDg4pRoY
-        NRIE+5JZZ/bcNakJ/Se00v1bqMbd4DMfqvJfe3k8UFjRpLJ5Vf1ptY5rt/OWhhyoX63rvufN
-        5IN7dBu9bq1Y+nvl55gwt72bN2ld/+IbxOZao8n3/YvHv/zJ60tffH+cltSi5vp8ycYDl2dM
-        8vRO1fRflZY5O+1yBfO6fI4yN14XzrJv0U9DlViKMxINtZiLihMBn1W5AtIDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsWy7bCSvK7lheY4gxeblS1Wf3zMaNEyaxGL
-        xdmmN+wWH3vusVpc3jWHzeJz7xFGi84vs9gsLp5ytbjduILN4t+1jSwWP3fNY3Hg9nh/o5Xd
-        Y+esu+wem1Z1snn0Nr9j8+jbsorR4/MmuQC2KC6blNSczLLUIn27BK6MCS0tLAUPOCp6Xq1l
-        amCcx97FyMkhIWAisffjbaYuRi4OIYHdjBIzzmxlhkhISky7eBTI5gCyhSUOHy6GqHnLKLFt
-        ag8jSI2wQIbE0i0nwJpFBJYySay4+QVsKrNAicSJZ/9YITq2Mkr8bG8D62AT0JLY/+IGG4jN
-        L6AocfXHY7A4r4CdxMFD18DiLAIqEp+e/mACsUUFwiR2LnnMBFEjKHFy5hMWEJtTwEyife4f
-        Zohl6hJ/5l2CssUlbj2ZzwRhy0tsfzuHeQKj8Cwk7bOQtMxC0jILScsCRpZVjJKpBcW56bnF
-        hgWGeanlesWJucWleel6yfm5mxjBEailuYPx8pL4Q4wCHIxKPLwKVs1xQqyJZcWVuYcYJTiY
-        lUR42fwb4oR4UxIrq1KL8uOLSnNSiw8xSnOwKInzPs07FikkkJ5YkpqdmlqQWgSTZeLglGpg
-        9LC/mrlrVVeUq/kT58cLavNYXQ5zntzGY3Nqb/Ce3H260oEMsbtuBbPfq2UynarzMHu7mf+U
-        lx0HX/f+4xKNc9SIb/6yOdVL9pPoDONHQUqXZsdbveUQSzJZIZKsGyanlL4+4U+RutxPxady
-        9zi49F5seHNNRFXGdvWy9dfLFe2yrHqyqy8qsRRnJBpqMRcVJwIAo1QZCLwCAAA=
-X-CMS-MailID: 20200331232025epcas1p242a0b7a24c7a68d679ae6b42a40e3985
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200330232026epcas1p2234ae241b9693555b4df74aab3d8aee9
-References: <20200330231617.17079-1-digetx@gmail.com>
-        <CGME20200330232026epcas1p2234ae241b9693555b4df74aab3d8aee9@epcas1p2.samsung.com>
-        <20200330231617.17079-6-digetx@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b947adc-a176-5fa0-1382-8b08ec3f8b09@ti.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
+On Tue, Mar 10, 2020 at 03:09:37PM -0500, Dan Murphy wrote:
+> Hello
+> 
+> On 3/6/20 5:55 PM, Sandeep Patil wrote:
+> > Hi Sebastian,
+> > 
+> > On Fri, Jan 17, 2020 at 02:06:58AM +0100, Sebastian Reichel wrote:
+> > > Hi,
+> > > 
+> > > On Thu, Jan 16, 2020 at 11:50:37AM -0600, Dan Murphy wrote:
+> > > > Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
+> > > > 
+> > > > Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> > > > ---
+> > > Looks good. But I will not merge it without a user and have comments
+> > > for the driver.
+> > Android has been looking for these properties for a while now [1].
+> > It was added[2] when we saw that the manufacturers were implementing these
+> > properties in the driver. I didn't know the properties were absent upstream
+> > until yesterday. Somebody pointed out in our ongoing effort to make sure
+> > all core kernel changes that android depends on are present upstream.
+> > 
+> > I think those values are also propagated in application facing APIs in
+> > Android (but I am not sure yet, let me know if that's something you want
+> > to find out).
+> > 
+> > I wanted to chime in and present you a 'user' for this if that helps.
+> 
+> We have re-submitted the BQ25150/155 driver that would be the user and we
+> have 2 more for review that will use the new definitions
 
-On 3/31/20 8:16 AM, Dmitry Osipenko wrote:
-> MCCPU frequency boosting needs to be taken into account in order to avoid
-> scheduling of unnecessary devfreq updates.
+Dan / Sebastian, I wasn't able to find the subsequent patches
+that add the 3 health properties, so I'm assuming this patch is still
+"out-of-tree".
 
-"in order to avoid scheduling of unnecessary devfreq updates."
-I don't understand the correct meaning of following description.
-Could you explain it more detailed?
+I was hoping against that so we (Android) aren't unnecessarily diverging
+from upstream. However, I have now just cherry-picked this patch[1] for the
+next Android release.
+
+Sebastian, since these appear in JEITA spec, will the same patch with
+additions to the commit message saying so be enough?
+
+Thanks,
+- ssp
+
+1. https://android-review.googlesource.com/c/kernel/common/+/1275596
 
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/devfreq/tegra30-devfreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Dan
 > 
-> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-> index 34f6291e880c..3b57aac9894c 100644
-> --- a/drivers/devfreq/tegra30-devfreq.c
-> +++ b/drivers/devfreq/tegra30-devfreq.c
-> @@ -420,7 +420,7 @@ tegra_actmon_cpufreq_contribution(struct tegra_devfreq *tegra,
->  
->  	static_cpu_emc_freq = actmon_cpu_to_emc_rate(tegra, cpu_freq);
->  
-> -	if (dev_freq >= static_cpu_emc_freq)
-> +	if (dev_freq + actmon_dev->boost_freq >= static_cpu_emc_freq)
->  		return 0;
->  
->  	return static_cpu_emc_freq;
-> 
-
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
