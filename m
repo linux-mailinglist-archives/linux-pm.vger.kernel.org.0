@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BCF19A715
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Apr 2020 10:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B75F19A722
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Apr 2020 10:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728236AbgDAIUV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Apr 2020 04:20:21 -0400
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:39889 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726406AbgDAIUT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Apr 2020 04:20:19 -0400
-Received: by mail-ua1-f66.google.com with SMTP id z7so4362765uai.6
-        for <linux-pm@vger.kernel.org>; Wed, 01 Apr 2020 01:20:18 -0700 (PDT)
+        id S1730366AbgDAIVd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Apr 2020 04:21:33 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:38021 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbgDAIVd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Apr 2020 04:21:33 -0400
+Received: by mail-vs1-f66.google.com with SMTP id x206so15347252vsx.5
+        for <linux-pm@vger.kernel.org>; Wed, 01 Apr 2020 01:21:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=verdurent-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Jfx+WzxfTIw9109h9/F+uN5ZdtC4CUJc38PHSbeeBtM=;
-        b=kFTdCWCnXWL/FxLIRizE+7P10KR+ftxEYZsICf8C8mqGdKrRQEscI/64vPCXWOyuC9
-         hv1fmKVvX9YZAvVuJ3eM8o3RuurUlQ5aquTKQh0S2A6ICZHE7hjgbois3NK3d53co6sq
-         7nciOYPmbIhWZIv6ATsF1xoYIr0T6KhPhl0VmA4WURRS/qkDk74rO3sf8FvomTCCOcuq
-         POSpjXZ0TQg9bAZVoaz+Xz/k2lCOWOBMBhWHOpRAtpnYuFgPGAxqJ5UKABKMW18QIPIW
-         wHo700tX4cbbOuvDpdRuVG2o3DeYGmjQ6XbVJpMNSdPca0p5LK3UF4iWM61Mu8qz8srV
-         8UQQ==
+        bh=TMiys8vgh/zVs+g/WqcrVmGnSmA9w/d7OqJQQ7up1M4=;
+        b=nOcgW+vJIDaeDBEdtqPJ13SjXnUQ8tvB/zXLpC8eEDmJa1qx0uTZpc4I94TQiNjE9T
+         msVtL4CTE33K//fw+xBNn9GaFPpRVLqyj5PGNxcqEoozzzRecgBLsoLIzAt/5NSW01AE
+         Ynl8VeIjsvYaiV6k4IVQfovLO0c12hxq3kZ41k3nh4TKrIk6ubCen/TswPapWoaThDNB
+         9A40s6iX1mVNOTpDe99mHNmQWlLJ2JxmLsTGu/yT5GmlhdDZoMZyZkyiPOJJq5FGqIcO
+         ti5blWz6lQahfcXM/qyBmUasrIWl9sVGvCfjPhfLX4CFLf8PQa13p+ye9/v/eTpjxdgF
+         Q1/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Jfx+WzxfTIw9109h9/F+uN5ZdtC4CUJc38PHSbeeBtM=;
-        b=Be/SU5K7oBLMVloRykEi/xqF0rE4t5H65fviwkV9JDz/jaZvC0RdB5fldMl5Cf6uQT
-         q2naSIMOXRyqmFFrRBWNKit+uPXG3BSMwrf2p50n9ezY1NCIja9Mmdt3xP6mGmO8XIRM
-         vu4WaIEm6uhaf3OTUFkAILX7ZQnpI0NhqjO4JTfqJ6KX4hvQCEPYrc83zSpVXUlckI0P
-         VqVWl18SjSdLZzRTTZ/HY9HaM8hhrHbe7H5XGc+xNqmqhCzOcvASc1zWyr7nOi+pw8D8
-         26j6qipxHTbNQwVT0fM16FcO78CQAP9SWNg9flFxVhT0Yv+Cr4L/LtsUr5jw/egYB8Ma
-         Yd+w==
-X-Gm-Message-State: AGi0PuakMnTUcNEgIQUWkQj32kPIWjqzAkefd7FDUC3eo/dgbpvv+5dn
-        mMUWbV6EpMSZ6qWia70/aoU8IZk192MYBrjJelTdHQ==
-X-Google-Smtp-Source: APiQypJ0UixfKiD4USaplcV9xofH2gdUQll0ySr4YPXyUtqi0iouiSejQj3sS2nAegAhi7IEFT63GHFPOW6QMhDyJRw=
-X-Received: by 2002:ab0:608b:: with SMTP id i11mr14498961ual.94.1585729217782;
- Wed, 01 Apr 2020 01:20:17 -0700 (PDT)
+        bh=TMiys8vgh/zVs+g/WqcrVmGnSmA9w/d7OqJQQ7up1M4=;
+        b=Q8VovnsDepUc8apnoGAKxrCbMNACf2buNXP9WRRICeSPFxkGO6bh14A1nnBf0oAKC9
+         doWn3kv85PPBKfiP64P2lDXyU8SfIPQ4Z4eU5DuFivzZxNT5as2f64MZdLAIKg2wygHa
+         g6jqZLilJXKNZNQ3bP0nVaQGOaCyHvN5UuJM27LXfAFN/ntWKZf7D/9jy20SFByb9FJX
+         yTPYZPaKaYPhAqGB3wIozqSGDqYXqhDPLTT3lguVu1JXRQjVAg9+ObLHkwJ8N9966uy4
+         HytGodfKX8dEluGZK5txrZBjI1VbAlU7431HlOWvvOlcjdCnWGkITYa4/fg8spO4CF1l
+         +d2g==
+X-Gm-Message-State: AGi0PuY3NfQ3oL5RoZawrops/K6/k/i4DVS+KHUMCzt+AXhBH1kVHgPC
+        4h5jGGjud6WL4VSrWofNuJbSxcl8Rw+IU4xoDAt3A1EWuD/QXw==
+X-Google-Smtp-Source: APiQypIFgzuZyqDqF5vQmkoXOgF4Gs4J+CyGROUlmGOe4oP6uK3MuXRnZum585qhaQzu2hPT5+Qkz4Vz+TJF0gMrJP0=
+X-Received: by 2002:a67:69d5:: with SMTP id e204mr14355392vsc.159.1585729291733;
+ Wed, 01 Apr 2020 01:21:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200331165449.30355-1-daniel.lezcano@linaro.org> <20200331165449.30355-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20200331165449.30355-2-daniel.lezcano@linaro.org>
+References: <20200331165449.30355-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20200331165449.30355-1-daniel.lezcano@linaro.org>
 From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Wed, 1 Apr 2020 13:50:06 +0530
-Message-ID: <CAHLCerOqyy+2H0hsrFZGD87aYpr6-fjimhKXasn=JCTK8An+qg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: core: Remove pointless debug traces
+Date:   Wed, 1 Apr 2020 13:51:20 +0530
+Message-ID: <CAHLCerPrCLNqcK8E1T917_HyV3uuP9U3e6sR335KiJn4ho72aw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: core: Make thermal_zone_set_trips private
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     Zhang Rui <rui.zhang@intel.com>,
         "open list:THERMAL" <linux-pm@vger.kernel.org>,
@@ -57,40 +57,90 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 10:27 PM Daniel Lezcano
+On Tue, Mar 31, 2020 at 10:26 PM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
-> The last temperature and the current temperature are show via a
-> dev_debug. The line before, those temperature are also traced.
+> The function thermal_zone_set_trips() is used by the thermal core code
+> in order to update the next trip points, there are no other users.
 >
-> It is pointless to duplicate the traces for the temperatures,
-> remove the dev_dbg traces.
+> Move the function definition in the thermal_core.h, remove the
+> EXPORT_SYMBOL_GPL and document the function.
 >
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
 Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 
 > ---
->  drivers/thermal/thermal_core.c | 6 ------
->  1 file changed, 6 deletions(-)
+>  drivers/thermal/thermal_core.h    |  3 +++
+>  drivers/thermal/thermal_helpers.c | 13 ++++++++++++-
+>  include/linux/thermal.h           |  3 ---
+>  3 files changed, 15 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 9a321dc548c8..c06550930979 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -447,12 +447,6 @@ static void update_temperature(struct thermal_zone_device *tz)
->         mutex_unlock(&tz->lock);
+> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+> index a9bf00e91d64..37cd4e2bead2 100644
+> --- a/drivers/thermal/thermal_core.h
+> +++ b/drivers/thermal/thermal_core.h
+> @@ -69,6 +69,9 @@ void thermal_zone_device_unbind_exception(struct thermal_zone_device *,
+>  int thermal_zone_device_set_policy(struct thermal_zone_device *, char *);
+>  int thermal_build_list_of_policies(char *buf);
 >
->         trace_thermal_temperature(tz);
-> -       if (tz->last_temperature == THERMAL_TEMP_INVALID)
-> -               dev_dbg(&tz->device, "last_temperature N/A, current_temperature=%d\n",
-> -                       tz->temperature);
-> -       else
-> -               dev_dbg(&tz->device, "last_temperature=%d, current_temperature=%d\n",
-> -                       tz->last_temperature, tz->temperature);
+> +/* Helpers */
+> +void thermal_zone_set_trips(struct thermal_zone_device *tz);
+> +
+>  /* sysfs I/F */
+>  int thermal_zone_create_device_groups(struct thermal_zone_device *, int);
+>  void thermal_zone_destroy_device_groups(struct thermal_zone_device *);
+> diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
+> index 2ba756af76b7..59eaf2d0fdb3 100644
+> --- a/drivers/thermal/thermal_helpers.c
+> +++ b/drivers/thermal/thermal_helpers.c
+> @@ -113,6 +113,18 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
 >  }
+>  EXPORT_SYMBOL_GPL(thermal_zone_get_temp);
 >
->  static void thermal_zone_device_init(struct thermal_zone_device *tz)
+> +/**
+> + * thermal_zone_set_trips - Computes the next trip points for the driver
+> + * @tz: a pointer to a thermal zone device structure
+> + *
+> + * The function computes the next temperature boundaries by browsing
+> + * the trip points. The result is the closer low and high trip points
+> + * to the current temperature. These values are passed to the backend
+> + * driver to let it set its own notification mechanism (usually an
+> + * interrupt).
+> + *
+> + * It does not return a value
+> + */
+>  void thermal_zone_set_trips(struct thermal_zone_device *tz)
+>  {
+>         int low = -INT_MAX;
+> @@ -161,7 +173,6 @@ void thermal_zone_set_trips(struct thermal_zone_device *tz)
+>  exit:
+>         mutex_unlock(&tz->lock);
+>  }
+> -EXPORT_SYMBOL_GPL(thermal_zone_set_trips);
+>
+>  void thermal_cdev_update(struct thermal_cooling_device *cdev)
+>  {
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index c91b1e344d56..448841ab0dca 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -439,7 +439,6 @@ int thermal_zone_unbind_cooling_device(struct thermal_zone_device *, int,
+>                                        struct thermal_cooling_device *);
+>  void thermal_zone_device_update(struct thermal_zone_device *,
+>                                 enum thermal_notify_event);
+> -void thermal_zone_set_trips(struct thermal_zone_device *);
+>
+>  struct thermal_cooling_device *thermal_cooling_device_register(const char *,
+>                 void *, const struct thermal_cooling_device_ops *);
+> @@ -497,8 +496,6 @@ static inline int thermal_zone_unbind_cooling_device(
+>  static inline void thermal_zone_device_update(struct thermal_zone_device *tz,
+>                                               enum thermal_notify_event event)
+>  { }
+> -static inline void thermal_zone_set_trips(struct thermal_zone_device *tz)
+> -{ }
+>  static inline struct thermal_cooling_device *
+>  thermal_cooling_device_register(char *type, void *devdata,
+>         const struct thermal_cooling_device_ops *ops)
 > --
 > 2.17.1
 >
