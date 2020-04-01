@@ -2,145 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B75F19A722
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Apr 2020 10:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0FD19A73B
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Apr 2020 10:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730366AbgDAIVd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Apr 2020 04:21:33 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:38021 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726197AbgDAIVd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Apr 2020 04:21:33 -0400
-Received: by mail-vs1-f66.google.com with SMTP id x206so15347252vsx.5
-        for <linux-pm@vger.kernel.org>; Wed, 01 Apr 2020 01:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TMiys8vgh/zVs+g/WqcrVmGnSmA9w/d7OqJQQ7up1M4=;
-        b=nOcgW+vJIDaeDBEdtqPJ13SjXnUQ8tvB/zXLpC8eEDmJa1qx0uTZpc4I94TQiNjE9T
-         msVtL4CTE33K//fw+xBNn9GaFPpRVLqyj5PGNxcqEoozzzRecgBLsoLIzAt/5NSW01AE
-         Ynl8VeIjsvYaiV6k4IVQfovLO0c12hxq3kZ41k3nh4TKrIk6ubCen/TswPapWoaThDNB
-         9A40s6iX1mVNOTpDe99mHNmQWlLJ2JxmLsTGu/yT5GmlhdDZoMZyZkyiPOJJq5FGqIcO
-         ti5blWz6lQahfcXM/qyBmUasrIWl9sVGvCfjPhfLX4CFLf8PQa13p+ye9/v/eTpjxdgF
-         Q1/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TMiys8vgh/zVs+g/WqcrVmGnSmA9w/d7OqJQQ7up1M4=;
-        b=Q8VovnsDepUc8apnoGAKxrCbMNACf2buNXP9WRRICeSPFxkGO6bh14A1nnBf0oAKC9
-         doWn3kv85PPBKfiP64P2lDXyU8SfIPQ4Z4eU5DuFivzZxNT5as2f64MZdLAIKg2wygHa
-         g6jqZLilJXKNZNQ3bP0nVaQGOaCyHvN5UuJM27LXfAFN/ntWKZf7D/9jy20SFByb9FJX
-         yTPYZPaKaYPhAqGB3wIozqSGDqYXqhDPLTT3lguVu1JXRQjVAg9+ObLHkwJ8N9966uy4
-         HytGodfKX8dEluGZK5txrZBjI1VbAlU7431HlOWvvOlcjdCnWGkITYa4/fg8spO4CF1l
-         +d2g==
-X-Gm-Message-State: AGi0PuY3NfQ3oL5RoZawrops/K6/k/i4DVS+KHUMCzt+AXhBH1kVHgPC
-        4h5jGGjud6WL4VSrWofNuJbSxcl8Rw+IU4xoDAt3A1EWuD/QXw==
-X-Google-Smtp-Source: APiQypIFgzuZyqDqF5vQmkoXOgF4Gs4J+CyGROUlmGOe4oP6uK3MuXRnZum585qhaQzu2hPT5+Qkz4Vz+TJF0gMrJP0=
-X-Received: by 2002:a67:69d5:: with SMTP id e204mr14355392vsc.159.1585729291733;
- Wed, 01 Apr 2020 01:21:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200331165449.30355-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20200331165449.30355-1-daniel.lezcano@linaro.org>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Wed, 1 Apr 2020 13:51:20 +0530
-Message-ID: <CAHLCerPrCLNqcK8E1T917_HyV3uuP9U3e6sR335KiJn4ho72aw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thermal: core: Make thermal_zone_set_trips private
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+        id S1731594AbgDAI0a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Apr 2020 04:26:30 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:21958 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726197AbgDAI0a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Apr 2020 04:26:30 -0400
+X-UUID: ae987413d5424ad39b5efb26be6d5138-20200401
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=KAc2JVwQuKcaNBn24f4yGzswCmaLnRG+W1Uvy/qyynU=;
+        b=VghYf4mcfYRptzIJ5bf80ffxk+6Wyxc101JWAJ5potRTS6/IiC9Jb211RXWLY/VF+tCdN0LlN8Bskd+6W0qKtVxdrHpmGdWukUdfx+kQLcUR6/4hBELv7j6onzL3i0UcUJDB07CXPttHNwhpCg26mXNSu/164P9e2ydyVfij2ds=;
+X-UUID: ae987413d5424ad39b5efb26be6d5138-20200401
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <hsin-hsiung.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 423719410; Wed, 01 Apr 2020 16:26:23 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 1 Apr 2020 16:26:19 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 1 Apr 2020 16:26:20 +0800
+Message-ID: <1585729581.2029.2.camel@mtksdaap41>
+Subject: Re: [PATCH v10 3/5] mfd: Add support for the MediaTek MT6358 PMIC
+From:   Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>
+To:     Lee Jones <lee.jones@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        "Frank Wunderlich" <frank-w@public-files.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <rfontana@redhat.com>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Ran Bi <ran.bi@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        <srv_heupstream@mediatek.com>
+Date:   Wed, 1 Apr 2020 16:26:21 +0800
+In-Reply-To: <20200325094326.GH442973@dell>
+References: <1583918223-22506-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+         <1583918223-22506-4-git-send-email-hsin-hsiung.wang@mediatek.com>
+         <20200325094326.GH442973@dell>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 10:26 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The function thermal_zone_set_trips() is used by the thermal core code
-> in order to update the next trip points, there are no other users.
->
-> Move the function definition in the thermal_core.h, remove the
-> EXPORT_SYMBOL_GPL and document the function.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+SGksDQoNCk9uIFdlZCwgMjAyMC0wMy0yNSBhdCAwOTo0MyArMDAwMCwgTGVlIEpvbmVzIHdyb3Rl
+Og0KPiBPbiBXZWQsIDExIE1hciAyMDIwLCBIc2luLUhzaXVuZyBXYW5nIHdyb3RlOg0KPiANCj4g
+PiBUaGlzIGFkZHMgc3VwcG9ydCBmb3IgdGhlIE1lZGlhVGVrIE1UNjM1OCBQTUlDLiBUaGlzIGlz
+IGENCj4gPiBtdWx0aWZ1bmN0aW9uIGRldmljZSB3aXRoIHRoZSBmb2xsb3dpbmcgc3ViIG1vZHVs
+ZXM6DQo+ID4gDQo+ID4gLSBSZWd1bGF0b3INCj4gPiAtIFJUQw0KPiA+IC0gQ29kZWMNCj4gPiAt
+IEludGVycnVwdA0KPiA+IA0KPiA+IEl0IGlzIGludGVyZmFjZWQgdG8gdGhlIGhvc3QgY29udHJv
+bGxlciB1c2luZyBTUEkgaW50ZXJmYWNlDQo+ID4gYnkgYSBwcm9wcmlldGFyeSBoYXJkd2FyZSBj
+YWxsZWQgUE1JQyB3cmFwcGVyIG9yIHB3cmFwLg0KPiA+IE1UNjM1OCBNRkQgaXMgYSBjaGlsZCBk
+ZXZpY2Ugb2YgdGhlIHB3cmFwLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEhzaW4tSHNpdW5n
+IFdhbmcgPGhzaW4taHNpdW5nLndhbmdAbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2
+ZXJzL21mZC9NYWtlZmlsZSAgICAgICAgICAgICAgICAgfCAgIDIgKy0NCj4gPiAgZHJpdmVycy9t
+ZmQvbXQ2MzU4LWlycS5jICAgICAgICAgICAgIHwgMjM2ICsrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrDQo+ID4gIGRyaXZlcnMvbWZkL210NjM5Ny1jb3JlLmMgICAgICAgICAgICB8ICA1NSAr
+KysrKystDQo+ID4gIGluY2x1ZGUvbGludXgvbWZkL210NjM1OC9jb3JlLmggICAgICB8IDE1OCAr
+KysrKysrKysrKysrKysrKysrKw0KPiA+ICBpbmNsdWRlL2xpbnV4L21mZC9tdDYzNTgvcmVnaXN0
+ZXJzLmggfCAyODIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gPiAgaW5j
+bHVkZS9saW51eC9tZmQvbXQ2Mzk3L2NvcmUuaCAgICAgIHwgICAzICsNCj4gPiAgNiBmaWxlcyBj
+aGFuZ2VkLCA3MzEgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4gPiAgY3JlYXRlIG1v
+ZGUgMTAwNjQ0IGRyaXZlcnMvbWZkL210NjM1OC1pcnEuYw0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2
+NDQgaW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L2NvcmUuaA0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2
+NDQgaW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L3JlZ2lzdGVycy5oDQo+ID4gDQo+ID4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvbWZkL01ha2VmaWxlIGIvZHJpdmVycy9tZmQvTWFrZWZpbGUNCj4gPiBp
+bmRleCBiODNmMTcyLi45YWYxNDE0IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvbWZkL01ha2Vm
+aWxlDQo+ID4gKysrIGIvZHJpdmVycy9tZmQvTWFrZWZpbGUNCj4gPiBAQCAtMjM4LDcgKzIzOCw3
+IEBAIG9iai0kKENPTkZJR19JTlRFTF9TT0NfUE1JQykJKz0gaW50ZWwtc29jLXBtaWMubw0KPiA+
+ICBvYmotJChDT05GSUdfSU5URUxfU09DX1BNSUNfQlhUV0MpCSs9IGludGVsX3NvY19wbWljX2J4
+dHdjLm8NCj4gPiAgb2JqLSQoQ09ORklHX0lOVEVMX1NPQ19QTUlDX0NIVFdDKQkrPSBpbnRlbF9z
+b2NfcG1pY19jaHR3Yy5vDQo+ID4gIG9iai0kKENPTkZJR19JTlRFTF9TT0NfUE1JQ19DSFREQ19U
+SSkJKz0gaW50ZWxfc29jX3BtaWNfY2h0ZGNfdGkubw0KPiA+IC1tdDYzOTctb2Jqcwk6PSBtdDYz
+OTctY29yZS5vIG10NjM5Ny1pcnEubw0KPiA+ICttdDYzOTctb2JqcwkJCTo9IG10NjM5Ny1jb3Jl
+Lm8gbXQ2Mzk3LWlycS5vIG10NjM1OC1pcnEubw0KPiA+ICBvYmotJChDT05GSUdfTUZEX01UNjM5
+NykJKz0gbXQ2Mzk3Lm8NCj4gPiAgb2JqLSQoQ09ORklHX0lOVEVMX1NPQ19QTUlDX01SRkxEKQkr
+PSBpbnRlbF9zb2NfcG1pY19tcmZsZC5vDQo+ID4gIA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L21mZC9tdDYzNTgtaXJxLmMgYi9kcml2ZXJzL21mZC9tdDYzNTgtaXJxLmMNCj4gPiBuZXcgZmls
+ZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAuLjAyMmU1ZjUNCj4gPiAtLS0gL2Rldi9u
+dWxsDQo+ID4gKysrIGIvZHJpdmVycy9tZmQvbXQ2MzU4LWlycS5jDQo+ID4gQEAgLTAsMCArMSwy
+MzYgQEANCj4gPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4gPiArLy8N
+Cj4gPiArLy8gQ29weXJpZ2h0IChjKSAyMDE5IE1lZGlhVGVrIEluYy4NCj4gDQo+IFRoaXMgaXMg
+b3V0IG9mIGRhdGUuDQo+IA0KDQpUaGFua3MuIEkgd2lsbCB1cGRhdGUgaXQgaW4gdGhlIG5leHQg
+cGF0Y2guDQoNCj4gPiArI2luY2x1ZGUgPGxpbnV4L2ludGVycnVwdC5oPg0KPiA+ICsjaW5jbHVk
+ZSA8bGludXgvbWZkL210NjM1OC9jb3JlLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9tZmQvbXQ2
+MzU4L3JlZ2lzdGVycy5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvbWZkL210NjM5Ny9jb3JlLmg+
+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L29m
+Lmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9vZl9kZXZpY2UuaD4NCj4gPiArI2luY2x1ZGUgPGxp
+bnV4L29mX2lycS5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+DQo+
+ID4gKyNpbmNsdWRlIDxsaW51eC9yZWdtYXAuaD4NCj4gPiArDQo+ID4gK3N0YXRpYyBzdHJ1Y3Qg
+aXJxX3RvcF90IG10NjM1OF9pbnRzW10gPSB7DQo+ID4gKwlNVDYzNThfVE9QX0dFTihCVUNLKSwN
+Cj4gPiArCU1UNjM1OF9UT1BfR0VOKExETyksDQo+ID4gKwlNVDYzNThfVE9QX0dFTihQU0MpLA0K
+PiA+ICsJTVQ2MzU4X1RPUF9HRU4oU0NLKSwNCj4gPiArCU1UNjM1OF9UT1BfR0VOKEJNKSwNCj4g
+PiArCU1UNjM1OF9UT1BfR0VOKEhLKSwNCj4gPiArCU1UNjM1OF9UT1BfR0VOKEFVRCksDQo+ID4g
+KwlNVDYzNThfVE9QX0dFTihNSVNDKSwNCj4gPiArfTsNCj4gPiArDQo+ID4gK3N0YXRpYyB2b2lk
+IHBtaWNfaXJxX2VuYWJsZShzdHJ1Y3QgaXJxX2RhdGEgKmRhdGEpDQo+ID4gK3sNCj4gPiArCXVu
+c2lnbmVkIGludCBod2lycSA9IGlycWRfdG9faHdpcnEoZGF0YSk7DQo+ID4gKwlzdHJ1Y3QgbXQ2
+Mzk3X2NoaXAgKmNoaXAgPSBpcnFfZGF0YV9nZXRfaXJxX2NoaXBfZGF0YShkYXRhKTsNCj4gDQo+
+IDYzOTc/DQo+IA0KPiBUaGlzIGRvZXMgbWFrZSBtZSB3b25kZXIgaG93IGRpZmZlcmVudCB0aGlz
+IGZpbGUgaXMgdG8gdGhlIGV4aXN0aW5nDQo+IHN1cHBvcnQgZm9yIHRoZSBNVDYzOTcuICBXaGF0
+IGlzIHRoZSBqdXN0aWZpY2F0aW9uIGZvciBub3QgZXh0ZW5kaW5nDQo+IHRoYXQgaW5zdGVhZCBv
+ZiBjcmVhdGluZyBhIGJyYW5kIG5ldyBmaWxlPw0KPiANCg0KTVQ2MzU4IGlzIHNpbWlsYXIgdG8g
+TVQ2Mzk3IGZvciBtZmQgZHJpdmVyIGV4Y2VwdCB0aGUgaGFyZHdhcmUgZGVzaWduIG9mDQppbnRl
+cnJ1cHQgd2hpY2ggcHJvdmlkZXMgbW9yZSBpbnRlcnJ1cHRzIHRoYW4gTVQ2Mzk3Lg0KSSB0aGlu
+ayBNVDYzNTggY2FuIHJldXNlIHRoZSBvdGhlciBwYXJ0IG9mIE1UNjM5NyBtZmQgZHJpdmVyLCBz
+byBJIG9ubHkNCmFkZCB0aGUgaW50ZXJydXB0IHBhcnQgb2YgTVQ2MzU4Lg0KDQo+ID4gKwlzdHJ1
+Y3QgcG1pY19pcnFfZGF0YSAqaXJxZCA9IGNoaXAtPmlycV9kYXRhOw0KPiA+ICsNCj4gPiArCWly
+cWQtPmVuYWJsZV9od2lycVtod2lycV0gPSB0cnVlOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0
+aWMgdm9pZCBwbWljX2lycV9kaXNhYmxlKHN0cnVjdCBpcnFfZGF0YSAqZGF0YSkNCj4gPiArew0K
+PiA+ICsJdW5zaWduZWQgaW50IGh3aXJxID0gaXJxZF90b19od2lycShkYXRhKTsNCj4gPiArCXN0
+cnVjdCBtdDYzOTdfY2hpcCAqY2hpcCA9IGlycV9kYXRhX2dldF9pcnFfY2hpcF9kYXRhKGRhdGEp
+Ow0KPiA+ICsJc3RydWN0IHBtaWNfaXJxX2RhdGEgKmlycWQgPSBjaGlwLT5pcnFfZGF0YTsNCj4g
+PiArDQo+ID4gKwlpcnFkLT5lbmFibGVfaHdpcnFbaHdpcnFdID0gZmFsc2U7DQo+ID4gK30NCj4g
+PiArDQo+ID4gK3N0YXRpYyB2b2lkIHBtaWNfaXJxX2xvY2soc3RydWN0IGlycV9kYXRhICpkYXRh
+KQ0KPiA+ICt7DQo+ID4gKwlzdHJ1Y3QgbXQ2Mzk3X2NoaXAgKmNoaXAgPSBpcnFfZGF0YV9nZXRf
+aXJxX2NoaXBfZGF0YShkYXRhKTsNCj4gPiArDQo+ID4gKwltdXRleF9sb2NrKCZjaGlwLT5pcnFs
+b2NrKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIHZvaWQgcG1pY19pcnFfc3luY191bmxv
+Y2soc3RydWN0IGlycV9kYXRhICpkYXRhKQ0KPiA+ICt7DQo+ID4gKwl1bnNpZ25lZCBpbnQgaSwg
+dG9wX2dwLCBncF9vZmZzZXQsIGVuX3JlZywgaW50X3JlZ3MsIHNoaWZ0Ow0KPiA+ICsJc3RydWN0
+IG10NjM5N19jaGlwICpjaGlwID0gaXJxX2RhdGFfZ2V0X2lycV9jaGlwX2RhdGEoZGF0YSk7DQo+
+ID4gKwlzdHJ1Y3QgcG1pY19pcnFfZGF0YSAqaXJxZCA9IGNoaXAtPmlycV9kYXRhOw0KPiA+ICsN
+Cj4gPiArCWZvciAoaSA9IDA7IGkgPCBpcnFkLT5udW1fcG1pY19pcnFzOyBpKyspIHsNCj4gPiAr
+CQlpZiAoaXJxZC0+ZW5hYmxlX2h3aXJxW2ldID09IGlycWQtPmNhY2hlX2h3aXJxW2ldKQ0KPiA+
+ICsJCQljb250aW51ZTsNCj4gPiArDQo+ID4gKwkJLyogRmluZCBvdXQgdGhlIElSUSBncm91cCAq
+Lw0KPiA+ICsJCXRvcF9ncCA9IDA7DQo+ID4gKwkJd2hpbGUgKCh0b3BfZ3AgKyAxKSA8IGlycWQt
+Pm51bV90b3AgJiYNCj4gPiArCQkgICAgICAgaSA+PSBtdDYzNThfaW50c1t0b3BfZ3AgKyAxXS5o
+d2lycV9iYXNlKQ0KPiA+ICsJCQl0b3BfZ3ArKzsNCj4gPiArDQo+ID4gKwkJLyogRmluZCB0aGUg
+aXJxIHJlZ2lzdGVycyAqLw0KPiANCj4gTml0OiAiSVJRIg0KPiANCg0KVGhhbmtzLiBJIHdpbGwg
+dXBkYXRlIGl0IGluIHRoZSBuZXh0IHBhdGNoLg0KDQo+ID4gKwkJZ3Bfb2Zmc2V0ID0gaSAtIG10
+NjM1OF9pbnRzW3RvcF9ncF0uaHdpcnFfYmFzZTsNCj4gPiArCQlpbnRfcmVncyA9IGdwX29mZnNl
+dCAvIE1UNjM1OF9SRUdfV0lEVEg7DQo+ID4gKwkJc2hpZnQgPSBncF9vZmZzZXQgJSBNVDYzNThf
+UkVHX1dJRFRIOw0KPiA+ICsJCWVuX3JlZyA9IG10NjM1OF9pbnRzW3RvcF9ncF0uZW5fcmVnICsN
+Cj4gPiArCQkJIChtdDYzNThfaW50c1t0b3BfZ3BdLmVuX3JlZ19zaGlmdCAqIGludF9yZWdzKTsN
+Cj4gPiArDQo+ID4gKwkJcmVnbWFwX3VwZGF0ZV9iaXRzKGNoaXAtPnJlZ21hcCwgZW5fcmVnLCBC
+SVQoc2hpZnQpLA0KPiA+ICsJCQkJICAgaXJxZC0+ZW5hYmxlX2h3aXJxW2ldIDw8IHNoaWZ0KTsN
+Cj4gPiArDQo+ID4gKwkJaXJxZC0+Y2FjaGVfaHdpcnFbaV0gPSBpcnFkLT5lbmFibGVfaHdpcnFb
+aV07DQo+ID4gKwl9DQo+ID4gKwltdXRleF91bmxvY2soJmNoaXAtPmlycWxvY2spOw0KPiA+ICt9
+DQo+IA0KPiBbLi4uXQ0KPiANCj4gPiAraW50IG10NjM1OF9pcnFfaW5pdChzdHJ1Y3QgbXQ2Mzk3
+X2NoaXAgKmNoaXApDQo+ID4gK3sNCj4gPiArCWludCBpLCBqLCByZXQ7DQo+ID4gKwlzdHJ1Y3Qg
+cG1pY19pcnFfZGF0YSAqaXJxZDsNCj4gPiArDQo+ID4gKwlpcnFkID0gZGV2bV9remFsbG9jKGNo
+aXAtPmRldiwgc2l6ZW9mKHN0cnVjdCBwbWljX2lycV9kYXRhICopLA0KPiANCj4gc2l6ZW9mKCpp
+cnFkKQ0KPiANCg0KVGhhbmtzLiBJIHdpbGwgdXBkYXRlIGl0IGluIHRoZSBuZXh0IHBhdGNoLg0K
+DQo+IFsuLi5dDQo+IA0KPiA+ICBzdGF0aWMgY29uc3Qgc3RydWN0IGNoaXBfZGF0YSBtdDYzOTdf
+Y29yZSA9IHsNCj4gPiAgCS5jaWRfYWRkciA9IE1UNjM5N19DSUQsDQo+ID4gIAkuY2lkX3NoaWZ0
+ID0gMCwNCj4gPiBAQCAtMTU0LDE5ICsxODQsMzMgQEAgc3RhdGljIGludCBtdDYzOTdfcHJvYmUo
+c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4gPiAgCWlmIChwbWljLT5pcnEgPD0gMCkN
+Cj4gPiAgCQlyZXR1cm4gcG1pYy0+aXJxOw0KPiA+ICANCj4gPiAtCXJldCA9IG10NjM5N19pcnFf
+aW5pdChwbWljKTsNCj4gPiAtCWlmIChyZXQpDQo+ID4gLQkJcmV0dXJuIHJldDsNCj4gPiAtDQo+
+ID4gIAlzd2l0Y2ggKHBtaWMtPmNoaXBfaWQpIHsNCj4gPiAgCWNhc2UgTVQ2MzIzX0NISVBfSUQ6
+DQo+ID4gKwkJcmV0ID0gbXQ2Mzk3X2lycV9pbml0KHBtaWMpOw0KPiA+ICsJCWlmIChyZXQpDQo+
+ID4gKwkJCXJldHVybiByZXQ7DQo+ID4gKw0KPiA+ICAJCXJldCA9IGRldm1fbWZkX2FkZF9kZXZp
+Y2VzKCZwZGV2LT5kZXYsIFBMQVRGT1JNX0RFVklEX05PTkUsDQo+ID4gIAkJCQkJICAgbXQ2MzIz
+X2RldnMsIEFSUkFZX1NJWkUobXQ2MzIzX2RldnMpLA0KPiA+ICAJCQkJCSAgIE5VTEwsIDAsIHBt
+aWMtPmlycV9kb21haW4pOw0KPiA+ICAJCWJyZWFrOw0KPiA+ICANCj4gPiArCWNhc2UgTVQ2MzU4
+X0NISVBfSUQ6DQo+ID4gKwkJcmV0ID0gbXQ2MzU4X2lycV9pbml0KHBtaWMpOw0KPiA+ICsJCWlm
+IChyZXQpDQo+ID4gKwkJCXJldHVybiByZXQ7DQo+ID4gKw0KPiA+ICsJCXJldCA9IGRldm1fbWZk
+X2FkZF9kZXZpY2VzKCZwZGV2LT5kZXYsIFBMQVRGT1JNX0RFVklEX05PTkUsDQo+ID4gKwkJCQkJ
+ICAgbXQ2MzU4X2RldnMsIEFSUkFZX1NJWkUobXQ2MzU4X2RldnMpLA0KPiA+ICsJCQkJCSAgIE5V
+TEwsIDAsIHBtaWMtPmlycV9kb21haW4pOw0KPiANCj4gSW4gYSBzdWJzZXF1ZW50IHBhdGNoIHlv
+dSBjYW4gY2hvb3NlIHRoZSBjb3JyZWN0IG10WFhYWF9kZXZzIHN0cnVjdHVyZQ0KPiB0byBwYXNz
+IGFuZCBjYWxsIGRldm1fbWZkX2FkZF9kZXZpY2VzKCkgb25seSBvbmNlIGJlbG93IHRoZSBzd2l0
+Y2goKS4NCj4gDQoNClRoYW5rcyBmb3IgeW91ciBjb21tZW50LiBJIHdpbGwgcmV3cml0ZSB0aGlz
+IGluIHRoZSBuZXh0IHBhdGNoLg0KDQo+ID4gKwkJYnJlYWs7DQo+ID4gKw0KPiA+ICAJY2FzZSBN
+VDYzOTFfQ0hJUF9JRDoNCj4gPiAgCWNhc2UgTVQ2Mzk3X0NISVBfSUQ6DQo+ID4gKwkJcmV0ID0g
+bXQ2Mzk3X2lycV9pbml0KHBtaWMpOw0KPiA+ICsJCWlmIChyZXQpDQo+ID4gKwkJCXJldHVybiBy
+ZXQ7DQo+ID4gKw0KPiA+ICAJCXJldCA9IGRldm1fbWZkX2FkZF9kZXZpY2VzKCZwZGV2LT5kZXYs
+IFBMQVRGT1JNX0RFVklEX05PTkUsDQo+ID4gIAkJCQkJICAgbXQ2Mzk3X2RldnMsIEFSUkFZX1NJ
+WkUobXQ2Mzk3X2RldnMpLA0KPiA+ICAJCQkJCSAgIE5VTEwsIDAsIHBtaWMtPmlycV9kb21haW4p
+Ow0KPiANCj4gWy4uLl0NCj4gDQoNCg==
 
-> ---
->  drivers/thermal/thermal_core.h    |  3 +++
->  drivers/thermal/thermal_helpers.c | 13 ++++++++++++-
->  include/linux/thermal.h           |  3 ---
->  3 files changed, 15 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-> index a9bf00e91d64..37cd4e2bead2 100644
-> --- a/drivers/thermal/thermal_core.h
-> +++ b/drivers/thermal/thermal_core.h
-> @@ -69,6 +69,9 @@ void thermal_zone_device_unbind_exception(struct thermal_zone_device *,
->  int thermal_zone_device_set_policy(struct thermal_zone_device *, char *);
->  int thermal_build_list_of_policies(char *buf);
->
-> +/* Helpers */
-> +void thermal_zone_set_trips(struct thermal_zone_device *tz);
-> +
->  /* sysfs I/F */
->  int thermal_zone_create_device_groups(struct thermal_zone_device *, int);
->  void thermal_zone_destroy_device_groups(struct thermal_zone_device *);
-> diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
-> index 2ba756af76b7..59eaf2d0fdb3 100644
-> --- a/drivers/thermal/thermal_helpers.c
-> +++ b/drivers/thermal/thermal_helpers.c
-> @@ -113,6 +113,18 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
->  }
->  EXPORT_SYMBOL_GPL(thermal_zone_get_temp);
->
-> +/**
-> + * thermal_zone_set_trips - Computes the next trip points for the driver
-> + * @tz: a pointer to a thermal zone device structure
-> + *
-> + * The function computes the next temperature boundaries by browsing
-> + * the trip points. The result is the closer low and high trip points
-> + * to the current temperature. These values are passed to the backend
-> + * driver to let it set its own notification mechanism (usually an
-> + * interrupt).
-> + *
-> + * It does not return a value
-> + */
->  void thermal_zone_set_trips(struct thermal_zone_device *tz)
->  {
->         int low = -INT_MAX;
-> @@ -161,7 +173,6 @@ void thermal_zone_set_trips(struct thermal_zone_device *tz)
->  exit:
->         mutex_unlock(&tz->lock);
->  }
-> -EXPORT_SYMBOL_GPL(thermal_zone_set_trips);
->
->  void thermal_cdev_update(struct thermal_cooling_device *cdev)
->  {
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index c91b1e344d56..448841ab0dca 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -439,7 +439,6 @@ int thermal_zone_unbind_cooling_device(struct thermal_zone_device *, int,
->                                        struct thermal_cooling_device *);
->  void thermal_zone_device_update(struct thermal_zone_device *,
->                                 enum thermal_notify_event);
-> -void thermal_zone_set_trips(struct thermal_zone_device *);
->
->  struct thermal_cooling_device *thermal_cooling_device_register(const char *,
->                 void *, const struct thermal_cooling_device_ops *);
-> @@ -497,8 +496,6 @@ static inline int thermal_zone_unbind_cooling_device(
->  static inline void thermal_zone_device_update(struct thermal_zone_device *tz,
->                                               enum thermal_notify_event event)
->  { }
-> -static inline void thermal_zone_set_trips(struct thermal_zone_device *tz)
-> -{ }
->  static inline struct thermal_cooling_device *
->  thermal_cooling_device_register(char *type, void *devdata,
->         const struct thermal_cooling_device_ops *ops)
-> --
-> 2.17.1
->
