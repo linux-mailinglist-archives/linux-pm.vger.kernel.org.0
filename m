@@ -2,329 +2,230 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EAB019B4FD
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Apr 2020 19:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B0E19B5EA
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Apr 2020 20:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732256AbgDAR7v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Apr 2020 13:59:51 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:59463 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730420AbgDAR7v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Apr 2020 13:59:51 -0400
-Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 36c63c6a6212dabb; Wed, 1 Apr 2020 19:59:47 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH] Documentation: PM: sleep: Document system-wide suspend code flows
-Date:   Wed, 01 Apr 2020 19:59:46 +0200
-Message-ID: <2548116.mvXUDI8C0e@kreacher>
+        id S1726640AbgDASsx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Apr 2020 14:48:53 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:43413 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727541AbgDASsx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Apr 2020 14:48:53 -0400
+Received: by mail-pf1-f196.google.com with SMTP id f206so423662pfa.10
+        for <linux-pm@vger.kernel.org>; Wed, 01 Apr 2020 11:48:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ulhOw4stYNMJI54bH35cjH5xFB2S7Dajjn042iFhlAk=;
+        b=ln2+bUNX3IYbT39875VObE1yUtmBMva3t4VVBd1h9kJmOV5CiaWYRaASBOMr0NFMWN
+         QM7pjk832AFgMpB5ZMjur7BjF2+e32lnw1K11fT2ieeFUKBUi2Bm/kQUx+fU9iNsj5f3
+         6A+staF/q7hNn90hN55oTFJbZJksRHC+anShor0skqvE4bN/jAW51494pJ7FxhYVjtkf
+         dVFjMvS+KfQQAuE6uJXxXsjmuuclN9ATmat2zYkjOxE703XanidHkvKNXFgHb0NI+4tn
+         X62wHa1LXJmZI96g93oPzlX+d1HHgTLRR3IhoBza2ajxtaG8q9gJemPc74aEujN3ywvv
+         zeAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ulhOw4stYNMJI54bH35cjH5xFB2S7Dajjn042iFhlAk=;
+        b=G0cC4sRtTCFLPO9lQtWEz27WKfZwdfeXM4OisgaF5W7kJozAmYxCDuuQ3TGoe+cUBz
+         uRy1XXdJlFaODZ5A8qY7DKVB4XMkx65vby7PsJA8dnOttZ3uSpMDPEZVo9cK8EmnSs8B
+         HRrYlguH34iwZYqYjoJLJTg7ixbwEa8LS9wZZUqlWWaXUhlBwk/R1ljFuRlqhcem2/+N
+         UZUCY7OBwrYJHfyvGlKuRFXtzzqkWZ2UMl36CLgAh8xTRUdEXV75KGtQaofAIvpV7ecR
+         ESn8DjQTZeOZN0deIHXkjXAGMHo8HoAiLyitTDPl1749YjmAVYtCtOSCjx2mHTU7mumz
+         MrPg==
+X-Gm-Message-State: AGi0PubcIC7/U/RiWaCSmOmkGGkzqZ+sILZfkjrWkT9nYH6r/dHV18yc
+        Fiij/bOAzYZAosEUGzDZC76LLg76thG0MQcHaKe9yw==
+X-Google-Smtp-Source: APiQypI2HZUUxGoH2263hX+0V33Waac14jbJ/InoRrxuPaarHNJHGn8YvcMK3io31gtf28si3KlZBW+Hl7Z/YFLOgbI=
+X-Received: by 2002:aa7:99cd:: with SMTP id v13mr20824814pfi.106.1585766931503;
+ Wed, 01 Apr 2020 11:48:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <cover.1585656143.git.matti.vaittinen@fi.rohmeurope.com>
+ <285da2166eadc1d46667dd9659d8dae74d28b0b9.1585656143.git.matti.vaittinen@fi.rohmeurope.com>
+ <CAFd5g460hY9uOtwicWHK2rhgLdL+gStbKGmLN5KLWi5JXDQEog@mail.gmail.com> <4f915b8b8bee36a61ebea62ebf34c61845170ad5.camel@fi.rohmeurope.com>
+In-Reply-To: <4f915b8b8bee36a61ebea62ebf34c61845170ad5.camel@fi.rohmeurope.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 1 Apr 2020 11:48:40 -0700
+Message-ID: <CAFd5g44gBrNti5Y_ctQKOE1_pWX3NAdTji1uH8m6dGj+tsJCew@mail.gmail.com>
+Subject: Re: [PATCH v7 04/10] lib/test_linear_ranges: add a test for the 'linear_ranges'
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "talgi@mellanox.com" <talgi@mellanox.com>,
+        "olteanv@gmail.com" <olteanv@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davidgow@google.com" <davidgow@google.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "yamada.masahiro@socionext.com" <yamada.masahiro@socionext.com>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>,
+        "bp@suse.de" <bp@suse.de>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "Laine, Markus" <Markus.Laine@fi.rohmeurope.com>,
+        "vincenzo.frascino@arm.com" <vincenzo.frascino@arm.com>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "zaslonko@linux.ibm.com" <zaslonko@linux.ibm.com>,
+        "uwe@kleine-koenig.org" <uwe@kleine-koenig.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Apr 1, 2020 at 1:45 AM Vaittinen, Matti
+<Matti.Vaittinen@fi.rohmeurope.com> wrote:
+>
+> Hello Brendan,
+>
+> Thanks for taking a look at this :) Much appreciated! I have always
+> admired you guys who have the patience to do all the reviewing... It's
+> definitely not my favourite job :/
 
-Add a document describing high-level system-wide suspend code flows
-in Linux.
+Huh, you know, I thought the same thing like 3 years ago. I guess it
+got the point where I had to do reviews for the things I maintained
+that I got used to it. Then I got to a point where I was requesting so
+many reviews from others that I felt that I owed the community
+reviews. So no thanks necessary, I feel that I am just paying it
+forward. :-)
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- Documentation/admin-guide/pm/suspend-flows.rst |  270 +++++++++++++++++++++++++
- Documentation/admin-guide/pm/system-wide.rst   |    1 
- 2 files changed, 271 insertions(+)
+> On Tue, 2020-03-31 at 11:08 -0700, Brendan Higgins wrote:
+> > On Tue, Mar 31, 2020 at 5:23 AM Matti Vaittinen
+> > <matti.vaittinen@fi.rohmeurope.com> wrote:
+> > >     Add a KUnit test for the linear_ranges helper.
+> > >
+> > > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> >
+> > One minor nit, other than that:
+> >
+> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> >
+> > > ---
+> > >
+>
+> /// Snip
+>
+> > > +
+> > > +/* First things first. I deeply dislike unit-tests. I have seen
+> > > all the hell
+> > > + * breaking loose when people who think the unit tests are "the
+> > > silver bullet"
+> > > + * to kill bugs get to decide how a company should implement
+> > > testing strategy...
+> > > + *
+> > > + * Believe me, it may get _really_ ridiculous. It is tempting to
+> > > think that
+> > > + * walking through all the possible execution branches will nail
+> > > down 100% of
+> > > + * bugs. This may lead to ideas about demands to get certain % of
+> > > "test
+> > > + * coverage" - measured as line coverage. And that is one of the
+> > > worst things
+> > > + * you can do.
+> > > + *
+> > > + * Ask people to provide line coverage and they do. I've seen
+> > > clever tools
+> > > + * which generate test cases to test the existing functions - and
+> > > by default
+> > > + * these tools expect code to be correct and just generate checks
+> > > which are
+> > > + * passing when ran against current code-base. Run this generator
+> > > and you'll get
+> > > + * tests that do not test code is correct but just verify nothing
+> > > changes.
+> > > + * Problem is that testing working code is pointless. And if it is
+> > > not
+> > > + * working, your test must not assume it is working. You won't
+> > > catch any bugs
+> > > + * by such tests. What you can do is to generate a huge amount of
+> > > tests.
+> > > + * Especially if you were are asked to proivde 100% line-coverage
+> > > x_x. So what
+> > > + * does these tests - which are not finding any bugs now - do?
+> >
+> > I don't entirely disagree. I have worked on projects that do testing
+> > well where it actually makes development faster, and I have worked on
+> > projects that do testing poorly where it never improves code quality
+> > and is just an encumbrance, and I have never seen a project get to
+> > 100% coverage (nor would I want to).
+> >
+> > Do you feel differently about incremental coverage vs. absolute
+> > coverage? I have found incremental coverage to be a lot more valuable
+> > in my experiences.
+>
+> I think I have only been dealing with projects measuring absolute
+> coverage. I think seeing a coverage as %-number is mostly not
+> interesting to me. What I think could be interesting is showing the
+> code-paths test has walked through. I believe that code spots that
+> should be tested should be hand picked by a human. When we look at any
+> %-number, we do not know what kind of code the test has tested.
 
-Index: linux-pm/Documentation/admin-guide/pm/suspend-flows.rst
-===================================================================
---- /dev/null
-+++ linux-pm/Documentation/admin-guide/pm/suspend-flows.rst
-@@ -0,0 +1,270 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. include:: <isonum.txt>
-+
-+=========================
-+System Suspend Code Flows
-+=========================
-+
-+:Copyright: |copy| 2020 Intel Corporation
-+
-+:Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-+
-+At least one global system-wide transition needs to be carried out for the
-+system to get from the working state into one of the supported
-+:doc:`sleep states <sleep-states>`.  Hibernation requires more than one
-+transition to occur for this purpose, but the other sleep states, commonly
-+referred to as *system-wide suspend* (or simply *system suspend*) states, need
-+only one.
-+
-+For those sleep states, the transition from the working state of the system into
-+the target sleep state is referred to as *system suspend* too (in the majority
-+of cases, whether this means a transition or a sleep state of the system should
-+be clear from the context) and the transition back from the sleep state into the
-+working state is referred to as *system resume*.
-+
-+The kernel code flows associated with the syspend and resume transitions for
-+different sleep states of the system are quite similar, but there are some
-+significant differences between the :ref:`suspend-to-idle <s2idle>` code flows
-+and the code flows related to the :ref:`suspend-to-RAM <s2ram>` and
-+:ref:`standby <standby>` sleep states.
-+
-+The :ref:`suspend-to-RAM <s2ram>` and :ref:`standby <standby>` sleep states
-+cannot be implemented without platform support and the difference between them
-+boils down to the platform-specific actions carried out by the suspend and
-+resume hooks that need to be provided by the platform driver to make them
-+available.  Apart from that, the suspend and resume code flows for these sleep
-+states are mostly identical, so they both together will be referred to as
-+*platform-dependent suspend* states in what follows.
-+
-+
-+.. _s2idle_suspend:
-+
-+Suspend-to-idle Suspend Code Flow
-+=================================
-+
-+The following steps are taken in order to transition the system from the working
-+state to the :ref:`suspend-to-idle <s2idle>` sleep state:
-+
-+ 1. Invoking system-wide suspend notifiers.
-+
-+    Kernel subsystems can register callbacks to be invoked when the suspend
-+    transition is about to occur and when the resume transition has finished.
-+
-+    That allows them to prepare for the change of the system state and to clean
-+    up after getting back to the working state.
-+
-+ 2. Freezing tasks.
-+
-+    Tasks are frozen primarily in order to avoid unchecked hardware accesses
-+    from user space through MMIO regions or I/O registers exposed directly to
-+    it and to prevent user space from entering the kernel while the next step
-+    of the transition is in progress (which might have been problematic for
-+    various reasons).
-+
-+    All user space tasks are intercepted as though they were sent a signal and
-+    put into uninterruptible sleep until the end of the subsequent system resume
-+    transition.
-+
-+    The kernel threads that choose to be frozen during system suspend for
-+    specific reasons are frozen subsequently, but they are not intercepted.
-+    Instead, they are expected to periodically check whether or not they need
-+    to be frozen and to put themselves into uninterruptible sleep if so.  [Note,
-+    however, that kernel threads can use locking and other concurrency controls
-+    available in kernel space to synchronize themselves with system suspend and
-+    resume, which can be much more precise than the freezing, so the latter is
-+    not a recommended option for kernel threads.]
-+
-+ 3. Suspending devices and reconfiguring IRQs.
-+
-+    Devices are suspended in four phases called *prepare*, *suspend*,
-+    *late suspend* and *noirq suspend* (see :ref:`driverapi_pm_devices` for more
-+    information on what exactly happens in each phase).
-+
-+    Every device is visited in each phase, but typically it is not physically
-+    accessed in more than two of them.
-+
-+    The runtime PM API is disabled for every device during the *late* suspend
-+    phase and high-level ("action") interrupt handlers are prevented from being
-+    invoked before the *noirq* suspend phase.
-+
-+    Interrupts are still handled after that, but they are only acknowledged to
-+    interrupt controllers without performing any device-specific actions that
-+    would be triggered in the working state of the system (those actions are
-+    deferred till the subsequent system resume transition as described
-+    `below <s2idle_resume_>`_).
-+
-+    IRQs associated with system wakeup devices are "armed" so that the resume
-+    transition of the system is started when one of them signals an event.
-+
-+ 4. Freezing the scheduler tick and suspending timekeeping.
-+
-+    When all devices have been suspended, CPUs enter the idle loop and are put
-+    into the deepest available idle state.  While doing that, each of them
-+    "freezes" its own scheduler tick so that the timer events associated with
-+    the tick do not occur until the CPU is woken up by another interrupt source.
-+
-+    The last CPU to enter the idle state also stops the timekeeping which
-+    (among other things) prevents high resolution timers from triggering going
-+    forward until the first CPU that is woken up restarts the timekeeping.
-+    That allows the CPUs to stay in the deep idle state relatively long in one
-+    go.
-+
-+    From this point on, the CPUs can only be woken up by non-timer hardware
-+    interrupts.  If that happens, they go back to the idle state unless the
-+    interrupt that woke up one of them comes from an IRQ that has been armed for
-+    system wakeup, in which case the system resume transition is started.
-+
-+
-+.. _s2idle_resume:
-+
-+Suspend-to-idle Resume Code Flow
-+================================
-+
-+The following steps are taken in order to transition the system from the
-+:ref:`suspend-to-idle <s2idle>` sleep state into the working state:
-+
-+ 1. Resuming timekeeping and unfreezing the scheduler tick.
-+
-+    When one of the CPUs is woken up (by a non-timer hardware interrupt), it
-+    leaves the idle state entered in the last step of the preceding suspend
-+    transition, restarts the timekeeping (unless it has been restarted already
-+    by another CPU that woke up earlier) and the scheduler tick on that CPU is
-+    unfrozen.
-+
-+    If the interrupt that has woken up the CPU was armed for system wakeup,
-+    the system resume transition begins.
-+
-+ 2. Resuming devices and restoring the working-state configuration of IRQs.
-+
-+    Devices are resumeed in four phases called *noirq resume*, *early resume*,
-+    *resume* and *complete* (see :ref:`driverapi_pm_devices` for more
-+    information on what exactly happens in each phase).
-+
-+    Every device is visited in each phase, but typically it is not physically
-+    accessed in more than two of them.
-+
-+    The working-state configuration of IRQs is restored after the *noirq* resume
-+    phase and the runtime PM API is re-enabled for every device whose driver
-+    supports it during the *early* resume phase.
-+
-+ 3. Thawing tasks.
-+
-+    Tasks frozen in step 2 of the preceding `suspend <s2idle_suspend_>`_
-+    transition are "thawed", which means that they are woken up from the
-+    uninterruptible sleep that they went into at that time and user space tasks
-+    are allowed to exit the kernel.
-+
-+ 4. Invoking system-wide resume notifiers.
-+
-+    This is analogous to step 1 of the `suspend <s2idle_suspend_>`_ transition
-+    and the same set of callbacks is invoked at this point, but a different
-+    "notification type" parameter value is passed to them.
-+
-+
-+Platform-dependent Suspend Code Flow
-+====================================
-+
-+The following steps are taken in order to transition the system from the working
-+state to platform-dependent suspend state:
-+
-+ 1. Invoking system-wide suspend notifiers.
-+
-+    This step is the same as step 1 of the suspend-to-idle suspend transision
-+    described `above <s2idle_suspend_>`_.
-+
-+ 2. Freezing tasks.
-+
-+    This step is the same as step 2 of the suspend-to-idle suspend transision
-+    described `above <s2idle_suspend_>`_.
-+
-+ 3. Suspending devices and reconfiguring IRQs.
-+
-+    This step is analogous to step 3 of the suspend-to-idle suspend transision
-+    described `above <s2idle_suspend_>`_, but the arming of IRQs for system
-+    wakeup generally does not have any effect on the platform.
-+
-+    There are platforms that can go into a very deep low-power state internally
-+    when all CPUs in them are in sufficiently deep idle states and all I/O
-+    devices have been put into low-power states.  On those platforms,
-+    suspend-to-idle can reduce system power very effectively.
-+
-+    On the other platforms, however, low-level components (like interrupt
-+    controllers) need to be turned off in a platform-specific way (implemented
-+    in the hooks provided by the platform driver) to achieve comparable power
-+    reduction.
-+
-+    That usually prevents in-band hardware interrupts from waking up the system,
-+    which must be done in a special platform-dependent way.  Then, the
-+    configuration of system wakeup sources usually starts when system wakeup
-+    devices are suspended and is finalized by the platform suspend hooks later
-+    on.
-+
-+ 4. Disabling non-boot CPUs.
-+
-+    On some platforms the suspend hooks mentioned above must run in a one-CPU
-+    configuration of the system (in particular, the herware cannot be accessed
-+    by any code running in parallel with the platform suspend hooks that may,
-+    and often do, trap into the platform firmware in order to finalize the
-+    suspend transition).
-+
-+    For this reason, the CPU offline/online (CPU hotplug) framework is used
-+    to take all of the CPUs in the system, except for one (the boot CPU),
-+    offline (typially, the CPUs that have been taken offline go into deep idle
-+    states).
-+
-+    This means that all tasks are migrated away from those CPUs and all IRQs are
-+    rerouted to the only CPU that remains online.
-+
-+ 5. Suspending core system components.
-+
-+    This prepares the core system components for (possibly) losing power going
-+    forward and suspends the timekeeping.
-+
-+ 6. Platform-specific power removal.
-+
-+    This is expected to remove power from all of the system components except
-+    for the mamory controller and RAM (in order to preserve the contents of the
-+    latter) and some devices designated for system wakeup.
-+
-+    In many cases control is passed to the platform firmware which is expected
-+    to finalize the suspend transition as needed.
-+
-+
-+Platform-dependent Resume Code Flow
-+===================================
-+
-+The following steps are taken in order to transition the system from a
-+platform-dependent suspend state into the working state:
-+
-+ 1. Platform-specific system wakeup.
-+
-+    The platform is woken up by a signal from one of the designated system
-+    wakeup devices (which need not be an in-band hardware interrupt)  and
-+    control is passed back to the kernel (the working configuration of the
-+    platform may need to be restored by the platform firmware before the
-+    kernel gets control again).
-+
-+ 2. Resuming core system components.
-+
-+    The suspend-time configuration of the core system components is restored and
-+    the timekeeping is resumed.
-+
-+ 3. Re-enabling non-boot CPUs.
-+
-+    The CPUs disabled in step 4 of the preceding suspend transition are taken
-+    back online and their suspend-time configuration is restored.
-+
-+ 4. Resuming devices and restoring the working-state configuration of IRQs.
-+
-+    This step is the same as step 2 of the suspend-to-idle suspend transision
-+    described `above <s2idle_resume_>`_.
-+
-+ 5. Thawing tasks.
-+
-+    This step is the same as step 3 of the suspend-to-idle suspend transision
-+    described `above <s2idle_resume_>`_.
-+
-+ 6. Invoking system-wide resume notifiers.
-+
-+    This step is the same as step 4 of the suspend-to-idle suspend transision
-+    described `above <s2idle_resume_>`_.
-Index: linux-pm/Documentation/admin-guide/pm/system-wide.rst
-===================================================================
---- linux-pm.orig/Documentation/admin-guide/pm/system-wide.rst
-+++ linux-pm/Documentation/admin-guide/pm/system-wide.rst
-@@ -8,3 +8,4 @@ System-Wide Power Management
-    :maxdepth: 2
- 
-    sleep-states
-+   suspend-flows
+Ah, okay, code coverage by functions called is a thing and GCOV + LCOV
+for the Linux kernel can actually give these nice reports that show
+the code paths that have been executed. It requires a bit of manual
+review, but I have found it pretty handy. Let me try to find you an
+example...
 
+> > You seem pretty passionate about this. Would you like to be included
+> > in our unit testing discussions in the future?
+>
+> I think it would be nice :) I don't expect I will be active talker
+> there but I really like to know what direction things are proceeding in
+> general. And who knows, maybe I will have a word to say at times :) So
+> please, include me if it is not a big thing for you.
 
+Absolutely! Would you be interested in joining our mailing list:
 
+https://groups.google.com/g/kunit-dev
+
+> //Snip
+>
+> > > +
+> > > +static void range_test_get_value(struct kunit *test)
+> > > +{
+> > > +       int ret, i;
+> > > +       unsigned int sel, val;
+> > > +
+> > > +       for (i = 0; i < RANGE1_NUM_VALS; i++) {
+> > > +               sel = range1_sels[i];
+> > > +               ret = linear_range_get_value_array(&testr[0], 2,
+> > > sel, &val);
+> > > +               KUNIT_EXPECT_EQ(test, 0, ret);
+> >
+> > nit: It looks like the next line might crash if this expectation
+> > fails. If this is the case, you might want to use a KUNIT_ASSERT_*
+> > here.
+>
+> Huh. I re-read this and almost agreed with you. Then I re-re-read this
+> and disagreed. Perhaps we should write an unit-test to test this ;)
+>
+> The range1_sels and range1_vals arrays should always be of same size.
+> Thus the crash should not occur here. If RANGE1_NUM_VALS was bad then
+> we would get the crash already at
+>
+> > > +               sel = range1_sels[i];
+>
+> The linear_range_get_value_array() may return non zero value if value
+> contained in range1_sels[i] is not in the range - but range1_vals[i]
+> should still be valid memory.
+
+Got it. Sorry, I just assumed the second check was invalid if the
+first one was invalid.
+
+All looks good to me then!
