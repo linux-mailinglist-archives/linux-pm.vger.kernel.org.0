@@ -2,36 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F2019C533
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Apr 2020 16:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AADDB19C530
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Apr 2020 16:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389114AbgDBO64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Apr 2020 10:58:56 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:45187 "EHLO rere.qmqm.pl"
+        id S2389117AbgDBO65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Apr 2020 10:58:57 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:37958 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389047AbgDBO6g (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S2388977AbgDBO6g (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Thu, 2 Apr 2020 10:58:36 -0400
 Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 48tR5k2S3Rz1vh;
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 48tR5k5lvLzpX;
         Thu,  2 Apr 2020 16:58:34 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1585839514; bh=gRqyNiKmpXtCcJah85qRJb4ZmdxMMi1xeLY32RUkzmw=;
+        t=1585839514; bh=kjx6NBawS358bbnB/tg0fAzXbSbFFBICYGk9a+ABk0A=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=py4C8dEl3mEDGP6diNl5IGaONluJgCjEUrAgpOdCMlmzzGB+kSQ8UsqPbkOmzyB/6
-         ClF+RNRKliZzAMgD302oZzOfqzGBH91lP/LL0REBDLF9uktKub9S/AcvzjwuT7be/B
-         09VS8Z68vdLkgpsbzDuCP/xI22ZvTc57YzfZsU4HBWXswZOgj9Ouj7AsuLVusj5gzd
-         idMtkYtb7qbKhj7zbvaZbJrQniLkQs3Ny85rtAdjBsZeKYvMI5jFcV7YAGgS42bP5t
-         K7fz5257DiYFWmRpbG4sZ8zhz84k7fLyTLf+Q9Ot+zfPGh4+vvrNLiqjMDfScm6tVz
-         m3+K+7kTpS06Q==
+        b=rrDhLWwwOv2K3yJ5/l7mfu+jCrprIToh4RnTswITiG4RiatJfxyRHYcWcWp8U9Ya3
+         2Y+orVzVVkQORT0M8aVFsD87kjZbxFK/X2fHYe8x6WtOac+8rCt2S07sGJG1Dun6kt
+         yo04h7IbG5mqcOuQbt0nT8wE/ysQaEzPhEuoAutbK3aHCiroImlCdZdnyZJoacgTK4
+         CPzMYoX0kd9WijF9cbpIl5UhhvDTh7toQp7igMx1EaoYQHkhsVLfnGs1tdpO7BLKdA
+         +QAcPRECOUNyXj1gd3HTIutkShoYCHoFyWi+LRwqnwgFl0agPIZY0Ux9Z47lD2ajWV
+         un2BiGAbQtzsg==
 X-Virus-Status: Clean
 X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Thu, 02 Apr 2020 16:58:33 +0200
-Message-Id: <e60a23192ff336dd5b7307bc059ebf3e876183b1.1585838679.git.mirq-linux@rere.qmqm.pl>
+Date:   Thu, 02 Apr 2020 16:58:34 +0200
+Message-Id: <2d7728cc62804d0773254337aae8eed9905786b3.1585838679.git.mirq-linux@rere.qmqm.pl>
 In-Reply-To: <cover.1585838678.git.mirq-linux@rere.qmqm.pl>
 References: <cover.1585838678.git.mirq-linux@rere.qmqm.pl>
 From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH 09/14] power: supply: bq25890: implement INPUT_CURRENT_LIMIT
- property
+Subject: [PATCH 10/14] power: supply: bq25890: use proper CURRENT_NOW property
+ for I_BAT
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -42,56 +42,68 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Report REG00.IINLIM value as INPUT_CURRENT_LIMIT property.
+Charge Current is more apropriately reflected by CURRENT_NOW property
+(measured current) than CONSTANT_CURRENT_VOLTAGE (configured CC-phase
+current limit). Fix the reference and make the sign reflect direction
+of the current.
 
 Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 ---
- drivers/power/supply/bq25890_charger.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/power/supply/bq25890_charger.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index b48685009048..87c5832e23d3 100644
+index 87c5832e23d3..250468f3ff18 100644
 --- a/drivers/power/supply/bq25890_charger.c
 +++ b/drivers/power/supply/bq25890_charger.c
-@@ -254,6 +254,7 @@ enum bq25890_table_ids {
- 	/* range tables */
- 	TBL_ICHG,
- 	TBL_ITERM,
-+	TBL_IILIM,
- 	TBL_VREG,
- 	TBL_BOOSTV,
- 	TBL_SYSVMIN,
-@@ -294,6 +295,7 @@ static const union {
- 	/* TODO: BQ25896 has max ICHG 3008 mA */
- 	[TBL_ICHG] =	{ .rt = {0,	  5056000, 64000} },	 /* uA */
- 	[TBL_ITERM] =	{ .rt = {64000,   1024000, 64000} },	 /* uA */
-+	[TBL_IILIM] =   { .rt = {50000,   3200000, 50000} },	 /* uA */
- 	[TBL_VREG] =	{ .rt = {3840000, 4608000, 16000} },	 /* uV */
- 	[TBL_BOOSTV] =	{ .rt = {4550000, 5510000, 64000} },	 /* uV */
- 	[TBL_SYSVMIN] = { .rt = {3000000, 3700000, 100000} },	 /* uV */
-@@ -505,6 +507,14 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
- 		val->intval = bq25890_find_val(bq->init_data.iterm, TBL_ITERM);
+@@ -468,15 +468,6 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+ 			val->intval = POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
  		break;
  
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		ret = bq25890_field_read(bq, F_IILIM);
+-	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+-		ret = bq25890_field_read(bq, F_ICHGR); /* read measured value */
+-		if (ret < 0)
+-			return ret;
+-
+-		/* converted_val = ADC_val * 50mA (table 10.3.19) */
+-		val->intval = ret * 50000;
+-		break;
+-
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+ 		val->intval = bq25890_find_val(bq->init_data.ichg, TBL_ICHG);
+ 		break;
+@@ -524,6 +515,15 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+ 		val->intval = 2304000 + ret * 20000;
+ 		break;
+ 
++	case POWER_SUPPLY_PROP_CURRENT_NOW:
++		ret = bq25890_field_read(bq, F_ICHGR); /* read measured value */
 +		if (ret < 0)
 +			return ret;
 +
-+		val->intval = bq25890_find_val(ret, TBL_IILIM);
++		/* converted_val = ADC_val * 50mA (table 10.3.19) */
++		val->intval = ret * -50000;
 +		break;
 +
- 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
- 		ret = bq25890_field_read(bq, F_SYSV); /* read measured value */
- 		if (ret < 0)
-@@ -695,6 +705,7 @@ static const enum power_supply_property bq25890_power_supply_props[] = {
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -699,7 +699,6 @@ static const enum power_supply_property bq25890_power_supply_props[] = {
+ 	POWER_SUPPLY_PROP_CHARGE_TYPE,
+ 	POWER_SUPPLY_PROP_ONLINE,
+ 	POWER_SUPPLY_PROP_HEALTH,
+-	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
+ 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
+ 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
  	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
- 	POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
+@@ -707,6 +706,7 @@ static const enum power_supply_property bq25890_power_supply_props[] = {
  	POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
-+	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+ 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
  	POWER_SUPPLY_PROP_VOLTAGE_NOW,
++	POWER_SUPPLY_PROP_CURRENT_NOW,
  };
  
+ static char *bq25890_charger_supplied_to[] = {
 -- 
 2.20.1
 
