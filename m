@@ -2,111 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 182E119C528
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Apr 2020 16:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E8119C548
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Apr 2020 17:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389072AbgDBO6j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Apr 2020 10:58:39 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:45187 "EHLO rere.qmqm.pl"
+        id S2388795AbgDBPAd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Apr 2020 11:00:33 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:30283 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389060AbgDBO6j (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 2 Apr 2020 10:58:39 -0400
+        id S1732754AbgDBPAd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 2 Apr 2020 11:00:33 -0400
 Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 48tR5n2L4szpX;
-        Thu,  2 Apr 2020 16:58:37 +0200 (CEST)
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 48tR7y6q9TzHd;
+        Thu,  2 Apr 2020 17:00:30 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1585839517; bh=K0kGzxg39yXWXSUEEmrAX5O79dFH60rAvb0VYzqfkq4=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=BUQAgeEbaQo7vEZ70u/oDSCKsw+v5485zBKPRB2tuYWUIbvv1Nvsl+ZqdN4Ck2Nq7
-         i3zV0w7F6xlJZFctGDMlcngHZyIn11F4ozCHVgGejY6d7rfhoPzekUUd1LfoLFE49Q
-         8AVlsuiLwucyjJ6Ckx3gztCPFvP7lL2nLwV3QHoLoPzhDR6vy37x0LNMPUC7SDslA5
-         LcHIzSkbN9MoXbRjO39CjOd+P7B4D93oyjktH0Nn+IYGLL9uMH6h10BgnOVigKYHRC
-         +O7QqDxkKPbGHMjgNimDz0rNNlifzr8CxpWTSeIkcTCx41ksflgnqjNBxULaP/qoO6
-         75wEgBU6UYIgg==
+        t=1585839631; bh=vn1sCW7UyenPqAw3zOWtIZx5V5o8WEC1MQiYnuQrEoI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pbiRv7SwA2Kv3UsmypWZi8c7Gh+CWfNX0+QMKrfYxbvn4rD3+ApKCimEywwss8UpX
+         66cix9tCiiukzmwODFaSny9BpmUcEXRrf+5thqgzFHC+rt4gYVdJExQV9MgfUOYHAs
+         Qlm/VS7uZg1aFLyMKjDCqUdIkgm1P6AZEL/0nsk8+AASZEGQhN/N+AdTYA06Rjqfh/
+         tV7Gd6BFyVG9k+n+A5tgg6dS+QxH0uYbJ4YGykWGct9Jw4vxrIKGlWwigjkHDJ+T3q
+         kIWDm8gnGXlDpBl+XdLaVO2u9T1aN/2tI2FglLX9b5Lvk9NdPWhYTJ1UDEEohus/UQ
+         jL6EA5ANPnCkQ==
 X-Virus-Status: Clean
 X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Thu, 02 Apr 2020 16:58:36 +0200
-Message-Id: <f70ea4f644d5751e8e254d4c718e964c63cac201.1585838679.git.mirq-linux@rere.qmqm.pl>
-In-Reply-To: <cover.1585838678.git.mirq-linux@rere.qmqm.pl>
-References: <cover.1585838678.git.mirq-linux@rere.qmqm.pl>
-From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH 14/14] power: supply: bq25890: support IBAT compensation
+Date:   Thu, 2 Apr 2020 17:00:29 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Sebastian Reichel (maintainer:POWER SUPPLY CLASS/SUBSYSTEM and DRIVERS 
+        ,blamed_fixes:1/1=100%)" <sebastian.reichel@collabora.com>,
+        "Andrey Smirnov (blamed_fixes:1/1=100%)" <andrew.smirnov@gmail.com>,
+        "open list:POWER SUPPLY CLASS/SUBSYSTEM and DRIVERS" 
+        <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/7] power: supply: core: fix HWMON temperature labels
+Message-ID: <20200402150029.GA8325@qmqm.qmqm.pl>
+References: <cover.1585837575.git.mirq-linux@rere.qmqm.pl>
+ <4a8ac6700e1503a69146f3eefd7cb515d11bfc9f.1585837575.git.mirq-linux@rere.qmqm.pl>
+ <29d67963-c110-553a-fec4-b972953987b1@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+In-Reply-To: <29d67963-c110-553a-fec4-b972953987b1@roeck-us.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add configuration for compensation of IBAT measuring resistor in series
-with the battery.
+On Thu, Apr 02, 2020 at 07:52:19AM -0700, Guenter Roeck wrote:
+> On 4/2/20 7:46 AM, Micha≥ Miros≥aw wrote:
+> > tempX_label files are swapped compared to what
+> > power_supply_hwmon_temp_to_property() uses. Make them match.
+> > While at it, make room for labeling other channels.
+> > 
+> > Fixes: e67d4dfc9ff1 ("power: supply: Add HWMON compatibility layer")
+> > Signed-off-by: Micha≥ Miros≥aw <mirq-linux@rere.qmqm.pl>
+> > ---
+> >  drivers/power/supply/power_supply_hwmon.c | 14 +++++++++++++-
+> >  1 file changed, 13 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/supply/power_supply_hwmon.c
+> > index 75cf861ba492..83318a21fb52 100644
+> > --- a/drivers/power/supply/power_supply_hwmon.c
+> > +++ b/drivers/power/supply/power_supply_hwmon.c
+> > @@ -43,6 +43,11 @@ static int power_supply_hwmon_curr_to_property(u32 attr)
+> >  	}
+> >  }
+> >  
+> > +static const char *const ps_temp_label[] = {
+> > +	"temp",
+> > +	"ambient temp",
+> > +};
+> > +
+> >  static int power_supply_hwmon_temp_to_property(u32 attr, int channel)
+> >  {
+> >  	if (channel) {
+> > @@ -144,7 +149,14 @@ static int power_supply_hwmon_read_string(struct device *dev,
+> >  					  u32 attr, int channel,
+> >  					  const char **str)
+> >  {
+> > -	*str = channel ? "temp" : "temp ambient";
+> > +	switch (type) {
+> > +	case hwmon_temp:
+> > +		*str = ps_temp_label[channel];
+> > +		break;
+> > +	default:
+> > +		break;
+> 
+> That returns "no error" without setting *str, which is really asking for trouble.
 
-Signed-off-by: Micha≈Ç Miros≈Çaw <mirq-linux@rere.qmqm.pl>
----
- drivers/power/supply/bq25890_charger.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+This is carried over from earlier version. No bug though, but I'll add a
+patch while I'm at it.
 
-diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index a61eab6a4552..ba1562968bec 100644
---- a/drivers/power/supply/bq25890_charger.c
-+++ b/drivers/power/supply/bq25890_charger.c
-@@ -83,6 +83,8 @@ struct bq25890_init_data {
- 	u8 boostf;	/* boost frequency		*/
- 	u8 ilim_en;	/* enable ILIM pin		*/
- 	u8 treg;	/* thermal regulation threshold */
-+	u8 rbatcomp;	/* IBAT sense resistor value    */
-+	u8 vclamp;	/* IBAT compensation voltage limit */
- };
- 
- struct bq25890_state {
-@@ -258,6 +260,8 @@ enum bq25890_table_ids {
- 	TBL_VREG,
- 	TBL_BOOSTV,
- 	TBL_SYSVMIN,
-+	TBL_VBATCOMP,
-+	TBL_RBATCOMP,
- 
- 	/* lookup tables */
- 	TBL_TREG,
-@@ -299,6 +303,8 @@ static const union {
- 	[TBL_VREG] =	{ .rt = {3840000, 4608000, 16000} },	 /* uV */
- 	[TBL_BOOSTV] =	{ .rt = {4550000, 5510000, 64000} },	 /* uV */
- 	[TBL_SYSVMIN] = { .rt = {3000000, 3700000, 100000} },	 /* uV */
-+	[TBL_VBATCOMP] ={ .rt = {0,        224000, 32000} },	 /* uV */
-+	[TBL_RBATCOMP] ={ .rt = {0,        140000, 20000} },	 /* uOhm */
- 
- 	/* lookup tables */
- 	[TBL_TREG] =	{ .lt = {bq25890_treg_tbl, BQ25890_TREG_TBL_SIZE} },
-@@ -667,7 +673,9 @@ static int bq25890_hw_init(struct bq25890_device *bq)
- 		{F_BOOSTI,	 bq->init_data.boosti},
- 		{F_BOOSTF,	 bq->init_data.boostf},
- 		{F_EN_ILIM,	 bq->init_data.ilim_en},
--		{F_TREG,	 bq->init_data.treg}
-+		{F_TREG,	 bq->init_data.treg},
-+		{F_BATCMP,	 bq->init_data.rbatcomp},
-+		{F_VCLAMP,	 bq->init_data.vclamp},
- 	};
- 
- 	ret = bq25890_chip_reset(bq);
-@@ -880,11 +888,14 @@ static int bq25890_fw_read_u32_props(struct bq25890_device *bq)
- 		{"ti,boost-max-current", false, TBL_BOOSTI, &init->boosti},
- 
- 		/* optional properties */
--		{"ti,thermal-regulation-threshold", true, TBL_TREG, &init->treg}
-+		{"ti,thermal-regulation-threshold", true, TBL_TREG, &init->treg},
-+		{"ti,ibatcomp-resistance", true, TBL_RBATCOMP, &init->rbatcomp},
-+		{"ti,ibatcomp-clamp-voltage", true, TBL_VBATCOMP, &init->vclamp},
- 	};
- 
- 	/* initialize data for optional properties */
- 	init->treg = 3; /* 120 degrees Celsius */
-+	init->rbatcomp = init->vclamp = 0; /* IBAT compensation disabled */
- 
- 	for (i = 0; i < ARRAY_SIZE(props); i++) {
- 		ret = device_property_read_u32(bq->dev, props[i].name,
--- 
-2.20.1
-
+Best Regards
+Micha≥ Miros≥aw
