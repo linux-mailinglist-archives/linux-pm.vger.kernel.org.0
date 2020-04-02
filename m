@@ -2,109 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1203B19BD27
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Apr 2020 09:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADE819BD3E
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Apr 2020 10:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387659AbgDBH6Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Apr 2020 03:58:24 -0400
-Received: from mga02.intel.com ([134.134.136.20]:21192 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725965AbgDBH6X (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 2 Apr 2020 03:58:23 -0400
-IronPort-SDR: RMdMDC4xPTADYH2XmaMBFhhVvLroWAd6LDBKiIc4zhT05neeiG931pHXiOjIZ8ZZQCRvoFlqbp
- TK7xieU2L2GQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2020 00:58:22 -0700
-IronPort-SDR: aWH9WU2pFjjgDUCmJAflWgcnacYwmqpUottW9hVSjKilfTfLSLozUVxCbsFcpHCXLgRBwcJ1GL
- zHXsu4/5/knQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,335,1580803200"; 
-   d="scan'208";a="273469236"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Apr 2020 00:58:19 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-doc@vger.kernel.org,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH][v3] PM / sleep: Add pm_debug_messages boot command control
-Date:   Thu,  2 Apr 2020 15:56:52 +0800
-Message-Id: <20200402075652.13289-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S2387565AbgDBICo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Apr 2020 04:02:44 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:46932 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387476AbgDBICo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Apr 2020 04:02:44 -0400
+Received: by mail-lj1-f194.google.com with SMTP id r7so2170073ljg.13
+        for <linux-pm@vger.kernel.org>; Thu, 02 Apr 2020 01:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vyp32wAklCO6J5UFHgfFYKkeTAHEzjD89tPlWTYStp0=;
+        b=HBlPb8FkIfaQVWnUvAD2TWPaTz73C7I5gXfZE4/tbSgsUl+4s4ZShIDC8unoa6HJTb
+         lX4vmMlXeC8V5BCEYreKA26zKdBSvhoffOKwFfytvwhizNhwEkWuaBrfMyBEFchJevIB
+         yyUNybyVPawYhZNhiG/hr1H13VIrfk1fGK11wydOa7ccULLoRLi4VbPyKCBFPwKk5qCZ
+         ySNgd5QgLemrXt+CGwdpYfi8zsY2Pea4QJAB3qaKGanP6fNZKlPVeHsyUefJTTcS1tSp
+         unVxjM6PsgJ9PEVzRwTzwCjMCBsKZ1YOE83bBO8WDxo/HWY8lt6TtijW0AXJuKxUQnhq
+         utJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Vyp32wAklCO6J5UFHgfFYKkeTAHEzjD89tPlWTYStp0=;
+        b=AScD3x6TPDx5l9ZsLmZNpBQL3akMQ6bmApDifjJWiBHZ16vGim2BP/sw/oJWHqqyf8
+         u/1rVY2qYECcPFYTgEzMYDi1HETlRwnzH+xyJIE5rHWq2Hxp0BuvcoR62pM93jcVaPol
+         hW7a78vAXypUkCZ02oLBPK9UammE8lgG0T0i2dq40422mudBJSdSKAdN8rrzhQyHKe2D
+         l1bh5y/387vO1PWqIO1motsjOhodfRevbtl9y1C2h3X3io1cWsiWlOti672ltr2T8LdR
+         9jL+9R6lkJi6ucUUqSH8Cbw0huF1DX5X+SscNXuKhoujmc3gtucvQ3/SEMCm0RX2NubB
+         SmfQ==
+X-Gm-Message-State: AGi0PubZwBj39PJoP/LcFqWp8tPDdMNIAHjmjYBagOiEa+Q3+qTjUPGh
+        4G9CEW9bQz6A49clbn8sYmZJqg==
+X-Google-Smtp-Source: APiQypKRiHheQF6ZN5f6Vy7jk9f35v3zWiX3N7C7LXyAWgdjwul7jANBM4QrgLAHDCT1hyyQ2MLdLg==
+X-Received: by 2002:a2e:9b07:: with SMTP id u7mr1242814lji.110.1585814561734;
+        Thu, 02 Apr 2020 01:02:41 -0700 (PDT)
+Received: from genomnajs.ideon.se ([85.235.10.227])
+        by smtp.gmail.com with ESMTPSA id i190sm3471898lfi.7.2020.04.02.01.02.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2020 01:02:40 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: [PATCH] cpufreq: Select schedutil when using big.LITTLE
+Date:   Thu,  2 Apr 2020 10:02:39 +0200
+Message-Id: <20200402080239.7471-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Debug messages from the system suspend/hibernation infrastructure
-is disabled by default, and can only be enabled after the system
-has boot up via /sys/power/pm_debug_messages. This makes the hibernation
-resume hard to track as it involves system boot up across hibernation.
-There's no chance for software_resume() to track the resume process,
-eg.
+When we are using a system with big.LITTLE HMP
+configuration, we need to use EAS to schedule the
+system.
 
-Turning on the pm_debug_messages during boot up by appending
-'pm_debug_messages'.
+As can be seen from kernel/sched/topology.c:
 
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Len Brown <lenb@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+ "EAS can be used on a root domain if it meets all the following conditions:
+  1. an Energy Model (EM) is available;
+  2. the SD_ASYM_CPUCAPACITY flag is set in the sched_domain hierarchy.
+  3. no SMT is detected.
+  4. the EM complexity is low enough to keep scheduling overheads low;
+  5. schedutil is driving the frequency of all CPUs of the rd;"
+
+This means that at the very least, schedutil needs to be
+available as a scheduling policy for EAS to work on these
+systems. Make this explicit by defaulting to the schedutil
+governor if BIG_LITTLE is selected.
+
+Currently users of the TC2 board (like me) has to figure these
+dependencies out themselves and it is not helpful.
+
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
-v2: According to Randy's suggestion, add the command line
-    option to Documentation/admin-guide/kernel-parameters.txt
+ drivers/cpufreq/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-v3: According to Rafael's suggestion, rename the boot command
-    to pm_debug_messages
----
- Documentation/admin-guide/kernel-parameters.txt | 3 +++
- kernel/power/main.c                             | 7 +++++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index ed73df5f1369..3fb9cbee8d28 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3720,6 +3720,9 @@
- 			Override pmtimer IOPort with a hex value.
- 			e.g. pmtmr=0x508
+diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+index bff5295016ae..873aefd96cf2 100644
+--- a/drivers/cpufreq/Kconfig
++++ b/drivers/cpufreq/Kconfig
+@@ -36,6 +36,7 @@ config CPU_FREQ_STAT
  
-+	pm_debug_messages	[SUSPEND,KNL]
-+			Enable suspend/resume debug messages during boot up.
-+
- 	pnp.debug=1	[PNP]
- 			Enable PNP debug messages (depends on the
- 			CONFIG_PNP_DEBUG_MESSAGES option).  Change at run-time
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 69b7a8aeca3b..40f86ec4ab30 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -535,6 +535,13 @@ static ssize_t pm_debug_messages_store(struct kobject *kobj,
- 
- power_attr(pm_debug_messages);
- 
-+static int __init pm_debug_messages_setup(char *str)
-+{
-+	pm_debug_messages_on = true;
-+	return 1;
-+}
-+__setup("pm_debug_messages", pm_debug_messages_setup);
-+
- /**
-  * __pm_pr_dbg - Print a suspend debug message to the kernel log.
-  * @defer: Whether or not to use printk_deferred() to print the message.
+ choice
+ 	prompt "Default CPUFreq governor"
++	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if BIG_LITTLE
+ 	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1100_CPUFREQ || ARM_SA1110_CPUFREQ
+ 	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
+ 	help
 -- 
-2.17.1
+2.25.1
 
