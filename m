@@ -2,120 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF3619C2C1
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Apr 2020 15:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961BA19C338
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Apr 2020 15:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388280AbgDBNd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Apr 2020 09:33:58 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:43482 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387752AbgDBNd5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Apr 2020 09:33:57 -0400
-Received: by mail-oi1-f193.google.com with SMTP id k5so2730777oiw.10;
-        Thu, 02 Apr 2020 06:33:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ECW1sL5MI7yjOdWrTi6RkJft8XYzmpkaIoE7bQzsjaM=;
-        b=RwPo6pLpJgNzlpYdXNOdKeH7P0zxM50gXVPMN9rphPYxblGPnjQV/n6VXiPM2DGE4/
-         4wRVlqu3FAqijVNlpAPobVS2dqsWz3kEs1axA6fRb3CDjCMSQtznhLT/XFpIc5oSCPqd
-         Bgt82DIBkDXjMp+SOl4igMGEvOeKvBjN1mLkryFVDSMaSWSoql+5lZ4eLkfQj6y4/l46
-         gwMFQPTfKXO2MrCJdeqiDaOxh2XMrJfi0UCD0+LtFdxqX3OaAXY/2Y/5SHvCsLjI6Mff
-         2wKsc8sZkB0Hi0EEl6SzhefnaPSGlyIT4vbSj4TSio4XKsJmLdbYDSk7TRLl4JE59nGw
-         xb0A==
-X-Gm-Message-State: AGi0Pubarc/af5BMfGUJSJn6lt8YZQVP01BYsbdPDcFrULj6xNPrBECI
-        yWgf0XAx7VyeRdqBnN47CfxUQEdacb9nhBMuPl0=
-X-Google-Smtp-Source: APiQypI2kY313Dq4uTKl7sebjrsM4yTadP8qeVcR6tRx3hDHNt1HwO5A2TJ0fvzY/Ly7nMDEQdosvXBfsEGRwDQHc2Y=
-X-Received: by 2002:aca:2209:: with SMTP id b9mr2258758oic.103.1585834436843;
- Thu, 02 Apr 2020 06:33:56 -0700 (PDT)
+        id S1731970AbgDBNxF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Apr 2020 09:53:05 -0400
+Received: from smtp1.axis.com ([195.60.68.17]:15751 "EHLO smtp1.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727322AbgDBNxF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 2 Apr 2020 09:53:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; l=2696; q=dns/txt; s=axis-central1;
+  t=1585835584; x=1617371584;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CV98VA9FjGiVV8kHnbGGkcM5ZTwpBaBb+rPFa5htYbc=;
+  b=DEWfDEb997ZftaOI7oxxpTvcXVKKOVTOzc4U4o9/7oYMV/QGBZmJq5cG
+   y0VTiM5DtvKwqNdlS6SpLK77MUpBC45jwKtHYRhs0607Yaoyc7fki8ckG
+   3VIBYWtY2D+80OrbK4wNKnokfuZousCNPKpEyzoOVUok+KCf9Kbx703aO
+   Uqymr1OYaSdfA+6bzMn1Zs2V2xRqt1PthSnn/Quf58b89D7vDqSW0ARgS
+   itZIj4PLKQxupfLHdROuZ3pCnwkov5W64evdhN/tXoa2/1ata3fGK83Md
+   m2aK0kE9+QNYoqpgY2DWMkNVOfeDDS3/UQwBWHI6bkHu83enTO5E2okQI
+   g==;
+IronPort-SDR: fGATzLwdBAQHpGaI2GlFlmFFxyp0j6MD3Cr8UUVyPMRnMrI1fLmKoJnoLfmeglY7JrZfv34fim
+ qdBsuLBZKnyy3ir7XrNRoIdiERCdRsfrm22uE8hrzTLBrN+kfwx6VJdfUHZCOsqWYc/3jhiN7I
+ D8Wl+kKuhe6b0S9ZJJ7h2vEIlWvPD968/RXHw0Ufjfg1Qwus3rCQ4O4brCFC5KNvyXk7ghNBmm
+ c+aIVOzthCfffaKtk/eXiLDKz0sOMukLsvCCqtnzSO0o4QlN8zGJ7zPzkFSIo0u7HJd4DKuBUi
+ t7Q=
+X-IronPort-AV: E=Sophos;i="5.72,335,1580770800"; 
+   d="scan'208";a="7244825"
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <rui.zhang@intel.com>, <daniel.lezcano@linaro.org>,
+        <amit.kucheria@verdurent.com>
+CC:     <kernel@axis.com>, <linux-pm@vger.kernel.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Subject: [PATCH] thermal: Add ratelimited print for HOT trip point
+Date:   Thu, 2 Apr 2020 15:52:42 +0200
+Message-ID: <20200402135242.11117-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20200402075652.13289-1-yu.c.chen@intel.com>
-In-Reply-To: <20200402075652.13289-1-yu.c.chen@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 2 Apr 2020 15:33:45 +0200
-Message-ID: <CAJZ5v0j2W5MYJnb4hiDn0OgR1xJZwm4TxVm9o-iw+epXPTp82g@mail.gmail.com>
-Subject: Re: [PATCH][v3] PM / sleep: Add pm_debug_messages boot command control
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 2, 2020 at 9:58 AM Chen Yu <yu.c.chen@intel.com> wrote:
->
-> Debug messages from the system suspend/hibernation infrastructure
-> is disabled by default, and can only be enabled after the system
-> has boot up via /sys/power/pm_debug_messages. This makes the hibernation
-> resume hard to track as it involves system boot up across hibernation.
-> There's no chance for software_resume() to track the resume process,
-> eg.
->
-> Turning on the pm_debug_messages during boot up by appending
-> 'pm_debug_messages'.
->
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
-> v2: According to Randy's suggestion, add the command line
->     option to Documentation/admin-guide/kernel-parameters.txt
->
-> v3: According to Rafael's suggestion, rename the boot command
->     to pm_debug_messages
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 3 +++
->  kernel/power/main.c                             | 7 +++++++
->  2 files changed, 10 insertions(+)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index ed73df5f1369..3fb9cbee8d28 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -3720,6 +3720,9 @@
->                         Override pmtimer IOPort with a hex value.
->                         e.g. pmtmr=0x508
->
-> +       pm_debug_messages       [SUSPEND,KNL]
-> +                       Enable suspend/resume debug messages during boot up.
-> +
->         pnp.debug=1     [PNP]
->                         Enable PNP debug messages (depends on the
->                         CONFIG_PNP_DEBUG_MESSAGES option).  Change at run-time
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index 69b7a8aeca3b..40f86ec4ab30 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -535,6 +535,13 @@ static ssize_t pm_debug_messages_store(struct kobject *kobj,
->
->  power_attr(pm_debug_messages);
->
-> +static int __init pm_debug_messages_setup(char *str)
-> +{
-> +       pm_debug_messages_on = true;
-> +       return 1;
-> +}
-> +__setup("pm_debug_messages", pm_debug_messages_setup);
-> +
->  /**
->   * __pm_pr_dbg - Print a suspend debug message to the kernel log.
->   * @defer: Whether or not to use printk_deferred() to print the message.
-> --
+Currently, HOT trips don't do much in the core except for emitting an
+ftrace event.  Unlike for ACTIVE/PASSIVE, cooling/throttling is not
+activated.
 
-Applied (as 5.7-rc material) with modified subject and changelog, thanks!
+The ACPI driver sends a netlink notification to userspace, but the other
+drivers either don't implement ->notify() (all but rcar_thermal), or
+don't do anything for HOT in their ->notify() implementation
+(rcar_thermal).  (tegra appears to use the HOT trip device tree data for
+other purposes.)
+
+To make this trip point a bit more useful, add a warning print in the
+core when this temperature is reached, so that this information is
+available in the kernel log for diagnostic purposes.  The warning is
+ratelimited by default to once an hour and can be adjusted with module
+parameters.
+
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ drivers/thermal/thermal_core.c | 12 ++++++++++++
+ include/linux/thermal.h        |  1 +
+ 2 files changed, 13 insertions(+)
+
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 9a321dc548c8..06f1dfae0310 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -47,6 +47,12 @@ static bool power_off_triggered;
+ 
+ static struct thermal_governor *def_governor;
+ 
++static unsigned int thermal_ratelimit_interval = 60 * 60 * HZ;
++static unsigned int thermal_ratelimit_burst = 1;
++
++module_param_named(ratelimit_interval, thermal_ratelimit_interval, uint, 0);
++module_param_named(ratelimit_burst, thermal_ratelimit_burst, uint, 0);
++
+ /*
+  * Governor section: set of functions to handle thermal governors
+  *
+@@ -404,6 +410,9 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
+ 			power_off_triggered = true;
+ 		}
+ 		mutex_unlock(&poweroff_lock);
++	} else if (__ratelimit(&tz->ratelimit)) {
++		dev_warn(&tz->device, "hot temperature reached (%d C)\n",
++			  tz->temperature / 1000);
+ 	}
+ }
+ 
+@@ -1290,6 +1299,9 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+ 	tz->passive_delay = passive_delay;
+ 	tz->polling_delay = polling_delay;
+ 
++	ratelimit_state_init(&tz->ratelimit, thermal_ratelimit_interval,
++			     thermal_ratelimit_burst);
++
+ 	/* sys I/F */
+ 	/* Add nodes that are always present via .groups */
+ 	result = thermal_zone_create_device_groups(tz, mask);
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 126913c6a53b..d3d0d6c7c4a1 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -196,6 +196,7 @@ struct thermal_zone_device {
+ 	int passive;
+ 	int prev_low_trip;
+ 	int prev_high_trip;
++	struct ratelimit_state ratelimit;
+ 	unsigned int forced_passive;
+ 	atomic_t need_update;
+ 	struct thermal_zone_device_ops *ops;
+-- 
+2.25.1
+
