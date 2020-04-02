@@ -2,218 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE72119C3E9
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Apr 2020 16:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490C319C403
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Apr 2020 16:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbgDBOXp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Apr 2020 10:23:45 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:45796 "EHLO
+        id S1732492AbgDBO2F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Apr 2020 10:28:05 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36808 "EHLO
         mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731780AbgDBOXo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Apr 2020 10:23:44 -0400
-Received: by mail-wr1-f68.google.com with SMTP id t7so4395202wrw.12
-        for <linux-pm@vger.kernel.org>; Thu, 02 Apr 2020 07:23:42 -0700 (PDT)
+        with ESMTP id S1726368AbgDBO2F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Apr 2020 10:28:05 -0400
+Received: by mail-wr1-f68.google.com with SMTP id 31so4471013wrs.3
+        for <linux-pm@vger.kernel.org>; Thu, 02 Apr 2020 07:28:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ji2Ku2ZH1WW9DKlxO4woetZ//ek7SsL6L8u0hVrXXuo=;
-        b=uDxWJD1+e5A+13EgYs9zhFRoYydcLXaG9+KU75+MWWlTqI/smjoP8BYlAcotejfyLg
-         wtu7NIoEdkzyc6NZYnBRh1jdwMrJFY04p2j/Oo4NM+dgGJ2pSmjMHrOJNSlvpzuPJDak
-         UTwnemuXW8W12yCSX0lnqA90fG7Ri0s57uj00YNP9sBIuL63RdA4el0mAefXD6SPaz2S
-         iCDJhAY7Ooe3dTi4iN075ckoXBXNnRpQfM11lJ9LuSR3waxPVFUyCQnAoxTrfNagPd+1
-         qOWUqGblOYUR8cjCy0YPAMJXUYvon7R2k0nYF98htJNYMgclA7sMResIH74b8s6zqSZA
-         nvrA==
+        h=from:to:cc:subject:date:message-id;
+        bh=L6/ijDa/Jd9lpmxJXYPH3CFr+MtNwUzGkblaHQTuEUE=;
+        b=Cxn+mi5l8LNcQ9ooeTVNyp7YknSO5b0dzRvVoadai2f9VqETOlr7uW+s2jR5paIkPV
+         9FuWrxFWvscGJ0X8P1sDj7EeEOsKRVjYsEXZcCDsVs26wsti5C56AAdP8QWFz6wXeaHF
+         NTGZzWjxHI8/HKg3RyfaeNaXP8pVJYkQAZamfx953+Gwt7Huv7wc+GXGjUWL73KdYblM
+         cA2Eb5ZO6bdNzqEtRwF6IAJHnjcmBUZRmFK+FDf2gO0lMF5hi8lKxCQijDbjRVwTSM7e
+         qF12rf/yC5hAd5qU1IS5AiCQmgyzVTuMmY9apGgF/1cauc3E5aEndR8dpiFNf1O2XBd8
+         cqhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ji2Ku2ZH1WW9DKlxO4woetZ//ek7SsL6L8u0hVrXXuo=;
-        b=orVUetxBl5021ciPNpq05KtBcaTqid+QB+4BarBb2zMnKR/gUrFAYbdcbE+O7OgLBt
-         zkPhmPsr2Eo4IV3MjGM9AnK971ZoF96PX5GGIIa+W2ECOeE8KDYIXeOpxDJQrwQW6pt0
-         o/ccv15B124z4fL6zX9IR6B/CAjXYBebl0ehjhRkRInbhojtLVAxWVWoSLYUB6KZ43vo
-         sjSKtHtZwHL6hsfQRh8P9sOiFaVQlh8njRsCo7+jUNNgjXZt3e6cG6+SPu6YelqIvtFQ
-         3YLX5mhmbMl4J2bc3OQ2WnaSuia5yh0rOkUWLZo0ZZ6RTS2IfULGIPMzlCAl0PcnNXex
-         WDoQ==
-X-Gm-Message-State: AGi0PuZ6ntqmOSpqDSM9xXPf/OwhzR5M4n7lJEIYmFcvGWuZOXSQxvbV
-        9z592iu1xRp70rc0LoXMt1wm3w==
-X-Google-Smtp-Source: APiQypJF86iX+9FGY7/V9HXAMzna8j3EKU+Y+3rBQFK/ogLyrcLPa0jPk7CbGNhpCsejVuKqa1bj/Q==
-X-Received: by 2002:adf:afdb:: with SMTP id y27mr3871899wrd.208.1585837421424;
-        Thu, 02 Apr 2020 07:23:41 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e34:ed2f:f020:2db3:bc11:ecac:6375])
-        by smtp.gmail.com with ESMTPSA id 9sm7096295wmm.6.2020.04.02.07.23.40
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=L6/ijDa/Jd9lpmxJXYPH3CFr+MtNwUzGkblaHQTuEUE=;
+        b=SQfsQdvD/z3xn8KRt5XkgHRiL0VgYLMj8GYFoN213B7IlJVu2PwwpP1p6b20t0VQVZ
+         CPyuZ0fca5CiEFWBz2ENALSOQrbVXfKNBmO0qRIajeX0nq2BRCWbRcbuQ9cu8iR5t/1p
+         I9/5kygHJmhTVr+lIDxVHAD85/Vc5h5JpcHD3zMD83O3kwovz/Ps3UDPvRet/o4vtO32
+         eW6hX28nWwgKJuMnEhqyw8tLVcDspqTBwBC0h/Z/T6RNyUO5FZkdUMLBrdGT37z7mRNH
+         ENBlyyrfkdA2DixoDJOgkpsnfxUewnS+h57BGeVA3wzsc3Y93ZxhAQcDi83DYy1eBnkf
+         Jf/w==
+X-Gm-Message-State: AGi0PuZwR8Kb9QIcxngf2JUYYLw1eoysDioQnDgqCdKEQY1mH7YixtXK
+        lHUI4aqLe2dsiXpQ+rw0YibXyw==
+X-Google-Smtp-Source: APiQypIUdnQDDdOEoeXFn6SQz3wAN0BAYyPNar/ytXY1aSsVIPaUfDXx8RyvFPho8qNwZDC8esAm6Q==
+X-Received: by 2002:a5d:53ce:: with SMTP id a14mr3711084wrw.129.1585837681758;
+        Thu, 02 Apr 2020 07:28:01 -0700 (PDT)
+Received: from mai.imgcgcw.net ([2a01:e34:ed2f:f020:4b2:e366:e86f:261a])
+        by smtp.gmail.com with ESMTPSA id a7sm7045186wmm.34.2020.04.02.07.28.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2020 07:23:40 -0700 (PDT)
+        Thu, 02 Apr 2020 07:28:01 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
-Cc:     amit.kucheria@verdurent.com, vincent.whitchurch@axis.com,
+Cc:     amit.kucheria@verdurent.com,
         linux-pm@vger.kernel.org (open list:THERMAL),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] thermal: core: Send a sysfs notification on trip points
-Date:   Thu,  2 Apr 2020 16:21:15 +0200
-Message-Id: <20200402142116.22869-1-daniel.lezcano@linaro.org>
+Subject: [PATCH V2 1/9] thermal: Move default governor config option to the internal header
+Date:   Thu,  2 Apr 2020 16:27:39 +0200
+Message-Id: <20200402142747.8307-1-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <a7e8287d-72be-7ab0-697a-9de40eb3f81f@linaro.org>
-References: <a7e8287d-72be-7ab0-697a-9de40eb3f81f@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the userspace has no easy way to get notified when a
-specific trip point was crossed. There are a couple of approaches:
+The default governor set at compilation time is a thermal internal
+business, no need to export to the global thermal header.
 
-- the userspace polls the sysfs temperature with usually an
-  unacceptable delay between the trip temperature point crossing and
-  the moment it is detected, or a high polling rate with an
-  unacceptable number of wakeup events.
-
-- the thermal zone is set to be managed by an userspace governor in
-  order to receive the uevent even if the thermal zone needs to be
-  managed by another governor.
-
-These changes allow to send a sysfs notification on the
-trip_point_*_temp when the temperature is getting higher than the trip
-point temperature. By this way, the userspace can be notified
-everytime when the trip point is crossed, this is useful for the
-thermal Android HAL or for notification to be sent via d-bus.
-
-That allows the userspace to manage the applications based on specific
-alerts on different thermal zones to mitigate the skin temperature,
-letting the kernel governors handle the high temperature for hardware
-like the CPU, the GPU or the modem.
-
-The temperature can be oscillating around a trip point and the event
-will be sent multiple times. It is up to the userspace to deal with
-this situation.
-
-The following userspace program allows to monitor those events:
-
-struct trip_data {
-       int fd;
-       int temperature;
-       const char *path;
-};
-
-int main(int argc, char *argv[])
-{
-	int efd, i;
-	struct trip_data *td;
-	struct epoll_event epe;
-
-	if (argc < 2) {
-		fprintf(stderr, "%s <trip1> ... <tripn>\n", argv[0]);
-		return 1;
-	}
-
-	if (argc > MAX_TRIPS) {
-		fprintf(stderr, "Max trip points supported: %d\n", MAX_TRIPS);
-		return 1;
-	}
-
-	efd = epoll_create(MAX_TRIPS);
-	if (efd <  0) {
-		fprintf(stderr, "epoll_create failed: %d\n", errno);
-		return 1;
-	}
-
-	for (i = 0; i < argc - 1; i++) {
-
-		FILE *f;
-		int temperature;
-
-		f = fopen(argv[i + 1], "r");
-		if (!f) {
-			fprintf(stderr, "Failed to open '%s': %d\n", argv[i + 1], errno);
-			return 1;
-		}
-
-		td = malloc(sizeof(*td));
-		if (!td) {
-			fprintf(stderr, "Failed to allocate trip_data\n");
-			return 1;
-		}
-
-		fscanf(f, "%d\n", &temperature);
-		rewind(f);
-
-		td->fd = fileno(f);
-		td->path = argv[i + 1];
-		td->temperature = temperature;
-
-		epe.events = EPOLLIN | EPOLLET;
-		epe.data.ptr = td;
-
-		if (epoll_ctl(efd, EPOLL_CTL_ADD, td->fd, &epe)) {
-			fprintf(stderr, "Failed to epoll_ctl: %d\n", errno);
-			return 1;
-		}
-
-		printf("Set '%s' for temperature '%d'\n",
-		       td->path, td->temperature);
-	}
-
-	while(1) {
-
-		if (epoll_wait(efd, &epe, 1, -1) < 0) {
-			fprintf(stderr, "Failed to epoll_wait: %d\n", errno);
-			return 1;
-		}
-
-		td = epe.data.ptr;
-
-		printf("The trip point '%s' crossed the temperature '%d'\n",
-		       td->path, td->temperature);
-	}
-
-	return 0;
-}
+Move the config options to the internal header.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/thermal_core.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ drivers/thermal/thermal_core.h | 11 +++++++++++
+ include/linux/thermal.h        | 11 -----------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index c06550930979..3cbdd20252ab 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -407,6 +407,19 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
- 	}
- }
+diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+index 37cd4e2bead2..828305508556 100644
+--- a/drivers/thermal/thermal_core.h
++++ b/drivers/thermal/thermal_core.h
+@@ -12,6 +12,17 @@
+ #include <linux/device.h>
+ #include <linux/thermal.h>
  
-+static int thermal_trip_crossed(struct thermal_zone_device *tz, int trip)
-+{
-+	int trip_temp;
++/* Default Thermal Governor */
++#if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
++#define DEFAULT_THERMAL_GOVERNOR       "step_wise"
++#elif defined(CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE)
++#define DEFAULT_THERMAL_GOVERNOR       "fair_share"
++#elif defined(CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE)
++#define DEFAULT_THERMAL_GOVERNOR       "user_space"
++#elif defined(CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR)
++#define DEFAULT_THERMAL_GOVERNOR       "power_allocator"
++#endif
 +
-+	tz->ops->get_trip_temp(tz, trip, &trip_temp);
-+
-+	if (tz->last_temperature == THERMAL_TEMP_INVALID)
-+		return 0;
-+
-+	return ((tz->last_temperature < trip_temp)) &&
-+		(tz->temperature >= trip_temp));
-+}
-+
- static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
- {
- 	enum thermal_trip_type type;
-@@ -417,6 +430,16 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+ /* Initial state of a cooling device during binding */
+ #define THERMAL_NO_TARGET -1UL
  
- 	tz->ops->get_trip_type(tz, trip, &type);
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 448841ab0dca..71cff87dcb46 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -32,17 +32,6 @@
+ /* use value, which < 0K, to indicate an invalid/uninitialized temperature */
+ #define THERMAL_TEMP_INVALID	-274000
  
-+	/*
-+	 * This condition will be true everytime the temperature is
-+	 * greater than the trip point and the previous temperature
-+	 * was below. In this case notify the userspace via a sysfs
-+	 * event on the trip point.
-+	 */
-+	if (thermal_trip_crossed(tz, trip))
-+		sysfs_notify(&tz->device.kobj, NULL,
-+			     tz->trip_temp_attrs[trip].attr.attr.name);
-+
- 	if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
- 		handle_critical_trips(tz, trip, type);
- 	else
+-/* Default Thermal Governor */
+-#if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
+-#define DEFAULT_THERMAL_GOVERNOR       "step_wise"
+-#elif defined(CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE)
+-#define DEFAULT_THERMAL_GOVERNOR       "fair_share"
+-#elif defined(CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE)
+-#define DEFAULT_THERMAL_GOVERNOR       "user_space"
+-#elif defined(CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR)
+-#define DEFAULT_THERMAL_GOVERNOR       "power_allocator"
+-#endif
+-
+ struct thermal_zone_device;
+ struct thermal_cooling_device;
+ struct thermal_instance;
 -- 
 2.17.1
 
