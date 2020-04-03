@@ -2,36 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 632E619DB7F
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 18:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A4219DB75
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 18:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404409AbgDCQXe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Apr 2020 12:23:34 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:16700 "EHLO rere.qmqm.pl"
+        id S2404018AbgDCQXb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Apr 2020 12:23:31 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:56843 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404284AbgDCQXd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 3 Apr 2020 12:23:33 -0400
+        id S1728293AbgDCQXb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 3 Apr 2020 12:23:31 -0400
 Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 48v4xH1Vr3zGl;
-        Fri,  3 Apr 2020 18:23:31 +0200 (CEST)
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 48v4xF4cj3z89;
+        Fri,  3 Apr 2020 18:23:29 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1585931011; bh=8lunpxS98lM0f3PoyUteDz8Xwp4fV51FcDnCqkylrZA=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=fFBoOCiZ3YnSg5A6zUE339EV7k7+8yHYKQWCFtzyFZ0tvOtnw0RyquTHs97P3VKXK
-         gmvevHujRta48yTH8VpBv2ePoL4FPhMmpyAJatiMkfrKSYM4EzsjeHnxZzN/ZOYDuA
-         D1pDHuQfAct9TqwXTXU1hOJ/ZiVECVgfl3k1q1sywZ4eIy5tVQ/xJuNZbJl2SOGE54
-         IRXSLlKm8L4sT2uKmkO7xlV2Nu3hZZVvgtNpxvOjBzCy6nig0Z17RXvva9cdaUXpaD
-         pXt4JtxVWF73hhUmS4MhsCjHLIxnEqkXhBgMhNHj7DzsHvoM9wJosdA8iZXhejPRHO
-         WHy7Rh7pi44hQ==
+        t=1585931009; bh=0CzaEgqfN263drxxDU5ar5X4YqApOdcM1FZ/ZfZc11c=;
+        h=Date:From:Subject:To:Cc:From;
+        b=ConTcMwycOVedQJkGyrX7J1npsFs24MHi/SGmCHT5MLCbIF1C9GoqdPwPVBeAQfIy
+         8zz+xnI41EAi9m3mzgWGU0o919zo7WjItC7G8V1jFN/2UsrURwxTr8cTTdycmv/bZO
+         0gViE6ld8TIQFipnU2Zmpe11c/5xDk5oGAbdwflbThZKbBh7lAQTpcf4gsZSgJkfWx
+         cLEH6Hujii5qEHnjpJJg0lc66hk5dtQNR8GUgdYm0qtveZV2IG3mf6OiGF8uYvYNKs
+         UzJ/2NulYQ8eO6R5ejyA+txe7E4w3MBEkajEuw+lwuW7bS//ScPwmCVwCsKT3VDBxR
+         Yls3f4ONOqUng==
 X-Virus-Status: Clean
 X-Virus-Scanned: clamav-milter 0.102.2 at mail
 Date:   Fri, 03 Apr 2020 18:23:29 +0200
-Message-Id: <cdf9c0b02acdee77721039d4e7557e0e232d837d.1585929579.git.mirq-linux@rere.qmqm.pl>
-In-Reply-To: <cover.1585929579.git.mirq-linux@rere.qmqm.pl>
-References: <cover.1585929579.git.mirq-linux@rere.qmqm.pl>
+Message-Id: <cover.1585929579.git.mirq-linux@rere.qmqm.pl>
 From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH v2 1/8] power: supply: core: reduce
- power_supply_show_usb_type() parameters
+Subject: [PATCH v2 0/8] power: supply: core: extensions and fixes
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -44,50 +41,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reduce power_supply_show_usb_type() parameter count by folding
-power_supply_desc dereference into the function.  This makes following
-patch making usb_types const easier.
+This series covers three areas of power supply class:
 
-Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+1-2. constify property and usb_type lists as they should not be changed
+     after driver registration
+3-5. fix and clean up HWMON labels
+6-8. extend core to support input/battery/output supply point
+     measurements
+
 ---
- drivers/power/supply/power_supply_sysfs.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+v2: splits power_supply_hwmon_read_string() fix from extensioa
+    (patches 3-4)
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index f37ad4eae60b..51de3f47b25d 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -78,8 +78,7 @@ static const char * const power_supply_scope_text[] = {
- };
- 
- static ssize_t power_supply_show_usb_type(struct device *dev,
--					  enum power_supply_usb_type *usb_types,
--					  ssize_t num_usb_types,
-+					  const struct power_supply_desc *desc,
- 					  union power_supply_propval *value,
- 					  char *buf)
- {
-@@ -88,8 +87,8 @@ static ssize_t power_supply_show_usb_type(struct device *dev,
- 	bool match = false;
- 	int i;
- 
--	for (i = 0; i < num_usb_types; ++i) {
--		usb_type = usb_types[i];
-+	for (i = 0; i < desc->num_usb_types; ++i) {
-+		usb_type = desc->usb_types[i];
- 
- 		if (value->intval == usb_type) {
- 			count += sprintf(buf + count, "[%s] ",
-@@ -163,8 +162,7 @@ static ssize_t power_supply_show_property(struct device *dev,
- 			      power_supply_type_text[value.intval]);
- 		break;
- 	case POWER_SUPPLY_PROP_USB_TYPE:
--		ret = power_supply_show_usb_type(dev, psy->desc->usb_types,
--						 psy->desc->num_usb_types,
-+		ret = power_supply_show_usb_type(dev, psy->desc,
- 						 &value, buf);
- 		break;
- 	case POWER_SUPPLY_PROP_SCOPE:
+Michał Mirosław (8):
+  power: supply: core: reduce power_supply_show_usb_type() parameters
+  power: supply: core: allow to constify property lists
+  power: supply: core: fix HWMON temperature labels
+  power: supply: core: tabularize HWMON temperature labels
+  power: supply: core: hide unused HWMON labels
+  power: supply: core: add input voltage/current measurements
+  power: supply: core: add output voltage measurements
+  power: supply: core: document measurement points
+
+ Documentation/power/power_supply_class.rst |   6 +
+ drivers/power/supply/power_supply_hwmon.c  | 198 +++++++++++++++++++--
+ drivers/power/supply/power_supply_sysfs.c  |  15 +-
+ include/linux/power_supply.h               |   9 +-
+ 4 files changed, 210 insertions(+), 18 deletions(-)
+
 -- 
 2.20.1
 
