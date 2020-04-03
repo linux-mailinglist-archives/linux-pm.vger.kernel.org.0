@@ -2,62 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA4C19DCA1
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 19:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B70F19DCFD
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 19:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728066AbgDCRVl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Apr 2020 13:21:41 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:52432 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403999AbgDCRTk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Apr 2020 13:19:40 -0400
-Received: by mail-wm1-f66.google.com with SMTP id t8so7918466wmi.2
-        for <linux-pm@vger.kernel.org>; Fri, 03 Apr 2020 10:19:37 -0700 (PDT)
+        id S2404002AbgDCRod (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Apr 2020 13:44:33 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:46608 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403981AbgDCRo3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Apr 2020 13:44:29 -0400
+Received: by mail-wr1-f66.google.com with SMTP id j17so9441810wru.13
+        for <linux-pm@vger.kernel.org>; Fri, 03 Apr 2020 10:44:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lcpNoI7xIY4kNiB3ex5eUnMyPccu+6NxZPGvlIGD290=;
-        b=TDXYMNKfZiYa/EW+laebpfeH6DTOSiUF2yoOKXyQnE6H9rvq3j/1B+tkjM0ZLtMIWc
-         2W4s8N2jtLdiS4unn+cBkh8zRMy0GV3JcebEIwrQ7ZVHEQKpaAa/xS6Qk4w8KPjTu896
-         lj7wzwJZd6WUrmUpLfH3T2wmVjVV48CjIoA1G99pup3G8ZW+UITRdgECh5ypz+xxxvCB
-         0VOhec4TfoHjmc/E0GiQBE04KCO3LHKp0mlKMy46gOZsM0WtQPH5r++V9DlPYa5+btPt
-         MagtVEVvvAKuOHGtOFIgRaajkJAHc0ubBMf7xceuHqxxla7C3l1Yx5yopQkWBx6Q1DnY
-         on3A==
+        bh=3IRCSeovtJ4qPaAlDb+qJfs2WHFPBRzlCPv+uW4BVtM=;
+        b=ZhFmw4awlQGDOQvhue1HPhakCr9If5mP4CbsYz9PdBRq10pZB0yNy2sa8oERY6TFsS
+         7SQUjqfgUXFtXhOgOgLFEdZsxg8p2FhnXEUsWKXWje8Y6qG9vNLAet+PPlvYxDO3gY+A
+         6wN+GZ1AmvYoK3e3gBIWHH/pGKixIOHHFhEdu9LCm+kVUTYkSzJ3J7mKQBZ6j41woqH+
+         86DprRHCk1JOfwIONwulVpSVTb4l4U/0/pEwEhMC+MA+gn/BgypE5CtfOaYszbZ2e8Rs
+         2xLd/Tq6McgT9qmwf0Bc6vyjHTyOlXV+5OcJVNWMQ85wSN4S7yWIeEEalF6ueNoEo0B+
+         vZ4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=lcpNoI7xIY4kNiB3ex5eUnMyPccu+6NxZPGvlIGD290=;
-        b=MvgbLxnNHs784nQxDMvNUM+6GRfnpXpZDfOnJwQQKvdIfsAN36ni8JRUrsSigrCkSh
-         rrc1PfJVercG3U3/8LtxwOiad7zHjlU/ZDNz9bZyULx0/x6YsThCWvVMQ/kdAE9+ciGa
-         CJYIJBC+Fqe0ppUQFQCZrIZ4Ntt68nTW7wi+mX5ZON69WlMkgVuOqG6wY6dtlLVMTV3G
-         xwb45KCx9RsSFyx64FjUHCyHXGDLiM7B6fFXBmJeX1zs3jvTh41DxNLVPFpcaveTXN8I
-         ehUoAiVYnfcznb5oMQn74ah+lTHxEIGsBC4rVFIDDKVhgmCrhTMw/LeYpk3X5tgeVQmL
-         2cLA==
-X-Gm-Message-State: AGi0PuYSW99fq/XiuiLvXP/bX8aIRpVJM2NhnOQkc0xO55QWjhbgZFrn
-        Pe6kdm57E4EQIa6lf0yv8ASwiA==
-X-Google-Smtp-Source: APiQypLOgQbj5Ks9utH7lmYdWi+N0qGdsebz0Zh8KZCLyjWZMJOBFHMnhBmL72ERIGTmEUoPMkkWJg==
-X-Received: by 2002:a1c:382:: with SMTP id 124mr8216482wmd.151.1585934376969;
-        Fri, 03 Apr 2020 10:19:36 -0700 (PDT)
+        bh=3IRCSeovtJ4qPaAlDb+qJfs2WHFPBRzlCPv+uW4BVtM=;
+        b=Rw+fiIwvqx4PKe8s84SiVlbEzQm8UCWLJmVAocPIbUsSoIqrJkAN81TIwj0lnm3n/z
+         CeXooFrgEhrw59dd0sO4xOvjzZrStgxu/ubd4YhyC79p4pXQl02W80JulodlW2XSz/yY
+         0TD8lsSa8Q0FC82LtsUpVo9HvWaUEbQhWJ02KOZTh4kvxjza2vs4mSU9tWnxpd6QI31X
+         FGFV9Yqy+Jiob7cZS1XZi8VEe+/Czf13kU/qcrp/76SIf8qjLZ9DkxjHCvClWVb4MKTR
+         H1xOG+o0yBBo4ob/rMt5AIxL0FXIeZ2XnG38S2ySiztQmNQTS1DO2f2RoHLXEXnYahJt
+         +zmA==
+X-Gm-Message-State: AGi0Pub6yLn+YCa6ebgJhIgkHqqiQDgdV+tknlrMzY/4HYrPmp0urJ8u
+        0WfR4C/G0KibFI3gNacQUT7n6g==
+X-Google-Smtp-Source: APiQypKhA0CqD87QFeE2Zs/PBK+BqNQHI+er4Gl7MSLIOo72Rqlrikz9gwnP4JJCTz7hxBOOvIKAvw==
+X-Received: by 2002:adf:f1ce:: with SMTP id z14mr10216145wro.68.1585935865740;
+        Fri, 03 Apr 2020 10:44:25 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:cc78:8018:8980:25d8? ([2a01:e34:ed2f:f020:cc78:8018:8980:25d8])
-        by smtp.googlemail.com with ESMTPSA id s2sm12925936wru.68.2020.04.03.10.19.33
+        by smtp.googlemail.com with ESMTPSA id m21sm12083413wmc.6.2020.04.03.10.44.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Apr 2020 10:19:36 -0700 (PDT)
-Subject: Re: [PATCH v5 3/5] thermal: devfreq_cooling: Use PM QoS to set
- frequency limits
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        Fri, 03 Apr 2020 10:44:24 -0700 (PDT)
+Subject: Re: [PATCH v5 4/5] thermal: devfreq_cooling: Refactor code and switch
+ to use Energy Model
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com, Morten.Rasmussen@arm.com,
-        Dietmar.Eggemann@arm.com, javi.merino@arm.com,
-        cw00.choi@samsung.com, b.zolnierkie@samsung.com, rjw@rjwysocki.net,
-        sudeep.holla@arm.com, viresh.kumar@linaro.org, nm@ti.com,
-        sboyd@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        linux-imx@nxp.com
+Cc:     Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com,
+        javi.merino@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
+        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, rostedt@goodmis.org,
         qperret@google.com, bsegall@google.com, mgorman@suse.de,
         shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
@@ -67,11 +67,9 @@ Cc:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
         tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
         airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
         lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
-        orjan.eide@arm.com, rdunlap@infradead.org
+        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
 References: <20200318114548.19916-1-lukasz.luba@arm.com>
- <20200318114548.19916-4-lukasz.luba@arm.com>
- <d73ce772-8d0a-e5f4-097a-d89e01ff7578@linaro.org>
- <20200403171818.GO199755@google.com>
+ <20200318114548.19916-5-lukasz.luba@arm.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -127,12 +125,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <82997cd2-1e4d-fb9d-8c64-6771b72456e9@linaro.org>
-Date:   Fri, 3 Apr 2020 19:19:33 +0200
+Message-ID: <f3e9f127-47b1-9f30-2148-3c95a5933a92@linaro.org>
+Date:   Fri, 3 Apr 2020 19:44:17 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200403171818.GO199755@google.com>
+In-Reply-To: <20200318114548.19916-5-lukasz.luba@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -141,31 +139,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/04/2020 19:18, Matthias Kaehlcke wrote:
-> Hi Daniel,
+On 18/03/2020 12:45, Lukasz Luba wrote:
+> The overhauled Energy Model (EM) framework support also devfreq devices.
+> The unified API interface of the EM can be used in the thermal subsystem to
+> not duplicate code. The power table now is taken from EM structure and
+> there is no need to maintain calculation for it locally. In case when the
+> EM is not provided by the device a simple interface for cooling device is
+> used.
 > 
-> On Fri, Apr 03, 2020 at 06:43:20PM +0200, Daniel Lezcano wrote:
->> On 18/03/2020 12:45, Lukasz Luba wrote:
->>> From: Matthias Kaehlcke <mka@chromium.org>
->>>
->>> Now that devfreq supports limiting the frequency range of a device
->>> through PM QoS make use of it instead of disabling OPPs that should
->>> not be used.
->>>
->>> The switch from disabling OPPs to PM QoS introduces a subtle behavioral
->>> change in case of conflicting requests (min > max): PM QoS gives
->>> precedence to the MIN_FREQUENCY request, while higher OPPs disabled
->>> with dev_pm_opp_disable() would override MIN_FREQUENCY.
->>>
->>> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
->>> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
->>> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
->>
->> This patch is standalone, right? If yes, I will apply it.
+> There is also an improvement in code related to enabling/disabling OPPs,
+> which prevents from race condition with devfreq governors.
 > 
-> Yes, it is standalone, please apply
+> [lkp: Reported the build warning]
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org> # for tracing code
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 
-Applied on 'testing', thanks
+The changes are too big, please split this patch into smaller chunks.
+
+> ---
+>  drivers/thermal/devfreq_cooling.c | 474 ++++++++++++++++--------------
+>  include/linux/devfreq_cooling.h   |  39 +--
+>  include/trace/events/thermal.h    |  19 +-
+>  3 files changed, 277 insertions(+), 255 deletions(-)
+> 
+> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+
+[ ... ]
+
+>  struct devfreq_cooling_device {
+>  	int id;
+>  	struct thermal_cooling_device *cdev;
+>  	struct devfreq *devfreq;
+>  	unsigned long cooling_state;
+> -	u32 *power_table;
+>  	u32 *freq_table;
+> -	size_t freq_table_size;
+> +	size_t max_level;
+
+Could you rename it to 'max_state' ?
+
+
+[ ... ]
 
 
 -- 
