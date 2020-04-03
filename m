@@ -2,112 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0EE19D6C1
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 14:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5790619D94C
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 16:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728066AbgDCMda (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Apr 2020 08:33:30 -0400
-Received: from mail-eopbgr40062.outbound.protection.outlook.com ([40.107.4.62]:48929
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728068AbgDCMda (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 3 Apr 2020 08:33:30 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BrrOHGNPNn+a7u8zA19QNPsprzIQL2q6RKMH0F3mBsf9BPvvc6yFV7zdRwclH54Ju3ItrW+NXTAWOynetw1RlxY/otmfpZrV5M2YGHtEfM2PYG3MyzV+cvkA1Dp33w5EiZh7IFgdDnbRiPf4/XHJ+pccAAR3WBNiw8g30AvU693v+KaBJxbJsRjDoedII8AuNevAcyAzOo0HlHPyc1vrdIQmxCZ2DfFGxZa3MPD3yb5+uv4JGwY+8c12oXzQP7zgvfwF0+n/b/Aotvor+RHMUslaNH7Yz/PVn3ikq8niEt5lFSWiSaDvOn22BG+mF+8EOfIZmVZqS3smFRcqbJi34Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DvEUeQYQMqYCiEXEi+AFQP3tXqAYTx+G4fP9FNLWc20=;
- b=KB+sgETRzq6KWNqACZQPHgAIohDCqRmvKlPUgYAS1FAOBsmqCwOR6Bj+mFfUc6mosbRhIT+nGJfmUYDlXkUqzZ+ZR9qiF3OfBzN0MZbqpj74K3xlIZGnLH684vtuYhicZOdS2M6y3iKkIfX7X6+SHsk+Ca14nj8UoPg2yHv6pGqVio9vIWsCNRs630MuJwIjsTHssYQTCPtbB38nVqBxDyAz4F265VbNWAwIQb1apdKpMSGdvGHd9X1+t3v4XIy6zp+Xe1EgRciRrxdj9tWZhfXuAsm53LPiwXCyyPuMGVkQpU7/QWaxylUYIWZwlQCj27XfxBS3QT965/wvxhuYYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DvEUeQYQMqYCiEXEi+AFQP3tXqAYTx+G4fP9FNLWc20=;
- b=e8TLsaVw2pv3k4fC+hmosqEq2Tp9Ekk4uUX71cX55+aXR7m8+bgkS5qmUuDmcK+DgTNynFnZ5xyrAaFLgQ4rNrd/K5FI5gsDuTFstvJTw6k/4hQsNC9A50u2rqdio0WRzyoJoSQxZfsHkQ50fCgAB+V+9Z4jW/xSiE5UfzeXok8=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (2603:10a6:8:10::18)
- by DB3PR0402MB3689.eurprd04.prod.outlook.com (2603:10a6:8:b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2878.16; Fri, 3 Apr
- 2020 12:33:26 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b%7]) with mapi id 15.20.2878.017; Fri, 3 Apr 2020
- 12:33:26 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Amit Kucheria <amit.kucheria@verdurent.com>
-CC:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        lakml <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH V3 1/3] dt-bindings: thermal: imx8mm-thermal: Add support
- for i.MX8MP
-Thread-Topic: [PATCH V3 1/3] dt-bindings: thermal: imx8mm-thermal: Add support
- for i.MX8MP
-Thread-Index: AQHWAQ+NgsYnRiisu0+CCnx8R8nFSKhnZDGAgAABh8A=
-Date:   Fri, 3 Apr 2020 12:33:26 +0000
-Message-ID: <DB3PR0402MB391601BEE4897CCD674597A4F5C70@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <1584966504-21719-1-git-send-email-Anson.Huang@nxp.com>
- <CAHLCerPVuZrNiSh45w4TF6jKmZ+aD5aBZCcCK87i4Txdfh_Z2g@mail.gmail.com>
-In-Reply-To: <CAHLCerPVuZrNiSh45w4TF6jKmZ+aD5aBZCcCK87i4Txdfh_Z2g@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [119.31.174.68]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 4d248068-0431-44ed-47bc-08d7d7cb34ee
-x-ms-traffictypediagnostic: DB3PR0402MB3689:|DB3PR0402MB3689:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB36891A11011059DBF45AE408F5C70@DB3PR0402MB3689.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 0362BF9FDB
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(39860400002)(136003)(346002)(366004)(376002)(396003)(66946007)(76116006)(64756008)(66446008)(66476007)(66556008)(33656002)(6916009)(55016002)(6506007)(5660300002)(53546011)(52536014)(9686003)(478600001)(2906002)(4326008)(86362001)(8936002)(186003)(44832011)(26005)(54906003)(8676002)(71200400001)(81156014)(7696005)(7416002)(316002)(81166006)(4744005)(32563001);DIR:OUT;SFP:1101;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rMp0pICX4uhd4tKc+CJnfIMzZT2ma7Fvy6+rm8XjBqSpUUjlH0wioEh9635nAxR0znEL4o/m6yRg7vTO9urfKnylX1aVNj8GpEz82YqyM7deWlDQyGOoDpGLbU+woFpV/Jf/dGXoVfPNk6SWRZ5XwOQ5dS+TDummJuOJb9DqeGfyu7C9R6ngpZgTFFJJdwhz2IK9JYHOj855coBTMnHbP0z4hQ575xDixu1zuDCfva2hKKr8D+tnc+qlPOtY8Qe7ksgYSCs6Ly9BVRLwYHbXLckMdaGgurjuOphLbTWQb39Nxel9iTTNKWKq4gqGQuI1LymnnokH4qYMiGimJmfjVaLO+nkv5vwN9Wxo+NleUa70NB+1G4UeqMYIU/kid/gVfONPDgMOv+bLlIaMV+is5v8UVJ6DwYWhqk4jBAD40vMnEXyrf0Dum0NAQdwvaKC7I+CvSxsO1SjtDZC8geO97KQwIIced/gMwmeEFl5GMaI=
-x-ms-exchange-antispam-messagedata: V9eqJCdAJcLjXsU4dJOfYlURPqyIQq1cyrXZXdW1U5WjgYT0Cp6gJfNOMy85BaapoT2lTyLLDNQEVYz5UbPb5SPv0PvdJUTNzQq8bb3xr5l0VQSN5LUJrgUsmtFruG4O18aQoosQJmxqnrDDX+0l6g==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S2403911AbgDCOkM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Apr 2020 10:40:12 -0400
+Received: from smtp1.axis.com ([195.60.68.17]:47636 "EHLO smtp1.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728066AbgDCOkM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 3 Apr 2020 10:40:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; l=3375; q=dns/txt; s=axis-central1;
+  t=1585924811; x=1617460811;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=+zXmvQ71wuVL3YLxRdG+cyS3KAA4sDvpKKdNeB9bCq8=;
+  b=OwERzdbT1UdVAiUUw9vHOJcronkCh0CcT/mYA9pFYH+H2qRRP3eDnKgu
+   0ub7jffCpCq7UDCV5KXZrgEUWAYqHrd83BBS+ZgzEm4X8o0i6+a6YneD8
+   3HedzAK79FTj71GzXOB9LTeRuQ31NIeu7StTlUK03l/qZ6DiWb7kBPGCI
+   GoS3YDUshbik7Il+eTUH9vsOHL4RnLNlkwYedO9L7/qoK2h/fP6GHcDde
+   2RyO3yFcxm0KXP1PzIcc4WvfVa0QAaZIXptzIpqTNDGESgITCzn3IopxH
+   6mdGdAglVUIudvCoRZfBw50F1MnqOSdshqdb6f2HrYmrH/0DNyNdyeCzc
+   A==;
+IronPort-SDR: uB+hmrX6WHbLrkXUv7Y6CMpJNYKKlANXcwQzCh+0+yXc/ZJa/1JC4QM038i0kzKea+x2XCuzm2
+ EiD/xGz3phOKwdwH2/rCbN7AKTLDsIugW95xWBUHNN0swfRVigSFOGvJ8dcG/PqxUIHrs1/PyG
+ PgWo79hFBouSYre9+iust2LC9FB8o7+bedX41vSyz9Jr4J33GoNbGOZbsdpu0VenFiAJzGtfeI
+ FYydH+pq6hnOPE2ptPTldHGt0ePWddz4Z827iUNboNtKo7cqex2QNCM/gI1XDWjZXau6M/Pru1
+ Jpk=
+X-IronPort-AV: E=Sophos;i="5.72,340,1580770800"; 
+   d="scan'208";a="7290918"
+Date:   Fri, 3 Apr 2020 16:40:09 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+CC:     "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] thermal: core: Send a sysfs notification on trip points
+Message-ID: <20200403144009.szjoss5ecleisg2f@axis.com>
+References: <a7e8287d-72be-7ab0-697a-9de40eb3f81f@linaro.org>
+ <20200402142116.22869-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d248068-0431-44ed-47bc-08d7d7cb34ee
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Apr 2020 12:33:26.1329
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MtAhzfrOXaZuUkm6geAhKq2Dn+BS/xRoo4noODgCz4fGqq2yGSgLLBYzT3oHUaHRevFAhh1GiIobYnKbpFJxKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3689
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200402142116.22869-1-daniel.lezcano@linaro.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksIEFtaXQNCg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIFYzIDEvM10gZHQtYmluZGluZ3M6IHRo
-ZXJtYWw6IGlteDhtbS10aGVybWFsOiBBZGQNCj4gc3VwcG9ydCBmb3IgaS5NWDhNUA0KPiANCj4g
-SGkgQW5zb24sDQo+IA0KPiBPbiBNb24sIE1hciAyMywgMjAyMCBhdCA2OjA1IFBNIEFuc29uIEh1
-YW5nIDxBbnNvbi5IdWFuZ0BueHAuY29tPg0KPiB3cm90ZToNCj4gPg0KPiA+IEFkZCB0aGVybWFs
-IGJpbmRpbmcgZG9jIGZvciBGcmVlc2NhbGUncyBpLk1YOE1QIFRoZXJtYWwgTW9uaXRvcmluZyBV
-bml0Lg0KPiA+DQo+IA0KPiBJIHJlYWxpc2UgdGhpcyBnb3QgbWVyZ2VkIGFscmVhZHksIGJ1dCBw
-bGVhc2Ugc2VuZCBhIHBhdGNoIGNvbnZlcnRpbmcgdGhpcw0KPiBiaW5kaW5nIHRvIHlhbWwgYXQg
-c29tZSBwb2ludC4NCg0KR290IGl0LCBJIHdpbGwgZmluZCBzb21lIHRpbWUgdG8gY29udmVydCBp
-Lk1YIHRoZXJtYWwgYmluZGluZyBkb2MgdG8geWFtbCBmb3JtYXQuDQoNClRoYW5rcywNCkFuc29u
-DQo=
+On Thu, Apr 02, 2020 at 04:21:15PM +0200, Daniel Lezcano wrote:
+> Currently the userspace has no easy way to get notified when a
+> specific trip point was crossed. There are a couple of approaches:
+> 
+> - the userspace polls the sysfs temperature with usually an
+>   unacceptable delay between the trip temperature point crossing and
+>   the moment it is detected, or a high polling rate with an
+>   unacceptable number of wakeup events.
+> 
+> - the thermal zone is set to be managed by an userspace governor in
+>   order to receive the uevent even if the thermal zone needs to be
+>   managed by another governor.
+> 
+> These changes allow to send a sysfs notification on the
+> trip_point_*_temp when the temperature is getting higher than the trip
+> point temperature. By this way, the userspace can be notified
+> everytime when the trip point is crossed, this is useful for the
+> thermal Android HAL or for notification to be sent via d-bus.
+> 
+> That allows the userspace to manage the applications based on specific
+> alerts on different thermal zones to mitigate the skin temperature,
+> letting the kernel governors handle the high temperature for hardware
+> like the CPU, the GPU or the modem.
+> 
+> The temperature can be oscillating around a trip point and the event
+> will be sent multiple times. It is up to the userspace to deal with
+> this situation.
+
+The actual temperature value would also be interesting.  Is there a way
+for userspace to obtain it in a race-free manner when it is notified
+that the trip point has been crossed?
+
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index c06550930979..3cbdd20252ab 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -407,6 +407,19 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
+>  	}
+>  }
+>  
+> +static int thermal_trip_crossed(struct thermal_zone_device *tz, int trip)
+> +{
+> +	int trip_temp;
+> +
+> +	tz->ops->get_trip_temp(tz, trip, &trip_temp);
+> +
+> +	if (tz->last_temperature == THERMAL_TEMP_INVALID)
+> +		return 0;
+> +
+> +	return ((tz->last_temperature < trip_temp)) &&
+> +		(tz->temperature >= trip_temp));
+
+ drivers/thermal/thermal_core.c: In function ‘thermal_trip_crossed’:
+ drivers/thermal/thermal_core.c:425:33: error: expected ‘;’ before ‘)’ token
+    (tz->temperature >= trip_temp));
+                                  ^
+ drivers/thermal/thermal_core.c:425:33: error: expected statement before ‘)’ token
+
+> +}
+> +
+>  static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+>  {
+>  	enum thermal_trip_type type;
+> @@ -417,6 +430,16 @@ static void handle_thermal_trip(struct thermal_zone_device *tz, int trip)
+>  
+>  	tz->ops->get_trip_type(tz, trip, &type);
+>  
+> +	/*
+> +	 * This condition will be true everytime the temperature is
+> +	 * greater than the trip point and the previous temperature
+> +	 * was below. In this case notify the userspace via a sysfs
+> +	 * event on the trip point.
+> +	 */
+> +	if (thermal_trip_crossed(tz, trip))
+> +		sysfs_notify(&tz->device.kobj, NULL,
+> +			     tz->trip_temp_attrs[trip].attr.attr.name);
+
+Normally sysfs_notify() is used to notify userspace that the value of
+the sysfs file has changed, but in this case it's being used on a sysfs
+file whose value never changes.  I don't know if there are other drivers
+that do something similar.
