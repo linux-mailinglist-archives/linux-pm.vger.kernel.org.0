@@ -2,36 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DA819DF2C
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 22:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B5319DF2E
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 22:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728108AbgDCUUe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Apr 2020 16:20:34 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:37268 "EHLO rere.qmqm.pl"
+        id S1728241AbgDCUUh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Apr 2020 16:20:37 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:1086 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727842AbgDCUUd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 3 Apr 2020 16:20:33 -0400
+        id S1727867AbgDCUUf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 3 Apr 2020 16:20:35 -0400
 Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 48vBBl4yQjzqB;
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 48vBBl1nhTzpX;
         Fri,  3 Apr 2020 22:20:31 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1585945231; bh=YiFWN6xOx5BwRik6WlkE3QdMHkXS7gn1p+WdXGp+C0s=;
+        t=1585945231; bh=Uo9Dg3wLKTkFKZCWLFRcaiKTWxbVtqoScgjUwEkb2W8=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=CiIWM2Z45+1iJLtBk+bAXUuEFgNKGXEFckMvL1iZ6OOoVs+uropYVpVfeI+WFmDZO
-         DPpe1hiTDG40X7Um/zuGqT3PUstNtr99vh4vLQ5fk8RoTxbySLwJij8pRaTA4iDe3n
-         qmlnYq+ud3dRm0m0vgRDaygDd9WnW2Qiantpgqq7uPAlzThnONH0nkzlroA9/FOWyS
-         3GlGIkNaTDbQRFAVz9pqY+WTRGBqmyMg1Z9nubKzGvaz4kB6mW200Y5aipYA/mcBzt
-         c19zdFeZxkKLP1ym6AyrOoosguKjzY1l4g0doMlVmDTXrV+DBcZXAXEyMtfJM/1E4Y
-         V57Ml/WFMzRNA==
+        b=nxz83yBUg1uqm/R9KaMLxkSsgsiD0pHoYlrtlPa7cN6e7iUsNhapQ5kn5tAD+fLJs
+         kliv3pYb58PuQP2Mw/8oni4J8ad0OjktVOaLT9aZQcYT0YGamLmJPWerSurv3fhQJ2
+         H7pXlkfdllJfgRo6l0Bom9ecUpJxpbytsMhVpMaTfOhN+gu86y5C2kpqOOtZala9XU
+         elFyWZ8UDBeIM+Lupvlz57izjhrf7/1mcyz822YKcv+BfTIXZnKywOs60/ozMGyyVv
+         CwrtXu7Wwv3WlSOApWLPS9yyyERhoC7xE8nndeYw8G1zwNEX5smbg/TUvFbDFZoxxm
+         WMSVUKcSgptBg==
 X-Virus-Status: Clean
 X-Virus-Scanned: clamav-milter 0.102.2 at mail
 Date:   Fri, 03 Apr 2020 22:20:31 +0200
-Message-Id: <f44b3baa6349f9e86c0d06a32b5cf63ced727f7c.1585944770.git.mirq-linux@rere.qmqm.pl>
+Message-Id: <a529e64edb81a4795fe0b6480f1e4051bed1b099.1585944770.git.mirq-linux@rere.qmqm.pl>
 In-Reply-To: <cover.1585944770.git.mirq-linux@rere.qmqm.pl>
 References: <cover.1585944770.git.mirq-linux@rere.qmqm.pl>
 From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH v3 03/11] power: generic-adc-battery: fold psy_props[] to
- private data
+Subject: [PATCH v3 02/11] power: charger-manager: don't write through
+ desc->properties
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -44,106 +44,92 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-psy_desc->properties will become pointer to const, so we can't use it
-for filling the property set. Let's append the list to private data
-structure and avoid introducing another variable to temporarily hold
-the pointer.
+psy_desc->properties will become pointer to const.  Avoid writing
+through the pointer to enable constification of the tables elsewhere.
 
-Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 ---
-v3: new patch, required before constification of property lists
+v3: initial version
 ---
- drivers/power/supply/generic-adc-battery.c | 30 ++++++++--------------
- 1 file changed, 10 insertions(+), 20 deletions(-)
+ drivers/power/supply/charger-manager.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-index bc462d1ec963..b3b567914dd7 100644
---- a/drivers/power/supply/generic-adc-battery.c
-+++ b/drivers/power/supply/generic-adc-battery.c
-@@ -52,6 +52,7 @@ struct gab {
- 	int	level;
- 	int	status;
- 	bool cable_plugged;
-+	enum power_supply_property	psy_props[];
- };
+diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
+index 887f5bb879e5..7ecb82107efb 100644
+--- a/drivers/power/supply/charger-manager.c
++++ b/drivers/power/supply/charger-manager.c
+@@ -1425,15 +1425,18 @@ static int cm_init_thermal_data(struct charger_manager *cm,
+ 		struct power_supply *fuel_gauge)
+ {
+ 	struct charger_desc *desc = cm->desc;
++	enum power_supply_property *props;
+ 	union power_supply_propval val;
+ 	int ret;
  
- static struct gab *to_generic_bat(struct power_supply *psy)
-@@ -246,7 +247,10 @@ static int gab_probe(struct platform_device *pdev)
- 	int index = ARRAY_SIZE(gab_props);
- 	bool any = false;
++	props = (void *)cm->charger_psy_desc.properties;
++
+ 	/* Verify whether fuel gauge provides battery temperature */
+ 	ret = power_supply_get_property(fuel_gauge,
+ 					POWER_SUPPLY_PROP_TEMP, &val);
  
--	adc_bat = devm_kzalloc(&pdev->dev, sizeof(*adc_bat), GFP_KERNEL);
-+	adc_bat = devm_kzalloc(&pdev->dev,
-+		struct_size(adc_bat, psy_props,
-+			ARRAY_SIZE(gab_props) + ARRAY_SIZE(gab_chan_name)),
-+		GFP_KERNEL);
- 	if (!adc_bat) {
- 		dev_err(&pdev->dev, "failed to allocate memory\n");
+ 	if (!ret) {
+-		cm->charger_psy_desc.properties[cm->charger_psy_desc.num_properties] =
++		props[cm->charger_psy_desc.num_properties] =
+ 				POWER_SUPPLY_PROP_TEMP;
+ 		cm->charger_psy_desc.num_properties++;
+ 		cm->desc->measure_battery_temp = true;
+@@ -1446,7 +1449,7 @@ static int cm_init_thermal_data(struct charger_manager *cm,
+ 			return PTR_ERR(cm->tzd_batt);
+ 
+ 		/* Use external thermometer */
+-		cm->charger_psy_desc.properties[cm->charger_psy_desc.num_properties] =
++		props[cm->charger_psy_desc.num_properties] =
+ 				POWER_SUPPLY_PROP_TEMP_AMBIENT;
+ 		cm->charger_psy_desc.num_properties++;
+ 		cm->desc->measure_battery_temp = true;
+@@ -1622,6 +1625,7 @@ static int charger_manager_probe(struct platform_device *pdev)
+ 	union power_supply_propval val;
+ 	struct power_supply *fuel_gauge;
+ 	struct power_supply_config psy_cfg = {};
++	enum power_supply_property *props;
+ 
+ 	if (IS_ERR(desc)) {
+ 		dev_err(&pdev->dev, "No platform data (desc) found\n");
+@@ -1717,7 +1721,7 @@ static int charger_manager_probe(struct platform_device *pdev)
+ 	cm->charger_psy_desc.name = cm->psy_name_buf;
+ 
+ 	/* Allocate for psy properties because they may vary */
+-	cm->charger_psy_desc.properties =
++	cm->charger_psy_desc.properties = props =
+ 		devm_kcalloc(&pdev->dev,
+ 			     ARRAY_SIZE(default_charger_props) +
+ 				NUM_CHARGER_PSY_OPTIONAL,
+@@ -1725,7 +1729,7 @@ static int charger_manager_probe(struct platform_device *pdev)
+ 	if (!cm->charger_psy_desc.properties)
  		return -ENOMEM;
-@@ -264,20 +268,8 @@ static int gab_probe(struct platform_device *pdev)
- 	psy_desc->external_power_changed = gab_ext_power_changed;
- 	adc_bat->pdata = pdata;
  
--	/*
--	 * copying the static properties and allocating extra memory for holding
--	 * the extra configurable properties received from platform data.
--	 */
--	psy_desc->properties = kcalloc(ARRAY_SIZE(gab_props) +
--					ARRAY_SIZE(gab_chan_name),
--					sizeof(*psy_desc->properties),
--					GFP_KERNEL);
--	if (!psy_desc->properties) {
--		ret = -ENOMEM;
--		goto first_mem_fail;
--	}
--
--	memcpy(psy_desc->properties, gab_props, sizeof(gab_props));
-+	/* copy static properties */
-+	memcpy(adc_bat->psy_props, gab_props, sizeof(gab_props));
+-	memcpy(cm->charger_psy_desc.properties, default_charger_props,
++	memcpy(props, default_charger_props,
+ 		sizeof(enum power_supply_property) *
+ 		ARRAY_SIZE(default_charger_props));
  
- 	/*
- 	 * getting channel from iio and copying the battery properties
-@@ -294,12 +286,12 @@ static int gab_probe(struct platform_device *pdev)
- 			int index2;
- 
- 			for (index2 = 0; index2 < index; index2++) {
--				if (psy_desc->properties[index2] ==
-+				if (adc_bat->psy_props[index2] ==
- 				    gab_dyn_props[chan])
- 					break;	/* already known */
- 			}
- 			if (index2 == index)	/* really new */
--				psy_desc->properties[index++] =
-+				adc_bat->psy_props[index++] =
- 					gab_dyn_props[chan];
- 			any = true;
- 		}
-@@ -317,6 +309,7 @@ static int gab_probe(struct platform_device *pdev)
- 	 * as come channels may be not be supported by the device.So
- 	 * we need to take care of that.
- 	 */
-+	psy_desc->properties = adc_bat->psy_props;
- 	psy_desc->num_properties = index;
- 
- 	adc_bat->psy = power_supply_register(&pdev->dev, psy_desc, &psy_cfg);
-@@ -358,8 +351,6 @@ static int gab_probe(struct platform_device *pdev)
- 			iio_channel_release(adc_bat->channel[chan]);
+@@ -1738,14 +1742,14 @@ static int charger_manager_probe(struct platform_device *pdev)
  	}
- second_mem_fail:
--	kfree(psy_desc->properties);
--first_mem_fail:
- 	return ret;
- }
- 
-@@ -381,7 +372,6 @@ static int gab_remove(struct platform_device *pdev)
- 			iio_channel_release(adc_bat->channel[chan]);
+ 	if (!power_supply_get_property(fuel_gauge,
+ 					  POWER_SUPPLY_PROP_CHARGE_NOW, &val)) {
+-		cm->charger_psy_desc.properties[cm->charger_psy_desc.num_properties] =
++		props[cm->charger_psy_desc.num_properties] =
+ 				POWER_SUPPLY_PROP_CHARGE_NOW;
+ 		cm->charger_psy_desc.num_properties++;
  	}
- 
--	kfree(adc_bat->psy_desc.properties);
- 	cancel_delayed_work(&adc_bat->bat_work);
- 	return 0;
- }
+ 	if (!power_supply_get_property(fuel_gauge,
+ 					  POWER_SUPPLY_PROP_CURRENT_NOW,
+ 					  &val)) {
+-		cm->charger_psy_desc.properties[cm->charger_psy_desc.num_properties] =
++		props[cm->charger_psy_desc.num_properties] =
+ 				POWER_SUPPLY_PROP_CURRENT_NOW;
+ 		cm->charger_psy_desc.num_properties++;
+ 	}
 -- 
 2.20.1
 
