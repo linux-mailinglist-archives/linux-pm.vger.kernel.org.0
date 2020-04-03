@@ -2,35 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2C919DB81
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 18:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 498E719DB83
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 18:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404022AbgDCQXt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Apr 2020 12:23:49 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:32439 "EHLO rere.qmqm.pl"
+        id S2404383AbgDCQXx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Apr 2020 12:23:53 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:20928 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404383AbgDCQXf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 3 Apr 2020 12:23:35 -0400
+        id S2404382AbgDCQXe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 3 Apr 2020 12:23:34 -0400
 Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 48v4xJ6yVHz1j9;
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 48v4xJ3NsszwF;
         Fri,  3 Apr 2020 18:23:32 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1585931013; bh=e01NuCFI8cZ9kBYqxCj223bkIKoEPVuKgnTPhgrzpws=;
+        t=1585931012; bh=ytAv1RGisXEVnnR7xx1RoYPw9sNMYqF3J9qpj0xDcU4=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=TuSwR9SLvmCeWKXZhxbD264t1HXK3UoVQ2/Z2imWy3p/QSFTdA0Y39ab39llcEaB6
-         PMgU5wQAfkFzY9UmORd0v6dG9K5iRzKWgAmuPi9SI9mQ/x1vGb+Jp7qx0cXw+Zu9rO
-         1DRinW8ThLUkyetu6Os4DjpDSdoMq0d9IZuQ0H0Ry7Ps8RnhdCKt3ga49DHOTUHufG
-         gANOMoUc5TF0aYOJYcLD2gq5PuUk1CKOlq/m6OgNWqsZi2M6ioLLL6rPEZXO8pqKuw
-         M3NVVNw1a9XDJU64vEB5kMRPiBvBexn4vBE1PwyOdw7XZ7InkHq3yDRIyf/yHxIklT
-         WxEKp8i3DixrQ==
+        b=Cod8sd6UiT3mgAim0MFcpfiA4927isjQZJuRXamZ6mEPh8E9OzhhWENCXp3bgEm19
+         XougCDk3g4z2sCP1qsCVXiX73x3aG7bNRnl9sZpPpUXXBK1zs8AJFnLTu9sitolo2T
+         4xycthdS/Utm2n74TjYJz2/G6p0qxKTulCmeUXmQ0R4altfOX6fje/NnkzkcqamNTl
+         HAWv+LoZsBSazHjmmWAOLtSHQsFNSqewxTEPfu7XCEbGaLga74mVgyS8sRLrUq7pea
+         56138xNn+zasecF6lgEFXI33T8+8AnZjM0+OqVdHBvi+7gO5dXAf+xdhJJgpy/SHmt
+         eBRbqFFagwwLw==
 X-Virus-Status: Clean
 X-Virus-Scanned: clamav-milter 0.102.2 at mail
 Date:   Fri, 03 Apr 2020 18:23:32 +0200
-Message-Id: <e5f50a00eff0511a12e81adae5cbde15995890e7.1585929579.git.mirq-linux@rere.qmqm.pl>
+Message-Id: <ae82abf9da86542f5657a8c37106bcdae5011927.1585929579.git.mirq-linux@rere.qmqm.pl>
 In-Reply-To: <cover.1585929579.git.mirq-linux@rere.qmqm.pl>
 References: <cover.1585929579.git.mirq-linux@rere.qmqm.pl>
 From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH v2 5/8] power: supply: core: hide unused HWMON labels
+Subject: [PATCH v2 4/8] power: supply: core: tabularize HWMON temperature
+ labels
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -43,76 +44,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently HWMON emulation shows all labels (temp and ambient temp)
-regardless if power supply supports reading the values. Check that at
-least one property is enabled for each label.
+Rework power_supply_hwmon_read_string() to check it's parameters.
+This allows to extend it later with labels for other types of
+measurements.
 
 Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 ---
- drivers/power/supply/power_supply_hwmon.c | 43 +++++++++++++++++++++--
- 1 file changed, 40 insertions(+), 3 deletions(-)
+v2: split from fix temperature labels
+---
+ drivers/power/supply/power_supply_hwmon.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/supply/power_supply_hwmon.c
-index 48c73994732c..a4f576f39b9c 100644
+index 67b6ee60085e..48c73994732c 100644
 --- a/drivers/power/supply/power_supply_hwmon.c
 +++ b/drivers/power/supply/power_supply_hwmon.c
-@@ -103,6 +103,40 @@ static bool power_supply_hwmon_is_a_label(enum hwmon_sensor_types type,
- 	return type == hwmon_temp && attr == hwmon_temp_label;
+@@ -43,6 +43,11 @@ static int power_supply_hwmon_curr_to_property(u32 attr)
+ 	}
  }
  
-+static bool power_supply_hwmon_has_property(
-+	const struct power_supply_hwmon *psyhw,
-+	enum hwmon_sensor_types type, u32 attr, int channel)
-+{
-+	int prop = power_supply_hwmon_to_property(type, attr, channel);
++static const char *const ps_temp_label[] = {
++	"temp",
++	"ambient temp",
++};
 +
-+	return prop >= 0 && test_bit(prop, psyhw->props);
-+}
-+
-+static bool power_supply_hwmon_has_input(
-+	const struct power_supply_hwmon *psyhw,
-+	enum hwmon_sensor_types type, int channel)
-+{
-+	static const enum hwmon_temp_attributes temp_attrs[] = {
-+		hwmon_temp_input,
-+		hwmon_temp_min, hwmon_temp_max,
-+		hwmon_temp_min_alarm, hwmon_temp_max_alarm,
-+	};
-+	size_t i;
+ static int power_supply_hwmon_temp_to_property(u32 attr, int channel)
+ {
+ 	if (channel) {
+@@ -144,8 +149,20 @@ static int power_supply_hwmon_read_string(struct device *dev,
+ 					  u32 attr, int channel,
+ 					  const char **str)
+ {
+-	*str = channel ? "temp ambient" : "temp";
+-	return 0;
++	if (channel < 0)
++		return -EINVAL;
 +
 +	switch (type) {
 +	case hwmon_temp:
-+		for (i = 0; i < ARRAY_SIZE(temp_attrs); ++i)
-+			if (power_supply_hwmon_has_property(psyhw, type,
-+					temp_attrs[i], channel))
-+				return true;
-+		break;
++		if (channel >= ARRAY_SIZE(ps_temp_label))
++			return -EINVAL;
++		*str = ps_temp_label[channel];
++		return 0;
 +	default:
 +		break;
 +	}
 +
-+	return false;
-+}
-+
- static bool power_supply_hwmon_is_writable(enum hwmon_sensor_types type,
- 					   u32 attr)
- {
-@@ -129,9 +163,12 @@ static umode_t power_supply_hwmon_is_visible(const void *data,
- 	const struct power_supply_hwmon *psyhw = data;
- 	int prop;
++	return -EINVAL;
+ }
  
--
--	if (power_supply_hwmon_is_a_label(type, attr))
--		return 0444;
-+	if (power_supply_hwmon_is_a_label(type, attr)) {
-+		if (power_supply_hwmon_has_input(psyhw, type, channel))
-+			return 0444;
-+		else
-+			return 0;
-+	}
- 
- 	prop = power_supply_hwmon_to_property(type, attr, channel);
- 	if (prop < 0 || !test_bit(prop, psyhw->props))
+ static int
 -- 
 2.20.1
 
