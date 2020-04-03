@@ -2,45 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4785D19E0FD
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 00:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504E319E140
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 01:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729134AbgDCWOu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Apr 2020 18:14:50 -0400
-Received: from mga07.intel.com ([134.134.136.100]:63427 "EHLO mga07.intel.com"
+        id S1728469AbgDCXF3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Apr 2020 19:05:29 -0400
+Received: from mga01.intel.com ([192.55.52.88]:10883 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729169AbgDCWOu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 3 Apr 2020 18:14:50 -0400
-IronPort-SDR: c0/XIzl62tDmqfQfv1mHHqfqwyw/urNIox6LLzXYhtv2ioBIK41isAvnNO9DnhocVEUtkMtzVk
- h7ZZztF6aJgg==
+        id S1727829AbgDCXF3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 3 Apr 2020 19:05:29 -0400
+IronPort-SDR: 5GirxLvalj/GewbUeJG7elLYHbLzdTmXfT9ijH8csUQq1YdKCcBsDGy+mYXWPDO1d7+WzjlPAe
+ Mh/fL2yOzUwg==
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2020 15:14:45 -0700
-IronPort-SDR: 5qLO+ELqdSKhw2nypVJxPYWCeTbgQI2HHtVmOURYR5cm2uMu0AS4NSNnc+ApDySQfAMiBQD4M5
- xT2NqlvxlE9A==
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2020 16:05:11 -0700
+IronPort-SDR: 6WGrEUON8qvigJoN7wJi/KEAw5mvZk3UCX2bsMmBmnuKiyqJZ76xu10z/lqm3DvAZ97Zm6f3XL
+ d/77VdT7HHkQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.72,341,1580803200"; 
-   d="gz'50?scan'50,208,50";a="239014056"
+   d="gz'50?scan'50,208,50";a="329303793"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 03 Apr 2020 15:14:42 -0700
+  by orsmga001.jf.intel.com with ESMTP; 03 Apr 2020 16:05:08 -0700
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1jKUaH-0008Oq-Dv; Sat, 04 Apr 2020 06:14:41 +0800
-Date:   Sat, 4 Apr 2020 06:14:07 +0800
+        id 1jKVN5-0006Pj-P1; Sat, 04 Apr 2020 07:05:07 +0800
+Date:   Sat, 4 Apr 2020 07:04:32 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
 Cc:     kbuild-all@lists.01.org, Sebastian Reichel <sre@kernel.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 05/14] power: supply: bq25890: fix ADC mode configuration
-Message-ID: <202004040614.3BzFMiYK%lkp@intel.com>
-References: <a1275df1b8de5112d81e4f0b57f34af34a4a0942.1585838678.git.mirq-linux@rere.qmqm.pl>
+Subject: Re: [PATCH 11/14] power: supply: bq25890: show measured VBUS
+Message-ID: <202004040748.s9g6KppJ%lkp@intel.com>
+References: <32ec8cef47cb49e02542916ae15972ba2e619e5a.1585838679.git.mirq-linux@rere.qmqm.pl>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="vkogqOf2sHV7VnPd"
+Content-Type: multipart/mixed; boundary="uAKRQypu60I7Lcqm"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a1275df1b8de5112d81e4f0b57f34af34a4a0942.1585838678.git.mirq-linux@rere.qmqm.pl>
+In-Reply-To: <32ec8cef47cb49e02542916ae15972ba2e619e5a.1585838679.git.mirq-linux@rere.qmqm.pl>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -48,7 +48,7 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---vkogqOf2sHV7VnPd
+--uAKRQypu60I7Lcqm
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
@@ -80,48 +80,61 @@ Reported-by: kbuild test robot <lkp@intel.com>
 All errors (new ones prefixed by >>):
 
    drivers/power/supply/bq25890_charger.c: In function 'bq25890_is_adc_property':
->> drivers/power/supply/bq25890_charger.c:381:7: error: 'POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW' undeclared (first use in this function); did you mean 'POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT'?
-     381 |  case POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW:
+   drivers/power/supply/bq25890_charger.c:383:7: error: 'POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW' undeclared (first use in this function); did you mean 'POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT'?
+     383 |  case POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW:
          |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
          |       POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT
-   drivers/power/supply/bq25890_charger.c:381:7: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/power/supply/bq25890_charger.c:382:7: error: 'POWER_SUPPLY_PROP_OUTPUT_VOLTAGE_NOW' undeclared (first use in this function); did you mean 'POWER_SUPPLY_PROP_VOLTAGE_NOW'?
-     382 |  case POWER_SUPPLY_PROP_OUTPUT_VOLTAGE_NOW:
+   drivers/power/supply/bq25890_charger.c:383:7: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/power/supply/bq25890_charger.c:384:7: error: 'POWER_SUPPLY_PROP_OUTPUT_VOLTAGE_NOW' undeclared (first use in this function); did you mean 'POWER_SUPPLY_PROP_VOLTAGE_NOW'?
+     384 |  case POWER_SUPPLY_PROP_OUTPUT_VOLTAGE_NOW:
          |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
          |       POWER_SUPPLY_PROP_VOLTAGE_NOW
+   drivers/power/supply/bq25890_charger.c: In function 'bq25890_power_supply_get_property':
+   drivers/power/supply/bq25890_charger.c:509:7: error: 'POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW' undeclared (first use in this function); did you mean 'POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT'?
+     509 |  case POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW:
+         |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |       POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT
    drivers/power/supply/bq25890_charger.c: At top level:
-   drivers/power/supply/bq25890_charger.c:686:16: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     686 |  .properties = bq25890_power_supply_props,
+>> drivers/power/supply/bq25890_charger.c:726:2: error: 'POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW' undeclared here (not in a function); did you mean 'POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT'?
+     726 |  POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW,
+         |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |  POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT
+   drivers/power/supply/bq25890_charger.c:738:16: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     738 |  .properties = bq25890_power_supply_props,
          |                ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-vim +381 drivers/power/supply/bq25890_charger.c
+vim +726 drivers/power/supply/bq25890_charger.c
 
-   377	
-   378	static bool bq25890_is_adc_property(enum power_supply_property psp)
-   379	{
-   380		switch (psp) {
- > 381		case POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW:
- > 382		case POWER_SUPPLY_PROP_OUTPUT_VOLTAGE_NOW:
-   383		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-   384		case POWER_SUPPLY_PROP_CURRENT_NOW:
-   385			return true;
-   386	
-   387		default:
-   388			return false;
-   389		}
-   390	}
-   391	
+   712	
+   713	static const enum power_supply_property bq25890_power_supply_props[] = {
+   714		POWER_SUPPLY_PROP_MANUFACTURER,
+   715		POWER_SUPPLY_PROP_MODEL_NAME,
+   716		POWER_SUPPLY_PROP_STATUS,
+   717		POWER_SUPPLY_PROP_CHARGE_TYPE,
+   718		POWER_SUPPLY_PROP_ONLINE,
+   719		POWER_SUPPLY_PROP_HEALTH,
+   720		POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
+   721		POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
+   722		POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
+   723		POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
+   724		POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
+   725		POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+ > 726		POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW,
+   727		POWER_SUPPLY_PROP_VOLTAGE_NOW,
+   728		POWER_SUPPLY_PROP_CURRENT_NOW,
+   729	};
+   730	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
---vkogqOf2sHV7VnPd
+--uAKRQypu60I7Lcqm
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICHOxh14AAy5jb25maWcAjDzZcty2su/5iinn4SZ14kSbZfve0gMIgjPIkAQNgKMZvaAU
+H4sICKe8h14AAy5jb25maWcAjDzZcty2su/5iinn4SZ14kSbZfve0gMIgjPIkAQNgKMZvaAU
 eeyoYksuLSfx399ucMPGUVJJbHY3tkajNzTmxx9+XJDnp/uv10+3N9dfvnxffN7f7R+un/Yf
 F59uv+z/b5GLRS30guVc/wrE5e3d8z+/fb399rh48+v5r0evH26OF+v9w93+y4Le3326/fwM
 rW/v73748Qf490cAfv0GHT387wIbvf6C7V9/vrlZ/LSk9OfF+19Pfz0CQirqgi8NpYYrA5iL
@@ -1315,4 +1328,4 @@ Tk2iYJxoLj3HmipdZfpInmKXmZZIY0n0mxLtn+yBN3AZuwiaYy4LffB7ST8TJzmGpSZqytjH
 rKMSpzPdIDDmt7iGGINRSnC6V6sF4yNQuz7T9q+8cqusiLymw+f9oABL5yhmNDg3zvYbeIBC
 F0ObGUcBcA9J9q60nncDbuGqD0B0KDB85F6EWrKizP1/V+vVgdYhBAA=
 
---vkogqOf2sHV7VnPd--
+--uAKRQypu60I7Lcqm--
