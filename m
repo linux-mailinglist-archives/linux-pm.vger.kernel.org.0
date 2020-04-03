@@ -2,168 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B65D519CFE8
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 07:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D6019CFEE
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Apr 2020 07:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732903AbgDCFqF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Apr 2020 01:46:05 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:45274 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730550AbgDCFqF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Apr 2020 01:46:05 -0400
-Received: by mail-vs1-f65.google.com with SMTP id x82so4164237vsc.12
-        for <linux-pm@vger.kernel.org>; Thu, 02 Apr 2020 22:46:04 -0700 (PDT)
+        id S1730550AbgDCFs5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Apr 2020 01:48:57 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40540 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729423AbgDCFs5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Apr 2020 01:48:57 -0400
+Received: by mail-pf1-f193.google.com with SMTP id c20so2963670pfi.7
+        for <linux-pm@vger.kernel.org>; Thu, 02 Apr 2020 22:48:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S4XNepmeOooAZ1+s30LlQ+CWVHmuUGaSrMEBEx9YwGo=;
-        b=zIZsDrrcJTGyEaY5wJrQpWkaz8MwaasE7La+XUSJtg3/Fei8sHG6TmlNUnjdV7T8wX
-         1FIaPRHwHluCkALganU6p5noYpWnVJvyIcTBe/kRZvpNkl0XRMrzCX5rf92cMtef4pqC
-         mAnt9li35bOeUdLroCDFuMJGkqRiePNH/be4Pxcwvu/tpzxeR/WQu3iVky+eJ+PODVFi
-         FziBzTQuwvkfBRaQbRN1MBwYaHBeLy2LEHuO8dbafMgAdj+9bWofkpNNeErdiyWGXIFE
-         HYIHu9XnCX4FetnrNoz53MjaDLTaShXiszb1qIIrvZZWtkXGaHxZg55ongNI0Mv/UmTj
-         AYMA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lEuCnG1hC7hkoMeTpMkJ0ZOk4ZF8anIyWsJ+Bib4RJ0=;
+        b=HWMgdrTg/4e1ihpCNZekctF8+royp5qDM1p33E2eOKXySwQQ2En/uDVttrXIAyWHaL
+         PMnfwUshIQSoDhv/c1zJNKTVJN9UVnmvJCxLtoYn3RBZ/Ah6EKigavNaC/AYLBlR36d6
+         em4RzAE/FtI5uPKmSEjXsKn13EI1pf1mUHwVDBjNb7f1xBzqQbewdm8onbDSNakKaYPF
+         +EMx1Rw2WYwNFg6ue8MwGd4ZU4CASY/6/tVzjrR1ydQqtEeVdACUnXKGal2lx+G8W4bQ
+         fyDVXBKuUP2MvaZPbRJ24tclCtRaVSudXvULkDSTV3WWvh6hVot/cHda+m6ucwNoV7ZO
+         QO3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S4XNepmeOooAZ1+s30LlQ+CWVHmuUGaSrMEBEx9YwGo=;
-        b=UByMjcYmwjXBqmOXrRKMWQugy/g4/0qaOpWC6FordxyPwUYvnKtUkHoWQlQ4/EUEJN
-         7cX/Qwes2NqlzlJSkODXk/tAsqfh3XLZG3atFtyuFHcEqLUHtQg+MxF2sca+3gPyEDDR
-         QvotkNC/I0eaguIHpbxva2dsVe7iOU/emmjClMo0kYJwOMoWuc2Fd4HG9cokp3vLbbor
-         0c7XU/+CCb/fQLn2cLC01knwzjaj0Ud2twpQbfmgbmczn7mHdlGJAVK5jgGzvOf4V8Bo
-         Vh4+Mphp842Ek+F/WEf49ie3Qi/FA8S3wX7L3czj0xGiGnPqhEok7Pk49lfFpeN74tew
-         6L3g==
-X-Gm-Message-State: AGi0PuaUflPKKBStDcmMdS0wGoF8hxB+AfLahFW9brjtY8yZnBgJ79QE
-        zSncPqAZbAB9rsEUv4onTpdwpJRE4l2uU/FfYB9OSw==
-X-Google-Smtp-Source: APiQypKwPJ3eQAj3UmcqOc18/vQnRNsFvQw3FTV9eUmQpOy4PLfT3A7xYCqvCkwaapvUhQCilHz1KbZizZs8pohCCcQ=
-X-Received: by 2002:a05:6102:104b:: with SMTP id h11mr5288832vsq.182.1585892764055;
- Thu, 02 Apr 2020 22:46:04 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lEuCnG1hC7hkoMeTpMkJ0ZOk4ZF8anIyWsJ+Bib4RJ0=;
+        b=FoiOsuLQOkQQw/6MMM+pKTMRQxwE2Q/16brdlDwyVl6Rgu11pmAaz3WxjZYqJW9JPq
+         grec8EQTEexaWyhGA6Rm235aj1q8FE4XrhSAES3DHjpcPmcR8fI9gDrQBqDyExzbm/fL
+         FykSDDE0jXrHk/2/Tu4KNIFSysCQyTELT7vINCQbXrmqf+ZKAqhBkvC4lbVxBSai1EZt
+         qbfyiHo541JhoxwfyDOvAJpY91EpLtrB4HDzqmt3L2ewhK52+C3qoPwTV2xQSGtIHWdj
+         tWNuRgIO352I9zTzfRpgMfSY1XjSwP0K1BbxcqpEzRriiQ7Vun0W/Or+bex1a6re7F7c
+         SIIg==
+X-Gm-Message-State: AGi0PuYDvg6dGgmisKDgpUZcdganpCttfdVWd6zksy0iPN8SfcDIENet
+        OK67qRLagy/j73xwFxy/cr6mBA==
+X-Google-Smtp-Source: APiQypKsdkC9AIQMLLAQSU0jy4LZoi7FwFTrBBdJUcSopHnRoHBK/wTF3hx/pHxFe0Cc1gfYJ2khhw==
+X-Received: by 2002:a63:230f:: with SMTP id j15mr4139593pgj.393.1585892934786;
+        Thu, 02 Apr 2020 22:48:54 -0700 (PDT)
+Received: from localhost ([122.171.118.46])
+        by smtp.gmail.com with ESMTPSA id p22sm4646330pgn.73.2020.04.02.22.48.53
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 Apr 2020 22:48:54 -0700 (PDT)
+Date:   Fri, 3 Apr 2020 11:18:52 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH] cpufreq: Select schedutil when using big.LITTLE
+Message-ID: <20200403054852.cx5sv27kt7wjgfa5@vireshk-i7>
+References: <20200402080239.7471-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-References: <1584966504-21719-1-git-send-email-Anson.Huang@nxp.com>
- <1584966504-21719-3-git-send-email-Anson.Huang@nxp.com> <CAHLCerNG3ZBbWrTwXxCbd1BOfyHxuvpAuo5tW_bNKgWcO5zESA@mail.gmail.com>
- <DB3PR0402MB3916AF241DE20AB9CCE1A4C2F5C70@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-In-Reply-To: <DB3PR0402MB3916AF241DE20AB9CCE1A4C2F5C70@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Fri, 3 Apr 2020 11:15:53 +0530
-Message-ID: <CAHLCerMEn7g3a-MG9xiiLKMUCLXjKRiuZ_wMjRjPJCXvDMzDdA@mail.gmail.com>
-Subject: Re: [PATCH V3 3/3] arm64: dts: imx8mp: Add thermal zones support
-To:     Anson Huang <anson.huang@nxp.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        lakml <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200402080239.7471-1-linus.walleij@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 3, 2020 at 9:04 AM Anson Huang <anson.huang@nxp.com> wrote:
->
-> Hi, Amit
->
-> > Subject: Re: [PATCH V3 3/3] arm64: dts: imx8mp: Add thermal zones support
-> >
-> > On Mon, Mar 23, 2020 at 6:05 PM Anson Huang <Anson.Huang@nxp.com>
-> > wrote:
-> > >
-> > > i.MX8MP has a TMU inside which supports two thermal zones, add support
-> > > for them.
-> > >
-> > > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> >
-> >
-> > [snip]
-> >
-> > >
-> > > +       thermal-zones {
-> > > +               cpu-thermal {
-> > > +                       polling-delay-passive = <250>;
-> > > +                       polling-delay = <2000>;
-> > > +                       thermal-sensors = <&tmu 0x0>;
-> >
-> > No need for 0x0, just use 0
->
-> OK.
->
-> >
-> > > +                       trips {
-> > > +                               cpu_alert0: trip0 {
-> > > +                                       temperature = <85000>;
-> > > +                                       hysteresis = <2000>;
-> > > +                                       type = "passive";
-> > > +                               };
-> > > +
-> > > +                               cpu_crit0: trip1 {
-> > > +                                       temperature = <95000>;
-> > > +                                       hysteresis = <2000>;
-> > > +                                       type = "critical";
-> > > +                               };
-> > > +                       };
-> > > +
-> > > +                       cooling-maps {
-> > > +                               map0 {
-> > > +                                       trip = <&cpu_alert0>;
-> > > +                                       cooling-device =
-> > > +                                               <&A53_0
-> > THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> > > +                                               <&A53_1
-> > THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> > > +                                               <&A53_2
-> > THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> > > +                                               <&A53_3
-> > THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> > > +                               };
-> > > +                       };
-> > > +               };
-> > > +
-> > > +               soc-thermal {
-> > > +                       polling-delay-passive = <250>;
-> > > +                       polling-delay = <2000>;
-> > > +                       thermal-sensors = <&tmu 0x1>;
-> >
-> > No need for 0x1, just use 1
->
-> OK.
->
-> >
-> > > +                       trips {
-> > > +                               soc_alert0: trip0 {
-> > > +                                       temperature = <85000>;
-> > > +                                       hysteresis = <2000>;
-> > > +                                       type = "passive";
-> > > +                               };
-> > > +
-> > > +                               soc_crit0: trip1 {
-> > > +                                       temperature = <95000>;
-> > > +                                       hysteresis = <2000>;
-> > > +                                       type = "critical";
-> > > +                               };
-> > > +                       };
-> >
-> > You need a cooling-map here since you have a passive trip point.
->
-> Currently, there is no cooling map defined for soc thermal zone, the cpufreq cooling
-> is mapped to cpu thermal zone already, so do you think it is OK to leave it as no cooling
-> map, or it is better to put cpufreq cooling for soc thermal zone as well?
->
+On 02-04-20, 10:02, Linus Walleij wrote:
+> When we are using a system with big.LITTLE HMP
+> configuration, we need to use EAS to schedule the
+> system.
+> 
+> As can be seen from kernel/sched/topology.c:
+> 
+>  "EAS can be used on a root domain if it meets all the following conditions:
+>   1. an Energy Model (EM) is available;
+>   2. the SD_ASYM_CPUCAPACITY flag is set in the sched_domain hierarchy.
+>   3. no SMT is detected.
+>   4. the EM complexity is low enough to keep scheduling overheads low;
+>   5. schedutil is driving the frequency of all CPUs of the rd;"
+> 
+> This means that at the very least, schedutil needs to be
+> available as a scheduling policy for EAS to work on these
+> systems. Make this explicit by defaulting to the schedutil
+> governor if BIG_LITTLE is selected.
+> 
+> Currently users of the TC2 board (like me) has to figure these
+> dependencies out themselves and it is not helpful.
+> 
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  drivers/cpufreq/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+> index bff5295016ae..873aefd96cf2 100644
+> --- a/drivers/cpufreq/Kconfig
+> +++ b/drivers/cpufreq/Kconfig
+> @@ -36,6 +36,7 @@ config CPU_FREQ_STAT
+>  
+>  choice
+>  	prompt "Default CPUFreq governor"
+> +	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if BIG_LITTLE
+>  	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1100_CPUFREQ || ARM_SA1110_CPUFREQ
+>  	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
+>  	help
 
-If there is no cooling, why do you need a passive trip point? Just
-make it a hot trip that will send you a nofication (if .notify
-callback registered).
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Regards,
-Amit
+-- 
+viresh
