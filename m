@@ -2,153 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B22919E350
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 09:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF4619E370
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 10:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726393AbgDDHba (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Apr 2020 03:31:30 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:34836 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725837AbgDDHb3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Apr 2020 03:31:29 -0400
-Received: by mail-vs1-f68.google.com with SMTP id u11so6504893vsg.2
-        for <linux-pm@vger.kernel.org>; Sat, 04 Apr 2020 00:31:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PM54+TAF+g/S8Jdu48v4vdALgU1uHmqD41DlN+nN2GQ=;
-        b=U/z7FaYgCxrifjRMbUMuNc48xDQkG1azVQ1qAqD5C7gQ2BC0+SFLokHqrseBZoS9BZ
-         HhrCnBVjIlsNzTSk4g9jfL9JJz+m5CKI+s5CrxslyKnjLoTsEBG8QO2itdwefQVPu7Sh
-         RWs2OJabHZCg++IlG5djjUt5kNFHWUOxPGGHY1AUmooXc5/Kvu95qNG/RJNI1bp408I1
-         rv4YucMhPRAVJiiew6KxAcltBjYQn1wwVVPeylGsfx2YHhAuDgZgIaV+C9Eq+6VzjDvp
-         i2sBU69P9pmQehnOz4LSQCQfw45G1MRqFniKV+pNE9TYCEJv2jY/nLd6aPv16oy5YDpy
-         UvZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PM54+TAF+g/S8Jdu48v4vdALgU1uHmqD41DlN+nN2GQ=;
-        b=q/RG7m2E1qggyyhYaoRiHGsWEbZ4dKhINaAaH1aLBt+LMCDwSCH3XrXXKDfQm1JtXl
-         /FwmdQPFuUTV66IUkz+uY+H/coMNDbqjwoP7EyLYsHtK1gGlW1+rNstsrtneRsw8z7pe
-         cOKcHiihzHmbarfYZXAfmfxU+DEm/LNTbZwTplQzET5t6cCfx1XK6QExQ/KOKCKLS30z
-         7fUZ4OpaubWFR+7ifBTHAk7dqnMA/X8KEWXahHUcH5FZG3UuRtY6HhJTZ1dSX8BASESc
-         xxQWIIVZFnpd+y90jw1YTlrHadX3zRg4UkBI6b9TkjkMKLHeEw7R/gRtsHWE27bL57tu
-         vM3A==
-X-Gm-Message-State: AGi0PuYwErjUOX9XBlZHzJ/tK7rqkcUhGUCD/ixr3h6Z+Ap+06EsFuMT
-        QDiFcUYCKv18LriTph2daxG4dS9wSRxcZrYqQv9ZWw==
-X-Google-Smtp-Source: APiQypIu/alTBXDgKITDXBctny47stbSvo55Own/Vu8y0I7bxK1KHmvt7pgNCgb+JQCSxYjPHiy+3AH9i6i2tnOhjmE=
-X-Received: by 2002:a67:69d5:: with SMTP id e204mr8446240vsc.159.1585985488361;
- Sat, 04 Apr 2020 00:31:28 -0700 (PDT)
+        id S1725837AbgDDI0q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Apr 2020 04:26:46 -0400
+Received: from mga09.intel.com ([134.134.136.24]:48962 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725730AbgDDI0q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 4 Apr 2020 04:26:46 -0400
+IronPort-SDR: 5a4t5BLJaYCB5zf5YsHxMIyPdHqVmOFCsKh7r8XO0LXJjY7ZSD+WHTjYCDfF9C/DIbMn+yngEi
+ lbcT2qEfQpvw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2020 01:26:45 -0700
+IronPort-SDR: wyZvYV/McKS3Lqmlf/DuTEqK8YI9Ej0TcDYL43Yh478CV1Nc3J4miouwZmDK0NzBBeiH8n8bPJ
+ m9kBRDecEH3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,343,1580803200"; 
+   d="scan'208";a="250394652"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 04 Apr 2020 01:26:43 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jKe8Y-00019x-Lo; Sat, 04 Apr 2020 16:26:42 +0800
+Date:   Sat, 04 Apr 2020 16:25:50 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 3c55e7bed1061c07f3678df7889e35719349dd22
+Message-ID: <5e88448e.Rv0Nqa6k3U2fl3Kn%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20200331075356.19171-1-j-keerthy@ti.com> <20200331075356.19171-2-j-keerthy@ti.com>
-In-Reply-To: <20200331075356.19171-2-j-keerthy@ti.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Sat, 4 Apr 2020 13:00:00 +0530
-Message-ID: <CAHLCerPrmsMU3uVwQGXfZAsWkgxiG+1M136f6uuWgwB4EF2uGg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] dt-bindings: thermal: k3: Add VTM bindings documentation
-To:     Keerthy <j-keerthy@ti.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh+dt@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, t-kristo@ti.com,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        lakml <linux-arm-kernel@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 1:24 PM Keerthy <j-keerthy@ti.com> wrote:
->
-> Add VTM bindings documentation. In the Voltage Thermal
-> Management Module(VTM), K3 AM654 supplies a voltage
-> reference and a temperature sensor feature that are gathered in the band
-> gap voltage and temperature sensor (VBGAPTS) module. The band
-> gap provides current and voltage reference for its internal
-> circuits and other analog IP blocks. The analog-to-digital
-> converter (ADC) produces an output value that is proportional
-> to the silicon temperature.
->
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->
-> Changes in v5:
->
->   * Added Reviewed-by: Rob Herring <robh@kernel.org>
->
->  .../bindings/thermal/ti,am654-thermal.yaml    | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
->
-> diff --git a/Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
-> new file mode 100644
-> index 000000000000..d241b65d6072
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/ti,am654-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments AM654 VTM (DTS) binding
-> +
-> +maintainers:
-> +  - Keerthy <j-keerthy@ti.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: ti,am654-vtm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +required:
-> +  - "#thermal-sensor-cells"
-> +  - compatible
-> +  - reg
-> +  - power-domains
-> +
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 3c55e7bed1061c07f3678df7889e35719349dd22  Merge branch 'pm-sleep' into bleeding-edge
 
-A nit-pick: arrange the required properties in order they're listed above.
+elapsed time: 1358m
 
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-> +    vtm: thermal@42050000 {
-> +        compatible = "ti,am654-vtm";
-> +        reg = <0x0 0x42050000 0x0 0x25c>;
-> +        power-domains = <&k3_pds 80 TI_SCI_PD_EXCLUSIVE>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
-> +
-> +    mpu0_thermal: mpu0_thermal {
-> +        polling-delay-passive = <250>; /* milliseconds */
-> +        polling-delay = <500>; /* milliseconds */
-> +        thermal-sensors = <&vtm0 0>;
-> +
-> +        trips {
-> +                mpu0_crit: mpu0_crit {
-> +                        temperature = <125000>; /* milliCelsius */
-> +                        hysteresis = <2000>; /* milliCelsius */
-> +                        type = "critical";
-> +                };
-> +        };
-> +    };
-> +...
-> --
-> 2.17.1
->
+configs tested: 145
+configs skipped: 0
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm64                            allyesconfig
+arm64                             allnoconfig
+arm                               allnoconfig
+arm                           efm32_defconfig
+arm                         at91_dt_defconfig
+arm                        shmobile_defconfig
+arm64                               defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                           sunxi_defconfig
+arm                        multi_v7_defconfig
+sparc                            allyesconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                             alldefconfig
+i386                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+ia64                             alldefconfig
+nios2                         3c120_defconfig
+nios2                         10m50_defconfig
+c6x                        evmc6678_defconfig
+xtensa                          iss_defconfig
+c6x                              allyesconfig
+xtensa                       common_defconfig
+openrisc                 simple_smp_defconfig
+openrisc                    or1ksim_defconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+h8300                       h8s-sim_defconfig
+h8300                     edosk2674_defconfig
+m68k                       m5475evb_defconfig
+m68k                             allmodconfig
+h8300                    h8300h-sim_defconfig
+m68k                           sun3_defconfig
+m68k                          multi_defconfig
+arc                                 defconfig
+arc                              allyesconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+mips                             allyesconfig
+mips                         64r6el_defconfig
+mips                              allnoconfig
+mips                           32r2_defconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                generic-64bit_defconfig
+parisc                generic-32bit_defconfig
+parisc                           allyesconfig
+x86_64               randconfig-a003-20200403
+i386                 randconfig-a002-20200403
+x86_64               randconfig-a002-20200403
+x86_64               randconfig-a001-20200403
+i386                 randconfig-a003-20200403
+i386                 randconfig-a001-20200403
+nds32                randconfig-a001-20200403
+m68k                 randconfig-a001-20200403
+alpha                randconfig-a001-20200403
+parisc               randconfig-a001-20200403
+riscv                randconfig-a001-20200403
+sparc64              randconfig-a001-20200403
+h8300                randconfig-a001-20200403
+nios2                randconfig-a001-20200403
+microblaze           randconfig-a001-20200403
+c6x                  randconfig-a001-20200403
+s390                 randconfig-a001-20200403
+xtensa               randconfig-a001-20200403
+csky                 randconfig-a001-20200403
+openrisc             randconfig-a001-20200403
+sh                   randconfig-a001-20200403
+i386                 randconfig-b003-20200403
+x86_64               randconfig-b001-20200403
+i386                 randconfig-b001-20200403
+i386                 randconfig-b002-20200403
+i386                 randconfig-c001-20200403
+i386                 randconfig-c003-20200403
+x86_64               randconfig-c002-20200403
+i386                 randconfig-c002-20200403
+x86_64               randconfig-c001-20200403
+x86_64               randconfig-d001-20200403
+i386                 randconfig-d003-20200403
+i386                 randconfig-d001-20200403
+i386                 randconfig-d002-20200403
+i386                 randconfig-e001-20200403
+x86_64               randconfig-e002-20200403
+i386                 randconfig-e003-20200403
+x86_64               randconfig-e003-20200403
+i386                 randconfig-e002-20200403
+i386                 randconfig-f001-20200403
+i386                 randconfig-f003-20200403
+x86_64               randconfig-f003-20200403
+x86_64               randconfig-f001-20200403
+i386                 randconfig-f002-20200403
+x86_64               randconfig-f002-20200403
+x86_64               randconfig-g003-20200403
+i386                 randconfig-g003-20200403
+x86_64               randconfig-g002-20200403
+i386                 randconfig-g001-20200403
+i386                 randconfig-g002-20200403
+x86_64               randconfig-g001-20200403
+arm64                randconfig-a001-20200403
+sparc                randconfig-a001-20200403
+ia64                 randconfig-a001-20200403
+arc                  randconfig-a001-20200403
+arm                  randconfig-a001-20200403
+powerpc              randconfig-a001-20200403
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+s390                       zfcpdump_defconfig
+s390                          debug_defconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                             alldefconfig
+s390                                defconfig
+sh                          rsk7269_defconfig
+sh                               allmodconfig
+sh                            titan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                                allnoconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
