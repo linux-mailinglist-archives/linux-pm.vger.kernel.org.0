@@ -2,350 +2,542 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4255D19E64A
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 17:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 915F519E71C
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 20:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726334AbgDDPxg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Apr 2020 11:53:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43252 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726269AbgDDPxg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 4 Apr 2020 11:53:36 -0400
-Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DDDEE206E6;
-        Sat,  4 Apr 2020 15:53:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586015615;
-        bh=VwUw1HacP630W9/H5Gi7KR8X0NJ5usEduzYXDz4f68E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lxYZwfsh2KDVA7FkQmFB9TWAaEa5u0g9D7LckLyP5Xn/gAkN/hzqCTyMPCJMSXA+w
-         cW9q4bmag1PG60PnbxNpgYeaTXSpNk0S82OG3mwqei8dLzElwJUV1rr1Gxy+rr6Qu9
-         74Wa5yPkgIzIOfy1aTlHAefnlpAFIopvFcAdUjRA=
-Date:   Sat, 4 Apr 2020 16:53:30 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Saravanan Sekar <sravanhome@gmail.com>
-Cc:     lee.jones@linaro.org, andy.shevchenko@gmail.com,
-        robh+dt@kernel.org, knaack.h@gmx.de, lars@metafoo.de,
-        pmeerw@pmeerw.net, sre@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 3/5] iio: adc: mp2629: Add support for mp2629 ADC
- driver
-Message-ID: <20200404165330.45d3acf0@archlinux>
-In-Reply-To: <20200329123110.26482-4-sravanhome@gmail.com>
-References: <20200329123110.26482-1-sravanhome@gmail.com>
-        <20200329123110.26482-4-sravanhome@gmail.com>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726329AbgDDSiy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Apr 2020 14:38:54 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:17601 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgDDSiy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Apr 2020 14:38:54 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e88d3d80000>; Sat, 04 Apr 2020 11:37:12 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Sat, 04 Apr 2020 11:38:52 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Sat, 04 Apr 2020 11:38:52 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 4 Apr
+ 2020 18:38:51 +0000
+Received: from [10.24.37.103] (10.124.1.5) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 4 Apr 2020
+ 18:38:47 +0000
+Subject: Re: [TEGRA194_CPUFREQ Patch 2/3] cpufreq: Add Tegra194 cpufreq driver
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rjw@rjwysocki.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <talho@nvidia.com>, <linux-pm@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>,
+        <mperttunen@nvidia.com>, <sumitg@nvidia.com>
+References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
+ <1575394348-17649-2-git-send-email-sumitg@nvidia.com>
+ <20200326115023.xy3n5bl7uetuw7mx@vireshk-i7>
+From:   sumitg <sumitg@nvidia.com>
+Message-ID: <d233b26b-6b50-7d41-9f33-a5dc151e0e7d@nvidia.com>
+Date:   Sun, 5 Apr 2020 00:08:44 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20200326115023.xy3n5bl7uetuw7mx@vireshk-i7>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1586025432; bh=5hdYw6ObfGFLG9jd7U4HnmWEClP8GiKvWCoh8X9OSgI=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=JgMYdbwUbXedZkmtlgwLgotdD5XBTnbRfd8+VzIPxVAItPIWtZdKzjXWh8HDCiK5P
+         E/Byrm5R8gc3drmATdYYHROEby12KKeMW26FfoHdvK0X9CpNxA0AFH8KVgGG5T+I4B
+         n2wJ4KMU/ST+K6FKmSM/da5gCPk4ckX5MIZQ1BGRC/DoLnlEDdj8LIMZYdwBJpfZpf
+         d7JeYfspqxAVJQZX0fSvtwTWJyyNoEM2Cc6HQMVYY/x7c6SMNblPXJDX06Ntpk1CH0
+         Ta0w1cLh7MXX1SYYEQGydNYuaHibCJhm5kbZ3b59CfvhTpAiDQ9gAK0MiNa72o4kOb
+         3EM1a1HCBZqsg==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 29 Mar 2020 14:31:08 +0200
-Saravanan Sekar <sravanhome@gmail.com> wrote:
 
-> Add support for 8-bit resolution ADC readings for input power
-> supply and battery charging measurement. Provides voltage, current
-> readings to mp2629 power supply driver.
+
+On 26/03/20 5:20 PM, Viresh Kumar wrote:
+> External email: Use caution opening links or attachments
 > 
-> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-
-The probe / remove order seems to have gotten messed up (or I missed it
-before :( and you've introduced a double free by mixing managed
-and unmanaged calls.
-
-Thanks,
-
-Jonathan
-
-> ---
->  drivers/iio/adc/Kconfig      |  10 ++
->  drivers/iio/adc/Makefile     |   1 +
->  drivers/iio/adc/mp2629_adc.c | 207 +++++++++++++++++++++++++++++++++++
->  include/linux/mfd/mp2629.h   |   9 ++
->  4 files changed, 227 insertions(+)
->  create mode 100644 drivers/iio/adc/mp2629_adc.c
 > 
-> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-> index 82e33082958c..ef0c0cd31855 100644
-> --- a/drivers/iio/adc/Kconfig
-> +++ b/drivers/iio/adc/Kconfig
-> @@ -680,6 +680,16 @@ config MESON_SARADC
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called meson_saradc.
->  
-> +config MP2629_ADC
-> +	tristate "Monolithic MP2629 ADC driver"
-> +	depends on MFD_MP2629
-> +	help
-> +	  Say yes to have support for battery charger IC MP2629 ADC device
-> +	  accessed over I2C.
-> +
-> +	  This driver provides ADC conversion of system, input power supply
-> +	  and battery voltage & current information.
-> +
->  config NAU7802
->  	tristate "Nuvoton NAU7802 ADC driver"
->  	depends on I2C
-> diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
-> index 919228900df9..f14416c245a6 100644
-> --- a/drivers/iio/adc/Makefile
-> +++ b/drivers/iio/adc/Makefile
-> @@ -64,6 +64,7 @@ obj-$(CONFIG_MCP3911) += mcp3911.o
->  obj-$(CONFIG_MEDIATEK_MT6577_AUXADC) += mt6577_auxadc.o
->  obj-$(CONFIG_MEN_Z188_ADC) += men_z188_adc.o
->  obj-$(CONFIG_MESON_SARADC) += meson_saradc.o
-> +obj-$(CONFIG_MP2629_ADC) += mp2629_adc.o
->  obj-$(CONFIG_MXS_LRADC_ADC) += mxs-lradc-adc.o
->  obj-$(CONFIG_NAU7802) += nau7802.o
->  obj-$(CONFIG_NPCM_ADC) += npcm_adc.o
-> diff --git a/drivers/iio/adc/mp2629_adc.c b/drivers/iio/adc/mp2629_adc.c
-> new file mode 100644
-> index 000000000000..2e5518168d3e
-> --- /dev/null
-> +++ b/drivers/iio/adc/mp2629_adc.c
-> @@ -0,0 +1,207 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * MP2629 Driver for ADC
-> + *
-> + * Copyright 2020 Monolithic Power Systems, Inc
-> + *
-> + * Author: Saravanan Sekar <sravanhome@gmail.com>
-> + */
-> +
-> +#include <linux/iio/driver.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/iio/machine.h>
-> +#include <linux/mfd/mp2629.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#define	MP2629_REG_ADC_CTRL		0x03
-> +#define	MP2629_REG_BATT_VOLT		0x0e
-> +#define	MP2629_REG_SYSTEM_VOLT		0x0f
-> +#define	MP2629_REG_INPUT_VOLT		0x11
-> +#define	MP2629_REG_BATT_CURRENT		0x12
-> +#define	MP2629_REG_INPUT_CURRENT	0x13
-> +
-> +#define	MP2629_ADC_START		BIT(7)
-> +#define	MP2629_ADC_CONTINUOUS		BIT(6)
-> +
-> +#define MP2629_MAP(_mp, _mpc) IIO_MAP(#_mp, "mp2629_charger", "mp2629-"_mpc)
-> +
-> +#define MP2629_ADC_CHAN(_ch, _type) {				\
-> +	.type = _type,						\
-> +	.indexed = 1,						\
-> +	.datasheet_name = #_ch,					\
-> +	.channel = MP2629_ ## _ch,				\
-> +	.address = MP2629_REG_ ## _ch,				\
-> +	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),		\
-> +	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),	\
-> +}
-> +
-> +struct mp2629_adc {
-> +	struct regmap *regmap;
-> +	struct device *dev;
-> +};
-> +
-> +static struct iio_chan_spec mp2629_channels[] = {
-> +	MP2629_ADC_CHAN(BATT_VOLT, IIO_VOLTAGE),
-> +	MP2629_ADC_CHAN(SYSTEM_VOLT, IIO_VOLTAGE),
-> +	MP2629_ADC_CHAN(INPUT_VOLT, IIO_VOLTAGE),
-> +	MP2629_ADC_CHAN(BATT_CURRENT, IIO_CURRENT),
-> +	MP2629_ADC_CHAN(INPUT_CURRENT, IIO_CURRENT)
-> +};
-> +
-> +static struct iio_map mp2629_adc_maps[] = {
-> +	MP2629_MAP(BATT_VOLT, "batt-volt"),
-> +	MP2629_MAP(SYSTEM_VOLT, "system-volt"),
-> +	MP2629_MAP(INPUT_VOLT, "input-volt"),
-> +	MP2629_MAP(BATT_CURRENT, "batt-current"),
-> +	MP2629_MAP(INPUT_CURRENT, "input-current")
-> +};
-> +
-> +static int mp2629_read_raw(struct iio_dev *indio_dev,
-> +			struct iio_chan_spec const *chan,
-> +			int *val, int *val2, long mask)
-> +{
-> +	struct mp2629_adc *info = iio_priv(indio_dev);
-> +	unsigned int rval;
-> +	int ret;
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_RAW:
-> +		ret = regmap_read(info->regmap, chan->address, &rval);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (chan->address == MP2629_INPUT_VOLT)
-> +			rval &= GENMASK(6, 0);
-> +		*val = rval;
-> +		return IIO_VAL_INT;
-> +
-> +	case IIO_CHAN_INFO_SCALE:
-> +		switch (chan->channel) {
-> +		case MP2629_BATT_VOLT:
-> +		case MP2629_SYSTEM_VOLT:
-> +			*val = 20;
-> +			return IIO_VAL_INT;
-> +
-> +		case MP2629_INPUT_VOLT:
-> +			*val = 60;
-> +			return IIO_VAL_INT;
-> +
-> +		case MP2629_BATT_CURRENT:
-> +			*val = 175;
-> +			*val2 = 10;
-> +			return IIO_VAL_FRACTIONAL;
-> +
-> +		case MP2629_INPUT_CURRENT:
-> +			*val = 133;
-> +			*val2 = 10;
-> +			return IIO_VAL_FRACTIONAL;
-> +
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static const struct iio_info mp2629_adc_info = {
-> +	.read_raw = &mp2629_read_raw,
-> +};
-> +
-> +static int mp2629_adc_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct mp2629_info *ddata = dev_get_drvdata(dev->parent);
-> +	struct mp2629_adc *info;
-> +	struct iio_dev *indio_dev;
-> +	int ret;
-> +
-> +	indio_dev = devm_iio_device_alloc(dev, sizeof(*info));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	info = iio_priv(indio_dev);
-> +	info->regmap = ddata->regmap;
-> +	info->dev = dev;
-> +	platform_set_drvdata(pdev, indio_dev);
-> +
-> +	ret = iio_map_array_register(indio_dev, mp2629_adc_maps);
-> +	if (ret) {
-> +		dev_err(dev, "IIO maps register fail: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	indio_dev->name = "mp2629-adc";
-> +	indio_dev->dev.parent = dev;
-> +	indio_dev->channels = mp2629_channels;
-> +	indio_dev->num_channels = ARRAY_SIZE(mp2629_channels);
-> +	indio_dev->modes = INDIO_DIRECT_MODE;
-> +	indio_dev->info = &mp2629_adc_info;
-> +
-> +	ret = regmap_update_bits(ddata->regmap, MP2629_REG_ADC_CTRL,
-> +				MP2629_ADC_START | MP2629_ADC_CONTINUOUS,
-> +				MP2629_ADC_START | MP2629_ADC_CONTINUOUS);
-> +	if (ret) {
-> +		dev_err(dev, "adc enable fail: %d\n", ret);
-> +		goto fail_unmap;
-> +	}
-> +
-> +	ret = devm_iio_device_register(dev, indio_dev);
-> +	if (ret) {
-> +		dev_err(dev, "IIO device register fail: %d\n", ret);
-> +		goto fail_disable;
-> +	}
-> +
-> +	return 0;
-> +
-> +fail_disable:
-> +	regmap_update_bits(ddata->regmap, MP2629_REG_ADC_CTRL,
-> +					 MP2629_ADC_CONTINUOUS, 0);
-> +	regmap_update_bits(ddata->regmap, MP2629_REG_ADC_CTRL,
-> +					 MP2629_ADC_START, 0);
-> +
-> +fail_unmap:
-> +	iio_map_array_unregister(indio_dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static int mp2629_adc_remove(struct platform_device *pdev)
-> +{
-> +	struct iio_dev *indio_dev = platform_get_drvdata(pdev);
-> +	struct mp2629_adc *info = iio_priv(indio_dev);
-> +
-> +	regmap_update_bits(info->regmap, MP2629_REG_ADC_CTRL,
-> +					 MP2629_ADC_CONTINUOUS, 0);
-> +	regmap_update_bits(info->regmap, MP2629_REG_ADC_CTRL,
-> +					 MP2629_ADC_START, 0);
-> +
-> +	iio_map_array_unregister(indio_dev);
-> +	iio_device_unregister(indio_dev);
+> On 03-12-19, 23:02, Sumit Gupta wrote:
+>> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+>> new file mode 100644
+>> index 0000000..9df12f4
+>> --- /dev/null
+>> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+>> @@ -0,0 +1,423 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved
+>> + */
+>> +
+>> +#include <linux/cpu.h>
+>> +#include <linux/cpufreq.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/dma-mapping.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/of_platform.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/slab.h>
+>> +
+>> +#include <asm/smp_plat.h>
+>> +
+>> +#include <soc/tegra/bpmp.h>
+>> +#include <soc/tegra/bpmp-abi.h>
+>> +
+>> +#define KHZ                     1000
+>> +#define REF_CLK_MHZ             408 /* 408 MHz */
+>> +#define US_DELAY                2000
+>> +#define US_DELAY_MIN            2
+>> +#define CPUFREQ_TBL_STEP_HZ     (50 * KHZ * KHZ)
+>> +#define MAX_CNT                 ~0U
+>> +
+>> +/* cpufreq transisition latency */
+>> +#define TEGRA_CPUFREQ_TRANSITION_LATENCY (300 * 1000) /* unit in nanoseconds */
+>> +
+>> +enum cluster {
+>> +     CLUSTER0,
+>> +     CLUSTER1,
+>> +     CLUSTER2,
+>> +     CLUSTER3,
+> 
+> All these have same CPUs ? Or big little kind of stuff ? How come they
+> have different frequency tables ?
+> 
+T194 SOC has homogeneous architecture where each cluster has two 
+symmetric Carmel cores and and not big little. LUT's are per cluster and 
+all LUT's have same values currently. Future SOC's may have different 
+LUT values per cluster.
 
-Not sure how I missed this before.
+>> +     MAX_CLUSTERS,
+>> +};
+>> +
+>> +struct tegra194_cpufreq_data {
+>> +     void __iomem *regs;
+>> +     size_t num_clusters;
+>> +     struct cpufreq_frequency_table **tables;
+>> +};
+>> +
+>> +static DEFINE_MUTEX(cpufreq_lock);
+>> +
+>> +struct tegra_cpu_ctr {
+>> +     u32 cpu;
+>> +     u32 delay;
+>> +     u32 coreclk_cnt, last_coreclk_cnt;
+>> +     u32 refclk_cnt, last_refclk_cnt;
+>> +};
+>> +
+>> +static struct workqueue_struct *read_counters_wq;
+>> +struct read_counters_work {
+>> +     struct work_struct work;
+>> +     struct tegra_cpu_ctr c;
+>> +};
+>> +
+>> +static enum cluster get_cpu_cluster(u8 cpu)
+>> +{
+>> +     return MPIDR_AFFINITY_LEVEL(cpu_logical_map(cpu), 1);
+>> +}
+>> +
+>> +/*
+>> + * Read per-core Read-only system register NVFREQ_FEEDBACK_EL1.
+>> + * The register provides frequency feedback information to
+>> + * determine the average actual frequency a core has run at over
+>> + * a period of time.
+>> + *   [31:0] PLLP counter: Counts at fixed frequency (408 MHz)
+>> + *   [63:32] Core clock counter: counts on every core clock cycle
+>> + *                   where the core is architecturally clocking
+>> + */
+>> +static u64 read_freq_feedback(void)
+>> +{
+>> +     u64 val = 0;
+>> +
+>> +     asm volatile("mrs %0, s3_0_c15_c0_5" : "=r" (val) : );
+>> +
+>> +     return val;
+>> +}
+>> +
+>> +u16 map_freq_to_ndiv(struct mrq_cpu_ndiv_limits_response *nltbl, u32 freq)
+>> +{
+>> +     return DIV_ROUND_UP(freq * nltbl->pdiv * nltbl->mdiv,
+>> +                         nltbl->ref_clk_hz / KHZ);
+>> +}
+>> +
+>> +static inline u32 map_ndiv_to_freq(struct mrq_cpu_ndiv_limits_response
+>> +                                *nltbl, u16 ndiv)
+>> +{
+>> +     return nltbl->ref_clk_hz / KHZ * ndiv / (nltbl->pdiv * nltbl->mdiv);
+>> +}
+>> +
+>> +static void tegra_read_counters(struct work_struct *work)
+>> +{
+>> +     struct read_counters_work *read_counters_work;
+>> +     struct tegra_cpu_ctr *c;
+>> +     u64 val;
+>> +
+>> +     /*
+>> +      * ref_clk_counter(32 bit counter) runs on constant clk,
+>> +      * pll_p(408MHz).
+>> +      * It will take = 2 ^ 32 / 408 MHz to overflow ref clk counter
+>> +      *              = 10526880 usec = 10.527 sec to overflow
+>> +      *
+>> +      * Like wise core_clk_counter(32 bit counter) runs on core clock.
+>> +      * It's synchronized to crab_clk (cpu_crab_clk) which runs at
+>> +      * freq of cluster. Assuming max cluster clock ~2000MHz,
+>> +      * It will take = 2 ^ 32 / 2000 MHz to overflow core clk counter
+>> +      *              = ~2.147 sec to overflow
+>> +      */
+>> +     read_counters_work = container_of(work, struct read_counters_work,
+>> +                                       work);
+>> +     c = &read_counters_work->c;
+>> +
+>> +     val = read_freq_feedback();
+>> +     c->last_refclk_cnt = lower_32_bits(val);
+>> +     c->last_coreclk_cnt = upper_32_bits(val);
+>> +     udelay(c->delay);
+>> +     val = read_freq_feedback();
+>> +     c->refclk_cnt = lower_32_bits(val);
+>> +     c->coreclk_cnt = upper_32_bits(val);
+>> +}
+>> +
+>> +/*
+>> + * Return instantaneous cpu speed
+>> + * Instantaneous freq is calculated as -
+>> + * -Takes sample on every query of getting the freq.
+>> + *   - Read core and ref clock counters;
+>> + *   - Delay for X us
+>> + *   - Read above cycle counters again
+>> + *   - Calculates freq by subtracting current and previous counters
+>> + *     divided by the delay time or eqv. of ref_clk_counter in delta time
+>> + *   - Return Kcycles/second, freq in KHz
+>> + *
+>> + *   delta time period = x sec
+>> + *                     = delta ref_clk_counter / (408 * 10^6) sec
+>> + *   freq in Hz = cycles/sec
+>> + *              = (delta cycles / x sec
+>> + *              = (delta cycles * 408 * 10^6) / delta ref_clk_counter
+>> + *   in KHz     = (delta cycles * 408 * 10^3) / delta ref_clk_counter
+>> + *
+>> + * @cpu - logical cpu whose freq to be updated
+>> + * Returns freq in KHz on success, 0 if cpu is offline
+>> + */
+>> +static unsigned int tegra194_get_speed_common(u32 cpu, u32 delay)
+>> +{
+>> +     struct read_counters_work read_counters_work;
+>> +     struct tegra_cpu_ctr c;
+>> +     u32 delta_refcnt;
+>> +     u32 delta_ccnt;
+>> +     u32 rate_mhz;
+>> +
+>> +     read_counters_work.c.cpu = cpu;
+>> +     read_counters_work.c.delay = delay;
+>> +     INIT_WORK_ONSTACK(&read_counters_work.work, tegra_read_counters);
+>> +     queue_work_on(cpu, read_counters_wq, &read_counters_work.work);
+>> +     flush_work(&read_counters_work.work);
+> 
+> Why can't this be done in current context ?
+> 
+We used work queue instead of smp_call_function_single() to have long delay.
 
-You are using a managed call devm_iio_device_register so there is nothing
-to undo here.  However, the ordering in this remove is not the reverse
-of that in probe.  That usually means there are some race conditions
-hiding so is a bad idea.  If there is a very strong reason to do so
-I'd expect to see a comment explaining it.
+>> +     c = read_counters_work.c;
+>> +
+>> +     if (c.coreclk_cnt < c.last_coreclk_cnt)
+>> +             delta_ccnt = c.coreclk_cnt + (MAX_CNT - c.last_coreclk_cnt);
+>> +     else
+>> +             delta_ccnt = c.coreclk_cnt - c.last_coreclk_cnt;
+>> +     if (!delta_ccnt)
+>> +             return 0;
+>> +
+>> +     /* ref clock is 32 bits */
+>> +     if (c.refclk_cnt < c.last_refclk_cnt)
+>> +             delta_refcnt = c.refclk_cnt + (MAX_CNT - c.last_refclk_cnt);
+>> +     else
+>> +             delta_refcnt = c.refclk_cnt - c.last_refclk_cnt;
+>> +     if (!delta_refcnt) {
+>> +             pr_debug("cpufreq: %d is idle, delta_refcnt: 0\n", cpu);
+>> +             return 0;
+>> +     }
+>> +     rate_mhz = ((unsigned long)(delta_ccnt * REF_CLK_MHZ)) / delta_refcnt;
+>> +
+>> +     return (rate_mhz * KHZ); /* in KHz */
+>> +}
+>> +
+>> +static unsigned int tegra194_get_speed(u32 cpu)
+>> +{
+>> +     return tegra194_get_speed_common(cpu, US_DELAY);
+>> +}
+>> +
+>> +static unsigned int tegra194_fast_get_speed(u32 cpu)
+>> +{
+>> +     return tegra194_get_speed_common(cpu, US_DELAY_MIN);
+> 
+> Why is this required specially here ? Why can't you work with normal
+> delay ?
+> 
+Less delay value used during init to reduce cpu boot time.
 
-Note you shouldn't be using the devm_iio_device_register because
-if you do then you can't manually unregister before calling the rest
-of the stuff in here (which you want to do).
+>> +}
+>> +
+>> +static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
+>> +{
+>> +     struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
+>> +     int cluster = get_cpu_cluster(policy->cpu);
+>> +
+>> +     if (cluster >= data->num_clusters)
+>> +             return -EINVAL;
+>> +
+>> +     policy->cur = tegra194_fast_get_speed(policy->cpu); /* boot freq */
+>> +
+>> +     /* set same policy for all cpus */
+>> +     cpumask_copy(policy->cpus, cpu_possible_mask);
+> 
+> You are copying cpu_possible_mask mask here, and so this routine will
+> get called only once.
+> 
+> I still don't understand the logic behind clusters and frequency
+> tables.
+> 
+Currently, we use same policy for all CPU's to maximize throughput. Will 
+add separate patch later to set policy as per cluster. But we are not 
+using that in T194 due to perf reasons.
 
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id mp2629_adc_of_match[] = {
-> +	{ .compatible = "mps,mp2629_adc"},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, mp2629_adc_of_match);
-> +
-> +static struct platform_driver mp2629_adc_driver = {
-> +	.driver = {
-> +		.name = "mp2629_adc",
-> +		.of_match_table = mp2629_adc_of_match,
-> +	},
-> +	.probe		= mp2629_adc_probe,
-> +	.remove		= mp2629_adc_remove,
-> +};
-> +module_platform_driver(mp2629_adc_driver);
-> +
-> +MODULE_AUTHOR("Saravanan Sekar <sravanhome@gmail.com>");
-> +MODULE_DESCRIPTION("MP2629 ADC driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/mfd/mp2629.h b/include/linux/mfd/mp2629.h
-> index 06985e41fc6f..83ebfab41691 100644
-> --- a/include/linux/mfd/mp2629.h
-> +++ b/include/linux/mfd/mp2629.h
-> @@ -16,4 +16,13 @@ struct mp2629_info {
->  	struct regmap *regmap;
->  };
->  
-> +enum mp2629_adc_chan {
-> +	MP2629_BATT_VOLT,
-> +	MP2629_SYSTEM_VOLT,
-> +	MP2629_INPUT_VOLT,
-> +	MP2629_BATT_CURRENT,
-> +	MP2629_INPUT_CURRENT,
-> +	MP2629_ADC_CHAN_END
-> +};
-> +
->  #endif
+>> +
+>> +     policy->freq_table = data->tables[cluster];
+>> +     policy->cpuinfo.transition_latency = TEGRA_CPUFREQ_TRANSITION_LATENCY;
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +static void set_cpu_ndiv(void *data)
+>> +{
+>> +     struct cpufreq_frequency_table *tbl = data;
+>> +     u64 ndiv_val = (u64)tbl->driver_data;
+>> +
+>> +     asm volatile("msr s3_0_c15_c0_4, %0" : : "r" (ndiv_val));
+>> +}
+>> +
+>> +static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
+>> +                                    unsigned int index)
+>> +{
+>> +     struct cpufreq_frequency_table *tbl = policy->freq_table + index;
+>> +     static struct cpufreq_freqs freqs;
+>> +
+>> +     mutex_lock(&cpufreq_lock);
+> 
+> No need of lock here.
+>
+Done
+
+>> +     freqs.old = policy->cur;
+>> +     freqs.new = tbl->frequency;
+>> +
+>> +     cpufreq_freq_transition_begin(policy, &freqs);
+>> +     on_each_cpu_mask(policy->cpus, set_cpu_ndiv, tbl, true);
+> 
+> When CPUs share clock line, why is this required for every CPU ?
+>Per core NVFREQ_REQ system register is written to make frequency 
+requests for the core. Cluster h/w then forwards the max(core0, core1) 
+request to cluster NAFLL.
+
+>> +     cpufreq_freq_transition_end(policy, &freqs, 0);
+>> +
+>> +     mutex_unlock(&cpufreq_lock);
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +static struct cpufreq_driver tegra194_cpufreq_driver = {
+>> +     .name = "tegra194",
+>> +     .flags = CPUFREQ_STICKY | CPUFREQ_CONST_LOOPS |
+>> +             CPUFREQ_NEED_INITIAL_FREQ_CHECK | CPUFREQ_ASYNC_NOTIFICATION,
+> 
+> Why Async here ? I am really confused if I am not able to understand
+> the driver or you :)
+> 
+Have removed the flag as it was not required. Thank you for pointing.
+
+>> +     .verify = cpufreq_generic_frequency_table_verify,
+>> +     .target_index = tegra194_cpufreq_set_target,
+>> +     .get = tegra194_get_speed,
+>> +     .init = tegra194_cpufreq_init,
+>> +     .attr = cpufreq_generic_attr,
+>> +};
+>> +
+>> +static void tegra194_cpufreq_free_resources(void)
+>> +{
+>> +     flush_workqueue(read_counters_wq);
+>> +     destroy_workqueue(read_counters_wq);
+>> +}
+>> +
+>> +static struct cpufreq_frequency_table *init_freq_table
+> 
+> Don't break line here, rather break after above *.
+> 
+Done
+
+>> +             (struct platform_device *pdev, struct tegra_bpmp *bpmp,
+>> +              unsigned int cluster_id)
+>> +{
+>> +     struct cpufreq_frequency_table *opp_table;
+> 
+> Please name it freq_table :)
+> 
+Done
+
+>> +     struct mrq_cpu_ndiv_limits_response resp;
+>> +     unsigned int num_freqs, ndiv, delta_ndiv;
+>> +     struct mrq_cpu_ndiv_limits_request req;
+>> +     struct tegra_bpmp_message msg;
+>> +     u16 freq_table_step_size;
+>> +     int err, index;
+>> +
+>> +     memset(&req, 0, sizeof(req));
+>> +     req.cluster_id = cluster_id;
+>> +
+>> +     memset(&msg, 0, sizeof(msg));
+>> +     msg.mrq = MRQ_CPU_NDIV_LIMITS;
+>> +     msg.tx.data = &req;
+>> +     msg.tx.size = sizeof(req);
+>> +     msg.rx.data = &resp;
+>> +     msg.rx.size = sizeof(resp);
+>> +
+>> +     err = tegra_bpmp_transfer(bpmp, &msg);
+>> +     if (err)
+>> +             return ERR_PTR(err);
+>> +
+>> +     /*
+>> +      * Make sure frequency table step is a multiple of mdiv to match
+>> +      * vhint table granularity.
+>> +      */
+>> +     freq_table_step_size = resp.mdiv *
+>> +                     DIV_ROUND_UP(CPUFREQ_TBL_STEP_HZ, resp.ref_clk_hz);
+>> +
+>> +     dev_dbg(&pdev->dev, "cluster %d: frequency table step size: %d\n",
+>> +             cluster_id, freq_table_step_size);
+>> +
+>> +     delta_ndiv = resp.ndiv_max - resp.ndiv_min;
+>> +
+>> +     if (unlikely(delta_ndiv == 0))
+>> +             num_freqs = 1;
+>> +     else
+>> +             /* We store both ndiv_min and ndiv_max hence the +1 */
+>> +             num_freqs = delta_ndiv / freq_table_step_size + 1;
+>> +
+>> +     num_freqs += (delta_ndiv % freq_table_step_size) ? 1 : 0;
+>> +
+>> +     opp_table = devm_kcalloc(&pdev->dev, num_freqs + 1, sizeof(*opp_table),
+>> +                              GFP_KERNEL);
+>> +     if (!opp_table)
+>> +             return ERR_PTR(-ENOMEM);
+>> +
+>> +     for (index = 0, ndiv = resp.ndiv_min;
+>> +                     ndiv < resp.ndiv_max;
+>> +                     index++, ndiv += freq_table_step_size) {
+>> +             opp_table[index].driver_data = ndiv;
+>> +             opp_table[index].frequency = map_ndiv_to_freq(&resp, ndiv);
+>> +     }
+>> +
+>> +     opp_table[index].driver_data = resp.ndiv_max;
+>> +     opp_table[index++].frequency = map_ndiv_to_freq(&resp, resp.ndiv_max);
+>> +     opp_table[index].frequency = CPUFREQ_TABLE_END;
+>> +
+>> +     return opp_table;
+>> +}
+>> +
+>> +static int tegra194_cpufreq_probe(struct platform_device *pdev)
+>> +{
+>> +     struct tegra194_cpufreq_data *data;
+>> +     struct tegra_bpmp *bpmp;
+>> +     int err, i;
+>> +
+>> +     data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+>> +     if (!data)
+>> +             return -ENOMEM;
+>> +
+>> +     data->num_clusters = MAX_CLUSTERS;
+>> +     data->tables = devm_kcalloc(&pdev->dev, data->num_clusters,
+>> +                                 sizeof(*data->tables), GFP_KERNEL);
+>> +     if (!data->tables)
+>> +             return -ENOMEM;
+>> +
+>> +     platform_set_drvdata(pdev, data);
+>> +
+>> +     read_counters_wq = alloc_workqueue("read_counters_wq", __WQ_LEGACY, 1);
+>> +     if (!read_counters_wq) {
+>> +             dev_err(&pdev->dev, "fail to create_workqueue\n");
+>> +             return -EINVAL;
+>> +     }
+>> +
+>> +     bpmp = of_tegra_bpmp_get();
+>> +     if (IS_ERR(bpmp)) {
+>> +             err = PTR_ERR(bpmp);
+>> +             goto err_free_res;
+>> +     }
+>> +
+>> +     for (i = 0; i < data->num_clusters; i++) {
+>> +             data->tables[i] = init_freq_table(pdev, bpmp, i);
+>> +             if (IS_ERR(data->tables[i])) {
+>> +                     err = PTR_ERR(data->tables[i]);
+>> +                     goto put_bpmp;
+>> +             }
+>> +     }
+>> +
+>> +     tegra_bpmp_put(bpmp);
+>> +
+>> +     tegra194_cpufreq_driver.driver_data = data;
+>> +
+>> +     err = cpufreq_register_driver(&tegra194_cpufreq_driver);
+>> +     if (err)
+>> +             goto err_free_res;
+>> +
+>> +     return err;
+>> +
+>> +put_bpmp:
+>> +     tegra_bpmp_put(bpmp);
+>> +err_free_res:
+>> +     tegra194_cpufreq_free_resources();
+>> +     return err;
+>> +}
+>> +
+>> +static int tegra194_cpufreq_remove(struct platform_device *pdev)
+>> +{
+>> +     cpufreq_unregister_driver(&tegra194_cpufreq_driver);
+>> +     tegra194_cpufreq_free_resources();
+>> +
+>> +     return 0;
+>> +}
+>> +
+>> +static struct platform_driver tegra194_cpufreq_platform_driver = {
+>> +     .driver = {
+>> +             .name = "tegra194-cpufreq",
+>> +     },
+>> +     .probe = tegra194_cpufreq_probe,
+>> +     .remove = tegra194_cpufreq_remove,
+>> +};
+>> +
+>> +static int __init tegra_cpufreq_init(void)
+> 
+> I seem to be forgetting this, but should we use __init with modules or
+> not ?
+> 
+Yes
+
+Thankyou for the review. I will send v2 with suggested changes.
+
+> --
+> viresh
+> 
 
