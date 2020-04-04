@@ -2,103 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D65F19E2F8
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 07:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B980F19E347
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 09:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725730AbgDDFOh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Apr 2020 01:14:37 -0400
-Received: from mga07.intel.com ([134.134.136.100]:20416 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725536AbgDDFOh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 4 Apr 2020 01:14:37 -0400
-IronPort-SDR: sNg7+XhwNe7+VMbYDOncI814nOTz8lk4c5mBZ77AYxvD2Lw3W6Lgb5AycpNEUMORaUprk8TT/O
- LJLK1oPTa79A==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2020 22:14:36 -0700
-IronPort-SDR: WsrgfXpQrVQnchJaZq+bi7mBvZ3kcbN+sfxIuXKBCrgtlsXmYOxUjrr4L5qiwFvTUMqURrunEj
- aBRVQCF/7+cg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,342,1580803200"; 
-   d="scan'208";a="360723667"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Apr 2020 22:14:34 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jKb8b-000A3Q-Ph; Sat, 04 Apr 2020 13:14:33 +0800
-Date:   Sat, 4 Apr 2020 13:14:03 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     kbuild-all@lists.01.org, Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 05/14] power: supply: bq25890: fix ADC mode configuration
-Message-ID: <202004041339.5x3xwKVj%lkp@intel.com>
-References: <a1275df1b8de5112d81e4f0b57f34af34a4a0942.1585838678.git.mirq-linux@rere.qmqm.pl>
+        id S1726225AbgDDHbB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Apr 2020 03:31:01 -0400
+Received: from mail-ua1-f66.google.com ([209.85.222.66]:44567 "EHLO
+        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725837AbgDDHbB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Apr 2020 03:31:01 -0400
+Received: by mail-ua1-f66.google.com with SMTP id r47so3604195uad.11
+        for <linux-pm@vger.kernel.org>; Sat, 04 Apr 2020 00:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iN6wacGfdwib+ApYHKZ/FdwkNp4iLTwqPrmNMYd7r8E=;
+        b=XgCyTbZnWC345hsCKy5O82Uyugw36Ruw2EuDhzxddNPaJuxpWG/szVyMl3nKOsOQEw
+         a6BCuJE2um28o68NDCtRThVKI9U4Z/+WRrs5jTdn0gjMLnJVWuNuO04Zq3VNqVjXz6O8
+         xzfXQSNFWneyDUxTm6J90kj5fxDYPWABFp8c46rQsUGTPUvU31Eb8JtyUPP2QnHUKFjS
+         GoEgMZB4zvnj8RChQvLVjKbqBLgm/ja1Pw7rEp8FQ/CceQt+fzgjrZDbFDZT/cOXSXMT
+         LF5uTx2yToS6x+iIPg6I0fNmVw9Oz6cLFMVbIHvgDltGByupCJFd39dk0GsGPBcxD+TS
+         Lt8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iN6wacGfdwib+ApYHKZ/FdwkNp4iLTwqPrmNMYd7r8E=;
+        b=eZG+RRwcpjmA8zXw/Nv47/OFasF3MabumboA5agXJhiu1tW6gKsNGXShbd7Jt9MOfK
+         XFTKhfhtCx/Ep1xcvplqyF6wxVhXN/BbrkE8S+xFo2g8fMTuuODPKUqB10vOO6fsRGQH
+         fN+Rvo+lkaqWYvDX/F0CBwSVCYBtAHgaGsMyq7J4z0/ElPF6008QgHkSW1wVjtySPPzt
+         gY77DTwRxkng6FCJXrehNW8oUuxOcOOjH97u+iQpqYRYSrNcmp1HgPoJMvxuIZeF1lPc
+         AhrCXZnxGguFo2ef5HLaEKW3+MQcXdpvxilFc7NTmMCBK1+AbYSIE0qjJVZcLfmNglac
+         /RIw==
+X-Gm-Message-State: AGi0PubZYV2DqT5+SBV6YJEjnoAV8wtnBfFyUIc+26rp6CexgtLy4eLi
+        VDy58lpVTowjeMTx8fSAtX0oMDHJSRPNjr0znQXsYA==
+X-Google-Smtp-Source: APiQypLxGLnrhOCRwjBuHxBjOcTXenqCe/nppA+193Zt4K2TYnyPUN4lriSlHgW1KlWine7JnWgynUq4FjLwy+MHZTM=
+X-Received: by 2002:ab0:5f90:: with SMTP id b16mr9274182uaj.77.1585985460113;
+ Sat, 04 Apr 2020 00:31:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a1275df1b8de5112d81e4f0b57f34af34a4a0942.1585838678.git.mirq-linux@rere.qmqm.pl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200402142747.8307-1-daniel.lezcano@linaro.org> <20200402142747.8307-3-daniel.lezcano@linaro.org>
+In-Reply-To: <20200402142747.8307-3-daniel.lezcano@linaro.org>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Sat, 4 Apr 2020 13:00:00 +0530
+Message-ID: <CAHLCerOD2sqqQ0o87z7RDmTAzqyk9eDbTMZN92esLRtUHErSBg@mail.gmail.com>
+Subject: Re: [PATCH V2 3/9] thermal: Move internal IPA functions
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi "Michał,
+On Thu, Apr 2, 2020 at 7:58 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> The exported IPA functions are used by the IPA. It is pointless to
+> declare the functions in the thermal.h file.
+>
+> For better self-encapsulation and less impact for the compilation if a
+> change is made on it. Move the code in the thermal core internal
+> header file.
+>
+> As the users depends on THERMAL then it is pointless to have the stub,
+> remove them.
+>
+> Take also the opportunity to fix checkpatch warnings/errors when
+> moving the code around.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-I love your patch! Perhaps something to improve:
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 
-[auto build test WARNING on power-supply/for-next]
-[also build test WARNING on linus/master v5.6 next-20200403]
-[cannot apply to linux/master]
-[if your patch is applied to the wrong git tree, please drop us a note to help
-improve the system. BTW, we also suggest to use '--base' option to specify the
-base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
-
-url:    https://github.com/0day-ci/linux/commits/Micha-Miros-aw/power-supply-bq25890-fix-and-extend/20200404-010738
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.1-188-g79f7ac98-dirty
-        make ARCH=x86_64 allmodconfig
-        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kbuild test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-
-   drivers/power/supply/bq25890_charger.c:381:14: sparse: sparse: undefined identifier 'POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW'
-   drivers/power/supply/bq25890_charger.c:382:14: sparse: sparse: undefined identifier 'POWER_SUPPLY_PROP_OUTPUT_VOLTAGE_NOW'
->> drivers/power/supply/bq25890_charger.c:381:14: sparse: sparse: incompatible types for 'case' statement
-   drivers/power/supply/bq25890_charger.c:382:14: sparse: sparse: incompatible types for 'case' statement
-   drivers/power/supply/bq25890_charger.c:686:23: sparse: sparse: incorrect type in initializer (different modifiers) @@    expected unsigned int enum power_supply_property *properties @@    got unsignunsigned int enum power_supply_property *properties @@
-   drivers/power/supply/bq25890_charger.c:686:23: sparse:    expected unsigned int enum power_supply_property *properties
-   drivers/power/supply/bq25890_charger.c:686:23: sparse:    got unsigned int enum power_supply_property const *
-   drivers/power/supply/bq25890_charger.c:381:14: sparse: sparse: Expected constant expression in case statement
-   drivers/power/supply/bq25890_charger.c:382:14: sparse: sparse: Expected constant expression in case statement
-
-vim +/case +381 drivers/power/supply/bq25890_charger.c
-
-   377	
-   378	static bool bq25890_is_adc_property(enum power_supply_property psp)
-   379	{
-   380		switch (psp) {
- > 381		case POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW:
-   382		case POWER_SUPPLY_PROP_OUTPUT_VOLTAGE_NOW:
-   383		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-   384		case POWER_SUPPLY_PROP_CURRENT_NOW:
-   385			return true;
-   386	
-   387		default:
-   388			return false;
-   389		}
-   390	}
-   391	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> ---
+>  drivers/thermal/thermal_core.h | 13 +++++++++++++
+>  include/linux/thermal.h        | 24 ------------------------
+>  2 files changed, 13 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+> index 5d08ad60d9df..f99551ce9838 100644
+> --- a/drivers/thermal/thermal_core.h
+> +++ b/drivers/thermal/thermal_core.h
+> @@ -46,6 +46,19 @@ struct thermal_attr {
+>         char name[THERMAL_NAME_LENGTH];
+>  };
+>
+> +static inline bool cdev_is_power_actor(struct thermal_cooling_device *cdev)
+> +{
+> +       return cdev->ops->get_requested_power && cdev->ops->state2power &&
+> +               cdev->ops->power2state;
+> +}
+> +
+> +int power_actor_get_max_power(struct thermal_cooling_device *cdev,
+> +                             struct thermal_zone_device *tz, u32 *max_power);
+> +int power_actor_get_min_power(struct thermal_cooling_device *cdev,
+> +                             struct thermal_zone_device *tz, u32 *min_power);
+> +int power_actor_set_power(struct thermal_cooling_device *cdev,
+> +                         struct thermal_instance *ti, u32 power);
+> +
+>  /*
+>   * This structure is used to describe the behavior of
+>   * a certain cooling device on a certain trip point
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 5aa80fb2fb61..e0279f7b43f4 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -399,18 +399,6 @@ void devm_thermal_zone_of_sensor_unregister(struct device *dev,
+>  #endif
+>
+>  #if IS_ENABLED(CONFIG_THERMAL)
+> -static inline bool cdev_is_power_actor(struct thermal_cooling_device *cdev)
+> -{
+> -       return cdev->ops->get_requested_power && cdev->ops->state2power &&
+> -               cdev->ops->power2state;
+> -}
+> -
+> -int power_actor_get_max_power(struct thermal_cooling_device *,
+> -                             struct thermal_zone_device *tz, u32 *max_power);
+> -int power_actor_get_min_power(struct thermal_cooling_device *,
+> -                             struct thermal_zone_device *tz, u32 *min_power);
+> -int power_actor_set_power(struct thermal_cooling_device *,
+> -                         struct thermal_instance *, u32);
+>  struct thermal_zone_device *thermal_zone_device_register(const char *, int, int,
+>                 void *, struct thermal_zone_device_ops *,
+>                 struct thermal_zone_params *, int, int);
+> @@ -447,18 +435,6 @@ struct thermal_instance *get_thermal_instance(struct thermal_zone_device *,
+>  void thermal_cdev_update(struct thermal_cooling_device *);
+>  void thermal_notify_framework(struct thermal_zone_device *, int);
+>  #else
+> -static inline bool cdev_is_power_actor(struct thermal_cooling_device *cdev)
+> -{ return false; }
+> -static inline int power_actor_get_max_power(struct thermal_cooling_device *cdev,
+> -                             struct thermal_zone_device *tz, u32 *max_power)
+> -{ return 0; }
+> -static inline int power_actor_get_min_power(struct thermal_cooling_device *cdev,
+> -                                           struct thermal_zone_device *tz,
+> -                                           u32 *min_power)
+> -{ return -ENODEV; }
+> -static inline int power_actor_set_power(struct thermal_cooling_device *cdev,
+> -                         struct thermal_instance *tz, u32 power)
+> -{ return 0; }
+>  static inline struct thermal_zone_device *thermal_zone_device_register(
+>         const char *type, int trips, int mask, void *devdata,
+>         struct thermal_zone_device_ops *ops,
+> --
+> 2.17.1
+>
