@@ -2,205 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF4619E370
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 10:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B135419E411
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 11:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725837AbgDDI0q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Apr 2020 04:26:46 -0400
-Received: from mga09.intel.com ([134.134.136.24]:48962 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725730AbgDDI0q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 4 Apr 2020 04:26:46 -0400
-IronPort-SDR: 5a4t5BLJaYCB5zf5YsHxMIyPdHqVmOFCsKh7r8XO0LXJjY7ZSD+WHTjYCDfF9C/DIbMn+yngEi
- lbcT2qEfQpvw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2020 01:26:45 -0700
-IronPort-SDR: wyZvYV/McKS3Lqmlf/DuTEqK8YI9Ej0TcDYL43Yh478CV1Nc3J4miouwZmDK0NzBBeiH8n8bPJ
- m9kBRDecEH3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,343,1580803200"; 
-   d="scan'208";a="250394652"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 04 Apr 2020 01:26:43 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jKe8Y-00019x-Lo; Sat, 04 Apr 2020 16:26:42 +0800
-Date:   Sat, 04 Apr 2020 16:25:50 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 3c55e7bed1061c07f3678df7889e35719349dd22
-Message-ID: <5e88448e.Rv0Nqa6k3U2fl3Kn%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725730AbgDDJWi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Apr 2020 05:22:38 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:50244 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725957AbgDDJWi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Apr 2020 05:22:38 -0400
+Received: by mail-wm1-f68.google.com with SMTP id t128so9589700wma.0
+        for <linux-pm@vger.kernel.org>; Sat, 04 Apr 2020 02:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=VaZ61SKUHp7an+3kDV0hcVK7pcsS2BDQgBYtbRGo0Ao=;
+        b=NJitEaM1WiqcZpIHhZWB/JObWP47Di3prSuIuSIPejCSNN3QAqLmhfE61pzotYEY8x
+         oJ4l5GOt4jKn62/YWedpAnJLqG6CEFVdFJGyRSGi0riMYS2mrLdvJJtJlXTtN+p188is
+         JTQpCdffTxuX/JI0sQ5tAqoWgmgIZONOTmsuFYcf3/3TXJeBEr++B0awUpew/4rCHfQu
+         hW6o1N53cYfbRCNMWF29WaWSS5KtgjDYSi+rI5k+wdSAUaTGM1jcp1QRQjmIcpodvwWQ
+         opB7VkF3zWSSe+tPQGh4gBoKSoDoaFOJQPLeHTJ03Su1kbc7gIqROKRPWm56VdjhrGQg
+         ZYFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=VaZ61SKUHp7an+3kDV0hcVK7pcsS2BDQgBYtbRGo0Ao=;
+        b=O8xyPU1KsS9Q+nFIRp5ZYxStHkdWCxVDJJmsURF/+Qa+bFxrAOZlrXoATw0lF0f5ig
+         MYA3W56QurXY+zFqEPp07k+U5T2UApEh/JSQ/M5Igl+1IieA+GBDLfBHYeGrleMgkjwh
+         azwk9AbVk+a/C+OBWKiLWg6+ybZodnurNtII0UgRVS1RMn8witmiG7Evvly+e0WxZvfV
+         O55dVgU8uIM8WtbA+p+nV/qwcRs+5htesqGyMvC3ek8/OdyN3BPEtjU0Q5Z8axWQl7Fo
+         ojNI4lT50IvLnoLtGV1Z6OCYbyFwz5jaJguILFz/OqarnhBus0Afz/pFpzx/UGUhypu/
+         Gjtg==
+X-Gm-Message-State: AGi0PubzXciWI3J7FWf/ox/Pn6ZivjkIMrTUn4XQOPGJ3qgIUNwPY4kh
+        wyYPfATdtYc4h3baAhJhAe6xdw==
+X-Google-Smtp-Source: APiQypLMMEINjoXwAvx3i+IZSgz1cEqky5zi+EArYlzMxHvOb5JG39Y6+gxwHT0+fxVDME/DCELsHw==
+X-Received: by 2002:a1c:6605:: with SMTP id a5mr12936275wmc.32.1585992153686;
+        Sat, 04 Apr 2020 02:22:33 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:b929:c9ac:10ec:b646? ([2a01:e34:ed2f:f020:b929:c9ac:10ec:b646])
+        by smtp.googlemail.com with ESMTPSA id p17sm14720153wmb.30.2020.04.04.02.22.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Apr 2020 02:22:33 -0700 (PDT)
+Subject: Re: [PATCH] Documentation: cpu-idle-cooling: fix diagram for 33% duty
+ cycle
+To:     Sergey Vidishev <sergeyv@yandex-team.ru>,
+        linux-kernel@vger.kernel.org
+Cc:     trivial@kernel.org, Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <2374188.AZIXMmL6Zy@sergeyv-box>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <525c21fd-f89d-97aa-2dc8-05f9bf4f51e2@linaro.org>
+Date:   Sat, 4 Apr 2020 11:22:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <2374188.AZIXMmL6Zy@sergeyv-box>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 3c55e7bed1061c07f3678df7889e35719349dd22  Merge branch 'pm-sleep' into bleeding-edge
+On 03/04/2020 21:12, Sergey Vidishev wrote:
+> Signed-off-by: Sergey Vidishev <sergeyv@yandex-team.ru>
 
-elapsed time: 1358m
+Applied, thanks
 
-configs tested: 145
-configs skipped: 0
+> --- Documentation/driver-api/thermal/cpu-idle-cooling.rst | 4 ++--
+> 1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/driver-api/thermal/cpu-idle-cooling.rst
+> b/ Documentation/driver-api/thermal/cpu-idle-cooling.rst index
+> 9f0016ee4cfb..a1c3edecae00 100644 ---
+> a/Documentation/driver-api/thermal/cpu-idle-cooling.rst +++
+> b/Documentation/driver-api/thermal/cpu-idle-cooling.rst @@ -95,28
+> +95,28 @@ and this variation will modulate the cooling effect.
+>
+> ::
+>
+> ^ | | |-------                 -------
+> |_______|_______________|_______|___________
+>
+> <------> idle  <--------------> running
+>
+> -      <-----------------------------> -              duty cycle
+> 33% +      <---------------------> +          duty cycle 33%
+>
+>
+> ^ | | |-------         -------
+> |_______|_______|_______|___________
+>
+> <------> idle  <------> running
+>
+> <------------->
+>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-arm64                            allyesconfig
-arm64                             allnoconfig
-arm                               allnoconfig
-arm                           efm32_defconfig
-arm                         at91_dt_defconfig
-arm                        shmobile_defconfig
-arm64                               defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                           sunxi_defconfig
-arm                        multi_v7_defconfig
-sparc                            allyesconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                             alldefconfig
-i386                                defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                             alldefconfig
-nios2                         3c120_defconfig
-nios2                         10m50_defconfig
-c6x                        evmc6678_defconfig
-xtensa                          iss_defconfig
-c6x                              allyesconfig
-xtensa                       common_defconfig
-openrisc                 simple_smp_defconfig
-openrisc                    or1ksim_defconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                       h8s-sim_defconfig
-h8300                     edosk2674_defconfig
-m68k                       m5475evb_defconfig
-m68k                             allmodconfig
-h8300                    h8300h-sim_defconfig
-m68k                           sun3_defconfig
-m68k                          multi_defconfig
-arc                                 defconfig
-arc                              allyesconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-mips                             allyesconfig
-mips                         64r6el_defconfig
-mips                              allnoconfig
-mips                           32r2_defconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                generic-64bit_defconfig
-parisc                generic-32bit_defconfig
-parisc                           allyesconfig
-x86_64               randconfig-a003-20200403
-i386                 randconfig-a002-20200403
-x86_64               randconfig-a002-20200403
-x86_64               randconfig-a001-20200403
-i386                 randconfig-a003-20200403
-i386                 randconfig-a001-20200403
-nds32                randconfig-a001-20200403
-m68k                 randconfig-a001-20200403
-alpha                randconfig-a001-20200403
-parisc               randconfig-a001-20200403
-riscv                randconfig-a001-20200403
-sparc64              randconfig-a001-20200403
-h8300                randconfig-a001-20200403
-nios2                randconfig-a001-20200403
-microblaze           randconfig-a001-20200403
-c6x                  randconfig-a001-20200403
-s390                 randconfig-a001-20200403
-xtensa               randconfig-a001-20200403
-csky                 randconfig-a001-20200403
-openrisc             randconfig-a001-20200403
-sh                   randconfig-a001-20200403
-i386                 randconfig-b003-20200403
-x86_64               randconfig-b001-20200403
-i386                 randconfig-b001-20200403
-i386                 randconfig-b002-20200403
-i386                 randconfig-c001-20200403
-i386                 randconfig-c003-20200403
-x86_64               randconfig-c002-20200403
-i386                 randconfig-c002-20200403
-x86_64               randconfig-c001-20200403
-x86_64               randconfig-d001-20200403
-i386                 randconfig-d003-20200403
-i386                 randconfig-d001-20200403
-i386                 randconfig-d002-20200403
-i386                 randconfig-e001-20200403
-x86_64               randconfig-e002-20200403
-i386                 randconfig-e003-20200403
-x86_64               randconfig-e003-20200403
-i386                 randconfig-e002-20200403
-i386                 randconfig-f001-20200403
-i386                 randconfig-f003-20200403
-x86_64               randconfig-f003-20200403
-x86_64               randconfig-f001-20200403
-i386                 randconfig-f002-20200403
-x86_64               randconfig-f002-20200403
-x86_64               randconfig-g003-20200403
-i386                 randconfig-g003-20200403
-x86_64               randconfig-g002-20200403
-i386                 randconfig-g001-20200403
-i386                 randconfig-g002-20200403
-x86_64               randconfig-g001-20200403
-arm64                randconfig-a001-20200403
-sparc                randconfig-a001-20200403
-ia64                 randconfig-a001-20200403
-arc                  randconfig-a001-20200403
-arm                  randconfig-a001-20200403
-powerpc              randconfig-a001-20200403
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-s390                       zfcpdump_defconfig
-s390                          debug_defconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                             alldefconfig
-s390                                defconfig
-sh                          rsk7269_defconfig
-sh                               allmodconfig
-sh                            titan_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                                allnoconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
