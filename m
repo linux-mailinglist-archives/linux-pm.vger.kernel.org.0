@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C230D19E751
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 21:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B9819E754
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Apr 2020 21:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbgDDT3X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 4 Apr 2020 15:29:23 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:2454 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726258AbgDDT3X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Apr 2020 15:29:23 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e88e0040000>; Sat, 04 Apr 2020 12:29:09 -0700
+        id S1726314AbgDDT3c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 4 Apr 2020 15:29:32 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:8269 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726258AbgDDT3c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 4 Apr 2020 15:29:32 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e88dfb70000>; Sat, 04 Apr 2020 12:27:51 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sat, 04 Apr 2020 12:29:22 -0700
+  Sat, 04 Apr 2020 12:29:31 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sat, 04 Apr 2020 12:29:22 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 4 Apr
- 2020 19:29:21 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Sat, 4 Apr 2020 19:29:21 +0000
+        by hqpgpgate101.nvidia.com on Sat, 04 Apr 2020 12:29:31 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 4 Apr
+ 2020 19:29:30 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Sat, 4 Apr 2020 19:29:30 +0000
 Received: from sumitg-l4t.nvidia.com (Not Verified[10.24.37.103]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e88e00e0000>; Sat, 04 Apr 2020 12:29:21 -0700
+        id <B5e88e0170001>; Sat, 04 Apr 2020 12:29:30 -0700
 From:   Sumit Gupta <sumitg@nvidia.com>
 To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
         <catalin.marinas@arm.com>, <will@kernel.org>,
@@ -35,51 +35,114 @@ To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <bbasu@nvidia.com>, <sumitg@nvidia.com>, <mperttunen@nvidia.com>
-Subject: [TEGRA194_CPUFREQ Patch v2 0/3] Add cpufreq driver for Tegra194 
-Date:   Sun, 5 Apr 2020 00:59:04 +0530
-Message-ID: <1586028547-14993-1-git-send-email-sumitg@nvidia.com>
+Subject: [TEGRA194_CPUFREQ Patch v2 1/3] firmware: tegra: adding function to get BPMP data
+Date:   Sun, 5 Apr 2020 00:59:05 +0530
+Message-ID: <1586028547-14993-2-git-send-email-sumitg@nvidia.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1586028547-14993-1-git-send-email-sumitg@nvidia.com>
+References: <1586028547-14993-1-git-send-email-sumitg@nvidia.com>
 X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1586028549; bh=ITK3P8Lpo3/BUJoeRA6qOlDnXfyv8xAa8YmjBZBRX2o=;
+        t=1586028471; bh=WtC++4Md9/b4qc1FTSjjLKQOR4hk6B0Sbkpq1iIzKm8=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         X-NVConfidentiality:MIME-Version:Content-Type;
-        b=O3RWMiL78Yri78v66kd2ilnAGd0zonL7JvmgbMnVo9ZURwhZZRVaYR95PJV8eHXCe
-         0MtuxKwZ5kZBwCtYmJ0qaydDUCpiTEfUIScBK65yM8qzt3areo2cMmRMCw9r8ERlC+
-         jrM+oqV/oLAbi2HreKbIDbKXhOehsbfgVm1Mzhcgps+HeI5sQxJb9AmILbrDto03bv
-         PcqNCG+aL1UTWex68BN0OYJmbyzCaDRNKiMwu3ybZG2NZ0bdLMvefc8Miq1OBPHTP3
-         ScoS5lZAahHg7gJKgtY5RhS7PiOOU4lUxo/TbzP358iH57vFDSJ+muBmHDGuN+OXdH
-         wAw14V+fcMJxQ==
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=dBeLAnAP0rCl2OAsVQh84lzWUE3m9aOYogONUHhMVCvQY07C9ur1irlkyD5L4vrlu
+         k4kLAkuS+BDH7ANs4tVyJbMGFerJVxZlWi6RCyGEiM28EP64t6N0Ek2gjhEVGoTXUJ
+         0PqsMVMp+2BLoQEAKP6hDUGaaYCshiVGT9jndzQ5SzbLKciywoDUHpbaXvXNKfw70f
+         qwRN3lfNFCtJegu7PouuEmJmMIxf/KYyVwgjicUwst8isdY3E0OCTc+WcMkPiqGAMG
+         kEmz57c7NSAKypukUYUckimGCOaomMtIXRmmwrV4TnSLwkJLNrEWOGzi1/4H8+zWeW
+         vNsXv0mrUZyxQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The patch series adds cpufreq driver for Tegra194 SOC.
+Adding new function of_tegra_bpmp_get() to get BPMP data.
+This function can be used by other drivers like cpufreq to
+get BPMP data without adding any property in respective
+drivers DT node.
 
-v1[1] -> v2:
-- Remove cpufreq_lock mutex from tegra194_cpufreq_set_target [Viresh].
-- Remove CPUFREQ_ASYNC_NOTIFICATION flag [Viresh].
-- Remove redundant _begin|end() call from tegra194_cpufreq_set_target.
-- Rename opp_table to freq_table [Viresh].
+Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+---
+ drivers/firmware/tegra/bpmp.c | 38 ++++++++++++++++++++++++++++++++++++++
+ include/soc/tegra/bpmp.h      |  5 +++++
+ 2 files changed, 43 insertions(+)
 
-Sumit Gupta (3):
-  firmware: tegra: adding function to get BPMP data
-  cpufreq: Add Tegra194 cpufreq driver
-  arm64: defconfig: Enable CONFIG_ARM_TEGRA194_CPUFREQ
-
- arch/arm64/configs/defconfig       |   1 +
- drivers/cpufreq/Kconfig.arm        |   6 +
- drivers/cpufreq/Makefile           |   1 +
- drivers/cpufreq/tegra194-cpufreq.c | 412 +++++++++++++++++++++++++++++++++++++
- drivers/firmware/tegra/bpmp.c      |  38 ++++
- include/soc/tegra/bpmp.h           |   5 +
- 6 files changed, 463 insertions(+)
- create mode 100644 drivers/cpufreq/tegra194-cpufreq.c
-
-[1] https://marc.info/?t=157539452300001&r=1&w=2
+diff --git a/drivers/firmware/tegra/bpmp.c b/drivers/firmware/tegra/bpmp.c
+index 6741fcd..9c3d7f1 100644
+--- a/drivers/firmware/tegra/bpmp.c
++++ b/drivers/firmware/tegra/bpmp.c
+@@ -38,6 +38,44 @@ channel_to_ops(struct tegra_bpmp_channel *channel)
+ 	return bpmp->soc->ops;
+ }
+ 
++struct tegra_bpmp *of_tegra_bpmp_get(void)
++{
++	struct platform_device *pdev;
++	struct device_node *bpmp_dev;
++	struct tegra_bpmp *bpmp;
++
++	/* Check for bpmp device status in DT */
++	bpmp_dev = of_find_compatible_node(NULL, NULL, "nvidia,tegra186-bpmp");
++	if (!bpmp_dev) {
++		bpmp = ERR_PTR(-ENODEV);
++		goto err_out;
++	}
++	if (!of_device_is_available(bpmp_dev)) {
++		bpmp = ERR_PTR(-ENODEV);
++		goto err_put;
++	}
++
++	pdev = of_find_device_by_node(bpmp_dev);
++	if (!pdev) {
++		bpmp = ERR_PTR(-ENODEV);
++		goto err_put;
++	}
++
++	bpmp = platform_get_drvdata(pdev);
++	if (!bpmp) {
++		bpmp = ERR_PTR(-EPROBE_DEFER);
++		put_device(&pdev->dev);
++		goto err_put;
++	}
++
++	return bpmp;
++err_put:
++	of_node_put(bpmp_dev);
++err_out:
++	return bpmp;
++}
++EXPORT_SYMBOL_GPL(of_tegra_bpmp_get);
++
+ struct tegra_bpmp *tegra_bpmp_get(struct device *dev)
+ {
+ 	struct platform_device *pdev;
+diff --git a/include/soc/tegra/bpmp.h b/include/soc/tegra/bpmp.h
+index f2604e9..21402d9 100644
+--- a/include/soc/tegra/bpmp.h
++++ b/include/soc/tegra/bpmp.h
+@@ -107,6 +107,7 @@ struct tegra_bpmp_message {
+ };
+ 
+ #if IS_ENABLED(CONFIG_TEGRA_BPMP)
++struct tegra_bpmp *of_tegra_bpmp_get(void);
+ struct tegra_bpmp *tegra_bpmp_get(struct device *dev);
+ void tegra_bpmp_put(struct tegra_bpmp *bpmp);
+ int tegra_bpmp_transfer_atomic(struct tegra_bpmp *bpmp,
+@@ -122,6 +123,10 @@ void tegra_bpmp_free_mrq(struct tegra_bpmp *bpmp, unsigned int mrq,
+ 			 void *data);
+ bool tegra_bpmp_mrq_is_supported(struct tegra_bpmp *bpmp, unsigned int mrq);
+ #else
++static inline struct tegra_bpmp *of_tegra_bpmp_get(void)
++{
++	return ERR_PTR(-ENOTSUPP);
++}
+ static inline struct tegra_bpmp *tegra_bpmp_get(struct device *dev)
+ {
+ 	return ERR_PTR(-ENOTSUPP);
 -- 
 2.7.4
 
