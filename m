@@ -2,395 +2,221 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF9B19EC9B
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Apr 2020 18:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8A519ECBB
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Apr 2020 18:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726918AbgDEQ2i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Apr 2020 12:28:38 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:12610 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727009AbgDEQ2i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Apr 2020 12:28:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1586104114;
-        s=strato-dkim-0002; d=gerhold.net;
-        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=TmOndsBzp3Rc3Ftu5hLq79dx5VIC3cpVya3P+Dtp6gk=;
-        b=UZutSowzYpX0aHb/1fhADwbyMwu0SnvELA8U6BAChzjOOdD83nbqdTp2Q1TSh2ZUNt
-        Fn4m8P+cqgOAWjhBtDxE4Ade1xZc94QfY4TzmlirYZJobQgbjemfIrmAzMxRMPw9E2GM
-        t4nRxbxmttmAzM6mDo36XuEPDOmCRwTTJtM1iNznV0w+HxrEG9I8a2NEaMNKB8JkkEeD
-        TjB0H3smTMYljt+63bBVTP7/phP9fJCjWjnub9N9KjeSuumaA9S3sH0bKQgOnQEUUW6n
-        EYFpJyJgHeTMD9KG/KjQNwAaKv/v7t5j4ck97vG8/mSED74u69X3ICZ4BfuWgJBjLSn5
-        CSCA==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVORvLd4SsytBXS7IYBkLahKxB526NfqU="
-X-RZG-CLASS-ID: mo00
-Received: from localhost.localdomain
-        by smtp.strato.de (RZmta 46.2.1 DYNA|AUTH)
-        with ESMTPSA id u043b8w35GMVxOu
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Sun, 5 Apr 2020 18:22:31 +0200 (CEST)
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     linux-pm@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        id S1727593AbgDEQvj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Apr 2020 12:51:39 -0400
+Received: from mout.web.de ([212.227.17.12]:47043 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726669AbgDEQvj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 5 Apr 2020 12:51:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1586105441;
+        bh=0YkSt5BcPX9ZJY8/TNdXEE7Js5ClyUIYnLeTWxyJu/Y=;
+        h=X-UI-Sender-Class:To:From:Subject:Cc:Date;
+        b=H6dpbL4NJlpbw1+XZb+6L/eGOman52ihDO/AIarLK0MtETnB8q5WFWzHHImwj0WSk
+         Ih26agawpGTRQFDoKCZ14NYfjK4xK31f+jaGdkWOuettOhLJYYi7gA2eRt1EfHaKqU
+         pNeq29ypL2mvTSX/Jbtos5WFq/+ela1HeknA6nbA=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.3] ([93.131.99.70]) by smtp.web.de (mrweb103
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0MPHKO-1jPYKf28rg-004Vck; Sun, 05
+ Apr 2020 18:50:41 +0200
+To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-omap@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Allison Randal <allison@lohutok.net>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Clark Williams <williams@redhat.com>,
+        Colin Ian King <colin.king@canonical.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, Luca Weiss <luca@z3ntu.xyz>,
-        Stephan Gerhold <stephan@gerhold.net>
-Subject: [PATCH] cpuidle: Convert Qualcomm SPM driver to a generic CPUidle driver
-Date:   Sun,  5 Apr 2020 18:20:52 +0200
-Message-Id: <20200405162052.53622-1-stephan@gerhold.net>
-X-Mailer: git-send-email 2.26.0
+        Eduardo Valentin <edubezval@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Keerthy <j-keerthy@ti.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Pascal Paillet <p.paillet@st.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Zhang Rui <rui.zhang@intel.com>
+From:   Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] thermal: Delete an error message in four functions
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Tang Bin <tangbin@cmss.chinamobile.com>
+Message-ID: <05f49ae7-5cc7-d6a0-fc3d-abaf2a0b373c@web.de>
+Date:   Sun, 5 Apr 2020 18:50:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:9ZhlZktT91pfbtbXRm+mTr0dzyW0rFCf8ipUz74Hg6LrC70wyT3
+ lgjget/+5B+v9e+XtCQhsiEWa3oYKGUxLwy/+16UFw9QBT7VDwPxyM6dCiB1jioWi3d4Dun
+ ML0SUPIN7MIt4nv1gt3EZ8XCxPkEg46lkgVeLOb6MWzJTeAhBrn8nYSpEZW5GnakmEhF5Yp
+ huyo983s7iSI3UbIrdpJw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:m0U7kNMqr14=:dv3CgYtVpGQVFYuC0r/Vx5
+ YNeBV5WDA756pnx2kjt5nIWU8boJcoOjypBLmzLgJTpy9mXm4PEJRAG4QN6/pxXQyRnTbZSbI
+ A0NSZmwTFCfOnYC5iYQSnZWrbaEpzfjZhgUf/SZ0mDMXS4ftkKTTuatf2RSzQCZFoejdz9Hw8
+ cm6OaB28hgMvLG4tUDaMEMutfixS6P/ohSg7ugLasRdUx8kzm/Qrg3soCoPVwSTIXgo2iKwHi
+ F8VRVy11ZkhsPDlAjl0ERPVu/YuAcvrs3kT9PbnJ7lyeHyuc9vOwXoEbAR0fgA429xEpM7pT3
+ oTRQbKPsbkhQzwj0k7dsk9Wz16j4qoG9QbkEiMg/h9WuP16Nm4j852KFaCSCKia4GdEbwVbeE
+ 7N6ZUupaAuDHaFevdBcdsg8tJviighjDxUA96PREW8pypalaTO1nUACHvnnpDdHH1W6POTp+o
+ r6Cjyqc9Twwm58iRfnlhU366rzje1enGS4siPXJszpwIlNry/qatNplAW+2evmNgtQBSIOT9B
+ B4uqQ11pfJMX/1ROnA93I247aT/Kdktt9Vc2DJG3CK9yGV0kfvkeDCKjfdmR7cfpglWmysTKv
+ xeIaEVjFjvXRdVtRRkEl4Riqh24X01nSyLTFfmklc6e6JeE0qAe9wzNHxZbFKG8UJk9wLDc0R
+ dMO/hDizFjqHSLvI19DJhyuxEpP83mXnL78A92I26CE4vNimkhLgN+8tfJUyGpYA8TPxU08bH
+ bHlenCrSNcdXdsKJxb/stLj7AX5SW17uIGmUY3ItFgPtX/2STeKclMhWil+oPbWNVQqtJPpwJ
+ guIxLqK89gBeAOme1CdIksGr5p96h8EBBJh0KKLhfu7MhwRaodqgMW3hluCGas/J+aTEE3ktM
+ G1acyNfb7eYn7tA6M56GOEVNqLaelktdgauk+cioS9P84pnjpI1YvktbcWUk9h8ke6izj+3RU
+ SmAc4OCmJXgIy0fLtxrJQ2Nr/TTJnV2sTWTLV6XJwpxtpbKGwmP2I+65/T+OLVteWFzOqFTaP
+ JnrI6EoSiuyIQvefCzps9lmScsgMoYBfJ/S206lHv+yGItg20lsqCBlN1h+neJANSlWNdlwug
+ ALnBiWq29KkDZZkosMSV2GIdN/k45SSWZ96K7cj+JNsF0+WJHI1nVzHAKHdkL3TSPejo6s9Ig
+ RdWFZvEaXDMhGoiYr9Xt7O0bDcrkWglBcPV/Em/29BmGbYm+uRs25qy3T7eW1nZQfz3lUYmMg
+ EuHOTflLBO5PdtXHm
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Qualcomm SPM cpuidle driver seems to be the last driver still
-using the generic ARM CPUidle infrastructure.
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Sun, 5 Apr 2020 18:35:16 +0200
 
-Converting it actually allows us to simplify the driver,
-and we end up being able to remove more lines than adding new ones:
+The function =E2=80=9Cplatform_get_irq=E2=80=9D can log an error already.
+Thus omit redundant messages for the exception handling in the
+calling functions.
 
-  - We can parse the CPUidle states in the device tree directly
-    with dt_idle_states (and don't need to duplicate that
-    functionality into the spm driver).
+This issue was detected by using the Coccinelle software.
 
-  - Each "saw" device managed by the SPM driver now directly
-    registers its own cpuidle driver, removing the need for
-    any global (per cpu) state.
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/thermal/rockchip_thermal.c          | 4 +---
+ drivers/thermal/st/st_thermal_memmap.c      | 4 +---
+ drivers/thermal/st/stm_thermal.c            | 4 +---
+ drivers/thermal/ti-soc-thermal/ti-bandgap.c | 5 ++---
+ 4 files changed, 5 insertions(+), 12 deletions(-)
 
-The device tree binding is the same, so the driver stays
-compatible with all old device trees.
+diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip=
+_thermal.c
+index 7c1a8bccdcba..15a71ecc916c 100644
+=2D-- a/drivers/thermal/rockchip_thermal.c
++++ b/drivers/thermal/rockchip_thermal.c
+@@ -1241,10 +1241,8 @@ static int rockchip_thermal_probe(struct platform_d=
+evice *pdev)
+ 		return -ENXIO;
 
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
----
-Related change for the PSCI cpuidle driver:
-  https://lore.kernel.org/linux-pm/cover.1565348376.git.lorenzo.pieralisi@arm.com/
-(converting the QCOM SPM driver was mentioned there)
----
- MAINTAINERS                                   |   1 +
- drivers/cpuidle/Kconfig.arm                   |  13 ++
- drivers/cpuidle/Makefile                      |   1 +
- .../qcom/spm.c => cpuidle/cpuidle-qcom-spm.c} | 138 +++++++-----------
- drivers/soc/qcom/Kconfig                      |  10 --
- drivers/soc/qcom/Makefile                     |   1 -
- 6 files changed, 67 insertions(+), 97 deletions(-)
- rename drivers/{soc/qcom/spm.c => cpuidle/cpuidle-qcom-spm.c} (75%)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 88bf75088b5a..fb4a347f874d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2208,6 +2208,7 @@ F:	drivers/*/*/qcom*
- F:	drivers/*/pm8???-*
- F:	drivers/bluetooth/btqcomsmd.c
- F:	drivers/clocksource/timer-qcom.c
-+F:	drivers/cpuidle/cpuidle-qcom-spm.c
- F:	drivers/extcon/extcon-qcom*
- F:	drivers/iommu/msm*
- F:	drivers/i2c/busses/i2c-qup.c
-diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
-index 62272ecfa771..51cf487d54d4 100644
---- a/drivers/cpuidle/Kconfig.arm
-+++ b/drivers/cpuidle/Kconfig.arm
-@@ -86,3 +86,16 @@ config ARM_MVEBU_V7_CPUIDLE
- 	depends on (ARCH_MVEBU || COMPILE_TEST) && !ARM64
- 	help
- 	  Select this to enable cpuidle on Armada 370, 38x and XP processors.
-+
-+config ARM_QCOM_SPM_CPUIDLE
-+	bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
-+	depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64
-+	select ARM_CPU_SUSPEND
-+	select CPU_IDLE_MULTIPLE_DRIVERS
-+	select DT_IDLE_STATES
-+	select QCOM_SCM
-+	help
-+	  Select this to enable cpuidle for Qualcomm processors.
-+	  The Subsystem Power Manager (SPM) controls low power modes for the
-+	  CPU and L2 cores. It interface with various system drivers to put
-+	  the cores in low power modes.
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index cc8c769d7fa9..1a7dc93671b4 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -24,6 +24,7 @@ obj-$(CONFIG_ARM_CPUIDLE)		+= cpuidle-arm.o
- obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle_psci.o
- cpuidle_psci-y				:= cpuidle-psci.o
- cpuidle_psci-$(CONFIG_PM_GENERIC_DOMAINS_OF) += cpuidle-psci-domain.o
-+obj-$(CONFIG_ARM_QCOM_SPM_CPUIDLE)	+= cpuidle-qcom-spm.o
- 
- ###############################################################################
- # MIPS drivers
-diff --git a/drivers/soc/qcom/spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-similarity index 75%
-rename from drivers/soc/qcom/spm.c
-rename to drivers/cpuidle/cpuidle-qcom-spm.c
-index 8e10e02c6aa5..adf91a6e4d7d 100644
---- a/drivers/soc/qcom/spm.c
-+++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-@@ -19,10 +19,11 @@
- #include <linux/cpu_pm.h>
- #include <linux/qcom_scm.h>
- 
--#include <asm/cpuidle.h>
- #include <asm/proc-fns.h>
- #include <asm/suspend.h>
- 
-+#include "dt_idle_states.h"
-+
- #define MAX_PMIC_DATA		2
- #define MAX_SEQ_DATA		64
- #define SPM_CTL_INDEX		0x7f
-@@ -62,6 +63,7 @@ struct spm_reg_data {
- };
- 
- struct spm_driver_data {
-+	struct cpuidle_driver cpuidle_driver;
- 	void __iomem *reg_base;
- 	const struct spm_reg_data *reg_data;
- };
-@@ -107,11 +109,6 @@ static const struct spm_reg_data spm_reg_8064_cpu = {
- 	.start_index[PM_SLEEP_MODE_SPC] = 2,
- };
- 
--static DEFINE_PER_CPU(struct spm_driver_data *, cpu_spm_drv);
--
--typedef int (*idle_fn)(void);
--static DEFINE_PER_CPU(idle_fn*, qcom_idle_ops);
--
- static inline void spm_register_write(struct spm_driver_data *drv,
- 					enum spm_reg reg, u32 val)
- {
-@@ -172,10 +169,9 @@ static int qcom_pm_collapse(unsigned long int unused)
- 	return -1;
- }
- 
--static int qcom_cpu_spc(void)
-+static int qcom_cpu_spc(struct spm_driver_data *drv)
- {
- 	int ret;
--	struct spm_driver_data *drv = __this_cpu_read(cpu_spm_drv);
- 
- 	spm_set_low_power_mode(drv, PM_SLEEP_MODE_SPC);
- 	ret = cpu_suspend(0, qcom_pm_collapse);
-@@ -190,94 +186,49 @@ static int qcom_cpu_spc(void)
- 	return ret;
- }
- 
--static int qcom_idle_enter(unsigned long index)
-+static int spm_enter_idle_state(struct cpuidle_device *dev,
-+				struct cpuidle_driver *drv, int idx)
- {
--	return __this_cpu_read(qcom_idle_ops)[index]();
-+	struct spm_driver_data *data = container_of(drv, struct spm_driver_data,
-+						    cpuidle_driver);
-+
-+	return CPU_PM_CPU_IDLE_ENTER_PARAM(qcom_cpu_spc, idx, data);
- }
- 
--static const struct of_device_id qcom_idle_state_match[] __initconst = {
--	{ .compatible = "qcom,idle-state-spc", .data = qcom_cpu_spc },
-+static struct cpuidle_driver qcom_spm_idle_driver = {
-+	.name = "qcom_spm",
-+	.owner = THIS_MODULE,
-+	.states[0] = {
-+		.enter			= spm_enter_idle_state,
-+		.exit_latency		= 1,
-+		.target_residency	= 1,
-+		.power_usage		= UINT_MAX,
-+		.name			= "WFI",
-+		.desc			= "ARM WFI",
-+	}
-+};
-+
-+static const struct of_device_id qcom_idle_state_match[] = {
-+	{ .compatible = "qcom,idle-state-spc", .data = spm_enter_idle_state },
- 	{ },
- };
- 
--static int __init qcom_cpuidle_init(struct device_node *cpu_node, int cpu)
-+static int spm_cpuidle_init(struct cpuidle_driver *drv, int cpu)
- {
--	const struct of_device_id *match_id;
--	struct device_node *state_node;
--	int i;
--	int state_count = 1;
--	idle_fn idle_fns[CPUIDLE_STATE_MAX];
--	idle_fn *fns;
--	cpumask_t mask;
--	bool use_scm_power_down = false;
--
--	if (!qcom_scm_is_available())
--		return -EPROBE_DEFER;
--
--	for (i = 0; ; i++) {
--		state_node = of_parse_phandle(cpu_node, "cpu-idle-states", i);
--		if (!state_node)
--			break;
--
--		if (!of_device_is_available(state_node))
--			continue;
--
--		if (i == CPUIDLE_STATE_MAX) {
--			pr_warn("%s: cpuidle states reached max possible\n",
--					__func__);
--			break;
--		}
--
--		match_id = of_match_node(qcom_idle_state_match, state_node);
--		if (!match_id)
--			return -ENODEV;
--
--		idle_fns[state_count] = match_id->data;
--
--		/* Check if any of the states allow power down */
--		if (match_id->data == qcom_cpu_spc)
--			use_scm_power_down = true;
--
--		state_count++;
--	}
--
--	if (state_count == 1)
--		goto check_spm;
--
--	fns = devm_kcalloc(get_cpu_device(cpu), state_count, sizeof(*fns),
--			GFP_KERNEL);
--	if (!fns)
--		return -ENOMEM;
--
--	for (i = 1; i < state_count; i++)
--		fns[i] = idle_fns[i];
-+	int ret;
- 
--	if (use_scm_power_down) {
--		/* We have atleast one power down mode */
--		cpumask_clear(&mask);
--		cpumask_set_cpu(cpu, &mask);
--		qcom_scm_set_warm_boot_addr(cpu_resume_arm, &mask);
--	}
-+	memcpy(drv, &qcom_spm_idle_driver, sizeof(*drv));
-+	drv->cpumask = (struct cpumask *)cpumask_of(cpu);
- 
--	per_cpu(qcom_idle_ops, cpu) = fns;
-+	/* Parse idle states from device tree */
-+	ret = dt_init_idle_driver(drv, qcom_idle_state_match, 1);
-+	if (ret <= 0)
-+		return ret ? : -ENODEV;
- 
--	/*
--	 * SPM probe for the cpu should have happened by now, if the
--	 * SPM device does not exist, return -ENXIO to indicate that the
--	 * cpu does not support idle states.
--	 */
--check_spm:
--	return per_cpu(cpu_spm_drv, cpu) ? 0 : -ENXIO;
-+	/* We have atleast one power down mode */
-+	return qcom_scm_set_warm_boot_addr(cpu_resume_arm, drv->cpumask);
- }
- 
--static const struct cpuidle_ops qcom_cpuidle_ops __initconst = {
--	.suspend = qcom_idle_enter,
--	.init = qcom_cpuidle_init,
--};
--
--CPUIDLE_METHOD_OF_DECLARE(qcom_idle_v1, "qcom,kpss-acc-v1", &qcom_cpuidle_ops);
--CPUIDLE_METHOD_OF_DECLARE(qcom_idle_v2, "qcom,kpss-acc-v2", &qcom_cpuidle_ops);
--
- static struct spm_driver_data *spm_get_drv(struct platform_device *pdev,
- 		int *spm_cpu)
- {
-@@ -323,11 +274,15 @@ static int spm_dev_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	const struct of_device_id *match_id;
- 	void __iomem *addr;
--	int cpu;
-+	int cpu, ret;
-+
-+	if (!qcom_scm_is_available())
-+		return -EPROBE_DEFER;
- 
- 	drv = spm_get_drv(pdev, &cpu);
- 	if (!drv)
+ 	irq =3D platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		dev_err(&pdev->dev, "no irq resource?\n");
++	if (irq < 0)
  		return -EINVAL;
-+	platform_set_drvdata(pdev, drv);
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	drv->reg_base = devm_ioremap_resource(&pdev->dev, res);
-@@ -340,6 +295,10 @@ static int spm_dev_probe(struct platform_device *pdev)
- 
- 	drv->reg_data = match_id->data;
- 
-+	ret = spm_cpuidle_init(&drv->cpuidle_driver, cpu);
-+	if (ret)
-+		return ret;
+-	}
+
+ 	thermal =3D devm_kzalloc(&pdev->dev, sizeof(struct rockchip_thermal_data=
+),
+ 			       GFP_KERNEL);
+diff --git a/drivers/thermal/st/st_thermal_memmap.c b/drivers/thermal/st/s=
+t_thermal_memmap.c
+index a824b78dabf8..a0114452d11f 100644
+=2D-- a/drivers/thermal/st/st_thermal_memmap.c
++++ b/drivers/thermal/st/st_thermal_memmap.c
+@@ -94,10 +94,8 @@ static int st_mmap_register_enable_irq(struct st_therma=
+l_sensor *sensor)
+ 	int ret;
+
+ 	sensor->irq =3D platform_get_irq(pdev, 0);
+-	if (sensor->irq < 0) {
+-		dev_err(dev, "failed to register IRQ\n");
++	if (sensor->irq < 0)
+ 		return sensor->irq;
+-	}
+
+ 	ret =3D devm_request_threaded_irq(dev, sensor->irq,
+ 					NULL, st_mmap_thermal_trip_handler,
+diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_the=
+rmal.c
+index 9314e3df6a42..331e2b768df5 100644
+=2D-- a/drivers/thermal/st/stm_thermal.c
++++ b/drivers/thermal/st/stm_thermal.c
+@@ -385,10 +385,8 @@ static int stm_register_irq(struct stm_thermal_sensor=
+ *sensor)
+ 	int ret;
+
+ 	sensor->irq =3D platform_get_irq(pdev, 0);
+-	if (sensor->irq < 0) {
+-		dev_err(dev, "%s: Unable to find IRQ\n", __func__);
++	if (sensor->irq < 0)
+ 		return sensor->irq;
+-	}
+
+ 	ret =3D devm_request_threaded_irq(dev, sensor->irq,
+ 					NULL,
+diff --git a/drivers/thermal/ti-soc-thermal/ti-bandgap.c b/drivers/thermal=
+/ti-soc-thermal/ti-bandgap.c
+index 263b0420fbe4..ab19ceff6e2a 100644
+=2D-- a/drivers/thermal/ti-soc-thermal/ti-bandgap.c
++++ b/drivers/thermal/ti-soc-thermal/ti-bandgap.c
+@@ -772,10 +772,9 @@ static int ti_bandgap_talert_init(struct ti_bandgap *=
+bgp,
+ 	int ret;
+
+ 	bgp->irq =3D platform_get_irq(pdev, 0);
+-	if (bgp->irq < 0) {
+-		dev_err(&pdev->dev, "get_irq failed\n");
++	if (bgp->irq < 0)
+ 		return bgp->irq;
+-	}
 +
- 	/* Write the SPM sequences first.. */
- 	addr = drv->reg_base + drv->reg_data->reg_offset[SPM_REG_SEQ_ENTRY];
- 	__iowrite32_copy(addr, drv->reg_data->seq,
-@@ -362,13 +321,20 @@ static int spm_dev_probe(struct platform_device *pdev)
- 	/* Set up Standby as the default low power mode */
- 	spm_set_low_power_mode(drv, PM_SLEEP_MODE_STBY);
- 
--	per_cpu(cpu_spm_drv, cpu) = drv;
-+	return cpuidle_register(&drv->cpuidle_driver, NULL);
-+}
-+
-+static int spm_dev_remove(struct platform_device *pdev)
-+{
-+	struct spm_driver_data *drv = platform_get_drvdata(pdev);
- 
-+	cpuidle_unregister(&drv->cpuidle_driver);
- 	return 0;
- }
- 
- static struct platform_driver spm_driver = {
- 	.probe = spm_dev_probe,
-+	.remove = spm_dev_remove,
- 	.driver = {
- 		.name = "saw",
- 		.of_match_table = spm_match_table,
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index d0a73e76d563..3efccf9e09f5 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -76,16 +76,6 @@ config QCOM_OCMEM
- 	  requirements. This is typically used by the GPU, camera/video, and
- 	  audio components on some Snapdragon SoCs.
- 
--config QCOM_PM
--	bool "Qualcomm Power Management"
--	depends on ARCH_QCOM && !ARM64
--	select ARM_CPU_SUSPEND
--	select QCOM_SCM
--	help
--	  QCOM Platform specific power driver to manage cores and L2 low power
--	  modes. It interface with various system drivers to put the cores in
--	  low power modes.
--
- config QCOM_QMI_HELPERS
- 	tristate
- 	depends on ARCH_QCOM || COMPILE_TEST
-diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-index 9fb35c8a495e..2366424a061f 100644
---- a/drivers/soc/qcom/Makefile
-+++ b/drivers/soc/qcom/Makefile
-@@ -7,7 +7,6 @@ obj-$(CONFIG_QCOM_GLINK_SSR) +=	glink_ssr.o
- obj-$(CONFIG_QCOM_GSBI)	+=	qcom_gsbi.o
- obj-$(CONFIG_QCOM_MDT_LOADER)	+= mdt_loader.o
- obj-$(CONFIG_QCOM_OCMEM)	+= ocmem.o
--obj-$(CONFIG_QCOM_PM)	+=	spm.o
- obj-$(CONFIG_QCOM_QMI_HELPERS)	+= qmi_helpers.o
- qmi_helpers-y	+= qmi_encdec.o qmi_interface.o
- obj-$(CONFIG_QCOM_RMTFS_MEM)	+= rmtfs_mem.o
--- 
+ 	ret =3D request_threaded_irq(bgp->irq, NULL,
+ 				   ti_bandgap_talert_irq_handler,
+ 				   IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
+=2D-
 2.26.0
 
