@@ -2,155 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAEA19F549
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 13:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 169F619F558
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 14:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727806AbgDFL6q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Apr 2020 07:58:46 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:42720 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727614AbgDFL6o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Apr 2020 07:58:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=qaqepCPg8Rs1dJnIiISXKi9Db9ulnrlsuqyzXsNq9N0=; b=uND0BZKqEj4sXLG5ufE/jQSjWH
-        uXDlJ2C75WOsSYz5iDs2e/NdXVtSDtCeT++1Mv4cd577cKul5RbAS3S+FCQwzDv3AIEtBhj3BPT+g
-        Vq3xrgDGVrvI6GZYp64yEgW0V8KPX8uTeI7/pn15gAC/M4r+LH+MYic3dHWFbFS8/suCiwYmdpKdv
-        fzeEac/AivnkZak7jVR23xyZ1m5j2mfC5tV7TOhM1qCMoZsOtpvC4Ta8JG/3ht3TsF7xoWBTiXnTu
-        GpyWJ0D6M0xr3RH6g8MBlJb22rpFeOMKm9tLREp/vh3+KMo1J7jUnnMKaEoue7kPCk/tJp9Vpirc2
-        vA8KwMTA==;
-Received: from [2001:4bb8:180:5765:7ca0:239a:fe26:fec2] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jLQOo-0008OV-1t; Mon, 06 Apr 2020 11:58:42 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] PM / sleep: handle the compat case in snapshot_set_swap_area
-Date:   Mon,  6 Apr 2020 13:58:35 +0200
-Message-Id: <20200406115835.1150002-3-hch@lst.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200406115835.1150002-1-hch@lst.de>
-References: <20200406115835.1150002-1-hch@lst.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+        id S1727737AbgDFMDT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Apr 2020 08:03:19 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:40070 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726329AbgDFMDT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 6 Apr 2020 08:03:19 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A02FB1A0DCF;
+        Mon,  6 Apr 2020 14:03:16 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 85B791A0DC9;
+        Mon,  6 Apr 2020 14:03:16 +0200 (CEST)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id CAD88204E6;
+        Mon,  6 Apr 2020 14:03:14 +0200 (CEST)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Alexandre Bailon <abailon@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Silvano di Ninno <silvano.dininno@nxp.com>,
+        linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/8] interconnect: Add imx support via devfreq
+Date:   Mon,  6 Apr 2020 15:03:05 +0300
+Message-Id: <cover.1586174566.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use in_compat_syscall to copy directly from the 32-bit ABI structure.
+This series adds interconnect scaling support for imx8m series chips. It uses a
+per-SOC interconnect provider layered on top of multiple instances of devfreq
+for scalable nodes along the interconnect.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- kernel/power/user.c | 54 ++++++++++++++++++---------------------------
- 1 file changed, 22 insertions(+), 32 deletions(-)
+Existing qcom interconnect providers mostly translate bandwidth requests into
+firmware calls but equivalent firmware on imx8m is much thinner. Scaling
+support for individual nodes is implemented as distinct devfreq drivers
+instead.
 
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index 0cb555f526e4..7959449765d9 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -196,28 +196,44 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
- 	return res;
- }
- 
-+struct compat_resume_swap_area {
-+	compat_loff_t offset;
-+	u32 dev;
-+} __packed;
-+
- static int snapshot_set_swap_area(struct snapshot_data *data,
- 		void __user *argp)
- {
--	struct resume_swap_area swap_area;
- 	sector_t offset;
- 	dev_t swdev;
- 
- 	if (swsusp_swap_in_use())
- 		return -EPERM;
--	if (copy_from_user(&swap_area, argp, sizeof(swap_area)))
--		return -EFAULT;
-+
-+	if (in_compat_syscall()) {
-+		struct compat_resume_swap_area swap_area;
-+
-+		if (copy_from_user(&swap_area, argp, sizeof(swap_area)))
-+			return -EFAULT;
-+		swdev = new_decode_dev(swap_area.dev);
-+		offset = swap_area.offset;
-+	} else {
-+		struct resume_swap_area swap_area;
-+
-+		if (copy_from_user(&swap_area, argp, sizeof(swap_area)))
-+			return -EFAULT;
-+		swdev = new_decode_dev(swap_area.dev);
-+		offset = swap_area.offset;
-+	}
- 
- 	/*
- 	 * User space encodes device types as two-byte values,
- 	 * so we need to recode them
- 	 */
--	swdev = new_decode_dev(swap_area.dev);
- 	if (!swdev) {
- 		data->swap = -1;
- 		return -EINVAL;
- 	}
--	offset = swap_area.offset;
- 	data->swap = swap_type_of(swdev, offset, NULL);
- 	if (data->swap < 0)
- 		return -ENODEV;
-@@ -394,12 +410,6 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
- }
- 
- #ifdef CONFIG_COMPAT
--
--struct compat_resume_swap_area {
--	compat_loff_t offset;
--	u32 dev;
--} __packed;
--
- static long
- snapshot_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- {
-@@ -410,33 +420,13 @@ snapshot_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 	case SNAPSHOT_AVAIL_SWAP_SIZE:
- 	case SNAPSHOT_ALLOC_SWAP_PAGE:
- 	case SNAPSHOT_CREATE_IMAGE:
-+	case SNAPSHOT_SET_SWAP_AREA:
- 		return snapshot_ioctl(file, cmd,
- 				      (unsigned long) compat_ptr(arg));
--
--	case SNAPSHOT_SET_SWAP_AREA: {
--		struct compat_resume_swap_area __user *u_swap_area =
--			compat_ptr(arg);
--		struct resume_swap_area swap_area;
--		mm_segment_t old_fs;
--		int err;
--
--		err = get_user(swap_area.offset, &u_swap_area->offset);
--		err |= get_user(swap_area.dev, &u_swap_area->dev);
--		if (err)
--			return -EFAULT;
--		old_fs = get_fs();
--		set_fs(KERNEL_DS);
--		err = snapshot_ioctl(file, SNAPSHOT_SET_SWAP_AREA,
--				     (unsigned long) &swap_area);
--		set_fs(old_fs);
--		return err;
--	}
--
- 	default:
- 		return snapshot_ioctl(file, cmd, arg);
- 	}
- }
--
- #endif /* CONFIG_COMPAT */
- 
- static const struct file_operations snapshot_fops = {
+The imx interconnect provider doesn't communicate with devfreq directly
+but rather computes "minimum frequencies" for nodes along the path and
+creates dev_pm_qos requests.
+
+Since there is no single devicetree node that can represent the
+"interconnect" the main NOC is picked as the "interconnect provider" and
+will probe the interconnect platform device if #interconnect-cells is
+present. This avoids introducing "virtual" devices but it means that DT
+bindings of main NOC includes properties for both devfreq and
+interconnect.
+
+Only the ddrc and main noc are scalable right now but more can be added.
+
+Also available on a github branch (with various unrelated changes):
+	https://github.com/cdleonard/linux/tree/next_leonard
+
+Changes since v2:
+* Fix unused variable in imx_bus_target
+* Sort imx before qcom in interconnect makefile/kconfig
+* Use icc_std_aggregate
+* Adjust prints in imx interconnect core.
+* Adjust included guarts for dt bindings
+* Remove imx_icc_unregister warning when there are active users, should
+be handled inside core instead.
+Link: https://patchwork.kernel.org/cover/11469157/
+
+Changes since v1:
+* Fix dt_bindings_check for yaml and reduce example to fit current
+features
+* Fix comment spelling in imx-bus
+* Drop mentions of passive governor from imx-bus (will repost later)
+* Improve error message in imx_bus_init_icc
+* Use dev_pm_opp_set_rate
+Link: https://patchwork.kernel.org/cover/11458971/
+
+Changes since RFCv6:
+* Allow building interconnect drivers as modules
+* Handle icc_provider_del errors in imx_icc_unregister (like EBUSY).
+* Rename imx-devfreq to imx-bus, similar to exynos-bus
+* Explain why imx bus clock enabling is not required
+Link: https://patchwork.kernel.org/cover/11244421/
+
+Changes since RFCv5:
+* Replace scanning for interconnect-node-id with explicit
+scalable-nodes/scalable-node-ids property on NoC.
+* Now passes make `dtbs_check`
+* Remove struct imx_icc_provider
+* Switch to of_icc_xlate_onecell
+* Use of_find_device_by_node to fetch QoS target, this causes fewer probe
+deferrals, removes dependency on devfreq API and even allows reloading ddrc
+module at runtime
+* Add imx_icc_node_destroy helper
+* Remove 0/1 on DEFINE_BUS_SLAVE/MASTER which created spurious links
+Link: https://patchwork.kernel.org/cover/11222015/
+
+Changes since RFCv4:
+* Drop icc proxy nonsense
+* Make devfreq driver for NOC probe the ICC driver if
+#interconnect-cells is present
+* Move NOC support to interconnect series and rename the node in DT
+* Add support for all chips at once, differences are not intereseting
+and there is more community interest for 8mq than 8mm.
+Link: https://patchwork.kernel.org/cover/11111865/
+
+Changes since RFCv3:
+* Remove the virtual "icc" node and add devfreq nodes as proxy providers
+* Fix build on 32-bit arm (reported by kbuilt test robot)
+* Remove ARCH_MXC_ARM64 (never existed in upstream)
+* Remove _numlinks, calculate instead
+* Replace __BUSFREQ_H header guard
+* Improve commit message and comment spelling
+* Fix checkpatch issues
+Link to RFCv3: https://patchwork.kernel.org/cover/11078671/
+
+Changes since RFCv2 and initial work by Alexandre Bailon:
+* Relying on devfreq and dev_pm_qos instead of CLK
+* No more "platform opp" stuff
+* No more special suspend handling: use suspend-opp on devfreq instead
+* Replace all mentions of "busfreq" with "interconnect"
+Link to v2: https://patchwork.kernel.org/cover/11021563/
+
+Leonard Crestez (8):
+  dt-bindings: interconnect: Add bindings for imx8m noc
+  PM / devfreq: Add generic imx bus scaling driver
+  PM / devfreq: imx: Register interconnect device
+  interconnect: Add imx core driver
+  interconnect: imx: Add platform driver for imx8mm
+  interconnect: imx: Add platform driver for imx8mq
+  interconnect: imx: Add platform driver for imx8mn
+  arm64: dts: imx8m: Add NOC nodes
+
+ .../bindings/interconnect/fsl,imx8m-noc.yaml  | 101 +++++++
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  24 ++
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  24 ++
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  24 ++
+ drivers/devfreq/Kconfig                       |   8 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/imx-bus.c                     | 179 +++++++++++
+ drivers/interconnect/Kconfig                  |   1 +
+ drivers/interconnect/Makefile                 |   1 +
+ drivers/interconnect/imx/Kconfig              |  17 ++
+ drivers/interconnect/imx/Makefile             |   9 +
+ drivers/interconnect/imx/imx.c                | 284 ++++++++++++++++++
+ drivers/interconnect/imx/imx.h                |  61 ++++
+ drivers/interconnect/imx/imx8mm.c             | 105 +++++++
+ drivers/interconnect/imx/imx8mn.c             |  94 ++++++
+ drivers/interconnect/imx/imx8mq.c             | 103 +++++++
+ include/dt-bindings/interconnect/imx8mm.h     |  50 +++
+ include/dt-bindings/interconnect/imx8mn.h     |  41 +++
+ include/dt-bindings/interconnect/imx8mq.h     |  48 +++
+ 19 files changed, 1175 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+ create mode 100644 drivers/devfreq/imx-bus.c
+ create mode 100644 drivers/interconnect/imx/Kconfig
+ create mode 100644 drivers/interconnect/imx/Makefile
+ create mode 100644 drivers/interconnect/imx/imx.c
+ create mode 100644 drivers/interconnect/imx/imx.h
+ create mode 100644 drivers/interconnect/imx/imx8mm.c
+ create mode 100644 drivers/interconnect/imx/imx8mn.c
+ create mode 100644 drivers/interconnect/imx/imx8mq.c
+ create mode 100644 include/dt-bindings/interconnect/imx8mm.h
+ create mode 100644 include/dt-bindings/interconnect/imx8mn.h
+ create mode 100644 include/dt-bindings/interconnect/imx8mq.h
+
 -- 
-2.25.1
+2.17.1
 
