@@ -2,60 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B828019F2D3
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 11:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA5D19F2F9
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 11:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbgDFJpP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Apr 2020 05:45:15 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:41788 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726718AbgDFJpO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Apr 2020 05:45:14 -0400
-Received: by mail-wr1-f68.google.com with SMTP id h9so16603791wrc.8
-        for <linux-pm@vger.kernel.org>; Mon, 06 Apr 2020 02:45:12 -0700 (PDT)
+        id S1726856AbgDFJxo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Apr 2020 05:53:44 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:33977 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726721AbgDFJxn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Apr 2020 05:53:43 -0400
+Received: by mail-wm1-f68.google.com with SMTP id c195so7430991wme.1
+        for <linux-pm@vger.kernel.org>; Mon, 06 Apr 2020 02:53:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/tAldBf8G4P8zLxLg45vHYhasSD0RWL4EXZe8LNxOmk=;
-        b=Bs1CDKGvtaL3YuqnE22w7H1CiaBIfDjxL1m17ETo9LLPVuQXPJOUPTOa66YSUqS9wg
-         zEBp4r88NOGWETG934877OOzkOpHpVtQiRIReeb8B6KZtQ6ZHDdYbbb1fFdNljgP9Dm5
-         TRT3s5wbiK4nQvngNSCs8Ie3iQ8CioAxql6pl+7gl6pxwUH1iD/2AILlo9nLIPYGhRX6
-         762chlNkdodPxCtLCd7bZ7ci6OxcxQiB0KhLqfReCRcB4hHFm9PtA8bGTBzKZT290VvZ
-         3xWGoo+S/2O+19WiMpn0Ud8HuLHT9+WUNe4Y+ackea1NrR7qTv+pU8G2fGI0XoVZMgFa
-         8xtA==
+        bh=0Y8KYYSV67CMXMuBRVrsEZZ0Dkuuswu9PWACPReBAMA=;
+        b=s9MvSctF6VhiZxmpezETuJqLWz6LiQ8GrJqpPtlj+GsurtNCV+FSmXOW/eBBmVDefy
+         qB3LCwrPEcRbOOB8cUofONyVR5HOLZuHN8Lx1bOPcong/pn7vqzjjYTs6UhJyoNVb1Y5
+         Q1z6Ks90GBFmZTL7EnyLzicSpHyoSS+IVCDnprUqf1lg5OUEvyWizrfVxOI+tpqlFJfJ
+         qzIr2UVRf4oWdKXvAShyLKewnZDleK9lAd1dAeYmJxwAhWCZis8fsWFAIq2ZZ0MOsGyn
+         EYHk1sOeM5SPbp8h1BGcw1Y2r0T94lMOuzboaipC8cyhCX6UmiToIGeeob7c8uN7SYVr
+         bY1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=/tAldBf8G4P8zLxLg45vHYhasSD0RWL4EXZe8LNxOmk=;
-        b=B9+DtxN5ZIsOMcW+I2X3v9oj1mzmw0ugNa6Z991gY3WCXgWu3DfbjJvk3tN8KFTebQ
-         tLZFjsztJq9hdDE5Q//ur8GEEHYPApFl638umP69u1rbT7f5VArh2iI1dHkXF4GKiV2p
-         86Rf5sIJ2scONFHPL4rEvnypyd0UKO+esE79bDK/1EzzpsvH8Pive2/zojrhd2aeflqX
-         69UuIvjBdHfxD923OxuHLko+b3O11IDYLW1r0BLIEtrnq0inc+sCJBasU2j9olRVQGnF
-         n7+anA85Mp/wSM9yO6r6jFDegV5z45bPxUH/q14yMUZUSQC5RRqiceF1g2GL9TL61stB
-         Z2nA==
-X-Gm-Message-State: AGi0Puaxp+aoeV08xV5vNXJf/S6vOTjqH22YFMKdJwKoXQ+jq1bZnMaS
-        aNpvyV5dysZ1zM6NF+QF8YeMiQ==
-X-Google-Smtp-Source: APiQypJFm0mX9OvGjd7tv7at0Nn+E0BhUS33ZRGbzsFhYfxlNTqRquWtriNOyNWJ/gYRKzSWLfhj0A==
-X-Received: by 2002:adf:9168:: with SMTP id j95mr22186195wrj.145.1586166312081;
-        Mon, 06 Apr 2020 02:45:12 -0700 (PDT)
+        bh=0Y8KYYSV67CMXMuBRVrsEZZ0Dkuuswu9PWACPReBAMA=;
+        b=obh1x2meG0LGZACIhwzzj34cKrfGn3XJqSoVqVbF+oj6osG19hXvi4uV59tbgn2aMW
+         KM1MFcLcyKIbqC3jmhrfELHZxcyiqT5dEolPJkO+owVkH7/DM/FM4JmlCBO8iImuNNyD
+         dsDM0symFZ7UjbtGW6BS1jZaOZWiJK4DzmoLxJHZ8FbH8OCmXlK+ImhVslp1J/z4yFd6
+         l+hCdU7wMRElNcjCLpxXqxJYN/lpZHXKSNYPwQRmORqgZ9Ucn951w3ho6bFgDvuB0ETy
+         /xYFX6AMVN+W6QzLBVy4247/6lfpxgQexvmTvfZT8xm+C8bNIbYP7AVsgsRtbQDHQGmp
+         B6zQ==
+X-Gm-Message-State: AGi0PubD96HpD+MNRL0lqdNEGf+JB4Omz431UimQHjxxxCD/0nuBlhdj
+        O6+NM2lMhJApDQDeNjj4u0hXHw==
+X-Google-Smtp-Source: APiQypJeWRqP9iDhDf1jNiCXRuf5mXvCdy0pKJP/pq5t5y/BwYnRBjK6yqABQxZaq860YTwRrveEYQ==
+X-Received: by 2002:a7b:c95a:: with SMTP id i26mr21481414wml.71.1586166819655;
+        Mon, 06 Apr 2020 02:53:39 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:b51c:42dc:1499:2880? ([2a01:e34:ed2f:f020:b51c:42dc:1499:2880])
-        by smtp.googlemail.com with ESMTPSA id f12sm25965374wrm.94.2020.04.06.02.45.10
+        by smtp.googlemail.com with ESMTPSA id i2sm25867008wrx.22.2020.04.06.02.53.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Apr 2020 02:45:11 -0700 (PDT)
+        Mon, 06 Apr 2020 02:53:39 -0700 (PDT)
 Subject: Re: [PATCH] thermal: core: Send a sysfs notification on trip points
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+To:     Amit Kucheria <amit.kucheria@verdurent.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>, vincent.whitchurch@axis.com,
         "open list:THERMAL" <linux-pm@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
 References: <a7e8287d-72be-7ab0-697a-9de40eb3f81f@linaro.org>
  <20200402142116.22869-1-daniel.lezcano@linaro.org>
- <20200403144009.szjoss5ecleisg2f@axis.com>
- <e0c819ce-31f4-cee1-c7cc-7ecb73d374a3@linaro.org>
- <20200406074525.2bhseq3n5bw7dd2t@axis.com>
+ <CAHLCerPOVouQfK4iqMc4xQpok=XTHj4d1hsLTsb9N5r=ZUBs8Q@mail.gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFv/yykBEADDdW8RZu7iZILSf3zxq5y8YdaeyZjI/MaqgnvG/c3WjFaunoTMspeusiFE
@@ -111,12 +108,12 @@ Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
  i6D9VoMMi6ICko/CXUZ77OgLtMsy3JtzTRbn/wRySOY2AsMgg0Sw6yJ0wfrVk6XAMoLGjaVt
  X4iPTvwocEhjvrO4eXCicRBocsIB2qZaIj3mlhk2u4AkSpkKm9cN0KWYFUxlENF4/NKWMK+g
  fGfsCsS3cXXiZpufZFGr+GoHwiELqfLEAQ9AhlrHGCKcgVgTOI6NHg==
-Message-ID: <62f5e0d0-155a-7520-cb1b-2113a2b711b3@linaro.org>
-Date:   Mon, 6 Apr 2020 11:45:10 +0200
+Message-ID: <ea0a6c97-fe8e-d705-6ce9-b5ac60046d63@linaro.org>
+Date:   Mon, 6 Apr 2020 11:53:38 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200406074525.2bhseq3n5bw7dd2t@axis.com>
+In-Reply-To: <CAHLCerPOVouQfK4iqMc4xQpok=XTHj4d1hsLTsb9N5r=ZUBs8Q@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -125,70 +122,75 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/04/2020 09:45, Vincent Whitchurch wrote:
-> On Fri, Apr 03, 2020 at 05:26:39PM +0200, Daniel Lezcano wrote:
->> On 03/04/2020 16:40, Vincent Whitchurch wrote:
->>> Normally sysfs_notify() is used to notify userspace that the
->>> value of the sysfs file has changed, but in this case it's
->>> being used on a sysfs file whose value never changes.  I don't
->>> know if there are other drivers that do something similar.
+On 06/04/2020 11:25, Amit Kucheria wrote:
+> On Thu, Apr 2, 2020 at 7:53 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
 >>
->> I think so:
+>> Currently the userspace has no easy way to get notified when a
+>> specific trip point was crossed. There are a couple of
+>> approaches:
 >>
->> eg.
+>> - the userspace polls the sysfs temperature with usually an
+>> unacceptable delay between the trip temperature point crossing
+>> and the moment it is detected, or a high polling rate with an
+>> unacceptable number of wakeup events.
 >>
->> drivers/hwmon/adt7x10.c: sysfs_notify(&dev->kobj, NULL,
->> "temp1_max_alarm"); drivers/hwmon/adt7x10.c:
->> sysfs_notify(&dev->kobj, NULL, "temp1_min_alarm");
->> drivers/hwmon/adt7x10.c: sysfs_notify(&dev->kobj, NULL,
->> "temp1_crit_alarm");
+>> - the thermal zone is set to be managed by an userspace governor
+>> in order to receive the uevent even if the thermal zone needs to
+>> be managed by another governor.
 >>
->> drivers/hwmon/abx500.c: sysfs_notify(&data->pdev->dev.kobj, NULL,
->> alarm_node); drivers/hwmon/abx500.c:
->> sysfs_notify(&data->pdev->dev.kobj, NULL, alarm_node);
+>> These changes allow to send a sysfs notification on the
+>> trip_point_*_temp when the temperature is getting higher than the
+>> trip point temperature. By this way, the userspace can be
+>> notified everytime when the trip point is crossed, this is useful
+>> for the thermal Android HAL or for notification to be sent via
+>> d-bus.
 >>
->> drivers/hwmon/stts751.c: sysfs_notify(&priv->dev->kobj, NULL,
->> "temp1_max_alarm"); drivers/hwmon/stts751.c:
->> sysfs_notify(&priv->dev->kobj, NULL, "temp1_min_alarm");
+>> That allows the userspace to manage the applications based on
+>> specific alerts on different thermal zones to mitigate the skin
+>> temperature, letting the kernel governors handle the high
+>> temperature for hardware like the CPU, the GPU or the modem.
 >>
->> There are also some other places I believe they are doing the
->> same like:
->>
->> drivers/md/md.c: sysfs_notify(&mddev->kobj, NULL,
->> "sync_completed"); drivers/md/md.c: sysfs_notify(&mddev->kobj,
->> NULL, "degraded");
+>> The temperature can be oscillating around a trip point and the
+>> event will be sent multiple times. It is up to the userspace to
+>> deal with this situation.
 >
-> AFAICS all these drivers (including the hwmon ones) use
-> sysfs_notify() to notify that the value of the sysfs file has
-> changed, unlike your proposed patch.
+> Thinking about this a bit more, userspace might want a
+> notification when the temperature reduces and crosses the threshold
+> on its way down too.
+>
+> Currently, we're only sending the notification on the way up. How
+> should userspace know when to stop mitigation activity other than
+> constantly polling the TZ temperature?
 
-Sorry, I don't have the same understanding:
+Assuming you want to monitor the temperature after a specific trip
+point is reached:
 
-drivers/hwmon/adt7x10.c:
+ - the notification is sent way up
 
- - receives an interrupt because one of the programmed temperature is
-reached
- - reads the status to know which one and sends a sysfs notification
+ - user space starts reading the temperature
 
-drivers/hwmon/stts751.c:
+ - the temperature goes below the trip point temperature
 
- - receives an I2C alert message, checks if it is a temperature alert
-and then sends a sysfs notification
+ - user space stops reading the temperature
 
-drivers/hwmon/abx500:
+Actually, I don't see the point of being notified and not read the
+temperature after.
 
- - This one is probably sending a notification on a change
+That is how is working the kernel side, especially with the interrupt
+mode. The sensor fires an interrupt -> thermal zone update ->
+temperature read -> trip point reached -> passive mode on ->
+temperature polling -> temperature below trip point -> passive mode off.
 
-The documentation also is giving the semantic for sysfs_notify for
-certain sysfs nodes:
 
-Documentation/misc-devices/apds990x.txt:             sysfs_notify
-called when threshold interrupt occurs
-Documentation/misc-devices/bh1770glc.txt:            sysfs_notify
-called when threshold interrupt occurs
 
-AFAICT, it is a matter of documenting the notification for
-trip_point_*_temp.
+>> The following userspace program allows to monitor those events:
+>>
+>> struct trip_data { int fd; int temperature; const char *path; };
+>>
+>
+> [snip]
+>
 
 
 -- 
