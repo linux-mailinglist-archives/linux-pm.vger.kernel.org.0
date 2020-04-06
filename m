@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E2A19FDA6
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 20:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6EF19FDB8
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 20:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725995AbgDFS4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Apr 2020 14:56:11 -0400
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:33822 "EHLO
+        id S1726353AbgDFS7R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Apr 2020 14:59:17 -0400
+Received: from mail-ua1-f65.google.com ([209.85.222.65]:44450 "EHLO
         mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725933AbgDFS4L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Apr 2020 14:56:11 -0400
-Received: by mail-ua1-f65.google.com with SMTP id d23so359239uak.1
-        for <linux-pm@vger.kernel.org>; Mon, 06 Apr 2020 11:56:09 -0700 (PDT)
+        with ESMTP id S1726406AbgDFS7R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Apr 2020 14:59:17 -0400
+Received: by mail-ua1-f65.google.com with SMTP id r47so337330uad.11
+        for <linux-pm@vger.kernel.org>; Mon, 06 Apr 2020 11:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=verdurent-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YCt9CgbBrzDRuK00OoymzXY2ko3dB7fTGcCY007YOZs=;
-        b=NMJLXJuSUipFN2jWrzRqytL4ZCYTvvfT1ckaVE2gbYkuDUS71hrCmNT9M0dXLP3dO6
-         3/Ti0+LCLAwTkV0icyklghku3G5pE488aIIuAVLCu5RZeJpGxwSNrtsuDDei010eL8fx
-         TBt+Wm9l6KuqIDFOXDlNDT4J9TmE+XccPop0f2xaj6ksGoijIHieXois8/S5vB7F+Wpx
-         yPmhaZfrBfZ2RPHMZZ0XT2hpk7zf0fOVb05p03yIpZVLuFf0Um2k72SX51i377Rfd2kI
-         YThSvxnxKUy/GZGuO34h3ewzit8uEL2Uh3CxMzvP/t4A2OeEMA37DlW3u6Boq/18p3fY
-         fNVg==
+        bh=nDAcnZMYqkDveNfrgmB4yWwyjbhpJ9MHsqPOuy8eQN4=;
+        b=fWNvo64mS+jo9GGyKMhWJ/qKsB/0W46MHYCDRzdQ+Ua0jzg9JmUngUZJz71qxuGeyN
+         E9ALiHDJWbgx7X73gJObz6ghq63kKkmAN+mOFu9Ow9R4jQyhQIdhFZBXKOHcX1FJcyYW
+         Xcvnhk5HWiMTSBjSJAEVOarpWJqdJr8fS77j8+JY5JrCnNlhXQwPAtWnt+6Np0s0LtsT
+         xyhbrh3zpfpRgREdvwklDAoV6bIQXy2J9653XLvME3opQs5yynnmMhVgCjyMRdgNjXCK
+         2SmTjWtbB25SfDV3PyAnjrhk/CKFPqQggOg90IQfiWUPVoenz2JuLxvqwoHgmufFyyOR
+         yYQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YCt9CgbBrzDRuK00OoymzXY2ko3dB7fTGcCY007YOZs=;
-        b=IdY7BDV/vfZLY4v0D9aLUnnOfxz3zKHdbn6G3xcnN0d4FZ4W22/BaH/Os9tNHM6I7N
-         T7bdWKhsy+x4rYAIeLVlBtr2+PvlJaLk7oaF+pBtHDZt3iib0Bbv4B7eXNvBJkOjZMqG
-         jzOHHks+RfDGGYgq6f/BwMoPgIAuFLJp8A1O8F1hahiv/jFLS6QVEycb/GYCPClUswVA
-         NV/WPZLPdXSOoqHH/KqxJd0CCL1SK4Gu8/9WPFLZFhomrOawKC173iJaobrHpwJv89vf
-         pbfYYQhIvQoridg2byE+KvPhZjQMnk33PYMdYmxIg8fh15OEURs7NMVRkiAN5Me0HysB
-         xQzA==
-X-Gm-Message-State: AGi0PuZNXKA1w+N4t0P1Jy8DMB7Fyf+Frv9CcJuVeNqSiaKNS+29KDov
-        5L9TBaJGGkHX4wBeVZPtGwzDNrZOkBR+qCgDFdixTRLrRGijQw==
-X-Google-Smtp-Source: APiQypLGBKWQKH327cHkPy1xzfBkm0CtDriYAFhKuYjgdi5YcigLSB9yGh/2OvKDRjcaN0LWJ4I9t9xAL1fCnKcmN1g=
-X-Received: by 2002:ab0:4e96:: with SMTP id l22mr884101uah.67.1586199369194;
- Mon, 06 Apr 2020 11:56:09 -0700 (PDT)
+        bh=nDAcnZMYqkDveNfrgmB4yWwyjbhpJ9MHsqPOuy8eQN4=;
+        b=n//4hD36tDsFrVx3dbcjgpEM8AxybHIy+egWqo2wH1DkiiC3ucjruxVfqUIwfRqfos
+         8O0PHthIBhp9hUo+0dLTv8YL8z20mSyuQ7BdVwt9d0oT3FD+ZiZkYMzlCFDDx/5QfHKl
+         hJigI8D7ye1pRbN3ccWuGk1qH9EoYy8MhVdOe0bG83kP79Uzp4SdhBNd4hV4AcGnIWm8
+         WKw2yDiYWGMyYOn1ztM/AcHhoH4GkFpDQf85WUqgkCecAA+Pet4B1IZod4K2ja4ZfIQh
+         9R64s4TBJWTlbec9Xh4/rjgAFwOhUlRxs0EslVGv7SdHoOMO8/0J83JiR3k0H0jyjeWr
+         GUPA==
+X-Gm-Message-State: AGi0PuZNF7lxjQIykb7mxAt72ZM1WckRAZTaj11J+LTllceRpCU9X3lB
+        dybx1KQ3Yiyi3F42z+5wRootj4LVoBGRrSxKKR00IlV77/LpUw==
+X-Google-Smtp-Source: APiQypLeRQREH9FZt78T2gDBjLSaxjqqmMP+EJjradX50Mt/AJhDgOrs5PJLAJsgyzbmkywlhuXwDEQRrvXKzlBgu7s=
+X-Received: by 2002:ab0:608b:: with SMTP id i11mr813311ual.94.1586199555194;
+ Mon, 06 Apr 2020 11:59:15 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200331075356.19171-1-j-keerthy@ti.com> <20200331075356.19171-3-j-keerthy@ti.com>
 In-Reply-To: <20200331075356.19171-3-j-keerthy@ti.com>
 From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Tue, 7 Apr 2020 00:25:58 +0530
-Message-ID: <CAHLCerNvRvp7QAeODb34EV89a0g77ZDLuDioBct7kuBjPgrjwQ@mail.gmail.com>
+Date:   Tue, 7 Apr 2020 00:29:04 +0530
+Message-ID: <CAHLCerN83E_JyMiU9xDajQqgjdGTxK3yXz3-Z-5i-jvrb1jAhA@mail.gmail.com>
 Subject: Re: [PATCH v5 2/4] thermal: k3: Add support for bandgap sensors
 To:     Keerthy <j-keerthy@ti.com>
 Cc:     Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh+dt@kernel.org>,
@@ -67,6 +67,10 @@ On Tue, Mar 31, 2020 at 1:24 PM Keerthy <j-keerthy@ti.com> wrote:
 > circuits and other analog IP blocks. The analog-to-digital
 > converter (ADC) produces an output value that is proportional
 > to the silicon temperature.
+
+Your cover letter seems to have useful information that belongs in
+this commit message IMO.
+
 >
 > Currently reading temperatures only is supported.
 > There are no active/passive cooling agent supported.
@@ -143,23 +147,13 @@ On Tue, Mar 31, 2020 at 1:24 PM Keerthy <j-keerthy@ti.com> wrote:
 > +#include <linux/thermal.h>
 > +#include <linux/of.h>
 > +
-
-Sort these includes alphabetically
-
-
 > +#define K3_VTM_DEVINFO_PWR0_OFFSET             0x4
 > +#define K3_VTM_DEVINFO_PWR0_CVD_CT_MASK        0xf
-
-Not used, remove.
-
 > +#define K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK   0xf0
 > +#define K3_VTM_TMPSENS0_CTRL_OFFSET    0x80
 > +#define K3_VTM_REGS_PER_TS                     0x10
 > +#define K3_VTM_TS_STAT_DTEMP_MASK      0x3ff
 > +#define K3_VTM_MAX_NUM_TS              8
-
-Not used, remove
-
 > +#define K3_VTM_TMPSENS_CTRL_CBIASSEL   BIT(0)
 > +#define K3_VTM_TMPSENS_CTRL_SOC                BIT(5)
 > +#define K3_VTM_TMPSENS_CTRL_CLRZ               BIT(6)
@@ -221,9 +215,6 @@ Not used, remove
 > +/* common data structures */
 > +struct k3_thermal_data {
 > +       struct thermal_zone_device *ti_thermal;
-
-Nit: perhap use tzd/tzdev instead of ti_thermal which doesn't really say much?
-
 > +       struct k3_bandgap *bgp;
 > +       int sensor_id;
 > +       u32 ctrl_offset;
@@ -262,11 +253,6 @@ Nit: perhap use tzd/tzdev instead of ti_thermal which doesn't really say much?
 > +        * report temperatures.
 > +        *
 > +        * Errata workaround.
-
-So there is no fix in later versions of silicon? If so, shouldn't this
-errata only apply to a subset of chips after checking some IP version?
-
-
 > +        */
 > +       s0 = readl(bgp->base + devdata->stat_offset) &
 > +               K3_VTM_TS_STAT_DTEMP_MASK;
@@ -377,10 +363,6 @@ errata only apply to a subset of chips after checking some IP version?
 > +err_alloc:
 > +       pm_runtime_put_sync(&pdev->dev);
 > +       pm_runtime_disable(&pdev->dev);
-
-Just use dev?
-
-
 > +
 > +       return ret;
 > +}
