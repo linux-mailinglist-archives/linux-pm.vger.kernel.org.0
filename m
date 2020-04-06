@@ -2,226 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E22BE19F56A
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 14:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F18919F6F6
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 15:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727941AbgDFMDd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Apr 2020 08:03:33 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:40282 "EHLO inva020.nxp.com"
+        id S1728349AbgDFNaK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Apr 2020 09:30:10 -0400
+Received: from foss.arm.com ([217.140.110.172]:45722 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727916AbgDFMDd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 6 Apr 2020 08:03:33 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 77FC81A0DDF;
-        Mon,  6 Apr 2020 14:03:31 +0200 (CEST)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5D9FB1A0DC9;
-        Mon,  6 Apr 2020 14:03:31 +0200 (CEST)
-Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 02343204E6;
-        Mon,  6 Apr 2020 14:03:28 +0200 (CEST)
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Alexandre Bailon <abailon@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Angus Ainslie <angus@akkea.ca>,
-        Martin Kepplinger <martink@posteo.de>,
-        Silvano di Ninno <silvano.dininno@nxp.com>,
-        linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 8/8] arm64: dts: imx8m: Add NOC nodes
-Date:   Mon,  6 Apr 2020 15:03:13 +0300
-Message-Id: <cc14c8134238311fb35ce1eabe7ec9d5dfffb762.1586174566.git.leonard.crestez@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1586174566.git.leonard.crestez@nxp.com>
-References: <cover.1586174566.git.leonard.crestez@nxp.com>
-In-Reply-To: <cover.1586174566.git.leonard.crestez@nxp.com>
-References: <cover.1586174566.git.leonard.crestez@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1728200AbgDFNaK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 6 Apr 2020 09:30:10 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 313E231B;
+        Mon,  6 Apr 2020 06:30:09 -0700 (PDT)
+Received: from [10.37.12.4] (unknown [10.37.12.4])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC4473F7D8;
+        Mon,  6 Apr 2020 06:29:58 -0700 (PDT)
+Subject: Re: [PATCH v5 1/5] PM / EM: add devices to Energy Model
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com
+Cc:     Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com,
+        javi.merino@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
+        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        qperret@google.com, bsegall@google.com, mgorman@suse.de,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
+        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
+        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
+References: <20200318114548.19916-1-lukasz.luba@arm.com>
+ <20200318114548.19916-2-lukasz.luba@arm.com>
+ <09b680a5-a118-8c6e-0ae1-03ab5f10c573@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <cb7f670a-a04f-ba6f-1486-0421f3cce2e9@arm.com>
+Date:   Mon, 6 Apr 2020 14:29:56 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <09b680a5-a118-8c6e-0ae1-03ab5f10c573@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add nodes for the main interconnect of the imx8m series chips.
+Hi Daniel,
 
-These nodes are bound to by devfreq and interconnect drivers.
+Thank you for the review.
 
-Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mm.dtsi | 24 +++++++++++++++++++++++
- arch/arm64/boot/dts/freescale/imx8mn.dtsi | 24 +++++++++++++++++++++++
- arch/arm64/boot/dts/freescale/imx8mq.dtsi | 24 +++++++++++++++++++++++
- 3 files changed, 72 insertions(+)
+On 4/3/20 5:05 PM, Daniel Lezcano wrote:
+> 
+> Hi Lukasz,
+> 
+> 
+> On 18/03/2020 12:45, Lukasz Luba wrote:
+>> Add support of other devices into the Energy Model framework not only the
+>> CPUs. Change the interface to be more unified which can handle other
+>> devices as well.
+> 
+> thanks for taking care of that. Overall I like the changes in this patch
+> but it hard to review in details because the patch is too big :/
+> 
+> Could you split this patch into smaller ones?
+> 
+> eg. (at your convenience)
+> 
+>   - One patch renaming s/cap/perf/
+> 
+>   - One patch adding a new function:
+> 
+>      em_dev_register_perf_domain(struct device *dev,
+> 				unsigned int nr_states,
+> 				struct em_data_callback *cb);
+> 
+>     (+ EXPORT_SYMBOL_GPL)
+> 
+>      And em_register_perf_domain() using it.
+> 
+>   - One converting the em_register_perf_domain() user to
+> 	em_dev_register_perf_domain
+> 
+>   - One adding the different new 'em' functions
+> 
+>   - And finally one removing em_register_perf_domain().
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-index 175c28ae10cf..41047b6709b6 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-@@ -6,10 +6,11 @@
- #include <dt-bindings/clock/imx8mm-clock.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/thermal/thermal.h>
-+#include <dt-bindings/interconnect/imx8mm.h>
- 
- #include "imx8mm-pinfunc.h"
- 
- / {
- 	interrupt-parent = <&gic>;
-@@ -860,10 +861,33 @@
- 				status = "disabled";
- 			};
- 
- 		};
- 
-+		noc: interconnect@32700000 {
-+			compatible = "fsl,imx8mm-noc", "fsl,imx8m-noc";
-+			reg = <0x32700000 0x100000>;
-+			clocks = <&clk IMX8MM_CLK_NOC>;
-+			fsl,ddrc = <&ddrc>;
-+			#interconnect-cells = <1>;
-+			operating-points-v2 = <&noc_opp_table>;
-+
-+			noc_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-150M {
-+					opp-hz = /bits/ 64 <150000000>;
-+				};
-+				opp-375M {
-+					opp-hz = /bits/ 64 <375000000>;
-+				};
-+				opp-750M {
-+					opp-hz = /bits/ 64 <750000000>;
-+				};
-+			};
-+		};
-+
- 		aips4: bus@32c00000 {
- 			compatible = "fsl,aips-bus", "simple-bus";
- 			reg = <0x32df0000 0x10000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-index 88e7d74e077f..e8a55956813f 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-@@ -6,10 +6,11 @@
- #include <dt-bindings/clock/imx8mn-clock.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/thermal/thermal.h>
-+#include <dt-bindings/interconnect/imx8mn.h>
- 
- #include "imx8mn-pinfunc.h"
- 
- / {
- 	interrupt-parent = <&gic>;
-@@ -751,10 +752,33 @@
- 				status = "disabled";
- 			};
- 
- 		};
- 
-+		noc: interconnect@32700000 {
-+			compatible = "fsl,imx8mn-noc", "fsl,imx8m-noc";
-+			reg = <0x32700000 0x100000>;
-+			clocks = <&clk IMX8MN_CLK_NOC>;
-+			fsl,ddrc = <&ddrc>;
-+			#interconnect-cells = <1>;
-+			operating-points-v2 = <&noc_opp_table>;
-+
-+			noc_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-100M {
-+					opp-hz = /bits/ 64 <100000000>;
-+				};
-+				opp-600M {
-+					opp-hz = /bits/ 64 <600000000>;
-+				};
-+				opp-800M {
-+					opp-hz = /bits/ 64 <800000000>;
-+				};
-+			};
-+		};
-+
- 		aips4: bus@32c00000 {
- 			compatible = "fsl,aips-bus", "simple-bus";
- 			reg = <0x32df0000 0x10000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-index ea93bc4b7d7e..3a208feec74c 100644
---- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-@@ -9,10 +9,11 @@
- #include <dt-bindings/reset/imx8mq-reset.h>
- #include <dt-bindings/gpio/gpio.h>
- #include "dt-bindings/input/input.h"
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/thermal/thermal.h>
-+#include <dt-bindings/interconnect/imx8mq.h>
- #include "imx8mq-pinfunc.h"
- 
- / {
- 	interrupt-parent = <&gpc>;
- 
-@@ -1026,10 +1027,33 @@
- 				fsl,num-rx-queues = <3>;
- 				status = "disabled";
- 			};
- 		};
- 
-+		noc: interconnect@32700000 {
-+			compatible = "fsl,imx8mq-noc", "fsl,imx8m-noc";
-+			reg = <0x32700000 0x100000>;
-+			clocks = <&clk IMX8MQ_CLK_NOC>;
-+			fsl,ddrc = <&ddrc>;
-+			#interconnect-cells = <1>;
-+			operating-points-v2 = <&noc_opp_table>;
-+
-+			noc_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-133M {
-+					opp-hz = /bits/ 64 <133333333>;
-+				};
-+				opp-400M {
-+					opp-hz = /bits/ 64 <400000000>;
-+				};
-+				opp-800M {
-+					opp-hz = /bits/ 64 <800000000>;
-+				};
-+			};
-+		};
-+
- 		bus@32c00000 { /* AIPS4 */
- 			compatible = "fsl,aips-bus", "simple-bus";
- 			reg = <0x32df0000 0x10000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
--- 
-2.17.1
+I agree and will do the split. I could also break the dependencies
+for future easier merge.
+
+> 
+> 
+>> Acked-by: Quentin Perret <qperret@google.com>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+> 
+> [ ... ]
+> 
+>>   2. Core APIs
+>> @@ -70,14 +72,16 @@ CONFIG_ENERGY_MODEL must be enabled to use the EM framework.
+>>   Drivers are expected to register performance domains into the EM framework by
+>>   calling the following API::
+>>   
+>> -  int em_register_perf_domain(cpumask_t *span, unsigned int nr_states,
+>> -			      struct em_data_callback *cb);
+>> +  int em_register_perf_domain(struct device *dev, unsigned int nr_states,
+>> +		struct em_data_callback *cb, cpumask_t *cpus);
+> 
+> Isn't possible to get rid of this cpumask by using
+> cpufreq_cpu_get() which returns the cpufreq's policy and from their get
+> the related cpus ?
+
+We had similar thoughts with Quentin and I've checked this.
+Unfortunately, if the policy is a 'new policy' [1] it gets
+allocated and passed into cpufreq driver ->init(policy) [2].
+Then that policy is set into per_cpu pointer for each related_cpu [3]:
+
+for_each_cpu(j, policy->related_cpus)
+	per_cpu(cpufreq_cpu_data, j) = policy;
+
+
+Thus, any calls of functions (i.e. cpufreq_cpu_get()) which try to
+take this ptr before [3] won't work.
+
+We are trying to register EM from cpufreq_driver->init(policy) and the
+per_cpu policy is likely to be not populated at that phase.
+
+Regards,
+Lukasz
+
+[1] 
+https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/cpufreq.c#L1328
+[2] 
+https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/cpufreq.c#L1350
+[3] 
+https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/cpufreq.c#L1374
+
 
