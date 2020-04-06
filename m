@@ -2,162 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A41319FE56
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 21:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3E219FEFE
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 22:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725957AbgDFTpa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Apr 2020 15:45:30 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:40218 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725895AbgDFTpa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Apr 2020 15:45:30 -0400
-Received: by mail-oi1-f196.google.com with SMTP id y71so14192984oia.7;
-        Mon, 06 Apr 2020 12:45:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M1RzRkQXbJmYiaNrArg47G4F7EhjksiR5+/JZ9JGZAA=;
-        b=ZTf9mhAYlpTqIAsWcka9DZuwrlSQnZ0gncKnXX0J8AuSq4FR5vZqnaFsvSigK5Og7L
-         j/aGT9Yinui37M5/6tlb9yDiQ6nNtWqKgxrPjWVxQnDUgnDSEotv62L5VVrAmYXpLagC
-         e5ivb82SuMqXQbC+BvY3WxFoRRpe2GmYw4u53gO5O3nk8PTzyowizlC3jzFvu79E1M0K
-         QmjJ29oJ21lZiZT030a8WA2XWFQgLexD0aCi4Dk7aopMz2uACCXRjuX/04Jf6/bVS9zQ
-         5rLmJXSAsduvjTuI5xkO84hKto/z4jYaufLHS702CgSnVevq3N5LK5hY8ARG+Jez4EgZ
-         XaMQ==
-X-Gm-Message-State: AGi0PuaKiBMscF0Vck16uG6rlQ2RXt8FNaNC7iSPSCgZOn7Hkqs0XT3j
-        h8PgIfqONldFxfYbwtO8mfuLwT9kWDB9AnZ8d3w=
-X-Google-Smtp-Source: APiQypIXF0aIb3eq4HWU0gbBbL/a9JNbUJjx6T2W3EG4mDEG3nAtAAl0bmc65fjOqhva1jkfUKaBiTtCCVLf8c1z1rA=
-X-Received: by 2002:aca:f07:: with SMTP id 7mr844131oip.68.1586202329136; Mon,
- 06 Apr 2020 12:45:29 -0700 (PDT)
+        id S1726230AbgDFUZJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Apr 2020 16:25:09 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46305 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725933AbgDFUZJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Apr 2020 16:25:09 -0400
+Received: (qmail 32756 invoked by uid 500); 6 Apr 2020 16:25:08 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 6 Apr 2020 16:25:08 -0400
+Date:   Mon, 6 Apr 2020 16:25:08 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+In-Reply-To: <3513564.a1tKoPzQQ1@kreacher>
+Message-ID: <Pine.LNX.4.44L0.2004061541080.26186-100000@netrider.rowland.org>
 MIME-Version: 1.0
-References: <20200406115835.1150002-1-hch@lst.de> <20200406115835.1150002-3-hch@lst.de>
-In-Reply-To: <20200406115835.1150002-3-hch@lst.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 6 Apr 2020 21:45:17 +0200
-Message-ID: <CAJZ5v0jqEWpdbXpDFRejWDqF-8ptEdzHKoDj40YkqYw9ZSN56w@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PM / sleep: handle the compat case in snapshot_set_swap_area
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 6, 2020 at 1:58 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> Use in_compat_syscall to copy directly from the 32-bit ABI structure.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  kernel/power/user.c | 54 ++++++++++++++++++---------------------------
->  1 file changed, 22 insertions(+), 32 deletions(-)
->
-> diff --git a/kernel/power/user.c b/kernel/power/user.c
-> index 0cb555f526e4..7959449765d9 100644
-> --- a/kernel/power/user.c
-> +++ b/kernel/power/user.c
-> @@ -196,28 +196,44 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
->         return res;
->  }
->
-> +struct compat_resume_swap_area {
-> +       compat_loff_t offset;
-> +       u32 dev;
-> +} __packed;
-> +
->  static int snapshot_set_swap_area(struct snapshot_data *data,
->                 void __user *argp)
->  {
-> -       struct resume_swap_area swap_area;
->         sector_t offset;
->         dev_t swdev;
->
->         if (swsusp_swap_in_use())
->                 return -EPERM;
-> -       if (copy_from_user(&swap_area, argp, sizeof(swap_area)))
-> -               return -EFAULT;
-> +
-> +       if (in_compat_syscall()) {
-> +               struct compat_resume_swap_area swap_area;
-> +
-> +               if (copy_from_user(&swap_area, argp, sizeof(swap_area)))
-> +                       return -EFAULT;
-> +               swdev = new_decode_dev(swap_area.dev);
-> +               offset = swap_area.offset;
-> +       } else {
-> +               struct resume_swap_area swap_area;
-> +
-> +               if (copy_from_user(&swap_area, argp, sizeof(swap_area)))
-> +                       return -EFAULT;
-> +               swdev = new_decode_dev(swap_area.dev);
-> +               offset = swap_area.offset;
-> +       }
->
->         /*
->          * User space encodes device types as two-byte values,
->          * so we need to recode them
->          */
-> -       swdev = new_decode_dev(swap_area.dev);
->         if (!swdev) {
->                 data->swap = -1;
->                 return -EINVAL;
->         }
-> -       offset = swap_area.offset;
->         data->swap = swap_type_of(swdev, offset, NULL);
->         if (data->swap < 0)
->                 return -ENODEV;
-> @@ -394,12 +410,6 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
->  }
->
->  #ifdef CONFIG_COMPAT
-> -
-> -struct compat_resume_swap_area {
-> -       compat_loff_t offset;
-> -       u32 dev;
-> -} __packed;
-> -
->  static long
->  snapshot_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
->  {
-> @@ -410,33 +420,13 @@ snapshot_compat_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
->         case SNAPSHOT_AVAIL_SWAP_SIZE:
->         case SNAPSHOT_ALLOC_SWAP_PAGE:
->         case SNAPSHOT_CREATE_IMAGE:
-> +       case SNAPSHOT_SET_SWAP_AREA:
->                 return snapshot_ioctl(file, cmd,
->                                       (unsigned long) compat_ptr(arg));
-> -
-> -       case SNAPSHOT_SET_SWAP_AREA: {
-> -               struct compat_resume_swap_area __user *u_swap_area =
-> -                       compat_ptr(arg);
-> -               struct resume_swap_area swap_area;
-> -               mm_segment_t old_fs;
-> -               int err;
-> -
-> -               err = get_user(swap_area.offset, &u_swap_area->offset);
-> -               err |= get_user(swap_area.dev, &u_swap_area->dev);
-> -               if (err)
-> -                       return -EFAULT;
-> -               old_fs = get_fs();
-> -               set_fs(KERNEL_DS);
-> -               err = snapshot_ioctl(file, SNAPSHOT_SET_SWAP_AREA,
-> -                                    (unsigned long) &swap_area);
-> -               set_fs(old_fs);
-> -               return err;
-> -       }
-> -
->         default:
->                 return snapshot_ioctl(file, cmd, arg);
->         }
->  }
-> -
->  #endif /* CONFIG_COMPAT */
->
->  static const struct file_operations snapshot_fops = {
-> --
+On Mon, 6 Apr 2020, Rafael J. Wysocki wrote:
 
-Applied along with the [1/2] as 5.7-rc material, thanks!
+> In the meantime I have created a git branch with changes to simplify the code,
+> rename some things and clarify the documentation a bit:
+> 
+>  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+>  pm-sleep-core
+> 
+> (https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-sleep-core
+> for web access).
+> 
+> I'm going to post these changes as patches soon.
+
+All right, those are some significant changes.  It'll take me a little 
+while to absorb them.
+
+> On Friday, April 3, 2020 10:15:09 PM CEST Alan Stern wrote:
+
+> > Let's put it like this: The resume-side callbacks should have the
+> > overall effect of bringing the device back to its initial state, with
+> > the following exceptions and complications:
+> > 
+> > 	Unless SMART_SUSPEND and LEAVE_SUSPEND are both set, a device
+> > 	that was in runtime suspend before the suspend_late phase 
+> > 	must end up being runtime-active after the matching RESUME.
+> >
+> > 	Unless SMART_SUSPEND is set, a device that was in runtime 
+> > 	suspend before the freeze_late phase must end up being 
+> > 	runtime-active after the matching THAW.
+> 
+> Correct.
+>  
+> > [I'm not so sure about this.  Wouldn't it make more sense to treat
+> > _every_ device as though SMART_SUSPEND was set for FREEZE/THAW
+> > transitions, and require subsystems to do the same?]
+> 
+> Drivers may expect devices to be runtime-active when their suspend
+> callbacks are invoked unless they set SMART_SUSPEND.  IOW, without
+> SMART_SUSPEND set the device should not be left in runtime suspend
+> during system-wide suspend at all unless direct-complete is applied
+> to it.
+
+[Let's confine this discussion to the not-direct-complete case.]
+
+Okay, say that SMART_SUSPEND isn't set and the device is initially
+runtime-suspended.  Since the core knows all this, shouldn't the core 
+then call pm_runtime_resume() immediately before ->suspend?  Why leave 
+this up to subsystems or drivers (which can easily get it wrong -- 
+not to mention all the code duplication it would require)?
+
+Also, doesn't it make sense for some subsystems or drivers to want 
+their devices to remain in runtime suspend throughout a FREEZE/THAW 
+transition but not throughout a SUSPEND/RESUME transition?  With only a 
+single SMART_SUSPEND flag, how can we accomodate this desire?
+
+Finally, my description above says that LEAVE_SUSPENDED matters for 
+SUSPEND/RESUME but not for FREEZE/THAW.  Is that really what you have 
+in mind?
+
+> > 	After RESTORE, _every_ device must end up being runtime 
+> > 	active.
+> 
+> Correct.
+> 
+> > 	In general, each resume-side callback should undo the effect
+> > 	of the matching suspend-side callback.  However, because of
+> > 	the requirements mentioned in the preceding sentences,
+> > 	sometimes a resume-side callback will be issued even though
+> > 	the matching suspend-side callback was skipped -- i.e., when
+> > 	a device that starts out runtime-suspended ends up being
+> > 	runtime-active.
+> > 
+> > How does that sound?
+> 
+> It is correct, but in general the other way around is possible too.
+> That is, a suspend-side callback may be issued without the matching
+> resume-side one and the device's PM runtime status may be changed
+> if LEAVE_SUSPENDED is set and SMART_SUSPEND is unset.
+
+This is inconsistent with what I wrote above (the "Unless SMART_SUSPEND
+and LEAVE_SUSPENDED are both set" part).  Are you saying that text
+should be changed?
+
+> > Are you certain you want the subsystem callback to be responsible for
+> > setting the runtime status to "active"?  Isn't this an example of
+> > something the core could do in order to help simplify subsystems?
+> 
+> The rationale here is that whoever decides whether or not to skip the
+> driver-level callbacks, should also set the PM-runtime status of the
+> device to match that decision.
+
+Well, that's not really a fair description.  The decision about
+skipping driver-level callbacks is being made right here, by us, now.  
+(Or if you prefer, by the developers who originally added the
+SMART_SUSPEND flag.)  We require subsystems to obey the decisions being
+outlined in this discussion.
+
+Given that fact, this is again a case of having the core do something 
+rather than forcing subsystems/drivers to do it (possibly getting it 
+wrong and certainly creating a lot of code duplication).
+
+If a subsystem really wants to override our decision, it can always
+call pm_runtime_set_{active|suspended} to override the core's setting.
+
+> > And this brings up another thing the core might do to help simplify
+> > drivers and subsystems: If SMART_SUSPEND isn't set and the device is in
+> > runtime suspend, couldn't the core do a pm_runtime_resume before
+> > issuing the ->suspend or ->suspend_late callback?
+> 
+> It could, but sometimes that is not desirable.  Like when the drivver points its
+> suspend callback to pm_runtime_force_suspend().
+
+This seems to contradict what you wrote above: "Drivers may expect
+devices to be runtime-active when their suspend callbacks are invoked
+unless they set SMART_SUSPEND.  IOW, without SMART_SUSPEND set the
+device should not be left in runtime suspend during system-wide suspend
+at all unless direct-complete is applied to it."
+
+If you stand by that statement then drivers should never point their
+suspend callback to pm_runtime_force_suspend() unless they also set
+SMART_SUSPEND.
+
+Alan Stern
+
