@@ -2,175 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 699CF19F89E
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 17:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB1819F91B
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Apr 2020 17:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728872AbgDFPOI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 6 Apr 2020 11:14:08 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:35049 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728826AbgDFPOH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Apr 2020 11:14:07 -0400
-Received: by mail-oi1-f194.google.com with SMTP id t25so13359991oij.2;
-        Mon, 06 Apr 2020 08:14:07 -0700 (PDT)
+        id S1729064AbgDFPoL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Apr 2020 11:44:11 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:40814 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728962AbgDFPoL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Apr 2020 11:44:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586187849;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ksel4zeuxEuvzlfkWBaq7N2seFfLhw/qIgpcMtr4cuE=;
+        b=gt0Mavq/yhlJDXnEyl191ZO3UMBjkeuZRoXrpeWn+cnQlpjUgyowI6GLS7Z52gbcpTMmVU
+        +tOmCtOb4zRQqUsm3R/sqH8n4wZWnpx4r0bGlFeWHA5vmLQhT6w1Run2AJT0yhJCdek6lr
+        ewzEt1Ge9+kX7m5ytk7HeOtuu9Wenz8=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-310-c8pSLHXoPA65P-u8bVv22A-1; Mon, 06 Apr 2020 11:44:08 -0400
+X-MC-Unique: c8pSLHXoPA65P-u8bVv22A-1
+Received: by mail-wr1-f70.google.com with SMTP id j12so8509706wrr.18
+        for <linux-pm@vger.kernel.org>; Mon, 06 Apr 2020 08:44:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=QnGJpUcnr/LV52LUQSsfc6dIRSvEfNk579Oi3E4BtZw=;
-        b=Xoi49p/6iRzhLdT6hx1V/WWCjj5dkxuc6Hd092rD6T7urHGKeqFUnQm1WL7uNaMVNE
-         BLOOHSBue8XCUJjZ28ItIjsFcM+YUV/a3/8J0ZpeYJBUVaQvEeP7NH9ouooIfkcIPhOy
-         pjp861gY+R1re/Mc8H+0eGoanzz45DTMbFB046+0fumSi32tP6JGneduoPHoKPYnWJfd
-         zepok9cpI0PtjekWHGUXEQ5VntXurM5qjVOt4BBc3DeGFbVPANnrPWJZPTUZ+WR4KH5P
-         Lh1dt/bw2zMa6v1vZ+fw3JatrJqd2m2+ChQlV8nPkkU/0SreUDdrHYdZMOuVeVSdI8pA
-         BT3A==
-X-Gm-Message-State: AGi0PuZcm2+0GdyDdAUo88LufYk9kSB//fgbgopwihtxsjan2iM3Gh9x
-        F6crbfaOQjbOqz6xLrctMZwzyRwgUveKzyX9+5PPKtV/
-X-Google-Smtp-Source: APiQypIvLhm4CgDSPv6mQsDS2leEsn8gXORXQlDxnq7+kZLH4nFyJJVQTQSogX/C6SWU6St1GIg5J+C3YfETlGEQQo0=
-X-Received: by 2002:a05:6808:8f:: with SMTP id s15mr13524853oic.110.1586186046794;
- Mon, 06 Apr 2020 08:14:06 -0700 (PDT)
+        bh=Ksel4zeuxEuvzlfkWBaq7N2seFfLhw/qIgpcMtr4cuE=;
+        b=qgUXq91HuyhFT1+NB/YG86ocx6nP51BZWgZfJIQEYJrT2DJSsgCcySVBtRN231wCvn
+         FmdzRPdCOAFnjZsOWWRFbmu+KRx5x37SZ1Um0zfq9gO1sph7U6+Am5iEQicXdUIqh5QP
+         uS5taY/RFbJsq/rzSvze3xpDVYiycUOywPNBz9g4MDQ0BRUmp9Ug8ktz32RyqX1LON03
+         Q4IxbdC14PhFjCmOtKZ/AZX60raV4W5ar/+XpeajLrPy30Ot1i1M/mLASzp48+E9yRQp
+         /pPWHMFJgHZWF2cvay5pqvmK7DT4GB+IZeLyWpZ0cyUNB3+ZCPw2UqcLtQKChN5L4RF4
+         /TGQ==
+X-Gm-Message-State: AGi0PuYLn2FzAc2veyF/0l+lakQlL4EqKw2+grQPftXaC1aeOecPJTSH
+        ADRrWmWnxsUUY7e9DmMWm006r1X7Yk0IiGrQOB3vA3Bpo3gyvfLqklpCA/I8AU+ldaoNyH44NbS
+        gqqFZiozfTv994Xlt42o=
+X-Received: by 2002:adf:cf09:: with SMTP id o9mr23888996wrj.74.1586187847097;
+        Mon, 06 Apr 2020 08:44:07 -0700 (PDT)
+X-Google-Smtp-Source: APiQypIq8KKSvRFBuJvpiGY0hkZeDDxmoHMbGHpSedw+9ufGA1JoBNOnkv7Pi7rNRZL2IOokbrnHLw==
+X-Received: by 2002:adf:cf09:: with SMTP id o9mr23888982wrj.74.1586187846908;
+        Mon, 06 Apr 2020 08:44:06 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id n6sm8802wmn.10.2020.04.06.08.44.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Apr 2020 08:44:06 -0700 (PDT)
+Subject: Re: [PATCH] power: supply: axp288_fuel_gauge: Add the Meegopad T02 to
+ the blacklist.
+To:     rafirafi <rafirafi.at@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200406140538.11894-1-rafirafi.at@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <eff57daf-6f71-1f6f-e4f9-5b5b1ed974cd@redhat.com>
+Date:   Mon, 6 Apr 2020 17:44:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 6 Apr 2020 17:13:55 +0200
-Message-ID: <CAJZ5v0j8rEiD0uv+LQoAQyfdXORF+joz-vLVH4ryH9_xvZebOQ@mail.gmail.com>
-Subject: [GIT PULL] More ACPI updates for v5.7-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20200406140538.11894-1-rafirafi.at@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+Hi,
 
-Please pull from the tag
+On 4/6/20 4:05 PM, rafirafi wrote:
+> From: Rafael Gandolfi <rafirafi.at@gmail.com>
+> 
+>      The Meegopad T02 is a PC in stick format and doesn't have a battery,
+>      it is reported with a random and constant battery charge but as
+>      discharging to userspace.
+> 
+>      Add it to the blacklist to avoid the bogus battery status reporting.
+> 
+> Signed-off-by: Rafael Gandolfi <rafirafi.at@gmail.com>
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-5.7-rc1-2
+Patch looks good to me:
 
-with top-most commit 33ae7f715e30a674599c7f57dce0512b6051edbf
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
- Merge branches 'acpi-cppc', 'acpi-video' and 'acpi-drivers'
+Regards,
 
-on top of commit 2ce94bc4e056d3e48291aac87a95ebd2a86348ba
-
- Merge tag 'pnp-5.7-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-to receive additional ACPI updates for 5.7-rc1.
-
-These update the ACPICA code in the kernel to the 20200326 upstream
-revision, fix an ACPI-related CPU hotplug deadlock on x86, update
-Intel Tiger Lake device IDs in some places, add a new ACPI backlight
-blacklist entry, update the "acpi_backlight" kernel command line
-switch documentation and clean up a CPPC library routine.
-
-Specifics:
-
- - Update the ACPICA code in the kernel to upstream revision 20200326
-   including:
-
-   * Fix for a typo in a comment field (Bob Moore).
-   * acpiExec namespace init file fixes (Bob Moore).
-   * Addition of NHLT to the known tables list (Cezary Rojewski).
-   * Conversion of PlatformCommChannel ASL keyword to PCC (Erik
-     Kaneda).
-   * acpiexec cleanup (Erik Kaneda).
-   * WSMT-related typo fix (Erik Kaneda).
-   * sprintf() utility function fix (John Levon).
-   * IVRS IVHD type 11h parsing implementation (Michał Żygowski).
-   * IVRS IVHD type 10h reserved field name fix (Michał Żygowski).
-
- - Fix ACPI-related CPU hotplug deadlock on x86 (Qian Cai).
-
- - Fix Intel Tiger Lake ACPI device IDs in several places (Gayatri
-   Kammela).
-
- - Add ACPI backlight blacklist entry for Acer Aspire 5783z (Hans
-   de Goede).
-
- - Fix documentation of the "acpi_backlight" kernel command line
-   switch (Randy Dunlap).
-
- - Clean up the acpi_get_psd_map() CPPC library routine (Liguang
-   Zhang).
-
-Thanks!
+Hans
 
 
----------------
+> ---
+>   drivers/power/supply/axp288_fuel_gauge.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+> index e1bc4e6e6f30..0bc548865a61 100644
+> --- a/drivers/power/supply/axp288_fuel_gauge.c
+> +++ b/drivers/power/supply/axp288_fuel_gauge.c
+> @@ -717,6 +717,12 @@ static const struct dmi_system_id axp288_fuel_gauge_blacklist[] = {
+>   			DMI_MATCH(DMI_PRODUCT_NAME, "STK1A32SC"),
+>   		},
+>   	},
+> +	{
+> +		/* Meegopad T02 */
+> +		.matches = {
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "MEEGOPAD T02"),
+> +		},
+> +	},
+>   	{
+>   		/* Meegopad T08 */
+>   		.matches = {
+> 
 
-Bob Moore (3):
-      ACPICA: Fix a typo in a comment field
-      ACPICA: Fixes for acpiExec namespace init file
-      ACPICA: Update version 20200326
-
-Cezary Rojewski (1):
-      ACPICA: Add NHLT table signature
-
-Erik Kaneda (3):
-      ACPICA: Change PlatformCommChannel ASL keyword to PCC
-      ACPICA: acpiexec: remove redeclaration of
-acpi_gbl_db_opt_no_region_support
-      ACPICA: WSMT: Fix typo, no functional change
-
-Gayatri Kammela (3):
-      ACPI: Update Tiger Lake ACPI device IDs
-      platform/x86: intel-hid: fix: Update Tiger Lake ACPI device ID
-      thermal: int340x_thermal: fix: Update Tiger Lake ACPI device IDs
-
-Hans de Goede (1):
-      ACPI: video: Use native backlight on Acer Aspire 5783z
-
-John Levon (1):
-      ACPICA: utilities: fix sprintf()
-
-Liguang Zhang (1):
-      ACPI: CPPC: clean up acpi_get_psd_map()
-
-Michał Żygowski (2):
-      ACPICA: Implement IVRS IVHD type 11h parsing
-      ACPICA: Fix IVRS IVHD type 10h reserved field name
-
-Qian Cai (1):
-      x86: ACPI: fix CPU hotplug deadlock
-
-Randy Dunlap (1):
-      ACPI: video: Docs update for "acpi_backlight" kernel parameter options
-
----------------
-
- Documentation/admin-guide/kernel-parameters.txt    |  8 +++--
- arch/x86/kernel/acpi/cstate.c                      |  3 +-
- drivers/acpi/acpica/acnamesp.h                     |  2 ++
- drivers/acpi/acpica/dbinput.c                      | 16 +++++-----
- drivers/acpi/acpica/dbxface.c                      |  1 +
- drivers/acpi/acpica/dswexec.c                      | 33 ++++++++++++++++++++
- drivers/acpi/acpica/dswload.c                      |  2 --
- drivers/acpi/acpica/dswload2.c                     | 35 ++++++++++++++++++++++
- drivers/acpi/acpica/nsnames.c                      |  6 +---
- drivers/acpi/acpica/utdecode.c                     |  2 +-
- drivers/acpi/acpica/utdelete.c                     |  9 +++---
- drivers/acpi/acpica/utprint.c                      |  7 ++++-
- drivers/acpi/cppc_acpi.c                           | 33 +++++---------------
- drivers/acpi/device_pm.c                           |  2 +-
- drivers/acpi/dptf/dptf_power.c                     |  2 +-
- drivers/acpi/dptf/int340x_thermal.c                |  8 ++---
- drivers/acpi/processor_throttling.c                |  7 -----
- drivers/acpi/tables.c                              |  2 +-
- drivers/acpi/video_detect.c                        |  9 ++++++
- drivers/platform/x86/intel-hid.c                   |  2 +-
- .../intel/int340x_thermal/int3400_thermal.c        |  2 +-
- .../intel/int340x_thermal/int3403_thermal.c        |  2 +-
- include/acpi/acpixf.h                              |  2 +-
- include/acpi/actbl2.h                              | 21 +++++++++++--
- include/acpi/actbl3.h                              |  6 ++--
- include/acpi/acuuid.h                              |  2 +-
- include/acpi/processor.h                           |  8 +++++
- 27 files changed, 155 insertions(+), 77 deletions(-)
