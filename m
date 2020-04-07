@@ -2,95 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5761A15A6
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 21:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F7E1A164D
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 21:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbgDGTMF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Apr 2020 15:12:05 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:33595 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726719AbgDGTMF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 15:12:05 -0400
-Received: by mail-lf1-f66.google.com with SMTP id h6so3303893lfc.0;
-        Tue, 07 Apr 2020 12:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CF9EVkMcPXMLKckuhEi8Rm3sQX799rg96bk7BbCR0Pw=;
-        b=AtJC2mfTzvxyg4EVv/8nFSUIkD0xfX8P59C1zdFpCOgqzoywoKw2zMD4zhktYPYzKP
-         rgAUBhwYTy5OrRTuShl3I0k6Csj3jS3zDSmqLLxCVWRa4619jWf6d8lxxBWtig+gvHLu
-         8cw/rgZKgVLCqEpbMSxf+8LaEXej4zdu3ZLHKGTd1ItZtLqF1OetnaiVS4c37ZV7kPhE
-         TXCCxDGJeqCzjrSoI6SSFyvBtYlURGmmE5lUP9skRgoIXMJmijiT7yIKwmDoD/cjeo0X
-         kTEhHNohnTnnG3ran3l7Rmt+YZmBQspA6ak6+xyrUjxVMRy3tQqqd6oeyx22IMv9jsNs
-         mpaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CF9EVkMcPXMLKckuhEi8Rm3sQX799rg96bk7BbCR0Pw=;
-        b=nzQpuI8QpNGza9f/h+V6wixFMxbSAEJJccPce1oGj58icX2d2mtGbcs/nHQq67d1Ce
-         Rdfb1l6QT/O0SWYR/+hYHDneEPFNf6C+DsUtfZCcjYEOpMnx9a2X/hF//NCGP0q0LpgC
-         Cb3GqGwaDAD1aj9CEUTm+QhCa6VGuORMpCmKZyDfs24NdX9pT+no6aA5RXWrvrtGnhbg
-         LSs1agFvG3lb2GSd4ODBuMozxPMbe0AJ76bbd38t4IhSK2ufoUQuSeJvZ9wUZpGlUDyx
-         Lh6mqD3JUQJc0oQNG+Vw03Z1bq/B8isWmhXzHFkIdD7tcrvz7fdlF0hF8WWjnGuvd7aS
-         0onw==
-X-Gm-Message-State: AGi0PubtZ1E78whqVb4uEDM+SaMRPyijnINpJUWpqE06/iOYOZfwehU6
-        XsC1f5D9K/+EZJHZZMgAVbA=
-X-Google-Smtp-Source: APiQypKLhUCx0eZnDHj52JEjnwmcfs/bE/1CLscRFZDkrSrz/iXzWyI75wF3JRRIMi8u5Jgbyvys6g==
-X-Received: by 2002:ac2:4554:: with SMTP id j20mr2376490lfm.91.1586286722428;
-        Tue, 07 Apr 2020 12:12:02 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.googlemail.com with ESMTPSA id 203sm12202499ljf.65.2020.04.07.12.12.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Apr 2020 12:12:01 -0700 (PDT)
-Subject: Re: [TEGRA194_CPUFREQ Patch v2 2/3] cpufreq: Add Tegra194 cpufreq
- driver
-To:     sumitg <sumitg@nvidia.com>, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, talho@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     bbasu@nvidia.com, mperttunen@nvidia.com
-References: <1586028547-14993-1-git-send-email-sumitg@nvidia.com>
- <1586028547-14993-3-git-send-email-sumitg@nvidia.com>
- <67f9feb1-ba51-f1ac-b6eb-4587924d0748@gmail.com>
- <538ddcf4-b760-a342-eab6-5a61c9bd860a@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <3009a636-0c85-c867-6dcb-2deb1a610a00@gmail.com>
-Date:   Tue, 7 Apr 2020 22:12:00 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1727028AbgDGT4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Apr 2020 15:56:11 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:50373 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726884AbgDGT4L (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 7 Apr 2020 15:56:11 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 48xdSl2pFCzGL;
+        Tue,  7 Apr 2020 21:56:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1586289369; bh=CVRF5lVxW3dFPevtLRvdrcbgt8omIeQJwRoS/TkzpZQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FcFLZuaXMU36jdEbciaxJwpUnUcwljtrU0GwN0JHieMQTpmNFMlmJm7uAKWVjShXq
+         Zd8ImcftN2Mt6Yrruq/fBrhUuscSgJhJXlUfVzpKGEIvZKke+b4lN19y6v3h3YaST1
+         R3s4h9nu0IE7zAwOIp7Ca8jpqoygoxo1D4gbLuHFFAFZAY7otsD7miQdRV/Esaoz4r
+         v2OV2bnnNWAuFVuqllB0a4Lj5uRY1uO3xnZaKXEJEknJAKV96bbiXloAJtZvk4kW6n
+         Yl2mE0iy6VAEYJcaULqLJxLoGl58mhg7KdI96Lsj2fGAtWdoNndWoqFN9gW7Lo3VSl
+         p1iADqHjgluig==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.2 at mail
+Date:   Tue, 7 Apr 2020 21:55:46 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 07/11] power: supply: core: tabularize HWMON
+ temperature labels
+Message-ID: <20200407195546.GA744@qmqm.qmqm.pl>
+References: <29b5043db9a51ef7a0cb6e3a8c69c91e36045cd6.1585944770.git.mirq-linux@rere.qmqm.pl>
+ <202004050928.d6QhVcsQ%lkp@intel.com>
+ <CAKwvOdm5BhMdAmXR0gCLntkbvF7ajaNoWoHVCCio1CqbGzS6aQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <538ddcf4-b760-a342-eab6-5a61c9bd860a@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdm5BhMdAmXR0gCLntkbvF7ajaNoWoHVCCio1CqbGzS6aQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-07.04.2020 21:55, sumitg пишет:
-...
->>> + * Returns freq in KHz on success, 0 if cpu is offline
->>
->> I don't see any checks in the code about whether CPU is offline.
->>
->> Googling for "queue_work_on offline cpu" suggests that this function
->> should hang.
->>
-> Tried this and didn't get crash or hang.
-> show_cpuinfo_cur_freq() returns "<unknown>" value on reading frequency
-> from a cluster having both it's cores offline.
-> If only one cpu is offline, then frequency of other online cpu which is
-> managing the policy of that cluster is returned.
-> Have still added below check as guard in get|set() freq calls.
->     if (!cpu_online(cpu))
->         return -EINVAL;
-> Thankyou for the input.
+On Tue, Apr 07, 2020 at 11:13:50AM -0700, Nick Desaulniers wrote:
+> On Sat, Apr 4, 2020 at 6:53 PM kbuild test robot <lkp@intel.com> wrote:
+> >
+> > Hi "Micha�,
+> >
+> > I love your patch! Perhaps something to improve:
+> >
+> > [auto build test WARNING on power-supply/for-next]
+> > [also build test WARNING on hwmon/hwmon-next linus/master v5.6 next-20200404]
+> > [if your patch is applied to the wrong git tree, please drop us a note to help
+> > improve the system. BTW, we also suggest to use '--base' option to specify the
+> > base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+> >
+> > url:    https://github.com/0day-ci/linux/commits/Micha-Miros-aw/extensions-and-fixes/20200405-044024
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+> > config: x86_64-randconfig-b002-20200405 (attached as .config)
+> > compiler: clang version 11.0.0 (https://github.com/llvm/llvm-project 62f3a9650a9f289a07a5f480764fb655178c2334)
+> > reproduce:
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # save the attached .config to linux build tree
+> >         COMPILER=clang make.cross ARCH=x86_64
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kbuild test robot <lkp@intel.com>
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> > >> drivers/power/supply/power_supply_hwmon.o: warning: objtool: power_supply_hwmon_read_string() falls through to next function power_supply_hwmon_write()
+> 
+> I'm guessing this is from the unreachable:
+> https://github.com/0day-ci/linux/commit/b8b2d14ca46ca54257f55c9af58ea25695b9ee36
+> I'll need to play with this some more as I couldn't reproduce with a
+> simplified test case, but looks like a compiler bug.  Filed
+> https://github.com/ClangBuiltLinux/linux/issues/978 for me to track.
 
-If CPUFreq core takes care of taking into account the offline CPU, then
-the check isn't needed. It also wouldn't be enough if there was a
-problem here.
+Hi Nick,
+
+Just guessing: have you tried adding another unrelated function to the
+testcase? I would expect that 'fall through to next function' needs
+some other function to match.
+
+Best Regards,
+Micha� Miros�aw
