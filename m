@@ -2,103 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A132A1A0D4C
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 14:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B167F1A0E65
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 15:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728209AbgDGMFP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Apr 2020 08:05:15 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:45578 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728555AbgDGMFO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 08:05:14 -0400
-Received: by mail-ed1-f68.google.com with SMTP id m12so3688263edl.12
-        for <linux-pm@vger.kernel.org>; Tue, 07 Apr 2020 05:05:13 -0700 (PDT)
+        id S1728913AbgDGNbE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Apr 2020 09:31:04 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:46515 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728482AbgDGNbE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 09:31:04 -0400
+Received: by mail-vs1-f67.google.com with SMTP id z125so2128077vsb.13
+        for <linux-pm@vger.kernel.org>; Tue, 07 Apr 2020 06:31:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
-        b=r9+wddViVvdqJX8nJHxmkHun6czJ1ikOViiDg5WrV9zsEG8g+/XsCs/Xm8ycJNr5Ml
-         2fuWB1NlLbfc9KUcuyehV5oBNlxoII4bQqlns7ggarruibdn9M7NPubgv2NwI4ghw4q6
-         1iP0OzwDLrwtuIjynAkDMR9V+F7VNbc5SOL1Zz9Q6G98wa8K8FFZQeUID3JSQdRWWQFi
-         ldW15EVw+VNiQ1Az7KgCIbVzPidhk/uK0SGlgeBOEFOC/dv6W9D9D9Vhs5YPaMbwGqPv
-         2jmm/lwv/01mhBrCJ7AZ83I7wgIQbzz7WwjiopAUrGbFPrMes7SZVSzxNBGnUxmtd/Xg
-         gYKw==
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1PuP95pVbFQYLwVP/nv0qO9FfBSm3TrhJmC4ds9qXhk=;
+        b=1w1df4RUeeL0VXPeqcyMGJbfByV2WYJmZC7sKAeNL9F9J9/8ILhODXlqWk8iLFAhnb
+         w/HDEYdNoDrwBasbNfqwV9lp3R40WUFTTN4Lxf/+SjA4k7SJSgtJKax8PQuyBimSyf9q
+         1JcejYcYCOahTojFNZqTKl8Z/S9zO6wlH8DyUqrZiUVMMiYnTUJvsN4d6uWZGrViK8Il
+         N+hErK9txJfx0zOnl3HEShvCd4kM+/6CaCGGopJtZHL3tY8oNk94Ps+euXHg5dN/vrs3
+         /fTV5DRZPFUwMrJM/zqIg9g46dgGOTLTAPICvLEIoPuTMXn6SuVVo/4gk8kj6YB5enRr
+         RWSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
-        b=oU04JwuATfBgy+cmgEJ04U1MSztmcfDhav5UTiH+inqs9CQPGkmRO7Qh/JuD3SmPk6
-         BnXrDlwgKXgEDo9HeDtPEIXr2WcUYM6LpIr8HwYyPlMfocVTfbefMtqQ8nF3ytgXtSFZ
-         +vZTiOtZQ0HwMzfBafpYa2gzetw5S82zGuHlbhydterJwsdKOQSo1bVu8Adocskl6JkR
-         vKMytIOTdH6XiQVJArxIVyViB9eL29UYGTMiJKx6odRRb0AB3RM6T+2wL8fd8GmN8naJ
-         IgSFMcXavMZsBckfQeQ+PvhC+3YXE4IIZe9cwOz8fUs2jSpXRnRKQ/UCi4WYpq21U6cc
-         eNtg==
-X-Gm-Message-State: AGi0PuYnwsJQO8lwPjyFVxOohtzBjhF93aZOJ97TbvxeYENj5zo9yzWt
-        I67xA+YrwVEGmJqDDrUBhTsuV+GuKNbQeBaoPjo=
-X-Google-Smtp-Source: APiQypLxWgxTObCMscWGDo5tJRLAw8Gjysi7VxpivmqA8Dbqp6klUnK+qCv8lcGGWvbj42MQ6KHkhLML+FeceTIY/Oc=
-X-Received: by 2002:a17:907:447c:: with SMTP id oo20mr1758131ejb.282.1586261112260;
- Tue, 07 Apr 2020 05:05:12 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1PuP95pVbFQYLwVP/nv0qO9FfBSm3TrhJmC4ds9qXhk=;
+        b=iawG40p3SzDDUjr+6jni9zlhjxucdnA5B2hV8cF7mL6BtNle9sKBPft37HhYUmk5+J
+         0njLihUIhdQZGGZmQmK3V49sxyQcvvnugK0eYy6gpJYCqvoHtnoiyNpzHRkfQd3Sl3yC
+         NScylFAeQcHKoZOWgVC3HKJs5JA8mDt0d6jbDptWNsvbCWVQR82p3ilcqwXGPpvV4Cxi
+         y8Mx4aB0KbmK5VcxasVyzOcVnPNnUP/e7pfkzYEYwcBCASh9BSJ+kD2xtS9nuFyh0FJO
+         DaTeRwN/PwCG53UZiTy5Xo6pIhSAFzqTb0Wh8bzSt6HKzgJm9usI+DDLrptFPO31hDCi
+         QwEA==
+X-Gm-Message-State: AGi0Puad12Tp3DJl7B1aSi5zV7ow5Yst5RKHUQsF/GnFBlXF1ze/bE3Y
+        tMs/gTqH8IysV46i39Ks3rufcCJXcWCJd7qLeKtuMifca/8=
+X-Google-Smtp-Source: APiQypJIsS5LtRIAMLOYYbraXYPuIBtAA/lQ8r44QqMyhwgvIj2oD2e4b8RhGlT6ilFbbaSHQrUmMUlH0XnQLV3KEX8=
+X-Received: by 2002:a67:69d5:: with SMTP id e204mr1615782vsc.159.1586266262706;
+ Tue, 07 Apr 2020 06:31:02 -0700 (PDT)
 MIME-Version: 1.0
-Reply-To: mrsanna.h.bruun119@gmail.com
-Received: by 2002:a17:906:2cd4:0:0:0:0 with HTTP; Tue, 7 Apr 2020 05:05:11
- -0700 (PDT)
-From:   "Mrs. Anna H. Bruun" <mrsanna.h.bruun119@gmail.com>
-Date:   Tue, 7 Apr 2020 05:05:11 -0700
-X-Google-Sender-Auth: A6h9rJGyrFCkCAMHowGD9fjWh1Q
-Message-ID: <CAMrr=JgtYk+AYEFNjXo8P18gjsxJDQG7ApfUuRfymRmMT5utiw@mail.gmail.com>
-Subject: My Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20200330140859.12535-1-tiwai@suse.de>
+In-Reply-To: <20200330140859.12535-1-tiwai@suse.de>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Tue, 7 Apr 2020 19:00:51 +0530
+Message-ID: <CAHLCerOGgv8k1ce43jvmhZwXWVQ_uB1WgrQN_NbkBphWE9NfHA@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Add a sanity check for invalid state at stats update
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="0000000000001bff0005a2b36595"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-My Dear
+--0000000000001bff0005a2b36595
+Content-Type: text/plain; charset="UTF-8"
 
-My Name is Mrs. Anna H. Bruun, from Norway. I know that this message
-will be a surprise to you. Firstly, I am married to Mr. Patrick Bruun,
-A gold merchant who owns a small gold Mine in Burkina Faso; He died of
-Cardiovascular Disease in mid-March 2011. During his life time he
-deposited the sum of =E2=82=AC 8.5 Million Euro) Eight million, Five hundre=
-d
-thousand Euros in a bank in Ouagadougou the capital city of Burkina
-Faso. The deposited money was from the sale of the shares, death
-benefits payment and entitlements of my deceased husband by his
-company.
+On Mon, Mar 30, 2020 at 7:39 PM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> The thermal sysfs handler keeps the statistics table with the fixed
+> size that was determined from the initial max_states() call, and the
+> table entry is updated at each sysfs cur_state write call.  And, when
+> the driver's set_cur_state() ops accepts the value given from
+> user-space, the thermal sysfs core blindly applies it to the
+> statistics table entry, which may overflow and cause an Oops.
+> Although it's rather a bug in the driver's ops implementations, we
+> shouldn't crash but rather give a proper warning instead.
+>
+> This patch adds a sanity check for avoiding such an OOB access and
+> warns with a stack trace to show the suspicious device in question.
 
-I am sending this message to you praying that it will reach you in
-good health, since I am not in good health condition in which I sleep
-every night without knowing if I may be alive to see the next day. I
-am suffering from long time cancer and presently i am partially
-suffering from a stroke illness which has become almost impossible for
-me to move around. I am married to my late husband for over 4 years
-before he died and is unfortunately that we don't have a child, my
-doctor confided in me that i have less chance to live. Having known my
-health condition, I decided to contact you to claim the fund since I
-don't have any relation I grew up from the orphanage home,
+Hi Takashi,
 
-I have decided to donate what I have to you for the support of helping
-Motherless babies/Less privileged/Widows' because I am dying and
-diagnosed of cancer for about 2 years ago. I have been touched by God
-Almighty to donate from what I have inherited from my late husband to
-you for good work of God Almighty. I have asked Almighty God to
-forgive me and believe he has, because He is a Merciful God I will be
-going in for an operation surgery soon
+Instead of this warning, I think we should reject such input when
+writing to cur_state.
 
-This is the reason i need your services to stand as my next of kin or
-an executor to claim the funds for charity purposes. If this money
-remains unclaimed after my death, the bank executives or the
-government will take the money as unclaimed fund and maybe use it for
-selfish and worthless ventures, I need a very honest person who can
-claim this money and use it for Charity works, for orphanages, widows
-and also build schools for less privilege that will be named after my
-late husband and my name; I need your urgent answer to know if you
-will be able to execute this project, and I will give you more
-Information on how the fund will be transferred to your bank account.
+See attached patch. If you think this OK, I'll submit it.
 
-Thanks
-Mrs. Anna H.
+Regards,
+Amit
+
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> ---
+>
+> We've hit some crash by stress tests, and this patch at least works
+> around the crash itself.  While the actual bug fix of the buggy driver
+> is still being investigated, I submit the hardening in the core side
+> at first.
+>
+>  drivers/thermal/thermal_sysfs.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index aa99edb4dff7..a23c4e701d63 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -772,6 +772,11 @@ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
+>
+>         spin_lock(&stats->lock);
+>
+> +       if (dev_WARN_ONCE(&cdev->device, new_state >= stats->max_states,
+> +                         "new state %ld exceeds max_state %ld",
+> +                         new_state, stats->max_states))
+> +               goto unlock;
+> +
+>         if (stats->state == new_state)
+>                 goto unlock;
+>
+> --
+> 2.16.4
+>
+
+--0000000000001bff0005a2b36595
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-thermal-Reject-invalid-cur_state-input-from-userspac.patch"
+Content-Disposition: attachment; 
+	filename="0001-thermal-Reject-invalid-cur_state-input-from-userspac.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_k8pxym180>
+X-Attachment-Id: f_k8pxym180
+
+RnJvbSA1NDI2NjI2MGQ0ODNhYjQ0NzY1MTBkZDQ0NjFhMWNhZmM2MTFlMTdkIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpNZXNzYWdlLUlkOiA8NTQyNjYyNjBkNDgzYWI0NDc2NTEwZGQ0NDYxYTFj
+YWZjNjExZTE3ZC4xNTg2MjY2MjI0LmdpdC5hbWl0Lmt1Y2hlcmlhQGxpbmFyby5vcmc+CkZyb206
+IEFtaXQgS3VjaGVyaWEgPGFtaXQua3VjaGVyaWFAbGluYXJvLm9yZz4KRGF0ZTogVHVlLCA3IEFw
+ciAyMDIwIDE4OjQ4OjE0ICswNTMwClN1YmplY3Q6IFtQQVRDSF0gdGhlcm1hbDogUmVqZWN0IGlu
+dmFsaWQgY3VyX3N0YXRlIGlucHV0IGZyb20gdXNlcnNwYWNlCgpXZSBkb24ndCBjaGVjayBpZiB0
+aGUgY3VyX3N0YXRlIHZhbHVlIGlucHV0IGluIHN5c2ZzIGlzIGdyZWF0ZXIgdGhhbiB0aGUKbWF4
+aW11bSBjb29saW5nIHN0YXRlIHRoYXQgdGhlIGNvb2xpbmcgZGV2aWNlIHN1cHBvcnRzLiBUaGlz
+IGNhbiBjYXVzZQphY2Nlc3MgdG8gdW5hbGxvY2F0ZWQgbWVtb3J5IGluIGNhc2UgVEhFUk1BTF9T
+VEFUSVNUSUNTIGluIGVuYWJsZWQgYW5kCmNvdWxkIGFsc28gY3Jhc2ggY29vbGluZyBkZXZpY2Vz
+IHRoYXQgZG9uJ3QgY2hlY2sgZm9yIGFuIGludmFsaWQgc3RhdGUgaW4KdGhlaXIgc2V0X2N1cl9z
+dGF0ZSgpIGNhbGxiYWNrLgoKUmV0dXJuIGFuIGVycm9yIGlmIHRoZSBzdGF0ZSBiZWluZyByZXF1
+ZXN0ZWQgaW4gZ3JlYXRlciB0aGFuIHRoZSBtYXhpbXVtCmNvb2xpbmcgc3RhdGUgdGhlIGRldmlj
+ZSBzdXBwb3J0cy4KClJlcG9ydGVkLWJ5OiBUYWthc2hpIEl3YWkgPHRpd2FpQHN1c2UuZGU+ClNp
+Z25lZC1vZmYtYnk6IEFtaXQgS3VjaGVyaWEgPGFtaXQua3VjaGVyaWFAbGluYXJvLm9yZz4KLS0t
+CiBkcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9zeXNmcy5jIHwgOSArKysrKysrKy0KIDEgZmlsZSBj
+aGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9kcml2
+ZXJzL3RoZXJtYWwvdGhlcm1hbF9zeXNmcy5jIGIvZHJpdmVycy90aGVybWFsL3RoZXJtYWxfc3lz
+ZnMuYwppbmRleCA3ZTFkMTFiZGQyNTguLjgwMzNlNWE5Mzg2YSAxMDA2NDQKLS0tIGEvZHJpdmVy
+cy90aGVybWFsL3RoZXJtYWxfc3lzZnMuYworKysgYi9kcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9z
+eXNmcy5jCkBAIC03MDMsNyArNzAzLDcgQEAgY3VyX3N0YXRlX3N0b3JlKHN0cnVjdCBkZXZpY2Ug
+KmRldiwgc3RydWN0IGRldmljZV9hdHRyaWJ1dGUgKmF0dHIsCiAJCWNvbnN0IGNoYXIgKmJ1Ziwg
+c2l6ZV90IGNvdW50KQogewogCXN0cnVjdCB0aGVybWFsX2Nvb2xpbmdfZGV2aWNlICpjZGV2ID0g
+dG9fY29vbGluZ19kZXZpY2UoZGV2KTsKLQl1bnNpZ25lZCBsb25nIHN0YXRlOworCXVuc2lnbmVk
+IGxvbmcgc3RhdGUsIG1heF9zdGF0ZTsKIAlpbnQgcmVzdWx0OwogCiAJaWYgKHNzY2FuZihidWYs
+ICIlbGRcbiIsICZzdGF0ZSkgIT0gMSkKQEAgLTcxMiw2ICs3MTIsMTMgQEAgY3VyX3N0YXRlX3N0
+b3JlKHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IGRldmljZV9hdHRyaWJ1dGUgKmF0dHIsCiAJ
+aWYgKChsb25nKXN0YXRlIDwgMCkKIAkJcmV0dXJuIC1FSU5WQUw7CiAKKwlyZXN1bHQgPSBjZGV2
+LT5vcHMtPmdldF9tYXhfc3RhdGUoY2RldiwgJm1heF9zdGF0ZSk7CisJaWYgKHJlc3VsdCkKKwkJ
+cmV0dXJuIHJlc3VsdDsKKworCWlmIChzdGF0ZSA+PSBtYXhfc3RhdGUpCisJCXJldHVybiAtRUlO
+VkFMOworCiAJbXV0ZXhfbG9jaygmY2Rldi0+bG9jayk7CiAKIAlyZXN1bHQgPSBjZGV2LT5vcHMt
+PnNldF9jdXJfc3RhdGUoY2Rldiwgc3RhdGUpOwotLSAKMi4yMC4xCgo=
+--0000000000001bff0005a2b36595--
