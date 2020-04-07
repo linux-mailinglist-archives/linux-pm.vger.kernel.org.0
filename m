@@ -2,159 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B167F1A0E65
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 15:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1F71A0E7B
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 15:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728913AbgDGNbE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Apr 2020 09:31:04 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:46515 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728482AbgDGNbE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 09:31:04 -0400
-Received: by mail-vs1-f67.google.com with SMTP id z125so2128077vsb.13
-        for <linux-pm@vger.kernel.org>; Tue, 07 Apr 2020 06:31:03 -0700 (PDT)
+        id S1728880AbgDGNgZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Apr 2020 09:36:25 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:39989 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728826AbgDGNgZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 09:36:25 -0400
+Received: by mail-wm1-f66.google.com with SMTP id a81so1845081wmf.5
+        for <linux-pm@vger.kernel.org>; Tue, 07 Apr 2020 06:36:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1PuP95pVbFQYLwVP/nv0qO9FfBSm3TrhJmC4ds9qXhk=;
-        b=1w1df4RUeeL0VXPeqcyMGJbfByV2WYJmZC7sKAeNL9F9J9/8ILhODXlqWk8iLFAhnb
-         w/HDEYdNoDrwBasbNfqwV9lp3R40WUFTTN4Lxf/+SjA4k7SJSgtJKax8PQuyBimSyf9q
-         1JcejYcYCOahTojFNZqTKl8Z/S9zO6wlH8DyUqrZiUVMMiYnTUJvsN4d6uWZGrViK8Il
-         N+hErK9txJfx0zOnl3HEShvCd4kM+/6CaCGGopJtZHL3tY8oNk94Ps+euXHg5dN/vrs3
-         /fTV5DRZPFUwMrJM/zqIg9g46dgGOTLTAPICvLEIoPuTMXn6SuVVo/4gk8kj6YB5enRr
-         RWSQ==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=u9BZfG2nBthv5AKRQY+T7BnFZHYtxdMBekMJA6DU6WI=;
+        b=MpZjcBvUGZNfe7vC+EhDld3yomZVNOYnOV+5Byyu7nhSWBR4AxQm2BiJ0kCnodqBaT
+         iOFmrgVBY8WjsWec5GcFlfZbUwF5pRYMYhFBvelAkAg9bFsN08PUGBRBxILlYR6L257Q
+         Tjaq9m2myndd9tE3soxjUaLcChf+aF6DA8Jip0DwdzTQuBUXwXOUbBAQrwsNo7NxqPoh
+         06Jy1bZ0/uxnEW0rgOaU4crZqQaf4E6xf3Z815KpvrVUer4g9nhLT2VzxjMcu0iw9iMe
+         iQqwVshwDi9FiVCT/EQa6L8tbehK43w4yzl4SYGPDw3V9TnNITX3k7l3EAL9g95XUWvD
+         S+tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1PuP95pVbFQYLwVP/nv0qO9FfBSm3TrhJmC4ds9qXhk=;
-        b=iawG40p3SzDDUjr+6jni9zlhjxucdnA5B2hV8cF7mL6BtNle9sKBPft37HhYUmk5+J
-         0njLihUIhdQZGGZmQmK3V49sxyQcvvnugK0eYy6gpJYCqvoHtnoiyNpzHRkfQd3Sl3yC
-         NScylFAeQcHKoZOWgVC3HKJs5JA8mDt0d6jbDptWNsvbCWVQR82p3ilcqwXGPpvV4Cxi
-         y8Mx4aB0KbmK5VcxasVyzOcVnPNnUP/e7pfkzYEYwcBCASh9BSJ+kD2xtS9nuFyh0FJO
-         DaTeRwN/PwCG53UZiTy5Xo6pIhSAFzqTb0Wh8bzSt6HKzgJm9usI+DDLrptFPO31hDCi
-         QwEA==
-X-Gm-Message-State: AGi0Puad12Tp3DJl7B1aSi5zV7ow5Yst5RKHUQsF/GnFBlXF1ze/bE3Y
-        tMs/gTqH8IysV46i39Ks3rufcCJXcWCJd7qLeKtuMifca/8=
-X-Google-Smtp-Source: APiQypJIsS5LtRIAMLOYYbraXYPuIBtAA/lQ8r44QqMyhwgvIj2oD2e4b8RhGlT6ilFbbaSHQrUmMUlH0XnQLV3KEX8=
-X-Received: by 2002:a67:69d5:: with SMTP id e204mr1615782vsc.159.1586266262706;
- Tue, 07 Apr 2020 06:31:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200330140859.12535-1-tiwai@suse.de>
-In-Reply-To: <20200330140859.12535-1-tiwai@suse.de>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Tue, 7 Apr 2020 19:00:51 +0530
-Message-ID: <CAHLCerOGgv8k1ce43jvmhZwXWVQ_uB1WgrQN_NbkBphWE9NfHA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: Add a sanity check for invalid state at stats update
-To:     Takashi Iwai <tiwai@suse.de>
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=u9BZfG2nBthv5AKRQY+T7BnFZHYtxdMBekMJA6DU6WI=;
+        b=hx5FqJdGNXk7KEzcQAKXN1Kl0B20siit0xgYupTsxfXRUJJHuTFoBIZ+xNhWE6v8tR
+         uB3heMJt32pghMex39wEDAh1Nb2Thkmfh+diWyjbqyLFRnUKTxOU1VueRU956KfLoDuA
+         jXesXHtvOROJ0LOTx63qhIYimwJ00SDVT5fNJ6ZfPGyf3/wCZbtltZvARhcPgnLr/UTh
+         S1612Z4AjL0Y9HRVGR0LjZbbViD/NHses1TLb+duKkQ8xbnzWX/q55z8CGEOkwkRw4v3
+         +khovi+Xz/+iY+xAcZlYym1Qo+oPmDmmoRlNctFJohDTGYNm3DXGFnQTIfIy/J+LKg1U
+         Vwpw==
+X-Gm-Message-State: AGi0PuaPmkfsKXLd8YAFvMpGVLdEaCwziJ81lsJWZyllGRGNraN+9mcA
+        gNqDAKC0NRvfLBbWVPMc86WJJA==
+X-Google-Smtp-Source: APiQypJSBaTYNDjpoPWk+BK323aBWYXUO0QXuBl85ab7C9SFD8Nhamx5xc1kjivg3AQ8c3rRxBbhwQ==
+X-Received: by 2002:a1c:99d3:: with SMTP id b202mr2546329wme.170.1586266583159;
+        Tue, 07 Apr 2020 06:36:23 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:5d56:fae1:b92:8fa0? ([2a01:e34:ed2f:f020:5d56:fae1:b92:8fa0])
+        by smtp.googlemail.com with ESMTPSA id t17sm26569311wrv.53.2020.04.07.06.36.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Apr 2020 06:36:22 -0700 (PDT)
+Subject: Re: [PATCH 2/4] dt-bindings: thermal: Add the idle cooling device
+To:     rafael@kernel.org, robh@kernel.org
 Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="0000000000001bff0005a2b36595"
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200329220324.8785-1-daniel.lezcano@linaro.org>
+ <20200329220324.8785-2-daniel.lezcano@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <723b86c4-273c-bf69-8934-b0a0ebe22409@linaro.org>
+Date:   Tue, 7 Apr 2020 15:36:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <20200329220324.8785-2-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---0000000000001bff0005a2b36595
-Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 30, 2020 at 7:39 PM Takashi Iwai <tiwai@suse.de> wrote:
->
-> The thermal sysfs handler keeps the statistics table with the fixed
-> size that was determined from the initial max_states() call, and the
-> table entry is updated at each sysfs cur_state write call.  And, when
-> the driver's set_cur_state() ops accepts the value given from
-> user-space, the thermal sysfs core blindly applies it to the
-> statistics table entry, which may overflow and cause an Oops.
-> Although it's rather a bug in the driver's ops implementations, we
-> shouldn't crash but rather give a proper warning instead.
->
-> This patch adds a sanity check for avoiding such an OOB access and
-> warns with a stack trace to show the suspicious device in question.
+Hi Rob,
 
-Hi Takashi,
+On 30/03/2020 00:03, Daniel Lezcano wrote:
+> Some devices are not able to cool down by reducing their voltage /
+> frequency because it could be not available or the system does not
+> allow voltage scaling. In this configuration, it is not possible to
+> use this strategy and the idle injection cooling device can be used
+> instead.
+> 
+> One idle cooling device is now present for the CPU as implemented by
+> the combination of the idle injection framework belonging to the power
+> capping framework and the thermal cooling device. The missing part is
+> the DT binding providing a way to describe how the cooling device will
+> work on the system.
+> 
+> A first iteration was done by making the cooling device to point to
+> the idle state. Unfortunately it does not make sense because it would
+> need to duplicate the idle state description for each CPU in order to
+> have a different phandle and make the thermal internal framework
+> happy.
+> 
+> It was proposed to add an cooling-cells to <3>, unfortunately the
+> thermal framework is expecting a value of <2> as stated by the
+> documentation and it is not possible from the cooling device generic
+> code to loop this third value to the back end cooling device.
+> 
+> Another proposal was to add a child 'thermal-idle' node as the SCMI
+> does. This approach allows to have a self-contained configuration for
+> the idle cooling device without colliding with the cpufreq cooling
+> device which is based on the CPU node. In addition, it allows to have
+> the cpufreq cooling device and the idle cooling device to co-exist
+> together as showed in the example.
 
-Instead of this warning, I think we should reject such input when
-writing to cur_state.
+The other patches of the series are acked-by.
 
-See attached patch. If you think this OK, I'll submit it.
+Do you think this patch is fine? I would like to apply the series.
 
-Regards,
-Amit
+Thanks
 
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> ---
->
-> We've hit some crash by stress tests, and this patch at least works
-> around the crash itself.  While the actual bug fix of the buggy driver
-> is still being investigated, I submit the hardening in the core side
-> at first.
->
->  drivers/thermal/thermal_sysfs.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index aa99edb4dff7..a23c4e701d63 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -772,6 +772,11 @@ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
->
->         spin_lock(&stats->lock);
->
-> +       if (dev_WARN_ONCE(&cdev->device, new_state >= stats->max_states,
-> +                         "new state %ld exceeds max_state %ld",
-> +                         new_state, stats->max_states))
-> +               goto unlock;
-> +
->         if (stats->state == new_state)
->                 goto unlock;
->
-> --
-> 2.16.4
->
+  -- Daniel
 
---0000000000001bff0005a2b36595
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-thermal-Reject-invalid-cur_state-input-from-userspac.patch"
-Content-Disposition: attachment; 
-	filename="0001-thermal-Reject-invalid-cur_state-input-from-userspac.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_k8pxym180>
-X-Attachment-Id: f_k8pxym180
 
-RnJvbSA1NDI2NjI2MGQ0ODNhYjQ0NzY1MTBkZDQ0NjFhMWNhZmM2MTFlMTdkIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpNZXNzYWdlLUlkOiA8NTQyNjYyNjBkNDgzYWI0NDc2NTEwZGQ0NDYxYTFj
-YWZjNjExZTE3ZC4xNTg2MjY2MjI0LmdpdC5hbWl0Lmt1Y2hlcmlhQGxpbmFyby5vcmc+CkZyb206
-IEFtaXQgS3VjaGVyaWEgPGFtaXQua3VjaGVyaWFAbGluYXJvLm9yZz4KRGF0ZTogVHVlLCA3IEFw
-ciAyMDIwIDE4OjQ4OjE0ICswNTMwClN1YmplY3Q6IFtQQVRDSF0gdGhlcm1hbDogUmVqZWN0IGlu
-dmFsaWQgY3VyX3N0YXRlIGlucHV0IGZyb20gdXNlcnNwYWNlCgpXZSBkb24ndCBjaGVjayBpZiB0
-aGUgY3VyX3N0YXRlIHZhbHVlIGlucHV0IGluIHN5c2ZzIGlzIGdyZWF0ZXIgdGhhbiB0aGUKbWF4
-aW11bSBjb29saW5nIHN0YXRlIHRoYXQgdGhlIGNvb2xpbmcgZGV2aWNlIHN1cHBvcnRzLiBUaGlz
-IGNhbiBjYXVzZQphY2Nlc3MgdG8gdW5hbGxvY2F0ZWQgbWVtb3J5IGluIGNhc2UgVEhFUk1BTF9T
-VEFUSVNUSUNTIGluIGVuYWJsZWQgYW5kCmNvdWxkIGFsc28gY3Jhc2ggY29vbGluZyBkZXZpY2Vz
-IHRoYXQgZG9uJ3QgY2hlY2sgZm9yIGFuIGludmFsaWQgc3RhdGUgaW4KdGhlaXIgc2V0X2N1cl9z
-dGF0ZSgpIGNhbGxiYWNrLgoKUmV0dXJuIGFuIGVycm9yIGlmIHRoZSBzdGF0ZSBiZWluZyByZXF1
-ZXN0ZWQgaW4gZ3JlYXRlciB0aGFuIHRoZSBtYXhpbXVtCmNvb2xpbmcgc3RhdGUgdGhlIGRldmlj
-ZSBzdXBwb3J0cy4KClJlcG9ydGVkLWJ5OiBUYWthc2hpIEl3YWkgPHRpd2FpQHN1c2UuZGU+ClNp
-Z25lZC1vZmYtYnk6IEFtaXQgS3VjaGVyaWEgPGFtaXQua3VjaGVyaWFAbGluYXJvLm9yZz4KLS0t
-CiBkcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9zeXNmcy5jIHwgOSArKysrKysrKy0KIDEgZmlsZSBj
-aGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9kcml2
-ZXJzL3RoZXJtYWwvdGhlcm1hbF9zeXNmcy5jIGIvZHJpdmVycy90aGVybWFsL3RoZXJtYWxfc3lz
-ZnMuYwppbmRleCA3ZTFkMTFiZGQyNTguLjgwMzNlNWE5Mzg2YSAxMDA2NDQKLS0tIGEvZHJpdmVy
-cy90aGVybWFsL3RoZXJtYWxfc3lzZnMuYworKysgYi9kcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9z
-eXNmcy5jCkBAIC03MDMsNyArNzAzLDcgQEAgY3VyX3N0YXRlX3N0b3JlKHN0cnVjdCBkZXZpY2Ug
-KmRldiwgc3RydWN0IGRldmljZV9hdHRyaWJ1dGUgKmF0dHIsCiAJCWNvbnN0IGNoYXIgKmJ1Ziwg
-c2l6ZV90IGNvdW50KQogewogCXN0cnVjdCB0aGVybWFsX2Nvb2xpbmdfZGV2aWNlICpjZGV2ID0g
-dG9fY29vbGluZ19kZXZpY2UoZGV2KTsKLQl1bnNpZ25lZCBsb25nIHN0YXRlOworCXVuc2lnbmVk
-IGxvbmcgc3RhdGUsIG1heF9zdGF0ZTsKIAlpbnQgcmVzdWx0OwogCiAJaWYgKHNzY2FuZihidWYs
-ICIlbGRcbiIsICZzdGF0ZSkgIT0gMSkKQEAgLTcxMiw2ICs3MTIsMTMgQEAgY3VyX3N0YXRlX3N0
-b3JlKHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IGRldmljZV9hdHRyaWJ1dGUgKmF0dHIsCiAJ
-aWYgKChsb25nKXN0YXRlIDwgMCkKIAkJcmV0dXJuIC1FSU5WQUw7CiAKKwlyZXN1bHQgPSBjZGV2
-LT5vcHMtPmdldF9tYXhfc3RhdGUoY2RldiwgJm1heF9zdGF0ZSk7CisJaWYgKHJlc3VsdCkKKwkJ
-cmV0dXJuIHJlc3VsdDsKKworCWlmIChzdGF0ZSA+PSBtYXhfc3RhdGUpCisJCXJldHVybiAtRUlO
-VkFMOworCiAJbXV0ZXhfbG9jaygmY2Rldi0+bG9jayk7CiAKIAlyZXN1bHQgPSBjZGV2LT5vcHMt
-PnNldF9jdXJfc3RhdGUoY2Rldiwgc3RhdGUpOwotLSAKMi4yMC4xCgo=
---0000000000001bff0005a2b36595--
+[ ... ]
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
