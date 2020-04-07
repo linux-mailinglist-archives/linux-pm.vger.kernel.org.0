@@ -2,93 +2,369 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5C31A0ACC
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 12:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9251A0AD4
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 12:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728212AbgDGKId (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Apr 2020 06:08:33 -0400
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:42277 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726562AbgDGKId (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 06:08:33 -0400
-Received: by mail-ua1-f65.google.com with SMTP id m18so1058147uap.9
-        for <linux-pm@vger.kernel.org>; Tue, 07 Apr 2020 03:08:31 -0700 (PDT)
+        id S1728290AbgDGKJP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Apr 2020 06:09:15 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:40164 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728250AbgDGKJO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 06:09:14 -0400
+Received: by mail-vs1-f66.google.com with SMTP id w14so1813034vsf.7
+        for <linux-pm@vger.kernel.org>; Tue, 07 Apr 2020 03:09:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=verdurent-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=F2A6bF5pOwQfH6U6RsbdhYdssLM5VS1H0bjWBJEI5rs=;
-        b=1uUD9C0jDUR1wh+FuDGcgIb3d6PIHB2NtGjyM6PYw6RBGSJyDc69ShTjTNZlBa2Urq
-         xp78/tif7EIZ626u5vHVQo2YiKDWWnBWDRpKO9NH4sj0P0fzMTZsWK9bOAIHNfxkrN7g
-         nTSUg77TDDjoWmpSKgZqOFCOfDr/DgIIT5XrSXRU2waJKwvLU+UH6BNouuGY1SmDQ+bR
-         UpXx0mBA6ILboHMR3pRyBbG8KNpJ4/LjhJp2xzcRGw2H//b1gST6JvRvwYmYzKhcFyEy
-         L/LF1/EETZqeKBGRjPTEGUQYZCxGvfhA2Bpmaug65oES0DbtpG1tXSO61SDTZedqkbcz
-         SP9g==
+         :cc;
+        bh=ZsUpwRti726Ty3AJIbeBq1egsf6xTccn+vZhdz4i67U=;
+        b=oV/S7kQTPJ8jnQbat92vIsMB7LUW49ibT5a2aQyvabMH7cCESxBXvIFoBac1Hi4SpT
+         TxNU89wbypX6KtCM8uPEzQmS0vPOjPbYHO/pUrNY3uJKIepTv4QI4JyhsZVZ4wsi7Rr8
+         eDPBtoRnaG5gDbqGF8X7slw0/CKfaTpBaDjbSDu2G4BiJne/zHJQ5eapgDI3nB7QIHhL
+         T/mongiukHzsaSOQM8x6z24yBxwhqZpVl27kLr2BXyfeUE3RlkB7pkTbKNqQ9tZ8v33n
+         uNucBbAwz63cjIDGZAZATxVAk4EPZOuvmY2Kx/h56N3tytyBcTEBCV5ZHIcJUO0AIWHi
+         U/Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=F2A6bF5pOwQfH6U6RsbdhYdssLM5VS1H0bjWBJEI5rs=;
-        b=OuKPBzZTMGcCrlYXg+SoO4GKaYOtaRbd5SSaMYzbW9q9hK4D3Uu/akkxo0LqyzmnLB
-         +6eZxMWx8Wxxe7bwA5ABxPpuaKcikaAmQmlvZ0leOwnEyZnHpYlPUhAVAXNq0C1y4qIT
-         3BjbjL9a61XNri5zVWzGzIyOr4G8DyAelXNkzyJn0a/OnPrKFlUkj8r/St52bl1Sr5rf
-         u8sXEYhHuJBNyiQODT1pyOZDUe95P0ArMhCqmdmP45IJIWTVNRs7qnnSGgnDyYbIsgDA
-         oT4WK+d7pFvugSXxLu/Nq34IaH6BpI5AoGKOm3UmQqYj9KqyKPKKzuyeSrSoa1D/kMXt
-         HZRQ==
-X-Gm-Message-State: AGi0Pua4FJqCxEGIuOdDzzgvcfD4FvgglpQnk5VLsFoYgW5SJC6Xb3Xx
-        h+O8JHLwc8Wj0OIc0UNYp7znXHyMx/XwhY0IcP3ckg==
-X-Google-Smtp-Source: APiQypLaGVsH6TbjG7WCt6G2mEAMejyONGl+O/A8Q1teowUXy6zgVgOiYzr90B/ArRCQp4PvnoEK0zPMmj9CyxjM+Rs=
-X-Received: by 2002:ab0:4e96:: with SMTP id l22mr1138595uah.67.1586254110747;
- Tue, 07 Apr 2020 03:08:30 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=ZsUpwRti726Ty3AJIbeBq1egsf6xTccn+vZhdz4i67U=;
+        b=aq9LW3aeCivNxXVS7XRqf45MsyS/6N6/ht0ld5c00mwAAJRgitCFXPV5SXG937ydpv
+         v4Pipf+z6/6vbLl1U6zFE8IV5RTPCtvx2cW+Z1YrfcX5//riG52cNHjVmsyVK9Kfl7VC
+         RWM5vZ7WWxmhPB1L+KPalVJMRqJpjcre/lXrJTVaH76Q02LcHW1BQ73Hl8C3X6pfvlgP
+         FoLpZ4Cz67mDBrwZlsMQbg5/+0PzaZ/I/55mjmP9v3cNPqOZSEC8MQuHwb/j7zLhDr6X
+         IQWHWzkVfZJ7Zg8YqEqzRkUlYLylHuUVbOSjfv8/XRAzETHNaR1oI+wIAsif+hg7q/C4
+         1cqQ==
+X-Gm-Message-State: AGi0PubIuqdTS0pIZZjMZPXY5e7Jv1HSYNuCdtOt2BmkFe7dkzwAeTGe
+        KTiLfQzfGE6Ih0d+vpfDUPiMCKsmU9OY4qIzLIrQFA==
+X-Google-Smtp-Source: APiQypKU50/UoxndCk56L2stjSFPY21c6NjNpG08LL1CAOpGx+yzkcwZnTwc4DvNsD9/b3QwobWsjnkfw9bS380NrBw=
+X-Received: by 2002:a67:b147:: with SMTP id z7mr1112637vsl.27.1586254151110;
+ Tue, 07 Apr 2020 03:09:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <1584363301-15858-1-git-send-email-shenyang39@huawei.com> <1584363301-15858-3-git-send-email-shenyang39@huawei.com>
-In-Reply-To: <1584363301-15858-3-git-send-email-shenyang39@huawei.com>
+References: <1584363301-15858-1-git-send-email-shenyang39@huawei.com> <1584363301-15858-2-git-send-email-shenyang39@huawei.com>
+In-Reply-To: <1584363301-15858-2-git-send-email-shenyang39@huawei.com>
 From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Tue, 7 Apr 2020 15:38:19 +0530
-Message-ID: <CAHLCerPJGdb8dx_8UMAricfL6LwEW4zYJdg-R11V=ggvZo10vw@mail.gmail.com>
-Subject: Re: [PATCH V2 2/2] MAINTAINERS: Add maintainers for kunpeng thermal
+Date:   Tue, 7 Apr 2020 15:39:00 +0530
+Message-ID: <CAHLCerMfny5vGFr=966LZpt_ocZQXH4wo5hHCea1EPWkMB=sXg@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] thermal: Add HiSilicon Kunpeng thermal driver
 To:     Yang Shen <shenyang39@huawei.com>
 Cc:     Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Yang,
+
 On Mon, Mar 16, 2020 at 6:25 PM Yang Shen <shenyang39@huawei.com> wrote:
 >
-> Add Yang Shen and Zhou Wang as maintainers for kunpeng thermal
+> Support HiSilicon Kunpeng tsensor. the driver will report the max
+> temperature for each core.
 >
 > Signed-off-by: Yang Shen <shenyang39@huawei.com>
 > Signed-off-by: Zhou Wang <wangzhou1@hisilicon.com>
-
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
-
+> Signed-off-by: Kunshan Tang <tangkunshan@huawei.com>
 > ---
->  MAINTAINERS | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  drivers/thermal/Kconfig           |   8 ++
+>  drivers/thermal/Makefile          |   1 +
+>  drivers/thermal/kunpeng_thermal.c | 219 ++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 228 insertions(+)
+>  create mode 100644 drivers/thermal/kunpeng_thermal.c
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cc1d18c..b7d4af4 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7602,6 +7602,13 @@ F:       drivers/crypto/hisilicon/sgl.c
->  F:     drivers/crypto/hisilicon/zip/
->  F:     Documentation/ABI/testing/debugfs-hisi-zip
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 5a05db5..7611b5d 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -239,6 +239,14 @@ config HISI_THERMAL
+>           thermal framework. cpufreq is used as the cooling device to throttle
+>           CPUs when the passive trip is crossed.
 >
-> +HISILICON KUNPENG TSENSOR DRIVER
-> +M:     Yang Shen <shenyang39@huawei.com>
-> +M:     Zhou Wang <wangzhou1@hisilicon.com>
-> +L:     linux-pm@vger.kernel.org
-> +S:     Maintained
-> +F:     drivers/thermal/kunpeng_thermal.c
+> +config KUNPENG_THERMAL
+> +       tristate "HiSilicon kunpeng thermal driver"
+> +       depends on ARM64 || COMPILE_TEST
+
+Please make this depend on your SoC, not all of ARM64. Perhaps ARCH_HISI?
+
+> +       help
+> +         Enable this to plug HiSilicon kunpeng's thermal sensors driver into
+> +         the Linux thermal framework, which supports to get the highest
+> +         temperature of one Kunpeng SoC.
 > +
->  HMM - Heterogeneous Memory Management
->  M:     J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
->  L:     linux-mm@kvack.org
+>  config IMX_THERMAL
+>         tristate "Temperature sensor driver for Freescale i.MX SoCs"
+>         depends on ARCH_MXC || COMPILE_TEST
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 9fb88e2..88ffca5 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -57,3 +57,4 @@ obj-$(CONFIG_GENERIC_ADC_THERMAL)     += thermal-generic-adc.o
+>  obj-$(CONFIG_ZX2967_THERMAL)   += zx2967_thermal.o
+>  obj-$(CONFIG_UNIPHIER_THERMAL) += uniphier_thermal.o
+>  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+> +obj-$(CONFIG_KUNPENG_THERMAL)     += kunpeng_thermal.o
+> diff --git a/drivers/thermal/kunpeng_thermal.c b/drivers/thermal/kunpeng_thermal.c
+> new file mode 100644
+> index 0000000..5b5df82
+> --- /dev/null
+> +++ b/drivers/thermal/kunpeng_thermal.c
+> @@ -0,0 +1,219 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2020 HiSilicon Limited. */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/thermal.h>
+> +
+> +#define KUNPENG_TSENSOR_CONTROL                        0x20D0
+> +#define KUNPENG_TSENSOR_ST                     0x60D0
+> +#define KUNPENG_TSENSOR_SAMPLE                 0x60D4
+> +#define KUNPENG_TSENSOR_CONTROL_EN             BIT(0)
+> +
+> +#define KUNPENG_TSENSOR_IS_ENABLE(reg)         ((reg) & 0x1)
+
+Typo: ENABLED
+
+> +#define KUNPENG_TSENSOR_IS_READY(reg)          (((reg) >> 12) & 0x1)
+> +#define KUNPENG_TSENSOR_IS_VALID(reg)          (((reg) >> 31) & 0x1)
+> +#define KUNPENG_TSENSOR_TRIM_HIGH(reg)         (((reg) >> 15) & 0x7FF)
+> +#define KUNPENG_TSENSOR_TRIM_LOW(reg)          ((reg) & 0x7FF)
+> +#define KUNPENG_TSENSOR_TEMP_VAL(reg)          ((reg) & 0x3FF)
+> +#define KUNPENG_TSENSOR_BASE_NUM(num)          (2 * (num))
+> +#define KUNPENG_TSENSOR_TRIM_NUM(num)          (2 * (num) + 1)
+> +
+> +#define KUNPENG_TSENSOR_RD_INTVRL_US           5
+> +#define KUNPENG_TSENSOR_RD_TMOUT_US            2000
+> +#define KUNPENG_TSENSOR_BASIC_TMP              25000
+> +#define KUNPENG_TSENSOR_BASIC_TRIM_RANGE       80000
+> +
+> +struct kunpeng_tsensor {
+> +       void __iomem *base;
+> +       void __iomem *trim_register;
+> +};
+> +
+> +struct kunpeng_thermal_dev {
+> +       u32 num_tsensors;
+> +       struct kunpeng_tsensor tsensor[];
+> +};
+> +
+> +static int kunpeng_thermal_temp_correct(u32 tmp, u32 trim)
+> +{
+> +       int trim_high = KUNPENG_TSENSOR_TRIM_HIGH(trim);
+> +       int trim_low = KUNPENG_TSENSOR_TRIM_LOW(trim);
+> +       int val = KUNPENG_TSENSOR_TEMP_VAL(tmp);
+> +
+> +       if (trim_high == trim_low)
+> +               return INT_MIN;
+> +
+> +       /* temperature of tsensor needs to be calibrated */
+> +       return KUNPENG_TSENSOR_BASIC_TRIM_RANGE * (val - trim_low)
+> +              / (trim_high - trim_low) + KUNPENG_TSENSOR_BASIC_TMP;
+> +}
+> +
+> +static int kunpeng_thermal_get_temp(struct thermal_zone_device *thermal,
+> +                                   int *temp)
+> +{
+> +       struct kunpeng_thermal_dev *tdev = thermal->devdata;
+> +       int tempmax = INT_MIN;
+> +       u32 i, reg, tmp, trim;
+> +       int ret;
+> +
+> +       for (i = 0; i < tdev->num_tsensors; i++) {
+> +               /* Waiting for tsensor ready */
+> +               ret = readl_relaxed_poll_timeout(tdev->tsensor[i].base +
+> +                                                KUNPENG_TSENSOR_ST, reg,
+> +                                                KUNPENG_TSENSOR_IS_READY(reg),
+> +                                                KUNPENG_TSENSOR_RD_INTVRL_US,
+> +                                                KUNPENG_TSENSOR_RD_TMOUT_US);
+> +               if (ret) {
+> +                       dev_err(&thermal->device,
+
+dev_dbg? If it's an error, you probably want to return here. No point
+in flooding the console with messages.
+
+> +                               "Tsensor%u isn't ready!\n", i);
+> +                       continue;
+> +               }
+> +
+> +               /* checking if tsensors are valid */
+
+s/tsensors/temperature/ ?
+
+> +               tmp = readl_relaxed(tdev->tsensor[i].base
+> +                                   + KUNPENG_TSENSOR_SAMPLE);
+> +               if (!KUNPENG_TSENSOR_IS_VALID(tmp)) {
+> +                       dev_err(&thermal->device,
+
+dev_dbg?
+
+> +                               "Tsensor%u temperature is invalid!\n", i);
+> +                       continue;
+> +               }
+> +
+> +               trim = readl_relaxed(tdev->tsensor[i].trim_register);
+> +
+> +               ret = kunpeng_thermal_temp_correct(tmp, trim);
+> +               if (ret == INT_MIN) {
+> +                       dev_err(&thermal->device,
+
+dev_dbg?
+
+> +                               "Tsensor%u trim value is invalid!\n", i);
+> +                       continue;
+> +               }
+> +
+> +               tempmax = max(ret, tempmax);
+> +       }
+> +
+> +       if (tempmax == INT_MIN)
+> +               return -EINVAL;
+> +
+> +       *temp = tempmax;
+> +
+> +       return 0;
+> +}
+> +
+> +static struct thermal_zone_device_ops ops = {
+> +       .get_temp       = kunpeng_thermal_get_temp,
+> +};
+> +
+> +static int kunpeng_thermal_get_iobase(struct platform_device *pdev,
+> +                                     struct kunpeng_tsensor *tsensor,
+> +                                     u32 resource_num)
+> +{
+> +       struct resource *res;
+> +       void __iomem *base;
+> +
+> +       res = platform_get_resource(pdev, IORESOURCE_MEM, resource_num);
+> +       if (!res)
+> +               return -EINVAL;
+> +
+> +       base = devm_ioremap(&pdev->dev, res->start, resource_size(res));
+
+Consider using devm_ioremap_resource()
+
+> +       if (IS_ERR(base))
+> +               return -EINVAL;
+> +
+> +       if (resource_num & 1)
+> +               tsensor->trim_register = base;
+> +       else
+> +               tsensor->base = base;
+> +
+> +       return 0;
+> +}
+> +
+> +/**
+> + * kunpeng_thermal_probe() - Enable tsensors. And register device to thermal.
+> + *
+> + * This driver and IMU share tsensor devices. This funciton only enable the
+
+Typo: function
+
+> + * devices but never change configure or disable them.
+
+Probe functions typically only enable the device. I don't think you
+need to put that into comments.
+
+> + */
+> +static int kunpeng_thermal_probe(struct platform_device *pdev)
+> +{
+> +       u32 num_tsensors = pdev->num_resources >> 1;
+> +       struct thermal_zone_device *thermal_zone;
+> +       struct kunpeng_thermal_dev *tdev;
+> +       u32 i, reg;
+> +       int ret;
+> +
+> +       tdev = devm_kzalloc(&pdev->dev, sizeof(*tdev) + sizeof(*tdev->tsensor) *
+> +                           num_tsensors, GFP_KERNEL);
+> +       if (!tdev)
+> +               return -ENOMEM;
+> +
+> +       tdev->num_tsensors = num_tsensors;
+> +
+> +       for (i = 0; i < num_tsensors; i++) {
+> +               ret = kunpeng_thermal_get_iobase(pdev, &tdev->tsensor[i],
+> +                                                KUNPENG_TSENSOR_BASE_NUM(i));
+> +               if (ret) {
+> +                       dev_err(&pdev->dev, "Fail to ioremap base!\n");
+> +                       return ret;
+> +               }
+> +
+> +               ret = kunpeng_thermal_get_iobase(pdev, &tdev->tsensor[i],
+> +                                                KUNPENG_TSENSOR_TRIM_NUM(i));
+> +               if (ret) {
+> +                       dev_err(&pdev->dev, "Fail to ioremap trim register!\n");
+> +                       return ret;
+> +               }
+> +
+> +               /* Enable thermal sensors when devices are disable */
+
+Get rid of this comment
+
+> +               reg = readl_relaxed(tdev->tsensor[i].base +
+> +                                   KUNPENG_TSENSOR_CONTROL);
+> +               if (!KUNPENG_TSENSOR_IS_ENABLE(reg))
+> +                       writel_relaxed(reg | KUNPENG_TSENSOR_CONTROL_EN,
+> +                                      tdev->tsensor[i].base +
+> +                                      KUNPENG_TSENSOR_CONTROL);
+
+Is it a problem if the sensor is enabled twice? Does firmware
+initialise this sensor? I suggest getting rid of the check and just
+enable it again in the driver.
+
+
+> +       }
+> +
+> +       thermal_zone = thermal_zone_device_register("kunpeng_thermal", 0, 0,
+> +                                                   tdev, &ops, NULL, 0, 0);
+> +       if (IS_ERR(thermal_zone)) {
+> +               dev_err(&pdev->dev, "Fail to register to thermal subsystem\n");
+> +               return PTR_ERR(thermal_zone);
+> +       }
+> +
+> +       platform_set_drvdata(pdev, thermal_zone);
+> +
+> +       return 0;
+> +}
+> +
+> +static int kunpeng_thermal_remove(struct platform_device *pdev)
+> +{
+> +       struct thermal_zone_device *thermal_zone = platform_get_drvdata(pdev);
+> +
+> +       thermal_zone_device_unregister(thermal_zone);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct acpi_device_id kunpeng_thermal_acpi_match[] = {
+> +       { "HISI0371", 0 },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(acpi, kunpeng_thermal_acpi_match);
+> +
+> +static struct platform_driver kunpeng_thermal_driver = {
+> +       .probe          = kunpeng_thermal_probe,
+> +       .remove         = kunpeng_thermal_remove,
+> +       .driver         = {
+> +               .name   = "kunpeng_thermal",
+> +               .acpi_match_table = ACPI_PTR(kunpeng_thermal_acpi_match),
+> +       },
+> +};
+> +
+> +module_platform_driver(kunpeng_thermal_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_AUTHOR("Yang Shen <shenyang39@huawei.com>");
+> +MODULE_DESCRIPTION("HiSilicon Kunpeng thermal driver");
 > --
 > 2.7.4
 >
