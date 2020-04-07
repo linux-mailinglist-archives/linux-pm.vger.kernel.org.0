@@ -2,129 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 516491A1653
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 21:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341821A1738
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 23:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbgDGT5i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Apr 2020 15:57:38 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44554 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726712AbgDGT5g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 15:57:36 -0400
-Received: by mail-pg1-f193.google.com with SMTP id n13so794943pgp.11
-        for <linux-pm@vger.kernel.org>; Tue, 07 Apr 2020 12:57:35 -0700 (PDT)
+        id S1726417AbgDGVMv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Apr 2020 17:12:51 -0400
+Received: from mail-ua1-f74.google.com ([209.85.222.74]:45575 "EHLO
+        mail-ua1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726380AbgDGVMv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 17:12:51 -0400
+Received: by mail-ua1-f74.google.com with SMTP id l4so1728966uao.12
+        for <linux-pm@vger.kernel.org>; Tue, 07 Apr 2020 14:12:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=v/v3EOCeKlH1yy1lBBdbnJgt8NXsE7ukja0JvSrCQjQ=;
-        b=CQE9Dcfhusx6FQIpv2B+gU7vG9dGA9oCh6IUgcsC12yvUuXxsRfaZpgHl6wb5eLPZi
-         F3mImKMTSl9feXaYzFnVf5OtPOZYH/rLINu1QxvttL0HeVnQf0i6RQ1quXFRxjE+d4Ro
-         WJiLyCIkCTAlsm2txRotBFwXqETsl2dMXNi7feFe+9yUh8s+rSkzkgf3MipiaigCNqiX
-         l36L9zXjGuo6s4K6qt4CnOg+8VUh2DtwJFzLqNE6Y+wYr0VNPCcy6HkPSa4xpm90I2jy
-         XiOsQnBlCwPwfm+DokOlqNKk2grgcCYlht/MJ4ZnEH7eGyurFObi54XdeZsmTiJ/1dSt
-         M1ZQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=MaBweOlch11HKb9t7GCZeN/zarBri4qPTIweTTR7A04=;
+        b=U1hIVeMgswPvziZ0ENUZYnzyWBhSCYX1bi1rARPXO57w/nzGQOlElGD5smfdBFlgwG
+         gXCN6YdCQeatvDTyqJdkgZuBP8CiZ+Hj3VRJHszvMVDyns+C/E9Q8C/y6yxRFeTTGWoM
+         GG1+jjyR0teAgUt91n/wzDszB+8msDgtD7ByUeko2Qpj4m22zRPp5ALbgoPr/uVvFgbQ
+         TTfUs8RpRc30TRfkI6SzWRYi6WgM/NLDDnXf7s3wFlY60H6B93LrYlmWtMw04W7Vrb+T
+         g4C1jYezUSJ/DNkuS09urOiqpdkeYzOib6zl5qhTxluDPNqAVmIR11J75YVKeTCRsxBW
+         LM3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=v/v3EOCeKlH1yy1lBBdbnJgt8NXsE7ukja0JvSrCQjQ=;
-        b=Svo5dppMJdzfZtg6zC9vN6kfVG9I9i2754cbW57Ln8AB/iqZCAeHGKHW2AHC1XQ2Da
-         xTNLfptjFNhUrvS21Y41+AV4HauluSpjNh8jkBfxK3A/Yt3hUrqFqTuRmCSP5OygHLvj
-         QTiE67tpxrWfURWvPLm+J6UnvZ2xK6bZLft47ISOrEa7HuquYEpsLM5588efd7gkXgtZ
-         Fekm3+Q95HD92ryQSYxuDUnaME4RNjLw35+xyzxuTGU56LYb04gZfJzPNOO94Avswooy
-         pHqPcET8CApJPQfEQImDN7xzSUFFHpV7O5nZbTJqu1DIrruCr34JXdz5EfNmeXoqdAkA
-         Yf8A==
-X-Gm-Message-State: AGi0PuZAQAgVQm2gFHOkCuPI8uiyVXLZ4jL93NgFFCxA0GzYXZLddald
-        EQotNIsTL9BSBl9KRHWzYcUTdtXVZuyMFccoyqFubA==
-X-Google-Smtp-Source: APiQypII/JsB+LYF2NyT6Q4N251TPQgr++zZZo+BiIULYVeFrP2T7zYy37qhEpV/Syk1GqNaKD4JaMLDMmplOFP/jq0=
-X-Received: by 2002:a05:6a00:42:: with SMTP id i2mr4102001pfk.108.1586289454742;
- Tue, 07 Apr 2020 12:57:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <29b5043db9a51ef7a0cb6e3a8c69c91e36045cd6.1585944770.git.mirq-linux@rere.qmqm.pl>
- <202004050928.d6QhVcsQ%lkp@intel.com> <CAKwvOdm5BhMdAmXR0gCLntkbvF7ajaNoWoHVCCio1CqbGzS6aQ@mail.gmail.com>
- <20200407195546.GA744@qmqm.qmqm.pl>
-In-Reply-To: <20200407195546.GA744@qmqm.qmqm.pl>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 7 Apr 2020 12:57:23 -0700
-Message-ID: <CAKwvOdnSgp5fL1B1S02haeEDBTfyHjmMFvGZd+LA3j7BoSLsLw@mail.gmail.com>
-Subject: Re: [PATCH v3 07/11] power: supply: core: tabularize HWMON
- temperature labels
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=MaBweOlch11HKb9t7GCZeN/zarBri4qPTIweTTR7A04=;
+        b=OP2FBA/o8DA/8AD3tSB1cPnTqgsWR3lJGLY5jb/0a26zVBpQfp6lSOF9cngWbTtjS0
+         cj3hmBpkyAdSbOSwRRerLxFE9+RotMTform/U0Gof6iX2tf+ua9PuLfLoClr4QkmXqDF
+         d8IeA48AsRxzOOsUg68u3T23F3VthC4reot9LHykbYKlVjMSKW3xWL7YuOXkjY2xlyBV
+         prQOPycZAwbSVG9XAk4rqS5tXOFF0Xcgjkjtpiu2xxxccv+20Gs46qsjwzm+qlF/sD/T
+         rIIWj/6hD7d/9xfqhIwqSlQQ+eu1trkqINmMrNZ4cuOxp+9MUIdLmagiWcgKQ9n2ItKD
+         mAUA==
+X-Gm-Message-State: AGi0PuYwE3WiSx/5N2me9VGsIqudW7IeCA38xHysAxFYaIvT7XK8f/Ud
+        oJJggMD9N3AlNKFD13BhRiBeBZUlLq4=
+X-Google-Smtp-Source: APiQypK5y0nSomIW5VQaxOMuV0GGky2G/aipZdtaQUPbQUivIeAbJmE6e/0rAFwdiqwLJNImOtnXxJ/ZUpM=
+X-Received: by 2002:ab0:764a:: with SMTP id s10mr3176845uaq.1.1586293969257;
+ Tue, 07 Apr 2020 14:12:49 -0700 (PDT)
+Date:   Tue,  7 Apr 2020 14:12:43 -0700
+Message-Id: <20200407211243.247362-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.26.0.292.g33ef6b2f38-goog
+Subject: [PATCH v1] power_supply: Add a helper function to retrieve psy array
+ from phandle
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 7, 2020 at 12:56 PM Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.=
-qmqm.pl> wrote:
->
-> On Tue, Apr 07, 2020 at 11:13:50AM -0700, Nick Desaulniers wrote:
-> > On Sat, Apr 4, 2020 at 6:53 PM kbuild test robot <lkp@intel.com> wrote:
-> > >
-> > > Hi "Micha=C5=82,
-> > >
-> > > I love your patch! Perhaps something to improve:
-> > >
-> > > [auto build test WARNING on power-supply/for-next]
-> > > [also build test WARNING on hwmon/hwmon-next linus/master v5.6 next-2=
-0200404]
-> > > [if your patch is applied to the wrong git tree, please drop us a not=
-e to help
-> > > improve the system. BTW, we also suggest to use '--base' option to sp=
-ecify the
-> > > base tree in git format-patch, please see https://stackoverflow.com/a=
-/37406982]
-> > >
-> > > url:    https://github.com/0day-ci/linux/commits/Micha-Miros-aw/exten=
-sions-and-fixes/20200405-044024
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-pow=
-er-supply.git for-next
-> > > config: x86_64-randconfig-b002-20200405 (attached as .config)
-> > > compiler: clang version 11.0.0 (https://github.com/llvm/llvm-project =
-62f3a9650a9f289a07a5f480764fb655178c2334)
-> > > reproduce:
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
-/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # save the attached .config to linux build tree
-> > >         COMPILER=3Dclang make.cross ARCH=3Dx86_64
-> > >
-> > > If you fix the issue, kindly add following tag as appropriate
-> > > Reported-by: kbuild test robot <lkp@intel.com>
-> > >
-> > > All warnings (new ones prefixed by >>):
-> > >
-> > > >> drivers/power/supply/power_supply_hwmon.o: warning: objtool: power=
-_supply_hwmon_read_string() falls through to next function power_supply_hwm=
-on_write()
-> >
-> > I'm guessing this is from the unreachable:
-> > https://github.com/0day-ci/linux/commit/b8b2d14ca46ca54257f55c9af58ea25=
-695b9ee36
-> > I'll need to play with this some more as I couldn't reproduce with a
-> > simplified test case, but looks like a compiler bug.  Filed
-> > https://github.com/ClangBuiltLinux/linux/issues/978 for me to track.
->
-> Hi Nick,
->
-> Just guessing: have you tried adding another unrelated function to the
-> testcase? I would expect that 'fall through to next function' needs
-> some other function to match.
+power_supply_get_by_phandle retrieves power_supply object based on
+phandle. However, when multiple power_supply objects are registered
+by the same parent device the first power_supply object's reference
+is returned. This varies according to probe order. Add a helper to
+return all the power_supply object's reference.
 
-I was throwing the test case linked into godbolt and looking at the
-generated assembly.  It contained no jumps, only movs and conditional
-movs.  Thank you for the suggestion.
+The caller has to provide the power_supply pointer array.
+-EOVERFLOW is returned when the size of the array is not enough to
+pass back all the power_supply objects.
 
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/power/supply/power_supply_core.c | 78 ++++++++++++++++++++++++
+ include/linux/power_supply.h             |  9 +++
+ 2 files changed, 87 insertions(+)
 
---=20
-Thanks,
-~Nick Desaulniers
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 1a9a9fae73d32..e7bab4661ba13 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -32,6 +32,13 @@ EXPORT_SYMBOL_GPL(power_supply_notifier);
+ 
+ static struct device_type power_supply_dev_type;
+ 
++struct match_device_node_array_param {
++	struct device_node *parent_of_node;
++	struct power_supply **psy;
++	ssize_t psy_size;
++	ssize_t psy_count;
++};
++
+ #define POWER_SUPPLY_DEFERRED_REGISTER_TIME	msecs_to_jiffies(10)
+ 
+ static bool __power_supply_is_supplied_by(struct power_supply *supplier,
+@@ -522,6 +529,77 @@ struct power_supply *power_supply_get_by_phandle(struct device_node *np,
+ }
+ EXPORT_SYMBOL_GPL(power_supply_get_by_phandle);
+ 
++static int power_supply_match_device_node_array(struct device *dev,
++						void *data)
++{
++	struct match_device_node_array_param *param =
++		(struct match_device_node_array_param *)data;
++	struct power_supply **psy = param->psy;
++	ssize_t size = param->psy_size;
++	ssize_t *count = &param->psy_count;
++
++	if (!dev->parent || dev->parent->of_node != param->parent_of_node)
++		return 0;
++
++	if (*count >= size)
++		return -EOVERFLOW;
++
++	psy[*count] = dev_get_drvdata(dev);
++	atomic_inc(&psy[*count]->use_cnt);
++	(*count)++;
++
++	return 0;
++}
++
++/**
++ * power_supply_get_by_phandle_array() - Similar to
++ * power_supply_get_by_phandle but returns an array of power supply
++ * objects which are associated with the phandle.
++ * @np: Pointer to device node holding phandle property.
++ * @property: Name of property holding a power supply name.
++ * @psy: Array of power_supply pointers provided by the client which is
++ * filled by power_supply_get_by_phandle_array.
++ * @size: size of power_supply pointer array.
++ *
++ * If power supply was found, it increases reference count for the
++ * internal power supply's device. The user should power_supply_put()
++ * after usage.
++ *
++ * Return: On success returns the number of power supply objects filled
++ * in the @psy array.
++ * -EOVERFLOW when size of @psy array is not suffice.
++ * -EINVAL when @psy is NULL or @size is 0.
++ * -ENODEV when matching device_node is not found.
++ */
++int power_supply_get_by_phandle_array(struct device_node *np,
++				      const char *property,
++				      struct power_supply **psy,
++				      ssize_t size)
++{
++	struct device_node *power_supply_np;
++	int ret;
++	struct match_device_node_array_param param;
++
++	if (psy == NULL || size == 0)
++		return -EINVAL;
++
++	power_supply_np = of_parse_phandle(np, property, 0);
++	if (!power_supply_np)
++		return -ENODEV;
++
++	param.parent_of_node = power_supply_np;
++	param.psy = psy;
++	param.psy_size = size;
++	param.psy_count = 0;
++	ret = class_for_each_device(power_supply_class, NULL, &param,
++				    power_supply_match_device_node_array);
++
++	of_node_put(power_supply_np);
++
++	return param.psy_count;
++}
++EXPORT_SYMBOL_GPL(power_supply_get_by_phandle_array);
++
+ static void devm_power_supply_put(struct device *dev, void *res)
+ {
+ 	struct power_supply **psy = res;
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index dcd5a71e6c677..8c1478a480674 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -366,12 +366,21 @@ extern void power_supply_put(struct power_supply *psy);
+ #ifdef CONFIG_OF
+ extern struct power_supply *power_supply_get_by_phandle(struct device_node *np,
+ 							const char *property);
++extern int power_supply_get_by_phandle_array(struct device_node *np,
++					     const char *property,
++					     struct power_supply **psy,
++					     ssize_t size);
+ extern struct power_supply *devm_power_supply_get_by_phandle(
+ 				    struct device *dev, const char *property);
+ #else /* !CONFIG_OF */
+ static inline struct power_supply *
+ power_supply_get_by_phandle(struct device_node *np, const char *property)
+ { return NULL; }
++static int power_supply_get_by_phandle_array(struct device_node *np,
++					     const char *property,
++					     struct power_supply **psy,
++					     int size)
++{ return 0; }
+ static inline struct power_supply *
+ devm_power_supply_get_by_phandle(struct device *dev, const char *property)
+ { return NULL; }
+-- 
+2.26.0.292.g33ef6b2f38-goog
+
