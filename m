@@ -2,80 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 694231A0670
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 07:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADDA01A06B6
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 07:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726992AbgDGFPV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Apr 2020 01:15:21 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:45169 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726821AbgDGFPP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 01:15:15 -0400
-Received: by mail-vs1-f65.google.com with SMTP id x82so1385424vsc.12
-        for <linux-pm@vger.kernel.org>; Mon, 06 Apr 2020 22:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
-        b=MfHDvIBIt69xqysjTBYVVNc0kV20i2uh+5pM5bA0kgqzaY38Y8DWEj01Pvo2lprKBQ
-         GeMPmsDw8mI8JPS3USlc7fo909SxPcbTvuuO8fmlDj3Epr1eVDtR360WKQPQyhZWRFR1
-         e2AVs/X8xmnpyFeBVbEpWkW/7xUX6BkoKcBNjhVPYru9i1s3MQXqsGzojyz2OPT8Gzuk
-         eAsRgBBtJfCcoxVL23nq2mmza5GNfLtG1Vewilonxc/7to20Va10m3hSWyxvaqvjeUuq
-         +R1bw/nay987q2JQWtF8qmoAYape5iyXc2fGu9oueeJmEOdg+02io2ZWkJnJglNvfVbH
-         fVHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
-        b=XONHy+m9JqPR31HCEbw3bikMCOQ6753Y0yQzFPO+GcF1IQmvbWfFmehp9312N7UWIr
-         kXkWz6MQA9h5Ovp/N8ELqxlzMN3sbXkH20tDxtYYdBk8tqBLtSfpvYJB6DYXd95x0i5p
-         cuQ+4K4AjAl8GEnmUSWgqv/KMuvxZBHfBcMs+OFtA5K1fqyu9aUDaWUIBoE6I9+Cspa2
-         ndltF499uMA7NS2ZPHL5FTNKcRvQlq28vacTqoWCFtHD90victBomTZvt7WL7qr45lpq
-         tfkoCk+OXE6Ab1HHBZpgDAh16Ah2eZ/Ji5T31ctX9Osv4G4bWd4os+Jq53GYexZeBNq6
-         6c4w==
-X-Gm-Message-State: AGi0Puah0ivFDkcW9iQQP1FporKzSjzdoBgKpP4uJl5PhD61ostO6u3l
-        +MgOJ7L6u0E98eZ4XbXWuDdneYp2Qcfnu9sf3Gk=
-X-Google-Smtp-Source: APiQypL+ArhsKP1HCJpJZSuqqOKzmqGe03VSBcvbyU5XLwMdkDIdNu0ELlIqojTyqMNnJA6AEodSyvd4rSFXD4DVz/E=
-X-Received: by 2002:a67:fa85:: with SMTP id f5mr495699vsq.65.1586236514277;
- Mon, 06 Apr 2020 22:15:14 -0700 (PDT)
+        id S1726591AbgDGFvk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Apr 2020 01:51:40 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:41518 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725817AbgDGFvk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 01:51:40 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0375pPNn091413;
+        Tue, 7 Apr 2020 00:51:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1586238685;
+        bh=hR+ITKXScejGN8Vg1z7eaq/mNwFLIoSkIvJwYBN9RZ0=;
+        h=From:To:CC:Subject:Date;
+        b=W2AY5epzcUvMVbJXVRs58V3R/6exPLe69ANPE6sJpr0EnJYtkWlwYmhPDdllXiSOt
+         iNmKap+3WjuG8vFM8mfHj/gixzgFuurQneKuEk1t9TX8av2tWIEdUy0JO57uYoz+Cc
+         sDHzVhEDi3b9Qxbpr1mMVwW/eEkNLsEcwW3paWa4=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0375pPMZ041443
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 7 Apr 2020 00:51:25 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 7 Apr
+ 2020 00:51:25 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 7 Apr 2020 00:51:25 -0500
+Received: from a0393675ula.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0375pLdL017972;
+        Tue, 7 Apr 2020 00:51:22 -0500
+From:   Keerthy <j-keerthy@ti.com>
+To:     <rui.zhang@intel.com>, <robh+dt@kernel.org>,
+        <daniel.lezcano@linaro.org>
+CC:     <j-keerthy@ti.com>, <amit.kucheria@verdurent.com>,
+        <t-kristo@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <mark.rutland@arm.com>
+Subject: [PATCH v6 0/4] thermal: k3: Add support for bandgap sensors
+Date:   Tue, 7 Apr 2020 11:21:12 +0530
+Message-ID: <20200407055116.16082-1-j-keerthy@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:ab0:254a:0:0:0:0:0 with HTTP; Mon, 6 Apr 2020 22:15:12 -0700 (PDT)
-From:   SANDRA DEWI <sdewisandra@gmail.com>
-Date:   Tue, 7 Apr 2020 05:15:12 +0000
-Message-ID: <CALe9-EdG2aBp2yBY=t79ZuBObzzfY6nuVfAsra6+wc2BAYMhcg@mail.gmail.com>
-Subject: whether this is your correct email address or not
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear ,Pastor
+Add VTM thermal support. In the Voltage Thermal
+Management Module(VTM), K3 AM654 supplies a voltage
+reference and a temperature sensor feature that are gathered in the band
+gap voltage and temperature sensor (VBGAPTS) module. The band
+gap provides current and voltage reference for its internal
+circuits and other analog IP blocks. The analog-to-digital
+converter (ADC) produces an output value that is proportional
+to the silicon temperature.
 
+Add support for bandgap sensors. Currently reading temperatures
+is supported.
 
+Changes in v6:
 
-I have a client who is an oil business man and he made a fixed deposit
-of $26 million USD in my bank, where I am the director of the branch,
-My client died with his entire family in Jordanian
+  * Removed bunch of unused #defines and couple of redundant variables.
+  * Reordered patches a bit.
+  * Minor reordering in dt binding patch.
 
-50% of the fund will be for the church  for the work of God,the
-balance 50% we share it in the ratio of 50/50. Meaning 50% to you and
-50% for me
+Changes in v5:
 
-intervention in the Syrian Civil War 2014 leaving behind no next of
-kin. I Propose to present you as next of kin to claim the funds, if
-interested reply me for full details and how we are to
+  * Removed thermal work function which was unused.
+  * Removed unused preve_tenmp and a couple more struct variables.
+  * Removed couple of redundant header function include.
 
+Changes in v4:
 
+  * Fixed comments from Daniel to remove trend function.
+  * Mostly cleaned up all the unused variables.
+  * Driver from bool to tristate.
 
-proceed to close this deal.
+Changes in v3:
 
+  * Fixed errors seen with:
+    dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
 
+Changes in v2:
 
+  * Fixed yaml errors
+  * renamed am654-industrial-thermal.dtsi to k3-am654-industrial-thermal.dtsi
+    to follow the convention for k3 family.  
 
-Mrs. Sandra Dewi
+Keerthy (4):
+  dt-bindings: thermal: k3: Add VTM bindings documentation
+  thermal: k3: Add support for bandgap sensors
+  arm64: dts: ti: am65-wakeup: Add VTM node
+  arm64: dts: ti: am654: Add thermal zones
 
+ .../bindings/thermal/ti,am654-thermal.yaml    |  56 ++++
+ arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi    |  11 +
+ .../dts/ti/k3-am654-industrial-thermal.dtsi   |  45 +++
+ drivers/thermal/Kconfig                       |  10 +
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/k3_bandgap.c                  | 264 ++++++++++++++++++
+ 6 files changed, 387 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am654-industrial-thermal.dtsi
+ create mode 100644 drivers/thermal/k3_bandgap.c
 
+-- 
+2.17.1
 
-Email  mrsdewi@gmx.com
