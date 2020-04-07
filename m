@@ -2,124 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B65E51A08A6
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 09:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C770E1A0957
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Apr 2020 10:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726635AbgDGHu5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Apr 2020 03:50:57 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:37861 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726393AbgDGHu4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 03:50:56 -0400
-Received: by mail-oi1-f193.google.com with SMTP id u20so704036oic.4;
-        Tue, 07 Apr 2020 00:50:56 -0700 (PDT)
+        id S1725817AbgDGI3e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Apr 2020 04:29:34 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:34352 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726725AbgDGI3d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Apr 2020 04:29:33 -0400
+Received: by mail-pl1-f196.google.com with SMTP id a23so972410plm.1
+        for <linux-pm@vger.kernel.org>; Tue, 07 Apr 2020 01:29:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4R/FPBL4dOo4mvZ9ReJ8CLxavGglB5XXnfcP3bpIQMU=;
+        b=YF7pfVtnVNormD+6w1FhUmCCmIPX8WylGW+gMb6fcDVCwxbjNpGspR80BZhFu81/wC
+         9mGnJKwUU3jjI6aV9mcWfz9QHoD3N9j+t3t7uW1fJfq3k9+V6vPBnljs+ugaNxvH2oM3
+         4fBcqqWsKDX8Vg/5/IVAXwf+8dlGNtHJhTMLogSVr30vlUXOSwvnl5PxBYoUdlZqZHZz
+         8hYl4Zqcu6CNjvxU0x9amIs54FLIYOip55tk5JBJ+2Pi1ijg3lhIm+XWqxUIXtIsl/Gu
+         3Y8xRbNRGLHZTKZBmWLyUyWGcwSuRyW6xDHlEgTIVdhWpg0gMdR1bVdSlt0FgGwI1rX+
+         myNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0xy6duWOZRsuHgXNoNpThMEK6ifcrseX8Tb2v5L0t3w=;
-        b=GjmjozCa9XABCQsxu8udzhj+4g0cFo/678VvU34pINIJ8YH8Kji7kPBBFpOI0n47LI
-         kgDmxgHmsgUcrQtxFBCPHmB1sTfdzCQQytFnlcL84+rnVc99mBS2FAJSpcZzRWBUdrHq
-         jtgtMMx+FV+KN1J0e/ppLVeV/I/vaOcbQQgk0S6rkkVN4l+ZBRFU8RZXWSE0wGglg2Ob
-         oDgy7RVN5YwIyoeI2IE3lk8AEtEF5e/wAHZkUGzg1rGmo7SvM5HUZyEZRfUrKgMwkBn9
-         ewNBSQhbpMEx5TXUm5mjElvabw7m2HHiLRaIKgJeu1eDyFnQBHztb0jkqO0XPYOns61d
-         Bw1w==
-X-Gm-Message-State: AGi0Puasw42vU11wl0+z1T4pdTwV4oS+tQ/G98zWBLrUaatDZvuP2E8J
-        A+5HJoUpOVO9j6kM9fle04EjIPZw7EK5pbMUXvgnYg==
-X-Google-Smtp-Source: APiQypKCWFOch3oAwMdPxUdedE4Y/iCDOJ6IAetbFPjyMJpK27zl1aQSrHJKlOtCDvanLpz5/kdr8tkFj2evA3On/xc=
-X-Received: by 2002:aca:cdd1:: with SMTP id d200mr671758oig.153.1586245855947;
- Tue, 07 Apr 2020 00:50:55 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4R/FPBL4dOo4mvZ9ReJ8CLxavGglB5XXnfcP3bpIQMU=;
+        b=UNzorxsF9UpSUsmnfgqBBJvgfGuehWo2pAlcD12RpqiG82HQ3evlGBDCFCSNuukkxI
+         VTyCmM2ENM9SeNtmG4QSiaHzE7g/jcGqRzpLU+B3LFleyJBBTcjoHwhknP5vigIiMCO6
+         R8fHOb02+f+5cKuMg0YQQDRecWlhtKc6EBOBFjM7vqvGcMts8+HBCAiH2YDBYeU0dcle
+         Jg1PYvYXx+dYQaAl51BM2EUp+V1EADHs7bHWCukA3Zr4QcZutb04xxvBdfK+E6TFW1S4
+         ov98/BwbQNercARZZ3DmNzUYp1AYQNi8uzGY+bq8gzG4XiuWyWYDqf82BK2MLG1e1yzl
+         aeXQ==
+X-Gm-Message-State: AGi0PuawgEb7UTnTUTe6MrS/on9EUGOIZAGm38a7ghHmTmvThUMSt9P9
+        tnaBewnxj10Fh2U8MHzmr4OAgQ==
+X-Google-Smtp-Source: APiQypIcnVfCrjU/SQx6rFcAG9MOEb1k60YQzwaCjM39FmAU4PrzS6vHLapoN/BLX9AQQ8GBXTqLpw==
+X-Received: by 2002:a17:902:b489:: with SMTP id y9mr1436701plr.144.1586248171653;
+        Tue, 07 Apr 2020 01:29:31 -0700 (PDT)
+Received: from localhost ([122.171.118.46])
+        by smtp.gmail.com with ESMTPSA id np4sm989176pjb.48.2020.04.07.01.29.30
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Apr 2020 01:29:30 -0700 (PDT)
+Date:   Tue, 7 Apr 2020 13:59:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "andrew-sh.cheng" <andrew-sh.cheng@mediatek.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>, Nishanth Menon <nm@ti.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fan Chen =?utf-8?B?KOmZs+WHoSk=?= <fan.chen@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [v5, PATCH 4/5] cpufreq: mediatek: add opp notification for SVS
+ support
+Message-ID: <20200407082928.lancywbqts5yg4ks@vireshk-i7>
+References: <20191127083619.etocnhpyyut3hzwq@vireshk-i7>
+ <1575874588.13494.4.camel@mtksdaap41>
+ <20191210064319.f4ksrxozp3gv4xry@vireshk-i7>
+ <1583827865.4840.1.camel@mtksdaap41>
+ <20200311060616.62nh7sfwtjwvrjfr@vireshk-i7>
+ <1584084154.7753.3.camel@mtksdaap41>
+ <20200313091038.q7q7exiowoah4nk4@vireshk-i7>
+ <1586164366.5015.6.camel@mtksdaap41>
+ <20200406092945.d5thcd2h3bo7mn45@vireshk-i7>
+ <1586242489.10019.1.camel@mtksdaap41>
 MIME-Version: 1.0
-References: <TYAPR01MB45443FA43152C0091D6EBF9AD8C20@TYAPR01MB4544.jpnprd01.prod.outlook.com>
- <20200407070609.42865-1-john.stultz@linaro.org>
-In-Reply-To: <20200407070609.42865-1-john.stultz@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 7 Apr 2020 09:50:44 +0200
-Message-ID: <CAMuHMdWSXvHN5zEh7A+CygxEHP42qFrum+ntiL=m+ATwYOOB0Q@mail.gmail.com>
-Subject: Re: [RFC][PATCH] driver core: Ensure wait_for_device_probe() waits
- until the deferred_probe_timeout fires
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        netdev <netdev@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1586242489.10019.1.camel@mtksdaap41>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi John,
+On 07-04-20, 14:54, andrew-sh.cheng wrote:
+> On Mon, 2020-04-06 at 14:59 +0530, Viresh Kumar wrote:
+> > On 06-04-20, 17:12, andrew-sh.cheng wrote:
+> > > I will use regulator in the locked region.
+> > > And regulator will use mutex_lock.
+> > 
+> > Yeah, you can't use spinlock here, use a mutex.
+> > 
+> Hi Viresh,
+> 
+> I am not familiar with read/write lock.
+> Do you mean there is another read/write function, which is not
+> read_lock()/write_lock(), using mutex but not spinlock?
 
-On Tue, Apr 7, 2020 at 9:06 AM John Stultz <john.stultz@linaro.org> wrote:
-> In commit c8c43cee29f6 ("driver core: Fix
-> driver_deferred_probe_check_state() logic"), we set the default
-> driver_deferred_probe_timeout value to 30 seconds to allow for
-> drivers that are missing dependencies to have some time so that
-> the dependency may be loaded from userland after initcalls_done
-> is set.
->
-> However, Yoshihiro Shimoda reported that on his device that
-> expects to have unmet dependencies (due to "optional links" in
-> its devicetree), was failing to mount the NFS root.
->
-> In digging further, it seemed the problem was that while the
-> device properly probes after waiting 30 seconds for any missing
-> modules to load, the ip_auto_config() had already failed,
-> resulting in NFS to fail. This was due to ip_auto_config()
-> calling wait_for_device_probe() which doesn't wait for the
-> driver_deferred_probe_timeout to fire.
->
-> This patch tries to fix the issue by creating a waitqueue
-> for the driver_deferred_probe_timeout, and calling wait_event()
-> to make sure driver_deferred_probe_timeout is zero in
-> wait_for_device_probe() to make sure all the probing is
-> finished.
->
-> NOTE: I'm not 100% sure this won't have other unwanted side
-> effects (I don't have failing hardware myself to validate),
-> so I'd apprecate testing and close review.
->
-> If this approach doesn't work, I'll simply set the default
-> driver_deferred_probe_timeout value back to zero, to avoid any
-> behavioral change from before.
->
-> Thanks to Geert for chasing down that ip_auto_config was why NFS
-> was failing in this case!
->
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
-> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> Cc: netdev <netdev@vger.kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> Fixes: c8c43cee29f6 ("driver core: Fix driver_deferred_probe_check_state() logic")
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-
-Thanks, this fixes the issue for me!
-
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
+Heh, I am asking you to use simple mutex here, leave the read/write
+lock thing completely as it won't work here.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+viresh
