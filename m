@@ -2,169 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC9B1A1B64
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 07:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025EE1A1BA0
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 07:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbgDHFGq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Apr 2020 01:06:46 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:43124 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727089AbgDHFGq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Apr 2020 01:06:46 -0400
-Received: by mail-wr1-f68.google.com with SMTP id w15so6247924wrv.10
-        for <linux-pm@vger.kernel.org>; Tue, 07 Apr 2020 22:06:44 -0700 (PDT)
+        id S1725932AbgDHFxG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Apr 2020 01:53:06 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44091 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726494AbgDHFxG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Apr 2020 01:53:06 -0400
+Received: by mail-pg1-f193.google.com with SMTP id n13so1413391pgp.11
+        for <linux-pm@vger.kernel.org>; Tue, 07 Apr 2020 22:53:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RVqYLzvz5LKqumC9icZHSiO0RIIhX7YU71aDHaxaFJE=;
-        b=mt2UO1ksFUf2Wqcy/GXaoOoCVWX2OeRgET0TvIwM1qEhWK0CR1YeHqkacSxJv/P8fU
-         VRA2yUT2pdNNBlBgUjtuWicF7bp7SIQxCJV403Pr1MDRJ0rxyUehQKnlOvLM1Ut+1qbD
-         YDyaE7xaFAI8xHJ4/UwY5fE1ZAG0sWOpBgYTQ=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5e4MJJn8a/rgtRLRcTfQ/Iwfbqly/Z6Qseq2BhNVXhs=;
+        b=Buvyp94gdoyw/raDpF1YKbKaOV8H5YUTSwbYKlAKBdifSk24gF0L4UwqZp3RXq99dd
+         sRdjTCdrxsdyE1HODCeUTL98tb5zF4E1JAMVkMfFWkyLXApJynqd/dprODX+DZmo7Bzz
+         p0CkcsxnkwT6qh4SW5NIr12InVUfZ/K+KS+M80Ijd4O7ClNbKM9cFTk5YSeb+soqgXcE
+         23+iEs5d4gEfdVMvUEIK8KwmBPZafE2iIShuoD2klQovIVxmOXrIJ0ELG5x3w4VwDPPQ
+         zrkSFKTBQCGnPoVtv6M0xq2xZbSber/BMiLaZKHxCFVx3Qf/Znsu8QYtK6YOX8m5pdr2
+         IZeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RVqYLzvz5LKqumC9icZHSiO0RIIhX7YU71aDHaxaFJE=;
-        b=gUN6RmgsfIM32dESpremu4LYctWRoNKTb4JTR5J8WBqWd++xAnne9jgFQ0nwAwIP7D
-         QotmU/NVofXSg71qNXP0Nt8o9vK4ZX0R4ezTKne4Zib3nCo7usice6VYJIslf4dJNwhK
-         8JcjrqpkX6gMVoiky/wrYW9sIUo4z/H0Ck7zK9XXJ4+2SJkp+YY7pVcfXm4UAmrttPk7
-         vE32JrCXKaiVKXpAcu3cH3VwZunk+4EWfhNl2Q4GiDOlWLM276hXWAe4XoOJ3+ul1mBN
-         dU4Qs+UaX3jQo8sdrg79GsVa1PZ/5vIdXElokDA+tMXwApjwOB0HLA5YLkm/I4/YSq1u
-         BCbA==
-X-Gm-Message-State: AGi0PuYUr5y+rZ9sxIiEe720gGv25V5JCH/6QnwDzSIpNIyAafUTSWNj
-        P0P+JqWLfeshNmaOaez5rNttYAjI3lYaMmtVGH+JBA==
-X-Google-Smtp-Source: APiQypIN18iGe7EO2INUCjO7GQKpI0EzzwmN1Z1k8o9aPCwEQGXb3Iysg/a12d8h4jfUDp3v4FHpOhNbFw6kY+d81vI=
-X-Received: by 2002:adf:fa51:: with SMTP id y17mr6697995wrr.358.1586322403655;
- Tue, 07 Apr 2020 22:06:43 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5e4MJJn8a/rgtRLRcTfQ/Iwfbqly/Z6Qseq2BhNVXhs=;
+        b=OFRRxwjXMJAKI486eE0Larq+3kuDbwZaMO/nsnPgD8E8hrcrMfr84LIVD/DVqRiCSD
+         fIIZ42Pe4rEe8Cb/S4KUJw3QPbWUOyqOQqO2mWsRmxSaxqzdzBbO0UizgA9t+ST0R4m7
+         I4zj2onEfIaA6XW/5CK9HarzDMPseh4e1jtRUOyBK2bgD+OAl1RXiZEcwp3j2BvpnZNW
+         Yha6C5YuimBuT4/GUswbkZAbm0pNJz9LKKHv2hBeMgs+MawhKSm9niwfpNrqCeW927Vs
+         6+8MqUwHTHb3xZxpzTUp2ikD4psRPi3Tz7bI6CS5PaUqQXpGMDfgzHr7eOPU4lcfreA8
+         CU0A==
+X-Gm-Message-State: AGi0PuY5PDMpU/thLTM5dK7Jz9P5D/ZODeSMOPCFDzfZ2vhuMqXYP/Wq
+        5op7UdZ5TyiH60Ysc6VWmfX+Xw==
+X-Google-Smtp-Source: APiQypLa1JacUHJ+QeokcMaEZM87v/v2o50a2V2iva/HH9LUehvg+Bz1b7fJMo2ykKancm0Rl5AMAA==
+X-Received: by 2002:a63:2903:: with SMTP id p3mr5153192pgp.87.1586325183838;
+        Tue, 07 Apr 2020 22:53:03 -0700 (PDT)
+Received: from localhost ([122.171.118.46])
+        by smtp.gmail.com with ESMTPSA id d26sm15488014pfo.37.2020.04.07.22.53.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Apr 2020 22:53:03 -0700 (PDT)
+Date:   Wed, 8 Apr 2020 11:23:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     sumitg <sumitg@nvidia.com>
+Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, will@kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, talho@nvidia.com,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bbasu@nvidia.com, mperttunen@nvidia.com
+Subject: Re: [TEGRA194_CPUFREQ Patch 2/3] cpufreq: Add Tegra194 cpufreq driver
+Message-ID: <20200408055301.jhvu5bc2luu3b5qr@vireshk-i7>
+References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
+ <1575394348-17649-2-git-send-email-sumitg@nvidia.com>
+ <20200326115023.xy3n5bl7uetuw7mx@vireshk-i7>
+ <d233b26b-6b50-7d41-9f33-a5dc151e0e7d@nvidia.com>
+ <20200406025549.qfwzlk3745y3r274@vireshk-i7>
+ <3ab4136c-8cca-c2f9-d286-b82dac23e720@nvidia.com>
 MIME-Version: 1.0
-References: <20200327151951.18111-1-ricardo.canuelo@collabora.com>
- <20200327154345.GA3971@ninjato> <CAGAzgsqJznZi83ijxCgQg463Q4AnwiNX-a0Q9+Og9MW5OJ4Vew@mail.gmail.com>
- <CAAEAJfCzquaiCkjxXYOJRH8tpGRkHJBSWnFD--S=C7uAvHwqUg@mail.gmail.com>
-In-Reply-To: <CAAEAJfCzquaiCkjxXYOJRH8tpGRkHJBSWnFD--S=C7uAvHwqUg@mail.gmail.com>
-From:   "dbasehore ." <dbasehore@chromium.org>
-Date:   Tue, 7 Apr 2020 22:06:32 -0700
-Message-ID: <CAGAzgsqCasNOFtP6Yk+HQAn_EiYVQApohmmjrGRukGukua9GyA@mail.gmail.com>
-Subject: Re: [PATCH] i2c: enable async suspend/resume on i2c devices
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
-        linux-i2c@vger.kernel.org, Guenter Roeck <groeck@chromium.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3ab4136c-8cca-c2f9-d286-b82dac23e720@nvidia.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Mar 29, 2020 at 5:49 AM Ezequiel Garcia
-<ezequiel@vanguardiasur.com.ar> wrote:
->
-> Hi Derek,
->
-> On Fri, 27 Mar 2020 at 17:26, dbasehore . <dbasehore@chromium.org> wrote:
-> >
-> > On Fri, Mar 27, 2020 at 8:43 AM Wolfram Sang <wsa@the-dreams.de> wrote:
-> > >
-> > > On Fri, Mar 27, 2020 at 04:19:51PM +0100, Ricardo Ca=C3=B1uelo wrote:
-> > > > This enables the async suspend property for i2c devices. This reduc=
-es
-> > > > the suspend/resume time considerably on platforms with multiple i2c
-> > > > devices (such as a trackpad or touchscreen).
-> > > >
-> > > > (am from https://patchwork.ozlabs.org/patch/949922/)
-> > > >
-> > > > Signed-off-by: Derek Basehore <dbasehore@chromium.org>
-> > > > Reviewed-on: https://chromium-review.googlesource.com/1152411
-> > > > Tested-by: Venkateswarlu V Vinjamuri <venkateswarlu.v.vinjamuri@int=
-el.com>
-> > > > Reviewed-by: Venkateswarlu V Vinjamuri <venkateswarlu.v.vinjamuri@i=
-ntel.com>
-> > > > Reviewed-by: Justin TerAvest <teravest@chromium.org>
-> > > > Signed-off-by: Guenter Roeck <groeck@chromium.org>
-> > > > Signed-off-by: Ricardo Ca=C3=B1uelo <ricardo.canuelo@collabora.com>
-> > > > ---
-> > >
-> > > Adding linux-pm to CC. I don't know much about internals of async
-> > > suspend. Is there a guide like "what every maintainer needs to know
-> > > about"?
-> >
-> > For more details, you can look at the function dpm_resume in the
-> > drivers/base/power/main.c file and follow from there.
-> >
-> > I can't find anything in Documentation/, so here's a short overview:
-> > Async devices have suspend/resume callbacks scheduled via
-> > async_schedule at every step (normal, late, noirq, etc.) for
-> > suspending/resuming devices. We wait for all device callbacks to
-> > complete at the end of each of these steps before moving onto the next
-> > one. This means that you won't have a resume_early callback running
-> > when you start the normal device resume callbacks.
-> >
-> > The async callbacks still wait individually for children on suspend
-> > and parents on resume to complete their own callbacks before calling
-> > their own. Because some dependencies may not be tracked by the
-> > parent/child graph (or other unknown reasons), async is off by
-> > default.
-> >
-> > Enabling async is a confirmation that all dependencies to other
-> > devices are properly tracked, whether through the parent/child
-> > relationship or otherwise.
-> >
->
-> Have you noticed the async sysfs attribute [1]?
->
-> Given this allows userspace to enable the async suspend/resume,
-> wouldn't it be simpler to just do that in userspace, on the
-> platforms you want to target (e.g. Apollolake Chromebook devices, and so =
-on) ?
+On 07-04-20, 23:48, sumitg wrote:
+> On 06/04/20 8:25 AM, Viresh Kumar wrote:
+> > On 05-04-20, 00:08, sumitg wrote:
+> > > On 26/03/20 5:20 PM, Viresh Kumar wrote:
+> > > > On 03-12-19, 23:02, Sumit Gupta wrote:
+> > > > > diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+> > > > > +static unsigned int tegra194_get_speed_common(u32 cpu, u32 delay)
+> > > > > +{
+> > > > > +     struct read_counters_work read_counters_work;
+> > > > > +     struct tegra_cpu_ctr c;
+> > > > > +     u32 delta_refcnt;
+> > > > > +     u32 delta_ccnt;
+> > > > > +     u32 rate_mhz;
+> > > > > +
+> > > > > +     read_counters_work.c.cpu = cpu;
+> > > > > +     read_counters_work.c.delay = delay;
+> > > > > +     INIT_WORK_ONSTACK(&read_counters_work.work, tegra_read_counters);
+> > > > > +     queue_work_on(cpu, read_counters_wq, &read_counters_work.work);
+> > > > > +     flush_work(&read_counters_work.work);
+> > > > 
+> > > > Why can't this be done in current context ?
+> > > > 
+> > > We used work queue instead of smp_call_function_single() to have long delay.
+> > 
+> > Please explain completely, you have raised more questions than you
+> > answered :)
+> > 
+> > Why do you want to have long delays ?
+> > 
+> Long delay value is used to have the observation window long enough for
+> correctly reconstructing the CPU frequency considering noise.
+> In next patch version, changed delay value to 500us which in our tests is
+> considered reliable.
 
-I don't remember much since I attempted this a long time ago. That
-sounds like it would be reasonable under many circumstances though.
+I understand that you need to put a udelay() while reading the freq from
+hardware, that is fine, but why do you need a workqueue for that? Why can't you
+just read the values directly from the same context ?
 
->
-> Thanks,
-> Ezequiel
->
-> [1] Documentation/ABI/testing/sysfs-devices-power
->
-> > >
-> > > > This patch was originally created for chromeos some time ago and I'=
-m
-> > > > evaluating if it's a good candidate for upstreaming.
-> > > >
-> > > > By the looks of it I think it was done with chromebooks in mind, bu=
-t
-> > > > AFAICT this would impact every i2c client in every platform, so I'd=
- like
-> > > > to know your opinion about it.
-> > > >
-> > > > As far as I know there was no further investigation or testing on i=
-t, so
-> > > > I don't know if it was tested on any other hardware.
-> > > >
-> > > > Best,
-> > > > Ricardo
-> > > >
-> > > >  drivers/i2c/i2c-core-base.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-bas=
-e.c
-> > > > index cefad0881942..643bc0fe0281 100644
-> > > > --- a/drivers/i2c/i2c-core-base.c
-> > > > +++ b/drivers/i2c/i2c-core-base.c
-> > > > @@ -769,6 +769,7 @@ i2c_new_client_device(struct i2c_adapter *adap,=
- struct i2c_board_info const *inf
-> > > >       client->dev.of_node =3D of_node_get(info->of_node);
-> > > >       client->dev.fwnode =3D info->fwnode;
-> > > >
-> > > > +     device_enable_async_suspend(&client->dev);
-> > > >       i2c_dev_set_name(adap, client, info);
-> > > >
-> > > >       if (info->properties) {
-> > > > --
-> > > > 2.18.0
-> > > >
+-- 
+viresh
