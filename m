@@ -2,147 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A35A1A1E9C
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 12:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D461A1EBF
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 12:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727990AbgDHKOP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Apr 2020 06:14:15 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:55752 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727916AbgDHKON (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Apr 2020 06:14:13 -0400
-Received: by mail-wm1-f67.google.com with SMTP id e26so4540195wmk.5
-        for <linux-pm@vger.kernel.org>; Wed, 08 Apr 2020 03:14:11 -0700 (PDT)
+        id S1727652AbgDHKZL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Apr 2020 06:25:11 -0400
+Received: from mail-eopbgr1410117.outbound.protection.outlook.com ([40.107.141.117]:25520
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725932AbgDHKZL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 Apr 2020 06:25:11 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eIileUYx2ujVRzzqiekNonmMNJBV2atI91vSdQGuaozhL/u5sod1G/pyamIEf4TB03w39xQQV4cZ4r7NC9hM6vv3stgyUo1aIz8K+Uw0q7vNRtT0zYYL8JisPFrwJl2ZwvYt3sS1HKkxD5MFGY5FYlpCBwzbX+1rNx8lmCZGmaAk5iF+MTOZkcRKvH163CruBxi2ZPatlqJOUE0BsY341RW0zcIz805wGjaIGe2N3kRTyS+NTKxVVancPMaVailQtZFGH/0rNCQPSGWkSZ9RDGdeQl+TVBAdIZmJECVHP1XkDe4u5UJ1lSzbyp39LsoAyOrWkt5Ma1ZXTMvCl2qk0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0bvMIfu4bNVmo90Z4RETSA6+xb42chgYJiM3N8RXqX8=;
+ b=BBHBTkzMZoX8cpL0Joh2nU9MPgWDz94lOk2Tnzt+rbQQ9Tt2Gz9/0XO+3kpPWMUByvAHdxTNeeQFcfHHKH6HIaIuYFfkGOCvifFo7uLJR8PKEAj4QGpOSyB7IV9ZoL/NU47hM6QHbRLei7iq1d+SXkOYnOOy+8qzNC5d2tPTDzFclczXdfiFwKOiZza4A0YIp7ByPJoPLt+Uv0hPzfQVP69pFbTYBNudcyAoz4o016XUBDH4SEeq2LzBBdm06o7hpA8OdiueFPlSxjomSazkBJonYrAqOgDom1n9UNgDcONUzesFtm58PAC8QQG0paqIt6c1WlNvPXMLP0iEIohGrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=25069VDYosEmyzjyjgB1Fr18hxU9v2CBSXz/PzXbBl8=;
-        b=qH2Gq9ofUudA1pSW/odMa2/8M3XmMMz4UqX2oplXnZzl9Zo6pq3fFKvWczVldbcoE3
-         rCblbFO7EivrifQ0yexwYerKq5cUSFOuFmSsm+ChZxBrayh9ItBM00FDUsvaif0CzZUT
-         yXwnsYgQPkmmQec1o15WiCKzl7gZ5VKsbTqCIqd3B+4Vp56sx080HaaB3XlU92ixc7j+
-         lxi3bHPtjS9RgyNojZsXRodNFPBF4XYPZQdnvvXcwz+1uGfrkDexovaZic2rcBwRZ8ii
-         3QNtzuH4yGE4hmhzJEFo6vFePo89Z8YhFrjA40dtu/+8URe59utwIJ0kIMFqkLvlzLB5
-         qsaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=25069VDYosEmyzjyjgB1Fr18hxU9v2CBSXz/PzXbBl8=;
-        b=TzKDDq+JLN5BxPGKf7d0yVJz0v0868F+pBxt4Ud6foA5I1QBr4Ua36M4fla5a677pR
-         CioURDejoIG2vKFctPbKOHtAgt5ivAYbMfQuhQ2laLqHPiDl1dze5sH6SQZsPwa17CUk
-         a0CXdSRXIg3zGqxH7CKWeMlq+/x7iG2caIKOeycfNUN7/VBQsmVmAqb49WyxekD0sEIU
-         Labhk+WEfhTKuI5phkBxcGTm559RHA7ox4qWPOLkHSWFp6iVs9gX/KMai3b/s9M3FWFC
-         4T+7pOtTxDzJ279trjUKhRRne1h+w4E1M5NkUVZVH04+O0JWciaRDl8nV34myFWRlzy1
-         Lnwg==
-X-Gm-Message-State: AGi0PubCwnLRU1zcolljYCF5/uPhkgQqJk/lpsPz9wjKPz98vbC1bNq0
-        vvvHiiYWbxOOcjuuhSSvYI5v0g==
-X-Google-Smtp-Source: APiQypJXilSL/A+a4hF27py3ApM+n04W/ugNsSh5QoeD0Hyiw1yKokhPBGveos7hrHjep9MKgM7opA==
-X-Received: by 2002:a05:600c:2c06:: with SMTP id q6mr3967744wmg.42.1586340850731;
-        Wed, 08 Apr 2020 03:14:10 -0700 (PDT)
-Received: from dell ([2.31.167.253])
-        by smtp.gmail.com with ESMTPSA id y7sm33984899wrq.54.2020.04.08.03.14.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2020 03:14:10 -0700 (PDT)
-Date:   Wed, 8 Apr 2020 11:15:06 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     saravanan sekar <sravanhome@gmail.com>
-Cc:     robh+dt@kernel.org, jic23@kernel.org, knaack.h@gmx.de,
-        lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] dt-bindings: mfd: add document bindings for mp2629
-Message-ID: <20200408101506.GI30614@dell>
-References: <20200322224626.13160-1-sravanhome@gmail.com>
- <20200322224626.13160-2-sravanhome@gmail.com>
- <20200327080013.GG603801@dell>
- <d449b567-bd5c-168d-83af-5ba38771f75a@gmail.com>
- <20200330064630.GA30614@dell>
- <e4412378-1423-a48e-9176-f0d48f6000c4@gmail.com>
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0bvMIfu4bNVmo90Z4RETSA6+xb42chgYJiM3N8RXqX8=;
+ b=AMHkf43h4Fn1Zz7oPeuMcZkya32VPNVz8TaxJGx3qDy/aQZmoB0bSgsvJgRfatjil5qQ4YdDu7xT19gP3fcxoylZ6XSYz836YzYyLmEKmDbS8ytTGhNuBQLAhGEPk9L/4uY/qzyY33ZUifE75jP6uNywv6HX/2hhXGloNURRF7M=
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
+ TYAPR01MB2735.jpnprd01.prod.outlook.com (20.177.101.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2878.20; Wed, 8 Apr 2020 10:25:06 +0000
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::ed7f:1268:55a9:fc06]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::ed7f:1268:55a9:fc06%4]) with mapi id 15.20.2900.015; Wed, 8 Apr 2020
+ 10:25:06 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     John Stultz <john.stultz@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        netdev <netdev@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [RFC][PATCH v2 1/2] driver core: Revert default
+ driver_deferred_probe_timeout value to 0
+Thread-Topic: [RFC][PATCH v2 1/2] driver core: Revert default
+ driver_deferred_probe_timeout value to 0
+Thread-Index: AQHWDXcWXye7D9W90EKkrusU1lNNn6hvBE8w
+Date:   Wed, 8 Apr 2020 10:25:05 +0000
+Message-ID: <TYAPR01MB45442402CC541A01A623F8C4D8C00@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+References: <20200408072650.1731-1-john.stultz@linaro.org>
+In-Reply-To: <20200408072650.1731-1-john.stultz@linaro.org>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [124.210.22.195]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 420cafd8-0f3c-4e8e-74f1-08d7dba71b4b
+x-ms-traffictypediagnostic: TYAPR01MB2735:
+x-microsoft-antispam-prvs: <TYAPR01MB27359A1927A17E8886C28950D8C00@TYAPR01MB2735.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 0367A50BB1
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(4636009)(376002)(346002)(396003)(136003)(39860400002)(366004)(110136005)(52536014)(54906003)(316002)(26005)(8936002)(9686003)(5660300002)(55016002)(81166007)(86362001)(186003)(55236004)(7696005)(66446008)(6506007)(66946007)(4326008)(66556008)(8676002)(64756008)(66476007)(33656002)(7416002)(478600001)(2906002)(71200400001)(76116006)(81156014);DIR:OUT;SFP:1102;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: iudkrUzifjIHL/KFpCdfRuLdeXMDhNnTGHjz5fM714s2eejcLHxXgDup+dEZO50LDOFARYLkLUVSwWDnyeOj2M0EQUhsc0M9pkpqeZT9WFo3HWcUeQADGXrm6eJjWuOzwAAl6xqJDwLqQI629FZHF2yaujaqoAtEYxMLXcT73IidFNEtrgWap1XqTJm7+i7djBcoPZyCmqQdaFAsujQpl/S+xJuUNeM1MROcRDTnhlNKd8jxYdXgGo4v6plWMP3SqkSJjkl3aLIWXkkThUJoOXeuH91I6f2ZixJBrpYO/kyPlqouT0/HBg0muESdlW0oC8sY/4Mf+gIJ9krsNI0YMrwrURHAtqcsrS/0/+xfDIvNDrWB3syVszHfbH4FGW68x8mlOAHSk6QgprQmZ1nue3rD5TItktDJX8IC1lRx7ja60MA1R+VlqLn1bLdTfq9N
+x-ms-exchange-antispam-messagedata: Mh9U3V2hHSPwIaoL7SvQUOebOFpRI9fIdB7kSB9MUVtviiWw69+Nd/JAS1NyhbyqrsAuvpcSqf2PB9SbSSEEnL8BLw9tUhLrqlHEXRSP8/2+dQgdieHQMQkOahJVBH/2t6PaGB/7HAxG86buobpOsw==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e4412378-1423-a48e-9176-f0d48f6000c4@gmail.com>
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 420cafd8-0f3c-4e8e-74f1-08d7dba71b4b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2020 10:25:05.8286
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XXctKMTY9uJkIE29OV3cRyvokZUPcRS3inyuuvt7PKAZkQP/Nw1uRt63Hyg4RgAKakyL3H64Nw/W9TXEfZOCiF2nFBtkg2Ognq7mKgs6qafp2d0/gNfh3DcSuL3hqJXZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB2735
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 07 Apr 2020, saravanan sekar wrote:
+Hi John,
 
-> Hi Lee,
-> 
-> On 30/03/20 8:46 am, Lee Jones wrote:
-> > On Fri, 27 Mar 2020, saravanan sekar wrote:
-> > > On 27/03/20 9:00 am, Lee Jones wrote:
-> > > > On Sun, 22 Mar 2020, Saravanan Sekar wrote:
-> > > > 
-> > > > > Add device tree binding information for mp2629 mfd driver.
-> > > > > 
-> > > > > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-> > > > > ---
-> > > > >    .../devicetree/bindings/mfd/mps,mp2629.yaml   | 60 +++++++++++++++++++
-> > > > >    1 file changed, 60 insertions(+)
-> > > > >    create mode 100644 Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
-> > > > > 
-> > > > > diff --git a/Documentation/devicetree/bindings/mfd/mps,mp2629.yaml b/Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
-> > > > > new file mode 100644
-> > > > > index 000000000000..314309ea91ac
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
-> > > > > @@ -0,0 +1,60 @@
-> > > > > +# SPDX-License-Identifier: GPL-2.0
-> > > > > +%YAML 1.2
-> > > > > +---
-> > > > > +$id: http://devicetree.org/schemas/mfd/mps,mp2629.yaml#
-> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > Are these links supposed to work?
-> > > Not really, but as far my understanding needed for dt-bindings check
-> > Rob, why are these here if they just result in 404s?
-> > 
-> > > > > +examples:
-> > > > > +  - |
-> > > > > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > > > > +    #include <dt-bindings/input/linux-event-codes.h>
-> > > > > +    i2c {
-> > > > i2c@0x????????
-> > > Its a I2C controller node, I don't think address is needed. Mention like
-> > > this my previous other driver patches,
-> > This doesn't sound right.
-> > 
-> > How do you control/operate the controller?
-> > 
-> > Surely you read/write from/to registers?
-> 
-> 
-> Indeed, but each SoC will have different address so which address to mention
-> here.
-> For me it should be like &i2c {}, anyhow I respect maintainers review (I can
-> give RPi I2c bus address used for testing)
-> and wait for Rob's reply
+> From: John Stultz, Sent: Wednesday, April 8, 2020 4:27 PM
+>=20
+> In commit c8c43cee29f6 ("driver core: Fix
+> driver_deferred_probe_check_state() logic"), we both cleaned up
+> the logic and also set the default driver_deferred_probe_timeout
+> value to 30 seconds to allow for drivers that are missing
+> dependencies to have some time so that the dependency may be
+> loaded from userland after initcalls_done is set.
+>=20
+> However, Yoshihiro Shimoda reported that on his device that
+> expects to have unmet dependencies (due to "optional links" in
+> its devicetree), was failing to mount the NFS root.
+>=20
+> In digging further, it seemed the problem was that while the
+> device properly probes after waiting 30 seconds for any missing
+> modules to load, the ip_auto_config() had already failed,
+> resulting in NFS to fail. This was due to ip_auto_config()
+> calling wait_for_device_probe() which doesn't wait for the
+> driver_deferred_probe_timeout to fire.
+>=20
+> Fixing that issue is possible, but could also introduce 30
+> second delays in bootups for users who don't have any
+> missing dependencies, which is not ideal.
+>=20
+> So I think the best solution to avoid any regressions is to
+> revert back to a default timeout value of zero, and allow
+> systems that need to utilize the timeout in order for userland
+> to load any modules that supply misisng dependencies in the dts
+> to specify the timeout length via the exiting documented boot
+> argument.
+>=20
+> Thanks to Geert for chasing down that ip_auto_config was why NFS
+> was failing in this case!
+>=20
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
+> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> Cc: netdev <netdev@vger.kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> Fixes: c8c43cee29f6 ("driver core: Fix driver_deferred_probe_check_state(=
+) logic")
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
 
-It's only an example.  It doesn't have to match any real H/W.
+Thank you for the patch! This patch could fix the issue
+on my environment. So,
 
-> > > dt_binding_check is also passed
-> > > 
-> > > > > +        #address-cells = <1>;
-> > > > > +        #size-cells = <0>;
-> > > > > +
-> > > > > +        pmic@4b {
-> > > > > +            compatible = "mps,mp2629";
-> > > > > +            reg = <0x4b>;
-> > > > > +
-> > > > > +            interrupt-controller;
-> > > > > +            interrupt-parent = <&gpio2>;
-> > > > > +            #interrupt-cells = <2>;
-> > > > > +            interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
-> > > > > +        };
-> > > > > +    };
+Tested-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Best regards,
+Yoshihiro Shimoda
+
