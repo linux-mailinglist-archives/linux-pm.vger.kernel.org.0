@@ -2,140 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C04471A1F36
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 12:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA351A1FC2
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 13:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727254AbgDHKxI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Apr 2020 06:53:08 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55042 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726980AbgDHKxI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Apr 2020 06:53:08 -0400
-Received: by mail-wm1-f65.google.com with SMTP id h2so4666980wmb.4
-        for <linux-pm@vger.kernel.org>; Wed, 08 Apr 2020 03:53:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=urGUcaHoOYUM5FPu/2/95ZPBaR2VlGmS9zoEil6aMBw=;
-        b=rqva7QFyqWsxRa6X4mRYKo2igMyBc+MB0DFnNMcR20yq3mSPg13PXdmrOZRhubThk/
-         jBgkY6a6YVdkabnRSIACYqsx7J9Re0A9Uk3SDHv7ccbgEUfKcUMFccnEb4UGw2CJZq/x
-         hVm4E/4wuwBKNPddhYegDog0ueMtf87l1G8XUK5ukw5RPbCuCBsRP7depzKp4psAeu+H
-         PuPBgc9TFklszqdRC8LD3AfjqsjNTMD8Ts/1uH8bLvLIT9AyJRkAYGdCb7gmcMK2AexM
-         5zwaz8hcksnyXrIJcfoWlNiOFdFp8wiNs7PG7ekX0GwrUg72+SXC/JZlegKWCOSDlR8E
-         PtoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=urGUcaHoOYUM5FPu/2/95ZPBaR2VlGmS9zoEil6aMBw=;
-        b=Wol2VW4W6xnxI+D7Ox1Bg3t6L71cMW5f7tD8JStrjr9FICnH5KgaxHdmHwCdBeUZIU
-         qUKHDKDsUjj1OA+y+0csxYTU8GQo7q6WNpSkWUTYzhhnKNqAYpKDzQyx6q1LxnbaW6Fx
-         TNwqBJupyyV1F/5SxESJMG0eVaPbGvbgvH9/ClsO97M8eK49oB+cKDu5x4Y29F+E4X5b
-         LOFHypqISNMGKOMc4Xwtp735tplwyQogFy+upv7R2869BItMIII7wCc8XdehrgfG0fYb
-         e8YQ84rMrQT9fIpmYpqQ/a0H1CbnGRo3rofYb/iD77HQZK4UpNQowNvNl5BD2BQ7r+K2
-         EZBw==
-X-Gm-Message-State: AGi0PuaoCRJcg66DXuGBoYApIQOMlBwXKZPYuoIC2Gz94PvafLcLnJwE
-        /J43XM4+Uhs/1MkR0EcbMSfMaA==
-X-Google-Smtp-Source: APiQypJicFap+MLD9pPPPE/yE7cIO221IUi0LQ7UTChFWe3p8XtSrHleUHxGe+8OH3U3ZGZS7L7j5A==
-X-Received: by 2002:a7b:c118:: with SMTP id w24mr3912929wmi.173.1586343187010;
-        Wed, 08 Apr 2020 03:53:07 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:5d56:fae1:b92:8fa0? ([2a01:e34:ed2f:f020:5d56:fae1:b92:8fa0])
-        by smtp.googlemail.com with ESMTPSA id y189sm6668969wmb.26.2020.04.08.03.53.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Apr 2020 03:53:06 -0700 (PDT)
-Subject: Re: [GIT PULL] thermal for v5.7-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Willy Wolff <willy.mh.wolff.ml@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>
-References: <49c5b834-362d-0569-32c5-76d366cb0a44@linaro.org>
- <CAHk-=wjkEYLViZ6zBLaWaiTXZ4RqcR4DHkkY_PKJZ2-0HAX_Pw@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <2422ce89-5b76-f56e-2b62-c120062ce642@linaro.org>
-Date:   Wed, 8 Apr 2020 12:53:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1728443AbgDHLX7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Apr 2020 07:23:59 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:14525 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728442AbgDHLX7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Apr 2020 07:23:59 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e8db3e60002>; Wed, 08 Apr 2020 04:22:14 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 08 Apr 2020 04:23:57 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 08 Apr 2020 04:23:57 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 8 Apr
+ 2020 11:23:57 +0000
+Received: from [10.24.37.103] (10.124.1.5) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 8 Apr 2020
+ 11:23:53 +0000
+Subject: Re: [TEGRA194_CPUFREQ Patch 2/3] cpufreq: Add Tegra194 cpufreq driver
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rjw@rjwysocki.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <talho@nvidia.com>, <linux-pm@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>,
+        <mperttunen@nvidia.com>, <sumitg@nvidia.com>
+References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
+ <1575394348-17649-2-git-send-email-sumitg@nvidia.com>
+ <20200326115023.xy3n5bl7uetuw7mx@vireshk-i7>
+ <d233b26b-6b50-7d41-9f33-a5dc151e0e7d@nvidia.com>
+ <20200406025549.qfwzlk3745y3r274@vireshk-i7>
+ <3ab4136c-8cca-c2f9-d286-b82dac23e720@nvidia.com>
+ <20200408055301.jhvu5bc2luu3b5qr@vireshk-i7>
+From:   sumitg <sumitg@nvidia.com>
+Message-ID: <08307e54-0e14-14a3-7d6a-d59e1e04a683@nvidia.com>
+Date:   Wed, 8 Apr 2020 16:54:07 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <CAHk-=wjkEYLViZ6zBLaWaiTXZ4RqcR4DHkkY_PKJZ2-0HAX_Pw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200408055301.jhvu5bc2luu3b5qr@vireshk-i7>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1586344935; bh=oYFcSb+xjYNh1lFY2wJ0O1MqXnEs9+vbafQpizW2IEQ=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=iB1I9IcXw9V27t4+8PI4OAE3+gQvSQNfry3VT4hcWVhrBiwyoP597DPogUKCkoT1T
+         noPO3H03Ywg4wflAC9Ia4kxBER2iSwLeKpREetVAh7XJCFFi4XPdCIyoTlC/U5um+/
+         SJXmDCIWMx0ZcCM6DWwG4RSDzDfGW6fe/qh3A1RwelVKh3QMxSx3yek/CnhqruUCBg
+         /YbbOmIC5PlPUdVbHPF2LzBKgiwzdF2OiYj0HeitxVPZiVCJ+DSbg3xxEtSrFKN6YC
+         nzUxvfm43RrhlWn1xmRskmWhQ928Nr3TSppfXaHBma2nW+tAxHyFzCMvVKDssd3E7r
+         clyE9PtKQW0dg==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Linus,
 
-On 08/04/2020 05:14, Linus Torvalds wrote:
-> On Tue, Apr 7, 2020 at 4:26 AM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> git://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
->> tags/thermal-v5.7-rc1
+On 08/04/20 11:23 AM, Viresh Kumar wrote:
+> External email: Use caution opening links or attachments
 > 
-> Ho humm.
 > 
-> This caused a conflict between commit
+> On 07-04-20, 23:48, sumitg wrote:
+>> On 06/04/20 8:25 AM, Viresh Kumar wrote:
+>>> On 05-04-20, 00:08, sumitg wrote:
+>>>> On 26/03/20 5:20 PM, Viresh Kumar wrote:
+>>>>> On 03-12-19, 23:02, Sumit Gupta wrote:
+>>>>>> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+>>>>>> +static unsigned int tegra194_get_speed_common(u32 cpu, u32 delay)
+>>>>>> +{
+>>>>>> +     struct read_counters_work read_counters_work;
+>>>>>> +     struct tegra_cpu_ctr c;
+>>>>>> +     u32 delta_refcnt;
+>>>>>> +     u32 delta_ccnt;
+>>>>>> +     u32 rate_mhz;
+>>>>>> +
+>>>>>> +     read_counters_work.c.cpu = cpu;
+>>>>>> +     read_counters_work.c.delay = delay;
+>>>>>> +     INIT_WORK_ONSTACK(&read_counters_work.work, tegra_read_counters);
+>>>>>> +     queue_work_on(cpu, read_counters_wq, &read_counters_work.work);
+>>>>>> +     flush_work(&read_counters_work.work);
+>>>>>
+>>>>> Why can't this be done in current context ?
+>>>>>
+>>>> We used work queue instead of smp_call_function_single() to have long delay.
+>>>
+>>> Please explain completely, you have raised more questions than you
+>>> answered :)
+>>>
+>>> Why do you want to have long delays ?
+>>>
+>> Long delay value is used to have the observation window long enough for
+>> correctly reconstructing the CPU frequency considering noise.
+>> In next patch version, changed delay value to 500us which in our tests is
+>> considered reliable.
 > 
->   f12e4f66ab6a ("thermal/cpu-cooling: Update thermal pressure in case
-> of a maximum frequency capping")
+> I understand that you need to put a udelay() while reading the freq from
+> hardware, that is fine, but why do you need a workqueue for that? Why can't you
+> just read the values directly from the same context ?
 > 
-> that came in through the scheduler updates from Ingo Molnar, and commit
-> 
->   ff44f672d741 ("thermal/drivers/cpufreq_cooling: Fix return of
-> cpufreq_set_cur_state")
-> 
-> from the thermal tree.
-> 
-> The conflict wasn't complicated, but the reason I mention it is that I
-> resolved it in a way that neither of those commits had done.
-> 
-> In particular, the thermal tree did
-> 
->   ret = freq_qos_update_request(..)
->   return ret < 0 ? ret : 0;
-> 
-> where that whole "return negative or zero" logic is new (it used to
-> return positive values, the fix was to return zero instead).
-> 
-> The scheduler tree did
-> 
->   ret = freq_qos_update_request(..)
->   if (ret > 0) {.. do thermal pressure thing ..}
->   return ret;
-> 
-> which obviously still returns that positive value.
-> 
-> My resolution to the conflict was to not take that return with a
-> conditional operation, but instead just add a
-> 
->   ret = 0;
-> 
-> to inside that thermal pressure if-statement, and avoid returning a
-> non-zero positive value that way.
-> 
-> I just wanted both sides to be aware of my non-traditional merge
-> resolution, and take a look.
+The register to read frequency is per core and not accessible to other 
+cores. So, we have to execute the function remotely as the target core 
+to read frequency might be different from current.
+The functions for that are smp_call_function_single or queue_work_on.
+We used queue_work_on() to avoid long delay inside ipi interrupt context 
+with interrupts disabled.
 
-The resolution looks correct to me.
-
-Thanks
-
-  -- Daniel
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> --
+> viresh
+> 
