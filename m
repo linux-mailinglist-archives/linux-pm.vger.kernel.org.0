@@ -2,143 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9AD81A1CA9
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 09:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AC91A1D32
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 10:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726921AbgDHHal (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Apr 2020 03:30:41 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:33667 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726192AbgDHHak (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Apr 2020 03:30:40 -0400
-Received: by mail-vs1-f68.google.com with SMTP id y138so4128388vsy.0
-        for <linux-pm@vger.kernel.org>; Wed, 08 Apr 2020 00:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=o2awHw9ue68/ioPQ/hcJMwV/cE3GRHWFi4nGkCXTPbg=;
-        b=Hvo2oCqtE17cvDi5h706vd7Fxzwir+m/OZWa7BGhDLz6xJwaTOpq6XrMP+kPjV4Qzj
-         bqanKuAY0pGptv9P9cfnMNx6Mj4Ihq55xfj5KmpRQyKxPVmwk9IWlfR+Utz2g9uaLLHM
-         hQGcb3X4jAYuwQmAstYccEv7thXGDN54MFu1f5KJV+d5Nu19FbL9VM9BD2bEvzORYbob
-         hSraiQY7Flb5jqULSSJkAqTqLglHZpY3u5/FKt/v2yIhzfjrYcCDRB4gJ5nVsYE9WLld
-         6BDn5LxOMDz/uT8VGyOtmrRh4A6/ymYyeeTL3w05OtRcF5VsDKUKcgOlAybtCc0vD4BD
-         j1Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o2awHw9ue68/ioPQ/hcJMwV/cE3GRHWFi4nGkCXTPbg=;
-        b=Rel2N3NRma1jAwE2ZLgSOwZn++S6hiQoJoUQBS+Pvt4cmMYx5h8/od1JajMxS8LWYE
-         DZPznLm38QY+KOs/lVt+YTH+mfC65sFRqaSeZCUINs3EC57AlzLHnflbzV55h10LxDm0
-         McFHkStB4cSolmLR3+KROEAcAgXaYgPUrF3f6o34xFcdxsquZSOUxtYFDAih0tlpg+2j
-         naG0GxRB5S76erlFZO9SGnBG7EwQnLm7x89RL8Dj6zOtUCjbUyY19DYi0nuARGtWQg7r
-         U7zh8GU7fsqkQ+Y8USxD1DUKg1m5ClS0ywqZMzh2nMob8otDNu3NJr0g3W5r5tVaEFMw
-         b2ng==
-X-Gm-Message-State: AGi0PuYcTZLkW5+iWEF7cdgO9f8aUmnlASeKTI9LPt8MQqrZbjeJe2Q3
-        U5GPQFWnzgFQa08u6R5Abfe6tK6LCphnvQJZp+8sMg==
-X-Google-Smtp-Source: APiQypLTmXBd+2LWVSrhlxxqM9wlcwqHYDI3H4zuMX9eSDO877vQ5tMjIv6xmU/xvJo0Yfccvn/Nmu/8tLxAtcnnsGU=
-X-Received: by 2002:a67:c594:: with SMTP id h20mr2746932vsk.95.1586331038462;
- Wed, 08 Apr 2020 00:30:38 -0700 (PDT)
+        id S1727026AbgDHINB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Apr 2020 04:13:01 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:46511 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726525AbgDHINB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Apr 2020 04:13:01 -0400
+X-UUID: 53ee3fd8b8cf4e5594616ccf0ae4b40b-20200408
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ReQScgLFJ9/68fAYgC7XYU0D88RS9Ej3AolLMr7k38s=;
+        b=R+9pES03dreXenkf2EvtHb+0JMmK/wRdQ+RFzG+pRO+PU8DU96knKnXBHTPLamVrSTruGb86aiKo/V6DEtAO0SjglFw4NdODeqYkwkh4iw7SlOqGzyoBcEGo+t0qYc2qM+6pBKZ+hlNjI+clsOYSGF+rPE3paPPnqDdVjhsZQ5M=;
+X-UUID: 53ee3fd8b8cf4e5594616ccf0ae4b40b-20200408
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <hsin-hsiung.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 2085188719; Wed, 08 Apr 2020 16:12:53 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 8 Apr 2020 16:12:49 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 8 Apr 2020 16:12:49 +0800
+From:   Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     Nicolas Boichat <drinkcat@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Richard Fontana <rfontana@redhat.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        Ran Bi <ran.bi@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <srv_heupstream@mediatek.com>
+Subject: [PATCH v12 0/6] Add Support for MediaTek PMIC MT6358
+Date:   Wed, 8 Apr 2020 16:12:05 +0800
+Message-ID: <1586333531-21641-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-References: <20200407055116.16082-1-j-keerthy@ti.com> <20200407055116.16082-5-j-keerthy@ti.com>
-In-Reply-To: <20200407055116.16082-5-j-keerthy@ti.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Wed, 8 Apr 2020 13:00:00 +0530
-Message-ID: <CAHLCerNZqQj=DLkTdHbL5SSs3ufej5BdW+OBVqjuioL26Fn_iQ@mail.gmail.com>
-Subject: Re: [PATCH v6 4/4] arm64: dts: ti: am654: Add thermal zones
-To:     Keerthy <j-keerthy@ti.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh+dt@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, t-kristo@ti.com,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        lakml <linux-arm-kernel@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 1D8F51BD4EA362DB9AFC00BF572DE7769CFAA3A7B3B2B4FA91B9CCF20772BA492000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 7, 2020 at 11:21 AM Keerthy <j-keerthy@ti.com> wrote:
->
-> The am654 SoC has three thermal zones namely MPU0, MPU1 and MCU
-> zones.
->
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+VGhpcyBwYXRjaHNldCBpbmNsdWRpbmcgbW9kaWZ5aW5nIHN1c3BlbmQvcmVzdW1lIGJlaGF2aW9y
+IGFuZCB0cmltbWluZyBwcm9iZSBmdW5jdGlvbiBhZGQgc3VwcG9ydCB0byBNVDYzNTggUE1JQy4N
+Ck1UNjM1OCBpcyB0aGUgcHJpbWFyeSBQTUlDIGZvciBNVDgxODMgcGxhdGZvcm0uDQoNCmNoYW5n
+ZXMgc2luY2UgdjExOg0KLSBhZGQgYSBuZXcgcGF0Y2ggdG8gdHJpbSBwcm9iZSBmdW5jdGlvbiBt
+b3JlIGNsZWFubHkuDQotIGZpeCBzb21lIGNvdmVyaXR5IGRlZmVjdHMuDQotIHVwZGF0ZSBzb21l
+IGNvbW1lbnQgbWVzc2FnZXMuDQotIGZpeCB3cm9uZyBzaXplb2YgYXJndW1lbnQuDQoNCkhzaW4t
+SHNpdW5nIFdhbmcgKDUpOg0KICBtZmQ6IG10NjM5NzogTW9kaWZ5IHN1c3BlbmQvcmVzdW1lIGJl
+aGF2aW9yDQogIG1mZDogbXQ2Mzk3OiBUcmltIHByb2JlIGZ1bmN0aW9uIHRvIHN1cHBvcnQgZGlm
+ZmVyZW50IGNoaXBzIG1vcmUNCiAgICBjbGVhbmx5DQogIGR0LWJpbmRpbmdzOiBtZmQ6IEFkZCBj
+b21wYXRpYmxlIGZvciB0aGUgTWVkaWFUZWsgTVQ2MzU4IFBNSUMNCiAgbWZkOiBBZGQgc3VwcG9y
+dCBmb3IgdGhlIE1lZGlhVGVrIE1UNjM1OCBQTUlDDQogIGFybTY0OiBkdHM6IG10NjM1ODogYWRk
+IFBNSUMgTVQ2MzU4IHJlbGF0ZWQgbm9kZXMNCg0KUmFuIEJpICgxKToNCiAgcnRjOiBtdDYzOTc6
+IEFkZCBzdXBwb3J0IGZvciB0aGUgTWVkaWFUZWsgTVQ2MzU4IFJUQw0KDQogRG9jdW1lbnRhdGlv
+bi9kZXZpY2V0cmVlL2JpbmRpbmdzL21mZC9tdDYzOTcudHh0IHwgIDE0ICstDQogYXJjaC9hcm02
+NC9ib290L2R0cy9tZWRpYXRlay9tdDYzNTguZHRzaSAgICAgICAgIHwgMzU4ICsrKysrKysrKysr
+KysrKysrKysrKysrDQogYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMtZXZiLmR0
+cyAgICAgIHwgICAxICsNCiBkcml2ZXJzL21mZC9NYWtlZmlsZSAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgfCAgIDIgKy0NCiBkcml2ZXJzL21mZC9tdDYzNTgtaXJxLmMgICAgICAgICAgICAg
+ICAgICAgICAgICAgfCAyMzUgKysrKysrKysrKysrKysrDQogZHJpdmVycy9tZmQvbXQ2Mzk3LWNv
+cmUuYyAgICAgICAgICAgICAgICAgICAgICAgIHwgMTAxICsrKystLS0NCiBkcml2ZXJzL21mZC9t
+dDYzOTctaXJxLmMgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMzUgKystDQogZHJpdmVycy9w
+b3dlci9yZXNldC9tdDYzMjMtcG93ZXJvZmYuYyAgICAgICAgICAgIHwgICAyICstDQogZHJpdmVy
+cy9ydGMvcnRjLW10NjM5Ny5jICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDE4ICstDQogaW5j
+bHVkZS9saW51eC9tZmQvbXQ2MzU4L2NvcmUuaCAgICAgICAgICAgICAgICAgIHwgMTU4ICsrKysr
+KysrKysNCiBpbmNsdWRlL2xpbnV4L21mZC9tdDYzNTgvcmVnaXN0ZXJzLmggICAgICAgICAgICAg
+fCAyODIgKysrKysrKysrKysrKysrKysrDQogaW5jbHVkZS9saW51eC9tZmQvbXQ2Mzk3L2NvcmUu
+aCAgICAgICAgICAgICAgICAgIHwgICA1ICsNCiBpbmNsdWRlL2xpbnV4L21mZC9tdDYzOTcvcnRj
+LmggICAgICAgICAgICAgICAgICAgfCAgIDkgKy0NCiAxMyBmaWxlcyBjaGFuZ2VkLCAxMTU4IGlu
+c2VydGlvbnMoKyksIDYyIGRlbGV0aW9ucygtKQ0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2Fy
+bTY0L2Jvb3QvZHRzL21lZGlhdGVrL210NjM1OC5kdHNpDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRy
+aXZlcnMvbWZkL210NjM1OC1pcnEuYw0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2xpbnV4
+L21mZC9tdDYzNTgvY29yZS5oDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGluY2x1ZGUvbGludXgvbWZk
+L210NjM1OC9yZWdpc3RlcnMuaA0KDQotLSANCjIuNi40DQo=
 
-> ---
->  arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi    |  4 ++
->  .../dts/ti/k3-am654-industrial-thermal.dtsi   | 45 +++++++++++++++++++
->  2 files changed, 49 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am654-industrial-thermal.dtsi
->
-> diff --git a/arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi
-> index 98b89cf0ccdf..54a133fa1bf2 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi
-> @@ -96,4 +96,8 @@
->                 power-domains = <&k3_pds 80 TI_SCI_PD_EXCLUSIVE>;
->                 #thermal-sensor-cells = <1>;
->         };
-> +
-> +       thermal_zones: thermal-zones {
-> +               #include "k3-am654-industrial-thermal.dtsi"
-> +       };
->  };
-> diff --git a/arch/arm64/boot/dts/ti/k3-am654-industrial-thermal.dtsi b/arch/arm64/boot/dts/ti/k3-am654-industrial-thermal.dtsi
-> new file mode 100644
-> index 000000000000..cdc3d40c3f60
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-am654-industrial-thermal.dtsi
-> @@ -0,0 +1,45 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <dt-bindings/thermal/thermal.h>
-> +
-> +mpu0_thermal: mpu0_thermal {
-> +       polling-delay-passive = <250>; /* milliseconds */
-> +       polling-delay = <500>; /* milliseconds */
-> +       thermal-sensors = <&wkup_vtm0 0>;
-> +
-> +       trips {
-> +               mpu0_crit: mpu0_crit {
-> +                       temperature = <125000>; /* milliCelsius */
-> +                       hysteresis = <2000>; /* milliCelsius */
-> +                       type = "critical";
-> +               };
-> +       };
-> +};
-> +
-> +mpu1_thermal: mpu1_thermal {
-> +       polling-delay-passive = <250>; /* milliseconds */
-> +       polling-delay = <500>; /* milliseconds */
-> +       thermal-sensors = <&wkup_vtm0 1>;
-> +
-> +       trips {
-> +               mpu1_crit: mpu1_crit {
-> +                       temperature = <125000>; /* milliCelsius */
-> +                       hysteresis = <2000>; /* milliCelsius */
-> +                       type = "critical";
-> +               };
-> +       };
-> +};
-> +
-> +mcu_thermal: mcu_thermal {
-> +       polling-delay-passive = <250>; /* milliseconds */
-> +       polling-delay = <500>; /* milliseconds */
-> +       thermal-sensors = <&wkup_vtm0 2>;
-> +
-> +       trips {
-> +               mcu_crit: mcu_crit {
-> +                       temperature = <125000>; /* milliCelsius */
-> +                       hysteresis = <2000>; /* milliCelsius */
-> +                       type = "critical";
-> +               };
-> +       };
-> +};
-> --
-> 2.17.1
->
