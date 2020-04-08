@@ -2,29 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9231A1E2F
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 11:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292F21A1E41
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 11:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbgDHJpV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Apr 2020 05:45:21 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53020 "EHLO mx2.suse.de"
+        id S1727051AbgDHJrn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Apr 2020 05:47:43 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54930 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726345AbgDHJpV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 8 Apr 2020 05:45:21 -0400
+        id S1726901AbgDHJrn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 Apr 2020 05:47:43 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 09C75AE07;
-        Wed,  8 Apr 2020 09:45:20 +0000 (UTC)
-Date:   Wed, 08 Apr 2020 11:45:20 +0200
-Message-ID: <s5himias43z.wl-tiwai@suse.de>
+        by mx2.suse.de (Postfix) with ESMTP id 54EC4AF33;
+        Wed,  8 Apr 2020 09:47:41 +0000 (UTC)
+Date:   Wed, 08 Apr 2020 11:47:41 +0200
+Message-ID: <s5hh7xus402.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Zhang Rui <rui.zhang@intel.com>
 Cc:     linux-pm@vger.kernel.org, daniel.lezcano@linaro.org,
         viresh.kumar@linaro.org
-Subject: Re: [RFC PATCH 3/5] thermal: support statistics table resizing at runtime
-In-Reply-To: <20200408041917.2329-3-rui.zhang@intel.com>
+Subject: Re: [RFC PATCH 1/5] thermal: rename thermal_cooling_device_stats_update()
+In-Reply-To: <20200408041917.2329-1-rui.zhang@intel.com>
 References: <20200408041917.2329-1-rui.zhang@intel.com>
-        <20200408041917.2329-3-rui.zhang@intel.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -35,57 +34,21 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 08 Apr 2020 06:19:15 +0200,
+On Wed, 08 Apr 2020 06:19:13 +0200,
 Zhang Rui wrote:
 > 
-> Introduce thermal_cdev_stats_update_max() which can be used to update
-> the cooling device statistics table when maximum cooling state of a
-> cooling device is changed.
+> Rename thermal_cooling_device_stats_update() to
+> thermal_cdev_stats_update_cur()
 > 
 > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 
-Just a couple of small nitpicking:
+Thanks for the patch set!  I did a quick test and it seems working
+fine.  Also through a glance, the patches are good, just a few trivial
+issues as posted in another mail.
 
-> @@ -787,6 +791,23 @@ void thermal_cdev_stats_update_cur(struct thermal_cooling_device *cdev,
->  	spin_unlock(&stats->lock);
->  }
->  
-> +void thermal_cdev_stats_update_max(struct thermal_cooling_device *cdev)
-> +{
-> +	struct cooling_dev_stats *stats = cdev->stats;
-> +	unsigned long cur_state, max_state;
-> +
-> +	if (!stats)
-> +		return;
-> +
-> +	if (cdev->ops->get_max_state(cdev, &max_state))
-> +		return;
-> +
-> +	if (cdev->ops->get_cur_state(cdev, &cur_state))
-> +		return;
-> +
-> +	cooling_device_stats_resize(cdev, cur_state, max_state);
-> +}
+So, feel free to take my tags for the whole series:
+  Tested-by: Takashi Iwai <tiwai@suse.de>
+  Reviewed-by: Takashi Iwai <tiwai@suse.de>
 
-Don't we need to export this?
-
-> @@ -946,7 +975,15 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
->  	cdev->stats = stats;
->  	spin_lock_init(&stats->lock);
->  
-> -	ret = cooling_device_stats_resize(cdev);
-> +	ret = cdev->ops->get_max_state(cdev, &max_state);
-> +	if (ret)
-> +		return;
-> +
-> +	/**
-> +	 *  cooling device current state will be updated soon
-> +	 *  during registration
-> +	 **/
-
-This comment style is confusing as if a kernel-doc.
-
-
-thanks,
 
 Takashi
