@@ -2,43 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 140D21A2232
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 14:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB781A2233
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Apr 2020 14:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727736AbgDHMjW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Apr 2020 08:39:22 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:40273 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727505AbgDHMjW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Apr 2020 08:39:22 -0400
-Received: by mail-oi1-f194.google.com with SMTP id a7so1624805oid.7
-        for <linux-pm@vger.kernel.org>; Wed, 08 Apr 2020 05:39:22 -0700 (PDT)
+        id S1727505AbgDHMj6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Apr 2020 08:39:58 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:34127 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726977AbgDHMj6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Apr 2020 08:39:58 -0400
+Received: by mail-oi1-f196.google.com with SMTP id d3so4564250oic.1
+        for <linux-pm@vger.kernel.org>; Wed, 08 Apr 2020 05:39:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4LzDAJ2JFzqV5kaVsQfPnzZ6M0GP0zUjgVzXoUn3Lrc=;
-        b=m4AKuuXSLH9v1r8tDjx4pYAeueg7iDRfp7xG7q652IiZ9XxkAFGpUlKJTbn+FF902t
-         6k54t+KRVY9s6XzuxzQZT4RZr73/qih+k3KJ/G2u3V0jdwcO4QjD0QqjriNIwYxPwKtA
-         Qawn2NeKBIQwpLWW4iUaEJCYQu5bpchc4mle2xBOofvfRE/d1btZLGMXJBcWzdVTnYJG
-         SI0bGERDiKWaiGx8AK5LspQXyiCZhdRcKVTubd/HdaDPC+opRhUpv/ujnrZ6fl2pCR4t
-         31JdRdS2RHxUWvo1Ti9upiYJloiAq5644Yzr5WI61j1L7gvn04CSVjyJ13dLYjO61NbD
-         pbtQ==
-X-Gm-Message-State: AGi0PubToysJbBv+cpIR0R4LcGW4W687iBJHJsHnc3PKP3wLokExH15U
-        sZhLEn4ys7h1aByfTgtKyaWD5Kp38AXVD/G81NI=
-X-Google-Smtp-Source: APiQypK+4wgTSL61YFGiIgOyz2UmixXbC8mmTNDK56huExUVTMgpCSp4kC4BvZCLIj9DcT4Kr5wpWxLCPSbUwCIWEAg=
-X-Received: by 2002:a05:6808:8f:: with SMTP id s15mr2349812oic.110.1586349561648;
- Wed, 08 Apr 2020 05:39:21 -0700 (PDT)
+        bh=kkV5aCqmaPlq4Pm4QUUj93so6eB1aJOk2q+C8E8j918=;
+        b=IA6vCtQ0XXVm/N25pZmxM03jl9Eh1MJQMGevZ3qzJlXJ5gKoUSB8RlRQq/vRiAhq57
+         zAIiwTYPUMVBfwW4Fprs5AqiqEnOBdNLsNbWtYB8EvTHD0dEsbkJQgPsNPYUbrwJjxet
+         MB6IH8iM/bWyF9Wowr43vXaylWuLUpSemQcN28Y7fUPKI8A8QFvA+gdqwOeOywFEj801
+         kHMpbAbv7a2IKZKmQLM/A8XuEQS3UQ0YTXBMYI/1D+Jk6iW8rin4TlA0goQGhgQq3ngy
+         lOg4PlDzQNyI1LEUe3YfETLs00Ko5+Pi9dMjeLLv3cYFRJgL4ZJGuaFlrzgorJN2ij27
+         iJbQ==
+X-Gm-Message-State: AGi0PuYrxKQTx/RceuwDKJq2HS4/koivSKiRnp+dUuNq4zdgft5EQRmL
+        dLPhg+6JXW+olAJBcPOiaK8gsy1S3HRvGH9I6Go=
+X-Google-Smtp-Source: APiQypIYg1P9XwBga4EuUql+E3lgJ74CAAUUc4SdCxsxnK/B2w++R0oXKeSdczs6nSH8CyuuwX7jM0yUx30JDIsUbGo=
+X-Received: by 2002:aca:f07:: with SMTP id 7mr2204476oip.68.1586349597157;
+ Wed, 08 Apr 2020 05:39:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <bb6be3ff924a6ade66a9c4be37a15adb315d47e1.1586340575.git.wuyihao@linux.alibaba.com>
-In-Reply-To: <bb6be3ff924a6ade66a9c4be37a15adb315d47e1.1586340575.git.wuyihao@linux.alibaba.com>
+References: <20200408024412.41402-1-yanaijie@huawei.com>
+In-Reply-To: <20200408024412.41402-1-yanaijie@huawei.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 8 Apr 2020 14:39:10 +0200
-Message-ID: <CAJZ5v0g=as9hTGdUwNMdAdsH6AbGCozKSuz0gj2aU2s2K5B5LQ@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle-haltpoll: Fix a small typo of haltpoll
-To:     Yihao Wu <wuyihao@linux.alibaba.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+Date:   Wed, 8 Apr 2020 14:39:45 +0200
+Message-ID: <CAJZ5v0j=vzb-p7kr0yiV5P_Y8UYxn0xQ4Ms4r1My9t=d-vvqHA@mail.gmail.com>
+Subject: Re: [PATCH] ACPI, x86/boot: make acpi_nobgrt static
+To:     Jason Yan <yanaijie@huawei.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
@@ -46,37 +50,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 8, 2020 at 12:11 PM Yihao Wu <wuyihao@linux.alibaba.com> wrote:
+On Wed, Apr 8, 2020 at 4:45 AM Jason Yan <yanaijie@huawei.com> wrote:
 >
-> This patch fix a spelling typo in cpuidle-haltpoll.c
+> Fix the following sparse warning:
 >
-> Signed-off-by: Yihao Wu <wuyihao@linux.alibaba.com>
+> arch/x86/kernel/acpi/boot.c:48:5: warning: symbol 'acpi_nobgrt' was not
+> declared. Should it be static?
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
 > ---
->  drivers/cpuidle/cpuidle-haltpoll.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  arch/x86/kernel/acpi/boot.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-> index db124bc1ca2c..fcc53215bac8 100644
-> --- a/drivers/cpuidle/cpuidle-haltpoll.c
-> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
-> @@ -94,7 +94,7 @@ static void haltpoll_uninit(void)
->         haltpoll_cpuidle_devices = NULL;
->  }
+> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+> index 1ae5439a9a85..683ed9e12e6b 100644
+> --- a/arch/x86/kernel/acpi/boot.c
+> +++ b/arch/x86/kernel/acpi/boot.c
+> @@ -45,7 +45,7 @@ EXPORT_SYMBOL(acpi_disabled);
+>  #define PREFIX                 "ACPI: "
 >
-> -static bool haltpool_want(void)
-> +static bool haltpoll_want(void)
->  {
->         return kvm_para_has_hint(KVM_HINTS_REALTIME) || force;
->  }
-> @@ -110,7 +110,7 @@ static int __init haltpoll_init(void)
+>  int acpi_noirq;                                /* skip ACPI IRQ initialization */
+> -int acpi_nobgrt;                       /* skip ACPI BGRT */
+> +static int acpi_nobgrt;                        /* skip ACPI BGRT */
+>  int acpi_pci_disabled;         /* skip ACPI PCI scan and IRQ initialization */
+>  EXPORT_SYMBOL(acpi_pci_disabled);
 >
->         cpuidle_poll_state_init(drv);
->
-> -       if (!kvm_para_available() || !haltpool_want())
-> +       if (!kvm_para_available() || !haltpoll_want())
->                 return -ENODEV;
->
->         ret = cpuidle_register_driver(drv);
 > --
 
 Applied as 5.7-rc material, thanks!
