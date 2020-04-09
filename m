@@ -2,161 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A741A360C
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Apr 2020 16:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1414C1A3611
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Apr 2020 16:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727528AbgDIOhW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Apr 2020 10:37:22 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:34870 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727327AbgDIOhV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Apr 2020 10:37:21 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 039EbA5j008107;
-        Thu, 9 Apr 2020 09:37:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1586443030;
-        bh=t0Pz8343qyR0XZCGjZzKoEfLBwp8RY74fZEv6viiDRk=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=wQflHXbmBySjer9/hT20YQkA86nduHAOQSxNmJ+JkcmfIybnRtPjd/+QLdn6sXnAh
-         q3n9Sgybhy/GZJNlkTgoZXm/j8qRzyRSSJC25TycQOpENGyElgMxLxVKhz3kx7jSi+
-         U9oXaQOZxwn2oS+o8pb9d4QW+B5hAjNHkE39Un1k=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 039EbANt016166
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Apr 2020 09:37:10 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 9 Apr
- 2020 09:37:08 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 9 Apr 2020 09:37:08 -0500
-Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 039Eb6BD069628;
-        Thu, 9 Apr 2020 09:37:06 -0500
-Subject: Re: [PATCH v6 0/4] thermal: k3: Add support for bandgap sensors
-To:     "J, KEERTHY" <j-keerthy@ti.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        <rui.zhang@intel.com>, <robh+dt@kernel.org>
-CC:     <amit.kucheria@verdurent.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <mark.rutland@arm.com>
-References: <20200407055116.16082-1-j-keerthy@ti.com>
- <3c69e3c6-5549-e891-fde6-95a2ecc49f77@linaro.org>
- <0817f9ee-c72f-3e9f-00cf-e8ddaf608020@ti.com>
-From:   Tero Kristo <t-kristo@ti.com>
-Message-ID: <e7dd6470-5992-8d22-5d0c-7532a47a400c@ti.com>
-Date:   Thu, 9 Apr 2020 17:37:05 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727473AbgDIOjn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Apr 2020 10:39:43 -0400
+Received: from mail-vk1-f195.google.com ([209.85.221.195]:45289 "EHLO
+        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727368AbgDIOjn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Apr 2020 10:39:43 -0400
+Received: by mail-vk1-f195.google.com with SMTP id i185so4114vki.12
+        for <linux-pm@vger.kernel.org>; Thu, 09 Apr 2020 07:39:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xEkP9tsPmG6xIpP1vzjRU5PHmw91Ij8x4EQYq0ffIRY=;
+        b=gRRRZ1sMj922xak2A74EFoOiHADrJzQm7/rJaeK5pfAuVSHS3gB2+2r+tsPF5OS3eU
+         d6WCreqRsPuEuBmb7GUYzdYOWcj35hAhSyknSdX72vRTG8MWdz56Xa0CxZ3wF6m+lNY+
+         LTFdC2ag6KmzAX+wWZkumO7x9+kjKJCrPw4XheX1XI6vClZR6jJ3v9g8n+UDk6Y5h+94
+         DCmS5TZheYWqU1IJ9febMYwkGVw3Spycnc9wl32T284wdq1MJvmrwQuP6SJyi2M0qycW
+         JoLTjabvZkTA6YKrrBRs8HZv8gpzqbcKC+Km/0ddJSh+SHoNn/WtjQiXGv+2ykhEopSO
+         4W4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xEkP9tsPmG6xIpP1vzjRU5PHmw91Ij8x4EQYq0ffIRY=;
+        b=U6vTyQ4Qk3TI1yZ16uEiIkq/HAtbz0YaAvOhAciCON7girM6hTOS535xucpdw1/+7a
+         Z2OPLHmaCH+vH4Hbk+3z+k/ZLSH84/eJPD1jjITBcpGEUUWbhXgCjkN9DM85WMVggnIS
+         Biq96hPAeHuJVMDqwp/SA19/LgCcadfSBn6nK8Xpj+pjWW6wVtVVOmt+5zwWJnNOi/M3
+         MbSHfcKROiGFI0ymjFRpmba7SiVcHtFOE2wqeOI9jnjdEbigbOouhaQNoVEi+l1+jhox
+         54ZoQnuIEfG3J1d4OnqMryETP+3xCmZJTlaPNtYSAdQ2fUA/+0T6RTXLCP21VqrK/rOt
+         ndgA==
+X-Gm-Message-State: AGi0PubYkMEGlrieJEUIYStfk3g+f+mkJkenUMsp8s8HnaeMUHWTaOcp
+        h2rv/zVSmy/pwLVxbVtZQaLvxM4uGNGIezn9W1v9wA==
+X-Google-Smtp-Source: APiQypLrVG6KjexVOrXdXNiyGWmOu+0dTmnud+29Y24Oy2Dagz3JnegvbbcroVkVqLcf1po17uWnVbKTKKTfeO305Zg=
+X-Received: by 2002:a05:6122:446:: with SMTP id f6mr1083497vkk.79.1586443182560;
+ Thu, 09 Apr 2020 07:39:42 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <0817f9ee-c72f-3e9f-00cf-e8ddaf608020@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <1586402293-30579-1-git-send-email-Anson.Huang@nxp.com>
+ <CAHLCerNonZ7qJi8Qihmj87QteEnxTF0PRS6vw5GPemMurOfS9Q@mail.gmail.com> <DB3PR0402MB39160A94CD5E97AA79E2DB5AF5C10@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+In-Reply-To: <DB3PR0402MB39160A94CD5E97AA79E2DB5AF5C10@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Thu, 9 Apr 2020 20:09:31 +0530
+Message-ID: <CAHLCerM+UpmdvvxV2KpEZuJSKQNjz2ONpXdFPdyUxCOj0PjnGA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: thermal: Convert i.MX8MM to json-schema
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        lakml <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/04/2020 17:07, J, KEERTHY wrote:
-> 
-> 
-> On 4/9/2020 7:19 PM, Daniel Lezcano wrote:
->>
->> Hi Keerthy,
->>
->> On 07/04/2020 07:51, Keerthy wrote:
->>> Add VTM thermal support. In the Voltage Thermal
->>> Management Module(VTM), K3 AM654 supplies a voltage
->>> reference and a temperature sensor feature that are gathered in the band
->>> gap voltage and temperature sensor (VBGAPTS) module. The band
->>> gap provides current and voltage reference for its internal
->>> circuits and other analog IP blocks. The analog-to-digital
->>> converter (ADC) produces an output value that is proportional
->>> to the silicon temperature.
->>>
->>> Add support for bandgap sensors. Currently reading temperatures
->>> is supported.
->>
->> How do you want to proceed? Shall I take patches 1 & 2 ?
-> 
-> +Tero
-> 
-> Hi Tero,
-> 
-> Can you pull 3 & 4? Or Daniel can take all 4?
+On Thu, Apr 9, 2020 at 7:52 PM Anson Huang <anson.huang@nxp.com> wrote:
+>
+> Hi, Amit
+>
+> > Subject: Re: [PATCH] dt-bindings: thermal: Convert i.MX8MM to json-schema
+> >
+> > Hi Anson,
+> >
+> > On Thu, Apr 9, 2020 at 8:56 AM Anson Huang <Anson.Huang@nxp.com>
+> > wrote:
+> > >
+> > > Convert the i.MX8MM thermal binding to DT schema format using
+> > > json-schema
+> >
+> > Would it be possible to have a single yaml file for all i.MX thermal sensors by
+> > playing with required and optional properties ?
+>
+> i.MX SoCs have many different thermal sensor IP and hence different thermal driver
+> is used, and different i.MX thermal drivers have different DT bindings, so is it good to
+> put all of them into single yaml file? For example, imx_thermal.c is for i.MX6/7 SoCs which
+> do NOT use of_thermal framework, imx8mm_thermal.c is for i.MX8MM/i.MX8MP which
+> use of_thermal framework.
+>
+> If putting all of them into 1 yaml file, it will be almost like just putting 2 files together, I
+> Personally don't think it is a good idea.
 
-Let me pull the DT patches, that way we avoid any conflicts in the 
-arm64/dts tree. There has been quite a bit of traffic on that front 
-lately and we did mess up something with the current merge window already.
+OK.
 
-I believe you are picking the driver side changes to 5.8?
+> >
+> > > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> > > ---
+> > >  .../devicetree/bindings/thermal/imx8mm-thermal.txt | 15 ------
+> > >  .../bindings/thermal/imx8mm-thermal.yaml           | 53
+> > ++++++++++++++++++++++
+> > >  2 files changed, 53 insertions(+), 15 deletions(-)  delete mode
+> > > 100644 Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+> > >  create mode 100644
+> > > Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml
+> > >
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+> > > b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+> > > deleted file mode 100644
+> > > index 3629d3c..0000000
+> > > --- a/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+> > > +++ /dev/null
+> > > @@ -1,15 +0,0 @@
+> > > -* Thermal Monitoring Unit (TMU) on Freescale i.MX8MM SoC
+> > > -
+> > > -Required properties:
+> > > -- compatible : Must be "fsl,imx8mm-tmu" or "fsl,imx8mp-tmu".
+> > > -- reg : Address range of TMU registers.
+> > > -- clocks : TMU's clock source.
+> > > -- #thermal-sensor-cells : Should be 0 or 1. See ./thermal.txt for a description.
+> > > -
+> > > -Example:
+> > > -tmu: tmu@30260000 {
+> > > -       compatible = "fsl,imx8mm-tmu";
+> > > -       reg = <0x30260000 0x10000>;
+> > > -       clocks = <&clk IMX8MM_CLK_TMU_ROOT>;
+> > > -       #thermal-sensor-cells = <0>;
+> > > -};
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml
+> > > b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml
+> > > new file mode 100644
+> > > index 0000000..53a42b3
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml
+> > > @@ -0,0 +1,53 @@
+> > > +# SPDX-License-Identifier: GPL-2.0
+> > > +%YAML 1.2
+> > > +---
+> > > +$id:
+> > > +https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevi
+> > >
+> > +cetree.org%2Fschemas%2Fthermal%2Fimx8mm-thermal.yaml%23&amp;data
+> > =02%7
+> > >
+> > +C01%7CAnson.Huang%40nxp.com%7Cb190e049130e49e0750d08d7dc8e48
+> > a3%7C686e
+> > >
+> > +a1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637220375963888457&am
+> > p;sdata=s
+> > >
+> > +S8%2FR2j%2BT1UmDqXFIPPzPgWs26lMiwW3saTq4qlZAUs%3D&amp;reserve
+> > d=0
+> > > +$schema:
+> > > +https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevi
+> > >
+> > +cetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=02%7C01%7CAns
+> > on.Hua
+> > >
+> > +ng%40nxp.com%7Cb190e049130e49e0750d08d7dc8e48a3%7C686ea1d3bc
+> > 2b4c6fa92
+> > >
+> > +cd99c5c301635%7C0%7C0%7C637220375963898454&amp;sdata=tXIh9d%
+> > 2BszcExH0
+> > > +7ic7s%2BqJyUdbE0aHM3tH%2BwkWgnbhQ%3D&amp;reserved=0
+> > > +
+> > > +title: NXP i.MX8M Mini Thermal Binding
+> > > +
+> > > +maintainers:
+> > > +  - Anson Huang <Anson.Huang@nxp.com>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    oneOf:
+> > > +      - items:
+> > > +          - enum:
+> > > +              - fsl,imx8mm-tmu
+> > > +              - fsl,imx8mp-tmu
+> > > +  reg:
+> > > +    description: |
+> > > +      Address range of TMU registers.
+> > > +    maxItems: 1
+> > > +  clocks:
+> > > +    description: |
+> > > +      TMU's clock source.
+> > > +    maxItems: 1
+> > > +
+> > > +  # See ./thermal.txt for details
+> >
+> > Don't point to thermal.txt anymore. thermal.txt will be replaced by
+> > thermal-*.yaml files at some point soon.
+>
+> OK, will remove it.
+>
+> >
+> > > +  "#thermal-sensor-cells":
+> > > +    enum:
+> > > +      - 0
+> >
+> > Don't you have multiple sensors connected to this controller? In that case, 0
+> > won't be a valid value.
+>
+> imx8mm_thermal driver is for i.MX8MM and i.MX8MP, i.MX8MM ONLY has 1 sensor,
+> while i.MX8MP has 2 sensors, that is why I put both 0 and 1 here.
 
--Tero
-
-> 
-> - Keerthy
-> 
->>
->>
->>> Changes in v6:
->>>
->>>    * Removed bunch of unused #defines and couple of redundant variables.
->>>    * Reordered patches a bit.
->>>    * Minor reordering in dt binding patch.
->>>
->>> Changes in v5:
->>>
->>>    * Removed thermal work function which was unused.
->>>    * Removed unused preve_tenmp and a couple more struct variables.
->>>    * Removed couple of redundant header function include.
->>>
->>> Changes in v4:
->>>
->>>    * Fixed comments from Daniel to remove trend function.
->>>    * Mostly cleaned up all the unused variables.
->>>    * Driver from bool to tristate.
->>>
->>> Changes in v3:
->>>
->>>    * Fixed errors seen with:
->>>      dt_binding_check 
->>> DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml 
->>>
->>>
->>> Changes in v2:
->>>
->>>    * Fixed yaml errors
->>>    * renamed am654-industrial-thermal.dtsi to 
->>> k3-am654-industrial-thermal.dtsi
->>>      to follow the convention for k3 family.
->>>
->>> Keerthy (4):
->>>    dt-bindings: thermal: k3: Add VTM bindings documentation
->>>    thermal: k3: Add support for bandgap sensors
->>>    arm64: dts: ti: am65-wakeup: Add VTM node
->>>    arm64: dts: ti: am654: Add thermal zones
->>>
->>>   .../bindings/thermal/ti,am654-thermal.yaml    |  56 ++++
->>>   arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi    |  11 +
->>>   .../dts/ti/k3-am654-industrial-thermal.dtsi   |  45 +++
->>>   drivers/thermal/Kconfig                       |  10 +
->>>   drivers/thermal/Makefile                      |   1 +
->>>   drivers/thermal/k3_bandgap.c                  | 264 ++++++++++++++++++
->>>   6 files changed, 387 insertions(+)
->>>   create mode 100644 
->>> Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
->>>   create mode 100644 
->>> arch/arm64/boot/dts/ti/k3-am654-industrial-thermal.dtsi
->>>   create mode 100644 drivers/thermal/k3_bandgap.c
->>>
->>
->>
-
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Please put this in description after maintainers above.
