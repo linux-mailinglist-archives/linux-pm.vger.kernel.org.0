@@ -2,148 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EBB1A3313
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Apr 2020 13:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAC91A332B
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Apr 2020 13:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725987AbgDILUz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Apr 2020 07:20:55 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:17408 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725972AbgDILUz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Apr 2020 07:20:55 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e8f04ae0000>; Thu, 09 Apr 2020 04:19:10 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 09 Apr 2020 04:20:54 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 09 Apr 2020 04:20:54 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 9 Apr
- 2020 11:20:54 +0000
-Received: from [10.24.37.103] (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 9 Apr 2020
- 11:20:49 +0000
-Subject: Re: [TEGRA194_CPUFREQ Patch 2/3] cpufreq: Add Tegra194 cpufreq driver
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rjw@rjwysocki.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <talho@nvidia.com>, <linux-pm@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>,
-        <mperttunen@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
-References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
- <1575394348-17649-2-git-send-email-sumitg@nvidia.com>
- <20200326115023.xy3n5bl7uetuw7mx@vireshk-i7>
- <d233b26b-6b50-7d41-9f33-a5dc151e0e7d@nvidia.com>
- <20200406025549.qfwzlk3745y3r274@vireshk-i7>
- <3ab4136c-8cca-c2f9-d286-b82dac23e720@nvidia.com>
- <20200408055301.jhvu5bc2luu3b5qr@vireshk-i7>
- <08307e54-0e14-14a3-7d6a-d59e1e04a683@nvidia.com>
- <20200409074415.twpzu2n4frqlde7b@vireshk-i7>
-From:   Sumit Gupta <sumitg@nvidia.com>
-Message-ID: <00390070-38a1-19aa-ca59-42c4658bee7e@nvidia.com>
-Date:   Thu, 9 Apr 2020 16:51:13 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20200409074415.twpzu2n4frqlde7b@vireshk-i7>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1586431150; bh=qMj+7UqSwh6oU1fngw5KoRbQ6xPzFrPcGepKTB1mVZk=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=Rjpp4cG4bDTXrC6kQByGu9sXXULFmZfKueFslkBwG7MqdgPN4ewhwHCClI/UlFr1d
-         g6vaC3CTN0fXLX0i7vcueUHYBa25tt4wGFjyidi3w7T5dnKEKSkoMJcZV9z4/bmhVs
-         ByaVYwf6aGGyg/syi9vdzrlI0cpmWKa+OxAwB+FqGzoMZlKD5d9KQf2CT/hL1Uh/Tu
-         2nOWyBtV7AD4CnOOCSnc98IrrljSfAXLEYGcPAfN1pzi0zi604lvPQev+KkSPctUtk
-         +yX1OQGsBistlrxX97ZqQNJ+K8RFRHUawTd+BDj+Q70YcTWAnUTMU629pspUBI7unW
-         Ic82eu3GUyjkg==
+        id S1726523AbgDIL2K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Apr 2020 07:28:10 -0400
+Received: from foss.arm.com ([217.140.110.172]:48898 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726470AbgDIL2K (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 9 Apr 2020 07:28:10 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3614031B;
+        Thu,  9 Apr 2020 04:28:08 -0700 (PDT)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A21003F73D;
+        Thu,  9 Apr 2020 04:28:06 -0700 (PDT)
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Qais Yousef <qais.yousef@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Todd E Brandt <todd.e.brandt@linux.intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] Revert "cpu/hotplug: Ignore pm_wakeup_pending() for disable_nonboot_cpus()"
+Date:   Thu,  9 Apr 2020 12:27:40 +0100
+Message-Id: <20200409112742.3581-1-qais.yousef@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This issue was fixed already by:
 
+commit d66b16f5df4b ("arm64: Don't use disable_nonboot_cpus()")
+commit dddf3578e0d4 ("ARM: Don't use disable_nonboot_cpus()")
 
-On 09/04/20 1:14 PM, Viresh Kumar wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On 08-04-20, 16:54, sumitg wrote:
->>
->>
->> On 08/04/20 11:23 AM, Viresh Kumar wrote:
->>> External email: Use caution opening links or attachments
->>>
->>>
->>> On 07-04-20, 23:48, sumitg wrote:
->>>> On 06/04/20 8:25 AM, Viresh Kumar wrote:
->>>>> On 05-04-20, 00:08, sumitg wrote:
->>>>>> On 26/03/20 5:20 PM, Viresh Kumar wrote:
->>>>>>> On 03-12-19, 23:02, Sumit Gupta wrote:
->>>>>>>> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
->>>>>>>> +static unsigned int tegra194_get_speed_common(u32 cpu, u32 delay)
->>>>>>>> +{
->>>>>>>> +     struct read_counters_work read_counters_work;
->>>>>>>> +     struct tegra_cpu_ctr c;
->>>>>>>> +     u32 delta_refcnt;
->>>>>>>> +     u32 delta_ccnt;
->>>>>>>> +     u32 rate_mhz;
->>>>>>>> +
->>>>>>>> +     read_counters_work.c.cpu = cpu;
->>>>>>>> +     read_counters_work.c.delay = delay;
->>>>>>>> +     INIT_WORK_ONSTACK(&read_counters_work.work, tegra_read_counters);
-> 
-> Initialize the work only once from init routine.
-> 
-We are using "read_counters_work" as local variable. So every invocation 
-the function will have its own copy of counters for corresponding cpu. 
-That's why are doing INIT_WORK_ONSTACK here.
+The only caller of disable_nonboot_cpus() is x86, which is in a proper
+suspend/resume path and due to the reverted patch lost its ability to
+early abort due to a pending wakeup.
 
->>>>>>>> +     queue_work_on(cpu, read_counters_wq, &read_counters_work.work);
->>>>>>>> +     flush_work(&read_counters_work.work);
->>>>>>>
->>>>>>> Why can't this be done in current context ?
->>>>>>>
->>>>>> We used work queue instead of smp_call_function_single() to have long delay.
->>>>>
->>>>> Please explain completely, you have raised more questions than you
->>>>> answered :)
->>>>>
->>>>> Why do you want to have long delays ?
->>>>>
->>>> Long delay value is used to have the observation window long enough for
->>>> correctly reconstructing the CPU frequency considering noise.
->>>> In next patch version, changed delay value to 500us which in our tests is
->>>> considered reliable.
->>>
->>> I understand that you need to put a udelay() while reading the freq from
->>> hardware, that is fine, but why do you need a workqueue for that? Why can't you
->>> just read the values directly from the same context ?
->>>
->> The register to read frequency is per core and not accessible to other
->> cores. So, we have to execute the function remotely as the target core to
->> read frequency might be different from current.
->> The functions for that are smp_call_function_single or queue_work_on.
->> We used queue_work_on() to avoid long delay inside ipi interrupt context
->> with interrupts disabled.
-> 
-> Okay, I understand this now, finally :)
-> 
-> But if the interrupts are disabled during some call, won't workqueues face the
-> same problem ?
-> 
-Yes, we are trying to minimize the case.
+The fix that is being reverted is arguably a better one to backport to
+stable trees. But it highlights the confusion about using
+disable_nonboot_cpus() API.
 
-> --
-> viresh
-> 
+This is a preparation to remove disable_nonboot_cpus() in favor of
+freeze_secondary_cpus().
+
+This reverts commit e98eac6ff1b45e4e73f2e6031b37c256ccb5d36b.
+
+Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC: Len Brown <len.brown@intel.com>
+CC: Pavel Machek <pavel@ucw.cz>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Borislav Petkov <bp@alien8.de>
+CC: "H. Peter Anvin" <hpa@zytor.com>
+CC: x86@kernel.org
+CC: Todd E Brandt <todd.e.brandt@linux.intel.com>
+CC: linux-pm@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+---
+ include/linux/cpu.h | 12 +++---------
+ kernel/cpu.c        |  4 ++--
+ 2 files changed, 5 insertions(+), 11 deletions(-)
+
+diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+index beaed2dc269e..9ead281157d3 100644
+--- a/include/linux/cpu.h
++++ b/include/linux/cpu.h
+@@ -144,18 +144,12 @@ static inline void get_online_cpus(void) { cpus_read_lock(); }
+ static inline void put_online_cpus(void) { cpus_read_unlock(); }
+ 
+ #ifdef CONFIG_PM_SLEEP_SMP
+-int __freeze_secondary_cpus(int primary, bool suspend);
+-static inline int freeze_secondary_cpus(int primary)
+-{
+-	return __freeze_secondary_cpus(primary, true);
+-}
+-
++extern int freeze_secondary_cpus(int primary);
+ static inline int disable_nonboot_cpus(void)
+ {
+-	return __freeze_secondary_cpus(0, false);
++	return freeze_secondary_cpus(0);
+ }
+-
+-void enable_nonboot_cpus(void);
++extern void enable_nonboot_cpus(void);
+ 
+ static inline int suspend_disable_secondary_cpus(void)
+ {
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 12ae636e9cb6..30848496cbc7 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -1327,7 +1327,7 @@ void bringup_nonboot_cpus(unsigned int setup_max_cpus)
+ #ifdef CONFIG_PM_SLEEP_SMP
+ static cpumask_var_t frozen_cpus;
+ 
+-int __freeze_secondary_cpus(int primary, bool suspend)
++int freeze_secondary_cpus(int primary)
+ {
+ 	int cpu, error = 0;
+ 
+@@ -1352,7 +1352,7 @@ int __freeze_secondary_cpus(int primary, bool suspend)
+ 		if (cpu == primary)
+ 			continue;
+ 
+-		if (suspend && pm_wakeup_pending()) {
++		if (pm_wakeup_pending()) {
+ 			pr_info("Wakeup pending. Abort CPU freeze\n");
+ 			error = -EBUSY;
+ 			break;
+-- 
+2.17.1
+
