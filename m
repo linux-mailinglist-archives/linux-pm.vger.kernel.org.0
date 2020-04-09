@@ -2,199 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C021A36B8
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Apr 2020 17:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AD21A39EB
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Apr 2020 20:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727990AbgDIPPa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Apr 2020 11:15:30 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:46767 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727327AbgDIPPa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Apr 2020 11:15:30 -0400
-Received: by mail-wr1-f65.google.com with SMTP id f13so5760428wrm.13
-        for <linux-pm@vger.kernel.org>; Thu, 09 Apr 2020 08:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=NB4ksyP2jrR/UYMBMPqVUT1i/za7yPOLnw9p85nB5k0=;
-        b=YeshcaYVhuzooV87JL/oy+h4UfUMlrMT5+lDQ9mgKmQuP9LzHc3nMDCsrhLVPiX4mp
-         CwzKe/7FcaMXA1jl8Sb2tQTj6prIvLbe75X2hWyGPvYBS5S0MI4pkPEVyeDI0YSYTrUK
-         TaTDOLuII3hCC2AZVcYhlxJ/BfHi6dXYfaLOVPfTl0cR4T7sHPPIVFdWsrXhi9G4sj/b
-         Pyr3L/wpzaLTVgKVdR7rNLSTLuHQtmGYYjEEQ9IdO3lwqe1zBUcv/IRzCLiAEUF7oVDi
-         HwLdSj6i/EetleoMTltSvLUXTqU92XD1lyvrgSMbFMfJlhWR0ZFz6/cnoQVW0GxxmTTl
-         D58Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=NB4ksyP2jrR/UYMBMPqVUT1i/za7yPOLnw9p85nB5k0=;
-        b=buH2U1393pxU8p6GVLtZmfY8Lzbu7JDAg2XRpLDOvhBtXuS8pfmkHMAKeLg0nj5Kp7
-         CFSpLnmR50zhksUlniIFLwtYcF2BETcknGUIfrRlnFSsBp0dcq+wIbrjqh++EMvoiqRH
-         sFIELr6t6C2MVyOZsdKxxMmz8tkvZ6pJT4jxG9mD7k5wY8oKbk/OUkSdSXlM6ywF7A59
-         XFLEhKlJmHnOHkp3JOcUZktJ6jYk2r1WhmbwY42a4D9ObvJnHMiyoMejwCTDhytK7MHh
-         HQI0ow+YcR0JWAmEdJ/NTXyOFwZO7WNIPhbRrPd/zifPk7YG8hfDwGq6Y2PlBa6dbRAi
-         eIiA==
-X-Gm-Message-State: AGi0PuZ0mXYbGkASGi3Eh/24wl7PKzxvLQx0LYioLsnP/NqMu85y5FZS
-        gxW5yCbfiOwYEpbzTRP+cTQJkw==
-X-Google-Smtp-Source: APiQypKyFG8LUaYzBZRLhP2WaBrGH1w7TFh8TNT19wcdguxini7oXIHR8ivm0cgqucWHwxgBNlRSsg==
-X-Received: by 2002:a5d:4011:: with SMTP id n17mr12149784wrp.104.1586445329570;
-        Thu, 09 Apr 2020 08:15:29 -0700 (PDT)
-Received: from localhost.localdomain (lns-bzn-59-82-252-135-148.adsl.proxad.net. [82.252.135.148])
-        by smtp.gmail.com with ESMTPSA id 19sm4051392wmi.32.2020.04.09.08.15.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Apr 2020 08:15:29 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
-Cc:     linux-kernel@vger.kernel.org, amit.kucheria@verdurent.com,
-        linux-pm@vger.kernel.org (open list:THERMAL)
-Subject: [PATCH 2/2] thermal: core: Remove pointless 'updated' boolean
-Date:   Thu,  9 Apr 2020 17:15:15 +0200
-Message-Id: <20200409151515.6607-2-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200409151515.6607-1-daniel.lezcano@linaro.org>
-References: <20200409151515.6607-1-daniel.lezcano@linaro.org>
+        id S1726670AbgDISpt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Apr 2020 14:45:49 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:56789 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726477AbgDISpt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Apr 2020 14:45:49 -0400
+Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
+ id 0829b55dba071591; Thu, 9 Apr 2020 20:45:46 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+Date:   Thu, 09 Apr 2020 20:45:45 +0200
+Message-ID: <3100919.FSIbSBgRSq@kreacher>
+In-Reply-To: <Pine.LNX.4.44L0.2004061541080.26186-100000@netrider.rowland.org>
+References: <Pine.LNX.4.44L0.2004061541080.26186-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The sequence to update the cooling state in the thermal instances is always:
+On Monday, April 6, 2020 10:25:08 PM CEST Alan Stern wrote:
+> On Mon, 6 Apr 2020, Rafael J. Wysocki wrote:
+> 
+> > In the meantime I have created a git branch with changes to simplify the code,
+> > rename some things and clarify the documentation a bit:
+> > 
+> >  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+> >  pm-sleep-core
+> > 
+> > (https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-sleep-core
+> > for web access).
+> > 
+> > I'm going to post these changes as patches soon.
+> 
+> All right, those are some significant changes.  It'll take me a little 
+> while to absorb them.
+> 
+> > On Friday, April 3, 2020 10:15:09 PM CEST Alan Stern wrote:
+> 
+> > > Let's put it like this: The resume-side callbacks should have the
+> > > overall effect of bringing the device back to its initial state, with
+> > > the following exceptions and complications:
+> > > 
+> > > 	Unless SMART_SUSPEND and LEAVE_SUSPEND are both set, a device
+> > > 	that was in runtime suspend before the suspend_late phase 
+> > > 	must end up being runtime-active after the matching RESUME.
+> > >
+> > > 	Unless SMART_SUSPEND is set, a device that was in runtime 
+> > > 	suspend before the freeze_late phase must end up being 
+> > > 	runtime-active after the matching THAW.
+> > 
+> > Correct.
+> >  
+> > > [I'm not so sure about this.  Wouldn't it make more sense to treat
+> > > _every_ device as though SMART_SUSPEND was set for FREEZE/THAW
+> > > transitions, and require subsystems to do the same?]
+> > 
+> > Drivers may expect devices to be runtime-active when their suspend
+> > callbacks are invoked unless they set SMART_SUSPEND.  IOW, without
+> > SMART_SUSPEND set the device should not be left in runtime suspend
+> > during system-wide suspend at all unless direct-complete is applied
+> > to it.
+> 
+> [Let's confine this discussion to the not-direct-complete case.]
+> 
+> Okay, say that SMART_SUSPEND isn't set and the device is initially
+> runtime-suspended.  Since the core knows all this, shouldn't the core 
+> then call pm_runtime_resume() immediately before ->suspend?  Why leave 
+> this up to subsystems or drivers (which can easily get it wrong -- 
+> not to mention all the code duplication it would require)?
 
-    mutex_lock(&instance->cdev->lock);
-    instance->cdev->updated = false;
-    mutex_unlock(&instance->cdev->lock);
-    thermal_cdev_update(instance->cdev);
+I would agree in principle, but that has been done by subsystems forever and
+(at least in some cases) drivers on bus types like platform on i2c (where
+subsystem-level PM callbacks are not provided in general unless there is a PM
+domain doing that) don't expect the devices to be resumed and they
+decide whether or not to do that themselves.
 
-So each call to thermal_cdev_update() is prefixed by resetting the updated
-flag which turns on to be a pointless test in the function itself.
+Making the core resume the runtime-suspended devices during system-wide
+suspend, would require those drivers to adapt and it is rather hard to
+even estimate how many of them there are.
 
-Remove the flag.
+> Also, doesn't it make sense for some subsystems or drivers to want 
+> their devices to remain in runtime suspend throughout a FREEZE/THAW 
+> transition but not throughout a SUSPEND/RESUME transition?  With only a 
+> single SMART_SUSPEND flag, how can we accomodate this desire?
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/fair_share.c      | 3 ---
- drivers/thermal/gov_bang_bang.c   | 3 ---
- drivers/thermal/power_allocator.c | 3 ---
- drivers/thermal/step_wise.c       | 3 ---
- drivers/thermal/thermal_core.c    | 4 ----
- drivers/thermal/thermal_helpers.c | 6 ------
- include/linux/thermal.h           | 1 -
- 7 files changed, 23 deletions(-)
+That's a fair statement, but in general it is more desirable to optimize
+suspend/resume than to optimize hibernation, so the latter is not a priority.
 
-diff --git a/drivers/thermal/fair_share.c b/drivers/thermal/fair_share.c
-index aaa07180ab48..718de1f96cb6 100644
---- a/drivers/thermal/fair_share.c
-+++ b/drivers/thermal/fair_share.c
-@@ -105,9 +105,6 @@ static int fair_share_throttle(struct thermal_zone_device *tz, int trip)
- 		instance->target = get_target_state(tz, cdev, percentage,
- 						    cur_trip_level);
- 
--		mutex_lock(&instance->cdev->lock);
--		instance->cdev->updated = false;
--		mutex_unlock(&instance->cdev->lock);
- 		thermal_cdev_update(cdev);
- 	}
- 	return 0;
-diff --git a/drivers/thermal/gov_bang_bang.c b/drivers/thermal/gov_bang_bang.c
-index c292a69845bb..d678a2a0c4d4 100644
---- a/drivers/thermal/gov_bang_bang.c
-+++ b/drivers/thermal/gov_bang_bang.c
-@@ -61,9 +61,6 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
- 		dev_dbg(&instance->cdev->device, "target=%d\n",
- 					(int)instance->target);
- 
--		mutex_lock(&instance->cdev->lock);
--		instance->cdev->updated = false; /* cdev needs update */
--		mutex_unlock(&instance->cdev->lock);
- 		thermal_cdev_update(instance->cdev);
- 	}
- 
-diff --git a/drivers/thermal/power_allocator.c b/drivers/thermal/power_allocator.c
-index 44636475b2a3..f8e4219cf5de 100644
---- a/drivers/thermal/power_allocator.c
-+++ b/drivers/thermal/power_allocator.c
-@@ -530,9 +530,6 @@ static void allow_maximum_power(struct thermal_zone_device *tz)
- 			continue;
- 
- 		instance->target = 0;
--		mutex_lock(&instance->cdev->lock);
--		instance->cdev->updated = false;
--		mutex_unlock(&instance->cdev->lock);
- 		thermal_cdev_update(instance->cdev);
- 	}
- 	mutex_unlock(&tz->lock);
-diff --git a/drivers/thermal/step_wise.c b/drivers/thermal/step_wise.c
-index 298eedac0293..9ddff715f3dd 100644
---- a/drivers/thermal/step_wise.c
-+++ b/drivers/thermal/step_wise.c
-@@ -164,9 +164,6 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
- 			update_passive_instance(tz, trip_type, -1);
- 
- 		instance->initialized = true;
--		mutex_lock(&instance->cdev->lock);
--		instance->cdev->updated = false; /* cdev needs update */
--		mutex_unlock(&instance->cdev->lock);
- 		thermal_cdev_update(instance->cdev);
- 	}
- 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index c06550930979..da63899b9e6c 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -593,9 +593,6 @@ int power_actor_set_power(struct thermal_cooling_device *cdev,
- 		return ret;
- 
- 	instance->target = state;
--	mutex_lock(&cdev->lock);
--	cdev->updated = false;
--	mutex_unlock(&cdev->lock);
- 	thermal_cdev_update(cdev);
- 
- 	return 0;
-@@ -969,7 +966,6 @@ __thermal_cooling_device_register(struct device_node *np,
- 	INIT_LIST_HEAD(&cdev->thermal_instances);
- 	cdev->np = np;
- 	cdev->ops = ops;
--	cdev->updated = false;
- 	cdev->device.class = &thermal_class;
- 	cdev->devdata = devdata;
- 	thermal_cooling_device_setup_sysfs(cdev);
-diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
-index 59eaf2d0fdb3..85cae31301aa 100644
---- a/drivers/thermal/thermal_helpers.c
-+++ b/drivers/thermal/thermal_helpers.c
-@@ -180,11 +180,6 @@ void thermal_cdev_update(struct thermal_cooling_device *cdev)
- 	unsigned long target = 0;
- 
- 	mutex_lock(&cdev->lock);
--	/* cooling device is updated*/
--	if (cdev->updated) {
--		mutex_unlock(&cdev->lock);
--		return;
--	}
- 
- 	/* Make sure cdev enters the deepest cooling state */
- 	list_for_each_entry(instance, &cdev->thermal_instances, cdev_node) {
-@@ -199,7 +194,6 @@ void thermal_cdev_update(struct thermal_cooling_device *cdev)
- 	if (!cdev->ops->set_cur_state(cdev, target))
- 		thermal_cooling_device_stats_update(cdev, target);
- 
--	cdev->updated = true;
- 	mutex_unlock(&cdev->lock);
- 	trace_cdev_update(cdev, target);
- 	dev_dbg(&cdev->device, "set to state %lu\n", target);
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 216185bb3014..08969f0be6a0 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -114,7 +114,6 @@ struct thermal_cooling_device {
- 	void *devdata;
- 	void *stats;
- 	const struct thermal_cooling_device_ops *ops;
--	bool updated; /* true if the cooling device does not need update */
- 	struct mutex lock; /* protect thermal_instances list */
- 	struct list_head thermal_instances;
- 	struct list_head node;
--- 
-2.17.1
+I'm not ruling out adding one more flag specific to hibernation or similar
+in the future.
+
+> Finally, my description above says that LEAVE_SUSPENDED matters for 
+> SUSPEND/RESUME but not for FREEZE/THAW.  Is that really what you have 
+> in mind?
+
+Yes, it is.  LEAVE_SUSPENDED really does not apply to hibernation at all.
+
+> > > 	After RESTORE, _every_ device must end up being runtime 
+> > > 	active.
+> > 
+> > Correct.
+> > 
+> > > 	In general, each resume-side callback should undo the effect
+> > > 	of the matching suspend-side callback.  However, because of
+> > > 	the requirements mentioned in the preceding sentences,
+> > > 	sometimes a resume-side callback will be issued even though
+> > > 	the matching suspend-side callback was skipped -- i.e., when
+> > > 	a device that starts out runtime-suspended ends up being
+> > > 	runtime-active.
+> > > 
+> > > How does that sound?
+> > 
+> > It is correct, but in general the other way around is possible too.
+> > That is, a suspend-side callback may be issued without the matching
+> > resume-side one and the device's PM runtime status may be changed
+> > if LEAVE_SUSPENDED is set and SMART_SUSPEND is unset.
+> 
+> This is inconsistent with what I wrote above (the "Unless SMART_SUSPEND
+> and LEAVE_SUSPENDED are both set" part).  Are you saying that text
+> should be changed?
+
+Yes, in fact SMART_SUSPEND need not be set for resume callbacks to be skipped.
+
+LEAVE_SUSPENDED must be set for that to happen (except for hibernation) and it
+may be sufficient if the subsystem sets power.may_skip_resume in addition.
+
+> > > Are you certain you want the subsystem callback to be responsible for
+> > > setting the runtime status to "active"?  Isn't this an example of
+> > > something the core could do in order to help simplify subsystems?
+> > 
+> > The rationale here is that whoever decides whether or not to skip the
+> > driver-level callbacks, should also set the PM-runtime status of the
+> > device to match that decision.
+> 
+> Well, that's not really a fair description.  The decision about
+> skipping driver-level callbacks is being made right here, by us, now.  
+> (Or if you prefer, by the developers who originally added the
+> SMART_SUSPEND flag.)  We require subsystems to obey the decisions being
+> outlined in this discussion.
+> 
+> Given that fact, this is again a case of having the core do something 
+> rather than forcing subsystems/drivers to do it (possibly getting it 
+> wrong and certainly creating a lot of code duplication).
+> 
+> If a subsystem really wants to override our decision, it can always
+> call pm_runtime_set_{active|suspended} to override the core's setting.
+
+OK, fair enough.
+
+I've incorporated this into the changes on the pm-sleep-core branch
+mentioned before.
+
+> > > And this brings up another thing the core might do to help simplify
+> > > drivers and subsystems: If SMART_SUSPEND isn't set and the device is in
+> > > runtime suspend, couldn't the core do a pm_runtime_resume before
+> > > issuing the ->suspend or ->suspend_late callback?
+> > 
+> > It could, but sometimes that is not desirable.  Like when the drivver points its
+> > suspend callback to pm_runtime_force_suspend().
+> 
+> This seems to contradict what you wrote above: "Drivers may expect
+> devices to be runtime-active when their suspend callbacks are invoked
+> unless they set SMART_SUSPEND.  IOW, without SMART_SUSPEND set the
+> device should not be left in runtime suspend during system-wide suspend
+> at all unless direct-complete is applied to it."
+> 
+> If you stand by that statement then drivers should never point their
+> suspend callback to pm_runtime_force_suspend() unless they also set
+> SMART_SUSPEND.
+
+OK, let me rephrase.
+
+Some drivers that don't use SMART_SUSPEND expect the devices to be runtime-active
+when their system-wide PM callbacks run, but the other drivers do not have such
+expectations, because the subsystems they work with have never resumed devices
+during system-wide suspend.
+
+SMART_SUSPEND is not needed for the latter category of drivers, but it is for
+the former and I want the behavior when SMART_SUSPEND *is* set to be consistent
+across the core and subsystems, while the other case have never been so.
+
+Cheers!
+
+
 
