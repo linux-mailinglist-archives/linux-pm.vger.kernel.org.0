@@ -2,141 +2,256 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F6E1A3520
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Apr 2020 15:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E865F1A3530
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Apr 2020 15:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726979AbgDINte (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Apr 2020 09:49:34 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:38064 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726977AbgDINte (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Apr 2020 09:49:34 -0400
-Received: by mail-wr1-f67.google.com with SMTP id 31so12021415wre.5
-        for <linux-pm@vger.kernel.org>; Thu, 09 Apr 2020 06:49:32 -0700 (PDT)
+        id S1727016AbgDINx4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Apr 2020 09:53:56 -0400
+Received: from mail-vk1-f195.google.com ([209.85.221.195]:41814 "EHLO
+        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727014AbgDINx4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Apr 2020 09:53:56 -0400
+Received: by mail-vk1-f195.google.com with SMTP id i5so2749671vkk.8
+        for <linux-pm@vger.kernel.org>; Thu, 09 Apr 2020 06:53:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xI/13ahNFkzIs4fIOUGU+GiPaJZFLk48sQn0t25jaGY=;
-        b=afn5TbxaSodVr0dusUmbWTENkDb2K7KmcDYRZvC1s1/ABXD0YGMH+o0CUhuulFvK8D
-         TiiyY59rpWL2aj/8BFvJcBbzZd3kS72CwBWjKimtNHITiDCpdWPXbpMyrq9VIGeapAoZ
-         JFj9e9zNZjLMKip1oZo6xLrulUab5B0RopS2krK6YhQKUVhDJ6EV9zHcdxi/tlYmIp9P
-         VHDGc9RTvC9FU8xTekWP6oBJ5KhFJfwCMx5E5AR/Co0fbbo4lyQbXK0Xvl4OjHtuEn8I
-         +9cIQsqMGxquOA3ok8x7PkaJl2UIYpHP6F93Dfn0cMZrwnprNo9JjDjGiynZ3f4NEKRS
-         oxgg==
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dwoCAYUicLqYBaO2hxUisMrF80YNdDxwi3wgZyFZPfY=;
+        b=wweADUP5FzxaHiLF24hi0m7NCNmG+wWWvNjJ1eiOO/OlSay/LG3/+OL7VRWt+AD1mh
+         ZH52JsZOextHKATsMZttP9sdaEEMofKEi6yH9s6CgYHwfByd/lm5rOpUXF1YK1/qTN8O
+         bfzayFsyH9z3xOO+OGPTz3eDCybehJkSgorlgO8Sl0h0um8cgs1uq2T1hjBjDVHXdIFP
+         YkQCHQbuMbl4VVPKNGuJ2X1sYlHDweECPisSywxLmg30PknIkU1xwvBk+Bzu8HxgvMEP
+         hAKGSuBFt54bjpyrQ/GPEEGgAP3aunJ4+vie6fAEomGmeNhRfFsK9xt8v+qJC+LhEoww
+         WgaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xI/13ahNFkzIs4fIOUGU+GiPaJZFLk48sQn0t25jaGY=;
-        b=S/W/LSPHk6gZAgE/rbXR3diMQFC7/hinDwatIBT9g/veqoU6rK4hWOB3ECTTwJDXt6
-         klj9IH0Rth5OOgv86vpltRJi5lakljiac1dlBYZCCbYbsKGokuOKD7JEt75xgpLUNW1A
-         YFslm0GvNRPOchjJCk05pe3BI5HjAj+fyyi2xx4e1BdM1qjW51t2QjpBQ23WKBQsoWWa
-         BcI11iUUgsK7jjOAXxxafYq+3oZeULVHXc43aGTiXt5VhLNWyb+I0+uosbp1u5ppoSBY
-         1zw+iO/tATJFO8AgdVUxkkeLIJYrn998dDFvD0hqAhhZUbPHhjplygag4D1Jfo64n409
-         dmYw==
-X-Gm-Message-State: AGi0PubCCsVUOpFMd8WtskAETzB++QBESAFo116moMIyFRQ5P6Q5Zn30
-        HQpwqNc1GRKaCbb87CNzDgbAag==
-X-Google-Smtp-Source: APiQypLdC3AyJfiHJHy5bpqo/UY+01I+BfVknqM3QSrQr+ChtRt3Ew2TsNKjwXQyBVHN0NcAEWTNsg==
-X-Received: by 2002:adf:aacc:: with SMTP id i12mr15309250wrc.116.1586440171850;
-        Thu, 09 Apr 2020 06:49:31 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:4e:2ab3:ef46:7bda? ([2a01:e34:ed2f:f020:4e:2ab3:ef46:7bda])
-        by smtp.googlemail.com with ESMTPSA id u17sm45525611wra.63.2020.04.09.06.49.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Apr 2020 06:49:31 -0700 (PDT)
-Subject: Re: [PATCH v6 0/4] thermal: k3: Add support for bandgap sensors
-To:     Keerthy <j-keerthy@ti.com>, rui.zhang@intel.com, robh+dt@kernel.org
-Cc:     amit.kucheria@verdurent.com, t-kristo@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        mark.rutland@arm.com
-References: <20200407055116.16082-1-j-keerthy@ti.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <3c69e3c6-5549-e891-fde6-95a2ecc49f77@linaro.org>
-Date:   Thu, 9 Apr 2020 15:49:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dwoCAYUicLqYBaO2hxUisMrF80YNdDxwi3wgZyFZPfY=;
+        b=cZUfV11fz22gNqq8tBKhnIsGBWDwesbJ24oiUINxDYMD4wW8buMcOwGNjZIotQYSyv
+         0Nsj13YlQfNzhyykRJ6wV5O6BxYH1YPtbuItZEZVDnyaOHOePChxQGMQh09wFHfvePjZ
+         WAK64+kzZQs8u1sff/wr1NjIfylnLRRIrtwCqEP0IO7SV+w6+2EqBwO/Ec/rK36hG2Ln
+         4J5C67C92CmMSFAW3nYliTYIRaavJzPug4EH2vM+ThRuyj4iZaLUC6dlpUN562PKrcQa
+         hfJgs7UoSS00ovmYRWq3l8gs5eWmZR0q7cBwUjqwxyXpUe4aTRf7j1/blKX+Llw/xOqm
+         7FKQ==
+X-Gm-Message-State: AGi0PubgqXK83xc2M7ZZxLr3rRi8WFhi9VfDW6ar7RA2UHtG3TKi8KVu
+        Ytt/erHc+XZJWU1pZ48Pd0kLEy32tUUbaCd9g6l3yQ==
+X-Google-Smtp-Source: APiQypJpp/sbsI5ihDNmtxV/fEa+CftX/eQjWcUjtA7pyebaLAuJHu4CYdMxU68qtsXicyllRa5cVZ+HSgPtk8QZ6s0=
+X-Received: by 2002:a1f:ce86:: with SMTP id e128mr9764243vkg.86.1586440434685;
+ Thu, 09 Apr 2020 06:53:54 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200407055116.16082-1-j-keerthy@ti.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1586407908-27139-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1586407908-27139-1-git-send-email-Anson.Huang@nxp.com>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Thu, 9 Apr 2020 19:23:43 +0530
+Message-ID: <CAHLCerOY9gBM-E2oJXi0TnUODj5bzpDpgvD3ixW_oLNN8hnpDg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: thermal: Convert i.MX to json-schema
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        Fabio Estevam <festevam@gmail.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        lakml <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <Linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Apr 9, 2020 at 10:29 AM Anson Huang <Anson.Huang@nxp.com> wrote:
+>
+> Convert the i.MX thermal binding to DT schema format using json-schema
+>
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
+>  .../devicetree/bindings/thermal/imx-thermal.txt    | 61 --------------
+>  .../devicetree/bindings/thermal/imx-thermal.yaml   | 97 ++++++++++++++++++++++
+>  2 files changed, 97 insertions(+), 61 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/imx-thermal.txt
+>  create mode 100644 Documentation/devicetree/bindings/thermal/imx-thermal.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/thermal/imx-thermal.txt b/Documentation/devicetree/bindings/thermal/imx-thermal.txt
+> deleted file mode 100644
+> index 823e417..0000000
+> --- a/Documentation/devicetree/bindings/thermal/imx-thermal.txt
+> +++ /dev/null
+> @@ -1,61 +0,0 @@
+> -* Temperature Monitor (TEMPMON) on Freescale i.MX SoCs
+> -
+> -Required properties:
+> -- compatible : must be one of following:
+> -  - "fsl,imx6q-tempmon" for i.MX6Q,
+> -  - "fsl,imx6sx-tempmon" for i.MX6SX,
+> -  - "fsl,imx7d-tempmon" for i.MX7S/D.
+> -- interrupts : the interrupt output of the controller:
+> -  i.MX6Q has one IRQ which will be triggered when temperature is higher than high threshold,
+> -  i.MX6SX and i.MX7S/D have two more IRQs than i.MX6Q, one is IRQ_LOW and the other is IRQ_PANIC,
+> -  when temperature is below than low threshold, IRQ_LOW will be triggered, when temperature
+> -  is higher than panic threshold, system will auto reboot by SRC module.
+> -- fsl,tempmon : phandle pointer to system controller that contains TEMPMON
+> -  control registers, e.g. ANATOP on imx6q.
+> -- nvmem-cells: A phandle to the calibration cells provided by ocotp.
+> -- nvmem-cell-names: Should be "calib", "temp_grade".
+> -
+> -Deprecated properties:
+> -- fsl,tempmon-data : phandle pointer to fuse controller that contains TEMPMON
+> -  calibration data, e.g. OCOTP on imx6q.  The details about calibration data
+> -  can be found in SoC Reference Manual.
+> -
+> -Direct access to OCOTP via fsl,tempmon-data is incorrect on some newer chips
+> -because it does not handle OCOTP clock requirements.
+> -
+> -Optional properties:
+> -- clocks : thermal sensor's clock source.
+> -
+> -Example:
+> -ocotp: ocotp@21bc000 {
+> -       #address-cells = <1>;
+> -       #size-cells = <1>;
+> -       compatible = "fsl,imx6sx-ocotp", "syscon";
+> -       reg = <0x021bc000 0x4000>;
+> -       clocks = <&clks IMX6SX_CLK_OCOTP>;
+> -
+> -       tempmon_calib: calib@38 {
+> -               reg = <0x38 4>;
+> -       };
+> -
+> -       tempmon_temp_grade: temp-grade@20 {
+> -               reg = <0x20 4>;
+> -       };
+> -};
+> -
+> -tempmon: tempmon {
+> -       compatible = "fsl,imx6sx-tempmon", "fsl,imx6q-tempmon";
+> -       interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
+> -       fsl,tempmon = <&anatop>;
+> -       nvmem-cells = <&tempmon_calib>, <&tempmon_temp_grade>;
+> -       nvmem-cell-names = "calib", "temp_grade";
+> -       clocks = <&clks IMX6SX_CLK_PLL3_USB_OTG>;
+> -};
+> -
+> -Legacy method (Deprecated):
+> -tempmon {
+> -       compatible = "fsl,imx6q-tempmon";
+> -       fsl,tempmon = <&anatop>;
+> -       fsl,tempmon-data = <&ocotp>;
+> -       clocks = <&clks 172>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/thermal/imx-thermal.yaml b/Documentation/devicetree/bindings/thermal/imx-thermal.yaml
+> new file mode 100644
+> index 0000000..ad12622
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/imx-thermal.yaml
+> @@ -0,0 +1,97 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/imx-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP i.MX Thermal Binding
+> +
+> +maintainers:
+> +  - Anson Huang <Anson.Huang@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - fsl,imx6q-tempmon
+> +              - fsl,imx6sx-tempmon
+> +              - fsl,imx7d-tempmon
+> +
+> +  interrupts:
+> +    description: |
+> +      The interrupt output of the controller, the IRQ will be triggered
+> +      when temperature is higher than high threshold.
+> +    maxItems: 1
+> +
+> +  nvmem-cells:
+> +    description: |
+> +      Phandle to the calibration cells provided by ocotp for calibration
+> +      data and temperature grade.
+> +    maxItems: 2
+> +
+> +  nvmem-cell-names:
+> +    maxItems: 2
+> +    items:
+> +      - const: calib
+> +      - const: temp_grade
+> +
+> +  fsl,tempmon:
+> +    description: |
+> +      Phandle pointer to system controller that contains TEMPMON control
+> +      registers, e.g. ANATOP on imx6q.
+> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> +
+> +  fsl,tempmon-data:
+> +    description: |
+> +      Deprecated property, phandle pointer to fuse controller that contains
+> +      TEMPMON calibration data, e.g. OCOTP on imx6q. The details about
+> +      calibration data can be found in SoC Reference Manual.
+> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> +
+> +  clocks:
+> +    description: |
+> +      Thermal sensor's clock source.
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - interrupts
+> +  - fsl,tempmon
+> +  - clocks
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx6sx-clock.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    ocotp: ocotp@21bc000 {
+> +         #address-cells = <1>;
+> +         #size-cells = <1>;
+> +         compatible = "fsl,imx6sx-ocotp", "syscon";
+> +         reg = <0x021bc000 0x4000>;
+> +         clocks = <&clks IMX6SX_CLK_OCOTP>;
+> +
+> +         tempmon_calib: calib@38 {
+> +             reg = <0x38 4>;
+> +         };
+> +
+> +         tempmon_temp_grade: temp-grade@20 {
+> +             reg = <0x20 4>;
+> +         };
+> +    };
+> +
+> +    tempmon: tempmon {
+> +         compatible = "fsl,imx6sx-tempmon";
+> +         interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
+> +         fsl,tempmon = <&anatop>;
+> +         nvmem-cells = <&tempmon_calib>, <&tempmon_temp_grade>;
+> +         nvmem-cell-names = "calib", "temp_grade";
+> +         clocks = <&clks IMX6SX_CLK_PLL3_USB_OTG>;
 
-Hi Keerthy,
+Also, #thermal-sensor-cells property is missing in the example and in
+the property list above.
 
-On 07/04/2020 07:51, Keerthy wrote:
-> Add VTM thermal support. In the Voltage Thermal
-> Management Module(VTM), K3 AM654 supplies a voltage
-> reference and a temperature sensor feature that are gathered in the band
-> gap voltage and temperature sensor (VBGAPTS) module. The band
-> gap provides current and voltage reference for its internal
-> circuits and other analog IP blocks. The analog-to-digital
-> converter (ADC) produces an output value that is proportional
-> to the silicon temperature.
-> 
-> Add support for bandgap sensors. Currently reading temperatures
-> is supported.
-
-How do you want to proceed? Shall I take patches 1 & 2 ?
-
-
-> Changes in v6:
-> 
->   * Removed bunch of unused #defines and couple of redundant variables.
->   * Reordered patches a bit.
->   * Minor reordering in dt binding patch.
-> 
-> Changes in v5:
-> 
->   * Removed thermal work function which was unused.
->   * Removed unused preve_tenmp and a couple more struct variables.
->   * Removed couple of redundant header function include.
-> 
-> Changes in v4:
-> 
->   * Fixed comments from Daniel to remove trend function.
->   * Mostly cleaned up all the unused variables.
->   * Driver from bool to tristate.
-> 
-> Changes in v3:
-> 
->   * Fixed errors seen with:
->     dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
-> 
-> Changes in v2:
-> 
->   * Fixed yaml errors
->   * renamed am654-industrial-thermal.dtsi to k3-am654-industrial-thermal.dtsi
->     to follow the convention for k3 family.  
-> 
-> Keerthy (4):
->   dt-bindings: thermal: k3: Add VTM bindings documentation
->   thermal: k3: Add support for bandgap sensors
->   arm64: dts: ti: am65-wakeup: Add VTM node
->   arm64: dts: ti: am654: Add thermal zones
-> 
->  .../bindings/thermal/ti,am654-thermal.yaml    |  56 ++++
->  arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi    |  11 +
->  .../dts/ti/k3-am654-industrial-thermal.dtsi   |  45 +++
->  drivers/thermal/Kconfig                       |  10 +
->  drivers/thermal/Makefile                      |   1 +
->  drivers/thermal/k3_bandgap.c                  | 264 ++++++++++++++++++
->  6 files changed, 387 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am654-industrial-thermal.dtsi
->  create mode 100644 drivers/thermal/k3_bandgap.c
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> +    };
+> +
+> +...
+> --
+> 2.7.4
+>
