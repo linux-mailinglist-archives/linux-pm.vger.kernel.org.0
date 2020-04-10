@@ -2,82 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5DA1A44B1
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Apr 2020 11:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A4D1A4509
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Apr 2020 12:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725924AbgDJJt1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Apr 2020 05:49:27 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:42290 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725913AbgDJJt0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Apr 2020 05:49:26 -0400
-Received: by mail-ot1-f66.google.com with SMTP id j20so647692otl.9;
-        Fri, 10 Apr 2020 02:49:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=BDftgNGFhLsA0GtFODNTD/SzPGGvfXbg9/jYVMsqdKg=;
-        b=nzuZPiqGRvBiXRx3Ds+ZbZjF1wyQbAlIR+CNV7Y71cA4cBMzTc2Mg2znVEd/iYL3fI
-         4fQbDbbVAj+nfWp5NQfIrp9ZTxL0ESpPAtAvgP31Dcwxe5JZyPDwiVzVonLOo50iNNGV
-         LDHKhewPjJSHgehIB0CQ+r/hsTbWXV3/XB3gpYNGSMlPYZf3jtM+j8P6GPzFaUbz+BQb
-         cUzh8hSqP4eGTgOavAJ4sc2Xk6ZbY3Bjzx17zezFWWzbYLtplCIDc3Oe3svfXnka58T9
-         1pE1gVCV1fS4a315Ra+h7IPZGKJdwMZn6XpB/Ep+dTkfsO/XVivyTwJn/WQ57OdnOqfc
-         sjhw==
-X-Gm-Message-State: AGi0PubTXN4c+TUvBjDzqmn5FYazmWOengVKLVUfl2dndu00XGm5aAB9
-        3u7soLaQJWW9Ptv/VDcyChwFNy76a0t2G4T5qHNpsA3q
-X-Google-Smtp-Source: APiQypId9kNEpqs5uF69GdjBvwTGbjg2zQdxb5GMhraQbP1z8cEbM8V7unS832jhWtSK3Hb6qGfdhMHt4WahAuU+hV4=
-X-Received: by 2002:a9d:1d07:: with SMTP id m7mr3349035otm.167.1586512164981;
- Fri, 10 Apr 2020 02:49:24 -0700 (PDT)
-MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 10 Apr 2020 11:49:13 +0200
-Message-ID: <CAJZ5v0jUWsonPL3NDdVhwQcpVpsPuA9EpOdPpDqF=5XEaPBOVw@mail.gmail.com>
-Subject: [GIT PULL] More power management updates for v5.7-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1725897AbgDJKOL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Apr 2020 06:14:11 -0400
+Received: from mga02.intel.com ([134.134.136.20]:35404 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725893AbgDJKOL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 10 Apr 2020 06:14:11 -0400
+IronPort-SDR: lEAAHwxNYLaVaWCPPSMq63WM/1ghUIAhBnoOJFhfyHCPMklvbFQ+311Ioh9yqqWLcHEIbOaQTa
+ +X/iECOtrvgg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2020 03:14:10 -0700
+IronPort-SDR: znwmLGqGF7fBrxbjOQHuDL9fIjHD9nBDwbGOgyLlWixbox6ihlAJtbZRPT8E9bvFR1EixwvFk2
+ MGfV9tIeJbrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,366,1580803200"; 
+   d="scan'208";a="255435504"
+Received: from qjbian-mobl.amr.corp.intel.com ([10.255.31.146])
+  by orsmga006.jf.intel.com with ESMTP; 10 Apr 2020 03:14:09 -0700
+Message-ID: <8e4c2825d71e5bf5602b92937a49c04187c68e17.camel@intel.com>
+Subject: Re: [PATCH 1/2] thermal: core: Move thermal_cdev_update next to
+ updated=false
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, amit.kucheria@verdurent.com,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+Date:   Fri, 10 Apr 2020 18:14:08 +0800
+In-Reply-To: <20200409151515.6607-1-daniel.lezcano@linaro.org>
+References: <20200409151515.6607-1-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+Hi, Daniel,
 
-Please pull from the tag
+On Thu, 2020-04-09 at 17:15 +0200, Daniel Lezcano wrote:
+> The call to the thermal_cdev_update() function is done after browsing
+> the thermal instances which sets the updated flag by browsing them
+> again.
+> 
+> Instead of doing this, let's move the call right after setting the
+> cooling device 'updated' flag as it is done in the other governors.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.7-rc1-3
+The reason we do this in two steps is that we want to avoid redundant
+cooling device state changes.
 
-with top-most commit a31434bcd4cb73b13cd8136c3cbba966dd01f058
+Further more, I think it is better to move the thermal_cdev_update out
+of .throllte() callback, to thermal_zone_device_update(). So that we do
+not need to update the cooling device for each trip point.
 
- Merge branch 'pm-cpuidle'
+is there any specific reason we need to do thermal_cdev_update() for
+every potential change?
 
-on top of commit 7e63420847ae5f1036e4f7c42f0b3282e73efbc2
+thanks,
+rui
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/gov_bang_bang.c | 10 +---------
+>  drivers/thermal/step_wise.c     | 10 +---------
+>  2 files changed, 2 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/thermal/gov_bang_bang.c
+> b/drivers/thermal/gov_bang_bang.c
+> index 991a1c54296d..c292a69845bb 100644
+> --- a/drivers/thermal/gov_bang_bang.c
+> +++ b/drivers/thermal/gov_bang_bang.c
+> @@ -64,6 +64,7 @@ static void thermal_zone_trip_update(struct
+> thermal_zone_device *tz, int trip)
+>  		mutex_lock(&instance->cdev->lock);
+>  		instance->cdev->updated = false; /* cdev needs update
+> */
+>  		mutex_unlock(&instance->cdev->lock);
+> +		thermal_cdev_update(instance->cdev);
+>  	}
+>  
+>  	mutex_unlock(&tz->lock);
+> @@ -98,17 +99,8 @@ static void thermal_zone_trip_update(struct
+> thermal_zone_device *tz, int trip)
+>   */
+>  static int bang_bang_control(struct thermal_zone_device *tz, int
+> trip)
+>  {
+> -	struct thermal_instance *instance;
+> -
+>  	thermal_zone_trip_update(tz, trip);
+>  
+> -	mutex_lock(&tz->lock);
+> -
+> -	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+> -		thermal_cdev_update(instance->cdev);
+> -
+> -	mutex_unlock(&tz->lock);
+> -
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/thermal/step_wise.c
+> b/drivers/thermal/step_wise.c
+> index 2ae7198d3067..298eedac0293 100644
+> --- a/drivers/thermal/step_wise.c
+> +++ b/drivers/thermal/step_wise.c
+> @@ -167,6 +167,7 @@ static void thermal_zone_trip_update(struct
+> thermal_zone_device *tz, int trip)
+>  		mutex_lock(&instance->cdev->lock);
+>  		instance->cdev->updated = false; /* cdev needs update
+> */
+>  		mutex_unlock(&instance->cdev->lock);
+> +		thermal_cdev_update(instance->cdev);
+>  	}
+>  
+>  	mutex_unlock(&tz->lock);
+> @@ -185,20 +186,11 @@ static void thermal_zone_trip_update(struct
+> thermal_zone_device *tz, int trip)
+>   */
+>  static int step_wise_throttle(struct thermal_zone_device *tz, int
+> trip)
+>  {
+> -	struct thermal_instance *instance;
+> -
+>  	thermal_zone_trip_update(tz, trip);
+>  
+>  	if (tz->forced_passive)
+>  		thermal_zone_trip_update(tz, THERMAL_TRIPS_NONE);
+>  
+> -	mutex_lock(&tz->lock);
+> -
+> -	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+> -		thermal_cdev_update(instance->cdev);
+> -
+> -	mutex_unlock(&tz->lock);
+> -
+>  	return 0;
+>  }
+>  
 
- Merge tag 'acpi-5.7-rc1-2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-to receive more power management updates for 5.7-rc1.
-
-These rework the compat ioctl handling in the user space hibernation
-interface (Christoph Hellwig) and fix a typo in a function name in
-the cpuidle haltpoll driver (Yihao Wu).
-
-Thanks!
-
-
----------------
-
-Christoph Hellwig (2):
-      PM / sleep: move SNAPSHOT_SET_SWAP_AREA handling into a helper
-      PM / sleep: handle the compat case in snapshot_set_swap_area()
-
-Yihao Wu (1):
-      cpuidle-haltpoll: Fix small typo
-
----------------
-
- drivers/cpuidle/cpuidle-haltpoll.c |   4 +-
- kernel/power/user.c                | 101 +++++++++++++++++--------------------
- 2 files changed, 48 insertions(+), 57 deletions(-)
