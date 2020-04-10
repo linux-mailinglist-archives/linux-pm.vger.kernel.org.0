@@ -2,68 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEBE1A49D5
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Apr 2020 20:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E6A1A4A19
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Apr 2020 21:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726594AbgDJS22 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Apr 2020 14:28:28 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:35690 "EHLO
+        id S1726648AbgDJTCj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Apr 2020 15:02:39 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:38770 "EHLO
         mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726177AbgDJS22 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Apr 2020 14:28:28 -0400
-Received: by mail-lj1-f193.google.com with SMTP id k21so2824125ljh.2;
-        Fri, 10 Apr 2020 11:28:25 -0700 (PDT)
+        with ESMTP id S1726646AbgDJTCj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Apr 2020 15:02:39 -0400
+Received: by mail-lj1-f193.google.com with SMTP id v16so2894056ljg.5;
+        Fri, 10 Apr 2020 12:02:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=q+S9FQcm44gCkUcVdVprrI4SiEYMw4o+DCvVDXTf1yI=;
-        b=SwMy/QxroluHVUM/6FKQ9+IjMym0OdlVEJKFzpjegXVVqhuLuWEfr20uoodqRoOjw6
-         uq+cxx0rfMJPB6s2le8gCs8JBuibGGUBV+UL3HQzGhtDGpSXSoijrdjL9ZNPMPhHwd5R
-         YdUk53GHoolSl/2lIcXaByAF/ny4tC1WEYi3ppiPSOY9+g8nVM8+4kpvTQgvHoRYwaK0
-         uBrSLTeQFZw+9gp9cQAPvUIvnnBeQl4YfWTF13D2e8h0N8KzEzCuTZZEzej3/KVmfvfd
-         LEBwQRNlNzYStJK76cU/05M/P32BTPi90t2JfffuZzQ5nT407MJghhQu1deDjYOYKjLc
-         mZ4w==
+        bh=PYKcTVIV4hyvh7eYr2ZVXran4rltE2Q1T3gTm8AMtDs=;
+        b=RSyEvYJvOqY0KhhjOQhe7BPWwgzk38OSAtjb4e86Zn6ANKrVOq2V4auUZJvD4Q3y2x
+         QkeWukpU82Xz48weMvWTAtLlRh4hhxR9naz+TXzRyH6STBreqv1nqvcUnvySEo5XESR3
+         hmTcNtzVuniuGue7H4AtHOuql4Hd8hY9zGUdiAcuMVyC/9EjDdNNgkyuqelJACt2zBjt
+         pRXqK/sRVqNfhmgYiC0KWBLwQ5606XyFwqBin/lduMQ0YdrvIGVwjEp0G2mwjbRyeG2Q
+         NjXDK951Y8D1tMy0aCFif/paZrqO9PrIk6RYkezrRnz4bTqeuQggGjrF0yiU/PddrrmP
+         Yu5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=q+S9FQcm44gCkUcVdVprrI4SiEYMw4o+DCvVDXTf1yI=;
-        b=bWBfBOvaIn4GxzEay+cYFhUfob7/34qpf5BveRoJBZrxlxkcvEA5YssyLWyD1wcohk
-         pUqXPqs1TNQvQrFGSSAI+pjH7j2bozI415pUnh8Bz9cjetx0Ihk3LwYBPeBAidTqIzFv
-         /TY4y5Qep4tEcrxi8ot4cHD8URoophn9fotO/ESUq3JgdckEAqwkWmTMRp1YVO6mFr8q
-         eIpODbgSfCsjUDTiqDwRaPKgHWV72kCeMUKs7DJ6HEnWMMasLe9wpdFEq7Sx/d6ShL/j
-         25gAisaJgsL0Z27y2+sjJJFIv4Gd7bxmUzuVzl+WddO/8rEOMnMR8o0oYDg2SeXkIrX9
-         bpug==
-X-Gm-Message-State: AGi0Pub9wys7lunZeI65Xab6ffJs4NhrZM5ZlaQZKHuGEsJL8LUsvyq7
-        ehId14RIUBGPl7r4LBUjMimTxg+R
-X-Google-Smtp-Source: APiQypJDMRwiWxqCQIVoO1DjqAKbxN9a3USsG+5h8JhkdiiSyqW5X2ClXQ9wa/FUBYCazlrhcZe10w==
-X-Received: by 2002:a2e:904b:: with SMTP id n11mr3658147ljg.171.1586543304167;
-        Fri, 10 Apr 2020 11:28:24 -0700 (PDT)
+        bh=PYKcTVIV4hyvh7eYr2ZVXran4rltE2Q1T3gTm8AMtDs=;
+        b=Vs0yBr0gSW7q6gwYsI+9ZGzjeXcj1HURO/8ks3GPvhpv1Ocyq5fXbsxaUZRfkuTWeA
+         IdmXK5mIm/KJAF3k9a7whPCch0nx70P9tPnwTo79a0zi/e4P7ztYGEM7kTxnWza9fgvp
+         tH+1ZcwmQ/Inzq5ODrr0q4/vmsySvsD2VX8vXXzYIx4hr64SdEXS8dTij8j/d8vdMxAF
+         +qKYB8XJdCwtOuy8shweU70jrC2Rd39v+28xbQZAzNrt5qxcUPo2P3cwPVtni9vy2IIH
+         2MoES9bzkCHsaZ4v5wAR/Ow3Y+7UtweW/GPbyUnYR8NcoO/XX6/+ldbQ5yVMil/oXLlU
+         xfOw==
+X-Gm-Message-State: AGi0PuaDsz0eJIb9iov/mqbHd8K4PUV7eRTkLTRMdEVF40p1VyYhK7jZ
+        FplGv72GuwPxsx1hmgJgaGO2gmfE
+X-Google-Smtp-Source: APiQypJ7yEEZbmoRR3GUh5umTAf4/y8qh40+fhTFXAvoCq/oM8h7IMbGYuCADkYMUfcoKj0dLKvlTQ==
+X-Received: by 2002:a2e:9605:: with SMTP id v5mr3691202ljh.258.1586545357403;
+        Fri, 10 Apr 2020 12:02:37 -0700 (PDT)
 Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.googlemail.com with ESMTPSA id u13sm1487881lji.27.2020.04.10.11.28.23
+        by smtp.googlemail.com with ESMTPSA id k11sm2132420ljj.36.2020.04.10.12.02.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Apr 2020 11:28:23 -0700 (PDT)
-Subject: Re: [PATCH v2 05/22] dt-bindings: host1x: Document new interconnect
- properties
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Fri, 10 Apr 2020 12:02:36 -0700 (PDT)
+Subject: Re: [PATCH 4/9] dt-bindings: power: supply: Add device-tree binding
+ for Summit SMB3xx
+To:     Rob Herring <robh@kernel.org>, David Heidelberg <david@ixit.cz>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Jonghwa Lee <jonghwa3.lee@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Myungjoo Ham <myungjoo.ham@samsung.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Vinay Simha BN <simhavcs@gmail.com>,
+        mika.westerberg@linux.intel.com, ramakrishna.pallala@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-References: <20200330010904.27643-1-digetx@gmail.com>
- <20200330010904.27643-6-digetx@gmail.com> <20200410170929.GA1498@bogus>
+References: <20200329161552.215075-1-david@ixit.cz>
+ <20200329162128.218584-5-david@ixit.cz> <20200410164905.GA719@bogus>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <98d28983-0c50-1155-adc0-8ddbd15cc701@gmail.com>
-Date:   Fri, 10 Apr 2020 21:28:22 +0300
+Message-ID: <8c4ab1ce-1947-ab38-3f8c-9055406428e4@gmail.com>
+Date:   Fri, 10 Apr 2020 22:02:35 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200410170929.GA1498@bogus>
+In-Reply-To: <20200410164905.GA719@bogus>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -72,16 +75,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-10.04.2020 20:09, Rob Herring пишет:
+10.04.2020 19:49, Rob Herring пишет:
 ...
->> +  Optional properties:
->> +  - interconnects: Must contain entry for the MPE memory clients.
->> +  - interconnect-names: Must include name of the interconnect path for each
->> +    interconnect entry. Consult TRM documentation for information about
->> +    available memory clients.
-> 
-> Is the TRM public? Perhaps refer to the header.
+>> +  summit,max-chg-curr:
+>> +    description: Maximum current for charging (in uA)
+>> +    allOf:
+>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+>> +  summit,max-chg-volt:
+>> +    description: Maximum voltage for charging (in uV)
+>> +    allOf:
+>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+>> +    minimum: 3500000
+>> +    maximum: 4500000
+>> +
+>> +  summit,pre-chg-curr:
+>> +    description: Pre-charging current for charging (in uA)
+>> +    allOf:
+>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+>> +  summit,term-curr:
+>> +    description: Charging cycle termination current (in uA)
+>> +    allOf:
+>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+...
+> These are all properties of the battery attached and we have standard 
+> properties for some/all of these.
 
-Yes, you can download it from NVIDIA website (after registration).
+Looks like only four properties seem to be matching the properties of
+the battery.txt binding.
 
-I'll add "Consult Memory Controller section of TRM..." in the next version.
+Are you suggesting that these matching properties should be renamed
+after the properties in battery.txt?
+
+> Also, any property with units should have a unit suffix as defined in 
+> property-units.txt. And with that, you don't need to define the type.
+
+Indeed, thank you for the suggestion.
