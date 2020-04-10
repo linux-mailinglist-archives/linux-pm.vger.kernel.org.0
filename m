@@ -2,54 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DAF1A48F5
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Apr 2020 19:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEBE1A49D5
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Apr 2020 20:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726828AbgDJRa2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Apr 2020 13:30:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58462 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726816AbgDJRa2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 10 Apr 2020 13:30:28 -0400
-Subject: Re: [GIT PULL] More power management updates for v5.7-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586539828;
-        bh=Doo0J0I0r8vmA+xBCBK4VzSd26D81j+LMv9WROysvl0=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=WrDNZA079jsUYMDmy27QdRFWrmiRmKFG5ztH9467IMPyjcRdT3cJNHz08qF9I13sN
-         Iv/CZyguMYH6zQU+5T1qUU+4by0Cywm9XmNrehfbEufkeUT1BlzOD0xOozMapDIwx/
-         A0mvtltvb4TLJ7SAasNuQCjCet6hvOrn7EI9OARc=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0jUWsonPL3NDdVhwQcpVpsPuA9EpOdPpDqF=5XEaPBOVw@mail.gmail.com>
-References: <CAJZ5v0jUWsonPL3NDdVhwQcpVpsPuA9EpOdPpDqF=5XEaPBOVw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0jUWsonPL3NDdVhwQcpVpsPuA9EpOdPpDqF=5XEaPBOVw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
- pm-5.7-rc1-3
-X-PR-Tracked-Commit-Id: a31434bcd4cb73b13cd8136c3cbba966dd01f058
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: bbec2a2dc338a19185549c318356e25c65552d15
-Message-Id: <158653982823.6431.6953161213468667754.pr-tracker-bot@kernel.org>
-Date:   Fri, 10 Apr 2020 17:30:28 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1726594AbgDJS22 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Apr 2020 14:28:28 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:35690 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726177AbgDJS22 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Apr 2020 14:28:28 -0400
+Received: by mail-lj1-f193.google.com with SMTP id k21so2824125ljh.2;
+        Fri, 10 Apr 2020 11:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=q+S9FQcm44gCkUcVdVprrI4SiEYMw4o+DCvVDXTf1yI=;
+        b=SwMy/QxroluHVUM/6FKQ9+IjMym0OdlVEJKFzpjegXVVqhuLuWEfr20uoodqRoOjw6
+         uq+cxx0rfMJPB6s2le8gCs8JBuibGGUBV+UL3HQzGhtDGpSXSoijrdjL9ZNPMPhHwd5R
+         YdUk53GHoolSl/2lIcXaByAF/ny4tC1WEYi3ppiPSOY9+g8nVM8+4kpvTQgvHoRYwaK0
+         uBrSLTeQFZw+9gp9cQAPvUIvnnBeQl4YfWTF13D2e8h0N8KzEzCuTZZEzej3/KVmfvfd
+         LEBwQRNlNzYStJK76cU/05M/P32BTPi90t2JfffuZzQ5nT407MJghhQu1deDjYOYKjLc
+         mZ4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=q+S9FQcm44gCkUcVdVprrI4SiEYMw4o+DCvVDXTf1yI=;
+        b=bWBfBOvaIn4GxzEay+cYFhUfob7/34qpf5BveRoJBZrxlxkcvEA5YssyLWyD1wcohk
+         pUqXPqs1TNQvQrFGSSAI+pjH7j2bozI415pUnh8Bz9cjetx0Ihk3LwYBPeBAidTqIzFv
+         /TY4y5Qep4tEcrxi8ot4cHD8URoophn9fotO/ESUq3JgdckEAqwkWmTMRp1YVO6mFr8q
+         eIpODbgSfCsjUDTiqDwRaPKgHWV72kCeMUKs7DJ6HEnWMMasLe9wpdFEq7Sx/d6ShL/j
+         25gAisaJgsL0Z27y2+sjJJFIv4Gd7bxmUzuVzl+WddO/8rEOMnMR8o0oYDg2SeXkIrX9
+         bpug==
+X-Gm-Message-State: AGi0Pub9wys7lunZeI65Xab6ffJs4NhrZM5ZlaQZKHuGEsJL8LUsvyq7
+        ehId14RIUBGPl7r4LBUjMimTxg+R
+X-Google-Smtp-Source: APiQypJDMRwiWxqCQIVoO1DjqAKbxN9a3USsG+5h8JhkdiiSyqW5X2ClXQ9wa/FUBYCazlrhcZe10w==
+X-Received: by 2002:a2e:904b:: with SMTP id n11mr3658147ljg.171.1586543304167;
+        Fri, 10 Apr 2020 11:28:24 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
+        by smtp.googlemail.com with ESMTPSA id u13sm1487881lji.27.2020.04.10.11.28.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Apr 2020 11:28:23 -0700 (PDT)
+Subject: Re: [PATCH v2 05/22] dt-bindings: host1x: Document new interconnect
+ properties
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+References: <20200330010904.27643-1-digetx@gmail.com>
+ <20200330010904.27643-6-digetx@gmail.com> <20200410170929.GA1498@bogus>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <98d28983-0c50-1155-adc0-8ddbd15cc701@gmail.com>
+Date:   Fri, 10 Apr 2020 21:28:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20200410170929.GA1498@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 10 Apr 2020 11:49:13 +0200:
+10.04.2020 20:09, Rob Herring пишет:
+...
+>> +  Optional properties:
+>> +  - interconnects: Must contain entry for the MPE memory clients.
+>> +  - interconnect-names: Must include name of the interconnect path for each
+>> +    interconnect entry. Consult TRM documentation for information about
+>> +    available memory clients.
+> 
+> Is the TRM public? Perhaps refer to the header.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.7-rc1-3
+Yes, you can download it from NVIDIA website (after registration).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/bbec2a2dc338a19185549c318356e25c65552d15
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+I'll add "Consult Memory Controller section of TRM..." in the next version.
