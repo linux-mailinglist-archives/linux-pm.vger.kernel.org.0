@@ -2,140 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E1E1A4AA3
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Apr 2020 21:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE18D1A4B15
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Apr 2020 22:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbgDJTiD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Apr 2020 15:38:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52560 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726203AbgDJTiD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 10 Apr 2020 15:38:03 -0400
-Received: from localhost (mobile-166-170-220-109.mycingular.net [166.170.220.109])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BB1CC20732;
-        Fri, 10 Apr 2020 19:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586547482;
-        bh=76FW6bsyi+GvI3cA1295vPvYzfcdLfIdfR/uMK0cqIM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=f5aqyeY5H8P+Dg0VtR5VXhNEaIBxx4R/gGzchOa7w+V/JIMrsYuYNV7aLVSvrZntH
-         WWv3dp0kGmlDxfECQgMchX8GExkaXAsoMWQhr1nrjc+24qlq2ngw+8X5Yw7mD9qxHN
-         rCJAnLyi2B0qmE9qQBazZ/B4H3+CIp6g7so4MwFk=
-Date:   Fri, 10 Apr 2020 14:38:00 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans De Goede <hdegoede@redhat.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        DRI-devel <dri-devel@lists.freedesktop.org>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH 5/7] PM: sleep: core: Rename DPM_FLAG_NEVER_SKIP
-Message-ID: <20200410193800.GA5202@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5092680.jloV5Ae5OO@kreacher>
+        id S1726638AbgDJUT5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Apr 2020 16:19:57 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:50468 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbgDJUT5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Apr 2020 16:19:57 -0400
+Received: by mail-wm1-f67.google.com with SMTP id x25so3626646wmc.0;
+        Fri, 10 Apr 2020 13:19:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=c0e+/KBVc/nobaXkJrTJrhiH2MWb5NU2UiIxXfMzlcE=;
+        b=ppavkZBLmnDZyYFzfQI2VnEXeS3xcqKugv8XTxOnumjZOK48cLVbcwhuYhSJI+4PzH
+         9uh5aNTqXV4nNJcF+xJ6acFv661+hGDvy6fkxsCYP+cXjfgSh0zK/A6WPumZL+XTnJSr
+         P7Ezml3+eG4HHt7QyKSH3vab8XEqn4oUPxKRKaE7+dxy9YKtuUYIRoYyOKoIhSMd+qfK
+         JF6PY0G4THYL2iz1IBlvayoXzZZ7CdYtk2s1qDYNMYda0PDQyBzvM2108kuw7iW6OMGL
+         /Wtg00b/EA0XrJLurV1abvL3S83erFDDRbC06nCvEPq04JgETKbkdgOtKp5znFKbJjyu
+         lueQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=c0e+/KBVc/nobaXkJrTJrhiH2MWb5NU2UiIxXfMzlcE=;
+        b=ZjDgTKUbE3zlC2jafQqGnef7ceTEGj9q/reN3LWZ4ahp/I0MeJ/nTyVpqAZ+2H0cyc
+         C4EtnsQi+ws6hO3RT+SmUDH3M98Id5J746f1KLE0aRPfYPfaXS3Je0+ibpFVEEoJaaAs
+         pgECdcOv26nv6zwveCvAV8TvOTyBGxKK6aBoLqyEnV9IFoBDx+4nObzW7M7DB8WWLewG
+         9UXSG2oBrc4psACAA6YerndzHRzgQKwOAAEcjPAXp8iQ9hj32uP295uM3JW7noldb/RM
+         qpka/G6lc3U/sjSATqRkYzwdMCYug38mxBNBktou8WfsuhL5nkbFwUKvI+LeYD7j/bCT
+         /HKw==
+X-Gm-Message-State: AGi0PuY5gaB90L6jegbsfDc2MDtfytdVo31cu6q+rjO2wszhGGs2dI4I
+        6/42yl61Ep2g70hnK/utaSU=
+X-Google-Smtp-Source: APiQypK1BaglDoLnSEUss0hxYNRBfBl24Gpqh1wAASwcxiZycB1f7Q+RTNm+SDmsZl82vHWJG62yAg==
+X-Received: by 2002:a1c:3c08:: with SMTP id j8mr4319008wma.30.1586549995637;
+        Fri, 10 Apr 2020 13:19:55 -0700 (PDT)
+Received: from localhost.localdomain (p5B3F6388.dip0.t-ipconnect.de. [91.63.99.136])
+        by smtp.gmail.com with ESMTPSA id n11sm4405187wrg.72.2020.04.10.13.19.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Apr 2020 13:19:54 -0700 (PDT)
+From:   Saravanan Sekar <sravanhome@gmail.com>
+To:     lee.jones@linaro.org, andy.shevchenko@gmail.com,
+        robh+dt@kernel.org, jic23@kernel.org, knaack.h@gmx.de,
+        lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        Saravanan Sekar <sravanhome@gmail.com>
+Subject: [PATCH v7 0/5] Add battery charger driver support for MP2629
+Date:   Fri, 10 Apr 2020 22:19:43 +0200
+Message-Id: <20200410201948.1293-1-sravanhome@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 10, 2020 at 05:56:13PM +0200, Rafael J. Wysocki wrote:
-> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> 
-> Rename DPM_FLAG_NEVER_SKIP to DPM_FLAG_NO_DIRECT_COMPLETE which
-> matches its purpose more closely.
-> 
-> No functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+changes in v7:
+ - fixed probe/remove order, managed and unmanaged call mix use in adc.
+ - Documentation dual license, i2c node with controller address
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com> # for PCI parts
+changes in v6:
+ - removed includes types.h in mfd, of_device.h in adc.
+ - fixed review comments parentheses, err check, kstrtouint
 
-> ---
->  Documentation/driver-api/pm/devices.rst    |  6 +++---
->  Documentation/power/pci.rst                | 10 +++++-----
->  drivers/base/power/main.c                  |  2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c    |  2 +-
->  drivers/gpu/drm/i915/intel_runtime_pm.c    |  2 +-
->  drivers/gpu/drm/radeon/radeon_kms.c        |  2 +-
->  drivers/misc/mei/pci-me.c                  |  2 +-
->  drivers/misc/mei/pci-txe.c                 |  2 +-
->  drivers/net/ethernet/intel/e1000e/netdev.c |  2 +-
->  drivers/net/ethernet/intel/igb/igb_main.c  |  2 +-
->  drivers/net/ethernet/intel/igc/igc_main.c  |  2 +-
->  drivers/pci/pcie/portdrv_pci.c             |  2 +-
->  include/linux/pm.h                         |  6 +++---
->  13 files changed, 21 insertions(+), 21 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/pm/devices.rst b/Documentation/driver-api/pm/devices.rst
-> index f66c7b9126ea..4ace0eba4506 100644
-> --- a/Documentation/driver-api/pm/devices.rst
-> +++ b/Documentation/driver-api/pm/devices.rst
-> @@ -361,9 +361,9 @@ the phases are: ``prepare``, ``suspend``, ``suspend_late``, ``suspend_noirq``.
->  	runtime PM disabled.
+changes in v5:
+ - removed platfrom data stored in mfd and directly accessed mfd struct in child
+ - fixed spell check and capitalization in mfd and documentation
 
-Minor question about a preceding paragraph that ends:
+changes in v4:
+ - fixed capitalization in mfg Kconfig and documentation
 
-  In that case, the ``->complete`` callback will be invoked directly
-  after the ``->prepare`` callback and is entirely responsible for
-  putting the device into a consistent state as appropriate.
+changes in v3:
+ - regmap for children passed using platform data and remove mfd driver info
+   access directly from children
 
-What does" a consistent state as appropriate" mean?  I know this is
-generic documentation at a high level, so maybe there's no good
-explanation for "consistent state," but I don't know what to imagine
-there.
+changes in v2:
+ - removed EXPORT_SYMBOL of register set/get helper
+ - regmap bit filed used, fixed other review comments
 
-And what does "as appropriate" mean?  Would it change the meaning to
-drop those two words, or are there situations where it's not
-appropriate to put the device into a consistent state?  Or maybe it's
-just that the type of device determines what the consistent state is?
+This patch series add support for Battery charger control driver for Monolithic
+Power System's MP2629 chipset, includes MFD driver for ADC battery & input
+power supply measurement and battery charger control driver.
 
->  	This feature also can be controlled by device drivers by using the
-> -	``DPM_FLAG_NEVER_SKIP`` and ``DPM_FLAG_SMART_PREPARE`` driver power
-> -	management flags.  [Typically, they are set at the time the driver is
-> -	probed against the device in question by passing them to the
-> +	``DPM_FLAG_NO_DIRECT_COMPLETE`` and ``DPM_FLAG_SMART_PREPARE`` driver
-> +	power management flags.  [Typically, they are set at the time the driver
-> +	is probed against the device in question by passing them to the
->  	:c:func:`dev_pm_set_driver_flags` helper function.]  If the first of
->  	these flags is set, the PM core will not apply the direct-complete
->  	procedure described above to the given device and, consequenty, to any
+Thanks,
+Saravanan
 
-s/consequenty/consequently/
+Saravanan Sekar (5):
+  dt-bindings: mfd: add document bindings for mp2629
+  mfd: mp2629: Add support for mps battery charger
+  iio: adc: mp2629: Add support for mp2629 ADC driver
+  power: supply: Add support for mps mp2629 battery charger
+  MAINTAINERS: Add entry for mp2629 Battery Charger driver
 
-Drive-by comment: I looked for a definition of "direct-complete".  The
-closest I found is a couple paragraphs above this, where it says "Note
-that this direct-complete procedure ...," but that leaves me to try to
-reconstruct the definition from the preceding text.
+ .../devicetree/bindings/mfd/mps,mp2629.yaml   |  60 ++
+ MAINTAINERS                                   |   5 +
+ drivers/iio/adc/Kconfig                       |  10 +
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/mp2629_adc.c                  | 208 ++++++
+ drivers/mfd/Kconfig                           |   9 +
+ drivers/mfd/Makefile                          |   2 +
+ drivers/mfd/mp2629.c                          |  86 +++
+ drivers/power/supply/Kconfig                  |  10 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/mp2629_charger.c         | 687 ++++++++++++++++++
+ include/linux/mfd/mp2629.h                    |  28 +
+ 12 files changed, 1107 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
+ create mode 100644 drivers/iio/adc/mp2629_adc.c
+ create mode 100644 drivers/mfd/mp2629.c
+ create mode 100644 drivers/power/supply/mp2629_charger.c
+ create mode 100644 include/linux/mfd/mp2629.h
 
-AFAICT, going to freeze, standby, or memory sleep includes these
-callbacks:
+-- 
+2.17.1
 
-  ->prepare
-  ->suspend
-  ->suspend_late
-  ->suspend_noirq
-  ->complete         (not mentioned in the list of phases)
-
-And "direct-complete" means we skip the suspend, suspend_late,
-and suspend_noirq callbacks so we only use these:
-
-  ->prepare
-  ->complete
-
-And apparently we skip those callbacks for device X if ->prepare() for
-X and all its descendents returns a positive value AND they are all
-runtime-suspended, except if a driver for X or a descendent sets
-DPM_FLAG_NO_DIRECT_COMPLETE.
-
-Bjorn
