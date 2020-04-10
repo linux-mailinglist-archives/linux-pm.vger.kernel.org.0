@@ -2,201 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AD21A39EB
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Apr 2020 20:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8831A3DA4
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Apr 2020 03:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726670AbgDISpt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Apr 2020 14:45:49 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:56789 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726477AbgDISpt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Apr 2020 14:45:49 -0400
-Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 0829b55dba071591; Thu, 9 Apr 2020 20:45:46 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Qais Yousef <qais.yousef@arm.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-Date:   Thu, 09 Apr 2020 20:45:45 +0200
-Message-ID: <3100919.FSIbSBgRSq@kreacher>
-In-Reply-To: <Pine.LNX.4.44L0.2004061541080.26186-100000@netrider.rowland.org>
-References: <Pine.LNX.4.44L0.2004061541080.26186-100000@netrider.rowland.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        id S1726082AbgDJBQe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Apr 2020 21:16:34 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:35662 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725987AbgDJBQe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 9 Apr 2020 21:16:34 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 52B6B1A19C8;
+        Fri, 10 Apr 2020 03:16:32 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E1BE61A1A19;
+        Fri, 10 Apr 2020 03:15:16 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id A4894402D5;
+        Fri, 10 Apr 2020 09:15:08 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH V2] dt-bindings: thermal: Convert i.MX to json-schema
+Date:   Fri, 10 Apr 2020 09:07:24 +0800
+Message-Id: <1586480844-19227-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday, April 6, 2020 10:25:08 PM CEST Alan Stern wrote:
-> On Mon, 6 Apr 2020, Rafael J. Wysocki wrote:
-> 
-> > In the meantime I have created a git branch with changes to simplify the code,
-> > rename some things and clarify the documentation a bit:
-> > 
-> >  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
-> >  pm-sleep-core
-> > 
-> > (https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=pm-sleep-core
-> > for web access).
-> > 
-> > I'm going to post these changes as patches soon.
-> 
-> All right, those are some significant changes.  It'll take me a little 
-> while to absorb them.
-> 
-> > On Friday, April 3, 2020 10:15:09 PM CEST Alan Stern wrote:
-> 
-> > > Let's put it like this: The resume-side callbacks should have the
-> > > overall effect of bringing the device back to its initial state, with
-> > > the following exceptions and complications:
-> > > 
-> > > 	Unless SMART_SUSPEND and LEAVE_SUSPEND are both set, a device
-> > > 	that was in runtime suspend before the suspend_late phase 
-> > > 	must end up being runtime-active after the matching RESUME.
-> > >
-> > > 	Unless SMART_SUSPEND is set, a device that was in runtime 
-> > > 	suspend before the freeze_late phase must end up being 
-> > > 	runtime-active after the matching THAW.
-> > 
-> > Correct.
-> >  
-> > > [I'm not so sure about this.  Wouldn't it make more sense to treat
-> > > _every_ device as though SMART_SUSPEND was set for FREEZE/THAW
-> > > transitions, and require subsystems to do the same?]
-> > 
-> > Drivers may expect devices to be runtime-active when their suspend
-> > callbacks are invoked unless they set SMART_SUSPEND.  IOW, without
-> > SMART_SUSPEND set the device should not be left in runtime suspend
-> > during system-wide suspend at all unless direct-complete is applied
-> > to it.
-> 
-> [Let's confine this discussion to the not-direct-complete case.]
-> 
-> Okay, say that SMART_SUSPEND isn't set and the device is initially
-> runtime-suspended.  Since the core knows all this, shouldn't the core 
-> then call pm_runtime_resume() immediately before ->suspend?  Why leave 
-> this up to subsystems or drivers (which can easily get it wrong -- 
-> not to mention all the code duplication it would require)?
+Convert the i.MX thermal binding to DT schema format using json-schema
 
-I would agree in principle, but that has been done by subsystems forever and
-(at least in some cases) drivers on bus types like platform on i2c (where
-subsystem-level PM callbacks are not provided in general unless there is a PM
-domain doing that) don't expect the devices to be resumed and they
-decide whether or not to do that themselves.
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+Changes since V1:
+	- make clock property optional.
+---
+ .../devicetree/bindings/thermal/imx-thermal.txt    | 61 --------------
+ .../devicetree/bindings/thermal/imx-thermal.yaml   | 96 ++++++++++++++++++++++
+ 2 files changed, 96 insertions(+), 61 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/thermal/imx-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/imx-thermal.yaml
 
-Making the core resume the runtime-suspended devices during system-wide
-suspend, would require those drivers to adapt and it is rather hard to
-even estimate how many of them there are.
-
-> Also, doesn't it make sense for some subsystems or drivers to want 
-> their devices to remain in runtime suspend throughout a FREEZE/THAW 
-> transition but not throughout a SUSPEND/RESUME transition?  With only a 
-> single SMART_SUSPEND flag, how can we accomodate this desire?
-
-That's a fair statement, but in general it is more desirable to optimize
-suspend/resume than to optimize hibernation, so the latter is not a priority.
-
-I'm not ruling out adding one more flag specific to hibernation or similar
-in the future.
-
-> Finally, my description above says that LEAVE_SUSPENDED matters for 
-> SUSPEND/RESUME but not for FREEZE/THAW.  Is that really what you have 
-> in mind?
-
-Yes, it is.  LEAVE_SUSPENDED really does not apply to hibernation at all.
-
-> > > 	After RESTORE, _every_ device must end up being runtime 
-> > > 	active.
-> > 
-> > Correct.
-> > 
-> > > 	In general, each resume-side callback should undo the effect
-> > > 	of the matching suspend-side callback.  However, because of
-> > > 	the requirements mentioned in the preceding sentences,
-> > > 	sometimes a resume-side callback will be issued even though
-> > > 	the matching suspend-side callback was skipped -- i.e., when
-> > > 	a device that starts out runtime-suspended ends up being
-> > > 	runtime-active.
-> > > 
-> > > How does that sound?
-> > 
-> > It is correct, but in general the other way around is possible too.
-> > That is, a suspend-side callback may be issued without the matching
-> > resume-side one and the device's PM runtime status may be changed
-> > if LEAVE_SUSPENDED is set and SMART_SUSPEND is unset.
-> 
-> This is inconsistent with what I wrote above (the "Unless SMART_SUSPEND
-> and LEAVE_SUSPENDED are both set" part).  Are you saying that text
-> should be changed?
-
-Yes, in fact SMART_SUSPEND need not be set for resume callbacks to be skipped.
-
-LEAVE_SUSPENDED must be set for that to happen (except for hibernation) and it
-may be sufficient if the subsystem sets power.may_skip_resume in addition.
-
-> > > Are you certain you want the subsystem callback to be responsible for
-> > > setting the runtime status to "active"?  Isn't this an example of
-> > > something the core could do in order to help simplify subsystems?
-> > 
-> > The rationale here is that whoever decides whether or not to skip the
-> > driver-level callbacks, should also set the PM-runtime status of the
-> > device to match that decision.
-> 
-> Well, that's not really a fair description.  The decision about
-> skipping driver-level callbacks is being made right here, by us, now.  
-> (Or if you prefer, by the developers who originally added the
-> SMART_SUSPEND flag.)  We require subsystems to obey the decisions being
-> outlined in this discussion.
-> 
-> Given that fact, this is again a case of having the core do something 
-> rather than forcing subsystems/drivers to do it (possibly getting it 
-> wrong and certainly creating a lot of code duplication).
-> 
-> If a subsystem really wants to override our decision, it can always
-> call pm_runtime_set_{active|suspended} to override the core's setting.
-
-OK, fair enough.
-
-I've incorporated this into the changes on the pm-sleep-core branch
-mentioned before.
-
-> > > And this brings up another thing the core might do to help simplify
-> > > drivers and subsystems: If SMART_SUSPEND isn't set and the device is in
-> > > runtime suspend, couldn't the core do a pm_runtime_resume before
-> > > issuing the ->suspend or ->suspend_late callback?
-> > 
-> > It could, but sometimes that is not desirable.  Like when the drivver points its
-> > suspend callback to pm_runtime_force_suspend().
-> 
-> This seems to contradict what you wrote above: "Drivers may expect
-> devices to be runtime-active when their suspend callbacks are invoked
-> unless they set SMART_SUSPEND.  IOW, without SMART_SUSPEND set the
-> device should not be left in runtime suspend during system-wide suspend
-> at all unless direct-complete is applied to it."
-> 
-> If you stand by that statement then drivers should never point their
-> suspend callback to pm_runtime_force_suspend() unless they also set
-> SMART_SUSPEND.
-
-OK, let me rephrase.
-
-Some drivers that don't use SMART_SUSPEND expect the devices to be runtime-active
-when their system-wide PM callbacks run, but the other drivers do not have such
-expectations, because the subsystems they work with have never resumed devices
-during system-wide suspend.
-
-SMART_SUSPEND is not needed for the latter category of drivers, but it is for
-the former and I want the behavior when SMART_SUSPEND *is* set to be consistent
-across the core and subsystems, while the other case have never been so.
-
-Cheers!
-
-
+diff --git a/Documentation/devicetree/bindings/thermal/imx-thermal.txt b/Documentation/devicetree/bindings/thermal/imx-thermal.txt
+deleted file mode 100644
+index 823e417..0000000
+--- a/Documentation/devicetree/bindings/thermal/imx-thermal.txt
++++ /dev/null
+@@ -1,61 +0,0 @@
+-* Temperature Monitor (TEMPMON) on Freescale i.MX SoCs
+-
+-Required properties:
+-- compatible : must be one of following:
+-  - "fsl,imx6q-tempmon" for i.MX6Q,
+-  - "fsl,imx6sx-tempmon" for i.MX6SX,
+-  - "fsl,imx7d-tempmon" for i.MX7S/D.
+-- interrupts : the interrupt output of the controller:
+-  i.MX6Q has one IRQ which will be triggered when temperature is higher than high threshold,
+-  i.MX6SX and i.MX7S/D have two more IRQs than i.MX6Q, one is IRQ_LOW and the other is IRQ_PANIC,
+-  when temperature is below than low threshold, IRQ_LOW will be triggered, when temperature
+-  is higher than panic threshold, system will auto reboot by SRC module.
+-- fsl,tempmon : phandle pointer to system controller that contains TEMPMON
+-  control registers, e.g. ANATOP on imx6q.
+-- nvmem-cells: A phandle to the calibration cells provided by ocotp.
+-- nvmem-cell-names: Should be "calib", "temp_grade".
+-
+-Deprecated properties:
+-- fsl,tempmon-data : phandle pointer to fuse controller that contains TEMPMON
+-  calibration data, e.g. OCOTP on imx6q.  The details about calibration data
+-  can be found in SoC Reference Manual.
+-
+-Direct access to OCOTP via fsl,tempmon-data is incorrect on some newer chips
+-because it does not handle OCOTP clock requirements.
+-
+-Optional properties:
+-- clocks : thermal sensor's clock source.
+-
+-Example:
+-ocotp: ocotp@21bc000 {
+-	#address-cells = <1>;
+-	#size-cells = <1>;
+-	compatible = "fsl,imx6sx-ocotp", "syscon";
+-	reg = <0x021bc000 0x4000>;
+-	clocks = <&clks IMX6SX_CLK_OCOTP>;
+-
+-	tempmon_calib: calib@38 {
+-		reg = <0x38 4>;
+-	};
+-
+-	tempmon_temp_grade: temp-grade@20 {
+-		reg = <0x20 4>;
+-	};
+-};
+-
+-tempmon: tempmon {
+-	compatible = "fsl,imx6sx-tempmon", "fsl,imx6q-tempmon";
+-	interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
+-	fsl,tempmon = <&anatop>;
+-	nvmem-cells = <&tempmon_calib>, <&tempmon_temp_grade>;
+-	nvmem-cell-names = "calib", "temp_grade";
+-	clocks = <&clks IMX6SX_CLK_PLL3_USB_OTG>;
+-};
+-
+-Legacy method (Deprecated):
+-tempmon {
+-	compatible = "fsl,imx6q-tempmon";
+-	fsl,tempmon = <&anatop>;
+-	fsl,tempmon-data = <&ocotp>;
+-	clocks = <&clks 172>;
+-};
+diff --git a/Documentation/devicetree/bindings/thermal/imx-thermal.yaml b/Documentation/devicetree/bindings/thermal/imx-thermal.yaml
+new file mode 100644
+index 0000000..193c7e5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/imx-thermal.yaml
+@@ -0,0 +1,96 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/imx-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP i.MX Thermal Binding
++
++maintainers:
++  - Anson Huang <Anson.Huang@nxp.com>
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - fsl,imx6q-tempmon
++              - fsl,imx6sx-tempmon
++              - fsl,imx7d-tempmon
++
++  interrupts:
++    description: |
++      The interrupt output of the controller, the IRQ will be triggered
++      when temperature is higher than high threshold.
++    maxItems: 1
++
++  nvmem-cells:
++    description: |
++      Phandle to the calibration cells provided by ocotp for calibration
++      data and temperature grade.
++    maxItems: 2
++
++  nvmem-cell-names:
++    maxItems: 2
++    items:
++      - const: calib
++      - const: temp_grade
++
++  fsl,tempmon:
++    $ref: '/schemas/types.yaml#/definitions/phandle'
++    description: |
++      Phandle pointer to system controller that contains TEMPMON control
++      registers, e.g. ANATOP on imx6q.
++
++  fsl,tempmon-data:
++    $ref: '/schemas/types.yaml#/definitions/phandle'
++    description: |
++      Deprecated property, phandle pointer to fuse controller that contains
++      TEMPMON calibration data, e.g. OCOTP on imx6q. The details about
++      calibration data can be found in SoC Reference Manual.
++
++  clocks:
++    description: |
++      Thermal sensor's clock source, it is optional.
++    maxItems: 1
++
++required:
++  - compatible
++  - interrupts
++  - fsl,tempmon
++  - nvmem-cells
++  - nvmem-cell-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/imx6sx-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    ocotp: ocotp@21bc000 {
++         #address-cells = <1>;
++         #size-cells = <1>;
++         compatible = "fsl,imx6sx-ocotp", "syscon";
++         reg = <0x021bc000 0x4000>;
++         clocks = <&clks IMX6SX_CLK_OCOTP>;
++
++         tempmon_calib: calib@38 {
++             reg = <0x38 4>;
++         };
++
++         tempmon_temp_grade: temp-grade@20 {
++             reg = <0x20 4>;
++         };
++    };
++
++    tempmon: tempmon {
++         compatible = "fsl,imx6sx-tempmon";
++         interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
++         fsl,tempmon = <&anatop>;
++         nvmem-cells = <&tempmon_calib>, <&tempmon_temp_grade>;
++         nvmem-cell-names = "calib", "temp_grade";
++         clocks = <&clks IMX6SX_CLK_PLL3_USB_OTG>;
++    };
++
++...
+-- 
+2.7.4
 
