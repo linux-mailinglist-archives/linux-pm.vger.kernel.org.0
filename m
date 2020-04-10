@@ -2,147 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A4D1A4509
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Apr 2020 12:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95C51A4582
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Apr 2020 13:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725897AbgDJKOL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Apr 2020 06:14:11 -0400
-Received: from mga02.intel.com ([134.134.136.20]:35404 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725893AbgDJKOL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 10 Apr 2020 06:14:11 -0400
-IronPort-SDR: lEAAHwxNYLaVaWCPPSMq63WM/1ghUIAhBnoOJFhfyHCPMklvbFQ+311Ioh9yqqWLcHEIbOaQTa
- +X/iECOtrvgg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2020 03:14:10 -0700
-IronPort-SDR: znwmLGqGF7fBrxbjOQHuDL9fIjHD9nBDwbGOgyLlWixbox6ihlAJtbZRPT8E9bvFR1EixwvFk2
- MGfV9tIeJbrA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,366,1580803200"; 
-   d="scan'208";a="255435504"
-Received: from qjbian-mobl.amr.corp.intel.com ([10.255.31.146])
-  by orsmga006.jf.intel.com with ESMTP; 10 Apr 2020 03:14:09 -0700
-Message-ID: <8e4c2825d71e5bf5602b92937a49c04187c68e17.camel@intel.com>
-Subject: Re: [PATCH 1/2] thermal: core: Move thermal_cdev_update next to
- updated=false
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, amit.kucheria@verdurent.com,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-Date:   Fri, 10 Apr 2020 18:14:08 +0800
-In-Reply-To: <20200409151515.6607-1-daniel.lezcano@linaro.org>
-References: <20200409151515.6607-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1725993AbgDJLMo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Apr 2020 07:12:44 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:44013 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725897AbgDJLMo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Apr 2020 07:12:44 -0400
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D0C895808B7;
+        Fri, 10 Apr 2020 07:12:42 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute7.internal (MEProxy); Fri, 10 Apr 2020 07:12:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=luisgerhorst.de;
+         h=references:from:to:cc:subject:in-reply-to:date:message-id
+        :mime-version:content-type; s=mesmtp; bh=1XCTRzA4r6t+aW/YmemVZF7
+        K9mMd/HGoO3EIq2+dA90=; b=qIrPPVsbiwtiPCG914yDDwQbRVGekh653wn5tFg
+        3OXdht3GDey5g1KxO9bQPKJBaZjXrLahuzs7uwHaDn1hha4c8tqr9U6h/enmMfmq
+        axrVJWAkDeXqxnz5S/s0WX+23JNsmfvxG76MaCu5yoZ/10otB8aw6fJY8I0RJhAL
+        UKCE=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=1XCTRz
+        A4r6t+aW/YmemVZF7K9mMd/HGoO3EIq2+dA90=; b=W9Z+DKjhWSrSdyvjUXQWV0
+        Ht2PBs1Ju8IyieMn6zSkkE0Ul7b4auQXJoekqKJj2FzKU9A+TGuBoFK1SeMMbtzb
+        8oMu2rI+B4LzmSkiLSgoieRYIg+B8B0W2HubEz8VgtrlMAXtwwV8LwPnsaNl7ENf
+        Hnjisw0YwgMkCsP9gyq9jSxPZWrZ9Ts2HPNybosCeGMKZtC5AH9R3c92CP8iSrSH
+        gHS5Yf6zBUWVLj0ZbW7UWf0jF0G8RyBbIZtZRddWT5nYI7Y5ITHyhHNZMoDcYH6U
+        Tdhl71Pqk4drxYS2/9BHw9I+ui37vmZMPZYDw+naFkx8jWWMgcUvkw4fFivbpqgw
+        ==
+X-ME-Sender: <xms:o1SQXtej93cVqf0lMq7BjSBnI80YT6WTnh_bM3bafOgyIiQWYNJntw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrvddvgdefjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpehffgfhvffujgffkfggtgesthdtredttdertdenucfhrhhomhepnfhuihhsucfi
+    vghrhhhorhhsthcuoehlihhnuhigqdhkvghrnhgvlheslhhuihhsghgvrhhhohhrshhtrd
+    guvgeqnecukfhppeelvddruddujedrudefiedrkeeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomheplhhinhhugidqkhgvrhhnvghlsehluhhish
+    hgvghrhhhorhhsthdruggv
+X-ME-Proxy: <xmx:o1SQXsJqEEpdAVlBBNOrPjECiypCvsioWJAkkkqB7OV1k6G1cJ037Q>
+    <xmx:o1SQXm3GbM5jjQeq5Fw3vlWvqURZgDtwUCKygupmqpZPjSWL5fF5KQ>
+    <xmx:o1SQXlY0lL6nr4XO4VhiScv6QkQfeTRa26Q3bZiNQCcnAlci-1NBaA>
+    <xmx:qlSQXgnwI9ZSlZ3EtewA6ucmkah78uuNHQkFyCGi-HgqJe16QWXm_g>
+Received: from luis-debian.fastmail.com (unknown [92.117.136.88])
+        by mail.messagingengine.com (Postfix) with ESMTPA id DA33E3280060;
+        Fri, 10 Apr 2020 07:12:29 -0400 (EDT)
+References: <20200410084210.24932-1-lukasz.luba@arm.com> <20200410084210.24932-5-lukasz.luba@arm.com>
+User-agent: mu4e 1.0; emacs 26.1
+From:   Luis Gerhorst <linux-kernel@luisgerhorst.de>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com, Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
+        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, qperret@google.com, bsegall@google.com,
+        mgorman@suse.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, kernel@pengutronix.de, khilman@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
+        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
+        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
+Subject: Re: [PATCH v6 04/10] PM / EM: add support for other devices than CPUs in Energy Model
+In-reply-to: <20200410084210.24932-5-lukasz.luba@arm.com>
+Date:   Fri, 10 Apr 2020 13:12:28 +0200
+Message-ID: <87ftdboaqr.fsf@luis-debian.luis-debian-domain>
+MIME-Version: 1.0
+Content-Type: text/plain; format=flowed
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Daniel,
 
-On Thu, 2020-04-09 at 17:15 +0200, Daniel Lezcano wrote:
-> The call to the thermal_cdev_update() function is done after browsing
-> the thermal instances which sets the updated flag by browsing them
-> again.
-> 
-> Instead of doing this, let's move the call right after setting the
-> cooling device 'updated' flag as it is done in the other governors.
+Lukasz Luba writes:
 
-The reason we do this in two steps is that we want to avoid redundant
-cooling device state changes.
+> +/**
+> + * em_dev_unregister_perf_domain() - Unregister Energy Model 
+> (EM) for a device
+> + * @dev		: Device for which the EM is registered
+> + *
+> + * Try to unregister the EM for the specified device (it checks 
+> current
+> + * reference counter). The EM for CPUs will not be freed.
+> + */
+> +void em_dev_unregister_perf_domain(struct device *dev)
+> +{
+> +	struct em_device *em_dev, *tmp;
+> +
+> +	if (IS_ERR_OR_NULL(dev))
+> +		return;
+> +
+> +	/* We don't support freeing CPU structures in hotplug */
+> +	if (_is_cpu_device(dev)) {
+> +		dev_dbg_once(dev, "EM: the structures are not going to be 
+> removed\n");
+> +		return;
+> +	}
+> +
+> +	mutex_lock(&em_pd_mutex);
+> +
+> +	if (list_empty(&em_pd_dev_list)) {
+> +		mutex_unlock(&em_pd_mutex);
+> +		return;
+> +	}
+> +
+> +	list_for_each_entry_safe(em_dev, tmp, &em_pd_dev_list, 
+> em_dev_list) {
+> +		if (em_dev->dev == dev) {
+> +			kref_put(&em_dev->kref, _em_release);
+> +			break;
+> +		}
+> +	}
+> +
+> +	mutex_unlock(&em_pd_mutex);
+> +}
+> +EXPORT_SYMBOL_GPL(em_dev_unregister_perf_domain);
 
-Further more, I think it is better to move the thermal_cdev_update out
-of .throllte() callback, to thermal_zone_device_update(). So that we do
-not need to update the cooling device for each trip point.
+Ok, so em_dev_unregister_perf_domain() does not support the CPU 
+device
+and a subsequent em_register_perf_domain() will fail with EEXIST.
 
-is there any specific reason we need to do thermal_cdev_update() for
-every potential change?
-
-thanks,
-rui
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/gov_bang_bang.c | 10 +---------
->  drivers/thermal/step_wise.c     | 10 +---------
->  2 files changed, 2 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/thermal/gov_bang_bang.c
-> b/drivers/thermal/gov_bang_bang.c
-> index 991a1c54296d..c292a69845bb 100644
-> --- a/drivers/thermal/gov_bang_bang.c
-> +++ b/drivers/thermal/gov_bang_bang.c
-> @@ -64,6 +64,7 @@ static void thermal_zone_trip_update(struct
-> thermal_zone_device *tz, int trip)
->  		mutex_lock(&instance->cdev->lock);
->  		instance->cdev->updated = false; /* cdev needs update
-> */
->  		mutex_unlock(&instance->cdev->lock);
-> +		thermal_cdev_update(instance->cdev);
->  	}
->  
->  	mutex_unlock(&tz->lock);
-> @@ -98,17 +99,8 @@ static void thermal_zone_trip_update(struct
-> thermal_zone_device *tz, int trip)
->   */
->  static int bang_bang_control(struct thermal_zone_device *tz, int
-> trip)
->  {
-> -	struct thermal_instance *instance;
-> -
->  	thermal_zone_trip_update(tz, trip);
->  
-> -	mutex_lock(&tz->lock);
-> -
-> -	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
-> -		thermal_cdev_update(instance->cdev);
-> -
-> -	mutex_unlock(&tz->lock);
-> -
->  	return 0;
->  }
->  
-> diff --git a/drivers/thermal/step_wise.c
-> b/drivers/thermal/step_wise.c
-> index 2ae7198d3067..298eedac0293 100644
-> --- a/drivers/thermal/step_wise.c
-> +++ b/drivers/thermal/step_wise.c
-> @@ -167,6 +167,7 @@ static void thermal_zone_trip_update(struct
-> thermal_zone_device *tz, int trip)
->  		mutex_lock(&instance->cdev->lock);
->  		instance->cdev->updated = false; /* cdev needs update
-> */
->  		mutex_unlock(&instance->cdev->lock);
-> +		thermal_cdev_update(instance->cdev);
->  	}
->  
->  	mutex_unlock(&tz->lock);
-> @@ -185,20 +186,11 @@ static void thermal_zone_trip_update(struct
-> thermal_zone_device *tz, int trip)
->   */
->  static int step_wise_throttle(struct thermal_zone_device *tz, int
-> trip)
->  {
-> -	struct thermal_instance *instance;
-> -
->  	thermal_zone_trip_update(tz, trip);
->  
->  	if (tz->forced_passive)
->  		thermal_zone_trip_update(tz, THERMAL_TRIPS_NONE);
->  
-> -	mutex_lock(&tz->lock);
-> -
-> -	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
-> -		thermal_cdev_update(instance->cdev);
-> -
-> -	mutex_unlock(&tz->lock);
-> -
->  	return 0;
->  }
->  
-
+Is there a way to unregister/change the CPU's energy model during
+runtime without restarting the whole system?
