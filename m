@@ -2,113 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC6D1A4D89
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Apr 2020 04:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB181A4D8F
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Apr 2020 04:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbgDKClO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Apr 2020 22:41:14 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:54033 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726683AbgDKClO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Apr 2020 22:41:14 -0400
-Received: (qmail 1139 invoked by uid 500); 10 Apr 2020 22:41:14 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 10 Apr 2020 22:41:14 -0400
-Date:   Fri, 10 Apr 2020 22:41:14 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Qais Yousef <qais.yousef@arm.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-In-Reply-To: <3100919.FSIbSBgRSq@kreacher>
-Message-ID: <Pine.LNX.4.44L0.2004102231270.30859-100000@netrider.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1726657AbgDKCzo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Apr 2020 22:55:44 -0400
+Received: from mga17.intel.com ([192.55.52.151]:33534 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726654AbgDKCzo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 10 Apr 2020 22:55:44 -0400
+IronPort-SDR: NBVfcLPGYFaba3r/IheqLOGZJ4PgW9k+3MteTSE4F6qXUmMnqaF3KTKkbYkFiqondOQzsbOFa2
+ /HBUdDmxQ0IA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2020 19:55:44 -0700
+IronPort-SDR: RYDMMs5NiZmiBSdJjKPbnh/69/JnJglUjZ8FSGkRM9/sDUkp7MmkdvJGPMgU7pJjFCtTMl3h6q
+ kN+LS6w4P/YA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,368,1580803200"; 
+   d="scan'208";a="452580329"
+Received: from lzhao24-mobl.ccr.corp.intel.com ([10.255.29.254])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Apr 2020 19:55:42 -0700
+Message-ID: <a91cf79e0ee7da4e0ac108168eceb5c63c78f8e1.camel@intel.com>
+Subject: Re: [PATCH 1/2] thermal: core: Move thermal_cdev_update next to
+ updated=false
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, amit.kucheria@verdurent.com,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+Date:   Sat, 11 Apr 2020 10:55:42 +0800
+In-Reply-To: <0c9796c5-95fe-0349-d128-393da9b344d6@linaro.org>
+References: <20200409151515.6607-1-daniel.lezcano@linaro.org>
+         <8e4c2825d71e5bf5602b92937a49c04187c68e17.camel@intel.com>
+         <0c9796c5-95fe-0349-d128-393da9b344d6@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Okay, this is my attempt to summarize what we have been discussing.  
-But first: There is a dev_pm_skip_resume() helper routine which
-subsystems can call to see whether resume-side _early and _noirq driver
-callbacks should be skipped.  But there is no corresponding
-dev_pm_skip_suspend() helper routine.  Let's add one, or rename
-dev_pm_smart_suspend_and_suspended() to dev_pm_skip_suspend().
+On Fri, 2020-04-10 at 13:26 +0200, Daniel Lezcano wrote:
+> On 10/04/2020 12:14, Zhang Rui wrote:
+> > Hi, Daniel,
+> > 
+> > On Thu, 2020-04-09 at 17:15 +0200, Daniel Lezcano wrote:
+> > > The call to the thermal_cdev_update() function is done after
+> > > browsing
+> > > the thermal instances which sets the updated flag by browsing
+> > > them
+> > > again.
+> > > 
+> > > Instead of doing this, let's move the call right after setting
+> > > the
+> > > cooling device 'updated' flag as it is done in the other
+> > > governors.
+> > 
+> > The reason we do this in two steps is that we want to avoid
+> > redundant
+> > cooling device state changes.
+> > 
+> > Further more, I think it is better to move the thermal_cdev_update
+> > out
+> > of .throllte() callback, to thermal_zone_device_update(). So that
+> > we do
+> > not need to update the cooling device for each trip point.
+> > 
+> > is there any specific reason we need to do thermal_cdev_update()
+> > for
+> > every potential change?
+> 
+> I agree we can go further and move the cooling device update in the
+> thermal_zone_device_update() by letting the throttle callback let us
+> know an update is needed with the return value.
+> 
+> Makes sense to provide more changes on top of those two patches ?
 
-Given that, here's my understanding of what should happen.  (I'm
-assuming the direct_complete mechanism is not being used.)  This tries
-to describe what we _want_ to happen, which is not always the same as
-what the current code actually _does_.
+Hmmm, without the update flag, we can only updating all the cooling
+devices blindly. And this is time consuming for some cooling devices.
 
-	During the suspend side, for each of the
-	{suspend,freeze,poweroff}_{late,noirq} phases: If
-	dev_pm_skip_suspend() returns true then the subsystem should
-	not invoke the driver's callback, and if there is no subsystem
-	callback then the core will not invoke the driver's callback.
+thanks,
+rui
 
-	During the resume side, for each of the
-	{resume,thaw,restore}_{early,noirq} phases: If
-	dev_pm_skip_resume() returns true then the subsystem should
-	not invoke the driver's callback, and if there is no subsystem
-	callback then the core will not invoke the driver's callback.
-
-	dev_pm_skip_suspend() will return "true" if SMART_SUSPEND is
-	set and the device's runtime status is "suspended".
-
-	power.must_resume gets set following the suspend-side _noirq
-	phase if power.usage_count > 1 (indicating the device was
-	in active use before the start of the sleep transition) or
-	power.must_resume is set for any of the device's dependents.
-
-	dev_pm_skip_resume() will return "false" if the current
-	transition is RESTORE or power.must_resume is set.  Otherwise:
-	It will return true if the current transition is THAW,
-	SMART_SUSPEND is set, and the device's runtime status is
-	"suspended".  It will return "true" if the current transition is
-	RESUME, SMART_SUSPEND and MAY_SKIP_RESUME are both set, and
-	the device's runtime status is "suspended".  For a RESUME
-	transition, it will also return "true" if MAY_SKIP_RESUME and
-	power.may_skip_resume are both set, regardless of
-	SMART_SUSPEND or the current runtime status.
-
-	At the start of the {resume,thaw,restore}_noirq phase, if
-	dev_pm_skip_resume() returns true then the core will set the
-	runtime status to "suspended".  Otherwise it will set the
-	runtime status to "active".  If this is not what the subsystem
-	or driver wants, it must update the runtime status itself.
-
-Comments and differences with respect to the code in your pm-sleep-core
-branch:
-
-	I'm not sure whether we should specify other conditions for
-	setting power.must_resume.
-
-	dev_pm_skip_resume() doesn't compute the value described
-	above.  I'm pretty sure the existing code is wrong.
-
-	device_resume_noirq() checks
-	dev_pm_smart_suspend_and_suspended() before setting the
-	runtime PM status to "active", contrary to the text above.
-	The difference shows up in the case where SMART_SUSPEND is
-	clear but the runtime PM status is "suspended".  Don't we want
-	to set the status to "active" in this case?  Or is there some 
-	need to accomodate legacy drivers here?  In any case, wouldn't
-	it be good enough to check just the SMART_SUSPEND flag?
-
-	__device_suspend_late() sets power.may_skip_resume, contrary
-	to the comment in include/linux/pm.h: That flag is supposed to
-	be set by subsystems, not the core.
-
-	I'm not at all sure that this algorithm won't run into trouble
-	at some point when it tries to set a device's runtime status
-	to "active" but the parent's status is set to "suspended".
-	And I'm not sure this problem can be fixed by adjusting
-	power.must_resume.
-
-Alan Stern
+> 
+> > > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > > ---
+> > >  drivers/thermal/gov_bang_bang.c | 10 +---------
+> > >  drivers/thermal/step_wise.c     | 10 +---------
+> > >  2 files changed, 2 insertions(+), 18 deletions(-)
+> > > 
+> > > diff --git a/drivers/thermal/gov_bang_bang.c
+> > > b/drivers/thermal/gov_bang_bang.c
+> > > index 991a1c54296d..c292a69845bb 100644
+> > > --- a/drivers/thermal/gov_bang_bang.c
+> > > +++ b/drivers/thermal/gov_bang_bang.c
+> > > @@ -64,6 +64,7 @@ static void thermal_zone_trip_update(struct
+> > > thermal_zone_device *tz, int trip)
+> > >  		mutex_lock(&instance->cdev->lock);
+> > >  		instance->cdev->updated = false; /* cdev needs update
+> > > */
+> > >  		mutex_unlock(&instance->cdev->lock);
+> > > +		thermal_cdev_update(instance->cdev);
+> > >  	}
+> > >  
+> > >  	mutex_unlock(&tz->lock);
+> > > @@ -98,17 +99,8 @@ static void thermal_zone_trip_update(struct
+> > > thermal_zone_device *tz, int trip)
+> > >   */
+> > >  static int bang_bang_control(struct thermal_zone_device *tz, int
+> > > trip)
+> > >  {
+> > > -	struct thermal_instance *instance;
+> > > -
+> > >  	thermal_zone_trip_update(tz, trip);
+> > >  
+> > > -	mutex_lock(&tz->lock);
+> > > -
+> > > -	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+> > > -		thermal_cdev_update(instance->cdev);
+> > > -
+> > > -	mutex_unlock(&tz->lock);
+> > > -
+> > >  	return 0;
+> > >  }
+> > >  
+> > > diff --git a/drivers/thermal/step_wise.c
+> > > b/drivers/thermal/step_wise.c
+> > > index 2ae7198d3067..298eedac0293 100644
+> > > --- a/drivers/thermal/step_wise.c
+> > > +++ b/drivers/thermal/step_wise.c
+> > > @@ -167,6 +167,7 @@ static void thermal_zone_trip_update(struct
+> > > thermal_zone_device *tz, int trip)
+> > >  		mutex_lock(&instance->cdev->lock);
+> > >  		instance->cdev->updated = false; /* cdev needs update
+> > > */
+> > >  		mutex_unlock(&instance->cdev->lock);
+> > > +		thermal_cdev_update(instance->cdev);
+> > >  	}
+> > >  
+> > >  	mutex_unlock(&tz->lock);
+> > > @@ -185,20 +186,11 @@ static void thermal_zone_trip_update(struct
+> > > thermal_zone_device *tz, int trip)
+> > >   */
+> > >  static int step_wise_throttle(struct thermal_zone_device *tz,
+> > > int
+> > > trip)
+> > >  {
+> > > -	struct thermal_instance *instance;
+> > > -
+> > >  	thermal_zone_trip_update(tz, trip);
+> > >  
+> > >  	if (tz->forced_passive)
+> > >  		thermal_zone_trip_update(tz, THERMAL_TRIPS_NONE);
+> > >  
+> > > -	mutex_lock(&tz->lock);
+> > > -
+> > > -	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+> > > -		thermal_cdev_update(instance->cdev);
+> > > -
+> > > -	mutex_unlock(&tz->lock);
+> > > -
+> > >  	return 0;
+> > >  }
+> > >  
+> 
+> 
 
