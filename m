@@ -2,107 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B591A4CDA
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Apr 2020 02:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC6D1A4D89
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Apr 2020 04:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726898AbgDKAUg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Apr 2020 20:20:36 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53893 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726897AbgDKAUZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Apr 2020 20:20:25 -0400
-Received: by mail-wm1-f68.google.com with SMTP id d77so4066711wmd.3;
-        Fri, 10 Apr 2020 17:20:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TE3sMAOxYDEKsrqGbaQEWcZdkId7UvPKpC1cYAS9Bb4=;
-        b=GUZ+gowPiKiUow4O9M2HabHPSHLL480L/OTu8zEtqyHcAhIJ5hl5HaWjK+P1z0MW/y
-         kNhTwww5jaisDQoxtRveKw1lsq/8NmPm4aPVc7vCdQdQo8YaYvG1V7cT6RoeGQu4unKy
-         gOoayXt3b1qctBo110K+40gtZzVE9ZHprMSHbm9+HnywZvpsDK/vy1cWVccGxMP7r6oO
-         FzjyTol44+KxQGYv2cIMxl3BlfugfRF6ydXlSQLfmWfVgBhTU2wHiDic1+1Ly91BgonE
-         KPK6WcY5wiMuPYnXWsyJ6CtSG0UjB8WXGIZsjs/V/73bN+lbsvmGJ477sN/619XPWLXN
-         2s8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TE3sMAOxYDEKsrqGbaQEWcZdkId7UvPKpC1cYAS9Bb4=;
-        b=F9Ctm4YxOMjMlsGmu3/E0qviiuIbDHXCSCZTcXbLSXqJM2MO8o2MIMv3Jw2Y9llDqN
-         dg8KtRDRUBCjCIWLKIDSSyzHz79VigvS0Jqr5onAyHeeh+CdneQV8GaX2xoqXpKvmc+W
-         z7w/fa8kWvZRvWM2DW56nTnweBoliO0x4aB8WNMtNGQi4dMZQu5ti06M+PxxebX3YP2t
-         mJEwcB7aGirzUEcybsS0UwPbzX6K07tgAwbATmuuIImuVuCFmO0W/I6lsuBRiawl7q91
-         2hI84/aN0mD0BLwfBVk5PiNo92UNtYgwCxld9SOljdAUNz5ugSr538qDbTq5jXMALNWa
-         8fvw==
-X-Gm-Message-State: AGi0PuYg/E+IZkrj4Fcx8YsgSHd4BNNUXtaBrER3Vs2i6u4OQWlU97EL
-        DjOAbhpNLpwctxq3Ov7+SQ/mw0X+xkjA
-X-Google-Smtp-Source: APiQypLmI3kOoMegOugkPKgJfR0jWXdEoWwlIgoTtC1TiO5weHkh3/vOlXbmIHhWPaov2aHfK1w5Jw==
-X-Received: by 2002:a7b:cd8c:: with SMTP id y12mr7877443wmj.106.1586564423558;
-        Fri, 10 Apr 2020 17:20:23 -0700 (PDT)
-Received: from ninjahost.lan (host-2-102-14-153.as13285.net. [2.102.14.153])
-        by smtp.gmail.com with ESMTPSA id b191sm5091594wmd.39.2020.04.10.17.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2020 17:20:23 -0700 (PDT)
-From:   Jules Irenge <jbi.octave@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     boqun.feng@gmail.com, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE)
-Subject: [PATCH 9/9] power: wakeup: Add missing annotation for wakeup_sources_read_lock() and wakeup_sources_read_unlock()
-Date:   Sat, 11 Apr 2020 01:19:33 +0100
-Message-Id: <20200411001933.10072-10-jbi.octave@gmail.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200411001933.10072-1-jbi.octave@gmail.com>
-References: <0/9>
- <20200411001933.10072-1-jbi.octave@gmail.com>
+        id S1726690AbgDKClO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Apr 2020 22:41:14 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:54033 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726683AbgDKClO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Apr 2020 22:41:14 -0400
+Received: (qmail 1139 invoked by uid 500); 10 Apr 2020 22:41:14 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 10 Apr 2020 22:41:14 -0400
+Date:   Fri, 10 Apr 2020 22:41:14 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+In-Reply-To: <3100919.FSIbSBgRSq@kreacher>
+Message-ID: <Pine.LNX.4.44L0.2004102231270.30859-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sparse reports warnings at wakeup_sources_read_lock()
-	and wakeup_sources_read_unlock()
+Okay, this is my attempt to summarize what we have been discussing.  
+But first: There is a dev_pm_skip_resume() helper routine which
+subsystems can call to see whether resume-side _early and _noirq driver
+callbacks should be skipped.  But there is no corresponding
+dev_pm_skip_suspend() helper routine.  Let's add one, or rename
+dev_pm_smart_suspend_and_suspended() to dev_pm_skip_suspend().
 
-warning: context imbalance in wakeup_sources_read_lock()
-	- wrong count at exit
-context imbalance in wakeup_sources_read_unlock()
-	- unexpected unlock
+Given that, here's my understanding of what should happen.  (I'm
+assuming the direct_complete mechanism is not being used.)  This tries
+to describe what we _want_ to happen, which is not always the same as
+what the current code actually _does_.
 
-The root cause is the missing annotation at
-wakeup_sources_read_lock() and wakeup_sources_read_unlock()
+	During the suspend side, for each of the
+	{suspend,freeze,poweroff}_{late,noirq} phases: If
+	dev_pm_skip_suspend() returns true then the subsystem should
+	not invoke the driver's callback, and if there is no subsystem
+	callback then the core will not invoke the driver's callback.
 
-Add the missing  __acquires(&wakeup_srcu) annotation
-Add the missing __releases(&wakeup_srcu) annotation
+	During the resume side, for each of the
+	{resume,thaw,restore}_{early,noirq} phases: If
+	dev_pm_skip_resume() returns true then the subsystem should
+	not invoke the driver's callback, and if there is no subsystem
+	callback then the core will not invoke the driver's callback.
 
-Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
----
- drivers/base/power/wakeup.c | 2 ++
- 1 file changed, 2 insertions(+)
+	dev_pm_skip_suspend() will return "true" if SMART_SUSPEND is
+	set and the device's runtime status is "suspended".
 
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 41ce086d8f57..753e9a46e04e 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -254,6 +254,7 @@ EXPORT_SYMBOL_GPL(wakeup_source_unregister);
-  * This index must be passed to the matching wakeup_sources_read_unlock().
-  */
- int wakeup_sources_read_lock(void)
-+	__acquires(&wakeup_srcu)
- {
- 	return srcu_read_lock(&wakeup_srcu);
- }
-@@ -264,6 +265,7 @@ EXPORT_SYMBOL_GPL(wakeup_sources_read_lock);
-  * @idx: return value from corresponding wakeup_sources_read_lock()
-  */
- void wakeup_sources_read_unlock(int idx)
-+	__releases(&wakeup_srcu)
- {
- 	srcu_read_unlock(&wakeup_srcu, idx);
- }
--- 
-2.24.1
+	power.must_resume gets set following the suspend-side _noirq
+	phase if power.usage_count > 1 (indicating the device was
+	in active use before the start of the sleep transition) or
+	power.must_resume is set for any of the device's dependents.
+
+	dev_pm_skip_resume() will return "false" if the current
+	transition is RESTORE or power.must_resume is set.  Otherwise:
+	It will return true if the current transition is THAW,
+	SMART_SUSPEND is set, and the device's runtime status is
+	"suspended".  It will return "true" if the current transition is
+	RESUME, SMART_SUSPEND and MAY_SKIP_RESUME are both set, and
+	the device's runtime status is "suspended".  For a RESUME
+	transition, it will also return "true" if MAY_SKIP_RESUME and
+	power.may_skip_resume are both set, regardless of
+	SMART_SUSPEND or the current runtime status.
+
+	At the start of the {resume,thaw,restore}_noirq phase, if
+	dev_pm_skip_resume() returns true then the core will set the
+	runtime status to "suspended".  Otherwise it will set the
+	runtime status to "active".  If this is not what the subsystem
+	or driver wants, it must update the runtime status itself.
+
+Comments and differences with respect to the code in your pm-sleep-core
+branch:
+
+	I'm not sure whether we should specify other conditions for
+	setting power.must_resume.
+
+	dev_pm_skip_resume() doesn't compute the value described
+	above.  I'm pretty sure the existing code is wrong.
+
+	device_resume_noirq() checks
+	dev_pm_smart_suspend_and_suspended() before setting the
+	runtime PM status to "active", contrary to the text above.
+	The difference shows up in the case where SMART_SUSPEND is
+	clear but the runtime PM status is "suspended".  Don't we want
+	to set the status to "active" in this case?  Or is there some 
+	need to accomodate legacy drivers here?  In any case, wouldn't
+	it be good enough to check just the SMART_SUSPEND flag?
+
+	__device_suspend_late() sets power.may_skip_resume, contrary
+	to the comment in include/linux/pm.h: That flag is supposed to
+	be set by subsystems, not the core.
+
+	I'm not at all sure that this algorithm won't run into trouble
+	at some point when it tries to set a device's runtime status
+	to "active" but the parent's status is set to "suspended".
+	And I'm not sure this problem can be fixed by adjusting
+	power.must_resume.
+
+Alan Stern
 
