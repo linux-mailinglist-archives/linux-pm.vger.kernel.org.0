@@ -2,136 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A70591A4F4E
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Apr 2020 12:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBB21A52FA
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Apr 2020 18:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbgDKKRH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 Apr 2020 06:17:07 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:36454 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725951AbgDKKRH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Apr 2020 06:17:07 -0400
-Received: by mail-pl1-f194.google.com with SMTP id g2so1514734plo.3;
-        Sat, 11 Apr 2020 03:17:06 -0700 (PDT)
+        id S1726140AbgDKQ52 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Apr 2020 12:57:28 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:42508 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726094AbgDKQ52 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Apr 2020 12:57:28 -0400
+Received: by mail-wr1-f68.google.com with SMTP id j2so5585342wrs.9;
+        Sat, 11 Apr 2020 09:57:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+KhT4Lw+E5hrVuuvNZOtXCA2e1KBZDLsYmSlwMgDSyg=;
-        b=TWEUX3Fl2swRdWz1CPY9/HNUxPMMtmhelCLQ8zPb4wYHGuGI9SpL/HzaYcX16EELqZ
-         BXN0p1OBYoA6HjRK8EbmVcQ1UZ7YnhYSjkdTzBSnSG88f+VjOjHU/r5cB1ZBQA12+vNO
-         UFD4IP8e817V2PQN5efSqYJ6nKR1zEZ7tPW8Zl9koZbPe/2xF89FZYc1/zxm5baDE8kR
-         UsJnvbCyQgDwxGBDIGIj4TCs2IFCUvTzlj4n0H24f4cGsOkd1BVmmc0PR51dMFRuEdEd
-         p1ZbT0tzx+EcKlQWZslSb8Th5r5btoHG5z/Fg7+HD0Ab/ITdri8x2ja6kfGVPsgndwIi
-         JFIw==
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XHtQD/meuXaYe8UaCWq5ou0S7rpgnlSgQuuCrxXrgqE=;
+        b=RWrw26nqS4KT9PlkFPDn2JxIpRqcyPHhXMFaV2xV/LRA5u0k8ivXmdSjtFyCEqZfs/
+         w6d951CQrL1mkIvQKsxH9o9MjSCclbzSWvG8mH72tmFcKpKfRqa3g1YP8QzUIoSPuWRl
+         VfC7wxNrZMh142P0OaR5q4xJ3A8rcTAIzhZSXShlqTSlELXp0V+oV4zQjnrmXwL8gBp7
+         8Iy1gSh8L065we/ErvRTUYKpFeXymglr0A96fJfQmniKcFkQnfRxAr6e07HealZfhgrm
+         H0r7FiZGM1Np9CXQUXmq3rMU4WLM/x6xnx8oh3NXwpxvXewCfyiF5eM6LzfF1sZdS2hU
+         IflA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+KhT4Lw+E5hrVuuvNZOtXCA2e1KBZDLsYmSlwMgDSyg=;
-        b=bwzUHxvckPq+1Ghycx8SnGAooZAWyPvAV8wdncb0QdnHacnHqvKZGZ05AkAfvTt3UX
-         SKoJaiKusU+0KIeixKZDJQseg+hfoKO+v/imkAA1YascDDfKs4O4ySifOJR0aBptziYU
-         lFFeF3LN1VMSe6yG20VRn9JZ6AnpdyRsVFPPa2GbhgLNc7M2iiCD4lxRgliefbKOSSCW
-         mYAAdnrmL0JuU3I2mnlmeVG/1QDeI/vP0k8BUnttuVVePunqKYikZtGLH2goYe/cTUcv
-         KKB3ai1FwkNPO3/++GvMieB3+kBBu6Znx3nkQW3vjgD8YhHGtdJdP9cN1XpxOIXyg6b9
-         jrJw==
-X-Gm-Message-State: AGi0PubRyEezX6gwpzvoyfXf17u0UFOl8x98LnFalGOcjCiW1Cyesvya
-        S5rNZLhn7ngCLjMznFQ/zpqM7wWGd/lHSVLofAg=
-X-Google-Smtp-Source: APiQypKBxqyP2VTpmEejb05I4p492JmmrAy8Kn3YOkmqKWJ44ajFN7cG6Yd4Z7a8ByaUsXFQr/6Fx/zuKiqXXAhbmLo=
-X-Received: by 2002:a17:902:5985:: with SMTP id p5mr4048369pli.262.1586600225472;
- Sat, 11 Apr 2020 03:17:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XHtQD/meuXaYe8UaCWq5ou0S7rpgnlSgQuuCrxXrgqE=;
+        b=B08y4nEzMqW8RnKlM8UrFWHR+2Efmip+ZmFSg5uHWDprshvZdvwOgWEKyRnc0RIFNb
+         WOOTWUy58VrcdkN7vK4XCUQBCYINJa/UTyDg/KsLEgyVgI2Wbi940Tq+3sajt69j2sp/
+         Hge7k7xKdwS6WwDoGQQWczo6hEMJPN1K/SU+4rMzRUs85ElfNywrSgJe78FvxgmJ4DmU
+         igPH4tMPA9r006YdU0vwGEwI5+Nre/2CNY9DNF+fvlSGDVM4mBITfwxQAeRL6zbJ3uIv
+         miyRCtHi+9jVMqtGPyDGZEOIusFD7Po4P0BRlw49gnzCxJ7D+JesJFML4lL7E80DEyZX
+         i4FQ==
+X-Gm-Message-State: AGi0PuZE8iAcFoTH8dq0OzNcCrSqX21NRkH4v9GqGg2nce9mOKCoJOvR
+        F0Rz2AMQJhY83UnjOg5CliE=
+X-Google-Smtp-Source: APiQypI831li2YGPKN/VZUe6xPsQn9Sks+evd0nSUfRQDu+keljhtZbYvFFAXX996GgtLV3jKygrbA==
+X-Received: by 2002:adf:80af:: with SMTP id 44mr10792605wrl.241.1586624246453;
+        Sat, 11 Apr 2020 09:57:26 -0700 (PDT)
+Received: from localhost.localdomain (p200300F13710ED00428D5CFFFEB99DB8.dip0.t-ipconnect.de. [2003:f1:3710:ed00:428d:5cff:feb9:9db8])
+        by smtp.googlemail.com with ESMTPSA id z11sm7781992wrv.58.2020.04.11.09.57.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Apr 2020 09:57:25 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     robh+dt@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Qiang Yu <yuq825@gmail.com>
+Subject: [PATCH v5] dt-bindings: gpu: mali-utgard: Add the #cooling-cells property
+Date:   Sat, 11 Apr 2020 18:57:00 +0200
+Message-Id: <20200411165700.1576314-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-References: <20200410201948.1293-1-sravanhome@gmail.com>
-In-Reply-To: <20200410201948.1293-1-sravanhome@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 11 Apr 2020 13:16:53 +0300
-Message-ID: <CAHp75Vem_Uifke36hZrWJutddJbar1t2CK7qrydg91=Fdu_GzQ@mail.gmail.com>
-Subject: Re: [PATCH v7 0/5] Add battery charger driver support for MP2629
-To:     Saravanan Sekar <sravanhome@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald <pmeerw@pmeerw.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 10, 2020 at 11:19 PM Saravanan Sekar <sravanhome@gmail.com> wrote:
->
-> changes in v7:
->  - fixed probe/remove order, managed and unmanaged call mix use in adc.
->  - Documentation dual license, i2c node with controller address
+The GPU can be one of the big heat sources on a SoC. Allow the
+"#cooling-cells" property to be specified for ARM Mali Utgard GPUs so
+the GPU clock speeds (and voltages) can be reduced to prevent a SoC from
+overheating.
 
-Overall looks good to me, FWIW,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-One question though in reply to patch 4.
-
-> changes in v6:
->  - removed includes types.h in mfd, of_device.h in adc.
->  - fixed review comments parentheses, err check, kstrtouint
->
-> changes in v5:
->  - removed platfrom data stored in mfd and directly accessed mfd struct in child
->  - fixed spell check and capitalization in mfd and documentation
->
-> changes in v4:
->  - fixed capitalization in mfg Kconfig and documentation
->
-> changes in v3:
->  - regmap for children passed using platform data and remove mfd driver info
->    access directly from children
->
-> changes in v2:
->  - removed EXPORT_SYMBOL of register set/get helper
->  - regmap bit filed used, fixed other review comments
->
-> This patch series add support for Battery charger control driver for Monolithic
-> Power System's MP2629 chipset, includes MFD driver for ADC battery & input
-> power supply measurement and battery charger control driver.
->
-> Thanks,
-> Saravanan
->
-> Saravanan Sekar (5):
->   dt-bindings: mfd: add document bindings for mp2629
->   mfd: mp2629: Add support for mps battery charger
->   iio: adc: mp2629: Add support for mp2629 ADC driver
->   power: supply: Add support for mps mp2629 battery charger
->   MAINTAINERS: Add entry for mp2629 Battery Charger driver
->
->  .../devicetree/bindings/mfd/mps,mp2629.yaml   |  60 ++
->  MAINTAINERS                                   |   5 +
->  drivers/iio/adc/Kconfig                       |  10 +
->  drivers/iio/adc/Makefile                      |   1 +
->  drivers/iio/adc/mp2629_adc.c                  | 208 ++++++
->  drivers/mfd/Kconfig                           |   9 +
->  drivers/mfd/Makefile                          |   2 +
->  drivers/mfd/mp2629.c                          |  86 +++
->  drivers/power/supply/Kconfig                  |  10 +
->  drivers/power/supply/Makefile                 |   1 +
->  drivers/power/supply/mp2629_charger.c         | 687 ++++++++++++++++++
->  include/linux/mfd/mp2629.h                    |  28 +
->  12 files changed, 1107 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
->  create mode 100644 drivers/iio/adc/mp2629_adc.c
->  create mode 100644 drivers/mfd/mp2629.c
->  create mode 100644 drivers/power/supply/mp2629_charger.c
->  create mode 100644 include/linux/mfd/mp2629.h
->
-> --
-> 2.17.1
->
+Reviewed-by: Qiang Yu <yuq825@gmail.com>
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
+Changes since v4 at [0]:
+- Added Qiang's Reviewed-by (many thanks)
+- re-send because I missed the devicetree mailing list in v4
 
 
+[0] https://patchwork.kernel.org/patch/11448013/
+
+
+ Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
+index f5401cc8de4a..4869258daadb 100644
+--- a/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
++++ b/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
+@@ -107,6 +107,9 @@ properties:
+ 
+   operating-points-v2: true
+ 
++  "#cooling-cells":
++    const: 2
++
+ required:
+   - compatible
+   - reg
+@@ -164,6 +167,7 @@ examples:
+       clocks = <&ccu 1>, <&ccu 2>;
+       clock-names = "bus", "core";
+       resets = <&ccu 1>;
++      #cooling-cells = <2>;
+     };
+ 
+ ...
 -- 
-With Best Regards,
-Andy Shevchenko
+2.26.0
+
