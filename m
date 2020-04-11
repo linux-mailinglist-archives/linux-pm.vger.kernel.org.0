@@ -2,228 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C45B11A4F21
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Apr 2020 11:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9181A4F4A
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Apr 2020 12:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725934AbgDKJ1d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 Apr 2020 05:27:33 -0400
-Received: from bin-mail-out-06.binero.net ([195.74.38.229]:58065 "EHLO
-        bin-mail-out-06.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725900AbgDKJ1d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Apr 2020 05:27:33 -0400
-X-Halon-ID: 97ac6961-7bd6-11ea-89d0-0050569116f7
-Authorized-sender: niklas@soderlund.pp.se
-Received: from bismarck.berto.se (p4fca2392.dip0.t-ipconnect.de [79.202.35.146])
-        by bin-vsp-out-03.atm.binero.net (Halon) with ESMTPA
-        id 97ac6961-7bd6-11ea-89d0-0050569116f7;
-        Sat, 11 Apr 2020 11:27:02 +0200 (CEST)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v2] dt-bindings: thermal: rcar-gen3-thermal: Convert bindings to json-schema
-Date:   Sat, 11 Apr 2020 11:27:19 +0200
-Message-Id: <20200411092719.1170489-1-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.26.0
+        id S1726162AbgDKKQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Apr 2020 06:16:00 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:44782 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726129AbgDKKQA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Apr 2020 06:16:00 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n13so2062911pgp.11;
+        Sat, 11 Apr 2020 03:16:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=scubK+r04ANvJ29JphyW/4RuEQax/zyXuzaYQPzCFCM=;
+        b=GNaRhQ9nYhkAq0UI9ryUmQD01lO3Pku9cYd7QbjSFYzwMvPG1d+YJDoqUKlnvk7IzZ
+         x9bZUR+RrVUlKk8vCjUP04j5VRT0hMHfzIC6ON9X/AIlPiaDIVEfqZ5Qq3w0gEPSf/Rg
+         ozUvI420hMOdneTBRCsQTvemtvPrxsVUAs3L4rQ0IIuZUQuOGoSoEVL7Me24EuCtlT3Z
+         IeVOO36F2l/VTog/B0fNq7Qekt1MczQ5iuivaNqH0H4r1kJ8YKBXAJbFXL2HL25V8f/z
+         R3EdXokEF+FbRyfJV91LEuhtmU3XyM6Eu4qpfbdb52sKQX6l7YfsyAWsIR5N3CR5vm6p
+         gQXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=scubK+r04ANvJ29JphyW/4RuEQax/zyXuzaYQPzCFCM=;
+        b=RaOd+JlvVina3JNEgoB4cSkoG4oXNIzRdNKmvXJJu8wXkmWViIPclijBhyQKtkbmEZ
+         AEBPa7NWo3LB+85iyF0DQyHJu2PBkUPwOPd3lRnR0iMhz+jZd8tw2pMws38ls+PIG1uL
+         Q3umwHpScao4flAJGKHzQbvWmiloBXvgjiLyOn6byfFdEr9XJvz2WnAKnyYZotAvG/qe
+         CW+Yx1E2U+IUE3ovwBJjzeTxGD/Cs6yj/4GfH2pUGRx17mAxCS1pIYEASasJg30PUe95
+         B0vd+XCrlB234J0ptgOyKdsTgnVEtBblzGsDy1vKf9QTiBVxMBmISZVspt1/cmiIvKFd
+         UvUQ==
+X-Gm-Message-State: AGi0PuZ+RiGKYAaltPmg96AFjfPiSckPxDadIesxzB8Aj07n76N1zR8x
+        SSJaqG+Bztjyxua9cFhD1c4pAslkKK6JgSZ/t20=
+X-Google-Smtp-Source: APiQypLM96wHbtB2AIkNdcMbN+kWGkC6xP7eQasEi3VO1Wybh6tYHb/ULm6Eu2U8rQX6Ofw0T/+J4sqqH+vz/vQFac8=
+X-Received: by 2002:aa7:9097:: with SMTP id i23mr9016213pfa.170.1586600159486;
+ Sat, 11 Apr 2020 03:15:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20200410201948.1293-1-sravanhome@gmail.com> <20200410201948.1293-5-sravanhome@gmail.com>
+In-Reply-To: <20200410201948.1293-5-sravanhome@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 11 Apr 2020 13:15:47 +0300
+Message-ID: <CAHp75Vc2Gf_=wWKdH2rgEhGTb0HmZkbVeUYx2hpdKE0P6Ru7FA@mail.gmail.com>
+Subject: Re: [PATCH v7 4/5] power: supply: Add support for mps mp2629 battery charger
+To:     Saravanan Sekar <sravanhome@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald <pmeerw@pmeerw.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert Renesas R-Car Gen3 Thermal bindings documentation to
-json-schema.
+On Fri, Apr 10, 2020 at 11:20 PM Saravanan Sekar <sravanhome@gmail.com> wrote:
+>
+> The mp2629 provides switching-mode battery charge management for
+> single-cell Li-ion or Li-polymer battery. Driver supports the
+> access/control input source and battery charging parameters.
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
-* Changes since v1
-- Improved on reg and interrupt descriptions with the use of 'items:'
-- Improved the examples inside the yaml file
-- Added compatibility value renesas,r8a77961-thermal for R-Car M3-W+
-  which was merged in the text binding description.
----
- .../bindings/thermal/rcar-gen3-thermal.txt    | 60 -----------
- .../bindings/thermal/rcar-gen3-thermal.yaml   | 99 +++++++++++++++++++
- 2 files changed, 99 insertions(+), 60 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.txt
- create mode 100644 Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+...
 
-diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.txt b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.txt
-deleted file mode 100644
-index 2993fa720195308f..0000000000000000
---- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.txt
-+++ /dev/null
-@@ -1,60 +0,0 @@
--* DT bindings for Renesas R-Car Gen3 Thermal Sensor driver
--
--On R-Car Gen3 SoCs, the thermal sensor controllers (TSC) control the thermal
--sensors (THS) which are the analog circuits for measuring temperature (Tj)
--inside the LSI.
--
--Required properties:
--- compatible		: "renesas,<soctype>-thermal",
--			  Examples with soctypes are:
--			    - "renesas,r8a774a1-thermal" (RZ/G2M)
--			    - "renesas,r8a774b1-thermal" (RZ/G2N)
--			    - "renesas,r8a7795-thermal" (R-Car H3)
--			    - "renesas,r8a7796-thermal" (R-Car M3-W)
--			    - "renesas,r8a77961-thermal" (R-Car M3-W+)
--			    - "renesas,r8a77965-thermal" (R-Car M3-N)
--			    - "renesas,r8a77980-thermal" (R-Car V3H)
--- reg			: Address ranges of the thermal registers. Each sensor
--			  needs one address range. Sorting must be done in
--			  increasing order according to datasheet, i.e.
--			  TSC1, TSC2, ...
--- clocks		: Must contain a reference to the functional clock.
--- #thermal-sensor-cells : must be <1>.
--
--Optional properties:
--
--- interrupts		: interrupts routed to the TSC (must be 3).
--- power-domain		: Must contain a reference to the power domain. This
--			  property is mandatory if the thermal sensor instance
--			  is part of a controllable power domain.
--
--Example:
--
--	tsc: thermal@e6198000 {
--		compatible = "renesas,r8a7795-thermal";
--		reg = <0 0xe6198000 0 0x100>,
--		      <0 0xe61a0000 0 0x100>,
--		      <0 0xe61a8000 0 0x100>;
--		interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
--			     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 522>;
--		power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
--		#thermal-sensor-cells = <1>;
--	};
--
--	thermal-zones {
--		sensor_thermal1: sensor-thermal1 {
--			polling-delay-passive = <250>;
--			polling-delay = <1000>;
--			thermal-sensors = <&tsc 0>;
--
--			trips {
--				sensor1_crit: sensor1-crit {
--					temperature = <90000>;
--					hysteresis = <2000>;
--					type = "critical";
--				};
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-new file mode 100644
-index 0000000000000000..1fba1b6b89d5f1ce
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-@@ -0,0 +1,99 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+# Copyright (C) 2020 Renesas Electronics Corp.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/rcar-gen3-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas R-Car Gen3 Thermal Sensor
-+
-+description:
-+  On R-Car Gen3 SoCs, the thermal sensor controllers (TSC) control the thermal
-+  sensors (THS) which are the analog circuits for measuring temperature (Tj)
-+  inside the LSI.
-+
-+maintainers:
-+  - Niklas Söderlund <niklas.soderlund@ragnatech.se>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - renesas,r8a774a1-thermal # RZ/G2M
-+      - renesas,r8a774b1-thermal # RZ/G2N
-+      - renesas,r8a7795-thermal  # R-Car H3
-+      - renesas,r8a7796-thermal  # R-Car M3-W
-+      - renesas,r8a77961-thermal # R-Car M3-W+
-+      - renesas,r8a77965-thermal # R-Car M3-N
-+      - renesas,r8a77980-thermal # R-Car V3H
-+  reg:
-+    minItems: 2
-+    maxItems: 3
-+    items:
-+      - description: TSC1 registers
-+      - description: TSC2 registers
-+      - description: TSC3 registers
-+
-+  interrupts:
-+    items:
-+      - description: TEMP1 interrupt
-+      - description: TEMP2 interrupt
-+      - description: TEMP3 interrupt
-+
-+  clocks:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - power-domains
-+  - resets
-+  - "#thermal-sensor-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a7795-sysc.h>
-+
-+    tsc: thermal@e6198000 {
-+            compatible = "renesas,r8a7795-thermal";
-+            reg = <0 0xe6198000 0 0x100>,
-+                  <0 0xe61a0000 0 0x100>,
-+                  <0 0xe61a8000 0 0x100>;
-+            interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&cpg CPG_MOD 522>;
-+            power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+            resets = <&cpg 522>;
-+            #thermal-sensor-cells = <1>;
-+    };
-+
-+    thermal-zones {
-+            sensor_thermal: sensor-thermal {
-+                    polling-delay-passive = <250>;
-+                    polling-delay = <1000>;
-+                    thermal-sensors = <&tsc 0>;
-+
-+                    trips {
-+                            sensor1_crit: sensor1-crit {
-+                                    temperature = <90000>;
-+                                    hysteresis = <2000>;
-+                                    type = "critical";
-+                            };
-+                    };
-+            };
-+    };
+> +static DEVICE_ATTR_RW(batt_impedance_compensation);
+> +
+> +static struct attribute *mp2629_charger_sysfs_attrs[] = {
+> +       &dev_attr_batt_impedance_compensation.attr,
+> +       NULL
+> +};
+> +ATTRIBUTE_GROUPS(mp2629_charger_sysfs);
+
+Did I miss ABI documentation?
+
+
 -- 
-2.26.0
-
+With Best Regards,
+Andy Shevchenko
