@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2745F1A5C24
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Apr 2020 05:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0E41A5C29
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Apr 2020 05:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726708AbgDLD3a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 Apr 2020 23:29:30 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:54974 "EHLO
+        id S1726876AbgDLDaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Apr 2020 23:30:20 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:55030 "EHLO
         vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726798AbgDLD3a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Apr 2020 23:29:30 -0400
+        with ESMTP id S1726798AbgDLDaT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Apr 2020 23:30:19 -0400
 Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id B747520D23;
-        Sun, 12 Apr 2020 03:29:23 +0000 (UTC)
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 074EA20D28;
+        Sun, 12 Apr 2020 03:30:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1586662170; bh=BOc6QgkrNBLeLZl+hvilMEjIegxaLYZEaLH0YSkmRQI=;
+        t=1586662220; bh=n4+06mBFG2E/6pL4l2HWMXmoCzgCWYsl2JbLBTdqk/Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X2NSAqDvYKwfd8rwogqVTj+Je0hAWBgYxpakWNlLoUsDtToRGFZKv/msuqGBGnlLX
-         H1g+Rcbs4Hmlh5Y1nBkP003a7tSdCOYMLbqGZVSAABE5mP91z/GaV+9/mwlMMG6Gri
-         9yIn4aWtn1bo8riNUEDyA3aZxBchuHVGa1vpjX0ztIOBv/Jrfxd/T0fMv3NKM9qpcZ
-         GklkisndpvtsI8aZCgOukbG6762Tv/9axoZHdGZPcrcLfrjUqGJj54pUlllBky/2h/
-         FhSrMUGY4/poOr8QkJYpk/TR9tzM/Lrdc4vSPIa2yqVR/HT0QMdf/9Cd/B+UdHDMAQ
-         GhAHxQ4HFzD6w==
+        b=G6c6rQPj7i8G4NQzr1+RrqfibhJZrKz05vJtbSnHpUi2899+XEDwnBocTlOdWvqav
+         Z5qm4Nv07R3bGOBaBW75RlbHnfToqG74vRz+p48NLsqwQkCbflshXes1diVmo41aDL
+         cC2QbgVWzT2IG2VTjJ/MHcfrwNaZ42c89fjkcmpWPKNJQFSxzim7pqz6JUph1w8DVE
+         1qBEF6becW1Leh8T5Tm7afBU/YEaWbkhdehIiSm8y1Xoy8XE0vv4gAnEgfpbK4XZJi
+         Fu6xmqD5vmdHtzGXMElKA2nuIdJ//JB3NDC9ujK5H9kSb1sKyqMZZJTl152xIVUi9+
+         ezK78J/8oWKfw==
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     dietmar.eggemann@arm.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -46,29 +46,30 @@ Cc:     dietmar.eggemann@arm.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Marc Zyngier <maz@kernel.org>,
         Paul Burton <paulburton@kernel.org>,
         Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
         Kate Stewart <kstewart@linuxfoundation.org>,
         Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Alexios Zavras <alexios.zavras@intel.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Zhou Yanjie <zhouyanjie@zoho.com>,
         =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
         <zhouyanjie@wanyeetech.com>, YunQiang Su <syq@debian.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Serge Semin <fancer.lancer@gmail.com>,
-        Enrico Weigelt <info@metux.net>,
         Matt Redfearn <matt.redfearn@mips.com>,
-        Richard Fontana <rfontana@redhat.com>,
         Steve Winslow <swinslow@gmail.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
         Peter Xu <peterx@redhat.com>,
         afzal mohammed <afzal.mohd.ma@gmail.com>,
         Oleksij Rempel <linux@rempel-privat.de>,
+        Mike Rapoport <rppt@linux.ibm.com>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
         linux-kernel@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
         linux-pm@vger.kernel.org
-Subject: [PATCH v2 08/11] irqchip: mips-cpu: Switch to new topology interface
-Date:   Sun, 12 Apr 2020 11:20:38 +0800
-Message-Id: <20200412032123.3896114-9-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 09/11] MIPS: bmips: Switch to new topology interface
+Date:   Sun, 12 Apr 2020 11:20:39 +0800
+Message-Id: <20200412032123.3896114-10-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.26.0.rc2
 In-Reply-To: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
 References: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
@@ -79,26 +80,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Change the parameter of cpu_vpe_id from cpu_data to cpuid.
+Change the parameter of cpu_set_core from cpudata to cpuid.
+Also set cluster id for bmips as it have different method to probe
+actual hwid of CPU, and smp_store_cpuinfo is using cluster id to
+determine if we should probe topology info again.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- drivers/irqchip/irq-mips-cpu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/kernel/smp-bmips.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-mips-cpu.c b/drivers/irqchip/irq-mips-cpu.c
-index 95d4fd8f7a96..eed3edf8480b 100644
---- a/drivers/irqchip/irq-mips-cpu.c
-+++ b/drivers/irqchip/irq-mips-cpu.c
-@@ -100,7 +100,7 @@ static void mips_mt_send_ipi(struct irq_data *d, unsigned int cpu)
- 	WARN_ON(!cpus_are_siblings(smp_processor_id(), cpu));
- 
- 	vpflags = dvpe();
--	settc(cpu_vpe_id(&cpu_data[cpu]));
-+	settc(cpu_vpe_id(cpu));
- 	write_vpe_c0_cause(read_vpe_c0_cause() | (C_SW0 << hwirq));
- 	evpe(vpflags);
- 
+diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
+index 9058e9dcf080..c40bb37eab38 100644
+--- a/arch/mips/kernel/smp-bmips.c
++++ b/arch/mips/kernel/smp-bmips.c
+@@ -247,7 +247,8 @@ static void bmips_init_secondary(void)
+ 		break;
+ 	case CPU_BMIPS5000:
+ 		write_c0_brcm_action(ACTION_CLR_IPI(smp_processor_id(), 0));
+-		cpu_set_core(&current_cpu_data, (read_c0_brcm_config() >> 25) & 3);
++		cpu_set_core(smp_processor_id(), (read_c0_brcm_config() >> 25) & 3);
++		cpu_set_cluster(smp_processor_id(), 0);
+ 		break;
+ 	}
+ }
 -- 
 2.26.0.rc2
 
