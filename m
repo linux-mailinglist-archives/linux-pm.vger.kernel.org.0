@@ -2,146 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DE11A5D00
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Apr 2020 08:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765971A5D58
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Apr 2020 09:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725909AbgDLGNz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Apr 2020 02:13:55 -0400
-Received: from mga01.intel.com ([192.55.52.88]:51445 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725832AbgDLGNz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 12 Apr 2020 02:13:55 -0400
-IronPort-SDR: jLg5m848YJMNeL9nmPXnkw56qoCwn+dChfOXgBO5dmjQGuRURKtAwM0AoFHK+Sv2geDQ76QsUn
- nYHbw1t1cvAw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2020 23:13:55 -0700
-IronPort-SDR: nXrO0ceQg8CdXZRzHi6uO7d0ZKiJMyl3YPMynmeQvnXDMPnt1yhKK2IN4A40srpYushslUXMXd
- JyICsmnoJHMA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,373,1580803200"; 
-   d="scan'208";a="399313178"
-Received: from mengling-mobl.ccr.corp.intel.com ([10.255.29.65])
-  by orsmga004.jf.intel.com with ESMTP; 11 Apr 2020 23:13:53 -0700
-Message-ID: <fee68438572796c71089571e0ff0add6cbbd3e0c.camel@intel.com>
-Subject: Re: [RFC PATCH 5/5] ACPI: processor: do update when maximum cooling
- state changed
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        id S1725812AbgDLHt7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Apr 2020 03:49:59 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:55326 "EHLO
+        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725832AbgDLHt7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Apr 2020 03:49:59 -0400
+Received: from flygoat-x1e (unknown [IPv6:240e:390:499:a20::d68])
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 92F8320CE8;
+        Sun, 12 Apr 2020 07:49:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
+        t=1586677799; bh=k5hxOeHZh9IXjDoSK3WNcs/9hTqV8S41aIzhUrny+3k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Izfs6T4sNhGSQrbDpc1FuzRkrZlA/Osk5StRIEV1TJ4Fe72X2TGwBh4OAZyI2RU9H
+         4juvb/wwxEJZ3JXCHjgwRcIBnQdtXetGmwTCkFlGS41zJErwM87iU1Gv/z4e1vGywy
+         SQZpAlaAbQD7K3v8RQncp4B/+s1NnynFKs6WpUgcybeYZfvPqtjHEnga7cEYuIoNrw
+         oJn5cQ/8B8Kmbd7o/+D+RhAHqnzIwpzM1ZNvugs1JD/QH49S5fuB2bcbOOL09BID/u
+         A0pRRIrRmZxwAYv+sKsaqDlJoZebMupTbfAJ5m47TwhhVmG7SP3TMwB7hiS2sMxPSE
+         IlIU52Wnfg4OQ==
+Date:   Sun, 12 Apr 2020 15:49:27 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Robert Richter <rric@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Zhou Yanjie <zhouyanjie@zoho.com>,
+        " =?UTF-8?B?5ZGo55Cw5p2w?= (Zhou Yanjie) " 
+        <zhouyanjie@wanyeetech.com>, YunQiang Su <syq@debian.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Matt Redfearn <matt.redfearn@mips.com>,
+        Steve Winslow <swinslow@gmail.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        afzal mohammed <afzal.mohd.ma@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
         linux-pm@vger.kernel.org
-Cc:     tiwai@suse.de, viresh.kumar@linaro.org
-Date:   Sun, 12 Apr 2020 14:13:52 +0800
-In-Reply-To: <a15dee60-8d20-0f56-0037-276830c613cd@linaro.org>
-References: <20200408041917.2329-1-rui.zhang@intel.com>
-         <20200408041917.2329-5-rui.zhang@intel.com>
-         <5cd80df7-775e-96bd-cec5-b14965de2a67@linaro.org>
-         <2bef9553fcf7ccd7c9811ad1d572af2e5a811917.camel@intel.com>
-         <a15dee60-8d20-0f56-0037-276830c613cd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
+Subject: Re: [PATCH v2 05/11] MIPS: Switch to arch_topology
+Message-ID: <20200412154927.7ac453d5@flygoat-x1e>
+In-Reply-To: <202004121349.xFzTOGS4%lkp@intel.com>
+References: <20200412032123.3896114-6-jiaxun.yang@flygoat.com>
+        <202004121349.xFzTOGS4%lkp@intel.com>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2020-04-10 at 14:10 +0200, Daniel Lezcano wrote:
-> On 10/04/2020 10:02, Zhang Rui wrote:
-> > On Thu, 2020-04-09 at 15:34 +0200, Daniel Lezcano wrote:
-> > > Hi Rui,
-> > > 
-> > > 
-> > > On 08/04/2020 06:19, Zhang Rui wrote:
-> > > > ACPI processor cooling device supports 1 cooling state before
-> > > > cpufreq
-> > > > driver probed, and 4 cooling states after cpufreq driver
-> > > > probed.
-> > > 
-> > > What is this one state ?
-> > 
-> > One state means its original state and we can not set it to others.
-> > 
-> > ACPI processor cooling states are combined of p-state cooling
-> > states
-> > and a couple of optional t-state cooling states.
-> > 
-> > Say, if we have a processor device supports 7 throttling states, it
-> > actually supports 8 cooling states with cpufreq driver unprobed,
-> > and 11
-> > cooling states with cpufreq driver probed.
-> > 
-> > > 
-> > > > Thus update the statistics table when the cpufeq driver is
-> > > > probed/unprobed.
-> > > 
-> > > To be honest, the series seems to skirt a problem in the acpi
-> > > processor.
-> > > 
-> > > If there is a new policy, then there is a new cooling device. Why
-> > > not
-> > > unregister the old one and register the new one ?
-> > > 
-> > 
-> > Good point.
-> > IMO, the real problem is that do we support dynamic
-> > max_cooling_state
-> > or not in the thermal framework.
-> > Previously, I thought we don't have a hard rule of static
-> > max_cooling_state because we always invoke .get_max_state()
-> > callback
-> > when we need it. But after a second thought, actually we do have
-> > this
-> > limitation. For example, when binding cooling devices to thermal
-> > zones,
-> > the upper limit is set based on the return value of
-> > .get_max_state() at
-> > the binding time, and we never update the upper limit later.
-> > So this ACPI processor issue is not just about statistics table
-> > update
-> > issue, we actually lose some of its cooling states.
-> > 
-> > Thus, a new max_state means that all the previous setting of the
-> > cooling_device, i.e. all the thermal instances of the cooling
-> > device,
-> > needs to get updated.
-> > 
-> > And to fix this, it's better to
-> > a. unregister and re-register the cooling device as you suggested.
-> > or
-> > b. introduce an API that updates the cooling device entirely
-> > instead of
-> > statistics table only.
-> > 
-> > For either of the above solutions, we'd better to cleanup the code
-> > to 
-> > invoke .get_max_state() during registration/max_state_reset phase,
-> > once, and then always use cached value later.
-> > And plus, if we want to follow solution a), it's better to remove
-> > .get_max_state() callback and use an integer instead so that every
-> > driver knows this limitation.
-> > I'd vote for solution a) if there is no soc thermal driver that may
-> > return dynamic max_states.
-> > 
-> > Do I still miss something?
+On Sun, 12 Apr 2020 13:24:21 +0800
+kbuild test robot <lkp@intel.com> wrote:
+
+> Hi Jiaxun,
 > 
-> I agree for the a) solution too.
+> I love your patch! Yet something to improve:
 > 
-> But regarding the get_max_state() callback being converted to a
-> integer,
-> the driver int3406_thermal.c computes the upper and lower limits
-> which
-> are updated on a INT3406_BRIGHTNESS_LIMITS_CHANGED notification and
-> get_max_state() does uppper - lower.
+> [auto build test ERROR on driver-core/driver-core-testing]
+> [also build test ERROR on pm/linux-next linus/master next-20200411]
+> [cannot apply to tip/perf/core tip/irq/core v5.6]
+> [if your patch is applied to the wrong git tree, please drop us a
+> note to help improve the system. BTW, we also suggest to use '--base'
+> option to specify the base tree in git format-patch, please see
+> https://stackoverflow.com/a/37406982]
+> 
+> url:
+> https://github.com/0day-ci/linux/commits/Jiaxun-Yang/MIPS-Topology-DeviceTree-CPU-rework-v2/20200412-113308
+> base:
+> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+> a10c9c710f9ecea87b9f4bbb837467893b4bef01 config: mips-allnoconfig
+> (attached as .config) compiler: mips-linux-gcc (GCC) 9.3.0 reproduce:
+> wget
+> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+> -O ~/bin/make.cross chmod +x ~/bin/make.cross # save the attached
+> .config to linux build tree GCC_VERSION=9.3.0 make.cross ARCH=mips 
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kbuild test robot <lkp@intel.com>
+> 
+> Note: the
+> linux-review/Jiaxun-Yang/MIPS-Topology-DeviceTree-CPU-rework-v2/20200412-113308
+> HEAD 8e8e9d4f7aa74359f2199773786ffe2fbb7877d0 builds fine. It only
+> hurts bisectibility.
+> 
+Hi all,
 
-Right, this is another case shows that it's better to support dynamic
-max_state.
-IMO, this is not difficult to do. We just need to introduce a new API,
-which reuses the current cdev device, and reset its every thermal
-instance, and update all the thermal zones the cdev is involved.
-what do you think?
+In this case I think it should be fine to break bisect, otherwise #05
+will combine too many modifications in different subsystems.
 
-thanks,
-rui
 
+Thanks.
+--
+Jiaxun Yang
