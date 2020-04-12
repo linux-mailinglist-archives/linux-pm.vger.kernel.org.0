@@ -2,111 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBCF1A5D7C
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Apr 2020 10:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E361A5D84
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Apr 2020 10:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725903AbgDLIfs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Apr 2020 04:35:48 -0400
-Received: from mga03.intel.com ([134.134.136.65]:22370 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725812AbgDLIfs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 12 Apr 2020 04:35:48 -0400
-IronPort-SDR: SYCaQUwtwJh1uTj7DT/Urrwo9uVISyMhZBpzPbhoN88YgN1WrMpRgHuHimKWxyOK+tG2foWkw4
- Fx7kANgqk8cg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2020 01:35:48 -0700
-IronPort-SDR: 070gcJ/HXzq3ZNsG44fhmAmRZpVKoQEdyhb50h3krgOaEPfgp1yyXjPjzUv28df8UnOjxnNnBZ
- 6dGOBwGjeCZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,374,1580803200"; 
-   d="scan'208";a="399334741"
-Received: from mengling-mobl.ccr.corp.intel.com ([10.255.29.65])
-  by orsmga004.jf.intel.com with ESMTP; 12 Apr 2020 01:35:46 -0700
-Message-ID: <271484966db322cb052b59833a4babcfb8488d95.camel@intel.com>
+        id S1726072AbgDLIjs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Apr 2020 04:39:48 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:41344 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725909AbgDLIjs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Apr 2020 04:39:48 -0400
+Received: by mail-wr1-f65.google.com with SMTP id h9so7131253wrc.8
+        for <linux-pm@vger.kernel.org>; Sun, 12 Apr 2020 01:39:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3ydioquZgqLSixo2HGZzKcXImWHvCTw0YsXAUmkffXQ=;
+        b=HUTO+Qx+Z0tSbrVKqd1NH9/8CJwkjJOYIxaDu1HlTYhcZncWsEM0aP/Vh3zuEGoqJy
+         ExIyUty46K0Yb3UhYRyT9Xoxl75DK64ZIdtZ4oca9G6dLZrbJcTXlYcb76cCaAtfWEbp
+         rI9lf60tOgAtDMLE4/K1htsk2SRq/Ii0ZYHXskL0qwmAsJvUM/bpwRj8X6jaUXS03UkJ
+         aMbnHVDbgfMJsEyCBeBjh3d2AweuMui+/Bch+xf1I7cLycDEBn0glzpOM+vV3ESkSFRV
+         w3i1JjTNBEONGyrSaBy/hXdQJQrJ7RrK6zjXyvhlVbtLGf0RbPEU67cgZ/kfNV/bqX13
+         DboQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3ydioquZgqLSixo2HGZzKcXImWHvCTw0YsXAUmkffXQ=;
+        b=ohn+nbySc5CwgkrKMqy93xnmY0KzJG58que/d/KDtkJQneHEVq/yDo91tud2cOC9NJ
+         0vBGS1loEtVL/7LkCDLtTtBO28n05p9AH6mNtsTpaRnGrFCqg817JgUrWFEOwiGamfp8
+         GLRD/qflxeiROGsVu2yjRAjPxdnzvujAYwxDw+qs6SFCBDgj+oHLtGUJylyFkVwD7O2u
+         xmqF94n7YWV2n1H8ws2zHEEcP1e/uAmf1dz05XhqAMNQ+2fsEASJaDN38uiN+znuD4+h
+         9R1hiCly0feno+I4+BZdlogQ2/E/DJ9q0+VF/0mwNzvilSCAC7raoxVb4igqjCyYeeXn
+         8Vrg==
+X-Gm-Message-State: AGi0PuY9oGV4V9WY/FpKiCs0z+eHKG5Wzql1ycXlFn9eICoNotx9UMQd
+        H0knglz1/S70ELNR4Fjo293czw==
+X-Google-Smtp-Source: APiQypJoZQU2qKjrNS9LUnKMGyhn3HCZq9g+cbw5ltOT5bSCdNAyA4Llpbaa+RN6tpZqI9bHl8ykXQ==
+X-Received: by 2002:a5d:4cc7:: with SMTP id c7mr12730820wrt.375.1586680786499;
+        Sun, 12 Apr 2020 01:39:46 -0700 (PDT)
+Received: from [192.168.0.41] (lns-bzn-59-82-252-135-148.adsl.proxad.net. [82.252.135.148])
+        by smtp.googlemail.com with ESMTPSA id t67sm10373203wmg.40.2020.04.12.01.39.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Apr 2020 01:39:45 -0700 (PDT)
 Subject: Re: [PATCH V2 1/9] thermal: Move default governor config option to
  the internal header
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     Zhang Rui <rui.zhang@intel.com>
 Cc:     amit.kucheria@verdurent.com,
         "open list:THERMAL" <linux-pm@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
-Date:   Sun, 12 Apr 2020 16:35:45 +0800
-In-Reply-To: <20200402142747.8307-1-daniel.lezcano@linaro.org>
 References: <20200402142747.8307-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+ <271484966db322cb052b59833a4babcfb8488d95.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <86c25a5a-f339-a6f1-fb5a-568c7f158125@linaro.org>
+Date:   Sun, 12 Apr 2020 10:39:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <271484966db322cb052b59833a4babcfb8488d95.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Daniel,
-
-please feel free to add my Acked-by for the whole patch set.
-
-thanks,
-rui
-
-On Thu, 2020-04-02 at 16:27 +0200, Daniel Lezcano wrote:
-> The default governor set at compilation time is a thermal internal
-> business, no need to export to the global thermal header.
+On 12/04/2020 10:35, Zhang Rui wrote:
+> Hi, Daniel,
 > 
-> Move the config options to the internal header.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/thermal_core.h | 11 +++++++++++
->  include/linux/thermal.h        | 11 -----------
->  2 files changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.h
-> b/drivers/thermal/thermal_core.h
-> index 37cd4e2bead2..828305508556 100644
-> --- a/drivers/thermal/thermal_core.h
-> +++ b/drivers/thermal/thermal_core.h
-> @@ -12,6 +12,17 @@
->  #include <linux/device.h>
->  #include <linux/thermal.h>
->  
-> +/* Default Thermal Governor */
-> +#if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
-> +#define DEFAULT_THERMAL_GOVERNOR       "step_wise"
-> +#elif defined(CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE)
-> +#define DEFAULT_THERMAL_GOVERNOR       "fair_share"
-> +#elif defined(CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE)
-> +#define DEFAULT_THERMAL_GOVERNOR       "user_space"
-> +#elif defined(CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR)
-> +#define DEFAULT_THERMAL_GOVERNOR       "power_allocator"
-> +#endif
-> +
->  /* Initial state of a cooling device during binding */
->  #define THERMAL_NO_TARGET -1UL
->  
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 448841ab0dca..71cff87dcb46 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -32,17 +32,6 @@
->  /* use value, which < 0K, to indicate an invalid/uninitialized
-> temperature */
->  #define THERMAL_TEMP_INVALID	-274000
->  
-> -/* Default Thermal Governor */
-> -#if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
-> -#define DEFAULT_THERMAL_GOVERNOR       "step_wise"
-> -#elif defined(CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE)
-> -#define DEFAULT_THERMAL_GOVERNOR       "fair_share"
-> -#elif defined(CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE)
-> -#define DEFAULT_THERMAL_GOVERNOR       "user_space"
-> -#elif defined(CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR)
-> -#define DEFAULT_THERMAL_GOVERNOR       "power_allocator"
-> -#endif
-> -
->  struct thermal_zone_device;
->  struct thermal_cooling_device;
->  struct thermal_instance;
+> please feel free to add my Acked-by for the whole patch set.
 
+Great, thanks!
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
