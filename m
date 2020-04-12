@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6F01A5C32
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Apr 2020 05:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACC51A5C34
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Apr 2020 05:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726565AbgDLDcX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1726689AbgDLDcX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Sat, 11 Apr 2020 23:32:23 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:55198 "EHLO
+Received: from vultr.net.flygoat.com ([149.28.68.211]:55216 "EHLO
         vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726689AbgDLDcW (ORCPT
+        with ESMTP id S1726759AbgDLDcW (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Apr 2020 23:32:22 -0400
 Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 7C0B620D14;
-        Sun, 12 Apr 2020 03:25:16 +0000 (UTC)
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 67F8320D16;
+        Sun, 12 Apr 2020 03:26:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1586661923; bh=lW3H17njgy5+F3MBeH473cWUr39gwQNfiozOltaAlZo=;
+        t=1586661973; bh=tGxZsojCaXRQzUdr7zPR3NOXIGurTKod1uy8NjI5p4E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nq1yaboi2b8euWQTuffYuLwxu9gm+0wXpG8eAUt872HD3R/G1zamY0v3SrarEoeW+
-         k0VHnJvkjtoHWMBTefrlzC4SRnwpI/Y0EcyNmhIaapMjN8HJt42EIJq4WmuF7naiY/
-         s/UBP+yxWVlQSGsamLniRPwr0vnuNKXu1VThSOSx+7vTUXdaDX9vUKK61IYiqs6ow5
-         n2dbaWXl9T0rWwnoT7vJTa2TIDkqQ5OG7Otu+ZUcB0myOGqO59py/0+nUZC8oTrsC2
-         JtirU1WhtdHYUioNWoDSOHEKYz5Pv0NYrg6FIXK6NC5f4wpMTwCKN7OyFxEPm24GGe
-         VCx84vG7PUong==
+        b=xGx/6YE0io5bsdUPMhxoxEtHAD2PhTqgr8oGauD28ht0om5LPEo9Gg+mYvohWevhA
+         DDt7PXbYLaEmUppcrL7V3FD5fsup9agG6l9dlf3MM/mfoiQ/qm7RY+JV/YiKSVbTX7
+         t5dyba1nNAHbzbaddtE0RtBYGhPPEVgAu64dbSmm7RNhD5GvXAsUjkZS2P3k+NFHgN
+         OXiiUhR58SGALxKtK3jd+Tn4s0v3SdRdz6uPrMisS7WmGYiFYnuWVS8wpT5xo5jUVa
+         lPrY8npH96DYo0qUsW0z9OI4ly38crST4a56ezVKQ73/EKeXcGDHFj7RR0F5YCksH+
+         t7Zh+NbVX1AWw==
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     dietmar.eggemann@arm.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -63,13 +63,12 @@ Cc:     dietmar.eggemann@arm.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Peter Xu <peterx@redhat.com>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
         Oleksij Rempel <linux@rempel-privat.de>,
-        Mike Rapoport <rppt@linux.ibm.com>,
         linux-kernel@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
         linux-pm@vger.kernel.org
-Subject: [PATCH v2 03/11] arch_topology: Make it avilable for MIPS
-Date:   Sun, 12 Apr 2020 11:20:33 +0800
-Message-Id: <20200412032123.3896114-4-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 04/11] arch_topology: Reset all cpus in reset_cpu_topology
+Date:   Sun, 12 Apr 2020 11:20:34 +0800
+Message-Id: <20200412032123.3896114-5-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.26.0.rc2
 In-Reply-To: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
 References: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
@@ -80,170 +79,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Simply drop unnecessary archtecture limitions and add dummy
-function for platforms without OF support.
-As some of the functions are conflicting with Arm's platform
-implementations, we mark them as weak.
+For MIPS platform, when topology isn't probed by DeviceTree,
+possible_cpu might be empty when calling init_cpu_topology,
+that may result cpu_topology not fully reseted for all CPUs.
+So here we can reset all cpus instead of possible cpus.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
 --
-v2: Use weak instead of ifdef to exclude functions for Arm.
+v2: Use ARRAY_SIZE instead of NR_CPUS.
 ---
- drivers/base/arch_topology.c | 116 ++++++++++++++++++-----------------
- 1 file changed, 60 insertions(+), 56 deletions(-)
+ drivers/base/arch_topology.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 4d0a0038b476..13dc4fbf043f 100644
+index 13dc4fbf043f..e7912d0a875e 100644
 --- a/drivers/base/arch_topology.c
 +++ b/drivers/base/arch_topology.c
-@@ -143,57 +143,6 @@ void topology_normalize_cpu_scale(void)
- 	}
- }
- 
--bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
--{
--	struct clk *cpu_clk;
--	static bool cap_parsing_failed;
--	int ret;
--	u32 cpu_capacity;
--
--	if (cap_parsing_failed)
--		return false;
--
--	ret = of_property_read_u32(cpu_node, "capacity-dmips-mhz",
--				   &cpu_capacity);
--	if (!ret) {
--		if (!raw_capacity) {
--			raw_capacity = kcalloc(num_possible_cpus(),
--					       sizeof(*raw_capacity),
--					       GFP_KERNEL);
--			if (!raw_capacity) {
--				cap_parsing_failed = true;
--				return false;
--			}
--		}
--		raw_capacity[cpu] = cpu_capacity;
--		pr_debug("cpu_capacity: %pOF cpu_capacity=%u (raw)\n",
--			cpu_node, raw_capacity[cpu]);
--
--		/*
--		 * Update freq_factor for calculating early boot cpu capacities.
--		 * For non-clk CPU DVFS mechanism, there's no way to get the
--		 * frequency value now, assuming they are running at the same
--		 * frequency (by keeping the initial freq_factor value).
--		 */
--		cpu_clk = of_clk_get(cpu_node, 0);
--		if (!PTR_ERR_OR_ZERO(cpu_clk)) {
--			per_cpu(freq_factor, cpu) =
--				clk_get_rate(cpu_clk) / 1000;
--			clk_put(cpu_clk);
--		}
--	} else {
--		if (raw_capacity) {
--			pr_err("cpu_capacity: missing %pOF raw capacity\n",
--				cpu_node);
--			pr_err("cpu_capacity: partial information: fallback to 1024 for all CPUs\n");
--		}
--		cap_parsing_failed = true;
--		free_raw_capacity();
--	}
--
--	return !ret;
--}
--
- #ifdef CONFIG_CPU_FREQ
- static cpumask_var_t cpus_to_visit;
- static void parsing_done_workfn(struct work_struct *work);
-@@ -275,7 +224,58 @@ static void parsing_done_workfn(struct work_struct *work)
- core_initcall(free_raw_capacity);
- #endif
- 
--#if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
-+#if defined(CONFIG_OF)
-+bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
-+{
-+	struct clk *cpu_clk;
-+	static bool cap_parsing_failed;
-+	int ret;
-+	u32 cpu_capacity;
-+
-+	if (cap_parsing_failed)
-+		return false;
-+
-+	ret = of_property_read_u32(cpu_node, "capacity-dmips-mhz",
-+				   &cpu_capacity);
-+	if (!ret) {
-+		if (!raw_capacity) {
-+			raw_capacity = kcalloc(num_possible_cpus(),
-+					       sizeof(*raw_capacity),
-+					       GFP_KERNEL);
-+			if (!raw_capacity) {
-+				cap_parsing_failed = true;
-+				return false;
-+			}
-+		}
-+		raw_capacity[cpu] = cpu_capacity;
-+		pr_debug("cpu_capacity: %pOF cpu_capacity=%u (raw)\n",
-+			cpu_node, raw_capacity[cpu]);
-+
-+		/*
-+		 * Update freq_factor for calculating early boot cpu capacities.
-+		 * For non-clk CPU DVFS mechanism, there's no way to get the
-+		 * frequency value now, assuming they are running at the same
-+		 * frequency (by keeping the initial freq_factor value).
-+		 */
-+		cpu_clk = of_clk_get(cpu_node, 0);
-+		if (!PTR_ERR_OR_ZERO(cpu_clk)) {
-+			per_cpu(freq_factor, cpu) =
-+				clk_get_rate(cpu_clk) / 1000;
-+			clk_put(cpu_clk);
-+		}
-+	} else {
-+		if (raw_capacity) {
-+			pr_err("cpu_capacity: missing %pOF raw capacity\n",
-+				cpu_node);
-+			pr_err("cpu_capacity: partial information: fallback to 1024 for all CPUs\n");
-+		}
-+		cap_parsing_failed = true;
-+		free_raw_capacity();
-+	}
-+
-+	return !ret;
-+}
-+
- /*
-  * This function returns the logic cpu number of the node.
-  * There are basically three kinds of return values:
-@@ -461,7 +461,12 @@ static int __init parse_dt_topology(void)
- 	of_node_put(cn);
- 	return ret;
- }
--#endif
-+#else
-+static int __init parse_dt_topology(void)
-+{
-+	return 0;
-+}
-+#endif /* CONFIG_OF */
- 
- /*
-  * cpu topology table
-@@ -562,8 +567,8 @@ __weak int __init parse_acpi_topology(void)
- 	return 0;
- }
- 
--#if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
--void __init init_cpu_topology(void)
-+
-+__weak void __init init_cpu_topology(void)
+@@ -536,7 +536,7 @@ void __init reset_cpu_topology(void)
  {
- 	reset_cpu_topology();
+ 	unsigned int cpu;
  
-@@ -576,4 +581,3 @@ void __init init_cpu_topology(void)
- 	else if (of_have_populated_dt() && parse_dt_topology())
- 		reset_cpu_topology();
- }
--#endif
+-	for_each_possible_cpu(cpu) {
++	for (cpu = 0; cpu < ARRAY_SIZE(cpu_topology); cpu++) {
+ 		struct cpu_topology *cpu_topo = &cpu_topology[cpu];
+ 
+ 		cpu_topo->thread_id = -1;
 -- 
 2.26.0.rc2
 
