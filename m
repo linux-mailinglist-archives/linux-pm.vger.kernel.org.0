@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C801E1A5C33
+	by mail.lfdr.de (Postfix) with ESMTP id BB6F01A5C32
 	for <lists+linux-pm@lfdr.de>; Sun, 12 Apr 2020 05:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726759AbgDLDcX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1726565AbgDLDcX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Sat, 11 Apr 2020 23:32:23 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:55206 "EHLO
+Received: from vultr.net.flygoat.com ([149.28.68.211]:55198 "EHLO
         vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726706AbgDLDcW (ORCPT
+        with ESMTP id S1726689AbgDLDcW (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Apr 2020 23:32:22 -0400
 Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 0DA9720D0B;
-        Sun, 12 Apr 2020 03:24:26 +0000 (UTC)
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 7C0B620D14;
+        Sun, 12 Apr 2020 03:25:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1586661874; bh=oPTnJfivkM+8UlbJ6/9gGwXtkpRxLwi4xWE4eb0+CaY=;
+        t=1586661923; bh=lW3H17njgy5+F3MBeH473cWUr39gwQNfiozOltaAlZo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xdkAAkVhE9cLmt4b8+PYZ1ceY8j4cfNtQsYRsYkA3LvMmiJ3R6r25w7aD/QGgISKZ
-         I359nv7efhU2PI4KSVasEJ3dlYoYnMIipUwgLqmtXSooV2Gx/2n6J8zZbdhUh2E9eR
-         M7Yad4QLQbyjs2ZVh3QUJs6tatPMqCzxN1QRWDpTKj63tM5EkheRe4Xen1pIT/Gt+I
-         eKKZ/8eAAfqKopirzq3cc3dzFL3uwX+0IlxNtyAta/z9Y+Y3RvcUaIHQXX+cili6fg
-         PCXwe49oAs+nYA+EukxPtqkc1hdEv5BoIhFmRTU3C0mDE9eTKLvx3Q6VyAHr6PVR7o
-         ZNXGTUaVyXG2Q==
+        b=Nq1yaboi2b8euWQTuffYuLwxu9gm+0wXpG8eAUt872HD3R/G1zamY0v3SrarEoeW+
+         k0VHnJvkjtoHWMBTefrlzC4SRnwpI/Y0EcyNmhIaapMjN8HJt42EIJq4WmuF7naiY/
+         s/UBP+yxWVlQSGsamLniRPwr0vnuNKXu1VThSOSx+7vTUXdaDX9vUKK61IYiqs6ow5
+         n2dbaWXl9T0rWwnoT7vJTa2TIDkqQ5OG7Otu+ZUcB0myOGqO59py/0+nUZC8oTrsC2
+         JtirU1WhtdHYUioNWoDSOHEKYz5Pv0NYrg6FIXK6NC5f4wpMTwCKN7OyFxEPm24GGe
+         VCx84vG7PUong==
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     dietmar.eggemann@arm.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -46,10 +46,9 @@ Cc:     dietmar.eggemann@arm.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Marc Zyngier <maz@kernel.org>,
         Paul Burton <paulburton@kernel.org>,
         Allison Randal <allison@lohutok.net>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
         Enrico Weigelt <info@metux.net>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
         Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Richard Fontana <rfontana@redhat.com>,
         Alexios Zavras <alexios.zavras@intel.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Zhou Yanjie <zhouyanjie@zoho.com>,
@@ -58,18 +57,19 @@ Cc:     dietmar.eggemann@arm.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Serge Semin <fancer.lancer@gmail.com>,
         Matt Redfearn <matt.redfearn@mips.com>,
+        Richard Fontana <rfontana@redhat.com>,
         Steve Winslow <swinslow@gmail.com>,
         afzal mohammed <afzal.mohd.ma@gmail.com>,
         Peter Xu <peterx@redhat.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Mike Rapoport <rppt@linux.ibm.com>,
         linux-kernel@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
         linux-pm@vger.kernel.org
-Subject: [PATCH v2 02/11] MIPS: prom: Add helper to parse CPU node in dt
-Date:   Sun, 12 Apr 2020 11:20:32 +0800
-Message-Id: <20200412032123.3896114-3-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 03/11] arch_topology: Make it avilable for MIPS
+Date:   Sun, 12 Apr 2020 11:20:33 +0800
+Message-Id: <20200412032123.3896114-4-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.26.0.rc2
 In-Reply-To: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
 References: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
@@ -80,143 +80,170 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Mostly identical with arm one. The only difference is that we allow
-to mark a CPU Node as status = "disabled" in dt, which means the core
-is physicaly present, but not possible for the kernel. It will occupy
-a bit in cpumask as well.
+Simply drop unnecessary archtecture limitions and add dummy
+function for platforms without OF support.
+As some of the functions are conflicting with Arm's platform
+implementations, we mark them as weak.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
 --
-v2: Exclude non-SMP config.
+v2: Use weak instead of ifdef to exclude functions for Arm.
 ---
- arch/mips/include/asm/prom.h |  6 +++
- arch/mips/kernel/prom.c      | 97 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 103 insertions(+)
+ drivers/base/arch_topology.c | 116 ++++++++++++++++++-----------------
+ 1 file changed, 60 insertions(+), 56 deletions(-)
 
-diff --git a/arch/mips/include/asm/prom.h b/arch/mips/include/asm/prom.h
-index c42e07671934..84802c70e426 100644
---- a/arch/mips/include/asm/prom.h
-+++ b/arch/mips/include/asm/prom.h
-@@ -24,6 +24,12 @@ extern int __dt_register_buses(const char *bus0, const char *bus1);
- static inline void device_tree_init(void) { }
- #endif /* CONFIG_OF */
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 4d0a0038b476..13dc4fbf043f 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -143,57 +143,6 @@ void topology_normalize_cpu_scale(void)
+ 	}
+ }
  
-+#if defined(CONFIG_OF) && defined(CONFIG_SMP)
-+extern void mips_dt_init_cpu_maps(void);
-+#else
-+static inline void mips_dt_init_cpu_maps(void) { }
-+#endif
+-bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
+-{
+-	struct clk *cpu_clk;
+-	static bool cap_parsing_failed;
+-	int ret;
+-	u32 cpu_capacity;
+-
+-	if (cap_parsing_failed)
+-		return false;
+-
+-	ret = of_property_read_u32(cpu_node, "capacity-dmips-mhz",
+-				   &cpu_capacity);
+-	if (!ret) {
+-		if (!raw_capacity) {
+-			raw_capacity = kcalloc(num_possible_cpus(),
+-					       sizeof(*raw_capacity),
+-					       GFP_KERNEL);
+-			if (!raw_capacity) {
+-				cap_parsing_failed = true;
+-				return false;
+-			}
+-		}
+-		raw_capacity[cpu] = cpu_capacity;
+-		pr_debug("cpu_capacity: %pOF cpu_capacity=%u (raw)\n",
+-			cpu_node, raw_capacity[cpu]);
+-
+-		/*
+-		 * Update freq_factor for calculating early boot cpu capacities.
+-		 * For non-clk CPU DVFS mechanism, there's no way to get the
+-		 * frequency value now, assuming they are running at the same
+-		 * frequency (by keeping the initial freq_factor value).
+-		 */
+-		cpu_clk = of_clk_get(cpu_node, 0);
+-		if (!PTR_ERR_OR_ZERO(cpu_clk)) {
+-			per_cpu(freq_factor, cpu) =
+-				clk_get_rate(cpu_clk) / 1000;
+-			clk_put(cpu_clk);
+-		}
+-	} else {
+-		if (raw_capacity) {
+-			pr_err("cpu_capacity: missing %pOF raw capacity\n",
+-				cpu_node);
+-			pr_err("cpu_capacity: partial information: fallback to 1024 for all CPUs\n");
+-		}
+-		cap_parsing_failed = true;
+-		free_raw_capacity();
+-	}
+-
+-	return !ret;
+-}
+-
+ #ifdef CONFIG_CPU_FREQ
+ static cpumask_var_t cpus_to_visit;
+ static void parsing_done_workfn(struct work_struct *work);
+@@ -275,7 +224,58 @@ static void parsing_done_workfn(struct work_struct *work)
+ core_initcall(free_raw_capacity);
+ #endif
+ 
+-#if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
++#if defined(CONFIG_OF)
++bool __init topology_parse_cpu_capacity(struct device_node *cpu_node, int cpu)
++{
++	struct clk *cpu_clk;
++	static bool cap_parsing_failed;
++	int ret;
++	u32 cpu_capacity;
 +
- extern char *mips_get_machine_name(void);
- extern void mips_set_machine_name(const char *name);
++	if (cap_parsing_failed)
++		return false;
++
++	ret = of_property_read_u32(cpu_node, "capacity-dmips-mhz",
++				   &cpu_capacity);
++	if (!ret) {
++		if (!raw_capacity) {
++			raw_capacity = kcalloc(num_possible_cpus(),
++					       sizeof(*raw_capacity),
++					       GFP_KERNEL);
++			if (!raw_capacity) {
++				cap_parsing_failed = true;
++				return false;
++			}
++		}
++		raw_capacity[cpu] = cpu_capacity;
++		pr_debug("cpu_capacity: %pOF cpu_capacity=%u (raw)\n",
++			cpu_node, raw_capacity[cpu]);
++
++		/*
++		 * Update freq_factor for calculating early boot cpu capacities.
++		 * For non-clk CPU DVFS mechanism, there's no way to get the
++		 * frequency value now, assuming they are running at the same
++		 * frequency (by keeping the initial freq_factor value).
++		 */
++		cpu_clk = of_clk_get(cpu_node, 0);
++		if (!PTR_ERR_OR_ZERO(cpu_clk)) {
++			per_cpu(freq_factor, cpu) =
++				clk_get_rate(cpu_clk) / 1000;
++			clk_put(cpu_clk);
++		}
++	} else {
++		if (raw_capacity) {
++			pr_err("cpu_capacity: missing %pOF raw capacity\n",
++				cpu_node);
++			pr_err("cpu_capacity: partial information: fallback to 1024 for all CPUs\n");
++		}
++		cap_parsing_failed = true;
++		free_raw_capacity();
++	}
++
++	return !ret;
++}
++
+ /*
+  * This function returns the logic cpu number of the node.
+  * There are basically three kinds of return values:
+@@ -461,7 +461,12 @@ static int __init parse_dt_topology(void)
+ 	of_node_put(cn);
+ 	return ret;
+ }
+-#endif
++#else
++static int __init parse_dt_topology(void)
++{
++	return 0;
++}
++#endif /* CONFIG_OF */
  
-diff --git a/arch/mips/kernel/prom.c b/arch/mips/kernel/prom.c
-index 9e50dc8df2f6..deb5cc0a0eb5 100644
---- a/arch/mips/kernel/prom.c
-+++ b/arch/mips/kernel/prom.c
-@@ -89,4 +89,101 @@ int __init __dt_register_buses(const char *bus0, const char *bus1)
+ /*
+  * cpu topology table
+@@ -562,8 +567,8 @@ __weak int __init parse_acpi_topology(void)
  	return 0;
  }
  
-+#ifdef CONFIG_SMP
-+void __init mips_dt_init_cpu_maps(void)
-+{
-+	struct device_node *cpu, *cpus;
-+	u32 i, j, cpuidx = 1;
-+	u32 cpunum;
-+	u32 tmp_map[NR_CPUS] = { [0 ... NR_CPUS-1] = U32_MAX };
-+	bool cpu_possible[NR_CPUS] = { [0 ... NR_CPUS-1] = false };
-+	bool bootcpu_valid = false;
+-#if defined(CONFIG_ARM64) || defined(CONFIG_RISCV)
+-void __init init_cpu_topology(void)
 +
-+	cpus = of_find_node_by_path("/cpus");
-+	if (!cpus)
-+		return;
-+
-+	if (cpu_has_mips_r2_r6)
-+		cpunum = get_ebase_cpunum();
-+	else
-+		cpunum = 0; /* For legacy system we assume boot from CPU 0 */
-+
-+	for_each_of_cpu_node(cpu) {
-+		u32 hwid;
-+
-+		pr_debug(" * %pOF...\n", cpu);
-+		/*
-+		 * A device tree containing CPU nodes with missing "reg"
-+		 * properties is considered invalid to build the
-+		 * cpu_logical_map.
-+		 */
-+
-+		if (of_property_read_u32(cpu, "reg", &hwid)) {
-+			pr_debug(" * %pOF missing reg property\n", cpu);
-+			of_node_put(cpu);
-+			return;
-+		}
-+
-+		/*
-+		 * Duplicate hwid are a recipe for disaster.
-+		 * Scan all initialized entries and check for
-+		 * duplicates. If any is found just bail out.
-+		 */
-+		for (j = 0; j < cpuidx; j++)
-+			if (WARN(tmp_map[j] == hwid,
-+				 "Duplicate /cpu reg properties in the DT\n")) {
-+				of_node_put(cpu);
-+				return;
-+			}
-+
-+		/*
-+		 * Build a stashed array of hwid values. Numbering scheme
-+		 * requires that if detected the boot CPU must be assigned
-+		 * logical id 0. Other CPUs get sequential indexes starting
-+		 * from 1. If a CPU node with a reg property matching the
-+		 * boot CPU hwid is detected, this is recorded so that the
-+		 * logical map built from DT is validated.
-+		 */
-+		if (hwid == cpunum) {
-+			i = 0;
-+			if (of_device_is_available(cpu))
-+				bootcpu_valid = true;
-+		} else {
-+			i = cpuidx++;
-+		}
-+
-+		if (WARN(cpuidx > nr_cpu_ids, "DT /cpu %u nodes greater than "
-+						   "max cores %u, capping them\n",
-+						   cpuidx, nr_cpu_ids)) {
-+			cpuidx = nr_cpu_ids;
-+			of_node_put(cpu);
-+			break;
-+		}
-+
-+		tmp_map[i] = hwid;
-+
-+		if (of_device_is_available(cpu))
-+			cpu_possible[i] = true;
-+	}
-+
-+	if (!bootcpu_valid) {
-+		pr_warn("DT missing boot CPU, fall back to default cpu_logical_map\n");
-+		return;
-+	}
-+
-+	init_cpu_possible(cpu_none_mask);
-+	init_cpu_present(cpu_none_mask);
-+
-+	for (i = 0; i < cpuidx; i++) {
-+		set_cpu_possible(i, cpu_possible[i]);
-+		cpu_logical_map(i) = tmp_map[i];
-+		pr_debug("cpu logical map 0x%x\n", cpu_logical_map(i));
-+	}
-+}
-+
-+bool arch_match_cpu_phys_id(int cpu, u64 phys_id)
-+{
-+	return phys_id == cpu_logical_map(cpu);
-+}
-+#endif /* CONFIG_SMP */
- #endif
++__weak void __init init_cpu_topology(void)
+ {
+ 	reset_cpu_topology();
+ 
+@@ -576,4 +581,3 @@ void __init init_cpu_topology(void)
+ 	else if (of_have_populated_dt() && parse_dt_topology())
+ 		reset_cpu_topology();
+ }
+-#endif
 -- 
 2.26.0.rc2
 
