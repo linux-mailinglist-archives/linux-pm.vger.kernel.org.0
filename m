@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0E41A5C29
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Apr 2020 05:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F121A5C2C
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Apr 2020 05:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726876AbgDLDaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 Apr 2020 23:30:20 -0400
-Received: from vultr.net.flygoat.com ([149.28.68.211]:55030 "EHLO
+        id S1726759AbgDLDbK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Apr 2020 23:31:10 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:55098 "EHLO
         vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726798AbgDLDaT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Apr 2020 23:30:19 -0400
+        with ESMTP id S1726565AbgDLDbJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Apr 2020 23:31:09 -0400
 Received: from localhost.localdomain (unknown [IPv6:2001:da8:20f:4430:250:56ff:fe9a:7470])
-        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 074EA20D28;
-        Sun, 12 Apr 2020 03:30:12 +0000 (UTC)
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id C95F420D2B;
+        Sun, 12 Apr 2020 03:31:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
-        t=1586662220; bh=n4+06mBFG2E/6pL4l2HWMXmoCzgCWYsl2JbLBTdqk/Q=;
+        t=1586662270; bh=ZVoEHgyxwKRnpz9YM+7JK0CgnU+b6VSlDxJRGNc9WhU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G6c6rQPj7i8G4NQzr1+RrqfibhJZrKz05vJtbSnHpUi2899+XEDwnBocTlOdWvqav
-         Z5qm4Nv07R3bGOBaBW75RlbHnfToqG74vRz+p48NLsqwQkCbflshXes1diVmo41aDL
-         cC2QbgVWzT2IG2VTjJ/MHcfrwNaZ42c89fjkcmpWPKNJQFSxzim7pqz6JUph1w8DVE
-         1qBEF6becW1Leh8T5Tm7afBU/YEaWbkhdehIiSm8y1Xoy8XE0vv4gAnEgfpbK4XZJi
-         Fu6xmqD5vmdHtzGXMElKA2nuIdJ//JB3NDC9ujK5H9kSb1sKyqMZZJTl152xIVUi9+
-         ezK78J/8oWKfw==
+        b=AguW/aEn9egIUVf9Xs/nZ5oJzpXDA+gH+31H66p/dgAjejW5GZBsekpFsfshFyn1/
+         Q/7+38hfghIhqY7aWWUphwB01sJsYYQSoQ4zoftpqR8/T17hwt7yebt5/4yKQCDAaE
+         3J/V1guU57bOZGpQvEEfacr3dbG6+iRtebHsV9hHfMBBbJbS3OzqoV+mRjYSUPU67m
+         Z4XrMASt7salrpbY8/x9z8SNk0LHVLdeHRT21uD8UBOzR7H1imATE05DT3jPzLzVp6
+         D0+pr6x8u70Q7CayGX2NbOd7e2fJAcjXcO+fGJxu/6ljl74DBo9cH/UMcUV5RaWJeK
+         LQhxAdnggTMYw==
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     dietmar.eggemann@arm.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
@@ -46,9 +46,10 @@ Cc:     dietmar.eggemann@arm.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Marc Zyngier <maz@kernel.org>,
         Paul Burton <paulburton@kernel.org>,
         Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
         Kate Stewart <kstewart@linuxfoundation.org>,
+        Enrico Weigelt <info@metux.net>,
         Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Richard Fontana <rfontana@redhat.com>,
         Paul Cercueil <paul@crapouillou.net>,
         Zhou Yanjie <zhouyanjie@zoho.com>,
         =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
@@ -56,20 +57,19 @@ Cc:     dietmar.eggemann@arm.com, Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Serge Semin <fancer.lancer@gmail.com>,
         Matt Redfearn <matt.redfearn@mips.com>,
-        Steve Winslow <swinslow@gmail.com>,
-        Richard Fontana <rfontana@redhat.com>,
         Alexios Zavras <alexios.zavras@intel.com>,
-        Peter Xu <peterx@redhat.com>,
+        Steve Winslow <swinslow@gmail.com>,
         afzal mohammed <afzal.mohd.ma@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
+        Peter Xu <peterx@redhat.com>,
         Mike Rapoport <rppt@linux.ibm.com>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
         linux-kernel@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
         linux-pm@vger.kernel.org
-Subject: [PATCH v2 09/11] MIPS: bmips: Switch to new topology interface
-Date:   Sun, 12 Apr 2020 11:20:39 +0800
-Message-Id: <20200412032123.3896114-10-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 10/11] MIPS: nlm: Switch to new topology interface
+Date:   Sun, 12 Apr 2020 11:20:40 +0800
+Message-Id: <20200412032123.3896114-11-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.26.0.rc2
 In-Reply-To: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
 References: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
@@ -80,29 +80,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Change the parameter of cpu_set_core from cpudata to cpuid.
-Also set cluster id for bmips as it have different method to probe
-actual hwid of CPU, and smp_store_cpuinfo is using cluster id to
-determine if we should probe topology info again.
+Use new functions to set core_id & cluster_id.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- arch/mips/kernel/smp-bmips.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/mips/netlogic/common/smp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
-index 9058e9dcf080..c40bb37eab38 100644
---- a/arch/mips/kernel/smp-bmips.c
-+++ b/arch/mips/kernel/smp-bmips.c
-@@ -247,7 +247,8 @@ static void bmips_init_secondary(void)
- 		break;
- 	case CPU_BMIPS5000:
- 		write_c0_brcm_action(ACTION_CLR_IPI(smp_processor_id(), 0));
--		cpu_set_core(&current_cpu_data, (read_c0_brcm_config() >> 25) & 3);
-+		cpu_set_core(smp_processor_id(), (read_c0_brcm_config() >> 25) & 3);
-+		cpu_set_cluster(smp_processor_id(), 0);
- 		break;
- 	}
+diff --git a/arch/mips/netlogic/common/smp.c b/arch/mips/netlogic/common/smp.c
+index 39a300bd6cc2..14bfa8a099cc 100644
+--- a/arch/mips/netlogic/common/smp.c
++++ b/arch/mips/netlogic/common/smp.c
+@@ -122,8 +122,8 @@ static void nlm_init_secondary(void)
+ 	int hwtid;
+ 
+ 	hwtid = hard_smp_processor_id();
+-	cpu_set_core(&current_cpu_data, hwtid / NLM_THREADS_PER_CORE);
+-	current_cpu_data.package = nlm_nodeid();
++	cpu_set_core(smp_processor_id(), hwtid / NLM_THREADS_PER_CORE);
++	cpu_set_cluster(smp_processor_id(), nlm_nodeid());
+ 	nlm_percpu_init(hwtid);
+ 	nlm_smp_irq_init(hwtid);
  }
 -- 
 2.26.0.rc2
