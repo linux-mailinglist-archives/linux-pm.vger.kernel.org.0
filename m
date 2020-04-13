@@ -2,104 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B661A6E5D
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 23:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBF31A6E58
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 23:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389123AbgDMVdv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Apr 2020 17:33:51 -0400
-Received: from smtprelay0129.hostedemail.com ([216.40.44.129]:47468 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389040AbgDMVdu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 17:33:50 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay06.hostedemail.com (Postfix) with ESMTP id D45AF18027F9D;
-        Mon, 13 Apr 2020 21:33:46 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:966:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2196:2199:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3871:3872:4321:4385:5007:6119:6742:6743:7808:8660:10004:10400:10466:10848:11026:11232:11657:11658:11914:12043:12048:12296:12297:12438:12740:12760:12895:13069:13148:13230:13311:13357:13439:14659:14721:21080:21451:21627:21990:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
-X-HE-Tag: badge84_5a5696689f027
-X-Filterd-Recvd-Size: 3380
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf07.hostedemail.com (Postfix) with ESMTPA;
-        Mon, 13 Apr 2020 21:33:40 +0000 (UTC)
-Message-ID: <efd6ceb1f182aa7364e9706422768a1c1335aee4.camel@perches.com>
-Subject: Re: [PATCH 2/2] crypto: Remove unnecessary memzero_explicit()
-From:   Joe Perches <joe@perches.com>
-To:     Waiman Long <longman@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>
-Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Date:   Mon, 13 Apr 2020 14:31:32 -0700
-In-Reply-To: <20200413211550.8307-3-longman@redhat.com>
-References: <20200413211550.8307-1-longman@redhat.com>
-         <20200413211550.8307-3-longman@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+        id S2389099AbgDMVct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Apr 2020 17:32:49 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:55224 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389040AbgDMVcs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 17:32:48 -0400
+Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id 40cc3ddfdceb1350; Mon, 13 Apr 2020 23:32:44 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+Date:   Mon, 13 Apr 2020 23:32:43 +0200
+Message-ID: <6362254.rXp5uA8eak@kreacher>
+In-Reply-To: <Pine.LNX.4.44L0.2004102231270.30859-100000@netrider.rowland.org>
+References: <Pine.LNX.4.44L0.2004102231270.30859-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2020-04-13 at 17:15 -0400, Waiman Long wrote:
-> Since kfree_sensitive() will do an implicit memzero_explicit(), there
-> is no need to call memzero_explicit() before it. Eliminate those
-> memzero_explicit() and simplify the call sites.
+On Saturday, April 11, 2020 4:41:14 AM CEST Alan Stern wrote:
+> Okay, this is my attempt to summarize what we have been discussing.  
+> But first: There is a dev_pm_skip_resume() helper routine which
+> subsystems can call to see whether resume-side _early and _noirq driver
+> callbacks should be skipped.  But there is no corresponding
+> dev_pm_skip_suspend() helper routine.  Let's add one, or rename
+> dev_pm_smart_suspend_and_suspended() to dev_pm_skip_suspend().
 
-2 bits of trivia:
+OK
 
-> diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-[]
-> @@ -391,10 +388,7 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
->  		dev_dbg(ce->dev, "ERROR: Invalid keylen %u\n", keylen);
->  		return -EINVAL;
->  	}
-> -	if (op->key) {
-> -		memzero_explicit(op->key, op->keylen);
-> -		kfree(op->key);
-> -	}
-> +	kfree_sensitive(op->key);
->  	op->keylen = keylen;
->  	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
->  	if (!op->key)
+> Given that, here's my understanding of what should happen.  (I'm
+> assuming the direct_complete mechanism is not being used.)  This tries
+> to describe what we _want_ to happen, which is not always the same as
+> what the current code actually _does_.
 
-It might be a defect to set op->keylen before the kmemdup succeeds.
+OK
 
-> @@ -416,10 +410,7 @@ int sun8i_ce_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
->  	if (err)
->  		return err;
->  
-> -	if (op->key) {
-> -		memzero_explicit(op->key, op->keylen);
-> -		kfree(op->key);
-> -	}
-> +	free_sensitive(op->key, op->keylen);
+> 	During the suspend side, for each of the
+> 	{suspend,freeze,poweroff}_{late,noirq} phases: If
+> 	dev_pm_skip_suspend() returns true then the subsystem should
+> 	not invoke the driver's callback, and if there is no subsystem
+> 	callback then the core will not invoke the driver's callback.
+> 
+> 	During the resume side, for each of the
+> 	{resume,thaw,restore}_{early,noirq} phases: If
+> 	dev_pm_skip_resume() returns true then the subsystem should
+> 	not invoke the driver's callback, and if there is no subsystem
+> 	callback then the core will not invoke the driver's callback.
+> 
+> 	dev_pm_skip_suspend() will return "true" if SMART_SUSPEND is
+> 	set and the device's runtime status is "suspended".
 
-Why not kfree_sensitive(op->key) ?
+Agreed with the above.
+
+> 	power.must_resume gets set following the suspend-side _noirq
+> 	phase if power.usage_count > 1 (indicating the device was
+> 	in active use before the start of the sleep transition) or
+> 	power.must_resume is set for any of the device's dependents.
+
+Or MAY_SKIP_RESUME is unset (which means that the driver does not
+allow its resume callbacks to be skipped), or power.may_skip_resume
+is unset (which means that the subsystem does not allow the
+driver callbacks to be skipped).
+
+> 	dev_pm_skip_resume() will return "false" if the current
+> 	transition is RESTORE or power.must_resume is set.  Otherwise:
+> 	It will return true if the current transition is THAW,
+> 	SMART_SUSPEND is set, and the device's runtime status is
+> 	"suspended".
+
+The other way around.  That is:
+
+dev_pm_skip_resume() will return "true" if the current transition is
+THAW and dev_pm_skip_suspend() returns "true" for that device (so
+SMART_SUSPEND is set, and the device's runtime status is "suspended",
+as per the definition of that function above).
+
+Otherwise, it will return "true" if the current transition is RESTORE
+(which means that all devices are resumed) or power.must_resume is not
+set (so this particular device need not be resumed).
+
+>  It will return "true" if the current transition is
+> 	RESUME, SMART_SUSPEND and MAY_SKIP_RESUME are both set, and
+> 	the device's runtime status is "suspended".
+
+Unless MAY_SKIP_RESUME is unset for at least one of its descendants (or
+dependent devices).
+
+> 	For a RESUME
+> 	transition, it will also return "true" if MAY_SKIP_RESUME and
+> 	power.may_skip_resume are both set, regardless of
+> 	SMART_SUSPEND or the current runtime status.
+
+And if the device was not in active use before suspend (as per its usage
+counter) or MAY_SKIP_RESUME is unset for at least one of its descendants (or
+dependent devices in general).
+
+> 	At the start of the {resume,thaw,restore}_noirq phase, if
+> 	dev_pm_skip_resume() returns true then the core will set the
+> 	runtime status to "suspended".  Otherwise it will set the
+> 	runtime status to "active".  If this is not what the subsystem
+> 	or driver wants, it must update the runtime status itself.
+
+Right.
+
+> Comments and differences with respect to the code in your pm-sleep-core
+> branch:
+> 
+> 	I'm not sure whether we should specify other conditions for
+> 	setting power.must_resume.
+
+IMO we should.
+
+Otherwise it is rather hard to catch the case in which one of the
+device's descendants has MAY_SKIP_RESUME unset (and so the device
+needs to be resumed).
+
+> 	dev_pm_skip_resume() doesn't compute the value described
+> 	above.  I'm pretty sure the existing code is wrong.
+
+Well, we don't seem to have reached an agreement on some details
+above ...
+
+Cheers!
+
 
 
