@@ -2,243 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D8A1A6F23
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 00:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AEA1A6F3C
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 00:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728372AbgDMW31 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Apr 2020 18:29:27 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:37921 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389563AbgDMW30 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 18:29:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586816965;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=xENEjcmhPGwc2y5vLor/EJ6DRudCRi6D5WVSWBMRKcI=;
-        b=a2qwqlIcjP8lL2vgPnpktyZwxQJ3Gd8V799zI1IUP4hWTClZUbXZ7IPVt41XBZekaJ1cPz
-        JEkivVeYCabn0j9j1E4/d1K0J6VRG2By3j5kqgfg8x4IdE/P1X82aDPN4bpmhLR/JqzxFJ
-        9BTw5wYu52FL9ORzJX5cBeNfcl2diUc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-285-8AaFvKVINBm7IlQx6B5FDA-1; Mon, 13 Apr 2020 18:29:20 -0400
-X-MC-Unique: 8AaFvKVINBm7IlQx6B5FDA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CC5481005513;
-        Mon, 13 Apr 2020 22:29:15 +0000 (UTC)
-Received: from llong.com (ovpn-115-28.rdu2.redhat.com [10.10.115.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3589D100164D;
-        Mon, 13 Apr 2020 22:29:07 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>
-Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 2/2] crypto: Remove unnecessary memzero_explicit()
-Date:   Mon, 13 Apr 2020 18:28:46 -0400
-Message-Id: <20200413222846.24240-1-longman@redhat.com>
-In-Reply-To: <20200413211550.8307-1-longman@redhat.com>
-References: <20200413211550.8307-1-longman@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+        id S2389613AbgDMW3w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Apr 2020 18:29:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2389607AbgDMW3t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 18:29:49 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F07FC0A3BDC;
+        Mon, 13 Apr 2020 15:29:49 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id C774B2A1205
+Received: by earth.universe (Postfix, from userid 1000)
+        id AFBD63C08C7; Tue, 14 Apr 2020 00:29:45 +0200 (CEST)
+Date:   Tue, 14 Apr 2020 00:29:45 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] power_supply: Add a helper function to retrieve psy
+ array from phandle
+Message-ID: <20200413222945.6eynl77ckpss35eo@earth.universe>
+References: <20200407211243.247362-1-badhri@google.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="a6u4x77jcpwdjdw4"
+Content-Disposition: inline
+In-Reply-To: <20200407211243.247362-1-badhri@google.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since kfree_sensitive() will do an implicit memzero_explicit(), there
-is no need to call memzero_explicit() before it. Eliminate those
-memzero_explicit() and simplify the call sites. For better correctness,
-the setting of keylen is also moved down after the key pointer check.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- .../allwinner/sun8i-ce/sun8i-ce-cipher.c      | 19 +++++-------------
- .../allwinner/sun8i-ss/sun8i-ss-cipher.c      | 20 +++++--------------
- drivers/crypto/amlogic/amlogic-gxl-cipher.c   | 12 +++--------
- drivers/crypto/inside-secure/safexcel_hash.c  |  3 +--
- 4 files changed, 14 insertions(+), 40 deletions(-)
+--a6u4x77jcpwdjdw4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-index aa4e8fdc2b32..8358fac98719 100644
---- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-+++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-@@ -366,10 +366,7 @@ void sun8i_ce_cipher_exit(struct crypto_tfm *tfm)
- {
- 	struct sun8i_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	crypto_free_sync_skcipher(op->fallback_tfm);
- 	pm_runtime_put_sync_suspend(op->ce->dev);
- }
-@@ -391,14 +388,11 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		dev_dbg(ce->dev, "ERROR: Invalid keylen %u\n", keylen);
- 		return -EINVAL;
- 	}
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
--	op->keylen = keylen;
-+	kfree_sensitive(op->key);
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
- 		return -ENOMEM;
-+	op->keylen = keylen;
- 
- 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
- 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
-@@ -416,14 +410,11 @@ int sun8i_ce_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 	if (err)
- 		return err;
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
--	op->keylen = keylen;
-+	kfree_sensitive(op->key);
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
- 		return -ENOMEM;
-+	op->keylen = keylen;
- 
- 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
- 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-index 5246ef4f5430..0495fbc27fcc 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-@@ -249,7 +249,6 @@ static int sun8i_ss_cipher(struct skcipher_request *areq)
- 			offset = areq->cryptlen - ivsize;
- 			if (rctx->op_dir & SS_DECRYPTION) {
- 				memcpy(areq->iv, backup_iv, ivsize);
--				memzero_explicit(backup_iv, ivsize);
- 				kfree_sensitive(backup_iv);
- 			} else {
- 				scatterwalk_map_and_copy(areq->iv, areq->dst, offset,
-@@ -367,10 +366,7 @@ void sun8i_ss_cipher_exit(struct crypto_tfm *tfm)
- {
- 	struct sun8i_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	crypto_free_sync_skcipher(op->fallback_tfm);
- 	pm_runtime_put_sync(op->ss->dev);
- }
-@@ -392,14 +388,11 @@ int sun8i_ss_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		dev_dbg(ss->dev, "ERROR: Invalid keylen %u\n", keylen);
- 		return -EINVAL;
- 	}
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
--	op->keylen = keylen;
-+	kfree_sensitive(op->key);
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
- 		return -ENOMEM;
-+	op->keylen = keylen;
- 
- 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
- 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
-@@ -418,14 +411,11 @@ int sun8i_ss_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		return -EINVAL;
- 	}
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
--	op->keylen = keylen;
-+	kfree_sensitive(op->key);
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
- 		return -ENOMEM;
-+	op->keylen = keylen;
- 
- 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
- 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
-diff --git a/drivers/crypto/amlogic/amlogic-gxl-cipher.c b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-index fd1269900d67..6aa9ce7bbbd4 100644
---- a/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-+++ b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-@@ -341,10 +341,7 @@ void meson_cipher_exit(struct crypto_tfm *tfm)
- {
- 	struct meson_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	crypto_free_sync_skcipher(op->fallback_tfm);
- }
- 
-@@ -368,14 +365,11 @@ int meson_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		dev_dbg(mc->dev, "ERROR: Invalid keylen %u\n", keylen);
- 		return -EINVAL;
- 	}
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
--	op->keylen = keylen;
-+	kfree_sensitive(op->key);
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
- 		return -ENOMEM;
-+	op->keylen = keylen;
- 
- 	return crypto_sync_skcipher_setkey(op->fallback_tfm, key, keylen);
- }
-diff --git a/drivers/crypto/inside-secure/safexcel_hash.c b/drivers/crypto/inside-secure/safexcel_hash.c
-index 43962bc709c6..4a2d162914de 100644
---- a/drivers/crypto/inside-secure/safexcel_hash.c
-+++ b/drivers/crypto/inside-secure/safexcel_hash.c
-@@ -1081,8 +1081,7 @@ static int safexcel_hmac_init_pad(struct ahash_request *areq,
- 		}
- 
- 		/* Avoid leaking */
--		memzero_explicit(keydup, keylen);
--		kfree(keydup);
-+		kfree_sensitive(keydup);
- 
- 		if (ret)
- 			return ret;
--- 
-2.18.1
+Hi,
 
+On Tue, Apr 07, 2020 at 02:12:43PM -0700, Badhri Jagan Sridharan wrote:
+> power_supply_get_by_phandle retrieves power_supply object based on
+> phandle. However, when multiple power_supply objects are registered
+> by the same parent device the first power_supply object's reference
+> is returned. This varies according to probe order. Add a helper to
+> return all the power_supply object's reference.
+>=20
+> The caller has to provide the power_supply pointer array.
+> -EOVERFLOW is returned when the size of the array is not enough to
+> pass back all the power_supply objects.
+>=20
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> ---
+
+This patchset is incomplete, it is missing a mainline user.
+
+-- Sebastian
+
+>  drivers/power/supply/power_supply_core.c | 78 ++++++++++++++++++++++++
+>  include/linux/power_supply.h             |  9 +++
+>  2 files changed, 87 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
+ply/power_supply_core.c
+> index 1a9a9fae73d32..e7bab4661ba13 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -32,6 +32,13 @@ EXPORT_SYMBOL_GPL(power_supply_notifier);
+> =20
+>  static struct device_type power_supply_dev_type;
+> =20
+> +struct match_device_node_array_param {
+> +	struct device_node *parent_of_node;
+> +	struct power_supply **psy;
+> +	ssize_t psy_size;
+> +	ssize_t psy_count;
+> +};
+> +
+>  #define POWER_SUPPLY_DEFERRED_REGISTER_TIME	msecs_to_jiffies(10)
+> =20
+>  static bool __power_supply_is_supplied_by(struct power_supply *supplier,
+> @@ -522,6 +529,77 @@ struct power_supply *power_supply_get_by_phandle(str=
+uct device_node *np,
+>  }
+>  EXPORT_SYMBOL_GPL(power_supply_get_by_phandle);
+> =20
+> +static int power_supply_match_device_node_array(struct device *dev,
+> +						void *data)
+> +{
+> +	struct match_device_node_array_param *param =3D
+> +		(struct match_device_node_array_param *)data;
+> +	struct power_supply **psy =3D param->psy;
+> +	ssize_t size =3D param->psy_size;
+> +	ssize_t *count =3D &param->psy_count;
+> +
+> +	if (!dev->parent || dev->parent->of_node !=3D param->parent_of_node)
+> +		return 0;
+> +
+> +	if (*count >=3D size)
+> +		return -EOVERFLOW;
+> +
+> +	psy[*count] =3D dev_get_drvdata(dev);
+> +	atomic_inc(&psy[*count]->use_cnt);
+> +	(*count)++;
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * power_supply_get_by_phandle_array() - Similar to
+> + * power_supply_get_by_phandle but returns an array of power supply
+> + * objects which are associated with the phandle.
+> + * @np: Pointer to device node holding phandle property.
+> + * @property: Name of property holding a power supply name.
+> + * @psy: Array of power_supply pointers provided by the client which is
+> + * filled by power_supply_get_by_phandle_array.
+> + * @size: size of power_supply pointer array.
+> + *
+> + * If power supply was found, it increases reference count for the
+> + * internal power supply's device. The user should power_supply_put()
+> + * after usage.
+> + *
+> + * Return: On success returns the number of power supply objects filled
+> + * in the @psy array.
+> + * -EOVERFLOW when size of @psy array is not suffice.
+> + * -EINVAL when @psy is NULL or @size is 0.
+> + * -ENODEV when matching device_node is not found.
+> + */
+> +int power_supply_get_by_phandle_array(struct device_node *np,
+> +				      const char *property,
+> +				      struct power_supply **psy,
+> +				      ssize_t size)
+> +{
+> +	struct device_node *power_supply_np;
+> +	int ret;
+> +	struct match_device_node_array_param param;
+> +
+> +	if (psy =3D=3D NULL || size =3D=3D 0)
+> +		return -EINVAL;
+> +
+> +	power_supply_np =3D of_parse_phandle(np, property, 0);
+> +	if (!power_supply_np)
+> +		return -ENODEV;
+> +
+> +	param.parent_of_node =3D power_supply_np;
+> +	param.psy =3D psy;
+> +	param.psy_size =3D size;
+> +	param.psy_count =3D 0;
+> +	ret =3D class_for_each_device(power_supply_class, NULL, &param,
+> +				    power_supply_match_device_node_array);
+> +
+> +	of_node_put(power_supply_np);
+> +
+> +	return param.psy_count;
+> +}
+> +EXPORT_SYMBOL_GPL(power_supply_get_by_phandle_array);
+> +
+>  static void devm_power_supply_put(struct device *dev, void *res)
+>  {
+>  	struct power_supply **psy =3D res;
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index dcd5a71e6c677..8c1478a480674 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -366,12 +366,21 @@ extern void power_supply_put(struct power_supply *p=
+sy);
+>  #ifdef CONFIG_OF
+>  extern struct power_supply *power_supply_get_by_phandle(struct device_no=
+de *np,
+>  							const char *property);
+> +extern int power_supply_get_by_phandle_array(struct device_node *np,
+> +					     const char *property,
+> +					     struct power_supply **psy,
+> +					     ssize_t size);
+>  extern struct power_supply *devm_power_supply_get_by_phandle(
+>  				    struct device *dev, const char *property);
+>  #else /* !CONFIG_OF */
+>  static inline struct power_supply *
+>  power_supply_get_by_phandle(struct device_node *np, const char *property)
+>  { return NULL; }
+> +static int power_supply_get_by_phandle_array(struct device_node *np,
+> +					     const char *property,
+> +					     struct power_supply **psy,
+> +					     int size)
+> +{ return 0; }
+>  static inline struct power_supply *
+>  devm_power_supply_get_by_phandle(struct device *dev, const char *propert=
+y)
+>  { return NULL; }
+> --=20
+> 2.26.0.292.g33ef6b2f38-goog
+>=20
+
+--a6u4x77jcpwdjdw4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6U584ACgkQ2O7X88g7
++pq8cg/9GoRk7rhaCkFPcKCAZt3eEH5SzNs/p5qIqjbm/eskWrtMACcccOqD5lsz
++kIiGho2F5I7YSBpWJQJfKV+Jy/5Eu3PCy+ZcsznLyTupQ3waA3jhggrRzunJhQc
+RIeS63rk76D0cg35w9L2Vrcpja7r8JcBXLU7o1A9lIi/r2nt3CeOJFwI89jPzRiQ
+QpRMKc/Uxk66a9auDMcc4v9AlxC6x5GUvXX03a3RFtPqZ6EzkoPlQIFEHBjk7qfE
+/NKiklpa2ixKILgseanvU1Ikcwf0wl7eAHBrpDw0iDTKMVn7xRcDXWG3cvMsahC8
+th3wW3MbG0xCVdDab2ctNri17NMnWvLGLaM51GUEeHPSEhRnO/jF3i5p/eNyfmwc
+jX/l+x36gjcIOculpYDafz2kGviHGqbmD4jCtb6TBPWoQCJbEifyGcD63LGFbMvm
+/vbbJgtAzqMZJgH68EfQYQP6GzGmN+ti34cMng+Vqv3sSg0r9I78z6q1vGQNmU8C
+Wlbm4iPKATNULr8q9yLf9cAOKqZp9V87cNZbY6/kcteL3uN33CNVZVEjzHPbenHU
+tu2ECcNlQfJzhEg12SrZs7gAxNsXmzEX2EbQIIsn5RnF9YzXRqch2tkPWhGIGIZZ
+DQcn32sjiPIKOYyv9agPgqvES+RZ2cbl7JPUKPkaAuII5uE1Y1g=
+=tDHL
+-----END PGP SIGNATURE-----
+
+--a6u4x77jcpwdjdw4--
