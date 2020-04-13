@@ -2,144 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (unknown [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AAE1A616B
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 04:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 644D01A62FC
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 08:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727130AbgDMCB4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Apr 2020 22:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:36122 "EHLO
+        id S1728091AbgDMGVp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Apr 2020 02:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:49616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727081AbgDMCB4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Apr 2020 22:01:56 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D41C0A3BE0
-        for <linux-pm@vger.kernel.org>; Sun, 12 Apr 2020 19:01:57 -0700 (PDT)
-IronPort-SDR: 9JnDo3NnYiBPctInxECexVwjtklfPP5HT1xqI3OWB0zjjvZyVVowDLYb0juTnDE8F9yDep5GcM
- U/d/fXivs5eg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2020 19:01:56 -0700
-IronPort-SDR: IoTa00alKS8kHCgbI1kAiiRabnGK18B+IzYMOVk474GOY6TlcL6smnteSCbho6p3Imkl2h5aNX
- 5ClnAwQaeSFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,377,1580803200"; 
-   d="scan'208";a="399474922"
-Received: from lzhang2-mobl2.ccr.corp.intel.com ([10.255.28.254])
-  by orsmga004.jf.intel.com with ESMTP; 12 Apr 2020 19:01:54 -0700
-Message-ID: <17727142fac13f641d7cd5c3713cfadef77aa75c.camel@intel.com>
-Subject: Re: [RFC PATCH 5/5] ACPI: processor: do update when maximum cooling
- state changed
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org
-Cc:     tiwai@suse.de, viresh.kumar@linaro.org
-Date:   Mon, 13 Apr 2020 10:01:48 +0800
-In-Reply-To: <e264d4a2-b0d9-8adf-b44f-7501c4407029@linaro.org>
-References: <20200408041917.2329-1-rui.zhang@intel.com>
-         <20200408041917.2329-5-rui.zhang@intel.com>
-         <5cd80df7-775e-96bd-cec5-b14965de2a67@linaro.org>
-         <2bef9553fcf7ccd7c9811ad1d572af2e5a811917.camel@intel.com>
-         <a15dee60-8d20-0f56-0037-276830c613cd@linaro.org>
-         <fee68438572796c71089571e0ff0add6cbbd3e0c.camel@intel.com>
-         <e264d4a2-b0d9-8adf-b44f-7501c4407029@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S1728010AbgDMGVp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 02:21:45 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26824C0A3BE0
+        for <linux-pm@vger.kernel.org>; Sun, 12 Apr 2020 23:21:46 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id r4so4062469pgg.4
+        for <linux-pm@vger.kernel.org>; Sun, 12 Apr 2020 23:21:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=La50agcb/2KWA0YXVPyR15X/cVxbH5EFFNzow2CasCk=;
+        b=U4AhDKmpTjiiQCZMx8qJ1pvV8qHN5/3QPa+VuBSFlJKps1DI9ITUMc5Vs0rjFqGEFk
+         jnergkSEQGWU+5Kxd+rABuZrt2Uj2pIFjr97R4gXPKNC2B/tXBLXUEMn3jWZTCMxTC+d
+         Y4KwetQ/ZEN+5oNXk8NX3XVPtMRJjfP50fHutrzSmg8Ifet9woNEzC0a/qi0yLFeVccx
+         yRgkeliuuX2KAd5dT6IYcQ6e99JJXkCFk5kQixdxmzcrT9s3llqQkdUclDJTvA9sLQPS
+         owAhwVjvH/loJKinZhJcY6sV48c57edrdQub9pYTPcZQAbuOoulrCTh1pW59H8Tz2tlK
+         lW2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=La50agcb/2KWA0YXVPyR15X/cVxbH5EFFNzow2CasCk=;
+        b=lPaSc+jA2YA71uV7dB8uPHZsCK4SeTBPgBrpH7sW/WW5zki+t0TJTb8pSQB8an10XL
+         TboQ0hq7ch9SB0kD/Iu1cYaWvPLgmwKRj9Uv87Wb7MuA/t81YoAuEYlJkl/3FL0niQs7
+         hbFqzIj+KFM8YQDRBT/0GRhzu8umGn6yxV7bp7FRLLSg68JwVzjujavKpviXL7C4kZPZ
+         Dpo2iBqwpPpE4nimRIkeA6g4QoFwyc3v6j9Vw+psRKoAmHise9e2Y159/BB88G4Hqnnl
+         5rdgfUQpdkLYW24MZzJZO85cqraQjcNHKGTvtJV+mzCiVJXcu2w37s1lfKZlkyxdPIMC
+         ZZ6Q==
+X-Gm-Message-State: AGi0PuZ8yFtmlriM83nEHdvLxqox0OcXmbC7h1c7vQ+gxEFX0wFcAmC2
+        VpSxv+u9OkSlXU2r1zCyFoIdcg==
+X-Google-Smtp-Source: APiQypJQcvb09jM8vKcT10ou779L5BrE/iVeMVqorUgMs0rxNdmOzAZ2huH75ZLiRKpYDW7+F1nNsw==
+X-Received: by 2002:a63:a50c:: with SMTP id n12mr16740745pgf.274.1586758905511;
+        Sun, 12 Apr 2020 23:21:45 -0700 (PDT)
+Received: from localhost ([122.171.118.46])
+        by smtp.gmail.com with ESMTPSA id d203sm2351825pfd.79.2020.04.12.23.21.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 12 Apr 2020 23:21:44 -0700 (PDT)
+Date:   Mon, 13 Apr 2020 11:51:41 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, will@kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, talho@nvidia.com,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bbasu@nvidia.com, mperttunen@nvidia.com
+Subject: Re: [TEGRA194_CPUFREQ Patch 2/3] cpufreq: Add Tegra194 cpufreq driver
+Message-ID: <20200413062141.a6hmwipexhv3sctq@vireshk-i7>
+References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
+ <1575394348-17649-2-git-send-email-sumitg@nvidia.com>
+ <20200326115023.xy3n5bl7uetuw7mx@vireshk-i7>
+ <d233b26b-6b50-7d41-9f33-a5dc151e0e7d@nvidia.com>
+ <20200406025549.qfwzlk3745y3r274@vireshk-i7>
+ <3ab4136c-8cca-c2f9-d286-b82dac23e720@nvidia.com>
+ <20200408055301.jhvu5bc2luu3b5qr@vireshk-i7>
+ <08307e54-0e14-14a3-7d6a-d59e1e04a683@nvidia.com>
+ <20200409074415.twpzu2n4frqlde7b@vireshk-i7>
+ <00390070-38a1-19aa-ca59-42c4658bee7e@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00390070-38a1-19aa-ca59-42c4658bee7e@nvidia.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 2020-04-12 at 12:07 +0200, Daniel Lezcano wrote:
-> 
-> 
-> 
-> 
-> Hi Rui,
-> 
-> On 12/04/2020 08:13, Zhang Rui wrote:
-> > On Fri, 2020-04-10 at 14:10 +0200, Daniel Lezcano wrote:
-> 
-> [ ... ]
-> 
-> > > > And to fix this, it's better to
-> > > > a. unregister and re-register the cooling device as you
-> > > > suggested.
-> > > > or
-> > > > b. introduce an API that updates the cooling device entirely
-> > > > instead of
-> > > > statistics table only.
+On 09-04-20, 16:51, Sumit Gupta wrote:
+> We are using "read_counters_work" as local variable. So every invocation the
+> function will have its own copy of counters for corresponding cpu. That's
+> why are doing INIT_WORK_ONSTACK here.
+
+Why? To support parallel calls to reading the freq ?
+
+> > > > > > > > > +     queue_work_on(cpu, read_counters_wq, &read_counters_work.work);
+> > > > > > > > > +     flush_work(&read_counters_work.work);
+> > > > > > > > 
+> > > > > > > > Why can't this be done in current context ?
+> > > > > > > > 
+> > > > > > > We used work queue instead of smp_call_function_single() to have long delay.
+> > > > > > 
+> > > > > > Please explain completely, you have raised more questions than you
+> > > > > > answered :)
+> > > > > > 
+> > > > > > Why do you want to have long delays ?
+> > > > > > 
+> > > > > Long delay value is used to have the observation window long enough for
+> > > > > correctly reconstructing the CPU frequency considering noise.
+> > > > > In next patch version, changed delay value to 500us which in our tests is
+> > > > > considered reliable.
 > > > > 
-> > > > For either of the above solutions, we'd better to cleanup the
-> > > > code
-> > > > to 
-> > > > invoke .get_max_state() during registration/max_state_reset
-> > > > phase,
-> > > > once, and then always use cached value later.
-> > > > And plus, if we want to follow solution a), it's better to
-> > > > remove
-> > > > .get_max_state() callback and use an integer instead so that
-> > > > every
-> > > > driver knows this limitation.
-> > > > I'd vote for solution a) if there is no soc thermal driver that
-> > > > may
-> > > > return dynamic max_states.
+> > > > I understand that you need to put a udelay() while reading the freq from
+> > > > hardware, that is fine, but why do you need a workqueue for that? Why can't you
+> > > > just read the values directly from the same context ?
 > > > > 
-> > > > Do I still miss something?
-> > > 
-> > > I agree for the a) solution too.
-> > > 
-> > > But regarding the get_max_state() callback being converted to a
-> > > integer,
-> > > the driver int3406_thermal.c computes the upper and lower limits
-> > > which
-> > > are updated on a INT3406_BRIGHTNESS_LIMITS_CHANGED notification
-> > > and
-> > > get_max_state() does uppper - lower.
+> > > The register to read frequency is per core and not accessible to other
+> > > cores. So, we have to execute the function remotely as the target core to
+> > > read frequency might be different from current.
+> > > The functions for that are smp_call_function_single or queue_work_on.
+> > > We used queue_work_on() to avoid long delay inside ipi interrupt context
+> > > with interrupts disabled.
 > > 
-> > Right, this is another case shows that it's better to support
-> > dynamic
-> > max_state.
-> > IMO, this is not difficult to do. We just need to introduce a new
-> > API,
-> > which reuses the current cdev device, and reset its every thermal
-> > instance, and update all the thermal zones the cdev is involved.
-> > what do you think?
-> 
-> I like how the thermal framework is designed but I think there are
-> too
-> many API for the thermal framework and it deserves a simplification
-> rather than adding more of them.
+> > Okay, I understand this now, finally :)
+> > 
+> > But if the interrupts are disabled during some call, won't workqueues face the
+> > same problem ?
+> > 
+> Yes, we are trying to minimize the case.
 
-I agree.
-> 
-> There is no place where the get_max_state is cached except in the
-> stats
-> structure.
+But how do you know workqueues will perform better than
+smp_call_function_single() ? Just asking for clarity on this as normally
+everyone tries to do smp_call_function_single().
 
-why we can not have a cdev->max_state field, and get it updated right
-after .get_max_state().
-and .get_max_state()  is only invoked
-a) during cooling device registration
-b) when cooling device update its max_state via the new API.
-
-> 
-> In the function thermal_cooling_device_stats_update():
-> 
->   Is it possible to just compare the 'new_state' parameter with
-> stats->max_state and if it is greater increase the stats table and
-> update max_state to the new_state ?
-> 
-the problem is that thermal_cooling_device_stats_update() is invoked
-only if thermal zone are updated or the cur_state sysfs attribute is
-changed.
-There is no way for a cooling device driver to tell thermal framework
-that it has changed.
-Say, for the problem on hand, the statistics table will not be updated
-in time when cpufreq driver probed.
-
-thanks,
-rui
-
+-- 
+viresh
