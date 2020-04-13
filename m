@@ -2,106 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3571A1A6DBD
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 23:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B855D1A6DC0
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 23:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388724AbgDMVFR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Apr 2020 17:05:17 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34262 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388723AbgDMVFQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 17:05:16 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id D5CAB2A1205
-Received: by earth.universe (Postfix, from userid 1000)
-        id B9B673C08C7; Mon, 13 Apr 2020 23:05:12 +0200 (CEST)
-Date:   Mon, 13 Apr 2020 23:05:12 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Jason Yan <yanaijie@huawei.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: max14656: remove set but not used 'ret'
-Message-ID: <20200413210512.mljqzlgu46hzn3hu@earth.universe>
-References: <20200409085401.47516-1-yanaijie@huawei.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ul3uf7dcirbx5qse"
-Content-Disposition: inline
-In-Reply-To: <20200409085401.47516-1-yanaijie@huawei.com>
+        id S2388744AbgDMVGx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Apr 2020 17:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388723AbgDMVGw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 17:06:52 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3F7C0A3BDC
+        for <linux-pm@vger.kernel.org>; Mon, 13 Apr 2020 14:06:52 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id d11so11292858pjh.4
+        for <linux-pm@vger.kernel.org>; Mon, 13 Apr 2020 14:06:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=IV0jCGjY4W6KdLiLfKem198qqlhSCntJsgHYVO+E6jU=;
+        b=FNC5deBelKjQu9FQsxeDOLK8dE9RzOssihuoDJkcERxLh1LBzR9As37XDqlykamblH
+         H6sOT/wtr0SQv9/3+IXDT1GHWnoT8ecRaYNvy//giJCXMGeGJ3wd/7Ya/Eq3ppTD1a2u
+         f8iT3ZcSVqBTzNOvszdjAIWlt1GukNnhAZdmCbEevZXhG6s7079smKzUzbX90zSv8gY0
+         e7iwZNYwqtAPweHkrfy9hVFLEl5xw4Pjklvq9cgZrAJMoyr8JDFXl+txh8YK22uDEaXE
+         1/3oxX/THgt0KyBGSXepiXq+nLDgl8LqoQ0tTPoUh87+rgezNp/GZkhbggIfvZsNhVKO
+         u5kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=IV0jCGjY4W6KdLiLfKem198qqlhSCntJsgHYVO+E6jU=;
+        b=Hu34RaHFuoNSJ3LIGaCG1llWkGBOBcf1OdK0JPo98b08OPKPkUBekKw6ZfaUL/dETd
+         weqLh/XPAQTbyP8i0qhX3cD33PYrqjLhvIrg5ltBbHtUzqq8X0jcoai5jNZPdYDmAzPz
+         4epUH3AOIbeohmTnxHOcoAGmi4C9AX799CjWc4o3i8JfgrNY32ei1eCpHh6cWqv7B6Ie
+         gu0wP62lH77anQPeBimTzBHGG9evxjDKMLB8LuhzhOLJgk3jLPKZfE1l/6s0gA2W9B4n
+         gyajCjtBn6mQeWNDgFFfErq2EoHFDUf8p73TBi1m6xN8+cn6bdOg8TD7NbTLZzOArghR
+         nkaQ==
+X-Gm-Message-State: AGi0Pua5nPhCroL2wLrQ5z2OhaGn1Rfs1aIwgink9p36rUSsi7sOH+Lj
+        1V/tGws6uquAqA2oQgXHj+dsXCDVLxtKTRUQRzMfqA==
+X-Google-Smtp-Source: APiQypIJh3M/I5cOHqVYEHsnkdDtigtwOiciiePxgVDuJ8OG5dy1ncDxT6Fx/Pgv+rzuviXoXgvVVwmVfpKywghiEC6XQg==
+X-Received: by 2002:a17:90a:65c8:: with SMTP id i8mr23517001pjs.156.1586812011717;
+ Mon, 13 Apr 2020 14:06:51 -0700 (PDT)
+Date:   Mon, 13 Apr 2020 14:06:42 -0700
+Message-Id: <20200413210644.201801-1-matthewgarrett@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.26.0.110.g2183baf09c-goog
+Subject: [PATCH 1/3] thermal/int340x_thermal: Export GDDV
+From:   Matthew Garrett <matthewgarrett@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, rui.zhang@intel.com,
+        nisha.aram@intel.com, Matthew Garrett <mjg59@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Matthew Garrett <mjg59@google.com>
 
---ul3uf7dcirbx5qse
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Implementing DPTF properly requires making use of firmware-provided
+information associated with the INT3400 device. Calling GDDV provides a
+buffer of information which userland can then interpret to determine
+appropriate DPTF policy.
 
-Hi,
+Signed-off-by: Matthew Garrett <mjg59@google.com>
+---
+ .../intel/int340x_thermal/int3400_thermal.c   | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-On Thu, Apr 09, 2020 at 04:54:01PM +0800, Jason Yan wrote:
-> Fix the following gcc warning:
->=20
-> drivers/power/supply/max14656_charger_detector.c:142:6: warning:
-> variable =E2=80=98ret=E2=80=99 set but not used [-Wunused-but-set-variabl=
-e]
->   int ret =3D 0;
->       ^~~
->=20
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
-> ---
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index ceef89c956bd4..00a7732724cd0 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -52,6 +52,25 @@ struct int3400_thermal_priv {
+ 	u8 uuid_bitmap;
+ 	int rel_misc_dev_res;
+ 	int current_uuid_index;
++	char *data_vault;
++};
++
++static ssize_t data_vault_read(struct file *file, struct kobject *kobj,
++	     struct bin_attribute *attr, char *buf, loff_t off, size_t count)
++{
++	memcpy(buf, attr->private + off, count);
++	return count;
++}
++
++static BIN_ATTR_RO(data_vault, 0);
++
++static struct bin_attribute *data_attributes[] = {
++	&bin_attr_data_vault,
++	NULL,
++};
++
++static const struct attribute_group data_attribute_group = {
++	.bin_attrs = data_attributes,
+ };
+ 
+ static ssize_t available_uuids_show(struct device *dev,
+@@ -278,6 +297,32 @@ static struct thermal_zone_params int3400_thermal_params = {
+ 	.no_hwmon = true,
+ };
+ 
++static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
++{
++	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
++	union acpi_object *obj;
++	acpi_status status;
++
++	status = acpi_evaluate_object(priv->adev->handle, "GDDV", NULL,
++				      &buffer);
++	if (ACPI_FAILURE(status) || !buffer.length)
++		return;
++
++	obj = buffer.pointer;
++	if (obj->type != ACPI_TYPE_PACKAGE || obj->package.count != 1
++	    || obj->package.elements[0].type != ACPI_TYPE_BUFFER) {
++		kfree(buffer.pointer);
++		return;
++	}
++
++	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
++				   obj->package.elements[0].buffer.length,
++				   GFP_KERNEL);
++	bin_attr_data_vault.private = priv->data_vault;
++	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
++	kfree(buffer.pointer);
++}
++
+ static int int3400_thermal_probe(struct platform_device *pdev)
+ {
+ 	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
+@@ -309,6 +354,8 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, priv);
+ 
++	int3400_setup_gddv(priv);
++
+ 	int3400_thermal_ops.get_mode = int3400_thermal_get_mode;
+ 	int3400_thermal_ops.set_mode = int3400_thermal_set_mode;
+ 
+@@ -327,6 +374,13 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+ 	if (result)
+ 		goto free_rel_misc;
+ 
++	if (priv->data_vault) {
++		result = sysfs_create_group(&pdev->dev.kobj,
++					    &data_attribute_group);
++		if (result)
++			goto free_uuid;
++	}
++
+ 	result = acpi_install_notify_handler(
+ 			priv->adev->handle, ACPI_DEVICE_NOTIFY, int3400_notify,
+ 			(void *)priv);
+@@ -336,6 +390,9 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ free_sysfs:
++	if (priv->data_vault)
++		sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group);
++free_uuid:
+ 	sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
+ free_rel_misc:
+ 	if (!priv->rel_misc_dev_res)
+@@ -360,8 +417,11 @@ static int int3400_thermal_remove(struct platform_device *pdev)
+ 	if (!priv->rel_misc_dev_res)
+ 		acpi_thermal_rel_misc_device_remove(priv->adev->handle);
+ 
++	if (priv->data_vault)
++		sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group);
+ 	sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
+ 	thermal_zone_device_unregister(priv->thermal);
++	kfree(priv->data_vault);
+ 	kfree(priv->trts);
+ 	kfree(priv->arts);
+ 	kfree(priv);
+-- 
+2.26.0.110.g2183baf09c-goog
 
-Thanks, queued.
-
--- Sebastian
-
->  drivers/power/supply/max14656_charger_detector.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/supply/max14656_charger_detector.c b/drivers/p=
-ower/supply/max14656_charger_detector.c
-> index 3bbb8b4c8ae7..137f9fafce8c 100644
-> --- a/drivers/power/supply/max14656_charger_detector.c
-> +++ b/drivers/power/supply/max14656_charger_detector.c
-> @@ -139,10 +139,9 @@ static void max14656_irq_worker(struct work_struct *=
-work)
-> =20
->  	u8 buf[REG_TOTAL_NUM];
->  	u8 chg_type;
-> -	int ret =3D 0;
-> =20
-> -	ret =3D max14656_read_block_reg(chip->client, MAX14656_DEVICE_ID,
-> -				      REG_TOTAL_NUM, buf);
-> +	max14656_read_block_reg(chip->client, MAX14656_DEVICE_ID,
-> +				REG_TOTAL_NUM, buf);
-> =20
->  	if ((buf[MAX14656_STATUS_1] & STATUS1_VB_VALID_MASK) &&
->  		(buf[MAX14656_STATUS_1] & STATUS1_CHG_TYPE_MASK)) {
-> --=20
-> 2.17.2
->=20
-
---ul3uf7dcirbx5qse
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6U1AIACgkQ2O7X88g7
-+pqpgw//Y+UzgZPhDZpKZko7ATusRTbvh7P59AmNkfarrIHMYH2Ygi/txHlnkyN9
-ChuByntYsQvL2D7PMAFCw7MZBcYz+nToUQcrWRqLUN0YMeZpfgWVQO/nkw7B3AU1
-QN2QXxI9exfko7USJPv6lt24aFv0AeZaOR3XN47MvQP2EYcqmBYZSCa2Dcv3ntM8
-XrCAfhmnOrC0cXzp2TEwQXN5Z5QMPgFr9mg4a7EQ9KFSynNArHck1lgtR73w6zRo
-uyES0kB+eNlzu19xFocKv1LCILChIjIJ1Y/EA05ZaYiSimkTO2ZKRrKJFDswqgDR
-NEHW80ZooM08Hjm+vr9dFI9qF0p7D2OVghP2iQcsg0dQ//kFrOFSgjPfYBphWqcn
-tSE/5tqXpo+4FgwcqWSW21pdWBm4JwhXL3emOldLJy7tLcGdyStQKW2B45yVcVJh
-t5PEeAW9ngxyjsvpe2rgVDyTNesgSSGDpkVC06VMg40ndi0WA0BPZb+WfbwtNU28
-Yod1Sa7Wuay6Aa7iUGcpTQGnv+f20zIsw/y0tM8Edjqm6S30LDfvkiGK7opCMRZR
-sUuYY6AmgIphpbSfCyKPMAPKKoAxgUoxoCNzv22JadzGpVQEB4kyvR+Nde1EY6kI
-mL4hUIPIGMzkNmToY2yjOJlI+Z6UmNXjR9rY14Egu4XjiUg/yjg=
-=AFfq
------END PGP SIGNATURE-----
-
---ul3uf7dcirbx5qse--
