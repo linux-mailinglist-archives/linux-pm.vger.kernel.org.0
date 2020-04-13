@@ -2,95 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 761D51A6B7F
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 19:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE99D1A6BE1
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 20:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732915AbgDMRhe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Apr 2020 13:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
+        id S2387617AbgDMSGe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Apr 2020 14:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732882AbgDMRhO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 13:37:14 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2497C0A3BE2;
-        Mon, 13 Apr 2020 10:37:13 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id o81so4465427wmo.2;
-        Mon, 13 Apr 2020 10:37:13 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S2387498AbgDMSGc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 14:06:32 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF6CC0A3BDC
+        for <linux-pm@vger.kernel.org>; Mon, 13 Apr 2020 11:06:30 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id a201so10495139wme.1
+        for <linux-pm@vger.kernel.org>; Mon, 13 Apr 2020 11:06:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=6QvXfJZlpggMK4ANi6m9pBKzrWALkcbq78l8N8OifPg=;
-        b=FyRQ4O4tvTTJTitTz9W28h/1N/LB+saR96VqV/dHtuDmuCaOoLZajiaIyEYWqlSNFK
-         /nUN0Gvbw7+sIXhJT9QmCSA1tPmI5xuMEiUTsDUwdD7TJig99iJiIZQgB83msgwLRda5
-         tDUu2UruS3Pm3yjAmmSOGAc1msp8foDihyQrUwaU4P4ajkZlgFBlD8flj7mgd6y5S6uO
-         SRAw08Shw5dtKBlpGdMeshBj61gNkGGRPiIrm8G23pAHxwtW0JcMRqxszwty0+lmJ4eB
-         KZ1cQRQUqeKtGPvo5Ynm1+Df16dqyhngf4HL7pRHuSTyFBwht1OQtazm73b8e+NRiZU0
-         Y+Pw==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Q0D26fyaAIiTwbvFDpemvGzTvhTLQ2mWpZWWLig+LSk=;
+        b=e1VlO/z2ja5OF8Xxd2q5mFlNfnIu+IowBOXF8gnD9TM+63h2ZhCsVoXCqnFc12UoaL
+         dSeTSr1hRUeIv5ZwsmpT+mUcQ44zNlZmfxC7gspX8GWbUxLjg4Asm/h3cV+7kkxDPST9
+         LxefygA+BrV84CUE9CSeXcrObGL1e4FMGepI61NbEaDHMgT2TrrYBi47Q0UoYoew+1B3
+         +Z01Htc2mRs88Pwdu1HDS2WRw7kXd+G+TG1+2451yCK2o5Ikn44lrbadfTEXkTmhHLyt
+         a7gRMbc0CSCton+IpvsFa5z3x57prFeoXlmWNyBSX68RuZdIYzAUj8RVwRsPYptHE+ji
+         gdqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=6QvXfJZlpggMK4ANi6m9pBKzrWALkcbq78l8N8OifPg=;
-        b=kro5dDHDW6vtCzhS20NVOG1fXZinU86PGF8zvfIKN0f4nuyHiSIb607B9plJkYYJEZ
-         RlTBuO4PKNUFcgCZH/v4+hH9Ik17QCOhuw1vOiAANW+kOZ4PYOySpenPJd1Q/mfOWgi1
-         vuYSn5lfgXVCQRP9OdAFOnlCiDGk1f30dAjscqca+cd53IRePp3YshuJ459lA71WysL7
-         OYuGJkgmiLZ/+W8bSImQwT4EoHzzze4Z25pRb6Mmuj7cUME2pg795ygl9RFD8gE9NRHM
-         bEsKumXU/ZkgrObkcHVgt+2z6lhotxz9P5U3FylxksNrsSuCtkBGgcoEdO2OvSmeVn1e
-         QHDg==
-X-Gm-Message-State: AGi0Pub3rV4dvtCn1vxhf3jWrXuatrji4KRPtVRN7Nh6RUdYmonbRbU7
-        bco09TyrBZQccV3rWuloxuDuRy96Ckw=
-X-Google-Smtp-Source: APiQypLoFKiIymQKv4j12LxYH1Zb7462vvWxWlSn3xUcZq8EdPqS5Vh6LZWjzgYDMQin8f3MxLZQgg==
-X-Received: by 2002:a05:600c:2196:: with SMTP id e22mr6836810wme.105.1586799432693;
-        Mon, 13 Apr 2020 10:37:12 -0700 (PDT)
-Received: from localhost.localdomain (p5B3F6AD5.dip0.t-ipconnect.de. [91.63.106.213])
-        by smtp.gmail.com with ESMTPSA id a205sm11141465wmh.29.2020.04.13.10.37.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2020 10:37:11 -0700 (PDT)
-From:   Saravanan Sekar <sravanhome@gmail.com>
-To:     lee.jones@linaro.org, andy.shevchenko@gmail.com,
-        robh+dt@kernel.org, jic23@kernel.org, knaack.h@gmx.de,
-        lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
-        Saravanan Sekar <sravanhome@gmail.com>
-Subject: [PATCH v8 6/6] MAINTAINERS: Add entry for mp2629 Battery Charger driver
-Date:   Mon, 13 Apr 2020 19:36:56 +0200
-Message-Id: <20200413173656.28522-7-sravanhome@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200413173656.28522-1-sravanhome@gmail.com>
-References: <20200413173656.28522-1-sravanhome@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Q0D26fyaAIiTwbvFDpemvGzTvhTLQ2mWpZWWLig+LSk=;
+        b=BGMJfPU72K4la5mFBYq7YWxFiHRYUr4u8fLRUdTBe5Vq6Gbu0Zt1XSG7u8fTy4V2l+
+         ETBcC0AIY7afA0NS2474dk0IX6nrLRiENwlZQXOhIWj6iTtnKRQQlxSxMIrGMld241ev
+         AiihlUQ0rkqBA1YHOULFaPO7GFnjcB5hQ7qmeu/o6TIwsqpltAEcz2wWficFlkk4vf8u
+         3HnYwjGs/yFjeN5vO2uGp//U2RCLloo0vEo6XbN3GcfNj7TQpTeuvdDE+PfLb6IPF6PY
+         T4RKVih5NgBX5eoa4ZC1Qia7D1uAJkdS1ZpL7g+Km4gzU5X/uV0pKihk3ypHoGYSMp12
+         Y3pA==
+X-Gm-Message-State: AGi0PuY0jgrYreBgnIyaka55RitpSXByzqP8J0RkWRl+OVLIDCKuUfhv
+        Xet4JyFXT7AQF0MrA2rb89Ep6uOcKtg=
+X-Google-Smtp-Source: APiQypLEc3yDoQR2rctcavatj6UYGY0jIVTlIyrE6FXSUaswA7e7nT1mbH9O+UbUEzqPdXIqviX4ng==
+X-Received: by 2002:a1c:4e06:: with SMTP id g6mr19388073wmh.186.1586801189078;
+        Mon, 13 Apr 2020 11:06:29 -0700 (PDT)
+Received: from [192.168.0.41] (lns-bzn-59-82-252-135-148.adsl.proxad.net. [82.252.135.148])
+        by smtp.googlemail.com with ESMTPSA id w6sm11776606wrm.86.2020.04.13.11.06.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Apr 2020 11:06:28 -0700 (PDT)
+Subject: Re: [RFC PATCH 5/5] ACPI: processor: do update when maximum cooling
+ state changed
+To:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Cc:     tiwai@suse.de, viresh.kumar@linaro.org
+References: <20200408041917.2329-1-rui.zhang@intel.com>
+ <20200408041917.2329-5-rui.zhang@intel.com>
+ <5cd80df7-775e-96bd-cec5-b14965de2a67@linaro.org>
+ <2bef9553fcf7ccd7c9811ad1d572af2e5a811917.camel@intel.com>
+ <a15dee60-8d20-0f56-0037-276830c613cd@linaro.org>
+ <fee68438572796c71089571e0ff0add6cbbd3e0c.camel@intel.com>
+ <e264d4a2-b0d9-8adf-b44f-7501c4407029@linaro.org>
+ <17727142fac13f641d7cd5c3713cfadef77aa75c.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <1e65a2c3-fdeb-4f48-f477-a7ec67cffd4e@linaro.org>
+Date:   Mon, 13 Apr 2020 20:06:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <17727142fac13f641d7cd5c3713cfadef77aa75c.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add MAINTAINERS entry for Monolithic Power Systems mp2629 Charger driver.
+On 13/04/2020 04:01, Zhang Rui wrote:
+> On Sun, 2020-04-12 at 12:07 +0200, Daniel Lezcano wrote:
 
-Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
----
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
+[ ... ]
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 32a95d162f06..0f82d5a7a614 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11358,10 +11358,15 @@ F:	drivers/tty/mxser.*
- MONOLITHIC POWER SYSTEM PMIC DRIVER
- M:	Saravanan Sekar <sravanhome@gmail.com>
- S:	Maintained
-+F:	Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
- F:	Documentation/devicetree/bindings/regulator/mps,mp*.yaml
-+F:	drivers/iio/adc/mp2629_adc.c
-+F:	drivers/mfd/mp2629.c
-+F:	drivers/power/supply/mp2629_charger.c
- F:	drivers/regulator/mp5416.c
- F:	drivers/regulator/mpq7920.c
- F:	drivers/regulator/mpq7920.h
-+F:	include/linux/mfd/mp2629.h
- 
- MR800 AVERMEDIA USB FM RADIO DRIVER
- M:	Alexey Klimov <klimov.linux@gmail.com>
+> why we can not have a cdev->max_state field, and get it updated right
+> after .get_max_state().
+> and .get_max_state()  is only invoked
+> a) during cooling device registration
+> b) when cooling device update its max_state via the new API.
+> 
+>>
+>> In the function thermal_cooling_device_stats_update():
+>>
+>>   Is it possible to just compare the 'new_state' parameter with
+>> stats->max_state and if it is greater increase the stats table and
+>> update max_state to the new_state ?
+>>
+> the problem is that thermal_cooling_device_stats_update() is invoked
+> only if thermal zone are updated or the cur_state sysfs attribute is
+> changed.
+> There is no way for a cooling device driver to tell thermal framework
+> that it has changed.
+> Say, for the problem on hand, the statistics table will not be updated
+> in time when cpufreq driver probed.
+
+Except I'm missing something, the statistics are only read from
+userspace via sysfs.
+
+userspace is not notified about a stat change. Is it really a problem
+the table is not updated right at the probe time ? Does it really matter
+if the user sees the old table until an update happens on a new higher
+max state ?
+
+The table is always consistent whenever the userspace reads the content.
+
+A new entry will appear only if it is used, no?
+
+
+
+
+
+
 -- 
-2.17.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
