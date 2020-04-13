@@ -2,102 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (unknown [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C92E1A6318
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 08:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FFE1A635E
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 09:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728547AbgDMGgC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Apr 2020 02:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:51890 "EHLO
+        id S1727693AbgDMHAm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Apr 2020 03:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:55942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727536AbgDMGgC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 02:36:02 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAB3C008673;
-        Sun, 12 Apr 2020 23:36:01 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id t3so4691483qkg.1;
-        Sun, 12 Apr 2020 23:36:01 -0700 (PDT)
+        with ESMTP id S1727692AbgDMHAm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 03:00:42 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82575C008651;
+        Mon, 13 Apr 2020 00:00:41 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id i3so67133pgk.1;
+        Mon, 13 Apr 2020 00:00:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KMpw6K79lA/hKqIcCn2kKRSspiTDXkb2D8JjBGFr8zQ=;
-        b=uz5+521nlHBocaytihEXa/MzRtF6lSl6OnhByj/4tYGgzxMgsJepipn9S0nNQZMDJz
-         P9ee2v+EOPvrZl1stRWdTm9Of9V5vQioB7DSLHUIFvX8TZX3V1LKRUTYZ0fERav4znaL
-         ZQk7orz6i9h4g6ZzPYHczp93XiJ1euMZ2rulHWmEGDtfoxa4CRd/aewcwaAEHQdI75YQ
-         umHMLAFnEEzpJsCqD/LGFB7rPxGqxW9NBs//tY0mSGGrX1NmQJq+BRbg3orUyls6Eq5f
-         nMjVM/Z+9Tvx9dFxQHWvQGH1c63oXgjcGODdQ7gvgZTD0bQCB1/tpNBC/EHYReMxxX+J
-         oKMQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vq9fVC/+atcm9sq/MZsavv/suvJU7kj+o+ueUYxNyc4=;
+        b=CR8c8HlxxuKiXNyCthLNzWYOFiWWWq/N2EQHg+YZb11uAbVxigFRy6IHJFMOy07j/i
+         Qt1LJfKU7HudAz5rsUO7sCAOTSPeqkjXR8qjS8LPCfnt/ymY8xXDHTeQK0iB+V+6mgKs
+         WJe3AaawQB54O2xlpb7A1YXAWUUrQhmqntkwSVanEw7sHLXg96bEVSJAaPGavaySrtOT
+         Ds9cjEztjHzfZmUEGnCr5RVmsDAaJp+SfEdVGX1bl914YR9KHfwJ+GZOT9CENuBGQJdu
+         6LwCgY2Lgf2cQjBE5JgWozwcUGJvSgCIQx0I7kXkpqNSlk/uD+PRAVKnhybHWf2nmU1+
+         d+lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KMpw6K79lA/hKqIcCn2kKRSspiTDXkb2D8JjBGFr8zQ=;
-        b=tgqWtRRrxSr2eDB/injdtVY48C4Ki1TeIZ/oQz6vho80zdfdI8SgHX8YETDSlapzGq
-         JPSoiq9GdKnusBkzmEPQ/JTmq3DJoWBrBJ4XEGbMQ+EP/vdYXs51yK7p2O4nQZGzdfAL
-         hZ/XTzoRHQyXEMux98sq3bfzQMAZEQfK11ZGQWZKoiQdiQRjGHsDuqOaGW5RL6i8E/U2
-         FPe94y6mOmDhkEf1Nr20ImDAwuUw4zM7pP3r8wekiKbXH2grtTSLEaeF1SsstnUqnQPJ
-         iSZtE76y+N0yZChluiMYylYi9uBxLiWZeFY9/CpU25C/rVw/0rqu/CRxDiss/mqnWpEu
-         GWqQ==
-X-Gm-Message-State: AGi0PuZ55bqQ9oU4+nwCRXo5BALb5VDWQVThe4IKTmOn4vjsOwVp5rVz
-        C5MWyAUUVkTiJ3nXhfHlOGC1eQDa2KP8bVf/Jng=
-X-Google-Smtp-Source: APiQypLAkeIgbG9vE5BMPoUzyd5dJuTAeNpXUZF1UwhH8UT1xsBlzhBm3dFEKEbDE+I8yBJb7oDCmyFUzPvyYPBCdUQ=
-X-Received: by 2002:a37:ac6:: with SMTP id 189mr952703qkk.60.1586759759747;
- Sun, 12 Apr 2020 23:35:59 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vq9fVC/+atcm9sq/MZsavv/suvJU7kj+o+ueUYxNyc4=;
+        b=RjMEU/tc2Lcj1JvCXkqYpO8M7Y2Cp0ckXGx+ywhkjQAk+Q6phu4XRmyAmoak6LK6xH
+         9FCmEYSiQO5NKvmloc1X7FxQMx4c6UfVyxow/7emzE3rUeSW3UbRwxLXALa69N9yFsT3
+         KE7S1tuAyGIa2mYM2Xaw3A/LlQAI2PMARWLmqLvSBwheKe5VETQGTYaucfmWKH5IWq/J
+         EZZ0M0BIAi5runRy0ucX0/QlgmXStgI//hLCmyrp2YIbztZT6R1+Vj4MWnPuth4FZy64
+         rQzZEkVAYzRFzUjvVI/i26VTyjXCtnE0ZADJiLH7wr4tv4euTwm0XqxAa0ShpwV2lh+v
+         rW6Q==
+X-Gm-Message-State: AGi0PuaVkeN2qpnt8nj8QTg+K9j4A89WNd3evfazZ8Yc3ApjOHQaxR+E
+        z1NMP3gWtfzZWnQaWQiu5RQ=
+X-Google-Smtp-Source: APiQypJXOLKJmWnL8c+MQV5lQGIKFp6AH0keWS6hBKsja5EQEQiaT3oQ5MtfGpxL0FMP2zNbuBvbrg==
+X-Received: by 2002:a63:230f:: with SMTP id j15mr15933448pgj.393.1586761241161;
+        Mon, 13 Apr 2020 00:00:41 -0700 (PDT)
+Received: from ubt.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id p4sm7815670pfg.163.2020.04.13.00.00.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2020 00:00:40 -0700 (PDT)
+From:   zhang.lyra@gmail.com
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Subject: [RFC PATCH v1 0/2] allow idle state to be found as deepest state for s2idle only
+Date:   Mon, 13 Apr 2020 15:00:12 +0800
+Message-Id: <20200413070014.12960-1-zhang.lyra@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <1888197.j9z7NJ8yPn@kreacher> <5092680.jloV5Ae5OO@kreacher>
-In-Reply-To: <5092680.jloV5Ae5OO@kreacher>
-From:   Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Date:   Sun, 12 Apr 2020 23:35:48 -0700
-Message-ID: <CAL3LdT71aa3NfqoGTvmz-XzS7Ng=LqpwPROWyf=w_+PyvEET-w@mail.gmail.com>
-Subject: Re: [PATCH 5/7] PM: sleep: core: Rename DPM_FLAG_NEVER_SKIP
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans De Goede <hdegoede@redhat.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        DRI-devel <dri-devel@lists.freedesktop.org>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 10, 2020 at 9:03 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
->
-> Rename DPM_FLAG_NEVER_SKIP to DPM_FLAG_NO_DIRECT_COMPLETE which
-> matches its purpose more closely.
->
-> No functional impact.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-Acked-by: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+We can add a new c-state to let system suspend enter into the same deep
+state as s2ram when using s2idle, but we don't want other cases to use
+that c-state, such as play_idle() which would find the deepest state by
+invoking find_deepest_state() as well. This patch-set provides users
+an option which can restrict c-state to be found as deepest state for
+s2idle only.
 
-For the driver changes to e1000e, igb and igc.
+Chunyan Zhang (2):
+  cpuidle: allow idle state to be found as deepest state for s2idle only
+  dt-bindings: arm: Add description to the new property for-s2idle-only
 
-> ---
->  Documentation/driver-api/pm/devices.rst    |  6 +++---
->  Documentation/power/pci.rst                | 10 +++++-----
->  drivers/base/power/main.c                  |  2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c    |  2 +-
->  drivers/gpu/drm/i915/intel_runtime_pm.c    |  2 +-
->  drivers/gpu/drm/radeon/radeon_kms.c        |  2 +-
->  drivers/misc/mei/pci-me.c                  |  2 +-
->  drivers/misc/mei/pci-txe.c                 |  2 +-
->  drivers/net/ethernet/intel/e1000e/netdev.c |  2 +-
->  drivers/net/ethernet/intel/igb/igb_main.c  |  2 +-
->  drivers/net/ethernet/intel/igc/igc_main.c  |  2 +-
->  drivers/pci/pcie/portdrv_pci.c             |  2 +-
->  include/linux/pm.h                         |  6 +++---
->  13 files changed, 21 insertions(+), 21 deletions(-)
->
+ Documentation/devicetree/bindings/arm/idle-states.yaml | 10 +++++++++-
+ drivers/cpuidle/cpuidle.c                              |  3 ++-
+ drivers/cpuidle/dt_idle_states.c                       |  3 +++
+ include/linux/cpuidle.h                                |  1 +
+ 4 files changed, 15 insertions(+), 2 deletions(-)
+
+-- 
+2.20.1
+
