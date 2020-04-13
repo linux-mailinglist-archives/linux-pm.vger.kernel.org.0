@@ -2,122 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8B51A6D90
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 22:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3571A1A6DBD
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Apr 2020 23:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388591AbgDMUsw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Apr 2020 16:48:52 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34186 "EHLO
+        id S2388724AbgDMVFR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Apr 2020 17:05:17 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:34262 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388526AbgDMUsv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 16:48:51 -0400
+        with ESMTP id S2388723AbgDMVFQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 17:05:16 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 60CA22A132F
+        with ESMTPSA id D5CAB2A1205
 Received: by earth.universe (Postfix, from userid 1000)
-        id 7C6B13C08C7; Mon, 13 Apr 2020 22:48:47 +0200 (CEST)
-Date:   Mon, 13 Apr 2020 22:48:47 +0200
+        id B9B673C08C7; Mon, 13 Apr 2020 23:05:12 +0200 (CEST)
+Date:   Mon, 13 Apr 2020 23:05:12 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     saravanan sekar <sravanhome@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald <pmeerw@pmeerw.net>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v8 4/6] power: supply: Add support for mps mp2629 battery
- charger
-Message-ID: <20200413204847.ni7dsrn5tslrorqn@earth.universe>
-References: <20200413173656.28522-1-sravanhome@gmail.com>
- <20200413173656.28522-5-sravanhome@gmail.com>
- <CAHp75VeYFY1CW4AH+D4HAgzppMZ5J8dL8kKPYmcwsXNVGNSYjQ@mail.gmail.com>
- <6cfab0a6-c3eb-bd9b-6572-b49e3205524f@gmail.com>
+To:     Jason Yan <yanaijie@huawei.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: max14656: remove set but not used 'ret'
+Message-ID: <20200413210512.mljqzlgu46hzn3hu@earth.universe>
+References: <20200409085401.47516-1-yanaijie@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mr33cvt5svcy3hmn"
+        protocol="application/pgp-signature"; boundary="ul3uf7dcirbx5qse"
 Content-Disposition: inline
-In-Reply-To: <6cfab0a6-c3eb-bd9b-6572-b49e3205524f@gmail.com>
+In-Reply-To: <20200409085401.47516-1-yanaijie@huawei.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---mr33cvt5svcy3hmn
-Content-Type: text/plain; charset=us-ascii
+--ul3uf7dcirbx5qse
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Apr 13, 2020 at 10:28:19PM +0200, saravanan sekar wrote:
-> Hi Andy,
+On Thu, Apr 09, 2020 at 04:54:01PM +0800, Jason Yan wrote:
+> Fix the following gcc warning:
 >=20
-> On 13/04/20 10:10 pm, Andy Shevchenko wrote:
-> > On Mon, Apr 13, 2020 at 8:37 PM Saravanan Sekar <sravanhome@gmail.com> =
-wrote:
-> > > The mp2629 provides switching-mode battery charge management for
-> > > single-cell Li-ion or Li-polymer battery. Driver supports the
-> > > access/control input source and battery charging parameters.
-> > ...
-> >=20
-> > > +static int mp2629_charger_probe(struct platform_device *pdev)
-> > > +{
-> > > +       irq =3D platform_get_irq(to_platform_device(pdev->dev.parent)=
-, 0);
-> > Why not to use temporary variable dev?
-> >=20
-> > This should be platform_get_irq_optional().
+> drivers/power/supply/max14656_charger_detector.c:142:6: warning:
+> variable =E2=80=98ret=E2=80=99 set but not used [-Wunused-but-set-variabl=
+e]
+>   int ret =3D 0;
+>       ^~~
 >=20
-> Platform_get_irq in turn calls platform_get_irq_optional. It was suggested
-> by Lee and is it mandatory to change it?
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> ---
 
-platform_get_irq is fine.
-
-> > > +       if (irq) {
-
-But this must be
-
-if (irq > 0)
-
-or you will also try to continue with error codes.
-
-> > > +               ret =3D devm_request_irq(dev, irq, mp2629_irq_handler,
-> > > +                                IRQF_TRIGGER_RISING, "mp2629-charger=
-",
-> > > +                                charger);
-> > > +               if (ret) {
-> > > +                       dev_err(dev, "failed to request gpio IRQ\n");
-> > > +                       goto iio_fail;
-> > > +               }
-> > > +       }
-> > > +}
+Thanks, queued.
 
 -- Sebastian
 
---mr33cvt5svcy3hmn
+>  drivers/power/supply/max14656_charger_detector.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/max14656_charger_detector.c b/drivers/p=
+ower/supply/max14656_charger_detector.c
+> index 3bbb8b4c8ae7..137f9fafce8c 100644
+> --- a/drivers/power/supply/max14656_charger_detector.c
+> +++ b/drivers/power/supply/max14656_charger_detector.c
+> @@ -139,10 +139,9 @@ static void max14656_irq_worker(struct work_struct *=
+work)
+> =20
+>  	u8 buf[REG_TOTAL_NUM];
+>  	u8 chg_type;
+> -	int ret =3D 0;
+> =20
+> -	ret =3D max14656_read_block_reg(chip->client, MAX14656_DEVICE_ID,
+> -				      REG_TOTAL_NUM, buf);
+> +	max14656_read_block_reg(chip->client, MAX14656_DEVICE_ID,
+> +				REG_TOTAL_NUM, buf);
+> =20
+>  	if ((buf[MAX14656_STATUS_1] & STATUS1_VB_VALID_MASK) &&
+>  		(buf[MAX14656_STATUS_1] & STATUS1_CHG_TYPE_MASK)) {
+> --=20
+> 2.17.2
+>=20
+
+--ul3uf7dcirbx5qse
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6U0C8ACgkQ2O7X88g7
-+pp/Ag//YmXQ4Axy8vgozTsLCfwYOWz6Cyg5LfVbnQzgc36I0X9NcH4CUT4VYJfH
-PJx/mk5BusfFIXg+fF4Q02QDwmg3iphkka9buegvGafESzimOObozq9+bmGOp7VT
-HtXrxvydNs8QXplo09gD+8tkzUJ0dbiwfCU0S5TY3c1n7xo86gejqOOTYhXLJv2G
-xYDSjUeLcX04ttyZsck6bYaK0wrDMrQmJqn1bnCDYCHYa9bytDGIIPx+NSr0mKeU
-TqqnzbH4dEx2BlhPUGUA4v7q5p4BtLVj43nc2JRE5JpKsQgnTTLwvYRkLZGOg0cP
-9w4NCqL9UZCL15TSTpok8Hfq0XXmSu0/vfPuuPpmNuAlhChkFQ2kXnypQCW9dcsz
-tGwfa92Atb1XVNNdDew85Ab2557iHzF4kHrsUipn4DFthyVSV10kLiiKc9mCTzsT
-9155zGcJWySzqwJ6b2YsTP77iYqbCEWstYewvhtNnmUbPkIMJ2XNnGtR2MBlPtbO
-gdwrQ/fioGkhivS8de/7/okczvY8iuVjG57fOsarjvly//XVOZngt4QkiEc+Xqfh
-Lw8EuiJWvLkfTLglWw6bdC6suqa6gvsNhXD493iXYUn0HTXIG0EKeEvgqvV3EyiB
-np8CQSB98e9BDmwJonJI8UmBmJw5Q2OsEKcsEX5meYzc6T0+2F0=
-=VWLZ
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6U1AIACgkQ2O7X88g7
++pqpgw//Y+UzgZPhDZpKZko7ATusRTbvh7P59AmNkfarrIHMYH2Ygi/txHlnkyN9
+ChuByntYsQvL2D7PMAFCw7MZBcYz+nToUQcrWRqLUN0YMeZpfgWVQO/nkw7B3AU1
+QN2QXxI9exfko7USJPv6lt24aFv0AeZaOR3XN47MvQP2EYcqmBYZSCa2Dcv3ntM8
+XrCAfhmnOrC0cXzp2TEwQXN5Z5QMPgFr9mg4a7EQ9KFSynNArHck1lgtR73w6zRo
+uyES0kB+eNlzu19xFocKv1LCILChIjIJ1Y/EA05ZaYiSimkTO2ZKRrKJFDswqgDR
+NEHW80ZooM08Hjm+vr9dFI9qF0p7D2OVghP2iQcsg0dQ//kFrOFSgjPfYBphWqcn
+tSE/5tqXpo+4FgwcqWSW21pdWBm4JwhXL3emOldLJy7tLcGdyStQKW2B45yVcVJh
+t5PEeAW9ngxyjsvpe2rgVDyTNesgSSGDpkVC06VMg40ndi0WA0BPZb+WfbwtNU28
+Yod1Sa7Wuay6Aa7iUGcpTQGnv+f20zIsw/y0tM8Edjqm6S30LDfvkiGK7opCMRZR
+sUuYY6AmgIphpbSfCyKPMAPKKoAxgUoxoCNzv22JadzGpVQEB4kyvR+Nde1EY6kI
+mL4hUIPIGMzkNmToY2yjOJlI+Z6UmNXjR9rY14Egu4XjiUg/yjg=
+=AFfq
 -----END PGP SIGNATURE-----
 
---mr33cvt5svcy3hmn--
+--ul3uf7dcirbx5qse--
