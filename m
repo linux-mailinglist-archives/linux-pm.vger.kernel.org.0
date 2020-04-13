@@ -2,220 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AEA1A6F3C
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 00:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09D91A6F91
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 01:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389613AbgDMW3w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Apr 2020 18:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389607AbgDMW3t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 18:29:49 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F07FC0A3BDC;
-        Mon, 13 Apr 2020 15:29:49 -0700 (PDT)
+        id S2389817AbgDMXAy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Apr 2020 19:00:54 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35000 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728050AbgDMXAy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 19:00:54 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id C774B2A1205
+        with ESMTPSA id 6D8E02A0BF3
 Received: by earth.universe (Postfix, from userid 1000)
-        id AFBD63C08C7; Tue, 14 Apr 2020 00:29:45 +0200 (CEST)
-Date:   Tue, 14 Apr 2020 00:29:45 +0200
+        id 81F083C08C7; Tue, 14 Apr 2020 01:00:50 +0200 (CEST)
+Date:   Tue, 14 Apr 2020 01:00:50 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] power_supply: Add a helper function to retrieve psy
- array from phandle
-Message-ID: <20200413222945.6eynl77ckpss35eo@earth.universe>
-References: <20200407211243.247362-1-badhri@google.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     rafirafi <rafirafi.at@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: axp288_fuel_gauge: Add the Meegopad T02
+ to the blacklist.
+Message-ID: <20200413230050.e2litrlcvbs6hpar@earth.universe>
+References: <20200406140538.11894-1-rafirafi.at@gmail.com>
+ <eff57daf-6f71-1f6f-e4f9-5b5b1ed974cd@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a6u4x77jcpwdjdw4"
+        protocol="application/pgp-signature"; boundary="oazyorwjlp4634pg"
 Content-Disposition: inline
-In-Reply-To: <20200407211243.247362-1-badhri@google.com>
+In-Reply-To: <eff57daf-6f71-1f6f-e4f9-5b5b1ed974cd@redhat.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---a6u4x77jcpwdjdw4
+--oazyorwjlp4634pg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Apr 07, 2020 at 02:12:43PM -0700, Badhri Jagan Sridharan wrote:
-> power_supply_get_by_phandle retrieves power_supply object based on
-> phandle. However, when multiple power_supply objects are registered
-> by the same parent device the first power_supply object's reference
-> is returned. This varies according to probe order. Add a helper to
-> return all the power_supply object's reference.
+On Mon, Apr 06, 2020 at 05:44:04PM +0200, Hans de Goede wrote:
+> Hi,
 >=20
-> The caller has to provide the power_supply pointer array.
-> -EOVERFLOW is returned when the size of the array is not enough to
-> pass back all the power_supply objects.
+> On 4/6/20 4:05 PM, rafirafi wrote:
+> > From: Rafael Gandolfi <rafirafi.at@gmail.com>
+> >=20
+> >      The Meegopad T02 is a PC in stick format and doesn't have a batter=
+y,
+> >      it is reported with a random and constant battery charge but as
+> >      discharging to userspace.
+> >=20
+> >      Add it to the blacklist to avoid the bogus battery status reportin=
+g.
+> >=20
+> > Signed-off-by: Rafael Gandolfi <rafirafi.at@gmail.com>
 >=20
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
+> Patch looks good to me:
+>=20
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
-This patchset is incomplete, it is missing a mainline user.
+Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/supply/power_supply_core.c | 78 ++++++++++++++++++++++++
->  include/linux/power_supply.h             |  9 +++
->  2 files changed, 87 insertions(+)
->=20
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
-ply/power_supply_core.c
-> index 1a9a9fae73d32..e7bab4661ba13 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -32,6 +32,13 @@ EXPORT_SYMBOL_GPL(power_supply_notifier);
-> =20
->  static struct device_type power_supply_dev_type;
-> =20
-> +struct match_device_node_array_param {
-> +	struct device_node *parent_of_node;
-> +	struct power_supply **psy;
-> +	ssize_t psy_size;
-> +	ssize_t psy_count;
-> +};
-> +
->  #define POWER_SUPPLY_DEFERRED_REGISTER_TIME	msecs_to_jiffies(10)
-> =20
->  static bool __power_supply_is_supplied_by(struct power_supply *supplier,
-> @@ -522,6 +529,77 @@ struct power_supply *power_supply_get_by_phandle(str=
-uct device_node *np,
->  }
->  EXPORT_SYMBOL_GPL(power_supply_get_by_phandle);
-> =20
-> +static int power_supply_match_device_node_array(struct device *dev,
-> +						void *data)
-> +{
-> +	struct match_device_node_array_param *param =3D
-> +		(struct match_device_node_array_param *)data;
-> +	struct power_supply **psy =3D param->psy;
-> +	ssize_t size =3D param->psy_size;
-> +	ssize_t *count =3D &param->psy_count;
-> +
-> +	if (!dev->parent || dev->parent->of_node !=3D param->parent_of_node)
-> +		return 0;
-> +
-> +	if (*count >=3D size)
-> +		return -EOVERFLOW;
-> +
-> +	psy[*count] =3D dev_get_drvdata(dev);
-> +	atomic_inc(&psy[*count]->use_cnt);
-> +	(*count)++;
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * power_supply_get_by_phandle_array() - Similar to
-> + * power_supply_get_by_phandle but returns an array of power supply
-> + * objects which are associated with the phandle.
-> + * @np: Pointer to device node holding phandle property.
-> + * @property: Name of property holding a power supply name.
-> + * @psy: Array of power_supply pointers provided by the client which is
-> + * filled by power_supply_get_by_phandle_array.
-> + * @size: size of power_supply pointer array.
-> + *
-> + * If power supply was found, it increases reference count for the
-> + * internal power supply's device. The user should power_supply_put()
-> + * after usage.
-> + *
-> + * Return: On success returns the number of power supply objects filled
-> + * in the @psy array.
-> + * -EOVERFLOW when size of @psy array is not suffice.
-> + * -EINVAL when @psy is NULL or @size is 0.
-> + * -ENODEV when matching device_node is not found.
-> + */
-> +int power_supply_get_by_phandle_array(struct device_node *np,
-> +				      const char *property,
-> +				      struct power_supply **psy,
-> +				      ssize_t size)
-> +{
-> +	struct device_node *power_supply_np;
-> +	int ret;
-> +	struct match_device_node_array_param param;
-> +
-> +	if (psy =3D=3D NULL || size =3D=3D 0)
-> +		return -EINVAL;
-> +
-> +	power_supply_np =3D of_parse_phandle(np, property, 0);
-> +	if (!power_supply_np)
-> +		return -ENODEV;
-> +
-> +	param.parent_of_node =3D power_supply_np;
-> +	param.psy =3D psy;
-> +	param.psy_size =3D size;
-> +	param.psy_count =3D 0;
-> +	ret =3D class_for_each_device(power_supply_class, NULL, &param,
-> +				    power_supply_match_device_node_array);
-> +
-> +	of_node_put(power_supply_np);
-> +
-> +	return param.psy_count;
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_get_by_phandle_array);
-> +
->  static void devm_power_supply_put(struct device *dev, void *res)
->  {
->  	struct power_supply **psy =3D res;
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index dcd5a71e6c677..8c1478a480674 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -366,12 +366,21 @@ extern void power_supply_put(struct power_supply *p=
-sy);
->  #ifdef CONFIG_OF
->  extern struct power_supply *power_supply_get_by_phandle(struct device_no=
-de *np,
->  							const char *property);
-> +extern int power_supply_get_by_phandle_array(struct device_node *np,
-> +					     const char *property,
-> +					     struct power_supply **psy,
-> +					     ssize_t size);
->  extern struct power_supply *devm_power_supply_get_by_phandle(
->  				    struct device *dev, const char *property);
->  #else /* !CONFIG_OF */
->  static inline struct power_supply *
->  power_supply_get_by_phandle(struct device_node *np, const char *property)
->  { return NULL; }
-> +static int power_supply_get_by_phandle_array(struct device_node *np,
-> +					     const char *property,
-> +					     struct power_supply **psy,
-> +					     int size)
-> +{ return 0; }
->  static inline struct power_supply *
->  devm_power_supply_get_by_phandle(struct device *dev, const char *propert=
-y)
->  { return NULL; }
-> --=20
-> 2.26.0.292.g33ef6b2f38-goog
+> > ---
+> >   drivers/power/supply/axp288_fuel_gauge.c | 6 ++++++
+> >   1 file changed, 6 insertions(+)
+> >=20
+> > diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/s=
+upply/axp288_fuel_gauge.c
+> > index e1bc4e6e6f30..0bc548865a61 100644
+> > --- a/drivers/power/supply/axp288_fuel_gauge.c
+> > +++ b/drivers/power/supply/axp288_fuel_gauge.c
+> > @@ -717,6 +717,12 @@ static const struct dmi_system_id axp288_fuel_gaug=
+e_blacklist[] =3D {
+> >   			DMI_MATCH(DMI_PRODUCT_NAME, "STK1A32SC"),
+> >   		},
+> >   	},
+> > +	{
+> > +		/* Meegopad T02 */
+> > +		.matches =3D {
+> > +			DMI_MATCH(DMI_PRODUCT_NAME, "MEEGOPAD T02"),
+> > +		},
+> > +	},
+> >   	{
+> >   		/* Meegopad T08 */
+> >   		.matches =3D {
+> >=20
 >=20
 
---a6u4x77jcpwdjdw4
+--oazyorwjlp4634pg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6U584ACgkQ2O7X88g7
-+pq8cg/9GoRk7rhaCkFPcKCAZt3eEH5SzNs/p5qIqjbm/eskWrtMACcccOqD5lsz
-+kIiGho2F5I7YSBpWJQJfKV+Jy/5Eu3PCy+ZcsznLyTupQ3waA3jhggrRzunJhQc
-RIeS63rk76D0cg35w9L2Vrcpja7r8JcBXLU7o1A9lIi/r2nt3CeOJFwI89jPzRiQ
-QpRMKc/Uxk66a9auDMcc4v9AlxC6x5GUvXX03a3RFtPqZ6EzkoPlQIFEHBjk7qfE
-/NKiklpa2ixKILgseanvU1Ikcwf0wl7eAHBrpDw0iDTKMVn7xRcDXWG3cvMsahC8
-th3wW3MbG0xCVdDab2ctNri17NMnWvLGLaM51GUEeHPSEhRnO/jF3i5p/eNyfmwc
-jX/l+x36gjcIOculpYDafz2kGviHGqbmD4jCtb6TBPWoQCJbEifyGcD63LGFbMvm
-/vbbJgtAzqMZJgH68EfQYQP6GzGmN+ti34cMng+Vqv3sSg0r9I78z6q1vGQNmU8C
-Wlbm4iPKATNULr8q9yLf9cAOKqZp9V87cNZbY6/kcteL3uN33CNVZVEjzHPbenHU
-tu2ECcNlQfJzhEg12SrZs7gAxNsXmzEX2EbQIIsn5RnF9YzXRqch2tkPWhGIGIZZ
-DQcn32sjiPIKOYyv9agPgqvES+RZ2cbl7JPUKPkaAuII5uE1Y1g=
-=tDHL
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6U7xgACgkQ2O7X88g7
++pp7HA//Yu4Ne8/Ua1k0TUlgQSbJ+4xeJxNMgp+7GEciyHSLQ6pXwqALU/2trs5J
+ExFZcox4MID0CAYGgNLdwZ+zSkVqUiUZBUUsxHdvtH7aHv+IC3bNGUvFAOkuQxMP
+V0CqgE7Pl2VC6I0gtZtdj8Ni8Di0q/om2WjYap1qOLIiu/WalpH1XCmRWWpMdhPB
+e/LTIHljqMp9v1ZUFtwE/fu/1ZH9p0U/AMzml18hbmnkJwQDStb8jF3T0TzlbKSA
+sv8tG/PhZt6qwzDrQ8AO5sEJ+QUQ2PyWp4Sys7dgUZq6Pt08SoOabLbyOo8WuctO
+t1t87oUKkVRbbfirqntqcj/Tmkk2TWrlsXVsq9YA44CYK0SllMoawv6xFa9hI/yH
+ow3cM1zPXfqYNbSnKyZukfEIM4gCSU0POJbryxaLHk+cDbThO0hPouZ8Q0ngr+ay
+M5ucr1mitaabPUAl7gMgSXVLqQ3NRlkHVBXaNU+Y7k81QCwxdjdcB7qoJzGXacBd
+snp1h+Kt6ZyW50OO8MOtaKWjOkJ7NSVULilRgPZTff8sRCWCI4+6a8fWuyyLVMSn
+3rZApyibT39DZ2gBu4lYmwRlRN6156DtWY1AcXv/NNEScz+oNdGPM5tZeCgsxGso
+XNOlPXmSCFN3HjbAwEabQFpVbeZ4lI0C4i5ISPW4FKy2HnQXe9o=
+=2Okk
 -----END PGP SIGNATURE-----
 
---a6u4x77jcpwdjdw4--
+--oazyorwjlp4634pg--
