@@ -2,50 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FB11A70D1
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 04:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF90D1A70D4
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 04:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403954AbgDNCKA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Apr 2020 22:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S2403965AbgDNCKE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Apr 2020 22:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727867AbgDNCJ7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 22:09:59 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959D0C0A3BDC
-        for <linux-pm@vger.kernel.org>; Mon, 13 Apr 2020 19:09:59 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id l9so11688681pjq.8
-        for <linux-pm@vger.kernel.org>; Mon, 13 Apr 2020 19:09:59 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S2403963AbgDNCKC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 22:10:02 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D2BC0A3BE2
+        for <linux-pm@vger.kernel.org>; Mon, 13 Apr 2020 19:10:02 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id 65so10454306pfx.16
+        for <linux-pm@vger.kernel.org>; Mon, 13 Apr 2020 19:10:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=IV0jCGjY4W6KdLiLfKem198qqlhSCntJsgHYVO+E6jU=;
-        b=TxNzwdteXcO+NRa9KnMotSGqrmb+EL1atf38W0J3wvYcY7GgEB5sus+/a9qg1s9Udb
-         +8m7LQ5nGne+dQgSixQv7noFYCtyk/x8RxwatcAz+RA6zLOijOQLMGrsBuJ5wBl3hjYq
-         UdTmGWDeU6Ec99alAJY2Xv6tnXUFjkIy1N+hRnUUNu33i8l7qzig95xa9ZwX5eVxN/nT
-         ulQd1Swx6NMcnk/IgRlsxpazPUfDTYva+S01mPs3/MYPif2JSsqmkdzIQCviUfBnqeE2
-         vIUM2F72DrOZJWRvc9UZpnA0w3ecNieqF/WCq5CqivbDz9PKkvTahpctWYh8DrlKQc6W
-         exzw==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=YHR3wLSj0M6BuUX/ipe64SAlKpucYOALnl0bw9GVsCk=;
+        b=OqkFAcjncMFLHI/UNUK8qcvtRfUYyM8YNCWg5A9aOvs5rMmWYjmzs6UmPpAmPV//xt
+         naAfYZIcJFHBIwfU86vDOojKFwUtH68H7quwzPEfX7/QgjcculvnUAH1IqzLMmQ4VBi6
+         YIbO51AsZFJRtu+cJJZBmPiwguAIxtLPjKoJCTXKrWfXz4EagT5epD6P35PC4LTnfWmi
+         A9Z8l8DLtloQsE1OGXBU9lPcnquzTTE/YQoon+g+R+/SBx6R0yO500wWpESGalcyM9av
+         1JvFMAVBilWOtRjPhMSjqfiVwUEvp8MHJINx2hjT9Nu4BaW0qMR/W4eIMgeXIQfZHmjX
+         LsPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=IV0jCGjY4W6KdLiLfKem198qqlhSCntJsgHYVO+E6jU=;
-        b=NlRpJmjI7b4RjZVTfErsLTHDODAkcxM67Odx/shRGXMQ4n/l5LueI133n0w38WRZ3d
-         r3Tco5ktsyC0NLsAovj0YtUkVdA5isQegKm6+cenBrxvrRFvqLSnF7Q0Sq/8/6RbNEnh
-         2c4xGu7Y/7r8YRKQCg+YV9cXLrrmIsQ4wPn7CM43CUVwaGa7hcqWLMwE78PBn4DuVayV
-         98WRWDnkvq1ZfG4X/McNBQZkKv45CHjCGNwC/HkhED+6EDCTV2+L2nVwiiY90iOUeYXK
-         5FNF6oz3ce6zm7BJQdmERdezRJlefOzfUWxHR8i4dLwW8xizowYi0MApNpbyw7duTgb3
-         5ctA==
-X-Gm-Message-State: AGi0PubkVjtY8Mr43MLreVqrltDCZuKizyNvM08rcApCTHPxlZcSVNhE
-        LMjGT6+ec77ivfsAFwo2xl6bZzMVx6SYPfxOJgzzGw==
-X-Google-Smtp-Source: APiQypLZxejCoedLS04Fm/dwUgsisYLaXmBRSDsYUFCAZ5QZm+9qNaLFSxtw39HBkcqQkBLTbco0bJaIviWsMUgyTBNfsw==
-X-Received: by 2002:a17:90a:3707:: with SMTP id u7mr24168900pjb.182.1586830199089;
- Mon, 13 Apr 2020 19:09:59 -0700 (PDT)
-Date:   Mon, 13 Apr 2020 19:09:51 -0700
-Message-Id: <20200414020953.255364-1-matthewgarrett@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=YHR3wLSj0M6BuUX/ipe64SAlKpucYOALnl0bw9GVsCk=;
+        b=Rv81bipdLIzRxNVvEUd4HaZuEC7CIK1KoYgj9A+1/LlSbH4FxfSKJxR5Al5GiFh7Cq
+         D1yjQxykMt7R3tLvA3L1HEaN0wNGk2TQurANawDu96vfkKh80NYtkwOva/xKFZ4t3OWK
+         QxIzvk7TE1J1H1N1J/3F4hRNfwK59qs9RF6JAoYjqh85ofAf05HiX2twfMkp2BOwfBfg
+         uT6ZW0R0a16obarXA1rjtCUi0MiPZJqTzIqdqLJCe0kHcPJtoifK5l0rD00CvnR0EYr6
+         YGXsnp6y/Mh6EbTmgxpepPHVlHr0xc7MrS1tOZ5SnW0Oxc9RKzdLzJvLfgIeXlMBbWYz
+         PpdQ==
+X-Gm-Message-State: AGi0PuYc3b7N2jTq80oqkgN/m6JGXsmJnd9f9zmgnlGhfh14SvAiHFEy
+        JmkMKY4yCw2VTq8iXjweIwhf7PUc4cE95oU8vEfUFg==
+X-Google-Smtp-Source: APiQypKIH4SbR/v8HfyOjpSGIpJ8JHSb5NCuk2cLc0PWMCcKvfXTimCbze7nJveA0VBep7ccJChZv9TM63tU0O9F1LvJdQ==
+X-Received: by 2002:a17:90a:3268:: with SMTP id k95mr23984813pjb.185.1586830201490;
+ Mon, 13 Apr 2020 19:10:01 -0700 (PDT)
+Date:   Mon, 13 Apr 2020 19:09:52 -0700
+In-Reply-To: <20200414020953.255364-1-matthewgarrett@google.com>
+Message-Id: <20200414020953.255364-2-matthewgarrett@google.com>
 Mime-Version: 1.0
+References: <20200414020953.255364-1-matthewgarrett@google.com>
 X-Mailer: git-send-email 2.26.0.110.g2183baf09c-goog
-Subject: [PATCH V2 1/3] thermal/int340x_thermal: Export GDDV
+Subject: [PATCH V2 2/3] thermal/int340x_thermal: Export OEM vendor variables
 From:   Matthew Garrett <matthewgarrett@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-pm@vger.kernel.org, rui.zhang@intel.com,
@@ -58,124 +62,228 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Matthew Garrett <mjg59@google.com>
 
-Implementing DPTF properly requires making use of firmware-provided
-information associated with the INT3400 device. Calling GDDV provides a
-buffer of information which userland can then interpret to determine
-appropriate DPTF policy.
+The platform vendor may expose an array of OEM-specific values to be used
+in determining DPTF policy. These are obtained via the ODVP method, and
+then simply exposed in sysfs. In addition, they are updated when a
+notification is received or when the DPTF policy is changed by userland.
 
 Signed-off-by: Matthew Garrett <mjg59@google.com>
 ---
- .../intel/int340x_thermal/int3400_thermal.c   | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ .../intel/int340x_thermal/int3400_thermal.c   | 132 +++++++++++++++++-
+ 1 file changed, 131 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index ceef89c956bd4..00a7732724cd0 100644
+index 00a7732724cd0..3919098a73b47 100644
 --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
 +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -52,6 +52,25 @@ struct int3400_thermal_priv {
- 	u8 uuid_bitmap;
+@@ -13,6 +13,7 @@
+ #include "acpi_thermal_rel.h"
+ 
+ #define INT3400_THERMAL_TABLE_CHANGED 0x83
++#define INT3400_ODVP_CHANGED 0x88
+ 
+ enum int3400_thermal_uuid {
+ 	INT3400_THERMAL_PASSIVE_1,
+@@ -41,8 +42,11 @@ static char *int3400_thermal_uuids[INT3400_THERMAL_MAXIMUM_UUID] = {
+ 	"BE84BABF-C4D4-403D-B495-3128FD44dAC1",
+ };
+ 
++struct odvp_attr;
++
+ struct int3400_thermal_priv {
+ 	struct acpi_device *adev;
++	struct platform_device *pdev;
+ 	struct thermal_zone_device *thermal;
+ 	int mode;
+ 	int art_count;
+@@ -53,6 +57,17 @@ struct int3400_thermal_priv {
  	int rel_misc_dev_res;
  	int current_uuid_index;
-+	char *data_vault;
+ 	char *data_vault;
++	int odvp_count;
++	int *odvp;
++	struct odvp_attr *odvp_attrs;
 +};
 +
-+static ssize_t data_vault_read(struct file *file, struct kobject *kobj,
-+	     struct bin_attribute *attr, char *buf, loff_t off, size_t count)
++static int evaluate_odvp(struct int3400_thermal_priv *priv);
++
++struct odvp_attr {
++	int odvp;
++	struct int3400_thermal_priv *priv;
++	struct kobj_attribute attr;
+ };
+ 
+ static ssize_t data_vault_read(struct file *file, struct kobject *kobj,
+@@ -210,9 +225,110 @@ static int int3400_thermal_run_osc(acpi_handle handle,
+ 		result = -EPERM;
+ 
+ 	kfree(context.ret.pointer);
++
+ 	return result;
+ }
+ 
++static ssize_t odvp_show(struct kobject *kobj, struct kobj_attribute *attr,
++			 char *buf)
 +{
-+	memcpy(buf, attr->private + off, count);
-+	return count;
++	struct odvp_attr *odvp_attr;
++
++	odvp_attr = container_of(attr, struct odvp_attr, attr);
++
++	return sprintf(buf, "%d\n", odvp_attr->priv->odvp[odvp_attr->odvp]);
 +}
 +
-+static BIN_ATTR_RO(data_vault, 0);
-+
-+static struct bin_attribute *data_attributes[] = {
-+	&bin_attr_data_vault,
-+	NULL,
-+};
-+
-+static const struct attribute_group data_attribute_group = {
-+	.bin_attrs = data_attributes,
- };
- 
- static ssize_t available_uuids_show(struct device *dev,
-@@ -278,6 +297,32 @@ static struct thermal_zone_params int3400_thermal_params = {
- 	.no_hwmon = true,
- };
- 
-+static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
++static void cleanup_odvp(struct int3400_thermal_priv *priv)
 +{
-+	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-+	union acpi_object *obj;
++	int i;
++
++	if (priv->odvp_attrs) {
++		for (i = 0; i < priv->odvp_count; i++) {
++			sysfs_remove_file(&priv->pdev->dev.kobj,
++					  &priv->odvp_attrs[i].attr.attr);
++			kfree(priv->odvp_attrs[i].attr.attr.name);
++		}
++		kfree(priv->odvp_attrs);
++	}
++	kfree(priv->odvp);
++	priv->odvp_count = 0;
++}
++
++static int evaluate_odvp(struct int3400_thermal_priv *priv)
++{
++	struct acpi_buffer odvp = { ACPI_ALLOCATE_BUFFER, NULL };
++	union acpi_object *obj = NULL;
 +	acpi_status status;
++	int i, ret;
 +
-+	status = acpi_evaluate_object(priv->adev->handle, "GDDV", NULL,
-+				      &buffer);
-+	if (ACPI_FAILURE(status) || !buffer.length)
-+		return;
-+
-+	obj = buffer.pointer;
-+	if (obj->type != ACPI_TYPE_PACKAGE || obj->package.count != 1
-+	    || obj->package.elements[0].type != ACPI_TYPE_BUFFER) {
-+		kfree(buffer.pointer);
-+		return;
++	status = acpi_evaluate_object(priv->adev->handle, "ODVP", NULL, &odvp);
++	if (ACPI_FAILURE(status)) {
++		ret = -EINVAL;
++		goto out_err;
 +	}
 +
-+	priv->data_vault = kmemdup(obj->package.elements[0].buffer.pointer,
-+				   obj->package.elements[0].buffer.length,
-+				   GFP_KERNEL);
-+	bin_attr_data_vault.private = priv->data_vault;
-+	bin_attr_data_vault.size = obj->package.elements[0].buffer.length;
-+	kfree(buffer.pointer);
++	obj = odvp.pointer;
++	if (obj->type != ACPI_TYPE_PACKAGE) {
++		ret = -EINVAL;
++		goto out_err;
++	}
++
++	if (priv->odvp == NULL) {
++		priv->odvp_count = obj->package.count;
++		priv->odvp = kmalloc_array(priv->odvp_count, sizeof(int),
++				     GFP_KERNEL);
++		if (!priv->odvp) {
++			ret = -ENOMEM;
++			goto out_err;
++		}
++	}
++
++	if (priv->odvp_attrs == NULL) {
++		priv->odvp_attrs = kcalloc(priv->odvp_count,
++					   sizeof(struct odvp_attr),
++					   GFP_KERNEL);
++		if (!priv->odvp_attrs) {
++			ret = -ENOMEM;
++			goto out_err;
++		}
++		for (i = 0; i < priv->odvp_count; i++) {
++			struct odvp_attr *odvp = &priv->odvp_attrs[i];
++
++			sysfs_attr_init(&odvp->attr.attr);
++			odvp->priv = priv;
++			odvp->odvp = i;
++			odvp->attr.attr.name = kasprintf(GFP_KERNEL,
++							 "odvp%d", i);
++
++			if (!odvp->attr.attr.name) {
++				ret = -ENOMEM;
++				goto out_err;
++			}
++			odvp->attr.attr.mode = 0444;
++			odvp->attr.show = odvp_show;
++			odvp->attr.store = NULL;
++			ret = sysfs_create_file(&priv->pdev->dev.kobj,
++						&odvp->attr.attr);
++			if (ret)
++				goto out_err;
++		}
++	}
++
++	for (i = 0; i < obj->package.count; i++) {
++		if (obj->package.elements[i].type == ACPI_TYPE_INTEGER)
++			priv->odvp[i] = obj->package.elements[i].integer.value;
++	}
++
++	kfree(obj);
++	return 0;
++
++out_err:
++	cleanup_odvp(priv);
++	kfree(obj);
++	return ret;
 +}
 +
- static int int3400_thermal_probe(struct platform_device *pdev)
- {
- 	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-@@ -309,6 +354,8 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+ static void int3400_notify(acpi_handle handle,
+ 			u32 event,
+ 			void *data)
+@@ -236,6 +352,9 @@ static void int3400_notify(acpi_handle handle,
+ 		kobject_uevent_env(&priv->thermal->device.kobj, KOBJ_CHANGE,
+ 				thermal_prop);
+ 		break;
++	case INT3400_ODVP_CHANGED:
++		evaluate_odvp(priv);
++		break;
+ 	default:
+ 		/* Ignore unknown notification codes sent to INT3400 device */
+ 		break;
+@@ -285,6 +404,9 @@ static int int3400_thermal_set_mode(struct thermal_zone_device *thermal,
+ 						 priv->current_uuid_index,
+ 						 enable);
+ 	}
++
++	evaluate_odvp(priv);
++
+ 	return result;
+ }
  
- 	platform_set_drvdata(pdev, priv);
+@@ -336,6 +458,7 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+ 	if (!priv)
+ 		return -ENOMEM;
  
-+	int3400_setup_gddv(priv);
++	priv->pdev = pdev;
+ 	priv->adev = adev;
+ 
+ 	result = int3400_thermal_get_uuids(priv);
+@@ -356,6 +479,8 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+ 
+ 	int3400_setup_gddv(priv);
+ 
++	evaluate_odvp(priv);
 +
  	int3400_thermal_ops.get_mode = int3400_thermal_get_mode;
  	int3400_thermal_ops.set_mode = int3400_thermal_set_mode;
  
-@@ -327,6 +374,13 @@ static int int3400_thermal_probe(struct platform_device *pdev)
- 	if (result)
- 		goto free_rel_misc;
- 
-+	if (priv->data_vault) {
-+		result = sysfs_create_group(&pdev->dev.kobj,
-+					    &data_attribute_group);
-+		if (result)
-+			goto free_uuid;
-+	}
-+
- 	result = acpi_install_notify_handler(
- 			priv->adev->handle, ACPI_DEVICE_NOTIFY, int3400_notify,
- 			(void *)priv);
-@@ -336,6 +390,9 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+@@ -390,8 +515,11 @@ static int int3400_thermal_probe(struct platform_device *pdev)
  	return 0;
  
  free_sysfs:
-+	if (priv->data_vault)
-+		sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group);
-+free_uuid:
+-	if (priv->data_vault)
++	cleanup_odvp(priv);
++	if (priv->data_vault) {
+ 		sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group);
++		kfree(priv->data_vault);
++	}
+ free_uuid:
  	sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
  free_rel_misc:
- 	if (!priv->rel_misc_dev_res)
-@@ -360,8 +417,11 @@ static int int3400_thermal_remove(struct platform_device *pdev)
+@@ -414,6 +542,8 @@ static int int3400_thermal_remove(struct platform_device *pdev)
+ 			priv->adev->handle, ACPI_DEVICE_NOTIFY,
+ 			int3400_notify);
+ 
++	cleanup_odvp(priv);
++
  	if (!priv->rel_misc_dev_res)
  		acpi_thermal_rel_misc_device_remove(priv->adev->handle);
  
-+	if (priv->data_vault)
-+		sysfs_remove_group(&pdev->dev.kobj, &data_attribute_group);
- 	sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
- 	thermal_zone_device_unregister(priv->thermal);
-+	kfree(priv->data_vault);
- 	kfree(priv->trts);
- 	kfree(priv->arts);
- 	kfree(priv);
 -- 
 2.26.0.110.g2183baf09c-goog
 
