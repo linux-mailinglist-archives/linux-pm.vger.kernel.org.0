@@ -2,119 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A62451A6FBC
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 01:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DEF1A701B
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 02:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389920AbgDMXEd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Apr 2020 19:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727968AbgDMXEb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 19:04:31 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3BFC0A3BDC;
-        Mon, 13 Apr 2020 16:04:31 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 9D25B2A0D6D
-Received: by earth.universe (Postfix, from userid 1000)
-        id 6CD7E3C08C7; Tue, 14 Apr 2020 01:04:28 +0200 (CEST)
-Date:   Tue, 14 Apr 2020 01:04:28 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [PATCH v2] power:supply:88pm860x_battery:remove
- redundant dev_err message
-Message-ID: <20200413230428.33zvqkw22sq25yk3@earth.universe>
-References: <20200406050757.13796-1-tangbin@cmss.chinamobile.com>
+        id S1727914AbgDNAaB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Apr 2020 20:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390459AbgDNAaB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Apr 2020 20:30:01 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC54C00860A
+        for <linux-pm@vger.kernel.org>; Mon, 13 Apr 2020 17:30:00 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id k15so5294551pfh.6
+        for <linux-pm@vger.kernel.org>; Mon, 13 Apr 2020 17:30:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=GtP40NBc6K+wY7TevCqJVJVyGGxw6eyhk3x6njvRZbI=;
+        b=PMRE9MFBjRNguCLZJxvQ0tC6cbj5HN/L0mNJHOjg1H5naWvyPaji8Uw6CjXqOQ2azW
+         MhWs/LuNrHlvICFisvb7Cy6SJ3VKQrmiHJlokad5hGoOXcGXzDY3vorrrgpyAZrAVUDE
+         dUN76VdbMCLvs9G10TRyVoj/R2uKEUPKhrkRhwWPh9Qq6Oj8zqhrDAXwnWHye+K8R3ym
+         lDZQumSHVx6+RupP9U0o1EyjztcXPr7zTXefIIyzd+nYkxQBJg3bKkumuWN4k6N/hrZC
+         eN210smaNX58gX6QVglgalvDGfi5xzWfnOSt7/cWPG1d3xQeaexIo7gZ03EO3NRYAH/8
+         2wUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=GtP40NBc6K+wY7TevCqJVJVyGGxw6eyhk3x6njvRZbI=;
+        b=qQMQrUUHtjpmGnkMjbWAlmbCzp/Eq/27TcQVpJv3wrTNWdsEiaw9wunrIIFLXFqku5
+         GbZJnkL/vdDp5tLL+HzxSUCd9v7wVsEAtq2y3S+ke6OhxyTP6pwTQAwlcQP09OEJspzF
+         8z5kxX1Xf0WkuRoCwyBcaXX8SViPXm643VSDiytKEROc9pXJpfeZ4NluAasGX094EqN6
+         udxlgpRDcwdExVG7RxtD/bCsZmx3mY6IUVjxc4EeqzNAcZBWimovvl415q0BkBvNuAL4
+         5fBcT0tYZuENXJj8FON7zL5v+PzT5Q5oSqGmYsW6Z1bP2nC062uw4q3+0/fL9lphUYMJ
+         riiQ==
+X-Gm-Message-State: AGi0Pua2IcOopPyAcu9gfbexSQjamif/8LRjn9P5/zNxb9eCir4jri3T
+        cLjAC3hRkhfAQoXOBP9yibmnwg==
+X-Google-Smtp-Source: APiQypL5W5g7xmsU3GZXO1UecYYPwVLK1dPD412glciRM3pdZ8NSkRu/LjnNHn8Pg6Fxg4L/cgCpIw==
+X-Received: by 2002:a62:dd48:: with SMTP id w69mr10144721pff.86.1586824199909;
+        Mon, 13 Apr 2020 17:29:59 -0700 (PDT)
+Received: from [2620:15c:17:3:3a5:23a7:5e32:4598] ([2620:15c:17:3:3a5:23a7:5e32:4598])
+        by smtp.gmail.com with ESMTPSA id g11sm10055136pjs.17.2020.04.13.17.29.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2020 17:29:59 -0700 (PDT)
+Date:   Mon, 13 Apr 2020 17:29:58 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+X-X-Sender: rientjes@chino.kir.corp.google.com
+To:     Waiman Long <longman@redhat.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-crypto@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
+        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
+In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
+Message-ID: <alpine.DEB.2.21.2004131729410.260270@chino.kir.corp.google.com>
+References: <20200413211550.8307-1-longman@redhat.com> <20200413211550.8307-2-longman@redhat.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="n754yjdft2ijrfzm"
-Content-Disposition: inline
-In-Reply-To: <20200406050757.13796-1-tangbin@cmss.chinamobile.com>
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, 13 Apr 2020, Waiman Long wrote:
 
---n754yjdft2ijrfzm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> As said by Linus:
+> 
+>   A symmetric naming is only helpful if it implies symmetries in use.
+>   Otherwise it's actively misleading.
+> 
+>   In "kzalloc()", the z is meaningful and an important part of what the
+>   caller wants.
+> 
+>   In "kzfree()", the z is actively detrimental, because maybe in the
+>   future we really _might_ want to use that "memfill(0xdeadbeef)" or
+>   something. The "zero" part of the interface isn't even _relevant_.
+> 
+> The main reason that kzfree() exists is to clear sensitive information
+> that should not be leaked to other future users of the same memory
+> objects.
+> 
+> Rename kzfree() to kfree_sensitive() to follow the example of the
+> recently added kvfree_sensitive() and make the intention of the API
+> more explicit. In addition, memzero_explicit() is used to clear the
+> memory to make sure that it won't get optimized away by the compiler.
+> 
+> The renaming is done by using the command sequence:
+> 
+>   git grep -w --name-only kzfree |\
+>   xargs sed -i 's/\bkzfree\b/kfree_sensitive/'
+> 
+> followed by some editing of the kfree_sensitive() kerneldoc and the
+> use of memzero_explicit() instead of memset().
+> 
+> Suggested-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-Hi,
-
-On Mon, Apr 06, 2020 at 01:07:57PM +0800, Tang Bin wrote:
-> In the pm860x_battery_probe(),when get irq failed, the function
-> platform_get_irq() can log an dev_err message,so remove redundant
-> message here.
->=20
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-> ---
-
-Thanks, queued.
-
--- Sebastian
-
-> Changes from v1
->  - changed the theme=E3=80=81commit message and the code,but the purpose =
-is the same.
->    The original piece is:https://lore.kernel.org/linux-pm/20200402111222.=
-15204-1-tangbin@cmss.chinamobile.com/
-> ---
->  drivers/power/supply/88pm860x_battery.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/power/supply/88pm860x_battery.c b/drivers/power/supp=
-ly/88pm860x_battery.c
-> index 5ca047b3f..1308f3a18 100644
-> --- a/drivers/power/supply/88pm860x_battery.c
-> +++ b/drivers/power/supply/88pm860x_battery.c
-> @@ -919,16 +919,12 @@ static int pm860x_battery_probe(struct platform_dev=
-ice *pdev)
->  		return -ENOMEM;
-> =20
->  	info->irq_cc =3D platform_get_irq(pdev, 0);
-> -	if (info->irq_cc <=3D 0) {
-> -		dev_err(&pdev->dev, "No IRQ resource!\n");
-> +	if (info->irq_cc <=3D 0)
->  		return -EINVAL;
-> -	}
-> =20
->  	info->irq_batt =3D platform_get_irq(pdev, 1);
-> -	if (info->irq_batt <=3D 0) {
-> -		dev_err(&pdev->dev, "No IRQ resource!\n");
-> +	if (info->irq_batt <=3D 0)
->  		return -EINVAL;
-> -	}
-> =20
->  	info->chip =3D chip;
->  	info->i2c =3D
-> --=20
-> 2.20.1.windows.1
->=20
->=20
->=20
-
---n754yjdft2ijrfzm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6U7/wACgkQ2O7X88g7
-+pp5nBAAny2GsOfJrY108fh07lXnJQeY4FG//WzaAuCsYhRaVTKhYaZaj5XYCoAe
-YZDQ23fwGosAja9aAdTaMSA63H6nMaWuLn2xlIsEe6ZGPiay6JJtp7+MIpfa/rts
-C8iiJcN+jk0atj35W+f8QK2aeYuqKr/w8ZmATX6d7rvgWE72319dkGadpjiNZc16
-Wi9SxfbQP+0LpKpQcx2Xoph8zWs7pKBVUzCdsYw3NJCJPfz06bi1+fk7eB2cTjJq
-/loSJm9dZ17UXSjVMWmdiIznJ/dVDD/xUVrE+jp+tq9pUOxoP69pj90nE7Ytniy9
-Y/5O1pbhj9byGCnbvZJq+fDp0jQSmw9ex4tGter9xUae3epfToM2JpvV5yCso9id
-a85Va7AFktr+zPxGqj5q1wKQuP0eCWZaa7lxQV5UgKPM8zVuGXWl5b5tat5VyiGO
-Ye8vSWJ5NeOsIghWYy0gTLciAu8opudLrDrN9tyBSlS3FDGRg4i7TTjeVLdAwoWN
-bsKfsc86WQQM/hAIezyL3tjFdWrZuwPqMK1SODxbt7x1nqd0pF5WLVk0x6larXaZ
-cYb6A57wBp7rdL3QbKERrWBP5Ee/Vg2Hzx7FFfO0V46iXWodsFQHbiSIvy0t5PQ8
-XFX+QURl8SsZpOb/icLFKJGBd9j9KRM6ylCYs6OVPrtHYrD6YZo=
-=Q76U
------END PGP SIGNATURE-----
-
---n754yjdft2ijrfzm--
+Acked-by: David Rientjes <rientjes@google.com>
