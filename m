@@ -2,90 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D271A7606
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 10:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 679F11A7633
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 10:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436784AbgDNI1r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 04:27:47 -0400
-Received: from foss.arm.com ([217.140.110.172]:50988 "EHLO foss.arm.com"
+        id S2436888AbgDNIcU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 04:32:20 -0400
+Received: from mail.zx2c4.com ([192.95.5.64]:52379 "EHLO mail.zx2c4.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2436781AbgDNI1p (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Apr 2020 04:27:45 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E150D1FB;
-        Tue, 14 Apr 2020 01:27:44 -0700 (PDT)
-Received: from bogus (unknown [10.37.12.71])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 91F983F73D;
-        Tue, 14 Apr 2020 01:27:37 -0700 (PDT)
-Date:   Tue, 14 Apr 2020 09:27:34 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, dietmar.eggemann@arm.com,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Robert Richter <rric@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Zhou Yanjie <zhouyanjie@zoho.com>,
-        =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, YunQiang Su <syq@debian.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Matt Redfearn <matt.redfearn@mips.com>,
-        Richard Fontana <rfontana@redhat.com>,
-        Steve Winslow <swinslow@gmail.com>,
-        afzal mohammed <afzal.mohd.ma@gmail.com>,
-        Peter Xu <peterx@redhat.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 04/11] arch_topology: Reset all cpus in
- reset_cpu_topology
-Message-ID: <20200414082734.GC6459@bogus>
-References: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
- <20200412032123.3896114-5-jiaxun.yang@flygoat.com>
+        id S2436826AbgDNIcL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Apr 2020 04:32:11 -0400
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 9d220a78;
+        Tue, 14 Apr 2020 08:22:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=subject:to:cc
+        :references:from:message-id:date:mime-version:in-reply-to
+        :content-type:content-transfer-encoding; s=mail; bh=Bn42dUX94nPZ
+        VI2aresTt2verm4=; b=sx6IKJIxzuEOA3MDWmGK5eH/64R8mpMYlG8WURWdfzRD
+        XFeah0rjLnpfJ/wNxDNPuLqvGkOXg2tTc6/J9yxFJV/B/IyVASTm/xV1AWFh8sOT
+        E+Zkl2VUcl4Y0wf6Mu5iapMmn3g8Ztyi36JLXdlWN66PEuOJynjCGScQFzOu0tep
+        4+h/FZal3et8UceGQF9vqtL2mbwwUOtzAFh6NniwZkygh5iiMorXd4zwhnYD2AoL
+        UBjxDBvR+PqwgLJDDNN43HRxAe1Ka1ICHvrV5FNQIfjCNS9xZTJzxiJXAqnsHyrN
+        w3BT8jw4OmracAotC1L9+6WCZMUQn8YWdWOjpIB/Jw==
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e4f42b92 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 14 Apr 2020 08:22:18 +0000 (UTC)
+Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
+To:     Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>
+Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
+        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+References: <20200413211550.8307-1-longman@redhat.com>
+ <20200413211550.8307-2-longman@redhat.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Message-ID: <4babf834-c531-50ba-53f6-e88410b15ce3@zx2c4.com>
+Date:   Tue, 14 Apr 2020 02:32:03 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200412032123.3896114-5-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Apr 12, 2020 at 11:20:34AM +0800, Jiaxun Yang wrote:
-> For MIPS platform, when topology isn't probed by DeviceTree,
-> possible_cpu might be empty when calling init_cpu_topology,
-> that may result cpu_topology not fully reseted for all CPUs.
-> So here we can reset all cpus instead of possible cpus.
->
+On 4/13/20 3:15 PM, Waiman Long wrote:
+> As said by Linus:
+> 
+>    A symmetric naming is only helpful if it implies symmetries in use.
+>    Otherwise it's actively misleading.
+> 
+>    In "kzalloc()", the z is meaningful and an important part of what the
+>    caller wants.
+> 
+>    In "kzfree()", the z is actively detrimental, because maybe in the
+>    future we really _might_ want to use that "memfill(0xdeadbeef)" or
+>    something. The "zero" part of the interface isn't even _relevant_.
+> 
+> The main reason that kzfree() exists is to clear sensitive information
+> that should not be leaked to other future users of the same memory
+> objects.
+> 
+> Rename kzfree() to kfree_sensitive() to follow the example of the
+> recently added kvfree_sensitive() and make the intention of the API
+> more explicit. 
 
-As I have told before adjust and make it default before this function
-gets called.
+Seems reasonable to me. One bikeshed, that you can safely discard and 
+ignore as a mere bikeshed: kfree_memzero or kfree_scrub or 
+kfree_{someverb} seems like a better function name, as it describes what 
+the function does, rather than "_sensitive" that suggests something 
+about the data maybe but who knows what that entails. If you disagree, 
+not a big deal either way.
 
--- 
-Regards,
-Sudeep
+ > In addition, memzero_explicit() is used to clear the
+ > memory to make sure that it won't get optimized away by the compiler.
+
+This had occurred to me momentarily a number of years ago, but I was 
+under the impression that the kernel presumes extern function calls to 
+always imply a compiler barrier, making it difficult for the compiler to 
+reason about what happens in/after kfree, in order to be able to 
+optimize out the preceding memset. With LTO, that rule obviously 
+changes. I guess new code should be written with cross-object 
+optimizations in mind now a days? [Meanwhile, it would be sort of 
+interesting to teach gcc about kfree to enable additional scary 
+optimizations...]
