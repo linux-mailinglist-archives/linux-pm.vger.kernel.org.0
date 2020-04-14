@@ -2,131 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 348631A84C8
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 18:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089861A8577
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 18:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391539AbgDNQ1G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 12:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2391544AbgDNQ1F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 12:27:05 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F9BC0610D5
-        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 09:27:04 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id y24so14714389wma.4
-        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 09:27:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=1LHaTJUSb6YlKNJo8uEXGOXHLnntD8wG0lKLYJJal8o=;
-        b=asG7ZBqoRWoen0EhesYcUDuNHZ64mVYuDlESxkQtESEpYgzpIoltmbMvIkJwym3WfO
-         2AklxzEPMWgE7nie+BTaMUQfmCTQGyGJdyODxxnw42vkqKO5CEroNxRTWuvzMN7xG70O
-         dohNpdTqoTZfLtu4damkH5LbrNPWhK6YvpXOVDTxRijPXg8n2vkr0e0KEGDO2j9/xkSD
-         48EVFBCaexm8uKohNu/q7UTdYZ0tw4qBf2yR9Dea96u6CI3rwdbAI822abZ4iBGTAdT8
-         ojp/na+NR+Wsh63P61V7jL2KsnmEuuZauGX8tpdr27rDCS6qRzCWQx8AtUwkBAQAf7Td
-         zFUg==
+        id S2437221AbgDNQoD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 12:44:03 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:38898 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437160AbgDNQoB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 12:44:01 -0400
+Received: by mail-ot1-f68.google.com with SMTP id k21so278401otl.5;
+        Tue, 14 Apr 2020 09:44:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=1LHaTJUSb6YlKNJo8uEXGOXHLnntD8wG0lKLYJJal8o=;
-        b=G9MVS7EagBSmCh4YR+Rxf8/Sk/IkHbR9f9++pc2vz5SEtcEc9oz4oIRP8PkggGy8xY
-         De+O784WACRphVDo18TlmFoTPqx2K9TDyu0MX125aVJe77w5gP7N+45qziOpaqRNMgzO
-         O3BlWh3KZ7otUpxXDcCEhypGhl56T/Ec5bNnXgfmX5xXo2Lfc5EqRG57Mn/ian5DGn51
-         Uk3rgxAtoCCgp12+NPpjHQsFgVUC9TIaB+3U9/mapA/FTu96e4yov/K5Y7/KnzjQO7Uo
-         LzF12DZ2aI+Yuepte/QPa4QgkucfgimmM2P2imfHZSzt3YeMWPiXXs6bedmUIV5qE12r
-         By7Q==
-X-Gm-Message-State: AGi0PubhIGNeASwRMomLkhZ3jdHeT6g3R+mTRxDkGj7ReVcAq7TzlNTa
-        ZjZIINu5h2Qz3740qRCOCxpShQ==
-X-Google-Smtp-Source: APiQypIXhFiwhUI+LtSucAg5Mlgn4tl6tvKseJNoeacHZGV9fpdzkJsacrRP9EA+xeqbcNM8KdrTlw==
-X-Received: by 2002:a7b:c755:: with SMTP id w21mr637319wmk.120.1586881622774;
-        Tue, 14 Apr 2020 09:27:02 -0700 (PDT)
-Received: from localhost.localdomain (lns-bzn-59-82-252-135-148.adsl.proxad.net. [82.252.135.148])
-        by smtp.gmail.com with ESMTPSA id s14sm20199388wme.33.2020.04.14.09.27.01
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mdJGN+n2VYiCEYSu8u8xlSZpkqPfV2n6FeIMEPtdiVw=;
+        b=jRawnFkhpMXRAk9E226hLegLZOwJm+sg5V2l2IliKC7kTYlv3AjUbLNF2Q/3Db2pG8
+         /kBLzUav3peM7gUMIYvigwE7gudFjwgnz5cgfkvZaBIEmTKPPMwy21G9B/mNL19P0q+u
+         RnRmLqPM6octnPqaWHTIeyAzVkUP1eqT5CxQ+EQLFFSo5E3Mut6TtUNXCoiT+xikwlw8
+         o4EOKK1f3egKel9MXtX8QR4O0SnZQ7KJJxhMuX5CycDZ1j950fQCO+wXDhRdANxD+A/N
+         sCw5YYCzQa4ob6TORHTfkpqBzF6UeZV4grvYJZmGRw3Ll8N3V0Kt80ikIwcC8Gae8mtE
+         LH9w==
+X-Gm-Message-State: AGi0PuYsill/UOYWVcuAPTo1VL4eUTb985sb7O5B8uo3WEl08upTdoj1
+        qt2ARle7JPS4CPTrL/Hnyw==
+X-Google-Smtp-Source: APiQypINczSaAx3RvBdTvMgP/hZFPK9N4KYJKAMcgw+8KVN2riIwZXpaqEpmPb+hOROqaiW2MJnmaw==
+X-Received: by 2002:a4a:a98b:: with SMTP id w11mr19105677oom.80.1586882640106;
+        Tue, 14 Apr 2020 09:44:00 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id w15sm6274633ooq.24.2020.04.14.09.43.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 09:27:02 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
-Cc:     amit.kucheria@verdurent.com,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Tue, 14 Apr 2020 09:43:59 -0700 (PDT)
+Received: (nullmailer pid 11212 invoked by uid 1000);
+        Tue, 14 Apr 2020 16:43:57 -0000
+Date:   Tue, 14 Apr 2020 11:43:57 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        lukasz.luba@arm.com, daniel.lezcano@linaro.org,
         Sudeep Holla <sudeep.holla@arm.com>,
-        linux-pm@vger.kernel.org (open list:CPU IDLE TIME MANAGEMENT FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list),
-        linux-arm-kernel@lists.infradead.org (open list:CPUIDLE DRIVER - ARM
-        PSCI)
-Subject: [PATCH v2 4/4] thermal: cpuidle: Register cpuidle cooling device
-Date:   Tue, 14 Apr 2020 18:26:29 +0200
-Message-Id: <20200414162634.1867-4-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200414162634.1867-1-daniel.lezcano@linaro.org>
-References: <20200414162634.1867-1-daniel.lezcano@linaro.org>
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, Talel Shenhar <talel@amazon.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        Mans Rullgard <mans@mansr.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: thermal: Get rid of thermal.txt and replace
+ references
+Message-ID: <20200414164357.GA11178@bogus>
+References: <cbd70c2f0f5ddae0d8e418fcb1e03101e408f6c2.1585753313.git.amit.kucheria@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cbd70c2f0f5ddae0d8e418fcb1e03101e408f6c2.1585753313.git.amit.kucheria@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The cpuidle driver can be used as a cooling device by injecting idle
-cycles. The DT binding for the idle state added an optional
+On Wed,  1 Apr 2020 20:35:50 +0530, Amit Kucheria wrote:
+> Now that we have yaml bindings for the thermal subsystem, get rid of the
+> old bindings (thermal.txt).
+> 
+> Replace all references to thermal.txt in the Documentation with a link
+> to the appropriate YAML bindings using the following search and replace
+> pattern:
+>  - If the reference is specific to the thermal-sensor-cells property,
+>  replace with a pointer to thermal-sensor.yaml
+>  - If the reference is to the cooling-cells property, replace with a
+>  pointer to thermal-cooling-devices.yaml
+>  - If the reference is generic thermal bindings, replace with a
+>  reference to thermal*.yaml.
+> 
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> ---
+>  .../devicetree/bindings/arm/arm,scmi.txt      |   2 +-
+>  .../devicetree/bindings/arm/arm,scpi.txt      |   2 +-
+>  .../arm/marvell/ap80x-system-controller.txt   |   2 +-
+>  .../arm/marvell/cp110-system-controller.txt   |   2 +-
+>  .../bindings/cpufreq/cpufreq-dt.txt           |   3 +-
+>  .../bindings/cpufreq/cpufreq-mediatek.txt     |   4 +-
+>  .../devicetree/bindings/hwmon/gpio-fan.txt    |   3 +-
+>  .../devicetree/bindings/hwmon/lm90.txt        |   4 +-
+>  .../thermal/allwinner,sun8i-a83t-ths.yaml     |   2 +-
+>  .../bindings/thermal/amazon,al-thermal.txt    |   2 +-
+>  .../bindings/thermal/brcm,avs-ro-thermal.yaml |   2 +-
+>  .../bindings/thermal/brcm,bcm2835-thermal.txt |   2 +-
+>  .../bindings/thermal/hisilicon-thermal.txt    |   2 +-
+>  .../bindings/thermal/max77620_thermal.txt     |   6 +-
+>  .../bindings/thermal/mediatek-thermal.txt     |   2 +-
+>  .../thermal/nvidia,tegra124-soctherm.txt      |  10 +-
+>  .../thermal/nvidia,tegra186-bpmp-thermal.txt  |   2 +-
+>  .../bindings/thermal/qcom-spmi-temp-alarm.txt |   2 +-
+>  .../bindings/thermal/rockchip-thermal.txt     |   2 +-
+>  .../bindings/thermal/tango-thermal.txt        |   2 +-
+>  .../bindings/thermal/thermal-generic-adc.txt  |   2 +-
+>  .../devicetree/bindings/thermal/thermal.txt   | 586 ------------------
+>  .../bindings/thermal/uniphier-thermal.txt     |   2 +-
+>  23 files changed, 33 insertions(+), 615 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/thermal.txt
+> 
 
-When the property is set, register the cpuidle driver with the idle
-state node pointer as a cooling device. The thermal framework will do
-the association automatically with the thermal zone via the
-cooling-device defined in the device tree cooling-maps section.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/cpuidle/cpuidle-arm.c  | 5 +++++
- drivers/cpuidle/cpuidle-psci.c | 5 +++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/drivers/cpuidle/cpuidle-arm.c b/drivers/cpuidle/cpuidle-arm.c
-index 9e5156d39627..2406ac0ae134 100644
---- a/drivers/cpuidle/cpuidle-arm.c
-+++ b/drivers/cpuidle/cpuidle-arm.c
-@@ -8,6 +8,7 @@
- 
- #define pr_fmt(fmt) "CPUidle arm: " fmt
- 
-+#include <linux/cpu_cooling.h>
- #include <linux/cpuidle.h>
- #include <linux/cpumask.h>
- #include <linux/cpu_pm.h>
-@@ -124,6 +125,10 @@ static int __init arm_idle_init_cpu(int cpu)
- 	if (ret)
- 		goto out_kfree_drv;
- 
-+	ret = cpuidle_cooling_register(drv);
-+	if (ret)
-+		pr_err("Failed to register the idle cooling device: %d\n", ret);
-+
- 	return 0;
- 
- out_kfree_drv:
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index edd7a54ef0d3..8e805bff646f 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -9,6 +9,7 @@
- #define pr_fmt(fmt) "CPUidle PSCI: " fmt
- 
- #include <linux/cpuhotplug.h>
-+#include <linux/cpu_cooling.h>
- #include <linux/cpuidle.h>
- #include <linux/cpumask.h>
- #include <linux/cpu_pm.h>
-@@ -305,6 +306,10 @@ static int __init psci_idle_init_cpu(int cpu)
- 	if (ret)
- 		goto out_kfree_drv;
- 
-+	ret = cpuidle_cooling_register(drv);
-+	if (ret)
-+		pr_err("Failed to register the idle cooling device: %d\n", ret);
-+
- 	return 0;
- 
- out_kfree_drv:
--- 
-2.17.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
