@@ -2,117 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 109071A76F0
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 11:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1651A7806
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 12:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437363AbgDNJFY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 05:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437356AbgDNJFW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 05:05:22 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7049CC0A3BD0;
-        Tue, 14 Apr 2020 02:05:22 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id np9so5006901pjb.4;
-        Tue, 14 Apr 2020 02:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=F107NiRVAgQ23qg6alA+b2hmVPaDBWwXKGbC/6Kd1Ds=;
-        b=iPkJTp44SIdd8vyikAwhCDs+sHWOHLZ78+E8SBIxuZq285eqxNF9d2SS2o8+mIJG9+
-         bj+Ono74KZ67j91z2wgqvEPw6rRN8yvfKpvOHFvP1j1Fa4X93fCqFI+4g8q5k3BUnr76
-         Xh2PlVy406/b6FfP+bM49JHBBUPVp+sSQ4AGj25e2KaTwAjbrYWigzPSCYuN904rzINZ
-         b5ON0ysRUVmysJ5LoohGlP/9/kOs7Pjep80Uqc0M1wHHLZFIAXl7ZgTTFYDcQGs0gRhk
-         +oncynKLpp+dW+7w349p+icF5PZGiOOc2ZSEOzhES4+/RifvTaFOFW9nehAiNcgLNLIq
-         yMQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F107NiRVAgQ23qg6alA+b2hmVPaDBWwXKGbC/6Kd1Ds=;
-        b=mGpSDd/8n3MHJh596hxfgIXMSb8xEwoKYGIU5/j0l3bHqmSQD+ykxbQR2PfJVUzRqL
-         4XrqLpg3Nrokacp9ngGw6JXuXtHvZHZB1HWPeBR+DzloFLXGm2b3zERSMRP05aM5FSf9
-         Bj8fgZzbMNtO1Zk2UzqpzMH7RykD4Mv/wfIEjf90WqXGa241BqxvxsuY7iTkhUBD9FlL
-         Hl2FBmEbp2Z1ySdf2+PT0QDSijoYZ3f34zBsov7XZZTUKjtlsoZbW5YhukGXbrvz2O/6
-         lM4oRfIUCjHMJyaoOtqnCljvPaF2LTLNqHBxa8hxYgtc0JeOCQ1UtVzEq5LBVdZpyp97
-         x55w==
-X-Gm-Message-State: AGi0PubwUnWVtyHt+bS/fCk7kZypufxhAD+TYzpem6vKAnszQD0U1eIm
-        m0gY+5q3Kg9n++6cOhicspBsBlNk7vcaQBB0miI=
-X-Google-Smtp-Source: APiQypItJnd7xLSTDEuRf+mho4kdhPUComrhtelzkg62uCTrDAdfkoWo8cE1BKvSyx/C/m0v8G/RQo6NBn3pXMMcGmc=
-X-Received: by 2002:a17:902:aa09:: with SMTP id be9mr14890031plb.18.1586855121908;
- Tue, 14 Apr 2020 02:05:21 -0700 (PDT)
+        id S2438099AbgDNKDm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 06:03:42 -0400
+Received: from foss.arm.com ([217.140.110.172]:52300 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2438097AbgDNKDl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Apr 2020 06:03:41 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2ED3031B;
+        Tue, 14 Apr 2020 03:03:40 -0700 (PDT)
+Received: from bogus (unknown [10.37.12.71])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 896E43F6C4;
+        Tue, 14 Apr 2020 03:03:31 -0700 (PDT)
+Date:   Tue, 14 Apr 2020 11:03:24 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, dietmar.eggemann@arm.com,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhc@lemote.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Robert Richter <rric@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Zhou Yanjie <zhouyanjie@zoho.com>,
+        =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, YunQiang Su <syq@debian.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Matt Redfearn <matt.redfearn@mips.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Steve Winslow <swinslow@gmail.com>,
+        afzal mohammed <afzal.mohd.ma@gmail.com>,
+        Peter Xu <peterx@redhat.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 04/11] arch_topology: Reset all cpus in
+ reset_cpu_topology
+Message-ID: <20200414100324.GA17835@bogus>
+References: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
+ <20200412032123.3896114-5-jiaxun.yang@flygoat.com>
+ <20200414082734.GC6459@bogus>
+ <20200414163514.00000100@flygoat.com>
 MIME-Version: 1.0
-References: <20200413173656.28522-1-sravanhome@gmail.com> <20200413173656.28522-5-sravanhome@gmail.com>
- <CAHp75VeYFY1CW4AH+D4HAgzppMZ5J8dL8kKPYmcwsXNVGNSYjQ@mail.gmail.com>
- <6cfab0a6-c3eb-bd9b-6572-b49e3205524f@gmail.com> <20200413204847.ni7dsrn5tslrorqn@earth.universe>
-In-Reply-To: <20200413204847.ni7dsrn5tslrorqn@earth.universe>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 14 Apr 2020 12:05:15 +0300
-Message-ID: <CAHp75VdRXWVtveRnvR-k8wqH5R_P7owfQvFf7YT3qM_oVEY3vg@mail.gmail.com>
-Subject: Re: [PATCH v8 4/6] power: supply: Add support for mps mp2629 battery charger
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     saravanan sekar <sravanhome@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald <pmeerw@pmeerw.net>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200414163514.00000100@flygoat.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 13, 2020 at 11:48 PM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
-> On Mon, Apr 13, 2020 at 10:28:19PM +0200, saravanan sekar wrote:
-> > On 13/04/20 10:10 pm, Andy Shevchenko wrote:
-> > > On Mon, Apr 13, 2020 at 8:37 PM Saravanan Sekar <sravanhome@gmail.com> wrote:
-
-...
-
-> > > > +       irq = platform_get_irq(to_platform_device(pdev->dev.parent), 0);
-> > > Why not to use temporary variable dev?
+On Tue, Apr 14, 2020 at 04:35:14PM +0800, Jiaxun Yang wrote:
+> On Tue, 14 Apr 2020 09:27:34 +0100
+> Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> > On Sun, Apr 12, 2020 at 11:20:34AM +0800, Jiaxun Yang wrote:
+> > > For MIPS platform, when topology isn't probed by DeviceTree,
+> > > possible_cpu might be empty when calling init_cpu_topology,
+> > > that may result cpu_topology not fully reseted for all CPUs.
+> > > So here we can reset all cpus instead of possible cpus.
 > > >
-> > > This should be platform_get_irq_optional().
 > >
-> > Platform_get_irq in turn calls platform_get_irq_optional. It was suggested
-> > by Lee and is it mandatory to change it?
+> > As I have told before adjust and make it default before this function
+> > gets called.
 >
-> platform_get_irq is fine.
+> Hi,
+>
+> That's really impossible under current MIPS code structure.
+>
 
-I don't think so. It will spill an error in case there is no IRQ or
-error happened.
+I really doubt that, but I have no knowledge on MIPS port, so I would
+let maintainers take that call.
 
-So, either is should be _optional, or below conditional simply wrong, should be
-  if (irq < 0)
-    return irq;
+> Another option would be prefill possible_cpu with all_cpu_mask before
+> calling topology_init, but that would make the code unnecessarily
+> complex.
+>
 
-> > > > +       if (irq) {
->
-> But this must be
->
-> if (irq > 0)
->
-> or you will also try to continue with error codes.
->
-> > > > +               ret = devm_request_irq(dev, irq, mp2629_irq_handler,
-> > > > +                                IRQF_TRIGGER_RISING, "mp2629-charger",
-> > > > +                                charger);
-> > > > +               if (ret) {
-> > > > +                       dev_err(dev, "failed to request gpio IRQ\n");
-> > > > +                       goto iio_fail;
-> > > > +               }
-> > > > +       }
-> > > > +}
+I still prefer that. By the time we call this function on a config
+with say NR_CPUS=1024, we would have parsed DT and set nr_cpus to say 8
+or 16 just for sake of example, so if platforms can't figure the
+possible CPUs, let them set it to NR_CPUs so that not all platforms
+have to run through that loop.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> Here simply reset the whole array won't cause any regression.
+>
+
+Not necessary, please discuss and check if some simplification to MIPS
+can be done rather than patching here and there to make it work.
+
+--
+Regards,
+Sudeep
