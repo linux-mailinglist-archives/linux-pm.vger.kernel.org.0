@@ -2,177 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A411A83FA
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 17:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 966851A83F9
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 17:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391135AbgDNP5v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S2391139AbgDNP5v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 14 Apr 2020 11:57:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56830 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732405AbgDNP5t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Apr 2020 11:57:49 -0400
-Received: from localhost (unknown [213.57.247.131])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AB8B020732;
-        Tue, 14 Apr 2020 15:57:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586879868;
-        bh=ND3DvBfhLOXZG1Is2TrsdNAGZC2OizjI+yt+Di9QF1w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t2eDMgCwSSpeWFSVZWtTfXpo3B/+7e2Ebd7YB37gqCr6aev85o37jPFsWvjZYVd7f
-         3BbtIzXzyKv4HBhmA4QiOZKDp8BuNm33s17BOBBUxMoR9vLySIfyyjs4qjOtL3+BTh
-         IidgSVvzXUYF8ci8EWfdvuuOXmHkHFrlvrJhRaWQ=
-From:   Leon Romanovsky <leon@kernel.org>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Leon Romanovsky <leonro@mellanox.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Borislav Petkov <bp@suse.de>, Ion Badulescu <ionut@badula.org>,
-        Jay Vosburgh <j.vosburgh@gmail.com>, linux-pm@vger.kernel.org,
-        netdev@vger.kernel.org, Pensando Drivers <drivers@pensando.io>,
-        Sebastian Reichel <sre@kernel.org>,
-        Shannon Nelson <snelson@pensando.io>,
-        Veaceslav Falico <vfalico@gmail.com>
-Subject: [PATCH net-next 1/4] drivers: Remove inclusion of vermagic header
-Date:   Tue, 14 Apr 2020 18:57:29 +0300
-Message-Id: <20200414155732.1236944-2-leon@kernel.org>
-X-Mailer: git-send-email 2.25.2
-In-Reply-To: <20200414155732.1236944-1-leon@kernel.org>
-References: <20200414155732.1236944-1-leon@kernel.org>
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:45264 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732332AbgDNP5t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 11:57:49 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id D5F312A04F7
+Subject: Re: [PATCH 4/4] power: supply: core: Constify properties
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20200413183853.1088823-1-sebastian.reichel@collabora.com>
+ <20200413183853.1088823-5-sebastian.reichel@collabora.com>
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Message-ID: <48f5fbce-2eb3-a4dc-8f0f-bde0be0bea6f@collabora.com>
+Date:   Tue, 14 Apr 2020 17:57:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200413183853.1088823-5-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Leon Romanovsky <leonro@mellanox.com>
+Hi Sebastian,
 
-Get rid of linux/vermagic.h includes, so that MODULE_ARCH_VERMAGIC from
-the arch header arch/x86/include/asm/module.h won't be redefined.
+On 13/4/20 20:38, Sebastian Reichel wrote:
+> properties is a list of properties supported by the
+> driver. It is not modified by the power-supply core
+> and drivers are not supposed to change it once the
+> list has been registered. Let's mark it as const for
+> improved security.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-  In file included from ./include/linux/module.h:30,
-                   from drivers/net/ethernet/3com/3c515.c:56:
-  ./arch/x86/include/asm/module.h:73: warning: "MODULE_ARCH_VERMAGIC"
-redefined
-     73 | # define MODULE_ARCH_VERMAGIC MODULE_PROC_FAMILY
-        |
-  In file included from drivers/net/ethernet/3com/3c515.c:25:
-  ./include/linux/vermagic.h:28: note: this is the location of the
-previous definition
-     28 | #define MODULE_ARCH_VERMAGIC ""
-        |
+Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 
-Fixes: 6bba2e89a88c ("net/3com: Delete driver and module versions from 3com drivers")
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Leon Romanovsky <leonro@mellanox.com>
----
- drivers/net/bonding/bonding_priv.h               | 2 +-
- drivers/net/ethernet/3com/3c509.c                | 1 -
- drivers/net/ethernet/3com/3c515.c                | 1 -
- drivers/net/ethernet/adaptec/starfire.c          | 1 -
- drivers/net/ethernet/pensando/ionic/ionic_main.c | 2 +-
- drivers/power/supply/test_power.c                | 2 +-
- net/ethtool/ioctl.c                              | 3 +--
- 7 files changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/bonding/bonding_priv.h b/drivers/net/bonding/bonding_priv.h
-index 45b77bc8c7b3..48cdf3a49a7d 100644
---- a/drivers/net/bonding/bonding_priv.h
-+++ b/drivers/net/bonding/bonding_priv.h
-@@ -14,7 +14,7 @@
- 
- #ifndef _BONDING_PRIV_H
- #define _BONDING_PRIV_H
--#include <linux/vermagic.h>
-+#include <generated/utsrelease.h>
- 
- #define DRV_NAME	"bonding"
- #define DRV_DESCRIPTION	"Ethernet Channel Bonding Driver"
-diff --git a/drivers/net/ethernet/3com/3c509.c b/drivers/net/ethernet/3com/3c509.c
-index b762176a1406..139d0120f511 100644
---- a/drivers/net/ethernet/3com/3c509.c
-+++ b/drivers/net/ethernet/3com/3c509.c
-@@ -85,7 +85,6 @@
- #include <linux/device.h>
- #include <linux/eisa.h>
- #include <linux/bitops.h>
--#include <linux/vermagic.h>
- 
- #include <linux/uaccess.h>
- #include <asm/io.h>
-diff --git a/drivers/net/ethernet/3com/3c515.c b/drivers/net/ethernet/3com/3c515.c
-index 90312fcd6319..47b4215bb93b 100644
---- a/drivers/net/ethernet/3com/3c515.c
-+++ b/drivers/net/ethernet/3com/3c515.c
-@@ -22,7 +22,6 @@
- 
- */
- 
--#include <linux/vermagic.h>
- #define DRV_NAME		"3c515"
- 
- #define CORKSCREW 1
-diff --git a/drivers/net/ethernet/adaptec/starfire.c b/drivers/net/ethernet/adaptec/starfire.c
-index 2db42211329f..a64191fc2af9 100644
---- a/drivers/net/ethernet/adaptec/starfire.c
-+++ b/drivers/net/ethernet/adaptec/starfire.c
-@@ -45,7 +45,6 @@
- #include <asm/processor.h>		/* Processor type for cache alignment. */
- #include <linux/uaccess.h>
- #include <asm/io.h>
--#include <linux/vermagic.h>
- 
- /*
-  * The current frame processor firmware fails to checksum a fragment
-diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-index 588c62e9add7..3ed150512091 100644
---- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-@@ -6,7 +6,7 @@
- #include <linux/module.h>
- #include <linux/netdevice.h>
- #include <linux/utsname.h>
--#include <linux/vermagic.h>
-+#include <generated/utsrelease.h>
- 
- #include "ionic.h"
- #include "ionic_bus.h"
-diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-index 65c23ef6408d..b3c05ff05783 100644
---- a/drivers/power/supply/test_power.c
-+++ b/drivers/power/supply/test_power.c
-@@ -16,7 +16,7 @@
- #include <linux/power_supply.h>
- #include <linux/errno.h>
- #include <linux/delay.h>
--#include <linux/vermagic.h>
-+#include <generated/utsrelease.h>
- 
- enum test_power_id {
- 	TEST_AC,
-diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-index 89d0b1827aaf..d3cb5a49a0ce 100644
---- a/net/ethtool/ioctl.c
-+++ b/net/ethtool/ioctl.c
-@@ -17,7 +17,6 @@
- #include <linux/phy.h>
- #include <linux/bitops.h>
- #include <linux/uaccess.h>
--#include <linux/vermagic.h>
- #include <linux/vmalloc.h>
- #include <linux/sfp.h>
- #include <linux/slab.h>
-@@ -28,7 +27,7 @@
- #include <net/xdp_sock.h>
- #include <net/flow_offload.h>
- #include <linux/ethtool_netlink.h>
--
-+#include <generated/utsrelease.h>
- #include "common.h"
- 
- /*
--- 
-2.25.2
-
+> ---
+>  include/linux/power_supply.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 0392c9cc8f1c..6a34df65d4d1 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -225,7 +225,7 @@ struct power_supply_desc {
+>  	enum power_supply_type type;
+>  	const enum power_supply_usb_type *usb_types;
+>  	size_t num_usb_types;
+> -	enum power_supply_property *properties;
+> +	const enum power_supply_property *properties;
+>  	size_t num_properties;
+>  
+>  	/*
+> 
