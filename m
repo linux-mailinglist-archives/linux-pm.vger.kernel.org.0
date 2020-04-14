@@ -2,117 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EBF1A7657
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 10:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99091A76DB
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 11:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437020AbgDNImk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 04:42:40 -0400
-Received: from sender3-op-o12.zoho.com.cn ([124.251.121.243]:17852 "EHLO
-        sender3-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2436845AbgDNImi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 04:42:38 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1586853598; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=ZSK1M9iyq2xeDVWV8f1PWAKe/9uCU4E9T6vOsK6u9aSiBWGXfIn0pocsjl4tzWveQh2ZDy2cj1b7bpHgekQf0jbXo9LUSmHOeFntpMA9PPG8b23qxVeQDSY4EsbYXLiuAT1HFLfypwEDqH3WZQeK5l7MGE8gNsnNqPEbAdLbAlU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1586853598; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=5yxE8rjIQbfWB2zY24IJme7e+SE38jsS1KkXESLePEI=; 
-        b=MxrSvTiMyZFwn8zPfXMUcshZgT9ZAOJ0+qDa6+Tzu6So7Sme1O/aiY+OqbHehQy4rx3Xw09wK2lY2ViNCEJpA1yP8gFpRCNHDfyGSPKKWhGbLu/guUngLhylu0oHCtT3ggf/NpQGrV50PP2CpYp0098dw1hWvD/QtR4tAy5dycc=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=flygoat.com;
-        spf=pass  smtp.mailfrom=jiaxun.yang@flygoat.com;
-        dmarc=pass header.from=<jiaxun.yang@flygoat.com> header.from=<jiaxun.yang@flygoat.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1586853598;
-        s=mail; d=flygoat.com; i=jiaxun.yang@flygoat.com;
-        h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=5yxE8rjIQbfWB2zY24IJme7e+SE38jsS1KkXESLePEI=;
-        b=GpdV1a2IgBQOShDin5PNisEXA6+bNxd8Mf4rATLprEMaKlc4jf5QVVU3k27MHqSA
-        UeRk2dKl2ZRMbjt9syeLztoXGin7EcYipNexBIvvaQFIBtsgI+VxL4WIGrfrnDqUgNf
-        gaPqGT9RgEkxsHstO7khtgGjXMV3drq4ap00TVuE=
-Received: from localhost (122.235.212.87 [122.235.212.87]) by mx.zoho.com.cn
-        with SMTPS id 1586853596243411.62253278794117; Tue, 14 Apr 2020 16:39:56 +0800 (CST)
-Date:   Tue, 14 Apr 2020 16:39:57 +0800
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-mips@vger.kernel.org, dietmar.eggemann@arm.com,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Robert Richter <rric@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Zhou Yanjie <zhouyanjie@zoho.com>,
-        " =?GB18030?B?1tzn/L3c?= (Zhou Yanjie)" <zhouyanjie@wanyeetech.com>,
-        YunQiang Su <syq@debian.org>, Arnd Bergmann <arnd@arndb.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Matt Redfearn <matt.redfearn@mips.com>,
-        Richard Fontana <rfontana@redhat.com>,
-        Steve Winslow <swinslow@gmail.com>,
-        afzal mohammed <afzal.mohd.ma@gmail.com>,
-        Peter Xu <peterx@redhat.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 01/11] MIPS: setup: Drop prefill_possible_map
-Message-ID: <20200414163957.00006d65@flygoat.com>
-In-Reply-To: <20200414082123.GA6459@bogus>
-References: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
-        <20200412032123.3896114-2-jiaxun.yang@flygoat.com>
-        <20200414082123.GA6459@bogus>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-w64-mingw32)
+        id S2437316AbgDNJBj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 05:01:39 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38554 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437280AbgDNJBh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 05:01:37 -0400
+Received: by mail-wm1-f65.google.com with SMTP id g12so5210235wmh.3;
+        Tue, 14 Apr 2020 02:01:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZSEHFc2eh+N6K60wyVHbBWfK0AmjMN90oe2OMNtMMJ0=;
+        b=VZcdmcPfe6bokelP+VcFo/KKk2US9O6S8tRgNtF/gLstaIJygVoMVr8X5z7aVnpfwx
+         jGWGcCIyIgFX1qffbo5S4TmA9T/iLJ2Q0bT9GNRqVXaIfaO26J4K3BvaIU8/N/famYYr
+         /Vzb3JOQMfu9RVXx6Bpfb/EFXzrUyx0L6hYIh3nTQjuAUmNc5PFB2moXYPWzc5+1uoKL
+         VmqQFll+et195bcMN/B5vHfEjmD6kX7vTy47aaOOymqcG0eLYjjDaN7bgl0HghLX6r2H
+         x5fja3K7pItACo6LAcf8KM9Q8pUzmB7j4w5YTazUVAxnL3Ecgxz4soRhBQlJPpMXAquC
+         JSTQ==
+X-Gm-Message-State: AGi0PuaRcU49yxnL2rzL+ZED8gAyGbXieOsW7r3oPqKXnqp2UpcU96/U
+        XwPSodKQc3rqeZ01ta/hip0=
+X-Google-Smtp-Source: APiQypIjMMKQ1krTcIb7iRe2Mn/fScrYHKTluZiYEwYRZsrwjhiGsUjKHrgwCKNk20IxGSD17N1euw==
+X-Received: by 2002:a1c:a913:: with SMTP id s19mr23660673wme.134.1586854891811;
+        Tue, 14 Apr 2020 02:01:31 -0700 (PDT)
+Received: from localhost (ip-37-188-180-223.eurotel.cz. [37.188.180.223])
+        by smtp.gmail.com with ESMTPSA id n6sm18637096wrs.81.2020.04.14.02.01.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 02:01:30 -0700 (PDT)
+Date:   Tue, 14 Apr 2020 11:01:29 +0200
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-crypto@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
+        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
+Message-ID: <20200414090129.GE4629@dhcp22.suse.cz>
+References: <20200413211550.8307-1-longman@redhat.com>
+ <20200413211550.8307-2-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ZohoCNMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 14 Apr 2020 09:21:36 +0100
-Sudeep Holla <sudeep.holla@arm.com> wrote:
-
-> On Sun, Apr 12, 2020 at 11:20:31AM +0800, Jiaxun Yang wrote:
-> > All the plat_smp_setup are setting up possible cpus in their
-> > platform code. So prefill_possible_map is actually overwriting
-> > platform's setup, which seems unreasonable.
-> >   
+On Mon 13-04-20 17:15:49, Waiman Long wrote:
+> As said by Linus:
 > 
-> Why don't you rearrange the code so that this still remains as is and
-> the platforms can override if they need. If you do so, you don't need
-> the change in 04/11 as I suggested previously.
-
-Actually this code break a case that cpumask is not continuous.
-It do happen on some MIPS platforms.
-
-Yes. rearrange this is a option but I think it is making the logic
-unnecessarily complex.
-
-If you think that's better I'll do so.
-
-Thanks.
+>   A symmetric naming is only helpful if it implies symmetries in use.
+>   Otherwise it's actively misleading.
 > 
+>   In "kzalloc()", the z is meaningful and an important part of what the
+>   caller wants.
+> 
+>   In "kzfree()", the z is actively detrimental, because maybe in the
+>   future we really _might_ want to use that "memfill(0xdeadbeef)" or
+>   something. The "zero" part of the interface isn't even _relevant_.
+> 
+> The main reason that kzfree() exists is to clear sensitive information
+> that should not be leaked to other future users of the same memory
+> objects.
+> 
+> Rename kzfree() to kfree_sensitive() to follow the example of the
+> recently added kvfree_sensitive() and make the intention of the API
+> more explicit. In addition, memzero_explicit() is used to clear the
+> memory to make sure that it won't get optimized away by the compiler.
+> 
+> The renaming is done by using the command sequence:
+> 
+>   git grep -w --name-only kzfree |\
+>   xargs sed -i 's/\bkzfree\b/kfree_sensitive/'
+> 
+> followed by some editing of the kfree_sensitive() kerneldoc and the
+> use of memzero_explicit() instead of memset().
+> 
+> Suggested-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
---
-Jiaxun Yang
+Makes sense. I haven't checked all the conversions and will rely on the
+script doing the right thing. The core MM part is correct.
+
+Acked-by: Michal Hocko <mhocko@suse.com>
+-- 
+Michal Hocko
+SUSE Labs
