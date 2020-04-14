@@ -2,158 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F177B1A84B8
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 18:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28EFE1A84C7
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 18:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391468AbgDNQZo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 12:25:44 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:52977 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2391476AbgDNQZF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 12:25:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586881501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yW8t58m2bp1NhazlqC7/k8J+nPWsrZBYDWUsjTyk2qQ=;
-        b=NsgcQPq0gDRRzr+WCv6O+IejAhACeGf91UcZUch7xVIEkk4F0++6WsAKwkQ+6nkMoq/jD7
-        lzSV3f1EuKP3Hxnp2JivHQcF6Vr/Z22M++foNVb8RdxR7eWsyL6QJbeO4NazIgQ9svAhXl
-        7AFa78Hn9YCF68TMh9hKXOVlm2kXUcc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-87-m_CJjLwlPvyXxruKyZ4cKA-1; Tue, 14 Apr 2020 12:24:56 -0400
-X-MC-Unique: m_CJjLwlPvyXxruKyZ4cKA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 12123107ACC4;
-        Tue, 14 Apr 2020 16:24:50 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-118-173.rdu2.redhat.com [10.10.118.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0E02D118DEE;
-        Tue, 14 Apr 2020 16:24:36 +0000 (UTC)
-Subject: Re: [PATCH v2 2/2] crypto: Remove unnecessary memzero_explicit()
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>
-Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-References: <20200413211550.8307-1-longman@redhat.com>
- <20200413222846.24240-1-longman@redhat.com>
- <eca85e0b-0af3-c43a-31e4-bd5c3f519798@c-s.fr>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <e194a51f-a5e5-a557-c008-b08cac558572@redhat.com>
-Date:   Tue, 14 Apr 2020 12:24:36 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <eca85e0b-0af3-c43a-31e4-bd5c3f519798@c-s.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-Content-Transfer-Encoding: quoted-printable
+        id S2391534AbgDNQ1A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 12:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2391532AbgDNQ0z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 12:26:55 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26392C061A0E
+        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 09:26:55 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id r26so14766514wmh.0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 09:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=/VXMLsnEdFtu7k13O3hijxHV9EAnp9rCBMScPJUvt8E=;
+        b=so3gP1RlA1DMJNkabV9BVJKpPKhVefRrd749cpbQsMSUw9vEy2MT2snTkC0Iccc76H
+         AzVizRJ5FKnqt7TeKCsOnDj9RS9cHfRtLwvxTLsJ3j7Lh16aDRNKcmt0mNc1DzdBZSqy
+         Zktggq0zEqSoHYB4NUkTRUEMUGhz1MrfEX5ZBpfK9llw0545J4uoaF9JNWsCZkWYs9D1
+         Ak+pbPikFBBvTaMdnLuT1RXbOmREnoEcyCY2TcbfIqoTetk1iedUrw6ag9Tc0Pm9rQY1
+         Zcns8E/zxoM/7klSmWX6+o9Pj7vsFb+xz4RXO26dYkdeObLmqvSaXGn4z45wigjJgU0j
+         d/uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=/VXMLsnEdFtu7k13O3hijxHV9EAnp9rCBMScPJUvt8E=;
+        b=r6GW66uIhb7Y0dJ4lWKKdRlwbRYEBccDXnHRXsaEkTrTNHVXk7K/+sIktLhFRl92Le
+         oQA1z6Pv9BRlylZwKjYM0uyOKCq5hk0iImojQsPazEtxSNiGIPQ9lWwuORaxCZ+MdJ1g
+         0SYxhPEyGvwAll5auglAPmUNVW2ITDUU6o8tGucF7y5hVFUHUosmJHh1B80gSYnKxlBL
+         A2xhJMyboJAYEYxX4yvFVSUB1sohkOVjVcZeNdndwgjMPq+SaOqN+LfdTHglGLvVd/Io
+         CBgYoMl8H32lIqJlNXf8HOnTSFgyUxxeEaspWC7QYRa+XMzK1d79VLokrl6ukgchqC9Y
+         mjng==
+X-Gm-Message-State: AGi0Puakha4dLJq5L/t9tc0rwLMKnHEJNmaNcXTR6mDaMxBrrGngQBRK
+        L/6tlsR89pB+xdtR2RXYHtiIAQ==
+X-Google-Smtp-Source: APiQypLZSqAKnKa8/7bmUDaBawS19DxuB4c+NUiF7UJsB8UNeKpicbm4VpGHB77i6kzhldKm0rxM1Q==
+X-Received: by 2002:a05:600c:414b:: with SMTP id h11mr639225wmm.9.1586881613656;
+        Tue, 14 Apr 2020 09:26:53 -0700 (PDT)
+Received: from localhost.localdomain (lns-bzn-59-82-252-135-148.adsl.proxad.net. [82.252.135.148])
+        by smtp.gmail.com with ESMTPSA id s14sm20199388wme.33.2020.04.14.09.26.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 09:26:53 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
+Cc:     amit.kucheria@verdurent.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 1/4] powercap/drivers/idle_inject: Specify idle state max latency
+Date:   Tue, 14 Apr 2020 18:26:26 +0200
+Message-Id: <20200414162634.1867-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/14/20 2:08 AM, Christophe Leroy wrote:
->
->
-> Le 14/04/2020 =C3=A0 00:28, Waiman Long a =C3=A9crit=C2=A0:
->> Since kfree_sensitive() will do an implicit memzero_explicit(), there
->> is no need to call memzero_explicit() before it. Eliminate those
->> memzero_explicit() and simplify the call sites. For better correctness=
-,
->> the setting of keylen is also moved down after the key pointer check.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->> =C2=A0 .../allwinner/sun8i-ce/sun8i-ce-cipher.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 19 +++++-------------
->> =C2=A0 .../allwinner/sun8i-ss/sun8i-ss-cipher.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 20 +++++--------------
->> =C2=A0 drivers/crypto/amlogic/amlogic-gxl-cipher.c=C2=A0=C2=A0 | 12 ++=
-+--------
->> =C2=A0 drivers/crypto/inside-secure/safexcel_hash.c=C2=A0 |=C2=A0 3 +-=
--
->> =C2=A0 4 files changed, 14 insertions(+), 40 deletions(-)
->>
->> diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->> b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->> index aa4e8fdc2b32..8358fac98719 100644
->> --- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->> +++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
->> @@ -366,10 +366,7 @@ void sun8i_ce_cipher_exit(struct crypto_tfm *tfm)
->> =C2=A0 {
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct sun8i_cipher_tfm_ctx *op =3D cry=
-pto_tfm_ctx(tfm);
->> =C2=A0 -=C2=A0=C2=A0=C2=A0 if (op->key) {
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memzero_explicit(op->key, =
-op->keylen);
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op->key);
->> -=C2=A0=C2=A0=C2=A0 }
->> +=C2=A0=C2=A0=C2=A0 kfree_sensitive(op->key);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 crypto_free_sync_skcipher(op->fallback_=
-tfm);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pm_runtime_put_sync_suspend(op->ce->dev=
-);
->> =C2=A0 }
->> @@ -391,14 +388,11 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher
->> *tfm, const u8 *key,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_dbg(ce->dev=
-, "ERROR: Invalid keylen %u\n", keylen);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->> -=C2=A0=C2=A0=C2=A0 if (op->key) {
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 memzero_explicit(op->key, =
-op->keylen);
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(op->key);
->> -=C2=A0=C2=A0=C2=A0 }
->> -=C2=A0=C2=A0=C2=A0 op->keylen =3D keylen;
->> +=C2=A0=C2=A0=C2=A0 kfree_sensitive(op->key);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 op->key =3D kmemdup(key, keylen, GFP_KE=
-RNEL | GFP_DMA);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!op->key)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENOMEM;
->> +=C2=A0=C2=A0=C2=A0 op->keylen =3D keylen;
->
-> Does it matter at all to ensure op->keylen is not set when of->key is
-> NULL ? I'm not sure.
->
-> But if it does, then op->keylen should be set to 0 when freeing op->key=
-.=20
+Currently the idle injection framework uses the play_idle() function
+which puts the current CPU in an idle state. The idle state is the
+deepest one, as specified by the latency constraint when calling the
+subsequent play_idle_precise() function with the INT_MAX.
 
-My thinking is that if memory allocation fails, we just don't touch
-anything and return an error code. I will not explicitly set keylen to 0
-in this case unless it is specified in the API documentation.
+The idle_injection is used by the cpuidle_cooling device which
+computes the idle / run duration to mitigate the temperature by
+injecting idle cycles. The cooling device has no control on the depth
+of the idle state.
 
-Cheers,
-Longman
+Allow finer control of the idle injection mechanism by allowing to
+specify the latency for the idle state. Thus the cooling device has
+the ability to have a guarantee on the exit latency of the idle states
+it is injecting.
+
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/powercap/idle_inject.c | 16 +++++++++++++++-
+ include/linux/idle_inject.h    |  4 ++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+index cd1270614cc6..49f42c475620 100644
+--- a/drivers/powercap/idle_inject.c
++++ b/drivers/powercap/idle_inject.c
+@@ -61,12 +61,14 @@ struct idle_inject_thread {
+  * @timer: idle injection period timer
+  * @idle_duration_us: duration of CPU idle time to inject
+  * @run_duration_us: duration of CPU run time to allow
++ * @latency_us: max allowed latency
+  * @cpumask: mask of CPUs affected by idle injection
+  */
+ struct idle_inject_device {
+ 	struct hrtimer timer;
+ 	unsigned int idle_duration_us;
+ 	unsigned int run_duration_us;
++	unsigned int latency_us;
+ 	unsigned long int cpumask[0];
+ };
+ 
+@@ -138,7 +140,8 @@ static void idle_inject_fn(unsigned int cpu)
+ 	 */
+ 	iit->should_run = 0;
+ 
+-	play_idle(READ_ONCE(ii_dev->idle_duration_us));
++	play_idle_precise(READ_ONCE(ii_dev->idle_duration_us) * NSEC_PER_USEC,
++			  READ_ONCE(ii_dev->latency_us) * NSEC_PER_USEC);
+ }
+ 
+ /**
+@@ -169,6 +172,16 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
+ 	*idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
+ }
+ 
++/**
++ * idle_inject_set_latency - set the maximum latency allowed
++ * @latency_us: set the latency requirement for the idle state
++ */
++void idle_inject_set_latency(struct idle_inject_device *ii_dev,
++			     unsigned int latency_us)
++{
++	WRITE_ONCE(ii_dev->latency_us, latency_us);
++}
++
+ /**
+  * idle_inject_start - start idle injections
+  * @ii_dev: idle injection control device structure
+@@ -297,6 +310,7 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
+ 	cpumask_copy(to_cpumask(ii_dev->cpumask), cpumask);
+ 	hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	ii_dev->timer.function = idle_inject_timer_fn;
++	ii_dev->latency_us = UINT_MAX;
+ 
+ 	for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
+ 
+diff --git a/include/linux/idle_inject.h b/include/linux/idle_inject.h
+index a445cd1a36c5..91a8612b8bf9 100644
+--- a/include/linux/idle_inject.h
++++ b/include/linux/idle_inject.h
+@@ -26,4 +26,8 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
+ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
+ 				 unsigned int *run_duration_us,
+ 				 unsigned int *idle_duration_us);
++
++void idle_inject_set_latency(struct idle_inject_device *ii_dev,
++			     unsigned int latency_ns);
++
+ #endif /* __IDLE_INJECT_H__ */
+-- 
+2.17.1
 
