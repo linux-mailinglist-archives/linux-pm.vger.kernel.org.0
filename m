@@ -2,117 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8CD1A7BC4
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 15:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADF41A7BE8
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 15:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502570AbgDNNGZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 09:06:25 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:52113 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502563AbgDNNGQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 09:06:16 -0400
-Received: by mail-io1-f69.google.com with SMTP id s1so14517465iow.18
-        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 06:06:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=WGQ3SBJwnf5YlDpIwsgsa30mhVfEOL2HbfrgyzxLGnc=;
-        b=OL0MKNjzEgIYaTZ2obp92Znrers5g1+dWkxa2oR9jbFxHbjNBh2zAhJoiR89MUriyS
-         R+JZNFYpHOIP/4XwW6292C7LbvJYdf7L3OYwEOVYdiOGJ9HL26nXr56fBWFD6SCqldAf
-         BHMGyRn/i5dQo7/Bsssk+M1kOFDadJTotHzX/HwqWCEF543kfR1oMFmsKIPSuzBfSWGq
-         rnDuswcf9Mo5NFGjz+aZuvsbvGxmvHWO1MdtyzwnqvhKQhANh6aQcACqFvBca0N/jKNS
-         C/H8epLouRwsltOtkakL//GXPsFb1yWrS3UtU9UKE9l4AmvRXeppLMhc+7Zo2SPFyxnJ
-         d+CQ==
-X-Gm-Message-State: AGi0PuaXgEXqc2SojrdQbnd/bCgA2heoWXTJzfGe7RNXeTx4KuxUpeJM
-        L8YVnpXAe0VpCP65a0J2/0Q+ix3vKDd2eYVzuB7+UJYkqpRf
-X-Google-Smtp-Source: APiQypJhM6Ooj+LDG0cOS+J2eVV/xc3nBrVxB8AaWinUc083RZNukheeDbjpO8n8EebTcWpWn6KhKsXwn1rfWItyQs/rkAkmoVwg
+        id S2502603AbgDNNJd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 09:09:33 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:36210 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2502591AbgDNNJG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 09:09:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586869742;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hBYiVbPBfUS+AcwD+sXBpDKSbw0tQLOGN9sYzZKYAmI=;
+        b=ZwHvVhNOZhhrKBUdIBiII+uoxIhMCwhAfbxKSu3sFed9CBRY3cTVPGPfQe/EVwlch+tsCY
+        lDs1Zd0OEdmr+ADba1V2YoTsrIq/RGWhuGQnQC5V3CzG+XfUKnVfztXzi8GxxoImgZ0SCd
+        QUrRtuG50fBKlX8/Em12uOS+FP4Q0E0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-106-PA7uLtZsM327ACx1G3T_7g-1; Tue, 14 Apr 2020 09:07:49 -0400
+X-MC-Unique: PA7uLtZsM327ACx1G3T_7g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 96CEA8048E4;
+        Tue, 14 Apr 2020 13:07:05 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-113-129.rdu2.redhat.com [10.10.113.129])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5AB5418A8E;
+        Tue, 14 Apr 2020 13:06:57 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
+References: <20200413211550.8307-2-longman@redhat.com> <20200413211550.8307-1-longman@redhat.com>
+To:     Waiman Long <longman@redhat.com>, herbert@gondor.apana.org.au
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-crypto@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
+        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2a56:: with SMTP id k22mr530410iov.22.1586869575527;
- Tue, 14 Apr 2020 06:06:15 -0700 (PDT)
-Date:   Tue, 14 Apr 2020 06:06:15 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005ab2f105a33fdd82@google.com>
-Subject: WARNING in plist_check_prev_next
-From:   syzbot <syzbot+9c64e877cca5f208807f@syzkaller.appspotmail.com>
-To:     len.brown@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, pavel@ucw.cz, rjw@rjwysocki.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3807473.1586869616.1@warthog.procyon.org.uk>
+Date:   Tue, 14 Apr 2020 14:06:56 +0100
+Message-ID: <3807474.1586869616@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+Waiman Long <longman@redhat.com> wrote:
 
-syzbot found the following crash on:
+> As said by Linus:
+> 
+>   A symmetric naming is only helpful if it implies symmetries in use.
+>   Otherwise it's actively misleading.
+> 
+>   In "kzalloc()", the z is meaningful and an important part of what the
+>   caller wants.
+> 
+>   In "kzfree()", the z is actively detrimental, because maybe in the
+>   future we really _might_ want to use that "memfill(0xdeadbeef)" or
+>   something. The "zero" part of the interface isn't even _relevant_.
+> 
+> The main reason that kzfree() exists is to clear sensitive information
+> that should not be leaked to other future users of the same memory
+> objects.
+> 
+> Rename kzfree() to kfree_sensitive() to follow the example of the
+> recently added kvfree_sensitive() and make the intention of the API
+> more explicit. In addition, memzero_explicit() is used to clear the
+> memory to make sure that it won't get optimized away by the compiler.
+> 
+> The renaming is done by using the command sequence:
+> 
+>   git grep -w --name-only kzfree |\
+>   xargs sed -i 's/\bkzfree\b/kfree_sensitive/'
+> 
+> followed by some editing of the kfree_sensitive() kerneldoc and the
+> use of memzero_explicit() instead of memset().
+> 
+> Suggested-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-HEAD commit:    c0cc2711 Merge tag 'modules-for-v5.7' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1600bdb3e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23c5a352e32a1944
-dashboard link: https://syzkaller.appspot.com/bug?extid=9c64e877cca5f208807f
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-userspace arch: i386
+Since this changes a lot of crypto stuff, does it make sense for it to go via
+the crypto tree?
 
-Unfortunately, I don't have any reproducer for this crash yet.
+Acked-by: David Howells <dhowells@redhat.com>
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+9c64e877cca5f208807f@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-top: 00000000dcea6c9a, n: 0000000093c70fdb, p: 0000000013dbca61
-prev: 00000000dcea6c9a, n: 0000000093c70fdb, p: 0000000013dbca61
-next: 0000000093c70fdb, n: 0000000093c70fdb, p: 0000000093c70fdb
-WARNING: CPU: 1 PID: 30481 at lib/plist.c:35 plist_check_prev_next+0x108/0x1a0 lib/plist.c:35
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 30481 Comm: syz-executor.3 Not tainted 5.6.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x188/0x20d lib/dump_stack.c:118
- panic+0x2e3/0x75c kernel/panic.c:221
- __warn.cold+0x2f/0x35 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:175 [inline]
- fixup_bug arch/x86/kernel/traps.c:170 [inline]
- do_error_trap+0x12b/0x220 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:plist_check_prev_next+0x108/0x1a0 lib/plist.c:35
-Code: df 48 c1 ee 03 80 3c 16 00 75 6c 49 8b 14 24 41 55 4d 89 f1 49 89 d8 50 4c 89 e6 48 c7 c7 80 20 fc 88 55 41 57 e8 60 52 7b f9 <0f> 0b 48 83 c4 20 48 83 c4 10 5b 5d 41 5c 41 5d 41 5e 41 5f e9 1f
-RSP: 0018:ffffc90007d9f8d0 EFLAGS: 00010082
-RAX: 0000000000000000 RBX: ffffffff899a9780 RCX: 0000000000000000
-RDX: 0000000000020c0b RSI: ffffffff815cd551 RDI: fffff52000fb3f0c
-RBP: ffff8880a8479858 R08: ffff8880673a60c0 R09: ffffed1015ce45f1
-R10: ffff8880ae722f83 R11: ffffed1015ce45f0 R12: ffffffff899a9780
-R13: ffff8880a8479858 R14: ffff8880a8479858 R15: ffffffff8bbc3ed8
- plist_check_list+0x41/0xa0 lib/plist.c:48
- plist_add+0x2f/0x4e0 lib/plist.c:78
- pm_qos_update_target+0x4ac/0x5d0 kernel/power/qos.c:125
- cpu_latency_qos_apply+0x40/0x70 kernel/power/qos.c:247
- cpu_latency_qos_add_request+0xf1/0x3c0 kernel/power/qos.c:277
- snd_pcm_hw_params+0x173c/0x1da0 sound/core/pcm_native.c:757
- snd_pcm_kernel_ioctl+0xd1/0x240 sound/core/pcm_native.c:3305
- snd_pcm_oss_change_params_locked+0x1328/0x34b0 sound/core/oss/pcm_oss.c:941
- snd_pcm_oss_make_ready_locked+0xb3/0x130 sound/core/oss/pcm_oss.c:1166
- snd_pcm_oss_write1 sound/core/oss/pcm_oss.c:1384 [inline]
- snd_pcm_oss_write+0x43b/0x8c0 sound/core/oss/pcm_oss.c:2765
- __vfs_write+0x76/0x100 fs/read_write.c:495
- vfs_write+0x268/0x5d0 fs/read_write.c:559
- ksys_write+0x12d/0x250 fs/read_write.c:612
- do_syscall_32_irqs_on arch/x86/entry/common.c:337 [inline]
- do_fast_syscall_32+0x270/0xe90 arch/x86/entry/common.c:396
- entry_SYSENTER_compat+0x70/0x7f arch/x86/entry/entry_64_compat.S:139
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
