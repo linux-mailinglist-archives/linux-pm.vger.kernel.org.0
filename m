@@ -2,121 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1651A7806
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 12:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1901A78C8
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 12:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438099AbgDNKDm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 06:03:42 -0400
-Received: from foss.arm.com ([217.140.110.172]:52300 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438097AbgDNKDl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Apr 2020 06:03:41 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2ED3031B;
-        Tue, 14 Apr 2020 03:03:40 -0700 (PDT)
-Received: from bogus (unknown [10.37.12.71])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 896E43F6C4;
-        Tue, 14 Apr 2020 03:03:31 -0700 (PDT)
-Date:   Tue, 14 Apr 2020 11:03:24 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, dietmar.eggemann@arm.com,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhc@lemote.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Robert Richter <rric@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Zhou Yanjie <zhouyanjie@zoho.com>,
-        =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, YunQiang Su <syq@debian.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Matt Redfearn <matt.redfearn@mips.com>,
-        Richard Fontana <rfontana@redhat.com>,
-        Steve Winslow <swinslow@gmail.com>,
-        afzal mohammed <afzal.mohd.ma@gmail.com>,
-        Peter Xu <peterx@redhat.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, oprofile-list@lists.sf.net,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 04/11] arch_topology: Reset all cpus in
- reset_cpu_topology
-Message-ID: <20200414100324.GA17835@bogus>
-References: <20200412032123.3896114-1-jiaxun.yang@flygoat.com>
- <20200412032123.3896114-5-jiaxun.yang@flygoat.com>
- <20200414082734.GC6459@bogus>
- <20200414163514.00000100@flygoat.com>
+        id S2438639AbgDNKts (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 06:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2438635AbgDNKta (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 06:49:30 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275E4C061A0C;
+        Tue, 14 Apr 2020 03:49:30 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id B221B2A186D
+Received: by earth.universe (Postfix, from userid 1000)
+        id AD1183C08C7; Tue, 14 Apr 2020 12:49:26 +0200 (CEST)
+Date:   Tue, 14 Apr 2020 12:49:26 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     saravanan sekar <sravanhome@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald <pmeerw@pmeerw.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v8 4/6] power: supply: Add support for mps mp2629 battery
+ charger
+Message-ID: <20200414104926.2yxpxclsqdp2gz3f@earth.universe>
+References: <20200413173656.28522-1-sravanhome@gmail.com>
+ <20200413173656.28522-5-sravanhome@gmail.com>
+ <CAHp75VeYFY1CW4AH+D4HAgzppMZ5J8dL8kKPYmcwsXNVGNSYjQ@mail.gmail.com>
+ <6cfab0a6-c3eb-bd9b-6572-b49e3205524f@gmail.com>
+ <20200413204847.ni7dsrn5tslrorqn@earth.universe>
+ <CAHp75VdRXWVtveRnvR-k8wqH5R_P7owfQvFf7YT3qM_oVEY3vg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rlcmmezjuw4wenk5"
 Content-Disposition: inline
-In-Reply-To: <20200414163514.00000100@flygoat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAHp75VdRXWVtveRnvR-k8wqH5R_P7owfQvFf7YT3qM_oVEY3vg@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 04:35:14PM +0800, Jiaxun Yang wrote:
-> On Tue, 14 Apr 2020 09:27:34 +0100
-> Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> > On Sun, Apr 12, 2020 at 11:20:34AM +0800, Jiaxun Yang wrote:
-> > > For MIPS platform, when topology isn't probed by DeviceTree,
-> > > possible_cpu might be empty when calling init_cpu_topology,
-> > > that may result cpu_topology not fully reseted for all CPUs.
-> > > So here we can reset all cpus instead of possible cpus.
+
+--rlcmmezjuw4wenk5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Tue, Apr 14, 2020 at 12:05:15PM +0300, Andy Shevchenko wrote:
+> On Mon, Apr 13, 2020 at 11:48 PM Sebastian Reichel
+> <sebastian.reichel@collabora.com> wrote:
+> > On Mon, Apr 13, 2020 at 10:28:19PM +0200, saravanan sekar wrote:
+> > > On 13/04/20 10:10 pm, Andy Shevchenko wrote:
+> > > > On Mon, Apr 13, 2020 at 8:37 PM Saravanan Sekar <sravanhome@gmail.c=
+om> wrote:
+>=20
+> ...
+>=20
+> > > > > +       irq =3D platform_get_irq(to_platform_device(pdev->dev.par=
+ent), 0);
+> > > > Why not to use temporary variable dev?
+> > > >
+> > > > This should be platform_get_irq_optional().
 > > >
+> > > Platform_get_irq in turn calls platform_get_irq_optional. It was sugg=
+ested
+> > > by Lee and is it mandatory to change it?
 > >
-> > As I have told before adjust and make it default before this function
-> > gets called.
->
-> Hi,
->
-> That's really impossible under current MIPS code structure.
->
+> > platform_get_irq is fine.
+>=20
+> I don't think so. It will spill an error in case there is no IRQ or
+> error happened.
 
-I really doubt that, but I have no knowledge on MIPS port, so I would
-let maintainers take that call.
+I suppose even for an optional IRQ we want an error message when an
+error happens (i.e. IRQ is specified, but not used because $reason).
 
-> Another option would be prefill possible_cpu with all_cpu_mask before
-> calling topology_init, but that would make the code unnecessarily
-> complex.
->
+> So, either is should be _optional, or below conditional simply wrong, sho=
+uld be
+>   if (irq < 0)
+>     return irq;
 
-I still prefer that. By the time we call this function on a config
-with say NR_CPUS=1024, we would have parsed DT and set nr_cpus to say 8
-or 16 just for sake of example, so if platforms can't figure the
-possible CPUs, let them set it to NR_CPUs so that not all platforms
-have to run through that loop.
+In other words: Making the irq mandatory. Sounds reasonable to me
+considering the driver code. Without IRQ userspace needs to poll to
+know about error states like thermal shutdown.
 
-> Here simply reset the whole array won't cause any regression.
->
+-- Sebastian
+>=20
+> > > > > +       if (irq) {
+> >
+> > But this must be
+> >
+> > if (irq > 0)
+> >
+> > or you will also try to continue with error codes.
+> >
+> > > > > +               ret =3D devm_request_irq(dev, irq, mp2629_irq_han=
+dler,
+> > > > > +                                IRQF_TRIGGER_RISING, "mp2629-cha=
+rger",
+> > > > > +                                charger);
+> > > > > +               if (ret) {
+> > > > > +                       dev_err(dev, "failed to request gpio IRQ\=
+n");
+> > > > > +                       goto iio_fail;
+> > > > > +               }
+> > > > > +       }
+> > > > > +}
+>=20
+> --=20
+> With Best Regards,
+> Andy Shevchenko
 
-Not necessary, please discuss and check if some simplification to MIPS
-can be done rather than patching here and there to make it work.
+--rlcmmezjuw4wenk5
+Content-Type: application/pgp-signature; name="signature.asc"
 
---
-Regards,
-Sudeep
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6VlTYACgkQ2O7X88g7
++pp4Pw/7Bn+7UvIz8i2/PkRw+aYkOp53iodrsxMP38OY6owBwJ2WtgN0Bk43IrzB
+h2v4VXpaI/CtXmb8P4/wtr9eNDuZ3jWksI3zMh6QPtBt+8z3kwzesMFXDIl6pDtC
+AD358+a89lKanBayAXNC28JQuOjP3r5LXbnfusUK2zo21A6ZAj8nu/WcmZ+tzxnI
+5wJpjyuLnwOIgyzKlYeL7KFZghfSK4uCaoMDS4FQ7t1mWgslqiUcH5M8CyVXURNh
+BM1ljZkq4APaBcVmG0Lgj8WPxn+b++8dazKPpV83uUz4X71/Tt5iGetUQjsQwDK8
+yHUa24/qwfTi1hD6LjUqxKtngbfksddIf3GeTqPfxARotCtMEUMSQ1eIcaQ71f43
+DLEfb4CHOO7Y3SK9u984AbFiD6Br34Wuk22qasl4g2sNKLRLOJPictqfjRNyTzH9
+KYHXVpzZLH1D1gEOtca5xupI1W2G2PSQ5pHuY18o/1EhwZuL6yPBekywczjNmjSp
+xVHVusojDvBZCnbZdCR18QsCcTzEcwcxUS5jk8CPcV3sQh0/5JSysC2rw34p9buB
+upfx8jwp9dWhs2HxMOUCFaDMyCMLg9m14cl/mGM/f09gE1+HPBYTvK3aRoQqNCHc
+gxmLpwvBDuC4mlKU2/o8GIv/NwDPmrgpNScaTxnx8gTX9Dh2+W0=
+=Qvky
+-----END PGP SIGNATURE-----
+
+--rlcmmezjuw4wenk5--
