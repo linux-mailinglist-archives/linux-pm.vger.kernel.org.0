@@ -2,120 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADF41A7BE8
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 15:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2930D1A7EA5
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 15:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502603AbgDNNJd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 09:09:33 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:36210 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2502591AbgDNNJG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 09:09:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586869742;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hBYiVbPBfUS+AcwD+sXBpDKSbw0tQLOGN9sYzZKYAmI=;
-        b=ZwHvVhNOZhhrKBUdIBiII+uoxIhMCwhAfbxKSu3sFed9CBRY3cTVPGPfQe/EVwlch+tsCY
-        lDs1Zd0OEdmr+ADba1V2YoTsrIq/RGWhuGQnQC5V3CzG+XfUKnVfztXzi8GxxoImgZ0SCd
-        QUrRtuG50fBKlX8/Em12uOS+FP4Q0E0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-106-PA7uLtZsM327ACx1G3T_7g-1; Tue, 14 Apr 2020 09:07:49 -0400
-X-MC-Unique: PA7uLtZsM327ACx1G3T_7g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 96CEA8048E4;
-        Tue, 14 Apr 2020 13:07:05 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-113-129.rdu2.redhat.com [10.10.113.129])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5AB5418A8E;
-        Tue, 14 Apr 2020 13:06:57 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
-References: <20200413211550.8307-2-longman@redhat.com> <20200413211550.8307-1-longman@redhat.com>
-To:     Waiman Long <longman@redhat.com>, herbert@gondor.apana.org.au
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-crypto@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
+        id S1732737AbgDNNnR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 09:43:17 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:38104 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728028AbgDNNnO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 09:43:14 -0400
+Received: by mail-oi1-f193.google.com with SMTP id x21so4199764oic.5;
+        Tue, 14 Apr 2020 06:43:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R8OJr7MdmFUiaJqkSUSMNUd1rbCvGu/Jw8zTWMZO2co=;
+        b=f9cvEB7q5OX0kjTwNhvMRT8hk6AK6v/Qak4TP4v4iTAkoKPEeu6ULWuwd+lqZLk2xx
+         LxhxBA2Iy3L+CgNC3FU03Nw0cqeKhImDkVeK8RBp8ApIL+ASw30AYOZuyNym+BA2G0DD
+         KYCqUD4+7HmsUE2Du6zKDlkvP85tFmsMXAri5ZTBrnq8oV3A5+kemmDS56dqINs8iAnz
+         HE64FgOtYAahLZx/XW/SzQkPcMRyEWjW+M4wgcrGoKzeDmi0segBj2hZPhS80Bp5s9xs
+         QgQxFC4RTEa26whHcD2nHUpbW8XWowybfB1tZum9brcyJljC4wJMZaZD4USgVob0M/XV
+         3eMw==
+X-Gm-Message-State: AGi0PuZipJHaUSzSJxrrfvj8OC7s/57h3ZV7/kKtQCLI9Wxr7WjS/zaI
+        PKmjnt8CZ+7ih7skDCTBV3eWaiqOsBZrbgD1fiE=
+X-Google-Smtp-Source: APiQypJt/47quOZ6p2heqG3XjpDgc/jI3rGel706Hqe2lcfGhDVJx//FIXc88SmEIJ2HOzueXC/KMVkE23w7KDup9ls=
+X-Received: by 2002:aca:2209:: with SMTP id b9mr15986264oic.103.1586871792611;
+ Tue, 14 Apr 2020 06:43:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3807473.1586869616.1@warthog.procyon.org.uk>
-Date:   Tue, 14 Apr 2020 14:06:56 +0100
-Message-ID: <3807474.1586869616@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+References: <Pine.LNX.4.44L0.2004102231270.30859-100000@netrider.rowland.org> <6362254.rXp5uA8eak@kreacher>
+In-Reply-To: <6362254.rXp5uA8eak@kreacher>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 14 Apr 2020 15:43:01 +0200
+Message-ID: <CAJZ5v0jSMC1FGc2N06B=2VmXRF1XJi4gNyKPkjfBPCEtjm50Yw@mail.gmail.com>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Waiman Long <longman@redhat.com> wrote:
+Note to self: avoid replying to technical messages late in the night ...
 
-> As said by Linus:
-> 
->   A symmetric naming is only helpful if it implies symmetries in use.
->   Otherwise it's actively misleading.
-> 
->   In "kzalloc()", the z is meaningful and an important part of what the
->   caller wants.
-> 
->   In "kzfree()", the z is actively detrimental, because maybe in the
->   future we really _might_ want to use that "memfill(0xdeadbeef)" or
->   something. The "zero" part of the interface isn't even _relevant_.
-> 
-> The main reason that kzfree() exists is to clear sensitive information
-> that should not be leaked to other future users of the same memory
-> objects.
-> 
-> Rename kzfree() to kfree_sensitive() to follow the example of the
-> recently added kvfree_sensitive() and make the intention of the API
-> more explicit. In addition, memzero_explicit() is used to clear the
-> memory to make sure that it won't get optimized away by the compiler.
-> 
-> The renaming is done by using the command sequence:
-> 
->   git grep -w --name-only kzfree |\
->   xargs sed -i 's/\bkzfree\b/kfree_sensitive/'
-> 
-> followed by some editing of the kfree_sensitive() kerneldoc and the
-> use of memzero_explicit() instead of memset().
-> 
-> Suggested-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Waiman Long <longman@redhat.com>
+On Mon, Apr 13, 2020 at 11:32 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> On Saturday, April 11, 2020 4:41:14 AM CEST Alan Stern wrote:
+> > Okay, this is my attempt to summarize what we have been discussing.
+> > But first: There is a dev_pm_skip_resume() helper routine which
+> > subsystems can call to see whether resume-side _early and _noirq driver
+> > callbacks should be skipped.  But there is no corresponding
+> > dev_pm_skip_suspend() helper routine.  Let's add one, or rename
+> > dev_pm_smart_suspend_and_suspended() to dev_pm_skip_suspend().
+>
+> OK
+>
+> > Given that, here's my understanding of what should happen.  (I'm
+> > assuming the direct_complete mechanism is not being used.)  This tries
+> > to describe what we _want_ to happen, which is not always the same as
+> > what the current code actually _does_.
+>
+> OK
+>
+> >       During the suspend side, for each of the
+> >       {suspend,freeze,poweroff}_{late,noirq} phases: If
+> >       dev_pm_skip_suspend() returns true then the subsystem should
+> >       not invoke the driver's callback, and if there is no subsystem
+> >       callback then the core will not invoke the driver's callback.
+> >
+> >       During the resume side, for each of the
+> >       {resume,thaw,restore}_{early,noirq} phases: If
+> >       dev_pm_skip_resume() returns true then the subsystem should
+> >       not invoke the driver's callback, and if there is no subsystem
+> >       callback then the core will not invoke the driver's callback.
+> >
+> >       dev_pm_skip_suspend() will return "true" if SMART_SUSPEND is
+> >       set and the device's runtime status is "suspended".
+>
+> Agreed with the above.
+>
+> >       power.must_resume gets set following the suspend-side _noirq
+> >       phase if power.usage_count > 1 (indicating the device was
+> >       in active use before the start of the sleep transition) or
+> >       power.must_resume is set for any of the device's dependents.
+>
+> Or MAY_SKIP_RESUME is unset (which means that the driver does not
+> allow its resume callbacks to be skipped), or power.may_skip_resume
+> is unset (which means that the subsystem does not allow the
+> driver callbacks to be skipped).
+>
+> >       dev_pm_skip_resume() will return "false" if the current
+> >       transition is RESTORE or power.must_resume is set.  Otherwise:
+> >       It will return true if the current transition is THAW,
+> >       SMART_SUSPEND is set, and the device's runtime status is
+> >       "suspended".
+>
+> The other way around.  That is:
+>
+> dev_pm_skip_resume() will return "true" if the current transition is
+> THAW and dev_pm_skip_suspend() returns "true" for that device (so
+> SMART_SUSPEND is set, and the device's runtime status is "suspended",
+> as per the definition of that function above).
 
-Since this changes a lot of crypto stuff, does it make sense for it to go via
-the crypto tree?
+The above is what I wanted to say ->
 
-Acked-by: David Howells <dhowells@redhat.com>
+> Otherwise, it will return "true" if the current transition is RESTORE
+> (which means that all devices are resumed) or power.must_resume is not
+> set (so this particular device need not be resumed).
 
+-> but this isn't.  In particular, I messed up the RESTORE part, so it
+should read:
+
+Otherwise, it will return "true" if the current transition is *not*
+RESTORE (in which case all devices would be resumed) *and*
+power.must_resume is not set (so this particular device need not be
+resumed).
+
+Sorry about that.
+
+> >  It will return "true" if the current transition is
+> >       RESUME, SMART_SUSPEND and MAY_SKIP_RESUME are both set, and
+> >       the device's runtime status is "suspended".
+>
+> Unless MAY_SKIP_RESUME is unset for at least one of its descendants (or
+> dependent devices).
+
+That should include the power.may_skip_resume flag, so as to read as follows:
+
+Unless MAY_SKIP_RESUME is unset or power.may_skip_resume is unset for
+at least one of its descendants (or dependent devices).
+
+> >       For a RESUME
+> >       transition, it will also return "true" if MAY_SKIP_RESUME and
+> >       power.may_skip_resume are both set, regardless of
+> >       SMART_SUSPEND or the current runtime status.
+>
+> And if the device was not in active use before suspend (as per its usage
+> counter) or MAY_SKIP_RESUME is unset for at least one of its descendants (or
+> dependent devices in general).
+
+And analogously here, so what I really should have written is:
+
+And if the device was not in active use before suspend (as per its
+usage counter) or MAY_SKIP_RESUME or power.may_skip_resume is unset
+for at least one of its descendants (or dependent devices in general).
+
+> >       At the start of the {resume,thaw,restore}_noirq phase, if
+> >       dev_pm_skip_resume() returns true then the core will set the
+> >       runtime status to "suspended".  Otherwise it will set the
+> >       runtime status to "active".  If this is not what the subsystem
+> >       or driver wants, it must update the runtime status itself.
+>
+> Right.
+>
+> > Comments and differences with respect to the code in your pm-sleep-core
+> > branch:
+> >
+> >       I'm not sure whether we should specify other conditions for
+> >       setting power.must_resume.
+>
+> IMO we should.
+
+In fact, this is part of the implementation and it helps to
+"propagate" the "must resume" condition to the parent and the
+first-order suppliers of the device (which is sufficient, because
+their power.must_resume "propagates" in the same way and so on).
+
+IOW, the important piece is what the return value of
+dev_pm_skip_resume() should be in particular conditions and that
+return value is computed with the help of power.must_resume (and it
+might have been computed in a different, possibly less efficient,
+way).
+
+> Otherwise it is rather hard to catch the case in which one of the
+> device's descendants has MAY_SKIP_RESUME unset (and so the device
+> needs to be resumed).
+>
+> >       dev_pm_skip_resume() doesn't compute the value described
+> >       above.  I'm pretty sure the existing code is wrong.
+>
+> Well, we don't seem to have reached an agreement on some details
+> above ...
+
+Sorry for failing to be careful enough ...
