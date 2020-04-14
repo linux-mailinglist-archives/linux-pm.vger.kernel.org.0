@@ -2,305 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 221D31A8E9E
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 00:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241011A8F42
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 01:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391879AbgDNWal (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 18:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2391990AbgDNWaf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 18:30:35 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F394C061A10
-        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 15:30:35 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id y24so16279267wma.4
-        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 15:30:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=okVUGJ3ikrrEbdgJgp1xfbeReFhs19fwarQOs8B1AZk=;
-        b=FEbTmIVNW0JoSjYjr3F58Dza+Cb1Ac/sA7nNj8BJjD5avga0CHKNryFlZnyWoMT1E2
-         na8aftYRyJNOnjaU94xdsOPIs71//+sqT+bELBHBZIbzI3nbi3kByYX15ybKGjV8hqN8
-         PxohgfpVVFNtgIAZ8+2c5mP0p6CodDxUFWMY4O2jSjXsEBQJo7J8DK9ftSUKzLWke7nn
-         oAeGy3RkG0ySkJTzFv/BokwJwPVpqQYV+DSF2MSBBYwES8cAPcLFhiyABwkrSKDt1/Xd
-         zIbH9mjT61r1ANGVDNH0HBZbSuIrs3gfbCaJ63UJPyZrYL+Xj0hS9iZs1617fg7qMyP9
-         Bgww==
+        id S2634388AbgDNXqa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 19:46:30 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:40149 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2634364AbgDNXq0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 19:46:26 -0400
+Received: by mail-oi1-f194.google.com with SMTP id t199so8645396oif.7;
+        Tue, 14 Apr 2020 16:46:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=okVUGJ3ikrrEbdgJgp1xfbeReFhs19fwarQOs8B1AZk=;
-        b=l69zIK3+rq9kYPkQz9qt5DcL0CZa9Rejy9BsUvKA2926Gi80TYiBCKaBfEW3xZ2WvP
-         Wo1MFCUVl51lyvTIZL8cssc3CtSPIMB9aCb0t+82CxdFIMCoG7X3yZVwFvn9V3p55yal
-         NOiznt7Zn8LxWEvy8nkCv2TFz/YLbYa63d0e+nqEG996qWPjmoe0kF2N/xUJFLzq1Aho
-         /Ivu9XXFNnG6AgC11zzeHvvH/rsKFnMHmZE1sR8x9tRuv8/4hanfxpFuYBv4MxdTLyv+
-         VM6QIjfiWM6YJRMXQzsufwyGbRFFtzq8sJV/gKKJqs/i7mLkgz4nZnWkZIfQuOv+4pn0
-         f81A==
-X-Gm-Message-State: AGi0PuYhGKRvGJLSnbDojA3KvA6tJFhGfr7m0IWiHslrurKw4auU3zJI
-        B94gcxRrxfwWSQHwowMC+oyByg==
-X-Google-Smtp-Source: APiQypIbVYGNGOComyaA0BUnVsxnNYsocIyXxHF8/fexB9IRx/uxZhOitPNh1Qfq4Q5sjQ8E/NKUGA==
-X-Received: by 2002:a1c:bd08:: with SMTP id n8mr1947813wmf.23.1586903433566;
-        Tue, 14 Apr 2020 15:30:33 -0700 (PDT)
-Received: from [192.168.0.41] (lns-bzn-59-82-252-135-148.adsl.proxad.net. [82.252.135.148])
-        by smtp.googlemail.com with ESMTPSA id g186sm21701352wmg.36.2020.04.14.15.30.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Apr 2020 15:30:33 -0700 (PDT)
-Subject: Re: [RFC v2 4/9] thermal: core: Let thermal zone device's mode be
- stored in its struct
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8xSRt0kOxv48xywgi4ujHIQh1bkXuUAWN4jdwbwVrmg=;
+        b=hnBwT31oe7gv7p9y5SoUsmhZWJfiWLghVW7jcjF1y1+9UEYxkzeygcDvVnrD/rUsWs
+         0SLiY6W9YlZdWxSOcS2+wXS58wUeY56qbnOuZjzCNsDfLZxc1ZTJfD+edTq92+ehjvU7
+         xaz5a5rEBnzSMIkCZhIA9GTZCoQALoZ9dc6HihF6c4UrLm2klxy5bt0Xc+v1B9vguDJN
+         Q8AxvRAIZXxIZjQtDdGt6QZuMw4J4vb08cpQ4GH6vEjiZsxdsoOQlbeQpzcuTfQAsjTF
+         Lg2LoHNSug7N+e+26aj3Xzry20DEURC9nTCYv4FOYp0FBlkGQ7lPihsAC5NV1exf1nPq
+         D6xQ==
+X-Gm-Message-State: AGi0PuZPJvWevUgff1sQn+o6HCjDGSiyuyL8w9AMU6XMj/gxKw62Rjy4
+        58z4T7O3lLmaoIc/vw9/Ag==
+X-Google-Smtp-Source: APiQypLjJgia8DtwmXlglhQCkIfrCQUjRk7EaaiM7wZQW5xPrKj1csIO6d+59LYkgp2CRhzOkOeC4w==
+X-Received: by 2002:aca:3106:: with SMTP id x6mr5969478oix.94.1586907985808;
+        Tue, 14 Apr 2020 16:46:25 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 76sm5895152otg.68.2020.04.14.16.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 16:46:25 -0700 (PDT)
+Received: (nullmailer pid 22578 invoked by uid 1000);
+        Tue, 14 Apr 2020 23:46:23 -0000
+Date:   Tue, 14 Apr 2020 18:46:23 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-References: <2bc5a902-acde-526a-11a5-2357d899916c@linaro.org>
- <20200414180105.20042-1-andrzej.p@collabora.com>
- <20200414180105.20042-5-andrzej.p@collabora.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <c053480c-8279-2a51-7a55-252ff723b432@linaro.org>
-Date:   Wed, 15 Apr 2020 00:30:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Silvano di Ninno <silvano.dininno@nxp.com>,
+        linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 1/8] dt-bindings: interconnect: Add bindings for imx8m
+ noc
+Message-ID: <20200414234623.GA22499@bogus>
+References: <cover.1586174566.git.leonard.crestez@nxp.com>
+ <8b341d91e9aee679ae69feb22a2c842b2aeb2137.1586174566.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <20200414180105.20042-5-andrzej.p@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8b341d91e9aee679ae69feb22a2c842b2aeb2137.1586174566.git.leonard.crestez@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/04/2020 20:01, Andrzej Pietrasiewicz wrote:
-> All the drivers which provide ->get_mode()/->set_mode() methods store their
-> mode in a thermal_device_mode enum, so keep this information in struct
-> thermal_zone_device rather than scattered all over the place.
+On Mon,  6 Apr 2020 15:03:06 +0300, Leonard Crestez wrote:
+> Add initial dt bindings for the interconnects inside i.MX chips.
+> Multiple external IPs are involved but SOC integration means the
+> software controllable interfaces are very similar.
 > 
-> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> Main NOC node acts as interconnect provider if #interconnect-cells is
+> present. Currently there is a single imx interconnect provider for the
+> whole SOC.
+> 
+> Other pieces of scalable interconnects can be present, each with their
+> own OPP table.
+> 
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 > ---
->  drivers/thermal/thermal_core.c  | 28 +++++++++++++++++++
->  drivers/thermal/thermal_sysfs.c |  9 +++----
->  include/linux/thermal.h         | 48 +++++++++++++++++++++++++++++++++
->  3 files changed, 79 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 9a321dc548c8..cb0ff47f0dbe 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -469,6 +469,34 @@ static void thermal_zone_device_reset(struct thermal_zone_device *tz)
->  	thermal_zone_device_init(tz);
->  }
->  
-> +int thermal_zone_device_get_mode(struct thermal_zone_device *tz,
-> +				 enum thermal_device_mode *mode)
-> +{
-> +	if (tz->ops->get_mode)
-> +		return tz->ops->get_mode(tz, mode);
-
-I think we can get rid of the get_mode here.
-
-locks missing.
-
-and mode = tz->mode must be always set.
-
-> +	*mode = tz->mode;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_device_get_mode);
-> +
-> +int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
-> +				 enum thermal_device_mode mode)
-> +{
-> +	if (mode != THERMAL_DEVICE_DISABLED &&
-> +	    mode != THERMAL_DEVICE_ENABLED)
-> +		return -EINVAL;
-
-I'm not sure this is useful as 'mode' is an enum and this condition will
-be always correct.
-
-locks missing.
-
-> +	if (tz->ops->set_mode)
-> +		return tz->ops->set_mode(tz, mode);
-
-> +	tz->mode = mode;
-
-It should be like:
-
-	int ret = 0;
-
-	mutex_lock(&tz->lock);
-
-	if (tz->ops->set_mode)
-		ret = tz->ops->set_mode(tz, mode);
-
-	*mode = tz->mode;
-
-	mutex_unlock(&tz->lock);
-
-	return ret;
-
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_device_set_mode);
-> +
->  void thermal_zone_device_update(struct thermal_zone_device *tz,
->  				enum thermal_notify_event event)
->  {
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index aa99edb4dff7..66d9691b8bd6 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -52,10 +52,7 @@ mode_show(struct device *dev, struct device_attribute *attr, char *buf)
->  	enum thermal_device_mode mode;
->  	int result;
->  
-> -	if (!tz->ops->get_mode)
-> -		return -EPERM;
-> -
-> -	result = tz->ops->get_mode(tz, &mode);
-> +	result = thermal_zone_device_get_mode(tz, &mode);
->  	if (result)
->  		return result;
->  
-> @@ -74,9 +71,9 @@ mode_store(struct device *dev, struct device_attribute *attr,
->  		return -EPERM;
->  
->  	if (!strncmp(buf, "enabled", sizeof("enabled") - 1))
-> -		result = tz->ops->set_mode(tz, THERMAL_DEVICE_ENABLED);
-> +		result = thermal_zone_device_enable(tz);
->  	else if (!strncmp(buf, "disabled", sizeof("disabled") - 1))
-> -		result = tz->ops->set_mode(tz, THERMAL_DEVICE_DISABLED);
-> +		result = thermal_zone_device_disable(tz);
->  	else
->  		result = -EINVAL;
->  
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index c91b1e344d56..9ff8542b7e7d 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -143,6 +143,7 @@ struct thermal_attr {
->   * @trip_temp_attrs:	attributes for trip points for sysfs: trip temperature
->   * @trip_type_attrs:	attributes for trip points for sysfs: trip type
->   * @trip_hyst_attrs:	attributes for trip points for sysfs: trip hysteresis
-> + * @mode:		current mode of this thermal zone
->   * @devdata:	private pointer for device private data
->   * @trips:	number of trip points the thermal zone supports
->   * @trips_disabled;	bitmap for disabled trips
-> @@ -185,6 +186,7 @@ struct thermal_zone_device {
->  	struct thermal_attr *trip_temp_attrs;
->  	struct thermal_attr *trip_type_attrs;
->  	struct thermal_attr *trip_hyst_attrs;
-> +	enum thermal_device_mode mode;
->  	void *devdata;
->  	int trips;
->  	unsigned long trips_disabled;	/* bitmap for disabled trips */
-> @@ -437,6 +439,19 @@ int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
->  				     unsigned int);
->  int thermal_zone_unbind_cooling_device(struct thermal_zone_device *, int,
->  				       struct thermal_cooling_device *);
-> +
-> +int thermal_zone_device_get_mode(struct thermal_zone_device *tz,
-> +				 enum thermal_device_mode *mode);
-> +int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
-> +				 enum thermal_device_mode mode);
-> +
-> +static inline void
-> +thermal_zone_device_store_mode(struct thermal_zone_device *tz,
-> +			       enum thermal_device_mode mode)
-> +{
-> +	tz->mode = mode;
-> +}
-> +
-
-Please remove this store_mode function, it is not needed.
-
-Just:
-
-thermal_zone_device_get_mode()
-thermal_zone_device_set_mode()
-thermal_zone_device_disable()
-thermal_zone_device_enable()
-
-And all of them in drivers/thermal/thermal_core.h
-
->  void thermal_zone_device_update(struct thermal_zone_device *,
->  				enum thermal_notify_event);
->  void thermal_zone_set_trips(struct thermal_zone_device *);
-> @@ -494,6 +509,17 @@ static inline int thermal_zone_unbind_cooling_device(
->  	struct thermal_zone_device *tz, int trip,
->  	struct thermal_cooling_device *cdev)
->  { return -ENODEV; }
-> +static inline int thermal_zone_device_get_mode(struct thermal_zone_device *tz,
-> +					       enum thermal_device_mode *mode)
-> +{ return -ENODEV; }
-> +static inline int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
-> +					       enum thermal_device_mode mode)
-> +{ return -ENODEV; }
-> +static inline void
-> +thermal_zone_device_store_mode(struct thermal_zone_device *tz,
-> +			       enum thermal_device_mode mode)
-> +{ }
-> +
->  static inline void thermal_zone_device_update(struct thermal_zone_device *tz,
->  					      enum thermal_notify_event event)
->  { }
-> @@ -543,4 +569,26 @@ static inline void thermal_notify_framework(struct thermal_zone_device *tz,
->  { }
->  #endif /* CONFIG_THERMAL */
->  
-> +static inline int thermal_zone_device_enable(struct thermal_zone_device *tz)
-> +{
-> +	return thermal_zone_device_set_mode(tz, THERMAL_DEVICE_ENABLED);
-> +}
-> +
-> +static inline int thermal_zone_device_disable(struct thermal_zone_device *tz)
-> +{
-> +	return thermal_zone_device_set_mode(tz, THERMAL_DEVICE_DISABLED);
-> +}
-> +
-> +static inline void
-> +thermal_zone_device_store_enabled(struct thermal_zone_device *tz)
-> +{
-> +	thermal_zone_device_store_mode(tz, THERMAL_DEVICE_ENABLED);
-> +}
-> +
-> +static inline void
-> +thermal_zone_device_store_disabled(struct thermal_zone_device *tz)
-> +{
-> +	thermal_zone_device_store_mode(tz, THERMAL_DEVICE_DISABLED);
-> +}
-> +
->  #endif /* __THERMAL_H__ */
+>  .../bindings/interconnect/fsl,imx8m-noc.yaml  | 101 ++++++++++++++++++
+>  1 file changed, 101 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
 > 
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Reviewed-by: Rob Herring <robh@kernel.org>
