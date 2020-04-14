@@ -2,121 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8CD71A83E8
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 17:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CC41A83EB
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 17:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390841AbgDNP50 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 11:57:26 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:45260 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387417AbgDNP5Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 11:57:25 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id 0D0582A04F7
-Subject: Re: [PATCH 3/4] power: supply: generic-adc-battery: Prepare for const
- properties
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20200413183853.1088823-1-sebastian.reichel@collabora.com>
- <20200413183853.1088823-4-sebastian.reichel@collabora.com>
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Message-ID: <7ae59eca-35b2-59ed-8fc9-212fdb8decc5@collabora.com>
-Date:   Tue, 14 Apr 2020 17:57:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S2387543AbgDNP5t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 11:57:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56716 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390836AbgDNP5o (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Apr 2020 11:57:44 -0400
+Received: from localhost (unknown [213.57.247.131])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 12C43206D5;
+        Tue, 14 Apr 2020 15:57:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586879864;
+        bh=l9chY58r4Tu+9R4PzxN5YUOPlEav1oY44s9ex1BCTiU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RmfeK+QXiZNsEB5mIch9WsDk4/qNwCzlX5P4rjmP4AY5P3vOOlJghPsTIBHs0eBIR
+         Me0t9pQsM0nYSapcMNqDL9gLd4x85XbI5Y1kIuy/urlAu08nfY+Oer1UtKqSHDDiKO
+         yctIxm0KdJPeKAZcHtq3MsIiyUKWSGWtJaEjdkfk=
+From:   Leon Romanovsky <leon@kernel.org>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Leon Romanovsky <leonro@mellanox.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Borislav Petkov <bp@suse.de>, Ion Badulescu <ionut@badula.org>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, netdev@vger.kernel.org,
+        oss-drivers@netronome.com, Pensando Drivers <drivers@pensando.io>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Shannon Nelson <snelson@pensando.io>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>
+Subject: [PATCH net-next 0/4] Remove vermagic header from global include folder
+Date:   Tue, 14 Apr 2020 18:57:28 +0300
+Message-Id: <20200414155732.1236944-1-leon@kernel.org>
+X-Mailer: git-send-email 2.25.2
 MIME-Version: 1.0
-In-Reply-To: <20200413183853.1088823-4-sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+From: Leon Romanovsky <leonro@mellanox.com>
 
-On 13/4/20 20:38, Sebastian Reichel wrote:
-> This prepares the driver to work with the properties entry
-> in power_supply_desc marked as const.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Hi,
 
-Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+This is followup to the failure reported by Borislav [1] and suggested
+fix later on [2].
 
-> ---
->  drivers/power/supply/generic-adc-battery.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-> index bc462d1ec963..caa829738ef7 100644
-> --- a/drivers/power/supply/generic-adc-battery.c
-> +++ b/drivers/power/supply/generic-adc-battery.c
-> @@ -241,6 +241,7 @@ static int gab_probe(struct platform_device *pdev)
->  	struct power_supply_desc *psy_desc;
->  	struct power_supply_config psy_cfg = {};
->  	struct gab_platform_data *pdata = pdev->dev.platform_data;
-> +	enum power_supply_property *properties;
->  	int ret = 0;
->  	int chan;
->  	int index = ARRAY_SIZE(gab_props);
-> @@ -268,16 +269,16 @@ static int gab_probe(struct platform_device *pdev)
->  	 * copying the static properties and allocating extra memory for holding
->  	 * the extra configurable properties received from platform data.
->  	 */
-> -	psy_desc->properties = kcalloc(ARRAY_SIZE(gab_props) +
-> -					ARRAY_SIZE(gab_chan_name),
-> -					sizeof(*psy_desc->properties),
-> -					GFP_KERNEL);
-> -	if (!psy_desc->properties) {
-> +	properties = kcalloc(ARRAY_SIZE(gab_props) +
-> +			     ARRAY_SIZE(gab_chan_name),
-> +			     sizeof(*properties),
-> +			     GFP_KERNEL);
-> +	if (!properties) {
->  		ret = -ENOMEM;
->  		goto first_mem_fail;
->  	}
->  
-> -	memcpy(psy_desc->properties, gab_props, sizeof(gab_props));
-> +	memcpy(properties, gab_props, sizeof(gab_props));
->  
->  	/*
->  	 * getting channel from iio and copying the battery properties
-> @@ -294,13 +295,11 @@ static int gab_probe(struct platform_device *pdev)
->  			int index2;
->  
->  			for (index2 = 0; index2 < index; index2++) {
-> -				if (psy_desc->properties[index2] ==
-> -				    gab_dyn_props[chan])
-> +				if (properties[index2] == gab_dyn_props[chan])
->  					break;	/* already known */
->  			}
->  			if (index2 == index)	/* really new */
-> -				psy_desc->properties[index++] =
-> -					gab_dyn_props[chan];
-> +				properties[index++] = gab_dyn_props[chan];
->  			any = true;
->  		}
->  	}
-> @@ -317,6 +316,7 @@ static int gab_probe(struct platform_device *pdev)
->  	 * as come channels may be not be supported by the device.So
->  	 * we need to take care of that.
->  	 */
-> +	psy_desc->properties = properties;
->  	psy_desc->num_properties = index;
->  
->  	adc_bat->psy = power_supply_register(&pdev->dev, psy_desc, &psy_cfg);
-> @@ -358,7 +358,7 @@ static int gab_probe(struct platform_device *pdev)
->  			iio_channel_release(adc_bat->channel[chan]);
->  	}
->  second_mem_fail:
-> -	kfree(psy_desc->properties);
-> +	kfree(properties);
->  first_mem_fail:
->  	return ret;
->  }
-> 
+The series removes all includes of linux/vermagic.h, updates hns and
+nfp to use same kernel versioning scheme (exactly like we did for
+other drivers in previous cycle) and removes vermagic.h from global
+include folder.
+
+[1] https://lore.kernel.org/lkml/20200411155623.GA22175@zn.tnic
+[2] https://lore.kernel.org/lkml/20200413080452.GA3772@zn.tnic
+
+------------------------------------------------------------
+1. Honestly, I have no idea if it can go to net-rc, clearly not all my
+patches are fixes, so I'm sending them to the net-next.
+2. Still didn't get response from kbuild, but it passed my own
+compilation tests.
+
+Thanks
+
+Leon Romanovsky (4):
+  drivers: Remove inclusion of vermagic header
+  net/hns: Remove custom driver version in favour of global one
+  net/nfp: Update driver to use global kernel version
+  kernel/module: Hide vermagic header file from general use
+
+ drivers/net/bonding/bonding_priv.h                   | 2 +-
+ drivers/net/ethernet/3com/3c509.c                    | 1 -
+ drivers/net/ethernet/3com/3c515.c                    | 1 -
+ drivers/net/ethernet/adaptec/starfire.c              | 1 -
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c      | 3 ---
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.h      | 4 ----
+ drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c   | 4 ----
+ drivers/net/ethernet/netronome/nfp/nfp_main.c        | 3 ---
+ drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c | 2 --
+ drivers/net/ethernet/pensando/ionic/ionic_main.c     | 2 +-
+ drivers/power/supply/test_power.c                    | 2 +-
+ kernel/module.c                                      | 2 +-
+ {include/linux => kernel}/vermagic.h                 | 0
+ net/ethtool/ioctl.c                                  | 3 +--
+ 14 files changed, 5 insertions(+), 25 deletions(-)
+ rename {include/linux => kernel}/vermagic.h (100%)
+
+--
+2.25.2
+
