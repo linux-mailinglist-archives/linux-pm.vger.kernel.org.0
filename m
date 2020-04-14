@@ -2,209 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 399071A878E
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 19:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905281A87D7
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 19:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407679AbgDNRcs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 13:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2407672AbgDNRcq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 13:32:46 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F293C061A0E
-        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 10:32:46 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id r4so207371pgg.4
-        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 10:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=eu5tfJyu8mHmu9rt4YZttz81pwJSqiG4m0FXuEWFyYY=;
-        b=tHFCGSA/ediQZ7wQqT9vqcxu/83xsSExEP4twP9NsGsKFTH/iMLiU6IHDDfN7M4q4S
-         goUKV4c+gCrDhp0r2xOBtxKN1rFevwzYJUaTL6nx+gnlr3J5BonXssNqms6CG15pfVcL
-         BFHtgdeX3pmdPjAymrTB/nVwMvXFtUY6zPpgjN3KXr0HDuvvu9wjlyqg1l5gC+f7jQH0
-         ymKYwuZ8v5RfZ7o0Yv/RUri79VuBksmNoClumQLsGiBPddHh1umQEA6BFZap/vGJ+HlU
-         ON/YEgNlybAZBpS7W7XfF6OJiHdCaQJehhGXMy+IAL12iDgInDUtmXKvwuzqeqXHFLVe
-         22Ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=eu5tfJyu8mHmu9rt4YZttz81pwJSqiG4m0FXuEWFyYY=;
-        b=n2SZAO7tCxy01K1bLSgDQ4aW9c7kggtl+XK9kKlEJG00IH2W9htz9L6moJCiNB/oWD
-         5v7o4avOuPHcYoUTbG5FCIPumAPkUwGbfGJ1rolDxeXcWJcrQnP37M89k8qpMZAk6c3e
-         qhEbGcysnFp6/rSyIrVtMJdCpNZmw4N4pRySQlSCR9WmmTm0RAOnSrOw+r7PKR/LuHuv
-         g+1xphd/rU/odpcKzvl/O8fQOD08WTywQnQYh5VfzOIdnT3m+lfmXOq2xXffpafBCw9P
-         bCo4UK7QKF9/Y/tdPpc1Jpbah1GFEcQCUCYISBs6qyi4fEoUk6gyyYcYkfNuSNWtuh9W
-         Re4w==
-X-Gm-Message-State: AGi0PuaxanyqBhiwi18s1/c0q3wOqE6NxSspT7tQe05dBLPbPt9LSX+F
-        tpOtdm9r2LTdGhzwRpVsX5Crqw==
-X-Google-Smtp-Source: APiQypKoUvt1ilDEKHY/DChkoWPSCETFSz2iDy94SOmZmXFnrNwu7SU/6Gfggm9XQrCh2wsL6/goDQ==
-X-Received: by 2002:a63:140c:: with SMTP id u12mr16372504pgl.243.1586885565385;
-        Tue, 14 Apr 2020 10:32:45 -0700 (PDT)
-Received: from Shannons-MacBook-Pro.local (static-50-53-47-17.bvtn.or.frontiernet.net. [50.53.47.17])
-        by smtp.gmail.com with ESMTPSA id x27sm11775382pfj.74.2020.04.14.10.32.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Apr 2020 10:32:44 -0700 (PDT)
-Subject: Re: [PATCH net-next 1/4] drivers: Remove inclusion of vermagic header
-To:     Leon Romanovsky <leon@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Leon Romanovsky <leonro@mellanox.com>,
+        id S2502333AbgDNRos (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 13:44:48 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52116 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2502278AbgDNRoq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Apr 2020 13:44:46 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 0A901AEED;
+        Tue, 14 Apr 2020 17:44:41 +0000 (UTC)
+Date:   Tue, 14 Apr 2020 19:44:32 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Andy Gospodarek <andy@greyhouse.net>,
-        Borislav Petkov <bp@suse.de>, Ion Badulescu <ionut@badula.org>,
+        Ion Badulescu <ionut@badula.org>,
         Jay Vosburgh <j.vosburgh@gmail.com>, linux-pm@vger.kernel.org,
         netdev@vger.kernel.org, Pensando Drivers <drivers@pensando.io>,
         Sebastian Reichel <sre@kernel.org>,
+        Shannon Nelson <snelson@pensando.io>,
         Veaceslav Falico <vfalico@gmail.com>
+Subject: Re: [PATCH net-next 1/4] drivers: Remove inclusion of vermagic header
+Message-ID: <20200414174432.GI31763@zn.tnic>
 References: <20200414155732.1236944-1-leon@kernel.org>
  <20200414155732.1236944-2-leon@kernel.org>
-From:   Shannon Nelson <snelson@pensando.io>
-Message-ID: <823d56e6-87c2-35d2-c89e-57185ee45e7b@pensando.io>
-Date:   Tue, 14 Apr 2020 10:32:43 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.7.0
+ <20200414160041.GG31763@zn.tnic>
+ <20200414172604.GD1011271@unreal>
 MIME-Version: 1.0
-In-Reply-To: <20200414155732.1236944-2-leon@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200414172604.GD1011271@unreal>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/14/20 8:57 AM, Leon Romanovsky wrote:
-> From: Leon Romanovsky <leonro@mellanox.com>
+On Tue, Apr 14, 2020 at 08:26:04PM +0300, Leon Romanovsky wrote:
+> I personally don't use such notation and rely on the submission flow.
 >
-> Get rid of linux/vermagic.h includes, so that MODULE_ARCH_VERMAGIC from
-> the arch header arch/x86/include/asm/module.h won't be redefined.
->
->    In file included from ./include/linux/module.h:30,
->                     from drivers/net/ethernet/3com/3c515.c:56:
->    ./arch/x86/include/asm/module.h:73: warning: "MODULE_ARCH_VERMAGIC"
-> redefined
->       73 | # define MODULE_ARCH_VERMAGIC MODULE_PROC_FAMILY
->          |
->    In file included from drivers/net/ethernet/3com/3c515.c:25:
->    ./include/linux/vermagic.h:28: note: this is the location of the
-> previous definition
->       28 | #define MODULE_ARCH_VERMAGIC ""
->          |
->
-> Fixes: 6bba2e89a88c ("net/3com: Delete driver and module versions from 3com drivers")
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> Signed-off-by: Leon Romanovsky <leonro@mellanox.com>
+> The patch has two authors both written in SOBs and it will be visible
+> in the git history that those SOBs are not maintainers additions.
 
-for ionic driver:
-Acked-by: Shannon Nelson <snelson@pensando.io>
+A lonely SOB doesn't explain what the involvement of the person is. It
+is even documented:
 
-> ---
->   drivers/net/bonding/bonding_priv.h               | 2 +-
->   drivers/net/ethernet/3com/3c509.c                | 1 -
->   drivers/net/ethernet/3com/3c515.c                | 1 -
->   drivers/net/ethernet/adaptec/starfire.c          | 1 -
->   drivers/net/ethernet/pensando/ionic/ionic_main.c | 2 +-
->   drivers/power/supply/test_power.c                | 2 +-
->   net/ethtool/ioctl.c                              | 3 +--
->   7 files changed, 4 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/net/bonding/bonding_priv.h b/drivers/net/bonding/bonding_priv.h
-> index 45b77bc8c7b3..48cdf3a49a7d 100644
-> --- a/drivers/net/bonding/bonding_priv.h
-> +++ b/drivers/net/bonding/bonding_priv.h
-> @@ -14,7 +14,7 @@
->   
->   #ifndef _BONDING_PRIV_H
->   #define _BONDING_PRIV_H
-> -#include <linux/vermagic.h>
-> +#include <generated/utsrelease.h>
->   
->   #define DRV_NAME	"bonding"
->   #define DRV_DESCRIPTION	"Ethernet Channel Bonding Driver"
-> diff --git a/drivers/net/ethernet/3com/3c509.c b/drivers/net/ethernet/3com/3c509.c
-> index b762176a1406..139d0120f511 100644
-> --- a/drivers/net/ethernet/3com/3c509.c
-> +++ b/drivers/net/ethernet/3com/3c509.c
-> @@ -85,7 +85,6 @@
->   #include <linux/device.h>
->   #include <linux/eisa.h>
->   #include <linux/bitops.h>
-> -#include <linux/vermagic.h>
->   
->   #include <linux/uaccess.h>
->   #include <asm/io.h>
-> diff --git a/drivers/net/ethernet/3com/3c515.c b/drivers/net/ethernet/3com/3c515.c
-> index 90312fcd6319..47b4215bb93b 100644
-> --- a/drivers/net/ethernet/3com/3c515.c
-> +++ b/drivers/net/ethernet/3com/3c515.c
-> @@ -22,7 +22,6 @@
->   
->   */
->   
-> -#include <linux/vermagic.h>
->   #define DRV_NAME		"3c515"
->   
->   #define CORKSCREW 1
-> diff --git a/drivers/net/ethernet/adaptec/starfire.c b/drivers/net/ethernet/adaptec/starfire.c
-> index 2db42211329f..a64191fc2af9 100644
-> --- a/drivers/net/ethernet/adaptec/starfire.c
-> +++ b/drivers/net/ethernet/adaptec/starfire.c
-> @@ -45,7 +45,6 @@
->   #include <asm/processor.h>		/* Processor type for cache alignment. */
->   #include <linux/uaccess.h>
->   #include <asm/io.h>
-> -#include <linux/vermagic.h>
->   
->   /*
->    * The current frame processor firmware fails to checksum a fragment
-> diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-> index 588c62e9add7..3ed150512091 100644
-> --- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
-> +++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-> @@ -6,7 +6,7 @@
->   #include <linux/module.h>
->   #include <linux/netdevice.h>
->   #include <linux/utsname.h>
-> -#include <linux/vermagic.h>
-> +#include <generated/utsrelease.h>
->   
->   #include "ionic.h"
->   #include "ionic_bus.h"
-> diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-> index 65c23ef6408d..b3c05ff05783 100644
-> --- a/drivers/power/supply/test_power.c
-> +++ b/drivers/power/supply/test_power.c
-> @@ -16,7 +16,7 @@
->   #include <linux/power_supply.h>
->   #include <linux/errno.h>
->   #include <linux/delay.h>
-> -#include <linux/vermagic.h>
-> +#include <generated/utsrelease.h>
->   
->   enum test_power_id {
->   	TEST_AC,
-> diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-> index 89d0b1827aaf..d3cb5a49a0ce 100644
-> --- a/net/ethtool/ioctl.c
-> +++ b/net/ethtool/ioctl.c
-> @@ -17,7 +17,6 @@
->   #include <linux/phy.h>
->   #include <linux/bitops.h>
->   #include <linux/uaccess.h>
-> -#include <linux/vermagic.h>
->   #include <linux/vmalloc.h>
->   #include <linux/sfp.h>
->   #include <linux/slab.h>
-> @@ -28,7 +27,7 @@
->   #include <net/xdp_sock.h>
->   #include <net/flow_offload.h>
->   #include <linux/ethtool_netlink.h>
-> -
-> +#include <generated/utsrelease.h>
->   #include "common.h"
->   
->   /*
+Documentation/process/submitting-patches.rst
 
+Section 12) When to use Acked-by:, Cc:, and Co-developed-by:
+
+I guess that is the maintainer of the respective tree's call in the end.
+
+> Can you please reply to the original patch with extra tags you want,
+> so b4 and patchworks will pick them without me resending the patches?
+
+Ok.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
