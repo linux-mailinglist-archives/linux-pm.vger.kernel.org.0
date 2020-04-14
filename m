@@ -2,86 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 656561A8802
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 19:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8CB1A8824
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Apr 2020 20:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503078AbgDNRyt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Apr 2020 13:54:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56934 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729303AbgDNRyr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Apr 2020 13:54:47 -0400
-Received: from localhost (unknown [213.57.247.131])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 599802074D;
-        Tue, 14 Apr 2020 17:54:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586886887;
-        bh=IA9FHJ0vJjpnKmumofUoH+p/hbU24ui/rtshYOP3khQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z8GAWBOFXAPJ1BbmzPFQNTZo90hCmMBAfe+fsMRxW1zyzwqO4Cy7rJs9TCpmJhrZU
-         eCwDH/wzTPIjWtEp2cWykbTNFy2ynlKoeslE6BSW0H2nmPFx8jRZ73/OW/DRz2wX0U
-         rgi9OTwMtuwnsn7qoBwnJytQeZ0XJqBHOVrrKph4=
-Date:   Tue, 14 Apr 2020 20:54:35 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Borislav Petkov <bp@suse.de>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Ion Badulescu <ionut@badula.org>,
-        Jay Vosburgh <j.vosburgh@gmail.com>, linux-pm@vger.kernel.org,
-        netdev@vger.kernel.org, Pensando Drivers <drivers@pensando.io>,
-        Sebastian Reichel <sre@kernel.org>,
-        Shannon Nelson <snelson@pensando.io>,
-        Veaceslav Falico <vfalico@gmail.com>
-Subject: Re: [PATCH net-next 1/4] drivers: Remove inclusion of vermagic header
-Message-ID: <20200414175435.GF1011271@unreal>
-References: <20200414155732.1236944-1-leon@kernel.org>
- <20200414155732.1236944-2-leon@kernel.org>
- <20200414160041.GG31763@zn.tnic>
- <20200414172604.GD1011271@unreal>
- <20200414174432.GI31763@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200414174432.GI31763@zn.tnic>
+        id S2503174AbgDNSBU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Apr 2020 14:01:20 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46626 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730908AbgDNSBS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Apr 2020 14:01:18 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 5A7222A1BDC
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+To:     linux-pm@vger.kernel.org
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Subject: [RFC v2 0/9] Stop monitoring disabled devices
+Date:   Tue, 14 Apr 2020 20:00:56 +0200
+Message-Id: <20200414180105.20042-1-andrzej.p@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <2bc5a902-acde-526a-11a5-2357d899916c@linaro.org>
+References: <2bc5a902-acde-526a-11a5-2357d899916c@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 07:44:32PM +0200, Borislav Petkov wrote:
-> On Tue, Apr 14, 2020 at 08:26:04PM +0300, Leon Romanovsky wrote:
-> > I personally don't use such notation and rely on the submission flow.
-> >
-> > The patch has two authors both written in SOBs and it will be visible
-> > in the git history that those SOBs are not maintainers additions.
->
-> A lonely SOB doesn't explain what the involvement of the person is. It
-> is even documented:
->
-> Documentation/process/submitting-patches.rst
->
-> Section 12) When to use Acked-by:, Cc:, and Co-developed-by:
+This is the second iteration of this RFC.
 
-I know, and never liked that "Co-developed-by" tag and prefer
-to be in old school camp who uses SOB to mark the author. :)
+The series now focuses on cleaning up the code in the first place.
 
->
-> I guess that is the maintainer of the respective tree's call in the end.
->
-> > Can you please reply to the original patch with extra tags you want,
-> > so b4 and patchworks will pick them without me resending the patches?
->
-> Ok.
+After the cleanups in patches 1-3 struct thermal_zone_device is extended
+so that it contains a "mode" member (patch 4/9).
 
-Thanks
+The next patch (5/9) makes all thermal zone devices use the "mode" member.
+This patch makes drivers' ->get_mode() methods redundant, so the next one
+(6/9) removes the method altogether.
 
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+Patches 7-8/9 ensure that after changing thermal zone device's mode
+an attempt will be made to monitor the device.
+
+And finally patch 9/9 prevents DISABLED devices from being monitored.
+It also adds THERMAL_DEVICE_INITIAL to accommodate the devices, which
+should be monitored but cannot be initially ENABLED.
+
+Andrzej Pietrasiewicz (9):
+  thermal: int3400_thermal: Statically initialize
+    .get_mode()/.set_mode() ops
+  thermal: Eliminate an always-false condition
+  thermal: Properly handle mode values in .set_mode()
+  thermal: core: Let thermal zone device's mode be stored in its struct
+  thermal: Store mode in thermal_zone_device
+  thermal: Remove get_mode() method
+  thermal: core: Monitor thermal zone after mode change
+  thermal: of: Monitor thermal zone after enabling it
+  thermal: core: Stop polling DISABLED thermal devices
+
+ drivers/acpi/thermal.c                        | 44 +++++----------
+ .../ethernet/mellanox/mlxsw/core_thermal.c    | 43 ++++-----------
+ drivers/platform/x86/acerhdf.c                | 28 +++++-----
+ drivers/thermal/da9062-thermal.c              | 12 +---
+ drivers/thermal/imx_thermal.c                 | 30 ++++------
+ .../intel/int340x_thermal/int3400_thermal.c   | 39 +++----------
+ .../thermal/intel/intel_quark_dts_thermal.c   | 27 ++++-----
+ drivers/thermal/of-thermal.c                  | 28 ++++------
+ drivers/thermal/thermal_core.c                | 40 ++++++++++++--
+ drivers/thermal/thermal_core.h                |  2 +
+ drivers/thermal/thermal_sysfs.c               | 40 ++++----------
+ include/linux/thermal.h                       | 55 ++++++++++++++++++-
+ 12 files changed, 180 insertions(+), 208 deletions(-)
+
+-- 
+2.17.1
+
