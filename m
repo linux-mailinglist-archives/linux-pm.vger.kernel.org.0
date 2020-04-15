@@ -2,228 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A73831A91F8
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 06:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B661A922F
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 07:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388430AbgDOEiK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Apr 2020 00:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59872 "EHLO
+        id S2393189AbgDOFBZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Apr 2020 01:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388223AbgDOEiH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Apr 2020 00:38:07 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A94AC061A0C
-        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 21:38:07 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id i3so955591pgk.1
-        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 21:38:07 -0700 (PDT)
+        with ESMTP id S2393203AbgDOFBN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Apr 2020 01:01:13 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F3BC08C5F2
+        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 22:01:10 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id c12so1105228qvj.5
+        for <linux-pm@vger.kernel.org>; Tue, 14 Apr 2020 22:01:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=JstZHvX1uysvcXCr49BYyMPfu72nEWemRm+UuWT9g0o=;
-        b=KkoZurNH9vmNSsdomlm+xE4OvRp7PA689JvovFbv0Akkb7BS1Rw86IdNMQ9PwhHIZ8
-         OEFLonciRiXk+oakxKOiesLqkb+LuctmUg4ncx3Mi2JaV1tpJfvhaClet9n1022N9QU/
-         s18ZiwwsctWM3MZQ5NSqrbfgUpIHUget1H5mu+rLnr6So5/x2+RtmO+tg1XvKHARIO7n
-         n9ya2je8KpcoDrKa88sP8Qy7HM7RPzL9nLHHhby1zk5J20CZmU5aypKHVwRqp77fxl0N
-         5nu8jRVAFzyjWOim43EZCrlG1yT++Ifwlpq7LZiYY15mV/ylySZR7hkerNlbBPUQq5Es
-         7/+g==
+        d=cmpxchg-org.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ef3HLI/XX5ogd42JRuoGnEbb/Ln3ZxgvuLj5jaeUWkI=;
+        b=Tcxzc6xC3iVTZShTUf3CIv3N8B5ZyCbru12fLV5+tpVooL5/Bo3MM2R4w1+y/qKNnw
+         9lu0zJBRs+VK1Bc14YzwiZC+K/efs95VT8GzxaoJoz3t2WhfDZxWX+BgsMNU20r8wRPv
+         WS98QN/V8NZIzymtO0juNqdA9Tg6/2OTyjU7Zm1KL9ejebzf7wo1d0uOEsRrlg17M8fg
+         qYmffi6H6MwGLJe4epZjwPPvjWIdIXS0xtejpuhYYUqQSrz2GfoywvJh6tC6sCJVyKe7
+         xzOQhWdIv/o82YQJCk9DtMPUw2B8iLWuNwugd4l1OepDEbLixuOHRPHRALsrInJO+Rsn
+         o1og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=JstZHvX1uysvcXCr49BYyMPfu72nEWemRm+UuWT9g0o=;
-        b=tcItKnSW9FcFY11Yw0Z9lMoVdU6RaPxFxl/YLJovzl/y+8rpkXiKv2rPxzSdTeeCMk
-         E3QiuPd65YFTR30/mkPPoycZd5T+ny1NuTNkWT/3Z5/Nt/ck7pta8E6+DOXANAiZxKje
-         GyDS8SVaq9qSMFyylt5rpJFWWv7EAB5uLgAihniVf1lEs5W7yejpwo3XwXZbXiFXryjY
-         8AN8KUB6I3wMta5TLCGUKxQqvaqaYgU5FdrA4L6HYRP0iW3r93bm14P0idGtpmrd8e1T
-         Qk3piUhJX/6Zf7ajCUAPuShOHkpbL/kJcIcrql++3pWK41ouZJhhghf/a/uOYeYv/Z85
-         5BKA==
-X-Gm-Message-State: AGi0PuadBBAtD7rQAq+tAwzz7ztlKz1inUV5RdRJ9JjMIO2WKyLhL+hZ
-        JINEjfQu1HuVkaxjPLO/rwb9prt0nZM=
-X-Google-Smtp-Source: APiQypIwjNOgeC+QbzfX1ZgTEvWzX/CHaxbBZrhIeGZewwfbLVnD2oqe4MCGvtkZXa/VNMICVLfKxg==
-X-Received: by 2002:a63:954b:: with SMTP id t11mr25117923pgn.309.1586925486322;
-        Tue, 14 Apr 2020 21:38:06 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id o99sm4686011pjo.8.2020.04.14.21.38.05
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ef3HLI/XX5ogd42JRuoGnEbb/Ln3ZxgvuLj5jaeUWkI=;
+        b=k7cspHjNfHBRI+qZwAl+fekqISbU7ybHwPuhTdAKf1ckRxUEWOu3p5ppM+xCs44ZB3
+         Jazh1ScdLO5FJBbGj+GOw1jEE9kA/SITc4i9R5k9bnJv9eoQ4WuMkFkU+Hnqyjn3vB7w
+         J3tuJlz6F9fBYs33C8QsgzbGhA3bDcIWejEeKRT5G50MAe+TWSuF5kic5/3DfYZNZREZ
+         ywpJsScco5y+5vy+XW2Z7XdAjp1TYf09WVIMC4eGvdq8okkeYd67lnj3ajuS39hx+AmJ
+         LfhuJY+G5aWXvrQoZluVALgpV7LDT386XR6hN3/GJ4GW4gnfowbut2f+2VkmHfqnjvYg
+         taww==
+X-Gm-Message-State: AGi0PuZ2swPNVQ0iOlj5nE9U/rigud2+5dEAChahMhykZToBWCkaVsJK
+        rEc9Djh6IMrs06eaceumHEctJA==
+X-Google-Smtp-Source: APiQypJRjg+PyUSZjrIkjpxdMfgyPb9bMEWnffTFRMxoE1aQMUITXzNurR0P/0BN6q0H0W5xTyhSBA==
+X-Received: by 2002:a0c:e88d:: with SMTP id b13mr3243342qvo.245.1586926868219;
+        Tue, 14 Apr 2020 22:01:08 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::e623])
+        by smtp.gmail.com with ESMTPSA id 10sm6168833qtp.4.2020.04.14.22.01.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 21:38:05 -0700 (PDT)
-Message-ID: <5e968fad.1c69fb81.2a7c8.1323@mx.google.com>
-Date:   Tue, 14 Apr 2020 21:38:05 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 14 Apr 2020 22:01:07 -0700 (PDT)
+Date:   Wed, 15 Apr 2020 01:01:06 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-crypto@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
+        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 1/2] mm, treewide: Rename kzfree() to kfree_sensitive()
+Message-ID: <20200415050106.GA154671@cmpxchg.org>
+References: <20200413211550.8307-1-longman@redhat.com>
+ <20200413211550.8307-2-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.7-rc1-2-g38aeec472905
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 6 runs, 1 regressions (v5.7-rc1-2-g38aeec472905)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200413211550.8307-2-longman@redhat.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 6 runs, 1 regressions (v5.7-rc1-2-g38aeec472905)
+On Mon, Apr 13, 2020 at 05:15:49PM -0400, Waiman Long wrote:
+> As said by Linus:
+> 
+>   A symmetric naming is only helpful if it implies symmetries in use.
+>   Otherwise it's actively misleading.
 
-Test results summary
---------------------
+As the btrfs example proves - people can be tempted by this false
+symmetry to pair kzalloc with kzfree, which isn't what we wanted.
 
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
+>   In "kzalloc()", the z is meaningful and an important part of what the
+>   caller wants.
+> 
+>   In "kzfree()", the z is actively detrimental, because maybe in the
+>   future we really _might_ want to use that "memfill(0xdeadbeef)" or
+>   something. The "zero" part of the interface isn't even _relevant_.
+> 
+> The main reason that kzfree() exists is to clear sensitive information
+> that should not be leaked to other future users of the same memory
+> objects.
+> 
+> Rename kzfree() to kfree_sensitive() to follow the example of the
+> recently added kvfree_sensitive() and make the intention of the API
+> more explicit. In addition, memzero_explicit() is used to clear the
+> memory to make sure that it won't get optimized away by the compiler.
+> 
+> The renaming is done by using the command sequence:
+> 
+>   git grep -w --name-only kzfree |\
+>   xargs sed -i 's/\bkzfree\b/kfree_sensitive/'
+> 
+> followed by some editing of the kfree_sensitive() kerneldoc and the
+> use of memzero_explicit() instead of memset().
+> 
+> Suggested-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-2   | exynos5422-odroidxu3 | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
+Looks good to me. Thanks for fixing this very old mistake.
 
-3   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-4   | rk3288-veyron-jaq    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 21/21  =
-
-5   | rk3399-gru-kevin     | arm64 | lab-collabora | gcc-8    | defconfig  =
-        | 11/11  =
-
-6   | tegra124-nyan-big    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 2/2    =
-
-
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.7-rc1-2-g38aeec472905
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      38aeec47290576cd1f4112fab3937c855a0331d9 =
-
-
-
-Test Failures
--------------
-  =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
-
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc1-2-g38aeec4=
-72905/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc1-2-g38aeec4=
-72905/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0325.0/armhf/rootfs.cpio.gz  =
-
-
-  1 tests: 0 PASS, 1 FAIL, 0 SKIP
-    * login:
-        never passed   =
-
-      =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-2   | exynos5422-odroidxu3 | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
-
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc1-2-g38aeec4=
-72905/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-exynos5422-odroidxu3=
-.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc1-2-g38aeec4=
-72905/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-exynos5422-odroidxu3=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0325.0/armhf/rootfs.cpio.gz  =
-
-
-  1 tests: 0 PASS, 1 FAIL, 0 SKIP
-    * login:
-        new failure (last pass: v5.6-141-g61fafa3ac67b)   =
-
-      =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-3   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-
-  Results:     1 PASS, 20 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc1-2-g38aeec4=
-72905/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-square.=
-txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc1-2-g38aeec4=
-72905/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-square.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0325.0/armhf/rootfs.cpio.gz  =
-
-
-  21 tests: 1 PASS, 20 FAIL, 0 SKIP
-    * rtcwake-mem-1:
-        never passed
-    * rtcwake-mem-2:
-        never passed
-    * rtcwake-mem-3:
-        never passed
-    * rtcwake-mem-4:
-        never passed
-    * rtcwake-mem-5:
-        never passed
-    * rtcwake-mem-6:
-        never passed
-    * rtcwake-mem-7:
-        never passed
-    * rtcwake-mem-8:
-        never passed
-    * rtcwake-mem-9:
-        never passed
-    * rtcwake-mem-10:
-        never passed
-    * rtcwake-freeze-1:
-        never passed
-    * rtcwake-freeze-2:
-        never passed
-    * rtcwake-freeze-3:
-        never passed
-    * rtcwake-freeze-4:
-        never passed
-    * rtcwake-freeze-5:
-        never passed
-    * rtcwake-freeze-6:
-        never passed
-    * rtcwake-freeze-7:
-        never passed
-    * rtcwake-freeze-8:
-        never passed
-    * rtcwake-freeze-9:
-        never passed
-    * rtcwake-freeze-10:
-        never passed   =
-
-              =20
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
