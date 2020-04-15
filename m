@@ -2,96 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FE51AAF75
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 19:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458131AB16A
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 21:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410927AbgDORX5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Apr 2020 13:23:57 -0400
-Received: from vsp-unauthed02.binero.net ([195.74.38.227]:17110 "EHLO
-        vsp-unauthed02.binero.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2410926AbgDORX4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Apr 2020 13:23:56 -0400
-X-Halon-ID: dad1c5e3-7f3d-11ea-aeed-005056917f90
-Authorized-sender: niklas@soderlund.pp.se
-Received: from bismarck.berto.se (p4fca2392.dip0.t-ipconnect.de [79.202.35.146])
-        by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
-        id dad1c5e3-7f3d-11ea-aeed-005056917f90;
-        Wed, 15 Apr 2020 19:23:45 +0200 (CEST)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     linux-pm@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] thermal: rcar_thermal: Clean up rcar_thermal_update_temp()
-Date:   Wed, 15 Apr 2020 19:23:49 +0200
-Message-Id: <20200415172349.2185096-1-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.26.0
+        id S2505385AbgDOTPq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Apr 2020 15:15:46 -0400
+Received: from ns.pmeerw.net ([84.19.176.117]:53960 "EHLO ns.pmeerw.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2505232AbgDOTPq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Apr 2020 15:15:46 -0400
+X-Greylist: delayed 497 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Apr 2020 15:15:45 EDT
+Received: by ns.pmeerw.net (Postfix, from userid 1000)
+        id 0D51AE0851; Wed, 15 Apr 2020 21:07:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pmeerw.net; s=mail;
+        t=1586977644; bh=6kKOP9MD30yOGMfU+pNu0Hgt58IVDIYTyfhvXAfdje0=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=mvLltGiKZ+SX2dhw5gFV0PSGDlLVI3B7O6o+hVS9+bm6kTo0egsMam0IEMDoqmmkM
+         JiMZ7smuPvSLFzgBjG07AW72uF4kJ51b5hV3V105DT2NFfWRCIrQGamAuoCipS1i1k
+         79CO93pFUwKpy5vbDTz3WBplGLZgTODVoB5wY8LU=
+Received: from localhost (localhost [127.0.0.1])
+        by ns.pmeerw.net (Postfix) with ESMTP id 028A8E0451;
+        Wed, 15 Apr 2020 21:07:24 +0200 (CEST)
+Date:   Wed, 15 Apr 2020 21:07:23 +0200 (CEST)
+From:   Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+To:     Saravanan Sekar <sravanhome@gmail.com>
+cc:     lee.jones@linaro.org, andy.shevchenko@gmail.com,
+        robh+dt@kernel.org, jic23@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v9 1/6] dt-bindings: mfd: add document bindings for
+ mp2629
+In-Reply-To: <20200415162030.16414-2-sravanhome@gmail.com>
+Message-ID: <alpine.DEB.2.21.2004152106160.18914@vps.pmeerw.net>
+References: <20200415162030.16414-1-sravanhome@gmail.com> <20200415162030.16414-2-sravanhome@gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Moving the ctemp variable out of the private data structure made it
-possible to clean up rcar_thermal_update_temp(). Initialize the local
-ctemp to the error code to return if the reading fails and just return
-it at the end of the function.
+On Wed, 15 Apr 2020, Saravanan Sekar wrote:
 
-It's OK to change the datatype of old, new and ctemp to int as all
-values are AND with CTEMP (0x3f) before being stored. While at it
-change the datatype of the loop variable 'i' to to unsigned int.
+comment below
 
-Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
----
- drivers/thermal/rcar_thermal.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+> Add device tree binding information for mp2629 mfd driver.
+> 
+> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+> ---
+>  .../devicetree/bindings/mfd/mps,mp2629.yaml   | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/mps,mp2629.yaml b/Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
+> new file mode 100644
+> index 000000000000..e71c554802a8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/mps,mp2629.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MP2629 Battery Charger PMIC from Monolithic Power System.
+> +
+> +maintainers:
+> +  - Saravanan Sekar <sravanhome@gmail.com>
+> +
+> +description: |
+> +  MP2629 is a PMIC providing battery charging and power supply for smartphones,
+> +  wireless camera and portable devices. Chip is contrlled over I2C.
 
-diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-index e0c1f2409035e2bb..3c0c86b0664ec57f 100644
---- a/drivers/thermal/rcar_thermal.c
-+++ b/drivers/thermal/rcar_thermal.c
-@@ -198,8 +198,8 @@ static void _rcar_thermal_bset(struct rcar_thermal_priv *priv, u32 reg,
- static int rcar_thermal_update_temp(struct rcar_thermal_priv *priv)
- {
- 	struct device *dev = rcar_priv_to_dev(priv);
--	int i;
--	u32 ctemp, old, new;
-+	int old, new, ctemp = -EINVAL;
-+	unsigned int i;
- 
- 	mutex_lock(&priv->lock);
- 
-@@ -209,7 +209,6 @@ static int rcar_thermal_update_temp(struct rcar_thermal_priv *priv)
- 	 */
- 	rcar_thermal_bset(priv, THSCR, CPCTL, CPCTL);
- 
--	ctemp = 0;
- 	old = ~0;
- 	for (i = 0; i < 128; i++) {
- 		/*
-@@ -227,7 +226,7 @@ static int rcar_thermal_update_temp(struct rcar_thermal_priv *priv)
- 		old = new;
- 	}
- 
--	if (!ctemp) {
-+	if (ctemp == -EINVAL) {
- 		dev_err(dev, "thermal sensor was broken\n");
- 		goto err_out_unlock;
- 	}
-@@ -248,7 +247,7 @@ static int rcar_thermal_update_temp(struct rcar_thermal_priv *priv)
- err_out_unlock:
- 	mutex_unlock(&priv->lock);
- 
--	return ctemp ? ctemp : -EINVAL;
-+	return ctemp;
- }
- 
- static int rcar_thermal_get_current_temp(struct rcar_thermal_priv *priv,
+controlled
+
+> +
+> +  The battery charge management device handles battery charger controller and
+> +  ADC IIO device for battery, system voltage
+> +
+> +properties:
+> +  compatible:
+> +    const: mps,mp2629
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +    description:
+> +      The first cell is the IRQ number, the second cell is the trigger type.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-controller
+> +  - "#interrupt-cells"
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/input/linux-event-codes.h>
+> +    i2c@7e205000 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        pmic@4b {
+> +            compatible = "mps,mp2629";
+> +            reg = <0x4b>;
+> +
+> +            interrupt-controller;
+> +            interrupt-parent = <&gpio2>;
+> +            #interrupt-cells = <2>;
+> +            interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+> +        };
+> +    };
+> 
+
 -- 
-2.26.0
 
+Peter Meerwald-Stadler
+Mobile: +43 664 24 44 418
