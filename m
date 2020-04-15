@@ -2,40 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1062C1AA0DF
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 14:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67CF1AA09E
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 14:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S369626AbgDOMcN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Apr 2020 08:32:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37400 "EHLO mail.kernel.org"
+        id S369409AbgDOM3g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Apr 2020 08:29:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37466 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409084AbgDOLob (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:44:31 -0400
+        id S2409112AbgDOLoz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:44:55 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BAD2B21655;
-        Wed, 15 Apr 2020 11:44:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7546B2166E;
+        Wed, 15 Apr 2020 11:44:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586951068;
-        bh=UjrAK+OQRBdE3nXPOYyXQpoWIFD+vJtFTxgV0domYGU=;
+        s=default; t=1586951093;
+        bh=u+ZK0QjmPA3ERKqb6bXhhJqFb/fnt7rrc/MvdpraFAQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tfIfRFUSsCq40BaMHsbECAdvYJaqGOqo7j7htOPKxDvFGE8Xz+IhZxic3k+p5BCB5
-         X0NxezvbIGySLWgchu5/ILB7mm10Fd0n0eL3+7rFfsMa8ztUgaf1gI2vGzC8PfiuDU
-         jq2scIDHUIrnAxXtbd6vlomvvtFaplNDw23Cuxnc=
+        b=oo9IKAIj7YjvrQ/YJBjSYGICIe3eUdehQE6qDhKgdxYkG/pYztjBYRHXD7LB98yYr
+         JrrHERsEsPoMuOR3HCaO0FLdwWhAcrIJsluyBGlZ+ZVOXUU0FNYXi5NaTxvlEUzIys
+         4RiMNfZz+B/jxOkVmOFBfrUwWB2peZYNiUQ8EwLs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jeffery Miller <jmiller@neverware.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        "Andrew F . Davis" <afd@ti.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 100/106] power: supply: axp288_fuel_gauge: Broaden vendor check for Intel Compute Sticks.
-Date:   Wed, 15 Apr 2020 07:42:20 -0400
-Message-Id: <20200415114226.13103-100-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 09/84] power: supply: bq27xxx_battery: Silence deferred-probe error
+Date:   Wed, 15 Apr 2020 07:43:26 -0400
+Message-Id: <20200415114442.14166-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200415114226.13103-1-sashal@kernel.org>
-References: <20200415114226.13103-1-sashal@kernel.org>
+In-Reply-To: <20200415114442.14166-1-sashal@kernel.org>
+References: <20200415114442.14166-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -44,47 +46,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Jeffery Miller <jmiller@neverware.com>
+From: Dmitry Osipenko <digetx@gmail.com>
 
-[ Upstream commit e42fe5b29ac07210297e75f36deefe54edbdbf80 ]
+[ Upstream commit 583b53ece0b0268c542a1eafadb62e3d4b0aab8c ]
 
-The Intel Compute Stick `STK1A32SC` can have a system vendor of
-"Intel(R) Client Systems".
-Broaden the Intel Compute Stick DMI checks so that they match "Intel
-Corporation" as well as "Intel(R) Client Systems".
+The driver fails to probe with -EPROBE_DEFER if battery's power supply
+(charger driver) isn't ready yet and this results in a bit noisy error
+message in KMSG during kernel's boot up. Let's silence the harmless
+error message.
 
-This fixes an issue where the STK1A32SC compute sticks were still
-exposing a battery with the existing blacklist entry.
-
-Signed-off-by: Jeffery Miller <jmiller@neverware.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Reviewed-by: Andrew F. Davis <afd@ti.com>
+Reviewed-by: Pali Rohár <pali@kernel.org>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/axp288_fuel_gauge.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/power/supply/bq27xxx_battery.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
-index e1bc4e6e6f30e..f40fa0e63b6e5 100644
---- a/drivers/power/supply/axp288_fuel_gauge.c
-+++ b/drivers/power/supply/axp288_fuel_gauge.c
-@@ -706,14 +706,14 @@ static const struct dmi_system_id axp288_fuel_gauge_blacklist[] = {
- 	{
- 		/* Intel Cherry Trail Compute Stick, Windows version */
- 		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "Intel Corporation"),
-+			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "STK1AW32SC"),
- 		},
- 	},
- 	{
- 		/* Intel Cherry Trail Compute Stick, version without an OS */
- 		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "Intel Corporation"),
-+			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "STK1A32SC"),
- 		},
- 	},
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 195c18c2f426e..664e50103eaaf 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -1885,7 +1885,10 @@ int bq27xxx_battery_setup(struct bq27xxx_device_info *di)
+ 
+ 	di->bat = power_supply_register_no_ws(di->dev, psy_desc, &psy_cfg);
+ 	if (IS_ERR(di->bat)) {
+-		dev_err(di->dev, "failed to register battery\n");
++		if (PTR_ERR(di->bat) == -EPROBE_DEFER)
++			dev_dbg(di->dev, "failed to register battery, deferring probe\n");
++		else
++			dev_err(di->dev, "failed to register battery\n");
+ 		return PTR_ERR(di->bat);
+ 	}
+ 
 -- 
 2.20.1
 
