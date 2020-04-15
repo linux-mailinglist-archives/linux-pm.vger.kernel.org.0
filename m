@@ -2,93 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD6C1A96A4
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 10:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570C61A980F
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 11:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408091AbgDOIeu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Apr 2020 04:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2408089AbgDOIer (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Apr 2020 04:34:47 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBE7C061A0E
-        for <linux-pm@vger.kernel.org>; Wed, 15 Apr 2020 01:34:46 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id v2so992656plp.9
-        for <linux-pm@vger.kernel.org>; Wed, 15 Apr 2020 01:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+q9fhhXPPAI7xxs/9paMNG32NDbx6qowMd0HgUTJNtQ=;
-        b=VMDZHZs1bvqz6PiZYIWZ+woRZRnHL6I1fpiW+L4HvfygeUqSu6Ii1p5NAf45V6eARl
-         z+UyKYu2Yk4TOIEALs30LSMo28PPAvKD+f6fG3Kig06kRdFrRUav4fixpF9OT8tJ2xHo
-         6Ki2asDTK1znR+MWJo94R2r+Y499EyKqr7SVIplFOWDXK07GAfMzPZWomr8np813v70o
-         +SrV5GJnZqp+kUIymHq2vrx4L4gA0orij7Nb0c1jNXIUrj6QkdvyErnyq4MHxI5enEY5
-         jG5s5q/BQDGIIxt4aFToHbsiSlCulRVNZAaydltkwT97FZmuKX7NeNIu0C6HyaPy4jGM
-         LHQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+q9fhhXPPAI7xxs/9paMNG32NDbx6qowMd0HgUTJNtQ=;
-        b=nAhI724KnN2QBYCqn7Q9RBoTLfhG5k43/IUKSrcdTEgCd0nFitkubapCRtY23TxPTB
-         s2sFaR2r0uchTZ33OsXB+QemuUd9fOcwKUBFlhQtexRLc4QpzlhMAyLhWbBtS3ptAU+h
-         mSyAq1bbd1MZKKZc7xCpXlaPpl2VNX+bGO6dDjSnPomp+qSZiQaltuTO4oqa3eF95Orb
-         NRDN1aozX+tWqgQnSnKC6hn7HHw9PYAU2dS5obOPp9HAQRZ0QPGt4dA6dB/5eKx3Qw0D
-         te0Ep5uk5OjaftTArhfxJadS5FYf6wATVV0RvKOWO5utOXLfs7svu61a+Ed8cAmZvh0A
-         E03g==
-X-Gm-Message-State: AGi0Pub2TDxHnpmFiw2YdoFV87YIonNtX2rx13mzl/7ZTGs+avMIVsxS
-        hJUMkF6L86ge9gNf82ugWjbEa2L8c2M=
-X-Google-Smtp-Source: APiQypLXlvIf9iAE5/Jo4UuQtf7n/lK3XHyTG3fumOIXJV/vUkc1I5jkiiE3V1Ixruw7tVE1wddAeQ==
-X-Received: by 2002:a17:90a:3327:: with SMTP id m36mr4926706pjb.116.1586939685903;
-        Wed, 15 Apr 2020 01:34:45 -0700 (PDT)
-Received: from localhost ([122.171.118.46])
-        by smtp.gmail.com with ESMTPSA id c190sm12840456pfa.66.2020.04.15.01.34.44
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 15 Apr 2020 01:34:45 -0700 (PDT)
-Date:   Wed, 15 Apr 2020 14:04:43 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: omap: Build driver by default for ARCH_OMAP2PLUS
-Message-ID: <20200415083443.mb4ayu5ioyqljojn@vireshk-i7>
-References: <20200415081600.29904-1-anders.roxell@linaro.org>
+        id S2408352AbgDOJMN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Apr 2020 05:12:13 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:55234 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408345AbgDOJMK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Apr 2020 05:12:10 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200415091205euoutp02d7da1aadf1b9c21418359ee9fc031764~F80XsHgJa2689326893euoutp02C
+        for <linux-pm@vger.kernel.org>; Wed, 15 Apr 2020 09:12:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200415091205euoutp02d7da1aadf1b9c21418359ee9fc031764~F80XsHgJa2689326893euoutp02C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1586941925;
+        bh=ihC2jkfz1d7lvDLRTfZk+C5FM292xjkHp1pNgRwCkcY=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=esKjF/iFoYWKAgEHe7Agp4FuHbibu7GBVaPX7atm5N1bacwBbegvAqr5OhAXoPWQG
+         ozxqkohTHab4LJX9cntPUxaHeDtExHqEWU2su5KXIFcOQv46C+vEalSGI2/FOBOZLl
+         Gl3gXIr2OxQ8//uhU9wDoBEQj7MqdY/U359JG7Tk=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200415091204eucas1p101f6b173912d41a0557c373fb423fc9e~F80XR6yBY0356803568eucas1p1R;
+        Wed, 15 Apr 2020 09:12:04 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id B4.96.61286.4EFC69E5; Wed, 15
+        Apr 2020 10:12:04 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200415091204eucas1p1983548c2db52d8d0c2a5367034ec80dd~F80W6gWnA0526905269eucas1p1y;
+        Wed, 15 Apr 2020 09:12:04 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200415091204eusmtrp266a5b0be9173f136d2c886655562da92~F80W5dOuM1005510055eusmtrp2J;
+        Wed, 15 Apr 2020 09:12:04 +0000 (GMT)
+X-AuditID: cbfec7f2-ef1ff7000001ef66-ac-5e96cfe488aa
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 35.26.07950.4EFC69E5; Wed, 15
+        Apr 2020 10:12:04 +0100 (BST)
+Received: from [106.120.51.71] (unknown [106.120.51.71]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200415091203eusmtip2d83bf0ed2ff415a4aa3b9e24afb549e3~F80VuLINp1653416534eusmtip2o;
+        Wed, 15 Apr 2020 09:12:03 +0000 (GMT)
+Subject: Re: [RFC 1/8] thermal: int3400_thermal: Statically initialize
+ .get_mode()/.set_mode() ops
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Message-ID: <7cbddc1c-0049-6b50-7bca-204bd9df2c30@samsung.com>
+Date:   Wed, 15 Apr 2020 11:12:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200415081600.29904-1-anders.roxell@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20200407174926.23971-2-andrzej.p@collabora.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0wUVxj1zp2dHdCl18XK57PtVms0kUcweqVibNqYadJGf9ikYqXdygRM
+        WdjsCIiPiA9QtlpBi8KGWmypPKQCCwXWgq6oPKLu+kQQfGzc6KIssYsVIQJlHEj5d77znXPP
+        d5LLY62dm8lvTtgimhL08TrOn61pGnAudjuPRYdWOpfQkpZhlvY7Bhh66vEDlh7JHcH0RN8c
+        mu/cx1LzyVDqurOGZvTlstRl/5R27P6bofmeZFrlOKiipTk2ltpcXo4WnTuMqPVxm4qaB0sw
+        7Tt0CdGmgun0+vVv6Ol6D6ZXr9xUUbfrJ44O1VpZ6qkOog3pNzCtsubgVbOFuvuFSKgu6WCE
+        Yl+IYLPcVwtVxYuE3+u7GcFamskJXW31nNDrcIzyhbuEf3rcauHJ8YuMkPXCywmVvXWMcHgo
+        VHh9q0e1NjDKf0WMGL85WTSFrPzOP85dUKcyZmu29j5MR2kob7IZ+fFAloC7+TkyI39eS4oR
+        NFV0cMrwEkHnHw2sMvQhON/Szo5bzH8NqWWsJUUI3lRqFJEXwUhZFjYjng8kMeA6w8uaaSQc
+        Bmq8almDySs1NN7uxvKCIxGQvb8UyVhDVsK1P4dVMmbJfMjOtDMyfpd8Db5HF1WKZiq05rnf
+        HuFHIuFY3oO372ASBPfcvzIKfg9qvflYDgPyox9YujLUytWfQZe3jVNwIDxrrh7jZ8OITTbL
+        hjMIhg54xty1CIqODo85PoYuxyAnV8NkIZSfDVHoT+DlhT2MTAMJgHbvVOWIADhScxwrtAYO
+        ZGgV9UdQcaqCG48120pwFtJZJlSzTKhjmVDH8n9uAWJLUZCYJBliRSksQUwJlvQGKSkhNnhT
+        osGKRv/1leFmXx369+b3jYjwSDdF01KWE61V6ZOlVEMjAh7rpmnKDaOUJkafuk00JX5rSooX
+        pUY0i2d1QZrw37o3akmsfov4gygaRdP4luH9ZqahDw8FzIh4//O4ve3rEyN9X6zVp2HjpA05
+        upbC/Pj6gubw1obdL1KiitAH6xY401s9P3c+DIxKcc/r3zkwh4+OsT+Zsn3hqq+MbHTn4NKn
+        5ZEbJkdow27ZI3zmu8FPpS8hd8Xqdw6eGPkldfGa/svLlvekXDWW1c5I3fHmZOfc9c5rmev2
+        6VgpTh+2CJsk/X+BrTzB0wMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHe885m0drcJqab2IlgwiDpnOaj2aj24fzISr0S+SlpjuotEvt
+        TKk+lGVWjspLaDqsVlnp7ELTbJaKWszCWmokJGatRtnFdRHL5aU2LfDbj+f5/x544E+T4l5B
+        KJ2jNXB6rVItEQZQ3dNdQ6tczyrSo47Yw6Du0TQFvxweAq6+G6KgrPIPCedHl0D1s6MUGC9G
+        gfPFVjg2WkmBs30jvDx8n4Dq4TxocJwUgKW8mYJm54gQrrUVI7C+6xeA8XcdCaOnHiKwmxdB
+        T08q1LcMk/Cku08ALudpIUzdtVIw3BgCrYW9JDRYy8l1YaztVQ1iG+teEmztj0i22fTKj22o
+        XclebvlIsFZLkZAd7G8Rsm6HwzuvOcR+/+LyY9+ffUCwJd9GhOxtt41gi6ei2PHnXwTbAndI
+        E/W6XAMXnq3jDWslKTKIlsriQRodEy+VyePSEqJjJZGKRBWnzsnj9JGKXdJsl9km2FMq2ud+
+        XYjyUdV8I/KnMRODjXem/IwogBYzVxA+9b4LGRHtXYThrlt5s5lAPNlvFM5mPiPsKjhD+TKB
+        jAo7b9K+TBAjx56mkZk7JDPuh8cGaknfQszo8M+v15CPhUwCLj1umWERo8BPb0wLfEwxy3Fp
+        UTvh42BmO35gM/3LLMSPq1yUj/2ZtbiiamjmJsmswJPn+/5xCB5wXSBmeRm+O1JNliCxaY5u
+        mqOY5iimOYoZURYUxOXymiwNHy3llRo+V5slzdRprMhbpya7p9GGjO7kTsTQSLJA9Oh6ebpY
+        oMzj92s6EaZJSZDolsY7EqmU+w9wet1Ofa6a4ztRrPe5UjI0OFPnLafWsFMWK4uDeFmcPE6+
+        GiQhohNMR6qYyVIauN0ct4fT//cI2j80H/WkTzhWz9tQNhm7iqxfs6wg7ZImKaJgX/BY5edD
+        5vlb1h8QJSnf5ttVSwY7anJibkjaeovC88PV6gDnaEnh0Yw/Hd+SVJuTP0UVbmr6cC9zwDMl
+        3t634U1EiqU2CD+8MyCf6F/MlZ2DZo8ieW/3waXFE4rsjNbB5/b1mVp3RdrN0xKKz1bKVpJ6
+        XvkXsOWk2GQDAAA=
+X-CMS-MailID: 20200415091204eucas1p1983548c2db52d8d0c2a5367034ec80dd
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200415091204eucas1p1983548c2db52d8d0c2a5367034ec80dd
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200415091204eucas1p1983548c2db52d8d0c2a5367034ec80dd
+References: <20200407174926.23971-1-andrzej.p@collabora.com>
+        <20200407174926.23971-2-andrzej.p@collabora.com>
+        <CGME20200415091204eucas1p1983548c2db52d8d0c2a5367034ec80dd@eucas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15-04-20, 10:15, Anders Roxell wrote:
-> When building the mult_v7_defconfig, ARM_TI_CPUFREQ doesn't get enabled
-> evenwhen ARCH_OMAP(3|4) is selected. Build ARM_TI_CPUFREQ by default for
-> ARCH_OMAP2PLUS.
+
+On 4/7/20 7:49 PM, Andrzej Pietrasiewicz wrote:
+> int3400_thermal_ops is used inside int3400_thermal_probe() only after
+> the assignments, which can just as well be made statically at struct's
+> initizer.
 > 
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+
+Reviewed-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+
+Best regards,
+--
+Bartlomiej Zolnierkiewicz
+Samsung R&D Institute Poland
+Samsung Electronics
+
 > ---
->  drivers/cpufreq/Kconfig.arm | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-> index 15c1a1231516..9481292981f0 100644
-> --- a/drivers/cpufreq/Kconfig.arm
-> +++ b/drivers/cpufreq/Kconfig.arm
-> @@ -317,6 +317,7 @@ config ARM_TEGRA186_CPUFREQ
->  config ARM_TI_CPUFREQ
->  	bool "Texas Instruments CPUFreq support"
->  	depends on ARCH_OMAP2PLUS
-> +	default ARCH_OMAP2PLUS
->  	help
->  	  This driver enables valid OPPs on the running platform based on
->  	  values contained within the SoC in use. Enable this in order to
-
-Applied. Thanks.
-
--- 
-viresh
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index efae0c02d898..634b943e9e3d 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -271,6 +271,8 @@ static int int3400_thermal_set_mode(struct thermal_zone_device *thermal,
+>  
+>  static struct thermal_zone_device_ops int3400_thermal_ops = {
+>  	.get_temp = int3400_thermal_get_temp,
+> +	.get_mode = int3400_thermal_get_mode,
+> +	.set_mode = int3400_thermal_set_mode,
+>  };
+>  
+>  static struct thermal_zone_params int3400_thermal_params = {
+> @@ -309,9 +311,6 @@ static int int3400_thermal_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, priv);
+>  
+> -	int3400_thermal_ops.get_mode = int3400_thermal_get_mode;
+> -	int3400_thermal_ops.set_mode = int3400_thermal_set_mode;
+> -
+>  	priv->thermal = thermal_zone_device_register("INT3400 Thermal", 0, 0,
+>  						priv, &int3400_thermal_ops,
+>  						&int3400_thermal_params, 0, 0);
+> 
