@@ -2,84 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E8B1A9E83
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 13:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992421AA30B
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 15:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2897918AbgDOL4w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Apr 2020 07:56:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43430 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406444AbgDOLrv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:47:51 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 97EA6214D8;
-        Wed, 15 Apr 2020 11:47:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586951271;
-        bh=k14wArMvku5tzqw6qQ4izhm1/3kfQ3VVApMHKECRR1I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N44Z8rADD4Lt37T6j4z60IBYJbmzEkiF8NWeD5Arw6UZekB8K/ULWD5Vg8er/beSm
-         vvQV+fUMJvu7yiykRvNKBFxeACvkoLoUZO0H4tBb1Lfegw6r6Qehb4/oHiMngz+hPp
-         /tRql7WuiCs9zE4kRb36Y733BiWuEkZHPc28vZgU=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        "Andrew F . Davis" <afd@ti.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 02/21] power: supply: bq27xxx_battery: Silence deferred-probe error
-Date:   Wed, 15 Apr 2020 07:47:29 -0400
-Message-Id: <20200415114748.15713-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200415114748.15713-1-sashal@kernel.org>
-References: <20200415114748.15713-1-sashal@kernel.org>
+        id S2505793AbgDONDg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Apr 2020 09:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2503617AbgDONDb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Apr 2020 09:03:31 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EBCC061A0E
+        for <linux-pm@vger.kernel.org>; Wed, 15 Apr 2020 06:03:31 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id g12so11101203wmh.3
+        for <linux-pm@vger.kernel.org>; Wed, 15 Apr 2020 06:03:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UQjPZcbdaiez8gPnZVEEptasSZ40rtGmLV1WRLqgzEE=;
+        b=VSwRqt3Z9lmcScQ0G7eBWnQVgvgcuNvjh9qtbKIgya4dAhsx5+Q5YDTPAZUlIlsVqd
+         Q51Tl3+QDwo07tHlTp7EelXW0wi0Yi7L403sJ4SMJnRwv81vD2YW5heygNkqDV6ho9Th
+         JlCoEBrVJ/mpZzPq9R4PukfDdIcmxT+RrrG4iZxmz3dJB3y8GbVmQJ7BpuvEqCPOnVqT
+         I5LS25e7XS9B1l3FZspq2OA2aYSsS+x4b25BEkBNZ0xNhK1KkT/QW7iOL2FveJuUpFo+
+         i/+KsWFwmxTUmPxCGhyvztcdbK/LtzCoHxKSerGwGWJHTiPX7Lv4XMM/NR+Yc1AyYmXa
+         y6RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UQjPZcbdaiez8gPnZVEEptasSZ40rtGmLV1WRLqgzEE=;
+        b=VcgxtoPlOVPfPXIUhCr7fiBkMTRqM0CZ7k76rXlds7Ou60B8eMmT+WAn9KGthac3Ah
+         qwA9sMYnHa3IbgvJ8mQSCo/kjGRrOjFRU5PKVwGjmgWcsz4Q/djGENMZQ3AyauPM7h1v
+         u3poE9GN8A10hlS66t1vRMzH+/I/uHpIkKkBkEwpP/joeID8A0ZXaSZ9K2EbvRQVOjLS
+         /7UAHibtVaP7qjEBJ+fXcV4JFzgzYIy5PaBNgc/xdHmd1MDyPIuBqPCuL7hCPdXY9RdO
+         XPQ+XMpgphcJROcMR9V+za0GAwScxMzvNEnO1WjBe3mQp1YvcxTDBx4/8lvvcDEBMEL1
+         979w==
+X-Gm-Message-State: AGi0PuZJauTljiBL6A1I8VXLXvMLW7c08ckdVYN2kCwVG2Vxd/fH+vNJ
+        28gV4fdjgy2Zm19XusDA5hiQ3I35xLU=
+X-Google-Smtp-Source: APiQypLOtd28MynQpn58BxBpE7EdDidkO7rzi7NUQyfanjjWdu4P7EKBZSzTP6xF0cq5tapcaJf1Fw==
+X-Received: by 2002:a1c:1d92:: with SMTP id d140mr5087120wmd.67.1586955809800;
+        Wed, 15 Apr 2020 06:03:29 -0700 (PDT)
+Received: from localhost.localdomain ([87.120.218.65])
+        by smtp.googlemail.com with ESMTPSA id b66sm23418111wmh.12.2020.04.15.06.03.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Apr 2020 06:03:28 -0700 (PDT)
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        georgi.djakov@linaro.org
+Subject: [PATCH 0/1] interconnect fix for 5.7
+Date:   Wed, 15 Apr 2020 16:03:26 +0300
+Message-Id: <20200415130327.23059-1-georgi.djakov@linaro.org>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
+Hi Greg,
+This is a single fix for the current release. Please apply it to
+char-misc-linus whenever possible.
 
-[ Upstream commit 583b53ece0b0268c542a1eafadb62e3d4b0aab8c ]
+Thanks,
+Georgi
 
-The driver fails to probe with -EPROBE_DEFER if battery's power supply
-(charger driver) isn't ready yet and this results in a bit noisy error
-message in KMSG during kernel's boot up. Let's silence the harmless
-error message.
+Mike Tipton (1):
+  interconnect: qcom: Fix uninitialized tcs_cmd::wait
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Reviewed-by: Andrew F. Davis <afd@ti.com>
-Reviewed-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/power/supply/bq27xxx_battery.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index bccb3f595ff3d..247be9155694f 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -1031,7 +1031,10 @@ int bq27xxx_battery_setup(struct bq27xxx_device_info *di)
- 
- 	di->bat = power_supply_register_no_ws(di->dev, psy_desc, &psy_cfg);
- 	if (IS_ERR(di->bat)) {
--		dev_err(di->dev, "failed to register battery\n");
-+		if (PTR_ERR(di->bat) == -EPROBE_DEFER)
-+			dev_dbg(di->dev, "failed to register battery, deferring probe\n");
-+		else
-+			dev_err(di->dev, "failed to register battery\n");
- 		return PTR_ERR(di->bat);
- 	}
- 
--- 
-2.20.1
+ drivers/interconnect/qcom/bcm-voter.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
