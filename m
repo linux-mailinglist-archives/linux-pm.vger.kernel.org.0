@@ -2,37 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC86D1AA3C9
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 15:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA121AA373
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 15:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504683AbgDONMV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Apr 2020 09:12:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55068 "EHLO mail.kernel.org"
+        id S2505996AbgDONKT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Apr 2020 09:10:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55294 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2897061AbgDOLfd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:35:33 -0400
+        id S2897073AbgDOLfm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:35:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7C9B9215A4;
-        Wed, 15 Apr 2020 11:35:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8A9CB21556;
+        Wed, 15 Apr 2020 11:35:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586950533;
-        bh=G7KxnwoLgLdPJXOkgOpWzhaL/rwPD/wpMyKVXu5Bt9U=;
+        s=default; t=1586950542;
+        bh=Y1oOwpvRztHomKDGyowfxLsgFTMmRI5+HPm22BtDbKY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zsJcW0yr7/+NyNrHHcFVXKmT/sAlnh64En2NCyF5dYXpCF/7LDkPfdCkDl1KNgET5
-         ao6dztHhUsGLIbmo2UOCrDYZglDOMAVVKP1XN9MrQTYbJwQpaUafVskLC7HoyVkI4Z
-         Ufv86g8VHGbOJQ7pbSrrGZjnzTUvj0Xn/zFy1EI0=
+        b=2Uxs3E1jkHkXM5o4aBDgwh4Ttruw+9A5vreZnxk90DvSmXOlGUf7GsM+FvreowS9/
+         xakO4NEOMP6mTzDCtbwRVHk7Jtwi5dowTNiy6tr/eCrsZUoCbd5tnVckAJil4QcpU+
+         y6Q/vPdVPKWLQ0L2gAqM3sgwnPwFclGcnfExDhfI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Amit Kucheria <amit.kucheria@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+Cc:     Willy Wolff <willy.mh.wolff.ml@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 041/129] drivers: thermal: tsens: Release device in success path
-Date:   Wed, 15 Apr 2020 07:33:16 -0400
-Message-Id: <20200415113445.11881-41-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 049/129] thermal/drivers/cpufreq_cooling: Fix return of cpufreq_set_cur_state
+Date:   Wed, 15 Apr 2020 07:33:24 -0400
+Message-Id: <20200415113445.11881-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200415113445.11881-1-sashal@kernel.org>
 References: <20200415113445.11881-1-sashal@kernel.org>
@@ -45,60 +44,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Amit Kucheria <amit.kucheria@linaro.org>
+From: Willy Wolff <willy.mh.wolff.ml@gmail.com>
 
-[ Upstream commit f22a3bf0d2225fba438c46a25d3ab8823585a5e0 ]
+[ Upstream commit ff44f672d74178b3be19d41a169b98b3e391d4ce ]
 
-We don't currently call put_device in case of successfully initialising
-the device. So we hold the reference and keep the device pinned forever.
+When setting the cooling device current state from userspace via sysfs,
+the operation fails by returning an -EINVAL.
 
-Allow control to fall through so we can use same code for success and
-error paths to put_device.
+It appears the recent changes with the per-policy frequency QoS
+introduced a regression as reported by:
 
-As a part of this fixup, change devm_ioremap_resource to act on the same
-device pointer as that used to allocate regmap memory. That ensures that
-we are free to release op->dev after examining its resources.
+ https://lkml.org/lkml/2020/3/20/599
 
-Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+The function freq_qos_update_request returns 0 or 1 describing update
+effectiveness, and a negative error code on failure. However,
+cpufreq_set_cur_state returns 0 on success or an error code otherwise.
+
+Consider the QoS update as successful if the function does not return
+an error.
+
+Fixes: 3000ce3c52f8b ("cpufreq: Use per-policy frequency QoS")
+Signed-off-by: Willy Wolff <willy.mh.wolff.ml@gmail.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/d3996667e9f976bb30e97e301585cb1023be422e.1584015867.git.amit.kucheria@linaro.org
+Link: https://lore.kernel.org/r/20200321092740.7vvwfxsebcrznydh@macmini.local
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thermal/qcom/tsens-common.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/thermal/cpufreq_cooling.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/qcom/tsens-common.c b/drivers/thermal/qcom/tsens-common.c
-index c8d57ee0a5bb2..2cc276cdfcdb1 100644
---- a/drivers/thermal/qcom/tsens-common.c
-+++ b/drivers/thermal/qcom/tsens-common.c
-@@ -602,7 +602,7 @@ int __init init_common(struct tsens_priv *priv)
- 		/* DT with separate SROT and TM address space */
- 		priv->tm_offset = 0;
- 		res = platform_get_resource(op, IORESOURCE_MEM, 1);
--		srot_base = devm_ioremap_resource(&op->dev, res);
-+		srot_base = devm_ioremap_resource(dev, res);
- 		if (IS_ERR(srot_base)) {
- 			ret = PTR_ERR(srot_base);
- 			goto err_put_device;
-@@ -620,7 +620,7 @@ int __init init_common(struct tsens_priv *priv)
- 	}
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index fe83d7a210d47..af55ac08e1bd5 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -431,6 +431,7 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+ 				 unsigned long state)
+ {
+ 	struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
++	int ret;
  
- 	res = platform_get_resource(op, IORESOURCE_MEM, 0);
--	tm_base = devm_ioremap_resource(&op->dev, res);
-+	tm_base = devm_ioremap_resource(dev, res);
- 	if (IS_ERR(tm_base)) {
- 		ret = PTR_ERR(tm_base);
- 		goto err_put_device;
-@@ -687,8 +687,6 @@ int __init init_common(struct tsens_priv *priv)
- 	tsens_enable_irq(priv);
- 	tsens_debug_init(op);
+ 	/* Request state should be less than max_level */
+ 	if (WARN_ON(state > cpufreq_cdev->max_level))
+@@ -442,8 +443,9 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
  
--	return 0;
--
- err_put_device:
- 	put_device(&op->dev);
- 	return ret;
+ 	cpufreq_cdev->cpufreq_state = state;
+ 
+-	return freq_qos_update_request(&cpufreq_cdev->qos_req,
+-				get_state_freq(cpufreq_cdev, state));
++	ret = freq_qos_update_request(&cpufreq_cdev->qos_req,
++				      get_state_freq(cpufreq_cdev, state));
++	return ret < 0 ? ret : 0;
+ }
+ 
+ /* Bind cpufreq callbacks to thermal cooling device ops */
 -- 
 2.20.1
 
