@@ -2,116 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB3B1A98A8
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 11:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4779C1A997C
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 11:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895404AbgDOJXu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Apr 2020 05:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2895405AbgDOJXO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Apr 2020 05:23:14 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841B1C0610D5
-        for <linux-pm@vger.kernel.org>; Wed, 15 Apr 2020 02:23:13 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id h9so18232705wrc.8
-        for <linux-pm@vger.kernel.org>; Wed, 15 Apr 2020 02:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=p+pTtxbF6QRKm4ChjDfBhdzosGTJFivS8O2LYLc6THQ=;
-        b=wU0K3NA/8EqmM1ff21F2XRJIgW7Mcma7ec0tb8Vq97AT7ksJ4VfqAtHEjK4wV5jIy4
-         /yQFIqSk4PYe4fSkgSYWWgsf2SMd/XEpAUDZq9Jv+yx0ylFID3IH0MsxRdMJSjkikLnB
-         XnLhglk5wYF+wo5aXbTs0aoE7O/oCNmB8j19OCsJUX5cmDn5Dh6oTgeTDan0cHwcb7QT
-         SQskOHvgF5QlIxEfrXUEKamA5ifUB6l1MiFYHwpXk4gsHHZyrIX+MqlRzqDRLcZjs90f
-         v2tI+U1O56udSg6DR9X5hpCHQQYIXmg6uegtzv3uC35CaVBlQpjzrfzSekHAHgXewnuz
-         RLWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=p+pTtxbF6QRKm4ChjDfBhdzosGTJFivS8O2LYLc6THQ=;
-        b=RuBX4p8JOm1vELB0zIrjh2iinibFv62LqHtOzsCx1SteHJcbd3I8ENJwUOY3JI8VOw
-         94CSVLXmmX8RUKzo81O4hvnqR6UcK6F+E94Z4/5FXw6jUttA/BOjgVDfISyZDo0lrmG4
-         t5aZDhC+xP0OjkNi1eCoTx1cGo4g92zCX2ipTuPb1kP4vlPP+1vFhlV8MmsW3sH7NWoO
-         hn/ooFqfUJd4xcOLUPhTvkUU0x/Gagsc3QReCAjZOEONa+SuqPcUFZ9YLBEAkMX13Flg
-         M6s79ETc904ZKHifveQFAc0LU4e+Vnb9YKHRiQRzcVRtIRaDJYWhwJslmK2wIBKk9go0
-         gfAA==
-X-Gm-Message-State: AGi0PubpIiUUzC72TbAsH1rytBWlfTlyKRSdEYQZ50RESYOEkOcG4FXL
-        PAIzJKlizcDBVfacGst2wajSnw==
-X-Google-Smtp-Source: APiQypKZCE4jcvwyEetbY5z9ghNHFxXWQpEL5eKh/IZ5lv3p9Amt6yFTRtJP4keaPPNXhk4WY/KQtQ==
-X-Received: by 2002:adf:ea44:: with SMTP id j4mr4812531wrn.38.1586942591970;
-        Wed, 15 Apr 2020 02:23:11 -0700 (PDT)
-Received: from [192.168.0.41] (lns-bzn-59-82-252-135-148.adsl.proxad.net. [82.252.135.148])
-        by smtp.googlemail.com with ESMTPSA id 138sm23013314wmb.14.2020.04.15.02.23.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Apr 2020 02:23:11 -0700 (PDT)
-Subject: Re: [RFC v2 1/9] thermal: int3400_thermal: Statically initialize
- .get_mode()/.set_mode() ops
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-References: <2bc5a902-acde-526a-11a5-2357d899916c@linaro.org>
- <20200414180105.20042-1-andrzej.p@collabora.com>
- <20200414180105.20042-2-andrzej.p@collabora.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <3f271ce1-b4bf-4516-7e6d-7a26bd6953de@linaro.org>
-Date:   Wed, 15 Apr 2020 11:23:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S2895963AbgDOJvG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Apr 2020 05:51:06 -0400
+Received: from sauhun.de ([88.99.104.3]:50644 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2895955AbgDOJvE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Apr 2020 05:51:04 -0400
+Received: from localhost (p54B33507.dip0.t-ipconnect.de [84.179.53.7])
+        by pokefinder.org (Postfix) with ESMTPSA id EAF5A2C1F58;
+        Wed, 15 Apr 2020 11:51:01 +0200 (CEST)
+Date:   Wed, 15 Apr 2020 11:51:01 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans De Goede <hdegoede@redhat.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH 6/7] PM: sleep: core: Rename DPM_FLAG_LEAVE_SUSPENDED
+Message-ID: <20200415095101.GF1141@ninjato>
+References: <1888197.j9z7NJ8yPn@kreacher>
+ <11863688.3RhLv4JJn2@kreacher>
 MIME-Version: 1.0
-In-Reply-To: <20200414180105.20042-2-andrzej.p@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2FkSFaIQeDFoAt0B"
+Content-Disposition: inline
+In-Reply-To: <11863688.3RhLv4JJn2@kreacher>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/04/2020 20:00, Andrzej Pietrasiewicz wrote:
-> int3400_thermal_ops is used inside int3400_thermal_probe() only after
-> the assignments, which can just as well be made statically at struct's
-> initizer.
-> 
-> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> ---
 
-Applied this patch with Bartlomiej's tag.
+--2FkSFaIQeDFoAt0B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks
+On Fri, Apr 10, 2020 at 05:57:49PM +0200, Rafael J. Wysocki wrote:
+> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+>=20
+> Rename DPM_FLAG_LEAVE_SUSPENDED to DPM_FLAG_MAY_SKIP_RESUME which
+> matches its purpose more closely.
+>=20
+> No functional impact.
+>=20
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-  -- Daniel
+Acked-by: Wolfram Sang <wsa@the-dreams.de> # for I2C
 
 
+--2FkSFaIQeDFoAt0B
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+-----BEGIN PGP SIGNATURE-----
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6W2QUACgkQFA3kzBSg
+KbYLYA//dnjtvhFJWFAsMwE9BkNYmyzOvIsFhJy350O1uwA1j96UNz+9wzWPjHFa
+rUERnUkp16CWA7Na2XRCXTyyk22YwRxqg7pUixYLbCEItXS23jsPl/llXrmK2fjA
+Nmm6XQZfR8jtJYFJKTemE90E0TNgSKMJ6G/Rlinxxlv6bQFSS5fSeScf/gW+R4q5
+wfP+kWWiBxu0sA06TzeHln0CJIk3X+yd7HdkrwrdzUU7np6Zs1nxJ+Fp2BTZ+4VL
+RDOMKkKAcrAxNIW1W7qhWVKx3AOy1BJZXyCvIFTYjmbiSCeGH2E5PbyIreiyhVhp
+E37t3zlYXu2oCkirgF8qYurtUvZnvji7sYJzqDkrY0i5YUOXgLQG/J31kyZ88Fui
+72rWWIPnD6QUZtjo+KvyUtfbk9NhbWTo+/vKVqDo9lJPgwtpMmsmnhKyVPCgOlH8
+IDKZa8bDsYn6yjjzCFh1lW0Pa+H2a++mu56K7nKHXw0XlApez2jYw7i4stFPUi4T
+HVoTmKVSIJj95JUvkBiliO9b8WOf0xuPgjTvAgkb5Z3vBy3rhVOFu/d3TECeXr1E
+oXuBs5c7T2TCh8fNn5HYkFwtY69V3/MjG+tiHAl1a02lxxJ6cZUm8/1X0i0LaiW5
+4HX5suaNxl96rgvGaAZF51jYiZITdUGuWirGA3rpBQRTrnujlJI=
+=03Jn
+-----END PGP SIGNATURE-----
+
+--2FkSFaIQeDFoAt0B--
