@@ -2,35 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B88B1AA263
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 14:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0916D1AA257
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Apr 2020 14:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2898263AbgDOMyP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Apr 2020 08:54:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57236 "EHLO mail.kernel.org"
+        id S2898251AbgDOMxn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Apr 2020 08:53:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57288 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2897213AbgDOLhJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:37:09 -0400
+        id S2897215AbgDOLhM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:37:12 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BFDB62137B;
-        Wed, 15 Apr 2020 11:37:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DEB0821556;
+        Wed, 15 Apr 2020 11:37:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586950629;
-        bh=+e9qoTMeeUTLIN6LPfEmAaCFBw1h2Jg68LOFaxYeyAU=;
+        s=default; t=1586950631;
+        bh=UjrAK+OQRBdE3nXPOYyXQpoWIFD+vJtFTxgV0domYGU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dwS1YlAJT6gP/834hCev4b3oHXIEtBqS5DakUoJOPP5ASYfJzXACfmtDaCp7ps/m0
-         XXoX/Ich1JI7wJ6Pwta+5VtRdTjC+Wf+dYmZfiVGwSW/8Fpa9PdSujWkatdBqMEGU6
-         cXIecAuDmPuTORMuTGap12qcmi1kLlbS7UwXc990=
+        b=oRi3fQQ2nvx2sLKg6Qih9GyjG3WpfM0ZeECEpvL3/OjzQDle6QV0vehVtZno+h65Z
+         y4a2SoIdsy8Nv9fEe6nHUj3b3spB7LRU5Sc43d2NXZrCOLbyOTsUGlk1XW1vY59shY
+         wGzO7vKEOro0A/laFVA0cMTmAdTHoERFFJVWn1W0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yuantian Tang <andy.tang@nxp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+Cc:     Jeffery Miller <jmiller@neverware.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 120/129] thermal: qoriq: Fix a compiling issue
-Date:   Wed, 15 Apr 2020 07:34:35 -0400
-Message-Id: <20200415113445.11881-120-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 122/129] power: supply: axp288_fuel_gauge: Broaden vendor check for Intel Compute Sticks.
+Date:   Wed, 15 Apr 2020 07:34:37 -0400
+Message-Id: <20200415113445.11881-122-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200415113445.11881-1-sashal@kernel.org>
 References: <20200415113445.11881-1-sashal@kernel.org>
@@ -43,36 +44,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Yuantian Tang <andy.tang@nxp.com>
+From: Jeffery Miller <jmiller@neverware.com>
 
-[ Upstream commit cbe259fd80b7b02fba0dad79d8fdda8b70a8b963 ]
+[ Upstream commit e42fe5b29ac07210297e75f36deefe54edbdbf80 ]
 
-Qoriq thermal driver is used by both PowerPC and ARM architecture.
-When built for PowerPC architecture, it reports error:
-undefined reference to `.__devm_regmap_init_mmio_clk'
-To fix it, select config REGMAP_MMIO.
+The Intel Compute Stick `STK1A32SC` can have a system vendor of
+"Intel(R) Client Systems".
+Broaden the Intel Compute Stick DMI checks so that they match "Intel
+Corporation" as well as "Intel(R) Client Systems".
 
-Fixes: 4316237bd627 (thermal: qoriq: Convert driver to use regmap API)
-Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20200303084641.35687-1-andy.tang@nxp.com
+This fixes an issue where the STK1A32SC compute sticks were still
+exposing a battery with the existing blacklist entry.
+
+Signed-off-by: Jeffery Miller <jmiller@neverware.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thermal/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/power/supply/axp288_fuel_gauge.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 5a05db5438d60..5a0df0e54ce3e 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -265,6 +265,7 @@ config QORIQ_THERMAL
- 	tristate "QorIQ Thermal Monitoring Unit"
- 	depends on THERMAL_OF
- 	depends on HAS_IOMEM
-+	select REGMAP_MMIO
- 	help
- 	  Support for Thermal Monitoring Unit (TMU) found on QorIQ platforms.
- 	  It supports one critical trip point and one passive trip point. The
+diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+index e1bc4e6e6f30e..f40fa0e63b6e5 100644
+--- a/drivers/power/supply/axp288_fuel_gauge.c
++++ b/drivers/power/supply/axp288_fuel_gauge.c
+@@ -706,14 +706,14 @@ static const struct dmi_system_id axp288_fuel_gauge_blacklist[] = {
+ 	{
+ 		/* Intel Cherry Trail Compute Stick, Windows version */
+ 		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Intel Corporation"),
++			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "STK1AW32SC"),
+ 		},
+ 	},
+ 	{
+ 		/* Intel Cherry Trail Compute Stick, version without an OS */
+ 		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Intel Corporation"),
++			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "STK1A32SC"),
+ 		},
+ 	},
 -- 
 2.20.1
 
