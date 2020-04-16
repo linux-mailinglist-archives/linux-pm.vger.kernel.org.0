@@ -2,126 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B131AB6EE
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Apr 2020 06:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6251AB723
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Apr 2020 07:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404265AbgDPEqt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Apr 2020 00:46:49 -0400
-Received: from mga06.intel.com ([134.134.136.31]:41466 "EHLO mga06.intel.com"
+        id S2405878AbgDPFMf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Apr 2020 01:12:35 -0400
+Received: from mx.socionext.com ([202.248.49.38]:55850 "EHLO mx.socionext.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390974AbgDPEqr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 Apr 2020 00:46:47 -0400
-IronPort-SDR: J5XWLt2PWpY82y3DbcO2df7zjbHGlwidthxfZi+THCcA5ycO2cEvJs6RHFUd1s22cmz3JtMH18
- tfqnziIQMM4A==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2020 21:46:44 -0700
-IronPort-SDR: NgXFa+A1OnJUYtnlGU0y5dBWrSg1n4kM0kDMPzvbWqLHXLUIj9a+OFz25ouZxqt+SLh9rYqC2l
- DHCIIewSmlow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,388,1580803200"; 
-   d="scan'208";a="253739399"
-Received: from liulu4-mobl2.ccr.corp.intel.com ([10.255.30.220])
-  by orsmga003.jf.intel.com with ESMTP; 15 Apr 2020 21:46:42 -0700
-Message-ID: <eccb4e6a77ecd6ebaff9bd68b751ea20caa6a0a8.camel@intel.com>
-Subject: Re: [RFC PATCH 5/5] ACPI: processor: do update when maximum cooling
- state changed
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org
-Cc:     tiwai@suse.de, viresh.kumar@linaro.org
-Date:   Thu, 16 Apr 2020 12:46:41 +0800
-In-Reply-To: <1e65a2c3-fdeb-4f48-f477-a7ec67cffd4e@linaro.org>
-References: <20200408041917.2329-1-rui.zhang@intel.com>
-         <20200408041917.2329-5-rui.zhang@intel.com>
-         <5cd80df7-775e-96bd-cec5-b14965de2a67@linaro.org>
-         <2bef9553fcf7ccd7c9811ad1d572af2e5a811917.camel@intel.com>
-         <a15dee60-8d20-0f56-0037-276830c613cd@linaro.org>
-         <fee68438572796c71089571e0ff0add6cbbd3e0c.camel@intel.com>
-         <e264d4a2-b0d9-8adf-b44f-7501c4407029@linaro.org>
-         <17727142fac13f641d7cd5c3713cfadef77aa75c.camel@intel.com>
-         <1e65a2c3-fdeb-4f48-f477-a7ec67cffd4e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S2406149AbgDPFMc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Apr 2020 01:12:32 -0400
+Received: from unknown (HELO iyokan-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 16 Apr 2020 14:12:27 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan-ex.css.socionext.com (Postfix) with ESMTP id A338960057;
+        Thu, 16 Apr 2020 14:12:27 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 16 Apr 2020 14:12:27 +0900
+Received: from plum.e01.socionext.com (unknown [10.213.132.32])
+        by kinkan.css.socionext.com (Postfix) with ESMTP id EA77F1A12AD;
+        Thu, 16 Apr 2020 14:12:26 +0900 (JST)
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Subject: [PATCH] dt-bindings: thermal: Convert UniPhier thermal monitor to json-schema
+Date:   Thu, 16 Apr 2020 14:12:15 +0900
+Message-Id: <1587013935-21760-1-git-send-email-hayashi.kunihiko@socionext.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2020-04-13 at 20:06 +0200, Daniel Lezcano wrote:
-> On 13/04/2020 04:01, Zhang Rui wrote:
-> > On Sun, 2020-04-12 at 12:07 +0200, Daniel Lezcano wrote:
-> 
-> [ ... ]
-> 
-> > why we can not have a cdev->max_state field, and get it updated
-> > right
-> > after .get_max_state().
-> > and .get_max_state()  is only invoked
-> > a) during cooling device registration
-> > b) when cooling device update its max_state via the new API.
-> > 
-> > > 
-> > > In the function thermal_cooling_device_stats_update():
-> > > 
-> > >   Is it possible to just compare the 'new_state' parameter with
-> > > stats->max_state and if it is greater increase the stats table
-> > > and
-> > > update max_state to the new_state ?
-> > > 
-> > 
-> > the problem is that thermal_cooling_device_stats_update() is
-> > invoked
-> > only if thermal zone are updated or the cur_state sysfs attribute
-> > is
-> > changed.
-> > There is no way for a cooling device driver to tell thermal
-> > framework
-> > that it has changed.
-> > Say, for the problem on hand, the statistics table will not be
-> > updated
-> > in time when cpufreq driver probed.
-> 
-> Except I'm missing something, the statistics are only read from
-> userspace via sysfs.
+Convert the UniPhier thermal monitor binding to DT schema format.
 
-I agree.
-> 
-> userspace is not notified about a stat change. Is it really a problem
-> the table is not updated right at the probe time ?
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+---
+ .../thermal/socionext,uniphier-thermal.yaml        | 57 +++++++++++++++++++
+ .../bindings/thermal/uniphier-thermal.txt          | 65 ----------------------
+ 2 files changed, 57 insertions(+), 65 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
+ delete mode 100644 Documentation/devicetree/bindings/thermal/uniphier-thermal.txt
 
->  Does it really matter
-> if the user sees the old table until an update happens on a new
-> higher
-> max state ?
-> 
-> The table is always consistent whenever the userspace reads the
-> content.
-
-> 
-> A new entry will appear only if it is used, no?
-> 
-Hmm, IMO, stats table is not the biggest problem here.
-The problem is that thermal framework is not aware of the max_state
-change, and the thermal instances are never updated according to the
-new max_state.
-So, we should invoke .get_max_state() in thermal_zone_device_update()
-and update the thermal instances accordingly.
-And then, what we need to do is just to do stats update right after
-.get_max_state() being invoked.
-
-About how to update the stats table, I think adding new entries is not
-enough, because the meaning of each cooling state may change when
-max_state changes, thus I'd prefer a full reset/resizing of the table.
-
-thanks,
-rui
-> 
-> 
-> 
-> 
-> 
+diff --git a/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml b/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
+new file mode 100644
+index 0000000..bdddc5b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/socionext,uniphier-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Socionext UniPhier thermal monitor
++
++description: |
++  This describes the devicetree bindings for thermal monitor supported by
++  PVT(Process, Voltage and Temperature) monitoring unit implemented on
++  Socionext UniPhier SoCs.
++
++maintainers:
++  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
++
++properties:
++  compatible:
++    enum:
++      - socionext,uniphier-pxs2-thermal
++      - socionext,uniphier-ld20-thermal
++      - socionext,uniphier-pxs3-thermal
++
++  interrupts:
++    maxItems: 1
++
++  "#thermal-sensor-cells":
++    const: 0
++
++  socionext,tmod-calibration:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    description:
++      A pair of calibrated values referred from PVT, in case that the values
++      aren't set on SoC, like a reference board.
++
++required:
++  - compatible
++  - interrupts
++  - "#thermal-sensor-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    // The UniPhier thermal should be a subnode of a "syscon" compatible node.
++
++    sysctrl@61840000 {
++        compatible = "socionext,uniphier-ld20-sysctrl",
++                     "simple-mfd", "syscon";
++        reg = <0x61840000 0x10000>;
++
++        pvtctl: thermal {
++                compatible = "socionext,uniphier-ld20-thermal";
++                interrupts = <0 3 1>;
++                #thermal-sensor-cells = <0>;
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/thermal/uniphier-thermal.txt b/Documentation/devicetree/bindings/thermal/uniphier-thermal.txt
+deleted file mode 100644
+index ceb92a9..0000000
+--- a/Documentation/devicetree/bindings/thermal/uniphier-thermal.txt
++++ /dev/null
+@@ -1,65 +0,0 @@
+-* UniPhier Thermal bindings
+-
+-This describes the devicetree bindings for thermal monitor supported by
+-PVT(Process, Voltage and Temperature) monitoring unit implemented on Socionext
+-UniPhier SoCs.
+-
+-Required properties:
+-- compatible :
+-  - "socionext,uniphier-pxs2-thermal" : For UniPhier PXs2 SoC
+-  - "socionext,uniphier-ld20-thermal" : For UniPhier LD20 SoC
+-  - "socionext,uniphier-pxs3-thermal" : For UniPhier PXs3 SoC
+-- interrupts : IRQ for the temperature alarm
+-- #thermal-sensor-cells : Should be 0. See ./thermal.txt for details.
+-
+-Optional properties:
+-- socionext,tmod-calibration: A pair of calibrated values referred from PVT,
+-                              in case that the values aren't set on SoC,
+-                              like a reference board.
+-
+-Example:
+-
+-	sysctrl@61840000 {
+-		compatible = "socionext,uniphier-ld20-sysctrl",
+-			     "simple-mfd", "syscon";
+-		reg = <0x61840000 0x10000>;
+-		...
+-		pvtctl: pvtctl {
+-			compatible = "socionext,uniphier-ld20-thermal";
+-			interrupts = <0 3 1>;
+-			#thermal-sensor-cells = <0>;
+-		};
+-		...
+-	};
+-
+-	thermal-zones {
+-		cpu_thermal {
+-			polling-delay-passive = <250>;	/* 250ms */
+-			polling-delay = <1000>;		/* 1000ms */
+-			thermal-sensors = <&pvtctl>;
+-
+-			trips {
+-				cpu_crit: cpu_crit {
+-					temperature = <110000>;	/* 110C */
+-					hysteresis = <2000>;
+-					type = "critical";
+-				};
+-				cpu_alert: cpu_alert {
+-					temperature = <100000>;	/* 100C */
+-					hysteresis = <2000>;
+-					type = "passive";
+-				};
+-			};
+-
+-			cooling-maps {
+-				map0 {
+-					trip = <&cpu_alert>;
+-					cooling-device = <&cpu0 (-1) (-1)>;
+-				};
+-				map1 {
+-					trip = <&cpu_alert>;
+-					cooling-device = <&cpu2 (-1) (-1)>;
+-				};
+-			};
+-		};
+-	};
+-- 
+2.7.4
 
