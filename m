@@ -2,133 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6161ACE5D
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Apr 2020 19:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCD41AD0A1
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Apr 2020 21:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729799AbgDPRFm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Apr 2020 13:05:42 -0400
-Received: from mga12.intel.com ([192.55.52.136]:7539 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730647AbgDPRFl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 Apr 2020 13:05:41 -0400
-IronPort-SDR: ZtviEUcwAw04AQ6vGY2G6qGqhVhluMbOfUY9MOTyDKQ/HBJlrfEQCTppp6icNF6lCYwwlEBLwe
- lgH+ydAGIQXQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 10:05:40 -0700
-IronPort-SDR: r2p37llV8oTWEX2XJNI4HUD191O2WCdTioOapylF9eDQt2rnWXEtqiqUUUL7PgwyfxBRBlAi4M
- pxaUQq64DoUw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,391,1580803200"; 
-   d="scan'208";a="257290016"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by orsmga006.jf.intel.com with ESMTP; 16 Apr 2020 10:05:39 -0700
-Date:   Fri, 17 Apr 2020 01:06:11 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     'Len Brown' <lenb@kernel.org>,
-        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/3][v2] tools/power turbostat: Introduce functions to
- accumulate RAPL consumption
-Message-ID: <20200416170611.GA23628@chenyu-office.sh.intel.com>
-References: <cover.1586782089.git.yu.c.chen@intel.com>
- <db96fd31afd0ff65e4041665293b96c984e675bc.1586782089.git.yu.c.chen@intel.com>
- <001901d613a4$010e0a70$032a1f50$@net>
+        id S1728643AbgDPTzi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Apr 2020 15:55:38 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:53944 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728199AbgDPTzi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Apr 2020 15:55:38 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id F228E80307C5;
+        Thu, 16 Apr 2020 19:55:33 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id q6t9JrujRUgw; Thu, 16 Apr 2020 22:55:33 +0300 (MSK)
+Date:   Thu, 16 Apr 2020 22:56:20 +0300
+From:   Sergey Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Rob Herring <robh@kernel.org>
+CC:     Sebastian Reichel <sre@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/4] dt-bindings: power: reset: Add regmap support to the
+ SYSCON reboot-mode bindings
+Message-ID: <20200416195620.4q6scqk5rqbonz4s@ubsrv2.baikal.int>
+References: <20200306130341.9585-1-Sergey.Semin@baikalelectronics.ru>
+ <20200306130402.1F4F0803079F@mail.baikalelectronics.ru>
+ <20200312211438.GA21883@bogus>
+ <20200313130231.wrvvcttm7ofaxbfo@ubsrv2.baikal.int>
+ <CAL_Jsq+W84r687zNV=2S-hj9=xbTQxkx9MpVNDTn6TOrBgiGUw@mail.gmail.com>
+ <20200331195053.dcexmhbsbnbfuabe@ubsrv2.baikal.int>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <001901d613a4$010e0a70$032a1f50$@net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200331195053.dcexmhbsbnbfuabe@ubsrv2.baikal.int>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
-Thanks for reviewing this patch.
-On Wed, Apr 15, 2020 at 09:03:34PM -0700, Doug Smythies wrote:
-> On 2020.04.15 05:57 Chen Yu wrote:
-> 
-> ...
-> 
-> > v2: According to Len's suggestion:
-> >    1. Enable the accumulated RAPL mechanism by default.
-> 
-> I am not a fan of this, but O.K.
-> 
-> >    2. Re-use the rapl_joule_counter_range to represent the
-> >       the timeout of periodical timer.
-> 
-> No, please no. It is too easy to still have an overflow.
-> 
-> ...
-> > +	/*
-> > +	 * A wraparound time is calculated early.
-> > +	 */
-> > +	its.it_interval.tv_sec = rapl_joule_counter_range;
-> 
-> Would this be o.K.?
-> 
-> +	its.it_interval.tv_sec = rapl_joule_counter_range / 2;
-> 
-This should be okay. I've checked the defination of TDP, and
-on a wiki page it has mentioned that[1]:
-"Some sources state that the peak power for a microprocessor
-is usually 1.5 times the TDP rating"
-although the defination of TDP varies, using 2 * TDP should
-be safe.
-> > +	its.it_interval.tv_nsec = 0;
-> 
-> The way it was sent, this patch set does not work.
-> It still overflows.
-> 
-> Example, sample time calculated to ensure overflow:
-> 
-> Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
-> 100.00  3500    3592125 80      9.72    0.12
-> 100.00  3500    3587391 79      9.77    0.12
-> 
-> Actual package watts was around 65.
-> 
-> However, if this additional patch is applied (I only fixed one of them):
-> 
-> doug@s18:~/temp-k-git/linux/tools/power/x86/turbostat$ git diff
-> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-> index 29fc4069f467..4d72d9be5209 100644
-> --- a/tools/power/x86/turbostat/turbostat.c
-> +++ b/tools/power/x86/turbostat/turbostat.c
-> @@ -1350,7 +1350,8 @@ delta_package(struct pkg_data *new, struct pkg_data *old)
-> 
->         old->gfx_mhz = new->gfx_mhz;
-> 
-> -       DELTA_WRAP32(new->energy_pkg, old->energy_pkg);
-> +/*     DELTA_WRAP32(new->energy_pkg, old->energy_pkg);  */
-> +       old->energy_pkg = new->energy_pkg - old->energy_pkg;
->         DELTA_WRAP32(new->energy_cores, old->energy_cores);
->         DELTA_WRAP32(new->energy_gfx, old->energy_gfx);
->         DELTA_WRAP32(new->energy_dram, old->energy_dram);
-> 
-> Then it seems to work.
-> 
-Nice catch, I did not realize that the energy_pkg field has
-already been converted into accumuted variable which does not
-need to consider the wrapping(64bit should be long enough for
-normal test cases).
+Rob,
+Any comment on my suggestion below?
 
-Thanks,
-Chenyu
-> Example:
+Regards,
+-Sergey
+
+On Tue, Mar 31, 2020 at 10:50:53PM +0300, Sergey Semin wrote:
+> On Wed, Mar 18, 2020 at 05:14:25PM -0600, Rob Herring wrote:
+> > On Fri, Mar 13, 2020 at 7:03 AM Sergey Semin
+> > <Sergey.Semin@baikalelectronics.ru> wrote:
+> > >
+> > > On Thu, Mar 12, 2020 at 04:14:38PM -0500, Rob Herring wrote:
+> > > > On Fri, Mar 06, 2020 at 04:03:40PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> > > > > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > > >
+> > > > > Optional regmap property will be used to refer to a syscon-controller
+> > > > > having a reboot tolerant register mapped.
+> > > >
+> > > > NAK. It should simply be a child node of the 'syscon-controller'.
+> > >
+> > > Hm, It's dilemma. The driver maintainer said ack, while you disagree.)
+> > > So the code change will be merged while the doc-part won't? Lets discuss then
+> > > to settle the issue.
+> > >
+> > > Why 'syscon-reboot' can be out of syscon-controller node, while
+> > > 'syscon-reboot-mode' can't?
+> > 
+> > Look at the history and you will see one was reviewed by DT
+> > maintainers and one wasn't.
+> > 
+> > > They both belong to the same usecase: save
+> > > cause id and reboot. So having similar properties-set and declaring their
+> > > nodes someplace nearby is natural.
+> > 
+> > Which is what I'm asking for. Where else in the tree does it make
+> > sense to locate the 'syscon-reboot-mode' node? Locate nodes where they
+> > logically belong.
+> > 
+> > > According to the driver 'syscon-reboot'
+> > > can't lack the regmap property because it's mandatory, while here you refuse
+> > > to have even optional support. Additionally in most of the cases the
+> > > 'syscon-reboot' nodes aren't declared as a child of a system controller
+> > > node. Why 'syscon-reboot-mode' can't work in a similar way?
+> > 
+> > There's plenty of bad or "don't follow current best practice" examples
+> > in the tree for all sorts of things. That is not a reason for doing
+> > something in a new binding or adding to an existing one.
+> > 
+> > Rob
 > 
-> doug@s15:~/temp-turbostat$ sudo ./turbostat --Summary --show Busy%,Bzy_MHz,PkgTmp,PkgWatt,GFXWatt,IRQ --interval 1200
-> ...
-> RAPL: 690 sec. Joule Counter Range, at 95 Watts
-> ...
-> Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
-> 100.00  3500    3592328 80      64.32   0.12
-> 100.00  3500    3595195 79      64.37   0.12
+> Alright. I see your point. What about I'd provide a sort of opposite
+> implementation? I could make the "regmap"-phandle reference being optional
+> in the !"syscon-reboot"! driver instead of adding the regmap-property
+> support to the "syscon-reboot-mode" driver. So if regmap property isn't
+> defined in the "syscon-reboot"-compatible node, the driver will try to
+> get a syscon regmap from the parental node as it's done in the
+> "syscon-reboot-mode" driver.
 > 
-> ... Doug
+> Seeing you think that regmap-property-based design is a bad practice in
+> this case, I also could mark the property as deprecated in the "syscon-reboot"
+> dt schema and print a warning from the "syscon-reboot" driver if one is defined.
 > 
+> What do you think?
 > 
+> Regards,
+> -Sergey
