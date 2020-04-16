@@ -2,113 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D50461ACAF5
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Apr 2020 17:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6161ACE5D
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Apr 2020 19:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729941AbgDPPmB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Apr 2020 11:42:01 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:35019 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395513AbgDPPl7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Apr 2020 11:41:59 -0400
-Received: by mail-ot1-f67.google.com with SMTP id e20so3455780otl.2;
-        Thu, 16 Apr 2020 08:41:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v2r2r7O0CFpemVMZF52M89j+FDaTZj9iicBxWLrdGKQ=;
-        b=cWxSd2WFCpFpPKJYhn5g9auh747t7vpQLWrKQiFns9euE2mwmJAxx4OswvcW1SJdNr
-         5pBjf6DV7dvZCsq/fSzoUVXlvHRMkSx5+4PlPcqxb8BQm35ojCCp0MlczkoZdT58Ta9L
-         BLYBbqLol5UHyDawboY8p67ytB3sBdgT3UQNQYdCNc4vftu64uKewgavnd19LZdU6PWA
-         R96S9mVXSX/WFaMjCeyPrONJ43dwpqq0/TAWr1f9VwP6OVDa3Bqix21AjhDx+GCjR7ck
-         uKHyl+TEPCjWd8upAIVIeBD/5m6jvkVL9UlByAYK3e+k1npepC+Ytb0Vcxb/mHfkUayd
-         wrNg==
-X-Gm-Message-State: AGi0PuYG8NhUrTEKoXVwKRBu6oI4hiyibXJJem/CiN5kOx3pT3FFcZ1v
-        l18MSUDnR7YzSGa3yYkHEEWvNbNvbGQtpZ1Q3RU=
-X-Google-Smtp-Source: APiQypKYmfqXSVukeSYfuQdxJzi/Fy9tusMoaZDOo2RFrsmXI9m1AdnnIuDy0Q/dp38vblR7AcNuNmt5u6ZjLa0nqSU=
-X-Received: by 2002:a9d:6ac8:: with SMTP id m8mr17036281otq.262.1587051718557;
- Thu, 16 Apr 2020 08:41:58 -0700 (PDT)
+        id S1729799AbgDPRFm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Apr 2020 13:05:42 -0400
+Received: from mga12.intel.com ([192.55.52.136]:7539 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730647AbgDPRFl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Apr 2020 13:05:41 -0400
+IronPort-SDR: ZtviEUcwAw04AQ6vGY2G6qGqhVhluMbOfUY9MOTyDKQ/HBJlrfEQCTppp6icNF6lCYwwlEBLwe
+ lgH+ydAGIQXQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 10:05:40 -0700
+IronPort-SDR: r2p37llV8oTWEX2XJNI4HUD191O2WCdTioOapylF9eDQt2rnWXEtqiqUUUL7PgwyfxBRBlAi4M
+ pxaUQq64DoUw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,391,1580803200"; 
+   d="scan'208";a="257290016"
+Received: from chenyu-office.sh.intel.com ([10.239.158.173])
+  by orsmga006.jf.intel.com with ESMTP; 16 Apr 2020 10:05:39 -0700
+Date:   Fri, 17 Apr 2020 01:06:11 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     'Len Brown' <lenb@kernel.org>,
+        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/3][v2] tools/power turbostat: Introduce functions to
+ accumulate RAPL consumption
+Message-ID: <20200416170611.GA23628@chenyu-office.sh.intel.com>
+References: <cover.1586782089.git.yu.c.chen@intel.com>
+ <db96fd31afd0ff65e4041665293b96c984e675bc.1586782089.git.yu.c.chen@intel.com>
+ <001901d613a4$010e0a70$032a1f50$@net>
 MIME-Version: 1.0
-References: <20200416054745.740-1-ggherdovich@suse.cz> <20200416054745.740-2-ggherdovich@suse.cz>
-In-Reply-To: <20200416054745.740-2-ggherdovich@suse.cz>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 16 Apr 2020 17:41:47 +0200
-Message-ID: <CAJZ5v0hypB1cYAis6+tg5_ckY6Z4-Xbif8ZUj5ZP+M9SFHM4fw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] x86, sched: Bail out of frequency invariance if base
- frequency is unknown
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Len Brown <lenb@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Doug Smythies <dsmythies@telus.net>,
-        Like Xu <like.xu@linux.intel.com>,
-        Neil Rickert <nwr10cst-oslnx@yahoo.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <001901d613a4$010e0a70$032a1f50$@net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 16, 2020 at 7:48 AM Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
->
-> Some hypervisors such as VMWare ESXi 5.5 advertise support for
-> X86_FEATURE_APERFMPERF but then fill all MSR's with zeroes. In particular,
-> MSR_PLATFORM_INFO set to zero tricks the code that wants to know the base
-> clock frequency of the CPU (highest non-turbo frequency), producing a
-> division by zero when computing the ratio turbo_freq/base_freq necessary
-> for frequency invariant accounting.
->
-> It is to be noted that even if MSR_PLATFORM_INFO contained the appropriate
-> data, APERF and MPERF are constantly zero on ESXi 5.5, thus freq-invariance
-> couldn't be done in principle (not that it would make a lot of sense in a
-> VM anyway). The real problem is advertising X86_FEATURE_APERFMPERF. This
-> appears to be fixed in more recent versions: ESXi 6.7 doesn't advertise
-> that feature.
->
-> Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
-> Fixes: 1567c3e3467c ("x86, sched: Add support for frequency invariance")
+Hi Doug,
+Thanks for reviewing this patch.
+On Wed, Apr 15, 2020 at 09:03:34PM -0700, Doug Smythies wrote:
+> On 2020.04.15 05:57 Chen Yu wrote:
+> 
+> ...
+> 
+> > v2: According to Len's suggestion:
+> >    1. Enable the accumulated RAPL mechanism by default.
+> 
+> I am not a fan of this, but O.K.
+> 
+> >    2. Re-use the rapl_joule_counter_range to represent the
+> >       the timeout of periodical timer.
+> 
+> No, please no. It is too easy to still have an overflow.
+> 
+> ...
+> > +	/*
+> > +	 * A wraparound time is calculated early.
+> > +	 */
+> > +	its.it_interval.tv_sec = rapl_joule_counter_range;
+> 
+> Would this be o.K.?
+> 
+> +	its.it_interval.tv_sec = rapl_joule_counter_range / 2;
+> 
+This should be okay. I've checked the defination of TDP, and
+on a wiki page it has mentioned that[1]:
+"Some sources state that the peak power for a microprocessor
+is usually 1.5 times the TDP rating"
+although the defination of TDP varies, using 2 * TDP should
+be safe.
+> > +	its.it_interval.tv_nsec = 0;
+> 
+> The way it was sent, this patch set does not work.
+> It still overflows.
+> 
+> Example, sample time calculated to ensure overflow:
+> 
+> Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
+> 100.00  3500    3592125 80      9.72    0.12
+> 100.00  3500    3587391 79      9.77    0.12
+> 
+> Actual package watts was around 65.
+> 
+> However, if this additional patch is applied (I only fixed one of them):
+> 
+> doug@s18:~/temp-k-git/linux/tools/power/x86/turbostat$ git diff
+> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+> index 29fc4069f467..4d72d9be5209 100644
+> --- a/tools/power/x86/turbostat/turbostat.c
+> +++ b/tools/power/x86/turbostat/turbostat.c
+> @@ -1350,7 +1350,8 @@ delta_package(struct pkg_data *new, struct pkg_data *old)
+> 
+>         old->gfx_mhz = new->gfx_mhz;
+> 
+> -       DELTA_WRAP32(new->energy_pkg, old->energy_pkg);
+> +/*     DELTA_WRAP32(new->energy_pkg, old->energy_pkg);  */
+> +       old->energy_pkg = new->energy_pkg - old->energy_pkg;
+>         DELTA_WRAP32(new->energy_cores, old->energy_cores);
+>         DELTA_WRAP32(new->energy_gfx, old->energy_gfx);
+>         DELTA_WRAP32(new->energy_dram, old->energy_dram);
+> 
+> Then it seems to work.
+> 
+Nice catch, I did not realize that the energy_pkg field has
+already been converted into accumuted variable which does not
+need to consider the wrapping(64bit should be long enough for
+normal test cases).
 
-Please feel free to add
-
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-to all patches in the series and I'm expecting them to be routed through tip.
-
-Thanks!
-
-> ---
->  arch/x86/kernel/smpboot.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index fe3ab9632f3b..3a318ec9bc17 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1985,6 +1985,15 @@ static bool intel_set_max_freq_ratio(void)
->         return false;
->
->  out:
-> +       /*
-> +        * Some hypervisors advertise X86_FEATURE_APERFMPERF
-> +        * but then fill all MSR's with zeroes.
-> +        */
-> +       if (!base_freq) {
-> +               pr_debug("Couldn't determine cpu base frequency, necessary for scale-invariant accounting.\n");
-> +               return false;
-> +       }
-> +
->         arch_turbo_freq_ratio = div_u64(turbo_freq * SCHED_CAPACITY_SCALE,
->                                         base_freq);
->         arch_set_max_freq_ratio(turbo_disabled());
-> --
-> 2.16.4
->
+Thanks,
+Chenyu
+> Example:
+> 
+> doug@s15:~/temp-turbostat$ sudo ./turbostat --Summary --show Busy%,Bzy_MHz,PkgTmp,PkgWatt,GFXWatt,IRQ --interval 1200
+> ...
+> RAPL: 690 sec. Joule Counter Range, at 95 Watts
+> ...
+> Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
+> 100.00  3500    3592328 80      64.32   0.12
+> 100.00  3500    3595195 79      64.37   0.12
+> 
+> ... Doug
+> 
+> 
