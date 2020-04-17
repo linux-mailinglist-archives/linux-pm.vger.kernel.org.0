@@ -2,96 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD7B1AD90F
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Apr 2020 10:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B421ADA9A
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Apr 2020 11:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730034AbgDQIu4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Apr 2020 04:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729949AbgDQIu1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Apr 2020 04:50:27 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96465C061A0C;
-        Fri, 17 Apr 2020 01:50:27 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id j2so2092153wrs.9;
-        Fri, 17 Apr 2020 01:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=U1xmMluktHzlM1NHImtN6fu8B+63KJSJdW/amOIZcZQ=;
-        b=sJ4OMOgLzl0LD2rp3+h0uF22ob9fCFsZeGskB9gVeeCCvxJEyRplsDwqoRevOGWqve
-         po32fK/b2jDw10opRqMsrgK68kUsCcepe0aMhIweZ0h8zXXN/uJFxX9zRhDlTyqTJsHN
-         wqn9eoxfmmmOgNSn48O3TDdy18xhKK8CBtaueibg7mqcW7ptJhXZA7XIyVtF5JF15cPA
-         wZILJMCo1D595AXJT+2cQnK084+T690u1FiNCN5z3ter9tlSqwTvuvrxTUKfYcH8DJZk
-         c5A6xky0x2JglGBbPreiXrJft6kCF6k1U8en7VltMH4GvARrbuUn142d+4ROEiO9X2Bc
-         6Dkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=U1xmMluktHzlM1NHImtN6fu8B+63KJSJdW/amOIZcZQ=;
-        b=Iy618uItsScWh+s8A5Vx+tHelw7tfQ3pAy71frFFsOZ3pDbzBgYE5IKvsj9+3FTOOq
-         wwD/uHZ9AltW1xHtf+CuO097mGU4DgwpBkK2qXzqwF627ixpk4+A0HxXlrw4+mm7J5+b
-         MUZ9ejiA9wIqcjSP/sA7x6AWa534+EWo254YCzGinE8xq29glCzANOg2FYjyP4goVO3b
-         rS8AUaRc99KwfDCmIieDZSgnFRSCeD0mavOnAVv3jurnInngPI8fIAmHjqjREcoJxvoY
-         +7jsu2i0fr14n1Fk/JKtVhVK44khoCucp7+gr4GDGwr7PHRcvIaCu3K0A/20H6DTJKtN
-         4s4Q==
-X-Gm-Message-State: AGi0PuaPYskI8GOZEglGQGjbVN+0tZbP2dO1BeRT8yQigwc+Sv83rLiS
-        Zu8gaNIq43GJ9VQ8BS1rOJI=
-X-Google-Smtp-Source: APiQypJuv+sq0bF2eNkKo6NH7aK7IZZYZcqmgUTqDrAqE8NWB2MGlU5GlWDJBdXMNZmFD+sT//GZzw==
-X-Received: by 2002:adf:dfc2:: with SMTP id q2mr2963313wrn.390.1587113426255;
-        Fri, 17 Apr 2020 01:50:26 -0700 (PDT)
-Received: from localhost.localdomain (p5B3F7443.dip0.t-ipconnect.de. [91.63.116.67])
-        by smtp.gmail.com with ESMTPSA id l5sm6807527wmi.22.2020.04.17.01.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2020 01:50:25 -0700 (PDT)
-From:   Saravanan Sekar <sravanhome@gmail.com>
-To:     lee.jones@linaro.org, andy.shevchenko@gmail.com,
-        robh+dt@kernel.org, jic23@kernel.org, knaack.h@gmx.de,
-        lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
-        Saravanan Sekar <sravanhome@gmail.com>
-Subject: [PATCH v10 6/6] MAINTAINERS: Add entry for mp2629 Battery Charger driver
-Date:   Fri, 17 Apr 2020 10:50:03 +0200
-Message-Id: <20200417085003.6124-7-sravanhome@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200417085003.6124-1-sravanhome@gmail.com>
-References: <20200417085003.6124-1-sravanhome@gmail.com>
+        id S1727840AbgDQJ6A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Apr 2020 05:58:00 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:55670 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726712AbgDQJ6A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Apr 2020 05:58:00 -0400
+Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id 58873dd5037093b4; Fri, 17 Apr 2020 11:57:56 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+Date:   Fri, 17 Apr 2020 11:57:55 +0200
+Message-ID: <2040116.cccRbkeLkK@kreacher>
+In-Reply-To: <Pine.LNX.4.44L0.2004161036410.14937-100000@netrider.rowland.org>
+References: <Pine.LNX.4.44L0.2004161036410.14937-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add MAINTAINERS entry for Monolithic Power Systems mp2629 Charger driver.
+On Thursday, April 16, 2020 5:18:15 PM CEST Alan Stern wrote:
+> Thanks for all your help straightening this out.  I think the end 
+> result will be a distinct improvement over the old code.
 
-Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
----
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
+Yes, I believe so.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 32a95d162f06..0f82d5a7a614 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11358,10 +11358,15 @@ F:	drivers/tty/mxser.*
- MONOLITHIC POWER SYSTEM PMIC DRIVER
- M:	Saravanan Sekar <sravanhome@gmail.com>
- S:	Maintained
-+F:	Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
- F:	Documentation/devicetree/bindings/regulator/mps,mp*.yaml
-+F:	drivers/iio/adc/mp2629_adc.c
-+F:	drivers/mfd/mp2629.c
-+F:	drivers/power/supply/mp2629_charger.c
- F:	drivers/regulator/mp5416.c
- F:	drivers/regulator/mpq7920.c
- F:	drivers/regulator/mpq7920.h
-+F:	include/linux/mfd/mp2629.h
- 
- MR800 AVERMEDIA USB FM RADIO DRIVER
- M:	Alexey Klimov <klimov.linux@gmail.com>
--- 
-2.17.1
+> On Thu, 16 Apr 2020, Rafael J. Wysocki wrote:
+> 
+> > This means that the dev_pm_skip_resume() logic really is relatively
+> > straightforward:
+> >  - If the current transition is RESTORE, return "false".
+> >  - Otherwise, if the current transition is THAW, return the return value
+> >    of dev_pm_skip_suspend().
+> >  - Otherwise (so the current transition is RESUME which is the only remaining
+> >    case), return the logical negation of power.must_resume.
+> > 
+> > > Also, it would mean 
+> > > that a device whose subsystem doesn't know about power.may_skip_resume 
+> > > would never be allowed to stay in runtime suspend.
+> > 
+> > Not really, because I want the core to set power.may_skip_resume for the
+> > devices for which dev_pm_skip_suspend() returns "true" if the "suspend_late"
+> > subsystem-level callback is not present.  [It might be more consistent
+> > to simply set it for all devices for which dev_pm_skip_suspend() returns
+> > "true" and let the subsystems update it should they want to?  IOW, the
+> > default value of power.may_skip_resume could be the return value of
+> > dev_pm_skip_suspend()?]
+> 
+> How about this?  Let's set power.may_skip_resume to "true" for each
+> device before issuing ->prepare.
+
+Yes, it can be set to 'true' by default for all devices.
+
+It doesn't need to be before ->prepare, it can be before ->suspend (as it
+is now).
+
+> The subsystem can set it to "false"
+> if it wants to during any of the suspend-side callbacks.  Following the
+> ->suspend_noirq callback, the core will do the equivalent of:
+> 
+> 	dev->power.may_skip_resume &= dev_pm_skip_suspend(dev);
+> 
+> before propagating the flag.  Any subsystem changes to support this
+> should be minimal, since only ACPI and PCI currently use
+> may_skip_resume.
+
+IMO it can be simpler even.
+
+Because power.may_skip_resume is taken into account along with
+MAY_SKIP_RESUME and the driver setting the latter must be prepared
+for skipping its resume callbacks regardless of the suspend side of
+things, they may always be skipped (and the device may be left in
+suspend accordingly) if there is a reason to avoid doing that.
+
+The core doesn't know about those reasons, so it has no reason to
+touch power.may_skip_resume after setting it at the outset and then
+whoever sees a reason why these callbacks should run (the subsystem
+or the driver) needs to clear power.may_skip_resume (and clearing it
+more than once obviously makes no difference).
+
+> > > What about the runtime PM usage counter?
+> > 
+> > Yes, it applies to that too.
+> > 
+> > Of course, if dev_pm_skip_suspend() returns "true", the usage counter cannot
+> > be greater than 1 (for the given device as well as for any dependent devices).
+> 
+> Well, in theory the subsystem could call pm_runtime_get_noresume().  I 
+> can't imagine why it would want to, though.
+
+Indeed.
+
+> So here's what we've got:
+> 
+> > > Transition   Conditions for dev_pm_skip_resume() to return "true"
+> > > ----------   ----------------------------------------------------
+> > > 
+> > > RESTORE      Never
+> > 
+> > Right.
+> 
+> >  THAW	         dev_pm_skip_suspend() returns "true".
+> 
+> >  RESUME        power.must_resume is clear (which requires
+> >                  MAY_SKIP_RESUME and power.may_skip_resume to be set and
+> >                  the runtime usage counter to be = 1, and which 
+> >                  propagates up from dependent devices)
+> > 
+> > Nothing else is really strictly required IMO.
+> 
+> This seems very clear and simple.  And I will repeat here some of the 
+> things posted earlier, to make the description more complete:
+> 
+> 	During the suspend side, for each of the
+> 	{suspend,freeze,poweroff}_{late,noirq} phases: If
+> 	dev_pm_skip_suspend() returns true then the subsystem should
+> 	not invoke the driver's callback, and if there is no subsystem
+> 	callback then the core will not invoke the driver's callback.
+> 
+> 	During the resume side, for each of the
+> 	{resume,thaw,restore}_{early,noirq} phases: If
+> 	dev_pm_skip_resume() returns true then the subsystem should
+> 	not invoke the driver's callback, and if there is no subsystem
+> 	callback then the core will not invoke the driver's callback.
+> 
+> 	dev_pm_skip_suspend() will return "true" if SMART_SUSPEND is
+> 	set and the device's runtime status is "suspended".
+> 
+> 	For dev_pm_skip_resume() and power.must_resume, see above.
+> 
+> 	At the start of the {resume,thaw,restore}_noirq phase, if
+> 	dev_pm_skip_resume() returns true then the core will set the
+> 	runtime status to "suspended".  Otherwise it will set the
+> 	runtime status to "active".  If this is not what the subsystem
+> 	or driver wants, it must update the runtime status itself.
+> 
+> For this to work properly, we will have to rely on subsystems/drivers
+> to call pm_runtime_resume() during the suspend/freeze transition if
+> SMART_SUSPEND is clear.
+
+That has been the case forever, though.
+
+> Otherwise we could have the following scenario:
+> 
+> Device A has a child B, and both are runtime suspended when hibernation
+> starts.  Suppose that the SMART_SUSPEND flag is set for A but not for
+> B, and suppose that B's subsystem/driver neglects to call
+> pm_runtime_resume() during the FREEZE transition.  Then during the THAW
+> transition, dev_pm_skip_resume() will return "true" for A and "false"  
+> for B.  This will lead to an error when the core tries to set B's
+> runtime status to "active" while A's status is "suspended".
+> 
+> One way to avoid this is to have the core make the pm_runtime_resume()  
+> call, but you have said that you don't like that approach.  Any 
+> suggestions?
+
+Because the core has not been calling pm_runtime_resume() during system-wide
+suspend for devices with SMART_SUSPEND clear, that should not be changed or
+we'll see regressions.
+
+I know for a fact that some drivers expect the core to be doing nothing
+with respect to that.
+
+> Should the core take some special action following ->freeze_noirq if
+> the runtime status is "suspended" and SMART_SUSPEND is clear?
+
+Again, anything like that would change the current behavior which may
+not be expected by at least some drivers, so I wouldn't change that.
+
+IOW, SMART_SUSPEND clear means to the core that *it* need not care about
+the suspend side at all (because somebody else will do that).
+
+
 
