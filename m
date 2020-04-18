@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C251AEE80
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Apr 2020 16:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936B41AF123
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Apr 2020 16:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726447AbgDRONA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Apr 2020 10:13:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37562 "EHLO mail.kernel.org"
+        id S1728585AbgDROyx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Apr 2020 10:54:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50558 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726701AbgDROJw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 18 Apr 2020 10:09:52 -0400
+        id S1727965AbgDROl1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 18 Apr 2020 10:41:27 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 090F722264;
-        Sat, 18 Apr 2020 14:09:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 26E2222244;
+        Sat, 18 Apr 2020 14:41:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587218991;
+        s=default; t=1587220886;
         bh=+J1rnpev1mWG2DjbDUlUXV/sV3CYW4t3iOt9gosTfsA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wv2GtNodjhZm3Fwe99Saj4vESyde3uAKIE7+DxAd70KViU97O6AD/3IW21ZhzPfXo
-         ns4Hltrnv+6aPg19gpjKMlILg3uI9KLWS3ZtjQ2jozcMIHNOf0q1tpeOeEyR+VL+/o
-         zpQM7vN8C/tuUIq3y1qZLSNs8RbCAki/yQzGss0k=
+        b=HzkVAYVHyEjxHHN7InZPFuDhOKPqz3D5WC3LYA3ErKCETDSIy7qJ+/06YRTeYXHXZ
+         SPXpsHieXdGpDTF5I7r+y8bnotPQ9UKA0JLPyl7AbqjeTa0dxIeL+Cl6l7X4uV3vj6
+         7VqAfRWEvsA0LzFfRXVXazhOHOZ03fPf3Oif/168=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Karol Herbst <kherbst@redhat.com>,
@@ -34,12 +34,12 @@ Cc:     Karol Herbst <kherbst@redhat.com>,
         dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
         Ben Skeggs <bskeggs@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.5 32/75] drm/nouveau: workaround runpm fail by disabling PCI power management on certain intel bridges
-Date:   Sat, 18 Apr 2020 10:08:27 -0400
-Message-Id: <20200418140910.8280-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 30/78] drm/nouveau: workaround runpm fail by disabling PCI power management on certain intel bridges
+Date:   Sat, 18 Apr 2020 10:39:59 -0400
+Message-Id: <20200418144047.9013-30-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200418140910.8280-1-sashal@kernel.org>
-References: <20200418140910.8280-1-sashal@kernel.org>
+In-Reply-To: <20200418144047.9013-1-sashal@kernel.org>
+References: <20200418144047.9013-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
