@@ -2,93 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB411AFAF6
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Apr 2020 15:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 648551AFB52
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Apr 2020 16:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726409AbgDSNu5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Sun, 19 Apr 2020 09:50:57 -0400
-Received: from piie.net ([80.82.223.85]:49180 "EHLO piie.net"
+        id S1726036AbgDSOTE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Apr 2020 10:19:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40808 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726105AbgDSNu4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 19 Apr 2020 09:50:56 -0400
-Received: from mail.piie.net (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
-        (Client did not present a certificate)
-        by piie.net (Postfix) with ESMTPSA id BC23C1613;
-        Sun, 19 Apr 2020 15:50:35 +0200 (CEST)
-Mime-Version: 1.0
-Date:   Sun, 19 Apr 2020 13:50:35 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: RainLoop/1.11.3
-From:   "=?utf-8?B?UGV0ZXIgS8Okc3RsZQ==?=" <peter@piie.net>
-Message-ID: <a3f6a008696d87acb67db06c21eb600d@piie.net>
-Subject: Re: [RFC v3 1/2] thermal: core: Let thermal zone device's mode be
- stored in its struct
-To:     "Andrzej Pietrasiewicz" <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org
-Cc:     "Zhang Rui" <rui.zhang@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        "Len Brown" <lenb@kernel.org>, "Jiri Pirko" <jiri@mellanox.com>,
-        "Ido Schimmel" <idosch@mellanox.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Darren Hart" <dvhart@infradead.org>,
-        "Andy Shevchenko" <andy@infradead.org>,
-        "Support Opensource" <support.opensource@diasemi.com>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        "Amit Kucheria" <amit.kucheria@verdurent.com>,
-        "Shawn Guo" <shawnguo@kernel.org>,
-        "Sascha Hauer" <s.hauer@pengutronix.de>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Fabio Estevam" <festevam@gmail.com>,
-        "NXP Linux Team" <linux-imx@nxp.com>,
-        "Allison Randal" <allison@lohutok.net>,
-        "Enrico Weigelt" <info@metux.net>,
-        "Gayatri Kammela" <gayatri.kammela@intel.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        "Barlomiej Zolnierkiewicz" <b.zolnierkie@samsung.com>
-In-Reply-To: <20200417162020.19980-2-andrzej.p@collabora.com>
-References: <20200417162020.19980-2-andrzej.p@collabora.com>
- <9ac3b37a-8746-b8ee-70e1-9c876830ac83@linaro.org>
- <20200417162020.19980-1-andrzej.p@collabora.com>
+        id S1725905AbgDSOTE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 19 Apr 2020 10:19:04 -0400
+Received: from localhost (unknown [213.57.247.131])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 08206214AF;
+        Sun, 19 Apr 2020 14:19:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587305943;
+        bh=HGGxwLDnLH3qBDS3TOfoWeiAb1IBnNmSSrucnC+YpY4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=wgZer+L0X/9tLbkf2Hnm+en6Yx73tH9RBpDzlz5WjPLE0ghDarParNoFmXH2p98w1
+         6g+pno0FKZ/bQ3iXbgL41BpeTgBNNpnJDyRjjGOiBzZCFCYl+VeW9w/DC0kMC8EQah
+         MMYG8607eDHxDRLE47wZwZzeFIEoNBB6/5mPjqFg=
+From:   Leon Romanovsky <leon@kernel.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Leon Romanovsky <leonro@mellanox.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Borislav Petkov <bp@suse.de>, Ion Badulescu <ionut@badula.org>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>, netdev@vger.kernel.org,
+        oss-drivers@netronome.com, Salil Mehta <salil.mehta@huawei.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Shannon Nelson <snelson@pensando.io>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>
+Subject: [PATCH net-next v2 0/4] Remove vermagic header from global include folder
+Date:   Sun, 19 Apr 2020 17:18:46 +0300
+Message-Id: <20200419141850.126507-1-leon@kernel.org>
+X-Mailer: git-send-email 2.25.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-17. April 2020 18:20, "Andrzej Pietrasiewicz" <andrzej.p@collabora.com> schrieb:
+From: Leon Romanovsky <leonro@mellanox.com>
 
-> Thermal zone devices' mode is stored in individual drivers. This patch
-> changes it so that mode is stored in struct thermal_zone_device instead.
-> 
-> As a result all driver-specific variables storing the mode are not needed
-> and are removed. Consequently, the get_mode() implementations have nothing
-> to operate on and need to be removed, too.
-> 
-> Some thermal framework specific functions are introduced:
-> 
-> thermal_zone_device_get_mode()
-> thermal_zone_device_set_mode()
-> thermal_zone_device_enable()
-> thermal_zone_device_disable()
-> 
-> thermal_zone_device_get_mode() and its "set" counterpart take tzd's lock
-> and the "set" calls driver's set_mode() if provided, so the latter must
-> not take this lock again. At the end of the "set"
-> thermal_zone_device_update() is called so drivers don't need to repeat this
-> invocation in their specific set_mode() implementations.
-> 
-> The scope of the above 4 functions is purposedly limited to the thermal
-> framework and drivers are not supposed to call them. This encapsulation
-> does not fully work at the moment for some drivers, though:
-> 
-> - platform/x86/acerhdf.c
+Changelog:
+v2:
+ * Changed the implementation of patch #4 to be like Masahiro wants.
+I personally don't like this implementation and changing it just to move forward
+this this patchset.
+v1:
+https://lore.kernel.org/lkml/20200415133648.1306956-1-leon@kernel.org
+ * Added tags
+ * Updated patch #4 with test results
+ * Changed scripts/mod/modpost.c to create inclusion of vermagic.h
+   from kernel folder and not from general include/linux. This is
+   needed to generate *.mod.c files, while building modules.
+v0:
+https://lore.kernel.org/lkml/20200414155732.1236944-1-leon@kernel.org
+----------------------------------------------------------------------------
 
-Acked-by: Peter Kaestle <peter@piie.net>
+Hi,
 
-[...]
+This is followup to the failure reported by Borislav [1] and suggested
+fix later on [2].
 
--- 
---peter;
+The series removes all includes of linux/vermagic.h, updates hns and
+nfp to use same kernel versioning scheme (exactly like we did for
+other drivers in previous cycle) and removes vermagic.h from global
+include folder.
+
+[1] https://lore.kernel.org/lkml/20200411155623.GA22175@zn.tnic
+[2] https://lore.kernel.org/lkml/20200413080452.GA3772@zn.tnic
+
+------------------------------------------------------------
+1. Honestly, I have no idea if it can go to net-rc, clearly not all my
+patches are fixes, so I'm sending them to the net-next.
+2. Still didn't get response from kbuild, but it passed my own
+compilation tests.
+https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git/log/?h=vermagic
+
+Thanks
+
+Leon Romanovsky (4):
+  drivers: Remove inclusion of vermagic header
+  net/hns: Remove custom driver version in favour of global one
+  net/nfp: Update driver to use global kernel version
+  kernel/module: Hide vermagic header file from general use
+
+ drivers/net/bonding/bonding_priv.h                   | 2 +-
+ drivers/net/ethernet/3com/3c509.c                    | 1 -
+ drivers/net/ethernet/3com/3c515.c                    | 1 -
+ drivers/net/ethernet/adaptec/starfire.c              | 1 -
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c      | 3 ---
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.h      | 4 ----
+ drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c   | 4 ----
+ drivers/net/ethernet/netronome/nfp/nfp_main.c        | 3 ---
+ drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c | 2 --
+ drivers/net/ethernet/pensando/ionic/ionic_main.c     | 2 +-
+ drivers/power/supply/test_power.c                    | 2 +-
+ include/linux/vermagic.h                             | 5 +++++
+ kernel/module.c                                      | 3 +++
+ net/ethtool/ioctl.c                                  | 3 +--
+ scripts/mod/modpost.c                                | 1 +
+ 15 files changed, 13 insertions(+), 24 deletions(-)
+
+--
+2.25.2
+
