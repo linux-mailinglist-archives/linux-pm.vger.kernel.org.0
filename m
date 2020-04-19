@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2118D1AFC54
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Apr 2020 19:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209421AFC56
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Apr 2020 19:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725932AbgDSRIS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Apr 2020 13:08:18 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:43637 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726582AbgDSRIS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Apr 2020 13:08:18 -0400
-Received: by mail-ot1-f66.google.com with SMTP id g14so5954670otg.10;
-        Sun, 19 Apr 2020 10:08:17 -0700 (PDT)
+        id S1726636AbgDSRIV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Apr 2020 13:08:21 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:36534 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726613AbgDSRIV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Apr 2020 13:08:21 -0400
+Received: by mail-oi1-f194.google.com with SMTP id s202so6772111oih.3;
+        Sun, 19 Apr 2020 10:08:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=J4W1MOddjCCw9dJQYLiEdJO8bx77R5HtOxEd/Z5DPRs=;
-        b=dG+WO6E7anSCss5mEEnTN7NJVeuVofNwCgYn7tNI+xTsFZKzZR/CT5OIh/LbAR3nx2
-         /mEA+U5/x4CSfTLi++D6jojfO3nGVZXZ+Q/lKTAve38RF2mQPb/q9Nk4JjbMXPP/aEJz
-         aQ9BkVD+8Rq9Bjuw2MKBIWEpvdXS4GgV8sBx9MpyYBoOrX70Sb3ZfPZUmhkXqRBZRg+p
-         8KO2l+O8cbGppYhbYXhy7DktE3xhVbEfwZAEQcqe3stYNpr7UjPoRUQBHjfHBWydh129
-         oASC//RA/0vUFW/n1g3lM6cX5ASMQg0SP3GEA975cFWrDq6PSKIK5s2uocBVPz7cLPxP
-         KirQ==
-X-Gm-Message-State: AGi0Puaspczsl0XQ0IygxACza2ng7uCUyFzzkGpMn5M3cUEfd8i8Iy8d
-        OcpLejX5wcUfbAwUqmY5vw==
-X-Google-Smtp-Source: APiQypK0fJJhWegtefihZ3xqlHSSIU1Y4BN4GM5zgOcJ5aHxuge40tlIXHFeRHdB9gUqefM8BlqeQw==
-X-Received: by 2002:a9d:423:: with SMTP id 32mr6922257otc.334.1587316097257;
-        Sun, 19 Apr 2020 10:08:17 -0700 (PDT)
+        bh=rkm1yVQrueouMlMynX/IUSbPHuMCnuzEP4ZMzc2uSk4=;
+        b=uLKWkiKig45Yrm6j5rcm4kw8g8GkGBO9vaVp/IB2s9DaGJxzWBlo75Rn7Tb0syveQA
+         /47m//9XRJeqow79FXWI9mPpvK1TnDcwRlhWX71c3i9bAAuz+Cm8n0Mb7sfVXNntv9Gv
+         7vKWvKQIksstshLQmo1J7yVQ8/Y4tjtuYBSLMgVwsDFsOMuyA3EckOeIJGEO+EMNmWtk
+         bf1deNuGIfRvG9xRy/liMHW2yoHmdKYGFhJLrzwfIJMHAJsu/TLNQbCBV600xC3EgaM9
+         PGazcj86bmjT9uI6zGMfdgkn37glAFQiAxgWYQJyDx7U2xX8oF9AxJ4zUiaY6lDs/nxj
+         WrcA==
+X-Gm-Message-State: AGi0PuaKiBgzMKOu/dAbmzn76+bv/97I4S9bOiT2JIAjYQM1pT+NJfhz
+        q58aNTql9sIWcTh8P50ezA==
+X-Google-Smtp-Source: APiQypLVQEjKhtfaW8eTl7YjGxsB7Qz3p8JXmiFRCoXKab90R013s1nz5LZs7Fjm2ta59f95TNmGeQ==
+X-Received: by 2002:aca:f254:: with SMTP id q81mr8228410oih.12.1587316098741;
+        Sun, 19 Apr 2020 10:08:18 -0700 (PDT)
 Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.googlemail.com with ESMTPSA id u205sm9661938oia.37.2020.04.19.10.08.16
+        by smtp.googlemail.com with ESMTPSA id u205sm9661938oia.37.2020.04.19.10.08.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Apr 2020 10:08:16 -0700 (PDT)
+        Sun, 19 Apr 2020 10:08:18 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Liviu Dudau <liviu.dudau@arm.com>,
@@ -47,9 +47,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Kevin Brodsky <Kevin.Brodsky@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH 03/17] arm64: vexpress: Don't select CONFIG_VEXPRESS_CONFIG
-Date:   Sun, 19 Apr 2020 12:07:56 -0500
-Message-Id: <20200419170810.5738-4-robh@kernel.org>
+Subject: [PATCH 04/17] power/reset: vexpress: Support building as a module
+Date:   Sun, 19 Apr 2020 12:07:57 -0500
+Message-Id: <20200419170810.5738-5-robh@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200419170810.5738-1-robh@kernel.org>
 References: <20200419170810.5738-1-robh@kernel.org>
@@ -60,8 +60,7 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CONFIG_VEXPRESS_CONFIG has 'default y if ARCH_VEXPRESS', so selecting is
-unnecessary. It also prevents setting CONFIG_VEXPRESS_CONFIG to a module.
+Enable building the VExpress power-off/reset driver as a module.
 
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
@@ -69,23 +68,59 @@ Cc: Liviu Dudau <liviu.dudau@arm.com>
 Cc: Sudeep Holla <sudeep.holla@arm.com>
 Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/arm64/Kconfig.platforms | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/power/reset/Kconfig             |  2 +-
+ drivers/power/reset/vexpress-poweroff.c | 10 ++++------
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 9c084f995e0f..5c38dc56b808 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -278,7 +278,6 @@ config ARCH_VEXPRESS
- 	select GPIOLIB
- 	select PM
- 	select PM_GENERIC_DOMAINS
--	select VEXPRESS_CONFIG
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index 890380302080..0ba18221ba40 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -182,7 +182,7 @@ config POWER_RESET_VERSATILE
+ 	  reference boards.
+ 
+ config POWER_RESET_VEXPRESS
+-	bool "ARM Versatile Express power-off and reset driver"
++	tristate "ARM Versatile Express power-off and reset driver"
+ 	depends on ARM || ARM64
+ 	depends on VEXPRESS_CONFIG
  	help
- 	  This enables support for the ARMv8 software model (Versatile
- 	  Express).
+diff --git a/drivers/power/reset/vexpress-poweroff.c b/drivers/power/reset/vexpress-poweroff.c
+index 90cbaa8341e3..8a6d3add894c 100644
+--- a/drivers/power/reset/vexpress-poweroff.c
++++ b/drivers/power/reset/vexpress-poweroff.c
+@@ -5,6 +5,7 @@
+  */
+ 
+ #include <linux/delay.h>
++#include <linux/module.h>
+ #include <linux/notifier.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+@@ -87,6 +88,7 @@ static const struct of_device_id vexpress_reset_of_match[] = {
+ 	},
+ 	{}
+ };
++MODULE_DEVICE_TABLE(of, vexpress_reset_of_match);
+ 
+ static int _vexpress_register_restart_handler(struct device *dev)
+ {
+@@ -145,9 +147,5 @@ static struct platform_driver vexpress_reset_driver = {
+ 		.of_match_table = vexpress_reset_of_match,
+ 	},
+ };
+-
+-static int __init vexpress_reset_init(void)
+-{
+-	return platform_driver_register(&vexpress_reset_driver);
+-}
+-device_initcall(vexpress_reset_init);
++module_platform_driver(vexpress_reset_driver);
++MODULE_LICENSE("GPL v2");
 -- 
 2.20.1
 
