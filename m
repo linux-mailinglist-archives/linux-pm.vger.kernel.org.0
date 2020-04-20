@@ -2,33 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C39371B0FEE
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 17:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D304A1B0FF7
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 17:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726495AbgDTPYQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Apr 2020 11:24:16 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:47427 "EHLO
+        id S1725988AbgDTP0X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Apr 2020 11:26:23 -0400
+Received: from mout.kundenserver.de ([212.227.17.10]:34783 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726123AbgDTPYP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 11:24:15 -0400
-Received: from mail-qk1-f179.google.com ([209.85.222.179]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1M7s1M-1jMgOK1FWU-0050zR; Mon, 20 Apr 2020 17:24:14 +0200
-Received: by mail-qk1-f179.google.com with SMTP id s63so10975278qke.4;
-        Mon, 20 Apr 2020 08:24:14 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZsJt8Fl7eYK679DOTwiwgTO5eVvkPF9lLMDY8c/zPJPd+KoKtb
-        bEEO5xVvJ0fIagRZzYezB1N7FkJh9M7SjT2saUE=
-X-Google-Smtp-Source: APiQypJV6xCjJW3pYFBvIcq7CTKExcpEBGxZ7QSKktdgf68SWm1bP3Q+o1tJP+dpWf2jPXgW39nU0qV/m1IkXlbgPko=
-X-Received: by 2002:a37:851:: with SMTP id 78mr16828527qki.352.1587396253107;
- Mon, 20 Apr 2020 08:24:13 -0700 (PDT)
+        with ESMTP id S1725971AbgDTP0W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 11:26:22 -0400
+Received: from mail-qv1-f42.google.com ([209.85.219.42]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MplPf-1irye93rfJ-00q7k1; Mon, 20 Apr 2020 17:26:21 +0200
+Received: by mail-qv1-f42.google.com with SMTP id h6so1328804qvz.8;
+        Mon, 20 Apr 2020 08:26:20 -0700 (PDT)
+X-Gm-Message-State: AGi0PubZcE35yq1DF5oySJFcJtRxYr/qNEaeAYdwtkxYYB9c8WXPxfCm
+        ZbZgMJ9WnN4WzSV1z6qgvCriQH9HY7EyB8n+6tM=
+X-Google-Smtp-Source: APiQypJv5lK+3PbfI3zap38BiUd40Fgpk/tqlJevSMUnFeFtj8JD1Hr7NFYfNentqq7/tvrPz6zsYwzBa30IvpR9xJ4=
+X-Received: by 2002:ad4:4a8b:: with SMTP id h11mr9578757qvx.210.1587396379754;
+ Mon, 20 Apr 2020 08:26:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-5-robh@kernel.org>
-In-Reply-To: <20200419170810.5738-5-robh@kernel.org>
+References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-7-robh@kernel.org>
+In-Reply-To: <20200419170810.5738-7-robh@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 20 Apr 2020 17:23:56 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2BZLti5pLrru8s-45Yz54SA0JZbyjvYEstSDJZfnzEmA@mail.gmail.com>
-Message-ID: <CAK8P3a2BZLti5pLrru8s-45Yz54SA0JZbyjvYEstSDJZfnzEmA@mail.gmail.com>
-Subject: Re: [PATCH 04/17] power/reset: vexpress: Support building as a module
+Date:   Mon, 20 Apr 2020 17:26:03 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2cxU3UYSj19Rt6pcUAtA1uTiQx46MF=92q_asmMOXMnA@mail.gmail.com>
+Message-ID: <CAK8P3a2cxU3UYSj19Rt6pcUAtA1uTiQx46MF=92q_asmMOXMnA@mail.gmail.com>
+Subject: Re: [PATCH 06/17] clk: versatile: Only enable SP810 on 32-bit by default
 To:     Rob Herring <robh@kernel.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Liviu Dudau <liviu.dudau@arm.com>,
@@ -44,24 +44,24 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-clk <linux-clk@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:1uLzFsu4G1E5Rt4bBLhftgIZmGhW65qqMpfzKQqVU/38E3qAuO2
- WeXlbPd2TDNyXTJUYhBBLr71S8VHi1kr+rNKFl3nJ4cNdYMCT5SGFRnyRfHeWWc13cbpIL9
- lu1XTD23rQKhu/PSFkl6aIC9fs4Pu7rb+fb7BokKj+tikNmcKZ28qUsF36LSem6eCVUCLAy
- BqQ+OW6B3LhTXGjjtrVoA==
+X-Provags-ID: V03:K1:bBz6GYGP8aR+k3ek8N0TRzxBYP6+RqOopCXP2Dopyn4tdlnQAB3
+ 8peXjpz5RcMpvKR5fgil52r3204gUTu90GnX5YEloj55bKgSKyV7ANjIQcReLxVWhMIOKOr
+ XjYluBoCHDfYm+pP7bLkz9bmuXCqJRfqrX1KOweO7B2jKo6VI5+LYy/4i4YjL4ncHACq83l
+ vzg6OfOnb+OpDgCen7Byw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tthkWj2ZtV4=:5qcjt+vXrCzBw7Dz/EU2k7
- P/c170SQL8QUygDqAJNqQb0UKlAvZ0MVurmejkwupvd7ZGOnjRNGV+mKxYrLDXxN+1PEOLU29
- kpN6yWLWWoPOjHqrjNkqVbnY0Vymr7eA60mPh3sZbqU9RVgwVdZHRJKs+6ptQtAO2+WvI1PEU
- IWjKw741LEQ2OIMiGGhgt0m9oUmEsZZO51HTG626mGvB/dZaIEbCSXKVtluSL6ylQmim5UVoE
- mzx0iPMGHA9A26LpG81FQhbvpJu0ijlCrWtEp7jc02E0wTefnxJW0RZGO03B78BgXDmlr3/aL
- UjDvM5tL8IMUFAnmtciJevb6pfoXUXVNPTkxdhT4UKLOPtCkn1hHDRrZypwdXEgkrxnDcrjye
- IiF2k/kuebbnC7DPl4AFJjRfbE++aLJHmwKiGbXx5cLgbwYDdWTLqYNteQNn4svaMDUo8tSxF
- xBKh1nRnBgRzJX3pNWnd7sxHVYKqAKY7DLF2VZVEMlkG9AQsCvmEoP3B9hsv6BO+UXAhxpnKh
- y3WNVHV1vW6pwuSnE4AqNT6EN4UQBgBgLUmMrWMCQbIuJhuAlHaaTc2BkNsgnPa3vnJOQ6z3O
- KIfqjmzmlxV6MyHQNghTCk5UZtv8ZrC09UsuLurlOyPfaOBP6Iv+ATQ0jd3EdiNu14M3e7hwe
- l0vqdMBo6aUSa3o0Gr1Kctrl51AS8xcurDKzymLyJzpLWnhR7EnnViGhxEf7SZiYjiAmK4oOV
- I0FIS3QBO4MSBeUaFQQkPHFzOOJQslKDOj8LHCdiIqi/QS5sK14QSbOXvqxbHCBHAMcMxkVt/
- dzJxWh7VXx7jzp8WIcW9QEtdEIrY0cDgkq524gG0Wuzoozk3SE=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:sX7ICOpxPMw=:FMFGpCnrA0P+w9NGoCO6Bk
+ aMGZNEMH/7pV7eH9whEn8zLR728gJjPiBywcC37MBmb0Nn+or+0EBPGKohxyMogSoVhxAG5O2
+ linzMbGkfiWsa099a4D4c+9CBpiYwRfbUaW15QPkeg2N1wOEpT5q/QL68qJ/nnV5o3VNA95EK
+ 1IyHtC3811ulhtPCpSR4E89Cs8w27AQDW2CCVk534YtHVWKZkVX+TeE08vsGqTUI6hqSWS7ks
+ h1WZPx/b82yCKzBaevvn8Ssm9TKyWun1yemQgJr/9oUwNsZL8iJZd6zX3yrHe4qYSBDUhvypf
+ OZ1lmG+TL6eCAPzHVngKRFykECiZT67zq63/6HxqANLWWdY26Kt4lKW0Vprc/nljpcbF9bg2c
+ B7FcfOFnO7zLc7VIc3WexPeYTwkSFWnCwA4E8prbISaJU6b2qY2S0qGIUej9evrby/zMJGmro
+ p+9qYcV/2xuZArtySvJ6oH2Ju+QNC8Nf0wL9/qxg1NneDYaxjCwcS3eGk/soehideeTmdtCQu
+ pDNGX+99Zf3Ph7diq95ahorrI9XBhyG0+9QgUYXXCiMq3GhwRq+GDnQTVVvzk30a9LskHw3eL
+ XP+Aa5J1dfr0nmWljzKLLnHfApKHiKO7sEECBCENm/gHPvNVJpAexk7OqDYfTkclTqMyrxjwz
+ JFmSURYCpCA+SJkm2MZaLeXBk19ktxyYyUNMhDXA4qxkpgvzh/eSysH/3Z/4pRFeey8u9lY7e
+ g6XGepufU0lWHudYJGF0uyaM0MjG8FVo8yxv/W0UV2J84NQSzIe5saCY+mm0yGRs6zxZaUfUC
+ IbW1+IedAzQK0sUlRugJ7EY+AEQN/CQxPACcAywx8aFrUKuSz4=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -69,18 +69,27 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Sun, Apr 19, 2020 at 7:08 PM Rob Herring <robh@kernel.org> wrote:
 >
-> Enable building the VExpress power-off/reset driver as a module.
+> While 64-bit Arm reference platforms have SP810 for clocks for SP804
+> timers, they are not needed since the arch timers are used instead.
+>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Liviu Dudau <liviu.dudau@arm.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Your change allows loading and unloading the driver, but actually
-unloading is a bug with the current implementation, as there is no
-'release' handler to undo the _vexpress_register_restart_handler()
-function.
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-It should not be hard to add a release handler, or you could just
-mark the function as non-unloadable by only having a module_init()
-but no module_exit() function.
+>
+>  config CLK_SP810
+>         bool "Clock driver for ARM SP810 System Controller"
+> -       default y if ARCH_VEXPRESS
+> +       default y if (ARCH_VEXPRESS && ARM)
 
-I suppose if you do the latter, there should also be a suppress_bind_attrs
-flag in the device_driver. This is a preexisting bug.
+But maybe add "|| (COMPILE_TEST && OF)" for extra points.
 
        Arnd
