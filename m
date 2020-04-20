@@ -2,97 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD8D1B16FD
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 22:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B973F1B181C
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 23:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728235AbgDTU0s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Apr 2020 16:26:48 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:47221 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726899AbgDTU0r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 16:26:47 -0400
-Received: (qmail 23111 invoked by uid 500); 20 Apr 2020 16:26:45 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 20 Apr 2020 16:26:45 -0400
-Date:   Mon, 20 Apr 2020 16:26:45 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Qais Yousef <qais.yousef@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-cc:     Oliver Neukum <oneukum@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-In-Reply-To: <Pine.LNX.4.44L0.2003251631360.1724-100000@netrider.rowland.org>
-Message-ID: <Pine.LNX.4.44L0.2004201622260.22032-100000@netrider.rowland.org>
+        id S1726067AbgDTVNv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Apr 2020 17:13:51 -0400
+Received: from nimbus1.mmprivatehosting.com ([54.208.90.49]:59626 "EHLO
+        nimbus1.mmprivatehosting.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725774AbgDTVNv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 17:13:51 -0400
+X-Greylist: delayed 398 seconds by postgrey-1.27 at vger.kernel.org; Mon, 20 Apr 2020 17:13:50 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by nimbus1.mmprivatehosting.com (Postfix) with ESMTP id A02F96007C;
+        Mon, 20 Apr 2020 21:07:11 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at mmprivatehosting.com
+Received: from dave.mielke.cc (CPE74dada261772-CMac202ebc50a0.cpe.net.cable.rogers.com [174.115.199.202])
+        (Authenticated sender: relay@dave.mielke.cc)
+        by nimbus1.mmprivatehosting.com (Postfix) with ESMTPA;
+        Mon, 20 Apr 2020 21:07:11 +0000 (UTC)
+Received: from beta.private.mielke.cc (beta.private.mielke.cc [192.168.0.2])
+        by dave.mielke.cc (Postfix) with ESMTPS id C07FF4A7;
+        Mon, 20 Apr 2020 17:07:10 -0400 (EDT)
+Received: from beta.private.mielke.cc (localhost [127.0.0.1])
+        by beta.private.mielke.cc (8.15.2/8.15.2) with ESMTP id 03KL7ASh029807;
+        Mon, 20 Apr 2020 17:07:10 -0400
+Received: (from dave@localhost)
+        by beta.private.mielke.cc (8.15.2/8.15.2/Submit) id 03KL7AKd029805;
+        Mon, 20 Apr 2020 17:07:10 -0400
+Date:   Mon, 20 Apr 2020 17:07:10 -0400
+From:   Dave Mielke <Dave@mielke.cc>
+To:     linux-pm@vger.kernel.org
+Cc:     Samuel Thibault <Samuel.Thibault@ens-lyon.org>,
+        Nicolas Pitre <nico@fluxnic.net>
+Subject: Writing to /sys/../power/autosuspend when not root.
+Message-ID: <20200420210710.GF28801@beta.private.mielke.cc>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 25 Mar 2020, Alan Stern wrote:
+We're working on getting brltty to run as an unprivileged user with just a few
+required capabilities. We don't want one of those required capabilities to be
+CAP_DAC_OVERRIDE (bypass file permission checks).
 
-> On Wed, 25 Mar 2020, Qais Yousef wrote:
-> 
-> > Thanks for all the hints Alan.
-> > 
-> > I think I figured it out, the below patch seems to fix it for me. Looking
-> > at other drivers resume functions it seems we're missing the
-> > pm_runtime_disable()->set_active()->enable() dance. Doing that fixes the
-> > warning and the dev_err() in driver/base/power.
-> 
-> Ah, yes.  This should have been added years ago; guess I forgot.  :-(
-> 
-> > I don't see xhci-plat.c doing that, I wonder if it needs it too.
-> > 
-> > I'm not well versed about the details and the rules here. So my fix could be
-> > a hack, though it does seem the right thing to do.
-> > 
-> > I wonder why the power core doesn't handle this transparently..
-> 
-> Initially, we didn't want the PM core to do this automatically because
-> we thought some devices might want to remain runtime-suspended
-> following a system resume, and only the device driver would know what 
-> to do.
+Some USB-connected braille devices don't respond very well to being
+autosuspended. We get around this, when running as root, by writing to the
+SYSFS power/autosuspend file associated with the device. Our problem is that
+only the root user can write to it.
 
-Qais:
+Other than using CAP_DAC_OVERRIDE (which we don't want to do), what other
+way(s) might we be able to use to overcome this restriction? For example, is
+there some kind of safe (enough) udev rule?
 
-So it looks like the discussion with Rafael will lead to changes in the
-PM core, but they won't go into the -stable kernels, and they won't
-directly fix the problem here.
-
-In the meantime, why don't you write up your patch below and submit it
-properly?  Even better, create similar patches for ehci-platform.c and
-xhci-plat.c and submit them too.
-
-Alan Stern
-
-> > diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-> > index 7addfc2cbadc..eb92c8092fae 100644
-> > --- a/drivers/usb/host/ohci-platform.c
-> > +++ b/drivers/usb/host/ohci-platform.c
-> > @@ -299,6 +299,10 @@ static int ohci_platform_resume(struct device *dev)
-> >         }
-> > 
-> >         ohci_resume(hcd, false);
-> > +
-> > +       pm_runtime_disable(dev);
-> > +       pm_runtime_set_active(dev);
-> > +       pm_runtime_enable(dev);
-> >         return 0;
-> >  }
-> >  #endif /* CONFIG_PM_SLEEP */
-> > 
-> > 
-> > Thanks
-> > 
-> > --
-> > Qais Yousef
-> 
-> 
-> 
-
+-- 
+I believe the Bible to be the very Word of God: http://Mielke.cc/bible/
+Dave Mielke            | 2213 Fox Crescent | WebHome: http://Mielke.cc/
+EMail: Dave@Mielke.cc  | Ottawa, Ontario   | Twitter: @Dave_Mielke
+Phone: +1 613 726 0014 | Canada  K2A 1H7   |
