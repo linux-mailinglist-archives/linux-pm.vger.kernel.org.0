@@ -2,33 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CB01B0FCD
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 17:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39371B0FEE
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 17:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726689AbgDTPTE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Apr 2020 11:19:04 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:38413 "EHLO
+        id S1726495AbgDTPYQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Apr 2020 11:24:16 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:47427 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726451AbgDTPTE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 11:19:04 -0400
-Received: from mail-qt1-f178.google.com ([209.85.160.178]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MORR2-1jb2Zk1yYw-00Psst; Mon, 20 Apr 2020 17:19:02 +0200
-Received: by mail-qt1-f178.google.com with SMTP id n20so2493156qtp.9;
-        Mon, 20 Apr 2020 08:19:02 -0700 (PDT)
-X-Gm-Message-State: AGi0PubSIRmZXHMNj+5MtkGKPem5/FWkLTGXfIz2FNsAyBueUc8G+rck
-        65lvExUjrInTYgeqbrNae41NIt1cxx7mHZJatZs=
-X-Google-Smtp-Source: APiQypKRQPodylxbd8chSbVFgKzdE7lNTya9nK+Z/s8JVlEEwwh1pZNKLYQ4UcTIU2WPOGLZm5LTvsBN53rY/0ul88E=
-X-Received: by 2002:ac8:6757:: with SMTP id n23mr16431371qtp.304.1587395941298;
- Mon, 20 Apr 2020 08:19:01 -0700 (PDT)
+        with ESMTP id S1726123AbgDTPYP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 11:24:15 -0400
+Received: from mail-qk1-f179.google.com ([209.85.222.179]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1M7s1M-1jMgOK1FWU-0050zR; Mon, 20 Apr 2020 17:24:14 +0200
+Received: by mail-qk1-f179.google.com with SMTP id s63so10975278qke.4;
+        Mon, 20 Apr 2020 08:24:14 -0700 (PDT)
+X-Gm-Message-State: AGi0PuZsJt8Fl7eYK679DOTwiwgTO5eVvkPF9lLMDY8c/zPJPd+KoKtb
+        bEEO5xVvJ0fIagRZzYezB1N7FkJh9M7SjT2saUE=
+X-Google-Smtp-Source: APiQypJV6xCjJW3pYFBvIcq7CTKExcpEBGxZ7QSKktdgf68SWm1bP3Q+o1tJP+dpWf2jPXgW39nU0qV/m1IkXlbgPko=
+X-Received: by 2002:a37:851:: with SMTP id 78mr16828527qki.352.1587396253107;
+ Mon, 20 Apr 2020 08:24:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-4-robh@kernel.org>
-In-Reply-To: <20200419170810.5738-4-robh@kernel.org>
+References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-5-robh@kernel.org>
+In-Reply-To: <20200419170810.5738-5-robh@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 20 Apr 2020 17:18:45 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0x5+2mitmecfTeph_XYfUwcLeER_W5_n3iC=bEDdY+wA@mail.gmail.com>
-Message-ID: <CAK8P3a0x5+2mitmecfTeph_XYfUwcLeER_W5_n3iC=bEDdY+wA@mail.gmail.com>
-Subject: Re: [PATCH 03/17] arm64: vexpress: Don't select CONFIG_VEXPRESS_CONFIG
+Date:   Mon, 20 Apr 2020 17:23:56 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2BZLti5pLrru8s-45Yz54SA0JZbyjvYEstSDJZfnzEmA@mail.gmail.com>
+Message-ID: <CAK8P3a2BZLti5pLrru8s-45Yz54SA0JZbyjvYEstSDJZfnzEmA@mail.gmail.com>
+Subject: Re: [PATCH 04/17] power/reset: vexpress: Support building as a module
 To:     Rob Herring <robh@kernel.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Liviu Dudau <liviu.dudau@arm.com>,
@@ -44,24 +44,24 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-clk <linux-clk@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:e8vY7iePeX+FIhI3q0iHAD7WmSXun2FvDL9LPub/HMozO40wQ+n
- uefbnvLSEoFSgmtfXPp4hJNVo+sxj2MndBCfTOJOgk5HYd/9PqHxvLvq/JXDEmSWi800yOy
- NGBdMv8igBYCVDKnJYl+uGrQnqgYHDG7a94NiumuRoo4LECYLvNnXw5PidZq8mfMSdSoaR7
- Zod8EPLMpCR8VomGIecAQ==
+X-Provags-ID: V03:K1:1uLzFsu4G1E5Rt4bBLhftgIZmGhW65qqMpfzKQqVU/38E3qAuO2
+ WeXlbPd2TDNyXTJUYhBBLr71S8VHi1kr+rNKFl3nJ4cNdYMCT5SGFRnyRfHeWWc13cbpIL9
+ lu1XTD23rQKhu/PSFkl6aIC9fs4Pu7rb+fb7BokKj+tikNmcKZ28qUsF36LSem6eCVUCLAy
+ BqQ+OW6B3LhTXGjjtrVoA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:f11SmvnNras=:hDred+6yvval4NennpxZj1
- 4GRpvxMYfKSP+s/lYnx3co3fnOd7BWuvH/ygX/UuTGYDj89ZAW41RiwJmpVtPTtvbLeR3fjJQ
- 7pzUMoY4TnGId2ogcN8bgqOKV3MTaN+UXOPpAPhCGFgw15WzwXcHVYYBjS0w8iywxs994stWq
- p+z0mFZu2vkun7tehvqEh5t3gZZEjcrJzr07nUCD+mLdMusH4l9YkZmD0P7+jWnW0WRLoB9wg
- YxOQXR/nYxL7tlJs3LVgxuZePM3X3gPe6B4totjsg8wMq5D26eIcjUhpWxIRlRl5nHMAVh/GX
- 0LOPTZvDyz/UDzZ3xankvgRTTlJ4rCV7C/5x46MUpKVIgv+5+LckM9FkncsdeJofhbYAZzoBp
- jG/6kg5+dfrEMGawC2B0tbbmigF5rHr3QmBqljlXxpC4sJqiCYX6sTpMpmgDxyCC9k4mp9A0n
- 8q2k/JlIKrVyUvFFI48U6dCOOvz1z0x/roMvvIcLcfz9zffi2FgUzTfOdHeCdPc/SKlzgts9Y
- 8bqo0BbZATl7IA59kN/yaXOvReANGWZyeQMKLThqtmmriE/4Bc+ghhy1Ba8v7pIBhbNldzJAn
- +6UxN7x5PPEn8lAnViBgarpCIiMsodQk33zrF8d3xdtV/jxrHp+IPQRAtzMLOPffeudjVYGIG
- cI3aMKCDlEyQkfkplrCpRXGTONC6PqoleQlAf720pFq4liFxID3uCWvauCTvgFnziPtKtYMTD
- N3VzSTIVCd59nMFcvjTq4LYSbXNryiEjSz4XBjgdsOlQxVCScjXmyL/9VF/ikNO1T9xiOAyLJ
- Z3djd0HMGhvN6IecALr3VL1p/3yjIWR5GKQl3mxZ1M7B1SiZ5Q=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:tthkWj2ZtV4=:5qcjt+vXrCzBw7Dz/EU2k7
+ P/c170SQL8QUygDqAJNqQb0UKlAvZ0MVurmejkwupvd7ZGOnjRNGV+mKxYrLDXxN+1PEOLU29
+ kpN6yWLWWoPOjHqrjNkqVbnY0Vymr7eA60mPh3sZbqU9RVgwVdZHRJKs+6ptQtAO2+WvI1PEU
+ IWjKw741LEQ2OIMiGGhgt0m9oUmEsZZO51HTG626mGvB/dZaIEbCSXKVtluSL6ylQmim5UVoE
+ mzx0iPMGHA9A26LpG81FQhbvpJu0ijlCrWtEp7jc02E0wTefnxJW0RZGO03B78BgXDmlr3/aL
+ UjDvM5tL8IMUFAnmtciJevb6pfoXUXVNPTkxdhT4UKLOPtCkn1hHDRrZypwdXEgkrxnDcrjye
+ IiF2k/kuebbnC7DPl4AFJjRfbE++aLJHmwKiGbXx5cLgbwYDdWTLqYNteQNn4svaMDUo8tSxF
+ xBKh1nRnBgRzJX3pNWnd7sxHVYKqAKY7DLF2VZVEMlkG9AQsCvmEoP3B9hsv6BO+UXAhxpnKh
+ y3WNVHV1vW6pwuSnE4AqNT6EN4UQBgBgLUmMrWMCQbIuJhuAlHaaTc2BkNsgnPa3vnJOQ6z3O
+ KIfqjmzmlxV6MyHQNghTCk5UZtv8ZrC09UsuLurlOyPfaOBP6Iv+ATQ0jd3EdiNu14M3e7hwe
+ l0vqdMBo6aUSa3o0Gr1Kctrl51AS8xcurDKzymLyJzpLWnhR7EnnViGhxEf7SZiYjiAmK4oOV
+ I0FIS3QBO4MSBeUaFQQkPHFzOOJQslKDOj8LHCdiIqi/QS5sK14QSbOXvqxbHCBHAMcMxkVt/
+ dzJxWh7VXx7jzp8WIcW9QEtdEIrY0cDgkq524gG0Wuzoozk3SE=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -69,35 +69,18 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Sun, Apr 19, 2020 at 7:08 PM Rob Herring <robh@kernel.org> wrote:
 >
-> CONFIG_VEXPRESS_CONFIG has 'default y if ARCH_VEXPRESS', so selecting is
-> unnecessary. It also prevents setting CONFIG_VEXPRESS_CONFIG to a module.
->
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Liviu Dudau <liviu.dudau@arm.com>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  arch/arm64/Kconfig.platforms | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-> index 9c084f995e0f..5c38dc56b808 100644
-> --- a/arch/arm64/Kconfig.platforms
-> +++ b/arch/arm64/Kconfig.platforms
-> @@ -278,7 +278,6 @@ config ARCH_VEXPRESS
->         select GPIOLIB
->         select PM
->         select PM_GENERIC_DOMAINS
-> -       select VEXPRESS_CONFIG
->         help
->           This enables support for the ARMv8 software model (Versatile
->           Express).
+> Enable building the VExpress power-off/reset driver as a module.
 
-Nothing wrong with this change, but I'd fold it into the previous patch,
-as this 'select' was clearly meant to avoid a build failure on the
-previous one.
+Your change allows loading and unloading the driver, but actually
+unloading is a bug with the current implementation, as there is no
+'release' handler to undo the _vexpress_register_restart_handler()
+function.
 
-      Arnd
+It should not be hard to add a release handler, or you could just
+mark the function as non-unloadable by only having a module_init()
+but no module_exit() function.
+
+I suppose if you do the latter, there should also be a suppress_bind_attrs
+flag in the device_driver. This is a preexisting bug.
+
+       Arnd
