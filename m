@@ -2,33 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D304A1B0FF7
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 17:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192501B1002
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 17:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725988AbgDTP0X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Apr 2020 11:26:23 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:34783 "EHLO
+        id S1726061AbgDTP1N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Apr 2020 11:27:13 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:33653 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725971AbgDTP0W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 11:26:22 -0400
-Received: from mail-qv1-f42.google.com ([209.85.219.42]) by
+        with ESMTP id S1725784AbgDTP1L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 11:27:11 -0400
+Received: from mail-qv1-f51.google.com ([209.85.219.51]) by
  mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MplPf-1irye93rfJ-00q7k1; Mon, 20 Apr 2020 17:26:21 +0200
-Received: by mail-qv1-f42.google.com with SMTP id h6so1328804qvz.8;
-        Mon, 20 Apr 2020 08:26:20 -0700 (PDT)
-X-Gm-Message-State: AGi0PubZcE35yq1DF5oySJFcJtRxYr/qNEaeAYdwtkxYYB9c8WXPxfCm
-        ZbZgMJ9WnN4WzSV1z6qgvCriQH9HY7EyB8n+6tM=
-X-Google-Smtp-Source: APiQypJv5lK+3PbfI3zap38BiUd40Fgpk/tqlJevSMUnFeFtj8JD1Hr7NFYfNentqq7/tvrPz6zsYwzBa30IvpR9xJ4=
-X-Received: by 2002:ad4:4a8b:: with SMTP id h11mr9578757qvx.210.1587396379754;
- Mon, 20 Apr 2020 08:26:19 -0700 (PDT)
+ id 1MowSu-1isnkS2PpG-00qOh7; Mon, 20 Apr 2020 17:27:06 +0200
+Received: by mail-qv1-f51.google.com with SMTP id v38so4855483qvf.6;
+        Mon, 20 Apr 2020 08:27:06 -0700 (PDT)
+X-Gm-Message-State: AGi0PuaZYvuyRsq58uSjVOe0SmNgWXUYNkt1Y9X2fHXu4Gvlj0cYjbZg
+        wgcreCicNzqHa1t1wRAcQAu8NwSPCLBZIUZkfnQ=
+X-Google-Smtp-Source: APiQypJY4e69j8jIL+s5vF/j7gio8ULkDsO83cBqoR8Hjix4uZ83n4bPAVVPQRfqjcQFYTucLdXeHPEnt3VU5UPRKHo=
+X-Received: by 2002:ad4:4d50:: with SMTP id m16mr14104121qvm.222.1587396425446;
+ Mon, 20 Apr 2020 08:27:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-7-robh@kernel.org>
-In-Reply-To: <20200419170810.5738-7-robh@kernel.org>
+References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-8-robh@kernel.org>
+In-Reply-To: <20200419170810.5738-8-robh@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 20 Apr 2020 17:26:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2cxU3UYSj19Rt6pcUAtA1uTiQx46MF=92q_asmMOXMnA@mail.gmail.com>
-Message-ID: <CAK8P3a2cxU3UYSj19Rt6pcUAtA1uTiQx46MF=92q_asmMOXMnA@mail.gmail.com>
-Subject: Re: [PATCH 06/17] clk: versatile: Only enable SP810 on 32-bit by default
+Date:   Mon, 20 Apr 2020 17:26:49 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a18FP9NtJrsJdFZkMMM9ToFGiCJdLZRXkPuHSLUO+Zniw@mail.gmail.com>
+Message-ID: <CAK8P3a18FP9NtJrsJdFZkMMM9ToFGiCJdLZRXkPuHSLUO+Zniw@mail.gmail.com>
+Subject: Re: [PATCH 07/17] clk: vexpress-osc: Use the devres clock API variants
 To:     Rob Herring <robh@kernel.org>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Liviu Dudau <liviu.dudau@arm.com>,
@@ -44,24 +44,24 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-clk <linux-clk@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:bBz6GYGP8aR+k3ek8N0TRzxBYP6+RqOopCXP2Dopyn4tdlnQAB3
- 8peXjpz5RcMpvKR5fgil52r3204gUTu90GnX5YEloj55bKgSKyV7ANjIQcReLxVWhMIOKOr
- XjYluBoCHDfYm+pP7bLkz9bmuXCqJRfqrX1KOweO7B2jKo6VI5+LYy/4i4YjL4ncHACq83l
- vzg6OfOnb+OpDgCen7Byw==
+X-Provags-ID: V03:K1:nfu0q7SluVtFJTi7o3wSeW9189Uis/+YCl/uYbUq1odT0RrPnb1
+ VsXNEKl0r4GcOXEjIN81/kcJJdb62iGq7RyqToImFwNl8qTYfuNiTjpAEUzhuWQml4of3Sc
+ pIIE4aaSH8pB+6K5WZCP46gMhyxr8dpU+9RuhUnDwZNg/hNguPQb7cHYFgx8oadW2I+C7NY
+ Olqu8PX0hUBprUPcHOU1Q==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:sX7ICOpxPMw=:FMFGpCnrA0P+w9NGoCO6Bk
- aMGZNEMH/7pV7eH9whEn8zLR728gJjPiBywcC37MBmb0Nn+or+0EBPGKohxyMogSoVhxAG5O2
- linzMbGkfiWsa099a4D4c+9CBpiYwRfbUaW15QPkeg2N1wOEpT5q/QL68qJ/nnV5o3VNA95EK
- 1IyHtC3811ulhtPCpSR4E89Cs8w27AQDW2CCVk534YtHVWKZkVX+TeE08vsGqTUI6hqSWS7ks
- h1WZPx/b82yCKzBaevvn8Ssm9TKyWun1yemQgJr/9oUwNsZL8iJZd6zX3yrHe4qYSBDUhvypf
- OZ1lmG+TL6eCAPzHVngKRFykECiZT67zq63/6HxqANLWWdY26Kt4lKW0Vprc/nljpcbF9bg2c
- B7FcfOFnO7zLc7VIc3WexPeYTwkSFWnCwA4E8prbISaJU6b2qY2S0qGIUej9evrby/zMJGmro
- p+9qYcV/2xuZArtySvJ6oH2Ju+QNC8Nf0wL9/qxg1NneDYaxjCwcS3eGk/soehideeTmdtCQu
- pDNGX+99Zf3Ph7diq95ahorrI9XBhyG0+9QgUYXXCiMq3GhwRq+GDnQTVVvzk30a9LskHw3eL
- XP+Aa5J1dfr0nmWljzKLLnHfApKHiKO7sEECBCENm/gHPvNVJpAexk7OqDYfTkclTqMyrxjwz
- JFmSURYCpCA+SJkm2MZaLeXBk19ktxyYyUNMhDXA4qxkpgvzh/eSysH/3Z/4pRFeey8u9lY7e
- g6XGepufU0lWHudYJGF0uyaM0MjG8FVo8yxv/W0UV2J84NQSzIe5saCY+mm0yGRs6zxZaUfUC
- IbW1+IedAzQK0sUlRugJ7EY+AEQN/CQxPACcAywx8aFrUKuSz4=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rIooyW71Zz4=:0vsvLrvaI/poNYkPX8wHnp
+ 33mdy9Xk3dZ9XLrYNYoup2XCA++rYli+CTKnALuOHskFkDKonbBHJEg9nffcLZlGnI4lTqNe/
+ boTWYjtMXeO7HYTjyPLJn7d+NMdf0PSr4YTnAMUYfgJ1U5v/5kh3mALVrwV+XG6zA0XDu6Rtl
+ Ks+r7MTeJ+hKxdItt2BFTySsh5CBhOrO4JMskpcflt+aQ23FqZFoxccgHPfgf2iZDjZX4CzEd
+ 36qgVS5shHq3eizKZT41t8FldP0F8allVtG1leOTu0cBHliXGz5R6w4Ky8jssMNFweAN+SGLn
+ 7oN4KvGx0msOONngJhZEoXbvAOzP96DEOQGsKjXvpLVt37bJ+H1BT/MXrJDIUyM9vpXKm8ARx
+ lhLeGtHn7Iblkr0lZTgcHpff3MLyWbhzJ1ifZwbP5noTbENHrMZsHyJ+KP7wo8Lpt1qgUlALS
+ LlQ1m5Ic73WfxVUXe2bNiRJDEGrBn7qIiGFzHz5ssem5iGWH0RVctLOlHMpANVK1bzHNB3kBw
+ bg0oyk0tBcKlAdTAb4ombq/5pzLgjnVdL5vCHWVKM1HseMHdx6NsEA58R8dF7w5nLzjFMUxOy
+ qaWnq6a6bu+vojskV3D6B+7Z2U4mUCUEkrSgqSfCg3yaPDi3S71Y/r2TuJWyDj9ouwpn+SZ5b
+ oFkC/HMs4Ky7CmAq0Y1SEDiSESoveYDE91vNx22iWV+nLGUtEDBp7NJYRo1df1TF+8WOgB5Lm
+ outMns0pNZqyMEaucJ98EtwUGpAC/S3ZSmy79LtczhOpij8yhs/F+BHbgwj2TQsWflSN1xuk2
+ 86VuUlJYPw2NbPaD3AJ3N9FUuVxa8kjBATcNCmj+0sbD3bxPgo=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -69,11 +69,10 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Sun, Apr 19, 2020 at 7:08 PM Rob Herring <robh@kernel.org> wrote:
 >
-> While 64-bit Arm reference platforms have SP810 for clocks for SP804
-> timers, they are not needed since the arch timers are used instead.
+> In preparation to enable the vexpress-osc clock driver as a module,
+> convert the driver to use the managed devres clock API variants. With
+> this, a driver .remove() hook is not needed.
 >
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
 > Cc: Liviu Dudau <liviu.dudau@arm.com>
 > Cc: Sudeep Holla <sudeep.holla@arm.com>
 > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
@@ -83,13 +82,3 @@ On Sun, Apr 19, 2020 at 7:08 PM Rob Herring <robh@kernel.org> wrote:
 > Signed-off-by: Rob Herring <robh@kernel.org>
 
 Acked-by: Arnd Bergmann <arnd@arndb.de>
-
->
->  config CLK_SP810
->         bool "Clock driver for ARM SP810 System Controller"
-> -       default y if ARCH_VEXPRESS
-> +       default y if (ARCH_VEXPRESS && ARM)
-
-But maybe add "|| (COMPILE_TEST && OF)" for extra points.
-
-       Arnd
