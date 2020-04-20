@@ -2,97 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 342761B057F
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 11:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DA51B05C6
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 11:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725886AbgDTJWV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Apr 2020 05:22:21 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:26907 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725773AbgDTJWV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 20 Apr 2020 05:22:21 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 495LnK5hkRz8L;
-        Mon, 20 Apr 2020 11:22:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1587374539; bh=3MXoIlRv+JlYYbnLOSIrj3nnS5x96d5V041E6lXJFOI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cwsjvCbuaOQrYT5P5a4M9+BfRlVaTvanm1BxA0zi+/gKwN/31YiRn8FEZOvu8dK/w
-         VSehcnEl0n27LX7aWsyp33krF3pDiSE+xpaqTkWXb7WH3aGZ41NV3XIK31QLrah5Tp
-         Ep8NsdRh9vS0+VdRB3UawuReVWJmHkex4WBFE1T2znu43XmXoBPQ9j9kI+jZ8F0RTH
-         cr3aQDU8RX4I+JdMQl15TqLTOSgl7vk04pzLBzD7bQMIEkTEkSpx9z6jxakIlZO6wK
-         haVUgAKxNalhz6npsMnCszbvv4OIonFEs7yXMYikUAN+S3af+qVlVw5KarNvF+310L
-         GAEXcntkfydXg==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Mon, 20 Apr 2020 11:22:09 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 07/11] power: supply: core: tabularize HWMON
- temperature labels
-Message-ID: <20200420092209.GA25831@qmqm.qmqm.pl>
-References: <29b5043db9a51ef7a0cb6e3a8c69c91e36045cd6.1585944770.git.mirq-linux@rere.qmqm.pl>
- <202004050928.d6QhVcsQ%lkp@intel.com>
- <CAKwvOdm5BhMdAmXR0gCLntkbvF7ajaNoWoHVCCio1CqbGzS6aQ@mail.gmail.com>
+        id S1725959AbgDTJgO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Apr 2020 05:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725773AbgDTJgO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 05:36:14 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3D9C061A0C;
+        Mon, 20 Apr 2020 02:36:13 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id t3so9836579qkg.1;
+        Mon, 20 Apr 2020 02:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/3syDFruM55e7HQozZGMW1Rq8pizNFPEYU3zJts7jcc=;
+        b=jPlNud7IcyvvcC4FDfDaaF2GJOXTaOY9mACZEfQBSkhKxw2DZCnYqHSpqTGEPfimor
+         PjSWJpwWjdewLz98XZ/UZIfk/d/51vUoWdhqLHmdQfBUjLAy81WKoFUNUJmySNGtwnlm
+         /szq8VzdM6ihajM4VLZ10Bg/ouBqD2rD8P4Y6y+FZ2146MEIhyGRVtdtNbPi8sOrMuzy
+         Le86yrjIg4cAZVEsIU28yajgXDgKtthrapoK9jK7m7mTolLO94iLRVJ/lgXUtEr2NKb7
+         3USDC1P8FxQUb3Y2Lk5csj4rO7UlziADVkkITlHvfjUtzVnxO6u4ONGsIzgo0HLOy/X+
+         pugA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/3syDFruM55e7HQozZGMW1Rq8pizNFPEYU3zJts7jcc=;
+        b=Y2Gs9P7DeYpRy7Yi6nV9eWowL5vfE5QR+fBn+tEyPpo3A+FshZJfIjJ+stVpVlqQAa
+         TMl918CfUqSNtdhwr5yhtH2if6SZYPLvwbo6foPa5LE3k2B6VVkVcJ12I0XWObiT4pie
+         h7jh30gOUdJVvHxjYPfPQL9qVkNvKO5n1fTSmuaOP8e1JMHTPj2hPeInouTSVZg9hr4I
+         PO77izWKyoXFkssMzA8sacGMa2QWoYrqKhqtymxmpVa9RLIeb3RS+TNIepBZxQJhnQvw
+         7jwz6RzV40K0dDH2NiaXT95BTTxxsrs1Dj1xOSo8S6Hg0GBrLnVADBsTD/9BOxaARFZg
+         ytHg==
+X-Gm-Message-State: AGi0PuZI47uCtBGUdGDflaFj8AMrtHrJ1HlgOLrtl3AX8F6SxjVdjSqV
+        zJ73zA0XSyZw8Bzhk7TGDQjYLXdA17DVuOw+mF8=
+X-Google-Smtp-Source: APiQypLw+gOLHPIU20qEHGA+Tzz3uLgk+8kc5CB4I2cZCht+4GtvYnE+IUKaHLhktJS/u/ZqgBaQaC1xS3anJ+HAJLw=
+X-Received: by 2002:a37:6f41:: with SMTP id k62mr14432765qkc.239.1587375372653;
+ Mon, 20 Apr 2020 02:36:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdm5BhMdAmXR0gCLntkbvF7ajaNoWoHVCCio1CqbGzS6aQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200413070014.12960-1-zhang.lyra@gmail.com> <20200413070014.12960-2-zhang.lyra@gmail.com>
+In-Reply-To: <20200413070014.12960-2-zhang.lyra@gmail.com>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Mon, 20 Apr 2020 17:36:01 +0800
+Message-ID: <CABOV4+XaTMd=A5_5eTtGG=S3DvgBCTxrqV4aXnp55pTsdbO4NA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/2] cpuidle: allow idle state to be found as
+ deepest state for s2idle only
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 07, 2020 at 11:13:50AM -0700, Nick Desaulniers wrote:
-> On Sat, Apr 4, 2020 at 6:53 PM kbuild test robot <lkp@intel.com> wrote:
-> >
-> > Hi "Micha³,
-> >
-> > I love your patch! Perhaps something to improve:
-> >
-> > [auto build test WARNING on power-supply/for-next]
-> > [also build test WARNING on hwmon/hwmon-next linus/master v5.6 next-20200404]
-> > [if your patch is applied to the wrong git tree, please drop us a note to help
-> > improve the system. BTW, we also suggest to use '--base' option to specify the
-> > base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
-> >
-> > url:    https://github.com/0day-ci/linux/commits/Micha-Miros-aw/extensions-and-fixes/20200405-044024
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-> > config: x86_64-randconfig-b002-20200405 (attached as .config)
-> > compiler: clang version 11.0.0 (https://github.com/llvm/llvm-project 62f3a9650a9f289a07a5f480764fb655178c2334)
-> > reproduce:
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # save the attached .config to linux build tree
-> >         COMPILER=clang make.cross ARCH=x86_64
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kbuild test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/power/supply/power_supply_hwmon.o: warning: objtool: power_supply_hwmon_read_string() falls through to next function power_supply_hwmon_write()
-> 
-> I'm guessing this is from the unreachable:
-> https://github.com/0day-ci/linux/commit/b8b2d14ca46ca54257f55c9af58ea25695b9ee36
-> I'll need to play with this some more as I couldn't reproduce with a
-> simplified test case, but looks like a compiler bug.  Filed
-> https://github.com/ClangBuiltLinux/linux/issues/978 for me to track.
+Hello,
 
-Hi,
+Any comments or suggests on this? That would be very appreciated.
 
-For gcc this is bug 51513 [1]. This does not affect correctness of the
-code, so I wonder if we should/need be trying to work around it.
+Thanks,
+Chunyan
 
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=51513
 
-Best Regards,
-Micha³ Miros³aw
+On Mon, Apr 13, 2020 at 5:09 PM <zhang.lyra@gmail.com> wrote:
+>
+> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+>
+> Add a new flag CPUIDLE_FLAG_S2IDLE to allow c-state to be found as
+> deepest state for s2idle only, so that users can add a new c-state
+> for using s2idle and don't worry disturbing other use cases such as
+> play_idle() which probably don't want to enter into so much deep
+> idle state since devices are not suspended for that kind of cases.
+>
+> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> ---
+>  drivers/cpuidle/cpuidle.c        | 3 ++-
+>  drivers/cpuidle/dt_idle_states.c | 3 +++
+>  include/linux/cpuidle.h          | 1 +
+>  3 files changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index de81298051b3..bb61f0c271d2 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -89,7 +89,8 @@ static int find_deepest_state(struct cpuidle_driver *drv,
+>                     s->exit_latency_ns <= latency_req ||
+>                     s->exit_latency_ns > max_latency_ns ||
+>                     (s->flags & forbidden_flags) ||
+> -                   (s2idle && !s->enter_s2idle))
+> +                   (s2idle && !s->enter_s2idle) ||
+> +                   (!s2idle && (s->flags & CPUIDLE_FLAG_S2ILDE)))
+>                         continue;
+>
+>                 latency_req = s->exit_latency_ns;
+> diff --git a/drivers/cpuidle/dt_idle_states.c b/drivers/cpuidle/dt_idle_states.c
+> index 252f2a9686a6..530db2726c05 100644
+> --- a/drivers/cpuidle/dt_idle_states.c
+> +++ b/drivers/cpuidle/dt_idle_states.c
+> @@ -80,6 +80,9 @@ static int init_state_node(struct cpuidle_state *idle_state,
+>         idle_state->flags = 0;
+>         if (of_property_read_bool(state_node, "local-timer-stop"))
+>                 idle_state->flags |= CPUIDLE_FLAG_TIMER_STOP;
+> +
+> +       if (of_property_read_bool(state_node, "for-s2idle-only"))
+> +               idle_state->flags |= CPUIDLE_FLAG_S2ILDE;
+>         /*
+>          * TODO:
+>          *      replace with kstrdup and pointer assignment when name
+> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+> index ec2ef63771f0..08da701f74cd 100644
+> --- a/include/linux/cpuidle.h
+> +++ b/include/linux/cpuidle.h
+> @@ -78,6 +78,7 @@ struct cpuidle_state {
+>  #define CPUIDLE_FLAG_TIMER_STOP BIT(2) /* timer is stopped on this state */
+>  #define CPUIDLE_FLAG_UNUSABLE  BIT(3) /* avoid using this state */
+>  #define CPUIDLE_FLAG_OFF       BIT(4) /* disable this state by default */
+> +#define CPUIDLE_FLAG_S2ILDE    BIT(5) /* state is used for s2idle only */
+>
+>  struct cpuidle_device_kobj;
+>  struct cpuidle_state_kobj;
+> --
+> 2.20.1
+>
