@@ -2,90 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B5F1B1381
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 19:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65BD1B1430
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 20:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726492AbgDTRsn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Apr 2020 13:48:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60006 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726457AbgDTRsn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 20 Apr 2020 13:48:43 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 72969218AC;
-        Mon, 20 Apr 2020 17:48:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587404922;
-        bh=xUzIDhLrcbNY8MK4u4nZct1kwq2cE8o8IntAJsSwdpk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CFydE2rknr/Ms+qSihKc279Hhku/sxlE27vkOz7Ljm6u7pPYtYYm+HirqYmVg4kG8
-         jZTLjLpS6NVw08JzOZYidmIl5sFGJv9tL37F64PGrz+2cl9ItjfypjPruwRbHTMo8B
-         ccaWuhEWqwz3a67Z7TNBRt7J04CPt081UgDiTo8o=
-Received: by mail-qt1-f172.google.com with SMTP id z90so9232647qtd.10;
-        Mon, 20 Apr 2020 10:48:42 -0700 (PDT)
-X-Gm-Message-State: AGi0PuYoOGsCijC7BUPuVbSH+sUecdxBL472I+7Vea+TQzgYWhzcq0gG
-        w0tUa4sWsUujUJ2BCmszjq32hUizP5j+5L6c4g==
-X-Google-Smtp-Source: APiQypLsmqqa6tPO6Vd26Z8hr0a4fVqisr+0rvULo+LKFuzNKUPn9rWtoTexXEtJsn8bhiB8U87ufUvE1XRG0ZXm9r0=
-X-Received: by 2002:ac8:39e5:: with SMTP id v92mr17459679qte.224.1587404921554;
- Mon, 20 Apr 2020 10:48:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-7-robh@kernel.org>
- <CAK8P3a2cxU3UYSj19Rt6pcUAtA1uTiQx46MF=92q_asmMOXMnA@mail.gmail.com>
-In-Reply-To: <CAK8P3a2cxU3UYSj19Rt6pcUAtA1uTiQx46MF=92q_asmMOXMnA@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 20 Apr 2020 12:48:28 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJS5o7_Ep50vfhNBOQ2sczgD+dNuiF8+GwjHUu7tN9j7Q@mail.gmail.com>
-Message-ID: <CAL_JsqJS5o7_Ep50vfhNBOQ2sczgD+dNuiF8+GwjHUu7tN9j7Q@mail.gmail.com>
-Subject: Re: [PATCH 06/17] clk: versatile: Only enable SP810 on 32-bit by default
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726889AbgDTSRw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Apr 2020 14:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725891AbgDTSRw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 14:17:52 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4FCC061A0C;
+        Mon, 20 Apr 2020 11:17:52 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 16DD62A0FEB
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+To:     linux-pm@vger.kernel.org
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Barlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: [PATCH 0/2] Stop monitoring disabled devices
+Date:   Mon, 20 Apr 2020 20:17:39 +0200
+Message-Id: <20200420181741.13167-1-andrzej.p@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <d7efa7dd-6a07-beff-e3d1-8797dd203105@samsung.com>
+References: <d7efa7dd-6a07-beff-e3d1-8797dd203105@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 20, 2020 at 10:26 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sun, Apr 19, 2020 at 7:08 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > While 64-bit Arm reference platforms have SP810 for clocks for SP804
-> > timers, they are not needed since the arch timers are used instead.
-> >
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Liviu Dudau <liviu.dudau@arm.com>
-> > Cc: Sudeep Holla <sudeep.holla@arm.com>
-> > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: Stephen Boyd <sboyd@kernel.org>
-> > Cc: linux-clk@vger.kernel.org
-> > Signed-off-by: Rob Herring <robh@kernel.org>
->
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
->
-> >
-> >  config CLK_SP810
-> >         bool "Clock driver for ARM SP810 System Controller"
-> > -       default y if ARCH_VEXPRESS
-> > +       default y if (ARCH_VEXPRESS && ARM)
->
-> But maybe add "|| (COMPILE_TEST && OF)" for extra points.
+After 3 revisions of an RFC I'm sending this as a PATCH series.
 
-On a 'default y'? Not necessary.
+The first patch makes all the drivers store their mode in struct
+thermal_zone_device. Such a move has consequences: driver-specific
+variables for storing mode are not necessary. Consequently get_mode()
+methods become obsolete. Then sysfs "mode" attribute stops depending
+on get_mode() being provided, because it is always provided from now on.
 
-Rob
+The first patch also introduces the initial mode to be optionally passed
+to thermal_zone_device_register().
+
+Given all the groundwork done in patch 1/2 patch 2/2 becomes very simple.
+
+Compared to RFC v3 this series addresses comments from Bartlomiej,
+thank you Bartlomiej for your review!
+
+RFCv3..this PATCH:
+
+- export thermal_zone_device_{enable|disable}() for drivers
+- don't check provided enum values in acpi's thermal_zet_mode()
+and in int3400_thermal_set_mode()
+- use thermal_zone_device_enable() in of_thermal instead of open coding it
+- use thermal_zone_device_{enable|disable}() in hisi_thermal, rockchip_thermal
+and sprd_thermal
+- assume THERMAL_DEVICE_ENABLED is thermal_zone_params not provided at
+tzd's register time
+- eliminated tzp-s which contain only .initial_mode = THERMAL_DEVICE_ENABLED,
+- don't set tz->need_update and don't call thermal_zone_device_update()
+at the end of thermal_zone_device_register()
+- used .initial_mode in int340x_thermal_zone, x86_pkg_temp_thermal and
+int3400_thermal
+
+Andrzej Pietrasiewicz (2):
+  thermal: core: Let thermal zone device's mode be stored in its struct
+  thermal: core: Stop polling DISABLED thermal devices
+
+ drivers/acpi/thermal.c                        | 35 ++--------
+ .../ethernet/mellanox/mlxsw/core_thermal.c    | 42 ------------
+ drivers/platform/x86/acerhdf.c                | 17 +----
+ drivers/thermal/da9062-thermal.c              | 11 ----
+ drivers/thermal/hisi_thermal.c                |  6 +-
+ drivers/thermal/imx_thermal.c                 | 24 ++-----
+ .../intel/int340x_thermal/int3400_thermal.c   | 31 ++-------
+ .../int340x_thermal/int340x_thermal_zone.c    |  1 +
+ .../thermal/intel/intel_quark_dts_thermal.c   | 22 ++-----
+ drivers/thermal/intel/x86_pkg_temp_thermal.c  |  1 +
+ drivers/thermal/of-thermal.c                  | 24 +------
+ drivers/thermal/rockchip_thermal.c            |  6 +-
+ drivers/thermal/sprd_thermal.c                |  6 +-
+ drivers/thermal/thermal_core.c                | 65 ++++++++++++++++---
+ drivers/thermal/thermal_core.h                |  3 +
+ drivers/thermal/thermal_sysfs.c               | 29 +--------
+ include/linux/thermal.h                       | 22 ++++++-
+ 17 files changed, 121 insertions(+), 224 deletions(-)
+
+
+base-commit: 79799562bf087b30d9dd0fddf5bed2d3b038be08
+-- 
+2.17.1
+
