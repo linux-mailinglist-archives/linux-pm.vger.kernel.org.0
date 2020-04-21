@@ -2,267 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA921B1C48
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Apr 2020 05:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019961B1FE4
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Apr 2020 09:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727888AbgDUDAd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Apr 2020 23:00:33 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:23240 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727968AbgDUDA2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 23:00:28 -0400
-X-UUID: 618cd83ce46948a39f006c8fb473ba9a-20200421
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=fboIlcY89oR06KjlC/YVdkznl5AkMxS0hy38Zez8uX4=;
-        b=ogUSLd08+YPbz2FSfwmjyQIYp9vcVmIj4oJ8Lrd631uzy6Axay6wdGQ58+Vs7JcdCoBCZgg1DdK/sNHiwsE0c9mwEue2DyynERub9PnL5WxuE1Ry/znLjZA7+WKEoC0xFIXgJbeRqfq7a5aMIR97sZ7cZPovKC16aI7xm+mYBpE=;
-X-UUID: 618cd83ce46948a39f006c8fb473ba9a-20200421
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <hsin-hsiung.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 780414436; Tue, 21 Apr 2020 11:00:15 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 21 Apr 2020 11:00:14 +0800
-Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 21 Apr 2020 11:00:13 +0800
-From:   Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     <drinkcat@chromium.org>, Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        Josef Friedl <josef.friedl@speed.at>,
-        Richard Fontana <rfontana@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ran Bi <ran.bi@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <srv_heupstream@mediatek.com>
-Subject: [PATCH v13 6/6] arm64: dts: mt6358: add PMIC MT6358 related nodes
-Date:   Tue, 21 Apr 2020 11:00:12 +0800
-Message-ID: <1587438012-24832-7-git-send-email-hsin-hsiung.wang@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1587438012-24832-1-git-send-email-hsin-hsiung.wang@mediatek.com>
-References: <1587438012-24832-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+        id S1726388AbgDUHbl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Apr 2020 03:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725989AbgDUHbk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Apr 2020 03:31:40 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A902C061A0F;
+        Tue, 21 Apr 2020 00:31:40 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id b11so15222155wrs.6;
+        Tue, 21 Apr 2020 00:31:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D9m3MRy8x+o4H1EEycml0VyqSiaYH7kBtrQzXfBUS8w=;
+        b=GlKRZFFyQs7kZycqIc8kmWXH6Ud4+HQlXs3tT/pPSNZiMX9h8VVS8uJ4YjqPe9VH8K
+         VOsgHdZHB+X8w3fU84GRwWmtLSlcVzqJK7F/LoKjnYTtGYgq3XlXvWec2jF5yMlqXgqT
+         DMgM1TfcX2lja1KJLWe7ISkMNWMptDaq+uRd0auhbWqgVgW1EPpuWXmJWENaC70cqkHl
+         W1OAI+RQF3UbWRsqpDAk3GeJKKu0TXTiXcokuG6Qfw9gi4uhUhhkh/njN+XgNpd68M6p
+         4MIsTwBlPzPF6/fdkxJpNRxasCq6hiJzXqMxnl+6c6ccJiiwVjHBSMjSmK14iNLpPdBh
+         8oig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D9m3MRy8x+o4H1EEycml0VyqSiaYH7kBtrQzXfBUS8w=;
+        b=bY/MPHcON/9Cyl0dJG7ZISbjSsW7j3kyWOXuAeo8mOG2BGNVF26/Eg6TZ0cWQS0V37
+         VrcMTPEoyxsYGMxEJKCcJNfrqQ2sxqW6ZpO+P9XGb/nAnhzmE4IBnRekH+CsFbUJyKYe
+         9J/faFROUifUSEPa8sVsCh1jygNKPqistxBtW/5aCkrdCoVmtSacHypaNroSpH7IKP8C
+         s97ILkCDoguJ1AM495ZMeHYQ+kmoQWTS88c4eLWct3++ERwaCF30gWG2+4mlH3m2wos/
+         sJgC/FhMMaMQnSfHe4CAhT1KkfRLYl6dY88CtLJ1httWDvvyQ+fQKQipLEZozbr70/pa
+         huvA==
+X-Gm-Message-State: AGi0PuZVzIQHCFRDKr3qm5t0izjp7hRL8ZxIaG8qS824WxDHt9Z8Sj6w
+        U8SkI3bI123jpTG4qtfi2KvwxX/w4LaXFXrjKNQOHFjp
+X-Google-Smtp-Source: APiQypIBhAroyKy7dbi8XsEqmZkN6GmZp54F8mQFxWhAQGQ6iOUSPlckooO9rwUr3eRUH0h46LenNWSVw4928Sfzm+M=
+X-Received: by 2002:adf:8b1d:: with SMTP id n29mr22239047wra.196.1587454299040;
+ Tue, 21 Apr 2020 00:31:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <20200413070014.12960-1-zhang.lyra@gmail.com> <20200413070014.12960-2-zhang.lyra@gmail.com>
+ <20200420114222.GA14343@lakrids.cambridge.arm.com>
+In-Reply-To: <20200420114222.GA14343@lakrids.cambridge.arm.com>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Tue, 21 Apr 2020 15:31:02 +0800
+Message-ID: <CAAfSe-u+wraKLWFK2+oKed_ZzkckP0sFRhMkA5LB-b30CGawOw@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/2] cpuidle: allow idle state to be found as
+ deepest state for s2idle only
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-YWRkIFBNSUMgTVQ2MzU4IHJlbGF0ZWQgbm9kZXMgd2hpY2ggaXMgZm9yIE1UODE4MyBwbGF0Zm9y
-bQ0KDQpTaWduZWQtb2ZmLWJ5OiBIc2luLUhzaXVuZyBXYW5nIDxoc2luLWhzaXVuZy53YW5nQG1l
-ZGlhdGVrLmNvbT4NCi0tLQ0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2MzU4LmR0
-c2kgICAgfCAzNTggKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KIGFyY2gvYXJtNjQvYm9v
-dC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWV2Yi5kdHMgfCAgIDEgKw0KIDIgZmlsZXMgY2hhbmdlZCwg
-MzU5IGluc2VydGlvbnMoKykNCiBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm02NC9ib290L2R0
-cy9tZWRpYXRlay9tdDYzNTguZHRzaQ0KDQpkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9ib290L2R0
-cy9tZWRpYXRlay9tdDYzNTguZHRzaSBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2
-MzU4LmR0c2kNCm5ldyBmaWxlIG1vZGUgMTAwNjQ0DQppbmRleCAwMDAwMDAwLi45MzYxYWRhDQot
-LS0gL2Rldi9udWxsDQorKysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210NjM1OC5k
-dHNpDQpAQCAtMCwwICsxLDM1OCBAQA0KKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BM
-LTIuMCBPUiBNSVQpDQorLyoNCisgKiBDb3B5cmlnaHQgKGMpIDIwMjAgTWVkaWFUZWsgSW5jLg0K
-KyAqLw0KKw0KKyZwd3JhcCB7DQorCXBtaWM6IG10NjM1OCB7DQorCQljb21wYXRpYmxlID0gIm1l
-ZGlhdGVrLG10NjM1OCI7DQorCQlpbnRlcnJ1cHQtY29udHJvbGxlcjsNCisJCWludGVycnVwdC1w
-YXJlbnQgPSA8JnBpbz47DQorCQlpbnRlcnJ1cHRzID0gPDE4MiBJUlFfVFlQRV9MRVZFTF9ISUdI
-PjsNCisJCSNpbnRlcnJ1cHQtY2VsbHMgPSA8Mj47DQorDQorCQltdDYzNThjb2RlYzogbXQ2MzU4
-Y29kZWMgew0KKwkJCWNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ2MzU4LXNvdW5kIjsNCisJCX07
-DQorDQorCQltdDYzNThyZWd1bGF0b3I6IG10NjM1OHJlZ3VsYXRvciB7DQorCQkJbXQ2MzU4X3Zk
-cmFtMV9yZWc6IGJ1Y2tfdmRyYW0xIHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidmRyYW0xIjsN
-CisJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwPjsNCisJCQkJcmVndWxhdG9y
-LW1heC1taWNyb3ZvbHQgPSA8MjA4NzUwMD47DQorCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0g
-PDEyNTAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDA+Ow0KKwkJCQly
-ZWd1bGF0b3ItYWx3YXlzLW9uOw0KKwkJCQlyZWd1bGF0b3ItYWxsb3dlZC1tb2RlcyA9IDwwIDE+
-Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3Zjb3JlX3JlZzogYnVja192Y29yZSB7DQorCQkJCXJl
-Z3VsYXRvci1uYW1lID0gInZjb3JlIjsNCisJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8
-NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTI5Mzc1MD47DQorCQkJ
-CXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDYyNTA+Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJh
-bXAtZGVsYXkgPSA8MjAwPjsNCisJCQkJcmVndWxhdG9yLWFsd2F5cy1vbjsNCisJCQkJcmVndWxh
-dG9yLWFsbG93ZWQtbW9kZXMgPSA8MCAxPjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92cGFfcmVn
-OiBidWNrX3ZwYSB7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZwYSI7DQorCQkJCXJlZ3VsYXRv
-ci1taW4tbWljcm92b2x0ID0gPDUwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0
-ID0gPDM2NTAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItcmFtcC1kZWxheSA9IDw1MDAwMD47DQorCQkJ
-CXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNTA+Ow0KKwkJCQlyZWd1bGF0b3ItYWxs
-b3dlZC1tb2RlcyA9IDwwIDE+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3Zwcm9jMTFfcmVnOiBi
-dWNrX3Zwcm9jMTEgew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2cHJvYzExIjsNCisJCQkJcmVn
-dWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNy
-b3ZvbHQgPSA8MTI5Mzc1MD47DQorCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDYyNTA+Ow0K
-KwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MjAwPjsNCisJCQkJcmVndWxhdG9y
-LWFsd2F5cy1vbjsNCisJCQkJcmVndWxhdG9yLWFsbG93ZWQtbW9kZXMgPSA8MCAxPjsNCisJCQl9
-Ow0KKw0KKwkJCW10NjM1OF92cHJvYzEyX3JlZzogYnVja192cHJvYzEyIHsNCisJCQkJcmVndWxh
-dG9yLW5hbWUgPSAidnByb2MxMiI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDUw
-MDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDEyOTM3NTA+Ow0KKwkJCQly
-ZWd1bGF0b3ItcmFtcC1kZWxheSA9IDw2MjUwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1w
-LWRlbGF5ID0gPDIwMD47DQorCQkJCXJlZ3VsYXRvci1hbHdheXMtb247DQorCQkJCXJlZ3VsYXRv
-ci1hbGxvd2VkLW1vZGVzID0gPDAgMT47DQorCQkJfTsNCisNCisJCQltdDYzNThfdmdwdV9yZWc6
-IGJ1Y2tfdmdwdSB7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZncHUiOw0KKwkJCQlyZWd1bGF0
-b3ItbWluLW1pY3Jvdm9sdCA9IDw1MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9s
-dCA9IDwxMjkzNzUwPjsNCisJCQkJcmVndWxhdG9yLXJhbXAtZGVsYXkgPSA8NjI1MD47DQorCQkJ
-CXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyMDA+Ow0KKwkJCQlyZWd1bGF0b3ItYWxs
-b3dlZC1tb2RlcyA9IDwwIDE+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZzMl9yZWc6IGJ1Y2tf
-dnMyIHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidnMyIjsNCisJCQkJcmVndWxhdG9yLW1pbi1t
-aWNyb3ZvbHQgPSA8NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MjA4
-NzUwMD47DQorCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDEyNTAwPjsNCisJCQkJcmVndWxh
-dG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDA+Ow0KKwkJCQlyZWd1bGF0b3ItYWx3YXlzLW9uOw0K
-KwkJCX07DQorDQorCQkJbXQ2MzU4X3Ztb2RlbV9yZWc6IGJ1Y2tfdm1vZGVtIHsNCisJCQkJcmVn
-dWxhdG9yLW5hbWUgPSAidm1vZGVtIjsNCisJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8
-NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTI5Mzc1MD47DQorCQkJ
-CXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDYyNTA+Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJh
-bXAtZGVsYXkgPSA8OTAwPjsNCisJCQkJcmVndWxhdG9yLWFsd2F5cy1vbjsNCisJCQkJcmVndWxh
-dG9yLWFsbG93ZWQtbW9kZXMgPSA8MCAxPjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92czFfcmVn
-OiBidWNrX3ZzMSB7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZzMSI7DQorCQkJCXJlZ3VsYXRv
-ci1taW4tbWljcm92b2x0ID0gPDEwMDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9s
-dCA9IDwyNTg3NTAwPjsNCisJCQkJcmVndWxhdG9yLXJhbXAtZGVsYXkgPSA8MTI1MDA+Ow0KKwkJ
-CQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MD47DQorCQkJCXJlZ3VsYXRvci1hbHdh
-eXMtb247DQorCQkJfTsNCisNCisJCQltdDYzNThfdmRyYW0yX3JlZzogbGRvX3ZkcmFtMiB7DQor
-CQkJCXJlZ3VsYXRvci1uYW1lID0gInZkcmFtMiI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92
-b2x0ID0gPDYwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDE4MDAwMDA+
-Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MzMwMD47DQorCQkJfTsNCisN
-CisJCQltdDYzNThfdnNpbTFfcmVnOiBsZG9fdnNpbTEgew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9
-ICJ2c2ltMSI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE3MDAwMDA+Ow0KKwkJ
-CQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzMTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVu
-YWJsZS1yYW1wLWRlbGF5ID0gPDU0MD47DQorCQkJfTsNCisNCisJCQltdDYzNThfdmlicl9yZWc6
-IGxkb192aWJyIHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidmliciI7DQorCQkJCXJlZ3VsYXRv
-ci1taW4tbWljcm92b2x0ID0gPDEyMDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9s
-dCA9IDwzMzAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDYwPjsN
-CisJCQl9Ow0KKw0KKwkJCW10NjM1OF92cmYxMl9yZWc6IGxkb192cmYxMiB7DQorCQkJCWNvbXBh
-dGlibGUgPSAicmVndWxhdG9yLWZpeGVkIjsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidnJmMTIi
-Ow0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxMjAwMDAwPjsNCisJCQkJcmVndWxh
-dG9yLW1heC1taWNyb3ZvbHQgPSA8MTIwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFt
-cC1kZWxheSA9IDwxMjA+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZpbzE4X3JlZzogbGRvX3Zp
-bzE4IHsNCisJCQkJY29tcGF0aWJsZSA9ICJyZWd1bGF0b3ItZml4ZWQiOw0KKwkJCQlyZWd1bGF0
-b3ItbmFtZSA9ICJ2aW8xOCI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAw
-MDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCisJCQkJcmVn
-dWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI3MDA+Ow0KKwkJCQlyZWd1bGF0b3ItYWx3YXlz
-LW9uOw0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3Z1c2JfcmVnOiBsZG9fdnVzYiB7DQorCQkJCXJl
-Z3VsYXRvci1uYW1lID0gInZ1c2IiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwz
-MDAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MzEwMDAwMD47DQorCQkJ
-CXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNzA+Ow0KKwkJCQlyZWd1bGF0b3ItYWx3
-YXlzLW9uOw0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZjYW1pb19yZWc6IGxkb192Y2FtaW8gew0K
-KwkJCQljb21wYXRpYmxlID0gInJlZ3VsYXRvci1maXhlZCI7DQorCQkJCXJlZ3VsYXRvci1uYW1l
-ID0gInZjYW1pbyI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0K
-KwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCisJCQkJcmVndWxhdG9y
-LWVuYWJsZS1yYW1wLWRlbGF5ID0gPDMyNT47DQorCQkJfTsNCisNCisJCQltdDYzNThfdmNhbWRf
-cmVnOiBsZG9fdmNhbWQgew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2Y2FtZCI7DQorCQkJCXJl
-Z3VsYXRvci1taW4tbWljcm92b2x0ID0gPDkwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWlj
-cm92b2x0ID0gPDE4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8
-MzI1PjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92Y24xOF9yZWc6IGxkb192Y24xOCB7DQorCQkJ
-CWNvbXBhdGlibGUgPSAicmVndWxhdG9yLWZpeGVkIjsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAi
-dmNuMTgiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCisJCQkJ
-cmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTgwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFi
-bGUtcmFtcC1kZWxheSA9IDwyNzA+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZmZTI4X3JlZzog
-bGRvX3ZmZTI4IHsNCisJCQkJY29tcGF0aWJsZSA9ICJyZWd1bGF0b3ItZml4ZWQiOw0KKwkJCQly
-ZWd1bGF0b3ItbmFtZSA9ICJ2ZmUyOCI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0g
-PDI4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwyODAwMDAwPjsNCisJ
-CQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI3MD47DQorCQkJfTsNCisNCisJCQlt
-dDYzNThfdnNyYW1fcHJvYzExX3JlZzogbGRvX3ZzcmFtX3Byb2MxMSB7DQorCQkJCXJlZ3VsYXRv
-ci1uYW1lID0gInZzcmFtX3Byb2MxMSI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0g
-PDUwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDEyOTM3NTA+Ow0KKwkJ
-CQlyZWd1bGF0b3ItcmFtcC1kZWxheSA9IDw2MjUwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1y
-YW1wLWRlbGF5ID0gPDI0MD47DQorCQkJCXJlZ3VsYXRvci1hbHdheXMtb247DQorCQkJfTsNCisN
-CisJCQltdDYzNThfdmNuMjhfcmVnOiBsZG9fdmNuMjggew0KKwkJCQljb21wYXRpYmxlID0gInJl
-Z3VsYXRvci1maXhlZCI7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZjbjI4IjsNCisJCQkJcmVn
-dWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8MjgwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWlj
-cm92b2x0ID0gPDI4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8
-MjcwPjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92c3JhbV9vdGhlcnNfcmVnOiBsZG9fdnNyYW1f
-b3RoZXJzIHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidnNyYW1fb3RoZXJzIjsNCisJCQkJcmVn
-dWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNy
-b3ZvbHQgPSA8MTI5Mzc1MD47DQorCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDYyNTA+Ow0K
-KwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MjQwPjsNCisJCQkJcmVndWxhdG9y
-LWFsd2F5cy1vbjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92c3JhbV9ncHVfcmVnOiBsZG9fdnNy
-YW1fZ3B1IHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidnNyYW1fZ3B1IjsNCisJCQkJcmVndWxh
-dG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3Zv
-bHQgPSA8MTI5Mzc1MD47DQorCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDYyNTA+Ow0KKwkJ
-CQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MjQwPjsNCisJCQl9Ow0KKw0KKwkJCW10
-NjM1OF92eG8yMl9yZWc6IGxkb192eG8yMiB7DQorCQkJCWNvbXBhdGlibGUgPSAicmVndWxhdG9y
-LWZpeGVkIjsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidnhvMjIiOw0KKwkJCQlyZWd1bGF0b3It
-bWluLW1pY3Jvdm9sdCA9IDwyMjAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQg
-PSA8MjIwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwxMjA+Ow0K
-KwkJCQlyZWd1bGF0b3ItYWx3YXlzLW9uOw0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZlZnVzZV9y
-ZWc6IGxkb192ZWZ1c2Ugew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2ZWZ1c2UiOw0KKwkJCQly
-ZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxNzAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1t
-aWNyb3ZvbHQgPSA8MTkwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9
-IDwyNzA+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZhdXgxOF9yZWc6IGxkb192YXV4MTggew0K
-KwkJCQljb21wYXRpYmxlID0gInJlZ3VsYXRvci1maXhlZCI7DQorCQkJCXJlZ3VsYXRvci1uYW1l
-ID0gInZhdXgxOCI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0K
-KwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCisJCQkJcmVndWxhdG9y
-LWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI3MD47DQorCQkJfTsNCisNCisJCQltdDYzNThfdm1jaF9y
-ZWc6IGxkb192bWNoIHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidm1jaCI7DQorCQkJCXJlZ3Vs
-YXRvci1taW4tbWljcm92b2x0ID0gPDI5MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jv
-dm9sdCA9IDwzMzAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDYw
-PjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92YmlmMjhfcmVnOiBsZG9fdmJpZjI4IHsNCisJCQkJ
-Y29tcGF0aWJsZSA9ICJyZWd1bGF0b3ItZml4ZWQiOw0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2
-YmlmMjgiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwyODAwMDAwPjsNCisJCQkJ
-cmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MjgwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFi
-bGUtcmFtcC1kZWxheSA9IDwyNzA+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZzcmFtX3Byb2Mx
-Ml9yZWc6IGxkb192c3JhbV9wcm9jMTIgew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2c3JhbV9w
-cm9jMTIiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDw1MDAwMDA+Ow0KKwkJCQly
-ZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxMjkzNzUwPjsNCisJCQkJcmVndWxhdG9yLXJhbXAt
-ZGVsYXkgPSA8NjI1MD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNDA+
-Ow0KKwkJCQlyZWd1bGF0b3ItYWx3YXlzLW9uOw0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZjYW1h
-MV9yZWc6IGxkb192Y2FtYTEgew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2Y2FtYTEiOw0KKwkJ
-CQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1h
-eC1taWNyb3ZvbHQgPSA8MzAwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxh
-eSA9IDwzMjU+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZlbWNfcmVnOiBsZG9fdmVtYyB7DQor
-CQkJCXJlZ3VsYXRvci1uYW1lID0gInZlbWMiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9s
-dCA9IDwyOTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MzMwMDAwMD47
-DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDw2MD47DQorCQkJfTsNCisNCisJ
-CQltdDYzNThfdmlvMjhfcmVnOiBsZG9fdmlvMjggew0KKwkJCQljb21wYXRpYmxlID0gInJlZ3Vs
-YXRvci1maXhlZCI7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZpbzI4IjsNCisJCQkJcmVndWxh
-dG9yLW1pbi1taWNyb3ZvbHQgPSA8MjgwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92
-b2x0ID0gPDI4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8Mjcw
-PjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92YTEyX3JlZzogbGRvX3ZhMTIgew0KKwkJCQljb21w
-YXRpYmxlID0gInJlZ3VsYXRvci1maXhlZCI7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZhMTIi
-Ow0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxMjAwMDAwPjsNCisJCQkJcmVndWxh
-dG9yLW1heC1taWNyb3ZvbHQgPSA8MTIwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFt
-cC1kZWxheSA9IDwyNzA+Ow0KKwkJCQlyZWd1bGF0b3ItYWx3YXlzLW9uOw0KKwkJCX07DQorDQor
-CQkJbXQ2MzU4X3ZyZjE4X3JlZzogbGRvX3ZyZjE4IHsNCisJCQkJY29tcGF0aWJsZSA9ICJyZWd1
-bGF0b3ItZml4ZWQiOw0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2cmYxOCI7DQorCQkJCXJlZ3Vs
-YXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jv
-dm9sdCA9IDwxODAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDEy
-MD47DQorCQkJfTsNCisNCisJCQltdDYzNThfdmNuMzNfYnRfcmVnOiBsZG9fdmNuMzNfYnQgew0K
-KwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2Y24zM19idCI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWlj
-cm92b2x0ID0gPDMzMDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzNTAw
-MDAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI3MD47DQorCQkJfTsN
-CisNCisJCQltdDYzNThfdmNuMzNfd2lmaV9yZWc6IGxkb192Y24zM193aWZpIHsNCisJCQkJcmVn
-dWxhdG9yLW5hbWUgPSAidmNuMzNfd2lmaSI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0
-ID0gPDMzMDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzNTAwMDAwPjsN
-CisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI3MD47DQorCQkJfTsNCisNCisJ
-CQltdDYzNThfdmNhbWEyX3JlZzogbGRvX3ZjYW1hMiB7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0g
-InZjYW1hMiI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0KKwkJ
-CQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzMDAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVu
-YWJsZS1yYW1wLWRlbGF5ID0gPDMyNT47DQorCQkJfTsNCisNCisJCQltdDYzNThfdm1jX3JlZzog
-bGRvX3ZtYyB7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZtYyI7DQorCQkJCXJlZ3VsYXRvci1t
-aW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9
-IDwzMzAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDYwPjsNCisJ
-CQl9Ow0KKw0KKwkJCW10NjM1OF92bGRvMjhfcmVnOiBsZG9fdmxkbzI4IHsNCisJCQkJcmVndWxh
-dG9yLW5hbWUgPSAidmxkbzI4IjsNCisJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8Mjgw
-MDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDMwMDAwMDA+Ow0KKwkJCQly
-ZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MjcwPjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1
-OF92YXVkMjhfcmVnOiBsZG9fdmF1ZDI4IHsNCisJCQkJY29tcGF0aWJsZSA9ICJyZWd1bGF0b3It
-Zml4ZWQiOw0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2YXVkMjgiOw0KKwkJCQlyZWd1bGF0b3It
-bWluLW1pY3Jvdm9sdCA9IDwyODAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQg
-PSA8MjgwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNzA+Ow0K
-KwkJCX07DQorDQorCQkJbXQ2MzU4X3ZzaW0yX3JlZzogbGRvX3ZzaW0yIHsNCisJCQkJcmVndWxh
-dG9yLW5hbWUgPSAidnNpbTIiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxNzAw
-MDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MzEwMDAwMD47DQorCQkJCXJl
-Z3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDw1NDA+Ow0KKwkJCX07DQorCQl9Ow0KKw0KKwkJ
-bXQ2MzU4cnRjOiBtdDYzNThydGMgew0KKwkJCWNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ2MzU4
-LXJ0YyI7DQorCQl9Ow0KKwl9Ow0KK307DQpkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9ib290L2R0
-cy9tZWRpYXRlay9tdDgxODMtZXZiLmR0cyBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsv
-bXQ4MTgzLWV2Yi5kdHMNCmluZGV4IDFmYjE5NWMuLjllYjg0ZDcgMTAwNjQ0DQotLS0gYS9hcmNo
-L2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1ldmIuZHRzDQorKysgYi9hcmNoL2FybTY0
-L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1ldmIuZHRzDQpAQCAtNyw2ICs3LDcgQEANCiANCiAv
-ZHRzLXYxLzsNCiAjaW5jbHVkZSAibXQ4MTgzLmR0c2kiDQorI2luY2x1ZGUgIm10NjM1OC5kdHNp
-Ig0KIA0KIC8gew0KIAltb2RlbCA9ICJNZWRpYVRlayBNVDgxODMgZXZhbHVhdGlvbiBib2FyZCI7
-DQotLSANCjIuNi40DQo=
+Hi Mark,
 
+Many thanks for your comments.
+
+On Mon, 20 Apr 2020 at 19:42, Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Mon, Apr 13, 2020 at 03:00:13PM +0800, zhang.lyra@gmail.com wrote:
+> > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> >
+> > Add a new flag CPUIDLE_FLAG_S2IDLE to allow c-state to be found as
+> > deepest state for s2idle only, so that users can add a new c-state
+> > for using s2idle and don't worry disturbing other use cases such as
+> > play_idle() which probably don't want to enter into so much deep
+> > idle state since devices are not suspended for that kind of cases.
+>
+> Can you please elaborate on this?
+
+Ok.
+
+The thing was, I added a new c-state (named DOMAIN_PD for example) in
+DT for using s2idle, and the target power level indicated in DOMAIN_PD
+would be deeper than the level for regular cpuidle (for example
+level-0 is for regular cpuidle; level-1 is for system suspend and
+power domain would be shutdown as well as all cores , DOMAIN_PD uses
+level-1). I worried that would cause the deeper power domain to be
+shutdown if DOMAIN_PD was selected by play_idle().
+
+But after have another look at PSCI in ATF, I consider that it
+probably is not a problem which would really happen. Since play_idle()
+wouldn't occur on all cpus at the same time, although play_idle()
+could use DOMAIN_PD, the system wouldn't enter into that so deep power
+level.
+
+Hope I've explained the things clearly :)
+
+In a word, this patch seems not needed for now.
+
+
+Thanks again,
+Chunyan
+
+
+>
+> Why exactly are these states not suited for regular cpu idle? What
+> problems do they cause? e.g. long wakeup latency?
+>
+> The flag and the for-s2-idle-only DT property are encoding a policy
+> rarher than a property, and as such I don't think this is the right way
+> to describe this in the DT. However, if there might be porperties of the
+> idle state that we could describe so that the OS can come to the same
+> conclusion.
+>
+> Thanks,
+> Mark.
+>
+> >
+> > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> > ---
+> >  drivers/cpuidle/cpuidle.c        | 3 ++-
+> >  drivers/cpuidle/dt_idle_states.c | 3 +++
+> >  include/linux/cpuidle.h          | 1 +
+> >  3 files changed, 6 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> > index de81298051b3..bb61f0c271d2 100644
+> > --- a/drivers/cpuidle/cpuidle.c
+> > +++ b/drivers/cpuidle/cpuidle.c
+> > @@ -89,7 +89,8 @@ static int find_deepest_state(struct cpuidle_driver *drv,
+> >                   s->exit_latency_ns <= latency_req ||
+> >                   s->exit_latency_ns > max_latency_ns ||
+> >                   (s->flags & forbidden_flags) ||
+> > -                 (s2idle && !s->enter_s2idle))
+> > +                 (s2idle && !s->enter_s2idle) ||
+> > +                 (!s2idle && (s->flags & CPUIDLE_FLAG_S2ILDE)))
+> >                       continue;
+> >
+> >               latency_req = s->exit_latency_ns;
+> > diff --git a/drivers/cpuidle/dt_idle_states.c b/drivers/cpuidle/dt_idle_states.c
+> > index 252f2a9686a6..530db2726c05 100644
+> > --- a/drivers/cpuidle/dt_idle_states.c
+> > +++ b/drivers/cpuidle/dt_idle_states.c
+> > @@ -80,6 +80,9 @@ static int init_state_node(struct cpuidle_state *idle_state,
+> >       idle_state->flags = 0;
+> >       if (of_property_read_bool(state_node, "local-timer-stop"))
+> >               idle_state->flags |= CPUIDLE_FLAG_TIMER_STOP;
+> > +
+> > +     if (of_property_read_bool(state_node, "for-s2idle-only"))
+> > +             idle_state->flags |= CPUIDLE_FLAG_S2ILDE;
+> >       /*
+> >        * TODO:
+> >        *      replace with kstrdup and pointer assignment when name
+> > diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+> > index ec2ef63771f0..08da701f74cd 100644
+> > --- a/include/linux/cpuidle.h
+> > +++ b/include/linux/cpuidle.h
+> > @@ -78,6 +78,7 @@ struct cpuidle_state {
+> >  #define CPUIDLE_FLAG_TIMER_STOP BIT(2) /* timer is stopped on this state */
+> >  #define CPUIDLE_FLAG_UNUSABLE        BIT(3) /* avoid using this state */
+> >  #define CPUIDLE_FLAG_OFF     BIT(4) /* disable this state by default */
+> > +#define CPUIDLE_FLAG_S2ILDE  BIT(5) /* state is used for s2idle only */
+> >
+> >  struct cpuidle_device_kobj;
+> >  struct cpuidle_state_kobj;
+> > --
+> > 2.20.1
+> >
