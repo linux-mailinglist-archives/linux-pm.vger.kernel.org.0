@@ -2,148 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D75731B23DE
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Apr 2020 12:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CE71B23FE
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Apr 2020 12:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727120AbgDUKa5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Apr 2020 06:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
+        id S1728434AbgDUKkA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Apr 2020 06:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726741AbgDUKa4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Apr 2020 06:30:56 -0400
-Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D271C061A10
-        for <linux-pm@vger.kernel.org>; Tue, 21 Apr 2020 03:30:56 -0700 (PDT)
-Received: by mail-ua1-x943.google.com with SMTP id t8so4862434uap.3
-        for <linux-pm@vger.kernel.org>; Tue, 21 Apr 2020 03:30:56 -0700 (PDT)
+        with ESMTP id S1726120AbgDUKj7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Apr 2020 06:39:59 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE39C061A0F
+        for <linux-pm@vger.kernel.org>; Tue, 21 Apr 2020 03:39:59 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id o3so8088667vsd.4
+        for <linux-pm@vger.kernel.org>; Tue, 21 Apr 2020 03:39:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+Nmmt4cUyHLEe6qve6WvcXD9XM2QrRLQtbhGo4+r1qY=;
-        b=KycdRg1y9oQM3pZPaP3bxRnhvW1zUmoQIZW2WRzxFR2dQn/3L4nMD8XzdppM8rTkZ1
-         m8aCfMmSkq/htN3OrmP7HBWGtLYHToudPjD8M8ZqZD+PW90JzYDbk0WqZP+D4YFljGJ4
-         VKCkoDHOYm82W6pyaTLd5gjAuSdQnWwL5SM2tXDmCG0d2VAvVArx7zWPt9Y+Dplm9ykj
-         AwnU3caAvLH/DIlTeloP07h0x+NMLq+s8LVzkPbObaHMecie8vvUYuJKAiPLGebkdG5o
-         Hb5JUODBuPGnGPHLnCglQWCwG/GlsoJhEaAg3FskzyNDu3V2k1CTXv6Ahy0ruIzMoaLh
-         kddw==
+        bh=ZWOnko77txal0K7pJvRHJBebpvxdOfp3TVzw/ZvqiSM=;
+        b=sZb0j1ADnFw2pQCOR1I1/JAIJ2vP4Lj+6zzr6vrUr1JZpY+SKjo0VNeVwo35qRCV+F
+         1PPJMFAXIMfTGbxOXoZVrDf4gUZcRWtESA1GBPl60kn1gEdf5gq6fuwNsXgGh4eG28Yz
+         ZCr/66YuuY54OOylETzfZ17pWqnkCBWP/fxDWULm5idzduPopFhWtKSajwoZg2GehXJx
+         nbIQcoW8hWGVGSw73GXi1zBuTqJzyH0yKhBtjNENJlQ/1Hhp6xz73dZStiIjb+jT/Jkd
+         KedNNlRpRTAdqOhMd/jZ2wkg5Fv6T82MGFWxWfAM8S9LMNKw6ywmJ9bqrBm6MTtBi3tb
+         CRlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+Nmmt4cUyHLEe6qve6WvcXD9XM2QrRLQtbhGo4+r1qY=;
-        b=R3TtwoKhhWCX45rOgwCBaAP/hQKOsqtRhAZTOXpwPx9lRzlvlx7QY9pzukPnRn/4jw
-         46HwPg0l1ACRkz7RuzeClXtZqpaWPbJ5fnmHDzOz8MvhG+EV6TkenWb9gMcZjK11WFJU
-         pK1/EIVZAGgsK5L+WRCbv4tNqrUVcT4YKYn0UhnvlXwRAPrOOUerpty+tUer1nJLibEI
-         nDzLrVO+pveJNFBAEtKoRH/elZ5Vu+aXE1LyRZAP5VfzITMhfK3V9PD4IjlJ6NTKMm9b
-         g4E6n+BRp6TDN+RMoFLPr7MOEdHpwQyeoSA8YuS/qg7/ZorFJRnbU/z8vWgwJwOqljDM
-         ZwZQ==
-X-Gm-Message-State: AGi0PubdPxPbbBiSiXPvnzpp4DZX3jH18R2LlY3xruWNse4Z3IK3cjLx
-        +ZTPjWITQtQ3ojffocX3gaVcM4SzGcEWHa5T7pajUg==
-X-Google-Smtp-Source: APiQypJjJlGRUhECl9LUNHsivRWgdQRbBS7vnJgH8AQX+Nfndksy1VNAV4ImNERQV4t9bCWuXCZorue5jXGTrIUmCJ0=
-X-Received: by 2002:a9f:25af:: with SMTP id 44mr11675574uaf.104.1587465054589;
- Tue, 21 Apr 2020 03:30:54 -0700 (PDT)
+        bh=ZWOnko77txal0K7pJvRHJBebpvxdOfp3TVzw/ZvqiSM=;
+        b=aAv4Yv84nDSz02sDA57JynNa8g0Ojk3LXZ35av2S2vF1DIAeSKz2g9oj9UcT03km5U
+         eW//Dy+wYH3KPqWm5G3f8yOhUuSkLFJuHgd7ExX+lq3DSQNzrnJ1KYdPD8ZEvqvQV8f/
+         8cIfSsppcZ7nLMnMmxiLTP8wDvThUtS0Eht4sj1s7yV3kwexjhbaRdGWcoVcah2wGjyY
+         8qem8+7ZMi7SaALOIG913a0cnz2rrC5gbBm9T8/kRZZennv76Z8XHt3FrHA6QbQfCzka
+         agc1SvPK3g6xSLA7zy+WzhZIcJ5gsKQsENfoV9b/J4HexTpT3bJPiGzRuoRCeDDZ5jCx
+         +1Qg==
+X-Gm-Message-State: AGi0PuZjBgpueGJCBcMjKGWtN3fb/hltCtQ8Blo6DZhuuuxMChUxpbbV
+        yKg2Dw4Chh9zG2I4kQoZZsutGQSSff54SCpjHkSX6g==
+X-Google-Smtp-Source: APiQypKISV66Pw/5T+dsPNqBQ+0UbOK10keNAQzmOGZsGfLJ0yfsb04HQOYUoTZ32K7OtcDuVGegOMCuwdmU2fcyQrk=
+X-Received: by 2002:a67:ead1:: with SMTP id s17mr14820744vso.200.1587465598574;
+ Tue, 21 Apr 2020 03:39:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <1888197.j9z7NJ8yPn@kreacher> <5673945.BT02kTCndr@kreacher>
-In-Reply-To: <5673945.BT02kTCndr@kreacher>
+References: <20200413123207.74552-1-paul@crapouillou.net> <20200413123207.74552-3-paul@crapouillou.net>
+In-Reply-To: <20200413123207.74552-3-paul@crapouillou.net>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 21 Apr 2020 12:30:18 +0200
-Message-ID: <CAPDyKFoV-gMn34nghBBK91pRYy3c90D8jrA4-OP2SGxQPzxgdg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/9] PM: sleep: core: Rearrange the handling of driver
- power management flags
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans De Goede <hdegoede@redhat.com>
+Date:   Tue, 21 Apr 2020 12:39:22 +0200
+Message-ID: <CAPDyKFrRMzzodhWSC2tgMSSNBwLcowd7q48_6dFPGuHUD_CUZg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] mmc: jz4740: Use pm_ptr() macro
+To:     Paul Cercueil <paul@crapouillou.net>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        od@zcrc.me,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 18 Apr 2020 at 19:11, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+On Mon, 13 Apr 2020 at 14:32, Paul Cercueil <paul@crapouillou.net> wrote:
 >
-> Hi,
+> Use the newly introduced pm_ptr() macro to simplify the code.
 >
-> This is an update including some fixes and extra patches based on the
-> continuation of the discussion [1].
->
-> On Friday, April 10, 2020 5:46:27 PM CEST Rafael J. Wysocki wrote:
-> > Hi Alan,
-> >
-> > Following our recent discussion regarding the DPM_FLAG_* family of flags [1],
-> > I have decided to follow some of your recommendations and make changes to the
-> > core code handling those flags.
-> >
-> > The purpose of this is basically to make the code more consistent internally,
-> > easier to follow and better documented.
-> >
-> > First of all, patch [1/7] changes the PM core to skip driver-level "late"
-> > and "noirq" suspend callbacks for devices with SMART_SUSPEND set if they are
-> > still runtime-suspended during the "late" system-wide suspend phase (without
-> > the patch it does that only if subsystem-level late/noirq/early suspend/resume
-> > callbacks are not present for the device, which is demonstrably inconsistent)
-> > and updates the resume part of the code accordingly (it doesn't need to check
-> > whether or not the subsystem-level callbacks are present any more).
-> >
-> > The next patch, [2/7], is purely cosmetic and its only purpose is to reduce
-> > the LOC number and move related pieces of code closer to each other.
->
-> The first two patches have not changed.
->
-> > Patch [3/7] changes the PM core so that it doesn't skip any subsystem-level
-> > callbacks during system-wide resume (without the patch they may be skipped in
-> > the "early resume" and "resume" phases due to LEAVE_SUSPENDED being set which
-> > may be problematic) and to always run the driver's ->resume callback if the
-> > corresponding subsystem-level callback is not present (without the patch it
-> > may be skipped if LEAVE_SUSPENDED is set) to let it reverse the changes made
-> > by the driver's ->suspend callback (which always runs too) if need be.
->
-> The difference between this one and patch [3/9] in the v2 is the fixed
-> definition of dev_pm_may_skip_resume(), renamed to dev_pm_skip_resume() by
-> one of the next patches.
->
-> Patch [4/9] changes the handling of the power.may_skip_resume flag to set it
-> to 'true' by default and updates the subsystems aware of it to clear it when
-> they don't want devices to stay in suspend.
->
-> > Patches [4-6/7] rename one function in the PM core and two driver PM flags to
-> > make their names better reflect their purpose.
->
-> These are patches [5/9] and [7-8/9] in the v2 and patch [6/9] renames
-> dev_pm_smart_suspend_and_suspended() to dev_pm_skip_suspend().
->
-> > Finally, patch [7/7] updates the documentation of the driver PM flags to
-> > reflect the new code flows.
->
-> This patch [9/9] now and it has been updated to reflect the new code changes.
->
-> The pm-sleep-core branch:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
->   pm-sleep-core
->
-> contains the v2 now.
->
-> Cheers!
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-Rafael, apologize for taking some time to review and respond. I
-noticed you have queued this up on your next branch by now, good.
+To me, the series is a step in the right direction. Perhaps there is a
+better name than "pm_ptr", but that's just a nitpick.
 
-In any case, I have looked through the series and I think it looks good, thanks!
+That said, feel free to add (for all three patches in the series):
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Let's see what Rafael thinks about this.
 
 Kind regards
 Uffe
 
+> ---
 >
+> Notes:
+>     v2: Use pm_ptr() macro instead of pm_sleep_ptr()
 >
-> [1] https://lore.kernel.org/linux-pm/Pine.LNX.4.44L0.2003251631360.1724-100000@netrider.rowland.org/
+>  drivers/mmc/host/jz4740_mmc.c | 12 +++---------
+>  1 file changed, 3 insertions(+), 9 deletions(-)
 >
+> diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+> index fbae87d1f017..2d41e7e5ec43 100644
+> --- a/drivers/mmc/host/jz4740_mmc.c
+> +++ b/drivers/mmc/host/jz4740_mmc.c
+> @@ -1099,24 +1099,18 @@ static int jz4740_mmc_remove(struct platform_device *pdev)
+>         return 0;
+>  }
 >
+> -#ifdef CONFIG_PM_SLEEP
+> -
+> -static int jz4740_mmc_suspend(struct device *dev)
+> +static int __maybe_unused jz4740_mmc_suspend(struct device *dev)
+>  {
+>         return pinctrl_pm_select_sleep_state(dev);
+>  }
+>
+> -static int jz4740_mmc_resume(struct device *dev)
+> +static int __maybe_unused jz4740_mmc_resume(struct device *dev)
+>  {
+>         return pinctrl_select_default_state(dev);
+>  }
+>
+>  static SIMPLE_DEV_PM_OPS(jz4740_mmc_pm_ops, jz4740_mmc_suspend,
+>         jz4740_mmc_resume);
+> -#define JZ4740_MMC_PM_OPS (&jz4740_mmc_pm_ops)
+> -#else
+> -#define JZ4740_MMC_PM_OPS NULL
+> -#endif
+>
+>  static struct platform_driver jz4740_mmc_driver = {
+>         .probe = jz4740_mmc_probe,
+> @@ -1124,7 +1118,7 @@ static struct platform_driver jz4740_mmc_driver = {
+>         .driver = {
+>                 .name = "jz4740-mmc",
+>                 .of_match_table = of_match_ptr(jz4740_mmc_of_match),
+> -               .pm = JZ4740_MMC_PM_OPS,
+> +               .pm = pm_ptr(&jz4740_mmc_pm_ops),
+>         },
+>  };
+>
+> --
+> 2.25.1
 >
