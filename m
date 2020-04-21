@@ -2,174 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0902B1B29C7
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Apr 2020 16:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429AD1B2B80
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Apr 2020 17:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729139AbgDUObZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Apr 2020 10:31:25 -0400
-Received: from mail-am6eur05on2051.outbound.protection.outlook.com ([40.107.22.51]:25440
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729206AbgDUObX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 21 Apr 2020 10:31:23 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jTz2YPm6VYDbR/HdLyGcoWC7R3fn6whXZMZ+q1bVVbt8IwCCYdtryvGxndncQb+8ElpulF6M7zyDlQ3PUzWOb69gxGQgkxZlYqAjg6/mTIbQcj70OjgD1CHmMrQjL6Nssi1CgstIy5/qCxf1OR4+x9274YrArxaMh01V+l4xuVIcZAf80BOb7cLjYHOrR5J/fFycy3Moi2BIqr3nMxrCQZ/tUF0BELhk5MJoGVeV/dC/17SyWzQffvB3fX+1pYcFX7gsOYqWV1OH+vjomJ4KA7BZAP5flf82ygI2o/dajX5auKgL3PtOhz2PT3OUVrzLqKF/swRWaHdiBWTXpz/uBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EU13+WUaDHSv9p7Nw+Nxw0lh+DgYNdcrNFHJ/qMmWhw=;
- b=I55nzw2KNrcyUB7iPYJtlmvFWXec0I9Vz+BCc83lydlr9Va/kv1TvZpxd3zIvNiCjW+Y99oEBB5jdj/m/WPcbnUjhyhvhc08YPv0fMhQBYgraxtjmZGMdl+IBvE9wAktSBQr3wCSJnQykcFT2GSagCuHdHbIaCwoYKYo6qzOdUJFUmcsphtnmKJNimmSRyN3WgnZl0P0626boil1vSQa+XwxPIBT8KPnU5Ym4GlMdC9qrlg6Ua1Y8SXL40VdWEG0NeaCiePjXatiu4jWQglcSbA4CRxSC5m4KLFR+cmdrnFPNWNibLfsxVQsqubqMMPTl1MLWSkqXXAFujahv4mZvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EU13+WUaDHSv9p7Nw+Nxw0lh+DgYNdcrNFHJ/qMmWhw=;
- b=iLB7Qk01aqjSR8LdgnBCj7kFvQX7LwzBCaSQlLsIDe1tFr09UyPWIaHL6pa3H+UYLaoF7cXVzARje2GTmTABVM59V9m6mbE0mWYAtEd7zl6HgCi3CObot6UR+FN51PEaaOHPX3C7MeU7+XLdVV8TO3pS+szQ98OQjHuZSPMBwJQ=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (2603:10a6:8:10::18)
- by DB3PR0402MB3691.eurprd04.prod.outlook.com (2603:10a6:8:5::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.29; Tue, 21 Apr
- 2020 14:31:17 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b%7]) with mapi id 15.20.2921.030; Tue, 21 Apr 2020
- 14:31:17 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH V2] dt-bindings: thermal: Convert i.MX to json-schema
-Thread-Topic: [PATCH V2] dt-bindings: thermal: Convert i.MX to json-schema
-Thread-Index: AQHWDtWuHhuFKGSv1ECuhQdSmjVzK6iCZy4AgAFNxdA=
-Date:   Tue, 21 Apr 2020 14:31:17 +0000
-Message-ID: <DB3PR0402MB3916B60832507A72F39750EAF5D50@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <1586480844-19227-1-git-send-email-Anson.Huang@nxp.com>
- <20200420183512.GA5483@bogus>
-In-Reply-To: <20200420183512.GA5483@bogus>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [92.121.68.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 75e0848e-9930-4c6d-339d-08d7e600a749
-x-ms-traffictypediagnostic: DB3PR0402MB3691:|DB3PR0402MB3691:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB36912FDBFFC18F7789BFC55BF5D50@DB3PR0402MB3691.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1850;
-x-forefront-prvs: 038002787A
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(366004)(186003)(9686003)(6506007)(86362001)(54906003)(7416002)(8676002)(4326008)(81156014)(26005)(71200400001)(7696005)(55016002)(64756008)(66476007)(66946007)(66446008)(66556008)(33656002)(52536014)(8936002)(76116006)(44832011)(6916009)(2906002)(498600001)(5660300002);DIR:OUT;SFP:1101;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: eNx4v3QJzjTy8OndEy1RfW1XVrhEnqaRKW9vNETLm80zgl8e2t1Fk/b2eOFJATClWyBKf4Z5V7GuJFTpMoFAdTrluqWNh+h8CagKor9bXgSm5FbLKwNOaspwK+jB4Iggu6IvLonp+x3+mgx7tJpYUom+znzK1B4UA+8yLIxsvzz7dZk747qVmkq/nWONqLC5kAMaYq+g1QKguZbbHdZo50PJDVXuPhQsPV/YAsE4t+fntxR3rZHpHT/8CZfGs4ld84Pp7ZY1NkMMdBM0YACkJjGr4mZusq9N4PLd2aoz1QDdx/hns4kVJKHS/xRkgXA0zMDalikPhclMKl+5bAR77zzmtWpcqsfODCnUbUcRLPP00cyFKjzd8VMJk8eNoCz8gjnuo6ABJROB88dUrCzs2KPW7MH4VNw5hmGxJMG91AvKkzgWuEodVOeJ7I39aFXe
-x-ms-exchange-antispam-messagedata: 69Azka5k0n2Z7/ScLT4sKSg6/89XFnXYjriTCSnKXfeEaQucdOdS1OUq3ai2dGSK728McBV9G+ZO8mCrRAFt8+EYjx13L6JRO6ullyXYwuRjAV1ninpaZ0PImVE4mfK++m8cPwUcJaPdRNC2u2rGwIrsHMjKPxN9h3P1xah2d4LjGxDkwhEnFTD2Hjh3vcMiP8Zr/DyEdJzEdH3inHaZwSbDN5pAYe9bnVzml16pJHq5V7dTTNE1zS7LoXaBtrHEJmICO8jzyvWc/pNiVdRrdbfQu10Qs0s2FrdOBLUVyAsAP1eBZAcfay/mofDvj83PHbpslxAlK70LanR44VyGdStDCkz8KCT/uuVHbvIPSyr8m7XZIxRomDCFwXWFKEAHuepEzkii65FiF8rA+YnA7nyM7VFZNi1djpjXdUNhotj9Z6Qy8WYX5smh6OugdEfD0fYY9dHpB0844wgMNqgYpSAMsP7lhQtHEuqAq52BGBKaZ+9jg/S9Q/BTs/3HsuYM6WOdfgG+HJ3517bQfDVSAqWnJd+adgM19nMM1kgfe3oeqfcmuDmPTcRBF93bGEsjyuxuh7O8xPyEThNpbQnQ0+c67LqAGNOz32yf+IUr5jQTT+LeT9Xda37rvFRcFFbMvybjdjQlUWsS8dWhKP5Puzm/A2h6FoekYK3YkFtxawU0nqZwGLfaxnDkEeE5LaiX+nBIZFW4Mm2ZJwCNxl4ntjrhLVrb9Tnbkm2BJ3p/iYl5pi3VcA1KyJhhrKfXLuAPVDWXChwoS8/WnB4/wFPTlnez8rASQamMUQF8R6dQ6mk=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1725990AbgDUPoI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Apr 2020 11:44:08 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:48790 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725613AbgDUPoI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Apr 2020 11:44:08 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03LFYLpu158456;
+        Tue, 21 Apr 2020 15:43:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=eOpQsTy+r52WApbn5F48tilahuPcKCpRcdAW8A4UlGA=;
+ b=S2Ei/2rA/w6p0BxCFzMel9pG0tGXIyv5DeGr5XvUhFbU/FjplPPc6aqDy4JxcbEku14D
+ Ve4KWY5YmbeBuXRXCsbf7lWvIDxvAxl5bn20O+GNaQ32NHoyZHCqMQSHMKcRBb10fCGM
+ o/51uH2YV97a00SwX+fh06iFH6xzm0JyHmkZcBNw44/EwVbYwCA7g+aAK9IOk0hCuZIl
+ 1TMs2+mIycw+CdB0kyCDrT5jTqCO4edVKXuYma4P0FKbRvw+UO0hPGFNIPhOCTvXX/Ob
+ XRbS6J5OBxfcOj96IpHq8uQPVw8U98ESv9zgk42yaYDfgyZ0UU5Cyh2ro1iggUA/fBsM Dw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 30grpgj7g9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Apr 2020 15:43:42 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03LFbbiG157058;
+        Tue, 21 Apr 2020 15:43:42 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 30gb90aye7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Apr 2020 15:43:42 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03LFhcFu029521;
+        Tue, 21 Apr 2020 15:43:38 GMT
+Received: from localhost (/67.169.218.210)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 21 Apr 2020 08:43:37 -0700
+Date:   Tue, 21 Apr 2020 08:43:33 -0700
+From:   "Darrick J. Wong" <darrick.wong@oracle.com>
+To:     Domenico Andreoli <domenico.andreoli@linux.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-fsdevel@vger.kernel.org, mkleinsoft@gmail.com,
+        Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH] hibernate: unlock swap bdev for writing when uswsusp is
+ active
+Message-ID: <20200421154333.GG6749@magnolia>
+References: <20200229170825.GX8045@magnolia>
+ <20200229180716.GA31323@dumbo>
+ <20200229183820.GA8037@magnolia>
+ <20200229200200.GA10970@dumbo>
+ <CAJZ5v0iHaZyfuTnqJyM6u=UU=+W6yRuM_Q6iUvB2UudANuwfgA@mail.gmail.com>
+ <20200420185255.GA20916@dumbo>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75e0848e-9930-4c6d-339d-08d7e600a749
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Apr 2020 14:31:17.5716
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lgm0UrLLbkXpnleBqWuTzfo5VXLHwSzEtVhoGPI+YuAviOI8OsZ/bwn3chNaEyLViIIGfHG2mvdJyfr4cxVczQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3691
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200420185255.GA20916@dumbo>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9598 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 suspectscore=0 malwarescore=0 phishscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004210121
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9598 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=0 bulkscore=0 clxscore=1011
+ malwarescore=0 phishscore=0 spamscore=0 priorityscore=1501 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004210121
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Rob
+On Mon, Apr 20, 2020 at 08:52:55PM +0200, Domenico Andreoli wrote:
+> On Sun, Mar 01, 2020 at 10:35:36PM +0100, Rafael J. Wysocki wrote:
+> > On Sat, Feb 29, 2020 at 9:02 PM Domenico Andreoli <domenico.andreoli@linux.com> wrote:
+> > >
+> > > Maybe user-space hibernation should be a separate option.
+> > 
+> > That actually is not a bad idea at all in my view.
+> 
+> I prepared a patch for this:
+> https://lore.kernel.org/linux-pm/20200413190843.044112674@gmail.com/
 
+If you succeed in making uswsusp a kconfig option, can you amend the
+"!hibernation available()" test in blkdev_write_iter so that users of
+in-kernel hibernate are protected against userspace swap device
+scribbles, please?
 
-> Subject: Re: [PATCH V2] dt-bindings: thermal: Convert i.MX to json-schema
->=20
-> On Fri, Apr 10, 2020 at 09:07:24AM +0800, Anson Huang wrote:
-> > Convert the i.MX thermal binding to DT schema format using json-schema
-> >
-> > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> > ---
-> > Changes since V1:
-> > 	- make clock property optional.
-> > ---
-> >  .../devicetree/bindings/thermal/imx-thermal.txt    | 61 --------------
-> >  .../devicetree/bindings/thermal/imx-thermal.yaml   | 96
-> ++++++++++++++++++++++
-> >  2 files changed, 96 insertions(+), 61 deletions(-)  delete mode
-> > 100644 Documentation/devicetree/bindings/thermal/imx-thermal.txt
-> >  create mode 100644
-> > Documentation/devicetree/bindings/thermal/imx-thermal.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/thermal/imx-thermal.txt
-> > b/Documentation/devicetree/bindings/thermal/imx-thermal.txt
-> > deleted file mode 100644
-> > index 823e417..0000000
-> > +
-> > +title: NXP i.MX Thermal Binding
-> > +
-> > +maintainers:
-> > +  - Anson Huang <Anson.Huang@nxp.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - enum:
-> > +              - fsl,imx6q-tempmon
-> > +              - fsl,imx6sx-tempmon
-> > +              - fsl,imx7d-tempmon
-> > +
-> > +  interrupts:
-> > +    description: |
-> > +      The interrupt output of the controller, the IRQ will be triggere=
-d
-> > +      when temperature is higher than high threshold.
-> > +    maxItems: 1
-> > +
-> > +  nvmem-cells:
-> > +    description: |
-> > +      Phandle to the calibration cells provided by ocotp for calibrati=
-on
-> > +      data and temperature grade.
-> > +    maxItems: 2
-> > +
-> > +  nvmem-cell-names:
-> > +    maxItems: 2
-> > +    items:
-> > +      - const: calib
-> > +      - const: temp_grade
-> > +
-> > +  fsl,tempmon:
-> > +    $ref: '/schemas/types.yaml#/definitions/phandle'
-> > +    description: |
-> > +      Phandle pointer to system controller that contains TEMPMON
-> control
-> > +      registers, e.g. ANATOP on imx6q.
->=20
-> Really, this should have been a child of the system controller. Not too l=
-ate to
-> do that, but you'd need to keep this for compatibility.
+--D
 
-Sorry, I don't quite get your point, can you provide more details or exampl=
-e, thanks.
+> Regards,
+> Domenico
+> 
+> -- 
+> rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
+> ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
 
-Anson
 
