@@ -2,59 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDEC71B312C
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Apr 2020 22:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACC51B327B
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 00:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbgDUU2L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Apr 2020 16:28:11 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:54508 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726050AbgDUU2L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Apr 2020 16:28:11 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id C12AF128D4B46;
-        Tue, 21 Apr 2020 13:28:09 -0700 (PDT)
-Date:   Tue, 21 Apr 2020 13:28:08 -0700 (PDT)
-Message-Id: <20200421.132808.1673635156407152563.davem@davemloft.net>
-To:     leon@kernel.org
-Cc:     kuba@kernel.org, leonro@mellanox.com, andy@greyhouse.net,
-        bp@suse.de, ionut@badula.org, j.vosburgh@gmail.com,
-        jeyu@kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        masahiroy@kernel.org, michal.lkml@markovi.net,
-        netdev@vger.kernel.org, oss-drivers@netronome.com,
-        salil.mehta@huawei.com, sre@kernel.org, snelson@pensando.io,
-        vfalico@gmail.com, yisen.zhuang@huawei.com
-Subject: Re: [PATCH net-next v2 0/4] Remove vermagic header from global
- include folder
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200419141850.126507-1-leon@kernel.org>
-References: <20200419141850.126507-1-leon@kernel.org>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 21 Apr 2020 13:28:10 -0700 (PDT)
+        id S1726012AbgDUWHg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 21 Apr 2020 18:07:36 -0400
+Received: from mail.ac.gov.br ([179.252.114.240]:60098 "EHLO
+        srvifs070.ac.gov.br" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725850AbgDUWHg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Apr 2020 18:07:36 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by srvifs070.ac.gov.br (Postfix) with ESMTP id BA42E36C2C12;
+        Tue, 21 Apr 2020 17:08:04 -0500 (ACT)
+Received: from srvifs070.ac.gov.br ([127.0.0.1])
+        by localhost (srvifs070.ac.gov.br [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id UafOKOAphWEh; Tue, 21 Apr 2020 17:08:03 -0500 (ACT)
+Received: from srvifs070.ac.gov.br (localhost [127.0.0.1])
+        by srvifs070.ac.gov.br (Postfix) with ESMTP id E276036C2C26;
+        Tue, 21 Apr 2020 17:08:01 -0500 (ACT)
+Received: from srvifs070.ac.gov.br (srvifs070.ac.gov.br [10.1.4.71])
+        by srvifs070.ac.gov.br (Postfix) with ESMTP id D148836C2BEB;
+        Tue, 21 Apr 2020 17:07:57 -0500 (ACT)
+Date:   Tue, 21 Apr 2020 18:07:57 -0400 (AMT)
+From:   Azim Hashim premji <angela.magalhaes@ac.gov.br>
+Reply-To: Azim Hashim premji <Azimhashimpremjiunion@outlook.co.id>
+Message-ID: <1298426669.108986.1587506877563.JavaMail.zimbra@ac.gov.br>
+Subject: Eine Spende wurde Ihnen genehmigt
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [41.80.120.141]
+X-Mailer: Zimbra 8.0.6_GA_5922 (zclient/8.0.6_GA_5922)
+Thread-Topic: Eine Spende wurde Ihnen genehmigt
+Thread-Index: GZcbaDhN2psHAKu4nmuGUqMNUOu/4w==
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Leon Romanovsky <leon@kernel.org>
-Date: Sun, 19 Apr 2020 17:18:46 +0300
 
-> This is followup to the failure reported by Borislav [1] and suggested
-> fix later on [2].
-> 
-> The series removes all includes of linux/vermagic.h, updates hns and
-> nfp to use same kernel versioning scheme (exactly like we did for
-> other drivers in previous cycle) and removes vermagic.h from global
-> include folder.
-> 
-> [1] https://lore.kernel.org/lkml/20200411155623.GA22175@zn.tnic
-> [2] https://lore.kernel.org/lkml/20200413080452.GA3772@zn.tnic
 
-Series applied to net-next, thanks.
+-- 
+Ich bin Azim Hashim Premji, ein indischer Geschäftsmagnat, Investor und Philanthrop. Ich bin der Vorsitzende von Wipro Limited. Ich habe 25 Prozent meines persönlichen Vermögens für wohltätige Zwecke gespendet. Und ich habe auch versprochen, den Rest von 25% in diesem Jahr 2020 zu verschenken.
+
+Sie wurden ausgewählt, um die Summe von "Eine Million, zweihunderttausend Euro" in meinem laufenden Wohltätigkeitsprogramm zu erhalten. Für weitere Informationen senden Sie bitte eine E-Mail an:
+
+azimhashimpremjiunion@outlook.co.id
+oder auf WhatsApp Messenger: +19372662402
+Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich für weitere Informationen. Ich möchte auch, dass Sie Teil meiner Wohltätigkeitsstiftung sind, sobald Sie dieses Geld erhalten, damit wir Hand in Hand zusammenarbeiten können, um den Bedürftigen zu helfen.
+
+Über diesen Link können Sie auch mehr über mich lesen
+
+https://en.wikipedia.org/wiki/Azim_Premji
+
+Kontaktieren Sie sie per E-Mail für weitere Informationen: azimhashimpremjiunion@outlook.co.id
+oder auf WhatsApp Messenger: +19372662402
+Herzlichen Gruß,
