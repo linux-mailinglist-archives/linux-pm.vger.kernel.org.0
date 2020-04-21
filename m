@@ -2,109 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A25D1B1827
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Apr 2020 23:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F491B1C43
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Apr 2020 05:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbgDTVOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Apr 2020 17:14:51 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:35566 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725774AbgDTVOv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 17:14:51 -0400
-Received: by mail-oi1-f194.google.com with SMTP id o7so8402990oif.2;
-        Mon, 20 Apr 2020 14:14:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=D1tmHbhZ2ad6HfaZfQo7QhxzoWrXJ0tmAqtcSp3UnAM=;
-        b=nH2CRbxkPXWfzz/GD0YxPC1D5NVg+i1GZyQ4lxy8WGFT291+CSHqW7A8tTi9mKqQCt
-         GpAOW/e/gnOoZCCiyt8PqbWL7josMstTBisC9xE4mh2wU73DfhXWC+PCotOQ3yBL+aLG
-         /CI/0QWzI3CVsp2cGRrrJ5bWgFZ+xrrRjyNVzvUU3TSerugE9fqkEWYAUSHnSRk98jFl
-         hV/xeddpa0MK86mqGMScVaTNFpcPNFKJvVUI02k7aM6hfJczSO+0aA0RbBWUljFib8PP
-         ez5gzBWPY82Ct9OiFSEue3o3Fn8OzSIF26xu4eBOqBijscaheuni52aGptwfUYICy6d6
-         JVgg==
-X-Gm-Message-State: AGi0PubSfp80f2ce4WZaQikFgBoFFApHB/DdYozJ78txfwYD5K/cH5W0
-        BxW3D2IVOaZXJ+uM7Q0ag3blN8o=
-X-Google-Smtp-Source: APiQypIkgLf6iD08sZH0/MtRvDvHFkYHoX7Vn2cb2zxQrUsjpbFpA36SjP9PNXqkcKUzsyvr79uq9A==
-X-Received: by 2002:aca:c495:: with SMTP id u143mr1065353oif.72.1587417289983;
-        Mon, 20 Apr 2020 14:14:49 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id t9sm154233oie.24.2020.04.20.14.14.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2020 14:14:49 -0700 (PDT)
-Received: (nullmailer pid 16562 invoked by uid 1000);
-        Mon, 20 Apr 2020 21:14:48 -0000
-Date:   Mon, 20 Apr 2020 16:14:48 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, Mark Rutland <mark.rutland@arm.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/4] dt-bindings: thermal: Add the idle cooling device
-Message-ID: <20200420211448.GA16458@bogus>
-References: <20200414220837.9284-1-daniel.lezcano@linaro.org>
- <20200414220837.9284-2-daniel.lezcano@linaro.org>
+        id S1727908AbgDUDA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Apr 2020 23:00:26 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:3503 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727889AbgDUDAZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Apr 2020 23:00:25 -0400
+X-UUID: 74d6c1ec07f543caacbecb519939d4c8-20200421
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ZLGMpeA19u1Wima9wc0S7lbHcEYXik+4JHiV+qyzH4U=;
+        b=lhc693EKaBy0XHE9FarKqckLUwKiTZ2x5Qsw2rU4P/Ok+SP7Uvz5OzupMeTAxya+csS6N9NU/LKGsnqONlAnJJyM8UsRWvdBibiUymqZuGSsUsMRaRkpEkDvFMI2ji/VfoLmPZJMjhfsp4a86IVQOUCGVE3ljA3Z8GnuVSJJlyg=;
+X-UUID: 74d6c1ec07f543caacbecb519939d4c8-20200421
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <hsin-hsiung.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 610182586; Tue, 21 Apr 2020 11:00:15 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 21 Apr 2020 11:00:13 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 21 Apr 2020 11:00:12 +0800
+From:   Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     <drinkcat@chromium.org>, Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Richard Fontana <rfontana@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ran Bi <ran.bi@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <srv_heupstream@mediatek.com>
+Subject: [PATCH v13 0/6] Add Support for MediaTek PMIC MT6358
+Date:   Tue, 21 Apr 2020 11:00:06 +0800
+Message-ID: <1587438012-24832-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200414220837.9284-2-daniel.lezcano@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-TM-SNTS-SMTP: F7DE3C45707E7BC4C1C7A2764009051DD0C524407E750491ADB5A3F3C0033AAC2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 15 Apr 2020 00:08:31 +0200, Daniel Lezcano wrote:
-> Some devices are not able to cool down by reducing their voltage /
-> frequency because it could be not available or the system does not
-> allow voltage scaling. In this configuration, it is not possible to
-> use this strategy and the idle injection cooling device can be used
-> instead.
-> 
-> One idle cooling device is now present for the CPU as implemented by
-> the combination of the idle injection framework belonging to the power
-> capping framework and the thermal cooling device. The missing part is
-> the DT binding providing a way to describe how the cooling device will
-> work on the system.
-> 
-> A first iteration was done by making the cooling device to point to
-> the idle state. Unfortunately it does not make sense because it would
-> need to duplicate the idle state description for each CPU in order to
-> have a different phandle and make the thermal internal framework
-> happy.
-> 
-> It was proposed to add an cooling-cells to <3>, unfortunately the
-> thermal framework is expecting a value of <2> as stated by the
-> documentation and it is not possible from the cooling device generic
-> code to loop this third value to the back end cooling device.
-> 
-> Another proposal was to add a child 'thermal-idle' node as the SCMI
-> does. This approach allows to have a self-contained configuration for
-> the idle cooling device without colliding with the cpufreq cooling
-> device which is based on the CPU node. In addition, it allows to have
-> the cpufreq cooling device and the idle cooling device to co-exist
-> together as shown in the example.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  - V3:
->    - Removed extra line with tab inside
->  - V2:
->    - Fixed comment type
->    - Added dual license
->    - Fixed description s/begins to/should/
->    - Changed name s/duration/duration-us/
->    - Changed name s/latency/exit-latency-us/
->    - Removed types for latency / duration
->    - Fixed s/idle-thermal/thermal-idle/
-> ---
->  .../bindings/thermal/thermal-idle.yaml        | 145 ++++++++++++++++++
->  1 file changed, 145 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/thermal-idle.yaml
-> 
+VGhpcyBwYXRjaHNldCBpbmNsdWRpbmcgbW9kaWZ5aW5nIHN1c3BlbmQvcmVzdW1lIGJlaGF2aW9y
+IGFuZCB0cmltbWluZyBwcm9iZSBmdW5jdGlvbiBhZGQgc3VwcG9ydCB0byBNVDYzNTggUE1JQy4N
+Ck1UNjM1OCBpcyB0aGUgcHJpbWFyeSBQTUlDIGZvciBNVDgxODMgcGxhdGZvcm0uDQoNCmNoYW5n
+ZXMgc2luY2UgdjEyOg0KLSB1cGRhdGUgZmlsZSBkYXRlLg0KLSBtb2RpZnkgcGF0Y2ggc2lnbi1v
+ZmZzIGJsb2NrIGFjY29yZGluZyB0byBjaHJvbm9sb2dpY2FsIG9yZGVyLg0KLSBtb2RpZnkgcmVn
+aXN0ZXIgZGVmaW5pdGlvbiBpbiBoZWFkZXIgZmlsZS4NCi0gcmViYXNlIHNlcmllcyBvbiA1Ljct
+cmMxLg0KDQpIc2luLUhzaXVuZyBXYW5nICg1KToNCiAgbWZkOiBtdDYzOTc6IE1vZGlmeSBzdXNw
+ZW5kL3Jlc3VtZSBiZWhhdmlvcg0KICBtZmQ6IG10NjM5NzogVHJpbSBwcm9iZSBmdW5jdGlvbiB0
+byBzdXBwb3J0IGRpZmZlcmVudCBjaGlwcyBtb3JlDQogICAgY2xlYW5seQ0KICBkdC1iaW5kaW5n
+czogbWZkOiBBZGQgY29tcGF0aWJsZSBmb3IgdGhlIE1lZGlhVGVrIE1UNjM1OCBQTUlDDQogIG1m
+ZDogQWRkIHN1cHBvcnQgZm9yIHRoZSBNZWRpYVRlayBNVDYzNTggUE1JQw0KICBhcm02NDogZHRz
+OiBtdDYzNTg6IGFkZCBQTUlDIE1UNjM1OCByZWxhdGVkIG5vZGVzDQoNClJhbiBCaSAoMSk6DQog
+IHJ0YzogbXQ2Mzk3OiBBZGQgc3VwcG9ydCBmb3IgdGhlIE1lZGlhVGVrIE1UNjM1OCBSVEMNCg0K
+IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZmQvbXQ2Mzk3LnR4dCB8ICAxNCAr
+LQ0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2MzU4LmR0c2kgICAgICAgICB8IDM1
+OCArKysrKysrKysrKysrKysrKysrKysrKw0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsv
+bXQ4MTgzLWV2Yi5kdHMgICAgICB8ICAgMSArDQogZHJpdmVycy9tZmQvTWFrZWZpbGUgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstDQogZHJpdmVycy9tZmQvbXQ2MzU4LWlycS5j
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgMjM1ICsrKysrKysrKysrKysrKw0KIGRyaXZlcnMv
+bWZkL210NjM5Ny1jb3JlLmMgICAgICAgICAgICAgICAgICAgICAgICB8IDEwMSArKysrLS0tDQog
+ZHJpdmVycy9tZmQvbXQ2Mzk3LWlycS5jICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDM1ICsr
+LQ0KIGRyaXZlcnMvcG93ZXIvcmVzZXQvbXQ2MzIzLXBvd2Vyb2ZmLmMgICAgICAgICAgICB8ICAg
+MiArLQ0KIGRyaXZlcnMvcnRjL3J0Yy1tdDYzOTcuYyAgICAgICAgICAgICAgICAgICAgICAgICB8
+ICAxOCArLQ0KIGluY2x1ZGUvbGludXgvbWZkL210NjM1OC9jb3JlLmggICAgICAgICAgICAgICAg
+ICB8IDE1OCArKysrKysrKysrDQogaW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L3JlZ2lzdGVycy5o
+ICAgICAgICAgICAgIHwgMjgyICsrKysrKysrKysrKysrKysrKw0KIGluY2x1ZGUvbGludXgvbWZk
+L210NjM5Ny9jb3JlLmggICAgICAgICAgICAgICAgICB8ICAgNSArDQogaW5jbHVkZS9saW51eC9t
+ZmQvbXQ2Mzk3L3J0Yy5oICAgICAgICAgICAgICAgICAgIHwgICA5ICstDQogMTMgZmlsZXMgY2hh
+bmdlZCwgMTE1OCBpbnNlcnRpb25zKCspLCA2MiBkZWxldGlvbnMoLSkNCiBjcmVhdGUgbW9kZSAx
+MDA2NDQgYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDYzNTguZHRzaQ0KIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBkcml2ZXJzL21mZC9tdDYzNTgtaXJxLmMNCiBjcmVhdGUgbW9kZSAxMDA2NDQg
+aW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L2NvcmUuaA0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNs
+dWRlL2xpbnV4L21mZC9tdDYzNTgvcmVnaXN0ZXJzLmgNCg0KLS0gDQoyLjYuNA0K
 
-Reviewed-by: Rob Herring <robh@kernel.org>
