@@ -2,132 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CE71B23FE
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Apr 2020 12:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EDF1B24B8
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Apr 2020 13:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728434AbgDUKkA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Apr 2020 06:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726120AbgDUKj7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Apr 2020 06:39:59 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE39C061A0F
-        for <linux-pm@vger.kernel.org>; Tue, 21 Apr 2020 03:39:59 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id o3so8088667vsd.4
-        for <linux-pm@vger.kernel.org>; Tue, 21 Apr 2020 03:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZWOnko77txal0K7pJvRHJBebpvxdOfp3TVzw/ZvqiSM=;
-        b=sZb0j1ADnFw2pQCOR1I1/JAIJ2vP4Lj+6zzr6vrUr1JZpY+SKjo0VNeVwo35qRCV+F
-         1PPJMFAXIMfTGbxOXoZVrDf4gUZcRWtESA1GBPl60kn1gEdf5gq6fuwNsXgGh4eG28Yz
-         ZCr/66YuuY54OOylETzfZ17pWqnkCBWP/fxDWULm5idzduPopFhWtKSajwoZg2GehXJx
-         nbIQcoW8hWGVGSw73GXi1zBuTqJzyH0yKhBtjNENJlQ/1Hhp6xz73dZStiIjb+jT/Jkd
-         KedNNlRpRTAdqOhMd/jZ2wkg5Fv6T82MGFWxWfAM8S9LMNKw6ywmJ9bqrBm6MTtBi3tb
-         CRlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZWOnko77txal0K7pJvRHJBebpvxdOfp3TVzw/ZvqiSM=;
-        b=aAv4Yv84nDSz02sDA57JynNa8g0Ojk3LXZ35av2S2vF1DIAeSKz2g9oj9UcT03km5U
-         eW//Dy+wYH3KPqWm5G3f8yOhUuSkLFJuHgd7ExX+lq3DSQNzrnJ1KYdPD8ZEvqvQV8f/
-         8cIfSsppcZ7nLMnMmxiLTP8wDvThUtS0Eht4sj1s7yV3kwexjhbaRdGWcoVcah2wGjyY
-         8qem8+7ZMi7SaALOIG913a0cnz2rrC5gbBm9T8/kRZZennv76Z8XHt3FrHA6QbQfCzka
-         agc1SvPK3g6xSLA7zy+WzhZIcJ5gsKQsENfoV9b/J4HexTpT3bJPiGzRuoRCeDDZ5jCx
-         +1Qg==
-X-Gm-Message-State: AGi0PuZjBgpueGJCBcMjKGWtN3fb/hltCtQ8Blo6DZhuuuxMChUxpbbV
-        yKg2Dw4Chh9zG2I4kQoZZsutGQSSff54SCpjHkSX6g==
-X-Google-Smtp-Source: APiQypKISV66Pw/5T+dsPNqBQ+0UbOK10keNAQzmOGZsGfLJ0yfsb04HQOYUoTZ32K7OtcDuVGegOMCuwdmU2fcyQrk=
-X-Received: by 2002:a67:ead1:: with SMTP id s17mr14820744vso.200.1587465598574;
- Tue, 21 Apr 2020 03:39:58 -0700 (PDT)
+        id S1726403AbgDULPS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Apr 2020 07:15:18 -0400
+Received: from foss.arm.com ([217.140.110.172]:33308 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726018AbgDULPS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 21 Apr 2020 07:15:18 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0F0C1FB;
+        Tue, 21 Apr 2020 04:15:17 -0700 (PDT)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9217C3F73D;
+        Tue, 21 Apr 2020 04:15:16 -0700 (PDT)
+Date:   Tue, 21 Apr 2020 12:15:14 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Oliver Neukum <oneukum@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+Message-ID: <20200421111513.fy3oqebij6fnvbnc@e107158-lin.cambridge.arm.com>
+References: <Pine.LNX.4.44L0.2003251631360.1724-100000@netrider.rowland.org>
+ <Pine.LNX.4.44L0.2004201622260.22032-100000@netrider.rowland.org>
 MIME-Version: 1.0
-References: <20200413123207.74552-1-paul@crapouillou.net> <20200413123207.74552-3-paul@crapouillou.net>
-In-Reply-To: <20200413123207.74552-3-paul@crapouillou.net>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 21 Apr 2020 12:39:22 +0200
-Message-ID: <CAPDyKFrRMzzodhWSC2tgMSSNBwLcowd7q48_6dFPGuHUD_CUZg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] mmc: jz4740: Use pm_ptr() macro
-To:     Paul Cercueil <paul@crapouillou.net>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        od@zcrc.me,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.2004201622260.22032-100000@netrider.rowland.org>
+User-Agent: NeoMutt/20171215
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 13 Apr 2020 at 14:32, Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Use the newly introduced pm_ptr() macro to simplify the code.
->
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+On 04/20/20 16:26, Alan Stern wrote:
+> On Wed, 25 Mar 2020, Alan Stern wrote:
+> 
+> > On Wed, 25 Mar 2020, Qais Yousef wrote:
+> > 
+> > > Thanks for all the hints Alan.
+> > > 
+> > > I think I figured it out, the below patch seems to fix it for me. Looking
+> > > at other drivers resume functions it seems we're missing the
+> > > pm_runtime_disable()->set_active()->enable() dance. Doing that fixes the
+> > > warning and the dev_err() in driver/base/power.
+> > 
+> > Ah, yes.  This should have been added years ago; guess I forgot.  :-(
+> > 
+> > > I don't see xhci-plat.c doing that, I wonder if it needs it too.
+> > > 
+> > > I'm not well versed about the details and the rules here. So my fix could be
+> > > a hack, though it does seem the right thing to do.
+> > > 
+> > > I wonder why the power core doesn't handle this transparently..
+> > 
+> > Initially, we didn't want the PM core to do this automatically because
+> > we thought some devices might want to remain runtime-suspended
+> > following a system resume, and only the device driver would know what 
+> > to do.
+> 
+> Qais:
+> 
+> So it looks like the discussion with Rafael will lead to changes in the
+> PM core, but they won't go into the -stable kernels, and they won't
+> directly fix the problem here.
+> 
+> In the meantime, why don't you write up your patch below and submit it
+> properly?  Even better, create similar patches for ehci-platform.c and
+> xhci-plat.c and submit them too.
 
-To me, the series is a step in the right direction. Perhaps there is a
-better name than "pm_ptr", but that's just a nitpick.
+Sure.
 
-That said, feel free to add (for all three patches in the series):
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Thanks
 
-Let's see what Rafael thinks about this.
+--
+Qais Yousef
 
-Kind regards
-Uffe
-
-> ---
->
-> Notes:
->     v2: Use pm_ptr() macro instead of pm_sleep_ptr()
->
->  drivers/mmc/host/jz4740_mmc.c | 12 +++---------
->  1 file changed, 3 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
-> index fbae87d1f017..2d41e7e5ec43 100644
-> --- a/drivers/mmc/host/jz4740_mmc.c
-> +++ b/drivers/mmc/host/jz4740_mmc.c
-> @@ -1099,24 +1099,18 @@ static int jz4740_mmc_remove(struct platform_device *pdev)
->         return 0;
->  }
->
-> -#ifdef CONFIG_PM_SLEEP
-> -
-> -static int jz4740_mmc_suspend(struct device *dev)
-> +static int __maybe_unused jz4740_mmc_suspend(struct device *dev)
->  {
->         return pinctrl_pm_select_sleep_state(dev);
->  }
->
-> -static int jz4740_mmc_resume(struct device *dev)
-> +static int __maybe_unused jz4740_mmc_resume(struct device *dev)
->  {
->         return pinctrl_select_default_state(dev);
->  }
->
->  static SIMPLE_DEV_PM_OPS(jz4740_mmc_pm_ops, jz4740_mmc_suspend,
->         jz4740_mmc_resume);
-> -#define JZ4740_MMC_PM_OPS (&jz4740_mmc_pm_ops)
-> -#else
-> -#define JZ4740_MMC_PM_OPS NULL
-> -#endif
->
->  static struct platform_driver jz4740_mmc_driver = {
->         .probe = jz4740_mmc_probe,
-> @@ -1124,7 +1118,7 @@ static struct platform_driver jz4740_mmc_driver = {
->         .driver = {
->                 .name = "jz4740-mmc",
->                 .of_match_table = of_match_ptr(jz4740_mmc_of_match),
-> -               .pm = JZ4740_MMC_PM_OPS,
-> +               .pm = pm_ptr(&jz4740_mmc_pm_ops),
->         },
->  };
->
-> --
-> 2.25.1
->
+> 
+> Alan Stern
+> 
+> > > diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+> > > index 7addfc2cbadc..eb92c8092fae 100644
+> > > --- a/drivers/usb/host/ohci-platform.c
+> > > +++ b/drivers/usb/host/ohci-platform.c
+> > > @@ -299,6 +299,10 @@ static int ohci_platform_resume(struct device *dev)
+> > >         }
+> > > 
+> > >         ohci_resume(hcd, false);
+> > > +
+> > > +       pm_runtime_disable(dev);
+> > > +       pm_runtime_set_active(dev);
+> > > +       pm_runtime_enable(dev);
+> > >         return 0;
+> > >  }
+> > >  #endif /* CONFIG_PM_SLEEP */
+> > > 
+> > > 
+> > > Thanks
+> > > 
+> > > --
+> > > Qais Yousef
+> > 
+> > 
+> > 
+> 
