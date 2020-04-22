@@ -2,97 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 377F61B46D9
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 16:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CDE1B4717
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 16:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbgDVOIl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Apr 2020 10:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727026AbgDVOIi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 10:08:38 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0759AC03C1AA;
-        Wed, 22 Apr 2020 07:08:38 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id t63so2487135wmt.3;
-        Wed, 22 Apr 2020 07:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Wn/XLaNsEUc+JrRQ7mg4yGN/42PXRkrYATqvOjyi41s=;
-        b=snwH3gA2y8hxo2yX0BZogJrmkiRtOPUxjXX+dPm4cR0dVk9LX0VxJ7oPquVLBJbHqz
-         AWnwU3Mhtf0HovRIhUHzwtrkmb9A4hbMEuyPbYmr869gTWKpZ9nPKxwopbxNddiNT0iO
-         k95XZEP72PHNiVNwG/Wmr+htitVZPOUMLegX7fQFxuH6K/643K5oMFXCotPVRHG5OblZ
-         xcAnlzlRxlAYONV4tjcdkDdRPdzcr33n9n0qSv65oa+5hlCLxfiY1UdBC7PSos/Sc3Id
-         DNTZU26mI5J9GuQBD88ysDyCov7KTkmiRHTeQDVWryCdAkWal+U18AwAOPnPOd1vAUGi
-         to9g==
+        id S1726023AbgDVOV1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 22 Apr 2020 10:21:27 -0400
+Received: from mail-oo1-f65.google.com ([209.85.161.65]:43250 "EHLO
+        mail-oo1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725648AbgDVOV0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 10:21:26 -0400
+Received: by mail-oo1-f65.google.com with SMTP id d21so542414ook.10;
+        Wed, 22 Apr 2020 07:21:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Wn/XLaNsEUc+JrRQ7mg4yGN/42PXRkrYATqvOjyi41s=;
-        b=c3wFRSH7RIAg41n76ETY1Dss0GA1v/2B0t+TAIquTICvHQlajeqUJD5E9dgc337lea
-         y+78nVBVDEvimV8TYL0p5izb2oK+923TfYzRCMAiC7fnXk6XvcmAhzPNVWhLAEbpDt5a
-         Y6gMdibTu9gyuNw0RTrO2XjWeqLLcLZ6psYHlI4FFoEXNC8aIKWqbXTkFKYPFhrYlVSa
-         P91lao3qUy4ytsStIEeSZit1C62V+aKxQF48edLHBKT6ZtfMnI6GEKpzp4+9EcrRTEGF
-         5jZYntaHVkTY5rVBcbgeOnuxR4GFnEXekMrmrl+K0WDN9ENSLO5yG29hsBlIz6HGGUdX
-         3HrA==
-X-Gm-Message-State: AGi0PuZE/C13bIEiBCorxJYuUoxiLICMpgkMpHbMQgty7xnFLkjnJYXU
-        JRVKsc5tjzJ+MHBG1VhQ2/8=
-X-Google-Smtp-Source: APiQypLcBdgKcojkVDWJDUlHMTtYzEZSNEqVPBloleybYbcysXDKZ/PSC6WiURn0kRHtcRsdukQqQA==
-X-Received: by 2002:a7b:c850:: with SMTP id c16mr10268138wml.108.1587564516651;
-        Wed, 22 Apr 2020 07:08:36 -0700 (PDT)
-Received: from Ansuel-XPS.localdomain (host36-18-dynamic.45-213-r.retail.telecomitalia.it. [213.45.18.36])
-        by smtp.googlemail.com with ESMTPSA id a9sm7526790wmm.38.2020.04.22.07.08.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2020 07:08:35 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Ilia Lin <ilia.lin@kernel.org>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sricharan R <sricharan@codeaurora.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: opp: Fix wrong binding in qcom-nvmem-cpufreq
-Date:   Wed, 22 Apr 2020 16:08:27 +0200
-Message-Id: <20200422140827.1726-2-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200422140827.1726-1-ansuelsmth@gmail.com>
-References: <20200422140827.1726-1-ansuelsmth@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zNjUnY94w0UWiXsubeBPALgzfBzt9q3zu5ENZfCjrts=;
+        b=kzMfRMWsG3VKy4zOrZ6AWWh9+VxDQgk3o7R3I3vJGxDuR2m3Ff55DR+qVGM/41INfc
+         SRqtTmc/SPtU898lTlfO6FVqElolwC0KBBORYM7S4V1cbGfEetXQV0rYvx6HEz8IcKAx
+         fnkceX6RjxM0RspmXFvC3Egn2exCU724l4mg5jW+dlVkaVBPkYSC0VQYUhQz9WjTQqgl
+         XCAFoVVwM7KGJ0MPdWtjWxisiIIxDM/j1HOh6pVxbdTWoUvcif6IyLX16jW9MUuK6N7a
+         51QK97T76ALtCwTqpex/TY4Xqy27+JlGFt/r1/muguVL9i5zzJAaqeqneCrgcPUCDniV
+         NiNw==
+X-Gm-Message-State: AGi0Pubq9OqcnWDWAWXiKuf0eaZhRasusOLnyNrvOdH+d8HrByKr4f3z
+        7YsAtydc9QV1gfSMCYBR050QY83CWVH4e4hsggN/cg==
+X-Google-Smtp-Source: APiQypLzDbS17kDo7l7U/QyP+cqX3xyR5zgbb/QPEQAJ3Y5SfI4zsMPbwN/toLIfmHzKulF8hMgy2GynWRg/ze+Lcak=
+X-Received: by 2002:a4a:a286:: with SMTP id h6mr15515496ool.38.1587565284215;
+ Wed, 22 Apr 2020 07:21:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200422051529.30757-1-zhang.lyra@gmail.com> <CAJZ5v0ikL3avFomZVqtBhfEjeauN-5ZUm9kZwzG=Vo+Ks0AiyA@mail.gmail.com>
+ <CAAfSe-sVEEPOrq_ZzB1z59uXTfhmNh=+U_QvgaTcd4U1=9Tfvg@mail.gmail.com>
+In-Reply-To: <CAAfSe-sVEEPOrq_ZzB1z59uXTfhmNh=+U_QvgaTcd4U1=9Tfvg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Apr 2020 16:21:12 +0200
+Message-ID: <CAJZ5v0jxnSUDqVpaHo6ECQdr6bpe2WHEhV+uDL_=BAJQC9fA9w@mail.gmail.com>
+Subject: Re: [PATCH] PM: sleep: call devfreq_suspend/resume and
+ cpufreq_suspend/resume in pairs.
+To:     Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Vincent Wang <vincent.wang@unisoc.com>,
+        Samer Xie <samer.xie@unisoc.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Update binding to new generic name "operating-points-v2-qcom-cpu"
+On Wed, Apr 22, 2020 at 1:19 PM Chunyan Zhang <zhang.lyra@gmail.com> wrote:
+>
+> Hi Rafael,
+>
+> (Behalf Of Vincent Wang)
+>
+> Thanks for your comments, please see my answers below.
+>
+> On Wed, 22 Apr 2020 at 17:05, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Wed, Apr 22, 2020 at 7:15 AM Chunyan Zhang <zhang.lyra@gmail.com> wrote:
+> > >
+> > > From: Vincent Wang <vincent.wang@unisoc.com>
+> > >
+> > > If dpm_prepare() fails in dpm_suspend_start(), dpm_suspend() can't be
+> > > called.
+> >
+> > That's correct.
+> >
+> > > And then, devfreq_suspend() and cpufreq_suspend() will not be
+> > > called in the suspend flow.
+> >
+> > Right.
+> >
+> > > But in the resiume flow, devfreq_resume() and cpufreq_resume() will
+> > > be called.
+> >
+> > Right, and they are expected to cope with the situation.
+> >
+> > > This patch will ensure that devfreq_suspend/devfreq_resume and
+> > > cpufreq_suspend/cpufreq_resume are called in pairs.
+> >
+> > So why is it better to do this than to make devfreq_resume() meet the
+> > expectations?
+>
+> Yes，we found an issue with cpufreq schedutil governor on kernel4.14,
+> and I think the issue should haven't been changed on the latest
+> version of kernel.
+>
+> In the function dpm_suspend_start(), dpm_suspend() would not be
+> exceuted if return error from device_prepare() [1]. So
+> cpufreq_cpufreq() will not be called,
 
-Fixes: a8811ec764f9 cpufreq: qcom: Add support for krait based socs
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I guess you mean cpufreq_suspend().
 
-diff --git a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
-index 64f07417ecfb..537e1774f589 100644
---- a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
-+++ b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
-@@ -19,7 +19,7 @@ In 'cpu' nodes:
- 
- In 'operating-points-v2' table:
- - compatible: Should be
--	- 'operating-points-v2-kryo-cpu' for apq8096, msm8996, msm8974,
-+	- 'operating-points-v2-qcom-cpu' for apq8096, msm8996, msm8974,
- 					     apq8064, ipq8064, msm8960 and ipq8074.
- 
- Optional properties:
--- 
-2.25.1
+That should be OK .
 
+> then cpufreq_remove_update_util_hook() will not be called either, and so
+> cpufreq_update_util_data will not be NULL.
+>
+> In the dpm resume flow, sugov_start() will be called, in which
+> sg_cpu.update_util will be set to 0.
+
+Which code patch does this?
+
+Surely not cpufreq_resume(), because that checks cpufreq_suspended which
+cannot be set if cpufreq_suspend() has not been called (because it is the only
+place setting cpufreq_suspended).
