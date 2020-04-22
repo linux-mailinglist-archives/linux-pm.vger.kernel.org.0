@@ -2,181 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D7B1B360F
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 06:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03111B369E
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 06:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725355AbgDVEQx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Apr 2020 00:16:53 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:29369 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725811AbgDVEQx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 00:16:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587529011;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p9oZHlLxelAK0c0X/Rqg4X+RsMzY/HC92T0R43tToZQ=;
-        b=fVhtmjb9wmYxA8Ma17QWmLlRDQ8BoGAXMKO1lpzmtDvgD71kkCCoEu1hD4lXNW9GVvPVvV
-        ASBKRYSEV0J9X51WY9B5+IHlFvgBiiDg+9iOOEkojKYn6iYwkqM7AZe51jIO+BYfmlJ7eB
-        Hk6nu/4qfP7Y11y0ZYFvP+xj94vJJXA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-243-h3LPJ81NPFiow1jgO2OA6g-1; Wed, 22 Apr 2020 00:16:49 -0400
-X-MC-Unique: h3LPJ81NPFiow1jgO2OA6g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0C02B107ACC4;
-        Wed, 22 Apr 2020 04:16:46 +0000 (UTC)
-Received: from T590 (ovpn-8-28.pek2.redhat.com [10.72.8.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D35EDB3A76;
-        Wed, 22 Apr 2020 04:16:34 +0000 (UTC)
-Date:   Wed, 22 Apr 2020 12:16:29 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Dexuan Cui <decui@microsoft.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hch@lst.de" <hch@lst.de>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "hare@suse.de" <hare@suse.de>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] scsi: storvsc: Fix a panic in the hibernation procedure
-Message-ID: <20200422041629.GE299948@T590>
-References: <1587514644-47058-1-git-send-email-decui@microsoft.com>
- <20200422012814.GB299948@T590>
- <HK0P153MB0273B954294B331E20AACB41BFD20@HK0P153MB0273.APCP153.PROD.OUTLOOK.COM>
- <20200422020134.GC299948@T590>
- <20200422030807.GK17661@paulmck-ThinkPad-P72>
+        id S1726396AbgDVEwB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Apr 2020 00:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726085AbgDVEv6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 00:51:58 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA1BC03C1AA
+        for <linux-pm@vger.kernel.org>; Tue, 21 Apr 2020 21:51:57 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id e26so720203wmk.5
+        for <linux-pm@vger.kernel.org>; Tue, 21 Apr 2020 21:51:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=rbRuIjvtduoe5rDmx04RZeGHXBKwqWRmrOmSv68i/zh0G7dxA9cd5BhZoNzJ9N6B2q
+         5eB51NESGTz0lJfH+OoJDDpVTo+qxXxhbnSi124B4kpTazwydRIeem0V0Rn2Gpx5AgR0
+         91NEqcfa3WVqIpxag75NoGWW8q+uGkZGsCXD6y7KSAZw3zwUWhfcRtU5JwJdpyeFBvpu
+         I/eS/Go/9Ngzu8uFpI6/iAFe+GNKuK94+IhnnbCYE3ObU/zUMmMxc5hbM6bTP89gbhB1
+         2q5YYLgiH1QtRPLQDAJanaf5afhK9Zv47Sl7DZd7niBJkxSc7pNbN0D3ID5H+5HRDiKJ
+         B/CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=GBn9n4q8DmD5GxddrTVImJXKPGMXc+FiSAqf7qMxaecCHcmNvLD73yWIwwzxSW5DtN
+         U8GZIBURWhlM9CHeXIqBQXo4PO6+yliAwXB+afQ99bBFqJvUrHY+RS2zriFpmQuxDx/s
+         PAs3/aC6OeRH8heAqcl0ElUA5Qm1lxUA58yqhZHp9ujaVuVPHA4AXZjDfTWeLACf0X2K
+         4lCnfIu8wh18uQmIEubGT958h/WTMsFN3xH8++BYNXMLn2fsdWSxI62T/z+uE3YIDBGd
+         V5sPUQRbVsppq9JIyi9ItH76LcBLzmSpNnnNoOx2oR9WUT3v0+khgSKD/MSCKcFPKy/Y
+         msoQ==
+X-Gm-Message-State: AGi0PuZXZ0kt+OwzuBwYFJ8cAa28uAKZGp4OrIhYhcZ1oGkpuHYn8pNM
+        bsAnTamhu9Iu6P6aC4042KnJMPVkeFPnFKsBbM0=
+X-Google-Smtp-Source: APiQypL/2Y40sQ9V2EzHiDRLKrhgwszpYu1a0Q6bQA5MqdrYj1kOd9PP/XC5k6D0HMy42i7zfiwBpsCi7b09DZy6BRw=
+X-Received: by 2002:a1c:8106:: with SMTP id c6mr8259513wmd.88.1587531115600;
+ Tue, 21 Apr 2020 21:51:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200422030807.GK17661@paulmck-ThinkPad-P72>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Received: by 2002:a5d:4f89:0:0:0:0:0 with HTTP; Tue, 21 Apr 2020 21:51:55
+ -0700 (PDT)
+Reply-To: ayishagddafio@mail.ru
+From:   AISHA GADDAFI <ayishagadafi1@gmail.com>
+Date:   Tue, 21 Apr 2020 21:51:55 -0700
+Message-ID: <CAKmdXwuFimH8EYAQwUEKONYSYPzAwag3nAxBnPDHNjfMK3VCwg@mail.gmail.com>
+Subject: Lieber Freund (Assalamu Alaikum),?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 21, 2020 at 08:08:07PM -0700, Paul E. McKenney wrote:
-> On Wed, Apr 22, 2020 at 10:01:34AM +0800, Ming Lei wrote:
-> > On Wed, Apr 22, 2020 at 01:48:25AM +0000, Dexuan Cui wrote:
-> > > > From: Ming Lei <ming.lei@redhat.com>
-> > > > Sent: Tuesday, April 21, 2020 6:28 PM
-> > > > To: Dexuan Cui <decui@microsoft.com>
-> > > > 
-> > > > On Tue, Apr 21, 2020 at 05:17:24PM -0700, Dexuan Cui wrote:
-> > > > > During hibernation, the sdevs are suspended automatically in
-> > > > > drivers/scsi/scsi_pm.c before storvsc_suspend(), so after
-> > > > > storvsc_suspend(), there is no disk I/O from the file systems, but there
-> > > > > can still be disk I/O from the kernel space, e.g. disk_check_events() ->
-> > > > > sr_block_check_events() -> cdrom_check_events() can still submit I/O
-> > > > > to the storvsc driver, which causes a paic of NULL pointer dereference,
-> > > > > since storvsc has closed the vmbus channel in storvsc_suspend(): refer
-> > > > > to the below links for more info:
-> > > > >
-> > > > > Fix the panic by blocking/unblocking all the I/O queues properly.
-> > > > >
-> > > > > Note: this patch depends on another patch "scsi: core: Allow the state
-> > > > > change from SDEV_QUIESCE to SDEV_BLOCK" (refer to the second link
-> > > > above).
-> > > > >
-> > > > > Fixes: 56fb10585934 ("scsi: storvsc: Add the support of hibernation")
-> > > > > Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> > > > > ---
-> > > > >  drivers/scsi/storvsc_drv.c | 10 ++++++++++
-> > > > >  1 file changed, 10 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-> > > > > index fb41636519ee..fd51d2f03778 100644
-> > > > > --- a/drivers/scsi/storvsc_drv.c
-> > > > > +++ b/drivers/scsi/storvsc_drv.c
-> > > > > @@ -1948,6 +1948,11 @@ static int storvsc_suspend(struct hv_device
-> > > > *hv_dev)
-> > > > >  	struct storvsc_device *stor_device = hv_get_drvdata(hv_dev);
-> > > > >  	struct Scsi_Host *host = stor_device->host;
-> > > > >  	struct hv_host_device *host_dev = shost_priv(host);
-> > > > > +	int ret;
-> > > > > +
-> > > > > +	ret = scsi_host_block(host);
-> > > > > +	if (ret)
-> > > > > +		return ret;
-> > > > >
-> > > > >  	storvsc_wait_to_drain(stor_device);
-> > > > >
-> > > > > @@ -1968,10 +1973,15 @@ static int storvsc_suspend(struct hv_device
-> > > > *hv_dev)
-> > > > >
-> > > > >  static int storvsc_resume(struct hv_device *hv_dev)
-> > > > >  {
-> > > > > +	struct storvsc_device *stor_device = hv_get_drvdata(hv_dev);
-> > > > > +	struct Scsi_Host *host = stor_device->host;
-> > > > >  	int ret;
-> > > > >
-> > > > >  	ret = storvsc_connect_to_vsp(hv_dev, storvsc_ringbuffer_size,
-> > > > >  				     hv_dev_is_fc(hv_dev));
-> > > > > +	if (!ret)
-> > > > > +		ret = scsi_host_unblock(host, SDEV_RUNNING);
-> > > > > +
-> > > > >  	return ret;
-> > > > >  }
-> > > > 
-> > > > scsi_host_block() is actually too heavy for just avoiding
-> > > > scsi internal command, which can be done simply by one atomic
-> > > > variable.
-> > > > 
-> > > > Not mention scsi_host_block() is implemented too clumsy because
-> > > > nr_luns * synchronize_rcu() are required in scsi_host_block(),
-> > > > which should have been optimized to just one.
-> > > > 
-> > > > Also scsi_device_quiesce() is heavy too, still takes 2
-> > > > synchronize_rcu() for one LUN.
-> > > > 
-> > > > That is said SCSI suspend may take (3 * nr_luns) sysnchronize_rcu() in
-> > > > case that the HBA's suspend handler needs scsi_host_block().
-> > > > 
-> > > > Thanks,
-> > > > Ming
-> > > 
-> > > When we're in storvsc_suspend(), all the userspace processes have been
-> > > frozen and all the file systems have been flushed, and there should not
-> > > be too much I/O from the kernel space, so IMO scsi_host_block() should be
-> > > pretty fast here. 
-> > 
-> > I guess it depends on RCU's implementation, so CC RCU guys.
-> > 
-> > Hello Paul & Josh,
-> > 
-> > Could you clarify that if sysnchronize_rcu becomes quickly during
-> > system suspend?
-> 
-> Once you have all but one CPU offlined, it becomes extremely fast, as
-> in roughly a no-op (which is an idea of Josh's from back in the day).
-> But if there is more than one CPU online, then synchronize_rcu() still
-> takes on the order of several to several tens of jiffies.
-> 
-> So, yes, in some portions of system suspend, synchronize_rcu() becomes
-> very fast indeed.
+--=20
+Lieber Freund (Assalamu Alaikum),
 
-Hi Paul,
+Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
+Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
+Mutter und eine Witwe
+mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
+hen
+Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
 
-Thanks for your clarification.
+Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
+f=C3=BCnfhunderttausend
+United State Dollar ($ 27.500.000.00) und ich brauche eine
+vertrauensw=C3=BCrdige Investition
+Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
+jedoch
+M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
+von
+Investitionsprojekten in Ihrem Land
+Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
+bauen.
 
-In system suspend path, device is suspended before suspend_disable_secondary_cpus(), 
-so I guess synchronize_rcu() is not quick enough even though user space
-processes and some kernel threads are frozen.
+Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
+n und
+Unternehmensgewinn zu verhandeln
+Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
 
-Thanks,
-Ming
+Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
+antworten Sie bitte dringend
+Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
+.
 
+Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
+esse (
+ayishagddafio@mail.ru ) zur weiteren Diskussion.
+
+Freundliche Gr=C3=BC=C3=9Fe
+Frau Aisha Al-Qaddafi
