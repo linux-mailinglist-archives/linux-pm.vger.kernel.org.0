@@ -2,178 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB601B4E66
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 22:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199C61B4E78
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 22:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgDVUdS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Apr 2020 16:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S1726158AbgDVUqC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Apr 2020 16:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726430AbgDVUdG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 16:33:06 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49449C03C1A9
-        for <linux-pm@vger.kernel.org>; Wed, 22 Apr 2020 13:33:06 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id o15so1694504pgi.1
-        for <linux-pm@vger.kernel.org>; Wed, 22 Apr 2020 13:33:06 -0700 (PDT)
+        with ESMTP id S1725779AbgDVUqC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 16:46:02 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A239C03C1AA
+        for <linux-pm@vger.kernel.org>; Wed, 22 Apr 2020 13:46:02 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id e20so3411036otk.12
+        for <linux-pm@vger.kernel.org>; Wed, 22 Apr 2020 13:46:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=pMZgWl7gaqwxky4xlW6XJbmApvfvRuOxXJn93EkCWVo=;
-        b=LEbaRv0dypc5e5Wc7a84Kw/SbMBDatTaHXbP6iCorD9zGzR1nVNn357pTZEPJbSGH8
-         DO6J+hGiFfATe4XvgoRwKD/iyt+vOghi0A+9lXjvJKQSSngW7mtkvUKJRtMFXag3XuGi
-         kS1lvfmsj1CAadjzqIYzXXp3EGdkoP2Vb3RtgOpOrpr9uGeAie7EZkyNnSjLFFB/VIX+
-         cN/PSUP9+7xo5gVqezBN8MHq4yT+hnWXekDCIk3KvZ8RWPcHzzx5WEr2650WPRMUN3Sz
-         od9S/oDQyg22NNcbzi4ErXcO0GuJt9RE4qxMlIr7y0GU4oeBhtj10hVFiTQCWHBjJ7SA
-         00qA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3bCg8bvNmgUuam7hE8aERJSHaUoXzmzcb4svUaIW+Bg=;
+        b=j1svlTwB5CMoY1MWPNS26eCTOItSrWPJwu5Xirgfy9OmjsrI/8neRVSDltcQTuXssH
+         MKz+GnOG0Y1eAQQgMyuqetCTCISJVqcQrwB42hbxF90ynmaH4CceJJmDU9nYJxRnq8Wj
+         c2IaIf9FmYsh6iHTdd2N13fp3IZsFxL/GBgnn680ozcDRzM9JQbvyi4HxQlsLbh0ulgu
+         lJDzCie2CjVLMNTBlGpLCW1jZ8DWARb/Ksc+dKjlbV/9Jd9ZC9hWpSuqqBm3aRYnKSRu
+         MkE82Bm1SE4q0gTQA8LybxWDORjmjnd85NQtOLHxajqG7O11MxHgOi2Qou+qQ99VhbwB
+         NIDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=pMZgWl7gaqwxky4xlW6XJbmApvfvRuOxXJn93EkCWVo=;
-        b=OR0A1RpCSuzadKq7gSgghKfmEUM730pgDRd1Bw3XmusBrn3DKqyhyzsAR8OU0BuLKR
-         JzXvjC5wBeQnaAqXhMkfW5aao0ctmGlEIwjXzbqq3EnYg4F9vHuxH3BKq+T7JCaaW2Xm
-         2uu/yBeXZZ100nbHHqVARQQ7C+mXNdQl/Lbn85PwSZXFFAdKbv1OPKapOnVZ0W2dreiU
-         CTC6ZBxTQm5Fl+he46k/zoNvD4MGi5evKrHfrRuaveO2lHJW9FPIp26+3m0Yk9U8ABXL
-         keJV/u2VeGN2LHM2kgB6zKMsMLcNxsfWRZILDQOdQKMG67oO/1zzxlh8aQpyEomWC3iw
-         ySxg==
-X-Gm-Message-State: AGi0PuYHd01EuWJcXoJB2O18C2ZBWtBYl8XitE0psJ/zQECJAfEvTOT7
-        zD3uIchDaNKKJbPK/xo1lofuuQ==
-X-Google-Smtp-Source: APiQypIk7f8O7AVplXsto40VZokGnKKYUx0F+SKxFkELYuo0ol20r/CNbNqbITXVgN8Ro9fNiSWIaA==
-X-Received: by 2002:a63:ef4b:: with SMTP id c11mr760981pgk.400.1587587585769;
-        Wed, 22 Apr 2020 13:33:05 -0700 (PDT)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id b24sm360292pfd.175.2020.04.22.13.33.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2020 13:33:05 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3bCg8bvNmgUuam7hE8aERJSHaUoXzmzcb4svUaIW+Bg=;
+        b=dzr97JtIzULA+uRxBVbj3c0qptoPdhmDASAkRUN3MYeQZSlEy2MaHReVEqm+oVdKXC
+         9dHrBKSC601eJ1cyHXnRvNbI9ut8aC0xiD6hrJ9Q75UulUFzpZ06o7I1mDHWAVZlLdEU
+         6juTlSJB929Khp4DT28xGKv2Dx+JwijybyJHwEC0bAGKLds67aW/htXCBCxkVMyJDlMB
+         AJNRtlFZodc4GpvXymSmlFLyOrK57rDkz7eg7S/hBRCFmRTG+lVQTpcSWtqSZ0/LisE5
+         fGoBXk6lP8IHW3PFZ3rd0EGLeldqhuy7CS6pgJ7a5wTwQzgCUzwZBLN6QVQeeoFf+rmM
+         PUnw==
+X-Gm-Message-State: AGi0PuYBUvxwdN+2MjEKOt0zXnNN5UZPUY3z2xapGCFPVxC/kMGtKHJn
+        i8ep6ibD1zhBDBNeyv5J1iB7nUSQ6yt6NBMBtRxlKg==
+X-Google-Smtp-Source: APiQypITlavDSzc4OSiUD5yDWrzXGkJyW5M+cDplprwAPZfSa72YOKqxb8R4uBmPFp3TN/4VifziBqcENPZT5t0ZvDM=
+X-Received: by 2002:a05:6830:22dc:: with SMTP id q28mr749663otc.221.1587588361411;
+ Wed, 22 Apr 2020 13:46:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200225050828.56458-1-john.stultz@linaro.org>
+ <20200421235836.GA8319@lxhi-065.adit-jv.com> <CALAqxLXX455P0V0o11scc3-1MHvecnvcUoT=XBcwB+ma7Kyjqg@mail.gmail.com>
+ <20200422075413.GB4898@sirena.org.uk>
+In-Reply-To: <20200422075413.GB4898@sirena.org.uk>
 From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+Date:   Wed, 22 Apr 2020 13:45:49 -0700
+Message-ID: <CALAqxLW13oA376bqj7uTR4E4zmnX5ASK=rpqw3HMr4yOWQGaOw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/6] driver core: Improve and cleanup driver_deferred_probe_check_state()
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        lkml <linux-kernel@vger.kernel.org>,
         Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        netdev <netdev@vger.kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH v3 3/3] driver core: Ensure wait_for_device_probe() waits until the deferred_probe_timeout fires
-Date:   Wed, 22 Apr 2020 20:32:45 +0000
-Message-Id: <20200422203245.83244-4-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200422203245.83244-1-john.stultz@linaro.org>
-References: <20200422203245.83244-1-john.stultz@linaro.org>
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Todd Kjos <tkjos@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In commit c8c43cee29f6 ("driver core: Fix
-driver_deferred_probe_check_state() logic"), we set the default
-driver_deferred_probe_timeout value to 30 seconds to allow for
-drivers that are missing dependencies to have some time so that
-the dependency may be loaded from userland after initcalls_done
-is set.
+On Wed, Apr 22, 2020 at 12:54 AM Mark Brown <broonie@kernel.org> wrote:
+> On Tue, Apr 21, 2020 at 06:16:31PM -0700, John Stultz wrote:
+>
+> > The second reverts the default timeout back to 0:
+> >   https://lore.kernel.org/lkml/20200413204253.84991-1-john.stultz@linaro.org/
+>
+> If you're reverting the timeout we should revert the regulator change
+> too I think.
 
-However, Yoshihiro Shimoda reported that on his device that
-expects to have unmet dependencies (due to "optional links" in
-its devicetree), was failing to mount the NFS root.
+Maybe? The main issue for me was my change was clearly breaking users
+with dts with missing dependencies where their setup was working
+before. I sort of feel like having a dtb with missing dependencies is
+less valid than wanting to load module dependencies from userland, but
+they were working first, so we have to keep them happy :) And at least
+now the latter can add the timeout boot argument to make it work.
 
-In digging further, it seemed the problem was that while the
-device properly probes after waiting 30 seconds for any missing
-modules to load, the ip_auto_config() had already failed,
-resulting in NFS to fail. This was due to ip_auto_config()
-calling wait_for_device_probe() which doesn't wait for the
-driver_deferred_probe_timeout to fire.
+For your case, I'm not sure if the timeout would run afoul on the nfs
+root mounting case this one tripped over.
 
-This patch tries to fix the issue by creating a waitqueue
-for the driver_deferred_probe_timeout, and calling wait_event()
-to make sure driver_deferred_probe_timeout is zero in
-wait_for_device_probe() to make sure all the probing is
-finished.
-
-The downside to this solution is that kernel functionality that
-uses wait_for_device_probe(), will block until the
-driver_deferred_probe_timeout fires, regardless of if there is
-any missing dependencies.
-
-However, the previous patch reverts the default timeout value to
-zero, so this side-effect will only affect users who specify a
-driver_deferred_probe_timeout= value as a boot argument, where
-the additional delay would be beneficial to allow modules to
-load later during boot.
-
-Thanks to Geert for chasing down that ip_auto_config was why NFS
-was failing in this case!
-
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
-Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Basil Eljuse <Basil.Eljuse@arm.com>
-Cc: Ferry Toth <fntoth@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Anders Roxell <anders.roxell@linaro.org>
-Cc: netdev <netdev@vger.kernel.org>
-Cc: linux-pm@vger.kernel.org
-Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Tested-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Fixes: c8c43cee29f6 ("driver core: Fix driver_deferred_probe_check_state() logic")
-Signed-off-by: John Stultz <john.stultz@linaro.org>
----
- drivers/base/dd.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 9c88afa5c74a..94037be7f5d7 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -226,6 +226,7 @@ DEFINE_SHOW_ATTRIBUTE(deferred_devs);
- 
- int driver_deferred_probe_timeout;
- EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
-+static DECLARE_WAIT_QUEUE_HEAD(probe_timeout_waitqueue);
- 
- static int __init deferred_probe_timeout_setup(char *str)
- {
-@@ -275,6 +276,7 @@ static void deferred_probe_timeout_work_func(struct work_struct *work)
- 
- 	list_for_each_entry_safe(private, p, &deferred_probe_pending_list, deferred_probe)
- 		dev_info(private->device, "deferred probe pending");
-+	wake_up(&probe_timeout_waitqueue);
- }
- static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
- 
-@@ -649,6 +651,9 @@ int driver_probe_done(void)
-  */
- void wait_for_device_probe(void)
- {
-+	/* wait for probe timeout */
-+	wait_event(probe_timeout_waitqueue, !driver_deferred_probe_timeout);
-+
- 	/* wait for the deferred probe workqueue to finish */
- 	flush_work(&deferred_probe_work);
- 
--- 
-2.17.1
-
+thanks
+-john
