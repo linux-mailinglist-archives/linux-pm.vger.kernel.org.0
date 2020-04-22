@@ -2,100 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E011B5063
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 00:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0C01B50CE
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 01:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726060AbgDVWej (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Apr 2020 18:34:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50596 "EHLO mail.kernel.org"
+        id S1726054AbgDVXVa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Apr 2020 19:21:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725846AbgDVWej (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 22 Apr 2020 18:34:39 -0400
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1725968AbgDVXVa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 22 Apr 2020 19:21:30 -0400
+Received: from localhost (mobile-166-175-187-227.mycingular.net [166.175.187.227])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 66FC720787;
-        Wed, 22 Apr 2020 22:34:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 529712076C;
+        Wed, 22 Apr 2020 23:21:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587594878;
-        bh=SNLJpvjts7rfI5JB0oV0kkk5fsoKCQ2Y16T9IZfyysU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jfEGWgL3I7QE5dnT9rxy4Uh0or1xw7bOlQluSsJjQV2pMj3+bHmUWPnl+9rV5U8ne
-         AAabN2yFwNtBeg1WcMgBiezmMS82oeM0GmunyElkIOERrFQiLYuPSuBFXrffoNjL7a
-         dpAAZK6RY5ygJQAYsPKTD8Zwe73PoTVt8hiAjUCE=
-Received: by mail-qk1-f175.google.com with SMTP id n143so4327710qkn.8;
-        Wed, 22 Apr 2020 15:34:38 -0700 (PDT)
-X-Gm-Message-State: AGi0PuYpHE6R0dLPDGLB7vllMGMTsODmWDzd49rIqqdYK/wHAS7X1v/5
-        XbP40UbYnyNa06sBQPWoQm8WKEpPnrcUGiQYLw==
-X-Google-Smtp-Source: APiQypKvREuslhX7owSjgWSS+4M/X4oIDaXzXQlnQscoYPYL8BsUg9lRR4iwpRQ3uKjlf98Z0AnWRF3ELD7q9OJL57M=
-X-Received: by 2002:a37:61cd:: with SMTP id v196mr559236qkb.393.1587594877490;
- Wed, 22 Apr 2020 15:34:37 -0700 (PDT)
+        s=default; t=1587597689;
+        bh=eQWN3pP46KHM49RJh6DB+rLU7u/InpAf2XNNJk3Uh0A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ZlR+o4j/dIfsKlG85ZyM/YXf5IjN3j5mL315OQtJva0g0unK7gSvSEvf93zO6/i9D
+         RXsaegX5CNyrsxE8zkl9PnrDZXu5bGH8raTLZ40pfFSDEBdGUpy9GmQDya+o6RsQrc
+         KS9fX0bRBoDa5BlL1cBbNhSkocIzs8LGohDtrQaQ=
+Date:   Wed, 22 Apr 2020 18:21:27 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>,
+        alsa-devel@alsa-project.org, Roy Spliet <nouveau@spliet.org>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: Re: Unrecoverable AER error when resuming from RAM (hda regression
+ in 5.7-rc2)
+Message-ID: <20200422232127.GA24666@google.com>
 MIME-Version: 1.0
-References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-6-robh@kernel.org>
- <158754886772.132238.8648193086417881263@swboyd.mtv.corp.google.com>
-In-Reply-To: <158754886772.132238.8648193086417881263@swboyd.mtv.corp.google.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 22 Apr 2020 17:34:26 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLhdpye3z4-mznA+mV6y-mgfDONYZNW+39nZgEXH2_eEw@mail.gmail.com>
-Message-ID: <CAL_JsqLhdpye3z4-mznA+mV6y-mgfDONYZNW+39nZgEXH2_eEw@mail.gmail.com>
-Subject: Re: [PATCH 05/17] clk: versatile: Kill CONFIG_COMMON_CLK_VERSATILE
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <s5h8sinxlfz.wl-tiwai@suse.de>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 22, 2020 at 4:47 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Rob Herring (2020-04-19 10:07:58)
-> > diff --git a/drivers/clk/versatile/Kconfig b/drivers/clk/versatile/Kconfig
-> > index c2618f1477a2..3465fb291998 100644
-> > --- a/drivers/clk/versatile/Kconfig
-> > +++ b/drivers/clk/versatile/Kconfig
-> > @@ -1,22 +1,14 @@
-> >  # SPDX-License-Identifier: GPL-2.0-only
-> >  config ICST
-> > -       bool
-> > -
-> > -config COMMON_CLK_VERSATILE
-> > -       bool "Clock driver for ARM Reference designs"
-> > -       depends on ARCH_INTEGRATOR || ARCH_REALVIEW || \
-> > -               ARCH_VERSATILE || ARCH_VEXPRESS || ARM64 || \
-> > -               COMPILE_TEST
-> > +       bool "Clock driver for ARM Reference designs ICST" if COMPILE_TEST
-> >         select REGMAP_MMIO
-> >         ---help---
-> >           Supports clocking on ARM Reference designs:
-> >           - Integrator/AP and Integrator/CP
-> >           - RealView PB1176, EB, PB11MP and PBX
-> > -         - Versatile Express
-> >
-> >  config CLK_SP810
-> >         bool "Clock driver for ARM SP810 System Controller"
-> > -       depends on COMMON_CLK_VERSATILE
->
-> Shouldn't this get the depends from COMMON_CLK_VERSATILE so that this
-> option isn't exposed unless someone is compile testing or using that
-> platform?
+On Wed, Apr 22, 2020 at 11:25:04PM +0200, Takashi Iwai wrote:
+> On Wed, 22 Apr 2020 22:50:28 +0200,
+> Bjorn Helgaas wrote:
+> > ...
+> > I feel like this UR issue could be a PCI core issue or maybe some sort
+> > of misuse of PCI power management, but I can't seem to get traction on
+> > it.
+> > 
+> > > Then the display freezes and the system basically falls apart (can't 
+> > > even sudo reboot -f, need to use magic sysrq).
+> > > 
+> > > I bisected this to "ALSA: hda: Skip controller resume if not needed". 
+> > > Setting snd_hda_intel.power_save=0 resolves the issue.
+> > 
+> > FWIW, the complete citation is c4c8dd6ef807 ("ALSA: hda: Skip
+> > controller resume if not needed"),
+> > https://git.kernel.org/linus/c4c8dd6ef807, which first appeared in
+> > v5.7-rc2.
+> 
+> Yes, and I posted the fix patch right now:
+>   https://lore.kernel.org/r/20200422203744.26299-1-tiwai@suse.de
+> 
+> The possible cause was the tricky resume code that both HD-audio
+> controller (the parent PCI device) and the codec devices used.
+> 
+> At least the patch above seems working for the reporter's machine.
+> Now we need a bit more testing before merging, but it looks promising,
+> so far.
 
-IMO, once the dependencies get complicated enough, it's better to just
-expose the option. But I could drop just the select and keep the
-depends. It's primarily having both that we didn't need.
+Great, I'm glad you figured something out because I sure wasn't
+getting anywhere!
 
-Rob
+Maybe this is a tangent, but I can't figure out what
+snd_power_change_state() is doing.  It *looks* like it's supposed to
+change the PCI power state, but I gave up trying to figure out where
+it actually touches the device.
+
+It seems like sound has more magic in power management than other
+device types, which makes me wonder if we're not providing the right
+interfaces or something.
+
+Bjorn
