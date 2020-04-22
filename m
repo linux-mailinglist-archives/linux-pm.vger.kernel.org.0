@@ -2,125 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A8F1B3B26
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 11:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0FCB1B3BB1
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 11:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbgDVJYR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Apr 2020 05:24:17 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:21682 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726208AbgDVJYQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 05:24:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587547454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DMhA18q5o54p19fFpaLKF4OTjlHgtCkpRiehNkdmtk0=;
-        b=grApRieNK+OmW+Ph9h2tR9zU0uKExcWmmISzc/RrgOUdVjDeysh8DaWsu+FczjWWILTAPj
-        WIzMeEmSv0ZlCUw1vFqJ3GxVNUuoG4yjZ7fkrmNMYqjutoOIvIUTxPBxLB0L7SPmoT9jIe
-        BuntuwErSvNNbVZzI/ZjHmqtDlZ+J5g=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-47-bYl2gzczORKSGHhwjavuQw-1; Wed, 22 Apr 2020 05:24:10 -0400
-X-MC-Unique: bYl2gzczORKSGHhwjavuQw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726100AbgDVJrt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Apr 2020 05:47:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42030 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725994AbgDVJrt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 22 Apr 2020 05:47:49 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1503B8017FC;
-        Wed, 22 Apr 2020 09:24:08 +0000 (UTC)
-Received: from T590 (ovpn-8-28.pek2.redhat.com [10.72.8.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7B2FFB3A8F;
-        Wed, 22 Apr 2020 09:23:56 +0000 (UTC)
-Date:   Wed, 22 Apr 2020 17:23:51 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hch@lst.de" <hch@lst.de>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "hare@suse.de" <hare@suse.de>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] scsi: storvsc: Fix a panic in the hibernation procedure
-Message-ID: <20200422092351.GF299948@T590>
-References: <1587514644-47058-1-git-send-email-decui@microsoft.com>
- <20200422012814.GB299948@T590>
- <HK0P153MB0273B954294B331E20AACB41BFD20@HK0P153MB0273.APCP153.PROD.OUTLOOK.COM>
- <20200422020134.GC299948@T590>
- <20200422030807.GK17661@paulmck-ThinkPad-P72>
- <20200422041629.GE299948@T590>
- <HK0P153MB0273CF2901E193C03C934A47BFD20@HK0P153MB0273.APCP153.PROD.OUTLOOK.COM>
+        by mail.kernel.org (Postfix) with ESMTPSA id 8FBED2071E;
+        Wed, 22 Apr 2020 09:47:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587548868;
+        bh=VDHv7iN7f71wDl0Vm0L8nrtTCwARrTeDoVAxeAGLVmo=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=VbAV/lWHS2qQ8ld0T0GumGUybrF3+jzfqIyvP++6F+z/oF6aGijuYj7rFrmyK4hXh
+         IVpszqtn7I+Khe4u6muPSMSuIY68b/BnG+9+iiTjimExGrZ2VNCAXOgZOT0lKpe+eX
+         duDW8qDbVJCQrR6kaxDa/V0LidGo8iCNTAM+NhEY=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <HK0P153MB0273CF2901E193C03C934A47BFD20@HK0P153MB0273.APCP153.PROD.OUTLOOK.COM>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200419170810.5738-6-robh@kernel.org>
+References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-6-robh@kernel.org>
+Subject: Re: [PATCH 05/17] clk: versatile: Kill CONFIG_COMMON_CLK_VERSATILE
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Date:   Wed, 22 Apr 2020 02:47:47 -0700
+Message-ID: <158754886772.132238.8648193086417881263@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 22, 2020 at 04:58:14AM +0000, Dexuan Cui wrote:
-> > From: Ming Lei <ming.lei@redhat.com>
-> > Sent: Tuesday, April 21, 2020 9:16 PM
-> > ...
-> > > > > When we're in storvsc_suspend(), all the userspace processes have been
-> > > > > frozen and all the file systems have been flushed, and there should not
-> > > > > be too much I/O from the kernel space, so IMO scsi_host_block() should
-> > be
-> > > > > pretty fast here.
-> > > >
-> > > > I guess it depends on RCU's implementation, so CC RCU guys.
-> > > >
-> > > > Hello Paul & Josh,
-> > > >
-> > > > Could you clarify that if sysnchronize_rcu becomes quickly during
-> > > > system suspend?
-> > >
-> > > Once you have all but one CPU offlined, it becomes extremely fast, as
-> > > in roughly a no-op (which is an idea of Josh's from back in the day).
-> > > But if there is more than one CPU online, then synchronize_rcu() still
-> > > takes on the order of several to several tens of jiffies.
-> > >
-> > > So, yes, in some portions of system suspend, synchronize_rcu() becomes
-> > > very fast indeed.
-> > 
-> > Hi Paul,
-> > 
-> > Thanks for your clarification.
-> > 
-> > In system suspend path, device is suspended before
-> > suspend_disable_secondary_cpus(),
-> > so I guess synchronize_rcu() is not quick enough even though user space
-> > processes and some kernel threads are frozen.
-> > 
-> > Thanks,
-> > Ming
-> 
-> storvsc_suspend() -> scsi_host_block() is only called in the hibernation
-> path, which is not a hot path at all, so IMHO we don't really care if it
-> takes 10ms or 100ms or even 1s. :-)  BTW, in my test, typically the
+Quoting Rob Herring (2020-04-19 10:07:58)
+> diff --git a/drivers/clk/versatile/Kconfig b/drivers/clk/versatile/Kconfig
+> index c2618f1477a2..3465fb291998 100644
+> --- a/drivers/clk/versatile/Kconfig
+> +++ b/drivers/clk/versatile/Kconfig
+> @@ -1,22 +1,14 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config ICST
+> -       bool
+> -
+> -config COMMON_CLK_VERSATILE
+> -       bool "Clock driver for ARM Reference designs"
+> -       depends on ARCH_INTEGRATOR || ARCH_REALVIEW || \
+> -               ARCH_VERSATILE || ARCH_VEXPRESS || ARM64 || \
+> -               COMPILE_TEST
+> +       bool "Clock driver for ARM Reference designs ICST" if COMPILE_TEST
+>         select REGMAP_MMIO
+>         ---help---
+>           Supports clocking on ARM Reference designs:
+>           - Integrator/AP and Integrator/CP
+>           - RealView PB1176, EB, PB11MP and PBX
+> -         - Versatile Express
+> =20
+>  config CLK_SP810
+>         bool "Clock driver for ARM SP810 System Controller"
+> -       depends on COMMON_CLK_VERSATILE
 
-Are you sure the 'we' can cover all users?
+Shouldn't this get the depends from COMMON_CLK_VERSATILE so that this
+option isn't exposed unless someone is compile testing or using that
+platform?
 
-> scsi_host_block() here takes about 3ms in my 40-vCPU VM.
-
-If more LUNs are added, the time should be increased proportionallly,
-that is why I think scsi_host_block() is bad.
-
-
-Thanks,
-Ming
-
+>         default y if ARCH_VEXPRESS
+>         ---help---
+>           Supports clock muxing (REFCLK/TIMCLK to TIMERCLKEN0-3) capabili=
+ties
+> @@ -24,8 +16,7 @@ config CLK_SP810
+> =20
+>  config CLK_VEXPRESS_OSC
+>         bool "Clock driver for Versatile Express OSC clock generators"
+> -       depends on COMMON_CLK_VERSATILE
+> -       depends on VEXPRESS_CONFIG
+> +       depends on VEXPRESS_CONFIG || COMPILE_TEST
+>         default y if ARCH_VEXPRESS
+>         ---help---
+>           Simple regmap-based driver driving clock generators on Versatile
