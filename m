@@ -2,99 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E821B39E7
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 10:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5351B3ABC
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 11:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726041AbgDVITH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Apr 2020 04:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725811AbgDVITH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 04:19:07 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A909C03C1A6
-        for <linux-pm@vger.kernel.org>; Wed, 22 Apr 2020 01:19:07 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id f20so701955pgl.12
-        for <linux-pm@vger.kernel.org>; Wed, 22 Apr 2020 01:19:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=EekerngQJFduX7Ew7inUaoXZRPxCiQxtmSV8TYCHEcQ=;
-        b=qCwO0eD1AZwXFk3sb5mQcCFCpRtFPUmfPK9zYT8T5Ve+YHt9i6UnQMPkY3Aadh6wob
-         XGRRa6+gg8IaXAsm9QPZkT+LepaJgJRjo5m5uuFz0bBQHvHetp/ZmOuZq0ki4nLKOjlK
-         evfriyWh7Ywq7Z2uJyjSDiE/vazm725b6xVIn4la+5cjFTLEch4ecIdzk21SYMZxDcXu
-         d4Z/PMxNMUnCBwYwcdTNIq9u2iv+TX15szgevkd8sk/UR9cVZtrsJaRcY3/0chKgS7A+
-         kCgrMjqcvXsuSLrk7kRrm6AmBK4OWWLfwQe8uQvM/4DYYjDH3fIJl8h2uPCrBrqFXjAm
-         UZjQ==
+        id S1726082AbgDVJFR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Apr 2020 05:05:17 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:42612 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726041AbgDVJFQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 05:05:16 -0400
+Received: by mail-ot1-f67.google.com with SMTP id m18so1413015otq.9;
+        Wed, 22 Apr 2020 02:05:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=EekerngQJFduX7Ew7inUaoXZRPxCiQxtmSV8TYCHEcQ=;
-        b=lWfYe/95l7aAA5Tjt24wCO/exRGYZMj/0zePllPpr1L/vyWaZ2ZpmkBHG2f/YRimKV
-         iURN1MbAKxVWAL3wBaMYZMFPBdHAspRacsQZRMgt7QkrgZK5F/F4h89jdEtSHaVHD0XZ
-         2+Qxg2E9vU5IlzZrnyj5hQd1KGqDXrmBrQLGKOqIRh9T7hRnZ4znPDRCc8zAWhjtO0tF
-         4AotYVreBpxiDeWz0PhOiM8XqEy9Bd+csGZAXYmnAv0deM29ZujuoNaON6MBvlI6P85e
-         7H6FouQUqbfzqVmpNJ6BRq7Xz86Fz4fLcBqaA3U255KMBFXVsyKaVrZ+2+kKlDVliHBv
-         JZhA==
-X-Gm-Message-State: AGi0PuYQIR9h2JUNeNjSiM5sESMI6OhgxlRmbC3Y+7vwgSTAn8Cf5xey
-        KD/Sz5lYg/c2nFjT1CJhFocinVRdniw=
-X-Google-Smtp-Source: APiQypKPAF045iErsq2ppQZYUssCS2doi5whkj5j7xoi1bp1IpONf49w0ItUKHzbG5D/VjfivgnGcQ==
-X-Received: by 2002:a62:1ccb:: with SMTP id c194mr14373983pfc.325.1587543546649;
-        Wed, 22 Apr 2020 01:19:06 -0700 (PDT)
-Received: from localhost ([122.171.118.46])
-        by smtp.gmail.com with ESMTPSA id c14sm4335274pgi.54.2020.04.22.01.19.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Apr 2020 01:19:05 -0700 (PDT)
-Date:   Wed, 22 Apr 2020 13:49:04 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     peng.fan@nxp.com
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, rjw@rjwysocki.net,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        Anson.Huang@nxp.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] cpufreq: add i.MX7ULP support
-Message-ID: <20200422081904.ls6z5yjrcjvow3x4@vireshk-i7>
-References: <1587369314-23452-1-git-send-email-peng.fan@nxp.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B5vud3pf8Y69anGfFBmw7nwGjrVBjnFCZosReDIIX64=;
+        b=HhZ9zwwCZJ0VSex3qIBfOASl5dC63rr1q+leZv0RRI6JjRFB0UkOdI0zezTffNQOdO
+         ajNBkS5UdAob3u1vxnrVDd14SUQGGVq7914MyD+I2cwHBJzjQiGVAkqOIBtbsfMKhY5Y
+         pm1jxidgkkZ7TlDDb9e598ogee9+NDMBo/TovfLAVsVtMVbh5kJUbS4bI+USvbZtufJp
+         sqYbgHCPoaUfn/2/eJEAnn0nLbLFqCHqSNXb/YuzrX9dEWlEplP99whW1xyjwWd9F6Rs
+         TIYtX/yCWhwET+wepZTi+3dSo+DO9JG/gF3tNrbN1Ljk3+gjLMDj6BQNm9Vei2q3+g2F
+         orJw==
+X-Gm-Message-State: AGi0PubbDlI+1GGjozwCpgZbHNThy2JKDMlv2AsW2aDcYxOI7Z5lTr6r
+        akVhUqsmc0l8t2kVG6/fmJOIos9nf/iay1Xk/Uc=
+X-Google-Smtp-Source: APiQypJUxZX+VI/95qmujC40IKjXMF96E9hSjeeyFG1Ok5dU9Nkee09qE9cnSpVt/T0Km+isZ++7cDGWO/GG7Rxxlh8=
+X-Received: by 2002:a05:6830:18d0:: with SMTP id v16mr16109926ote.118.1587546315616;
+ Wed, 22 Apr 2020 02:05:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1587369314-23452-1-git-send-email-peng.fan@nxp.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20200422051529.30757-1-zhang.lyra@gmail.com>
+In-Reply-To: <20200422051529.30757-1-zhang.lyra@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 22 Apr 2020 11:05:04 +0200
+Message-ID: <CAJZ5v0ikL3avFomZVqtBhfEjeauN-5ZUm9kZwzG=Vo+Ks0AiyA@mail.gmail.com>
+Subject: Re: [PATCH] PM: sleep: call devfreq_suspend/resume and
+ cpufreq_suspend/resume in pairs.
+To:     Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Vincent Wang <vincent.wang@unisoc.com>,
+        Samer Xie <samer.xie@unisoc.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-04-20, 15:55, peng.fan@nxp.com wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> This is a splited patchset from https://patchwork.kernel.org/cover/11390589/
-> patch 11/14 and patch 12/14 posted 2 months ago.
-> 
-> This is to use cpufreq dt driver target_intermediate to implement
-> cpufreq for i.MX7ULP, because i.MX7ULP has some specific requirements
-> for core clk changing.
-> 
-> To make cpufreq on i.MX7ULP full function, there still more patches
-> required:
-> https://patchwork.kernel.org/cover/11491149/
-> https://patchwork.kernel.org/patch/11390559/
-> 
-> However with this current patchset applied, it not break anything,
-> because the cpufreq device has not been registered, and opp table
-> not added.
-> 
-> Peng Fan (2):
->   cpufreq: Add i.MX7ULP to cpufreq-dt-platdev blacklist
->   cpufreq: imx-cpufreq-dt: support i.MX7ULP
-> 
->  drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
->  drivers/cpufreq/imx-cpufreq-dt.c     | 84 +++++++++++++++++++++++++++++++++++-
->  2 files changed, 83 insertions(+), 2 deletions(-)
+On Wed, Apr 22, 2020 at 7:15 AM Chunyan Zhang <zhang.lyra@gmail.com> wrote:
+>
+> From: Vincent Wang <vincent.wang@unisoc.com>
+>
+> If dpm_prepare() fails in dpm_suspend_start(), dpm_suspend() can't be
+> called.
 
-Applied. Thanks.
+That's correct.
 
--- 
-viresh
+> And then, devfreq_suspend() and cpufreq_suspend() will not be
+> called in the suspend flow.
+
+Right.
+
+> But in the resiume flow, devfreq_resume() and cpufreq_resume() will
+> be called.
+
+Right, and they are expected to cope with the situation.
+
+> This patch will ensure that devfreq_suspend/devfreq_resume and
+> cpufreq_suspend/cpufreq_resume are called in pairs.
+
+So why is it better to do this than to make devfreq_resume() meet the
+expectations?
+
+> Signed-off-by: Vincent Wang <vincent.wang@unisoc.com>
+> Signed-off-by: Samer Xie <samer.xie@unisoc.com>
+> Signed-off-by: Chunyan Zhang <zhang.lyra@gmail.com>
+> ---
+>  drivers/base/power/main.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index fdd508a78ffd..eb3d987d43e0 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1866,9 +1866,6 @@ int dpm_suspend(pm_message_t state)
+>         trace_suspend_resume(TPS("dpm_suspend"), state.event, true);
+>         might_sleep();
+>
+> -       devfreq_suspend();
+> -       cpufreq_suspend();
+> -
+>         mutex_lock(&dpm_list_mtx);
+>         pm_transition = state;
+>         async_error = 0;
+> @@ -1988,6 +1985,9 @@ int dpm_prepare(pm_message_t state)
+>         trace_suspend_resume(TPS("dpm_prepare"), state.event, true);
+>         might_sleep();
+>
+> +       devfreq_suspend();
+> +       cpufreq_suspend();
+> +
+>         /*
+>          * Give a chance for the known devices to complete their probes, before
+>          * disable probing of devices. This sync point is important at least
+> --
+> 2.20.1
+>
