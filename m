@@ -2,91 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC301B43EC
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 14:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF0A1B46D8
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 16:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726539AbgDVMFN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Apr 2020 08:05:13 -0400
-Received: from foss.arm.com ([217.140.110.172]:48584 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726519AbgDVMFN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 22 Apr 2020 08:05:13 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4490131B;
-        Wed, 22 Apr 2020 05:05:12 -0700 (PDT)
-Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 25E3E3F6CF;
-        Wed, 22 Apr 2020 05:05:12 -0700 (PDT)
-Received: by e110455-lin.cambridge.arm.com (Postfix, from userid 1000)
-        id E5CFF682F3D; Wed, 22 Apr 2020 13:05:10 +0100 (BST)
-Date:   Wed, 22 Apr 2020 13:05:10 +0100
-From:   Liviu Dudau <liviu.dudau@arm.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 17/17] ARM: vexpress: Don't select VEXPRESS_CONFIG
-Message-ID: <20200422120510.GB364558@e110455-lin.cambridge.arm.com>
-References: <20200419170810.5738-1-robh@kernel.org>
- <20200419170810.5738-18-robh@kernel.org>
+        id S1727024AbgDVOIi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Apr 2020 10:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725810AbgDVOIh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 10:08:37 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF8AC03C1A9;
+        Wed, 22 Apr 2020 07:08:36 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id x18so2571158wrq.2;
+        Wed, 22 Apr 2020 07:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5seySNK4hDDxpkyp20i2oYy5PSF73LNYovBB3BodsdY=;
+        b=E/0pd5edymyvaj47xBUYZpOZ4bLjv2UW1STlse0uImx7/yQtKEdpnZUgRogcjvia+7
+         HSheHhSZNHyf6KktPA/breNZnh48Jk9SR1SGCUEfRSlAWDLXCIbOR0GNzje3mnFEMQI8
+         3IMFjoa10qcper65UGJIsf1+eD4NBDyMjoNVNvoG6oxXrE69qnH4AC2Ihu7W/qlId/hv
+         h1aRY5t55tqecKYj5wC4wRLHHs+GxJu0R6g1vIhtCvvIm5rjPDwbqd09n7KbaAVmfbp2
+         wOhDHKo2SYs2LIyBne71hUh5xlaMvA/JyVgOAI9xlEamQIysIriPVWGwu9xp9aqxxXH/
+         akGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5seySNK4hDDxpkyp20i2oYy5PSF73LNYovBB3BodsdY=;
+        b=LHO1FEerU9bVJD9ttSluoKazGyFymanO5kB68xoOSbqVmhBpjCCJABsxMXgB0GqdvE
+         YDWQfH2Q0ckxCzflbJeDB661wCey3yE2437Sz8Qjoq2A2lpW2Z5cj2QMEvHre8t30wXa
+         4YbpHespM17rEko9C9Ij2hW2r1Gd8XQAwJau9T3uBp0k6qBF5H23mX/tEWaVmY2LmXpS
+         m1KSn7oTqHaHEgnui+0ivFtI+QpK+ZQsQODK3V95pNGqSQTaMX5ofyl6rMQSN8mYJJ/v
+         GTVQPkTHyiI32LfkOsbgkVet8/KuZC+sNSfgwemxBchOSCce4lPvnOtlKpgXbDKzESq/
+         OVRg==
+X-Gm-Message-State: AGi0PuZVUgcrtyDOKP2AVWsVSEmjeYNR090QBk+sLUGmlmYh9v/G46rX
+        J2YAaaqz3xacwpKGutHtLSc=
+X-Google-Smtp-Source: APiQypJ0a6P5BC4d0K3z0Zq1NGFX9e8zmK21/U1fXuAlAJYYzL+Pc8udhC+MUPVQHOhmt99FJHrxcw==
+X-Received: by 2002:a05:6000:14c:: with SMTP id r12mr29022424wrx.62.1587564514700;
+        Wed, 22 Apr 2020 07:08:34 -0700 (PDT)
+Received: from Ansuel-XPS.localdomain (host36-18-dynamic.45-213-r.retail.telecomitalia.it. [213.45.18.36])
+        by smtp.googlemail.com with ESMTPSA id a9sm7526790wmm.38.2020.04.22.07.08.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Apr 2020 07:08:33 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Ilia Lin <ilia.lin@kernel.org>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sricharan R <sricharan@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] cpufreq: qcom: fix  compatibility issue with old binding
+Date:   Wed, 22 Apr 2020 16:08:26 +0200
+Message-Id: <20200422140827.1726-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200419170810.5738-18-robh@kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Apr 19, 2020 at 12:08:10PM -0500, Rob Herring wrote:
-> CONFIG_VEXPRESS_CONFIG has 'default y if ARCH_VEXPRESS', so selecting is
-> unnecessary. Selecting it also prevents setting CONFIG_VEXPRESS_CONFIG
-> to a module.
-> 
-> Cc: Liviu Dudau <liviu.dudau@arm.com>
+Binding has changed from operating-points-v2-kryo-cpu to
+operating-points-v2-qcom-cpu. Also check for old binding in driver
+probe.
 
-Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+Fixes: a8811ec764f9 cpufreq: qcom: Add support for krait based socs
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+---
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  arch/arm/mach-vexpress/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/arm/mach-vexpress/Kconfig b/arch/arm/mach-vexpress/Kconfig
-> index 065e12991663..8391a5b3cd78 100644
-> --- a/arch/arm/mach-vexpress/Kconfig
-> +++ b/arch/arm/mach-vexpress/Kconfig
-> @@ -19,7 +19,6 @@ menuconfig ARCH_VEXPRESS
->  	select POWER_SUPPLY
->  	select REGULATOR if MMC_ARMMMCI
->  	select REGULATOR_FIXED_VOLTAGE if REGULATOR
-> -	select VEXPRESS_CONFIG
->  	help
->  	  This option enables support for systems using Cortex processor based
->  	  ARM core and logic (FPGA) tiles on the Versatile Express motherboard,
-> -- 
-> 2.20.1
-> 
-
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index a1b8238872a2..8a0411efc79a 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -278,6 +278,10 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
+ 		return -ENOENT;
+ 
+ 	ret = of_device_is_compatible(np, "operating-points-v2-qcom-cpu");
++	if (!ret)
++		ret = of_device_is_compatible(np,
++					      "operating-points-v2-kyro-cpu");
++
+ 	if (!ret) {
+ 		of_node_put(np);
+ 		return -ENOENT;
 -- 
-====================
-| I would like to |
-| fix the world,  |
-| but they're not |
-| giving me the   |
- \ source code!  /
-  ---------------
-    ¯\_(ツ)_/¯
+2.25.1
+
