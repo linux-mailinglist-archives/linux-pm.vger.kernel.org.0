@@ -2,111 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F84E1B33AE
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 01:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493BF1B3434
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 02:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbgDUX7a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Apr 2020 19:59:30 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:54075 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725850AbgDUX7a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Apr 2020 19:59:30 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 71D5B3C0579;
-        Wed, 22 Apr 2020 01:59:26 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Ii3F635pHRba; Wed, 22 Apr 2020 01:59:20 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        id S1726341AbgDVAzZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Apr 2020 20:55:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43164 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726012AbgDVAzZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 21 Apr 2020 20:55:25 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 912D03C004C;
-        Wed, 22 Apr 2020 01:59:20 +0200 (CEST)
-Received: from lxhi-065.adit-jv.com (10.72.94.4) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 22 Apr
- 2020 01:59:20 +0200
-Date:   Wed, 22 Apr 2020 01:59:14 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     John Stultz <john.stultz@linaro.org>
-CC:     lkml <linux-kernel@vger.kernel.org>, Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Todd Kjos <tkjos@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-pm@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v5 0/6] driver core: Improve and cleanup
- driver_deferred_probe_check_state()
-Message-ID: <20200421235836.GA8319@lxhi-065.adit-jv.com>
-References: <20200225050828.56458-1-john.stultz@linaro.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id 04B0C2071E;
+        Wed, 22 Apr 2020 00:55:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587516925;
+        bh=1tGsEv5ZFp9bX2M6Kx0sfhTv+0ZAGMG4B0V9Zh/NRjQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iIZ/ySE32plEgTzSYEoFVxtu2f+Ees6F8/H9+vpBCrjILSB53HY7a8zDlU8Gy28XU
+         jGiV89vqnJFzcW0fhZ9EGuSjUKvNuvecXtgtyjDYvuFctHpqyN6JQqTBVoTUds1Ln7
+         wDuYMMNFP5kbg/+flHoTivANtUtqEQz1ewVHUmFU=
+Date:   Tue, 21 Apr 2020 20:55:23 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lyude Paul <lyude@redhat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau <nouveau@lists.freedesktop.org>,
+        Ben Skeggs <bskeggs@redhat.com>
+Subject: Re: [PATCH AUTOSEL 5.6 084/129] drm/nouveau: workaround runpm fail
+ by disabling PCI power management on certain intel bridges
+Message-ID: <20200422005523.GV1809@sasha-vm>
+References: <20200415113445.11881-1-sashal@kernel.org>
+ <20200415113445.11881-84-sashal@kernel.org>
+ <CACO55ttpvfoyt1p_5Y-Q1=+5NruF5kMoug85jE9y+jG+FW=HGw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20200225050828.56458-1-john.stultz@linaro.org>
-X-Originating-IP: [10.72.94.4]
+In-Reply-To: <CACO55ttpvfoyt1p_5Y-Q1=+5NruF5kMoug85jE9y+jG+FW=HGw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi John,
-Cc: linux-renesas-soc
+On Wed, Apr 15, 2020 at 06:11:10PM +0200, Karol Herbst wrote:
+>in addition to that 028a12f5aa829 "drm/nouveau/gr/gp107,gp108:
+>implement workaround for HW hanging during init" should probably get
+>picked as well as it's fixing some runtime pm related issue on a
+>handful of additional GPUs. I have a laptop myself which requires both
+>of those patches.
+>
+>Applies to 5.5 and 5..4 as well.
 
-On Tue, Feb 25, 2020 at 05:08:22AM +0000, John Stultz wrote:
-> This series goal is to improve and cleanup the
-> driver_deferred_probe_check_state() code in the driver core.
-> 
-> This series is useful for being able to support modules
-> dependencies which may be loaded by userland, far after
-> late_initcall is done. For instance, this series allows us to
-> successfully use various clk drivers as modules on the db845c
-> board. And without it, those drivers have to be statically built
-> in to work.
-> 
-> Since I first sent out this patch, Saravana suggested an
-> alternative approach which also works for our needs, and is a
-> bit simpler:
->  https://lore.kernel.org/lkml/20200220055250.196456-1-saravanak@google.com/T/#u
-> 
-> However, while that patch provides the functionality we need,
-> I still suspect the driver_deferred_probe_check_state() code
-> could benefit from the cleanup in this patch, as the existing
-> logic is somewhat muddy.
-> 
-> New in v5:
-> * Reworked the driver_deferred_probe_check_state() logic as
->   suggested by Saravana to tie the initcall_done checking with
->   modules being enabled.
-> * Cleanup some comment wording as suggested by Rafael
-> * Try to slightly simplify the regulator logic as suggested by
->   Bjorn
-> 
-> Thanks so much to Bjorn, Saravana and Rafael for their reviews
-> and suggestions! Additional review and feedback is always greatly
-> appreciated!
-
-Building a recent [0] kernel using vanilla arm64 defconfig
-and booting it on H3ULCB, I get buried into backtraces [1].
-
-After reverting this series, up to and including its first commit,
-booting goes back to normal [2].
-
-Any chance to get a fix or at least some hints where to dig into?
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=18bf34080c4c3b
-    ("Merge branch 'akpm' (patches from Andrew)")
-[1] https://gist.github.com/erosca/ac779c348dd272c448e162c406c48f4a
-[2] https://gist.github.com/erosca/5eea2bc5e82be651d405ba038d0ad036
+I've grabbed it for 5.6 and 5.4 (5.5 is EOL), thanks!
 
 -- 
-Best regards,
-Eugeniu Rosca
+Thanks,
+Sasha
