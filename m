@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF0A1B46D8
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 16:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 377F61B46D9
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Apr 2020 16:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727024AbgDVOIi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 22 Apr 2020 10:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
+        id S1727050AbgDVOIl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 22 Apr 2020 10:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbgDVOIh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 10:08:37 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF8AC03C1A9;
-        Wed, 22 Apr 2020 07:08:36 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id x18so2571158wrq.2;
-        Wed, 22 Apr 2020 07:08:36 -0700 (PDT)
+        with ESMTP id S1727026AbgDVOIi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 22 Apr 2020 10:08:38 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0759AC03C1AA;
+        Wed, 22 Apr 2020 07:08:38 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id t63so2487135wmt.3;
+        Wed, 22 Apr 2020 07:08:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5seySNK4hDDxpkyp20i2oYy5PSF73LNYovBB3BodsdY=;
-        b=E/0pd5edymyvaj47xBUYZpOZ4bLjv2UW1STlse0uImx7/yQtKEdpnZUgRogcjvia+7
-         HSheHhSZNHyf6KktPA/breNZnh48Jk9SR1SGCUEfRSlAWDLXCIbOR0GNzje3mnFEMQI8
-         3IMFjoa10qcper65UGJIsf1+eD4NBDyMjoNVNvoG6oxXrE69qnH4AC2Ihu7W/qlId/hv
-         h1aRY5t55tqecKYj5wC4wRLHHs+GxJu0R6g1vIhtCvvIm5rjPDwbqd09n7KbaAVmfbp2
-         wOhDHKo2SYs2LIyBne71hUh5xlaMvA/JyVgOAI9xlEamQIysIriPVWGwu9xp9aqxxXH/
-         akGw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Wn/XLaNsEUc+JrRQ7mg4yGN/42PXRkrYATqvOjyi41s=;
+        b=snwH3gA2y8hxo2yX0BZogJrmkiRtOPUxjXX+dPm4cR0dVk9LX0VxJ7oPquVLBJbHqz
+         AWnwU3Mhtf0HovRIhUHzwtrkmb9A4hbMEuyPbYmr869gTWKpZ9nPKxwopbxNddiNT0iO
+         k95XZEP72PHNiVNwG/Wmr+htitVZPOUMLegX7fQFxuH6K/643K5oMFXCotPVRHG5OblZ
+         xcAnlzlRxlAYONV4tjcdkDdRPdzcr33n9n0qSv65oa+5hlCLxfiY1UdBC7PSos/Sc3Id
+         DNTZU26mI5J9GuQBD88ysDyCov7KTkmiRHTeQDVWryCdAkWal+U18AwAOPnPOd1vAUGi
+         to9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5seySNK4hDDxpkyp20i2oYy5PSF73LNYovBB3BodsdY=;
-        b=LHO1FEerU9bVJD9ttSluoKazGyFymanO5kB68xoOSbqVmhBpjCCJABsxMXgB0GqdvE
-         YDWQfH2Q0ckxCzflbJeDB661wCey3yE2437Sz8Qjoq2A2lpW2Z5cj2QMEvHre8t30wXa
-         4YbpHespM17rEko9C9Ij2hW2r1Gd8XQAwJau9T3uBp0k6qBF5H23mX/tEWaVmY2LmXpS
-         m1KSn7oTqHaHEgnui+0ivFtI+QpK+ZQsQODK3V95pNGqSQTaMX5ofyl6rMQSN8mYJJ/v
-         GTVQPkTHyiI32LfkOsbgkVet8/KuZC+sNSfgwemxBchOSCce4lPvnOtlKpgXbDKzESq/
-         OVRg==
-X-Gm-Message-State: AGi0PuZVUgcrtyDOKP2AVWsVSEmjeYNR090QBk+sLUGmlmYh9v/G46rX
-        J2YAaaqz3xacwpKGutHtLSc=
-X-Google-Smtp-Source: APiQypJ0a6P5BC4d0K3z0Zq1NGFX9e8zmK21/U1fXuAlAJYYzL+Pc8udhC+MUPVQHOhmt99FJHrxcw==
-X-Received: by 2002:a05:6000:14c:: with SMTP id r12mr29022424wrx.62.1587564514700;
-        Wed, 22 Apr 2020 07:08:34 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Wn/XLaNsEUc+JrRQ7mg4yGN/42PXRkrYATqvOjyi41s=;
+        b=c3wFRSH7RIAg41n76ETY1Dss0GA1v/2B0t+TAIquTICvHQlajeqUJD5E9dgc337lea
+         y+78nVBVDEvimV8TYL0p5izb2oK+923TfYzRCMAiC7fnXk6XvcmAhzPNVWhLAEbpDt5a
+         Y6gMdibTu9gyuNw0RTrO2XjWeqLLcLZ6psYHlI4FFoEXNC8aIKWqbXTkFKYPFhrYlVSa
+         P91lao3qUy4ytsStIEeSZit1C62V+aKxQF48edLHBKT6ZtfMnI6GEKpzp4+9EcrRTEGF
+         5jZYntaHVkTY5rVBcbgeOnuxR4GFnEXekMrmrl+K0WDN9ENSLO5yG29hsBlIz6HGGUdX
+         3HrA==
+X-Gm-Message-State: AGi0PuZE/C13bIEiBCorxJYuUoxiLICMpgkMpHbMQgty7xnFLkjnJYXU
+        JRVKsc5tjzJ+MHBG1VhQ2/8=
+X-Google-Smtp-Source: APiQypLcBdgKcojkVDWJDUlHMTtYzEZSNEqVPBloleybYbcysXDKZ/PSC6WiURn0kRHtcRsdukQqQA==
+X-Received: by 2002:a7b:c850:: with SMTP id c16mr10268138wml.108.1587564516651;
+        Wed, 22 Apr 2020 07:08:36 -0700 (PDT)
 Received: from Ansuel-XPS.localdomain (host36-18-dynamic.45-213-r.retail.telecomitalia.it. [213.45.18.36])
-        by smtp.googlemail.com with ESMTPSA id a9sm7526790wmm.38.2020.04.22.07.08.32
+        by smtp.googlemail.com with ESMTPSA id a9sm7526790wmm.38.2020.04.22.07.08.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2020 07:08:33 -0700 (PDT)
+        Wed, 22 Apr 2020 07:08:35 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Ilia Lin <ilia.lin@kernel.org>
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
@@ -59,10 +59,12 @@ Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         Sricharan R <sricharan@codeaurora.org>,
         linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] cpufreq: qcom: fix  compatibility issue with old binding
-Date:   Wed, 22 Apr 2020 16:08:26 +0200
-Message-Id: <20200422140827.1726-1-ansuelsmth@gmail.com>
+Subject: [PATCH 2/2] dt-bindings: opp: Fix wrong binding in qcom-nvmem-cpufreq
+Date:   Wed, 22 Apr 2020 16:08:27 +0200
+Message-Id: <20200422140827.1726-2-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200422140827.1726-1-ansuelsmth@gmail.com>
+References: <20200422140827.1726-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -70,31 +72,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Binding has changed from operating-points-v2-kryo-cpu to
-operating-points-v2-qcom-cpu. Also check for old binding in driver
-probe.
+Update binding to new generic name "operating-points-v2-qcom-cpu"
 
 Fixes: a8811ec764f9 cpufreq: qcom: Add support for krait based socs
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/cpufreq/qcom-cpufreq-nvmem.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-index a1b8238872a2..8a0411efc79a 100644
---- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-@@ -278,6 +278,10 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
- 		return -ENOENT;
+diff --git a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+index 64f07417ecfb..537e1774f589 100644
+--- a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
++++ b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+@@ -19,7 +19,7 @@ In 'cpu' nodes:
  
- 	ret = of_device_is_compatible(np, "operating-points-v2-qcom-cpu");
-+	if (!ret)
-+		ret = of_device_is_compatible(np,
-+					      "operating-points-v2-kyro-cpu");
-+
- 	if (!ret) {
- 		of_node_put(np);
- 		return -ENOENT;
+ In 'operating-points-v2' table:
+ - compatible: Should be
+-	- 'operating-points-v2-kryo-cpu' for apq8096, msm8996, msm8974,
++	- 'operating-points-v2-qcom-cpu' for apq8096, msm8996, msm8974,
+ 					     apq8064, ipq8064, msm8960 and ipq8074.
+ 
+ Optional properties:
 -- 
 2.25.1
 
