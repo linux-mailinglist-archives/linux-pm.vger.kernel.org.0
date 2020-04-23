@@ -2,107 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6DC1B5984
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 12:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D4E1B5C02
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 14:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727787AbgDWKqy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 06:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
+        id S1728589AbgDWM6A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 08:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727077AbgDWKqx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 06:46:53 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFFDC08E859
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 03:46:53 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id x18so6282694wrq.2
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 03:46:53 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1728286AbgDWM6A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 08:58:00 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B4AC08E934;
+        Thu, 23 Apr 2020 05:57:59 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id u127so6448123wmg.1;
+        Thu, 23 Apr 2020 05:57:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=B1TBwFKRribKH6U+f2YHZKct8m6eaNTnkPh6s+3we4I=;
-        b=LZH+oOofFZ6HTrIFYsXaoNlGuvZDH5TfmDKrwIVEwXATLJ/gyO7J7sHyrTD+/agh8O
-         wWiBCM0FAZhVUMCrQXO7MVYC4rLCk7VA2qyt9dIa3ZKfWghqzp+RuJgis10Fj5K0M5sO
-         pglrlJg6UBZe/QVph5+sbzAlxLr83iDJkP8jfFart0ffS4ED2ONJgo/X5zGpe2mTItrI
-         D2/MiHPJ0/UjxCcnfxINq0p8TeK/xKrdedYUGtckd19yz7WTCbDj+abPTK1xTbstCekz
-         /PV4W/s0wv/F/z6wBMYDWjuOGUjW1Zj5Ma6SnFE3rWo5uuxGnWI5vpdvebrxZVskGRg4
-         Iiag==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=dqaGCrrGdtqTHr8h7W7rgZUN4zoILX85Lt2ArDxobAw=;
+        b=WvdmeSTm03f4OQVBbZ1iK+jbVgf/wF81xLfrlniB7emB2YICETx8QKNrBHjJ3D6B9S
+         /kT220mEN9AJvYfMSrpreaeEy/xx6N3MHR3M8VBv44C1pQdCGOgVmWFPxZFaSEuLv1/p
+         E4qk3+3tx+fACOucmXS+CoQzszk7ghP6MFuAjxXE1P7trrwLmBcLaPv2a2iSzAQERh53
+         CfbJmFQcQxfS6lUrjZ7mp87/3hJaDeYj1cErhJKhxoyzwDwkCMZQxbIlbOs+5ug72kkB
+         aj1dUEhlyHaTL58Br7RnRA3TGbkQihUatFh7dsfmq9SxzjAFh1VoBG6P/rVrEw09vhV9
+         WXsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=B1TBwFKRribKH6U+f2YHZKct8m6eaNTnkPh6s+3we4I=;
-        b=TFeB14NvSDqKiS6Guo+3oOGipI2UL0IAVlQmuWFS2a9EQ/C8r1iDioXA54jLWQH8N6
-         YdittgBdCZXLJFwZCqRFIS030in5pdqSa9q2q/uYF79oHKHsI4nu+nA3wEpWxawtX2ek
-         F69EoXso7WAFtTC83HfymEzlXOxeHUyGAxPvbMI5q6DEObyYMt+KqBeAUYZmbYY9y2Ca
-         aCPsZ3sYYhbNa1My07b3ltxiobxYF9NkENrAukWr68Bxv68M/P9T11pXN5GE5Y6E0tG+
-         Ri1YUipQOIWjMvBfe7IdxEPwY1PTrt4HlRL/Tl9gFRJ9gRPQw1xwFZMIw6rmQ2Sxp3EO
-         46CQ==
-X-Gm-Message-State: AGi0PuZxrRw3oL15GSdfML7+7HxWFhhdlYEwo+VK8QjSUDDrkcS0RK3L
-        QTwaB36WmULL/nw2PtJ0m5UDgQ==
-X-Google-Smtp-Source: APiQypKk6XUIzuutA3wLhgUEchycCeMPsBVS0IXvX9Ni7yK3fu/lKAGauoLlCdpwWe5IfJMCbOUR+w==
-X-Received: by 2002:a5d:5652:: with SMTP id j18mr4521872wrw.40.1587638812041;
-        Thu, 23 Apr 2020 03:46:52 -0700 (PDT)
-Received: from [192.168.43.23] ([37.167.216.250])
-        by smtp.googlemail.com with ESMTPSA id 17sm3087293wmo.2.2020.04.23.03.46.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Apr 2020 03:46:51 -0700 (PDT)
-Subject: Re: [PATCH v6 02/10] PM / EM: introduce em_dev_register_perf_domain
- function
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com
-Cc:     Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
-        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        qperret@google.com, bsegall@google.com, mgorman@suse.de,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        matthias.bgg@gmail.com, steven.price@arm.com,
-        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
-        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
-        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
-        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
-References: <20200410084210.24932-1-lukasz.luba@arm.com>
- <20200410084210.24932-3-lukasz.luba@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <4a1d8d5b-84f2-46b7-00ce-03178d7df72f@linaro.org>
-Date:   Thu, 23 Apr 2020 12:46:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200410084210.24932-3-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=dqaGCrrGdtqTHr8h7W7rgZUN4zoILX85Lt2ArDxobAw=;
+        b=IpC24l/tAOtchxTShUBvlBD8Btwwm3eGgGCFkmavfyswTTnN7n0tjirNVVo8JU6rSf
+         TNZkQZROYDgrNXHGQ92RqcMKzn0ZVsFG095T6rlhYCc1GPOI9YGsvd5VAVENlmMiUUic
+         q+QSigCtSse5GFrl06ex3dkLIgMsLFsrdk+6uobLmeydTZ96kEcBF/Hr0Lhv7Xt9B3Ox
+         jln6LGuwZbm+4TDQXru9ClO5f1h5YcuQaBZ6b4+DkS8Hu8keoS4M6DpFziArRWqVvYeq
+         mSJpxUnMnk50GBiPa6eAyGa/wiEr4P5PoGdES7o95i/jSn+wlZChijYTkZzG9U8YpbF5
+         LUGQ==
+X-Gm-Message-State: AGi0PuZ1/bkZ++VwCBWS5XuSSaKbXM3Srfv8NFaCmGesTNzhIvslSN5n
+        8ptEznObhuGqS4NoIzy5ufM=
+X-Google-Smtp-Source: APiQypJo4EyDiMeYphl9h0zQtMu+AdWMwzAH0KkyGB6bL0c5tSeXt3hvIJunfcz2O6eUi0LXihVJGA==
+X-Received: by 2002:a05:600c:2314:: with SMTP id 20mr3951028wmo.35.1587646678480;
+        Thu, 23 Apr 2020 05:57:58 -0700 (PDT)
+Received: from debian.lan (host-84-13-17-86.opaltelecom.net. [84.13.17.86])
+        by smtp.gmail.com with ESMTPSA id 185sm4051252wmc.32.2020.04.23.05.57.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 Apr 2020 05:57:57 -0700 (PDT)
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH] thermal: ti-soc-thermal: avoid dereferencing ERR_PTR
+Date:   Thu, 23 Apr 2020 13:57:57 +0100
+Message-Id: <20200423125757.14057-1-sudipm.mukherjee@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/04/2020 10:42, Lukasz Luba wrote:
-> Add now function in the Energy Model framework which is going to support
-> new devices. This function will help in transition and make it smoother.
-> For now it still checks if the cpumask is a valid pointer, which will be
-> removed later when the new structures and infrastructure will be ready.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
+On error the function ti_bandgap_get_sensor_data() returns the error
+code in ERR_PTR() but we only checked if the return value is NULL or
+not. And, so we can dereference a error code inside ERR_PTR.
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+---
+ drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-
+diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+index d3e959d01606..1e2bf1f22dd1 100644
+--- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
++++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+@@ -196,7 +196,7 @@ int ti_thermal_remove_sensor(struct ti_bandgap *bgp, int id)
+ 
+ 	data = ti_bandgap_get_sensor_data(bgp, id);
+ 
+-	if (data && data->ti_thermal) {
++	if (!IS_ERR_OR_NULL(data) && data->ti_thermal) {
+ 		if (data->our_zone)
+ 			thermal_zone_device_unregister(data->ti_thermal);
+ 	}
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.11.0
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
