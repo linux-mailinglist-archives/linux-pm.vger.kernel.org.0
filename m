@@ -2,134 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 712D11B5C7D
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 15:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE411B5CD4
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 15:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727944AbgDWNW5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 09:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726429AbgDWNW5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 09:22:57 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4374C08ED7D
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 06:22:56 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id d17so6803177wrg.11
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 06:22:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=6lrCN4Y2jvBEhMEE9yoKB0QoRLluJFmgeNzXOO0519c=;
-        b=MfGul8Hpypn6B6iEzWypyjdhBn2Sm6I3sSyNkRkdieKZwsujvoViJAlUxKfCp6PvVT
-         nwSpOW9fHqYx6TfeuZBHXpiT/Q2s2RfycyW/XV2CCERaWqWBevrZxULrN89FB2oqqqIj
-         EC4+LROpYsU0aZMAoa54xpOSfpfCZFQyZRrwaCx87r3hFioBkCt8KsdEjlJAImIi4s1I
-         Us/CNyKM0JIG8zvg7SiTo3pIgmAXzgypQm3ZpltQJG1qtzhzgxWvcovuoFdh5tQZy9Cx
-         NgvYaqs9da3YhKQ+izEK3Cgf+BXf15gAENfjKuHLNG3VaHH3xMMHcEogSfbIRqjGk5gK
-         /7lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=6lrCN4Y2jvBEhMEE9yoKB0QoRLluJFmgeNzXOO0519c=;
-        b=Mvavz/l39qUESecoWUcya/Kr5llCQ3F3TrmMEAK3hxRIKwxrZM0zqPZg6WhIdAQhlF
-         Se5DzXS1vs5Sifll4rQvQC5yPG2y3fvfJnv2jbO/+oJb+bypQTlQA1PKS9CVfVeAptIT
-         4b+dkHN3DXssQJBHsmknAs4LHs+qidKBs58Q2bHfsOQdfPClwa5HpmH/BCS0JwnjBilL
-         U6hALuOo6eT1yNgFVkpQxRWTWwcPA3dJAupuPnszR9kZKNtyqKx3+OSY5OXOKt3bXie4
-         L7gtkYmQwYsjOaMj9hu+CpMghlz0uYo91dxaULa98KdXoFD+1+qMVxa5CXsxcWBUlnwI
-         hHmQ==
-X-Gm-Message-State: AGi0PubGh7PvpLEkJyjl4IEFdj+rTI5A4vsvipHq+EHpdgASVSutVsQM
-        2ZLXZONOnFYJ6gPYFmNGgkuSBg==
-X-Google-Smtp-Source: APiQypLIExvxbZk7AtfC6O9cBOXmdm+gz1QSH3p+99FlJwwJBGarRXDyjXQkXRxvvC0opKaSfe3/tA==
-X-Received: by 2002:adf:fdc1:: with SMTP id i1mr5430755wrs.158.1587648175280;
-        Thu, 23 Apr 2020 06:22:55 -0700 (PDT)
-Received: from linaro.org ([37.167.216.250])
-        by smtp.gmail.com with ESMTPSA id h137sm14658623wme.0.2020.04.23.06.22.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Apr 2020 06:22:54 -0700 (PDT)
-Date:   Thu, 23 Apr 2020 15:22:43 +0200
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com, Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
-        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        qperret@google.com, bsegall@google.com, mgorman@suse.de,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        matthias.bgg@gmail.com, steven.price@arm.com,
-        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
-        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
-        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
-        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
-Subject: Re: [PATCH v6 03/10] PM / EM: update callback structure and add
- device pointer
-Message-ID: <20200423132243.GA65632@linaro.org>
-References: <20200410084210.24932-1-lukasz.luba@arm.com>
- <20200410084210.24932-4-lukasz.luba@arm.com>
+        id S1728437AbgDWNpk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 09:45:40 -0400
+Received: from foss.arm.com ([217.140.110.172]:40142 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727898AbgDWNpk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 23 Apr 2020 09:45:40 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C68431B;
+        Thu, 23 Apr 2020 06:45:39 -0700 (PDT)
+Received: from bogus (unknown [10.37.12.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 72B2E3F6CF;
+        Thu, 23 Apr 2020 06:45:35 -0700 (PDT)
+Date:   Thu, 23 Apr 2020 14:45:28 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>
+Subject: Re: [PATCH 08/17] clk: vexpress-osc: Support building as a module
+Message-ID: <20200423133342.GA10628@bogus>
+References: <20200419170810.5738-1-robh@kernel.org>
+ <20200419170810.5738-9-robh@kernel.org>
+ <20200422210802.GH25585@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200410084210.24932-4-lukasz.luba@arm.com>
+In-Reply-To: <20200422210802.GH25585@bogus>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 10, 2020 at 09:42:03AM +0100, Lukasz Luba wrote:
-> The Energy Model framework is going to support devices other that CPUs. In
-> order to make this happen change the callback function and add pointer to
-> a device as an argument.
-> 
-> Update the related users to use new function and new callback from the
-> Energy Model.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
+On Wed, Apr 22, 2020 at 10:08:02PM +0100, Sudeep Holla wrote:
+> On Sun, Apr 19, 2020 at 12:08:01PM -0500, Rob Herring wrote:
+> > Enable building the vexpress-osc clock driver as a module.
+> >
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: Liviu Dudau <liviu.dudau@arm.com>
+> > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> > Cc: Michael Turquette <mturquette@baylibre.com>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Cc: linux-clk@vger.kernel.org
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  drivers/clk/versatile/Kconfig            |  4 ++--
+> >  drivers/clk/versatile/clk-vexpress-osc.c | 10 ++++------
+> >  2 files changed, 6 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/clk/versatile/Kconfig b/drivers/clk/versatile/Kconfig
+> > index 5bdd5c98990b..9de2396dcf9b 100644
+> > --- a/drivers/clk/versatile/Kconfig
+> > +++ b/drivers/clk/versatile/Kconfig
+> > @@ -15,8 +15,8 @@ config CLK_SP810
+> >  	  of the ARM SP810 System Controller cell.
+> >
+> >  config CLK_VEXPRESS_OSC
+> > -	bool "Clock driver for Versatile Express OSC clock generators"
+> > -	depends on VEXPRESS_CONFIG || COMPILE_TEST
+> > +	tristate "Clock driver for Versatile Express OSC clock generators"
+> > +	depends on VEXPRESS_CONFIG
+> >  	default y if ARCH_VEXPRESS
+> >  	---help---
+> >  	  Simple regmap-based driver driving clock generators on Versatile
+> > diff --git a/drivers/clk/versatile/clk-vexpress-osc.c b/drivers/clk/versatile/clk-vexpress-osc.c
+> > index 5bb1d5a714d0..b2b32fa2d7c3 100644
+> > --- a/drivers/clk/versatile/clk-vexpress-osc.c
+> > +++ b/drivers/clk/versatile/clk-vexpress-osc.c
+> > @@ -7,6 +7,7 @@
+> >  #include <linux/clkdev.h>
+> >  #include <linux/clk-provider.h>
+> >  #include <linux/err.h>
+> > +#include <linux/module.h>
+> >  #include <linux/of.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/slab.h>
+> > @@ -108,6 +109,7 @@ static const struct of_device_id vexpress_osc_of_match[] = {
+> >  	{ .compatible = "arm,vexpress-osc", },
+> >  	{}
+> >  };
+> > +MODULE_DEVICE_TABLE(of, vexpress_osc_of_match);
+> >
+> >  static struct platform_driver vexpress_osc_driver = {
+> >  	.driver	= {
+> > @@ -116,9 +118,5 @@ static struct platform_driver vexpress_osc_driver = {
+> >  	},
+> >  	.probe = vexpress_osc_probe,
+> >  };
+> > -
+> > -static int __init vexpress_osc_init(void)
+> > -{
+> > -	return platform_driver_register(&vexpress_osc_driver);
+> > -}
+> > -core_initcall(vexpress_osc_init);
+> > +module_platform_driver(vexpress_osc_driver);
+>
+> I am not 100% sure of this. This might break the boot on CA9 and TC2
+> at-least. There are loads of MB peripherals that need this. This will
+> break the boot. We need to check if all the dependent modules are also
+> at module_initcall level and if they deal with deferred probe correctly.
+> Lot of them are legacy and may happen to be working by carefully initcall
+> level adjustments.
+>
 
-[ ... ]
+OK I managed to try this on my TC2 and it fails to boot. However when I
+enable earlyprintk as I see no log without it, it boots just fine.
 
-> +static struct em_perf_domain *
-> +em_create_pd(struct device *dev, int nr_states, struct em_data_callback *cb,
-> +	     cpumask_t *span)
->  {
->  	unsigned long opp_eff, prev_opp_eff = ULONG_MAX;
->  	unsigned long power, freq, prev_freq = 0;
-> @@ -106,7 +107,7 @@ static struct em_perf_domain *em_create_pd(cpumask_t *span, int nr_states,
->  		 * lowest performance state of 'cpu' above 'freq' and updates
->  		 * 'power' and 'freq' accordingly.
->  		 */
-> -		ret = cb->active_power(&power, &freq, cpu);
-> +		ret = cb->active_power(&power, &freq, dev);
->  		if (ret) {
->  			pr_err("pd%d: invalid perf. state: %d\n", cpu, ret);
->  			goto free_ps_table;
+I also checked adding initcall_debug and I may be wrong on the dependency
+part. The modules dependent on vexpress-osc are probed later correctly.
 
-Why are the changes 'cpu' to 'dev' in the patch 4/10 instead of this one ?
+This make it more difficult to debug as I don't have any debugger attached
+at the moment to look at the logbuf when it hangs without earlyprintk.
 
-> @@ -237,7 +238,7 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
->  	}
->  
->  	/* Create the performance domain and add it to the Energy Model. */
-> -	pd = em_create_pd(span, nr_states, cb);
-> +	pd = em_create_pd(dev, nr_states, cb, span);
->  	if (!pd) {
->  		ret = -EINVAL;
->  		goto unlock;
-
--- 
-
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--
+Regards,
+Sudeep
