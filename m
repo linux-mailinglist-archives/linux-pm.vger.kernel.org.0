@@ -2,108 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C43881B6168
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 18:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1EC1B6170
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 18:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729803AbgDWQ5Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 12:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729783AbgDWQ5Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 12:57:24 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27F0C09B042;
-        Thu, 23 Apr 2020 09:57:24 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id 75D292A2810
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Barlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [PATCH v3 2/2] thermal: core: Stop polling DISABLED thermal devices
-Date:   Thu, 23 Apr 2020 18:57:05 +0200
-Message-Id: <20200423165705.13585-3-andrzej.p@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200423165705.13585-1-andrzej.p@collabora.com>
-References: <a3998ad2-19bc-0893-a10d-2bb5adf7d99f@samsung.com>
- <20200423165705.13585-1-andrzej.p@collabora.com>
+        id S1729822AbgDWQ6X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 12:58:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:44234 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729674AbgDWQ6X (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 23 Apr 2020 12:58:23 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 85EE330E;
+        Thu, 23 Apr 2020 09:58:22 -0700 (PDT)
+Received: from [10.37.12.89] (unknown [10.37.12.89])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B9B73F68F;
+        Thu, 23 Apr 2020 09:57:48 -0700 (PDT)
+Subject: Re: [PATCH v6 04/10] PM / EM: add support for other devices than CPUs
+ in Energy Model
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com, Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
+        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        qperret@google.com, bsegall@google.com, mgorman@suse.de,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
+        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
+        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
+References: <20200410084210.24932-1-lukasz.luba@arm.com>
+ <20200410084210.24932-5-lukasz.luba@arm.com>
+ <20200423151250.GB65632@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <ff1c8cc5-f64d-6156-7d30-97b8426c6f99@arm.com>
+Date:   Thu, 23 Apr 2020 17:57:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20200423151250.GB65632@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Polling DISABLED devices is not desired, as all such "disabled" devices
-are meant to be handled by userspace. This patch introduces and uses
-should_stop_polling() to decide whether the device should be polled or not.
 
-Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
----
- drivers/thermal/thermal_core.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index a2a5034f76e7..03c4d8d23284 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -305,13 +305,22 @@ static void thermal_zone_device_set_polling(struct thermal_zone_device *tz,
- 		cancel_delayed_work(&tz->poll_queue);
- }
- 
-+static inline bool should_stop_polling(struct thermal_zone_device *tz)
-+{
-+	return thermal_zone_device_get_mode(tz) == THERMAL_DEVICE_DISABLED;
-+}
-+
- static void monitor_thermal_zone(struct thermal_zone_device *tz)
- {
-+	bool stop;
-+
-+	stop = should_stop_polling(tz);
-+
- 	mutex_lock(&tz->lock);
- 
--	if (tz->passive)
-+	if (!stop && tz->passive)
- 		thermal_zone_device_set_polling(tz, tz->passive_delay);
--	else if (tz->polling_delay)
-+	else if (!stop && tz->polling_delay)
- 		thermal_zone_device_set_polling(tz, tz->polling_delay);
- 	else
- 		thermal_zone_device_set_polling(tz, 0);
-@@ -503,6 +512,9 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
- {
- 	int count;
- 
-+	if (should_stop_polling(tz))
-+		return;
-+
- 	if (atomic_read(&in_suspend))
- 		return;
- 
--- 
-2.17.1
+On 4/23/20 4:12 PM, Daniel Lezcano wrote:
+> On Fri, Apr 10, 2020 at 09:42:04AM +0100, Lukasz Luba wrote:
+>> Add support for other devices that CPUs. The registration function
+>> does not require a valid cpumask pointer and is ready to handle new
+>> devices. Some of the internal structures has been reorganized in order to
+>> keep consistent view (like removing per_cpu pd pointers). To track usage
+>> of the Energy Model structures, they are protected with kref.
+> 
+> Why not add the energy model structure in the struct device directly?
+
+Do you mean this structure?
+https://elixir.bootlin.com/linux/latest/source/include/linux/device.h#L537
+
+and to put something like:
+struct device {
+...
+	struct dev_pm_domain	*pm_domain;
+#ifdef CONFIG_ENERGY_MODEL
+	struct em_perf_domain	*em_pd;
+#endif
+...
+};
+
+> 
+> For instance for the em_cpu_get() function, the cpu id allows to retrieve the
+> cpu device and then from there, the energy model instead of browsing another
+> list. The em_device life cycle will be tied to the struct device.
+
+That would be perfect.
+
+> 
+> Then when the struct device and the em_device are connected, add the debugfs
+> with a struct device list for those which are energy aware, so you end up with
+> a structure:
+> 
+> struct em_device {
+> 	struct device *dev;
+> 	struct list_head em_dev_list;
+> };
+> 
+> (a global single dentry for debugfs to do a recursive delete is enough).
+> 
+> Locks when inspecting and add/removal called from the struct device release
+> function. So no need of an extra refcounting.
+> 
+> Does it make sense?
+> 
+
+Indeed it looks much cleaner/simpler.
+
+I will try to address this idea and get rid of refcounting.
+
+This should be doable in this patch (4/10). In the v7 I will keep your
+ACKs for other patches that you have already commented.
+
+Thank you for your suggestions and review.
+
+Regards,
+Lukasz
 
