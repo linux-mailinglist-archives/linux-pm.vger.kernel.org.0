@@ -2,91 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5DD1B6386
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 20:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357D71B64E7
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 22:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730404AbgDWS1V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 14:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
+        id S1726287AbgDWUAW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 16:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730395AbgDWS1R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 14:27:17 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5013C09B044
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 11:27:14 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id 19so7485885ioz.10
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 11:27:14 -0700 (PDT)
+        with ESMTP id S1725934AbgDWUAV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 16:00:21 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C3BC09B042;
+        Thu, 23 Apr 2020 12:52:30 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id t63so7867960wmt.3;
+        Thu, 23 Apr 2020 12:52:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=G0MearUWJO2XoX5WFWCbOSBM0KnomNOcLxBMKb36E56Tk8IIyFbWO7z4INTed1WkRU
-         qeMi1eRR7YsA+BDT6DQvUAii78YnzCjvNMVBKy4slcZy3/gJbFRS56rTYb2i1ZQ8vqn/
-         EOaplCA4N/rSu1DPvHSaWXp+qBo2gCjTbf/vDHta9DawS0nUkV5FYws7CV/zXlK/VYiG
-         COL+ehFclZxGMjmnJCFdgQT7XS8eBs73XeZW6OQ9vAUq0KfaGK/YZHActLVD5NzSJiie
-         gXxsbNT9IQMnd4wAzDKDPSrX8AkY/tvkHFQgBX+60qxPigWKusZrEf/ce5VP7zRF3LJ+
-         eYhg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=bovI+nPzSNj2sKyQBiYFJbyyronnwfOZafj50co011I=;
+        b=pMEoHWALeeAnkX1KcYrdq9Wu09rZZfiG5IlDb0WnsVVnJDRHzrp05fQubkH2BZTNmb
+         yW+R/DX+rnBB8PgAdw0U/4eHnsp39QNe8FT25c3xH45B8LCuhSWon7FM4BFoB6t/koUs
+         U9DUDbWpZXMp/QJMw0zGszTH06M9Y5ZRbAwuIqTZCL0Y8HQymmcB/6BovysfBVKYZABC
+         zn+RXSL3uxt0jyISXIuYIxiL5iu4cd9mDG/H9USAFsr7cwFDJVikzJMaGgp0aYtXuS/R
+         PhNb9mcDil7QY99HMs/Gm1boGu3tyqqAQBlNWZ76ShV6EkXW6cZh60fduZye4h3x9luF
+         cbmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=WQBFWh1tPPoR++L0WkS4LCupenIGuPpSC5VT+jJrSMUEmbpwu0lY0f3zDilB9LILXJ
-         P49+rB82jBwf99Glzi4bqHXehJ/kqQJNCVj+06uvNDEK6mfGVVuPQlDI7k4Q5BuXFibx
-         S1mDvXdBHTA2Z1QA9T7P5kO6Pf5qfKm7RcexPtPXsxz29ICbF0iM78f/1W9UIu29nfXZ
-         B4pjYveTfkQDVK2skDLGN6MRhF1ODrVMR9XceuPA7RyxZxItWoLo43sTAQ/uYkfE7urK
-         B5Z+xdfJf+mdeKywIvE+Z79ovrr5NYLb0yx9FcoHW2v8W7XJz42OEDZn6m4XwlC5qzT1
-         E6ZQ==
-X-Gm-Message-State: AGi0PuY2HTI/grpBTcSDkN3eX1dupRjsg1drVHfch7BbPLTBxyVTaFJ9
-        U6aaUmMKV7+oOtb3Y5rfAqjCrTBmJVbVUzkJ1oMKl1M=
-X-Google-Smtp-Source: APiQypKOhu0Ivyzu1MQANRLgnSM6D7f6PDwmOyOGFsy7UwOOUt5tM1gVxevJ7CcMC29eb2aYcjzRxadXayX+T6slpNc=
-X-Received: by 2002:a05:6602:d:: with SMTP id b13mr5025673ioa.176.1587666433220;
- Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=bovI+nPzSNj2sKyQBiYFJbyyronnwfOZafj50co011I=;
+        b=DkhKEM5chH9v21A/Mmy5LvaZ7Crr+3qZR7GNg5JqOnMwtWnoEX9WrPsJeMMoWjfMMk
+         EnG3Pg+7tD/ncLz8S45ccSykDu6/0w40ktr/+RQIcpWJFNG5bxujERFOAuE6ZwP/ey8F
+         Y0VSGLiKupC3OfNxV9w2e6Yolm7Xx+MPQ/8jVAZaxjCE00wLr/MFI/ktNvdHhrKFgryG
+         9iV94O9lv+VWhaAAovhhUVCD1IyWImuZkEg0F++KRnzuPCJcRSjhl0jTJAO6xlPxmtKx
+         fF/8ipBlaS0yO/6cqLZbwf6fGgJPZeVeJpi+tBEop+NCy9s1J8wtZT3oVzyyS9S08JWL
+         whRA==
+X-Gm-Message-State: AGi0PuZz3Dgadld7y8j1lLLMwgeeU/0axG50C9+8FADMw1qqMYtSoyVv
+        CYpYK2g9NaMMi3S1Mw/qk8GU/rdepXH9fcXbs62CUK7I
+X-Google-Smtp-Source: APiQypKWYdRlNdDAQJSC7cfHmZ7OAgf6FRy5MFVTwUB9gGunyGmFEOeM9r8KlecUb0R6BbS0howq0wze2Q9r3Z4OpUQ=
+X-Received: by 2002:a5d:5352:: with SMTP id t18mr6638141wrv.111.1587671548719;
+ Thu, 23 Apr 2020 12:52:28 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a02:c845:0:0:0:0:0 with HTTP; Thu, 23 Apr 2020 11:27:12
- -0700 (PDT)
-Reply-To: boa.benin107@yahoo.com
-From:   "Mrs. Angella Michelle" <info.zennitbankplcnigerian@gmail.com>
-Date:   Thu, 23 Apr 2020 20:27:12 +0200
-Message-ID: <CABHzvrnzZLe4Z0E4acOdcsDJTPa3wvp-Oz12f_M4TQ03PAGZkw@mail.gmail.com>
-Subject: Contact Eco bank-Benin to receive your payment funds transfer amount
- of $12.800.000,00 Million USD,approved this morning by IMF.
-To:     undisclosed-recipients:;
+References: <CADnq5_NUueBoEXcO_HBHqwrONnmoAvepBLwwxtQW7R=SuyoFfQ@mail.gmail.com>
+In-Reply-To: <CADnq5_NUueBoEXcO_HBHqwrONnmoAvepBLwwxtQW7R=SuyoFfQ@mail.gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 23 Apr 2020 15:52:17 -0400
+Message-ID: <CADnq5_PPxCPPrggE96uNRHQLTq7+bg0iSq2+C46QybV_Xd_=gQ@mail.gmail.com>
+Subject: Re: runtime pm without pci or platform subsystem involvement
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Attn Dear.
-Contact Bank of Africa-Benin to receive your payment funds transfer amount =
-of
-$12.800.000,00 Million USD,approved this morning by IMF.
-Happy to inform you, we have finally deposited your payment funds
-$12.8 million us dollars with the Paying Bank of Africa-Benin
-to transfer the payment amount of $12.800,000,00 Million Us Dollars to you
-Contact the bank immediately you receive this email now.
-Director Bank of Africa-Benin: Dr. Festus Obiara
-Email id:  boa.benin107@yahoo.com
-Tel/mobile, (229) 62819378
-BOA-BENIN | GROUPE BANK OF AFRICA, boa-benin
-Avenue Jean-Paul II - 08 BP 0879 - Cotonou - B=C3=A9nin
-Phone:(229) 62819378.
-2020 GROUPE BANK OF AFRICA
-Be advised to re-confirm your bank details to this bank as listed.
-Your account Holder's name----------------
-Bank Name----------------------------------------------------------
-Bank address----------------------------------------------
-Account Numbers---------------------------------------
-Rounting-----------------------------------------------------------------
-Your direct Phone Numbers----------------------------------------------
-Note,I have paid the deposit and insurance fees for you
-But the only money you are to send to this bank is $150.00 us dollars
-Been for the wire transfer fees of your funds
-Contact Him now to receive your transfer deposited this morning
-I wait for your reply upon confirmation
-Mrs. Angella Michelle
-Editor, Zenith Bank- Companies Benin
-mrsa9389@gmail.com
+On Wed, Apr 1, 2020 at 10:54 AM Alex Deucher <alexdeucher@gmail.com> wrote:
+>
+> Hi,
+>
+>   I would like to be able to use the runtime pm infrastructure to
+> support additional power savings at runtime for a PCIe device, but for
+> various reasons, I need to keep the device in D0.  I don't want the
+> PCI or platform subsystem to put the device into D3hot/cold.  Is this
+> possible?  If so how?  I'd like to avoid spinning my own variant of
+> runtime pm just to support this feature.
+
+Expanding the audience a bit.  Is what I want to do possible?  Just
+want to make sure I don't re-invent something that already exists.
+
+Thanks,
+
+Alex
+
+>
+> Thanks,
+>
+> Alex
