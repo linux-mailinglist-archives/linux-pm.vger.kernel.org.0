@@ -2,22 +2,22 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 318F51B6636
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 23:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741F71B6639
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 23:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbgDWVlK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 17:41:10 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:25427 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725777AbgDWVlJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 17:41:09 -0400
+        id S1726997AbgDWVlN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 17:41:13 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:11728 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725777AbgDWVlN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 17:41:13 -0400
 X-IronPort-AV: E=Sophos;i="5.73,309,1583161200"; 
-   d="scan'208";a="45339771"
+   d="scan'208";a="45553072"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 24 Apr 2020 06:41:07 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 24 Apr 2020 06:41:11 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id ABF4F400C420;
-        Fri, 24 Apr 2020 06:41:03 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id AA16B4004BB2;
+        Fri, 24 Apr 2020 06:41:07 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -33,57 +33,37 @@ Cc:     Marian-Cristian Rotariu
         linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
         Lad Prabhakar <prabhakar.csengg@gmail.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 00/10] Add RZ/G1H support.
-Date:   Thu, 23 Apr 2020 22:40:40 +0100
-Message-Id: <1587678050-23468-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 01/10] dt-bindings: power: rcar-sysc: Document r8a7742 SYSC binding
+Date:   Thu, 23 Apr 2020 22:40:41 +0100
+Message-Id: <1587678050-23468-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1587678050-23468-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <1587678050-23468-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch series aims to add support for Renesas RZ/G1H (r8a7742) SoC.
+Add binding documentation for the RZ/G1H (R8A7742) SYSC block.
 
-RZ/G1H SoC is similar to R-Car Gen2 H2 SoC.
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+---
+ Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-This patch set is based on renesas-drivers/master-v5.7-rc1.
-
-Lad Prabhakar (10):
-  dt-bindings: power: rcar-sysc: Document r8a7742 SYSC binding
-  dt-bindings: power: rcar-sysc: Add r8a7742 power domain index macros
-  soc: renesas: rcar-sysc: add R8A7742 support
-  dt-bindings: reset: rcar-rst: Document r8a7742 reset module
-  soc: renesas: rcar-rst: Add support for RZ/G1H
-  dt-bindings: clock: renesas: cpg-mssr: Document r8a7742 binding
-  clk: renesas: Add r8a7742 CPG Core Clock Definitions
-  clk: renesas: cpg-mssr: Add R8A7742 support
-  ARM: shmobile: r8a7742: Basic SoC support
-  cpufreq: dt: Add support for r8a7742
-
- .../bindings/clock/renesas,cpg-mssr.yaml           |   1 +
- .../bindings/power/renesas,rcar-sysc.yaml          |   1 +
- .../devicetree/bindings/reset/renesas,rst.yaml     |   1 +
- arch/arm/mach-shmobile/setup-rcar-gen2.c           |   2 +
- drivers/clk/renesas/Kconfig                        |   5 +
- drivers/clk/renesas/Makefile                       |   1 +
- drivers/clk/renesas/r8a7742-cpg-mssr.c             | 289 +++++++++++++++++++++
- drivers/clk/renesas/renesas-cpg-mssr.c             |   6 +
- drivers/clk/renesas/renesas-cpg-mssr.h             |   1 +
- drivers/cpufreq/cpufreq-dt-platdev.c               |   1 +
- drivers/soc/renesas/Kconfig                        |   4 +
- drivers/soc/renesas/Makefile                       |   1 +
- drivers/soc/renesas/r8a7742-sysc.c                 |  42 +++
- drivers/soc/renesas/rcar-rst.c                     |   1 +
- drivers/soc/renesas/rcar-sysc.c                    |   3 +
- drivers/soc/renesas/rcar-sysc.h                    |   1 +
- include/dt-bindings/clock/r8a7742-cpg-mssr.h       |  42 +++
- include/dt-bindings/power/r8a7742-sysc.h           |  29 +++
- 18 files changed, 431 insertions(+)
- create mode 100644 drivers/clk/renesas/r8a7742-cpg-mssr.c
- create mode 100644 drivers/soc/renesas/r8a7742-sysc.c
- create mode 100644 include/dt-bindings/clock/r8a7742-cpg-mssr.h
- create mode 100644 include/dt-bindings/power/r8a7742-sysc.h
-
+diff --git a/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml b/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
+index e59331e1..55b6ab2 100644
+--- a/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
++++ b/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
+@@ -17,6 +17,7 @@ description:
+ properties:
+   compatible:
+     enum:
++      - renesas,r8a7742-sysc  # RZ/G1H
+       - renesas,r8a7743-sysc  # RZ/G1M
+       - renesas,r8a7744-sysc  # RZ/G1N
+       - renesas,r8a7745-sysc  # RZ/G1E
 -- 
 2.7.4
 
