@@ -2,103 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 611C41B5DD5
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 16:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A7C1B5DE1
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 16:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728241AbgDWObj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 10:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728175AbgDWObg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 10:31:36 -0400
-Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E375C08E934
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 07:31:35 -0700 (PDT)
-Received: by mail-ua1-x941.google.com with SMTP id c17so5840438uae.12
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 07:31:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W6zpFn1zJVrYQizk9f7+ghPBLR7OHw9eoL9Fn3H2lbA=;
-        b=dJcp7coCzFdfdbkaEsBKqU3CIF7bXl3qmif1RGgpbk4rfIPYRnaH3M4coOmrH7v7tz
-         vZY+9NQ+38MKGaIAbfDmJsvL//NhG0o1svW52qxQH68xocUvRdHcgSEu1xmzT1MctZ8Y
-         z7bjlvCQR6sCr+JkorL0wNtOzOl1lTedp+fyRGvhz3QrDZg154Ou814jLRD6eNDXMUKu
-         lDQg9w218VNTx8ipNLtlfudR7TGhq+LkQw9eyvZmqkrfyw+QaeB962JUVEbTOTgD3Ino
-         5XmrW7tUjUz7cbbIE3IkG9z6NAZbtVP9IWy1IiRiSUeTzNZqS8256q8OD8wT6Zqp3s/J
-         g6Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W6zpFn1zJVrYQizk9f7+ghPBLR7OHw9eoL9Fn3H2lbA=;
-        b=du3qEQRR6C0oDd9FKpW+IUytokhDUPrZtihc8/3F4mTpVecyV7L/RoNwO53Fksl4rR
-         qHgb7+PYbDcPmUOyPTFBj8945+pZtfVqkQlJBsQBA2V0IrojSAsdm+Ou3+3krdRm17Cu
-         T3BK1zdPwvkKnHbgsdS0LJV0RTvrylJ5LyRFxQW9K57f1+S1Mb27BO+vnMZxnti5m8CX
-         pWH3pgDNjHBQVazLgRap6PndW2fgi6nUKMe8LGbjGRg4acnUQjgpJj/STOmQbwSovVqZ
-         Kkr2fwYk2jiwSF9A4dnhEyt657DhOvr17CyulS0B2CqhFcz8rAFnZvoh0vjmvYmIEGGn
-         H0DA==
-X-Gm-Message-State: AGi0PuZOOCuSkMuYtAROhLHB2tt0G6Wh9M0c7DYFt00YvzkQCLxDCC7i
-        /0t5g+YORS+GPapx0jQ4qIkb6tFz3QnBAsXsvvlaTA==
-X-Google-Smtp-Source: APiQypLj7+UHWWr7l19cHjaedxQUwCnANkyx2Oxglcx9VhHQg+KFxhHNZ0hR6id8hEFLijzaPhwicBS2Wc3omEh9rnY=
-X-Received: by 2002:a67:4242:: with SMTP id p63mr3000372vsa.159.1587652294393;
- Thu, 23 Apr 2020 07:31:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200423125757.14057-1-sudipm.mukherjee@gmail.com>
-In-Reply-To: <20200423125757.14057-1-sudipm.mukherjee@gmail.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Thu, 23 Apr 2020 20:01:10 +0530
-Message-ID: <CAHLCerOTruxM_nJHVhjqq--gczi_MQRWGQN2zKF_BXpaz02ovw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: ti-soc-thermal: avoid dereferencing ERR_PTR
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        id S1728050AbgDWOfR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 10:35:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42368 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728036AbgDWOfR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 23 Apr 2020 10:35:17 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DC9C620728;
+        Thu, 23 Apr 2020 14:35:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587652516;
+        bh=rTNJGPsQUx5fw1XQatvpogr5TI8tvW4SJdwN6KzsVbQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kgd3dSZdZzX0zm4W8ZQ1CAi+zJwzKKzfNBpr5gzaWBcMOU9CXWIqwnKGxkK/S68oF
+         DC72b8r1cFWv5yycG8vEoVc6OB1dJxs2BanFkcVhzrXxWcX4IIpTOhp7MHcRUqukfz
+         9P8zIN4M89x6wF1Tq6oaEVquMYgjc4Whyjn4Hqlg=
+Date:   Thu, 23 Apr 2020 15:35:14 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Todd Kjos <tkjos@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
-        linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-renesas-soc@vger.kernel.org,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v5 0/6] driver core: Improve and cleanup
+ driver_deferred_probe_check_state()
+Message-ID: <20200423143514.GL4808@sirena.org.uk>
+References: <20200225050828.56458-1-john.stultz@linaro.org>
+ <20200421235836.GA8319@lxhi-065.adit-jv.com>
+ <CALAqxLXX455P0V0o11scc3-1MHvecnvcUoT=XBcwB+ma7Kyjqg@mail.gmail.com>
+ <20200422075413.GB4898@sirena.org.uk>
+ <CALAqxLW13oA376bqj7uTR4E4zmnX5ASK=rpqw3HMr4yOWQGaOw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1X+6QtwRodzgDPAC"
+Content-Disposition: inline
+In-Reply-To: <CALAqxLW13oA376bqj7uTR4E4zmnX5ASK=rpqw3HMr4yOWQGaOw@mail.gmail.com>
+X-Cookie: This unit... must... survive.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 23, 2020 at 6:27 PM Sudip Mukherjee
-<sudipm.mukherjee@gmail.com> wrote:
->
-> On error the function ti_bandgap_get_sensor_data() returns the error
-> code in ERR_PTR() but we only checked if the return value is NULL or
-> not. And, so we can dereference a error code inside ERR_PTR.
 
-Typo, s/a error/an error/
+--1X+6QtwRodzgDPAC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I see other uses of ti_bandgap_set_sensor_data() in the same file that
-could use similar checks.
+On Wed, Apr 22, 2020 at 01:45:49PM -0700, John Stultz wrote:
+> On Wed, Apr 22, 2020 at 12:54 AM Mark Brown <broonie@kernel.org> wrote:
 
-e.g. ti_thermal_unregister_cpu_cooling, possibly
-ti_thermal_report_sensor_temperature?
+> > If you're reverting the timeout we should revert the regulator change
+> > too I think.
 
->
-> Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+> Maybe? The main issue for me was my change was clearly breaking users
+> with dts with missing dependencies where their setup was working
+> before. I sort of feel like having a dtb with missing dependencies is
+> less valid than wanting to load module dependencies from userland, but
+> they were working first, so we have to keep them happy :) And at least
+> now the latter can add the timeout boot argument to make it work.
 
+> For your case, I'm not sure if the timeout would run afoul on the nfs
+> root mounting case this one tripped over.
 
-> ---
->  drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> index d3e959d01606..1e2bf1f22dd1 100644
-> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> @@ -196,7 +196,7 @@ int ti_thermal_remove_sensor(struct ti_bandgap *bgp, int id)
->
->         data = ti_bandgap_get_sensor_data(bgp, id);
->
-> -       if (data && data->ti_thermal) {
-> +       if (!IS_ERR_OR_NULL(data) && data->ti_thermal) {
->                 if (data->our_zone)
->                         thermal_zone_device_unregister(data->ti_thermal);
->         }
-> --
-> 2.11.0
->
+Given that it's basically entirely about glitching displays rather than
+an unrecoverable break I suspect that anyone using NFS root is some
+combination of unaffected or doesn't care if they see the timeout kick
+in.
+
+--1X+6QtwRodzgDPAC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6hp6EACgkQJNaLcl1U
+h9BAnQf4o2K1oT2OABX/pK3TMNmi6b4KY4XoVJSbuGguI9f01sgsNzhCfw+4txVs
+2sUiq++Ug1lckGyW3I56+/ZAYAuQco4kGgHsQ6ME27rl2hnt3Es457jjw2By3rmk
+VfCpvUWdq7Zifdq/2tKx2uJgNMWuRy6kPJ4wfwXeSXxLPFk3GvATDcyw7JjA0BMA
+Dt4GAC8Y2PFATD0AteC+bBo9JIWR4qs4CZ/1uladh22gWL4cAkCwDXQAKAJnpgbq
+ybEXCThDRbUeygV4aZD5yWwNLbyyN6+X+XN3itoIbmqBNiSnDGvILAkYGUNGTPN2
+exAfj9tWxY+JKkJTibhLAvmP7bYx
+=Gd5+
+-----END PGP SIGNATURE-----
+
+--1X+6QtwRodzgDPAC--
