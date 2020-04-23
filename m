@@ -2,29 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D54D41B5C41
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 15:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE2E1B5C7B
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 15:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726429AbgDWNTB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 09:19:01 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2880 "EHLO huawei.com"
+        id S1727780AbgDWNWg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 09:22:36 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:2845 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726361AbgDWNTB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 23 Apr 2020 09:19:01 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 16661D4447B4AF8529E4;
-        Thu, 23 Apr 2020 21:18:50 +0800 (CST)
-Received: from huawei.com (10.67.174.156) by DGGEMS408-HUB.china.huawei.com
- (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Thu, 23 Apr 2020
- 21:18:41 +0800
+        id S1727104AbgDWNWg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 23 Apr 2020 09:22:36 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 633546DCDA01EE0B70F5;
+        Thu, 23 Apr 2020 21:22:26 +0800 (CST)
+Received: from huawei.com (10.67.174.156) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.487.0; Thu, 23 Apr 2020
+ 21:22:17 +0800
 From:   ChenTao <chentao107@huawei.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <georgi.djakov@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <chentao107@huawei.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <chentao107@huawei.com>
 Subject: [PATCH-next v2] interconnect: qcom: Move the static keyword to the front of declaration
-Date:   Thu, 23 Apr 2020 21:18:07 +0800
-Message-ID: <20200423131807.44311-1-chentao107@huawei.com>
+Date:   Thu, 23 Apr 2020 21:21:42 +0800
+Message-ID: <20200423132142.45174-1-chentao107@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
