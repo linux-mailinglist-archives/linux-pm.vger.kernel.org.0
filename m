@@ -2,59 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4F11B5783
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 10:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C121B5835
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 11:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbgDWI4w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 04:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
+        id S1726764AbgDWJbQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 05:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725854AbgDWI4w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 04:56:52 -0400
+        with ESMTP id S1726101AbgDWJbQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 05:31:16 -0400
 Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EB8C08C5F2
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 01:56:50 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id g12so5658871wmh.3
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 01:56:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9425C08C5F2
+        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 02:31:15 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id t63so5645638wmt.3
+        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 02:31:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gPzpvlWWEkxl/GFcREXb7mvaG/UydxVYGTUgIsUo/dU=;
-        b=T8uFtLGrcfPG+2nC3WnF8sbFdbxtNMTsCsZb5h7zXdNuK8D1lQWl/bhbAPGdq1qA5s
-         GHokk7+lKGkW4+G3kJL7t//29MNS6Te82c64dTTOPjMiRw3r66JHc4gA5HT/Tan46luL
-         z/4IThEwdjsVd7d+XuMDCm7WOsPgvGq4mSF/cUQRVWVKpcYXeVc2xeAnYBjZOBiEfCzc
-         Zma73Lvv0oEBcJ8g9cAlSy2SsQTRC8Zk0tVSny4A69dY03R72XfBNdXGHXlZy3kUYQe7
-         grBdl0ipnmRY8hi6jZ1Rqbopra32g/XCOVUeauh5zxDzvByW3TA6Mqy3IBkD1HSik9IJ
-         JoNQ==
+        bh=O26z6wOk23INqulcDtAkwlfLrc079plGrt7LpzYNlIM=;
+        b=r2VXwUE9Svk3QiEBGBKAWJ8Cm5d65tBjhNru6zO9YbS+FD8b1nlIRR1fG26t5GxpFk
+         FJ8QWdlgJVHqPw5m4NSaWw29OStIwP298O3wnZ+Y7YfDnmo7Wu0jwAHlrNsENex6RpKa
+         OG2iKzQnglKldPkctBNoK1foc0IdklQ/7f6Pe3AvoTCUEKQeR8HCJR+D/LVVB4eC//bC
+         HAwjmbpaoEBsuIi8mUfNEWYu/GQrNrb2TiUJWi/kaY+7OP0RL2GqQdnQKIYmjk3R6MzR
+         MMLRo4yNCT38fmrGxw5FQcMNbmBJN3e+y5sdszlEu/59Mpsu0cP0MRBFb2CkVSq1S1o2
+         0Ljg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=gPzpvlWWEkxl/GFcREXb7mvaG/UydxVYGTUgIsUo/dU=;
-        b=RqVLPY0eQHtbTyfyHMRuJlR52u7bzALXNHBTgjhszwI96tIHs6taONZBqSEJlJb6VH
-         eCLF8ifZlTJk+lrDe5Iowo9BdlpBqtZpqHwKn3qZ545NgnEqCLfTF+kUx+LCdDQUY8Wf
-         IRYeYZ4s+jU+/m7pcOAIo9jtBb+iHvwwgP0DLQU1k+BpMn6HD63zP9LkF1o+qJooNiOe
-         3GU9PdBIBvmXvtFTWslyDF1/OLyHfuQxK5Xjhzavt6NX6LOLViGSzdI8ygPogKVsBzEP
-         CRi7qFE7Uu59n7w0uZB5YeRMv2L7RQt2FhoWGhvjTJkEhIjB1qNYTOO0CsmPx3Ni47AY
-         n3Zw==
-X-Gm-Message-State: AGi0PuZvYQVZyhDggHR+roJ8Iudn4QLfLDhs3W+ucxRDFx5TQS0H1T6a
-        NbophOJsAmSZFhjdRYZY5UbPyPXPPJE=
-X-Google-Smtp-Source: APiQypL+L94ldf52eXuQQdOMwOat1gAOMuXsdD/6mf5xHcSdVlWgVimqMZsXeTLQrUQSvNNSpM3T3Q==
-X-Received: by 2002:a1c:41d7:: with SMTP id o206mr2991240wma.89.1587632208686;
-        Thu, 23 Apr 2020 01:56:48 -0700 (PDT)
+        bh=O26z6wOk23INqulcDtAkwlfLrc079plGrt7LpzYNlIM=;
+        b=stydcxroxa4Gz4dvO4oWOFrYa/BEcffTCYPnu7U89H7917YqdTUFh7TfQz374YNsbF
+         h3jgaM6XxwTBt0qducLrdcJf5gptP6cM1CWEG84jj6KNe5jKUhJf3qrpcbJe3WocUINu
+         ecPXMavJR2zWuKQgbhK+OdQSjC4Q0nAkOIZHteQWgffxni5pPdUDPan3/GSECgWB4B85
+         MnGZ2peW/tu3CbgMvP0EDZEED7WMypbtkNCS18ZzIA4yj2dsolzFscf0elU8PkZbv9n1
+         A9cJMVofe9KAXv9di+rdMO9GyFUpsiJD3SC/fkGbD7V+J0Gl7Cz2CY8JFkBHFENKP7L7
+         TC3w==
+X-Gm-Message-State: AGi0PuaDqdksqWZ/cHfJpUJJB6LPD5ioiqD1mAFfU/EjxUbEt2MXidFq
+        3YddPhFHT+D5dGYXSbL3AxMKKQ==
+X-Google-Smtp-Source: APiQypKq50R8cweRl+GxccEmBu6i9qOFRnn+sD3w+viq7DNxgjg+A6RewEEgPj/G9AjZ5NSRpoz1Sg==
+X-Received: by 2002:a1c:ac44:: with SMTP id v65mr3192173wme.33.1587634273995;
+        Thu, 23 Apr 2020 02:31:13 -0700 (PDT)
 Received: from [192.168.0.136] ([87.120.218.65])
-        by smtp.googlemail.com with ESMTPSA id y20sm2759588wra.79.2020.04.23.01.56.47
+        by smtp.googlemail.com with ESMTPSA id o7sm2703512wmh.46.2020.04.23.02.31.12
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 Apr 2020 01:56:48 -0700 (PDT)
-Subject: Re: [PATCH] qcom:sdm: move the static keyword to the front of
- declaration
-To:     "chentao (AS)" <chentao107@huawei.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-References: <ae29b195-3529-e993-0219-cbf86ac4281a@huawei.com>
+        Thu, 23 Apr 2020 02:31:13 -0700 (PDT)
+Subject: Re: [PATCH V4 2/9] interconnect: Set peak requirement as twice of
+ average
+To:     Akash Asthana <akashast@codeaurora.org>, broonie@kernel.org
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org, evgreen@chromium.org,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Mike Tipton <mdtipton@codeaurora.org>,
+        Sean Sweeney <seansw@qti.qualcomm.com>
+References: <1586946198-13912-1-git-send-email-akashast@codeaurora.org>
+ <1586946198-13912-3-git-send-email-akashast@codeaurora.org>
 From:   Georgi Djakov <georgi.djakov@linaro.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
@@ -100,39 +109,42 @@ Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
  7ayYJIXFqjl/X0KBcCbiAl4vbdBw1bqFnO4zd1lMXKVoa29UHqby4MPbQhjWNVv9kqp8A39+
  E9xw890l1xdERkjVKX6IEJu2hf7X3MMl9tOjBK6MvdOUxvh1bNNmXh7OlBL1MpJYY/ydIm3B
  KEmKjLDvB0pePJkdTw==
-Message-ID: <ab7820c5-ec3e-21de-b18c-739853a8dc3f@linaro.org>
-Date:   Thu, 23 Apr 2020 11:56:46 +0300
+Message-ID: <58b91dc1-6ce3-49b8-88c8-259be9af1dbd@linaro.org>
+Date:   Thu, 23 Apr 2020 12:31:11 +0300
 MIME-Version: 1.0
-In-Reply-To: <ae29b195-3529-e993-0219-cbf86ac4281a@huawei.com>
+In-Reply-To: <1586946198-13912-3-git-send-email-akashast@codeaurora.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi Akash,
 
-On 4/23/20 10:16, chentao (AS) wrote:
-> Fix the following warning:
+On 4/15/20 13:23, Akash Asthana wrote:
+> Lot of ICC clients are not aware of their actual peak requirement,
+> most commonly they tend to guess their peak requirement as
+> (some factor) * avg_bw.
 > 
-> Move the static keyword to the front of declaration of sdm845_aggre1_noc
-> sdm845_aggre2_noc sdm845_config_noc sdm845_dc_noc sdm845_gladiator_noc
-> sdm845_mem_noc sdm845_mmss_noc and sdm845_system_noc, resolve the following
-> compiler warning that can be when building with warnings enabled (W=1):
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: ChenTao <chentao107@huawei.com>
+> Centralize random peak guess as twice of average, out into the core
+> to maintain consistency across the clients. Client can always
+> override this setting if they got a better idea.
 
-Tha patch is malformed and i can't apply it. Maybe try using git format-patch
-and git send-email instead of Thunderbird.
+I am still not convinced that this is a good idea. If the factor is a random
+value, then i think that the default factor should be 1.
 
-> ---
->  drivers/interconnect/qcom/sdm845.c | 16 ++++++++--------
+According to your previous reply, it seems that from geni we are requesting
+double peak bandwidth to compensate for other clients which are not requesting
+bandwidth for themselves. IMO, this is a bit hacky.
 
-I can see the same warning from osm-l3.c Could you please send one patch
-fixing both files? Also use the prefix "interconnect: qcom:" in the subject.
+Instead of requesting double peak bandwidth, IIUC the correct thing to do here
+is to request peak_bw = avg_bw for geni. And instead of trying to compensate for
+other clients "stealing" bandwidth, can't we make these clients vote for their
+own bandwidth? Or if they really can't, this should be handled elsewhere - maybe
+in the interconnect platform driver we can reserve some amount of minimum
+bandwidth for such cases?
 
 Thanks,
 Georgi
