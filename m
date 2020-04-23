@@ -2,117 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5BB1B5F94
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 17:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E601B5FF2
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 17:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726109AbgDWPj3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 11:39:29 -0400
-Received: from mail-eopbgr30046.outbound.protection.outlook.com ([40.107.3.46]:55534
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729332AbgDWPj3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 23 Apr 2020 11:39:29 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JcqhEkt2yevtKwGqWB0y+dgEY5GhNWa0tc0M/MnFLZrJiFccfHtNkuGSy449qCFXdvPD4QSIc93L4ob+5Yt3CAFCLHwhvBtrXjWC1MvE3JgE/H+6A2WSP3ISKXlAXuIT0bytgWA+80AC/mlnaBAG2E5lrKtfwpHHhTIjqmWaMDQbD0rO07j+8kYml4TkWkHuy7Nl3eEaTKCpTyr1EkOEtNarnvmat50sAzbpRxGOCde+U7M4gSXLWgIJjQwnyMr8h2FQIfErUSMnp0UWPe5a7fzKACHd6wdymFkFBHFUMl2xBNeCJ9uoRTwS5YxfqdM/4wmvWN6M4M4kuvgxB4Z/mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TIWm0BOwSfWeNSZUykaS0hHq8GTcL3jy9xN51aSqa5Y=;
- b=ma/b3HxxcDFh1hlWMPAoiI8S1QPlLBPYpgwX10dI/Ea7EcXEahfBUj7PPHVGmwUpXsCfJzBrdwievyg7Hh1zW5f37YFFaiIrm8hGpgyqG08zhvUm0Bp3H0aA+LCLDLSg01IHk2o7pgd+qRUXH5076JJh5NNoLj27JK9h0U9ObEuvw5jGdLmQ/N2LDaNVVHS8XSUEGev3SxrdpTSugYxLrwfKjgKjfEldjNlPRkzu7piJ7dCTcbBH9zHBYPewtPWP2ARYQONYeeg99dLctnfZtxZEqUNO+YziMgVADnjO+lVI2/CdSGF5yvVRabGjzMq30NN6wkGwisNl1iWD7ZFQmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TIWm0BOwSfWeNSZUykaS0hHq8GTcL3jy9xN51aSqa5Y=;
- b=idZVkBu5x7e5FON5hOEp5wayuBMPX2e6EVsKKgLv3JGCKCF5QAexTCCClyhGGW5ExCRbAm7vMVmzW8R9Tcq2MGcglZ9RRf5rpGyfwtn9KWjcCoQKv32yHM25fBXj8Y4hMNHH9RxJzGwcQSB/7qeYHnuk3vsksSCQRvFq+NaIYEY=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (2603:10a6:8:10::18)
- by DB3PR0402MB3899.eurprd04.prod.outlook.com (2603:10a6:8:f::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.29; Thu, 23 Apr
- 2020 15:39:24 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b%7]) with mapi id 15.20.2921.030; Thu, 23 Apr 2020
- 15:39:24 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Amit Kucheria <amit.kucheria@verdurent.com>
-CC:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        "linux@rempel-privat.de" <linux@rempel-privat.de>,
-        Peng Fan <peng.fan@nxp.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        lakml <linux-arm-kernel@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH 1/3] dt-bindings: firmware: imx: Move system control into
- dt-binding headfile
-Thread-Topic: [PATCH 1/3] dt-bindings: firmware: imx: Move system control into
- dt-binding headfile
-Thread-Index: AQHWGXizyKpLQyPoM0K6vK6jVENDPKiGxoOAgAAQV6A=
-Date:   Thu, 23 Apr 2020 15:39:24 +0000
-Message-ID: <DB3PR0402MB39167F9D8D3101FDA02E3077F5D30@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <1587650406-20050-1-git-send-email-Anson.Huang@nxp.com>
- <CAHLCerP3jGUZC+i2i6CEYhOtBjLYKAPe7M0bKUs1b5oQEsdfEg@mail.gmail.com>
-In-Reply-To: <CAHLCerP3jGUZC+i2i6CEYhOtBjLYKAPe7M0bKUs1b5oQEsdfEg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [183.192.13.100]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 51351c67-cb01-4163-ae22-08d7e79c802a
-x-ms-traffictypediagnostic: DB3PR0402MB3899:|DB3PR0402MB3899:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB38998B5117959DDDDA7E1167F5D30@DB3PR0402MB3899.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 03827AF76E
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(346002)(39860400002)(396003)(376002)(136003)(366004)(7416002)(76116006)(9686003)(8676002)(86362001)(64756008)(66476007)(4326008)(478600001)(66946007)(66446008)(66556008)(33656002)(5660300002)(55016002)(4744005)(316002)(186003)(54906003)(6916009)(2906002)(81156014)(71200400001)(52536014)(26005)(44832011)(8936002)(7696005)(6506007)(53546011);DIR:OUT;SFP:1101;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2bNCzmRQmwBbRCntm7MOTMnHzdshrQOzhpHE0wR+oIQ1XK6MX60rxF9mgiJ2I+Z0Cd0GVcdxyIS9iUWJwCbPVuvZHGCWT7eE1SGYdUSvvFWPbMe8WELWJEVw9rfVYjX4FjYs7kRVdjeJU2ztsgUmFNGwI1IPSWLTpem3f/Y30KGrPQsqXtWBVJn7Ol8UkoE2z/TWwrhLdRDlTlhhhiY/DPBZVNvMAf2nJX991D2mubgsvBQx+kIG5Y2tNKZcpLKoQ9YbUtTgEwIiqwtSBmP4UgV89cpp5w7WKXPa0bU48s5QOez/bhZY43FI/asW2SKaOB9hobstqxCsKstYOh8IdEuI8AVpa0pL+PKxeig0aIjooCgs3E+sFGzyPI8lAqLQNQcMnlap1JQa9GDG9784Japvnh2M8xv+mUM76bknazDGUlE9qdlUAKTejCy+FZ2Y
-x-ms-exchange-antispam-messagedata: Dw/cntGq1vYYAttlywiimH/vxgYh56tc8l0GU37ZfBU3a1v2xHr3JiVxFYFsbzjCeKb2zx5Ha6awmi015ttWoYkYFzVKGW2JUORKYgg8AO0Wgl/S4QDTQ6cFqje3pdYMCoU0KKvReoRyfJuQO0oZErj53N1o7XLam44cZBY6fpHVSqXFNfSXrsXULZ3qCa4ZwkQfuGGcM8kiaRfViU0tuk9rHwPrbOY3vw9JpuY3vagIhTLA6I3n5p7cn3KcRSaPAd2Xg4OMOc5eVkrWcXYpUZW0CxKsu9nB3J3b9oi+yjLVcfVVx9MY0xc68MfEvHYZO7/O1HQNjQreoYSFPsy3zzd0GwbJUy02EQ3+vk8JUK0xgH+pNapz574g1l+dVG3uYf8ItZP4xi8OnHntpjhVYTG1QGAyM8KnPNwFmp6v2cgjosMSF5vozKhdTLZIKB2gWwwkRZo2r8mk341TZvrkcmHhZW+SzLT5qDi/LlAFldeiNs38deR6bSnuvfbA6eSiO9InuEjISiv51/kKNJ2I2MLXF5pip3WaT6P6RzNbFQDpl29UWGgZFGTpDsIcWklJAptXb3j07wCbwwIh9FpTq22SJq1eHoZYnxN9/QzmeFgx++FmCvpANw/pFz+cgVR0zAq4Bt5EVGEhzUT9Fl3Wc4mCfCQpqSYSJ4/DGUqgOd+OlRlkC9/U0F1wZQ+PDniwCzzRbC0tZ/aLqswBNEeAo2BME2twi9GozVZJtBteppSlVboVlSoe1R601Ex7vbmUZ6ouQwQvcBeT6g6RYb4llBZIHgq4U/irAfX+PNt5pLs=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1729348AbgDWPx4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 11:53:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36120 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729230AbgDWPxz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 23 Apr 2020 11:53:55 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 010E721582;
+        Thu, 23 Apr 2020 15:53:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587657235;
+        bh=s3YHiF3eHUkNFeBMptoPc4xjgSN1RME0WUf4jO6w/us=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=A4phta+jNe4PkzlcXnUchsz34o2lcWJYlSeHvPrXxVgP2NqWk+Xq1dOTpvwJ/2nKr
+         JPrRIp+D3x3lLbTzRDRlRzzAZZxaVLBa/87IcYH6WfNHeYa8pqIXKbQtfh1zk24sCJ
+         AtLQweB9a+m8MyWv2FPyhkscdXMXQfFul7pYyNXs=
+Received: by mail-yb1-f175.google.com with SMTP id e17so3407067ybq.0;
+        Thu, 23 Apr 2020 08:53:54 -0700 (PDT)
+X-Gm-Message-State: AGi0PuYpEtJkNaXLu9+jIMjSpDdZgzIdcLSS0VUmw78ABaOiW8tWfZ4r
+        JhmD3dgwed1aHDn/eP4BqnImJPekKwF2U+c/pg==
+X-Google-Smtp-Source: APiQypItf6P4u5QhuwYnh32TjB2B27BbwMX+t2h/1EzeCIMKMBZ70JAemO83CNpLnyd2kyd3i8vYaBELfUOCkztl7Xo=
+X-Received: by 2002:a25:b74c:: with SMTP id e12mr8433306ybm.472.1587657234161;
+ Thu, 23 Apr 2020 08:53:54 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51351c67-cb01-4163-ae22-08d7e79c802a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Apr 2020 15:39:24.6320
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: k1dEcNp63/K34Y0bMOVtZMZOkgOfOICSQsTbB63VwSah77NnDDhbzXEqBMLOXlMAtR53LaZPIBBmbZptkZUlEw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3899
+References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-9-robh@kernel.org>
+ <20200422210802.GH25585@bogus> <20200423133342.GA10628@bogus>
+In-Reply-To: <20200423133342.GA10628@bogus>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 23 Apr 2020 10:53:40 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLnKd5_ifeARuc8RfsUCnc37jNBOkGSeWEp6EPA4J9tqA@mail.gmail.com>
+Message-ID: <CAL_JsqLnKd5_ifeARuc8RfsUCnc37jNBOkGSeWEp6EPA4J9tqA@mail.gmail.com>
+Subject: Re: [PATCH 08/17] clk: vexpress-osc: Support building as a module
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksIEFtaXQNCg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIDEvM10gZHQtYmluZGluZ3M6IGZpcm13
-YXJlOiBpbXg6IE1vdmUgc3lzdGVtIGNvbnRyb2wgaW50bw0KPiBkdC1iaW5kaW5nIGhlYWRmaWxl
-DQo+IA0KPiBPbiBUaHUsIEFwciAyMywgMjAyMCBhdCA3OjM4IFBNIEFuc29uIEh1YW5nIDxBbnNv
-bi5IdWFuZ0BueHAuY29tPg0KPiB3cm90ZToNCj4gPg0KPiA+IGkuTVg4IFNvQ3MgRFRTIGZpbGUg
-bmVlZHMgc3lzdGVtIGNvbnRyb2wgbWFjcm8gZGVmaW5pdGlvbnMsIHNvIG1vdmUNCj4gPiB0aGVt
-IGludG8gZHQtYmluZGluZyBoZWFkZmlsZS4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEFuc29u
-IEh1YW5nIDxBbnNvbi5IdWFuZ0BueHAuY29tPg0KPiANCj4gV2h5IGFtIEkgc2VlaW5nIG11bHRp
-cGxlIHZlcnNpb25zIG9mIHRoZSBzYW1lIHNlcmllcz8NCj4gDQo+IFlvdSBuZWVkIHRvIHNxdWFz
-aCB0aGlzIHNlcmllcyBzbyB0aGF0IHRoZSBzd2FwcGluZyBvZiB0aGUgaGVhZGVyIGZpbGUgaGFw
-cGVucw0KPiBpbiBhIHNpbmdsZSBwYXRjaCBvdGhlcndpc2UgY29tcGlsYXRpb24gd2lsbCBicmVh
-ayB3aXRoIG9ubHkgcGF0Y2ggMSBhcHBsaWVkLg0KDQpUaGUgZmlyc3QgdmVyc2lvbiBJIHNlbnQg
-aXMgaGF2aW5nIGNvbW1hbmQgZXJyb3IgYnkgbWlzdGFrZSBhbmQgcGF0Y2ggMS8zIGlzIG1pc3Np
-bmcsDQpTbyBJIHNlbmQgaXQgYWdhaW4uDQoNClllcywgSSB3aWxsIHNxdWFzaCB0aGlzIHNlcmll
-cywgc29tZXRpbWVzIEkgd2FzIGNvbmZ1c2VkIGFib3V0IHRoZSBwYXRjaCBjYXRlZ29yeSwgYnV0
-DQptYWtpbmcgaXQgTk9UIGJyZWFrIHRoZSBiaXNlY3Qgb3IgYnVpbGQgc2hvdWxkIGJlIHRoZSBt
-b3N0IGltcG9ydGFudCBmYWN0b3IuDQoNClRoYW5rcywNCkFuc29uDQo=
+On Thu, Apr 23, 2020 at 8:45 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Wed, Apr 22, 2020 at 10:08:02PM +0100, Sudeep Holla wrote:
+> > On Sun, Apr 19, 2020 at 12:08:01PM -0500, Rob Herring wrote:
+> > > Enable building the vexpress-osc clock driver as a module.
+> > >
+> > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > Cc: Liviu Dudau <liviu.dudau@arm.com>
+> > > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> > > Cc: Michael Turquette <mturquette@baylibre.com>
+> > > Cc: Stephen Boyd <sboyd@kernel.org>
+> > > Cc: linux-clk@vger.kernel.org
+> > > Signed-off-by: Rob Herring <robh@kernel.org>
+> > > ---
+> > >  drivers/clk/versatile/Kconfig            |  4 ++--
+> > >  drivers/clk/versatile/clk-vexpress-osc.c | 10 ++++------
+> > >  2 files changed, 6 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/drivers/clk/versatile/Kconfig b/drivers/clk/versatile/Kconfig
+> > > index 5bdd5c98990b..9de2396dcf9b 100644
+> > > --- a/drivers/clk/versatile/Kconfig
+> > > +++ b/drivers/clk/versatile/Kconfig
+> > > @@ -15,8 +15,8 @@ config CLK_SP810
+> > >       of the ARM SP810 System Controller cell.
+> > >
+> > >  config CLK_VEXPRESS_OSC
+> > > -   bool "Clock driver for Versatile Express OSC clock generators"
+> > > -   depends on VEXPRESS_CONFIG || COMPILE_TEST
+> > > +   tristate "Clock driver for Versatile Express OSC clock generators"
+> > > +   depends on VEXPRESS_CONFIG
+> > >     default y if ARCH_VEXPRESS
+> > >     ---help---
+> > >       Simple regmap-based driver driving clock generators on Versatile
+> > > diff --git a/drivers/clk/versatile/clk-vexpress-osc.c b/drivers/clk/versatile/clk-vexpress-osc.c
+> > > index 5bb1d5a714d0..b2b32fa2d7c3 100644
+> > > --- a/drivers/clk/versatile/clk-vexpress-osc.c
+> > > +++ b/drivers/clk/versatile/clk-vexpress-osc.c
+> > > @@ -7,6 +7,7 @@
+> > >  #include <linux/clkdev.h>
+> > >  #include <linux/clk-provider.h>
+> > >  #include <linux/err.h>
+> > > +#include <linux/module.h>
+> > >  #include <linux/of.h>
+> > >  #include <linux/platform_device.h>
+> > >  #include <linux/slab.h>
+> > > @@ -108,6 +109,7 @@ static const struct of_device_id vexpress_osc_of_match[] = {
+> > >     { .compatible = "arm,vexpress-osc", },
+> > >     {}
+> > >  };
+> > > +MODULE_DEVICE_TABLE(of, vexpress_osc_of_match);
+> > >
+> > >  static struct platform_driver vexpress_osc_driver = {
+> > >     .driver = {
+> > > @@ -116,9 +118,5 @@ static struct platform_driver vexpress_osc_driver = {
+> > >     },
+> > >     .probe = vexpress_osc_probe,
+> > >  };
+> > > -
+> > > -static int __init vexpress_osc_init(void)
+> > > -{
+> > > -   return platform_driver_register(&vexpress_osc_driver);
+> > > -}
+> > > -core_initcall(vexpress_osc_init);
+> > > +module_platform_driver(vexpress_osc_driver);
+> >
+> > I am not 100% sure of this. This might break the boot on CA9 and TC2
+> > at-least. There are loads of MB peripherals that need this. This will
+> > break the boot. We need to check if all the dependent modules are also
+> > at module_initcall level and if they deal with deferred probe correctly.
+> > Lot of them are legacy and may happen to be working by carefully initcall
+> > level adjustments.
+> >
+>
+> OK I managed to try this on my TC2 and it fails to boot. However when I
+> enable earlyprintk as I see no log without it, it boots just fine.
+
+Well, the uart clocks for TC2 are all dependent on vexpress-osc. The
+console setup is going to fail to get the clocks and just fail as
+there's no deferred probe for consoles. We need some way to retrigger
+the console matching.
+
+> I also checked adding initcall_debug and I may be wrong on the dependency
+> part. The modules dependent on vexpress-osc are probed later correctly.
+>
+> This make it more difficult to debug as I don't have any debugger attached
+> at the moment to look at the logbuf when it hangs without earlyprintk.
+>
+> --
+> Regards,
+> Sudeep
