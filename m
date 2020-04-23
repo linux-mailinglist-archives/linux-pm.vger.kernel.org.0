@@ -2,134 +2,229 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE411B5CD4
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 15:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF631B5D4C
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 16:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728437AbgDWNpk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 09:45:40 -0400
-Received: from foss.arm.com ([217.140.110.172]:40142 "EHLO foss.arm.com"
+        id S1726918AbgDWOIp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 10:08:45 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:60864 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727898AbgDWNpk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 23 Apr 2020 09:45:40 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C68431B;
-        Thu, 23 Apr 2020 06:45:39 -0700 (PDT)
-Received: from bogus (unknown [10.37.12.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 72B2E3F6CF;
-        Thu, 23 Apr 2020 06:45:35 -0700 (PDT)
-Date:   Thu, 23 Apr 2020 14:45:28 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH 08/17] clk: vexpress-osc: Support building as a module
-Message-ID: <20200423133342.GA10628@bogus>
-References: <20200419170810.5738-1-robh@kernel.org>
- <20200419170810.5738-9-robh@kernel.org>
- <20200422210802.GH25585@bogus>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200422210802.GH25585@bogus>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1726430AbgDWOIp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 23 Apr 2020 10:08:45 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 083FC20145B;
+        Thu, 23 Apr 2020 16:08:43 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id CF4DA20145F;
+        Thu, 23 Apr 2020 16:08:36 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 32B8A402D2;
+        Thu, 23 Apr 2020 22:08:29 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, robh+dt@kernel.org,
+        leonard.crestez@nxp.com, linux@rempel-privat.de, peng.fan@nxp.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH 1/3] dt-bindings: firmware: imx: Move system control into dt-binding headfile
+Date:   Thu, 23 Apr 2020 22:00:04 +0800
+Message-Id: <1587650406-20050-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 22, 2020 at 10:08:02PM +0100, Sudeep Holla wrote:
-> On Sun, Apr 19, 2020 at 12:08:01PM -0500, Rob Herring wrote:
-> > Enable building the vexpress-osc clock driver as a module.
-> >
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: Liviu Dudau <liviu.dudau@arm.com>
-> > Cc: Sudeep Holla <sudeep.holla@arm.com>
-> > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > Cc: Michael Turquette <mturquette@baylibre.com>
-> > Cc: Stephen Boyd <sboyd@kernel.org>
-> > Cc: linux-clk@vger.kernel.org
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  drivers/clk/versatile/Kconfig            |  4 ++--
-> >  drivers/clk/versatile/clk-vexpress-osc.c | 10 ++++------
-> >  2 files changed, 6 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/clk/versatile/Kconfig b/drivers/clk/versatile/Kconfig
-> > index 5bdd5c98990b..9de2396dcf9b 100644
-> > --- a/drivers/clk/versatile/Kconfig
-> > +++ b/drivers/clk/versatile/Kconfig
-> > @@ -15,8 +15,8 @@ config CLK_SP810
-> >  	  of the ARM SP810 System Controller cell.
-> >
-> >  config CLK_VEXPRESS_OSC
-> > -	bool "Clock driver for Versatile Express OSC clock generators"
-> > -	depends on VEXPRESS_CONFIG || COMPILE_TEST
-> > +	tristate "Clock driver for Versatile Express OSC clock generators"
-> > +	depends on VEXPRESS_CONFIG
-> >  	default y if ARCH_VEXPRESS
-> >  	---help---
-> >  	  Simple regmap-based driver driving clock generators on Versatile
-> > diff --git a/drivers/clk/versatile/clk-vexpress-osc.c b/drivers/clk/versatile/clk-vexpress-osc.c
-> > index 5bb1d5a714d0..b2b32fa2d7c3 100644
-> > --- a/drivers/clk/versatile/clk-vexpress-osc.c
-> > +++ b/drivers/clk/versatile/clk-vexpress-osc.c
-> > @@ -7,6 +7,7 @@
-> >  #include <linux/clkdev.h>
-> >  #include <linux/clk-provider.h>
-> >  #include <linux/err.h>
-> > +#include <linux/module.h>
-> >  #include <linux/of.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/slab.h>
-> > @@ -108,6 +109,7 @@ static const struct of_device_id vexpress_osc_of_match[] = {
-> >  	{ .compatible = "arm,vexpress-osc", },
-> >  	{}
-> >  };
-> > +MODULE_DEVICE_TABLE(of, vexpress_osc_of_match);
-> >
-> >  static struct platform_driver vexpress_osc_driver = {
-> >  	.driver	= {
-> > @@ -116,9 +118,5 @@ static struct platform_driver vexpress_osc_driver = {
-> >  	},
-> >  	.probe = vexpress_osc_probe,
-> >  };
-> > -
-> > -static int __init vexpress_osc_init(void)
-> > -{
-> > -	return platform_driver_register(&vexpress_osc_driver);
-> > -}
-> > -core_initcall(vexpress_osc_init);
-> > +module_platform_driver(vexpress_osc_driver);
->
-> I am not 100% sure of this. This might break the boot on CA9 and TC2
-> at-least. There are loads of MB peripherals that need this. This will
-> break the boot. We need to check if all the dependent modules are also
-> at module_initcall level and if they deal with deferred probe correctly.
-> Lot of them are legacy and may happen to be working by carefully initcall
-> level adjustments.
->
+i.MX8 SoCs DTS file needs system control macro definitions, so move them
+into dt-binding headfile.
 
-OK I managed to try this on my TC2 and it fails to boot. However when I
-enable earlyprintk as I see no log without it, it boots just fine.
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+ include/dt-bindings/firmware/imx/rsrc.h | 84 +++++++++++++++++++++++++++++++++
+ include/linux/firmware/imx/sci.h        |  1 -
+ include/linux/firmware/imx/types.h      | 65 -------------------------
+ 3 files changed, 84 insertions(+), 66 deletions(-)
+ delete mode 100644 include/linux/firmware/imx/types.h
 
-I also checked adding initcall_debug and I may be wrong on the dependency
-part. The modules dependent on vexpress-osc are probed later correctly.
+diff --git a/include/dt-bindings/firmware/imx/rsrc.h b/include/dt-bindings/firmware/imx/rsrc.h
+index 4e61f64..51906b9 100644
+--- a/include/dt-bindings/firmware/imx/rsrc.h
++++ b/include/dt-bindings/firmware/imx/rsrc.h
+@@ -547,4 +547,88 @@
+ #define IMX_SC_R_ATTESTATION		545
+ #define IMX_SC_R_LAST			546
+ 
++/*
++ * Defines for SC PM CLK
++ */
++#define IMX_SC_PM_CLK_SLV_BUS		0	/* Slave bus clock */
++#define IMX_SC_PM_CLK_MST_BUS		1	/* Master bus clock */
++#define IMX_SC_PM_CLK_PER		2	/* Peripheral clock */
++#define IMX_SC_PM_CLK_PHY		3	/* Phy clock */
++#define IMX_SC_PM_CLK_MISC		4	/* Misc clock */
++#define IMX_SC_PM_CLK_MISC0		0	/* Misc 0 clock */
++#define IMX_SC_PM_CLK_MISC1		1	/* Misc 1 clock */
++#define IMX_SC_PM_CLK_MISC2		2	/* Misc 2 clock */
++#define IMX_SC_PM_CLK_MISC3		3	/* Misc 3 clock */
++#define IMX_SC_PM_CLK_MISC4		4	/* Misc 4 clock */
++#define IMX_SC_PM_CLK_CPU		2	/* CPU clock */
++#define IMX_SC_PM_CLK_PLL		4	/* PLL */
++#define IMX_SC_PM_CLK_BYPASS		4	/* Bypass clock */
++
++/*
++ * Defines for SC CONTROL
++ */
++#define IMX_SC_C_TEMP                       0U
++#define IMX_SC_C_TEMP_HI                    1U
++#define IMX_SC_C_TEMP_LOW                   2U
++#define IMX_SC_C_PXL_LINK_MST1_ADDR         3U
++#define IMX_SC_C_PXL_LINK_MST2_ADDR         4U
++#define IMX_SC_C_PXL_LINK_MST_ENB           5U
++#define IMX_SC_C_PXL_LINK_MST1_ENB          6U
++#define IMX_SC_C_PXL_LINK_MST2_ENB          7U
++#define IMX_SC_C_PXL_LINK_SLV1_ADDR         8U
++#define IMX_SC_C_PXL_LINK_SLV2_ADDR         9U
++#define IMX_SC_C_PXL_LINK_MST_VLD           10U
++#define IMX_SC_C_PXL_LINK_MST1_VLD          11U
++#define IMX_SC_C_PXL_LINK_MST2_VLD          12U
++#define IMX_SC_C_SINGLE_MODE                13U
++#define IMX_SC_C_ID                         14U
++#define IMX_SC_C_PXL_CLK_POLARITY           15U
++#define IMX_SC_C_LINESTATE                  16U
++#define IMX_SC_C_PCIE_G_RST                 17U
++#define IMX_SC_C_PCIE_BUTTON_RST            18U
++#define IMX_SC_C_PCIE_PERST                 19U
++#define IMX_SC_C_PHY_RESET                  20U
++#define IMX_SC_C_PXL_LINK_RATE_CORRECTION   21U
++#define IMX_SC_C_PANIC                      22U
++#define IMX_SC_C_PRIORITY_GROUP             23U
++#define IMX_SC_C_TXCLK                      24U
++#define IMX_SC_C_CLKDIV                     25U
++#define IMX_SC_C_DISABLE_50                 26U
++#define IMX_SC_C_DISABLE_125                27U
++#define IMX_SC_C_SEL_125                    28U
++#define IMX_SC_C_MODE                       29U
++#define IMX_SC_C_SYNC_CTRL0                 30U
++#define IMX_SC_C_KACHUNK_CNT                31U
++#define IMX_SC_C_KACHUNK_SEL                32U
++#define IMX_SC_C_SYNC_CTRL1                 33U
++#define IMX_SC_C_DPI_RESET                  34U
++#define IMX_SC_C_MIPI_RESET                 35U
++#define IMX_SC_C_DUAL_MODE                  36U
++#define IMX_SC_C_VOLTAGE                    37U
++#define IMX_SC_C_PXL_LINK_SEL               38U
++#define IMX_SC_C_OFS_SEL                    39U
++#define IMX_SC_C_OFS_AUDIO                  40U
++#define IMX_SC_C_OFS_PERIPH                 41U
++#define IMX_SC_C_OFS_IRQ                    42U
++#define IMX_SC_C_RST0                       43U
++#define IMX_SC_C_RST1                       44U
++#define IMX_SC_C_SEL0                       45U
++#define IMX_SC_C_CALIB0                     46U
++#define IMX_SC_C_CALIB1                     47U
++#define IMX_SC_C_CALIB2                     48U
++#define IMX_SC_C_IPG_DEBUG                  49U
++#define IMX_SC_C_IPG_DOZE                   50U
++#define IMX_SC_C_IPG_WAIT                   51U
++#define IMX_SC_C_IPG_STOP                   52U
++#define IMX_SC_C_IPG_STOP_MODE              53U
++#define IMX_SC_C_IPG_STOP_ACK               54U
++#define IMX_SC_C_SYNC_CTRL                  55U
++#define IMX_SC_C_OFS_AUDIO_ALT              56U
++#define IMX_SC_C_DSP_BYP                    57U
++#define IMX_SC_C_CLK_GEN_EN                 58U
++#define IMX_SC_C_INTF_SEL                   59U
++#define IMX_SC_C_RXC_DLY                    60U
++#define IMX_SC_C_TIMER_SEL                  61U
++#define IMX_SC_C_LAST                       62U
++
+ #endif /* __DT_BINDINGS_RSCRC_IMX_H */
+diff --git a/include/linux/firmware/imx/sci.h b/include/linux/firmware/imx/sci.h
+index 17ba4e4..3fa418a 100644
+--- a/include/linux/firmware/imx/sci.h
++++ b/include/linux/firmware/imx/sci.h
+@@ -11,7 +11,6 @@
+ #define _SC_SCI_H
+ 
+ #include <linux/firmware/imx/ipc.h>
+-#include <linux/firmware/imx/types.h>
+ 
+ #include <linux/firmware/imx/svc/misc.h>
+ #include <linux/firmware/imx/svc/pm.h>
+diff --git a/include/linux/firmware/imx/types.h b/include/linux/firmware/imx/types.h
+deleted file mode 100644
+index 8082110..0000000
+--- a/include/linux/firmware/imx/types.h
++++ /dev/null
+@@ -1,65 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0+ */
+-/*
+- * Copyright (C) 2016 Freescale Semiconductor, Inc.
+- * Copyright 2017~2018 NXP
+- *
+- * Header file containing types used across multiple service APIs.
+- */
+-
+-#ifndef _SC_TYPES_H
+-#define _SC_TYPES_H
+-
+-/*
+- * This type is used to indicate a control.
+- */
+-enum imx_sc_ctrl {
+-	IMX_SC_C_TEMP = 0,
+-	IMX_SC_C_TEMP_HI = 1,
+-	IMX_SC_C_TEMP_LOW = 2,
+-	IMX_SC_C_PXL_LINK_MST1_ADDR = 3,
+-	IMX_SC_C_PXL_LINK_MST2_ADDR = 4,
+-	IMX_SC_C_PXL_LINK_MST_ENB = 5,
+-	IMX_SC_C_PXL_LINK_MST1_ENB = 6,
+-	IMX_SC_C_PXL_LINK_MST2_ENB = 7,
+-	IMX_SC_C_PXL_LINK_SLV1_ADDR = 8,
+-	IMX_SC_C_PXL_LINK_SLV2_ADDR = 9,
+-	IMX_SC_C_PXL_LINK_MST_VLD = 10,
+-	IMX_SC_C_PXL_LINK_MST1_VLD = 11,
+-	IMX_SC_C_PXL_LINK_MST2_VLD = 12,
+-	IMX_SC_C_SINGLE_MODE = 13,
+-	IMX_SC_C_ID = 14,
+-	IMX_SC_C_PXL_CLK_POLARITY = 15,
+-	IMX_SC_C_LINESTATE = 16,
+-	IMX_SC_C_PCIE_G_RST = 17,
+-	IMX_SC_C_PCIE_BUTTON_RST = 18,
+-	IMX_SC_C_PCIE_PERST = 19,
+-	IMX_SC_C_PHY_RESET = 20,
+-	IMX_SC_C_PXL_LINK_RATE_CORRECTION = 21,
+-	IMX_SC_C_PANIC = 22,
+-	IMX_SC_C_PRIORITY_GROUP = 23,
+-	IMX_SC_C_TXCLK = 24,
+-	IMX_SC_C_CLKDIV = 25,
+-	IMX_SC_C_DISABLE_50 = 26,
+-	IMX_SC_C_DISABLE_125 = 27,
+-	IMX_SC_C_SEL_125 = 28,
+-	IMX_SC_C_MODE = 29,
+-	IMX_SC_C_SYNC_CTRL0 = 30,
+-	IMX_SC_C_KACHUNK_CNT = 31,
+-	IMX_SC_C_KACHUNK_SEL = 32,
+-	IMX_SC_C_SYNC_CTRL1 = 33,
+-	IMX_SC_C_DPI_RESET = 34,
+-	IMX_SC_C_MIPI_RESET = 35,
+-	IMX_SC_C_DUAL_MODE = 36,
+-	IMX_SC_C_VOLTAGE = 37,
+-	IMX_SC_C_PXL_LINK_SEL = 38,
+-	IMX_SC_C_OFS_SEL = 39,
+-	IMX_SC_C_OFS_AUDIO = 40,
+-	IMX_SC_C_OFS_PERIPH = 41,
+-	IMX_SC_C_OFS_IRQ = 42,
+-	IMX_SC_C_RST0 = 43,
+-	IMX_SC_C_RST1 = 44,
+-	IMX_SC_C_SEL0 = 45,
+-	IMX_SC_C_LAST
+-};
+-
+-#endif /* _SC_TYPES_H */
+-- 
+2.7.4
 
-This make it more difficult to debug as I don't have any debugger attached
-at the moment to look at the logbuf when it hangs without earlyprintk.
-
---
-Regards,
-Sudeep
