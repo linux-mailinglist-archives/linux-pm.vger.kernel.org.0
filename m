@@ -2,149 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C121B5835
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 11:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B1C1B583F
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 11:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726764AbgDWJbQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 05:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726101AbgDWJbQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 05:31:16 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9425C08C5F2
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 02:31:15 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id t63so5645638wmt.3
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 02:31:15 -0700 (PDT)
+        id S1726410AbgDWJdW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 05:33:22 -0400
+Received: from mail-eopbgr1410134.outbound.protection.outlook.com ([40.107.141.134]:37409
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726335AbgDWJdV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 23 Apr 2020 05:33:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BrFZI+M0A8udvYPgBR1orh9eZhTwAYNsPWKdlzl1F/4l5ZLYusqmNOkDOJ/7m4Tsl656fgP/+Uv8Z6UhHcuG4HTTY1hV6gsTPz2cGOF3Yifw+HdCTNzU4ijCNBJ3pRPgblmDniel2qRSLczZyoSwmKsspR5qhtBgydnHfOClNG/LwLbc7ujPqYrzf6Z9/na/HbhASaR9jVZqLkPBDmtz7sYWrzWnQudgIhDapvBFDATGR67imq4CJWW0PiPN5R1LBONL/AhvMm9ncvrCHL9KvMLf5gpI96cepOLZsGvThq9qXBLUWVhOAUsmcLs1YAXcMVc+ikqUh0AE7SPDLaIAvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JVXmxWRS1Rq9LbIKtBBqMDVoi5gQUJu2eWiF27Fmb6M=;
+ b=Gw5Ex+GKaFwFh169lenG/k3If8RdHIRsDoxI5TPfCEf8tkX4DFVZtu29d3HWBcjmUU9IxiYOZm+q4qHF3ozyeNPX2Vkiqe9QEi6N2csAFA/ZCt3cMy3mYhUeIKkMPJNxnRt42lH4jJlyOHU31UT6vVJ7CqF+nCyzSIMbmm+DjDrSaF6uHXM11OntpuPpjV2fwiLYktdREiCkn9SlCR3XZzZnsQsoQTDvuCtmtSL5dTy4RQevVpx6M4hP0ORNQSPyLhGIdmLHmNPgLxPeYm85QgHV+pATitB1cyDH707kdvMJ7veG52cLxn5QyA7dx6HGSDzPQUUZqCes6UwqJwRTSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=O26z6wOk23INqulcDtAkwlfLrc079plGrt7LpzYNlIM=;
-        b=r2VXwUE9Svk3QiEBGBKAWJ8Cm5d65tBjhNru6zO9YbS+FD8b1nlIRR1fG26t5GxpFk
-         FJ8QWdlgJVHqPw5m4NSaWw29OStIwP298O3wnZ+Y7YfDnmo7Wu0jwAHlrNsENex6RpKa
-         OG2iKzQnglKldPkctBNoK1foc0IdklQ/7f6Pe3AvoTCUEKQeR8HCJR+D/LVVB4eC//bC
-         HAwjmbpaoEBsuIi8mUfNEWYu/GQrNrb2TiUJWi/kaY+7OP0RL2GqQdnQKIYmjk3R6MzR
-         MMLRo4yNCT38fmrGxw5FQcMNbmBJN3e+y5sdszlEu/59Mpsu0cP0MRBFb2CkVSq1S1o2
-         0Ljg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :message-id:date:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=O26z6wOk23INqulcDtAkwlfLrc079plGrt7LpzYNlIM=;
-        b=stydcxroxa4Gz4dvO4oWOFrYa/BEcffTCYPnu7U89H7917YqdTUFh7TfQz374YNsbF
-         h3jgaM6XxwTBt0qducLrdcJf5gptP6cM1CWEG84jj6KNe5jKUhJf3qrpcbJe3WocUINu
-         ecPXMavJR2zWuKQgbhK+OdQSjC4Q0nAkOIZHteQWgffxni5pPdUDPan3/GSECgWB4B85
-         MnGZ2peW/tu3CbgMvP0EDZEED7WMypbtkNCS18ZzIA4yj2dsolzFscf0elU8PkZbv9n1
-         A9cJMVofe9KAXv9di+rdMO9GyFUpsiJD3SC/fkGbD7V+J0Gl7Cz2CY8JFkBHFENKP7L7
-         TC3w==
-X-Gm-Message-State: AGi0PuaDqdksqWZ/cHfJpUJJB6LPD5ioiqD1mAFfU/EjxUbEt2MXidFq
-        3YddPhFHT+D5dGYXSbL3AxMKKQ==
-X-Google-Smtp-Source: APiQypKq50R8cweRl+GxccEmBu6i9qOFRnn+sD3w+viq7DNxgjg+A6RewEEgPj/G9AjZ5NSRpoz1Sg==
-X-Received: by 2002:a1c:ac44:: with SMTP id v65mr3192173wme.33.1587634273995;
-        Thu, 23 Apr 2020 02:31:13 -0700 (PDT)
-Received: from [192.168.0.136] ([87.120.218.65])
-        by smtp.googlemail.com with ESMTPSA id o7sm2703512wmh.46.2020.04.23.02.31.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 Apr 2020 02:31:13 -0700 (PDT)
-Subject: Re: [PATCH V4 2/9] interconnect: Set peak requirement as twice of
- average
-To:     Akash Asthana <akashast@codeaurora.org>, broonie@kernel.org
-Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, wsa@the-dreams.de,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, swboyd@chromium.org,
-        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org, mka@chromium.org,
-        dianders@chromium.org, evgreen@chromium.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Mike Tipton <mdtipton@codeaurora.org>,
-        Sean Sweeney <seansw@qti.qualcomm.com>
-References: <1586946198-13912-1-git-send-email-akashast@codeaurora.org>
- <1586946198-13912-3-git-send-email-akashast@codeaurora.org>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- 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
- KEmKjLDvB0pePJkdTw==
-Message-ID: <58b91dc1-6ce3-49b8-88c8-259be9af1dbd@linaro.org>
-Date:   Thu, 23 Apr 2020 12:31:11 +0300
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JVXmxWRS1Rq9LbIKtBBqMDVoi5gQUJu2eWiF27Fmb6M=;
+ b=EH6jkrcTvRSPHAitUnXlEQaq4xb6aBVY6GgO5szKGEAY1VqmYHEF3QIqvnljj+3kGlAx/ATU15wT90ELgcSYueJeve4XJ2F+SZkn+ntUOxCl508nenmr3lnhC3xPxzBtEQpOHGaoPV+qqjGIVDKwhSl0G5DL9i7rI4pFW8isULc=
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
+ TYAPR01MB5165.jpnprd01.prod.outlook.com (20.179.187.22) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2937.13; Thu, 23 Apr 2020 09:33:17 +0000
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::ed7f:1268:55a9:fc06]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::ed7f:1268:55a9:fc06%4]) with mapi id 15.20.2937.012; Thu, 23 Apr 2020
+ 09:33:17 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     John Stultz <john.stultz@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Basil Eljuse <Basil.Eljuse@arm.com>,
+        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        netdev <netdev@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [PATCH v3 2/3] driver core: Use dev_warn() instead of dev_WARN()
+ for deferred_probe_timeout warnings
+Thread-Topic: [PATCH v3 2/3] driver core: Use dev_warn() instead of dev_WARN()
+ for deferred_probe_timeout warnings
+Thread-Index: AQHWGOU70+TFUkow3UqLZ0sOeOMv7KiGcj4Q
+Date:   Thu, 23 Apr 2020 09:33:17 +0000
+Message-ID: <TYAPR01MB454456FA2EEBC3A989BC8B5BD8D30@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+References: <20200422203245.83244-1-john.stultz@linaro.org>
+ <20200422203245.83244-3-john.stultz@linaro.org>
+In-Reply-To: <20200422203245.83244-3-john.stultz@linaro.org>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [124.210.22.195]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 02ced91a-5d2a-4faa-0f26-08d7e7695a92
+x-ms-traffictypediagnostic: TYAPR01MB5165:
+x-microsoft-antispam-prvs: <TYAPR01MB516522F89812AEB0E26081E6D8D30@TYAPR01MB5165.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2958;
+x-forefront-prvs: 03827AF76E
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(366004)(376002)(346002)(396003)(39860400002)(7416002)(66946007)(4326008)(66446008)(9686003)(55016002)(66556008)(76116006)(64756008)(66476007)(71200400001)(33656002)(52536014)(86362001)(5660300002)(8676002)(81156014)(7696005)(55236004)(26005)(186003)(8936002)(316002)(478600001)(6506007)(110136005)(2906002)(54906003);DIR:OUT;SFP:1102;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zwyLe5tSEYNqjQ0yoFo0euUBmIEFobgItiGhSiobEa/EBL+otlLAPQd7ouf1c8/xpogu9RIVUdGZevCthMo1UKbT8l/6kz3Rtq0mZebCwtj8tNl2nhtXnoBywVJEe89YbtuzyjoT9thBUuV+36Wdv+INI66JYlD12XTgXOSwQNXZMO1eF+Ts5cm9RrN1VXN2LnaTndULUny7QFQOQNfW1zvDt1I69oaR7bS8SJVEJ1VCINJeNPV1UlDppTUBwFyg0U4iiudYLNpUeR+M1lTLCjZAGDua9JJMkah++kLVnJDMKplVyEIW9IA2Z8Irg4LOj9upZQKifHg0a3kc/4HxXNVskAb4E+UQHxLhXHTbDWMwIUGCIj2NJJ1nFZU4uoNSj+/vu0oHRUD9+G9Vu26olkTZa/K7FcJdQV8XTlJqohyyP/hSDZev0TYwxh5h8o84
+x-ms-exchange-antispam-messagedata: XmU6O57zphrxY1YM+L/EL1VoTeek+KcjKcYq+2gLhdhCaf2y8n+C5Q96fbinKMEFKm6Y3s6LGfORAvnoyTCvGAzIc9XQMA203UbLCTmmR9MvQeq4SJ0B4Q8iFrhASeP968+OuktCYAJt59nquCaYUA==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <1586946198-13912-3-git-send-email-akashast@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02ced91a-5d2a-4faa-0f26-08d7e7695a92
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Apr 2020 09:33:17.1159
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: H0zMO+j0LLoEgZmuP1qIYY/J9qggJpTo8TzirChX/mwI5x659XJibNF8XN4NGUp3OvVC6KdPJuLHVK/3q7SwfzFvCMPR4S3Hna42Pc5URf2BkDAiOsHcn4QTq7Y3G45U
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB5165
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Akash,
+Hi John,
 
-On 4/15/20 13:23, Akash Asthana wrote:
-> Lot of ICC clients are not aware of their actual peak requirement,
-> most commonly they tend to guess their peak requirement as
-> (some factor) * avg_bw.
-> 
-> Centralize random peak guess as twice of average, out into the core
-> to maintain consistency across the clients. Client can always
-> override this setting if they got a better idea.
+> From: John Stultz, Sent: Thursday, April 23, 2020 5:33 AM
+>=20
+> In commit c8c43cee29f6 ("driver core: Fix
+> driver_deferred_probe_check_state() logic") and following
+> changes the logic was changes slightly so that if there is no
+> driver to match whats found in the dtb, we wait the sepcified
+> seconds for modules to be loaded by userland, and then timeout,
+> where as previously we'd print "ignoring dependency for device,
+> assuming no driver" and immediately return -ENODEV after
+> initcall_done.
+>=20
+> However, in the timeout case (which previously existed but was
+> practicaly un-used without a boot argument), the timeout message
+> uses dev_WARN(). This means folks are now seeing a big backtrace
+> in their boot logs if there a entry in their dts that doesn't
+> have a driver.
+>=20
+> To fix this, lets use dev_warn(), instead of dev_WARN() to match
+> the previous error path.
+>=20
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
+> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Cc: Basil Eljuse <Basil.Eljuse@arm.com>
+> Cc: Ferry Toth <fntoth@gmail.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Anders Roxell <anders.roxell@linaro.org>
+> Cc: netdev <netdev@vger.kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Fixes: c8c43cee29f6 ("driver core: Fix driver_deferred_probe_check_state(=
+) logic")
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> ---
 
-I am still not convinced that this is a good idea. If the factor is a random
-value, then i think that the default factor should be 1.
+Thank you for the patch!
 
-According to your previous reply, it seems that from geni we are requesting
-double peak bandwidth to compensate for other clients which are not requesting
-bandwidth for themselves. IMO, this is a bit hacky.
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-Instead of requesting double peak bandwidth, IIUC the correct thing to do here
-is to request peak_bw = avg_bw for geni. And instead of trying to compensate for
-other clients "stealing" bandwidth, can't we make these clients vote for their
-own bandwidth? Or if they really can't, this should be handled elsewhere - maybe
-in the interconnect platform driver we can reserve some amount of minimum
-bandwidth for such cases?
+Best regards,
+Yoshihiro Shimoda
 
-Thanks,
-Georgi
