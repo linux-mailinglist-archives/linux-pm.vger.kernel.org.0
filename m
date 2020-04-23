@@ -2,94 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 803771B6146
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 18:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C942A1B6160
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Apr 2020 18:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729715AbgDWQsH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Apr 2020 12:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729684AbgDWQsG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 12:48:06 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A81BC09B043
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 09:48:06 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id y24so7290788wma.4
-        for <linux-pm@vger.kernel.org>; Thu, 23 Apr 2020 09:48:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oeW7DpwK6OFjCBKNQLrqnMbfGJLDE0OYjEBqgEog0ow=;
-        b=BZAU2ZE5Ne/lQJ9uzrq8Y6uSMWk2RcQiCd+b+CVY3yzxGoOUoDmU1pFRzaKcLc3JOA
-         hb9PbGSk3EG61c2VuKMh6n9nVdeCeKdREDewxGx/cfMu7d/fdgQ5NJjOQfO8cyEYmuWy
-         Ck60HvH+uctNWqEGuN32PGsDQZnbPrP5HSsiWC+kJeuFNkdgdMmQ3iqrZGNADnBi2Mo8
-         MfqCco6iumadOLg9jIS/GhZufVO/mUhu+P3cgkrAhO/w96tB6Yvmf7fIEbLSelHxAs4q
-         RM24gcZ/PnV/LQr9mWTKhfYKOuDyTFtT3m0wjORsqAndwMtN7yTnUaW/M18X37gEhghl
-         oEGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oeW7DpwK6OFjCBKNQLrqnMbfGJLDE0OYjEBqgEog0ow=;
-        b=KADZzlDrLyw/23u0i+b2XO8EsXaxRR+lPmKuJV1LzkBA2pfj3EnrhX6ADk9EoA2zDf
-         HGVGzNmSwvfiKnJoLxXCAG6RJfuVE1/hfr7VLHuXY84m3CXROGI+nlUOzinRKHh1Az7W
-         c8Qi0Gw2K0eNvpt6r5eLa7BwVjF2NBdq0rX+kK6PpRdD+95IoSJAsyYOujwI8Zc3YDEk
-         T071n3P9P+wjxReY8YR6Q10pFaL+I3htrdczYWxTBAXTXt8gzHUTU3OVEOe1fUwz5dda
-         oJZLgtuol2y489PlQS9EruQeTURQFDfsmIkmUtB/2MP0tnNI0DDsmYiM+gGLc2bDuD4g
-         SniQ==
-X-Gm-Message-State: AGi0PubVfXScrP84IcJTkCyw8hfZFkSwD3pJ1RwlEzuXEvcq/R9oyo4J
-        Yekw3e0iSvwLdGJzkdfjW7V18g==
-X-Google-Smtp-Source: APiQypL1N3VJZzRRWP+PtS/fdnZb1T66+D/zjqtbVIUR8pO7XtbEvjwXmID9KnBgg0fgEaDYfwzw+Q==
-X-Received: by 2002:a1c:ac44:: with SMTP id v65mr5176929wme.33.1587660485234;
-        Thu, 23 Apr 2020 09:48:05 -0700 (PDT)
-Received: from linaro.org ([37.167.216.250])
-        by smtp.gmail.com with ESMTPSA id a20sm4857880wra.26.2020.04.23.09.48.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Apr 2020 09:48:04 -0700 (PDT)
-Date:   Thu, 23 Apr 2020 18:47:59 +0200
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com, Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
-        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        qperret@google.com, bsegall@google.com, mgorman@suse.de,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        matthias.bgg@gmail.com, steven.price@arm.com,
-        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
-        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
-        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
-        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
-Subject: Re: [PATCH v6 08/10] OPP: refactor dev_pm_opp_of_register_em() and
- update related drivers
-Message-ID: <20200423164759.GF65632@linaro.org>
-References: <20200410084210.24932-1-lukasz.luba@arm.com>
- <20200410084210.24932-9-lukasz.luba@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200410084210.24932-9-lukasz.luba@arm.com>
+        id S1729721AbgDWQ5Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Apr 2020 12:57:16 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:59600 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729673AbgDWQ5Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Apr 2020 12:57:16 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 303362A0661
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+To:     linux-pm@vger.kernel.org
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Barlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: [PATCH v3 0/2] Stop monitoring disabled devices
+Date:   Thu, 23 Apr 2020 18:57:03 +0200
+Message-Id: <20200423165705.13585-1-andrzej.p@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <a3998ad2-19bc-0893-a10d-2bb5adf7d99f@samsung.com>
+References: <a3998ad2-19bc-0893-a10d-2bb5adf7d99f@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 10, 2020 at 09:42:08AM +0100, Lukasz Luba wrote:
-> The Energy Model framework supports not only CPU devices. Drop the CPU
-> specific interface with cpumask and add struct device. Add also a return
-> value, user might use it. This new interface provides easy way to create
-> a simple Energy Model, which then might be used by e.g. thermal subsystem.
->
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+This is the third iteration of this PATCH series (not counting RFCs).
+It addresses comments from Bartlomiej - thanks, Bartlomiej!
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+The first patch makes all the drivers store their mode in struct
+thermal_zone_device. Such a move has consequences: driver-specific
+variables for storing mode are not necessary. Consequently get_mode()
+methods become obsolete. Then sysfs "mode" attribute stops depending
+on get_mode() being provided, because it is always provided from now on.
+
+The first patch also introduces the initial mode to be optionally passed
+to thermal_zone_device_register().
+
+Given all the groundwork done in patch 1/2 patch 2/2 becomes very simple.
+
+I incorrectly named PATCH v2 a PATCH RESEND 1/2, so now I'm counting that
+as PATCH v2, hence this series is PATCH v3.
+
+PATCH v2..PATCH v3:
+- removed redundant regmap_write() in imx_thermal_suspend() and
+imx_thermal_resume() (Bartlomiej)
+- removed unnecessary call to soc_dts_enable() (now called indirectly
+from thermal_zone_device_register()->set_mode()) (Bartlomiej)
+- removed defensive-style checks for non-existent enum values in
+thermal_zone_device_set_mode() (Bartlomiej)
+- change mode only if driver's set_mode() succeeded in
+thermal_zone_device_set_mode() (Bartlomiej)
+- don't set tz->need_update in thermal_zone_device_register() - this
+was supposed to be part of PATCH v1, but was omitted (Bartlomiej)
+
+PATCH..PATCH v2:
+
+- fixed typo (missing semicolon in dummy thermal_zone_device_set_mode()
+implementation) (kbuild test robot)
+- fixed misspelled enum value in int3400_thermal_params.initial_mode
+
+RFCv3..this PATCH:
+
+- export thermal_zone_device_{enable|disable}() for drivers (Bartlomiej)
+- don't check provided enum values in acpi's thermal_zet_mode()
+and in int3400_thermal_set_mode() (Bartlomiej)
+- use thermal_zone_device_enable() in of_thermal instead of open coding it
+(Bartlomiej)
+- use thermal_zone_device_{enable|disable}() in hisi_thermal, rockchip_thermal
+and sprd_thermal (Bartlomiej)
+- assume THERMAL_DEVICE_ENABLED is thermal_zone_params not provided at
+tzd's register time (Bartlomiej)
+- eliminated tzp-s which contain only .initial_mode = THERMAL_DEVICE_ENABLED,
+(Bartlomiej)
+- don't set tz->need_update and don't call thermal_zone_device_update()
+at the end of thermal_zone_device_register() (Bartlomiej)
+- used .initial_mode in int340x_thermal_zone, x86_pkg_temp_thermal and
+int3400_thermal (Bartlomiej)
+
+Andrzej Pietrasiewicz (2):
+  thermal: core: Let thermal zone device's mode be stored in its struct
+  thermal: core: Stop polling DISABLED thermal devices
+
+ drivers/acpi/thermal.c                        | 35 ++--------
+ .../ethernet/mellanox/mlxsw/core_thermal.c    | 42 ------------
+ drivers/platform/x86/acerhdf.c                | 17 +----
+ drivers/thermal/da9062-thermal.c              | 11 ----
+ drivers/thermal/hisi_thermal.c                |  6 +-
+ drivers/thermal/imx_thermal.c                 | 36 ++--------
+ .../intel/int340x_thermal/int3400_thermal.c   | 31 ++-------
+ .../int340x_thermal/int340x_thermal_zone.c    |  1 +
+ .../thermal/intel/intel_quark_dts_thermal.c   | 30 ++-------
+ drivers/thermal/intel/x86_pkg_temp_thermal.c  |  1 +
+ drivers/thermal/of-thermal.c                  | 24 +------
+ drivers/thermal/rockchip_thermal.c            |  6 +-
+ drivers/thermal/sprd_thermal.c                |  6 +-
+ drivers/thermal/thermal_core.c                | 65 +++++++++++++++----
+ drivers/thermal/thermal_core.h                |  3 +
+ drivers/thermal/thermal_sysfs.c               | 29 +--------
+ include/linux/thermal.h                       | 22 ++++++-
+ 17 files changed, 119 insertions(+), 246 deletions(-)
+
+
+base-commit: 79799562bf087b30d9dd0fddf5bed2d3b038be08
+-- 
+2.17.1
 
