@@ -2,133 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0761B8195
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Apr 2020 23:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA5A1B81BA
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Apr 2020 23:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbgDXVS4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Apr 2020 17:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726122AbgDXVSz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Apr 2020 17:18:55 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550B0C09B048
-        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 14:18:54 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id 72so15006177otu.1
-        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 14:18:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JH4b2yUgrRfNHWgcGuHimY3HuUAtZbHhYYgcbbN+n7w=;
-        b=mwHsCg60VWO11eWQt/hJEUGF5Xp645z/jo0zwnavgwRPqatslMnx6qZ2kCxzXmPbCv
-         mYYvK6kIhQHF94oCzIbl3vtdmsKBNlehlwowsOzDsPcLP5bhH6TZEIHgjcHyn0l9kSZi
-         OM9PPDJeTrO2h7DfVpH3Z8SI+AfJNy+z7plWwpPs5mUbxW0nnqp6yZ6nwFb6GAUJsxdY
-         egaeDfTbWlW5vSqNTS1JOjtz5Ao/BsnxtzpK3T4zYuTcLK3hfphYs5hbdpGasPIjNrZJ
-         0nnct1jkEy26bE47J1Nw26p8Hj5OsXzMgiD3Fqmd9vBffR7DHCdUQ72jKcX3egKfnl1v
-         kQlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JH4b2yUgrRfNHWgcGuHimY3HuUAtZbHhYYgcbbN+n7w=;
-        b=rlfwlDLz4QzRBh3GTmjZdy9//iYGQvXSx1LDaraKLEQFlQGShSFYW1+xMRZEWYRdOE
-         xTuridXxhmfekrr6bXrRJ4DJVJSzzK3wSMPLuu3VdDWxqKAgd2OMcMLuTeAPmSeEsF3f
-         9mDKhkmBCE/+piHXEMs/rmDh/DfTjA5JOuw/uZS0qMmIewYWQzfiW7GLZEtgQxvG/wy4
-         GmwebGI/gryqIPwupJQeATebap7VUZO0wRUZspSmCDJQQomFWeQoMI7mKE5oacZ96fqG
-         9+Sb3tZm6o5vEp9iBB04Zt2KOSf+AC6MJC6FL4lfyw12HrjK4QME9/WG1PVYMf0xsjV3
-         1PmQ==
-X-Gm-Message-State: AGi0PuYY+l6rGg2jL9r21GYMEuArMNRaxWW4QTaBydwvWtnSOCA5m/Pk
-        saz9kNRuBCE2IreLxxRUTG2ZpK5C59UC1FqT3cSBPw==
-X-Google-Smtp-Source: APiQypIGeacaBHNTvM766dTzv4dPNygP9HlkNLpttNTbMpzV41oh77j62R8ZTlR1RzHISXuwWyhoFgUUG5AfVD2+FyU=
-X-Received: by 2002:a9d:2622:: with SMTP id a31mr10002145otb.231.1587763133240;
- Fri, 24 Apr 2020 14:18:53 -0700 (PDT)
+        id S1726053AbgDXVsd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Apr 2020 17:48:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37722 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725874AbgDXVsd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 24 Apr 2020 17:48:33 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9EFDB216FD;
+        Fri, 24 Apr 2020 21:48:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587764912;
+        bh=/Flh79nNPN9TxKaLGme5W4hkOaqTdEn8R2DTFhqf+zo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=e/0CtyihQizoahvum6szmpYpGJtmSQIFkuXvdTrSS670sqIcGAmPFlZBa13+XObeU
+         t5XXxRvntjTYQnV2UTSrjXNUlYkGaQ1cnNGt9Cr7bqpXwix+wHJlIRYot/ECRCOqtp
+         0oEGg5rsaQFqjTsESmkfFNteBnTm/ShZI2vJHdB4=
+Received: by mail-qt1-f170.google.com with SMTP id h26so8960045qtu.8;
+        Fri, 24 Apr 2020 14:48:32 -0700 (PDT)
+X-Gm-Message-State: AGi0PuamCWNZ0OxHIbF2rkeNIiu4ALWzz2B36LTvP5BHK2IqJ0Qr2krF
+        7btCxDWLJZz7yT3wSq1OMux++ZzAdHDQKc+KJQ==
+X-Google-Smtp-Source: APiQypL4JJo4fnsihFTOStqlmUkReE8AtASTbdGhFb4Wqybx4fc8PwdXXMT6vIbr014VWfZHaMQ0/yzYClt+9x0QYf8=
+X-Received: by 2002:ac8:7cba:: with SMTP id z26mr11972735qtv.143.1587764911775;
+ Fri, 24 Apr 2020 14:48:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200424155404.10746-1-georgi.djakov@linaro.org> <20200424155404.10746-7-georgi.djakov@linaro.org>
-In-Reply-To: <20200424155404.10746-7-georgi.djakov@linaro.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 24 Apr 2020 14:18:17 -0700
-Message-ID: <CAGETcx9iAJRW9Y9orHNF-fC53nNob_vZKYUNEpwf_AeAdWCOjw@mail.gmail.com>
-Subject: Re: [PATCH v7 6/7] OPP: Update the bandwidth on OPP frequency changes
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
+References: <20200422201216.10593-1-ansuelsmth@gmail.com> <20200422201216.10593-2-ansuelsmth@gmail.com>
+In-Reply-To: <20200422201216.10593-2-ansuelsmth@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 24 Apr 2020 16:48:19 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLUbM7ed2q7so4Uibiz2URRg1juoGRExy9Ta3J-LWAFow@mail.gmail.com>
+Message-ID: <CAL_JsqLUbM7ed2q7so4Uibiz2URRg1juoGRExy9Ta3J-LWAFow@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: opp: Fix wrong binding in qcom-nvmem-cpufreq
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Jordan Crouse <jcrouse@codeaurora.org>,
-        Evan Green <evgreen@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+        Ilia Lin <ilia.lin@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sricharan R <sricharan@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 24, 2020 at 8:54 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
+On Wed, Apr 22, 2020 at 3:12 PM Ansuel Smith <ansuelsmth@gmail.com> wrote:
 >
-> If the OPP bandwidth values are populated, we want to switch also the
-> interconnect bandwidth in addition to frequency and voltage.
+> Update binding to new generic name "operating-points-v2-qcom-cpu"
 >
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> Fixes: a8811ec764f9 ("cpufreq: qcom: Add support for krait based socs")
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 > ---
-> v7:
-> * Addressed review comments from Viresh.
+>  Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> v2: https://lore.kernel.org/r/20190423132823.7915-5-georgi.djakov@linaro.org
+> diff --git a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+> index 64f07417ecfb..537e1774f589 100644
+> --- a/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+> +++ b/Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
+> @@ -19,7 +19,7 @@ In 'cpu' nodes:
 >
->  drivers/opp/core.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 8e86811eb7b2..66a8ea10f3de 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -808,7 +808,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
->         unsigned long freq, old_freq, temp_freq;
->         struct dev_pm_opp *old_opp, *opp;
->         struct clk *clk;
-> -       int ret;
-> +       int ret, i;
->
->         opp_table = _find_opp_table(dev);
->         if (IS_ERR(opp_table)) {
-> @@ -895,6 +895,17 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
->                         dev_err(dev, "Failed to set required opps: %d\n", ret);
->         }
->
-> +       if (!ret && opp_table->paths) {
-> +               for (i = 0; i < opp_table->path_count; i++) {
-> +                       ret = icc_set_bw(opp_table->paths[i],
-> +                                        opp->bandwidth[i].avg,
-> +                                        opp->bandwidth[i].peak);
-> +                       if (ret)
-> +                               dev_err(dev, "Failed to set bandwidth[%d]: %d\n",
-> +                                       i, ret);
-> +               }
-> +       }
-> +
+>  In 'operating-points-v2' table:
+>  - compatible: Should be
+> -       - 'operating-points-v2-kryo-cpu' for apq8096, msm8996, msm8974,
+> +       - 'operating-points-v2-qcom-cpu' for apq8096, msm8996, msm8974,
+>                                              apq8064, ipq8064, msm8960 and ipq8074.
 
-Hey Georgi,
+This is not how you fix the backwards compatibility issue pointed out
+on the Fixes reference.
 
-Thanks for getting this series going again and converging on the DT
-bindings! Will be nice to see this land finally.
-
-I skimmed through all the patches in the series and they mostly look
-good (if you address some of Matthias's comments).
-
-My only comment is -- can we drop this patch please? I'd like to use
-devfreq governors for voting on bandwidth and this will effectively
-override whatever bandwidth decisions are made by the devfreq
-governor.
-
-If you really want to keep this, then maybe don't "get" the icc path
-by default in patch 4/7 and then let the device driver set the icc
-path if it wants the opp framework to manage the bandwidth too?
-
--Saravana
+Rob
