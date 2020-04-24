@@ -2,155 +2,237 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DDA1B7CEF
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Apr 2020 19:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20DB1B7D71
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Apr 2020 20:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbgDXRf7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Apr 2020 13:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
+        id S1728822AbgDXSCh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Apr 2020 14:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728871AbgDXRfs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Apr 2020 13:35:48 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9D3C09B047
-        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 10:35:47 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id w3so3986596plz.5
-        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 10:35:47 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726908AbgDXSCf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Apr 2020 14:02:35 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE0BC09B04A
+        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 11:02:33 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id mq3so4174011pjb.1
+        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 11:02:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=33hdVZdIvdo3r9ulzCeqVPA1lq6sxl5V/50+KNNX3vA=;
-        b=RkeTuMr6pQxS9kGQ1szZoB7f5ty7zYGnPdIZBCe2ITN1R7VrKR6yI0p9MOpKHYnxo3
-         0Brs7q3clGo3BgEVWdBjge9STeM5CRm7P2uyr8Mzr8kWWDVlBmgfl6BCE7UoOLb1896D
-         biUAhpRWUo7UjVhyGr6DCwQpy2UUSC3zc+iP4=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pOk/kzhlhPwNaetCm8gHWGwhQXlpl0JHUkFF0oAV7cs=;
+        b=Fnz1wUCcpiV9Sbd1YePKv3AoJZbAFcFu1weCKyJf/l35GLl+RBs2PnSoBgMsTXAbpN
+         hSkWcBmxyu1B3ASUzbyGpxWEYa9ByJRR0sL+EH0O7kGCxr9A9Pz/8cy6RBWvF9FPasIb
+         nyxWc4sgKXi4zzCu32UhYeVxmxIDJ535rbkn0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=33hdVZdIvdo3r9ulzCeqVPA1lq6sxl5V/50+KNNX3vA=;
-        b=UW84/1wWaiS/4jTYSDhHAIyKENw6yM9ep4RXWVr+g7TaA4GWQgk0dvEgIwdoPPzE4i
-         fLaaUz3f6+M8T4uZCxkVg/3RW12IkbYQ2tXJX91KBY7kSIkvtiPpgGs+/XVywAQL40dH
-         GUrl/yEfxJVHksUHG4G18ovyxRy4FgBApwSxrJk/Xt49X/N4fRW3QGJ2wmgfvVqsv48g
-         PFyCc8+gqHQJOVu0rJxg78pki55+hIQB13YMhzEyvu87zBd010Q2ABwOvcrXQxxNlySd
-         7JIlIPdvSHoe3vwKoq4jmopmYIDWNM9y5RJow7DJ5RQ8qCcscZ4speV14vy83uGzFX94
-         MFCQ==
-X-Gm-Message-State: AGi0PuaKGlorZtODlDRrf2dYllaw2gW+uHLdPjgzfb0FV9D3x5NR8L4e
-        uHlt/mLwKlbR2+XTiysIcrr4mQ==
-X-Google-Smtp-Source: APiQypLJyUYhCmBaJxgPQFab/PXXMhS2ejilK7aTPfMJlbmAfwvBlF1nccjDo6PyB52i/djxAENRDg==
-X-Received: by 2002:a17:902:549:: with SMTP id 67mr10219965plf.115.1587749747510;
-        Fri, 24 Apr 2020 10:35:47 -0700 (PDT)
-Received: from mathewk1.lan ([161.97.192.125])
-        by smtp.gmail.com with ESMTPSA id t188sm5360641pgc.3.2020.04.24.10.35.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Apr 2020 10:35:46 -0700 (PDT)
-From:   Mathew King <mathewk@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mathew King <mathewk@chromium.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH 4/4] power_supply: Add power supply type property to uevent env
-Date:   Fri, 24 Apr 2020 11:35:33 -0600
-Message-Id: <20200424173533.48572-5-mathewk@chromium.org>
-X-Mailer: git-send-email 2.26.2.303.gf8c07b1a785-goog
-In-Reply-To: <20200424173533.48572-1-mathewk@chromium.org>
-References: <20200424173533.48572-1-mathewk@chromium.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pOk/kzhlhPwNaetCm8gHWGwhQXlpl0JHUkFF0oAV7cs=;
+        b=M4jjrZ5WejRWsKH8kYmPAKVGi5X1m6AaqCl+XPDA1MwK406pD0cuQups0RR2n43nf6
+         FGyBXcP1vpt13g3cZjMp2R7fdl5cHGfWvJv/WYyD3RXwypt7JFvNx4MjxbpsK6+eGMk9
+         PUUXdQUhWsFk/5Hx+wESwlQiPPVkWnAjapbmENAglxyMNF/RZGHYm+Ednf7XB1ZxNdA+
+         5bQ5o7gOrjxABBSu3z1w9wBlXyIige/g7S/BKOFqoolGFRZmgPq1LVbPh2U0Bi6+2kc0
+         T6VAdcQAuPUCVoo9w0d2UMVpAbZJ/kRh8WOzdyb/lYevE5z7xDD3YvNXZYt2hGBee+CJ
+         I1Cw==
+X-Gm-Message-State: AGi0PubWqn9ZWuIKPDiZJiIoiHEgIxnkC0zbvNlSQU5H68nn4zEvv0NP
+        B0GggFMZc86zPEtkavDZchqOkg==
+X-Google-Smtp-Source: APiQypIyNcuFloIZ3Kpb1PoSspwoVMlg7ujNFsD0/3jv7Pkd7waV6IPMavxHd+yj90Bqk0Htn6n38g==
+X-Received: by 2002:a17:90b:297:: with SMTP id az23mr7357140pjb.85.1587751353096;
+        Fri, 24 Apr 2020 11:02:33 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id w30sm6418630pfj.25.2020.04.24.11.02.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Apr 2020 11:02:32 -0700 (PDT)
+Date:   Fri, 24 Apr 2020 11:02:31 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        robh+dt@kernel.org, rjw@rjwysocki.net, saravanak@google.com,
+        sibis@codeaurora.org, rnayak@codeaurora.org,
+        bjorn.andersson@linaro.org, vincent.guittot@linaro.org,
+        jcrouse@codeaurora.org, evgreen@chromium.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 3/7] interconnect: Add of_icc_get_by_index() helper
+ function
+Message-ID: <20200424180231.GN199755@google.com>
+References: <20200424155404.10746-1-georgi.djakov@linaro.org>
+ <20200424155404.10746-4-georgi.djakov@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200424155404.10746-4-georgi.djakov@linaro.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add POWER_SUPPLY_TYPE to the uevent env for power supply. Type is a
-property of all power supplies and there is a sysfs entry for it but it
-is not included in the properties array of the power supply so
-explicitly add it to the udev env.
+Hi,
 
-Signed-off-by: Mathew King <mathewk@chromium.org>
----
- drivers/power/supply/power_supply_sysfs.c | 61 ++++++++++++++---------
- 1 file changed, 37 insertions(+), 24 deletions(-)
+On Fri, Apr 24, 2020 at 06:54:00PM +0300, Georgi Djakov wrote:
+> This is the same as the traditional of_icc_get() function, but the
+> difference is that it takes index as an argument, instead of name.
+> 
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> ---
+> v7:
+> * Addressed review comments from Sibi.
+> * Re-based patch.
+> 
+> v2: https://lore.kernel.org/r/20190423132823.7915-3-georgi.djakov@linaro.org
+> 
+>  drivers/interconnect/core.c  | 68 +++++++++++++++++++++++++++---------
+>  include/linux/interconnect.h |  6 ++++
+>  2 files changed, 58 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 2c6515e3ecf1..648237f4de49 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -351,9 +351,9 @@ static struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
+>  }
+>  
+>  /**
+> - * of_icc_get() - get a path handle from a DT node based on name
+> + * of_icc_get_by_index() - get a path handle from a DT node based on index
+>   * @dev: device pointer for the consumer device
+> - * @name: interconnect path name
+> + * @idx: interconnect path index
+>   *
+>   * This function will search for a path between two endpoints and return an
+>   * icc_path handle on success. Use icc_put() to release constraints when they
+> @@ -365,13 +365,12 @@ static struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
+>   * Return: icc_path pointer on success or ERR_PTR() on error. NULL is returned
+>   * when the API is disabled or the "interconnects" DT property is missing.
+>   */
+> -struct icc_path *of_icc_get(struct device *dev, const char *name)
+> +struct icc_path *of_icc_get_by_index(struct device *dev, int idx)
+>  {
+>  	struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index fbb05466b9a5..c7087cd7ffe3 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -448,6 +448,37 @@ void power_supply_destroy_attrs(void)
- 	}
- }
- 
-+static int add_prop_uevent(struct device *dev, struct kobj_uevent_env *env,
-+			   enum power_supply_property prop, char *prop_buf)
-+{
-+	int ret = 0;
-+	struct power_supply_attr *pwr_attr;
-+	struct device_attribute *dev_attr;
-+	char *line;
-+
-+	pwr_attr = &power_supply_attrs[prop];
-+	dev_attr = &pwr_attr->dev_attr;
-+
-+	ret = power_supply_show_property(dev, dev_attr, prop_buf);
-+	if (ret == -ENODEV || ret == -ENODATA) {
-+		/*
-+		 * When a battery is absent, we expect -ENODEV. Don't abort;
-+		 * send the uevent with at least the the PRESENT=0 property
-+		 */
-+		return 0;
-+	}
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	line = strchr(prop_buf, '\n');
-+	if (line)
-+		*line = 0;
-+
-+	return add_uevent_var(env, "POWER_SUPPLY_%s=%s",
-+			      pwr_attr->upper_name, prop_buf);
-+}
-+
- int power_supply_uevent(struct device *dev, struct kobj_uevent_env *env)
- {
- 	struct power_supply *psy = dev_get_drvdata(dev);
-@@ -467,31 +498,13 @@ int power_supply_uevent(struct device *dev, struct kobj_uevent_env *env)
- 	if (!prop_buf)
- 		return -ENOMEM;
- 
--	for (j = 0; j < psy->desc->num_properties; j++) {
--		struct power_supply_attr *pwr_attr;
--		struct device_attribute *dev_attr;
--		char *line;
--
--		pwr_attr = &power_supply_attrs[psy->desc->properties[j]];
--		dev_attr = &pwr_attr->dev_attr;
--
--		ret = power_supply_show_property(dev, dev_attr, prop_buf);
--		if (ret == -ENODEV || ret == -ENODATA) {
--			/* When a battery is absent, we expect -ENODEV. Don't abort;
--			   send the uevent with at least the the PRESENT=0 property */
--			ret = 0;
--			continue;
--		}
--
--		if (ret < 0)
--			goto out;
--
--		line = strchr(prop_buf, '\n');
--		if (line)
--			*line = 0;
-+	ret = add_prop_uevent(dev, env, POWER_SUPPLY_PROP_TYPE, prop_buf);
-+	if (ret)
-+		goto out;
- 
--		ret = add_uevent_var(env, "POWER_SUPPLY_%s=%s",
--				     pwr_attr->upper_name, prop_buf);
-+	for (j = 0; j < psy->desc->num_properties; j++) {
-+		ret = add_prop_uevent(dev, env, psy->desc->properties[j],
-+				      prop_buf);
- 		if (ret)
- 			goto out;
- 	}
--- 
-2.26.2.303.gf8c07b1a785-goog
+nit: initialization is not needed. According to the diff this is existing
+code, but since we are adding a new function we can as well 'fix' it :)
 
+>  	struct icc_node *src_node, *dst_node;
+>  	struct device_node *np = NULL;
+
+ditto
+
+>  	struct of_phandle_args src_args, dst_args;
+> -	int idx = 0;
+>  	int ret;
+>  
+>  	if (!dev || !dev->of_node)
+> @@ -391,12 +390,6 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+>  	 * lets support only global ids and extend this in the future if needed
+>  	 * without breaking DT compatibility.
+>  	 */
+> -	if (name) {
+> -		idx = of_property_match_string(np, "interconnect-names", name);
+> -		if (idx < 0)
+> -			return ERR_PTR(idx);
+> -	}
+> -
+>  	ret = of_parse_phandle_with_args(np, "interconnects",
+>  					 "#interconnect-cells", idx * 2,
+>  					 &src_args);
+> @@ -439,12 +432,8 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+>  		return path;
+>  	}
+>  
+> -	if (name)
+> -		path->name = kstrdup_const(name, GFP_KERNEL);
+> -	else
+> -		path->name = kasprintf(GFP_KERNEL, "%s-%s",
+> -				       src_node->name, dst_node->name);
+> -
+> +	path->name = kasprintf(GFP_KERNEL, "%s-%s",
+> +			       src_node->name, dst_node->name);
+>  	if (!path->name) {
+>  		kfree(path);
+>  		return ERR_PTR(-ENOMEM);
+> @@ -452,6 +441,53 @@ struct icc_path *of_icc_get(struct device *dev, const char *name)
+>  
+>  	return path;
+>  }
+> +EXPORT_SYMBOL_GPL(of_icc_get_by_index);
+> +
+> +/**
+> + * of_icc_get() - get a path handle from a DT node based on name
+> + * @dev: device pointer for the consumer device
+> + * @name: interconnect path name
+> + *
+> + * This function will search for a path between two endpoints and return an
+> + * icc_path handle on success. Use icc_put() to release constraints when they
+> + * are not needed anymore.
+> + * If the interconnect API is disabled, NULL is returned and the consumer
+> + * drivers will still build. Drivers are free to handle this specifically,
+> + * but they don't have to.
+> + *
+> + * Return: icc_path pointer on success or ERR_PTR() on error. NULL is returned
+> + * when the API is disabled or the "interconnects" DT property is missing.
+> + */
+> +struct icc_path *of_icc_get(struct device *dev, const char *name)
+> +{
+> +	struct device_node *np = NULL;
+
+nit: initialization is not needed
+
+> +	int idx = 0;
+> +
+> +	if (!dev || !dev->of_node)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	np = dev->of_node;
+> +
+> +	/*
+> +	 * When the consumer DT node do not have "interconnects" property
+> +	 * return a NULL path to skip setting constraints.
+> +	 */
+> +	if (!of_find_property(np, "interconnects", NULL))
+> +		return NULL;
+> +
+> +	/*
+> +	 * We use a combination of phandle and specifier for endpoint. For now
+> +	 * lets support only global ids and extend this in the future if needed
+> +	 * without breaking DT compatibility.
+> +	 */
+> +	if (name) {
+> +		idx = of_property_match_string(np, "interconnect-names", name);
+> +		if (idx < 0)
+> +			return ERR_PTR(idx);
+> +	}
+> +
+> +	return of_icc_get_by_index(dev, idx);
+> +}
+>  EXPORT_SYMBOL_GPL(of_icc_get);
+>  
+>  /**
+> diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
+> index d70a914cba11..34e97231a6ab 100644
+> --- a/include/linux/interconnect.h
+> +++ b/include/linux/interconnect.h
+> @@ -28,6 +28,7 @@ struct device;
+>  struct icc_path *icc_get(struct device *dev, const int src_id,
+>  			 const int dst_id);
+>  struct icc_path *of_icc_get(struct device *dev, const char *name);
+> +struct icc_path *of_icc_get_by_index(struct device *dev, int idx);
+>  void icc_put(struct icc_path *path);
+>  int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
+>  void icc_set_tag(struct icc_path *path, u32 tag);
+> @@ -46,6 +47,11 @@ static inline struct icc_path *of_icc_get(struct device *dev,
+>  	return NULL;
+>  }
+>  
+> +static inline struct icc_path *of_icc_get_by_index(struct device *dev, int idx)
+> +{
+> +	return NULL;
+> +}
+> +
+>  static inline void icc_put(struct icc_path *path)
+>  {
+>  }
+
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
