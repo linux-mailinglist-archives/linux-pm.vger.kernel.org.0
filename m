@@ -2,97 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC0B1B70B7
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Apr 2020 11:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E5E1B7110
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Apr 2020 11:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726747AbgDXJWM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Apr 2020 05:22:12 -0400
-Received: from foss.arm.com ([217.140.110.172]:58060 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726726AbgDXJWM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 24 Apr 2020 05:22:12 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CEBB81FB;
-        Fri, 24 Apr 2020 02:22:11 -0700 (PDT)
-Received: from [10.37.12.92] (unknown [10.37.12.92])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A5703F73D;
-        Fri, 24 Apr 2020 02:22:06 -0700 (PDT)
-Subject: Re: [PATCH] thermal: power_allocate: add upper and lower limits
-To:     Michael Kao <michael.kao@mediatek.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>, hsinyi@chromium.org,
-        linux-pm@vger.kernel.org, srv_heupstream@mediatek.com
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20200424071601.2636-1-michael.kao@mediatek.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <accb83e0-ffbe-b6e3-6bf9-e7cc8b9fe19c@arm.com>
-Date:   Fri, 24 Apr 2020 10:22:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726809AbgDXJhZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Apr 2020 05:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726665AbgDXJhY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Apr 2020 05:37:24 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CF3C09B047
+        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 02:37:24 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id v8so9544062wma.0
+        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 02:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=lpgfeCztxAhzxjhQqiFZc+a2M7I9kDIUKtebW9THuHo=;
+        b=E+H+PKEWckalgAUrAxfA2tUr4Dr5zRoWeGzskBy6H53BglCw3eP155NoYhsC7jdQiI
+         qluFEhKpQ+DSHSzqLqSZMeD0k14RwoB+SUuhVdhR8jgyw4gXACOPaWr9XutcMcLuLel3
+         8WZxlynNH7qJd0BspwLL1sYeTrHFFu3a76G+RdF7obaS1pLM1DSCbMFbNY9dK4EZ5ymT
+         tlnH/ERsB9TegNHu+KfzIuiJdzFqqCnkwQ8PTxfEGIX3McYJjbN7mZF6m5rNJlKz3aGn
+         ZTeNp7OtPikPXwo7ZqOKDOi+bqkFqVzNR4szarGXzmGI+oivP5a8mWF6fMD7ByBzQbzj
+         15Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=lpgfeCztxAhzxjhQqiFZc+a2M7I9kDIUKtebW9THuHo=;
+        b=eliLUOyjKs5eVg5KrX3XqHvjeJ9rQHrtJ9ZWJzxVITBqfB4W6ny9XDmoQUXi0G34/j
+         wIG2AjUPwfDVUFcOYdArhtrgd6jnXB6U/XpLkEVipLk/k6ojj3YgA3f34dHvZQfiA1mV
+         RovMZVw9brIKJS206zT2YUgivK7YT4n4oy/MaWBPjCz870JZ1DUHWaz1FZQss1aGwm0D
+         GlTdi1h/BSW0SEANxswucudaDf7Nycsyw35x3EjDodRODaen3SCTKuHgodgQZLSoYnZw
+         WuAj/XOiqwoV7qn5kH4Ngo4JCST94g1Csq2EmKQEXTZspF/5Do0hZz1Tc5mWXju6PuJl
+         R5pw==
+X-Gm-Message-State: AGi0PuayZ3gmDBYlv/C8/fe7NIRQBWcwujYNMsG/fP1Yr/rNntQjAYr0
+        ou8zbqswa/lpVL8cfSfx4OedpA==
+X-Google-Smtp-Source: APiQypIP711LckL5LI1ubR6GN3OUzUAydpJDOVRvnJ3Nw6MpHq29JuuPonguAQ22PujRITptpK9QEA==
+X-Received: by 2002:a7b:c213:: with SMTP id x19mr8902459wmi.53.1587721043049;
+        Fri, 24 Apr 2020 02:37:23 -0700 (PDT)
+Received: from dell ([2.31.163.63])
+        by smtp.gmail.com with ESMTPSA id a7sm2062330wmj.12.2020.04.24.02.37.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Apr 2020 02:37:22 -0700 (PDT)
+Date:   Fri, 24 Apr 2020 10:37:20 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     saravanan sekar <sravanhome@gmail.com>
+Cc:     andy.shevchenko@gmail.com, robh+dt@kernel.org, jic23@kernel.org,
+        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
+        sre@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v9 2/6] mfd: mp2629: Add support for mps battery charger
+Message-ID: <20200424093720.GA3542@dell>
+References: <20200415162030.16414-1-sravanhome@gmail.com>
+ <20200415162030.16414-3-sravanhome@gmail.com>
+ <20200424071822.GM3612@dell>
+ <8ff17d07-8030-fcfe-8d8a-3011e4077778@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200424071601.2636-1-michael.kao@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8ff17d07-8030-fcfe-8d8a-3011e4077778@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Michael,
+On Fri, 24 Apr 2020, saravanan sekar wrote:
 
-On 4/24/20 8:16 AM, Michael Kao wrote:
-> The upper and lower limits of thermal throttle state in the
-> device tree do not apply to the power_allocate governor.
-> Add the upper and lower limits to the power_allocate governor.
+> Hi Lee,
 > 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> ---
->   drivers/thermal/thermal_core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 9a321dc548c8..f6feed2265bd 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -598,7 +598,7 @@ int power_actor_set_power(struct thermal_cooling_device *cdev,
->   	if (ret)
->   		return ret;
->   
-> -	instance->target = state;
-> +	instance->target = clamp_val(state, instance->lower, instance->upper);
->   	mutex_lock(&cdev->lock);
->   	cdev->updated = false;
->   	mutex_unlock(&cdev->lock);
-> 
+> On 24/04/20 9:18 am, Lee Jones wrote:
+> > On Wed, 15 Apr 2020, Saravanan Sekar wrote:
+> > 
+> > > mp2629 is a highly-integrated switching-mode battery charge management
+> > > device for single-cell Li-ion or Li-polymer battery.
+> > > 
+> > > Add MFD core enables chip access for ADC driver for battery readings,
+> > > and a power supply battery-charger driver
+> > > 
+> > > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+> > > ---
+> > >   drivers/mfd/Kconfig        |  9 ++++
+> > >   drivers/mfd/Makefile       |  2 +
+> > >   drivers/mfd/mp2629.c       | 86 ++++++++++++++++++++++++++++++++++++++
+> > >   include/linux/mfd/mp2629.h | 19 +++++++++
+> > >   4 files changed, 116 insertions(+)
+> > >   create mode 100644 drivers/mfd/mp2629.c
+> > >   create mode 100644 include/linux/mfd/mp2629.h
+> > How is this driver registered?
+> > 
+> > Looks like it has device tree support.  Is there another way?
+> Yes, only using device tree
 
-Thank you for the patch and having to look at it. I have some concerns
-with this approach. Let's analyze it further.
+Then how about using 'simple-mfd' and 'syscon'?
 
-In default the cooling devices in the thermal zone which is used by IPA
-do not have this 'lower' and 'upper' limits. They are set to
-THERMAL_NO_LIMIT in DT to give full control to IPA over the states.
+Then you can omit this driver completely.
 
-This the function 'power_actor_set_power' actually translates granted
-power to the state that device will run for the next period.
-The IPA algorithm has already split the power budget.
-Now what happen when the 'lower' value will change the state to a state
-which consumes more power than was calculated in the IPA alg... It will
-became unstable.
+> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > > index 3c547ed575e6..85be799795aa 100644
+> > > --- a/drivers/mfd/Kconfig
+> > > +++ b/drivers/mfd/Kconfig
+> > > @@ -434,6 +434,15 @@ config MFD_MC13XXX_I2C
+> > >   	help
+> > >   	  Select this if your MC13xxx is connected via an I2C bus.
+> > > +config MFD_MP2629
+> > > +	tristate "Monolithic power system MP2629 ADC and Battery charger"
+> > > +	depends on I2C
+> > > +	select REGMAP_I2C
+> > > +	help
+> > > +	  Select this option to enable support for monolithic power system
+> > > +	  battery charger. This provides ADC, thermal, battery charger power
+> > > +	  management functions on the systems.
 
-I would rather see a change which uses these 'lower' and 'upper' limits
-before the IPA do the calculation of the power budget. But this wasn't
-a requirement and we assumed that IPA has full control over the cooling
-device (which I described above with this DT THERMAL_NO_LIMIT).
-
-Is there a problem with your platform that it has to provide some
-minimal performance, so you tried to introduce this clamping?
-
-Regards,
-Lukasz
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
