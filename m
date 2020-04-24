@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D601B7ED5
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Apr 2020 21:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493D21B7F11
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Apr 2020 21:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725970AbgDXT0K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Apr 2020 15:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727022AbgDXT0J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Apr 2020 15:26:09 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6C7C09B049
-        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 12:26:09 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id f8so4097633plt.2
-        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 12:26:09 -0700 (PDT)
+        id S1729175AbgDXTgr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Apr 2020 15:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725970AbgDXTgq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Apr 2020 15:36:46 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221C6C09B048
+        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 12:36:45 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id e6so4274342pjt.4
+        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 12:36:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=6Ak3wRUTbhX3b+AZt5O65BJGsm25sMRWic48F76A9hM=;
-        b=aaVLBGt9xNHi+hCZ8vzCgEF7XWOZEZmPr0Phaz77zFbq5WMywT6yHSh9e8GCu8ociu
-         aGr7G3Cchq8usek7UA7iq6OS8pshLesDZoZqje7Aui6a8mp1OHLDByvI9C73O1SqdDiZ
-         mx0zwH44LI86AaesZXFM2Ajhmo0vIU9IhlS4Y=
+        bh=fCaJ0E8Gy0Ol3hZwXIBBUzkNzHWsMd/CDDe4oOvOuTQ=;
+        b=PQHAtxwFS2mt1dXsLhSX43jK+gKlDCgwH7u0Py3KQvQlYXy2gaDsNjW2cwZw6jVkC3
+         eqxmxs4oQHNNDo6AmIC8SPTTP1CfwTdpoNH1Sdj6KY1WrZ/Iryoj3I1djtUCdxXfdcHu
+         MvQSogpRnoYWLCopy2551VaW4dpQV5iKXjNCg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=6Ak3wRUTbhX3b+AZt5O65BJGsm25sMRWic48F76A9hM=;
-        b=fk/StH7J0+nCyJvIAVrDU6VF6J7zzqQS+luE3BHRliPPbcPCd0JNz5RBrpvK/RGMc5
-         f2W8JpcQbP1+lnZbUNGu4jQd40B5iJ0YTCe+NOxkQEvqV+2uB5PZ+Wz6scOTq18yhTMb
-         Sbjg2uj215wg2uvHgJLLQ17d4SY9sXgsii+KXrjYtzOVoG6j5/8DTlqf1reAsXWXZqWB
-         7u8eKEYPXI1cTzEA1QvZKBE7nm7l3m5C8iXFSvUmazUHg4QXtHyBfXQc7a+6BpeYHypx
-         iQ8U34/QGb/Sh6tHcp7jQbpYJ5cNzXFm1HkCIGLOviNjgJvj23o7qmv+SFzaVefm0gWa
-         NRSA==
-X-Gm-Message-State: AGi0Pua/0HnpFEyv5q67ZDwDXiEO+6FefaInpHe5pAzeeHI3RgVkAhIo
-        9rFa8Uc4S981sthJpz7X/wd3Cg==
-X-Google-Smtp-Source: APiQypL6ZHQVIk0jDGsuJs8ztATvWT/HuDC1iXb3RFCHlfbimDatC7NnMcHjF8PcL7UjBVc67o/vfw==
-X-Received: by 2002:a17:902:8b82:: with SMTP id ay2mr11186391plb.285.1587756369143;
-        Fri, 24 Apr 2020 12:26:09 -0700 (PDT)
+        bh=fCaJ0E8Gy0Ol3hZwXIBBUzkNzHWsMd/CDDe4oOvOuTQ=;
+        b=aGXvgGBz/+0CdH5knTVG7qR71ly7CET6Hsw7b2yXo7Diq1XpRuz+2yLl3R0tCGdYzK
+         nn4mPNESLGS1FDeJUDdShb3Bl7RcrleRMOWW41kiFP0ryX+NsH+lZPnXquKToDR0RsyI
+         SUVmJKp2t7vawjYIzkl+18EVRuiXStQQANoCJSOwaBjkkU2CfUPkkXTgH//dZ1EBcBFs
+         REU0qyfUy3o3U8tWsjgxsu90tucEwlYDV8E9aRnBRGMEnqwdBJgBIPQB/aJxnwgF6aMG
+         IGxcDZD0zszFGjZYqg4BMnilCO1gIDbxAwTYG44Hc3mMlY8RpRhgN8Jp/FycR26Ihf9n
+         5S3Q==
+X-Gm-Message-State: AGi0PuaYSkU7Ie1JWiXgkjVGBLx/6tGVz5By+Y+M3iz3xCQEpDkx0XhO
+        OM3YTkDEMbVe/BVE36f0pf/rKg==
+X-Google-Smtp-Source: APiQypKkAz8KIQ265AUq1vhvPDVa/neLERznR3WhDNuRCZGz09aJvd0sJvTaUaF15TcJWwgt3ZAv9Q==
+X-Received: by 2002:a17:90a:9318:: with SMTP id p24mr7963439pjo.163.1587757004623;
+        Fri, 24 Apr 2020 12:36:44 -0700 (PDT)
 Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id g6sm5227594pjx.48.2020.04.24.12.26.08
+        by smtp.gmail.com with ESMTPSA id d17sm5698390pgk.5.2020.04.24.12.36.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Apr 2020 12:26:08 -0700 (PDT)
-Date:   Fri, 24 Apr 2020 12:26:07 -0700
+        Fri, 24 Apr 2020 12:36:43 -0700 (PDT)
+Date:   Fri, 24 Apr 2020 12:36:42 -0700
 From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Georgi Djakov <georgi.djakov@linaro.org>
 Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
@@ -54,83 +54,63 @@ Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
         jcrouse@codeaurora.org, evgreen@chromium.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 5/7] OPP: Add sanity checks in _read_opp_key()
-Message-ID: <20200424192607.GB4525@google.com>
+Subject: Re: [PATCH v7 6/7] OPP: Update the bandwidth on OPP frequency changes
+Message-ID: <20200424193642.GC4525@google.com>
 References: <20200424155404.10746-1-georgi.djakov@linaro.org>
- <20200424155404.10746-6-georgi.djakov@linaro.org>
+ <20200424155404.10746-7-georgi.djakov@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200424155404.10746-6-georgi.djakov@linaro.org>
+In-Reply-To: <20200424155404.10746-7-georgi.djakov@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 24, 2020 at 06:54:02PM +0300, Georgi Djakov wrote:
-> When we read the OPP keys, it would be nice to do some sanity checks
-> of the values we get from DT and see if they match with the information
-> that is populated in the OPP table. Let's pass a pointer of the table,
-> so that we can do some validation.
+On Fri, Apr 24, 2020 at 06:54:03PM +0300, Georgi Djakov wrote:
+> If the OPP bandwidth values are populated, we want to switch also the
+> interconnect bandwidth in addition to frequency and voltage.
 > 
 > Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 > ---
 > v7:
-> New patch.
+> * Addressed review comments from Viresh.
 > 
->  drivers/opp/of.c | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
+> v2: https://lore.kernel.org/r/20190423132823.7915-5-georgi.djakov@linaro.org
 > 
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index 978e445b0cdb..2b590fe2e69a 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -574,8 +574,8 @@ void dev_pm_opp_of_remove_table(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(dev_pm_opp_of_remove_table);
+>  drivers/opp/core.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 8e86811eb7b2..66a8ea10f3de 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -808,7 +808,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+>  	unsigned long freq, old_freq, temp_freq;
+>  	struct dev_pm_opp *old_opp, *opp;
+>  	struct clk *clk;
+> -	int ret;
+> +	int ret, i;
 >  
-> -static int _read_opp_key(struct dev_pm_opp *new_opp, struct device_node *np,
-> -			 bool *rate_not_available)
-> +static int _read_opp_key(struct dev_pm_opp *new_opp, struct opp_table *table,
-> +			 struct device_node *np, bool *rate_not_available)
->  {
->  	struct property *peak, *avg;
->  	u32 *peak_bw, *avg_bw;
-> @@ -603,6 +603,12 @@ static int _read_opp_key(struct dev_pm_opp *new_opp, struct device_node *np,
->  		 * opp-avg-kBps = <path1_value path2_value>;
->  		 */
->  		count = peak->length / sizeof(u32);
-> +		if (table->path_count != count) {
-> +			pr_err("%s: Mismatch between opp-peak-kBps and paths (%d %d)\n",
-> +			       __func__, count, table->path_count);
-> +			return -EINVAL;
-> +		}
-> +
->  		peak_bw = kmalloc_array(count, sizeof(*peak_bw), GFP_KERNEL);
->  		if (!peak_bw)
->  			return -ENOMEM;
-> @@ -624,6 +630,13 @@ static int _read_opp_key(struct dev_pm_opp *new_opp, struct device_node *np,
->  	avg = of_find_property(np, "opp-avg-kBps", NULL);
->  	if (peak && avg) {
->  		count = avg->length / sizeof(u32);
-> +		if (table->path_count != count) {
-> +			pr_err("%s: Mismatch between opp-avg-kBps and paths (%d %d)\n",
-> +			       __func__, count, table->path_count);
-> +			ret = -EINVAL;
-> +			goto free_peak_bw;
-> +		}
-> +
->  		avg_bw = kmalloc_array(count, sizeof(*avg_bw), GFP_KERNEL);
->  		if (!avg_bw) {
->  			ret = -ENOMEM;
-> @@ -695,7 +708,7 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
->  	if (!new_opp)
->  		return ERR_PTR(-ENOMEM);
+>  	opp_table = _find_opp_table(dev);
+>  	if (IS_ERR(opp_table)) {
+> @@ -895,6 +895,17 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+>  			dev_err(dev, "Failed to set required opps: %d\n", ret);
+>  	}
 >  
-> -	ret = _read_opp_key(new_opp, np, &rate_not_available);
-> +	ret = _read_opp_key(new_opp, opp_table, np, &rate_not_available);
->  	if (ret < 0) {
->  		if (!opp_table->is_genpd)
->  			dev_err(dev, "%s: opp key field not found\n", __func__);
+> +	if (!ret && opp_table->paths) {
+> +		for (i = 0; i < opp_table->path_count; i++) {
+> +			ret = icc_set_bw(opp_table->paths[i],
+> +					 opp->bandwidth[i].avg,
+> +					 opp->bandwidth[i].peak);
+> +			if (ret)
+> +				dev_err(dev, "Failed to set bandwidth[%d]: %d\n",
+> +					i, ret);
+> +		}
+> +	}
+> +
+>  put_opp:
+>  	dev_pm_opp_put(opp);
+>  put_old_opp:
 
 Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
