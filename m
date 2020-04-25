@@ -2,299 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0DBC1B83C6
-	for <lists+linux-pm@lfdr.de>; Sat, 25 Apr 2020 06:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AD11B88AD
+	for <lists+linux-pm@lfdr.de>; Sat, 25 Apr 2020 21:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726034AbgDYEk5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 25 Apr 2020 00:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
+        id S1726197AbgDYTAK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 25 Apr 2020 15:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725909AbgDYEk5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Apr 2020 00:40:57 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42525C09B049
-        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 21:40:56 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id a32so4744334pje.5
-        for <linux-pm@vger.kernel.org>; Fri, 24 Apr 2020 21:40:56 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726182AbgDYTAK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 25 Apr 2020 15:00:10 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E71CC09B04D;
+        Sat, 25 Apr 2020 12:00:10 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id e6so5332097pjt.4;
+        Sat, 25 Apr 2020 12:00:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=wtEtC7Zl7iKfSkQifw3hShat/KPv6T4GkZHjA5uVCqw=;
-        b=fYXHxwikclAlBWCfj4VxR9uQIGVhDSE/G/F3xUrF4yVwfNW4SMFU48hfKsLQ0vgtGn
-         Tbl2bad0n5azzxVHIJTSFjBzJA+K8zkhk5ngwcLniiWHaUtAxeJ2ki0TAg3t7G8HlQb0
-         BSRZydIJ9LTcI1dSunoBujLl06i28XeU34Oa9V8qIn+WMIkyOxqicEuCtqJfkVJFaHdl
-         Ouyvd1taTo9dpWpOEYqoh6fDlmzwiUHgCxR4nxQhLeN7FdM9W3c4Ca893A7naT757DEL
-         iVQj2Bw4eAJ6U5Yql6IYs2fj1p4RC81esqTeFeeQ0JSks9SgNwpZmpN6GyFB4l9fcyUA
-         A9hA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=mHbZ4xPUa2e8Z9ySz/Reqmt5mff2C3fDEKHsxtsl+2U=;
+        b=lD9oBsew9gmagpFSaBbrod7+Dg6O9/fj1ury4cFPHeDkSTIIemQazMeG1h6gxz5EEr
+         2y0ubQjNt36fCEMrU7x/WFUDCndf+PIC5Igp9MPgFWwzQ/zFsxawUkVO8ZnaS+Z9YaUD
+         nPKf3pQp2ldfgUeqMXvaMyTHWs2iHo5ucqNdYU6MaSR+HcJq2/kDNyMKBu/e1Rb1Qsx7
+         Se9DN2GxojvPH2uzP07yA+icrTDtCnWluCtXcZFIQgjB2TV9gA5wq3u6mVvl6xEtkiQ5
+         jPSg9S0merRNcSahaBqYqGMz8tfQEJ0xghRzjzTMoSC/f7bWSAF6aWWUTRg2YFMpePvD
+         I2IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=wtEtC7Zl7iKfSkQifw3hShat/KPv6T4GkZHjA5uVCqw=;
-        b=HFA1meAiZDgJf01RTU+bErVOTwfFzHVMF0ISXT9i5rV5P87r0FmLGmXGce/d8FtnSw
-         cU4opdQKX+QgSRQqqcAkV0nOsRvDrIcic+p/g/aNhUVWDWa0Kki+40s/X3S02zj8SH90
-         uh71FiNtFlPPfrRFFTTlFxg/kP1e+SxTnRSjz59kvUtT7lH601F46Fhbnb564ieGwelv
-         zVhfoxcCs2IjNnd0/8nDYTrEJIxE0Unk6pX7WSDTdlGk3sA8Z1MXntEiWD3iboQYQZvn
-         iZaxdsn5C+T7PzDgGpRMlzv1TpAZ/xV2f9hrWsSaA/0vv2Ho53KFva4yKZX3lqPAH671
-         Vl+w==
-X-Gm-Message-State: AGi0PuafVORYMQWo6JSb2TnV5RCsY+ivTBNhvuLiiqS1hUkjXOG0H1R6
-        4QpxgU63EH5C0kES50vyf1fbRg==
-X-Google-Smtp-Source: APiQypLSwsWxKFEtfFUFxAw7eeFHFSNVQJZXUuYxdfev/dCkg69SQ38BW9ViYEHtPPWzkh+NgA3fsQ==
-X-Received: by 2002:a17:90a:315:: with SMTP id 21mr9572493pje.96.1587789655548;
-        Fri, 24 Apr 2020 21:40:55 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y186sm7086484pfy.66.2020.04.24.21.40.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Apr 2020 21:40:54 -0700 (PDT)
-Message-ID: <5ea3bf56.1c69fb81.22f35.8b90@mx.google.com>
-Date:   Fri, 24 Apr 2020 21:40:54 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=mHbZ4xPUa2e8Z9ySz/Reqmt5mff2C3fDEKHsxtsl+2U=;
+        b=SthF24jShzEyXVIjfNRQWBtZdJv/YBuElo1Etmn3v9bManWIeUHe/50fEbv4KvPhiW
+         DW0XvDms65ldQqevC4T31U8SomMjBclFiR/PYHeUzL6OUBCTeAm3hOfqKGau8TfLtnR3
+         Mwk2SmHW9u5PGqxByOooiuguaH6HaDJsGRC6HBLsj3Q+vc3NgwKn0s1fz7xU2xqOnQTg
+         kBjUx07ym/8xMpQ1/PHl1Ml3AHzM6OQahVaw6Q9vnUp/nXIC/P9cPqIl9EwIc+ALJAQ4
+         RIGiW+38aV3haZ5zsqr/ROuDBO3Rnvwe/ic9yNojPNn240M6so8GyLm/Fj/L5IkCl+iP
+         G9bw==
+X-Gm-Message-State: AGi0PuYjUU5pRjqYzO3nJVUS/dOEpy4e32d3rPBZiUm2OXARXplbwibQ
+        6r+5F5BlcnctP3zSdkXF/Tg=
+X-Google-Smtp-Source: APiQypLqZB8c/0OOLESufN7X24rZd9dVPY3QUBPGYqD1m6YtzXJwbEzRVL9gYijJiRQav0HHP9rS2g==
+X-Received: by 2002:a17:90a:1ae9:: with SMTP id p96mr13624264pjp.75.1587841209653;
+        Sat, 25 Apr 2020 12:00:09 -0700 (PDT)
+Received: from syed ([106.223.101.50])
+        by smtp.gmail.com with ESMTPSA id ie17sm7574431pjb.19.2020.04.25.12.00.03
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 25 Apr 2020 12:00:09 -0700 (PDT)
+Date:   Sun, 26 Apr 2020 00:29:59 +0530
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
+        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        yamada.masahiro@socionext.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/6] Introduce the for_each_set_clump macro
+Message-ID: <cover.1587840667.git.syednwaris@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: pnp-5.7-rc3-19-gcd227cc5ff82
-X-Kernelci-Report-Type: test
-Subject: pm/testing sleep: 7 runs, 1 regressions (pnp-5.7-rc3-19-gcd227cc5ff82)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 7 runs, 1 regressions (pnp-5.7-rc3-19-gcd227cc5ff82)
+This patchset introduces a new generic version of for_each_set_clump. 
+The previous version of for_each_set_clump8 used a fixed size 8-bit
+clump, but the new generic version can work with clump of any size but
+less than or equal to BITS_PER_LONG. The patchset utilizes the new macro 
+in several GPIO drivers.
 
-Test results summary
---------------------
+The earlier 8-bit for_each_set_clump8 facilitated a
+for-loop syntax that iterates over a memory region entire groups of set
+bits at a time.
 
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
+For example, suppose you would like to iterate over a 32-bit integer 8
+bits at a time, skipping over 8-bit groups with no set bit, where
+XXXXXXXX represents the current 8-bit group:
 
-2   | exynos5422-odroidxu3 | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
+    Example:        10111110 00000000 11111111 00110011
+    First loop:     10111110 00000000 11111111 XXXXXXXX
+    Second loop:    10111110 00000000 XXXXXXXX 00110011
+    Third loop:     XXXXXXXX 00000000 11111111 00110011
 
-3   | imx6q-sabrelite      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
+Each iteration of the loop returns the next 8-bit group that has at
+least one set bit.
 
-4   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
+But with the new for_each_set_clump the clump size can be different from 8 bits.
+Moreover, the clump can be split at word boundary in situations where word 
+size is not multiple of clump size. Following are examples showing the working 
+of new macro for clump sizes of 24 bits and 6 bits.
 
-5   | rk3288-veyron-jaq    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 21/21  =
+Example 1:
+clump size: 24 bits, Number of clumps (or ports): 10
+bitmap stores the bit information from where successive clumps are retrieved.
 
-6   | rk3399-gru-kevin     | arm64 | lab-collabora | gcc-8    | defconfig  =
-        | 6/6    =
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x000000aa000000aa;
+        0xbbbbabcdeffedcba;  /* Least significant bits */
 
-7   | tegra124-nyan-big    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 2/2    =
+Different iterations of for_each_set_clump:-
+'offset' is the bit position and 'clump' is the 24 bit clump from the
+above bitmap.
+Iteration first:        offset: 0 clump: 0xfedcba
+Iteration second:       offset: 24 clump: 0xabcdef
+Iteration third:        offset: 48 clump: 0xaabbbb
+Iteration fourth:       offset: 96 clump: 0xaa
+Iteration fifth:        offset: 144 clump: 0xff
+Iteration sixth:        offset: 168 clump: 0xaaaaaa
+Iteration seventh:      offset: 216 clump: 0xff
+Loop breaks because in the end the remaining bits (0x00aa) size was less
+than clump size of 24 bits.
 
+In above example it can be seen that in iteration third, the 24 bit clump
+that was retrieved was split between bitmap[0] and bitmap[1]. This example 
+also shows that 24 bit zeroes if present in between, were skipped (preserving
+the previous for_each_set_macro8 behaviour). 
 
+Example 2:
+clump size = 6 bits, Number of clumps (or ports) = 3.
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: pnp-5.7-rc3-19-gcd227cc5ff82
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      cd227cc5ff829b628f48df3e6b18fc59349c4f9c =
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x0f00000000000000;
+        0x0000000000000ac0;  /* Least significant bits */
 
+Different iterations of for_each_set_clump:
+'offset' is the bit position and 'clump' is the 6 bit clump from the
+above bitmap.
+Iteration first:        offset: 6 clump: 0x2b
+Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
+Here 6 * 3 is clump size * no. of clumps.
 
+Syed Nayyar Waris (6):
+  bitops: Introduce the the for_each_set_clump macro
+  lib/test_bitmap.c: Add for_each_set_clump test cases
+  gpio: thermal: Utilize for_each_set_clump macro
+  bitops: Remove code related to for_each_set_clump8
+  gpio: thunderx: Utilize for_each_set_clump macro
+  gpio: xilinx: Utilize for_each_set_clump macro
 
-Test Failures
--------------
-  =
+ drivers/gpio/gpio-104-dio-48e.c            |   8 +--
+ drivers/gpio/gpio-104-idi-48.c             |   4 +-
+ drivers/gpio/gpio-74x164.c                 |   4 +-
+ drivers/gpio/gpio-gpio-mm.c                |   8 +--
+ drivers/gpio/gpio-max3191x.c               |   4 +-
+ drivers/gpio/gpio-pca953x.c                |   4 +-
+ drivers/gpio/gpio-pci-idio-16.c            |   8 +--
+ drivers/gpio/gpio-pcie-idio-24.c           |   8 +--
+ drivers/gpio/gpio-pisosr.c                 |   4 +-
+ drivers/gpio/gpio-thunderx.c               |  12 ++--
+ drivers/gpio/gpio-uniphier.c               |   4 +-
+ drivers/gpio/gpio-ws16c48.c                |   8 +--
+ drivers/gpio/gpio-xilinx.c                 |  64 +++++++++--------
+ drivers/thermal/intel/intel_soc_dts_iosf.c |   6 +-
+ include/asm-generic/bitops/find.h          |  12 ++--
+ include/linux/bitmap.h                     |  60 +++++++++++-----
+ include/linux/bitops.h                     |   9 +--
+ lib/find_bit.c                             |  12 ++--
+ lib/test_bitmap.c                          | 108 ++++++++++++++++++++++-------
+ 19 files changed, 220 insertions(+), 127 deletions(-)
 
+-- 
+2.7.4
 
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
-
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/pnp-5.7-rc3-19-gcd2=
-27cc5ff82/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.=
-txt
-  HTML log:    https://storage.kernelci.org//pm/testing/pnp-5.7-rc3-19-gcd2=
-27cc5ff82/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0417.1/armhf/rootfs.cpio.gz  =
-
-
-  1 tests: 0 PASS, 1 FAIL, 0 SKIP
-    * login:
-        never passed   =
-
-      =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-2   | exynos5422-odroidxu3 | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
-
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/pnp-5.7-rc3-19-gcd2=
-27cc5ff82/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-exynos5422-odroi=
-dxu3.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/pnp-5.7-rc3-19-gcd2=
-27cc5ff82/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-exynos5422-odroi=
-dxu3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0417.1/armhf/rootfs.cpio.gz  =
-
-
-  1 tests: 0 PASS, 1 FAIL, 0 SKIP
-    * login:
-        new failure (last pass: v5.7-rc2-16-g247f4817f956)   =
-
-      =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-3   | imx6q-sabrelite      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-
-  Results:     1 PASS, 20 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/pnp-5.7-rc3-19-gcd2=
-27cc5ff82/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-imx6q-sabrelite.=
-txt
-  HTML log:    https://storage.kernelci.org//pm/testing/pnp-5.7-rc3-19-gcd2=
-27cc5ff82/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-imx6q-sabrelite.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0417.1/armhf/rootfs.cpio.gz  =
-
-
-  21 tests: 1 PASS, 20 FAIL, 0 SKIP
-    * rtcwake-mem-1:
-        never passed
-    * rtcwake-mem-2:
-        never passed
-    * rtcwake-mem-3:
-        never passed
-    * rtcwake-mem-4:
-        never passed
-    * rtcwake-mem-5:
-        never passed
-    * rtcwake-mem-6:
-        never passed
-    * rtcwake-mem-7:
-        never passed
-    * rtcwake-mem-8:
-        never passed
-    * rtcwake-mem-9:
-        never passed
-    * rtcwake-mem-10:
-        never passed
-    * rtcwake-freeze-1:
-        never passed
-    * rtcwake-freeze-2:
-        never passed
-    * rtcwake-freeze-3:
-        never passed
-    * rtcwake-freeze-4:
-        never passed
-    * rtcwake-freeze-5:
-        never passed
-    * rtcwake-freeze-6:
-        never passed
-    * rtcwake-freeze-7:
-        never passed
-    * rtcwake-freeze-8:
-        never passed
-    * rtcwake-freeze-9:
-        never passed
-    * rtcwake-freeze-10:
-        never passed   =
-
-      =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-4   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-
-  Results:     1 PASS, 20 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/pnp-5.7-rc3-19-gcd2=
-27cc5ff82/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squ=
-are.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/pnp-5.7-rc3-19-gcd2=
-27cc5ff82/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-squ=
-are.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0417.1/armhf/rootfs.cpio.gz  =
-
-
-  21 tests: 1 PASS, 20 FAIL, 0 SKIP
-    * rtcwake-mem-1:
-        never passed
-    * rtcwake-mem-2:
-        never passed
-    * rtcwake-mem-3:
-        never passed
-    * rtcwake-mem-4:
-        never passed
-    * rtcwake-mem-5:
-        never passed
-    * rtcwake-mem-6:
-        never passed
-    * rtcwake-mem-7:
-        never passed
-    * rtcwake-mem-8:
-        never passed
-    * rtcwake-mem-9:
-        never passed
-    * rtcwake-mem-10:
-        never passed
-    * rtcwake-freeze-1:
-        never passed
-    * rtcwake-freeze-2:
-        never passed
-    * rtcwake-freeze-3:
-        never passed
-    * rtcwake-freeze-4:
-        never passed
-    * rtcwake-freeze-5:
-        never passed
-    * rtcwake-freeze-6:
-        never passed
-    * rtcwake-freeze-7:
-        never passed
-    * rtcwake-freeze-8:
-        never passed
-    * rtcwake-freeze-9:
-        never passed
-    * rtcwake-freeze-10:
-        never passed   =
-
-              =20
