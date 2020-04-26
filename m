@@ -2,69 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA2F1B9108
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Apr 2020 17:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B8D1B9127
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Apr 2020 17:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbgDZPDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Apr 2020 11:03:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54930 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbgDZPDk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 26 Apr 2020 11:03:40 -0400
-Received: from localhost (unknown [137.135.114.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1D166208FE;
-        Sun, 26 Apr 2020 15:03:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587913420;
-        bh=p3Mga8iTwm/dBrCD1R6Ne3Zt3/Mk4u7B8EbWFRU5Lf4=;
-        h=Date:From:To:To:To:Cc:Cc:Cc:Cc:Subject:In-Reply-To:References:
-         From;
-        b=s2hOukVstWVsQ+/QU8H8bhLLXlmYxAxonbuK/RSBvE/xIB+iZzR75p/8tUqCvZnUS
-         dR9W6nUhlsSqL/W1+o+PzCntj368pMCkQt4mnT7vPvDxoCYb7dqithbk4hdke+HA9j
-         JvL6T8mMOwO/1O3pGuxFrXdCeQn9/L8iELbCRo9M=
-Date:   Sun, 26 Apr 2020 15:03:39 +0000
-From:   Sasha Levin <sashal@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-To:     Dexuan Cui <decui@microsoft.com>
-To:     linux-pm@vger.kernel.org, rjw@rjwysocki.net, len.brown@intel.com
-Cc:     linux-kernel@vger.kernel.org, ming.lei@redhat.com
-Cc:     Bart Van Assche <bvanassche@acm.org>
-Cc:     stable@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH] PM: hibernate: Freeze kernel threads in software_resume()
-In-Reply-To: <20200424034016.42046-1-decui@microsoft.com>
-References: <20200424034016.42046-1-decui@microsoft.com>
-Message-Id: <20200426150340.1D166208FE@mail.kernel.org>
+        id S1726154AbgDZPZB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Apr 2020 11:25:01 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:49150 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbgDZPZB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Apr 2020 11:25:01 -0400
+Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id 4bbe76b27600f444; Sun, 26 Apr 2020 17:24:59 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Todd E Brandt <todd.e.brandt@linux.intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] Revert "cpu/hotplug: Ignore pm_wakeup_pending() for disable_nonboot_cpus()"
+Date:   Sun, 26 Apr 2020 17:24:58 +0200
+Message-ID: <26038947.HFycnDbHsR@kreacher>
+In-Reply-To: <20200409112742.3581-1-qais.yousef@arm.com>
+References: <20200409112742.3581-1-qais.yousef@arm.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi
+On Thursday, April 9, 2020 1:27:40 PM CEST Qais Yousef wrote:
+> This issue was fixed already by:
+> 
+> commit d66b16f5df4b ("arm64: Don't use disable_nonboot_cpus()")
+> commit dddf3578e0d4 ("ARM: Don't use disable_nonboot_cpus()")
+> 
+> The only caller of disable_nonboot_cpus() is x86, which is in a proper
+> suspend/resume path and due to the reverted patch lost its ability to
+> early abort due to a pending wakeup.
+> 
+> The fix that is being reverted is arguably a better one to backport to
+> stable trees. But it highlights the confusion about using
+> disable_nonboot_cpus() API.
+> 
+> This is a preparation to remove disable_nonboot_cpus() in favor of
+> freeze_secondary_cpus().
+> 
+> This reverts commit e98eac6ff1b45e4e73f2e6031b37c256ccb5d36b.
+> 
+> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> CC: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> CC: Len Brown <len.brown@intel.com>
+> CC: Pavel Machek <pavel@ucw.cz>
+> CC: Ingo Molnar <mingo@redhat.com>
+> CC: Borislav Petkov <bp@alien8.de>
+> CC: "H. Peter Anvin" <hpa@zytor.com>
+> CC: x86@kernel.org
+> CC: Todd E Brandt <todd.e.brandt@linux.intel.com>
+> CC: linux-pm@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> ---
+>  include/linux/cpu.h | 12 +++---------
+>  kernel/cpu.c        |  4 ++--
+>  2 files changed, 5 insertions(+), 11 deletions(-)
+> 
+> diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+> index beaed2dc269e..9ead281157d3 100644
+> --- a/include/linux/cpu.h
+> +++ b/include/linux/cpu.h
+> @@ -144,18 +144,12 @@ static inline void get_online_cpus(void) { cpus_read_lock(); }
+>  static inline void put_online_cpus(void) { cpus_read_unlock(); }
+>  
+>  #ifdef CONFIG_PM_SLEEP_SMP
+> -int __freeze_secondary_cpus(int primary, bool suspend);
+> -static inline int freeze_secondary_cpus(int primary)
+> -{
+> -	return __freeze_secondary_cpus(primary, true);
+> -}
+> -
+> +extern int freeze_secondary_cpus(int primary);
+>  static inline int disable_nonboot_cpus(void)
+>  {
+> -	return __freeze_secondary_cpus(0, false);
+> +	return freeze_secondary_cpus(0);
+>  }
+> -
+> -void enable_nonboot_cpus(void);
+> +extern void enable_nonboot_cpus(void);
+>  
+>  static inline int suspend_disable_secondary_cpus(void)
+>  {
+> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> index 12ae636e9cb6..30848496cbc7 100644
+> --- a/kernel/cpu.c
+> +++ b/kernel/cpu.c
+> @@ -1327,7 +1327,7 @@ void bringup_nonboot_cpus(unsigned int setup_max_cpus)
+>  #ifdef CONFIG_PM_SLEEP_SMP
+>  static cpumask_var_t frozen_cpus;
+>  
+> -int __freeze_secondary_cpus(int primary, bool suspend)
+> +int freeze_secondary_cpus(int primary)
+>  {
+>  	int cpu, error = 0;
+>  
+> @@ -1352,7 +1352,7 @@ int __freeze_secondary_cpus(int primary, bool suspend)
+>  		if (cpu == primary)
+>  			continue;
+>  
+> -		if (suspend && pm_wakeup_pending()) {
+> +		if (pm_wakeup_pending()) {
+>  			pr_info("Wakeup pending. Abort CPU freeze\n");
+>  			error = -EBUSY;
+>  			break;
+> 
 
-[This is an automated email]
+I would do this the other way around:
 
-This commit has been processed because it contains a -stable tag.
-The stable tag indicates that it's relevant for the following trees: all
-
-The bot has tested the following trees: v5.6.7, v5.4.35, v4.19.118, v4.14.177, v4.9.220, v4.4.220.
-
-v5.6.7: Build OK!
-v5.4.35: Build OK!
-v4.19.118: Build OK!
-v4.14.177: Build OK!
-v4.9.220: Build OK!
-v4.4.220: Failed to apply! Possible dependencies:
-    ea00f4f4f00c ("PM / sleep: make PM notifiers called symmetrically")
-    fe12c00d21bb ("PM / hibernate: Introduce test_resume mode for hibernation")
+1. Make x86 call freeze_secondary_cpus() directly, rename
+   enable_nonboot_cpus() and drop disable_nonboot_cpus().
+2. Get rid of __freeze_secondary_cpus().
 
 
-NOTE: The patch will not be queued to stable trees until it is upstream.
 
-How should we proceed with this patch?
-
--- 
-Thanks
-Sasha
