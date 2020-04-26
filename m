@@ -2,69 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8381B9104
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Apr 2020 17:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA2F1B9108
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Apr 2020 17:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgDZPCP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Apr 2020 11:02:15 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:51532 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725876AbgDZPCP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Apr 2020 11:02:15 -0400
-Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 2c4431b5b229701a; Sun, 26 Apr 2020 17:02:13 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Chris Wilson <chris@chris-wilson.co.uk>
-Cc:     intel-gfx@lists.freedesktop.org, linux-pm@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [PATCH] cpufreq/pstate: Only mention the BIOS disabling turbo mode once
-Date:   Sun, 26 Apr 2020 17:02:12 +0200
-Message-ID: <15275956.dygttixizy@kreacher>
-In-Reply-To: <20200410192629.6779-1-chris@chris-wilson.co.uk>
-References: <20200410192629.6779-1-chris@chris-wilson.co.uk>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        id S1726151AbgDZPDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Apr 2020 11:03:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54930 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725876AbgDZPDk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 26 Apr 2020 11:03:40 -0400
+Received: from localhost (unknown [137.135.114.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D166208FE;
+        Sun, 26 Apr 2020 15:03:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587913420;
+        bh=p3Mga8iTwm/dBrCD1R6Ne3Zt3/Mk4u7B8EbWFRU5Lf4=;
+        h=Date:From:To:To:To:Cc:Cc:Cc:Cc:Subject:In-Reply-To:References:
+         From;
+        b=s2hOukVstWVsQ+/QU8H8bhLLXlmYxAxonbuK/RSBvE/xIB+iZzR75p/8tUqCvZnUS
+         dR9W6nUhlsSqL/W1+o+PzCntj368pMCkQt4mnT7vPvDxoCYb7dqithbk4hdke+HA9j
+         JvL6T8mMOwO/1O3pGuxFrXdCeQn9/L8iELbCRo9M=
+Date:   Sun, 26 Apr 2020 15:03:39 +0000
+From:   Sasha Levin <sashal@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+To:     Dexuan Cui <decui@microsoft.com>
+To:     linux-pm@vger.kernel.org, rjw@rjwysocki.net, len.brown@intel.com
+Cc:     linux-kernel@vger.kernel.org, ming.lei@redhat.com
+Cc:     Bart Van Assche <bvanassche@acm.org>
+Cc:     stable@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH] PM: hibernate: Freeze kernel threads in software_resume()
+In-Reply-To: <20200424034016.42046-1-decui@microsoft.com>
+References: <20200424034016.42046-1-decui@microsoft.com>
+Message-Id: <20200426150340.1D166208FE@mail.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, April 10, 2020 9:26:29 PM CEST Chris Wilson wrote:
-> Make a note of the first time we discover the turbo mode has been
-> disabled by the BIOS, as otherwise we complain every time we try to
-> update the mode.
-> 
-> Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/intel_pstate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index c81e1ff29069..b4c014464a20 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -1058,7 +1058,7 @@ static ssize_t store_no_turbo(struct kobject *a, struct kobj_attribute *b,
->  
->  	update_turbo_state();
->  	if (global.turbo_disabled) {
-> -		pr_warn("Turbo disabled by BIOS or unavailable on processor\n");
-> +		pr_notice_once("Turbo disabled by BIOS or unavailable on processor\n");
->  		mutex_unlock(&intel_pstate_limits_lock);
->  		mutex_unlock(&intel_pstate_driver_lock);
->  		return -EPERM;
-> 
+Hi
 
-Applied as a fix for 5.7-rc4, sorry for the delay.
+[This is an automated email]
 
-Thanks!
+This commit has been processed because it contains a -stable tag.
+The stable tag indicates that it's relevant for the following trees: all
+
+The bot has tested the following trees: v5.6.7, v5.4.35, v4.19.118, v4.14.177, v4.9.220, v4.4.220.
+
+v5.6.7: Build OK!
+v5.4.35: Build OK!
+v4.19.118: Build OK!
+v4.14.177: Build OK!
+v4.9.220: Build OK!
+v4.4.220: Failed to apply! Possible dependencies:
+    ea00f4f4f00c ("PM / sleep: make PM notifiers called symmetrically")
+    fe12c00d21bb ("PM / hibernate: Introduce test_resume mode for hibernation")
 
 
+NOTE: The patch will not be queued to stable trees until it is upstream.
 
+How should we proceed with this patch?
+
+-- 
+Thanks
+Sasha
