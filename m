@@ -2,263 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7B31B8C81
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Apr 2020 07:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9301B8DD7
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Apr 2020 10:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726101AbgDZFSU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Apr 2020 01:18:20 -0400
-Received: from mail-eopbgr80047.outbound.protection.outlook.com ([40.107.8.47]:43566
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725765AbgDZFST (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 26 Apr 2020 01:18:19 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gxr/E8mGf19FU0VVEC5nW5FX6pvkiNuJzgEeXy38JEIZlgJE7X3G5kLT20cJ8dPK9S3UepsPENgMxNfXe+kq1vGJzr9Hhx+QrRA0MxmsixvXCXmGcIActSKdjU34vEnKgzpAGN/q11T/eTWsdeSR9qMTaknnWgK9FaectEhJXWJloeJF4J+kQBzykJ1atXQ6Tgp2E9jBPXPeXAK08S5yHH1v++3hiXjCRUn+v2sOJW6oHeaCvIJE5Kz62ThBmoQdr+ZsjsNY3BTk2qsIe0ToNebNZ2lnAkKVmQ42TESuqoBRZbSbQZi/65Em7QhkfKWB9croR1V5zsQa3a9OcS852A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZDSGsPCluwiXZBSBRpiSfT1fC07XL/jHsyPKlDaeFVE=;
- b=TmWKRUgD/fJ4NUmK9DdGB7Jkx+KzlCr/SDAxuLwmhAewcF+oBK6NbRbA4+1T+0LpHRzWbAhGGXWS4Xt8xKBe0xe1uEp8uLVKAADivsOYuOfGL08h1LyvjZuAH5BiIo8TNTPBPVPe3JeEbf+P7jIFACdF4YKBe8JPjK9kBXL2+y1+ary+Pmy/Zwhb7VZAzq/xWtZVcACimhcEjHUUXSL4ujYmPgukYbuUPkDPn8Eccwg1JOgZLtfD1Xry1uSB7lamgriwheJbclN14ruhM1EMGdnQEhMbLYbiSB0Wxc/F5/FQiHUg5AIilSJXRPUDSyHworzlKNb7frpcCUraIgl00Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZDSGsPCluwiXZBSBRpiSfT1fC07XL/jHsyPKlDaeFVE=;
- b=L/FuaN4aiSH3U1vQNYH4pqTPvnz+dqAX8RIBaO8Xc6K+DOtPrL4kQOEppfUoPgDjxWV25zShEe+JxfmsMuXlTr/zTNV2Ae2vKy04nTmMAoJB4g46CCtnHKfFPAhoVYqcc1ECuvU/qSg9s0QIgZksvM22PXc0Bqt7M8WbWCOord4=
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
- by AM6PR04MB5048.eurprd04.prod.outlook.com (2603:10a6:20b:e::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.22; Sun, 26 Apr
- 2020 05:18:13 +0000
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::d9f7:5527:e89d:1ae3]) by AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::d9f7:5527:e89d:1ae3%7]) with mapi id 15.20.2937.020; Sun, 26 Apr 2020
- 05:18:13 +0000
-From:   Aisheng Dong <aisheng.dong@nxp.com>
-To:     Anson Huang <anson.huang@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        "linux@rempel-privat.de" <linux@rempel-privat.de>,
-        Peng Fan <peng.fan@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH V4] dt-bindings: firmware: imx: Move system control into
- dt-binding headfile
-Thread-Topic: [PATCH V4] dt-bindings: firmware: imx: Move system control into
- dt-binding headfile
-Thread-Index: AQHWGeF/dDOm6RvnPEOsUzQGw8l0KqiK3l/w
-Date:   Sun, 26 Apr 2020 05:18:13 +0000
-Message-ID: <AM6PR04MB49664F6FC7B692DDFAAEAB0980AE0@AM6PR04MB4966.eurprd04.prod.outlook.com>
-References: <1587695415-4441-1-git-send-email-Anson.Huang@nxp.com>
-In-Reply-To: <1587695415-4441-1-git-send-email-Anson.Huang@nxp.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=aisheng.dong@nxp.com; 
-x-originating-ip: [218.82.155.143]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: ea163b83-79c4-479c-234d-08d7e9a13831
-x-ms-traffictypediagnostic: AM6PR04MB5048:|AM6PR04MB5048:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR04MB5048574BE35FDBEFE3F0A25280AE0@AM6PR04MB5048.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:972;
-x-forefront-prvs: 03853D523D
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(136003)(396003)(346002)(376002)(39860400002)(5660300002)(478600001)(316002)(110136005)(33656002)(7696005)(4326008)(26005)(186003)(6506007)(7416002)(9686003)(55016002)(2906002)(8936002)(8676002)(81156014)(66556008)(76116006)(64756008)(66476007)(66946007)(66446008)(52536014)(86362001)(44832011)(71200400001)(921003);DIR:OUT;SFP:1101;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IA6t1zailcLXqahhjxfbPdzEDBKkJwiLdI6sd/spR7yAHEZyoejATbviGM9ZJeJxjuQ8qKoZO923LKyzqHth9R4sRBRduXSwS94Zk9o+X6jjv2MlCeJz2nbWLFb2Eq3v21arGD0LXYueb1bQmWKLVnHppjYxqHQp3AZC2PXJk2D+MIVkRqEuGstEMtzPVnllYF8rJyfHlGr7d/Or2XiubILEMushzUdFpk+l2vPGdQkDQ/s02URZ52voJRn27biKsWV1GdBnFijuXwdP9+yK9R3hmG7I6ll9SXq2SG8BI3M4VVos8vsw/8k87z3g9nCr43kZHTX6il57fa6g9EP4lw1V5eruBuwG8OUBjX5pSAvBVy9/hLfNDhgUsdtjma3e422oFCF0q0s9CA9pjAub98QqsZU20SXxsMIrBPFE6JAfQZXgy9cFOoChYvx4T2knxNUS/XH/8I7CLZW61yBt78HcmbuJY02CYgWCvkQmo/I=
-x-ms-exchange-antispam-messagedata: kLnMD3Pk2YbZhmZMzGxeyzivFwxHOvqik3wmVYZ3Do5gk0yH6MxyoqMB0/j2mUa/uMPlsIWN4ZPcGSVtzVqFLgBwE9wpYzPnVaW5eZ0CCJVmzVIR6Ct1uYbvi21GCv8dKNj30UlCH0rfPr930yd6UkNpmsoEeXxS56eseXEY/kwwkE+2XU/vde37wZqOf43+ree8LwDUQRPJ5aJwDCwCmqEhO//4jk/irehzln+rGwdPMffRYuHFSaUYwhfmDtfhJz/EpElUlhlZhs8LAih4cnqmtLpmsEQhcacPyRad548oe85pJ0NSKWEa1XBeWkECJF6zI46hzbC8ac0+D1ptS3ULhNW9PuSQMESCpfbzXYS8L2M5lqMT30s+k2WmtwF+wksc9/0vQNY2OCW/BGnA3dDdFEI4Emav7I1QMFtFC4kM2XDrbuqZ8+9odVU9XEhbqCgZuDu4/bm4u9Am3m74i2355+tGas+cN+b9t0ne5wOO3Qc8bqxMQkIdWfXZft3v1331PUKQGqkoHjdzXnxwzHhQU8Ig7nFPsS7PfKpVoAJagjtc5ekWJpcbbOZTnm9+BcOppAFb8lWeKFjQHG1cl0ZYHOGff/4GkMbZGJIxJ9vAkT9EPKKi4xU8Rk7VuxnGZoqsjacIeXAQA8u7/kI7IqHc9msn9SmqVVKs3z+32iz6JBaTVYOeHZ9wsPUoWHWBvmah2xPyF+oQIsbWThYBTrz2hlaaewBKIANEYvKOE/UwnkjQcGbXwMn235rXLOD6KwOiufG1gA/rQ1Qb4K6Oahdhr6E8MBB2EtF5rIxtuAg=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea163b83-79c4-479c-234d-08d7e9a13831
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2020 05:18:13.6916
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JMnG8xj8J1WROgXWMZeLM5lg9bGVp/OBSmHxxvnUlJHjFI5G4EDTxMAgGU+lf/0PulT82wgP2h1Q+1SrpFavdg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5048
+        id S1726125AbgDZIUb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Apr 2020 04:20:31 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:42160 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726122AbgDZIUb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 26 Apr 2020 04:20:31 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D8128200B9F;
+        Sun, 26 Apr 2020 10:20:29 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 597CC200BA3;
+        Sun, 26 Apr 2020 10:20:23 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id AAC1140246;
+        Sun, 26 Apr 2020 16:20:15 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, robh+dt@kernel.org,
+        leonard.crestez@nxp.com, linux@rempel-privat.de, peng.fan@nxp.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH V5 1/2] dt-bindings: firmware: imx: Move system control into dt-binding headfile
+Date:   Sun, 26 Apr 2020 16:11:43 +0800
+Message-Id: <1587888704-7158-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiBGcm9tOiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4gU2VudDogRnJpZGF5
-LCBBcHJpbCAyNCwgMjAyMCAxMDozMCBBTQ0KPiANCj4gaS5NWDggU29DcyBEVFMgZmlsZSBuZWVk
-cyBzeXN0ZW0gY29udHJvbCBtYWNybyBkZWZpbml0aW9ucywgc28gbW92ZSB0aGVtIGludG8NCj4g
-ZHQtYmluZGluZyBoZWFkZmlsZSwgdGhlbiBpbmNsdWRlL2xpbnV4L2Zpcm13YXJlL2lteC90eXBl
-cy5oIGNhbiBiZSByZW1vdmVkDQo+IGFuZCB0aG9zZSBkcml2ZXJzIHVzaW5nIGl0IHNob3VsZCBi
-ZSBjaGFuZ2VkIGFjY29yZGluZ2x5Lg0KPiANCj4gU2lnbmVkLW9mZi1ieTogRG9uZyBBaXNoZW5n
-IDxhaXNoZW5nLmRvbmdAbnhwLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogSmFja3kgQmFpIDxwaW5n
-LmJhaUBueHAuY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdA
-bnhwLmNvbT4NCj4gLS0tDQo+IENoYW5nZXMgc2luY2UgVjM6DQo+IAktIG5vIGNvZGUgY2hhbmdl
-LCBPTkxZIGFkZCB0aGUgbWlzc2luZyBhdXRob3IncyBzaWduZWQtb2ZmLg0KPiAtLS0NCj4gIGRy
-aXZlcnMvZmlybXdhcmUvaW14L2lteC1zY3UuYyAgICAgICAgICB8ICAxIC0NCj4gIGRyaXZlcnMv
-dGhlcm1hbC9pbXhfc2NfdGhlcm1hbC5jICAgICAgICB8ICAyICstDQo+ICBpbmNsdWRlL2R0LWJp
-bmRpbmdzL2Zpcm13YXJlL2lteC9yc3JjLmggfCA4NA0KPiArKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysNCj4gIGluY2x1ZGUvbGludXgvZmlybXdhcmUvaW14L3NjaS5oICAgICAgICB8
-ICAxIC0NCj4gIGluY2x1ZGUvbGludXgvZmlybXdhcmUvaW14L3R5cGVzLmggICAgICB8IDY1IC0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gIDUgZmlsZXMgY2hhbmdlZCwgODUgaW5zZXJ0aW9u
-cygrKSwgNjggZGVsZXRpb25zKC0pICBkZWxldGUgbW9kZSAxMDA2NDQNCj4gaW5jbHVkZS9saW51
-eC9maXJtd2FyZS9pbXgvdHlwZXMuaA0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZmlybXdh
-cmUvaW14L2lteC1zY3UuYyBiL2RyaXZlcnMvZmlybXdhcmUvaW14L2lteC1zY3UuYw0KPiBpbmRl
-eCBmNzFlYWE1Li5mMzM0MGZhIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2Zpcm13YXJlL2lteC9p
-bXgtc2N1LmMNCj4gKysrIGIvZHJpdmVycy9maXJtd2FyZS9pbXgvaW14LXNjdS5jDQo+IEBAIC04
-LDcgKzgsNiBAQA0KPiAgICovDQo+IA0KPiAgI2luY2x1ZGUgPGxpbnV4L2Vyci5oPg0KPiAtI2lu
-Y2x1ZGUgPGxpbnV4L2Zpcm13YXJlL2lteC90eXBlcy5oPg0KPiAgI2luY2x1ZGUgPGxpbnV4L2Zp
-cm13YXJlL2lteC9pcGMuaD4NCj4gICNpbmNsdWRlIDxsaW51eC9maXJtd2FyZS9pbXgvc2NpLmg+
-DQo+ICAjaW5jbHVkZSA8bGludXgvaW50ZXJydXB0Lmg+DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L3RoZXJtYWwvaW14X3NjX3RoZXJtYWwuYw0KPiBiL2RyaXZlcnMvdGhlcm1hbC9pbXhfc2NfdGhl
-cm1hbC5jDQo+IGluZGV4IGIyYjY4YzkuLmIwMWQyOGUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMv
-dGhlcm1hbC9pbXhfc2NfdGhlcm1hbC5jDQo+ICsrKyBiL2RyaXZlcnMvdGhlcm1hbC9pbXhfc2Nf
-dGhlcm1hbC5jDQo+IEBAIC0zLDkgKzMsOSBAQA0KPiAgICogQ29weXJpZ2h0IDIwMTgtMjAyMCBO
-WFAuDQo+ICAgKi8NCj4gDQo+ICsjaW5jbHVkZSA8ZHQtYmluZGluZ3MvZmlybXdhcmUvaW14L3Jz
-cmMuaD4NCj4gICNpbmNsdWRlIDxsaW51eC9lcnIuaD4NCj4gICNpbmNsdWRlIDxsaW51eC9maXJt
-d2FyZS9pbXgvc2NpLmg+DQo+IC0jaW5jbHVkZSA8bGludXgvZmlybXdhcmUvaW14L3R5cGVzLmg+
-DQo+ICAjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQo+ICAjaW5jbHVkZSA8bGludXgvb2YuaD4N
-Cj4gICNpbmNsdWRlIDxsaW51eC9vZl9kZXZpY2UuaD4NCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUv
-ZHQtYmluZGluZ3MvZmlybXdhcmUvaW14L3JzcmMuaA0KPiBiL2luY2x1ZGUvZHQtYmluZGluZ3Mv
-ZmlybXdhcmUvaW14L3JzcmMuaA0KPiBpbmRleCA0ZTYxZjY0Li41MTkwNmI5IDEwMDY0NA0KPiAt
-LS0gYS9pbmNsdWRlL2R0LWJpbmRpbmdzL2Zpcm13YXJlL2lteC9yc3JjLmgNCj4gKysrIGIvaW5j
-bHVkZS9kdC1iaW5kaW5ncy9maXJtd2FyZS9pbXgvcnNyYy5oDQo+IEBAIC01NDcsNCArNTQ3LDg4
-IEBADQo+ICAjZGVmaW5lIElNWF9TQ19SX0FUVEVTVEFUSU9OCQk1NDUNCj4gICNkZWZpbmUgSU1Y
-X1NDX1JfTEFTVAkJCTU0Ng0KPiANCj4gKy8qDQo+ICsgKiBEZWZpbmVzIGZvciBTQyBQTSBDTEsN
-Cj4gKyAqLw0KPiArI2RlZmluZSBJTVhfU0NfUE1fQ0xLX1NMVl9CVVMJCTAJLyogU2xhdmUgYnVz
-IGNsb2NrICovDQo+ICsjZGVmaW5lIElNWF9TQ19QTV9DTEtfTVNUX0JVUwkJMQkvKiBNYXN0ZXIg
-YnVzIGNsb2NrICovDQo+ICsjZGVmaW5lIElNWF9TQ19QTV9DTEtfUEVSCQkyCS8qIFBlcmlwaGVy
-YWwgY2xvY2sgKi8NCj4gKyNkZWZpbmUgSU1YX1NDX1BNX0NMS19QSFkJCTMJLyogUGh5IGNsb2Nr
-ICovDQo+ICsjZGVmaW5lIElNWF9TQ19QTV9DTEtfTUlTQwkJNAkvKiBNaXNjIGNsb2NrICovDQo+
-ICsjZGVmaW5lIElNWF9TQ19QTV9DTEtfTUlTQzAJCTAJLyogTWlzYyAwIGNsb2NrICovDQo+ICsj
-ZGVmaW5lIElNWF9TQ19QTV9DTEtfTUlTQzEJCTEJLyogTWlzYyAxIGNsb2NrICovDQo+ICsjZGVm
-aW5lIElNWF9TQ19QTV9DTEtfTUlTQzIJCTIJLyogTWlzYyAyIGNsb2NrICovDQo+ICsjZGVmaW5l
-IElNWF9TQ19QTV9DTEtfTUlTQzMJCTMJLyogTWlzYyAzIGNsb2NrICovDQo+ICsjZGVmaW5lIElN
-WF9TQ19QTV9DTEtfTUlTQzQJCTQJLyogTWlzYyA0IGNsb2NrICovDQo+ICsjZGVmaW5lIElNWF9T
-Q19QTV9DTEtfQ1BVCQkyCS8qIENQVSBjbG9jayAqLw0KPiArI2RlZmluZSBJTVhfU0NfUE1fQ0xL
-X1BMTAkJNAkvKiBQTEwgKi8NCj4gKyNkZWZpbmUgSU1YX1NDX1BNX0NMS19CWVBBU1MJCTQJLyog
-QnlwYXNzIGNsb2NrICovDQoNClVuZm9ydHVuYXRlbHkgdGhpcyBpcyB0aGUgdGhpcmQgdGltZSBJ
-IHJlcGVhdCB0aGUgc2FtZSBjb21tZW50cyBmb3Igb25lIHBhdGNoOg0KIiBUaGlzIGlzIG5ld2x5
-IGFkZGVkIHN0dWZmIGFuZCBzaG91bGQgYmUgYSBzZXBhcmF0ZSBwYXRjaC4iDQoNClBsZWFzZSBk
-byBub3QgYXJiaXRyYXJpbHkgaWdub3JlIHJldmlld2VyJ3MgY29tbWVudHMgYW5kIHdhc3Rlcw0K
-cmV2aWV3ZXIncyBlZmZvcnQuDQoNClJlZ2FyZHMNCkFpc2hlbmcNCg0KPiArDQo+ICsvKg0KPiAr
-ICogRGVmaW5lcyBmb3IgU0MgQ09OVFJPTA0KPiArICovDQo+ICsjZGVmaW5lIElNWF9TQ19DX1RF
-TVAgICAgICAgICAgICAgICAgICAgICAgIDBVDQo+ICsjZGVmaW5lIElNWF9TQ19DX1RFTVBfSEkg
-ICAgICAgICAgICAgICAgICAgIDFVDQo+ICsjZGVmaW5lIElNWF9TQ19DX1RFTVBfTE9XICAgICAg
-ICAgICAgICAgICAgIDJVDQo+ICsjZGVmaW5lIElNWF9TQ19DX1BYTF9MSU5LX01TVDFfQUREUiAg
-ICAgICAgIDNVDQo+ICsjZGVmaW5lIElNWF9TQ19DX1BYTF9MSU5LX01TVDJfQUREUiAgICAgICAg
-IDRVDQo+ICsjZGVmaW5lIElNWF9TQ19DX1BYTF9MSU5LX01TVF9FTkIgICAgICAgICAgIDVVDQo+
-ICsjZGVmaW5lIElNWF9TQ19DX1BYTF9MSU5LX01TVDFfRU5CICAgICAgICAgIDZVDQo+ICsjZGVm
-aW5lIElNWF9TQ19DX1BYTF9MSU5LX01TVDJfRU5CICAgICAgICAgIDdVDQo+ICsjZGVmaW5lIElN
-WF9TQ19DX1BYTF9MSU5LX1NMVjFfQUREUiAgICAgICAgIDhVDQo+ICsjZGVmaW5lIElNWF9TQ19D
-X1BYTF9MSU5LX1NMVjJfQUREUiAgICAgICAgIDlVDQo+ICsjZGVmaW5lIElNWF9TQ19DX1BYTF9M
-SU5LX01TVF9WTEQgICAgICAgICAgIDEwVQ0KPiArI2RlZmluZSBJTVhfU0NfQ19QWExfTElOS19N
-U1QxX1ZMRCAgICAgICAgICAxMVUNCj4gKyNkZWZpbmUgSU1YX1NDX0NfUFhMX0xJTktfTVNUMl9W
-TEQgICAgICAgICAgMTJVDQo+ICsjZGVmaW5lIElNWF9TQ19DX1NJTkdMRV9NT0RFICAgICAgICAg
-ICAgICAgIDEzVQ0KPiArI2RlZmluZSBJTVhfU0NfQ19JRCAgICAgICAgICAgICAgICAgICAgICAg
-ICAxNFUNCj4gKyNkZWZpbmUgSU1YX1NDX0NfUFhMX0NMS19QT0xBUklUWSAgICAgICAgICAgMTVV
-DQo+ICsjZGVmaW5lIElNWF9TQ19DX0xJTkVTVEFURSAgICAgICAgICAgICAgICAgIDE2VQ0KPiAr
-I2RlZmluZSBJTVhfU0NfQ19QQ0lFX0dfUlNUICAgICAgICAgICAgICAgICAxN1UNCj4gKyNkZWZp
-bmUgSU1YX1NDX0NfUENJRV9CVVRUT05fUlNUICAgICAgICAgICAgMThVDQo+ICsjZGVmaW5lIElN
-WF9TQ19DX1BDSUVfUEVSU1QgICAgICAgICAgICAgICAgIDE5VQ0KPiArI2RlZmluZSBJTVhfU0Nf
-Q19QSFlfUkVTRVQgICAgICAgICAgICAgICAgICAyMFUNCj4gKyNkZWZpbmUgSU1YX1NDX0NfUFhM
-X0xJTktfUkFURV9DT1JSRUNUSU9OICAgMjFVDQo+ICsjZGVmaW5lIElNWF9TQ19DX1BBTklDICAg
-ICAgICAgICAgICAgICAgICAgIDIyVQ0KPiArI2RlZmluZSBJTVhfU0NfQ19QUklPUklUWV9HUk9V
-UCAgICAgICAgICAgICAyM1UNCj4gKyNkZWZpbmUgSU1YX1NDX0NfVFhDTEsgICAgICAgICAgICAg
-ICAgICAgICAgMjRVDQo+ICsjZGVmaW5lIElNWF9TQ19DX0NMS0RJViAgICAgICAgICAgICAgICAg
-ICAgIDI1VQ0KPiArI2RlZmluZSBJTVhfU0NfQ19ESVNBQkxFXzUwICAgICAgICAgICAgICAgICAy
-NlUNCj4gKyNkZWZpbmUgSU1YX1NDX0NfRElTQUJMRV8xMjUgICAgICAgICAgICAgICAgMjdVDQo+
-ICsjZGVmaW5lIElNWF9TQ19DX1NFTF8xMjUgICAgICAgICAgICAgICAgICAgIDI4VQ0KPiArI2Rl
-ZmluZSBJTVhfU0NfQ19NT0RFICAgICAgICAgICAgICAgICAgICAgICAyOVUNCj4gKyNkZWZpbmUg
-SU1YX1NDX0NfU1lOQ19DVFJMMCAgICAgICAgICAgICAgICAgMzBVDQo+ICsjZGVmaW5lIElNWF9T
-Q19DX0tBQ0hVTktfQ05UICAgICAgICAgICAgICAgIDMxVQ0KPiArI2RlZmluZSBJTVhfU0NfQ19L
-QUNIVU5LX1NFTCAgICAgICAgICAgICAgICAzMlUNCj4gKyNkZWZpbmUgSU1YX1NDX0NfU1lOQ19D
-VFJMMSAgICAgICAgICAgICAgICAgMzNVDQo+ICsjZGVmaW5lIElNWF9TQ19DX0RQSV9SRVNFVCAg
-ICAgICAgICAgICAgICAgIDM0VQ0KPiArI2RlZmluZSBJTVhfU0NfQ19NSVBJX1JFU0VUICAgICAg
-ICAgICAgICAgICAzNVUNCj4gKyNkZWZpbmUgSU1YX1NDX0NfRFVBTF9NT0RFICAgICAgICAgICAg
-ICAgICAgMzZVDQo+ICsjZGVmaW5lIElNWF9TQ19DX1ZPTFRBR0UgICAgICAgICAgICAgICAgICAg
-IDM3VQ0KPiArI2RlZmluZSBJTVhfU0NfQ19QWExfTElOS19TRUwgICAgICAgICAgICAgICAzOFUN
-Cj4gKyNkZWZpbmUgSU1YX1NDX0NfT0ZTX1NFTCAgICAgICAgICAgICAgICAgICAgMzlVDQo+ICsj
-ZGVmaW5lIElNWF9TQ19DX09GU19BVURJTyAgICAgICAgICAgICAgICAgIDQwVQ0KPiArI2RlZmlu
-ZSBJTVhfU0NfQ19PRlNfUEVSSVBIICAgICAgICAgICAgICAgICA0MVUNCj4gKyNkZWZpbmUgSU1Y
-X1NDX0NfT0ZTX0lSUSAgICAgICAgICAgICAgICAgICAgNDJVDQo+ICsjZGVmaW5lIElNWF9TQ19D
-X1JTVDAgICAgICAgICAgICAgICAgICAgICAgIDQzVQ0KPiArI2RlZmluZSBJTVhfU0NfQ19SU1Qx
-ICAgICAgICAgICAgICAgICAgICAgICA0NFUNCj4gKyNkZWZpbmUgSU1YX1NDX0NfU0VMMCAgICAg
-ICAgICAgICAgICAgICAgICAgNDVVDQo+ICsjZGVmaW5lIElNWF9TQ19DX0NBTElCMCAgICAgICAg
-ICAgICAgICAgICAgIDQ2VQ0KPiArI2RlZmluZSBJTVhfU0NfQ19DQUxJQjEgICAgICAgICAgICAg
-ICAgICAgICA0N1UNCj4gKyNkZWZpbmUgSU1YX1NDX0NfQ0FMSUIyICAgICAgICAgICAgICAgICAg
-ICAgNDhVDQo+ICsjZGVmaW5lIElNWF9TQ19DX0lQR19ERUJVRyAgICAgICAgICAgICAgICAgIDQ5
-VQ0KPiArI2RlZmluZSBJTVhfU0NfQ19JUEdfRE9aRSAgICAgICAgICAgICAgICAgICA1MFUNCj4g
-KyNkZWZpbmUgSU1YX1NDX0NfSVBHX1dBSVQgICAgICAgICAgICAgICAgICAgNTFVDQo+ICsjZGVm
-aW5lIElNWF9TQ19DX0lQR19TVE9QICAgICAgICAgICAgICAgICAgIDUyVQ0KPiArI2RlZmluZSBJ
-TVhfU0NfQ19JUEdfU1RPUF9NT0RFICAgICAgICAgICAgICA1M1UNCj4gKyNkZWZpbmUgSU1YX1ND
-X0NfSVBHX1NUT1BfQUNLICAgICAgICAgICAgICAgNTRVDQo+ICsjZGVmaW5lIElNWF9TQ19DX1NZ
-TkNfQ1RSTCAgICAgICAgICAgICAgICAgIDU1VQ0KPiArI2RlZmluZSBJTVhfU0NfQ19PRlNfQVVE
-SU9fQUxUICAgICAgICAgICAgICA1NlUNCj4gKyNkZWZpbmUgSU1YX1NDX0NfRFNQX0JZUCAgICAg
-ICAgICAgICAgICAgICAgNTdVDQo+ICsjZGVmaW5lIElNWF9TQ19DX0NMS19HRU5fRU4gICAgICAg
-ICAgICAgICAgIDU4VQ0KPiArI2RlZmluZSBJTVhfU0NfQ19JTlRGX1NFTCAgICAgICAgICAgICAg
-ICAgICA1OVUNCj4gKyNkZWZpbmUgSU1YX1NDX0NfUlhDX0RMWSAgICAgICAgICAgICAgICAgICAg
-NjBVDQo+ICsjZGVmaW5lIElNWF9TQ19DX1RJTUVSX1NFTCAgICAgICAgICAgICAgICAgIDYxVQ0K
-PiArI2RlZmluZSBJTVhfU0NfQ19MQVNUICAgICAgICAgICAgICAgICAgICAgICA2MlUNCj4gKw0K
-PiAgI2VuZGlmIC8qIF9fRFRfQklORElOR1NfUlNDUkNfSU1YX0ggKi8NCj4gZGlmZiAtLWdpdCBh
-L2luY2x1ZGUvbGludXgvZmlybXdhcmUvaW14L3NjaS5oIGIvaW5jbHVkZS9saW51eC9maXJtd2Fy
-ZS9pbXgvc2NpLmgNCj4gaW5kZXggMTdiYTRlNC4uM2ZhNDE4YSAxMDA2NDQNCj4gLS0tIGEvaW5j
-bHVkZS9saW51eC9maXJtd2FyZS9pbXgvc2NpLmgNCj4gKysrIGIvaW5jbHVkZS9saW51eC9maXJt
-d2FyZS9pbXgvc2NpLmgNCj4gQEAgLTExLDcgKzExLDYgQEANCj4gICNkZWZpbmUgX1NDX1NDSV9I
-DQo+IA0KPiAgI2luY2x1ZGUgPGxpbnV4L2Zpcm13YXJlL2lteC9pcGMuaD4NCj4gLSNpbmNsdWRl
-IDxsaW51eC9maXJtd2FyZS9pbXgvdHlwZXMuaD4NCj4gDQo+ICAjaW5jbHVkZSA8bGludXgvZmly
-bXdhcmUvaW14L3N2Yy9taXNjLmg+ICAjaW5jbHVkZQ0KPiA8bGludXgvZmlybXdhcmUvaW14L3N2
-Yy9wbS5oPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9maXJtd2FyZS9pbXgvdHlwZXMuaA0K
-PiBiL2luY2x1ZGUvbGludXgvZmlybXdhcmUvaW14L3R5cGVzLmgNCj4gZGVsZXRlZCBmaWxlIG1v
-ZGUgMTAwNjQ0DQo+IGluZGV4IDgwODIxMTAuLjAwMDAwMDANCj4gLS0tIGEvaW5jbHVkZS9saW51
-eC9maXJtd2FyZS9pbXgvdHlwZXMuaA0KPiArKysgL2Rldi9udWxsDQo+IEBAIC0xLDY1ICswLDAg
-QEANCj4gLS8qIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wKyAqLw0KPiAtLyoNCj4g
-LSAqIENvcHlyaWdodCAoQykgMjAxNiBGcmVlc2NhbGUgU2VtaWNvbmR1Y3RvciwgSW5jLg0KPiAt
-ICogQ29weXJpZ2h0IDIwMTd+MjAxOCBOWFANCj4gLSAqDQo+IC0gKiBIZWFkZXIgZmlsZSBjb250
-YWluaW5nIHR5cGVzIHVzZWQgYWNyb3NzIG11bHRpcGxlIHNlcnZpY2UgQVBJcy4NCj4gLSAqLw0K
-PiAtDQo+IC0jaWZuZGVmIF9TQ19UWVBFU19IDQo+IC0jZGVmaW5lIF9TQ19UWVBFU19IDQo+IC0N
-Cj4gLS8qDQo+IC0gKiBUaGlzIHR5cGUgaXMgdXNlZCB0byBpbmRpY2F0ZSBhIGNvbnRyb2wuDQo+
-IC0gKi8NCj4gLWVudW0gaW14X3NjX2N0cmwgew0KPiAtCUlNWF9TQ19DX1RFTVAgPSAwLA0KPiAt
-CUlNWF9TQ19DX1RFTVBfSEkgPSAxLA0KPiAtCUlNWF9TQ19DX1RFTVBfTE9XID0gMiwNCj4gLQlJ
-TVhfU0NfQ19QWExfTElOS19NU1QxX0FERFIgPSAzLA0KPiAtCUlNWF9TQ19DX1BYTF9MSU5LX01T
-VDJfQUREUiA9IDQsDQo+IC0JSU1YX1NDX0NfUFhMX0xJTktfTVNUX0VOQiA9IDUsDQo+IC0JSU1Y
-X1NDX0NfUFhMX0xJTktfTVNUMV9FTkIgPSA2LA0KPiAtCUlNWF9TQ19DX1BYTF9MSU5LX01TVDJf
-RU5CID0gNywNCj4gLQlJTVhfU0NfQ19QWExfTElOS19TTFYxX0FERFIgPSA4LA0KPiAtCUlNWF9T
-Q19DX1BYTF9MSU5LX1NMVjJfQUREUiA9IDksDQo+IC0JSU1YX1NDX0NfUFhMX0xJTktfTVNUX1ZM
-RCA9IDEwLA0KPiAtCUlNWF9TQ19DX1BYTF9MSU5LX01TVDFfVkxEID0gMTEsDQo+IC0JSU1YX1ND
-X0NfUFhMX0xJTktfTVNUMl9WTEQgPSAxMiwNCj4gLQlJTVhfU0NfQ19TSU5HTEVfTU9ERSA9IDEz
-LA0KPiAtCUlNWF9TQ19DX0lEID0gMTQsDQo+IC0JSU1YX1NDX0NfUFhMX0NMS19QT0xBUklUWSA9
-IDE1LA0KPiAtCUlNWF9TQ19DX0xJTkVTVEFURSA9IDE2LA0KPiAtCUlNWF9TQ19DX1BDSUVfR19S
-U1QgPSAxNywNCj4gLQlJTVhfU0NfQ19QQ0lFX0JVVFRPTl9SU1QgPSAxOCwNCj4gLQlJTVhfU0Nf
-Q19QQ0lFX1BFUlNUID0gMTksDQo+IC0JSU1YX1NDX0NfUEhZX1JFU0VUID0gMjAsDQo+IC0JSU1Y
-X1NDX0NfUFhMX0xJTktfUkFURV9DT1JSRUNUSU9OID0gMjEsDQo+IC0JSU1YX1NDX0NfUEFOSUMg
-PSAyMiwNCj4gLQlJTVhfU0NfQ19QUklPUklUWV9HUk9VUCA9IDIzLA0KPiAtCUlNWF9TQ19DX1RY
-Q0xLID0gMjQsDQo+IC0JSU1YX1NDX0NfQ0xLRElWID0gMjUsDQo+IC0JSU1YX1NDX0NfRElTQUJM
-RV81MCA9IDI2LA0KPiAtCUlNWF9TQ19DX0RJU0FCTEVfMTI1ID0gMjcsDQo+IC0JSU1YX1NDX0Nf
-U0VMXzEyNSA9IDI4LA0KPiAtCUlNWF9TQ19DX01PREUgPSAyOSwNCj4gLQlJTVhfU0NfQ19TWU5D
-X0NUUkwwID0gMzAsDQo+IC0JSU1YX1NDX0NfS0FDSFVOS19DTlQgPSAzMSwNCj4gLQlJTVhfU0Nf
-Q19LQUNIVU5LX1NFTCA9IDMyLA0KPiAtCUlNWF9TQ19DX1NZTkNfQ1RSTDEgPSAzMywNCj4gLQlJ
-TVhfU0NfQ19EUElfUkVTRVQgPSAzNCwNCj4gLQlJTVhfU0NfQ19NSVBJX1JFU0VUID0gMzUsDQo+
-IC0JSU1YX1NDX0NfRFVBTF9NT0RFID0gMzYsDQo+IC0JSU1YX1NDX0NfVk9MVEFHRSA9IDM3LA0K
-PiAtCUlNWF9TQ19DX1BYTF9MSU5LX1NFTCA9IDM4LA0KPiAtCUlNWF9TQ19DX09GU19TRUwgPSAz
-OSwNCj4gLQlJTVhfU0NfQ19PRlNfQVVESU8gPSA0MCwNCj4gLQlJTVhfU0NfQ19PRlNfUEVSSVBI
-ID0gNDEsDQo+IC0JSU1YX1NDX0NfT0ZTX0lSUSA9IDQyLA0KPiAtCUlNWF9TQ19DX1JTVDAgPSA0
-MywNCj4gLQlJTVhfU0NfQ19SU1QxID0gNDQsDQo+IC0JSU1YX1NDX0NfU0VMMCA9IDQ1LA0KPiAt
-CUlNWF9TQ19DX0xBU1QNCj4gLX07DQo+IC0NCj4gLSNlbmRpZiAvKiBfU0NfVFlQRVNfSCAqLw0K
-PiAtLQ0KPiAyLjcuNA0KDQo=
+From: Dong Aisheng <aisheng.dong@nxp.com>
+
+i.MX8 SoCs DTS file needs system control macro definitions, so move them
+into dt-binding headfile, then include/linux/firmware/imx/types.h can be
+removed and those drivers using it should be changed accordingly.
+
+Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+Changes since V4:
+	- Use another patch for new added system controls and PM clock types.
+---
+ drivers/firmware/imx/imx-scu.c          |  1 -
+ drivers/thermal/imx_sc_thermal.c        |  2 +-
+ include/dt-bindings/firmware/imx/rsrc.h | 51 ++++++++++++++++++++++++++
+ include/linux/firmware/imx/sci.h        |  1 -
+ include/linux/firmware/imx/types.h      | 65 ---------------------------------
+ 5 files changed, 52 insertions(+), 68 deletions(-)
+ delete mode 100644 include/linux/firmware/imx/types.h
+
+diff --git a/drivers/firmware/imx/imx-scu.c b/drivers/firmware/imx/imx-scu.c
+index f71eaa5..f3340fa 100644
+--- a/drivers/firmware/imx/imx-scu.c
++++ b/drivers/firmware/imx/imx-scu.c
+@@ -8,7 +8,6 @@
+  */
+ 
+ #include <linux/err.h>
+-#include <linux/firmware/imx/types.h>
+ #include <linux/firmware/imx/ipc.h>
+ #include <linux/firmware/imx/sci.h>
+ #include <linux/interrupt.h>
+diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
+index b2b68c9..b01d28e 100644
+--- a/drivers/thermal/imx_sc_thermal.c
++++ b/drivers/thermal/imx_sc_thermal.c
+@@ -3,9 +3,9 @@
+  * Copyright 2018-2020 NXP.
+  */
+ 
++#include <dt-bindings/firmware/imx/rsrc.h>
+ #include <linux/err.h>
+ #include <linux/firmware/imx/sci.h>
+-#include <linux/firmware/imx/types.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+diff --git a/include/dt-bindings/firmware/imx/rsrc.h b/include/dt-bindings/firmware/imx/rsrc.h
+index 4e61f64..cdcda00 100644
+--- a/include/dt-bindings/firmware/imx/rsrc.h
++++ b/include/dt-bindings/firmware/imx/rsrc.h
+@@ -547,4 +547,55 @@
+ #define IMX_SC_R_ATTESTATION		545
+ #define IMX_SC_R_LAST			546
+ 
++/*
++ * Defines for SC CONTROL
++ */
++#define IMX_SC_C_TEMP				0
++#define IMX_SC_C_TEMP_HI			1
++#define IMX_SC_C_TEMP_LOW			2
++#define IMX_SC_C_PXL_LINK_MST1_ADDR		3
++#define IMX_SC_C_PXL_LINK_MST2_ADDR		4
++#define IMX_SC_C_PXL_LINK_MST_ENB		5
++#define IMX_SC_C_PXL_LINK_MST1_ENB		6
++#define IMX_SC_C_PXL_LINK_MST2_ENB		7
++#define IMX_SC_C_PXL_LINK_SLV1_ADDR		8
++#define IMX_SC_C_PXL_LINK_SLV2_ADDR		9
++#define IMX_SC_C_PXL_LINK_MST_VLD		10
++#define IMX_SC_C_PXL_LINK_MST1_VLD		11
++#define IMX_SC_C_PXL_LINK_MST2_VLD		12
++#define IMX_SC_C_SINGLE_MODE			13
++#define IMX_SC_C_ID				14
++#define IMX_SC_C_PXL_CLK_POLARITY		15
++#define IMX_SC_C_LINESTATE			16
++#define IMX_SC_C_PCIE_G_RST			17
++#define IMX_SC_C_PCIE_BUTTON_RST		18
++#define IMX_SC_C_PCIE_PERST			19
++#define IMX_SC_C_PHY_RESET			20
++#define IMX_SC_C_PXL_LINK_RATE_CORRECTION	21
++#define IMX_SC_C_PANIC				22
++#define IMX_SC_C_PRIORITY_GROUP			23
++#define IMX_SC_C_TXCLK				24
++#define IMX_SC_C_CLKDIV				25
++#define IMX_SC_C_DISABLE_50			26
++#define IMX_SC_C_DISABLE_125			27
++#define IMX_SC_C_SEL_125			28
++#define IMX_SC_C_MODE				29
++#define IMX_SC_C_SYNC_CTRL0			30
++#define IMX_SC_C_KACHUNK_CNT			31
++#define IMX_SC_C_KACHUNK_SEL			32
++#define IMX_SC_C_SYNC_CTRL1			33
++#define IMX_SC_C_DPI_RESET			34
++#define IMX_SC_C_MIPI_RESET			35
++#define IMX_SC_C_DUAL_MODE			36
++#define IMX_SC_C_VOLTAGE			37
++#define IMX_SC_C_PXL_LINK_SEL			38
++#define IMX_SC_C_OFS_SEL			39
++#define IMX_SC_C_OFS_AUDIO			40
++#define IMX_SC_C_OFS_PERIPH			41
++#define IMX_SC_C_OFS_IRQ			42
++#define IMX_SC_C_RST0				43
++#define IMX_SC_C_RST1				44
++#define IMX_SC_C_SEL0				45
++#define IMX_SC_C_LAST				46
++
+ #endif /* __DT_BINDINGS_RSCRC_IMX_H */
+diff --git a/include/linux/firmware/imx/sci.h b/include/linux/firmware/imx/sci.h
+index 17ba4e4..3fa418a 100644
+--- a/include/linux/firmware/imx/sci.h
++++ b/include/linux/firmware/imx/sci.h
+@@ -11,7 +11,6 @@
+ #define _SC_SCI_H
+ 
+ #include <linux/firmware/imx/ipc.h>
+-#include <linux/firmware/imx/types.h>
+ 
+ #include <linux/firmware/imx/svc/misc.h>
+ #include <linux/firmware/imx/svc/pm.h>
+diff --git a/include/linux/firmware/imx/types.h b/include/linux/firmware/imx/types.h
+deleted file mode 100644
+index 8082110..0000000
+--- a/include/linux/firmware/imx/types.h
++++ /dev/null
+@@ -1,65 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0+ */
+-/*
+- * Copyright (C) 2016 Freescale Semiconductor, Inc.
+- * Copyright 2017~2018 NXP
+- *
+- * Header file containing types used across multiple service APIs.
+- */
+-
+-#ifndef _SC_TYPES_H
+-#define _SC_TYPES_H
+-
+-/*
+- * This type is used to indicate a control.
+- */
+-enum imx_sc_ctrl {
+-	IMX_SC_C_TEMP = 0,
+-	IMX_SC_C_TEMP_HI = 1,
+-	IMX_SC_C_TEMP_LOW = 2,
+-	IMX_SC_C_PXL_LINK_MST1_ADDR = 3,
+-	IMX_SC_C_PXL_LINK_MST2_ADDR = 4,
+-	IMX_SC_C_PXL_LINK_MST_ENB = 5,
+-	IMX_SC_C_PXL_LINK_MST1_ENB = 6,
+-	IMX_SC_C_PXL_LINK_MST2_ENB = 7,
+-	IMX_SC_C_PXL_LINK_SLV1_ADDR = 8,
+-	IMX_SC_C_PXL_LINK_SLV2_ADDR = 9,
+-	IMX_SC_C_PXL_LINK_MST_VLD = 10,
+-	IMX_SC_C_PXL_LINK_MST1_VLD = 11,
+-	IMX_SC_C_PXL_LINK_MST2_VLD = 12,
+-	IMX_SC_C_SINGLE_MODE = 13,
+-	IMX_SC_C_ID = 14,
+-	IMX_SC_C_PXL_CLK_POLARITY = 15,
+-	IMX_SC_C_LINESTATE = 16,
+-	IMX_SC_C_PCIE_G_RST = 17,
+-	IMX_SC_C_PCIE_BUTTON_RST = 18,
+-	IMX_SC_C_PCIE_PERST = 19,
+-	IMX_SC_C_PHY_RESET = 20,
+-	IMX_SC_C_PXL_LINK_RATE_CORRECTION = 21,
+-	IMX_SC_C_PANIC = 22,
+-	IMX_SC_C_PRIORITY_GROUP = 23,
+-	IMX_SC_C_TXCLK = 24,
+-	IMX_SC_C_CLKDIV = 25,
+-	IMX_SC_C_DISABLE_50 = 26,
+-	IMX_SC_C_DISABLE_125 = 27,
+-	IMX_SC_C_SEL_125 = 28,
+-	IMX_SC_C_MODE = 29,
+-	IMX_SC_C_SYNC_CTRL0 = 30,
+-	IMX_SC_C_KACHUNK_CNT = 31,
+-	IMX_SC_C_KACHUNK_SEL = 32,
+-	IMX_SC_C_SYNC_CTRL1 = 33,
+-	IMX_SC_C_DPI_RESET = 34,
+-	IMX_SC_C_MIPI_RESET = 35,
+-	IMX_SC_C_DUAL_MODE = 36,
+-	IMX_SC_C_VOLTAGE = 37,
+-	IMX_SC_C_PXL_LINK_SEL = 38,
+-	IMX_SC_C_OFS_SEL = 39,
+-	IMX_SC_C_OFS_AUDIO = 40,
+-	IMX_SC_C_OFS_PERIPH = 41,
+-	IMX_SC_C_OFS_IRQ = 42,
+-	IMX_SC_C_RST0 = 43,
+-	IMX_SC_C_RST1 = 44,
+-	IMX_SC_C_SEL0 = 45,
+-	IMX_SC_C_LAST
+-};
+-
+-#endif /* _SC_TYPES_H */
+-- 
+2.7.4
+
