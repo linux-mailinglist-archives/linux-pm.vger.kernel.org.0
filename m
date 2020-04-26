@@ -2,79 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E4A1B91AD
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Apr 2020 18:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 317091B91F5
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Apr 2020 19:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbgDZQYR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Apr 2020 12:24:17 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:58234 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726146AbgDZQYR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Apr 2020 12:24:17 -0400
-Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 5c6f423f88d0ad3c; Sun, 26 Apr 2020 18:24:14 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     decui@microsoft.com
-Cc:     linux-pm@vger.kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        bvanassche@acm.org, mikelley@microsoft.com, longli@microsoft.com,
-        linux-kernel@vger.kernel.org, ming.lei@redhat.com,
-        wei.liu@kernel.org, sthemmin@microsoft.com, haiyangz@microsoft.com,
-        kys@microsoft.com, stable@vger.kernel.org
-Subject: Re: [PATCH] PM: hibernate: Freeze kernel threads in software_resume()
-Date:   Sun, 26 Apr 2020 18:24:14 +0200
-Message-ID: <2420808.aENraY2TMt@kreacher>
-In-Reply-To: <20200424034016.42046-1-decui@microsoft.com>
-References: <20200424034016.42046-1-decui@microsoft.com>
+        id S1726154AbgDZRGy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Apr 2020 13:06:54 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:45962 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726143AbgDZRGy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Apr 2020 13:06:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1587920811; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jTqCfxZBmTk09D67QB/ptZSM/wzN2C9X9u64qCP4L04=;
+        b=Ybd/6LupQKabv0CLwPuklV2cLPT+1BYCbip7YvN2vRxljCCsK8W+b/ryb0r4GWtbTQOzer
+        T3v4Fjg9/9aEuO++arc6fxNvxB0TfeQkVvQkkbh32M8kiMLGwRaTGUXJniBvOccf3fCaOR
+        0i5Eu2tdYj3KR/s7gkra/EzzdnEjnqU=
+Date:   Sun, 26 Apr 2020 19:06:40 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 1/3] PM: introduce pm_ptr() macro
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>, od@zcrc.me,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Message-Id: <4JNE9Q.Y5HBZ952XKLI@crapouillou.net>
+In-Reply-To: <2708095.iQXV2FnTNx@kreacher>
+References: <20200413123207.74552-1-paul@crapouillou.net>
+        <2708095.iQXV2FnTNx@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday, April 24, 2020 5:40:16 AM CEST Dexuan Cui wrote:
-> Currently the kernel threads are not frozen in software_resume(), so
-> between dpm_suspend_start(PMSG_QUIESCE) and resume_target_kernel(),
-> system_freezable_power_efficient_wq can still try to submit SCSI
-> commands and this can cause a panic since the low level SCSI driver
-> (e.g. hv_storvsc) has quiesced the SCSI adapter and can not accept
-> any SCSI commands: https://lkml.org/lkml/2020/4/10/47
-> 
-> At first I posted a fix (https://lkml.org/lkml/2020/4/21/1318) trying
-> to resolve the issue from hv_storvsc, but with the help of
-> Bart Van Assche, I realized it's better to fix software_resume(),
-> since this looks like a generic issue, not only pertaining to SCSI.
-> 
-> Cc: Bart Van Assche <bvanassche@acm.org>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> ---
->  kernel/power/hibernate.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index 86aba8706b16..30bd28d1d418 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -898,6 +898,13 @@ static int software_resume(void)
->  	error = freeze_processes();
->  	if (error)
->  		goto Close_Finish;
-> +
-> +	error = freeze_kernel_threads();
-> +	if (error) {
-> +		thaw_processes();
-> +		goto Close_Finish;
-> +	}
-> +
->  	error = load_image_and_restore();
->  	thaw_processes();
->   Finish:
-> 
+Hi Rafael,
 
-Applied as a fix for 5.7-rc4, thanks!
+Le dim. 26 avril 2020 =E0 17:40, Rafael J. Wysocki <rjw@rjwysocki.net> a=20
+=E9crit :
+> On Monday, April 13, 2020 2:32:05 PM CEST Paul Cercueil wrote:
+>>  This macro is analogous to the infamous of_match_ptr(). If CONFIG_PM
+>>  is enabled, this macro will resolve to its argument, otherwise to=20
+>> NULL.
+>=20
+> Well, this is going to result in quite a bit of unused code being
+> added to the kernels built with CONFIG_PM unset.
+>=20
+> Is there any way to avoid that somehow?
 
+Using __maybe_unused on the dev_pm_ops struct and the callbacks, as=20
+long as they are static, they should be dropped by the compiler when=20
+CONFIG_PM is not set.
+
+-Paul
+
+>=20
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>>=20
+>>  Notes:
+>>      v2: Remove pm_sleep_ptr() macro
+>>=20
+>>   include/linux/pm.h | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>=20
+>>  diff --git a/include/linux/pm.h b/include/linux/pm.h
+>>  index e057d1fa2469..1c0eec06905d 100644
+>>  --- a/include/linux/pm.h
+>>  +++ b/include/linux/pm.h
+>>  @@ -374,6 +374,12 @@ const struct dev_pm_ops name =3D { \
+>>   	SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
+>>   }
+>>=20
+>>  +#ifdef CONFIG_PM
+>>  +#define pm_ptr(_ptr) (_ptr)
+>>  +#else
+>>  +#define pm_ptr(_ptr) NULL
+>>  +#endif
+>>  +
+>>   /*
+>>    * PM_EVENT_ messages
+>>    *
+>>=20
+>=20
+>=20
+>=20
+>=20
 
 
