@@ -2,109 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2FA1BA0F0
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 12:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDB01BA0FB
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 12:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726539AbgD0KUm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 06:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726485AbgD0KUl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 06:20:41 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD28C0610D5;
-        Mon, 27 Apr 2020 03:20:41 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id m13so25199090otf.6;
-        Mon, 27 Apr 2020 03:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gUcWSkbxyPvJ0+ERW/qepkDLsiLjdEGghyciw3XnsT4=;
-        b=uNy2SXjrR2mbQALDHVMHlcFBkpzgy8HTawiU3KEQzSt++Gk5NabhVh9Ye4tWjoYCKl
-         pUmPFhRGG+Ecfi4QF7T7Fml1Ft31cm1aCR9QLNusoV6LIdEu/4gPNnbynP6ZUU2FTzfG
-         hvYSUHt9mYQVUl3PiZTKwiJvhWG4wXKqhdzTE9gtGfyM/Gbi4rWevwH8BBo1xQ6vBwZW
-         scW9/eXN/w6qmx9mT3YHcZrtoP/vO+RK54L0D48d7Y1ZrXPvsOkY7ib53eTwWszwsLEU
-         Xfhw5+HfEMIlhQNWef8RoTmymqqsrKfa2YJn2skuiblTh7MqWRbwBUsSNBKhtNJWhqia
-         w26A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gUcWSkbxyPvJ0+ERW/qepkDLsiLjdEGghyciw3XnsT4=;
-        b=kfjEpdVRYc4xfn/8vOJ4wZKBawGDVepIVQlAj2+FKXkgaThRBcCQPbcAddWn3cA6+L
-         W5GVIQWrXtV5rFVX55Ew6nQUB6JzLv+IXfMOuq/8juBMclUBpvvAOMXw3jbXzVHuNDM9
-         F2nzd/Kae/Wg/BV3S/v381FyTL9D5tGxkvsXeY5QPwGbTtEw9xFz38phl1Lm58tS0Fo7
-         JgdiuAONWQkU/LNthiuGdo7RckNsPHY3pHlK7ygYOYkQdqn3qNEVX/cVqps8FkKDb7xA
-         J415qmnRWYfJutF/++/Yx99PmMaw8pcDffvCQ3GgC9w7+lPhM7/tyeYSdNMazDGoK3RO
-         ne+w==
-X-Gm-Message-State: AGi0PuY00hti2oD7+Yex5/hJKDwOEuyA9ETMpFbqoEZjQyUEJLopIosO
-        F4S7s5eYVE1MRM7kjHdRtQd9DOA4CC73uvhbMNo=
-X-Google-Smtp-Source: APiQypIeuwTOWNRaduLVrl8FnkbpT7m1ncyU5dpdVc0UJFZpGKzatZMZ/wGFpQdBgCzzzKU46eV7y4UpS9+lDJyUvmw=
-X-Received: by 2002:aca:b783:: with SMTP id h125mr3049635oif.62.1587982840882;
- Mon, 27 Apr 2020 03:20:40 -0700 (PDT)
+        id S1726728AbgD0KV0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 06:21:26 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:33024 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726507AbgD0KV0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 06:21:26 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 03RALD0G051252;
+        Mon, 27 Apr 2020 05:21:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1587982873;
+        bh=t1hJLC5kDuKcKibDcEkvU70NnV8yMMsoqioAltNhm5E=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=jXCx2mGcdqOH+pCxeX2NQcKVCe/0SfWqYzUECFMWb0sQ89mD7KuLjVgd3mxMeN3A7
+         +J+6jQm4dfnG9d7smvfAK2Ct8EgtFsza5+VxOIjhgBIb0e+MAY/61JOaD5Pk1UBIaj
+         kYypjGqMbypc0Oysqbwq/1rk9qilzeAEydH+naHs=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 03RALDoY044674
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 27 Apr 2020 05:21:13 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 27
+ Apr 2020 05:21:13 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 27 Apr 2020 05:21:13 -0500
+Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 03RALAt8032790;
+        Mon, 27 Apr 2020 05:21:10 -0500
+Subject: Re: [PATCH v6 0/4] thermal: k3: Add support for bandgap sensors
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "J, KEERTHY" <j-keerthy@ti.com>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>
+CC:     <amit.kucheria@verdurent.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <mark.rutland@arm.com>
+References: <20200407055116.16082-1-j-keerthy@ti.com>
+ <3c69e3c6-5549-e891-fde6-95a2ecc49f77@linaro.org>
+ <0817f9ee-c72f-3e9f-00cf-e8ddaf608020@ti.com>
+ <e7dd6470-5992-8d22-5d0c-7532a47a400c@ti.com>
+ <3221f241-7118-a586-1789-d427791215c6@linaro.org>
+From:   Tero Kristo <t-kristo@ti.com>
+Message-ID: <1ee5ec60-97e9-930e-4bc2-4c10d1a82165@ti.com>
+Date:   Mon, 27 Apr 2020 13:21:09 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <1587678050-23468-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1587678050-23468-11-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdV6J-_gBkzhUXtA8OrxhJVzyrAqjA8oeGJGBp86X-C3Nw@mail.gmail.com> <20200427092408.g2vpc6j2c6it4x2i@vireshk-i7>
-In-Reply-To: <20200427092408.g2vpc6j2c6it4x2i@vireshk-i7>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 27 Apr 2020 11:20:14 +0100
-Message-ID: <CA+V-a8vwF=u53dZ_U4vX3oAUHrBh5uVUBeOTiDqTZJfV8UUeCA@mail.gmail.com>
-Subject: Re: [PATCH 10/10] cpufreq: dt: Add support for r8a7742
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Marian-Cristian Rotariu 
-        <marian-cristian.rotariu.rb@bp.renesas.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <3221f241-7118-a586-1789-d427791215c6@linaro.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
+On 09/04/2020 17:47, Daniel Lezcano wrote:
+> On 09/04/2020 16:37, Tero Kristo wrote:
+>> On 09/04/2020 17:07, J, KEERTHY wrote:
+>>>
+>>>
+>>> On 4/9/2020 7:19 PM, Daniel Lezcano wrote:
+>>>>
+>>>> Hi Keerthy,
+>>>>
+>>>> On 07/04/2020 07:51, Keerthy wrote:
+>>>>> Add VTM thermal support. In the Voltage Thermal
+>>>>> Management Module(VTM), K3 AM654 supplies a voltage
+>>>>> reference and a temperature sensor feature that are gathered in the
+>>>>> band
+>>>>> gap voltage and temperature sensor (VBGAPTS) module. The band
+>>>>> gap provides current and voltage reference for its internal
+>>>>> circuits and other analog IP blocks. The analog-to-digital
+>>>>> converter (ADC) produces an output value that is proportional
+>>>>> to the silicon temperature.
+>>>>>
+>>>>> Add support for bandgap sensors. Currently reading temperatures
+>>>>> is supported.
+>>>>
+>>>> How do you want to proceed? Shall I take patches 1 & 2 ?
+>>>
+>>> +Tero
+>>>
+>>> Hi Tero,
+>>>
+>>> Can you pull 3 & 4? Or Daniel can take all 4?
+>>
+>> Let me pull the DT patches, that way we avoid any conflicts in the
+>> arm64/dts tree. There has been quite a bit of traffic on that front
+>> lately and we did mess up something with the current merge window already.
+>>
+>> I believe you are picking the driver side changes to 5.8?
+> 
+> Applied patches 1 & 2
 
-On Mon, Apr 27, 2020 at 10:24 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 27-04-20, 11:22, Geert Uytterhoeven wrote:
-> > Hi Prabhakar,
-> >
-> > This patch should be merged through Viresh's cpufreq tree (CCed).
-> >
-> > On Thu, Apr 23, 2020 at 11:41 PM Lad Prabhakar
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > Add the compatible strings for supporting the generic cpufreq driver on
-> > > the Renesas RZ/G1H (R8A7742) SoC.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> >
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Prabhakar,
->
-> Please resend the patch with all dependencies to me so I can apply it.
->
-This is the only patch which is needed for R8A7742 SoC which needs to
-be applied for drivers/cpufreq. Shall I still repost it or you are
-happy to pick this one up ?
+Queued patches 3 & 4 towards 5.8, thanks.
 
-Cheers,
---Prabhakar
-
-> --
-> viresh
+-Tero
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
