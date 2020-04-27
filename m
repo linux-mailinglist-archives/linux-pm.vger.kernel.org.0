@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAF01B98EB
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 09:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA341B991A
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 09:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726662AbgD0HoN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 03:44:13 -0400
-Received: from mail-oo1-f66.google.com ([209.85.161.66]:41589 "EHLO
-        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726349AbgD0HoN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 03:44:13 -0400
-Received: by mail-oo1-f66.google.com with SMTP id t3so3653302oou.8;
-        Mon, 27 Apr 2020 00:44:12 -0700 (PDT)
+        id S1726339AbgD0H4m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 03:56:42 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:46977 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725785AbgD0H4m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 03:56:42 -0400
+Received: by mail-ot1-f68.google.com with SMTP id z25so24618299otq.13;
+        Mon, 27 Apr 2020 00:56:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aUJDPtd94Plupi9zkES8lfiieamV2XcJxXuQDIx8qu4=;
-        b=LaA8xE9HQN6CCOu8WU7r9z+uwaF5b992FKIuKd4AKAdE2sDR7Zq+5msm/Y3RF9MeYt
-         KIojFPh5aQRm39piXX6ApEwh9LO8M0peVAqQJFJL/xDqpVp5EGPy8312SX+lEW/7YaJv
-         O5FpxVJKU97kMSAQdRO6o16B09KHrzNl9ukl0d8CUNW3XG3CDfgKe5S06p4u2HM38m8x
-         yZvtc2zrdX55iwxqTzhJzZ4u2d7al2ULzFgIU4HIdCM6h00R9RRIide0XHYR/MStDJoC
-         zJDOSv6ovM0nZ9e56ZC3vhEcMWAQ3icWUNgAQL2itIY6mUw2HLo9lM6XIfS1m5irch7q
-         L3JA==
-X-Gm-Message-State: AGi0PuZrKbHc83BqU3YxiJrHC+Sk2+Kw+tiamDZv4lLUJl1egUqfWN5M
-        gBq9n9OdT2D9BDdttWxXXfszVOj6S3dkrTZNE8ZQE+8T
-X-Google-Smtp-Source: APiQypIl/TpnOn5p7OBbPvXk/Rw8DS6/P2ZXewhbJXbTzpHODYNJFR3YLZ3Ic8lUBEcmpgBPbPkwhix00waahtWul7Q=
-X-Received: by 2002:a4a:d44a:: with SMTP id p10mr11597099oos.11.1587973452397;
- Mon, 27 Apr 2020 00:44:12 -0700 (PDT)
+        bh=7UMvg3SgF3Z/vg+y7g9jGGsKrtnmuAla9KXreMTQAhI=;
+        b=t9NLlnFJ1OEK7sU6UwFePEt9q6jcE1qLs3bxhgGn0yWYEHifDLwDbpl5mEwXDi2C2C
+         KwedROgYEM4g+/nVYSbvZNcWapvVdII3r/GycvE3sZXZrg5CaDNG9NcuNk9rG979l5HV
+         ocGmzC+VRkLGhBcdL8OristTZe58zka2acvYsR1x74I1wMRhJHx+YPL+oYGghBJgBHT1
+         HlRUbakgFYOSoWDxtYcs9RlYGtfr5+xZ+7Sa/63iufYN6/gaAZIBWTMc6b2eAXDQeeom
+         8y+dWWPV3wFg0ExFq/JwfBFkw/t5nvjisec+k6R/ReG1Y+hpjkFY8SvNNjkabbnLsEeK
+         a6tg==
+X-Gm-Message-State: AGi0Pub7jHX0j95j0gF5mZjokylu2GNWv8NvDKctLdG9SWCVsCVE0LIF
+        qEOCe0RAa1WIoiYYBQJta0T/IeC4o/F+Yt5QvJ4=
+X-Google-Smtp-Source: APiQypJNiorFwGFtTWNfHeU91mJyq8jOtGMvHi4yXmBXBG6sADUJLDzy6CgqP6gm3Pr5teIV3//DtSwqQxPpDR3DXq8=
+X-Received: by 2002:a9d:7990:: with SMTP id h16mr11386571otm.145.1587974201140;
+ Mon, 27 Apr 2020 00:56:41 -0700 (PDT)
 MIME-Version: 1.0
 References: <1587678050-23468-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1587678050-23468-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1587678050-23468-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1587678050-23468-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1587678050-23468-4-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Apr 2020 09:44:00 +0200
-Message-ID: <CAMuHMdVkFBjgwL9M4GutgOaf0Avo1Vq1ZUUv9fWsia=Tb6qnmA@mail.gmail.com>
-Subject: Re: [PATCH 02/10] dt-bindings: power: rcar-sysc: Add r8a7742 power
- domain index macros
+Date:   Mon, 27 Apr 2020 09:56:29 +0200
+Message-ID: <CAMuHMdXQdoi07dhYeb2qqCTEuNN4xzVxA9sBgi9F+1tjtaHe6w@mail.gmail.com>
+Subject: Re: [PATCH 03/10] soc: renesas: rcar-sysc: add R8A7742 support
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -63,8 +63,7 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Thu, Apr 23, 2020 at 11:41 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> Add power domain indices for RZ/G1H (R8A7742) SoC.
+> Add support for RZ/G1H (R8A7742) SoC power areas to the R-Car SYSC driver.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
