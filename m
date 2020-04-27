@@ -2,157 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E651C1BA052
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 11:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7851BA072
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 11:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726916AbgD0Jsp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 05:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
+        id S1726504AbgD0JxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 05:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726604AbgD0Jsp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 05:48:45 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84E9C0610D5
-        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 02:48:44 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id x4so18802142wmj.1
-        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 02:48:44 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726434AbgD0JxN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 05:53:13 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB5BC0610D5
+        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 02:53:13 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id j2so19770284wrs.9
+        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 02:53:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=rvoonvuH1XZk7YgYas1FUIUOgK1WKMyamprodjp5yVo=;
-        b=TU82lExp8hS5GpeuvSNNaMEUzvUQw1yKbwfQHuLeIjxyZouPYCgr+9DYKcwLBQGmTt
-         tZC43KW3Kwmfpw6xWTTFkOogPt0EzfjP2JB3HvNn/Sj+s/+r0UUV4UHLu5IUN50mcC85
-         pEC6zYrIBmfifzEv4CX6j4lZpevZhjNRcaJTjcWAtafx25ycyZqbcvFoTIIk38qZs06o
-         GMnYNIOu2nODJlpQ2Fiyw5cN03XNhy5KnWWdkWutvDLXsr6fKsaskZIo3QP88ZmgTrWl
-         iPvjTs1362KFsacIfkTMieQWrOZI6bmAh+9NUOFGRKbr+Py4BcP3xs8MfUDd3v0b6rdc
-         dPKw==
+        bh=csq4kjxMcX7yi6/sCOr5uG9HWQ0xBFcUG9f3NAhrCRc=;
+        b=ucbhQMAmJHeml9eJHjaC2XGS2Pkyn3DTTWPocyrdQKu/Cklh87Qm0/6t1ZRkWVHJn+
+         cezjmwaJftR0w4J7BMDcPZTvwGUUFWBmSqLliHNJP6IAc0Qtj4A8lW1QSyKBbgc4a4eE
+         ST8aScMAD7oQr7eFmWcfAl6/apkkQiAUW86WcqqqeoFrV/ogjH82BGkUAS6OnCGGE13C
+         eZ/OFNR5xRkijdiTjHf4i7wAw6sF+E5mZKBU/y0+eJQYuCLm0u/tkeHOG+J1d+MPaZxV
+         935Ictbg/PklCkaVMBTXct5tIuhoCcFRZF1HQ/MGQtDpwMMUHYc8steYUN+CaQkHdqrt
+         fkRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rvoonvuH1XZk7YgYas1FUIUOgK1WKMyamprodjp5yVo=;
-        b=D2s3jE3t6rUIjEewciGkgBKFjxpHESNGdwdO37cWve/KcMgP/dz2hyFZvKskQ90fge
-         9dycvB29D4oivS3rWGvApRcwgRjdQlSgMVqV8g2Yf/AAwUy0CECaPzDVPHdqMwX0T5gW
-         V7lM3SAA4/9KWzwHP7fvuVAo+dO3pqtkpKjEDvIJ7BTjXnR7630hk57XkoRg0HCFkA+x
-         78hvDXJWlfCuQIg82rUHQrL2xK+Fch7lhUCJIJ+5RB8LwLZtdEpMRW1B4DgHZBfbA1LQ
-         v4pmvNnr0RTNlY5R/fc8wDwvipbHLn+WKpc8iuwkWCHyPQZVf4o39vjFNeynl59sg/th
-         Py+g==
-X-Gm-Message-State: AGi0PuaT8SYM7oo2ndkZ83VhqVhPaK5UzlH8mEtCol2gteCnS4rv0j/t
-        tq5Smwby21uvLITk+Jr5QhI=
-X-Google-Smtp-Source: APiQypIb9LUz9ar07dDqWHAuWF9kt/zVlUIyQ80xI5J5JoygiY4k8On/KPXxXAA4j4DxCnos84I0Rw==
-X-Received: by 2002:a1c:6402:: with SMTP id y2mr25839220wmb.116.1587980923446;
-        Mon, 27 Apr 2020 02:48:43 -0700 (PDT)
+        bh=csq4kjxMcX7yi6/sCOr5uG9HWQ0xBFcUG9f3NAhrCRc=;
+        b=Zr7Mq4z6BVIcDlspUTqNAPJJ3LhJ9FD4KdQaYvH9bSYwKEQYfBss/lw6UM4pil3Yac
+         tl8cITP+xVbU0mFD6SPW4ZAkdLN9gPFwMUMyTOFJISfpTJ2pjMGamjZiDLEOjoeG4jev
+         s3TKOYckb1IDuO4yg923RToNPoeJWcEzeT1JzyPdY4ZYWNKxeEPBkdtn3OSgp5dPsgDc
+         DTe000Xtq3C5lXdNza5nhWsE1s7VwSrkmh36qWj5v1mR6M3qpFKt57Y48qACMYybgJlc
+         Z1BGSHjXZEXxhg6TsRSCQOsHnvTLJ88jLfOqbXUoS97QrsMsCacgCWWhZYFMR4Eptt9M
+         MWow==
+X-Gm-Message-State: AGi0PuYRoo50ztQasb3f6a2bL51Wkk/nmbEbv8x5v31IzmO90gaudpIn
+        gzFBcfTQpFfRJQlN/3cifx8=
+X-Google-Smtp-Source: APiQypJaDwWJ47cyjMZkFrceCp5gRSSsZiEsGBGpij94l0gsTK2RM46aS1y8bowsG6swJmxS0RWqhQ==
+X-Received: by 2002:adf:eec8:: with SMTP id a8mr25171938wrp.28.1587981192015;
+        Mon, 27 Apr 2020 02:53:12 -0700 (PDT)
 Received: from dumbo (zarathustra.tor.k0nsl.org. [2605:6400:30:fd17:5f56:ce5b:f14f:e252])
-        by smtp.gmail.com with ESMTPSA id j10sm15768171wmi.18.2020.04.27.02.48.42
+        by smtp.gmail.com with ESMTPSA id v1sm20859473wrv.19.2020.04.27.02.53.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2020 02:48:42 -0700 (PDT)
+        Mon, 27 Apr 2020 02:53:11 -0700 (PDT)
 Received: from cavok by dumbo with local (Exim 4.92)
         (envelope-from <cavok@dumbo>)
-        id 1jT0NU-00037E-Kd; Mon, 27 Apr 2020 11:48:40 +0200
-Date:   Mon, 27 Apr 2020 11:48:40 +0200
+        id 1jT0Rm-0007w3-I0; Mon, 27 Apr 2020 11:53:06 +0200
+Date:   Mon, 27 Apr 2020 11:53:06 +0200
 From:   Domenico Andreoli <domenico.andreoli@linux.com>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Pavel Machek <pavel@ucw.cz>, Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 2/2] uswsusp: build only when configured
-Message-ID: <20200427094840.GA29259@dumbo>
+Cc:     Pavel Machek <pavel@ucw.cz>, Linux PM <linux-pm@vger.kernel.org>,
+        954061@bugs.debian.org
+Subject: Re: [PATCH 0/2] Preparing to phase out uswsusp
+Message-ID: <20200427095306.GB29259@dumbo>
 References: <20200413190843.044112674@gmail.com>
- <20200413193718.956985775@gmail.com>
- <4068729.AMvo8hvaBI@kreacher>
+ <1636190.8qWULXYmPk@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4068729.AMvo8hvaBI@kreacher>
+In-Reply-To: <1636190.8qWULXYmPk@kreacher>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Apr 26, 2020 at 06:16:29PM +0200, Rafael J. Wysocki wrote:
-> On Monday, April 13, 2020 9:08:45 PM CEST Domenico Andreoli wrote:
-> > From: Domenico Andreoli <domenico.andreoli@linux.com>
+On Sun, Apr 26, 2020 at 05:46:37PM +0200, Rafael J. Wysocki wrote:
+> On Monday, April 13, 2020 9:08:43 PM CEST Domenico Andreoli wrote:
+> > Dear maintainers,
 > > 
-> > uswsusp is no longer the preferred way to suspend/hibernate and the
-> > userspace tools have not received any update in years.
-> > 
-> > Make it possible to enable the uswsusp support only if needed, prepare
-> > for future phase out.
-> > 
-> > Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
-> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > Cc: Pavel Machek <pavel@ucw.cz>
-> > Cc: Linux PM <linux-pm@vger.kernel.org>
-> > 
-> > ---
-> >  kernel/power/Kconfig  |    5 +++++
-> >  kernel/power/Makefile |    3 ++-
-> >  kernel/power/power.h  |    5 +++++
-> >  3 files changed, 12 insertions(+), 1 deletion(-)
-> > 
-> > Index: b/kernel/power/Kconfig
-> > ===================================================================
-> > --- a/kernel/power/Kconfig
-> > +++ b/kernel/power/Kconfig
-> > @@ -80,6 +80,11 @@ config HIBERNATION
-> >  
-> >  	  For more information take a look at <file:Documentation/power/swsusp.rst>.
-> >  
-> > +config HIBERNATION_USER
-> > +	bool "Userspace software suspend interface (DEPRECATED)"
-> > +	depends on HIBERNATION
-> > +	default n
+> >   it is my understanding that the usermode software suspend is not any
+> > more the first choice for suspend/hibernate needs (uswsusp tool did
+> > not receive any update in years).
 > 
-> This needs to be "default y" for the time being.
+> While the last part is true, the user space utilities are still usable.
 > 
-> Also, I would call the option HIBERNATION_SNAPSHOT_DEV, because it effectively
-> controls whether or not the snapshot device is available.
-> 
-> > +
-> >  config PM_STD_PARTITION
-> >  	string "Default resume partition"
-> >  	depends on HIBERNATION
-> > Index: b/kernel/power/Makefile
-> > ===================================================================
-> > --- a/kernel/power/Makefile
-> > +++ b/kernel/power/Makefile
-> > @@ -10,7 +10,8 @@ obj-$(CONFIG_VT_CONSOLE_SLEEP)	+= consol
-> >  obj-$(CONFIG_FREEZER)		+= process.o
-> >  obj-$(CONFIG_SUSPEND)		+= suspend.o
-> >  obj-$(CONFIG_PM_TEST_SUSPEND)	+= suspend_test.o
-> > -obj-$(CONFIG_HIBERNATION)	+= hibernate.o snapshot.o swap.o user.o
-> > +obj-$(CONFIG_HIBERNATION)	+= hibernate.o snapshot.o swap.o
-> > +obj-$(CONFIG_HIBERNATION_USER)	+= user.o
-> >  obj-$(CONFIG_PM_AUTOSLEEP)	+= autosleep.o
-> >  obj-$(CONFIG_PM_WAKELOCKS)	+= wakelock.o
-> >  
-> > Index: b/kernel/power/power.h
-> > ===================================================================
-> > --- a/kernel/power/power.h
-> > +++ b/kernel/power/power.h
-> > @@ -158,8 +158,13 @@ extern sector_t alloc_swapdev_block(int
-> >  extern void free_all_swap_pages(int swap);
-> >  extern int swsusp_swap_in_use(void);
-> >  
-> > +#ifdef CONFIG_HIBERNATION_USER
-> >  bool swsusp_try_enter(void);
-> >  void swsusp_leave(void);
-> > +#else
-> > +static inline bool swsusp_try_enter(void) { return 1; }
-> > +static inline void swsusp_leave(void) {}
-> > +#endif
-> 
-> It is possible in theory that two processes write "disk" to /sys/power/state
-> concurrently.
-> 
-> Is there enough mutual exclusion in place to handle this gracefully after the
-> above change?
 
-No, indeed.
+Indeed I've been using them until now and work perfectly.
 
-It looks like hibernate.c needs the mutual exclusion and user.c could
-just use it. Should I move snapshot_device_available to hibernate.c
-and rename it hibernate_available?
+> Moreover, the kernel-based hibernation is still missing one important
+> piece with respect to the user space variant, which is image encryption.
+> 
+
+Interesting, is it advertised anywhere?
+
+> That gap needs to be removed before the user space variant can be
+> regarded as deprecated.
+> 
+> > This small series aims to better separate the kernel side in view of
+> > a future phase out.
+> > 
+> > Marking the new option as deprecated and disabled by default is quite
+> > extreme but I've not any specific agenda for pushing it that far,
+> > it's just my interpretation and could be totally wrong.
+> 
+> It is not totally wrong, but a bit premature at this point.
+
+Thanks for clarifying.
+
+I CCed the Debian bug which requested the removal of uswsusp from
+the archive.
+
+> 
+> Thanks!
 
 -- 
 rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
