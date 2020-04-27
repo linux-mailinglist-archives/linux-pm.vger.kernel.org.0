@@ -2,158 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CA21B9788
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 08:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8BB1B9831
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 09:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726407AbgD0Gky (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 02:40:54 -0400
-Received: from mail-eopbgr40044.outbound.protection.outlook.com ([40.107.4.44]:17287
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726246AbgD0Gkx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 27 Apr 2020 02:40:53 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hTl43Xia3GkLKWUKjUGTy35379PI8YWD0J9YYJPsvoRR1lGXFGN9imA4yK7ZhBdXd0NG0dTuQGoD6bW8FIPAvpXXkF4erz8g722pUlZJ62okj3PGlwy9PT1Q4u7vOPkc6Q5cc2KAvMnRG8vg7W7AI0kXiDk8+/9lhurTiIOi/zXrWa+sg+xSy1l8lvy92zcbQ90/SlM+UQ92cHmyfpMIc6ymmVvl8Bmq/8o6RNjkvUfrPS9lHgsu5Qp10H3hziLeZNrICIwcJN28OmkGyCAGVWsUj4TDl8NA6LH1dcqI31RjkByObfUGwV7u9t7/id7kUWhgaXrj94BIC6axombdIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WOLqgno/KMv+TgrH9znHKGOOAd2FOk9jAuhZPrMGEfw=;
- b=a0PlAyY9ddh0Twg37ArcgDGbq2rGIlezcynKv/J1sqNW3k9gy/scU/SUbpinMujZRdMCLArxCtPzu5A6TQ7vh25boWTUuXDcGrYDURXPo908aL7ezD+yGqPwGJ7/cfbpNfjRuIWcRh2BPw7zpjFdACvnmU212U28AYefVgHN/Usr7uTFv0dMUTQWBa+fdKelMCASIZ7hAMvzbL/LuyXgvTlhM7Dv1FXWDsPtWK4G5iQpsbiqFdUkHPSUj1G1mwK2F3aMHEl/P9Nbm6mwGW1KYo9H59jXgDZSH0ZY1g/c8wn2Li9Qcbqr7SP8MvKma3IE3+4o/dq4lU6MzR5jA2iC/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WOLqgno/KMv+TgrH9znHKGOOAd2FOk9jAuhZPrMGEfw=;
- b=avU2u4B4Glj/NXI00vhL22Lrs7RDyqF9YdgCeytYVh/fBnj3jD7gIyJoIlIqsIjxVqWjm0r8GTfUT49YumWrs3vbpaqUvYv+/7pq0SQv53MFJVI0MpXYF7iOKgRMz7ZWLyfMrchgakq9wTXMJzUElADf35iOmunQbZfLJ81ZPaY=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (2603:10a6:8:10::18)
- by DB3PR0402MB3803.eurprd04.prod.outlook.com (2603:10a6:8:e::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.22; Mon, 27 Apr
- 2020 06:40:49 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3143:c46:62e4:8a8b%7]) with mapi id 15.20.2937.023; Mon, 27 Apr 2020
- 06:40:49 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        "linux@rempel-privat.de" <linux@rempel-privat.de>,
-        Peng Fan <peng.fan@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH V5 1/2] dt-bindings: firmware: imx: Move system control
- into dt-binding headfile
-Thread-Topic: [PATCH V5 1/2] dt-bindings: firmware: imx: Move system control
- into dt-binding headfile
-Thread-Index: AQHWG6ON2FILnnPVpkiXZVEUYRccAqiMfhCAgAAH9uA=
-Date:   Mon, 27 Apr 2020 06:40:49 +0000
-Message-ID: <DB3PR0402MB3916E21104F4D0DAF84A4B33F5AF0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <1587888704-7158-1-git-send-email-Anson.Huang@nxp.com>
- <20200427061121.tsybnbqrzjpy7f3a@pengutronix.de>
-In-Reply-To: <20200427061121.tsybnbqrzjpy7f3a@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [92.121.68.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 24665c24-286a-4b11-0c4a-08d7ea75ec7b
-x-ms-traffictypediagnostic: DB3PR0402MB3803:|DB3PR0402MB3803:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB3803724CD336369A7518EAC1F5AF0@DB3PR0402MB3803.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2201;
-x-forefront-prvs: 0386B406AA
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(376002)(346002)(366004)(396003)(136003)(39860400002)(7416002)(71200400001)(4326008)(9686003)(55016002)(44832011)(5660300002)(54906003)(8676002)(81156014)(86362001)(66556008)(66446008)(64756008)(66476007)(6916009)(52536014)(186003)(66946007)(76116006)(478600001)(6506007)(53546011)(26005)(7696005)(8936002)(316002)(2906002)(33656002);DIR:OUT;SFP:1101;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jN43100xHcqPtpO3zPbJcWGcCDBMFegbGY82ACd/Gcv9bEh++29HE3KRs3BpOenpFtscF9ZQqptbG2fgas91/aaAAhsP5G3sfPQewRswKfwkSOjF0GEMwAdQ97U6LchAMG61FRtxey2abVeH7rB2oKl0vAfYEkMNNrZWi7Jtk4g+j0isMdxDcqB8t34YQtaCsJkTw7H+zQ2xP2/6jJJAn3XjhTbUC0R1gejOFy8SN3j3gTKakjgFZxgpmfSSrBXX2rsq5xAp7PrQF5fE1Xga2mLDb8VZLtLze2DkL6rb89oIL6TwkgCsoK8ueDPMWMi1cCCJjxaps6SWfLp6i7OUAow8CoLASguDM3LL7v3tvLSE2C/18TjV8VseKKC3UPsJsg2pu4ZZemcfwDKlj7TitVXI6Z9XAfbYx012I+Y3Y9BFYLDtrd/BU5MvrCjnkFBY
-x-ms-exchange-antispam-messagedata: WdPGZ4BJ8CYSjilq12IyP7PFKIdzEUszxbADLMB2u8JNEJOW1KhwhcosTlpnCoO1sbESmHmtQPUnF/4hAx3kkJTnu0X+aZlxcj2SfINkTy5SX80bLvG+TCWz26LRVrrgBsx9BBx9Zvnigv09idk5tKrZ5MGv0Qe4Zq8Yxh8wwrG0+yx7xhtOGu4DEhw8duqbOkjntcQ6ifvLmkKzcF8ORcP9Dfh+e6yR28332BJsuPXjt35/sIBYRS/nrCAp9qyCVrqfnGNv5ubyN4uwsEO29p65JUdgGljuJ/jhDj1CCy7k3FyGdVTSOX5nlIu6HiFHhz8vrXq3T+O2hoe3UICzi/qcb8IxaeIMjWsLNjdI0bf15/MLEc/JFQz+QbgI6Oetouw4RoxSwwHqmnfLTYTm6tjbIzMP+GFDURMRhbsOu9Fq8MUuvFVBkPm/C2PSP4WaeI9xUXHkqx7trewsNfXfwGqrZGaLI9FFGd7uLqdPYfuMfD7ckVMt/5sr+famKI9MrYqnQSzB1eEVwlZ6wgpNAEz2jp71TFaiQ384VqH85fkwSz4bcx+8YKL8YEfXtdYgGNN3qmPTNkB7KdIGzFGavZVypfcCwUal2JhWMFlULEONpAPAYPtuqFW/LGV4FIWp0USYv/vUeiSIWrjGkGKmK9HeTvq7RBZl0X8VAjWSH6xWsvytE/Z1MmkgvXn+URUfHMXgcmoUfr4GpLV5dqM4R5pjxco1HtiLsyie3pt5y15J5CIaQindiIqqwM9Yem8PQG8Xx42KBPuPSdl7hX+vY4fN+SdQXxX5ZnK+s7qmOds=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726460AbgD0HSN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 03:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726349AbgD0HSM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 03:18:12 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92455C061A0F;
+        Mon, 27 Apr 2020 00:18:12 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id u16so19184678wmc.5;
+        Mon, 27 Apr 2020 00:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=GSFLOVrCBMaE39ZARVJRO9s5UghXhwgRJUz+OPn7Ktg=;
+        b=GtgYzpjjWTvcTiZ6qRjm+FPqX88Fj8nnNToX87F0QUUwa0pKXDv8hPNWRnboMNwfPT
+         1sblJ3gFK1cjg4EH1LZ71qlvs4ZEyrYDCfSHBAnVWq9mG8uT9dPOupsy9uPMcNR9Xp+M
+         eys0hV+fBwJHmSRlvmuEUAObzw4mewhHJowoHrmRqLMMQBSyljdOMdzHeAsnIxcb73n/
+         55bEDqKZD+UFzt7Zhgq3Om55Hyjp2NI6i7jYtfqVGu4w/rGBMp+3xe9xap6Q86Jiit03
+         +EIQk4x9QpOdfUyN9f8nlMpYWJjVPVAhPOwlm48ZSJubBNbZ4Gvsm+82Wsn23K1nQSfp
+         aFuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GSFLOVrCBMaE39ZARVJRO9s5UghXhwgRJUz+OPn7Ktg=;
+        b=kOzz6WkOLnXvsLUuFb/N3GC7EEy5U6RjALPcBzQe+1JHr5/Z+ab3n0okX4DBp4I1A0
+         X41a58YjMBzSXzmtonkw8qO5awKIZzuvGSZsRxBPRzHKZWgRV6TDeYGwXFNolfTDlejp
+         2+Vb/jJJ5i3ETHRamieXCsDykKz6aqlOit9cZ3WFaA+MyekWAJhbJE7h4u7SUJRAZMnX
+         U3XftDYzmDeGr9NkpuCdvYEIfocMnpgnCkOXk5cHBhSOF4N4y+VqxNce9AYBZpe9nC3z
+         99EkynfFvtFeyfSfM1mpqqPVqEVUAh2cMS80vlgQHFSj56Oa6aj9efh+PWvtXgzSMdwb
+         S+iA==
+X-Gm-Message-State: AGi0PubNjiFeIhoSgVcXzpLLGII2eQDHt6rSGZh2Ov6Wzd956mXetsxZ
+        ZPVW6DKP3pDF8Zv6tvkPZB4=
+X-Google-Smtp-Source: APiQypKM/LXleIlMD+jgyvadAcE5+hCHSkKJPgy7DKl3nf8so7RrsI3ytrH2ncjwWK8OegXzmAod/Q==
+X-Received: by 2002:a1c:2383:: with SMTP id j125mr24250659wmj.6.1587971891138;
+        Mon, 27 Apr 2020 00:18:11 -0700 (PDT)
+Received: from localhost (p2E5BEDBA.dip0.t-ipconnect.de. [46.91.237.186])
+        by smtp.gmail.com with ESMTPSA id s12sm13721240wmc.7.2020.04.27.00.18.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Apr 2020 00:18:09 -0700 (PDT)
+Date:   Mon, 27 Apr 2020 09:18:00 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Mikko Perttunen <cyndis@kapsi.fi>, Sumit Gupta <sumitg@nvidia.com>,
+        catalin.marinas@arm.com, will@kernel.org, jonathanh@nvidia.com,
+        talho@nvidia.com, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, bbasu@nvidia.com,
+        mperttunen@nvidia.com, devicetree@vger.kernel.org
+Subject: Re: [TEGRA194_CPUFREQ Patch 1/3] firmware: tegra: adding function to
+ get BPMP data
+Message-ID: <20200427071800.GA3451400@ulmo>
+References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
+ <20191203174229.GA1721849@ulmo>
+ <9404232d-84ce-a117-89dd-f2d8de80993e@kapsi.fi>
+ <20191204091703.d32to5omdm3eynon@vireshk-i7>
+ <20191204093339.GA2784830@ulmo>
+ <20191204095138.rrul5vxnkprfwmku@vireshk-i7>
+ <20200407100520.GA1720957@ulmo>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24665c24-286a-4b11-0c4a-08d7ea75ec7b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Apr 2020 06:40:49.4595
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zqUB4v5WHV0AWolZ49A1t0Z9l6s8Sfyp+HGwDfrLkcHuOFB4DJxa17JzdnBPjM4Y1+UzXG++wwOrBINENBr41A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3803
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="r5Pyd7+fXNt84Ff3"
+Content-Disposition: inline
+In-Reply-To: <20200407100520.GA1720957@ulmo>
+User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Marco
 
+--r5Pyd7+fXNt84Ff3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Subject: Re: [PATCH V5 1/2] dt-bindings: firmware: imx: Move system contr=
-ol
-> into dt-binding headfile
+On Tue, Apr 07, 2020 at 12:05:20PM +0200, Thierry Reding wrote:
+> On Wed, Dec 04, 2019 at 03:21:38PM +0530, Viresh Kumar wrote:
+> > On 04-12-19, 10:33, Thierry Reding wrote:
+> > > Yeah, the code that registers this device is in drivers/base/cpu.c in
+> > > register_cpu(). It even retrieves the device tree node for the CPU fr=
+om
+> > > device tree and stores it in cpu->dev.of_node, so we should be able to
+> > > just pass &cpu->dev to tegra_bpmp_get() in order to retrieve a refere=
+nce
+> > > to the BPMP.
+> > >=20
+> > > That said, I'm wondering if perhaps we could just add a compatible
+> > > string to the /cpus node for cases like this where we don't have an
+> > > actual device representing the CPU complex. There are a number of CPU
+> > > frequency drivers that register dummy devices just so that they have
+> > > something to bind a driver to.
+> > >=20
+> > > If we allow the /cpus node to represent the CPU complex (if no other
+> > > "device" does that yet), we can add a compatible string and have the
+> > > cpufreq driver match on that.
+> > >=20
+> > > Of course this would be slightly difficult to retrofit into existing
+> > > drivers because they'd need to remain backwards compatible with exist=
+ing
+> > > device trees. But it would allow future drivers to do this a little m=
+ore
+> > > elegantly. For some SoCs this may not matter, but especially once you
+> > > start depending on additional resources this would come in handy.
+> > >=20
+> > > Adding Rob and the device tree mailing list for feedback on this idea.
+> >=20
+> > Took some time to find this thread, but something around this was
+> > suggested by Rafael earlier.
+> >=20
+> > https://lore.kernel.org/lkml/8139001.Q4eV8YG1Il@vostro.rjw.lan/
 >=20
-> Hi Anson,
+> I gave this a try and came up with the following:
 >=20
-> sorry for jumping in..
+> --- >8 ---
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/d=
+ts/nvidia/tegra194.dtsi
+> index f4ede86e32b4..e4462f95f0b3 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+> @@ -1764,6 +1764,9 @@ bpmp_thermal: thermal {
+>  	};
+> =20
+>  	cpus {
+> +		compatible =3D "nvidia,tegra194-ccplex";
+> +		nvidia,bpmp =3D <&bpmp>;
+> +
+>  		#address-cells =3D <1>;
+>  		#size-cells =3D <0>;
+> =20
+> --- >8 ---
 >=20
-> On 20-04-26 16:11, Anson Huang wrote:
-> > From: Dong Aisheng <aisheng.dong@nxp.com>
-> >
-> > i.MX8 SoCs DTS file needs system control macro definitions, so move
-> > them into dt-binding headfile, then include/linux/firmware/imx/types.h
-> > can be removed and those drivers using it should be changed accordingly=
-.
-> >
-> > Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
-> > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> > ---
-> > Changes since V4:
-> > 	- Use another patch for new added system controls and PM clock types.
-> > ---
-> >  drivers/firmware/imx/imx-scu.c          |  1 -
-> >  drivers/thermal/imx_sc_thermal.c        |  2 +-
-> >  include/dt-bindings/firmware/imx/rsrc.h | 51
-> ++++++++++++++++++++++++++
-> >  include/linux/firmware/imx/sci.h        |  1 -
-> >  include/linux/firmware/imx/types.h      | 65 -------------------------=
---------
-> >  5 files changed, 52 insertions(+), 68 deletions(-)  delete mode
-> > 100644 include/linux/firmware/imx/types.h
-> >
-> > diff --git a/drivers/firmware/imx/imx-scu.c
-> > b/drivers/firmware/imx/imx-scu.c index f71eaa5..f3340fa 100644
-> > --- a/drivers/firmware/imx/imx-scu.c
-> > +++ b/drivers/firmware/imx/imx-scu.c
-> > @@ -8,7 +8,6 @@
-> >   */
-> >
-> >  #include <linux/err.h>
-> > -#include <linux/firmware/imx/types.h>  #include
-> > <linux/firmware/imx/ipc.h>  #include <linux/firmware/imx/sci.h>
-> > #include <linux/interrupt.h>
+> Now I can do something rougly like this, although I have a more complete
+> patch locally that also gets rid of all the global variables because we
+> now actually have a struct platform_device that we can anchor everything
+> at:
 >=20
-> You don't need this anymore here or was it a needless include?
+> --- >8 ---
+> static const struct of_device_id tegra194_cpufreq_of_match[] =3D {
+> 	{ .compatible =3D "nvidia,tegra194-ccplex", },
+> 	{ /* sentinel */ }
+> };
+> MODULE_DEVICE_TABLE(of, tegra194_cpufreq_of_match);
+>=20
+> static struct platform_driver tegra194_ccplex_driver =3D {
+> 	.driver =3D {
+> 		.name =3D "tegra194-cpufreq",
+> 		.of_match_table =3D tegra194_cpufreq_of_match,
+> 	},
+> 	.probe =3D tegra194_cpufreq_probe,
+> 	.remove =3D tegra194_cpufreq_remove,
+> };
+> module_platform_driver(tegra194_ccplex_driver);
+> --- >8 ---
+>=20
+> I don't think that's exactly what Rafael (Cc'ed) had in mind, since the
+> above thread seems to have mostly talked about binding a driver to each
+> individual CPU.
+>=20
+> But this seems a lot better than having to instantiate a device from
+> scratch just so that a driver can bind to it and it allows additional
+> properties to be associated with the CCPLEX device.
+>=20
+> Rob, any thoughts on this from a device tree point of view? The /cpus
+> bindings don't mention the compatible property, but there doesn't seem
+> to be anything in the bindings that would prohibit its use.
+>=20
+> If we can agree on that, I can forward my local changes to Sumit for
+> inclusion or reference.
 
-I don't need this anymore, and since it is going to be removed, so this inc=
-lude also needs to be removed.
+Rob, do you see any reason why we shouldn't be able to use a compatible
+string in the /cpus node for devices such as Tegra194 where there is no
+dedicated hardware block for the CCPLEX?
 
-Thanks,
-Anson
+Thierry
+
+--r5Pyd7+fXNt84Ff3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6mhyUACgkQ3SOs138+
+s6E+QhAApPHiPfSUuUkQgv2VAlF2+HUgVeHwtL5RjQhzcO2s/kaj5v9Cu2xSRvLh
+GMg4cEYg8NBv4wDXxtm/OVf4+S5BKs1pX0vyM1xMhiUWgwAPTfkIxoQFmxUCoJUj
+LAvCrk1kgGI3dOUdLNoAJh78o6J/OsNbCMlhi2q80RWYnJ9ckrqt6SsTmeHoegKb
+9ftQoIfO4amqE56unSmbGL3/ebn3UbqM7JSuPe3LZNj5vxGz9Rz9l8DD6Oz+kVXq
+E50KsubpwNUovQfJaBBN+63uLbTKbPtYSPoABTUG2N2KoY/q5vCgoeykCJu00LD1
+yCZAJC+nG+paY+N29gUkfKloj249xu86thaRf7i0lVNWSgLkcB9Jc4T0aFdriBE/
+wZHOJn39TpeHlok8IKuH5WHbwN4psYT9mXKrfDf2ZyQEytl+llD16oedc6QdcWhd
+Qxrtfx6oa1hcKNPsngIukOAe8pzO438/AXpadny5aO9wMYpzZyjfsiCLpSKw+yBR
+LuR2nPripZLEeIiD1uQZTnPJkMoCnEUgrxgAXbYqsJKScso3bTJDJgGbl3tW87cF
+XR3ZZzMNsfQ9emD8/ps0P1x825v9m6kkL36eoS9A9ueXG/lMJQhQBuK/6l8HjHGd
+vnFCTI6FVTQVgMNDJrero/MX4rqFeBc1WBE2pC0iGx0LIntAQSU=
+=U6Hg
+-----END PGP SIGNATURE-----
+
+--r5Pyd7+fXNt84Ff3--
