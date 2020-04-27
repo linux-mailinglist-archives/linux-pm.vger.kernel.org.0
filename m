@@ -2,207 +2,282 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8BB1B9831
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 09:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D391B9889
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 09:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgD0HSN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 03:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
+        id S1726539AbgD0H0t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 03:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726349AbgD0HSM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 03:18:12 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92455C061A0F;
-        Mon, 27 Apr 2020 00:18:12 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id u16so19184678wmc.5;
-        Mon, 27 Apr 2020 00:18:12 -0700 (PDT)
+        with ESMTP id S1726243AbgD0H0s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 03:26:48 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06E2C061A10
+        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 00:26:48 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id j1so19247352wrt.1
+        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 00:26:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GSFLOVrCBMaE39ZARVJRO9s5UghXhwgRJUz+OPn7Ktg=;
-        b=GtgYzpjjWTvcTiZ6qRjm+FPqX88Fj8nnNToX87F0QUUwa0pKXDv8hPNWRnboMNwfPT
-         1sblJ3gFK1cjg4EH1LZ71qlvs4ZEyrYDCfSHBAnVWq9mG8uT9dPOupsy9uPMcNR9Xp+M
-         eys0hV+fBwJHmSRlvmuEUAObzw4mewhHJowoHrmRqLMMQBSyljdOMdzHeAsnIxcb73n/
-         55bEDqKZD+UFzt7Zhgq3Om55Hyjp2NI6i7jYtfqVGu4w/rGBMp+3xe9xap6Q86Jiit03
-         +EIQk4x9QpOdfUyN9f8nlMpYWJjVPVAhPOwlm48ZSJubBNbZ4Gvsm+82Wsn23K1nQSfp
-         aFuw==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=REsNWJFhGHkYdNp6uSDWtGMh4mD2RMBDMNXtan+gWIc=;
+        b=y6lolgbWbIjibS0k2DZwbMu9IhLLA/Q1+5YPGsQ0VMTlpMCgfMMpCBqC1Z9oQ9V5Xz
+         1sWBinJaUKGAihPUZPFY3rlf9BFT3AObzjJwss7B5O3Nzu7skbTVK8XPFb1Dyp9Isl4j
+         IphzvC/ITzqb4VWc7vxeKv1TXxbqJfSzWmsV7Kh06CyOsDZDP5MFFHSOclkE/5h2h5Dy
+         rrx9XWHk4Jg+FFvxpsLmYSXFSfFYyZ9zYKKd8hJkp/zfQLPkXl7tNjZDuT4L+WWbsOlA
+         TkDRy0vJ63E5HQ9r/zA9OqZNwaYzdw3uFm+t9lhxnlHZt2lS0OOtQgNmZvRcczaksk6U
+         S2IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GSFLOVrCBMaE39ZARVJRO9s5UghXhwgRJUz+OPn7Ktg=;
-        b=kOzz6WkOLnXvsLUuFb/N3GC7EEy5U6RjALPcBzQe+1JHr5/Z+ab3n0okX4DBp4I1A0
-         X41a58YjMBzSXzmtonkw8qO5awKIZzuvGSZsRxBPRzHKZWgRV6TDeYGwXFNolfTDlejp
-         2+Vb/jJJ5i3ETHRamieXCsDykKz6aqlOit9cZ3WFaA+MyekWAJhbJE7h4u7SUJRAZMnX
-         U3XftDYzmDeGr9NkpuCdvYEIfocMnpgnCkOXk5cHBhSOF4N4y+VqxNce9AYBZpe9nC3z
-         99EkynfFvtFeyfSfM1mpqqPVqEVUAh2cMS80vlgQHFSj56Oa6aj9efh+PWvtXgzSMdwb
-         S+iA==
-X-Gm-Message-State: AGi0PubNjiFeIhoSgVcXzpLLGII2eQDHt6rSGZh2Ov6Wzd956mXetsxZ
-        ZPVW6DKP3pDF8Zv6tvkPZB4=
-X-Google-Smtp-Source: APiQypKM/LXleIlMD+jgyvadAcE5+hCHSkKJPgy7DKl3nf8so7RrsI3ytrH2ncjwWK8OegXzmAod/Q==
-X-Received: by 2002:a1c:2383:: with SMTP id j125mr24250659wmj.6.1587971891138;
-        Mon, 27 Apr 2020 00:18:11 -0700 (PDT)
-Received: from localhost (p2E5BEDBA.dip0.t-ipconnect.de. [46.91.237.186])
-        by smtp.gmail.com with ESMTPSA id s12sm13721240wmc.7.2020.04.27.00.18.09
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=REsNWJFhGHkYdNp6uSDWtGMh4mD2RMBDMNXtan+gWIc=;
+        b=UbxB4J72Iur1K79kSl/knDp4lZKLi8alc/Jc9saqbn84U8Dlymx4z1IShsxKLBhvdL
+         1ZVWboyfeWlFEk8Xc4Ejca1bOpbnrCsXoxWSPPVALU7OHFOd/6EDmkMiw2xMTzPrd3U8
+         wWqg+vQQMdldstQSGVE7Vl04Mu+hM47S/eyAATstYBp7R43WbaOTlnD9rASqamNWFzt5
+         HMSOm2UkmAAJW5kUQiw8iLEOfIakuirIkT2p+MKswYcEu92ldIMWIw/QUYRdjyUnOZrx
+         vpULPhGIgzeG2D910KAjy7KSlONE2sH5zWhj2eDzrNesqjWJ+9Pq0BEjAwt/J72/SoHG
+         3utg==
+X-Gm-Message-State: AGi0PuaAv8B/oTo2ZzhWtJrNqTq2AJmSZEbo1g8+pewdQBy5iELqQlCN
+        P7G7KqDODt4Z66xrgOuTHQyp0w==
+X-Google-Smtp-Source: APiQypKoocBwU3Ift+kayLrttVgX080iHAs2xcy/58Ymq9mcLr92w1rV9fJaFpQx4LTHnYzOcp3oIA==
+X-Received: by 2002:a5d:574b:: with SMTP id q11mr20276374wrw.324.1587972407272;
+        Mon, 27 Apr 2020 00:26:47 -0700 (PDT)
+Received: from dell ([2.31.163.63])
+        by smtp.gmail.com with ESMTPSA id x13sm15123749wmc.5.2020.04.27.00.26.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2020 00:18:09 -0700 (PDT)
-Date:   Mon, 27 Apr 2020 09:18:00 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Mikko Perttunen <cyndis@kapsi.fi>, Sumit Gupta <sumitg@nvidia.com>,
-        catalin.marinas@arm.com, will@kernel.org, jonathanh@nvidia.com,
-        talho@nvidia.com, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, bbasu@nvidia.com,
-        mperttunen@nvidia.com, devicetree@vger.kernel.org
-Subject: Re: [TEGRA194_CPUFREQ Patch 1/3] firmware: tegra: adding function to
- get BPMP data
-Message-ID: <20200427071800.GA3451400@ulmo>
-References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
- <20191203174229.GA1721849@ulmo>
- <9404232d-84ce-a117-89dd-f2d8de80993e@kapsi.fi>
- <20191204091703.d32to5omdm3eynon@vireshk-i7>
- <20191204093339.GA2784830@ulmo>
- <20191204095138.rrul5vxnkprfwmku@vireshk-i7>
- <20200407100520.GA1720957@ulmo>
+        Mon, 27 Apr 2020 00:26:46 -0700 (PDT)
+Date:   Mon, 27 Apr 2020 08:26:44 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Saravanan Sekar <sravanhome@gmail.com>
+Cc:     andy.shevchenko@gmail.com, robh+dt@kernel.org, jic23@kernel.org,
+        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
+        sre@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v9 2/6] mfd: mp2629: Add support for mps battery charger
+Message-ID: <20200427072644.GE3559@dell>
+References: <20200415162030.16414-1-sravanhome@gmail.com>
+ <20200415162030.16414-3-sravanhome@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="r5Pyd7+fXNt84Ff3"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200407100520.GA1720957@ulmo>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200415162030.16414-3-sravanhome@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, 15 Apr 2020, Saravanan Sekar wrote:
 
---r5Pyd7+fXNt84Ff3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> mp2629 is a highly-integrated switching-mode battery charge management
+> device for single-cell Li-ion or Li-polymer battery.
+> 
+> Add MFD core enables chip access for ADC driver for battery readings,
+> and a power supply battery-charger driver
+> 
+> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+> ---
+>  drivers/mfd/Kconfig        |  9 ++++
+>  drivers/mfd/Makefile       |  2 +
+>  drivers/mfd/mp2629.c       | 86 ++++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/mp2629.h | 19 +++++++++
+>  4 files changed, 116 insertions(+)
+>  create mode 100644 drivers/mfd/mp2629.c
+>  create mode 100644 include/linux/mfd/mp2629.h
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 3c547ed575e6..85be799795aa 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -434,6 +434,15 @@ config MFD_MC13XXX_I2C
+>  	help
+>  	  Select this if your MC13xxx is connected via an I2C bus.
+>  
+> +config MFD_MP2629
+> +	tristate "Monolithic power system MP2629 ADC and Battery charger"
 
-On Tue, Apr 07, 2020 at 12:05:20PM +0200, Thierry Reding wrote:
-> On Wed, Dec 04, 2019 at 03:21:38PM +0530, Viresh Kumar wrote:
-> > On 04-12-19, 10:33, Thierry Reding wrote:
-> > > Yeah, the code that registers this device is in drivers/base/cpu.c in
-> > > register_cpu(). It even retrieves the device tree node for the CPU fr=
-om
-> > > device tree and stores it in cpu->dev.of_node, so we should be able to
-> > > just pass &cpu->dev to tegra_bpmp_get() in order to retrieve a refere=
-nce
-> > > to the BPMP.
-> > >=20
-> > > That said, I'm wondering if perhaps we could just add a compatible
-> > > string to the /cpus node for cases like this where we don't have an
-> > > actual device representing the CPU complex. There are a number of CPU
-> > > frequency drivers that register dummy devices just so that they have
-> > > something to bind a driver to.
-> > >=20
-> > > If we allow the /cpus node to represent the CPU complex (if no other
-> > > "device" does that yet), we can add a compatible string and have the
-> > > cpufreq driver match on that.
-> > >=20
-> > > Of course this would be slightly difficult to retrofit into existing
-> > > drivers because they'd need to remain backwards compatible with exist=
-ing
-> > > device trees. But it would allow future drivers to do this a little m=
-ore
-> > > elegantly. For some SoCs this may not matter, but especially once you
-> > > start depending on additional resources this would come in handy.
-> > >=20
-> > > Adding Rob and the device tree mailing list for feedback on this idea.
-> >=20
-> > Took some time to find this thread, but something around this was
-> > suggested by Rafael earlier.
-> >=20
-> > https://lore.kernel.org/lkml/8139001.Q4eV8YG1Il@vostro.rjw.lan/
->=20
-> I gave this a try and came up with the following:
->=20
-> --- >8 ---
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/d=
-ts/nvidia/tegra194.dtsi
-> index f4ede86e32b4..e4462f95f0b3 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-> +++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
-> @@ -1764,6 +1764,9 @@ bpmp_thermal: thermal {
->  	};
-> =20
->  	cpus {
-> +		compatible =3D "nvidia,tegra194-ccplex";
-> +		nvidia,bpmp =3D <&bpmp>;
+"Power Systems"
+
+> +	depends on I2C
+> +	select REGMAP_I2C
+> +	help
+> +	  Select this option to enable support for monolithic power system
+
+"Monolithic Power Systems"
+
+> +	  battery charger. This provides ADC, thermal, battery charger power
+
+"thermal and battery"
+
+> +	  management functions on the systems.
+
+What does "on the systems" mean?
+
+I would just drop that part.
+
+>  config MFD_MXS_LRADC
+>  	tristate "Freescale i.MX23/i.MX28 LRADC"
+>  	depends on ARCH_MXS || COMPILE_TEST
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index f935d10cbf0f..d6c210f96d02 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -170,6 +170,8 @@ obj-$(CONFIG_MFD_MAX8925)	+= max8925.o
+>  obj-$(CONFIG_MFD_MAX8997)	+= max8997.o max8997-irq.o
+>  obj-$(CONFIG_MFD_MAX8998)	+= max8998.o max8998-irq.o
+>  
+> +obj-$(CONFIG_MFD_MP2629)	+= mp2629.o
 > +
->  		#address-cells =3D <1>;
->  		#size-cells =3D <0>;
-> =20
-> --- >8 ---
->=20
-> Now I can do something rougly like this, although I have a more complete
-> patch locally that also gets rid of all the global variables because we
-> now actually have a struct platform_device that we can anchor everything
-> at:
->=20
-> --- >8 ---
-> static const struct of_device_id tegra194_cpufreq_of_match[] =3D {
-> 	{ .compatible =3D "nvidia,tegra194-ccplex", },
-> 	{ /* sentinel */ }
-> };
-> MODULE_DEVICE_TABLE(of, tegra194_cpufreq_of_match);
->=20
-> static struct platform_driver tegra194_ccplex_driver =3D {
-> 	.driver =3D {
-> 		.name =3D "tegra194-cpufreq",
-> 		.of_match_table =3D tegra194_cpufreq_of_match,
-> 	},
-> 	.probe =3D tegra194_cpufreq_probe,
-> 	.remove =3D tegra194_cpufreq_remove,
-> };
-> module_platform_driver(tegra194_ccplex_driver);
-> --- >8 ---
->=20
-> I don't think that's exactly what Rafael (Cc'ed) had in mind, since the
-> above thread seems to have mostly talked about binding a driver to each
-> individual CPU.
->=20
-> But this seems a lot better than having to instantiate a device from
-> scratch just so that a driver can bind to it and it allows additional
-> properties to be associated with the CCPLEX device.
->=20
-> Rob, any thoughts on this from a device tree point of view? The /cpus
-> bindings don't mention the compatible property, but there doesn't seem
-> to be anything in the bindings that would prohibit its use.
->=20
-> If we can agree on that, I can forward my local changes to Sumit for
-> inclusion or reference.
+>  pcf50633-objs			:= pcf50633-core.o pcf50633-irq.o
+>  obj-$(CONFIG_MFD_PCF50633)	+= pcf50633.o
+>  obj-$(CONFIG_PCF50633_ADC)	+= pcf50633-adc.o
+> diff --git a/drivers/mfd/mp2629.c b/drivers/mfd/mp2629.c
+> new file mode 100644
+> index 000000000000..46242b1cdf24
+> --- /dev/null
+> +++ b/drivers/mfd/mp2629.c
+> @@ -0,0 +1,86 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * MP2629 parent driver for ADC and battery charger
+> + *
+> + * Copyright 2020 Monolithic Power Systems, Inc
+> + *
+> + * Author: Saravanan Sekar <sravanhome@gmail.com>
+> + */
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/mp2629.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
+> +
+> +enum {
+> +	MP2629_MFD_ADC,
+> +	MP2629_MFD_CHARGER,
+> +	MP2629_MFD_MAX
+> +};
 
-Rob, do you see any reason why we shouldn't be able to use a compatible
-string in the /cpus node for devices such as Tegra194 where there is no
-dedicated hardware block for the CCPLEX?
+Why do you need this?  I think it can be dropped.
 
-Thierry
+> +static const struct mfd_cell mp2629mfd[] = {
 
---r5Pyd7+fXNt84Ff3
-Content-Type: application/pgp-signature; name="signature.asc"
+Drop the "mfd" part of "mp2629mfd".
 
------BEGIN PGP SIGNATURE-----
+You can call it "mp2629_cell" if you like.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6mhyUACgkQ3SOs138+
-s6E+QhAApPHiPfSUuUkQgv2VAlF2+HUgVeHwtL5RjQhzcO2s/kaj5v9Cu2xSRvLh
-GMg4cEYg8NBv4wDXxtm/OVf4+S5BKs1pX0vyM1xMhiUWgwAPTfkIxoQFmxUCoJUj
-LAvCrk1kgGI3dOUdLNoAJh78o6J/OsNbCMlhi2q80RWYnJ9ckrqt6SsTmeHoegKb
-9ftQoIfO4amqE56unSmbGL3/ebn3UbqM7JSuPe3LZNj5vxGz9Rz9l8DD6Oz+kVXq
-E50KsubpwNUovQfJaBBN+63uLbTKbPtYSPoABTUG2N2KoY/q5vCgoeykCJu00LD1
-yCZAJC+nG+paY+N29gUkfKloj249xu86thaRf7i0lVNWSgLkcB9Jc4T0aFdriBE/
-wZHOJn39TpeHlok8IKuH5WHbwN4psYT9mXKrfDf2ZyQEytl+llD16oedc6QdcWhd
-Qxrtfx6oa1hcKNPsngIukOAe8pzO438/AXpadny5aO9wMYpzZyjfsiCLpSKw+yBR
-LuR2nPripZLEeIiD1uQZTnPJkMoCnEUgrxgAXbYqsJKScso3bTJDJgGbl3tW87cF
-XR3ZZzMNsfQ9emD8/ps0P1x825v9m6kkL36eoS9A9ueXG/lMJQhQBuK/6l8HjHGd
-vnFCTI6FVTQVgMNDJrero/MX4rqFeBc1WBE2pC0iGx0LIntAQSU=
-=U6Hg
------END PGP SIGNATURE-----
+> +	[MP2629_MFD_ADC] = {
+> +		.name = "mp2629_adc",
+> +		.of_compatible = "mps,mp2629_adc",
+> +	},
+> +	[MP2629_MFD_CHARGER] = {
+> +		.name = "mp2629_charger",
+> +		.of_compatible = "mps,mp2629_charger",
+> +	}
+> +};
+> +
+> +static const struct regmap_config mp2629_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = 0x17,
 
---r5Pyd7+fXNt84Ff3--
+Best to define the registers in an enum and call the last one
+MP2629_MAX_REG or similar.
+
+> +};
+> +
+> +static int mp2629_probe(struct i2c_client *client)
+> +{
+> +	struct mp2629_info *ddata;
+
+Either change "info" to "ddata", or drop it completely.
+
+> +	int ret;
+> +
+> +	ddata = devm_kzalloc(&client->dev, sizeof(*ddata), GFP_KERNEL);
+> +	if (!ddata)
+> +		return -ENOMEM;
+> +
+> +	ddata->dev = &client->dev;
+> +	i2c_set_clientdata(client, ddata);
+> +
+> +	ddata->regmap = devm_regmap_init_i2c(client, &mp2629_regmap_config);
+> +	if (IS_ERR(ddata->regmap)) {
+> +		dev_err(ddata->dev, "Failed to allocate regmap!\n");
+
+No need for the exclamation mark.
+
+> +		return PTR_ERR(ddata->regmap);
+> +	}
+> +
+> +	ret = devm_mfd_add_devices(ddata->dev, PLATFORM_DEVID_NONE, mp2629mfd,
+
+Why NONE over AUTO?
+
+> +				ARRAY_SIZE(mp2629mfd), NULL,
+> +				0, NULL);
+> +	if (ret)
+> +		dev_err(ddata->dev, "Failed to register sub-devices %d\n", ret);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct of_device_id mp2629_of_match[] = {
+> +	{ .compatible = "mps,mp2629"},
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, mp2629_of_match);
+> +
+> +static struct i2c_driver mp2629_driver = {
+> +	.driver = {
+> +		.name = "mp2629",
+> +		.of_match_table = mp2629_of_match,
+> +	},
+> +	.probe_new	= mp2629_probe,
+> +};
+> +module_i2c_driver(mp2629_driver);
+> +
+> +MODULE_AUTHOR("Saravanan Sekar <sravanhome@gmail.com>");
+> +MODULE_DESCRIPTION("MP2629 Battery charger parent driver");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/mfd/mp2629.h b/include/linux/mfd/mp2629.h
+> new file mode 100644
+> index 000000000000..06985e41fc6f
+> --- /dev/null
+> +++ b/include/linux/mfd/mp2629.h
+> @@ -0,0 +1,19 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +/*
+> + * register definitions for MP2629 charger
+
+"Register"
+
+Although there aren't any register definitions in here?
+
+> + * Copyright 2020 Monolithic Power Systems, Inc
+> + */
+> +
+> +#ifndef __MP2629_H__
+> +#define __MP2629_H__
+> +
+> +#include <linux/device.h>
+> +#include <linux/regmap.h>
+> +
+> +struct mp2629_info {
+> +	struct device *dev;
+> +	struct regmap *regmap;
+> +};
+> +
+> +#endif
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
