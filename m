@@ -2,136 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 333641BAB95
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 19:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D761BACD5
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 20:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726238AbgD0RqD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 13:46:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54150 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726226AbgD0RqD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 27 Apr 2020 13:46:03 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CCAA621775;
-        Mon, 27 Apr 2020 17:46:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588009562;
-        bh=iF9YmvJqlTOPV6QEo1ch3u7PI0qsz6iUbUvNWthAYms=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=x5dT7bls/3QJn+I9NbWzFlG6FHclIlFs0dMqD5tSRm8dQv0gBaJ4/72TXlkHbf0kb
-         5JDD4w1fIgId0fi//oLcPdvIffq0NDHGy0/8f7NlxLYtrTIJIvLtveFzXAIaaFbQMa
-         kbfuHB2JKD+TyBrwC58U+aB0tbjo5/LEOt5HXqfM=
-Received: by mail-yb1-f172.google.com with SMTP id o139so9891403ybc.11;
-        Mon, 27 Apr 2020 10:46:02 -0700 (PDT)
-X-Gm-Message-State: AGi0PuauBr6AQeTzL2HsNKdxN76/MrNIVzrVim/JmvLEVxEn5U97W+QQ
-        sjcxAxJ9PEokUyEsAS1VKL+cUmHgkF8t/yHSUQ==
-X-Google-Smtp-Source: APiQypJCjp0sKkH8wsvV7TRTZ+Y5WfstmylSaK6ab9MlcQ1t5UeAxbE4A4p6/U7DdUD81SjmmMDCkQIJah8HRlmHtgQ=
-X-Received: by 2002:a25:281:: with SMTP id 123mr37843786ybc.358.1588009561921;
- Mon, 27 Apr 2020 10:46:01 -0700 (PDT)
+        id S1726249AbgD0Sep (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 14:34:45 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40318 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726230AbgD0Seo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 14:34:44 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id BAEC52A0D29
+Subject: Re: [PATCH v3 2/2] thermal: core: Stop polling DISABLED thermal
+ devices
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "'linux-pm@vger.kernel.org'" <linux-pm@vger.kernel.org>
+Cc:     "'Rafael J . Wysocki'" <rjw@rjwysocki.net>,
+        'Len Brown' <lenb@kernel.org>,
+        'Jiri Pirko' <jiri@mellanox.com>,
+        'Ido Schimmel' <idosch@mellanox.com>,
+        "'David S . Miller'" <davem@davemloft.net>,
+        'Peter Kaestle' <peter@piie.net>,
+        'Darren Hart' <dvhart@infradead.org>,
+        'Andy Shevchenko' <andy@infradead.org>,
+        'Support Opensource' <support.opensource@diasemi.com>,
+        'Daniel Lezcano' <daniel.lezcano@linaro.org>,
+        'Amit Kucheria' <amit.kucheria@verdurent.com>,
+        'Shawn Guo' <shawnguo@kernel.org>,
+        'Sascha Hauer' <s.hauer@pengutronix.de>,
+        'Pengutronix Kernel Team' <kernel@pengutronix.de>,
+        'Fabio Estevam' <festevam@gmail.com>,
+        'NXP Linux Team' <linux-imx@nxp.com>,
+        'Heiko Stuebner' <heiko@sntech.de>,
+        'Orson Zhai' <orsonzhai@gmail.com>,
+        'Baolin Wang' <baolin.wang7@gmail.com>,
+        'Chunyan Zhang' <zhang.lyra@gmail.com>,
+        "'linux-acpi@vger.kernel.org'" <linux-acpi@vger.kernel.org>,
+        "'netdev@vger.kernel.org'" <netdev@vger.kernel.org>,
+        "'platform-driver-x86@vger.kernel.org'" 
+        <platform-driver-x86@vger.kernel.org>,
+        "'linux-arm-kernel@lists.infradead.org'" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "'kernel@collabora.com'" <kernel@collabora.com>,
+        'Barlomiej Zolnierkiewicz' <b.zolnierkie@samsung.com>
+References: <a3998ad2-19bc-0893-a10d-2bb5adf7d99f@samsung.com>
+ <20200423165705.13585-1-andrzej.p@collabora.com>
+ <20200423165705.13585-3-andrzej.p@collabora.com>
+ <744357E9AAD1214791ACBA4B0B90926377CF60E3@SHSMSX108.ccr.corp.intel.com>
+ <744357E9AAD1214791ACBA4B0B90926377CF9A10@SHSMSX108.ccr.corp.intel.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Message-ID: <da9f0547-226d-71cf-f508-f4669fb2f5c2@collabora.com>
+Date:   Mon, 27 Apr 2020 20:34:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20200422201216.10593-1-ansuelsmth@gmail.com> <20200422201216.10593-2-ansuelsmth@gmail.com>
- <CAL_JsqLUbM7ed2q7so4Uibiz2URRg1juoGRExy9Ta3J-LWAFow@mail.gmail.com>
- <087301d61a86$68b6f950$3a24ebf0$@gmail.com> <20200427034951.xrk5ja3pg4anbg4s@vireshk-i7>
- <016c01d61c80$ba1358b0$2e3a0a10$@gmail.com>
-In-Reply-To: <016c01d61c80$ba1358b0$2e3a0a10$@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 27 Apr 2020 12:45:49 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKu15CQu4pP6uyrUvYk3xZVWwUu=86CE5yDHPx7cSKdTw@mail.gmail.com>
-Message-ID: <CAL_JsqKu15CQu4pP6uyrUvYk3xZVWwUu=86CE5yDHPx7cSKdTw@mail.gmail.com>
-Subject: Re: R: [PATCH v2 2/2] dt-bindings: opp: Fix wrong binding in qcom-nvmem-cpufreq
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sricharan R <sricharan@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <744357E9AAD1214791ACBA4B0B90926377CF9A10@SHSMSX108.ccr.corp.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 27, 2020 at 5:43 AM <ansuelsmth@gmail.com> wrote:
->
-> > On 25-04-20, 00:19, ansuelsmth@gmail.com wrote:
-> > > > On Wed, Apr 22, 2020 at 3:12 PM Ansuel Smith
-> > <ansuelsmth@gmail.com>
-> > > > wrote:
-> > > > >
-> > > > > Update binding to new generic name "operating-points-v2-qcom-cpu"
-> > > > >
-> > > > > Fixes: a8811ec764f9 ("cpufreq: qcom: Add support for krait based
-> > socs")
-> > > > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > > > > ---
-> > > > >  Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt |
-> > 2
-> > > > +-
-> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/opp/qcom-nvmem-
-> > > > cpufreq.txt b/Documentation/devicetree/bindings/opp/qcom-nvmem-
-> > > > cpufreq.txt
-> > > > > index 64f07417ecfb..537e1774f589 100644
-> > > > > --- a/Documentation/devicetree/bindings/opp/qcom-nvmem-
-> > cpufreq.txt
-> > > > > +++ b/Documentation/devicetree/bindings/opp/qcom-nvmem-
-> > > > cpufreq.txt
-> > > > > @@ -19,7 +19,7 @@ In 'cpu' nodes:
-> > > > >
-> > > > >  In 'operating-points-v2' table:
-> > > > >  - compatible: Should be
-> > > > > -       - 'operating-points-v2-kryo-cpu' for apq8096, msm8996,
-> > msm8974,
-> > > > > +       - 'operating-points-v2-qcom-cpu' for apq8096, msm8996,
-> > > > msm8974,
-> > > > >                                              apq8064, ipq8064,
-> msm8960 and ipq8074.
-> > > >
-> > > > This is not how you fix the backwards compatibility issue pointed out
-> > > > on the Fixes reference.
-> > > >
-> > > > Rob
-> > >
-> > > Sorry but can you give some directive? Should I use the old binding and
-> > change
-> > > the driver to use it instead of the new one (and drop it) ?
-> >
-> > It is not about the name of the binding, you can rename it to whatever
-> > you want. The kernel needs to keep supporting all the previous
-> > bindings, so we can keep on changing the kernel but keep the same
-> > bootloader (with earlier bindings).
-> >
-> > --
-> > viresh
->
-> Ok but still I can't understand why this is not right.
-> In 1/2 of this patchset I added the check for the old binding in the driver
+Hi,
 
-I don't have patch 1 and this patch should stand on it's own.
+W dniu 27.04.2020 o 16:20, Zhang, Rui pisze:
+> 
+> 
+>> -----Original Message-----
+>> From: Zhang, Rui
+>> Sent: Friday, April 24, 2020 5:03 PM
+>> To: Andrzej Pietrasiewicz <andrzej.p@collabora.com>; linux-
+>> pm@vger.kernel.org
+>> Cc: Rafael J . Wysocki <rjw@rjwysocki.net>; Len Brown <lenb@kernel.org>;
+>> Jiri Pirko <jiri@mellanox.com>; Ido Schimmel <idosch@mellanox.com>; David
+>> S . Miller <davem@davemloft.net>; Peter Kaestle <peter@piie.net>; Darren
+>> Hart <dvhart@infradead.org>; Andy Shevchenko <andy@infradead.org>;
+>> Support Opensource <support.opensource@diasemi.com>; Daniel Lezcano
+>> <daniel.lezcano@linaro.org>; Amit Kucheria
+>> <amit.kucheria@verdurent.com>; Shawn Guo <shawnguo@kernel.org>;
+>> Sascha Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
+>> <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; NXP
+>> Linux Team <linux-imx@nxp.com>; Heiko Stuebner <heiko@sntech.de>;
+>> Orson Zhai <orsonzhai@gmail.com>; Baolin Wang
+>> <baolin.wang7@gmail.com>; Chunyan Zhang <zhang.lyra@gmail.com>; linux-
+>> acpi@vger.kernel.org; netdev@vger.kernel.org; platform-driver-
+>> x86@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+>> kernel@collabora.com; Barlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+>> Subject: RE: [PATCH v3 2/2] thermal: core: Stop polling DISABLED thermal
+>> devices
+>>
+>> Hi, Andrzej,
+>>
+>> Thanks for the patches. My Linux laptop was broken and won't get fixed till
+>> next week, so I may lost some of the discussions previously.
+>>
+>>> -----Original Message-----
+>>> From: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+>>> Sent: Friday, April 24, 2020 12:57 AM
+>>> To: linux-pm@vger.kernel.org
+>>> Cc: Zhang, Rui <rui.zhang@intel.com>; Rafael J . Wysocki
+>>> <rjw@rjwysocki.net>; Len Brown <lenb@kernel.org>; Jiri Pirko
+>>> <jiri@mellanox.com>; Ido Schimmel <idosch@mellanox.com>; David S .
+>>> Miller <davem@davemloft.net>; Peter Kaestle <peter@piie.net>; Darren
+>>> Hart <dvhart@infradead.org>; Andy Shevchenko <andy@infradead.org>;
+>>> Support Opensource <support.opensource@diasemi.com>; Daniel Lezcano
+>>> <daniel.lezcano@linaro.org>; Amit Kucheria
+>>> <amit.kucheria@verdurent.com>; Shawn Guo <shawnguo@kernel.org>;
+>> Sascha
+>>> Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
+>>> <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; NXP
+>> Linux
+>>> Team <linux-imx@nxp.com>; Heiko Stuebner <heiko@sntech.de>; Orson
+>> Zhai
+>>> <orsonzhai@gmail.com>; Baolin Wang <baolin.wang7@gmail.com>;
+>> Chunyan
+>>> Zhang <zhang.lyra@gmail.com>; linux- acpi@vger.kernel.org;
+>>> netdev@vger.kernel.org; platform-driver- x86@vger.kernel.org;
+>>> linux-arm-kernel@lists.infradead.org;
+>>> kernel@collabora.com; Andrzej Pietrasiewicz <andrzej.p@collabora.com>;
+>>> Barlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+>>> Subject: [PATCH v3 2/2] thermal: core: Stop polling DISABLED thermal
+>>> devices
+>>> Importance: High
+>>>
+>>> Polling DISABLED devices is not desired, as all such "disabled"
+>>> devices are meant to be handled by userspace. This patch introduces
+>>> and uses
+>>> should_stop_polling() to decide whether the device should be polled or
+>> not.
+>>>
+>> Thanks for the fix, and IMO, this reveal some more problems.
+>> Say, we need to define "DISABLED" thermal zone.
+>> Can we read the temperature? Can we trust the trip point value?
+>>
+>> IMO, a disabled thermal zone does not mean it is handled by userspace,
+>> because that is what the userspace governor designed for.
+>> Instead, if a thermal zone is disabled, in thermal_zone_device_update(), we
+>> should basically skip all the other operations as well.
+>>
+> I overlooked the last line of the patch. So thermal_zone_device_update() returns
+> immediately if the thermal zone is disabled, right?
+> 
+> But how can we stop polling in this case?
 
-> and
-> here I updated the Documentation with the new one. This way the kernel
-> should support all the previous bindings and I can use the new better name.
+It does stop. However, I indeed observe an extra call to
+thermal_zone_device_update() before it fully stops.
+I think what happens is this:
 
-First, a compatible string is just an identifier. Maybe it wasn't the
-best name, but who cares really. Just use it even if it's not just
-kryo cpus. Otherwise, it's more complicated.
+- storing "disabled" in mode ends up in thermal_zone_device_set_mode(),
+which calls driver's ->set_mode() and then calls thermal_zone_device_update(),
+which returns immediately and does not touch the tz->poll_queue delayed
+work
 
-Are you changing every dts file? If not, then dts files now have an
-undocumented compatible string which is not okay. You'd need to keep
-the old compatible and mark it deprecated. If you are, then you are
-breaking compatibility between new dts and older kernels unless adding
-the new compatible string to the driver is backported to stable (which
-should be okay).
+- thermal_zone_device_update() is called from the delayed work when its
+time comes and this time it also returns immediately, not modifying the
+said delayed work, so polling effectively stops now.
 
-Rob
+> There is no chance to call into monitor_thermal_zone() in thermal_zone_device_update(),
+> or do I miss something?
+
+Without the last "if" statement in this patch polling stops with the
+first call to thermal_zone_device_update() because it indeed disables
+the delayed work.
+
+So you are probably right - that last "if" should not be introduced.
+
+> 
+>> I'll try your patches and probably make an incremental patch.
+> 
+> I have finished a small patch set to improve this based on my understanding, and will post it
+> tomorrow after testing.
+> 
+
+Is your small patchset based on top of this series or is it a completely
+rewritten version?
+
+Andrzej
