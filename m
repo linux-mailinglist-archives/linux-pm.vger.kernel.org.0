@@ -2,104 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D7A1BA6AE
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 16:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1871BAA68
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 18:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728050AbgD0Olm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 10:41:42 -0400
-Received: from cmta18.telus.net ([209.171.16.91]:49902 "EHLO cmta18.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727012AbgD0Oll (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 27 Apr 2020 10:41:41 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id T4wzj73HAVEJfT4x0jPTVe; Mon, 27 Apr 2020 08:41:40 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1587998500; bh=FiJz5xRPR2jwwYNYrp1GATPMRcZKYvCN7htIP5MWM8Y=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=N4PZzdKb7/hn/N/LWoKzh2mRypfoIaaFWpFfuFP/EC8wZsc46mzB0N7kj8Ojx5V1W
-         h8FekCpWpM/DLtHJKY3F68yeli8xMMJGu3gjn1TwvnXXzG4e5vRqbD1oVFCKvFiJxi
-         WmkAZhZPoKbu6yARVXvVDSbp7CK+J15uDXWq0L9TcJ3DsqvGEN9kaK7QzSDSN3M9P9
-         XFTbFVtb9h82wH2L5NIeaSAxgFFWsVQIR/9SGMCVrO3WyYUcYhYynMU15VXDLfg+Mk
-         OqlXuPL3tzos/yH1zJ0/njsWBH3TCIlKWEKxrXlHAyTkArog9wULYMfUaL+AhzfQf0
-         V7wN+uH6EVo/w==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=KIck82No c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=IkcTkHD0fZMA:10 a=i0EeH86SAAAA:8
- a=Z4Wf9oU1dosRAX0lpn8A:9 a=QEXdDO2ut3YA:10
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Hanjun Guo'" <guohanjun@huawei.com>
-Cc:     <linux-pm@vger.kernel.org>,
-        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>,
-        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-References: <1587982637-33618-1-git-send-email-guohanjun@huawei.com> <06ff344e-7abf-9eb6-9664-0e9f9d8d6bc7@linaro.org>
-In-Reply-To: <06ff344e-7abf-9eb6-9664-0e9f9d8d6bc7@linaro.org>
-Subject: RE: [RFC PATCH] cpuidle: Make cpuidle governor switchable to be the default behaviour
-Date:   Mon, 27 Apr 2020 07:41:36 -0700
-Message-ID: <000401d61ca1$f684f7b0$e38ee710$@net>
+        id S1726238AbgD0QuN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 12:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726223AbgD0QuN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 12:50:13 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D375EC03C1A7
+        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 09:50:12 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id k1so21415183wrx.4
+        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 09:50:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ifZHzQrYJTJ2psIoVYONoJxVcPBrBwiLq0Ka5H1X7f0=;
+        b=YN4xMzacilYGgkI5xIJKKjKcvwZcZ4qjnwboi7t+4heCeg+DVoCri3aTgOQ43+2b/U
+         ur3Wx9/P9iXCTeuhRKTWS9KtRKW7D4EGSQ1W6lDnSmD3l0qsduegt1i2nxkp/i7sIvSY
+         40XOB+SMgz68l1/ArBdGciU3CqBzBQR7h2zzVy6FvC8lqekaAiyRsAw56dIw+I4FErQ4
+         azNHB4ooJm10iR0K4KIDxECVWcNQfJk1j0FaB9+bxGqUgxFV+H5J+klrzmWcM6+4poJV
+         1RqelOBabzBzN0wbIZzc+jQcxhamURzPkZjnvLWAby0K3AwbgDzpUeJXgcLJw4EKrHSR
+         6A2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ifZHzQrYJTJ2psIoVYONoJxVcPBrBwiLq0Ka5H1X7f0=;
+        b=H3C1JWtPpEqY3fPtO9M9PG1KX+QRIktl8M2MkVCNA9zBS8v4ihXbWKgajl2fgvBMIW
+         7+xbPFym25tHLpDyiMoScEFykFMU4L5qJTwazYyNC33K7cPcjTU/L+h5+kvXhVUAT1K2
+         Jz2qq5thUkCGZCvCjaIdIyfJUD2SXeFfUABjODiJ29GurqFEY1ozwM6OH02Nu+18PIVQ
+         oCvIP4HgWfnkmSjfK44O9iKDlGpCqv3LGe8MvJKWEHS9Rj5CyENM/t4MdP4eCD+ec7G1
+         pEtPGNNxs8u808Y5znEO3Ty010eUua3DklEBDF5dWki6Yb/AyMqDPRggBbOwDu+7tJp+
+         4d9A==
+X-Gm-Message-State: AGi0PuaDmMpPJKibzY8EAbQch7bhyGjigz5HBJyVdNXv/YNs2wnDe/OT
+        DDiBEpM8T4IZVIOGeIGl68lHKw==
+X-Google-Smtp-Source: APiQypLnpGbWiFbiATkGLzM1ksCRfp33HEV/xjz0k0UXMZ8dYv4G0WKZWQ6pcTQZyBZPekAo8fPm6Q==
+X-Received: by 2002:adf:f24c:: with SMTP id b12mr28353216wrp.359.1588006211473;
+        Mon, 27 Apr 2020 09:50:11 -0700 (PDT)
+Received: from [192.168.0.41] (lns-bzn-59-82-252-135-148.adsl.proxad.net. [82.252.135.148])
+        by smtp.googlemail.com with ESMTPSA id f23sm16030600wml.4.2020.04.27.09.50.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Apr 2020 09:50:10 -0700 (PDT)
+Subject: Re: [PATCH v3 4/4] thermal: cpuidle: Register cpuidle cooling device
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "open list:CPU IDLE TIME MANAGEMENT FRAMEWORK" 
+        <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:CPUIDLE DRIVER - ARM PSCI" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20200414220837.9284-1-daniel.lezcano@linaro.org>
+ <20200414220837.9284-4-daniel.lezcano@linaro.org>
+ <6b58035c-fe48-09ab-f042-729b07bcfec6@linaro.org>
+Message-ID: <34667fb4-664c-c80b-6bba-fe2ae981dcc1@linaro.org>
+Date:   Mon, 27 Apr 2020 18:50:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdYcmPLp6bju3k5oQcqR39LDQnZ46AABgHQg
-X-CMAE-Envelope: MS4wfJDCRIWLulyl9yvNRsWRWpP1LUZI7VkQXl1XOnOSE/N5PhF88+dwPsBsz87xEYnZ9ofovcC8miTrcIAvkBvqgl/JsUNc85jnUXQxLEtloiGGL/n66VVq
- hcTe9CsFnUC23KNfTR9xBCY9baxnRcJcpxjeqpxFRZkdcmoojA/RwU68STwaXRQ5ayI+x1MzZiVSGM3DRMsqKDXrVN1H9p59JozHOhwPx9AWRi/VFdkTaUdQ
- 3kIxxnYfkkkpuErzgfCRgdf6JPWzKRQzjm0czZLt3g0=
+In-Reply-To: <6b58035c-fe48-09ab-f042-729b07bcfec6@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I very much support this RFC.
-I have been running only with "cpuidle_sysfs_switch" for about 2 years.
 
-Some changes would be required for the documentation files also.
+Hi guys,
 
-On 2020.04.27 06:37 Daniel Lezcano wrote:
-> On 27/04/2020 12:17, Hanjun Guo wrote:
->> For now cpuidle governor can be switched via sysfs only when the
->> boot option "cpuidle_sysfs_switch" is passed, but it's important
->> to switch the governor to adapt to different workloads, especially
->> after TEO and haltpoll governor were introduced.
->> 
->> Introduce a CONFIG option to make cpuidle governor switchable to be
->> the default behaviour, which will not break the boot option behaviour.
->> 
->> Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
+any chance you ack this patch ?
+
+
+On 21/04/2020 10:15, Daniel Lezcano wrote:
+> 
+> Hi Lorenzo, Sudeep,
+> 
+> other patches of the series are acked / reviewed.
+> 
+> If you are ok with these changes, could you add your acked-by so I can
+> merge all the series via the thermal tree?
+> 
+> Thanks
+> 
+>   -- Daniel
+> 
+> On 15/04/2020 00:08, Daniel Lezcano wrote:
+>> The cpuidle driver can be used as a cooling device by injecting idle
+>> cycles. The DT binding for the idle state added an optional
+>>
+>> When the property is set, register the cpuidle driver with the idle
+>> state node pointer as a cooling device. The thermal framework will do
+>> the association automatically with the thermal zone via the
+>> cooling-device defined in the device tree cooling-maps section.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 >> ---
->>  drivers/cpuidle/Kconfig | 9 +++++++++
->>  drivers/cpuidle/sysfs.c | 2 +-
->>  2 files changed, 10 insertions(+), 1 deletion(-)
->> 
->> diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
->> index c0aeedd..c40cb40 100644
->> --- a/drivers/cpuidle/Kconfig
->> +++ b/drivers/cpuidle/Kconfig
->> @@ -47,6 +47,15 @@ config CPU_IDLE_GOV_HALTPOLL
->>  config DT_IDLE_STATES
->>  	bool
+>>  drivers/cpuidle/cpuidle-arm.c  | 5 +++++
+>>  drivers/cpuidle/cpuidle-psci.c | 5 +++++
+>>  2 files changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/cpuidle/cpuidle-arm.c b/drivers/cpuidle/cpuidle-arm.c
+>> index 9e5156d39627..2406ac0ae134 100644
+>> --- a/drivers/cpuidle/cpuidle-arm.c
+>> +++ b/drivers/cpuidle/cpuidle-arm.c
+>> @@ -8,6 +8,7 @@
 >>  
->> +config CPU_IDLE_SWITCH_GOV_IN_DEFAULT
->> +	bool "Switch the CPU idle governor via sysfs at runtime in default behaviour"
->> +	help
->> +	  Make the CPU idle governor switchable at runtime, and make it as the
->> +	  default behaviour even the boot option "cpuidle_sysfs_switch" is not
->> +	  passed in cmdline.
+>>  #define pr_fmt(fmt) "CPUidle arm: " fmt
+>>  
+>> +#include <linux/cpu_cooling.h>
+>>  #include <linux/cpuidle.h>
+>>  #include <linux/cpumask.h>
+>>  #include <linux/cpu_pm.h>
+>> @@ -124,6 +125,10 @@ static int __init arm_idle_init_cpu(int cpu)
+>>  	if (ret)
+>>  		goto out_kfree_drv;
+>>  
+>> +	ret = cpuidle_cooling_register(drv);
+>> +	if (ret)
+>> +		pr_err("Failed to register the idle cooling device: %d\n", ret);
 >> +
->> +	  Say N if you unsure about this.
->
-> Well I wouldn't make this optional but just remove the sysfs_switch.
+>>  	return 0;
+>>  
+>>  out_kfree_drv:
+>> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+>> index edd7a54ef0d3..8e805bff646f 100644
+>> --- a/drivers/cpuidle/cpuidle-psci.c
+>> +++ b/drivers/cpuidle/cpuidle-psci.c
+>> @@ -9,6 +9,7 @@
+>>  #define pr_fmt(fmt) "CPUidle PSCI: " fmt
+>>  
+>>  #include <linux/cpuhotplug.h>
+>> +#include <linux/cpu_cooling.h>
+>>  #include <linux/cpuidle.h>
+>>  #include <linux/cpumask.h>
+>>  #include <linux/cpu_pm.h>
+>> @@ -305,6 +306,10 @@ static int __init psci_idle_init_cpu(int cpu)
+>>  	if (ret)
+>>  		goto out_kfree_drv;
+>>  
+>> +	ret = cpuidle_cooling_register(drv);
+>> +	if (ret)
+>> +		pr_err("Failed to register the idle cooling device: %d\n", ret);
+>> +
+>>  	return 0;
+>>  
+>>  out_kfree_drv:
+>>
+> 
+> 
 
-Agree.
 
-> However, there is the '_ro' suffix when the option is not set. In order
-> to not break the existing tools, may be let both files co-exist and add
-> in the ABI/obselete the '_ro' file as candidate for removal ?
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-I do not like this _ro thing, and got hit by it with turbostat one time.
-Agree it should be made a candidate for removal.
-
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
