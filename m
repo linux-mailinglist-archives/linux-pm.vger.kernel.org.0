@@ -2,138 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7318C1BA192
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 12:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2E81BA1EB
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 13:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbgD0Knt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 06:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
+        id S1726963AbgD0LHF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 07:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726537AbgD0Knt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 06:43:49 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EFFC0610D5;
-        Mon, 27 Apr 2020 03:43:49 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id s10so19972310wrr.0;
-        Mon, 27 Apr 2020 03:43:49 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726485AbgD0LHE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 07:07:04 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5261EC0610D5
+        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 04:07:04 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id t16so6869699plo.7
+        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 04:07:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:content-language
-         :thread-index;
-        bh=8VrvOpg1vEprgEJxlFupBjFgcQQNFTGZ6LU4Tz38GQo=;
-        b=dXF9roYiDIYZjPSd2jGEHE9og4CQxpRwJtc76ja66qiCXiHh/uRRb0XIInTA/k28zZ
-         Dh6RVCce4oD6EbqXH1Y5TzJtdUdIPI35WSA3sAPFZ06jy5lUiVq1w82xsFcamybOm4se
-         obRdBmLrwOUzH8RJ+ex7abuj1Ah1zzBrhdcvKsebjVr4WFkKwTPZOMpI6Wpl65InNT8F
-         i4fNZUkz8RvLnGvuLgD3XaTWYezh0pGVV5FnDIAanvo3YaiWcb03sb63X7MmKeCfRTYU
-         uQyXNT0f3fnbMFJqi27+GYFSlQiLmvMh0RdLnXDhH1Sz0X1b30YRlIadeJUe64nxoC8X
-         1WMw==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=nKQt7v7w4nS3rXoLM16YoPujt6MNkA5qMmK0B9veF/o=;
+        b=NiDLsLSfYBF75S4sOIhxCiWkNcizgGDC2o7zZe7SGvA6du+5HkyPa/Ez8quz4VobdX
+         Ssjhngjx9SQ+WQS7kqvaVf7oo/3q/Sc/VNoa+dTYwhriBWogwzvROeeOSd04f03RvER/
+         MJKCjDra1SgzYqWpzVcMZsfuYqw5Gr5QPsqqbRVV+dynzq4UmDfFtofS19Xo6YEhtIlN
+         r/zY+q5kBiaA8SGfRIQjP0dxJDy1SnzCsZLOalE/dBqLJFzRsvAsYShWxJYP/IhaMgLv
+         HlhckoVTiXyEZ76WGS200kwyYYj0PF/03KHb40XzXAN5nWAwFzP0io4jSVBPIWPk781j
+         AiMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:content-language
-         :thread-index;
-        bh=8VrvOpg1vEprgEJxlFupBjFgcQQNFTGZ6LU4Tz38GQo=;
-        b=o46B3gqTHESMsUOca4zsqFlP5o2USvfR5pYasZ3PpAExOKHIVvKRN9vDLRPkZ9NZMc
-         e4sm6xTd+wkBcn14Oun6rfsFxsGLrxULbIFWrkXM8olMPRGtcnnYoUqLCSIlu36mY2rI
-         /ZUMJkItf/P5s69IHNIXRJ5itXvH9WqiR06uQktiFp8WBtK6YwAk6eEUbCIPmtLIEsDX
-         CW4aqspqPBulhmmRwPBnqgjMgVpSSsTYIIpedcS+kgOIynyqQOFgGva+by53TXK9pRkc
-         VksQJpWUHlijErXE+q1yc0GNWEo48lvzkLcYC7hs+h0ycsq0HGg8IUS+9Uqz69PUKq8H
-         5YMA==
-X-Gm-Message-State: AGi0PuY5k+G35Ka0zspxGxWbVplvvLvnxokP7fPgCN9fslE6W5CiDBFu
-        gO+Cgrr1RMcVafZwGejKVZ0=
-X-Google-Smtp-Source: APiQypLo5rKIrkPgDi/F0qTznt4jwhBCY3AfHSXpG5DZtCW6uWuoOEl4kd6ym1UbbBTtgFBz9K+LTg==
-X-Received: by 2002:a5d:42cf:: with SMTP id t15mr26270515wrr.354.1587984227110;
-        Mon, 27 Apr 2020 03:43:47 -0700 (PDT)
-Received: from AnsuelXPS ([79.37.253.240])
-        by smtp.gmail.com with ESMTPSA id g186sm15672947wme.7.2020.04.27.03.43.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 27 Apr 2020 03:43:46 -0700 (PDT)
-From:   <ansuelsmth@gmail.com>
-To:     "'Viresh Kumar'" <viresh.kumar@linaro.org>
-Cc:     "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Viresh Kumar'" <vireshk@kernel.org>,
-        "'Andy Gross'" <agross@kernel.org>,
-        "'Bjorn Andersson'" <bjorn.andersson@linaro.org>,
-        "'Ilia Lin'" <ilia.lin@kernel.org>, "'Nishanth Menon'" <nm@ti.com>,
-        "'Stephen Boyd'" <sboyd@kernel.org>,
-        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        "'Sricharan R'" <sricharan@codeaurora.org>,
-        "'linux-arm-msm'" <linux-arm-msm@vger.kernel.org>,
-        "'open list:THERMAL'" <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20200422201216.10593-1-ansuelsmth@gmail.com> <20200422201216.10593-2-ansuelsmth@gmail.com> <CAL_JsqLUbM7ed2q7so4Uibiz2URRg1juoGRExy9Ta3J-LWAFow@mail.gmail.com> <087301d61a86$68b6f950$3a24ebf0$@gmail.com> <20200427034951.xrk5ja3pg4anbg4s@vireshk-i7>
-In-Reply-To: <20200427034951.xrk5ja3pg4anbg4s@vireshk-i7>
-Subject: R: R: [PATCH v2 2/2] dt-bindings: opp: Fix wrong binding in qcom-nvmem-cpufreq
-Date:   Mon, 27 Apr 2020 12:43:43 +0200
-Message-ID: <016c01d61c80$ba1358b0$2e3a0a10$@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=nKQt7v7w4nS3rXoLM16YoPujt6MNkA5qMmK0B9veF/o=;
+        b=oLPALFax1dtKf8D5WXDK+/KCUG+51vFprqjyaYidDQRpdKi7LesUHESjH2furWWfua
+         wK2oTcO5M1mC29+8YFxZD97NtMj1D/knyHff/dt9kmFOCylxU7mt40tIFkrybOPwMY08
+         q/NFgHcA4VnWYdw5jLLkzOH8WSoqRVOKJUcWfK0MARx9Z3Fw+o25f0wmwR6GGlEky+Js
+         fhivEXEJHRYU4WeNZo17VLZ+j82fO44+DaM0l4jXdp4fsBTIucJGNH3H+o0KSzOmG4fV
+         moeHvcKMtB3EGN7m6BPRNzySEJpGNahV2+3uczxDISVzU8+iaOAhxHw3JGSL7U6T56z5
+         jZqQ==
+X-Gm-Message-State: AGi0PuYvGB3mNZImtXQxzDuKu5bHz5xdTJ7/vDuEfCg/NerQki9ZlZar
+        cNHdJFQjtNAN4g7lehzHg6yx9g==
+X-Google-Smtp-Source: APiQypL2xX2OvzSref2mlr2Tpur7b7xPtPzD5XT2w8zJeD/8v5a39JnQ0fbpU/4UCU1fJ7v37pR9DA==
+X-Received: by 2002:a17:90a:8c85:: with SMTP id b5mr5956274pjo.187.1587985623719;
+        Mon, 27 Apr 2020 04:07:03 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 198sm12570715pfa.87.2020.04.27.04.07.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Apr 2020 04:07:02 -0700 (PDT)
+Message-ID: <5ea6bcd6.1c69fb81.8bcc5.22ab@mx.google.com>
+Date:   Mon, 27 Apr 2020 04:07:02 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: it
-Thread-Index: AQI2zLF6jE7E+qUxZ1JX975++E9sxAFV8SPrAaqC6P0CXGiiOwGPGxidp5QHXxA=
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.7-rc3-21-gd38f9bc9261a
+X-Kernelci-Report-Type: boot
+Subject: pm/testing boot: 68 boots: 2 failed,
+ 65 passed with 1 conflict (v5.7-rc3-21-gd38f9bc9261a)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> On 25-04-20, 00:19, ansuelsmth@gmail.com wrote:
-> > > On Wed, Apr 22, 2020 at 3:12 PM Ansuel Smith
-> <ansuelsmth@gmail.com>
-> > > wrote:
-> > > >
-> > > > Update binding to new generic name "operating-points-v2-qcom-cpu"
-> > > >
-> > > > Fixes: a8811ec764f9 ("cpufreq: qcom: Add support for krait based
-> socs")
-> > > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt |
-> 2
-> > > +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/opp/qcom-nvmem-
-> > > cpufreq.txt b/Documentation/devicetree/bindings/opp/qcom-nvmem-
-> > > cpufreq.txt
-> > > > index 64f07417ecfb..537e1774f589 100644
-> > > > --- a/Documentation/devicetree/bindings/opp/qcom-nvmem-
-> cpufreq.txt
-> > > > +++ b/Documentation/devicetree/bindings/opp/qcom-nvmem-
-> > > cpufreq.txt
-> > > > @@ -19,7 +19,7 @@ In 'cpu' nodes:
-> > > >
-> > > >  In 'operating-points-v2' table:
-> > > >  - compatible: Should be
-> > > > -       - 'operating-points-v2-kryo-cpu' for apq8096, msm8996,
-> msm8974,
-> > > > +       - 'operating-points-v2-qcom-cpu' for apq8096, msm8996,
-> > > msm8974,
-> > > >                                              apq8064, ipq8064,
-msm8960 and ipq8074.
-> > >
-> > > This is not how you fix the backwards compatibility issue pointed out
-> > > on the Fixes reference.
-> > >
-> > > Rob
-> >
-> > Sorry but can you give some directive? Should I use the old binding and
-> change
-> > the driver to use it instead of the new one (and drop it) ?
-> 
-> It is not about the name of the binding, you can rename it to whatever
-> you want. The kernel needs to keep supporting all the previous
-> bindings, so we can keep on changing the kernel but keep the same
-> bootloader (with earlier bindings).
-> 
-> --
-> viresh
+pm/testing boot: 68 boots: 2 failed, 65 passed with 1 conflict (v5.7-rc3-21=
+-gd38f9bc9261a)
 
-Ok but still I can't understand why this is not right. 
-In 1/2 of this patchset I added the check for the old binding in the driver
-and 
-here I updated the Documentation with the new one. This way the kernel 
-should support all the previous bindings and I can use the new better name.
+Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
+el/v5.7-rc3-21-gd38f9bc9261a/
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+7-rc3-21-gd38f9bc9261a/
 
+Tree: pm
+Branch: testing
+Git Describe: v5.7-rc3-21-gd38f9bc9261a
+Git Commit: d38f9bc9261a2b20e8509370b5df9bdb3badaf81
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Tested: 59 unique boards, 15 SoC families, 3 builds out of 6
+
+Boot Regressions Detected:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8:
+          omap3-beagle-xm:
+              lab-baylibre: new failure (last pass: acpi-5.7-rc3-250-g177af=
+5b82ac5)
+
+x86_64:
+
+    x86_64_defconfig:
+        gcc-8:
+          qemu_x86_64:
+              lab-collabora: new failure (last pass: acpi-5.7-rc3-250-g177a=
+f5b82ac5)
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            omap3-beagle-xm: 1 failed lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+x86_64:
+    x86_64_defconfig:
+        qemu_x86_64:
+            lab-baylibre: PASS (gcc-8)
+            lab-collabora: FAIL (gcc-8)
+
+---
+For more info write to <info@kernelci.org>
