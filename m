@@ -2,113 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 645CB1B9A90
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 10:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 388EA1B9ACA
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 10:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbgD0IoN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 04:44:13 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:36263 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726539AbgD0IoN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 04:44:13 -0400
-Received: by mail-ot1-f67.google.com with SMTP id b13so24885555oti.3;
-        Mon, 27 Apr 2020 01:44:11 -0700 (PDT)
+        id S1726243AbgD0Ivy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 04:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725899AbgD0Ivx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 04:51:53 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54530C061A10
+        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 01:51:53 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id k1so19565078wrx.4
+        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 01:51:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=YPX4x0jDIEDTz7nvc7sn5bHK6BG3ihIkRvdS/BPSLzE=;
+        b=kWzVEYgY/9/widQPXrFcowP4ZjgLQHkdS9enzKduSjdkfx0EjP8bo0XL/1eJr3WKSX
+         JaXngTlXbRhWYn2hX9lTbL3BYOqB19rkhQThOErWAmIF/qonKh6RswR09vTh231Wumen
+         kkhqjmo/YdeXh0zkjImVDbUiZWOQt5OyFIRoy4ZvEENcfdPREtsZ5U6G1/quPfUCxTIt
+         5WXJoK36jKqIJyTxsTPlB5EpFR3KR7+KpsTR2iyPEYyeeX6eEN0rh8FYAJP1NsCNeGda
+         ozRxEpQyGjVLx9eZmfL6/SZ/2VZ5D0pd0rGMWpG6pqLBK3piKAxPdyCLrOe8OBJMZ1fF
+         OK0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e7PZSKjhCNlOl1JE2fl7JKkNcGODFwULz8sVcRzeFak=;
-        b=isQmk7i6vBykZ+bqqp925veBDzWRs80XKqXKibKrTwuCtssGSwI7PZgaD4zGHmmngn
-         TneDF83sUtmGHAb+wawf4mSbEias8vRLTDY1KOXX1JDQ6aTYz7xkGnvR2v3faFTepNE5
-         Oz6B778zMLjwr2TbRSjLXmRtFtDTExJQJ3RvQDxwuPCaQRv1bn6HwTSOPjdncqtDFXpL
-         s+LqvjV7b3BnmHNfY2PWRQdEyRUF1blfh2Hrgp04aRUQUq4H0pRMCOAE71TUV04f4RUv
-         WxGSgQ72H4JJyHMuCQunJeKDpNZZU11bZr+C6EEcDAYzo6AXfbxsD13vCh/5tOyr79Xi
-         BiNA==
-X-Gm-Message-State: AGi0PuYWElwM4j2Vc0i2CeNSxmSvkUi31JhHlK9oQu02lBuGXMqsv1Yi
-        S3LQ7jclN/z9SdMziN/TA+FuSkOXzYMnTZEhHo0=
-X-Google-Smtp-Source: APiQypJUnWb3Dmq9g+U8cpYpdlem+kOYdhiTvns0Do1UHHo2sTY/VEP8OZ49UAjfixE3UKDsd1Qrgg/z0ro5DEZDEz0=
-X-Received: by 2002:a9d:6ac8:: with SMTP id m8mr17542881otq.262.1587977050743;
- Mon, 27 Apr 2020 01:44:10 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=YPX4x0jDIEDTz7nvc7sn5bHK6BG3ihIkRvdS/BPSLzE=;
+        b=P7oHudkD1fOME0wOvM0DIE+qfH8YXRWqvqKokH/a8H1g58/vq+y8dQRMzz0b26A29K
+         Nh07+GnBm75ngQe7m0RILgd3WWDSbV1Oa7iUAbCJmbnJlidMDT+I2nGzXjExL1LWA+eN
+         C9i+MTDrD2rxOr7XGgOH1nZRXlhB4168E1bcbEuDc5xtO/TH27/8uPeH703huvKpYYnM
+         EcBJsS8hXSPbqpmgu9wuO00U8QA+P8MzeSGMdboVavANb8AJKM+JOFko1D9z2hwp3oYV
+         EHxV01lECmi8pIsVoR5BZ3VqQa/DmSlbWCj+1XRcDLgpOJqggZ0rKU2K8AUNUPa7oK13
+         dHfw==
+X-Gm-Message-State: AGi0PuYebfJpqFCPqeN0BQBPwkODmFyJGmFMrtjy+GDIr/z2PH17cwIc
+        YyDCBmlWjtyDbmpNABtF6XlYxw==
+X-Google-Smtp-Source: APiQypLxApUbpg3TJ0ILuchowzV4ZZ5EBCvXW4eaI3vv4CK0MLDKEWjIbJVseNky+c8kdrfJlPFTuQ==
+X-Received: by 2002:adf:dd8a:: with SMTP id x10mr26630284wrl.308.1587977511933;
+        Mon, 27 Apr 2020 01:51:51 -0700 (PDT)
+Received: from dell ([2.31.163.63])
+        by smtp.gmail.com with ESMTPSA id x18sm14507505wmi.29.2020.04.27.01.51.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Apr 2020 01:51:51 -0700 (PDT)
+Date:   Mon, 27 Apr 2020 09:51:49 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     saravanan sekar <sravanhome@gmail.com>
+Cc:     andy.shevchenko@gmail.com, robh+dt@kernel.org, jic23@kernel.org,
+        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
+        sre@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v9 2/6] mfd: mp2629: Add support for mps battery charger
+Message-ID: <20200427085149.GF3559@dell>
+References: <20200415162030.16414-1-sravanhome@gmail.com>
+ <20200415162030.16414-3-sravanhome@gmail.com>
+ <20200424071822.GM3612@dell>
+ <8ff17d07-8030-fcfe-8d8a-3011e4077778@gmail.com>
+ <20200424093720.GA3542@dell>
+ <864eb6ad-a605-c0a0-c3e7-23c0c70f5ede@gmail.com>
+ <20200424105319.GD8414@dell>
+ <c62cd5f2-6d82-0a2a-5ee5-a3e99e188a05@gmail.com>
 MIME-Version: 1.0
-References: <20200424034016.42046-1-decui@microsoft.com> <2420808.aENraY2TMt@kreacher>
- <08f28683-4978-3e3c-e85a-303f6e46ef55@acm.org>
-In-Reply-To: <08f28683-4978-3e3c-e85a-303f6e46ef55@acm.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Apr 2020 10:43:58 +0200
-Message-ID: <CAJZ5v0gXHRWyoY29LNCMqYnkHcMN7jmFhvpO30c43Gte8Kmp=Q@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: Freeze kernel threads in software_resume()
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Dexuan Cui <decui@microsoft.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Michael Kelley <mikelley@microsoft.com>, longli@microsoft.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ming Lei <ming.lei@redhat.com>, wei.liu@kernel.org,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c62cd5f2-6d82-0a2a-5ee5-a3e99e188a05@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Apr 26, 2020 at 8:34 PM Bart Van Assche <bvanassche@acm.org> wrote:
->
-> On 2020-04-26 09:24, Rafael J. Wysocki wrote:
-> > On Friday, April 24, 2020 5:40:16 AM CEST Dexuan Cui wrote:
-> >> Currently the kernel threads are not frozen in software_resume(), so
-> >> between dpm_suspend_start(PMSG_QUIESCE) and resume_target_kernel(),
-> >> system_freezable_power_efficient_wq can still try to submit SCSI
-> >> commands and this can cause a panic since the low level SCSI driver
-> >> (e.g. hv_storvsc) has quiesced the SCSI adapter and can not accept
-> >> any SCSI commands: https://lkml.org/lkml/2020/4/10/47
-> >>
-> >> At first I posted a fix (https://lkml.org/lkml/2020/4/21/1318) trying
-> >> to resolve the issue from hv_storvsc, but with the help of
-> >> Bart Van Assche, I realized it's better to fix software_resume(),
-> >> since this looks like a generic issue, not only pertaining to SCSI.
-> >>
-> >> Cc: Bart Van Assche <bvanassche@acm.org>
-> >> Cc: stable@vger.kernel.org
-> >> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> >> ---
-> >>  kernel/power/hibernate.c | 7 +++++++
-> >>  1 file changed, 7 insertions(+)
-> >>
-> >> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> >> index 86aba8706b16..30bd28d1d418 100644
-> >> --- a/kernel/power/hibernate.c
-> >> +++ b/kernel/power/hibernate.c
-> >> @@ -898,6 +898,13 @@ static int software_resume(void)
-> >>      error = freeze_processes();
-> >>      if (error)
-> >>              goto Close_Finish;
-> >> +
-> >> +    error = freeze_kernel_threads();
-> >> +    if (error) {
-> >> +            thaw_processes();
-> >> +            goto Close_Finish;
-> >> +    }
-> >> +
-> >>      error = load_image_and_restore();
-> >>      thaw_processes();
-> >>   Finish:
-> >
-> > Applied as a fix for 5.7-rc4, thanks!
->
-> Hi Rafael,
->
-> What is not clear to me is how kernel threads are thawed after
-> load_image_and_restore() has finished? Should a comment perhaps be added
-> above the freeze_kernel_threads() call that explains how
-> thaw_kernel_threads() is invoked after load_image_and_restore() has
-> finished?
+On Fri, 24 Apr 2020, saravanan sekar wrote:
 
-It isn't, because that is not necessary.
+> 
+> On 24/04/20 12:53 pm, Lee Jones wrote:
+> > On Fri, 24 Apr 2020, saravanan sekar wrote:
+> > 
+> > > Hi Lee,
+> > > 
+> > > On 24/04/20 11:37 am, Lee Jones wrote:
+> > > > On Fri, 24 Apr 2020, saravanan sekar wrote:
+> > > > 
+> > > > > Hi Lee,
+> > > > > 
+> > > > > On 24/04/20 9:18 am, Lee Jones wrote:
+> > > > > > On Wed, 15 Apr 2020, Saravanan Sekar wrote:
+> > > > > > 
+> > > > > > > mp2629 is a highly-integrated switching-mode battery charge management
+> > > > > > > device for single-cell Li-ion or Li-polymer battery.
+> > > > > > > 
+> > > > > > > Add MFD core enables chip access for ADC driver for battery readings,
+> > > > > > > and a power supply battery-charger driver
+> > > > > > > 
+> > > > > > > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+> > > > > > > ---
+> > > > > > >     drivers/mfd/Kconfig        |  9 ++++
+> > > > > > >     drivers/mfd/Makefile       |  2 +
+> > > > > > >     drivers/mfd/mp2629.c       | 86 ++++++++++++++++++++++++++++++++++++++
+> > > > > > >     include/linux/mfd/mp2629.h | 19 +++++++++
+> > > > > > >     4 files changed, 116 insertions(+)
+> > > > > > >     create mode 100644 drivers/mfd/mp2629.c
+> > > > > > >     create mode 100644 include/linux/mfd/mp2629.h
+> > > > > > How is this driver registered?
+> > > > > > 
+> > > > > > Looks like it has device tree support.  Is there another way?
+> > > > > Yes, only using device tree
+> > > > Then how about using 'simple-mfd' and 'syscon'?
+> > > > 
+> > > > Then you can omit this driver completely.
+> > > The exception is to support for non device tree platform as well, but I have
+> > > tested only for ARM device tree platform.
+> > Is that a reality though?
+> > 
+> > How else do you see this realistically being registered?
+> > 
+> I understand that acpi related device table are not covered here, well I
+> don't have to platform to test so.
+> If you ask me to cover acpi related table, I can do but hard to test.
 
-thaw_processes() will thaw them along with the user space.
+I don't know of any reasons why syscon can't be used by ACPI.
 
-Cheers!
+Please try to solve this issue using 'simple-mfd' and 'syscon'.
+
+> > > > > > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > > > > > > index 3c547ed575e6..85be799795aa 100644
+> > > > > > > --- a/drivers/mfd/Kconfig
+> > > > > > > +++ b/drivers/mfd/Kconfig
+> > > > > > > @@ -434,6 +434,15 @@ config MFD_MC13XXX_I2C
+> > > > > > >     	help
+> > > > > > >     	  Select this if your MC13xxx is connected via an I2C bus.
+> > > > > > > +config MFD_MP2629
+> > > > > > > +	tristate "Monolithic power system MP2629 ADC and Battery charger"
+> > > > > > > +	depends on I2C
+> > > > > > > +	select REGMAP_I2C
+> > > > > > > +	help
+> > > > > > > +	  Select this option to enable support for monolithic power system
+> > > > > > > +	  battery charger. This provides ADC, thermal, battery charger power
+> > > > > > > +	  management functions on the systems.
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
