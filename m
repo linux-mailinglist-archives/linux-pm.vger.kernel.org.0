@@ -2,45 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5841F1B994B
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 10:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A0A1B9A1D
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 10:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726349AbgD0IEH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 04:04:07 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:35669 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725785AbgD0IEG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 04:04:06 -0400
-Received: by mail-ot1-f65.google.com with SMTP id e26so24752088otr.2;
-        Mon, 27 Apr 2020 01:04:04 -0700 (PDT)
+        id S1726693AbgD0I0u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 04:26:50 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:45521 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726003AbgD0I0t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 04:26:49 -0400
+Received: by mail-ot1-f68.google.com with SMTP id e20so24776350otk.12;
+        Mon, 27 Apr 2020 01:26:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yp9HgL6YXH1Mrs7/xb1a0hjYzru62kco8NbdEX0q47w=;
-        b=fqf2apN6rMLx+bj9WGC0vXQnzxwveZ3ahvm450ePwDSnEHZcdxPaPSr7K7Pc3mvcBO
-         e0dCwnt1oE/748jia21S+QBQaSMeSy0+TbKHw8eKGEWYBboW5CpkqZJ15j2Ik7PlwKMV
-         wo7FXsWj9vBEzlGrojdmY+/2KY97+4j+W/+4q//gv8btJtdcZ665O1uix35th7eB82zT
-         VNNN2SJTpvAwAPOQUYmTjVNgAdIIqSpzzdvgOrf0mYRZkKxR61eb5z4FuB+Y21p6DWcM
-         ozXbyoaxVLuDb/MzThOx+KxyD23Kdtl0qKjb3zIDQY3gQ47X8fpRAx+2ow+cP+VGYazo
-         847g==
-X-Gm-Message-State: AGi0Pubo0I9AvwMRJ3PgvuQgaWmhUv+DIp3TxjZZIxeV2EeJ1y1nBb/1
-        6z8VQ85jsJup41aqcJhyxM3dCnbkA8o5QDSMiDY=
-X-Google-Smtp-Source: APiQypL9L0sStSs9sZCJMMiE2Zg4MITGkAayddwxMKwHPKdmjS62MIWjUuR1BBUAExNprGCWXUObgfMmOo6mye5Vn6w=
-X-Received: by 2002:a9d:7d85:: with SMTP id j5mr16411444otn.107.1587974644288;
- Mon, 27 Apr 2020 01:04:04 -0700 (PDT)
+        bh=ihiMp4vbxc5oIwvcnHb0LN0vARvd9Ooni0RPVOQhxkc=;
+        b=ldHTcSiV/BP3++8pNFeavcbIN0lXV8KYO+c7ytorF4KsAfRYv/r6lNmKX0jI7+IjK+
+         nn9nE7/GAUjlQ8wJjWKSLtKmKq7foaAO7oETquo/fQZEamu+SfTyCNNTElw0Te0+XTRv
+         yNF+2r7X6yAstmD1RtTc0gnvVvtIgizSCXPKPdio4VCfdJtT6b7hafXABZ6WHvKmvb3S
+         THW9CBG67+w4k3zCA/vd1vgSDsOfcCFYzHAtz8wMEMSFKLRrKS/P2k1d7U5M55vZqGkr
+         ps5Ew98sgqH46sv32IUs38rfzxehtoowWCKln2UlM00UrwJFeCcUdibEif9Mjw59L7lS
+         FpXg==
+X-Gm-Message-State: AGi0PuYX549If7yKaEjNXnMY0bLkyTydEFcKICbRG/HFZ1oPnnghN2Uf
+        Nt/cKL5MTiQvARKgVpn2VWwf1+LbUbkEdEygnMg=
+X-Google-Smtp-Source: APiQypLscqMbwKnZqMSsnfb4EiQfW0ot85GIYgb9GEJ+7ISJ7utlbyc9JuuZHDQUSrdVZSbs1WF5JQsxiBr4ZA0cGCs=
+X-Received: by 2002:a9d:564:: with SMTP id 91mr17457118otw.250.1587976008856;
+ Mon, 27 Apr 2020 01:26:48 -0700 (PDT)
 MIME-Version: 1.0
 References: <1587678050-23468-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1587678050-23468-7-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1587678050-23468-7-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1587678050-23468-8-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1587678050-23468-8-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Apr 2020 10:03:52 +0200
-Message-ID: <CAMuHMdWiQd1x7+_qJnFzNbz27CwCW9yO431pUfYATE=0rM8J-Q@mail.gmail.com>
-Subject: Re: [PATCH 06/10] dt-bindings: clock: renesas: cpg-mssr: Document
- r8a7742 binding
+Date:   Mon, 27 Apr 2020 10:26:37 +0200
+Message-ID: <CAMuHMdUTAxaPE1WRJJOPr4_O9f_Yw7zVrgm6wkwjHiExSNu+yg@mail.gmail.com>
+Subject: Re: [PATCH 07/10] clk: renesas: Add r8a7742 CPG Core Clock Definitions
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
+Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -64,8 +62,9 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Thu, Apr 23, 2020 at 11:41 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add binding documentation for the RZ/G1H (R8A7742) Clock Pulse Generator
-> driver.
+> Add all RZ/G1H Clock Pulse Generator Core Clock Outputs, as listed in
+> Table 7.2a ("List of Clocks [RZ/G1H]") of the RZ/G1 Hardware User's
+> Manual.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
