@@ -2,150 +2,221 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 388EA1B9ACA
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 10:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0381B9F69
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 11:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726243AbgD0Ivy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 04:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725899AbgD0Ivx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 04:51:53 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54530C061A10
-        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 01:51:53 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id k1so19565078wrx.4
-        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 01:51:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=YPX4x0jDIEDTz7nvc7sn5bHK6BG3ihIkRvdS/BPSLzE=;
-        b=kWzVEYgY/9/widQPXrFcowP4ZjgLQHkdS9enzKduSjdkfx0EjP8bo0XL/1eJr3WKSX
-         JaXngTlXbRhWYn2hX9lTbL3BYOqB19rkhQThOErWAmIF/qonKh6RswR09vTh231Wumen
-         kkhqjmo/YdeXh0zkjImVDbUiZWOQt5OyFIRoy4ZvEENcfdPREtsZ5U6G1/quPfUCxTIt
-         5WXJoK36jKqIJyTxsTPlB5EpFR3KR7+KpsTR2iyPEYyeeX6eEN0rh8FYAJP1NsCNeGda
-         ozRxEpQyGjVLx9eZmfL6/SZ/2VZ5D0pd0rGMWpG6pqLBK3piKAxPdyCLrOe8OBJMZ1fF
-         OK0Q==
+        id S1726539AbgD0JKm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 05:10:42 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:45141 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726183AbgD0JKm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 05:10:42 -0400
+Received: by mail-ot1-f66.google.com with SMTP id e20so24946276otk.12;
+        Mon, 27 Apr 2020 02:10:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=YPX4x0jDIEDTz7nvc7sn5bHK6BG3ihIkRvdS/BPSLzE=;
-        b=P7oHudkD1fOME0wOvM0DIE+qfH8YXRWqvqKokH/a8H1g58/vq+y8dQRMzz0b26A29K
-         Nh07+GnBm75ngQe7m0RILgd3WWDSbV1Oa7iUAbCJmbnJlidMDT+I2nGzXjExL1LWA+eN
-         C9i+MTDrD2rxOr7XGgOH1nZRXlhB4168E1bcbEuDc5xtO/TH27/8uPeH703huvKpYYnM
-         EcBJsS8hXSPbqpmgu9wuO00U8QA+P8MzeSGMdboVavANb8AJKM+JOFko1D9z2hwp3oYV
-         EHxV01lECmi8pIsVoR5BZ3VqQa/DmSlbWCj+1XRcDLgpOJqggZ0rKU2K8AUNUPa7oK13
-         dHfw==
-X-Gm-Message-State: AGi0PuYebfJpqFCPqeN0BQBPwkODmFyJGmFMrtjy+GDIr/z2PH17cwIc
-        YyDCBmlWjtyDbmpNABtF6XlYxw==
-X-Google-Smtp-Source: APiQypLxApUbpg3TJ0ILuchowzV4ZZ5EBCvXW4eaI3vv4CK0MLDKEWjIbJVseNky+c8kdrfJlPFTuQ==
-X-Received: by 2002:adf:dd8a:: with SMTP id x10mr26630284wrl.308.1587977511933;
-        Mon, 27 Apr 2020 01:51:51 -0700 (PDT)
-Received: from dell ([2.31.163.63])
-        by smtp.gmail.com with ESMTPSA id x18sm14507505wmi.29.2020.04.27.01.51.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2020 01:51:51 -0700 (PDT)
-Date:   Mon, 27 Apr 2020 09:51:49 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     saravanan sekar <sravanhome@gmail.com>
-Cc:     andy.shevchenko@gmail.com, robh+dt@kernel.org, jic23@kernel.org,
-        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
-        sre@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v9 2/6] mfd: mp2629: Add support for mps battery charger
-Message-ID: <20200427085149.GF3559@dell>
-References: <20200415162030.16414-1-sravanhome@gmail.com>
- <20200415162030.16414-3-sravanhome@gmail.com>
- <20200424071822.GM3612@dell>
- <8ff17d07-8030-fcfe-8d8a-3011e4077778@gmail.com>
- <20200424093720.GA3542@dell>
- <864eb6ad-a605-c0a0-c3e7-23c0c70f5ede@gmail.com>
- <20200424105319.GD8414@dell>
- <c62cd5f2-6d82-0a2a-5ee5-a3e99e188a05@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qcNlgT253Q+mnyb0dmPBeKwZupVLUVCEsXLGGQlN7mU=;
+        b=l4XhQPhefh0GTIyDpEVrTyYasipwFtBtPxRNNze6HMFvhzgKUILtr5x4Pxt6g9S7xk
+         nrlESZJxyPUREGTzDaQLIEla2kvKIHDxvCC0uK2D4Nd0MivcNkRSu0xpinahms6i0VPy
+         Eqz0WfhsFoIF7hOedkK2esFVThhk6teUvbc99jmoMiILkZq3hqPVUely6hk+tFlBVsnz
+         AP48sMs2gRryUU7c3+XvO5qdKBp0mRta1ZqKtQ5qTgveYbItxF38XyfEO5xcnapDhmV5
+         1xBZlaI6IwhdllM/XAjkefXIbiq3yy0QclKQTPiwGEbdOEI5s+M/+QdtF9tsbEdxSdIJ
+         5SZw==
+X-Gm-Message-State: AGi0PuY6kedkysaYurdLYTDWR4JUxVVrmkKZPbf1M2fj5FSnUO/Ug7aP
+        jxyt6a26K8Pd6DOjjb87YcTuH+i7TYMQrY0Pyqc=
+X-Google-Smtp-Source: APiQypKw19uX7pNh+s25tQlcVi6u/qoBo4l+PDXl+dtgYprl6i34GYCNk/rsJvOcHawKKsX52BSbZ5FC/bbkN04OYi4=
+X-Received: by 2002:a9d:7990:: with SMTP id h16mr11539338otm.145.1587978640642;
+ Mon, 27 Apr 2020 02:10:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c62cd5f2-6d82-0a2a-5ee5-a3e99e188a05@gmail.com>
+References: <1587678050-23468-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1587678050-23468-9-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1587678050-23468-9-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 27 Apr 2020 11:10:29 +0200
+Message-ID: <CAMuHMdUmj+m8WLaSfwELD0VGYFpDaACTLgerbznBeqfVVy2nzw@mail.gmail.com>
+Subject: Re: [PATCH 08/10] clk: renesas: cpg-mssr: Add R8A7742 support
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marian-Cristian Rotariu 
+        <marian-cristian.rotariu.rb@bp.renesas.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Lad Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 24 Apr 2020, saravanan sekar wrote:
+Hi Prabhakar,
 
-> 
-> On 24/04/20 12:53 pm, Lee Jones wrote:
-> > On Fri, 24 Apr 2020, saravanan sekar wrote:
-> > 
-> > > Hi Lee,
-> > > 
-> > > On 24/04/20 11:37 am, Lee Jones wrote:
-> > > > On Fri, 24 Apr 2020, saravanan sekar wrote:
-> > > > 
-> > > > > Hi Lee,
-> > > > > 
-> > > > > On 24/04/20 9:18 am, Lee Jones wrote:
-> > > > > > On Wed, 15 Apr 2020, Saravanan Sekar wrote:
-> > > > > > 
-> > > > > > > mp2629 is a highly-integrated switching-mode battery charge management
-> > > > > > > device for single-cell Li-ion or Li-polymer battery.
-> > > > > > > 
-> > > > > > > Add MFD core enables chip access for ADC driver for battery readings,
-> > > > > > > and a power supply battery-charger driver
-> > > > > > > 
-> > > > > > > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-> > > > > > > ---
-> > > > > > >     drivers/mfd/Kconfig        |  9 ++++
-> > > > > > >     drivers/mfd/Makefile       |  2 +
-> > > > > > >     drivers/mfd/mp2629.c       | 86 ++++++++++++++++++++++++++++++++++++++
-> > > > > > >     include/linux/mfd/mp2629.h | 19 +++++++++
-> > > > > > >     4 files changed, 116 insertions(+)
-> > > > > > >     create mode 100644 drivers/mfd/mp2629.c
-> > > > > > >     create mode 100644 include/linux/mfd/mp2629.h
-> > > > > > How is this driver registered?
-> > > > > > 
-> > > > > > Looks like it has device tree support.  Is there another way?
-> > > > > Yes, only using device tree
-> > > > Then how about using 'simple-mfd' and 'syscon'?
-> > > > 
-> > > > Then you can omit this driver completely.
-> > > The exception is to support for non device tree platform as well, but I have
-> > > tested only for ARM device tree platform.
-> > Is that a reality though?
-> > 
-> > How else do you see this realistically being registered?
-> > 
-> I understand that acpi related device table are not covered here, well I
-> don't have to platform to test so.
-> If you ask me to cover acpi related table, I can do but hard to test.
+On Thu, Apr 23, 2020 at 11:41 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Add RZ/G1H (R8A7742) Clock Pulse Generator / Module Standby and Software
+> Reset support, using the CPG/MSSR driver core and the common R-Car Gen2
+> (and RZ/G) code.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
 
-I don't know of any reasons why syscon can't be used by ACPI.
+Thanks for your patch!
 
-Please try to solve this issue using 'simple-mfd' and 'syscon'.
+> --- /dev/null
+> +++ b/drivers/clk/renesas/r8a7742-cpg-mssr.c
 
-> > > > > > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > > > > > > index 3c547ed575e6..85be799795aa 100644
-> > > > > > > --- a/drivers/mfd/Kconfig
-> > > > > > > +++ b/drivers/mfd/Kconfig
-> > > > > > > @@ -434,6 +434,15 @@ config MFD_MC13XXX_I2C
-> > > > > > >     	help
-> > > > > > >     	  Select this if your MC13xxx is connected via an I2C bus.
-> > > > > > > +config MFD_MP2629
-> > > > > > > +	tristate "Monolithic power system MP2629 ADC and Battery charger"
-> > > > > > > +	depends on I2C
-> > > > > > > +	select REGMAP_I2C
-> > > > > > > +	help
-> > > > > > > +	  Select this option to enable support for monolithic power system
-> > > > > > > +	  battery charger. This provides ADC, thermal, battery charger power
-> > > > > > > +	  management functions on the systems.
+> +static struct cpg_core_clk r8a7742_core_clks[] __initdata = {
+> +       /* External Clock Inputs */
+> +       DEF_INPUT("extal",      CLK_EXTAL),
+> +       DEF_INPUT("usb_extal",  CLK_USB_EXTAL),
+> +
+> +       /* Internal Core Clocks */
+> +       DEF_BASE(".main",       CLK_MAIN, CLK_TYPE_GEN2_MAIN, CLK_EXTAL),
+> +       DEF_BASE(".pll0",       CLK_PLL0, CLK_TYPE_GEN2_PLL0, CLK_MAIN),
+> +       DEF_BASE(".pll1",       CLK_PLL1, CLK_TYPE_GEN2_PLL1, CLK_MAIN),
+> +       DEF_BASE(".pll3",       CLK_PLL3, CLK_TYPE_GEN2_PLL3, CLK_MAIN),
+> +
+> +       DEF_FIXED(".pll1_div2", CLK_PLL1_DIV2, CLK_PLL1, 2, 1),
+> +
+> +       /* Core Clock Outputs */
+> +       DEF_BASE("z",    R8A7742_CLK_Z,    CLK_TYPE_GEN2_Z,     CLK_PLL0),
+> +       DEF_BASE("sdh",  R8A7742_CLK_SDH,  CLK_TYPE_GEN2_SDH,   CLK_PLL1),
+> +       DEF_BASE("sd0",  R8A7742_CLK_SD0,  CLK_TYPE_GEN2_SD0,   CLK_PLL1),
+> +       DEF_BASE("sd1",  R8A7742_CLK_SD1,  CLK_TYPE_GEN2_SD1,   CLK_PLL1),
+> +       DEF_BASE("qspi", R8A7742_CLK_QSPI, CLK_TYPE_GEN2_QSPI,  CLK_PLL1_DIV2),
+> +       DEF_BASE("rcan", R8A7742_CLK_RCAN, CLK_TYPE_GEN2_RCAN,  CLK_USB_EXTAL),
+> +
+> +       DEF_FIXED("z2",    R8A7742_CLK_Z2,      CLK_PLL1,           2, 1),
+> +       DEF_FIXED("zg",    R8A7742_CLK_ZG,      CLK_PLL1,           3, 1),
+> +       DEF_FIXED("zt",    R8A7742_CLK_ZT,      CLK_PLL1,           5, 1),
+> +       DEF_FIXED("ztr",   R8A7742_CLK_ZTR,     CLK_PLL1,           4, 1),
+> +       DEF_FIXED("ztrd2", R8A7742_CLK_ZTRD2,   CLK_PLL1,           12, 1),
+
+The ZT* clocks are not fixed-factor clocks, but use programmable
+dividers in FRQCRB.
+So either you implement them correctly, or you drop them, like we did
+for the other R-Car Gen2 and RZ/G1 SoCs (there are no users yet).
+
+> +       DEF_FIXED("zx",    R8A7742_CLK_ZX,      CLK_PLL1,           3, 1),
+> +       DEF_FIXED("zs",    R8A7742_CLK_ZS,      CLK_PLL1,           6, 1),
+> +       DEF_FIXED("hp",    R8A7742_CLK_HP,      CLK_PLL1,          12, 1),
+> +       DEF_FIXED("b",     R8A7742_CLK_B,       CLK_PLL1,          12, 1),
+> +       DEF_FIXED("lb",    R8A7742_CLK_LB,      CLK_PLL1,          24, 1),
+
+Please use CLK_TYPE_GEN2_LB, as the LB divider depends on the state of
+mode pin MD18.
+
+> +       DEF_FIXED("p",     R8A7742_CLK_P,       CLK_PLL1,          24, 1),
+> +       DEF_FIXED("cl",    R8A7742_CLK_CL,      CLK_PLL1,          48, 1),
+> +       DEF_FIXED("m2",    R8A7742_CLK_M2,      CLK_PLL1,           8, 1),
+> +       DEF_FIXED("zb3",   R8A7742_CLK_ZB3,     CLK_PLL3,           4, 1),
+> +       DEF_FIXED("zb3d2", R8A7742_CLK_ZB3D2,   CLK_PLL3,           8, 1),
+> +       DEF_FIXED("ddr",   R8A7742_CLK_DDR,     CLK_PLL3,           8, 1),
+> +       DEF_FIXED("mp",    R8A7742_CLK_MP,      CLK_PLL1_DIV2,     15, 1),
+> +       DEF_FIXED("cp",    R8A7742_CLK_CP,      CLK_EXTAL,          2, 1),
+> +       DEF_FIXED("r",     R8A7742_CLK_R,       CLK_PLL1,       49152, 1),
+> +       DEF_FIXED("osc",   R8A7742_CLK_OSC,     CLK_PLL1,       12288, 1),
+> +
+> +       DEF_DIV6P1("sd2",  R8A7742_CLK_SD2,     CLK_PLL1_DIV2,  0x078),
+> +       DEF_DIV6P1("sd3",  R8A7742_CLK_SD3,     CLK_PLL1_DIV2,  0x26c),
+> +       DEF_DIV6P1("mmc0", R8A7742_CLK_MMC0,    CLK_PLL1_DIV2,  0x240),
+> +       DEF_DIV6P1("mmc1", R8A7742_CLK_MMC1,    CLK_PLL1_DIV2,  0x244),
+> +};
+> +
+> +static const struct mssr_mod_clk r8a7742_mod_clks[] __initconst = {
+> +       DEF_MOD("msiof0",                  0,   R8A7742_CLK_MP),
+> +       DEF_MOD("vcp1",                  100,   R8A7742_CLK_ZS),
+> +       DEF_MOD("vcp0",                  101,   R8A7742_CLK_ZS),
+> +       DEF_MOD("vpc1",                  102,   R8A7742_CLK_ZS),
+> +       DEF_MOD("vpc0",                  103,   R8A7742_CLK_ZS),
+> +       DEF_MOD("tmu1",                  111,   R8A7742_CLK_P),
+> +       DEF_MOD("3dg",                   112,   R8A7742_CLK_ZG),
+> +       DEF_MOD("2d-dmac",               115,   R8A7742_CLK_ZS),
+> +       DEF_MOD("fdp1-2",                117,   R8A7742_CLK_ZS),
+> +       DEF_MOD("fdp1-1",                118,   R8A7742_CLK_ZS),
+> +       DEF_MOD("fdp1-0",                119,   R8A7742_CLK_ZS),
+> +       DEF_MOD("tmu3",                  121,   R8A7742_CLK_P),
+> +       DEF_MOD("tmu2",                  122,   R8A7742_CLK_P),
+> +       DEF_MOD("cmt0",                  124,   R8A7742_CLK_R),
+> +       DEF_MOD("tmu0",                  125,   R8A7742_CLK_CP),
+> +       DEF_MOD("vsp1du1",               127,   R8A7742_CLK_ZS),
+> +       DEF_MOD("vsp1du0",               128,   R8A7742_CLK_ZS),
+> +       DEF_MOD("vsp1-sy",               131,   R8A7742_CLK_ZS),
+> +       DEF_MOD("scifa2",                202,   R8A7742_CLK_MP),
+> +       DEF_MOD("scifa1",                203,   R8A7742_CLK_MP),
+> +       DEF_MOD("scifa0",                204,   R8A7742_CLK_MP),
+> +       DEF_MOD("msiof2",                205,   R8A7742_CLK_MP),
+> +       DEF_MOD("scifb0",                206,   R8A7742_CLK_MP),
+> +       DEF_MOD("scifb1",                207,   R8A7742_CLK_MP),
+> +       DEF_MOD("msiof1",                208,   R8A7742_CLK_MP),
+> +       DEF_MOD("msiof3",                215,   R8A7742_CLK_MP),
+> +       DEF_MOD("scifb2",                216,   R8A7742_CLK_MP),
+> +       DEF_MOD("sys-dmac1",             218,   R8A7742_CLK_ZS),
+> +       DEF_MOD("sys-dmac0",             219,   R8A7742_CLK_ZS),
+> +       DEF_MOD("iic2",                  300,   R8A7742_CLK_CP),
+
+Parent should be R8A7742_CLK_HP.
+
+> +       DEF_MOD("tpu0",                  304,   R8A7742_CLK_CP),
+> +       DEF_MOD("mmcif1",                305,   R8A7742_CLK_MMC1),
+> +       DEF_MOD("scif2",                 310,   R8A7742_CLK_CP),
+
+Parent should be R8A7742_CLK_P.
+
+> +       DEF_MOD("sdhi3",                 311,   R8A7742_CLK_SD3),
+> +       DEF_MOD("sdhi2",                 312,   R8A7742_CLK_SD2),
+> +       DEF_MOD("sdhi1",                 313,   R8A7742_CLK_SD2),
+
+Parent should be R8A7742_CLK_SD1.
+
+> +static int __init r8a7742_cpg_mssr_init(struct device *dev)
+> +{
+> +       const struct rcar_gen2_cpg_pll_config *cpg_pll_config;
+> +       struct device_node *np = dev->of_node;
+> +       unsigned int i;
+> +       u32 cpg_mode;
+> +       int error;
+> +
+> +       error = rcar_rst_read_mode_pins(&cpg_mode);
+> +       if (error)
+> +               return error;
+> +
+> +       cpg_pll_config = &cpg_pll_configs[CPG_PLL_CONFIG_INDEX(cpg_mode)];
+> +
+> +       if (of_device_is_compatible(np, "renesas,r8a7742-cpg-mssr")) {
+> +               /* RZ/G1H uses a 1/3 divider for ZG */
+> +               for (i = 0; i < ARRAY_SIZE(r8a7742_core_clks); i++)
+> +                       if (r8a7742_core_clks[i].id == R8A7742_CLK_ZG) {
+> +                               r8a7742_core_clks[i].div = 3;
+> +                               break;
+> +                       }
+> +       }
+
+Do you really need this part? (copied from r8a7743-cpg-mssr.c ;-)
+If you remove it, r8a7742_core_clks[] can be const, and <linux/of.h> is
+no longer needed,
+
+> +       return rcar_gen2_cpg_init(cpg_pll_config, 2, cpg_mode);
+> +}
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
