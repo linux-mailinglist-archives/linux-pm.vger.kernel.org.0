@@ -2,168 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1871BAA68
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 18:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 333641BAB95
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 19:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726238AbgD0QuN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 12:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726223AbgD0QuN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 12:50:13 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D375EC03C1A7
-        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 09:50:12 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id k1so21415183wrx.4
-        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 09:50:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ifZHzQrYJTJ2psIoVYONoJxVcPBrBwiLq0Ka5H1X7f0=;
-        b=YN4xMzacilYGgkI5xIJKKjKcvwZcZ4qjnwboi7t+4heCeg+DVoCri3aTgOQ43+2b/U
-         ur3Wx9/P9iXCTeuhRKTWS9KtRKW7D4EGSQ1W6lDnSmD3l0qsduegt1i2nxkp/i7sIvSY
-         40XOB+SMgz68l1/ArBdGciU3CqBzBQR7h2zzVy6FvC8lqekaAiyRsAw56dIw+I4FErQ4
-         azNHB4ooJm10iR0K4KIDxECVWcNQfJk1j0FaB9+bxGqUgxFV+H5J+klrzmWcM6+4poJV
-         1RqelOBabzBzN0wbIZzc+jQcxhamURzPkZjnvLWAby0K3AwbgDzpUeJXgcLJw4EKrHSR
-         6A2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ifZHzQrYJTJ2psIoVYONoJxVcPBrBwiLq0Ka5H1X7f0=;
-        b=H3C1JWtPpEqY3fPtO9M9PG1KX+QRIktl8M2MkVCNA9zBS8v4ihXbWKgajl2fgvBMIW
-         7+xbPFym25tHLpDyiMoScEFykFMU4L5qJTwazYyNC33K7cPcjTU/L+h5+kvXhVUAT1K2
-         Jz2qq5thUkCGZCvCjaIdIyfJUD2SXeFfUABjODiJ29GurqFEY1ozwM6OH02Nu+18PIVQ
-         oCvIP4HgWfnkmSjfK44O9iKDlGpCqv3LGe8MvJKWEHS9Rj5CyENM/t4MdP4eCD+ec7G1
-         pEtPGNNxs8u808Y5znEO3Ty010eUua3DklEBDF5dWki6Yb/AyMqDPRggBbOwDu+7tJp+
-         4d9A==
-X-Gm-Message-State: AGi0PuaDmMpPJKibzY8EAbQch7bhyGjigz5HBJyVdNXv/YNs2wnDe/OT
-        DDiBEpM8T4IZVIOGeIGl68lHKw==
-X-Google-Smtp-Source: APiQypLnpGbWiFbiATkGLzM1ksCRfp33HEV/xjz0k0UXMZ8dYv4G0WKZWQ6pcTQZyBZPekAo8fPm6Q==
-X-Received: by 2002:adf:f24c:: with SMTP id b12mr28353216wrp.359.1588006211473;
-        Mon, 27 Apr 2020 09:50:11 -0700 (PDT)
-Received: from [192.168.0.41] (lns-bzn-59-82-252-135-148.adsl.proxad.net. [82.252.135.148])
-        by smtp.googlemail.com with ESMTPSA id f23sm16030600wml.4.2020.04.27.09.50.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Apr 2020 09:50:10 -0700 (PDT)
-Subject: Re: [PATCH v3 4/4] thermal: cpuidle: Register cpuidle cooling device
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "open list:CPU IDLE TIME MANAGEMENT FRAMEWORK" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:CPUIDLE DRIVER - ARM PSCI" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20200414220837.9284-1-daniel.lezcano@linaro.org>
- <20200414220837.9284-4-daniel.lezcano@linaro.org>
- <6b58035c-fe48-09ab-f042-729b07bcfec6@linaro.org>
-Message-ID: <34667fb4-664c-c80b-6bba-fe2ae981dcc1@linaro.org>
-Date:   Mon, 27 Apr 2020 18:50:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726238AbgD0RqD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 13:46:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54150 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726226AbgD0RqD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 27 Apr 2020 13:46:03 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CCAA621775;
+        Mon, 27 Apr 2020 17:46:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588009562;
+        bh=iF9YmvJqlTOPV6QEo1ch3u7PI0qsz6iUbUvNWthAYms=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=x5dT7bls/3QJn+I9NbWzFlG6FHclIlFs0dMqD5tSRm8dQv0gBaJ4/72TXlkHbf0kb
+         5JDD4w1fIgId0fi//oLcPdvIffq0NDHGy0/8f7NlxLYtrTIJIvLtveFzXAIaaFbQMa
+         kbfuHB2JKD+TyBrwC58U+aB0tbjo5/LEOt5HXqfM=
+Received: by mail-yb1-f172.google.com with SMTP id o139so9891403ybc.11;
+        Mon, 27 Apr 2020 10:46:02 -0700 (PDT)
+X-Gm-Message-State: AGi0PuauBr6AQeTzL2HsNKdxN76/MrNIVzrVim/JmvLEVxEn5U97W+QQ
+        sjcxAxJ9PEokUyEsAS1VKL+cUmHgkF8t/yHSUQ==
+X-Google-Smtp-Source: APiQypJCjp0sKkH8wsvV7TRTZ+Y5WfstmylSaK6ab9MlcQ1t5UeAxbE4A4p6/U7DdUD81SjmmMDCkQIJah8HRlmHtgQ=
+X-Received: by 2002:a25:281:: with SMTP id 123mr37843786ybc.358.1588009561921;
+ Mon, 27 Apr 2020 10:46:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <6b58035c-fe48-09ab-f042-729b07bcfec6@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200422201216.10593-1-ansuelsmth@gmail.com> <20200422201216.10593-2-ansuelsmth@gmail.com>
+ <CAL_JsqLUbM7ed2q7so4Uibiz2URRg1juoGRExy9Ta3J-LWAFow@mail.gmail.com>
+ <087301d61a86$68b6f950$3a24ebf0$@gmail.com> <20200427034951.xrk5ja3pg4anbg4s@vireshk-i7>
+ <016c01d61c80$ba1358b0$2e3a0a10$@gmail.com>
+In-Reply-To: <016c01d61c80$ba1358b0$2e3a0a10$@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 27 Apr 2020 12:45:49 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKu15CQu4pP6uyrUvYk3xZVWwUu=86CE5yDHPx7cSKdTw@mail.gmail.com>
+Message-ID: <CAL_JsqKu15CQu4pP6uyrUvYk3xZVWwUu=86CE5yDHPx7cSKdTw@mail.gmail.com>
+Subject: Re: R: [PATCH v2 2/2] dt-bindings: opp: Fix wrong binding in qcom-nvmem-cpufreq
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sricharan R <sricharan@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Apr 27, 2020 at 5:43 AM <ansuelsmth@gmail.com> wrote:
+>
+> > On 25-04-20, 00:19, ansuelsmth@gmail.com wrote:
+> > > > On Wed, Apr 22, 2020 at 3:12 PM Ansuel Smith
+> > <ansuelsmth@gmail.com>
+> > > > wrote:
+> > > > >
+> > > > > Update binding to new generic name "operating-points-v2-qcom-cpu"
+> > > > >
+> > > > > Fixes: a8811ec764f9 ("cpufreq: qcom: Add support for krait based
+> > socs")
+> > > > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > > > > ---
+> > > > >  Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt |
+> > 2
+> > > > +-
+> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/Documentation/devicetree/bindings/opp/qcom-nvmem-
+> > > > cpufreq.txt b/Documentation/devicetree/bindings/opp/qcom-nvmem-
+> > > > cpufreq.txt
+> > > > > index 64f07417ecfb..537e1774f589 100644
+> > > > > --- a/Documentation/devicetree/bindings/opp/qcom-nvmem-
+> > cpufreq.txt
+> > > > > +++ b/Documentation/devicetree/bindings/opp/qcom-nvmem-
+> > > > cpufreq.txt
+> > > > > @@ -19,7 +19,7 @@ In 'cpu' nodes:
+> > > > >
+> > > > >  In 'operating-points-v2' table:
+> > > > >  - compatible: Should be
+> > > > > -       - 'operating-points-v2-kryo-cpu' for apq8096, msm8996,
+> > msm8974,
+> > > > > +       - 'operating-points-v2-qcom-cpu' for apq8096, msm8996,
+> > > > msm8974,
+> > > > >                                              apq8064, ipq8064,
+> msm8960 and ipq8074.
+> > > >
+> > > > This is not how you fix the backwards compatibility issue pointed out
+> > > > on the Fixes reference.
+> > > >
+> > > > Rob
+> > >
+> > > Sorry but can you give some directive? Should I use the old binding and
+> > change
+> > > the driver to use it instead of the new one (and drop it) ?
+> >
+> > It is not about the name of the binding, you can rename it to whatever
+> > you want. The kernel needs to keep supporting all the previous
+> > bindings, so we can keep on changing the kernel but keep the same
+> > bootloader (with earlier bindings).
+> >
+> > --
+> > viresh
+>
+> Ok but still I can't understand why this is not right.
+> In 1/2 of this patchset I added the check for the old binding in the driver
 
-Hi guys,
+I don't have patch 1 and this patch should stand on it's own.
 
-any chance you ack this patch ?
+> and
+> here I updated the Documentation with the new one. This way the kernel
+> should support all the previous bindings and I can use the new better name.
 
+First, a compatible string is just an identifier. Maybe it wasn't the
+best name, but who cares really. Just use it even if it's not just
+kryo cpus. Otherwise, it's more complicated.
 
-On 21/04/2020 10:15, Daniel Lezcano wrote:
-> 
-> Hi Lorenzo, Sudeep,
-> 
-> other patches of the series are acked / reviewed.
-> 
-> If you are ok with these changes, could you add your acked-by so I can
-> merge all the series via the thermal tree?
-> 
-> Thanks
-> 
->   -- Daniel
-> 
-> On 15/04/2020 00:08, Daniel Lezcano wrote:
->> The cpuidle driver can be used as a cooling device by injecting idle
->> cycles. The DT binding for the idle state added an optional
->>
->> When the property is set, register the cpuidle driver with the idle
->> state node pointer as a cooling device. The thermal framework will do
->> the association automatically with the thermal zone via the
->> cooling-device defined in the device tree cooling-maps section.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>  drivers/cpuidle/cpuidle-arm.c  | 5 +++++
->>  drivers/cpuidle/cpuidle-psci.c | 5 +++++
->>  2 files changed, 10 insertions(+)
->>
->> diff --git a/drivers/cpuidle/cpuidle-arm.c b/drivers/cpuidle/cpuidle-arm.c
->> index 9e5156d39627..2406ac0ae134 100644
->> --- a/drivers/cpuidle/cpuidle-arm.c
->> +++ b/drivers/cpuidle/cpuidle-arm.c
->> @@ -8,6 +8,7 @@
->>  
->>  #define pr_fmt(fmt) "CPUidle arm: " fmt
->>  
->> +#include <linux/cpu_cooling.h>
->>  #include <linux/cpuidle.h>
->>  #include <linux/cpumask.h>
->>  #include <linux/cpu_pm.h>
->> @@ -124,6 +125,10 @@ static int __init arm_idle_init_cpu(int cpu)
->>  	if (ret)
->>  		goto out_kfree_drv;
->>  
->> +	ret = cpuidle_cooling_register(drv);
->> +	if (ret)
->> +		pr_err("Failed to register the idle cooling device: %d\n", ret);
->> +
->>  	return 0;
->>  
->>  out_kfree_drv:
->> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
->> index edd7a54ef0d3..8e805bff646f 100644
->> --- a/drivers/cpuidle/cpuidle-psci.c
->> +++ b/drivers/cpuidle/cpuidle-psci.c
->> @@ -9,6 +9,7 @@
->>  #define pr_fmt(fmt) "CPUidle PSCI: " fmt
->>  
->>  #include <linux/cpuhotplug.h>
->> +#include <linux/cpu_cooling.h>
->>  #include <linux/cpuidle.h>
->>  #include <linux/cpumask.h>
->>  #include <linux/cpu_pm.h>
->> @@ -305,6 +306,10 @@ static int __init psci_idle_init_cpu(int cpu)
->>  	if (ret)
->>  		goto out_kfree_drv;
->>  
->> +	ret = cpuidle_cooling_register(drv);
->> +	if (ret)
->> +		pr_err("Failed to register the idle cooling device: %d\n", ret);
->> +
->>  	return 0;
->>  
->>  out_kfree_drv:
->>
-> 
-> 
+Are you changing every dts file? If not, then dts files now have an
+undocumented compatible string which is not okay. You'd need to keep
+the old compatible and mark it deprecated. If you are, then you are
+breaking compatibility between new dts and older kernels unless adding
+the new compatible string to the driver is backported to stable (which
+should be okay).
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Rob
