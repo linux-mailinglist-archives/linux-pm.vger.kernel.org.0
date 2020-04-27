@@ -2,119 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 486481BA158
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 12:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7318C1BA192
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 12:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726728AbgD0Kd2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 06:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
+        id S1726832AbgD0Knt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 06:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726504AbgD0Kd1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 06:33:27 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7512EC0610D5;
-        Mon, 27 Apr 2020 03:33:27 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id 72so25313361otu.1;
-        Mon, 27 Apr 2020 03:33:27 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726537AbgD0Knt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 06:43:49 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EFFC0610D5;
+        Mon, 27 Apr 2020 03:43:49 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id s10so19972310wrr.0;
+        Mon, 27 Apr 2020 03:43:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RHfKISSDuem09HNmnqJrvLsee+Kd/nK6TGgV01HIek4=;
-        b=u871Cc3aU+fj9E/6ltaMi4DRumGoRfm36hLggOksBcwUIQlOn+/VZR5G8ZmZ+MSjOs
-         R0ahBZlobrZWEonpeSZVJbZqyUJHfuSEK6LwjXbKKL33b8U/lX+aPIj3cXjM58nwR8cg
-         zk5FfOFxVWl4st/r6DjbI3ohzYmy3Sufzui6R0MtC0h6ZGAMOUS7xYRliSOv31QY5qi3
-         ZR9CpoLvcvWwSt2Cdh85uBHqMky7C1e7mbWk3Fj+rQZo/s8dJ1z5Y2wZEnGQFx7xTKnA
-         Xs6wOq3xj+V2SetBWAnFdlGiPrTvXuDcPVqqxzrMCw+VcxhmfIxoIglQs2ecwrMsEbHu
-         U+Gw==
+        h=from:to:cc:references:in-reply-to:subject:date:message-id
+         :mime-version:content-transfer-encoding:content-language
+         :thread-index;
+        bh=8VrvOpg1vEprgEJxlFupBjFgcQQNFTGZ6LU4Tz38GQo=;
+        b=dXF9roYiDIYZjPSd2jGEHE9og4CQxpRwJtc76ja66qiCXiHh/uRRb0XIInTA/k28zZ
+         Dh6RVCce4oD6EbqXH1Y5TzJtdUdIPI35WSA3sAPFZ06jy5lUiVq1w82xsFcamybOm4se
+         obRdBmLrwOUzH8RJ+ex7abuj1Ah1zzBrhdcvKsebjVr4WFkKwTPZOMpI6Wpl65InNT8F
+         i4fNZUkz8RvLnGvuLgD3XaTWYezh0pGVV5FnDIAanvo3YaiWcb03sb63X7MmKeCfRTYU
+         uQyXNT0f3fnbMFJqi27+GYFSlQiLmvMh0RdLnXDhH1Sz0X1b30YRlIadeJUe64nxoC8X
+         1WMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RHfKISSDuem09HNmnqJrvLsee+Kd/nK6TGgV01HIek4=;
-        b=pcGAv1dhy3K5ZPzlvpGtqubhhQ/V5/ee1xBTK6UgOdsPrvhOZLA95qFmzIFMf3eUDm
-         z5ylLzMch5j+XG8yGt+VZE7R8l0o0FjZQy6IZ7SauxJ5in+NLnO35+lUdWqhTIxdC114
-         vcDwDp4H+A1NYEvCftmOGNExnwDg71v6356kaUrdmCUXLMLp2fHEUMI/KhT7S+tdjU7g
-         llrJUElqcdKHM6r4I5pMbdT5bmbBUBusEPMO1jy2E2O0JvJk9gEMsFQsxXPkZdOJDGuq
-         +CLogL0CebRyaW4St8gSB1hHxbr/Um26Yo1/OS2rrccnv6ziRBrs+Gx7cVZ57GGCqMrc
-         CPNA==
-X-Gm-Message-State: AGi0Pua6BxSDXYuCeotJLr+dDDFewhpCmKek9fWPHAPKVeiUKcc9c8IM
-        cyiL9SRUA4lUl+pwKTuPTi1CheT6xm5jiadQHf4=
-X-Google-Smtp-Source: APiQypJYWrI2wW3qHn8idUgkhu1PgaumpBUm2i/d7Fy3/icjCxWW32db6tol3+HUkjrAEJvFcar5dI/Knt8Yve0JLgM=
-X-Received: by 2002:a9d:7390:: with SMTP id j16mr16472029otk.43.1587983606923;
- Mon, 27 Apr 2020 03:33:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
+         :message-id:mime-version:content-transfer-encoding:content-language
+         :thread-index;
+        bh=8VrvOpg1vEprgEJxlFupBjFgcQQNFTGZ6LU4Tz38GQo=;
+        b=o46B3gqTHESMsUOca4zsqFlP5o2USvfR5pYasZ3PpAExOKHIVvKRN9vDLRPkZ9NZMc
+         e4sm6xTd+wkBcn14Oun6rfsFxsGLrxULbIFWrkXM8olMPRGtcnnYoUqLCSIlu36mY2rI
+         /ZUMJkItf/P5s69IHNIXRJ5itXvH9WqiR06uQktiFp8WBtK6YwAk6eEUbCIPmtLIEsDX
+         CW4aqspqPBulhmmRwPBnqgjMgVpSSsTYIIpedcS+kgOIynyqQOFgGva+by53TXK9pRkc
+         VksQJpWUHlijErXE+q1yc0GNWEo48lvzkLcYC7hs+h0ycsq0HGg8IUS+9Uqz69PUKq8H
+         5YMA==
+X-Gm-Message-State: AGi0PuY5k+G35Ka0zspxGxWbVplvvLvnxokP7fPgCN9fslE6W5CiDBFu
+        gO+Cgrr1RMcVafZwGejKVZ0=
+X-Google-Smtp-Source: APiQypLo5rKIrkPgDi/F0qTznt4jwhBCY3AfHSXpG5DZtCW6uWuoOEl4kd6ym1UbbBTtgFBz9K+LTg==
+X-Received: by 2002:a5d:42cf:: with SMTP id t15mr26270515wrr.354.1587984227110;
+        Mon, 27 Apr 2020 03:43:47 -0700 (PDT)
+Received: from AnsuelXPS ([79.37.253.240])
+        by smtp.gmail.com with ESMTPSA id g186sm15672947wme.7.2020.04.27.03.43.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 Apr 2020 03:43:46 -0700 (PDT)
+From:   <ansuelsmth@gmail.com>
+To:     "'Viresh Kumar'" <viresh.kumar@linaro.org>
+Cc:     "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Viresh Kumar'" <vireshk@kernel.org>,
+        "'Andy Gross'" <agross@kernel.org>,
+        "'Bjorn Andersson'" <bjorn.andersson@linaro.org>,
+        "'Ilia Lin'" <ilia.lin@kernel.org>, "'Nishanth Menon'" <nm@ti.com>,
+        "'Stephen Boyd'" <sboyd@kernel.org>,
+        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
+        "'Sricharan R'" <sricharan@codeaurora.org>,
+        "'linux-arm-msm'" <linux-arm-msm@vger.kernel.org>,
+        "'open list:THERMAL'" <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20200422201216.10593-1-ansuelsmth@gmail.com> <20200422201216.10593-2-ansuelsmth@gmail.com> <CAL_JsqLUbM7ed2q7so4Uibiz2URRg1juoGRExy9Ta3J-LWAFow@mail.gmail.com> <087301d61a86$68b6f950$3a24ebf0$@gmail.com> <20200427034951.xrk5ja3pg4anbg4s@vireshk-i7>
+In-Reply-To: <20200427034951.xrk5ja3pg4anbg4s@vireshk-i7>
+Subject: R: R: [PATCH v2 2/2] dt-bindings: opp: Fix wrong binding in qcom-nvmem-cpufreq
+Date:   Mon, 27 Apr 2020 12:43:43 +0200
+Message-ID: <016c01d61c80$ba1358b0$2e3a0a10$@gmail.com>
 MIME-Version: 1.0
-References: <1587678050-23468-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1587678050-23468-11-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdV6J-_gBkzhUXtA8OrxhJVzyrAqjA8oeGJGBp86X-C3Nw@mail.gmail.com>
- <20200427092408.g2vpc6j2c6it4x2i@vireshk-i7> <CA+V-a8vwF=u53dZ_U4vX3oAUHrBh5uVUBeOTiDqTZJfV8UUeCA@mail.gmail.com>
- <20200427102240.jsskbskczvctvcwv@vireshk-i7>
-In-Reply-To: <20200427102240.jsskbskczvctvcwv@vireshk-i7>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 27 Apr 2020 11:33:00 +0100
-Message-ID: <CA+V-a8u46NZ8Y9dAQRHpsVQ2h4fevmRVxnCMLL5mJ2uewRUm8A@mail.gmail.com>
-Subject: Re: [PATCH 10/10] cpufreq: dt: Add support for r8a7742
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Marian-Cristian Rotariu 
-        <marian-cristian.rotariu.rb@bp.renesas.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: it
+Thread-Index: AQI2zLF6jE7E+qUxZ1JX975++E9sxAFV8SPrAaqC6P0CXGiiOwGPGxidp5QHXxA=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 27, 2020 at 11:22 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 27-04-20, 11:20, Lad, Prabhakar wrote:
-> > Hi Viresh,
+> On 25-04-20, 00:19, ansuelsmth@gmail.com wrote:
+> > > On Wed, Apr 22, 2020 at 3:12 PM Ansuel Smith
+> <ansuelsmth@gmail.com>
+> > > wrote:
+> > > >
+> > > > Update binding to new generic name "operating-points-v2-qcom-cpu"
+> > > >
+> > > > Fixes: a8811ec764f9 ("cpufreq: qcom: Add support for krait based
+> socs")
+> > > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt |
+> 2
+> > > +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/opp/qcom-nvmem-
+> > > cpufreq.txt b/Documentation/devicetree/bindings/opp/qcom-nvmem-
+> > > cpufreq.txt
+> > > > index 64f07417ecfb..537e1774f589 100644
+> > > > --- a/Documentation/devicetree/bindings/opp/qcom-nvmem-
+> cpufreq.txt
+> > > > +++ b/Documentation/devicetree/bindings/opp/qcom-nvmem-
+> > > cpufreq.txt
+> > > > @@ -19,7 +19,7 @@ In 'cpu' nodes:
+> > > >
+> > > >  In 'operating-points-v2' table:
+> > > >  - compatible: Should be
+> > > > -       - 'operating-points-v2-kryo-cpu' for apq8096, msm8996,
+> msm8974,
+> > > > +       - 'operating-points-v2-qcom-cpu' for apq8096, msm8996,
+> > > msm8974,
+> > > >                                              apq8064, ipq8064,
+msm8960 and ipq8074.
+> > >
+> > > This is not how you fix the backwards compatibility issue pointed out
+> > > on the Fixes reference.
+> > >
+> > > Rob
 > >
-> > On Mon, Apr 27, 2020 at 10:24 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > On 27-04-20, 11:22, Geert Uytterhoeven wrote:
-> > > > Hi Prabhakar,
-> > > >
-> > > > This patch should be merged through Viresh's cpufreq tree (CCed).
-> > > >
-> > > > On Thu, Apr 23, 2020 at 11:41 PM Lad Prabhakar
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > > > Add the compatible strings for supporting the generic cpufreq driver on
-> > > > > the Renesas RZ/G1H (R8A7742) SoC.
-> > > > >
-> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> > > >
-> > > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > >
-> > > Prabhakar,
-> > >
-> > > Please resend the patch with all dependencies to me so I can apply it.
-> > >
-> > This is the only patch which is needed for R8A7742 SoC which needs to
-> > be applied for drivers/cpufreq. Shall I still repost it or you are
-> > happy to pick this one up ?
->
-> would be easier for me if you repost it. I don't have it in my
-> mailbox.
->
-Sure will post that in a bit.
-
-Cheers,
---Prabhakar
-
+> > Sorry but can you give some directive? Should I use the old binding and
+> change
+> > the driver to use it instead of the new one (and drop it) ?
+> 
+> It is not about the name of the binding, you can rename it to whatever
+> you want. The kernel needs to keep supporting all the previous
+> bindings, so we can keep on changing the kernel but keep the same
+> bootloader (with earlier bindings).
+> 
 > --
 > viresh
+
+Ok but still I can't understand why this is not right. 
+In 1/2 of this patchset I added the check for the old binding in the driver
+and 
+here I updated the Documentation with the new one. This way the kernel 
+should support all the previous bindings and I can use the new better name.
+
