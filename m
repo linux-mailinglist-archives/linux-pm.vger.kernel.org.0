@@ -2,56 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4672C1B9FD0
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 11:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C861B9FD9
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Apr 2020 11:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726692AbgD0JYP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Apr 2020 05:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726938AbgD0JYM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 05:24:12 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FC1C09B050
-        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 02:24:11 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id z6so6780143plk.10
-        for <linux-pm@vger.kernel.org>; Mon, 27 Apr 2020 02:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=62sxPbsrxCm2fvIpJ8tpB4+O/E6FAUO1ubRiSS5aMQs=;
-        b=PqkwdOV9sWGTFWFEwpK93utJLjznxrq9WB2g7q3+71ll4BiIeRtuPb+ynL2zXTe+Nr
-         m1FfLsqEjWI8q0Ir9zWeZBQ1TzbPYwbUz1alfss91jOdDLIcQnVwOHgqhJnjSXatqq8n
-         TCA/aUeHD5zilUdC3r50QHTAo7ow6caq+LkPzrGFb5FjU3YbfpUYUU0TvEQcBYSsfx08
-         OsL3fcXvxI1Gcvat0hjax14vIxLSD/CeFJ0AMJ5SD3/IqM6mPuQxuU+KfC1JDHRmktRv
-         bNwzP6r4PlUzL7vbiwLeUR6qcr+VJ26wQ5jfmfm7C/ODd3PFJ80O+/A9HzGO+7gkYSrL
-         ISFw==
+        id S1726693AbgD0J2H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Apr 2020 05:28:07 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:39573 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726003AbgD0J2H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Apr 2020 05:28:07 -0400
+Received: by mail-ot1-f66.google.com with SMTP id m13so24995621otf.6;
+        Mon, 27 Apr 2020 02:28:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=62sxPbsrxCm2fvIpJ8tpB4+O/E6FAUO1ubRiSS5aMQs=;
-        b=XesmC1pDt/8BIcLX20IE76hZ8KsYetUcCUl4Cb62RGmUbjbrD8r1XPOcffjQEOyXUj
-         GUqYoCQSjPQImM7hIDxSh1u1ulY1lbsI0ObnXrH7vLchTppC4RZy0pbMrPGdPWBMnw/0
-         5YQ6kQ6uOPxEaN1XlM66U9sUH/rTeexCmyihTGSLXNQY9IBWpFFHt63hBhR0a/+Lwjob
-         lWD9Qs7zUSj/Q1BISfmk+o57iDWITm9BDt3BGmDBpYh2R6q7k930CAmQ06YQLicFSt3b
-         xUo5s0drEqgtTuZ/91KqDtZLUTkc6ZMiv5Zv/AVQK9l1C3FhMIw2bg9KBXzbK86vg5ya
-         2Cvg==
-X-Gm-Message-State: AGi0PuY3+Y3RcafGVEHFbMN68iyemhqTiwGj2lireyeHO3I/vA+oyijE
-        OX7a6JopsifuKlC0CjAbHJFHtA==
-X-Google-Smtp-Source: APiQypLoeg39tmPVj837ge/fvjEjwcaLKfMYIysT4UHtoPUQOPFkSmOF2zWgF54zZIpO9qIWwNDClQ==
-X-Received: by 2002:a17:90a:1501:: with SMTP id l1mr21988435pja.82.1587979450837;
-        Mon, 27 Apr 2020 02:24:10 -0700 (PDT)
-Received: from localhost ([122.171.118.46])
-        by smtp.gmail.com with ESMTPSA id l37sm10807183pje.12.2020.04.27.02.24.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 27 Apr 2020 02:24:10 -0700 (PDT)
-Date:   Mon, 27 Apr 2020 14:54:08 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Michael Turquette <mturquette@baylibre.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=satcs0L6pCESi5s1zRT0opUmLRyAMa2F37DYw2oCF+o=;
+        b=ol0F7Rtxb6Gb+9Dnw0WNZUdvytHtpgIc+/KqV098Nk9R4sEj4a9p+Z4gDFEgAVwhoT
+         lLsTPikzwIoG/XZREvvmDnvc9v4cy5deA5WzaXSe1AMwESqbPzF3VYNlSTlqr3op/rJ0
+         gCPJ2b+5V9zTaS5tz6BCwATxojWf+5eN6m3CgEyujLw6ivWq8NjZigru2tnVDvD4HuOE
+         jfKJhOzSeskRLAHJqornMCPAwuTgscZ8BbumiyC12bV3Ty3gXDwDck1kpR5o765D84ji
+         MEaGSd2ZOg1JL18X/uQDFHfNtu41wzD8qmfSFcahRAojySrBWBlhwYiEGShb2dRiL6lL
+         v/Vg==
+X-Gm-Message-State: AGi0PuahJnDw5VZhzN/HcYMKmd+m+tuP06kK6NRkALxkMz2oafS89LEs
+        HVz8/lSE6ZlTtstLhOgbHKvVUiCK/eU036Grl+w=
+X-Google-Smtp-Source: APiQypJzALJgRY1d91rA8c98t1wolcYkZSylcGRu1D6EuuJWyXLxqd15Cj20htAHNIdKONFRaH1i3C9mh1n0ja0zK0E=
+X-Received: by 2002:a9d:564:: with SMTP id 91mr17595764otw.250.1587979686512;
+ Mon, 27 Apr 2020 02:28:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <1587678050-23468-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1587678050-23468-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 27 Apr 2020 11:27:55 +0200
+Message-ID: <CAMuHMdXwsUAaeY+b6t-nqPE8kL-p+F4HqXE2mujP0eXPjrbooQ@mail.gmail.com>
+Subject: Re: [PATCH 00/10] Add RZ/G1H support.
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -67,39 +53,52 @@ Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
         Lad Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH 10/10] cpufreq: dt: Add support for r8a7742
-Message-ID: <20200427092408.g2vpc6j2c6it4x2i@vireshk-i7>
-References: <1587678050-23468-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1587678050-23468-11-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdV6J-_gBkzhUXtA8OrxhJVzyrAqjA8oeGJGBp86X-C3Nw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdV6J-_gBkzhUXtA8OrxhJVzyrAqjA8oeGJGBp86X-C3Nw@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27-04-20, 11:22, Geert Uytterhoeven wrote:
-> Hi Prabhakar,
-> 
-> This patch should be merged through Viresh's cpufreq tree (CCed).
-> 
-> On Thu, Apr 23, 2020 at 11:41 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > Add the compatible strings for supporting the generic cpufreq driver on
-> > the Renesas RZ/G1H (R8A7742) SoC.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> 
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Hi Prabhakar,
 
-Prabhakar,
+On Thu, Apr 23, 2020 at 11:41 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> This patch series aims to add support for Renesas RZ/G1H (r8a7742) SoC.
+>
+> RZ/G1H SoC is similar to R-Car Gen2 H2 SoC.
+>
+> This patch set is based on renesas-drivers/master-v5.7-rc1.
 
-Please resend the patch with all dependencies to me so I can apply it.
+Thanks for your series!
+
+Looks mostly OK to me.
+The missing code part seems to be the introduction of the main
+CONFIG_ARCH_R8A7742 symbol?
+
+I assume you plan to submit the DTS for v5.8, too, so I'll have to be
+careful and apply the binding definitions to a separate shared branch?
+
+Thanks again!
+
+> Lad Prabhakar (10):
+>   dt-bindings: power: rcar-sysc: Document r8a7742 SYSC binding
+>   dt-bindings: power: rcar-sysc: Add r8a7742 power domain index macros
+>   soc: renesas: rcar-sysc: add R8A7742 support
+>   dt-bindings: reset: rcar-rst: Document r8a7742 reset module
+>   soc: renesas: rcar-rst: Add support for RZ/G1H
+>   dt-bindings: clock: renesas: cpg-mssr: Document r8a7742 binding
+>   clk: renesas: Add r8a7742 CPG Core Clock Definitions
+>   clk: renesas: cpg-mssr: Add R8A7742 support
+>   ARM: shmobile: r8a7742: Basic SoC support
+>   cpufreq: dt: Add support for r8a7742
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-viresh
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
