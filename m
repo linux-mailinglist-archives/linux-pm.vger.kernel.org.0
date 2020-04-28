@@ -2,102 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93ABE1BCC2E
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 21:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7104B1BCC40
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 21:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728474AbgD1TSV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Apr 2020 15:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S1729149AbgD1TUI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Apr 2020 15:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728392AbgD1TSV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Apr 2020 15:18:21 -0400
+        by vger.kernel.org with ESMTP id S1729135AbgD1TUH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Apr 2020 15:20:07 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C868DC03C1AB;
-        Tue, 28 Apr 2020 12:18:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A290C03C1AB;
+        Tue, 28 Apr 2020 12:20:07 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 81E182A1F7F
+        with ESMTPSA id E79792A1F87
 Received: by earth.universe (Postfix, from userid 1000)
-        id 6AB5E3C08C6; Tue, 28 Apr 2020 21:18:17 +0200 (CEST)
-Date:   Tue, 28 Apr 2020 21:18:17 +0200
+        id 5F2173C08C6; Tue, 28 Apr 2020 21:20:03 +0200 (CEST)
+Date:   Tue, 28 Apr 2020 21:20:03 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Kejia Hu <kejia.hu@codethink.co.uk>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] power: reset: qcom-pon: reg write mask depends on pon
- generation
-Message-ID: <20200428191817.jawbnvnyjnucxa3d@earth.universe>
-References: <20200428070437.14016-1-kejia.hu@codethink.co.uk>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Jason Yan <yanaijie@huawei.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] power: supply: ab8500_fg: remove comparison to bool
+Message-ID: <20200428192003.yhqfvezez2kntjwi@earth.universe>
+References: <20200426094250.23995-1-yanaijie@huawei.com>
+ <CACRpkdYwu3LnN9KGfbjhnJu75hmKBKgnSWnDCWmdnGWGGGYPTw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="egloem2s3afwqov4"
+        protocol="application/pgp-signature"; boundary="ttdcwcb7uw2owqyr"
 Content-Disposition: inline
-In-Reply-To: <20200428070437.14016-1-kejia.hu@codethink.co.uk>
+In-Reply-To: <CACRpkdYwu3LnN9KGfbjhnJu75hmKBKgnSWnDCWmdnGWGGGYPTw@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---egloem2s3afwqov4
+--ttdcwcb7uw2owqyr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Apr 28, 2020 at 08:04:37AM +0100, Kejia Hu wrote:
-> Instead of hardcode the mask, it should be depends
-> on which generation of pon it was.
+On Tue, Apr 28, 2020 at 04:02:31PM +0200, Linus Walleij wrote:
+> On Sun, Apr 26, 2020 at 11:43 AM Jason Yan <yanaijie@huawei.com> wrote:
 >=20
-> Signed-off-by: Kejia Hu <kejia.hu@codethink.co.uk>
-> ---
+> > Fix the following coccicheck warning:
+> >
+> > drivers/power/supply/ab8500_fg.c:2402:5-24: WARNING: Comparison to bool
+> >
+> > Signed-off-by: Jason Yan <yanaijie@huawei.com>
+>=20
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/reset/qcom-pon.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-po=
-n.c
-> index 22a743a0bf28..4a688741a88a 100644
-> --- a/drivers/power/reset/qcom-pon.c
-> +++ b/drivers/power/reset/qcom-pon.c
-> @@ -34,7 +34,8 @@ static int pm8916_reboot_mode_write(struct reboot_mode_=
-driver *reboot,
-> =20
->  	ret =3D regmap_update_bits(pon->regmap,
->  				 pon->baseaddr + PON_SOFT_RB_SPARE,
-> -				 0xfc, magic << pon->reason_shift);
-> +				 GENMASK(7, pon->reason_shift),
-> +				 magic << pon->reason_shift);
->  	if (ret < 0)
->  		dev_err(pon->dev, "update reboot mode bits failed\n");
-> =20
-> --=20
-> 2.11.0
->=20
-
---egloem2s3afwqov4
+--ttdcwcb7uw2owqyr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6ogXIACgkQ2O7X88g7
-+ppBBg//ddYN4j3A2I6mp+u5sDX/NidZ6aK5PjibvnU9+VeEPAHNhqOCzoDRla9u
-++B6b/eeZVsJoJlC7nEML3dgwN/ABFgLZfSGGGryv4dDKqYlLzjXFhien7cfes6B
-2V+/Ah8dxiqKmzSJaQk8Oj7EQC3/uw0JObDfTbdRATv0bSwixXR7rTNRrtR50nyV
-hIJkscTpwYXQngd8x+9maIfUfmjGCogxgDYOhri9wHgup+nMJL/z/cD1yUTxxYt3
-T5fta7yIK/5/6rhuLc1PMaXtLQ1A7FNyUc7jstzRywkCZTkRAo0oVky2FbZkXjNJ
-0GRlqjsw16rB96o8r+IhUyAXwucVUEzv+OFuVPXApF7EQV+t/Ah+JFbbNnVDmvzG
-0Tn/1SjSrG1inAAV2TEUe3GkfVTq54WYdVdGGufMbGY5ZLWzIhRmjMUzmr1Wmd77
-bgty2YUDzaxoZYATSJ0lVPrNWV9cGAS8soVSD2VX1gIwIIlpUfgE2dKpudWysTFq
-gc1ozU1F92vm/BhDHGnVumwNB6eFH2U9yqLgZCQno5qxqDCw9phJx1xCj47tuWEG
-xJOCCp//DoBJNtiASuTXfO4ZD/ssK11O7fb7oD0DO+QiXeqEyu6/9bprsPVadEBS
-394/hJ0jTodpdm9aA/iDj5b0Wz1n+X8NXwDLNqwPztpUs93T65w=
-=54AQ
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6ogeMACgkQ2O7X88g7
++prREQ//Y/BVNO+E0LA3tnVd+n5Vf1Q1Th7uxH5p2Ui1B/Onv5qP7o/mr0ELvddb
+1IM5T448L6MgJ0YSepWK3BCzKqun0w5YAa0QZG8TAEJeBrLvFl6zXFWsxgMNSiYZ
+pIlYEg7UFlud7FiUt1V1gir+SI4qjG8RXL2A64Z4EQ6J4dpTPnOk4mX/zzgyR2h0
+LQ9oCHoK+GNkyAo5jVJoVxAE/2l7kDHT0MQJAv4zS7xgxwz5/giQrn5jJTZadeFM
+m/PalOmH1aJ2CQAjlYHr28sKPAIC+mz6i5e9cnYwK7bM7+f53I74xMMrA7YVaTsL
+/Mc3k5oVa/DBNgKAdHrGZ4jv4R01aZhoUQcaKevPuiwQEBhqkOXVshoaE5sDiXpb
+lkEcyG6Q8AJOC5e4Qm/eRv2oh7Xm7yzedAhQD39AKtFl5X7SeB17tWk914RJXIeS
+T/DAm+B8ido7LJZ0myw/k0BwOU3H8mMOkWdmhjnnmbSP8FP4+mtlDZDuH7Y1NOHD
+895rfdMVqNEEyhnD1PuWIKBPixZaxshHrC8cuR3pbL4Z926pHkTUR1ltzmtLuDGg
+x7OJgfXHBTW7C7vn/YgSe5HdOBybOLXqABCLf9cOc/l04oShE7lVzyKJu6uXgaH7
+z/oVfO8VF3uk7SL0JDjKNjujqkECLy77DA1M6QmYNtE2RN1/iPU=
+=ghDH
 -----END PGP SIGNATURE-----
 
---egloem2s3afwqov4--
+--ttdcwcb7uw2owqyr--
