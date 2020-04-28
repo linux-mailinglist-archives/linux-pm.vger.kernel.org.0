@@ -2,85 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A1B1BCC5F
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 21:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755CB1BCC6A
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 21:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728614AbgD1T0f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Apr 2020 15:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728613AbgD1T0e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Apr 2020 15:26:34 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A44C03C1AB;
-        Tue, 28 Apr 2020 12:26:34 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 5D21D2A06C3
+        id S1728584AbgD1Tb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Apr 2020 15:31:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36946 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728474AbgD1Tb1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 28 Apr 2020 15:31:27 -0400
+Received: from earth.universe (dyndsl-095-033-172-075.ewe-ip-backbone.de [95.33.172.75])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A3BFA21707;
+        Tue, 28 Apr 2020 19:31:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588102286;
+        bh=xj/V0eXDEGpxei/D4tRMMNGrhD6ZfmLPRgXfOZqZIGY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u/FoPomPbU1vPfODWtg6PZi8uOI/TJdHLpuHwDWL8wmZG/ki/i8heElf78GyUXuYr
+         YDQTitPOORz1q5RWM34tPzESu94USs0MWCUDpKDC3h/f28pTs+3d17VchijSrYU8Fj
+         cFHEBWN2uv4vgGyI/R/lZQt4GMyBAtBf8FBvn26Q=
 Received: by earth.universe (Postfix, from userid 1000)
-        id D156B3C08C6; Tue, 28 Apr 2020 21:26:30 +0200 (CEST)
-Date:   Tue, 28 Apr 2020 21:26:30 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Baolin Wang <baolin.wang7@gmail.com>
-Cc:     orsonzhai@gmail.com, zhang.lyra@gmail.com, yuanjiang.yu@unisoc.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] Add some new properties for the SC27XX fuel gauge
-Message-ID: <20200428192630.bnxwhclctzwqov6x@earth.universe>
-References: <cover.1587353854.git.baolin.wang7@gmail.com>
+        id DDA173C08C6; Tue, 28 Apr 2020 21:31:24 +0200 (CEST)
+Date:   Tue, 28 Apr 2020 21:31:24 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 04/17] power/reset: vexpress: Support building as a module
+Message-ID: <20200428193124.xe53lgorhc6uyffv@earth.universe>
+References: <20200419170810.5738-1-robh@kernel.org>
+ <20200419170810.5738-5-robh@kernel.org>
+ <CAK8P3a2BZLti5pLrru8s-45Yz54SA0JZbyjvYEstSDJZfnzEmA@mail.gmail.com>
+ <CAL_Jsq+Hk_WuK=c+eHi1Kz3EPzm=zOw2ctETXEySPH1WgAGjug@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ohtg55muwurupbgz"
+        protocol="application/pgp-signature"; boundary="6ujoodgxix7zrbfc"
 Content-Disposition: inline
-In-Reply-To: <cover.1587353854.git.baolin.wang7@gmail.com>
+In-Reply-To: <CAL_Jsq+Hk_WuK=c+eHi1Kz3EPzm=zOw2ctETXEySPH1WgAGjug@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ohtg55muwurupbgz
+--6ujoodgxix7zrbfc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Apr 20, 2020 at 11:42:03AM +0800, Baolin Wang wrote:
-> This patch set adds some new properties for the SC27XX fuel gauge,
-> as well as changing the 'POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN' as
-> writeable. Thanks.
+On Mon, Apr 20, 2020 at 12:23:13PM -0500, Rob Herring wrote:
+> On Mon, Apr 20, 2020 at 10:24 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Sun, Apr 19, 2020 at 7:08 PM Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > Enable building the VExpress power-off/reset driver as a module.
+> >
+> > Your change allows loading and unloading the driver, but actually
+> > unloading is a bug with the current implementation, as there is no
+> > 'release' handler to undo the _vexpress_register_restart_handler()
+> > function.
 >=20
-> Yuanjiang Yu (4):
->   power: supply: sc27xx: Set 'no_thermal' flag for SC27xx fuel gauge
->   power: supply: sc27xx: Allow to change the battery full capacity
->   power: supply: sc27xx: Add CURRENT_NOW/VOLTAGE_NOW properties support
->   power: supply: sc27xx: Add boot voltage support
->=20
->  drivers/power/supply/sc27xx_fuel_gauge.c | 77 +++++++++++++++++++++++-
->  1 file changed, 74 insertions(+), 3 deletions(-)
+> And also to save and restore pm_power_off...
 
-Thanks, queued.
+I'm fine with providing Acked-by for this for merging through a
+different tree or taking it through my tree.
+
+> > It should not be hard to add a release handler, or you could just
+> > mark the function as non-unloadable by only having a module_init()
+> > but no module_exit() function.
+> >
+> > I suppose if you do the latter, there should also be a suppress_bind_at=
+trs
+> > flag in the device_driver. This is a preexisting bug.
+>=20
+> I may just drop this patch. I wrote it and then realized I don't need
+> it as PSCI can be used instead.
+
+So is the driver useless on arm64 and depends can be reduced to
+arm32?
 
 -- Sebastian
 
---ohtg55muwurupbgz
+--6ujoodgxix7zrbfc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6og2YACgkQ2O7X88g7
-+prZew/8DC17AQ0V4UMuWcnhm3BMkDa11x/XZDjMahHLWZBdEMiPGFuzM8Ya2KVm
-PSeNNV6xs72NyNuYqNubD5L60BfdRvapYlj0ZwoVXF+ed4ZkpHxfBjaxdypt0EuQ
-spJ6ZPGImIbIgl5l0NeMnrdOLsCHdYcXXPiZL0HLub0vYbFzsg38mio9hwgWrerv
-sakmv+GlEIZhV39sgWeY4SZpffn1FJe1XghJjfHcEUh0DXTo1FPsPIhkiJ+VB0EU
-/0vBG4eK2YkUSF7aZKahwbd23JY5mqAfCm6af2+X1w+n8aa2lw6FIPI40FaMXhi0
-eboZLWdcbZG4/0XsZtjyFAEOKSenHwAWOAkSZDh5KkT2JG3aS7QedQeKSGQEXJ+B
-h39j88tpYDr2Vtx9FSAgsnfQvpRXoUldaSVcPMZp/x4QUzfRT3Q/MlwgBjGUT5Ua
-TZylhIlALEjiY+XT3hXmesFqXdhB7G9UBJ7BFsP42LCUM6zkoyCnxK9t+NoGH46a
-6l5724PMAmTtP4/UpWRLTJBQMhbbM5ySzC1SWKj4h2GGnf4M8DwJxfOUgPlBuSXD
-u+bjzUxZBS0HsSX4cBnsJmqyuZcL1mdlRa57jdu88fKHQ9CStcwsXetn1tpnzgF+
-3NHc9iq7/eybLvIL3u+ui8G3rfD2nzEhvLu3kkFtTB0rwXmpZpA=
-=9FQC
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6ohIwACgkQ2O7X88g7
++ppDwRAAjzNQt+XW6UyQw1RRYM2D/aruiSteQDj9cf12K3voQf5RNkTLuRqVnJ07
+Va8MWbiUbK95NMhhwkqIf8QZ3hpt3tTR5c0f8pLvBhbG7EJvhK8VVNqDmfFsjy4v
+ahU0XxqIYt7pFxtsEo/WZ3o6L0maB15vdguIhKpEetmpd8hY9HJazdiiqrwu+dHX
+J/bQpZ0ogKb6Nzckn9NZDOQGpAyi4qHkIjss7lvB6FCq/e2I4SIbxbhmE9UPhNcH
+nJGSIbCTei/AhVDZApM4OBfcgg1QZQq4gffNPGXoA45hYNl/aCdLRNz+9syiSZhl
+4vLICMyDPCCSFiud5CFnFeUXRcmc8Le/oAM+xVAY/O0loHmKZLELXkXR/NjrCyGn
+ZKuQ70LBrMULyd/rqz+FhYKuObOTX1fZEaFW/NSSTMFpDHdpP1g6qmj92XCZK0V5
+xpqZPyKjDvSRRfTFFVK9a8RhK34oV7WuL6HbSuo+2IktoavQjIQNKmem56qGUjrF
+S+SR6r1majboQHs8NngZ7usn+u2oCLAst2LAsNUkz/Bi18JtjS8yqL9mRp8xYnDQ
+BOL4zeUZMo/fBBksGeNwOYvf7bLKEneQ6kNhclGgqDc+81rbkv/YQYDW/wTXHw+a
+yMPT/3lDRKcsUJoXQRgWWurcXn8WG6ii/qONJQMei2HQM9NtI/w=
+=XM6R
 -----END PGP SIGNATURE-----
 
---ohtg55muwurupbgz--
+--6ujoodgxix7zrbfc--
