@@ -2,233 +2,378 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACA71BBBD2
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 13:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153D71BBCE6
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 13:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726405AbgD1LD2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Apr 2020 07:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726364AbgD1LD1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Apr 2020 07:03:27 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67D5C03C1A9
-        for <linux-pm@vger.kernel.org>; Tue, 28 Apr 2020 04:03:27 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id l20so2218308pgb.11
-        for <linux-pm@vger.kernel.org>; Tue, 28 Apr 2020 04:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=u6NUV4QFcmdAUkWHWR4oRPbBUyOZ9tdu9YsJYci8TXw=;
-        b=vX3ssBxeYBNQSdgaU7xX8FMGCijpLf5QtXUFMQze4XjLZvrWBdotaiFkLk2UK2UMpB
-         J0CfOKlrMmzZ/VMDMsc8J7P3qHUISQNvfrY7Bv9rgIjuVbnDusQ3gsXNwQUJJQ17J/87
-         BHXulBJ+uZTj0Hk2tUs7k5jtq0Z0t6FbfWKFUTfMZaIAM40UjzMekEoXYg3dk1jMUvsN
-         OwGLoKJj9v/ijDCHj/3uE3kubT0827LKTYxlOceSzqEb6jxvE+oniIyhAKi2MFk2TxP4
-         Zb3I+bUI7KZlW0MT9+fwgSf8w2l7bjsKhAiyVXpMasYubCTIkvgKxjZf9kOx4bKd8qpL
-         r1YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=u6NUV4QFcmdAUkWHWR4oRPbBUyOZ9tdu9YsJYci8TXw=;
-        b=ZIYv4WHV5TMm4Gacwc1T710OrD4sM3cNrP+2ya//3gNjFjWpP2Qda1v6/tLcUikyyS
-         jmPz6zfyKzvBAcySbTeeP+cOZtNMoXm89Mham9UuHVApiUz4q6g3tiusn/ulaj6rn60Z
-         wDmnBSNJZx+owszZAacVc5TILRpoDvk/jmVIG/EuAQznJ1Kk4e4WHdxu6klqaYaHEX/5
-         N7KMvT17AAzfnZAFvcpvrB+NIwFvxIm2fANBYvGZDxA4m6kREXR5naX2HkBnVkAVoAOH
-         A/pnIeY3PoIe3KkiNjvQGdCh0ORePbLucxg38H9y1crVX0B9wAkUpLbqHFDepQ3HQo1z
-         l9eA==
-X-Gm-Message-State: AGi0PuaA9G9Mo7Eq5yBkmUQM8/L0bhfF2lcqwe8TGC3P7oqPcbG2Ot73
-        vtgE/l40WUZOojcANAAh2EA0jW2VYQAfDD77puo=
-X-Google-Smtp-Source: APiQypLPdmI3LDV1I5iX0k1L+KHT4qqIBYZYxvP7Igy+9g6GrP/tGZYR2wsJmcgv5WInNo6zIcVh1gciOoHUqfbZWvY=
-X-Received: by 2002:a63:f94f:: with SMTP id q15mr26990919pgk.256.1588071807015;
- Tue, 28 Apr 2020 04:03:27 -0700 (PDT)
+        id S1726556AbgD1L6N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Apr 2020 07:58:13 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:3326 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726505AbgD1L6M (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 28 Apr 2020 07:58:12 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id BB2F859E7DABCBD492CE;
+        Tue, 28 Apr 2020 19:58:10 +0800 (CST)
+Received: from [127.0.0.1] (10.74.173.6) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.487.0; Tue, 28 Apr 2020
+ 19:58:04 +0800
+Subject: Re: [PATCH V3 2/2] thermal: Add HiSilicon Kunpeng thermal driver
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <amit.kucheria@verdurent.com>
+References: <1587455093-33876-1-git-send-email-shenyang39@huawei.com>
+ <1587455093-33876-3-git-send-email-shenyang39@huawei.com>
+ <53ca3883-9155-c023-7916-10ec8cccf977@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linuxarm@huawei.com>,
+        <wangzhou1@hisilicon.com>
+From:   "shenyang (M)" <shenyang39@huawei.com>
+Message-ID: <0be585d3-1180-7b42-8b51-392a34793f70@huawei.com>
+Date:   Tue, 28 Apr 2020 19:58:04 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Received: by 2002:a17:90a:2129:0:0:0:0 with HTTP; Tue, 28 Apr 2020 04:03:26
- -0700 (PDT)
-In-Reply-To: <0272d497-a207-6695-cb1b-cbbbccc5f4b7@linaro.org>
-References: <1587365320-25222-1-git-send-email-gao.yunxiao6@gmail.com>
- <20200422080439.kkpl7xmaawkxu5re@vireshk-i7> <CANO_MSLwA6PWEqGEbj50y98TR=trqddENQ6Qcne5edvf1oi9jg@mail.gmail.com>
- <20200422095433.br2zgpzm7f66ydhi@vireshk-i7> <CANO_MSJdi_12=OV4mOju9M0dDc1Sd4daZJ1WBXM1A++XKqBLgQ@mail.gmail.com>
- <CANO_MSK28MgNM8ohXaoONQa69bM2Nz1N8Rh8t53peQ9kboT6Xg@mail.gmail.com>
- <f6a57336-a591-09df-49f6-7f80cc6ddfb4@linaro.org> <CANO_MS+pqKvkSgMuO0W615UE4tzfK__hB92HazJHLNQgN=mM9Q@mail.gmail.com>
- <0aff94ac-22da-4dd7-e062-fd1fc86e1652@linaro.org> <CANO_MSKvvGgDsCEZFMrAazCQw+kjOhGMGshLUNX8eF3xfb11sA@mail.gmail.com>
- <0272d497-a207-6695-cb1b-cbbbccc5f4b7@linaro.org>
-From:   gao yunxiao <gao.yunxiao6@gmail.com>
-Date:   Tue, 28 Apr 2020 19:03:26 +0800
-Message-ID: <CANO_MSJobds9XCHuXrW60tXH=5tND6S97=UtM2DqV--AagMTug@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thermal/drivers/cpufreq_cooling: Add platform
- callback functions
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, amit.kachhap@gmail.com,
-        javi.merino@kernel.org, linux-pm@vger.kernel.org,
-        kernel-team@android.com, orsonzhai@gmail.com, zhang.lyra@gmail.com,
-        Jeson Gao <jeson.gao@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <53ca3883-9155-c023-7916-10ec8cccf977@linaro.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.74.173.6]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Daniel, thank you very much
+On 2020/4/27 20:13, Daniel Lezcano wrote:
+> On 21/04/2020 09:44, Yang Shen wrote:
+>> Support HiSilicon Kunpeng tsensor. the driver will report the max
+>> temperature for each core.
+>
+> As this is a new driver, can you give a bit more details of the hardware
+> in this description.
+>
+> A subsidiary question, why do you want to aggregate the temperatures in
+> this driver ?
+>
 
-On 28/04/2020, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> On 28/04/2020 12:01, gao yunxiao wrote:
->> Yes=EF=BC=8Cthank you for your introduction
+OK. In fact, there are five temperature sensors distributed in the SOC.
+And our strategy is to collect all temperatures and return the max to
+the interface.
+
+I will add a description of the hardware in the next version.
+
+>> Signed-off-by: Yang Shen <shenyang39@huawei.com>
+>> Signed-off-by: Zhou Wang <wangzhou1@hisilicon.com>
+>> Signed-off-by: Kunshan Tang <tangkunshan@huawei.com>
+>> ---
+>>  drivers/thermal/Kconfig           |   8 ++
+>>  drivers/thermal/Makefile          |   1 +
+>>  drivers/thermal/kunpeng_thermal.c | 216 ++++++++++++++++++++++++++++++++++++++
+>>  3 files changed, 225 insertions(+)
+>>  create mode 100644 drivers/thermal/kunpeng_thermal.c
 >>
->> another question trouble to you.
->> I'm worried that the idle cycle is set too long, there may be a
->> jamming phenomenon for the mobile phone, so I am not sure how to
->> determine the idle cycle?
+>> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+>> index 5a05db5..7611b5d 100644
+>> --- a/drivers/thermal/Kconfig
+>> +++ b/drivers/thermal/Kconfig
+>> @@ -239,6 +239,14 @@ config HISI_THERMAL
+>>  	  thermal framework. cpufreq is used as the cooling device to throttle
+>>  	  CPUs when the passive trip is crossed.
+>>
+>> +config KUNPENG_THERMAL
+>> +	tristate "HiSilicon kunpeng thermal driver"
+>> +	depends on ARM64 || COMPILE_TEST
+>> +	help
+>> +	  Enable this to plug HiSilicon kunpeng's thermal sensors driver into
+>> +	  the Linux thermal framework, which supports to get the highest
+>> +	  temperature of one Kunpeng SoC.
+>> +
+>>  config IMX_THERMAL
+>>  	tristate "Temperature sensor driver for Freescale i.MX SoCs"
+>>  	depends on ARCH_MXC || COMPILE_TEST
+>> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+>> index 9fb88e2..88ffca5 100644
+>> --- a/drivers/thermal/Makefile
+>> +++ b/drivers/thermal/Makefile
+>> @@ -57,3 +57,4 @@ obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+>>  obj-$(CONFIG_ZX2967_THERMAL)	+= zx2967_thermal.o
+>>  obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>>  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>> +obj-$(CONFIG_KUNPENG_THERMAL)     += kunpeng_thermal.o
+>> diff --git a/drivers/thermal/kunpeng_thermal.c b/drivers/thermal/kunpeng_thermal.c
+>> new file mode 100644
+>> index 0000000..d22e875
+>> --- /dev/null
+>> +++ b/drivers/thermal/kunpeng_thermal.c
+>> @@ -0,0 +1,216 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/* Copyright (c) 2020 HiSilicon Limited. */
+>> +
+>> +#include <linux/acpi.h>
+>> +#include <linux/device.h>
+>> +#include <linux/err.h>
+>> +#include <linux/io.h>
+>> +#include <linux/iopoll.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/thermal.h>
+>> +
+>> +#define KUNPENG_TSENSOR_CONTROL			0x20D0
+>> +#define KUNPENG_TSENSOR_ST			0x60D0
+>> +#define KUNPENG_TSENSOR_SAMPLE			0x60D4
+>> +#define KUNPENG_TSENSOR_CONTROL_EN		BIT(0)
+>> +
+>> +#define KUNPENG_TSENSOR_IS_READY(reg)		(((reg) >> 12) & 0x1)
+>> +#define KUNPENG_TSENSOR_IS_VALID(reg)		(((reg) >> 31) & 0x1)
+>> +#define KUNPENG_TSENSOR_TRIM_HIGH(reg)		(((reg) >> 15) & 0x7FF)
+>> +#define KUNPENG_TSENSOR_TRIM_LOW(reg)		((reg) & 0x7FF)
+>> +#define KUNPENG_TSENSOR_TEMP_VAL(reg)		((reg) & 0x3FF)
+>> +#define KUNPENG_TSENSOR_BASE_NUM(num)		(2 * (num))
+>> +#define KUNPENG_TSENSOR_TRIM_NUM(num)		(2 * (num) + 1)
+>> +
+>> +#define KUNPENG_TSENSOR_RD_INTVRL_US		5
+>> +#define KUNPENG_TSENSOR_RD_TMOUT_US		5000
+>> +#define KUNPENG_TSENSOR_BASIC_TMP		25000
+>> +#define KUNPENG_TSENSOR_BASIC_TRIM_RANGE	80000
+>> +
+>> +struct kunpeng_tsensor {
+>> +	void __iomem *base;
+>> +	void __iomem *trim_register;
+>> +};
+>> +
+>> +struct kunpeng_thermal_dev {
+>> +	u32 num_tsensors;
+>> +	struct kunpeng_tsensor tsensor[];
+>> +};
+>> +
+>> +static int kunpeng_thermal_temp_correct(u32 tmp, u32 trim)
+>> +{
+>> +	int trim_high = KUNPENG_TSENSOR_TRIM_HIGH(trim);
+>> +	int trim_low = KUNPENG_TSENSOR_TRIM_LOW(trim);
+>> +	int val = KUNPENG_TSENSOR_TEMP_VAL(tmp);
+>> +
+>> +	if (trim_high == trim_low)
+>> +		return INT_MIN;
+>> +
+>> +	/* temperature of tsensor needs to be calibrated */
+>> +	return KUNPENG_TSENSOR_BASIC_TRIM_RANGE * (val - trim_low) /
+>> +	       (trim_high - trim_low) + KUNPENG_TSENSOR_BASIC_TMP;
 >
-> That will depend on the speed transition of the available idle states.
-> The DT gives the binding for the idle duration and the exit latency.
+> Is it possible to give some details about why this is done?
 >
-> The optional exit latency constraint will prevent to choose deep idle
-> states (but which have better cooling effect).
+
+The hardware will measure the two standard temperature readings and
+write them into the registers, and the driver will calibrate the
+current readings according to the two standard temperature readings.
+
+I will add this comment.
+
+>> +}
+>> +
+>> +static int kunpeng_thermal_get_temp(struct thermal_zone_device *thermal,
+>> +				    int *temp)
+>> +{
+>> +	struct kunpeng_thermal_dev *tdev = thermal->devdata;
+>> +	int tempmax = INT_MIN;
+>> +	u32 i, reg, tmp, trim;
+>> +	int ret;
+>> +
+>> +	for (i = 0; i < tdev->num_tsensors; i++) {
+>> +		/* Waiting for tsensor ready */
+>> +		ret = readl_relaxed_poll_timeout(tdev->tsensor[i].base +
+>> +						 KUNPENG_TSENSOR_ST, reg,
+>> +						 KUNPENG_TSENSOR_IS_READY(reg),
+>> +						 KUNPENG_TSENSOR_RD_INTVRL_US,
+>> +						 KUNPENG_TSENSOR_RD_TMOUT_US);
+>> +		if (ret) {
+>> +			dev_err(&thermal->device,
+>> +				"Tsensor%u isn't ready!\n", i);
+>> +			continue;
+>> +		}
+>> +
+>> +		/* checking if temperatures are valid */
+>> +		tmp = readl_relaxed(tdev->tsensor[i].base +
+>> +				    KUNPENG_TSENSOR_SAMPLE);
+>> +		if (!KUNPENG_TSENSOR_IS_VALID(tmp)) {
+>> +			dev_err(&thermal->device,
+>> +				"Tsensor%u temperature is invalid!\n", i);
+>> +			continue;
+>> +		}
+>> +
+>> +		trim = readl_relaxed(tdev->tsensor[i].trim_register);
+>> +
+>> +		ret = kunpeng_thermal_temp_correct(tmp, trim);
+>> +		if (ret == INT_MIN) {
+>> +			dev_err(&thermal->device,
+>> +				"Tsensor%u trim value is invalid!\n", i);
+>> +			continue;
+>> +		}
+>> +
+>> +		tempmax = max(ret, tempmax);
+>> +	}
+>> +
+>> +	if (tempmax == INT_MIN)
+>> +		return -EINVAL;
+>> +
+>> +	*temp = tempmax;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static struct thermal_zone_device_ops ops = {
+>> +	.get_temp	= kunpeng_thermal_get_temp,
+>> +};
+>> +
+>> +static int kunpeng_thermal_get_iobase(struct platform_device *pdev,
+>> +				      struct kunpeng_tsensor *tsensor,
+>> +				      u32 resource_num)
+>> +{
+>> +	struct resource *res;
+>> +	void __iomem *base;
+>> +
+>> +	res = platform_get_resource(pdev, IORESOURCE_MEM, resource_num);
+>> +	if (!res)
+>> +		return -EINVAL;
+>> +
+>> +	base = devm_ioremap(&pdev->dev, res->start, resource_size(res));
+>> +	if (IS_ERR(base))
+>> +		return -EINVAL;
+>> +
+>> +	if (resource_num & 1)
+>> +		tsensor->trim_register = base;
+>> +	else
+>> +		tsensor->base = base;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int kunpeng_thermal_probe(struct platform_device *pdev)
+>> +{
+>> +	u32 num_tsensors = pdev->num_resources >> 1;
+>> +	struct thermal_zone_device *thermal_zone;
+>> +	struct kunpeng_thermal_dev *tdev;
+>> +	u32 i, reg;
+>> +	int ret;
+>> +
+>> +	tdev = devm_kzalloc(&pdev->dev, sizeof(*tdev) + sizeof(*tdev->tsensor) *
+>> +			    num_tsensors, GFP_KERNEL);
+>> +	if (!tdev)
+>> +		return -ENOMEM;
+>> +
+>> +	tdev->num_tsensors = num_tsensors;
+>> +
+>> +	for (i = 0; i < num_tsensors; i++) {
+>> +		ret = kunpeng_thermal_get_iobase(pdev, &tdev->tsensor[i],
+>> +						 KUNPENG_TSENSOR_BASE_NUM(i));
+>> +		if (ret) {
+>> +			dev_err(&pdev->dev, "Fail to ioremap base!\n");
+>> +			return ret;
+>> +		}
+>> +
+>> +		ret = kunpeng_thermal_get_iobase(pdev, &tdev->tsensor[i],
+>> +						 KUNPENG_TSENSOR_TRIM_NUM(i));
+>> +		if (ret) {
+>> +			dev_err(&pdev->dev, "Fail to ioremap trim register!\n");
+>> +			return ret;
+>> +		}
 >
-> So choosing the right constraint and the idle duration (which should be
-> at least greater than target residency of the idle state) is a question
-> of experimentation.
+> I initially thought there was a bug because the function is called with
+> the &tsensor[i] twice, then noticed the spin in the underlying function.
 >
-> Concerning the jamming effect, if the phone is failing to cool down with
-> cpufreq and has to use the idle injection in addition, clearly there is
-> a problem with the heat dissipation and the latency introduced is not
-> the biggest problem in this situation.
->
-> If you think hotplugging the CPU is better, you still have the
-> possibility to rely on the hot trip point notification (not sure it
-> works) to unplug from userspace the CPU [1].
->
->   -- Daniel
->
-> [1]
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/d=
-rivers/thermal/thermal_core.c#n290
->
->
->> On 28/04/2020, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>>
->>> Hi,
->>>
->>> On 28/04/2020 08:51, gao yunxiao wrote:
->>>> Daniel
->>>>
->>>> Thank you for your suggestion
->>>>
->>>> Yes=EF=BC=8C the platform can support voltage scaling.
->>>
->>> Given your issue, I would double check if the voltage scaling is really
->>> effective.
->>>
->>>> I will porting cpuidle cooling and double check it on our platform.
->>>>
->>>> By the way, I have a question trouble to you
->>>> when one cpu is forced into the cpuidle, the running task on it are
->>>> stopped or migrated other cpu?
->>>
->>> The task is scheduled out by the idle injection which has a real time
->>> priority. When this one finishes the idle cycle, it schedules itself an=
-d
->>> the previous task continue its work. So the short answer is the task is
->>> stopped, the idle injection happens, then the task runs again.
->>>
->>> Concerning the migration, that is a scheduler thing and will depend on
->>> the thermal configuration and sensors layout.
->>>
->>> Let's assume the platform is 4 x cores (one cluster).
->>>
->>> 1. The platform has one sensor per core and the configuration sets one
->>> thermal zone with one idle cooling device per core
->>>
->>> In this case, the mitigation will insert idle cycles, those will be see=
-n
->>> as chunk of system load cycle and will enter in the CPU load
->>> computation. Thus, when there is an imbalance, the scheduler can migrat=
-e
->>> the task to an idle CPU (or less busy CPU).
->>>
->>> 2. The platform has one sensor per cluster and the configuration sets
->>> one thermal zone with *four* idle cooling devices (one per core)
->>>
->>> When the mitigation happens, the idle injection will be on all the core=
-s
->>> at the same time, thus the load will increase on all the CPUs and won't
->>>  enter in the balance computation (well actually it will enter but as
->>> they are the same on all the CPUs, the difference is zero).
->>>
->>>
->>> In practical, we found the configuration #2, and in order to reach the
->>> temperature limit, all the cores are fully busy, so task migration
->>> depends on what the tasks do and the idle injection has few impact on
->>> this.
->>>
->>> Does it answer your question ?
->>>
->>>
->>>> On 28/04/2020, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>>>> On 22/04/2020 13:11, gao yunxiao wrote:
->>>>>> On 22/04/2020, gao yunxiao <gao.yunxiao6@gmail.com> wrote:
->>>>>>> viresh
->>>>>>>
->>>>>>> On UNISOC platform, CPU's temperature can not be controlled when
->>>>>>> cpufreq has been limited to the lowest frequency, we have to hotplu=
-g
->>>>>>> out CPUS to mitigate temperature rising.
->>>>>>>
->>>>>>> adding platform callback to have a chance to check whether the
->>>>>>> normalised power at power2state() is lower than the power
->>>>>>> corresponding to the lowest frequency. provide an example in anothe=
-r
->>>>>>> patch
->>>>>
->>>>> You can use in addition the cpuidle cooling device if the cpufreq
->>>>> cooling device fails.
->>>>>
->>>>> Add two trip points. The first one mitigated by the cpufreq cooling
->>>>> device and the second one, with a higher temperature, mitigated by th=
-e
->>>>> cpuidle cooling device [1][2].
->>>>>
->>>>> For my personal information, does the platform support voltage
->>>>> scaling?
->>>>>
->>>>>
->>>>> [1]
->>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/Documentation/driver-api/thermal/cpu-idle-cooling.rst
->>>>>
->>>>> [2] https://lkml.org/lkml/2020/4/14/1442
->>>>>
->>>>>
->>>>>
->>>>> --
->>>>> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software fo=
-r ARM
->>>>> SoCs
->>>>>
->>>>> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->>>>> <http://twitter.com/#!/linaroorg> Twitter |
->>>>> <http://www.linaro.org/linaro-blog/> Blog
->>>>>
->>>
->>>
->>> --
->>> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for =
-ARM SoCs
->>>
->>> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->>> <http://twitter.com/#!/linaroorg> Twitter |
->>> <http://www.linaro.org/linaro-blog/> Blog
->>>
+> It is probably better to make the code a bit more self-explicit. May be
+> increment 'i' by a step of 2?
 >
 >
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
+
+My original idea was to extract the iobase function as a separate
+function, so I named it kunpeng_thermal_get_iobase.
+I can modify it to be a function for initializing the iobase of a
+single sensor, which might be easier to understand.
+
+>> +		reg = readl_relaxed(tdev->tsensor[i].base +
+>> +				    KUNPENG_TSENSOR_CONTROL);
+>> +		writel_relaxed(reg | KUNPENG_TSENSOR_CONTROL_EN,
+>> +			       tdev->tsensor[i].base +
+>> +			       KUNPENG_TSENSOR_CONTROL);
 >
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+> Please add helpers with explicit function name for understanding.
 >
+
+OK, I will fix in next version.
+
+>> +	}
+>> +
+>> +	thermal_zone = thermal_zone_device_register("kunpeng_thermal", 0, 0,
+>> +						    tdev, &ops, NULL, 0, 0);
+>> +	if (IS_ERR(thermal_zone)) {
+>> +		dev_err(&pdev->dev, "Fail to register to thermal subsystem\n");
+>> +		return PTR_ERR(thermal_zone);
+>> +	}
+>> +
+>> +	platform_set_drvdata(pdev, thermal_zone);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +/**
+>> + * kunpeng_thermal_remove() - Unregister device from thermal.
+>> + *
+>> + * This driver and IMU share tsensor devices. This function only unregister
+>> + * devices from thermal but never disable tsensors.
+>
+> What is the IMU ?
+>
+
+IMU is stand for Intelligent Management Unit. It functions as a
+supervisor and a manager of the chip. It has complete SoC
+components and is totally independent from the application processor
+system.
+So the IMU will read the tsensors temperature registers too.
+
+> I don't see in this driver anything related to the sensors being shared
+> with something else.
+>
+
+Yes. This driver use the device independently. But the driver cannot
+disable devices when it is removed.
+I add comments here to avoid user confusion.
+
+>> + */
+>> +static int kunpeng_thermal_remove(struct platform_device *pdev)
+>> +{
+>> +	struct thermal_zone_device *thermal_zone = platform_get_drvdata(pdev);
+>> +
+>> +	thermal_zone_device_unregister(thermal_zone);
+> Why not add a devm_thermal_zone_device_register() ? and get rid of this
+> function ?
+>
+
+Do  you ask me to add this function in thermal_core.c?
+
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct acpi_device_id kunpeng_thermal_acpi_match[] = {
+>> +	{ "HISI0371", 0 },
+>> +	{ }
+>> +};
+>> +MODULE_DEVICE_TABLE(acpi, kunpeng_thermal_acpi_match);
+>> +
+>> +static struct platform_driver kunpeng_thermal_driver = {
+>> +	.probe		= kunpeng_thermal_probe,
+>> +	.remove		= kunpeng_thermal_remove,
+>> +	.driver		= {
+>> +		.name	= "kunpeng_thermal",
+>> +		.acpi_match_table = ACPI_PTR(kunpeng_thermal_acpi_match),
+>> +	},
+>> +};
+>> +
+>> +module_platform_driver(kunpeng_thermal_driver);
+>> +
+>> +MODULE_LICENSE("GPL v2");
+>> +MODULE_AUTHOR("Yang Shen <shenyang39@huawei.com>");
+>> +MODULE_DESCRIPTION("HiSilicon Kunpeng thermal driver");
+>> --
+>> 2.7.4
+>>
+>
+>
+
