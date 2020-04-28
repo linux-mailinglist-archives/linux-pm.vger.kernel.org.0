@@ -2,97 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D92631BB953
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 10:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FEB1BB9A2
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 11:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726929AbgD1I4o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Apr 2020 04:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
+        id S1726772AbgD1JQ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Apr 2020 05:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726271AbgD1I4n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Apr 2020 04:56:43 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E209C03C1A9
-        for <linux-pm@vger.kernel.org>; Tue, 28 Apr 2020 01:56:42 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id w65so10346387pfc.12
-        for <linux-pm@vger.kernel.org>; Tue, 28 Apr 2020 01:56:42 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726602AbgD1JQ4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Apr 2020 05:16:56 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCE4C03C1AB
+        for <linux-pm@vger.kernel.org>; Tue, 28 Apr 2020 02:16:54 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id i10so23738278wrv.10
+        for <linux-pm@vger.kernel.org>; Tue, 28 Apr 2020 02:16:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wlWsWgzvjaY6Zm713YqzHXb7hr0bB1APBMwSRZ1R5jQ=;
-        b=x9bXsXHqaZwzQh11fgkLu9FwrsX7MONN5jJgeHm5EGQz3imOH1hWREYUBEmY/8LhEs
-         paVGxCfQASR13jlekWOmNiE/5ETm4L0wemAzcCxWQdPF8MEekG31DnWCniZ5y8tTZNo5
-         Jjagg3er6eiTO97t9DMXhwrWbn84zjQCivHYbc5HGj8owg0nqMRKmUC+0D5edfgHxqiz
-         Ad1h4ntdiHG9ZoeoQWAw/KwCbMyPVKKOraZwH6pd2Oooay0HJktN11ASNkZjrV3AKhMY
-         XVPIm+B7w844ZulwJFCmp8gAx6a2bUpiq3A+kVh+NsGnFeSBlzazWSjUSB9o7Ny+yo1B
-         F1Iw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kol2KnUcVyH0F7Ix7H0VZWG4kz6cZK2B84uPA/+NLmw=;
+        b=b8TK5lRu2zdjHITUnvvgSNq0/t93vnrQav69WlFUmdAImx/QVnBdaMJhSSstXj/vmp
+         c4vsNZG6H64f48aO3ug9CSBci33QqvxxEmV/nUCvNBeJsf1O9+Jze6a/ky7hUtRzM94+
+         fBfpv3prrsqZsGudTQmxieV6v1qUSaQqYxufroh+dxH0D/UgWt6Xl7gmr5K7qcRX91VB
+         NR2iqxHu0A6YnnsZPfeTPUyvKsVhrPfYzgIRmB0L7BIxJbke+HopvQbMi84lOyKf0WiI
+         B0cg6zstCm5gE4ikZjVuET9oxlAqknEE4s2x+LI1ua0BBG1G+4gp87qCSWDK9zYghAVL
+         S46A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wlWsWgzvjaY6Zm713YqzHXb7hr0bB1APBMwSRZ1R5jQ=;
-        b=t1HVEJlFPAKXRJR1+5WKtclFi2feKB3Lron5N/NtjCzo8Bni9tOFB2bXRw0ZxSPiB+
-         7NHBjKOwfCTXLAyXJx3OtXDHDERkXpq3PytPHEVYWukd4XxySje85nXBJfA/B6OOzA6l
-         OQIU5QMdAlyrBlRLOn1Jd0Gd052SnCoRUVrPLfW890kHLXrHc9mZdqbQ4wbozFUW3te4
-         Pf179iCeiS2OKbME0GZ6pJNV+FKf71w/TFQWcdRaM33z7xwdRsNtTIoYEnZZhCd9S9ND
-         u2gnDqEhh3EfiFYwlg4lSmOvtdRVlGIdD5rTQkxKfmPB1Kz4RBxJ6SkbJRSsa8S0mJkX
-         eedQ==
-X-Gm-Message-State: AGi0PuZottuBGbIZJBAdQHDKor72mKj+yLuRZy1eiP9JvEA0fbiy8EVh
-        Qe24ynQNRtqAKH9q8F1tP1xoIw==
-X-Google-Smtp-Source: APiQypLfHyrNiZidn8JIOhptq3liNhjWyq1CmeTN5XT8QBCqjEeYVZJ6n/4C5fL/Y8PZ3RJyC65LBw==
-X-Received: by 2002:a63:63c1:: with SMTP id x184mr12378474pgb.116.1588064201941;
-        Tue, 28 Apr 2020 01:56:41 -0700 (PDT)
-Received: from localhost ([122.171.118.46])
-        by smtp.gmail.com with ESMTPSA id g22sm1498422pju.21.2020.04.28.01.56.40
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kol2KnUcVyH0F7Ix7H0VZWG4kz6cZK2B84uPA/+NLmw=;
+        b=otPtkHL+UTz9YpnmLSHJGwFUJYs7CPBAefkthJl8P33IF8sQgT9ULUXrv8add4e+QK
+         5wJma0b+faRnxO8J9UApKW9VKrHIe2PBdsRMVqxtKM2pzu1h6V5287DeqbQV3mEng083
+         Fg+ak6VfNmfJPYNz5sYpd73hxTjnzFJuM1+XXKM3mClGwiprn3mn2YUlwqaAc22sXZd3
+         9V1101ZczBEDV3S1FWFx4644GJvbHEiJbgBZUsojsthpwSi5N3QD3vfLgGHGQjBiMC9A
+         mgEVBtvWY02Db6B0e7cbHlR0q2Lhx3KgU3N78NcbJmyvRHFr9BD9kMyqh0DgIlgXkJsP
+         znug==
+X-Gm-Message-State: AGi0PuYYAAMYKkmPU09EhE+W4kes5Bww1eeNHH+4mCq/nuL2M6E2AD28
+        r9ZE594U8U76dN+xLdR9JFOa86WttVE=
+X-Google-Smtp-Source: APiQypI1NaFanMBSA/9TXktEMwg92qBduRtE849bebURjum+Ps+JfDCHR5BF5kVxyiG6aXCkG+KrrQ==
+X-Received: by 2002:a5d:4843:: with SMTP id n3mr31480285wrs.7.1588065412820;
+        Tue, 28 Apr 2020 02:16:52 -0700 (PDT)
+Received: from localhost.localdomain ([87.120.218.65])
+        by smtp.googlemail.com with ESMTPSA id k14sm25005543wrp.53.2020.04.28.02.16.51
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 Apr 2020 01:56:41 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 14:26:39 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     peng.fan@nxp.com
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, rjw@rjwysocki.net,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        Anson.Huang@nxp.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] cpufreq: imx-cpufreq-dt: support i.MX7ULP
-Message-ID: <20200428085639.6kt6qxxu44omajug@vireshk-i7>
-References: <1588058460-11105-1-git-send-email-peng.fan@nxp.com>
+        Tue, 28 Apr 2020 02:16:52 -0700 (PDT)
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     linux-pm@vger.kernel.org, evgreen@chromium.org,
+        bjorn.andersson@linaro.org
+Cc:     akashast@codeaurora.org, linux-kernel@vger.kernel.org,
+        georgi.djakov@linaro.org
+Subject: [PATCH] interconnect: Add helpers for enabling/disabling a path
+Date:   Tue, 28 Apr 2020 12:16:50 +0300
+Message-Id: <20200428091650.27669-1-georgi.djakov@linaro.org>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1588058460-11105-1-git-send-email-peng.fan@nxp.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28-04-20, 15:21, peng.fan@nxp.com wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> i.MX7ULP's ARM core clock design is totally different compared
-> with i.MX7D/8M SoCs which supported by imx-cpufreq-dt. It needs
-> get_intermediate and target_intermedate to configure clk MUX ready,
-> before let OPP configure ARM core clk.
->                                           |---FIRC
->      |------RUN---...---SCS(MUX2) --------|
-> ARM --(MUX1)                              |---SPLL_PFD0(CLK_SET_RATE_GATE)
->      |------HSRUN--...--HSRUN_SCS(MUX3)---|
->                                           |---SRIC
-> 
-> FIRC is step clk, SPLL_PFD0 is the normal clk driving ARM core.
-> MUX2 and MUX3 share same inputs. So if MUX2/MUX3 both sources from
-> SPLL_PFD0, both MUXes will lose input when configure SPLL_PFD0.
-> So the target_intermediate will configure MUX2/MUX3 to FIRC, to avoid
-> ARM core lose clk when configure SPLL_PFD0.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
-> 
-> V2:
->  Fix boot break. Tested on i.MX8MN DDR4 EVK.
+There is a repeated pattern in multiple drivers where they want to switch
+the bandwidth between zero and some other value. This is happening often
+in the suspend/resume callbacks. Let's add helper functions to enable and
+disable the path, so that callers don't have to take care of remembering
+the bandwidth values and handle this in the framework instead.
 
-Applied. Thanks.
+With this patch the users can call icc_disable() and icc_enable() to lower
+their bandwidth request to zero and then restore it back to it's previous
+value.
 
--- 
-viresh
+Suggested-by: Evan Green <evgreen@chromium.org>
+Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+---
+ drivers/interconnect/core.c     | 50 ++++++++++++++++++++++++++++++++-
+ drivers/interconnect/internal.h |  2 ++
+ include/linux/interconnect.h    | 12 ++++++++
+ 3 files changed, 63 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 2c6515e3ecf1..6af68e506ac2 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -158,6 +158,7 @@ static struct icc_path *path_init(struct device *dev, struct icc_node *dst,
+ 		hlist_add_head(&path->reqs[i].req_node, &node->req_list);
+ 		path->reqs[i].node = node;
+ 		path->reqs[i].dev = dev;
++		path->reqs[i].enabled = true;
+ 		/* reference to previous node was saved during path traversal */
+ 		node = node->reverse;
+ 	}
+@@ -249,9 +250,12 @@ static int aggregate_requests(struct icc_node *node)
+ 	if (p->pre_aggregate)
+ 		p->pre_aggregate(node);
+ 
+-	hlist_for_each_entry(r, &node->req_list, req_node)
++	hlist_for_each_entry(r, &node->req_list, req_node) {
++		if (!r->enabled)
++			continue;
+ 		p->aggregate(node, r->tag, r->avg_bw, r->peak_bw,
+ 			     &node->avg_bw, &node->peak_bw);
++	}
+ 
+ 	return 0;
+ }
+@@ -546,6 +550,50 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ }
+ EXPORT_SYMBOL_GPL(icc_set_bw);
+ 
++int icc_disable(struct icc_path *path)
++{
++	int i;
++
++	if (!path)
++		return 0;
++
++	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
++		return -EINVAL;
++
++	mutex_lock(&icc_lock);
++
++	for (i = 0; i < path->num_nodes; i++)
++		path->reqs[i].enabled = false;
++
++	mutex_unlock(&icc_lock);
++
++	return icc_set_bw(path, path->reqs[0].avg_bw,
++			  path->reqs[0].peak_bw);
++}
++EXPORT_SYMBOL_GPL(icc_disable);
++
++int icc_enable(struct icc_path *path)
++{
++	int i;
++
++	if (!path)
++		return 0;
++
++	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
++		return -EINVAL;
++
++	mutex_lock(&icc_lock);
++
++	for (i = 0; i < path->num_nodes; i++)
++		path->reqs[i].enabled = true;
++
++	mutex_unlock(&icc_lock);
++
++	return icc_set_bw(path, path->reqs[0].avg_bw,
++			  path->reqs[0].peak_bw);
++}
++EXPORT_SYMBOL_GPL(icc_enable);
++
+ /**
+  * icc_get() - return a handle for path between two endpoints
+  * @dev: the device requesting the path
+diff --git a/drivers/interconnect/internal.h b/drivers/interconnect/internal.h
+index bf18cb7239df..f5f82a5c939e 100644
+--- a/drivers/interconnect/internal.h
++++ b/drivers/interconnect/internal.h
+@@ -14,6 +14,7 @@
+  * @req_node: entry in list of requests for the particular @node
+  * @node: the interconnect node to which this constraint applies
+  * @dev: reference to the device that sets the constraints
++ * @enabled: indicates whether the path with this request is enabled
+  * @tag: path tag (optional)
+  * @avg_bw: an integer describing the average bandwidth in kBps
+  * @peak_bw: an integer describing the peak bandwidth in kBps
+@@ -22,6 +23,7 @@ struct icc_req {
+ 	struct hlist_node req_node;
+ 	struct icc_node *node;
+ 	struct device *dev;
++	bool enabled;
+ 	u32 tag;
+ 	u32 avg_bw;
+ 	u32 peak_bw;
+diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
+index d70a914cba11..21dd232d81ff 100644
+--- a/include/linux/interconnect.h
++++ b/include/linux/interconnect.h
+@@ -29,6 +29,8 @@ struct icc_path *icc_get(struct device *dev, const int src_id,
+ 			 const int dst_id);
+ struct icc_path *of_icc_get(struct device *dev, const char *name);
+ void icc_put(struct icc_path *path);
++int icc_disable(struct icc_path *path);
++int icc_enable(struct icc_path *path);
+ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
+ void icc_set_tag(struct icc_path *path, u32 tag);
+ 
+@@ -50,6 +52,16 @@ static inline void icc_put(struct icc_path *path)
+ {
+ }
+ 
++static inline int icc_disable(struct icc_path *path)
++{
++	return 0;
++}
++
++static inline int icc_enable(struct icc_path *path)
++{
++	return 0;
++}
++
+ static inline int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ {
+ 	return 0;
