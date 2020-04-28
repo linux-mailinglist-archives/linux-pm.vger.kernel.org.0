@@ -2,171 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 046801BB9F3
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 11:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD091BBA37
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 11:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbgD1JhL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Apr 2020 05:37:11 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:3323 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726477AbgD1JhL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 28 Apr 2020 05:37:11 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 9BE3D3B50836C88B459B;
-        Tue, 28 Apr 2020 17:37:08 +0800 (CST)
-Received: from linux-lmwb.huawei.com (10.175.103.112) by
- DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 28 Apr 2020 17:36:59 +0800
-From:   Zou Wei <zou_wei@huawei.com>
-To:     <trenn@suse.com>, <shuah@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Zou Wei <zou_wei@huawei.com>
-Subject: [PATCH -next] cpupower: Remove unneeded semicolon
-Date:   Tue, 28 Apr 2020 17:43:15 +0800
-Message-ID: <1588066995-71840-1-git-send-email-zou_wei@huawei.com>
-X-Mailer: git-send-email 2.6.2
+        id S1727094AbgD1Jqh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Apr 2020 05:46:37 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:10220 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726486AbgD1Jqh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Apr 2020 05:46:37 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1588067196; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=SYneJt2s6AGtNS7/rM4TXAHvpd3iuzSFax4dKDwNdEQ=; b=JV1+Zdy0TEygw5V/Mh2w9a3KIpLrKV/Iw9bNMqlsfcm83uEn/p8xEgR47fp5pEbm/EQRgpsO
+ EJA5Z2+B6saGVKN9eRAkb6xltyPWqFvYmJHI6PHkDCzW7DoWjo+/i3YpJWsKAG9bu9t1Nk2f
+ 60Jsvumfo3PlkPAXVtuMLjNXTaM=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5ea7fb7b.7fdbc1a78ce0-smtp-out-n03;
+ Tue, 28 Apr 2020 09:46:35 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id F3289C43637; Tue, 28 Apr 2020 09:46:34 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.43.98] (unknown [157.48.58.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E83EBC433F2;
+        Tue, 28 Apr 2020 09:46:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E83EBC433F2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH V4 2/9] interconnect: Set peak requirement as twice of
+ average
+To:     Georgi Djakov <georgi.djakov@linaro.org>, broonie@kernel.org
+Cc:     gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, wsa@the-dreams.de,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, swboyd@chromium.org,
+        mgautam@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org, evgreen@chromium.org,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Mike Tipton <mdtipton@codeaurora.org>,
+        Sean Sweeney <seansw@qti.qualcomm.com>
+References: <1586946198-13912-1-git-send-email-akashast@codeaurora.org>
+ <1586946198-13912-3-git-send-email-akashast@codeaurora.org>
+ <58b91dc1-6ce3-49b8-88c8-259be9af1dbd@linaro.org>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <7a79688c-3b9b-c7c1-2973-fca0c4b2c78b@codeaurora.org>
+Date:   Tue, 28 Apr 2020 15:16:16 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.103.112]
-X-CFilter-Loop: Reflected
+In-Reply-To: <58b91dc1-6ce3-49b8-88c8-259be9af1dbd@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fixes coccicheck warnings:
+Hi Georgi,
 
-tools/power/cpupower/utils/cpupower-info.c:65:2-3: Unneeded semicolon
-tools/power/cpupower/utils/cpupower-set.c:75:2-3: Unneeded semicolon
-tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c:120:2-3: Unneeded semicolon
-tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c:175:2-3: Unneeded semicolon
-tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c:56:2-3: Unneeded semicolon
-tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c:75:2-3: Unneeded semicolon
-tools/power/cpupower/utils/idle_monitor/hsw_ext_idle.c:82:2-3: Unneeded semicolon
-tools/power/cpupower/utils/idle_monitor/nhm_idle.c:94:2-3: Unneeded semicolon
-tools/power/cpupower/utils/idle_monitor/snb_idle.c:80:2-3: Unneeded semicolon
+On 4/23/2020 3:01 PM, Georgi Djakov wrote:
+> Hi Akash,
+>
+> On 4/15/20 13:23, Akash Asthana wrote:
+>> Lot of ICC clients are not aware of their actual peak requirement,
+>> most commonly they tend to guess their peak requirement as
+>> (some factor) * avg_bw.
+>>
+>> Centralize random peak guess as twice of average, out into the core
+>> to maintain consistency across the clients. Client can always
+>> override this setting if they got a better idea.
+> I am still not convinced that this is a good idea. If the factor is a random
+> value, then i think that the default factor should be 1.
+>
+> According to your previous reply, it seems that from geni we are requesting
+> double peak bandwidth to compensate for other clients which are not requesting
+> bandwidth for themselves. IMO, this is a bit hacky.
+>
+> Instead of requesting double peak bandwidth, IIUC the correct thing to do here
+> is to request peak_bw = avg_bw for geni. And instead of trying to compensate for
+> other clients "stealing" bandwidth, can't we make these clients vote for their
+> own bandwidth? Or if they really can't, this should be handled elsewhere - maybe
+> in the interconnect platform driver we can reserve some amount of minimum
+> bandwidth for such cases?
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zou Wei <zou_wei@huawei.com>
----
- tools/power/cpupower/utils/cpupower-info.c                | 2 +-
- tools/power/cpupower/utils/cpupower-set.c                 | 2 +-
- tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c | 2 +-
- tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c   | 6 +++---
- tools/power/cpupower/utils/idle_monitor/hsw_ext_idle.c    | 2 +-
- tools/power/cpupower/utils/idle_monitor/nhm_idle.c        | 2 +-
- tools/power/cpupower/utils/idle_monitor/snb_idle.c        | 2 +-
- 7 files changed, 9 insertions(+), 9 deletions(-)
+Okay, probably we can correct clients vote for their own bandwidth or 
+reserve some minimum BW from interconnect platform driver is case of any 
+latency issue observed.
 
-diff --git a/tools/power/cpupower/utils/cpupower-info.c b/tools/power/cpupower/utils/cpupower-info.c
-index d3755ea..0ba61a2 100644
---- a/tools/power/cpupower/utils/cpupower-info.c
-+++ b/tools/power/cpupower/utils/cpupower-info.c
-@@ -62,7 +62,7 @@ int cmd_info(int argc, char **argv)
- 		default:
- 			print_wrong_arg_exit();
- 		}
--	};
-+	}
- 
- 	if (!params.params)
- 		params.params = 0x7;
-diff --git a/tools/power/cpupower/utils/cpupower-set.c b/tools/power/cpupower/utils/cpupower-set.c
-index 3cca6f7..052044d 100644
---- a/tools/power/cpupower/utils/cpupower-set.c
-+++ b/tools/power/cpupower/utils/cpupower-set.c
-@@ -72,7 +72,7 @@ int cmd_set(int argc, char **argv)
- 		default:
- 			print_wrong_arg_exit();
- 		}
--	};
-+	}
- 
- 	if (!params.params)
- 		print_wrong_arg_exit();
-diff --git a/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c b/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
-index 20f4634..5edd35b 100644
---- a/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
-+++ b/tools/power/cpupower/utils/idle_monitor/amd_fam14h_idle.c
-@@ -117,7 +117,7 @@ static int amd_fam14h_get_pci_info(struct cstate *state,
- 		break;
- 	default:
- 		return -1;
--	};
-+	}
- 	return 0;
- }
- 
-diff --git a/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c b/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
-index a65f7d0..8b42c2f 100644
---- a/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
-+++ b/tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c
-@@ -53,7 +53,7 @@ static int cpuidle_start(void)
- 			dprint("CPU %d - State: %d - Val: %llu\n",
- 			       cpu, state, previous_count[cpu][state]);
- 		}
--	};
-+	}
- 	return 0;
- }
- 
-@@ -72,7 +72,7 @@ static int cpuidle_stop(void)
- 			dprint("CPU %d - State: %d - Val: %llu\n",
- 			       cpu, state, previous_count[cpu][state]);
- 		}
--	};
-+	}
- 	return 0;
- }
- 
-@@ -172,7 +172,7 @@ static struct cpuidle_monitor *cpuidle_register(void)
- 		cpuidle_cstates[num].id = num;
- 		cpuidle_cstates[num].get_count_percent =
- 			cpuidle_get_count_percent;
--	};
-+	}
- 
- 	/* Free this at program termination */
- 	previous_count = malloc(sizeof(long long *) * cpu_count);
-diff --git a/tools/power/cpupower/utils/idle_monitor/hsw_ext_idle.c b/tools/power/cpupower/utils/idle_monitor/hsw_ext_idle.c
-index 97ad323..55e55b6 100644
---- a/tools/power/cpupower/utils/idle_monitor/hsw_ext_idle.c
-+++ b/tools/power/cpupower/utils/idle_monitor/hsw_ext_idle.c
-@@ -79,7 +79,7 @@ static int hsw_ext_get_count(enum intel_hsw_ext_id id, unsigned long long *val,
- 		break;
- 	default:
- 		return -1;
--	};
-+	}
- 	if (read_msr(cpu, msr, val))
- 		return -1;
- 	return 0;
-diff --git a/tools/power/cpupower/utils/idle_monitor/nhm_idle.c b/tools/power/cpupower/utils/idle_monitor/nhm_idle.c
-index 1142711..16eaf00 100644
---- a/tools/power/cpupower/utils/idle_monitor/nhm_idle.c
-+++ b/tools/power/cpupower/utils/idle_monitor/nhm_idle.c
-@@ -91,7 +91,7 @@ static int nhm_get_count(enum intel_nhm_id id, unsigned long long *val,
- 		break;
- 	default:
- 		return -1;
--	};
-+	}
- 	if (read_msr(cpu, msr, val))
- 		return -1;
- 
-diff --git a/tools/power/cpupower/utils/idle_monitor/snb_idle.c b/tools/power/cpupower/utils/idle_monitor/snb_idle.c
-index df8b223..811d63a 100644
---- a/tools/power/cpupower/utils/idle_monitor/snb_idle.c
-+++ b/tools/power/cpupower/utils/idle_monitor/snb_idle.c
-@@ -77,7 +77,7 @@ static int snb_get_count(enum intel_snb_id id, unsigned long long *val,
- 		break;
- 	default:
- 		return -1;
--	};
-+	}
- 	if (read_msr(cpu, msr, val))
- 		return -1;
- 	return 0;
+I will drop this change in next version.
+
+Will it create any difference if  peak_bw = 0 instead of peak_bw = 
+avg_bw? In my understanding peak_bw <= avg_bw is no-ops, it won't impact 
+the NOC speed.
+
+
+Regards,
+
+Akash
+
+>
+> Thanks,
+> Georgi
+
 -- 
-2.6.2
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
