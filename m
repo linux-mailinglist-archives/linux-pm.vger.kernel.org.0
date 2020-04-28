@@ -2,167 +2,239 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E0B1BC19D
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 16:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEBC1BC2FF
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 17:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728088AbgD1Oo2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Apr 2020 10:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728073AbgD1Oo2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Apr 2020 10:44:28 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D35BC03C1AB;
-        Tue, 28 Apr 2020 07:44:28 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id d17so10440975pgo.0;
-        Tue, 28 Apr 2020 07:44:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JsDPihDIradvM9f3uLrw4TfW583mPkxAjR22PUFbNgw=;
-        b=jTNPxSCiyyU0KwKpMbzpSBK4KSkGIk8o1pSKZtwukGLG41ZvNmsGS5VxBVhVsXGGF7
-         Y579jbF3hrNbZ7t1P/5xtvo5AJaAr94aSqIKKfTOhKjt/e6f05fj7IdqJid8ZnP22XVM
-         pn6dgX1n6cfBOj/wurixACb9gk78J0ilz3cGFS/Sc8bDALFKLmlhU+jpiC+3BfbfDuHz
-         Bkpu3URvpdyo02dAiXPfAS/XR6NkkKmJEdbtj+MRgdbQv3uax5VN7GgP/lJnbEzhySLw
-         4Mw3gfGC7C5yOgpCKfIstwyEn3QLP6PcjXUa3qIBeXOm/PioypwSCoM7U9945lbZx6sg
-         n0nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JsDPihDIradvM9f3uLrw4TfW583mPkxAjR22PUFbNgw=;
-        b=l1btFeE5e/v3ppKB8a1Az9uqw653vJaB+KnBB9vq35uyPxhaR366hNMK4TtgUz43rw
-         X+WwirM+zstrIuh6w3X3FZgvvch2NEjjv1S+fpDZQ5qZL1cvEf/gus0HM9eHknKn/6SZ
-         O3B4+0AysitpPfknCVaC25tXe6Uxs09DqXv45LvHXyQJx7isocS7xbPC8Cy8m0TMst4c
-         hlXwwduVGEc32xWcjmlYSzwKf8nsu/IqN0T/w4TZOCDEBu1u6/AwWx0159y+ZPUxYUNe
-         PI8HUuvICCpNUYjyLCqTDyyvzm+KKEnk5RlMKawAt+C52p93DJ2Xvz4j8YaBz0fJKEQM
-         D1Fw==
-X-Gm-Message-State: AGi0PubW9GKxrWLJ3WzhkBoPrkM5iGwsdLNAsKetgS9MsCivZARoQYXj
-        U93VXZzlrbCoAGPHcUmkKrU=
-X-Google-Smtp-Source: APiQypL3iX01wY2OqSHGJMR8Y4yXNEIVYUlcFdcIISd34gE2G8qCPiXj1wmuiQETuwl5OGVPQq8Yag==
-X-Received: by 2002:a63:6f07:: with SMTP id k7mr29916217pgc.274.1588085067622;
-        Tue, 28 Apr 2020 07:44:27 -0700 (PDT)
-Received: from varodek.localdomain ([2401:4900:40f3:10a2:97c1:b981:9f1:d7d0])
-        by smtp.gmail.com with ESMTPSA id d203sm15053203pfd.79.2020.04.28.07.44.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 07:44:26 -0700 (PDT)
-From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
-To:     Shannon Nelson <snelson@pensando.io>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Martin Habets <mhabets@solarflare.com>,
-        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        netdev@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, bjorn@helgaas.com,
-        linux-kernel-mentees@lists.linuxfoundation.org, rjw@rjwysocki.net
-Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, skhan@linuxfoundation.org
-Subject: [Linux-kernel-mentees] [PATCH v2 2/2] realtek/8139cp: Remove Legacy Power Management
-Date:   Tue, 28 Apr 2020 20:13:14 +0530
-Message-Id: <20200428144314.24533-3-vaibhavgupta40@gmail.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200428144314.24533-1-vaibhavgupta40@gmail.com>
-References: <20200428144314.24533-1-vaibhavgupta40@gmail.com>
+        id S1728341AbgD1PUu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Apr 2020 11:20:50 -0400
+Received: from foss.arm.com ([217.140.110.172]:53970 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728177AbgD1PUk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 28 Apr 2020 11:20:40 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 252C230E;
+        Tue, 28 Apr 2020 08:20:40 -0700 (PDT)
+Received: from [10.37.12.125] (unknown [10.37.12.125])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD30A3F305;
+        Tue, 28 Apr 2020 08:20:33 -0700 (PDT)
+Subject: Re: [PATCH v3 3/4] thermal/drivers/cpuidle_cooling: Change the
+ registration function
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
+Cc:     amit.kucheria@verdurent.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        "open list:THERMAL/CPU_COOLING" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200414220837.9284-1-daniel.lezcano@linaro.org>
+ <20200414220837.9284-3-daniel.lezcano@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <4a8483a5-b481-5e97-9d03-f1ad3ae163d5@arm.com>
+Date:   Tue, 28 Apr 2020 16:20:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200414220837.9284-3-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Upgrade power management from legacy to generic using dev_pm_ops.
+Hi Daniel,
 
-Add "__maybe_unused" attribute to resume() and susend() callbacks
-definition to suppress compiler warnings.
+I have checked the patches and run them on Juno.
+Please find my comments below.
 
-Generic callback requires an argument of type "struct device*". Hence,
-convert it to "struct net_device*" using "dev_get_drv_data()" to use
-it in the callback.
+On 4/14/20 11:08 PM, Daniel Lezcano wrote:
+> Today, there is no user for the cpuidle cooling device. The targetted
+> platform is ARM and ARM64.
+> 
+> The cpuidle and the cpufreq cooling device are based on the device tree.
+> 
+> As the cpuidle cooling device can have its own configuration depending
+> on the platform and the available idle states. The DT node description
+> will give the optional properties to set the cooling device up.
+> 
+> Do no longer rely on the CPU node which is prone to error and will
+> lead to a confusion in the DT because the cpufreq cooling device is
+> also using it. Let initialize the cpuidle cooling device with the DT
+> binding.
+> 
+> This was tested on:
+>   - hikey960
+>   - hikey6220
+>   - rock960
+>   - db845c
+> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   drivers/thermal/cpuidle_cooling.c | 58 +++++++++++++++++++++++++------
+>   include/linux/cpu_cooling.h       |  7 ----
+>   2 files changed, 47 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
+> index 0bb843246f59..b2c81c427f05 100644
+> --- a/drivers/thermal/cpuidle_cooling.c
+> +++ b/drivers/thermal/cpuidle_cooling.c
+> @@ -10,6 +10,7 @@
+>   #include <linux/err.h>
+>   #include <linux/idle_inject.h>
+>   #include <linux/idr.h>
+> +#include <linux/of_device.h>
+>   #include <linux/slab.h>
+>   #include <linux/thermal.h>
+>   
+> @@ -154,22 +155,25 @@ static struct thermal_cooling_device_ops cpuidle_cooling_ops = {
+>   };
+>   
+>   /**
+> - * cpuidle_of_cooling_register - Idle cooling device initialization function
+> + * __cpuidle_cooling_register: register the cooling device
+>    * @drv: a cpuidle driver structure pointer
+> - * @np: a node pointer to a device tree cooling device node
+> + * @np: a device node structure pointer used for the thermal binding
+>    *
+> - * This function is in charge of creating a cooling device per cpuidle
+> - * driver and register it to thermal framework.
+> + * This function is in charge of allocating the cpuidle cooling device
+> + * structure, the idle injection, initialize them and register the
+> + * cooling device to the thermal framework.
+>    *
+> - * Return: zero on success, or negative value corresponding to the
+> - * error detected in the underlying subsystems.
+> + * Return: zero on success, a negative value returned by one of the
+> + * underlying subsystem in case of error
+>    */
+> -int cpuidle_of_cooling_register(struct device_node *np,
+> -				struct cpuidle_driver *drv)
+> +static int __cpuidle_cooling_register(struct device_node *np,
+> +				      struct cpuidle_driver *drv)
+>   {
+>   	struct idle_inject_device *ii_dev;
+>   	struct cpuidle_cooling_device *idle_cdev;
+>   	struct thermal_cooling_device *cdev;
+> +	unsigned int idle_duration_us = TICK_USEC;
+> +	unsigned int latency_us = UINT_MAX;
+>   	char dev_name[THERMAL_NAME_LENGTH];
+>   	int id, ret;
+>   
+> @@ -191,7 +195,11 @@ int cpuidle_of_cooling_register(struct device_node *np,
+>   		goto out_id;
+>   	}
+>   
+> -	idle_inject_set_duration(ii_dev, TICK_USEC, TICK_USEC);
+> +	of_property_read_u32(np, "duration", &idle_duration_us);
 
-Most of the cleaning part is to remove pci_save_state(),
-pci_set_power_state(), etc power management function calls.
+This probably is 'duration-us' according to DT bindings.
 
-Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
----
- drivers/net/ethernet/realtek/8139cp.c | 25 +++++++------------------
- 1 file changed, 7 insertions(+), 18 deletions(-)
+> +	of_property_read_u32(np, "latency", &latency_us);
 
-diff --git a/drivers/net/ethernet/realtek/8139cp.c b/drivers/net/ethernet/realtek/8139cp.c
-index 60d342f82fb3..4f2fb1393966 100644
---- a/drivers/net/ethernet/realtek/8139cp.c
-+++ b/drivers/net/ethernet/realtek/8139cp.c
-@@ -2054,10 +2054,9 @@ static void cp_remove_one (struct pci_dev *pdev)
- 	free_netdev(dev);
- }
- 
--#ifdef CONFIG_PM
--static int cp_suspend (struct pci_dev *pdev, pm_message_t state)
-+static int __maybe_unused cp_suspend(struct device *device)
- {
--	struct net_device *dev = pci_get_drvdata(pdev);
-+	struct net_device *dev = dev_get_drvdata(device);
- 	struct cp_private *cp = netdev_priv(dev);
- 	unsigned long flags;
- 
-@@ -2075,16 +2074,12 @@ static int cp_suspend (struct pci_dev *pdev, pm_message_t state)
- 
- 	spin_unlock_irqrestore (&cp->lock, flags);
- 
--	pci_save_state(pdev);
--	pci_enable_wake(pdev, pci_choose_state(pdev, state), cp->wol_enabled);
--	pci_set_power_state(pdev, pci_choose_state(pdev, state));
--
- 	return 0;
- }
- 
--static int cp_resume (struct pci_dev *pdev)
-+static int __maybe_unused cp_resume(struct device *device)
- {
--	struct net_device *dev = pci_get_drvdata (pdev);
-+	struct net_device *dev = dev_get_drvdata(device);
- 	struct cp_private *cp = netdev_priv(dev);
- 	unsigned long flags;
- 
-@@ -2093,10 +2088,6 @@ static int cp_resume (struct pci_dev *pdev)
- 
- 	netif_device_attach (dev);
- 
--	pci_set_power_state(pdev, PCI_D0);
--	pci_restore_state(pdev);
--	pci_enable_wake(pdev, PCI_D0, 0);
--
- 	/* FIXME: sh*t may happen if the Rx ring buffer is depleted */
- 	cp_init_rings_index (cp);
- 	cp_init_hw (cp);
-@@ -2111,7 +2102,6 @@ static int cp_resume (struct pci_dev *pdev)
- 
- 	return 0;
- }
--#endif /* CONFIG_PM */
- 
- static const struct pci_device_id cp_pci_tbl[] = {
-         { PCI_DEVICE(PCI_VENDOR_ID_REALTEK,     PCI_DEVICE_ID_REALTEK_8139), },
-@@ -2120,15 +2110,14 @@ static const struct pci_device_id cp_pci_tbl[] = {
- };
- MODULE_DEVICE_TABLE(pci, cp_pci_tbl);
- 
-+static SIMPLE_DEV_PM_OPS(cp_pm_ops, cp_suspend, cp_resume);
-+
- static struct pci_driver cp_driver = {
- 	.name         = DRV_NAME,
- 	.id_table     = cp_pci_tbl,
- 	.probe        =	cp_init_one,
- 	.remove       = cp_remove_one,
--#ifdef CONFIG_PM
--	.resume       = cp_resume,
--	.suspend      = cp_suspend,
--#endif
-+	.driver.pm    = &cp_pm_ops,
- };
- 
- module_pci_driver(cp_driver);
--- 
-2.26.2
+the same here s/latency/exit-latency-us/
 
+> +
+> +	idle_inject_set_duration(ii_dev, TICK_USEC, idle_duration_us);
+> +	idle_inject_set_latency(ii_dev, latency_us);
+>   
+>   	idle_cdev->ii_dev = ii_dev;
+>   
+> @@ -204,6 +212,9 @@ int cpuidle_of_cooling_register(struct device_node *np,
+>   		goto out_unregister;
+>   	}
+>   
+> +	pr_info("%s: Idle injection set with idle duration=%u, latency=%u\n",
+> +		dev_name, idle_duration_us, latency_us);
+
+1. It is more like a 'debug' rather than 'info', I would change it.
+2. This is going to be printed for every CPU which has the
+'thermal-idle' feature in DT. For platforms with many CPUs, it's a lot
+of log entries
+
+> +
+>   	return 0;
+>   
+>   out_unregister:
+> @@ -221,12 +232,37 @@ int cpuidle_of_cooling_register(struct device_node *np,
+>    * @drv: a cpuidle driver structure pointer
+>    *
+>    * This function is in charge of creating a cooling device per cpuidle
+> - * driver and register it to thermal framework.
+> + * driver and register it to the thermal framework.
+>    *
+>    * Return: zero on success, or negative value corresponding to the
+>    * error detected in the underlying subsystems.
+>    */
+>   int cpuidle_cooling_register(struct cpuidle_driver *drv)
+>   {
+> -	return cpuidle_of_cooling_register(NULL, drv);
+> +	struct device_node *cooling_node;
+> +	struct device_node *cpu_node;
+> +	int cpu, ret;
+> +
+> +	for_each_cpu(cpu, drv->cpumask) {
+> +
+> +		cpu_node = of_cpu_device_node_get(cpu);
+> +
+> +		cooling_node = of_get_child_by_name(cpu_node, "idle-thermal");
+
+In DT binding this is 'thermal-idle'.
+
+> +
+> +		of_node_put(cpu_node);
+> +
+> +		if (!cooling_node)
+> +			continue;
+
+This 'continue' is suspicious because it won't tell if there was no
+node "idle-thermal" but still the function will return 0. This was
+my case when I tried to enable it on Juno.
+
+Maybe a debug print that the node hasn't been found would be a
+good idea. Or somehow return different value than 0 taking into
+account that every CPU was skipped.
+
+> +
+> +		ret = __cpuidle_cooling_register(cooling_node, drv);
+> +
+> +		of_node_put(cooling_node);
+> +
+> +		if (ret)
+> +			return ret;
+> +
+> +		cooling_node = NULL;
+> +	}
+> +
+> +	return 0;
+>   }
+> diff --git a/include/linux/cpu_cooling.h b/include/linux/cpu_cooling.h
+> index 65501d8f9778..4d7b4a303327 100644
+> --- a/include/linux/cpu_cooling.h
+> +++ b/include/linux/cpu_cooling.h
+> @@ -64,18 +64,11 @@ struct cpuidle_driver;
+>   
+>   #ifdef CONFIG_CPU_IDLE_THERMAL
+>   int cpuidle_cooling_register(struct cpuidle_driver *drv);
+> -int cpuidle_of_cooling_register(struct device_node *np,
+> -				struct cpuidle_driver *drv);
+>   #else /* CONFIG_CPU_IDLE_THERMAL */
+>   static inline int cpuidle_cooling_register(struct cpuidle_driver *drv)
+>   {
+>   	return 0;
+>   }
+> -static inline int cpuidle_of_cooling_register(struct device_node *np,
+> -					      struct cpuidle_driver *drv)
+> -{
+> -	return 0;
+> -}
+>   #endif /* CONFIG_CPU_IDLE_THERMAL */
+>   
+>   #endif /* __CPU_COOLING_H__ */
+> 
+
+Apart from that, looks good to me.
+
+Regards,
+Lukasz
