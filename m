@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4461BB486
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 05:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AC61BB487
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 05:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726284AbgD1D1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1726335AbgD1D1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Mon, 27 Apr 2020 23:27:52 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:48930 "EHLO mx1.riseup.net"
+Received: from mx1.riseup.net ([198.252.153.129]:48912 "EHLO mx1.riseup.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726307AbgD1D1v (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1726312AbgD1D1v (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Mon, 27 Apr 2020 23:27:51 -0400
 Received: from bell.riseup.net (unknown [10.0.1.178])
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 49B6Xl1x7HzFfGF;
+        by mx1.riseup.net (Postfix) with ESMTPS id 49B6Xl3gxvzFfHC;
         Mon, 27 Apr 2020 20:27:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1588044471; bh=v8UNnVZ8Y5Hwsl7QoKfs74cLkoHuFMvNVDWGXykM/Sw=;
+        t=1588044471; bh=sGuXA/+5WIjTQ087osfcebpmWG4DqRI3IB3ZQpHAqWY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X9zHmA2uwQR9FhLlc7O4/a0iqROrWc1RZHWVQuqtY4ScGY+gqK+uVj+W1z4JWwX37
-         ceREWvbLzvVHYx8/lCu6VWMOirO6VdSg5J8WStj1qGJQXEj/gxOry+zUW4XPZl3LBr
-         zB/WypGR8K9A1pnn24FVRPZyJ7mBB8qSmTJGa0wo=
-X-Riseup-User-ID: 3A079DF5A56B22579F23B58E12178184DFE2B31AB44B9F9E9A66C7CC9107EB32
+        b=QqZvh+CzSLblaHHShm99+PvMpQ8+JZCqOMTUHTAgLsF7Xs9oDMgRehNSEnHOirThS
+         +5osZwRoFKBtKTk0GC3RlxBwGSMshPRBkO7yr/gti+jNBsQuqHgsv9rJ51Gxd63SWz
+         iEi71SnS29/2WSKgkL4IYCNf+VcgJGt6eWNbPY0c=
+X-Riseup-User-ID: 114744E557F2DD3C88A19DFBDF3999A048F0F63B1DAC11BE228326A912507F03
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by bell.riseup.net (Postfix) with ESMTPSA id 49B6Xk742RzJqbv;
-        Mon, 27 Apr 2020 20:27:50 -0700 (PDT)
+         by bell.riseup.net (Postfix) with ESMTPSA id 49B6Xl1ms9zJqbk;
+        Mon, 27 Apr 2020 20:27:51 -0700 (PDT)
 From:   Francisco Jerez <currojerez@riseup.net>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         "Pandruvada\, Srinivas" <srinivas.pandruvada@intel.com>
@@ -33,9 +33,9 @@ Cc:     linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
         chris.p.wilson@intel.com,
         "Vivi\, Rodrigo" <rodrigo.vivi@intel.com>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCHv2.99 05/11] cpufreq: intel_pstate: Reorder intel_pstate_clear_update_util_hook() and intel_pstate_set_update_util_hook().
-Date:   Mon, 27 Apr 2020 20:22:52 -0700
-Message-Id: <20200428032258.2518-6-currojerez@riseup.net>
+Subject: [PATCHv2.99 06/11] cpufreq: intel_pstate: Call intel_pstate_set_update_util_hook() once from the setpolicy hook.
+Date:   Mon, 27 Apr 2020 20:22:53 -0700
+Message-Id: <20200428032258.2518-7-currojerez@riseup.net>
 In-Reply-To: <20200428032258.2518-1-currojerez@riseup.net>
 References: <20200428032258.2518-1-currojerez@riseup.net>
 MIME-Version: 1.0
@@ -45,55 +45,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Trivial.
+And let it figure out whether an update_util hook is needed, and what
+the appropriate function pointer is based on the CPUFREQ policy of the
+current CPU.
 
 Signed-off-by: Francisco Jerez <currojerez@riseup.net>
 ---
- drivers/cpufreq/intel_pstate.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ drivers/cpufreq/intel_pstate.c | 22 +++++++---------------
+ 1 file changed, 7 insertions(+), 15 deletions(-)
 
 diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 66ab6523c3eb..49401cfe9858 100644
+index 49401cfe9858..fd7eee57c05c 100644
 --- a/drivers/cpufreq/intel_pstate.c
 +++ b/drivers/cpufreq/intel_pstate.c
-@@ -2000,6 +2000,18 @@ static int intel_pstate_init_cpu(unsigned int cpunum)
- 	return 0;
- }
- 
-+static void intel_pstate_clear_update_util_hook(unsigned int cpu)
-+{
-+	struct cpudata *cpu_data = all_cpu_data[cpu];
-+
-+	if (!cpu_data->update_util_set)
-+		return;
-+
-+	cpufreq_remove_update_util_hook(cpu);
-+	cpu_data->update_util_set = false;
-+	synchronize_rcu();
-+}
-+
- static void intel_pstate_set_update_util_hook(unsigned int cpu_num)
+@@ -2016,10 +2016,11 @@ static void intel_pstate_set_update_util_hook(unsigned int cpu_num)
  {
  	struct cpudata *cpu = all_cpu_data[cpu_num];
-@@ -2019,18 +2031,6 @@ static void intel_pstate_set_update_util_hook(unsigned int cpu_num)
- 	cpu->update_util_set = true;
- }
  
--static void intel_pstate_clear_update_util_hook(unsigned int cpu)
--{
--	struct cpudata *cpu_data = all_cpu_data[cpu];
--
--	if (!cpu_data->update_util_set)
+-	if (hwp_active && !hwp_boost)
 -		return;
 -
--	cpufreq_remove_update_util_hook(cpu);
--	cpu_data->update_util_set = false;
--	synchronize_rcu();
--}
--
- static int intel_pstate_get_max_freq(struct cpudata *cpu)
- {
- 	return global.turbo_disabled || global.no_turbo ?
+ 	if (cpu->update_util_set)
++		intel_pstate_clear_update_util_hook(cpu_num);
++
++	if (cpu->policy == CPUFREQ_POLICY_PERFORMANCE ||
++	    (hwp_active && !hwp_boost))
+ 		return;
+ 
+ 	/* Prevent intel_pstate_update_util() from using stale data. */
+@@ -2117,27 +2118,18 @@ static int intel_pstate_set_policy(struct cpufreq_policy *policy)
+ 
+ 	intel_pstate_update_perf_limits(cpu, policy->min, policy->max);
+ 
++	intel_pstate_set_update_util_hook(policy->cpu);
++
+ 	if (cpu->policy == CPUFREQ_POLICY_PERFORMANCE) {
+ 		/*
+ 		 * NOHZ_FULL CPUs need this as the governor callback may not
+ 		 * be invoked on them.
+ 		 */
+-		intel_pstate_clear_update_util_hook(policy->cpu);
+ 		intel_pstate_max_within_limits(cpu);
+-	} else {
+-		intel_pstate_set_update_util_hook(policy->cpu);
+ 	}
+ 
+-	if (hwp_active) {
+-		/*
+-		 * When hwp_boost was active before and dynamically it
+-		 * was turned off, in that case we need to clear the
+-		 * update util hook.
+-		 */
+-		if (!hwp_boost)
+-			intel_pstate_clear_update_util_hook(policy->cpu);
++	if (hwp_active)
+ 		intel_pstate_hwp_set(policy->cpu);
+-	}
+ 
+ 	mutex_unlock(&intel_pstate_limits_lock);
+ 
 -- 
 2.22.1
 
