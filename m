@@ -2,113 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D55E1BCD81
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 22:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD0B1BCDA1
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Apr 2020 22:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726413AbgD1UeN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Apr 2020 16:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S1726366AbgD1UnY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Apr 2020 16:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726286AbgD1UeL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Apr 2020 16:34:11 -0400
-Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04424C03C1AB
-        for <linux-pm@vger.kernel.org>; Tue, 28 Apr 2020 13:34:09 -0700 (PDT)
-Received: by mail-ua1-x941.google.com with SMTP id z16so22858915uae.11
-        for <linux-pm@vger.kernel.org>; Tue, 28 Apr 2020 13:34:09 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726180AbgD1UnX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Apr 2020 16:43:23 -0400
+Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7992C03C1AC
+        for <linux-pm@vger.kernel.org>; Tue, 28 Apr 2020 13:43:23 -0700 (PDT)
+Received: by mail-vk1-xa42.google.com with SMTP id q200so52165vka.13
+        for <linux-pm@vger.kernel.org>; Tue, 28 Apr 2020 13:43:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=verdurent-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=z97Q8zIF1xZ1WiB5BLHXUrpSO7gV7Uk5iXCchLoct18=;
-        b=g7o6v59iRNgpmNU22S7QAHVZZ5eMbcXUaro17i5cvT7gtb4rYzeT5iF82Z8QbSyLos
-         3oyXlsKo3ccwL58lV4OcDoj5R2Qn/eYUWn62IGSYp5gV3DSeSCJGMksU4PPxXsclN2ui
-         cMs1F8RG0iuGsY27CHKe0pK4E5FR+YPotvQ9G+LHh4pczxrc2Gx32+ufbE+9ZLYobY9F
-         8bK3rpag9kjCRt4x6AbU1oaoQiyG9svN3c/8pGjp5mRAdBUfTeFHVYSfWap8vG6SWE8j
-         A8wHuddtQs6fvQyFQTm0sMt8ovIPXHXjC6ORldqbOU9C8r9F/dRR+sU23tqz6vk9FmKF
-         jXiw==
+        bh=/OSHGWesGAjIQKdOPpoKsn+XeE0l9RMqKCT+tPNC2z4=;
+        b=zX6Iakul0LkrFXuvvK6fla1W/wqCi4+6Vv0VkHkIeJuwdsqVxPwZCn+2bPbmUGyx3Y
+         uYs65uOc8V43C8V26+c/UCnzteqOdMsTRnrxVnbkx3ZHHV9QnkIK781R6AkXe7E/Kbf0
+         ldnBZ5ISzENYyaHpx0zxsAtR0fK/y8OvXL1S85GHBhf3wKSJC/tuBGpBQtuJNsK9Bn6E
+         HEr3RomC/5KSQOWnug5HoXnpEJywQXpW3BMxvYaqrm0WkB5Fyxsd4oY9fAEQ4BF2n/6s
+         igsVJwKx55OfcDMhhmHTE1jTAA0zImbzD4u4NmBTT3qPePwldQT09+gE9wFhTPowWYvt
+         GJcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=z97Q8zIF1xZ1WiB5BLHXUrpSO7gV7Uk5iXCchLoct18=;
-        b=qL7kmqr6Y5h5npc1+IkKypchQ+lwou/NheH5QUPVybQXeLmzNj8dIcSSf83jBTyRup
-         R3D0AO9mJXgIDG4aW66wBSI0BI2rnFxQkIuqEMD2ZJw/MTEEZ7zp9Z62aOYhdBK/XTBQ
-         7mbXBVl7ZmTejVMhXjv4gBFLBg8sNZa29/ZqCwRv2V7pQeqHJamkxy2ZD3Hu9Am+4U2K
-         odEWxIlM0vRb3/YlPYVp7b5Mc6aurdFswjYUBR/gD70n0smEudcdrK1bsgwQDiJPkNDl
-         FscgTw6w7YIQb7Ayylf7oYDf2+wsPYGmXX3Z/RWirb/RS27X2y39mSjKxqTK0GtNykqr
-         KZBA==
-X-Gm-Message-State: AGi0PuZ7RyHZqgdjtLCEP+gOuKJ58O99yOEv15MrLp/AFdbWesqyNOMl
-        QZNtXBm+zYFjxj11S12EcxvMTZ+8PsAiCOo+sLUrXA==
-X-Google-Smtp-Source: APiQypIreH+1VhDbJwXHZbOxs7FxoAr4YVLrwqIHB4Ov/kDaB/n1zXGWYYQvnW5yvPxXNWy4O5Ee+qC4VU8WGKGBUKU=
-X-Received: by 2002:a67:e9d9:: with SMTP id q25mr22060001vso.27.1588106049108;
- Tue, 28 Apr 2020 13:34:09 -0700 (PDT)
+        bh=/OSHGWesGAjIQKdOPpoKsn+XeE0l9RMqKCT+tPNC2z4=;
+        b=rtpFsJZjGaB8RGLSjIJKWd9ExqDX83bNSUDQIVgFSHK+9Kg/Wj2QPbT2LTRafmMZc0
+         3azKC9gnHDjQarJQj5GAhTuq3GbsHiz2lbhzFyftxGPOaMd8NAFXQB8V4uNMpiJY1qvw
+         VMgzBw8sCgGrQCAubJamQV69HfA9frWMfSD8g+B0L/lO3RoDHd9bFWnnHHgmPdWUqlPO
+         VGJnfdxfxpUAjo13xlDJmI/S2lay2he1+rvoARpRSxUhuvJcGdeWjPD1En0IMHNyw6Tc
+         bvdARffaHoPKdSCdwH3ZHxiZ/h2oCxx8WdysFOhy0Actq4k9F/Fa4oydEH/FpqYPC8Ke
+         kTMw==
+X-Gm-Message-State: AGi0PubN7PbOFZGnXH/lTxL1X17wRzO4LvVPS7lyb6r3mPWzYwlmGahp
+        VMkT8D0JHEY577U5jCQ6OilDsAdUWsbef77HLnRlBw==
+X-Google-Smtp-Source: APiQypKCUKt3jJ4sj9lTa6XBBwThMQqjqJzLuTpJ4h/WRkAacfQ6QQbfN6+a9FmS4vKfBKHCvunkUWb/88bEQfn0/Zw=
+X-Received: by 2002:a1f:2a13:: with SMTP id q19mr10178790vkq.73.1588106602833;
+ Tue, 28 Apr 2020 13:43:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200424161944.6044-1-sudipm.mukherjee@gmail.com>
-In-Reply-To: <20200424161944.6044-1-sudipm.mukherjee@gmail.com>
+References: <1587477544-20052-1-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1587477544-20052-1-git-send-email-Anson.Huang@nxp.com>
 From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Wed, 29 Apr 2020 02:03:33 +0530
-Message-ID: <CAHLCerPm=FssMWhccXbJiCaxakDb-Trz_uOpCAmtwEyaQkeqxQ@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: ti-soc-thermal: avoid dereferencing ERR_PTR
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
-        Zhang Rui <rui.zhang@intel.com>,
+Date:   Wed, 29 Apr 2020 02:12:47 +0530
+Message-ID: <CAHLCerM0w=Zc0seb6u0f2=wpsObuv4O9fZiKaZJbS7ojDgx7EA@mail.gmail.com>
+Subject: Re: [PATCH V3] dt-bindings: thermal: Convert i.MX8MM to json-schema
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        Fabio Estevam <festevam@gmail.com>,
         Linux PM list <linux-pm@vger.kernel.org>,
-        linux-omap@vger.kernel.org
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        lakml <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <Linux-imx@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 24, 2020 at 9:49 PM Sudip Mukherjee
-<sudipm.mukherjee@gmail.com> wrote:
+On Tue, Apr 21, 2020 at 7:37 PM Anson Huang <Anson.Huang@nxp.com> wrote:
 >
-> On error the function ti_bandgap_get_sensor_data() returns the error
-> code in ERR_PTR() but we only checked if the return value is NULL or
-> not. And, so we can dereference an error code inside ERR_PTR.
-> While at it, convert a check to IS_ERR_OR_NULL.
+> Convert the i.MX8MM thermal binding to DT schema format using json-schema
 >
-> Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+
 Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 
+
 > ---
->  drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> Changes since V2:
+>         - drop unnecessary description for reg/clocks;
+>         - improve compatible;
+>         - use thermal-sensor as node name.
+> ---
+>  .../devicetree/bindings/thermal/imx8mm-thermal.txt | 15 ------
+>  .../bindings/thermal/imx8mm-thermal.yaml           | 58 ++++++++++++++++++++++
+>  2 files changed, 58 insertions(+), 15 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+>  create mode 100644 Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml
 >
-> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> index d3e959d01606..85776db4bf34 100644
-> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> @@ -169,7 +169,7 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
->
->         data = ti_bandgap_get_sensor_data(bgp, id);
->
-> -       if (!data || IS_ERR(data))
-> +       if (!IS_ERR_OR_NULL(data))
->                 data = ti_thermal_build_data(bgp, id);
->
->         if (!data)
-> @@ -196,7 +196,7 @@ int ti_thermal_remove_sensor(struct ti_bandgap *bgp, int id)
->
->         data = ti_bandgap_get_sensor_data(bgp, id);
->
-> -       if (data && data->ti_thermal) {
-> +       if (!IS_ERR_OR_NULL(data) && data->ti_thermal) {
->                 if (data->our_zone)
->                         thermal_zone_device_unregister(data->ti_thermal);
->         }
-> @@ -262,7 +262,7 @@ int ti_thermal_unregister_cpu_cooling(struct ti_bandgap *bgp, int id)
->
->         data = ti_bandgap_get_sensor_data(bgp, id);
->
-> -       if (data) {
-> +       if (!IS_ERR_OR_NULL(data)) {
->                 cpufreq_cooling_unregister(data->cool_dev);
->                 if (data->policy)
->                         cpufreq_cpu_put(data->policy);
+> diff --git a/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+> deleted file mode 100644
+> index 3629d3c..0000000
+> --- a/Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
+> +++ /dev/null
+> @@ -1,15 +0,0 @@
+> -* Thermal Monitoring Unit (TMU) on Freescale i.MX8MM SoC
+> -
+> -Required properties:
+> -- compatible : Must be "fsl,imx8mm-tmu" or "fsl,imx8mp-tmu".
+> -- reg : Address range of TMU registers.
+> -- clocks : TMU's clock source.
+> -- #thermal-sensor-cells : Should be 0 or 1. See ./thermal.txt for a description.
+> -
+> -Example:
+> -tmu: tmu@30260000 {
+> -       compatible = "fsl,imx8mm-tmu";
+> -       reg = <0x30260000 0x10000>;
+> -       clocks = <&clk IMX8MM_CLK_TMU_ROOT>;
+> -       #thermal-sensor-cells = <0>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml
+> new file mode 100644
+> index 0000000..3885287
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml
+> @@ -0,0 +1,58 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/imx8mm-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP i.MX8M Mini Thermal Binding
+> +
+> +maintainers:
+> +  - Anson Huang <Anson.Huang@nxp.com>
+> +
+> +description: |
+> +  i.MX8MM has TMU IP to allow temperature measurement, there are
+> +  currently two distinct major versions of the IP that is supported
+> +  by a single driver. The IP versions are named v1 and v2, v1 is
+> +  for i.MX8MM which has ONLY 1 sensor, v2 is for i.MX8MP which has
+> +  2 sensors.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - fsl,imx8mm-tmu
+> +      - fsl,imx8mp-tmu
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  "#thermal-sensor-cells":
+> +    description: |
+> +      Number of cells required to uniquely identify the thermal
+> +      sensors, 0 for ONLY one sensor and 1 for multiple sensors.
+> +    enum:
+> +      - 0
+> +      - 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - '#thermal-sensor-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx8mm-clock.h>
+> +
+> +    thermal-sensor@30260000 {
+> +         compatible = "fsl,imx8mm-tmu";
+> +         reg = <0x30260000 0x10000>;
+> +         clocks = <&clk IMX8MM_CLK_TMU_ROOT>;
+> +         #thermal-sensor-cells = <0>;
+> +    };
+> +
+> +...
 > --
-> 2.11.0
+> 2.7.4
 >
