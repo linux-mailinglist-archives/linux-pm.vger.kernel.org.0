@@ -2,115 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8578F1BE63B
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 20:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3919A1BE7F5
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 22:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbgD2S2c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Apr 2020 14:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726456AbgD2S2c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 14:28:32 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5CAC03C1AE;
-        Wed, 29 Apr 2020 11:28:32 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id DECFE2A223C
-Received: by earth.universe (Postfix, from userid 1000)
-        id 3D4783C08C6; Wed, 29 Apr 2020 20:28:28 +0200 (CEST)
-Date:   Wed, 29 Apr 2020 20:28:28 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Geordan Neukum <gneukum1@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: max17042_battery: Add support for the
- TTE_NOW prop
-Message-ID: <20200429182828.xgqltubijz7y6wei@earth.universe>
-References: <20200330053352.GA28178@localhost.localdomain>
+        id S1726481AbgD2UAQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Apr 2020 16:00:16 -0400
+Received: from foss.arm.com ([217.140.110.172]:44202 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726456AbgD2UAP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 Apr 2020 16:00:15 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39F261063;
+        Wed, 29 Apr 2020 13:00:15 -0700 (PDT)
+Received: from [10.37.12.43] (unknown [10.37.12.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C80F3F68F;
+        Wed, 29 Apr 2020 13:00:13 -0700 (PDT)
+Subject: Re: [PATCH v4 3/4] thermal/drivers/cpuidle_cooling: Change the
+ registration function
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        "open list:THERMAL/CPU_COOLING" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200429103644.5492-1-daniel.lezcano@linaro.org>
+ <20200429103644.5492-3-daniel.lezcano@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <a0a3edaf-03ff-2fbe-7caf-d77b43db7ed4@arm.com>
+Date:   Wed, 29 Apr 2020 21:00:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t2ax7cucttldjspz"
-Content-Disposition: inline
-In-Reply-To: <20200330053352.GA28178@localhost.localdomain>
+In-Reply-To: <20200429103644.5492-3-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Daniel,
 
---t2ax7cucttldjspz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Mon, Mar 30, 2020 at 01:33:55AM -0400, Geordan Neukum wrote:
-> The max170{42,47,50,55} family of fuel gauges all provide time-to-empty
-> estimation. As such, let's export this as a property.
->=20
-> Signed-off-by: Geordan Neukum <gneukum1@gmail.com>
+On 4/29/20 11:36 AM, Daniel Lezcano wrote:
+> Today, there is no user for the cpuidle cooling device. The targetted
+> platform is ARM and ARM64.
+> 
+> The cpuidle and the cpufreq cooling device are based on the device tree.
+> 
+> As the cpuidle cooling device can have its own configuration depending
+> on the platform and the available idle states. The DT node description
+> will give the optional properties to set the cooling device up.
+> 
+> Do no longer rely on the CPU node which is prone to error and will
+> lead to a confusion in the DT because the cpufreq cooling device is
+> also using it. Let initialize the cpuidle cooling device with the DT
+> binding.
+> 
+> This was tested on:
+>   - hikey960
+>   - hikey6220
+>   - rock960
+>   - db845c
+> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   - V4:
+>     - Changed message from pr_info to pr_debug
+>     - Fixed of properties to comply with the binding
+>     - Add a debug message int case the thermal-idle node is not found
+>     - Do not return an error as the caller won't care
 > ---
 
-Thanks, queued.
+Looks good.
 
--- Sebastian
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
->  drivers/power/supply/max17042_battery.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supp=
-ly/max17042_battery.c
-> index 69ec4295d55d..f284547913d6 100644
-> --- a/drivers/power/supply/max17042_battery.c
-> +++ b/drivers/power/supply/max17042_battery.c
-> @@ -87,6 +87,7 @@ static enum power_supply_property max17042_battery_prop=
-s[] =3D {
->  	POWER_SUPPLY_PROP_SCOPE,
->  	POWER_SUPPLY_PROP_CURRENT_NOW,
->  	POWER_SUPPLY_PROP_CURRENT_AVG,
-> +	POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW,
->  };
->=20
->  static int max17042_get_temperature(struct max17042_chip *chip, int *tem=
-p)
-> @@ -411,6 +412,13 @@ static int max17042_get_property(struct power_supply=
- *psy,
->  			return -EINVAL;
->  		}
->  		break;
-> +	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
-> +		ret =3D regmap_read(map, MAX17042_TTE, &data);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		val->intval =3D data * 5625 / 1000;
-> +		break;
->  	default:
->  		return -EINVAL;
->  	}
-> --
-> 2.18.1
->=20
-
---t2ax7cucttldjspz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6px0cACgkQ2O7X88g7
-+poMqw/9Esv66ea/NvgO4QzIQAsMYGE/irM6QqbHQrmAOPWacir96tsG1Hq4XxXS
-1hoGb3LxtYTBUBws6I+UdLHM4RpuYVEw4pstk97WHpBddNZRRCWjvdzR+8YnFVjR
-bgdkXjYBaE3zE+fV5HogTOFR7l1YR8JSXLjIep+U9bSMoCUWoZvoVrZvpuNkVcMI
-kxBWyZj1lmE0HF7K66eW+ydaDRHbzkBnbWxPsfeWcbxKQmi8+DeTTLSN02P8o3r6
-mlgMEOA/MoQP8OI7VRTnfSDbsagF8njkkvZOXJCU1Vm67tGvbOgfpAaH9Wclixlg
-ODe1fWGnChDzbhHECrTazj73TmsNCCxRMAcQspOWm4akRqNK2bCX3oUWGcAeAaeX
-BOZZ/ai4Hy8iULmnsRQwVJOBi1dfdK78IwU8u1kF4/TPzVo6vBeB5h/z7C00mte6
-bHDBbeM59Adg//KNlutkuFghIDj+rKdFQY8bd0MV25fTXOAowRm3r1VkGaNM4ptm
-zBm1nmorWlUNzbsz/PTXXFRNcfPlgbFuYJMpZCIncQe4DRpR/LVOc8rxlBErKE/0
-L9R1wK6YViWsnO6Q7yCaFd2jQssSudah6nd+5IZ3MZTZE5iSxEe81Bwv1tQWewzb
-LMMXDjS6LsDO74t5X/vvZbob19ZZPpXp40yIVXQ0S1rraT0Azi4=
-=nyOD
------END PGP SIGNATURE-----
-
---t2ax7cucttldjspz--
+Regards,
+Lukasz
