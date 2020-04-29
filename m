@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5819E1BE94D
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 22:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0E91BE94F
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 22:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727086AbgD2U6i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Apr 2020 16:58:38 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:46313 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727070AbgD2U6h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 16:58:37 -0400
-Received: by mail-oi1-f196.google.com with SMTP id q204so3107167oia.13;
-        Wed, 29 Apr 2020 13:58:37 -0700 (PDT)
+        id S1727102AbgD2U6k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Apr 2020 16:58:40 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:41114 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727070AbgD2U6j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 16:58:39 -0400
+Received: by mail-oi1-f193.google.com with SMTP id 19so3121315oiy.8;
+        Wed, 29 Apr 2020 13:58:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EoRdXSXyDk/x1mGGqjsqWksS6mCyDXiHkJ0dVC6MTqs=;
-        b=XEWib+bhJcgyXc/k32lnfr6E56uNc6lED+lKW4cz7BsCEBFpMlGwW6B0eFc/bFDCni
-         w7X7R5e0rO33RKfrf6U69sYKprNxfjWdfAkf7VydxX5HK8k/Ze9QPgXfc4PWra0RvUIo
-         a1g/utf5pzrH3FgZjEjJGmXmybaNT79g97LaG6hcPmeFHRti6KVpJxwqk2eEMeXJjjun
-         ZcQyQ9q9dyXiG2EcM7IiqzC/VE/lVzX2ruD7npJqsAXNUkvSmwlA2ixOu0fldnGaQZK/
-         srMnZK6wo0pQA+BvzqNlck4PwgFNkR5DLtB1OmX8xNl0gDf7ycJDxxweKUi4/5qkQkh4
-         8UZA==
-X-Gm-Message-State: AGi0PuZ6evyJBvCLj+Ad+S51GOZm70QrWwj9r5PWBX2wcgwrcJ0XtUjZ
-        qCyPc10sAygXEPFsWOO8YQ==
-X-Google-Smtp-Source: APiQypLdCoQOqyhUOrgVpALW16PrMgDTQhtSkj/rPf8nCMNL3vEltambBtSQoCpAq6uy/8hcmIv3FA==
-X-Received: by 2002:a54:4801:: with SMTP id j1mr108023oij.101.1588193916924;
-        Wed, 29 Apr 2020 13:58:36 -0700 (PDT)
+        bh=qg2zxc590nC56Olu/LMLIdebNTiQLSp6hgsD/Wgzqhc=;
+        b=jGCOmzGqVtaMZ+AgL4r4UTSJEoMJEHCOHSLCsqRpCIlbrddNLAfMmSTlVbtKqqcHLl
+         GCPzv1dycCZAezM/Yqcu3PQUCHxxoC7r+C0Qg1Ly53zy84WQgZw4d1d646LzZ4KTaJOu
+         FX3j4TKg8VOUWbeXy8lpTHwSYyvdQ57a1wkw78KZBXJUAUt2dKcciNrlHbknh+3vweUa
+         inANULWtepxULwIi7IyQiXzfjcbLqu81L5KYo+PN7K1HuL3T85icvvO5dw2QVJLpNpYz
+         UjVrPoouOm25XLTdR9FD4ybALUOKaDoUoL0iUzzb1QYgqZOgH7DbKA5u5WV3OXqd8+/2
+         WLfQ==
+X-Gm-Message-State: AGi0PuajgC+iTW02vZ3Nju4nTeOyT21YIiYbGLhNxPDgh12DMgOIdhuQ
+        ToJ8UMCu+OH9cLKsPj7q0w==
+X-Google-Smtp-Source: APiQypLrWJY7pYSRXhfCSOB9FxS2TVlt5Ok67NnxttN2E8ckgZPz2Ph897iAX8kOYgBQBWEzEAcFZw==
+X-Received: by 2002:a54:4619:: with SMTP id p25mr128029oip.122.1588193918475;
+        Wed, 29 Apr 2020 13:58:38 -0700 (PDT)
 Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.googlemail.com with ESMTPSA id z13sm653162oth.10.2020.04.29.13.58.35
+        by smtp.googlemail.com with ESMTPSA id z13sm653162oth.10.2020.04.29.13.58.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2020 13:58:36 -0700 (PDT)
+        Wed, 29 Apr 2020 13:58:37 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Liviu Dudau <liviu.dudau@arm.com>,
@@ -46,10 +46,11 @@ Cc:     Kevin Brodsky <Kevin.Brodsky@arm.com>,
         Sebastian Reichel <sre@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v2 06/16] clk: vexpress-osc: Use the devres clock API variants
-Date:   Wed, 29 Apr 2020 15:58:15 -0500
-Message-Id: <20200429205825.10604-7-robh@kernel.org>
+        linux-pm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>
+Subject: [PATCH v2 07/16] clk: vexpress-osc: Support building as a module
+Date:   Wed, 29 Apr 2020 15:58:16 -0500
+Message-Id: <20200429205825.10604-8-robh@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200429205825.10604-1-robh@kernel.org>
 References: <20200429205825.10604-1-robh@kernel.org>
@@ -60,52 +61,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In preparation to enable the vexpress-osc clock driver as a module,
-convert the driver to use the managed devres clock API variants. With
-this, a driver .remove() hook is not needed.
+Enable building the vexpress-osc clock driver as a module.
 
-Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
 Cc: linux-clk@vger.kernel.org
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-Acked-by: Liviu Dudau <liviu.dudau@arm.com>
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/clk/versatile/clk-vexpress-osc.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/clk/versatile/clk-vexpress-osc.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/clk/versatile/clk-vexpress-osc.c b/drivers/clk/versatile/clk-vexpress-osc.c
-index 7ade146a3ea9..5bb1d5a714d0 100644
+index 5bb1d5a714d0..b2b32fa2d7c3 100644
 --- a/drivers/clk/versatile/clk-vexpress-osc.c
 +++ b/drivers/clk/versatile/clk-vexpress-osc.c
-@@ -65,8 +65,8 @@ static int vexpress_osc_probe(struct platform_device *pdev)
- {
- 	struct clk_init_data init;
- 	struct vexpress_osc *osc;
--	struct clk *clk;
- 	u32 range[2];
-+	int ret;
+@@ -7,6 +7,7 @@
+ #include <linux/clkdev.h>
+ #include <linux/clk-provider.h>
+ #include <linux/err.h>
++#include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+@@ -108,6 +109,7 @@ static const struct of_device_id vexpress_osc_of_match[] = {
+ 	{ .compatible = "arm,vexpress-osc", },
+ 	{}
+ };
++MODULE_DEVICE_TABLE(of, vexpress_osc_of_match);
  
- 	osc = devm_kzalloc(&pdev->dev, sizeof(*osc), GFP_KERNEL);
- 	if (!osc)
-@@ -92,11 +92,11 @@ static int vexpress_osc_probe(struct platform_device *pdev)
- 
- 	osc->hw.init = &init;
- 
--	clk = clk_register(NULL, &osc->hw);
--	if (IS_ERR(clk))
--		return PTR_ERR(clk);
-+	ret = devm_clk_hw_register(&pdev->dev, &osc->hw);
-+	if (ret < 0)
-+		return ret;
- 
--	of_clk_add_provider(pdev->dev.of_node, of_clk_src_simple_get, clk);
-+	devm_of_clk_add_hw_provider(&pdev->dev, of_clk_hw_simple_get, &osc->hw);
- 	clk_hw_set_rate_range(&osc->hw, osc->rate_min, osc->rate_max);
- 
- 	dev_dbg(&pdev->dev, "Registered clock '%s'\n", init.name);
+ static struct platform_driver vexpress_osc_driver = {
+ 	.driver	= {
+@@ -116,9 +118,5 @@ static struct platform_driver vexpress_osc_driver = {
+ 	},
+ 	.probe = vexpress_osc_probe,
+ };
+-
+-static int __init vexpress_osc_init(void)
+-{
+-	return platform_driver_register(&vexpress_osc_driver);
+-}
+-core_initcall(vexpress_osc_init);
++module_platform_driver(vexpress_osc_driver);
++MODULE_LICENSE("GPL v2");
 -- 
 2.20.1
 
