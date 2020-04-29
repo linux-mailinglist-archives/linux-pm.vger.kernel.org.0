@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE1C1BE953
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 22:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB341BE955
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 22:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727109AbgD2U6m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Apr 2020 16:58:42 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:33633 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727070AbgD2U6m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 16:58:42 -0400
-Received: by mail-ot1-f65.google.com with SMTP id j26so3009644ots.0;
-        Wed, 29 Apr 2020 13:58:41 -0700 (PDT)
+        id S1727112AbgD2U6o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Apr 2020 16:58:44 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:44195 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727070AbgD2U6n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 16:58:43 -0400
+Received: by mail-oi1-f195.google.com with SMTP id a2so3117386oia.11;
+        Wed, 29 Apr 2020 13:58:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xStMKk0H1Os/f4XhAPdtzwoAZgabWI5+EIoJOxpP6QU=;
-        b=Zlb9kiqGbTv4xdp589LXEgGgDSaD6xJyxvuHFcHcOlt9GPE61O5r3Jsufn//1ziSpz
-         uQgBR53LFNT4lX740j28fciWg5Aoy+jDrCIUmpWLyFovE6zuzTbtvvAqRZLZquUzQwX0
-         Up44E7VBxKtWWQt8K6nl0NwhWhdUKoxRkXemUwrkMAc6NEx3B6NiXdfJ1fDRcYB/WdY+
-         RqWARye9QdNAyVEJ77LUQCvyhjQfO8VY2J6hprkQCUejaDobBK6A32WEvUHBa1cwtBBr
-         snAeQ2rBBUmHF4OYxLoySsrbm8QPbV0T/pJU0v232otg8kg/o0ZQhEaTe7YH9nHucTEz
-         0I6A==
-X-Gm-Message-State: AGi0PubJft2Efx5B6upfYTwoDhZh6zGMzZtPanuK5ccfi6/GWdY2iXlP
-        Yepm79R+N558RbH84SR+/A==
-X-Google-Smtp-Source: APiQypK3kk60mycPcQlbrx8lkRNiDbkLmjHejw1+fZgz13WaNX4EQAK5LW9ZdLCUGNgRh1SQc9dLUg==
-X-Received: by 2002:a9d:37c9:: with SMTP id x67mr27294346otb.207.1588193921255;
-        Wed, 29 Apr 2020 13:58:41 -0700 (PDT)
+        bh=mCsNkb20GktgvT3EVSg7e0Ed7fNCWMt0hSKRdrZhvDs=;
+        b=sMDRWWbDbki96lLdasxcFtsMdVea8AQZ6bdNo6DLYMSvfBhgJwR9Ne3CZPL1rZqwjH
+         m5m5dx6jGHF/nrzAawvTBr7Lsk5eRk4gmvK/ge9UjGFvbDKnce+BFfelDOpJLaKsijti
+         hT1nwm2w38U38tmWJpA1hqwVaEtdezMysyWaFQlGe7Z3ziIi3fn1d1bDd9OlUDDgJnIL
+         KlkQMrQHjKEK4gid9YSL9KycehfKpztHzlknWF3Zg3B3ynXKMz3gQodbP4arYs162b2A
+         ujsU8hcsWbhC7AxCtHZIYGu+vo+7Ua4uwkrIvnemA6obDZ1MSYxpeCmy6G34ROz3bBwI
+         VIEA==
+X-Gm-Message-State: AGi0PubN2YC+6OMu6e1Am6ANblwirBvDz9MKfDAvWI/1C9pAmgL9VOwR
+        GiRUkztM0H+HzbMZ05x89Q==
+X-Google-Smtp-Source: APiQypIMdJYtJ48k8tsFDlemNM2E4VC1cOVOCiiaXWDZFhkxrRyppPOhxj91cmywM1r4IIPVqeGw1w==
+X-Received: by 2002:aca:2807:: with SMTP id 7mr123603oix.15.1588193922725;
+        Wed, 29 Apr 2020 13:58:42 -0700 (PDT)
 Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.googlemail.com with ESMTPSA id z13sm653162oth.10.2020.04.29.13.58.39
+        by smtp.googlemail.com with ESMTPSA id z13sm653162oth.10.2020.04.29.13.58.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2020 13:58:40 -0700 (PDT)
+        Wed, 29 Apr 2020 13:58:42 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Liviu Dudau <liviu.dudau@arm.com>,
@@ -47,9 +47,9 @@ Cc:     Kevin Brodsky <Kevin.Brodsky@arm.com>,
         Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v2 09/16] mfd: vexpress-sysreg: Drop unused syscon child devices
-Date:   Wed, 29 Apr 2020 15:58:18 -0500
-Message-Id: <20200429205825.10604-10-robh@kernel.org>
+Subject: [PATCH v2 10/16] mfd: vexpress-sysreg: Use devres API variants
+Date:   Wed, 29 Apr 2020 15:58:19 -0500
+Message-Id: <20200429205825.10604-11-robh@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200429205825.10604-1-robh@kernel.org>
 References: <20200429205825.10604-1-robh@kernel.org>
@@ -60,91 +60,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The "sys_id", "sys_misc" and "sys_procid" devices don't have a user
-anywhere in the tree and do nothing more than create a syscon regmap for
-a single register or 2. That's an overkill for creating child devices.
-Let's just remove them.
+Use the managed devm_gpiochip_add_data() and devm_mfd_add_devices()
+instead of their unmanaged counterparts. With this, no .remove() hook is
+needed for driver unbind.
 
 Cc: Liviu Dudau <liviu.dudau@arm.com>
 Cc: Sudeep Holla <sudeep.holla@arm.com>
 Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>
 Cc: Lee Jones <lee.jones@linaro.org>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
-Note that the other GPIO child devices could probably be removed and
-added to the bgpio driver. Unfortunately, the model dts files were
-never updated 6 years ago. Not sure if the models really need LEDs...
-
-v2:
- - Add missing commmit message
----
- drivers/mfd/vexpress-sysreg.c | 36 -----------------------------------
- 1 file changed, 36 deletions(-)
+ drivers/mfd/vexpress-sysreg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/mfd/vexpress-sysreg.c b/drivers/mfd/vexpress-sysreg.c
-index 0b9cc67706c7..90a4eda2ba2b 100644
+index 90a4eda2ba2b..9fb37fa689e0 100644
 --- a/drivers/mfd/vexpress-sysreg.c
 +++ b/drivers/mfd/vexpress-sysreg.c
-@@ -43,10 +43,6 @@
+@@ -140,9 +140,9 @@ static int vexpress_sysreg_probe(struct platform_device *pdev)
+ 	bgpio_init(mmc_gpio_chip, &pdev->dev, 0x4, base + SYS_MCI,
+ 			NULL, NULL, NULL, NULL, 0);
+ 	mmc_gpio_chip->ngpio = 2;
+-	gpiochip_add_data(mmc_gpio_chip, NULL);
++	devm_gpiochip_add_data(&pdev->dev, mmc_gpio_chip, NULL);
  
- /* The sysreg block is just a random collection of various functions... */
- 
--static struct syscon_platform_data vexpress_sysreg_sys_id_pdata = {
--	.label = "sys_id",
--};
--
- static struct bgpio_pdata vexpress_sysreg_sys_led_pdata = {
- 	.label = "sys_led",
- 	.base = -1,
-@@ -65,24 +61,8 @@ static struct bgpio_pdata vexpress_sysreg_sys_flash_pdata = {
- 	.ngpio = 1,
- };
- 
--static struct syscon_platform_data vexpress_sysreg_sys_misc_pdata = {
--	.label = "sys_misc",
--};
--
--static struct syscon_platform_data vexpress_sysreg_sys_procid_pdata = {
--	.label = "sys_procid",
--};
--
- static struct mfd_cell vexpress_sysreg_cells[] = {
- 	{
--		.name = "syscon",
--		.num_resources = 1,
--		.resources = (struct resource []) {
--			DEFINE_RES_MEM(SYS_ID, 0x4),
--		},
--		.platform_data = &vexpress_sysreg_sys_id_pdata,
--		.pdata_size = sizeof(vexpress_sysreg_sys_id_pdata),
--	}, {
- 		.name = "basic-mmio-gpio",
- 		.of_compatible = "arm,vexpress-sysreg,sys_led",
- 		.num_resources = 1,
-@@ -109,22 +89,6 @@ static struct mfd_cell vexpress_sysreg_cells[] = {
- 		},
- 		.platform_data = &vexpress_sysreg_sys_flash_pdata,
- 		.pdata_size = sizeof(vexpress_sysreg_sys_flash_pdata),
--	}, {
--		.name = "syscon",
--		.num_resources = 1,
--		.resources = (struct resource []) {
--			DEFINE_RES_MEM(SYS_MISC, 0x4),
--		},
--		.platform_data = &vexpress_sysreg_sys_misc_pdata,
--		.pdata_size = sizeof(vexpress_sysreg_sys_misc_pdata),
--	}, {
--		.name = "syscon",
--		.num_resources = 1,
--		.resources = (struct resource []) {
--			DEFINE_RES_MEM(SYS_PROCID0, 0x8),
--		},
--		.platform_data = &vexpress_sysreg_sys_procid_pdata,
--		.pdata_size = sizeof(vexpress_sysreg_sys_procid_pdata),
- 	}, {
- 		.name = "vexpress-syscfg",
- 		.num_resources = 1,
+-	return mfd_add_devices(&pdev->dev, PLATFORM_DEVID_AUTO,
++	return devm_mfd_add_devices(&pdev->dev, PLATFORM_DEVID_AUTO,
+ 			vexpress_sysreg_cells,
+ 			ARRAY_SIZE(vexpress_sysreg_cells), mem, 0, NULL);
+ }
 -- 
 2.20.1
 
