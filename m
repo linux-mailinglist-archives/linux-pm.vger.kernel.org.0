@@ -2,41 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 883DF1BDAA2
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 13:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CB31BDAAC
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 13:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726662AbgD2Laa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Apr 2020 07:30:30 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:45398 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726620AbgD2Laa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 07:30:30 -0400
-Received: by mail-ot1-f67.google.com with SMTP id e20so1333337otk.12;
-        Wed, 29 Apr 2020 04:30:29 -0700 (PDT)
+        id S1726973AbgD2Laz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Apr 2020 07:30:55 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:40706 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726836AbgD2Laz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 07:30:55 -0400
+Received: by mail-oi1-f196.google.com with SMTP id t199so1461892oif.7;
+        Wed, 29 Apr 2020 04:30:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mJLQaIat2tDbEwACly2x5coQW2dyQ71GmCW1Pk/+Pe0=;
-        b=lu6Wh/M+LRHLWNg4cR8b9fCM0GIKOZfVDKacY39nnCoWwOXTDcSFwjzMg82RfQGPuo
-         1aZHs/P9FeaBec98E/HlbzSpXaiJw94wb84edCPlyNzPKvjADGPopsxP/Jdu9OIu3WJP
-         Ak5eZTj1iLyYJYSMpbX3tPuqinUsaiS/j+L34DqBNd8PJFVGtY5f/o5T0A/gBYiyYIb4
-         OKL8jT3mViTzzC23hhqnVog6UtgAYmF1POo68rYyS1XYrCZx8cBvHbzQXB/x2VIg8i5x
-         NGXorNi14ZheGKkrjQW2qZQTq0Aie9WIWZ66kfQ3IL4LhLgd+THo5Vs5uEAwg4CxW+8N
-         Dgfw==
-X-Gm-Message-State: AGi0PuanipB5Cmh8tlI0wrQTE44UC9QC6vGOC6JKEnII5ycA6wOboLT0
-        QtDfpOPNVdvesaENYeHcMN980M0FrC4Z86TTUj8=
-X-Google-Smtp-Source: APiQypIxdnHfH8fsytx0SXUL7Yzk0wRF6oZwhYIlSygbrTH5FgtTjQI6UbJwZ6dhKKE3HNiTqMY6ekE7V/Zic4Xznmc=
-X-Received: by 2002:a9d:1d07:: with SMTP id m7mr25072932otm.167.1588159829033;
- Wed, 29 Apr 2020 04:30:29 -0700 (PDT)
+        bh=heSLd4npprlNejenb5g45wkQja+dNAq9zzOcbGYSaDc=;
+        b=WnjWbi3/V2pjffEx2+R4V6Llf7vZNCwlWzTK8tTRktZTEohSbxSafSYTz3Dh8O0C7c
+         Zbfl+nPHx2ZnpvtLIeM7/AWRE2Bli79IenKso5MhO3rwCJGp+ka9f4xW7HMVbmbYyi/+
+         ZUWAYm9SmVRh3I7hopGRlCfEa6JsjTZrpf8l9PCl4hO2yT5QGqYRAMJXeBLYia33MpHJ
+         zEaw/UqgFOGXMsryhAfrtQK/L+SRzJB//CmQhH5c2ATnEQhkBj1fDkkm3zi+imPNGIzW
+         oX2kbORf6wPhlqahqUkBAqsqUdRUAep8LbeyohPmAtJGGW80HxN4XPGxtaDtQP6OO5bN
+         m1cQ==
+X-Gm-Message-State: AGi0PuYMHY3idDJXetPKuqRjvv9lD5Kmb3Ud4CBOjs67vgJ4SRFwXRfl
+        pKZoecjqIqzyAIhgtNQPAx59tBXzdCNCst1thL4=
+X-Google-Smtp-Source: APiQypL2VJCwN8MUXctgcgltHppclMxwktU0GxZbf5xmOkgYPSjcfg5KRmGgzF7wKzviwEGyKJ4dDwf4LmIZiY4bQcY=
+X-Received: by 2002:aca:c441:: with SMTP id u62mr1351091oif.110.1588159854355;
+ Wed, 29 Apr 2020 04:30:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200428132450.24901-1-ggherdovich@suse.cz> <20200428132450.24901-2-ggherdovich@suse.cz>
-In-Reply-To: <20200428132450.24901-2-ggherdovich@suse.cz>
+References: <20200428132450.24901-1-ggherdovich@suse.cz> <20200428132450.24901-3-ggherdovich@suse.cz>
+In-Reply-To: <20200428132450.24901-3-ggherdovich@suse.cz>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 29 Apr 2020 13:30:17 +0200
-Message-ID: <CAJZ5v0jitYE=a25rFd0Tb6QYeWeSJBE4p_yg29bq_e0Q5Pecbw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86, sched: Prevent divisions by zero in frequency
- invariant accounting
+Date:   Wed, 29 Apr 2020 13:30:43 +0200
+Message-ID: <CAJZ5v0gQ8zJfeeyqH=GK=VFb=_ziGX1NgFnTGH1G3uqz5Yqb6w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] x86, sched: Bail out of frequency invariance if turbo
+ frequency is unknown
 To:     Giovanni Gherdovich <ggherdovich@suse.cz>
 Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -57,68 +57,37 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Tue, Apr 28, 2020 at 3:25 PM Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
 >
-> The product mcnt * arch_max_freq_ratio could be zero if it overflows u64.
->
-> For context, a large value for arch_max_freq_ratio would be 5000,
-> corresponding to a turbo_freq/base_freq ratio of 5 (normally it's more like
-> 1500-2000). A large increment frequency for the MPERF counter would be 5GHz
-> (the base clock of all CPUs on the market today is less than that). With
-> these figures, a CPU would need to go without a scheduler tick for around 8
-> days for the u64 overflow to happen. It is unlikely, but the check is
-> warranted.
->
-> In that case it's also appropriate to disable frequency invariant
-> accounting: the feature relies on measures of the clock frequency done at
-> every scheduler tick, which need to be "fresh" to be at all meaningful.
+> There may be CPUs that support turbo boost but don't declare any turbo
+> ratio, i.e. their MSR_TURBO_RATIO_LIMIT is all zeroes. In that condition
+> scale-invariant calculations can't be performed.
 >
 > Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+> Suggested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 > Fixes: 1567c3e3467c ("x86, sched: Add support for frequency invariance")
 
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 > ---
->  arch/x86/kernel/smpboot.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
+>  arch/x86/kernel/smpboot.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
 > diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 8c89e4d9ad28..4718f29a3065 100644
+> index 4718f29a3065..ab2a0df7d1fb 100644
 > --- a/arch/x86/kernel/smpboot.c
 > +++ b/arch/x86/kernel/smpboot.c
-> @@ -2039,6 +2039,14 @@ static void init_freq_invariance(bool secondary)
+> @@ -1991,9 +1991,11 @@ static bool intel_set_max_freq_ratio(void)
+>         /*
+>          * Some hypervisors advertise X86_FEATURE_APERFMPERF
+>          * but then fill all MSR's with zeroes.
+> +        * Some CPUs have turbo boost but don't declare any turbo ratio
+> +        * in MSR_TURBO_RATIO_LIMIT.
+>          */
+> -       if (!base_freq) {
+> -               pr_debug("Couldn't determine cpu base frequency, necessary for scale-invariant accounting.\n");
+> +       if (!base_freq || !turbo_freq) {
+> +               pr_debug("Couldn't determine cpu base or turbo frequency, necessary for scale-invariant accounting.\n");
+>                 return false;
 >         }
->  }
->
-> +static void disable_freq_invariance_workfn(struct work_struct *work)
-> +{
-> +       static_branch_disable(&arch_scale_freq_key);
-> +}
-> +
-> +static DECLARE_WORK(disable_freq_invariance_work,
-> +                   disable_freq_invariance_workfn);
-> +
->  DEFINE_PER_CPU(unsigned long, arch_freq_scale) = SCHED_CAPACITY_SCALE;
->
->  void arch_scale_freq_tick(void)
-> @@ -2055,14 +2063,18 @@ void arch_scale_freq_tick(void)
->
->         acnt = aperf - this_cpu_read(arch_prev_aperf);
->         mcnt = mperf - this_cpu_read(arch_prev_mperf);
-> -       if (!mcnt)
-> -               return;
->
->         this_cpu_write(arch_prev_aperf, aperf);
->         this_cpu_write(arch_prev_mperf, mperf);
->
->         acnt <<= 2*SCHED_CAPACITY_SHIFT;
->         mcnt *= arch_max_freq_ratio;
-> +       if (!mcnt) {
-> +               pr_warn("Scheduler tick missing for long time, disabling scale-invariant accounting.\n");
-> +               /* static_branch_disable() acquires a lock and may sleep */
-> +               schedule_work(&disable_freq_invariance_work);
-> +               return;
-> +       }
->
->         freq_scale = div64_u64(acnt, mcnt);
 >
 > --
 > 2.16.4
