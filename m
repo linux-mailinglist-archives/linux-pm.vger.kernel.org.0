@@ -2,96 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BE81BEBF0
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 00:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE831BEBF7
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 00:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727049AbgD2WLv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Apr 2020 18:11:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57470 "EHLO mail.kernel.org"
+        id S1726554AbgD2WOs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Apr 2020 18:14:48 -0400
+Received: from mga02.intel.com ([134.134.136.20]:33562 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726961AbgD2WLv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 Apr 2020 18:11:51 -0400
-Received: from earth.universe (dyndsl-095-033-155-009.ewe-ip-backbone.de [95.33.155.9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8B5532076B;
-        Wed, 29 Apr 2020 22:11:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588198310;
-        bh=NhJAGA4WB4ekULoqW87ilxLf8lLw8KWDvkBTnjmjiDc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YBOfG5srM35SBMfI2Op8Z/+cCm8Z7RP0MbLIbzO9SX4YMVoKDug0qFEDIakDqv20A
-         FBXLfzuTVUr3ou8QabGEC4vGojna1iGQTr1JmjPjvSn9O2pA76RuUT8fOBGj5gElka
-         r490vEmIJ3Aw8ayvxWRtAiFxNaMQxCWYSUSSxT3U=
-Received: by earth.universe (Postfix, from userid 1000)
-        id B37603C08C6; Thu, 30 Apr 2020 00:11:48 +0200 (CEST)
-Date:   Thu, 30 Apr 2020 00:11:48 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 00/17] Modularizing Versatile Express
-Message-ID: <20200429221148.q7lozhkha6j3t4nt@earth.universe>
-References: <20200429205825.10604-1-robh@kernel.org>
+        id S1726481AbgD2WOs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 Apr 2020 18:14:48 -0400
+IronPort-SDR: JtBZBYjBaAjK4loXlJYh4rDzWjpxZZtHCNCyYvemIkTOW8fT8Dtnvz09MrMOKvnz/c2u4PbkA9
+ hYPTRgk9K+MQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 15:14:47 -0700
+IronPort-SDR: ++bFfEkStQHBAWlbsHtYzohMzF41O7NJZ1J0v/QYzTRMvr92sRwWH7UnOzkQujjl5vQXARfawY
+ ytwYjMCD4Rjw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,333,1583222400"; 
+   d="scan'208";a="303109933"
+Received: from rantogno-mobl4.jf.intel.com (HELO rantogno-mobl4.amr.corp.intel.com) ([10.54.72.142])
+  by FMSMGA003.fm.intel.com with SMTP; 29 Apr 2020 15:14:47 -0700
+Date:   Wed, 29 Apr 2020 15:14:47 -0700
+From:   Rafael Antognolli <rafael.antognolli@intel.com>
+To:     linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/1] Add new GFXAMHz field to turbostat.
+Message-ID: <20200429221447.zsyd2gwc76zweum4@rantogno-mobl4.amr.corp.intel.com>
+References: <20200422220207.17425-1-rafael.antognolli@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nthuz3olvzwitejh"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200429205825.10604-1-robh@kernel.org>
+In-Reply-To: <20200422220207.17425-1-rafael.antognolli@intel.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi again...
 
---nthuz3olvzwitejh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Does anyone feel like taking a look at this? Or maybe do their own
+implementation?
 
-Hi,
+Thank you,
+Rafael
 
-On Wed, Apr 29, 2020 at 03:58:09PM -0500, Rob Herring wrote:
-> [...]
->
-> v2:
-> The major change is a boot fix for 32-bit VExpress platforms with patch 3.
-> I also dropped 'power/reset: vexpress: Support building as a module' as it
-> was incomplete and not needed for this series.
-
-Ok, please also drop me from Cc for v3 :)
-
-Thanks,
-
--- Sebastian
-
---nthuz3olvzwitejh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6p+6QACgkQ2O7X88g7
-+ppsow//fD+6baBTm98AWivrmVVWoWCogsnA14PAN71E53Bra7o+E47MHNsq9eSD
-KeukkLWEMwt24Bl18kGAZVADe2kHsibb6s4i497ZvY57L/FIy2kI0e2lXeJh2nRA
-saNyrSWvV1u2EXb4pxMARzS/fDhPGq+eVbyoDwLiM+Ldy3HkAePU7y0vbZthnBKN
-Xh/oZdjFHRZvKzvvqUQ0n9KmIhTbSGA4XO67s8RaufSM8/36/BI8P/9DhHEIbUsE
-MILYSECWvSnHXXMXpFMk4KBDoFwFyhxhhRqVIlhn3cz+PycqtPfiNnOKIG5vhxhW
-ez4caJtiElsjDP9IpoQw1MEEDYJpFGER90tNo/AQv/SNAc9I0febivmcWjuXDrQB
-LuLDfL19RY0lOelVr7JJB1pcwylGwTcUTWZsPLXCk61ReRxMFZMlASEQJsL9qjcT
-h2Gq8U4NLlXtibCYTwQFYmq7c3H9Bfyc1fcl7ER146pP37UGHMYfMeikdw/9vAgB
-l901C/5smpeoUq6HQDxvpz3yxfPgzg4EzKwlLkwiFG1P5HlHUVhQRrM9xaBKoN3M
-cYJLY6JNELq7SwrSiuaiROH57tO5ogtunFS7aZYYNx2odz2xZewjH1uxQnByJQ1G
-u6QuAxsh/dAUTfUviK8Q48d9q/CYnzy5wl0koZxWl5optFu/BKo=
-=fGB5
------END PGP SIGNATURE-----
-
---nthuz3olvzwitejh--
+On Wed, Apr 22, 2020 at 03:02:06PM -0700, Rafael Antognolli wrote:
+> Hi,
+> 
+> I work on the Mesa team at Intel and we have been using turbostat a lot
+> to monitor CPU and GPU frequency. However, turbostat only displays the
+> frequency read by
+> /sys/class/graphics/fb0/device/drm/card0/gt_cur_freq_mhz. We have been
+> also manually printing the content from gt_act_freq_mhz, but would be
+> nice if it was just another column in turbostat.
+> 
+> The following patch adds that, with a field name called "GFXAMHz" (open
+> to better names, of course). Would it be reasonable to have such patch?
+> 
+> If not, would you propose something else instead?
+> 
+> Thank you!
+> 
+> Rafael Antognolli (1):
+>   turbostat: Add a new GFXAMHz column that exposes gt_act_freq_mhz.
+> 
+>  tools/power/x86/turbostat/turbostat.c | 50 +++++++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+> 
+> -- 
+> 2.26.2
+> 
