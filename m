@@ -2,164 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBCA1BD614
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 09:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECBC1BD715
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 10:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726447AbgD2Haw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Apr 2020 03:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726386AbgD2Haw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 03:30:52 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163C3C03C1AD
-        for <linux-pm@vger.kernel.org>; Wed, 29 Apr 2020 00:30:52 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id y24so819938wma.4
-        for <linux-pm@vger.kernel.org>; Wed, 29 Apr 2020 00:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5cir3hSU9vYREyHnKXXc4jEYfDUGJRcsjkRDosrqGZw=;
-        b=SN9CHto/lvnRKnVzHatlo9Bk3n6mrK+taJw1/YDutPfp3mn4CDAga4Uf7XIOjlYnIU
-         8Se2NtbuFKW6DtjMWmIdYFzqBDGUqlcUhFtrGn2sDC8nzED2SUXESqGoosvXQIBRn2Kc
-         yjS4g1CS62V+R8kUvjvS26FYd43HaLcNfjkm+NttFFL1AFwdrgBOyprjl8fEg2ifOVqL
-         sIFTo/w3UIdxxuAu2zjNFRlmStHPXyuQnLcHtzb66OCueiN5YmS4O8s95eNc+U41plba
-         Ybs7UPa7JytJ77nOhJSOFm0OE4uC7aPLjkAV0qssA5Z5O0mMXQa7SKt/nokvaWEdW2Ep
-         eDMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :message-id:date:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5cir3hSU9vYREyHnKXXc4jEYfDUGJRcsjkRDosrqGZw=;
-        b=R9fIcer8dotqFgt5XAst0bMT3s8t4plq0iscorXM+D+7Y2E9vyzVNvXunPi1XeDAOo
-         g/Lafje0RtTBiqLViaW6X6U3sfqFIFJy3ph4CvSFtbxF9EiuHThkbM52x/NSJt7A3f5X
-         a1eC1/Pafp7pmfAgwrBgthHrXuEvp2JruWkdqpszod73JjkGtBvIwcGdM0aqWQCCP8AB
-         c9K3v4SpxoOZoKkI8aQGTj+qLVhMm+gH2b0vKaNj94VRciUqJuhMvXFlD3BIj1Jbvgle
-         SZjKV4z8Xg5+ynOnAAfSBL8tJ4jNGD4/K/xnPI1FoJ+zqRNw8IxBx3vdWc30T6K83K8L
-         8Lng==
-X-Gm-Message-State: AGi0PuYfEUITBeizV1koJYoRANKjzLzhSBSmPiRqqBCDa80WdSax1Iu9
-        DnAGRcQNFzaMLZ2uGwjp1majQA==
-X-Google-Smtp-Source: APiQypK0q9FlMYd4/tFHdoL8fCMv8pmOiilzczqSZepghPIPAGFwJEW67oJ+NvDJhRKLINjmWjU8rw==
-X-Received: by 2002:a7b:c642:: with SMTP id q2mr1739567wmk.41.1588145450782;
-        Wed, 29 Apr 2020 00:30:50 -0700 (PDT)
-Received: from [192.168.0.136] ([87.120.218.65])
-        by smtp.googlemail.com with ESMTPSA id n9sm28626564wrx.61.2020.04.29.00.30.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 Apr 2020 00:30:50 -0700 (PDT)
-Subject: Re: [PATCH v3 0/8] interconnect: Add imx support via devfreq
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1726572AbgD2IV2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Apr 2020 04:21:28 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:5552 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726386AbgD2IV2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 04:21:28 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ea938c50002>; Wed, 29 Apr 2020 01:20:21 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 29 Apr 2020 01:21:27 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 29 Apr 2020 01:21:27 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 Apr
+ 2020 08:21:27 +0000
+Received: from [10.24.37.103] (10.124.1.5) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 Apr
+ 2020 08:21:22 +0000
+Subject: Re: Re: [TEGRA194_CPUFREQ Patch 1/3] firmware: tegra: adding function
+ to get BPMP data
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Angus Ainslie <angus@akkea.ca>,
-        Martin Kepplinger <martink@posteo.de>,
-        Silvano di Ninno <silvano.dininno@nxp.com>,
-        linux-pm@vger.kernel.org, kernel@pengutronix.de, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <cover.1586174566.git.leonard.crestez@nxp.com>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- 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
- KEmKjLDvB0pePJkdTw==
-Message-ID: <86c1596c-d3c2-0c2d-4a7c-016f9cd7d4c4@linaro.org>
-Date:   Wed, 29 Apr 2020 10:30:47 +0300
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC:     Mikko Perttunen <cyndis@kapsi.fi>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <jonathanh@nvidia.com>, <talho@nvidia.com>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>,
+        <mperttunen@nvidia.com>, <devicetree@vger.kernel.org>,
+        Sumit Gupta <sumitg@nvidia.com>
+References: <1575394348-17649-1-git-send-email-sumitg@nvidia.com>
+ <20191203174229.GA1721849@ulmo>
+ <9404232d-84ce-a117-89dd-f2d8de80993e@kapsi.fi>
+ <20191204091703.d32to5omdm3eynon@vireshk-i7> <20191204093339.GA2784830@ulmo>
+ <20191204095138.rrul5vxnkprfwmku@vireshk-i7> <20200407100520.GA1720957@ulmo>
+ <20200427071800.GA3451400@ulmo>
+From:   Sumit Gupta <sumitg@nvidia.com>
+Message-ID: <e320f849-bbd0-3ab9-64b2-d54da97500a4@nvidia.com>
+Date:   Wed, 29 Apr 2020 13:51:19 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <cover.1586174566.git.leonard.crestez@nxp.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200427071800.GA3451400@ulmo>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1588148421; bh=3T8uyQ4yXKerxDV81gNnyh9w/zfWOeHLjgfBDDESJBI=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=Hp8QSRuYhrSjW5iSVnv77wXZqnN0jg2R1n46ywRFLQfqE/DSAHB3IYpMhOvcb8fXA
+         6R8UP8eSGS0Y4l2KzgI8IJfzAb5a2ztW0F3mD9LRCCLd1+e7SYPeqMLmAyO48EgAul
+         zgtdvV+3l/BNvGBzxcrXJZZGSmFOQdDzIs6hsdHM2IeAnQQcv67Axtk7gA7iHCYbtt
+         3yuFDVKmFXzQPLLYh2EiWa8DUDekia62iMwrbwQDhXwjIBGik30Rm33X6dtTHnOcpO
+         qoykp0kBRRkWpyRT5xmLQ0z44fkgSfT/GvXgU+tAbOZyWyprpK644cxGd93Yc0UgMk
+         DWM+hPL9Ba8LQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
 
-On 4/6/20 15:03, Leonard Crestez wrote:
-> This series adds interconnect scaling support for imx8m series chips. It uses a
-> per-SOC interconnect provider layered on top of multiple instances of devfreq
-> for scalable nodes along the interconnect.
+
+On 27/04/20 12:48 PM, Thierry Reding wrote:
+> On Tue, Apr 07, 2020 at 12:05:20PM +0200, Thierry Reding wrote:
+>> On Wed, Dec 04, 2019 at 03:21:38PM +0530, Viresh Kumar wrote:
+>>> On 04-12-19, 10:33, Thierry Reding wrote:
+>>>> Yeah, the code that registers this device is in drivers/base/cpu.c in
+>>>> register_cpu(). It even retrieves the device tree node for the CPU from
+>>>> device tree and stores it in cpu->dev.of_node, so we should be able to
+>>>> just pass &cpu->dev to tegra_bpmp_get() in order to retrieve a reference
+>>>> to the BPMP.
+>>>>
+>>>> That said, I'm wondering if perhaps we could just add a compatible
+>>>> string to the /cpus node for cases like this where we don't have an
+>>>> actual device representing the CPU complex. There are a number of CPU
+>>>> frequency drivers that register dummy devices just so that they have
+>>>> something to bind a driver to.
+>>>>
+>>>> If we allow the /cpus node to represent the CPU complex (if no other
+>>>> "device" does that yet), we can add a compatible string and have the
+>>>> cpufreq driver match on that.
+>>>>
+>>>> Of course this would be slightly difficult to retrofit into existing
+>>>> drivers because they'd need to remain backwards compatible with existing
+>>>> device trees. But it would allow future drivers to do this a little more
+>>>> elegantly. For some SoCs this may not matter, but especially once you
+>>>> start depending on additional resources this would come in handy.
+>>>>
+>>>> Adding Rob and the device tree mailing list for feedback on this idea.
+>>>
+>>> Took some time to find this thread, but something around this was
+>>> suggested by Rafael earlier.
+>>>
+>>> https://lore.kernel.org/lkml/8139001.Q4eV8YG1Il@vostro.rjw.lan/
+>>
+>> I gave this a try and came up with the following:
+>>
+>> --- >8 ---
+>> diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+>> index f4ede86e32b4..e4462f95f0b3 100644
+>> --- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+>> +++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+>> @@ -1764,6 +1764,9 @@ bpmp_thermal: thermal {
+>>   	};
+>>   
+>>   	cpus {
+>> +		compatible = "nvidia,tegra194-ccplex";
+>> +		nvidia,bpmp = <&bpmp>;
+>> +
+>>   		#address-cells = <1>;
+>>   		#size-cells = <0>;
+>>   
+>> --- >8 ---
+>>
+>> Now I can do something rougly like this, although I have a more complete
+>> patch locally that also gets rid of all the global variables because we
+>> now actually have a struct platform_device that we can anchor everything
+>> at:
+>>
+>> --- >8 ---
+>> static const struct of_device_id tegra194_cpufreq_of_match[] = {
+>> 	{ .compatible = "nvidia,tegra194-ccplex", },
+>> 	{ /* sentinel */ }
+>> };
+>> MODULE_DEVICE_TABLE(of, tegra194_cpufreq_of_match);
+>>
+>> static struct platform_driver tegra194_ccplex_driver = {
+>> 	.driver = {
+>> 		.name = "tegra194-cpufreq",
+>> 		.of_match_table = tegra194_cpufreq_of_match,
+>> 	},
+>> 	.probe = tegra194_cpufreq_probe,
+>> 	.remove = tegra194_cpufreq_remove,
+>> };
+>> module_platform_driver(tegra194_ccplex_driver);
+>> --- >8 ---
+>>
+>> I don't think that's exactly what Rafael (Cc'ed) had in mind, since the
+>> above thread seems to have mostly talked about binding a driver to each
+>> individual CPU.
+>>
+>> But this seems a lot better than having to instantiate a device from
+>> scratch just so that a driver can bind to it and it allows additional
+>> properties to be associated with the CCPLEX device.
+>>
+>> Rob, any thoughts on this from a device tree point of view? The /cpus
+>> bindings don't mention the compatible property, but there doesn't seem
+>> to be anything in the bindings that would prohibit its use.
+>>
+>> If we can agree on that, I can forward my local changes to Sumit for
+>> inclusion or reference.
 > 
-> Existing qcom interconnect providers mostly translate bandwidth requests into
-> firmware calls but equivalent firmware on imx8m is much thinner. Scaling
-> support for individual nodes is implemented as distinct devfreq drivers
-> instead.
+> Rob, do you see any reason why we shouldn't be able to use a compatible
+> string in the /cpus node for devices such as Tegra194 where there is no
+> dedicated hardware block for the CCPLEX?
 > 
-> The imx interconnect provider doesn't communicate with devfreq directly
-> but rather computes "minimum frequencies" for nodes along the path and
-> creates dev_pm_qos requests.
+> Thierry
 > 
-> Since there is no single devicetree node that can represent the
-> "interconnect" the main NOC is picked as the "interconnect provider" and
-> will probe the interconnect platform device if #interconnect-cells is
-> present. This avoids introducing "virtual" devices but it means that DT
-> bindings of main NOC includes properties for both devfreq and
-> interconnect.
 
-Thank you for your work Leonard! There is no build dependency between the
-devfreq and interconnect patches, so i can apply patches 1,4-7.
+Ping.
+Please suggest if we can add compatible string in the '/cpus' node.
+If not then i propose accepting the current patch to get BPMP data 
+without adding any property in respective driver's DT node.
+We can push separate patch later if we need to add compatible string in 
+the '/cpus' node or create new DT node for cpufreq.
 
-Chanwoo, should i take also the two devfreq patches with your Ack?
-
-Thanks,
-Georgi
+Regards,
+Sumit
