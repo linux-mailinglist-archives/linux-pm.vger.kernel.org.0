@@ -2,103 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEE01BDF96
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 15:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA181BE0D0
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 16:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727062AbgD2Nwc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Apr 2020 09:52:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57736 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726885AbgD2Nwc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 Apr 2020 09:52:32 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CC0FD20B80;
-        Wed, 29 Apr 2020 13:52:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588168351;
-        bh=ytyUCCIGyI+obLrMHzKUGgdlqFzyE04ZtGFK91iRm3M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lJkD/zbF1yevejOPgDCxQVSXUwBW/PWbOWYpI/zUSqNEq2OM6x8+7V+spbjIyhxcg
-         eN9lkO0ouItL2Ik+0MigJ11kTM7haS58xBWd4EqV2++KMVrtEELIMHeaJcxnFR2Ccp
-         Bg/nUNm71ptDOwgsWg3HxAKyf3jcXK2iQLdS37HQ=
-Date:   Wed, 29 Apr 2020 14:52:28 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        netdev <netdev@vger.kernel.org>, linux-pm@vger.kernel.org,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
-Subject: Re: [PATCH v3 1/3] driver core: Revert default
- driver_deferred_probe_timeout value to 0
-Message-ID: <20200429135228.GL4201@sirena.org.uk>
-References: <20200422203245.83244-1-john.stultz@linaro.org>
- <20200422203245.83244-2-john.stultz@linaro.org>
- <CGME20200429134605eucas1p2bd601082e7a6b8c8fdbe79c83972e2e3@eucas1p2.samsung.com>
- <9e0501b5-c8c8-bc44-51e7-4bde2844b912@samsung.com>
+        id S1726826AbgD2OYk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Apr 2020 10:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726741AbgD2OYk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 10:24:40 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F88C03C1AD;
+        Wed, 29 Apr 2020 07:24:40 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id i3so2342664ioo.13;
+        Wed, 29 Apr 2020 07:24:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A1CN4jZl4jTo+TBoqkD+2uQy2R8zmyg041lpKbHoH7M=;
+        b=pTjVdU2l+wv4rjf7RjiT6n/blcv5kQhRkTpYCmloytxCdlJT0daN6v+k5wiAG5V05p
+         +lyQmzwez7Vjd0dU1iU0E6Rw7gv7LqG1MW0U0Y8VRqwxCkoO6tKIPwR9r2MAefbYYF3B
+         mFTuY85Kakd1ESJLf7sgADtBuP8ayxrkUtE7UfCTQ/8abnCI++kDFGUmYfVXPuFStAw8
+         krNHekQgb2i+bDxKz/u6F0cAchKDkFph31Rl4hrAZW7Y5sov5rmfAJE/PJ4YSrK0H2Ne
+         PRHZ7THNVQjRH38dM2RLvEKtAl48F3dlOW+bgCnko5NxLdm07f4BuONIRIi/iW+PnDN+
+         AFcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A1CN4jZl4jTo+TBoqkD+2uQy2R8zmyg041lpKbHoH7M=;
+        b=m/Jz6Bm3UffPAM4GsF/45veXKBDMSBp0hMBN3sV4hcoIIci2Ki6/i1c70zVka7BMu+
+         Y57ita9TsyALb3IUS2G1wfagF+yNshJ2LRqUZDFgPS9OW/Me97Iy26641Unqwc8mIQP9
+         ck6c29mpCsQCGaPfvcFYl3QM+RVgSQGrugxiHTIDnmeG4TuEIBBvgG7S7Ag/baAqxeiJ
+         whZR4Acnx4c0WYJKC8QyesNjyCONHnpImRYtxJURB1sQnCHTt4Mm+uuESLkyXzIziv+x
+         t4J4Zs+SI/698deXoobaiLpvgv2i7MEEFQy7bmySEWHEI3qPff5tyCB8PoLMGarLEYMv
+         2ljg==
+X-Gm-Message-State: AGi0PuasUZhMOkBtXBZuKwMP+AFVXzrZPUrPShUPzoVcoRuNj5daGrOA
+        Jtoyd/BCBmB6EsK4yU2K7dkGea/kzLNK+eRclUY=
+X-Google-Smtp-Source: APiQypL3YJRLn/CjDFWSkIcYSR70WFcO7nOnYCpUZp/Dvytozh01gIQHSjZZDOziBum8nxJbwwX/Hj3cpRG7hohBiiU=
+X-Received: by 2002:a02:bb91:: with SMTP id g17mr29519507jan.88.1588170279522;
+ Wed, 29 Apr 2020 07:24:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="00hq2S6J2Jlg6EbK"
-Content-Disposition: inline
-In-Reply-To: <9e0501b5-c8c8-bc44-51e7-4bde2844b912@samsung.com>
-X-Cookie: I know how to do SPECIAL EFFECTS!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200428144314.24533-1-vaibhavgupta40@gmail.com> <d33991cc-c219-dc27-7559-f30dd5f4aa0a@gmail.com>
+In-Reply-To: <d33991cc-c219-dc27-7559-f30dd5f4aa0a@gmail.com>
+From:   Vaibhav Gupta <vaibhav.varodek@gmail.com>
+Date:   Wed, 29 Apr 2020 19:53:36 +0530
+Message-ID: <CAPBsFfDn2GV8=o63zBRDhHddNnH+jUiiNCB+WRPUqH1mZasEPA@mail.gmail.com>
+Subject: Re: [Linux-kernel-mentees] [PATCH v2 0/2] realtek ethernet : remove
+ legacy power management callbacks.
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        Shannon Nelson <snelson@pensando.io>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Martin Habets <mhabets@solarflare.com>, netdev@vger.kernel.org,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, bjorn@helgaas.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, 28 Apr 2020 at 23:24, Heiner Kallweit <hkallweit1@gmail.com> wrote:
+>
+> On 28.04.2020 16:43, Vaibhav Gupta wrote:
+> > The purpose of this patch series is to remove legacy power management callbacks
+> > from realtek ethernet drivers.
+> >
+> > The callbacks performing suspend() and resume() operations are still calling
+> > pci_save_state(), pci_set_power_state(), etc. and handling the powermanagement
+> > themselves, which is not recommended.
+> >
+> Did you test any of the changes? If not, then mention this at least.
+> A typical comment in the commit message would be "compile-tested only".
+Yeah its compile-tested only. I should have mention that. Thanks for
+pointing it out.
+>
+> In addition the following should be changed.
+> [Linux-kernel-mentees] [PATCH v2 0/2]
+> Use
+> [PATCH net-next v2 0/2]
+> instead.
+Sure!
 
---00hq2S6J2Jlg6EbK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Apr 29, 2020 at 03:46:04PM +0200, Marek Szyprowski wrote:
-> On 22.04.2020 22:32, John Stultz wrote:
-
-> > Fixes: c8c43cee29f6 ("driver core: Fix driver_deferred_probe_check_stat=
-e() logic")
-> > Signed-off-by: John Stultz <john.stultz@linaro.org>
-
-> Please also revert dca0b44957e5 "regulator: Use=20
-> driver_deferred_probe_timeout for regulator_init_complete_work" then,=20
-> because now with the default 0 timeout some regulators gets disabled=20
-> during boot, before their supplies gets instantiated.
-
-Yes, please - I requested this when the revert was originally proposed :(
-
---00hq2S6J2Jlg6EbK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6phpsACgkQJNaLcl1U
-h9B9Ogf+MFUG/IZB61LkLCHnKhJON6xWRLosWtR73L7yE/rRElq2K/LdbZGCyN7I
-EjK3VX1zEARY+I/ZQFGed1LNwAn9hMdFEVwqFv+PHOCC6hzJd+0O2jnbyUaC+3Bq
-+Hg2vXWb9z9UXLyoXcPiz4B+1fLkS2e48lLf/ahWQfd+BZQpzNrpoZ3i+0Pt+Vqn
-mXKIC9ZbFJtslUU6Gt6fz8DzseaPWMw0qPfdssdaG4EfNCP+UO4GtxVsFwnV2h/u
-fYgUlXaMEwQJN0p+g6Qu/f4419vhBIqoDXRtqQ0Fc4tPoUif0qYSx/bEpK6No3ue
-yv7+6TCSurJPLib9y1EXa60sVn/4Hg==
-=4Efx
------END PGP SIGNATURE-----
-
---00hq2S6J2Jlg6EbK--
+--Vaibhav Gupta
+>
+> > The conversion requires the removal of the those function calls and change the
+> > callback definition accordingly.
+> >
+> > Vaibhav Gupta (2):
+> >   realtek/8139too: Remove Legacy Power Management
+> >   realtek/8139cp: Remove Legacy Power Management
+> >
+> >  drivers/net/ethernet/realtek/8139cp.c  | 25 +++++++------------------
+> >  drivers/net/ethernet/realtek/8139too.c | 26 +++++++-------------------
+> >  2 files changed, 14 insertions(+), 37 deletions(-)
+> >
+>
