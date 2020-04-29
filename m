@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F38861BE947
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 22:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CCC1BE94B
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 22:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727069AbgD2U6e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Apr 2020 16:58:34 -0400
-Received: from mail-oo1-f67.google.com ([209.85.161.67]:38293 "EHLO
-        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727070AbgD2U6d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 16:58:33 -0400
-Received: by mail-oo1-f67.google.com with SMTP id i9so760486ool.5;
-        Wed, 29 Apr 2020 13:58:33 -0700 (PDT)
+        id S1727094AbgD2U6h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Apr 2020 16:58:37 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:35421 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727070AbgD2U6g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 16:58:36 -0400
+Received: by mail-ot1-f65.google.com with SMTP id e26so3006313otr.2;
+        Wed, 29 Apr 2020 13:58:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fvDZPYS6H9HDGHwxJM3nkwWID3WCQsyjXK3Xs8Lgdrk=;
-        b=aXxrIfe0b3Iyr0yqI4Iwf//euiHI8q0gf1hVQ055ZY4e4SE1DaSclmEA8WiHVigPVo
-         JTpNElj0kt+BGd2AAS+J5f+UUplHsUT+2MnnEs9YUNtDD04BZLfgtflQgsLyW+QZWGiB
-         ZfsJhilbqcvVMkVxLs+vFN+7q2b69II/t4Ysb+/2IRYZp+jK/AnN1Syn8iXa2BKx015t
-         1NnFJJ5Bt183oHVDbdKvDrhXD0HejsDXREVQlX+/QKNcA7wY+ygRqeBp4JJ/7hKXD7k7
-         d4YoO6xLcZnO/e8jMyf7ltChbuPgCbYk5iAkWaYFTlGCuOfx04PwfsxI0at5xqa0MtUP
-         YVvw==
-X-Gm-Message-State: AGi0PubKHj7enNE7mm1MK+gWxjLld+jniBH26m20NPpdZ8DGrdAfhRsP
-        iAyK0dt8CRWUYM8ZtMqbWA==
-X-Google-Smtp-Source: APiQypLli0R0MaoqAgHiLNWiKMhf+xW515Euvb/NrzLKICWLWGqC2Ukck1Jb9yu3tupivtQoI9YbHw==
-X-Received: by 2002:a4a:2fd3:: with SMTP id p202mr28859228oop.33.1588193912719;
-        Wed, 29 Apr 2020 13:58:32 -0700 (PDT)
+        bh=ycrzTsN2UDt80PFGBLFquCxPRdusJ6s2yOMWOscpSM4=;
+        b=EtjarPHuadfV1NbMBXYMoHbqWbIbcn3Swqbi+WnC26ajPHYcaYWVICl9zXEQ8a947J
+         Sq2+0Dyfj7EbIQ+GfdAFTmPUUitqKoyPyb35bPvQwqfuP5XedtIQdYE9ICzX3KRDA9n5
+         tmjlRdy4YQz5xZ99uWjdQ69wF8oyfJ2zM3o58qWSPEDG5kmiIqdy5slx5kg+P6ImPGOS
+         1zJsHto9imFmJpKe7KpCRnKfREkOGYx7jaVPcZC7lzG59eGVFqun2NxmOrgKb5keX2vD
+         jQ1U03k/6K4xF0w+5yCS9tEfDcSAQwQfbTgETcWFrZ8KWUp49CRPU8pRlkPzbLqyOEcZ
+         LmcQ==
+X-Gm-Message-State: AGi0PuY3ZLi408o8TD4VtcqLpa2NRvZC4hOJBewj2bIiDktAu2u5ISl1
+        oaK7B8fJCe4RkOznzSoonQ==
+X-Google-Smtp-Source: APiQypL4VnrXGZPah4Civ+Lm3BOCjh2M68S53+iKXITJryVzyn0lRjk1cF+ARDOewyDNk8HX1VAE3Q==
+X-Received: by 2002:a05:6830:22dc:: with SMTP id q28mr26756333otc.221.1588193914163;
+        Wed, 29 Apr 2020 13:58:34 -0700 (PDT)
 Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.googlemail.com with ESMTPSA id z13sm653162oth.10.2020.04.29.13.58.31
+        by smtp.googlemail.com with ESMTPSA id z13sm653162oth.10.2020.04.29.13.58.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2020 13:58:31 -0700 (PDT)
+        Wed, 29 Apr 2020 13:58:33 -0700 (PDT)
 From:   Rob Herring <robh@kernel.org>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Liviu Dudau <liviu.dudau@arm.com>,
@@ -46,14 +46,10 @@ Cc:     Kevin Brodsky <Kevin.Brodsky@arm.com>,
         Sebastian Reichel <sre@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Russell King <linux@armlinux.org.uk>
-Subject: [PATCH v2 03/16] amba: Retry adding deferred devices at late_initcall
-Date:   Wed, 29 Apr 2020 15:58:12 -0500
-Message-Id: <20200429205825.10604-4-robh@kernel.org>
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2 04/16] clk: versatile: Rework kconfig structure
+Date:   Wed, 29 Apr 2020 15:58:13 -0500
+Message-Id: <20200429205825.10604-5-robh@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200429205825.10604-1-robh@kernel.org>
 References: <20200429205825.10604-1-robh@kernel.org>
@@ -64,69 +60,165 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If amba bus devices defer when adding, the amba bus code simply retries
-adding the devices every 5 seconds. This doesn't work well as it
-completely unsynchronized with starting the init process which can
-happen in less than 5 secs. Add a retry during late_initcall. If the
-amba devices are added, then deferred probe takes over. If the
-dependencies have not probed at this point, then there's no improvement
-over previous behavior. To completely solve this, we'd need to retry
-after every successful probe as deferred probe does.
+CONFIG_COMMON_CLK_VERSATILE doesn't really do anything other than hiding
+Arm Ltd reference platform clock drivers. It is both selected by the
+platforms that need it and has a 'depends on' for those platforms. Let's
+drop the selects and convert CONFIG_COMMON_CLK_VERSATILE into a
+menuconfig entry. With this make CONFIG_ICST visible.
 
-The list_empty() check now happens outside the mutex, but the mutex
-wasn't necessary in the first place.
+Move the 'select REGMAP_MMIO' to the drivers that require it (SP810 did
+not).
 
-This needed to use deferred probe instead of fragile initcall ordering
-on 32-bit VExpress systems where the apb_pclk has a number of probe
-dependencies (vexpress-sysregs, vexpress-config).
+This also has the side effect of enabling CONFIG_ICST for COMPILE_TEST
+as it was not visible before.
 
-Cc: John Stultz <john.stultz@linaro.org>
-Cc: Saravana Kannan <saravanak@google.com>
-Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Russell King <linux@armlinux.org.uk>
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-Tested-by: Sudeep Holla <sudeep.holla@arm.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/amba/bus.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+v2:
+ - Correct erroneous COMPILE_TEST added and then removed later in the
+   series.
+ - Bring back COMMON_CLK_VERSATILE making it a menuconfig and separate
+   it from CONFIG_ICST
+---
+ arch/arm/mach-integrator/Kconfig |  1 -
+ arch/arm/mach-realview/Kconfig   |  1 -
+ arch/arm/mach-versatile/Kconfig  |  1 -
+ arch/arm/mach-vexpress/Kconfig   |  1 -
+ arch/arm64/Kconfig.platforms     |  1 -
+ drivers/clk/Makefile             |  2 +-
+ drivers/clk/versatile/Kconfig    | 22 ++++++++++++----------
+ 7 files changed, 13 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
-index fe1523664816..e797995fc65b 100644
---- a/drivers/amba/bus.c
-+++ b/drivers/amba/bus.c
-@@ -505,7 +505,7 @@ static DECLARE_DELAYED_WORK(deferred_retry_work, amba_deferred_retry_func);
-
- #define DEFERRED_DEVICE_TIMEOUT (msecs_to_jiffies(5 * 1000))
-
--static void amba_deferred_retry_func(struct work_struct *dummy)
-+static int amba_deferred_retry(void)
- {
- 	struct deferred_device *ddev, *tmp;
-
-@@ -521,11 +521,19 @@ static void amba_deferred_retry_func(struct work_struct *dummy)
- 		kfree(ddev);
- 	}
-
-+	mutex_unlock(&deferred_devices_lock);
+diff --git a/arch/arm/mach-integrator/Kconfig b/arch/arm/mach-integrator/Kconfig
+index 982eabc36163..d59ba15a6b69 100644
+--- a/arch/arm/mach-integrator/Kconfig
++++ b/arch/arm/mach-integrator/Kconfig
+@@ -3,7 +3,6 @@ menuconfig ARCH_INTEGRATOR
+ 	bool "ARM Ltd. Integrator family"
+ 	depends on ARCH_MULTI_V4T || ARCH_MULTI_V5 || ARCH_MULTI_V6
+ 	select ARM_AMBA
+-	select COMMON_CLK_VERSATILE
+ 	select HAVE_TCM
+ 	select ICST
+ 	select MFD_SYSCON
+diff --git a/arch/arm/mach-realview/Kconfig b/arch/arm/mach-realview/Kconfig
+index 44ebbf9ec673..002404fafc14 100644
+--- a/arch/arm/mach-realview/Kconfig
++++ b/arch/arm/mach-realview/Kconfig
+@@ -6,7 +6,6 @@ menuconfig ARCH_REALVIEW
+ 	select ARM_GIC
+ 	select ARM_TIMER_SP804
+ 	select CLK_SP810
+-	select COMMON_CLK_VERSATILE
+ 	select GPIO_PL061 if GPIOLIB
+ 	select HAVE_ARM_SCU if SMP
+ 	select HAVE_ARM_TWD if SMP
+diff --git a/arch/arm/mach-versatile/Kconfig b/arch/arm/mach-versatile/Kconfig
+index f5c275434d6c..d88e7725bf99 100644
+--- a/arch/arm/mach-versatile/Kconfig
++++ b/arch/arm/mach-versatile/Kconfig
+@@ -6,7 +6,6 @@ config ARCH_VERSATILE
+ 	select ARM_TIMER_SP804
+ 	select ARM_VIC
+ 	select CLKSRC_VERSATILE
+-	select COMMON_CLK_VERSATILE
+ 	select CPU_ARM926T
+ 	select ICST
+ 	select MFD_SYSCON
+diff --git a/arch/arm/mach-vexpress/Kconfig b/arch/arm/mach-vexpress/Kconfig
+index 18951cd20d9d..2d1fdec4c230 100644
+--- a/arch/arm/mach-vexpress/Kconfig
++++ b/arch/arm/mach-vexpress/Kconfig
+@@ -7,7 +7,6 @@ menuconfig ARCH_VEXPRESS
+ 	select ARM_GIC
+ 	select ARM_GLOBAL_TIMER
+ 	select ARM_TIMER_SP804
+-	select COMMON_CLK_VERSATILE
+ 	select GPIOLIB
+ 	select HAVE_ARM_SCU if SMP
+ 	select HAVE_ARM_TWD if SMP
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 5c38dc56b808..25cbb556d863 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -274,7 +274,6 @@ config ARCH_UNIPHIER
+ 
+ config ARCH_VEXPRESS
+ 	bool "ARMv8 software model (Versatile Express)"
+-	select COMMON_CLK_VERSATILE
+ 	select GPIOLIB
+ 	select PM
+ 	select PM_GENERIC_DOMAINS
+diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+index f4169cc2fd31..fb30c16e1596 100644
+--- a/drivers/clk/Makefile
++++ b/drivers/clk/Makefile
+@@ -114,7 +114,7 @@ obj-$(CONFIG_ARCH_TEGRA)		+= tegra/
+ obj-y					+= ti/
+ obj-$(CONFIG_CLK_UNIPHIER)		+= uniphier/
+ obj-$(CONFIG_ARCH_U8500)		+= ux500/
+-obj-$(CONFIG_COMMON_CLK_VERSATILE)	+= versatile/
++obj-y					+= versatile/
+ ifeq ($(CONFIG_COMMON_CLK), y)
+ obj-$(CONFIG_X86)			+= x86/
+ endif
+diff --git a/drivers/clk/versatile/Kconfig b/drivers/clk/versatile/Kconfig
+index c2618f1477a2..df0d50bb846c 100644
+--- a/drivers/clk/versatile/Kconfig
++++ b/drivers/clk/versatile/Kconfig
+@@ -1,22 +1,22 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-config ICST
+-	bool
+ 
+-config COMMON_CLK_VERSATILE
+-	bool "Clock driver for ARM Reference designs"
+-	depends on ARCH_INTEGRATOR || ARCH_REALVIEW || \
+-		ARCH_VERSATILE || ARCH_VEXPRESS || ARM64 || \
+-		COMPILE_TEST
++menuconfig COMMON_CLK_VERSATILE
++	bool "Clock driver for ARM Reference designs" if COMPILE_TEST
++	default y if ARCH_INTEGRATOR || ARCH_REALVIEW || \
++		ARCH_VERSATILE || ARCH_VEXPRESS
 +
-+	return 0;
-+}
-+late_initcall(amba_deferred_retry);
++if COMMON_CLK_VERSATILE
 +
-+static void amba_deferred_retry_func(struct work_struct *dummy)
-+{
-+	amba_deferred_retry();
++config ICST
++	bool "Clock driver for ARM Reference designs ICST"
+ 	select REGMAP_MMIO
+ 	---help---
+ 	  Supports clocking on ARM Reference designs:
+ 	  - Integrator/AP and Integrator/CP
+ 	  - RealView PB1176, EB, PB11MP and PBX
+-	  - Versatile Express
+ 
+ config CLK_SP810
+ 	bool "Clock driver for ARM SP810 System Controller"
+-	depends on COMMON_CLK_VERSATILE
+ 	default y if ARCH_VEXPRESS
+ 	---help---
+ 	  Supports clock muxing (REFCLK/TIMCLK to TIMERCLKEN0-3) capabilities
+@@ -24,10 +24,12 @@ config CLK_SP810
+ 
+ config CLK_VEXPRESS_OSC
+ 	bool "Clock driver for Versatile Express OSC clock generators"
+-	depends on COMMON_CLK_VERSATILE
+ 	depends on VEXPRESS_CONFIG
++	select REGMAP_MMIO
+ 	default y if ARCH_VEXPRESS
+ 	---help---
+ 	  Simple regmap-based driver driving clock generators on Versatile
+ 	  Express platforms hidden behind its configuration infrastructure,
+ 	  commonly known as OSCs.
 +
- 	if (!list_empty(&deferred_devices))
- 		schedule_delayed_work(&deferred_retry_work,
- 				      DEFERRED_DEVICE_TIMEOUT);
--
--	mutex_unlock(&deferred_devices_lock);
- }
-
- /**
---
++endif
+-- 
 2.20.1
+
