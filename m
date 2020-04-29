@@ -2,46 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B491BD54A
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 09:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD32C1BD552
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Apr 2020 09:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726274AbgD2HBL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Apr 2020 03:01:11 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:40291 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726158AbgD2HBL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 03:01:11 -0400
-Received: by mail-lj1-f196.google.com with SMTP id y4so1416205ljn.7;
-        Wed, 29 Apr 2020 00:01:09 -0700 (PDT)
+        id S1726423AbgD2HCl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Apr 2020 03:02:41 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:35632 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726158AbgD2HCk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Apr 2020 03:02:40 -0400
+Received: by mail-lf1-f68.google.com with SMTP id r17so735235lff.2;
+        Wed, 29 Apr 2020 00:02:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ptPYLDei9LMsvhdKW9/nay5bhWp9Qq4b7cAcaUxshS0=;
-        b=sI7Q3oMH3ORGN4oKJKwqzteji/kk9Q7ewqE3/Y7odvuM0e2BrYhh5TWi3hPNyAj0G0
-         tFqetBv5RxQj0P0V2mM8noMXqZrkJVRTHYJs0BKIB7RlihiLUxu9JduA1P+ows7wG0nJ
-         R3O5NfaOyrbAAxh3vMvyQkLb2pav5CBz2HYhdiLQSzPbalLiH3RGTrvKIH6g93eWD3cZ
-         sj9zHrnrysnAwJdjPUm0h1/3SsfazfuWrQHE+pgvu7URXktOoYH2bQ8FDBc6L0PL15wx
-         GXdHWUeQCgjht+EeuABBiT8XZUa/CSUoQ9mFkzxD4HRu8tPTsBZmTSePgwtnoaVPr0kn
-         KwlA==
-X-Gm-Message-State: AGi0PuaPI+LONLGG8aNn+8X+fhPKfHhPahUFeSee6ysBkFRleRigCGyf
-        VY0SNZgmqXTKEcDNo9qxzWU=
-X-Google-Smtp-Source: APiQypKMS7huMXVCwkN0xqaQZEasmGknHyh+qzVqmq/W6qhQomOoC00vc8yxZ9z4Kv8EM7paUv0ttQ==
-X-Received: by 2002:a2e:96c2:: with SMTP id d2mr20730865ljj.214.1588143668845;
-        Wed, 29 Apr 2020 00:01:08 -0700 (PDT)
+        bh=r85BWktV4eKffhP5bEUSsTAbCcixIe97gDFSAa6NS3Q=;
+        b=d8MO2agmSpgE0t4Hwc90drXsc3Pv1WIi8szDM6PgnW9tGkvHMCKa2FXPicLcaz5cRk
+         VoC5Ku1ChYdJxOEk1Ry1m8wojb6TR1gra6U3vGnuoBFj80dYS6ced27SOsft25wOiGwX
+         0gCtCruF4C8PokGM1nVQHp79akAtxAloqfIRAAbECwpCH1EqYp1mRP6t3CblnvJYJwuJ
+         6A9cK15ooQvgWyXEJa/DHmAThnspbBwbK7LGrW/tfPqPZA/9OwiLneDYhtnm6JEMit/M
+         OLn/uxKAq7kOt9aAyJrVUNC2VrSO2rJoyvWJXxjDGZ1uomaQSHWPrfHovWDyjrt/iyRR
+         7zwA==
+X-Gm-Message-State: AGi0Pubrxt37PQaeOvRhUYeEYRnkGk+OBjy/Gjvxe1EdpYQhGdqWK4Ot
+        frKKgVFQCFHpgngvySXEooXRkB+D
+X-Google-Smtp-Source: APiQypIFi9ou7QBNuT6F+ieYM01MLBxKnRbK+Vb4zU2l2zTUMF/LaQAO7c13hHD9GVjqgs8VW8hnsg==
+X-Received: by 2002:ac2:47f0:: with SMTP id b16mr21856798lfp.81.1588143758172;
+        Wed, 29 Apr 2020 00:02:38 -0700 (PDT)
 Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id w29sm1775466lfq.35.2020.04.29.00.01.07
+        by smtp.gmail.com with ESMTPSA id h24sm1618370lji.99.2020.04.29.00.02.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2020 00:01:08 -0700 (PDT)
-Date:   Wed, 29 Apr 2020 10:00:22 +0300
+        Wed, 29 Apr 2020 00:02:37 -0700 (PDT)
+Date:   Wed, 29 Apr 2020 10:01:49 +0300
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     sre@kernel.org, robh+dt@kernel.org, broonie@kernel.org,
         lgirdwood@gmail.com, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v10 06/11] dt-bindings: battery: add new battery
- parameters
-Message-ID: <f2f0eef84a3b0bf852ffb07e2a6224f5b19ab653.1586925868.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [RESEND PATCH v10 07/11] power: supply: add battery parameters
+Message-ID: <9b59e3674ad89fddf83aa6396c8699e71836be0c.1586925868.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1586925868.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -53,73 +52,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add:
+Add parsing of new device-tree battery bindings.
 
- - trickle-charge-current-microamp:
-
-Some chargers have 3 charging stages. First one when battery is almost
-empty is often called as trickle-charge. Last state when battery has been
-"woken up" is usually called as fast-charge. In addition to this some
-chargers have a 'middle state' which ROHM BD99954 data-sheet describes as
-pre-charge. Some batteries can benefit from this 3-phase charging
-[citation needed].
-
-Introduce trickle-charge-current-microamp so that batteries can give
-charging current limit for all three states.
-
- - precharge-upper-limit-microvolt:
-
-When battery voltage has reached certain limit we change from
-trickle-charge to next charging state (pre-charge for BD99954). Allow
-battery to specify this limit.
-
- - re-charge-voltage-microvolt:
-
-Allow giving a battery specific voltage limit for chargers which can
-automatically re-start charging when battery has discharghed down to
-this limit.
-
-- over-voltage-threshold-microvolt
-
-Allow specifying voltage threshold after which the battery is assumed to
-be faulty.
+     - trickle-charge-current-microamp
+     - precharge-upper-limit-microvolt
+     - re-charge-voltage-microvolt
+     - over-voltage-threshold-microvolt
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
 
 No changes since v9
 
- Documentation/devicetree/bindings/power/supply/battery.txt | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/power/supply/power_supply_core.c | 8 ++++++++
+ include/linux/power_supply.h             | 4 ++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/battery.txt b/Documentation/devicetree/bindings/power/supply/battery.txt
-index 3049cf88bdcf..5e29595edd74 100644
---- a/Documentation/devicetree/bindings/power/supply/battery.txt
-+++ b/Documentation/devicetree/bindings/power/supply/battery.txt
-@@ -11,15 +11,21 @@ different type. This prevents unpredictable, potentially harmful,
- behavior should a replacement that changes the battery type occur
- without a corresponding update to the dtb.
- 
-+Please note that not all charger drivers respect all of the properties.
-+
- Required Properties:
-  - compatible: Must be "simple-battery"
- 
- Optional Properties:
-+ - over-voltage-threshold-microvolt: battery over-voltage limit
-+ - re-charge-voltage-microvolt: limit to automatically start charging again
-  - voltage-min-design-microvolt: drained battery voltage
-  - voltage-max-design-microvolt: fully charged battery voltage
-  - energy-full-design-microwatt-hours: battery design energy
-  - charge-full-design-microamp-hours: battery design capacity
-+ - trickle-charge-current-microamp: current for trickle-charge phase
-  - precharge-current-microamp: current for pre-charge phase
-+ - precharge-upper-limit-microvolt: limit when to change to constant charging
-  - charge-term-current-microamp: current for charge termination phase
-  - constant-charge-current-max-microamp: maximum constant input current
-  - constant-charge-voltage-max-microvolt: maximum constant input voltage
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 1a9a9fae73d3..02b37fe6061c 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -620,10 +620,18 @@ int power_supply_get_battery_info(struct power_supply *psy,
+ 			     &info->voltage_min_design_uv);
+ 	of_property_read_u32(battery_np, "voltage-max-design-microvolt",
+ 			     &info->voltage_max_design_uv);
++	of_property_read_u32(battery_np, "trickle-charge-current-microamp",
++			     &info->tricklecharge_current_ua);
+ 	of_property_read_u32(battery_np, "precharge-current-microamp",
+ 			     &info->precharge_current_ua);
++	of_property_read_u32(battery_np, "precharge-upper-limit-microvolt",
++			     &info->precharge_voltage_max_uv);
+ 	of_property_read_u32(battery_np, "charge-term-current-microamp",
+ 			     &info->charge_term_current_ua);
++	of_property_read_u32(battery_np, "re-charge-voltage-microvolt",
++			     &info->charge_restart_voltage_uv);
++	of_property_read_u32(battery_np, "over-voltage-threshold-microvolt",
++			     &info->overvoltage_limit_uv);
+ 	of_property_read_u32(battery_np, "constant-charge-current-max-microamp",
+ 			     &info->constant_charge_current_max_ua);
+ 	of_property_read_u32(battery_np, "constant-charge-voltage-max-microvolt",
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index dcd5a71e6c67..d01322d1ab52 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -346,8 +346,12 @@ struct power_supply_battery_info {
+ 	int charge_full_design_uah;	    /* microAmp-hours */
+ 	int voltage_min_design_uv;	    /* microVolts */
+ 	int voltage_max_design_uv;	    /* microVolts */
++	int tricklecharge_current_ua;	    /* microAmps */
+ 	int precharge_current_ua;	    /* microAmps */
++	int precharge_voltage_max_uv;	    /* microVolts */
+ 	int charge_term_current_ua;	    /* microAmps */
++	int charge_restart_voltage_uv;	    /* microVolts */
++	int overvoltage_limit_uv;	    /* microVolts */
+ 	int constant_charge_current_max_ua; /* microAmps */
+ 	int constant_charge_voltage_max_uv; /* microVolts */
+ 	int factory_internal_resistance_uohm;   /* microOhms */
 -- 
 2.21.0
 
