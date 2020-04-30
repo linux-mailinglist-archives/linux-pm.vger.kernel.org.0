@@ -2,150 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF881BF049
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 08:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E891BF0F2
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 09:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726575AbgD3G3X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Apr 2020 02:29:23 -0400
-Received: from mga11.intel.com ([192.55.52.93]:25173 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726358AbgD3G3X (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 30 Apr 2020 02:29:23 -0400
-IronPort-SDR: humlRVR2/wG9kZkf4ty1L8fxdPQ7h+ZnCJQn1jDoOQ4WnBTNEWB9hJSLgnMj/eXWbCWc+Riok8
- JETJzOBTbXuw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 23:29:23 -0700
-IronPort-SDR: +wKeSGww6JJPXvbSKLDQ+YoYIinGq8FxPE5drQ1kzWax6Iuc8J7HyVspAyOlefGZJ90jj/8IL1
- Lm5hl2FN4q7g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,334,1583222400"; 
-   d="scan'208";a="282751693"
-Received: from power-sh.sh.intel.com ([10.239.48.5])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Apr 2020 23:29:21 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     linux-pm@vger.kernel.org
-Cc:     linux-wireless@vger.kernel.org, daniel.lezcano@linaro.org,
-        andrzej.p@collabora.com, b.zolnierkie@samsung.com, luca@coelho.fi,
-        rui.zhang@intel.com
-Subject: [PATCH RFC 6/6] iwlwifi: enable thermal zone only when firmware loaded
-Date:   Thu, 30 Apr 2020 14:32:29 +0800
-Message-Id: <20200430063229.6182-7-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200430063229.6182-1-rui.zhang@intel.com>
-References: <20200430063229.6182-1-rui.zhang@intel.com>
+        id S1726433AbgD3HOl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Apr 2020 03:14:41 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:57180 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726337AbgD3HOl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 30 Apr 2020 03:14:41 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id A0752DF930DB2881B5C2;
+        Thu, 30 Apr 2020 15:14:38 +0800 (CST)
+Received: from [127.0.0.1] (10.166.213.93) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.487.0; Thu, 30 Apr 2020
+ 15:14:33 +0800
+Subject: Re: [RFC PATCH] cpuidle: Make cpuidle governor switchable to be the
+ default behaviour
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Doug Smythies <dsmythies@telus.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+References: <1587982637-33618-1-git-send-email-guohanjun@huawei.com>
+ <06ff344e-7abf-9eb6-9664-0e9f9d8d6bc7@linaro.org>
+ <000401d61ca1$f684f7b0$e38ee710$@net>
+ <0fbf3fc3-fabf-c9cb-b582-8dc6e2d5b7de@huawei.com>
+ <CAJZ5v0hMr928Up83JXzYOkoc0=1q_ofdm_fH5cSmY0dV3uypEQ@mail.gmail.com>
+From:   Hanjun Guo <guohanjun@huawei.com>
+Message-ID: <f5c02738-3fa8-8a2b-326a-0cd8da46aa9b@huawei.com>
+Date:   Thu, 30 Apr 2020 15:14:33 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <CAJZ5v0hMr928Up83JXzYOkoc0=1q_ofdm_fH5cSmY0dV3uypEQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.166.213.93]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-in iwl_mvm_thermal_zone_register(), when registering a thermal zone, the
-thermal subsystem will evaluate its temperature.
-But iwl_mvm_tzone_get_temp() fails at this time because
-iwl_mvm_firmware_running() returns false.
-And that's why many users report that they see
-"thermal thermal_zoneX: failed to read out thermal zone (-61)"
-message during wifi driver probing.
+On 2020/4/29 18:46, Rafael J. Wysocki wrote:
+> On Tue, Apr 28, 2020 at 4:48 AM Hanjun Guo <guohanjun@huawei.com> wrote:
+>>
+>> On 2020/4/27 22:41, Doug Smythies wrote:
+>>> I very much support this RFC.
+>>> I have been running only with "cpuidle_sysfs_switch" for about 2 years.
+>>
+>> Thanks, glad to hear that switch cpuidle governor at
+>> runtime works for years.
+>>
+>>>
+>>> Some changes would be required for the documentation files also.
+>>
+>> I will update them in next version.
+>>
+>>>
+>>> On 2020.04.27 06:37 Daniel Lezcano wrote:
+>>>> On 27/04/2020 12:17, Hanjun Guo wrote:
+>>>>> For now cpuidle governor can be switched via sysfs only when the
+>>>>> boot option "cpuidle_sysfs_switch" is passed, but it's important
+>>>>> to switch the governor to adapt to different workloads, especially
+>>>>> after TEO and haltpoll governor were introduced.
+>>>>>
+>>>>> Introduce a CONFIG option to make cpuidle governor switchable to be
+>>>>> the default behaviour, which will not break the boot option behaviour.
+>>>>>
+>>>>> Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
+>>>>> ---
+>>>>>    drivers/cpuidle/Kconfig | 9 +++++++++
+>>>>>    drivers/cpuidle/sysfs.c | 2 +-
+>>>>>    2 files changed, 10 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
+>>>>> index c0aeedd..c40cb40 100644
+>>>>> --- a/drivers/cpuidle/Kconfig
+>>>>> +++ b/drivers/cpuidle/Kconfig
+>>>>> @@ -47,6 +47,15 @@ config CPU_IDLE_GOV_HALTPOLL
+>>>>>    config DT_IDLE_STATES
+>>>>>      bool
+>>>>>
+>>>>> +config CPU_IDLE_SWITCH_GOV_IN_DEFAULT
+>>>>> +   bool "Switch the CPU idle governor via sysfs at runtime in default behaviour"
+>>>>> +   help
+>>>>> +     Make the CPU idle governor switchable at runtime, and make it as the
+>>>>> +     default behaviour even the boot option "cpuidle_sysfs_switch" is not
+>>>>> +     passed in cmdline.
+>>>>> +
+>>>>> +     Say N if you unsure about this.
+>>>>
+>>>> Well I wouldn't make this optional but just remove the sysfs_switch.
+>>>
+>>> Agree.
+>>>
+>>>> However, there is the '_ro' suffix when the option is not set. In order
+>>>> to not break the existing tools, may be let both files co-exist and add
+>>>> in the ABI/obselete the '_ro' file as candidate for removal ?
+>>>
+>>> I do not like this _ro thing, and got hit by it with turbostat one time.
+>>> Agree it should be made a candidate for removal.
+>>
+>> OK, I will prepare another RFC patch set to remove sysfs_switch.
+> 
+> I would just do it in one series, though, as suggested by Daniel.
 
-With the changes made earlier in this patch series, the problem can be
-solved by registering the iwlwifi thermal zone as disabled, and enable it
-later when the firmware is ready.
+OK, will sent out the patchset today.
 
-*NOTE*
-This is just a prototype patch to illustrate the problem and
-how we can fix it based on the new thermal changes.
+> 
+> Also, I wouldn't worry about the _ro thing too much, as the changes
+> effectively make "cpuidle_sysfs_switch" be the default (and the tools
+> should be able to cope with "cpuidle_sysfs_switch" anyway) without an
+> alternative (but who cares?).
 
-I'm not sure what is the proper place to enable/disable the thermal zone.
-The solution in this patch causes a deadlock issue because
-a) thermal_zone_device_enable() is invoked with mvm->mutex locked.
-b) .get_temp() callback is invoked when enabling the thermal zone.
-c) iwl_mvm_tzone_get_temp() also needs to hold mvm->mutex.
-And that's why I hacked iwl_mvm_tzone_get_temp() to avoid this.
-
-So if you have ideas on how to fix this, please feel free to propose it.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=201761
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/net/wireless/intel/iwlwifi/mvm/fw.c  |  2 ++
- drivers/net/wireless/intel/iwlwifi/mvm/mvm.h |  4 ++++
- drivers/net/wireless/intel/iwlwifi/mvm/tt.c  | 12 +++++++++---
- 3 files changed, 15 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/fw.c b/drivers/net/wireless/intel/iwlwifi/mvm/fw.c
-index a4038f2..ff47fc6 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/fw.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/fw.c
-@@ -1222,6 +1222,8 @@ int iwl_mvm_up(struct iwl_mvm *mvm)
- #ifdef CONFIG_THERMAL
- 	/* TODO: read the budget from BIOS / Platform NVM */
- 
-+	if (mvm->tz_device.tzone && tz_disabled(mvm->tz_device.tzone))
-+		thermal_zone_device_enable(mvm->tz_device.tzone);
- 	/*
- 	 * In case there is no budget from BIOS / Platform NVM the default
- 	 * budget should be 2000mW (cooling state 0).
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
-index afcf2b9..b964c01 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
-@@ -1946,6 +1946,10 @@ static inline u32 iwl_mvm_flushable_queues(struct iwl_mvm *mvm)
- 
- static inline void iwl_mvm_stop_device(struct iwl_mvm *mvm)
- {
-+#ifdef CONFIG_THERMAL
-+	if (mvm->tz_device.tzone && !tz_disabled(mvm->tz_device.tzone))
-+		thermal_zone_device_disable(mvm->tz_device.tzone);
-+#endif
- 	lockdep_assert_held(&mvm->mutex);
- 	iwl_fw_cancel_timestamp(&mvm->fwrt);
- 	clear_bit(IWL_MVM_STATUS_FIRMWARE_RUNNING, &mvm->status);
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-index 6344b6b..819dcaf 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-@@ -620,8 +620,9 @@ static int iwl_mvm_tzone_get_temp(struct thermal_zone_device *device,
- 	struct iwl_mvm *mvm = (struct iwl_mvm *)device->devdata;
- 	int ret;
- 	int temp;
-+	int locked;
- 
--	mutex_lock(&mvm->mutex);
-+	locked = mutex_trylock(&mvm->mutex);
- 
- 	if (!iwl_mvm_firmware_running(mvm) ||
- 	    mvm->fwrt.cur_fw_img != IWL_UCODE_REGULAR) {
-@@ -636,7 +637,8 @@ static int iwl_mvm_tzone_get_temp(struct thermal_zone_device *device,
- 	*temperature = temp * 1000;
- 
- out:
--	mutex_unlock(&mvm->mutex);
-+	if (locked)
-+		mutex_unlock(&mvm->mutex);
- 	return ret;
- }
- 
-@@ -730,6 +732,10 @@ static  struct thermal_zone_device_ops tzone_ops = {
- /* make all trips writable */
- #define IWL_WRITABLE_TRIPS_MSK (BIT(IWL_MAX_DTS_TRIPS) - 1)
- 
-+static struct thermal_zone_params tz_params = {
-+	.initial_mode   = THERMAL_DEVICE_DISABLED,
-+};
-+
- static void iwl_mvm_thermal_zone_register(struct iwl_mvm *mvm)
- {
- 	int i;
-@@ -749,7 +755,7 @@ static void iwl_mvm_thermal_zone_register(struct iwl_mvm *mvm)
- 							IWL_MAX_DTS_TRIPS,
- 							IWL_WRITABLE_TRIPS_MSK,
- 							mvm, &tzone_ops,
--							NULL, 0, 0);
-+							&tz_params, 0, 0);
- 	if (IS_ERR(mvm->tz_device.tzone)) {
- 		IWL_DEBUG_TEMP(mvm,
- 			       "Failed to register to thermal zone (err = %ld)\n",
--- 
-2.7.4
+Thanks
+Hanjun
 
