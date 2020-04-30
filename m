@@ -2,91 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C08A1BF399
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 10:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 785101BF39F
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 11:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726474AbgD3I6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Apr 2020 04:58:41 -0400
-Received: from mga02.intel.com ([134.134.136.20]:3533 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726453AbgD3I6k (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 30 Apr 2020 04:58:40 -0400
-IronPort-SDR: hag3hn/eIZ2cAbGcW+ETW7HAwAeLoHldreFwwMwPYSQvInw5ieXVqWiQK0xOzFifRQvUTweIhC
- AI70gorY2XCA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2020 01:58:40 -0700
-IronPort-SDR: fQup+oKPTPZMZ4ooLPtXFuvORBuqsK7f/UtzDl9s1y4AiSJZVmDW2Qr+fxosBzs6DWgb0hl5VC
- E9wY5qfvcDQQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,334,1583222400"; 
-   d="scan'208";a="368077231"
-Received: from fmsmsx108.amr.corp.intel.com ([10.18.124.206])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Apr 2020 01:58:40 -0700
-Received: from FMSMSX109.amr.corp.intel.com (10.18.116.9) by
- FMSMSX108.amr.corp.intel.com (10.18.124.206) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Thu, 30 Apr 2020 01:58:39 -0700
-Received: from shsmsx153.ccr.corp.intel.com (10.239.6.53) by
- fmsmsx109.amr.corp.intel.com (10.18.116.9) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Thu, 30 Apr 2020 01:58:39 -0700
-Received: from shsmsx108.ccr.corp.intel.com ([169.254.8.7]) by
- SHSMSX153.ccr.corp.intel.com ([169.254.12.89]) with mapi id 14.03.0439.000;
- Thu, 30 Apr 2020 16:58:37 +0800
-From:   "Zhang, Rui" <rui.zhang@intel.com>
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "b.zolnierkie@samsung.com" <b.zolnierkie@samsung.com>,
-        "luca@coelho.fi" <luca@coelho.fi>
-Subject: RE: [PATCH 2/6] thermal: core: delete thermal_notify_framework()
-Thread-Topic: [PATCH 2/6] thermal: core: delete thermal_notify_framework()
-Thread-Index: AQHWHrivmvF3aVRc5kel0SLDGSPp4KiQ1F8AgACH7GA=
-Date:   Thu, 30 Apr 2020 08:58:37 +0000
-Message-ID: <744357E9AAD1214791ACBA4B0B90926377CFB787@SHSMSX108.ccr.corp.intel.com>
-References: <20200430063229.6182-1-rui.zhang@intel.com>
- <20200430063229.6182-3-rui.zhang@intel.com>
- <f6d7dcae-ccf1-eee1-2ac1-eaa8472e2f87@collabora.com>
-In-Reply-To: <f6d7dcae-ccf1-eee1-2ac1-eaa8472e2f87@collabora.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.2.0.6
-dlp-reaction: no-action
-x-originating-ip: [10.239.127.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726453AbgD3JAT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Apr 2020 05:00:19 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:33853 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726420AbgD3JAS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Apr 2020 05:00:18 -0400
+Received: by mail-ot1-f67.google.com with SMTP id 72so4306278otu.1;
+        Thu, 30 Apr 2020 02:00:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6KQACPLN/GZpi+FYGmYG62Ze5DkTEi4wV710+OZY2aQ=;
+        b=H3Jrnez4+57h4GGsGlUKjBUCzgCWRyEy6JDWuCmKOCUwez6SKQkM17Y0T4lZYkM+3/
+         U4vZQnqImo3eBrs+Ia2oUL/dju4W8ziszY+cnBNYNA47hbTjvd9X0eS6zcQFYB4QTHF0
+         o+msu24phfMWs/i/Rb9SoKhf1O/TMa12x79vd1Msgn42LseBhvKVz+TbJaJu8uNgpFSL
+         AoZiHg7TzuKitI1VP7RIjEtRs7qV5Y5iQjbDxYfF3Cu/mXxUsL2wzB5TFO/AtqcoWRPG
+         Gv2InbBZN8+ZURT3Kek0CDOPH7tpWuSYn8S9AhwB8MaZg33w6ypVtCqokvlSp4qLKRMP
+         25EQ==
+X-Gm-Message-State: AGi0PuZ/6WYvKDfchk5YdRNXQF+OKEYiYpF+ah6eQ9rFZ3kCPO0QYV0r
+        ENSw71cjgK1fJsovF8cELACBs1r5AYHNIpCuL0qQDA==
+X-Google-Smtp-Source: APiQypION7scbqEm7NDh6Gggg+1C2ij+NE18vee8aBc9XS9X5f4dFoPNeOl0elV99+hw6k1aQNEtvFSivkjKAlKGNyw=
+X-Received: by 2002:a9d:112:: with SMTP id 18mr1274967otu.167.1588237217674;
+ Thu, 30 Apr 2020 02:00:17 -0700 (PDT)
 MIME-Version: 1.0
+References: <20200424114058.21199-1-benjamin.gaignard@st.com>
+ <7657495.QyJl4BcWH5@kreacher> <CAKfTPtBNH8x=83RVQajgK859qQGjMTyvEdP4GioMONEZp9t-NA@mail.gmail.com>
+In-Reply-To: <CAKfTPtBNH8x=83RVQajgK859qQGjMTyvEdP4GioMONEZp9t-NA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Apr 2020 11:00:05 +0200
+Message-ID: <CAJZ5v0g+9DYuGS8URoXYecOxcnu5-kC-D=gvYTuMvxMZbYXR9w@mail.gmail.com>
+Subject: Re: [RFC 0/3] Introduce cpufreq minimum load QoS
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>, hugues.fruchet@st.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Patrick Bellasi <patrick.bellasi@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEFuZHJ6ZWogUGlldHJhc2ll
-d2ljeiA8YW5kcnplai5wQGNvbGxhYm9yYS5jb20+DQo+IFNlbnQ6IFRodXJzZGF5LCBBcHJpbCAz
-MCwgMjAyMCA0OjQ3IFBNDQo+IFRvOiBaaGFuZywgUnVpIDxydWkuemhhbmdAaW50ZWwuY29tPjsg
-bGludXgtcG1Admdlci5rZXJuZWwub3JnDQo+IENjOiBsaW51eC13aXJlbGVzc0B2Z2VyLmtlcm5l
-bC5vcmc7IGRhbmllbC5sZXpjYW5vQGxpbmFyby5vcmc7DQo+IGIuem9sbmllcmtpZUBzYW1zdW5n
-LmNvbTsgbHVjYUBjb2VsaG8uZmkNCj4gU3ViamVjdDogUmU6IFtQQVRDSCAyLzZdIHRoZXJtYWw6
-IGNvcmU6IGRlbGV0ZSB0aGVybWFsX25vdGlmeV9mcmFtZXdvcmsoKQ0KPiBJbXBvcnRhbmNlOiBI
-aWdoDQo+IA0KPiBIaSBSdWksDQo+IA0KPiBUaGFua3MgZm9yIHRoZSBzZXJpZXMsDQo+IA0KPiBX
-IGRuaXUgMzAuMDQuMjAyMCBvwqAwODozMiwgWmhhbmcgUnVpIHBpc3plOg0KPiA+IERlbGV0ZSB0
-aGVybWFsX25vdGlmeV9mcmFtZXdvcmsoKSBhcyB0aGVyZSBpcyBubyB1c2VyIG9mIGl0Lg0KPiA+
-DQo+ID4gU2lnbmVkLW9mZi1ieTogWmhhbmcgUnVpIDxydWkuemhhbmdAaW50ZWwuY29tPg0KPiA+
-IC0tLQ0KPiA+ICAgZHJpdmVycy90aGVybWFsL3RoZXJtYWxfY29yZS5jIHwgMTggLS0tLS0tLS0t
-LS0tLS0tLS0tDQo+ID4gICBpbmNsdWRlL2xpbnV4L3RoZXJtYWwuaCAgICAgICAgfCAgNCAtLS0t
-DQo+ID4gICAyIGZpbGVzIGNoYW5nZWQsIDIyIGRlbGV0aW9ucygtKQ0KPiA+DQo+IA0KPiBnaXQg
-Z3JlcCB0aGVybWFsX25vdGlmeV9mcmFtZXdvcmsNCj4gRG9jdW1lbnRhdGlvbi9kcml2ZXItYXBp
-L3RoZXJtYWwvc3lzZnMtYXBpLnJzdDo0LjMuDQo+IHRoZXJtYWxfbm90aWZ5X2ZyYW1ld29yaw0K
-PiANCj4gU2hvdWxkIHRoZSBkb2N1bWVudGF0aW9uIGJlIHN0aWxsIGRvY3VtZW50aW5nIGEgbm9u
-LWV4aXN0ZW50IGZ1bmN0aW9uPw0KPiANClJpZ2h0LCB0aGFua3MgZm9yIHRoZSByZW1pbmRlci4N
-CldpbGwgY2xlYW4gaXQgdXAgaW4gbmV4dCB2ZXJzaW9uLg0KDQo+IEJUVywgZ2V0X3R6X3RyZW5k
-KCkgaXMgb25seSB1c2VkIGluIGRyaXZlcnMvdGhlcm1hbC9zdGVwX3dpc2UuYywgYnV0IGlzIHN0
-aWxsDQo+IGV4cG9ydGVkIHdpdGggRVhQT1JUX1NZTUJPTCgpLiBQcm9iYWJseSBkb2VzIG5vdCBu
-ZWVkIHRvIGJlIGV4cG9ydGVkDQo+IGFueW1vcmUuDQo+IA0KUmlnaHQsIHRoYXQgd29ydGggYSBz
-ZXBhcmF0ZSBjbGVhbnVwIHBhdGNoLg0KDQpDYW4geW91IHBsZWFzZSB0cnkgdGhpcyBwYXRjaCBh
-bmQgY29uZmlybSB0aGUgcG9sbGluZyB0aW1lcnMgYXJlIHF1ZXVlZC9jYW5jZWxsZWQgYXMgZXhw
-ZWN0ZWQ/DQoNCnRoYW5rcywNCnJ1aQ0K
+On Wed, Apr 29, 2020 at 7:08 PM Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
+>
+> On Wed, 29 Apr 2020 at 17:50, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >
+> > On Friday, April 24, 2020 1:40:55 PM CEST Benjamin Gaignard wrote:
+> > > When start streaming from the sensor the CPU load could remain very low
+> > > because almost all the capture pipeline is done in hardware (i.e. without
+> > > using the CPU) and let believe to cpufreq governor that it could use lower
+> > > frequencies. If the governor decides to use a too low frequency that
+> > > becomes a problem when we need to acknowledge the interrupt during the
+> > > blanking time.
+> > > The delay to ack the interrupt and perform all the other actions before
+> > > the next frame is very short and doesn't allow to the cpufreq governor to
+> > > provide the required burst of power. That led to drop the half of the frames.
+> > >
+> > > To avoid this problem, DCMI driver informs the cpufreq governors by adding
+> > > a cpufreq minimum load QoS resquest.
+> >
+> > This seems to be addressing a use case that can be addressed with the help of
+> > utilization clamps with less power overhead.
+>
+> Can't freq_qos_update_request() be also used if you don't have cgroup
+> enabled on your system ?
+
+It can.
+
+The problem here is that imposing a global minimum frequency limit
+generally causes the power draw of the system to increase regardless
+of what is going on, including the CPUs that are not involved in the
+handling of the interrupt in question.
+
+That seems a bit excessive ...
