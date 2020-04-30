@@ -2,99 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 020801C00C3
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 17:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B70E31C00F9
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 17:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726530AbgD3Pup (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Apr 2020 11:50:45 -0400
-Received: from foss.arm.com ([217.140.110.172]:57778 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725844AbgD3Pup (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 30 Apr 2020 11:50:45 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C539931B;
-        Thu, 30 Apr 2020 08:50:44 -0700 (PDT)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9F273F68F;
-        Thu, 30 Apr 2020 08:50:42 -0700 (PDT)
-References: <20200424114058.21199-1-benjamin.gaignard@st.com> <7657495.QyJl4BcWH5@kreacher> <30cdecf9-703a-eb2b-7c2b-f1e21c805add@st.com> <70e743cf-b88e-346a-5114-939b8724c83d@arm.com> <6b5cde14-58b3-045d-9413-223e66b87bf0@st.com> <CAJZ5v0h6t6perZiibCWhEh1_V0pSXqFe-z22TFqH7KTFXYmqpQ@mail.gmail.com> <a234e123-6c15-8e58-8921-614b58ca24ca@st.com> <jhjtv11cabk.mognet@arm.com> <a20c5214-211b-1f70-1162-57b32e60549b@st.com>
-User-agent: mu4e 0.9.17; emacs 26.3
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Benjamin GAIGNARD <benjamin.gaignard@st.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "viresh.kumar\@linaro.org" <viresh.kumar@linaro.org>,
-        Hugues FRUCHET <hugues.fruchet@st.com>,
-        "mchehab\@kernel.org" <mchehab@kernel.org>,
-        "mcoquelin.stm32\@gmail.com" <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        "pavel\@ucw.cz" <pavel@ucw.cz>,
-        "len.brown\@intel.com" <len.brown@intel.com>,
-        "linux-pm\@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media\@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-stm32\@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel\@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Patrick Bellasi <patrick.bellasi@arm.com>
-Subject: Re: [RFC 0/3] Introduce cpufreq minimum load QoS
-Message-ID: <jhjmu6tc6rz.mognet@arm.com>
-In-reply-to: <a20c5214-211b-1f70-1162-57b32e60549b@st.com>
-Date:   Thu, 30 Apr 2020 16:50:40 +0100
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1726878AbgD3P6V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Apr 2020 11:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726420AbgD3P6V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Apr 2020 11:58:21 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4AFC035494;
+        Thu, 30 Apr 2020 08:58:19 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id x4so2466740wmj.1;
+        Thu, 30 Apr 2020 08:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=OPbeDM2cJ5aY40/5CUX4MHQFjKQOx8SNoJZ2e5+rWE4=;
+        b=P5yrqIGJN0HwsHhkR4vMRNhcfK9xpijRREv97x1ZAk/hVSZeoUnHqMcaPk5Mpg7k60
+         Arw2ul2YgP0P2EZqMvuMAbiWI4riPNjH5n9HqegzKqlKAK6egB88JO1LnICEhqkdhOHx
+         C7qgl/AUVidKSO2dQ231ogIMRjnM9+QEzY3U7uGMNfCF/xniyj6Ch1SjEjHbg/CLis4C
+         rbT6z5X4mWtbbSlXWzWJSUswcazMECs6EEYudahmjYbkWXf5bMYiMPOHGYmc1Sq2MDb+
+         wvNS6jzQK79PzCqvtSnyUapdCU6CUrJqSHgPZXXrZ5o3zHIwduJqjizPf7j/Ht0mL0To
+         cF6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=OPbeDM2cJ5aY40/5CUX4MHQFjKQOx8SNoJZ2e5+rWE4=;
+        b=hZzLksOz3yS8KUChr++PjlgJhSs2uhosgMVu11DOxEPNVtNOU0hOaAU86h7kvBDj6r
+         hWFwrnmly1l6oCBDfDIRjBjoqWMfL50HIuqfbUBEz3Tc6feqv3nfHU2azTP+XP5iZceW
+         UAY05zRH4HJvWA9Ib3TA03pW+3O+xivQHbXAapt6qofAQJs7XX15Qm/RO5QdHRzFyJrw
+         ojdk5LZjbya/TDVzz8/0bTY4OhqhK7kubdeTvA/4mJe3ZNRi/CQOxqsNEWPREXf/b2rR
+         nvS6LOPPU4CmmIJDb957PyKymGHXLbsstweegzfxnU+etIr+IPfAVNrWxwEPIZAkD1J2
+         0vbw==
+X-Gm-Message-State: AGi0PuaXcQsWQU86MnhIuFDKratux3gMZ03HlJuJLd1zkl7ZfFegtwGB
+        ZeFUx60a3f1kpyvNqVhiYVo=
+X-Google-Smtp-Source: APiQypJGM/yC0m96AySjSxYslDHri5PZMrYCb0FFv3elkENgHkRGkZiiD/fFkakWizNlPa+BFZW0Yw==
+X-Received: by 2002:a7b:c4c9:: with SMTP id g9mr3674853wmk.171.1588262298154;
+        Thu, 30 Apr 2020 08:58:18 -0700 (PDT)
+Received: from localhost.localdomain (p5B3F6E9D.dip0.t-ipconnect.de. [91.63.110.157])
+        by smtp.gmail.com with ESMTPSA id w8sm265410wrs.25.2020.04.30.08.58.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2020 08:58:17 -0700 (PDT)
+From:   Saravanan Sekar <sravanhome@gmail.com>
+To:     lee.jones@linaro.org, andy.shevchenko@gmail.com,
+        robh+dt@kernel.org, jic23@kernel.org, knaack.h@gmx.de,
+        lars@metafoo.de, pmeerw@pmeerw.net, sre@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        Saravanan Sekar <sravanhome@gmail.com>
+Subject: [PATCH v11 0/6]  Add battery charger driver support for MP2629
+Date:   Thu, 30 Apr 2020 17:58:04 +0200
+Message-Id: <20200430155810.21383-1-sravanhome@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+changes in v11:
+ - module_remove part replaced by devm_add_action_or_reset in charger patch
+ - minor review comments solved in mfd and adc patch
 
-On 30/04/20 16:37, Benjamin GAIGNARD wrote:
-> On 4/30/20 4:33 PM, Valentin Schneider wrote:
->> On 30/04/20 14:46, Benjamin GAIGNARD wrote:
->>>> That's not what I meant.
->>>>
->>>> I suppose that the interrupt processing in question takes place in
->>>> process context and so you may set the lower clamp on the utilization
->>>> of the task carrying that out.
->>> I have try to add this code when starting streaming (before the first
->>> interrupt) the frames from the sensor:
->>> const struct sched_attr sched_attr = {
->>>     .sched_util_min = 10000, /* 100% of usage */
->> Unless you play with SCHED_CAPACITY_SHIFT, the max should be 1024 -
->> i.e. SCHED_CAPACITY_SCALE. That's a really big boost, but that's for you to
->> benchmark.
->>
->>>     .sched_flags = SCHED_FLAG_UTIL_CLAMP_MIN,
->>>    };
->>>
->>> sched_setattr(current, &sched_attr);
->>>
->>> I don't see any benefices maybe there is some configuration flags to set.
->>>
->>> How changing sched_util_min could impact cpufreq ondemand governor ?
->>> Does it change the value returned when the governor check the idle time ?
->>>
->> You'll have to use the schedutil governor for uclamp to have an effect. And
->> arguably that's what you should be using, unless something explicitly
->> prevents you from doing that.
-> Even with schedutil and SCHED_CAPACITY_SCALE that it doesn't work.
-> cpufreq/cpuinfo_cur_freq values are always on the max value even if the
-> stats show transitions between the available frequencies.
->
-> I see two possibles reasons to explain that:
-> - sched_setattr() is called in userland process context, but the
-> threaded irq handler is running in another process.
+changes in v10:
+ - fixed typo, \n in dev_err
+ - dt bindings Warning (unit_address_vs_reg) reported by bot
 
-Ah yes, this only works if the task you boost is the one that will handle
-whatever work you care about (in this case handling the irq). That said, if
-you do use threaded IRQs, that should give you a SCHED_FIFO thread, which
-should drive the frequency to its max when using schedutil (unrelated to
-uclamp).
+changes in v9:
+ - fixed review comments in mp2629 power supply such as resource based
+   iio channel, replace workqueue by threaded irq, irq get with "_optional"
 
-> - because this use case is almost running all in hardware the process
-> isn't doing anything so the scheduler doesn't take care of it.
->
->>
->>>> Alternatively, that task may be a deadline one.
+changes in v8:
+ - fixed order of call in probe/remove in iio adc
+ - add ABI documentation for mp2629 power supply
+
+changes in v7:
+ - fixed probe/remove order, managed and unmanaged call mix use in adc.
+ - Documentation dual license, i2c node with controller address
+
+Overall looks good to me, FWIW,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+One question though in reply to patch 4.
+
+changes in v6:
+ - removed includes types.h in mfd, of_device.h in adc.
+ - fixed review comments parentheses, err check, kstrtouint
+
+changes in v5:
+ - removed platfrom data stored in mfd and directly accessed mfd struct in child
+ - fixed spell check and capitalization in mfd and documentation
+
+changes in v4:
+ - fixed capitalization in mfg Kconfig and documentation
+
+changes in v3:
+ - regmap for children passed using platform data and remove mfd driver info
+   access directly from children
+
+changes in v2:
+ - removed EXPORT_SYMBOL of register set/get helper
+ - regmap bit filed used, fixed other review comments
+
+This patch series add support for Battery charger control driver for Monolithic
+Power System's MP2629 chipset, includes MFD driver for ADC battery & input
+power supply measurement and battery charger control driver.
+
+Thanks,
+Saravanan
+
+Saravanan Sekar (6):
+  dt-bindings: mfd: add document bindings for mp2629
+  mfd: mp2629: Add support for mps battery charger
+  iio: adc: mp2629: Add support for mp2629 ADC driver
+  power: supply: Add support for mps mp2629 battery charger
+  power: supply: mp2629: Add impedance compensation config
+  MAINTAINERS: Add entry for mp2629 Battery Charger driver
+
+ .../ABI/testing/sysfs-class-power-mp2629      |   8 +
+ .../devicetree/bindings/mfd/mps,mp2629.yaml   |  62 ++
+ MAINTAINERS                                   |   5 +
+ drivers/iio/adc/Kconfig                       |  10 +
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/mp2629_adc.c                  | 208 ++++++
+ drivers/mfd/Kconfig                           |   9 +
+ drivers/mfd/Makefile                          |   2 +
+ drivers/mfd/mp2629.c                          |  79 +++
+ drivers/power/supply/Kconfig                  |  10 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/mp2629_charger.c         | 669 ++++++++++++++++++
+ include/linux/mfd/mp2629.h                    |  26 +
+ 13 files changed, 1090 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-power-mp2629
+ create mode 100644 Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
+ create mode 100644 drivers/iio/adc/mp2629_adc.c
+ create mode 100644 drivers/mfd/mp2629.c
+ create mode 100644 drivers/power/supply/mp2629_charger.c
+ create mode 100644 include/linux/mfd/mp2629.h
+
+-- 
+2.17.1
+
