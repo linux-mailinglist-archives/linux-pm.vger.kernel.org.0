@@ -2,158 +2,231 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BFA1BEF96
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 07:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC00F1BEF9E
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 07:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726505AbgD3FJY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Apr 2020 01:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57892 "EHLO
+        id S1726404AbgD3FVn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Apr 2020 01:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726378AbgD3FJX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Apr 2020 01:09:23 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C35C08E859
-        for <linux-pm@vger.kernel.org>; Wed, 29 Apr 2020 22:09:21 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id t9so240936pjw.0
-        for <linux-pm@vger.kernel.org>; Wed, 29 Apr 2020 22:09:21 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726391AbgD3FVn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Apr 2020 01:21:43 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E125DC08E859
+        for <linux-pm@vger.kernel.org>; Wed, 29 Apr 2020 22:21:42 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id a31so253461pje.1
+        for <linux-pm@vger.kernel.org>; Wed, 29 Apr 2020 22:21:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=BcQ5rdhX5fAQSX2rbYN56O2PhBMBX/klcGq2rtNptpM=;
-        b=UIPWkQRCuoKPusij5bXjIgUWQTmsoLYcmtJotv/WTwQI8XCnxYM/ilm3V1d3vhaud4
-         oCaqKAnwOWt5jxRvv0ApLhJU/GBO/g0rlUmPsIbEgyH43hmyRzM8W2Il6LQSpGe3ypnj
-         EOj8avcPW4dHenocr4HMTna0mxX8s7g5Oix67ExkIYNYkeitD5cOrJyEPfZ+y5EwxtJf
-         S9n7zQsqB0ZmZi2MzkQtgIZt/ak+6Vil0L6KPPg8uk2fG+qxaymCvPs6GsTq+PnOJIXW
-         XW99dc7mSyRYJpsJB0bdR02UuxxukrNuIyIriUSQBawkWbd4eQCLUGzlQNPouKs6ZAIN
-         WoUQ==
+        bh=3+Aje/v5jcj8L3yv0nBtSsoYFCrlpuzCMRL81ZSK7zQ=;
+        b=WMRL5oZ97WiITscnQMde+o232dXlIvgsliipcI180iJ8pVpzQN0tjjvBC8prpmNwNM
+         2Rl5hSog1LlVBwRMnDw08s+kAQTVOYXbKxVIh6LM1l0au6rr7zvfSaUX890zTF854Lod
+         lG/W2F5HzIQR+j2as9L9akXJ6oFHNRpnYb8bqLXkp3Oc6ryBgNKs1tG3jApEg5iSmEJ/
+         1MTKmlA7pz7sp0+vHHyawhYtqROiD6HBWhchth6/IH4Ff6T2ax5LN1D+rr6pE2Qwd3eq
+         Kc4uHEzakoAqU7o2rkrA9mrjdSFe16zL3IY9afOgw77rr7fnSBbVkG+Q0YZ7ejfQNKGX
+         y1Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BcQ5rdhX5fAQSX2rbYN56O2PhBMBX/klcGq2rtNptpM=;
-        b=qldZgCw+Xmsx4XkryQDRWxT6pWkIsAsUko/Oe/K2GrH/kzG6AddgeHtYtgduLC7om6
-         V5QqYeoSRd8vMb3W8nP8I/M4e3vIbN3Wq290RkTwMbm5bmKr37wVxiJVy+Q+htOrrBDw
-         4dE0keyjn9g05HdmmC/RVIRxnYHOsCgaTpniIBNZ+2S4VMDT3txP6Cu/ha4xZeqTifCu
-         D/5KaurvCFpUxKLBISHUo5++uaIDzo3WGdH6NVAzEpqM3qF604FzWnCHD6gjAU9F8QGw
-         +oFPpwZqpcl+C9ApXAe1yY5DPkL8LXKAEloIw0UsB7cHudjKG8MVgPJOHly/vbniqHdT
-         eAOg==
-X-Gm-Message-State: AGi0Puba8pKg7kHNaq9zwBAdzTUM7ckj3/kYCbPW8RoYKemHOgkpYpDh
-        UX97uyIS/tHAaNSj8MMUuWfZZRJXN/Q=
-X-Google-Smtp-Source: APiQypIWG8LTlURGRjcnCZlUiotPB1jlfz7jUIeRNAIqGaqtSuVr93jORUA5tW+QP7j+WvGiFJXmgQ==
-X-Received: by 2002:a17:90a:ee84:: with SMTP id i4mr956177pjz.71.1588223361336;
-        Wed, 29 Apr 2020 22:09:21 -0700 (PDT)
+        bh=3+Aje/v5jcj8L3yv0nBtSsoYFCrlpuzCMRL81ZSK7zQ=;
+        b=AZr/g/e/pqIrqeMlPB69DxIejXWbZ7bazOtcG0Y3NPbj7udeaeam4SKPhIWdv6SCrU
+         WD9/+fZy0DbZz04+L9/nhQHK66Kbqx31bYoeDGUcvWnTAV2608VxCQbJDLSUjtdH6WhP
+         RMHdJ5xVYQ/XCNNzPvJM80lybVPT2EbbYerddah9s4J85wLOuiXljNkSLJhpX+XO6F0z
+         wye8G/PmRRnmNMhoqTw8T8f/zfFCb7OOcgQtezFho98YoQRpx9yY6jJfRo9j7JugSwK6
+         vmLY02hw2ZsJK5K0J9rttFt9x4Sj5iQhzBlKmgXmsrbsSsBWyheeJ34Rad07Fc5UuKbh
+         KOeA==
+X-Gm-Message-State: AGi0PuZxY3XyeVrxc1av5DCbAGh2SW67S99o32we+jkGSlnTZjXL3FOh
+        V4Pwo3JIqPOIF21Vo6wr6x3kpQ==
+X-Google-Smtp-Source: APiQypJT2Qj4R3PjkMG/fujT78Utc+4rknpPqcNDAU5n5mvRk6nX1Ay33sH4ujimxFi3CdH3WArD0w==
+X-Received: by 2002:a17:902:47:: with SMTP id 65mr1842545pla.54.1588224102051;
+        Wed, 29 Apr 2020 22:21:42 -0700 (PDT)
 Received: from localhost ([122.171.118.46])
-        by smtp.gmail.com with ESMTPSA id h193sm2422349pfe.30.2020.04.29.22.09.20
+        by smtp.gmail.com with ESMTPSA id x13sm2444143pfq.154.2020.04.29.22.21.40
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 Apr 2020 22:09:20 -0700 (PDT)
-Date:   Thu, 30 Apr 2020 10:39:18 +0530
+        Wed, 29 Apr 2020 22:21:41 -0700 (PDT)
+Date:   Thu, 30 Apr 2020 10:51:38 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        robh+dt@kernel.org, rjw@rjwysocki.net, saravanak@google.com,
-        sibis@codeaurora.org, rnayak@codeaurora.org,
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>, vireshk@kernel.org,
+        nm@ti.com, sboyd@kernel.org, robh+dt@kernel.org, rjw@rjwysocki.net,
+        saravanak@google.com, sibis@codeaurora.org, rnayak@codeaurora.org,
         bjorn.andersson@linaro.org, vincent.guittot@linaro.org,
         jcrouse@codeaurora.org, evgreen@chromium.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 1/7] dt-bindings: opp: Introduce opp-peak-kBps and
- opp-avg-kBps bindings
-Message-ID: <20200430050918.b2g2yc7xhvbzeqqq@vireshk-i7>
+Subject: Re: [PATCH v7 2/7] OPP: Add helpers for reading the binding
+ properties
+Message-ID: <20200430052138.zr6smv3wrtkt5e52@vireshk-i7>
 References: <20200424155404.10746-1-georgi.djakov@linaro.org>
- <20200424155404.10746-2-georgi.djakov@linaro.org>
+ <20200424155404.10746-3-georgi.djakov@linaro.org>
+ <20200424173052.GM199755@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200424155404.10746-2-georgi.djakov@linaro.org>
+In-Reply-To: <20200424173052.GM199755@google.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24-04-20, 18:53, Georgi Djakov wrote:
-> From: Saravana Kannan <saravanak@google.com>
+On 24-04-20, 10:30, Matthias Kaehlcke wrote:
+> Hi Georgi,
 > 
-> Interconnects often quantify their performance points in terms of
-> bandwidth. So, add opp-peak-kBps (required) and opp-avg-kBps (optional) to
-> allow specifying Bandwidth OPP tables in DT.
+> On Fri, Apr 24, 2020 at 06:53:59PM +0300, Georgi Djakov wrote:
+> > From: Saravana Kannan <saravanak@google.com>
+> > 
+> > The opp-hz DT property is not mandatory and we may use another property
+> > as a key in the OPP table. Add helper functions to simplify the reading
+> > and comparing the keys.
+> > 
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> > ---
+> > v7:
+> > * Extracted just the helpers from patch v6, as Viresh advised to split it.
+> > 
+> > v6: https://lore.kernel.org/r/20191207002424.201796-3-saravanak@google.com
+> > 
+> >  drivers/opp/core.c | 15 +++++++++++++--
+> >  drivers/opp/of.c   | 42 ++++++++++++++++++++++++++----------------
+> >  drivers/opp/opp.h  |  1 +
+> >  3 files changed, 40 insertions(+), 18 deletions(-)
+> > 
+> > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > index ba43e6a3dc0a..c9c1bbe6ae27 100644
+> > --- a/drivers/opp/core.c
+> > +++ b/drivers/opp/core.c
+> > @@ -1272,11 +1272,21 @@ static bool _opp_supported_by_regulators(struct dev_pm_opp *opp,
+> >  	return true;
+> >  }
+> >  
+> > +int _opp_compare_key(struct dev_pm_opp *opp1, struct dev_pm_opp *opp2)
+> > +{
+> > +	if (opp1->rate != opp2->rate)
+> > +		return opp1->rate < opp2->rate ? -1 : 1;
+> > +	if (opp1->level != opp2->level)
+> > +		return opp1->level < opp2->level ? -1 : 1;
+> > +	return 0;
+> > +}
+> > +
+> >  static int _opp_is_duplicate(struct device *dev, struct dev_pm_opp *new_opp,
+> >  			     struct opp_table *opp_table,
+> >  			     struct list_head **head)
+> >  {
+> >  	struct dev_pm_opp *opp;
+> > +	int opp_cmp;
+> >  
+> >  	/*
+> >  	 * Insert new OPP in order of increasing frequency and discard if
+> > @@ -1287,12 +1297,13 @@ static int _opp_is_duplicate(struct device *dev, struct dev_pm_opp *new_opp,
+> >  	 * loop.
+> >  	 */
+> >  	list_for_each_entry(opp, &opp_table->opp_list, node) {
+> > -		if (new_opp->rate > opp->rate) {
+> > +		opp_cmp = _opp_compare_key(new_opp, opp);
+> > +		if (opp_cmp > 0) {
+> >  			*head = &opp->node;
+> >  			continue;
+> >  		}
+> >  
+> > -		if (new_opp->rate < opp->rate)
+> > +		if (opp_cmp < 0)
+> >  			return 0;
+> >  
+> >  		/* Duplicate OPPs */
+> > diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> > index 9cd8f0adacae..e33169c7e045 100644
+> > --- a/drivers/opp/of.c
+> > +++ b/drivers/opp/of.c
+> > @@ -521,6 +521,28 @@ void dev_pm_opp_of_remove_table(struct device *dev)
+> >  }
+> >  EXPORT_SYMBOL_GPL(dev_pm_opp_of_remove_table);
+> >  
+> > +static int _read_opp_key(struct dev_pm_opp *new_opp, struct device_node *np,
+> > +			 bool *rate_not_available)
+> > +{
+> > +	u64 rate;
+> > +	int ret;
+> > +
+> > +	ret = of_property_read_u64(np, "opp-hz", &rate);
+> > +	if (!ret) {
+> > +		/*
+> > +		 * Rate is defined as an unsigned long in clk API, and so
+> > +		 * casting explicitly to its type. Must be fixed once rate is 64
+> > +		 * bit guaranteed in clk API.
+> > +		 */
+> > +		new_opp->rate = (unsigned long)rate;
+> > +	}
 > 
-> opp-peak-kBps is a required property that replaces opp-hz for Bandwidth OPP
-> tables.
-> 
-> opp-avg-kBps is an optional property that can be used in Bandwidth OPP
-> tables.
-> 
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-> ---
-> v7:
-> * I have dropped Rob's Reviewed-by, because of the minor change below:
-> * In order to store the bandwidth values for multiple paths, the
-> opp-peak-kBps and opp-avg-kBps are now defined as arrays of integers,
-> instead of just integers.
-> * Improved wording (Viresh)
-> 
-> v6: https://lore.kernel.org/r/20191207002424.201796-2-saravanak@google.com
-> 
->  Documentation/devicetree/bindings/opp/opp.txt | 20 ++++++++++++++++---
->  .../devicetree/bindings/property-units.txt    |  4 ++++
->  2 files changed, 21 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/opp.txt b/Documentation/devicetree/bindings/opp/opp.txt
-> index 68592271461f..a8a6a3bfcfcb 100644
-> --- a/Documentation/devicetree/bindings/opp/opp.txt
-> +++ b/Documentation/devicetree/bindings/opp/opp.txt
-> @@ -83,9 +83,17 @@ properties.
->  
->  Required properties:
->  - opp-hz: Frequency in Hz, expressed as a 64-bit big-endian integer. This is a
-> -  required property for all device nodes but devices like power domains. The
-> -  power domain nodes must have another (implementation dependent) property which
-> -  uniquely identifies the OPP nodes.
-> +  required property for all device nodes except for devices like power domains
-> +  or bandwidth opp tables. The devices which don't have this property must have
+> nit: curly braces are not needed
 
-bandwidth opp table ?
+In fact they are as the comment is present within the if block (which
+is the right thing to do). Yes the code will compile fine without
+braces, but coding guideline suggests it around multi-line-statements.
 
-> +  another (implementation dependent) property which uniquely identifies the OPP
-> +  nodes.
-> +
-> +
-> +- opp-peak-kBps: Peak bandwidth in kilobytes per second, expressed as an array
-> +  of 32-bit big-endian integers. Each element of the array represents the
-> +  peak bandwidth value of each interconnect path. The number of elements should
-> +  match the number of interconnect paths. This is a required property for
-> +  bandwidth OPP tables.
->  
->  Optional properties:
->  - opp-microvolt: voltage in micro Volts.
-> @@ -132,6 +140,12 @@ Optional properties:
->  - opp-level: A value representing the performance level of the device,
->    expressed as a 32-bit integer.
->  
-> +- opp-avg-kBps: Average bandwidth in kilobytes per second, expressed as an array
-> +  of 32-bit big-endian integers. Each element of the array represents the
-> +  average bandwidth value of each interconnect path. The number of elements
-> +  should match the number of interconnect paths. This property is only
-> +  meaningful in OPP tables where opp-peak-kBps is present.
-> +
->  - clock-latency-ns: Specifies the maximum possible transition latency (in
->    nanoseconds) for switching to this OPP from any other OPP.
->  
-> diff --git a/Documentation/devicetree/bindings/property-units.txt b/Documentation/devicetree/bindings/property-units.txt
-> index e9b8360b3288..c80a110c1e26 100644
-> --- a/Documentation/devicetree/bindings/property-units.txt
-> +++ b/Documentation/devicetree/bindings/property-units.txt
-> @@ -41,3 +41,7 @@ Temperature
->  Pressure
->  ----------------------------------------
->  -kpascal	: kilopascal
-> +
-> +Throughput
-> +----------------------------------------
-> +-kBps		: kilobytes per second
+> > +	*rate_not_available = !!ret;
+> > +
+> > +	of_property_read_u32(np, "opp-level", &new_opp->level);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> >  /**
+> >   * _opp_add_static_v2() - Allocate static OPPs (As per 'v2' DT bindings)
+> >   * @opp_table:	OPP table
+> > @@ -558,26 +580,14 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
+> >  	if (!new_opp)
+> >  		return ERR_PTR(-ENOMEM);
+> >  
+> > -	ret = of_property_read_u64(np, "opp-hz", &rate);
+> > +	ret = _read_opp_key(new_opp, np, &rate_not_available);
+> >  	if (ret < 0) {
+> > -		/* "opp-hz" is optional for devices like power domains. */
+> > -		if (!opp_table->is_genpd) {
+> > -			dev_err(dev, "%s: opp-hz not found\n", __func__);
+> > -			goto free_opp;
+> > -		}
+> > +		if (!opp_table->is_genpd)
+> > +			dev_err(dev, "%s: opp key field not found\n", __func__);
+
+Looks like the logic got changed here ? We used to goto free_opp only
+if !is_genpd earlier..
+
+> >  
+> > -		rate_not_available = true;
+> > -	} else {
+> > -		/*
+> > -		 * Rate is defined as an unsigned long in clk API, and so
+> > -		 * casting explicitly to its type. Must be fixed once rate is 64
+> > -		 * bit guaranteed in clk API.
+> > -		 */
+> > -		new_opp->rate = (unsigned long)rate;
+> > +		goto free_opp;
+> >  	}
+> >  
+> > -	of_property_read_u32(np, "opp-level", &new_opp->level);
+> > -
+> >  	/* Check if the OPP supports hardware's hierarchy of versions or not */
+> >  	if (!_opp_is_supported(dev, opp_table, np)) {
+> >  		dev_dbg(dev, "OPP not supported by hardware: %llu\n", rate);
+> > diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+> > index d14e27102730..bcadb1e328a4 100644
+> > --- a/drivers/opp/opp.h
+> > +++ b/drivers/opp/opp.h
+> > @@ -211,6 +211,7 @@ struct opp_device *_add_opp_dev(const struct device *dev, struct opp_table *opp_
+> >  void _dev_pm_opp_find_and_remove_table(struct device *dev);
+> >  struct dev_pm_opp *_opp_allocate(struct opp_table *opp_table);
+> >  void _opp_free(struct dev_pm_opp *opp);
+> > +int _opp_compare_key(struct dev_pm_opp *opp1, struct dev_pm_opp *opp2);
+> >  int _opp_add(struct device *dev, struct dev_pm_opp *new_opp, struct opp_table *opp_table, bool rate_not_available);
+> >  int _opp_add_v1(struct opp_table *opp_table, struct device *dev, unsigned long freq, long u_volt, bool dynamic);
+> >  void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cpu);
+> 
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 
 -- 
 viresh
