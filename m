@@ -2,149 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8333B1C0206
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 18:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25E01C0296
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 18:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728148AbgD3QSj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Apr 2020 12:18:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58578 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726420AbgD3QSi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 30 Apr 2020 12:18:38 -0400
-Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A560320873;
-        Thu, 30 Apr 2020 16:18:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588263517;
-        bh=lW4zzFS0G9Wi4Z0P+nqG08m6PRjTTMBcjkMLSKAEx/k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t615eT3Q9pNpfUIrouBfac8mgll8VUS4jr3Ag7enyIc+LVo6TA9j3lMsuJE9cQQfz
-         sf9wlQhSNxFOavyUaeU7+062U1oEI3YBwpstTJ/7fZTx03yIZqvRcaMolvo/ohpyig
-         cmqXaXddzzJQ9zOGjwxL1N0Mwus6QNxjBg+E8ROc=
-Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jUBtT-00Axge-S6; Thu, 30 Apr 2020 18:18:35 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH v4 01/19] docs: thermal: convert cpu-idle-cooling.rst to ReST
-Date:   Thu, 30 Apr 2020 18:18:15 +0200
-Message-Id: <617873f33407a764671be95d4ee15afa6027c924.1588263270.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <cover.1588263270.git.mchehab+huawei@kernel.org>
-References: <cover.1588263270.git.mchehab+huawei@kernel.org>
+        id S1726631AbgD3Qcz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Apr 2020 12:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726469AbgD3Qcy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Apr 2020 12:32:54 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16656C035494
+        for <linux-pm@vger.kernel.org>; Thu, 30 Apr 2020 09:32:54 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id o7so122263oif.2
+        for <linux-pm@vger.kernel.org>; Thu, 30 Apr 2020 09:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7ZsclabnnR3wKrS78Exn79EM/lt2n7ZZyGteRGUsI8A=;
+        b=JUYJmd1MBGqCas674WTA1IWfQlE/kGTREfBIK5mpDA0GKQCWA5TWrInT5xqa+cty1P
+         1uf7jMp4ptZNe61WpozNUpn19cau+2xAsPJezxaJ/YkNvLq0Y4Ke8RMtVAAA6GGjYHiE
+         gScspZIdHjRYqpJ2Uno+FQWJL/XiblVg/Mi22ewLmBd/WxxJ9smUOoHF9lr4DrqqMmAI
+         C9OI28yxF+GzrKoTO+j1owgWEJOGkNwuwuNh8Zj6Tpvn/9KtPJiufeBqwE3ogh5pXqwf
+         6/YLrVQoTxsZzAQIfZM8oI6/JkLwFFLp8PmBtms1w/jVWbOij59zxxdfJnRIZKaW6HD3
+         p3DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7ZsclabnnR3wKrS78Exn79EM/lt2n7ZZyGteRGUsI8A=;
+        b=p6M3BSOZToESmC7tIOBAaWfHLEyyFLIBR6IlbPM5wK8z1S8bcQxexnAKz2QUneME/g
+         grj2mR1wGb10cwWL/dDMhk0y6DvAVTQqKYNmkyIN35BAltP9batw8cPju5FXc2H1zyw0
+         sfqrURw1Ub8O9q03925xEMgoyF9PWRShXOfjUJkW7F89yn3eLKuLJRMPc5+RaUYrtCMe
+         txIWt+mGf3s6ukd4pVqW34P6n//ncdz+sOdxHm31+diIdOpJMaS572EWmxKYNt8Ky5Dc
+         0RtS3lputLeeQ3Fb0qX//WLHAf6P9twcggN8857x2pMED1Bggl7iOVUNj8H7XxiRJ+YI
+         s/oA==
+X-Gm-Message-State: AGi0PuYSR/1uFx/M46SSFRySNSVKTMVTYEd+qlrT3W3P2WOEPuYvlrvY
+        3iDzMbxg/bSEM5gbd3jdNS54011p2wLC7ALb96sSWA==
+X-Google-Smtp-Source: APiQypJprzA/+arNVWPUX0khphDyRoZS8i1qOaFeSW8at+OIuNhknrJDu20eedqo9Mv1KETW0rnGhGJV0oxQ/gnyTBI=
+X-Received: by 2002:aca:1c08:: with SMTP id c8mr36776oic.172.1588264373140;
+ Thu, 30 Apr 2020 09:32:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20200424155404.10746-1-georgi.djakov@linaro.org>
+ <20200424155404.10746-7-georgi.djakov@linaro.org> <CAGETcx9iAJRW9Y9orHNF-fC53nNob_vZKYUNEpwf_AeAdWCOjw@mail.gmail.com>
+ <20200430060901.j7jjw6soo5h5xoul@vireshk-i7> <CAGETcx_zH_KJ7_A7Ofc2M5GfHKX_J__URJB127MSMcTeaqyzjw@mail.gmail.com>
+ <20200430075356.rjtctfuenirvhxgn@vireshk-i7>
+In-Reply-To: <20200430075356.rjtctfuenirvhxgn@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 30 Apr 2020 09:32:17 -0700
+Message-ID: <CAGETcx-W5XjNtgjDz2Ma_miN=cUBb5LFfhzYtKRpf6iAi4bXNw@mail.gmail.com>
+Subject: Re: [PATCH v7 6/7] OPP: Update the bandwidth on OPP frequency changes
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Jordan Crouse <jcrouse@codeaurora.org>,
+        Evan Green <evgreen@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Despite being named with .rst extension, this file doesn't
-match the ReST standard. It actually causes a crash at
-Sphinx:
+On Thu, Apr 30, 2020 at 12:54 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 30-04-20, 00:35, Saravana Kannan wrote:
+> > On Wed, Apr 29, 2020 at 11:09 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > >
+> > > On 24-04-20, 14:18, Saravana Kannan wrote:
+> > > > My only comment is -- can we drop this patch please? I'd like to use
+> > > > devfreq governors for voting on bandwidth and this will effectively
+> > > > override whatever bandwidth decisions are made by the devfreq
+> > > > governor.
+> > >
+> > > And why would that be better ? FWIW, that will have the same problem
+> > > which cpufreq governors had since ages, i.e. they were not proactive
+> > > and were always too late.
+> > >
+> > > The bw should get updated right with frequency, why shouldn't it ?
+> >
+> > I didn't say the bw would be voted based on just CPUfreq. It can also
+> > be based on CPU busy time and other stats. Having said that, this is
+> > not just about CPUfreq. Having the bw be force changed every time a
+> > device has it's OPP is changed is very inflexible. Please don't do it.
+>
+> So, the vote based on the requirements of cpufreq driver should come
+> directly from the cpufreq side itself, but no one stops the others
+> layers to aggregate the requests and then act on them. This is how it
+> is done for other frameworks like clk, regulator, genpd, etc.
 
-	Sphinx parallel build error:
-	docutils.utils.SystemMessage: /devel/v4l/docs/Documentation/driver-api/thermal/cpu-idle-cooling.rst:69: (SEVERE/4) Unexpected section title.
+You are missing the point. This is not about aggregation. This is
+about OPP voting for bandwidth on a path when the vote can/should be
+0.
 
-Add needed markups for it to be properly parsed.
+I'll give another example. Say one of the interconnect paths needs to
+be voted only when a particular use case is running. Say, the GPU
+needs to vote for bandwidth to L3 only when it's running in cache
+coherent mode. But it always needs to vote for bandwidth to DDR. With
+the way it's written now, OPP is going to force vote a non-zero
+bandwidth to L3 even when it can be zero. Wasting power for no good
+reason.
 
-While here, add it to the thermal index.rst.
+Just let the drivers/device get the bandwidth values from OPP without
+forcing them to vote for the bandwidth when they don't need to. Just
+because they decide to use OPP to set their clock doesn't mean they
+should lose to ability to control their bandwidth in a more
+intelligent fashion.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- .../driver-api/thermal/cpu-idle-cooling.rst    | 18 ++++++++++++------
- Documentation/driver-api/thermal/index.rst     |  1 +
- 2 files changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/driver-api/thermal/cpu-idle-cooling.rst b/Documentation/driver-api/thermal/cpu-idle-cooling.rst
-index a1c3edecae00..b5a4544af004 100644
---- a/Documentation/driver-api/thermal/cpu-idle-cooling.rst
-+++ b/Documentation/driver-api/thermal/cpu-idle-cooling.rst
-@@ -1,3 +1,9 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+================
-+CPU Idle Cooling
-+================
-+
- 
- Situation:
- ----------
-@@ -45,7 +51,7 @@ idle state target residency, we lead to dropping the static and the
- dynamic leakage for this period (modulo the energy needed to enter
- this state). So the sustainable power with idle cycles has a linear
- relation with the OPP’s sustainable power and can be computed with a
--coefficient similar to:
-+coefficient similar to::
- 
- 	    Power(IdleCycle) = Coef x Power(OPP)
- 
-@@ -136,7 +142,7 @@ Power considerations
- --------------------
- 
- When we reach the thermal trip point, we have to sustain a specified
--power for a specific temperature but at this time we consume:
-+power for a specific temperature but at this time we consume::
- 
-  Power = Capacitance x Voltage^2 x Frequency x Utilisation
- 
-@@ -145,7 +151,7 @@ wrong in the system setup). The ‘Capacitance’ and ‘Utilisation’ are a
- fixed value, ‘Voltage’ and the ‘Frequency’ are fixed artificially
- because we don’t want to change the OPP. We can group the
- ‘Capacitance’ and the ‘Utilisation’ into a single term which is the
--‘Dynamic Power Coefficient (Cdyn)’ Simplifying the above, we have:
-+‘Dynamic Power Coefficient (Cdyn)’ Simplifying the above, we have::
- 
-  Pdyn = Cdyn x Voltage^2 x Frequency
- 
-@@ -154,7 +160,7 @@ in order to target the sustainable power defined in the device
- tree. So with the idle injection mechanism, we want an average power
- (Ptarget) resulting in an amount of time running at full power on a
- specific OPP and idle another amount of time. That could be put in a
--equation:
-+equation::
- 
-  P(opp)target = ((Trunning x (P(opp)running) + (Tidle x P(opp)idle)) /
- 			(Trunning + Tidle)
-@@ -165,7 +171,7 @@ equation:
- 
- At this point if we know the running period for the CPU, that gives us
- the idle injection we need. Alternatively if we have the idle
--injection duration, we can compute the running duration with:
-+injection duration, we can compute the running duration with::
- 
-  Trunning = Tidle / ((P(opp)running / P(opp)target) - 1)
- 
-@@ -188,7 +194,7 @@ However, in this demonstration we ignore three aspects:
-    target residency, otherwise we end up consuming more energy and
-    potentially invert the mitigation effect
- 
--So the final equation is:
-+So the final equation is::
- 
-  Trunning = (Tidle - Twakeup ) x
- 		(((P(opp)dyn + P(opp)static ) - P(opp)target) / P(opp)target )
-diff --git a/Documentation/driver-api/thermal/index.rst b/Documentation/driver-api/thermal/index.rst
-index 5ba61d19c6ae..4cb0b9b6bfb8 100644
---- a/Documentation/driver-api/thermal/index.rst
-+++ b/Documentation/driver-api/thermal/index.rst
-@@ -8,6 +8,7 @@ Thermal
-    :maxdepth: 1
- 
-    cpu-cooling-api
-+   cpu-idle-cooling
-    sysfs-api
-    power_allocator
- 
--- 
-2.25.4
-
+-Saravana
