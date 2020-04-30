@@ -2,67 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B28CE1BF35A
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 10:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F14E51BF35F
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 10:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbgD3Iqt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Apr 2020 04:46:49 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:3396 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726766AbgD3Iqs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 30 Apr 2020 04:46:48 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 5ABEF243B61531968836;
-        Thu, 30 Apr 2020 16:46:20 +0800 (CST)
-Received: from linux-ibm.site (10.175.102.37) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 30 Apr 2020 16:46:12 +0800
-From:   Hanjun Guo <guohanjun@huawei.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Doug Smythies <dsmythies@telus.net>
-CC:     <linux-pm@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Hanjun Guo <guohanjun@huawei.com>
-Subject: [RFC v2 PATCH 6/6] Documentation: ABI: make current_governer_ro as a candidate for removal
-Date:   Thu, 30 Apr 2020 16:39:47 +0800
-Message-ID: <1588235987-12300-7-git-send-email-guohanjun@huawei.com>
-X-Mailer: git-send-email 1.7.12.4
-In-Reply-To: <1588235987-12300-1-git-send-email-guohanjun@huawei.com>
-References: <1588235987-12300-1-git-send-email-guohanjun@huawei.com>
+        id S1726616AbgD3Ir1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Apr 2020 04:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726531AbgD3Ir1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Apr 2020 04:47:27 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CC7C035494;
+        Thu, 30 Apr 2020 01:47:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 5D09E2A0A59
+Subject: Re: [PATCH 2/6] thermal: core: delete thermal_notify_framework()
+To:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Cc:     linux-wireless@vger.kernel.org, daniel.lezcano@linaro.org,
+        b.zolnierkie@samsung.com, luca@coelho.fi
+References: <20200430063229.6182-1-rui.zhang@intel.com>
+ <20200430063229.6182-3-rui.zhang@intel.com>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Message-ID: <f6d7dcae-ccf1-eee1-2ac1-eaa8472e2f87@collabora.com>
+Date:   Thu, 30 Apr 2020 10:47:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.102.37]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20200430063229.6182-3-rui.zhang@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since both current_governor and current_governor_ro co-exist under
-/sys/devices/te system/cpu/cpuidle/ file, and it's duplicate,
-make current_governer_ro as a candidate for removal.
+Hi Rui,
 
-Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
----
- Documentation/ABI/obsolete/sysfs-cpuidle | 9 +++++++++
- 1 file changed, 9 insertions(+)
- create mode 100644 Documentation/ABI/obsolete/sysfs-cpuidle
+Thanks for the series,
 
-diff --git a/Documentation/ABI/obsolete/sysfs-cpuidle b/Documentation/ABI/obsolete/sysfs-cpuidle
-new file mode 100644
-index 00000000..f984b9c
---- /dev/null
-+++ b/Documentation/ABI/obsolete/sysfs-cpuidle
-@@ -0,0 +1,9 @@
-+What:		/sys/devices/system/cpu/cpuidle/current_governor_ro
-+Date:		April, 2020
-+Contact:	linux-pm@vger.kernel.org
-+Description:
-+	current_governor_ro shows current using cpuidle governor, but read only.
-+	with the update that cpuidle governor can be changed at runtime in default,
-+	both current_governor and current_governor_ro co-exist under
-+	/sys/devices/te system/cpu/cpuidle/ file, it's duplicate so make
-+	current_governor_ro obselete.
--- 
-1.7.12.4
+W dniu 30.04.2020 o 08:32, Zhang Rui pisze:
+> Delete thermal_notify_framework() as there is no user of it.
+> 
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>   drivers/thermal/thermal_core.c | 18 ------------------
+>   include/linux/thermal.h        |  4 ----
+>   2 files changed, 22 deletions(-)
+> 
 
+git grep thermal_notify_framework
+Documentation/driver-api/thermal/sysfs-api.rst:4.3. thermal_notify_framework
+
+Should the documentation be still documenting a non-existent function?
+
+BTW, get_tz_trend() is only used in drivers/thermal/step_wise.c,
+but is still exported with EXPORT_SYMBOL(). Probably does not need to
+be exported anymore.
+
+Andrzej
