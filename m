@@ -2,94 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9B81BF19D
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 09:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CFB1BF1DB
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Apr 2020 09:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbgD3Hfu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Apr 2020 03:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726510AbgD3Hfu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Apr 2020 03:35:50 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E5DC08E859
-        for <linux-pm@vger.kernel.org>; Thu, 30 Apr 2020 00:35:49 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id m10so4417121oie.6
-        for <linux-pm@vger.kernel.org>; Thu, 30 Apr 2020 00:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qs31g31s4Qup1BiKCc2DuRtqM2XedKFVg5N5v+BZjjw=;
-        b=SicuVYS5fp0fa/wzv+q09rX6oQxgNmClx4f49iFcA5bDwQqCogfhamiVVpkdy0QlsF
-         ae2KdpL6Mq+vPjWq/ZPYZD0ac60feHz/OOkbVGO55xwzQgCIGJ5rzD7n4sYr5kl4TlEp
-         wH2/j7ymvRCJMxLbnipbZWJ8zIBG/Tv/jUppjIaLk03n1xDbd1/77ztyxWdT7eKEPCjx
-         dQp1Sgf9DZdRh8mwUC9Bgk3OPPMmpMqiuy6smhEU/FwS1srovO5NAs/NFGak/WaGLQ4a
-         envkNnbxsbFhwALdCNKh73IEILCjujXDrRdFoWIqfr0vWIhEddXSJ1Wzw2YR0cO3KLMw
-         B0nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qs31g31s4Qup1BiKCc2DuRtqM2XedKFVg5N5v+BZjjw=;
-        b=Z3vLDzBHyBH0K7SH75azoFGq0QyS45yzk/ci5iAZ7IopFsjkzvrEXkWiy5iaymwAWI
-         U9sXgWE58/0DdsyEsfGj78K8Wjf9/K17+MxkjbkZBRcUyFB+8pSdnmV56OIqWqY22BH6
-         vfRW26B0reOw2rWPYXh/MDDmPROSgZ8euCHjllNn3IUG5Ov4Srpq8ZkKEivUCp53ZxuQ
-         el7PE5IjSyLVfy7zBh+TOmZBM89wjQ5d03yX+OgPzWmh7kmJaKZtoesuVYzhGOFmG2Qb
-         mzh/zSYVWpn9nIuqzVdpc4hmWI+mS2U9tPVr52sG1P5WBH3yc2GXMMxeO/e2ldxIXD73
-         TviQ==
-X-Gm-Message-State: AGi0PuYOJWxvEemDe9JzGIbrZEM41b5LBzj7i/tiJl8LAVlPGQ6rjUAX
-        XeJS9BxnZFl+kbqqfGw8WFUtAseGSf0tP9PcDETpnA==
-X-Google-Smtp-Source: APiQypJSVbEeLdKvSzeK+HnDLd495hRaTsKPEMdbd300IaB2PC5hErDtAPw/RD9fpBoG5vAHd3mduLUJ3j8aWN9Hbk4=
-X-Received: by 2002:aca:1c08:: with SMTP id c8mr827526oic.172.1588232148850;
- Thu, 30 Apr 2020 00:35:48 -0700 (PDT)
+        id S1726453AbgD3HxU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Apr 2020 03:53:20 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:56950 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726358AbgD3HxT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Apr 2020 03:53:19 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03U7qeNP027781;
+        Thu, 30 Apr 2020 09:52:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=nNpjPfXaDpTj1MuVss1sEC1CkwsvuNELkclHvxqRjuk=;
+ b=mGYUaPC5tsszTgiYAXjw65KfK8FzSp/hg/Kb/mUbkmqRGx6QAnvnXh9gsypDbQ2ODf1M
+ bZRxTFR46p8V0vmGwe3FP/W18dQhRxiAKXrdKTpvgiqtKJjgzYKPx620HX0lAiZnOQAh
+ qPi+lZslWd68ItaHxvBCmrsobpZWSfzmCuqq2m//xvaRCfgJmxXcvym7NRpzRhVIUzAg
+ YrtUNz57ffn6FIi5CD3vzCU+08AiqoKzJzT4yzHzeBGszUIxb0fLaMWu7YKB9vUFVWKK
+ b7J7E7rC174mGxqie2A/wE8CPGMjh6uN9nFSYKlxG1dyDlD8X3enjL2SPLGXH0eCbJrS BQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 30mhjx2sv8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Apr 2020 09:52:59 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5BDA5100034;
+        Thu, 30 Apr 2020 09:52:58 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3BE402AAF69;
+        Thu, 30 Apr 2020 09:52:58 +0200 (CEST)
+Received: from SFHDAG3NODE3.st.com (10.75.127.9) by SFHDAG5NODE3.st.com
+ (10.75.127.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 30 Apr
+ 2020 09:52:57 +0200
+Received: from SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476]) by
+ SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476%20]) with mapi id
+ 15.00.1347.000; Thu, 30 Apr 2020 09:52:57 +0200
+From:   Benjamin GAIGNARD <benjamin.gaignard@st.com>
+To:     Valentin Schneider <valentin.schneider@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC:     "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        Hugues FRUCHET <hugues.fruchet@st.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Patrick Bellasi <patrick.bellasi@arm.com>
+Subject: Re: [RFC 0/3] Introduce cpufreq minimum load QoS
+Thread-Topic: [RFC 0/3] Introduce cpufreq minimum load QoS
+Thread-Index: AQHWGi06wBgeAQBseECYOK/U7Qvw76iQJdAAgAACCYCAAAQ3AIABBseA
+Date:   Thu, 30 Apr 2020 07:52:57 +0000
+Message-ID: <6b5cde14-58b3-045d-9413-223e66b87bf0@st.com>
+References: <20200424114058.21199-1-benjamin.gaignard@st.com>
+ <7657495.QyJl4BcWH5@kreacher> <30cdecf9-703a-eb2b-7c2b-f1e21c805add@st.com>
+ <70e743cf-b88e-346a-5114-939b8724c83d@arm.com>
+In-Reply-To: <70e743cf-b88e-346a-5114-939b8724c83d@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.44]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <AE1AA8893A6E7D438296C06CD62B8BC8@st.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20200424155404.10746-1-georgi.djakov@linaro.org>
- <20200424155404.10746-7-georgi.djakov@linaro.org> <CAGETcx9iAJRW9Y9orHNF-fC53nNob_vZKYUNEpwf_AeAdWCOjw@mail.gmail.com>
- <20200430060901.j7jjw6soo5h5xoul@vireshk-i7>
-In-Reply-To: <20200430060901.j7jjw6soo5h5xoul@vireshk-i7>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 30 Apr 2020 00:35:12 -0700
-Message-ID: <CAGETcx_zH_KJ7_A7Ofc2M5GfHKX_J__URJB127MSMcTeaqyzjw@mail.gmail.com>
-Subject: Re: [PATCH v7 6/7] OPP: Update the bandwidth on OPP frequency changes
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Jordan Crouse <jcrouse@codeaurora.org>,
-        Evan Green <evgreen@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-30_02:2020-04-30,2020-04-30 signatures=0
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 29, 2020 at 11:09 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 24-04-20, 14:18, Saravana Kannan wrote:
-> > My only comment is -- can we drop this patch please? I'd like to use
-> > devfreq governors for voting on bandwidth and this will effectively
-> > override whatever bandwidth decisions are made by the devfreq
-> > governor.
->
-> And why would that be better ? FWIW, that will have the same problem
-> which cpufreq governors had since ages, i.e. they were not proactive
-> and were always too late.
->
-> The bw should get updated right with frequency, why shouldn't it ?
-
-I didn't say the bw would be voted based on just CPUfreq. It can also
-be based on CPU busy time and other stats. Having said that, this is
-not just about CPUfreq. Having the bw be force changed every time a
-device has it's OPP is changed is very inflexible. Please don't do it.
-
--Saravana
+DQoNCk9uIDQvMjkvMjAgNjoxMiBQTSwgVmFsZW50aW4gU2NobmVpZGVyIHdyb3RlOg0KPiBPbiAy
+OS8wNC8yMDIwIDE2OjU3LCBCZW5qYW1pbiBHQUlHTkFSRCB3cm90ZToNCj4+DQo+PiBPbiA0LzI5
+LzIwIDU6NTAgUE0sIFJhZmFlbCBKLiBXeXNvY2tpIHdyb3RlOg0KPj4+IE9uIEZyaWRheSwgQXBy
+aWwgMjQsIDIwMjAgMTo0MDo1NSBQTSBDRVNUIEJlbmphbWluIEdhaWduYXJkIHdyb3RlOg0KPj4+
+PiBXaGVuIHN0YXJ0IHN0cmVhbWluZyBmcm9tIHRoZSBzZW5zb3IgdGhlIENQVSBsb2FkIGNvdWxk
+IHJlbWFpbiB2ZXJ5IGxvdw0KPj4+PiBiZWNhdXNlIGFsbW9zdCBhbGwgdGhlIGNhcHR1cmUgcGlw
+ZWxpbmUgaXMgZG9uZSBpbiBoYXJkd2FyZSAoaS5lLiB3aXRob3V0DQo+Pj4+IHVzaW5nIHRoZSBD
+UFUpIGFuZCBsZXQgYmVsaWV2ZSB0byBjcHVmcmVxIGdvdmVybm9yIHRoYXQgaXQgY291bGQgdXNl
+IGxvd2VyDQo+Pj4+IGZyZXF1ZW5jaWVzLiBJZiB0aGUgZ292ZXJub3IgZGVjaWRlcyB0byB1c2Ug
+YSB0b28gbG93IGZyZXF1ZW5jeSB0aGF0DQo+Pj4+IGJlY29tZXMgYSBwcm9ibGVtIHdoZW4gd2Ug
+bmVlZCB0byBhY2tub3dsZWRnZSB0aGUgaW50ZXJydXB0IGR1cmluZyB0aGUNCj4+Pj4gYmxhbmtp
+bmcgdGltZS4NCj4+Pj4gVGhlIGRlbGF5IHRvIGFjayB0aGUgaW50ZXJydXB0IGFuZCBwZXJmb3Jt
+IGFsbCB0aGUgb3RoZXIgYWN0aW9ucyBiZWZvcmUNCj4+Pj4gdGhlIG5leHQgZnJhbWUgaXMgdmVy
+eSBzaG9ydCBhbmQgZG9lc24ndCBhbGxvdyB0byB0aGUgY3B1ZnJlcSBnb3Zlcm5vciB0bw0KPj4+
+PiBwcm92aWRlIHRoZSByZXF1aXJlZCBidXJzdCBvZiBwb3dlci4gVGhhdCBsZWQgdG8gZHJvcCB0
+aGUgaGFsZiBvZiB0aGUgZnJhbWVzLg0KPj4+Pg0KPj4+PiBUbyBhdm9pZCB0aGlzIHByb2JsZW0s
+IERDTUkgZHJpdmVyIGluZm9ybXMgdGhlIGNwdWZyZXEgZ292ZXJub3JzIGJ5IGFkZGluZw0KPj4+
+PiBhIGNwdWZyZXEgbWluaW11bSBsb2FkIFFvUyByZXNxdWVzdC4NCj4+PiBUaGlzIHNlZW1zIHRv
+IGJlIGFkZHJlc3NpbmcgYSB1c2UgY2FzZSB0aGF0IGNhbiBiZSBhZGRyZXNzZWQgd2l0aCB0aGUg
+aGVscCBvZg0KPj4+IHV0aWxpemF0aW9uIGNsYW1wcyB3aXRoIGxlc3MgcG93ZXIgb3ZlcmhlYWQu
+DQo+PiBEbyBtZWFuIGNsYW1waW5nIHRoZSBwb2xpY3kgZnJlcXVlbmNpZXMgPyBJIG1heSBoYXZl
+IG1pc3MgdGhlIEFQSSB0byBkbw0KPj4gdGhhdC4uLg0KPiBJSVVDIFJhZmFlbCBpcyByZWZlcnJp
+bmcgdG8gdWNsYW1wLCBpLmUuIHNjaGVkdWxlciB1dGlsaXphdGlvbiBjbGFtcGluZywgc2VlOg0K
+Pg0KPiAgICBodHRwczovL3d3dy5rZXJuZWwub3JnL2RvYy9odG1sL2xhdGVzdC9hZG1pbi1ndWlk
+ZS9jZ3JvdXAtdjIuaHRtbCNjcHUNCj4NCj4gVGhlIGFib3ZlIGRlc2NyaWJlcyB0aGUgY2dyb3Vw
+IGludGVyZmFjZSwgbm90ZSB0aGF0IHlvdSBjYW4gYWxzbyBzZXQgY2xhbXBzDQo+IHBlciB0YXNr
+ICh2aWEgc2NoZWRfc2V0YXR0cigpKS4NCj4NCj4gT25lIHRoaW5nIHRoYXQgY29tZXMgdG8gbWlu
+ZCBob3dldmVyIGlzIHRoYXQgc2NoZWR1dGlsIG9ubHkgInNlZXMiIHRoZSBjbGFtcHMNCj4gb2Yg
+cnVubmFibGUgdGFza3MsIGFuZCBmcm9tIHJlYWRpbmcgeW91ciBjaGFuZ2Vsb2cgeW91IG1heSBu
+b3QgaGF2ZSBtb21lbnRzDQo+IHdpdGhvdXQgYW55IChpLmUuIGdlYXJzIGFyZSBncmluZGluZyBp
+biBIVykuIFlvdSdkIGhhdmUgdG8gdHJ5IGJvb3N0aW5nDQo+IChzZXR0aW5nIGEgaGlnaCB1Y2xh
+bXAubWluKSB3aGF0ZXZlciB0YXNrcyB5b3UgaGF2ZSBvbiB0aGUgc29mdHdhcmUgc2lkZSBhbmQN
+Cj4gc2VlIGhvdyBpdCBhbGwgYmVoYXZlcy4NClJlbHlpbmcgb24gdXNlcmxhbmQgc2lkZSBtZWFu
+cyB0aGF0IHZhcmlvdXMgYXBwbGljYXRpb25zIG5lZWQgdG8gYmUgYXdhcmUNCm9mIHRoaXMgc3Bl
+Y2lmaWMgaGFyZHdhcmUgY2FzZSBhbmQgZml4IGl0LiBJIHdhcyBob3BpbmcgdG8gZmluZCBhIA0K
+c29sdXRpb24gaW4gc2lkZSB0aGUga2VybmVsDQp0byBub3QgaW1wYWN0IHRoZSBzb2Z0d2FyZSBz
+aWRlLg0KDQo+DQo+Pj4gVGhhbmtzIQ0KPj4+DQo+Pj4NCj4+Pg0K
