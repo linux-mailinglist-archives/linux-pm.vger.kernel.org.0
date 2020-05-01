@@ -2,88 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0305B1C1382
-	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 15:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34761C1598
+	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 16:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729890AbgEANaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 May 2020 09:30:14 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:9192 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729897AbgEANaN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 1 May 2020 09:30:13 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 49DCmL4hYwz7N;
-        Fri,  1 May 2020 15:30:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1588339811; bh=df1zMSo857OmD6bMwuGX0U3QsXa2EYWws/vLhmRKD5I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HVR74c+TgNmjXzHbHgAf8zUizG6qUVh2yQtlEpfUuorGlirN04XEI/Xkt+C3HFnUU
-         08uYs/Ld7bZdjV5O84mbKhVCZp4zzKNBCo0qhqVplbXhl5IetrUc5uY8oasWazxWTE
-         usDHiLz3W49Xmu0+oHXX2eNCy6xAJih94CiSy5sUg7jZQuMPrqRGW6MgEvM1UeWLts
-         zue5D0xdSWakcXYlGEgkaDuT4CDWZ/UEC+QDDAjY1lxeVtLGkuELiOLYGwUS0PWBzR
-         WKXVx+1IAVix88Mck3SlhyMeSYlmxnZ/NaFHIcMczrZ4Lt/jjOpuS6MEWwfuN58m9c
-         YBFkWWhuSrT5Q==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Fri, 1 May 2020 15:30:08 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 02/11] power: charger-manager: don't write through
- desc->properties
-Message-ID: <20200501133008.GA8927@qmqm.qmqm.pl>
-References: <cover.1585944770.git.mirq-linux@rere.qmqm.pl>
- <a529e64edb81a4795fe0b6480f1e4051bed1b099.1585944770.git.mirq-linux@rere.qmqm.pl>
- <20200501123849.ws2a5ybeeej6phyr@earth.universe>
+        id S1730052AbgEANaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 May 2020 09:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730043AbgEANay (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 May 2020 09:30:54 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D8AC061A0C;
+        Fri,  1 May 2020 06:30:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=g1HJbRTAH6u4WBCmhMZ9LnGwhoaAiquAYI+U4ca89TU=; b=oyDdMDAg89BCnftkud0KnfX+Z9
+        9Ai6tavDSvb42MbYg/Sk7oB9XLAxIU3UNFnxjSFjM+nsOAtqCaBYFZad5DmH9pIqED0r/tyEkxZTZ
+        pHJ01TYue0gOaNpQtZ1WJ8veKIu3sRO8L+tQ7ga+YVIhJ5OJi7QVSxEbkhPZURdlwe623hdUIszkm
+        iCVIlbZI+HC/FoiqQbMPnp1dt/cE4fPPdC42kSGUSQnKJLRwxCemoXV0OsCDxRxT3SHbiTCkrMDHb
+        TOgf7cyxpAb1YVWkjHqoQqOKIHmJNluaoMl3tUeN472F67EGVE7FVU+caPQ661NhpIS0/+v8pAr5S
+        5yvBLsvw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jUVkc-0007vG-5C; Fri, 01 May 2020 13:30:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EDCEE3075F9;
+        Fri,  1 May 2020 15:30:42 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DB3F32391C520; Fri,  1 May 2020 15:30:42 +0200 (CEST)
+Date:   Fri, 1 May 2020 15:30:42 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Giovanni Gherdovich <ggherdovich@suse.cz>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@suse.de>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH 1/2] x86, sched: Prevent divisions by zero in frequency
+ invariant accounting
+Message-ID: <20200501133042.GE3762@hirez.programming.kicks-ass.net>
+References: <20200428132450.24901-1-ggherdovich@suse.cz>
+ <20200428132450.24901-2-ggherdovich@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200501123849.ws2a5ybeeej6phyr@earth.universe>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200428132450.24901-2-ggherdovich@suse.cz>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 01, 2020 at 02:38:49PM +0200, Sebastian Reichel wrote:
-> Hi,
+On Tue, Apr 28, 2020 at 03:24:49PM +0200, Giovanni Gherdovich wrote:
+> The product mcnt * arch_max_freq_ratio could be zero if it overflows u64.
 > 
-> On Fri, Apr 03, 2020 at 10:20:31PM +0200, Micha³ Miros³aw wrote:
-> > psy_desc->properties will become pointer to const.  Avoid writing
-> > through the pointer to enable constification of the tables elsewhere.
-> > 
-> > Signed-off-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
-> For patches 1-3 I used my version, that I wrote in parallel while
-> reviewing a different patch series. It is slightly different, but
-> achieves the same goal.
+> For context, a large value for arch_max_freq_ratio would be 5000,
+> corresponding to a turbo_freq/base_freq ratio of 5 (normally it's more like
+> 1500-2000). A large increment frequency for the MPERF counter would be 5GHz
+> (the base clock of all CPUs on the market today is less than that). With
+> these figures, a CPU would need to go without a scheduler tick for around 8
+> days for the u64 overflow to happen. It is unlikely, but the check is
+> warranted.
+> 
+> In that case it's also appropriate to disable frequency invariant
+> accounting: the feature relies on measures of the clock frequency done at
+> every scheduler tick, which need to be "fresh" to be at all meaningful.
+> 
+> Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+> Fixes: 1567c3e3467c ("x86, sched: Add support for frequency invariance")
 
-There is a bug in the tree now regarding use of num_properties
-in charger-manager.  Following patch should fix it.
+>  	acnt <<= 2*SCHED_CAPACITY_SHIFT;
+>  	mcnt *= arch_max_freq_ratio;
+> +	if (!mcnt) {
 
-Best Regards,
-Micha³ Miros³aw
+The problem is; this doesn't do what you claim it does.
 
-diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
-index a71e2ee81423..2ef53dc1f2fb 100644
---- a/drivers/power/supply/charger-manager.c
-+++ b/drivers/power/supply/charger-manager.c
-@@ -1740,14 +1740,14 @@ static int charger_manager_probe(struct platform_device *pdev)
+> +		pr_warn("Scheduler tick missing for long time, disabling scale-invariant accounting.\n");
+> +		/* static_branch_disable() acquires a lock and may sleep */
+> +		schedule_work(&disable_freq_invariance_work);
+> +		return;
+> +	}
+>  
+>  	freq_scale = div64_u64(acnt, mcnt);
+
+I've changed the patch like so.. OK?
+
+(ok, perhaps I went a little overboard with the paranoia ;-)
+
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -55,6 +55,7 @@
+ #include <linux/gfp.h>
+ #include <linux/cpuidle.h>
+ #include <linux/numa.h>
++#include <linux/overflow.h>
+ 
+ #include <asm/acpi.h>
+ #include <asm/desc.h>
+@@ -2057,11 +2058,19 @@ static void init_freq_invariance(bool se
  	}
- 	if (!power_supply_get_property(fuel_gauge,
- 					  POWER_SUPPLY_PROP_CHARGE_NOW, &val)) {
--		properties[cm->charger_psy_desc.num_properties] =
-+		properties[num_properties] =
- 				POWER_SUPPLY_PROP_CHARGE_NOW;
- 		num_properties++;
- 	}
- 	if (!power_supply_get_property(fuel_gauge,
- 					  POWER_SUPPLY_PROP_CURRENT_NOW,
- 					  &val)) {
--		properties[cm->charger_psy_desc.num_properties] =
-+		properties[num_properties] =
- 				POWER_SUPPLY_PROP_CURRENT_NOW;
- 		num_properties++;
- 	}
+ }
+ 
++static void disable_freq_invariance_workfn(struct work_struct *work)
++{
++	static_branch_disable(&arch_scale_freq_key);
++}
++
++static DECLARE_WORK(disable_freq_invariance_work,
++		    disable_freq_invariance_workfn);
++
+ DEFINE_PER_CPU(unsigned long, arch_freq_scale) = SCHED_CAPACITY_SCALE;
+ 
+ void arch_scale_freq_tick(void)
+ {
+-	u64 freq_scale;
++	u64 freq_scale = SCHED_CAPACITY_SCALE;
+ 	u64 aperf, mperf;
+ 	u64 acnt, mcnt;
+ 
+@@ -2073,19 +2082,27 @@ void arch_scale_freq_tick(void)
+ 
+ 	acnt = aperf - this_cpu_read(arch_prev_aperf);
+ 	mcnt = mperf - this_cpu_read(arch_prev_mperf);
+-	if (!mcnt)
+-		return;
+ 
+ 	this_cpu_write(arch_prev_aperf, aperf);
+ 	this_cpu_write(arch_prev_mperf, mperf);
+ 
+-	acnt <<= 2*SCHED_CAPACITY_SHIFT;
+-	mcnt *= arch_max_freq_ratio;
++	if (check_shl_overflow(acnt, 2*SCHED_CAPACITY_SHIFT, &acnt))
++		goto error;
++
++	if (check_mul_overflow(mcnt, arch_max_freq_ratio, &mcnt) || !mcnt)
++		goto error;
+ 
+ 	freq_scale = div64_u64(acnt, mcnt);
++	if (!freq_scale)
++		goto error;
+ 
+ 	if (freq_scale > SCHED_CAPACITY_SCALE)
+ 		freq_scale = SCHED_CAPACITY_SCALE;
+ 
+ 	this_cpu_write(arch_freq_scale, freq_scale);
++	return;
++
++error:
++	pr_warn("Scheduler frequency invariance went wobbly, disabling!\n");
++	schedule_work(&disable_freq_invariance_work);
+ }
