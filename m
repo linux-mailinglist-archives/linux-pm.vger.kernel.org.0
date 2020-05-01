@@ -2,66 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3621C17CA
-	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 16:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66381C18D0
+	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 16:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728896AbgEAOas (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 May 2020 10:30:48 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:20580 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728724AbgEAOas (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 1 May 2020 10:30:48 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 49DF6G1brdz7N;
-        Fri,  1 May 2020 16:30:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1588343446; bh=WgVlgCr6MbzvVSNExbvY4JCH5rFnjkfqWzvLsrfDpq8=;
-        h=Date:From:Subject:In-Reply-To:To:Cc:From;
-        b=i7UdLiawyrvn4fBym2ZE5X2aK8Wgd/yxbIWzeG8qQ3RJQv5vYJuu7M1Z3oE9CTxT5
-         dBzpCdUBGHP9ybnKCy420e2hrizMPkpft6CgGp7uDSoBumC3GYERaWEJnxlNvvtjZ4
-         h3+sKG4aykp3raA+aDueJrruiYA54nNQmW35IWAwmdknMw8+aW5z4az/nmdFEXSF4s
-         Wc26seBBZoK3BuZ0amPh3yHrRCVJpyxnRj/tHAUmEx3eW6kgsnxAt1MIYKX7q+tfnf
-         Fq9abWNhnOluaF1vZzDOk3JNVXalB29IPTgSD+pDs+M4ZP6+ASXk9lpt/r5d4ZmdsD
-         /oKpyE2cG8x4Q==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Fri, 01 May 2020 16:30:43 +0200
-Message-Id: <c262c4b0921d916712de6a15133ff016fb721c4f.1588343350.git.mirq-linux@rere.qmqm.pl>
-From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH] power: charger-manager: clarify num_properties starting value
-In-Reply-To: <20200501135109.45gwxpczcqdt3fbb@earth.universe>
+        id S1728839AbgEAOya (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 May 2020 10:54:30 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:32818 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728737AbgEAOy3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 May 2020 10:54:29 -0400
+Received: by mail-ot1-f67.google.com with SMTP id j26so2774264ots.0
+        for <linux-pm@vger.kernel.org>; Fri, 01 May 2020 07:54:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Pmjrv5qPvKOPeFLJljuTHlccBG/WcgupC+vQ1RcE9Y4=;
+        b=p1FLRGHD5IE01JfdnlkkSWs9lV880/WC32CRxxuks/P8slWfYJ7NFgaGBWVrH/3kFT
+         tS4/IVp8C0apPfbbh07Z6lQd9xyvtHZJaGT+IFzTGa6rFkYXUKN0vJseUosIp4CHr4vL
+         d83rplypJXZzu0KMOcexyKeGfp8QnQL138vW97tKByeBLvR+vtWr3X/6ManhUfZDGBbh
+         VHjDLbZkPkhIoi81AnpKpMFFjxLW7XKucpMM90fmxmKeGrBYUlieR3SmnM+MQvzVxzLx
+         yJTqwO+DfZxBaR3fSKJ+4si2XCfNcbI/WOcXKyy9wMz+jqgs6360MAJ0UQGaTO9zsESm
+         9Fag==
+X-Gm-Message-State: AGi0PuaWzEN5cJY73cl/WHklBtDEBZuT/z5cWbagIHDuWcJM4ADeYXKR
+        Iwif1o9m+daonI8vmx/xHbFFbFIaosSvFFbZgnhijA==
+X-Google-Smtp-Source: APiQypIofkrNeM8CqcEO9KjlBxTesezBbJsnEXoizmYFN9TI14vTWRqsSAkMmiDuaNBPU2KZ5BV18/wTKMfaCCKHetw=
+X-Received: by 2002:a9d:6ac8:: with SMTP id m8mr3916497otq.262.1588344868215;
+ Fri, 01 May 2020 07:54:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200413190843.044112674@gmail.com> <20200413193718.956985775@gmail.com>
+ <4068729.AMvo8hvaBI@kreacher> <20200427094840.GA29259@dumbo>
+ <CAJZ5v0hbE3Gswp_Wp4QQTb8wuaAOGQrWNEa7Utg45wR50QN0QQ@mail.gmail.com> <20200501071052.GA20585@dumbo>
+In-Reply-To: <20200501071052.GA20585@dumbo>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 1 May 2020 16:54:13 +0200
+Message-ID: <CAJZ5v0itdtHTsMhbrgThR76YRDv-BBH2VSiU413d+K9K0VFyAA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] uswsusp: build only when configured
+To:     Domenico Andreoli <domenico.andreoli@linux.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Initialize num_properties with length of the copied array instead
-of relying on previously memcpy'd value. This makes it clear how
-the array and the counter are related.
+On Fri, May 1, 2020 at 9:10 AM Domenico Andreoli
+<domenico.andreoli@linux.com> wrote:
+>
+> On Wed, Apr 29, 2020 at 01:20:53PM +0200, Rafael J. Wysocki wrote:
+> > On Mon, Apr 27, 2020 at 11:48 AM Domenico Andreoli <domenico.andreoli@linux.com> wrote:
+> > >
+> > > On Sun, Apr 26, 2020 at 06:16:29PM +0200, Rafael J. Wysocki wrote:
+> > > >
+>
+> [...]
+>
+> > > >
+> > > > It is possible in theory that two processes write "disk" to /sys/power/state
+> > > > concurrently.
+> > > >
+> > > > Is there enough mutual exclusion in place to handle this gracefully after the
+> > > > above change?
+> > >
+> > > No, indeed.
+> > >
+> > > It looks like hibernate.c needs the mutual exclusion and user.c could
+> > > just use it. Should I move snapshot_device_available to hibernate.c
+> > > and rename it hibernate_available?
+> >
+> > There is hibernation_available() already.
+> >
+> > Maybe switch over to the refcount_t API, call the variable
+> > hibernate_refcount and use refcount_add_not_zero() on it for the
+> > mutual exclusion.
+>
+> I'm doing as you ask but I'm not understanding what we actually gain
+> from using the refcount_t API.
+>
+> I'm reading about relaxation of memory ordering and there is no mention
+> on what this implies for the add_not_zero operation that we use.
 
-Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
----
- drivers/power/supply/charger-manager.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The details probably don't matter, but what we use here effectively is
+a refcount which is not allowed to grow above 1,
 
-diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
-index 415a9efa6816..2ef53dc1f2fb 100644
---- a/drivers/power/supply/charger-manager.c
-+++ b/drivers/power/supply/charger-manager.c
-@@ -1729,7 +1729,7 @@ static int charger_manager_probe(struct platform_device *pdev)
- 	memcpy(properties, default_charger_props,
- 		sizeof(enum power_supply_property) *
- 		ARRAY_SIZE(default_charger_props));
--	num_properties = psy_default.num_properties;
-+	num_properties = ARRAY_SIZE(default_charger_props);
- 
- 	/* Find which optional psy-properties are available */
- 	fuel_gauge = power_supply_get_by_name(desc->psy_fuel_gauge);
--- 
-2.20.1
-
+That's why it'd be reasonable to explicitly define it as a refcount,
+now that there is a suitable API.
