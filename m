@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E49061C1BF0
-	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 19:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD0D1C1C73
+	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 20:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729980AbgEARhz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 May 2020 13:37:55 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:47060 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729040AbgEARhz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 May 2020 13:37:55 -0400
+        id S1730055AbgEASAA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 May 2020 14:00:00 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:33342 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729410AbgEASAA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 May 2020 14:00:00 -0400
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 041Hbsiw029531;
-        Fri, 1 May 2020 12:37:54 -0500
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 041Hxwhe042549;
+        Fri, 1 May 2020 12:59:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1588354674;
-        bh=kl6qxjXpK8WjVJ4rxTSpNCEet+Pn0TlP5V/ouUJcsA0=;
+        s=ti-com-17Q1; t=1588355999;
+        bh=qJjDwd6CKyDhY83FeTF+lldULXjVHA5iOtjwclkfDmo=;
         h=From:To:CC:Subject:Date;
-        b=tSnPkGiYiB4BbC7Jl6xNHDULDeETvYTe2x6bX3D5mABtgKNdko8nLjffJspd/1F6s
-         ambWdSFwAohmPmtGrGQAcGN3xzYiMVM/vWT984qu2ipFIhzI0HpsnSBaMvHdSL8aV7
-         zdvPejHxeF8DqcvH9UFOoVsEqRV7g6gEhjcsqXds=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 041HbsU7046998
+        b=OHM2J3ifevHs+kTtOePXdkyHa2AqPith3lo9k3s6xfThhgzSgsPmXFG2mJI37mO4D
+         GPxVw/YA8q8iHAqgemBe4abExtFoas6tltsiyJFhsCKc298aPUZJlYG7++Fi/pTB0e
+         UVx9JP0zbP/uVbQdUfKZoJMxgri206ab90ZFX2LE=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 041HxwFv077992
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 1 May 2020 12:37:54 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 1 May 2020 12:59:58 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 1 May
- 2020 12:37:53 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ 2020 12:59:58 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 1 May 2020 12:37:54 -0500
+ Frontend Transport; Fri, 1 May 2020 12:59:58 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 041Hbr8J087346;
-        Fri, 1 May 2020 12:37:53 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 041Hxw4W044913;
+        Fri, 1 May 2020 12:59:58 -0500
 From:   Dan Murphy <dmurphy@ti.com>
 To:     <sre@kernel.org>
 CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, Dan Murphy <dmurphy@ti.com>
-Subject: [PATCH v2] dt-bindings: power: Convert power_supply text to yaml
-Date:   Fri, 1 May 2020 12:29:13 -0500
-Message-ID: <20200501172913.23537-1-dmurphy@ti.com>
+Subject: [PATCH v5 0/3] BQ25150/155 Batter charger
+Date:   Fri, 1 May 2020 12:51:15 -0500
+Message-ID: <20200501175118.26226-1-dmurphy@ti.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,95 +53,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert the power_supply.txt to power-supply.yaml.
-This conversion entailed fixing up the binding to being yaml and dt
-checker compliant.
+Hello,
 
-Added a note in the power_supply.txt to reference the power-supply.yaml
+Resending for Ricardo
 
-Signed-off-by: Dan Murphy <dmurphy@ti.com>
----
- .../bindings/power/supply/power-supply.yaml   | 40 +++++++++++++++++++
- .../bindings/power/supply/power_supply.txt    | 25 +-----------
- 2 files changed, 42 insertions(+), 23 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/power/supply/power-supply.yaml
+This v5 series picks up on the development that Dan Murphy <dmurphy@ti.com> 
+began with the power_supply framework and bq2515x_charger driver.
 
-diff --git a/Documentation/devicetree/bindings/power/supply/power-supply.yaml b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
-new file mode 100644
-index 000000000000..3bb02bb3a2d8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/power/supply/power-supply.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Power Supply Core Support
-+
-+maintainers:
-+  - Sebastian Reichel <sre@kernel.org>
-+
-+properties:
-+  power-supplies:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    description:
-+      This property is added to a supply in order to list the devices which
-+      supply it power, referenced by their phandles.
-+
-+examples:
-+  - |
-+    power {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      usb_charger:charger@e {
-+        compatible = "some,usb-charger";
-+        reg = <0xe>;
-+      };
-+
-+      ac_charger:charger@c {
-+        compatible = "some,ac-charger";
-+        reg = <0xc>;
-+      };
-+
-+      battery:battery@b {
-+        compatible = "some,battery";
-+        reg = <0xb>;
-+        power-supplies = <&usb_charger>, <&ac_charger>;
-+      };
-+    };
-diff --git a/Documentation/devicetree/bindings/power/supply/power_supply.txt b/Documentation/devicetree/bindings/power/supply/power_supply.txt
-index 8391bfa0edac..d9693e054509 100644
---- a/Documentation/devicetree/bindings/power/supply/power_supply.txt
-+++ b/Documentation/devicetree/bindings/power/supply/power_supply.txt
-@@ -1,23 +1,2 @@
--Power Supply Core Support
--
--Optional Properties:
-- - power-supplies : This property is added to a supply in order to list the
--   devices which supply it power, referenced by their phandles.
--
--Example:
--
--	usb-charger: power@e {
--		compatible = "some,usb-charger";
--		...
--	};
--
--	ac-charger: power@c {
--		compatible = "some,ac-charger";
--		...
--	};
--
--	battery@b {
--		compatible = "some,battery";
--		...
--		power-supplies = <&usb-charger>, <&ac-charger>;
--	};
-+This binding has been converted to yaml please see power-supply.yaml in this
-+directory.
+This series incorporates the changes suggested by
+Sebastien Reichel<sre@kernel.org> in v4.
+
+Datasheets for these devices can be found at:
+http://www.ti.com/lit/ds/symlink/bq25150.pdf
+http://www.ti.com/lit/ds/symlink/bq25155.pdf 
+
+Thanks, Ricardo
+
+Dan Murphy (1):
+  power_supply: Add additional health properties to the header
+
+Ricardo Rivera-Matos (2):
+  Add the bindings for the bq25150 and bq25155 500mA charging ICs from
+    Texas Instruments.
+  power: supply: bq25150 introduce the bq25150
+
+ Documentation/ABI/testing/sysfs-class-power   |    2 +-
+ .../bindings/power/supply/bq2515x.yaml        |   99 ++
+ drivers/power/supply/Kconfig                  |    8 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/bq2515x_charger.c        | 1170 +++++++++++++++++
+ drivers/power/supply/power_supply_sysfs.c     |    2 +-
+ include/linux/power_supply.h                  |    3 +
+ 7 files changed, 1283 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+ create mode 100644 drivers/power/supply/bq2515x_charger.c
+
 -- 
 2.25.1
 
