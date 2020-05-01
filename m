@@ -2,83 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 804A51C124D
-	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 14:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2F61C1251
+	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 14:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728751AbgEAMiy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 May 2020 08:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728742AbgEAMiy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 May 2020 08:38:54 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACC4C061A0C;
-        Fri,  1 May 2020 05:38:53 -0700 (PDT)
+        id S1728782AbgEAMjZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 May 2020 08:39:25 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60040 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728712AbgEAMjZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 May 2020 08:39:25 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id BFC212A2F61
+        with ESMTPSA id 007712A2E1D
 Received: by earth.universe (Postfix, from userid 1000)
-        id 069B93C08C7; Fri,  1 May 2020 14:38:50 +0200 (CEST)
-Date:   Fri, 1 May 2020 14:38:49 +0200
+        id D91B73C08C7; Fri,  1 May 2020 14:39:21 +0200 (CEST)
+Date:   Fri, 1 May 2020 14:39:21 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 02/11] power: charger-manager: don't write through
- desc->properties
-Message-ID: <20200501123849.ws2a5ybeeej6phyr@earth.universe>
+        Guenter Roeck <linux@roeck-us.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 06/11] power: supply: core: fix HWMON temperature
+ labels
+Message-ID: <20200501123921.k4vgng7ggcjoe6ux@earth.universe>
 References: <cover.1585944770.git.mirq-linux@rere.qmqm.pl>
- <a529e64edb81a4795fe0b6480f1e4051bed1b099.1585944770.git.mirq-linux@rere.qmqm.pl>
+ <4c33741ba56d3c7830827c140bccf13621e59232.1585944770.git.mirq-linux@rere.qmqm.pl>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="unb3rd3vc4hlpfj7"
+        protocol="application/pgp-signature"; boundary="5wm5ps46dek33h7p"
 Content-Disposition: inline
-In-Reply-To: <a529e64edb81a4795fe0b6480f1e4051bed1b099.1585944770.git.mirq-linux@rere.qmqm.pl>
+In-Reply-To: <4c33741ba56d3c7830827c140bccf13621e59232.1585944770.git.mirq-linux@rere.qmqm.pl>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---unb3rd3vc4hlpfj7
+--5wm5ps46dek33h7p
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Apr 03, 2020 at 10:20:31PM +0200, Micha=C5=82 Miros=C5=82aw wrote:
-> psy_desc->properties will become pointer to const.  Avoid writing
-> through the pointer to enable constification of the tables elsewhere.
+On Fri, Apr 03, 2020 at 10:20:33PM +0200, Micha=C5=82 Miros=C5=82aw wrote:
+> tempX_label files are swapped compared to what
+> power_supply_hwmon_temp_to_property() uses. Make them match.
 >=20
+> Cc: stable@vger.kernel.org
+> Fixes: e67d4dfc9ff1 ("power: supply: Add HWMON compatibility layer")
 > Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
 > ---
+> v2: split parameter checking to separate patch
+> ---
 
-For patches 1-3 I used my version, that I wrote in parallel while
-reviewing a different patch series. It is slightly different, but
-achieves the same goal.
+Thanks, queued.
 
 -- Sebastian
 
---unb3rd3vc4hlpfj7
+>  drivers/power/supply/power_supply_hwmon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/su=
+pply/power_supply_hwmon.c
+> index 75cf861ba492..67b6ee60085e 100644
+> --- a/drivers/power/supply/power_supply_hwmon.c
+> +++ b/drivers/power/supply/power_supply_hwmon.c
+> @@ -144,7 +144,7 @@ static int power_supply_hwmon_read_string(struct devi=
+ce *dev,
+>  					  u32 attr, int channel,
+>  					  const char **str)
+>  {
+> -	*str =3D channel ? "temp" : "temp ambient";
+> +	*str =3D channel ? "temp ambient" : "temp";
+>  	return 0;
+>  }
+> =20
+> --=20
+> 2.20.1
+>=20
+
+--5wm5ps46dek33h7p
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6sGFkACgkQ2O7X88g7
-+ppqkhAAhISHuB7ilFWN8oIoGCZjUnTRVcSXFZEcfsKXphhTwrsx+4KKMN6akRCF
-1KtmCRY0tcnBUnaeOSSfSoRU2blqGngUfd01Hp0Yl9X7R2W0QRC45o6A+AZ6i1Y3
-uFZYsdIz3O0oq682X5KAcMrZO7eXZWySZtljUqjoNsUrAdUqFw0Mi+A9XOZtcZLC
-WhB3ZFuh9NwDhb9DF4zxECiE9CgXcukeyOk94i/HbbpFZLi7YhDJyqnIkWBhdc/L
-M72qaQLXov1ftz7SeDydcNDwYiU76Ue0Kc4EJuUYmtpL5eqi6Rs8ICDTCu3ujnCC
-lJHaiQfLAPs527fMkULo+FFcsO7gKoEUkGqXuEGRXoyKh/CSg1U9OCMCkPAEeBnu
-vblE5fj2Pe9ocsLOUZFGhFvafivE6J3sAw/nvuwPvmUgVF+3nuafUfwdc0b6b7af
-r0bM9uSwwYUQ6kpTFNTIAOrE6+610zwAyfpwj51ko7xPmnEotMxW6elru4AG/WXz
-OT5ZT/M9aQysPMrn3Qztc+Z0vqkFmS2nz8UxM+D8grw+S5BF6UKUEOrNaHn0iJvf
-2kw2wP0oGbcJTVf/ITZqSyi79vmxK5bYfAXSQtxxfQ8sGzSW+x2/+PKq8+HNC5ay
-cBC561G3JUR61YN4ZgS87Z0t96khXCls2vTZ7QS6CKktUGSMj5k=
-=FVQh
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6sGHkACgkQ2O7X88g7
++pofYg/8CYre6kxA2y2v+h3U9Em6zL/Y3RQ0ulhetV5MBKzguQjQJ6hMPl/gB+pF
+/NeyPJ5ba3NDaUumtiQBfhGZ/3w3GEh0JTjd9ddOIFymYhKlh//zTHfWprxwnkmc
+bcikO700CUG9YepsMODt19onA7WDjYVfzTcKprpQi9QN1+zWNZF2vh6KhJ8nysg8
+tv1ctbPK3k5fm0YGDyEJnv/JVzvcRacA/LhG18RbE15HyFsUyMoXpGSChBK5bH6e
+1rnao3RBzDKeV/W0JG2OKqMU+KPHPerSBHs8j0+k5+JGvF79ZVmBWaxTfYdyn956
+a/3bu0ugd/FbbB6pgJcRqSuPY8rbb9pmhycyvlhJdyuijlqIcUUvyD0IXXAsEqyK
++HCPxAQp1dVfhs3mA2Q2aZIpM2M29aj4gMjv2fvo0dRwWXe7fH5EBdsxRiuAoF19
+51Gek3OgD2vIWqcyrEc47L5jclPzsR9IpnZJN8N14B1FfiVq++W7TZeN91KuPm9b
+9dIUnfoEoWAi1IIROsdwFECQ50d01Ql5WSF46l/x2YGNPmayY+DjCcJ8O4YzpYS2
+8E5gdSxqGDvxaTz3aECmDuXkaqVdeyeKWJJL2hbyIB45trw9bkdDqTStNoxetHCZ
+opBGn5DoOHP0YIT/avfHGsKxxArh9vFQso1c0k8wiZXEDlEpGvs=
+=kCn8
 -----END PGP SIGNATURE-----
 
---unb3rd3vc4hlpfj7--
+--5wm5ps46dek33h7p--
