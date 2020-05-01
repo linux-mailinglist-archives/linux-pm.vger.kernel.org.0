@@ -2,105 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F08BC1C123C
-	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 14:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804A51C124D
+	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 14:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728751AbgEAMgt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 May 2020 08:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S1728751AbgEAMiy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 May 2020 08:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728639AbgEAMgs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 May 2020 08:36:48 -0400
+        by vger.kernel.org with ESMTP id S1728742AbgEAMiy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 May 2020 08:38:54 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09CDC061A0C;
-        Fri,  1 May 2020 05:36:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACC4C061A0C;
+        Fri,  1 May 2020 05:38:53 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id A01292A2FC1
+        with ESMTPSA id BFC212A2F61
 Received: by earth.universe (Postfix, from userid 1000)
-        id 69D353C08C7; Fri,  1 May 2020 14:36:45 +0200 (CEST)
-Date:   Fri, 1 May 2020 14:36:45 +0200
+        id 069B93C08C7; Fri,  1 May 2020 14:38:50 +0200 (CEST)
+Date:   Fri, 1 May 2020 14:38:49 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
 Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 05/11] power: supply: core: allow to constify property
- lists
-Message-ID: <20200501123645.tqs6ta7n3cdtcdv3@earth.universe>
+Subject: Re: [PATCH v3 02/11] power: charger-manager: don't write through
+ desc->properties
+Message-ID: <20200501123849.ws2a5ybeeej6phyr@earth.universe>
 References: <cover.1585944770.git.mirq-linux@rere.qmqm.pl>
- <1ebdfa76e2912c579c3c45fe86dbbedac6824167.1585944770.git.mirq-linux@rere.qmqm.pl>
+ <a529e64edb81a4795fe0b6480f1e4051bed1b099.1585944770.git.mirq-linux@rere.qmqm.pl>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fv6uh23nozfyr4mm"
+        protocol="application/pgp-signature"; boundary="unb3rd3vc4hlpfj7"
 Content-Disposition: inline
-In-Reply-To: <1ebdfa76e2912c579c3c45fe86dbbedac6824167.1585944770.git.mirq-linux@rere.qmqm.pl>
+In-Reply-To: <a529e64edb81a4795fe0b6480f1e4051bed1b099.1585944770.git.mirq-linux@rere.qmqm.pl>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---fv6uh23nozfyr4mm
+--unb3rd3vc4hlpfj7
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Apr 03, 2020 at 10:20:32PM +0200, Micha=C5=82 Miros=C5=82aw wrote:
-> Since tables pointed to by power_supply_desc->properties and
-> ->usb_types are not expected to change after registration, mark
-> the pointers accordingly
+On Fri, Apr 03, 2020 at 10:20:31PM +0200, Micha=C5=82 Miros=C5=82aw wrote:
+> psy_desc->properties will become pointer to const.  Avoid writing
+> through the pointer to enable constification of the tables elsewhere.
 >=20
 > Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
 > ---
 
-Thanks, queued.
+For patches 1-3 I used my version, that I wrote in parallel while
+reviewing a different patch series. It is slightly different, but
+achieves the same goal.
 
 -- Sebastian
 
->  include/linux/power_supply.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index dcd5a71e6c67..6a34df65d4d1 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -223,9 +223,9 @@ struct power_supply_config {
->  struct power_supply_desc {
->  	const char *name;
->  	enum power_supply_type type;
-> -	enum power_supply_usb_type *usb_types;
-> +	const enum power_supply_usb_type *usb_types;
->  	size_t num_usb_types;
-> -	enum power_supply_property *properties;
-> +	const enum power_supply_property *properties;
->  	size_t num_properties;
-> =20
->  	/*
-> --=20
-> 2.20.1
->=20
-
---fv6uh23nozfyr4mm
+--unb3rd3vc4hlpfj7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6sF90ACgkQ2O7X88g7
-+ppYTw/7BRO4/SGM635ARYaEVZhIURdUiSfrZVBqooNJssCcWzxcx/98OshrBpfr
-GlP92ZLz95npJbdPmpVsLRv9MCW4nV1P7uhs3OPlw9hcdu891F+6pPtR4vD2Qj1B
-5uNQcvaRhczh3D6eS3RvSyLihFgZRipm99qg3eNFj7yiD4YNKyojp8DhgiB7bHqJ
-w/DRZ48Z/SwrsO94U9WbBipFic03Z0NQEKkJ09uRl/1bDnylFcLXD6hNOJ7Oq2Kd
-1ZB/FFGFrWHSG28zBYDtZbKJJgyPhXhNkur8Gmn2wz7nuoY4YYaaOFqqfzZW1xzx
-AehuYByeCrsgwtLKpPhJLbsA15tmTUxhBKQFHggLJtRxFLoZn/XLUuA0zZU42mbC
-1jY9gfifU8YvIzIdlf0ENWR0ZcvUT7kIExF9D1LRSHfcaFigi7B/fK2SpI51+DxV
-YQVGOnS1EudND91BXFE9Nu1SQmItABD3Ofnl9LtQ0AGcgP/5Wg2RLujCM9615hp5
-pgSNwV80JJmkGHaMuwt+CQ40RSqngCNnH/+KytC+DS5b3u964RvmqcCRNpEBJ+Z4
-JNSZzCiVCO5bokIyQFn9rPD1mMHAKRciO8Dagf7DM+wR0chM7Wx4BDi2JQKIooOl
-+MdWBF9M1LTi5n2/ck1wno3/nRL8QbLZNN/SY1FnLauSFT64y5c=
-=FQql
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6sGFkACgkQ2O7X88g7
++ppqkhAAhISHuB7ilFWN8oIoGCZjUnTRVcSXFZEcfsKXphhTwrsx+4KKMN6akRCF
+1KtmCRY0tcnBUnaeOSSfSoRU2blqGngUfd01Hp0Yl9X7R2W0QRC45o6A+AZ6i1Y3
+uFZYsdIz3O0oq682X5KAcMrZO7eXZWySZtljUqjoNsUrAdUqFw0Mi+A9XOZtcZLC
+WhB3ZFuh9NwDhb9DF4zxECiE9CgXcukeyOk94i/HbbpFZLi7YhDJyqnIkWBhdc/L
+M72qaQLXov1ftz7SeDydcNDwYiU76Ue0Kc4EJuUYmtpL5eqi6Rs8ICDTCu3ujnCC
+lJHaiQfLAPs527fMkULo+FFcsO7gKoEUkGqXuEGRXoyKh/CSg1U9OCMCkPAEeBnu
+vblE5fj2Pe9ocsLOUZFGhFvafivE6J3sAw/nvuwPvmUgVF+3nuafUfwdc0b6b7af
+r0bM9uSwwYUQ6kpTFNTIAOrE6+610zwAyfpwj51ko7xPmnEotMxW6elru4AG/WXz
+OT5ZT/M9aQysPMrn3Qztc+Z0vqkFmS2nz8UxM+D8grw+S5BF6UKUEOrNaHn0iJvf
+2kw2wP0oGbcJTVf/ITZqSyi79vmxK5bYfAXSQtxxfQ8sGzSW+x2/+PKq8+HNC5ay
+cBC561G3JUR61YN4ZgS87Z0t96khXCls2vTZ7QS6CKktUGSMj5k=
+=FVQh
 -----END PGP SIGNATURE-----
 
---fv6uh23nozfyr4mm--
+--unb3rd3vc4hlpfj7--
