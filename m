@@ -2,91 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E66381C18D0
-	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 16:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434711C18D4
+	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 16:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728839AbgEAOya (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 May 2020 10:54:30 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:32818 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728737AbgEAOy3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 May 2020 10:54:29 -0400
-Received: by mail-ot1-f67.google.com with SMTP id j26so2774264ots.0
-        for <linux-pm@vger.kernel.org>; Fri, 01 May 2020 07:54:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Pmjrv5qPvKOPeFLJljuTHlccBG/WcgupC+vQ1RcE9Y4=;
-        b=p1FLRGHD5IE01JfdnlkkSWs9lV880/WC32CRxxuks/P8slWfYJ7NFgaGBWVrH/3kFT
-         tS4/IVp8C0apPfbbh07Z6lQd9xyvtHZJaGT+IFzTGa6rFkYXUKN0vJseUosIp4CHr4vL
-         d83rplypJXZzu0KMOcexyKeGfp8QnQL138vW97tKByeBLvR+vtWr3X/6ManhUfZDGBbh
-         VHjDLbZkPkhIoi81AnpKpMFFjxLW7XKucpMM90fmxmKeGrBYUlieR3SmnM+MQvzVxzLx
-         yJTqwO+DfZxBaR3fSKJ+4si2XCfNcbI/WOcXKyy9wMz+jqgs6360MAJ0UQGaTO9zsESm
-         9Fag==
-X-Gm-Message-State: AGi0PuaWzEN5cJY73cl/WHklBtDEBZuT/z5cWbagIHDuWcJM4ADeYXKR
-        Iwif1o9m+daonI8vmx/xHbFFbFIaosSvFFbZgnhijA==
-X-Google-Smtp-Source: APiQypIofkrNeM8CqcEO9KjlBxTesezBbJsnEXoizmYFN9TI14vTWRqsSAkMmiDuaNBPU2KZ5BV18/wTKMfaCCKHetw=
-X-Received: by 2002:a9d:6ac8:: with SMTP id m8mr3916497otq.262.1588344868215;
- Fri, 01 May 2020 07:54:28 -0700 (PDT)
+        id S1728839AbgEAO6o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 May 2020 10:58:44 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:33270 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728737AbgEAO6o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 May 2020 10:58:44 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 10F6F2A30D9
+Received: by earth.universe (Postfix, from userid 1000)
+        id EEA473C08C7; Fri,  1 May 2020 16:58:40 +0200 (CEST)
+Date:   Fri, 1 May 2020 16:58:40 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: charger-manager: clarify num_properties starting
+ value
+Message-ID: <20200501145840.ezo4udnmvwdopz5p@earth.universe>
+References: <20200501135109.45gwxpczcqdt3fbb@earth.universe>
+ <c262c4b0921d916712de6a15133ff016fb721c4f.1588343350.git.mirq-linux@rere.qmqm.pl>
 MIME-Version: 1.0
-References: <20200413190843.044112674@gmail.com> <20200413193718.956985775@gmail.com>
- <4068729.AMvo8hvaBI@kreacher> <20200427094840.GA29259@dumbo>
- <CAJZ5v0hbE3Gswp_Wp4QQTb8wuaAOGQrWNEa7Utg45wR50QN0QQ@mail.gmail.com> <20200501071052.GA20585@dumbo>
-In-Reply-To: <20200501071052.GA20585@dumbo>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 1 May 2020 16:54:13 +0200
-Message-ID: <CAJZ5v0itdtHTsMhbrgThR76YRDv-BBH2VSiU413d+K9K0VFyAA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] uswsusp: build only when configured
-To:     Domenico Andreoli <domenico.andreoli@linux.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4eei2x72djf2ji37"
+Content-Disposition: inline
+In-Reply-To: <c262c4b0921d916712de6a15133ff016fb721c4f.1588343350.git.mirq-linux@rere.qmqm.pl>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 1, 2020 at 9:10 AM Domenico Andreoli
-<domenico.andreoli@linux.com> wrote:
->
-> On Wed, Apr 29, 2020 at 01:20:53PM +0200, Rafael J. Wysocki wrote:
-> > On Mon, Apr 27, 2020 at 11:48 AM Domenico Andreoli <domenico.andreoli@linux.com> wrote:
-> > >
-> > > On Sun, Apr 26, 2020 at 06:16:29PM +0200, Rafael J. Wysocki wrote:
-> > > >
->
-> [...]
->
-> > > >
-> > > > It is possible in theory that two processes write "disk" to /sys/power/state
-> > > > concurrently.
-> > > >
-> > > > Is there enough mutual exclusion in place to handle this gracefully after the
-> > > > above change?
-> > >
-> > > No, indeed.
-> > >
-> > > It looks like hibernate.c needs the mutual exclusion and user.c could
-> > > just use it. Should I move snapshot_device_available to hibernate.c
-> > > and rename it hibernate_available?
-> >
-> > There is hibernation_available() already.
-> >
-> > Maybe switch over to the refcount_t API, call the variable
-> > hibernate_refcount and use refcount_add_not_zero() on it for the
-> > mutual exclusion.
->
-> I'm doing as you ask but I'm not understanding what we actually gain
-> from using the refcount_t API.
->
-> I'm reading about relaxation of memory ordering and there is no mention
-> on what this implies for the add_not_zero operation that we use.
 
-The details probably don't matter, but what we use here effectively is
-a refcount which is not allowed to grow above 1,
+--4eei2x72djf2ji37
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-That's why it'd be reasonable to explicitly define it as a refcount,
-now that there is a suitable API.
+Hi,
+
+On Fri, May 01, 2020 at 04:30:43PM +0200, Micha=C5=82 Miros=C5=82aw wrote:
+> Initialize num_properties with length of the copied array instead
+> of relying on previously memcpy'd value. This makes it clear how
+> the array and the counter are related.
+>=20
+> Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> ---
+
+Thanks, queued.
+
+-- Sebastian
+
+>  drivers/power/supply/charger-manager.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/suppl=
+y/charger-manager.c
+> index 415a9efa6816..2ef53dc1f2fb 100644
+> --- a/drivers/power/supply/charger-manager.c
+> +++ b/drivers/power/supply/charger-manager.c
+> @@ -1729,7 +1729,7 @@ static int charger_manager_probe(struct platform_de=
+vice *pdev)
+>  	memcpy(properties, default_charger_props,
+>  		sizeof(enum power_supply_property) *
+>  		ARRAY_SIZE(default_charger_props));
+> -	num_properties =3D psy_default.num_properties;
+> +	num_properties =3D ARRAY_SIZE(default_charger_props);
+> =20
+>  	/* Find which optional psy-properties are available */
+>  	fuel_gauge =3D power_supply_get_by_name(desc->psy_fuel_gauge);
+> --=20
+> 2.20.1
+>=20
+
+--4eei2x72djf2ji37
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6sORwACgkQ2O7X88g7
++ppsAg/8C4Cd02OyvvtTrE9r6iALN1WxEkpaSi4DXQ7S4Pf422WXYy20+K0tAPyU
+jh//lkSSnA7ivhhwnPG4WFC9CDiej0QgPGS9vXr3Iu+08QdavowtvM/Cpiv5lVv5
+FYMC2K4q7oN2WCie7UlN2aGmaXSvsR6QqVIU1zrBVFfGJjIwGNX6ejITgz976x04
+61RcYo4YuEZeaMDaWa0NVB7EPnR5EILzYrpkK8OVrvm6qxgC2zzdL0V7gdE3mAfV
+qt28WF/c8zlj2firppeuCwDqvNGt8Syjg5s+g3xNiuaKlbtJlrYE2ku35slfm6D0
+c1WHBPHGOMGnTeFa9xgmuGiUG9a4lKyQXfFc2A59zR0sdp2Lte6VXdRwmEQsoDx2
+254NgrYYjj70v888kuIL426tzYGkXOgeHruQ98fABFuD874ZGH0Q61iDuWFhrWjY
+bGzPRGb9tL8tgjl8ueUghxITNdB44BpClB3LWJZeqVd5MDGZBn7GFGIoExCRqVUI
+YljFl1ybgSu4ksbjGYVxlpa8O7rXWQR1ZJWxvIq0tCDAAKCIpnjqsBGbaX54rTjw
+a+NMDPbQl6HB0snsL0IRUU4ji4k5joVfcqADlIpPRO0Pt6A73wI4ghAeIfHT2H6M
+TRMYPIu6pUX9II/XbVCICdeJ0m5Q1qA1fSybHf70xBGRfYQV4LM=
+=ADgy
+-----END PGP SIGNATURE-----
+
+--4eei2x72djf2ji37--
