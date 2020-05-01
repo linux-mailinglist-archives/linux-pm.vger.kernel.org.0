@@ -2,159 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A34761C1598
-	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 16:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167F01C161B
+	for <lists+linux-pm@lfdr.de>; Fri,  1 May 2020 16:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730052AbgEANaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 May 2020 09:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730043AbgEANay (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 May 2020 09:30:54 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D8AC061A0C;
-        Fri,  1 May 2020 06:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=g1HJbRTAH6u4WBCmhMZ9LnGwhoaAiquAYI+U4ca89TU=; b=oyDdMDAg89BCnftkud0KnfX+Z9
-        9Ai6tavDSvb42MbYg/Sk7oB9XLAxIU3UNFnxjSFjM+nsOAtqCaBYFZad5DmH9pIqED0r/tyEkxZTZ
-        pHJ01TYue0gOaNpQtZ1WJ8veKIu3sRO8L+tQ7ga+YVIhJ5OJi7QVSxEbkhPZURdlwe623hdUIszkm
-        iCVIlbZI+HC/FoiqQbMPnp1dt/cE4fPPdC42kSGUSQnKJLRwxCemoXV0OsCDxRxT3SHbiTCkrMDHb
-        TOgf7cyxpAb1YVWkjHqoQqOKIHmJNluaoMl3tUeN472F67EGVE7FVU+caPQ661NhpIS0/+v8pAr5S
-        5yvBLsvw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jUVkc-0007vG-5C; Fri, 01 May 2020 13:30:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EDCEE3075F9;
-        Fri,  1 May 2020 15:30:42 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DB3F32391C520; Fri,  1 May 2020 15:30:42 +0200 (CEST)
-Date:   Fri, 1 May 2020 15:30:42 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@suse.de>,
-        Len Brown <lenb@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>, x86@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH 1/2] x86, sched: Prevent divisions by zero in frequency
- invariant accounting
-Message-ID: <20200501133042.GE3762@hirez.programming.kicks-ass.net>
-References: <20200428132450.24901-1-ggherdovich@suse.cz>
- <20200428132450.24901-2-ggherdovich@suse.cz>
+        id S1730545AbgEANj5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 May 2020 09:39:57 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:23304 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731236AbgEANj4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 1 May 2020 09:39:56 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 49DCzY6Xj4z7N;
+        Fri,  1 May 2020 15:39:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1588340394; bh=/jLlputangsPP+b55RSTFIHnXSnuLA7C91+qL92JlCs=;
+        h=Date:From:Subject:In-Reply-To:To:Cc:From;
+        b=d4UrYz7eA6oL6JT7nGH+GCCO5ILfvvFRR4THomwkN1imzCtf8Xu1ZTum5nuTNbskC
+         s/y9NJ0vIGFTKXXHQzBY3vK0JfegKRTMzr+ian5OHuuW8MfOpl4AJdt93kApnwEUyt
+         CKR5T5tPokGTpX+ceptKT4UZPmzgMGbTXE6o2e7iSFfqCeYtLiSw0SiqKZE4PIAdEk
+         wODz178taLb/kqGH0iWeFO3T465dW7j2TUy7I4OsyyW8PKP83MzaaYRyjlYBggyd67
+         so0epaXCFiWpSquBFDLprlJPdQiwi5+fa7HlOp0/MJmre0xhaPwPK1eSZF/TEQ9y+d
+         NXfFCtuEZjdWw==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.2 at mail
+Date:   Fri, 01 May 2020 15:39:53 +0200
+Message-Id: <995cf2c7d41d4895c319b60ea4ea83e858c34cef.1588340276.git.mirq-linux@rere.qmqm.pl>
+From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Subject: [PATCH] power: charger-manager: fix adding of optional properties
+In-Reply-To: <20200501133008.GA8927@qmqm.qmqm.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200428132450.24901-2-ggherdovich@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 03:24:49PM +0200, Giovanni Gherdovich wrote:
-> The product mcnt * arch_max_freq_ratio could be zero if it overflows u64.
-> 
-> For context, a large value for arch_max_freq_ratio would be 5000,
-> corresponding to a turbo_freq/base_freq ratio of 5 (normally it's more like
-> 1500-2000). A large increment frequency for the MPERF counter would be 5GHz
-> (the base clock of all CPUs on the market today is less than that). With
-> these figures, a CPU would need to go without a scheduler tick for around 8
-> days for the u64 overflow to happen. It is unlikely, but the check is
-> warranted.
-> 
-> In that case it's also appropriate to disable frequency invariant
-> accounting: the feature relies on measures of the clock frequency done at
-> every scheduler tick, which need to be "fresh" to be at all meaningful.
-> 
-> Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
-> Fixes: 1567c3e3467c ("x86, sched: Add support for frequency invariance")
+Use num_properties to index added property.
+This will prevent overwriting POWER_SUPPLY_PROP_CHARGE_NOW with
+POWER_SUPPLY_PROP_CURRENT_NOW and leaving the latter entry
+uninitialized.
 
->  	acnt <<= 2*SCHED_CAPACITY_SHIFT;
->  	mcnt *= arch_max_freq_ratio;
-> +	if (!mcnt) {
+For clarity, num_properties is initialized with length of the copied
+array instead of relying on previously memcpy'd value.
 
-The problem is; this doesn't do what you claim it does.
+Fixes: 0a46510addc7 ("power: supply: charger-manager: Prepare for const properties")
+Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+---
+ drivers/power/supply/charger-manager.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> +		pr_warn("Scheduler tick missing for long time, disabling scale-invariant accounting.\n");
-> +		/* static_branch_disable() acquires a lock and may sleep */
-> +		schedule_work(&disable_freq_invariance_work);
-> +		return;
-> +	}
->  
->  	freq_scale = div64_u64(acnt, mcnt);
-
-I've changed the patch like so.. OK?
-
-(ok, perhaps I went a little overboard with the paranoia ;-)
-
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -55,6 +55,7 @@
- #include <linux/gfp.h>
- #include <linux/cpuidle.h>
- #include <linux/numa.h>
-+#include <linux/overflow.h>
+diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
+index a71e2ee81423..2ef53dc1f2fb 100644
+--- a/drivers/power/supply/charger-manager.c
++++ b/drivers/power/supply/charger-manager.c
+@@ -1729,7 +1729,7 @@ static int charger_manager_probe(struct platform_device *pdev)
+ 	memcpy(properties, default_charger_props,
+ 		sizeof(enum power_supply_property) *
+ 		ARRAY_SIZE(default_charger_props));
+-	num_properties = psy_default.num_properties;
++	num_properties = ARRAY_SIZE(default_charger_props);
  
- #include <asm/acpi.h>
- #include <asm/desc.h>
-@@ -2057,11 +2058,19 @@ static void init_freq_invariance(bool se
+ 	/* Find which optional psy-properties are available */
+ 	fuel_gauge = power_supply_get_by_name(desc->psy_fuel_gauge);
+@@ -1740,14 +1740,14 @@ static int charger_manager_probe(struct platform_device *pdev)
  	}
- }
- 
-+static void disable_freq_invariance_workfn(struct work_struct *work)
-+{
-+	static_branch_disable(&arch_scale_freq_key);
-+}
-+
-+static DECLARE_WORK(disable_freq_invariance_work,
-+		    disable_freq_invariance_workfn);
-+
- DEFINE_PER_CPU(unsigned long, arch_freq_scale) = SCHED_CAPACITY_SCALE;
- 
- void arch_scale_freq_tick(void)
- {
--	u64 freq_scale;
-+	u64 freq_scale = SCHED_CAPACITY_SCALE;
- 	u64 aperf, mperf;
- 	u64 acnt, mcnt;
- 
-@@ -2073,19 +2082,27 @@ void arch_scale_freq_tick(void)
- 
- 	acnt = aperf - this_cpu_read(arch_prev_aperf);
- 	mcnt = mperf - this_cpu_read(arch_prev_mperf);
--	if (!mcnt)
--		return;
- 
- 	this_cpu_write(arch_prev_aperf, aperf);
- 	this_cpu_write(arch_prev_mperf, mperf);
- 
--	acnt <<= 2*SCHED_CAPACITY_SHIFT;
--	mcnt *= arch_max_freq_ratio;
-+	if (check_shl_overflow(acnt, 2*SCHED_CAPACITY_SHIFT, &acnt))
-+		goto error;
-+
-+	if (check_mul_overflow(mcnt, arch_max_freq_ratio, &mcnt) || !mcnt)
-+		goto error;
- 
- 	freq_scale = div64_u64(acnt, mcnt);
-+	if (!freq_scale)
-+		goto error;
- 
- 	if (freq_scale > SCHED_CAPACITY_SCALE)
- 		freq_scale = SCHED_CAPACITY_SCALE;
- 
- 	this_cpu_write(arch_freq_scale, freq_scale);
-+	return;
-+
-+error:
-+	pr_warn("Scheduler frequency invariance went wobbly, disabling!\n");
-+	schedule_work(&disable_freq_invariance_work);
- }
+ 	if (!power_supply_get_property(fuel_gauge,
+ 					  POWER_SUPPLY_PROP_CHARGE_NOW, &val)) {
+-		properties[cm->charger_psy_desc.num_properties] =
++		properties[num_properties] =
+ 				POWER_SUPPLY_PROP_CHARGE_NOW;
+ 		num_properties++;
+ 	}
+ 	if (!power_supply_get_property(fuel_gauge,
+ 					  POWER_SUPPLY_PROP_CURRENT_NOW,
+ 					  &val)) {
+-		properties[cm->charger_psy_desc.num_properties] =
++		properties[num_properties] =
+ 				POWER_SUPPLY_PROP_CURRENT_NOW;
+ 		num_properties++;
+ 	}
+-- 
+2.20.1
+
