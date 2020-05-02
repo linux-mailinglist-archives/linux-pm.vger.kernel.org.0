@@ -2,87 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1256D1C28CB
-	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 01:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0781C28F3
+	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 01:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726410AbgEBXMB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 May 2020 19:12:01 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:22506 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725844AbgEBXMB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 2 May 2020 19:12:01 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 49F4dC40wyz39;
-        Sun,  3 May 2020 01:11:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1588461119; bh=PtEoSLlKWMegYf9HRBfoVi/1ytKJy7M8Vrb70UMSaJA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KWl5EY3topXH9uyM4aU82OxE23+g+gQlWgXnscOuek0XwzOQrAegeTPNk9aDTS/vU
-         5F5n2A16tuCsRceRY83UJV++Pj3Pg6ah6fMmNif2jekz+kJpcG7/8L0ijk4YEC0F9A
-         cIbwIb0GN5dQUJIXmLdXsjs7BvS0VoksThwuiMuMZcVDCpbHCjy4Nl/QknpXtV/llb
-         laVfLka3Dkf3J7JUdFNAywkALtzI2t3gg01AbN7YuOgNxFJrOdLq30sDioGN+ccg8A
-         1l0rQYbZY+PHFvkKmWR9RksSL0PB/QyutfZzZTchITusdc/1wn+Kmjir3xi4KDUJRS
-         xRaNY7QytNOrQ==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Sun, 3 May 2020 01:11:58 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] power: supply: core: add input voltage/current
- measurements
-Message-ID: <20200502231158.GB25127@qmqm.qmqm.pl>
-References: <cover.1588345420.git.mirq-linux@rere.qmqm.pl>
- <249d7ad42b02bfeb8c31c49a64ee92b3e745086d.1588345420.git.mirq-linux@rere.qmqm.pl>
- <20200502222349.tfa72nr5zunybpla@earth.universe>
- <20200502224526.GA25127@qmqm.qmqm.pl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200502224526.GA25127@qmqm.qmqm.pl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726625AbgEBXd5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 May 2020 19:33:57 -0400
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:40028 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726621AbgEBXd4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 May 2020 19:33:56 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 49F56V5c3Nz9vC9Y
+        for <linux-pm@vger.kernel.org>; Sat,  2 May 2020 23:33:54 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WQPJiuchO0r4 for <linux-pm@vger.kernel.org>;
+        Sat,  2 May 2020 18:33:54 -0500 (CDT)
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 49F56V4GTGz9vC9N
+        for <linux-pm@vger.kernel.org>; Sat,  2 May 2020 18:33:54 -0500 (CDT)
+Received: by mail-qt1-f198.google.com with SMTP id q57so16050602qte.3
+        for <linux-pm@vger.kernel.org>; Sat, 02 May 2020 16:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=5Ok6v3QTS7jskLU7bXRb5zaNyLJwMRDHy874gWet09s=;
+        b=DsWF8qvZsx5RG9xuqF3JePeNDEacJrPwkOZyQswTfIjPVYFTsuAOC9Fjvz4d5Hkq6L
+         9YnvkpVqcSo7VISqviBMZ9tw1gh1BFLBSaOVGqgzpSF9sOBgsQCgXtfAxSyw57jey6At
+         u+zqXyCC8GdmAFOrtl2lsIH2CbWWL28yN46ZXvgCxzDM5ceGaZPGdCUiO+Hua/yof0vb
+         QVUVuxycX/oUpwrI3vZCAnDCvDgdhUAziu7Lch0nnOG+pHCLs9g55WEpw4j6Svcz1ifp
+         cmQqHT4k8jMDVTRbuHOzqcqiazsAIyt/th0LmxuvIRZjLrHAqtWHL7+Szv/MdmVXPApG
+         c2Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=5Ok6v3QTS7jskLU7bXRb5zaNyLJwMRDHy874gWet09s=;
+        b=kZHcbWVSKGoPG5BO4BoapXYAo7yXRhXzyST9EtsJgEmt3DFrCkz/PlsoI8fQTMng50
+         jwmPafEVbAID/q5yKcCO5r43fWhLNyFQ7js5k+YfzbH/QzkJ8bfNWsdJXu3zDNEuatOh
+         Pz72bS3EeQbRFNviMt6LSlAEORKM/wNfcKfSvmVXGB4YP6MzK0ki4w32Bfv9Sn0gUfUv
+         wYTlu+cyAR2zMnqcTCExUROGxNUtibEgSm5LBVuQ8Pgw0gK0BmJGU4WVlSUq4crFvyP9
+         cV4bbPr2vG6rhP50Xtdz9u3z0j6dwxdKGx+5kAyEpUS5lx8f9WMkyiiKPjSKnd2H1/HP
+         uxeA==
+X-Gm-Message-State: AGi0PuYkKzBt1FRvrphqDOj1i+wuBhw3qtgNEP/GMFQAR5nyEYxF/DG3
+        UPwwru2zpFLWetTpLF529jDux+UjaHPG8ULZWQDrk1x35Il+g7nvNkOwGSpWn9G6jEVMK8AkfYK
+        M9RQXVVuAr6iTpjMxv/0Byxk=
+X-Received: by 2002:a05:620a:8da:: with SMTP id z26mr9951156qkz.182.1588462434009;
+        Sat, 02 May 2020 16:33:54 -0700 (PDT)
+X-Google-Smtp-Source: APiQypIp6mvb+J23R0t0JtGB8uh+DMZjcNiEF5oMT/5zh8Qusv1Wa3sgrkzYFNCQpRU3ptC4oHe+7g==
+X-Received: by 2002:a05:620a:8da:: with SMTP id z26mr9951138qkz.182.1588462433574;
+        Sat, 02 May 2020 16:33:53 -0700 (PDT)
+Received: from qiushi.dtc.umn.edu (cs-kh5248-02-umh.cs.umn.edu. [128.101.106.4])
+        by smtp.gmail.com with ESMTPSA id u11sm6708645qtj.10.2020.05.02.16.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 May 2020 16:33:52 -0700 (PDT)
+From:   wu000273@umn.edu
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kjlu@umn.edu, wu000273@umn.edu
+Subject: [PATCH] power: supply: fix memory leaks (v2)
+Date:   Sat,  2 May 2020 18:33:38 -0500
+Message-Id: <20200502233338.9188-1-wu000273@umn.edu>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, May 03, 2020 at 12:45:26AM +0200, Micha³ Miros³aw wrote:
-> On Sun, May 03, 2020 at 12:23:49AM +0200, Sebastian Reichel wrote:
-> > On Fri, May 01, 2020 at 05:11:18PM +0200, Micha³ Miros³aw wrote:
-[...]
-> > > --- a/include/linux/power_supply.h
-> > > +++ b/include/linux/power_supply.h
-> > > @@ -127,7 +127,9 @@ enum power_supply_property {
-> > >  	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX,
-> > >  	POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD, /* in percents! */
-> > >  	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD, /* in percents! */
-> > > +	POWER_SUPPLY_PROP_INPUT_CURRENT_NOW,
-> > 
-> > What:           /sys/class/power_supply/<supply_name>/current_avg    
-> > Date:           May 2007
-> > Contact:        linux-pm@vger.kernel.org                          
-> > Description:                  
-> >                 Reports an average IBUS current reading over a fixed period.   
-> >                 Normally devices will provide a fixed interval in which they   
-> >                 average readings to smooth out the reported value.             
-> >                                                                                 
-> >                 Access: Read    
-> >                 Valid values: Represented in microamps
-> > 
-> 
-> There are two entries for /sys/class/power_supply/<supply_name>/current_avg
-> in the file, the other one mentions IBAT instead. "voltage_now" has the
-> same problem.
-[...]
+From: Qiushi Wu <wu000273@umn.edu>
 
-So the general idea of the sysfs API seems to require separate devices for the
-input (charger) and battery elements. Since what I'm looking at is an
-integrated battery controller (bq25896) which has three connections: an USB
-power (VBUS), a battery and the system load, but it creates only a single
-power-class device. This is complicated by the fact that this is an OTG device
-and so it can sink or source VBUS power.
+In function power_supply_add_hwmon_sysfs(), psyhw->props is
+allocated by bitmap_zalloc(). But this pointer is not deallocated
+when devm_add_action fail,  which lead to a memory leak bug. To fix
+this, we replace devm_add_action with devm_add_action_or_reset.
 
-Best Regards,
-Micha³ Miros³aw
+v2:
+  - Prevent introducing double-free.
+  - Added fixes tag
+
+Fixes: e67d4dfc9ff19 ("power: supply: Add HWMON compatibility layer")
+Signed-off-by: Qiushi Wu <wu000273@umn.edu>
+---
+ drivers/power/supply/power_supply_hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/supply/power_supply_hwmon.c
+index 75cf861ba492..7c8296ea0c34 100644
+--- a/drivers/power/supply/power_supply_hwmon.c
++++ b/drivers/power/supply/power_supply_hwmon.c
+@@ -304,7 +304,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply *psy)
+ 		goto error;
+ 	}
+ 
+-	ret = devm_add_action(dev, power_supply_hwmon_bitmap_free,
++	ret = devm_add_action_or_reset(dev, power_supply_hwmon_bitmap_free,
+ 			      psyhw->props);
+ 	if (ret)
+ 		goto error;
+-- 
+2.17.1
+
