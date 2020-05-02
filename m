@@ -2,169 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 080411C2893
-	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 00:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70741C2898
+	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 00:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728555AbgEBWZm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 May 2020 18:25:42 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:43910 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728530AbgEBWZm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 May 2020 18:25:42 -0400
+        id S1728555AbgEBWjq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 May 2020 18:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728550AbgEBWjq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 May 2020 18:39:46 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569CFC061A0C;
+        Sat,  2 May 2020 15:39:46 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 5BC3D26127B
+        with ESMTPSA id 14DEB2A05BC
 Received: by earth.universe (Postfix, from userid 1000)
-        id 512973C08C7; Sun,  3 May 2020 00:25:38 +0200 (CEST)
-Date:   Sun, 3 May 2020 00:25:38 +0200
+        id 771C93C08C7; Sun,  3 May 2020 00:39:42 +0200 (CEST)
+Date:   Sun, 3 May 2020 00:39:42 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Dan Murphy <dmurphy@ti.com>
+To:     wu000273@umn.edu
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: power: Convert power_supply text to yaml
-Message-ID: <20200502222538.4picedksvh5pvvnr@earth.universe>
-References: <20200501172913.23537-1-dmurphy@ti.com>
+        kjlu@umn.edu, Andrey Smirnov <andrew.smirnov@gmail.com>
+Subject: Re: [PATCH] power: supply: fix memory leaks
+Message-ID: <20200502223942.fksizdglrw5zdpw6@earth.universe>
+References: <20200502211056.20975-1-wu000273@umn.edu>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="g67rzxqxnnbyq5ce"
+        protocol="application/pgp-signature"; boundary="bfnyv6h55yl2uve7"
 Content-Disposition: inline
-In-Reply-To: <20200501172913.23537-1-dmurphy@ti.com>
+In-Reply-To: <20200502211056.20975-1-wu000273@umn.edu>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---g67rzxqxnnbyq5ce
+--bfnyv6h55yl2uve7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, May 01, 2020 at 12:29:13PM -0500, Dan Murphy wrote:
-> Convert the power_supply.txt to power-supply.yaml.
-> This conversion entailed fixing up the binding to being yaml and dt
-> checker compliant.
+On Sat, May 02, 2020 at 04:10:56PM -0500, wu000273@umn.edu wrote:
+> From: Qiushi Wu <wu000273@umn.edu>
 >=20
-> Added a note in the power_supply.txt to reference the power-supply.yaml
+> In function power_supply_add_hwmon_sysfs(), psyhw->props is
+> allocated by bitmap_zalloc(). But this pointer is not deallocated
+> in several error paths, which lead to memory leak bugs. To fix
+> this, we can call bitmap_free() to free this pointer.
 >=20
-> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> Signed-off-by: Qiushi Wu <wu000273@umn.edu>
 > ---
 
-Thanks, queued.
+You are correct, that there is a problem in the first instance, but
+the other changes are incorrect and introduce a new double free. Please
+read documentation for devm_add_action(). The proper fix is to just
+replace the call to devm_add_action() with devm_add_action_or_reset().
+Please send a new version for this. Also please add the following
+tag:
+
+Fixes: e67d4dfc9ff19 ("power: supply: Add HWMON compatibility layer")
+
+Thanks,
 
 -- Sebastian
 
->  .../bindings/power/supply/power-supply.yaml   | 40 +++++++++++++++++++
->  .../bindings/power/supply/power_supply.txt    | 25 +-----------
->  2 files changed, 42 insertions(+), 23 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/power-=
-supply.yaml
+>  drivers/power/supply/power_supply_hwmon.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 >=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/power-supply.=
-yaml b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
-> new file mode 100644
-> index 000000000000..3bb02bb3a2d8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/power/supply/power-supply.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Power Supply Core Support
-> +
-> +maintainers:
-> +  - Sebastian Reichel <sre@kernel.org>
-> +
-> +properties:
-> +  power-supplies:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description:
-> +      This property is added to a supply in order to list the devices wh=
-ich
-> +      supply it power, referenced by their phandles.
-> +
-> +examples:
-> +  - |
-> +    power {
-> +      #address-cells =3D <1>;
-> +      #size-cells =3D <0>;
-> +
-> +      usb_charger:charger@e {
-> +        compatible =3D "some,usb-charger";
-> +        reg =3D <0xe>;
-> +      };
-> +
-> +      ac_charger:charger@c {
-> +        compatible =3D "some,ac-charger";
-> +        reg =3D <0xc>;
-> +      };
-> +
-> +      battery:battery@b {
-> +        compatible =3D "some,battery";
-> +        reg =3D <0xb>;
-> +        power-supplies =3D <&usb_charger>, <&ac_charger>;
-> +      };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/power/supply/power_supply.=
-txt b/Documentation/devicetree/bindings/power/supply/power_supply.txt
-> index 8391bfa0edac..d9693e054509 100644
-> --- a/Documentation/devicetree/bindings/power/supply/power_supply.txt
-> +++ b/Documentation/devicetree/bindings/power/supply/power_supply.txt
-> @@ -1,23 +1,2 @@
-> -Power Supply Core Support
-> -
-> -Optional Properties:
-> - - power-supplies : This property is added to a supply in order to list =
-the
-> -   devices which supply it power, referenced by their phandles.
-> -
-> -Example:
-> -
-> -	usb-charger: power@e {
-> -		compatible =3D "some,usb-charger";
-> -		...
-> -	};
-> -
-> -	ac-charger: power@c {
-> -		compatible =3D "some,ac-charger";
-> -		...
-> -	};
-> -
-> -	battery@b {
-> -		compatible =3D "some,battery";
-> -		...
-> -		power-supplies =3D <&usb-charger>, <&ac-charger>;
-> -	};
-> +This binding has been converted to yaml please see power-supply.yaml in =
-this
-> +directory.
+> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/su=
+pply/power_supply_hwmon.c
+> index 75cf861ba492..7453390ab7a4 100644
+> --- a/drivers/power/supply/power_supply_hwmon.c
+> +++ b/drivers/power/supply/power_supply_hwmon.c
+> @@ -307,7 +307,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply =
+*psy)
+>  	ret =3D devm_add_action(dev, power_supply_hwmon_bitmap_free,
+>  			      psyhw->props);
+>  	if (ret)
+> -		goto error;
+> +		goto out_free;
+> =20
+>  	for (i =3D 0; i < desc->num_properties; i++) {
+>  		const enum power_supply_property prop =3D desc->properties[i];
+> @@ -342,7 +342,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply =
+*psy)
+>  		new_name =3D devm_kstrdup(dev, name, GFP_KERNEL);
+>  		if (!new_name) {
+>  			ret =3D -ENOMEM;
+> -			goto error;
+> +			goto out_free;
+>  		}
+>  		strreplace(new_name, '-', '_');
+>  		name =3D new_name;
+> @@ -353,10 +353,12 @@ int power_supply_add_hwmon_sysfs(struct power_suppl=
+y *psy)
+>  						NULL);
+>  	ret =3D PTR_ERR_OR_ZERO(hwmon);
+>  	if (ret)
+> -		goto error;
+> +		goto out_free;
+> =20
+>  	devres_close_group(dev, power_supply_add_hwmon_sysfs);
+>  	return 0;
+> +out_free:
+> +	bitmap_free(psyhw->props);
+>  error:
+>  	devres_release_group(dev, NULL);
+>  	return ret;
 > --=20
-> 2.25.1
+> 2.17.1
 >=20
 
---g67rzxqxnnbyq5ce
+--bfnyv6h55yl2uve7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6t82IACgkQ2O7X88g7
-+poYNg//bzYxRkCjCt7ev8FZ3vQSMwknF0RzNN1TzDYgzIGo0OVAVY5qrQs5ZoW0
-OGn1QNdnGknhIVFio2RrqDhcVzC3icY4KiBjT8t8m6TE9uR0hLmUreFOjYMGs1/2
-RJBpt//tcABEsKEKDJClR6MC0r/2mrhbWh7OTghkFBOO28udl0Nz9KIDRtIyUIVP
-E435QPs1OKGEJGqPOeDiKHyhbBk/Hwo2xrpsJl81pl9nl4YmvrZqkJYAyvzgBjFk
-1UoFZYRqwvIZDgc25cKJeQotIoit5Q3edPVlFgdqd9VScgCVFFHWCTDnGcvWuHJA
-3aw9HaNLDnTGmP0/pKwoNIZ3PJsM4rRUnwKsI8p+8ERlw/HvYaqP7t7u3snC5Bmo
-mzqlfEcjk9DL4eqmrdtIHqsImGO2yD41qAksZZG/gZ88IK3pVzjsMKhZfSEoTa0O
-5pa38ohIkIMlo3LSWfjBI803JDbElMnq/dpVUFQ7JyHhFLawc1iQS2Y6WdhhV8im
-sdzAxik8FOw204d6V7Ijy7EReIH+aAajba9BPHgXtYmxm44tjgq7eHBXb0xRCvQW
-gLhc+fSMVsiifx92gM/xrvamAs+GEEW7nDAXsG4GLDWn8Fc+Bxd5CRHmnEoIeMqM
-J9vNQUkXj9OHV/Xa1hGDT3mF7DjX4lNoG9tKOjC2lWPLhS2KrEE=
-=RCwM
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6t9qYACgkQ2O7X88g7
++poW4Q/+MRp2UMwvH182vYfEZaPV4oUWAdkWo8EBzRsTvINvOBDvFx39aCip7JS+
+xHj42Enw5U/JoZqLdJ7gFnXOfqHJAn5P74u2mY9ttGqS2uFKhVWdgtwOUIo14A/3
+qywQuGep91TW+h8i3QoBDw9aBecbol/wOLR+6Mm3CfOlAn69yBxYB6FVmYqNbZMD
+Tq2O/HK9gyaAnowz7vmmC09xRLoOufzeLlqxCH05VtjbRiawuYl+fpFIW/7VUsHj
+molq0ltvvaU4fNonMcGeyQSqjcDx/Ri8O7IjblIq4lFRbewHoBaf1zSBtrPCCp2L
+t4FSrXb85VAaDzF9mZz2ubBkSfpFffvz3M+4xkG7GJcaMU68MtPXjb2K2BkgSfOl
+kDWqzGZkixNeKoaza3H6uf8QYWWDtOYzC1S+JaYGIcwusR/fiofKiBGRjshkWauH
+3BYP2j8T3isIpfu0N4EQjkLMfx0gNlwccPz+TUJWAkOe3N/8tPL1usTPh9W/qHwb
+Hs+2q4iv8JKiYb4MvATKtCAz8fDu5KlvYJjnHPLtkwSc/95PDDZBAw8yTp3Rp1uj
+/B56K1HVa8Qx8j45G2hu2pZIjq60J2Qv0//qgWhFrZO4BY2h35HZNcfvuD4SszaE
+I5FZgDREdbceGYGnWeh+NoAsUUYYayD4tISIpvFFO7sWWTrIamg=
+=XGdH
 -----END PGP SIGNATURE-----
 
---g67rzxqxnnbyq5ce--
+--bfnyv6h55yl2uve7--
