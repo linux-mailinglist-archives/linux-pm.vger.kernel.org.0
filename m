@@ -2,124 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C20E1C285A
-	for <lists+linux-pm@lfdr.de>; Sat,  2 May 2020 23:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F501C288E
+	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 00:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728527AbgEBVUG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 May 2020 17:20:06 -0400
-Received: from mta-p7.oit.umn.edu ([134.84.196.207]:56916 "EHLO
-        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728513AbgEBVUF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 May 2020 17:20:05 -0400
-X-Greylist: delayed 537 seconds by postgrey-1.27 at vger.kernel.org; Sat, 02 May 2020 17:20:05 EDT
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 49F1xl6CQkz9vKTk
-        for <linux-pm@vger.kernel.org>; Sat,  2 May 2020 21:11:07 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p7.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1pOSXK6vAUt9 for <linux-pm@vger.kernel.org>;
-        Sat,  2 May 2020 16:11:07 -0500 (CDT)
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 49F1xl51jjz9vKSs
-        for <linux-pm@vger.kernel.org>; Sat,  2 May 2020 16:11:07 -0500 (CDT)
-Received: by mail-qv1-f70.google.com with SMTP id v2so14005627qvy.1
-        for <linux-pm@vger.kernel.org>; Sat, 02 May 2020 14:11:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=98Gw/YIKBAo25+eia8JVZ/k22pWYO0PDQMHyI7+B3/Y=;
-        b=qiXSHn3VnvB/69IWAG+v5cQyvBCq6ZxUOeK/CmnxT5yJCxiSzFhnxlJML24aAdXu8D
-         +eaj2Nsq05zO4XATqr44CfX8qbwWcBAq0IVDFn1r4Ful+yx3U24s84fh6ZYmKT5bV1wn
-         TPw5LykhGf79lQojJ6PSpVILIStk9+PpXQlaCQe+ShXXT8nFkyWgmOmGucjxQsAUpLNQ
-         ECn8BFafsy5uQlIZNhJVhBnNFiOKUAULkKEo55x9szxvFXUvVrT3W5GUgJawmSf0tAV/
-         ppNdq0kCTqyO3v+kQbAIi7otRocRzuJ96dpQvq2WrIhPIrgnNj1aYCYJXJ37qjP2yXsI
-         iPhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=98Gw/YIKBAo25+eia8JVZ/k22pWYO0PDQMHyI7+B3/Y=;
-        b=ba4mpEp3cbganwkwZEUH4UutxDMnb46PX0Y22c1nQqXyj4cuXcnhJBDnk9YoxKu4vQ
-         jcqZ3xJffj2FbbhUpELcGeqCxfL+KJnOJQU8EMFvt68UeAWLWO9sBPNd9GLaY93hxJxl
-         PUWw+au3jkYnlqgbiHfKWrLSoShOi4MEqR5ednbM2/8EmJkTY/bDa/vCD2Xx2CznB8is
-         DWJWbumEqo5/tPr2XOnbF7VqNQGq8vQCAP92+bctlwIGpCVQ+vyxcgvLeCh8SVAxK73t
-         tEndbvHC+wwmiSobglGWOR217XgR+MyQCPCKYYjSQe4MxQzvsckbl5N3/aP39LzdMOiW
-         tnzw==
-X-Gm-Message-State: AGi0Puad3q+AWc+gtQX7pD5QMavhzSeO1QeTvOV3y/P186RAh0+9LUH2
-        Bx48R55ZKH1Crpe8fma/OZ4lyFxMMHFLb1K5jB9VBnFSRhM8Jy99TVmzie4e9p1kF/zQVtlLnow
-        SKco0nviGLgAejbRXZ3a3c3M=
-X-Received: by 2002:a37:a186:: with SMTP id k128mr9694069qke.149.1588453867092;
-        Sat, 02 May 2020 14:11:07 -0700 (PDT)
-X-Google-Smtp-Source: APiQypLDJ29emRSGxtOrg7phOUBKtXGhr9D7AIFJJXZK+qKPj9RkQfFg5OekLu1Lbs0v6owzYNPvoA==
-X-Received: by 2002:a37:a186:: with SMTP id k128mr9694039qke.149.1588453866425;
-        Sat, 02 May 2020 14:11:06 -0700 (PDT)
-Received: from qiushi.dtc.umn.edu (cs-kh5248-02-umh.cs.umn.edu. [128.101.106.4])
-        by smtp.gmail.com with ESMTPSA id l12sm5919552qke.89.2020.05.02.14.11.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 May 2020 14:11:05 -0700 (PDT)
-From:   wu000273@umn.edu
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kjlu@umn.edu, wu000273@umn.edu
-Subject: [PATCH] power: supply: fix memory leaks
-Date:   Sat,  2 May 2020 16:10:56 -0500
-Message-Id: <20200502211056.20975-1-wu000273@umn.edu>
-X-Mailer: git-send-email 2.17.1
+        id S1728556AbgEBWXx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 May 2020 18:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728530AbgEBWXx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 May 2020 18:23:53 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AB3C061A0C;
+        Sat,  2 May 2020 15:23:53 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 35F9B260157
+Received: by earth.universe (Postfix, from userid 1000)
+        id 0F1993C08C7; Sun,  3 May 2020 00:23:49 +0200 (CEST)
+Date:   Sun, 3 May 2020 00:23:49 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] power: supply: core: add input voltage/current
+ measurements
+Message-ID: <20200502222349.tfa72nr5zunybpla@earth.universe>
+References: <cover.1588345420.git.mirq-linux@rere.qmqm.pl>
+ <249d7ad42b02bfeb8c31c49a64ee92b3e745086d.1588345420.git.mirq-linux@rere.qmqm.pl>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="g3ivjy5uiv4t2q7t"
+Content-Disposition: inline
+In-Reply-To: <249d7ad42b02bfeb8c31c49a64ee92b3e745086d.1588345420.git.mirq-linux@rere.qmqm.pl>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Qiushi Wu <wu000273@umn.edu>
 
-In function power_supply_add_hwmon_sysfs(), psyhw->props is
-allocated by bitmap_zalloc(). But this pointer is not deallocated
-in several error paths, which lead to memory leak bugs. To fix
-this, we can call bitmap_free() to free this pointer.
+--g3ivjy5uiv4t2q7t
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Qiushi Wu <wu000273@umn.edu>
----
- drivers/power/supply/power_supply_hwmon.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/supply/power_supply_hwmon.c
-index 75cf861ba492..7453390ab7a4 100644
---- a/drivers/power/supply/power_supply_hwmon.c
-+++ b/drivers/power/supply/power_supply_hwmon.c
-@@ -307,7 +307,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply *psy)
- 	ret = devm_add_action(dev, power_supply_hwmon_bitmap_free,
- 			      psyhw->props);
- 	if (ret)
--		goto error;
-+		goto out_free;
- 
- 	for (i = 0; i < desc->num_properties; i++) {
- 		const enum power_supply_property prop = desc->properties[i];
-@@ -342,7 +342,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply *psy)
- 		new_name = devm_kstrdup(dev, name, GFP_KERNEL);
- 		if (!new_name) {
- 			ret = -ENOMEM;
--			goto error;
-+			goto out_free;
- 		}
- 		strreplace(new_name, '-', '_');
- 		name = new_name;
-@@ -353,10 +353,12 @@ int power_supply_add_hwmon_sysfs(struct power_supply *psy)
- 						NULL);
- 	ret = PTR_ERR_OR_ZERO(hwmon);
- 	if (ret)
--		goto error;
-+		goto out_free;
- 
- 	devres_close_group(dev, power_supply_add_hwmon_sysfs);
- 	return 0;
-+out_free:
-+	bitmap_free(psyhw->props);
- error:
- 	devres_release_group(dev, NULL);
- 	return ret;
--- 
-2.17.1
+On Fri, May 01, 2020 at 05:11:18PM +0200, Micha=C5=82 Miros=C5=82aw wrote:
+> Introduce input voltage and current limits and measurements.
+> This makes room for e.g. VBUS measurements in USB chargers.
 
+We already have properties for charger input voltage/current.
+Unfortunately the naming is not as straight forward, as it
+could be. Basically the properties have been added over time
+and are ABI now. Things are documented in
+
+Documentation/ABI/testing/sysfs-class-power
+
+I provided the relevant properties below.
+
+> Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+
+[...]
+
+> --- a/drivers/power/supply/power_supply_sysfs.c
+> +++ b/drivers/power/supply/power_supply_sysfs.c
+> @@ -273,7 +273,9 @@ static struct device_attribute power_supply_attrs[] =
+=3D {
+>  	POWER_SUPPLY_ATTR(charge_control_limit_max),
+>  	POWER_SUPPLY_ATTR(charge_control_start_threshold),
+>  	POWER_SUPPLY_ATTR(charge_control_end_threshold),
+> +	POWER_SUPPLY_ATTR(input_current_now),
+>  	POWER_SUPPLY_ATTR(input_current_limit),
+> +	POWER_SUPPLY_ATTR(input_voltage_now),
+>  	POWER_SUPPLY_ATTR(input_voltage_limit),
+>  	POWER_SUPPLY_ATTR(input_power_limit),
+>  	POWER_SUPPLY_ATTR(energy_full_design),
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 6a34df65d4d1..5313d1284aad 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -127,7 +127,9 @@ enum power_supply_property {
+>  	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX,
+>  	POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD, /* in percents! */
+>  	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD, /* in percents! */
+> +	POWER_SUPPLY_PROP_INPUT_CURRENT_NOW,
+
+What:           /sys/class/power_supply/<supply_name>/current_avg   =20
+Date:           May 2007
+Contact:        linux-pm@vger.kernel.org                         =20
+Description:                 =20
+                Reports an average IBUS current reading over a fixed period=
+=2E  =20
+                Normally devices will provide a fixed interval in which the=
+y  =20
+                average readings to smooth out the reported value.         =
+   =20
+                                                                           =
+    =20
+                Access: Read   =20
+                Valid values: Represented in microamps
+
+>  	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+> +	POWER_SUPPLY_PROP_INPUT_VOLTAGE_NOW,
+
+What:           /sys/class/power_supply/<supply_name>/voltage_now   =20
+Date:           May 2007   =20
+Contact:        linux-pm@vger.kernel.org   =20
+Description:   =20
+                Reports the VBUS voltage supplied now. This value is genera=
+lly   =20
+                read-only reporting, unless the 'online' state of the suppl=
+y   =20
+                is set to be programmable, in which case this value can be =
+set   =20
+                within the reported min/max range.   =20
+   =20
+                Access: Read, Write   =20
+                Valid values: Represented in microvolts   =20
+
+>  	POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT,
+>  	POWER_SUPPLY_PROP_INPUT_POWER_LIMIT,
+>  	POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
+
+-- Sebastian
+
+--g3ivjy5uiv4t2q7t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6t8u0ACgkQ2O7X88g7
++ppPhg//Zc1WwfEDVYa11+sBTdEsTb4FGzPsFixlXe4GE6kNmXK/uFzUmwH+8Jbe
+YLtwTb7Disi0ub04w6ZAc3gwGLmRU6hRj/ybkFAcBh3WNli5AtY6K/hFU3mSZc9f
+i2mNHKP/15VTswHgoteCx1LFvNsIhuH2D3CuR85zZneiX3vT8rT9MFItAvr+mNTK
+pegtIIhaGEgg44ab6k5PmSvrS3L/KhEM3ditb4mrWNCxt5yPDrB8oaYV9cRjKdPo
+y7UGF6kM80fp5ggI9IWgysi7egLa49gb+3VNWOhgNUclEAgbQuRnM78nxQpPHtG0
+xQO5h9jz5xrIEp7O8WKaDmtPz/lAZm62ofD15dGh+sZju4h8tWh8bbW0vAIekpXS
+a+JjS5qeZVW1EvmDSC7wrVkUl5RGzZYvNoqftKxSVYCXVIPKOrDPmCFKiMGYe1+P
+t7PsOwfmMvrEXH8dDAw1AOd9xIBAUx5PFAjN6T8Tmir0I81JDGeAN37gzCigoIJb
+eeB+9vedR7PskCG0JzU+//Jx5mFKjZP6Ltk8PapowpT/TOca6LKrX24pCnYVzv+0
+V27N/38P4bCnUSc0yFj2k2BSsFhISXCmUMjZv49pmoA4rqTC7bATIlRJX+2o5RpU
+/J6Es9QaNPmtVSWwcLStnGtS6jKQZc4pQoKMHfG9SvZHovTb4JQ=
+=Y7im
+-----END PGP SIGNATURE-----
+
+--g3ivjy5uiv4t2q7t--
