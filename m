@@ -2,138 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D70741C2898
-	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 00:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6706F1C289E
+	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 00:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728555AbgEBWjq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 May 2020 18:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728550AbgEBWjq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 May 2020 18:39:46 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569CFC061A0C;
-        Sat,  2 May 2020 15:39:46 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 14DEB2A05BC
-Received: by earth.universe (Postfix, from userid 1000)
-        id 771C93C08C7; Sun,  3 May 2020 00:39:42 +0200 (CEST)
-Date:   Sun, 3 May 2020 00:39:42 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     wu000273@umn.edu
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kjlu@umn.edu, Andrey Smirnov <andrew.smirnov@gmail.com>
-Subject: Re: [PATCH] power: supply: fix memory leaks
-Message-ID: <20200502223942.fksizdglrw5zdpw6@earth.universe>
-References: <20200502211056.20975-1-wu000273@umn.edu>
+        id S1728572AbgEBWpa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 May 2020 18:45:30 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:62888 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728565AbgEBWpa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 2 May 2020 18:45:30 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 49F42b5VNMz39;
+        Sun,  3 May 2020 00:45:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1588459527; bh=CHJShVi3XY0BbhLa65FPayKa3UNmPaRfnp/54qLpPKE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VHhx0GNXIyuT2BCU7dFUuVUEEB3FIrCDKDVfIE12gZxd+eu2SPLn8YOhyU2S5IPpy
+         FgLuLCetken040elkf6SAPn7JBarf6ZxBlUjeg35LSmRJZnULDb/XDbnLUe2sjz9NR
+         sarrrJLq6a6oEiT3LK+QrACrMG2lW97lZ2PUAeKWrsm+IEA9RDd80wfIHyEz40Nh/6
+         pyIgleQHvsyB1w8O9i/6R6j5j31e8+P1mOTV24ne40f6h++IYxEahM7ZosJmCbTlY2
+         vFTmVx3y3VQl3mb6tMohW9RNuAOH/Add54UwS7wvLRCk2kRCWEIsp3q3cgoJKwh+Y6
+         jpFl2c6bWdOGg==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.2 at mail
+Date:   Sun, 3 May 2020 00:45:26 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     clang-built-linux@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] power: supply: core: add input voltage/current
+ measurements
+Message-ID: <20200502224526.GA25127@qmqm.qmqm.pl>
+References: <cover.1588345420.git.mirq-linux@rere.qmqm.pl>
+ <249d7ad42b02bfeb8c31c49a64ee92b3e745086d.1588345420.git.mirq-linux@rere.qmqm.pl>
+ <20200502222349.tfa72nr5zunybpla@earth.universe>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bfnyv6h55yl2uve7"
+Content-Type: text/plain; charset=iso-8859-2
 Content-Disposition: inline
-In-Reply-To: <20200502211056.20975-1-wu000273@umn.edu>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200502222349.tfa72nr5zunybpla@earth.universe>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Sun, May 03, 2020 at 12:23:49AM +0200, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Fri, May 01, 2020 at 05:11:18PM +0200, Micha³ Miros³aw wrote:
+> > Introduce input voltage and current limits and measurements.
+> > This makes room for e.g. VBUS measurements in USB chargers.
+> We already have properties for charger input voltage/current.
+> Unfortunately the naming is not as straight forward, as it
+> could be. Basically the properties have been added over time
+> and are ABI now. Things are documented in
+> 
+> Documentation/ABI/testing/sysfs-class-power
+> 
+> I provided the relevant properties below.
 
---bfnyv6h55yl2uve7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hmm. Looks like there is no battery current/voltage properties then?
+This is different from IBUS (input current), as IBUS = charging
+current + system load. Documentation/power/power_supply_class.rst is
+missing descriptions for the properties you mention.
 
-Hi,
+[...]
+> > --- a/include/linux/power_supply.h
+> > +++ b/include/linux/power_supply.h
+> > @@ -127,7 +127,9 @@ enum power_supply_property {
+> >  	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX,
+> >  	POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD, /* in percents! */
+> >  	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD, /* in percents! */
+> > +	POWER_SUPPLY_PROP_INPUT_CURRENT_NOW,
+> 
+> What:           /sys/class/power_supply/<supply_name>/current_avg    
+> Date:           May 2007
+> Contact:        linux-pm@vger.kernel.org                          
+> Description:                  
+>                 Reports an average IBUS current reading over a fixed period.   
+>                 Normally devices will provide a fixed interval in which they   
+>                 average readings to smooth out the reported value.             
+>                                                                                 
+>                 Access: Read    
+>                 Valid values: Represented in microamps
+> 
 
-On Sat, May 02, 2020 at 04:10:56PM -0500, wu000273@umn.edu wrote:
-> From: Qiushi Wu <wu000273@umn.edu>
->=20
-> In function power_supply_add_hwmon_sysfs(), psyhw->props is
-> allocated by bitmap_zalloc(). But this pointer is not deallocated
-> in several error paths, which lead to memory leak bugs. To fix
-> this, we can call bitmap_free() to free this pointer.
->=20
-> Signed-off-by: Qiushi Wu <wu000273@umn.edu>
-> ---
+There are two entries for /sys/class/power_supply/<supply_name>/current_avg
+in the file, the other one mentions IBAT instead. "voltage_now" has the
+same problem. There seems to be a split-personality disorder present in
+the kernel ABI. ;-)
 
-You are correct, that there is a problem in the first instance, but
-the other changes are incorrect and introduce a new double free. Please
-read documentation for devm_add_action(). The proper fix is to just
-replace the call to devm_add_action() with devm_add_action_or_reset().
-Please send a new version for this. Also please add the following
-tag:
-
-Fixes: e67d4dfc9ff19 ("power: supply: Add HWMON compatibility layer")
-
-Thanks,
-
--- Sebastian
-
->  drivers/power/supply/power_supply_hwmon.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/su=
-pply/power_supply_hwmon.c
-> index 75cf861ba492..7453390ab7a4 100644
-> --- a/drivers/power/supply/power_supply_hwmon.c
-> +++ b/drivers/power/supply/power_supply_hwmon.c
-> @@ -307,7 +307,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply =
-*psy)
->  	ret =3D devm_add_action(dev, power_supply_hwmon_bitmap_free,
->  			      psyhw->props);
->  	if (ret)
-> -		goto error;
-> +		goto out_free;
-> =20
->  	for (i =3D 0; i < desc->num_properties; i++) {
->  		const enum power_supply_property prop =3D desc->properties[i];
-> @@ -342,7 +342,7 @@ int power_supply_add_hwmon_sysfs(struct power_supply =
-*psy)
->  		new_name =3D devm_kstrdup(dev, name, GFP_KERNEL);
->  		if (!new_name) {
->  			ret =3D -ENOMEM;
-> -			goto error;
-> +			goto out_free;
->  		}
->  		strreplace(new_name, '-', '_');
->  		name =3D new_name;
-> @@ -353,10 +353,12 @@ int power_supply_add_hwmon_sysfs(struct power_suppl=
-y *psy)
->  						NULL);
->  	ret =3D PTR_ERR_OR_ZERO(hwmon);
->  	if (ret)
-> -		goto error;
-> +		goto out_free;
-> =20
->  	devres_close_group(dev, power_supply_add_hwmon_sysfs);
->  	return 0;
-> +out_free:
-> +	bitmap_free(psyhw->props);
->  error:
->  	devres_release_group(dev, NULL);
->  	return ret;
-> --=20
-> 2.17.1
->=20
-
---bfnyv6h55yl2uve7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6t9qYACgkQ2O7X88g7
-+poW4Q/+MRp2UMwvH182vYfEZaPV4oUWAdkWo8EBzRsTvINvOBDvFx39aCip7JS+
-xHj42Enw5U/JoZqLdJ7gFnXOfqHJAn5P74u2mY9ttGqS2uFKhVWdgtwOUIo14A/3
-qywQuGep91TW+h8i3QoBDw9aBecbol/wOLR+6Mm3CfOlAn69yBxYB6FVmYqNbZMD
-Tq2O/HK9gyaAnowz7vmmC09xRLoOufzeLlqxCH05VtjbRiawuYl+fpFIW/7VUsHj
-molq0ltvvaU4fNonMcGeyQSqjcDx/Ri8O7IjblIq4lFRbewHoBaf1zSBtrPCCp2L
-t4FSrXb85VAaDzF9mZz2ubBkSfpFffvz3M+4xkG7GJcaMU68MtPXjb2K2BkgSfOl
-kDWqzGZkixNeKoaza3H6uf8QYWWDtOYzC1S+JaYGIcwusR/fiofKiBGRjshkWauH
-3BYP2j8T3isIpfu0N4EQjkLMfx0gNlwccPz+TUJWAkOe3N/8tPL1usTPh9W/qHwb
-Hs+2q4iv8JKiYb4MvATKtCAz8fDu5KlvYJjnHPLtkwSc/95PDDZBAw8yTp3Rp1uj
-/B56K1HVa8Qx8j45G2hu2pZIjq60J2Qv0//qgWhFrZO4BY2h35HZNcfvuD4SszaE
-I5FZgDREdbceGYGnWeh+NoAsUUYYayD4tISIpvFFO7sWWTrIamg=
-=XGdH
------END PGP SIGNATURE-----
-
---bfnyv6h55yl2uve7--
+Best Regards,
+Micha³ Miros³aw
