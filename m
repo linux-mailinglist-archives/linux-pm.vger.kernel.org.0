@@ -2,157 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEAA81C2DA8
-	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 17:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943DB1C2E5A
+	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 19:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728765AbgECPs7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 May 2020 11:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
+        id S1728907AbgECRZX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 May 2020 13:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728207AbgECPs6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 May 2020 11:48:58 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CB6C061A0E;
-        Sun,  3 May 2020 08:48:58 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id B4F282A04E0
-Received: by earth.universe (Postfix, from userid 1000)
-        id 258293C08C7; Sun,  3 May 2020 17:48:55 +0200 (CEST)
-Date:   Sun, 3 May 2020 17:48:55 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Tobias Schramm <t.schramm@manjaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND v6 0/3] Add support for CellWise cw2015 fuel gauge
-Message-ID: <20200503154855.duwj2djgqfiyleq5@earth.universe>
-References: <20200414125208.1091989-1-t.schramm@manjaro.org>
+        with ESMTP id S1728904AbgECRZW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 May 2020 13:25:22 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2D3C061A0E
+        for <linux-pm@vger.kernel.org>; Sun,  3 May 2020 10:25:22 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id h4so5724701wmb.4
+        for <linux-pm@vger.kernel.org>; Sun, 03 May 2020 10:25:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bBJwk1f560Kl/Mp1W9X0i0aTlx7TM73egresLUSpamk=;
+        b=cFOQk5jEn1w6eKi51VwnlLbqKOjETU9EbLf608ljWuQErnnpEzoFVe7kiZzrpQ+x3v
+         ufOGwEvyBt3gGi+RRbDRnTf/PDaG+4U5uDK3il+CBPDKIgFj5rfF2s6Ht9xgtG0jhTPQ
+         g3OpY0aH1gDpkyOQpeC1q/Gopyru92nF9gSE6ujWD3+32WKm8X4CR/H8q0nlqUhwPAJs
+         l+mDrAQGcqaQVYMRtWIU/se7z12tfJSmcIStjTmpAK2q3CDGaSL6DWkJ4EaRxSrOwqNA
+         Kr78urrAsA6c5U20eSvt57lP5TzZzBtVy9Yrjp5WKbStqFdb1pmVcdd+CDBgp8KaK8nG
+         fuxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bBJwk1f560Kl/Mp1W9X0i0aTlx7TM73egresLUSpamk=;
+        b=Qs20T0LbSARtzWBdr/8MpfqLSIZieOajCdjP2ie7gPsz3ImfAfuu2dWhHzJMD7ZYEv
+         gIm3aBet+5ZPeH3JkQAwjwSaMsp5wP7ULlKoAhGcv4yp9CxqJJHX0twKq2DeeDyDOkwT
+         s9fq+OeBWMroE0IDs1LQhhKYyc5QPgwuIh2QLOepYVRqDN2BS57ib3k/UNpJx3iHIYBi
+         0pIfnXMqcbCPFGo9Qp0P4u0lj3skUq7rcqHSRQ+ZCj6OYfhHguOosNSzFSb190oMDwxi
+         zWiweCBFJqY5KjAg7iWzyoA0z5+qdujNoT1Swdb6aXC3noD+h8Xb47kVOXeB35Z/vdwU
+         i4CA==
+X-Gm-Message-State: AGi0PuatESy0NWaq5KxM06yWfxz9cflFyCtDdrbFNhtCRTjCvmQIQf0Q
+        Z9UEjtuTH9VVw40s4pHQJvsLMUUxa+s=
+X-Google-Smtp-Source: APiQypJ6ItRfjkkv2gd+FO52dZNWQAa0DnQ8tfMXvazmN43TfD0+VqJIGCuIstUTV4BNwCia0F9OzQ==
+X-Received: by 2002:a1c:f312:: with SMTP id q18mr10098314wmq.175.1588526720813;
+        Sun, 03 May 2020 10:25:20 -0700 (PDT)
+Received: from dumbo ([2a0b:f4c2:2::1])
+        by smtp.gmail.com with ESMTPSA id n2sm14566983wrt.33.2020.05.03.10.25.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 May 2020 10:25:19 -0700 (PDT)
+Received: from cavok by dumbo with local (Exim 4.92)
+        (envelope-from <cavok@dumbo>)
+        id 1jVIMf-0003X9-R5; Sun, 03 May 2020 19:25:17 +0200
+Date:   Sun, 3 May 2020 19:25:17 +0200
+From:   Domenico Andreoli <domenico.andreoli@linux.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 2/2] uswsusp: build only when configured
+Message-ID: <20200503172517.GA9498@dumbo>
+References: <20200413190843.044112674@gmail.com>
+ <20200413193718.956985775@gmail.com>
+ <4068729.AMvo8hvaBI@kreacher>
+ <20200427094840.GA29259@dumbo>
+ <CAJZ5v0hbE3Gswp_Wp4QQTb8wuaAOGQrWNEa7Utg45wR50QN0QQ@mail.gmail.com>
+ <20200501071052.GA20585@dumbo>
+ <CAJZ5v0itdtHTsMhbrgThR76YRDv-BBH2VSiU413d+K9K0VFyAA@mail.gmail.com>
+ <20200503133104.GA24480@dumbo>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h4n2rz53hnvcjnho"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200414125208.1091989-1-t.schramm@manjaro.org>
+In-Reply-To: <20200503133104.GA24480@dumbo>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Sun, May 03, 2020 at 03:31:05PM +0200, Domenico Andreoli wrote:
+> On Fri, May 01, 2020 at 04:54:13PM +0200, Rafael J. Wysocki wrote:
+> > On Fri, May 1, 2020 at 9:10 AM Domenico Andreoli
+> > <domenico.andreoli@linux.com> wrote:
+> > >
+> > > On Wed, Apr 29, 2020 at 01:20:53PM +0200, Rafael J. Wysocki wrote:
+> > > > On Mon, Apr 27, 2020 at 11:48 AM Domenico Andreoli <domenico.andreoli@linux.com> wrote:
+> > > > >
+> > > > > On Sun, Apr 26, 2020 at 06:16:29PM +0200, Rafael J. Wysocki wrote:
+> > > > > >
+> > >
+> > > [...]
+> > >
+> > > > > >
+> > > > > > It is possible in theory that two processes write "disk" to /sys/power/state
+> > > > > > concurrently.
+> > > > > >
+> > > > > > Is there enough mutual exclusion in place to handle this gracefully after the
+> > > > > > above change?
+> > > > >
+> > > > > No, indeed.
+> > > > >
+> > > > > It looks like hibernate.c needs the mutual exclusion and user.c could
+> > > > > just use it. Should I move snapshot_device_available to hibernate.c
+> > > > > and rename it hibernate_available?
+> > > >
+> > > > There is hibernation_available() already.
+> > > >
+> > > > Maybe switch over to the refcount_t API, call the variable
+> > > > hibernate_refcount and use refcount_add_not_zero() on it for the
+> > > > mutual exclusion.
+> > >
+> > > I'm doing as you ask but I'm not understanding what we actually gain
+> > > from using the refcount_t API.
+> > >
+> > > I'm reading about relaxation of memory ordering and there is no mention
+> > > on what this implies for the add_not_zero operation that we use.
+> > 
+> > The details probably don't matter, but what we use here effectively is
+> > a refcount which is not allowed to grow above 1,
+> > 
+> > That's why it'd be reasonable to explicitly define it as a refcount,
+> > now that there is a suitable API.
+> 
+> The logic above looks fine to me and AFICT I implemented it in
+> https://lore.kernel.org/linux-pm/20200501152304.523890160@gmail.com/.
+> 
+> What I noticed only after I posted the patch, it triggers a warning
+> (the ">>>>>>" traces are only in my local code):
+> 
+> | May  3 15:06:10 dumbo kernel: [  318.272438] >>>>>>>>>> release refcount-pre 3221225472
+> | May  3 15:06:10 dumbo kernel: [  318.272441] ------------[ cut here ]------------
+> | May  3 15:06:10 dumbo kernel: [  318.272442] refcount_t: saturated; leaking memory.
+> | ...
+> | May  3 15:06:10 dumbo kernel: [  318.272531] Call Trace:
+> | May  3 15:06:10 dumbo kernel: [  318.272537]  hibernate_release+0x52/0x64
+> | May  3 15:06:10 dumbo kernel: [  318.272540]  snapshot_release+0x47/0x70
+> | May  3 15:06:10 dumbo kernel: [  318.272545]  __fput+0xe1/0x250
+> | May  3 15:06:10 dumbo kernel: [  318.272547]  task_work_run+0x76/0xb0
+> | May  3 15:06:10 dumbo kernel: [  318.272551]  exit_to_usermode_loop+0xeb/0xf0
+> | May  3 15:06:10 dumbo kernel: [  318.272554]  do_syscall_64+0x162/0x180
+> | May  3 15:06:10 dumbo kernel: [  318.272558]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> | May  3 15:06:10 dumbo kernel: [  318.272560] RIP: 0033:0x7fc0c064eb54
+> | ...
+> | May  3 15:06:10 dumbo kernel: [  318.272570] ---[ end trace 9b4a89152f05edb2 ]---
+> | May  3 15:06:10 dumbo kernel: [  318.272571] >>>>>>>>>> release refcount-port 3221225472
+> 
+> If I switch back to atomic_t, I get the expected values (my traces of
+> two hibernation cycles):
+> 
+> | [   42.836678] >>>>>>>>>> acquire refcount-pre 1
+> | [   42.836683] >>>>>>>>>> acquire refcount-post 0
+> | [   47.313636] >>>>>>>>>> release refcount-pre 0
+> | [   47.313638] >>>>>>>>>> release refcount-post 1
+> | [   58.069508] >>>>>>>>>> acquire refcount-pre 1
+> | [   58.069513] >>>>>>>>>> acquire refcount-post 0
+> | [   63.661207] >>>>>>>>>> release refcount-pre 0
+> | [   63.661209] >>>>>>>>>> release refcount-post 1
+> 
+> I'm still trying to understand why this difference between refcount_t
+> and atomic_t in our context. I must be missing something big.
 
---h4n2rz53hnvcjnho
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The problem is in refcount_add():
 
-Hi,
+| static inline void refcount_add(int i, refcount_t *r)
+| {
+| 	int old = atomic_fetch_add_relaxed(i, &r->refs);
+| 
+| 	if (unlikely(!old))
+| 		refcount_warn_saturate(r, REFCOUNT_ADD_UAF);
+| 	else if (unlikely(old < 0 || old + i < 0))
+| 		refcount_warn_saturate(r, REFCOUNT_ADD_OVF);
+| }
 
-On Tue, Apr 14, 2020 at 02:52:05PM +0200, Tobias Schramm wrote:
-> This patchset adds support for the CellWise cw2015 fuel gauge.
->=20
-> The CellWise cw2015 fuel gauge is a shuntless, single-cell Li-Ion fuel
-> gauge. It is used in the pine64 Pinebook Pro laptop.
->=20
-> This is just a resend of v6 to the linux-pm maintainers for merging.
->=20
-> I've kept the cellwise,battery-profile property in the device tree. Its
-> content describes characteristics of the battery built into a device. The
-> exact format is unknown and not publicly documented. It is likely
-> comprised of some key parameters of the battery (chemistry, voltages,
-> design capacity) and parameters for tuning the internal state of charge
-> approximation function.
-> Since v2 CellWise has confirmed to me that the only way to obtain the
-> profile blob is to mail them batteries for testing. Thus we will need to
-> keep that property.
+She clearly does not like to add anything to zero. Which does not make
+much sense to me.
 
-Thanks, queued.
+Dom
 
-> In general I'm not 100 % sure about my json-schema binding for the gauge.
-> It is my first time ever writing a json-schema binding and I'm not sure
-> whether properties like power-supplies or monitored-battery need to be
-> added to a separate, common schema for power supplies or not.
-
-Yes, they should be referenced, but at the time of your patch the
-common power-supply properties and the battery bindings have not
-yet been converted to YAML. The power-supplies property is now
-described in Documentation/devicetree/bindings/power/supply/power-supply.ya=
-ml
-and conversion of the simple-battery binding will hopefully happen
-soon. Afterwards we can update the cw2015 binding accordingly.
-
--- Sebastian
-
-> Best Regards,
->=20
-> Tobias Schramm
->=20
-> Changelog:
->  v2:
->   * Change subject to "Add support for CellWise cw2015 fuel gauge"
->   * Rewrite bindings as json-schema
->   * Use default power-supplies handling
->   * Use regmap for register access
->   * Use standard simple-battery node
->   * Replace printk/pr_* by dev_{dbg,info,warn,err}
->   * Use cancel_delayed_work_sync in remove
->   * General code cleanup
->  v3:
->   * Incorporate review by Andy
->   * Add cellwise vendor prefix
->   * Rename cellwise,bat-config-info property to cellwise,battery-profile
->   * Remove most state of charge post-processing
->   * Use fwnode interface
->   * General code cleanup
->   * Lots of code style fixes
->  v4:
->   * Implement additional changes requested by Andy
->   * Use fwnode inline wrappers
->   * Clean up waiting for gauge
->   * Minor code style fixes
->  v5:
->   * Clean up includes
->   * Handle errors during device property parsing
->   * Refactor device property parsing
->   * Replace i2c->probe by i2c->probe_new=20
->   * More code style fixes
->  v6:
->   * Fix bindings according to review by Rob
->=20
-> Tobias Schramm (3):
->   dt-bindings: Document cellwise vendor-prefix
->   dt-bindings: power: supply: add cw2015_battery bindings
->   power: supply: add CellWise cw2015 fuel gauge driver
->=20
->  .../bindings/power/supply/cw2015_battery.yaml |  82 ++
->  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
->  MAINTAINERS                                   |   6 +
->  drivers/power/supply/Kconfig                  |  11 +
->  drivers/power/supply/Makefile                 |   1 +
->  drivers/power/supply/cw2015_battery.c         | 749 ++++++++++++++++++
->  6 files changed, 851 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/cw2015=
-_battery.yaml
->  create mode 100644 drivers/power/supply/cw2015_battery.c
->=20
-> --=20
-> 2.26.0
->=20
-
---h4n2rz53hnvcjnho
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6u5+EACgkQ2O7X88g7
-+pomrg/5ASAQXZsM9KBxE7il9Jg64/S3HPh+iaT1r5CNDWH/Z1fnThOI1Zc9cyw0
-ReCDGNSuILQEfR7qCypuP60/V6hTDad/BU3ZGCIvZiifuOg3HBSGVjSyYNZA7Nfn
-PYvqJBgw8WsUYTd/XFTfqjI8y5CJcbWOtP2umaIb6AX2zRCDeUMjjfW0EBWM4m1m
-0uZ5HYRCQbTvs3sqc6XkXcJzrOmmn11TWGtWcwNu4U/YoR3i4qLLF0bNyFkAlxd/
-EYRb1KR5/oot5pngsD5E2CFrJTy/0+/vlEsHk6TMIRqAb8nVD4xWaFfhSlukcRP2
-vyYa7aynDMgll+L1ErKXdYpUXW4ACN3GVs0tkPuQm/KIqhLtT5vdBRsbAPoSqUJ8
-XqMp+0Cs1qA/9ysCrRQeXTZOA7ZAu7FQ25pGgBTwF8P1RqLHkqX2JNPspZtbRgXn
-jS55DclRebIJtl3KNWiiTnajaSUfh83SAPali5SS8IfTjFVX2/NJarmaZaKPdkHf
-BiEGE8OJjSSQpn33mRo5tSjpFSptI7mwB2uSuVeuD4R104vv+5ZQNHAvlDa0aOKm
-rLdffwRoNLdDLsjq7fTKJrv/oAU0k1H6jkNc1dRBM9FE0g/k90qeSxXypSHFB+7C
-hWOwNdi7sPfPm0lqTqcJy8tjSQuvsrW4aMjUD60R58sXUO0Ua1c=
-=6qYg
------END PGP SIGNATURE-----
-
---h4n2rz53hnvcjnho--
+-- 
+rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
+ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
