@@ -2,140 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CD91C2939
-	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 02:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082DA1C293D
+	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 02:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726577AbgECAav (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 May 2020 20:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726431AbgECAav (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 May 2020 20:30:51 -0400
+        id S1726581AbgECAki (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 May 2020 20:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726570AbgECAki (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 May 2020 20:40:38 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB95C061A0C;
-        Sat,  2 May 2020 17:30:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5A8C061A0C;
+        Sat,  2 May 2020 17:40:38 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 33E402A26C5
+        with ESMTPSA id E7DA12A0BBA
 Received: by earth.universe (Postfix, from userid 1000)
-        id C515B3C08C7; Sun,  3 May 2020 02:30:47 +0200 (CEST)
-Date:   Sun, 3 May 2020 02:30:47 +0200
+        id EE5E43C08C7; Sun,  3 May 2020 02:40:34 +0200 (CEST)
+Date:   Sun, 3 May 2020 02:40:34 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Dan Murphy <dmurphy@ti.com>
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org,
-        Guru Das Srinagesh <gurus@codeaurora.org>,
-        Sandeep Patil <sspatil@android.com>
-Subject: Re: [PATCH v5 1/3] power_supply: Add additional health properties to
- the header
-Message-ID: <20200503003047.3d3migz2fagmvfs6@earth.universe>
+        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v5 2/3] Add the bindings for the bq25150 and bq25155
+ 500mA charging ICs from Texas Instruments.
+Message-ID: <20200503004034.eroc76g2yyeqmtip@earth.universe>
 References: <20200501175118.26226-1-dmurphy@ti.com>
- <20200501175118.26226-2-dmurphy@ti.com>
+ <20200501175118.26226-3-dmurphy@ti.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lanqkvysnjhf2eti"
+        protocol="application/pgp-signature"; boundary="jwgmemsqra7osklz"
 Content-Disposition: inline
-In-Reply-To: <20200501175118.26226-2-dmurphy@ti.com>
+In-Reply-To: <20200501175118.26226-3-dmurphy@ti.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---lanqkvysnjhf2eti
+--jwgmemsqra7osklz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, May 01, 2020 at 12:51:16PM -0500, Dan Murphy wrote:
-> Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
+On Fri, May 01, 2020 at 12:51:17PM -0500, Dan Murphy wrote:
+> From: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
 >=20
-> Tested-by: Guru Das Srinagesh <gurus@codeaurora.org>
-> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> Description:
+> The BQ2515X family of devices are highly integrated battery management
+> ICs that integrate the most common functions for wearbale devices
+> namely a charger, an output voltage rail, ADC for battery and system
+> monitoring, and a push-button controller.
+>=20
+> Datasheets:
+> http://www.ti.com/lit/ds/symlink/bq25150.pdf
+> http://www.ti.com/lit/ds/symlink/bq25155.pdf
+>=20
+> CC: Rob Herring <robh@kernel.org>
+> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
 > ---
+>  .../bindings/power/supply/bq2515x.yaml        | 99 +++++++++++++++++++
+>  1 file changed, 99 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/bq2515=
+x.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml =
+b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> new file mode 100644
+> index 000000000000..673caf67a993
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+> @@ -0,0 +1,99 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) 2020 Texas Instruments Incorporated
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/power/supply/bq2515x.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: TI bq2515x 500-mA Linear charger family
+> +
+> +maintainers:
+> +  - Dan Murphy <dmurphy@ti.com>
+> +
+> +description: |
+> +  The BQ2515x family is a highly integrated battery charge management IC=
+ that
+> +  integrates the most common functions for wearable devices, namely a ch=
+arger,
+> +  an output voltage rail, ADC for battery and system monitoring, and
+> +  push-button controller.
+> +
+> +  Specifications about the charger can be found at:
+> +    http://www.ti.com/lit/ds/symlink/bq25150.pdf
+> +    http://www.ti.com/lit/ds/symlink/bq25155.pdf
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,bq25150
+> +      - ti,bq25155
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  ac_detect-gpios:
+> +    description: |
+> +       GPIO used for connecting the bq2515x device PG (AC Detect)
+> +       pin.  This pin should be used if possible as this is the
+> +       recommended way to obtain the charger's input PG state.
+> +       If this pin is not specified a software-based approach for PG
+> +       detection is used.
 
-What is going on? Ricardo wrote, that he added the JEITA spec
-reference to the commit message. I don't see it anywhere. Also
-Sandeep Patil asked to be Cc'd in new versions of the patchset.
+No _ in DT properties, please use ac-detect-gpios as I wrote in PATCHv4.
 
-You do not need to list bq2515x as user, but patch will only be
-taken together with the driver (or any other driver using the
-properties in mainline kernel).
+> +  reset-gpios:
+> +    description: |
+> +       GPIO used for hardware reset.
+> +
+> +  low-power-gpios:
+> +    description: |
+> +       GPIO used for low power mode of IC.
+> +
+> +  charge-enable-gpios:
+> +    description: |
+> +       GPIO used to turn on and off charging.
+> +
+> +  constant-charge-current-max-microamp:
+> +    description: |
+> +       Maximum charging current in micro Amps.
+> +    minimum: 50000
+> +    maximum: 600000
+> +
+> +  precharge-current-max-microamp:
+> +    description: |
+> +       Maximum precharging current in micro Amps.
+> +    minimum: 1250
+> +    maximum: 77500
+> +
+> +  input-current-limit-microamp:
+> +    description: |
+> +       Maximum input current in micro Amps.
+> +    minimum: 50000
+> +    maximum: 500000
+> +
+> +  constant-charge-voltage-max-microvolt:
+> +    description: |
+> +       Maximum charging voltage in micro volts.
+> +    minimum: 3600000
+> +    maximum: 4600000
+
+The following properties describe battery properties
+and should go into a simple-battery node, which is
+referenced by the charger. Then you get the properties
+in the driver via power_supply_get_battery_info():
+
+constant-charge-current-max-microamp
+constant-charge-voltage-max-microvolt
+precharge-current-max-microamp
+
+The binding for simple-battery can be found here:
+
+Documentation/devicetree/bindings/power/supply/battery.txt
+
+(still needs to be converted to YAML)
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    i2c0 {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +      charger@6b {
+> +          compatible =3D "ti,bq25150";
+> +          reg =3D <0x6b>;
+> +
+> +          ac_detect-gpios =3D <&gpio1 28 GPIO_ACTIVE_HIGH>;
+> +          reset-gpios =3D <&gpio0 14 GPIO_ACTIVE_HIGH>;
+> +          low-power-gpios =3D <&gpio0 15 GPIO_ACTIVE_HIGH>;
+> +          charge-enable-gpios =3D <&gpio0 13 GPIO_ACTIVE_LOW>;
+> +          constant-charge-current-max-microamp =3D <300000>;
+> +          constant-charge-voltage-max-microvolt =3D <4200000>;
+> +	  precharge-current-max-microamp =3D <2500>;
+> +	  input-current-limit-microamp =3D <100000>;
+
+bogus indention
+
+> +      };
+> +    };
 
 -- Sebastian
 
->  Documentation/ABI/testing/sysfs-class-power | 2 +-
->  drivers/power/supply/power_supply_sysfs.c   | 2 +-
->  include/linux/power_supply.h                | 3 +++
->  3 files changed, 5 insertions(+), 2 deletions(-)
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/=
-ABI/testing/sysfs-class-power
-> index bf3b48f022dc..9f3fd01a9373 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power
-> +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -190,7 +190,7 @@ Description:
->  		Valid values: "Unknown", "Good", "Overheat", "Dead",
->  			      "Over voltage", "Unspecified failure", "Cold",
->  			      "Watchdog timer expire", "Safety timer expire",
-> -			      "Over current"
-> +			      "Over current", "Warm", "Cool", "Hot"
-> =20
->  What:		/sys/class/power_supply/<supply_name>/precharge_current
->  Date:		June 2017
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
-pply/power_supply_sysfs.c
-> index f37ad4eae60b..d0d549611794 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -61,7 +61,7 @@ static const char * const power_supply_charge_type_text=
-[] =3D {
->  static const char * const power_supply_health_text[] =3D {
->  	"Unknown", "Good", "Overheat", "Dead", "Over voltage",
->  	"Unspecified failure", "Cold", "Watchdog timer expire",
-> -	"Safety timer expire", "Over current"
-> +	"Safety timer expire", "Over current", "Warm", "Cool", "Hot"
->  };
-> =20
->  static const char * const power_supply_technology_text[] =3D {
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index dcd5a71e6c67..8670e90c1d51 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -61,6 +61,9 @@ enum {
->  	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
->  	POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE,
->  	POWER_SUPPLY_HEALTH_OVERCURRENT,
-> +	POWER_SUPPLY_HEALTH_WARM,
-> +	POWER_SUPPLY_HEALTH_COOL,
-> +	POWER_SUPPLY_HEALTH_HOT,
->  };
-> =20
->  enum {
-> --=20
-> 2.25.1
->=20
-
---lanqkvysnjhf2eti
+--jwgmemsqra7osklz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6uELcACgkQ2O7X88g7
-+poBAg//cG25BWxTZ1Jhdk6pjuTlBMR/sSCntUwxGOXzdBmLcj4TQZlEnDziy4GW
-U+mrskZ4fIxvecOu+ai668lBzTeILHDRUn3Xi+cFDeRUbHhG5G8FCIiT+SNYenyl
-LkvgL/AYu2j3kls8YpQQbcDxG9CcVcMhNldWikYTz8ivZwVI8FO9JALyWd8wXvxG
-SdjmeyjIwdED+HdMvtpF8oAB+g3U/EDlvdm6FG9lYFWknSuyZGJvceY3sSCKUZED
-QE+B3BNJIIOnyxQZP1SX5pzyslq1EMTvWKu5awYatHc722D2ykiTLvODOsgiywiv
-3z5pUBHgpGNwsnRJ3ro/mgFP1Pwf2HBMItuh9pjMFGS77YJXqh2bDRUd5kqESeLX
-lIOO9ay+vC3q+lCJlRlM9uy/3nCpEsmY/jsjOPKrRT9ON/ubb5p3z/daRL6B4Ys/
-HoFF0AeKnvlVx7qfuPon6DANfxRmWrvNeA92MH2VpzpYwBmF8JP1ghOYyxC2mNqB
-i4dOEp+M6Tvo1oHD2XN23fNHcQ/2zqcHutoB0B80f+vunhfo3JhQJqrvHqC81eWg
-fVzP5EdDHfFBocsAC5M1RYn+02iTvYyc33MvsmTAII5VEH4Tb4/GrBiOsvX/K2C5
-vc+MlTEZvgcdLIyUxdrjxQIVnc/0NnKf48DUM4vSc03XBjKoEZI=
-=YrBL
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6uEwIACgkQ2O7X88g7
++poYthAApXLPRZ2KAIty+bU6dXkuWyH6CVmLJw54N5i1RMnagbSSU0b7W3SbuwOi
+uW12N9aNh4mRt9W8/F2fbnGYp6iQjJJ3Hfl0xEcg+4PMy7UJkVsVlISXJkdR229r
+UeyusIEjPQcVKe4ilf04bmLaeyKuVIwNA5mD1LXBQMSH5JgAjfsNUkFdTl7+2moa
+fkP2L2zPukrQfqdP7AvOYkRZHENHwP+TR4h7pZtHnvT5l1epM75MxralnE2YBRht
+7DXX5WP15Y1bSTiZ5+1ksBHP7JsOPYaQRw6E7UCJNHOlxDIXBedAqJ1KT0NIKHdS
+ToU8HTLlSe4a6qXdxhWc0Aoxq+8/DeO/D8RAFzt60wXdqI181pE1U4rtX0CC4IjP
+oUJf2w6ZxnUeV8lAdhsIE3K8+CaTLuUk+KLRg4JHmRRS8i58ze4hRvnLbE/JElVE
+PwjHyij1HzR09gMTKTXWCS68awbh5TVLPsxS6OQf4nM69PWN8lKwZny7MFLWG1d1
+clAsSIcMwiObqIaiY/Pwu6ozTetPxA1edz3pkLJYYvJ7kwWRGJs3YBmNk2J4gPo2
+i+wg6z114fv2QL0P7gYQvOtSC7zglXHbS9j+QuRfgXwFBlTBypXzoMIt1x9/iQYQ
+0NLicFRgJW6Rmwh5VnW1WJsj6a+Rt07CJ6BW7zQ9/HQ6Ai5DVmg=
+=ZNJM
 -----END PGP SIGNATURE-----
 
---lanqkvysnjhf2eti--
+--jwgmemsqra7osklz--
