@@ -2,200 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3E61C2ADE
-	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 11:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADC71C2B97
+	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 13:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbgECJQ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 May 2020 05:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726445AbgECJQ4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 May 2020 05:16:56 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651A7C061A0C
-        for <linux-pm@vger.kernel.org>; Sun,  3 May 2020 02:16:55 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id t16so5561842plo.7
-        for <linux-pm@vger.kernel.org>; Sun, 03 May 2020 02:16:55 -0700 (PDT)
+        id S1727023AbgECLTO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 May 2020 07:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726965AbgECLTO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 May 2020 07:19:14 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EF4C061A0C
+        for <linux-pm@vger.kernel.org>; Sun,  3 May 2020 04:19:12 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id x25so5134142wmc.0
+        for <linux-pm@vger.kernel.org>; Sun, 03 May 2020 04:19:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=dKheKIl+HzrQoKcAIW+W1McBqWU+UD71Pljgu088DE8=;
-        b=tFYKLgmRQ8NYSJf6x7m8XkiYc4OW9pW0YoxtCA2hjcDz/8r/rgqFB7+xd1PdW3JD95
-         BIeONdnz5Bg8C3Ut35yN/MAD/qqnnewmz3XBnwlEm4CZcz6rPvTsTmJWCtoIwvjG7oPq
-         wPKv6JHmZSH1iBQn9wwO8SzeOkEBEWumGh0O8oOPMoG9XdnAxsJ61/3pf/Pjvg/T9lZV
-         yMDKgdybfACU+vzK8LPsYKyaUtwdnM2iEcvnsqP10ONOGZZryuSPy1g6eRCeV4kAJ3nf
-         iFQaRrvTSpcOUoFMigxVuwBC06xi38gK3CRFltTjauX0e2xvTxJHmN+yUfKyFlt7A4W/
-         HRmQ==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=qP1MRrLLrbUAl5gkkOUt0RQz2ai3Wb6/GB+tjQOX60E=;
+        b=c0WrlK3rKHKQOa4ioMf83Bk3KEnFNkbrm+gfAq1sdqz/xzo1nV8cPC3L4obSMLBppf
+         TAal6IhCdX1yR9YRv21T+rgo4IOf1AcCuif/rbShc91nDE/p4rkQsajvhmFj7Cyrl3Jx
+         Lsxbw5wItJxtUj4pRxtPm2KzVo/itqHEWTXoJKb7XmM5S8f4j4N7UMCd7eD34VWDckCf
+         mlnwF9UhYpR2wdGSwln0rdrND0QQ3fB7xCTtBomb5H7k1PL2cwiPMvnatRCwTV8BoRDd
+         YrfqXJVUB0f5mUN1AYGzUWDnmPJTb11+KGK146/sM/lcyVdzVrlDnYqSwV4utg0Fn/hH
+         S2Zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=dKheKIl+HzrQoKcAIW+W1McBqWU+UD71Pljgu088DE8=;
-        b=aGMtuaGxo0rpvNEcNKVE/DuKNOJS9PegXE3agDQiXeOhhx/npO4c9yY4zHbpA0S1Ke
-         l6tI9QrPlvod3ExvitGK1Yt1ls/cray5KYCTk96U8unr9cNUHInCRz6ejM1bl/KfixUT
-         QJzH1YHic4zuklDt/zpagkMb6UIL/5rDDCG/PSWesv0jivQjvwho1iWCIq4lMLnthyIk
-         BSGJzDv/UZchqgNvCtvITvWi8+j5X+2e4r3kJcjCFBb3piMM27DqjGpvaqZ4t16+nkdJ
-         XpJC+T0jcl/NjC7/zqKq4LkBwuAmanTGlJnvhJExj5ezjQRLd3V39hUm3HkGRjcit+HT
-         4AUQ==
-X-Gm-Message-State: AGi0PubHjev0+IQRnucqdvhW0KII8QuHKYVgDYVYADxgnA3JDttTu6um
-        ySUHVEyDz2g7naObB/UwBeNlHfAsOD8=
-X-Google-Smtp-Source: APiQypLY53WBX+xLVt3KLGjSVRjYaks25NTEtl8x9QDcQ8bYsrRf8NzNH5TK0YNDIL1+C5ei3ysXbQ==
-X-Received: by 2002:a17:902:fe03:: with SMTP id g3mr12647531plj.28.1588497414967;
-        Sun, 03 May 2020 02:16:54 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d18sm6166196pfq.177.2020.05.03.02.16.53
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qP1MRrLLrbUAl5gkkOUt0RQz2ai3Wb6/GB+tjQOX60E=;
+        b=P4hYodxX1yzfFyVrpFDIWEhCSD4lM6DsinRZmtEZL6sqsDq56pUlas1AUhfwvIakB6
+         zFp0DmeKE5fwWYraBnJDMZ/iHWP87OXIfrrxK8dDr6qgF2kDxCYgfzSoZUTDqC/KF0m8
+         lBZIFJvVPTkqdJvEB5u0qJQ9bktCOE4AMx7sPQQ62crJQjJbOn3E8bA0uHJX1UgT/oHe
+         SSdun+C/6m7fZ2MJMtR2DmmF4R1Qhlz3XRbvO4psRGtsnDVcmVKWsfQf/Uito4mlPwHI
+         /3busGvFxPuEsiR6BIDnvjTpzPYzv4ZFKGVwE9WE16EAtmESsHMSqWT9YE7t0hzDGWxG
+         aicQ==
+X-Gm-Message-State: AGi0PubeoPePkvB53j6TcjuZ7UiXvtpI51YIlCCZh/B9usbO3uvST8hI
+        z4S00ZmAp1oi7AhGxyOg00pDihe4on0=
+X-Google-Smtp-Source: APiQypKVXKSUjEZDAtkJ8t0C3RTo7c95uEWuSx/68TPZxh8jLL5G9pj8/b6vBbbUHJ2E8tGe1OVxXQ==
+X-Received: by 2002:a05:600c:22d3:: with SMTP id 19mr9475610wmg.110.1588504751084;
+        Sun, 03 May 2020 04:19:11 -0700 (PDT)
+Received: from dumbo (tor-exit-5.zbau.f3netze.de. [2a0b:f4c0:16c:5::1])
+        by smtp.gmail.com with ESMTPSA id t2sm8246641wmt.15.2020.05.03.04.19.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 May 2020 02:16:54 -0700 (PDT)
-Message-ID: <5eae8c06.1c69fb81.58467.8d7a@mx.google.com>
-Date:   Sun, 03 May 2020 02:16:54 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 03 May 2020 04:19:10 -0700 (PDT)
+Received: from cavok by dumbo with local (Exim 4.92)
+        (envelope-from <cavok@dumbo>)
+        id 1jVCeK-0006ML-N2; Sun, 03 May 2020 13:19:08 +0200
+Date:   Sun, 3 May 2020 13:19:08 +0200
+From:   Domenico Andreoli <cavok@debian.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>, 954061@bugs.debian.org
+Subject: Re: [PATCH 0/2] Preparing to phase out uswsusp
+Message-ID: <20200503111908.GA8066@dumbo>
+References: <20200413190843.044112674@gmail.com>
+ <1636190.8qWULXYmPk@kreacher>
+ <20200427095306.GB29259@dumbo>
+ <CAJZ5v0g4GyaxtKvbdS7u0rWtMbd075hPzFO-+Cz0q+zM1WbE-g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.7-rc3-24-g1985b45de014
-X-Kernelci-Report-Type: test
-Subject: pm/testing sleep: 6 runs, 0 regressions (v5.7-rc3-24-g1985b45de014)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0g4GyaxtKvbdS7u0rWtMbd075hPzFO-+Cz0q+zM1WbE-g@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 6 runs, 0 regressions (v5.7-rc3-24-g1985b45de014)
+On Wed, Apr 29, 2020 at 01:06:01PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Apr 27, 2020 at 11:53 AM Domenico Andreoli
+> <domenico.andreoli@linux.com> wrote:
+> >
+> > On Sun, Apr 26, 2020 at 05:46:37PM +0200, Rafael J. Wysocki wrote:
+> > > On Monday, April 13, 2020 9:08:43 PM CEST Domenico Andreoli wrote:
+> > > > Dear maintainers,
+> > > >
+> > > >   it is my understanding that the usermode software suspend is not any
+> > > > more the first choice for suspend/hibernate needs (uswsusp tool did
+> > > > not receive any update in years).
+> > >
+> > > While the last part is true, the user space utilities are still usable.
+> > >
+> >
+> > Indeed I've been using them until now and work perfectly.
+> >
+> > > Moreover, the kernel-based hibernation is still missing one important
+> > > piece with respect to the user space variant, which is image encryption.
+> > >
+> >
+> > Interesting, is it advertised anywhere?
+> 
+> I'm not sure what you mean by "advertised".
 
-Test results summary
---------------------
+Wrong and misinformed wording, encryption is also mentioned on uswsusp
+web page http://suspend.sourceforge.net/.
 
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
+> 
+> There is a way to combine hibernation with dm-crypt which is kind of
+> described by Documentation/power/swsusp-dmcrypt.rst, but the lack of
+> encryption support in the built-in hibernation code is not documented
+> otherwise AFAICS.
 
-2   | exynos5422-odroidxu3 | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 21/21  =
+I use a full disk encryption on Debian, swap included. I've to say
+that everything works flawlessly, after the pass phrase is entered it
+resumes from hibernation whatever system I used to hibernate: it works
+either with uswsusp or in-kernel mechanism.
 
-3   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
+Is there any advantage in the approach of swsusp-dmcrypt.rst?
 
-4   | rk3288-veyron-jaq    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 21/21  =
+Thanks,
+Domenico
 
-5   | rk3399-gru-kevin     | arm64 | lab-collabora | gcc-8    | defconfig  =
-        | 11/11  =
-
-6   | tegra124-nyan-big    | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 2/2    =
-
-
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.7-rc3-24-g1985b45de014
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      1985b45de01473658db9194e948eb151f9e076ae =
-
-
-
-Test Failures
--------------
-  =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | bcm2836-rpi-2-b      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 0/1    =
-
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc3-24-g1985b4=
-5de014/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc3-24-g1985b4=
-5de014/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-bcm2836-rpi-2-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0424.0/armhf/rootfs.cpio.gz  =
-
-
-  1 tests: 0 PASS, 1 FAIL, 0 SKIP
-    * login:
-        never passed   =
-
-         =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-3   | rk3288-rock2-square  | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-
-  Results:     1 PASS, 20 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc3-24-g1985b4=
-5de014/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-square=
-.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc3-24-g1985b4=
-5de014/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-rock2-square=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0424.0/armhf/rootfs.cpio.gz  =
-
-
-  21 tests: 1 PASS, 20 FAIL, 0 SKIP
-    * rtcwake-mem-1:
-        never passed
-    * rtcwake-mem-2:
-        never passed
-    * rtcwake-mem-3:
-        never passed
-    * rtcwake-mem-4:
-        never passed
-    * rtcwake-mem-5:
-        never passed
-    * rtcwake-mem-6:
-        never passed
-    * rtcwake-mem-7:
-        never passed
-    * rtcwake-mem-8:
-        never passed
-    * rtcwake-mem-9:
-        never passed
-    * rtcwake-mem-10:
-        never passed
-    * rtcwake-freeze-1:
-        never passed
-    * rtcwake-freeze-2:
-        never passed
-    * rtcwake-freeze-3:
-        never passed
-    * rtcwake-freeze-4:
-        never passed
-    * rtcwake-freeze-5:
-        never passed
-    * rtcwake-freeze-6:
-        never passed
-    * rtcwake-freeze-7:
-        never passed
-    * rtcwake-freeze-8:
-        never passed
-    * rtcwake-freeze-9:
-        never passed
-    * rtcwake-freeze-10:
-        never passed   =
-
-              =20
+-- 
+rsa4096: 3B10 0CA1 8674 ACBA B4FE  FCD2 CE5B CF17 9960 DE13
+ed25519: FFB4 0CC3 7F2E 091D F7DA  356E CC79 2832 ED38 CB05
