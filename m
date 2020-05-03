@@ -2,62 +2,243 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8655B1C2F05
-	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 22:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F631C2F5B
+	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 23:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728992AbgECUGa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 May 2020 16:06:30 -0400
-Received: from smtprelay0218.hostedemail.com ([216.40.44.218]:49860 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729052AbgECUGa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 May 2020 16:06:30 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 4D39380196CE;
-        Sun,  3 May 2020 20:06:29 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:2901:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:4250:4321:5007:8957:10004:10400:10848:11232:11658:11914:12048:12297:12740:12760:12895:13069:13311:13357:13439:14659:21080:21627:21740:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
-X-HE-Tag: twig67_386849556fe11
-X-Filterd-Recvd-Size: 1750
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf12.hostedemail.com (Postfix) with ESMTPA;
-        Sun,  3 May 2020 20:06:27 +0000 (UTC)
-Message-ID: <67bb48d7e7927b6b50bafa69a21eef41fc2157b5.camel@perches.com>
-Subject: Re: [PATCH] thermal: stm32: fix spelling mistake "acces" -> "access"
-From:   Joe Perches <joe@perches.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, edubezval@gmail.com, info@metux.net,
-        tglx@linutronix.de, gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Date:   Sun, 03 May 2020 13:06:25 -0700
-In-Reply-To: <20200503191104.153711-1-christophe.jaillet@wanadoo.fr>
-References: <20200503191104.153711-1-christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.1-2 
+        id S1729091AbgECVKm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 May 2020 17:10:42 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:50470 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729089AbgECVKm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 May 2020 17:10:42 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 95BF32A083E
+Received: by earth.universe (Postfix, from userid 1000)
+        id 823973C08C7; Sun,  3 May 2020 23:10:37 +0200 (CEST)
+Date:   Sun, 3 May 2020 23:10:37 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 04/11] power: bq25890: protect view of the chip's state
+Message-ID: <20200503211037.eovuhtugmg2vy4er@earth.universe>
+References: <cover.1588517058.git.mirq-linux@rere.qmqm.pl>
+ <3291ca81bf8eb1b0401579ae08e7835e71dfc1ff.1588517058.git.mirq-linux@rere.qmqm.pl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="avukksuw7xknvrq2"
+Content-Disposition: inline
+In-Reply-To: <3291ca81bf8eb1b0401579ae08e7835e71dfc1ff.1588517058.git.mirq-linux@rere.qmqm.pl>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 2020-05-03 at 21:11 +0200, Christophe JAILLET wrote:
-> Fix a typo in Kconfig.
-[]
-> diff --git a/drivers/thermal/st/Kconfig b/drivers/thermal/st/Kconfig
-[]
-> @@ -23,5 +23,5 @@ config STM32_THERMAL
->  	help
->  	  Support for thermal framework on STMicroelectronics STM32 series of
->  	  SoCs. This thermal driver allows to access to general thermal framework
-> -	  functionalities and to acces to SoC sensor functionalities. This
-> +	  functionalities and to access to SoC sensor functionalities. This
->  	  configuration is fully dependent of MACH_STM32MP157.
 
-Could fix the grammar too:
+--avukksuw7xknvrq2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This thermal driver allows to access general thermal framework
-functionalities and access to SoC sensor functionalities.
+Hi,
 
+On Sun, May 03, 2020 at 05:21:11PM +0200, Micha=C5=82 Miros=C5=82aw wrote:
+> Extend bq->lock over whole updating of the chip's state. Might get
+> useful later for switching ADC modes correctly.
+>=20
+> Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> ---
+
+Thanks, queued.
+
+-- Sebastian
+
+>  drivers/power/supply/bq25890_charger.c | 82 ++++++++------------------
+>  1 file changed, 26 insertions(+), 56 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/suppl=
+y/bq25890_charger.c
+> index c4a69fd69f34..9339e216651f 100644
+> --- a/drivers/power/supply/bq25890_charger.c
+> +++ b/drivers/power/supply/bq25890_charger.c
+> @@ -510,74 +510,50 @@ static int bq25890_get_chip_state(struct bq25890_de=
+vice *bq,
+>  	return 0;
+>  }
+> =20
+> -static bool bq25890_state_changed(struct bq25890_device *bq,
+> -				  struct bq25890_state *new_state)
+> -{
+> -	struct bq25890_state old_state;
+> -
+> -	mutex_lock(&bq->lock);
+> -	old_state =3D bq->state;
+> -	mutex_unlock(&bq->lock);
+> -
+> -	return (old_state.chrg_status !=3D new_state->chrg_status ||
+> -		old_state.chrg_fault !=3D new_state->chrg_fault	||
+> -		old_state.online !=3D new_state->online		||
+> -		old_state.bat_fault !=3D new_state->bat_fault	||
+> -		old_state.boost_fault !=3D new_state->boost_fault ||
+> -		old_state.vsys_status !=3D new_state->vsys_status);
+> -}
+> -
+> -static void bq25890_handle_state_change(struct bq25890_device *bq,
+> -					struct bq25890_state *new_state)
+> +static irqreturn_t __bq25890_handle_irq(struct bq25890_device *bq)
+>  {
+> +	struct bq25890_state new_state;
+>  	int ret;
+> -	struct bq25890_state old_state;
+> =20
+> -	mutex_lock(&bq->lock);
+> -	old_state =3D bq->state;
+> -	mutex_unlock(&bq->lock);
+> +	ret =3D bq25890_get_chip_state(bq, &new_state);
+> +	if (ret < 0)
+> +		return IRQ_NONE;
+> =20
+> -	if (!new_state->online) {			     /* power removed */
+> +	if (!memcmp(&bq->state, &new_state, sizeof(new_state)))
+> +		return IRQ_NONE;
+> +
+> +	if (!new_state.online && bq->state.online) {	    /* power removed */
+>  		/* disable ADC */
+>  		ret =3D bq25890_field_write(bq, F_CONV_START, 0);
+>  		if (ret < 0)
+>  			goto error;
+> -	} else if (!old_state.online) {			    /* power inserted */
+> +	} else if (new_state.online && !bq->state.online) { /* power inserted */
+>  		/* enable ADC, to have control of charge current/voltage */
+>  		ret =3D bq25890_field_write(bq, F_CONV_START, 1);
+>  		if (ret < 0)
+>  			goto error;
+>  	}
+> =20
+> -	return;
+> +	bq->state =3D new_state;
+> +	power_supply_changed(bq->charger);
+> =20
+> +	return IRQ_HANDLED;
+>  error:
+> -	dev_err(bq->dev, "Error communicating with the chip.\n");
+> +	dev_err(bq->dev, "Error communicating with the chip: %pe\n",
+> +		ERR_PTR(ret));
+> +	return IRQ_HANDLED;
+>  }
+> =20
+>  static irqreturn_t bq25890_irq_handler_thread(int irq, void *private)
+>  {
+>  	struct bq25890_device *bq =3D private;
+> -	int ret;
+> -	struct bq25890_state state;
+> -
+> -	ret =3D bq25890_get_chip_state(bq, &state);
+> -	if (ret < 0)
+> -		goto handled;
+> -
+> -	if (!bq25890_state_changed(bq, &state))
+> -		goto handled;
+> -
+> -	bq25890_handle_state_change(bq, &state);
+> +	irqreturn_t ret;
+> =20
+>  	mutex_lock(&bq->lock);
+> -	bq->state =3D state;
+> +	ret =3D __bq25890_handle_irq(bq);
+>  	mutex_unlock(&bq->lock);
+> =20
+> -	power_supply_changed(bq->charger);
+> -
+> -handled:
+> -	return IRQ_HANDLED;
+> +	return ret;
+>  }
+> =20
+>  static int bq25890_chip_reset(struct bq25890_device *bq)
+> @@ -607,7 +583,6 @@ static int bq25890_hw_init(struct bq25890_device *bq)
+>  {
+>  	int ret;
+>  	int i;
+> -	struct bq25890_state state;
+> =20
+>  	const struct {
+>  		enum bq25890_fields id;
+> @@ -655,16 +630,12 @@ static int bq25890_hw_init(struct bq25890_device *b=
+q)
+>  		return ret;
+>  	}
+> =20
+> -	ret =3D bq25890_get_chip_state(bq, &state);
+> +	ret =3D bq25890_get_chip_state(bq, &bq->state);
+>  	if (ret < 0) {
+>  		dev_dbg(bq->dev, "Get state failed %d\n", ret);
+>  		return ret;
+>  	}
+> =20
+> -	mutex_lock(&bq->lock);
+> -	bq->state =3D state;
+> -	mutex_unlock(&bq->lock);
+> -
+>  	return 0;
+>  }
+> =20
+> @@ -1001,19 +972,16 @@ static int bq25890_suspend(struct device *dev)
+>  static int bq25890_resume(struct device *dev)
+>  {
+>  	int ret;
+> -	struct bq25890_state state;
+>  	struct bq25890_device *bq =3D dev_get_drvdata(dev);
+> =20
+> -	ret =3D bq25890_get_chip_state(bq, &state);
+> +	mutex_lock(&bq->lock);
+> +
+> +	ret =3D bq25890_get_chip_state(bq, &bq->state);
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> -	mutex_lock(&bq->lock);
+> -	bq->state =3D state;
+> -	mutex_unlock(&bq->lock);
+> -
+>  	/* Re-enable ADC only if charger is plugged in. */
+> -	if (state.online) {
+> +	if (bq->state.online) {
+>  		ret =3D bq25890_field_write(bq, F_CONV_START, 1);
+>  		if (ret < 0)
+>  			return ret;
+> @@ -1022,6 +990,8 @@ static int bq25890_resume(struct device *dev)
+>  	/* signal userspace, maybe state changed while suspended */
+>  	power_supply_changed(bq->charger);
+> =20
+> +	mutex_unlock(&bq->lock);
+> +
+>  	return 0;
+>  }
+>  #endif
+> --=20
+> 2.20.1
+>=20
+
+--avukksuw7xknvrq2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6vM0cACgkQ2O7X88g7
++poI0BAAihCMYr96iK1zSZzrOUb6cFWbGTK9kk735UpGterCN8qlVqwEHZcOW5lw
+TSL83l9sz3FwoYiMrZA98K4zY86slknBOmod7GcQjfEvWLQRQ7tWSrdUWcfNgC4u
+2AZjFkenrUxXeTCqqTY3vLZEcTrBa9kznIr3kCdQsxLt3c9QgQ+xr33RwojmsFdJ
+VMvnDopLfYF4kqMtf7oMSFH8c3Dmest/oFlg//k16VhliNyLGCcQnY8+swR4Lcc0
+1uMWEAtyRQ5okupCpg7gu5HejB3er0NVf7KWSUrzjYdJxmuWIKSVQTO7oJgaP0lo
+eVJ//Smin3bBNL0CrnsySPiEpMhgAhpF4Klc7hP78SyM92h080GQqzOq4Ej63Tj5
+g3w5q0+oSqbgr0ekvnMrHwlLJk9mQX7516qFbIAP9fLQh7x/ZmGgpFgZdqOkzZ4B
+qYR2fm/r5VARFOfJEIgQBk/0ChvUDe4wxckxVj2ZBvVlkBqnsVmhp9Mnr6Y5NMxH
+4Tq8l35AtRrotAamV2NhffB1kB+NWuXOwgdQxmaTRyfz4yOyhOrbnEErBt7OZqKq
+fnjW0L3+Kkl0LBgHciWLdPvpTf2cI8i//50spxIDU4aOeYoaIcyjLw4ish2ebyR5
+1r1rfhB2H9DSmCLr/J10NTRCgWH7ejiwq2j0J/wsrLNOL6WTNAc=
+=N5HG
+-----END PGP SIGNATURE-----
+
+--avukksuw7xknvrq2--
