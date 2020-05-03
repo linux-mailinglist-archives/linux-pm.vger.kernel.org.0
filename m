@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 584891C2D68
-	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 17:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039821C2D65
+	for <lists+linux-pm@lfdr.de>; Sun,  3 May 2020 17:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728873AbgECPVw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1728866AbgECPVw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Sun, 3 May 2020 11:21:52 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:51302 "EHLO rere.qmqm.pl"
+Received: from rere.qmqm.pl ([91.227.64.183]:1610 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728595AbgECPVN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 3 May 2020 11:21:13 -0400
+        id S1728636AbgECPVO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 3 May 2020 11:21:14 -0400
 Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 49FV7V4cPmzJf;
-        Sun,  3 May 2020 17:21:10 +0200 (CEST)
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 49FV7W4f4xzMP;
+        Sun,  3 May 2020 17:21:11 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1588519270; bh=mKRZQCnghprUjuua4YgNrBV4tEAzgIfaruToSEdSL8Q=;
+        t=1588519271; bh=Ol/Fy27tVQcocJtHbCOujmzZ2avDxeNSc4gh5D0opQs=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=iPkQ/FLZt0ykL0C0STfJW+MwNu2UkDUGr4OQ6JlSyUelkoC4xqpzSnNFV9/O2rSuL
-         VpVMo3SAaD9wZHXIHicqatX/+9KlUNiAqV61sgnRyuonVnDUZcJd0mPcruQ+XN2ym3
-         /4x+QfaU89Of/NgvDIZ1DQvRvLoKwciO+vTFPe/5Nxe/HO0OjShhFdk2UKlHl1adkS
-         3t0HVeYcmo5n7krhUhsq+iLmUYGxM+kQyWHSYGbJHB4rZBHSoLgx5QDrWANi3VJ2bF
-         /PFK/8jh1IirzAtd3Q9f9Junk6m8OH/FHP+igF7ru3dlPPkRveQ7JoYam7VDBozhIS
-         XubhkFsOchIlg==
+        b=AhbzeEWDyU93vzm/jrmI/+GefArk8AWvjpxxTK2j9ftGLqJo1SZUUiWQWzkByoULW
+         UK0iQWN04Yl6xkLTXAcyFHe2S0ms90xOaBmhKNo6+mdoRR4WRO6L2i9coC7q9PqNIH
+         IhsA7CkTy+fUoOcgdIiwU/efn8jpy/fWkiTknmm1Bp+n21y/VUxfhqCoxMrfkj3RjW
+         C8ZW08kvYLfyBJwnG9XMufPxMRDz9kaEprm4wBlLGiZ6CeuQeEPoys9JRQlRB8GOwE
+         piuwAUlsaX05/SoQLvJxAda52pUTaWsA1tJJJyJn3ZY0blFVsfGFOqFsun39RY9xhe
+         DFrO2eGVlOj8g==
 X-Virus-Status: Clean
 X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Sun, 03 May 2020 17:21:10 +0200
-Message-Id: <e623178ff9592e041089a40a7593b5a5770df4f3.1588517058.git.mirq-linux@rere.qmqm.pl>
+Date:   Sun, 03 May 2020 17:21:11 +0200
+Message-Id: <3291ca81bf8eb1b0401579ae08e7835e71dfc1ff.1588517058.git.mirq-linux@rere.qmqm.pl>
 In-Reply-To: <cover.1588517058.git.mirq-linux@rere.qmqm.pl>
 References: <cover.1588517058.git.mirq-linux@rere.qmqm.pl>
 From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH v2 02/11] power: bq25890: simplify chip name property getter
+Subject: [PATCH v2 04/11] power: bq25890: protect view of the chip's state
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -43,53 +43,171 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Driver rejects unknown chips early in the probe(), so when
-bq25890_power_supply_get_property() is made reachable, bq->chip_version
-will already be set to correct value - there is no need to check
-it again.
+Extend bq->lock over whole updating of the chip's state. Might get
+useful later for switching ADC modes correctly.
 
 Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 ---
- drivers/power/supply/bq25890_charger.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ drivers/power/supply/bq25890_charger.c | 82 ++++++++------------------
+ 1 file changed, 26 insertions(+), 56 deletions(-)
 
 diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index c642519ef7b2..f9f29edadddc 100644
+index c4a69fd69f34..9339e216651f 100644
 --- a/drivers/power/supply/bq25890_charger.c
 +++ b/drivers/power/supply/bq25890_charger.c
-@@ -32,6 +32,13 @@ enum bq25890_chip_version {
- 	BQ25896,
- };
+@@ -510,74 +510,50 @@ static int bq25890_get_chip_state(struct bq25890_device *bq,
+ 	return 0;
+ }
  
-+static const char *const bq25890_chip_name[] = {
-+	"BQ25890",
-+	"BQ25892",
-+	"BQ25895",
-+	"BQ25896",
-+};
-+
- enum bq25890_fields {
- 	F_EN_HIZ, F_EN_ILIM, F_IILIM,				     /* Reg00 */
- 	F_BHOT, F_BCOLD, F_VINDPM_OFS,				     /* Reg01 */
-@@ -400,17 +407,7 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
- 		break;
- 
- 	case POWER_SUPPLY_PROP_MODEL_NAME:
--		if (bq->chip_version == BQ25890)
--			val->strval = "BQ25890";
--		else if (bq->chip_version == BQ25892)
--			val->strval = "BQ25892";
--		else if (bq->chip_version == BQ25895)
--			val->strval = "BQ25895";
--		else if (bq->chip_version == BQ25896)
--			val->strval = "BQ25896";
--		else
--			val->strval = "UNKNOWN";
+-static bool bq25890_state_changed(struct bq25890_device *bq,
+-				  struct bq25890_state *new_state)
+-{
+-	struct bq25890_state old_state;
 -
-+		val->strval = bq25890_chip_name[bq->chip_version];
- 		break;
+-	mutex_lock(&bq->lock);
+-	old_state = bq->state;
+-	mutex_unlock(&bq->lock);
+-
+-	return (old_state.chrg_status != new_state->chrg_status ||
+-		old_state.chrg_fault != new_state->chrg_fault	||
+-		old_state.online != new_state->online		||
+-		old_state.bat_fault != new_state->bat_fault	||
+-		old_state.boost_fault != new_state->boost_fault ||
+-		old_state.vsys_status != new_state->vsys_status);
+-}
+-
+-static void bq25890_handle_state_change(struct bq25890_device *bq,
+-					struct bq25890_state *new_state)
++static irqreturn_t __bq25890_handle_irq(struct bq25890_device *bq)
+ {
++	struct bq25890_state new_state;
+ 	int ret;
+-	struct bq25890_state old_state;
  
- 	case POWER_SUPPLY_PROP_ONLINE:
+-	mutex_lock(&bq->lock);
+-	old_state = bq->state;
+-	mutex_unlock(&bq->lock);
++	ret = bq25890_get_chip_state(bq, &new_state);
++	if (ret < 0)
++		return IRQ_NONE;
+ 
+-	if (!new_state->online) {			     /* power removed */
++	if (!memcmp(&bq->state, &new_state, sizeof(new_state)))
++		return IRQ_NONE;
++
++	if (!new_state.online && bq->state.online) {	    /* power removed */
+ 		/* disable ADC */
+ 		ret = bq25890_field_write(bq, F_CONV_START, 0);
+ 		if (ret < 0)
+ 			goto error;
+-	} else if (!old_state.online) {			    /* power inserted */
++	} else if (new_state.online && !bq->state.online) { /* power inserted */
+ 		/* enable ADC, to have control of charge current/voltage */
+ 		ret = bq25890_field_write(bq, F_CONV_START, 1);
+ 		if (ret < 0)
+ 			goto error;
+ 	}
+ 
+-	return;
++	bq->state = new_state;
++	power_supply_changed(bq->charger);
+ 
++	return IRQ_HANDLED;
+ error:
+-	dev_err(bq->dev, "Error communicating with the chip.\n");
++	dev_err(bq->dev, "Error communicating with the chip: %pe\n",
++		ERR_PTR(ret));
++	return IRQ_HANDLED;
+ }
+ 
+ static irqreturn_t bq25890_irq_handler_thread(int irq, void *private)
+ {
+ 	struct bq25890_device *bq = private;
+-	int ret;
+-	struct bq25890_state state;
+-
+-	ret = bq25890_get_chip_state(bq, &state);
+-	if (ret < 0)
+-		goto handled;
+-
+-	if (!bq25890_state_changed(bq, &state))
+-		goto handled;
+-
+-	bq25890_handle_state_change(bq, &state);
++	irqreturn_t ret;
+ 
+ 	mutex_lock(&bq->lock);
+-	bq->state = state;
++	ret = __bq25890_handle_irq(bq);
+ 	mutex_unlock(&bq->lock);
+ 
+-	power_supply_changed(bq->charger);
+-
+-handled:
+-	return IRQ_HANDLED;
++	return ret;
+ }
+ 
+ static int bq25890_chip_reset(struct bq25890_device *bq)
+@@ -607,7 +583,6 @@ static int bq25890_hw_init(struct bq25890_device *bq)
+ {
+ 	int ret;
+ 	int i;
+-	struct bq25890_state state;
+ 
+ 	const struct {
+ 		enum bq25890_fields id;
+@@ -655,16 +630,12 @@ static int bq25890_hw_init(struct bq25890_device *bq)
+ 		return ret;
+ 	}
+ 
+-	ret = bq25890_get_chip_state(bq, &state);
++	ret = bq25890_get_chip_state(bq, &bq->state);
+ 	if (ret < 0) {
+ 		dev_dbg(bq->dev, "Get state failed %d\n", ret);
+ 		return ret;
+ 	}
+ 
+-	mutex_lock(&bq->lock);
+-	bq->state = state;
+-	mutex_unlock(&bq->lock);
+-
+ 	return 0;
+ }
+ 
+@@ -1001,19 +972,16 @@ static int bq25890_suspend(struct device *dev)
+ static int bq25890_resume(struct device *dev)
+ {
+ 	int ret;
+-	struct bq25890_state state;
+ 	struct bq25890_device *bq = dev_get_drvdata(dev);
+ 
+-	ret = bq25890_get_chip_state(bq, &state);
++	mutex_lock(&bq->lock);
++
++	ret = bq25890_get_chip_state(bq, &bq->state);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	mutex_lock(&bq->lock);
+-	bq->state = state;
+-	mutex_unlock(&bq->lock);
+-
+ 	/* Re-enable ADC only if charger is plugged in. */
+-	if (state.online) {
++	if (bq->state.online) {
+ 		ret = bq25890_field_write(bq, F_CONV_START, 1);
+ 		if (ret < 0)
+ 			return ret;
+@@ -1022,6 +990,8 @@ static int bq25890_resume(struct device *dev)
+ 	/* signal userspace, maybe state changed while suspended */
+ 	power_supply_changed(bq->charger);
+ 
++	mutex_unlock(&bq->lock);
++
+ 	return 0;
+ }
+ #endif
 -- 
 2.20.1
 
