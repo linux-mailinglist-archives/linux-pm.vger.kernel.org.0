@@ -2,82 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D36A1C3516
-	for <lists+linux-pm@lfdr.de>; Mon,  4 May 2020 10:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3802D1C3563
+	for <lists+linux-pm@lfdr.de>; Mon,  4 May 2020 11:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728146AbgEDI57 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 May 2020 04:57:59 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:47209 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728165AbgEDI56 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 May 2020 04:57:58 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1588582677; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=rknaC2TCytI0e0UGEz1lxoHb9ILU/Hk1mGxInS5Hx0U=; b=NCun6Kt/o4iVf9XXoiepWcfExYEwAiwOQGyWIDICPploIhYs5AkB/Qdf1FvyXnVufZhngzSG
- bpo9/ZJWzLrb2TSFUHnPmw5YZX66Nvlx/5SwkAnTZQAixy1eixfscTVzutqy1/9GPKlyDhii
- uuTQSAefKkpt7lqRDRj5LxTCFg4=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5eafd90a.7f88f64a42d0-smtp-out-n01;
- Mon, 04 May 2020 08:57:46 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 7EA6EC433CB; Mon,  4 May 2020 08:57:46 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.1.106] (unknown [27.59.218.31])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akashast)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1089FC433BA;
-        Mon,  4 May 2020 08:57:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1089FC433BA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
-Subject: Re: [PATCH] interconnect: Add helpers for enabling/disabling a path
-To:     Georgi Djakov <georgi.djakov@linaro.org>, linux-pm@vger.kernel.org,
-        evgreen@chromium.org, bjorn.andersson@linaro.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20200428091650.27669-1-georgi.djakov@linaro.org>
-From:   Akash Asthana <akashast@codeaurora.org>
-Message-ID: <44cbf83d-f210-97ec-21c2-ebe65b9821c1@codeaurora.org>
-Date:   Mon, 4 May 2020 14:27:39 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200428091650.27669-1-georgi.djakov@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        id S1727824AbgEDJSH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 May 2020 05:18:07 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:28466 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726625AbgEDJSH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 May 2020 05:18:07 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 044978Ts004044;
+        Mon, 4 May 2020 11:17:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=t8yE9JoGl4flloHQYJEWfkrlpSIqoEFqyExGxmwsMx8=;
+ b=SKVrCXff3h/xL4m3odmOVBOJUf2qGJNoKtavF7W6Rz0kENh4xvZMCpxwYDsfw58rWIxe
+ uHRuHlXRWPeptG3pU39cL8A4BE1d0BtwMYevfaQHB/x2JNqzO9+rv8pP8e/Bm++04prk
+ NdRdpi514nAwSf9qy1Vh0haZNOCXBmidZqBMY04DfYc6MFpEo1X2u3FXlifIRn7rEtbt
+ SHgnlyxsUf/vuXjEWSG7CZZ98MkRvZu5Ey0Me0w2BRr4wkDbaVHNUqljBSysarYiAjBl
+ atBmEB2Osx42GsTLk8y13PzfkW51ioujPXV2+37zvew1lZHY8NySEcot5hhcDaqikLV2 xg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 30rx089j7y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 May 2020 11:17:45 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1E65710002A;
+        Mon,  4 May 2020 11:17:41 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D3AA22BBAA5;
+        Mon,  4 May 2020 11:17:41 +0200 (CEST)
+Received: from SFHDAG3NODE3.st.com (10.75.127.9) by SFHDAG5NODE3.st.com
+ (10.75.127.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 4 May
+ 2020 11:17:41 +0200
+Received: from SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476]) by
+ SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476%20]) with mapi id
+ 15.00.1347.000; Mon, 4 May 2020 11:17:41 +0200
+From:   Benjamin GAIGNARD <benjamin.gaignard@st.com>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        Hugues FRUCHET <hugues.fruchet@st.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Patrick Bellasi <patrick.bellasi@arm.com>
+Subject: Re: [RFC 0/3] Introduce cpufreq minimum load QoS
+Thread-Topic: [RFC 0/3] Introduce cpufreq minimum load QoS
+Thread-Index: AQHWGi06wBgeAQBseECYOK/U7Qvw76iQJdAAgAACCYCAAAQ3AIABBseAgAAT0wCAAE7QgIAADU2AgAARzICAAAO9AIAF2zaA
+Date:   Mon, 4 May 2020 09:17:41 +0000
+Message-ID: <b8757472-c973-a32d-d5c9-a584d7d703f8@st.com>
+References: <20200424114058.21199-1-benjamin.gaignard@st.com>
+ <7657495.QyJl4BcWH5@kreacher> <30cdecf9-703a-eb2b-7c2b-f1e21c805add@st.com>
+ <70e743cf-b88e-346a-5114-939b8724c83d@arm.com>
+ <6b5cde14-58b3-045d-9413-223e66b87bf0@st.com>
+ <CAJZ5v0h6t6perZiibCWhEh1_V0pSXqFe-z22TFqH7KTFXYmqpQ@mail.gmail.com>
+ <a234e123-6c15-8e58-8921-614b58ca24ca@st.com> <jhjtv11cabk.mognet@arm.com>
+ <a20c5214-211b-1f70-1162-57b32e60549b@st.com> <jhjmu6tc6rz.mognet@arm.com>
+In-Reply-To: <jhjmu6tc6rz.mognet@arm.com>
+Accept-Language: en-US
 Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.44]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F04BFBC11629A34FAC8C983CAC60E3EF@st.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-05-04_05:2020-05-01,2020-05-04 signatures=0
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Georgi,
-
-On 4/28/2020 2:46 PM, Georgi Djakov wrote:
-> There is a repeated pattern in multiple drivers where they want to switch
-> the bandwidth between zero and some other value. This is happening often
-> in the suspend/resume callbacks. Let's add helper functions to enable and
-> disable the path, so that callers don't have to take care of remembering
-> the bandwidth values and handle this in the framework instead.
->
-> With this patch the users can call icc_disable() and icc_enable() to lower
-> their bandwidth request to zero and then restore it back to it's previous
-> value.
-
-Thanks for this patch.
-
-Are you planning to add bulk versions of icc_enable/disable APIs?
-
-Regards,
-
-Akash
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
+DQoNCk9uIDQvMzAvMjAgNTo1MCBQTSwgVmFsZW50aW4gU2NobmVpZGVyIHdyb3RlOg0KPiBPbiAz
+MC8wNC8yMCAxNjozNywgQmVuamFtaW4gR0FJR05BUkQgd3JvdGU6DQo+PiBPbiA0LzMwLzIwIDQ6
+MzMgUE0sIFZhbGVudGluIFNjaG5laWRlciB3cm90ZToNCj4+PiBPbiAzMC8wNC8yMCAxNDo0Niwg
+QmVuamFtaW4gR0FJR05BUkQgd3JvdGU6DQo+Pj4+PiBUaGF0J3Mgbm90IHdoYXQgSSBtZWFudC4N
+Cj4+Pj4+DQo+Pj4+PiBJIHN1cHBvc2UgdGhhdCB0aGUgaW50ZXJydXB0IHByb2Nlc3NpbmcgaW4g
+cXVlc3Rpb24gdGFrZXMgcGxhY2UgaW4NCj4+Pj4+IHByb2Nlc3MgY29udGV4dCBhbmQgc28geW91
+IG1heSBzZXQgdGhlIGxvd2VyIGNsYW1wIG9uIHRoZSB1dGlsaXphdGlvbg0KPj4+Pj4gb2YgdGhl
+IHRhc2sgY2FycnlpbmcgdGhhdCBvdXQuDQo+Pj4+IEkgaGF2ZSB0cnkgdG8gYWRkIHRoaXMgY29k
+ZSB3aGVuIHN0YXJ0aW5nIHN0cmVhbWluZyAoYmVmb3JlIHRoZSBmaXJzdA0KPj4+PiBpbnRlcnJ1
+cHQpIHRoZSBmcmFtZXMgZnJvbSB0aGUgc2Vuc29yOg0KPj4+PiBjb25zdCBzdHJ1Y3Qgc2NoZWRf
+YXR0ciBzY2hlZF9hdHRyID0gew0KPj4+PiAgICAgIC5zY2hlZF91dGlsX21pbiA9IDEwMDAwLCAv
+KiAxMDAlIG9mIHVzYWdlICovDQo+Pj4gVW5sZXNzIHlvdSBwbGF5IHdpdGggU0NIRURfQ0FQQUNJ
+VFlfU0hJRlQsIHRoZSBtYXggc2hvdWxkIGJlIDEwMjQgLQ0KPj4+IGkuZS4gU0NIRURfQ0FQQUNJ
+VFlfU0NBTEUuIFRoYXQncyBhIHJlYWxseSBiaWcgYm9vc3QsIGJ1dCB0aGF0J3MgZm9yIHlvdSB0
+bw0KPj4+IGJlbmNobWFyay4NCj4+Pg0KPj4+PiAgICAgIC5zY2hlZF9mbGFncyA9IFNDSEVEX0ZM
+QUdfVVRJTF9DTEFNUF9NSU4sDQo+Pj4+ICAgICB9Ow0KPj4+Pg0KPj4+PiBzY2hlZF9zZXRhdHRy
+KGN1cnJlbnQsICZzY2hlZF9hdHRyKTsNCj4+Pj4NCj4+Pj4gSSBkb24ndCBzZWUgYW55IGJlbmVm
+aWNlcyBtYXliZSB0aGVyZSBpcyBzb21lIGNvbmZpZ3VyYXRpb24gZmxhZ3MgdG8gc2V0Lg0KPj4+
+Pg0KPj4+PiBIb3cgY2hhbmdpbmcgc2NoZWRfdXRpbF9taW4gY291bGQgaW1wYWN0IGNwdWZyZXEg
+b25kZW1hbmQgZ292ZXJub3IgPw0KPj4+PiBEb2VzIGl0IGNoYW5nZSB0aGUgdmFsdWUgcmV0dXJu
+ZWQgd2hlbiB0aGUgZ292ZXJub3IgY2hlY2sgdGhlIGlkbGUgdGltZSA/DQo+Pj4+DQo+Pj4gWW91
+J2xsIGhhdmUgdG8gdXNlIHRoZSBzY2hlZHV0aWwgZ292ZXJub3IgZm9yIHVjbGFtcCB0byBoYXZl
+IGFuIGVmZmVjdC4gQW5kDQo+Pj4gYXJndWFibHkgdGhhdCdzIHdoYXQgeW91IHNob3VsZCBiZSB1
+c2luZywgdW5sZXNzIHNvbWV0aGluZyBleHBsaWNpdGx5DQo+Pj4gcHJldmVudHMgeW91IGZyb20g
+ZG9pbmcgdGhhdC4NCj4+IEV2ZW4gd2l0aCBzY2hlZHV0aWwgYW5kIFNDSEVEX0NBUEFDSVRZX1ND
+QUxFIHRoYXQgaXQgZG9lc24ndCB3b3JrLg0KPj4gY3B1ZnJlcS9jcHVpbmZvX2N1cl9mcmVxIHZh
+bHVlcyBhcmUgYWx3YXlzIG9uIHRoZSBtYXggdmFsdWUgZXZlbiBpZiB0aGUNCj4+IHN0YXRzIHNo
+b3cgdHJhbnNpdGlvbnMgYmV0d2VlbiB0aGUgYXZhaWxhYmxlIGZyZXF1ZW5jaWVzLg0KPj4NCj4+
+IEkgc2VlIHR3byBwb3NzaWJsZXMgcmVhc29ucyB0byBleHBsYWluIHRoYXQ6DQo+PiAtIHNjaGVk
+X3NldGF0dHIoKSBpcyBjYWxsZWQgaW4gdXNlcmxhbmQgcHJvY2VzcyBjb250ZXh0LCBidXQgdGhl
+DQo+PiB0aHJlYWRlZCBpcnEgaGFuZGxlciBpcyBydW5uaW5nIGluIGFub3RoZXIgcHJvY2Vzcy4N
+Cj4gQWggeWVzLCB0aGlzIG9ubHkgd29ya3MgaWYgdGhlIHRhc2sgeW91IGJvb3N0IGlzIHRoZSBv
+bmUgdGhhdCB3aWxsIGhhbmRsZQ0KPiB3aGF0ZXZlciB3b3JrIHlvdSBjYXJlIGFib3V0IChpbiB0
+aGlzIGNhc2UgaGFuZGxpbmcgdGhlIGlycSkuIFRoYXQgc2FpZCwgaWYNCj4geW91IGRvIHVzZSB0
+aHJlYWRlZCBJUlFzLCB0aGF0IHNob3VsZCBnaXZlIHlvdSBhIFNDSEVEX0ZJRk8gdGhyZWFkLCB3
+aGljaA0KPiBzaG91bGQgZHJpdmUgdGhlIGZyZXF1ZW5jeSB0byBpdHMgbWF4IHdoZW4gdXNpbmcg
+c2NoZWR1dGlsICh1bnJlbGF0ZWQgdG8NCj4gdWNsYW1wKS4NCkNhbiBJIGNvbmNsdWRlIHRoYXQg
+c2NoZWRfc2V0YXR0cigpIGlzbid0IHRoZSBnb29kIHdheSB0byBzb2x2ZSB0aGlzIA0KcHJvYmxl
+bSA/DQpEb2VzIG15IHBhdGNoZXMgbWFrZSBzZW5zZSBpbiB0aGlzIGNhc2UgPw0KDQo+PiAtIGJl
+Y2F1c2UgdGhpcyB1c2UgY2FzZSBpcyBhbG1vc3QgcnVubmluZyBhbGwgaW4gaGFyZHdhcmUgdGhl
+IHByb2Nlc3MNCj4+IGlzbid0IGRvaW5nIGFueXRoaW5nIHNvIHRoZSBzY2hlZHVsZXIgZG9lc24n
+dCB0YWtlIGNhcmUgb2YgaXQuDQo+Pg0KPj4+Pj4gQWx0ZXJuYXRpdmVseSwgdGhhdCB0YXNrIG1h
+eSBiZSBhIGRlYWRsaW5lIG9uZS4NCg==
