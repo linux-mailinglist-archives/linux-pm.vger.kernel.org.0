@@ -2,157 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D612D1C4845
-	for <lists+linux-pm@lfdr.de>; Mon,  4 May 2020 22:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A38B41C484F
+	for <lists+linux-pm@lfdr.de>; Mon,  4 May 2020 22:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728042AbgEDUaF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 May 2020 16:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726334AbgEDU34 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 May 2020 16:29:56 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E39C061A0F
-        for <linux-pm@vger.kernel.org>; Mon,  4 May 2020 13:29:56 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id v2so242355plp.9
-        for <linux-pm@vger.kernel.org>; Mon, 04 May 2020 13:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3jc0TOyQ4war+DAm2+lh4uAs3ApKGMVi9why4UvGExE=;
-        b=QNsTHDRZoZuDPWYQs4Csq+6FgUrP8w3uyMqQAR+1uJZZGAxtjqBK6vIQLXiLro9EUM
-         rZiKT7UuJeIhn7v8tm363KM+VROs4JMrqn+S7N7HytoMEK+V/od5eq1OdNDeXkskr4S1
-         0ilRHOmV42klq2IeepjH+ryE1UU5IjBInAFLI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3jc0TOyQ4war+DAm2+lh4uAs3ApKGMVi9why4UvGExE=;
-        b=hi1FGvwEDBqDI7mXXMBmDS8I/pFlrY/26Y4hTyg92RW4M796K/qjRhk6KKADIbfoAW
-         QDv++Y8MBLUrCwz8Oykojd2uJPPs5wYoaY4n3r255GbtLOEqqcgcWKWyQ1qAQ9Y4BFHA
-         XrKYHMXjj2b03GNypxiEZGh0tEcaL7ShRAAJEa6eK1y1XLyWrqlbIZ+pdxbLb4aFoSYm
-         zH9Aw1Fl+vDJt+nmAVFkgkiE4Oi9yR2Bei9iBXRvXF2HFioBKKkO+2vB2gXW+qdQsA3e
-         rLAjLLMOB6bOksjinazjYQW9g/Li9t3NHytJ2rjOY36A7hkPTdjmkFjalESuu+djGMeY
-         QUmQ==
-X-Gm-Message-State: AGi0Puay8MZT1ymbSqWQ9t1VRYv3Z0fKAcC2d93zcm+9XCwJfrQLJ+8t
-        XwAZ88HY+FtAt/wscKve8fHh3w==
-X-Google-Smtp-Source: APiQypKaJu64Aen3AruMc8A3xz6cDGP1Ljua3iefkQJP7oxlKh9bFxhPzW0F/NDlcNiJYNL4gl8S4g==
-X-Received: by 2002:a17:902:a40b:: with SMTP id p11mr1019115plq.304.1588624196117;
-        Mon, 04 May 2020 13:29:56 -0700 (PDT)
-Received: from mathewk1.lan ([161.97.192.125])
-        by smtp.gmail.com with ESMTPSA id z23sm9511737pfr.136.2020.05.04.13.29.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2020 13:29:55 -0700 (PDT)
-From:   Mathew King <mathewk@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mathew King <mathewk@chromium.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH v2 4/4] power_supply: Add power supply type property to uevent env
-Date:   Mon,  4 May 2020 14:29:30 -0600
-Message-Id: <20200504202930.228453-5-mathewk@chromium.org>
-X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
-In-Reply-To: <20200504202930.228453-1-mathewk@chromium.org>
-References: <20200504202930.228453-1-mathewk@chromium.org>
+        id S1728108AbgEDUbe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 May 2020 16:31:34 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:20477 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726338AbgEDUbb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 May 2020 16:31:31 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1588624290; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=cqJaYZazg1/VMjB0ocaT64qt21+ld4ZwVZIyw06JsVs=;
+ b=AwBgbtH6uIYbXbVBKgXdVChZybIdI1815a5AYFFV6IDoKMZYM+JC5hfaid6CWzR3rq7zDxgX
+ 5dzYud6gty0ciYg0jXLiQGehv3HhJjrrDL4N3DqTNpQEZ0WIFiRRpYK99kHrikV0yPb1xiWH
+ p493MAMrNJBWgOBNOyyC7AkYTQs=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5eb07b9f.7efd131cc3b0-smtp-out-n02;
+ Mon, 04 May 2020 20:31:27 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 5DE86C43637; Mon,  4 May 2020 20:31:26 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8D4CDC433D2;
+        Mon,  4 May 2020 20:31:25 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 05 May 2020 02:01:25 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        robh+dt@kernel.org, rjw@rjwysocki.net, saravanak@google.com,
+        rnayak@codeaurora.org, bjorn.andersson@linaro.org,
+        vincent.guittot@linaro.org, jcrouse@codeaurora.org,
+        evgreen@chromium.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/7] dt-bindings: opp: Introduce opp-peak-kBps and
+ opp-avg-kBps bindings
+In-Reply-To: <20200424155404.10746-2-georgi.djakov@linaro.org>
+References: <20200424155404.10746-1-georgi.djakov@linaro.org>
+ <20200424155404.10746-2-georgi.djakov@linaro.org>
+Message-ID: <187f2f21e6ca55a9ab26a026f01dd893@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add POWER_SUPPLY_TYPE to the uevent env for power supply. Type is a
-property of all power supplies and there is a sysfs entry for it but it
-is not included in the properties array of the power supply so
-explicitly add it to the udev env.
+On 2020-04-24 21:23, Georgi Djakov wrote:
+> From: Saravana Kannan <saravanak@google.com>
+> 
+> Interconnects often quantify their performance points in terms of
+> bandwidth. So, add opp-peak-kBps (required) and opp-avg-kBps (optional) 
+> to
+> allow specifying Bandwidth OPP tables in DT.
+> 
+> opp-peak-kBps is a required property that replaces opp-hz for Bandwidth 
+> OPP
+> tables.
+> 
+> opp-avg-kBps is an optional property that can be used in Bandwidth OPP
+> tables.
+> 
 
-Signed-off-by: Mathew King <mathewk@chromium.org>
----
-v2: - Fixup with patches in series
----
- drivers/power/supply/power_supply_sysfs.c | 61 ++++++++++++++---------
- 1 file changed, 37 insertions(+), 24 deletions(-)
+Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 8f90daff0003..d856aed8cb41 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -410,6 +410,37 @@ void power_supply_init_attrs(struct device_type *dev_type)
- 	}
- }
- 
-+static int add_prop_uevent(struct device *dev, struct kobj_uevent_env *env,
-+			   enum power_supply_property prop, char *prop_buf)
-+{
-+	int ret = 0;
-+	struct power_supply_attr *pwr_attr;
-+	struct device_attribute *dev_attr;
-+	char *line;
-+
-+	pwr_attr = &power_supply_attrs[prop];
-+	dev_attr = &pwr_attr->dev_attr;
-+
-+	ret = power_supply_show_property(dev, dev_attr, prop_buf);
-+	if (ret == -ENODEV || ret == -ENODATA) {
-+		/*
-+		 * When a battery is absent, we expect -ENODEV. Don't abort;
-+		 * send the uevent with at least the the PRESENT=0 property
-+		 */
-+		return 0;
-+	}
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	line = strchr(prop_buf, '\n');
-+	if (line)
-+		*line = 0;
-+
-+	return add_uevent_var(env, "POWER_SUPPLY_%s=%s",
-+			      pwr_attr->prop_name, prop_buf);
-+}
-+
- int power_supply_uevent(struct device *dev, struct kobj_uevent_env *env)
- {
- 	struct power_supply *psy = dev_get_drvdata(dev);
-@@ -429,31 +460,13 @@ int power_supply_uevent(struct device *dev, struct kobj_uevent_env *env)
- 	if (!prop_buf)
- 		return -ENOMEM;
- 
--	for (j = 0; j < psy->desc->num_properties; j++) {
--		struct power_supply_attr *pwr_attr;
--		struct device_attribute *dev_attr;
--		char *line;
--
--		pwr_attr = &power_supply_attrs[psy->desc->properties[j]];
--		dev_attr = &pwr_attr->dev_attr;
--
--		ret = power_supply_show_property(dev, dev_attr, prop_buf);
--		if (ret == -ENODEV || ret == -ENODATA) {
--			/* When a battery is absent, we expect -ENODEV. Don't abort;
--			   send the uevent with at least the the PRESENT=0 property */
--			ret = 0;
--			continue;
--		}
--
--		if (ret < 0)
--			goto out;
--
--		line = strchr(prop_buf, '\n');
--		if (line)
--			*line = 0;
-+	ret = add_prop_uevent(dev, env, POWER_SUPPLY_PROP_TYPE, prop_buf);
-+	if (ret)
-+		goto out;
- 
--		ret = add_uevent_var(env, "POWER_SUPPLY_%s=%s",
--				     pwr_attr->prop_name, prop_buf);
-+	for (j = 0; j < psy->desc->num_properties; j++) {
-+		ret = add_prop_uevent(dev, env, psy->desc->properties[j],
-+				      prop_buf);
- 		if (ret)
- 			goto out;
- 	}
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> ---
+> v7:
+> * I have dropped Rob's Reviewed-by, because of the minor change below:
+> * In order to store the bandwidth values for multiple paths, the
+> opp-peak-kBps and opp-avg-kBps are now defined as arrays of integers,
+> instead of just integers.
+> * Improved wording (Viresh)
+...
+
+
 -- 
-2.26.2.526.g744177e7f7-goog
-
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
