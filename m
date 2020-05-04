@@ -2,113 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBAC1C350E
-	for <lists+linux-pm@lfdr.de>; Mon,  4 May 2020 10:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D36A1C3516
+	for <lists+linux-pm@lfdr.de>; Mon,  4 May 2020 10:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728370AbgEDI4V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 May 2020 04:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728165AbgEDI4U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 May 2020 04:56:20 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09076C061A0E
-        for <linux-pm@vger.kernel.org>; Mon,  4 May 2020 01:56:20 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id s8so9628470wrt.9
-        for <linux-pm@vger.kernel.org>; Mon, 04 May 2020 01:56:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=cxb+ZWhOowouZHcr/9zGu47fpdlJUABxmhLddbqkDGo=;
-        b=KjP/CPhVoyoVHxRfOZPYKJMbQbb1OH1X/SdQnlH6Sqv0GWA4AXO0GgW5eyxKsEyl/9
-         acv63S4fAoTQKYX6VT01lF9GS8UmNMS+LcCPmBGoyVMwIorwJaWPrqY+n4t78za2Seev
-         ir1YERXRmPk3MsUjiE4j0VI8FOXwUQdiPoiRdfeP7xGpV6M/FJveH7HfBc2befxjRg1L
-         +0ChXAHT9j2WVzB/gemP33nvbA8hv760xmKScJN0oQcFbYv2+zHVVDP9HicmDaY9Wjnd
-         FIsctLUhhIfn4O2wBNcsxeqxVjtW2+E9XgYH+NG9kSQa5z84w2RWWPhohpWYST2HG6gb
-         QTRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=cxb+ZWhOowouZHcr/9zGu47fpdlJUABxmhLddbqkDGo=;
-        b=c9UCib0A0/eaKKN5a4yv/TVK0LEH3TF6JNxLPeWbpcJYo7NAYMvm8IKNGCMX472wFH
-         SLzIwiV3OF343rZdnh6BDv/27wNC1XpfIaLX/UHc+YcA/BvH4aHiv2H5SoZyRYjM67YW
-         AvjhqJW3IL6bqsB2na2zPr5Oa+14c4fZNT+FxDWwAtGGikOyx/WoZPj64hWpUoZUVjMR
-         fcxQ3WV4cgk2aqolHPgpX54MhIPX3FPMsEJC/q+tPATGpT/WGEM0dHFxFqp/3sO7qdDx
-         blAdzooDT49lSO6M6b7a/tu/3tsNBoCqj6oaY40fR9CkCcJ++8JsF85JbGVJIBMWnPrC
-         RRFw==
-X-Gm-Message-State: AGi0PubtdArlkygAYWov82DvSnyaiEVlVwCsCxAhWqg68z5tHh3tyq9Q
-        /NPwZQQMeP7lkBblkjFhdmWSfg==
-X-Google-Smtp-Source: APiQypIJA1Cxt7YOUF+68JT0W1SFjsyeUbBkN9uhvc9MdF+wh/6hR3+o3fvijZm+Tupqy5kyDXXe0w==
-X-Received: by 2002:adf:f041:: with SMTP id t1mr4458998wro.346.1588582578720;
-        Mon, 04 May 2020 01:56:18 -0700 (PDT)
-Received: from dell ([2.31.163.63])
-        by smtp.gmail.com with ESMTPSA id d5sm17646871wrp.44.2020.05.04.01.56.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2020 01:56:18 -0700 (PDT)
-Date:   Mon, 4 May 2020 09:56:16 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 01/16] ARM: vexpress: Move vexpress_flags_set() into
- arch code
-Message-ID: <20200504085616.GI298816@dell>
-References: <20200429205825.10604-1-robh@kernel.org>
- <20200429205825.10604-2-robh@kernel.org>
+        id S1728146AbgEDI57 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 May 2020 04:57:59 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:47209 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728165AbgEDI56 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 May 2020 04:57:58 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1588582677; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=rknaC2TCytI0e0UGEz1lxoHb9ILU/Hk1mGxInS5Hx0U=; b=NCun6Kt/o4iVf9XXoiepWcfExYEwAiwOQGyWIDICPploIhYs5AkB/Qdf1FvyXnVufZhngzSG
+ bpo9/ZJWzLrb2TSFUHnPmw5YZX66Nvlx/5SwkAnTZQAixy1eixfscTVzutqy1/9GPKlyDhii
+ uuTQSAefKkpt7lqRDRj5LxTCFg4=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5eafd90a.7f88f64a42d0-smtp-out-n01;
+ Mon, 04 May 2020 08:57:46 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7EA6EC433CB; Mon,  4 May 2020 08:57:46 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.1.106] (unknown [27.59.218.31])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akashast)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1089FC433BA;
+        Mon,  4 May 2020 08:57:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1089FC433BA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akashast@codeaurora.org
+Subject: Re: [PATCH] interconnect: Add helpers for enabling/disabling a path
+To:     Georgi Djakov <georgi.djakov@linaro.org>, linux-pm@vger.kernel.org,
+        evgreen@chromium.org, bjorn.andersson@linaro.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20200428091650.27669-1-georgi.djakov@linaro.org>
+From:   Akash Asthana <akashast@codeaurora.org>
+Message-ID: <44cbf83d-f210-97ec-21c2-ebe65b9821c1@codeaurora.org>
+Date:   Mon, 4 May 2020 14:27:39 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200429205825.10604-2-robh@kernel.org>
+In-Reply-To: <20200428091650.27669-1-georgi.djakov@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 29 Apr 2020, Rob Herring wrote:
+Hi Georgi,
 
-> vexpress_flags_set() is only used by the platform SMP related code and
-> has nothing to do with the vexpress-sysreg MFD driver other than both
-> access the same h/w block. It's also only needed for 32-bit systems and
-> must be built-in for them. Let's move vexpress_flags_set() closer to
-> where it is being used. This will allow for vexpress-sysreg to be built
-> as a module.
-> 
-> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> Acked-by: Liviu Dudau <liviu.dudau@arm.com>
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  arch/arm/mach-vexpress/Kconfig |  1 -
->  arch/arm/mach-vexpress/core.h  |  1 +
->  arch/arm/mach-vexpress/dcscb.c |  1 +
->  arch/arm/mach-vexpress/v2m.c   | 23 +++++++++++++++++++++++
+On 4/28/2020 2:46 PM, Georgi Djakov wrote:
+> There is a repeated pattern in multiple drivers where they want to switch
+> the bandwidth between zero and some other value. This is happening often
+> in the suspend/resume callbacks. Let's add helper functions to enable and
+> disable the path, so that callers don't have to take care of remembering
+> the bandwidth values and handle this in the framework instead.
+>
+> With this patch the users can call icc_disable() and icc_enable() to lower
+> their bandwidth request to zero and then restore it back to it's previous
+> value.
 
->  drivers/mfd/vexpress-sysreg.c  | 19 -------------------
+Thanks for this patch.
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
+Are you planning to add bulk versions of icc_enable/disable APIs?
 
->  include/linux/vexpress.h       |  4 ----
->  6 files changed, 25 insertions(+), 24 deletions(-)
+Regards,
+
+Akash
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,\na Linux Foundation Collaborative Project
