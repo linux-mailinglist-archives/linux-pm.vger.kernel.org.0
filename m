@@ -2,36 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D97FF1C459E
-	for <lists+linux-pm@lfdr.de>; Mon,  4 May 2020 20:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7831C45A6
+	for <lists+linux-pm@lfdr.de>; Mon,  4 May 2020 20:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730118AbgEDSQm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 May 2020 14:16:42 -0400
+        id S1732431AbgEDSQ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 May 2020 14:16:56 -0400
 Received: from mga12.intel.com ([192.55.52.136]:27142 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731651AbgEDSQm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 4 May 2020 14:16:42 -0400
-IronPort-SDR: iCyM7OTrg9xXAbpe5CP/qc2iHeBrJRDvswaHw9vT0ABO2ZrOme+fpu17rR6NR22JfqwOcg/dSn
- BqYJ19LFG5hA==
+        id S1731270AbgEDSQo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 4 May 2020 14:16:44 -0400
+IronPort-SDR: 4qqtT4SPLEW/sZ2KAqQ3bQ6K7RZVNZYa4oq1WLROY4Ier09QnqJr1an+s1fCBkdRe6uTC6TzZ8
+ zPa6nkEhh2kQ==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2020 11:16:33 -0700
-IronPort-SDR: V766HvWC6rBdcZA8Jv4qpDf6TH6op0Ofg3z2QG/C+iaWJhoNwivZZQTLjSJKncla9w9g1xdsqG
- oMMZ6K9bQ2Ww==
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2020 11:16:34 -0700
+IronPort-SDR: 078soUGTQ5aWln7LwyIGSfzdYrqG9zKepNPq/uYGF4Bp6UlW0KLBeYvJnCSw8oBij1UNmT8kMw
+ f8SJEbN23THA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,352,1583222400"; 
-   d="scan'208";a="259427120"
+   d="scan'208";a="259427129"
 Received: from spandruv-mobl.amr.corp.intel.com ([10.212.145.237])
-  by orsmga003.jf.intel.com with ESMTP; 04 May 2020 11:16:32 -0700
+  by orsmga003.jf.intel.com with ESMTP; 04 May 2020 11:16:33 -0700
 From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
         amit.kucheria@verdurent.com
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [RFC][PATCH 2/5] thermal: Add notification for zone creation and deletion
-Date:   Mon,  4 May 2020 11:16:13 -0700
-Message-Id: <20200504181616.175477-3-srinivas.pandruvada@linux.intel.com>
+Subject: [RFC][PATCH 3/5] thermal: Add support for setting notification thresholds
+Date:   Mon,  4 May 2020 11:16:14 -0700
+Message-Id: <20200504181616.175477-4-srinivas.pandruvada@linux.intel.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200504181616.175477-1-srinivas.pandruvada@linux.intel.com>
 References: <20200504181616.175477-1-srinivas.pandruvada@linux.intel.com>
@@ -42,38 +42,233 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Whenever thermal_zone_device_register() is called and zone is created
-successfully, send a notification "THERMAL_ZONE_CREATE".
-Similarly send "THERMAL_ZONE_DELETE" when thermal_zone_device_unregister
-is called.
+Add new attributes in thermal syfs when a thermal drivers provides
+callbacks for them and CONFIG_THERMAL_USER_EVENT_INTERFACE is defined.
+
+These attribute allow user space to stop polling for temperature.
+
+These attributes are:
+- temp_thres_low: Specify a notification temperature for a low
+temperature threshold event.
+temp_thres_high: Specify a notification temperature for a high
+temperature threshold event.
+temp_thres_hyst: Specify a change in temperature to send notification
+again.
+
+This is implemented by adding additional sysfs attribute group. The
+changes in this patch are trivial to add new attributes in thermal
+sysfs as done for other attributes.
 
 Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- drivers/thermal/thermal_core.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/thermal/thermal_sysfs.c | 136 +++++++++++++++++++++++++++++++-
+ include/linux/thermal.h         |  10 ++-
+ 2 files changed, 143 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 9a321dc548c8..14770d882d42 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1350,6 +1350,8 @@ thermal_zone_device_register(const char *type, int trips, int mask,
- 	if (atomic_cmpxchg(&tz->need_update, 1, 0))
- 		thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index aa99edb4dff7..aa85424c3ac4 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -215,6 +215,125 @@ trip_point_hyst_show(struct device *dev, struct device_attribute *attr,
+ 	return ret ? ret : sprintf(buf, "%d\n", temperature);
+ }
  
-+	thermal_dev_send_event(tz->id, THERMAL_ZONE_CREATE, 0);
++#if IS_ENABLED(CONFIG_THERMAL_USER_EVENT_INTERFACE)
 +
- 	return tz;
- 
- unregister:
-@@ -1379,6 +1381,8 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- 	if (!tz)
- 		return;
- 
-+	thermal_dev_send_event(tz->id, THERMAL_ZONE_DELETE, 0);
++#define create_thres_attr(name)					\
++	static ssize_t							\
++	name##_show(struct device *dev, struct device_attribute *devattr, \
++		char *buf)						\
++	{								\
++	struct thermal_zone_device *tz = to_thermal_zone(dev);	\
++	int temperature, ret;						\
++									\
++	ret = tz->ops->get_##name(tz, &temperature);			\
++									\
++	return ret ? ret : sprintf(buf, "%d\n", temperature);	\
++	}								\
++									\
++	static ssize_t							\
++	name##_store(struct device *dev, struct device_attribute *devattr, \
++		const char *buf, size_t count)				\
++	{								\
++		struct thermal_zone_device *tz = to_thermal_zone(dev);	\
++		int temperature, ret;					\
++									\
++		if (kstrtoint(buf, 10, &temperature))			\
++			return -EINVAL;				\
++									\
++		ret = tz->ops->set_##name(tz, temperature);		\
++		return ret ? ret : count;				\
++	}
 +
- 	tzp = tz->tzp;
++create_thres_attr(temp_thres_low);
++create_thres_attr(temp_thres_high);
++create_thres_attr(temp_thres_hyst);
++
++static int create_user_events_attrs(struct thermal_zone_device *tz)
++{
++	struct attribute **attrs;
++	int index = 0;
++
++	if (tz->ops->get_temp_thres_low)
++		++index;
++	if (tz->ops->get_temp_thres_high)
++		++index;
++	if (tz->ops->get_temp_thres_high)
++		++index;
++
++	/* One additional space for NULL */
++	attrs = kcalloc(index + 1, sizeof(*attrs), GFP_KERNEL);
++	if (!attrs)
++		return -ENOMEM;
++
++	tz->threshold_attrs = kcalloc(index, sizeof(*tz->threshold_attrs), GFP_KERNEL);
++	if (!tz->threshold_attrs) {
++		kfree(attrs);
++		return -ENOMEM;
++	}
++
++	index = 0;
++
++	if (tz->ops->get_temp_thres_low) {
++		snprintf(tz->threshold_attrs[index].name, THERMAL_NAME_LENGTH,
++			 "temp_thres_low");
++
++		sysfs_attr_init(&tz->threshold_attrs[index].attr.attr);
++		tz->threshold_attrs[index].attr.attr.name =
++						tz->threshold_attrs[index].name;
++		tz->threshold_attrs[index].attr.attr.mode = S_IWUSR | S_IRUGO;
++		tz->threshold_attrs[index].attr.show = temp_thres_low_show;
++		tz->threshold_attrs[index].attr.store = temp_thres_low_store;
++		attrs[index] = &tz->threshold_attrs[index].attr.attr;
++		++index;
++	}
++	if (tz->ops->get_temp_thres_high) {
++		snprintf(tz->threshold_attrs[index].name, THERMAL_NAME_LENGTH,
++			 "temp_thres_high");
++
++		sysfs_attr_init(&tz->threshold_attrs[index].attr.attr);
++		tz->threshold_attrs[index].attr.attr.name =
++						tz->threshold_attrs[index].name;
++		tz->threshold_attrs[index].attr.attr.mode = S_IWUSR | S_IRUGO;
++		tz->threshold_attrs[index].attr.show = temp_thres_high_show;
++		tz->threshold_attrs[index].attr.store = temp_thres_high_store;
++		attrs[index] = &tz->threshold_attrs[index].attr.attr;
++		++index;
++	}
++	if (tz->ops->get_temp_thres_hyst) {
++		snprintf(tz->threshold_attrs[index].name, THERMAL_NAME_LENGTH,
++			 "temp_thres_hyst");
++
++		sysfs_attr_init(&tz->threshold_attrs[index].attr.attr);
++		tz->threshold_attrs[index].attr.attr.name =
++						tz->threshold_attrs[index].name;
++		tz->threshold_attrs[index].attr.attr.mode = S_IWUSR | S_IRUGO;
++		tz->threshold_attrs[index].attr.show = temp_thres_hyst_show;
++		tz->threshold_attrs[index].attr.store = temp_thres_hyst_store;
++		attrs[index] = &tz->threshold_attrs[index].attr.attr;
++		++index;
++	}
++	attrs[index] = NULL;
++	tz->threshold_attribute_group.attrs = attrs;
++
++	return 0;
++}
++
++static void delete_user_events_attrs(struct thermal_zone_device *tz)
++{
++	kfree(tz->threshold_attrs);
++	kfree(tz->threshold_attribute_group.attrs);
++}
++#else
++static int create_user_events_attrs(struct thermal_zone_device *tz)
++{
++	return -EINVAL;
++}
++
++static void delete_user_events_attrs(struct thermal_zone_device *tz)
++{
++}
++#endif
++
+ static ssize_t
+ passive_store(struct device *dev, struct device_attribute *attr,
+ 	      const char *buf, size_t count)
+@@ -625,16 +744,27 @@ int thermal_zone_create_device_groups(struct thermal_zone_device *tz,
+ {
+ 	const struct attribute_group **groups;
+ 	int i, size, result;
++	int start = 0;
  
- 	mutex_lock(&thermal_list_lock);
+ 	/* we need one extra for trips and the NULL to terminate the array */
+ 	size = ARRAY_SIZE(thermal_zone_attribute_groups) + 2;
++
++	result = create_user_events_attrs(tz);
++	if (!result) {
++		++size;
++		++start;
++	}
++
+ 	/* This also takes care of API requirement to be NULL terminated */
+ 	groups = kcalloc(size, sizeof(*groups), GFP_KERNEL);
+ 	if (!groups)
+ 		return -ENOMEM;
+ 
+-	for (i = 0; i < size - 2; i++)
+-		groups[i] = thermal_zone_attribute_groups[i];
++	if (start)
++		groups[0] = &tz->threshold_attribute_group;
++
++	for (i = 0; i < size - 2 - start; i++)
++		groups[i + start] = thermal_zone_attribute_groups[i];
+ 
+ 	if (tz->trips) {
+ 		result = create_trip_attrs(tz, mask);
+@@ -660,6 +790,8 @@ void thermal_zone_destroy_device_groups(struct thermal_zone_device *tz)
+ 	if (tz->trips)
+ 		destroy_trip_attrs(tz);
+ 
++	delete_user_events_attrs(tz);
++
+ 	kfree(tz->device.groups);
+ }
+ 
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index f5e1e7c6a9a2..ee9d79ace7ce 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -102,6 +102,12 @@ struct thermal_zone_device_ops {
+ 			  enum thermal_trend *);
+ 	int (*notify) (struct thermal_zone_device *, int,
+ 		       enum thermal_trip_type);
++	int (*set_temp_thres_low)(struct thermal_zone_device *, int);
++	int (*set_temp_thres_high)(struct thermal_zone_device *, int);
++	int (*set_temp_thres_hyst)(struct thermal_zone_device *, int);
++	int (*get_temp_thres_low)(struct thermal_zone_device *, int *);
++	int (*get_temp_thres_high)(struct thermal_zone_device *, int *);
++	int (*get_temp_thres_hyst)(struct thermal_zone_device *, int *);
+ };
+ 
+ struct thermal_cooling_device_ops {
+@@ -208,6 +214,8 @@ struct thermal_zone_device {
+ 	struct list_head node;
+ 	struct delayed_work poll_queue;
+ 	enum thermal_notify_event notify_event;
++	struct attribute_group threshold_attribute_group;
++	struct thermal_attr *threshold_attrs;
+ };
+ 
+ /**
+@@ -558,7 +566,7 @@ enum thermal_device_events {
+ 	THERMAL_PERF_CHANGED,
+ };
+ 
+-#ifdef CONFIG_THERMAL_USER_EVENT_INTERFACE
++#if IS_ENABLED(CONFIG_THERMAL_USER_EVENT_INTERFACE)
+ int thermal_dev_send_event(int zone_id, enum thermal_device_events event, u64 event_data);
+ #else
+ int thermal_dev_send_event(int zone_id, enum thermal_device_events event, u64 event_data)
 -- 
 2.25.4
 
