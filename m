@@ -2,183 +2,350 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B27A11C3350
-	for <lists+linux-pm@lfdr.de>; Mon,  4 May 2020 09:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8014E1C33F9
+	for <lists+linux-pm@lfdr.de>; Mon,  4 May 2020 10:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726751AbgEDHJ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 May 2020 03:09:27 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:46900 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726515AbgEDHJ1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 May 2020 03:09:27 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200504070924euoutp01eb438222ee51c52ff7cd2ea6ad7d71ab~LwZrxXYwC3075030750euoutp01i
-        for <linux-pm@vger.kernel.org>; Mon,  4 May 2020 07:09:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200504070924euoutp01eb438222ee51c52ff7cd2ea6ad7d71ab~LwZrxXYwC3075030750euoutp01i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1588576164;
-        bh=VtOpu5X3uB4NzT/4wolwk7hNOmggXQ7mv6Gswxpv0Mk=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=iBENbkJrmIxg+O2e8pxRHQOxqu3HQmW6MKEzijniOyZznkrWijxbdwSoK0wVCjaBx
-         3LgqUK3OLREuaTUVzd8ME81E74r/gKYV5BxNxwI2SsDOwOeRgLZL6dIKavTxybhqwE
-         EhiwrWxHMRMOzELap5AhgDTPkS+NOef1kF7dsmiM=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200504070924eucas1p29205209e0bcde54dd0e099d11c045780~LwZrq_bm-0841308413eucas1p2F;
-        Mon,  4 May 2020 07:09:24 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 09.AC.60679.4AFBFAE5; Mon,  4
-        May 2020 08:09:24 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200504070924eucas1p15ab260a66dc51c3a2d4213af1045927c~LwZrNHsqW2246722467eucas1p1s;
-        Mon,  4 May 2020 07:09:24 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200504070924eusmtrp19859cfee3cca65bc64094885861152f9~LwZrMalOP2122621226eusmtrp1a;
-        Mon,  4 May 2020 07:09:24 +0000 (GMT)
-X-AuditID: cbfec7f4-0e5ff7000001ed07-98-5eafbfa40ab1
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 3C.62.07950.4AFBFAE5; Mon,  4
-        May 2020 08:09:24 +0100 (BST)
-Received: from [106.120.51.71] (unknown [106.120.51.71]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200504070923eusmtip1e020cbf71e0205115ca1426a5793fb50~LwZqzux2f2235922359eusmtip1r;
-        Mon,  4 May 2020 07:09:23 +0000 (GMT)
-Subject: Re: [PATCH 5/6] thermal: core: introduce tz_disabled() helper
- function
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, linux-wireless@vger.kernel.org,
-        daniel.lezcano@linaro.org, andrzej.p@collabora.com, luca@coelho.fi
-From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Message-ID: <4aa6fd7d-9e0c-614a-88e9-0e2637a114d4@samsung.com>
-Date:   Mon, 4 May 2020 09:09:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.8.0
+        id S1728052AbgEDIEx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 May 2020 04:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727843AbgEDIEw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 May 2020 04:04:52 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E621C061A0E;
+        Mon,  4 May 2020 01:04:52 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id f12so12701188edn.12;
+        Mon, 04 May 2020 01:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Q0Wo6vmSbri8U9kC6pe1XiL0TL6H2jlma6FaWSj8O4Q=;
+        b=LZskB9FqybWHb+eV93vXm28XWtfwXMtiwZL/1+z7s0ZmjZj0OBTtcNcGgv2V43ROGz
+         HkJQOX4aziHF1Su2R82dyPPxgOtqbNgsDx7UD0s8Q8CGhDOKiQ6q5zCfPlPaSj48VBiX
+         yGqSHEb6IiZN3xWBKmVoxdl0aosgJwMc2hejsp5RCaux5fveeasQPH7SFcyFWPSSf5Bo
+         AMJJopIjghVtTKr+/+cocb5WtwMIqbP+XYS3kXXtnQooTTsef/pLUYYA9zSLWY0wcQpv
+         fBcD+DL/wa5vZfiNdMj/km/1qACzdE/CSvJxBInlzn5DaZoCCmNpPEHL+XPzTDKE+aBo
+         Ot9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Q0Wo6vmSbri8U9kC6pe1XiL0TL6H2jlma6FaWSj8O4Q=;
+        b=qmYQ6TTpbtizPSh7iQ/s4YBkVTSzjmOULd6+7g55VKtov+qJ7NgSAidc6PiDFbD1x6
+         K9YXqjDhux0NLadJIM/nXF3GA1xNmsVGnibB5LDoGEtHitF9FkRN0Zqwlp/jNJqhrmxp
+         SIRcxEsC3IM/HwahhMzKR3U5FDhGCh0Q1rwe5sc6uEX0AOWYh7wQyz6u7GMGXhy9ruJ9
+         hHT1dBjbwet1FduZfFbVG+Q49AmvphVBeGt6b/AWWe039nUEFXhUoQ0FcdnxQMk49HDo
+         Wmm8yFDLn6kNBCc7x39EOBpgaiFU/AEMcdQs7aTW3bLHzOL86fwlZWljf59JxQCxXDIL
+         0RMA==
+X-Gm-Message-State: AGi0PuYFDSWGEbysGzVMsSytSyLVTUYDLi1c2otC4XA5rifo4EqFfVi/
+        Pk/Tgo/6rayavakvSA7UEDR9wpGBl51ihplVFos=
+X-Google-Smtp-Source: APiQypLvGhp/jZH8bUH+mkNOvXgUOAEl58T3yRSgCIF8JZ+gAN+WuBYFDHc6KIliNvqUdWYZvAqWvATFJGsgc5LmUuE=
+X-Received: by 2002:aa7:dcc3:: with SMTP id w3mr12803208edu.231.1588579491120;
+ Mon, 04 May 2020 01:04:51 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200430063229.6182-6-rui.zhang@intel.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMKsWRmVeSWpSXmKPExsWy7djP87pL9q+PM/h+Ucli2eN7LBbzPsta
-        fO49wmjxZsUddosZ52exWzx52MfmwObxcNdsNo8dd5cweize85LJ4861PWwenzfJBbBGcdmk
-        pOZklqUW6dslcGX07L7AVrBcuOLFf+0Gxn/8XYycHBICJhIdvyYydTFycQgJrGCUOP66jxXC
-        +cIosbzxGBuE85lR4sH+ycwwLZ93NLJAJJYzShy9/RksISTwllHi+iKOLkYODmGBQInzSyVB
-        wiICyhKLzm1lBLGZBZoYJb4fKwCx2QSsJCa2rwKL8wrYSRz5/ogdxGYRUJH4uOIkmC0qECHx
-        6cFhVogaQYmTM5+wgNicAhYST78fhZopLnHryXwmCFteYvvbOcwgt0kIrGOX2PD3FDvE0S4S
-        ncfnQtnCEq+Ob4GyZSROT+5hgWpglPjb8QKqezvQ/5P/sUFUWUvcOfeLDeQzZgFNifW79CHC
-        jhJrW1Ywg4QlBPgkbrwVhDiCT2LStulQYV6JjjYhiGo1iQ3LNrDBrO3auZJ5AqPSLCSvzULy
-        ziwk78xC2LuAkWUVo3hqaXFuemqxUV5quV5xYm5xaV66XnJ+7iZGYNI5/e/4lx2Mu/4kHWIU
-        4GBU4uF98HldnBBrYllxZe4hRgkOZiUR3h0t6+OEeFMSK6tSi/Lji0pzUosPMUpzsCiJ8xov
-        ehkrJJCeWJKanZpakFoEk2Xi4JRqYCzcd61qSUv2ysS70m/YEi+5ZrYuLZgv8inn7ZNnj/S1
-        p5b5fSp8P3tTh5PBHU3VCRteXzs8ccr7D4+ME/6dm5i/PMx7/cMdpZfVb4aeP7lhtQjfBDnu
-        a50lq3vtV7/4tkg37M8El9tcEyblLDD9JZf1x2nTJInfXz/oyG+Qmy3RGWe0bNF15f1WSizF
-        GYmGWsxFxYkAaXjgFjYDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGIsWRmVeSWpSXmKPExsVy+t/xu7pL9q+PM/h3mdVi2eN7LBbzPsta
-        fO49wmjxZsUddosZ52exWzx52MfmwObxcNdsNo8dd5cweize85LJ4861PWwenzfJBbBG6dkU
-        5ZeWpCpk5BeX2CpFG1oY6RlaWugZmVjqGRqbx1oZmSrp29mkpOZklqUW6dsl6GX07L7AVrBc
-        uOLFf+0Gxn/8XYycHBICJhKfdzSydDFycQgJLGWU+Pb2PZDDAZSQkTi+vgyiRljiz7UuNoia
-        14wStx8eZwSpERYIlDi/VBKkRkRAWWLRua2MIDXMAk2MEs+fn2SFaNjJKHFj5hI2kCo2ASuJ
-        ie2rGEFsXgE7iSPfH7GD2CwCKhIfV5wEs0UFIiQO75gFVSMocXLmExYQm1PAQuLp96NgcWYB
-        dYk/8y4xQ9jiEreezGeCsOUltr+dwzyBUWgWkvZZSFpmIWmZhaRlASPLKkaR1NLi3PTcYiO9
-        4sTc4tK8dL3k/NxNjMA423bs55YdjF3vgg8xCnAwKvHwPvi8Lk6INbGsuDL3EKMEB7OSCO+O
-        lvVxQrwpiZVVqUX58UWlOanFhxhNgZ6byCwlmpwPTAF5JfGGpobmFpaG5sbmxmYWSuK8HQIH
-        Y4QE0hNLUrNTUwtSi2D6mDg4pRoYj1wOn7E9J3N1iOvr4zfOXdZelaQ2Y+Uq89XJN56c0Tui
-        euO6354+qdY9Xy/U/upJ2cK9WHZ20Aqf/twrgQelvs11v9VkzHr7bUxfU/v9DYJrVmjFlLTL
-        erO8ktqs9bl1P/dkhhye77F5NXIBHG7xYc+dpgoaRSxb/q42gGfFEgWrbI49p6fJK7EUZyQa
-        ajEXFScCAFz2Bn/JAgAA
-X-CMS-MailID: 20200504070924eucas1p15ab260a66dc51c3a2d4213af1045927c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200430062922eucas1p288a6f222286b4293b32272a3da1166ab
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200430062922eucas1p288a6f222286b4293b32272a3da1166ab
-References: <20200430063229.6182-1-rui.zhang@intel.com>
-        <CGME20200430062922eucas1p288a6f222286b4293b32272a3da1166ab@eucas1p2.samsung.com>
-        <20200430063229.6182-6-rui.zhang@intel.com>
+References: <20200501203311.143934-1-konradybcio@gmail.com>
+ <20200501203311.143934-2-konradybcio@gmail.com> <CAP245DUOcsort1B1ftWW251Bzxp8=SuaGdZuZBmUubO9tw78cw@mail.gmail.com>
+In-Reply-To: <CAP245DUOcsort1B1ftWW251Bzxp8=SuaGdZuZBmUubO9tw78cw@mail.gmail.com>
+From:   Konrad Dybcio <konradybcio@gmail.com>
+Date:   Mon, 4 May 2020 10:04:14 +0200
+Message-ID: <CAMS8qEXAPTcCYTKSA1VYnHtqT1zuUdYNNskRfgPiFykdKdqsKA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: qcom: tsens-v0_1: Add support for MSM8939
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     skrzynka@konradybcio.pl, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Thanks for your review. I'll hopefully send a v2 later today.
 
-On 4/30/20 8:32 AM, Zhang Rui wrote:
-> Rename should_stop_polling() to tz_disabled(), and make it global.
-> Because there are platform thermal drivers which also need this.
-> 
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/thermal/thermal_core.c | 17 ++++++++---------
->  include/linux/thermal.h        |  2 ++
->  2 files changed, 10 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 5f7a867..1cd5d5d0 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -305,16 +305,9 @@ static void thermal_zone_device_set_polling(struct thermal_zone_device *tz,
->  		cancel_delayed_work(&tz->poll_queue);
->  }
->  
-> -static inline bool should_stop_polling(struct thermal_zone_device *tz)
-> -{
-> -	return thermal_zone_device_get_mode(tz) == THERMAL_DEVICE_DISABLED;
-> -}
-> -
->  static void monitor_thermal_zone(struct thermal_zone_device *tz)
->  {
-> -	bool stop;
-> -
-> -	stop = should_stop_polling(tz);
-> +	bool stop = tz_disabled(tz);
->  
->  	mutex_lock(&tz->lock);
->  
-> @@ -502,12 +495,18 @@ int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->  }
->  EXPORT_SYMBOL_GPL(thermal_zone_device_set_mode);
->  
-> +bool tz_disabled(struct thermal_zone_device *tz)
-> +{
-> +	return thermal_zone_device_get_mode(tz) == THERMAL_DEVICE_DISABLED;
-> +}
-> +EXPORT_SYMBOL(tz_disabled);
+As for the sensor count, I don't know how many there actually are. I'm
+an independent dev and don't have access to any documentation and I'm
+solely basing on what I find in downstream, and I think it's 10,
+unless mainline expects the _0_4 and _5 to be counted separately.. [1]
 
-Is there actual reason to not make it _GPL?
+I will also make sure to test it again before sending and will give
+you the results in the v2 cover letter.
 
-[ all other thermal core functionality seems to be _GPL anyway ]
+[1] https://github.com/konradybcio/android_kernel_asus_msm8916-1/blob/minim=
+al/drivers/thermal/msm8974-tsens.c#L396
 
-Otherwise the patch looks fine:
 
-Reviewed-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-
-Best regards,
---
-Bartlomiej Zolnierkiewicz
-Samsung R&D Institute Poland
-Samsung Electronics
-
-> +
->  void thermal_zone_device_update(struct thermal_zone_device *tz,
->  				enum thermal_notify_event event)
->  {
->  	int count;
->  
-> -	if (should_stop_polling(tz))
-> +	if (tz_disabled(tz))
->  		goto update_polling;
->  
->  	if (atomic_read(&in_suspend))
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index a87fbaf..0bc62ee 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -479,4 +479,6 @@ static inline int thermal_zone_device_disable(struct thermal_zone_device *tz)
->  	return thermal_zone_device_set_mode(tz, THERMAL_DEVICE_DISABLED);
->  }
->  
-> +bool tz_disabled(struct thermal_zone_device *tz);
-> +
->  #endif /* __THERMAL_H__ */
-> 
-
+pon., 4 maj 2020 o 08:31 Amit Kucheria <amit.kucheria@linaro.org> napisa=C5=
+=82(a):
+>
+> On Sat, May 2, 2020 at 2:03 AM Konrad Dybcio <konradybcio@gmail.com> wrot=
+e:
+> >
+> > Signed-off-by: Konrad Dybcio <konradybcio@gmail.com>
+> > ---
+> >  drivers/thermal/qcom/tsens-v0_1.c | 142 +++++++++++++++++++++++++++++-
+> >  drivers/thermal/qcom/tsens.c      |   3 +
+> >  drivers/thermal/qcom/tsens.h      |   2 +-
+> >  3 files changed, 145 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/t=
+sens-v0_1.c
+> > index 959a9371d205c..29b95886273b7 100644
+> > --- a/drivers/thermal/qcom/tsens-v0_1.c
+> > +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> > @@ -48,6 +48,64 @@
+> >  #define MSM8916_CAL_SEL_MASK   0xe0000000
+> >  #define MSM8916_CAL_SEL_SHIFT  29
+> >
+> > +/* eeprom layout data for 8939 */
+> > +#define MSM8939_BASE0_MASK           0x000000ff
+> > +#define MSM8939_BASE1_MASK           0xff000000
+> > +#define MSM8939_BASE0_SHIFT
+>
+> Use 0?
+>
+> > +#define MSM8939_BASE1_SHIFT          24
+> > +
+> > +#define MSM8939_S0_P1_MASK         0x000001f8
+> > +#define MSM8939_S1_P1_MASK         0x001f8000
+> > +#define MSM8939_S2_P1_MASK_0_4     0xf8000000
+> > +#define MSM8939_S2_P1_MASK_5       0x00000001
+> > +#define MSM8939_S3_P1_MASK         0x00001f80
+> > +#define MSM8939_S4_P1_MASK         0x01f80000
+> > +#define MSM8939_S5_P1_MASK         0x00003f00
+> > +#define MSM8939_S6_P1_MASK         0x03f00000
+> > +#define MSM8939_S7_P1_MASK         0x0000003f
+> > +#define MSM8939_S8_P1_MASK         0x0003f000
+> > +#define MSM8939_S9_P1_MASK         0x07e00000
+> > +
+> > +#define MSM8939_S0_P2_MASK         0x00007e00
+> > +#define MSM8939_S1_P2_MASK         0x07e00000
+> > +#define MSM8939_S2_P2_MASK         0x0000007e
+> > +#define MSM8939_S3_P2_MASK         0x0007e000
+> > +#define MSM8939_S4_P2_MASK         0x7e000000
+> > +#define MSM8939_S5_P2_MASK         0x000fc000
+> > +#define MSM8939_S6_P2_MASK         0xfc000000
+> > +#define MSM8939_S7_P2_MASK         0x00000fc0
+> > +#define MSM8939_S8_P2_MASK         0x00fc0000
+> > +#define MSM8939_S9_P2_MASK_0_4     0xf8000000
+> > +#define MSM8939_S9_P2_MASK_5       0x00002000
+> > +
+> > +#define MSM8939_CAL_SEL_MASK   0xc0000000
+> > +#define MSM8939_CAL_SEL_SHIFT  0
+> > +
+> > +
+>
+> Get rid of extra line.
+>
+> > +#define MSM8939_S0_P1_SHIFT        3
+> > +#define MSM8939_S1_P1_SHIFT        15
+> > +#define MSM8939_S2_P1_SHIFT_0_4    27
+> > +#define MSM8939_S2_P1_SHIFT_5      5
+> > +#define MSM8939_S3_P1_SHIFT        7
+> > +#define MSM8939_S4_P1_SHIFT        19
+> > +#define MSM8939_S5_P1_SHIFT        8
+> > +#define MSM8939_S6_P1_SHIFT        20
+> > +//yes, 7 is missing in downstream
+>
+> Use C style comments.
+>
+> > +#define MSM8939_S8_P1_SHIFT        12
+> > +#define MSM8939_S9_P1_SHIFT        21
+> > +
+> > +#define MSM8939_S0_P2_SHIFT        9
+> > +#define MSM8939_S1_P2_SHIFT        21
+> > +#define MSM8939_S2_P2_SHIFT        1
+> > +#define MSM8939_S3_P2_SHIFT        13
+> > +#define MSM8939_S4_P2_SHIFT        25
+> > +#define MSM8939_S5_P2_SHIFT        14
+> > +#define MSM8939_S6_P2_SHIFT        26
+> > +#define MSM8939_S7_P2_SHIFT        6
+> > +#define MSM8939_S8_P2_SHIFT        18
+> > +#define MSM8939_S9_P2_SHIFT_0_4    27
+> > +#define MSM8939_S9_P2_SHIFT_5      8
+> > +
+> >  /* eeprom layout data for 8974 */
+> >  #define BASE1_MASK             0xff
+> >  #define S0_P1_MASK             0x3f00
+> > @@ -189,6 +247,73 @@ static int calibrate_8916(struct tsens_priv *priv)
+> >         return 0;
+> >  }
+> >
+> > +static int calibrate_8939(struct tsens_priv *priv)
+> > +{
+> > +       int base0 =3D 0, base1 =3D 0, i;
+> > +       u32 p1[11], p2[11];
+> > +       int mode =3D 0;
+> > +       u32 *qfprom_cdata, *qfprom_csel;
+> > +
+> > +       qfprom_cdata =3D (u32 *)qfprom_read(priv->dev, "calib");
+> > +       if (IS_ERR(qfprom_cdata))
+> > +               return PTR_ERR(qfprom_cdata);
+> > +
+> > +       qfprom_csel =3D (u32 *)qfprom_read(priv->dev, "calib_sel");
+> > +       if (IS_ERR(qfprom_csel)) {
+> > +               kfree(qfprom_cdata);
+> > +               return PTR_ERR(qfprom_csel);
+> > +       }
+> > +
+> > +       mode =3D (qfprom_csel[0] & MSM8939_CAL_SEL_MASK) >> MSM8939_CAL=
+_SEL_SHIFT;
+> > +       dev_dbg(priv->dev, "calibration mode is %d\n", mode);
+>
+> Add an extra line here.
+>
+> > +       switch (mode) {
+> > +       case TWO_PT_CALIB:
+> > +               base1 =3D (qfprom_cdata[1] & MSM8939_BASE1_MASK) >> MSM=
+8939_BASE1_SHIFT;
+> > +               p2[0] =3D (qfprom_cdata[0] & MSM8939_S0_P2_MASK) >> MSM=
+8939_S0_P2_SHIFT;
+> > +               p2[1] =3D (qfprom_cdata[0] & MSM8939_S1_P2_MASK) >> MSM=
+8939_S1_P2_SHIFT;
+> > +               p2[2] =3D (qfprom_cdata[1] & MSM8939_S2_P2_MASK) >> MSM=
+8939_S2_P2_SHIFT;
+> > +               p2[3] =3D (qfprom_cdata[1] & MSM8939_S3_P2_MASK) >> MSM=
+8939_S3_P2_SHIFT;
+> > +               p2[4] =3D (qfprom_cdata[1] & MSM8939_S4_P2_MASK) >> MSM=
+8939_S4_P2_SHIFT;
+> > +               p2[5] =3D (qfprom_cdata[1] & MSM8939_S5_P2_MASK) >> MSM=
+8939_S5_P2_SHIFT;
+> > +               p2[6] =3D (qfprom_cdata[1] & MSM8939_S6_P2_MASK) >> MSM=
+8939_S6_P2_SHIFT;
+> > +               p2[7] =3D (qfprom_cdata[1] & MSM8939_S7_P2_MASK) >> MSM=
+8939_S7_P2_SHIFT;
+> > +               p2[8] =3D (qfprom_cdata[1] & MSM8939_S8_P2_MASK) >> MSM=
+8939_S8_P2_SHIFT;
+> > +               p2[9] =3D (qfprom_cdata[1] & MSM8939_S9_P2_MASK_0_4) >>=
+ MSM8939_S9_P2_SHIFT_0_4;
+> > +               p2[10] =3D (qfprom_cdata[1] & MSM8939_S9_P2_MASK_5) >> =
+MSM8939_S9_P2_SHIFT_5;
+> > +               for (i =3D 0; i < priv->num_sensors; i++)
+> > +                       p2[i] =3D ((base1 + p2[i]) << 3);
+> > +               /* Fall through */
+> > +       case ONE_PT_CALIB2:
+> > +               base0 =3D (qfprom_cdata[0] & MSM8939_BASE0_MASK);
+> > +               p1[0] =3D (qfprom_cdata[0] & MSM8939_S0_P1_MASK) >> MSM=
+8939_S0_P1_SHIFT;
+> > +               p1[1] =3D (qfprom_cdata[0] & MSM8939_S1_P1_MASK) >> MSM=
+8939_S1_P1_SHIFT;
+> > +               p1[2] =3D (qfprom_cdata[0] & MSM8939_S2_P1_MASK_0_4) >>=
+ MSM8939_S2_P1_SHIFT_0_4;
+> > +               p1[3] =3D (qfprom_cdata[0] & MSM8939_S2_P1_MASK_5) >> M=
+SM8939_S2_P1_SHIFT_5;
+> > +               p1[4] =3D (qfprom_cdata[1] & MSM8939_S3_P1_MASK) >> MSM=
+8939_S3_P1_SHIFT;
+> > +               p1[5] =3D (qfprom_cdata[1] & MSM8939_S4_P1_MASK) >> MSM=
+8939_S4_P1_SHIFT;
+> > +               p1[6] =3D (qfprom_cdata[1] & MSM8939_S5_P1_MASK) >> MSM=
+8939_S5_P1_SHIFT;
+> > +               p1[7] =3D (qfprom_cdata[1] & MSM8939_S6_P1_MASK) >> MSM=
+8939_S6_P1_SHIFT;
+> > +               //yes, 7 is missing in downstream
+>
+> Use C comment style. Might this be a bug?
+>
+> > +               p1[8] =3D (qfprom_cdata[1] & MSM8939_S8_P1_MASK) >> MSM=
+8939_S8_P1_SHIFT;
+> > +               p1[9] =3D (qfprom_cdata[1] & MSM8939_S9_P1_MASK) >> MSM=
+8939_S9_P1_SHIFT;
+> > +               for (i =3D 0; i < priv->num_sensors; i++)
+> > +                       p1[i] =3D (((base0) + p1[i]) << 3);
+> > +               break;
+> > +       default:
+> > +               for (i =3D 0; i < priv->num_sensors; i++) {
+> > +                       p1[i] =3D 500;
+> > +                       p2[i] =3D 780;
+> > +               }
+> > +               break;
+> > +       }
+> > +
+> > +       compute_intercept_slope(priv, p1, p2, mode);
+> > +       kfree(qfprom_cdata);
+> > +       kfree(qfprom_csel);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> >  static int calibrate_8974(struct tsens_priv *priv)
+> >  {
+> >         int base1 =3D 0, base2 =3D 0, i;
+> > @@ -325,7 +450,7 @@ static int calibrate_8974(struct tsens_priv *priv)
+> >         return 0;
+> >  }
+> >
+> > -/* v0.1: 8916, 8974 */
+> > +/* v0.1: 8916, 8939, 8974 */
+> >
+> >  static struct tsens_features tsens_v0_1_feat =3D {
+> >         .ver_major      =3D VER_0_1,
+> > @@ -386,6 +511,21 @@ struct tsens_plat_data data_8916 =3D {
+> >         .fields =3D tsens_v0_1_regfields,
+> >  };
+> >
+> > +static const struct tsens_ops ops_8939 =3D {
+> > +       .init           =3D init_common,
+> > +       .calibrate      =3D calibrate_8939,
+> > +       .get_temp       =3D get_temp_common,
+> > +};
+> > +
+> > +struct tsens_plat_data data_8939 =3D {
+> > +       .num_sensors    =3D 10,
+>
+> I think 8939 has 11 sensors. Can you confirm?
+>
+> > +       .ops            =3D &ops_8939,
+> > +       .hw_ids         =3D (unsigned int []){0, 1, 2, 4, 5, 6, 7, 8, 9=
+ },
+>
+> And this should be equal to the number of sensors
+>
+>
+> > +
+> > +       .feat           =3D &tsens_v0_1_feat,
+> > +       .fields =3D tsens_v0_1_regfields,
+> > +};
+> > +
+> >  static const struct tsens_ops ops_8974 =3D {
+> >         .init           =3D init_common,
+> >         .calibrate      =3D calibrate_8974,
+> > diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.=
+c
+> > index 2f77d235cf735..f654057e96ae1 100644
+> > --- a/drivers/thermal/qcom/tsens.c
+> > +++ b/drivers/thermal/qcom/tsens.c
+> > @@ -59,6 +59,9 @@ static const struct of_device_id tsens_table[] =3D {
+> >         {
+> >                 .compatible =3D "qcom,msm8916-tsens",
+> >                 .data =3D &data_8916,
+> > +       }, {
+> > +               .compatible =3D "qcom,msm8939-tsens",
+> > +               .data =3D &data_8939,
+> >         }, {
+> >                 .compatible =3D "qcom,msm8974-tsens",
+> >                 .data =3D &data_8974,
+> > diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.=
+h
+> > index 502acf0e68285..403b15546f648 100644
+> > --- a/drivers/thermal/qcom/tsens.h
+> > +++ b/drivers/thermal/qcom/tsens.h
+> > @@ -590,7 +590,7 @@ irqreturn_t tsens_critical_irq_thread(int irq, void=
+ *data);
+> >  extern struct tsens_plat_data data_8960;
+> >
+> >  /* TSENS v0.1 targets */
+> > -extern struct tsens_plat_data data_8916, data_8974;
+> > +extern struct tsens_plat_data data_8916, data_8939, data_8974;
+> >
+> >  /* TSENS v1 targets */
+> >  extern struct tsens_plat_data data_tsens_v1, data_8976;
+> > --
+> > 2.26.1
+> >
