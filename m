@@ -2,29 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D271C4EF3
-	for <lists+linux-pm@lfdr.de>; Tue,  5 May 2020 09:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF88A1C4F41
+	for <lists+linux-pm@lfdr.de>; Tue,  5 May 2020 09:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727973AbgEEHUH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 May 2020 03:20:07 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:23353 "EHLO
+        id S1728433AbgEEHhD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 May 2020 03:37:03 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:25392 "EHLO
         mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726065AbgEEHUF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 May 2020 03:20:05 -0400
+        by vger.kernel.org with ESMTP id S1728114AbgEEHhC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 May 2020 03:37:02 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1588663205; h=Message-ID: References: In-Reply-To: Subject:
+ s=smtp; t=1588664221; h=Message-ID: References: In-Reply-To: Subject:
  Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=uJwzx6pIPPCofwLtZDB4TDrhcslzQR2DeFg2pp9P5pI=;
- b=gj4ZWfx4plbtNj0+UN9uomtR24lrdm8oFsrQNOxZ1zrMZSK3vtsCgIva8y1Dbf2aO3Pt/Gz3
- Ubc/nvcqpa5Iiq/1z8Mp9Y8CuHOSp69TQHkF7TKqLXTi5FImXb4T03XSJzx15Fg8+capYS/G
- 5RFGxDdwMNDvKsbQT3lZy8FJ4tk=
+ MIME-Version: Sender; bh=kIFbus3pdBIDI9q5dNQbOWwVqxDFyCbLIbVYGC3IkTQ=;
+ b=uu2ko1x7N/Gp3ty9bvyzBmqH0X00Crj2tm8xiVqDh7kSel69j0LTbBf1dpyeWbDrUhy4IcHy
+ WKwuYeQvJg1IKgRz0jZ4QlYTEo3FCBGzVyGBrCYzkfQhwTjWy48WGyFYLCaoOclGRoU3om2A
+ er/GSDEB4bnUKJsz91z5YiT/FCQ=
 X-Mailgun-Sending-Ip: 104.130.122.26
 X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
 Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5eb1139d.7f331717f0a0-smtp-out-n05;
- Tue, 05 May 2020 07:19:57 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5eb11796.7fc83b4433b0-smtp-out-n03;
+ Tue, 05 May 2020 07:36:54 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 0258AC4478C; Tue,  5 May 2020 07:19:55 +0000 (UTC)
+        id A2428C44788; Tue,  5 May 2020 07:36:53 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -34,31 +34,41 @@ Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
         (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 53D46C433D2;
-        Tue,  5 May 2020 07:19:55 +0000 (UTC)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 01650C433D2;
+        Tue,  5 May 2020 07:36:52 +0000 (UTC)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 05 May 2020 12:49:55 +0530
+Date:   Tue, 05 May 2020 13:06:52 +0530
 From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     sboyd@kernel.org, georgi.djakov@linaro.org,
-        bjorn.andersson@linaro.org, saravanak@google.com, mka@chromium.org,
-        nm@ti.com, agross@kernel.org, david.brown@linaro.org,
-        robh+dt@kernel.org, mark.rutland@arm.com, rjw@rjwysocki.net,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dianders@chromium.org, vincent.guittot@linaro.org,
-        amit.kucheria@linaro.org, ulf.hansson@linaro.org,
-        lukasz.luba@arm.com, sudeep.holla@arm.com
-Subject: Re: [PATCH v4 06/12] cpufreq: qcom: Update the bandwidth levels on
- frequency change
-In-Reply-To: <20200505045012.zfx2e6chqo5f3e4n@vireshk-i7>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Nishanth Menon <nm@ti.com>, Andy Gross <agross@kernel.org>,
+        David Brown <david.brown@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-arm-msm@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, lukasz.luba@arm.com,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [PATCH v4 07/12] OPP: Add and export helper to get icc path count
+In-Reply-To: <CAGETcx9=kfuG9WtaSxsDe_SM1Gewbn889eQ--3ui3H_rzm3BRA@mail.gmail.com>
 References: <20200504202243.5476-1-sibis@codeaurora.org>
- <20200504202243.5476-7-sibis@codeaurora.org>
- <20200505045012.zfx2e6chqo5f3e4n@vireshk-i7>
-Message-ID: <8fc5b72c9af6fd6a707a280cfc678677@codeaurora.org>
+ <20200504202243.5476-8-sibis@codeaurora.org>
+ <CAGETcx9=kfuG9WtaSxsDe_SM1Gewbn889eQ--3ui3H_rzm3BRA@mail.gmail.com>
+Message-ID: <9c5786c552bf7f0092cecbbdabd7761b@codeaurora.org>
 X-Sender: sibis@codeaurora.org
 User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
@@ -66,21 +76,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-05-05 10:20, Viresh Kumar wrote:
-> On 05-05-20, 01:52, Sibi Sankar wrote:
->> Add support to parse optional OPP table attached to the cpu node when
->> the OPP bandwidth values are populated. This allows for scaling of
->> DDR/L3 bandwidth levels with frequency change.
+On 2020-05-05 03:33, Saravana Kannan wrote:
+> On Mon, May 4, 2020 at 1:24 PM Sibi Sankar <sibis@codeaurora.org> 
+> wrote:
 >> 
->> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+>> Add and export 'dev_pm_opp_get_path_count' to get the icc path count
+>> associated with the device.
 > 
-> What about using opp_set_rate instead ?
+> This is not related to OPP. You should add this helper function to ICC
+> framework?
 
-I can't use opp_set_rate since
-the cpu dev does not have a
-clock associated with it and the
-scaling is done through writing
-on perf state register.
+yes it should be, I'll work with
+Georgi so that it gets re-used in
+his series as well.
+
+
+> 
+> -Saravana
 
 -- 
 Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
