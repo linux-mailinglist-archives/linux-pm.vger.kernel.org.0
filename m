@@ -2,22 +2,22 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1971C7856
-	for <lists+linux-pm@lfdr.de>; Wed,  6 May 2020 19:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC4B1C7875
+	for <lists+linux-pm@lfdr.de>; Wed,  6 May 2020 19:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730326AbgEFRo1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 May 2020 13:44:27 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:32814 "EHLO
+        id S1730312AbgEFRo0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 May 2020 13:44:26 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:32852 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730263AbgEFRoW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 May 2020 13:44:22 -0400
+        with ESMTP id S1730167AbgEFRo0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 May 2020 13:44:26 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 948DE8000B81;
-        Wed,  6 May 2020 17:44:19 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 234AA8000B84;
+        Wed,  6 May 2020 17:44:21 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id yB4vVyCw6pxE; Wed,  6 May 2020 20:44:19 +0300 (MSK)
+        with ESMTP id Z08SmWcnA9yN; Wed,  6 May 2020 20:44:20 +0300 (MSK)
 From:   <Sergey.Semin@baikalelectronics.ru>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -25,15 +25,14 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Allison Randal <allison@lohutok.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 14/20] mips: Use offset-sized IO-mem accessors in CPS debug printout
-Date:   Wed, 6 May 2020 20:42:32 +0300
-Message-ID: <20200506174238.15385-15-Sergey.Semin@baikalelectronics.ru>
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 15/20] mips: cdmm: Add mti,mips-cdmm dtb node support
+Date:   Wed, 6 May 2020 20:42:33 +0300
+Message-ID: <20200506174238.15385-16-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
  <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
@@ -48,66 +47,63 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Similar to commit 8e5c62e38a88 ("mips: early_printk_8250: Use offset-sized
-IO-mem accessors") the IO-memory might require to use a proper load/store
-instructions (like Bailal-T1 IO-memory). To fix the cps-vec UART debug
-printout lets use the memory access instructions in accordance with the
-UART registers offset config specified at boot time.
+Since having and mapping the CDMM block is platform specific, then
+instead of just returning a zero-address, lets make the default CDMM
+base address search method (mips_cdmm_phys_base()) to do something
+useful. For instance to find the address in a dedicated dtb-node in
+order to support of-based platforms by default.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 Cc: Paul Burton <paulburton@kernel.org>
 Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Olof Johansson <olof@lixom.net>
 Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-mips@vger.kernel.org
 Cc: linux-pm@vger.kernel.org
 Cc: devicetree@vger.kernel.org
-
 ---
-There might be another problem in cps-vec-ns16550.S connected with the
-difference in CPU/devices endinanness on some platforms. But there is
-no such for Baikal-T1 SoC.
----
- arch/mips/kernel/cps-vec-ns16550.S | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ drivers/bus/mips_cdmm.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/arch/mips/kernel/cps-vec-ns16550.S b/arch/mips/kernel/cps-vec-ns16550.S
-index d5a67b4ce9f6..2adb1c56c7c5 100644
---- a/arch/mips/kernel/cps-vec-ns16550.S
-+++ b/arch/mips/kernel/cps-vec-ns16550.S
-@@ -14,16 +14,30 @@
- #define UART_TX_OFS	(UART_TX << CONFIG_MIPS_CPS_NS16550_SHIFT)
- #define UART_LSR_OFS	(UART_LSR << CONFIG_MIPS_CPS_NS16550_SHIFT)
- 
-+#if CONFIG_MIPS_CPS_NS16550_SHIFT == 0
-+# define UART_L		lb
-+# define UART_S		sb
-+#elif CONFIG_MIPS_CPS_NS16550_SHIFT == 1
-+# define UART_L		lh
-+# define UART_S		sh
-+#elif CONFIG_MIPS_CPS_NS16550_SHIFT == 2
-+# define UART_L		lw
-+# define UART_S		sw
-+#else
-+# define UART_L		lw
-+# define UART_S		sb
-+#endif
-+
- /**
-  * _mips_cps_putc() - write a character to the UART
-  * @a0: ASCII character to write
-  * @t9: UART base address
+diff --git a/drivers/bus/mips_cdmm.c b/drivers/bus/mips_cdmm.c
+index 1b14256376d2..7faa8c049f07 100644
+--- a/drivers/bus/mips_cdmm.c
++++ b/drivers/bus/mips_cdmm.c
+@@ -16,6 +16,8 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/smp.h>
++#include <linux/of_address.h>
++#include <linux/of.h>
+ #include <asm/cdmm.h>
+ #include <asm/hazards.h>
+ #include <asm/mipsregs.h>
+@@ -337,9 +339,22 @@ static phys_addr_t mips_cdmm_cur_base(void)
+  * Picking a suitable physical address at which to map the CDMM region is
+  * platform specific, so this weak function can be overridden by platform
+  * code to pick a suitable value if none is configured by the bootloader.
++ * By default this method tries to find a CDMM-specific node in the system
++ * dtb. Note that this won't work for early serial console.
   */
- LEAF(_mips_cps_putc)
--1:	lw		t0, UART_LSR_OFS(t9)
-+1:	UART_L		t0, UART_LSR_OFS(t9)
- 	andi		t0, t0, UART_LSR_TEMT
- 	beqz		t0, 1b
--	sb		a0, UART_TX_OFS(t9)
-+	UART_S		a0, UART_TX_OFS(t9)
- 	jr		ra
- 	END(_mips_cps_putc)
+ phys_addr_t __weak mips_cdmm_phys_base(void)
+ {
++	struct device_node *np;
++	struct resource res;
++	int err;
++
++	np = of_find_compatible_node(NULL, NULL, "mti,mips-cdmm");
++	if (np) {
++		err = of_address_to_resource(np, 0, &res);
++		if (!err)
++			return res.start;
++	}
++
+ 	return 0;
+ }
  
 -- 
 2.25.1
