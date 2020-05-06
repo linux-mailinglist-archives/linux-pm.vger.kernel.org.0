@@ -2,38 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AB41C786B
-	for <lists+linux-pm@lfdr.de>; Wed,  6 May 2020 19:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF3B1C7863
+	for <lists+linux-pm@lfdr.de>; Wed,  6 May 2020 19:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729334AbgEFRov (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 May 2020 13:44:51 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:32958 "EHLO
+        id S1728619AbgEFRof (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 May 2020 13:44:35 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:32938 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730349AbgEFRob (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 May 2020 13:44:31 -0400
+        with ESMTP id S1730377AbgEFRod (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 May 2020 13:44:33 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 6D5E08000BB3;
-        Wed,  6 May 2020 17:44:27 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id D1D928000CF8;
+        Wed,  6 May 2020 17:44:30 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id DyI7IDSfg4EM; Wed,  6 May 2020 20:44:26 +0300 (MSK)
+        with ESMTP id dpFA3fEHy6Gk; Wed,  6 May 2020 20:44:29 +0300 (MSK)
 From:   <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>
 CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        afzal mohammed <afzal.mohd.ma@gmail.com>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 19/20] mips: cevt-r4k: Update the r4k-clockevent frequency in sync with CPU
-Date:   Wed, 6 May 2020 20:42:37 +0300
-Message-ID: <20200506174238.15385-20-Sergey.Semin@baikalelectronics.ru>
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <stable@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Yue Hu <huyue2@yulong.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 20/20] cpufreq: Return zero on success in boost sw setting
+Date:   Wed, 6 May 2020 20:42:38 +0300
+Message-ID: <20200506174238.15385-21-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
 References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
  <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
@@ -48,95 +53,50 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Due to being embedded into the CPU cores MIPS count/compare timer
-frequency is changed together with the CPU clocks alteration.
-In case if frequency really changes the kernel clockevent framework
-must be notified, otherwise the kernel timers won't work correctly.
-Fix this by calling clockevents_update_freq() for each r4k clockevent
-handlers registered per available CPUs.
+Recent commit e61a41256edf ("cpufreq: dev_pm_qos_update_request() can
+return 1 on success") fixed a problem when active policies traverse
+was falsely stopped due to invalidly treating the non-zero return value
+from freq_qos_update_request() method as an error. Yes, that function
+can return positive values if the requested update actually took place.
+The current problem is that the returned value is then passed to the
+return cell of the cpufreq_boost_set_sw() (set_boost callback) method.
+This value is then also analyzed for being non-zero, which is also
+treated as having an error. As a result during the boost activation
+we'll get an error returned while having the QOS frequency update
+successfully performed. Fix this by returning a negative value from the
+cpufreq_boost_set_sw() if actual error was encountered and zero
+otherwise treating any positive values as the successful operations
+completion.
 
-Traditionally MIPS r4k-clock are clocked with CPU frequency divided by 2.
-But this isn't true for some of the platforms. Due to this we have to save
-the basic CPU frequency, so then use it to scale the initial timer
-frequency (mips_hpt_frequency) and pass the updated value further to the
-clockevent framework.
-
+Fixes: 18c49926c4bf ("cpufreq: Add QoS requests for userspace constraints")
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: Paul Burton <paulburton@kernel.org>
 Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
 Cc: devicetree@vger.kernel.org
+Cc: stable@vger.kernel.org
 ---
- arch/mips/kernel/cevt-r4k.c | 44 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ drivers/cpufreq/cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
-index 17a9cbb8b3df..f5b72fb7d5ee 100644
---- a/arch/mips/kernel/cevt-r4k.c
-+++ b/arch/mips/kernel/cevt-r4k.c
-@@ -8,6 +8,7 @@
-  */
- #include <linux/clockchips.h>
- #include <linux/interrupt.h>
-+#include <linux/cpufreq.h>
- #include <linux/percpu.h>
- #include <linux/smp.h>
- #include <linux/irq.h>
-@@ -250,6 +251,49 @@ unsigned int __weak get_c0_compare_int(void)
- 	return MIPS_CPU_IRQ_BASE + cp0_compare_irq;
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 045f9fe157ce..5870cdca88cf 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -2554,7 +2554,7 @@ static int cpufreq_boost_set_sw(int state)
+ 			break;
+ 	}
+ 
+-	return ret;
++	return ret < 0 ? ret : 0;
  }
  
-+#ifdef CONFIG_CPU_FREQ
-+
-+static unsigned long mips_ref_freq;
-+
-+static int cpufreq_callback(struct notifier_block *nb,
-+			    unsigned long val, void *data)
-+{
-+	struct cpufreq_freqs *freq = data;
-+	struct clock_event_device *cd;
-+	unsigned long rate;
-+	int cpu;
-+
-+	if (!mips_ref_freq)
-+		mips_ref_freq = freq->old;
-+
-+	if (val == CPUFREQ_POSTCHANGE) {
-+		rate = cpufreq_scale(mips_hpt_frequency, mips_ref_freq,
-+				     freq->new);
-+
-+		for_each_cpu(cpu, freq->policy->cpus) {
-+			cd = &per_cpu(mips_clockevent_device, cpu);
-+
-+			clockevents_update_freq(cd, rate);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static struct notifier_block cpufreq_notifier = {
-+	.notifier_call  = cpufreq_callback,
-+};
-+
-+static int __init register_cpufreq_notifier(void)
-+{
-+	return cpufreq_register_notifier(&cpufreq_notifier,
-+					 CPUFREQ_TRANSITION_NOTIFIER);
-+
-+}
-+core_initcall(register_cpufreq_notifier);
-+
-+#endif /* !CONFIG_CPU_FREQ */
-+
- int r4k_clockevent_init(void)
- {
- 	unsigned long flags = IRQF_PERCPU | IRQF_TIMER | IRQF_SHARED;
+ int cpufreq_boost_trigger_state(int state)
 -- 
 2.25.1
 
