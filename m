@@ -2,251 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1DB1C9CEC
-	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 23:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1E81C9D1A
+	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 23:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbgEGVEm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 May 2020 17:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726218AbgEGVEl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 May 2020 17:04:41 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63F9C05BD43
-        for <linux-pm@vger.kernel.org>; Thu,  7 May 2020 14:04:41 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id s20so2571670plp.6
-        for <linux-pm@vger.kernel.org>; Thu, 07 May 2020 14:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Wjy/IrFS3EYTcdqJWqTHTUkiZgq1ZCAU84SV7ODWboc=;
-        b=aEGCV+Ox6hVUcJTQoKbSkQrkEpKPD7DpOv9YAZvJk0AqVIxWs5SHbLqZ8EJ1rd4RnH
-         03NyevAYhSBZsle5hZPN0Swdexqz7M8iJRRgPP7UdQFdTJf/IiO5kxMoTP9fRSL8IrsW
-         Y5wYF1kxcvuk+YgWDHcv0LqMKPGdN3GSvXqeLfJVZHT1KlNzBNGX3AOkhQr/hevMmbIq
-         vKBQVRelFbOlN8tvc9UYcbgc0EzytF1yfSSqjCIGLdlsiNPVVa08whuPZ8vZnMkLmmj7
-         8u0ba74sUhSTs/Na7zmgOz1f0bGK9rwcm1nYw5b4PoqmLhgsfiCN/uBjW7na1O5hAbxn
-         1u/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Wjy/IrFS3EYTcdqJWqTHTUkiZgq1ZCAU84SV7ODWboc=;
-        b=l4U3xN7R6Oqy103WbjQMbMLtCpZYtFAKU30ugbWQ4w3fvfBNx7Tp/s7Vord7DqOMIA
-         EbCJ6ToKJHa29AIu5pmvgS0Y1jMBTvQ0iGbxlL3ftRF6MZzWQltoeKIes03UFFC5hNcP
-         LX/K/mrAS5QmFmp32QgJV07+/om2NAKSzTRt3ByRpeH+npdIIO64URSI5IHIpNj57Bsx
-         K2DqNRS1KzlbyYTgr2xvwKC9OsQ/8XUuVy2KTYjr3NSXUMqTq5qJ+HPIAm9BOwj/xx8a
-         3BDxtDmxOpP+IINwmLCuIHakoJZdmlIEvYC7aHiWUt7iZJN3kQHpCcDCzLRoD5qdc+cC
-         vjhQ==
-X-Gm-Message-State: AGi0PuYl8DU9ySZADQcoN3/MshVWZU6YeEQVmy1E2DhySdDbwgqL8ifz
-        ADYRnj/dsAO/fxOHYjwI+kuP3A==
-X-Google-Smtp-Source: APiQypJr+siHCBYoAlZWa2WDRdW5Mc3oZw8mpSeReFs3d4kPgCZZ65qYl/ou6mAs+dR834pgiNkr5g==
-X-Received: by 2002:a17:90a:d245:: with SMTP id o5mr2292842pjw.213.1588885481094;
-        Thu, 07 May 2020 14:04:41 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id b3sm4471335pgh.75.2020.05.07.14.04.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2020 14:04:40 -0700 (PDT)
-Message-ID: <5eb477e8.1c69fb81.a93ba.f813@mx.google.com>
-Date:   Thu, 07 May 2020 14:04:40 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726565AbgEGVTb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 May 2020 17:19:31 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:38566 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726531AbgEGVTa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 May 2020 17:19:30 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 8EF3C803087C;
+        Thu,  7 May 2020 21:19:27 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id iD8rLD5BeSaP; Fri,  8 May 2020 00:19:26 +0300 (MSK)
+Date:   Fri, 8 May 2020 00:19:23 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC:     Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alexander Lobakin <alobakin@dlink.ru>,
+        Huacai Chen <chenhc@lemote.com>,
+        Cedric Hombourger <Cedric_Hombourger@mentor.com>,
+        =?utf-8?B?UmVuw6k=?= van Dorst <opensource@vdorst.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 07/20] mips: Add MIPS Warrior P5600 support
+Message-ID: <20200507211923.kfu2ly3ncqms4c2u@mobilestation>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-8-Sergey.Semin@baikalelectronics.ru>
+ <20200507111735.GF11616@alpha.franken.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.7-rc4-21-g5b45c277ddc3
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
- 25 warnings (v5.7-rc4-21-g5b45c277ddc3)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200507111735.GF11616@alpha.franken.de>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 6 builds: 0 failed, 6 passed, 25 warnings (v5.7-rc4-21-g5=
-b45c277ddc3)
+On Thu, May 07, 2020 at 01:17:35PM +0200, Thomas Bogendoerfer wrote:
+> On Wed, May 06, 2020 at 08:42:25PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> >  
+> > +config CPU_P5600
+> > +	bool "MIPS Warrior P5600"
+> > +	depends on SYS_HAS_CPU_P5600
+> > +	select CPU_HAS_PREFETCH
+> > +	select CPU_SUPPORTS_32BIT_KERNEL
+> > +	select CPU_SUPPORTS_HIGHMEM
+> > +	select CPU_SUPPORTS_MSA
+> > +	select CPU_SUPPORTS_UNCACHED_ACCELERATED
+> > +	select CPU_SUPPORTS_CPUFREQ
+> > +	select CPU_MIPSR2_IRQ_VI
+> > +	select CPU_MIPSR2_IRQ_EI
+> > +	select HAVE_KVM
+> > +	select MIPS_O32_FP64_SUPPORT
+> > +	help
+> > +	  Choose this option to build a kernel for MIPS Warrior P5600 CPU.
+> > +	  It's based on MIPS32r5 ISA with XPA, EVA, dual/quad issue exec pipes,
+> > +	  MMU with two-levels TLB, UCA, MSA, MDU core level features and system
+> > +	  level features like up to six P5600 calculation cores, CM2 with L2
+> > +	  cache, IOCU/IOMMU (though might be unused depending on the system-
+> > +	  specific IP core configuration), GIC, CPC, virtualisation module,
+> > +	  eJTAG and PDtrace.
+> > +
+> >  config CPU_R3000
+> >  	bool "R3000"
+> >  	depends on SYS_HAS_CPU_R3000
+> > @@ -1841,7 +1863,8 @@ endchoice
+> >  config CPU_MIPS32_3_5_FEATURES
+> >  	bool "MIPS32 Release 3.5 Features"
+> >  	depends on SYS_HAS_CPU_MIPS32_R3_5
+> > -	depends on CPU_MIPS32_R2 || CPU_MIPS32_R5 || CPU_MIPS32_R6
+> > +	depends on CPU_MIPS32_R2 || CPU_MIPS32_R5 || CPU_MIPS32_R6 || \
+> > +		   CPU_P5600
+> >  	help
+> >  	  Choose this option to build a kernel for release 2 or later of the
+> >  	  MIPS32 architecture including features from the 3.5 release such as
+> > @@ -1861,7 +1884,7 @@ config CPU_MIPS32_3_5_EVA
+> >  config CPU_MIPS32_R5_FEATURES
+> >  	bool "MIPS32 Release 5 Features"
+> >  	depends on SYS_HAS_CPU_MIPS32_R5
+> > -	depends on CPU_MIPS32_R2 || CPU_MIPS32_R5
+> > +	depends on CPU_MIPS32_R2 || CPU_MIPS32_R5 || CPU_P5600
+> >  	help
+> >  	  Choose this option to build a kernel for release 2 or later of the
+> >  	  MIPS32 architecture including features from release 5 such as
+> > @@ -2016,6 +2039,10 @@ config SYS_HAS_CPU_MIPS64_R6
+> >  	bool
+> >  	select ARCH_HAS_SYNC_DMA_FOR_CPU if DMA_NONCOHERENT
+> >  
+> > +config SYS_HAS_CPU_P5600
+> > +	bool
+> > +	select ARCH_HAS_SYNC_DMA_FOR_CPU if DMA_NONCOHERENT
+> > +
+> 
+> P5600 is CPU_MIPS_R5 so can't you select it here and drop all the || CPU_5600
+> above/below ?
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-7-rc4-21-g5b45c277ddc3/
+Alas, We can't do this so easy. CONFIG_CPU_MIPS32_{R2,R5,R6} and any other
+CONFIG_CPU_* configs is something that kernel config-file is supposed to select.
+Their availability is enabled by the CONFIG_SYS_HAS_CPU_* configs. CONFIG_CPU_*
+is supposed to activate CPU-specific features and there is only one
+CONFIG_CPU_x can be enabled at a time seeing it's a part of the "CPU type"
+choice kconfig menu. In addition the CPU config also tunes a compiler to activate
+the arch-specific ISA and optimizations in the arch/mips/Makefile by setting
+-march=cpu-name (where cpu-name can be p5600, mips32r5, etc).
 
-Tree: pm
-Branch: testing
-Git Describe: v5.7-rc4-21-g5b45c277ddc3
-Git Commit: 5b45c277ddc338e5236f44f9be4a64ff904ec9b5
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 6 unique architectures
+Yes, P5600 is based on the MIPS32r5, but it also has got some specific features
+(see config CPU_P5600 and config MIPS32_R5), which makes it to be different from
+the ancestor. So In addition to the difficulties described above IMHO converting
+CPU_P5600 to a set of features activated on top of the CPU_MIPS32_R5 config
+would contradict the design of the CPU-support configs implemented in the MIPS
+arch subsystem.
 
-Warnings Detected:
+-Sergey
 
-arc:
-
-arm64:
-    defconfig (gcc-8): 24 warnings
-
-arm:
-    multi_v7_defconfig (gcc-8): 1 warning
-
-mips:
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    16   arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (=
-dma_ranges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" p=
-roperty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, chil=
-d #address-cells =3D=3D 2, #size-cells =3D=3D 1)
-    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
-rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
- its #size-cells (1) differs from / (2)
-    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
-rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
- its #address-cells (1) differs from / (2)
-    1    kernel/futex.c:1676:17: warning: =E2=80=98oldval=E2=80=99 may be u=
-sed uninitialized in this function [-Wmaybe-uninitialized]
-    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
-s_format): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells=
- (1) differs from / (2)
-    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
-s_format): /soc:dma-ranges: empty "dma-ranges" property but its #address-ce=
-lls (1) differs from / (2)
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 24 warnings, 0 section m=
-ismatches
-
-Warnings:
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#address-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#size-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#address-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#size-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#address-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#size-cells (1) differs from / (2)
-    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
-mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
-1) differs from / (2)
-    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
-mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
-differs from / (2)
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    kernel/futex.c:1676:17: warning: =E2=80=98oldval=E2=80=99 may be used u=
-ninitialized in this function [-Wmaybe-uninitialized]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+> 
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
