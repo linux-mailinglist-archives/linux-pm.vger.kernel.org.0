@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 881671C98E7
-	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 20:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437AC1C98FB
+	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 20:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728355AbgEGSKe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 May 2020 14:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
+        id S1728286AbgEGSLK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 May 2020 14:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728279AbgEGSKd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 May 2020 14:10:33 -0400
+        by vger.kernel.org with ESMTP id S1728378AbgEGSKf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 May 2020 14:10:35 -0400
 Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502C2C05BD43
-        for <linux-pm@vger.kernel.org>; Thu,  7 May 2020 11:10:33 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id v18so7681672qtq.22
-        for <linux-pm@vger.kernel.org>; Thu, 07 May 2020 11:10:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F56BC05BD43
+        for <linux-pm@vger.kernel.org>; Thu,  7 May 2020 11:10:35 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id z8so7691231qtu.17
+        for <linux-pm@vger.kernel.org>; Thu, 07 May 2020 11:10:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=9OhNNPOR5bOJXqrXgYTR/z4ZLcIw94c7qBlgw12zehM=;
-        b=ge96F09XdFsFsB5dYM9NSm1hEwRKTOm6LHBDxv4p756JWp8TiB91WkCmvrH5GpJ7ID
-         R1VU3A76KGfuijtfRH6+xrVKU0ddCaeLZF07G8RQYkl68nCxyTdIXIQfY4W8gRGhbCod
-         azIuW5jjVQqpdZInIkwMQBSRaUjl5Tu+cNcP1+KoCyvyGrxIzqKulY0Gn7TkwjziZ94Z
-         BtRbwdywx5zzFJCVKWdH20zAP5GXCNqJLhSfhYgDYP5/Mm28PlWHVX30Ju4SOsih1iTY
-         7kpSk4677XwaHJJbNtMj+FUeOaemVnGoLjxIK5A4BsQxJR1aZ0j9uqW/oOpFjoP7CYkq
-         VN1Q==
+        bh=DfxtwXI8P8XYrWM5eaBon+8Miqx9tOiiT4uA5B/D10w=;
+        b=VpHuDRD3x1EhaaRdJqrnbGTDyAXQO4MFmWH4pJHMS83w4ots6AXYPEFxqNMMm0qGZZ
+         LFiJv4ekcAnYvmWhZGt06rYb+pN3owdaJPkkA/v0FeipJzuCvO10Jb/MwaRjTeMpt0UK
+         t6OHkQnPhqLt4WpxTiuixQRnYh3LpnTulmrdKdCtsaeKYAPgKRqF1C8RLaT24hBj1j2E
+         S/unIaQOkLs2Ga8pAx0Cwv8mml64n8ey3EGv0ST710vZNEz0elcR+8XMAJN+flMjlgMj
+         LlOaEL39pa1UbV7CYf+18zzWcQVX3r4JyfjV9YIq/bFHDirTQUipLCaJ7glZdREobAiC
+         JkXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=9OhNNPOR5bOJXqrXgYTR/z4ZLcIw94c7qBlgw12zehM=;
-        b=EN/SaTlmYGcl+httFDxTdGR1JI6DrXXsvTiJAOjOF9UOPjrGdq9Hw+v212KF8u4MCe
-         LKPlt2YT0ywI8YZhBH/4H33RmP48DR/x4kUdYRF7i4+9+bo+4n/QyEAj0WM7l32+7yew
-         ZDRxgrbT2fEYqzOZpngjNqNSvdgv7BQAGMUcGJE9hxfOTiX4ohz8UO4er1C3Y/AI9Uyw
-         7AlwPmCTtckT+rusM5G0s9Ch1JPOiBxZSAplbgPttUki9+5J07aRRSFDwrQazxvHURN7
-         hRoQNTyfCym/QHalkduLqewdLc3ZgZV92LN6vKtaroVQBTt1Cn752EeqILjV2iUbesCn
-         LNag==
-X-Gm-Message-State: AGi0Pub+pL+HW173tqu0mgXNVnmgqYn2NWPBk1PhlhXYVS8ac3M2KIkG
-        myD26XtfhTSCAF18rfzpwcllhFL9+46Z
-X-Google-Smtp-Source: APiQypIiwLV5BbE0n5CUQvk0QJA7FNWdGbxWcAUCqDJsE+LSuluk52+DrvUSh3DwGlH7tJ6FU4zi3lidRXSp
-X-Received: by 2002:a0c:f50a:: with SMTP id j10mr13910437qvm.172.1588875032506;
- Thu, 07 May 2020 11:10:32 -0700 (PDT)
-Date:   Thu,  7 May 2020 19:10:06 +0100
+        bh=DfxtwXI8P8XYrWM5eaBon+8Miqx9tOiiT4uA5B/D10w=;
+        b=nLRpoN14lgL2TZ8gP4tDEWEf9Wa3yCEmh6TJ77Zru8fwlpXVlzxQ6BYARxaDPt7xEu
+         zg+bRBo2mm5p7XRIyy3J3Z+vgzLzAah0lZm0JcaX3wRNs2HxrsHtdMJRd8lpCI6OA8kj
+         ssepNtZCHwilgtfMHjoH8t2wI702K1U3EE5NKNhShKZLMD5pEhdCxfZELfM3Gk6h51ta
+         sinXtdNDZGWxOsTLS+olQOzSktyhMUk1bgETC25h7zlJ8LcFyhkw1alFMdU90gm/RQbh
+         lbKIZmkYR3RsEg/mtLey4Y42jTMo42R1lA2g7XybDZ2+cS72Ku8O2Jp72gkG+DtcFSBQ
+         VUQg==
+X-Gm-Message-State: AGi0PuYK2AEEqxYmkgQBLmWmbNzwb9iV+3iBxOiTJojv2IRf2WwlPjZV
+        mCtYH/5IyCFL7roTvXvfnJFlqCCB137l
+X-Google-Smtp-Source: APiQypISczuWnNG4La/XG2W8nFH7JeUZ2tqgh5D3kd/vIRdYL3gah5ZjsGOiYjkD93PCI2ZdBobicL9VO7GJ
+X-Received: by 2002:a05:6214:15d1:: with SMTP id p17mr15021011qvz.45.1588875034647;
+ Thu, 07 May 2020 11:10:34 -0700 (PDT)
+Date:   Thu,  7 May 2020 19:10:07 +0100
 In-Reply-To: <20200507181012.29791-1-qperret@google.com>
-Message-Id: <20200507181012.29791-9-qperret@google.com>
+Message-Id: <20200507181012.29791-10-qperret@google.com>
 Mime-Version: 1.0
 References: <20200507181012.29791-1-qperret@google.com>
 X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
-Subject: [PATCH 08/14] sched/core: Export runqueues per-cpu array
+Subject: [PATCH 09/14] sched/cpufreq: Export cpufreq_this_cpu_can_update()
 From:   Quentin Perret <qperret@google.com>
 To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
@@ -70,24 +70,21 @@ It will be needed by schedutil once modularized, export it.
 
 Signed-off-by: Quentin Perret <qperret@google.com>
 ---
-This is only needed for cpu_rq() -> cpu_bw_dl() in schedutil, so there is
-probably an alternative if exporting this isn't desirable.
----
- kernel/sched/core.c | 1 +
+ kernel/sched/cpufreq.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index dbaf3f63df22..537eb45b4274 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -36,6 +36,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_se_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(sched_overutilized_tp);
+diff --git a/kernel/sched/cpufreq.c b/kernel/sched/cpufreq.c
+index 82f2dda61a55..f4abe4e4e927 100644
+--- a/kernel/sched/cpufreq.c
++++ b/kernel/sched/cpufreq.c
+@@ -75,6 +75,7 @@ bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy)
+ 		(policy->dvfs_possible_from_any_cpu &&
+ 		 rcu_dereference_sched(*this_cpu_ptr(&cpufreq_update_util_data)));
+ }
++EXPORT_SYMBOL_GPL(cpufreq_this_cpu_can_update);
  
- DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
-+EXPORT_SYMBOL_GPL(runqueues);
- 
- #if defined(CONFIG_SCHED_DEBUG) && defined(CONFIG_JUMP_LABEL)
- /*
+ #ifdef CONFIG_ENERGY_MODEL
+ extern bool sched_energy_update;
 -- 
 2.26.2.526.g744177e7f7-goog
 
