@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5CF31C8F99
-	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 16:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCE21C8F2C
+	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 16:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727902AbgEGOdW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 May 2020 10:33:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57400 "EHLO mail.kernel.org"
+        id S1728713AbgEGO34 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 May 2020 10:29:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58216 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728591AbgEGO3e (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 7 May 2020 10:29:34 -0400
+        id S1726712AbgEGO3z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 7 May 2020 10:29:55 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A5BBE2083B;
-        Thu,  7 May 2020 14:29:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A627821473;
+        Thu,  7 May 2020 14:29:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588861774;
-        bh=KFbd1vMPx1N9D3//2dkbNX6qzqR1HhfZr1JgaPOh90s=;
+        s=default; t=1588861795;
+        bh=HmyanbqIU+mg0HbgtYSUBECyKESgiVSnXXzJzAHboeo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=smsOevBPoj8WDiBMED7akYMYW8QF88yXYmIPzv4yu55ZcXGITmF4obecpLmKzvOBd
-         bAmCy+BZNRR4a5ydLersgz1Sbas32E3J5Uh9zQ/J3x5ZYR8MyDYWI32lnNLATS3CYY
-         u0j7AOYiTtOAkuYtYJ02SgPGJmyyoHxN6o8kjC9Y=
+        b=xSMt8FTTw2LZxO1STI/nrjJMuJotadBaHVRUM+4FveZACbkKiNUivwefCx3MGjgh2
+         l9fQ6VRHqldjPG9Anw1Un2ozo392Yd3Oio7zgx6Uwkpl822FKU+sFnab8cAL6h5rQe
+         Kc8M38JjeFULWypTSvqD5IzX3V56wIMh8jtNdi5g=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Chris Wilson <chris@chris-wilson.co.uk>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 14/20] cpufreq: intel_pstate: Only mention the BIOS disabling turbo mode once
-Date:   Thu,  7 May 2020 10:29:10 -0400
-Message-Id: <20200507142917.26612-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 10/16] cpufreq: intel_pstate: Only mention the BIOS disabling turbo mode once
+Date:   Thu,  7 May 2020 10:29:37 -0400
+Message-Id: <20200507142943.26848-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200507142917.26612-1-sashal@kernel.org>
-References: <20200507142917.26612-1-sashal@kernel.org>
+In-Reply-To: <20200507142943.26848-1-sashal@kernel.org>
+References: <20200507142943.26848-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,10 +59,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 29f25d5d65e00..e7b3d4ed8eff4 100644
+index 7a5662425b291..1aa0b05c8cbdf 100644
 --- a/drivers/cpufreq/intel_pstate.c
 +++ b/drivers/cpufreq/intel_pstate.c
-@@ -957,7 +957,7 @@ static ssize_t store_no_turbo(struct kobject *a, struct kobj_attribute *b,
+@@ -935,7 +935,7 @@ static ssize_t store_no_turbo(struct kobject *a, struct kobj_attribute *b,
  
  	update_turbo_state();
  	if (global.turbo_disabled) {
