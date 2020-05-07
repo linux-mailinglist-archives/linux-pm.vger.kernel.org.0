@@ -2,203 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 921F81C8A21
-	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 14:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5590F1C8A22
+	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 14:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbgEGMIx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 May 2020 08:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
+        id S1725939AbgEGMJ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 May 2020 08:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725939AbgEGMIu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 May 2020 08:08:50 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849ACC05BD09
-        for <linux-pm@vger.kernel.org>; Thu,  7 May 2020 05:08:50 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id l18so6073925wrn.6
-        for <linux-pm@vger.kernel.org>; Thu, 07 May 2020 05:08:50 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1725879AbgEGMJZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 May 2020 08:09:25 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFA7C05BD43
+        for <linux-pm@vger.kernel.org>; Thu,  7 May 2020 05:09:25 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id z8so6104743wrw.3
+        for <linux-pm@vger.kernel.org>; Thu, 07 May 2020 05:09:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cU4Z779oiZ5X1KtL6o+GfgpTVjAX9hDbWnPU6sq2sRo=;
-        b=jhaavaRP0OgpViv0SFakoHbHfHJQ2+BF9Bw9ycjm7Dg2HSQSq/8xbwRXy53r/H2B73
-         dF3VeQ1DxWgL5AcoGDvK5me3OkdxwturoaKT8VRL79ZDfzmPNki3xUOhaG/VZlrc/NCu
-         4zihjNlAuF34vmVoPDSrfq7SYo4lk//qveC3wlG0PmqInrUid2TkF6Q1pxzkVaqA9UpB
-         KMcgL86SkX0+JhcGPEjv6CnKY6Oh48Hnbq+N47hB8x9ohbisDnzL6tqI4UTi7iRIsbNx
-         hj/WdKPYjbTH2SlnKgYjcccZu6vwORWuPu+hNhgjtDH6AbMmq6as/tP9YAfimmavYWDH
-         MptA==
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=90vc9+gg31gTodCFfqabRhf0L1y+66v0VlxzDAW0JmM=;
+        b=m/hNhWAJrEAkwRd7Asqcllvo/0WlhwBTJ4CHEKzWXXEFVMtHW74xrf6enuWiqtYDhB
+         jYRDwhXlH3f0EwssjzvpjCZvnG1ennyfwYOOjWn5IrGPhsAu3lZskASycyG5HZdSZKJk
+         wKc1TwtVFWMIIW+N4NLj6ZErytAfDVeMJqEg7XE2hYz5+d3CqrB03gNNAiJ6RiIoKLYj
+         rfa3rnUnINwmjfd3otn/SlS4ni9HVnSUwgpioQVXmATBIgXQKEPNmynKz2bHeHXTHlQU
+         cESv9D6lMawl0L52ysrXLuLzq+9Lz+ncf9AEv1OIx08VeOOnjZTRtAvjlIVHgLG3VEK/
+         jeEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=cU4Z779oiZ5X1KtL6o+GfgpTVjAX9hDbWnPU6sq2sRo=;
-        b=KbQyBp6z2P+HAaSmbmySMWFNFa3KpkTlmUKxeLUrr+b3qGpLHEZwb4K498QT8J9Asr
-         FOJ+zTKcgmKuiui9O0y4iNojGcehjQsWiLxHn210lqmI44MwwCC0wlQXx2IxooiW7Czq
-         tBdHnpI6DDRVb/0knHF8l8dF3JhED6Mp/x9fIcsNc4B7QgeVYIncZ7LtRZic6D5hGQXa
-         Reisd0IFHtCbzSFp2fQ9Qzu9M+edRL3bRfTvPm1//5BooZQIvIwqSabtFrJokeji0Ekn
-         dsL+CHYc/znRZuqD4dd+rOJjNHoaaFXcvHQ+gVrvts5HekJSB1kIuuCkLzmLUUdwzROA
-         7fww==
-X-Gm-Message-State: AGi0PubZCzzO7abkGyw5VUvNfgLkllP8tsjnpO7KxjqMir17KW4PJ00t
-        zEBYDZXeVH+66W6gL4+6NVWePsXoh/Y=
-X-Google-Smtp-Source: APiQypIXn6rC140NZSrR3FyAareqVrgqZulNikJP/mOTFiNeikQMLpljvv2MgS3DJTGXJbCUvDzfaQ==
-X-Received: by 2002:adf:e9d2:: with SMTP id l18mr14969416wrn.34.1588853328684;
-        Thu, 07 May 2020 05:08:48 -0700 (PDT)
-Received: from localhost.localdomain ([87.120.218.65])
-        by smtp.googlemail.com with ESMTPSA id 1sm7874605wmz.13.2020.05.07.05.08.46
+        bh=90vc9+gg31gTodCFfqabRhf0L1y+66v0VlxzDAW0JmM=;
+        b=imwXzCs3enmtYhGtwRPV5QGqOqyunRTHzUIyF298VkHHsVyLiICPD6AYFyrpk6xJi9
+         FEbJ7mOzaxlOP14V9qNd2AL8BLiZRlLBsRCvpawHSJ5qrbCpOAXEoAR303OKLv63Pw6g
+         KMw0Kjh6GFU7HSdQjruEcmhC+0q1TJrxjtehny15bSqtHGh9NuGQdkt7GHBAhn9bcDtT
+         MZJXK0yuj2xxgVAYu1pJDcPBqcb3fGeaxBMjV6RcxhFJEPM/nR8cfBN/qzHHkotF9Xnn
+         0xFLgnGanjMv0wiW6M9hRykEWJtkPW1AzXmQXzg6tSN08ec1NOCUdYww0ozkgA5tNwhP
+         QHtg==
+X-Gm-Message-State: AGi0PubQ7nIOsxWjclq/W1ldIBCJZd7SJ/tT5zAb1l3X14BXwuOVO0d3
+        uaSBAy5tVjPcQg9g5khlKKW4/Q==
+X-Google-Smtp-Source: APiQypKMICJDzchdLEuUDWUPJvhguvBLqjAs7tSuSPnHHBlJScv2BxzUTOXhXS4x1cuRqK8Gc6cZHQ==
+X-Received: by 2002:a5d:6283:: with SMTP id k3mr14550666wru.62.1588853363825;
+        Thu, 07 May 2020 05:09:23 -0700 (PDT)
+Received: from [192.168.0.136] ([87.120.218.65])
+        by smtp.googlemail.com with ESMTPSA id a9sm7524087wmm.38.2020.05.07.05.09.22
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 07 May 2020 05:08:46 -0700 (PDT)
+        Thu, 07 May 2020 05:09:22 -0700 (PDT)
+Subject: Re: [PATCH] interconnect: Add helpers for enabling/disabling a path
+To:     Akash Asthana <akashast@codeaurora.org>
+Cc:     linux-pm@vger.kernel.org, evgreen@chromium.org,
+        bjorn.andersson@linaro.org, linux-kernel@vger.kernel.org
+References: <20200428091650.27669-1-georgi.djakov@linaro.org>
+ <44cbf83d-f210-97ec-21c2-ebe65b9821c1@codeaurora.org>
 From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     linux-pm@vger.kernel.org
-Cc:     evgreen@chromium.org, bjorn.andersson@linaro.org, mka@chromium.org,
-        akashast@codeaurora.org, linux-kernel@vger.kernel.org,
-        georgi.djakov@linaro.org
-Subject: [PATCH v2] interconnect: Add helpers for enabling/disabling a path
-Date:   Thu,  7 May 2020 15:08:46 +0300
-Message-Id: <20200507120846.8354-1-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.26.2
+Openpgp: preference=signencrypt
+Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+ KEmKjLDvB0pePJkdTw==
+Message-ID: <27bcb979-cf5c-4969-6c39-80061158effa@linaro.org>
+Date:   Thu, 7 May 2020 15:09:22 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <44cbf83d-f210-97ec-21c2-ebe65b9821c1@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a repeated pattern in multiple drivers where they want to switch
-the bandwidth between zero and some other value. This is happening often
-in the suspend/resume callbacks. Let's add helper functions to enable and
-disable the path, so that callers don't have to take care of remembering
-the bandwidth values and handle this in the framework instead.
+On 5/4/20 11:57, Akash Asthana wrote:
+> Hi Georgi,
+> 
+> On 4/28/2020 2:46 PM, Georgi Djakov wrote:
+>> There is a repeated pattern in multiple drivers where they want to switch
+>> the bandwidth between zero and some other value. This is happening often
+>> in the suspend/resume callbacks. Let's add helper functions to enable and
+>> disable the path, so that callers don't have to take care of remembering
+>> the bandwidth values and handle this in the framework instead.
+>>
+>> With this patch the users can call icc_disable() and icc_enable() to lower
+>> their bandwidth request to zero and then restore it back to it's previous
+>> value.
+> 
+> Thanks for this patch.
+> 
+> Are you planning to add bulk versions of icc_enable/disable APIs?
+> 
 
-With this patch the users can call icc_disable() and icc_enable() to lower
-their bandwidth request to zero and then restore it back to it's previous
-value.
+Yes, i have already a bunch of patches that add bulk versions for most
+of the API functions. Will post them on the list.
 
-Suggested-by: Evan Green <evgreen@chromium.org>
-Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
----
-v2: https://lore.kernel.org/r/20200428091650.27669-1-georgi.djakov@linaro.org/
-* Extract the common code into __icc_enable() (Matthias)
+Thanks,
+Georgi
 
-
- drivers/interconnect/core.c     | 39 ++++++++++++++++++++++++++++++++-
- drivers/interconnect/internal.h |  2 ++
- include/linux/interconnect.h    | 12 ++++++++++
- 3 files changed, 52 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index f5699ed34e43..d5e0f93c942d 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -158,6 +158,7 @@ static struct icc_path *path_init(struct device *dev, struct icc_node *dst,
- 		hlist_add_head(&path->reqs[i].req_node, &node->req_list);
- 		path->reqs[i].node = node;
- 		path->reqs[i].dev = dev;
-+		path->reqs[i].enabled = true;
- 		/* reference to previous node was saved during path traversal */
- 		node = node->reverse;
- 	}
-@@ -249,9 +250,12 @@ static int aggregate_requests(struct icc_node *node)
- 	if (p->pre_aggregate)
- 		p->pre_aggregate(node);
- 
--	hlist_for_each_entry(r, &node->req_list, req_node)
-+	hlist_for_each_entry(r, &node->req_list, req_node) {
-+		if (!r->enabled)
-+			continue;
- 		p->aggregate(node, r->tag, r->avg_bw, r->peak_bw,
- 			     &node->avg_bw, &node->peak_bw);
-+	}
- 
- 	return 0;
- }
-@@ -571,6 +575,39 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
- }
- EXPORT_SYMBOL_GPL(icc_set_bw);
- 
-+static int __icc_enable(struct icc_path *path, bool enable)
-+{
-+	int i;
-+
-+	if (!path)
-+		return 0;
-+
-+	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
-+		return -EINVAL;
-+
-+	mutex_lock(&icc_lock);
-+
-+	for (i = 0; i < path->num_nodes; i++)
-+		path->reqs[i].enabled = enable;
-+
-+	mutex_unlock(&icc_lock);
-+
-+	return icc_set_bw(path, path->reqs[0].avg_bw,
-+			  path->reqs[0].peak_bw);
-+}
-+
-+int icc_disable(struct icc_path *path)
-+{
-+	return __icc_enable(path, false);
-+}
-+EXPORT_SYMBOL_GPL(icc_disable);
-+
-+int icc_enable(struct icc_path *path)
-+{
-+	return __icc_enable(path, true);
-+}
-+EXPORT_SYMBOL_GPL(icc_enable);
-+
- /**
-  * icc_get() - return a handle for path between two endpoints
-  * @dev: the device requesting the path
-diff --git a/drivers/interconnect/internal.h b/drivers/interconnect/internal.h
-index bf18cb7239df..f5f82a5c939e 100644
---- a/drivers/interconnect/internal.h
-+++ b/drivers/interconnect/internal.h
-@@ -14,6 +14,7 @@
-  * @req_node: entry in list of requests for the particular @node
-  * @node: the interconnect node to which this constraint applies
-  * @dev: reference to the device that sets the constraints
-+ * @enabled: indicates whether the path with this request is enabled
-  * @tag: path tag (optional)
-  * @avg_bw: an integer describing the average bandwidth in kBps
-  * @peak_bw: an integer describing the peak bandwidth in kBps
-@@ -22,6 +23,7 @@ struct icc_req {
- 	struct hlist_node req_node;
- 	struct icc_node *node;
- 	struct device *dev;
-+	bool enabled;
- 	u32 tag;
- 	u32 avg_bw;
- 	u32 peak_bw;
-diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
-index 770692421f4c..2b7b331c9354 100644
---- a/include/linux/interconnect.h
-+++ b/include/linux/interconnect.h
-@@ -30,6 +30,8 @@ struct icc_path *icc_get(struct device *dev, const int src_id,
- struct icc_path *of_icc_get(struct device *dev, const char *name);
- struct icc_path *devm_of_icc_get(struct device *dev, const char *name);
- void icc_put(struct icc_path *path);
-+int icc_disable(struct icc_path *path);
-+int icc_enable(struct icc_path *path);
- int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
- void icc_set_tag(struct icc_path *path, u32 tag);
- 
-@@ -57,6 +59,16 @@ static inline void icc_put(struct icc_path *path)
- {
- }
- 
-+static inline int icc_disable(struct icc_path *path)
-+{
-+	return 0;
-+}
-+
-+static inline int icc_enable(struct icc_path *path)
-+{
-+	return 0;
-+}
-+
- static inline int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
- {
- 	return 0;
