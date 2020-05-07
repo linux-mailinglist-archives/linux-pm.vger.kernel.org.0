@@ -2,62 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A971C88A2
-	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 13:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D5D1C889F
+	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 13:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726612AbgEGLnW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1726636AbgEGLnW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Thu, 7 May 2020 07:43:22 -0400
-Received: from elvis.franken.de ([193.175.24.41]:43576 "EHLO elvis.franken.de"
+Received: from elvis.franken.de ([193.175.24.41]:43588 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725914AbgEGLnV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S1726572AbgEGLnV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
         Thu, 7 May 2020 07:43:21 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jWevq-00081e-03; Thu, 07 May 2020 13:43:14 +0200
+        id 1jWevq-00081e-04; Thu, 07 May 2020 13:43:14 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 93899C0409; Thu,  7 May 2020 13:09:51 +0200 (CEST)
-Date:   Thu, 7 May 2020 13:09:51 +0200
+        id 952AEC0409; Thu,  7 May 2020 13:10:07 +0200 (CEST)
+Date:   Thu, 7 May 2020 13:10:07 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To:     Sergey.Semin@baikalelectronics.ru
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Markos Chandras <markos.chandras@imgtec.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Zhou Yanjie <zhouyanjie@zoho.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        devicetree@vger.kernel.org, Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 11/20] mips: MAAR: Use more precise address mask
-Message-ID: <20200507110951.GD11616@alpha.franken.de>
+Subject: Re: [PATCH v2 04/20] mips: cm: Fix an invalid error code of
+ INTVN_*_ERR
+Message-ID: <20200507111007.GE11616@alpha.franken.de>
 References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
  <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-12-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-5-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200506174238.15385-12-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200506174238.15385-5-Sergey.Semin@baikalelectronics.ru>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 06, 2020 at 08:42:29PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+On Wed, May 06, 2020 at 08:42:22PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
 > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> Indeed according to the P5600/P6000 manual the MAAR pair register
-> address field either takes [12:31] bits for 32-bits non-XPA systems
-> and [12:35] otherwise. In any case the current address mask is just
-> wrong for 64-bit and 32-bits XPA chips. So lets extend it to 39-bits
-> value. This shall cover the 64-bits architecture and systems with XPA
-> enabled, and won't cause any problem for non-XPA 32-bit systems, since
-> the value will be just truncated when written to the 32-bits register.
+> Commit 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache
+> errors") adds cm2_causes[] array with map of error type ID and
+> pointers to the short description string. There is a mistake in
+> the table, since according to MIPS32 manual CM2_ERROR_TYPE = {17,18}
+> correspond to INTVN_WR_ERR and INTVN_RD_ERR, while the table
+> claims they have {0x17,0x18} codes. This is obviously hex-dec
+> copy-paste bug. Moreover codes {0x18 - 0x1a} indicate L2 ECC errors.
+> 
+> Fixes: 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache errors")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> ---
+>  arch/mips/kernel/mips-cm.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-according to MIPS32 Priveleged Resoure Architecture Rev. 6.02
-ADDR spans from bit 12 to bit 55. So your patch fits only for P5600.
-Does the wider mask cause any problems ?
+applied to mips-next.
 
 Thomas.
 
