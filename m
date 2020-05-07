@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C64EA1C98FA
-	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 20:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3F61C98ED
+	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 20:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728148AbgEGSLI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 May 2020 14:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
+        id S1728465AbgEGSKm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 May 2020 14:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728410AbgEGSKh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 May 2020 14:10:37 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA20C05BD43
-        for <linux-pm@vger.kernel.org>; Thu,  7 May 2020 11:10:37 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id s8so7933814ybj.9
-        for <linux-pm@vger.kernel.org>; Thu, 07 May 2020 11:10:37 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1727117AbgEGSKl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 May 2020 14:10:41 -0400
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B61C05BD43
+        for <linux-pm@vger.kernel.org>; Thu,  7 May 2020 11:10:39 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id g8so8148945qtq.2
+        for <linux-pm@vger.kernel.org>; Thu, 07 May 2020 11:10:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=4lcduyr6+J6gjW9QNJps5OFAxCiY2gXgkQhtQfZmlTA=;
-        b=cEOQlfEVMyYdUWmraiQv6868nByrpJRpaaymVgBwUTg6wEdgwdIVUponU3hyLSlvTp
-         5fiab1SKPl//PLD9mpej/wjBU00SMNMDS/A6fS41QZb3XHBzUwGFrYDzviO9ErMIFElp
-         LwjjpHOlYW87TavxsSdPCcg22n61ccvSbxkoFAZDeYUmjLjjj4SVs55GP1gwTD4sufrO
-         1E+2tAPiEMo1TUE9sizh8TCAFsd4mfShxMp1rSgIjvOIDptPPsdc8eHYXWVvI/Knbn3T
-         e3CUlcs//sah/3XJ5uIYx6vHAdrtdPm6R0cTeDtF/EcwT6CcWJezEkkN2nUm9CU5LFel
-         gO6w==
+        bh=zZWvTUfx/wRuyyDcQxDeif3qbH8vMyyGM38ys5fdFsY=;
+        b=Hsq7csMm3aKxHXFy3vU5SjedQTdFGmje4EFFn7pUNQI+7Tt5gipsk3gojrKeqv0oZA
+         zKJmEc4qjOnoV2Poo1wux8oWp7druRmTRThDjQx0nXRmvka5WsF9eIK05U+G5BZ5kwA9
+         7QtfLulqPmZBLYbI0vKZu/6D5HO6i4g2a6I7enOxrKuX3hdzh9btnYC61l0lBlUK9g6G
+         nIOYbvEzOurFENmE7JQ0pSeNgQ5IUaGVHwya8NGk1H3C8O8Gh3pvyYFCxt45XHtnr/q4
+         xHM22KlaIb+SQa38QzZsQOlVjsp4CDU+E/SvPDegyt/YmQrsmOX/1Q6cfHLV37HoscxQ
+         DBqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=4lcduyr6+J6gjW9QNJps5OFAxCiY2gXgkQhtQfZmlTA=;
-        b=rxyE+tLSMDZiEqvN9IhCmJleoPyVFqe29pYGDPVFBMopYWmMsSjMkgrDxNxXSlFDRT
-         Db6o46cchhXkyT0+YwuBqkd2rZoK3FLlEOk4H7g8zcKoyMLGLF0+wVMiIEE5u2Ia6kya
-         Q0gne3wnZl4SA2GuoBUXiF6Iw6E11UyqMRbkE6Jm0Xn1aaPh6w6xxm4KTS1tRVjDzyLD
-         qn4IDn8XIPB9szg5iO526uMD5fiIY3Z+GZqSyoeR+41U4p2G93ItKYHc3V/B+6fbb+wG
-         PRKZXWX2HA3H/z1+T+zn/8TouPleXVVRsm1r0Og8LWaurTUBMwxB1pHD/rMcYVmo7nwt
-         XgWg==
-X-Gm-Message-State: AGi0PubP1dgduL+cfGMjaFcE/aZCpxXzqEtkVuKXFUnzr4qlM09oe5EK
-        XXjM0e8pH+p3NchJFuMduq5JpI9ynlAv
-X-Google-Smtp-Source: APiQypJPdsp8s/0FJ9HkF1hHrjGbTTy5ACV7cG92EmYwZKI6DWKFrz6S0o0PVs9GwAJo3DvMiOded7dIskOr
-X-Received: by 2002:a5b:707:: with SMTP id g7mr13422225ybq.489.1588875036707;
- Thu, 07 May 2020 11:10:36 -0700 (PDT)
-Date:   Thu,  7 May 2020 19:10:08 +0100
+        bh=zZWvTUfx/wRuyyDcQxDeif3qbH8vMyyGM38ys5fdFsY=;
+        b=hRTUNlQyTSUqIMx4bZ79d23KgqeinRXb8eOE7UuN1AoF3WJuHYADk5zpK6466jz+9j
+         FEsDi+RI6ajpJQ1X2NuQnj+dlaXgSkwwrCaSh0+iUhKcVE/nuxLnAtiTqnmBSAhEYyrO
+         a549GaDsiqKqvAFf7jqXM6z6eEwXdN2v+ZEA90TjFyMCbvZt3psauqGE9oKKHRFtwcix
+         JI7zwW0/+aJs+ecAl7hojaIpfm3Rz0LdvuRmOSXaWeimukpcG7YLT8u5g5KCcDui87QF
+         XMH9+DjgZmVqnkKYYyxgHLyKY24HYOUG42lBzLx00C6PO4I/ovN7NqLj+ldFUjZedwBq
+         PxPQ==
+X-Gm-Message-State: AGi0PuYIMEsYtaAXEu31NkqiQj5O6XZqxOpRu71i48kEKGwt6SuKQ65f
+        4jVKGCSxupjfJzu2UHqAgzgBxWgvyENe
+X-Google-Smtp-Source: APiQypLtVxYcoBCGLT2opMHxryNuYGnQnZvm1aIxlatafdQirXZzAlFCc71e959iGzwoL9cFGjpKT/1CxlGY
+X-Received: by 2002:a0c:facb:: with SMTP id p11mr14758771qvo.17.1588875038848;
+ Thu, 07 May 2020 11:10:38 -0700 (PDT)
+Date:   Thu,  7 May 2020 19:10:09 +0100
 In-Reply-To: <20200507181012.29791-1-qperret@google.com>
-Message-Id: <20200507181012.29791-11-qperret@google.com>
+Message-Id: <20200507181012.29791-12-qperret@google.com>
 Mime-Version: 1.0
 References: <20200507181012.29791-1-qperret@google.com>
 X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
-Subject: [PATCH 10/14] sched/fair: Export cpu_util_freq()
+Subject: [PATCH 11/14] tick/sched: Export tick_nohz_get_idle_calls_cpu
 From:   Quentin Perret <qperret@google.com>
 To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
@@ -70,21 +70,21 @@ It will be needed by schedutil once modularized, export it.
 
 Signed-off-by: Quentin Perret <qperret@google.com>
 ---
- kernel/sched/fair.c | 1 +
+ kernel/time/tick-sched.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index dadf0a060abe..b7b43aeff969 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6488,6 +6488,7 @@ unsigned long cpu_util_freq(int cpu, unsigned long max)
- {
- 	return aggregate_cpu_util(cpu, cpu_util(cpu), max, FREQUENCY_UTIL, NULL);
- }
-+EXPORT_SYMBOL_GPL(cpu_util_freq);
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 3e2dc9b8858c..3b1050cabb58 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -1122,6 +1122,7 @@ unsigned long tick_nohz_get_idle_calls_cpu(int cpu)
  
- /*
-  * Predicts what cpu_util(@cpu) would return if @p was migrated (and enqueued)
+ 	return ts->idle_calls;
+ }
++EXPORT_SYMBOL_GPL(tick_nohz_get_idle_calls_cpu);
+ 
+ /**
+  * tick_nohz_get_idle_calls - return the current idle calls counter value
 -- 
 2.26.2.526.g744177e7f7-goog
 
