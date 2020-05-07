@@ -2,111 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C00A71C9542
-	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 17:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6C11C95A8
+	for <lists+linux-pm@lfdr.de>; Thu,  7 May 2020 17:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726029AbgEGPmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 May 2020 11:42:52 -0400
-Received: from foss.arm.com ([217.140.110.172]:34304 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725914AbgEGPmv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 7 May 2020 11:42:51 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08C801FB;
-        Thu,  7 May 2020 08:42:51 -0700 (PDT)
-Received: from [10.37.12.53] (unknown [10.37.12.53])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 292293F68F;
-        Thu,  7 May 2020 08:42:48 -0700 (PDT)
-Subject: Re: [PATCH] memory/samsung: Maybe wrong triming parameter
-To:     Bernard Zhao <bernard@vivo.com>, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     opensource.kernel@vivo.com
-References: <20200507114514.11589-1-bernard@vivo.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <2eeb33f7-1acc-66bb-704a-b724fa0be0a8@arm.com>
-Date:   Thu, 7 May 2020 16:42:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727998AbgEGP5R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 May 2020 11:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728028AbgEGP5Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 May 2020 11:57:16 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FD8C05BD43
+        for <linux-pm@vger.kernel.org>; Thu,  7 May 2020 08:57:16 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id 18so3192876pfv.8
+        for <linux-pm@vger.kernel.org>; Thu, 07 May 2020 08:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=D4EacoqLrks03Ge0RCzM6pu9iVWZ73tmsSunwf83CvA=;
+        b=AoTz5sGmagbHHvj2Ukx2Xn0z5zI4ieVjR3BuWxfMXVqkIDVqRpfZzMZ3lr/cT1UCdB
+         Rlr9fsxa01PQZrNoTl088lbebcpciyfdWkOi2/JDtNBm1YhZF3Dxl/gx02be7INEG+oA
+         6qlGHMwDEbY79blf2uKO+a5CXvf4KdjgtNQJ4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=D4EacoqLrks03Ge0RCzM6pu9iVWZ73tmsSunwf83CvA=;
+        b=LmbBzkVSbkIJrPi2bP2NNlZv18WLxpFAzgIh3tfIq4BLLfMFNqXfJKWTBFIa9ZbH3q
+         mXgTmUt544o0QMUlBp4BxJX8+8zN7N9t3UrY9nBR63QmAZ8YQ/5kPTw+CT8LIfJQeox7
+         95wvUOuPq/TTnGvDHFue0K+Qq/322A0xOCVLVVuepbHTFU4oacCvhjcK6quBmXYOVMn2
+         OghwuQJ/qNJgt8uWfitqp8Xm/gx53WFifEQZlDD9A5hjw4M9/bLEA4s6taHoPm80BhmG
+         iwthuKVjyiCzkeSjmLgCW+dzqX2YIMazEXLs3apkNls+VPNj5D2XxVbaCmtGYPrVn2E1
+         ZANQ==
+X-Gm-Message-State: AGi0PuYbpZVs92/xD67C7Z829RmJ1q5domG4A7ns7P4Oanupg05D30qG
+        zYq+V8rLRrNn2IIg76d4POCmug==
+X-Google-Smtp-Source: APiQypKpyD0a/6T6VXGV5Q0+j/KBuiI/K33HfPtiUjfj2T9KrCHbp9VRrfnx8mQILJgdSpJFU/m6zQ==
+X-Received: by 2002:a62:16cb:: with SMTP id 194mr14822510pfw.78.1588867033537;
+        Thu, 07 May 2020 08:57:13 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id gd17sm234805pjb.21.2020.05.07.08.57.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 May 2020 08:57:12 -0700 (PDT)
+Date:   Thu, 7 May 2020 08:57:11 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-pm@vger.kernel.org, evgreen@chromium.org,
+        bjorn.andersson@linaro.org, akashast@codeaurora.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] interconnect: Add helpers for enabling/disabling a
+ path
+Message-ID: <20200507155711.GZ4525@google.com>
+References: <20200507120846.8354-1-georgi.djakov@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20200507114514.11589-1-bernard@vivo.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200507120846.8354-1-georgi.djakov@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Bernard,
-
-
-On 5/7/20 12:45 PM, Bernard Zhao wrote:
-> In function create_timings_aligned, all the max is to use
-> dmc->min_tck->xxx, aligned with val dmc->timings->xxx.
-> But the dmc->timings->tFAW use dmc->min_tck->tXP?
-> Maybe this point is wrong parameter useing.
+On Thu, May 07, 2020 at 03:08:46PM +0300, Georgi Djakov wrote:
+> There is a repeated pattern in multiple drivers where they want to switch
+> the bandwidth between zero and some other value. This is happening often
+> in the suspend/resume callbacks. Let's add helper functions to enable and
+> disable the path, so that callers don't have to take care of remembering
+> the bandwidth values and handle this in the framework instead.
 > 
-> Signed-off-by: Bernard Zhao <bernard@vivo.com>
+> With this patch the users can call icc_disable() and icc_enable() to lower
+> their bandwidth request to zero and then restore it back to it's previous
+> value.
+> 
+> Suggested-by: Evan Green <evgreen@chromium.org>
+> Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 > ---
->   drivers/memory/samsung/exynos5422-dmc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> v2: https://lore.kernel.org/r/20200428091650.27669-1-georgi.djakov@linaro.org/
+> * Extract the common code into __icc_enable() (Matthias)
 > 
-> diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-> index 81a1b1d01683..22a43d662833 100644
-> --- a/drivers/memory/samsung/exynos5422-dmc.c
-> +++ b/drivers/memory/samsung/exynos5422-dmc.c
-> @@ -1091,7 +1091,7 @@ static int create_timings_aligned(struct exynos5_dmc *dmc, u32 *reg_timing_row,
->   	/* power related timings */
->   	val = dmc->timings->tFAW / clk_period_ps;
->   	val += dmc->timings->tFAW % clk_period_ps ? 1 : 0;
-> -	val = max(val, dmc->min_tck->tXP);
-> +	val = max(val, dmc->min_tck->tFAW);
->   	reg = &timing_power[0];
->   	*reg_timing_power |= TIMING_VAL2REG(reg, val);
->   
 > 
+>  drivers/interconnect/core.c     | 39 ++++++++++++++++++++++++++++++++-
+>  drivers/interconnect/internal.h |  2 ++
+>  include/linux/interconnect.h    | 12 ++++++++++
+>  3 files changed, 52 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index f5699ed34e43..d5e0f93c942d 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -158,6 +158,7 @@ static struct icc_path *path_init(struct device *dev, struct icc_node *dst,
+>  		hlist_add_head(&path->reqs[i].req_node, &node->req_list);
+>  		path->reqs[i].node = node;
+>  		path->reqs[i].dev = dev;
+> +		path->reqs[i].enabled = true;
+>  		/* reference to previous node was saved during path traversal */
+>  		node = node->reverse;
+>  	}
+> @@ -249,9 +250,12 @@ static int aggregate_requests(struct icc_node *node)
+>  	if (p->pre_aggregate)
+>  		p->pre_aggregate(node);
+>  
+> -	hlist_for_each_entry(r, &node->req_list, req_node)
+> +	hlist_for_each_entry(r, &node->req_list, req_node) {
+> +		if (!r->enabled)
+> +			continue;
+>  		p->aggregate(node, r->tag, r->avg_bw, r->peak_bw,
+>  			     &node->avg_bw, &node->peak_bw);
+> +	}
+>  
+>  	return 0;
+>  }
+> @@ -571,6 +575,39 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+>  }
+>  EXPORT_SYMBOL_GPL(icc_set_bw);
+>  
+> +static int __icc_enable(struct icc_path *path, bool enable)
+> +{
+> +	int i;
+> +
+> +	if (!path)
+> +		return 0;
+> +
+> +	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&icc_lock);
+> +
+> +	for (i = 0; i < path->num_nodes; i++)
+> +		path->reqs[i].enabled = enable;
+> +
+> +	mutex_unlock(&icc_lock);
+> +
+> +	return icc_set_bw(path, path->reqs[0].avg_bw,
+> +			  path->reqs[0].peak_bw);
+> +}
+> +
+> +int icc_disable(struct icc_path *path)
+> +{
+> +	return __icc_enable(path, false);
+> +}
+> +EXPORT_SYMBOL_GPL(icc_disable);
+> +
+> +int icc_enable(struct icc_path *path)
+> +{
+> +	return __icc_enable(path, true);
+> +}
+> +EXPORT_SYMBOL_GPL(icc_enable);
+> +
 
-Good catch! Indeed this should be a dmc->min_tck->tFAW used for
-clamping.
+uber-nit: my brain expects the order enable/disable, just like lock/unlock
+or true/false instead of vice-versa, but it's certainly not really
+important :)
 
-It didn't show up in testing because the frequency values based on
-which the 'clk_period_ps' are calculated are sane.
-Check the dump below:
+>  /**
+>   * icc_get() - return a handle for path between two endpoints
+>   * @dev: the device requesting the path
+> diff --git a/drivers/interconnect/internal.h b/drivers/interconnect/internal.h
+> index bf18cb7239df..f5f82a5c939e 100644
+> --- a/drivers/interconnect/internal.h
+> +++ b/drivers/interconnect/internal.h
+> @@ -14,6 +14,7 @@
+>   * @req_node: entry in list of requests for the particular @node
+>   * @node: the interconnect node to which this constraint applies
+>   * @dev: reference to the device that sets the constraints
+> + * @enabled: indicates whether the path with this request is enabled
+>   * @tag: path tag (optional)
+>   * @avg_bw: an integer describing the average bandwidth in kBps
+>   * @peak_bw: an integer describing the peak bandwidth in kBps
+> @@ -22,6 +23,7 @@ struct icc_req {
+>  	struct hlist_node req_node;
+>  	struct icc_node *node;
+>  	struct device *dev;
+> +	bool enabled;
+>  	u32 tag;
+>  	u32 avg_bw;
+>  	u32 peak_bw;
+> diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
+> index 770692421f4c..2b7b331c9354 100644
+> --- a/include/linux/interconnect.h
+> +++ b/include/linux/interconnect.h
+> @@ -30,6 +30,8 @@ struct icc_path *icc_get(struct device *dev, const int src_id,
+>  struct icc_path *of_icc_get(struct device *dev, const char *name);
+>  struct icc_path *devm_of_icc_get(struct device *dev, const char *name);
+>  void icc_put(struct icc_path *path);
+> +int icc_disable(struct icc_path *path);
+> +int icc_enable(struct icc_path *path);
+>  int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
+>  void icc_set_tag(struct icc_path *path, u32 tag);
+>  
+> @@ -57,6 +59,16 @@ static inline void icc_put(struct icc_path *path)
+>  {
+>  }
+>  
+> +static inline int icc_disable(struct icc_path *path)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline int icc_enable(struct icc_path *path)
+> +{
+> +	return 0;
+> +}
+> +
+>  static inline int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+>  {
+>  	return 0;
 
-[    5.458227] DMC: mem tFAW=25000, clk_period_ps=6060
-[    5.461743] DMC: tFAW=5, tXP=2 val=5
-[    5.465273] DMC: mem tFAW=25000, clk_period_ps=4854
-[    5.470101] DMC: tFAW=5, tXP=2 val=6
-[    5.473668] DMC: mem tFAW=25000, clk_period_ps=3636
-[    5.478507] DMC: tFAW=5, tXP=2 val=7
-[    5.482072] DMC: mem tFAW=25000, clk_period_ps=2421
-[    5.486951] DMC: tFAW=5, tXP=2 val=11
-[    5.490531] DMC: mem tFAW=25000, clk_period_ps=1841
-[    5.495439] DMC: tFAW=5, tXP=2 val=14
-[    5.499113] DMC: mem tFAW=25000, clk_period_ps=1579
-[    5.503877] DMC: tFAW=5, tXP=2 val=16
-[    5.507476] DMC: mem tFAW=25000, clk_period_ps=1373
-[    5.512368] DMC: tFAW=5, tXP=2 val=19
-[    5.515968] DMC: mem tFAW=25000, clk_period_ps=1212
-[    5.520826] DMC: tFAW=5, tXP=2 val=21
-
-That's why in the existing configuration it does not harm
-(the calculated 'val' is always >= 5) the board.
-
-But I think this patch should be applied (after small changes in the
-commit message).
-
-@Krzysztof could you have a look on the commit message or take the
-patch with small adjustment in the description, please?
-
-I conditionally give (because of this description):
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-
-
-Thank you Bernard for reporting and fixing this.
-
-Regards,
-Lukasz
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
