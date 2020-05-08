@@ -2,118 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DC41CA2B3
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 07:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A39851CA4E1
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 09:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725891AbgEHFfk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 01:35:40 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:32337 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725896AbgEHFfk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 01:35:40 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1588916139; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=5fYVIpYpMlyU60GX56gjAg+98E401CnvmhRI1AZYvRw=; b=L1aezfJaGKrBGCClkvxNgdSuQSyCNNTQ3E/iqoEztj4GO5lpHmdQuzQL9YPZRJQuOQf0NfVh
- iqhU/a/Yc0R17ks7cpgFZr0GPK3KAZY/oVbcNnZFY6LzVb7HkNMk2e7aLN73Xd3ZiL6Kd69C
- fNofHCQJANv7eXggXl6vPQ/gLgY=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5eb4efa8.7ffa51e476f8-smtp-out-n02;
- Fri, 08 May 2020 05:35:36 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 6CABEC44791; Fri,  8 May 2020 05:35:34 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from codeaurora.org (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: pkondeti)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 310E2C433F2;
-        Fri,  8 May 2020 05:35:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 310E2C433F2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=pkondeti@codeaurora.org
-Date:   Fri, 8 May 2020 11:05:23 +0530
-From:   Pavan Kondeti <pkondeti@codeaurora.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, sudeep.holla@arm.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, mcgrof@kernel.org, keescook@chromium.org,
-        yzaikin@google.com, fweisbec@gmail.com, tkjos@google.com,
-        kernel-team@android.com
-Subject: Re: [PATCH 04/14] sched: cpufreq: Move
- sched_cpufreq_governor_change()
-Message-ID: <20200508053523.GH19464@codeaurora.org>
-References: <20200507181012.29791-1-qperret@google.com>
- <20200507181012.29791-5-qperret@google.com>
+        id S1727029AbgEHHM3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 03:12:29 -0400
+Received: from smtp01.smtpout.orange.fr ([80.12.242.123]:37547 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726009AbgEHHM3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 03:12:29 -0400
+Received: from localhost.localdomain ([93.23.14.114])
+        by mwinf5d01 with ME
+        id c7CQ2200A2Tev1p037CQVC; Fri, 08 May 2020 09:12:26 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 08 May 2020 09:12:26 +0200
+X-ME-IP: 93.23.14.114
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     milo.kim@ti.com, sre@kernel.org, anton.vorontsov@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] power: supply: lp8788: Fix an error handling path in 'lp8788_charger_probe()'
+Date:   Fri,  8 May 2020 09:11:50 +0200
+Message-Id: <20200508071150.204974-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200507181012.29791-5-qperret@google.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 07, 2020 at 07:10:02PM +0100, Quentin Perret wrote:
-> CPUFreq calls into sched_cpufreq_governor_change() when switching
-> governors, which triggers a sched domain rebuild when entering or
-> exiting schedutil.
-> 
-> Move the function to sched/cpufreq.c to prepare the ground for the
-> modularization of schedutil.
-> 
-> Signed-off-by: Quentin Perret <qperret@google.com>
-> ---
->  kernel/sched/cpufreq.c           | 33 ++++++++++++++++++++++++++++++++
->  kernel/sched/cpufreq_schedutil.c | 33 --------------------------------
->  2 files changed, 33 insertions(+), 33 deletions(-)
-> 
-> diff --git a/kernel/sched/cpufreq.c b/kernel/sched/cpufreq.c
-> index 7c2fe50fd76d..82f2dda61a55 100644
-> --- a/kernel/sched/cpufreq.c
-> +++ b/kernel/sched/cpufreq.c
-> @@ -75,3 +75,36 @@ bool cpufreq_this_cpu_can_update(struct cpufreq_policy *policy)
->  		(policy->dvfs_possible_from_any_cpu &&
->  		 rcu_dereference_sched(*this_cpu_ptr(&cpufreq_update_util_data)));
->  }
-> +
-> +#ifdef CONFIG_ENERGY_MODEL
-> +extern bool sched_energy_update;
-> +extern struct mutex sched_energy_mutex;
-> +
-> +static void rebuild_sd_workfn(struct work_struct *work)
-> +{
-> +	mutex_lock(&sched_energy_mutex);
-> +	sched_energy_update = true;
-> +	rebuild_sched_domains();
-> +	sched_energy_update = false;
-> +	mutex_unlock(&sched_energy_mutex);
-> +}
-> +static DECLARE_WORK(rebuild_sd_work, rebuild_sd_workfn);
-> +
-> +/*
-> + * EAS shouldn't be attempted without sugov, so rebuild the sched_domains
-> + * on governor changes to make sure the scheduler knows about it.
-> + */
+In case of error, resources allocated in 'lp8788_setup_adc_channel()' must
+be released.
 
-In the previous patch, you removed reference to schedutil and replaced it with
-" an EAS-compatible CPUfreq governor (schedutil)". May be you could do the
-same here.
+Add a call to 'lp8788_release_adc_channel()' as already done in the remove
+function.
 
-Thanks,
-Pavan
+Fixes: 98a276649358 ("power_supply: Add new lp8788 charger driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/power/supply/lp8788-charger.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/power/supply/lp8788-charger.c b/drivers/power/supply/lp8788-charger.c
+index 84a206f42a8e..641815eb24bc 100644
+--- a/drivers/power/supply/lp8788-charger.c
++++ b/drivers/power/supply/lp8788-charger.c
+@@ -719,13 +719,17 @@ static int lp8788_charger_probe(struct platform_device *pdev)
+ 
+ 	ret = lp8788_psy_register(pdev, pchg);
+ 	if (ret)
+-		return ret;
++		goto err_release_adc_channel;
+ 
+ 	ret = lp8788_irq_register(pdev, pchg);
+ 	if (ret)
+ 		dev_warn(dev, "failed to register charger irq: %d\n", ret);
+ 
+ 	return 0;
++
++err_release_adc_channel:
++	lp8788_release_adc_channel(pchg);
++	return ret;
+ }
+ 
+ static int lp8788_charger_remove(struct platform_device *pdev)
 -- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+2.25.1
+
