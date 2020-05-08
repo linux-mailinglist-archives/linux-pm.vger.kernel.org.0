@@ -2,72 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E05451CA5C1
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 10:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D941CA6EA
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 11:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726612AbgEHIMa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 04:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726048AbgEHIMa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 04:12:30 -0400
-Received: from merlin.infradead.org (unknown [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5071CC05BD43;
-        Fri,  8 May 2020 01:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3ahC++fEwMzmLLM2QpP2jvwJMwZREpXt88C4KYJBX2U=; b=u/BuPo7WsiFvewU2RMhJpL7PNC
-        3/dZzUXyh/eiYNNFsAgV0nNEpU6QXz3cLsV+fb4rcK3VQ7FTjKBNe3/ArFyBBYY4QEStYjxEaPv2q
-        zkToNxMIkliWpH5z1CmXlsPYGFUEohVtY9/xQLwafuXbFqV+okSh7+KJyWfwpZlJ1eu1or5oK4hw5
-        4z2RoIQXsiuyOdeUzbAiCAG/QbdlzbGmshvf2DP4bEtzaeMo5ZrZxpAt7TvIRaakE4KCHS6Yva8oj
-        ikC+7/+sr/MFvTh5oLOxsFrtzO08ieBJeoM0nWN7HcqrIWfVA2D8iaeUZZdK7LFAhCxVPVqltkP5u
-        EAKiGU8w==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jWy6V-0003Fp-Jk; Fri, 08 May 2020 08:11:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B060A301A80;
-        Fri,  8 May 2020 10:11:28 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9C4892038FB83; Fri,  8 May 2020 10:11:28 +0200 (CEST)
-Date:   Fri, 8 May 2020 10:11:28 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, sudeep.holla@arm.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        fweisbec@gmail.com, tkjos@google.com, kernel-team@android.com
-Subject: Re: [PATCH 00/14] Modularize schedutil
-Message-ID: <20200508081128.GM5298@hirez.programming.kicks-ass.net>
-References: <20200507181012.29791-1-qperret@google.com>
+        id S1726767AbgEHJR3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 05:17:29 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:4299 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725774AbgEHJR3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 8 May 2020 05:17:29 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id AC3ACFE3BEB4DBA9C525;
+        Fri,  8 May 2020 17:17:26 +0800 (CST)
+Received: from linux-ibm.site (10.175.102.37) by
+ DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
+ 14.3.487.0; Fri, 8 May 2020 17:17:17 +0800
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
+        <Souvik.Chakravarty@arm.com>, <Thanu.Rangarajan@arm.com>
+CC:     <Sudeep.Holla@arm.com>, <guohanjun@huawei.com>,
+        <john.garry@huawei.com>, <jonathan.cameron@huawei.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wangxiongfeng2@huawei.com>
+Subject: [RFC PATCH 0/3] add SW BOOST support for CPPC
+Date:   Fri, 8 May 2020 17:11:01 +0800
+Message-ID: <1588929064-30270-1-git-send-email-wangxiongfeng2@huawei.com>
+X-Mailer: git-send-email 1.7.12.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200507181012.29791-1-qperret@google.com>
+Content-Type: text/plain
+X-Originating-IP: [10.175.102.37]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 07, 2020 at 07:09:58PM +0100, Quentin Perret wrote:
-> One challenge to implement GKI is to avoid bloating the kernel by
-> compiling too many things in, especially given that different devices
-> need different things. As such, anything that can be turned into a
-> module helps GKI, by offering an alternative to having that component
-> built-in. This is true for pretty much anything that can be made
-> modular, including drivers as well as other kernel components, such as
-> CPUFreq governors.
+ACPI spec 6.2 section 8.4.7.1 provide the following two CPC registers.
 
-The idea is to move to 1 governor, schedutil. Also, I abhor all the
-exports this thing does. Modules have no business touching most of that.
+"Highest performance is the absolute maximum performance an individual
+processor may reach, assuming ideal conditions. This performance level
+may not be sustainable for long durations, and may only be achievable if
+other platform components are in a specific state; for example, it may
+require other processors be in an idle state.
 
-Look at every EXPORT you do and wonder ask yourself how you can abuse
-it. Modules are not a good thing, they're horrible pieces of crap.
+Nominal Performance is the maximum sustained performance level of the
+processor, assuming ideal operating conditions. In absence of an
+external constraint (power, thermal, etc.) this is the performance level
+the platform is expected to be able to maintain continuously. All
+processors are expected to be able to sustain their nominal performance
+state simultaneously."
+
+We can use Highest Performance as the max performance in boost mode and
+Nomial Performance as the max performance in non-boost mode. If the
+Highest Performance is greater than the Nominal Performance, we assume
+SW BOOST is supported.
+
+Xiongfeng Wang (3):
+  cpufreq: fix the return value in 'cpufreq_boost_set_sw()'
+  cpufreq: Add SW BOOST support for drivers without frequency table
+  CPPC: add support for SW BOOST
+
+ drivers/cpufreq/cppc_cpufreq.c | 17 +++++++++++++++--
+ drivers/cpufreq/cpufreq.c      | 25 +++++++++++++++++--------
+ include/linux/cpufreq.h        |  2 ++
+ 3 files changed, 34 insertions(+), 10 deletions(-)
+
+-- 
+1.7.12.4
+
