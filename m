@@ -2,165 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F01761CA1AC
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 05:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B001CA1B9
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 05:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726768AbgEHDsE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 May 2020 23:48:04 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:46966 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726736AbgEHDsE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 May 2020 23:48:04 -0400
+        id S1726618AbgEHDyr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 May 2020 23:54:47 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:60685 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726689AbgEHDyr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 May 2020 23:54:47 -0400
 Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200508034801epoutp01160bab80e399966b5adbe0fa639e1478~M8O-hgHCe0534205342epoutp01B
-        for <linux-pm@vger.kernel.org>; Fri,  8 May 2020 03:48:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200508034801epoutp01160bab80e399966b5adbe0fa639e1478~M8O-hgHCe0534205342epoutp01B
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200508035443epoutp03debcdf297d69c79f35b20acc9c82c18c~M8U1v6DzQ3224432244epoutp03B
+        for <linux-pm@vger.kernel.org>; Fri,  8 May 2020 03:54:43 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200508035443epoutp03debcdf297d69c79f35b20acc9c82c18c~M8U1v6DzQ3224432244epoutp03B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1588909681;
-        bh=H3dky0BejFaiWB40srhii5TqB3bg1Vcn1f7mHVdMoX4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Nc9GrC+dMNRy18z4gqUW9HlsMm9HvD2GjBjVOo/l9yNG6rwkPFRvlC5Oyr8ySETqY
-         rufR30SbG+cMJrCf/oTgkLdM+DQvdxtBEOriWsXc6MS/xLKK8pNBbhJr9AhgF3xU7J
-         y5fqLf5w2smzPcMlfeRY1dW+x3eMR6Ns/pKbiJqY=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200508034800epcas1p1520d538908c47140a0292440575b1093~M8O_0bBZO2517225172epcas1p16;
-        Fri,  8 May 2020 03:48:00 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.156]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 49JGWL6pGwzMqYlp; Fri,  8 May
-        2020 03:47:58 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F4.B5.04648.E66D4BE5; Fri,  8 May 2020 12:47:58 +0900 (KST)
+        s=mail20170921; t=1588910083;
+        bh=F962LpSrFOl3x1UqKVgw8NIpqI4eBnKTQnStyDbMIiU=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=hivsNr5lFveg12lfH2F0F9EFy02h0KDxHJv6DZDRNKEOFAuuFyqWzywjbENSLBSAN
+         Rwvh0CdqL7DVz9osk54bYdgLUs1lifUaSeaLU69MoRRhALCrC3z4h9nAB2PDOqokiY
+         rF0k0ijA2qOgn1Iqk33qNkw/acG2866i0RLxM95o=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20200508035442epcas1p3077679ccbe91f54e6c87f08fd38f7ba1~M8U1D0jw42074720747epcas1p3j;
+        Fri,  8 May 2020 03:54:42 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.152]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 49JGg43gk2zMqYkj; Fri,  8 May
+        2020 03:54:40 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F5.F9.04402.008D4BE5; Fri,  8 May 2020 12:54:40 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20200508034758epcas1p3f3d5d33ba201ffc9927c9e4e91309bd2~M8O8kjItc3050130501epcas1p37;
-        Fri,  8 May 2020 03:47:58 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200508035438epcas1p12d02b9a9ac102e68b74bdd62ce9d390a~M8UxmMiTp0145501455epcas1p14;
+        Fri,  8 May 2020 03:54:38 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200508034758epsmtrp20fd869c5728f67c0757aec4dab885ba8~M8O8jqsiK2028120281epsmtrp2N;
-        Fri,  8 May 2020 03:47:58 +0000 (GMT)
-X-AuditID: b6c32a37-1dbff70000001228-9d-5eb4d66e5681
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E8.E9.25866.E66D4BE5; Fri,  8 May 2020 12:47:58 +0900 (KST)
+        20200508035438epsmtrp22236cf07c6ebe21b7c0b72292534dfee~M8UxlWPia2412024120epsmtrp2X;
+        Fri,  8 May 2020 03:54:38 +0000 (GMT)
+X-AuditID: b6c32a35-753ff70000001132-73-5eb4d8008b39
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        96.DC.18461.EF7D4BE5; Fri,  8 May 2020 12:54:38 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200508034758epsmtip18c3331dd21c34d82042ca6612c31d6d5~M8O8S5fv61798317983epsmtip1R;
-        Fri,  8 May 2020 03:47:58 +0000 (GMT)
-Subject: Re: [PATCH] PM / devfreq: imx: Fix inconsistent IS_ERR and PTR_ERR
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200508035438epsmtip2b574f3494727385bbd41c8aa15358639~M8UxVCku41898718987epsmtip2A;
+        Fri,  8 May 2020 03:54:38 +0000 (GMT)
+Subject: Re: [PATCH v2] PM / devfreq: tegra: Add Dmitry as a maintainer
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <7dc02882-3317-20cc-450c-23abc23d5cb5@samsung.com>
-Date:   Fri, 8 May 2020 12:57:55 +0900
+Message-ID: <921abb5e-8c12-db8b-b345-fbe49080dc1c@samsung.com>
+Date:   Fri, 8 May 2020 13:04:35 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <82fc7219-b9c7-c5fa-10b1-692f6a5ed411@samsung.com>
+In-Reply-To: <20200402221723.6064-1-digetx@gmail.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLJsWRmVeSWpSXmKPExsWy7bCmvm7etS1xBnv/mVg8vOpvsXWPqsWv
-        i9NYLVZN3clicbbpDbvFirsfWS02Pb7GatH1ayWzxeVdc9gsPvceYbS43biCzeLv9k0sFi+2
-        iDvweqw7qOqxc9Zddo9NqzrZPDYvqffY+G4Hk0f/XwOPvi2rGD0+b5IL4IjKtslITUxJLVJI
-        zUvOT8nMS7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBulZJoSwxpxQoFJBYXKyk
-        b2dTlF9akqqQkV9cYquUWpCSU2BZoFecmFtcmpeul5yfa2VoYGBkClSYkJ3x/dQ+loJF3BW7
-        t91hbWCcwNnFyMkhIWAicWBiG1sXIxeHkMAORonDczaygiSEBD4xSsy56QBhf2aU+H85AKbh
-        /80fjBANuxglmve2skM47xkl1h/YzwxSJSzgLfFgyXYwm01AS2L/ixtgK0QEfjNJvJq7Fayd
-        WWASo8Tm3fvB9vELKEpc/fGYEcTmFbCTWDzvM1g3i4CKxOmrTWC2qECYxMltLVA1ghInZz5h
-        AbE5BewlPi16ywZiMwuIS9x6Mp8JwpaX2P52DjPIMgmBKxwSa1ecZoN4wkXiQ+cqVghbWOLV
-        8S3sELaUxOd3e6FqqiVWnjzCBtHcwSixZf8FqAZjif1LJwNt4ADaoCmxfpc+RFhRYufvuYwQ
-        i/kk3n3tYQUpkRDglehoE4IoUZa4/OAuE4QtKbG4vZNtAqPSLCTvzELywiwkL8xCWLaAkWUV
-        o1hqQXFuemqxYYExcnRvYgQnZS3zHYwbzvkcYhTgYFTi4bX4uDlOiDWxrLgy9xCjBAezkgjv
-        xIotcUK8KYmVValF+fFFpTmpxYcYTYGhPZFZSjQ5H5gx8kriDU2NjI2NLUwMzUwNDZXEeade
-        z4kTEkhPLEnNTk0tSC2C6WPi4JRqYAysVK4tmDPf9eG13devvnPgM5y9xsQ3/45vglF835Gv
-        kxTseIw8yvY9zvhgKF+71Orbs7xlv1JMnnt7Wzu4zjWWbpzjoMed3sUsbHVn8akEfXHTid8D
-        eFhf375x6eCHbbbSHy817L2zY2u7/V6r/+5/tgaJngu6pJ9ssO8nx6elbKEXpZ67NCuxFGck
-        GmoxFxUnAgA6ul2q4AMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFIsWRmVeSWpSXmKPExsWy7bCSnG7etS1xBn0XRC0eXvW32LpH1eLX
-        xWmsFqum7mSxONv0ht1ixd2PrBabHl9jtej6tZLZ4vKuOWwWn3uPMFrcblzBZvF3+yYWixdb
-        xB14PdYdVPXYOesuu8emVZ1sHpuX1HtsfLeDyaP/r4FH35ZVjB6fN8kFcERx2aSk5mSWpRbp
-        2yVwZXw/tY+lYBF3xe5td1gbGCdwdjFyckgImEj8v/mDEcQWEtjBKNH+JwsiLikx7eJR5i5G
-        DiBbWOLw4eIuRi6gkreMEt9/zGUGqREW8JZ4sGQ7mM0moCWx/8UNNpAiEYG/TBItdxexgSSY
-        BSYxSnxenQ/RvY1R4u3jiWAJfgFFias/HoNt5hWwk1g87zPYJBYBFYnTV5vAbFGBMImdSx4z
-        QdQISpyc+YQFxOYUsJf4tOgt1AJ1iT/zLjFD2OISt57MZ4Kw5SW2v53DPIFReBaS9llIWmYh
-        aZmFpGUBI8sqRsnUguLc9NxiwwKjvNRyveLE3OLSvHS95PzcTYzg6NTS2sG4Z9UHvUOMTByM
-        hxglOJiVRHgnVmyJE+JNSaysSi3Kjy8qzUktPsQozcGiJM77ddbCOCGB9MSS1OzU1ILUIpgs
-        EwenVAPTxVPzZK7UPNGt4xE3u2z+cKZSRfaGEoc3i75dnpnmKFr8xO/E+aVJ9VxVp+ZU/nWt
-        +sEzJURh4dHHFxTO/GJ/lbj6pfz2HCfpnInHJj/8I7nkfsGSZNcptz0m3NexCj8ak2O9cEvL
-        t9vuve7cqf8irsRNnW3NERpoPOdL7Robh+IQDz2/WS/edPu3MvsfORNwi1lUdlGVZlyOtV7R
-        5WJ7Rr+8vLOJNv1B9nK/Xz5Tq6jZnSqnmXy66Azb5ke15+rLpopnPEgTSTs5d46TllvxhX8a
-        m/sq9Ob52u2V2bCg/eq/rWZOgmaqC1yjHrzrPiR97+RXQevX5VeENsstZxcNevuYSXxmLLtP
-        oOGciTeVWIozEg21mIuKEwFWYtzTPQMAAA==
-X-CMS-MailID: 20200508034758epcas1p3f3d5d33ba201ffc9927c9e4e91309bd2
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SaUwTURDHfT22W6D6rKJjjYirH4SEwlqLq1KioWqjRjHGixhwhRWQHptu
+        qdcH8YhVIioRNTYVFWOi4hWpAjWEWIxK8ArEEzEaUDzxQI1EQbtsjXz7zbz5z/WGlGvPEToy
+        3+7inHbWShERiisNcfqEQY/9mUmerTFM5Zd2xGz3ViiYO1s/qJiWgI9gukuuI2bXNy/BtG45
+        RTC3m5qVTE+gXDFDban1tqksJdu6CIv/gUdh2eM/gyzdl2LSlRkFKXkcm8M5Yzl7tiMn355r
+        ouYtzkrLMiYn0Qn0VGYKFWtnbZyJMs9PT5idbw01RMW6WWthyJXOCgKVmJridBS6uNg8h+Ay
+        URyfY+Wn8nqBtQmF9lx9tsM2jU5KmmQMBa4qyGu7cUPJt0auD5T3qIpQg7oYqUnAk6G4r1cl
+        shbXILhXpCtGESH+iuDlvkPhhx8IDvaZ/wkaf5YppaA6BG/OtoaNTwjKOz0hgySH4Tmw96hJ
+        9A/HvxHcb21Wimo5XgENtZUykQkcD/VvHhMiD8Hj4MHPdiSyBqdCxeWgTMyjwBPAtzdVdEfj
+        pdB4ZXs4ZCg0Hu5QiKzGRvB7PofTj4SnHUdlEo+F6o8+udgD4NMk9H3wyaQJzHD7WrVS4mHw
+        7qZfJbEOurvqCIk3wenG64Qk3onAX38/LDBA/cn9/c3JcRxcCCRK7nFQ++sIkgoPhq7vu/v3
+        AFgDO3dopZDx0PKiLdzCKDjh2UXsQ5R3wDjeASN4B4zg/V/sGFKcQSM4XrDlcgLN0wP/+hLq
+        P9V4Yw0quzs/iDCJqCgN86UqU6tk3cIGWxABKaeGa0rX+zO1mhx2w0bO6chyFlo5IYiMoWWX
+        ynXR2Y7Q4dtdWbRxksFgYCbTyUaapkZqDjyyZmpxLuviCjiO55z/dDJSrStCTWMj/zyJPsIv
+        OEfXOF73zWxR97g3H5qlNXdGZSS625akLSq9zByvfFFSXF0Vk2A+75uoW8G9ndPhL3P39iYu
+        fzcr3ZTyNrn0T0SHvn3h3JX44WpDlT4Y3CisjRr98Rk/ffW6TfXvIzW3np+4umN3VXNdxpjg
+        sozAK/lFTdOadWklcZRCyGPpeLlTYP8Cpg/OkcADAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphkeLIzCtJLcpLzFFi42LZdlhJXvff9S1xBp9mm1qs/viY0aJl1iIW
+        i7NNb9gtLu+aw2bxufcIo0Xnl1lsFrcbV7BZnDl9idXi5655LA6cHjtn3WX36G1+x+ax5Wo7
+        i0ffllWMHp83yQWwRnHZpKTmZJalFunbJXBl3D12jLXgNnfFrnk/2RsYD3N2MXJySAiYSJz8
+        MYW1i5GLQ0hgN6PEkt2X2CESkhLTLh5l7mLkALKFJQ4fLoaoecsoMaP7MBtIXFjAXaJ/vi1I
+        XESggUmiddEyJpBeZoFIiZ65W9ggGjoYJa7N2wyWYBPQktj/4gYbiM0voChx9cdjRhCbV8BO
+        YtHWQ0wgQ1kEVCTm9NuBhEUFwiR2LnnMBFEiKHFy5hMWEJtTwFRiS/sHVohd6hJ/5l1ihrDF
+        JW49mQ91g7zE9rdzmCcwCs9C0j4LScssJC2zkLQsYGRZxSiZWlCcm55bbFhgmJdarlecmFtc
+        mpeul5yfu4kRHGFamjsYt6/6oHeIkYmD8RCjBAezkgjvxIotcUK8KYmVValF+fFFpTmpxYcY
+        pTlYlMR5bxQujBMSSE8sSc1OTS1ILYLJMnFwSjUwnT4Sdicg7kIMwySVOdoyFw77avyb+niB
+        9pV0Vr8fBRMtDm3wT/v7f8OS//FT5/faZe6VNJKzqa7p31D+96bjehYtlULDZdGP59e5btQU
+        vPHolFjnSZfVvx83S3jeY6tx2NPVpmLR8/Tx/uDdCps9Zu4vfHJyI0drbs/UmK/Zif2Tuu4w
+        zNmRabvKvsV7xqeYGJlT5ZGrouekzsowexlpxr2L9dbX/twE7cNzdl/lPtR2Zql8jMuKr6+f
+        y0++/MlLsdhoupdc82njLU9WTdKdciTq0SWOW05GKhvr4/04o62rGT+/XFNy3XPGVcajCjc2
+        hthL1zw4OadxwqV5eeoveOwmNDqZ/ZTq71V4WpWwTImlOCPRUIu5qDgRAKmLcc4fAwAA
+X-CMS-MailID: 20200508035438epcas1p12d02b9a9ac102e68b74bdd62ce9d390a
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200507130824epcas1p287961e0a2f5019a55ecd1c94772fdfff
-References: <CGME20200507130824epcas1p287961e0a2f5019a55ecd1c94772fdfff@epcas1p2.samsung.com>
-        <20200507131245.GA709@embeddedor>
-        <82fc7219-b9c7-c5fa-10b1-692f6a5ed411@samsung.com>
+X-CMS-RootMailID: 20200402222006epcas1p4027cd509b32ba2d2bdf90e9e84cf4bec
+References: <CGME20200402222006epcas1p4027cd509b32ba2d2bdf90e9e84cf4bec@epcas1p4.samsung.com>
+        <20200402221723.6064-1-digetx@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/8/20 12:55 PM, Chanwoo Choi wrote:
-> On 5/7/20 10:12 PM, Gustavo A. R. Silva wrote:
->> Fix inconsistent IS_ERR and PTR_ERR in imx_bus_init_icc().
->>
->> The proper pointer to be passed as argument to PTR_ERR() is
->> priv->icc_pdev.
->>
->> This bug was detected with the help of Coccinelle.
->>
->> Fixes: 16c1d2f1b0bd ("PM / devfreq: imx: Register interconnect device")
->> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->> ---
->>  drivers/devfreq/imx-bus.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/devfreq/imx-bus.c b/drivers/devfreq/imx-bus.c
->> index 532e7954032f..4f38455ad742 100644
->> --- a/drivers/devfreq/imx-bus.c
->> +++ b/drivers/devfreq/imx-bus.c
->> @@ -88,8 +88,8 @@ static int imx_bus_init_icc(struct device *dev)
->>  			dev, icc_driver_name, -1, NULL, 0);
->>  	if (IS_ERR(priv->icc_pdev)) {
->>  		dev_err(dev, "failed to register icc provider %s: %ld\n",
->> -				icc_driver_name, PTR_ERR(priv->devfreq));
->> -		return PTR_ERR(priv->devfreq);
->> +				icc_driver_name, PTR_ERR(priv->icc_pdev));
->> +		return PTR_ERR(priv->icc_pdev);
->>  	}
->>  
->>  	return 0;
->>
-> 
-> Applied it. Thanks.
-> 
+Hi Rafael,
 
-I edit the patch title as following:
-- before : PM / devfreq: imx: Fix inconsistent IS_ERR and PTR_ERR
-- after  : PM / devfreq: imx-bus: Fix inconsistent IS_ERR and PTR_ERR
+Could you please apply it to linux-pm directly?
 
-Thanks.
+I think that it is better to be applied directly
+for preventing the possible merge conflict of MAINTAINERS file.
 
--- 
 Best Regards,
 Chanwoo Choi
-Samsung Electronics
+
+On 4/3/20 7:17 AM, Dmitry Osipenko wrote:
+> I was contributing to the NVIDIA Tegra20+ devfreq drivers recently and
+> want to help keep them working and evolving in the future.
+> 
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+> 
+> Changelog:
+> 
+> v2: - Addressed review comments made by Chanwoo Choi to v1 by correcting
+>       git's address, making this patch standalone and adding Rafael Wysocki
+>       to the list of email recipients.
+> 
+>  MAINTAINERS | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 245a96316636..0a694e20ea19 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10922,6 +10922,15 @@ F:	include/linux/memblock.h
+>  F:	mm/memblock.c
+>  F:	Documentation/core-api/boot-time-mm.rst
+>  
+> +MEMORY FREQUENCY SCALING DRIVERS FOR NVIDIA TEGRA
+> +M:	Dmitry Osipenko <digetx@gmail.com>
+> +L:	linux-pm@vger.kernel.org
+> +L:	linux-tegra@vger.kernel.org
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
+> +S:	Maintained
+> +F:	drivers/devfreq/tegra20-devfreq.c
+> +F:	drivers/devfreq/tegra30-devfreq.c
+> +
+>  MEMORY MANAGEMENT
+>  M:	Andrew Morton <akpm@linux-foundation.org>
+>  L:	linux-mm@kvack.org
+> 
