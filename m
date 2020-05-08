@@ -2,126 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA8E1CB3B7
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 17:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF651CB3A4
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 17:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726771AbgEHPnK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 11:43:10 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:41721 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727092AbgEHPnK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 11:43:10 -0400
-Received: by mail-lf1-f68.google.com with SMTP id a9so1770579lfb.8;
-        Fri, 08 May 2020 08:43:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oMfRzSsPW3kRjYs+IOUJ9u3rrSqH1BCp5PIFe3h0wzc=;
-        b=oP5e0Tk+WBB6EscyAauBqDXKUivHbaoZXA7V2G6uRKkqqeOX6LJd9f6jhBOhAlXew6
-         mIGBa/IMePbkMEadrrP8d4RNiJUUVkPiVB4dZWsv5MevjpXO8BtkKETPyLolBtvyMxJK
-         1Ming/DccCrEfyBpnLkngJqA3kp30E+vfidGgcZNRKcF5OdlgKE57fn5dPhfTx0gT9UD
-         cqCBLyY3HfnNVf6/dzYkXq4HgJku85jo6AIA1BA+5plq8q9mI7kON297PQHjs1wAlPIZ
-         snx5GHHkUaPt+xznwznj+vpkvA/RiFfZv1xNb/NYRlGlPSQsaFiX/AzoXHctayeYUtiZ
-         8/Xg==
-X-Gm-Message-State: AOAM533bKuJRkovdhLZvuA9/ruoP7AxIN9hUl+y6TN1HYVl/yA41IisT
-        hXL5cNITNzk4AKni7DVtDl0PNfARL08=
-X-Google-Smtp-Source: ABdhPJysPCemwWLOlCAkNj5z4nRgPdxp3FHNzRmSurpODBPwOv8Sv4YzWGDuc2DQpN2bLzi46h9cdA==
-X-Received: by 2002:a19:8293:: with SMTP id e141mr2346736lfd.173.1588952587907;
-        Fri, 08 May 2020 08:43:07 -0700 (PDT)
-Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id h3sm1541224lfk.3.2020.05.08.08.43.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2020 08:43:07 -0700 (PDT)
-Date:   Fri, 8 May 2020 18:41:49 +0300
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, sre@kernel.org,
-        brendanhiggins@google.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v12 03/11] power: supply: bd70528: rename linear_range to
- avoid collision
-Message-ID: <286b1ae0adc1c08e7b644cbdc1a43eb2e0644647.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
+        id S1728365AbgEHPm1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 11:42:27 -0400
+Received: from elvis.franken.de ([193.175.24.41]:44985 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728282AbgEHPmZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 8 May 2020 11:42:25 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1jX58n-0005J7-01; Fri, 08 May 2020 17:42:21 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 65A77C043A; Fri,  8 May 2020 17:41:50 +0200 (CEST)
+Date:   Fri, 8 May 2020 17:41:50 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Sergey.Semin@baikalelectronics.ru
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
+ if CPU_FREQ enabled
+Message-ID: <20200508154150.GB22247@alpha.franken.de>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Follow-up patches in this series will add a generic struct
-linear_range. Rename bd70528 internal struct to avoid collision.
+On Wed, May 06, 2020 at 08:42:36PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> Commit 07d69579e7fe ("MIPS: Don't register r4k sched clock when
+> CPUFREQ enabled") disabled the r4k-clock usage for scheduler ticks
+> counting due to the scheduler being non-tolerant for unstable
+> clocks sources. For the same reason the clock should be used
+> in the system clocksource framework only as a last resort if CPU
+> frequency may change.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> ---
+>  arch/mips/kernel/csrc-r4k.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/mips/kernel/csrc-r4k.c b/arch/mips/kernel/csrc-r4k.c
+> index 437dda64fd7a..d81fb374f477 100644
+> --- a/arch/mips/kernel/csrc-r4k.c
+> +++ b/arch/mips/kernel/csrc-r4k.c
+> @@ -71,7 +71,11 @@ int __init init_r4k_clocksource(void)
+>  		return -ENXIO;
+>  
+>  	/* Calculate a somewhat reasonable rating value */
+> +#ifndef CONFIG_CPU_FREQ
+>  	clocksource_mips.rating = 200 + mips_hpt_frequency / 10000000;
+> +#else
+> +	clocksource_mips.rating = 99;
+> +#endif
 
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- drivers/power/supply/bd70528-charger.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+I dislike this patch. Assuming you have an other clocksource, why not
+simply disable csrc-r4k, if CPU_FREQ is enabled ?
 
-diff --git a/drivers/power/supply/bd70528-charger.c b/drivers/power/supply/bd70528-charger.c
-index b8e1ec106627..3b820110ecfa 100644
---- a/drivers/power/supply/bd70528-charger.c
-+++ b/drivers/power/supply/bd70528-charger.c
-@@ -335,14 +335,14 @@ static int bd70528_get_present(struct bd70528_psy *bdpsy, int *val)
- 	return 0;
- }
- 
--struct linear_range {
-+struct bd70528_linear_range {
- 	int min;
- 	int step;
- 	int vals;
- 	int low_sel;
- };
- 
--static const struct linear_range current_limit_ranges[] = {
-+static const struct bd70528_linear_range current_limit_ranges[] = {
- 	{
- 		.min = 5,
- 		.step = 1,
-@@ -374,7 +374,7 @@ static const struct linear_range current_limit_ranges[] = {
-  * voltage for low temperatures. The driver currently only reads
-  * the charge current at room temperature. We do set both though.
-  */
--static const struct linear_range warm_charge_curr[] = {
-+static const struct bd70528_linear_range warm_charge_curr[] = {
- 	{
- 		.min = 10,
- 		.step = 10,
-@@ -398,7 +398,7 @@ static const struct linear_range warm_charge_curr[] = {
- #define MAX_WARM_CHG_CURR_SEL 0x1f
- #define MIN_CHG_CURR_SEL 0x0
- 
--static int find_value_for_selector_low(const struct linear_range *r,
-+static int find_value_for_selector_low(const struct bd70528_linear_range *r,
- 				       int selectors, unsigned int sel,
- 				       unsigned int *val)
- {
-@@ -420,7 +420,7 @@ static int find_value_for_selector_low(const struct linear_range *r,
-  * I guess it is enough if we use voltage/current which is closest (below)
-  * the requested?
-  */
--static int find_selector_for_value_low(const struct linear_range *r,
-+static int find_selector_for_value_low(const struct bd70528_linear_range *r,
- 				       int selectors, unsigned int val,
- 				       unsigned int *sel, bool *found)
- {
--- 
-2.21.0
-
+Thomas.
 
 -- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
