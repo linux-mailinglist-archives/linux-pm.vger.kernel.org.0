@@ -2,90 +2,306 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9201CB24F
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 16:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6EC1CB37F
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 17:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgEHOwQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 10:52:16 -0400
-Received: from foss.arm.com ([217.140.110.172]:49654 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726751AbgEHOwQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 8 May 2020 10:52:16 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1BF8F1FB;
-        Fri,  8 May 2020 07:52:15 -0700 (PDT)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 048B93F305;
-        Fri,  8 May 2020 07:52:11 -0700 (PDT)
-References: <20200507181012.29791-1-qperret@google.com> <jhjftcbtoo6.mognet@arm.com> <20200508131508.GB10541@google.com>
-User-agent: mu4e 0.9.17; emacs 26.3
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Quentin Perret <qperret@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, sudeep.holla@arm.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, mcgrof@kernel.org, keescook@chromium.org,
-        yzaikin@google.com, fweisbec@gmail.com, tkjos@google.com,
-        kernel-team@android.com, Ionela Voinescu <ionela.voinescu@arm.com>
-Subject: Re: [PATCH 00/14] Modularize schedutil
-In-reply-to: <20200508131508.GB10541@google.com>
-Date:   Fri, 08 May 2020 15:52:07 +0100
-Message-ID: <jhjeerutr6w.mognet@arm.com>
+        id S1727811AbgEHPjJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 11:39:09 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:38983 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727785AbgEHPjJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 11:39:09 -0400
+Received: by mail-lj1-f196.google.com with SMTP id u6so2135317ljl.6;
+        Fri, 08 May 2020 08:39:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=bZGhc0X6CANrUZcST5h5hth4ZWVIz1cOCp8CtQaTIqM=;
+        b=QvJA9RBjtLKzDlyjAV1n4rCjNwxJJwyhG+I1YOzeFs3JmfClGgb9UUN5b6SwuUmSBA
+         JiMrKon44CCYSPQ3hnSNjTgcWZ9W/F/qkcoallQMBhkkHgs6xo5vUhUeX5rpMmdETX5Q
+         BfeLDfmBoU9Q6wNxnCm5AhwdPsYtOzePGGtBqTlPk5oQbwkb9KQJlmhkjsfyF3Hn8KYZ
+         iT75trPM7k8eTxLc3TKmRXYrI0eOGw91dZ3SBzzR1WyBZh3RwFIVXf2s2ROCE3X6kITF
+         nwqj6tqcu2A+1KNbkgE7cXLhpM1Z7kGGaqtll5UO7dlakmUgKdKCzvWIwx/1jkaEkTNz
+         WRLg==
+X-Gm-Message-State: AOAM532mGZefYWgBjjZvJ4375srkr+//hfLS0DK4JLK+SEv6CWTx6oHR
+        lWxBnAjQ/jO04wlvB+eLTnQ=
+X-Google-Smtp-Source: ABdhPJyQ6XtdnSoUwK9wR1Fcg5qOYj25iTGLAg6uuGeaPyzvP2oa5Yi/zCIlif8+jwcVHKKO1CLtMA==
+X-Received: by 2002:a2e:7e04:: with SMTP id z4mr2208787ljc.50.1588952345613;
+        Fri, 08 May 2020 08:39:05 -0700 (PDT)
+Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id f4sm1447502ljm.11.2020.05.08.08.39.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 May 2020 08:39:04 -0700 (PDT)
+Date:   Fri, 8 May 2020 18:38:17 +0300
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, sre@kernel.org,
+        brendanhiggins@google.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v12 00/11] Support ROHM BD99954 charger IC
+Message-ID: <cover.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Please note that this series should be applied to two trees. Patches
+1-4 (or 1-5 as suggested by Sebastian) should go to regulator tree.
+Perhaps Mark can provide an immutable branch to Sebastian? Rest of the
+patches can then go to power-supply tree.
 
-On 08/05/20 14:15, Quentin Perret wrote:
-> Hey Valentin,
->
-> On Thursday 07 May 2020 at 22:34:17 (+0100), Valentin Schneider wrote:
->> I'm curious; why would some Android device not want to roll with schedutil?
->>
->> When it comes to dynamic policies (i.e. forget performance / powersave, and
->> put userspace in a corner), I'd be willing to take a stand and say you
->> should only really be using schedutil nowadays - alignment with the
->> scheduler, uclamp, yadda yadda.
->>
->> AFAIA the only schedutil-related quirk we oughta fix for arm/arm64 is that
->> arch_scale_freq_invariant() thingie, and FWIW I'm hoping to get something
->> regarding this out sometime soonish. After that, I'd actually want to make
->> schedutil the default governor for arm/arm64.
->
-> As in setting CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL=y in the arm64
-> defconfig? If so, you have my Acked-by already :)
->
+Support ROHM BD99954 Battery Management IC
 
-I'm actually thinking of making it the unconditional default for arm/arm64
-in cpufreq's Kconfig, following what has been recently done for
-intel_pstate.
+ROHM BD99954 is a Battery Management IC for 1-4 cell Lithium-Ion
+secondary battery. BD99954 is intended to be used in space-constraint
+equipment such as Low profile Notebook PC, Tablets and other
+applications.
 
->> I'm not opiniated on the modularization, but if you can, could you please
->> share some more details as to why schedutil cannot fulfill its role of holy
->> messiah of governors for GKI?
->
-> I guess I answered some of that in the other thread with Peter, but all
-> in all I'm definitely not trying to make an argument that schedutil
-> isn't good enough here. I'm trying to say that mandating it in *GKI* is
-> just likely to cause unnecessary friction, and trust me there is already
-> enough of that with other topics.
+Series extracts a "linear ranges" helper out of the regulator
+framework. Linear ranges helper is intended to help converting
+real-world values to register values when conversion is linear. I
+suspect this is useful also for power subsystem and possibly for clk.
 
-Right, I appreciate it must be an "interesting" tug of war. My own opinion
-has also already been expanded in the rest of the thread; i.e. we should
-strive to make schedutil good enough that folks don't feel like they still
-need to use ondemand/whatever frankengov. That said, even without GKI, I
-get that making some vendors change their already tested-and-tuned setup is
-an obstacle course in and of itself.
+Current implementation does not support inversely proportional ranges
+but adding support for that could be helpful.
 
-> Giving the option of having sugov as a
-> module doesn't prevent us from making it a default for a few arches, so
-> I think there is ground for an agreement!
->
-> Cheers,
-> Quentin
+This version of series introduces new battry DT binding entries and
+adds the parsing in power_supply_get_battery_info().
+
+Changelog v12:
+ - Added missing KConfig dependency from linear_ranges_test to
+   linear_ranges lib. Thanks to Mark for pointing it out.
+
+Changelog v11:
+ - Rebased on top of v5.7-rc4
+
+Changelog v10:
+ - Add patch 11 which removes the "default n" from power/supply KConfig
+   (Please just drop from series if you disagree)
+ - Fix the regulator_linear_ranges added to qcom_smd-regulator.c at
+   v5.7-rc1
+ - Minor styling to BD70528 power/supply driver as suggested by Andy
+
+Changelog v9:
+ General:
+   - rebased on top of v5.7-rc1
+   - re-ordered patches as suggested by Sebastian Reichel
+   - added few acks
+ BD99954 driver:
+   - Moved bd99954-charger.h to drivers/power/supply
+   - fixed a typo from print
+   - used devm_add_action_or_reset and removed remove callback
+
+Changelog v8:
+ Linear ranges
+   - small improvements suggested by Andy Shevchenko, no functional changes
+
+Changelog v7:
+ General:
+   - rebased on top of v5.6
+ bd99954 driver:
+   - fixed bunch of styling issues spotted by Andy Shevchenko
+   - dropped ACPI table as ACPI properties are not supported at this
+     version of driver.
+   - added few acks
+
+Changelog v6:
+ generic:
+   - rebased on top of 5.6-rc7.
+ linear ranges:
+   - moved to lib as requested by Greg KH
+   - EXPORT_SYMBOL => EXPORT_SYMBOL_GPL
+   - licence GPL-2.0, not later
+   - added KUnit test for linear ranges
+
+Changelog v5:
+ generic:
+   - rebased on top of 5.6-rc6.
+ DT-bindings:
+   - Dropped -charger extension from compatible and removed wildcard x.
+ regulators:
+   - squashed the regulator changes in one patch.
+ power-supply KConfig:
+   - fixed indentiation
+   - dropped unnecessary 'default N' from BD99954.
+
+Changelog v4:
+ generic:
+   - rebase and drop RFC.
+ DT-bindings:
+   - add I2C node address-cells and size-cells to fix yaml check errors
+   - uncomment multipleOf:
+ bd70528:
+   - add patch which renames driver internal linear_range struct to
+     avoid collision when regulator/driver.h (which gets included from
+     rohm generic header) introduces the linear_range struct.
+ regulators:
+   - rebase to v5.6-rc2 and convert also the two newly introduced
+     drivers to use linear_range struct instead of
+     regulator_linear_range.
+ linear_ranges:
+   - Fix kerneldoc.
+
+Changelog RFC-v3:
+ DT-bindings:
+   - fix the BD99954 binding (the *-microvolt Vs. *-microvolts issue is
+     still there. Not sure which one is correct)
+   - renabe tricklecharge-* binding to trickle-charge-* as suggested by
+     Rob.
+ - drop the linear-ranges helper which was written for BD70528 and
+   extract the linear-range code from regulator framework instead.
+ - refactor regulator framework to utilize extracted linear-ranges
+   code.
+ - change the struct regulator_linear_range to linear_range from
+   regulator drivers.
+ - refactor BD70528 to use regulator framework originated
+   linear-ranges code.
+ - change BD99954 to use linear-ranges code from regulator framework
+
+Changelog RFC-v2:
+ DT-bindings:
+   - Used the battery parameters described in battery.txt
+   - Added few new parameters to battery.txt
+   - Added ASCII art charging profile chart for BD99954 to explain
+     states and limits.
+ Linear ranges:
+   - Fixed division by zero error from linear-ranges code if step 0 is
+     used.
+ Power-supply core:
+   - Added parsing of new battery parameters.
+ BD99954 driver:
+   - converted to use battery parameters from battery node
+   - Added step 0 ranges for reg values which do not change voltage
+   - added dt-node to psy-config
+
+Patch 1:
+	Linear ranges helpers
+Patch 2:
+	Test for linear ranges helpers
+Patch 3:
+	Rename driver internal struct linear_range from bd70528-power
+Patch 4:
+	Use linear-ranges helpers in regulator framework and
+	convert regulator drivers to use new linear_range struct.
+Patch 5:
+	Use linear-ranges helpers in bd70528 driver
+Patch 6:
+	DT binding docs for the new battery parameters
+Patch 7:
+	Parsing of new battery parameters
+Patch 8:
+	BD99954 charger DT binding docs
+Patch 9:
+	ROHM BD99954 charger IC driver
+Patch 10:
+	Fix Kconfig help text indentiation for other entries as well.
+Patch 11:
+	Fix Kconfig by removing the "default n".
+
+---
+
+Matti Vaittinen (11):
+  lib: add linear ranges helpers
+  lib/test_linear_ranges: add a test for the 'linear_ranges'
+  power: supply: bd70528: rename linear_range to avoid collision
+  regulator: use linear_ranges helper
+  power: supply: bd70528: use linear ranges
+  dt-bindings: battery: add new battery parameters
+  power: supply: add battery parameters
+  dt_bindings: ROHM BD99954 Charger
+  power: supply: Support ROHM bd99954 charger
+  power: supply: Fix Kconfig help text indentiation
+  power: supply: KConfig cleanup default n
+
+ .../bindings/power/supply/battery.txt         |    6 +
+ .../bindings/power/supply/rohm,bd99954.yaml   |  155 +++
+ drivers/power/supply/Kconfig                  |   36 +-
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/bd70528-charger.c        |  140 +-
+ drivers/power/supply/bd99954-charger.c        | 1142 +++++++++++++++++
+ drivers/power/supply/bd99954-charger.h        | 1075 ++++++++++++++++
+ drivers/power/supply/power_supply_core.c      |    8 +
+ drivers/regulator/88pg86x.c                   |    4 +-
+ drivers/regulator/88pm800-regulator.c         |    4 +-
+ drivers/regulator/Kconfig                     |    1 +
+ drivers/regulator/act8865-regulator.c         |    4 +-
+ drivers/regulator/act8945a-regulator.c        |    2 +-
+ drivers/regulator/arizona-ldo1.c              |    2 +-
+ drivers/regulator/arizona-micsupp.c           |    4 +-
+ drivers/regulator/as3711-regulator.c          |    6 +-
+ drivers/regulator/as3722-regulator.c          |    4 +-
+ drivers/regulator/axp20x-regulator.c          |   16 +-
+ drivers/regulator/bcm590xx-regulator.c        |    8 +-
+ drivers/regulator/bd70528-regulator.c         |    8 +-
+ drivers/regulator/bd71828-regulator.c         |   10 +-
+ drivers/regulator/bd718x7-regulator.c         |   26 +-
+ drivers/regulator/da903x.c                    |    2 +-
+ drivers/regulator/helpers.c                   |  130 +-
+ drivers/regulator/hi6421-regulator.c          |    4 +-
+ drivers/regulator/lochnagar-regulator.c       |    4 +-
+ drivers/regulator/lp873x-regulator.c          |    4 +-
+ drivers/regulator/lp87565-regulator.c         |    2 +-
+ drivers/regulator/lp8788-buck.c               |    2 +-
+ drivers/regulator/max77650-regulator.c        |    2 +-
+ drivers/regulator/mcp16502.c                  |    4 +-
+ drivers/regulator/mp8859.c                    |    2 +-
+ drivers/regulator/mt6323-regulator.c          |    6 +-
+ drivers/regulator/mt6358-regulator.c          |    8 +-
+ drivers/regulator/mt6380-regulator.c          |    6 +-
+ drivers/regulator/mt6397-regulator.c          |    6 +-
+ drivers/regulator/palmas-regulator.c          |    4 +-
+ drivers/regulator/qcom-rpmh-regulator.c       |    2 +-
+ drivers/regulator/qcom_rpm-regulator.c        |   14 +-
+ drivers/regulator/qcom_smd-regulator.c        |   78 +-
+ drivers/regulator/rk808-regulator.c           |   10 +-
+ drivers/regulator/s2mps11.c                   |   14 +-
+ drivers/regulator/sky81452-regulator.c        |    2 +-
+ drivers/regulator/stpmic1_regulator.c         |   18 +-
+ drivers/regulator/tps65086-regulator.c        |   10 +-
+ drivers/regulator/tps65217-regulator.c        |    4 +-
+ drivers/regulator/tps65218-regulator.c        |    6 +-
+ drivers/regulator/tps65912-regulator.c        |    4 +-
+ drivers/regulator/twl-regulator.c             |    4 +-
+ drivers/regulator/twl6030-regulator.c         |    2 +-
+ drivers/regulator/wm831x-dcdc.c               |    2 +-
+ drivers/regulator/wm831x-ldo.c                |    4 +-
+ drivers/regulator/wm8350-regulator.c          |    2 +-
+ drivers/regulator/wm8400-regulator.c          |    2 +-
+ include/linux/linear_range.h                  |   48 +
+ include/linux/power_supply.h                  |    4 +
+ include/linux/regulator/driver.h              |   27 +-
+ lib/Kconfig                                   |    3 +
+ lib/Kconfig.debug                             |   12 +
+ lib/Makefile                                  |    2 +
+ lib/linear_ranges.c                           |  241 ++++
+ lib/test_linear_ranges.c                      |  228 ++++
+ 62 files changed, 3229 insertions(+), 362 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+ create mode 100644 drivers/power/supply/bd99954-charger.c
+ create mode 100644 drivers/power/supply/bd99954-charger.h
+ create mode 100644 include/linux/linear_range.h
+ create mode 100644 lib/linear_ranges.c
+ create mode 100644 lib/test_linear_ranges.c
+
+
+base-commit: 0e698dfa282211e414076f9dc7e83c1c288314fd
+-- 
+2.21.0
+
+
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
