@@ -2,73 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F07111CB170
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 16:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066AE1CB234
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 16:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727882AbgEHOKY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 10:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726792AbgEHOKX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 10:10:23 -0400
-Received: from merlin.infradead.org (unknown [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BD8C05BD43;
-        Fri,  8 May 2020 07:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0S9YlEMp9Fll1gT9k7DjCjsWQkPxcTbl7fnb3cKQ7G4=; b=fBiQd9Iz1busnHlOGBKJ5hWfHK
-        VcHIwfHaTUDN8GUwzo86b71ehk4KpZzkjb4rK+QFmyAc2eVLTeKpJL6ygT4xq/the3Ue2hL4CLhch
-        CR4i7CXFLkj20SB4bc8yqzgddId1ZbU8dVEoznPe96yFCNi0acypBXqbeF4ceXz4e72fXzwxCWxvL
-        BixOPAZb50ASIYtxi/EoQ7gTMzIKYPe/cvob6kwUYwyF9L3anypR6ASURchw0+OEZL8ewvZN69TN/
-        LCfyP21Y/Lj/ph0jTnnhURUZ7/opiQQu5XBoPhbrFKcxY+Tqa6C+avK3qRpxwmYgSbzn/ibn0PKBO
-        xME49MLA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jX3h8-0005Ij-AE; Fri, 08 May 2020 14:09:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2712E3079EB;
-        Fri,  8 May 2020 16:09:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0A42C28688AB1; Fri,  8 May 2020 16:09:39 +0200 (CEST)
-Date:   Fri, 8 May 2020 16:09:38 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com, sudeep.holla@arm.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        fweisbec@gmail.com, tkjos@google.com, kernel-team@android.com
-Subject: Re: [PATCH 00/14] Modularize schedutil
-Message-ID: <20200508140938.GA3344@hirez.programming.kicks-ass.net>
-References: <20200507181012.29791-1-qperret@google.com>
- <20200508081128.GM5298@hirez.programming.kicks-ass.net>
- <20200508103721.GA3860390@kroah.com>
- <20200508111612.GA252673@google.com>
- <20200508113141.GB5298@hirez.programming.kicks-ass.net>
- <20200508130507.GA10541@google.com>
+        id S1726751AbgEHOqQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 10:46:16 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:42456 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726689AbgEHOqP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 10:46:15 -0400
+Received: by mail-ed1-f68.google.com with SMTP id s10so1407053edy.9;
+        Fri, 08 May 2020 07:46:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XarHM7quPtL8Iwp9fTwswhgZUavH/ZpsvuGgVu5XAdQ=;
+        b=s/ZHhlAj71VgJ8NnezjZBWro4BmGv+kztSHzy9OaFeyxmgcg4yrKfs91ak7WS/rjF0
+         xq6ErTJk3IsxZP480DStFO9tOyhR38TvWShYjzdduYmpnf9kRbOjCNW6ehXLn6IdLex+
+         lBtONwzWDLu0Bw18ILlbuDoKvcL4t9BnN3mjLGvv6PADRb3IP8c+jNQaP8inW3HaQfTt
+         uSn7kGk0K37Tz9PW0jd82VNFOLI01l3hAt7R6jPZElr/PQqp1hqW8EIJBJDTa7a6+N4b
+         0ey3uHJFOh7tW3LO4Vr+mzwybi3GDTg1/k7RCEIoWQbAYCpwI8udTTyZgyUMc901yWP9
+         MK6w==
+X-Gm-Message-State: AGi0PuYEgz24/EQPsqpy32zYDKrXkaecLzIA9HmXl1iM+Lk4afrMFdGG
+        4esZFW1O41NnuZHbqtBLIkY=
+X-Google-Smtp-Source: APiQypJjIQQnYzAO+FSyQEz9WwVtWHbUUhLRrRKlBcmzLwDdJK0dXJ06g9EggDcxrDp7mWZKsB0M9g==
+X-Received: by 2002:a05:6402:1515:: with SMTP id f21mr2448831edw.370.1588949173380;
+        Fri, 08 May 2020 07:46:13 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.237])
+        by smtp.googlemail.com with ESMTPSA id a5sm289736edn.14.2020.05.08.07.46.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 08 May 2020 07:46:12 -0700 (PDT)
+Date:   Fri, 8 May 2020 16:46:10 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Bernard Zhao <bernard@vivo.com>, Kukjin Kim <kgene@kernel.org>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        opensource.kernel@vivo.com
+Subject: Re: [PATCH] memory/samsung: Maybe wrong triming parameter
+Message-ID: <20200508144610.GA5983@kozik-lap>
+References: <20200507114514.11589-1-bernard@vivo.com>
+ <2eeb33f7-1acc-66bb-704a-b724fa0be0a8@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200508130507.GA10541@google.com>
+In-Reply-To: <2eeb33f7-1acc-66bb-704a-b724fa0be0a8@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 08, 2020 at 02:05:07PM +0100, Quentin Perret wrote:
-> So, all in all, I don't think the series actively makes schedutil worse
-> by adding out-of-line calls in the hot path or anything like that, and
+On Thu, May 07, 2020 at 04:42:46PM +0100, Lukasz Luba wrote:
+> Hi Bernard,
+> 
+> 
+> On 5/7/20 12:45 PM, Bernard Zhao wrote:
+> > In function create_timings_aligned, all the max is to use
+> > dmc->min_tck->xxx, aligned with val dmc->timings->xxx.
+> > But the dmc->timings->tFAW use dmc->min_tck->tXP?
+> > Maybe this point is wrong parameter useing.
+> > 
+> > Signed-off-by: Bernard Zhao <bernard@vivo.com>
+> > ---
+> >   drivers/memory/samsung/exynos5422-dmc.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
+> > index 81a1b1d01683..22a43d662833 100644
+> > --- a/drivers/memory/samsung/exynos5422-dmc.c
+> > +++ b/drivers/memory/samsung/exynos5422-dmc.c
+> > @@ -1091,7 +1091,7 @@ static int create_timings_aligned(struct exynos5_dmc *dmc, u32 *reg_timing_row,
+> >   	/* power related timings */
+> >   	val = dmc->timings->tFAW / clk_period_ps;
+> >   	val += dmc->timings->tFAW % clk_period_ps ? 1 : 0;
+> > -	val = max(val, dmc->min_tck->tXP);
+> > +	val = max(val, dmc->min_tck->tFAW);
+> >   	reg = &timing_power[0];
+> >   	*reg_timing_power |= TIMING_VAL2REG(reg, val);
+> > 
+> 
+> Good catch! Indeed this should be a dmc->min_tck->tFAW used for
+> clamping.
+> 
+> It didn't show up in testing because the frequency values based on
+> which the 'clk_period_ps' are calculated are sane.
+> Check the dump below:
+> 
+> [    5.458227] DMC: mem tFAW=25000, clk_period_ps=6060
+> [    5.461743] DMC: tFAW=5, tXP=2 val=5
+> [    5.465273] DMC: mem tFAW=25000, clk_period_ps=4854
+> [    5.470101] DMC: tFAW=5, tXP=2 val=6
+> [    5.473668] DMC: mem tFAW=25000, clk_period_ps=3636
+> [    5.478507] DMC: tFAW=5, tXP=2 val=7
+> [    5.482072] DMC: mem tFAW=25000, clk_period_ps=2421
+> [    5.486951] DMC: tFAW=5, tXP=2 val=11
+> [    5.490531] DMC: mem tFAW=25000, clk_period_ps=1841
+> [    5.495439] DMC: tFAW=5, tXP=2 val=14
+> [    5.499113] DMC: mem tFAW=25000, clk_period_ps=1579
+> [    5.503877] DMC: tFAW=5, tXP=2 val=16
+> [    5.507476] DMC: mem tFAW=25000, clk_period_ps=1373
+> [    5.512368] DMC: tFAW=5, tXP=2 val=19
+> [    5.515968] DMC: mem tFAW=25000, clk_period_ps=1212
+> [    5.520826] DMC: tFAW=5, tXP=2 val=21
+> 
+> That's why in the existing configuration it does not harm
+> (the calculated 'val' is always >= 5) the board.
+> 
+> But I think this patch should be applied (after small changes in the
+> commit message).
+> 
+> @Krzysztof could you have a look on the commit message or take the
+> patch with small adjustment in the description, please?
+> 
+> I conditionally give (because of this description):
+> 
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
-Do note that (afaik) ARM64 (and Power and probably others) has modules
-in an address space that is not reachable from regular kernel text and
-needs those intermediate trampolines.
+Thanks for review.
 
-While that's probably not a very big deal, it does increase L1$ pressure
-and things.
+I applied patch with CC-stable and adjusred commit msg.
+
+Best regards,
+Krzysztof
+
