@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAEC1CAFAE
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 15:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7874D1CAFE8
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 15:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729432AbgEHNSx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 09:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S1730580AbgEHNVf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 09:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728978AbgEHNSp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 09:18:45 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF483C05BD09
-        for <linux-pm@vger.kernel.org>; Fri,  8 May 2020 06:18:44 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id e26so10145676wmk.5
-        for <linux-pm@vger.kernel.org>; Fri, 08 May 2020 06:18:44 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1729183AbgEHNVe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 09:21:34 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80974C05BD43
+        for <linux-pm@vger.kernel.org>; Fri,  8 May 2020 06:21:34 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id z8so1823584wrw.3
+        for <linux-pm@vger.kernel.org>; Fri, 08 May 2020 06:21:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=4KMLQ4EJCkyzbgYa2IJD+khf7hToXVbXh2lcQiHZtv0=;
-        b=ove31f7pciE4Fbhm6NDLjUI9JBlFL/PA3cUZfCszFLpIChGlte7eSbOLZymdajQ9kK
-         gvPBvpGJZMgMzeDA1EWhE0mUt1GnwHlyuFs+gm9exfx6IXGGNHzVY4W50lYSmpTxaCsr
-         60fGF+UTCK5hnkhDKeZlzt0pslaA7Y4MwXdN6ESNWcuWEQBFvqVx6K1UAb/+sraNF90l
-         xMAMizHB0CVXKviA38ftlh3FUyyE1yDtVKxWT6kZls3slkOAl0Q435rKgLdXkdtvuOtf
-         FVitAidX3tCzTkx6dJUJxHvvAArCb6NPH2LSG4Egd+Ea7/031fRzmYTwHdvZh+FaQx0J
-         x81Q==
+        bh=EdCijOczIQMLs1X4cAiihh7qwIxfmO/FmCoXMHIAt4I=;
+        b=QF9qhyvg3Qeb+YdknO2fao+XlPzsK19K/rtqFb+isyApE2gUA67kAJtCEbpFlaMbpL
+         dcijhFnjRYwsGrSpYFEdti57I43KZ8UJ0e+M60tBa2Gbm3/cm8H7yiqCqG6EY0EgxY1C
+         BeU3J+n0cXh29+FgY+fqG/ymytpuJWNTQHSnllJBQmDNb7rHv3lAlxjwr0etXAa2ptFB
+         7g7oPs/+taioniIBI29hoil0gYL0DZVP0rgSC2ri1qjfbIcpf1DDmjD0eszCHTKT00WF
+         k43oRpf8CYrDjieni9DUKpnnVMOxSLg06KLLhPJKXzpr0eyaH1TlvS1MwzQJLpAvAysn
+         YYTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=4KMLQ4EJCkyzbgYa2IJD+khf7hToXVbXh2lcQiHZtv0=;
-        b=pGNBbCeIqcD8eAGNFo8uLRaPcJKxU5e7P4r/tojRH0okpkz5044arTVJr4GrCFEcT5
-         gponLCKLk8HWiyGup346rGkhkv9UHQKrfkePus7QIsKPYc9T4YAkunYP7x8OGgTS0Dgg
-         YkcT8gxK0t5kbEi8ii5bfaGr7eqjHWLd4Ffu8extwL6+uzwxmieZDj3Hgv5p4iQKC20Z
-         xCwo7lnyugatERKycl7I0U1LMVAHwhnXBg1C7q8UO8mNROHdjW+0GCqk4x+ZjGoNGnwK
-         RIZic9EGTKNbnX9/kVeyQbQ/XF7bH+j0KGiRRdBfhvkaxF6smwibNpbBZZKSF8tY//Ve
-         cH7A==
-X-Gm-Message-State: AGi0Pub3J+5iOF4Q9kCGCoBDgauy52fSxNPq/H86DyqE9jb6GM8MQlO5
-        CopCW5gE65mJW8zOu4oVmeyklQ==
-X-Google-Smtp-Source: APiQypJdRU9stBd3NG3JUQJliF1xwamMgT+gqtFcU/P7BSs1kniXBB4NJN4eJrTemJwu3kbPfB9g1Q==
-X-Received: by 2002:a1c:c345:: with SMTP id t66mr17057953wmf.189.1588943923328;
-        Fri, 08 May 2020 06:18:43 -0700 (PDT)
+        bh=EdCijOczIQMLs1X4cAiihh7qwIxfmO/FmCoXMHIAt4I=;
+        b=qT69PORpwvnbUpIGxm/KMU2idq6X+N0KN5h/ow+uYr/nzAMNYAfn+ZeA/PrKB24zvr
+         HFctNmEo88LGul2GLENuif948PpKUKhw2+vwF70fdKBGhBSvekrPdU9ZpUuhZmm4YWlE
+         Fmgu0d5jqmyjtxQLdeUZ19LlUUp5vyyg6HRFret/zpM2MHkj1vqHMCIRkw51az0usuAN
+         eGWbWHOelbnI0j3IifB1yl+CoSUMnzhpTG1XdeT5kgKLNFdeM1kuvSQ07KTCz0t/Jd10
+         10mRg6RnHj2oUU4DdlbtcV5+wjO1Kfa52H6BOd+o3ksWDqOq5k6/VGP6LSpNM+rQ6Jxh
+         532w==
+X-Gm-Message-State: AGi0PuZ+Vi5abVi4nkWg5jwGaB/nOrPoW3Ucji2iKTXGjIF3+JJe8ygR
+        pTYG7Q6u0EOQARKyHaK1dC9bog==
+X-Google-Smtp-Source: APiQypI1o0GT8qsdRugAQfihzVy7cdudanFaAiRDCAYBqFxUeH6OF3tVH8JjYsz1IbNVzkpokawI1w==
+X-Received: by 2002:a5d:5490:: with SMTP id h16mr2920378wrv.250.1588944093030;
+        Fri, 08 May 2020 06:21:33 -0700 (PDT)
 Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id m82sm988007wmf.3.2020.05.08.06.18.42
+        by smtp.gmail.com with ESMTPSA id h6sm12871912wmf.31.2020.05.08.06.21.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2020 06:18:42 -0700 (PDT)
-Date:   Fri, 8 May 2020 14:18:39 +0100
+        Fri, 08 May 2020 06:21:32 -0700 (PDT)
+Date:   Fri, 8 May 2020 14:21:29 +0100
 From:   Quentin Perret <qperret@google.com>
 To:     Pavan Kondeti <pkondeti@codeaurora.org>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -59,27 +59,33 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         mgorman@suse.de, mcgrof@kernel.org, keescook@chromium.org,
         yzaikin@google.com, fweisbec@gmail.com, tkjos@google.com,
         kernel-team@android.com
-Subject: Re: [PATCH 04/14] sched: cpufreq: Move
- sched_cpufreq_governor_change()
-Message-ID: <20200508131839.GD10541@google.com>
+Subject: Re: [PATCH 13/14] sched: cpufreq: Use IS_ENABLED() for schedutil
+Message-ID: <20200508132129.GE10541@google.com>
 References: <20200507181012.29791-1-qperret@google.com>
- <20200507181012.29791-5-qperret@google.com>
- <20200508053523.GH19464@codeaurora.org>
+ <20200507181012.29791-14-qperret@google.com>
+ <20200508053053.GG19464@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200508053523.GH19464@codeaurora.org>
+In-Reply-To: <20200508053053.GG19464@codeaurora.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday 08 May 2020 at 11:05:23 (+0530), Pavan Kondeti wrote:
-> In the previous patch, you removed reference to schedutil and replaced it with
-> " an EAS-compatible CPUfreq governor (schedutil)". May be you could do the
-> same here.
+On Friday 08 May 2020 at 11:00:53 (+0530), Pavan Kondeti wrote:
+> > -#if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+> > +#if defined(CONFIG_ENERGY_MODEL) && IS_ENABLED(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+> >  	/* Build perf. domains: */
+> >  	for (i = 0; i < ndoms_new; i++) {
+> >  		for (j = 0; j < n && !sched_energy_update; j++) {
+> 
+> Now that scheduler does not have any references to schedutil_gov and cpufreq
+> has want_eas flag, do we need this CONFIG_CPU_FREQ_GOV_SCHEDUTIL checks here?
 
-Good point, I add it to the todo list for v2 ;)
+Right, they're not absolutely required, but given that sugov is the only
+one to have 'want_eas' set I guess there is no need to compile that in
+without it, no?
 
-Thanks,
+Cheers,
 Quentin
