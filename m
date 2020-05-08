@@ -2,144 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC971CB523
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 18:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C3F1CB576
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 19:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbgEHQqW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 12:46:22 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:47884 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726750AbgEHQqV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 12:46:21 -0400
-Received: from 89-64-85-173.dynamic.chello.pl (89.64.85.173) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id b97d93fcd990997d; Fri, 8 May 2020 18:46:18 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Chris Chiu <chiu@endlessm.com>
-Subject: [PATCH] ACPI: EC: s2idle: Avoid premature returns from acpi_s2idle_wake()
-Date:   Fri, 08 May 2020 18:46:17 +0200
-Message-ID: <1604462.Hd3yvOQCVk@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        id S1727830AbgEHRNt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 13:13:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49792 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727824AbgEHRNt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 8 May 2020 13:13:49 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3956D24955;
+        Fri,  8 May 2020 17:13:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588958028;
+        bh=PwDwGLPB/vmEn/XMf+w4VRIZtv0DET4wLqOPmH36V0A=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=gJDKMMtlo0CromuNqAnnO5/Ncs4qU6x0TCenBYGK2Wo7slhCjc+LIdShUbbl3llQk
+         3+QkPPgWbgXDtpgtE7ZjiuLyP4cogtwKla6zHy+zQMdvxf2cOlW+wpPsNjKCmM7hTZ
+         FNy7N9JvgJWoLcGz7mRP1I1Lg9rCSEZzpsUOn1/o=
+Date:   Fri, 08 May 2020 18:13:46 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        mazziesaccount@gmail.com
+Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
+        brendanhiggins@google.com, linux-kernel@vger.kernel.org,
+        lgirdwood@gmail.com
+In-Reply-To: <cover.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
+References: <cover.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: Re: [PATCH v12 00/11] Support ROHM BD99954 charger IC
+Message-Id: <158895800278.30774.18266282191247434212.b4-ty@kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri, 8 May 2020 18:38:17 +0300, Matti Vaittinen wrote:
+> Please note that this series should be applied to two trees. Patches
+> 1-4 (or 1-5 as suggested by Sebastian) should go to regulator tree.
+> Perhaps Mark can provide an immutable branch to Sebastian? Rest of the
+> patches can then go to power-supply tree.
+> 
+> Support ROHM BD99954 Battery Management IC
+> 
+> [...]
 
-If the EC GPE status is not set after checking all of the other GPEs,
-acpi_s2idle_wake() returns 'false', to indicate that the SCI event
-that has just triggered is not a system wakeup one, but it does that
-without canceling the pending wakeup and re-arming the SCI for system
-wakeup which is a mistake, because it may cause valid subsequent
-wakeup events to be missed.
+Applied to
 
-Fix that by moving all of the GPE checking logic from
-acpi_s2idle_wake() to acpi_ec_dispatch_gpe() and making the
-latter return 'true' only if a non-EC GPE has triggered and
-'false' otherwise, which will cause acpi_s2idle_wake() to
-cancel the pending SCI wakeup and re-arm the SCI for system
-wakeup regardless of the EC GPE status.
+   local tree regulator/for-5.7
 
-Fixes: d5406284ff80 ("ACPI: PM: s2idle: Refine active GPEs check")
-Reported-by: Chris Chiu <chiu@endlessm.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/ec.c       |   24 ++++++++++++++++--------
- drivers/acpi/internal.h |    1 -
- drivers/acpi/sleep.c    |   14 ++------------
- 3 files changed, 18 insertions(+), 21 deletions(-)
+Thanks!
 
-Index: linux-pm/drivers/acpi/sleep.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sleep.c
-+++ linux-pm/drivers/acpi/sleep.c
-@@ -1013,21 +1013,11 @@ static bool acpi_s2idle_wake(void)
- 		if (acpi_check_wakeup_handlers())
- 			return true;
- 
--		/*
--		 * If the status bit is set for any enabled GPE other than the
--		 * EC one, the wakeup is regarded as a genuine one.
--		 */
--		if (acpi_ec_other_gpes_active())
-+		/* Check non-EC GPE wakeups and dispatch the EC GPE. */
-+		if (acpi_ec_dispatch_gpe())
- 			return true;
- 
- 		/*
--		 * If the EC GPE status bit has not been set, the wakeup is
--		 * regarded as a spurious one.
--		 */
--		if (!acpi_ec_dispatch_gpe())
--			return false;
--
--		/*
- 		 * Cancel the wakeup and process all pending events in case
- 		 * there are any wakeup ones in there.
- 		 *
-Index: linux-pm/drivers/acpi/ec.c
-===================================================================
---- linux-pm.orig/drivers/acpi/ec.c
-+++ linux-pm/drivers/acpi/ec.c
-@@ -1994,23 +1994,31 @@ void acpi_ec_set_gpe_wake_mask(u8 action
- 		acpi_set_gpe_wake_mask(NULL, first_ec->gpe, action);
- }
- 
--bool acpi_ec_other_gpes_active(void)
--{
--	return acpi_any_gpe_status_set(first_ec ? first_ec->gpe : U32_MAX);
--}
--
- bool acpi_ec_dispatch_gpe(void)
- {
- 	u32 ret;
- 
- 	if (!first_ec)
-+		return acpi_any_gpe_status_set(U32_MAX);
-+
-+	/*
-+	 * Report wakeup if the status bit is set for any enabled GPE other
-+	 * than the EC one.
-+	 */
-+	if (acpi_any_gpe_status_set(first_ec->gpe))
-+		return true;
-+
-+	if (ec_no_wakeup)
- 		return false;
- 
-+	/*
-+	 * Dispatch the EC GPE in-band, but do not report wakeup in any case
-+	 * to allow the caller to process events properly after that.
-+	 */
- 	ret = acpi_dispatch_gpe(NULL, first_ec->gpe);
--	if (ret == ACPI_INTERRUPT_HANDLED) {
-+	if (ret == ACPI_INTERRUPT_HANDLED)
- 		pm_pr_dbg("EC GPE dispatched\n");
--		return true;
--	}
-+
- 	return false;
- }
- #endif /* CONFIG_PM_SLEEP */
-Index: linux-pm/drivers/acpi/internal.h
-===================================================================
---- linux-pm.orig/drivers/acpi/internal.h
-+++ linux-pm/drivers/acpi/internal.h
-@@ -202,7 +202,6 @@ void acpi_ec_remove_query_handler(struct
- 
- #ifdef CONFIG_PM_SLEEP
- void acpi_ec_flush_work(void);
--bool acpi_ec_other_gpes_active(void);
- bool acpi_ec_dispatch_gpe(void);
- #endif
- 
+[1/4] lib: add linear ranges helpers
+      (no commit info)
+[2/4] lib/test_linear_ranges: add a test for the 'linear_ranges'
+      (no commit info)
+[3/4] power: supply: bd70528: rename linear_range to avoid collision
+      (no commit info)
+[4/4] regulator: use linear_ranges helper
+      (no commit info)
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
