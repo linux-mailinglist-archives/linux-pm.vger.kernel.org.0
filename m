@@ -2,75 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5842B1CA99D
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 13:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1059D1CAA63
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 14:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbgEHLc0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 07:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726636AbgEHLcZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 07:32:25 -0400
-Received: from merlin.infradead.org (unknown [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81001C05BD43;
-        Fri,  8 May 2020 04:32:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NWlroRPhjKXWBXk+E3h0bugl1afjnkqbnRZaxRthnJY=; b=djTopVknrfMScTGAEreoTA7YRZ
-        oVxe/HCGGD8pXVy77wrHCrzjMNhEpHJ+Uu0Koet8yKnyHMTysGpWyls3CM5HDO+hviqfsUM53Q2lJ
-        O2C550g2AAOVcuDETBXlbuu5gWfCxm2Y6ro9uA5UtjpR/S1ak4/GSCefURk4HMcrF8USwjR/9/Fmy
-        UKYLe5Nx1pRBhj/SjdCmQDwTrUDpNiioc1yq9tH4s3S7C2X58DGtKnGZvJkbs76AabQFdP11IctOd
-        M52V2sDLzMwQ965nKGlufMhZaFy0pZuSN+3HmcIeLYV1nu8z/6M3P4JkgYIzNpj2r6vGypoe+VB1Y
-        S/H/Oc8Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jX1EG-0008Dt-28; Fri, 08 May 2020 11:31:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 305CB301DFC;
-        Fri,  8 May 2020 13:31:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 14DE82B8CAD85; Fri,  8 May 2020 13:31:41 +0200 (CEST)
-Date:   Fri, 8 May 2020 13:31:41 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com, sudeep.holla@arm.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        fweisbec@gmail.com, tkjos@google.com, kernel-team@android.com
-Subject: Re: [PATCH 00/14] Modularize schedutil
-Message-ID: <20200508113141.GB5298@hirez.programming.kicks-ass.net>
-References: <20200507181012.29791-1-qperret@google.com>
- <20200508081128.GM5298@hirez.programming.kicks-ass.net>
- <20200508103721.GA3860390@kroah.com>
- <20200508111612.GA252673@google.com>
+        id S1726712AbgEHMP5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 08:15:57 -0400
+Received: from vultr.net.flygoat.com ([149.28.68.211]:33180 "EHLO
+        vultr.net.flygoat.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726638AbgEHMP5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 08:15:57 -0400
+Received: from flygoat-x1e (unknown [IPv6:240e:e0:f181:b238:7275:17ea:845e:bb31])
+        by vultr.net.flygoat.com (Postfix) with ESMTPSA id 5189A2049E;
+        Fri,  8 May 2020 12:15:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com; s=vultr;
+        t=1588940156; bh=UlB/LTQO9GDoNBWvUvxhRQdqtyIVKakesW0HTOXtYEY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HmpjRH8UIJe/LGtE/KC4xshp8rXQyfTRgfTtU/ZHHyOip/0iU/qXM8YZ7BfFEZyFZ
+         6TyU+Pv5kC/pms8VXZMRefwS8Q62sa1VRbuJ6GpguxtnMeTQn/q90m7GW7Ch640bnG
+         TZxQie1uUxnJ6m8hjCffzP5geBSOmcHc7nycjdtAxZ4Fd1ejSm/tV+sPY+QMO8zPBL
+         N5NK6i1RD9qrGTZYE+4NxDWvjxtb1f4+yuv6iwXsXcEAbssbkKFOJMHPyPhc5kbAf3
+         RR4bmSjeSHIH+H8110o8qAhgZraRnYjjPjSXeDZF4fPU5h0AN8MIPrLsxmoHZ9r4ja
+         2Lw1Daucvo8bw==
+Date:   Fri, 8 May 2020 20:15:34 +0800
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     <Sergey.Semin@baikalelectronics.ru>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 17/20] mips: Add udelay lpj numbers adjustment
+Message-ID: <20200508201534.2a54da17@flygoat-x1e>
+In-Reply-To: <20200506174238.15385-18-Sergey.Semin@baikalelectronics.ru>
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+        <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+        <20200506174238.15385-18-Sergey.Semin@baikalelectronics.ru>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200508111612.GA252673@google.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 08, 2020 at 12:16:12PM +0100, Quentin Perret wrote:
-> However, the point I tried to make here is orthogonal to that. As of
-> today using another governor than schedutil is fully supported upstream,
-> and in fact it isn't even enabled by default for most archs. If vendors
-> feel like using something else makes their product better, then I don't
-> see why I need to argue with them about that. And frankly I don't see
-> that support being removed from upstream any time soon.
+On Wed, 6 May 2020 20:42:35 +0300
+<Sergey.Semin@baikalelectronics.ru> wrote:
 
-Right, it'll take a while to get there. But that doesn't mean we
-shouldn't encourage schedutil usage wherever and whenever possible. That
-includes not making it easier to not use it.
+> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> Loops-per-jiffies is a special number which represents a number of
+> noop-loop cycles per CPU-scheduler quantum - jiffies. As you
+> understand aside from CPU-specific implementation it depends on
+> the CPU frequency. So when a platform has the CPU frequency fixed,
+> we have no problem and the current udelay interface will work
+> just fine. But as soon as CPU-freq driver is enabled and the cores
+> frequency changes, we'll end up with distorted udelay's. In order
+> to fix this we have to accordinly adjust the per-CPU udelay_val
+> (the same as the global loops_per_jiffy) number. This can be done
+> in the CPU-freq transition event handler. We subscribe to that event
+> in the MIPS arch time-inititalization method.
+> 
+> Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
 
-In that respect making it modular goes against our ultimate goal (world
-domination, <mad giggles here>).
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+That have been absent in MIPS kernel so long!
+
+Thanks.
+> ---
+[...]
+---
+Jiaxun Yang
