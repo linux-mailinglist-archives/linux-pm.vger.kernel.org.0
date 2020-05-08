@@ -2,105 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3AA01CAF29
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 15:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F019C1CAF5E
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 15:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727118AbgEHNPS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 09:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729976AbgEHNPO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 09:15:14 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1CAC05BD09
-        for <linux-pm@vger.kernel.org>; Fri,  8 May 2020 06:15:14 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id z8so1801614wrw.3
-        for <linux-pm@vger.kernel.org>; Fri, 08 May 2020 06:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EzHI5Xuq83xJbZHgwiOOt3hcMqs9I4sZnbPBM/oFcog=;
-        b=Z07+lJBTwEM4bGY+C2ZRpCkZ3QKIXTnBan62CpCJWSEOHTqvZzUUAt//mNP9uZPftp
-         sQeXNAaPYEa6cZEAlZGZc5DqdAnJ/z+l6NM0pdSs1N9LGxjy2xMfXlCoRi63lJ0EHv9V
-         pE1Pfd2pMSp4yr5gs5x6HArujjnLW8svw4Dd9z1F0owqqg1VBdc4sDITw1ARI8r8rEzk
-         0XFzY/t+NB9SFaln00id3Bsa1hskpTKKnI+0INn0hWTKqgITQkfNDoxZGXG3F4sh5b4k
-         +brqbhpCGl0e2MjLTLVVontyQ4ZdJK5SDTLZhVPvlQ9ZlgEc0Tm254JpPB3NnV0+nyk5
-         KKpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EzHI5Xuq83xJbZHgwiOOt3hcMqs9I4sZnbPBM/oFcog=;
-        b=M0jBrVgW+7PPCfLbuK6vg5ykM9bNYbAfmnLq7SExe3mfUOex145Y3mRFX8upeCo6uI
-         F1nI8hlceX7fvAOuO5ZYSKpm12q860mSv4B5va2aq+4qYJKyRhi3sAYuoANh2afj16mT
-         hhn+t0oyBFUYYFGUjkJCOVOhOE/bj2rjCPjfCoQMuOU3jeV0NTVWwJa4nJLop4RZFS9a
-         p0vOHv0JRJImhWC4DNZ7AgtRCeC2JV1GmJZmK+AuFPHUiMcGSTE8QnX9m4WvoFJE6T3X
-         p2pcHQDb2bxsj/tvXk2kzAz2+rlv0F0CJFxr4272FjGsZpMq/xnumVSkJLjpolgmrQOK
-         aYZA==
-X-Gm-Message-State: AGi0PuYZJRsOZeHiXLbvhVkKsjqI4r/Suco6gRQF2pvW1hrGErWnwPza
-        ZfB3bf9UViE1MyFkJ8Z/65ZiKA==
-X-Google-Smtp-Source: APiQypI9F7N2h90hD9nJL9PvGxhA6vVv5J1pErloGxpY7jK8feMGi5s195iTAy1p44wUJq0ITF+Pug==
-X-Received: by 2002:a05:6000:1ca:: with SMTP id t10mr2937315wrx.230.1588943712773;
-        Fri, 08 May 2020 06:15:12 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id w10sm2921808wrg.52.2020.05.08.06.15.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2020 06:15:12 -0700 (PDT)
-Date:   Fri, 8 May 2020 14:15:08 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, sudeep.holla@arm.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, mcgrof@kernel.org, keescook@chromium.org,
-        yzaikin@google.com, fweisbec@gmail.com, tkjos@google.com,
-        kernel-team@android.com, Ionela Voinescu <ionela.voinescu@arm.com>
-Subject: Re: [PATCH 00/14] Modularize schedutil
-Message-ID: <20200508131508.GB10541@google.com>
-References: <20200507181012.29791-1-qperret@google.com>
- <jhjftcbtoo6.mognet@arm.com>
+        id S1729435AbgEHNRX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 09:17:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39810 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729162AbgEHNRW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 8 May 2020 09:17:22 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0E92A206B8;
+        Fri,  8 May 2020 13:17:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588943842;
+        bh=3afVTxvPGGedmPH0V3XdskRZC6TaovubqNcaoRvIw84=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wljXzPmztGYalAoA9rpHKhIthnbvDxCDuUWxhLA7Ux6IyXHMuyVvipCwDeUZASH4v
+         1EK455Sr8j9CcqPSrL15a0cT9Rl1QmpaJSoZaLPajRbx8xwhrmS8SK2e0ceK4sTUz4
+         UN42bI9PAZGXE3IEkKsserK4lyePSkv2+6GHkAhQ=
+Date:   Fri, 8 May 2020 14:17:19 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     mazziesaccount@gmail.com, lgirdwood@gmail.com, sre@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 00/11] Support ROHM BD99954 charger IC
+Message-ID: <20200508131719.GJ4820@sirena.org.uk>
+References: <cover.1588829892.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="XigHxYirkHk2Kxsx"
 Content-Disposition: inline
-In-Reply-To: <jhjftcbtoo6.mognet@arm.com>
+In-Reply-To: <cover.1588829892.git.matti.vaittinen@fi.rohmeurope.com>
+X-Cookie: Give him an evasive answer.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Valentin,
 
-On Thursday 07 May 2020 at 22:34:17 (+0100), Valentin Schneider wrote:
-> I'm curious; why would some Android device not want to roll with schedutil?
-> 
-> When it comes to dynamic policies (i.e. forget performance / powersave, and
-> put userspace in a corner), I'd be willing to take a stand and say you
-> should only really be using schedutil nowadays - alignment with the
-> scheduler, uclamp, yadda yadda.
-> 
-> AFAIA the only schedutil-related quirk we oughta fix for arm/arm64 is that
-> arch_scale_freq_invariant() thingie, and FWIW I'm hoping to get something
-> regarding this out sometime soonish. After that, I'd actually want to make
-> schedutil the default governor for arm/arm64.
+--XigHxYirkHk2Kxsx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-As in setting CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL=y in the arm64
-defconfig? If so, you have my Acked-by already :)
+On Thu, May 07, 2020 at 09:03:06AM +0300, Matti Vaittinen wrote:
+> Sorry folks for excessive amount of emails. I am resending this once
+> more (I already resent v10 and v11 has no changes but was just rebased)
+> because I am afraid the previous version did not reach Mark. If this is
+> true - I am the one to blame. I see I sent original v10 to all other
 
-> I'm not opiniated on the modularization, but if you can, could you please
-> share some more details as to why schedutil cannot fulfill its role of holy
-> messiah of governors for GKI?
+You probably should've mentioned in this mail something about applying
+on a shared branch - I had seen the mail about that and was planning to
+handle these this week but if I'd missed Sebastian's mail from earlier
+in the week I'd probably just look at this and realise I'd reviewed
+everything relevant in it.
 
-I guess I answered some of that in the other thread with Peter, but all
-in all I'm definitely not trying to make an argument that schedutil
-isn't good enough here. I'm trying to say that mandating it in *GKI* is
-just likely to cause unnecessary friction, and trust me there is already
-enough of that with other topics. Giving the option of having sugov as a
-module doesn't prevent us from making it a default for a few arches, so
-I think there is ground for an agreement!
+--XigHxYirkHk2Kxsx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Cheers,
-Quentin
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl61W98ACgkQJNaLcl1U
+h9AkfQf/e/9GJz9qTkXY5cZVnaFer3RazGsHnLxJrdUop24aL0otGQdqY/HW1box
+mUooQnGc65yBNG12MO4fNjeylRqJEzLpmnawWYXmxCChD1OJDPC+kaHFOdddPGaO
+WGIviYxXXH5nOqF1nOgX65ZhnGwMv+LXMG8wUd6Gj4s0lbxWfgDV7A3LkQ+fTssK
+iVIAc0X0cmA/YYSpgyBERUM1GlBcve0ep1HGk1VUlvcgKyHOerCWfSatpt2Wy8Rx
+Ilory7thQ+weCvjC3y++s1kSSI46bKw+em0pr9nyfQVKjB2qTx6mhe/uKOT/YX3k
+VmPQuOnH4KQyGi1ea88uKzN+fK1VZQ==
+=7/MS
+-----END PGP SIGNATURE-----
+
+--XigHxYirkHk2Kxsx--
