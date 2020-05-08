@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F41C01CB3EC
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 17:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDCC1CB3F7
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 17:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbgEHPua (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 11:50:30 -0400
-Received: from mail-lf1-f48.google.com ([209.85.167.48]:35561 "EHLO
-        mail-lf1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726815AbgEHPua (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 11:50:30 -0400
-Received: by mail-lf1-f48.google.com with SMTP id x73so1799833lfa.2;
-        Fri, 08 May 2020 08:50:23 -0700 (PDT)
+        id S1726776AbgEHPvj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 11:51:39 -0400
+Received: from mail-lj1-f178.google.com ([209.85.208.178]:33247 "EHLO
+        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726767AbgEHPvj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 11:51:39 -0400
+Received: by mail-lj1-f178.google.com with SMTP id w20so2193667ljj.0;
+        Fri, 08 May 2020 08:51:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
         bh=tOutJD2xYvFGsgDuihS2J8o+BCj4hyrEHQq7i/QSsz4=;
-        b=N0TFUkL77onCmCjXTAWpfD4mdiPRJuldemKPojWe/lB6GEapm5BN1b5oxjU6hrN00N
-         2t5uHlpTIvS1FpP1bC6qEFnwNrPeBYag8X8FcqVvTCIltX/CPUlTbCtzDjwPMs3W1zDz
-         HzRmxhrnCDmiydbfBL/t/oNH4rT6KX1cEaLufOZDDcliN0iKu6zDCjyLaMs/eAa4C1E6
-         +EPOqyZExgItFfTNTiifJeKYEnSNtH+kR8hAYn6pw+7eg3bq4mZFmkVtMwKif3t0beWD
-         MOXYoNo7p1ipf5vGrr1fkdAth9m7i1j1whm89Gd4tnN0jCAQwpSbGHspTPYJBrUoQ0at
-         Vjug==
-X-Gm-Message-State: AOAM531WIp8tSGALqDGTcerLK1jEs1k0tC2FoXSgX/Z3L1meLOS7i5cd
-        Z5mywTOHLAgub1sTtinvOJQ=
-X-Google-Smtp-Source: ABdhPJzPeVQ0+nkphKjebk7xlaXNB2mnQgeb94HhNsypsEQ2WBKT0C3pOVocUn8gBYpDnR3HKSmxgQ==
-X-Received: by 2002:ac2:548e:: with SMTP id t14mr2346902lfk.136.1588953022047;
-        Fri, 08 May 2020 08:50:22 -0700 (PDT)
+        b=TNvSkwA0XBizakiYSqEA+cHc7+Isiuj8iXCuB+px2kTUm9lyx/KAU7r9aCDDO+j4JN
+         xKxUvrWgmAQXTJ/9Fub28BalcqJmsxG5Tq//iyvIZp9LqjSOFp9GDrBQ5Hs3o/XK6BfY
+         bJGNWcvw1iQ0UxnXzDDxFLxb7bOcj0iqXHst0kN2YKeV9NYbchwqzmE6QcaGg13iEUGr
+         kRjoGxd1wafvyJyiNjvY1YCppVi+zVyiwiuLpGMxDvGr1Bjhlro65wKGfzntGQ6z7RLy
+         LAANdnHymwqwuHK3KPw/CEliDIzGeQHqRZ56bK7H5mL7JEySPJxDsbMwqv+5WmxYfqjB
+         whuQ==
+X-Gm-Message-State: AOAM531OFA81i4uykU2HVbi9S/MfKPzEtbO3uGOWpMD6PbLZBK2/xf0z
+        LieLiTtkuHVB8V2K8ejZbpw=
+X-Google-Smtp-Source: ABdhPJwmhdxZM28yT06b6+5CuvI3P5/Zlvqn74KlSzZh6T27UschCQlimc51/88i+r2gMQRcaLf/gw==
+X-Received: by 2002:a2e:8949:: with SMTP id b9mr2238269ljk.108.1588953088030;
+        Fri, 08 May 2020 08:51:28 -0700 (PDT)
 Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id r12sm1439796ljc.12.2020.05.08.08.50.20
+        by smtp.gmail.com with ESMTPSA id f5sm1491808lfh.84.2020.05.08.08.51.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2020 08:50:21 -0700 (PDT)
-Date:   Fri, 8 May 2020 18:49:26 +0300
+        Fri, 08 May 2020 08:51:27 -0700 (PDT)
+Date:   Fri, 8 May 2020 18:50:40 +0300
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     lgirdwood@gmail.com, broonie@kernel.org, sre@kernel.org,
