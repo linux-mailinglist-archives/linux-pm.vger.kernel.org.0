@@ -2,128 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 066AE1CB234
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 16:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9201CB24F
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 16:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726751AbgEHOqQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 10:46:16 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:42456 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726689AbgEHOqP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 10:46:15 -0400
-Received: by mail-ed1-f68.google.com with SMTP id s10so1407053edy.9;
-        Fri, 08 May 2020 07:46:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XarHM7quPtL8Iwp9fTwswhgZUavH/ZpsvuGgVu5XAdQ=;
-        b=s/ZHhlAj71VgJ8NnezjZBWro4BmGv+kztSHzy9OaFeyxmgcg4yrKfs91ak7WS/rjF0
-         xq6ErTJk3IsxZP480DStFO9tOyhR38TvWShYjzdduYmpnf9kRbOjCNW6ehXLn6IdLex+
-         lBtONwzWDLu0Bw18ILlbuDoKvcL4t9BnN3mjLGvv6PADRb3IP8c+jNQaP8inW3HaQfTt
-         uSn7kGk0K37Tz9PW0jd82VNFOLI01l3hAt7R6jPZElr/PQqp1hqW8EIJBJDTa7a6+N4b
-         0ey3uHJFOh7tW3LO4Vr+mzwybi3GDTg1/k7RCEIoWQbAYCpwI8udTTyZgyUMc901yWP9
-         MK6w==
-X-Gm-Message-State: AGi0PuYEgz24/EQPsqpy32zYDKrXkaecLzIA9HmXl1iM+Lk4afrMFdGG
-        4esZFW1O41NnuZHbqtBLIkY=
-X-Google-Smtp-Source: APiQypJjIQQnYzAO+FSyQEz9WwVtWHbUUhLRrRKlBcmzLwDdJK0dXJ06g9EggDcxrDp7mWZKsB0M9g==
-X-Received: by 2002:a05:6402:1515:: with SMTP id f21mr2448831edw.370.1588949173380;
-        Fri, 08 May 2020 07:46:13 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.237])
-        by smtp.googlemail.com with ESMTPSA id a5sm289736edn.14.2020.05.08.07.46.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 08 May 2020 07:46:12 -0700 (PDT)
-Date:   Fri, 8 May 2020 16:46:10 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Bernard Zhao <bernard@vivo.com>, Kukjin Kim <kgene@kernel.org>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        opensource.kernel@vivo.com
-Subject: Re: [PATCH] memory/samsung: Maybe wrong triming parameter
-Message-ID: <20200508144610.GA5983@kozik-lap>
-References: <20200507114514.11589-1-bernard@vivo.com>
- <2eeb33f7-1acc-66bb-704a-b724fa0be0a8@arm.com>
+        id S1726776AbgEHOwQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 10:52:16 -0400
+Received: from foss.arm.com ([217.140.110.172]:49654 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726751AbgEHOwQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 8 May 2020 10:52:16 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1BF8F1FB;
+        Fri,  8 May 2020 07:52:15 -0700 (PDT)
+Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 048B93F305;
+        Fri,  8 May 2020 07:52:11 -0700 (PDT)
+References: <20200507181012.29791-1-qperret@google.com> <jhjftcbtoo6.mognet@arm.com> <20200508131508.GB10541@google.com>
+User-agent: mu4e 0.9.17; emacs 26.3
+From:   Valentin Schneider <valentin.schneider@arm.com>
+To:     Quentin Perret <qperret@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, sudeep.holla@arm.com, gregkh@linuxfoundation.org,
+        rafael@kernel.org, viresh.kumar@linaro.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, mcgrof@kernel.org, keescook@chromium.org,
+        yzaikin@google.com, fweisbec@gmail.com, tkjos@google.com,
+        kernel-team@android.com, Ionela Voinescu <ionela.voinescu@arm.com>
+Subject: Re: [PATCH 00/14] Modularize schedutil
+In-reply-to: <20200508131508.GB10541@google.com>
+Date:   Fri, 08 May 2020 15:52:07 +0100
+Message-ID: <jhjeerutr6w.mognet@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2eeb33f7-1acc-66bb-704a-b724fa0be0a8@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 07, 2020 at 04:42:46PM +0100, Lukasz Luba wrote:
-> Hi Bernard,
-> 
-> 
-> On 5/7/20 12:45 PM, Bernard Zhao wrote:
-> > In function create_timings_aligned, all the max is to use
-> > dmc->min_tck->xxx, aligned with val dmc->timings->xxx.
-> > But the dmc->timings->tFAW use dmc->min_tck->tXP?
-> > Maybe this point is wrong parameter useing.
-> > 
-> > Signed-off-by: Bernard Zhao <bernard@vivo.com>
-> > ---
-> >   drivers/memory/samsung/exynos5422-dmc.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-> > index 81a1b1d01683..22a43d662833 100644
-> > --- a/drivers/memory/samsung/exynos5422-dmc.c
-> > +++ b/drivers/memory/samsung/exynos5422-dmc.c
-> > @@ -1091,7 +1091,7 @@ static int create_timings_aligned(struct exynos5_dmc *dmc, u32 *reg_timing_row,
-> >   	/* power related timings */
-> >   	val = dmc->timings->tFAW / clk_period_ps;
-> >   	val += dmc->timings->tFAW % clk_period_ps ? 1 : 0;
-> > -	val = max(val, dmc->min_tck->tXP);
-> > +	val = max(val, dmc->min_tck->tFAW);
-> >   	reg = &timing_power[0];
-> >   	*reg_timing_power |= TIMING_VAL2REG(reg, val);
-> > 
-> 
-> Good catch! Indeed this should be a dmc->min_tck->tFAW used for
-> clamping.
-> 
-> It didn't show up in testing because the frequency values based on
-> which the 'clk_period_ps' are calculated are sane.
-> Check the dump below:
-> 
-> [    5.458227] DMC: mem tFAW=25000, clk_period_ps=6060
-> [    5.461743] DMC: tFAW=5, tXP=2 val=5
-> [    5.465273] DMC: mem tFAW=25000, clk_period_ps=4854
-> [    5.470101] DMC: tFAW=5, tXP=2 val=6
-> [    5.473668] DMC: mem tFAW=25000, clk_period_ps=3636
-> [    5.478507] DMC: tFAW=5, tXP=2 val=7
-> [    5.482072] DMC: mem tFAW=25000, clk_period_ps=2421
-> [    5.486951] DMC: tFAW=5, tXP=2 val=11
-> [    5.490531] DMC: mem tFAW=25000, clk_period_ps=1841
-> [    5.495439] DMC: tFAW=5, tXP=2 val=14
-> [    5.499113] DMC: mem tFAW=25000, clk_period_ps=1579
-> [    5.503877] DMC: tFAW=5, tXP=2 val=16
-> [    5.507476] DMC: mem tFAW=25000, clk_period_ps=1373
-> [    5.512368] DMC: tFAW=5, tXP=2 val=19
-> [    5.515968] DMC: mem tFAW=25000, clk_period_ps=1212
-> [    5.520826] DMC: tFAW=5, tXP=2 val=21
-> 
-> That's why in the existing configuration it does not harm
-> (the calculated 'val' is always >= 5) the board.
-> 
-> But I think this patch should be applied (after small changes in the
-> commit message).
-> 
-> @Krzysztof could you have a look on the commit message or take the
-> patch with small adjustment in the description, please?
-> 
-> I conditionally give (because of this description):
-> 
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
-Thanks for review.
+On 08/05/20 14:15, Quentin Perret wrote:
+> Hey Valentin,
+>
+> On Thursday 07 May 2020 at 22:34:17 (+0100), Valentin Schneider wrote:
+>> I'm curious; why would some Android device not want to roll with schedutil?
+>>
+>> When it comes to dynamic policies (i.e. forget performance / powersave, and
+>> put userspace in a corner), I'd be willing to take a stand and say you
+>> should only really be using schedutil nowadays - alignment with the
+>> scheduler, uclamp, yadda yadda.
+>>
+>> AFAIA the only schedutil-related quirk we oughta fix for arm/arm64 is that
+>> arch_scale_freq_invariant() thingie, and FWIW I'm hoping to get something
+>> regarding this out sometime soonish. After that, I'd actually want to make
+>> schedutil the default governor for arm/arm64.
+>
+> As in setting CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL=y in the arm64
+> defconfig? If so, you have my Acked-by already :)
+>
 
-I applied patch with CC-stable and adjusred commit msg.
+I'm actually thinking of making it the unconditional default for arm/arm64
+in cpufreq's Kconfig, following what has been recently done for
+intel_pstate.
 
-Best regards,
-Krzysztof
+>> I'm not opiniated on the modularization, but if you can, could you please
+>> share some more details as to why schedutil cannot fulfill its role of holy
+>> messiah of governors for GKI?
+>
+> I guess I answered some of that in the other thread with Peter, but all
+> in all I'm definitely not trying to make an argument that schedutil
+> isn't good enough here. I'm trying to say that mandating it in *GKI* is
+> just likely to cause unnecessary friction, and trust me there is already
+> enough of that with other topics.
 
+Right, I appreciate it must be an "interesting" tug of war. My own opinion
+has also already been expanded in the rest of the thread; i.e. we should
+strive to make schedutil good enough that folks don't feel like they still
+need to use ondemand/whatever frankengov. That said, even without GKI, I
+get that making some vendors change their already tested-and-tuned setup is
+an obstacle course in and of itself.
+
+> Giving the option of having sugov as a
+> module doesn't prevent us from making it a default for a few arches, so
+> I think there is ground for an agreement!
+>
+> Cheers,
+> Quentin
