@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 574A91CA98B
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 13:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5842B1CA99D
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 13:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbgEHL0a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 07:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
+        id S1726736AbgEHLc0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 07:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726618AbgEHL0a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 07:26:30 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B97AC05BD43;
-        Fri,  8 May 2020 04:26:30 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726636AbgEHLcZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 07:32:25 -0400
+Received: from merlin.infradead.org (unknown [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81001C05BD43;
+        Fri,  8 May 2020 04:32:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=i605eDMDNY8KyszY5v6QIxThK3xpDXQtG6gdo/y+ktg=; b=KLlSvJ6JY5ihQrVCCnT+wbVZgJ
-        z3wpGMlGDZpsLvpDv7HIafxPs1yngTfy6fULgy9QRhhHGASaQ06FQm2v8cmhOBEmkoK4/J7vVN8tp
-        aTZxlpudeb6U0tOfvdFCMTTE9KlxrTCbSnzfra1Mw059R2wKbxchrqwJkdQ7mtOG2M8prxNOqV8uJ
-        nM2eLo5j/vASGAmjQtDWqNyWzZvhepI6Htw9ExmaxYnAl8wIeAen3lA4X9GR1/W+OiWUkYHjkO2PN
-        Tp1j5aA81izfL94vE1bB4a6BMP6saHjBzm3isSsjsgyM/7dkfOKCas9GvS+LcA3VuauD1cpRS2xiB
-        SJaonrUQ==;
+        bh=NWlroRPhjKXWBXk+E3h0bugl1afjnkqbnRZaxRthnJY=; b=djTopVknrfMScTGAEreoTA7YRZ
+        oVxe/HCGGD8pXVy77wrHCrzjMNhEpHJ+Uu0Koet8yKnyHMTysGpWyls3CM5HDO+hviqfsUM53Q2lJ
+        O2C550g2AAOVcuDETBXlbuu5gWfCxm2Y6ro9uA5UtjpR/S1ak4/GSCefURk4HMcrF8USwjR/9/Fmy
+        UKYLe5Nx1pRBhj/SjdCmQDwTrUDpNiioc1yq9tH4s3S7C2X58DGtKnGZvJkbs76AabQFdP11IctOd
+        M52V2sDLzMwQ965nKGlufMhZaFy0pZuSN+3HmcIeLYV1nu8z/6M3P4JkgYIzNpj2r6vGypoe+VB1Y
+        S/H/Oc8Q==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jX18t-0000MQ-Ly; Fri, 08 May 2020 11:26:11 +0000
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jX1EG-0008Dt-28; Fri, 08 May 2020 11:31:44 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2D6B8301EFB;
-        Fri,  8 May 2020 13:26:09 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 305CB301DFC;
+        Fri,  8 May 2020 13:31:41 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1877B203ECDC2; Fri,  8 May 2020 13:26:09 +0200 (CEST)
-Date:   Fri, 8 May 2020 13:26:09 +0200
+        id 14DE82B8CAD85; Fri,  8 May 2020 13:31:41 +0200 (CEST)
+Date:   Fri, 8 May 2020 13:31:41 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Quentin Perret <qperret@google.com>, linux-kernel@vger.kernel.org,
+To:     Quentin Perret <qperret@google.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, x86@kernel.org, hpa@zytor.com, sudeep.holla@arm.com,
         rafael@kernel.org, viresh.kumar@linaro.org, juri.lelli@redhat.com,
@@ -46,44 +46,31 @@ Cc:     Quentin Perret <qperret@google.com>, linux-kernel@vger.kernel.org,
         mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
         fweisbec@gmail.com, tkjos@google.com, kernel-team@android.com
 Subject: Re: [PATCH 00/14] Modularize schedutil
-Message-ID: <20200508112609.GA5298@hirez.programming.kicks-ass.net>
+Message-ID: <20200508113141.GB5298@hirez.programming.kicks-ass.net>
 References: <20200507181012.29791-1-qperret@google.com>
  <20200508081128.GM5298@hirez.programming.kicks-ass.net>
  <20200508103721.GA3860390@kroah.com>
+ <20200508111612.GA252673@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200508103721.GA3860390@kroah.com>
+In-Reply-To: <20200508111612.GA252673@google.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 08, 2020 at 12:37:21PM +0200, Greg KH wrote:
-> On Fri, May 08, 2020 at 10:11:28AM +0200, Peter Zijlstra wrote:
-> > On Thu, May 07, 2020 at 07:09:58PM +0100, Quentin Perret wrote:
-> > > One challenge to implement GKI is to avoid bloating the kernel by
-> > > compiling too many things in, especially given that different devices
-> > > need different things. As such, anything that can be turned into a
-> > > module helps GKI, by offering an alternative to having that component
-> > > built-in. This is true for pretty much anything that can be made
-> > > modular, including drivers as well as other kernel components, such as
-> > > CPUFreq governors.
-> > 
-> > The idea is to move to 1 governor, schedutil. Also, I abhor all the
-> > exports this thing does. Modules have no business touching most of that.
-> > 
-> > Look at every EXPORT you do and wonder ask yourself how you can abuse
-> > it. Modules are not a good thing, they're horrible pieces of crap.
-> 
-> Quentin, what is missing from schedutil that warrants the need for a
-> totally different governor?  Is there specific problems with the
-> existing ones or is this just an instance of "we wrote our own a long
-> time ago and never pushed it upstream" from various SoC companies?
+On Fri, May 08, 2020 at 12:16:12PM +0100, Quentin Perret wrote:
+> However, the point I tried to make here is orthogonal to that. As of
+> today using another governor than schedutil is fully supported upstream,
+> and in fact it isn't even enabled by default for most archs. If vendors
+> feel like using something else makes their product better, then I don't
+> see why I need to argue with them about that. And frankly I don't see
+> that support being removed from upstream any time soon.
 
-At the very least there's that interactive governor that's really
-popular with Android. But IIRC there's a whole scala of home-brew
-governors and tweaks out there.
+Right, it'll take a while to get there. But that doesn't mean we
+shouldn't encourage schedutil usage wherever and whenever possible. That
+includes not making it easier to not use it.
 
-And instead of enabling that crap, we should be discouraging it.
-Consolidate and kill the governor interface.
+In that respect making it modular goes against our ultimate goal (world
+domination, <mad giggles here>).
