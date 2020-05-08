@@ -2,158 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2239A1CB5B7
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 19:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D551CB633
+	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 19:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727788AbgEHRU2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 13:20:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53892 "EHLO mail.kernel.org"
+        id S1726817AbgEHRoJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 13:44:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40388 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727123AbgEHRU2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 8 May 2020 13:20:28 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        id S1726807AbgEHRoJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 8 May 2020 13:44:09 -0400
+Received: from earth.universe (dyndsl-037-138-187-059.ewe-ip-backbone.de [37.138.187.59])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 00160218AC;
-        Fri,  8 May 2020 17:20:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C1FDB208CA;
+        Fri,  8 May 2020 17:44:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588958427;
-        bh=avvo2D7+fnzhDfjNEeCtFHIBbh21vAReCLZQrBEIXUk=;
+        s=default; t=1588959848;
+        bh=4UYeO0qyEtD4knQ5iIGMA1jOB8Onqgq8lqWUo7oBasw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HsXhb2aBCFZ/aC/VKxnedL0ym7q4w56+RvbYMXOY9XJ1EYBvs4YZkJZnijkLq3c7L
-         yIaIp2ADpbwsQYYfKGkkbGpkdFscXaD8KPBnWAm2ZPZsj9r6viZA5cnVtBsYrZDimM
-         9kfUHNsJCjy6QSUBzZwhHzPHcvTd8IbYiG+wce5g=
-Date:   Fri, 8 May 2020 18:20:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, lgirdwood@gmail.com, sre@kernel.org,
-        brendanhiggins@google.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 00/11] Support ROHM BD99954 charger IC
-Message-ID: <20200508172024.GN4820@sirena.org.uk>
+        b=O0OG+NGYN1jtt6d0KABKC2oxJnu/6Z0z/iodf/dOBShz9MCQ/DkhN51CBDecEx8/t
+         imK0yeelRD/3vED8wnlEo2bZ1e+ozX9QfmOOf6hydokt9ZQgsOZ9eITIlh4ywemrJH
+         h3ZRg5sa1cvw07kxjEBOX2mtKPv+9NVhz8cvOayI=
+Received: by earth.universe (Postfix, from userid 1000)
+        id 639E23C08C6; Fri,  8 May 2020 19:44:06 +0200 (CEST)
+Date:   Fri, 8 May 2020 19:44:06 +0200
+From:   "sre@kernel.org" <sre@kernel.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "brendanhiggins@google.com" <brendanhiggins@google.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v12 09/11] power: supply: Support ROHM bd99954 charger
+Message-ID: <20200508174406.s7ijef67roaoutkx@earth.universe>
 References: <cover.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
+ <6d2f82459c5331fa7d27f41e6645a55cc1e44837.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
+ <7a6c4afc9caf5437567c520d5f50ecf540d1c303.camel@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6o78gXsyQHm68LY/"
+        protocol="application/pgp-signature"; boundary="n2n64qp3gm6ara7d"
 Content-Disposition: inline
-In-Reply-To: <cover.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
-X-Cookie: Give him an evasive answer.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <7a6c4afc9caf5437567c520d5f50ecf540d1c303.camel@fi.rohmeurope.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---6o78gXsyQHm68LY/
+--n2n64qp3gm6ara7d
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 08, 2020 at 06:38:17PM +0300, Matti Vaittinen wrote:
-> Please note that this series should be applied to two trees. Patches
-> 1-4 (or 1-5 as suggested by Sebastian) should go to regulator tree.
-> Perhaps Mark can provide an immutable branch to Sebastian? Rest of the
-> patches can then go to power-supply tree.
+Hi,
 
-The following changes since commit 0e698dfa282211e414076f9dc7e83c1c288314fd:
+On Fri, May 08, 2020 at 03:59:18PM +0000, Vaittinen, Matti wrote:
+> On Fri, 2020-05-08 at 18:50 +0300, Matti Vaittinen wrote:
+> > The ROHM BD99954 is a Battery Management LSI for 1-4 cell Lithium-Ion
+> > secondary battery intended to be used in space-constraint equipment
+> > such
+> > as Low profile Notebook PC, Tablets and other applications. BD99954
+> > provides a Dual-source Battery Charger, two port BC1.2 detection and
+> > a
+> > Battery Monitor.
+> >=20
+> > Support ROHM BD99954 Charger IC.
+> >=20
+> > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>=20
+> Huh. I shouldn't do work at the Friday evenings... It seems I did
+> accidentally send this patch twice. Hopefully it does not mess up the
+> series for you - I'd rather not resend this anymore... Please let me
+> know if I should do some corrective actions.
 
-  Linux 5.7-rc4 (2020-05-03 14:56:04 -0700)
+My mail system automatically drops mails with same Message-IDs :)
 
-are available in the Git repository at:
+-- Sebastian
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/linear-ranges-lib
-
-for you to fetch changes up to 60ab7f4153b6af461c90d572c31104086b44639f:
-
-  regulator: use linear_ranges helper (2020-05-08 18:18:13 +0100)
-
-----------------------------------------------------------------
-lib: Add linear ranges helper library and start using it
-
-Series extracts a "linear ranges" helper out of the regulator
-framework. Linear ranges helper is intended to help converting
-real-world values to register values when conversion is linear. I
-suspect this is useful also for power subsystem and possibly for clk.
-
-----------------------------------------------------------------
-Matti Vaittinen (4):
-      lib: add linear ranges helpers
-      lib/test_linear_ranges: add a test for the 'linear_ranges'
-      power: supply: bd70528: rename linear_range to avoid collision
-      regulator: use linear_ranges helper
-
- drivers/power/supply/bd70528-charger.c  |  10 +-
- drivers/regulator/88pg86x.c             |   4 +-
- drivers/regulator/88pm800-regulator.c   |   4 +-
- drivers/regulator/Kconfig               |   1 +
- drivers/regulator/act8865-regulator.c   |   4 +-
- drivers/regulator/act8945a-regulator.c  |   2 +-
- drivers/regulator/arizona-ldo1.c        |   2 +-
- drivers/regulator/arizona-micsupp.c     |   4 +-
- drivers/regulator/as3711-regulator.c    |   6 +-
- drivers/regulator/as3722-regulator.c    |   4 +-
- drivers/regulator/axp20x-regulator.c    |  16 +--
- drivers/regulator/bcm590xx-regulator.c  |   8 +-
- drivers/regulator/bd70528-regulator.c   |   8 +-
- drivers/regulator/bd71828-regulator.c   |  10 +-
- drivers/regulator/bd718x7-regulator.c   |  26 ++--
- drivers/regulator/da903x.c              |   2 +-
- drivers/regulator/helpers.c             | 130 ++++++++---------
- drivers/regulator/hi6421-regulator.c    |   4 +-
- drivers/regulator/lochnagar-regulator.c |   4 +-
- drivers/regulator/lp873x-regulator.c    |   4 +-
- drivers/regulator/lp87565-regulator.c   |   2 +-
- drivers/regulator/lp8788-buck.c         |   2 +-
- drivers/regulator/max77650-regulator.c  |   2 +-
- drivers/regulator/mcp16502.c            |   4 +-
- drivers/regulator/mp8859.c              |   2 +-
- drivers/regulator/mt6323-regulator.c    |   6 +-
- drivers/regulator/mt6358-regulator.c    |   8 +-
- drivers/regulator/mt6380-regulator.c    |   6 +-
- drivers/regulator/mt6397-regulator.c    |   6 +-
- drivers/regulator/palmas-regulator.c    |   4 +-
- drivers/regulator/qcom-rpmh-regulator.c |   2 +-
- drivers/regulator/qcom_rpm-regulator.c  |  14 +-
- drivers/regulator/qcom_smd-regulator.c  |  78 +++++------
- drivers/regulator/rk808-regulator.c     |  10 +-
- drivers/regulator/s2mps11.c             |  14 +-
- drivers/regulator/sky81452-regulator.c  |   2 +-
- drivers/regulator/stpmic1_regulator.c   |  18 +--
- drivers/regulator/tps65086-regulator.c  |  10 +-
- drivers/regulator/tps65217-regulator.c  |   4 +-
- drivers/regulator/tps65218-regulator.c  |   6 +-
- drivers/regulator/tps65912-regulator.c  |   4 +-
- drivers/regulator/twl-regulator.c       |   4 +-
- drivers/regulator/twl6030-regulator.c   |   2 +-
- drivers/regulator/wm831x-dcdc.c         |   2 +-
- drivers/regulator/wm831x-ldo.c          |   4 +-
- drivers/regulator/wm8350-regulator.c    |   2 +-
- drivers/regulator/wm8400-regulator.c    |   2 +-
- include/linux/linear_range.h            |  48 +++++++
- include/linux/regulator/driver.h        |  27 +---
- lib/Kconfig                             |   3 +
- lib/Kconfig.debug                       |  12 ++
- lib/Makefile                            |   2 +
- lib/linear_ranges.c                     | 241 ++++++++++++++++++++++++++++++++
- lib/test_linear_ranges.c                | 228 ++++++++++++++++++++++++++++++
- 54 files changed, 768 insertions(+), 266 deletions(-)
- create mode 100644 include/linux/linear_range.h
- create mode 100644 lib/linear_ranges.c
- create mode 100644 lib/test_linear_ranges.c
-
---6o78gXsyQHm68LY/
+--n2n64qp3gm6ara7d
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl61lNgACgkQJNaLcl1U
-h9Cg+Af9GYU8vLIXNEIgi10KBZaimF8/PfT9BHGYO+SiKhL8KxTsHBMKEANxDois
-M9cjt5K/HneS+UK/Ki1MPCq2+LPop+5sQq0zrh6iCyzM5C1bNpLA9Pdb5WNyEB2P
-ctfJcXwNQEdhmYgBM0mw7+Vr9TVoUqc63mpU/0LDZr3vOKXYkoR3I6zrFjgZ3QTY
-Xuo0Pl1gpPbmPOQsXpzHcxGbvX6Pse29wL9WfVJ3nJuzdXkPsuUIeXoHuqTQ5v/y
-/S0pHliaENCTheW1wDg4JPdCp/G0Ca19xxZXJs6pn9yUUWRIDeibnT4k60N+fnhT
-yPg0RIckqQr5pWcnbaxtOwO2xwFfjg==
-=ETMU
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl61mlMACgkQ2O7X88g7
++pqhvg//WO/Jg8dJ5AymeVFgGWRbClG2POO3n0bcU9wHFcA3nz/oMjprXvB+AKmx
++gQ8Ilr8a6TOaRSfiQbTmY5M4ylRicrTv5+0yNTT9t4Uw4W2xror4pmlhhxTyc9F
+MK/2RBQkLoGo8uOs9eLp2DMA8z6YVMdhT9Q1y5Me5jQloOHtA8Hn7pcxgVwGj2uT
+SEmwKpBP0uoMhhxVer8hoTG8Xv27elpx0mC/vmxfOSRbaWIs60xrk1f4X8N4P+nn
+7O2p+PT4W7LMOcEAcnSFD/SJe2Adtb46V6F646DhZFCG2w6+sllBt7yN1uVD9TtU
+z0D8Y846dBtAcJ+XczzFwInssYrTr98QxEXBFRtW36IcmoSdjaANs3KMfyqupG90
+wijpueDSN7TlQ4G4aO0z9f24p5fv08TkzrY1EyHG3w9M4o4ncQV0OjWN50TpRrRY
+hNSa4e0/6kUCM2ium62IYqd7MQmeBmkFJnh0Y3XEB6kSlk/YVyRdsms9QupE3Pdn
+MOpEQJvwhFnFuUzUPiRR/IpOb1vqLUN31ankZNDza5AeK/g78iMQ9jEoVxNzAQIK
+F+0bm0dTrab6kU/8DA0X5RwPnjF730SsK2puRSgeP4oy0bk8k2Egnsq7m37ZHQY/
+jr08qOAdb1XgtpeCPKok5HpFHKjoWbK3vv7gtXP5hjTOzQPkVIA=
+=qAKx
 -----END PGP SIGNATURE-----
 
---6o78gXsyQHm68LY/--
+--n2n64qp3gm6ara7d--
