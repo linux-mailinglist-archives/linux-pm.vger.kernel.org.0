@@ -2,87 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BE61CC446
-	for <lists+linux-pm@lfdr.de>; Sat,  9 May 2020 21:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B466F1CC548
+	for <lists+linux-pm@lfdr.de>; Sun, 10 May 2020 01:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728171AbgEIT4y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 May 2020 15:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727938AbgEIT4y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 May 2020 15:56:54 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F00DC061A0C
-        for <linux-pm@vger.kernel.org>; Sat,  9 May 2020 12:56:54 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id w6so4717716ilg.1
-        for <linux-pm@vger.kernel.org>; Sat, 09 May 2020 12:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=1TGVQpNFmxPokiSkHbYv59AhWmEUxZVocgOxVRedEyc=;
-        b=tqjkeQvEYAZOmHNSm7kAp3bbKLN4eM/4X8/IgdRJR7vqg06JabjncUXGPIIYMctbYc
-         CQFKMbjrzA7fvBdcNgLFWKg5C2zOtJgGul3uiWoM8Aac0HXkVoWRSc4J8rbDiiSsyWuC
-         9IJhaHCrWmC3/kYwYqYKmYRw5C7WIxbuF2d5yEc+J+7OXs/O78NvB3wFvJitI1adSk5q
-         ha3ilxh0IH9nStqs1IL7doXJ/OwJHuW7TpmvHQ6pi6THcuI6AF6oEb13FvnttctogoZI
-         0jVHAdzdrqkTE3qc3LzNzp3ztLCKVuGpL29l5yQcuf8T37V7yrZU8mBlOSHImAQj6sZi
-         ou4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=1TGVQpNFmxPokiSkHbYv59AhWmEUxZVocgOxVRedEyc=;
-        b=fMFo+dtYxULqddPhAj3oxwujCPEoKIVIoaK18PyLGUxVQFIY3bMYh8SPOvRv3NPbf5
-         uQAehMYm5e7XY+Clr7gQV8seolW1RMOdems3uB0BU2CXSmvGJUQXoG2gSi9l03V4KscT
-         u39JGKkWX6HOlkQdVh0EuaAcq6XYGdthSRsZDX1iBtDQfDgy9zDkvhbCUMr2CoajB7po
-         +OX+FQ9FHjJ7nGyc40jb+iQ9iDyB1qwHlkPPoI6YkGFaBpU5Y0HlUugN+RIcXqB8xib2
-         poameSPpepWtysafp5JSjUMCBoeGx+nbk8QZD3U0mke/4XEUjM9qiSmBY+p4ggDTf6G6
-         iCQQ==
-X-Gm-Message-State: AGi0PubUqVwFBWps89X0B05nSTEoOTYJyeO9DkrgGykcPKyziNh4ppiL
-        Xi95oMAGbDAc7NewGJv70QwuFhV21mgIw8svrfc=
-X-Google-Smtp-Source: APiQypKFdaBfeAb/HEJhn/ChACQGkbVwyZU/fZy/+UBk2o8NxVidB4ilA6EAZAR582CAb7SZ/bvaoB/a3hjJxrlcqvY=
-X-Received: by 2002:a92:507:: with SMTP id q7mr3652870ile.150.1589054213457;
- Sat, 09 May 2020 12:56:53 -0700 (PDT)
+        id S1728522AbgEIXmH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 May 2020 19:42:07 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:34152 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726955AbgEIXmG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 May 2020 19:42:06 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id AF6FE2A01A7
+Received: by earth.universe (Postfix, from userid 1000)
+        id A76D43C08C7; Sun, 10 May 2020 01:42:01 +0200 (CEST)
+Date:   Sun, 10 May 2020 01:42:01 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hongbo Yao <yaohongbo@huawei.com>
+Cc:     chenzhou10@huawei.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH -next] power: reset: ltc2952: remove set but used variable
+Message-ID: <20200509234201.md2veh4cxkdwoj2h@earth.universe>
+References: <20200509103611.29551-1-yaohongbo@huawei.com>
 MIME-Version: 1.0
-From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date:   Sat, 9 May 2020 21:56:42 +0200
-Message-ID: <CAJiuCce9ZxeXnQzEW_3dbBDNZmmtWmKeft0hX+F9+SYu80NU=Q@mail.gmail.com>
-Subject: Question about OPP regulator for Panfrost Devfreq
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ocomalmwbouxc3aq"
+Content-Disposition: inline
+In-Reply-To: <20200509103611.29551-1-yaohongbo@huawei.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear OPP Maintainers,
 
-I'm working on adding DVFS support using the generic OPP framework to Panfrost.
-I'm using the dev_pm_opp_set_regulators() to let OPP framework get and
-manage the regulator.
-https://github.com/clementperon/linux/commit/be310c37b82010e293b7f129ccdcb711a2abb2ce
+--ocomalmwbouxc3aq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-However it seems that this function only get the regulator but never enable it.
-This result that the regulator is disabled later by the
-regulator_late_cleanup().
+Hi,
 
-In a previous version I let the Panfrost driver to get and enable the
-regulator in addition to OPP but this create a conflict in debugFS
-because the regulator is "get" two times.
+On Sat, May 09, 2020 at 06:36:11PM +0800, Hongbo Yao wrote:
+> Fixes gcc '-Wunused-but-set-variable' warning:
+> drivers/power/reset/ltc2952-poweroff.c:97:16: warning: variable
+> =E2=80=98overruns=E2=80=99 set but not used [-Wunused-but-set-variable]
+>   unsigned long overruns;
+>=20
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Hongbo Yao <yaohongbo@huawei.com>
+> ---
 
-Quick discussion with Mark Brown point that we should try to avoid
-getting two times a regulator as it can create "confusion in your code
-with two different parts of the device controlling the same supply
-independently."
+Thanks, queued.
 
-Is my understanding correct? If yes,
-Should we not add a call to regulator_enable() in the
-dev_pm_opp_set_regulators() ?
+-- Sebastian
 
-My WIP branch :
-https://github.com/clementperon/linux/commits/panfrost_devfreq
+>  drivers/power/reset/ltc2952-poweroff.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/reset/ltc2952-poweroff.c b/drivers/power/reset=
+/ltc2952-poweroff.c
+> index e4a0cc45b3d1..318927938b05 100644
+> --- a/drivers/power/reset/ltc2952-poweroff.c
+> +++ b/drivers/power/reset/ltc2952-poweroff.c
+> @@ -94,7 +94,6 @@ static enum hrtimer_restart ltc2952_poweroff_timer_wde(=
+struct hrtimer *timer)
+>  {
+>  	ktime_t now;
+>  	int state;
+> -	unsigned long overruns;
+>  	struct ltc2952_poweroff *data =3D to_ltc2952(timer, timer_wde);
+> =20
+>  	if (data->kernel_panic)
+> @@ -104,7 +103,7 @@ static enum hrtimer_restart ltc2952_poweroff_timer_wd=
+e(struct hrtimer *timer)
+>  	gpiod_set_value(data->gpio_watchdog, !state);
+> =20
+>  	now =3D hrtimer_cb_get_time(timer);
+> -	overruns =3D hrtimer_forward(timer, now, data->wde_interval);
+> +	hrtimer_forward(timer, now, data->wde_interval);
+> =20
+>  	return HRTIMER_RESTART;
+>  }
+> --=20
+> 2.20.1
+>=20
 
-Thanks for your help,
-Clement
+--ocomalmwbouxc3aq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl63P8AACgkQ2O7X88g7
++ppUHhAAlOhSJZFvAj8R7L0WLTSsWZmZ5QflRas0lCV7jYwESpyhyDxaHSxelnF8
+l/DDBHSS90Vn9qSzFQw7uTrso6jAXUHYnLc0zLYWaXbmO07OoENeE5pfkh56j5FU
+x7f+NSnC/u5bDJIXy/0v77DUmhy6S2OduZUrxH3C0EvT3cuHbphGMPKa/Rcdny+o
+dfZH77x4WjQsFZZr8gdkaDWybgrFBrZZ1BH7WO8+SBVxJp8C/7RJqDyPT1ut8EnZ
+9d0M4Ii3ZJ7xpcDsLIaEJmGtvB6u3ZXTiYZXkUyTSB57uyPcQf6Gsva1CZKb26nO
+gYAJmZW1VkZrdT7tOeySzLGBND+HWtYEbhgPTfWuojT5Ye0yydDs4gjzClCl7jfX
+BHz2G0sh3rG4fcB9CoiZymN8tbf+L+wiiwLUBTXw/7913ENCoROiy3lU5fY+vEwM
+rCKsXrMXrCeuEkmRwXsr4WTRm13gBwzX6DQ6LzwCWx2RoV9RhAaASldtKw1tx2mR
+5SUA23GJx/iluisRYSrM1kSLy9FFw0NIG25ZulfUWCIoQEqJF2CdyA02ITyNO7JO
+4rbbAPhBiBBAWwRl8c7KBIKCvtNkLWPufzG1vTiOJ2y5V96AFgzgCKmkR/HBiwPK
+P9zz7sSP7PNugxmgrgHrf3yOgRbKOZi2+S5MiJgmPTWJjvq8XQA=
+=07TS
+-----END PGP SIGNATURE-----
+
+--ocomalmwbouxc3aq--
