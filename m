@@ -2,106 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9834D1CBD12
-	for <lists+linux-pm@lfdr.de>; Sat,  9 May 2020 05:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AE31CBE4E
+	for <lists+linux-pm@lfdr.de>; Sat,  9 May 2020 09:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728575AbgEIDvX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 23:51:23 -0400
-Received: from mail-vi1eur05on2089.outbound.protection.outlook.com ([40.107.21.89]:6188
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726415AbgEIDvX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 8 May 2020 23:51:23 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YEQJyFCMiXMZ4TG/KxboPyLA66+xKEgFV9cyNED4KIO68vuh4ygJL4npNQPZNewMimCeNvspLm66+gbRwKyv7JBWDsGzH6QMp4496OKD+ZnCiZaeRAXNhRL7sn1E3qnpO/N5IvAAjO6cZ3lIZBcuXsm3d/wqw17vcIkou3qj/SxgPox5PO+4BwUS6oqfABPbwGo20rRNzC/U/jpB34H4jvGzg/RuUwxJOELMSPyiz/m+eZz2Utj5XhcWbyGDjJl6Gf/Rf0FJGI5nMv5fIUaLNdvOXiHDqR6lUJNBJrI6oxamCoDUiYc634SXhnEm9MNhaw+hf2ESvTd2irJoBwJ6jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/DKw5NJaPrlON8tfFVdPcd3XhjIarmoMZ3zdAUVzwa4=;
- b=nGLcRkZ8z/pQsaOmSzp+2RXsgr4x+t+a0HpP7UAkssW5pwzrARTpZtKTz0PgRhl7MEm0tQZU0/PLMQz82b1DEFDIDTOcFmV44Gyfdu62A9DFl7WbNL9K4UgT7voam75Sau62InZOMxTS3jsNstGiFf+lUeamL6+XjHLG+3tTp6btkAZ0H45oZZ8UTfpiCTZpbU6MHQtXxqWqvQWvLTT8T4pc/O2hTOlo9ZKn5bInhtKGblRRpaOYXlCfhOHTat02UHSn/wrsng0/TvnpIMA3AUlT59KTJzyOJ2n+Gr+TmfjZJ3l/krJp5mZViqviAJ4NTAnrTFgbhsXvCRZr1r/NIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/DKw5NJaPrlON8tfFVdPcd3XhjIarmoMZ3zdAUVzwa4=;
- b=UXMb0PIef1Kza28lxicKeSqK9Cmzd5+xjdWy73boJEiyelFQEgpZVItnQ33WmsL5k2gDehCla/fUYT2vShyu97T5y6AZsmLNEJwTxCDQqYSeXOiuiiRcqGlzueZYY6gYc8P4/rVPUzBe1eLrTbDK0IXCXxqwabq3cYkGIFXFoEA=
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
- by AM6PR04MB4310.eurprd04.prod.outlook.com (2603:10a6:209:3f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.28; Sat, 9 May
- 2020 03:51:19 +0000
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::3c6c:a0e9:9a4e:c51d]) by AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::3c6c:a0e9:9a4e:c51d%7]) with mapi id 15.20.2979.033; Sat, 9 May 2020
- 03:51:19 +0000
-From:   Aisheng Dong <aisheng.dong@nxp.com>
-To:     Wei Yongjun <weiyongjun1@huawei.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Leonard Crestez <leonard.crestez@nxp.com>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        Hulk Robot <hulkci@huawei.com>
-Subject: RE: [PATCH -next] interconnect: imx: Fix return value check in
- imx_icc_node_init_qos()
-Thread-Topic: [PATCH -next] interconnect: imx: Fix return value check in
- imx_icc_node_init_qos()
-Thread-Index: AQHWJa29IiyE1sVgb0mWjOX1icTJP6ifHq6g
-Date:   Sat, 9 May 2020 03:51:19 +0000
-Message-ID: <AM6PR04MB4966FFE3C487D217A91B070280A30@AM6PR04MB4966.eurprd04.prod.outlook.com>
-References: <20200509030214.14435-1-weiyongjun1@huawei.com>
-In-Reply-To: <20200509030214.14435-1-weiyongjun1@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: huawei.com; dkim=none (message not signed)
- header.d=none;huawei.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [218.82.155.143]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: c2e96bff-e72d-4dd5-66da-08d7f3cc3ba5
-x-ms-traffictypediagnostic: AM6PR04MB4310:|AM6PR04MB4310:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR04MB4310A3330355AEFA6DEAA26A80A30@AM6PR04MB4310.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2582;
-x-forefront-prvs: 03982FDC1D
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zRgs61Ry4FsLLaaxZMUZjlydhcnkUS4CIz8gMQR8woVeBpL5u8vnpTpjkulfQ986IREA7qYkm+FoDoikJwb3cHyejW2wETEhGoGEcbAVHc4/wl481NDFxr+r4dFPgNtVOvr0YUJkMpkmQZff4mYyRdQqztVyflX/i/QYB4foug+ZE95spY4VKLAYie6FXxRGAeHNS+gEvB6ADoQlYqLOVEqM8bUA9t3XAHJrq+hPl0J3g/1jRdYutVxLLeReqiAouHy4ZCfAd7LWyXwfqZMpoLFH2x4uJhlWCBjeYo4gXhgoQ9wOsT4G3v35mldItlEAoiuhKZHOkoDE5XkxkWIPvdK2Kur21rj+vSPb3oQKTealJfa7otfV8VgVMxIoIXfylKAs6tqJ8fnYebq/tiLT51pfJ+uX4+hLUEztna+UEgS+kk6OMBIsLo1K9pdoKnoY4jxxEeS4ppFDBnFqninHzwVt6eW9+zsMJH/s98zTVwR/2tISeYRUzvEB+Nb8qzdynL7z/TOITH+rRVhCTI3bHQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(136003)(39860400002)(346002)(376002)(396003)(33430700001)(86362001)(64756008)(66476007)(478600001)(66556008)(6506007)(52536014)(76116006)(33440700001)(4326008)(66946007)(316002)(7696005)(44832011)(5660300002)(4744005)(66446008)(186003)(8936002)(55016002)(6636002)(26005)(2906002)(54906003)(71200400001)(7416002)(33656002)(110136005)(8676002)(9686003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: gbcHeIFuhjU1Rus+s8OQXmRAYE3B6jE41einC6fyBTjJ8LYuFdtqEOE2thRgFkMjFCja5oZqMGlly4SUto1O1eYrS6F7UMJLE3Tz/Ju49usi9pLRFuEr82z00I78wU1l8qwwjVCvgJQPhcQ40eTvRALG2JjVFkFRYUTVLuKoHZnc5uSAfbfmQqUpfZLtbqPKqsS7ZfqmthKs7CV2xlaXazxjxzFdHxZDkN7mF3kSJJQov6dwAEeOxmqDi4J6d9QCq88zMQlcZ4TmZ/d/eTU8zvbS8FnQGaDGj94c+URURD/3By0xbRotBs5MY2xAm2r9sueWIjM92LiJOCPZt807vpIJovoGlaNZFBtUH6zeKoRpeGtrQDgukNwbLJHazVntxp4X7PcUmVz4OG20ZpS3rIEMplgCFle2iuUHLu9fufN4702LSSUvwApdRdHf74G2NqZizehlu6wNaCWbAcyXXoHZNUbDdocdtoTFRFL2v0ucUwdwNQWvvTmHKL2eR6oG
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1729009AbgEIHDG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 May 2020 03:03:06 -0400
+Received: from mout.web.de ([217.72.192.78]:51543 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728471AbgEIHDF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 9 May 2020 03:03:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1589007770;
+        bh=kDJTCtXtYcbpkL8hwDBkWtiOYtx0rgVWacu2fHE5bgs=;
+        h=X-UI-Sender-Class:To:Cc:Subject:From:Date;
+        b=magyDjl8pWAeZ96slZ6RUzMA0AsIVXbLL2gMZykCe+0RbUKRz2DMgzfQ/uoNAMEn6
+         0Co31R+o2QQMmv55caPaxnwIFOvhJZxBfh0dbgpJeK3LmY1zYpHrfDwNbV0vX+eOeY
+         g1DrkAXXsF2EGcUSY4DmsGWFji0Y8AWLVz3Sv2mg=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.2] ([78.48.147.78]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MGxQX-1jJrFT33wp-00E5xg; Sat, 09
+ May 2020 09:02:48 +0200
+To:     Hongbo Yao <yaohongbo@huawei.com>, linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Chen Zhou <chenzhou10@huawei.com>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCH] power: reset: ltc2952: remove set variable but unused
+ value
+From:   Markus Elfring <Markus.Elfring@web.de>
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+Message-ID: <e40a971a-68b8-8d63-41d1-2617763fb042@web.de>
+Date:   Sat, 9 May 2020 09:02:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2e96bff-e72d-4dd5-66da-08d7f3cc3ba5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2020 03:51:19.4648
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LKPlzNSvPrJ7lIE/2UgcXQvx7CKDVJhqk9SZ0ohueLCfjNUM+Nc7rir2BdjiOvZbg6xKt+g1O7GXrT5lDHOctQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4310
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:5JyDbG3bZgXKd8ldDbOvYEuCINmvvP7IenG8Byblf/EnXDgURO1
+ rK/PisbhNrDJxj8JXydUHKe/zX5dMQ8nKmpIUy61FQPo9eTXG949oW358p3pa3Y3w3AyAWB
+ +pBIg8uBGa7GUGiEvxO2/2vOWNhgHh28SB9FOSuc/4Aa2Eah/uxr+KeR86l2yVEFOa+HrxE
+ WK/xM1vxRQFP6esAucBgw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WMeo8hbqx+Q=:2YDgLNqRWUU38a+EQKoLcm
+ NiLuIfBQ1krB03Z0pPVpCOAXlxE9NOhNOMjHSFdQSFfi5Xm3icZLDbn3mrf2xjPAdKpGlkE6v
+ QMMpbAzNlS1Pq88K8E6jSv68ixX/FgzhDkK0KbzMhRdMNwlZPFvB35XnfAMWZpafcMKVeQiGQ
+ T0fO/aZILLhTsyvxzzSQH9KqM3udg1AL34RwznTU09Z4/tcanhdhTaLiKzQOY69exGH0Ow8pU
+ uMloq0ShWrgamhyAlmanYzMn6qZiQFQjPcuThTmRjQPOwXA28t47slh33P1s7etbZ44dLgj+1
+ GEYPhzvA4g7JxMw19UM9pHgWK4lo48GxL8AC43FTfTkC7hHc0AsCktQLsTFVwvrphbN96DhM9
+ KR3s/CSncCJKtsopUOWhEHbNOdHavtiaWSCGKUcXZR8/Z6/cQW+CsgrXDtX6yMPdaMsb+aOkb
+ UoRBh9zWUfad3iS9PMQzB67UtYQJLk/13ysILDZOymS8gOKyrL81EhI2EPdI38bdy9kRYswAF
+ wh2h+vEjqrgyxJ7CdVFzvbNVjH89DsA2toeFYDEfS4/1qcGdEi1ts6EfRh8hVMn+Wzqlh3RlI
+ Uo/hBlHzxiBvscS5YFcKtsBz74jXwUYBpBdesyil3cAAqsao/vwPsstW163iA2LS+67utmaWp
+ QaGx1eMHqV/JvBvIoGppTcVVdZmnq7EIZ4ZkBNXW9juJEoCzwea5By7mZoCoVq8F2Y1z/+f85
+ 8r45Be44qFOFv1xjfeldL8CF4ZpqaRS7F422lq0iJ4f6h9V2ILBFCzb8/NL+VdvadOl0vlZRQ
+ LMcX1btK/BV6MAFm5YJ63fsUE9vqLLLaQ9JW9e+eeQFe6KkoY+t2vHmjt7cck7PFWI5LRA9M3
+ cc1eD5vbXF6VT2Rb+u2wzpr4ix7lD9Bwq9XePUZlRjGZjwHB2SGI8rfXRVvgKg1uakuSpVPEq
+ 47Y8VrJh+sEIB3C4ZBnRIbEhu9+D/uyD+HMPqNi3Mfye+D6VDJJdfOotq6gu+pWaivCT4DGXt
+ lljVVC0lAqQ0BlFWlRZ2g6W3nRvV0Qhwlmol+ph5B+2LvevtjPL9/ans6jjDZD6BWI1Gw183W
+ FcOEV076JXxOsv3PGoD2xLozWwp2LpEWocbjO033UYPbtjDDwozCCMXXGgChpmhhPhourLcD8
+ Kf4iCOerx4sx3NaZ624F4K28HOrv5ukD8ZvTPMKof1L2/vLQ/MbY4UxZRd1xqdGSfjiqiE+33
+ As2RXX13J0rxS31YH
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiBGcm9tOiBXZWkgWW9uZ2p1biA8d2VpeW9uZ2p1bjFAaHVhd2VpLmNvbT4NCj4gU2VudDogU2F0
-dXJkYXksIE1heSA5LCAyMDIwIDExOjAyIEFNDQo+IA0KPiBJbiBjYXNlIG9mIGVycm9yLCB0aGUg
-ZnVuY3Rpb24gb2ZfcGFyc2VfcGhhbmRsZSgpIHJldHVybnMgTlVMTCBwb2ludGVyIG5vdA0KPiBF
-UlJfUFRSKCkuIFRoZSBJU19FUlIoKSB0ZXN0IGluIHRoZSByZXR1cm4gdmFsdWUgY2hlY2sgc2hv
-dWxkIGJlIHJlcGxhY2VkIHdpdGgNCj4gTlVMTCB0ZXN0Lg0KPiANCj4gRml4ZXM6IGYwZDgwNDg1
-MjVkNyAoImludGVyY29ubmVjdDogQWRkIGlteCBjb3JlIGRyaXZlciIpDQo+IFJlcG9ydGVkLWJ5
-OiBIdWxrIFJvYm90IDxodWxrY2lAaHVhd2VpLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogV2VpIFlv
-bmdqdW4gPHdlaXlvbmdqdW4xQGh1YXdlaS5jb20+DQoNClJldmlld2VkLWJ5OiBEb25nIEFpc2hl
-bmcgPGFpc2hlbmcuZG9uZ0BueHAuY29tPg0KDQpSZWdhcmRzDQpBaXNoZW5nDQo=
+> Fixes gcc '-Wunused-but-set-variable' warning:
+> drivers/power/reset/ltc2952-poweroff.c:97:16: warning: variable
+> =E2=80=98overruns=E2=80=99 set but not used [-Wunused-but-set-variable]
+
+I suggest to improve also this commit message.
+
+* Can it be helpful to replace the word =E2=80=9CFixes=E2=80=9D by the tex=
+t
+  =E2=80=9CAn issue was pointed out by the compiler.=E2=80=9D?
+
+* How do you think about to add the wording =E2=80=9CThus delete the menti=
+oned variable.=E2=80=9D
+  to the change description?
+
+* The value of an assigned variable was not reused in this function implem=
+entation.
+  Should this detail be better represented in the final commit subject?
+
+* Would you like to add the tag =E2=80=9CFixes=E2=80=9D?
+
+Regards,
+Markus
