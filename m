@@ -2,96 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 652361CBEDF
-	for <lists+linux-pm@lfdr.de>; Sat,  9 May 2020 10:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773631CBF4D
+	for <lists+linux-pm@lfdr.de>; Sat,  9 May 2020 10:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727815AbgEIIXd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 May 2020 04:23:33 -0400
-Received: from smtp13.smtpout.orange.fr ([80.12.242.135]:35658 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725930AbgEIIXd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 May 2020 04:23:33 -0400
-Received: from localhost.localdomain ([93.22.149.123])
-        by mwinf5d73 with ME
-        id cYPT2200N2fyvbx03YPU05; Sat, 09 May 2020 10:23:29 +0200
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 09 May 2020 10:23:29 +0200
-X-ME-IP: 93.22.149.123
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     milo.kim@ti.com, sre@kernel.org, anton.vorontsov@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH V2] power: supply: lp8788: Fix an error handling path in 'lp8788_charger_probe()'
-Date:   Sat,  9 May 2020 10:23:23 +0200
-Message-Id: <20200509082323.223884-1-christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.25.1
+        id S1726063AbgEIIoq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 May 2020 04:44:46 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:47368 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725989AbgEIIop (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 May 2020 04:44:45 -0400
+Received: from 89-77-60-66.dynamic.chello.pl (89.77.60.66) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id 30bfb3c741368213; Sat, 9 May 2020 10:44:42 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Chris Chiu <chiu@endlessm.com>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>
+Subject: [PATCH v2] ACPI: EC: s2idle: Avoid premature returns from acpi_s2idle_wake()
+Date:   Sat, 09 May 2020 10:44:41 +0200
+Message-ID: <13031978.1nyG40egBz@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In the probe function, in case of error, resources allocated in
-'lp8788_setup_adc_channel()' must be released.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This can be achieved easily by using the devm_ variant of
-'iio_channel_get()'.
-This has the extra benefit to simplify the remove function and to axe the
-'lp8788_release_adc_channel()' function which is now useless.
+If the EC GPE status is not set after checking all of the other GPEs,
+acpi_s2idle_wake() returns 'false', to indicate that the SCI event
+that has just triggered is not a system wakeup one, but it does that
+without canceling the pending wakeup and re-arming the SCI for system
+wakeup which is a mistake, because it may cause s2idle_loop() to busy
+spin until the next valid wakeup event.  [If that happens, the first
+spurious wakeup is still pending after acpi_s2idle_wake() has
+returned, so s2idle_enter() does nothing, acpi_s2idle_wake()
+is called again and it sees that the SCI has triggered, but no GPEs
+are active, so 'false' is returned again, and so on.]
 
-Fixes: 98a276649358 ("power_supply: Add new lp8788 charger driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Fix that by moving all of the GPE checking logic from
+acpi_s2idle_wake() to acpi_ec_dispatch_gpe() and making the
+latter return 'true' only if a non-EC GPE has triggered and
+'false' otherwise, which will cause acpi_s2idle_wake() to
+cancel the pending SCI wakeup and re-arm the SCI for system
+wakeup regardless of the EC GPE status.
+
+This also addresses a lockup observed on an Elitegroup EF20EA laptop
+after attempting to wake it up from suspend-to-idle by a key press.
+
+Fixes: d5406284ff80 ("ACPI: PM: s2idle: Refine active GPEs check")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=207603
+Reported-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+Fixes: fdde0ff8590b ("ACPI: PM: s2idle: Prevent spurious SCIs from waking up the system")
+Link: https://lore.kernel.org/linux-acpi/CAB4CAwdqo7=MvyG_PE+PGVfeA17AHF5i5JucgaKqqMX6mjArbQ@mail.gmail.com/
+Reported-by: Chris Chiu <chiu@endlessm.com>
+Cc: 5.4+ <stable@vger.kernel.org> # 5.4+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
-V2: use devm_iio_channel_get instead of iio_channel_get and simplify code
----
- drivers/power/supply/lp8788-charger.c | 18 ++----------------
- 1 file changed, 2 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/power/supply/lp8788-charger.c b/drivers/power/supply/lp8788-charger.c
-index 84a206f42a8e..e7931ffb7151 100644
---- a/drivers/power/supply/lp8788-charger.c
-+++ b/drivers/power/supply/lp8788-charger.c
-@@ -572,27 +572,14 @@ static void lp8788_setup_adc_channel(struct device *dev,
- 		return;
+-> v2:
+   * Improve the changelog and add more tags.
+
+---
+ drivers/acpi/ec.c       |   24 ++++++++++++++++--------
+ drivers/acpi/internal.h |    1 -
+ drivers/acpi/sleep.c    |   14 ++------------
+ 3 files changed, 18 insertions(+), 21 deletions(-)
+
+Index: linux-pm/drivers/acpi/sleep.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/sleep.c
++++ linux-pm/drivers/acpi/sleep.c
+@@ -1013,21 +1013,11 @@ static bool acpi_s2idle_wake(void)
+ 		if (acpi_check_wakeup_handlers())
+ 			return true;
  
- 	/* ADC channel for battery voltage */
--	chan = iio_channel_get(dev, pdata->adc_vbatt);
-+	chan = devm_iio_channel_get(dev, pdata->adc_vbatt);
- 	pchg->chan[LP8788_VBATT] = IS_ERR(chan) ? NULL : chan;
+-		/*
+-		 * If the status bit is set for any enabled GPE other than the
+-		 * EC one, the wakeup is regarded as a genuine one.
+-		 */
+-		if (acpi_ec_other_gpes_active())
++		/* Check non-EC GPE wakeups and dispatch the EC GPE. */
++		if (acpi_ec_dispatch_gpe())
+ 			return true;
  
- 	/* ADC channel for battery temperature */
--	chan = iio_channel_get(dev, pdata->adc_batt_temp);
-+	chan = devm_iio_channel_get(dev, pdata->adc_batt_temp);
- 	pchg->chan[LP8788_BATT_TEMP] = IS_ERR(chan) ? NULL : chan;
+ 		/*
+-		 * If the EC GPE status bit has not been set, the wakeup is
+-		 * regarded as a spurious one.
+-		 */
+-		if (!acpi_ec_dispatch_gpe())
+-			return false;
+-
+-		/*
+ 		 * Cancel the wakeup and process all pending events in case
+ 		 * there are any wakeup ones in there.
+ 		 *
+Index: linux-pm/drivers/acpi/ec.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/ec.c
++++ linux-pm/drivers/acpi/ec.c
+@@ -1994,23 +1994,31 @@ void acpi_ec_set_gpe_wake_mask(u8 action
+ 		acpi_set_gpe_wake_mask(NULL, first_ec->gpe, action);
  }
  
--static void lp8788_release_adc_channel(struct lp8788_charger *pchg)
+-bool acpi_ec_other_gpes_active(void)
 -{
--	int i;
--
--	for (i = 0; i < LP8788_NUM_CHG_ADC; i++) {
--		if (!pchg->chan[i])
--			continue;
--
--		iio_channel_release(pchg->chan[i]);
--		pchg->chan[i] = NULL;
--	}
+-	return acpi_any_gpe_status_set(first_ec ? first_ec->gpe : U32_MAX);
 -}
 -
- static ssize_t lp8788_show_charger_status(struct device *dev,
- 				struct device_attribute *attr, char *buf)
+ bool acpi_ec_dispatch_gpe(void)
  {
-@@ -735,7 +722,6 @@ static int lp8788_charger_remove(struct platform_device *pdev)
- 	flush_work(&pchg->charger_work);
- 	lp8788_irq_unregister(pdev, pchg);
- 	lp8788_psy_unregister(pchg);
--	lp8788_release_adc_channel(pchg);
+ 	u32 ret;
  
- 	return 0;
+ 	if (!first_ec)
++		return acpi_any_gpe_status_set(U32_MAX);
++
++	/*
++	 * Report wakeup if the status bit is set for any enabled GPE other
++	 * than the EC one.
++	 */
++	if (acpi_any_gpe_status_set(first_ec->gpe))
++		return true;
++
++	if (ec_no_wakeup)
+ 		return false;
+ 
++	/*
++	 * Dispatch the EC GPE in-band, but do not report wakeup in any case
++	 * to allow the caller to process events properly after that.
++	 */
+ 	ret = acpi_dispatch_gpe(NULL, first_ec->gpe);
+-	if (ret == ACPI_INTERRUPT_HANDLED) {
++	if (ret == ACPI_INTERRUPT_HANDLED)
+ 		pm_pr_dbg("EC GPE dispatched\n");
+-		return true;
+-	}
++
+ 	return false;
  }
--- 
-2.25.1
+ #endif /* CONFIG_PM_SLEEP */
+Index: linux-pm/drivers/acpi/internal.h
+===================================================================
+--- linux-pm.orig/drivers/acpi/internal.h
++++ linux-pm/drivers/acpi/internal.h
+@@ -202,7 +202,6 @@ void acpi_ec_remove_query_handler(struct
+ 
+ #ifdef CONFIG_PM_SLEEP
+ void acpi_ec_flush_work(void);
+-bool acpi_ec_other_gpes_active(void);
+ bool acpi_ec_dispatch_gpe(void);
+ #endif
+ 
+
+
 
