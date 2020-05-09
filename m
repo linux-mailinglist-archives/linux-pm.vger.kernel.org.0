@@ -2,120 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 947DC1CBBB6
-	for <lists+linux-pm@lfdr.de>; Sat,  9 May 2020 02:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A761CBBC8
+	for <lists+linux-pm@lfdr.de>; Sat,  9 May 2020 02:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728368AbgEIAPd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 20:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
+        id S1727959AbgEIAat (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 20:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727983AbgEIAPd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 20:15:33 -0400
+        by vger.kernel.org with ESMTP id S1727878AbgEIAat (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 20:30:49 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F52FC061A0C;
-        Fri,  8 May 2020 17:15:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFE7C061A0C;
+        Fri,  8 May 2020 17:30:48 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 203592A33A3
+        with ESMTPSA id A551E2A33C2
 Received: by earth.universe (Postfix, from userid 1000)
-        id 9BE163C08C6; Sat,  9 May 2020 02:15:29 +0200 (CEST)
-Date:   Sat, 9 May 2020 02:15:29 +0200
+        id 5EC5C3C08C6; Sat,  9 May 2020 02:30:45 +0200 (CEST)
+Date:   Sat, 9 May 2020 02:30:45 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] power: bq25890: unlock on error paths in bq25890_resume()
-Message-ID: <20200509001529.vikzemeiifyfp4fs@earth.universe>
-References: <20200506101116.GA77004@mwanda>
- <20200506122019.GB18376@qmqm.qmqm.pl>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: reset: Convert
+ syscon-reboot-mode to DT schema
+Message-ID: <20200509003045.3mi7cfey6cmlidul@earth.universe>
+References: <20200507233846.11548-1-Sergey.Semin@baikalelectronics.ru>
+ <20200507233846.11548-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="os2uun2xexgi6yf2"
+        protocol="application/pgp-signature"; boundary="ur4wzzx455z2lgxp"
 Content-Disposition: inline
-In-Reply-To: <20200506122019.GB18376@qmqm.qmqm.pl>
+In-Reply-To: <20200507233846.11548-2-Sergey.Semin@baikalelectronics.ru>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---os2uun2xexgi6yf2
-Content-Type: text/plain; charset=utf-8
+--ur4wzzx455z2lgxp
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, May 06, 2020 at 02:20:20PM +0200, Micha=C5=82 Miros=C5=82aw wrote:
-> On Wed, May 06, 2020 at 01:11:16PM +0300, Dan Carpenter wrote:
-> > We introduced some new locking here, but need to update the error
-> > paths so they unlock before returning.
+On Fri, May 08, 2020 at 02:38:44AM +0300, Serge Semin wrote:
+> Modern device tree bindings are supposed to be created as YAML-files
+> in accordance with dt-schema. This commit replaces SYSCON reboot-mode
+> legacy bare text bindings with YAML file. As before the bindings file
+> states that the corresponding dts node is supposed to be compatible
+> "syscon-reboot-mode" device and necessarily have an offset property
+> to determine which register from the regmap is supposed to keep the
+> mode on reboot.
 >=20
-> Reviewed-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Allison Randal <allison@lohutok.net>
+> Cc: Richard Fontana <rfontana@redhat.com>
+> Cc: Kate Stewart <kstewart@linuxfoundation.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: linux-mips@vger.kernel.org
+> ---
 
-Thanks, queued.
+Thanks, I queued this patch to power-supply's for-next branch. For the other
+two patches I will wait for Rob's feedback.
 
 -- Sebastian
 
-> > Fixes: 72d9cd9cdc18 ("power: bq25890: protect view of the chip's state")
-> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > ---
-> >  drivers/power/supply/bq25890_charger.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/sup=
-ply/bq25890_charger.c
-> > index 9339e216651ff..20b9824ef5acd 100644
-> > --- a/drivers/power/supply/bq25890_charger.c
-> > +++ b/drivers/power/supply/bq25890_charger.c
-> > @@ -978,21 +978,22 @@ static int bq25890_resume(struct device *dev)
-> > =20
-> >  	ret =3D bq25890_get_chip_state(bq, &bq->state);
-> >  	if (ret < 0)
-> > -		return ret;
-> > +		goto unlock;
-> > =20
-> >  	/* Re-enable ADC only if charger is plugged in. */
-> >  	if (bq->state.online) {
-> >  		ret =3D bq25890_field_write(bq, F_CONV_START, 1);
-> >  		if (ret < 0)
-> > -			return ret;
-> > +			goto unlock;
-> >  	}
-> > =20
-> >  	/* signal userspace, maybe state changed while suspended */
-> >  	power_supply_changed(bq->charger);
-> > =20
-> > +unlock:
-> >  	mutex_unlock(&bq->lock);
-> > =20
-> > -	return 0;
-> > +	return ret;
-> >  }
-> >  #endif
-> > =20
-> > --=20
-> > 2.26.2
-> >=20
+>  .../power/reset/syscon-reboot-mode.txt        | 35 ------------
+>  .../power/reset/syscon-reboot-mode.yaml       | 55 +++++++++++++++++++
+>  2 files changed, 55 insertions(+), 35 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/power/reset/syscon-=
+reboot-mode.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/syscon-=
+reboot-mode.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot-=
+mode.txt b/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode=
+=2Etxt
+> deleted file mode 100644
+> index f7ce1d8af04a..000000000000
+> --- a/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.txt
+> +++ /dev/null
+> @@ -1,35 +0,0 @@
+> -SYSCON reboot mode driver
+> -
+> -This driver gets reboot mode magic value form reboot-mode driver
+> -and stores it in a SYSCON mapped register. Then the bootloader
+> -can read it and take different action according to the magic
+> -value stored.
+> -
+> -This DT node should be represented as a sub-node of a "syscon", "simple-=
+mfd"
+> -node.
+> -
+> -Required properties:
+> -- compatible: should be "syscon-reboot-mode"
+> -- offset: offset in the register map for the storage register (in bytes)
+> -
+> -Optional property:
+> -- mask: bits mask of the bits in the register to store the reboot mode m=
+agic value,
+> -  default set to 0xffffffff if missing.
+> -
+> -The rest of the properties should follow the generic reboot-mode descrip=
+tion
+> -found in reboot-mode.txt
+> -
+> -Example:
+> -	pmu: pmu@20004000 {
+> -		compatible =3D "rockchip,rk3066-pmu", "syscon", "simple-mfd";
+> -		reg =3D <0x20004000 0x100>;
+> -
+> -		reboot-mode {
+> -			compatible =3D "syscon-reboot-mode";
+> -			offset =3D <0x40>;
+> -			mode-normal =3D <BOOT_NORMAL>;
+> -			mode-recovery =3D <BOOT_RECOVERY>;
+> -			mode-bootloader =3D <BOOT_FASTBOOT>;
+> -			mode-loader =3D <BOOT_BL_DOWNLOAD>;
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot-=
+mode.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot-mod=
+e.yaml
+> new file mode 100644
+> index 000000000000..9b1ffceefe3d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot-mode.ya=
+ml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/reset/syscon-reboot-mode.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic SYSCON reboot mode driver
+> +
+> +maintainers:
+> +  - Sebastian Reichel <sre@kernel.org>
+> +
+> +description: |
+> +  This driver gets reboot mode magic value from reboot-mode driver
+> +  and stores it in a SYSCON mapped register. Then the bootloader
+> +  can read it and take different action according to the magic
+> +  value stored. The SYSCON mapped register is retrieved from the
+> +  parental dt-node plus the offset. So the SYSCON reboot-mode node
+> +  should be represented as a sub-node of a "syscon", "simple-mfd" node.
+> +
+> +properties:
+> +  compatible:
+> +    const: syscon-reboot-mode
+> +
+> +  mask:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Update only the register bits defined by the mask (32 b=
+it)
+> +
+> +  offset:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Offset in the register map for the mode register (in by=
+tes)
+> +
+> +patternProperties:
+> +  "^mode-.+":
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Vendor-specific mode value written to the mode register
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - offset
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/soc/rockchip,boot-mode.h>
+> +
+> +    reboot-mode {
+> +      compatible =3D "syscon-reboot-mode";
+> +      offset =3D <0x40>;
+> +      mode-normal =3D <BOOT_NORMAL>;
+> +      mode-recovery =3D <BOOT_RECOVERY>;
+> +      mode-bootloader =3D <BOOT_FASTBOOT>;
+> +      mode-loader =3D <BOOT_BL_DOWNLOAD>;
+> +    };
+> +...
+> --=20
+> 2.25.1
+>=20
 
---os2uun2xexgi6yf2
+--ur4wzzx455z2lgxp
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl619iEACgkQ2O7X88g7
-+poabw/+ImmnCtrv3oeQlxgy1kvUmLKF+VY8OcGAGt+GHgx4XNKwXKaKcX4vSff2
-82m0CZAQsJWkItPv2ImEBf/X6ikWQAay6xtFLV5DuHG6YqcgCMvE4grl2T1pwoMh
-Gj4uutn4N5a5zXBfm7dtMImwOpwnNIDCxbl2DFWhYrrH8h1pVnYVzU7ryfSu9EUm
-/z7ouvMuAKHI9Sb/pCaEGOU2GyzSBwdbFzFSGtSCiLFUxxdA5r/7U9Wz794LpoTG
-LRav7bQMeAJvJrHTmuHxZMtEiDil2qlXl8URvc7qAmPc6h+GbJrYOPZz9k94z8YS
-h0JUxybdaSmwuEVtTXJiEHO3GcHsrJphqEvnhOIHZQwr680Sjsf9HME8YCMCjyHb
-ce7y3GxGH5ip05/en28f0TObHHupwSPDRSBO2p/4jloWiwkBU0UWkowzWJV+qBLc
-jOf0hJKBJ0b9bJbQnPdzzx4+QQNdGVUrwY+erXSFXmm8fnaQ84y7+rCD07+O5gLV
-604U4PA/QxXyr7CZ6JGsPVryBjhopqp28k+2zwoZYGzEklTOZjXbLn8jn/CKuPIH
-H5owsCiI/+oTKwFfRJgjCGwuIDXvBORJAfkirrMaxPK0XoEgKIqzemPPQ8CBW+od
-Wsgq19OUxBxhPRTe9QBe2Sk6xtCzh57N0+vHYhrZg1kVB0gOll4=
-=h8Do
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl61+awACgkQ2O7X88g7
++pqzEA/+Op6qhzk78p5C+O+Dmu3nhHxsCMWMYu8TJI/RtuiicengIHySqfmjR2HM
+CSleCh6877cDg5pdedah1nn5XU44+Rm5nEl7focIWuyunCsRoQlYUj6/PfFCCbTg
+E1JdE4/PyB4CNQLuAcADP1dQLJXjTOWvxGGjjRV+kSAKzMAMJuTuMCLWdo9Cewvf
+qf6w5lyxaskfUIO9wgMR6qe/8XiqBgEJ1Es4XfFaiotNpC9ED82lQj79rgCuofJc
+K+il2gJqYkFlUQqgjlxb98M6Rrbin6xKtx/kq7SvoKoorjLom10g2EA4DEu7sIVN
+hvMcfJjFt/n5qEUDEqflNTVZ04/Xzp7hB9GUEA60MgjPSIfxWT97Fxf69GbQFpOO
+1DSYoUl5cHaMRalhTZYydrHiaKb6NQyikGBvGuw3kprgHvbGhakLZshzGRyzSSBl
+f1dFJyrD3bKiqFNTZGEGl5qVIlspEnmAHJJL7bZJBxerTdQbtFts5gFz3iXHX2t4
+p0XPnmLUCC1aX6w0QarCQVX78JHjd5F1sIRh1fwZAipN07GiqHln+f/MQbQXmMIa
+WIYYEvI6q7W7lcBCQiXvKF1/OXca4lP9wA1jr+2MteMo7Il9nyUDcOeZ1SgKDdkU
+JcfBD3mq5mUQodaePmY4O54ut+3rxL2rsEMtG6Zd3Sq/asjbkbg=
+=FC4l
 -----END PGP SIGNATURE-----
 
---os2uun2xexgi6yf2--
+--ur4wzzx455z2lgxp--
