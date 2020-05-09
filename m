@@ -2,82 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2914F1CB785
-	for <lists+linux-pm@lfdr.de>; Fri,  8 May 2020 20:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3194B1CBBB0
+	for <lists+linux-pm@lfdr.de>; Sat,  9 May 2020 02:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbgEHSm3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 May 2020 14:42:29 -0400
-Received: from mailgate1.rohmeurope.com ([87.129.152.131]:50642 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726767AbgEHSm2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 14:42:28 -0400
-X-AuditID: c0a8fbf4-473ff70000004419-47-5eb5a8139f75
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id F6.55.17433.318A5BE5; Fri,  8 May 2020 20:42:27 +0200 (CEST)
-Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0487.000; Fri, 8 May 2020 20:42:26 +0200
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "broonie@kernel.org" <broonie@kernel.org>
-CC:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "brendanhiggins@google.com" <brendanhiggins@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v12 02/11] lib/test_linear_ranges: add a test for the
- 'linear_ranges'
-Thread-Topic: [PATCH v12 02/11] lib/test_linear_ranges: add a test for the
- 'linear_ranges'
-Thread-Index: AQHWJU8mRcNXc963mUOdUoB6SvCrNaieTQ+AgAAXoIA=
-Date:   Fri, 8 May 2020 18:42:25 +0000
-Message-ID: <a34578a06c991119519e53b0cf87f438fffcc808.camel@fi.rohmeurope.com>
-References: <cover.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
-         <311fea741bafdcd33804d3187c1642e24275e3e5.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
-         <20200508171751.GM4820@sirena.org.uk>
-In-Reply-To: <20200508171751.GM4820@sirena.org.uk>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [62.78.225.252]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1958FFA8F02F1042A080BADFA512F3E6@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        id S1728392AbgEIAOe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 May 2020 20:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727959AbgEIAOe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 May 2020 20:14:34 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1B5C061A0C;
+        Fri,  8 May 2020 17:14:34 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 38D8C2A2ECF
+Received: by earth.universe (Postfix, from userid 1000)
+        id B1ECA3C08C6; Sat,  9 May 2020 02:14:29 +0200 (CEST)
+Date:   Sat, 9 May 2020 02:14:29 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     milo.kim@ti.com, anton.vorontsov@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] power: supply: lp8788: Fix an error handling path in
+ 'lp8788_charger_probe()'
+Message-ID: <20200509001429.65lk56xov22fxa47@earth.universe>
+References: <20200508071150.204974-1-christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDKsWRmVeSWpSXmKPExsVyYMXvTbrCK7bGGayfLWRx8cZkZoupD5+w
-        WXy70sFkcXnXHDaLz71HGC3mLD3BYnF6d4kDu8fOWXfZPRZsKvXYtKqTzePzJrkAlihum6TE
-        krLgzPQ8fbsE7oynh36yFRzgrLhxvYOtgXEBZxcjJ4eEgInE8Q2b2LsYuTiEBK4xSiy59pEN
-        wjnOKDHz9VmWLkYODjYBG4mum+wgDSICuhJTfy0Gq2EWOMAk0bx1KRtIQlggWmLK4QuMEEUx
-        EqunNjKC9IoIWEmcemEEEmYRUJF4/PUoM4jNK+An8WnmXhYQW0jgDKNE894SEJtTwEhizvfF
-        rCA2o4CsRGfDOyYQm1lAXGLTs++sEEcLSCzZc54ZwhaVePn4H1RcUWL793VgJzMLaEqs36UP
-        0eogcXfSQUYIW1FiSvdDdogTBCVOznzCMoFRbBaSDbMQumch6Z6FpHsWku4FjKyrGCVyEzNz
-        0hNLUg31ilJL9YryM3KBVHJ+7iZGSGx+2cH4/5DnIUYmDsZDjJIcTEqivEGTt8YJ8SXlp1Rm
-        JBZnxBeV5qQWH2KU4GBWEuGdWLElTog3JbGyKrUoHyYlzcGiJM6r/nBirJAAyK7s1NSC1CKY
-        rAwHh5IE79FlQEMFi1LTUyvSMnNKENJMHJwgw7mkRIpT81JSixJLSzLiQckjvhiYPkBSPEB7
-        VUHaeYsLEnOBohCtpxi1OSa8nLuImePI3KWLmIVY8vLzUqXEeWWWA5UKgJRmlObBLXrFKM7B
-        qCTMywCS5QEmabg5r4BWMAGt+PxpE8iKkkSElFQDo3Ody+o6/6sn1Y5cNRBavmX6Jt6iq+Hy
-        SdH3TRgagzsiHTb3Tr0QKdWeGxep3mPrfafTs/HKpNA/7YdnP+tPuvnjV+XEy5OLrn/a+dSE
-        h3fpyQJd5Y1zq/ON+M5aGu66EZbRuFXUr04pMeOXVkpc1Tuf92zyNzNelUesfOaUezXF8drT
-        Ln45JZbijERDLeai4kQAuefDho8DAAA=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="elsq2nfey66uahg5"
+Content-Disposition: inline
+In-Reply-To: <20200508071150.204974-1-christophe.jaillet@wanadoo.fr>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-VGhhbmtzIE1hcmshDQoNCk9uIEZyaSwgMjAyMC0wNS0wOCBhdCAxODoxNyArMDEwMCwgTWFyayBC
-cm93biB3cm90ZToNCj4gT24gRnJpLCBNYXkgMDgsIDIwMjAgYXQgMDY6NDA6NDNQTSArMDMwMCwg
-TWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0KPiA+ICAgICBBZGQgYSBLVW5pdCB0ZXN0IGZvciB0aGUg
-bGluZWFyX3JhbmdlcyBoZWxwZXIuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogTWF0dGkgVmFp
-dHRpbmVuIDxtYXR0aS52YWl0dGluZW5AZmkucm9obWV1cm9wZS5jb20+DQo+ID4gUmV2aWV3ZWQt
-Ynk6IEJyZW5kYW4gSGlnZ2lucyA8YnJlbmRhbmhpZ2dpbnNAZ29vZ2xlLmNvbT4NCj4gDQo+IFRo
-aXMgbm93IGdlbmVyYXRlczoNCj4gDQo+IFdBUk5JTkc6IG1vZHBvc3Q6IG1pc3NpbmcgTU9EVUxF
-X0xJQ0VOU0UoKSBpbiBsaWIvbGluZWFyX3Jhbmdlcy5vDQo+IHNlZSBpbmNsdWRlL2xpbnV4L21v
-ZHVsZS5oIGZvciBtb3JlIGluZm9ybWF0aW9uDQo+IA0KPiB3aGVuIHRoZSB0ZXN0cyBhcmUgYnVp
-bHQgYXMgYSBtb2R1bGUgYW5kIHNlbGVjdCB0aGUgbGlicmFyeS4NCg0KSSdtIHNvcnJ5LiBJIGRp
-ZCBidWlsZCBhbGxtb2Rjb25maWcgYnVpbGQgYnV0IG1pc3NlZCB0aGUgd2FybmluZyA6LyBJDQpz
-YXcgeW91IGFwcGxpZWQgMS01LiBEbyB5b3Ugd2FudCBhIHNpbmdsZSBpbmNyZW1lbnRhbCBwYXRj
-aCB3aXRoDQpNT0RVTEVfTElDRU5TRSgpIG9yIHNob3VsZCBJIHJlc3VibWl0IG9mIHdob2xlIHNl
-cmllcz8gR1BMIGlzIHRoZQ0KbGljZW5zZSBJIHdvdWxkIGxpa2UgdG8gdXNlIGZvciBsaW5raW5n
-IGFuZCBTUERYIHNob3VsZCBjb3ZlciBtb3JlDQphY2N1cmF0ZSB2ZXJzaW9uIGluZm9ybWF0aW9u
-Lg0KDQoNCkJlc3QgUmVnYXJkcw0KCS0tTWF0dGkNCg0K
+
+--elsq2nfey66uahg5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+Please change the driver to call devm_iio_channel_get() instead of
+iio_channel_get() and drop the lp8788_release_adc_channel() function.
+
+-- Sebastian
+
+On Fri, May 08, 2020 at 09:11:50AM +0200, Christophe JAILLET wrote:
+> In case of error, resources allocated in 'lp8788_setup_adc_channel()' must
+> be released.
+>=20
+> Add a call to 'lp8788_release_adc_channel()' as already done in the remove
+> function.
+>=20
+> Fixes: 98a276649358 ("power_supply: Add new lp8788 charger driver")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/power/supply/lp8788-charger.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/lp8788-charger.c b/drivers/power/supply=
+/lp8788-charger.c
+> index 84a206f42a8e..641815eb24bc 100644
+> --- a/drivers/power/supply/lp8788-charger.c
+> +++ b/drivers/power/supply/lp8788-charger.c
+> @@ -719,13 +719,17 @@ static int lp8788_charger_probe(struct platform_dev=
+ice *pdev)
+> =20
+>  	ret =3D lp8788_psy_register(pdev, pchg);
+>  	if (ret)
+> -		return ret;
+> +		goto err_release_adc_channel;
+> =20
+>  	ret =3D lp8788_irq_register(pdev, pchg);
+>  	if (ret)
+>  		dev_warn(dev, "failed to register charger irq: %d\n", ret);
+> =20
+>  	return 0;
+> +
+> +err_release_adc_channel:
+> +	lp8788_release_adc_channel(pchg);
+> +	return ret;
+>  }
+> =20
+>  static int lp8788_charger_remove(struct platform_device *pdev)
+> --=20
+> 2.25.1
+>=20
+
+--elsq2nfey66uahg5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl619eAACgkQ2O7X88g7
++pqhUQ//XakrsUVE5Wq5klKII1Z1Xz6RLpu0yPGB2ZR+Rg/IWcHR5CBlT/WYmFUK
+vgUi9bYkL00DvvG63gWySGvM6wINXEw9qU+j0qLYCg31jOB74Vz2TVdpS/ZP2son
+jD3hP5eIw+IaaTU4Nt/ScL3Ywcu3boL8JrADRkuIrGHVqC4WO56LRHYc1EzXzXMD
+A83Cnx+JTGesyK6uDrGdw7Ac8JoEcEZy4Db7u31S42wMpArfr8s3FYEV7G1pF5gV
+/2IfoneLLdUVJYQgG0kRQC+zL1Zvrr8Rf/U6OVNahNAtr5GuV7wde3MQaFqOppHt
+JcKalt30MoQndXUXsyFaY5GKHU9k7DlDm9Y3ZasKyvOqbdoRwhz0OwhqkbT/rgVR
+AQGm/ii6ZElIfgmWr7E9PHyThjHN+yI7RdXxpMDybsgnAQAyxIuBRglavoDBikfA
+dOnlfITqJtsFPlBhsaI5fd72EfjylVczOHwTelAsf7+KFL58wOA+M8FXoQ8Jx3L0
+dRVoNRB5SjK4Fqdd5DFeAwfpuGm5+li5akN4w7Vd+tPrXbS87ljO2bFz6aoRU4k7
+LARlmKJNqBQKXpI6J5tXMMw+YuZqy6D17kjK0cSPp4qEOFq577UW+wKLJ0dcuESS
+MGO4z8sOg7zosW7QUQnj08T5Ppa9vsiXamiGaSULgQnlclsraM4=
+=Pdz3
+-----END PGP SIGNATURE-----
+
+--elsq2nfey66uahg5--
