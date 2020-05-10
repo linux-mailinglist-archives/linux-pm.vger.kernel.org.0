@@ -2,112 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D121CCC6F
-	for <lists+linux-pm@lfdr.de>; Sun, 10 May 2020 18:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC661CCCA8
+	for <lists+linux-pm@lfdr.de>; Sun, 10 May 2020 19:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728907AbgEJQyw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 May 2020 12:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728681AbgEJQyw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 May 2020 12:54:52 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BEEC061A0C;
-        Sun, 10 May 2020 09:54:52 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 092F12A0A58
-Received: by earth.universe (Postfix, from userid 1000)
-        id 1DC893C08C7; Sun, 10 May 2020 18:54:49 +0200 (CEST)
-Date:   Sun, 10 May 2020 18:54:49 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 3/3] power: charger: max14577: Add proper dt-compatible
- strings
-Message-ID: <20200510165449.d5vuqzo4fgkxu4re@earth.universe>
-References: <20200220145127.21273-1-m.szyprowski@samsung.com>
- <CGME20200220145135eucas1p1ba181cef65c7a4f91a254ee35e022f08@eucas1p1.samsung.com>
- <20200220145127.21273-3-m.szyprowski@samsung.com>
+        id S1726913AbgEJR1y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 May 2020 13:27:54 -0400
+Received: from mga02.intel.com ([134.134.136.20]:63797 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728360AbgEJR1x (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 10 May 2020 13:27:53 -0400
+IronPort-SDR: 4dZvyEYv7/+ArD5qTS8+K+GOCJq7QrisaO64i7UShxMaT2tyugFUGSPmYRYFkqnvgpbMXllyBj
+ 02ziDvlwSHJg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2020 10:27:53 -0700
+IronPort-SDR: 6HBmt3eri5NysWAIzVdwwmEpicxlmtU+vGL0m6WYC/b1gRo8qgLE+b+qwnkYslFiFxdZmHXDuH
+ B987YwJ19aAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,376,1583222400"; 
+   d="scan'208";a="408675000"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 10 May 2020 10:27:51 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jXpjy-0009ow-Ss; Mon, 11 May 2020 01:27:50 +0800
+Date:   Mon, 11 May 2020 01:26:52 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 6a6044584305b1d608cd3b6d42c01fd4ac35cabf
+Message-ID: <5eb8395c.ysD0ybywpyDl62/p%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ut7sdpq7tngbdbjc"
-Content-Disposition: inline
-In-Reply-To: <20200220145127.21273-3-m.szyprowski@samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 6a6044584305b1d608cd3b6d42c01fd4ac35cabf  Merge branch 'pm-acpi' into bleeding-edge
 
---ut7sdpq7tngbdbjc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+elapsed time: 482m
 
-Hi,
+configs tested: 101
+configs skipped: 1
 
-On Thu, Feb 20, 2020 at 03:51:27PM +0100, Marek Szyprowski wrote:
-> Add device tree compatible strings and create proper modalias structures
-> to let this driver load automatically if compiled as module, because
-> max14577 MFD driver creates MFD cells with such compatible strings.
->=20
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->  drivers/power/supply/max14577_charger.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->=20
-> diff --git a/drivers/power/supply/max14577_charger.c b/drivers/power/supp=
-ly/max14577_charger.c
-> index 8a59feac6468..891ba9f6f295 100644
-> --- a/drivers/power/supply/max14577_charger.c
-> +++ b/drivers/power/supply/max14577_charger.c
-> @@ -623,6 +623,15 @@ static const struct platform_device_id max14577_char=
-ger_id[] =3D {
->  };
->  MODULE_DEVICE_TABLE(platform, max14577_charger_id);
-> =20
-> +static const struct of_device_id of_max14577_charger_dt_match[] =3D {
-> +	{ .compatible =3D "maxim,max77836-charger",
-> +	  .data =3D (void *)MAXIM_DEVICE_TYPE_MAX77836, },
-> +	{ .compatible =3D "maxim,max14577-charger",
-> +	  .data =3D (void *)MAXIM_DEVICE_TYPE_MAX14577, },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, of_max14577_charger_dt_match);
-> +
->  static struct platform_driver max14577_charger_driver =3D {
->  	.driver =3D {
->  		.name	=3D "max14577-charger",
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Independently of the discussion in patch 1 this is missing the link
-to the of table in platform_driver->driver->of_match_table.
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+sparc                            allyesconfig
+m68k                             allyesconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+microblaze                       allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20200510
+i386                 randconfig-a005-20200510
+i386                 randconfig-a003-20200510
+i386                 randconfig-a001-20200510
+i386                 randconfig-a004-20200510
+i386                 randconfig-a002-20200510
+x86_64               randconfig-a016-20200510
+x86_64               randconfig-a012-20200510
+x86_64               randconfig-a015-20200510
+x86_64               randconfig-a013-20200510
+x86_64               randconfig-a014-20200510
+x86_64               randconfig-a011-20200510
+i386                 randconfig-a012-20200510
+i386                 randconfig-a016-20200510
+i386                 randconfig-a014-20200510
+i386                 randconfig-a011-20200510
+i386                 randconfig-a013-20200510
+i386                 randconfig-a015-20200510
+x86_64               randconfig-a005-20200510
+x86_64               randconfig-a003-20200510
+x86_64               randconfig-a001-20200510
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
 
--- Sebastian
-
---ut7sdpq7tngbdbjc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl64MdQACgkQ2O7X88g7
-+pon5BAAgLSR2GaiG7ZcwcUyWL3Fl65dPuLl45Xbr3fPQykYwbzUvVmJ6jwDc8yo
-lwbJzAxW7L/USAYQ/gLKW1Cs+sEE035GA9V0MdxaasuIUFqc2KIoU2mw/TCvt/CN
-fNOCwpavTbNpMtWHuyBlY2Z1qMJPOb29ji9W4Rd8w1pSy75gmGtkZ+Lrm7//Y8wb
-tX/eNqMl/3mrYWLk8ft/yFVWdsEdkmA9+b4t9SZ5hqba9sR9tEfOshiKw7rhoEec
-9Zzxd8LbMZziN3KuUGd5UuG9IqRa7hn0Mslkmk4l7Zq6Y9Q6j6RgJMSB6iB8fqNz
-gZqvZm9VJ0xxcxziO0keFOylw80JaxFOzJGbE5knf2vhpuPUnHRJwunoEajdUVR2
-1auNHy1Gc8Q1dQadowuoubnWm9bNdxekccWZne59cUXVCAPT8wtgx4BfjfOqKt0n
-hXd0LT9KoSUVtiY7o+P+z6BS3iHRegv2wGRd1nResH+ZVPbk46AFlHJQPreT/1XH
-NZPPGD3zW3Z+sIiV5U5NjiyxNVAwXTNj8PDChgubj32cw2vjL8bppmBoYZWFYGoD
-oTbU/1b6FrfkZ49CPcj4T+n3se2kmCSF7QyT7A/M/uCT6hOOQNW+40bFowcevkrk
-YY2kUgTcPX+YWNddNMUdNtLU1wz+jVahr/1oWCDHhE55qJOUtJE=
-=aaxC
------END PGP SIGNATURE-----
-
---ut7sdpq7tngbdbjc--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
