@@ -2,360 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B3B1CCC46
-	for <lists+linux-pm@lfdr.de>; Sun, 10 May 2020 18:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D121CCC6F
+	for <lists+linux-pm@lfdr.de>; Sun, 10 May 2020 18:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728123AbgEJQkr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 May 2020 12:40:47 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40504 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726446AbgEJQkr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 May 2020 12:40:47 -0400
+        id S1728907AbgEJQyw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 May 2020 12:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728681AbgEJQyw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 May 2020 12:54:52 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71BEEC061A0C;
+        Sun, 10 May 2020 09:54:52 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id F204D2699CB
+        with ESMTPSA id 092F12A0A58
 Received: by earth.universe (Postfix, from userid 1000)
-        id B0E6C3C08C7; Sun, 10 May 2020 18:40:42 +0200 (CEST)
-Date:   Sun, 10 May 2020 18:40:42 +0200
+        id 1DC893C08C7; Sun, 10 May 2020 18:54:49 +0200 (CEST)
+Date:   Sun, 10 May 2020 18:54:49 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Jonghwa Lee <jonghwa3.lee@samsung.com>,
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        Myungjoo Ham <myungjoo.ham@samsung.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Vinay Simha BN <simhavcs@gmail.com>,
-        mika.westerberg@linux.intel.com, ramakrishna.pallala@intel.com,
-        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/9] power: supply: smb347-charger: Support SMB345 and
- SMB358
-Message-ID: <20200510164042.y7xm2ezg7qpwsihu@earth.universe>
-References: <20200329161552.215075-1-david@ixit.cz>
- <20200329162128.218584-7-david@ixit.cz>
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH 3/3] power: charger: max14577: Add proper dt-compatible
+ strings
+Message-ID: <20200510165449.d5vuqzo4fgkxu4re@earth.universe>
+References: <20200220145127.21273-1-m.szyprowski@samsung.com>
+ <CGME20200220145135eucas1p1ba181cef65c7a4f91a254ee35e022f08@eucas1p1.samsung.com>
+ <20200220145127.21273-3-m.szyprowski@samsung.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sa24v6gpbuf57hdl"
+        protocol="application/pgp-signature"; boundary="ut7sdpq7tngbdbjc"
 Content-Disposition: inline
-In-Reply-To: <20200329162128.218584-7-david@ixit.cz>
+In-Reply-To: <20200220145127.21273-3-m.szyprowski@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---sa24v6gpbuf57hdl
+--ut7sdpq7tngbdbjc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sun, Mar 29, 2020 at 06:21:25PM +0200, David Heidelberg wrote:
-> Tested SMB345 on Nexus 7 2013. Works.
+On Thu, Feb 20, 2020 at 03:51:27PM +0100, Marek Szyprowski wrote:
+> Add device tree compatible strings and create proper modalias structures
+> to let this driver load automatically if compiled as module, because
+> max14577 MFD driver creates MFD cells with such compatible strings.
 >=20
-> Based on:
-> - https://patchwork.kernel.org/patch/4922431/
-> - https://patchwork.ozlabs.org/patch/666877/
->=20
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
+>  drivers/power/supply/max14577_charger.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/max14577_charger.c b/drivers/power/supp=
+ly/max14577_charger.c
+> index 8a59feac6468..891ba9f6f295 100644
+> --- a/drivers/power/supply/max14577_charger.c
+> +++ b/drivers/power/supply/max14577_charger.c
+> @@ -623,6 +623,15 @@ static const struct platform_device_id max14577_char=
+ger_id[] =3D {
+>  };
+>  MODULE_DEVICE_TABLE(platform, max14577_charger_id);
+> =20
+> +static const struct of_device_id of_max14577_charger_dt_match[] =3D {
+> +	{ .compatible =3D "maxim,max77836-charger",
+> +	  .data =3D (void *)MAXIM_DEVICE_TYPE_MAX77836, },
+> +	{ .compatible =3D "maxim,max14577-charger",
+> +	  .data =3D (void *)MAXIM_DEVICE_TYPE_MAX14577, },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, of_max14577_charger_dt_match);
+> +
+>  static struct platform_driver max14577_charger_driver =3D {
+>  	.driver =3D {
+>  		.name	=3D "max14577-charger",
 
-LGTM.
+Independently of the discussion in patch 1 this is missing the link
+to the of table in platform_driver->driver->of_match_table.
 
 -- Sebastian
 
->  drivers/power/supply/Kconfig          |   6 +-
->  drivers/power/supply/smb347-charger.c | 109 ++++++++++++++------------
->  2 files changed, 62 insertions(+), 53 deletions(-)
->=20
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index f3424fdce341..2581ed8aff5a 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -598,12 +598,12 @@ config CHARGER_BQ25890
->  	  Say Y to enable support for the TI BQ25890 battery charger.
-> =20
->  config CHARGER_SMB347
-> -	tristate "Summit Microelectronics SMB347 Battery Charger"
-> +	tristate "Summit Microelectronics SMB3XX Battery Charger"
->  	depends on I2C
->  	select REGMAP_I2C
->  	help
-> -	  Say Y to include support for Summit Microelectronics SMB347
-> -	  Battery Charger.
-> +	  Say Y to include support for Summit Microelectronics SMB345,
-> +	  SMB347 or SMB358 Battery Charger.
-> =20
->  config CHARGER_TPS65090
->  	tristate "TPS65090 battery charger driver"
-> diff --git a/drivers/power/supply/smb347-charger.c b/drivers/power/supply=
-/smb347-charger.c
-> index 852d2ab566e0..0cbd0743fd91 100644
-> --- a/drivers/power/supply/smb347-charger.c
-> +++ b/drivers/power/supply/smb347-charger.c
-> @@ -128,6 +128,7 @@
->   * @mains: power_supply instance for AC/DC power
->   * @usb: power_supply instance for USB power
->   * @battery: power_supply instance for battery
-> + * @id: SMB charger ID
->   * @mains_online: is AC/DC input connected
->   * @usb_online: is USB input connected
->   * @charging_enabled: is charging enabled
-> @@ -140,64 +141,61 @@ struct smb347_charger {
->  	struct power_supply	*mains;
->  	struct power_supply	*usb;
->  	struct power_supply	*battery;
-> +	unsigned int		id;
->  	bool			mains_online;
->  	bool			usb_online;
->  	bool			charging_enabled;
->  	const struct smb347_charger_platform_data *pdata;
->  };
-> =20
-> -/* Fast charge current in uA */
-> -static const unsigned int fcc_tbl[] =3D {
-> -	700000,
-> -	900000,
-> -	1200000,
-> -	1500000,
-> -	1800000,
-> -	2000000,
-> -	2200000,
-> -	2500000,
-> +enum smb_charger_chipid {
-> +	SMB345,
-> +	SMB347,
-> +	SMB358,
-> +	NUM_CHIP_TYPES,
->  };
-> =20
-> +/* Fast charge current in uA */
-> +static const unsigned int fcc_tbl[NUM_CHIP_TYPES][8] =3D {
-> +	[SMB345] =3D {  200000,  450000,  600000,  900000,
-> +		     1300000, 1500000, 1800000, 2000000 },
-> +	[SMB347] =3D {  700000,  900000, 1200000, 1500000,
-> +		     1800000, 2000000, 2200000, 2500000 },
-> +	[SMB358] =3D {  200000,  450000,  600000,  900000,
-> +		     1300000, 1500000, 1800000, 2000000 },
-> +};
->  /* Pre-charge current in uA */
-> -static const unsigned int pcc_tbl[] =3D {
-> -	100000,
-> -	150000,
-> -	200000,
-> -	250000,
-> +static const unsigned int pcc_tbl[NUM_CHIP_TYPES][4] =3D {
-> +	[SMB345] =3D { 150000, 250000, 350000, 450000 },
-> +	[SMB347] =3D { 100000, 150000, 200000, 250000 },
-> +	[SMB358] =3D { 150000, 250000, 350000, 450000 },
->  };
-> =20
->  /* Termination current in uA */
-> -static const unsigned int tc_tbl[] =3D {
-> -	37500,
-> -	50000,
-> -	100000,
-> -	150000,
-> -	200000,
-> -	250000,
-> -	500000,
-> -	600000,
-> +static const unsigned int tc_tbl[NUM_CHIP_TYPES][8] =3D {
-> +	[SMB345] =3D {  30000,  40000,  60000,  80000,
-> +		     100000, 125000, 150000, 200000 },
-> +	[SMB347] =3D {  37500,  50000, 100000, 150000,
-> +		     200000, 250000, 500000, 600000 },
-> +	[SMB358] =3D {  30000,  40000,  60000,  80000,
-> +		     100000, 125000, 150000, 200000 },
->  };
-> =20
->  /* Input current limit in uA */
-> -static const unsigned int icl_tbl[] =3D {
-> -	300000,
-> -	500000,
-> -	700000,
-> -	900000,
-> -	1200000,
-> -	1500000,
-> -	1800000,
-> -	2000000,
-> -	2200000,
-> -	2500000,
-> +static const unsigned int icl_tbl[NUM_CHIP_TYPES][10] =3D {
-> +	[SMB345] =3D {  300000,  500000,  700000, 1000000, 1500000,
-> +		     1800000, 2000000, 2000000, 2000000, 2000000 },
-> +	[SMB347] =3D {  300000,  500000,  700000,  900000, 1200000,
-> +		     1500000, 1800000, 2000000, 2200000, 2500000 },
-> +	[SMB358] =3D {  300000,  500000,  700000, 1000000, 1500000,
-> +		     1800000, 2000000, 2000000, 2000000, 2000000 },
->  };
-> =20
->  /* Charge current compensation in uA */
-> -static const unsigned int ccc_tbl[] =3D {
-> -	250000,
-> -	700000,
-> -	900000,
-> -	1200000,
-> +static const unsigned int ccc_tbl[NUM_CHIP_TYPES][4] =3D {
-> +	[SMB345] =3D {  200000,  450000,  600000,  900000 },
-> +	[SMB347] =3D {  250000,  700000,  900000, 1200000 },
-> +	[SMB358] =3D {  200000,  450000,  600000,  900000 },
->  };
-> =20
->  /* Convert register value to current using lookup table */
-> @@ -352,10 +350,11 @@ static int smb347_start_stop_charging(struct smb347=
-_charger *smb)
-> =20
->  static int smb347_set_charge_current(struct smb347_charger *smb)
->  {
-> +	unsigned int id =3D smb->id;
->  	int ret;
-> =20
->  	if (smb->pdata->max_charge_current) {
-> -		ret =3D current_to_hw(fcc_tbl, ARRAY_SIZE(fcc_tbl),
-> +		ret =3D current_to_hw(fcc_tbl[id], ARRAY_SIZE(fcc_tbl[id]),
->  				    smb->pdata->max_charge_current);
->  		if (ret < 0)
->  			return ret;
-> @@ -368,7 +367,7 @@ static int smb347_set_charge_current(struct smb347_ch=
-arger *smb)
->  	}
-> =20
->  	if (smb->pdata->pre_charge_current) {
-> -		ret =3D current_to_hw(pcc_tbl, ARRAY_SIZE(pcc_tbl),
-> +		ret =3D current_to_hw(pcc_tbl[id], ARRAY_SIZE(pcc_tbl[id]),
->  				    smb->pdata->pre_charge_current);
->  		if (ret < 0)
->  			return ret;
-> @@ -381,7 +380,7 @@ static int smb347_set_charge_current(struct smb347_ch=
-arger *smb)
->  	}
-> =20
->  	if (smb->pdata->termination_current) {
-> -		ret =3D current_to_hw(tc_tbl, ARRAY_SIZE(tc_tbl),
-> +		ret =3D current_to_hw(tc_tbl[id], ARRAY_SIZE(tc_tbl[id]),
->  				    smb->pdata->termination_current);
->  		if (ret < 0)
->  			return ret;
-> @@ -397,10 +396,11 @@ static int smb347_set_charge_current(struct smb347_=
-charger *smb)
-> =20
->  static int smb347_set_current_limits(struct smb347_charger *smb)
->  {
-> +	unsigned int id =3D smb->id;
->  	int ret;
-> =20
->  	if (smb->pdata->mains_current_limit) {
-> -		ret =3D current_to_hw(icl_tbl, ARRAY_SIZE(icl_tbl),
-> +		ret =3D current_to_hw(icl_tbl[id], ARRAY_SIZE(icl_tbl[id]),
->  				    smb->pdata->mains_current_limit);
->  		if (ret < 0)
->  			return ret;
-> @@ -413,7 +413,7 @@ static int smb347_set_current_limits(struct smb347_ch=
-arger *smb)
->  	}
-> =20
->  	if (smb->pdata->usb_hc_current_limit) {
-> -		ret =3D current_to_hw(icl_tbl, ARRAY_SIZE(icl_tbl),
-> +		ret =3D current_to_hw(icl_tbl[id], ARRAY_SIZE(icl_tbl[id]),
->  				    smb->pdata->usb_hc_current_limit);
->  		if (ret < 0)
->  			return ret;
-> @@ -463,6 +463,7 @@ static int smb347_set_voltage_limits(struct smb347_ch=
-arger *smb)
-> =20
->  static int smb347_set_temp_limits(struct smb347_charger *smb)
->  {
-> +	unsigned int id =3D smb->id;
->  	bool enable_therm_monitor =3D false;
->  	int ret =3D 0;
->  	int val;
-> @@ -587,7 +588,7 @@ static int smb347_set_temp_limits(struct smb347_charg=
-er *smb)
->  	}
-> =20
->  	if (smb->pdata->charge_current_compensation) {
-> -		val =3D current_to_hw(ccc_tbl, ARRAY_SIZE(ccc_tbl),
-> +		val =3D current_to_hw(ccc_tbl[id], ARRAY_SIZE(ccc_tbl[id]),
->  				    smb->pdata->charge_current_compensation);
->  		if (val < 0)
->  			return val;
-> @@ -883,6 +884,7 @@ static int smb347_irq_init(struct smb347_charger *smb,
->   */
->  static int get_const_charge_current(struct smb347_charger *smb)
->  {
-> +	unsigned int id =3D smb->id;
->  	int ret, intval;
->  	unsigned int v;
-> =20
-> @@ -898,10 +900,12 @@ static int get_const_charge_current(struct smb347_c=
-harger *smb)
->  	 * and we can detect which table to use from bit 5.
->  	 */
->  	if (v & 0x20) {
-> -		intval =3D hw_to_current(fcc_tbl, ARRAY_SIZE(fcc_tbl), v & 7);
-> +		intval =3D hw_to_current(fcc_tbl[id],
-> +				       ARRAY_SIZE(fcc_tbl[id]), v & 7);
->  	} else {
->  		v >>=3D 3;
-> -		intval =3D hw_to_current(pcc_tbl, ARRAY_SIZE(pcc_tbl), v & 7);
-> +		intval =3D hw_to_current(pcc_tbl[id],
-> +				       ARRAY_SIZE(pcc_tbl[id]), v & 7);
->  	}
-> =20
->  	return intval;
-> @@ -1317,6 +1321,7 @@ static int smb347_probe(struct i2c_client *client,
-> =20
->  	mutex_init(&smb->lock);
->  	smb->dev =3D &client->dev;
-> +	smb->id =3D id->driver_data;
-> =20
->  	smb->regmap =3D devm_regmap_init_i2c(client, &smb347_regmap);
->  	if (IS_ERR(smb->regmap))
-> @@ -1391,13 +1396,17 @@ static int smb347_remove(struct i2c_client *clien=
-t)
->  }
-> =20
->  static const struct i2c_device_id smb347_id[] =3D {
-> -	{ "smb347", 0 },
-> -	{ }
-> +	{ "smb345", SMB345 },
-> +	{ "smb347", SMB347 },
-> +	{ "smb358", SMB358 },
-> +	{}
->  };
->  MODULE_DEVICE_TABLE(i2c, smb347_id);
-> =20
->  static const struct of_device_id smb3xx_of_match[] =3D {
-> +	{ .compatible =3D "summit,smb345" },
->  	{ .compatible =3D "summit,smb347" },
-> +	{ .compatible =3D "summit,smb358" },
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, smb3xx_of_match);
-> --=20
-> 2.25.0
->=20
-
---sa24v6gpbuf57hdl
+--ut7sdpq7tngbdbjc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl64LooACgkQ2O7X88g7
-+ppL2w//cU8s8ZESAFjBqF20vNpqZ9KsINg0YN3+r10vtRHwS/SbW5441CY7nekz
-qHCenf8/jTW372HyOZma5skIPJ6ioFZsoQxJnwFHAgBithe8qb2tYsH3nq2RhQwL
-vQE56+MOTiU1D2b19n/rWUJXtvSm/Uq/tGapGCo0uIBpRvq7uMljx7m3Vp8ElSxm
-NIefrRBHBQjHNoksyMZhwTwyi5narJfKosu4phpV8mUNi+nfzdsgKajqggYQgJ2+
-sXnNcvwfGegTsLnJ9ROFLorOdYee1pn5CwMsGLPgkjjTTRf7UopeOpent9/EvwYR
-jbm5GjsAR0hpESWw3pv3HjM+aG8Vsa6PmVL25D23chXWUQLaQl+pMwpFC8+GkD2o
-51cmmYuGYpFzLCxtuN/RHKrwofXcY29SUzFOibzsUu+nH+cUMkB7+qYvyj5Zr7xR
-qFwNMa0x9fay1FKWrVhQwmj5s7vEtI9iK25gVfv2yU0PtV/xQ0t2ItUTxANYBM6m
-b2y+iNZ7L0KZKYuXRcmuuezUfGsKURJifBXnn7o+WHUNF/Bc1EEarxhT+Obh5Od1
-/Li0nLNRTQcIQcJvXeGO23mSO3UFlAx+Q0ZFd4g0q7vnZGFAjWiFUtVf+3J17WpU
-V24A5LPL7ka17qQ4iV32C4pzm9/Wvq8qQIXaRV73+z0SJZA2oKA=
-=JRt5
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl64MdQACgkQ2O7X88g7
++pon5BAAgLSR2GaiG7ZcwcUyWL3Fl65dPuLl45Xbr3fPQykYwbzUvVmJ6jwDc8yo
+lwbJzAxW7L/USAYQ/gLKW1Cs+sEE035GA9V0MdxaasuIUFqc2KIoU2mw/TCvt/CN
+fNOCwpavTbNpMtWHuyBlY2Z1qMJPOb29ji9W4Rd8w1pSy75gmGtkZ+Lrm7//Y8wb
+tX/eNqMl/3mrYWLk8ft/yFVWdsEdkmA9+b4t9SZ5hqba9sR9tEfOshiKw7rhoEec
+9Zzxd8LbMZziN3KuUGd5UuG9IqRa7hn0Mslkmk4l7Zq6Y9Q6j6RgJMSB6iB8fqNz
+gZqvZm9VJ0xxcxziO0keFOylw80JaxFOzJGbE5knf2vhpuPUnHRJwunoEajdUVR2
+1auNHy1Gc8Q1dQadowuoubnWm9bNdxekccWZne59cUXVCAPT8wtgx4BfjfOqKt0n
+hXd0LT9KoSUVtiY7o+P+z6BS3iHRegv2wGRd1nResH+ZVPbk46AFlHJQPreT/1XH
+NZPPGD3zW3Z+sIiV5U5NjiyxNVAwXTNj8PDChgubj32cw2vjL8bppmBoYZWFYGoD
+oTbU/1b6FrfkZ49CPcj4T+n3se2kmCSF7QyT7A/M/uCT6hOOQNW+40bFowcevkrk
+YY2kUgTcPX+YWNddNMUdNtLU1wz+jVahr/1oWCDHhE55qJOUtJE=
+=aaxC
 -----END PGP SIGNATURE-----
 
---sa24v6gpbuf57hdl--
+--ut7sdpq7tngbdbjc--
