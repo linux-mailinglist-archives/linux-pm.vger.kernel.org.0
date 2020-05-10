@@ -2,163 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F701CCB43
-	for <lists+linux-pm@lfdr.de>; Sun, 10 May 2020 15:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC8D1CCC1D
+	for <lists+linux-pm@lfdr.de>; Sun, 10 May 2020 18:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729023AbgEJNGE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 May 2020 09:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728743AbgEJNGE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 May 2020 09:06:04 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8432C061A0C
-        for <linux-pm@vger.kernel.org>; Sun, 10 May 2020 06:06:03 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id z1so3414915pfn.3
-        for <linux-pm@vger.kernel.org>; Sun, 10 May 2020 06:06:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=vfGef1Szw54qMt4C3vH6yp5y6l1t/GAXNeY2v8+8UOY=;
-        b=levZOkn+3RY8ytHoXmukZ8gWoV0NByuDCWrLTrG12pWeLByznFrPXMUmsPMK0Na4Vs
-         Qj3pqXyHbqGQ2b2B8ACdH4/ks2IKLDPP+zHB9hmBgdj8CaeA+jq6EnlKZbhJMRgS42Gk
-         ymHDoZzTl5q1XYxBM+Ui2edF5dl+xZ2EUP5O8/cfmLnE2MwTz9JL77WElOhj2/Bq4epd
-         VkSx6yMMUIY8zGkaR1MS7gJbeJJhIb/JYQmFXc9pLCi+D+aaocdunsxrmU5udCcxjQtD
-         BUzKwWxYWqtL2Lmc2NDrVHYyJB7hmZPV8uDtCjGKKBtgAVZVSPPZzuQana/zoe8Fuz5h
-         qlHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=vfGef1Szw54qMt4C3vH6yp5y6l1t/GAXNeY2v8+8UOY=;
-        b=jadn6GH03h7CdiQtYIJczK4F5ykCBpHUhmg5vDWBefubSRFV8OzDwDp4ROwhcLnyct
-         0zfGG9xVkjg8VFsLyoA/SfCQmn3QtCii6QhMv9B0YOXSbMk0R4E3ty76pYV1YpHxc5Yn
-         GnVJRU5ep9vG/02c/F4j09tE43qK3vZxNDWOaradEPPBRRv8u2g7EyTcujpWMg3U0QFD
-         cOjnVWE8IUDeesEmCRjkoBh2cj2YHgPG2z+bvapim4zP/zu7VsazhRS6Eusg5kvMn7Pc
-         YNHCkF+mC4VIrlRmoIYSNeT1M3kq+EDT/ZqcENAf5CZp8YNUrMm59zxpn3YvLnSRGvyG
-         nvmg==
-X-Gm-Message-State: AOAM5330mIJg/iF8ivivlY4RhwbRUS2oczLfiPKOcuWMtrIqbItlUzqT
-        wvIdZodxcfO1BxPfsvgVUEDu/y26QQc=
-X-Google-Smtp-Source: ABdhPJxsXqk76ZvaX8lJ6sHgymxT5nZCyMQS7R5tVfxDXIP985/ap5D5wgRQ2xWqAaZLS+wS/WyG8A==
-X-Received: by 2002:a63:3ec4:: with SMTP id l187mr862004pga.358.1589115962896;
-        Sun, 10 May 2020 06:06:02 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id n30sm1622219pgc.87.2020.05.10.06.06.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 May 2020 06:06:02 -0700 (PDT)
-Message-ID: <5eb7fc3a.1c69fb81.c6446.5525@mx.google.com>
-Date:   Sun, 10 May 2020 06:06:02 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1729008AbgEJQEt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 May 2020 12:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728856AbgEJQEt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 May 2020 12:04:49 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B85CC061A0C;
+        Sun, 10 May 2020 09:04:49 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 3DBF02A0563
+Received: by earth.universe (Postfix, from userid 1000)
+        id 55D2B3C08C7; Sun, 10 May 2020 18:04:45 +0200 (CEST)
+Date:   Sun, 10 May 2020 18:04:45 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     mazziesaccount@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        brendanhiggins@google.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 00/11] Support ROHM BD99954 charger IC
+Message-ID: <20200510160445.6fg2v7jug2vlepkv@earth.universe>
+References: <cover.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.7-rc4-41-g277a1722e66d
-X-Kernelci-Report-Type: test
-Subject: pm/testing sleep: 3 runs, 0 regressions (v5.7-rc4-41-g277a1722e66d)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="k67hcptim6stu57b"
+Content-Disposition: inline
+In-Reply-To: <cover.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 3 runs, 0 regressions (v5.7-rc4-41-g277a1722e66d)
 
-Test results summary
---------------------
+--k67hcptim6stu57b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-1   | exynos5422-odroidxu3 | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 21/21  =
+Hi,
 
-2   | imx6q-sabrelite      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
+On Fri, May 08, 2020 at 06:38:17PM +0300, Matti Vaittinen wrote:
+> Please note that this series should be applied to two trees. Patches
+> 1-4 (or 1-5 as suggested by Sebastian) should go to regulator tree.
+> Perhaps Mark can provide an immutable branch to Sebastian? Rest of the
+> patches can then go to power-supply tree.
 
-3   | rk3399-gru-kevin     | arm64 | lab-collabora | gcc-8    | defconfig  =
-        | 11/11  =
+Thanks, I merged the pull-request from Mark and queued patches 5-11.
 
+-- Sebastian
 
+--k67hcptim6stu57b
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.7-rc4-41-g277a1722e66d
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      277a1722e66d47e6fc8b63834273f83631e33562 =
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl64Jh0ACgkQ2O7X88g7
++prR0A//aCqBAlia1d0xSZZue2lV8hlTJIUPfa6+6b+Mkl9YmFWu0vJFxwRdpsj1
+bfgv1N4s6Cvj7JLfEMQ5WbNFz89qRKk5zuB8qZVR5ZwfKd0hZXDipmob3lViBqZP
+y+cYm1RBvfnvoZSY/+zUdRJS7UzmNytb6sSjZze7Hys6BXS+5H54X0wDVSShxOoI
+GcCD7jDswjYqvPQzlZQXGQ4RlYsvBsazNLKWTKZnuRLIeGjX1IWmTq58TKB8albF
+/UgdURZiuEUZc4Ybr6RDyuARquTGxj/ZcUHtiboNbkBnj6436D/RKAKE80WqMYzu
+X/yxxGHlF3jFWvvr83Yr7NMZJigfi9k2pyvEBMcbEyJErgEjE5qeJ85xiLGd9ga2
+E0XQuaogbcIn9u7H0JId1eysKDn4Tmt0B1NlN6+2OQcOnkOvjDP/oeOuClQHgts4
+Vj+dmxBzP3XdjdK6SeRuU+Gpia+bVQKcwBMOCVaT5CZEoQkEBcDhlZb78KY04pi1
+bw2ceIkMrFe012hqeqHjlAdsOzUZGRTFZDpvdRfGf9hBNddMbaKl/UmnpaircnWf
+XHVFqiw5HLO7FCt3R5V3+qqp60m+e8Ljq02wNrjOw2wUyIfRHoYFVIBX30W979py
+q4Eis19au99FpOHZXgFZoR9A2Mw0zzOnv5vap6N9dwt/xYSY9wg=
+=vbvd
+-----END PGP SIGNATURE-----
 
-
-Test Failures
--------------
-     =
-
-
-run | platform             | arch  | lab           | compiler | defconfig  =
-        | results
-----+----------------------+-------+---------------+----------+------------=
---------+--------
-2   | imx6q-sabrelite      | arm   | lab-collabora | gcc-8    | multi_v7_de=
-fconfig | 1/21   =
-
-
-  Results:     1 PASS, 20 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc4-41-g277a17=
-22e66d/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-imx6q-sabrelite.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc4-41-g277a17=
-22e66d/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-imx6q-sabrelite.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0424.0/armhf/rootfs.cpio.gz  =
-
-
-  21 tests: 1 PASS, 20 FAIL, 0 SKIP
-    * rtcwake-mem-1:
-        never passed
-    * rtcwake-mem-2:
-        never passed
-    * rtcwake-mem-3:
-        never passed
-    * rtcwake-mem-4:
-        never passed
-    * rtcwake-mem-5:
-        never passed
-    * rtcwake-mem-6:
-        never passed
-    * rtcwake-mem-7:
-        never passed
-    * rtcwake-mem-8:
-        never passed
-    * rtcwake-mem-9:
-        never passed
-    * rtcwake-mem-10:
-        never passed
-    * rtcwake-freeze-1:
-        never passed
-    * rtcwake-freeze-2:
-        never passed
-    * rtcwake-freeze-3:
-        never passed
-    * rtcwake-freeze-4:
-        never passed
-    * rtcwake-freeze-5:
-        never passed
-    * rtcwake-freeze-6:
-        never passed
-    * rtcwake-freeze-7:
-        never passed
-    * rtcwake-freeze-8:
-        never passed
-    * rtcwake-freeze-9:
-        never passed
-    * rtcwake-freeze-10:
-        never passed   =
-
-        =20
+--k67hcptim6stu57b--
