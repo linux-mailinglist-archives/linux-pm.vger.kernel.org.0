@@ -2,144 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C051CCD2A
-	for <lists+linux-pm@lfdr.de>; Sun, 10 May 2020 21:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27601CCD58
+	for <lists+linux-pm@lfdr.de>; Sun, 10 May 2020 21:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729216AbgEJTFv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 May 2020 15:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728385AbgEJTFu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 May 2020 15:05:50 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4567C061A0C;
-        Sun, 10 May 2020 12:05:50 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id d22so3495231pgk.3;
-        Sun, 10 May 2020 12:05:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TrDysAnyzIqn5Cn1iMOx1jHu5Zp3yUHwKX37t/G/0oo=;
-        b=Tusd/kAIJ93DCgBlGio6JGtGTJMloGM3X+oLDhyeqDPqSqCXLICnX9B8HMn/Jd0Tik
-         +k7rp+0JfNDOaOh23t8jMPC6KRZz/xaa8oDPLQ+uXPvlcS1bGZ1DLNaxEcN5K35fNAUQ
-         K4+XmSRSvOCSjx8VciY3xSCCEOJy8x4ot1c6rf6Kzelxqy31GZ+6vunnB01XxySlLljG
-         nKgOxJLV8Qb0HRTMNhZNqOejR93rP3pryODWevJvGCthrkNvR2P1xPBlvkfvmDyxSxTH
-         wJlGEMaTgD4KvDzqEGV1cq7HxVl6HOFnLM2W1f9zS4HlohudcR0q29xfWtlTGa7bPjpw
-         Je0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TrDysAnyzIqn5Cn1iMOx1jHu5Zp3yUHwKX37t/G/0oo=;
-        b=nU3K3FfvENJIKEtD5yCrNbaiuNwQbD91+pmL60KA3Kz6h6+pohF9PfK3yrhVifU8LA
-         W7AAgVwMgBp/2MMqZE2vq5nMuZ0+6OjwO2bGoAmqXtrMc0PolQwXdlwORb6nvU4bIiMz
-         kGp10xYT+YDmZbMtJoxuXQ2aJSFErjHLpoEkesjnyK9ipabcFdM8LKLglOrq22MpVpup
-         WA1128OOgT0MVCWgCCVOBzIvo1Ugr4lOAuZwzFfbghSbMO01wBo2rGS4KzvMDjG+C5LW
-         mX+yvpOX+g6n1ZpvDNMdLi0497Qxhr+BHq4ABwuAzK9tylffTogQW+4DWsaREJwOd0m5
-         hcSw==
-X-Gm-Message-State: AGi0PuZncimxjfZ58V9lpjl7wxFboiksifoxXxSDedQErzw2tXLPuw7D
-        pJYaZWDaMi18vK1P2cZGgRpakmF1V15WTn3Modw=
-X-Google-Smtp-Source: APiQypLeReEsRK6CfvZljwNh3sLkBBj5r2qTM7yV0oIgFRo3EmuOUB97cNaBFdGIXnDDJM4DwzZIgvCMuvjhuSRGYZ8=
-X-Received: by 2002:a65:6251:: with SMTP id q17mr11271737pgv.4.1589137550161;
- Sun, 10 May 2020 12:05:50 -0700 (PDT)
+        id S1729215AbgEJTvE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 May 2020 15:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729032AbgEJTvE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 May 2020 15:51:04 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC744C061A0C;
+        Sun, 10 May 2020 12:51:03 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id A6A532A08CD
+Received: by earth.universe (Postfix, from userid 1000)
+        id AA8803C08C7; Sun, 10 May 2020 21:50:59 +0200 (CEST)
+Date:   Sun, 10 May 2020 21:50:59 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     mazziesaccount@gmail.com, Mark Brown <broonie@kernel.org>,
+        linux-pm@vger.kernel.org, brendanhiggins@google.com,
+        linux-kernel@vger.kernel.org, lgirdwood@gmail.com
+Subject: Re: [PATCH] lib: linear_ranges: Add missing MODULE_LICENSE()
+Message-ID: <20200510195059.dijv6ysac42a6nuq@earth.universe>
+References: <20200509151519.GA7100@localhost.localdomain>
 MIME-Version: 1.0
-References: <cover.1588460322.git.syednwaris@gmail.com> <20200504114109.GE185537@smile.fi.intel.com>
- <20200504143638.GA4635@shinobu> <CAHp75Vf_vP1qM9x81dErPeaJ4-cK-GOMnmEkxkhPY2gCvtmVbA@mail.gmail.com>
- <20200505145250.GA5979@shinobu> <CACG_h5pcb3uOn+or-6L8bMk3bBNFXWJre9C9pRi3hNgFxGkd_g@mail.gmail.com>
-In-Reply-To: <CACG_h5pcb3uOn+or-6L8bMk3bBNFXWJre9C9pRi3hNgFxGkd_g@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 10 May 2020 22:05:38 +0300
-Message-ID: <CAHp75VcRztO-DPnUin-2TU9e10k0VViD7=S3ypQ0vQ=ittxNkw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] Introduce the for_each_set_clump macro
-To:     Syed Nayyar Waris <syednwaris@gmail.com>
-Cc:     William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, rrichter@marvell.com,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yg3s6qf7ohrjd3se"
+Content-Disposition: inline
+In-Reply-To: <20200509151519.GA7100@localhost.localdomain>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, May 9, 2020 at 7:36 PM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
-> On Tue, May 5, 2020 at 8:24 PM William Breathitt Gray
-> <vilhelm.gray@gmail.com> wrote:
-> > On Tue, May 05, 2020 at 04:51:56PM +0300, Andy Shevchenko wrote:
-> > > On Mon, May 4, 2020 at 5:41 PM William Breathitt Gray
-> > > <vilhelm.gray@gmail.com> wrote:
-> > > > On Mon, May 04, 2020 at 02:41:09PM +0300, Andy Shevchenko wrote:
-> > > > > On Sun, May 03, 2020 at 04:38:36AM +0530, Syed Nayyar Waris wrote:
 
-...
+--yg3s6qf7ohrjd3se
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > > > Looking into the last patches where we have examples I still do not see a
-> > > > > benefit of variadic clump sizes. power of 2 sizes would make sense (and be
-> > > > > optimized accordingly (64-bit, 32-bit).
+Hi,
 
-> > > > There is of course benefit in defining for_each_set_clump with clump
-> > > > sizes of powers of 2 (we can optimize for 32 and 64 bit sizes and avoid
-> > > > boundary checks that we know will not occur), but at the very least the
-> > > > variable size bitmap_set_value and bitmap_get_value provide significant
-> > > > benefit for the readability of the gpio-xilinx code:
-> > > >
-> > > >         bitmap_set_value(old, state[0], 0, width[0]);
-> > > >         bitmap_set_value(old, state[1], width[0], width[1]);
-> > > >         ...
-> > > >         state[0] = bitmap_get_value(new, 0, width[0]);
-> > > >         state[1] = bitmap_get_value(new, width[0], width[1]);
-> > > >
-> > > > These lines are simple and clear to read: we know immediately what they
-> > > > do. But if we did not have bitmap_set_value/bitmap_get_value, we'd have
-> > > > to use several bitwise operations for each line; the obfuscation of the
-> > > > code would be an obvious hinderance here.
-> > >
-> > > Do I understand correctly that width[0] and width[1] may not be power
-> > > of two and it's actually the case?
+On Sat, May 09, 2020 at 06:15:19PM +0300, Matti Vaittinen wrote:
+> When linear_ranges is compiled as module we get warning
+> about missing MODULE_LICENSE(). Fix it by adding
+> MODULE_LICENSE("GPL") as is suggested by SPDX and EXPORTs.
+>=20
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> ---
+>=20
+> I saw Mark applied the linear-ranges patch. So I sent this fix as
+> incremental patch - but I still use the same Linus tree as a base of
+> this fix - the linear-ranges file should be unchanged in regulator tree.
+> If this does not apply I can clone regulator tree and create this fix on
+> it.
+>=20
+> I don't know if this is the correct way to fix this as the linear-ranges
+> should be merged to power-supply tree.
+>=20
+> I guess we can either:
+> - Use this patch to fix regulator tree and create fixed tag for
+>   power-supply(?)
+> - Add this fix in the original series and resend whole series(?)
+> - re-create the series and drop the already applied patches. Add this
+>   fix as a fixup patch in new series and apply it to power-supply tree
+>   after the linear-ranges from regulator is merged to power-supply.
+>=20
+>  Please adviece me if this patch is not the way to go.
+>=20
+> Oh, and I am really sorry for the trouble. I saw I had regulators=3Dy
+> in all of my compilations due to some pincontrol dependencies. So
+> linear-ranges was not built as module in any of my test compilations :(
+>=20
+> Thanks for testing Mark!
 
-> > I'm under the impression that width[0] and width[1] are arbitrarily
-> > chosen by the user and could be any integer. I have never used this
-> > hardware so I'm hoping one of the gpio-xilinx or GPIO subsystem
-> > maintainers in this thread will respond with some guidance.
-> >
-> > If the values of width[0] and width[1] are restricted to powers of 2,
-> > then I agree that there is no need for generic bitmap_set_value and
-> > bitmap_get_value functions and we can instead use more optimized power
-> > of 2 versions.
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-> Regarding the question that whether width[0] and width[1] can have any
-> value or they are restricted to power-of-2.
->
-> Referring to the document (This xilinx GPIO IP was mentioned in the
-> gpio-xilinx.c file):
-> https://www.xilinx.com/support/documentation/ip_documentation/axi_gpio/v2_0/pg144-axi-gpio.pdf
->
-> On page 8, we can see that the GPIO widths for the 2 channels can have
-> values different from power-of-2.For example: 5, 15 etc.
->
-> So, I think we should keep the 'for_each_set_clump',
-> 'bitmap_get_value' and 'bitmap_set_value' as completely generic.
->
-> I am proceeding further for my next patchset submission keeping above
-> findings in mind. If you guys think something else or would like to
-> add something, let me know.
+I think it makes sense to just queue this through the regulator tree.
+Apart from that you should add a MAINTAINERS file entry for the
+linear_ranges lib. Main user is regulators, so future patches should
+probably be queued through its tree.
 
-Thank you for investigation. So, if Xilinx is okay with the change, I
-have no objections.
+-- Sebastian
 
--- 
-With Best Regards,
-Andy Shevchenko
+>  lib/linear_ranges.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/lib/linear_ranges.c b/lib/linear_ranges.c
+> index d1336c75ccd7..9495ef3572b7 100644
+> --- a/lib/linear_ranges.c
+> +++ b/lib/linear_ranges.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/export.h>
+>  #include <linux/kernel.h>
+>  #include <linux/linear_range.h>
+> +#include <linux/module.h>
+> =20
+>  /**
+>   * linear_range_values_in_range - return the amount of values in a range
+> @@ -239,3 +240,6 @@ int linear_range_get_selector_high(const struct linea=
+r_range *r,
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(linear_range_get_selector_high);
+> +
+> +MODULE_DESCRIPTION("linear-ranges helper");
+> +MODULE_LICENSE("GPL");
+> --=20
+> 2.21.0
+>=20
+>=20
+> --=20
+> Matti Vaittinen, Linux device drivers
+> ROHM Semiconductors, Finland SWDC
+> Kiviharjunlenkki 1E
+> 90220 OULU
+> FINLAND
+>=20
+> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+> Simon says - in Latin please.
+> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+> Thanks to Simon Glass for the translation =3D]=20
+
+--yg3s6qf7ohrjd3se
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl64Wx0ACgkQ2O7X88g7
++pofrw//YFyv13THGq5MxNK50UVeuJkY4S79XhCf8X1P09EnZRmVkD1bZUgQ1McD
+yLW7YB8JAJ8XVtbJ1Mh4/uoyppdW9RrqnBbzdRNpU79eVb/sF7/sZHHsfFC8WHdz
+Ff2XXQBEy0vu6dyEbaXkiTzYgfRAt5e04FQ4I/pFWtwEguCcx5LqV7lzYfhtNfTK
+bmR+dtnnrPu/otNNNHKKTXYj+HQijNyRviVzrbNRlZmYL78Bjfqjp46SXAvktK6/
+RzqwtKyV9UpmY33oiiXhTP5q4Wg8SCQ8hFNj8fgFT4hecm8hO4S8aNojPrtJvjzk
+7hSO76elClvE0GjFN3b/GuqpUM5FApqeTM047Ml0UO1+P9n6mxHiNOXPMPl1mdvB
+2WjNOii30IOZYAsrasPY+oHBkpSHdSN3u1e+rsEBHqzbHNm729GZtzHDh8t4NzrT
+6cKDHf7LvP3og+xzm8PYgGj5biqo3wzqQtkN93kYd0DvpQ5OZPx4qDPgPJtVqUwT
+3jWy1zw4GacA2KjQn13pGoMDbZbKWEpkQKk9lQc5levoBxORYazzHKC66QYP3VLt
+gO1N0YCHmog90krF9x0Po31G+YhSacmFkUsbW16zkw472/oWKhol5cyNHWEiBw0l
+QF3Uep26aL5XE/Hd8+553tm9+ZHZev+hh291neLz2GdTywCXeT0=
+=fi0g
+-----END PGP SIGNATURE-----
+
+--yg3s6qf7ohrjd3se--
