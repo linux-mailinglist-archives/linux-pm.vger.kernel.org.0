@@ -2,137 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C95F1CC55B
-	for <lists+linux-pm@lfdr.de>; Sun, 10 May 2020 01:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F141CC5C2
+	for <lists+linux-pm@lfdr.de>; Sun, 10 May 2020 02:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728117AbgEIXnm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 May 2020 19:43:42 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34160 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726356AbgEIXnm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 May 2020 19:43:42 -0400
+        id S1726531AbgEJAct (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 May 2020 20:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726356AbgEJAct (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 May 2020 20:32:49 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673B0C061A0C;
+        Sat,  9 May 2020 17:32:49 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id B494F2A01A7
+        with ESMTPSA id 7E8652753CA
 Received: by earth.universe (Postfix, from userid 1000)
-        id DCAE43C08C7; Sun, 10 May 2020 01:43:38 +0200 (CEST)
-Date:   Sun, 10 May 2020 01:43:38 +0200
+        id BD0943C08C7; Sun, 10 May 2020 02:32:44 +0200 (CEST)
+Date:   Sun, 10 May 2020 02:32:44 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     milo.kim@ti.com, anton.vorontsov@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH V2] power: supply: lp8788: Fix an error handling path in
- 'lp8788_charger_probe()'
-Message-ID: <20200509234338.htilukszgiktza62@earth.universe>
-References: <20200509082323.223884-1-christophe.jaillet@wanadoo.fr>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        mazziesaccount@gmail.com, lgirdwood@gmail.com,
+        brendanhiggins@google.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 00/11] Support ROHM BD99954 charger IC
+Message-ID: <20200510003244.3ecxkn5r57nudsm2@earth.universe>
+References: <cover.1588944082.git.matti.vaittinen@fi.rohmeurope.com>
+ <20200508172024.GN4820@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fvloof6eixjzfmk4"
+        protocol="application/pgp-signature"; boundary="2vnpaxzv7zffzoea"
 Content-Disposition: inline
-In-Reply-To: <20200509082323.223884-1-christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20200508172024.GN4820@sirena.org.uk>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---fvloof6eixjzfmk4
+--2vnpaxzv7zffzoea
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, May 09, 2020 at 10:23:23AM +0200, Christophe JAILLET wrote:
-> In the probe function, in case of error, resources allocated in
-> 'lp8788_setup_adc_channel()' must be released.
+On Fri, May 08, 2020 at 06:20:24PM +0100, Mark Brown wrote:
+> On Fri, May 08, 2020 at 06:38:17PM +0300, Matti Vaittinen wrote:
+> > Please note that this series should be applied to two trees. Patches
+> > 1-4 (or 1-5 as suggested by Sebastian) should go to regulator tree.
+> > Perhaps Mark can provide an immutable branch to Sebastian? Rest of the
+> > patches can then go to power-supply tree.
 >=20
-> This can be achieved easily by using the devm_ variant of
-> 'iio_channel_get()'.
-> This has the extra benefit to simplify the remove function and to axe the
-> 'lp8788_release_adc_channel()' function which is now useless.
+> The following changes since commit 0e698dfa282211e414076f9dc7e83c1c288314=
+fd:
 >=20
-> Fixes: 98a276649358 ("power_supply: Add new lp8788 charger driver")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> V2: use devm_iio_channel_get instead of iio_channel_get and simplify code
-> ---
+>   Linux 5.7-rc4 (2020-05-03 14:56:04 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git t=
+ags/linear-ranges-lib
+>=20
+> for you to fetch changes up to 60ab7f4153b6af461c90d572c31104086b44639f:
+>=20
+>   regulator: use linear_ranges helper (2020-05-08 18:18:13 +0100)
+>=20
+> ----------------------------------------------------------------
+> lib: Add linear ranges helper library and start using it
+>=20
+> Series extracts a "linear ranges" helper out of the regulator
+> framework. Linear ranges helper is intended to help converting
+> real-world values to register values when conversion is linear. I
+> suspect this is useful also for power subsystem and possibly for clk.
+>=20
+> ----------------------------------------------------------------
 
-Thanks, queued.
+Thanks, merged to power-supply's for-next branch.
 
 -- Sebastian
 
->  drivers/power/supply/lp8788-charger.c | 18 ++----------------
->  1 file changed, 2 insertions(+), 16 deletions(-)
+> Matti Vaittinen (4):
+>       lib: add linear ranges helpers
+>       lib/test_linear_ranges: add a test for the 'linear_ranges'
+>       power: supply: bd70528: rename linear_range to avoid collision
+>       regulator: use linear_ranges helper
 >=20
-> diff --git a/drivers/power/supply/lp8788-charger.c b/drivers/power/supply=
-/lp8788-charger.c
-> index 84a206f42a8e..e7931ffb7151 100644
-> --- a/drivers/power/supply/lp8788-charger.c
-> +++ b/drivers/power/supply/lp8788-charger.c
-> @@ -572,27 +572,14 @@ static void lp8788_setup_adc_channel(struct device =
-*dev,
->  		return;
-> =20
->  	/* ADC channel for battery voltage */
-> -	chan =3D iio_channel_get(dev, pdata->adc_vbatt);
-> +	chan =3D devm_iio_channel_get(dev, pdata->adc_vbatt);
->  	pchg->chan[LP8788_VBATT] =3D IS_ERR(chan) ? NULL : chan;
-> =20
->  	/* ADC channel for battery temperature */
-> -	chan =3D iio_channel_get(dev, pdata->adc_batt_temp);
-> +	chan =3D devm_iio_channel_get(dev, pdata->adc_batt_temp);
->  	pchg->chan[LP8788_BATT_TEMP] =3D IS_ERR(chan) ? NULL : chan;
->  }
-> =20
-> -static void lp8788_release_adc_channel(struct lp8788_charger *pchg)
-> -{
-> -	int i;
-> -
-> -	for (i =3D 0; i < LP8788_NUM_CHG_ADC; i++) {
-> -		if (!pchg->chan[i])
-> -			continue;
-> -
-> -		iio_channel_release(pchg->chan[i]);
-> -		pchg->chan[i] =3D NULL;
-> -	}
-> -}
-> -
->  static ssize_t lp8788_show_charger_status(struct device *dev,
->  				struct device_attribute *attr, char *buf)
->  {
-> @@ -735,7 +722,6 @@ static int lp8788_charger_remove(struct platform_devi=
-ce *pdev)
->  	flush_work(&pchg->charger_work);
->  	lp8788_irq_unregister(pdev, pchg);
->  	lp8788_psy_unregister(pchg);
-> -	lp8788_release_adc_channel(pchg);
-> =20
->  	return 0;
->  }
-> --=20
-> 2.25.1
->=20
+>  drivers/power/supply/bd70528-charger.c  |  10 +-
+>  drivers/regulator/88pg86x.c             |   4 +-
+>  drivers/regulator/88pm800-regulator.c   |   4 +-
+>  drivers/regulator/Kconfig               |   1 +
+>  drivers/regulator/act8865-regulator.c   |   4 +-
+>  drivers/regulator/act8945a-regulator.c  |   2 +-
+>  drivers/regulator/arizona-ldo1.c        |   2 +-
+>  drivers/regulator/arizona-micsupp.c     |   4 +-
+>  drivers/regulator/as3711-regulator.c    |   6 +-
+>  drivers/regulator/as3722-regulator.c    |   4 +-
+>  drivers/regulator/axp20x-regulator.c    |  16 +--
+>  drivers/regulator/bcm590xx-regulator.c  |   8 +-
+>  drivers/regulator/bd70528-regulator.c   |   8 +-
+>  drivers/regulator/bd71828-regulator.c   |  10 +-
+>  drivers/regulator/bd718x7-regulator.c   |  26 ++--
+>  drivers/regulator/da903x.c              |   2 +-
+>  drivers/regulator/helpers.c             | 130 ++++++++---------
+>  drivers/regulator/hi6421-regulator.c    |   4 +-
+>  drivers/regulator/lochnagar-regulator.c |   4 +-
+>  drivers/regulator/lp873x-regulator.c    |   4 +-
+>  drivers/regulator/lp87565-regulator.c   |   2 +-
+>  drivers/regulator/lp8788-buck.c         |   2 +-
+>  drivers/regulator/max77650-regulator.c  |   2 +-
+>  drivers/regulator/mcp16502.c            |   4 +-
+>  drivers/regulator/mp8859.c              |   2 +-
+>  drivers/regulator/mt6323-regulator.c    |   6 +-
+>  drivers/regulator/mt6358-regulator.c    |   8 +-
+>  drivers/regulator/mt6380-regulator.c    |   6 +-
+>  drivers/regulator/mt6397-regulator.c    |   6 +-
+>  drivers/regulator/palmas-regulator.c    |   4 +-
+>  drivers/regulator/qcom-rpmh-regulator.c |   2 +-
+>  drivers/regulator/qcom_rpm-regulator.c  |  14 +-
+>  drivers/regulator/qcom_smd-regulator.c  |  78 +++++------
+>  drivers/regulator/rk808-regulator.c     |  10 +-
+>  drivers/regulator/s2mps11.c             |  14 +-
+>  drivers/regulator/sky81452-regulator.c  |   2 +-
+>  drivers/regulator/stpmic1_regulator.c   |  18 +--
+>  drivers/regulator/tps65086-regulator.c  |  10 +-
+>  drivers/regulator/tps65217-regulator.c  |   4 +-
+>  drivers/regulator/tps65218-regulator.c  |   6 +-
+>  drivers/regulator/tps65912-regulator.c  |   4 +-
+>  drivers/regulator/twl-regulator.c       |   4 +-
+>  drivers/regulator/twl6030-regulator.c   |   2 +-
+>  drivers/regulator/wm831x-dcdc.c         |   2 +-
+>  drivers/regulator/wm831x-ldo.c          |   4 +-
+>  drivers/regulator/wm8350-regulator.c    |   2 +-
+>  drivers/regulator/wm8400-regulator.c    |   2 +-
+>  include/linux/linear_range.h            |  48 +++++++
+>  include/linux/regulator/driver.h        |  27 +---
+>  lib/Kconfig                             |   3 +
+>  lib/Kconfig.debug                       |  12 ++
+>  lib/Makefile                            |   2 +
+>  lib/linear_ranges.c                     | 241 ++++++++++++++++++++++++++=
+++++++
+>  lib/test_linear_ranges.c                | 228 ++++++++++++++++++++++++++=
+++++
+>  54 files changed, 768 insertions(+), 266 deletions(-)
+>  create mode 100644 include/linux/linear_range.h
+>  create mode 100644 lib/linear_ranges.c
+>  create mode 100644 lib/test_linear_ranges.c
 
---fvloof6eixjzfmk4
+
+
+--2vnpaxzv7zffzoea
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl63QCoACgkQ2O7X88g7
-+pqXkw//TQAiHoFVbfj4PDt6JINhpc+KHH09+OYBJASqORFGRahjpl9lRP2KwOWC
-M5slAVpIewYZduNjMSiXLsl3E9THqT4aPlMCQsPbMbqf9opbo+v/N+99eqK6H7zX
-muI5Ujy4mal8dQblR2ePlZiZkXj+rcY85JwW4BndWPDxY6H66GlYdFTuBdphLqIJ
-o3dFznmKZBWVk7jLogVf0Cqa/lK1h4FAg/X9f+9gsX8WEZujUONFdYxccQxlGZXt
-pBVVeTlg4a7PdXvvKDZwNLrhIs4tRI3ePc8cxcjkl2R9GUmk4r2LV2xswrkYbBpt
-dhYnPSHSKwFupk2iDiqL6cZxGdjyI7xHy/06rQO+vo2FgI6xDSsEgYhRFV2WrgME
-4T0FJOUw3wSEXpxndU/Q0339Hbq27n6m5ql3w5CNLOGU5phWFGGFJLxfYj2do8Gj
-9KwXpGGZy0hr03y0G036B+kWWxbrhoPfOE0VPfIo7ZcSFqXQNGPw+fQELbI1DFvI
-ElAndnEVL6hIa2iQyXHAqSkkPo/uq87/miBDo3DyHnmkshZAB3hLVmXEaMG+82Rq
-vPbK+TCz2sqHDKS6CDEAOZ/pG9P0wL5WUHP8uSLBq3dLqkKY+1zsjlhPHqwH9q44
-t9MY0/eLvpGTMWVwIO01U3Rpo4m6FdjN8JwahBASvoRzLEeUh5c=
-=2IDJ
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl63S6cACgkQ2O7X88g7
++poxMQ//ZqWoqEMXvf3HYr8zHc/3gRNnrZHVI1jhO2aSOs4UIH1gebjIUEaVmSdH
+iK2rLIyGChmiHZbwDW84POb9e3DhV6vSzzo2MB+ZpYszYQWSzfioVbS2mM+kpMWs
+n35kz0CbznrukxOjIZpmCqVwHwu4UOURhasRJdf6HzddUYt8TIRd3B1SKqqgN96W
+hKJt3JYeIs3e1gARYHKA1tI10OpAnfyqJ+2fWejjEBtPFeBqyy2bJAwqe9EJOV8J
++Ks7+kO8nYYaWtDEamXfJC5gn+fre4eG4tH7Xu7NYIsHJ7duiQ6jwixsy3m78vp9
+oRzDegoHoTtgGTtjBy28jyZWubK6bCZxDY7tlbdvx63cePAHH+KJuhlQKXxxKxUr
+TFmYP4hIL4xp0D5P3v0WRURdgfxK4Tf0YVrM2qsIseLpiXeepPcDxlgmWl6KFJlW
+9DnhbCvxPzP/Prybahox3W2RzTeOAvjCO25zl6J/wozksGQgFtc8REy0+PJcp3cW
+7GZdhlOGQru8848JO0CnuearPDIc41+2q97FfJH2n5OLURwOg1n/fOx05vguhD/c
+IPYVEZs9TLICb6OmJOUlZUD775/Lcp2ceUiwdfDgGo2y+T8Fy/O2Ym7C9IHXuEcN
+aeKqUNpeaKC8vOnsIicKALw6fd193vUQ1wKppLvi+KEXPd6Osck=
+=Xn2+
 -----END PGP SIGNATURE-----
 
---fvloof6eixjzfmk4--
+--2vnpaxzv7zffzoea--
