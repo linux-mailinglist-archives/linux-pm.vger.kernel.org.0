@@ -2,57 +2,226 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 554F11CD774
-	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 13:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA4A1CD782
+	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 13:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726934AbgEKLPr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 May 2020 07:15:47 -0400
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:38859 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726438AbgEKLPr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 07:15:47 -0400
-Received: by mail-oi1-f180.google.com with SMTP id r66so14738432oie.5
-        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 04:15:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8bByo2cebBdK6Ej+kmrJVle0wyAQ3TiwRFnpDV6NdMY=;
-        b=PiTEM/EalJHj71tVRWgP4NZcKOJU14zCBYpMbZCiS67CnzdSeTuxg0XfWX/lhQoAAX
-         n6vkDMAC/0C/faRC/Dstkdbw0wgJHVAPKb+5Iwm1+jNKjl8tq6FYD/eIVt5cE5qqta4P
-         PCV7iDxA0JHSXxZjS5k048j7ablgaoU4/O8e0fkw+XDZ+t3VCGNsenxJ1nloXmMhBXSk
-         46qY+QT4QI4d9Gt5+rnjDTdbDMj+UALXzXls28Wrt2XDq5Bh23mRh8ofbZoe7q/jN7js
-         Hx9Ub3XROo3CGn44AAwibD/tIQArzSG2s/YAoAVb/kodYEo6wyL3e8GCKOa8rELThQiU
-         +Vjg==
-X-Gm-Message-State: AGi0PubPplEB1sEjxC1fcK1GcYlJQ8/tknsnx+Na0M5WoLHt+bmZCnZQ
-        IoxZu6As6KgvmxSGxEQhqQpApeQqiMfnBqspvfMwZnYt
-X-Google-Smtp-Source: APiQypLaKwpdCOTsM+BCn9RTWmuEuMSDZBV5XZIkTbUYUSsm1et3txm4L7zB7Aejkis3mDefq+FDORD4lDRaBVLsdqM=
-X-Received: by 2002:aca:aa8c:: with SMTP id t134mr19920696oie.103.1589195746631;
- Mon, 11 May 2020 04:15:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAJCQCtQ=1=UFaCvPO99W0t9SWuK5zG4ENKYzq2PgJ36iu-EiiQ@mail.gmail.com>
-In-Reply-To: <CAJCQCtQ=1=UFaCvPO99W0t9SWuK5zG4ENKYzq2PgJ36iu-EiiQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 11 May 2020 13:15:30 +0200
-Message-ID: <CAJZ5v0hqODC52Bogeo-2suROH63NmON=5a5K6OZEp1YYMYK_QA@mail.gmail.com>
-Subject: Re: 5.7 sleep/wake regression
-To:     Chris Murphy <chris@colorremedies.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728402AbgEKLTe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 May 2020 07:19:34 -0400
+Received: from foss.arm.com ([217.140.110.172]:56914 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725993AbgEKLTd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 11 May 2020 07:19:33 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D1251FB;
+        Mon, 11 May 2020 04:19:32 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.37.12.83])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F2E713F305;
+        Mon, 11 May 2020 04:19:21 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com
+Cc:     Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
+        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, qperret@google.com, bsegall@google.com,
+        mgorman@suse.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, kernel@pengutronix.de, khilman@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
+        lorenzo.pieralisi@arm.com, lukasz.luba@arm.com,
+        patrick.bellasi@matbug.net, orjan.eide@arm.com,
+        rdunlap@infradead.org, mka@chromium.org
+Subject: [PATCH v7 00/15] Add support for devices in the Energy Model
+Date:   Mon, 11 May 2020 12:18:57 +0100
+Message-Id: <20200511111912.3001-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 11, 2020 at 6:22 AM Chris Murphy <chris@colorremedies.com> wrote:
->
-> Got an older Macbook Pro that does suspend to RAM and wake OK with
-> 5.6, but starting with git 47acac8cae28, it will not wake up. Instead
-> it has a black screen, gets hot, fans go to high, and it turns into a
-> hair dryer. So it's a regression.
+Hi all,
 
-There is a known issue addressed by this patch:
+This patch set introduces support for devices in the Energy Model (EM)
+framework. It will unify the power model for thermal subsystem. It will
+make simpler to add support for new devices willing to use more
+advanced features (like Intelligent Power Allocation). Now it should
+require less knowledge and effort for driver developer to add e.g.
+GPU driver with simple energy model. A more sophisticated energy model
+in the thermal framework is also possible, driver needs to provide
+a dedicated callback function. More information can be found in the
+updated documentation file.
 
-https://patchwork.kernel.org/patch/11538065/
+First 7 patches are refactoring Energy Model framework to add support
+of other devices that CPUs. They change:
+- naming convention from 'capacity' to 'performance' state,
+- API arguments adding device pointer and not rely only on cpumask,
+- change naming when 'cpu' was used, now it's a 'device'
+- internal structure to maintain registered devices
+- update users to the new API
+Patch 8 updates OPP framework helper function to be more generic, not
+CPU specific.
+Patches 9-14 change devfreq cooling, dropping part of old power model and
+adding registration with Energy Model via exported GPL function.
+The last path is a simple change for Panfrost GPU driver.
 
-so can you please try it?
+The patch set is based on linux-next tag next-20200508.
+
+Changes:
+v7:
+- all the EM changes are for patch 4/10 from v6
+-- added em_perf_domain structure into struct device in order to simplify
+  code (suggested by Daniel)
+-- removed kref, em_pd, debug_dir from em_device (suggested by Daniel)
+-- refactored code and removed unsed functions
+-- refactored checking if EM exists for a CPU and deleted em_cpus_pd_exist()
+-- simplified em_pd_get() and em_cpu_get()
+-- removed em_debug_type_show()
+-- removed a few unused debug prints
+-- changed debug dir name in order to remove em_debug_type_show() and
+  em_debug_dev_show() functions
+-- removed em_dev_list and em_device since it is now possible to use
+  struct device and rely on it
+- thermal: split patch 9/10 from v6 as requested by Daniel and created 6 new:
+-- patch v7 9/15 with only tracing change - exactly the same code so I keep
+   'Reviewed-by # for tracing code' from Steven Rostedt
+-- patch 10/15 and 11/14 takes more consistent state of devfreq device
+-- patch 12/15 which adds Energy Model register/unregister functions
+-- patch 13/15 which uses the new Energy Model
+-- patch 14/15 adjusts headers license into the SPDX
+v6 [6]:
+- split patch 1/5 from v5 into smaller patches as requested by Daniel
+  and dropped ACK from Quentin which was in the old there
+- added function em_dev_register_perf_domain as suggested by Daniel, which
+  would help transition into the new API
+- changed 'cs' (capacity state) in different places into 'ps' (performance state),
+  since now there are many smaller patches (previously skipped because
+  of too big size of the patch with main features and left to do later)
+- changed cpumask_equal() to cpumask_intersects() when checking if 'cpus' coming
+  as an argument to registration function might overlap with already known;
+  this shouldn't be an issue when cpufreq policy is OK, but a check doesn't harm
+- added Reviewed-by from Alyssa into Panfrost related patch
+- dropped Matthias patch with PM QoS from the series since it's in the next now
+v5 [5]:
+- devfreq cooling: rebased on top of pending patch introducing PM QoS limits
+- devfreq cooling: added Matthias's patch to make this series build check pass
+- devfreq cooling: removed OPP disable code and switched to PM QoS
+- devfreq cooling: since thermal code always used a pointer to devfreq_dev_status,
+  switched to work on a local copy and avoid potential race when either busy_time or
+  total_time could change in the background
+- devfreq cooling: added _normalize_load() and handle all scenarios when
+  busy_time and total_time could have odd values (even raw counters)
+- Energy Model patch 2/4: removed prints from cpufreq drivers and added print inside
+  dev_pm_opp_of_register_em()
+- update patch 2/4 description to better reflect upcoming changes
+- collected ACK from Quentin for patch 1/4 and Reviewed-by from Steven for 4/4
+v4 [4]:
+- devfreq cooling: added two new registration functions, which will take care
+  of registering EM for the device and simplify drivers code
+  (suggested by Robin and Rob)
+- Energy Model: changed unregistering code, added kref to track usage, added
+  code freeing tables, added helper function
+- added return value to function dev_pm_opp_of_register_em() and updated
+  CPUFreq drivers code, added debug prints in case of failure
+- updated comments in devfreq cooling removing statement that only
+  simple_ondemand devfreq governor is supported to work with power extentions
+- fixed spelling in the documentation (reported by Randy)
+v3 [3]:
+- added back the cpumask 'cpus' in the em_perf_domain due potential cache misses
+- removed _is_cpu_em() since there is no need for it
+- changed function name from em_pd_energy() to em_cpu_energy(), which is
+  optimized for usage from the scheduler making some assumptions and not
+  validating arguments to speed-up, there is a comment stressing that it should
+  be used only for CPUs em_perf_domain
+- changed em_get_pd() to em_pd_get() which is now aligned with em_cpu_get()
+  naming
+- Energy Model: add code which checks if the EM is already registered for the
+  devfreq device
+- extended comment in em_cpu_get() describing the need for this function
+- fixed build warning reported on x86 by kbuild test robot in devfreq_cooling.c
+- updated documentation in the energy-model.rst
+- changed print messages from 'energy_model' to 'EM'
+- changed dev_warn to dev_dbg, should calm down test scripts in case the
+  platform has OPPs less efficient in the OPP table (some of them are there for
+  cooling reasons, we shouldn't warn in this case, debug info is enough)
+v2 [2]:
+- changed EM API em_register_perf_domain() adding cpumask_t pointer
+  as last argument (which was discussed with Dietmar and Quentin)
+- removed dependency on PM_OPP, thanks to the cpumask_t argument
+- removed enum em_type and em->type dependent code
+- em_get_pd() can handle CPU device as well as devfreq device
+- updated EM documentation
+- in devfreq cooling added code which prevents from race condition with
+  devfreq governors which are trying to use OPPs while thermal is in the middle
+  of disabling them.
+- in devfreq cooling added code which updates state of the devfreq device to
+  avoid working on stale data when governor has not updated it for a long time
+- in devfreq cooling added backward compatibility frequency table for drivers
+  which did not provide EM
+- added Steven's Reviewed-by to trace code in thermal
+- added another CPUFreq driver which needs to be updated to the new API
+The v1 can be found here [1].
+
+Regards,
+Lukasz Luba
+
+[1] https://lkml.org/lkml/2020/1/16/619
+[2] https://lkml.org/lkml/2020/2/6/377
+[3] https://lkml.org/lkml/2020/2/21/1910
+[4] https://lkml.org/lkml/2020/3/9/471
+[5] https://lkml.org/lkml/2020/3/18/351
+[6] https://lkml.org/lkml/2020/4/10/108
+
+
+Lukasz Luba (15):
+  PM / EM: change naming convention from 'capacity' to 'performance'
+  PM / EM: introduce em_dev_register_perf_domain function
+  PM / EM: update callback structure and add device pointer
+  PM / EM: add support for other devices than CPUs in Energy Model
+  PM / EM: remove em_register_perf_domain
+  PM / EM: change name of em_pd_energy to em_cpu_energy
+  Documentation: power: update Energy Model description
+  OPP: refactor dev_pm_opp_of_register_em() and update related drivers
+  thermal: devfreq_cooling: change tracing function and arguments
+  thermal: devfreq_cooling: get device load and frequency directly
+  thermal: devfreq_cooling: work on a copy of device status
+  thermal: devfreq_cooling: add new registration functions with Energy
+    Model
+  thermal: devfreq_cooling: remove old power model and use EM
+  thermal: devfreq_cooling: update license to use SPDX
+  drm/panfrost: Register devfreq cooling and attempt to add Energy Model
+
+ Documentation/power/energy-model.rst        | 135 ++++---
+ drivers/cpufreq/cpufreq-dt.c                |   2 +-
+ drivers/cpufreq/imx6q-cpufreq.c             |   2 +-
+ drivers/cpufreq/mediatek-cpufreq.c          |   2 +-
+ drivers/cpufreq/omap-cpufreq.c              |   2 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c           |   2 +-
+ drivers/cpufreq/scmi-cpufreq.c              |  11 +-
+ drivers/cpufreq/scpi-cpufreq.c              |   2 +-
+ drivers/cpufreq/vexpress-spc-cpufreq.c      |   2 +-
+ drivers/gpu/drm/panfrost/panfrost_devfreq.c |   2 +-
+ drivers/opp/of.c                            |  76 ++--
+ drivers/thermal/cpufreq_cooling.c           |  12 +-
+ drivers/thermal/devfreq_cooling.c           | 426 ++++++++++----------
+ include/linux/devfreq_cooling.h             |  51 ++-
+ include/linux/device.h                      |   5 +
+ include/linux/energy_model.h                | 148 ++++---
+ include/linux/pm_opp.h                      |  15 +-
+ include/trace/events/thermal.h              |  19 +-
+ kernel/power/energy_model.c                 | 283 ++++++++-----
+ kernel/sched/fair.c                         |   2 +-
+ kernel/sched/topology.c                     |  20 +-
+ 21 files changed, 692 insertions(+), 527 deletions(-)
+
+-- 
+2.17.1
+
