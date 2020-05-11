@@ -2,202 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B1A1CDEF0
-	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 17:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2051CDF0E
+	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 17:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730135AbgEKP0j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 May 2020 11:26:39 -0400
-Received: from mail-oo1-f67.google.com ([209.85.161.67]:36977 "EHLO
-        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726410AbgEKP0i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 11:26:38 -0400
-Received: by mail-oo1-f67.google.com with SMTP id v6so2014419oou.4;
-        Mon, 11 May 2020 08:26:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gqxtbamSYrDjCiG2Sa6OgrEIPkjy0PKI+7BZGr9gIXA=;
-        b=dSJWE3o7H3iyfv2Y+1fp/rjzUXH5SEiIwtE+bblrmTVtKZ4vG2ITnohZjUNPAMmvq/
-         nx+z6ZF18pIbx29+/XGM5n1JCc1MpkC7Tpm2A/2FjmimEA3jT+tWXmIjYk/9kxe0t6EU
-         dPFTQtlujbEcDWFGdtE71DwY0hoj01SH6NiESXwTQ2RrDZDgdJ1G2AyeJIvwBRvIPbUr
-         WOfcuFIV2E4DhACbCrDsxDuLwQz0CdJ9fdGQerHbHt+UBhLNmgOzIjQL4RONYGb+50CJ
-         jySh7we8uPp9qz7TRPYc/s4pQ7oPhdzFIp73p7zifFOfrerNn6huHDomr6nrt3Q3oLu/
-         0hOA==
-X-Gm-Message-State: AGi0PuYwZjXxNf4/krVwsqLdEQUQ4sPoMGqnIrxEY7GgL1mRxJETeoZW
-        c238JVb20C96Di/F9D2M5FbTsDhAqhSCcGZqhTY=
-X-Google-Smtp-Source: APiQypLq5jwWsqunJB5ifvHoh9oneaKxF7zKbKuAepuLszChzT3ZWyMlvRfbS+itaggAC9KM0ZNU+FCjePlLSSduPko=
-X-Received: by 2002:a4a:d204:: with SMTP id c4mr2387438oos.1.1589210797413;
- Mon, 11 May 2020 08:26:37 -0700 (PDT)
+        id S1729119AbgEKPbA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 May 2020 11:31:00 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:52660 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727093AbgEKPbA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 11:31:00 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 3BCD62A0923
+Received: by earth.universe (Postfix, from userid 1000)
+        id 0AA733C08C6; Mon, 11 May 2020 17:30:56 +0200 (CEST)
+Date:   Mon, 11 May 2020 17:30:55 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Dan Murphy <dmurphy@ti.com>
+Cc:     linux-pm@vger.kernel.org, robh@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        "Andrew F . Davis" <afd@ti.com>
+Subject: Re: [PATCH v2] dt-bindings: power: Convert bq27xxx dt to yaml
+Message-ID: <20200511153055.7u7afdcpcfbsmswq@earth.universe>
+References: <20200507183013.27261-1-dmurphy@ti.com>
+ <20200510161721.257vprq6rqp64wu5@earth.universe>
+ <fb9b240e-9bfe-1295-6fc4-700d886ea7c9@ti.com>
+ <20200511143241.nmkti7meahvj2swt@earth.universe>
+ <8674289c-038d-d811-4786-322d66072527@ti.com>
+ <20200511145700.lnytcr747snnolya@earth.universe>
+ <57e2495d-ec06-53ff-c2b5-10062da2848f@ti.com>
 MIME-Version: 1.0
-References: <20200507181012.29791-1-qperret@google.com> <20200508081128.GM5298@hirez.programming.kicks-ass.net>
- <20200508103721.GA3860390@kroah.com> <20200508111612.GA252673@google.com>
- <20200508113141.GB5298@hirez.programming.kicks-ass.net> <20200508130507.GA10541@google.com>
- <CAJZ5v0iaa_VCtN608QKTYZ-A6QG_7bwxihxSgoEGv1LcSK-ksA@mail.gmail.com> <20200511090049.GA229633@google.com>
-In-Reply-To: <20200511090049.GA229633@google.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 11 May 2020 17:26:26 +0200
-Message-ID: <CAJZ5v0jKMgFsR0dXDt4si5hT9QF2evaoMS-13y-Qde8UpcaARg@mail.gmail.com>
-Subject: Re: [PATCH 00/14] Modularize schedutil
-To:     Quentin Perret <qperret@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Todd Kjos <tkjos@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="p6a5pm5xcfp2qz24"
+Content-Disposition: inline
+In-Reply-To: <57e2495d-ec06-53ff-c2b5-10062da2848f@ti.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 11, 2020 at 11:00 AM Quentin Perret <qperret@google.com> wrote:
->
-> Hi Rafael,
->
-> On Friday 08 May 2020 at 15:40:34 (+0200), Rafael J. Wysocki wrote:
-> > On Fri, May 8, 2020 at 3:05 PM Quentin Perret <qperret@google.com> wrote:
-> > >
-> > > On Friday 08 May 2020 at 13:31:41 (+0200), Peter Zijlstra wrote:
-> > > > On Fri, May 08, 2020 at 12:16:12PM +0100, Quentin Perret wrote:
-> > > > > However, the point I tried to make here is orthogonal to that. As of
-> > > > > today using another governor than schedutil is fully supported upstream,
-> > > > > and in fact it isn't even enabled by default for most archs. If vendors
-> > > > > feel like using something else makes their product better, then I don't
-> > > > > see why I need to argue with them about that. And frankly I don't see
-> > > > > that support being removed from upstream any time soon.
-> > > >
-> > > > Right, it'll take a while to get there. But that doesn't mean we
-> > > > shouldn't encourage schedutil usage wherever and whenever possible. That
-> > > > includes not making it easier to not use it.
-> > > >
-> > > > In that respect making it modular goes against our ultimate goal (world
-> > > > domination, <mad giggles here>).
-> > >
-> > > Right, I definitely understand the sentiment. OTOH, things like that
-> > > give vendors weapons against GKI ('you-force-us-to-build-in-things-we-dont't-want'
-> > > etc etc). That _is_ true to some extent, but it's important we make sure
-> > > to keep this to an absolute minimum, otherwise GKI just won't happen
-> > > (and I really think that'd be a shame, GKI _is_ a good thing for
-> > > upstream).
-> > >
-> > > And sure, schedutil isn't that big, and we can make an exception. But
-> > > I'm sure you know what happens when you starting making exceptions ;)
-> >
-> > This is a very weak argument, if it can be regarded as an argument at all.
->
-> Well, fair enough :)
->
-> > You will have to make exceptions, the question is how many and on what
-> > criteria and you really need to figure that out for the GKI plan.
->
-> The base idea is, anything that we know from experience is used by
-> everybody can be built in, anything else will need investigation. And as
-> you've understood, schedutil falls in that second category.
 
-The fact that the vendor sets up a different governor by default
-doesn't mean that there should be no way to switch over to schedutil
-IMO.
+--p6a5pm5xcfp2qz24
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > So, all in all, I don't think the series actively makes schedutil worse
-> > > by adding out-of-line calls in the hot path or anything like that, and
-> > > having it as a module helps with GKI which I'm arguing is a good thing
-> > > in the grand scheme of things.
-> >
-> > Frankly, I'm not sure if it really helps.
->
-> Oh, why not?
->
-> > The idea of making schedutil modular seems to be based on the
-> > observation that it is not part of the core kernel, which I don't
-> > agree with.
->
-> Right, so that I think is the core of the discussion.
->
-> > Arguably, things like util clamps need it to work as
-> > expected.
->
-> Sure, but loading sugov dynamically as a module doesn't change much does
-> it?
->
-> If you are referring to the Kconfig dependency of uclamp on schedutil,
-> then that is a good point and I will argue that it should be removed.
-> In fact I'll add a patch to v2 that does just that, with the following
-> rationale:
+Hi,
 
-Which isn't correct AFAICS.
+On Mon, May 11, 2020 at 09:55:11AM -0500, Dan Murphy wrote:
+> On 5/11/20 9:57 AM, Sebastian Reichel wrote:
+> > On Mon, May 11, 2020 at 09:29:59AM -0500, Dan Murphy wrote:
+> > > On 5/11/20 9:32 AM, Sebastian Reichel wrote:
+> > > > On Mon, May 11, 2020 at 07:25:06AM -0500, Dan Murphy wrote:
+> > > > > On 5/10/20 11:17 AM, Sebastian Reichel wrote:
+> > > > > > This needs is missing the power-supplies property. The N900 DT
+> > > > > > contains a bq27200 referencing the charger, so it should fail t=
+he DT
+> > > > > > check without the property being listed here.
+> > > > > Hmm.=A0 I ran the dt checker specifically on the binding and it d=
+id not fail.
+> > > > > Unless I need to build some other DTs as well.
+> > > > > Either I will have the power-supplies property
+> > > > I just tried it myself. The problem is the way you are specifying
+> > > > the compatible strings. This is the parsing result:
+> > > >=20
+> > > > enum: ['ti,bq27200 - BQ27200', 'ti,bq27210 - BQ27210', 'ti,bq27500 =
+- deprecated,
+> > > >         use revision specific property below', ...
+> > > >=20
+> > > > You can see this in Documentation/devicetree/bindings/processed-sch=
+ema.yaml, which
+> > > > is generated by running the check. The compatible comments need a #=
+ as separation
+> > > > character like this to generate proper bindings:
+> > > >=20
+> > > > properties:
+> > > >     compatible:
+> > > >       enum:
+> > > >         - ti,bq27200 # BQ27200
+> > > >         - ti,bq27210 # BQ27210
+> > > >         - ti,bq27500 # deprecated, use revision specific property b=
+elow
+> > > Well honestly not sure why we need the comment either.=A0These are pr=
+etty
+> > > self explanatory maybe we should just remove the additional comments
+> > Fine with me.
+> Ack
+> >=20
+> > > Any consideration on just removing the deprecated values?
+> > Let's keep them with their comment for now. Removing them should
+> > start with marking them as depracated in the binding and generating
+> > a runtime warning in the driver, so that people become aware of the
+> > problem. At least for ti,bq27500 we have mainline users At least for
+> > ti,bq27500 we have mainline users.
+>=20
+> There are only 2 dts files that have this reference unless we are not sure
+> which device is actually in use.
 
->  - it is obsolete:
+DT is considered ABI and one is supposed to be able to boot a new
+kernel with an old DT. It's not enough to just update the in-tree
+dts files. I suppose we can consider removing support for the old
+compatible values after having the warning being printed for some
+time and the mainline users being converted to the new binding.
 
-No, it isn't IMO.
+-- Sebastian
 
-> the reason that dependency was added originally was
->    because sugov was the only place where util clamps where taken into
->    accounts. But that is no longer true -- we check them in the capacity
->    aware wake-up path as well, which is entirely independent from the
->    currently running governor;
+--p6a5pm5xcfp2qz24
+Content-Type: application/pgp-signature; name="signature.asc"
 
-But this is done under the assumption that the governor will also take
-the clamps into account, isn't it?
+-----BEGIN PGP SIGNATURE-----
 
-Otherwise you can see your "low util" tasks running at high
-frequencies and "high util" ones running slowly.  Surely, that's not
-desirable?
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl65b6oACgkQ2O7X88g7
++prdsA/+LRNbHjpJM/eGMeZL07Zi7D0x1usYEjVEkUDLpt4jUoyk+rwGe7Lf5c/f
+UZJHzGn6FvTKpNi8IJNYZ/mBywIPIyt/0PYqAuHpE2vNaEB+g7IA4KzDkWlLOxxX
+Oep5YeyezarXQwLrv/2m6DFvOYteMxn1/FPwGgMED3T6diw1691ajAmLTSyshshp
+tKkXtK0gMcPHNKzdSh85z7eNXRGpQh0V9Zi+iOc6Hz1/VlC+cPysOgF2zjaUTfAR
+g0E+jR7FAfBsexmQt/IedMS1vjusQhqQN/ogQrjGEkRnoAb1HgJojvLWmLfRgn/k
+bF7uwfh+fqShrkBtyl7uPJQMsAMuTKkWNZwjaNtZfsyylpLP7ugDiBVqUg+ni17d
+mkcYKuQ9hdJQ99Rkn/FH+atEUKqnCUzX5PKgMMfyszeklyAZ8fEi1D3/0w7A8U39
+a96TBija1qzCQh3yR4vLNkeNoVajlf0k1xdigL2YKvDMjQ3AyTRdDzD1/6/Zn9VS
+mVyczXSpb27X5oNGOPrstf/UQvtzTJ6nUIdVnOeGzu0m0LWQ7ViAneKdePT9aNKY
+RohcxgnRxnIeTcKdzy119iE3kHogyf0hgeH0HUBfv/wuWGQHHFpTFv97bG23C3p+
+gv34Kd8ytuTW8ga9M4nFCyVqFWI5riic49ZbtGqxuwwXKaPOMqs=
+=0M+W
+-----END PGP SIGNATURE-----
 
-IIUC, the task placement needs to be consistent with the governor's
-decisions for things to work as expected.
-
->  - because of the above, it is (now) largely useless: a compile time
->    dependency doesn't guarantee we are actually running with schedutil
->    at all;
->  - it is artificial: there are no actual compilation dependencies
->    between sugov and uclamp, everything will compile just fine without
->    that 'depends on';
-
-That actually is the case, but it doesn't mean that there is no
-dependency in there.
-
-> Or maybe you were thinking of something else?
->
-> > > That of course is only true if we can
-> > > agree on a reasonable set of exported symbols, so I'll give others some
-> > > time to complain and see if I can post a v2 addressing these issues!
-> >
-> > This isn't just about exported symbols, it is about what is regarded
-> > as essential and what isn't.
->
-> Right, the exported symbols are, IMO, quite interesting because they
-> show how 'core' the governor is. But what exactly do you mean by
-> 'essential' here? Essential in what sense?
-
-IMO the question is how much value there is in making it possible to
-avoid loading a particular piece of kernel code into memory.
-
-You've demonstrated that it can be done with schedutil, but does that
-matter that it needs to be done?
-
-I thought that the original idea was to make it closely integrated
-with the scheduler, so it could access the scheduler's data structures
-(that we specifically didn't want to expose to the *other* governors)
-and so as to avoid forgetting about any dependencies when making
-changes to either the scheduler or schedutil.  Allowing it to be build
-as a module would make make us have to worry about those things again,
-so is it really worth it?
+--p6a5pm5xcfp2qz24--
