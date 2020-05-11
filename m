@@ -2,214 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0621CCFD3
-	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 04:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1581CD096
+	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 06:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727121AbgEKClb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 May 2020 22:41:31 -0400
-Received: from mail-bn8nam11olkn2024.outbound.protection.outlook.com ([40.92.20.24]:24192
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726013AbgEKClb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 10 May 2020 22:41:31 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jkFpbmOzAcrmVE2pVeazgKAlhzzslPo6tSmqoOHh0MVsLyR0DFhgsNyk2KEaI0n/lydvg/fdvu0nsf001Bp6/h+ncuuP3aSKMRdyCmjTdzWrREjZedN1mXTZovkxOEG0fSpN/LIsUEkytcz1QtDdvN8+qH/z0iryb9WcMEVC+9A2uvn7gWxbmOurWuCuiUxtskBis7j0EoobbLe8Nn1fRw9BzWdoSxqZ75IpfbxZ3shhqKCTHtA57f5ybSQL5KBRz/AlwXXuNQ4Wq17WpzBmQzn6BSlvSuxFjOpgzJbYfPfEFnnPFRX8syRVu7D94LMq5hDhKZSKVtQNwI/A0e/5XA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7HVq+8NKAvqaKsv71Xui8b7ThIO7O0xlXODyWJD3Bm8=;
- b=D/3muWuS7JvdYJrgUwxvMHUlDtCXZUYjiDb1sTd0DOKva+RTxM7JX7hb5Q8P0cfvc7M+slKL8IXExMCArj7HUN34AzNHkYgwUFlaWfJ63t1vcBqnJ/AFsbgXGoZbFw1y3LiEcRZAXNzlMtA4LwVzcnlvr+Htjzq6q/+sOeL5Vuvj7yXlM45Amd/U6dAXURcYnFDE6s+Rz9RoNQaPtW/pSi2+g4AJ1vXN+6E2Fx8Mjotj+x0+l8TZwlfs+JAeQgn1twSPn1i9IkbDH9In1XwISBQlb7dL23GRsGmi8XVtblmb0P1AOfdjLW6BTXgDDhUrdwn8qV/DflvYMewn4RPvMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=live.ca; dmarc=pass action=none header.from=live.ca; dkim=pass
- header.d=live.ca; arc=none
-Received: from CO1NAM11FT004.eop-nam11.prod.protection.outlook.com
- (2a01:111:e400:3861::47) by
- CO1NAM11HT088.eop-nam11.prod.protection.outlook.com (2a01:111:e400:3861::310)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.27; Mon, 11 May
- 2020 02:41:27 +0000
-Received: from BN6PR04MB0660.namprd04.prod.outlook.com
- (2a01:111:e400:3861::51) by CO1NAM11FT004.mail.protection.outlook.com
- (2a01:111:e400:3861::345) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.27 via Frontend
- Transport; Mon, 11 May 2020 02:41:27 +0000
-X-IncomingTopHeaderMarker: OriginalChecksum:A60277B37A69857AA09DF6BD1815EB0CBE43B645E0807D9BAB85DC2778AEC8A6;UpperCasedChecksum:11ABE59EBCDFB19BA91C6E007C71B2E7FD5A655EB0F1191EB2E7511D457CEEF5;SizeAsReceived:8285;Count:50
-Received: from BN6PR04MB0660.namprd04.prod.outlook.com
- ([fe80::ad10:4127:4bc8:76fc]) by BN6PR04MB0660.namprd04.prod.outlook.com
- ([fe80::ad10:4127:4bc8:76fc%6]) with mapi id 15.20.2979.033; Mon, 11 May 2020
- 02:41:26 +0000
-Subject: Re: [PATCH 3/3] power: supply: max17040: Set rcomp value
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-References: <20200504221300.3153-1-xc-racer2@live.ca>
- <BN6PR04MB066057B881DEFC0C48208589A3A60@BN6PR04MB0660.namprd04.prod.outlook.com>
- <20200510200851.zam6m37bkr36s5cr@earth.universe>
-From:   Jonathan Bakker <xc-racer2@live.ca>
-Message-ID: <BN6PR04MB06603F40894AD514E24E6BF8A3A10@BN6PR04MB0660.namprd04.prod.outlook.com>
-Date:   Sun, 10 May 2020 19:41:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
-In-Reply-To: <20200510200851.zam6m37bkr36s5cr@earth.universe>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MWHPR14CA0004.namprd14.prod.outlook.com
- (2603:10b6:300:ae::14) To BN6PR04MB0660.namprd04.prod.outlook.com
- (2603:10b6:404:d9::21)
-X-Microsoft-Original-Message-ID: <eb476907-c456-3cd3-2dd3-e0da44825b4d@live.ca>
+        id S1725817AbgEKEW5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 May 2020 00:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725790AbgEKEW5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 00:22:57 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7DBC061A0C
+        for <linux-pm@vger.kernel.org>; Sun, 10 May 2020 21:22:56 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id k12so16480267wmj.3
+        for <linux-pm@vger.kernel.org>; Sun, 10 May 2020 21:22:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorremedies-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=o4xnzYVyuC6111/k6qlkYw+Jq59DyNMy7m+FNNQ5p08=;
+        b=AnJ1rTDcWpE+dgcz3zIdeHJg4ZBk5ATq1zsU2ubaD6BfNbeTmDMUoAvXvZpiaCurlJ
+         GjrigAI4LPLprdxORkMxWBhhqQ74pO55NP7SMkeYXANzfhWEoBjAu+clv2L0f04weUzt
+         TgrkLBaPt6YK+G8ky6OvIfMGOhJ/wpbkRWMmYYo9o+Ujgnv8MCeZvH2nlAyIZN1GlZ+n
+         3IeeIdIgDBVQVeIlLv4DuTvtyh2oE8Yhe/cUcmtg2feuRgZ1j9iRigFpl+kardNVMMzt
+         pOUIMPl2i9nHlO1t/OYOoN5tp/LjMVXRryjgvCuiihX8vwG7Z7n9wuGizArBeXvbNqq0
+         gwow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=o4xnzYVyuC6111/k6qlkYw+Jq59DyNMy7m+FNNQ5p08=;
+        b=Ea9YlMFoHj+SZa5WPaWmSnT1jS4v7R3tarrqW4CoVedUcAeO9SgWffAwx9lQUlQcbN
+         kgyf17m4yzL+wGyLzBX6G5p9bC6K7GiXs+k3+JP7+Gg5eIHU2jhzCvhpWP3lMheV9/79
+         785FiesNztWMqc/CqUQsWg0sLZyzV0/VF1yctIZ5FpyhQdU4IPddwcvfztJ/B1lviEDu
+         P1YxaZHtvT75DtVH0mzeBU8aljBUBP9lK8qKgSkIUawZ3XdA5z4x15Adr55r6H3XHpXA
+         eoJcnor4iuDdOelSTkdwAXC1+fzY/wJmrPa2x1wxLCPXBk9WPobozBB1pTHzCrB2tZI/
+         o5Dg==
+X-Gm-Message-State: AGi0PubPtoCLD2JwQGfRAvy0MvGqK6uiX0h/5hYY0fK1ZMl17R/8lffc
+        lVUnQ+L2W4rTWAeoMON1sgKq2TWygNVnKIUWv3RBbDSj6NLlyQ==
+X-Google-Smtp-Source: APiQypIgSJeVkIGwLjaMTF8P/e8pVXmbJZdDBQ5F1SyvvWiGAp+76UWQQFz897NE66aB2YjjqSSchnQTbIwYTQhDg9k=
+X-Received: by 2002:a1c:2348:: with SMTP id j69mr12781262wmj.11.1589170972707;
+ Sun, 10 May 2020 21:22:52 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2001:569:fb68:9c00:8067:f823:1e15:7520] (2001:569:fb68:9c00:8067:f823:1e15:7520) by MWHPR14CA0004.namprd14.prod.outlook.com (2603:10b6:300:ae::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.26 via Frontend Transport; Mon, 11 May 2020 02:41:22 +0000
-X-Microsoft-Original-Message-ID: <eb476907-c456-3cd3-2dd3-e0da44825b4d@live.ca>
-X-TMN:  [znEavWOxicV2w16oTe5S7oQMFi9b8uJZ+IpL1nsuCDaIgUNsjyyiO3EXsBEkL+8H]
-X-MS-PublicTrafficType: Email
-X-IncomingHeaderCount: 50
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-Correlation-Id: 6a0ec689-4cb8-4e75-a3d1-08d7f554cb69
-X-MS-TrafficTypeDiagnostic: CO1NAM11HT088:
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mwCMOpyaHTRJUUYEoNxhqunYUFrA5fWrqm7m2UEQA3DBllD/NUsR8frgfuVp/uFyijQsDLtH95wuzHnMoiZ8GHpOwuHN4cWQx4X6xUiNun58A4gcrMI593ZswyQXUtoYC0nEYHDoJ+glU2hFEJc+LQslX4J6wgDlGQ3926Rf6CJvhlCTn3RxL97rdLwBqzsoUqxQO4+D+AemSJcvfFFqOYE70xPXdI513mJw5EwoR2TCLKeIWEtCK4xQfdOmyQx2
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:0;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR04MB0660.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:;DIR:OUT;SFP:1901;
-X-MS-Exchange-AntiSpam-MessageData: bqwQa1hxP7v4wkJIag6KC5IZpfBAwgNw0nRrKJssfkZ7l0B1Cn0BDrfQdXTz7RXsGTPnmFjg9wyRjBoX4hJKuXAlPZDrkkPs8/nCsBXLkcw4xaZe0qiHNulQ3I5uB/wrn5obD3mEbEiQV0jf+Q3tPcg9r/l+R33rvZ3ciXMzmF6iMU8V4zvfHyJ2XUyO7LkhP+mom0s/3f/AcXJrX3mokg==
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a0ec689-4cb8-4e75-a3d1-08d7f554cb69
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2020 02:41:26.7965
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1NAM11HT088
+From:   Chris Murphy <chris@colorremedies.com>
+Date:   Sun, 10 May 2020 22:22:36 -0600
+Message-ID: <CAJCQCtQ=1=UFaCvPO99W0t9SWuK5zG4ENKYzq2PgJ36iu-EiiQ@mail.gmail.com>
+Subject: 5.7 sleep/wake regression
+To:     Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+Got an older Macbook Pro that does suspend to RAM and wake OK with
+5.6, but starting with git 47acac8cae28, it will not wake up. Instead
+it has a black screen, gets hot, fans go to high, and it turns into a
+hair dryer. So it's a regression.
 
-On 2020-05-10 1:08 p.m., Sebastian Reichel wrote:
-> Hi,
-> 
-> On Mon, May 04, 2020 at 03:13:00PM -0700, Jonathan Bakker wrote:
->> According to the datasheet (1), the rcomp parameter can
->> vary based on the typical operating temperature and the
->> battery chemistry.  If provided, make sure we set it after
->> we reset the chip on boot.
->>
->> 1) https://datasheets.maximintegrated.com/en/ds/MAX17040-MAX17041.pdf
->>
->> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
->> ---
->>  drivers/power/supply/max17040_battery.c | 33 +++++++++++++++++++++----
->>  1 file changed, 28 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
->> index 48aa44665e2f..f66e2fdc0a8a 100644
->> --- a/drivers/power/supply/max17040_battery.c
->> +++ b/drivers/power/supply/max17040_battery.c
->> @@ -10,6 +10,7 @@
->>  #include <linux/init.h>
->>  #include <linux/platform_device.h>
->>  #include <linux/mutex.h>
->> +#include <linux/property.h>
->>  #include <linux/err.h>
->>  #include <linux/i2c.h>
->>  #include <linux/delay.h>
->> @@ -31,6 +32,8 @@
->>  
->>  #define MAX17040_ATHD_MASK		0xFFC0
->>  #define MAX17040_ATHD_DEFAULT_POWER_UP	4
->> +#define MAX17040_RCOMP_MASK		0xFF
->> +#define MAX17040_RCOMP_DEFAULT_POWER_UP	0x97
-> 
-> Why is this 8 bits? Quote from the datasheet, that you linked:
-> 
-> »RCOMP is a 16-bit value used to compensate the ModelGauge algorithm«
+I started a bisect but, that's not going well.
 
-Well, the driver also supports the max17043 (datasheet at https://datasheets.maximintegrated.com/en/ds/MAX17043-MAX17044.pdf
-here the register is named CONFIG), by the maxim,max77836-battery compatible.  The bottom 8 bits are for the alert config,
-and I'm presuming it's the same on the max17040 (the vendor kernel for the device I'm testing on only sets the top 8 bits
-and leaves the rest at 0).
+$ git bisect good
+Bisecting: 123 revisions left to test after this (roughly 7 steps)
+[7af51678b6d367ee93dc3d21e72ecf15be50fcb1] docs: deprecated.rst: Add
+BUG()-family
+$ make -j8
 
-If there's a better way of doing it (ie maybe explicitly making it a 16 bit value and checking if the bottom 8 bits are
-set when the compatible is maxim,max77836-battery), then I'm happy to do it that way.
+...15 minutes later
 
-Thanks,
-Jonathan
+  GZIP    arch/x86/boot/compressed/vmlinux.bin.gz
+  MKPIGGY arch/x86/boot/compressed/piggy.S
+  AS      arch/x86/boot/compressed/piggy.o
+  LD      arch/x86/boot/compressed/vmlinux
+ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple
+definition of `__force_order';
+arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
+make[2]: *** [arch/x86/boot/compressed/Makefile:119:
+arch/x86/boot/compressed/vmlinux] Error 1
+make[1]: *** [arch/x86/boot/Makefile:113:
+arch/x86/boot/compressed/vmlinux] Error 2
+make: *** [arch/x86/Makefile:283: bzImage] Error 2
 
-> 
-> -- Sebastian
-> 
->>  struct max17040_chip {
->>  	struct i2c_client		*client;
->> @@ -48,6 +51,8 @@ struct max17040_chip {
->>  	int status;
->>  	/* Low alert threshold from 32% to 1% of the State of Charge */
->>  	u32 low_soc_alert;
->> +	/* Optimization for specific chemistries */
->> +	u8 rcomp_value;
->>  };
->>  
->>  static int max17040_get_property(struct power_supply *psy,
->> @@ -119,6 +124,20 @@ static int max17040_set_low_soc_alert(struct i2c_client *client, u32 level)
->>  	return ret;
->>  }
->>  
->> +static int max17040_set_rcomp(struct i2c_client *client, u32 val)
->> +{
->> +	int ret;
->> +	u16 data;
->> +
->> +	data = max17040_read_reg(client, MAX17040_RCOMP);
->> +	/* clear the rcomp val and set MSb 8 bits */
->> +	data &= MAX17040_RCOMP_MASK;
->> +	data |= val << 8;
->> +	ret = max17040_write_reg(client, MAX17040_RCOMP, data);
->> +
->> +	return ret;
->> +}
->> +
->>  static void max17040_get_vcell(struct i2c_client *client)
->>  {
->>  	struct max17040_chip *chip = i2c_get_clientdata(client);
->> @@ -190,8 +209,14 @@ static int max17040_get_of_data(struct max17040_chip *chip)
->>  				 "maxim,alert-low-soc-level",
->>  				 &chip->low_soc_alert);
->>  
->> -	if (chip->low_soc_alert <= 0 || chip->low_soc_alert >= 33)
->> +	if (chip->low_soc_alert <= 0 || chip->low_soc_alert >= 33) {
->> +		dev_err(&client->dev,
->> +			"failed: low SOC alert OF data out of bounds\n");
->>  		return -EINVAL;
->> +	}
->> +
->> +	chip->rcomp_value = MAX17040_RCOMP_DEFAULT_POWER_UP;
->> +	device_property_read_u8(dev, "maxim,rcomp-value", &chip->rcomp_value);
->>  
->>  	return 0;
->>  }
->> @@ -289,11 +314,8 @@ static int max17040_probe(struct i2c_client *client,
->>  	chip->client = client;
->>  	chip->pdata = client->dev.platform_data;
->>  	ret = max17040_get_of_data(chip);
->> -	if (ret) {
->> -		dev_err(&client->dev,
->> -			"failed: low SOC alert OF data out of bounds\n");
->> +	if (ret)
->>  		return ret;
->> -	}
->>  
->>  	i2c_set_clientdata(client, chip);
->>  	psy_cfg.drv_data = chip;
->> @@ -307,6 +329,7 @@ static int max17040_probe(struct i2c_client *client,
->>  
->>  	max17040_reset(client);
->>  	max17040_get_version(client);
->> +	max17040_set_rcomp(client, chip->rcomp_value);
->>  
->>  	/* check interrupt */
->>  	if (client->irq && of_device_is_compatible(client->dev.of_node,
->> -- 
->> 2.20.1
->>
+
+I'll give 'git bisect skip' a try and see if it'll get close enough to
+the first bad commit.
+
+Anyway, all of 5.6.x sleep/wake fine, and all of 5.7 do not, i.e. it
+hasn't been fixed in rc5. Thanks.
+
+
+-- 
+Chris Murphy
