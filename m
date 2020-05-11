@@ -2,104 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2292F1CDD4B
-	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 16:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE411CDE16
+	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 17:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbgEKOcp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 May 2020 10:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726173AbgEKOcp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 10:32:45 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD8EC061A0C;
-        Mon, 11 May 2020 07:32:45 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id A41E32A17E0
-Received: by earth.universe (Postfix, from userid 1000)
-        id 921DF3C08C6; Mon, 11 May 2020 16:32:41 +0200 (CEST)
-Date:   Mon, 11 May 2020 16:32:41 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Dan Murphy <dmurphy@ti.com>
-Cc:     linux-pm@vger.kernel.org, robh@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>
+        id S1729556AbgEKPEJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 May 2020 11:04:09 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:38156 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729439AbgEKPEJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 11:04:09 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04BF46RQ021721;
+        Mon, 11 May 2020 10:04:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1589209446;
+        bh=PaHM7ncRDAEeXG4G61hU0xZ07/k9Q++S5viFtly/yvY=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=aBdUYVv5/S69k7u1l/tYskoGTZuUF/9VtRtxiZXl8RrwNk6CVOgPDv4SvHgwL6KxC
+         VVqCbJz1jRdwEpB20Beb63Zmi2kvVM1Z/9N17sJF7SgJGoih78A+zrVCUFih8Oagpw
+         4lFLpCf6mwNvQse64wxJYv1zTZSgQLp85IF7Ui9o=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04BF46fI069574;
+        Mon, 11 May 2020 10:04:06 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 11
+ May 2020 10:04:05 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 11 May 2020 10:04:05 -0500
+Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04BF44HX084827;
+        Mon, 11 May 2020 10:04:04 -0500
 Subject: Re: [PATCH v2] dt-bindings: power: Convert bq27xxx dt to yaml
-Message-ID: <20200511143241.nmkti7meahvj2swt@earth.universe>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+CC:     <linux-pm@vger.kernel.org>, <robh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        "Andrew F . Davis" <afd@ti.com>
 References: <20200507183013.27261-1-dmurphy@ti.com>
  <20200510161721.257vprq6rqp64wu5@earth.universe>
  <fb9b240e-9bfe-1295-6fc4-700d886ea7c9@ti.com>
+ <20200511143241.nmkti7meahvj2swt@earth.universe>
+ <8674289c-038d-d811-4786-322d66072527@ti.com>
+ <20200511145700.lnytcr747snnolya@earth.universe>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <57e2495d-ec06-53ff-c2b5-10062da2848f@ti.com>
+Date:   Mon, 11 May 2020 09:55:11 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gonlqgai5ywifdkl"
-Content-Disposition: inline
-In-Reply-To: <fb9b240e-9bfe-1295-6fc4-700d886ea7c9@ti.com>
+In-Reply-To: <20200511145700.lnytcr747snnolya@earth.universe>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Sebastian
 
---gonlqgai5ywifdkl
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 5/11/20 9:57 AM, Sebastian Reichel wrote:
+> Hi,
+>
+> On Mon, May 11, 2020 at 09:29:59AM -0500, Dan Murphy wrote:
+>> On 5/11/20 9:32 AM, Sebastian Reichel wrote:
+>>> On Mon, May 11, 2020 at 07:25:06AM -0500, Dan Murphy wrote:
+>>>> On 5/10/20 11:17 AM, Sebastian Reichel wrote:
+>>>>> This needs is missing the power-supplies property. The N900 DT
+>>>>> contains a bq27200 referencing the charger, so it should fail the DT
+>>>>> check without the property being listed here.
+>>>> Hmm.  I ran the dt checker specifically on the binding and it did not fail.
+>>>> Unless I need to build some other DTs as well.
+>>>> Either I will have the power-supplies property
+>>> I just tried it myself. The problem is the way you are specifying
+>>> the compatible strings. This is the parsing result:
+>>>
+>>> enum: ['ti,bq27200 - BQ27200', 'ti,bq27210 - BQ27210', 'ti,bq27500 - deprecated,
+>>>         use revision specific property below', ...
+>>>
+>>> You can see this in Documentation/devicetree/bindings/processed-schema.yaml, which
+>>> is generated by running the check. The compatible comments need a # as separation
+>>> character like this to generate proper bindings:
+>>>
+>>> properties:
+>>>     compatible:
+>>>       enum:
+>>>         - ti,bq27200 # BQ27200
+>>>         - ti,bq27210 # BQ27210
+>>>         - ti,bq27500 # deprecated, use revision specific property below
+>> Well honestly not sure why we need the comment either. These are pretty
+>> self explanatory maybe we should just remove the additional comments
+> Fine with me.
+Ack
+>
+>> Any consideration on just removing the deprecated values?
+> Let's keep them with their comment for now. Removing them should
+> start with marking them as depracated in the binding and generating
+> a runtime warning in the driver, so that people become aware of the
+> problem. At least for ti,bq27500 we have mainline users At least for
+> ti,bq27500 we have mainline users.
 
-Hi,
+There are only 2 dts files that have this reference unless we are not 
+sure which device is actually in use.
 
-On Mon, May 11, 2020 at 07:25:06AM -0500, Dan Murphy wrote:
-> On 5/10/20 11:17 AM, Sebastian Reichel wrote:
-> > This needs is missing the power-supplies property. The N900 DT
-> > contains a bq27200 referencing the charger, so it should fail the DT
-> > check without the property being listed here.
->=20
-> Hmm.=A0 I ran the dt checker specifically on the binding and it did not f=
-ail.=A0
-> Unless I need to build some other DTs as well.
-> Either I will have the power-supplies property
+Dan
 
-I just tried it myself. The problem is the way you are specifying
-the compatible strings. This is the parsing result:
 
-enum: ['ti,bq27200 - BQ27200', 'ti,bq27210 - BQ27210', 'ti,bq27500 - deprec=
-ated,
-      use revision specific property below', ...
-
-You can see this in Documentation/devicetree/bindings/processed-schema.yaml=
-, which
-is generated by running the check. The compatible comments need a # as sepa=
-ration
-character like this to generate proper bindings:
-
-properties:   =20
-  compatible:   =20
-    enum:   =20
-      - ti,bq27200 # BQ27200   =20
-      - ti,bq27210 # BQ27210   =20
-      - ti,bq27500 # deprecated, use revision specific property below
-
--- Sebastian
-
---gonlqgai5ywifdkl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl65YgIACgkQ2O7X88g7
-+posWhAAoqCX7rzM0wCNRMFqSMsFexYyyWQ7Tb5GYEH2eMIB8vqf6So+9KX5SSky
-sDR4hXP0shO9Q/4EIXj/JyLlOAlulH8zrpuI6F44HHlt/bkPsFx7mV7Fk8LP/VTb
-HrYFcZgza8Oa5bhNCnISS6yZTDi0BhIsqJnvVrTa+FbtcOsJQsUUecqUbYQDOgXL
-cWDzjNtf+NzULVzk5gRDOz3WUMqNVlADb+3wnAOiY7OcLsW4B+1PKii5JeY6oI+D
-Rm0zgttHKL4xagPrHRT29XVnhPs8G4IyevpIWLZodHeYvYo5jBYfQIxi6XFEsYIn
-BOKq0fL4EuR6a/L9IDYZGnb0+lu9QWbHQ8SMVN/B5NOaLPG7tLf6kKPovbfIcEJB
-RI/L+hvPllmQop4/VZ1ye0qXkuYd+2NQNXIYg2mfc+tKsT7IOQs2WF61XjG/xgws
-lROSvCXrU345/LRDS1tldydmalU+aAhiFm0lZXape6gdARoJsGuwOkmTpC4m6SOm
-rFU38S+qukE4weLdZQtL9nzw38ckjY9x/BwJjQGV0J3dnUHEjCnI9jYgEdoguRCG
-iBjqz5mVCqFgtmfefpdk1Jor/wWBUU/XsLexn/IJMCefU29XWA3HHfGIsVlecu8v
-ldXWlJ78Qj7NSyoF+6LjtH7hvWq8wMEApbgcU2L5cNkrFaJDWYE=
-=h6cH
------END PGP SIGNATURE-----
-
---gonlqgai5ywifdkl--
+> -- Sebastian
