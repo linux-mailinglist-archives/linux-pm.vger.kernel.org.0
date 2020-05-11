@@ -2,275 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EE21CD9F3
-	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 14:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53D51CDB13
+	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 15:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728402AbgEKMeE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 May 2020 08:34:04 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:41810 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728367AbgEKMeE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 08:34:04 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04BCXwwK056420;
-        Mon, 11 May 2020 07:33:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1589200438;
-        bh=F3ki1mQxyvwiG49j9FhGin3FqAgAN01/D6XjYGfeuc8=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=nLuqfACWXcGZGQZ/7schkjTSz7zv4XJ4oVpzvasC+NcgNj34Kd56yiXlkIshRRMbd
-         Mqtckc6YxtXyGEviDKtZ/I4dpgNL+Yjr6bCRGZ5Qg7PzaoteWLxfg9noz3igbzybCl
-         IYMw53EPdNo5fTbXgYre3JpMcxVhsvO/guDD0a0I=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04BCXwM6111293;
-        Mon, 11 May 2020 07:33:58 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 11
- May 2020 07:33:58 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 11 May 2020 07:33:58 -0500
-Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04BCXwZT030336;
-        Mon, 11 May 2020 07:33:58 -0500
-Subject: Re: [PATCH v2] dt-bindings: power: Convert bq27xxx dt to yaml
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-CC:     <linux-pm@vger.kernel.org>, <robh@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>
-References: <20200507183013.27261-1-dmurphy@ti.com>
- <20200510161721.257vprq6rqp64wu5@earth.universe>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <fb9b240e-9bfe-1295-6fc4-700d886ea7c9@ti.com>
-Date:   Mon, 11 May 2020 07:25:06 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200510161721.257vprq6rqp64wu5@earth.universe>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S1725993AbgEKNUa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 May 2020 09:20:30 -0400
+Received: from mail-eopbgr00049.outbound.protection.outlook.com ([40.107.0.49]:3716
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726013AbgEKNUa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 11 May 2020 09:20:30 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YGY4X7uGRR/pIi4iWspZBWlAB3R0Jw4s9iJCqn/1AsidqfO+pIiFcPSKy3N77/QMfZ3LNLfzuPjKyMdaq+Dj1svccX/KEfXbkJ50iE4rkqv6S5bEUuNAAfsI1X7RGRdXOJTAZSgmFwp5avyOVtS/0mjtsSzDelYl8+XudSs8MPqAeiY4+i1WYp2uWM0wEuzvEcFPElqBCsDhmD/BTYknycE0bOxtM0cOsnnnGEvuQaJUEHXbBa0JMzm8WEPuGwtUIfY85O6nG4PXGjoKpEXjD+6FxPHGr1j4uVHemXnsfI7x1MNbN+MxeB7QAzeueCB0VAXdC/IQLtQ1Z1yHj/i1ww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8skQfuzwOlDUAsyUg6p+34Tb1f9ovt9wZHYRtHg0fmE=;
+ b=JVLKGrIdQOtiCGe+XRFyKWhIrLgKTPnBJdSbebbov2r1GdMzZfRtk/YPq2N+cz2EDNObUN4ZzY+KldZChCUuXPbNjLYiirdMX0XJ1TBv73DkShC/es7l1rKwUirFQUfSQlwTq5u/Uh4o94UKgBC6dYDRGEj/t8bmNLj9I/X9mZ3PHWRNwJqZtBuzI2SK+doNOKDfG5rq0bXJLFJi3j4mcVedn1eCZRo34vM1+7i1JX/seKINHCOJJ0/SKKvrblTFqaC5zyYGgLKXmZg5dR/7HWwCPu1DuJOB6nZq6Cg+aLCISCwDtTWhzBglei3pzt9+CrDY4DkbkwMxiYmMd8fWsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8skQfuzwOlDUAsyUg6p+34Tb1f9ovt9wZHYRtHg0fmE=;
+ b=glYpxoHXjkqVNF5so1A2Pdby+Mu0aeqdbJO204v5oz/wXmhNMT68iV6yxJhD90xugufcnitJu41plJOOMqHmOaA5tIqcM4wUtBvuuNVQW4uowVQ4R+61Dmk/f68fWLT656lV8cfFRl7WtO0UX0k+BLoDUbxjdHTl1fuCkUYnIbo=
+Received: from VI1PR04MB6941.eurprd04.prod.outlook.com (2603:10a6:803:12e::23)
+ by VI1SPR01MB0358.eurprd04.prod.outlook.com (2603:10a6:803:8d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.26; Mon, 11 May
+ 2020 13:20:27 +0000
+Received: from VI1PR04MB6941.eurprd04.prod.outlook.com
+ ([fe80::8de5:8c61:6e4d:9fe9]) by VI1PR04MB6941.eurprd04.prod.outlook.com
+ ([fe80::8de5:8c61:6e4d:9fe9%9]) with mapi id 15.20.2958.035; Mon, 11 May 2020
+ 13:20:26 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Wei Yongjun <weiyongjun1@huawei.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>
+CC:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH -next] interconnect: imx: Fix return value check in
+ imx_icc_node_init_qos()
+Thread-Topic: [PATCH -next] interconnect: imx: Fix return value check in
+ imx_icc_node_init_qos()
+Thread-Index: AQHWJa29mXPWwTufek+ikA2u4wg9vw==
+Date:   Mon, 11 May 2020 13:20:26 +0000
+Message-ID: <VI1PR04MB694150C03CC158988F7124A4EEA10@VI1PR04MB6941.eurprd04.prod.outlook.com>
+References: <20200509030214.14435-1-weiyongjun1@huawei.com>
+Accept-Language: en-US
 Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: huawei.com; dkim=none (message not signed)
+ header.d=none;huawei.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [95.76.3.222]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: bb8b1648-599f-4c12-add1-08d7f5ae11e7
+x-ms-traffictypediagnostic: VI1SPR01MB0358:|VI1SPR01MB0358:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1SPR01MB0358160C9F273B167C7EF680EEA10@VI1SPR01MB0358.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1091;
+x-forefront-prvs: 04004D94E2
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: c1vQa+6g6VonddA+eXM2cc7MTm3t9YEwLXZB74IoElKOXjkmkfAySoSOHRChE4qfW0fHVVzA8E5Lkx2BwLnS7fwD38vgIWpMP7u5R5J5g6x89FSIL8+m8yQ3j9m8UkKAwqUhphcuHKzoU0a8InsotsB4z60ZfTjOdjtam7h0HI39xfzKHgf3W0hhkzKpW9nMGjMGfx6BfgN4nOXRZLl+WlvAz48VqBIk7wknKsXqZzne1nR98J4Gsq+hLlUNXcrNvAxCXpBpcKto0YPxIjFfxHuYcPmkg22xULvDb7zD5Vjs3hfoZey0CIrYNYaGMULmcT0IJ50zdtXW367KVTBJJciIWFOKURI1PT4oqplf10/SKyg9lvIW5MZXQBKt2KFgVp7lKlK65zQkXoQa/olNZqO5zekAnGSJr6zsBphSLlTCNDsIsz7oYoxHssqlOc4NdEVdp+2jTeWtgLrI6I7kBQHVUw0ZBke6AtCQMsF0Lq9oCfw3SeSZuZ6eJhmdWz2/geLeUvOmTzp1JFZEnnycsA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB6941.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(33430700001)(26005)(53546011)(5660300002)(8936002)(316002)(186003)(52536014)(8676002)(66446008)(4326008)(91956017)(54906003)(9686003)(478600001)(66476007)(66556008)(64756008)(55016002)(66946007)(76116006)(110136005)(2906002)(71200400001)(33440700001)(7696005)(6506007)(33656002)(44832011)(7416002)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: mbK3G43Egfnm1/RIFt4/2VSI3mI0+YV7b1V72Q0wS9w1Z/j2yD4LUjRrQdbjJ7vLoeP1vD+ZPSDMDXEk3KABN+4Af+gZQt+eY93rsAWMwvdYRrflI83RQKO08ThCZmaykif/6l8BhX2GtdJPhyfXWnL+ha296gtKeqoYcd0negNWsS3TABIPB3EeA/KslGsHo7YXKa2fgzhXEUPY/D4PwJMeXN86KVsSVmHp0bOzOvdCN+FK+OIQPFmbh4+1jkQSQe9I6PlmONFqzIGGcEwxfBcsq8l8umsTzsuQTZrGZ1wfxSd02WOMQ+fF4UB76QfDo6gJu1fk/zAXRl4fUWG7iVAoYoqKxKZ8w1Y6+MnrJUsgp7xgq3jAXxQ9SV1gRwPjvMFBgcqUgtoM/Bgjmq/RZo6IgC8yYuPUsN07XpIgdrIW+0XkSpS+zxtX0pBNYdQFyPh6JnMPkBVqI96/an6w4cOWuJYzXzIfm12MWFtc/MM=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb8b1648-599f-4c12-add1-08d7f5ae11e7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2020 13:20:26.8729
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Sx2/F39cpUY4i3bmB3XZH8uX2MqLxcCdg2jFq0AD9ZXxPRLdik26gzwXeFcBEODmknFl1dBLtqYZ6BLNU1Pn1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1SPR01MB0358
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sebastian
-
-On 5/10/20 11:17 AM, Sebastian Reichel wrote:
-> Hi Dan,
->
-> On Thu, May 07, 2020 at 01:30:13PM -0500, Dan Murphy wrote:
->> Convert the bq27xxx.txt to yaml format
->>
->> CC: Pali Rohár <pali@kernel.org>
->> CC: Andrew F. Davis <afd@ti.com>
->> Signed-off-by: Dan Murphy <dmurphy@ti.com>
->> ---
-> This needs is missing the power-supplies property. The N900 DT
-> contains a bq27200 referencing the charger, so it should fail the DT
-> check without the property being listed here.
-
-Hmm.  I ran the dt checker specifically on the binding and it did not 
-fail.  Unless I need to build some other DTs as well.
-
-Either I will have the power-supplies property
-
->
->>   .../bindings/power/supply/bq27xxx.txt         | 56 ------------
->>   .../bindings/power/supply/bq27xxx.yaml        | 86 +++++++++++++++++++
->>   2 files changed, 86 insertions(+), 56 deletions(-)
->>   delete mode 100644 Documentation/devicetree/bindings/power/supply/bq27xxx.txt
->>   create mode 100644 Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/bq27xxx.txt b/Documentation/devicetree/bindings/power/supply/bq27xxx.txt
->> deleted file mode 100644
->> index 4fa8e08df2b6..000000000000
->> --- a/Documentation/devicetree/bindings/power/supply/bq27xxx.txt
->> +++ /dev/null
->> @@ -1,56 +0,0 @@
->> -TI BQ27XXX fuel gauge family
->> -
->> -Required properties:
->> -- compatible: contains one of the following:
->> - * "ti,bq27200" - BQ27200
->> - * "ti,bq27210" - BQ27210
->> - * "ti,bq27500" - deprecated, use revision specific property below
->> - * "ti,bq27510" - deprecated, use revision specific property below
->> - * "ti,bq27520" - deprecated, use revision specific property below
->> - * "ti,bq27500-1" - BQ27500/1
->> - * "ti,bq27510g1" - BQ27510-g1
->> - * "ti,bq27510g2" - BQ27510-g2
->> - * "ti,bq27510g3" - BQ27510-g3
->> - * "ti,bq27520g1" - BQ27520-g1
->> - * "ti,bq27520g2" - BQ27520-g2
->> - * "ti,bq27520g3" - BQ27520-g3
->> - * "ti,bq27520g4" - BQ27520-g4
->> - * "ti,bq27521" - BQ27521
->> - * "ti,bq27530" - BQ27530
->> - * "ti,bq27531" - BQ27531
->> - * "ti,bq27541" - BQ27541
->> - * "ti,bq27542" - BQ27542
->> - * "ti,bq27546" - BQ27546
->> - * "ti,bq27742" - BQ27742
->> - * "ti,bq27545" - BQ27545
->> - * "ti,bq27411" - BQ27411
->> - * "ti,bq27421" - BQ27421
->> - * "ti,bq27425" - BQ27425
->> - * "ti,bq27426" - BQ27426
->> - * "ti,bq27441" - BQ27441
->> - * "ti,bq27621" - BQ27621
->> -- reg: integer, I2C address of the fuel gauge.
->> -
->> -Optional properties:
->> -- monitored-battery: phandle of battery characteristics node
->> -    The fuel gauge uses the following battery properties:
->> -    + energy-full-design-microwatt-hours
->> -    + charge-full-design-microamp-hours
->> -    + voltage-min-design-microvolt
->> -  Both or neither of the *-full-design-*-hours properties must be set.
->> -  See Documentation/devicetree/bindings/power/supply/battery.txt
->> -
->> -Example:
->> -
->> -	bat: battery {
->> -		compatible = "simple-battery";
->> -		voltage-min-design-microvolt = <3200000>;
->> -		energy-full-design-microwatt-hours = <5290000>;
->> -		charge-full-design-microamp-hours = <1430000>;
->> -	};
->> -
->> -	bq27510g3: fuel-gauge@55 {
->> -		compatible = "ti,bq27510g3";
->> -		reg = <0x55>;
->> -		monitored-battery = <&bat>;
->> -	};
->> diff --git a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
->> new file mode 100644
->> index 000000000000..54f497c291f2
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
->> @@ -0,0 +1,86 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +# Copyright (C) 2020 Texas Instruments Incorporated
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/power/supply/bq27xxx.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> +
->> +title: TI BQ27XXX fuel gauge family
->> +
->> +maintainers:
->> +  - Pali Rohár <pali@kernel.org>
->> +  - Andrew F. Davis <afd@ti.com>
->> +  - Sebastian Reichel <sre@kernel.org>
->> +
->> +description: |
->> +  Support various Texas Instruments fuel gauge devices that share similar
->> +  register maps and power supply properties
-> allOf:
->    - $ref: power-supply.yaml#
-Ack
->
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ti,bq27200 - BQ27200
->> +      - ti,bq27210 - BQ27210
->> +      - ti,bq27500 - deprecated, use revision specific property below
->> +      - ti,bq27510 - deprecated, use revision specific property below
->> +      - ti,bq27520 - deprecated, use revision specific property below
-> There is a deprecated property ("deprecated: true"), but IDK how to
-> apply it to specific compatible values. Maybe Rob can help out here.
-> Otherwise it's not a blocker, since the conversion is still an
-> improvement without having explicit deprecation marks :)
->
-I would prefer to do this in separate patches.
-
-The code still contains these deprecated values.
-
-So technically we should remove them in this conversion from the 
-binding, code and the 2 bindings that they are associated with.
-
-These have been marked deprecated since 2017.
-
-I know we are not supposed to remove items from the bindings so at the 
-very least we should remove them from the code and update the devicetree 
-files and as you said mark these as deprecated and removed in this 
-conversion.
-
->> +      - ti,bq27500-1 - BQ27500/1
->> +      - ti,bq27510g1 - BQ27510-g1
->> +      - ti,bq27510g2 - BQ27510-g2
->> +      - ti,bq27510g3 - BQ27510-g3
->> +      - ti,bq27520g1 - BQ27520-g1
->> +      - ti,bq27520g2 - BQ27520-g2
->> +      - ti,bq27520g3 - BQ27520-g3
->> +      - ti,bq27520g4 - BQ27520-g4
->> +      - ti,bq27521 - BQ27521
->> +      - ti,bq27530 - BQ27530
->> +      - ti,bq27531 - BQ27531
->> +      - ti,bq27541 - BQ27541
->> +      - ti,bq27542 - BQ27542
->> +      - ti,bq27546 - BQ27546
->> +      - ti,bq27742 - BQ27742
->> +      - ti,bq27545 - BQ27545
->> +      - ti,bq27411 - BQ27411
->> +      - ti,bq27421 - BQ27421
->> +      - ti,bq27425 - BQ27425
->> +      - ti,bq27426 - BQ27426
->> +      - ti,bq27441 - BQ27441
->> +      - ti,bq27621 - BQ27621
->> +
->> +  reg:
->> +    maxItems: 1
->> +    description: integer, I2C address of the fuel gauge.
->> +
->> +  monitored-battery:
->> +    description: |
->> +       phandle of battery characteristics node.
->> +       The fuel gauge uses the following battery properties:
->> +       - energy-full-design-microwatt-hours
->> +       - charge-full-design-microamp-hours
->> +       - voltage-min-design-microvolt
->> +       Both or neither of the *-full-design-*-hours properties must be set.
->> +       See Documentation/devicetree/bindings/power/supply/battery.txt
-> power-supplies: true
-Ack
->
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c0 {
->> +      #address-cells = <1>;
->> +      #size-cells = <0>;
->> +      bat: battery {
->> +        compatible = "simple-battery";
->> +        voltage-min-design-microvolt = <3200000>;
->> +        energy-full-design-microwatt-hours = <5290000>;
->> +        charge-full-design-microamp-hours = <1430000>;
->> +      };
->> +
->> +      bq27510g3: fuel-gauge@55 {
->> +        compatible = "ti,bq27510g3";
->> +        reg = <0x55>;
->> +        monitored-battery = <&bat>;
->> +      };
->> +    };
-> Otherwise looks good to me.
-
-Ack
-
-Dan
-
->
-> -- Sebastian
+On 2020-05-09 5:58 AM, Wei Yongjun wrote:=0A=
+> In case of error, the function of_parse_phandle() returns NULL pointer=0A=
+> not ERR_PTR(). The IS_ERR() test in the return value check should be=0A=
+> replaced with NULL test.=0A=
+> =0A=
+> Fixes: f0d8048525d7 ("interconnect: Add imx core driver")=0A=
+> Reported-by: Hulk Robot <hulkci@huawei.com>=0A=
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>=0A=
+> ---=0A=
+>   drivers/interconnect/imx/imx.c | 8 ++++----=0A=
+>   1 file changed, 4 insertions(+), 4 deletions(-)=0A=
+> =0A=
+> diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/im=
+x.c=0A=
+> index 6884212511f0..ac420f86008e 100644=0A=
+> --- a/drivers/interconnect/imx/imx.c=0A=
+> +++ b/drivers/interconnect/imx/imx.c=0A=
+> @@ -90,10 +90,10 @@ static int imx_icc_node_init_qos(struct icc_provider =
+*provider,=0A=
+>   			node->name, node->id);=0A=
+>   	} else {=0A=
+>   		dn =3D of_parse_phandle(dev->of_node, adj->phandle_name, 0);=0A=
+> -		if (IS_ERR(dn)) {=0A=
+> -			dev_warn(dev, "Failed to parse %s: %ld\n",=0A=
+> -				 adj->phandle_name, PTR_ERR(dn));=0A=
+> -			return PTR_ERR(dn);=0A=
+> +		if (!dn) {=0A=
+> +			dev_warn(dev, "Failed to parse %s\n",=0A=
+> +				 adj->phandle_name);=0A=
+> +			return -ENODEV;=0A=
+>   		}=0A=
+>   		/* Allow scaling to be disabled on a per-node basis */=0A=
+>   		if (!dn || !of_device_is_available(dn)) {=0A=
+=0A=
+Reviewed-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
