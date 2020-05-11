@@ -2,130 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2051CDF0E
-	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 17:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288E01CE1D8
+	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 19:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729119AbgEKPbA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 May 2020 11:31:00 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:52660 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727093AbgEKPbA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 11:31:00 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 3BCD62A0923
-Received: by earth.universe (Postfix, from userid 1000)
-        id 0AA733C08C6; Mon, 11 May 2020 17:30:56 +0200 (CEST)
-Date:   Mon, 11 May 2020 17:30:55 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Dan Murphy <dmurphy@ti.com>
-Cc:     linux-pm@vger.kernel.org, robh@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>
-Subject: Re: [PATCH v2] dt-bindings: power: Convert bq27xxx dt to yaml
-Message-ID: <20200511153055.7u7afdcpcfbsmswq@earth.universe>
-References: <20200507183013.27261-1-dmurphy@ti.com>
- <20200510161721.257vprq6rqp64wu5@earth.universe>
- <fb9b240e-9bfe-1295-6fc4-700d886ea7c9@ti.com>
- <20200511143241.nmkti7meahvj2swt@earth.universe>
- <8674289c-038d-d811-4786-322d66072527@ti.com>
- <20200511145700.lnytcr747snnolya@earth.universe>
- <57e2495d-ec06-53ff-c2b5-10062da2848f@ti.com>
+        id S1730696AbgEKRhX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 May 2020 13:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730624AbgEKRhW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 13:37:22 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A22C061A0C
+        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 10:37:22 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id z72so10697437wmc.2
+        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 10:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorremedies-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ayLvqeYWqATA5bQj5fLg2I6fTjHGqPLDoJtYi9Y4aHA=;
+        b=B2YQfZ19SBrL5s1ahzAUpJSVLXy9s0SsBFwF1UcljeCMcGn0wLwifkm4A/3ecmjxML
+         gWETSy6fbvlo6FjWebqHF+P//ryGUkSow86brx1106ZlQLFag/Em52Dwd0OyMAddcv1y
+         itq9Nww5HyA34cSU0Jywv137IapwB7iESAAvMbWlTStydWrCUAEfqIazzcxPr7mJbjen
+         pv4llM3jGDFQ6AFI18pciXCqiPfM1iSWp160RFSxziDb7HsSAJGBANgm1gSBZsIbyI4G
+         vy7ENmB5xmiei8MgtvGCJM8/MEzfDwMIsY3Ntsknw8AeMOYsaQf/xOLNMWeZPV9XtCmq
+         dNTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ayLvqeYWqATA5bQj5fLg2I6fTjHGqPLDoJtYi9Y4aHA=;
+        b=HxI0YR5pLJjS+KbMC8KuLUZ/AYGxY8wvJ8wFS1Vz9TThc0ZNYlfnDmcf/rdghag2wA
+         /buzkWtWRa8vqjZQlCuOIniulYkOcewHhSU1EWBcxd3qCotzldYjrTUtqvSl5bjJkwQq
+         3Fsu5F6Ks7//wNE4oBgbvuUO+/cmlR13umX9c3gPhwmYoG/uWU6j0ztN0MWjgfmAbrgw
+         zw5t/gXpis7JL0NiX24+RV7KrWlErPxd6bPev2JXLrjBbhKlAWBRH6ZRKSiXrFUsWR3Y
+         4mIJz1oHSNYRK+E0iU1ALv5g+azcOUdhvgWF27YSN+AQ8QTnk3QZrJ4HQXbzONnvskyv
+         JBdg==
+X-Gm-Message-State: AGi0Pua55kr748H1MtJyPdoH/G8hRkXerLOi/l0S/tsMMWxRlgplqFHf
+        vpQoSTMtThyBOthnJbXam/ijxfPfKjGyY0sLWiLUyNjcNLrsVw==
+X-Google-Smtp-Source: APiQypIF6nqq/7vCoLfa1X1WanpXbwBnw1Za2yLXPvvMhDu120RyEQEp17GHICnVxafC6+h9VF05sZ2qDIvyRoJ5QN0=
+X-Received: by 2002:a05:600c:2645:: with SMTP id 5mr32007969wmy.168.1589218641278;
+ Mon, 11 May 2020 10:37:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p6a5pm5xcfp2qz24"
-Content-Disposition: inline
-In-Reply-To: <57e2495d-ec06-53ff-c2b5-10062da2848f@ti.com>
+References: <CAJCQCtQ=1=UFaCvPO99W0t9SWuK5zG4ENKYzq2PgJ36iu-EiiQ@mail.gmail.com>
+ <CAJZ5v0hqODC52Bogeo-2suROH63NmON=5a5K6OZEp1YYMYK_QA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hqODC52Bogeo-2suROH63NmON=5a5K6OZEp1YYMYK_QA@mail.gmail.com>
+From:   Chris Murphy <chris@colorremedies.com>
+Date:   Mon, 11 May 2020 11:37:04 -0600
+Message-ID: <CAJCQCtTxQw=P43wHM2ENX600Jm+BXU+f+=Wv09ijjiqWZoWsiQ@mail.gmail.com>
+Subject: Re: 5.7 sleep/wake regression
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, May 11, 2020 at 5:15 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Mon, May 11, 2020 at 6:22 AM Chris Murphy <chris@colorremedies.com> wrote:
+> >
+> > Got an older Macbook Pro that does suspend to RAM and wake OK with
+> > 5.6, but starting with git 47acac8cae28, it will not wake up. Instead
+> > it has a black screen, gets hot, fans go to high, and it turns into a
+> > hair dryer. So it's a regression.
+>
+> There is a known issue addressed by this patch:
+>
+> https://patchwork.kernel.org/patch/11538065/
+>
+> so can you please try it?
 
---p6a5pm5xcfp2qz24
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Patch applied, but the problem remains.
 
-Hi,
+CPU is i7-2820QM and dmesg for the working sleep+wake case:
+https://paste.centos.org/view/ea5b913d
 
-On Mon, May 11, 2020 at 09:55:11AM -0500, Dan Murphy wrote:
-> On 5/11/20 9:57 AM, Sebastian Reichel wrote:
-> > On Mon, May 11, 2020 at 09:29:59AM -0500, Dan Murphy wrote:
-> > > On 5/11/20 9:32 AM, Sebastian Reichel wrote:
-> > > > On Mon, May 11, 2020 at 07:25:06AM -0500, Dan Murphy wrote:
-> > > > > On 5/10/20 11:17 AM, Sebastian Reichel wrote:
-> > > > > > This needs is missing the power-supplies property. The N900 DT
-> > > > > > contains a bq27200 referencing the charger, so it should fail t=
-he DT
-> > > > > > check without the property being listed here.
-> > > > > Hmm.=A0 I ran the dt checker specifically on the binding and it d=
-id not fail.
-> > > > > Unless I need to build some other DTs as well.
-> > > > > Either I will have the power-supplies property
-> > > > I just tried it myself. The problem is the way you are specifying
-> > > > the compatible strings. This is the parsing result:
-> > > >=20
-> > > > enum: ['ti,bq27200 - BQ27200', 'ti,bq27210 - BQ27210', 'ti,bq27500 =
-- deprecated,
-> > > >         use revision specific property below', ...
-> > > >=20
-> > > > You can see this in Documentation/devicetree/bindings/processed-sch=
-ema.yaml, which
-> > > > is generated by running the check. The compatible comments need a #=
- as separation
-> > > > character like this to generate proper bindings:
-> > > >=20
-> > > > properties:
-> > > >     compatible:
-> > > >       enum:
-> > > >         - ti,bq27200 # BQ27200
-> > > >         - ti,bq27210 # BQ27210
-> > > >         - ti,bq27500 # deprecated, use revision specific property b=
-elow
-> > > Well honestly not sure why we need the comment either.=A0These are pr=
-etty
-> > > self explanatory maybe we should just remove the additional comments
-> > Fine with me.
-> Ack
-> >=20
-> > > Any consideration on just removing the deprecated values?
-> > Let's keep them with their comment for now. Removing them should
-> > start with marking them as depracated in the binding and generating
-> > a runtime warning in the driver, so that people become aware of the
-> > problem. At least for ti,bq27500 we have mainline users At least for
-> > ti,bq27500 we have mainline users.
->=20
-> There are only 2 dts files that have this reference unless we are not sure
-> which device is actually in use.
+In the failed wake case, I note the following: the fade-in/out sleep
+indicator light on the laptop is pulsing, suggests it did actually
+enter sleep OK. When waking by spacebar press, this sleep indicator
+light stops pulsing, the backlight does not come on, the laptop does
+not respond to either ssh or ping. Following  a power reset and
+reboot, the journal's last line is
 
-DT is considered ABI and one is supposed to be able to boot a new
-kernel with an old DT. It's not enough to just update the in-tree
-dts files. I suppose we can consider removing support for the old
-compatible values after having the warning being printed for some
-time and the mainline users being converted to the new binding.
+[   61.678347] fmac.local kernel: PM: suspend entry (deep)
 
--- Sebastian
+Let me know if I should resume bisect.
 
---p6a5pm5xcfp2qz24
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl65b6oACgkQ2O7X88g7
-+prdsA/+LRNbHjpJM/eGMeZL07Zi7D0x1usYEjVEkUDLpt4jUoyk+rwGe7Lf5c/f
-UZJHzGn6FvTKpNi8IJNYZ/mBywIPIyt/0PYqAuHpE2vNaEB+g7IA4KzDkWlLOxxX
-Oep5YeyezarXQwLrv/2m6DFvOYteMxn1/FPwGgMED3T6diw1691ajAmLTSyshshp
-tKkXtK0gMcPHNKzdSh85z7eNXRGpQh0V9Zi+iOc6Hz1/VlC+cPysOgF2zjaUTfAR
-g0E+jR7FAfBsexmQt/IedMS1vjusQhqQN/ogQrjGEkRnoAb1HgJojvLWmLfRgn/k
-bF7uwfh+fqShrkBtyl7uPJQMsAMuTKkWNZwjaNtZfsyylpLP7ugDiBVqUg+ni17d
-mkcYKuQ9hdJQ99Rkn/FH+atEUKqnCUzX5PKgMMfyszeklyAZ8fEi1D3/0w7A8U39
-a96TBija1qzCQh3yR4vLNkeNoVajlf0k1xdigL2YKvDMjQ3AyTRdDzD1/6/Zn9VS
-mVyczXSpb27X5oNGOPrstf/UQvtzTJ6nUIdVnOeGzu0m0LWQ7ViAneKdePT9aNKY
-RohcxgnRxnIeTcKdzy119iE3kHogyf0hgeH0HUBfv/wuWGQHHFpTFv97bG23C3p+
-gv34Kd8ytuTW8ga9M4nFCyVqFWI5riic49ZbtGqxuwwXKaPOMqs=
-=0M+W
------END PGP SIGNATURE-----
-
---p6a5pm5xcfp2qz24--
+-- 
+Chris Murphy
