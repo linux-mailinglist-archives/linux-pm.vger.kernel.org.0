@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB97C1CDBA5
-	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 15:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6891CDBBB
+	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 15:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729514AbgEKNqD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 May 2020 09:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S1726438AbgEKNtD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 May 2020 09:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726438AbgEKNqD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 09:46:03 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E316C05BD0A
-        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 06:46:01 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id e16so11045950wra.7
-        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 06:46:01 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1730158AbgEKNtC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 09:49:02 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1700C061A0E
+        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 06:49:00 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id z72so9736849wmc.2
+        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 06:49:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Q2BxZKtzYVJdnhKDk6kHCLe3qRzlCf6s3v+h+pLemAg=;
-        b=vt3tIM8SXmyGE76DoZTOdmElnTIl4bMIltVntIAc0he88Sp9qJRB/V82zw+WrS5ihG
-         EJG7w8kdcUMgSuW4nZHMeP55c/FdVaRUqO93oTbSH/bkPfFrlHPMjgPH5/AEfRuoUu/U
-         Ak1f5Qmm6SUMcApwnUw266CxwLZzc4MxBgHsCu1MEztG1efH6KjzjCsHLbufXO/JHkyg
-         4qqYKPjp/oW9mizuM4Pn3HGbqhzheYTNDFkaLvftrCVNM/VYgWqz1bSWSuZetRx/q5K6
-         et6c5WXisyQm9pdE/trnsAi0Rc4P282oAY4w74LRTcifJkmjSnGbQrMkFE8BBK/CLrHU
-         kIFw==
+        bh=BjHVuVtBWSdENXXYiinZ4uI8mae/pV5Z0nfAWffhAkY=;
+        b=k5UvlXD0wz5vs3V4Z1hLq6biCClQbT+SzjjXqeAWFhwqVN+GA6qeV+oLnHhDuhXDcw
+         MVX0TgpYBV2DjO6YTj2/kloLSz+106Qm/fu9Fbt1wd7Q9aE3k+RpBPuqoe4B/zYzxdUq
+         BWm+yMkxszNTBcpnFcQs0Byn+efwRCTcgItZvKIAw201wqDgUXYW7R4/7Cfdosha29v5
+         hG7krpuspf6IGF5pvCDjIZnLghI9pcVt8KAQQzkY5BjrBvfl67q0XBW22UMkTBRK4S4F
+         DLCrrH5eHw06BLRl64MM4YyqwuAW3hNxzvNkr+tVHeL/B126T/5EI79diNMMOpSg7Ksv
+         7m/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Q2BxZKtzYVJdnhKDk6kHCLe3qRzlCf6s3v+h+pLemAg=;
-        b=NnAq/yBhgsj30ktA8bFF/szWIcqYSDbr7ZIr08iCz85PbI3TguYtbgXU/A5lNazouS
-         DYAlelOAOqqg5IRiq+zCRjteGU59Xve1BF/s1N6jqCYX7VVS7TR138lLPncEPzIvCC47
-         u/rWGFu1slguU1Q5ZTEIV6TyL9lkzmTsJl7A6IhEwW9Wc8QxjrTMOuMZkjRZA8/dvq/v
-         7oY/CpO+X+nKLsFLnlxWw9ncsn2/mzyLFLcBD1BAhwXUsM5CkJ2c1cXAIvFzMq2/k490
-         XbBW2xBXJcqocWjxuVfD6B+kgPxLyMbkbNifa0PiNeHE6B1XzXRea4q+/ZxK69vd/Sls
-         5EMA==
-X-Gm-Message-State: AGi0PuZ7FopWCPk2xJDg7QzUHdqXW5AOPSwM2zbgpZLyiF4Hpx1U5ci1
-        kXAuHmc9z/3cf40FiGjs/I950+Iy2XVXtQ==
-X-Google-Smtp-Source: APiQypIZNeq7ry3Hj06e+ssDcQCx46NyjFOu4uu1tNoXA1NhJj0eKvkluOlZpeHyLFtt4scGQaFK5w==
-X-Received: by 2002:adf:810a:: with SMTP id 10mr19863253wrm.101.1589204759978;
-        Mon, 11 May 2020 06:45:59 -0700 (PDT)
+        bh=BjHVuVtBWSdENXXYiinZ4uI8mae/pV5Z0nfAWffhAkY=;
+        b=B2JPxumQIuslq/aFTELfFFnfsxn/e92PdF2J9ah4XtLRpxXkNd2aNOrK82aCHDV4Rm
+         AUR78sACcW/JoM0QBxUzz6gyMbECLCCkmndgr6kY8IAvuseXcS0RoPhq5LOvFIxVBoog
+         4DnD9VvpotgFQODLkbTssk+dJkoXSX/UJSC9AorjDbv2QHFoGpzwG/5AevoMQD+2xIb9
+         NSj0OB9+VQw7qsAtAUkmJm8zerjv+ANAGc875sOw0D2r5LslVVjn7AF6VPNyKIYFPjzq
+         s2UHXs+NvfZc47vwOPmNed5uzSXUXDXJpAFSCAfG5vFMTjNHNphfUpwTTCjDeFq1rCj5
+         qGrA==
+X-Gm-Message-State: AGi0PuZXoltfnQhEBadab15+uVBPn5gSK0u6R5/HJitZ9ksDYPX65kqH
+        AQx0PDA26GJQM/QDq8XPGZQiNoBcOk2Cpw==
+X-Google-Smtp-Source: APiQypLt90h3E4QOKCct7odHvidKqDIEKMSux9lbzqVHNQsX/QafgI6SnH5ciyxpl3mgK+o2GNzOyg==
+X-Received: by 2002:a1c:df83:: with SMTP id w125mr22393555wmg.140.1589204939170;
+        Mon, 11 May 2020 06:48:59 -0700 (PDT)
 Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id q184sm27152043wma.25.2020.05.11.06.45.58
+        by smtp.gmail.com with ESMTPSA id a24sm26771229wmb.24.2020.05.11.06.48.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 06:45:58 -0700 (PDT)
-Date:   Mon, 11 May 2020 14:45:55 +0100
+        Mon, 11 May 2020 06:48:58 -0700 (PDT)
+Date:   Mon, 11 May 2020 14:48:54 +0100
 From:   Quentin Perret <qperret@google.com>
 To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -69,27 +69,23 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
         lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
         orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
-Subject: Re: [PATCH v7 06/15] PM / EM: change name of em_pd_energy to
- em_cpu_energy
-Message-ID: <20200511134555.GC29112@google.com>
+Subject: Re: [PATCH v7 07/15] Documentation: power: update Energy Model
+ description
+Message-ID: <20200511134854.GD29112@google.com>
 References: <20200511111912.3001-1-lukasz.luba@arm.com>
- <20200511111912.3001-7-lukasz.luba@arm.com>
+ <20200511111912.3001-8-lukasz.luba@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200511111912.3001-7-lukasz.luba@arm.com>
+In-Reply-To: <20200511111912.3001-8-lukasz.luba@arm.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday 11 May 2020 at 12:19:03 (+0100), Lukasz Luba wrote:
-> Energy Model framework supports now other devices than CPUs. Refactor some
-> of the functions in order to prevent wrong usage. The old function
-> em_pd_energy has to generic name. It must not be used without proper
-> cpumask pointer, which is possible only for CPU devices. Thus, rename it
-> and add proper description to warn of potential wrong usage for other
-> devices.
+On Monday 11 May 2020 at 12:19:04 (+0100), Lukasz Luba wrote:
+> The Energy Model framework supports also other devices than CPUs. Update
+> related information and add description for the new usage.
 > 
 > Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
