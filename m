@@ -2,76 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB36D1CE305
-	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 20:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A9A1CE3AA
+	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 21:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729750AbgEKSvH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 May 2020 14:51:07 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:45000 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729661AbgEKSvH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 14:51:07 -0400
-Received: by mail-ot1-f68.google.com with SMTP id j4so8409369otr.11;
-        Mon, 11 May 2020 11:51:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kE5/Go6t2fYGvoXtO9HkWgvHFtqFj74OSf+x9Glf+U8=;
-        b=UjZSYw4RSv+TpNcr0pTQrHpT/aFHcX2Idooxt6BBtneGl17MTpstYmDCesutGWFs4E
-         Rdu6GMJp9K4J3MA9YzxgDfn95uUWvaIQ50neusqdJ1ymMeuLzdkAjIarS9dqYV0JlJ0D
-         66kpTqhMNYptELLPUGwp6T23lJS2D3x/8MQAVgT6Yr/CZ8wUZQ7aikql7H620+6GY4mE
-         v+y8EEXZ1SYa7DtR1fKYxt4KaoPSFox6LfgiuEd5ewn9M/MrroeIV8u3mHcvvS92bSqj
-         tM7uoKXpD9nSZTLtaVOVNPxB9ZdFdoi3fZEoM6PVrP+EBx3qQDTzrXDrw/sNH9kQKb67
-         IJHA==
-X-Gm-Message-State: AGi0PuaUyBJ7/weP7U+zxzskrOtkZX4i3Tgi8EzIfrVR9eslWYENBVYX
-        Ttb9Y+BhBpDBmp0hksoi6R6qHMo=
-X-Google-Smtp-Source: APiQypIRsow20DA+OFWNNQtxZ4M+f9YRd4zN3KlQ4rWozGy8h57PD0s4/z5hpOktemuW1PcKm94mMw==
-X-Received: by 2002:a9d:19af:: with SMTP id k44mr13367362otk.80.1589223065262;
-        Mon, 11 May 2020 11:51:05 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id k84sm4766130oib.10.2020.05.11.11.51.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 11:51:04 -0700 (PDT)
-Received: (nullmailer pid 25902 invoked by uid 1000);
-        Mon, 11 May 2020 18:51:03 -0000
-Date:   Mon, 11 May 2020 13:51:03 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     amit.kucheria@verdurent.com, rui.zhang@intel.com,
-        s.hauer@pengutronix.de, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, shawnguo@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Linux-imx@nxp.com, festevam@gmail.com, kernel@pengutronix.de,
-        robh+dt@kernel.org, daniel.lezcano@linaro.org
-Subject: Re: [PATCH V3] dt-bindings: thermal: Convert i.MX8MM to json-schema
-Message-ID: <20200511185103.GA25293@bogus>
-References: <1587477544-20052-1-git-send-email-Anson.Huang@nxp.com>
+        id S1729215AbgEKTPi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 May 2020 15:15:38 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:35722 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728613AbgEKTPi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 15:15:38 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04BJFZNf083357;
+        Mon, 11 May 2020 14:15:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1589224535;
+        bh=i3l1grILIbxc03pyhfwIusQdRfYWPfn5hdnAbv7xGzw=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=QRIMqbF5Jue8dYveT0mJj8JkwiOMW3yewVqcZtzlL7XYiQcg2jxMw0fHBVbwXHXHn
+         spp0E7TO0OMq0zksJd5IIKLjfrq7KgeVKY9f4f7VWLxSiDdGfbjojZI89IjY95YZbr
+         L7fuius7nMy3/X0cBiAiOs5p7OZ1nikRCrRqBekc=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04BJFZHA077175
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 11 May 2020 14:15:35 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 11
+ May 2020 14:15:34 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 11 May 2020 14:15:34 -0500
+Received: from [10.250.52.63] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04BJFVuO003772;
+        Mon, 11 May 2020 14:15:34 -0500
+Subject: Re: [PATCH v2] dt-bindings: power: Convert bq27xxx dt to yaml
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+CC:     <linux-pm@vger.kernel.org>, <robh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        "Andrew F . Davis" <afd@ti.com>
+References: <20200507183013.27261-1-dmurphy@ti.com>
+ <20200510161721.257vprq6rqp64wu5@earth.universe>
+ <fb9b240e-9bfe-1295-6fc4-700d886ea7c9@ti.com>
+ <20200511143241.nmkti7meahvj2swt@earth.universe>
+ <8674289c-038d-d811-4786-322d66072527@ti.com>
+ <20200511145700.lnytcr747snnolya@earth.universe>
+ <57e2495d-ec06-53ff-c2b5-10062da2848f@ti.com>
+ <20200511153055.7u7afdcpcfbsmswq@earth.universe>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <767f3083-45ae-9198-0a25-6beddc7e0c03@ti.com>
+Date:   Mon, 11 May 2020 14:06:33 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1587477544-20052-1-git-send-email-Anson.Huang@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200511153055.7u7afdcpcfbsmswq@earth.universe>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 21 Apr 2020 21:59:04 +0800, Anson Huang wrote:
-> Convert the i.MX8MM thermal binding to DT schema format using json-schema
-> 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
-> Changes since V2:
-> 	- drop unnecessary description for reg/clocks;
-> 	- improve compatible;
-> 	- use thermal-sensor as node name.
-> ---
->  .../devicetree/bindings/thermal/imx8mm-thermal.txt | 15 ------
->  .../bindings/thermal/imx8mm-thermal.yaml           | 58 ++++++++++++++++++++++
->  2 files changed, 58 insertions(+), 15 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/thermal/imx8mm-thermal.txt
->  create mode 100644 Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml
-> 
+Sebastian
 
-Applied, thanks!
+On 5/11/20 10:30 AM, Sebastian Reichel wrote:
+> Hi,
+>
+> On Mon, May 11, 2020 at 09:55:11AM -0500, Dan Murphy wrote:
+>> On 5/11/20 9:57 AM, Sebastian Reichel wrote:
+>>> On Mon, May 11, 2020 at 09:29:59AM -0500, Dan Murphy wrote:
+>>>> On 5/11/20 9:32 AM, Sebastian Reichel wrote:
+>>>>> On Mon, May 11, 2020 at 07:25:06AM -0500, Dan Murphy wrote:
+>>>>>> On 5/10/20 11:17 AM, Sebastian Reichel wrote:
+>>>>>>> This needs is missing the power-supplies property. The N900 DT
+>>>>>>> contains a bq27200 referencing the charger, so it should fail the DT
+>>>>>>> check without the property being listed here.
+>>>>>> Hmm.  I ran the dt checker specifically on the binding and it did not fail.
+>>>>>> Unless I need to build some other DTs as well.
+>>>>>> Either I will have the power-supplies property
+>>>>> I just tried it myself. The problem is the way you are specifying
+>>>>> the compatible strings. This is the parsing result:
+>>>>>
+>>>>> enum: ['ti,bq27200 - BQ27200', 'ti,bq27210 - BQ27210', 'ti,bq27500 - deprecated,
+>>>>>          use revision specific property below', ...
+>>>>>
+>>>>> You can see this in Documentation/devicetree/bindings/processed-schema.yaml, which
+>>>>> is generated by running the check. The compatible comments need a # as separation
+>>>>> character like this to generate proper bindings:
+>>>>>
+>>>>> properties:
+>>>>>      compatible:
+>>>>>        enum:
+>>>>>          - ti,bq27200 # BQ27200
+>>>>>          - ti,bq27210 # BQ27210
+>>>>>          - ti,bq27500 # deprecated, use revision specific property below
+>>>> Well honestly not sure why we need the comment either. These are pretty
+>>>> self explanatory maybe we should just remove the additional comments
+>>> Fine with me.
+>> Ack
+>>>> Any consideration on just removing the deprecated values?
+>>> Let's keep them with their comment for now. Removing them should
+>>> start with marking them as depracated in the binding and generating
+>>> a runtime warning in the driver, so that people become aware of the
+>>> problem. At least for ti,bq27500 we have mainline users At least for
+>>> ti,bq27500 we have mainline users.
+>> There are only 2 dts files that have this reference unless we are not sure
+>> which device is actually in use.
+> DT is considered ABI and one is supposed to be able to boot a new
+> kernel with an old DT. It's not enough to just update the in-tree
+> dts files. I suppose we can consider removing support for the old
+> compatible values after having the warning being printed for some
+> time and the mainline users being converted to the new binding.
+
+Yes I know. I may have said that before.
+
+After looking at the driver and how this is all stitched together I 
+think I am just going to stick to the DT conversion as is.
+
+I will make the basic changes for conversion but any changes to the 
+compatibles should be done later.
+
+Dan
+
+
+> -- Sebastian
