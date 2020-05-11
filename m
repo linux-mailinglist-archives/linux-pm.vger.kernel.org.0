@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5A31CD9BD
-	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 14:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E3A1CD9C3
+	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 14:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730024AbgEKM0W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 May 2020 08:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
+        id S1730037AbgEKM02 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 May 2020 08:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730006AbgEKM0V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 08:26:21 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB98DC061A0E
-        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 05:26:21 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id f6so4494869pgm.1
-        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 05:26:21 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1729022AbgEKM00 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 08:26:26 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F57C061A0E
+        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 05:26:26 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id u10so3873040pls.8
+        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 05:26:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=a6qQPRYkkqKyAG6TLaEJB/cXToLWZ6lQEL1jR4ff/IE=;
-        b=X+M5qnS54NsxisnIx7GWnpMoWDWn3S2xQWIGyp3UWhsDJYDkZoiNsvjCajD6xx8AuQ
-         6mOWP09lgMi99nLfIw805FbWRAgJv6s45+jM0CbnOCyl3V/xqGnqi27nzDsb2mwlXfAA
-         XJ47NejW5B4bMduwJJwqauCx9wS0XpxT+By53oU2vUu872hKmotTLcAS8RKKKdqlxE+q
-         R5k259oNqmf7ex6OJunBi2f/dH6P7waZekWGNgAJptbSmOEUuS7eikiChC7J4X3aH0g/
-         nE2Ha6gc9xTR6Nerie4w88IVyFzTw5E+MtNxlclal4M/RklF4pXg2jJItR7e9POgsDuu
-         hBAg==
+        bh=rY1JOMAJv6wVttlYP9KeyPLdulfjmcdiwqnMN+0tcMw=;
+        b=EswIUU0mwPJ60q3J+agrtsxLgRaW36AeIg2tZ12LEZ71Hq0mxal8xYW1sDc9SSFGRF
+         hj2lEY/kizUWmRCfkp2EJKJSHkze5IZs03woynq0IsWtjITFEGkP+suceVLMA7Ynfch3
+         BBxlNS0Cb7KZy78+LzM2DdgstvYwmEhvEqtrh2mDTkDXRrTeGjX4WYZdkBazBu2qbPSl
+         +OI55xFZyxgDTrrKPdeP4YVfr1+8d5wmEXD4Iepvuvd3TMNL0qDsLbt5ipdIMxChfWqK
+         s9MG8vPjAz9rUX899zzPTFoN8ak07c4/iEAEDirFQWL4yhieJhftxpH3mSsQ0BulvUA0
+         PLwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=a6qQPRYkkqKyAG6TLaEJB/cXToLWZ6lQEL1jR4ff/IE=;
-        b=RqMFbkd8q9VsEEsgcD0kB/tQKuR8DQdh92HMzRxW5S9onQ6u3O8HMRzU6ipFVRycJm
-         Qy6j2g1HGvt0tr/rnzOHm+aDFGQJf+cVx0jDRJQAJ06+nPpkNzwvpGpm7cgTciWWwwwZ
-         A5+eEAtxOwurUbJpZLPbTICYSjf4SHsN6mh8ZZtbEIp1SKjk3kkgiIXRwsoIfJDID3pF
-         VcjElHyEyYBdmc3x+2tOFkXzvjgtXgQGh04/Ky51nJ5dYG8pjajgyIlTHbuAGOBipGDx
-         JUdN+JBNC7shxoKl2U+USfjAP2sqEFwj94krlDLpW+AUVQr+udTvmsTGzS/apkUVYV15
-         yhug==
-X-Gm-Message-State: AGi0PuZK0FRCzA3BwEgSI49iH73og8pp922lnZlSr/7R6XH/toyYA+C6
-        ubS5zPD6APCq4MBa7nNemlV3VY4wAqE=
-X-Google-Smtp-Source: APiQypLL4nvhq334zGg7iTbU1aDby51pF04VFXV0ASs9Ytw4L7wGG6wQYPS0Ri4lhijGPjC5YU88PA==
-X-Received: by 2002:a63:9558:: with SMTP id t24mr8618037pgn.48.1589199981320;
-        Mon, 11 May 2020 05:26:21 -0700 (PDT)
+        bh=rY1JOMAJv6wVttlYP9KeyPLdulfjmcdiwqnMN+0tcMw=;
+        b=mFtWHQg0sO5K7nEKSClKSwSI5i08FPIJX98QeMmb6KBEW2fATK/LUz/xbCV1Qj0uG1
+         ym3elKZlhVwUGJDK+3egnYp4EWdW4hQirOdIPhrT5T+umA44Yw02T/kFj6R4CoI2HBeC
+         yGwzsOBmmPRbbIlDU1DNKho/9hT4027mZv2c6z4VAEzDlsLDVwP99wP1wM2I9BYaxOlx
+         +3Xg6MCanua4HIjqa9z95FRVLRCi9jFEaRsfcQFTy9jYHtztsO8GW6mZEOOV/iSSxsUo
+         VZo2fIx20IgGyvdBiVZPW/YexMwtL5rSdqcxHvd0yq9DUjQ2nJfyQvAGSD2RMvb91hYk
+         LoFQ==
+X-Gm-Message-State: AGi0PuaLzrWvsqTVMD37/h7IW+zABewOHeJBixrSIZbqBSXcK4TTok37
+        6Y5o64+DQ+23qd1G9r8dzy9GaA==
+X-Google-Smtp-Source: APiQypL2yR2ZKxc/eTQV3F2wxog5egsQIyblGquQ3Qg53tNBVvAI268E0+y7jAQHKXUoV4VWgruw3g==
+X-Received: by 2002:a17:90a:1181:: with SMTP id e1mr23537379pja.234.1589199986348;
+        Mon, 11 May 2020 05:26:26 -0700 (PDT)
 Received: from localhost ([45.127.45.102])
-        by smtp.gmail.com with ESMTPSA id y7sm9229481pfq.21.2020.05.11.05.26.20
+        by smtp.gmail.com with ESMTPSA id j5sm10314784pjf.0.2020.05.11.05.26.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 05:26:20 -0700 (PDT)
+        Mon, 11 May 2020 05:26:25 -0700 (PDT)
 From:   Amit Kucheria <amit.kucheria@linaro.org>
 To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         daniel.lezcano@linaro.org,
@@ -56,9 +56,9 @@ To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>
 Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH 12/14] thermal/drivers/user_space: Sort headers alphabetically
-Date:   Mon, 11 May 2020 17:55:00 +0530
-Message-Id: <406d0c7c961e997b42e25adf4e432fe4f57b315a.1589199124.git.amit.kucheria@linaro.org>
+Subject: [PATCH 13/14] thermal/governors: Prefix all source files with gov_
+Date:   Mon, 11 May 2020 17:55:01 +0530
+Message-Id: <b9a85d3204712f14e320504948c12712dc0b291b.1589199124.git.amit.kucheria@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1589199124.git.amit.kucheria@linaro.org>
 References: <cover.1589199124.git.amit.kucheria@linaro.org>
@@ -69,27 +69,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sort headers to make it easier to read and find duplicate headers.
+Bang-bang governor source file is prefixed with gov_. Do the same for
+other governors for consistency so they're easy to find in the sources.
 
 Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 ---
- drivers/thermal/user_space.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/Makefile                                  | 8 ++++----
+ drivers/thermal/{fair_share.c => gov_fair_share.c}        | 0
+ .../thermal/{power_allocator.c => gov_power_allocator.c}  | 0
+ drivers/thermal/{step_wise.c => gov_step_wise.c}          | 0
+ drivers/thermal/{user_space.c => gov_user_space.c}        | 0
+ 5 files changed, 4 insertions(+), 4 deletions(-)
+ rename drivers/thermal/{fair_share.c => gov_fair_share.c} (100%)
+ rename drivers/thermal/{power_allocator.c => gov_power_allocator.c} (100%)
+ rename drivers/thermal/{step_wise.c => gov_step_wise.c} (100%)
+ rename drivers/thermal/{user_space.c => gov_user_space.c} (100%)
 
-diff --git a/drivers/thermal/user_space.c b/drivers/thermal/user_space.c
-index 293cffd9c8ad..82a7198bbe71 100644
---- a/drivers/thermal/user_space.c
-+++ b/drivers/thermal/user_space.c
-@@ -10,8 +10,8 @@
-  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  */
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index 8c8ed7b79915..09ff0e259d46 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -12,11 +12,11 @@ thermal_sys-$(CONFIG_THERMAL_HWMON)		+= thermal_hwmon.o
+ thermal_sys-$(CONFIG_THERMAL_OF)		+= of-thermal.o
  
--#include <linux/thermal.h>
- #include <linux/slab.h>
-+#include <linux/thermal.h>
+ # governors
+-thermal_sys-$(CONFIG_THERMAL_GOV_FAIR_SHARE)	+= fair_share.o
++thermal_sys-$(CONFIG_THERMAL_GOV_FAIR_SHARE)	+= gov_fair_share.o
+ thermal_sys-$(CONFIG_THERMAL_GOV_BANG_BANG)	+= gov_bang_bang.o
+-thermal_sys-$(CONFIG_THERMAL_GOV_STEP_WISE)	+= step_wise.o
+-thermal_sys-$(CONFIG_THERMAL_GOV_USER_SPACE)	+= user_space.o
+-thermal_sys-$(CONFIG_THERMAL_GOV_POWER_ALLOCATOR)	+= power_allocator.o
++thermal_sys-$(CONFIG_THERMAL_GOV_STEP_WISE)	+= gov_step_wise.o
++thermal_sys-$(CONFIG_THERMAL_GOV_USER_SPACE)	+= gov_user_space.o
++thermal_sys-$(CONFIG_THERMAL_GOV_POWER_ALLOCATOR)	+= gov_power_allocator.o
  
- #include "thermal_core.h"
- 
+ # cpufreq cooling
+ thermal_sys-$(CONFIG_CPU_FREQ_THERMAL)	+= cpufreq_cooling.o
+diff --git a/drivers/thermal/fair_share.c b/drivers/thermal/gov_fair_share.c
+similarity index 100%
+rename from drivers/thermal/fair_share.c
+rename to drivers/thermal/gov_fair_share.c
+diff --git a/drivers/thermal/power_allocator.c b/drivers/thermal/gov_power_allocator.c
+similarity index 100%
+rename from drivers/thermal/power_allocator.c
+rename to drivers/thermal/gov_power_allocator.c
+diff --git a/drivers/thermal/step_wise.c b/drivers/thermal/gov_step_wise.c
+similarity index 100%
+rename from drivers/thermal/step_wise.c
+rename to drivers/thermal/gov_step_wise.c
+diff --git a/drivers/thermal/user_space.c b/drivers/thermal/gov_user_space.c
+similarity index 100%
+rename from drivers/thermal/user_space.c
+rename to drivers/thermal/gov_user_space.c
 -- 
 2.20.1
 
