@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F30D41CD9C1
-	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 14:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3091CD9A6
+	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 14:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729811AbgEKMZv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 May 2020 08:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
+        id S1729855AbgEKMZx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 May 2020 08:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729728AbgEKMZs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 08:25:48 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CD6C061A0C
-        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 05:25:48 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id k19so3867610pll.9
-        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 05:25:48 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1729837AbgEKMZw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 08:25:52 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517DBC061A0E
+        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 05:25:52 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id t7so3880318plr.0
+        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 05:25:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=haxNS0r+O/CZv15x/o++MDoCTq7xU6xDTOnaN5esXAw=;
-        b=YXhiLmSx4goD8MUm/DW+rJ3zGpXWB6FJ31sgJ5LlIO1JYcdZkfCt5mSFZIuxiNtm5l
-         UfHYxoICohviLDbSbjQmTo+sOI/dpnqt3cbXlcfW13WQsYTxb8gc/Ei0zObJ5Yh4p0Ba
-         iF3fXBsX6jrgIDBJnZM4Wh/x3tNrHCcUf0MS3jsv6VVJmLC5qOzpwb4tGxZsrxkBbywa
-         YxaL3gXVxEIlRpdW4oMDNSobiYem5inBDHkZxsUTxoA8QqbtdNHXhv5usHlkZeRqNhkO
-         g/rXcAd6Vj+FDAc0jItxg+usDGmwxOWHSD++8EhIzWWfJUFNLJdxrvORZXMDBb5R+6zU
-         8UYA==
+        bh=CNjMX4Q50x2uZtB4NYh8/Da4gpgdASbh7q3Dr2tPrVQ=;
+        b=eb7YFu+ZwTh0kdRzfvf0DoWF3+HZqXzNxoucioWmLAplPiYL6HvXU+u/lkC+JA3ZzQ
+         D3OPLNTYWBoIhtiCIqGJ48OvRcIPxbXUJ9AtCXE6qVnmPQz3oUxq5E4AwTb/nbJduW79
+         JS7NAtR0hVYCuRMUNXkY4DqS2S8oe55KeLrQUn+bkBD/p6seUuz8aOhaJS8pzgAZ/j5W
+         vC0kJzc4N5K7a6Txud/eo0ckNLqHljjsf8Yb8ziUnpJ9QFiM7eX6g0OmTcyjCHAsPRs5
+         N98I9FJHBy2wWXm4Cq6rLT4w/mbEdZBcwJymAmalRQbwvdVWEU5vSa+RF9fzrOvmK/vx
+         0bSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=haxNS0r+O/CZv15x/o++MDoCTq7xU6xDTOnaN5esXAw=;
-        b=LhwGYbkln07y77r54+x8k+876aU0M1bX3U9ylzgKk9r6Cvh12f2cQCIx8uoKh07iRy
-         VDWoqESpKWTe2IiTqiAMxJvrS1vHEU4Q7TwdV9QU+npZD7nUm3tUZESRxKSEp7r7pmgc
-         /G3adMB/npVd92mZQwJIic747ltT01BdNCMU0dzM7uM+tafHqClC7crfmbGsfXa4UbZZ
-         0JuiLUP5yI/uh01zqH1Bbu70Gt/y1hZ1B4us1vrtDvHMj5cEVCZKYbFkO5erGb2Wh1nI
-         0E8j4Po4eWghQJguu3zpkjejzfWdmP5da0U0a9Da9GTHMGKZTsWryZKhiUgVuWUY4fV8
-         dAbA==
-X-Gm-Message-State: AGi0Pua11C4W/wiyHyqXEHtjKdU2go27TIocQslfDHP9jLYWIbm3F8nw
-        ta2KehYRJoSfeWdrEuYo41OETw==
-X-Google-Smtp-Source: APiQypKuTjY9Gg8mysJb/lkYYkrUVhRtatcvHzJl+3wFXdbvG1f4JVxn/zvTUHIoQRLk+TPOTNmBjg==
-X-Received: by 2002:a17:90a:e013:: with SMTP id u19mr20147358pjy.16.1589199947854;
-        Mon, 11 May 2020 05:25:47 -0700 (PDT)
+        bh=CNjMX4Q50x2uZtB4NYh8/Da4gpgdASbh7q3Dr2tPrVQ=;
+        b=mw4eAiTwxTWSkWnIvWlqTQVFId/41gss8+iSz3XJNfsrekRjxgWfG3RflEX95vEnGV
+         1eekdFVjtZKBhwjFQWcQnVAGkFlei6u9rFCr3tKycjwMC1UkC7BkPWzPoDmySyt3R9uS
+         uvECrQvtnr13ByjrX++Ytf9ir31JTMKkRQ4BUTUGAmRRdkrvqZ9SwLJwmSY88ksdV+Hn
+         HMfEXESo57EvYIxTVvwf1na7IbM7SdKkRyS0bqzZ5/i4BtxZBgJc0ToLZl8v3Hqj09Ph
+         CCNalDEPoITVDgpSl+htAw81naYOpbR9U/AupofBkpgjLljIqiiMkQv0gFo/EyjD4MbO
+         uGJg==
+X-Gm-Message-State: AGi0PuZGePXJthUTIX0SOrYPMtp3RmVJzF3AIhvVfiDCJljL4wJV1z4A
+        2BL/FOMXqnArKu+F5Zps0M1Eww==
+X-Google-Smtp-Source: APiQypJr6Iz0W0TXA7y6Xi3bZjA5ak5FQ3uvSh+4LgtY2bsmfCxDLRWUEUsLZlmkB2/rkPFogPpleg==
+X-Received: by 2002:a17:90a:f418:: with SMTP id ch24mr21983158pjb.68.1589199951878;
+        Mon, 11 May 2020 05:25:51 -0700 (PDT)
 Received: from localhost ([45.127.45.102])
-        by smtp.gmail.com with ESMTPSA id x193sm9569958pfd.54.2020.05.11.05.25.46
+        by smtp.gmail.com with ESMTPSA id o99sm10158324pjo.8.2020.05.11.05.25.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 05:25:47 -0700 (PDT)
+        Mon, 11 May 2020 05:25:51 -0700 (PDT)
 From:   Amit Kucheria <amit.kucheria@linaro.org>
 To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         daniel.lezcano@linaro.org,
@@ -56,9 +56,9 @@ To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>
 Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH 04/14] thermal/drivers/thermal_helpers: Include export.h
-Date:   Mon, 11 May 2020 17:54:52 +0530
-Message-Id: <fd3443f00dbba6ca90f35726c7451ae52145d2d4.1589199124.git.amit.kucheria@linaro.org>
+Subject: [PATCH 05/14] thermal/drivers/thermal_hwmon: Sort headers alphabetically
+Date:   Mon, 11 May 2020 17:54:53 +0530
+Message-Id: <29b64f1fe81e674c753c8f8309c310acd782ebea.1589199124.git.amit.kucheria@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1589199124.git.amit.kucheria@linaro.org>
 References: <cover.1589199124.git.amit.kucheria@linaro.org>
@@ -69,26 +69,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It is preferable to include export.h when you are using EXPORT_SYMBOL
-family of macros.
+Sort headers to make it easier to read and find duplicate headers.
 
 Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
 ---
- drivers/thermal/thermal_helpers.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/thermal_hwmon.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
-index 8ea0a05404f7..e47da80daf3a 100644
---- a/drivers/thermal/thermal_helpers.c
-+++ b/drivers/thermal/thermal_helpers.c
-@@ -14,6 +14,7 @@
- 
- #include <linux/device.h>
- #include <linux/err.h>
-+#include <linux/export.h>
+diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+index c8d2620f2e42..e43ae551592d 100644
+--- a/drivers/thermal/thermal_hwmon.c
++++ b/drivers/thermal/thermal_hwmon.c
+@@ -10,10 +10,11 @@
+  *  Copyright (C) 2013 Texas Instruments
+  *  Copyright (C) 2013 Eduardo Valentin <eduardo.valentin@ti.com>
+  */
++#include <linux/err.h>
+ #include <linux/hwmon.h>
+-#include <linux/thermal.h>
  #include <linux/slab.h>
- #include <linux/string.h>
- #include <linux/sysfs.h>
+-#include <linux/err.h>
++#include <linux/thermal.h>
++
+ #include "thermal_hwmon.h"
+ 
+ /* hwmon sys I/F */
 -- 
 2.20.1
 
