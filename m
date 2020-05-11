@@ -2,92 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1581CD096
-	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 06:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2CD1CD13C
+	for <lists+linux-pm@lfdr.de>; Mon, 11 May 2020 07:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725817AbgEKEW5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 May 2020 00:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
+        id S1725854AbgEKFVr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 May 2020 01:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725790AbgEKEW5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 00:22:57 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7DBC061A0C
-        for <linux-pm@vger.kernel.org>; Sun, 10 May 2020 21:22:56 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id k12so16480267wmj.3
-        for <linux-pm@vger.kernel.org>; Sun, 10 May 2020 21:22:56 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1725840AbgEKFVq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 May 2020 01:21:46 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B59C061A0E
+        for <linux-pm@vger.kernel.org>; Sun, 10 May 2020 22:21:46 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id r14so4240135pfg.2
+        for <linux-pm@vger.kernel.org>; Sun, 10 May 2020 22:21:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorremedies-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=o4xnzYVyuC6111/k6qlkYw+Jq59DyNMy7m+FNNQ5p08=;
-        b=AnJ1rTDcWpE+dgcz3zIdeHJg4ZBk5ATq1zsU2ubaD6BfNbeTmDMUoAvXvZpiaCurlJ
-         GjrigAI4LPLprdxORkMxWBhhqQ74pO55NP7SMkeYXANzfhWEoBjAu+clv2L0f04weUzt
-         TgrkLBaPt6YK+G8ky6OvIfMGOhJ/wpbkRWMmYYo9o+Ujgnv8MCeZvH2nlAyIZN1GlZ+n
-         3IeeIdIgDBVQVeIlLv4DuTvtyh2oE8Yhe/cUcmtg2feuRgZ1j9iRigFpl+kardNVMMzt
-         pOUIMPl2i9nHlO1t/OYOoN5tp/LjMVXRryjgvCuiihX8vwG7Z7n9wuGizArBeXvbNqq0
-         gwow==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=z99sLoNJtvUPb5Oimy7/Ab89RPlq4LmhubC3XgJRemk=;
+        b=QdDOkdm3armA+UkqeDUI8uWIroEDHSaYNvrr4VtGNWVIFrFo/etGIyX800wKwlfa5q
+         oGjtaEa0g2f4LawzX3D+qPqLg1IT+hmn+jz4LE4ATT6ZAvc+h4ODPMqZubBSVObx0qh+
+         rktIuB5m9Nub3X6gvdpdt/o4LOqI/u8bZRjIcqmN0xAdzuDMPbplG9KswC+J2ZvFf918
+         qRna5DApJzMlYqIQhVouVzxQ4RRgIUWfhk4Znz6rxvMTxshnPe9vImq8WYGoTka2skes
+         UbrF889Y3uzhYGyxsovIbXR1ux0uVe+odeHMapgON28crbNfVN3BVpKAtQGIGKS8fvgd
+         ZEGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=o4xnzYVyuC6111/k6qlkYw+Jq59DyNMy7m+FNNQ5p08=;
-        b=Ea9YlMFoHj+SZa5WPaWmSnT1jS4v7R3tarrqW4CoVedUcAeO9SgWffAwx9lQUlQcbN
-         kgyf17m4yzL+wGyLzBX6G5p9bC6K7GiXs+k3+JP7+Gg5eIHU2jhzCvhpWP3lMheV9/79
-         785FiesNztWMqc/CqUQsWg0sLZyzV0/VF1yctIZ5FpyhQdU4IPddwcvfztJ/B1lviEDu
-         P1YxaZHtvT75DtVH0mzeBU8aljBUBP9lK8qKgSkIUawZ3XdA5z4x15Adr55r6H3XHpXA
-         eoJcnor4iuDdOelSTkdwAXC1+fzY/wJmrPa2x1wxLCPXBk9WPobozBB1pTHzCrB2tZI/
-         o5Dg==
-X-Gm-Message-State: AGi0PubPtoCLD2JwQGfRAvy0MvGqK6uiX0h/5hYY0fK1ZMl17R/8lffc
-        lVUnQ+L2W4rTWAeoMON1sgKq2TWygNVnKIUWv3RBbDSj6NLlyQ==
-X-Google-Smtp-Source: APiQypIgSJeVkIGwLjaMTF8P/e8pVXmbJZdDBQ5F1SyvvWiGAp+76UWQQFz897NE66aB2YjjqSSchnQTbIwYTQhDg9k=
-X-Received: by 2002:a1c:2348:: with SMTP id j69mr12781262wmj.11.1589170972707;
- Sun, 10 May 2020 21:22:52 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=z99sLoNJtvUPb5Oimy7/Ab89RPlq4LmhubC3XgJRemk=;
+        b=W8W7+2YDJ+aEgRBdezPp7SOWSsGPqD3/oj3EOk6kjGykF1ItzUhL/aypbkdP+SPAru
+         L/Z/01bDQLNS+RHdK6qaYqubcsaxl5sF41oPNK4ZQTiMaw8Y07nYHiOYpmGkBZ3weT4Y
+         qXzz9cJjCgKZlkiAimVjyKXnTxXcFw3DGsBO1L8c9NnTMWoe4RClQmx59brT0FzhtR+/
+         haYDwuv2AQs0QS2TU+9UXInS8LDfFO3s8Mo23Q2ZQYEa4We9DX3zEmSqHWKqRf8zBE4K
+         OWEUyn0nnziAuwzs+3zXgKktrb+yT9sJkXJQYR/8AbJTlZsFghRtXztmNIDx9bAfKD1B
+         fnCg==
+X-Gm-Message-State: AOAM5329vx2KQ5ZONoU17weC4+X+LMvYRMtOhTa+sGkKpPFILQ2tqJ3d
+        LMoL6PS4/HhygBFvjOetP4hF9Q==
+X-Google-Smtp-Source: ABdhPJy5If8k0d87yf9zR6j4eLkbVal8JbArOgQGRcuw/Z5nthLe/i9OHHVLXY1wFyTehEaMPXJ/yw==
+X-Received: by 2002:a63:4cc:: with SMTP id 195mr627586pge.294.1589174506092;
+        Sun, 10 May 2020 22:21:46 -0700 (PDT)
+Received: from localhost ([122.167.130.103])
+        by smtp.gmail.com with ESMTPSA id w11sm7976422pfq.100.2020.05.10.22.21.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 10 May 2020 22:21:45 -0700 (PDT)
+Date:   Mon, 11 May 2020 10:51:42 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Quentin Perret <qperret@google.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, sudeep.holla@arm.com, rafael@kernel.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, mcgrof@kernel.org, keescook@chromium.org,
+        yzaikin@google.com, fweisbec@gmail.com, tkjos@google.com,
+        kernel-team@android.com
+Subject: Re: [PATCH 00/14] Modularize schedutil
+Message-ID: <20200511052142.s2zjxuv44dqx3ta2@vireshk-i7>
+References: <20200507181012.29791-1-qperret@google.com>
+ <20200508081128.GM5298@hirez.programming.kicks-ass.net>
+ <20200508103721.GA3860390@kroah.com>
+ <20200508112609.GA5298@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-From:   Chris Murphy <chris@colorremedies.com>
-Date:   Sun, 10 May 2020 22:22:36 -0600
-Message-ID: <CAJCQCtQ=1=UFaCvPO99W0t9SWuK5zG4ENKYzq2PgJ36iu-EiiQ@mail.gmail.com>
-Subject: 5.7 sleep/wake regression
-To:     Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200508112609.GA5298@hirez.programming.kicks-ass.net>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Got an older Macbook Pro that does suspend to RAM and wake OK with
-5.6, but starting with git 47acac8cae28, it will not wake up. Instead
-it has a black screen, gets hot, fans go to high, and it turns into a
-hair dryer. So it's a regression.
+On 08-05-20, 13:26, Peter Zijlstra wrote:
+> At the very least there's that interactive governor that's really
+> popular with Android. But IIRC there's a whole scala of home-brew
+> governors and tweaks out there.
 
-I started a bisect but, that's not going well.
-
-$ git bisect good
-Bisecting: 123 revisions left to test after this (roughly 7 steps)
-[7af51678b6d367ee93dc3d21e72ecf15be50fcb1] docs: deprecated.rst: Add
-BUG()-family
-$ make -j8
-
-...15 minutes later
-
-  GZIP    arch/x86/boot/compressed/vmlinux.bin.gz
-  MKPIGGY arch/x86/boot/compressed/piggy.S
-  AS      arch/x86/boot/compressed/piggy.o
-  LD      arch/x86/boot/compressed/vmlinux
-ld: arch/x86/boot/compressed/pgtable_64.o:(.bss+0x0): multiple
-definition of `__force_order';
-arch/x86/boot/compressed/kaslr_64.o:(.bss+0x0): first defined here
-make[2]: *** [arch/x86/boot/compressed/Makefile:119:
-arch/x86/boot/compressed/vmlinux] Error 1
-make[1]: *** [arch/x86/boot/Makefile:113:
-arch/x86/boot/compressed/vmlinux] Error 2
-make: *** [arch/x86/Makefile:283: bzImage] Error 2
-
-
-I'll give 'git bisect skip' a try and see if it'll get close enough to
-the first bad commit.
-
-Anyway, all of 5.6.x sleep/wake fine, and all of 5.7 do not, i.e. it
-hasn't been fixed in rc5. Thanks.
-
+I removed interactive governor from Android long time back :)
 
 -- 
-Chris Murphy
+viresh
