@@ -2,136 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E67381CFA94
-	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 18:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161CA1CFA9D
+	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 18:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727099AbgELQ0g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 May 2020 12:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725904AbgELQ0g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 12:26:36 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5EDC061A0C
-        for <linux-pm@vger.kernel.org>; Tue, 12 May 2020 09:26:36 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id y16so9060726wrs.3
-        for <linux-pm@vger.kernel.org>; Tue, 12 May 2020 09:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6HJT2kKPgjiAAOGtBVsRpj6IJ2zADNGtQgIXFAzK6EU=;
-        b=M5XIGTx9K+Ro5VIvFc+qCSNhF3KkcELu6ClryP/Ful95DZGJV63YVAsk0s+IIS/cOC
-         3lVxRk4Q7Q3VIi+ppabWHEC2pDtYTB5vwiaq/cOmEVMUiKLIfIiQKAcEBepfcf2R3HAN
-         hhbSeWYPwx7kvhtlY8yZzaXYsjD9P7sn9PJVvHxvntpu1lkSaS/mPkXyXIngbNNoLQTG
-         Pi1lscl6DlH2eIibNigMPai7KR1FjqABXAfrJtvwE2v5z7LoMjyce9E29ZgUUDoxPonr
-         8iT+174llTvZNzyNIT4942C+9pPrjoLdJ6+fiNNLguJurlddAtnWEgQ8g3aDTfUqDm3m
-         FEsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6HJT2kKPgjiAAOGtBVsRpj6IJ2zADNGtQgIXFAzK6EU=;
-        b=DaYSVOWNdvEY6RoYXGBG8yNVGMYKd1dKKbzPaTf1Ok6QyQ0i0FegRUHRgyxY+fCTVi
-         a0rVRJg0RhyfM0uXyFdVoebiqHwlz62d+eHH/RCEAOVR+kStqnYjGaXf1UWzs98Y0qGn
-         oqBUfMUqf1gGeNzN3HFlnDMRTIxNmnVERAx3R4dcvUyGCrnGhD/D1NUEn2dItXkwqP2S
-         8qSwnS0xGj3MiFMstlbIkhoQVnlWe2atJkcN5qxUnCttBczaVf5HaqgPBQjVxuRBYXmn
-         Pq7P0GCb2vFw/cnauj3T85ktpRD7gugUX/df0cXYrmKy4YhBHpwLngkqW2cwMplN6zzw
-         ThQA==
-X-Gm-Message-State: AGi0PuZt0AqamCA/2bL1aruKB+zV9uCFfcXq9/pv8UgXG8qLYixn0qpe
-        FM8W6+9AjjD1M9X6P9EF1qigRw==
-X-Google-Smtp-Source: APiQypL/x/G/880ourR80PnFei74Q8cyJAmJ9uQ2rDfHQWhpRYDP56v5DXwQRxGPeMC+/N+xoYPCtw==
-X-Received: by 2002:adf:bc41:: with SMTP id a1mr27717873wrh.302.1589300794743;
-        Tue, 12 May 2020 09:26:34 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id s17sm31238957wmc.48.2020.05.12.09.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 09:26:33 -0700 (PDT)
-Date:   Tue, 12 May 2020 17:26:30 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Todd Kjos <tkjos@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>
-Subject: Re: [PATCH 00/14] Modularize schedutil
-Message-ID: <20200512162630.GC101124@google.com>
-References: <20200508130507.GA10541@google.com>
- <CAJZ5v0iaa_VCtN608QKTYZ-A6QG_7bwxihxSgoEGv1LcSK-ksA@mail.gmail.com>
- <20200511090049.GA229633@google.com>
- <CAJZ5v0jKMgFsR0dXDt4si5hT9QF2evaoMS-13y-Qde8UpcaARg@mail.gmail.com>
- <20200512092102.GA16151@google.com>
- <CAJZ5v0hm3Tv2yZKLzM9a+kJuB1V5_eFOEKT-uM318dzeKV3_Qw@mail.gmail.com>
- <20200512135813.GA101124@google.com>
- <CAJZ5v0hN708uvurZ-3oo90qUJFw3=Eg0OmtTaOKXQgNPXhCkFg@mail.gmail.com>
- <20200512151120.GB101124@google.com>
- <CAJZ5v0inoge=nWQtv-rU_ReQUMZA5w-PZXuSpHHj1UHn-S7aSA@mail.gmail.com>
+        id S1728180AbgELQ1Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 May 2020 12:27:25 -0400
+Received: from www.zeus03.de ([194.117.254.33]:41330 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725987AbgELQ1Z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 12 May 2020 12:27:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=HOkGV9ZQq1hEjxBKXjNAGGrru8Hs
+        mXQHDos4mfRW9KI=; b=T3Vy3AZGIYU0yk4ZbnUQcLa/vLg21UrdmxMnZ/FTVyw4
+        2WgDdpym5hAhaED2RYGMAuHcexcEH1VoZnDtIW42Fyid46pOL7oudu4KvYRy4ray
+        PxEqwZ02dB9eMU4EQNEV28+MaH6RDzNNB1uNXHZSQYJWL+MiMYJXlKyJOlGm9Fk=
+Received: (qmail 3009713 invoked from network); 12 May 2020 18:27:23 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 May 2020 18:27:23 +0200
+X-UD-Smtp-Session: l3s3148p1@+bc78HWlZsggAwDPXw2aAE67cgFBY+HL
+Date:   Tue, 12 May 2020 18:27:23 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] power: supply: bq24190_charger: convert to use
+ i2c_new_client_device()
+Message-ID: <20200512162723.GI13516@ninjato>
+References: <20200326210954.12931-1-wsa+renesas@sang-engineering.com>
+ <20200326210954.12931-2-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lqaZmxkhekPBfBzr"
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0inoge=nWQtv-rU_ReQUMZA5w-PZXuSpHHj1UHn-S7aSA@mail.gmail.com>
+In-Reply-To: <20200326210954.12931-2-wsa+renesas@sang-engineering.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday 12 May 2020 at 17:30:36 (+0200), Rafael J. Wysocki wrote:
-> On Tue, May 12, 2020 at 5:11 PM Quentin Perret <qperret@google.com> wrote:
-> > The end goal with GKI is the following: Google will release a single
-> > binary kernel image (signed, etc etc) that all devices using a given
-> > Android version will be required to use. That image is however going to
-> > be only for the core of the kernel (no drivers or anything of the sort).
-> > Vendors and OEMs, on their end, will be responsible to build and ship
-> > GKI-compatible modules for their respective devices. So, Android devices
-> > will eventually ship with a Google-issued GKI, plus a bunch of
-> > vendor-provided modules loaded during boot.
-> 
-> If that is the case, then I absolutely think that schedutil should be
-> part of the GKI.
-> 
-> Moreover, that would have been my opinion even if it had been modular
-> in the first place.
 
-I definitely understand the feeling. Heck I contributed to schedutil, so
-I'd love to see the entire world run it :-)
+--lqaZmxkhekPBfBzr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But my personal preference doesn't seem to matter in this world, sadly.
-The truth is, we cannot afford to be arbitrary in our decisions in GKI.
-Switching governors and such is a fully supported feature upstream, and
-it has been for a long time. Taking that away from partners is not the
-goal, nor the intention, of GKI. They will be able to choose whatever
-governor they want, because there are no *objective* reasons to not let
-them do that.
+On Thu, Mar 26, 2020 at 10:09:54PM +0100, Wolfram Sang wrote:
+> Move away from the deprecated API in this comment.
+>=20
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-> > This is a significant shift from the current model where vendors
-> > completely own the kernel, and are largely free to use the kernel config
-> > they want. Today, those who don't use schedutil are free to turn the
-> > config off, for example.
-> 
-> So why is this regarded as a good thing?
+Can we have this now so I can remove the old API in the next merge
+window?
 
-You mean using something else than schedutil? It is not seen as a good
-thing at all, at least not by me. But we have the same problem as
-upstream. We cannot remove the other governors or the governor API for a
-simple reason: they have users :/
+> ---
+>  drivers/power/supply/bq24190_charger.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/suppl=
+y/bq24190_charger.c
+> index 453d6332d43a..4540e913057f 100644
+> --- a/drivers/power/supply/bq24190_charger.c
+> +++ b/drivers/power/supply/bq24190_charger.c
+> @@ -673,7 +673,7 @@ static int bq24190_register_reset(struct bq24190_dev_=
+info *bdi)
+>  	 *   { .type =3D "bq24190", .addr =3D 0x6b, .properties =3D pe, .irq =
+=3D irq };
+>  	 * struct i2c_adapter ad =3D { ... };
+>  	 * i2c_add_adapter(&ad);
+> -	 * i2c_new_device(&ad, &bi);
+> +	 * i2c_new_client_device(&ad, &bi);
+>  	 */
+>  	if (device_property_read_bool(bdi->dev, "disable-reset"))
+>  		return 0;
+> --=20
+> 2.20.1
+>=20
 
-Thanks,
-Quentin
+--lqaZmxkhekPBfBzr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl66zmsACgkQFA3kzBSg
+KbakUw//aWhElrgSTmvOdYqp/rtKFOvF1FbnmBJVqHt/1xHGHw3DgFru2UQIo7gW
+6Q5ByT4uW9ZcwKWVKXalKLeRfBr/QY5H30s33GwFFgzY6ky+V3p/oNoQWtPN5xMT
++1TrA1qXB/LojQQqWPBte+PQucQJqo2FdzNDyknmOlBUtbiTFiXvfOwUrnceAXOM
+XVNi2xk1r8YN2NtDQA+ZW1Vxlck2R54qMZczBGxdfEFoy8nvQBdbSN3KqXyZU7FJ
+Grspvsthjd/4mq+F4ZrgJV0w8NREf8LyUu+E5SJtK8gIqjvZWjcnSMTbB4TgWhM0
+MO4KSqp454euHg4MVHW0xIO7g9p/pyxq6LP21oB5o5Mgb9bVkrDYfjSyJ//F9VUa
+eVDgnMTzvrPowJIL5Tde5GGA3hD71PwJf8EGu7pj3x0+0vDUmh+Zd9IGkSv9zlYz
++k5U3YYnb1pIdkG53IeJTH7Td5ALatxZfzwsMLXTyzwNzUcL9Q9zWQFOVi23xfXs
+nVaavHOHS1Sit+kSvNekKD881aRgMEjhnO7bAtdNoR97MeqF3AXrHeM+Qwmpcoh3
+4qhUxFENZ4kz1zc3D9Z0ZpH7oMx7yyMNgHwrmBJY6Iw43gY3wBrIzttsiCKQRGvI
+N6lv0xH5NzBs6xLxbkKx+CEwQy/lURzjC+xbY5pwnPID4mWBwdU=
+=XYzx
+-----END PGP SIGNATURE-----
+
+--lqaZmxkhekPBfBzr--
