@@ -2,107 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A96D01CFBAE
-	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 19:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716341CFC30
+	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 19:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728039AbgELRKw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 May 2020 13:10:52 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38922 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725938AbgELRKv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 13:10:51 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 2BE132A2240
-Received: by earth.universe (Postfix, from userid 1000)
-        id C90F63C08C6; Tue, 12 May 2020 19:10:47 +0200 (CEST)
-Date:   Tue, 12 May 2020 19:10:47 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] power: supply: bq24190_charger: convert to use
- i2c_new_client_device()
-Message-ID: <20200512171047.gyk6zze46ow6i3yy@earth.universe>
-References: <20200326210954.12931-1-wsa+renesas@sang-engineering.com>
- <20200326210954.12931-2-wsa+renesas@sang-engineering.com>
- <20200512162723.GI13516@ninjato>
+        id S1726465AbgELRbG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 May 2020 13:31:06 -0400
+Received: from mail-oo1-f67.google.com ([209.85.161.67]:42105 "EHLO
+        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725554AbgELRbG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 13:31:06 -0400
+Received: by mail-oo1-f67.google.com with SMTP id a83so1071528oob.9;
+        Tue, 12 May 2020 10:31:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j1rDBr2LZPsItx6oTianrE8hsJBryJBqNpicNCJ+hAs=;
+        b=EhPKR/NRP0RukIDkdCDVe3PHbRB7rudpt1ez+EE+x6j8lqDdHDAWN4j0gDSdEa8xhp
+         5CCIT4b4rTnFCHxd2GpT09RqZ2FtTj9NqRaYkVSN1tcwJvUpMYQ+Ns9xutb6Ngb3W6CY
+         2ETqbsfQDW13qJQYFMFxm5/VqrVdRMC8i5jNRaFgTOzLX/9PsfUSnr4I4W3c43FyCFjX
+         be0JwPk88TyoUPOWkRZnig1vs/JpOsJrlp18KmU5/yPZJF0d/2BliB+WDn0rKfeUASqi
+         MiWevFYPZPMdJ/j2I4PVUSENJecK5gjby7Gh3jkwq7QtVJDzgTqLVMG0Vz+2+teR5QAs
+         h3SQ==
+X-Gm-Message-State: AGi0PuYzJ3vZgS4KoiX6B8rKUT3Xtfe/TtExxSRj35rPpRbDltZ38Hif
+        i7tUquX1Qf+pmwckJzpICk35EJSnhOwhWIs0KWY=
+X-Google-Smtp-Source: APiQypKndO1ilammFSxfSHkTTuvKf8k/4MMjBYODJ6DRYHfCIGjbXnCB2909MoBJph27lwy/hs1h5J+csCpw8WUFqGI=
+X-Received: by 2002:a4a:a286:: with SMTP id h6mr18757126ool.38.1589304663700;
+ Tue, 12 May 2020 10:31:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tefe22k3doyhs66g"
-Content-Disposition: inline
-In-Reply-To: <20200512162723.GI13516@ninjato>
+References: <20200508130507.GA10541@google.com> <CAJZ5v0iaa_VCtN608QKTYZ-A6QG_7bwxihxSgoEGv1LcSK-ksA@mail.gmail.com>
+ <20200511090049.GA229633@google.com> <CAJZ5v0jKMgFsR0dXDt4si5hT9QF2evaoMS-13y-Qde8UpcaARg@mail.gmail.com>
+ <20200512092102.GA16151@google.com> <CAJZ5v0hm3Tv2yZKLzM9a+kJuB1V5_eFOEKT-uM318dzeKV3_Qw@mail.gmail.com>
+ <20200512135813.GA101124@google.com> <CAJZ5v0hN708uvurZ-3oo90qUJFw3=Eg0OmtTaOKXQgNPXhCkFg@mail.gmail.com>
+ <20200512151120.GB101124@google.com> <CAJZ5v0inoge=nWQtv-rU_ReQUMZA5w-PZXuSpHHj1UHn-S7aSA@mail.gmail.com>
+ <20200512162630.GC101124@google.com>
+In-Reply-To: <20200512162630.GC101124@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 12 May 2020 19:30:52 +0200
+Message-ID: <CAJZ5v0ges4=e2HkHpVk4E1yF1VsBm9H5noqMz-MxX9DK_kt6Xg@mail.gmail.com>
+Subject: Re: [PATCH 00/14] Modularize schedutil
+To:     Quentin Perret <qperret@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Todd Kjos <tkjos@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, May 12, 2020 at 6:26 PM Quentin Perret <qperret@google.com> wrote:
+>
+> On Tuesday 12 May 2020 at 17:30:36 (+0200), Rafael J. Wysocki wrote:
+> > On Tue, May 12, 2020 at 5:11 PM Quentin Perret <qperret@google.com> wrote:
+> > > The end goal with GKI is the following: Google will release a single
+> > > binary kernel image (signed, etc etc) that all devices using a given
+> > > Android version will be required to use. That image is however going to
+> > > be only for the core of the kernel (no drivers or anything of the sort).
+> > > Vendors and OEMs, on their end, will be responsible to build and ship
+> > > GKI-compatible modules for their respective devices. So, Android devices
+> > > will eventually ship with a Google-issued GKI, plus a bunch of
+> > > vendor-provided modules loaded during boot.
+> >
+> > If that is the case, then I absolutely think that schedutil should be
+> > part of the GKI.
+> >
+> > Moreover, that would have been my opinion even if it had been modular
+> > in the first place.
+>
+> I definitely understand the feeling. Heck I contributed to schedutil, so
+> I'd love to see the entire world run it :-)
+>
+> But my personal preference doesn't seem to matter in this world, sadly.
+> The truth is, we cannot afford to be arbitrary in our decisions in GKI.
+> Switching governors and such is a fully supported feature upstream, and
+> it has been for a long time. Taking that away from partners is not the
+> goal, nor the intention, of GKI.
 
---tefe22k3doyhs66g
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It still will be possible with schedutil built-in, however.
 
-Hi Wolfram,
+> They will be able to choose whatever
+> governor they want, because there are no *objective* reasons to not let
+> them do that.
 
-On Tue, May 12, 2020 at 06:27:23PM +0200, Wolfram Sang wrote:
-> On Thu, Mar 26, 2020 at 10:09:54PM +0100, Wolfram Sang wrote:
-> > Move away from the deprecated API in this comment.
-> >=20
-> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->=20
-> Can we have this now so I can remove the old API in the next merge
-> window?
+Which, again, is still possible with non-modular schedutil AFAICS.
 
-Thanks for the ping. The patch is now queued into power-supply's
-for-next branch.
+I don't see any technical reason for making schedutil modular in the
+context of GKI other than to make the GKI image smaller, but I don't
+expect that to be significant enough.
 
--- Sebastian
+Is there anything else I am missing?
 
-> > ---
-> >  drivers/power/supply/bq24190_charger.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/sup=
-ply/bq24190_charger.c
-> > index 453d6332d43a..4540e913057f 100644
-> > --- a/drivers/power/supply/bq24190_charger.c
-> > +++ b/drivers/power/supply/bq24190_charger.c
-> > @@ -673,7 +673,7 @@ static int bq24190_register_reset(struct bq24190_de=
-v_info *bdi)
-> >  	 *   { .type =3D "bq24190", .addr =3D 0x6b, .properties =3D pe, .irq =
-=3D irq };
-> >  	 * struct i2c_adapter ad =3D { ... };
-> >  	 * i2c_add_adapter(&ad);
-> > -	 * i2c_new_device(&ad, &bi);
-> > +	 * i2c_new_client_device(&ad, &bi);
-> >  	 */
-> >  	if (device_property_read_bool(bdi->dev, "disable-reset"))
-> >  		return 0;
-> > --=20
-> > 2.20.1
-> >=20
+> > > This is a significant shift from the current model where vendors
+> > > completely own the kernel, and are largely free to use the kernel config
+> > > they want. Today, those who don't use schedutil are free to turn the
+> > > config off, for example.
+> >
+> > So why is this regarded as a good thing?
+>
+> You mean using something else than schedutil?
 
+I mean why allowing people to compile schedutil out is regarded as a good thing.
 
+> It is not seen as a good
+> thing at all, at least not by me. But we have the same problem as
+> upstream. We cannot remove the other governors or the governor API for a
+> simple reason: they have users :/
 
---tefe22k3doyhs66g
-Content-Type: application/pgp-signature; name="signature.asc"
+I'm not saying about removing any of that.  I'm just trying to
+understand why you need schedutil to be modular so as to make those
+things possible.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl662JEACgkQ2O7X88g7
-+pq+2A//VuwHDZl3QCyXTOsEqiULP9UPbP2WhUE2b/J8/JRSx8/UeDtan1n8CG7u
-JOGrFqxU3W+i7iy5xbY83FOtocw/4yocAAe50I9lJDqxwgns7nnfyMRGT28OHxEY
-haAhxTBn6yxL/Ve2mhoW3oJAiR5b/FZ1BGczxkBj0iyzQfgwhrqgbrapAVUNFvP9
-/Rc2WUkCQWEg/6Gr20vI7WQLtCnMINMN8VhU0W2d7YWLnSPC9OucWMiDSdocGLU8
-zrb9FhrkaAfqqCJgn/Ze/REdal874SIFi1hy7lepSoOw1irnOCQpczIsvLerjr3V
-Djpg2DHERhQsAKQAbPIugKbTUo98xylu6uxbCZCOTLCtfrMJb0mrwjA4b/C5gvlD
-EahQcOLLalQJx7gKdmgVdFWfebopbVENF8rcyMGt1BVE4ws7SczEAHKow5g0L06H
-aqVW6rgEF+fHfgaGpD6A2TIhv3EeFry1T9gcxaWZqX3M8aSqW7c1BV/y22/4tycK
-gqml5/HCfLAD9y2KpcED5y3mHZuTPKOh5U9h07cy99atMVK35NhFGadEkauNgoUH
-q09d8KoaqvWkofJf3o0I75OPetkHCpMx4zD1kYsS8gBhBWeSdaHv1/xyttW5jb6+
-+h1HxszputoLIM5HpC5kiNgjWg40WNhRGQpEo/26lMbOtLJ+830=
-=57sD
------END PGP SIGNATURE-----
-
---tefe22k3doyhs66g--
+Cheers!
