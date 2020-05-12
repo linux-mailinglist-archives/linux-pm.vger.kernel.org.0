@@ -2,101 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 161CA1CFA9D
-	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 18:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96D01CFBAE
+	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 19:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728180AbgELQ1Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 May 2020 12:27:25 -0400
-Received: from www.zeus03.de ([194.117.254.33]:41330 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725987AbgELQ1Z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 12 May 2020 12:27:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=HOkGV9ZQq1hEjxBKXjNAGGrru8Hs
-        mXQHDos4mfRW9KI=; b=T3Vy3AZGIYU0yk4ZbnUQcLa/vLg21UrdmxMnZ/FTVyw4
-        2WgDdpym5hAhaED2RYGMAuHcexcEH1VoZnDtIW42Fyid46pOL7oudu4KvYRy4ray
-        PxEqwZ02dB9eMU4EQNEV28+MaH6RDzNNB1uNXHZSQYJWL+MiMYJXlKyJOlGm9Fk=
-Received: (qmail 3009713 invoked from network); 12 May 2020 18:27:23 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 May 2020 18:27:23 +0200
-X-UD-Smtp-Session: l3s3148p1@+bc78HWlZsggAwDPXw2aAE67cgFBY+HL
-Date:   Tue, 12 May 2020 18:27:23 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        id S1728039AbgELRKw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 May 2020 13:10:52 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:38922 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725938AbgELRKv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 13:10:51 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 2BE132A2240
+Received: by earth.universe (Postfix, from userid 1000)
+        id C90F63C08C6; Tue, 12 May 2020 19:10:47 +0200 (CEST)
+Date:   Tue, 12 May 2020 19:10:47 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 1/1] power: supply: bq24190_charger: convert to use
  i2c_new_client_device()
-Message-ID: <20200512162723.GI13516@ninjato>
+Message-ID: <20200512171047.gyk6zze46ow6i3yy@earth.universe>
 References: <20200326210954.12931-1-wsa+renesas@sang-engineering.com>
  <20200326210954.12931-2-wsa+renesas@sang-engineering.com>
+ <20200512162723.GI13516@ninjato>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lqaZmxkhekPBfBzr"
+        protocol="application/pgp-signature"; boundary="tefe22k3doyhs66g"
 Content-Disposition: inline
-In-Reply-To: <20200326210954.12931-2-wsa+renesas@sang-engineering.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200512162723.GI13516@ninjato>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---lqaZmxkhekPBfBzr
+--tefe22k3doyhs66g
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 26, 2020 at 10:09:54PM +0100, Wolfram Sang wrote:
-> Move away from the deprecated API in this comment.
->=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Hi Wolfram,
 
-Can we have this now so I can remove the old API in the next merge
-window?
-
-> ---
->  drivers/power/supply/bq24190_charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, May 12, 2020 at 06:27:23PM +0200, Wolfram Sang wrote:
+> On Thu, Mar 26, 2020 at 10:09:54PM +0100, Wolfram Sang wrote:
+> > Move away from the deprecated API in this comment.
+> >=20
+> > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 >=20
-> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/suppl=
-y/bq24190_charger.c
-> index 453d6332d43a..4540e913057f 100644
-> --- a/drivers/power/supply/bq24190_charger.c
-> +++ b/drivers/power/supply/bq24190_charger.c
-> @@ -673,7 +673,7 @@ static int bq24190_register_reset(struct bq24190_dev_=
-info *bdi)
->  	 *   { .type =3D "bq24190", .addr =3D 0x6b, .properties =3D pe, .irq =
+> Can we have this now so I can remove the old API in the next merge
+> window?
+
+Thanks for the ping. The patch is now queued into power-supply's
+for-next branch.
+
+-- Sebastian
+
+> > ---
+> >  drivers/power/supply/bq24190_charger.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/sup=
+ply/bq24190_charger.c
+> > index 453d6332d43a..4540e913057f 100644
+> > --- a/drivers/power/supply/bq24190_charger.c
+> > +++ b/drivers/power/supply/bq24190_charger.c
+> > @@ -673,7 +673,7 @@ static int bq24190_register_reset(struct bq24190_de=
+v_info *bdi)
+> >  	 *   { .type =3D "bq24190", .addr =3D 0x6b, .properties =3D pe, .irq =
 =3D irq };
->  	 * struct i2c_adapter ad =3D { ... };
->  	 * i2c_add_adapter(&ad);
-> -	 * i2c_new_device(&ad, &bi);
-> +	 * i2c_new_client_device(&ad, &bi);
->  	 */
->  	if (device_property_read_bool(bdi->dev, "disable-reset"))
->  		return 0;
-> --=20
-> 2.20.1
->=20
+> >  	 * struct i2c_adapter ad =3D { ... };
+> >  	 * i2c_add_adapter(&ad);
+> > -	 * i2c_new_device(&ad, &bi);
+> > +	 * i2c_new_client_device(&ad, &bi);
+> >  	 */
+> >  	if (device_property_read_bool(bdi->dev, "disable-reset"))
+> >  		return 0;
+> > --=20
+> > 2.20.1
+> >=20
 
---lqaZmxkhekPBfBzr
+
+
+--tefe22k3doyhs66g
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl66zmsACgkQFA3kzBSg
-KbakUw//aWhElrgSTmvOdYqp/rtKFOvF1FbnmBJVqHt/1xHGHw3DgFru2UQIo7gW
-6Q5ByT4uW9ZcwKWVKXalKLeRfBr/QY5H30s33GwFFgzY6ky+V3p/oNoQWtPN5xMT
-+1TrA1qXB/LojQQqWPBte+PQucQJqo2FdzNDyknmOlBUtbiTFiXvfOwUrnceAXOM
-XVNi2xk1r8YN2NtDQA+ZW1Vxlck2R54qMZczBGxdfEFoy8nvQBdbSN3KqXyZU7FJ
-Grspvsthjd/4mq+F4ZrgJV0w8NREf8LyUu+E5SJtK8gIqjvZWjcnSMTbB4TgWhM0
-MO4KSqp454euHg4MVHW0xIO7g9p/pyxq6LP21oB5o5Mgb9bVkrDYfjSyJ//F9VUa
-eVDgnMTzvrPowJIL5Tde5GGA3hD71PwJf8EGu7pj3x0+0vDUmh+Zd9IGkSv9zlYz
-+k5U3YYnb1pIdkG53IeJTH7Td5ALatxZfzwsMLXTyzwNzUcL9Q9zWQFOVi23xfXs
-nVaavHOHS1Sit+kSvNekKD881aRgMEjhnO7bAtdNoR97MeqF3AXrHeM+Qwmpcoh3
-4qhUxFENZ4kz1zc3D9Z0ZpH7oMx7yyMNgHwrmBJY6Iw43gY3wBrIzttsiCKQRGvI
-N6lv0xH5NzBs6xLxbkKx+CEwQy/lURzjC+xbY5pwnPID4mWBwdU=
-=XYzx
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl662JEACgkQ2O7X88g7
++pq+2A//VuwHDZl3QCyXTOsEqiULP9UPbP2WhUE2b/J8/JRSx8/UeDtan1n8CG7u
+JOGrFqxU3W+i7iy5xbY83FOtocw/4yocAAe50I9lJDqxwgns7nnfyMRGT28OHxEY
+haAhxTBn6yxL/Ve2mhoW3oJAiR5b/FZ1BGczxkBj0iyzQfgwhrqgbrapAVUNFvP9
+/Rc2WUkCQWEg/6Gr20vI7WQLtCnMINMN8VhU0W2d7YWLnSPC9OucWMiDSdocGLU8
+zrb9FhrkaAfqqCJgn/Ze/REdal874SIFi1hy7lepSoOw1irnOCQpczIsvLerjr3V
+Djpg2DHERhQsAKQAbPIugKbTUo98xylu6uxbCZCOTLCtfrMJb0mrwjA4b/C5gvlD
+EahQcOLLalQJx7gKdmgVdFWfebopbVENF8rcyMGt1BVE4ws7SczEAHKow5g0L06H
+aqVW6rgEF+fHfgaGpD6A2TIhv3EeFry1T9gcxaWZqX3M8aSqW7c1BV/y22/4tycK
+gqml5/HCfLAD9y2KpcED5y3mHZuTPKOh5U9h07cy99atMVK35NhFGadEkauNgoUH
+q09d8KoaqvWkofJf3o0I75OPetkHCpMx4zD1kYsS8gBhBWeSdaHv1/xyttW5jb6+
++h1HxszputoLIM5HpC5kiNgjWg40WNhRGQpEo/26lMbOtLJ+830=
+=57sD
 -----END PGP SIGNATURE-----
 
---lqaZmxkhekPBfBzr--
+--tefe22k3doyhs66g--
