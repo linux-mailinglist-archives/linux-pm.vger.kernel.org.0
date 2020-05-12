@@ -2,151 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A33461CF4ED
-	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 14:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6721CF516
+	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 14:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730023AbgELMyV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 May 2020 08:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730016AbgELMyS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 08:54:18 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F73C05BD11
-        for <linux-pm@vger.kernel.org>; Tue, 12 May 2020 05:54:15 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id k12so21578453wmj.3
-        for <linux-pm@vger.kernel.org>; Tue, 12 May 2020 05:54:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fvKbAOWfl/knTZNX27VnXfewubIaPbz+/XetIklYZ7g=;
-        b=CtAO3vqc/5ciyMQoZsCfVYtGsZMc+eGRSXx8OOoeAcTbEVI4XVBa71bqTsRSIHZ0gK
-         cIoZxWJLoMHxPgfW90arxdJ8OlAjwSTl9umY/OPCe30eJ/bW7vTcQkNceICuv313oULW
-         TOGrpVNZ9fr3FpbebaRAGuhnQhXb7jCQv3QOwonNO2kt4Ps1rNkm//Xwdg34qLqRAsiw
-         ZF0XfOyfRoK6lhpW+QCop6SAla1XYxNLOWCXFpFzGfqvQkIGLdm42P0TaQuoqZBRveos
-         tJhRidy4xOS3ok+vXCq8VghzXgIU1qoCXK7qMumPAlU/3O+ElEbAbTKGV5pfpG4mgQ0B
-         137Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fvKbAOWfl/knTZNX27VnXfewubIaPbz+/XetIklYZ7g=;
-        b=RiqO7yOJkCYhi3s64vuFi4LqQD4QNdeSoijZBU+Xr2htjFZ9BH18POz19Z+snl4mUk
-         cnJMh+uegeUt91d0m3eiG+eaxM5jWl/kKKOBP78ViR4bH47xGZqaq8ElrHSw4HZqTlbn
-         W+wmWRg5ipkJCum6EfUCNHXCQk+ECAq9dZbUBqwxe7Bi6Y+KJZqTZeLtYUN9VOSsZZIy
-         qzMFcMHldGBVOukl4SWpfCvRZrX/15sBg4e7bGwRDXi5UjZ5xiv5NVCMzioMKljDoDRd
-         wbnqp5Ax8qVuM/uTEYmIh0+B+DLHf+cw9YtO7cjs8vSVe2wqmz2Y6iS0QK7PJMeYmQHR
-         QDdA==
-X-Gm-Message-State: AOAM533qPP18/+SwucRZghVebDYpoDMCCRNiidVr/dW1XMdMXU+SANBf
-        dwz7anJBuUIp1Yx1s4HK1LmTBQ==
-X-Google-Smtp-Source: ABdhPJwY/a0cn3q6lCGX60mZA2InAaE/IzVG1DBnCICgZqVoe54tj6ukY4c547zEb5HQfe3aDNwFYA==
-X-Received: by 2002:a1c:444:: with SMTP id 65mr351423wme.21.1589288054568;
-        Tue, 12 May 2020 05:54:14 -0700 (PDT)
-Received: from localhost.localdomain (212-39-89-66.ip.btc-net.bg. [212.39.89.66])
-        by smtp.googlemail.com with ESMTPSA id n13sm2433938wrs.2.2020.05.12.05.54.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 May 2020 05:54:13 -0700 (PDT)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, rjw@rjwysocki.net,
-        saravanak@google.com, sibis@codeaurora.org, mka@chromium.org
-Cc:     robh+dt@kernel.org, rnayak@codeaurora.org,
-        bjorn.andersson@linaro.org, vincent.guittot@linaro.org,
-        jcrouse@codeaurora.org, evgreen@chromium.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, georgi.djakov@linaro.org
-Subject: [PATCH v8 10/10] OPP: Add support for setting interconnect-tags
-Date:   Tue, 12 May 2020 15:53:27 +0300
-Message-Id: <20200512125327.1868-11-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200512125327.1868-1-georgi.djakov@linaro.org>
-References: <20200512125327.1868-1-georgi.djakov@linaro.org>
+        id S1729570AbgELM5j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 May 2020 08:57:39 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:52090 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729519AbgELM5j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 08:57:39 -0400
+Received: from 89-64-84-167.dynamic.chello.pl (89.64.84.167) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id 94d77207d4edfcba; Tue, 12 May 2020 14:57:36 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Chris Murphy <chris@colorremedies.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: 5.7 sleep/wake regression
+Date:   Tue, 12 May 2020 14:57:35 +0200
+Message-ID: <7163502.2kdGmH96AJ@kreacher>
+In-Reply-To: <CAJCQCtTxQw=P43wHM2ENX600Jm+BXU+f+=Wv09ijjiqWZoWsiQ@mail.gmail.com>
+References: <CAJCQCtQ=1=UFaCvPO99W0t9SWuK5zG4ENKYzq2PgJ36iu-EiiQ@mail.gmail.com> <CAJZ5v0hqODC52Bogeo-2suROH63NmON=5a5K6OZEp1YYMYK_QA@mail.gmail.com> <CAJCQCtTxQw=P43wHM2ENX600Jm+BXU+f+=Wv09ijjiqWZoWsiQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Sibi Sankar <sibis@codeaurora.org>
+On Monday, May 11, 2020 7:37:04 PM CEST Chris Murphy wrote:
+> On Mon, May 11, 2020 at 5:15 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Mon, May 11, 2020 at 6:22 AM Chris Murphy <chris@colorremedies.com> wrote:
+> > >
+> > > Got an older Macbook Pro that does suspend to RAM and wake OK with
+> > > 5.6, but starting with git 47acac8cae28, it will not wake up. Instead
+> > > it has a black screen, gets hot, fans go to high, and it turns into a
+> > > hair dryer. So it's a regression.
+> >
+> > There is a known issue addressed by this patch:
+> >
+> > https://patchwork.kernel.org/patch/11538065/
+> >
+> > so can you please try it?
+> 
+> Patch applied, but the problem remains.
+> 
+> CPU is i7-2820QM and dmesg for the working sleep+wake case:
+> https://paste.centos.org/view/ea5b913d
+> 
+> In the failed wake case, I note the following: the fade-in/out sleep
+> indicator light on the laptop is pulsing, suggests it did actually
+> enter sleep OK. When waking by spacebar press, this sleep indicator
+> light stops pulsing, the backlight does not come on, the laptop does
+> not respond to either ssh or ping. Following  a power reset and
+> reboot, the journal's last line is
+> 
+> [   61.678347] fmac.local kernel: PM: suspend entry (deep)
+> 
+> Let me know if I should resume bisect.
 
-Add support for setting tags on icc paths associated with
-the opp_table.
+Please first try to revert commit
 
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
----
-v8:
-* New patch, picked from here:
-  https://lore.kernel.org/r/20200504202243.5476-11-sibis@codeaurora.org
+6d232b29cfce ("ACPICA: Dispatcher: always generate buffer
+objects for ASL create_field() operator")
 
- drivers/opp/of.c | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
+and see if that helps.
 
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 3a64f2aa0f86..fd148d54022f 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -336,6 +336,7 @@ int _of_find_icc_paths(struct opp_table *opp_table, struct device *dev)
- {
- 	struct device_node *np;
- 	int ret, i, count, num_paths;
-+	u32 tag;
- 
- 	np = of_node_get(dev->of_node);
- 	if (!np)
-@@ -344,20 +345,25 @@ int _of_find_icc_paths(struct opp_table *opp_table, struct device *dev)
- 	count = of_count_phandle_with_args(np, "interconnects",
- 					   "#interconnect-cells");
- 	of_node_put(np);
--	if (count < 0)
--		return 0;
-+	if (count < 0) {
-+		ret = 0;
-+		goto put_np;
-+	}
- 
- 	/* two phandles when #interconnect-cells = <1> */
- 	if (count % 2) {
- 		dev_err(dev, "%s: Invalid interconnects values\n", __func__);
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_np;
- 	}
- 
- 	num_paths = count / 2;
- 	opp_table->paths = kcalloc(num_paths, sizeof(*opp_table->paths),
- 				   GFP_KERNEL);
--	if (!opp_table->paths)
--		return -ENOMEM;
-+	if (!opp_table->paths) {
-+		ret = -ENOMEM;
-+		goto put_np;
-+	}
- 
- 	for (i = 0; i < num_paths; i++) {
- 		opp_table->paths[i] = of_icc_get_by_index(dev, i);
-@@ -369,8 +375,14 @@ int _of_find_icc_paths(struct opp_table *opp_table, struct device *dev)
- 			}
- 			goto err;
- 		}
-+
-+		/* Set tag if present */
-+		if (!of_property_read_u32_index(np, "interconnect-tags",
-+						i, &tag))
-+			icc_set_tag(opp_table->paths[i], tag);
- 	}
- 	opp_table->path_count = num_paths;
-+	of_node_put(np);
- 
- 	return 0;
- 
-@@ -380,6 +392,8 @@ int _of_find_icc_paths(struct opp_table *opp_table, struct device *dev)
- 
- 	kfree(opp_table->paths);
- 	opp_table->paths = NULL;
-+put_np:
-+	of_node_put(np);
- 
- 	return ret;
- }
+I have no other ideas ATM, so please continue bisecting if it doesn't help.
+
+Cheers!
+
+
+
