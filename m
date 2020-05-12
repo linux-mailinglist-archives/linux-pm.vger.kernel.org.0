@@ -2,80 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A191CF712
-	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 16:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BA11CF83E
+	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 17:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730200AbgELO0R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 May 2020 10:26:17 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:41578 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729637AbgELO0R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 10:26:17 -0400
-Received: by mail-ot1-f67.google.com with SMTP id 63so3239731oto.8
-        for <linux-pm@vger.kernel.org>; Tue, 12 May 2020 07:26:17 -0700 (PDT)
+        id S1730287AbgELPA7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 May 2020 11:00:59 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:34420 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726610AbgELPAs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 11:00:48 -0400
+Received: by mail-oi1-f193.google.com with SMTP id c12so17474741oic.1;
+        Tue, 12 May 2020 08:00:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=45HMBvU5mnuD/YPEsMrs7gjEaaIwWfQc1uLgD2S+xK8=;
-        b=Hv/xpyuMkKvHERtSSNBFToNGBlxPsMjzZoRlibydYjqjAN+AxD8ZK7TyzGNXrychBW
-         Zw00sdk7rgMqzA0zmMVLkRkxSw8qvhg5zCgy+rMgez/gUJR75aUE9eq2s1LvxcbivVUv
-         aguYk9DJDe4r0lAfddzsUUXQNYza7XYIu3HnMiwrDNSgvZ7Q8qzL/4Nuzy1xZiD0KUQL
-         cjxCmbBzV1hk+FFsXlWH6vbZ7IucmlI1fPGpDSt6aQ8bSx2m5dlVeWiF/OSD8MYSwZTw
-         WenmzfuYZuLCbwCmPzgWeoZrcdzeliQVaKmSQ0gI2Qo3Y/ogOxkstI5jAgTEBM8fIV4P
-         b/sw==
-X-Gm-Message-State: AGi0PuYZwJbINGsQU6U/r6WJ0rA7xn2TH9u3tW64u+RqMziDlAnTZUxQ
-        RGaUVO95Dm1NkwG70mRfF5UGJvUohU1nXdpevx0=
-X-Google-Smtp-Source: APiQypLFBS1fss/n0yDRVADd9XBXnB6e00jilNH6eEybyXcTe39CzTGqVXuzWnl5uK/ZtUE1TAgUYJ5mssUtbiL7t9Y=
-X-Received: by 2002:a9d:6ac8:: with SMTP id m8mr17033842otq.262.1589293576759;
- Tue, 12 May 2020 07:26:16 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=K2qEAhn3BL894xmtaV/upHqpgOLZLhF17B7mhH3SLdw=;
+        b=EQPd2xqybJGXrUnMdAohRdQypB0fQEtUJgvegjsikb1Y7OVePu+xywjtTgJ4v+0y9X
+         1WTBrYJXXPn2SK/1Ea+a8GVC9Wx5NipwZA3ZLIyCU+v3eCpwJMCQdj0vqYiWC8bv4f0O
+         hiFalfZgnFOqFd7sQUzyQzIzlDC2doPZG7iP1OgYlFSlQqT8qzRnb0+xTOsvuoOmYDoo
+         JFiWw3f4zB1r7oIeQk1LBM72GyxLOdBciSADDz4h3CCg5DkprfVcrRPOWqYyvqCBwWIQ
+         xfCDYsRz2OuUGAxpfmrKGxOAwf7MsiEiISz77Z3Tq/Oz9x8ec/bPAgdeH5KG9XhB9yam
+         bJPA==
+X-Gm-Message-State: AGi0PuZcljvu3vCrbrMtHlOwuYcrwU1inmCHTpXKcagTrkvYnR6S3gHG
+        yK58rTViK3rwq2rUoX9HHQ==
+X-Google-Smtp-Source: APiQypKZIkofztkq59hpBx1iHRg0VN9CZze8uMwIbm08YX4fu5XJHMAkcofCOlv4ErOSk8Lh5NqzAg==
+X-Received: by 2002:a05:6808:8ed:: with SMTP id d13mr22974291oic.149.1589295647581;
+        Tue, 12 May 2020 08:00:47 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id c25sm3476892otp.50.2020.05.12.08.00.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2020 08:00:46 -0700 (PDT)
+Received: (nullmailer pid 8751 invoked by uid 1000);
+        Tue, 12 May 2020 15:00:46 -0000
+Date:   Tue, 12 May 2020 10:00:46 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     devicetree@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
+Subject: Re: [PATCH v2] dt-bindings: thermal: Convert UniPhier thermal
+ monitor to json-schema
+Message-ID: <20200512150046.GA8622@bogus>
+References: <1588215934-13252-1-git-send-email-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
-References: <20200512060814.jkbbxxsxw45mcmg7@vireshk-i7>
-In-Reply-To: <20200512060814.jkbbxxsxw45mcmg7@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 12 May 2020 16:26:05 +0200
-Message-ID: <CAJZ5v0gwu6d4MNP0q_h4bQKiZ9HGav+dxTdCixSXEX+7Jt4Pvg@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm changes for 5.8
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1588215934-13252-1-git-send-email-hayashi.kunihiko@socionext.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 12, 2020 at 8:08 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Hi Rafael,
->
-> This pull request contains:
->
-> - Build OMAP cpufreq driver by default for ARCH_OMAP2PLUS platform
->   (Anders Roxell).
->
-> - Fix compatible bindings for qcom cpufreq driver (Ansuel Smith).
->
-> - Update qoriq cpufreq driver to automatically loaded when built as
->   module and related changes (Mian Yousaf Kaukab and Geert
->   Uytterhoeven).
->
-> - Add support for r8a7742 to cpufreq-dt platform driver (Lad
->   Prabhakar).
->
-> - Add support for i.MX7ULP to imx cpufreq driver (Peng Fan).
->
-> --
-> viresh
->
-> -------------------------8<-------------------------
->
-> The following changes since commit ae83d0b416db002fe95601e7f97f64b59514d936:
->
->   Linux 5.7-rc2 (2020-04-19 14:35:30 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+On Thu, 30 Apr 2020 12:05:34 +0900, Kunihiko Hayashi wrote:
+> Convert the UniPhier thermal monitor binding to DT schema format.
+> 
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+> 
+> Changes since v1:
+> - Add maxItems to "socionext,tmod-calibration" property
+> - Fix indents in examples
+> 
+> .../thermal/socionext,uniphier-thermal.yaml        | 59 ++++++++++++++++++++
+>  .../bindings/thermal/uniphier-thermal.txt          | 65 ----------------------
+>  2 files changed, 59 insertions(+), 65 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/uniphier-thermal.txt
+> 
 
-Pulled, thanks!
+Applied, thanks!
