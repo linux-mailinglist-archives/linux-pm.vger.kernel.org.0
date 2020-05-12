@@ -2,87 +2,197 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FD41CF164
-	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 11:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1B91CF170
+	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 11:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729270AbgELJU1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 May 2020 05:20:27 -0400
-Received: from m177129.mail.qiye.163.com ([123.58.177.129]:48818 "EHLO
-        m177129.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726024AbgELJU1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 05:20:27 -0400
-Received: from vivo.com (wm-2.qy.internal [127.0.0.1])
-        by m177129.mail.qiye.163.com (Hmail) with ESMTP id 641F05C3638;
-        Tue, 12 May 2020 17:19:50 +0800 (CST)
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-Message-ID: <AP*ABgAXCELISG6y0r8HaKrn.3.1589275190376.Hmail.bernard@vivo.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>, Kukjin Kim <kgene@kernel.org>,
-        linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        opensource.kernel@vivo.com
-Subject: =?UTF-8?B?UmU6UmU6IFtQQVRDSF0gbWVtb3J5L3NhbXN1bmc6IHJlZHVjZSB1bm5lY2Vzc2FyeSBtdXRleCBsb2NrIGFyZWE=?=
-X-Priority: 3
-X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com
-X-Originating-IP: 157.0.31.122
-In-Reply-To: <CAJKOXPekrkyDf2TMCnX7Nvbdaj-JQwuyqrsurFM4moALqVx8Sw@mail.gmail.com>
+        id S1729288AbgELJVJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 May 2020 05:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729283AbgELJVJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 05:21:09 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5315C061A0E
+        for <linux-pm@vger.kernel.org>; Tue, 12 May 2020 02:21:08 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id e16so14435938wra.7
+        for <linux-pm@vger.kernel.org>; Tue, 12 May 2020 02:21:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WSJ+GxsTuzqD8+IxmpWAkgNXtGw85Gobj3y/xeLlGVs=;
+        b=c/o7xP451p05+fbz2TZLhRj4Tx9fMnzXC7w9k+1fmEi2v4E6edj5mks2yFuwCAvnPp
+         TyWPeDv3I+NJk6fDLPEzr5a0Usrj1uDa9QV8rwbM0oMgtWc47RbytX55Vzw5l3YqwsLM
+         a4eICQXcaTVh8j9/OsIM2SPdyoZY/NloXhg0BvPe9X+La/wKffYh1XYR5/6f82jU90R2
+         /TD4bIb/voRBppIOHLNonM7o2IMRruu5UxC1AfSA+dKrszymKCPgTbzxB/TkRyJpaGLF
+         ywZ7hwkK1iBicuimPtD4sQsOFhKY2kI1FMvpET9K4CMjloQ7YWjCE86Sd62GJF3UMgo/
+         Zpfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WSJ+GxsTuzqD8+IxmpWAkgNXtGw85Gobj3y/xeLlGVs=;
+        b=Y1GwFiEVV3mC+yekrHsDgw6X1lPsIav/Lpxwp2CxKMfzNeK/h/P5py6lCWdcymkgkK
+         mwNNy0ovBBkpiD6BWBPO2CTqDmVXOaihCxnEBPOu9VkYHqsrwyeT+jYu6DDcjrtGDKKP
+         6AHenG0qonSiG8MmRV0ySzRLGs9PVZArMDsNs9rcUAVDpAIs0nvPxqzBOHdceWrw/ZgI
+         OdTqvN3IDutHqHb3GjhUTV1+OkDyvOw0kLe5mwX1XxB2saYwzVin3L3Jr/n68P2vcO9l
+         bv0mFenw1du++TXUXH7S6gni5Tx4A6O/w4s8umRufdaiOMd4dCRH9/QxO+4I9cBJJ9XU
+         pT3Q==
+X-Gm-Message-State: AGi0PuZ/AShx+CwzTPS93ZnYy3yIcJVU2RArvlSqLQ9K3LSySuuOtf8E
+        cmxHuk4W4cJcBshcBnWZhRAr6A==
+X-Google-Smtp-Source: APiQypJzs8nFdQli4YVacxVDlFi3KZMkRuI5sjbQ+3MXmbG/9a6/E+gFH+A9GVHHr5dUP9sAv5OAfQ==
+X-Received: by 2002:a5d:444c:: with SMTP id x12mr20172504wrr.406.1589275266995;
+        Tue, 12 May 2020 02:21:06 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
+        by smtp.gmail.com with ESMTPSA id 128sm24726511wme.39.2020.05.12.02.21.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2020 02:21:06 -0700 (PDT)
+Date:   Tue, 12 May 2020 10:21:02 +0100
+From:   Quentin Perret <qperret@google.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Todd Kjos <tkjos@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Subject: Re: [PATCH 00/14] Modularize schedutil
+Message-ID: <20200512092102.GA16151@google.com>
+References: <20200507181012.29791-1-qperret@google.com>
+ <20200508081128.GM5298@hirez.programming.kicks-ass.net>
+ <20200508103721.GA3860390@kroah.com>
+ <20200508111612.GA252673@google.com>
+ <20200508113141.GB5298@hirez.programming.kicks-ass.net>
+ <20200508130507.GA10541@google.com>
+ <CAJZ5v0iaa_VCtN608QKTYZ-A6QG_7bwxihxSgoEGv1LcSK-ksA@mail.gmail.com>
+ <20200511090049.GA229633@google.com>
+ <CAJZ5v0jKMgFsR0dXDt4si5hT9QF2evaoMS-13y-Qde8UpcaARg@mail.gmail.com>
 MIME-Version: 1.0
-Received: from bernard@vivo.com( [157.0.31.122) ] by ajax-webmail ( [127.0.0.1] ) ; Tue, 12 May 2020 17:19:50 +0800 (GMT+08:00)
-From:   Bernard <bernard@vivo.com>
-Date:   Tue, 12 May 2020 17:19:50 +0800 (GMT+08:00)
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZSFVKQ0hLS0tLQ0xMSENLT1lXWShZQU
-        hPN1dZLVlBSVdZCQ4XHghZQVk1NCk2OjckKS43PlkG
-X-HM-Sender-Digest: e1kJHlYWEh9ZQUhMTElJSk9LTkNCN1dZDB4ZWUEPCQ4eV1kSHx4VD1lB
-        WUc6K1E6ORw6Izg#NzIoPE0CSwlDMxowCRVVSFVKTkNCSUxOSkJLT0NDVTMWGhIXVRkeCRUaCR87
-        DRINFFUYFBZFWVdZEgtZQVlKTkxVS1VISlVKSUlZV1kIAVlBTkhISjcG
-X-HM-Tid: 0a72082ee4906447kurs641f05c3638
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0jKMgFsR0dXDt4si5hT9QF2evaoMS-13y-Qde8UpcaARg@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CkZyb206IEtyenlzenRvZiBLb3psb3dza2kgPGtyemtAa2VybmVsLm9yZz4KRGF0ZTogMjAyMC0w
-NS0xMiAxNzowNToyOApUbzogIEx1a2FzeiBMdWJhIDxsdWthc3oubHViYUBhcm0uY29tPgpDYzog
-IEJlcm5hcmQgWmhhbyA8YmVybmFyZEB2aXZvLmNvbT4sS3VramluIEtpbSA8a2dlbmVAa2VybmVs
-Lm9yZz4sbGludXgtcG1Admdlci5rZXJuZWwub3JnLCJsaW51eC1zYW1zdW5nLXNvY0B2Z2VyLmtl
-cm5lbC5vcmciIDxsaW51eC1zYW1zdW5nLXNvY0B2Z2VyLmtlcm5lbC5vcmc+LGxpbnV4LWFybS1r
-ZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZywibGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZyIg
-PGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+LG9wZW5zb3VyY2Uua2VybmVsQHZpdm8uY29t
-ClN1YmplY3Q6IFJlOiBbUEFUQ0hdIG1lbW9yeS9zYW1zdW5nOiByZWR1Y2UgdW5uZWNlc3Nhcnkg
-bXV0ZXggbG9jayBhcmVhPk9uIFR1ZSwgMTIgTWF5IDIwMjAgYXQgMTA6NDcsIEx1a2FzeiBMdWJh
-IDxsdWthc3oubHViYUBhcm0uY29tPiB3cm90ZToKPj4KPj4gSGkgS3J6eXN6dG9mLAo+Pgo+PiBJ
-IGFtIHNvcnJ5LCBJIHdhcyBhIGJpdCBidXN5IHJlY2VudGx5Lgo+Pgo+PiBPbiA1LzEyLzIwIDc6
-NTAgQU0sIEtyenlzenRvZiBLb3psb3dza2kgd3JvdGU6Cj4+ID4gT24gRnJpLCBNYXkgMDgsIDIw
-MjAgYXQgMDY6MTM6MzhBTSAtMDcwMCwgQmVybmFyZCBaaGFvIHdyb3RlOgo+PiA+PiBNYXliZSBk
-bWMtPmRmLT5sb2NrIGlzIHVubmVjZXNzYXJ5IHRvIHByb3RlY3QgZnVuY3Rpb24KPj4gPj4gZXh5
-bm9zNV9kbWNfcGVyZl9ldmVudHNfY2hlY2soZG1jKS4gSWYgd2UgaGF2ZSB0byBwcm90ZWN0LAo+
-PiA+PiBkbWMtPmxvY2sgaXMgbW9yZSBiZXR0ZXIgYW5kIG1vcmUgZWZmZWN0aXZlLgo+PiA+PiBB
-bHNvLCBpdCBzZWVtcyBub3QgbmVlZGVkIHRvIHByb3RlY3QgImlmIChyZXQpICYgZGV2X3dhcm4i
-Cj4+ID4+IGJyYW5jaC4KPj4gPj4KPj4gPj4gU2lnbmVkLW9mZi1ieTogQmVybmFyZCBaaGFvIDxi
-ZXJuYXJkQHZpdm8uY29tPgo+PiA+PiAtLS0KPj4gPj4gICBkcml2ZXJzL21lbW9yeS9zYW1zdW5n
-L2V4eW5vczU0MjItZG1jLmMgfCA2ICsrLS0tLQo+PiA+PiAgIDEgZmlsZSBjaGFuZ2VkLCAyIGlu
-c2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCj4+ID4KPj4gPiBJIGNoZWNrZWQgdGhlIGNvbmN1
-cnJlbnQgYWNjZXNzZXMgYW5kIGl0IGxvb2tzIGNvcnJlY3QuCj4+ID4KPj4gPiBMdWthc3osIGFu
-eSByZXZpZXcgZnJvbSB5b3VyIHNpZGU/Cj4+Cj4+IFRoZSBsb2NrIGZyb20gZGV2ZnJlcSBsb2Nr
-IHByb3RlY3RzIGZyb20gYSBzY2VuYXJpbyB3aGVuCj4+IGNvbmN1cnJlbnQgYWNjZXNzIGZyb20g
-ZGV2ZnJlcSBmcmFtZXdvcmsgdXNlcyBpbnRlcm5hbCBkbWMgZmllbGRzICdsb2FkJwo+PiBhbmQg
-J3RvdGFsJyAod2hpY2ggYXJlIHNldCB0byAnYnVzeV90aW1lJywgJ3RvdGFsX3RpbWUnKS4KPj4g
-VGhlIC5nZXRfZGV2X3N0YXR1cyBjYW4gYmUgY2FsbGVkIGF0IGFueSB0aW1lIChldmVuIGR1ZSB0
-byB0aGVybWFsCj4+IGRldmZyZXEgY29vbGluZyBhY3Rpb24pIGFuZCByZWFkcyBhYm92ZSBmaWVs
-ZHMuCj4+IFRoYXQncyB3aHkgdGhlIGNhbGN1bGF0aW9uIG9mIHRoZSBuZXcgdmFsdWVzIGluc2lk
-ZSBkbWMgaXMgcHJvdGVjdGVkLgo+Cj5JIGxvb2tlZCBhdCB0aGlzIHBhdGggKGdldF9kZXZfc3Rh
-dHVzKSBhbmQgY3VycmVudGx5IGluIGRldmZyZXEgaXQKPndpbGwgYmUgb25seSBjYWxsZWQgZnJv
-bSB1cGRhdGVfZGV2ZnJlcSgpIC0+IGdldF90YXJnZXRfZnJlcSgpLi4uIGF0Cj5sZWFzdCB3aGVu
-IGxvb2tpbmcgYXQgZGV2ZnJlcSBjb3JlIGFuZCBnb3Zlcm5vcnMuIE9uIHRoZSBvdGhlciBoYW5k
-Cj55b3UgYXJlIHJpZ2h0IHRoYXQgdGhpcyBpcyBwdWJsaWMgZnVuY3Rpb24gYW5kIHRoaXMgY2Fs
-bCBzY2VuYXJpbwo+bWlnaHQgY2hhbmdlLiBJdCBjb3VsZCBiZSBjYWxsZWQgZGlyZWN0bHkgZnJv
-bSBvdGhlciBwYXRocyBzb29uZXIgb3IKPmxhdGVyLgo+Cj4+IFRoaXMgcGF0Y2ggc2hvdWxkIG5v
-dCBiZSB0YWtlbiBJTU8uIE1heWJlIHdlIGNhbiByZWxlYXNlIGxvY2sgYmVmb3JlIHRoZQo+PiBp
-ZiBzdGF0ZW1lbnQsIGp1c3QgdG8gc3BlZWQtdXAuCj4KPlllcC4KPgo+QmVybmFyZCwgeW91IGNh
-biBzZW5kIGp1c3QgdGhpcyBwYXJ0IG9mIHRoZSBwYXRjaC4KPgoKU3VyZSwgSSB3aWxsIHJlc3Vi
-bWl0IGEgcGF0Y2ggaW4gdjIuCgpCZXN0IHJlZ2FyZHMsCkJlcm5hcmQKCj5CZXN0IHJlZ2FyZHMs
-Cj5Lcnp5c3p0b2YKDQoNCg==
+Hi Rafael,
+
+On Monday 11 May 2020 at 17:26:26 (+0200), Rafael J. Wysocki wrote:
+> On Mon, May 11, 2020 at 11:00 AM Quentin Perret <qperret@google.com> wrote:
+> > The base idea is, anything that we know from experience is used by
+> > everybody can be built in, anything else will need investigation. And as
+> > you've understood, schedutil falls in that second category.
+> 
+> The fact that the vendor sets up a different governor by default
+> doesn't mean that there should be no way to switch over to schedutil
+> IMO.
+
+Well, there will always be the option to load the schedutil module ;-)
+
+<snip>
+> > the reason that dependency was added originally was
+> >    because sugov was the only place where util clamps where taken into
+> >    accounts. But that is no longer true -- we check them in the capacity
+> >    aware wake-up path as well, which is entirely independent from the
+> >    currently running governor;
+> 
+> But this is done under the assumption that the governor will also take
+> the clamps into account, isn't it?
+
+Even if that was correct, it's not clear a compile-time dependency makes
+that assumption true, right?
+
+For governors and the like, if the option is =n, then you can hard-rely
+on it not being used. But if it is =y, you cannot assume anything
+what-so-ever. EAS does a run-time check for that exact reason -- a
+sole Kconfig dependency typically doesn't work for that.
+
+> Otherwise you can see your "low util" tasks running at high
+> frequencies and "high util" ones running slowly.  Surely, that's not
+> desirable?
+> 
+> IIUC, the task placement needs to be consistent with the governor's
+> decisions for things to work as expected.
+
+Sure, but, say, the 'performance' governor could give you some of that
+too. That is, you could use uclamp.min on some tasks to ensure they are
+biased to bigger CPUs, and just stick the frequency to max. I wouldn't
+be surprised to see setups like that on non-battery-powered devices for
+instance. And yes, there are non-battery-powered devices that use big
+little out there (TVs and such, often because the only SOCs matching
+their requirements are mobile SOCs).
+
+> >  - because of the above, it is (now) largely useless: a compile time
+> >    dependency doesn't guarantee we are actually running with schedutil
+> >    at all;
+> >  - it is artificial: there are no actual compilation dependencies
+> >    between sugov and uclamp, everything will compile just fine without
+> >    that 'depends on';
+> 
+> That actually is the case, but it doesn't mean that there is no
+> dependency in there.
+
+Sure, and the dependency did make sense when uclamp was first introduced.
+At the time, the clamp values where used _only_ in schedutil. So, it
+was fair to say "if schedutil is =n, there is no way the clamps will ever
+be useful to anything else, so the uclamp code can be safely compiled
+out". That is no longer true, and if you want to make uclamp work only
+with schedutil (which I would advise against for the above reason), then
+a Kconfig dependency doesn't seem to be the right tool for that anyway.
+
+> > Or maybe you were thinking of something else?
+> >
+> > > > That of course is only true if we can
+> > > > agree on a reasonable set of exported symbols, so I'll give others some
+> > > > time to complain and see if I can post a v2 addressing these issues!
+> > >
+> > > This isn't just about exported symbols, it is about what is regarded
+> > > as essential and what isn't.
+> >
+> > Right, the exported symbols are, IMO, quite interesting because they
+> > show how 'core' the governor is. But what exactly do you mean by
+> > 'essential' here? Essential in what sense?
+> 
+> IMO the question is how much value there is in making it possible to
+> avoid loading a particular piece of kernel code into memory.
+> 
+> You've demonstrated that it can be done with schedutil, but does that
+> matter that it needs to be done?
+> 
+> I thought that the original idea was to make it closely integrated
+> with the scheduler, so it could access the scheduler's data structures
+> (that we specifically didn't want to expose to the *other* governors)
+> and so as to avoid forgetting about any dependencies when making
+> changes to either the scheduler or schedutil.  Allowing it to be build
+> as a module would make make us have to worry about those things again,
+> so is it really worth it?
+
+Right, so, if there is a strong technical reason to keep schedutil a
+bool option (such as accessing data structures we really don't want to
+export), then sure, I'll have no choice but to accept it. Now, assuming
+that I fix the usage of 'runqueues', is there anything in particular
+that you think is wrong in the series?
+
+Note that if one day keeping schedutil modular becomes a blocker for a
+new feature, then we'll have the option to make it bool again. But is
+there something like that already?
+
+Thanks,
+Quentin
