@@ -2,144 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B511CEA65
-	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 04:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DD21CEBDF
+	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 06:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727942AbgELCAC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 May 2020 22:00:02 -0400
-Received: from mga14.intel.com ([192.55.52.115]:22635 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726874AbgELCAC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 11 May 2020 22:00:02 -0400
-IronPort-SDR: 8tjHejZxPx4H6rnaIY8fKgGBhkOjwbhVzZDkN+ukjpjo+/JCGsa5H0JEp1Z9s3EyDdEegyFvdd
- NCE+hYtZiOMg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2020 19:00:01 -0700
-IronPort-SDR: KISenIb5qB5yclmk9k9YMzJWwk1y9ewHOcY+5LGqHEMCfrX4pTEKKne5MlA5t2hauGLYZ2Wxaa
- AS400SecdXCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,381,1583222400"; 
-   d="scan'208";a="279962125"
-Received: from xwang69-mobl1.ccr.corp.intel.com ([10.249.168.68])
-  by orsmga002.jf.intel.com with ESMTP; 11 May 2020 18:59:58 -0700
-Message-ID: <9056a7b3be9161c1ae266ac0266bdb0ab386de66.camel@intel.com>
-Subject: Re: [PATCH 5/6] thermal: core: introduce tz_disabled() helper
- function
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc:     linux-pm@vger.kernel.org, linux-wireless@vger.kernel.org,
-        daniel.lezcano@linaro.org, andrzej.p@collabora.com, luca@coelho.fi
-Date:   Tue, 12 May 2020 09:59:57 +0800
-In-Reply-To: <4aa6fd7d-9e0c-614a-88e9-0e2637a114d4@samsung.com>
-References: <20200430063229.6182-1-rui.zhang@intel.com>
-         <CGME20200430062922eucas1p288a6f222286b4293b32272a3da1166ab@eucas1p2.samsung.com>
-         <20200430063229.6182-6-rui.zhang@intel.com>
-         <4aa6fd7d-9e0c-614a-88e9-0e2637a114d4@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1725814AbgELEVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 May 2020 00:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725851AbgELEVN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 00:21:13 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DD5C05BD09
+        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 21:21:13 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id z1so5753289pfn.3
+        for <linux-pm@vger.kernel.org>; Mon, 11 May 2020 21:21:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=IdjYh0oULyLJ5bKtvUfrpKY/2RKuAj8/Dl3bei8f6k4=;
+        b=y43K56Dfg/lBfYBZTCGXMXhFb6d7tRa60kQPwF899DRyGef9/q2FtoD2Jfq/ZCrVs1
+         E0CsaE1tM4k+NHsP3W/LVLuDD8mlF297aj4IGgmlAHHeEivD1jDFVAR1q9h1rl2SDAvM
+         9/cPC/FiLdFYHFKgi7ae0Z8DRv/RNIA+lHtIKXm2D1vj5LfFZf5zqIptDJK+gY9tYbTf
+         Vk/HwtggQJ1bpYthbTPDcWSa4ot8Qg7ubveZ36oooDLWPNrYNCCzT4zidKfYn3nwmuAR
+         8IPu2ZXkbSD/pi9lotIhEeGy7uu7WiLk3rLRM5E3S1BiLTZv+6lfB8g/yVYDPPkD40e4
+         VPxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=IdjYh0oULyLJ5bKtvUfrpKY/2RKuAj8/Dl3bei8f6k4=;
+        b=FJnMMxzAcz0fNTdNmbP1+ggfpoqxPj/ltQUQVElwnloe076RrTNzuO6ppYmnSY2UHx
+         n1+ABMLhnTZqa5wlaIPQ1qiA6TvvqC6IkjL26qLxKkBEh/dPvT051+g+w2nSmfvZjtCE
+         0KH8vmOTWHueQvFrnWABwbbQe9EymTvBRD9crOLUB+IbX0fOnEvQ+nw3OIbAU4fhQEgk
+         9hdMR0z8UON9oEoHI0kvJafBpIMScXugC1OEAoXInGLet8437wI5QuQ69i7u3meJezzF
+         cJ3JQ0u/Ra34kkvRWT5ZKGHXEYzMgbqNGRLecD4l9+gN29zfb5hHhmhp2X411AqHXjT8
+         I9tg==
+X-Gm-Message-State: AGi0PuZBnb5LlY95hglVAKNkm0rPhNnXrK9ytrGMbwOIOzkybU8xoQTt
+        0Z43UsAQ9FKScDQ59WtvCYxaAA==
+X-Google-Smtp-Source: APiQypKjWODnYY86agN2yEWC9uxMVeLfVAM2apbPJioRbCX8VaeEXSRQ0fMmHf5BAc6q+ja5I8RfmQ==
+X-Received: by 2002:a65:4c41:: with SMTP id l1mr18142702pgr.43.1589257272699;
+        Mon, 11 May 2020 21:21:12 -0700 (PDT)
+Received: from localhost ([122.167.130.103])
+        by smtp.gmail.com with ESMTPSA id 1sm10749022pff.180.2020.05.11.21.21.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 11 May 2020 21:21:12 -0700 (PDT)
+Date:   Tue, 12 May 2020 09:51:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        daniel.lezcano@linaro.org,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 00/14] thermal core include cleanups
+Message-ID: <20200512042110.drvrtnwj5tynnkqo@vireshk-i7>
+References: <cover.1589199124.git.amit.kucheria@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1589199124.git.amit.kucheria@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2020-05-04 at 09:09 +0200, Bartlomiej Zolnierkiewicz wrote:
-> On 4/30/20 8:32 AM, Zhang Rui wrote:
-> > Rename should_stop_polling() to tz_disabled(), and make it global.
-> > Because there are platform thermal drivers which also need this.
-> > 
-> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > ---
-> >  drivers/thermal/thermal_core.c | 17 ++++++++---------
-> >  include/linux/thermal.h        |  2 ++
-> >  2 files changed, 10 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/thermal_core.c
-> > b/drivers/thermal/thermal_core.c
-> > index 5f7a867..1cd5d5d0 100644
-> > --- a/drivers/thermal/thermal_core.c
-> > +++ b/drivers/thermal/thermal_core.c
-> > @@ -305,16 +305,9 @@ static void
-> > thermal_zone_device_set_polling(struct thermal_zone_device *tz,
-> >  		cancel_delayed_work(&tz->poll_queue);
-> >  }
-> >  
-> > -static inline bool should_stop_polling(struct thermal_zone_device
-> > *tz)
-> > -{
-> > -	return thermal_zone_device_get_mode(tz) ==
-> > THERMAL_DEVICE_DISABLED;
-> > -}
-> > -
-> >  static void monitor_thermal_zone(struct thermal_zone_device *tz)
-> >  {
-> > -	bool stop;
-> > -
-> > -	stop = should_stop_polling(tz);
-> > +	bool stop = tz_disabled(tz);
-> >  
-> >  	mutex_lock(&tz->lock);
-> >  
-> > @@ -502,12 +495,18 @@ int thermal_zone_device_set_mode(struct
-> > thermal_zone_device *tz,
-> >  }
-> >  EXPORT_SYMBOL_GPL(thermal_zone_device_set_mode);
-> >  
-> > +bool tz_disabled(struct thermal_zone_device *tz)
-> > +{
-> > +	return thermal_zone_device_get_mode(tz) ==
-> > THERMAL_DEVICE_DISABLED;
-> > +}
-> > +EXPORT_SYMBOL(tz_disabled);
+On 11-05-20, 17:54, Amit Kucheria wrote:
+> I noticed some remnants from when thermal core could be modular. While
+> cleaning that up, I fixed up the includes to be sorted alphabetically and
+> included export.h in files that were using EXPORT_SYMBOL* or THIS_MODULE
+> while at the same time removing inclusion of module.h from core files.
 > 
-> Is there actual reason to not make it _GPL?
+> Finally, the names of the source files for the governors and core have some
+> inconsistencies and the last couple of patches rename them.
 > 
-> [ all other thermal core functionality seems to be _GPL anyway ]
+> Build and boot tested on some ARM boards.
 
-Thanks for catching this, will fix in next version.
-> 
-> Otherwise the patch looks fine:
-> 
-> Reviewed-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-thanks for the review.
-
--Rui
-> 
-> Best regards,
-> --
-> Bartlomiej Zolnierkiewicz
-> Samsung R&D Institute Poland
-> Samsung Electronics
-> 
-> > +
-> >  void thermal_zone_device_update(struct thermal_zone_device *tz,
-> >  				enum thermal_notify_event event)
-> >  {
-> >  	int count;
-> >  
-> > -	if (should_stop_polling(tz))
-> > +	if (tz_disabled(tz))
-> >  		goto update_polling;
-> >  
-> >  	if (atomic_read(&in_suspend))
-> > diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> > index a87fbaf..0bc62ee 100644
-> > --- a/include/linux/thermal.h
-> > +++ b/include/linux/thermal.h
-> > @@ -479,4 +479,6 @@ static inline int
-> > thermal_zone_device_disable(struct thermal_zone_device *tz)
-> >  	return thermal_zone_device_set_mode(tz,
-> > THERMAL_DEVICE_DISABLED);
-> >  }
-> >  
-> > +bool tz_disabled(struct thermal_zone_device *tz);
-> > +
-> >  #endif /* __THERMAL_H__ */
-> > 
-> 
-> 
-
+-- 
+viresh
