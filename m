@@ -2,119 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC271CFFD8
-	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 22:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818851D0095
+	for <lists+linux-pm@lfdr.de>; Tue, 12 May 2020 23:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730929AbgELUv1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 May 2020 16:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726661AbgELUv1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 16:51:27 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CE3C061A0C
-        for <linux-pm@vger.kernel.org>; Tue, 12 May 2020 13:51:26 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id f4so9278380iov.11
-        for <linux-pm@vger.kernel.org>; Tue, 12 May 2020 13:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=p+BMFZWdD3PwNvd8PN0fWEsuEjzT0rH3K1Az8SxOj5Q=;
-        b=RoECtTDyc2doVXJ49Gfgob0XQB0ehmOjd60t0zREhpEuhg26zUAQKP7C38su2LZUcV
-         jNAU3oaiTLuwB5JUtIzSRflJd/WVp6+bg8/ygTUhFxGos/k8bS/DBJfHMy9ypzel+h0q
-         F8t7o86A34FBKggCf8+ro9CJenzIyHarlw1fM/945zr4vCYfk44qy71PF8G3hhKIQUDI
-         qyndDIQztH5MXlEH7W+QnRtSmTLLscKc09Noow5r4KHZyZNxhJ2wB/fk6SWKCRadoojZ
-         +PaWCKCT7sNPiIiNOVxf4QZj2RJNBN102PUPyf13Jg0xALOrwgw5qnn1p6QrN+EQdzoa
-         Ux0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=p+BMFZWdD3PwNvd8PN0fWEsuEjzT0rH3K1Az8SxOj5Q=;
-        b=qP75+jjmfpWhy1l5q7jIHIDWqjTejozDZwdE3MY+vrjjMvZFXAltL+W66XPyIq0bbe
-         z1uwqoFn6lq36aGz6GrHujRo2k0wKOqi6JHY97m6xT63443t9hRGH/QGwBD16CEaBOwc
-         QUDuiegM6qmUOilHv8afoyNYJiDdKuar0w/pITYmrEGCChVW2tUEPUKqae5fqWn15Daz
-         TqXD8HNhIKzAH0/FTHB5CiviiyAsxxTkyzq6r4KegxzW1LaOrSISYBvDXHe2Z9yAguPd
-         0FEWVzcjirmU07eoMjrDI5LzCXQ18IOoKLtLrfuWkstii9P/YhBUJrLcnxd/SfYZqJoP
-         +kPg==
-X-Gm-Message-State: AGi0PubxAKHl3WiCMKfvylCQY92YFyKsGfj4T5jSICbPwyG9SuGnonag
-        RUQDxlqY+Uke/TgYV5M9LzAsfdHrduJWQcSz3Nk=
-X-Google-Smtp-Source: APiQypLaStK8eLH1LlqpfbBEyXblJ78bzDirJjcecqi+FbQhKOcgg664cg1vjkxI9qq1qLWIafgej3OAAhVVusJWQcM=
-X-Received: by 2002:a02:85ec:: with SMTP id d99mr9159118jai.144.1589316686091;
- Tue, 12 May 2020 13:51:26 -0700 (PDT)
+        id S1726661AbgELVR6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 May 2020 17:17:58 -0400
+Received: from cmta20.telus.net ([209.171.16.93]:47457 "EHLO cmta20.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725938AbgELVR6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 12 May 2020 17:17:58 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id YcHhjiM2GdVYHYcHjjVzld; Tue, 12 May 2020 15:17:57 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1589318277; bh=lCmzouqvDwIKKyuHxG+JEEnygxM8jtT+WS6QXdOjx60=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=LN8jWasS+k5TKHoZ6BLNsncm08MI5JNgW8TDDJhPdZtJC0AAt6kkEoPqPGY9xxT7L
+         OkGmcTbLKlbogdefDJX+tQjN5NUOevaSR53QQH6sfgyeVwrgTbHMiScDlLRP8EmPtu
+         3MeewAbJ4+V0fdx8KI0A402fmlyFyvqhRu4TxugsjFWCmHFaToO0BNnAU9OxcaVdWW
+         Zq4Xv1TxkWEzTBOpKqFzzSenuF1LFqORJ+v9WATH7R4CUGKphnyHfE2If2lxsU3D3y
+         oKiCAf/ijockjQXlXP9TUw0J+HrxpXH7RRX7m2bmp6e9K+M7Kcz4Sb9Zf5iV3cRUBM
+         uPBGqDVIKNA4w==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=Y5CGTSWN c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=aatUQebYAAAA:8
+ a=H9R6TWYQEZhs2jsBW84A:9 a=CjuIK1q_8ugA:10 a=7715FyvI7WU-l6oqrZBK:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Hanjun Guo'" <guohanjun@huawei.com>
+Cc:     <linux-pm@vger.kernel.org>, "'Jonathan Corbet'" <corbet@lwn.net>,
+        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
+        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>
+References: <1588235987-12300-1-git-send-email-guohanjun@huawei.com>
+In-Reply-To: <1588235987-12300-1-git-send-email-guohanjun@huawei.com>
+Subject: RE: [RFC v2 PATCH 0/6] cpuidle: Make cpuidle governor switchable to be the default behaviour
+Date:   Tue, 12 May 2020 14:17:52 -0700
+Message-ID: <000b01d628a2$ce0a1ab0$6a1e5010$@net>
 MIME-Version: 1.0
-References: <CAJiuCce9ZxeXnQzEW_3dbBDNZmmtWmKeft0hX+F9+SYu80NU=Q@mail.gmail.com>
- <20200511052530.iazkduojnba3abil@vireshk-i7>
-In-Reply-To: <20200511052530.iazkduojnba3abil@vireshk-i7>
-From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date:   Tue, 12 May 2020 22:51:15 +0200
-Message-ID: <CAJiuCcfRmDbBxEms=HAFQhaiBTznEd1of3TOcnAAc2yuTq0XtA@mail.gmail.com>
-Subject: Re: Question about OPP regulator for Panfrost Devfreq
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
-        Steven Price <steven.price@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdYey9jjgudlnXFSR52mQgNF139jGQJ1fYfA
+X-CMAE-Envelope: MS4wfKqmccL6Yr81rmbZ/foisTd8sHzHQHT8UN7LmHAjmDhBOOw3sQHQQGiRnNsRsYskcaToVnGflCtKr3ZJKGc7OEBsJdkrOU3NVMMuNp+qtxRMhWjOgI5Q
+ JjaTk4d44GKZf9frWXbbsNZEGJWZpfNfp5pw26k/Yf5zTtLubaCackp/tkyCY33DjI80oKy1dzFuug+PjkRs8joy/vbTCDLXBdI117Mqal7CIhDXKjWEIME3
+ IUTEEgQPlAbwsC1R9QxUoALlIJBJZjEzbhZDLNzPxEHWX1Dw1v5YrzWx9eTJMxQf
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh, Marek and Mark
+On 2020.04.30 01:40 Hanjun Guo wrote:
 
-On Mon, 11 May 2020 at 07:25, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> For now cpuidle governor can be switched via sysfs only when the
+> boot option "cpuidle_sysfs_switch" is passed, but it's important
+>to switch the governor to adapt to different workloads, especially
+> after TEO and haltpoll governor were introduced.
 >
-> On 09-05-20, 21:56, Cl=C3=A9ment P=C3=A9ron wrote:
-> > Dear OPP Maintainers,
-> >
-> > I'm working on adding DVFS support using the generic OPP framework to P=
-anfrost.
-> > I'm using the dev_pm_opp_set_regulators() to let OPP framework get and
-> > manage the regulator.
-> > https://github.com/clementperon/linux/commit/be310c37b82010e293b7f129cc=
-dcb711a2abb2ce
-> >
-> > However it seems that this function only get the regulator but never en=
-able it.
-> > This result that the regulator is disabled later by the
-> > regulator_late_cleanup().
-> >
-> > In a previous version I let the Panfrost driver to get and enable the
-> > regulator in addition to OPP but this create a conflict in debugFS
-> > because the regulator is "get" two times.
-> >
-> > Quick discussion with Mark Brown point that we should try to avoid
-> > getting two times a regulator as it can create "confusion in your code
-> > with two different parts of the device controlling the same supply
-> > independently."
-> >
-> > Is my understanding correct? If yes,
-> > Should we not add a call to regulator_enable() in the
-> > dev_pm_opp_set_regulators() ?
-> >
-> > My WIP branch :
-> > https://github.com/clementperon/linux/commits/panfrost_devfreq
+> Make cpuidle governor switchable to be the default behaviour by removing
+> the sysfs_switch and switch attributes, also update the document as well.
 >
-> https://lore.kernel.org/lkml/20191017102758.8104-1-m.szyprowski@samsung.c=
-om/
+> v1->v2:
+> - Add two bugfix patch which can be triggered if the governor name is 15
+>   characters, it is not a 'real' bug for now as we don't have such usecases
+>   so we can merge them together via this patchset.
+> - Remove the sysfs_switch, not introduce a CONFIG option to make cpuidle
+>   governor switchable in default, suggested by Daniel.
+> - Update the document after cpuidle_sysfs_switch is removed, suggested by
+>   Doug Smythies.
 >
-> We tried that sometime back and faced issues with it.
-
-Regarding GPU it uses also the OPP framework and the regulator is not
-always-on so it seems quick logic the use_count should be increased
-for this regulator.
-
-Does declaring the regulator as 'regulator-boot-on' could fix the issue?
-
-Regards,
-Clement
-
-
+> Hanjun Guo (6):
+>  cpuidle: sysfs: Fix the overlap for showing available governors
+>  cpuidle: sysfs: Accept governor name with 15 characters
+>  cpuidle: Make cpuidle governor switchable to be the default behaviour
+>  cpuidle: sysfs: Remove sysfs_switch and switch attributes
+>  Documentation: cpuidle: update the document
+>  Documentation: ABI: make current_governer_ro as a candidate for
+>    removal
 >
-> --
-> viresh
+> Documentation/ABI/obsolete/sysfs-cpuidle           |  9 ++++
+> Documentation/ABI/testing/sysfs-devices-system-cpu | 24 ++++------
+> Documentation/admin-guide/pm/cpuidle.rst           | 20 ++++----
+> Documentation/driver-api/pm/cpuidle.rst            |  5 +-
+> drivers/cpuidle/sysfs.c                            | 56 ++++++----------------
+> 5 files changed, 44 insertions(+), 70 deletions(-)
+> create mode 100644 Documentation/ABI/obsolete/sysfs-cpuidle
+
+Thanks,
+
+Reviewed and tested by Doug Smythies <dsmythies@telus.net>
+  
+
