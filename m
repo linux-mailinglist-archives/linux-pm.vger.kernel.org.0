@@ -2,119 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9661D1D0B50
-	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 10:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A516B1D0BBF
+	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 11:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730262AbgEMI5Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 May 2020 04:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
+        id S1731864AbgEMJT1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 May 2020 05:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728397AbgEMI5Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 04:57:25 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E17DC061A0C
-        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 01:57:25 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id g14so11303354wme.1
-        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 01:57:24 -0700 (PDT)
+        with ESMTP id S1730334AbgEMJT1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 05:19:27 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB684C061A0C
+        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 02:19:25 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id d184so7752914pfd.4
+        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 02:19:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=L3D5wbM4+UOmg5X3zyhaWbHPrhXUjtC7ABKOs6rc9yo=;
-        b=l5M7DQyeLT9ZtP2AGAsL3Bd2tnuVnla/JxC44sQIF4uXl5wHEwSa58d8aQ3P0/LoCt
-         ht/7aaRWkRXdvMqhnLMNz4J9ItKHZIAZEAmQAqtrHbtFWtKP5NPplaIH68AQbpaWIrbP
-         EEOGWgzFy120izmq5SavA0GscGogGocNzDjGwxUED/CCSzMP7GCkzWVeSbQYyJeQOMB7
-         AlU8TvnvoFCk37ygEzK9QfXc2yUkYx44PB0tGROMy088nWvW9VyvYKrDxmeQvrVR/oYY
-         x6JjT0XZAMuLUKF7FauiwGkcsEuE2RAc1r8iVWvx9KOA11BkyIYe9asE+9oNRESEpEGB
-         3xvQ==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=ehs8D/i0+/N1zCQQnkt7QFlvG4VVy6oBEc7nouR0tmY=;
+        b=U7RrZNoQeIk7iFUjq3G0vEI1LOlrSv4U/imLHjt9FIm1Ov6YlmeBLVf/ze4+y33Pkf
+         K4193qvdmsheOrMXl5kXArsi+8OGL8Ip+GizFfb1Cs0/2Z63oVofrjImitKRp8HKrc9X
+         BGbTFwf8llkzPpp61bpFYweZ1R8jrMeHtVp5Cy7Yoa8tngcx7gqo6Xj3vAUFnXETrbp+
+         bStYxdzJ074UUZUd4vXP3+jia0ZhlsrrB+rPAWg/rT8r6NIrACEFOp7KRsnlC+ESle/X
+         8bvG/HCv/kw2uc3jL/XBrUyWFrB+lNPgllkFVf+R+dqNyOadUXioXmWsMLSZCkIOM7vE
+         Xz5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L3D5wbM4+UOmg5X3zyhaWbHPrhXUjtC7ABKOs6rc9yo=;
-        b=AblwAKXy4wERD2RLMRh9ZNNh5Fw1crMGllFPx9zKjwNNVkh5OvnlCkEDK/rP9zmjMY
-         sWyaEbC3i6VmhWpEE6+G3O8nP/U33rYAazL8FE6DvjKkhDTm+TuuD94KjY3yNQpb+hwh
-         QXxyrm4UoctEW2wt1zMHavC7HDjQrNq6tAH4Wrw4dDdBcuepcAYwk7rvekGUSXgJzGsx
-         WbMofoEWDsV8sZGHkNZiImWjViheFdze5hnpL5H7stYI4hkDvi8DQeNurHtdK1LbCPTl
-         GoB+Mta8D07gWBH3QKUwxuVCaYCzuTyeQp75m2mEgPcQW5nLDNp9MxGBGGV6HDz+0tg6
-         JjLQ==
-X-Gm-Message-State: AGi0PuY6KheMvboF2lwaDUMEzX2ZYlPtZiYKG5jv5+sJ7rv9H9SeTg8t
-        Vlvzbg1UTxf2QcwM4yKBW7I2/O76P0I=
-X-Google-Smtp-Source: APiQypIIh+5TVT139VH+1iFKgejig/aRcQfdqcB/1OfJwTRe5B9kfraMOZX3g/i2i2aAqIIpIRB3/w==
-X-Received: by 2002:a1c:2e07:: with SMTP id u7mr41975477wmu.74.1589360243384;
-        Wed, 13 May 2020 01:57:23 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id 89sm26212772wrj.37.2020.05.13.01.57.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 01:57:22 -0700 (PDT)
-Date:   Wed, 13 May 2020 09:57:19 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     Joel Fernandes <joelaf@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Todd Kjos <tkjos@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>
-Subject: Re: [PATCH 00/14] Modularize schedutil
-Message-ID: <20200513085719.GA225140@google.com>
-References: <CAJZ5v0iaa_VCtN608QKTYZ-A6QG_7bwxihxSgoEGv1LcSK-ksA@mail.gmail.com>
- <20200511090049.GA229633@google.com>
- <CAJZ5v0jKMgFsR0dXDt4si5hT9QF2evaoMS-13y-Qde8UpcaARg@mail.gmail.com>
- <20200512092102.GA16151@google.com>
- <CAJZ5v0hm3Tv2yZKLzM9a+kJuB1V5_eFOEKT-uM318dzeKV3_Qw@mail.gmail.com>
- <20200512135813.GA101124@google.com>
- <CAJZ5v0hN708uvurZ-3oo90qUJFw3=Eg0OmtTaOKXQgNPXhCkFg@mail.gmail.com>
- <20200512151120.GB101124@google.com>
- <CAJZ5v0inoge=nWQtv-rU_ReQUMZA5w-PZXuSpHHj1UHn-S7aSA@mail.gmail.com>
- <CAJWu+oqVc16B8nf-317Yyf9befPsjBohfG=GOdoBZyuVz==bmQ@mail.gmail.com>
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=ehs8D/i0+/N1zCQQnkt7QFlvG4VVy6oBEc7nouR0tmY=;
+        b=hrUnnfmwPfKn0sXtukDme30rBOY32qAXjzv5Z5DFKOqZ1FIt7YrBNVaSxqS/wrrHX9
+         /myUhRQ7N1/HPnWTSLme/De9VdO+7QouVZCqfkjfjIaimdEKfAZlrnuXJXgPHWiJQYb5
+         JEYQ4JfHfgst68U42zGE+7tM+t1J1uFDEqHQHWIhPEH7n4chJRdV/t0mVEcY+dG8sU29
+         G6P9Ngf13J6LxEXgW8/7wozW6+h1nFZquqq6ZzmaV1EJWuNzKblS+x3yZNQltVxS1DYY
+         buviKPLAUADSk5IB6ZslTvXI6q+MlKsE0uDmGyMbbhCSNRWLy3pEgvnUpcsUI7jjywjg
+         +qdA==
+X-Gm-Message-State: AGi0PuYTyECTEFQhGzglf2AGHM7kN0GIZVlXktsdDwr2pDNbgT69bq0u
+        IzDfvbik5e0ig3WF/skE45ghiQ==
+X-Google-Smtp-Source: APiQypLgLAkqL1ozHiZiSu90p2A8clIUN0n+8N8AINYcwAggh+BQNt1I1LIS0u6/ksTVFtwXvIlarg==
+X-Received: by 2002:a62:15c5:: with SMTP id 188mr23636617pfv.66.1589361565252;
+        Wed, 13 May 2020 02:19:25 -0700 (PDT)
+Received: from localhost ([122.167.130.103])
+        by smtp.gmail.com with ESMTPSA id x13sm14738270pfq.154.2020.05.13.02.19.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 May 2020 02:19:24 -0700 (PDT)
+Date:   Wed, 13 May 2020 14:49:22 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mark Brown <broonie@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
+        Steven Price <steven.price@arm.com>
+Subject: Re: Question about OPP regulator for Panfrost Devfreq
+Message-ID: <20200513091922.qnpjx4kw2m3jv2ry@vireshk-i7>
+References: <CAJiuCce9ZxeXnQzEW_3dbBDNZmmtWmKeft0hX+F9+SYu80NU=Q@mail.gmail.com>
+ <20200511052530.iazkduojnba3abil@vireshk-i7>
+ <CAJiuCcfRmDbBxEms=HAFQhaiBTznEd1of3TOcnAAc2yuTq0XtA@mail.gmail.com>
+ <20200513054601.nvwsjhk6i4bjmgt7@vireshk-i7>
+ <CAJiuCccd+ycnmirL7chtMom0uqbQ8cX9VQf_ZAvhzTto9VSDbA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAJWu+oqVc16B8nf-317Yyf9befPsjBohfG=GOdoBZyuVz==bmQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJiuCccd+ycnmirL7chtMom0uqbQ8cX9VQf_ZAvhzTto9VSDbA@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Joel,
+On 13-05-20, 10:18, Clément Péron wrote:
+> Sorry,  my message was not clear, I was trying to see if there is a
+> way to fix exynos issue other than removing the regulator_enable().
+> I'm wondering if calling regulator_enable() on an reg which is
+> 'regulator-boot-on' declared will trigger this issue.
 
-On Tuesday 12 May 2020 at 11:49:32 (-0400), Joel Fernandes wrote:
-> Also, does this series make it easier for vendors / oems / whoever to
-> carry out-of-tree schedutil hacks saying that's "Ok" because that's
-> not part of the core GKI? That would definitely be a bad thing to
-> encourage as well. schedutil should pretty much be considered a part
-> of the core GKI if the goal is to encourage everyone to move to it,
-> IMO.
+Ahh, that's actually the real problem. Enabling the regulator which is
+already enabled by the boot loader has some side effects explained in
+the below thread and so the patch was quickly reverted after being
+applied.
 
-Sure, but I don't think the series makes it easier to carry out-of-tree
-stuff. Vendors will have the choice to load the governor they want. Some
-will use schedutil, some will use other upstream governors, and some will
-use their out of tree crap. And that is orthogonal to schedutil being a
-module or not.
+https://lkml.org/lkml/2019/10/8/459
 
-The only thing that will happen is that they will complain about GKI,
-and find examples of things like schedutil that is being forced on
-them. Realistically, having schedutil built-in is unlikely to change
-their mind about the governor they want to use, it is just likely to
-give them reasons not to do the right thing and be GKI compliant.
+> > What about doing runtime_pm_get/put() from the driver which should
+> > enable/disable all power related stuff for the device ?
 
-Thanks,
-Quentin
+Actually runtime_pm_get() may not affect the regulator, but just the
+pm domain.
+
+> I'm really not an expert on this but for what I understand I think
+> that removing the regulator_enable in the OPP framework to fix some
+> side-effects is not the proper fix.
+
+It was removed quickly after we added it. And everyone knew that it
+isn't the best fix possible :(
+
+> I wonder if we can get where the voltage is changed and why? Maybe
+> there is a proper fix like setting the required OPP voltage before
+> enabling the regulator or declaring the regulator as
+> 'regulator-boot-on'.
+
+I am not sure how to fix that problem, but ...
+
+@Mark: Regarding enabling/disabling regulators from the OPP core, what
+about skipping that only for the regulators that are enabled at boot,
+i.e. to avoid the issue we faced earlier, (by exporting a helper from
+regulator core for that first) and then applying this patch again: 
+
+https://lore.kernel.org/lkml/20191017102758.8104-1-m.szyprowski@samsung.com/
+
+-- 
+viresh
