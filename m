@@ -2,23 +2,20 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B88551D1E5D
-	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 20:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810631D1E61
+	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 20:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390374AbgEMS4e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 May 2020 14:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390370AbgEMS4d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 14:56:33 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B186FC061A0C;
-        Wed, 13 May 2020 11:56:33 -0700 (PDT)
+        id S2389946AbgEMS5y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 May 2020 14:57:54 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:51886 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390068AbgEMS4e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 14:56:34 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id E65ED2A27A9
+        with ESMTPSA id E38EE2A25D4
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 6C7E8480101; Wed, 13 May 2020 20:56:29 +0200 (CEST)
+        id 6F40C480102; Wed, 13 May 2020 20:56:29 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -27,9 +24,9 @@ To:     Sebastian Reichel <sre@kernel.org>,
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCHv1 03/19] power: supply: core: add manufacture date properties
-Date:   Wed, 13 May 2020 20:55:59 +0200
-Message-Id: <20200513185615.508236-4-sebastian.reichel@collabora.com>
+Subject: [PATCHv1 04/19] power: supply: core: add POWER_SUPPLY_HEALTH_CALIBRATION_REQUIRED
+Date:   Wed, 13 May 2020 20:56:00 +0200
+Message-Id: <20200513185615.508236-5-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200513185615.508236-1-sebastian.reichel@collabora.com>
 References: <20200513185615.508236-1-sebastian.reichel@collabora.com>
@@ -40,81 +37,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some smart batteries store their manufacture date, which is
-useful to identify the battery and/or to know about the cell
-quality.
+Some battery fuel gauges know when the battery needs to
+be recalibrated before providing usable values. This
+should be reported via the health property.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- Documentation/ABI/testing/sysfs-class-power | 28 +++++++++++++++++++++
- drivers/power/supply/power_supply_sysfs.c   |  3 +++
- include/linux/power_supply.h                |  3 +++
- 3 files changed, 34 insertions(+)
+ Documentation/ABI/testing/sysfs-class-power | 2 +-
+ drivers/power/supply/power_supply_sysfs.c   | 1 +
+ include/linux/power_supply.h                | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index 2f896555ae23..e6d7348766b2 100644
+index e6d7348766b2..216d61a22f1e 100644
 --- a/Documentation/ABI/testing/sysfs-class-power
 +++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -680,3 +680,31 @@ Description:
- 		Valid values:
- 		- 1: enabled
- 		- 0: disabled
-+
-+What:		/sys/class/power_supply/<supply_name>/manufacture_year
-+Date:		January 2020
-+Contact:	linux-pm@vger.kernel.org
-+Description:
-+		Reports the year (following Gregorian calendar) when the device has been
-+		manufactured.
-+
-+		Access: Read
-+		Valid values: Reported as integer
-+
-+What:		/sys/class/power_supply/<supply_name>/manufacture_month
-+Date:		January 2020
-+Contact:	linux-pm@vger.kernel.org
-+Description:
-+		Reports the month when the device has been manufactured.
-+
-+		Access: Read
-+		Valid values: 1-12
-+
-+What:		/sys/class/power_supply/<supply_name>/manufacture_day
-+Date:		January 2020
-+Contact:	linux-pm@vger.kernel.org
-+Description:
-+		Reports the day of month when the device has been manufactured.
-+
-+		Access: Read
-+		Valid values: 1-31
+@@ -205,7 +205,7 @@ Description:
+ 		Valid values: "Unknown", "Good", "Overheat", "Dead",
+ 			      "Over voltage", "Unspecified failure", "Cold",
+ 			      "Watchdog timer expire", "Safety timer expire",
+-			      "Over current"
++			      "Over current", "Calibration required"
+ 
+ What:		/sys/class/power_supply/<supply_name>/precharge_current
+ Date:		June 2017
 diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index e664774a2d1e..78d5382e69f1 100644
+index 78d5382e69f1..bc79560229b5 100644
 --- a/drivers/power/supply/power_supply_sysfs.c
 +++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -198,6 +198,9 @@ static struct power_supply_attr power_supply_attrs[] = {
- 	POWER_SUPPLY_ATTR(PRECHARGE_CURRENT),
- 	POWER_SUPPLY_ATTR(CHARGE_TERM_CURRENT),
- 	POWER_SUPPLY_ATTR(CALIBRATE),
-+	POWER_SUPPLY_ATTR(MANUFACTURE_YEAR),
-+	POWER_SUPPLY_ATTR(MANUFACTURE_MONTH),
-+	POWER_SUPPLY_ATTR(MANUFACTURE_DAY),
- 	/* Properties of type `const char *' */
- 	POWER_SUPPLY_ATTR(MODEL_NAME),
- 	POWER_SUPPLY_ATTR(MANUFACTURER),
+@@ -100,6 +100,7 @@ static const char * const POWER_SUPPLY_HEALTH_TEXT[] = {
+ 	[POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE] = "Watchdog timer expire",
+ 	[POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE]   = "Safety timer expire",
+ 	[POWER_SUPPLY_HEALTH_OVERCURRENT]	    = "Over current",
++	[POWER_SUPPLY_HEALTH_CALIBRATION_REQUIRED]  = "Calibration required",
+ };
+ 
+ static const char * const POWER_SUPPLY_TECHNOLOGY_TEXT[] = {
 diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 453a85f25635..63ffe2a0a87b 100644
+index 63ffe2a0a87b..ac1345a48ad0 100644
 --- a/include/linux/power_supply.h
 +++ b/include/linux/power_supply.h
-@@ -159,6 +159,9 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
- 	POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
- 	POWER_SUPPLY_PROP_CALIBRATE,
-+	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
-+	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
-+	POWER_SUPPLY_PROP_MANUFACTURE_DAY,
- 	/* Properties of type `const char *' */
- 	POWER_SUPPLY_PROP_MODEL_NAME,
- 	POWER_SUPPLY_PROP_MANUFACTURER,
+@@ -61,6 +61,7 @@ enum {
+ 	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
+ 	POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE,
+ 	POWER_SUPPLY_HEALTH_OVERCURRENT,
++	POWER_SUPPLY_HEALTH_CALIBRATION_REQUIRED,
+ };
+ 
+ enum {
 -- 
 2.26.2
 
