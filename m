@@ -2,119 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A516B1D0BBF
-	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 11:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24311D0C7C
+	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 11:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731864AbgEMJT1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 May 2020 05:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        id S1726891AbgEMJlY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 May 2020 05:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730334AbgEMJT1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 05:19:27 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB684C061A0C
-        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 02:19:25 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id d184so7752914pfd.4
-        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 02:19:25 -0700 (PDT)
+        with ESMTP id S1726645AbgEMJlX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 05:41:23 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8820CC061A0C
+        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 02:41:23 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id f134so13650832wmf.1
+        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 02:41:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=ehs8D/i0+/N1zCQQnkt7QFlvG4VVy6oBEc7nouR0tmY=;
-        b=U7RrZNoQeIk7iFUjq3G0vEI1LOlrSv4U/imLHjt9FIm1Ov6YlmeBLVf/ze4+y33Pkf
-         K4193qvdmsheOrMXl5kXArsi+8OGL8Ip+GizFfb1Cs0/2Z63oVofrjImitKRp8HKrc9X
-         BGbTFwf8llkzPpp61bpFYweZ1R8jrMeHtVp5Cy7Yoa8tngcx7gqo6Xj3vAUFnXETrbp+
-         bStYxdzJ074UUZUd4vXP3+jia0ZhlsrrB+rPAWg/rT8r6NIrACEFOp7KRsnlC+ESle/X
-         8bvG/HCv/kw2uc3jL/XBrUyWFrB+lNPgllkFVf+R+dqNyOadUXioXmWsMLSZCkIOM7vE
-         Xz5w==
+         :content-disposition:in-reply-to;
+        bh=NJBGaruknTCLtKKJk9/NPgVcIhnHRN5HOgLiTidMfps=;
+        b=nbtBTs6Xx54r3xi5mFEcv4se2zQfkJy0cQh1tbJCIw8IoMzRCEr0oal1hCN8wgjJwG
+         XJfDbD6yCAuuqlDeI7Ry1xErq+ap5T/xl3ude7Kf8KxrPAOkKt0I7tT+gue0xmLf03UW
+         T7e5+LBwZVFtpdt1QkXQGwAyCQ8X7HkI6BligttJ82dncMKxLO6r9/fNTKcYJySDfwIR
+         cRgHstp7X6H5NMznogdlwx1FUvoY9Ns4+KsmIXMTxizqrvkKIOMTkvUTVZDFaCJS2IkP
+         yWiL85KWNcfvxM1s/c5bZSWwd3Y9ECI1Dc8APHKOiNg4ZliFiPwgPuftVHjIxUzlFmWi
+         npSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=ehs8D/i0+/N1zCQQnkt7QFlvG4VVy6oBEc7nouR0tmY=;
-        b=hrUnnfmwPfKn0sXtukDme30rBOY32qAXjzv5Z5DFKOqZ1FIt7YrBNVaSxqS/wrrHX9
-         /myUhRQ7N1/HPnWTSLme/De9VdO+7QouVZCqfkjfjIaimdEKfAZlrnuXJXgPHWiJQYb5
-         JEYQ4JfHfgst68U42zGE+7tM+t1J1uFDEqHQHWIhPEH7n4chJRdV/t0mVEcY+dG8sU29
-         G6P9Ngf13J6LxEXgW8/7wozW6+h1nFZquqq6ZzmaV1EJWuNzKblS+x3yZNQltVxS1DYY
-         buviKPLAUADSk5IB6ZslTvXI6q+MlKsE0uDmGyMbbhCSNRWLy3pEgvnUpcsUI7jjywjg
-         +qdA==
-X-Gm-Message-State: AGi0PuYTyECTEFQhGzglf2AGHM7kN0GIZVlXktsdDwr2pDNbgT69bq0u
-        IzDfvbik5e0ig3WF/skE45ghiQ==
-X-Google-Smtp-Source: APiQypLgLAkqL1ozHiZiSu90p2A8clIUN0n+8N8AINYcwAggh+BQNt1I1LIS0u6/ksTVFtwXvIlarg==
-X-Received: by 2002:a62:15c5:: with SMTP id 188mr23636617pfv.66.1589361565252;
-        Wed, 13 May 2020 02:19:25 -0700 (PDT)
-Received: from localhost ([122.167.130.103])
-        by smtp.gmail.com with ESMTPSA id x13sm14738270pfq.154.2020.05.13.02.19.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 13 May 2020 02:19:24 -0700 (PDT)
-Date:   Wed, 13 May 2020 14:49:22 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mark Brown <broonie@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
-        Steven Price <steven.price@arm.com>
-Subject: Re: Question about OPP regulator for Panfrost Devfreq
-Message-ID: <20200513091922.qnpjx4kw2m3jv2ry@vireshk-i7>
-References: <CAJiuCce9ZxeXnQzEW_3dbBDNZmmtWmKeft0hX+F9+SYu80NU=Q@mail.gmail.com>
- <20200511052530.iazkduojnba3abil@vireshk-i7>
- <CAJiuCcfRmDbBxEms=HAFQhaiBTznEd1of3TOcnAAc2yuTq0XtA@mail.gmail.com>
- <20200513054601.nvwsjhk6i4bjmgt7@vireshk-i7>
- <CAJiuCccd+ycnmirL7chtMom0uqbQ8cX9VQf_ZAvhzTto9VSDbA@mail.gmail.com>
+         :mime-version:content-disposition:in-reply-to;
+        bh=NJBGaruknTCLtKKJk9/NPgVcIhnHRN5HOgLiTidMfps=;
+        b=k2DXWDcz+GCn/FZCqO/tvj+/3Rnz1W50IxagSyRDpTymdT+DumB7/VUL2oGZGKgOJS
+         Meg+oLg86Et7AyzYtdBAR5vJEt3vITKJjGWipuoyzK1bpP2r6M+11Febs/klSGNYodfV
+         KKTFhounAiVZF6XOK17cGbVLvFFT+LPSuaVRCUaG1rDHy0U3qFi0TuRpjOJWJYH0aBKe
+         6uE0oPuCo8CAlpI3sAR265KSk7GKtUdQb5MVEFRb8n8lsZofGN5h+iGhMJ0+C5Iejp9I
+         q8xEq68H7AJ8jlyj7QPJgBCXFE1ZbXZUipwwcRxCPUd5QQ+MlIpqfAxJAWGudM5gUGTP
+         lPng==
+X-Gm-Message-State: AOAM530uuXm/UmOwtkBS/I5XS3oQhRYRmsbSqsG002efaLog/HcGslvQ
+        7u84sC3zjadmPaTN4VyV6E/X7g==
+X-Google-Smtp-Source: ABdhPJxIzSvxktEk0dfkDZAgXrtWIO1vC88KrHWFh9dWQyFJ4zAsOGcxznMe+hx/MAUnWP+KEEw9nQ==
+X-Received: by 2002:a1c:6245:: with SMTP id w66mr7104946wmb.33.1589362881903;
+        Wed, 13 May 2020 02:41:21 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
+        by smtp.gmail.com with ESMTPSA id x24sm28184249wrd.51.2020.05.13.02.41.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 May 2020 02:41:20 -0700 (PDT)
+Date:   Wed, 13 May 2020 10:41:17 +0100
+From:   Quentin Perret <qperret@google.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Todd Kjos <tkjos@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Subject: Re: [PATCH 00/14] Modularize schedutil
+Message-ID: <20200513094117.GB225140@google.com>
+References: <20200511090049.GA229633@google.com>
+ <CAJZ5v0jKMgFsR0dXDt4si5hT9QF2evaoMS-13y-Qde8UpcaARg@mail.gmail.com>
+ <20200512092102.GA16151@google.com>
+ <CAJZ5v0hm3Tv2yZKLzM9a+kJuB1V5_eFOEKT-uM318dzeKV3_Qw@mail.gmail.com>
+ <20200512135813.GA101124@google.com>
+ <CAJZ5v0hN708uvurZ-3oo90qUJFw3=Eg0OmtTaOKXQgNPXhCkFg@mail.gmail.com>
+ <20200512151120.GB101124@google.com>
+ <CAJZ5v0inoge=nWQtv-rU_ReQUMZA5w-PZXuSpHHj1UHn-S7aSA@mail.gmail.com>
+ <20200512162630.GC101124@google.com>
+ <CAJZ5v0ges4=e2HkHpVk4E1yF1VsBm9H5noqMz-MxX9DK_kt6Xg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJiuCccd+ycnmirL7chtMom0uqbQ8cX9VQf_ZAvhzTto9VSDbA@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <CAJZ5v0ges4=e2HkHpVk4E1yF1VsBm9H5noqMz-MxX9DK_kt6Xg@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13-05-20, 10:18, Clément Péron wrote:
-> Sorry,  my message was not clear, I was trying to see if there is a
-> way to fix exynos issue other than removing the regulator_enable().
-> I'm wondering if calling regulator_enable() on an reg which is
-> 'regulator-boot-on' declared will trigger this issue.
+Hi Rafael,
 
-Ahh, that's actually the real problem. Enabling the regulator which is
-already enabled by the boot loader has some side effects explained in
-the below thread and so the patch was quickly reverted after being
-applied.
+On Tuesday 12 May 2020 at 19:30:52 (+0200), Rafael J. Wysocki wrote:
+> I don't see any technical reason for making schedutil modular in the
+> context of GKI other than to make the GKI image smaller, but I don't
+> expect that to be significant enough.
 
-https://lkml.org/lkml/2019/10/8/459
+The fact that we can make the image smaller, and we give vendors one
+less reason to not-want GKI _is_ desirable IMO.
 
-> > What about doing runtime_pm_get/put() from the driver which should
-> > enable/disable all power related stuff for the device ?
+  $ size vmlinux.*
+     text	   data	    bss	    dec	    hex	filename
+  19225963	9601976	 491084	29319023	1bf5f6f	vmlinux.after
+  19230599	9603236	 491084	29324919	1bf7677	vmlinux.before
 
-Actually runtime_pm_get() may not affect the regulator, but just the
-pm domain.
+^ that's with the series applied. 'before' means sugov is =y, and
+'after' is sugov =m. So modularizing saves just over 4K on text, and a
+bit of data too. Is it significant? Maybe not. But it's quite likely
+that those who don't use schedutil will find any unnecessary byte to be
+one too many.
 
-> I'm really not an expert on this but for what I understand I think
-> that removing the regulator_enable in the OPP framework to fix some
-> side-effects is not the proper fix.
+I just checked the size of modules in the default arm64 defconfig, and
+the median is ~4K of text. The average is a little bigger, but mostly
+because of a small number of really large modules (nouveau being the
+prime the example). So all in all, the sugov module is not particularly
+small by comparison with other things that have been modularized. A lot
+of small things can lead to significant savings at the end.
 
-It was removed quickly after we added it. And everyone knew that it
-isn't the best fix possible :(
-
-> I wonder if we can get where the voltage is changed and why? Maybe
-> there is a proper fix like setting the required OPP voltage before
-> enabling the regulator or declaring the regulator as
-> 'regulator-boot-on'.
-
-I am not sure how to fix that problem, but ...
-
-@Mark: Regarding enabling/disabling regulators from the OPP core, what
-about skipping that only for the regulators that are enabled at boot,
-i.e. to avoid the issue we faced earlier, (by exporting a helper from
-regulator core for that first) and then applying this patch again: 
-
-https://lore.kernel.org/lkml/20191017102758.8104-1-m.szyprowski@samsung.com/
-
--- 
-viresh
+Thanks,
+Quentin
