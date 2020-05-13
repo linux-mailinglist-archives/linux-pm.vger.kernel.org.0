@@ -2,71 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35DC31D0472
-	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 03:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD85E1D04B2
+	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 04:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731298AbgEMBmn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 May 2020 21:42:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39944 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728313AbgEMBmm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 12 May 2020 21:42:42 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 55F3C206B7;
-        Wed, 13 May 2020 01:42:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589334162;
-        bh=UUe8Ow1eaBCAZdT0NORukKFKzcce3xKtVcZKNHDEJfc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=H5DlGW5P9dgx82cPu99375mFApJpuS5528wGS/tB7C+vkQ8+pgq8bPeAPY09/HAIZ
-         YTzDr3ALvEdj15f0kAZAkSpioDGRurgHdsJu/ktrQzXkzsZvImPTnAdi3RbAUDYdeA
-         VHCtBvid7Bzc8WYg+62O5X1W7f/9kRhpDLF24UZ0=
-Subject: Re: [PATCH -next] cpupower: Remove unneeded semicolon
-To:     Samuel Zou <zou_wei@huawei.com>, trenn@suse.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah <shuah@kernel.org>
-References: <1588066995-71840-1-git-send-email-zou_wei@huawei.com>
- <a51e2f2b-3381-bd5d-9599-0f291520b272@kernel.org>
- <1d1333ae-6d7f-a456-567b-34852270000b@huawei.com>
- <932d9e24-43d3-4c31-1401-ffa930d96582@kernel.org>
-From:   shuah <shuah@kernel.org>
-Message-ID: <10644e99-9ac4-b7e6-334e-417a8d14c7f9@kernel.org>
-Date:   Tue, 12 May 2020 19:42:21 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1727792AbgEMCQ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 May 2020 22:16:58 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36084 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726885AbgEMCQ6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 May 2020 22:16:58 -0400
+Received: by mail-ot1-f66.google.com with SMTP id t3so12234100otp.3;
+        Tue, 12 May 2020 19:16:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=a2wqEiR2YO61/IM28RCF3k1La3GOe9RC7Vyta+XxUIs=;
+        b=G3byAfV6OKO/eomHZKMG1s+l+Y9nS/419iAg+zq+C9co0zqosDk3pOG5cuHemuQV/x
+         oLd9l+mpC5/urRI9Nj2qw3X0U/qnBOHaZT2MfIMl7ESsNdPVSNoibMTCog0cZGD57CCr
+         Y3zNHffpvQrYAnmc+afDXNIUWx3id8I5oRWX6chl6UkvBAarEbV06PYRO+gLoN9Bu8Pl
+         vDAoUXi2djm+l941J/cUDn0bNG8mvjP9eNncqpIInKqWLLf9/EhFwUfSOf6rQEanVAvb
+         8bVgDb+i/WAqkBiBe91l06TC4NHrNcCQG9uDiNPQkYkWvD36M2BzYSshzoDnOeO5dnAA
+         Ux6A==
+X-Gm-Message-State: AGi0PubmxjWU7nT/pIR5jc5xaZEYnFJxk1rrqJsTJ0EjRJUl7+JoXjPe
+        /ZXUEJOgmDtrutoXqsuoBQ==
+X-Google-Smtp-Source: APiQypKRTpQwgp+rBKDYfr3vpom+3FfInuZDYIisAS2nc0jQdulhFvoyzkUjMKXdHprWZ80vJXQQuA==
+X-Received: by 2002:a9d:7a8a:: with SMTP id l10mr18385009otn.302.1589336217276;
+        Tue, 12 May 2020 19:16:57 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id q68sm1400827ooa.29.2020.05.12.19.16.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2020 19:16:56 -0700 (PDT)
+Received: (nullmailer pid 9003 invoked by uid 1000);
+        Wed, 13 May 2020 02:16:55 -0000
+Date:   Tue, 12 May 2020 21:16:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jonathan Bakker <xc-racer2@live.ca>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        sre@kernel.org, linux-pm@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: power: supply: Document
+ maxim,rcomp-value for max17040
+Message-ID: <20200513021655.GA8915@bogus>
+References: <20200504221300.3153-1-xc-racer2@live.ca>
+ <BN6PR04MB0660F4D09451AE8F1DB284D3A3A60@BN6PR04MB0660.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <932d9e24-43d3-4c31-1401-ffa930d96582@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN6PR04MB0660F4D09451AE8F1DB284D3A3A60@BN6PR04MB0660.namprd04.prod.outlook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/6/20 10:09 AM, shuah wrote:
-> On 5/5/20 6:52 PM, Samuel Zou wrote:
->> Hi Shuah,
->>
->> I run with the below command, and get the output report.
->>
->> [local-host linux-next]# make coccicheck MODE=report 
->> M=tools/power/cpupower/utils
->>
+On Mon,  4 May 2020 15:12:59 -0700, Jonathan Bakker wrote:
+> The rcomp value is a device-specific value for configuration based
+> on specific chemistries.  There is no public documentation on how
+> to tune it.
 > 
-> Yes this is the command I am using as well. I don't see the errors
-> you are seeing. What is the difference?
+> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+> ---
+>  .../devicetree/bindings/power/supply/max17040_battery.txt      | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
 
-I figured out what's going on. The coccinelle package from the distro
-was the problem. I ended up installing coccinelle_1.0.8.deb-2_amd64.deb
-from https://packages.debian.org/sid/amd64/coccinelle/download
-
-After fixing that problem, it all works now.
-
-I see the same errors you are seeing.
-
-thanks,
--- Shuah
+Acked-by: Rob Herring <robh@kernel.org>
