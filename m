@@ -2,105 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0521D0F4E
-	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 12:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4E91D0F64
+	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 12:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388638AbgEMKGT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 May 2020 06:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S1732913AbgEMKKn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 May 2020 06:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388602AbgEMKGR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 06:06:17 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A59C061A0E
-        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 03:06:17 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id u16so27776107wmc.5
-        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 03:06:17 -0700 (PDT)
+        with ESMTP id S1732674AbgEMKKl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 06:10:41 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A26C061A0E
+        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 03:10:40 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id g12so27800810wmh.3
+        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 03:10:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zU0nB1Ip8ux85FhZzaXr4w0z8K5MqsOQGnZo4jaAbog=;
-        b=SszF5JPW3fDKq2WXZ39nc9lt5EoRcBFOKEf7uZel3MJNBA0J7xDYyepZ0GB8YN2VoX
-         FyQ3Hp7xbElnfZvb8GtdVWbJQPOtnErTX233RRP744Q6VTMBlG5q+eucT4uCUWIVMPj4
-         zFa9/+WUYlcsh/gG1hOn36HQj6yk2mZCB48BqGFRztVd07biYqlPpAnxXb8dZpJCiToO
-         VfemMFAHmSwm4hoUFOxJZj2mDlBuZ9fUAqgFkFsiXIolgtHnzH0A8/jBI0hhedCfa1/f
-         H7CvfWcHTM+6t7cekF9kiPFDTq0eoRIuN0VsDfnsJRdF0WSZkZhmcAMUgr/0ndRe5Jrp
-         eRag==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HLNFbZ1pUXdpUu4uIHgZes4VhXZ3ubFdB8i3YmL6eQg=;
+        b=gMQBgdnIMWxdQ281X69UXFiONU35q6BA2601uQGUEHpjqLi5V8HCyK4H8zFwxayomQ
+         mJpAUrqL+E6M2zRhA3+ynOOKjOizz6VUdlyEjDsC3H1hftoopwObOU/bKxJX8xZxd6Di
+         ndY+GQzvG94Aodppqte8cBTfQdV1crDDfSZkLq2IJIs0Rq7Pp1PcFUiUSgKBcoMzbTup
+         A8J9ZJBzof9t6+H6X2OqlDZ2o/4ZL8y4/0cphFHirWpT1mmh79OxCeKN87cMHnMZ7DPP
+         9B+K2b6BX4nLVlXlCVKPPHUV70yAkyIJrkGnOhyEg5Cn8ROoSGsz/dixpXEB7FBOKTu+
+         ZU3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zU0nB1Ip8ux85FhZzaXr4w0z8K5MqsOQGnZo4jaAbog=;
-        b=LthL6mKFHqzL2qCNWBGkVxaL+ZHdrdaBKR1I9uIqkjuB0fF9yEAHXJQpOw/+uFCsSP
-         h5cCkJOBux+FYwFxRhrVg9BjFfB63ufA4Jayio6//a+dlWeQN6yRQ9N7hRthlVSgFjky
-         RTVJdrgB6Iq8hl6MsakMl66rJ1TH5/vdsPqdKM4bUyRCxj3BfshWJMeqPLUctOsDyVZr
-         5nE4aR4v95pRp4VpepI99xpcvGtX+MuKS87Gd19BeoVOg8LILtdlofWFhdWeEfP2NsVd
-         orOoDlw6h/hLKz7jCKkU3HjK8GXqlrJv9rX+T0jNp7Jd7Zp+bBYpItbbMh95afgwp03X
-         b67A==
-X-Gm-Message-State: AGi0PuayombAo8auJlUqkK2yjPvMY17hkVp6sAyKZKdn9QPDZp6erzMv
-        ajRi7X5QCs1/yF2f2/UE2G11IA==
-X-Google-Smtp-Source: APiQypK2RUITynpf031+51+fINLm92xUpyiGpfNAzJn9+fcZDpMYpGn6iHsaty4IHIxjBH6P5sq3fA==
-X-Received: by 2002:a05:600c:21c1:: with SMTP id x1mr12590358wmj.173.1589364375719;
-        Wed, 13 May 2020 03:06:15 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id l13sm10335380wrm.55.2020.05.13.03.06.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 03:06:15 -0700 (PDT)
-Date:   Wed, 13 May 2020 11:06:11 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Todd Kjos <tkjos@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>
-Subject: Re: [PATCH 00/14] Modularize schedutil
-Message-ID: <20200513100611.GA168476@google.com>
-References: <20200512092102.GA16151@google.com>
- <CAJZ5v0hm3Tv2yZKLzM9a+kJuB1V5_eFOEKT-uM318dzeKV3_Qw@mail.gmail.com>
- <20200512135813.GA101124@google.com>
- <CAJZ5v0hN708uvurZ-3oo90qUJFw3=Eg0OmtTaOKXQgNPXhCkFg@mail.gmail.com>
- <20200512151120.GB101124@google.com>
- <CAJZ5v0inoge=nWQtv-rU_ReQUMZA5w-PZXuSpHHj1UHn-S7aSA@mail.gmail.com>
- <20200512162630.GC101124@google.com>
- <CAJZ5v0ges4=e2HkHpVk4E1yF1VsBm9H5noqMz-MxX9DK_kt6Xg@mail.gmail.com>
- <20200513094117.GB225140@google.com>
- <20200513100213.GA868852@kroah.com>
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HLNFbZ1pUXdpUu4uIHgZes4VhXZ3ubFdB8i3YmL6eQg=;
+        b=DozmyGNafyLbVfpl6IsE2gI7HCDuTy2BJpgy18VwOuj6eoukOUgMXCp6bISsVHzyN6
+         jZYDzxJPzOx29NtklgX+koD8hWFFenKs3Q2iPEacKO/Lz3aBotXo1ZVsMbLiDsv6W05p
+         rS2ZR6GCobeWCJM4iR7eUVIjf/9PCoEb9OHUdt7vkpuEswO2lxI/jSD/OXe3YCIodkM0
+         8i7B3WP6kCE5x7FIBJBFs/7k95GfR+3gXEN23s4pvxnKj7sTXjxQBdIJ3Z1Pheztvj8h
+         wFbo/hS3bQZpM0RA8fj+cMDUVSquOmRyAOIqVhtL2FmzU7T4EyQSSwI7UrvK18rsdmuw
+         nvBw==
+X-Gm-Message-State: AGi0PuZyj2TgYf5LpbiAipd1jmhD3p20yi+/wLecjdVODqOvL1wQovBY
+        epqJMI6pRU1RV7wT09I/hHcNRQ==
+X-Google-Smtp-Source: APiQypIYdTSZJe3Y4e3+lnSSbtwf1K8offweIlDZGjyZHvtGvqNlYAe+bH5LnVDK5Hv8ivjuh+nPcA==
+X-Received: by 2002:a1c:1f0d:: with SMTP id f13mr16463240wmf.184.1589364639220;
+        Wed, 13 May 2020 03:10:39 -0700 (PDT)
+Received: from [192.168.43.249] (212-39-89-233.ip.btc-net.bg. [212.39.89.233])
+        by smtp.googlemail.com with ESMTPSA id m7sm12180941wmc.40.2020.05.13.03.10.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 May 2020 03:10:38 -0700 (PDT)
+Subject: Re: [PATCH v8 00/10] Introduce OPP bandwidth bindings
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, rjw@rjwysocki.net,
+        saravanak@google.com, sibis@codeaurora.org, mka@chromium.org,
+        robh+dt@kernel.org, rnayak@codeaurora.org,
+        bjorn.andersson@linaro.org, vincent.guittot@linaro.org,
+        jcrouse@codeaurora.org, evgreen@chromium.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200512125327.1868-1-georgi.djakov@linaro.org>
+ <20200513065559.wznvqc7tzvmv3ghy@vireshk-i7>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+ KEmKjLDvB0pePJkdTw==
+Message-ID: <ea73d0e7-7428-c3cf-b44b-59427c4d6109@linaro.org>
+Date:   Wed, 13 May 2020 13:10:29 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200513100213.GA868852@kroah.com>
+In-Reply-To: <20200513065559.wznvqc7tzvmv3ghy@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday 13 May 2020 at 12:02:13 (+0200), Greg KH wrote:
-> It's not significant at all, just always build it in, no one will notice
-> it, it's just a page or two.  Serial port drivers are way bigger :)
+Hi Viresh,
 
-Alright, I give up :)
+On 5/13/20 09:55, Viresh Kumar wrote:
+> On 12-05-20, 15:53, Georgi Djakov wrote:
+>> Here is a proposal to extend the OPP bindings with bandwidth based on
+>> a few previous discussions [1] and patchsets from me [2][3] and Saravana
+>> [4][5][6][7][8][9].
+>>
+>> Changes in v8:
+>> * Addressed review comments from Matthias, Sibi and Viresh.
+>> * Picked reviewed-by tags.
+>> * Picked Sibi's interconnect-tag patches into this patchset.
+> 
+> I have applied the series with the modifications I replied with
+> separately.
 
-When partners will complain (and I think they will) I'll point them here
-and say we tried ;)
+Thanks a lot!
 
-Cheers,
-Quentin
+> Please lemme know if any more tags (reviewed/acked) etc need to be
+> applied or any more changes are required before I send the pull
+> request to Rafael.
+> 
+> Please give my branch a try as soon as you can.
+
+On top of your branch i tested with scaling 3 different test paths (also
+tagged with different tags) and it looks good:
+
+ node                                  tag          avg         peak
+--------------------------------------------------------------------
+slv_ebi_ch0                                      458824      1525000
+  cpu0                                   3          922          911
+  cpu0                                   2          902          901
+  cpu0                                   1       457000      1525000
+
+Apart from that, i ran memory throughput tests and they also confirm
+that it's working as expected.
+
+There will be a minor conflict with my branch when this is merged upstream,
+so maybe we will need to report it or use an immutable tag/branch.
+
+Thanks,
+Georgi
