@@ -2,23 +2,20 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9281D1D1E4D
-	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 20:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231B21D1E41
+	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 20:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390533AbgEMS5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 May 2020 14:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390394AbgEMS4g (ORCPT
+        id S2390494AbgEMS5K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 May 2020 14:57:10 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:51916 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390383AbgEMS4g (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 14:56:36 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE64C05BD09;
-        Wed, 13 May 2020 11:56:35 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 4D5722A2521
+        with ESMTPSA id 4FD212A28AB
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 777C3480105; Wed, 13 May 2020 20:56:29 +0200 (CEST)
+        id 7AAD6480106; Wed, 13 May 2020 20:56:29 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -27,9 +24,9 @@ To:     Sebastian Reichel <sre@kernel.org>,
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCHv1 07/19] power: supply: sbs-battery: simplify read_read_string_data
-Date:   Wed, 13 May 2020 20:56:03 +0200
-Message-Id: <20200513185615.508236-8-sebastian.reichel@collabora.com>
+Subject: [PATCHv1 08/19] power: supply: sbs-battery: add PEC support
+Date:   Wed, 13 May 2020 20:56:04 +0200
+Message-Id: <20200513185615.508236-9-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200513185615.508236-1-sebastian.reichel@collabora.com>
 References: <20200513185615.508236-1-sebastian.reichel@collabora.com>
@@ -40,120 +37,128 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The SBS battery implements SMBus block reads. Currently the
-driver "emulates" this by doing an I2C byte read for the
-length followed by an I2C block read. The I2C subsystem
-actually provides a proper API for doing SMBus block reads,
-which can and should be used instead. The current implementation
-does not properly handle packet error checking (PEC).
-
-This change requires, that I2C bus drivers support I2C_M_RECV_LEN
-or directly provide the SMBus API to access device manufacturer
-and model name.
+SBS batteries optionally have support for PEC. This enables
+PEC handling based on the implemented SBS version as suggested
+by the standard. The support for PEC is re-evaluated when the
+battery is hotplugged into the system, since there might be
+systems supporting batteries from different SBS generations.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/power/supply/sbs-battery.c | 65 ++++++------------------------
- 1 file changed, 12 insertions(+), 53 deletions(-)
+ drivers/power/supply/sbs-battery.c | 72 ++++++++++++++++++++++++++++--
+ 1 file changed, 69 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index 4356fdf25d4a..a9a1d28dabbe 100644
+index a9a1d28dabbe..ab774d491269 100644
 --- a/drivers/power/supply/sbs-battery.c
 +++ b/drivers/power/supply/sbs-battery.c
-@@ -202,66 +202,32 @@ static int sbs_read_string_data(struct i2c_client *client, u8 address,
- 				char *values)
- {
- 	struct sbs_info *chip = i2c_get_clientdata(client);
--	s32 ret = 0, block_length = 0;
--	int retries_length, retries_block;
--	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
--
--	retries_length = chip->i2c_retry_count;
--	retries_block = chip->i2c_retry_count;
+@@ -46,6 +46,14 @@ enum {
+ 	REG_MODEL_NAME,
+ };
+ 
++#define REG_ADDR_SPEC_INFO		0x1A
++#define SPEC_INFO_VERSION_MASK		GENMASK(7, 4)
++#define SPEC_INFO_VERSION_SHIFT		4
++
++#define SBS_VERSION_1_0			1
++#define SBS_VERSION_1_1			2
++#define SBS_VERSION_1_1_WITH_PEC	3
++
+ /* Battery Mode defines */
+ #define BATTERY_MODE_OFFSET		0x03
+ #define BATTERY_MODE_CAPACITY_MASK	BIT(15)
+@@ -175,6 +183,64 @@ static char model_name[I2C_SMBUS_BLOCK_MAX + 1];
+ static char manufacturer[I2C_SMBUS_BLOCK_MAX + 1];
+ static bool force_load;
+ 
++static int sbs_update_presence(struct sbs_info *chip, bool is_present)
++{
++	struct i2c_client *client = chip->client;
 +	int retries = chip->i2c_retry_count;
 +	s32 ret = 0;
- 
--	/* Adapter needs to support these two functions */
- 	if (!i2c_check_functionality(client->adapter,
--				     I2C_FUNC_SMBUS_BYTE_DATA |
--				     I2C_FUNC_SMBUS_I2C_BLOCK)){
-+				     I2C_FUNC_SMBUS_READ_BLOCK_DATA)) {
- 		return -ENODEV;
- 	}
- 
--	/* Get the length of block data */
--	while (retries_length > 0) {
--		ret = i2c_smbus_read_byte_data(client, address);
--		if (ret >= 0)
--			break;
--		retries_length--;
--	}
--
--	if (ret < 0) {
--		dev_dbg(&client->dev,
--			"%s: i2c read at address 0x%x failed\n",
--			__func__, address);
--		return ret;
--	}
--
--	/* block_length does not include NULL terminator */
--	block_length = ret;
--	if (block_length > I2C_SMBUS_BLOCK_MAX) {
--		dev_err(&client->dev,
--			"%s: Returned block_length is longer than 0x%x\n",
--			__func__, I2C_SMBUS_BLOCK_MAX);
--		return -EINVAL;
--	}
--
- 	/* Get the block data */
--	while (retries_block > 0) {
--		ret = i2c_smbus_read_i2c_block_data(
--				client, address,
--				block_length + 1, block_buffer);
++	u8 version;
++
++	if (chip->is_present == is_present)
++		return 0;
++
++	if (!is_present) {
++		chip->is_present = false;
++		/* Disable PEC when no device is present */
++		client->flags &= ~I2C_CLIENT_PEC;
++		return 0;
++	}
++
++	/* Check if device supports packet error checking and use it */
 +	while (retries > 0) {
-+		ret = i2c_smbus_read_block_data(client, address, values);
- 		if (ret >= 0)
- 			break;
--		retries_block--;
++		ret = i2c_smbus_read_word_data(client, REG_ADDR_SPEC_INFO);
++		if (ret >= 0)
++			break;
++
++		/*
++		 * Some batteries trigger the detection pin before the
++		 * I2C bus is properly connected. This works around the
++		 * issue.
++		 */
++		msleep(100);
++
 +		retries--;
- 	}
- 
- 	if (ret < 0) {
--		dev_dbg(&client->dev,
--			"%s: i2c read at address 0x%x failed\n",
--			__func__, address);
-+		dev_dbg(&client->dev, "%s: failed to read block 0x%x: %d\n",
-+			__func__, address, ret);
- 		return ret;
- 	}
- 
--	/* block_buffer[0] == block_length */
--	memcpy(values, block_buffer + 1, block_length);
--	values[block_length] = '\0';
-+	/* add string termination */
-+	values[ret] = '\0';
- 
--	return ret;
++	}
++
++	if (ret < 0) {
++		dev_dbg(&client->dev, "failed to read spec info: %d\n", ret);
++
++		/* fallback to old behaviour */
++		client->flags &= ~I2C_CLIENT_PEC;
++		chip->is_present = true;
++
++		return ret;
++	}
++
++	version = (ret & SPEC_INFO_VERSION_MASK) >> SPEC_INFO_VERSION_SHIFT;
++
++	if (version == SBS_VERSION_1_1_WITH_PEC)
++		client->flags |= I2C_CLIENT_PEC;
++	else
++		client->flags &= ~I2C_CLIENT_PEC;
++
++	dev_dbg(&client->dev, "PEC: %s\n", (client->flags & I2C_CLIENT_PEC) ?
++		"enabled" : "disabled");
++
++	chip->is_present = true;
++
 +	return 0;
- }
- 
- static int sbs_write_word_data(struct i2c_client *client, u8 address,
-@@ -465,14 +431,7 @@ static int sbs_get_battery_property(struct i2c_client *client,
- static int sbs_get_battery_string_property(struct i2c_client *client,
- 	int reg_offset, enum power_supply_property psp, char *val)
++}
++
+ static int sbs_read_word_data(struct i2c_client *client, u8 address)
  {
--	s32 ret;
--
--	ret = sbs_read_string_data(client, sbs_data[reg_offset].addr, val);
--
--	if (ret < 0)
--		return ret;
--
--	return 0;
-+	return sbs_read_string_data(client, sbs_data[reg_offset].addr, val);
+ 	struct sbs_info *chip = i2c_get_clientdata(client);
+@@ -579,7 +645,7 @@ static int sbs_get_property(struct power_supply *psy,
+ 			return ret;
+ 		if (psp == POWER_SUPPLY_PROP_PRESENT) {
+ 			val->intval = ret;
+-			chip->is_present = val->intval;
++			sbs_update_presence(chip, ret);
+ 			return 0;
+ 		}
+ 		if (ret == 0)
+@@ -678,7 +744,7 @@ static int sbs_get_property(struct power_supply *psy,
+ 
+ 	if (!chip->gpio_detect &&
+ 		chip->is_present != (ret >= 0)) {
+-		chip->is_present = (ret >= 0);
++		sbs_update_presence(chip, (ret >= 0));
+ 		power_supply_changed(chip->power_supply);
+ 	}
+ 
+@@ -709,7 +775,7 @@ static void sbs_supply_changed(struct sbs_info *chip)
+ 	ret = gpiod_get_value_cansleep(chip->gpio_detect);
+ 	if (ret < 0)
+ 		return;
+-	chip->is_present = ret;
++	sbs_update_presence(chip, ret);
+ 	power_supply_changed(battery);
  }
  
- static void  sbs_unit_adjustment(struct i2c_client *client,
 -- 
 2.26.2
 
