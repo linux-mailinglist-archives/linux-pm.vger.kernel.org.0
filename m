@@ -2,38 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B311D1064
-	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 13:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EDF1D1083
+	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 13:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729180AbgEMLAm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 May 2020 07:00:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38684 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726020AbgEMLAm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 13 May 2020 07:00:42 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4126620659;
-        Wed, 13 May 2020 11:00:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589367641;
-        bh=mJieOJy4NuNu/AlkpFgPMFAFRaWameJ9hJz3cvTR6Rg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=brO0OdFVV61zzKDNRCseKslcHhi9HdP0gLpKT/nqq43rZjoG1p0YRENXP/T8XDOMU
-         ZGRuLptLqt1mNM8tlPZ8dj45gRsFNqSQXQkRt6Ju8MSb40kLPfT286TVnaaBt5Y5y7
-         CKZK0bs7oNwAeXcyYG9y9va8SpXOtcX7IDaytPfw=
-Date:   Wed, 13 May 2020 12:00:39 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>,
+        id S1729660AbgEMLDy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 May 2020 07:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729376AbgEMLDy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 07:03:54 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F83C061A0C
+        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 04:03:54 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d184so7856925pfd.4
+        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 04:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vlIWikT098vFFSA85jSYw2HqnT2EWGQ+JN0hGFauhi4=;
+        b=GFuLTBUOJBpZdQ9wmW/LZeyQusHib18GNBACb2tTEXg8quP5GJ8vSZcsUEONrOUpl4
+         UnkgxFS4x3QBH9apmKDpNutIEVREi7gPdd9qJvwCG6YbVUFu1uygq5SspKcnHhdFIjmK
+         k5Su5r4OjkuznDdC9Ucq8XDIBx4xjPpIvI6SZ3tuX4kNDu3LQb0EWgAAwsEg/A/ZEMPV
+         8KCbh2K0vvF5eW5x8MB/4oOFkNvA483oosSNVH1IUSWAmVTJcqzGs97IcHaqAb+wSUQd
+         tVU5osHwCiVGlfdKWmabMhtI5tEZccpOata0TkurCGu+gDyLiMHdlNzHTYq8lH28wuIF
+         ugsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vlIWikT098vFFSA85jSYw2HqnT2EWGQ+JN0hGFauhi4=;
+        b=rOFNJhbKEjUqUJb99ueGri2gvLSswzFyOAWQQtGGjSIP9Yk4jb/rxGvFAVma/2O68o
+         2oqr2lJQYwhddRqpMkHPIS0s1N8x/kMZRpDmi8bKJzJmS9ZbOn6prxqhMGJJRj2nOhp7
+         BjCMZLTozxnHwF0PFNlaqO3woidFXUQTVSTht9SqsMzANeEldfVQziUylymUirEKquZM
+         mPxYu+0xI1ANxQRpKaOheuf7evdLNuAzwsC86PIBaVS6aNA3rA22uZ+el88GlDcgR5GR
+         8jnCRDwigAE1qwroRVbG3lgvj+gkHxwRxSTBgqnMCyct/dN7glSkbZUx0vH3OHDuseao
+         M1xg==
+X-Gm-Message-State: AGi0Pub1YDgUM7fuHPtM1S0XFERDqjkXqg5AofufZizu/RYjMognNU1x
+        KDtecGIoQ9KuCD0w1ctfBxxELg==
+X-Google-Smtp-Source: APiQypI8HPSs6xiuK3e+2ILfdrpxWtiobB+9Jgg6w3R0NkhJQoO4DLir7vsN+myJk1m5HKZejXK68w==
+X-Received: by 2002:aa7:85c4:: with SMTP id z4mr26905068pfn.199.1589367833478;
+        Wed, 13 May 2020 04:03:53 -0700 (PDT)
+Received: from localhost ([122.167.130.103])
+        by smtp.gmail.com with ESMTPSA id 25sm14650864pjk.50.2020.05.13.04.03.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 May 2020 04:03:52 -0700 (PDT)
+Date:   Wed, 13 May 2020 16:33:50 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
         "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
         Steven Price <steven.price@arm.com>
 Subject: Re: Question about OPP regulator for Panfrost Devfreq
-Message-ID: <20200513110039.GD4803@sirena.org.uk>
+Message-ID: <20200513110350.uojo5jaufx7rj5v6@vireshk-i7>
 References: <CAJiuCce9ZxeXnQzEW_3dbBDNZmmtWmKeft0hX+F9+SYu80NU=Q@mail.gmail.com>
  <20200511052530.iazkduojnba3abil@vireshk-i7>
  <CAJiuCcfRmDbBxEms=HAFQhaiBTznEd1of3TOcnAAc2yuTq0XtA@mail.gmail.com>
@@ -42,77 +66,28 @@ References: <CAJiuCce9ZxeXnQzEW_3dbBDNZmmtWmKeft0hX+F9+SYu80NU=Q@mail.gmail.com>
  <20200513091922.qnpjx4kw2m3jv2ry@vireshk-i7>
  <20200513101805.GA4803@sirena.org.uk>
  <20200513104015.oyiaimjpspablq5p@vireshk-i7>
+ <20200513110039.GD4803@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bajzpZikUji1w+G9"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200513104015.oyiaimjpspablq5p@vireshk-i7>
-X-Cookie: Long life is in store for you.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200513110039.GD4803@sirena.org.uk>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 13-05-20, 12:00, Mark Brown wrote:
+> The OPP code can and should be calling regulator_enable().  If the OPP
+> code needs some particular voltage configuration it can and should be
+> calling regulator_set_voltage() to tell the core what it needs.  What
+> I'm saying is that if when the OPP code enables the regulator it needs
+> a particular voltage configuration it should tell the core about that
+> prior to enabling.
 
---bajzpZikUji1w+G9
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I see. Thanks for that.
 
-On Wed, May 13, 2020 at 04:10:15PM +0530, Viresh Kumar wrote:
-> On 13-05-20, 11:18, Mark Brown wrote:
-> > On Wed, May 13, 2020 at 02:49:22PM +0530, Viresh Kumar wrote:
+Clement: I will prepare a patch for you to test then.
 
-> > > @Mark: Regarding enabling/disabling regulators from the OPP core, what
-
-> > My name is spelt Mark.
-
-> Hmm. But isn't that what I wrote ? I used @ as that's what people use
-> to address questions to someone. :)
-
-No, it isn't what people use to address a question to someone.  Some
-social media uses it to prefix usernames but email is not one of those
-systems.  If anything it makes it *less* likely that people will see
-things as people mostly read by pattern matching the shapes of words
-(especially when scanning) rather than spelling out individual letters.
-
-> > As ever if you have requirements for the voltage of a regulator you
-> > should use regulator_set_voltage() to tell the core about it.  The core
-> > cannot be expected to infer these requirements without being told by the
-> > users.  If you need the voltage to be a particular level when you enable
-> > the regulator you should set that voltage.  Why can't the code do that
-> > instead of trying to add these complex and fragile bodges?  Randomly
-> > skipping applying configurations some of the time is not going to make
-> > anything more robust or easier to understand.
-
-> Right.
-
-> Cl=E9ment is facing a problem where his regulator isn't getting enabled
-> and he was asking why the OPP core can't call regulator_enable(), when
-> it handles everything else around them. Can you suggest to him on what
-> he should be doing here ?
-
-The OPP code can and should be calling regulator_enable().  If the OPP
-code needs some particular voltage configuration it can and should be
-calling regulator_set_voltage() to tell the core what it needs.  What
-I'm saying is that if when the OPP code enables the regulator it needs
-a particular voltage configuration it should tell the core about that
-prior to enabling.
-
---bajzpZikUji1w+G9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6701YACgkQJNaLcl1U
-h9D9Iwf/ZeF6i/4k13G51G9vQt/ywxZ2fIQa7BoUTg/ZFq8UnkyT82wef1cny7kE
-0SzsCxNepppDzU7pA8pb/uKD9tO8RP3iFPG/FgA27h7/psaClT2W6wAln9pYJei8
-T0YVDUSu0M81P5S+1NZJNUVFPSUgYyrgKaidLiZen0QlGkzL8BAWbegf+nArs7mp
-EbLjAHE0Xj74PszM3iqoNslNa7k9WvoKUvFMtKeFssCYcVRcP4FdMUYOheezhVgM
-IL6TnhtpTocBjKHcneT2AZ3cxR0jGRuDvje/aVH8j0w7GI5DzWFRk6tIdD0s+6hM
-o9EJbKAGqjtlL7FcNWR2/ythKo8oYQ==
-=KRLW
------END PGP SIGNATURE-----
-
---bajzpZikUji1w+G9--
+-- 
+viresh
