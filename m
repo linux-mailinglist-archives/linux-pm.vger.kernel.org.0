@@ -2,20 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E96371D1E30
-	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 20:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99ED51D1E56
+	for <lists+linux-pm@lfdr.de>; Wed, 13 May 2020 20:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390403AbgEMS4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 May 2020 14:56:36 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51900 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390381AbgEMS4g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 14:56:36 -0400
+        id S2390542AbgEMS5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 May 2020 14:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2390389AbgEMS4f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 May 2020 14:56:35 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7721EC061A0C;
+        Wed, 13 May 2020 11:56:35 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 4724A2A0188
+        with ESMTPSA id 4A0F92A251E
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 7203A480103; Wed, 13 May 2020 20:56:29 +0200 (CEST)
+        id 74B84480104; Wed, 13 May 2020 20:56:29 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -24,9 +27,9 @@ To:     Sebastian Reichel <sre@kernel.org>,
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCHv1 05/19] power: supply: sbs-battery: Add TI BQ20Z65 support
-Date:   Wed, 13 May 2020 20:56:01 +0200
-Message-Id: <20200513185615.508236-6-sebastian.reichel@collabora.com>
+Subject: [PATCHv1 06/19] power: supply: sbs-battery: add POWER_SUPPLY_PROP_CAPACITY_ERROR_MARGIN support
+Date:   Wed, 13 May 2020 20:56:02 +0200
+Message-Id: <20200513185615.508236-7-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200513185615.508236-1-sebastian.reichel@collabora.com>
 References: <20200513185615.508236-1-sebastian.reichel@collabora.com>
@@ -37,86 +40,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add support for BQ20Z65 manufacturer data to the sbs-battery
-driver. Implementation has been verified using the public TRM
-available from [0] and tested using a GE Flex 3S2P battery.
-
-[0] http://www.ti.com/lit/pdf/sluu386
+Add support for reporting the MaxError register from
+battery fuel gauges following the smart battery standard.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- .../bindings/power/supply/sbs_sbs-battery.txt     |  1 +
- drivers/power/supply/sbs-battery.c                | 15 ++++++++++-----
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ drivers/power/supply/sbs-battery.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
-index 4e78e51018eb..fa5a8b516dbf 100644
---- a/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
-+++ b/Documentation/devicetree/bindings/power/supply/sbs_sbs-battery.txt
-@@ -6,6 +6,7 @@ Required properties :
-      part number compatible string might be used in order to take care of
-      vendor specific registers.
-      Known <vendor>,<part-number>:
-+       ti,bq20z65
-        ti,bq20z75
- 
- Optional properties :
 diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index 6acd242eed48..a15783802ef8 100644
+index a15783802ef8..4356fdf25d4a 100644
 --- a/drivers/power/supply/sbs-battery.c
 +++ b/drivers/power/supply/sbs-battery.c
-@@ -149,8 +149,8 @@ static enum power_supply_property sbs_properties[] = {
- 	POWER_SUPPLY_PROP_MODEL_NAME
- };
- 
--/* Supports special manufacturer commands from TI BQ20Z75 IC. */
--#define SBS_FLAGS_TI_BQ20Z75		BIT(0)
-+/* Supports special manufacturer commands from TI BQ20Z65 and BQ20Z75 IC. */
-+#define SBS_FLAGS_TI_BQ20ZX5		BIT(0)
- 
- struct sbs_info {
- 	struct i2c_client		*client;
-@@ -626,7 +626,7 @@ static int sbs_get_property(struct power_supply *psy,
- 	switch (psp) {
- 	case POWER_SUPPLY_PROP_PRESENT:
- 	case POWER_SUPPLY_PROP_HEALTH:
--		if (chip->flags & SBS_FLAGS_TI_BQ20Z75)
-+		if (chip->flags & SBS_FLAGS_TI_BQ20ZX5)
- 			ret = sbs_get_ti_battery_presence_and_health(client,
- 								     psp, val);
- 		else
-@@ -950,7 +950,7 @@ static int sbs_suspend(struct device *dev)
- 	if (chip->poll_time > 0)
- 		cancel_delayed_work_sync(&chip->work);
- 
--	if (chip->flags & SBS_FLAGS_TI_BQ20Z75) {
-+	if (chip->flags & SBS_FLAGS_TI_BQ20ZX5) {
- 		/* Write to manufacturer access with sleep command. */
- 		ret = sbs_write_word_data(client,
- 					  sbs_data[REG_MANUFACTURER_DATA].addr,
-@@ -970,6 +970,7 @@ static SIMPLE_DEV_PM_OPS(sbs_pm_ops, sbs_suspend, NULL);
- #endif
- 
- static const struct i2c_device_id sbs_id[] = {
-+	{ "bq20z65", 0 },
- 	{ "bq20z75", 0 },
- 	{ "sbs-battery", 1 },
- 	{}
-@@ -978,9 +979,13 @@ MODULE_DEVICE_TABLE(i2c, sbs_id);
- 
- static const struct of_device_id sbs_dt_ids[] = {
- 	{ .compatible = "sbs,sbs-battery" },
-+	{
-+		.compatible = "ti,bq20z65",
-+		.data = (void *)SBS_FLAGS_TI_BQ20ZX5,
-+	},
- 	{
- 		.compatible = "ti,bq20z75",
--		.data = (void *)SBS_FLAGS_TI_BQ20Z75,
-+		.data = (void *)SBS_FLAGS_TI_BQ20ZX5,
- 	},
- 	{ }
- };
+@@ -26,6 +26,7 @@ enum {
+ 	REG_TEMPERATURE,
+ 	REG_VOLTAGE,
+ 	REG_CURRENT,
++	REG_MAX_ERR,
+ 	REG_CAPACITY,
+ 	REG_TIME_TO_EMPTY,
+ 	REG_TIME_TO_FULL,
+@@ -85,6 +86,8 @@ static const struct chip_data {
+ 		SBS_DATA(POWER_SUPPLY_PROP_VOLTAGE_NOW, 0x09, 0, 20000),
+ 	[REG_CURRENT] =
+ 		SBS_DATA(POWER_SUPPLY_PROP_CURRENT_NOW, 0x0A, -32768, 32767),
++	[REG_MAX_ERR] =
++		SBS_DATA(POWER_SUPPLY_PROP_CAPACITY_ERROR_MARGIN, 0x0c, 0, 100),
+ 	[REG_CAPACITY] =
+ 		SBS_DATA(POWER_SUPPLY_PROP_CAPACITY, 0x0D, 0, 100),
+ 	[REG_REMAINING_CAPACITY] =
+@@ -132,6 +135,7 @@ static enum power_supply_property sbs_properties[] = {
+ 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+ 	POWER_SUPPLY_PROP_CURRENT_NOW,
+ 	POWER_SUPPLY_PROP_CAPACITY,
++	POWER_SUPPLY_PROP_CAPACITY_ERROR_MARGIN,
+ 	POWER_SUPPLY_PROP_TEMP,
+ 	POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG,
+ 	POWER_SUPPLY_PROP_TIME_TO_FULL_AVG,
+@@ -676,6 +680,7 @@ static int sbs_get_property(struct power_supply *psy,
+ 	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+ 	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
+ 	case POWER_SUPPLY_PROP_CAPACITY:
++	case POWER_SUPPLY_PROP_CAPACITY_ERROR_MARGIN:
+ 		ret = sbs_get_property_index(client, psp);
+ 		if (ret < 0)
+ 			break;
 -- 
 2.26.2
 
