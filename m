@@ -2,214 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E8F1D24B7
-	for <lists+linux-pm@lfdr.de>; Thu, 14 May 2020 03:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE541D26D7
+	for <lists+linux-pm@lfdr.de>; Thu, 14 May 2020 07:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725977AbgENBcc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 May 2020 21:32:32 -0400
-Received: from mga06.intel.com ([134.134.136.31]:19483 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725925AbgENBcc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 13 May 2020 21:32:32 -0400
-IronPort-SDR: 8HHzqPjWVaiKaTGWNCP9VDtLNeXqu17ZYnej/6ZnrmfFPklXfNKkZy3U+9zvsTWRcW/ZXWHkj8
- +t+RLfysmqaA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 18:32:31 -0700
-IronPort-SDR: rDPfITWhGuHuS82A5qBo+61be/o1PDF3AH4183Ah4L9S+SdYJM2TidAYalhSNSFOlen6UI9/2/
- uMA/DECljETQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,389,1583222400"; 
-   d="scan'208";a="341445682"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 13 May 2020 18:32:30 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jZ2jd-000HiF-ED; Thu, 14 May 2020 09:32:29 +0800
-Date:   Thu, 14 May 2020 09:31:42 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- fbe093dd16f4eb35746ca73c063d6290a494a93a
-Message-ID: <5ebc9f7e.sgT17YkFQuXh+FGG%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725938AbgENFyv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 May 2020 01:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725794AbgENFyv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 May 2020 01:54:51 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84716C061A0C
+        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 22:54:49 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id e16so2227836wra.7
+        for <linux-pm@vger.kernel.org>; Wed, 13 May 2020 22:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=colorremedies-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BrRixFaK3qbLbJSTAOAVAGhKQtDzGIdm7NHvqZCg7Bw=;
+        b=arWXR0uShXjGmk1nm+OHbkA7idbTNBe23fjM1FEzyO6cGhosULQzKf6UftY1pg3bCr
+         g/6d9SjYz9eoaGJl1IM40roxTnIjtoPjX2tQ7xNPE2ifPiO++8EqrjRh0TNTWdPKbXwK
+         j1+jzuwPPyDGKLjWJo1xtXY9xwFbx6w1Y4hPd3XuGtuc3WFOEiuFZWe0QkY5+tj55eG2
+         ckOxcMm4bspaItR1+06tVlkLWskhd1vicDY9B84zYAgkeL4j/fwXPx4saxLKBvQzrbTk
+         Ekzj9VY0O4DTQgReq2OFdkJ6Bf9frElGC8hiMR/MQ2MJFnfMNf3KXukay/RRyEaBVD/u
+         9+QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BrRixFaK3qbLbJSTAOAVAGhKQtDzGIdm7NHvqZCg7Bw=;
+        b=Fdj8YAv/JHrpi0xQstWOjY7dBm4o5027SXoA1GNY9vGNwTQ9UeF2Qdz5dl8FSD8dug
+         BHOarZTSJaJ8T9VK7ZQ3ggkjggnWYmBzS4a94H/FjbAnzfbO0XP0BmFTLVT6fr5VzHmY
+         FLnfP4Ua1kswQc7ri/xhBUHHYXnEMJJPxnAYqo5jWJJhcDRVBeUxfcqXZUH2qtha50wM
+         xYDLMNn1ODN5NpljYmTONwCZSLhi9iVfH+/Ooy0lFGHivcjP6e5GjKvEkM4FmSFUZ/1i
+         RBNPsYN65SapsKOOBzADf1sLQ7sJHPu1wz6jNf4EL6Gb1DHAwXkTOVx8ONUqqli6COaN
+         BrOQ==
+X-Gm-Message-State: AOAM531TErsK8dSzWEHZtooOT67uAnBed9AKK/3yoQtSubEzhXXqxNfo
+        SX2U/q4/WxzsRh9Ycs1cbbZwRSxbFrsswAnoeq8gJQ==
+X-Google-Smtp-Source: ABdhPJymgEtBVCcAn3pSyiF+v4bp+AdIwu3Mj+68Yl4gqeJ4t+isuhTkTY3hJDbhbyg8uA0VHLrvaA/VUeDn+J4cO80=
+X-Received: by 2002:a05:6000:1241:: with SMTP id j1mr3380775wrx.42.1589435688197;
+ Wed, 13 May 2020 22:54:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <CAJCQCtQ=1=UFaCvPO99W0t9SWuK5zG4ENKYzq2PgJ36iu-EiiQ@mail.gmail.com>
+ <CAJZ5v0hqODC52Bogeo-2suROH63NmON=5a5K6OZEp1YYMYK_QA@mail.gmail.com>
+ <CAJCQCtTxQw=P43wHM2ENX600Jm+BXU+f+=Wv09ijjiqWZoWsiQ@mail.gmail.com>
+ <7163502.2kdGmH96AJ@kreacher> <CAJCQCtRAMgH4Qwfo7xqO2PQYedLSKBD9wmbj-T9aBvVYa2MGPQ@mail.gmail.com>
+ <CAJZ5v0hMs_A1-=wLmjgdO8jhW-MA-JSxV8xuDPCxti+yxTW2JQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hMs_A1-=wLmjgdO8jhW-MA-JSxV8xuDPCxti+yxTW2JQ@mail.gmail.com>
+From:   Chris Murphy <chris@colorremedies.com>
+Date:   Wed, 13 May 2020 23:54:32 -0600
+Message-ID: <CAJCQCtTowrKa=xWxjhzRqgV4b3Vh70fctaRaL8_7WdD+CGHY0A@mail.gmail.com>
+Subject: Re: 5.7 sleep/wake regression
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: fbe093dd16f4eb35746ca73c063d6290a494a93a  Merge branch 'pm-cpufreq' into linux-next
+On Wed, May 13, 2020 at 8:04 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, May 13, 2020 at 8:11 AM Chris Murphy <chris@colorremedies.com> wrote:
+> >
+> > On Tue, May 12, 2020 at 6:57 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> > >
+> > > On Monday, May 11, 2020 7:37:04 PM CEST Chris Murphy wrote:
+> > > > On Mon, May 11, 2020 at 5:15 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > >
+> > > > > On Mon, May 11, 2020 at 6:22 AM Chris Murphy <chris@colorremedies.com> wrote:
+> > > > > >
+> > > > > > Got an older Macbook Pro that does suspend to RAM and wake OK with
+> > > > > > 5.6, but starting with git 47acac8cae28, it will not wake up. Instead
+> > > > > > it has a black screen, gets hot, fans go to high, and it turns into a
+> > > > > > hair dryer. So it's a regression.
+> > > > >
+> > > > > There is a known issue addressed by this patch:
+> > > > >
+> > > > > https://patchwork.kernel.org/patch/11538065/
+> > > > >
+> > > > > so can you please try it?
+> > > >
+> > > > Patch applied, but the problem remains.
+> > > >
+> > > > CPU is i7-2820QM and dmesg for the working sleep+wake case:
+> > > > https://paste.centos.org/view/ea5b913d
+> > > >
+> > > > In the failed wake case, I note the following: the fade-in/out sleep
+> > > > indicator light on the laptop is pulsing, suggests it did actually
+> > > > enter sleep OK. When waking by spacebar press, this sleep indicator
+> > > > light stops pulsing, the backlight does not come on, the laptop does
+> > > > not respond to either ssh or ping. Following  a power reset and
+> > > > reboot, the journal's last line is
+> > > >
+> > > > [   61.678347] fmac.local kernel: PM: suspend entry (deep)
+> > > >
+> > > > Let me know if I should resume bisect.
+> > >
+> > > Please first try to revert commit
+> > >
+> > > 6d232b29cfce ("ACPICA: Dispatcher: always generate buffer
+> > > objects for ASL create_field() operator")
+> >
+> > Still fails. Bisect says
+> >
+> > $ git bisect good
+> > b41e98524e424d104aa7851d54fd65820759875a is the first bad commit
+> > commit b41e98524e424d104aa7851d54fd65820759875a
+> > Author: Jens Axboe <axboe@kernel.dk>
+> > Date:   Mon Feb 17 09:52:41 2020 -0700
+> >
+> >     io_uring: add per-task callback handler
+> >
+> > I'm not that great at git bisect so I'm not sure how to narrow it
+> > down; offhand that doesn't seem a likely culprit.
+>
+> I would try to revert it and see what happens. :-)
 
-elapsed time: 484m
+It won't revert.
 
-configs tested: 154
-configs skipped: 12
+$ git revert b41e98524e4
+Auto-merging fs/io_uring.c
+CONFLICT (content): Merge conflict in fs/io_uring.c
+error: could not revert b41e98524e42... io_uring: add per-task callback handler
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-sparc                            allyesconfig
-m68k                             allyesconfig
-h8300                     edosk2674_defconfig
-mips                     decstation_defconfig
-sh                          rsk7201_defconfig
-parisc                              defconfig
-m68k                          amiga_defconfig
-mips                malta_qemu_32r6_defconfig
-i386                              allnoconfig
-sh                          sdk7786_defconfig
-arm                            hisi_defconfig
-arm                          exynos_defconfig
-arm                            mps2_defconfig
-s390                       zfcpdump_defconfig
-m68k                       m5249evb_defconfig
-m68k                          sun3x_defconfig
-sh                           se7619_defconfig
-mips                        qi_lb60_defconfig
-arc                        nsim_700_defconfig
-arm                         lubbock_defconfig
-arm                          tango4_defconfig
-sh                            shmin_defconfig
-mips                           mtx1_defconfig
-riscv                    nommu_virt_defconfig
-mips                        nlm_xlr_defconfig
-arm                         s3c2410_defconfig
-xtensa                           allyesconfig
-powerpc                      chrp32_defconfig
-arm                     eseries_pxa_defconfig
-xtensa                    xip_kc705_defconfig
-arm                           h3600_defconfig
-arm                         nhk8815_defconfig
-powerpc                    adder875_defconfig
-mips                 pnx8335_stb225_defconfig
-sh                   sh7770_generic_defconfig
-arm                            dove_defconfig
-mips                 decstation_r4k_defconfig
-arm                          moxart_defconfig
-sh                               allmodconfig
-sh                             espt_defconfig
-arm                            xcep_defconfig
-microblaze                          defconfig
-arm                         orion5x_defconfig
-mips                      pic32mzda_defconfig
-mips                  mips_paravirt_defconfig
-riscv                          rv32_defconfig
-powerpc                      ppc44x_defconfig
-arm                         at91_dt_defconfig
-sh                           se7724_defconfig
-arc                             nps_defconfig
-arm                             rpc_defconfig
-powerpc                       holly_defconfig
-arm                           h5000_defconfig
-arm                          pxa910_defconfig
-sh                          rsk7203_defconfig
-arm                         assabet_defconfig
-m68k                                defconfig
-arm                           sama5_defconfig
-sh                        sh7785lcr_defconfig
-arm                         shannon_defconfig
-nios2                            alldefconfig
-sh                   secureedge5410_defconfig
-arm                      footbridge_defconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a006-20200513
-i386                 randconfig-a005-20200513
-i386                 randconfig-a003-20200513
-i386                 randconfig-a001-20200513
-i386                 randconfig-a004-20200513
-i386                 randconfig-a002-20200513
-x86_64               randconfig-a005-20200513
-x86_64               randconfig-a003-20200513
-x86_64               randconfig-a006-20200513
-x86_64               randconfig-a004-20200513
-x86_64               randconfig-a001-20200513
-x86_64               randconfig-a002-20200513
-i386                 randconfig-a012-20200513
-i386                 randconfig-a016-20200513
-i386                 randconfig-a014-20200513
-i386                 randconfig-a011-20200513
-i386                 randconfig-a013-20200513
-i386                 randconfig-a015-20200513
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-x86_64                              defconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Chris Murphy
