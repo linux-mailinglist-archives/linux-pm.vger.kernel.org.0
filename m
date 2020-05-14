@@ -2,75 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5211D2E92
-	for <lists+linux-pm@lfdr.de>; Thu, 14 May 2020 13:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBA51D2EB0
+	for <lists+linux-pm@lfdr.de>; Thu, 14 May 2020 13:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726067AbgENLnQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 May 2020 07:43:16 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:43313 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725925AbgENLnP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 May 2020 07:43:15 -0400
-Received: by mail-ot1-f67.google.com with SMTP id a68so2045964otb.10;
-        Thu, 14 May 2020 04:43:15 -0700 (PDT)
+        id S1726707AbgENLrq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 May 2020 07:47:46 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:40650 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726037AbgENLro (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 May 2020 07:47:44 -0400
+Received: by mail-oi1-f193.google.com with SMTP id v128so7441996oia.7
+        for <linux-pm@vger.kernel.org>; Thu, 14 May 2020 04:47:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NS81db2WlAKMw750j0Vkkc7VOtrTVlN07aaoyD593YE=;
-        b=iWd8YsJ8gMAsewHv7hUB+1DRvJfDWwQuI79cna1iibz7xp8B2GikaKruJb3hJ3O8tG
-         aIWKimf2Lk0ERlQMDdlgXmLodPgmIo4ObOkwKFfB+/QQ08kD9bg2XXoOonkROWG3pCnR
-         wk6bCUPS7JFPsBERqy59F9ZH3qoYojfe7UVzphz0RYORT+iUrwim6tp7xkJ1kuYExZfy
-         HVH5tXMM9jeXhS9OGRyAyYt5gX9npc/Ek9BdsGFHi5NkkGx+30qd+JfJFY6DkAOgiQT5
-         IuMN+sXqXRu6xOqBQkUzv5mvq/rRDnJ2Bdmq7YiKrL7HU7O6cJNGUNaf1OErDLvR3Nvp
-         Fa+w==
-X-Gm-Message-State: AOAM531KnNgTu1PfAadRPpib31ehDfxaQu4ZTKgmvQe5BVO87t7JXxa9
-        RG3c249K6leefekrXFBXUlTQ8edhepVVpqPVG1Y=
-X-Google-Smtp-Source: ABdhPJyzhN/gdsuRBgS7a7zU2LSl2miiuZORSHSpQIDzx+jZm6FIXM7zz2uaaNZ4WouoFvZQk2blbM2G/amuLKCT0A0=
-X-Received: by 2002:a9d:6356:: with SMTP id y22mr3000318otk.167.1589456594965;
- Thu, 14 May 2020 04:43:14 -0700 (PDT)
+        bh=q46vUJwAl39FNDzxN9NSRe4sL6otBGE87NrewJ9vp4k=;
+        b=Co0RXX3HErahBvFBNVyPv0q81aaACYSasmNzB663sgs96cWWCx+gom9fn1nSpW0xPm
+         Jg3a2PY7szM6ll7WGxxU7uIBYgu7nY3cI8xRnHYCvoPFEZOAY9urfkMDB+0pdMG2Y0mh
+         Q56OvVpO2bcgzH/cJznXU9LSFD2RbEAZJcikASDw/04UJ5I/ajMqu72zRVTNLV6mySdj
+         9Lyyf5TYjq1lFAm4z8M6UiDbPBCI4+YPwLGrEa6DXggTukhyrbmASc4TBTVo3Nd4DtzK
+         lMCi6ezhBtUQbFZ8jQ74tKBp42r8x52oTNYtxDHdGMZG5g4WqbLOxxX5aK70UKTkiMFB
+         x0KQ==
+X-Gm-Message-State: AGi0PuZKfs2bB9Kzkjoq2U5LiafRHuWhi8bjb2N0SG5MRMGADtZvb0Py
+        b9rWqBwQoVgkeacd6EWHllFv1+XoY9CnBYRa8Xk=
+X-Google-Smtp-Source: APiQypKd56ihoatKA3JhBJMUJA8TRkk5hUpSmdmHek3jiZjWU/ra8NGLLFVAly7DAvcLxzfwZL+m2m99QAddIs4RYV8=
+X-Received: by 2002:aca:4fd5:: with SMTP id d204mr9618868oib.103.1589456864285;
+ Thu, 14 May 2020 04:47:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200513141854.18451-1-wenhu.wang@vivo.com>
-In-Reply-To: <20200513141854.18451-1-wenhu.wang@vivo.com>
+References: <20200513101751.111907-1-pterjan@google.com>
+In-Reply-To: <20200513101751.111907-1-pterjan@google.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 14 May 2020 13:43:04 +0200
-Message-ID: <CAJZ5v0jHVMA5=fYkDqSLdpvxFi8iHvxVa-ZkT71cbd4hr1ohDg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: fix a minor typo for cpufreq_driver doc
-To:     Wang Wenhu <wenhu.wang@vivo.com>
+Date:   Thu, 14 May 2020 13:47:33 +0200
+Message-ID: <CAJZ5v0hSGYCwAED6TWq=dPv+W=YSZ3p+3T1tbkfbhL5pWnOO8A@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Delete unused define_one_ro/rw macros
+To:     Pascal Terjan <pterjan@google.com>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel@vivo.com
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 13, 2020 at 4:26 PM Wang Wenhu <wenhu.wang@vivo.com> wrote:
+On Wed, May 13, 2020 at 12:18 PM Pascal Terjan <pterjan@google.com> wrote:
 >
-> Delete the duplicate "to" possibly double-typed.
+> They were already unused when cpuidle was introduced.
 >
-> Signed-off-by: Wang Wenhu <wenhu.wang@vivo.com>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Pascal Terjan <pterjan@google.com>
 > ---
->  include/linux/cpufreq.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/cpuidle/sysfs.c | 5 -----
+>  1 file changed, 5 deletions(-)
 >
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index f7240251a949..67d5950bd878 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -330,7 +330,7 @@ struct cpufreq_driver {
->          *
->          * get_intermediate should return a stable intermediate frequency
->          * platform wants to switch to and target_intermediate() should set CPU
-> -        * to to that frequency, before jumping to the frequency corresponding
-> +        * to that frequency, before jumping to the frequency corresponding
->          * to 'index'. Core will take care of sending notifications and driver
->          * doesn't have to handle them in target_intermediate() or
->          * target_index().
+> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+> index cdeedbf02646..7729cf622d1e 100644
+> --- a/drivers/cpuidle/sysfs.c
+> +++ b/drivers/cpuidle/sysfs.c
+> @@ -167,11 +167,6 @@ struct cpuidle_attr {
+>         ssize_t (*store)(struct cpuidle_device *, const char *, size_t count);
+>  };
+>
+> -#define define_one_ro(_name, show) \
+> -       static struct cpuidle_attr attr_##_name = __ATTR(_name, 0444, show, NULL)
+> -#define define_one_rw(_name, show, store) \
+> -       static struct cpuidle_attr attr_##_name = __ATTR(_name, 0644, show, store)
+> -
+>  #define attr_to_cpuidleattr(a) container_of(a, struct cpuidle_attr, attr)
+>
+>  struct cpuidle_device_kobj {
 > --
 
-Applied as 5.8 material with some minor subject changes, thanks!
+This patch doesn't apply on top of the cpuidle material for 5.8
+present in linux-next, thanks!
