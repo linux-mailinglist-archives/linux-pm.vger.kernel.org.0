@@ -2,28 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0327F1D2C0C
-	for <lists+linux-pm@lfdr.de>; Thu, 14 May 2020 12:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8CC1D2C32
+	for <lists+linux-pm@lfdr.de>; Thu, 14 May 2020 12:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726015AbgENKBc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 May 2020 06:01:32 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:65458 "EHLO
+        id S1726024AbgENKKF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 May 2020 06:10:05 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:52220 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725935AbgENKBc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 May 2020 06:01:32 -0400
+        with ESMTP id S1725955AbgENKKF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 May 2020 06:10:05 -0400
 Received: from 89-64-84-17.dynamic.chello.pl (89.64.84.17) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 3eb25ceebfb78a86; Thu, 14 May 2020 12:01:30 +0200
+ id bfcb0575ef1464d6; Thu, 14 May 2020 12:10:02 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Chris Murphy <chris@colorremedies.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: 5.7 sleep/wake regression
-Date:   Thu, 14 May 2020 12:01:29 +0200
-Message-ID: <4108819.xVErsNMLeE@kreacher>
-In-Reply-To: <CAJCQCtTowrKa=xWxjhzRqgV4b3Vh70fctaRaL8_7WdD+CGHY0A@mail.gmail.com>
-References: <CAJCQCtQ=1=UFaCvPO99W0t9SWuK5zG4ENKYzq2PgJ36iu-EiiQ@mail.gmail.com> <CAJZ5v0hMs_A1-=wLmjgdO8jhW-MA-JSxV8xuDPCxti+yxTW2JQ@mail.gmail.com> <CAJCQCtTowrKa=xWxjhzRqgV4b3Vh70fctaRaL8_7WdD+CGHY0A@mail.gmail.com>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        Chris Chiu <chiu@endlessm.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH[RFT]] ACPI: EC: s2idle: Avoid flushing EC work when EC GPE is inactive
+Date:   Thu, 14 May 2020 12:10:01 +0200
+Message-ID: <4502272.pByIgeXik9@kreacher>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -32,76 +30,102 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday, May 14, 2020 7:54:32 AM CEST Chris Murphy wrote:
-> On Wed, May 13, 2020 at 8:04 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Wed, May 13, 2020 at 8:11 AM Chris Murphy <chris@colorremedies.com> wrote:
-> > >
-> > > On Tue, May 12, 2020 at 6:57 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > > >
-> > > > On Monday, May 11, 2020 7:37:04 PM CEST Chris Murphy wrote:
-> > > > > On Mon, May 11, 2020 at 5:15 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > > >
-> > > > > > On Mon, May 11, 2020 at 6:22 AM Chris Murphy <chris@colorremedies.com> wrote:
-> > > > > > >
-> > > > > > > Got an older Macbook Pro that does suspend to RAM and wake OK with
-> > > > > > > 5.6, but starting with git 47acac8cae28, it will not wake up. Instead
-> > > > > > > it has a black screen, gets hot, fans go to high, and it turns into a
-> > > > > > > hair dryer. So it's a regression.
-> > > > > >
-> > > > > > There is a known issue addressed by this patch:
-> > > > > >
-> > > > > > https://patchwork.kernel.org/patch/11538065/
-> > > > > >
-> > > > > > so can you please try it?
-> > > > >
-> > > > > Patch applied, but the problem remains.
-> > > > >
-> > > > > CPU is i7-2820QM and dmesg for the working sleep+wake case:
-> > > > > https://paste.centos.org/view/ea5b913d
-> > > > >
-> > > > > In the failed wake case, I note the following: the fade-in/out sleep
-> > > > > indicator light on the laptop is pulsing, suggests it did actually
-> > > > > enter sleep OK. When waking by spacebar press, this sleep indicator
-> > > > > light stops pulsing, the backlight does not come on, the laptop does
-> > > > > not respond to either ssh or ping. Following  a power reset and
-> > > > > reboot, the journal's last line is
-> > > > >
-> > > > > [   61.678347] fmac.local kernel: PM: suspend entry (deep)
-> > > > >
-> > > > > Let me know if I should resume bisect.
-> > > >
-> > > > Please first try to revert commit
-> > > >
-> > > > 6d232b29cfce ("ACPICA: Dispatcher: always generate buffer
-> > > > objects for ASL create_field() operator")
-> > >
-> > > Still fails. Bisect says
-> > >
-> > > $ git bisect good
-> > > b41e98524e424d104aa7851d54fd65820759875a is the first bad commit
-> > > commit b41e98524e424d104aa7851d54fd65820759875a
-> > > Author: Jens Axboe <axboe@kernel.dk>
-> > > Date:   Mon Feb 17 09:52:41 2020 -0700
-> > >
-> > >     io_uring: add per-task callback handler
-> > >
-> > > I'm not that great at git bisect so I'm not sure how to narrow it
-> > > down; offhand that doesn't seem a likely culprit.
-> >
-> > I would try to revert it and see what happens. :-)
-> 
-> It won't revert.
-> 
-> $ git revert b41e98524e4
-> Auto-merging fs/io_uring.c
-> CONFLICT (content): Merge conflict in fs/io_uring.c
-> error: could not revert b41e98524e42... io_uring: add per-task callback handler
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-So there are commits on top of it that would need to be reverted as well.
+Flushing the EC work while suspended to idle when the EC GPE status
+is not set causes some EC wakeup events (notably power button and
+lid ones) to be missed after a series of spurious wakeups on the Dell
+XPS13 9360 in my office.
 
-Never mind.  As Jens said, it is unlikely that this particular commit
-introduced the problem anyway.
+If that happens, the machine cannot be woken up from suspend-to-idle
+by a power button press or lid status change and it needs to be woken
+up in some other way (eg. by a key press).
+
+Flushing the EC work only after successful dispatching the EC GPE,
+which means that its status has been set, avoids the issue, so change
+the code in question accordingly.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+Hi Chris,
+
+Please check if the key press wakeup still works on your system with this patch
+applied (on top of https://patchwork.kernel.org/patch/11538065/).
+
+Thanks!
+
+---
+ drivers/acpi/ec.c    |    6 +++++-
+ drivers/acpi/sleep.c |   15 ++++-----------
+ 2 files changed, 9 insertions(+), 12 deletions(-)
+
+Index: linux-pm/drivers/acpi/ec.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/ec.c
++++ linux-pm/drivers/acpi/ec.c
+@@ -2020,9 +2020,13 @@ bool acpi_ec_dispatch_gpe(void)
+ 	 * to allow the caller to process events properly after that.
+ 	 */
+ 	ret = acpi_dispatch_gpe(NULL, first_ec->gpe);
+-	if (ret == ACPI_INTERRUPT_HANDLED)
++	if (ret == ACPI_INTERRUPT_HANDLED) {
+ 		pm_pr_dbg("EC GPE dispatched\n");
+ 
++		/* Flush the event and query workqueues. */
++		acpi_ec_flush_work();
++	}
++
+ 	return false;
+ }
+ #endif /* CONFIG_PM_SLEEP */
+Index: linux-pm/drivers/acpi/sleep.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/sleep.c
++++ linux-pm/drivers/acpi/sleep.c
+@@ -980,13 +980,6 @@ static int acpi_s2idle_prepare_late(void
+ 	return 0;
+ }
+ 
+-static void acpi_s2idle_sync(void)
+-{
+-	/* The EC driver uses special workqueues that need to be flushed. */
+-	acpi_ec_flush_work();
+-	acpi_os_wait_events_complete(); /* synchronize Notify handling */
+-}
+-
+ static bool acpi_s2idle_wake(void)
+ {
+ 	if (!acpi_sci_irq_valid())
+@@ -1018,7 +1011,7 @@ static bool acpi_s2idle_wake(void)
+ 			return true;
+ 
+ 		/*
+-		 * Cancel the wakeup and process all pending events in case
++		 * Cancel the SCI wakeup and process all pending events in case
+ 		 * there are any wakeup ones in there.
+ 		 *
+ 		 * Note that if any non-EC GPEs are active at this point, the
+@@ -1026,8 +1019,7 @@ static bool acpi_s2idle_wake(void)
+ 		 * should be missed by canceling the wakeup here.
+ 		 */
+ 		pm_system_cancel_wakeup();
+-
+-		acpi_s2idle_sync();
++		acpi_os_wait_events_complete();
+ 
+ 		/*
+ 		 * The SCI is in the "suspended" state now and it cannot produce
+@@ -1060,7 +1052,8 @@ static void acpi_s2idle_restore(void)
+ 	 * of GPEs.
+ 	 */
+ 	acpi_os_wait_events_complete(); /* synchronize GPE processing */
+-	acpi_s2idle_sync();
++	acpi_ec_flush_work(); /* flush the EC driver's workqueues */
++	acpi_os_wait_events_complete(); /* synchronize Notify handling */
+ 
+ 	s2idle_wakeup = false;
+ 
 
 
 
