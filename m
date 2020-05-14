@@ -2,131 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AD61D3532
-	for <lists+linux-pm@lfdr.de>; Thu, 14 May 2020 17:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B86761D3567
+	for <lists+linux-pm@lfdr.de>; Thu, 14 May 2020 17:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726240AbgENPf4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 May 2020 11:35:56 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64534 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726117AbgENPf4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 May 2020 11:35:56 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04EFWcfO134212;
-        Thu, 14 May 2020 11:35:48 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 310v92ywww-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 May 2020 11:35:47 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04EFWpfh135593;
-        Thu, 14 May 2020 11:35:47 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 310v92ywv4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 May 2020 11:35:47 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 04EFYjkt025388;
-        Thu, 14 May 2020 15:35:43 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03fra.de.ibm.com with ESMTP id 3100ub1k6p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 May 2020 15:35:43 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04EFZeog64225342
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 May 2020 15:35:40 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C02EA4064;
-        Thu, 14 May 2020 15:35:40 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 749B0A4054;
-        Thu, 14 May 2020 15:35:38 +0000 (GMT)
-Received: from [9.85.86.4] (unknown [9.85.86.4])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 14 May 2020 15:35:38 +0000 (GMT)
-Subject: Re: [RFC 1/1] Weighted approach to gather and use history in TEO
- governor
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Doug Smythies <dsmythies@telus.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        Vaidyanathan Srinivasan <svaidy@linux.ibm.com>,
-        pratik.sampat@in.ibm.com, pratik.r.sampat@gmail.com
-References: <20200511141055.43029-1-psampat@linux.ibm.com>
- <20200511141055.43029-2-psampat@linux.ibm.com>
- <20200512173722.GM2978@hirez.programming.kicks-ass.net>
- <09b8bf40-e371-e1eb-d77e-6c676f22dd29@linux.ibm.com>
- <CAJZ5v0jOGRQv1EUEhkba30OKuS8aupdoGConKJH9C=R6DxptFA@mail.gmail.com>
-From:   Pratik Sampat <psampat@linux.ibm.com>
-Message-ID: <47e3d97d-7dd3-85f5-d790-42b95760c64e@linux.ibm.com>
-Date:   Thu, 14 May 2020 21:05:37 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1726190AbgENPmQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 May 2020 11:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726056AbgENPmQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 May 2020 11:42:16 -0400
+Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20E2C061A0C
+        for <linux-pm@vger.kernel.org>; Thu, 14 May 2020 08:42:15 -0700 (PDT)
+Received: by mail-ua1-x944.google.com with SMTP id k3so543809ual.8
+        for <linux-pm@vger.kernel.org>; Thu, 14 May 2020 08:42:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2rIx/Wu7eMh93mXeZtHrHjtTiAAX0hql7/jejCyN09w=;
+        b=a5GPjn8648UlAfmJaK2TJFrcyVrDkiNzYsJxuOz8jPR6ciYok3uavjFviHTuS4A7PV
+         rfm+tyI01ZfEqTm62Fv9Gfqp+UiXYkdOzsev9G0DpivQRPUdAGGo6TVIlZGNxm6/NCFm
+         34ml3WCEocIytXFsg515AmudQ2algOPI4NN9VFtX5EujELFvnyt2wL5xwF87SVCaVFdw
+         qlyj9w66Vk2AepGL5kSKwdiH90SJBmhp3VkBWHHttVHddxXVYIjjbbJtgFSCTgQ9qLhp
+         odwe5cyAk1sh0cxMu8Y1wiseiodka0q6pd0uQhrpEriyoL2MkTmMJRsLNZlizE//58Sg
+         BOew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2rIx/Wu7eMh93mXeZtHrHjtTiAAX0hql7/jejCyN09w=;
+        b=pHTod8+8AfQp2R0mi2jcBzBcspUpMWTk1ERrTeJ42wHdpkxpFyvthIyOUTHmpITmUE
+         fhIBN4QCc9pgJbR01ffVb+l+y3mo9AbBFBEs1UXvXrO5YvZUXpg9S+TNsLxg748aeyU8
+         D86nmg+gnZ+q0jbm8Pd4b4n/mwVMSLiNRblvYD/CjYWkS/Nl1j6lLdtIrcgNJE3uxDQ2
+         Rvk+oTlsmsjPcOO0WMUzCM2BabBLMbHH3rooeOxyplClsTuTmGRAzIgpR/3SgJ11HMjQ
+         Sd2PLj2LANJqfU2aEQXoVYTCPZ3AAHXeu9UtvyPFQsEh7VMwGbbE/30JWpnhNdV35HSr
+         TsNw==
+X-Gm-Message-State: AOAM5336y5XpWegoVgZhwEh/WsrhL5IM/wm9919qeQvs7b49lEIxl20U
+        tagPivBaJL+40pCNshjJJE+0eBIY0uZahzOVzDp9nA==
+X-Google-Smtp-Source: ABdhPJz/bMzouhi1RGPHhOCmF6Koyy+n5c60NKn1Em+Y4Tc7MHz1QcibV/c1az5d/ugLkeDWtYYAx0FsQwvovoaPWlk=
+X-Received: by 2002:ab0:5ca:: with SMTP id e68mr4338167uae.19.1589470933422;
+ Thu, 14 May 2020 08:42:13 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0jOGRQv1EUEhkba30OKuS8aupdoGConKJH9C=R6DxptFA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-14_05:2020-05-14,2020-05-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 cotscore=-2147483648
- impostorscore=0 suspectscore=0 phishscore=0 adultscore=0 mlxscore=0
- mlxlogscore=999 spamscore=0 clxscore=1015 bulkscore=0 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005140133
+References: <20200511133346.21706-1-ulf.hansson@linaro.org> <20200514142015.GA23401@bogus>
+In-Reply-To: <20200514142015.GA23401@bogus>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 14 May 2020 17:41:37 +0200
+Message-ID: <CAPDyKFoVo8L7eiGdEVNYR2DY7cszDuLkmX8O_SfyUKh73pbpMQ@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: psci: Fixup execution order when entering a
+ domain idle state
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, 14 May 2020 at 16:20, Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Mon, May 11, 2020 at 03:33:46PM +0200, Ulf Hansson wrote:
+> > Moving forward, platforms are going to need to execute specific "last-man"
+> > operations before a domain idle state can be entered.
+>
+> I need to dig the thread details, but I remember commenting on one of
+> the similar discussion. It was something to do with voting which wasn't
+> necessary at all. I am interested in the details here.
+>
+> > In one way or the other, these operations needs to be triggered while
+> > walking the  hierarchical topology via runtime PM and genpd, as it's at that
+> > point the last-man becomes known.
+> >
+> > Moreover, executing last-man operations needs to be done after the CPU PM
+> > notifications are sent through cpu_pm_enter(), as otherwise it's likely
+> > that some notifications would fail. Therefore, let's re-order the sequence
+> > in psci_enter_domain_idle_state(), so cpu_pm_enter() gets called prior
+> > pm_runtime_put_sync().
+> >
+>
+> More details on why notifications fail ?
 
+Well, at this moment this is more of a hypothetical issue as there is
+no last-man notification sent/used yet.
 
-On 13/05/20 8:19 pm, Rafael J. Wysocki wrote:
-> On Wed, May 13, 2020 at 7:31 AM Pratik Sampat <psampat@linux.ibm.com> wrote:
->> Thanks for your comment.
->>
->>
->> On 12/05/20 11:07 pm, Peter Zijlstra wrote:
->>> Just a quick note..
->>>
->>> On Mon, May 11, 2020 at 07:40:55PM +0530, Pratik Rajesh Sampat wrote:
->>>
->>>> +    /*
->>>> +     * Rearrange the weight distribution of the state, increase the weight
->>>> +     * by the LEARNING RATE % for the idle state that was supposed to be
->>>> +     * chosen and reduce by the same amount for rest of the states
->>>> +     *
->>>> +     * If the weights are greater than (100 - LEARNING_RATE) % or lesser
->>>> +     * than LEARNING_RATE %, do not increase or decrease the confidence
->>>> +     * respectively
->>>> +     */
->>>> +    for (i = 0; i < drv->state_count; i++) {
->>>> +            unsigned int delta;
->>>> +
->>>> +            if (idx == -1)
->>>> +                    break;
->>>> +            if (i ==  idx) {
->>>> +                    delta = (LEARNING_RATE * cpu_data->state_mat[last_idx][i]) / 100;
->>> 100 is a crap number to divide by as a computer. We bio-puddings happend
->>> to have 10 digits, so 100 makes sense to us, but it does not to our
->>> binary friends.
->>>
->>>
->> Absolutely! I just wrote the code exactly the way I did the Math on paper,
->> definitely need to figure out an optimal way of doing things.
-> There is no particular reason to use percent in computations at all.
-> You may as well use 1/1024 parts instead (and then use shifts instead
-> of divisions).
+However, typically we would call cpu_cluster_pm_enter() in the path as
+when the psci_pd_power_off() is called (for psci PM domains), when a
+valid domain state has been found.
 
-Yes you're right. Looking at it now the whole percent system and divisions
-does seem quite unnecessary and we can achieve it rather with bitwise
-operations.
+This means, we would violate the cpu_cluster_pm_enter() API, as it's
+clearly stated in its corresponding function header, that
+cpu_pm_enter() needs to be called first (and that's also how others
+are currently using it).
 
-Thanks!
+Note that, I am currently exploring whether we shall call
+cpu_cluster_pm_enter|exit() at all, or whether we can use some other
+new genpd mechanism to accomplish the similar thing.
 
+>
+> > Fixes: ce85aef570df ("cpuidle: psci: Manage runtime PM in the idle path")
+> > Reported-by: Lina Iyer <ilina@codeaurora.org>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >  drivers/cpuidle/cpuidle-psci.c | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+> > index bae9140a65a5..d0fb585073c6 100644
+> > --- a/drivers/cpuidle/cpuidle-psci.c
+> > +++ b/drivers/cpuidle/cpuidle-psci.c
+> > @@ -58,6 +58,10 @@ static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
+> >       u32 state;
+> >       int ret;
+> >
+> > +     ret = cpu_pm_enter();
+> > +     if (ret)
+> > +             return -1;
+> > +
+>
+> This change is ignoring the retention case psci_enter_state handles and
+> this may affect performance by doing unnecessary save/restore.
+
+This was already the case before. CPU_PM_CPU_IDLE_ENTER_PARAM() ends
+up always setting "is_retention" to 0, when __CPU_PM_CPU_IDLE_ENTER()
+is called.
+
+Kind regards
+Uffe
