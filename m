@@ -2,167 +2,240 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D74B1D3D28
-	for <lists+linux-pm@lfdr.de>; Thu, 14 May 2020 21:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82D91D3D92
+	for <lists+linux-pm@lfdr.de>; Thu, 14 May 2020 21:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728432AbgENTM3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 May 2020 15:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        id S1726550AbgENTe5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 May 2020 15:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729523AbgENTM2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 May 2020 15:12:28 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7510C061A0C
-        for <linux-pm@vger.kernel.org>; Thu, 14 May 2020 12:12:27 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id b11so2636416vsa.13
-        for <linux-pm@vger.kernel.org>; Thu, 14 May 2020 12:12:27 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726128AbgENTe4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 May 2020 15:34:56 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCB4C061A0C;
+        Thu, 14 May 2020 12:34:56 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id h4so4792828ljg.12;
+        Thu, 14 May 2020 12:34:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1LE3Op6W1pMVVmKhBNLCDSlKGpivMWVI6Y3FDIsX10s=;
-        b=hdhJP6EkEPN4CIH6D4KHLE7Hg+GJ+ap7GksmrIQCwncKT0WXcnpBJflfW9zqooy/CR
-         1SyXzAEnzuGmhPNMPO8t6tBWaIpAn9Pgeqe0w2N77pECiKnK9O+sb03tun6Lbp7c8LVO
-         ZQ2W8WuLM+ptixrh3UzXJ4AkylwR1r1VLt6jrJ/JXMNkWp8rB/mWgsTv8PUaiF59avZ0
-         fiF4tgSoFNUKdWnTSo21eIESqvyQNcB8Av36iYz6e1XEGc8zqpgKOdGxboaFb7gLyXc3
-         +vZO6/Fj9xJTySrViGMj+gagg/9QH3dp1Noon3ZuMCGnzAKIBjgYPU6AppZLienNgYbw
-         TLjA==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=og+mFqkQ1CAe/czR3+TKiYrXrYEV1ucIAEKU/RyoNDU=;
+        b=CZolF2DggsKTYh/lV2wyHaCyiHB7GdpzW6g/ZtAFXpginQWA/dcpxrrOZQN7GAq3Ue
+         8zdhEQ1f//fiAMdlhLLQ9WqGSx/FouKUOmmRxTGAat8BhikOJpfiS79qRkg8S9neyS9p
+         bKYRxmRxa0kRH7ZNCcu1yBLfMAmLjoxyNNzZwVcTDc6XcT/Wnw6z7NdKlmWP9xaxgI93
+         F9JR+DvnTzhW6HBs4pLEg4DtNlD1nEoeO5CmRc63GIwhYw4UsMuejkrXmqv08YofzFUg
+         s20cXrdibxukNV0TOQleiGRde2ZVH1xtygUSM2YCyDWwfClF7IGM9uOXOV61tuPCHY2X
+         vqrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1LE3Op6W1pMVVmKhBNLCDSlKGpivMWVI6Y3FDIsX10s=;
-        b=rDlC5nJbdxGN4wHBWrr9ZmZcTRWJ2c8bXb1qTkvsI2xPmfkw0/GgSRQAvPoisidm6y
-         wYLTjUKCOsr31xirZyyoTdqD0p2pNmxUt7cdcH2OSsFVlvRmP0j4yCe0EbAUU+Y2wiUE
-         GLdJ+JIY493oxPbXBPnmjAuTLw1k2UYPII1QNAgvonsNXYVZ6cRxVx27Gi6/XlabhEd8
-         0x+fdfD4lZkhkUhUDDquc9I/7EH4h5EBUG4qi+CGOS59MW/2IT2JuHMY1mrf+1zxYDFy
-         4acrVgNXNQgRXklapzRKFH4pUDW7d4Ay90dSHSj/2pNLmSLhNyBLBHKT5uHhRX//B9mV
-         L5ww==
-X-Gm-Message-State: AOAM532YrSlKSuPU/JyxgFELtf1saf6MQJJ+eiEC7FZvbA4BUbTIJ380
-        /lH5vGdr5078sNEeUm2+z3BxyPQIrmJIb36BQb8XuQ==
-X-Google-Smtp-Source: ABdhPJyFDV7FfjuvogH4RjQMp/eTHNABRxGEE68tUKUm3krpWc2shmK46EO0auQqrgNrRsGZNJCioZodjIqF0MeMz/Q=
-X-Received: by 2002:a05:6102:242:: with SMTP id a2mr4819381vsq.200.1589483546788;
- Thu, 14 May 2020 12:12:26 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=og+mFqkQ1CAe/czR3+TKiYrXrYEV1ucIAEKU/RyoNDU=;
+        b=Pdz23X5p8SznJ0UV4lEV1aQvQryKgsrLmTY5JOnQgXcEQW9iGeuAQiNsN2MxBS6cNs
+         j1AkquVLeYjCKdUm67GpRvgMGK0FKPikMbDstkhZr+BN9Bj0yiB9ci6nb6rFdUCYROBq
+         MNIik8CzvKXGsohkz3gS7ZZ+XfVxspmDLafkfbvb20Zunkh0tPpKucGwrtNYocOTpSp0
+         AZhxwL7+j4Sj9qtMojCxGzuqf9q/KXW6Wv6WL9RszWETh+FekgwfxTgVKsG8MUW5NjPo
+         6cGXEuU6ynsh44N6swSHXat9pMX9cweDZ2CxgIUeW44gdWYFigkASHCeiSYvyRqZYqvz
+         EtiQ==
+X-Gm-Message-State: AOAM5331E38FW//1wv/4pbwlz9OUUgrlC3gBcJoK6z979yP3ujA8B8ea
+        Klyc/m3iDmc96J/m4uxPIyWjqwpP
+X-Google-Smtp-Source: ABdhPJxDflsh0HvwluZVujuFduHUZilb+GFF3x0ItuiZEaHP8qSiaL9YfMiDfg6H1ZW4TlRkFv1U/w==
+X-Received: by 2002:a2e:9e97:: with SMTP id f23mr3698618ljk.228.1589484892987;
+        Thu, 14 May 2020 12:34:52 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
+        by smtp.googlemail.com with ESMTPSA id w12sm53343ljj.55.2020.05.14.12.34.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 May 2020 12:34:51 -0700 (PDT)
+Subject: Re: [PATCH 4/9] dt-bindings: power: supply: Add device-tree binding
+ for Summit SMB3xx
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Rob Herring <robh@kernel.org>, David Heidelberg <david@ixit.cz>,
+        Jonghwa Lee <jonghwa3.lee@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Myungjoo Ham <myungjoo.ham@samsung.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Vinay Simha BN <simhavcs@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        ramakrishna.pallala@intel.com,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+References: <20200329161552.215075-1-david@ixit.cz>
+ <20200329162128.218584-5-david@ixit.cz> <20200410164905.GA719@bogus>
+ <8c4ab1ce-1947-ab38-3f8c-9055406428e4@gmail.com>
+ <CAL_JsqJgZaQux04vdkShX4vkmOK5T-H6tOXt7Da19jgG0P76-Q@mail.gmail.com>
+ <687db60d-fea9-f157-d4ce-907189bb3cc7@gmail.com>
+ <20200509011406.hs7nj3g7f5pzetxp@earth.universe>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <fea13673-9500-c34b-5b50-c4f8cef9c4d8@gmail.com>
+Date:   Thu, 14 May 2020 22:34:49 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20200511133346.21706-1-ulf.hansson@linaro.org>
- <20200514142015.GA23401@bogus> <CAPDyKFoVo8L7eiGdEVNYR2DY7cszDuLkmX8O_SfyUKh73pbpMQ@mail.gmail.com>
- <20200514172816.GA42669@bogus>
-In-Reply-To: <20200514172816.GA42669@bogus>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 14 May 2020 21:11:50 +0200
-Message-ID: <CAPDyKFrdrOnxFHaAR=cmMi2VfSudyHdjZ7vRZKhTQtepdkiXug@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: psci: Fixup execution order when entering a
- domain idle state
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200509011406.hs7nj3g7f5pzetxp@earth.universe>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 14 May 2020 at 19:28, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Thu, May 14, 2020 at 05:41:37PM +0200, Ulf Hansson wrote:
-> > On Thu, 14 May 2020 at 16:20, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > On Mon, May 11, 2020 at 03:33:46PM +0200, Ulf Hansson wrote:
-> > > > Moving forward, platforms are going to need to execute specific "last-man"
-> > > > operations before a domain idle state can be entered.
-> > >
-> > > I need to dig the thread details, but I remember commenting on one of
-> > > the similar discussion. It was something to do with voting which wasn't
-> > > necessary at all. I am interested in the details here.
-> > >
-> > > > In one way or the other, these operations needs to be triggered while
-> > > > walking the  hierarchical topology via runtime PM and genpd, as it's at that
-> > > > point the last-man becomes known.
-> > > >
-> > > > Moreover, executing last-man operations needs to be done after the CPU PM
-> > > > notifications are sent through cpu_pm_enter(), as otherwise it's likely
-> > > > that some notifications would fail. Therefore, let's re-order the sequence
-> > > > in psci_enter_domain_idle_state(), so cpu_pm_enter() gets called prior
-> > > > pm_runtime_put_sync().
-> > > >
-> > >
-> > > More details on why notifications fail ?
-> >
-> > Well, at this moment this is more of a hypothetical issue as there is
-> > no last-man notification sent/used yet.
-> >
->
-> Ah OK.
->
-> > However, typically we would call cpu_cluster_pm_enter() in the path as
-> > when the psci_pd_power_off() is called (for psci PM domains), when a
-> > valid domain state has been found.
-> >
->
-> Please don't use cpu_cluster_pm_enter. I thought the whole idea of genpd
-> will remove the notion of cluster and we will never need to use
-> cpu_cluster_pm_*
->
-> > This means, we would violate the cpu_cluster_pm_enter() API, as it's
-> > clearly stated in its corresponding function header, that
-> > cpu_pm_enter() needs to be called first (and that's also how others
-> > are currently using it).
-> >
->
-> Ah so, it was just for use of cpu_cluster_pm_* which I would like to
-> avoid. That was one of the motivation for using genpd I thought.
->
-> > Note that, I am currently exploring whether we shall call
-> > cpu_cluster_pm_enter|exit() at all, or whether we can use some other
-> > new genpd mechanism to accomplish the similar thing.
-> >
->
-> Good, you do think so.
+09.05.2020 04:14, Sebastian Reichel пишет:
+> Hi,
+> 
+> On Wed, Apr 15, 2020 at 06:30:02PM +0300, Dmitry Osipenko wrote:
+>> 15.04.2020 17:27, Rob Herring пишет:
+>>> On Fri, Apr 10, 2020 at 2:02 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>>>>
+>>>> 10.04.2020 19:49, Rob Herring пишет:
+>>>> ...
+>>>>>> +  summit,max-chg-curr:
+>>>>>> +    description: Maximum current for charging (in uA)
+>>>>>> +    allOf:
+>>>>>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+>>>>>> +
+>>>>>> +  summit,max-chg-volt:
+>>>>>> +    description: Maximum voltage for charging (in uV)
+>>>>>> +    allOf:
+>>>>>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+>>>>>> +    minimum: 3500000
+>>>>>> +    maximum: 4500000
+>>>>>> +
+>>>>>> +  summit,pre-chg-curr:
+>>>>>> +    description: Pre-charging current for charging (in uA)
+>>>>>> +    allOf:
+>>>>>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+>>>>>> +
+>>>>>> +  summit,term-curr:
+>>>>>> +    description: Charging cycle termination current (in uA)
+>>>>>> +    allOf:
+>>>>>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+>>>> ...
+>>>>> These are all properties of the battery attached and we have standard
+>>>>> properties for some/all of these.
+>>>>
+>>>> Looks like only four properties seem to be matching the properties of
+>>>> the battery.txt binding.
+>>>>
+>>>> Are you suggesting that these matching properties should be renamed
+>>>> after the properties in battery.txt?
+>>>
+>>> Yes, and that there should be a battery node.
+>>
+>> Usually, it's a battery that has a phandle to the power-supply. Isn't it?
+> 
+> There are two things: The infrastructure described by 
+> Documentation/devicetree/bindings/power/supply/power-supply.yaml is
+> used for telling the operating system, that a battery is charged
+> by some charger. This is done by adding a power-supplies = <&phandle>
+> in the battery fuel gauge node referencing the charger and probably
+> what you mean here.
+> 
+> Then we have the infrastructure described by 
+> Documentation/devicetree/bindings/power/supply/battery.txt, which
+> provides data about the battery cell. In an ideal world we would
+> have only smart batteries providing this data, but we don't live
+> in such a world. So what we currently have is a binding looking
+> like this:
+> 
+> bat: dumb-battery {
+>     compatible = "simple-battery";
+> 
+>     // data about battery cell(s)
+> };
+> 
+> fuel-gauge {
+>     // fuel-gauge specific data
+> 
+>     supplies = <&charger>;
+>     monitored-battery = <&bat>;
+> };
+> 
+> charger: charger {
+>     // charger specific data
+> 
+>     monitored-battery = <&bat>;
+> };
+> 
+> In an ideal world, charger should possibly reference fuel-gauge
+> node, which could provide combined data. Right now we do not have
+> the infrastructure for that, so it needs to directly reference
+> the simple-battery node.
+> 
+>>> Possibly you should add
+>>> new properties battery.txt. It's curious that different properties are
+>>> needed.
+>>
+>> I guess it should be possible to make all these properties generic.
+>>
+>> Sebastian, will you be okay if we will add all the required properties
+>> to the power_supply_core?
+> 
+> Extending battery.txt is possible when something is missing. As Rob
+> mentioned quite a few are already described, though:
+> 
+> summit,max-chg-curr => constant-charge-current-max-microamp
+> summit,max-chg-volt => constant-charge-voltage-max-microvolt
+> summit,pre-chg-curr => precharge-current-microamp
+> summit,term-curr => charge-term-current-microamp
+> 
+> I think at least the battery temperature limits are something, that
+> should be added to the generic code.
+> 
+>>> Ultimately, for a given battery technology I would expect
+>>> there's a fixed set of properties needed to describe how to charge
+>>> them.
+>>
+>> Please notice that the charger doesn't "only charge" the battery,
+>> usually it also supplies power to the whole device.
+>>
+>> For example, when battery is fully-charged and charger is connected to
+>> the power source (USB or mains), then battery may not draw any current
+>> at all.
+> 
+> It is also a question of how good the charging process should be.
+> Technically I can charge a single cell Li-ion battery without
+> knowing much, but it can reduce battery life and/or be very slow.
+> It might even be dangerous, if charging is done at high
+> temperatures. Also some of the properties in the battery binding
+> are not about charging, but about gauging. Some devices basically
+> have only options to measure voltage and voltage drop over a
+> resistor and everything else must be done by the operating system.
+> 
+>>> Perhaps some of these properties can just be derived from other
+>>> properties and folks are just picking what a specific charger wants.
+>>
+>> Could be so, but I don't know for sure.
+> 
+> I don't think we have things, that can be derived with a reasonable
+> amount of effort in the existing simple-battery binding, except for
+> energy-full-design-microwatt-hours & charge-full-design-microamp-hours.
+> 
+>> Even if some properties could be derived from the others, it won't hurt
+>> if we will specify everything explicitly in the device-tree.
+>>
+>>> Unfortunately, we have just a mess of stuff made up for each charger
+>>> out there. I don't have the time nor the experience in this area to do
+>>> much more than say do better.
+>>
+>> I don't think it's a mess in the kernel. For example, it's common that
+>> embedded controllers are exposed to the system as "just a battery",
+>> while in fact it's a combined charger + battery controller and the
+>> charger parameters just couldn't be changed by SW.
+> 
+> A good EC driver exposes a charger and a battery device, so that
+> userspace can easily identify if a charger is connected.
+> 
+>> In a case of the Nexus 7 devices, the battery controller and charger
+>> controller are two separate entities in the system. The battery
+>> controller (bq27541) only monitors status of the battery (charge level,
+>> temperature and etc).
 
-Okay, let's see where things go. I will keep you posted.
+Hello Sebastian,
 
-> > >
-> > > > Fixes: ce85aef570df ("cpuidle: psci: Manage runtime PM in the idle path")
-> > > > Reported-by: Lina Iyer <ilina@codeaurora.org>
-> > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > ---
-> > > >  drivers/cpuidle/cpuidle-psci.c | 8 +++++++-
-> > > >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > > > index bae9140a65a5..d0fb585073c6 100644
-> > > > --- a/drivers/cpuidle/cpuidle-psci.c
-> > > > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > > > @@ -58,6 +58,10 @@ static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
-> > > >       u32 state;
-> > > >       int ret;
-> > > >
-> > > > +     ret = cpu_pm_enter();
-> > > > +     if (ret)
-> > > > +             return -1;
-> > > > +
-> > >
-> > > This change is ignoring the retention case psci_enter_state handles and
-> > > this may affect performance by doing unnecessary save/restore.
-> >
-> > This was already the case before. CPU_PM_CPU_IDLE_ENTER_PARAM() ends
-> > up always setting "is_retention" to 0, when __CPU_PM_CPU_IDLE_ENTER()
-> > is called.
-> >
->
-> Ah OK, I recall now, sorry for the noise.
+Thank you very much for the comments! We'll prepare the v2.
 
-No worries, thanks for reviewing.
-
-That said, are you fine with Rafel queuing this then?
-
-Kind regards
-Uffe
