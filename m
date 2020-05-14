@@ -2,177 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 468811D417C
-	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 01:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A965C1D418F
+	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 01:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729089AbgENXF0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 May 2020 19:05:26 -0400
-Received: from mail-bn8nam12olkn2108.outbound.protection.outlook.com ([40.92.21.108]:52132
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729164AbgENXFY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 14 May 2020 19:05:24 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FzXng47NL8FcgWy1gQ9W7tlLb3tw/GA9M48/LyWy6VGTt/xv16NIagwvxz3UF/K18avxwezAYlRHNO6TvmIEBwrq2iT0rlsnLo3pRCQAfYBixnf0rGDnsQ5A4vytKoZf0JoiUsSYQjwR5Za6F1MsmnTXoNFe+nFcoGKrXI4PdVLwQe6w5ULB0wSYduZgoD8GZB+vlwhBeo2dmDh/3843ujcKZEpOM8DLowEpPZLMkXSRiEqNUtbt1Kn1PqkKxtvJ82kEAkpFcYvArwL/xzQW1U718h0euoS7c2jNXHvg9WevnjpBCVNBFoViu93shkzqJEL6GxOQVncnXzi8C2CcPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qe8FbzbVdPyeGBc4pRx8iEkk18QIkWBbq67esAEoc/U=;
- b=fHFSnkBDByckvhL9LeCRU2pxEb61ffTNjPbUbvq6gAomLFEMV5WYtGPOFkBuatqoyIY+G3qfarluH3yT1wSouIwP7p+K9CtZLWZKpVIYDvXFIiHmqirqQcYh8nkFVP6ynb7FD5RsSpqdYacnS60byTD3e8zN5SCZyQdBKqpuMxE4QezHyhGWX73n78cKHAVONQuLykJWS2V0gvQaAW/dxRtNyZhlfEHdVuAekeG4fsIPEmJWxh/nmomoE8YiDNU9U82qxTZoC5tsquB6f9qtxThtIKuizFbvq1IIe30yylAwtWGU5NLikbQLePLI1bfhZGU3KDm8RavKPiuX38C+Yg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=live.ca; dmarc=pass action=none header.from=live.ca; dkim=pass
- header.d=live.ca; arc=none
-Received: from MW2NAM12FT003.eop-nam12.prod.protection.outlook.com
- (2a01:111:e400:fc65::44) by
- MW2NAM12HT209.eop-nam12.prod.protection.outlook.com (2a01:111:e400:fc65::472)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.11; Thu, 14 May
- 2020 23:05:21 +0000
-Received: from BN6PR04MB0660.namprd04.prod.outlook.com
- (2a01:111:e400:fc65::44) by MW2NAM12FT003.mail.protection.outlook.com
- (2a01:111:e400:fc65::70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.11 via Frontend
- Transport; Thu, 14 May 2020 23:05:21 +0000
-X-IncomingTopHeaderMarker: OriginalChecksum:8FE46E5D22477DA16827A93781B410B0D8719A47343C2F81C8D0CD8B7CC14DCE;UpperCasedChecksum:DE063B2EF7B2E3193A6A4BF53F51B43C4F701699C70C528B78C3F7B85453DA6E;SizeAsReceived:7862;Count:50
-Received: from BN6PR04MB0660.namprd04.prod.outlook.com
- ([fe80::ad10:4127:4bc8:76fc]) by BN6PR04MB0660.namprd04.prod.outlook.com
- ([fe80::ad10:4127:4bc8:76fc%6]) with mapi id 15.20.3000.022; Thu, 14 May 2020
- 23:05:21 +0000
-From:   Jonathan Bakker <xc-racer2@live.ca>
-To:     sre@kernel.org, krzk@kernel.org, jonghwa3.lee@samsung.com,
-        tglx@linutronix.de, kstewart@linuxfoundation.org,
-        baolin.wang7@gmail.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jonathan Bakker <xc-racer2@live.ca>
-Subject: [PATCH 10/10] dt-bindings: power: supply: Cleanup charger-manager bindings
-Date:   Thu, 14 May 2020 16:04:35 -0700
-Message-ID: <BN6PR04MB0660E57423994D19C84370A3A3BC0@BN6PR04MB0660.namprd04.prod.outlook.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200514230435.11798-1-xc-racer2@live.ca>
-References: <20200514230435.11798-1-xc-racer2@live.ca>
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MWHPR22CA0040.namprd22.prod.outlook.com
- (2603:10b6:300:69::26) To BN6PR04MB0660.namprd04.prod.outlook.com
- (2603:10b6:404:d9::21)
-X-Microsoft-Original-Message-ID: <20200514230435.11798-11-xc-racer2@live.ca>
+        id S1726188AbgENXQ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 May 2020 19:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726088AbgENXQZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 May 2020 19:16:25 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23F1C061A0C;
+        Thu, 14 May 2020 16:16:25 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id x2so57366pfx.7;
+        Thu, 14 May 2020 16:16:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=/+eJp01tcGIi1FS6nFoffCHP/3vMG+E9qZfC/akFkdg=;
+        b=DcMY/BwGW9Ui9hS5lf+6zAGj+OmK2cB2fnuNjh62obBQ8tM0MRuSOYJ+fncTgpIzjl
+         Fr+G43Ze3vE389xISo74EvA5+F+pwxdq08UOHL93AoQVJdRseYr71wLDSffjOCejHxOw
+         sDUEWQJaYfVGt1pPvT5UhdNq5b5EWWJT/dYV39X3soljP5oukSwuraLSZhNMgD8gT36O
+         0WY12k7mzMgqL4i7LU2CROOvdP9Z4u4fVAPH0G8g5zT2l+dEtVq0T1+UQQwHYSHwXwmY
+         PddE82IB1dy4WSCzikNexASjizHGyyXjKkSKQBK6Yi7BCXESMSIB5m833S0uF/PqqNEl
+         vzog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=/+eJp01tcGIi1FS6nFoffCHP/3vMG+E9qZfC/akFkdg=;
+        b=fN2mwNfRXOLbBbXHyJKasdooL0v4wzNDdfoLida50w3Oi72d8+Ahgt9znwcaVKmvJ+
+         TtKqFtLoSsgNzSomzEkVBatSNrVrKQi4u3gnKLHzwIh9tTk1GVe4b0/mlCPJx1WiI2s6
+         ND3EejEyu0Y1quDRMpyUe66RwtAmb4IgDGwPvlUlP05PKD5HlKfzkCjHyogWNGWNcV/S
+         I9Mm6BMg3VYD7SZM5lcI9SurNWYWz4EoBR6vVqYPg+WrQs6kjfYHz2GEfDrFX8X1Qjq4
+         +ghZsMukrAB1kytCSxn1de6hjW1E88M9MmHZZWjSYcgWbUBkuNagjpQo1odedv9E+Gx1
+         Zs9Q==
+X-Gm-Message-State: AOAM533tKT2BFNTGbRF/v83nM64+SoEQFY3O+9J/KOlZ+BAq6x4SOcbH
+        2pTcXBCUzckHn+6d6ULPCV0=
+X-Google-Smtp-Source: ABdhPJwRRq+bL5xaxHN1P6mCwtKSPR/WiDUgW/JFP+3vWldtyl1raVdBJTKBlG9MkAPg1TEaxdcXGg==
+X-Received: by 2002:a63:5026:: with SMTP id e38mr430641pgb.149.1589498185092;
+        Thu, 14 May 2020 16:16:25 -0700 (PDT)
+Received: from syed ([106.223.1.212])
+        by smtp.gmail.com with ESMTPSA id t14sm231437pgr.61.2020.05.14.16.16.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 14 May 2020 16:16:24 -0700 (PDT)
+Date:   Fri, 15 May 2020 04:46:03 +0530
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
+        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        yamada.masahiro@socionext.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v6 0/4] Introduce the for_each_set_clump macro
+Message-ID: <cover.1589497311.git.syednwaris@gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from jon-hp-6570b.telus (2001:569:fb68:9c00:8067:f823:1e15:7520) by MWHPR22CA0040.namprd22.prod.outlook.com (2603:10b6:300:69::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.26 via Frontend Transport; Thu, 14 May 2020 23:05:19 +0000
-X-Mailer: git-send-email 2.20.1
-X-Microsoft-Original-Message-ID: <20200514230435.11798-11-xc-racer2@live.ca>
-X-TMN:  [MWEiQQrJbor6Eb/d0JZR+Ax6cMEWlvDwFRLGKClVWSx7rfMDU/Cel/S3miHFtqaz]
-X-MS-PublicTrafficType: Email
-X-IncomingHeaderCount: 50
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-Correlation-Id: 58a531cf-2e75-4aba-7847-08d7f85b46bd
-X-MS-TrafficTypeDiagnostic: MW2NAM12HT209:
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8jhOcp/k0IL0FyU8mDfcfHrTPPl3dPoIJYAQ5VkiRpV3OC2VH1D6O0woOX52ZYBcLOTAmgPpMZy24Y+gyfq7U6t+p2eJAyLw5Pc9zX86mE2pw/5FuFYcNVaPpMn5QjPrvZdhv0kb/9w+LTXQFtxPBOjeQbXjvrUTpZMYAGpDPOHIhQX9TEPxI6nQdoZCTj1ji8OSESUt9BysMA1LYCJs5g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:0;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR04MB0660.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:;DIR:OUT;SFP:1901;
-X-MS-Exchange-AntiSpam-MessageData: gk7JFDJ7j+wwMIWEXjrZr+7d9Lf32O521nshvEFRBDrIt+D2ZM0BIqjRDw53VUAUG1DmnDqq3no/S6pYoQUxkEGaXDDZ595vYHPVhEkS4dfusxCS7zXYNV/SnWTyN8eqGk80MZ0K1zrmnmTXjcN4LLugE+mMvcs81NpMOygs1B8Q83XXG321rGdIuYZr/YjVaM1XE96Wfq3GkeD0wSGfyA==
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58a531cf-2e75-4aba-7847-08d7f85b46bd
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2020 23:05:21.5046
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2NAM12HT209
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The bindings for charger-manager were very unclear and didn't
-specify allowable values in many cases.  Clean these up to show
-what each value does and make sure all properties are documented
-here rather than using wildcards.
+This patchset introduces a new generic version of for_each_set_clump. 
+The previous version of for_each_set_clump8 used a fixed size 8-bit
+clump, but the new generic version can work with clump of any size but
+less than or equal to BITS_PER_LONG. The patchset utilizes the new macro 
+in several GPIO drivers.
 
-Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
----
- .../bindings/power/supply/charger-manager.txt | 30 ++++++++++++-------
- 1 file changed, 20 insertions(+), 10 deletions(-)
+The earlier 8-bit for_each_set_clump8 facilitated a
+for-loop syntax that iterates over a memory region entire groups of set
+bits at a time.
 
-diff --git a/Documentation/devicetree/bindings/power/supply/charger-manager.txt b/Documentation/devicetree/bindings/power/supply/charger-manager.txt
-index ec4fe9de3137..b5ae9061b7a0 100644
---- a/Documentation/devicetree/bindings/power/supply/charger-manager.txt
-+++ b/Documentation/devicetree/bindings/power/supply/charger-manager.txt
-@@ -3,24 +3,32 @@ charger-manager bindings
- 
- Required properties :
-  - compatible : "charger-manager"
-- - <>-supply : for regulator consumer
-- - cm-num-chargers : number of chargers
-+ - <>-supply : for regulator consumer, named according to cm-regulator-name
-  - cm-chargers : name of chargers
-  - cm-fuel-gauge : name of battery fuel gauge
-  - subnode <regulator> :
- 	- cm-regulator-name : name of charger regulator
- 	- subnode <cable> :
--		- cm-cable-name : name of charger cable
-+		- cm-cable-name : name of charger cable - one of USB, USB-HOST,
-+			SDP, DCP, CDP, ACA, FAST-CHARGER, SLOW-CHARGER, WPT,
-+			PD, DOCK, JIG, or MECHANICAL
- 		- cm-cable-extcon : name of extcon dev
- (optional)	- cm-cable-min : minimum current of cable
- (optional)	- cm-cable-max : maximum current of cable
- 
- Optional properties :
-  - cm-name : charger manager's name (default : "battery")
-- - cm-poll-mode : polling mode (enum polling_modes)
-- - cm-poll-interval : polling interval
-- - cm-battery-stat : battery status (enum data_source)
-- - cm-fullbatt-* : data for full battery checking
-+ - cm-poll-mode : polling mode - 0 for disabled, 1 for always, 2 for when
-+	external power is connected, or 3 for when charging.  If not present,
-+	then polling is disabled
-+ - cm-poll-interval : polling interval (in ms)
-+ - cm-battery-stat : battery status - 0 for battery always present, 1 for no
-+	battery, 2 to check presence via fuel gauge, or 3 to check presence
-+	via charger
-+ - cm-fullbatt-vchkdrop-volt : voltage drop (in uV) before restarting charging
-+ - cm-fullbatt-voltage : voltage (in uV) of full battery
-+ - cm-fullbatt-soc : state of charge to consider as full battery
-+ - cm-fullbatt-capacity : capcity (in uAh) to consider as full battery
-  - cm-thermal-zone : name of external thermometer's thermal zone
-  - cm-battery-* : threshold battery temperature for charging
- 	-cold : critical cold temperature of battery for charging
-@@ -29,6 +37,10 @@ Optional properties :
- 	-temp-diff : temperature difference to allow recharging
-  - cm-dis/charging-max = limits of charging duration
- 
-+Deprecated properties:
-+ - cm-num-chargers
-+ - cm-fullbatt-vchkdrop-ms
-+
- Example :
- 	charger-manager@0 {
- 		compatible = "charger-manager";
-@@ -39,13 +51,11 @@ Example :
- 		cm-poll-mode = <1>;
- 		cm-poll-interval = <30000>;
- 
--		cm-fullbatt-vchkdrop-ms = <30000>;
- 		cm-fullbatt-vchkdrop-volt = <150000>;
- 		cm-fullbatt-soc = <100>;
- 
- 		cm-battery-stat = <3>;
- 
--		cm-num-chargers = <3>;
- 		cm-chargers = "charger0", "charger1", "charger2";
- 
- 		cm-fuel-gauge = "fuelgauge0";
-@@ -71,7 +81,7 @@ Example :
- 				cm-cable-max = <500000>;
- 			};
- 			cable@1 {
--				cm-cable-name = "TA";
-+				cm-cable-name = "SDP";
- 				cm-cable-extcon = "extcon-dev.0";
- 				cm-cable-min = <650000>;
- 				cm-cable-max = <675000>;
+For example, suppose you would like to iterate over a 32-bit integer 8
+bits at a time, skipping over 8-bit groups with no set bit, where
+XXXXXXXX represents the current 8-bit group:
+
+    Example:        10111110 00000000 11111111 00110011
+    First loop:     10111110 00000000 11111111 XXXXXXXX
+    Second loop:    10111110 00000000 XXXXXXXX 00110011
+    Third loop:     XXXXXXXX 00000000 11111111 00110011
+
+Each iteration of the loop returns the next 8-bit group that has at
+least one set bit.
+
+But with the new for_each_set_clump the clump size can be different from 8 bits.
+Moreover, the clump can be split at word boundary in situations where word 
+size is not multiple of clump size. Following are examples showing the working 
+of new macro for clump sizes of 24 bits and 6 bits.
+
+Example 1:
+clump size: 24 bits, Number of clumps (or ports): 10
+bitmap stores the bit information from where successive clumps are retrieved.
+
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x000000aa000000aa;
+        0xbbbbabcdeffedcba;  /* Least significant bits */
+
+Different iterations of for_each_set_clump:-
+'offset' is the bit position and 'clump' is the 24 bit clump from the
+above bitmap.
+Iteration first:        offset: 0 clump: 0xfedcba
+Iteration second:       offset: 24 clump: 0xabcdef
+Iteration third:        offset: 48 clump: 0xaabbbb
+Iteration fourth:       offset: 96 clump: 0xaa
+Iteration fifth:        offset: 144 clump: 0xff
+Iteration sixth:        offset: 168 clump: 0xaaaaaa
+Iteration seventh:      offset: 216 clump: 0xff
+Loop breaks because in the end the remaining bits (0x00aa) size was less
+than clump size of 24 bits.
+
+In above example it can be seen that in iteration third, the 24 bit clump
+that was retrieved was split between bitmap[0] and bitmap[1]. This example 
+also shows that 24 bit zeroes if present in between, were skipped (preserving
+the previous for_each_set_macro8 behaviour). 
+
+Example 2:
+clump size = 6 bits, Number of clumps (or ports) = 3.
+
+     /* bitmap memory region */
+        0x00aa0000ff000000;  /* Most significant bits */
+        0xaaaaaa0000ff0000;
+        0x0f00000000000000;
+        0x0000000000000ac0;  /* Least significant bits */
+
+Different iterations of for_each_set_clump:
+'offset' is the bit position and 'clump' is the 6 bit clump from the
+above bitmap.
+Iteration first:        offset: 6 clump: 0x2b
+Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
+Here 6 * 3 is clump size * no. of clumps.
+
+Changes in v6:
+ - [Patch 2/4]: Make 'for loop' inside test_for_each_set_clump more
+   succinct.
+
+Changes in v5:
+ - [Patch 4/4]: Minor change: Hardcode value for better code readability.
+
+Changes in v4:
+ - [Patch 2/4]: Use 'for' loop in test function of for_each_set_clump.
+ - [Patch 3/4]: Minor change: Inline value for better code readability.
+ - [Patch 4/4]: Minor change: Inline value for better code readability.
+
+Changes in v3:
+ - [Patch 3/4]: Change datatype of some variables from u64 to unsigned long
+   in function thunderx_gpio_set_multiple.
+
+CHanges in v2:
+ - [Patch 2/4]: Unify different tests for 'for_each_set_clump'. Pass test data as
+   function parameters.
+ - [Patch 2/4]: Remove unnecessary bitmap_zero calls.
+
+Syed Nayyar Waris (4):
+  bitops: Introduce the the for_each_set_clump macro
+  lib/test_bitmap.c: Add for_each_set_clump test cases
+  gpio: thunderx: Utilize for_each_set_clump macro
+  gpio: xilinx: Utilize for_each_set_clump macro
+
+ drivers/gpio/gpio-thunderx.c      |  11 ++-
+ drivers/gpio/gpio-xilinx.c        |  62 ++++++-------
+ include/asm-generic/bitops/find.h |  19 ++++
+ include/linux/bitmap.h            |  61 +++++++++++++
+ include/linux/bitops.h            |  13 +++
+ lib/find_bit.c                    |  14 +++
+ lib/test_bitmap.c                 | 142 ++++++++++++++++++++++++++++++
+ 7 files changed, 288 insertions(+), 34 deletions(-)
+
+
+base-commit: 5f458e572071a54841b93f41e25fbe8ded82df79
 -- 
-2.20.1
+2.26.2
 
