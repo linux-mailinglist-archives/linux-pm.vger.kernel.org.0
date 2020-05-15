@@ -2,117 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9791D5915
-	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 20:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 056101D593D
+	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 20:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726237AbgEOS3r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 May 2020 14:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        id S1726292AbgEOSmB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 May 2020 14:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726197AbgEOS3q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 May 2020 14:29:46 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E31EC061A0C
-        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 11:29:46 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id w64so3652117wmg.4
-        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 11:29:46 -0700 (PDT)
+        with ESMTP id S1726238AbgEOSmA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 May 2020 14:42:00 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDFCC061A0C
+        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 11:42:00 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id z26so1255455pfk.12
+        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 11:42:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=GJ9JhcL5w+UKUif3imo4eTLikeA01EEdC4v2F/TAyYo=;
-        b=u4wTi9baIUhOAwGePlS93LW9WleOHD7hiHU85TQGl6kB3A89YHNvOVKf9nEa2ZXwDJ
-         ewBNDg7Ru3BbIHGC9RE1x6g/scMTKPw1m+OMX1T7wPehuTbdnnCm44X5eYyDJtBt2+iG
-         OqJ6p8zfawDjNrz3roVA4TlmfPBQwR5ntqqCYbZpX7wgksam+Un9Iw3nrxpU/STzjnCL
-         WjN3tcva3TaGFtTrzgBximFbVol9XvBsJeT/KK3ti6lFni/Sk4egi+jmWLOhWMmHZJc3
-         r6FyyyAfOThsGFnz5mw/JgFj81cQEoeSL8SS8HWjlSRYjQT1C0mFnkuPW7H5rrnTJYsC
-         6fcg==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=lL8pAZjSlnYf0khYaqRm7TrxuhYrtZ5rDHp6ebKkdQw=;
+        b=O9FP1a03UIQLoCSj2/Lwl6YnP5b5LY2D4jQmqLOJ1TAL0tzB7rxfA+2eRQhzc830jI
+         isx2C6US+bE8DKB5OhiCiwXoGPeSMh7MwfkuUPQT9OPuUW6zGKdD8WkJ93rCsRu/9CVn
+         5Kijes2tD5A63GywAK+m57pu6PF2XUUKwmmpr0Pt0TExON8UZx24YhsFR2C4PKca/+kJ
+         1IbToAHlIevVe1PMdvdwP3u0wbuCZyc7GDXIe3Ir+A8xrCiU/+qV4OThw45NBomUXk5w
+         v6OQKrR4XI3iQJRdGlcTCDms+PEgSqD2a+T+W0yy6oJNm6aEUGdtYCu/JWp8r9BlhD8p
+         WTEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=GJ9JhcL5w+UKUif3imo4eTLikeA01EEdC4v2F/TAyYo=;
-        b=BaCuFN7i1aSsZWfW91xbGT0b+u0yvN4T9nNNO69i7rqh/R9IeIrwupqvfLAdLP12eZ
-         ADdh07+EHWWMNmh/CqruIuH8Rp+RcFEVHysl/XwaK24q6mi+iF2+kYb5E/C2NIMj+nzy
-         dK5DAGXXTyn9oeoEfFEb8N+gbN3a9CwvJcdPFsa2St5Jd6bK5YKlWpzKGPAG8UHzXYsA
-         8SIzB9f+sZ1D1CHjQna/BwwJ9FclruOFnI4dIbkHRO6dtTZ+M3nB7rPJYESIFAxdS0Rm
-         2ehcpzIUfrYaNI2wOB6A0dglTy/pRwpDg4jc8dZQu4q/ROdWWTbmN1p5abNcG+FdNPcY
-         iZXQ==
-X-Gm-Message-State: AOAM533ZiB76RCYviOmaSBswNSbH/iagwtffbWrdlF+Yzo4OvOXELYKE
-        KnkzNNIOLTflwNEWXBL0UHUhdhG8jUo=
-X-Google-Smtp-Source: ABdhPJz/hCF+DYv5rBjLp/yIksSf1A9sF91/4odzyWZ6Alby3Um3A6BcMB0Lix+gtLUkPWaVIQz2Gw==
-X-Received: by 2002:a1c:7513:: with SMTP id o19mr5347731wmc.104.1589567385074;
-        Fri, 15 May 2020 11:29:45 -0700 (PDT)
-Received: from linaro.org ([2a01:e34:ed2f:f020:5450:281:8a7d:dd9a])
-        by smtp.gmail.com with ESMTPSA id n9sm4959897wmj.5.2020.05.15.11.29.43
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=lL8pAZjSlnYf0khYaqRm7TrxuhYrtZ5rDHp6ebKkdQw=;
+        b=t4ah4pkw3wI3UeZtv7C5DXLDAANdWEiIteTYydCbA1W1isHt7M1Je7zvopoyOuXSIE
+         4ILPi/7FLJ35znRjlYzFkLA9cpoMaeyQxeEqrQPiTl5Sd7dAH0vEXY47GtauoIYFBFu8
+         NNDPt2wbDcVffig+qepfcQmK8vMR7XI5+QG2fJMhZ5N/avIZv9ZBZU267g7LqXMgBuKd
+         3UnnujN4LcDF9ooNX9fwTFBBcHaZSV9ANifIE3c77ilcNUPYPlf9vMbpeYwlnV2k4Yej
+         CCCcoKZCk6jGMsR5+TjUV1oqryupaMVOSvSF11Nq6Cu16kCpq0jA1TVy/mxFvGg4Baqx
+         GkHg==
+X-Gm-Message-State: AOAM533r5tauHa0vm1HKuWWOGsUPuLEYkzinqRSRaQ3IOZl5V0vl+s6S
+        uX7BO6P/MzvPfXK0oIZ+MebvhA==
+X-Google-Smtp-Source: ABdhPJwhBb/E5x2JcIBki9KgjX7HwRpAgzUIrrwsMyjUWXuk5VASJR4OqrO0G9tbevUP4b1J7D+L8g==
+X-Received: by 2002:a62:528e:: with SMTP id g136mr5488246pfb.165.1589568120102;
+        Fri, 15 May 2020 11:42:00 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id n16sm2537568pfq.61.2020.05.15.11.41.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2020 11:29:44 -0700 (PDT)
-Date:   Fri, 15 May 2020 20:29:42 +0200
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Zhou Wang <wangzhou1@hisilicon.com>
-Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
-        "shenyang (M)" <shenyang39@huawei.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>, linuxarm@huawei.com
-Subject: Re: [PATCH V3 2/2] thermal: Add HiSilicon Kunpeng thermal driver
-Message-ID: <20200515182942.GB760381@linaro.org>
-References: <1587455093-33876-3-git-send-email-shenyang39@huawei.com>
- <53ca3883-9155-c023-7916-10ec8cccf977@linaro.org>
- <0be585d3-1180-7b42-8b51-392a34793f70@huawei.com>
- <b1739246-3639-a6c1-6c0d-275eb2ab0d16@linaro.org>
- <5EB65D33.80105@hisilicon.com>
- <96c7578e-25cf-d258-6505-8c1c631dbe82@linaro.org>
- <5EB8A9DC.9030004@hisilicon.com>
- <85f9f90f-2b67-4cfd-cc28-b14e037755b7@linaro.org>
- <CAHLCerMfbJ3cAD32DHmYjEHPTa85a=ocYiPi3C9Ew5ctj-rVvQ@mail.gmail.com>
- <5EBD42BA.7070008@hisilicon.com>
+        Fri, 15 May 2020 11:41:59 -0700 (PDT)
+Message-ID: <5ebee277.1c69fb81.e88a0.7c49@mx.google.com>
+Date:   Fri, 15 May 2020 11:41:59 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5EBD42BA.7070008@hisilicon.com>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.7-rc5-57-g8ef6544598d6
+X-Kernelci-Report-Type: boot
+Subject: pm/testing boot: 66 boots: 2 failed,
+ 63 passed with 1 untried/unknown (v5.7-rc5-57-g8ef6544598d6)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 14, 2020 at 09:08:10PM +0800, Zhou Wang wrote:
-> On 2020/5/13 20:45, Amit Kucheria wrote:
-> > On Mon, May 11, 2020 at 1:44 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
+pm/testing boot: 66 boots: 2 failed, 63 passed with 1 untried/unknown (v5.7=
+-rc5-57-g8ef6544598d6)
 
-[ ... ]
+Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
+el/v5.7-rc5-57-g8ef6544598d6/
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+7-rc5-57-g8ef6544598d6/
 
-> > They're simply using the thermal framework to show some temperatures
-> > in sysfs. It seems they have no use for any of the other features of
-> > the thermal framework, all that is handled in ACPI firmware.
-> 
-> This driver is ACPI based.
-> 
-> > 
-> > I do wonder if such drivers would be better off registering a hwmon
-> > driver instead.
-> 
-> If this driver is registering as a hwmon driver, it will block possible
-> usages of other thermal features in the future.
-> 
-> So as a new driver, we would like to register to thermal subsystem :)
+Tree: pm
+Branch: testing
+Git Describe: v5.7-rc5-57-g8ef6544598d6
+Git Commit: 8ef6544598d61aab12b6b4613971bf53256b14eb
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Tested: 58 unique boards, 16 SoC families, 3 builds out of 6
 
-When I did the first comments, I missed the point of the ACPI aspect but the
-main concern remains, especially in regard with the "features in the future".
+Boot Regressions Detected:
 
-Please, do not aggregate the sensors in the driver. Make them separate to give
-the real view of the system.
+arm64:
 
-The aggregation aspect is still under discussion (virtual sensor or virtual
-thermal zone).
+    defconfig:
+        gcc-8:
+          meson-gxl-s805x-p241:
+              lab-baylibre: new failure (last pass: v5.7-rc5-53-gfbe093dd16=
+f4)
 
+Boot Failures Detected:
 
--- 
+arm64:
+    defconfig:
+        gcc-8:
+            sun50i-a64-pine64-plus: 1 failed lab
 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+---
+For more info write to <info@kernelci.org>
