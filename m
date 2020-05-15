@@ -2,161 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C420C1D4755
-	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 09:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A721D4776
+	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 09:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726714AbgEOHso (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 May 2020 03:48:44 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:34292 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726694AbgEOHso (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 May 2020 03:48:44 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 9F08D8030791;
-        Fri, 15 May 2020 07:48:38 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Z5eapfVpeB6f; Fri, 15 May 2020 10:48:33 +0300 (MSK)
-Date:   Fri, 15 May 2020 10:48:27 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
- if CPU_FREQ enabled
-Message-ID: <20200515074827.6p5zx4sb3bmavjih@mobilestation>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
- <20200508154150.GB22247@alpha.franken.de>
- <20200511133121.cz5axbwynhmqkx7x@mobilestation>
+        id S1727001AbgEOH5d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 May 2020 03:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726671AbgEOH5b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 May 2020 03:57:31 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABD1C061A0C
+        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 00:57:30 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id q16so613139plr.2
+        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 00:57:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZyzW1H8AFFYElgNpg92Xk3JWxRZpBy2j9yutlr0YjsE=;
+        b=HWM2/1Du2WgTucuJQpwh98ZrRlroWxqg15O5s2SpAAGHKSWILrVa0LrWXciiMeLDbm
+         dHKCyvUnu7aEVyi+PSvgBB3lT1L6ms806WxRI7BvHHoUTTqEndaAEdj5b/pkalA1MJ0U
+         66B/Po2dzZDRD7fRfnOF9jpHeXir0aWwiZovv6OWW+mJkIM6QZCNX+c1pMXkijbrPk7i
+         H5CMH9GcPO60vokgnukC1QNN4vDyKQkijVYmiNpzz5njzwKIuYr+oJaislpmOdPVmCDO
+         zQNyXOlV0jO5KigMzAtxOTk54UKJYTSGP9V8OIS6p6J3lhZRHOdCQ9xfvq76FHB7CKJj
+         /geg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZyzW1H8AFFYElgNpg92Xk3JWxRZpBy2j9yutlr0YjsE=;
+        b=FPCfChlSLHxilFa6t4QDEwkw9Adendv3YUWC8zyIgVJgFShXUn3HqBw5R/z4s9vfpc
+         uTeVZRfdh0tWtxDByY7kzTNyew4fliMEZUQH7MaExGm7oh480pYzOFXGNV1mjLsjBiTw
+         ipaeD2NCBBYc2VZ4KM8eyQovEeHQZ4zPO6p+FBEQPK1kQHdGVt899AzHoaXXQlBfkrVm
+         dV/Fv7U8EftR8CVTk2CSCW/zmZLLVR0jKhZc3W5BpLDKrdJqVGj1SgXqxoLa/bHshGXp
+         8p1q8bj5PnfXG3IOUI1l5czyp4Sr9IG3tWkzah0AMJxravoyLXFCI3rxPwfqLs5HZgkv
+         1dfg==
+X-Gm-Message-State: AOAM532EvaoT8vi1diq2QSllWm14iG5x1JIzv6g2pGQvW9Tge8Sjyx/w
+        PqvvAuDHl4VqCnZ3X0sKoJFCPw==
+X-Google-Smtp-Source: ABdhPJyoEn77D99k5JFEmPox0/Sh0OVxYkzLK8U5vnIaAotAEhqOhnvr845CAGGuRKRTrA/vUU8D8A==
+X-Received: by 2002:a17:90b:3790:: with SMTP id mz16mr2056475pjb.179.1589529449691;
+        Fri, 15 May 2020 00:57:29 -0700 (PDT)
+Received: from localhost ([122.167.130.103])
+        by smtp.gmail.com with ESMTPSA id 140sm1218633pfw.96.2020.05.15.00.57.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 15 May 2020 00:57:28 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     k.konieczny@samsung.com, peron.clem@gmail.com,
+        m.szyprowski@samsung.com, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>, broonie@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] opp: core: add regulators enable and disable
+Date:   Fri, 15 May 2020 13:27:19 +0530
+Message-Id: <cover.1589528491.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200511133121.cz5axbwynhmqkx7x@mobilestation>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thomas,
-Could you take a look at my comment below so I could proceed with the
-patchset v3 development?
+Hi,
 
--Sergey
+This series reintroduces the usage of regulator_enable/disable() to the
+OPP core after the previous attempt was reverted [1] shortly after getting
+applied. This time the regulator is enabled only after it is configured
+by the OPP core.
 
-On Mon, May 11, 2020 at 04:31:21PM +0300, Serge Semin wrote:
-> On Fri, May 08, 2020 at 05:41:50PM +0200, Thomas Bogendoerfer wrote:
-> > On Wed, May 06, 2020 at 08:42:36PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> > > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > 
-> > > Commit 07d69579e7fe ("MIPS: Don't register r4k sched clock when
-> > > CPUFREQ enabled") disabled the r4k-clock usage for scheduler ticks
-> > > counting due to the scheduler being non-tolerant for unstable
-> > > clocks sources. For the same reason the clock should be used
-> > > in the system clocksource framework only as a last resort if CPU
-> > > frequency may change.
-> > > 
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > > Cc: Paul Burton <paulburton@kernel.org>
-> > > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: Arnd Bergmann <arnd@arndb.de>
-> > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > Cc: linux-pm@vger.kernel.org
-> > > Cc: devicetree@vger.kernel.org
-> > > ---
-> > >  arch/mips/kernel/csrc-r4k.c | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > > 
-> > > diff --git a/arch/mips/kernel/csrc-r4k.c b/arch/mips/kernel/csrc-r4k.c
-> > > index 437dda64fd7a..d81fb374f477 100644
-> > > --- a/arch/mips/kernel/csrc-r4k.c
-> > > +++ b/arch/mips/kernel/csrc-r4k.c
-> > > @@ -71,7 +71,11 @@ int __init init_r4k_clocksource(void)
-> > >  		return -ENXIO;
-> > >  
-> > >  	/* Calculate a somewhat reasonable rating value */
-> > > +#ifndef CONFIG_CPU_FREQ
-> > >  	clocksource_mips.rating = 200 + mips_hpt_frequency / 10000000;
-> > > +#else
-> > > +	clocksource_mips.rating = 99;
-> > > +#endif
-> > 
-> > I dislike this patch. Assuming you have an other clocksource, why not
-> > simply disable csrc-r4k, if CPU_FREQ is enabled ?
-> 
-> Me neither and the best way would be to update the clocksource frequency
-> dynamically the same way it's done for cevt-r4k and MIPS GIC timers. Alas the
-> clocksource doesn't support it. Due to this together with CPU-freq facility
-> enabled we have to use a very slow DW APB Timer instead of the fast embedded
-> into the CPU core r4k and MIPS GIC timers. Just note the difference: it takes
-> 220 ns to read the counter from DW APB Timer in comparison to a few nanoseconds
-> reading from MIPS GIC and R4K. So IMO disabling the timer as you suggest isn't
-> the best option. By making the CPUFREQ and CSRC_R4K mutual exclusive we'd
-> assume a use-case that the system will always use the CPU-freq facility changing
-> the CPU reference frequency. This is obviously not true. Noone prevents the
-> system administrator to leave the default setting of the CPU-freq with fixed
-> frequency and select a faster, more accurate timer like in our case.
-> 
-> My idea was not to try to predict how the system would be used, but to let the
-> system administration to choose which timer is applicable in particular usecase
-> enabling a safest one by default. So if CPUFREQ is available, then we fallback
-> to the external timer as safest one. If the system user wouldn't need to have
-> the CPUFREQ facility utilized, then the system administrator would want to
-> leave the default CPU-freq governor with pre-defined CPU frequency and
-> select either R4K (MIPS) or MIPS GIC timer just by writing its name into
-> /sys/bus/clocksource/devices/clocksource0/current_clocksource .
->  
-> I should note, that currently CPU_FREQ won't be available if there is no
-> MIPS_EXTERNAL_TIMER available for the platform. It's prohibited by means of the
-> conditional kbuild config inclusion declared in the arch/mips/Kconfig:
-> + if CPU_SUPPORTS_CPUFREQ && MIPS_EXTERNAL_TIMER
-> + source "drivers/cpufreq/Kconfig"
-> + endif
-> So if there is no external timer working independently from the CPU core clock
-> source, the CPUFREQ won't be available to select for the kernel. Though currently
-> this limitation is supposed to be applicable for the R4K/MIPS GIC clocksource
-> timers only since clockevents must work fine in unstable reference clock conditions.
-> 
-> So what can we do to improve the patch? First one is a solution I suggested in
-> this patch but it could be a bit altered by using IS_ENABLED() macro to:
-> + clocksource_mips.rating = !IS_ENABLED(CONFIG_CPU_FREQ) ?
-> +			    200 + mips_hpt_frequency / 10000000 : 99;
-> 
-> Another idea I discovered when have been searching through the x86 arch code.
-> x86's got the same problem with TSC timer, but it doesn't disable it if
-> CPU-frequency is switched on. Instead it just marks it as unstable by calling
-> the clocksource_mark_unstable() method if CPU frequency changes. I suggest to
-> implement the same approach in our case of MIPS GIC (another patchset
-> I've sent, see "clocksource: Fix MIPS GIC and DW APB Timer for Baikal-T1 SoC
-> support" in your email client) and R4K timers. We'll subscribe to the CPU
-> frequency change and if it changes we'll call clocksource_mark_unstable() with
-> MIPS GIC and R4K clocksource handlers passed. This shall reduce their rating and
-> cause selecting a clocksource with better one. BTW I suppose it won't be
-> necessary to initially lower the rating of the MIPS GIC and R4K clocksource
-> timers if this is implemented.
-> 
-> So, what do you think?
-> 
-> -Sergey
-> 
-> > 
-> > Thomas.
-> > 
-> > -- 
-> > Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> > good idea.                                                [ RFC1925, 2.3 ]
+Marek, Kamil and Clément: Can you guys please test this out and report
+if this doesn't work as expected ?
+
+--
+viresh
+
+[1] https://lore.kernel.org/lkml/20191017102758.8104-1-m.szyprowski@samsung.com/
+
+Kamil Konieczny (1):
+  opp: core: add regulators enable and disable
+
+Viresh Kumar (1):
+  opp: Reorder the code for !target_freq case
+
+ drivers/opp/core.c | 39 ++++++++++++++++++++++++++++++++++-----
+ drivers/opp/opp.h  |  2 ++
+ 2 files changed, 36 insertions(+), 5 deletions(-)
+
+-- 
+2.25.0.rc1.19.g042ed3e048af
+
