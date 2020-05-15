@@ -2,117 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F93D1D5342
-	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 17:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E618C1D53ED
+	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 17:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727001AbgEOPJd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 May 2020 11:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
+        id S1726266AbgEOPON (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 May 2020 11:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726219AbgEOPJd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 May 2020 11:09:33 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA137C061A0C
-        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 08:09:32 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id n5so3074139wmd.0
-        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 08:09:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jx0XKJ2rCIhRcqgOXEUQmg+a5t/C06hEEw2771wCrpc=;
-        b=xRXa6uk7sY5l0kUkxtMtjnnegPJEPXpzWVBtJYypcC978gemlnFTFHOMjBcbc10QpS
-         QaFAcfSa6/+nIfd9VbbJnqFnAkW8Qlg6RpEaymWSUnnoPfhRsL5QVIbMrUgyPfdmVfQx
-         7aIdfDpyCPW3PySPGMbIGfI1c+gV/YhTi0ckAMTrSqt7WO4reax1zYQJuV2YNIKOT+7x
-         Qb4lik5t5kYa2RE/iC77TlPCRge53K4u28Vldd9Eu2XB/1YsNFE3ZzqrOlKisHqs1pf3
-         EOpFnAvbVn0Nmj1veW/0FfkBCBbkbGUmJJZrxbniv9vLXecDqIY/xPw60FnWYa3dD1uU
-         90Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jx0XKJ2rCIhRcqgOXEUQmg+a5t/C06hEEw2771wCrpc=;
-        b=tKHdrOfWRldpdig7lX//IhbYjsGhG6+XoYAE+Y9q4ao1ortNBz3+goB3Zc/XWqEC4Z
-         AwhB2aT6Cb3tBrQrmXSF0U5HaCMF0Y8zeaiDlo8+6yQBlvQtuHIeIkXdqBIubK08FSYx
-         h1TuW1FWHgNu4Ypsts2HrCsOBCOn37XpR9vYmFXeB4y5OTWptt8WpjlhpDGjZXo1RDMU
-         opRtAa/8G/MeDBAeInhLw6WG8gL8/dkL0CymqRedqnkDmG9qUcLMBF2cC0nNKALwHWF3
-         zRODaXuf476TRhi4nDGSoxDqVXFI0juq14xzrx28Oa8e0QJTaycIZ0XJJEHl+HQ0WrrJ
-         a4+w==
-X-Gm-Message-State: AOAM531/vFbRJTw/wiwQRjXGo/gkV34lTBq689vQ+RKenKYPk1/2BN2k
-        j+FpD7KydSpuBQ2W0U6iEaQhww==
-X-Google-Smtp-Source: ABdhPJzK6NqwmRRnGC5NyaLkwDKbAx4XTdfPDAKUwWKA5Ss6lvRh0R+qSgwZkAw0X/NDc8GIEj5t3w==
-X-Received: by 2002:a05:600c:40d:: with SMTP id q13mr4585592wmb.69.1589555371482;
-        Fri, 15 May 2020 08:09:31 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:5450:281:8a7d:dd9a? ([2a01:e34:ed2f:f020:5450:281:8a7d:dd9a])
-        by smtp.googlemail.com with ESMTPSA id b7sm3946043wmj.29.2020.05.15.08.09.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 May 2020 08:09:30 -0700 (PDT)
-Subject: Re: [PATCH 4/4] thermal: core: genetlink support for
- events/cmd/sampling
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rui.zhang@intel.com
-Cc:     amit.kucheria@verdurent.com, arnd@arndb.de,
-        rkumbako@codeaurora.org, ilina@codeaurora.org,
-        linux-pm@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
-References: <20200515141034.19154-1-daniel.lezcano@linaro.org>
- <20200515141034.19154-4-daniel.lezcano@linaro.org>
- <3b729b2a518d55c973f7daa7dc77547dfaf7b315.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <2369d65a-bd97-a57b-f0d6-5d4aea918bff@linaro.org>
-Date:   Fri, 15 May 2020 17:09:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        by vger.kernel.org with ESMTP id S1726188AbgEOPON (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 May 2020 11:14:13 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B9CC061A0C;
+        Fri, 15 May 2020 08:14:12 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id CBFDA2A3488
+Received: by earth.universe (Postfix, from userid 1000)
+        id C07A63C08C6; Fri, 15 May 2020 17:14:08 +0200 (CEST)
+Date:   Fri, 15 May 2020 17:14:08 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Emil Velikov <emil.velikov@collabora.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv1 03/19] power: supply: core: add manufacture date
+ properties
+Message-ID: <20200515151408.vbj75fag6ya5g2bq@earth.universe>
+References: <20200513185615.508236-1-sebastian.reichel@collabora.com>
+ <20200513185615.508236-4-sebastian.reichel@collabora.com>
+ <20200515144732.GC2836808@arch-x1c3>
 MIME-Version: 1.0
-In-Reply-To: <3b729b2a518d55c973f7daa7dc77547dfaf7b315.camel@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3xq2l5oxqmhxeqpo"
+Content-Disposition: inline
+In-Reply-To: <20200515144732.GC2836808@arch-x1c3>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/05/2020 16:43, Srinivas Pandruvada wrote:
-> On Fri, 2020-05-15 at 16:10 +0200, Daniel Lezcano wrote:
->> Initially the thermal framework had a very simple notification
->> mechanism to send generic netlink messages to the userspace.
->>
->> The notification function was never called from anywhere and the
->> corresponding dead code was removed. It was probably a first attempt
->> to introduce the netlink notification.
->>
->> At LPC2018, the presentation "Linux thermal: User kernel interface",
->> proposed to create the notifications to the userspace via a kfifo.
->>
->> The advantage of the kfifo is the performance. It is usually used
->> from
->> a 1:1 communication channel where a driver captures data and send
->> them
->> as fast as possible to an userspace process.
-> Shall I submit my RFC using KFifo on top of this series? Any
-> objections?
 
-ATM the notification is not plugged with any thermal core code path. It
-is separated on purpose in order to let your RFC to get some comments.
+--3xq2l5oxqmhxeqpo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If you want to base your RFC on top of it, I'm perfectly fine with that.
+Hi,
 
-I'll review your RFC now, I wanted to do that before but got busy with
-another stuff.
+On Fri, May 15, 2020 at 03:47:32PM +0100, Emil Velikov wrote:
+> On 2020/05/13, Sebastian Reichel wrote:
+> > Some smart batteries store their manufacture date, which is
+> > useful to identify the battery and/or to know about the cell
+> > quality.
+> >=20
+> Have you considered exposing this as a single file? Say following
+> the ISO8601 format - YYYY-MM-DD.
 
-If you want to compare kfifo and netlink, the userspace test programs
-are at:
+Yes. My initial implementation was exactly that. The thing is, that
+I suspect some fuel gauge implementations may only expose the year
+or just year + month. I chose 3 files, since receiving 'YYYY-MM'
+instead of full ISO code might be more unexpected than not having
+the DAY file available. But I don't have a strong opinion on this.
 
-https://git.linaro.org/people/daniel.lezcano/thermal-genl.git/
+-- Sebastian
 
-IMO, using the kfifo for the sampling and the notifications/the commands
-via netlink would make more sense.
+--3xq2l5oxqmhxeqpo
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl6+sbgACgkQ2O7X88g7
++prQgQ/8DObxqwSGq8FRackNMigPfBZos5u1g1+5PprsLQ9E7zb0ibMFybVRGQse
+PJa82uqIwP4lYAyZx6EwFBeOFhI6i9A5sHEugiuarjRAJjXZuyW3YjObCw/UfC54
+eUkVm6F4iy7r3NyucF+be398TDZEEwJ+fqIIOY/YagSurMpxR3Pdemy2mDAxykI9
+ZJXIT5on3/L0X7E0Trdx1IyfeQQfvLjTtJaBV3J+WaIYViIb+pkMpHsSZD1SOLi+
+qOLT31pXXp87D9xicCLU5ayWgdIxi93fGMEQnGHcfIbNjjD8ncGy2BBR/tbsU065
+lqO7edflFoXocf35ZQCLzCXK+AfNkYw1GZw+URAnh5icGK41IHVPNe041YFrySCs
+8qzl7f7/G+WUznezbxFYpqtRpNW2KfThnezhJsV+Istc1zhE6hCCliBVmXlcJjO/
+Ts2FlER/OfePg99I7TRtnr/Ld49gX74S9balftKrrvc18e0U4+J1B8c9cqe0reWo
+8OVpPvQ1b7HQ5/VzsmhJf0QpXp1vG+EHD8toIt5EwCtPfmr9lzHOIo63YdElsCvP
+b1qRVHv9Sc/Rusfg4aE8Lqsor5SnMoE988Tj8lhFpJD5pucK91WxGzfyWtb6qtnp
+QHx0gsVOQCZBQYSSudMEPNSqH9P0qSHTfwtKCnyNSKqo2s37zuU=
+=D2js
+-----END PGP SIGNATURE-----
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--3xq2l5oxqmhxeqpo--
