@@ -2,138 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C3D1D4615
-	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 08:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405601D46D3
+	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 09:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726215AbgEOGnW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 May 2020 02:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726301AbgEOGnV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 May 2020 02:43:21 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34472C05BD0A
-        for <linux-pm@vger.kernel.org>; Thu, 14 May 2020 23:43:21 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id 62so613200vsi.2
-        for <linux-pm@vger.kernel.org>; Thu, 14 May 2020 23:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3u5biufGGoeHTr+TJL8nbm6kBJzdWnn/M3v0cfmw50s=;
-        b=pD/NsOHgg9RiRzrmFZckLGgtKv4FNpjz6MHbVkQ9V5iKpGCmFLdD9+7u8AzgIJdOUx
-         iLCRHKLZI6aJmLhCA4u/iuIgKUKWvgytv6eplSb4xpChzRdJZswwqTH+RGOkhfavvGxG
-         9OqNaw3NjTjZyC88sDBbY/jwaH0osejduH/BQCz1vkUPR5thEUYmREH+nTWqA7nntaIY
-         a91o5rJlHh3HrATc0gEZ14PJ7r4t+orDTaS7hQY6HaL8OQUj7ZESKlpDmHICKJ9Uwlxq
-         TUnqSThoi6EzywAYWhMr/iHqiGIiOxZSwA34a4ST8G9x+/PeaFtKmyUNT/jJUwlFjN+g
-         212Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3u5biufGGoeHTr+TJL8nbm6kBJzdWnn/M3v0cfmw50s=;
-        b=hCoEHhHbc71bAbl1bqdO4tMO7GGmdRsNYkMdjdiv/wNqW3XiTzTRIdFBc8imGyfg+P
-         GqzwSHtL4c9N9LgoWYvTTJgjtRQn6ON57+oAhbM2nyGVg+AAacodXi4f5KM+3msNbHRi
-         4xxKQWzWBP9jkTyDvNTPTZzNBD0igjlkemdWs+4L/LhIBftwv8AVIqux71TELIHiaTQF
-         bg2l6RFBAc/aU8mPr5+FiMIAElYDPSKc9pveAQPRaCh+KoM/nxWUcCcmYT3ekqCvlwfQ
-         6D0rNC0mdU6JfN+apGPKgT5kyIibAU7Vn5k+aYIQLcbCYzF6PDFQt3Zb3uHiT/NKaPfA
-         3OyQ==
-X-Gm-Message-State: AOAM532001CGzlMlwMEq+NWxrMUiWrkTmSugbL3yD6CTQ5cJ3UAvHRWm
-        QYT6i9gE5Jubs7YgdTtGeOrR4I7mX+AxaFaVFRHW6g==
-X-Google-Smtp-Source: ABdhPJz1EnXjRX110fk6oUizGR6vyVuia3mcnLi7d3Ga6JMGWl+PQ5YITnQDF2FwN/zC8y0AEoQFGDiVNZgyE8UHtf8=
-X-Received: by 2002:a67:42c6:: with SMTP id p189mr1528692vsa.9.1589525000316;
- Thu, 14 May 2020 23:43:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200512132613.31507-1-narmstrong@baylibre.com> <20200512132613.31507-2-narmstrong@baylibre.com>
-In-Reply-To: <20200512132613.31507-2-narmstrong@baylibre.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Fri, 15 May 2020 12:12:39 +0530
-Message-ID: <CAHLCerMP2m1BfzNGoOzOe=4_zYr=i-kXOXnJ_WTN-f1L4N7SUg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: add Khadas Microcontroller bindings
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-amlogic@lists.infradead.org,
+        id S1726675AbgEOHL4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 May 2020 03:11:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42570 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726604AbgEOHL4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 15 May 2020 03:11:56 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B832D206F1;
+        Fri, 15 May 2020 07:11:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589526715;
+        bh=bO56gu0bStJa4vn7t8SHLVGqZOgUKV4d9WF3KRFluMk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gYnEKRSFxTIOOTXSSfz64gxCP9PnNitGXe0AzDZ3nhC+xisp2VmVbc0YTmdcBSE+a
+         WkXOdmm6R6cdIWWcu3D2RsDqeLfO/2oUeFrgZCeogzvSgzXqqw2yTF6Vg3ZcNh7UYk
+         V59vecakrN237UppeFjGXvdW+U40njZH1mLER2iY=
+Date:   Fri, 15 May 2020 09:11:52 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
-        lakml <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        lkml <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: Re: [PATCH] interconnect: Disallow interconnect core to be built as
+ a module
+Message-ID: <20200515071152.GA1274556@kroah.com>
+References: <b789cce388dd1f2906492f307dea6780c398bc6a.1567065991.git.viresh.kumar@linaro.org>
+ <CAOCOHw4ri6ikRpkJWtAdaPQiMhdKMrdNciqQ8YNaXR+ApSnAew@mail.gmail.com>
+ <66c3d470-48e2-619a-dd95-6064a85161e0@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <66c3d470-48e2-619a-dd95-6064a85161e0@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 12, 2020 at 6:56 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> This Microcontroller is present on the Khadas VIM1, VIM2, VIM3 and Edge
-> boards.
->
-> It has multiple boot control features like password check, power-on
-> options, power-off control and system FAN control on recent boards.
->
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+On Fri, May 15, 2020 at 07:48:47AM +0300, Georgi Djakov wrote:
+> On 9/12/19 19:33, Bjorn Andersson wrote:
+> > On Thu, Aug 29, 2019 at 1:07 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >>
+> >> Building individual drivers as modules is fine but allowing a core
+> >> framework to be built as a module makes it really complex and should be
+> >> avoided.
+> >>
+> >> Whatever uses the interconnect core APIs must also be built as a module
+> >> if interconnect core is built as module, else we will see compilation
+> >> failures.
+> >>
+> >> If another core framework (like cpufreq, clk, etc), that can't be built
+> >> as module, needs to use interconnect APIs then we will start seeing
+> >> compilation failures with allmodconfig configurations as the symbols
+> >> (like of_icc_get()) used in other frameworks will not be available in
+> >> the built-in image.
+> >>
+> >> Disallow the interconnect core to be built as a module to avoid all
+> >> these issues.
+> 
+> Hi Greg,
+> 
+> We had a discussion [1] a few months back about frameworks being built as
+> modules. IIUC, you initially expressed some doubts about this patch, so i
+> wanted to check with you again on this.
+> 
+> While i think that the possibility for a framework core to be a module is a
+> nice feature, and we should try to be as modular as possible, it seems that
+> handling dependencies between the different core frameworks becomes difficult
+> when one of them is tristate.
+> 
+> This of course affects the drivers which use it (every client should express
+> the dependency in Kconfig as a "depends on framework || !framework"), in order
+> to avoid build failures in the case when framework=m and client=y. However, this
+> is not a big issue.
+> 
+> But it gets more complex when another framework2 becomes a client of the modular
+> framework and especially when framework2 is "select"-ed in Kconfig by it's
+> users. When selects are used in Kconfig, it forces the option, without ever
+> visiting the dependencies. I am not sure what we should do in this case, maybe
+> we can continue and sprinkle more "depends on framework || !framework" also for
+> every single user which selects framework2.. But i believe that this is very
+> inconvenient.
+> 
+> Well, the above is not impossible, but other frameworks (regulator, clk, reset,
+> pinctrl, etc.) are solving this problem by just being bool, instead of tristate.
+> This makes life much easier for everyone. So i am wondering if it wouldn't be
+> more appropriate to use the same approach here too?
 
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+Ok, if it makes things easier, perhaps this is the best way to handle
+it.
 
-> ---
->  .../devicetree/bindings/mfd/khadas,mcu.yaml   | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/khadas,mcu.yaml
->
-> diff --git a/Documentation/devicetree/bindings/mfd/khadas,mcu.yaml b/Documentation/devicetree/bindings/mfd/khadas,mcu.yaml
-> new file mode 100644
-> index 000000000000..a3b976f101e8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/khadas,mcu.yaml
-> @@ -0,0 +1,44 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/khadas,mcu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Khadas on-board Microcontroller Device Tree Bindings
-> +
-> +maintainers:
-> +  - Neil Armstrong <narmstrong@baylibre.com>
-> +
-> +description: |
-> +  Khadas embeds a microcontroller on their VIM and Edge boards adding some
-> +  system feature as PWM Fan control (for VIM2 rev14 or VIM3), User memory
-> +  storage, IR/Key resume control, system power LED control and more.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - khadas,mcu # MCU revision is discoverable
-> +
-> +  "#cooling-cells": # Only needed for boards having FAN control feature
-> +    const: 2
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      khadas_mcu: system-controller@18 {
-> +        compatible = "khadas,mcu";
-> +        reg = <0x18>;
-> +        #cooling-cells = <2>;
-> +      };
-> +    };
-> --
-> 2.22.0
->
+thanks,
+
+greg k-h
