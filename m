@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E19431D42F2
-	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 03:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C70FD1D433A
+	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 03:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726166AbgEOB2g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 May 2020 21:28:36 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:4842 "EHLO huawei.com"
+        id S1726168AbgEOBtN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 May 2020 21:49:13 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:49342 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726112AbgEOB2g (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 14 May 2020 21:28:36 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 0515F29578E8C6EBAE43;
-        Fri, 15 May 2020 09:28:33 +0800 (CST)
-Received: from [127.0.0.1] (10.166.215.101) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Fri, 15 May 2020
- 09:28:23 +0800
-Subject: Re: [RFC PATCH 1/3] cpufreq: fix the return value in
- 'cpufreq_boost_set_sw()'
+        id S1726100AbgEOBtN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 14 May 2020 21:49:13 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id E464DE8851E4BA132951;
+        Fri, 15 May 2020 09:49:10 +0800 (CST)
+Received: from [127.0.0.1] (10.166.215.101) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.487.0; Fri, 15 May 2020
+ 09:49:03 +0800
+Subject: Re: [RFC PATCH 2/3] cpufreq: Add SW BOOST support for drivers without
+ frequency table
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
 CC:     <viresh.kumar@linaro.org>, <Souvik.Chakravarty@arm.com>,
         <Thanu.Rangarajan@arm.com>, <Sudeep.Holla@arm.com>,
@@ -26,15 +26,15 @@ CC:     <viresh.kumar@linaro.org>, <Souvik.Chakravarty@arm.com>,
         <jonathan.cameron@huawei.com>, <linux-pm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 References: <1588929064-30270-1-git-send-email-wangxiongfeng2@huawei.com>
- <1588929064-30270-2-git-send-email-wangxiongfeng2@huawei.com>
- <28914151.3vfbF0e6KZ@kreacher>
+ <1588929064-30270-3-git-send-email-wangxiongfeng2@huawei.com>
+ <5858421.kfVlu25t0p@kreacher>
 From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <881629ba-17fb-114c-858f-43b62e32b421@huawei.com>
-Date:   Fri, 15 May 2020 09:28:22 +0800
+Message-ID: <7325b64c-85f7-21fe-3860-faa10ab1cf21@huawei.com>
+Date:   Fri, 15 May 2020 09:49:02 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <28914151.3vfbF0e6KZ@kreacher>
+In-Reply-To: <5858421.kfVlu25t0p@kreacher>
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.166.215.101]
@@ -44,52 +44,94 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
 
-Thanks for your reply !
 
-On 2020/5/14 21:54, Rafael J. Wysocki wrote:
-> On Friday, May 8, 2020 11:11:02 AM CEST Xiongfeng Wang wrote:
->> When I try to add SW BOOST support for CPPC, I got the following error:
->> cpufreq: cpufreq_boost_trigger_state: Cannot enable BOOST
->> cpufreq: store_boost: Cannot enable BOOST!
+On 2020/5/14 22:16, Rafael J. Wysocki wrote:
+> On Friday, May 8, 2020 11:11:03 AM CEST Xiongfeng Wang wrote:
+>> Software-managed BOOST get the boost frequency by check the flag
+>> CPUFREQ_BOOST_FREQ at driver's frequency table. But some cpufreq driver
+>> don't have frequency table and use other methods to get the frequency
+>> range, such CPPC cpufreq driver.
 >>
->> It is because return value 1 of 'freq_qos_update_request()' means the
->> effective constraint value has changed, not a error code on failures.
->> But for 'cpufreq_driver.set_boost()', a nonzero return value means
->> failure. So change 'ret' to zero when 'freq_qos_update_request()'
->> returns a positive value.
+>> To add SW BOOST support for drivers without frequency table, we add
+>> members in 'cpufreq_policy.cpufreq_cpuinfo' to record the max frequency
+>> of boost mode and non-boost mode. The cpufreq driver initialize these two
+>> members when probing.
 >>
 >> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
 >> ---
->>  drivers/cpufreq/cpufreq.c | 2 ++
->>  1 file changed, 2 insertions(+)
+>>  drivers/cpufreq/cpufreq.c | 23 +++++++++++++++--------
+>>  include/linux/cpufreq.h   |  2 ++
+>>  2 files changed, 17 insertions(+), 8 deletions(-)
 >>
 >> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> index 4adac3a..475fb1b 100644
+>> index 475fb1b..a299426 100644
 >> --- a/drivers/cpufreq/cpufreq.c
 >> +++ b/drivers/cpufreq/cpufreq.c
->> @@ -2522,6 +2522,8 @@ static int cpufreq_boost_set_sw(int state)
->>  		ret = freq_qos_update_request(policy->max_freq_req, policy->max);
->>  		if (ret < 0)
->>  			break;
->> +		else
->> +			ret = 0;
->>  	}
+>> @@ -2508,15 +2508,22 @@ static int cpufreq_boost_set_sw(int state)
+>>  	int ret = -EINVAL;
 >>  
->>  	return ret;
->>
+>>  	for_each_active_policy(policy) {
+>> -		if (!policy->freq_table)
+>> -			continue;
+>> -
+>> -		ret = cpufreq_frequency_table_cpuinfo(policy,
+>> +		if (policy->freq_table) {
+>> +			ret = cpufreq_frequency_table_cpuinfo(policy,
+>>  						      policy->freq_table);
+>> -		if (ret) {
+>> -			pr_err("%s: Policy frequency update failed\n",
+>> -			       __func__);
+>> -			break;
+>> +			if (ret) {
+>> +				pr_err("%s: Policy frequency update failed\n",
+>> +				       __func__);
+>> +				break;
+>> +			}
+>> +		} else if (policy->cpuinfo.boost_max_freq) {
+>> +			if (state)
+>> +				policy->max = policy->cpuinfo.boost_max_freq;
+>> +			else
+>> +				policy->max = policy->cpuinfo.nonboost_max_freq;
+>> +			policy->cpuinfo.max_freq = policy->max;
+>> +		} else {
+>> +			continue;
+>>  		}
 > 
-> I would change cpufreq_boost_trigger_state() to take the 1 into account properly
-> instead.
+> Why do you need to update this function?
 
-Thanks for your suggestion. I will change it in the next version.
+My original thought is to reuse the current SW BOOST code as possible, but this
+seems to change the cpufreq core too much.
+
+> 
+> The driver should be able to provide its own ->set_boost callback just fine,
+> shouldn't it?
+
+Thanks for your advice. This is better. I will provide a '->set_boost' callback
+for CPPC driver. But I will need to export 'cpufreq_policy_list' and make the
+macro 'for_each_active_policy' public.
 
 Thanks,
 Xiongfeng
 
 > 
-> Thanks!
+>>  
+>>  		ret = freq_qos_update_request(policy->max_freq_req, policy->max);
+>> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+>> index 018dce8..c3449e6 100644
+>> --- a/include/linux/cpufreq.h
+>> +++ b/include/linux/cpufreq.h
+>> @@ -43,6 +43,8 @@ enum cpufreq_table_sorting {
+>>  struct cpufreq_cpuinfo {
+>>  	unsigned int		max_freq;
+>>  	unsigned int		min_freq;
+>> +	unsigned int		boost_max_freq;
+>> +	unsigned int		nonboost_max_freq;
+>>  
+>>  	/* in 10^(-9) s = nanoseconds */
+>>  	unsigned int		transition_latency;
+>>
+> 
 > 
 > 
 > 
