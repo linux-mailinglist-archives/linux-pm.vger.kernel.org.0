@@ -2,70 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 079F01D4AC9
-	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 12:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3832B1D4B29
+	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 12:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728060AbgEOKXI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 May 2020 06:23:08 -0400
-Received: from foss.arm.com ([217.140.110.172]:52894 "EHLO foss.arm.com"
+        id S1728060AbgEOKjj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 May 2020 06:39:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52242 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728047AbgEOKXH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 15 May 2020 06:23:07 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1094C2F;
-        Fri, 15 May 2020 03:23:07 -0700 (PDT)
-Received: from bogus (unknown [10.37.12.6])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D6513F71E;
-        Fri, 15 May 2020 03:23:03 -0700 (PDT)
-Date:   Fri, 15 May 2020 11:22:56 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] cpuidle: psci: Fixup execution order when entering a
- domain idle state
-Message-ID: <20200515102255.GA25927@bogus>
-References: <20200511133346.21706-1-ulf.hansson@linaro.org>
- <20200514142015.GA23401@bogus>
- <CAPDyKFoVo8L7eiGdEVNYR2DY7cszDuLkmX8O_SfyUKh73pbpMQ@mail.gmail.com>
- <20200514172816.GA42669@bogus>
- <CAPDyKFrdrOnxFHaAR=cmMi2VfSudyHdjZ7vRZKhTQtepdkiXug@mail.gmail.com>
+        id S1728013AbgEOKji (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 15 May 2020 06:39:38 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE6FF207CB;
+        Fri, 15 May 2020 10:39:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589539178;
+        bh=PrM+xPGfJLUiyDISNpS4vjvmsRnmHt+gojfva9KvB1U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xKedetK3gPz0GVdrzVQ0d2O10La+Y6bjL3cWBrZWWII43x/E4CYjMQXu8/BW6fZUM
+         rh3QHk9e8A0x0zyw3F8au4UiM9tovwygfrHoJpIIAwzwWPGPmslwTrjQg5pd9oAXCN
+         MBdfy7hljbo4joxXXgyVWcCioRg2NLkQcvSja5rc=
+Date:   Fri, 15 May 2020 12:39:36 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 10/11] kernel/power: constify sysrq_key_op
+Message-ID: <20200515103936.GA1712181@kroah.com>
+References: <20200513214351.2138580-1-emil.l.velikov@gmail.com>
+ <20200513214351.2138580-10-emil.l.velikov@gmail.com>
+ <CAJZ5v0iM5H03=RTtk2sZtUzaW0XJ+AaX1M00C8QjvaNz0ZE3bQ@mail.gmail.com>
+ <CACvgo52myKJ+3s8pYPnqNBxWqg6bCHQXqGJrLwmrSvocuqU=pg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFrdrOnxFHaAR=cmMi2VfSudyHdjZ7vRZKhTQtepdkiXug@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CACvgo52myKJ+3s8pYPnqNBxWqg6bCHQXqGJrLwmrSvocuqU=pg@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 14, 2020 at 09:11:50PM +0200, Ulf Hansson wrote:
->
-> No worries, thanks for reviewing.
->
+On Fri, May 15, 2020 at 11:11:57AM +0100, Emil Velikov wrote:
+> On Thu, 14 May 2020 at 12:21, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Wed, May 13, 2020 at 11:46 PM Emil Velikov <emil.l.velikov@gmail.com> wrote:
+> > >
+> > > With earlier commits, the API no longer discards the const-ness of the
+> > > sysrq_key_op. As such we can add the notation.
+> > >
+> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > Cc: Jiri Slaby <jslaby@suse.com>
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > > Cc: Len Brown <len.brown@intel.com>
+> > > Cc: linux-pm@vger.kernel.org
+> > > Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
+> >
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> Thanks
+> 
+> > and I'm assuming that this is going to be applied along with the rest
+> > of the series.
+> >
+> I believe so, although I have not heard anything from the TTY maintainers yet.
 
-You are welcome.
+I will take them all, thanks.
 
-> That said, are you fine with Rafel queuing this then?
->
-
-I am fine with that. However I told if you need fixes tags as there are
-no users of the notification yet in the kernel. Though this is trivial,
-but do we need this backported to stable kernel. I don't have strong
-opinion and leave it to you and Rafael.
-
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-
---
-Regards,
-Sudeep
+greg k-h
