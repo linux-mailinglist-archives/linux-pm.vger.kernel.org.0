@@ -2,177 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E681D4CA4
-	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 13:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFC81D4D3E
+	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 14:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726097AbgEOLdA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 May 2020 07:33:00 -0400
-Received: from mga17.intel.com ([192.55.52.151]:20782 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725986AbgEOLc7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 15 May 2020 07:32:59 -0400
-IronPort-SDR: XqeWr7S/fqOBGflO8ApSAhWwiaBR2ZEZjVT78CRk11D6mgUgoqR6Zfnxghtl5zZvaiwWCdOH1T
- i6BerGzpoS/g==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 04:32:58 -0700
-IronPort-SDR: 0gS0OaFJiuv3OfG2ljoqjSB4HKx6CLP4K3KFhfm6vWhg8PAp9Nw/f+wW4k3a8VLZLakldEI3/w
- +/CncU4PobkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,395,1583222400"; 
-   d="scan'208";a="464700264"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005.fm.intel.com with ESMTP; 15 May 2020 04:32:55 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jZYaH-006qe0-KA; Fri, 15 May 2020 14:32:57 +0300
-Date:   Fri, 15 May 2020 14:32:57 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Syed Nayyar Waris <syednwaris@gmail.com>
-Cc:     akpm@linux-foundation.org, vilhelm.gray@gmail.com,
-        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        yamada.masahiro@socionext.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 0/4] Introduce the for_each_set_clump macro
-Message-ID: <20200515113257.GP185537@smile.fi.intel.com>
-References: <cover.1589497311.git.syednwaris@gmail.com>
+        id S1726162AbgEOMAz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 May 2020 08:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726062AbgEOMAz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 May 2020 08:00:55 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3418C061A0C;
+        Fri, 15 May 2020 05:00:54 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id k6so2412304iob.3;
+        Fri, 15 May 2020 05:00:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=yYxgWvcJ8rrN6qfxnW2mlSqNc8IfTvO2QBvIRiKBE98=;
+        b=TAUf1qdOEbF3duuSQazplZs2NAADUhUcfKqnmJtxmwGU5MMw/dwlM0IMlAWQAIJX7v
+         GhWNPojZ4W9K7i9UspaaAwU2zTfCzr6x65rEcNexdVXEndz112MbSqZQPZ6RxPo5zllj
+         v8pceFBybKceRLQySE910AEo65Jfey0I9F1k8Wj/Y9cwBcWCBqaXGJSeaRcaeH55KdLk
+         HUZ3dPy852dM8kicfMhdnyT0WeYAWFooNd8HWLeSajeoUQ4/phgbb+Pf4P8ryWv9EeoH
+         jNNB7iTlSFQZuek9+t27y0ULbTZPKdVP5Wgb+54pgKHdBdcCE5209jATfKo6zqar0uYU
+         dhog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=yYxgWvcJ8rrN6qfxnW2mlSqNc8IfTvO2QBvIRiKBE98=;
+        b=NelTxw4FqtNPWz/6JjYPFt+4Uer+lA65SQJJ4A/4lPbyY6c2URPCpuDU5ncCAFj5rk
+         9P7wOptWCRZQoBpxTf5HcRwcsUZwPFJJWEGRvdlxHIY7n6E+BO2SVW8AgE2tZRI9FUqK
+         sLorXcnJiJ/s1N4gRJbRjHMuL6ZtyFIRGWC075i7ipdIcAykYHUEiW1391tRcoibNHYc
+         GY8e040HxEfz2Pn79YbbiKC0TQrTDtyU89yvtm+cMFtRQTrpJ4RShyh9liKppXStVdwU
+         4+LrvfsWcom0RIMbgkHeyojLhvJ8cmtfeRWA+uGAs40tjBgMsJauJYX75tD2fgeYaEUU
+         Q9dQ==
+X-Gm-Message-State: AOAM530ITKdMapP1GHUo76tVKxQJIED1h/KWtsX52GStRbXiRJq7xzlo
+        35DxhENIE8AG3iykBokilP+wJjyN+wuEmr7ah42cptNA
+X-Google-Smtp-Source: ABdhPJyscAOeMTHnpUYFEpvWOFvtaX4XmX+fEDzqMgO4hSAwAvVPP/zBFr4agXyags8j+2o8bmw9E1q7F2JcXarQ17Y=
+X-Received: by 2002:a02:3b4b:: with SMTP id i11mr2962189jaf.16.1589544053459;
+ Fri, 15 May 2020 05:00:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1589497311.git.syednwaris@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <cover.1589528491.git.viresh.kumar@linaro.org>
+In-Reply-To: <cover.1589528491.git.viresh.kumar@linaro.org>
+From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Date:   Fri, 15 May 2020 14:00:42 +0200
+Message-ID: <CAJiuCceftArjKPyiEW8AnT5TtuCJFsRGGA-_8y2zG5GDTxHO4Q@mail.gmail.com>
+Subject: Re: [PATCH 0/2] opp: core: add regulators enable and disable
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     k.konieczny@samsung.com,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        "open list:ALLWINNER CPUFREQ DRIVER" <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Mark Brown <broonie@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 15, 2020 at 04:46:03AM +0530, Syed Nayyar Waris wrote:
-> This patchset introduces a new generic version of for_each_set_clump. 
-> The previous version of for_each_set_clump8 used a fixed size 8-bit
-> clump, but the new generic version can work with clump of any size but
-> less than or equal to BITS_PER_LONG. The patchset utilizes the new macro 
-> in several GPIO drivers.
-> 
-> The earlier 8-bit for_each_set_clump8 facilitated a
-> for-loop syntax that iterates over a memory region entire groups of set
-> bits at a time.
-> 
-> For example, suppose you would like to iterate over a 32-bit integer 8
-> bits at a time, skipping over 8-bit groups with no set bit, where
-> XXXXXXXX represents the current 8-bit group:
-> 
->     Example:        10111110 00000000 11111111 00110011
->     First loop:     10111110 00000000 11111111 XXXXXXXX
->     Second loop:    10111110 00000000 XXXXXXXX 00110011
->     Third loop:     XXXXXXXX 00000000 11111111 00110011
-> 
-> Each iteration of the loop returns the next 8-bit group that has at
-> least one set bit.
-> 
-> But with the new for_each_set_clump the clump size can be different from 8 bits.
-> Moreover, the clump can be split at word boundary in situations where word 
-> size is not multiple of clump size. Following are examples showing the working 
-> of new macro for clump sizes of 24 bits and 6 bits.
-> 
-> Example 1:
-> clump size: 24 bits, Number of clumps (or ports): 10
-> bitmap stores the bit information from where successive clumps are retrieved.
-> 
->      /* bitmap memory region */
->         0x00aa0000ff000000;  /* Most significant bits */
->         0xaaaaaa0000ff0000;
->         0x000000aa000000aa;
->         0xbbbbabcdeffedcba;  /* Least significant bits */
-> 
-> Different iterations of for_each_set_clump:-
-> 'offset' is the bit position and 'clump' is the 24 bit clump from the
-> above bitmap.
-> Iteration first:        offset: 0 clump: 0xfedcba
-> Iteration second:       offset: 24 clump: 0xabcdef
-> Iteration third:        offset: 48 clump: 0xaabbbb
-> Iteration fourth:       offset: 96 clump: 0xaa
-> Iteration fifth:        offset: 144 clump: 0xff
-> Iteration sixth:        offset: 168 clump: 0xaaaaaa
-> Iteration seventh:      offset: 216 clump: 0xff
-> Loop breaks because in the end the remaining bits (0x00aa) size was less
-> than clump size of 24 bits.
-> 
-> In above example it can be seen that in iteration third, the 24 bit clump
-> that was retrieved was split between bitmap[0] and bitmap[1]. This example 
-> also shows that 24 bit zeroes if present in between, were skipped (preserving
-> the previous for_each_set_macro8 behaviour). 
-> 
-> Example 2:
-> clump size = 6 bits, Number of clumps (or ports) = 3.
-> 
->      /* bitmap memory region */
->         0x00aa0000ff000000;  /* Most significant bits */
->         0xaaaaaa0000ff0000;
->         0x0f00000000000000;
->         0x0000000000000ac0;  /* Least significant bits */
-> 
-> Different iterations of for_each_set_clump:
-> 'offset' is the bit position and 'clump' is the 6 bit clump from the
-> above bitmap.
-> Iteration first:        offset: 6 clump: 0x2b
-> Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
-> Here 6 * 3 is clump size * no. of clumps.
+Hi Viresh,
 
-Thank you!
+On Fri, 15 May 2020 at 09:57, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Hi,
+>
+> This series reintroduces the usage of regulator_enable/disable() to the
+> OPP core after the previous attempt was reverted [1] shortly after gettin=
+g
+> applied. This time the regulator is enabled only after it is configured
+> by the OPP core.
+>
+> Marek, Kamil and Cl=C3=A9ment: Can you guys please test this out and repo=
+rt
+> if this doesn't work as expected ?
 
-Overall looks good to me, though I gave tags per individual patches (I'm not
-familiar with that GPIO drivers, so, I may not tag them).
+I have reviewed the patch and it seems fine for my use case.
+Unfortunately I can't test it until next week.
 
-> 
-> Changes in v6:
->  - [Patch 2/4]: Make 'for loop' inside test_for_each_set_clump more
->    succinct.
-> 
-> Changes in v5:
->  - [Patch 4/4]: Minor change: Hardcode value for better code readability.
-> 
-> Changes in v4:
->  - [Patch 2/4]: Use 'for' loop in test function of for_each_set_clump.
->  - [Patch 3/4]: Minor change: Inline value for better code readability.
->  - [Patch 4/4]: Minor change: Inline value for better code readability.
-> 
-> Changes in v3:
->  - [Patch 3/4]: Change datatype of some variables from u64 to unsigned long
->    in function thunderx_gpio_set_multiple.
-> 
-> CHanges in v2:
->  - [Patch 2/4]: Unify different tests for 'for_each_set_clump'. Pass test data as
->    function parameters.
->  - [Patch 2/4]: Remove unnecessary bitmap_zero calls.
-> 
-> Syed Nayyar Waris (4):
->   bitops: Introduce the the for_each_set_clump macro
->   lib/test_bitmap.c: Add for_each_set_clump test cases
->   gpio: thunderx: Utilize for_each_set_clump macro
->   gpio: xilinx: Utilize for_each_set_clump macro
-> 
->  drivers/gpio/gpio-thunderx.c      |  11 ++-
->  drivers/gpio/gpio-xilinx.c        |  62 ++++++-------
->  include/asm-generic/bitops/find.h |  19 ++++
->  include/linux/bitmap.h            |  61 +++++++++++++
->  include/linux/bitops.h            |  13 +++
->  lib/find_bit.c                    |  14 +++
->  lib/test_bitmap.c                 | 142 ++++++++++++++++++++++++++++++
->  7 files changed, 288 insertions(+), 34 deletions(-)
-> 
-> 
-> base-commit: 5f458e572071a54841b93f41e25fbe8ded82df79
-> -- 
-> 2.26.2
-> 
+Acked-by: Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Regards,
+Clement
 
 
+>
+> --
+> viresh
+>
+> [1] https://lore.kernel.org/lkml/20191017102758.8104-1-m.szyprowski@samsu=
+ng.com/
+>
+> Kamil Konieczny (1):
+>   opp: core: add regulators enable and disable
+>
+> Viresh Kumar (1):
+>   opp: Reorder the code for !target_freq case
+>
+>  drivers/opp/core.c | 39 ++++++++++++++++++++++++++++++++++-----
+>  drivers/opp/opp.h  |  2 ++
+>  2 files changed, 36 insertions(+), 5 deletions(-)
+>
+> --
+> 2.25.0.rc1.19.g042ed3e048af
+>
