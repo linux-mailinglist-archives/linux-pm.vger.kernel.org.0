@@ -2,91 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FFE1D4AAC
-	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 12:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079F01D4AC9
+	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 12:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728354AbgEOKOq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 May 2020 06:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728351AbgEOKOo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 May 2020 06:14:44 -0400
-Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB16C061A0C;
-        Fri, 15 May 2020 03:14:44 -0700 (PDT)
-Received: by mail-vk1-xa41.google.com with SMTP id j127so437216vke.4;
-        Fri, 15 May 2020 03:14:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EZ6OfaKWMNYLsq/vPPXTECTxhgHBG6tG/ll2X5nosuY=;
-        b=CMChNp0FChPCbFs3F+MPjQ8mCacNZi+APaqwCEJMony0vvfP4fzBL/plYi1PTDsgjK
-         3QT3ITHBA23ywLRg/M8uhZvZvgMqYwefgNad/vATXqp5pZCAy5KnBj2Lnm47dp+fm07g
-         luF6VNtLHrIuV7oxuc2jQ2uEQe2HUEvZOr72HWZhEgMhQVS6Bb+jTOtbmSis2Q9HU4km
-         Rw+76lFSY3QaXJQmOnNFPR7Ya4yfLqY9yugsS076acxRvt1+K6DjB6LbVYs0KpcOtdd8
-         k2Ke3achgeQ0U5rXPq3LNHZ6+oXMPBlKrgMuI0+qhdU3YD3/GsU9mbdxp1MmB+3gVpQz
-         7Rbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EZ6OfaKWMNYLsq/vPPXTECTxhgHBG6tG/ll2X5nosuY=;
-        b=cmcjLLwcd73W5X5R0ekQqwNoiAcQcHJfgKH2O9BF2GPfPPfpdTb10pwwvjIw5kjgpE
-         6fm6kAhzo9nNFHyOMGorOYHK+uF0dI4wWo+sxRhvY7pFNcFV/+1b2pbrOHag8Q3Lg0O7
-         nwHJANsHX/HqdXE23K5QWLi99ibmLOzt8rQJ0gKfIf26cjDmFhR4HeEDwDNsCKzsFM45
-         nK3eHto45lx/m4kfsuI+49uzojwFRUpysQQXaQfmIpM0V3ZhTrLrniCAbAYuoV5wZMF0
-         kL0w6xLkpkbg8KbN6d05iUnL4XO5mAfcRmRiTRtcF1ytHn1SE4bdlzZncK0fRCerF6Ma
-         FOWw==
-X-Gm-Message-State: AOAM530Z/9pwK5ctqvDMgFY6YhcFhv7IzMJ4CyuGF+7b86E+S9+SRZV3
-        1IKboODpQFsWc/ZpxUCW+rSdcMtGPJXugmbmnH4=
-X-Google-Smtp-Source: ABdhPJwySImY4STiLUyhyA0RYWBwnXcjZprr971z+NO8BgHmDKAA0Y4ycqtqtV/2t6BMdwfeII55n5dCjcYyTEMlNyk=
-X-Received: by 2002:a1f:2f91:: with SMTP id v139mr2005615vkv.22.1589537682435;
- Fri, 15 May 2020 03:14:42 -0700 (PDT)
+        id S1728060AbgEOKXI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 May 2020 06:23:08 -0400
+Received: from foss.arm.com ([217.140.110.172]:52894 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728047AbgEOKXH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 15 May 2020 06:23:07 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1094C2F;
+        Fri, 15 May 2020 03:23:07 -0700 (PDT)
+Received: from bogus (unknown [10.37.12.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D6513F71E;
+        Fri, 15 May 2020 03:23:03 -0700 (PDT)
+Date:   Fri, 15 May 2020 11:22:56 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] cpuidle: psci: Fixup execution order when entering a
+ domain idle state
+Message-ID: <20200515102255.GA25927@bogus>
+References: <20200511133346.21706-1-ulf.hansson@linaro.org>
+ <20200514142015.GA23401@bogus>
+ <CAPDyKFoVo8L7eiGdEVNYR2DY7cszDuLkmX8O_SfyUKh73pbpMQ@mail.gmail.com>
+ <20200514172816.GA42669@bogus>
+ <CAPDyKFrdrOnxFHaAR=cmMi2VfSudyHdjZ7vRZKhTQtepdkiXug@mail.gmail.com>
 MIME-Version: 1.0
-References: <20200513214351.2138580-1-emil.l.velikov@gmail.com>
- <20200513214351.2138580-10-emil.l.velikov@gmail.com> <CAJZ5v0iM5H03=RTtk2sZtUzaW0XJ+AaX1M00C8QjvaNz0ZE3bQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iM5H03=RTtk2sZtUzaW0XJ+AaX1M00C8QjvaNz0ZE3bQ@mail.gmail.com>
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-Date:   Fri, 15 May 2020 11:11:57 +0100
-Message-ID: <CACvgo52myKJ+3s8pYPnqNBxWqg6bCHQXqGJrLwmrSvocuqU=pg@mail.gmail.com>
-Subject: Re: [PATCH 10/11] kernel/power: constify sysrq_key_op
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFrdrOnxFHaAR=cmMi2VfSudyHdjZ7vRZKhTQtepdkiXug@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 14 May 2020 at 12:21, Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Thu, May 14, 2020 at 09:11:50PM +0200, Ulf Hansson wrote:
 >
-> On Wed, May 13, 2020 at 11:46 PM Emil Velikov <emil.l.velikov@gmail.com> wrote:
-> >
-> > With earlier commits, the API no longer discards the const-ness of the
-> > sysrq_key_op. As such we can add the notation.
-> >
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Jiri Slaby <jslaby@suse.com>
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: linux-pm@vger.kernel.org
-> > Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
+> No worries, thanks for reviewing.
 >
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-Thanks
 
-> and I'm assuming that this is going to be applied along with the rest
-> of the series.
->
-I believe so, although I have not heard anything from the TTY maintainers yet.
+You are welcome.
 
--Emil
+> That said, are you fine with Rafel queuing this then?
+>
+
+I am fine with that. However I told if you need fixes tags as there are
+no users of the notification yet in the kernel. Though this is trivial,
+but do we need this backported to stable kernel. I don't have strong
+opinion and leave it to you and Rafael.
+
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+
+--
+Regards,
+Sudeep
