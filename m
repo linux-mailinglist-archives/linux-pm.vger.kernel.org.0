@@ -2,132 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F22F81D58AE
-	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 20:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9791D5915
+	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 20:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbgEOSKA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 May 2020 14:10:00 -0400
-Received: from foss.arm.com ([217.140.110.172]:60536 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726144AbgEOSJ7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 15 May 2020 14:09:59 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A2921042;
-        Fri, 15 May 2020 11:09:59 -0700 (PDT)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 785E73F71E;
-        Fri, 15 May 2020 11:09:57 -0700 (PDT)
-References: <20200428032258.2518-1-currojerez@riseup.net> <20200511105701.GA2940@hirez.programming.kicks-ass.net> <874ksmuqx6.fsf@riseup.net> <jhjwo5erb0e.mognet@arm.com> <87a72at44d.fsf@riseup.net>
-User-agent: mu4e 0.9.17; emacs 26.3
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Francisco Jerez <currojerez@riseup.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Pandruvada\, Srinivas" <srinivas.pandruvada@intel.com>,
-        linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        chris.p.wilson@intel.com,
-        "Vivi\, Rodrigo" <rodrigo.vivi@intel.com>, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        Lukasz Luba <Lukasz.Luba@arm.com>
-Subject: Re: [RFC] GPU-bound energy efficiency improvements for the intel_pstate driver (v2.99)
-In-reply-to: <87a72at44d.fsf@riseup.net>
-Date:   Fri, 15 May 2020 19:09:52 +0100
-Message-ID: <jhjv9kxqdcf.mognet@arm.com>
+        id S1726237AbgEOS3r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 May 2020 14:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbgEOS3q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 May 2020 14:29:46 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E31EC061A0C
+        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 11:29:46 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id w64so3652117wmg.4
+        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 11:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=GJ9JhcL5w+UKUif3imo4eTLikeA01EEdC4v2F/TAyYo=;
+        b=u4wTi9baIUhOAwGePlS93LW9WleOHD7hiHU85TQGl6kB3A89YHNvOVKf9nEa2ZXwDJ
+         ewBNDg7Ru3BbIHGC9RE1x6g/scMTKPw1m+OMX1T7wPehuTbdnnCm44X5eYyDJtBt2+iG
+         OqJ6p8zfawDjNrz3roVA4TlmfPBQwR5ntqqCYbZpX7wgksam+Un9Iw3nrxpU/STzjnCL
+         WjN3tcva3TaGFtTrzgBximFbVol9XvBsJeT/KK3ti6lFni/Sk4egi+jmWLOhWMmHZJc3
+         r6FyyyAfOThsGFnz5mw/JgFj81cQEoeSL8SS8HWjlSRYjQT1C0mFnkuPW7H5rrnTJYsC
+         6fcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=GJ9JhcL5w+UKUif3imo4eTLikeA01EEdC4v2F/TAyYo=;
+        b=BaCuFN7i1aSsZWfW91xbGT0b+u0yvN4T9nNNO69i7rqh/R9IeIrwupqvfLAdLP12eZ
+         ADdh07+EHWWMNmh/CqruIuH8Rp+RcFEVHysl/XwaK24q6mi+iF2+kYb5E/C2NIMj+nzy
+         dK5DAGXXTyn9oeoEfFEb8N+gbN3a9CwvJcdPFsa2St5Jd6bK5YKlWpzKGPAG8UHzXYsA
+         8SIzB9f+sZ1D1CHjQna/BwwJ9FclruOFnI4dIbkHRO6dtTZ+M3nB7rPJYESIFAxdS0Rm
+         2ehcpzIUfrYaNI2wOB6A0dglTy/pRwpDg4jc8dZQu4q/ROdWWTbmN1p5abNcG+FdNPcY
+         iZXQ==
+X-Gm-Message-State: AOAM533ZiB76RCYviOmaSBswNSbH/iagwtffbWrdlF+Yzo4OvOXELYKE
+        KnkzNNIOLTflwNEWXBL0UHUhdhG8jUo=
+X-Google-Smtp-Source: ABdhPJz/hCF+DYv5rBjLp/yIksSf1A9sF91/4odzyWZ6Alby3Um3A6BcMB0Lix+gtLUkPWaVIQz2Gw==
+X-Received: by 2002:a1c:7513:: with SMTP id o19mr5347731wmc.104.1589567385074;
+        Fri, 15 May 2020 11:29:45 -0700 (PDT)
+Received: from linaro.org ([2a01:e34:ed2f:f020:5450:281:8a7d:dd9a])
+        by smtp.gmail.com with ESMTPSA id n9sm4959897wmj.5.2020.05.15.11.29.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2020 11:29:44 -0700 (PDT)
+Date:   Fri, 15 May 2020 20:29:42 +0200
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     Zhou Wang <wangzhou1@hisilicon.com>
+Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
+        "shenyang (M)" <shenyang39@huawei.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>, linuxarm@huawei.com
+Subject: Re: [PATCH V3 2/2] thermal: Add HiSilicon Kunpeng thermal driver
+Message-ID: <20200515182942.GB760381@linaro.org>
+References: <1587455093-33876-3-git-send-email-shenyang39@huawei.com>
+ <53ca3883-9155-c023-7916-10ec8cccf977@linaro.org>
+ <0be585d3-1180-7b42-8b51-392a34793f70@huawei.com>
+ <b1739246-3639-a6c1-6c0d-275eb2ab0d16@linaro.org>
+ <5EB65D33.80105@hisilicon.com>
+ <96c7578e-25cf-d258-6505-8c1c631dbe82@linaro.org>
+ <5EB8A9DC.9030004@hisilicon.com>
+ <85f9f90f-2b67-4cfd-cc28-b14e037755b7@linaro.org>
+ <CAHLCerMfbJ3cAD32DHmYjEHPTa85a=ocYiPi3C9Ew5ctj-rVvQ@mail.gmail.com>
+ <5EBD42BA.7070008@hisilicon.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5EBD42BA.7070008@hisilicon.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, May 14, 2020 at 09:08:10PM +0800, Zhou Wang wrote:
+> On 2020/5/13 20:45, Amit Kucheria wrote:
+> > On Mon, May 11, 2020 at 1:44 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
 
-On 15/05/20 01:48, Francisco Jerez wrote:
-> Valentin Schneider <valentin.schneider@arm.com> writes:
->
->> (+Lukasz)
->>
->> On 11/05/20 22:01, Francisco Jerez wrote:
->>>> What I'm missing is an explanation for why this isn't using the
->>>> infrastructure that was build for these kinds of things? The thermal
->>>> framework, was AFAIU, supposed to help with these things, and the IPA
->>>> thing in particular is used by ARM to do exactly this GPU/CPU power
->>>> budget thing.
->>>>
->>>> If thermal/IPA is found wanting, why aren't we improving that?
->>>
->>> The GPU/CPU power budget "thing" is only a positive side effect of this
->>> series on some TDP-bound systems.  Its ultimate purpose is improving the
->>> energy efficiency of workloads which have a bottleneck on a device other
->>> than the CPU, by giving the bottlenecking device driver some influence
->>> over the response latency of CPUFREQ governors via a PM QoS interface.
->>> This seems to be completely outside the scope of the thermal framework
->>> and IPA AFAIU.
->>>
->>
->> It's been a while since I've stared at IPA, but it does sound vaguely
->> familiar.
->>
->> When thermally constrained, IPA figures out a budget and splits it between
->> actors (cpufreq and devfreq devices) depending on how much juice they are
->> asking for; see cpufreq_get_requested_power() and
->> devfreq_cooling_get_requested_power(). There's also some weighing involved.
->>
->
-> I'm aware of those.  Main problem is that the current mechanism for IPA
-> to figure out the requested power of each actor is based on a rough
-> estimate of their past power consumption: If an actor was operating at a
-> highly energy-inefficient regime it will end up requesting more power
-> than another actor with the same load but more energy-efficient
-> behavior.
+[ ... ]
 
-Right, we do mix load (busy time for either cpufreq and devfreq devices
-AFAIR) and current state (freq) into one single power value.
+> > They're simply using the thermal framework to show some temperatures
+> > in sysfs. It seems they have no use for any of the other features of
+> > the thermal framework, all that is handled in ACPI firmware.
+> 
+> This driver is ACPI based.
+> 
+> > 
+> > I do wonder if such drivers would be better off registering a hwmon
+> > driver instead.
+> 
+> If this driver is registering as a hwmon driver, it will block possible
+> usages of other thermal features in the future.
+> 
+> So as a new driver, we would like to register to thermal subsystem :)
 
-> The IPA power allocator is therefore ineffective at improving
-> the energy efficiency of an agent beyond its past behavior --
-> Furthermore it seems to *rely* on individual agents being somewhat
-> energetically responsible in order for its power allocation result to be
-> anywhere close to optimal.  But improving the energy efficiency of an
-> agent seems useful in its own right, whether IPA is used to balance
-> power across agents or not.  That's precisely the purpose of this
-> series.
->
->> If you look at the cpufreq cooling side of things, you'll see it also uses
->> the PM QoS interface. For instance, should IPA decide to cap the CPUs
->> (perhaps because say the GPU is the one drawing most of the juice), it'll
->> lead to a maximum frequency capping request.
->>
->> So it does sound like that's what you want, only not just when thermally
->> constrained.
->
-> Capping the CPU frequency from random device drivers is highly
-> problematic, because the CPU is a shared resource which a number of
-> different concurrent applications might be using beyond the GPU client.
-> The GPU driver has no visibility over its impact on the performance of
-> other applications.  And even in a single-task environment, in order to
-> behave as effectively as the present series the GPU driver would need to
-> monitor the utilization of *all* CPUs in the system and place a
-> frequency constraint on each one of them (since there is the potential
-> of the task scheduler migrating the process from one CPU to another
-> without notice).  Furthermore these frequency constraints would need to
-> be updated at high frequency in order to avoid performance degradation
-> whenever the balance of load between CPU and IO device fluctuates.
->
-> The present series attempts to remove the burden of computing frequency
-> constraints out of individual device drivers into the CPUFREQ governor.
-> Instead the device driver provides a response latency constraint when it
-> encounters a bottleneck, which can be more easily derived from hardware
-> and protocol characteristics than a CPU frequency.  PM QoS aggregates
-> the response latency constraints provided by all applications and gives
-> CPUFREQ a single response latency target compatible with all of them (so
-> a device driver specifying a high latency target won't lead to
-> performance degradation in a concurrent application with lower latency
-> constraints).  The CPUFREQ governor then computes frequency constraints
-> for each CPU core that minimize energy usage without limiting
-> throughput, based on the results obtained from CPU performance counters,
-> while guaranteeing that a discontinuous transition in CPU utilization
-> leads to a proportional transition in the CPU frequency before the
-> specified response latency has elapsed.
+When I did the first comments, I missed the point of the ACPI aspect but the
+main concern remains, especially in regard with the "features in the future".
 
-Right, I think I see your point there. I'm thinking the 'actual' IPA gurus
-(Lukasz or even Javi) may want to have a look at this.
+Please, do not aggregate the sensors in the driver. Make them separate to give
+the real view of the system.
+
+The aggregation aspect is still under discussion (virtual sensor or virtual
+thermal zone).
+
+
+-- 
+
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
