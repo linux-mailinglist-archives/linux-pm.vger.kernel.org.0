@@ -2,28 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1431D520C
-	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 16:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50E21D525C
+	for <lists+linux-pm@lfdr.de>; Fri, 15 May 2020 16:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbgEOOnE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 May 2020 10:43:04 -0400
-Received: from mga02.intel.com ([134.134.136.20]:51208 "EHLO mga02.intel.com"
+        id S1726144AbgEOOsE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 May 2020 10:48:04 -0400
+Received: from mga11.intel.com ([192.55.52.93]:17192 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726226AbgEOOnE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 15 May 2020 10:43:04 -0400
-IronPort-SDR: ZSSKv52bcW5GKMooSoUmbGccXNeCT76wCfOFs+kVgUPEhO2OMHGQf+lb2n/WCrwlvx8uVDgN0z
- iGHLqzoTp26Q==
+        id S1726610AbgEOOsD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 15 May 2020 10:48:03 -0400
+IronPort-SDR: y0Oib5dGbrNc9ibzjKh4vDeT1vU6yC3MgFqodI5kbxz5+J6GbsPwMgXzXrZDOPIophwqckBEir
+ cU8QHgTMl7HA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 07:43:03 -0700
-IronPort-SDR: IuGyOetG9Jl68eOLvCYB7lJcYhkAr+WUaSslMQdzOeFYb03SE/Y1On/LB2vsVPsbLwnpPIKKgX
- nWwHZaLW5x2g==
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 07:44:00 -0700
+IronPort-SDR: YWaXmdCBsfhvCu45nkeA1bHZdsoQDFtcKhmGU4gFsnkEexjF+haCMRiV5yoas108ScKA3IGNgG
+ gQmVRwec3qvA==
 X-IronPort-AV: E=Sophos;i="5.73,395,1583222400"; 
-   d="scan'208";a="252049772"
+   d="scan'208";a="438335331"
 Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 07:43:03 -0700
-Message-ID: <645ae01569ddf7b885fc5e345b34aa2687eb4ad1.camel@linux.intel.com>
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 07:43:59 -0700
+Message-ID: <3b729b2a518d55c973f7daa7dc77547dfaf7b315.camel@linux.intel.com>
 Subject: Re: [PATCH 4/4] thermal: core: genetlink support for
  events/cmd/sampling
 From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
@@ -31,7 +31,7 @@ To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
 Cc:     amit.kucheria@verdurent.com, arnd@arndb.de,
         rkumbako@codeaurora.org, ilina@codeaurora.org,
         linux-pm@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
-Date:   Fri, 15 May 2020 07:42:35 -0700
+Date:   Fri, 15 May 2020 07:43:59 -0700
 In-Reply-To: <20200515141034.19154-4-daniel.lezcano@linaro.org>
 References: <20200515141034.19154-1-daniel.lezcano@linaro.org>
          <20200515141034.19154-4-daniel.lezcano@linaro.org>
