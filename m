@@ -2,74 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA801D6097
-	for <lists+linux-pm@lfdr.de>; Sat, 16 May 2020 13:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412711D60F6
+	for <lists+linux-pm@lfdr.de>; Sat, 16 May 2020 14:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgEPLzL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 May 2020 07:55:11 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:39954 "EHLO
+        id S1726249AbgEPMwK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 May 2020 08:52:10 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:40058 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726197AbgEPLzL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 May 2020 07:55:11 -0400
+        with ESMTP id S1726237AbgEPMwK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 May 2020 08:52:10 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id E88598030875;
-        Sat, 16 May 2020 11:55:08 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 43AD88030802;
+        Sat, 16 May 2020 12:52:07 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Ih4dynNzh_Sx; Sat, 16 May 2020 14:55:07 +0300 (MSK)
-Date:   Sat, 16 May 2020 14:55:05 +0300
+        with ESMTP id PpvYz0io-J5L; Sat, 16 May 2020 15:52:05 +0300 (MSK)
+Date:   Sat, 16 May 2020 15:52:03 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Paul Burton <paulburton@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
- if CPU_FREQ enabled
-Message-ID: <20200516115505.6ybwxuv2bsu2myry@mobilestation>
+        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <stable@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Yue Hu <huyue2@yulong.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 20/20] cpufreq: Return zero on success in boost sw
+ setting
+Message-ID: <20200516125203.et5gkv6ullkerjyd@mobilestation>
 References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
  <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
- <20200508154150.GB22247@alpha.franken.de>
- <20200511133121.cz5axbwynhmqkx7x@mobilestation>
- <20200515074827.6p5zx4sb3bmavjih@mobilestation>
- <20200515210647.GA22922@alpha.franken.de>
+ <20200506174238.15385-21-Sergey.Semin@baikalelectronics.ru>
+ <c5109483-4c14-1a0c-efa9-51edf01c12de@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200515210647.GA22922@alpha.franken.de>
+In-Reply-To: <c5109483-4c14-1a0c-efa9-51edf01c12de@intel.com>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 15, 2020 at 11:06:47PM +0200, Thomas Bogendoerfer wrote:
-> On Fri, May 15, 2020 at 10:48:27AM +0300, Serge Semin wrote:
-> > Thomas,
-> > Could you take a look at my comment below so I could proceed with the
-> > patchset v3 development?
+Hello Rafael,
+
+On Fri, May 15, 2020 at 05:58:47PM +0200, Rafael J. Wysocki wrote:
+> On 5/6/2020 7:42 PM, Sergey.Semin@baikalelectronics.ru wrote:
+> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > Recent commit e61a41256edf ("cpufreq: dev_pm_qos_update_request() can
+> > return 1 on success") fixed a problem when active policies traverse
+> > was falsely stopped due to invalidly treating the non-zero return value
+> > from freq_qos_update_request() method as an error. Yes, that function
+> > can return positive values if the requested update actually took place.
+> > The current problem is that the returned value is then passed to the
+> > return cell of the cpufreq_boost_set_sw() (set_boost callback) method.
+> > This value is then also analyzed for being non-zero, which is also
+> > treated as having an error. As a result during the boost activation
+> > we'll get an error returned while having the QOS frequency update
+> > successfully performed. Fix this by returning a negative value from the
+> > cpufreq_boost_set_sw() if actual error was encountered and zero
+> > otherwise treating any positive values as the successful operations
+> > completion.
+> > 
+> > Fixes: 18c49926c4bf ("cpufreq: Add QoS requests for userspace constraints")
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Paul Burton <paulburton@kernel.org>
+> > Cc: Ralf Baechle <ralf@linux-mips.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org
+> > Cc: stable@vger.kernel.org
+> > ---
+> >   drivers/cpufreq/cpufreq.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 045f9fe157ce..5870cdca88cf 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -2554,7 +2554,7 @@ static int cpufreq_boost_set_sw(int state)
+> >   			break;
+> >   	}
+> > -	return ret;
+> > +	return ret < 0 ? ret : 0;
+> >   }
+> >   int cpufreq_boost_trigger_state(int state)
 > 
-> I can't help, but using r4k clocksource with changing frequency is
-> probaly only usefull as a random generator. So IMHO the only two
-> options are disabling it or implement what arch/x86/kernel/tsc.c does.
+> IMO it is better to update the caller of this function to handle the
+> positive value possibly returned by it correctly.
 
-Then it's settled. I'll resend the series with csrc-r4k updated to have the
-tsc-like design implemented.
+Could you elaborate why? Viresh seems to be ok with this solution.
 
+As I see it the caller doesn't expect the positive value returned by the
+original freq_qos_update_request(). It just doesn't need to know whether the
+effective policy has been updated or not, it only needs to make sure the
+operations has been successful. Moreover the positive value is related only
+to the !last! active policy, which doesn't give the caller a full picture
+of the policy change anyway. So taking all of these into account I'd leave the
+fix as is.
+
+Regards,
 -Sergey
 
 > 
-> Thomas.
+> Thanks!
 > 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+> 
