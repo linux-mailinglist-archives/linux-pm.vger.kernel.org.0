@@ -2,123 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 412711D60F6
-	for <lists+linux-pm@lfdr.de>; Sat, 16 May 2020 14:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA5D1D6119
+	for <lists+linux-pm@lfdr.de>; Sat, 16 May 2020 14:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726249AbgEPMwK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 May 2020 08:52:10 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:40058 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726237AbgEPMwK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 May 2020 08:52:10 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 43AD88030802;
-        Sat, 16 May 2020 12:52:07 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PpvYz0io-J5L; Sat, 16 May 2020 15:52:05 +0300 (MSK)
-Date:   Sat, 16 May 2020 15:52:03 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <stable@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>, Yue Hu <huyue2@yulong.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 20/20] cpufreq: Return zero on success in boost sw
- setting
-Message-ID: <20200516125203.et5gkv6ullkerjyd@mobilestation>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-21-Sergey.Semin@baikalelectronics.ru>
- <c5109483-4c14-1a0c-efa9-51edf01c12de@intel.com>
+        id S1726254AbgEPMzm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 May 2020 08:55:42 -0400
+Received: from mga09.intel.com ([134.134.136.24]:44093 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726237AbgEPMzm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 16 May 2020 08:55:42 -0400
+IronPort-SDR: 5VDLdr00A4ic7OpXSkaNZdKMh7MD0FHLH/HZXDERePDS7SbSoiCF0jXjJSw0sjyp/Z1M7IEapf
+ rbirqJPnelqQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2020 05:55:42 -0700
+IronPort-SDR: yvN0SmOZJHqQmoYtjm5IXoaI46heARkHG7baRSf11Og0i45uTzKHgSDrNEzfOajO8f78C1Q4Kq
+ YnuBNvBDDdlQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,398,1583222400"; 
+   d="scan'208";a="410756982"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 16 May 2020 05:55:39 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jZwLr-000AZ3-5p; Sat, 16 May 2020 20:55:39 +0800
+Date:   Sat, 16 May 2020 20:55:05 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
+Cc:     kbuild-all@lists.01.org, amit.kucheria@verdurent.com,
+        srinivas.pandruvada@linux.intel.com, arnd@arndb.de,
+        rkumbako@codeaurora.org, ilina@codeaurora.org,
+        linux-pm@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH] thermal: core: thermal_genl_sampling_temp() can be static
+Message-ID: <20200516125505.GA16652@aae4cc650884>
+References: <20200515141034.19154-4-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c5109483-4c14-1a0c-efa9-51edf01c12de@intel.com>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200515141034.19154-4-daniel.lezcano@linaro.org>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Rafael,
 
-On Fri, May 15, 2020 at 05:58:47PM +0200, Rafael J. Wysocki wrote:
-> On 5/6/2020 7:42 PM, Sergey.Semin@baikalelectronics.ru wrote:
-> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > Recent commit e61a41256edf ("cpufreq: dev_pm_qos_update_request() can
-> > return 1 on success") fixed a problem when active policies traverse
-> > was falsely stopped due to invalidly treating the non-zero return value
-> > from freq_qos_update_request() method as an error. Yes, that function
-> > can return positive values if the requested update actually took place.
-> > The current problem is that the returned value is then passed to the
-> > return cell of the cpufreq_boost_set_sw() (set_boost callback) method.
-> > This value is then also analyzed for being non-zero, which is also
-> > treated as having an error. As a result during the boost activation
-> > we'll get an error returned while having the QOS frequency update
-> > successfully performed. Fix this by returning a negative value from the
-> > cpufreq_boost_set_sw() if actual error was encountered and zero
-> > otherwise treating any positive values as the successful operations
-> > completion.
-> > 
-> > Fixes: 18c49926c4bf ("cpufreq: Add QoS requests for userspace constraints")
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Paul Burton <paulburton@kernel.org>
-> > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: devicetree@vger.kernel.org
-> > Cc: stable@vger.kernel.org
-> > ---
-> >   drivers/cpufreq/cpufreq.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 045f9fe157ce..5870cdca88cf 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -2554,7 +2554,7 @@ static int cpufreq_boost_set_sw(int state)
-> >   			break;
-> >   	}
-> > -	return ret;
-> > +	return ret < 0 ? ret : 0;
-> >   }
-> >   int cpufreq_boost_trigger_state(int state)
-> 
-> IMO it is better to update the caller of this function to handle the
-> positive value possibly returned by it correctly.
+Signed-off-by: kbuild test robot <lkp@intel.com>
+---
+ thermal_netlink.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Could you elaborate why? Viresh seems to be ok with this solution.
-
-As I see it the caller doesn't expect the positive value returned by the
-original freq_qos_update_request(). It just doesn't need to know whether the
-effective policy has been updated or not, it only needs to make sure the
-operations has been successful. Moreover the positive value is related only
-to the !last! active policy, which doesn't give the caller a full picture
-of the policy change anyway. So taking all of these into account I'd leave the
-fix as is.
-
-Regards,
--Sergey
-
-> 
-> Thanks!
-> 
-> 
+diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+index a2bce846771e4..851db26e66465 100644
+--- a/drivers/thermal/thermal_netlink.c
++++ b/drivers/thermal/thermal_netlink.c
+@@ -66,7 +66,7 @@ static struct genl_family thermal_gnl_family;
+ 
+ /************************** Sampling encoding *******************************/
+ 
+-int thermal_genl_sampling_temp(int id, int temp)
++static int thermal_genl_sampling_temp(int id, int temp)
+ {
+ 	struct sk_buff *skb;
+ 	void *hdr;
+@@ -506,7 +506,7 @@ static cb_t cmd_cb[] = {
+ 	[THERMAL_GENL_CMD_CDEV_GET]	= thermal_genl_cmd_cdev_get,
+ };
+ 
+-int thermal_genl_cmd_dumpit(struct sk_buff *skb, struct netlink_callback *cb)
++static int thermal_genl_cmd_dumpit(struct sk_buff *skb, struct netlink_callback *cb)
+ {
+ 	struct param p = { .msg = skb };
+ 	const struct genl_dumpit_info *info = genl_dumpit_info(cb);
+@@ -532,7 +532,7 @@ int thermal_genl_cmd_dumpit(struct sk_buff *skb, struct netlink_callback *cb)
+ 	return ret;
+ }
+ 
+-int thermal_genl_cmd_doit(struct sk_buff *skb, struct genl_info *info)
++static int thermal_genl_cmd_doit(struct sk_buff *skb, struct genl_info *info)
+ {
+ 	struct param p = { .attrs = info->attrs };
+ 	struct sk_buff *msg;
