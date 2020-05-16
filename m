@@ -2,100 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 776A11D5C8F
-	for <lists+linux-pm@lfdr.de>; Sat, 16 May 2020 00:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C63B1D5D5E
+	for <lists+linux-pm@lfdr.de>; Sat, 16 May 2020 02:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726212AbgEOWwW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 May 2020 18:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726204AbgEOWwV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 May 2020 18:52:21 -0400
-Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B482DC061A0C
-        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 15:52:21 -0700 (PDT)
-Received: by mail-vk1-xa44.google.com with SMTP id s85so1005420vks.11
-        for <linux-pm@vger.kernel.org>; Fri, 15 May 2020 15:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=WbuEj039XowiCe872ez0d/kuiLPdSK2EUDD/EsorImU=;
-        b=ZNVF+uq/7F3k14c9fHjdvZnu5OiptEZ6xGZD/w3bVDroahAvvvCpcAvk7ybDONFDW2
-         2Wm/FUU3zKNK+7Ikbs0nntJavqM2MfXgfauhK9h6MiEFaLJLrP2i1bG69UmpSxSQEG2V
-         GqCw+ey9n8tgH/D2QTJ+mLDQr8ERWeIAaoB8IhOBWwc9eKoDLThcZfILs5GgL1Iw/38T
-         xy2OLa4MeEVzjL8V4CVyngub6C7KFIBD27AVZtMILtxcBUkMYYzyGPmNd+tked7Yy7AJ
-         z6H9993kAS4i3CrKjS/82vcCtVKg69fLmnPyrdAWZUzfEjfG3g/1NBiML9FVuFxNTdvh
-         GSbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=WbuEj039XowiCe872ez0d/kuiLPdSK2EUDD/EsorImU=;
-        b=SSHfcZK4gIqy8HZZdyOYyMQanxPVtS9jcDrqHMbgLH7hrZtQ7bd0vVhcxqNDq75yhd
-         kJaI82mXaQmFYjWrXUb8q4kiBximIw/c8MYEcuUBEIecOaLZEA9SQSaMabHoiv+J/CnL
-         iAFm3P5zfPZQfDuQlp3BGh3yN4xH8jk/ZqYZT1SiLP7qM+r2mpOekluK+cpTCo4WX+a7
-         ay1ulb62SizCKfnGmlr39FCLjCTbCqeJhty5pcMBfVm3xvgf0pKC1irO+OT+UnTlJesI
-         Lh0YB1H1SJhbVm9puu9kWnJQs2nDR0PjmXS2bGVhBiwWZ1EgeSNafsGSvpPLQtHqKGX4
-         3Tfg==
-X-Gm-Message-State: AOAM533pEUgtIMk1PLKY+OtdVRDq0/o0DkdesLZ4GrggAJHwgVzxhH4c
-        Ee/3j33OlzIXfFndTFIpnzZnnESsUYXU0QyRrVg=
-X-Google-Smtp-Source: ABdhPJypHod7wp2hFypvDehBfl0Dncbw739g7WXAwFpX7Hmgy+Apo5yvQz7L+a1sT11t5rJ0BA5fr++jmReid5XpeZM=
-X-Received: by 2002:a1f:9e17:: with SMTP id h23mr4547623vke.57.1589583140716;
- Fri, 15 May 2020 15:52:20 -0700 (PDT)
+        id S1726550AbgEPApj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 May 2020 20:45:39 -0400
+Received: from mga03.intel.com ([134.134.136.65]:44267 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726198AbgEPApi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 15 May 2020 20:45:38 -0400
+IronPort-SDR: TUDa25sKYK+94Ob4w9Cm4MHDoUmY5wi0iBgLlcX+lcD/XOdwKm4KpXVYvPIMxaM4ARLUq0+0yr
+ dsfg50yNKoug==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 17:45:38 -0700
+IronPort-SDR: WHDxuv8yXzoceDm90cr7hMsrhg5t8/q+Tg+F5oQuQTM9MpT75Q/l5xIR8YMV+c94sG6RxqlcKT
+ kZsq5N2RLhgw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,397,1583222400"; 
+   d="scan'208";a="299205095"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 15 May 2020 17:45:36 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jZkxL-0009QF-Oh; Sat, 16 May 2020 08:45:35 +0800
+Date:   Sat, 16 May 2020 08:45:30 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 3185635a9dc3e75b55820693314c0f0953672c84
+Message-ID: <5ebf37aa.Lct74Cqf1aOWcXAs%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Reply-To: mr_mohammadahmed62@yahoo.com
-Received: by 2002:a67:72c5:0:0:0:0:0 with HTTP; Fri, 15 May 2020 15:52:20
- -0700 (PDT)
-From:   Mohammad Ahmed <mohammad.ahmed17177@gmail.com>
-Date:   Fri, 15 May 2020 15:52:20 -0700
-X-Google-Sender-Auth: VZTK2cywbE9KSmFMOukoO-quYRo
-Message-ID: <CAJKsNowTmzyd_vD6ZzrAMJqT03w-6qAHrO8ws0TtS=NuoVJqhQ@mail.gmail.com>
-Subject: GREETINGS FROM MR.MOHAMMAD AHMED / CAN I TRUST YOU?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-My Dear Friend.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 3185635a9dc3e75b55820693314c0f0953672c84  Merge branch 'pm-cpuidle' into bleeding-edge
 
-Greetings.
+elapsed time: 484m
 
-I know this message will come to you as a surprise, My name is Mr.
-Mohammad Ahmed a banker with Bank of Africa Burkina Faso West Africa,
-Please i want to transfer an abandoned sum of 13.5 Million United
-States Dollars into your account, if you are interested do not
-hesitate to get back to me with your personal information listed
-bellow for trust and confident to enable me feed you with more details
-on how the fund will be transfer into your account.
+configs tested: 96
+configs skipped: 1
 
-My dear you will provide account for transfer of the fund in your
-favor by our bank management and once the fund transferred into your
-account 50% is for you and 50% for me.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-The transaction is risk free and there will be no harm, I will like
-you to respond back to me immediately after reading this message to
-enable us proceed ahead for mutual benefit.
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+i386                              allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20200515
+i386                 randconfig-a005-20200515
+i386                 randconfig-a003-20200515
+i386                 randconfig-a001-20200515
+i386                 randconfig-a004-20200515
+i386                 randconfig-a002-20200515
+i386                 randconfig-a012-20200515
+i386                 randconfig-a016-20200515
+i386                 randconfig-a014-20200515
+i386                 randconfig-a013-20200515
+x86_64               randconfig-a005-20200515
+x86_64               randconfig-a003-20200515
+x86_64               randconfig-a006-20200515
+x86_64               randconfig-a004-20200515
+x86_64               randconfig-a001-20200515
+x86_64               randconfig-a002-20200515
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+x86_64                              defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
 
-My  Dear  i know the source of the fund and I assure you of receiving
-it into your account without any problem, Read this message and if we
-have business urgently get back to me with your personal information
-required bellow for more details.
-
-I am looking forward to hear back from you urgently.
-
-1. Full name:.........
-2. Home Address:.........
-3. Phone.............
-4. Occupation:.............
-5. Age:............
-6. Country:........
-7. Sex........
-8. Your Passport or ID card or Driving License
-
-Thanks.
-
-Yours faithfully
-
-Mr. Mohammad Ahmed.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
