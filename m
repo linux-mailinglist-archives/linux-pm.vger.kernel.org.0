@@ -2,99 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D72E71D676D
-	for <lists+linux-pm@lfdr.de>; Sun, 17 May 2020 12:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB171D6778
+	for <lists+linux-pm@lfdr.de>; Sun, 17 May 2020 12:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727904AbgEQKc0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 May 2020 06:32:26 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:31383 "EHLO
+        id S1727903AbgEQKrL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 May 2020 06:47:11 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:19161 "EHLO
         mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727122AbgEQKc0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 May 2020 06:32:26 -0400
+        by vger.kernel.org with ESMTP id S1727899AbgEQKrK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 May 2020 06:47:10 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1589711545; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=2Ot+L1wKDGqMcBOo6FkL+oGSqA8tD3Wir6teurhqckc=;
- b=kWKN4SqxCv7x7QImg/AOW3ttonknDfgX7IqTKeN+8RkXZFl0PIvmuY53Au1kpdlG9AFsZWFo
- 8by5g+h8sQY3VyBFGnyybHDSi+8JCfKy8LWhnIggqSnFTX9UWWKxUhxUheXlc15KAdyBBvWm
- V+mCu2Ib0exxqRlM45cmIyQfJ1s=
+ s=smtp; t=1589712430; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=gKtdSd/m1Hypkss/AI1u9zC9wBa/GBjsWEYmwhUlMa0=; b=t2ijHR4PW57guprPPiJQTIQlMP3iSQDNSJ7xuMm7Jky6E3wLIqwzjV5DOlMkyxA9cRpM18hB
+ OgejXqfs2cVQI41x7V5PdtrcobdDR11SJSPe+bh7fQh1K/RtDhBB9UvegNurEOdnHmuJD0jz
+ lXiRi06JzyfYBwZvLPI9FA5tmWU=
 X-Mailgun-Sending-Ip: 104.130.122.26
 X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 5ec112b90404ab4a8dd82d71 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sun, 17 May 2020 10:32:25
- GMT
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5ec11624.7f7243054618-smtp-out-n04;
+ Sun, 17 May 2020 10:47:00 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 870FFC433D2; Sun, 17 May 2020 10:32:24 +0000 (UTC)
+        id B6FBDC43637; Sun, 17 May 2020 10:46:59 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+Received: from codeaurora.org (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: manafm)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B7D50C433F2;
-        Sun, 17 May 2020 10:32:23 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Sun, 17 May 2020 16:02:23 +0530
-From:   manafm@codeaurora.org
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 73F91C433D2;
+        Sun, 17 May 2020 10:46:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 73F91C433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=manafm@codeaurora.org
+From:   Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: thermal: tsens: Add zeroc interrupt
- support in yaml
-In-Reply-To: <20200505153819.GA19181@bogus>
-References: <20200505111204.963-1-manafm@codeaurora.org>
- <20200505111204.963-3-manafm@codeaurora.org> <20200505153819.GA19181@bogus>
-Message-ID: <73fa201face9710efa5ce143980f9b9e@codeaurora.org>
-X-Sender: manafm@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
+Subject: [PATCH v2 0/2] Add zeroc interrupt support to tsens driver
+Date:   Sun, 17 May 2020 16:16:25 +0530
+Message-Id: <20200517104627.29501-1-manafm@codeaurora.org>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-05-05 21:08, Rob Herring wrote:
-> On Tue,  5 May 2020 16:42:04 +0530, Manaf Meethalavalappu Pallikunhi 
-> wrote:
->> Add 0C (zeroc) interrupt support for tsens in yaml.
->> 
->> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
->> <manafm@codeaurora.org>
->> ---
->>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 7 +++++--
->>  1 file changed, 5 insertions(+), 2 deletions(-)
->> 
-> 
-> My bot found errors running 'make dt_binding_check' on your patch:
-> 
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/qcom-tsens.example.dt.yaml:
-> thermal-sensor@c263000: interrupt-names: ['uplow', 'critical',
-> 'zeroc'] is too long
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/thermal/qcom-tsens.example.dt.yaml:
-> thermal-sensor@c263000: interrupts: [[0, 506, 4], [0, 508, 4], [0,
-> 510, 1]] is too long
-> 
-> See https://patchwork.ozlabs.org/patch/1283470
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure dt-schema is up to date:
-> 
-> pip3 install
-> git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-> 
-> Please check and re-submit.
-Addressed above errors for 
-Documentation/devicetree/bindings/thermal/qcom-tsens.yaml in v2
+The changes have dependency on merging tsens-common.c into tsens.c [1]
+to merge first.
+
+Dependencies:
+[1] https://lkml.org/lkml/2020/4/29/1028
+
+Changes in v2:
+* Add zeroc interrupt support to tsens driver
+* Update zeroc interrupt support in yaml
+
+Manaf Meethalavalappu Pallikunhi (2):
+  drivers: thermal: tsens: Add zeroc interrupt support
+  dt-bindings: thermal: tsens: Add zeroc interrupt support in yaml
+
+ .../bindings/thermal/qcom-tsens.yaml          |  21 ++++
+ drivers/thermal/qcom/tsens-v2.c               |   5 +
+ drivers/thermal/qcom/tsens.c                  | 107 +++++++++++++++++-
+ drivers/thermal/qcom/tsens.h                  |  10 ++
+ 4 files changed, 141 insertions(+), 2 deletions(-)
+
+-- 
+2.26.2
