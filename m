@@ -2,171 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9561D7677
-	for <lists+linux-pm@lfdr.de>; Mon, 18 May 2020 13:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287C01D7775
+	for <lists+linux-pm@lfdr.de>; Mon, 18 May 2020 13:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727831AbgERLOm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 May 2020 07:14:42 -0400
-Received: from mail-oo1-f66.google.com ([209.85.161.66]:33199 "EHLO
-        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727840AbgERLOg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 May 2020 07:14:36 -0400
-Received: by mail-oo1-f66.google.com with SMTP id q6so1948442oot.0;
-        Mon, 18 May 2020 04:14:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xIPLeWfzuIiw+O1I+1psfswOSkbFeXLFcX0dH9PjiPk=;
-        b=VKXy+kZFmQZOVGV4ja7GB9lC/o6XQ25NP4HKhhIIRpMukzO0GmDm2lBq6DOH/3RTgy
-         JluM3WKFVRm1HpxTIgrCPDXhWFxBmXJDEIvSwIdOV2it/71ZnxyWPJuxYlBSTzSP1Mil
-         q9p/Pjzp8oXnxSrryoJGkPEDuRLBQnRAv0ygAue/veGcKVCNdt0UfWRTyQeFEJK7AWxh
-         CPlDYza+zNa14g5K7yLkfZaXM3dAm+sNfWhIpkCBQlh0tBQV0JjGw+dvNPvVFNXNlC0w
-         tPwad7bwXdjJjPDsg46N/2Uq9fCJn495l0BPx3ZILD8oS0dsX32NlXzkCZg6vjDnbKgF
-         HepA==
-X-Gm-Message-State: AOAM531d4L/CAUOOh6/9VWFn2iVGFSoheT8rp3tlvbZw/01RTn9wrld5
-        NP7JA9XJ/YQINI3haYxEuYfHahjsrju06PlbW0w=
-X-Google-Smtp-Source: ABdhPJyjjRohNtzYOZux1PadVtPRgk3RCnO2GQyqFlC1CuoS1BzGXLkakHwRRIC6/Jm5lH2+Px+N/LPVW0cgUdFmPrs=
-X-Received: by 2002:a4a:a286:: with SMTP id h6mr12497264ool.38.1589800474994;
- Mon, 18 May 2020 04:14:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <4502272.pByIgeXik9@kreacher> <CAJZ5v0j6S+we7tHeV9TM30LS+TO3zWigACe0ZUFfWphg2FBBZQ@mail.gmail.com>
- <CAB4CAwc4y7xitv9L9w61GKfBsbhHXuk+iM+QWKc2=0mks_fNFg@mail.gmail.com>
-In-Reply-To: <CAB4CAwc4y7xitv9L9w61GKfBsbhHXuk+iM+QWKc2=0mks_fNFg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 18 May 2020 13:14:23 +0200
-Message-ID: <CAJZ5v0hMtxmu9S3xsyEhT-b-qYiects80cLt18orxEXyeH6ESw@mail.gmail.com>
-Subject: Re: [PATCH[RFT]] ACPI: EC: s2idle: Avoid flushing EC work when EC GPE
- is inactive
-To:     Chris Chiu <chiu@endlessm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+        id S1726758AbgERLkC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 May 2020 07:40:02 -0400
+Received: from paleale.coelho.fi ([176.9.41.70]:33228 "EHLO
+        farmhouse.coelho.fi" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726362AbgERLkC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 May 2020 07:40:02 -0400
+X-Greylist: delayed 1124 seconds by postgrey-1.27 at vger.kernel.org; Mon, 18 May 2020 07:40:01 EDT
+Received: from 91-156-6-193.elisa-laajakaista.fi ([91.156.6.193] helo=[192.168.100.69])
+        by farmhouse.coelho.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <luca@coelho.fi>)
+        id 1jadpb-000cvW-JP; Mon, 18 May 2020 14:21:16 +0300
+Message-ID: <bc0d0a9155f198f0ae34045932598b237e82d157.camel@coelho.fi>
+From:   Luca Coelho <luca@coelho.fi>
+To:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        gil.adam@intel.com
+Cc:     linux-wireless@vger.kernel.org, daniel.lezcano@linaro.org,
+        andrzej.p@collabora.com, b.zolnierkie@samsung.com
+Date:   Mon, 18 May 2020 14:21:13 +0300
+In-Reply-To: <4b6a9dbf43a33354c01d760f7fab3723e5882269.camel@intel.com>
+References: <20200430063229.6182-1-rui.zhang@intel.com>
+         <20200430063229.6182-2-rui.zhang@intel.com>
+         <4b6a9dbf43a33354c01d760f7fab3723e5882269.camel@intel.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.2-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on farmhouse.coelho.fi
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        TVD_RCVD_IP autolearn=ham autolearn_force=no version=3.4.4
+Subject: Re: [PATCH 1/6] iwlwifi: use thermal_zone_device_update() for
+ temperature change
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 18, 2020 at 1:11 PM Chris Chiu <chiu@endlessm.com> wrote:
->
-> On Mon, May 18, 2020 at 4:59 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Thu, May 14, 2020 at 12:10 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > Flushing the EC work while suspended to idle when the EC GPE status
-> > > is not set causes some EC wakeup events (notably power button and
-> > > lid ones) to be missed after a series of spurious wakeups on the Dell
-> > > XPS13 9360 in my office.
-> > >
-> > > If that happens, the machine cannot be woken up from suspend-to-idle
-> > > by a power button press or lid status change and it needs to be woken
-> > > up in some other way (eg. by a key press).
-> > >
-> > > Flushing the EC work only after successful dispatching the EC GPE,
-> > > which means that its status has been set, avoids the issue, so change
-> > > the code in question accordingly.
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >
-> > > Hi Chris,
-> > >
-> > > Please check if the key press wakeup still works on your system with this patch
-> > > applied (on top of https://patchwork.kernel.org/patch/11538065/).
-> >
-> > Hi Chris,
-> >
-> > Since I haven't heard back from you and the problem at hand is a
-> > regression on the machine where it happens, I'm going to push this
-> > patch for merging.
-> >
-> > If it causes the key press wakeup issue to reappear on your machine,
-> > I'm afraid that we'll need to quirk it in the EC driver.
-> >
-> > Thanks!
->
-> Hi Rafael,
-> My laptop works w/o problem waking up from a keystroke with this patch
-> on top of https://patchwork.kernel.org/patch/11538065/).
+On Tue, 2020-05-12 at 09:58 +0800, Zhang Rui wrote:
+> On Thu, 2020-04-30 at 14:32 +0800, Zhang Rui wrote:
+> > thermal_notify_framework() is an obsolete API, and iwlwifi is the
+> > only
+> > user of it.
+> > Convert iwlwifi driver to use thermal_zone_device_update() instead.
+> > 
+> > Note that, thermal_zone_device_update() is able to handle the crossed
+> > threshold by comparing the current temperature with every trip point,
+> > so
+> > ths_crossed variant in iwl_mvm_temp_notif() is probably not needed.
+> > It is still left there in this patch, in case the debug information
+> > is
+> > still needed.
+> > 
+> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> 
+> Hi, Luca,
+> 
+> Any comments about this patch and patch 6/6?
 
-Great, thanks for the confirmation!
+Hi Rui,
 
-> > > ---
-> > >  drivers/acpi/ec.c    |    6 +++++-
-> > >  drivers/acpi/sleep.c |   15 ++++-----------
-> > >  2 files changed, 9 insertions(+), 12 deletions(-)
-> > >
-> > > Index: linux-pm/drivers/acpi/ec.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/acpi/ec.c
-> > > +++ linux-pm/drivers/acpi/ec.c
-> > > @@ -2020,9 +2020,13 @@ bool acpi_ec_dispatch_gpe(void)
-> > >          * to allow the caller to process events properly after that.
-> > >          */
-> > >         ret = acpi_dispatch_gpe(NULL, first_ec->gpe);
-> > > -       if (ret == ACPI_INTERRUPT_HANDLED)
-> > > +       if (ret == ACPI_INTERRUPT_HANDLED) {
-> > >                 pm_pr_dbg("EC GPE dispatched\n");
-> > >
-> > > +               /* Flush the event and query workqueues. */
-> > > +               acpi_ec_flush_work();
-> > > +       }
-> > > +
-> > >         return false;
-> > >  }
-> > >  #endif /* CONFIG_PM_SLEEP */
-> > > Index: linux-pm/drivers/acpi/sleep.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/acpi/sleep.c
-> > > +++ linux-pm/drivers/acpi/sleep.c
-> > > @@ -980,13 +980,6 @@ static int acpi_s2idle_prepare_late(void
-> > >         return 0;
-> > >  }
-> > >
-> > > -static void acpi_s2idle_sync(void)
-> > > -{
-> > > -       /* The EC driver uses special workqueues that need to be flushed. */
-> > > -       acpi_ec_flush_work();
-> > > -       acpi_os_wait_events_complete(); /* synchronize Notify handling */
-> > > -}
-> > > -
-> > >  static bool acpi_s2idle_wake(void)
-> > >  {
-> > >         if (!acpi_sci_irq_valid())
-> > > @@ -1018,7 +1011,7 @@ static bool acpi_s2idle_wake(void)
-> > >                         return true;
-> > >
-> > >                 /*
-> > > -                * Cancel the wakeup and process all pending events in case
-> > > +                * Cancel the SCI wakeup and process all pending events in case
-> > >                  * there are any wakeup ones in there.
-> > >                  *
-> > >                  * Note that if any non-EC GPEs are active at this point, the
-> > > @@ -1026,8 +1019,7 @@ static bool acpi_s2idle_wake(void)
-> > >                  * should be missed by canceling the wakeup here.
-> > >                  */
-> > >                 pm_system_cancel_wakeup();
-> > > -
-> > > -               acpi_s2idle_sync();
-> > > +               acpi_os_wait_events_complete();
-> > >
-> > >                 /*
-> > >                  * The SCI is in the "suspended" state now and it cannot produce
-> > > @@ -1060,7 +1052,8 @@ static void acpi_s2idle_restore(void)
-> > >          * of GPEs.
-> > >          */
-> > >         acpi_os_wait_events_complete(); /* synchronize GPE processing */
-> > > -       acpi_s2idle_sync();
-> > > +       acpi_ec_flush_work(); /* flush the EC driver's workqueues */
-> > > +       acpi_os_wait_events_complete(); /* synchronize Notify handling */
-> > >
-> > >         s2idle_wakeup = false;
-> > >
-> > >
-> > >
-> > >
+Sorry for the delay, we have been making some small changes in this
+code to support a new interface with our firmware and I wanted to make
+sure things work together.
+
+I'm adding Gil, who is making the changes, to this thread so he can
+also take a look.
+
+--
+Cheers,
+Luca.
+
