@@ -2,159 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBD21D735E
-	for <lists+linux-pm@lfdr.de>; Mon, 18 May 2020 10:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF171D73E5
+	for <lists+linux-pm@lfdr.de>; Mon, 18 May 2020 11:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726432AbgERI7e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 May 2020 04:59:34 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:42602 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726180AbgERI7d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 May 2020 04:59:33 -0400
-Received: by mail-ot1-f65.google.com with SMTP id z3so5745900otp.9;
-        Mon, 18 May 2020 01:59:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HcC5d0dkGCVtIC0H6I2J3H5klgnWGhpsgSC2d3NhmtY=;
-        b=dSe7x6Xn0/BmroqGeGszSIzWEqOWDMRGKr5R6+cSXqDzT9w5YGci0RMxs8wZhgU/Ww
-         U+lWGTkdPWeHqcvV9ZwSsgSuG2gT1kuvxKyqcWGuMMmkuYmxX5etXrS0p8IduyJYp8db
-         fTEaD7dZq5C2VCjLoyY4cv1WPSYOfyzn1hZtaG9YwZ18oXDXFvb8OWd+BAcJJCOm4PdK
-         kwd/NPCvsraafwYZTyT+NTIG+Uwc/tGy0CcO8s5Q6rSbAiPvMUzJ3aNW9QN6JOpQL/3N
-         G989r1evWT1lwwxyv0wbLCCXhVgGl2Yz05qmxD4yJAxg8IxQnRb+mxmgQ+cl5J5hJDcJ
-         DNJw==
-X-Gm-Message-State: AOAM531p+VO33VxRkjTBDKtNH1mwgiLV48J3GELhUOA6iW3moefGdXWO
-        rPRh5oezuxvqMw+7+6gvIJ0tmPRsO4EptcNB7Gg=
-X-Google-Smtp-Source: ABdhPJzHU/Z1F5YsgIDVwxzd5lXbIG4cpPdzQkCfjzP+lYB0PuTC/2UalzJ4qHxT8jZN0CA1Ix7+aLSUeVJU7LdzUGI=
-X-Received: by 2002:a9d:3d05:: with SMTP id a5mr426572otc.262.1589792372469;
- Mon, 18 May 2020 01:59:32 -0700 (PDT)
+        id S1726270AbgERJYu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 May 2020 05:24:50 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:62365 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726040AbgERJYu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 May 2020 05:24:50 -0400
+X-UUID: 38ef98bc9db2438b8e621db43415db51-20200518
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=0DTYtg7DH/aaZsHajF1M0GEhpPDj6HE4U9Su4EW4ZBg=;
+        b=Va6hluz4/bYSptacD8bkhsa7nqDZ2RFMyTranQOalM8PvJkJFDufyvfFqfxrt16Eu3JTqNK1zXkkWjaYPe4/rTWrbAF32VKsT7VVlBavvczJ9jN19kkFozRrtllCR0Kyh2vL+FHwLlmDezX0unYUnglb0LuuuzxNYqAEFeq5e5w=;
+X-UUID: 38ef98bc9db2438b8e621db43415db51-20200518
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1124336748; Mon, 18 May 2020 17:24:48 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 18 May 2020 17:24:45 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 18 May 2020 17:24:45 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        YT Lee <yt.lee@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v8 0/3] PM / AVS: SVS: Introduce SVS engine
+Date:   Mon, 18 May 2020 17:24:01 +0800
+Message-ID: <20200518092403.22647-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <4502272.pByIgeXik9@kreacher>
-In-Reply-To: <4502272.pByIgeXik9@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 18 May 2020 10:59:17 +0200
-Message-ID: <CAJZ5v0j6S+we7tHeV9TM30LS+TO3zWigACe0ZUFfWphg2FBBZQ@mail.gmail.com>
-Subject: Re: [PATCH[RFT]] ACPI: EC: s2idle: Avoid flushing EC work when EC GPE
- is inactive
-To:     Chris Chiu <chiu@endlessm.com>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 5934DDCDEAF0C437AC4DD8F51EBED5FD5EACA359D2BA842B5D2816D48513A4412000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 14, 2020 at 12:10 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Flushing the EC work while suspended to idle when the EC GPE status
-> is not set causes some EC wakeup events (notably power button and
-> lid ones) to be missed after a series of spurious wakeups on the Dell
-> XPS13 9360 in my office.
->
-> If that happens, the machine cannot be woken up from suspend-to-idle
-> by a power button press or lid status change and it needs to be woken
-> up in some other way (eg. by a key press).
->
-> Flushing the EC work only after successful dispatching the EC GPE,
-> which means that its status has been set, avoids the issue, so change
-> the code in question accordingly.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->
-> Hi Chris,
->
-> Please check if the key press wakeup still works on your system with this patch
-> applied (on top of https://patchwork.kernel.org/patch/11538065/).
+MS4gU1ZTIGRyaXZlciB1c2UgT1BQIGFkanVzdCBldmVudCBpbiBbMV0gdG8gdXBkYXRlIE9QUCB0
+YWJsZSB2b2x0YWdlIHBhcnQuDQoyLiBTVlMgZHRzIG5vZGUgcmVmZXJzIHRvIENQVSBvcHAgdGFi
+bGUgWzJdIGFuZCBHUFUgb3BwIHRhYmxlIFszXS4NCjMuIFNWUyBhbmQgdGhlcm1hbCBkdHMgdXNl
+IHRoZSBzYW1lIHRoZXJtYWwgZWZ1c2UgWzRdLg0KNC4gU1ZTIGR0cyBuZWVkcyBwb3dlci1kb21h
+aW4gWzVdWzZdIGFuZCBQTUlDIHJlZ3VsYXRvciBbN10uDQoNClsxXSBodHRwczovL3BhdGNod29y
+ay5rZXJuZWwub3JnL3BhdGNoLzExMTkzNTEzLw0KWzJdIGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5l
+bC5vcmcvcGF0Y2gvMTEzMDQ5MzUvDQpbM10gaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9w
+YXRjaC8xMTQyMzAwOS8NCls0XSBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzEx
+MzE2NDk1Lw0KWzVdIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3BhdGNod29yay9wYXRjaC8xMjM2
+ODc1Lw0KWzZdIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3BhdGNod29yay9wYXRjaC8xMjM2ODc4
+Lw0KWzddIGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcGF0Y2gvMTEyODQ2MTcvDQoNCnBl
+bmRpbmcgZGlzY3Vzc2lvbjoNCi0gU1ZTIHN1Yi1ub2RlIGFyY2hpdGVjdHVyZSBjb25jZXJuIGlu
+IGJlbG93IHBhdGNoLg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvcGF0Y2h3b3JrL3BhdGNoLzEx
+NzU5OTQvDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9wYXRjaHdvcmsvcGF0Y2gvMTE3NTk5NC8N
+Cg0KY2hhbmdlcyBzaW5jZSB2NzoNCi0gQWRkICJtdGtfc3ZzLnlhbWwiIGZvciBkZXZpY2UtdHJl
+ZSBiaW5kaW5nIGRvY3VtZW50Lg0KLSBBZGQgc3ZzX2FkZF90aGVybWFsX2RldmljZV9saW5rKCkg
+aW4gZHJpdmVyIGZvciBzdnMgZGV2aWNlIChjb25zdW1lcikNCnRvIGxpbmsgdGhlcm1hbCBkZXZp
+Y2UgKHN1cHBsaWVyKS4NCi0gcmVwbGFjZSBwbV9xb3NfYWRkX3JlcXVlc3QoKSB3aXRoIGNwdV9s
+YXRlbmN5X3Fvc19hZGRfcmVxdWVzdCgpIGZvcg0KbGV0dGluZyBDUFVzIGxlYXZlIGlkbGUtb2Zm
+IHN0YXRlLg0KDQpSb2dlciBMdSAoMyk6DQogIGR0LWJpbmRpbmdzOiBwb3dlcjogYXZzOiBhZGQg
+bXRrIHN2cyBkdC1iaW5kaW5ncw0KICBhcm02NDogZHRzOiBtdDgxODM6IGFkZCBzdnMgZGV2aWNl
+IGluZm9ybWF0aW9uDQogIFBNIC8gQVZTOiBTVlM6IEludHJvZHVjZSBTVlMgZW5naW5lDQoNCiAu
+Li4vYmluZGluZ3MvcG93ZXIvYXZzL210a19zdnMueWFtbCAgICAgICAgICAgfCAgMTQxICsrDQog
+YXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMtZXZiLmR0cyAgIHwgICAxNiArDQog
+YXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMuZHRzaSAgICAgIHwgICA0MSArDQog
+ZHJpdmVycy9wb3dlci9hdnMvS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgIHwgICAxMCArDQog
+ZHJpdmVycy9wb3dlci9hdnMvTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgIHwgICAgMSArDQog
+ZHJpdmVycy9wb3dlci9hdnMvbXRrX3N2cy5jICAgICAgICAgICAgICAgICAgIHwgMjExOSArKysr
+KysrKysrKysrKysrKw0KIGluY2x1ZGUvbGludXgvcG93ZXIvbXRrX3N2cy5oICAgICAgICAgICAg
+ICAgICB8ICAgMjMgKw0KIDcgZmlsZXMgY2hhbmdlZCwgMjM1MSBpbnNlcnRpb25zKCspDQogY3Jl
+YXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9wb3dlci9h
+dnMvbXRrX3N2cy55YW1sDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvcG93ZXIvYXZzL210
+a19zdnMuYw0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2xpbnV4L3Bvd2VyL210a19zdnMu
+aA0K
 
-Hi Chris,
-
-Since I haven't heard back from you and the problem at hand is a
-regression on the machine where it happens, I'm going to push this
-patch for merging.
-
-If it causes the key press wakeup issue to reappear on your machine,
-I'm afraid that we'll need to quirk it in the EC driver.
-
-Thanks!
-
-> ---
->  drivers/acpi/ec.c    |    6 +++++-
->  drivers/acpi/sleep.c |   15 ++++-----------
->  2 files changed, 9 insertions(+), 12 deletions(-)
->
-> Index: linux-pm/drivers/acpi/ec.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/ec.c
-> +++ linux-pm/drivers/acpi/ec.c
-> @@ -2020,9 +2020,13 @@ bool acpi_ec_dispatch_gpe(void)
->          * to allow the caller to process events properly after that.
->          */
->         ret = acpi_dispatch_gpe(NULL, first_ec->gpe);
-> -       if (ret == ACPI_INTERRUPT_HANDLED)
-> +       if (ret == ACPI_INTERRUPT_HANDLED) {
->                 pm_pr_dbg("EC GPE dispatched\n");
->
-> +               /* Flush the event and query workqueues. */
-> +               acpi_ec_flush_work();
-> +       }
-> +
->         return false;
->  }
->  #endif /* CONFIG_PM_SLEEP */
-> Index: linux-pm/drivers/acpi/sleep.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/sleep.c
-> +++ linux-pm/drivers/acpi/sleep.c
-> @@ -980,13 +980,6 @@ static int acpi_s2idle_prepare_late(void
->         return 0;
->  }
->
-> -static void acpi_s2idle_sync(void)
-> -{
-> -       /* The EC driver uses special workqueues that need to be flushed. */
-> -       acpi_ec_flush_work();
-> -       acpi_os_wait_events_complete(); /* synchronize Notify handling */
-> -}
-> -
->  static bool acpi_s2idle_wake(void)
->  {
->         if (!acpi_sci_irq_valid())
-> @@ -1018,7 +1011,7 @@ static bool acpi_s2idle_wake(void)
->                         return true;
->
->                 /*
-> -                * Cancel the wakeup and process all pending events in case
-> +                * Cancel the SCI wakeup and process all pending events in case
->                  * there are any wakeup ones in there.
->                  *
->                  * Note that if any non-EC GPEs are active at this point, the
-> @@ -1026,8 +1019,7 @@ static bool acpi_s2idle_wake(void)
->                  * should be missed by canceling the wakeup here.
->                  */
->                 pm_system_cancel_wakeup();
-> -
-> -               acpi_s2idle_sync();
-> +               acpi_os_wait_events_complete();
->
->                 /*
->                  * The SCI is in the "suspended" state now and it cannot produce
-> @@ -1060,7 +1052,8 @@ static void acpi_s2idle_restore(void)
->          * of GPEs.
->          */
->         acpi_os_wait_events_complete(); /* synchronize GPE processing */
-> -       acpi_s2idle_sync();
-> +       acpi_ec_flush_work(); /* flush the EC driver's workqueues */
-> +       acpi_os_wait_events_complete(); /* synchronize Notify handling */
->
->         s2idle_wakeup = false;
->
->
->
->
