@@ -2,135 +2,349 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD0F1D8B8F
-	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 01:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C081D8BAF
+	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 01:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbgERXS5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 May 2020 19:18:57 -0400
-Received: from mga04.intel.com ([192.55.52.120]:12670 "EHLO mga04.intel.com"
+        id S1726763AbgERXka (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 May 2020 19:40:30 -0400
+Received: from mga11.intel.com ([192.55.52.93]:29440 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726481AbgERXS5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 18 May 2020 19:18:57 -0400
-IronPort-SDR: 1u9cZhhch1Y6umQdCf392RZVekuuXfeU8jcbqWu1Imdg+hooNh0UH8p2f8ifw07vUR9q9OHJ7f
- YHIwjlX84niQ==
+        id S1726407AbgERXk3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 18 May 2020 19:40:29 -0400
+IronPort-SDR: AUOXTi/Ynv3CgSfudNR8mWxUMZcwqqSf6iOfH1sZG9enQE6w8xVp8v9YRmI1YW/dZ5wV9/QsNo
+ HpSvHrWlMoAQ==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 16:18:55 -0700
-IronPort-SDR: Do1n78TGn8syvfDXnMIWKqmnbacq1fJc9bPvbkRNxn0up6FAAzCafH/f2RxLcT++xRCGkAaBsp
- yZM5csWNFa6g==
-X-ExtLoop1: 1
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 16:40:25 -0700
+IronPort-SDR: iz1nXBt9K4ogBQpYtnjfZYYRebULUmKsIDkJcJ1yJMO4IBF9SMKYcL6iIJw/BPeJlZXXbHihq6
+ S0VBYro51sqQ==
 X-IronPort-AV: E=Sophos;i="5.73,408,1583222400"; 
-   d="scan'208";a="465927983"
-Received: from orsmsx108.amr.corp.intel.com ([10.22.240.6])
-  by fmsmga006.fm.intel.com with ESMTP; 18 May 2020 16:18:55 -0700
-Received: from orsmsx109.amr.corp.intel.com ([169.254.11.125]) by
- ORSMSX108.amr.corp.intel.com ([169.254.2.68]) with mapi id 14.03.0439.000;
- Mon, 18 May 2020 16:18:54 -0700
-From:   "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
-To:     "matthewgarrett@google.com" <matthewgarrett@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Aram, Nisha" <nisha.aram@intel.com>,
-        "mjg59@google.com" <mjg59@google.com>
-Subject: Re: [PATCH V2 1/3] thermal/int340x_thermal: Export GDDV
-Thread-Topic: [PATCH V2 1/3] thermal/int340x_thermal: Export GDDV
-Thread-Index: AQHWLWqyLmaGM0UKiEamDjfu32esnA==
-Date:   Mon, 18 May 2020 23:18:53 +0000
-Message-ID: <4c00e15c8d5e34a723896f132989edd581c6995e.camel@intel.com>
-References: <20200414020953.255364-1-matthewgarrett@google.com>
-In-Reply-To: <20200414020953.255364-1-matthewgarrett@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-x-originating-ip: [10.251.227.7]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A2D12CCD5DB97F49844C0FDF324CA1F5@intel.com>
-Content-Transfer-Encoding: base64
+   d="scan'208";a="411441805"
+Received: from spandruv-mobl.amr.corp.intel.com ([10.251.227.7])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 16:40:24 -0700
+Message-ID: <2cd6c73b890b3eab12420adf4ae29101672e6a0b.camel@linux.intel.com>
+Subject: Re: [RFC][PATCH 3/5] thermal: Add support for setting notification
+ thresholds
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date:   Mon, 18 May 2020 16:40:22 -0700
+In-Reply-To: <a9af415d-9fd0-dcea-79ee-0fb90f45045e@linaro.org>
+References: <20200504181616.175477-1-srinivas.pandruvada@linux.intel.com>
+         <20200504181616.175477-4-srinivas.pandruvada@linux.intel.com>
+         <a9af415d-9fd0-dcea-79ee-0fb90f45045e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gTW9uLCAyMDIwLTA0LTEzIGF0IDE5OjA5IC0wNzAwLCBNYXR0aGV3IEdhcnJldHQgd3JvdGU6
-DQo+IEZyb206IE1hdHRoZXcgR2FycmV0dCA8bWpnNTlAZ29vZ2xlLmNvbT4NCj4gDQo+IEltcGxl
-bWVudGluZyBEUFRGIHByb3Blcmx5IHJlcXVpcmVzIG1ha2luZyB1c2Ugb2YgZmlybXdhcmUtcHJv
-dmlkZWQNCj4gaW5mb3JtYXRpb24gYXNzb2NpYXRlZCB3aXRoIHRoZSBJTlQzNDAwIGRldmljZS4g
-Q2FsbGluZyBHRERWIHByb3ZpZGVzDQo+IGENCj4gYnVmZmVyIG9mIGluZm9ybWF0aW9uIHdoaWNo
-IHVzZXJsYW5kIGNhbiB0aGVuIGludGVycHJldCB0byBkZXRlcm1pbmUNCj4gYXBwcm9wcmlhdGUg
-RFBURiBwb2xpY3kuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBNYXR0aGV3IEdhcnJldHQgPG1qZzU5
-QGdvb2dsZS5jb20+DQpUZXN0ZWQtYnk6IFBhbmRydXZhZGEsIFNyaW5pdmFzIDxzcmluaXZhcy5w
-YW5kcnV2YWRhQGxpbnV4LmludGVsLmNvbT4NCg0KPiAtLS0NCj4gIC4uLi9pbnRlbC9pbnQzNDB4
-X3RoZXJtYWwvaW50MzQwMF90aGVybWFsLmMgICB8IDYwDQo+ICsrKysrKysrKysrKysrKysrKysN
-Cj4gIDEgZmlsZSBjaGFuZ2VkLCA2MCBpbnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy90aGVybWFsL2ludGVsL2ludDM0MHhfdGhlcm1hbC9pbnQzNDAwX3RoZXJtYWwuYw0K
-PiBiL2RyaXZlcnMvdGhlcm1hbC9pbnRlbC9pbnQzNDB4X3RoZXJtYWwvaW50MzQwMF90aGVybWFs
-LmMNCj4gaW5kZXggY2VlZjg5Yzk1NmJkNC4uMDBhNzczMjcyNGNkMCAxMDA2NDQNCj4gLS0tIGEv
-ZHJpdmVycy90aGVybWFsL2ludGVsL2ludDM0MHhfdGhlcm1hbC9pbnQzNDAwX3RoZXJtYWwuYw0K
-PiArKysgYi9kcml2ZXJzL3RoZXJtYWwvaW50ZWwvaW50MzQweF90aGVybWFsL2ludDM0MDBfdGhl
-cm1hbC5jDQo+IEBAIC01Miw2ICs1MiwyNSBAQCBzdHJ1Y3QgaW50MzQwMF90aGVybWFsX3ByaXYg
-ew0KPiAgCXU4IHV1aWRfYml0bWFwOw0KPiAgCWludCByZWxfbWlzY19kZXZfcmVzOw0KPiAgCWlu
-dCBjdXJyZW50X3V1aWRfaW5kZXg7DQo+ICsJY2hhciAqZGF0YV92YXVsdDsNCj4gK307DQo+ICsN
-Cj4gK3N0YXRpYyBzc2l6ZV90IGRhdGFfdmF1bHRfcmVhZChzdHJ1Y3QgZmlsZSAqZmlsZSwgc3Ry
-dWN0IGtvYmplY3QNCj4gKmtvYmosDQo+ICsJICAgICBzdHJ1Y3QgYmluX2F0dHJpYnV0ZSAqYXR0
-ciwgY2hhciAqYnVmLCBsb2ZmX3Qgb2ZmLCBzaXplX3QNCj4gY291bnQpDQo+ICt7DQo+ICsJbWVt
-Y3B5KGJ1ZiwgYXR0ci0+cHJpdmF0ZSArIG9mZiwgY291bnQpOw0KPiArCXJldHVybiBjb3VudDsN
-Cj4gK30NCj4gKw0KPiArc3RhdGljIEJJTl9BVFRSX1JPKGRhdGFfdmF1bHQsIDApOw0KPiArDQo+
-ICtzdGF0aWMgc3RydWN0IGJpbl9hdHRyaWJ1dGUgKmRhdGFfYXR0cmlidXRlc1tdID0gew0KPiAr
-CSZiaW5fYXR0cl9kYXRhX3ZhdWx0LA0KPiArCU5VTEwsDQo+ICt9Ow0KPiArDQo+ICtzdGF0aWMg
-Y29uc3Qgc3RydWN0IGF0dHJpYnV0ZV9ncm91cCBkYXRhX2F0dHJpYnV0ZV9ncm91cCA9IHsNCj4g
-KwkuYmluX2F0dHJzID0gZGF0YV9hdHRyaWJ1dGVzLA0KPiAgfTsNCj4gIA0KPiAgc3RhdGljIHNz
-aXplX3QgYXZhaWxhYmxlX3V1aWRzX3Nob3coc3RydWN0IGRldmljZSAqZGV2LA0KPiBAQCAtMjc4
-LDYgKzI5NywzMiBAQCBzdGF0aWMgc3RydWN0IHRoZXJtYWxfem9uZV9wYXJhbXMNCj4gaW50MzQw
-MF90aGVybWFsX3BhcmFtcyA9IHsNCj4gIAkubm9faHdtb24gPSB0cnVlLA0KPiAgfTsNCj4gIA0K
-PiArc3RhdGljIHZvaWQgaW50MzQwMF9zZXR1cF9nZGR2KHN0cnVjdCBpbnQzNDAwX3RoZXJtYWxf
-cHJpdiAqcHJpdikNCj4gK3sNCj4gKwlzdHJ1Y3QgYWNwaV9idWZmZXIgYnVmZmVyID0geyBBQ1BJ
-X0FMTE9DQVRFX0JVRkZFUiwgTlVMTCB9Ow0KPiArCXVuaW9uIGFjcGlfb2JqZWN0ICpvYmo7DQo+
-ICsJYWNwaV9zdGF0dXMgc3RhdHVzOw0KPiArDQo+ICsJc3RhdHVzID0gYWNwaV9ldmFsdWF0ZV9v
-YmplY3QocHJpdi0+YWRldi0+aGFuZGxlLCAiR0REViIsIE5VTEwsDQo+ICsJCQkJICAgICAgJmJ1
-ZmZlcik7DQo+ICsJaWYgKEFDUElfRkFJTFVSRShzdGF0dXMpIHx8ICFidWZmZXIubGVuZ3RoKQ0K
-PiArCQlyZXR1cm47DQo+ICsNCj4gKwlvYmogPSBidWZmZXIucG9pbnRlcjsNCj4gKwlpZiAob2Jq
-LT50eXBlICE9IEFDUElfVFlQRV9QQUNLQUdFIHx8IG9iai0+cGFja2FnZS5jb3VudCAhPSAxDQo+
-ICsJICAgIHx8IG9iai0+cGFja2FnZS5lbGVtZW50c1swXS50eXBlICE9IEFDUElfVFlQRV9CVUZG
-RVIpIHsNCj4gKwkJa2ZyZWUoYnVmZmVyLnBvaW50ZXIpOw0KPiArCQlyZXR1cm47DQo+ICsJfQ0K
-PiArDQo+ICsJcHJpdi0+ZGF0YV92YXVsdCA9IGttZW1kdXAob2JqLQ0KPiA+cGFja2FnZS5lbGVt
-ZW50c1swXS5idWZmZXIucG9pbnRlciwNCj4gKwkJCQkgICBvYmotDQo+ID5wYWNrYWdlLmVsZW1l
-bnRzWzBdLmJ1ZmZlci5sZW5ndGgsDQo+ICsJCQkJICAgR0ZQX0tFUk5FTCk7DQo+ICsJYmluX2F0
-dHJfZGF0YV92YXVsdC5wcml2YXRlID0gcHJpdi0+ZGF0YV92YXVsdDsNCj4gKwliaW5fYXR0cl9k
-YXRhX3ZhdWx0LnNpemUgPSBvYmotDQo+ID5wYWNrYWdlLmVsZW1lbnRzWzBdLmJ1ZmZlci5sZW5n
-dGg7DQo+ICsJa2ZyZWUoYnVmZmVyLnBvaW50ZXIpOw0KPiArfQ0KPiArDQo+ICBzdGF0aWMgaW50
-IGludDM0MDBfdGhlcm1hbF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAg
-ew0KPiAgCXN0cnVjdCBhY3BpX2RldmljZSAqYWRldiA9IEFDUElfQ09NUEFOSU9OKCZwZGV2LT5k
-ZXYpOw0KPiBAQCAtMzA5LDYgKzM1NCw4IEBAIHN0YXRpYyBpbnQgaW50MzQwMF90aGVybWFsX3By
-b2JlKHN0cnVjdA0KPiBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICANCj4gIAlwbGF0Zm9ybV9z
-ZXRfZHJ2ZGF0YShwZGV2LCBwcml2KTsNCj4gIA0KPiArCWludDM0MDBfc2V0dXBfZ2Rkdihwcml2
-KTsNCj4gKw0KPiAgCWludDM0MDBfdGhlcm1hbF9vcHMuZ2V0X21vZGUgPSBpbnQzNDAwX3RoZXJt
-YWxfZ2V0X21vZGU7DQo+ICAJaW50MzQwMF90aGVybWFsX29wcy5zZXRfbW9kZSA9IGludDM0MDBf
-dGhlcm1hbF9zZXRfbW9kZTsNCj4gIA0KPiBAQCAtMzI3LDYgKzM3NCwxMyBAQCBzdGF0aWMgaW50
-IGludDM0MDBfdGhlcm1hbF9wcm9iZShzdHJ1Y3QNCj4gcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0K
-PiAgCWlmIChyZXN1bHQpDQo+ICAJCWdvdG8gZnJlZV9yZWxfbWlzYzsNCj4gIA0KPiArCWlmIChw
-cml2LT5kYXRhX3ZhdWx0KSB7DQo+ICsJCXJlc3VsdCA9IHN5c2ZzX2NyZWF0ZV9ncm91cCgmcGRl
-di0+ZGV2LmtvYmosDQo+ICsJCQkJCSAgICAmZGF0YV9hdHRyaWJ1dGVfZ3JvdXApOw0KPiArCQlp
-ZiAocmVzdWx0KQ0KPiArCQkJZ290byBmcmVlX3V1aWQ7DQo+ICsJfQ0KPiArDQo+ICAJcmVzdWx0
-ID0gYWNwaV9pbnN0YWxsX25vdGlmeV9oYW5kbGVyKA0KPiAgCQkJcHJpdi0+YWRldi0+aGFuZGxl
-LCBBQ1BJX0RFVklDRV9OT1RJRlksDQo+IGludDM0MDBfbm90aWZ5LA0KPiAgCQkJKHZvaWQgKilw
-cml2KTsNCj4gQEAgLTMzNiw2ICszOTAsOSBAQCBzdGF0aWMgaW50IGludDM0MDBfdGhlcm1hbF9w
-cm9iZShzdHJ1Y3QNCj4gcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgCXJldHVybiAwOw0KPiAg
-DQo+ICBmcmVlX3N5c2ZzOg0KPiArCWlmIChwcml2LT5kYXRhX3ZhdWx0KQ0KPiArCQlzeXNmc19y
-ZW1vdmVfZ3JvdXAoJnBkZXYtPmRldi5rb2JqLA0KPiAmZGF0YV9hdHRyaWJ1dGVfZ3JvdXApOw0K
-PiArZnJlZV91dWlkOg0KPiAgCXN5c2ZzX3JlbW92ZV9ncm91cCgmcGRldi0+ZGV2LmtvYmosICZ1
-dWlkX2F0dHJpYnV0ZV9ncm91cCk7DQo+ICBmcmVlX3JlbF9taXNjOg0KPiAgCWlmICghcHJpdi0+
-cmVsX21pc2NfZGV2X3JlcykNCj4gQEAgLTM2MCw4ICs0MTcsMTEgQEAgc3RhdGljIGludCBpbnQz
-NDAwX3RoZXJtYWxfcmVtb3ZlKHN0cnVjdA0KPiBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICAJ
-aWYgKCFwcml2LT5yZWxfbWlzY19kZXZfcmVzKQ0KPiAgCQlhY3BpX3RoZXJtYWxfcmVsX21pc2Nf
-ZGV2aWNlX3JlbW92ZShwcml2LT5hZGV2LQ0KPiA+aGFuZGxlKTsNCj4gIA0KPiArCWlmIChwcml2
-LT5kYXRhX3ZhdWx0KQ0KPiArCQlzeXNmc19yZW1vdmVfZ3JvdXAoJnBkZXYtPmRldi5rb2JqLA0K
-PiAmZGF0YV9hdHRyaWJ1dGVfZ3JvdXApOw0KPiAgCXN5c2ZzX3JlbW92ZV9ncm91cCgmcGRldi0+
-ZGV2LmtvYmosICZ1dWlkX2F0dHJpYnV0ZV9ncm91cCk7DQo+ICAJdGhlcm1hbF96b25lX2Rldmlj
-ZV91bnJlZ2lzdGVyKHByaXYtPnRoZXJtYWwpOw0KPiArCWtmcmVlKHByaXYtPmRhdGFfdmF1bHQp
-Ow0KPiAgCWtmcmVlKHByaXYtPnRydHMpOw0KPiAgCWtmcmVlKHByaXYtPmFydHMpOw0KPiAgCWtm
-cmVlKHByaXYpOw0K
+On Mon, 2020-05-18 at 18:37 +0200, Daniel Lezcano wrote:
+> On 04/05/2020 20:16, Srinivas Pandruvada wrote:
+> > Add new attributes in thermal syfs when a thermal drivers provides
+> > callbacks for them and CONFIG_THERMAL_USER_EVENT_INTERFACE is
+> > defined.
+> > 
+> > These attribute allow user space to stop polling for temperature.
+> > 
+> > These attributes are:
+> > - temp_thres_low: Specify a notification temperature for a low
+> > temperature threshold event.
+> > temp_thres_high: Specify a notification temperature for a high
+> > temperature threshold event.
+> > temp_thres_hyst: Specify a change in temperature to send
+> > notification
+> > again.
+> > 
+> > This is implemented by adding additional sysfs attribute group. The
+> > changes in this patch are trivial to add new attributes in thermal
+> > sysfs as done for other attributes.
+> 
+> Isn't it duplicate with the trip point?
+A trip point is where an in-kernel governor takes some action. This is
+not same as a notification temperature. For example at trip point
+configured by ACPI at 85C, the thermal governor may start aggressive
+throttling. 
+But a user space can set a notification threshold at 80C and start some
+active controls like activate some fan to reduce the impact of passive
+control on performance.
+
+We need a way to distinguish between temperature notification threshold
+and actual trip point. Changing a trip point means that user wants
+kernel to throttle at temperature.
+
+
+Thanks,
+Srinivas
+
+> 
+> 
+> 
+> 
+> > Signed-off-by: Srinivas Pandruvada <
+> > srinivas.pandruvada@linux.intel.com>
+> > ---
+> >  drivers/thermal/thermal_sysfs.c | 136
+> > +++++++++++++++++++++++++++++++-
+> >  include/linux/thermal.h         |  10 ++-
+> >  2 files changed, 143 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/thermal/thermal_sysfs.c
+> > b/drivers/thermal/thermal_sysfs.c
+> > index aa99edb4dff7..aa85424c3ac4 100644
+> > --- a/drivers/thermal/thermal_sysfs.c
+> > +++ b/drivers/thermal/thermal_sysfs.c
+> > @@ -215,6 +215,125 @@ trip_point_hyst_show(struct device *dev,
+> > struct device_attribute *attr,
+> >  	return ret ? ret : sprintf(buf, "%d\n", temperature);
+> >  }
+> >  
+> > +#if IS_ENABLED(CONFIG_THERMAL_USER_EVENT_INTERFACE)
+> > +
+> > +#define create_thres_attr(name)					
+> > \
+> > +	static ssize_t							
+> > \
+> > +	name##_show(struct device *dev, struct device_attribute
+> > *devattr, \
+> > +		char *buf)						\
+> > +	{								\
+> > +	struct thermal_zone_device *tz = to_thermal_zone(dev);	\
+> > +	int temperature, ret;						
+> > \
+> > +									
+> > \
+> > +	ret = tz->ops->get_##name(tz, &temperature);			
+> > \
+> > +									
+> > \
+> > +	return ret ? ret : sprintf(buf, "%d\n", temperature);	\
+> > +	}								\
+> > +									
+> > \
+> > +	static ssize_t							
+> > \
+> > +	name##_store(struct device *dev, struct device_attribute
+> > *devattr, \
+> > +		const char *buf, size_t count)				
+> > \
+> > +	{								\
+> > +		struct thermal_zone_device *tz = to_thermal_zone(dev);	
+> > \
+> > +		int temperature, ret;					
+> > \
+> > +									
+> > \
+> > +		if (kstrtoint(buf, 10, &temperature))			
+> > \
+> > +			return -EINVAL;				\
+> > +									
+> > \
+> > +		ret = tz->ops->set_##name(tz, temperature);		\
+> > +		return ret ? ret : count;				\
+> > +	}
+> > +
+> > +create_thres_attr(temp_thres_low);
+> > +create_thres_attr(temp_thres_high);
+> > +create_thres_attr(temp_thres_hyst);
+> > +
+> > +static int create_user_events_attrs(struct thermal_zone_device
+> > *tz)
+> > +{
+> > +	struct attribute **attrs;
+> > +	int index = 0;
+> > +
+> > +	if (tz->ops->get_temp_thres_low)
+> > +		++index;
+> > +	if (tz->ops->get_temp_thres_high)
+> > +		++index;
+> > +	if (tz->ops->get_temp_thres_high)
+> > +		++index;
+> > +
+> > +	/* One additional space for NULL */
+> > +	attrs = kcalloc(index + 1, sizeof(*attrs), GFP_KERNEL);
+> > +	if (!attrs)
+> > +		return -ENOMEM;
+> > +
+> > +	tz->threshold_attrs = kcalloc(index, sizeof(*tz-
+> > >threshold_attrs), GFP_KERNEL);
+> > +	if (!tz->threshold_attrs) {
+> > +		kfree(attrs);
+> > +		return -ENOMEM;
+> > +	}
+> > +
+> > +	index = 0;
+> > +
+> > +	if (tz->ops->get_temp_thres_low) {
+> > +		snprintf(tz->threshold_attrs[index].name,
+> > THERMAL_NAME_LENGTH,
+> > +			 "temp_thres_low");
+> > +
+> > +		sysfs_attr_init(&tz->threshold_attrs[index].attr.attr);
+> > +		tz->threshold_attrs[index].attr.attr.name =
+> > +						tz-
+> > >threshold_attrs[index].name;
+> > +		tz->threshold_attrs[index].attr.attr.mode = S_IWUSR |
+> > S_IRUGO;
+> > +		tz->threshold_attrs[index].attr.show =
+> > temp_thres_low_show;
+> > +		tz->threshold_attrs[index].attr.store =
+> > temp_thres_low_store;
+> > +		attrs[index] = &tz->threshold_attrs[index].attr.attr;
+> > +		++index;
+> > +	}
+> > +	if (tz->ops->get_temp_thres_high) {
+> > +		snprintf(tz->threshold_attrs[index].name,
+> > THERMAL_NAME_LENGTH,
+> > +			 "temp_thres_high");
+> > +
+> > +		sysfs_attr_init(&tz->threshold_attrs[index].attr.attr);
+> > +		tz->threshold_attrs[index].attr.attr.name =
+> > +						tz-
+> > >threshold_attrs[index].name;
+> > +		tz->threshold_attrs[index].attr.attr.mode = S_IWUSR |
+> > S_IRUGO;
+> > +		tz->threshold_attrs[index].attr.show =
+> > temp_thres_high_show;
+> > +		tz->threshold_attrs[index].attr.store =
+> > temp_thres_high_store;
+> > +		attrs[index] = &tz->threshold_attrs[index].attr.attr;
+> > +		++index;
+> > +	}
+> > +	if (tz->ops->get_temp_thres_hyst) {
+> > +		snprintf(tz->threshold_attrs[index].name,
+> > THERMAL_NAME_LENGTH,
+> > +			 "temp_thres_hyst");
+> > +
+> > +		sysfs_attr_init(&tz->threshold_attrs[index].attr.attr);
+> > +		tz->threshold_attrs[index].attr.attr.name =
+> > +						tz-
+> > >threshold_attrs[index].name;
+> > +		tz->threshold_attrs[index].attr.attr.mode = S_IWUSR |
+> > S_IRUGO;
+> > +		tz->threshold_attrs[index].attr.show =
+> > temp_thres_hyst_show;
+> > +		tz->threshold_attrs[index].attr.store =
+> > temp_thres_hyst_store;
+> > +		attrs[index] = &tz->threshold_attrs[index].attr.attr;
+> > +		++index;
+> > +	}
+> > +	attrs[index] = NULL;
+> > +	tz->threshold_attribute_group.attrs = attrs;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void delete_user_events_attrs(struct thermal_zone_device
+> > *tz)
+> > +{
+> > +	kfree(tz->threshold_attrs);
+> > +	kfree(tz->threshold_attribute_group.attrs);
+> > +}
+> > +#else
+> > +static int create_user_events_attrs(struct thermal_zone_device
+> > *tz)
+> > +{
+> > +	return -EINVAL;
+> > +}
+> > +
+> > +static void delete_user_events_attrs(struct thermal_zone_device
+> > *tz)
+> > +{
+> > +}
+> > +#endif
+> > +
+> >  static ssize_t
+> >  passive_store(struct device *dev, struct device_attribute *attr,
+> >  	      const char *buf, size_t count)
+> > @@ -625,16 +744,27 @@ int thermal_zone_create_device_groups(struct
+> > thermal_zone_device *tz,
+> >  {
+> >  	const struct attribute_group **groups;
+> >  	int i, size, result;
+> > +	int start = 0;
+> >  
+> >  	/* we need one extra for trips and the NULL to terminate the
+> > array */
+> >  	size = ARRAY_SIZE(thermal_zone_attribute_groups) + 2;
+> > +
+> > +	result = create_user_events_attrs(tz);
+> > +	if (!result) {
+> > +		++size;
+> > +		++start;
+> > +	}
+> > +
+> >  	/* This also takes care of API requirement to be NULL
+> > terminated */
+> >  	groups = kcalloc(size, sizeof(*groups), GFP_KERNEL);
+> >  	if (!groups)
+> >  		return -ENOMEM;
+> >  
+> > -	for (i = 0; i < size - 2; i++)
+> > -		groups[i] = thermal_zone_attribute_groups[i];
+> > +	if (start)
+> > +		groups[0] = &tz->threshold_attribute_group;
+> > +
+> > +	for (i = 0; i < size - 2 - start; i++)
+> > +		groups[i + start] = thermal_zone_attribute_groups[i];
+> >  
+> >  	if (tz->trips) {
+> >  		result = create_trip_attrs(tz, mask);
+> > @@ -660,6 +790,8 @@ void thermal_zone_destroy_device_groups(struct
+> > thermal_zone_device *tz)
+> >  	if (tz->trips)
+> >  		destroy_trip_attrs(tz);
+> >  
+> > +	delete_user_events_attrs(tz);
+> > +
+> >  	kfree(tz->device.groups);
+> >  }
+> >  
+> > diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> > index f5e1e7c6a9a2..ee9d79ace7ce 100644
+> > --- a/include/linux/thermal.h
+> > +++ b/include/linux/thermal.h
+> > @@ -102,6 +102,12 @@ struct thermal_zone_device_ops {
+> >  			  enum thermal_trend *);
+> >  	int (*notify) (struct thermal_zone_device *, int,
+> >  		       enum thermal_trip_type);
+> > +	int (*set_temp_thres_low)(struct thermal_zone_device *, int);
+> > +	int (*set_temp_thres_high)(struct thermal_zone_device *, int);
+> > +	int (*set_temp_thres_hyst)(struct thermal_zone_device *, int);
+> > +	int (*get_temp_thres_low)(struct thermal_zone_device *, int *);
+> > +	int (*get_temp_thres_high)(struct thermal_zone_device *, int
+> > *);
+> > +	int (*get_temp_thres_hyst)(struct thermal_zone_device *, int
+> > *);
+> >  };
+> >  
+> >  struct thermal_cooling_device_ops {
+> > @@ -208,6 +214,8 @@ struct thermal_zone_device {
+> >  	struct list_head node;
+> >  	struct delayed_work poll_queue;
+> >  	enum thermal_notify_event notify_event;
+> > +	struct attribute_group threshold_attribute_group;
+> > +	struct thermal_attr *threshold_attrs;
+> >  };
+> >  
+> >  /**
+> > @@ -558,7 +566,7 @@ enum thermal_device_events {
+> >  	THERMAL_PERF_CHANGED,
+> >  };
+> >  
+> > -#ifdef CONFIG_THERMAL_USER_EVENT_INTERFACE
+> > +#if IS_ENABLED(CONFIG_THERMAL_USER_EVENT_INTERFACE)
+> >  int thermal_dev_send_event(int zone_id, enum thermal_device_events
+> > event, u64 event_data);
+> >  #else
+> >  int thermal_dev_send_event(int zone_id, enum thermal_device_events
+> > event, u64 event_data)
+> > 
+> 
+> 
+
