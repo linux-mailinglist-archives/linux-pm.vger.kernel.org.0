@@ -2,530 +2,1383 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5511D7CE8
-	for <lists+linux-pm@lfdr.de>; Mon, 18 May 2020 17:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 558C71D7DC2
+	for <lists+linux-pm@lfdr.de>; Mon, 18 May 2020 18:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728299AbgERPdw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 May 2020 11:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727006AbgERPdw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 May 2020 11:33:52 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD56EC061A0C
-        for <linux-pm@vger.kernel.org>; Mon, 18 May 2020 08:33:50 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id o26so5816519vsr.10
-        for <linux-pm@vger.kernel.org>; Mon, 18 May 2020 08:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JuiFjY8rEtzI/nuU668c1fxC0KXzwIHtxU4PRAgXJyo=;
-        b=sMn9DL9CZYB69iY3reUMMbflCQ2y4bWTfqHsPnZBREWJx9vhhcn9EhPyTkmB3CB/JH
-         3IlAwL/eNCpg+f3Do0RI/2PrWO1hxxs4qpJ4ytnFj9tK1ANYvJrGI1k6t3xrpOkT+aaS
-         uM8TtccQ3xjkORxk7WAYS37ujathyuhWA2eSRNAgo6Nz7apx1C/2sIoGx4NdC/zchW1q
-         0C6eQ89woo4Is039pm2TEu9WEZwoubMM4YUHZDtsEH8Awr/CSDynVTQ/UfR5iuA8+b3w
-         GpnKnUwDEbf8STqdnMpfUKJKOIin5DBcHSE8uLk8xsz+nDB8WLMMKZJBee49ywQcKmHy
-         baCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JuiFjY8rEtzI/nuU668c1fxC0KXzwIHtxU4PRAgXJyo=;
-        b=YtsvyPg/Yiaan1lKEW3zMIALDHENHdnx1XLsRLYNAyO5PxHOi7zyDxnk9iRhSUnlC+
-         bDx7nRLrzeZqlRADhg42mzUC7tSJt3vr6i3qvui/GwWVbUV6tNDpETYs7NPW29v9Z3Vk
-         s3LhfkDDRk8ZcmZJJMJH8bjCKXl32DpNjQLUTrgHUQ5vH2yaAHA4Qz0LCZSbmMzd/DV5
-         clCUmZU7zMMbNtFhHguq66lQPYgdZHeR1p58IsZvqcu7uyQdBsJvnCP/tgAs466zbJDh
-         142GtOpZgABGTzubdaifnsMFL6830RXB+NRYgbq/7UwjoIt0eYj5giM61GiJgtObaLrY
-         KOpg==
-X-Gm-Message-State: AOAM531SCIC9TSA14NBRSY8HP5pzrwrOlJxpS/3LFThIYgRrkJ/98FSs
-        rEEk0+xcrY+dV+IuRmvfa06uYs8hO8NKqYqUE0dYbg==
-X-Google-Smtp-Source: ABdhPJzNx/5LlZZ3QuAqylyNO5Um3dEgEtotqJZHfZSvZ1JyOQH3UkRnQR3Qoow/q2apducZelmI/FuhfphFiTteExM=
-X-Received: by 2002:a67:407:: with SMTP id 7mr10909399vse.95.1589816028859;
- Mon, 18 May 2020 08:33:48 -0700 (PDT)
+        id S1727035AbgERQFU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 May 2020 12:05:20 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:56118 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727938AbgERQFU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 May 2020 12:05:20 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04IG5E39001854;
+        Mon, 18 May 2020 11:05:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1589817914;
+        bh=Lcn57braS40p91YrVmBQ0uszKTNns2CEwJl+HzOqZ2U=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=dDPINpM8pSLtiT8ySj+0rYnX212NwVc2ZeOmiEZRCguAyLFZuDW2AhJJdMoQvJae+
+         Pfhmb+jpjt+L37as4ekX6a4atarzVYYQW02ZxYZnL2VshQ0MIQV7zjjsoJ/R9RARTG
+         XNIPhjlr4mTF++/+3UdRlMy4dZFsw3GO9TqrySyQ=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04IG5EIH069755
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 18 May 2020 11:05:14 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 18
+ May 2020 11:05:14 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 18 May 2020 11:05:14 -0500
+Received: from [10.250.38.163] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04IG5DhQ041145;
+        Mon, 18 May 2020 11:05:13 -0500
+Subject: Re: [PATCH 3/3] power: supply: bq25150 introduce the bq25150
+To:     Dan Murphy <dmurphy@ti.com>, <sre@kernel.org>
+CC:     <sspatil@android.com>, <linux-pm@vger.kernel.org>,
+        <robh@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+References: <20200515193148.8502-1-dmurphy@ti.com>
+ <20200515193148.8502-4-dmurphy@ti.com>
+From:   "Andrew F. Davis" <afd@ti.com>
+Message-ID: <2b882e9b-1d84-ea1f-edd5-d42aef701b5c@ti.com>
+Date:   Mon, 18 May 2020 12:05:13 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20200505111204.963-1-manafm@codeaurora.org> <20200505111204.963-2-manafm@codeaurora.org>
- <CAP245DV3-WXa1183tY=AzREAfzt3nXYugngG+zn6pEjXLc68cA@mail.gmail.com> <bbc9eef884f3b83191b582a80d3dd5d3@codeaurora.org>
-In-Reply-To: <bbc9eef884f3b83191b582a80d3dd5d3@codeaurora.org>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Mon, 18 May 2020 21:03:09 +0530
-Message-ID: <CAHLCerPZu9DwafFLB37+FT7V91Q0HcJ101gx7m5PjRigeiHY9g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drivers: thermal: tsens: Add 0C (zeorC) interrupt support
-To:     manafm@codeaurora.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200515193148.8502-4-dmurphy@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, May 17, 2020 at 3:58 PM <manafm@codeaurora.org> wrote:
->
-> On 2020-05-05 17:39, Amit Kucheria wrote:
-> > Hi Manaf,
-> >
-> > Typo: fix zeorC in subject line.
-> Done
-> >
-> > Please rebase this patch[1] on top of my patch merging tsens-common.c
-> > and tsens.c.
-> >
-> > [1]
-> > https://lore.kernel.org/linux-arm-msm/e30e2ba6fa5c007983afd4d7d4e0311c0b57917a.1588183879.git.amit.kucheria@linaro.org/
-> Done
-> >
-> > On Tue, May 5, 2020 at 4:42 PM Manaf Meethalavalappu Pallikunhi
-> > <manafm@codeaurora.org> wrote:
-> >>
-> >> TSENS IP v2.6+ adds 0C interrupt support. It triggers set
-> >> interrupt when aggregated minimum temperature of all TSENS falls
-> >> below 0C preset threshold and triggers reset interrupt when aggregate
-> >> minimum temperature of all TSENS crosses above reset threshold.
-> >> Add support for this interrupt in the driver.
-> >>
-> >> It adds another sensor to the of-thermal along with all individual
-> >> TSENS. It enables to add any mitigation for 0C interrupt.
-> >>
-> >> Signed-off-by: Manaf Meethalavalappu Pallikunhi
-> >> <manafm@codeaurora.org>
-> >> ---
-> >>  drivers/thermal/qcom/tsens-common.c | 72
-> >> ++++++++++++++++++++++++++++-
-> >>  drivers/thermal/qcom/tsens-v2.c     |  7 +++
-> >>  drivers/thermal/qcom/tsens.c        | 51 ++++++++++++++++++--
-> >>  drivers/thermal/qcom/tsens.h        | 11 +++++
-> >>  4 files changed, 135 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/drivers/thermal/qcom/tsens-common.c
-> >> b/drivers/thermal/qcom/tsens-common.c
-> >> index 172545366636..44e7edeb9a90 100644
-> >> --- a/drivers/thermal/qcom/tsens-common.c
-> >> +++ b/drivers/thermal/qcom/tsens-common.c
-> >> @@ -198,7 +198,8 @@ static void tsens_set_interrupt_v1(struct
-> >> tsens_priv *priv, u32 hw_id,
-> >>                 index = LOW_INT_CLEAR_0 + hw_id;
-> >>                 break;
-> >>         case CRITICAL:
-> >> -               /* No critical interrupts before v2 */
-> >> +       case ZEROC:
-> >> +               /* No critical and 0c interrupts before v2 */
-> >>                 return;
-> >>         }
-> >>         regmap_field_write(priv->rf[index], enable ? 0 : 1);
-> >> @@ -229,6 +230,9 @@ static void tsens_set_interrupt_v2(struct
-> >> tsens_priv *priv, u32 hw_id,
-> >>                 index_mask  = CRIT_INT_MASK_0 + hw_id;
-> >>                 index_clear = CRIT_INT_CLEAR_0 + hw_id;
-> >>                 break;
-> >> +       case ZEROC:
-> >> +               /* Nothing to handle for 0c interrupt */
-> >> +               return;
-> >>         }
-> >>
-> >>         if (enable) {
-> >> @@ -360,6 +364,34 @@ static inline u32 masked_irq(u32 hw_id, u32 mask,
-> >> enum tsens_ver ver)
-> >>         return 0;
-> >>  }
-> >>
-> >> +/**
-> >> + * tsens_0c_irq_thread - Threaded interrupt handler for 0c interrupt
-> >
-> > Let's use zeroc instead of 0c in the function and variable names and
-> > comments everywhere. Easier to grep and better consistency too.
-> Done
-> >
-> >> + * @irq: irq number
-> >> + * @data: tsens controller private data
-> >> + *
-> >> + * Whenever interrupt triggers notify thermal framework using
-> >> + * thermal_zone_device_update() to update cold temperature
-> >> mitigation.
-> >
-> > How is this mitigation updated?
-> Updated comment section
-> >> + *
-> >> + * Return: IRQ_HANDLED
-> >> + */
-> >> +irqreturn_t tsens_0c_irq_thread(int irq, void *data)
-> >> +{
-> >> +       struct tsens_priv *priv = data;
-> >> +       struct tsens_sensor *s = &priv->sensor[priv->num_sensors];
-> >> +       int temp, ret;
-> >> +
-> >> +       ret = regmap_field_read(priv->rf[TSENS_0C_STATUS], &temp);
+On 5/15/20 3:31 PM, Dan Murphy wrote:
+> From: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> 
+> Introduce the bq2515x family of chargers.
+> 
+> The BQ2515X family of devices are highly integrated battery management
+> ICs that integrate the most common functions for wearbale devices
 
 
-> >> +       if (ret)
-> >> +               return ret;
-> >> +
-> >> +       dev_dbg(priv->dev, "[%u] %s: 0c interrupt is %s\n",
-> >> +               s->hw_id, __func__, temp ? "triggered" : "cleared");
-> >
-> > So triggered is printed for non-zero (including negative) values?
-> This zeroc hardware generates each interrupt when any of the TSENS that
-> it monitors goes below 5C or above 10c. These thresholds are not
-> configurable. Hence we don't expect this to be changed from kernel side.
-> So this sensor (status register) will read 0 or 1.  1 means soc
-> temperature is in cold condition and 0 means it is in normal
-> temperature.
+s/wearbale/wearable
 
-All this information belongs in the function description and the part
-about the status register returning 0 (for temp > 10) and 1 (for temp
-<=5) belongs in the patch description too. Please add it to v3.
 
-What happens at 7 degrees? Will the HW continue returning 1 due to
-some hysteresis?
+> namely a charger, an output voltage rail, ADC for battery and system
+> monitoring, and a push-button controller.
+> 
+> Datasheets:
+> 	bq25150 - http://www.ti.com/lit/ds/symlink/bq25150.pdf
+> 	bq25155 - http://www.ti.com/lit/ds/symlink/bq25155.pdf
+> 
+> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> ---
+>  drivers/power/supply/Kconfig           |   13 +
+>  drivers/power/supply/Makefile          |    1 +
+>  drivers/power/supply/bq2515x_charger.c | 1176 ++++++++++++++++++++++++
+>  3 files changed, 1190 insertions(+)
+>  create mode 100644 drivers/power/supply/bq2515x_charger.c
+> 
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index f3424fdce341..266193301e2d 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -589,6 +589,19 @@ config CHARGER_BQ24735
+>  	help
+>  	  Say Y to enable support for the TI BQ24735 battery charger.
+>  
+> +config CHARGER_BQ2515X
+> +	tristate "TI BQ2515X battery charger family"
+> +	depends on I2C
+> +	depends on GPIOLIB || COMPILE_TEST
+> +	select REGMAP_I2C
+> +	help
+> +	  Say Y to enable support for the TI BQ2515X family of battery
+> +	  charging integrated circuits. The BQ2515X are highly integrated
+> +	  battery charge management ICs that integrate the most common
+> +	  functions for wearable devices, namely a charger, an output voltage
+> +	  rail, ADC for battery and system monitoring, and push-button
+> +	  controller.
+> +
+>  config CHARGER_BQ25890
+>  	tristate "TI BQ25890 battery charger driver"
+>  	depends on I2C
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index 6c7da920ea83..8fcc175a7e22 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -80,6 +80,7 @@ obj-$(CONFIG_CHARGER_BQ2415X)	+= bq2415x_charger.o
+>  obj-$(CONFIG_CHARGER_BQ24190)	+= bq24190_charger.o
+>  obj-$(CONFIG_CHARGER_BQ24257)	+= bq24257_charger.o
+>  obj-$(CONFIG_CHARGER_BQ24735)	+= bq24735-charger.o
+> +obj-$(CONFIG_CHARGER_BQ2515X)	+= bq2515x_charger.o
+>  obj-$(CONFIG_CHARGER_BQ25890)	+= bq25890_charger.o
+>  obj-$(CONFIG_CHARGER_SMB347)	+= smb347-charger.o
+>  obj-$(CONFIG_CHARGER_TPS65090)	+= tps65090-charger.o
+> diff --git a/drivers/power/supply/bq2515x_charger.c b/drivers/power/supply/bq2515x_charger.c
+> new file mode 100644
+> index 000000000000..78311168b171
+> --- /dev/null
+> +++ b/drivers/power/supply/bq2515x_charger.c
+> @@ -0,0 +1,1176 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// BQ2515X Battery Charger Driver
+> +// Copyright (C) 2020 Texas Instruments Incorporated - http://www.ti.com/
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/interrupt.h>
 
-I'll review v2 in a bit.
 
-> >
-> >> +
-> >> +       thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
-> >> +
-> >> +       return IRQ_HANDLED;
-> >> +}
-> >> +
-> >>  /**
-> >>   * tsens_critical_irq_thread() - Threaded handler for critical
-> >> interrupts
-> >>   * @irq: irq number
-> >> @@ -566,6 +598,20 @@ void tsens_disable_irq(struct tsens_priv *priv)
-> >>         regmap_field_write(priv->rf[INT_EN], 0);
-> >>  }
-> >>
-> >> +int tsens_get_0c_int_status(const struct tsens_sensor *s, int *temp)
-> >> +{
-> >> +       struct tsens_priv *priv = s->priv;
-> >> +       int last_temp = 0, ret;
-> >> +
-> >> +       ret = regmap_field_read(priv->rf[TSENS_0C_STATUS],
-> >> &last_temp);
-> >> +       if (ret)
-> >> +               return ret;
-> >> +
-> >> +       *temp = last_temp;
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >>  int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
-> >>  {
-> >>         struct tsens_priv *priv = s->priv;
-> >> @@ -833,6 +879,30 @@ int __init init_common(struct tsens_priv *priv)
-> >>                 regmap_field_write(priv->rf[CC_MON_MASK], 1);
-> >>         }
-> >>
-> >> +       if (tsens_version(priv) > VER_1_X &&  ver_minor > 5) {
-> >> +               /* 0C interrupt is present only on v2.6+ */
-> >> +               priv->rf[TSENS_0C_INT_EN] =
-> >> devm_regmap_field_alloc(dev,
-> >> +                                               priv->srot_map,
-> >> +
-> >> priv->fields[TSENS_0C_INT_EN]);
-> >> +               if (IS_ERR(priv->rf[TSENS_0C_INT_EN])) {
-> >> +                       ret = PTR_ERR(priv->rf[TSENS_0C_INT_EN]);
-> >> +                       goto err_put_device;
-> >> +               }
-> >> +
-> >> +               /* Check whether 0C interrupt is enabled or not */
-> >> +               regmap_field_read(priv->rf[TSENS_0C_INT_EN],
-> >> &enabled);
-> >> +               if (enabled) {
-> >> +                       priv->feat->zero_c_int = 1;
-> >
-> > This should be done at the beginning of the block where you check our
-> > version is > 2.6 since the flag only says whether the feature is
-> > present.
-> Done
-> >
-> >> +                       priv->rf[TSENS_0C_STATUS] =
-> >> devm_regmap_field_alloc(dev,
-> >> +                                               priv->tm_map,
-> >> +
-> >> priv->fields[TSENS_0C_STATUS]);
-> >> +                       if (IS_ERR(priv->rf[TSENS_0C_STATUS])) {
-> >> +                               ret =
-> >> PTR_ERR(priv->rf[TSENS_0C_STATUS]);
-> >> +                               goto err_put_device;
-> >> +                       }
-> >> +               }
-> >> +       }
-> >> +
-> >>         spin_lock_init(&priv->ul_lock);
-> >>         tsens_enable_irq(priv);
-> >>         tsens_debug_init(op);
-> >> diff --git a/drivers/thermal/qcom/tsens-v2.c
-> >> b/drivers/thermal/qcom/tsens-v2.c
-> >> index b293ed32174b..ce80d82c7255 100644
-> >> --- a/drivers/thermal/qcom/tsens-v2.c
-> >> +++ b/drivers/thermal/qcom/tsens-v2.c
-> >> @@ -11,6 +11,7 @@
-> >>  /* ----- SROT ------ */
-> >>  #define SROT_HW_VER_OFF        0x0000
-> >>  #define SROT_CTRL_OFF          0x0004
-> >> +#define SROT_OC_CTRL_OFF       0x0018
-> >>
-> >>  /* ----- TM ------ */
-> >>  #define TM_INT_EN_OFF                  0x0004
-> >> @@ -23,6 +24,7 @@
-> >>  #define TM_Sn_UPPER_LOWER_THRESHOLD_OFF 0x0020
-> >>  #define TM_Sn_CRITICAL_THRESHOLD_OFF   0x0060
-> >>  #define TM_Sn_STATUS_OFF               0x00a0
-> >> +#define TM_0C_INT_STATUS_OFF           0x00e0
-> >>  #define TM_TRDY_OFF                    0x00e4
-> >>  #define TM_WDOG_LOG_OFF                0x013c
-> >>
-> >> @@ -45,6 +47,7 @@ static const struct reg_field
-> >> tsens_v2_regfields[MAX_REGFIELDS] = {
-> >>         /* CTRL_OFF */
-> >>         [TSENS_EN]     = REG_FIELD(SROT_CTRL_OFF,    0,  0),
-> >>         [TSENS_SW_RST] = REG_FIELD(SROT_CTRL_OFF,    1,  1),
-> >> +       [TSENS_0C_INT_EN] = REG_FIELD(SROT_OC_CTRL_OFF, 0,  0),
-> >>
-> >>         /* ----- TM ------ */
-> >>         /* INTERRUPT ENABLE */
-> >> @@ -86,6 +89,9 @@ static const struct reg_field
-> >> tsens_v2_regfields[MAX_REGFIELDS] = {
-> >>         REG_FIELD_FOR_EACH_SENSOR16(CRITICAL_STATUS, TM_Sn_STATUS_OFF,
-> >> 19,  19),
-> >>         REG_FIELD_FOR_EACH_SENSOR16(MAX_STATUS,      TM_Sn_STATUS_OFF,
-> >> 20,  20),
-> >>
-> >> +       /* 0C INETRRUPT STATUS */
-> >
-> > Typo: Interrupt
-> >
-> >> +       [TSENS_0C_STATUS] = REG_FIELD(TM_0C_INT_STATUS_OFF, 0, 0),
-> >> +
-> >>         /* TRDY: 1=ready, 0=in progress */
-> >>         [TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
-> >>  };
-> >> @@ -93,6 +99,7 @@ static const struct reg_field
-> >> tsens_v2_regfields[MAX_REGFIELDS] = {
-> >>  static const struct tsens_ops ops_generic_v2 = {
-> >>         .init           = init_common,
-> >>         .get_temp       = get_temp_tsens_valid,
-> >> +       .get_0c_status  = tsens_get_0c_int_status,
-> >>  };
-> >>
-> >>  struct tsens_plat_data data_tsens_v2 = {
-> >> diff --git a/drivers/thermal/qcom/tsens.c
-> >> b/drivers/thermal/qcom/tsens.c
-> >> index 2f77d235cf73..e60870c53383 100644
-> >> --- a/drivers/thermal/qcom/tsens.c
-> >> +++ b/drivers/thermal/qcom/tsens.c
-> >> @@ -14,6 +14,17 @@
-> >>  #include <linux/thermal.h>
-> >>  #include "tsens.h"
-> >>
-> >> +static int tsens_0c_get_temp(void *data, int *temp)
-> >> +{
-> >> +       struct tsens_sensor *s = data;
-> >> +       struct tsens_priv *priv = s->priv;
-> >> +
-> >> +       if (priv->ops->get_0c_status)
-> >> +               return priv->ops->get_0c_status(s, temp);
-> >> +
-> >> +       return -ENOTSUPP;
-> >> +}
-> >> +
-> >>  static int tsens_get_temp(void *data, int *temp)
-> >>  {
-> >>         struct tsens_sensor *s = data;
-> >> @@ -85,6 +96,10 @@ static const struct thermal_zone_of_device_ops
-> >> tsens_of_ops = {
-> >>         .set_trips = tsens_set_trips,
-> >>  };
-> >>
-> >> +static const struct thermal_zone_of_device_ops tsens_0c_of_ops = {
-> >> +       .get_temp = tsens_0c_get_temp,
-> >> +};
-> >> +
-> >>  static int tsens_register_irq(struct tsens_priv *priv, char *irqname,
-> >>                               irq_handler_t thread_fn)
-> >>  {
-> >> @@ -142,6 +157,21 @@ static int tsens_register(struct tsens_priv
-> >> *priv)
-> >>                 ret = tsens_register_irq(priv, "critical",
-> >>                                          tsens_critical_irq_thread);
-> >>
-> >> +       if (priv->feat->zero_c_int) {
-> >> +               priv->sensor[priv->num_sensors].priv = priv;
-> >> +               tzd = devm_thermal_zone_of_sensor_register(priv->dev,
-> >> +
-> >> priv->sensor[priv->num_sensors].hw_id,
-> >> +
-> >> &priv->sensor[priv->num_sensors],
-> >> +                                       &tsens_0c_of_ops);
-> >> +               if (IS_ERR(tzd)) {
-> >> +                       ret = 0;
-> >> +                       return ret;
-> >> +               }
-> >> +
-> >> +               priv->sensor[priv->num_sensors].tzd = tzd;
-> >
-> > Why can't this happen in the previous loop, but increase the loop to
-> > <= num_sensors? It is duplicated code.
-> I think if i change  default loop logic to <= num_sensors, it will break
-> other legacy targets, right ?
-> My idea is to guard all changes related to zeroc under zeroc related
-> feature flag.
-> Again, since we cannot configure any threshold from kernel side, there
-> is no set_trip ops for this sensor, so we need to call register function
-> differently in compared to regular sensor
-> >
-> >> +               ret = tsens_register_irq(priv, "zeroc",
-> >> tsens_0c_irq_thread);
-> >> +       }
-> >> +
-> >>         return ret;
-> >>  }
-> >>
-> >> @@ -178,11 +208,22 @@ static int tsens_probe(struct platform_device
-> >> *pdev)
-> >>                 return -EINVAL;
-> >>         }
-> >>
-> >> -       priv = devm_kzalloc(dev,
-> >> -                            struct_size(priv, sensor, num_sensors),
-> >> -                            GFP_KERNEL);
-> >> -       if (!priv)
-> >> -               return -ENOMEM;
-> >> +       /* Check for 0c interrupt is enabled or not */
-> >> +       if (platform_get_irq_byname(pdev, "zeroc") > 0) {
-> >> +               priv = devm_kzalloc(dev,
-> >> +                               struct_size(priv, sensor, num_sensors
-> >> + 1),
-> >> +                               GFP_KERNEL);
-> >
-> > Instead of doing this, simply do the following,
-> >
-> > if (platform_get_irq_byname(pdev, "zeroc") > 0) {
-> >         num_sensors++;
-> >
-> > The kzalloc will just work then, no?
-> I just changed logic in v2.  Basically this zeroc feature is an
-> optional. There is a chance that we don't need to enable in software
-> even though hardware support is present.
-> So I used another variable to check whether feature is enabled or not by
-> checking DT interrupt configuration.
+Is this header used? Looks like the chips have an INT pin for faults but
+this driver doesn't handle that yet.
 
-I've looked briefly at v2 and I don't like the way we play around with
-num_sensors by special casing zeroc_en to allocate extra memory and
-then revert it. It feels very convoluted. I'll address the rest of the
-comments on v2.
 
-> >
-> >> +               if (!priv)
-> >> +                       return -ENOMEM;
-> >> +               /* Use Max sensor index as 0c sensor hw_id */
-> >> +               priv->sensor[num_sensors].hw_id =
-> >> data->feat->max_sensors;
-> >> +       } else {
-> >> +               priv = devm_kzalloc(dev,
-> >> +                               struct_size(priv, sensor,
-> >> num_sensors),
-> >> +                               GFP_KERNEL);
-> >> +               if (!priv)
-> >> +                       return -ENOMEM;
-> >> +       }
-> >>
-> >>         priv->dev = dev;
-> >>         priv->num_sensors = num_sensors;
-> >> diff --git a/drivers/thermal/qcom/tsens.h
-> >> b/drivers/thermal/qcom/tsens.h
-> >> index 502acf0e6828..5b53a0352b4d 100644
-> >> --- a/drivers/thermal/qcom/tsens.h
-> >> +++ b/drivers/thermal/qcom/tsens.h
-> >> @@ -34,6 +34,7 @@ enum tsens_irq_type {
-> >>         LOWER,
-> >>         UPPER,
-> >>         CRITICAL,
-> >> +       ZEROC,
-> >>  };
-> >>
-> >>  /**
-> >> @@ -64,6 +65,7 @@ struct tsens_sensor {
-> >>   * @suspend: Function to suspend the tsens device
-> >>   * @resume: Function to resume the tsens device
-> >>   * @get_trend: Function to get the thermal/temp trend
-> >> + * @get_0c_status: Function to get the 0c interrupt status
-> >>   */
-> >>  struct tsens_ops {
-> >>         /* mandatory callbacks */
-> >> @@ -76,6 +78,7 @@ struct tsens_ops {
-> >>         int (*suspend)(struct tsens_priv *priv);
-> >>         int (*resume)(struct tsens_priv *priv);
-> >>         int (*get_trend)(struct tsens_sensor *s, enum thermal_trend
-> >> *trend);
-> >> +       int (*get_0c_status)(const struct tsens_sensor *s, int *temp);
-> >>  };
-> >>
-> >>  #define REG_FIELD_FOR_EACH_SENSOR11(_name, _offset, _startbit,
-> >> _stopbit) \
-> >> @@ -161,6 +164,8 @@ enum regfield_ids {
-> >>         TSENS_SW_RST,
-> >>         SENSOR_EN,
-> >>         CODE_OR_TEMP,
-> >> +       /* 0C CTRL OFFSET */
-> >> +       TSENS_0C_INT_EN,
-> >>
-> >>         /* ----- TM ------ */
-> >>         /* TRDY */
-> >> @@ -485,6 +490,8 @@ enum regfield_ids {
-> >>         MAX_STATUS_14,
-> >>         MAX_STATUS_15,
-> >>
-> >> +       TSENS_0C_STATUS,        /* 0C INTERRUPT status */
-> >> +
-> >>         /* Keep last */
-> >>         MAX_REGFIELDS
-> >>  };
-> >> @@ -497,6 +504,7 @@ enum regfield_ids {
-> >>   * @srot_split: does the IP neatly splits the register space into
-> >> SROT and TM,
-> >>   *              with SROT only being available to secure boot
-> >> firmware?
-> >>   * @has_watchdog: does this IP support watchdog functionality?
-> >> + * @zero_c_int: does this IP support 0C interrupt ?
-> >>   * @max_sensors: maximum sensors supported by this version of the IP
-> >>   */
-> >>  struct tsens_features {
-> >> @@ -505,6 +513,7 @@ struct tsens_features {
-> >>         unsigned int adc:1;
-> >>         unsigned int srot_split:1;
-> >>         unsigned int has_watchdog:1;
-> >> +       unsigned int zero_c_int:1;
-> >
-> > zeroc_interrupt
-> Done
-> >
-> >>         unsigned int max_sensors;
-> >>  };
-> >>
-> >> @@ -580,11 +589,13 @@ void compute_intercept_slope(struct tsens_priv
-> >> *priv, u32 *pt1, u32 *pt2, u32 mo
-> >>  int init_common(struct tsens_priv *priv);
-> >>  int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp);
-> >>  int get_temp_common(const struct tsens_sensor *s, int *temp);
-> >> +int tsens_get_0c_int_status(const struct tsens_sensor *s, int *temp);
-> >>  int tsens_enable_irq(struct tsens_priv *priv);
-> >>  void tsens_disable_irq(struct tsens_priv *priv);
-> >>  int tsens_set_trips(void *_sensor, int low, int high);
-> >>  irqreturn_t tsens_irq_thread(int irq, void *data);
-> >>  irqreturn_t tsens_critical_irq_thread(int irq, void *data);
-> >> +irqreturn_t tsens_0c_irq_thread(int irq, void *data);
-> >>
-> >>  /* TSENS target */
-> >>  extern struct tsens_plat_data data_8960;
-> >> --
-> >> 2.26.2
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+
+
+This one can also be dropped after addressing a comment below.
+
+
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/power_supply.h>
+> +#include <linux/regmap.h>
+> +#include <linux/types.h>
+> +
+> +#define BQ2515X_MANUFACTURER "Texas Instruments"
+> +
+> +#define BQ2515X_STAT0		0x00
+> +#define BQ2515X_STAT1		0x01
+> +#define BQ2515X_STAT2		0x02
+> +#define BQ2515X_FLAG0		0x03
+> +#define BQ2515X_FLAG1		0x04
+> +#define BQ2515X_FLAG2		0x05
+> +#define BQ2515X_FLAG3		0x06
+> +#define BQ2515X_MASK0		0x07
+> +#define BQ2515X_MASK1		0x08
+> +#define BQ2515X_MASK2		0x09
+> +#define BQ2515X_MASK3		0x0a
+> +#define BQ2515X_VBAT_CTRL	0x12
+> +#define BQ2515X_ICHG_CTRL	0x13
+> +#define BQ2515X_PCHRGCTRL	0x14
+> +#define BQ2515X_TERMCTRL	0x15
+> +#define BQ2515X_BUVLO		0x16
+> +#define BQ2515X_CHARGERCTRL0	0x17
+> +#define BQ2515X_CHARGERCTRL1	0x18
+> +#define BQ2515X_ILIMCTRL	0x19
+> +#define BQ2515X_LDOCTRL		0x1d
+> +#define BQ2515X_MRCTRL		0x30
+> +#define BQ2515X_ICCTRL0		0x35
+> +#define BQ2515X_ICCTRL1		0x36
+> +#define BQ2515X_ICCTRL2		0x37
+> +#define BQ2515X_ADCCTRL0	0x40
+> +#define BQ2515X_ADCCTRL1	0x41
+> +#define BQ2515X_ADC_VBAT_M	0x42
+> +#define BQ2515X_ADC_VBAT_L	0x43
+> +#define BQ2515X_ADC_TS_M	0x44
+> +#define BQ2515X_ADC_TS_L	0x45
+> +#define BQ2515X_ADC_ICHG_M	0x46
+> +#define BQ2515X_ADC_ICHG_L	0x47
+> +#define BQ2515X_ADC_ADCIN_M	0x48
+> +#define BQ2515X_ADC_ADCIN_L	0x49
+> +#define BQ2515X_ADC_VIN_M	0x4a
+> +#define BQ2515X_ADC_VIN_L	0x4b
+> +#define BQ2515X_ADC_PMID_M	0x4c
+> +#define BQ2515X_ADC_PMID_L	0x4d
+> +#define BQ2515X_ADC_IIN_M	0x4e
+> +#define BQ2515X_ADC_IIN_L	0x4f
+> +#define BQ2515X_ADC_COMP1_M	0x52
+> +#define BQ2515X_ADC_COMP1_L	0X53
+> +#define BQ2515X_ADC_COMP2_M	0X54
+> +#define BQ2515X_ADC_COMP2_L	0x55
+> +#define BQ2515X_ADC_COMP3_M	0x56
+> +#define BQ2515X_ADC_COMP3_L	0x57
+> +#define BQ2515X_ADC_READ_EN	0x58
+> +#define BQ2515X_TS_FASTCHGCTRL	0x61
+> +#define BQ2515X_TS_COLD		0x62
+> +#define BQ2515X_TS_COOL		0x63
+> +#define BQ2515X_TS_WARM		0x64
+> +#define BQ2515X_TS_HOT		0x65
+> +#define BQ2515X_DEVICE_ID	0x6f
+> +
+> +#define BQ2515X_DEFAULT_ICHG_UA		10000
+> +#define BQ25150_DEFAULT_ILIM_UA		100000
+> +#define BQ25155_DEFAULT_ILIM_UA		500000
+> +#define BQ2515X_DEFAULT_VBAT_REG_UV	4200000
+> +#define BQ2515X_DEFAULT_IPRECHARGE_UA	2500
+> +
+> +#define BQ2515X_DIVISOR				65536
+> +#define BQ2515X_VBAT_BASE_VOLT			3600000
+> +#define BQ2515X_VBAT_REG_MAX			4600000
+> +#define BQ2515X_VBAT_REG_MIN			3600000
+> +#define BQ2515X_VBAT_STEP_UV			10000
+> +#define BQ2515X_UV_FACTOR			1000000
+> +#define BQ2515X_VBAT_MULTIPLIER			6
+> +#define BQ2515X_ICHG_DIVISOR			52429
+> +#define BQ2515X_ICHG_CURR_STEP_THRESH_UA	318750
+> +#define BQ2515X_ICHG_MIN_UA			0
+> +#define BQ2515X_ICHG_MAX_UA			500000
+> +#define BQ2515X_ICHG_RNG_1B0_UA			1250
+> +#define BQ2515X_ICHG_RNG_1B1_UA			2500
+> +#define BQ2515X_VLOWV_SEL_1B0_UV		3000000
+> +#define BQ2515X_VLOWV_SEL_1B1_UV		2800000
+> +#define BQ2515X_PRECHRG_ICHRG_RNGE_1875_UA	18750
+> +#define BQ2515X_PRECHRG_ICHRG_RNGE_3750_UA	37500
+> +#define BQ2515X_TWAKE2_MIN_US			1700000
+> +#define BQ2515X_TWAKE2_MAX_US			2300000
+> +
+> +#define BQ2515X_ILIM_150MA	0x2
+> +#define BQ2515X_ILIM_MASK	0x7
+> +#define BQ2515X_HEALTH_MASK	0xf
+> +#define BQ2515X_ICHGRNG_MASK	0x80
+> +#define BQ2515X_STAT0_MASK	0x0f
+> +#define BQ2515X_STAT1_MASK	0x1f
+> +#define BQ2515X_PRECHARGE_MASK	0x1f
+> +
+> +#define BQ2515X_TS_HOT_STAT		BIT(0)
+> +#define BQ2515X_TS_WARM_STAT		BIT(1)
+> +#define BQ2515X_TS_COOL_STAT		BIT(2)
+> +#define BQ2515X_TS_COLD_STAT		BIT(3)
+> +#define BQ2515X_SAFETY_TIMER_EXP	BIT(5)
+> +
+> +#define BQ2515X_EN_VBAT_READ		BIT(3)
+> +#define BQ2515X_EN_ICHG_READ		BIT(5)
+> +
+> +#define BQ2515X_VIN_GOOD		BIT(0)
+> +#define BQ2515X_CHRG_DONE		BIT(5)
+> +#define BQ2515X_CV_CHRG_MODE		BIT(6)
+> +
+> +#define BQ2515X_VIN_OVP_FAULT_STAT	BIT(7)
+> +
+> +#define BQ2515X_WATCHDOG_DISABLE	BIT(4)
+> +
+> +#define BQ2515X_ICHARGE_RANGE		BIT(7)
+> +
+> +#define BQ2515X_VLOWV_SEL		BIT(5)
+> +
+> +#define BQ2515X_CHARGER_DISABLE		BIT(0)
+> +
+> +#define BQ2515X_HWRESET_14S_WD		BIT(1)
+> +
+> +static const int bq2515x_ilim_lvl_values[] = {
+> +	50000, 100000, 150000, 200000, 300000, 400000, 500000, 600000
+> +};
+> +
+> +/**
+> + * struct bq2515x_init_data -
+> + * @ilim: input current limit
+> + */
+> +struct bq2515x_init_data {
+> +	int ilim;
+> +};
+> +
+> +enum bq2515x_id {
+> +	BQ25150,
+> +	BQ25155,
+> +};
+> +
+> +/**
+> + * struct bq2515x_device -
+> + * @mains: mains properties
+> + * @battery: battery properties
+> + * @client: i2c client structure
+> + * @regmap: register map structure
+> + * @dev: device structure
+> + * @id: enumeration of device ids
+> + *
+> + * @reset_gpio: manual reset (MR) pin
+> + * @lp_gpio: low power mode pin
+> + * @ac_detect_gpio: power good (PG) pin
+> + * @ce_gpio: charge enable (CE) pin
+> + *
+> + * @model_name: string value describing device model
+> + * @device_id: value of device_id
+> + * @mains_online: boolean value indicating power supply online
+> + *
+> + * @bq2515x_init_data init_data: charger initialization data structure
+> + */
+> +struct bq2515x_device {
+> +	struct power_supply *mains;
+> +	struct power_supply *battery;
+> +	struct i2c_client *client;
+
+
+'client' doesn't seem used, it usually has use in the remove path, but
+this driver has everything devm managed, so not needed.
+
+
+> +	struct regmap *regmap;
+> +	struct device *dev;
+> +	enum bq2515x_id id;
+> +
+> +	struct gpio_desc *reset_gpio;
+> +	struct gpio_desc *lp_gpio;
+> +	struct gpio_desc *ac_detect_gpio;
+> +	struct gpio_desc *ce_gpio;
+> +
+> +	char model_name[I2C_NAME_SIZE];
+> +	int device_id;
+
+
+This looks to be the same 'id' above, drop this one and use 'id'
+everywhere (or rename this ones type as enum bq2515x_id then remove the
+otherone).
+
+
+> +	bool mains_online;
+> +
+> +	struct bq2515x_init_data init_data;
+> +};
+> +
+> +static struct reg_default bq25150_reg_defs[] = {
+> +	{BQ2515X_FLAG0, 0x0},
+> +	{BQ2515X_FLAG1, 0x0},
+> +	{BQ2515X_FLAG2, 0x0},
+> +	{BQ2515X_FLAG3, 0x0},
+> +	{BQ2515X_MASK0, 0x0},
+> +	{BQ2515X_MASK1, 0x0},
+> +	{BQ2515X_MASK2, 0x71},
+> +	{BQ2515X_MASK3, 0x0},
+> +	{BQ2515X_VBAT_CTRL, 0x3C},
+> +	{BQ2515X_ICHG_CTRL, 0x8},
+> +	{BQ2515X_PCHRGCTRL, 0x2},
+> +	{BQ2515X_TERMCTRL, 0x14},
+> +	{BQ2515X_BUVLO, 0x0},
+> +	{BQ2515X_CHARGERCTRL0, 0x82},
+> +	{BQ2515X_CHARGERCTRL1, 0x42},
+> +	{BQ2515X_ILIMCTRL, 0x1},
+> +	{BQ2515X_LDOCTRL, 0xB0},
+> +	{BQ2515X_MRCTRL, 0x2A},
+> +	{BQ2515X_ICCTRL0, 0x10},
+> +	{BQ2515X_ICCTRL1, 0x0},
+> +	{BQ2515X_ICCTRL2, 0x0},
+> +	{BQ2515X_ADCCTRL0, 0x2},
+> +	{BQ2515X_ADCCTRL1, 0x40},
+> +	{BQ2515X_ADC_COMP1_M, 0x23},
+> +	{BQ2515X_ADC_COMP1_L, 0x20},
+> +	{BQ2515X_ADC_COMP2_M, 0x38},
+> +	{BQ2515X_ADC_COMP2_L, 0x90},
+> +	{BQ2515X_ADC_COMP3_M, 0x0},
+> +	{BQ2515X_ADC_COMP3_L, 0x0},
+> +	{BQ2515X_ADC_READ_EN, 0x0},
+> +	{BQ2515X_TS_FASTCHGCTRL, 0x34},
+> +	{BQ2515X_TS_COLD, 0x7C},
+> +	{BQ2515X_TS_COOL, 0x6D},
+> +	{BQ2515X_TS_WARM, 0x38},
+> +	{BQ2515X_TS_HOT, 0x27},
+> +	{BQ2515X_DEVICE_ID, 0x20},
+> +};
+> +
+> +static struct reg_default bq25155_reg_defs[] = {
+> +	{BQ2515X_FLAG0, 0x0},
+> +	{BQ2515X_FLAG1, 0x0},
+> +	{BQ2515X_FLAG2, 0x0},
+> +	{BQ2515X_FLAG3, 0x0},
+> +	{BQ2515X_MASK0, 0x0},
+> +	{BQ2515X_MASK1, 0x0},
+> +	{BQ2515X_MASK2, 0x71},
+> +	{BQ2515X_MASK3, 0x0},
+> +	{BQ2515X_VBAT_CTRL, 0x3C},
+> +	{BQ2515X_ICHG_CTRL, 0x8},
+> +	{BQ2515X_PCHRGCTRL, 0x2},
+> +	{BQ2515X_TERMCTRL, 0x14},
+> +	{BQ2515X_BUVLO, 0x0},
+> +	{BQ2515X_CHARGERCTRL0, 0x82},
+> +	{BQ2515X_CHARGERCTRL1, 0xC2},
+> +	{BQ2515X_ILIMCTRL, 0x6},
+> +	{BQ2515X_LDOCTRL, 0xB0},
+> +	{BQ2515X_MRCTRL, 0x2A},
+> +	{BQ2515X_ICCTRL0, 0x10},
+> +	{BQ2515X_ICCTRL1, 0x0},
+> +	{BQ2515X_ICCTRL2, 0x40},
+> +	{BQ2515X_ADCCTRL0, 0x2},
+> +	{BQ2515X_ADCCTRL1, 0x40},
+> +	{BQ2515X_ADC_COMP1_M, 0x23},
+> +	{BQ2515X_ADC_COMP1_L, 0x20},
+> +	{BQ2515X_ADC_COMP2_M, 0x38},
+> +	{BQ2515X_ADC_COMP2_L, 0x90},
+> +	{BQ2515X_ADC_COMP3_M, 0x0},
+> +	{BQ2515X_ADC_COMP3_L, 0x0},
+> +	{BQ2515X_ADC_READ_EN, 0x0},
+> +	{BQ2515X_TS_FASTCHGCTRL, 0x34},
+> +	{BQ2515X_TS_COLD, 0x7C},
+> +	{BQ2515X_TS_COOL, 0x6D},
+> +	{BQ2515X_TS_WARM, 0x38},
+> +	{BQ2515X_TS_HOT, 0x27},
+> +	{BQ2515X_DEVICE_ID, 0x35},
+> +};
+> +
+> +static bool bq2515x_is_ps_online(struct bq2515x_device *bq2515x)
+> +{
+> +	return bq2515x->mains_online;
+
+
+Do we need a function for this? Just use 'bq2515x->mains_online' directly.
+
+
+> +}
+> +
+> +static int bq2515x_wake_up(struct bq2515x_device *bq2515x)
+> +{
+> +	int ret;
+> +	int val;
+> +
+> +	/* Read the STAT register if we can read it then the device is out
+> +	 * of ship mode.  If the register cannot be read then attempt to wake
+> +	 * it up and enable the ADC.
+> +	 */
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_STAT0, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Need to toggle LP and bring device out of ship mode. The device
+> +	 * will exit the ship mode when the MR pin is held low for at least
+> +	 * t_WAKE2 as shown in section 8.3.7.1 of the datasheet.
+> +	 */
+> +	gpiod_set_value_cansleep(bq2515x->lp_gpio, 0);
+> +
+> +	gpiod_set_value_cansleep(bq2515x->reset_gpio, 0);
+> +	usleep_range(BQ2515X_TWAKE2_MIN_US, BQ2515X_TWAKE2_MAX_US);
+> +	gpiod_set_value_cansleep(bq2515x->reset_gpio, 1);
+> +
+> +	return regmap_write(bq2515x->regmap, BQ2515X_ADC_READ_EN,
+> +				(BQ2515X_EN_VBAT_READ | BQ2515X_EN_ICHG_READ));
+> +}
+> +
+> +static int bq2515x_update_ps_status(struct bq2515x_device *bq2515x)
+> +{
+> +	bool dc = false;
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	if (bq2515x->ac_detect_gpio)
+> +		val = gpiod_get_value_cansleep(bq2515x->ac_detect_gpio);
+> +	else {
+> +		ret = regmap_read(bq2515x->regmap, BQ2515X_STAT0, &val);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	dc = val & BQ2515X_VIN_GOOD;
+> +
+> +	ret = bq2515x->mains_online != dc;
+> +
+> +	bq2515x->mains_online = dc;
+> +
+> +	return ret;
+> +}
+> +
+> +static int bq2515x_disable_watchdog_timers(struct bq2515x_device *bq2515x)
+> +{
+> +	int ret;
+> +
+> +	ret = regmap_update_bits(bq2515x->regmap, BQ2515X_CHARGERCTRL0,
+> +			BQ2515X_WATCHDOG_DISABLE, BQ2515X_WATCHDOG_DISABLE);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return regmap_update_bits(bq2515x->regmap, BQ2515X_ICCTRL2,
+> +						BQ2515X_HWRESET_14S_WD, 0);
+> +}
+> +
+> +static int bq2515x_get_battery_voltage_now(struct bq2515x_device *bq2515x)
+> +{
+> +	int ret;
+> +	int vbat_msb;
+> +	int vbat_lsb;
+> +	uint32_t vbat_measurement;
+> +
+> +	if (!bq2515x_is_ps_online(bq2515x))
+> +		bq2515x_wake_up(bq2515x);
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_ADC_VBAT_M, &vbat_msb);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_ADC_VBAT_L, &vbat_lsb);
+> +	if (ret)
+> +		return ret;
+> +
+> +	vbat_measurement = (vbat_msb << 8) | vbat_lsb;
+> +
+> +	return vbat_measurement * (BQ2515X_UV_FACTOR / BQ2515X_DIVISOR) *
+> +						BQ2515X_VBAT_MULTIPLIER;
+> +}
+> +
+> +static int bq2515x_get_battery_current_now(struct bq2515x_device *bq2515x)
+> +{
+> +	int ret;
+> +	int ichg_msb;
+> +	int ichg_lsb;
+> +	uint32_t ichg_measurement;
+> +	u16 ichg_multiplier = BQ2515X_ICHG_RNG_1B0_UA;
+> +	unsigned int ichg_reg_code, reg_code;
+> +	unsigned int icharge_range = 0, pchrgctrl;
+> +	unsigned int buvlo, vlowv_sel, vlowv = BQ2515X_VLOWV_SEL_1B0_UV;
+> +
+> +	if (!bq2515x_is_ps_online(bq2515x))
+> +		return -ENODATA;
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_ADC_ICHG_M, &ichg_msb);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_ADC_ICHG_L, &ichg_lsb);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ichg_measurement = (ichg_msb << 8) | ichg_lsb;
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_BUVLO, &buvlo);
+> +	if (ret)
+> +		return ret;
+> +
+> +	vlowv_sel = buvlo & BQ2515X_VLOWV_SEL;
+> +
+> +	if (vlowv_sel)
+> +		vlowv = BQ2515X_VLOWV_SEL_1B1_UV;
+> +
+> +	if (bq2515x_get_battery_voltage_now(bq2515x) < vlowv) {
+> +		ret = regmap_read(bq2515x->regmap, BQ2515X_PCHRGCTRL,
+> +								&pchrgctrl);
+> +		if (ret)
+> +			return ret;
+> +
+> +		reg_code = pchrgctrl & BQ2515X_PRECHARGE_MASK;
+> +	} else {
+> +		ret = regmap_read(bq2515x->regmap, BQ2515X_ICHG_CTRL,
+> +							&ichg_reg_code);
+> +		if (ret)
+> +			return ret;
+> +
+> +		reg_code = ichg_reg_code;
+> +	}
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_PCHRGCTRL, &pchrgctrl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	icharge_range = pchrgctrl & BQ2515X_ICHARGE_RANGE;
+> +
+> +	if (icharge_range)
+> +		ichg_multiplier = BQ2515X_ICHG_RNG_1B1_UA;
+> +
+> +	return reg_code * (ichg_multiplier * ichg_measurement /
+> +							BQ2515X_ICHG_DIVISOR);
+> +}
+> +
+> +static bool bq2515x_get_charge_disable(struct bq2515x_device *bq2515x)
+> +{
+> +	int ret;
+> +	int ce_pin;
+> +	int icctrl2;
+> +	int charger_disable;
+> +
+> +	ce_pin = gpiod_get_value_cansleep(bq2515x->ce_gpio);
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_ICCTRL2, &icctrl2);
+> +	if (ret)
+> +		return ret;
+> +
+> +	charger_disable = icctrl2 & BQ2515X_CHARGER_DISABLE;
+> +
+> +	if (charger_disable || ce_pin)
+> +		return true;
+> +
+> +	return false;
+> +}
+> +
+> +static int bq2515x_set_charge_disable(struct bq2515x_device *bq2515x, int val)
+> +{
+> +	gpiod_set_value_cansleep(bq2515x->ce_gpio, val);
+> +
+> +	return regmap_update_bits(bq2515x->regmap, BQ2515X_ICCTRL2,
+> +					BQ2515X_CHARGER_DISABLE, val);
+> +}
+> +
+> +static int bq2515x_get_const_charge_current(struct bq2515x_device *bq2515x)
+> +{
+> +	int ret;
+> +	u16 ichg_multiplier = BQ2515X_ICHG_RNG_1B0_UA;
+> +	unsigned int ichg_reg_code;
+> +	unsigned int pchrgctrl;
+> +	unsigned int icharge_range;
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_ICHG_CTRL, &ichg_reg_code);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_PCHRGCTRL, &pchrgctrl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	icharge_range = pchrgctrl & BQ2515X_ICHARGE_RANGE;
+> +
+> +	if (icharge_range)
+> +		ichg_multiplier = BQ2515X_ICHG_RNG_1B1_UA;
+> +
+> +	return ichg_reg_code * ichg_multiplier;
+> +}
+> +
+> +static int bq2515x_set_const_charge_current(struct bq2515x_device *bq2515x,
+> +								int val)
+> +{
+> +	int ret;
+> +	unsigned int ichg_reg_code;
+> +	u16 ichg_multiplier = BQ2515X_ICHG_RNG_1B0_UA;
+> +	unsigned int icharge_range = 0;
+> +
+> +	if (val > BQ2515X_ICHG_MAX_UA || val < BQ2515X_ICHG_MIN_UA)
+> +		return -EINVAL;
+> +
+> +	if (val > BQ2515X_ICHG_CURR_STEP_THRESH_UA) {
+> +		ichg_multiplier = BQ2515X_ICHG_RNG_1B1_UA;
+> +		icharge_range = BQ2515X_ICHARGE_RANGE;
+> +	}
+> +
+> +	bq2515x_set_charge_disable(bq2515x, 1);
+> +
+> +	ret = regmap_update_bits(bq2515x->regmap, BQ2515X_PCHRGCTRL,
+> +					BQ2515X_ICHARGE_RANGE, icharge_range);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ichg_reg_code = val / ichg_multiplier;
+> +
+> +	ret = regmap_write(bq2515x->regmap, BQ2515X_ICHG_CTRL, ichg_reg_code);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return bq2515x_set_charge_disable(bq2515x, 0);
+> +}
+> +
+> +static int bq2515x_get_precharge_current(struct bq2515x_device *bq2515x)
+> +{
+> +	int ret;
+> +	unsigned int pchrgctrl;
+> +	unsigned int icharge_range;
+> +	u16 precharge_multiplier = BQ2515X_ICHG_RNG_1B0_UA;
+> +	unsigned int precharge_reg_code;
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_PCHRGCTRL, &pchrgctrl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	icharge_range = pchrgctrl & BQ2515X_ICHARGE_RANGE;
+> +
+> +	if (icharge_range)
+> +		precharge_multiplier = BQ2515X_ICHG_RNG_1B1_UA;
+> +
+> +	precharge_reg_code = pchrgctrl & BQ2515X_PRECHARGE_MASK;
+> +
+> +	return precharge_reg_code * precharge_multiplier;
+> +}
+> +
+> +static int bq2515x_set_precharge_current(struct bq2515x_device *bq2515x,
+> +					int val)
+> +{
+> +	int ret;
+> +	unsigned int pchrgctrl;
+> +	unsigned int icharge_range;
+> +	unsigned int precharge_reg_code;
+> +	u16 precharge_multiplier = BQ2515X_ICHG_RNG_1B0_UA;
+> +	u16 precharge_max_ua = BQ2515X_PRECHRG_ICHRG_RNGE_1875_UA;
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_PCHRGCTRL, &pchrgctrl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	icharge_range = pchrgctrl & BQ2515X_ICHARGE_RANGE;
+> +
+> +	if (icharge_range) {
+> +		precharge_max_ua = BQ2515X_PRECHRG_ICHRG_RNGE_3750_UA;
+> +		precharge_multiplier = BQ2515X_ICHG_RNG_1B1_UA;
+> +	}
+> +	if (val > precharge_max_ua || val < BQ2515X_ICHG_MIN_UA)
+> +		return -EINVAL;
+> +
+> +	precharge_reg_code = val / precharge_multiplier;
+> +
+> +	ret = bq2515x_set_charge_disable(bq2515x, 1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_update_bits(bq2515x->regmap, BQ2515X_PCHRGCTRL,
+> +				BQ2515X_PRECHARGE_MASK, precharge_reg_code);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return bq2515x_set_charge_disable(bq2515x, 0);
+> +}
+> +
+> +static int bq2515x_charging_status(struct bq2515x_device *bq2515x,
+> +				   union power_supply_propval *val)
+> +{
+> +	bool status0_no_fault;
+> +	bool status1_no_fault;
+> +	bool ce_status;
+> +	bool charge_done;
+> +	unsigned int status;
+> +	int ret;
+> +
+> +	if (!bq2515x_is_ps_online(bq2515x)) {
+> +		val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
+> +		return 0;
+> +	}
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_STAT0, &status);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * The code block below is used to determine if any faults from the
+> +	 * STAT0 register are disbaling charging or if the charge has completed
+> +	 * according to the CHARGE_DONE_STAT bit.
+> +	 */
+> +	if (((status & BQ2515X_STAT0_MASK) == true) &
+> +			((status & BQ2515X_CHRG_DONE) == false)) {
+> +		status0_no_fault = true;
+> +		charge_done = false;
+> +	} else if (status & BQ2515X_CHRG_DONE) {
+> +		charge_done = true;
+> +		status0_no_fault = false;
+> +	} else {
+> +		status0_no_fault = false;
+> +		charge_done = false;
+> +	}
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_STAT1, &status);
+> +	if (ret)
+> +		return ret;
+> +	/*
+> +	 * The code block below is used to determine if any faults from the
+> +	 * STAT1 register are disbaling charging
+> +	 */
+> +	if ((status & BQ2515X_STAT1_MASK) == false)
+> +		status1_no_fault = true;
+> +	else
+> +		status1_no_fault = false;
+> +
+> +	ce_status = (!bq2515x_get_charge_disable(bq2515x));
+> +
+> +	/*
+> +	 * If there are no faults and charging is enabled, then status is
+> +	 * charging. Otherwise, if charging is complete, then status is full.
+> +	 * Otherwise, if a fault exists or charging is disabled, then status is
+> +	 * not charging
+> +	 */
+> +	if (status0_no_fault & status1_no_fault & ce_status)
+> +		val->intval = POWER_SUPPLY_STATUS_CHARGING;
+> +	else if (charge_done)
+> +		val->intval = POWER_SUPPLY_STATUS_FULL;
+> +	else if (!(status0_no_fault & status1_no_fault & ce_status))
+> +		val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
+> +
+> +	return 0;
+> +}
+> +
+> +static int bq2515x_get_batt_reg(struct bq2515x_device *bq2515x)
+> +{
+> +	int vbat_reg_code;
+> +	int ret;
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_VBAT_CTRL, &vbat_reg_code);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return BQ2515X_VBAT_BASE_VOLT + vbat_reg_code * BQ2515X_VBAT_STEP_UV;
+> +}
+> +
+> +static int bq2515x_set_batt_reg(struct bq2515x_device *bq2515x, int val)
+> +{
+> +	int vbat_reg_code;
+> +
+> +	if (val > BQ2515X_VBAT_REG_MAX || val < BQ2515X_VBAT_REG_MIN)
+> +		return -EINVAL;
+> +
+> +	vbat_reg_code = (val - BQ2515X_VBAT_BASE_VOLT) / BQ2515X_VBAT_STEP_UV;
+> +
+> +	return regmap_write(bq2515x->regmap, BQ2515X_VBAT_CTRL, vbat_reg_code);
+> +}
+> +
+> +static int bq2515x_get_ilim_lvl(struct bq2515x_device *bq2515x)
+> +{
+> +	int ret;
+> +	int ilimctrl;
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_ILIMCTRL, &ilimctrl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return bq2515x_ilim_lvl_values[ilimctrl & BQ2515X_ILIM_MASK];
+> +}
+> +
+> +static int bq2515x_set_ilim_lvl(struct bq2515x_device *bq2515x, int val)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(bq2515x_ilim_lvl_values); i++) {
+> +		if (val == bq2515x_ilim_lvl_values[i])
+> +			break;
+> +
+> +		if (val > bq2515x_ilim_lvl_values[i - 1] &&
+> +		    val < bq2515x_ilim_lvl_values[i]) {
+> +			if (val - bq2515x_ilim_lvl_values[i - 1] <
+> +			    bq2515x_ilim_lvl_values[i] - val) {
+> +				i = i - 1;
+> +				break;
+
+
+This is a little messy, and it's not immediately obvious it will always
+work, in fact thinking about this, what happends in the else case.. the
+value is closer to the [i] value, then we just never find it (I don't
+think that is what we want, to only find the closest value below the next.)
+
+Lucky for us, there are helper macros already in kernel to do most of
+these tasks (I belive there is one for finding the closest value in an
+array, but I'll leave finding it for you :) (if it exists..)).
+
+
+> +			}
+> +		}
+> +	}
+> +
+> +	return regmap_write(bq2515x->regmap, BQ2515X_ILIMCTRL, i);
+> +}
+> +
+> +static int bq2515x_power_supply_property_is_writeable(struct power_supply *psy,
+> +					enum power_supply_property prop)
+> +{
+> +	switch (prop) {
+> +	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+> +	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+> +static int bq2515x_charger_get_health(struct bq2515x_device *bq2515x,
+> +				      union power_supply_propval *val)
+> +{
+> +	int health = POWER_SUPPLY_HEALTH_GOOD;
+> +	int ret;
+> +	unsigned int stat1;
+> +	unsigned int flag3;
+> +
+> +	if (!bq2515x_is_ps_online(bq2515x))
+> +		bq2515x_wake_up(bq2515x);
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_FLAG3, &flag3);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_read(bq2515x->regmap, BQ2515X_STAT1, &stat1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (stat1 & BQ2515X_HEALTH_MASK) {
+> +		switch (stat1 & BQ2515X_HEALTH_MASK) {
+> +		case BQ2515X_TS_HOT_STAT:
+> +			health = POWER_SUPPLY_HEALTH_HOT;
+> +			break;
+> +		case BQ2515X_TS_WARM_STAT:
+> +			health = POWER_SUPPLY_HEALTH_WARM;
+> +			break;
+> +		case BQ2515X_TS_COOL_STAT:
+> +			health = POWER_SUPPLY_HEALTH_COOL;
+> +			break;
+> +		case BQ2515X_TS_COLD_STAT:
+> +			health = POWER_SUPPLY_HEALTH_COLD;
+> +			break;
+> +		default:
+> +			health = POWER_SUPPLY_HEALTH_UNKNOWN;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (stat1 & BQ2515X_VIN_OVP_FAULT_STAT)
+> +		health = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
+> +
+> +	if (flag3 & BQ2515X_SAFETY_TIMER_EXP)
+> +		health = POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE;
+> +
+> +	val->intval = health;
+> +	return 0;
+> +}
+> +
+> +static int bq2515x_mains_set_property(struct power_supply *psy,
+> +		enum power_supply_property prop,
+> +		const union power_supply_propval *val)
+> +{
+> +	struct bq2515x_device *bq2515x = power_supply_get_drvdata(psy);
+> +	int ret;
+> +
+> +	switch (prop) {
+> +	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+> +		ret = bq2515x_set_ilim_lvl(bq2515x, val->intval);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int bq2515x_battery_set_property(struct power_supply *psy,
+> +		enum power_supply_property prop,
+> +		const union power_supply_propval *val)
+> +{
+> +	struct bq2515x_device *bq2515x = power_supply_get_drvdata(psy);
+> +	int ret;
+> +
+> +	switch (prop) {
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+> +		ret = bq2515x_set_batt_reg(bq2515x, val->intval);
+> +		break;
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+> +		ret = bq2515x_set_const_charge_current(bq2515x, val->intval);
+> +		break;
+> +	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> +		ret = bq2515x_set_precharge_current(bq2515x, val->intval);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int bq2515x_mains_get_property(struct power_supply *psy,
+> +				     enum power_supply_property prop,
+> +				     union power_supply_propval *val)
+> +{
+> +	struct bq2515x_device *bq2515x = power_supply_get_drvdata(psy);
+> +	int ret = 0;
+> +
+> +	switch (prop) {
+> +	case POWER_SUPPLY_PROP_ONLINE:
+> +		val->intval = bq2515x->mains_online;
+> +		break;
+> +	case POWER_SUPPLY_PROP_HEALTH:
+> +		ret = bq2515x_charger_get_health(bq2515x, val);
+> +		if (ret)
+> +			val->intval = POWER_SUPPLY_HEALTH_UNKNOWN;
+> +		break;
+> +	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+> +		ret = bq2515x_get_ilim_lvl(bq2515x);
+> +		if (ret)
+> +			return ret;
+> +
+> +		val->intval = ret;
+> +		break;
+> +	case POWER_SUPPLY_PROP_MODEL_NAME:
+> +		val->strval = bq2515x->model_name;
+> +		break;
+> +	case POWER_SUPPLY_PROP_MANUFACTURER:
+> +		val->strval = BQ2515X_MANUFACTURER;
+> +		break;
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		ret = bq2515x_charging_status(bq2515x, val);
+> +		if (ret)
+> +			return ret;
+> +		break;
+> +
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int bq2515x_battery_get_property(struct power_supply *psy,
+> +				       enum power_supply_property prop,
+> +				       union power_supply_propval *val)
+> +{
+> +	struct bq2515x_device *bq2515x = power_supply_get_drvdata(psy);
+> +	int ret;
+> +
+> +	ret = bq2515x_update_ps_status(bq2515x);
+> +	if (ret)
+> +		return ret;
+> +
+> +	switch (prop) {
+> +
+> +	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+> +		ret = bq2515x_get_battery_voltage_now(bq2515x);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		val->intval = ret;
+> +		break;
+> +	case POWER_SUPPLY_PROP_CURRENT_NOW:
+> +		ret = bq2515x_get_battery_current_now(bq2515x);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		val->intval = ret;
+> +		break;
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+> +		ret = bq2515x_get_const_charge_current(bq2515x);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		val->intval = ret;
+> +		break;
+> +	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> +		ret = bq2515x_get_precharge_current(bq2515x);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		val->intval = ret;
+> +		break;
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+> +		ret = bq2515x_get_batt_reg(bq2515x);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		val->intval = ret;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static enum power_supply_property bq2515x_battery_properties[] = {
+> +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+> +	POWER_SUPPLY_PROP_CURRENT_NOW,
+> +	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
+> +	POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
+> +	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
+> +};
+> +
+> +static enum power_supply_property bq2515x_charger_properties[] = {
+> +	POWER_SUPPLY_PROP_ONLINE,
+> +	POWER_SUPPLY_PROP_STATUS,
+> +	POWER_SUPPLY_PROP_HEALTH,
+> +	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+> +	POWER_SUPPLY_PROP_MODEL_NAME,
+> +	POWER_SUPPLY_PROP_MANUFACTURER,
+> +};
+> +
+> +static struct power_supply_desc bq2515x_mains_desc = {
+> +	.name			= "bq2515x-mains",
+> +	.type			= POWER_SUPPLY_TYPE_MAINS,
+> +	.get_property		= bq2515x_mains_get_property,
+> +	.set_property		= bq2515x_mains_set_property,
+> +	.properties		= bq2515x_charger_properties,
+> +	.num_properties		= ARRAY_SIZE(bq2515x_charger_properties),
+> +	.property_is_writeable	= bq2515x_power_supply_property_is_writeable,
+> +};
+> +
+> +static struct power_supply_desc bq2515x_battery_desc = {
+> +	.name			= "bq2515x-battery",
+> +	.type			= POWER_SUPPLY_TYPE_BATTERY,
+> +	.get_property		= bq2515x_battery_get_property,
+> +	.set_property		= bq2515x_battery_set_property,
+> +	.properties		= bq2515x_battery_properties,
+> +	.num_properties		= ARRAY_SIZE(bq2515x_battery_properties),
+> +	.property_is_writeable	= bq2515x_power_supply_property_is_writeable,
+> +};
+> +
+> +static int bq2515x_power_supply_register(struct bq2515x_device *bq2515x,
+> +							struct device *dev)
+> +{
+> +	struct power_supply_config psy_cfg = { .drv_data = bq2515x,
+> +						.of_node = dev->of_node, };
+> +
+> +	bq2515x->mains = devm_power_supply_register(bq2515x->dev,
+> +						    &bq2515x_mains_desc,
+> +						    &psy_cfg);
+> +	if (IS_ERR(bq2515x->mains))
+> +		return -EINVAL;
+> +
+> +	bq2515x->battery = devm_power_supply_register(bq2515x->dev,
+> +						      &bq2515x_battery_desc,
+> +						      &psy_cfg);
+> +	if (IS_ERR(bq2515x->battery))
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int bq2515x_hw_init(struct bq2515x_device *bq2515x)
+> +{
+> +	int ret;
+> +	struct power_supply_battery_info bat_info = { };
+> +
+> +	ret = bq2515x_disable_watchdog_timers(bq2515x);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (bq2515x->init_data.ilim) {
+> +		ret = bq2515x_set_ilim_lvl(bq2515x, bq2515x->init_data.ilim);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret = power_supply_get_battery_info(bq2515x->mains, &bat_info);
+> +	if (ret) {
+> +		dev_warn(bq2515x->dev, "battery info missing, default values will be applied\n");
+> +
+> +		bat_info.constant_charge_current_max_ua =
+> +						BQ2515X_DEFAULT_ICHG_UA;
+> +
+> +		bat_info.constant_charge_voltage_max_uv =
+> +						BQ2515X_DEFAULT_VBAT_REG_UV;
+> +
+> +		bat_info.precharge_current_ua =
+> +						BQ2515X_DEFAULT_IPRECHARGE_UA;
+> +	}
+> +
+> +	ret = bq2515x_set_const_charge_current(bq2515x,
+> +			bat_info.constant_charge_current_max_ua);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = bq2515x_set_batt_reg(bq2515x,
+> +			bat_info.constant_charge_voltage_max_uv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return bq2515x_set_precharge_current(bq2515x,
+> +			bat_info.precharge_current_ua);
+> +}
+> +
+> +static int bq2515x_read_properties(struct bq2515x_device *bq2515x)
+> +{
+> +	int ret;
+> +
+> +	ret = device_property_read_u32(bq2515x->dev,
+> +				      "input-current-limit-microamp",
+> +				      &bq2515x->init_data.ilim);
+> +	if (ret)
+> +		switch (bq2515x->device_id) {
+> +		case BQ25150:
+> +			bq2515x->init_data.ilim = BQ25150_DEFAULT_ILIM_UA;
+> +			break;
+> +		case BQ25155:
+> +			bq2515x->init_data.ilim = BQ25155_DEFAULT_ILIM_UA;
+> +			break;
+> +		}
+> +
+> +	bq2515x->ac_detect_gpio = devm_gpiod_get_optional(bq2515x->dev,
+> +						   "ac-detect", GPIOD_IN);
+> +	if (IS_ERR(bq2515x->ac_detect_gpio)) {
+> +		ret = PTR_ERR(bq2515x->ac_detect_gpio);
+> +		if (ret != -ENODEV) {
+> +			dev_err(bq2515x->dev, "Failed to get ac detect: %d\n",
+> +								ret);
+
+
+Do we need to print 'ret' here? It is print out in the caller on
+returning, plus the alignment wrap is really not so pretty here..
+
+
+> +			return ret;
+> +		}
+> +		bq2515x->ac_detect_gpio = NULL;
+> +	}
+> +
+> +	bq2515x->reset_gpio = devm_gpiod_get_optional(bq2515x->dev,
+> +						   "reset", GPIOD_OUT_LOW);
+> +	if (IS_ERR(bq2515x->reset_gpio)) {
+> +		ret = PTR_ERR(bq2515x->reset_gpio);
+> +		if (ret != -ENODEV) {
+> +			dev_err(bq2515x->dev, "Failed to get reset: %d\n",
+> +								ret);
+> +			return ret;
+> +		}
+> +		bq2515x->reset_gpio = NULL;
+> +	}
+> +
+> +	bq2515x->lp_gpio = devm_gpiod_get_optional(bq2515x->dev, "low-power",
+> +						   GPIOD_OUT_LOW);
+> +	if (IS_ERR(bq2515x->lp_gpio)) {
+> +		ret = PTR_ERR(bq2515x->lp_gpio);
+> +		if (ret != -ENODEV) {
+> +			dev_err(bq2515x->dev, "Failed to get low power: %d\n",
+> +								ret);
+> +			return ret;
+> +		}
+> +		bq2515x->lp_gpio = NULL;
+> +	}
+> +
+> +	bq2515x->ce_gpio = devm_gpiod_get_optional(bq2515x->dev,
+> +						   "charge-enable",
+> +						   GPIOD_OUT_LOW);
+> +	if (IS_ERR(bq2515x->ce_gpio)) {
+> +		ret = PTR_ERR(bq2515x->ce_gpio);
+> +		if (ret != -ENODEV) {
+> +			dev_err(bq2515x->dev, "Failed to get ce %d\n", ret);
+> +			return ret;
+> +		}
+> +		bq2515x->ce_gpio = NULL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static bool bq2515x_volatile_register(struct device *dev, unsigned int reg)
+> +{
+> +	switch (reg) {
+> +	case BQ2515X_STAT0 ... BQ2515X_FLAG3:
+> +	case BQ2515X_ADC_VBAT_M ... BQ2515X_ADC_IIN_L:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+> +static const struct regmap_config bq25150_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +
+> +	.max_register		= BQ2515X_DEVICE_ID,
+> +	.reg_defaults		= bq25150_reg_defs,
+
+
+NITPICK: 'defs' reads to me like definitions, maybe just use _defautls.
+
+
+> +	.num_reg_defaults	= ARRAY_SIZE(bq25150_reg_defs),
+> +	.cache_type		= REGCACHE_RBTREE,
+> +	.volatile_reg		= bq2515x_volatile_register,
+> +};
+> +
+> +static const struct regmap_config bq25155_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +
+> +	.max_register		= BQ2515X_DEVICE_ID,
+> +	.reg_defaults		= bq25155_reg_defs,
+> +	.num_reg_defaults	= ARRAY_SIZE(bq25155_reg_defs),
+> +	.cache_type		= REGCACHE_RBTREE,
+> +	.volatile_reg		= bq2515x_volatile_register,
+> +};
+> +
+> +static int bq2515x_probe(struct i2c_client *client,
+> +			 const struct i2c_device_id *id)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct bq2515x_device *bq;
+> +	int ret;
+> +
+> +	bq = devm_kzalloc(dev, sizeof(*bq), GFP_KERNEL);
+> +	if (!bq)
+> +		return -ENOMEM;
+> +
+> +	bq->client = client;
+> +	bq->dev = dev;
+> +
+> +	strncpy(bq->model_name, id->name, I2C_NAME_SIZE);
+> +
+> +	bq->device_id = (enum bq2515x_id)of_device_get_match_data(&client->dev);
+
+
+This grabs the 'data' field of of_device_id table below which will
+always be zero as you do not define the IDs there. You are actually
+wanting to grab from 'data' in i2c_device_id table. So replace this line
+with:
+
+bq->device_id = id->driver_data;
+
+After that since you don't use any of_* functions, drop the
+'of_device.h' header include. (Idea here is that most drivers should not
+use of_ functions directly anyway).
+
+
+> +
+> +	switch (bq->device_id) {
+> +	case BQ25150:
+> +		bq->regmap = devm_regmap_init_i2c(client,
+> +						&bq25150_regmap_config);
+> +		break;
+> +	case BQ25155:
+> +		bq->regmap = devm_regmap_init_i2c(client,
+> +						&bq25155_regmap_config);
+> +		break;
+> +	}
+> +
+> +	if (IS_ERR(bq->regmap)) {
+> +		dev_err(dev, "failed to allocate register map\n");
+> +		return PTR_ERR(bq->regmap);
+> +	}
+> +
+> +	i2c_set_clientdata(client, bq);
+> +
+> +	ret = bq2515x_read_properties(bq);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to read device tree properties %d\n",
+> +									ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = bq2515x_power_supply_register(bq, dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to register power supply\n");
+> +		return ret;
+> +	}
+> +
+
+
+Is this order right here? Usually the last thing you do is register with
+the framework, doing it before all the device init is done could lead to
+some accessor functions in this driver getting called before the below
+fully inits the chip.
+
+Andrew
+
+
+> +	ret = bq2515x_hw_init(bq);
+> +	if (ret) {
+> +		dev_err(dev, "Cannot initialize the chip\n");
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct i2c_device_id bq2515x_i2c_ids[] = {
+> +	{ "bq25150", BQ25150, },
+> +	{ "bq25155", BQ25155, },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(i2c, bq2515x_i2c_ids);
+> +
+> +static const struct of_device_id bq2515x_of_match[] = {
+> +	{ .compatible = "ti,bq25150", },
+> +	{ .compatible = "ti,bq25155", },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, bq2515x_of_match);
+> +
+> +static struct i2c_driver bq2515x_driver = {
+> +	.driver = {
+> +		.name = "bq2515x-charger",
+> +		.of_match_table = bq2515x_of_match,
+> +	},
+> +	.probe = bq2515x_probe,
+> +	.id_table = bq2515x_i2c_ids,
+> +};
+> +module_i2c_driver(bq2515x_driver);
+> +
+> +MODULE_AUTHOR("Dan Murphy <dmurphy@ti.com>");
+> +MODULE_AUTHOR("Ricardo Rivera-Matos <r-rivera-matos@ti.com>");
+> +MODULE_DESCRIPTION("BQ2515X charger driver");
+> +MODULE_LICENSE("GPL v2");
+> 
