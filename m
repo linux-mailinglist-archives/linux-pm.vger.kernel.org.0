@@ -2,140 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C02F1D8767
-	for <lists+linux-pm@lfdr.de>; Mon, 18 May 2020 20:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5391D8891
+	for <lists+linux-pm@lfdr.de>; Mon, 18 May 2020 21:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728304AbgERSlg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 May 2020 14:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728514AbgERSlg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 May 2020 14:41:36 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA6AC05BD09
-        for <linux-pm@vger.kernel.org>; Mon, 18 May 2020 11:41:35 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id b190so5362992pfg.6
-        for <linux-pm@vger.kernel.org>; Mon, 18 May 2020 11:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BbV/LEIOeouRXOmK+GKN6o5kBO4anE2Qst31rAC/h8s=;
-        b=wpk1EG3wH9AfuuSAZTKJ+/n0Q9IjxGLodBjTu4ynOAG7Oao8ePt7F7SjaPQi9rYFBW
-         vTCGn5jpPiGn8sP5TKR4fBIzl8X9fsFTOYKFPTb5F3AHf4SMLBDa30kiGOOx9gMf0vy1
-         aCFLjZgohKiam+RjD+RPJxjAMEV3Movg6BLoGWxnmo9SwsN7aYuVgFyq3fhx2D23ln2S
-         YfMxuQDebgG45W/1YRp1agw9YqdJ9v0+swjux9ma+c/ER6RwDShQ18qxv2t9S/AHctoO
-         lxbR3qnHIIx8VG8ImM0hPjjD/EYgZ8jlOYCuvhtqOm3rlT2aF+H9ymdN8ob3LH3KMKPa
-         NDrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BbV/LEIOeouRXOmK+GKN6o5kBO4anE2Qst31rAC/h8s=;
-        b=A7kyTtu++XKHJoZqGZO/7tg3F5mI9oiDxDvFTZ0gNElTH303FoNgGJgoJzv8icU9nP
-         30TcjS4IRhw6tnfFjz6QFXphLcDJWSi0hU5RDovAA6tgKZKYwcQKr6mvaABJQfmXSr1z
-         5t15IRKyHmaXJMaZZ2OMiQuvdoytUntaUcBD5/haXoZe5rJGGLbFGSu5VAgN3W/YyhOY
-         iHUCdJQU8FIgIkEXNTVjoy0mEmmA69nY+RDKtwgEouLfdnIxhWrliK8Qe7HvXT2ZaNqr
-         sScZcB6B/T0YcDzp9WkAtOrSL64oVsocxFZXwr5hlZkJz82GfQwY15XyQr3YQA6tbUzh
-         NN/Q==
-X-Gm-Message-State: AOAM5304VHtMEbjLGi0QOtPc+QoseM4BBeMaHsjpm6Jm8Eing2vTjFmW
-        B9MXH5WApWEnyEaxdHlzrqwCtYDrIxM=
-X-Google-Smtp-Source: ABdhPJz0TbunwEJ3QS58Piw9hJtSVbZ5pMCjwwHgcI7aZsqjDXKf1WlgVOn75F7erOVKbayPWGlQIA==
-X-Received: by 2002:a63:f64d:: with SMTP id u13mr15918251pgj.151.1589827294403;
-        Mon, 18 May 2020 11:41:34 -0700 (PDT)
-Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id x62sm9251663pfc.46.2020.05.18.11.41.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2020 11:41:33 -0700 (PDT)
-Date:   Mon, 18 May 2020 11:40:10 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: Re: [PATCH] interconnect: Disallow interconnect core to be built as
- a module
-Message-ID: <20200518184010.GF2165@builder.lan>
-References: <b789cce388dd1f2906492f307dea6780c398bc6a.1567065991.git.viresh.kumar@linaro.org>
- <CAOCOHw4ri6ikRpkJWtAdaPQiMhdKMrdNciqQ8YNaXR+ApSnAew@mail.gmail.com>
- <66c3d470-48e2-619a-dd95-6064a85161e0@linaro.org>
- <20200515071152.GA1274556@kroah.com>
+        id S1728583AbgERTz7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 May 2020 15:55:59 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32156 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726478AbgERTz7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 18 May 2020 15:55:59 -0400
+IronPort-SDR: rrSG37EOeX1MVcizng4ReLy2D6cjmkNUrxar2dphGHMhndnVqOkYP3+9EuTPNBJdYk9sgqe5EE
+ NGxG0QXzEE9w==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 12:55:58 -0700
+IronPort-SDR: pS1ePkmo+FQeU5Nb9ddkZ3vUqdn/wx31m7W6rvZwl7KFhZm/P+4fJJpJ+nRpptDMWb+EMi+B9l
+ VpzrAvfurJFg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,407,1583222400"; 
+   d="scan'208";a="253006253"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 18 May 2020 12:55:56 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jalrf-000AhL-UL; Tue, 19 May 2020 03:55:55 +0800
+Date:   Tue, 19 May 2020 03:55:39 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ c28a27fcb43003e1f9b9e12e7e2cdb9678f0d3be
+Message-ID: <5ec2e83b.FIdYw1WRguiceYx+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200515071152.GA1274556@kroah.com>
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 15 May 00:11 PDT 2020, Greg Kroah-Hartman wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: c28a27fcb43003e1f9b9e12e7e2cdb9678f0d3be  Merge branch 'acpi-pmic' into bleeding-edge
 
-> On Fri, May 15, 2020 at 07:48:47AM +0300, Georgi Djakov wrote:
-> > On 9/12/19 19:33, Bjorn Andersson wrote:
-> > > On Thu, Aug 29, 2019 at 1:07 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >>
-> > >> Building individual drivers as modules is fine but allowing a core
-> > >> framework to be built as a module makes it really complex and should be
-> > >> avoided.
-> > >>
-> > >> Whatever uses the interconnect core APIs must also be built as a module
-> > >> if interconnect core is built as module, else we will see compilation
-> > >> failures.
-> > >>
-> > >> If another core framework (like cpufreq, clk, etc), that can't be built
-> > >> as module, needs to use interconnect APIs then we will start seeing
-> > >> compilation failures with allmodconfig configurations as the symbols
-> > >> (like of_icc_get()) used in other frameworks will not be available in
-> > >> the built-in image.
-> > >>
-> > >> Disallow the interconnect core to be built as a module to avoid all
-> > >> these issues.
-> > 
-> > Hi Greg,
-> > 
-> > We had a discussion [1] a few months back about frameworks being built as
-> > modules. IIUC, you initially expressed some doubts about this patch, so i
-> > wanted to check with you again on this.
-> > 
-> > While i think that the possibility for a framework core to be a module is a
-> > nice feature, and we should try to be as modular as possible, it seems that
-> > handling dependencies between the different core frameworks becomes difficult
-> > when one of them is tristate.
-> > 
-> > This of course affects the drivers which use it (every client should express
-> > the dependency in Kconfig as a "depends on framework || !framework"), in order
-> > to avoid build failures in the case when framework=m and client=y. However, this
-> > is not a big issue.
-> > 
-> > But it gets more complex when another framework2 becomes a client of the modular
-> > framework and especially when framework2 is "select"-ed in Kconfig by it's
-> > users. When selects are used in Kconfig, it forces the option, without ever
-> > visiting the dependencies. I am not sure what we should do in this case, maybe
-> > we can continue and sprinkle more "depends on framework || !framework" also for
-> > every single user which selects framework2.. But i believe that this is very
-> > inconvenient.
-> > 
-> > Well, the above is not impossible, but other frameworks (regulator, clk, reset,
-> > pinctrl, etc.) are solving this problem by just being bool, instead of tristate.
-> > This makes life much easier for everyone. So i am wondering if it wouldn't be
-> > more appropriate to use the same approach here too?
-> 
-> Ok, if it makes things easier, perhaps this is the best way to handle
-> it.
-> 
+elapsed time: 512m
 
-It most certainly does.
+configs tested: 104
+configs skipped: 1
 
-With INTERCONNECT as a bool we can handle its absence with stub
-functions - like every other framework does. But as a tristate then
-every driver with a call to the interconnect api needs an entry in
-Kconfig to ensure the client driver must be a module if the interconnect
-framework is.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Regards,
-Bjorn
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+sparc                            allyesconfig
+mips                             allyesconfig
+sh                   secureedge5410_defconfig
+sh                        apsh4ad0a_defconfig
+sh                                  defconfig
+mips                          rm200_defconfig
+mips                     loongson1c_defconfig
+alpha                               defconfig
+arm                          imote2_defconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+i386                              allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20200518
+i386                 randconfig-a005-20200518
+i386                 randconfig-a001-20200518
+i386                 randconfig-a003-20200518
+i386                 randconfig-a004-20200518
+i386                 randconfig-a002-20200518
+x86_64               randconfig-a016-20200518
+x86_64               randconfig-a012-20200518
+x86_64               randconfig-a015-20200518
+x86_64               randconfig-a013-20200518
+x86_64               randconfig-a011-20200518
+x86_64               randconfig-a014-20200518
+i386                 randconfig-a012-20200518
+i386                 randconfig-a014-20200518
+i386                 randconfig-a016-20200518
+i386                 randconfig-a011-20200518
+i386                 randconfig-a015-20200518
+i386                 randconfig-a013-20200518
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+x86_64                              defconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
