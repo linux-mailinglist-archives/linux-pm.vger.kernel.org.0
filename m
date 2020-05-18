@@ -2,103 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 773901D7419
-	for <lists+linux-pm@lfdr.de>; Mon, 18 May 2020 11:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEE11D746A
+	for <lists+linux-pm@lfdr.de>; Mon, 18 May 2020 11:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726972AbgERJcU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 May 2020 05:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726920AbgERJcT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 May 2020 05:32:19 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A80C05BD0A
-        for <linux-pm@vger.kernel.org>; Mon, 18 May 2020 02:32:18 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id d191so8395018oib.12
-        for <linux-pm@vger.kernel.org>; Mon, 18 May 2020 02:32:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r4y8pOF1U2hIXUEaQHB5pp1+f6cCMjasAlccauvS3u8=;
-        b=p+4e8OGbkl4jtB21Kp0Taies1F3UglkyxEVlBRQUQ1JCB7uuaBDtommPyyPp+nFWc3
-         1Xguh2oulhrEM1GT03E7NzWVydFgKZNO9PxIrx2t4zUNhN2e2Yzekzb5Kd8ItHWtaWJ+
-         DJRzZRP0Zod3TVkJ8lxGJbG7FIMvQZ7pP+Yi5IcziQk+yOTY+8Ijv+n/4M4sTFnh95o/
-         YyGb1xwUv7sa8c9Jbj4KOSqiGGjhEjVMmHGmH4kDJ/f+dly1SZSizUV2p+nmhaft5URq
-         EUcitTFvt2xe/bdolmFD5KvRRInAoLbZB0WCOCNiPysMYx9wph5eWaErFcbLXSzPw6Y3
-         SQ6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r4y8pOF1U2hIXUEaQHB5pp1+f6cCMjasAlccauvS3u8=;
-        b=iOoxTXE+Xuqg0msQjsoOrFlSzSgsIsXQCVY+R+E5+rI7obtpRYxT9twTC7gdlbzBWt
-         3UeveiIMug2577e0H3IplDp8glz4vkQMW3L1ox/bDNylNVnsZVk2VwZKO0QG+1mQx1+3
-         FTEPu67AlsCis7UEHZsWfn44Uh3FhZWxJ5qR2z3duWMQCLI8JDYZWLWwBwD+OdEtPfDP
-         KX798/T9Y/kHfE4NQ8200m8EJZ5lgCCJN0N62w22psIXMlMUvOpJjCRa8V1NHQvQzsFe
-         eUI0glsxOsBGxKpYsPShlox6UwJRM0gsJsz341bPwOOu73XP/UfytSuLvpTHRtVMwI0T
-         H3sQ==
-X-Gm-Message-State: AOAM532EGoMXhxgM9mfInOuNenEKZ4PZ5+BBx+DMGi3Kzcc2Twk/sDp/
-        wqRLOXeHcd8O6HQIR3QieiWhsHCg3TWIImPpkjnXyQ==
-X-Google-Smtp-Source: ABdhPJyrEJAISIZWsXEyVlyc4BlPLuXVfhVNfJE1HrEOPfH8Lbw8GOfGkNCHlNzM0DGX7IOc1TiEmiYBdJ1xs3xDRQ4=
-X-Received: by 2002:aca:ea46:: with SMTP id i67mr9709314oih.152.1589794337493;
- Mon, 18 May 2020 02:32:17 -0700 (PDT)
+        id S1726180AbgERJx3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 May 2020 05:53:29 -0400
+Received: from mga07.intel.com ([134.134.136.100]:29861 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726127AbgERJx2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 18 May 2020 05:53:28 -0400
+IronPort-SDR: fOjCcUXM30INFO0ZwLVMQwn3+o3YQtSBOVuGF3mmX3lnNvlIX0vDS3dHB4tjpbW6kaABYLmnlQ
+ 2ezaBRLQDbiA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 02:53:28 -0700
+IronPort-SDR: IPxhcZLdyUPpSJDtRywqmENMCEXb8iNw2LOGME7vov3Pi2g/kBh+2kmc4fcyM75/P26UqVcqln
+ tzZ03x2Y4dtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,406,1583222400"; 
+   d="scan'208";a="281919241"
+Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.149.12]) ([10.249.149.12])
+  by orsmga002.jf.intel.com with ESMTP; 18 May 2020 02:53:22 -0700
+Subject: Re: [PATCH v2 20/20] cpufreq: Return zero on success in boost sw
+ setting
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org, stable@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Yue Hu <huyue2@yulong.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
+ <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506174238.15385-21-Sergey.Semin@baikalelectronics.ru>
+ <c5109483-4c14-1a0c-efa9-51edf01c12de@intel.com>
+ <20200516125203.et5gkv6ullkerjyd@mobilestation>
+ <20200518074142.c6kbofpdlxro2pjz@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+Message-ID: <a8dfa493-f858-e35d-7e57-78478be555c4@intel.com>
+Date:   Mon, 18 May 2020 11:53:22 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-References: <4502272.pByIgeXik9@kreacher> <CAJZ5v0j6S+we7tHeV9TM30LS+TO3zWigACe0ZUFfWphg2FBBZQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j6S+we7tHeV9TM30LS+TO3zWigACe0ZUFfWphg2FBBZQ@mail.gmail.com>
-From:   Chris Chiu <chiu@endlessm.com>
-Date:   Mon, 18 May 2020 17:32:06 +0800
-Message-ID: <CAB4CAweV+U_pPv9877S+j6UVUPjcTzJq26rarxnJfwc6on1ESA@mail.gmail.com>
-Subject: Re: [PATCH[RFT]] ACPI: EC: s2idle: Avoid flushing EC work when EC GPE
- is inactive
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200518074142.c6kbofpdlxro2pjz@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 18, 2020 at 4:59 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On 5/18/2020 9:41 AM, Viresh Kumar wrote:
+> On 16-05-20, 15:52, Serge Semin wrote:
+>> On Fri, May 15, 2020 at 05:58:47PM +0200, Rafael J. Wysocki wrote:
+>>>> @@ -2554,7 +2554,7 @@ static int cpufreq_boost_set_sw(int state)
+>>>>    			break;
+>>>>    	}
+>>>> -	return ret;
+>>>> +	return ret < 0 ? ret : 0;
+>>>>    }
+>>>>    int cpufreq_boost_trigger_state(int state)
+>>> IMO it is better to update the caller of this function to handle the
+>>> positive value possibly returned by it correctly.
+>> Could you elaborate why? Viresh seems to be ok with this solution.
+> And it is absolutely fine for Rafael to not agree with it :)
 >
-> On Thu, May 14, 2020 at 12:10 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Flushing the EC work while suspended to idle when the EC GPE status
-> > is not set causes some EC wakeup events (notably power button and
-> > lid ones) to be missed after a series of spurious wakeups on the Dell
-> > XPS13 9360 in my office.
-> >
-> > If that happens, the machine cannot be woken up from suspend-to-idle
-> > by a power button press or lid status change and it needs to be woken
-> > up in some other way (eg. by a key press).
-> >
-> > Flushing the EC work only after successful dispatching the EC GPE,
-> > which means that its status has been set, avoids the issue, so change
-> > the code in question accordingly.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > Hi Chris,
-> >
-> > Please check if the key press wakeup still works on your system with this patch
-> > applied (on top of https://patchwork.kernel.org/patch/11538065/).
->
-> Hi Chris,
->
-> Since I haven't heard back from you and the problem at hand is a
-> regression on the machine where it happens, I'm going to push this
-> patch for merging.
->
-> If it causes the key press wakeup issue to reappear on your machine,
-> I'm afraid that we'll need to quirk it in the EC driver.
->
-> Thanks!
->
+>> As I see it the caller doesn't expect the positive value returned by the
+>> original freq_qos_update_request(). It just doesn't need to know whether the
+>> effective policy has been updated or not, it only needs to make sure the
+>> operations has been successful. Moreover the positive value is related only
+>> to the !last! active policy, which doesn't give the caller a full picture
+>> of the policy change anyway. So taking all of these into account I'd leave the
+>> fix as is.
+> Rafael: This function is called via a function pointer, which can call
+> this or a platform dependent routine (like in acpi-cpufreq.c), and it
+> would be reasonable IMO for the return of that callback to only look
+> for 0 or negative values, as is generally done in the kernel.
 
-Sorry that I missed this email. I'll apply this patch and test again.
+But it only has one caller that can easily check ret < 0 instead of just 
+ret, so the extra branch can be saved.
+
+That said if you really only want it to return 0 on success, you may as 
+well add a ret = 0; statement (with a comment explaining why it is 
+needed) after the last break in the loop.
+
+Cheers!
+
+
