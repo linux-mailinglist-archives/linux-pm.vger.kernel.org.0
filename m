@@ -2,89 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD881D9BD8
-	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 18:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24191D9B88
+	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 17:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729297AbgESQAL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 May 2020 12:00:11 -0400
-Received: from elvis.franken.de ([193.175.24.41]:59275 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729211AbgESQAK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 19 May 2020 12:00:10 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jb4ew-0001Fc-00; Tue, 19 May 2020 18:00:02 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 0EC79C012F; Tue, 19 May 2020 17:42:13 +0200 (CEST)
-Date:   Tue, 19 May 2020 17:42:13 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Sergey.Semin@baikalelectronics.ru
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Zhou Yanjie <zhouyanjie@zoho.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 12/20] mips: MAAR: Add XPA mode support
-Message-ID: <20200519154213.GA15797@alpha.franken.de>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-13-Sergey.Semin@baikalelectronics.ru>
+        id S1729055AbgESPnv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 May 2020 11:43:51 -0400
+Received: from mail-oo1-f67.google.com ([209.85.161.67]:34964 "EHLO
+        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728778AbgESPnu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 May 2020 11:43:50 -0400
+Received: by mail-oo1-f67.google.com with SMTP id c187so49529ooc.2
+        for <linux-pm@vger.kernel.org>; Tue, 19 May 2020 08:43:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m2j7HuOHXkAbzLO6I5FYA6dFqjbBL3HFsyJ5j8o4z6E=;
+        b=o7TBsLxE6R8ge64E4BOPGz1GrKbqDp5YPEyDVoitECjE/5YLYjEQDe0+HNvfxSG1Rx
+         gVLh3GSZvh/84e1vzUoO4j3trvaouVdkBoMEFsPnPyS7i7DvGOnEMyv3mKJc8DBQgNGv
+         M6EAol3/i22oWvkFj2B/Qval8K17mAMcbObFw1jp65ncFT3cTjM4Ar8EDoH9HkwRrZGq
+         RaPpqzbviWBlh6V7x+/6c/7LmnLfbzy5ReiPIAMxxDdAO5gifU5MsTOtygxobmA//0aN
+         1GP9iH8Plb3NcDHeIGw0iXAnlAfd/gyGfQUW7SitXFPv3Xz5adfui56XfBZzu0lq5NAE
+         XdHg==
+X-Gm-Message-State: AOAM532yTeT6zHW8Ja+45nduwWyEiOvpog7yUaoHZFGVcV9WurwTlZL2
+        HW3zQL+jL4CZaEwg3ab7vtfXTVZjUqGUCfw19l4=
+X-Google-Smtp-Source: ABdhPJy3Gna95WyEhrWO3xW/XTKdjTv1EmyyHUDqdSWwzcphMvr3CJjo1El3vvxokdtfGFwCZYWlZ4TU55S4y+F6RkE=
+X-Received: by 2002:a4a:a286:: with SMTP id h6mr17245048ool.38.1589903029084;
+ Tue, 19 May 2020 08:43:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200506174238.15385-13-Sergey.Semin@baikalelectronics.ru>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+References: <1589869525-29893-1-git-send-email-guohanjun@huawei.com> <1589869525-29893-2-git-send-email-guohanjun@huawei.com>
+In-Reply-To: <1589869525-29893-2-git-send-email-guohanjun@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 19 May 2020 17:43:37 +0200
+Message-ID: <CAJZ5v0g=TvPE5K5Xumk+0OcZ2xmS+d9fsSHE-JQv=7OdHCM1jg@mail.gmail.com>
+Subject: Re: [PATCH 1/6] cpuidle: sysfs: Fix the overlap for showing available governors
+To:     Hanjun Guo <guohanjun@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Doug Smythies <dsmythies@telus.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 06, 2020 at 08:42:30PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> When XPA mode is enabled the normally 32-bits MAAR pair registers
-> are extended to be of 64-bits width as in pure 64-bits MIPS
-> architecture. In this case the MAAR registers can enable the
-> speculative loads/stores for addresses of up to 39-bits width.
-> But in this case the process of the MAAR initialization changes a bit.
-> The upper 32-bits of the registers are supposed to be accessed by mean
-> of the dedicated instructions mfhc0/mthc0 and there is a CP0.MAAR.VH
-> bit which should be set together with CP0.MAAR.VL as indication
-> of the boundary validity. All of these peculiarities were taken into
-> account in this commit so the speculative loads/stores would work
-> when XPA mode is enabled.
-> 
-> Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> ---
->  arch/mips/include/asm/maar.h     | 17 +++++++++++++++--
->  arch/mips/include/asm/mipsregs.h | 10 ++++++++++
->  arch/mips/mm/init.c              |  8 +++++++-
->  3 files changed, 32 insertions(+), 3 deletions(-)
+On Tue, May 19, 2020 at 8:32 AM Hanjun Guo <guohanjun@huawei.com> wrote:
+>
+> When showing the available governors, it's "%s " in scnprintf(),
+> not "%s", so if the governor name has 15 characters, it will
+> overlap with the later one, fix it by adding one more for the
+> size.
+>
+> While we are at it, fix the minor coding style issue and remove
+> the "/sizeof(char)" since sizeof(char) always equals 1.
+>
+> Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
+> Reviewed-by: Doug Smythies <dsmythies@telus.net>
+> Tested-by: Doug Smythies <dsmythies@telus.net>
 
-applied to mips-next.
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+All patches in this series applied as 5.8 material, thanks!
