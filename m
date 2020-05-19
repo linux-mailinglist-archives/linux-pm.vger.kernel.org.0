@@ -2,102 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F37AF1D9569
-	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 13:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A331D958C
+	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 13:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728691AbgESLgw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 May 2020 07:36:52 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:46862 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726508AbgESLgw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 May 2020 07:36:52 -0400
-Received: from 89-64-84-14.dynamic.chello.pl (89.64.84.14) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id a7004566450acdb1; Tue, 19 May 2020 13:36:49 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH] ACPI: PM: s2idle: Print type of wakeup debug messages
-Date:   Tue, 19 May 2020 13:36:48 +0200
-Message-ID: <1709513.f9ygnvZT4z@kreacher>
+        id S1728837AbgESLr5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 May 2020 07:47:57 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:4866 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726880AbgESLr5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 19 May 2020 07:47:57 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id B16082A384A26CA1F027;
+        Tue, 19 May 2020 19:47:54 +0800 (CST)
+Received: from linux-ibm.site (10.175.102.37) by
+ DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 19 May 2020 19:47:46 +0800
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
+        <Souvik.Chakravarty@arm.com>, <Thanu.Rangarajan@arm.com>
+CC:     <Sudeep.Holla@arm.com>, <guohanjun@huawei.com>,
+        <john.garry@huawei.com>, <jonathan.cameron@huawei.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wangxiongfeng2@huawei.com>
+Subject: [RFC PATCH v3 0/2] add SW BOOST support for CPPC
+Date:   Tue, 19 May 2020 19:41:27 +0800
+Message-ID: <1589888489-13828-1-git-send-email-wangxiongfeng2@huawei.com>
+X-Mailer: git-send-email 1.7.12.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain
+X-Originating-IP: [10.175.102.37]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+ACPI spec 6.2 section 8.4.7.1 provide the following two CPC registers.
 
-Since acpi_s2idle_wake() knows the category of wakeup causing the
-system to resume from suspend-to-idle, make it print a unique message
-for each of them to help diagnose wakeup issues.
+"Highest performance is the absolute maximum performance an individual
+processor may reach, assuming ideal conditions. This performance level
+may not be sustainable for long durations, and may only be achievable if
+other platform components are in a specific state; for example, it may
+require other processors be in an idle state.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+Nominal Performance is the maximum sustained performance level of the
+processor, assuming ideal operating conditions. In absence of an
+external constraint (power, thermal, etc.) this is the performance level
+the platform is expected to be able to maintain continuously. All
+processors are expected to be able to sustain their nominal performance
+state simultaneously."
 
-The patch is on top of the linux-next branch in linux-pm.git.
+We can use Highest Performance as the max performance in boost mode and
+Nomial Performance as the max performance in non-boost mode. If the
+Highest Performance is greater than the Nominal Performance, we assume
+SW BOOST is supported.
 
----
- drivers/acpi/sleep.c |   20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+Xiongfeng Wang (2):
+  cpufreq: change '.set_boost' to act on only one policy
+  CPPC: add support for SW BOOST
 
-Index: linux-pm/drivers/acpi/sleep.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sleep.c
-+++ linux-pm/drivers/acpi/sleep.c
-@@ -992,23 +992,31 @@ static bool acpi_s2idle_wake(void)
- 		 * wakeup is pending anyway and the SCI is not the source of
- 		 * it).
- 		 */
--		if (irqd_is_wakeup_armed(irq_get_irq_data(acpi_sci_irq)))
-+		if (irqd_is_wakeup_armed(irq_get_irq_data(acpi_sci_irq))) {
-+			pm_pr_dbg("Wakeup unrelated to ACPI SCI\n");
- 			return true;
-+		}
- 
- 		/*
- 		 * If the status bit of any enabled fixed event is set, the
- 		 * wakeup is regarded as valid.
- 		 */
--		if (acpi_any_fixed_event_status_set())
-+		if (acpi_any_fixed_event_status_set()) {
-+			pm_pr_dbg("ACPI fixed event wakeup\n");
- 			return true;
-+		}
- 
- 		/* Check wakeups from drivers sharing the SCI. */
--		if (acpi_check_wakeup_handlers())
-+		if (acpi_check_wakeup_handlers()) {
-+			pm_pr_dbg("ACPI custom handler wakeup\n");
- 			return true;
-+		}
- 
- 		/* Check non-EC GPE wakeups and dispatch the EC GPE. */
--		if (acpi_ec_dispatch_gpe())
-+		if (acpi_ec_dispatch_gpe()) {
-+			pm_pr_dbg("ACPI non-EC GPE wakeup\n");
- 			return true;
-+		}
- 
- 		/*
- 		 * Cancel the SCI wakeup and process all pending events in case
-@@ -1027,8 +1035,10 @@ static bool acpi_s2idle_wake(void)
- 		 * are pending here, they must be resulting from the processing
- 		 * of EC events above or coming from somewhere else.
- 		 */
--		if (pm_wakeup_pending())
-+		if (pm_wakeup_pending()) {
-+			pm_pr_dbg("Wakeup after ACPI Notify sync\n");
- 			return true;
-+		}
- 
- 		rearm_wake_irq(acpi_sci_irq);
- 	}
+ drivers/cpufreq/acpi-cpufreq.c |  4 ++--
+ drivers/cpufreq/cppc_cpufreq.c | 39 +++++++++++++++++++++++++++++--
+ drivers/cpufreq/cpufreq.c      | 53 +++++++++++++++++++++---------------------
+ include/linux/cpufreq.h        |  2 +-
+ 4 files changed, 67 insertions(+), 31 deletions(-)
 
-
+-- 
+1.7.12.4
 
