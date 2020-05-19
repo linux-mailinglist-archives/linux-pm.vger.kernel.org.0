@@ -2,100 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEF01D9479
-	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 12:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37AF1D9569
+	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 13:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728612AbgESKhr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 May 2020 06:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727882AbgESKhq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 May 2020 06:37:46 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70011C05BD0B
-        for <linux-pm@vger.kernel.org>; Tue, 19 May 2020 03:37:45 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id n18so2908480wmj.5
-        for <linux-pm@vger.kernel.org>; Tue, 19 May 2020 03:37:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=aXsJU44GCIYk2OgRQy7d759a/u1ue6myLJURyVBYd8A=;
-        b=CLcZ236jj0tlYpqLtFL3ioPxwkbu37Ip4CxCdOnYn9axGgoRWAgEiXb7medhtvS0aw
-         S8hfrC0JE0DYi3y30LTInIHDQfUDxzoII2CXXieMTgbi1b1gYcMUOpdhRR6fT2H3Bd4z
-         9InwXKX+yA6Pgj5Mu5UVPY+nzaBFzQxntiWBtIW28S/h+WQAOi/KVfliYPqW+QiZru7P
-         HHnBRRp0qgbgl0dABgTBbXxni+72y9ObnZH/ZW9Zh7bbV116bT8hmzG+Ml3Za9DbLzQS
-         hZy8scnazhAh3wj7771MVayMozXxjHz47wvkYN+o+NoxKlD3sZ0x8v65BmuKr5/OAPPH
-         n2bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=aXsJU44GCIYk2OgRQy7d759a/u1ue6myLJURyVBYd8A=;
-        b=NSs80vvVgXiplft4OxHkmnqjKZRGkCDBvAon1eUZ4CkQogz2bT7j1UFjNm0VYQCuhJ
-         8gCQD/kT3yw5stiiTqoW712IZ6xkU0AmyuRN335Iu1lyUkaaXkRdUxyp0+4JanQhr43u
-         zRc0aKpkukAQWZa0ZK84W273p9uFEhQtgVpCrT5S/2ZGLgAbWsew3gdnfQguq4tIyy2s
-         qs7JL0id2yg8TkYhMeR+8kOU97QZDT3EVbpnYR8WRXPE9Sft6ooYh+xSskOcxMfDPcvM
-         NnJdg76yTFlMl+XanqJfNI6W+2tSn4mhuvzqcqt5GOLBAdLNG7Gya4plLzet7c4/Ua3i
-         L83Q==
-X-Gm-Message-State: AOAM532XCV3F1gI1wPE9yhaM9Hvl+iL/5koxUWwyr8ydzcJUERBAEG95
-        vaurdgNple/WitArzrbjUDyZOIQoHpw=
-X-Google-Smtp-Source: ABdhPJxiAzyUerOuMTk5FRcIW0Jcjoj2ZL7CECmIr6mC4isdh9wLpToG+AphXu0YHNWUccUjNP0TCw==
-X-Received: by 2002:a1c:8094:: with SMTP id b142mr4859380wmd.61.1589884664183;
-        Tue, 19 May 2020 03:37:44 -0700 (PDT)
-Received: from dell ([2.31.163.63])
-        by smtp.gmail.com with ESMTPSA id q2sm3433181wmq.23.2020.05.19.03.37.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2020 03:37:43 -0700 (PDT)
-Date:   Tue, 19 May 2020 11:37:41 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Saravanan Sekar <sravanhome@gmail.com>
-Cc:     andy.shevchenko@gmail.com, robh+dt@kernel.org, jic23@kernel.org,
-        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
-        sre@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v11 2/6] mfd: mp2629: Add support for mps battery charger
-Message-ID: <20200519103741.GW271301@dell>
-References: <20200430155810.21383-1-sravanhome@gmail.com>
- <20200430155810.21383-3-sravanhome@gmail.com>
+        id S1728691AbgESLgw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 May 2020 07:36:52 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:46862 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726508AbgESLgw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 May 2020 07:36:52 -0400
+Received: from 89-64-84-14.dynamic.chello.pl (89.64.84.14) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id a7004566450acdb1; Tue, 19 May 2020 13:36:49 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH] ACPI: PM: s2idle: Print type of wakeup debug messages
+Date:   Tue, 19 May 2020 13:36:48 +0200
+Message-ID: <1709513.f9ygnvZT4z@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200430155810.21383-3-sravanhome@gmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 30 Apr 2020, Saravanan Sekar wrote:
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> mp2629 is a highly-integrated switching-mode battery charge management
-> device for single-cell Li-ion or Li-polymer battery.
-> 
-> Add MFD core enables chip access for ADC driver for battery readings,
-> and a power supply battery-charger driver
-> 
-> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
->  drivers/mfd/Kconfig        |  9 +++++
->  drivers/mfd/Makefile       |  2 +
->  drivers/mfd/mp2629.c       | 79 ++++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/mp2629.h | 17 ++++++++
->  4 files changed, 107 insertions(+)
->  create mode 100644 drivers/mfd/mp2629.c
->  create mode 100644 include/linux/mfd/mp2629.h
+Since acpi_s2idle_wake() knows the category of wakeup causing the
+system to resume from suspend-to-idle, make it print a unique message
+for each of them to help diagnose wakeup issues.
 
-For my own reference (apply this as-is to your sign-off block):
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+The patch is on top of the linux-next branch in linux-pm.git.
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+---
+ drivers/acpi/sleep.c |   20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
+
+Index: linux-pm/drivers/acpi/sleep.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/sleep.c
++++ linux-pm/drivers/acpi/sleep.c
+@@ -992,23 +992,31 @@ static bool acpi_s2idle_wake(void)
+ 		 * wakeup is pending anyway and the SCI is not the source of
+ 		 * it).
+ 		 */
+-		if (irqd_is_wakeup_armed(irq_get_irq_data(acpi_sci_irq)))
++		if (irqd_is_wakeup_armed(irq_get_irq_data(acpi_sci_irq))) {
++			pm_pr_dbg("Wakeup unrelated to ACPI SCI\n");
+ 			return true;
++		}
+ 
+ 		/*
+ 		 * If the status bit of any enabled fixed event is set, the
+ 		 * wakeup is regarded as valid.
+ 		 */
+-		if (acpi_any_fixed_event_status_set())
++		if (acpi_any_fixed_event_status_set()) {
++			pm_pr_dbg("ACPI fixed event wakeup\n");
+ 			return true;
++		}
+ 
+ 		/* Check wakeups from drivers sharing the SCI. */
+-		if (acpi_check_wakeup_handlers())
++		if (acpi_check_wakeup_handlers()) {
++			pm_pr_dbg("ACPI custom handler wakeup\n");
+ 			return true;
++		}
+ 
+ 		/* Check non-EC GPE wakeups and dispatch the EC GPE. */
+-		if (acpi_ec_dispatch_gpe())
++		if (acpi_ec_dispatch_gpe()) {
++			pm_pr_dbg("ACPI non-EC GPE wakeup\n");
+ 			return true;
++		}
+ 
+ 		/*
+ 		 * Cancel the SCI wakeup and process all pending events in case
+@@ -1027,8 +1035,10 @@ static bool acpi_s2idle_wake(void)
+ 		 * are pending here, they must be resulting from the processing
+ 		 * of EC events above or coming from somewhere else.
+ 		 */
+-		if (pm_wakeup_pending())
++		if (pm_wakeup_pending()) {
++			pm_pr_dbg("Wakeup after ACPI Notify sync\n");
+ 			return true;
++		}
+ 
+ 		rearm_wake_irq(acpi_sci_irq);
+ 	}
+
+
+
