@@ -2,69 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE0F1D9020
-	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 08:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF38D1D905D
+	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 08:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727070AbgESGcf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 May 2020 02:32:35 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:39444 "EHLO huawei.com"
+        id S1728279AbgESGxX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 May 2020 02:53:23 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:35576 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726943AbgESGce (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 19 May 2020 02:32:34 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id C5C95F07358CB38F3006;
-        Tue, 19 May 2020 14:32:28 +0800 (CST)
-Received: from linux-ibm.site (10.175.102.37) by
- DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 19 May 2020 14:32:18 +0800
-From:   Hanjun Guo <guohanjun@huawei.com>
+        id S1726841AbgESGxX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 19 May 2020 02:53:23 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id C2B80AAC56C0FBE5A135;
+        Tue, 19 May 2020 14:53:18 +0800 (CST)
+Received: from [127.0.0.1] (10.166.213.93) by DGGEMS403-HUB.china.huawei.com
+ (10.3.19.203) with Microsoft SMTP Server id 14.3.487.0; Tue, 19 May 2020
+ 14:53:14 +0800
+Subject: Re: [PATCH 0/6] cpuidle: Make cpuidle governor switchable to be the
+ default behaviour
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Doug Smythies <dsmythies@telus.net>
-CC:     <linux-pm@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Hanjun Guo <guohanjun@huawei.com>
-Subject: [PATCH 6/6] Documentation: ABI: make current_governer_ro as a candidate for removal
-Date:   Tue, 19 May 2020 14:25:25 +0800
-Message-ID: <1589869525-29893-7-git-send-email-guohanjun@huawei.com>
-X-Mailer: git-send-email 1.7.12.4
-In-Reply-To: <1589869525-29893-1-git-send-email-guohanjun@huawei.com>
+CC:     <linux-pm@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>
 References: <1589869525-29893-1-git-send-email-guohanjun@huawei.com>
+From:   Hanjun Guo <guohanjun@huawei.com>
+Message-ID: <b01ce164-d41a-0e84-05a7-971fceb51175@huawei.com>
+Date:   Tue, 19 May 2020 14:53:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.102.37]
+In-Reply-To: <1589869525-29893-1-git-send-email-guohanjun@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.166.213.93]
 X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since both current_governor and current_governor_ro co-exist under
-/sys/devices/system/cpu/cpuidle/ file, and it's duplicate,
-make current_governer_ro as a candidate for removal.
+On 2020/5/19 14:25, Hanjun Guo wrote:
+> This is the formal patch set after the RFC v2 [0].
+> 
+> For now cpuidle governor can be switched via sysfs only when the
+> boot option "cpuidle_sysfs_switch" is passed, but it's useful
+> to switch the governor to adapt to different workloads, especially
+> after TEO and haltpoll governors were introduced.
+> 
+> Make cpuidle governor switchable to be the default behaviour by
+> removing the sysfs_switch and switch attributes, also update the
+> document as well.
+> 
+> Patch 1/6 and 2/6 are bugfix patch which can be triggered if the
+> governor name is 15 characters, it is not a 'real' bug for now as we
+> don't have such usecases, so we can merge them together via this
+> patchset.
+> 
+> Patch 3/6 and 4/6 are the functional update to make cpuidle governor
+> switchable to be the default behaviour.
+> 
+> Patch 5/6 and 6/6 are the document update.
+> 
+> Changes since RFC v2:
+>   - Remove sizeof(char) in patch 1/6;
+>   - Fix some minor typos;
+>   - Adding Review/Test/ACK tags.
 
-Signed-off-by: Hanjun Guo <guohanjun@huawei.com>
-Reviewed-by: Doug Smythies <dsmythies@telus.net>
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- Documentation/ABI/obsolete/sysfs-cpuidle | 9 +++++++++
- 1 file changed, 9 insertions(+)
- create mode 100644 Documentation/ABI/obsolete/sysfs-cpuidle
+Forgot to mention that this patch set is rebased on linux-next
+branch of linux-pm.git
 
-diff --git a/Documentation/ABI/obsolete/sysfs-cpuidle b/Documentation/ABI/obsolete/sysfs-cpuidle
-new file mode 100644
-index 00000000..e398fb5
---- /dev/null
-+++ b/Documentation/ABI/obsolete/sysfs-cpuidle
-@@ -0,0 +1,9 @@
-+What:		/sys/devices/system/cpu/cpuidle/current_governor_ro
-+Date:		April, 2020
-+Contact:	linux-pm@vger.kernel.org
-+Description:
-+	current_governor_ro shows current using cpuidle governor, but read only.
-+	with the update that cpuidle governor can be changed at runtime in default,
-+	both current_governor and current_governor_ro co-exist under
-+	/sys/devices/system/cpu/cpuidle/ file, it's duplicate so make
-+	current_governor_ro obselete.
--- 
-1.7.12.4
+Thanks
+Hanjun
 
