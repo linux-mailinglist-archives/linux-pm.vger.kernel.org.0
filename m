@@ -2,98 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B74E1D95CE
-	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 14:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4571D9666
+	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 14:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728626AbgESMDM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 May 2020 08:03:12 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:35138 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726949AbgESMDM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 May 2020 08:03:12 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04JC36om118363;
-        Tue, 19 May 2020 12:03:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=jZMwShTybmkTcclY7Hu7TMQtBKNHU0kfnfdEefM5Djc=;
- b=nvw9x9cCXDnrZfr+ZyndNBmyYBPPCq1zPmjWFE7zQzj7Z4BKoPtPJmoJlJOKArU5GcNX
- dvslc2mwYalwGfZAXunPNoAGqbgl755QtePkh5Mg19TcyeHyTGcUOdu9KvqJ+xWyRYYu
- GtZ9QE57p8qmLGSU3uIuHTYdgqtC9J+YAohb5smZdUUOk9a5Y+TTa4HaF6sb6DdEHyxo
- 9+GHC/YEbmpPER/hScfGXxrUIhnZEH2Te9Sj1wjy/wPIzTIvZJhUbr+7+rQ2xn+4+Af/
- 0LwrCxmlCNQ8mHrkyFgeliJCjyaQwYipqu9KTmkX6NmiDcVFYks3yoJvHnaFTnBrP9da gg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 3127kr4x23-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 19 May 2020 12:02:40 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04JC2XEk084199;
-        Tue, 19 May 2020 12:02:40 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 313gj1j6q5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 May 2020 12:02:40 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04JC2bH1018200;
-        Tue, 19 May 2020 12:02:39 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 19 May 2020 05:02:37 -0700
-Date:   Tue, 19 May 2020 15:02:31 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     k.konieczny@samsung.com
-Cc:     linux-pm@vger.kernel.org
-Subject: [bug report] opp: core: add regulators enable and disable
-Message-ID: <20200519120231.GB42765@mwanda>
+        id S1728858AbgESMdO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 May 2020 08:33:14 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:57550 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728745AbgESMdO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 May 2020 08:33:14 -0400
+Received: from 89-64-84-14.dynamic.chello.pl (89.64.84.14) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id a5a690b566f2bc2b; Tue, 19 May 2020 14:33:11 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH] ACPI: EC: PM: s2idle: Extend GPE dispatching debug message
+Date:   Tue, 19 May 2020 14:33:10 +0200
+Message-ID: <9095435.I46LYtAkWL@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9625 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 malwarescore=0
- mlxscore=0 adultscore=0 bulkscore=0 suspectscore=3 mlxlogscore=836
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005190109
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9625 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 spamscore=0
- bulkscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 impostorscore=0
- suspectscore=3 mlxlogscore=867 malwarescore=0 cotscore=-2147483648
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2005190109
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Kamil Konieczny,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This is a semi-automatic email about new static checker warnings.
+Add the "ACPI" string to the "EC GPE dispatched" message as it is
+ACPI-related.
 
-The patch f4111e2e1ae1: "opp: core: add regulators enable and
-disable" from Jul 19, 2019, leads to the following Smatch complaint:
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/ec.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-    drivers/opp/core.c:846 dev_pm_opp_set_rate()
-    error: we previously assumed 'opp_table->regulators' could be null (see line 840)
+Index: linux-pm/drivers/acpi/ec.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/ec.c
++++ linux-pm/drivers/acpi/ec.c
+@@ -2020,7 +2020,7 @@ bool acpi_ec_dispatch_gpe(void)
+ 	 */
+ 	ret = acpi_dispatch_gpe(NULL, first_ec->gpe);
+ 	if (ret == ACPI_INTERRUPT_HANDLED) {
+-		pm_pr_dbg("EC GPE dispatched\n");
++		pm_pr_dbg("ACPI EC GPE dispatched\n");
+ 
+ 		/* Flush the event and query workqueues. */
+ 		acpi_ec_flush_work();
 
-drivers/opp/core.c
-   839	
-   840			if (!opp_table->required_opp_tables && !opp_table->regulators) {
-                                                            ^^
-Should this && be ||?
 
-   841				dev_err(dev, "target frequency can't be 0\n");
-                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-This error message is confusing.
 
-   842				ret = -EINVAL;
-   843			}
-   844	
-   845			if (opp_table->regulator_enabled) {
-   846				regulator_disable(opp_table->regulators[0]);
-                                                  ^^^^^^^^^^^^^^^^^^^^^
-Unchecked dereference.
-
-   847				opp_table->regulator_enabled = false;
-   848			}
-
-regards,
-dan carpenter
