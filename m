@@ -2,183 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B0D1D95B6
-	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 13:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B74E1D95CE
+	for <lists+linux-pm@lfdr.de>; Tue, 19 May 2020 14:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728286AbgESL52 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 May 2020 07:57:28 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:4815 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726949AbgESL52 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 19 May 2020 07:57:28 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id B53B34391CBB79186702;
-        Tue, 19 May 2020 19:57:25 +0800 (CST)
-Received: from [127.0.0.1] (10.166.215.101) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Tue, 19 May 2020
- 19:57:17 +0800
-Subject: Re: [RFC PATCH v3 1/2] cpufreq: change '.set_boost' to act on only
- one policy
-To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
-        <Souvik.Chakravarty@arm.com>, <Thanu.Rangarajan@arm.com>
-CC:     <Sudeep.Holla@arm.com>, <guohanjun@huawei.com>,
-        <john.garry@huawei.com>, <jonathan.cameron@huawei.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1589888489-13828-1-git-send-email-wangxiongfeng2@huawei.com>
- <1589888489-13828-2-git-send-email-wangxiongfeng2@huawei.com>
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <060a79bb-00d0-982a-4e4b-1cf4511ccce2@huawei.com>
-Date:   Tue, 19 May 2020 19:57:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1728626AbgESMDM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 May 2020 08:03:12 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:35138 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726949AbgESMDM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 May 2020 08:03:12 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04JC36om118363;
+        Tue, 19 May 2020 12:03:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=jZMwShTybmkTcclY7Hu7TMQtBKNHU0kfnfdEefM5Djc=;
+ b=nvw9x9cCXDnrZfr+ZyndNBmyYBPPCq1zPmjWFE7zQzj7Z4BKoPtPJmoJlJOKArU5GcNX
+ dvslc2mwYalwGfZAXunPNoAGqbgl755QtePkh5Mg19TcyeHyTGcUOdu9KvqJ+xWyRYYu
+ GtZ9QE57p8qmLGSU3uIuHTYdgqtC9J+YAohb5smZdUUOk9a5Y+TTa4HaF6sb6DdEHyxo
+ 9+GHC/YEbmpPER/hScfGXxrUIhnZEH2Te9Sj1wjy/wPIzTIvZJhUbr+7+rQ2xn+4+Af/
+ 0LwrCxmlCNQ8mHrkyFgeliJCjyaQwYipqu9KTmkX6NmiDcVFYks3yoJvHnaFTnBrP9da gg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 3127kr4x23-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 19 May 2020 12:02:40 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04JC2XEk084199;
+        Tue, 19 May 2020 12:02:40 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 313gj1j6q5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 May 2020 12:02:40 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04JC2bH1018200;
+        Tue, 19 May 2020 12:02:39 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 19 May 2020 05:02:37 -0700
+Date:   Tue, 19 May 2020 15:02:31 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     k.konieczny@samsung.com
+Cc:     linux-pm@vger.kernel.org
+Subject: [bug report] opp: core: add regulators enable and disable
+Message-ID: <20200519120231.GB42765@mwanda>
 MIME-Version: 1.0
-In-Reply-To: <1589888489-13828-2-git-send-email-wangxiongfeng2@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.166.215.101]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9625 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 malwarescore=0
+ mlxscore=0 adultscore=0 bulkscore=0 suspectscore=3 mlxlogscore=836
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2005190109
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9625 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 spamscore=0
+ bulkscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 impostorscore=0
+ suspectscore=3 mlxlogscore=867 malwarescore=0 cotscore=-2147483648
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2005190109
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello Kamil Konieczny,
 
+This is a semi-automatic email about new static checker warnings.
 
-On 2020/5/19 19:41, Xiongfeng Wang wrote:
-> Macro 'for_each_active_policy()' is defined internally. To avoid some
-> cpufreq driver needing this macro to iterate over all the policies in
-> '.set_boost' callback, we redefine '.set_boost' to act on only one
-> policy and pass the policy as an argument.
-> 'cpufreq_boost_trigger_state()' iterate over all the policies to set
-> boost for the system. This is preparation for adding SW BOOST support
-> for CPPC.
-> 
-> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-> ---
->  drivers/cpufreq/acpi-cpufreq.c |  4 ++--
->  drivers/cpufreq/cpufreq.c      | 53 +++++++++++++++++++++---------------------
->  include/linux/cpufreq.h        |  2 +-
->  3 files changed, 30 insertions(+), 29 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index 289e8ce..b0a9eb5 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -126,7 +126,7 @@ static void boost_set_msr_each(void *p_en)
->  	boost_set_msr(enable);
->  }
->  
-> -static int set_boost(int val)
-> +static int set_boost(struct cpufreq_policy *policy, int val)
->  {
->  	get_online_cpus();
->  	on_each_cpu(boost_set_msr_each, (void *)(long)val, 1);
-> @@ -162,7 +162,7 @@ static ssize_t store_cpb(struct cpufreq_policy *policy, const char *buf,
->  	if (ret || val > 1)
->  		return -EINVAL;
->  
-> -	set_boost(val);
-> +	set_boost(policy, val);
->  
->  	return count;
->  }
+The patch f4111e2e1ae1: "opp: core: add regulators enable and
+disable" from Jul 19, 2019, leads to the following Smatch complaint:
 
-My original thought is as below. Since '/sys/devices/system/cpu/cpufreq/boost'
-can be used to set boost for the system. The file 'cpb' below each policy can be
-used to set boost for the policy. But this will change the existing logic.
+    drivers/opp/core.c:846 dev_pm_opp_set_rate()
+    error: we previously assumed 'opp_table->regulators' could be null (see line 840)
 
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -126,12 +126,14 @@ static void boost_set_msr_each(void *p_en)
-        boost_set_msr(enable);
- }
+drivers/opp/core.c
+   839	
+   840			if (!opp_table->required_opp_tables && !opp_table->regulators) {
+                                                            ^^
+Should this && be ||?
 
--static int set_boost(int val)
-+static int set_boost(struct cpufreq_policy *policy, int val)
- {
-        get_online_cpus();
--   on_each_cpu(boost_set_msr_each, (void *)(long)val, 1);
-+ on_each_cpu_mask(policy->cpus, boost_set_msr_each,
-+                  (void *)(long)val, 1);
-        put_online_cpus();
--   pr_debug("Core Boosting %sabled.\n", val ? "en" : "dis");
-+ pr_debug("CPU %*pbl: Core Boosting %sabled.\n",
-+          cpumask_pr_args(policy->cpus), val ? "en" : "dis");
+   841				dev_err(dev, "target frequency can't be 0\n");
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This error message is confusing.
 
-        return 0;
- }
-@@ -162,7 +164,7 @@ static ssize_t store_cpb(struct cpufreq_policy *policy,
-const char *buf,
-        if (ret || val > 1)
-                return -EINVAL;
+   842				ret = -EINVAL;
+   843			}
+   844	
+   845			if (opp_table->regulator_enabled) {
+   846				regulator_disable(opp_table->regulators[0]);
+                                                  ^^^^^^^^^^^^^^^^^^^^^
+Unchecked dereference.
 
--   set_boost(val);
-+ set_boost(policy, val);
+   847				opp_table->regulator_enabled = false;
+   848			}
 
-        return count;
- }
-
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index d03f250..d0d86b1 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
->
->  int cpufreq_boost_trigger_state(int state)
->  {
-> +	struct cpufreq_policy *policy;
->  	unsigned long flags;
->  	int ret = 0;
->  
-> @@ -2570,16 +2565,22 @@ int cpufreq_boost_trigger_state(int state)
->  	cpufreq_driver->boost_enabled = state;
->  	write_unlock_irqrestore(&cpufreq_driver_lock, flags);
->  
-> -	ret = cpufreq_driver->set_boost(state);
-> -	if (ret) {
-> -		write_lock_irqsave(&cpufreq_driver_lock, flags);
-> -		cpufreq_driver->boost_enabled = !state;
-> -		write_unlock_irqrestore(&cpufreq_driver_lock, flags);
-> -
-> -		pr_err("%s: Cannot %s BOOST\n",
-> -		       __func__, state ? "enable" : "disable");
-> +	for_each_active_policy(policy) {
-> +		ret = cpufreq_driver->set_boost(policy, state);
-> +		if (ret)
-> +			goto err_reset_state;
->  	}
->  
-> +	return 0;
-> +
-> +err_reset_state:
-> +	write_lock_irqsave(&cpufreq_driver_lock, flags);
-> +	cpufreq_driver->boost_enabled = !state;
-> +	write_unlock_irqrestore(&cpufreq_driver_lock, flags);
-> +
-> +	pr_err("%s: Cannot %s BOOST\n",
-> +	       __func__, state ? "enable" : "disable");
-> +
->  	return ret;
->  }
-
-Is it better to set 'boost_enabled' after set boost successfully rather than
-setting it in the begining and resetting it if setting boost failed.
-
-Thanks,
-Xiongfeng
-
->  
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 67d5950..3494f67 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -367,7 +367,7 @@ struct cpufreq_driver {
->  
->  	/* platform specific boost support code */
->  	bool		boost_enabled;
-> -	int		(*set_boost)(int state);
-> +	int		(*set_boost)(struct cpufreq_policy *policy, int state);
->  };
->  
->  /* flags */
-> 
-
+regards,
+dan carpenter
