@@ -2,23 +2,23 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A65E1DB284
-	for <lists+linux-pm@lfdr.de>; Wed, 20 May 2020 13:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062911DB2CE
+	for <lists+linux-pm@lfdr.de>; Wed, 20 May 2020 14:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726525AbgETL7e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 May 2020 07:59:34 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:58188 "EHLO
+        id S1726862AbgETMMJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 May 2020 08:12:09 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:58300 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726435AbgETL7e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 May 2020 07:59:34 -0400
+        with ESMTP id S1726452AbgETMMI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 May 2020 08:12:08 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 530D480307C1;
-        Wed, 20 May 2020 11:59:28 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 0FADA80307C1;
+        Wed, 20 May 2020 12:12:03 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ez3oW4GvgvxF; Wed, 20 May 2020 14:59:27 +0300 (MSK)
-Date:   Wed, 20 May 2020 14:59:26 +0300
+        with ESMTP id c8BOnlAs7pZK; Wed, 20 May 2020 15:12:02 +0300 (MSK)
+Date:   Wed, 20 May 2020 15:12:01 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 CC:     Serge Semin <fancer.lancer@gmail.com>,
@@ -34,7 +34,7 @@ CC:     Serge Semin <fancer.lancer@gmail.com>,
         <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
  if CPU_FREQ enabled
-Message-ID: <20200520115926.lk6ycke75flwzcd2@mobilestation>
+Message-ID: <20200520121201.wohv6u646rx5otkf@mobilestation>
 References: <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
  <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
  <20200508154150.GB22247@alpha.franken.de>
@@ -82,9 +82,6 @@ On Tue, May 19, 2020 at 05:50:53PM +0200, Thomas Bogendoerfer wrote:
 > 
 > only for 16/20. 15/20 looks ok to me, but I have not enough insides
 > on the hardware to say this is good.
-
-Ok.
-
 > 
 > > > > ├─>[PATCH v2 13/20] mips: early_printk_8250: Use offset-sized IO-mem accessors
 > > > 
@@ -138,10 +135,25 @@ Ok.
 > > What do you think about this?
 > 
 > please do your own prom_putchar.
+
+One more time regarding this problem but in appliance to another part of the
+MIPS code. I've missed the patch to draw your attention to:
+[PATCH v2 14/20] mips: Use offset-sized IO-mem accessors in CPS debug printout
+
+There I've applied the same fix as in the patch:
+[PATCH v2 13/20] mips: early_printk_8250: Use offset-sized IO-mem accessors
+
+Since you don't like the way I initially fixed it, suppose there we don't have
+another way but to introduce something like CONFIG_MIPS_CPS_NS16550_WIDTH
+parameter to select a proper accessors, like sw in our case, and sb by defaul).
+Right?
+
+(Note UART_L is incorrectly created in that patch, I'll remove that macro in
+v3.)
+
+-Sergey
+
 > 
-
-Ok.
-
 > 
 > > > 
 > > > > ├─>[PATCH v2 12/20] mips: MAAR: Add XPA mode support
@@ -161,9 +173,6 @@ Ok.
 > 
 > As this didn't apply cleanly, I'll apply it after you've resent it.
 > IMHO no need for a Reviewed-by.
-
-Ok.
-
 > 
 > > > > └─>[PATCH v2 09/20] mips: Add CP0 Write Merge config support
 > > > 
@@ -178,9 +187,6 @@ Ok.
 > 
 > do you have a user of that ? I'm not introducing code nobody uses.
 > 
-
-See my comment below.
-
 > > I could use them to implement a code pattern like:
 > > 
 > > +	if (cpu_has_mm_full) {
@@ -200,31 +206,6 @@ See my comment below.
 > To me this is a hardware feature I expect to be done by firmware and
 > Linux shouldn't care about it, if it doesn't have any software
 > implications.
-
-I think there is a misunderstanding here. In this patch I am not enabling
-Write-Merge feature for any memory range. I am enabling the UCA Cache Coherency
-attribute to be available for utilization. See the user-manual info regarding
-the CP0.CONFIG.MM field:
-	Write Merge.This bit indicates whether write-through merging is enabled
-	in the 32-byte collapsing write buffer.
-	0: No merging allowed
-	1: Merging allowed
-
-In order to have the Write-merging really enabled for a particular PFN one have
-to mark its TLB entry with UCA (EntryLoX.C[3:5] = 7) attribute. So in this patch
-I am attempting to detect whether the feature is either already enabled or if
-available to enable it for utilization.
-
-If there is no misunderstanding and you said what you said, that even enabling
-the feature for utilization might be dangerous, let's at least leave the
-MIPS_CONF_MM, MIPS_CONF_MM_FULL and MIPS_CONF_MM_SYS_SYSAD fields
-definition in the "arch/mips/include/asm/mipsregs.h" header. I'll use
-them to enable the write-merge in my platform code.
-
-What do you think?
-
--Sergey
-
 > 
 > Thomas.
 > 
