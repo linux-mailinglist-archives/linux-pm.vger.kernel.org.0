@@ -2,98 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E13B1DB1C8
-	for <lists+linux-pm@lfdr.de>; Wed, 20 May 2020 13:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A771DB1BF
+	for <lists+linux-pm@lfdr.de>; Wed, 20 May 2020 13:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbgETLbI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 May 2020 07:31:08 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:57970 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgETLbH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 May 2020 07:31:07 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 2D97180307C1;
-        Wed, 20 May 2020 11:31:01 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id yGC09t4w11r0; Wed, 20 May 2020 14:31:00 +0300 (MSK)
-Date:   Wed, 20 May 2020 14:30:58 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Zhou Yanjie <zhouyanjie@zoho.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 12/20] mips: MAAR: Add XPA mode support
-Message-ID: <20200520113058.nd7fsafrbhdcp2c7@mobilestation>
-References: <20200306124807.3596F80307C2@mail.baikalelectronics.ru>
- <20200506174238.15385-1-Sergey.Semin@baikalelectronics.ru>
- <20200506174238.15385-13-Sergey.Semin@baikalelectronics.ru>
- <20200519154213.GA15797@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200519154213.GA15797@alpha.franken.de>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+        id S1726486AbgETL37 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 May 2020 07:29:59 -0400
+Received: from mga06.intel.com ([134.134.136.31]:33065 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726403AbgETL37 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 20 May 2020 07:29:59 -0400
+IronPort-SDR: Tv+oiap8EimFtvKTfrqHsqt/7QEE8AOEVhv947PaFNjc3x78LFv9Nh/KLMeECn6E8RepYLWwlt
+ sPHmcPsxLowA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2020 04:29:59 -0700
+IronPort-SDR: 01NBMwqFV8OTmqOCteBCh16e5yCHeDTeT7iKrAJkcOynoejJMDsEoXlkUo0K0hfz/LdDHFdB0w
+ FYQuTav0J2lA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,413,1583222400"; 
+   d="scan'208";a="268239004"
+Received: from unknown (HELO linuxpc.iind.intel.com) ([10.223.107.108])
+  by orsmga006.jf.intel.com with ESMTP; 20 May 2020 04:29:56 -0700
+From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+To:     rui.zhang@intel.com, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     andriy.shevchenko@intel.com, srinivas.pandruvada@linux.intel.com,
+        sumeet.r.pawnikar@intel.com
+Subject: [PATCH] powercap: remove unused local MSR define
+Date:   Wed, 20 May 2020 17:06:18 +0530
+Message-Id: <1589974578-26791-1-git-send-email-sumeet.r.pawnikar@intel.com>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 19, 2020 at 05:42:13PM +0200, Thomas Bogendoerfer wrote:
-> On Wed, May 06, 2020 at 08:42:30PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
-> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > When XPA mode is enabled the normally 32-bits MAAR pair registers
-> > are extended to be of 64-bits width as in pure 64-bits MIPS
-> > architecture. In this case the MAAR registers can enable the
-> > speculative loads/stores for addresses of up to 39-bits width.
-> > But in this case the process of the MAAR initialization changes a bit.
-> > The upper 32-bits of the registers are supposed to be accessed by mean
-> > of the dedicated instructions mfhc0/mthc0 and there is a CP0.MAAR.VH
-> > bit which should be set together with CP0.MAAR.VL as indication
-> > of the boundary validity. All of these peculiarities were taken into
-> > account in this commit so the speculative loads/stores would work
-> > when XPA mode is enabled.
-> > 
-> > Co-developed-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Paul Burton <paulburton@kernel.org>
-> > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: devicetree@vger.kernel.org
-> > ---
-> >  arch/mips/include/asm/maar.h     | 17 +++++++++++++++--
-> >  arch/mips/include/asm/mipsregs.h | 10 ++++++++++
-> >  arch/mips/mm/init.c              |  8 +++++++-
-> >  3 files changed, 32 insertions(+), 3 deletions(-)
-> 
-> applied to mips-next.
+From: "Pawnikar, Sumeet" <sumeet.r.pawnikar@intel.com>
 
-Great! Thanks.
+Remove unused PLATFORM_POWER_LIMIT MSR local definition from file
+intel_rapl_common.c. This was missed while splitting old RAPL code
+intel_rapl.c file into two new files intel_rapl_msr.c and
+intel_rapl_common.c as per the commit 3382388d7148
+("intel_rapl: abstract RAPL common code"). Currently, this #define
+entry is being used only in intel_rapl_msr.c file and local definition
+present in this file.
 
--Sergey
+Signed-off-by: Pawnikar, Sumeet <sumeet.r.pawnikar@intel.com>
+---
+ drivers/powercap/intel_rapl_common.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
-> 
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index eb328655bc01..5527a7c76309 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -26,9 +26,6 @@
+ #include <asm/cpu_device_id.h>
+ #include <asm/intel-family.h>
+ 
+-/* Local defines */
+-#define MSR_PLATFORM_POWER_LIMIT	0x0000065C
+-
+ /* bitmasks for RAPL MSRs, used by primitive access functions */
+ #define ENERGY_STATUS_MASK      0xffffffff
+ 
+-- 
+1.7.9.5
+
