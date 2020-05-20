@@ -2,144 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 798DC1DB31A
-	for <lists+linux-pm@lfdr.de>; Wed, 20 May 2020 14:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE13F1DB338
+	for <lists+linux-pm@lfdr.de>; Wed, 20 May 2020 14:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726443AbgETMVa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 May 2020 08:21:30 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:58416 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgETMVa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 May 2020 08:21:30 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 7033F8030875;
-        Wed, 20 May 2020 12:21:27 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id HpXx65hG0gh0; Wed, 20 May 2020 15:21:26 +0300 (MSK)
-Date:   Wed, 20 May 2020 15:21:25 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 18/20] mips: csrc-r4k: Decrease r4k-clocksource rating
- if CPU_FREQ enabled
-Message-ID: <20200520122125.opn53q5wxvcc4ath@mobilestation>
-References: <20200506174238.15385-19-Sergey.Semin@baikalelectronics.ru>
- <20200508154150.GB22247@alpha.franken.de>
- <20200511133121.cz5axbwynhmqkx7x@mobilestation>
- <20200515074827.6p5zx4sb3bmavjih@mobilestation>
- <20200515210647.GA22922@alpha.franken.de>
- <20200518134820.wedoumgbsllvhem6@mobilestation>
- <20200518163206.GA17800@alpha.franken.de>
- <20200518205752.txbylbjt2zkwdwwe@mobilestation>
- <20200519155053.GB15797@alpha.franken.de>
- <20200520121201.wohv6u646rx5otkf@mobilestation>
+        id S1726452AbgETMbi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 May 2020 08:31:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726439AbgETMbi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 20 May 2020 08:31:38 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 191D320756;
+        Wed, 20 May 2020 12:31:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589977897;
+        bh=rL8WkukpYlQE2FvyEL1Ca998vF4yjcYjdKtcskbOga4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LoxEWlrzY++Y0BFWiabgMwjNGX/nvadbakyFaRZq89IjX/nhET64+AAldhU56uv4y
+         /N2F8Ge6zCrPiaYs24N4AeJZ8C+ZXyDCJWLD1XynAuUuEF6n7NdU/UlXGv8qQP01VQ
+         yNqJhM8BUg7QoFPleCnp2BaLZ0B5zDCzVNny15Vs=
+Date:   Wed, 20 May 2020 13:31:35 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        srv_heupstream@mediatek.com
+Subject: Re: [PATCH 09/12] devfreq: add mediatek cci devfreq
+Message-ID: <20200520123135.GD4823@sirena.org.uk>
+References: <20200520034307.20435-1-andrew-sh.cheng@mediatek.com>
+ <20200520034307.20435-10-andrew-sh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2iBwrppp/7QCDedR"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200520121201.wohv6u646rx5otkf@mobilestation>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <20200520034307.20435-10-andrew-sh.cheng@mediatek.com>
+X-Cookie: You can't get there from here.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 20, 2020 at 03:12:02PM +0300, Serge Semin wrote:
-> On Tue, May 19, 2020 at 05:50:53PM +0200, Thomas Bogendoerfer wrote:
-> > On Mon, May 18, 2020 at 11:57:52PM +0300, Serge Semin wrote:
-> > > On Mon, May 18, 2020 at 06:32:06PM +0200, Thomas Bogendoerfer wrote:
-> > > > On Mon, May 18, 2020 at 04:48:20PM +0300, Serge Semin wrote:
 
-[nip]
+--2iBwrppp/7QCDedR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > > > > ├─>[PATCH v2 13/20] mips: early_printk_8250: Use offset-sized IO-mem accessors
-> > > > 
-> > > > that's broken. A reg shift of 2 doesn't mean we could use 32bit access
-> > > > to the registers on other platforms. As I don't think adding some ifdefery
-> > > > makes things nicer, just implement the your prom_putchar in board code.
-> > > 
-> > > I thought about that initially, but then I decided to alter the generic
-> > > early_printk_8250 code instead. My version of prom_putchar() would be almost
-> > > the same as one implemented in the early_printk_8250 module except minor
-> > > modification of replacing readb/writeb methods with readl/writel. So I didn't
-> > > want to duplicate the code, but wanted to provide a general way to fix the
-> > > problem potentially also for another platforms.
-> > > 
-> > > Since you don't like this fix alternatively I'd suggest to add the reg_width
-> > > parameter passed to the setup_8250_early_printk_port() method like this:
-> > > -setup_8250_early_printk_port(unsigned long base, unsigned int reg_shift,
-> > > -                             unsigned int timeout)
-> > > +setup_8250_early_printk_port(unsigned long base, unsigned int reg_shift,
-> > > +                             unsigned int reg_width, unsigned int timeout)
-> > > 
-> > > By reg_width parameter we could determine the actual width of the register:
-> > >  static inline u8 serial_in(int offset)
-> > >  {
-> > > -       return readb(serial8250_base + (offset << serial8250_reg_shift));
-> > > +       u8 ret = 0xFF;
-> > > +
-> > > +       offset <<= serial8250_reg_shift;
-> > > +       switch (serial8250_reg_width) {
-> > > +       case 1:
-> > > +               ret = readb(serial8250_base + offset);
-> > > +               break;
-> > > +       case 2:
-> > > +               ret = readw(serial8250_base + offset);
-> > > +               break;
-> > > +       case 4:
-> > > +               ret = readl(serial8250_base + offset);
-> > > +               break;
-> > > +       default:
-> > > +               break;
-> > > +       }
-> > > +
-> > > +       return ret;
-> > >  }
-> > > 
-> > > The similar modification will be implemented for serial_out(). I'll also modify
-> > 
-> > look at the lines of code you are adding. Doing your own prom_putchar will
-> > probably have less lines.
-> > 
-> > > What do you think about this?
-> > 
-> > please do your own prom_putchar.
-> 
-> One more time regarding this problem but in appliance to another part of the
-> MIPS code. I've missed the patch to draw your attention to:
-> [PATCH v2 14/20] mips: Use offset-sized IO-mem accessors in CPS debug printout
-> 
-> There I've applied the same fix as in the patch:
-> [PATCH v2 13/20] mips: early_printk_8250: Use offset-sized IO-mem accessors
-> 
-> Since you don't like the way I initially fixed it, suppose there we don't have
-> another way but to introduce something like CONFIG_MIPS_CPS_NS16550_WIDTH
-> parameter to select a proper accessors, like sw in our case, and sb by defaul).
-> Right?
-> 
+On Wed, May 20, 2020 at 11:43:04AM +0800, Andrew-sh.Cheng wrote:
 
-> (Note UART_L is incorrectly created in that patch, I'll remove that macro in
-> v3.)
+> +	cci_df->proc_reg = devm_regulator_get_optional(cci_dev, "proc");
+> +	ret = PTR_ERR_OR_ZERO(cci_df->proc_reg);
+> +	if (ret) {
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(cci_dev, "failed to get regulator for CCI: %d\n",
+> +				ret);
+> +		return ret;
+> +	}
+> +	ret = regulator_enable(cci_df->proc_reg);
 
-Hm, actually no. The macro is correct. According to the code _mips_cps_putc()
-always perform lw from the UART MMIO registers. This must be a bug. Don't you
-think?
+The code appears to require a regulator (and I'm guessing the device
+needs power) so why is this using regulator_get_optional()?
 
--Sergey
+--2iBwrppp/7QCDedR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> -Sergey
-> 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7FIyYACgkQJNaLcl1U
+h9D0kAf/f2yyGL/KhJ2Y+J/Xvk72EFz2UdjxlDjJo9wXYf3J4HWB9sgTXydoZoRj
+bPlZzQtBeUPNmvX60Nczzt1V0KYNXns6mOfBOTueIAlSLeOnWBLV2+IUedCAVOJw
+NX2i3pZdZ2p7yOO9QGU2s8hxc3uwCHKETMa5U/B6ENwkQkkOlJCNkjVYYiuoAJn+
+9mIq1Ko2yfPHqJPyh/wP/CTC7AqXyPnQmO+rAlua+v8ua7RXRqAlkI/LpWhhpe1U
+PAdhYsvKa9TiyafrrUPW1TPbTBRnWpHd1s2gjhpiGuuDhJyEaGjxsm0dz82gs5ml
+aut3SlENmvhhRkfxSKh8LBYpjvJ0hA==
+=vHQ8
+-----END PGP SIGNATURE-----
+
+--2iBwrppp/7QCDedR--
