@@ -2,49 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BF21DB30A
-	for <lists+linux-pm@lfdr.de>; Wed, 20 May 2020 14:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E2F1DB30F
+	for <lists+linux-pm@lfdr.de>; Wed, 20 May 2020 14:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726439AbgETMUf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 May 2020 08:20:35 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:44090 "EHLO
+        id S1726812AbgETMUl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 May 2020 08:20:41 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:44108 "EHLO
         lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgETMUf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 May 2020 08:20:35 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04KCKXtV061137;
-        Wed, 20 May 2020 07:20:33 -0500
+        with ESMTP id S1726224AbgETMUl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 May 2020 08:20:41 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04KCKco0061153;
+        Wed, 20 May 2020 07:20:38 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1589977233;
-        bh=/vs8Gq9YQ5Dc/ZEYvAlM2ob1iJ0palS32T3aRszrMWU=;
-        h=From:To:CC:Subject:Date;
-        b=Wn27GW7iT2gSXI+t7YUwim8oXLJqxvJZ3MzZbHLclpvyCnE+CbwnvavZLdEZ4TS4l
-         JKCQSSN3GQwepPWPcpYV/wLfezkoaCuAahm8xWUhri8nk0SdbdPkEIOpFD1W1u3dt9
-         sNJAlKHlTPQvnd438qpgyPoClzEMlBSx8MCgUZco=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04KCKXgU069601
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 20 May 2020 07:20:33 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+        s=ti-com-17Q1; t=1589977238;
+        bh=hvXKcUkV7XpnUy1BQBCRXKA20QIPtE7iW2gyUhNIc9Y=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=BwC/PZ9XyakTLt155LuTvUgqKlzhw6Z+UzM7EUks7SaNZA908r6yEaE5V/PhdgbJj
+         IcemRfDu32u9uq/H4n5uSIe1f4eRVsRJOl+Y6mURteB4MuEI5kHqLM6WRHg7luJLIx
+         Ac2JvdeQYRclkuUjmgXVHdKqEQ22a7Fp0+x0/8Ec=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04KCKcxZ010552;
+        Wed, 20 May 2020 07:20:38 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 20
- May 2020 07:20:32 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ May 2020 07:20:38 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 20 May 2020 07:20:32 -0500
+ Frontend Transport; Wed, 20 May 2020 07:20:38 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04KCKWtd112464;
-        Wed, 20 May 2020 07:20:32 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04KCKcBA062731;
+        Wed, 20 May 2020 07:20:38 -0500
 From:   Dan Murphy <dmurphy@ti.com>
 To:     <sre@kernel.org>
 CC:     <sspatil@android.com>, <dmurphy@ti.com>,
         <linux-pm@vger.kernel.org>, <robh@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v8 0/3] Add JEITA properties and introduce the bq2515x charger
-Date:   Wed, 20 May 2020 07:20:24 -0500
-Message-ID: <20200520122027.31320-1-dmurphy@ti.com>
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Guru Das Srinagesh <gurus@codeaurora.org>
+Subject: [PATCH v8 1/3] power_supply: Add additional health properties to the header
+Date:   Wed, 20 May 2020 07:20:25 -0500
+Message-ID: <20200520122027.31320-2-dmurphy@ti.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200520122027.31320-1-dmurphy@ti.com>
+References: <20200520122027.31320-1-dmurphy@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -54,31 +56,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
 
-This patchset adds additional health properties to the power_supply header.
-These additional properties are taken from the JEITA specification. This
-patchset also introduces the bq2515x family of charging ICs.
+HEALTH_WARM, HEALTH_COOL, and HEALTH_HOT properties are taken from the JEITA spec.
 
-Dan Murphy (1):
-  power_supply: Add additional health properties to the header
+Signed-off-by: Dan Murphy <dmurphy@ti.com>
 
-Ricardo Rivera-Matos (2):
-  Add the bindings for the bq25150 and bq25155 500mA charging ICs from
-    Texas Instruments.
-  power: supply: bq25150 introduce the bq25150
+Tested-by: Guru Das Srinagesh <gurus@codeaurora.org>
+---
+ Documentation/ABI/testing/sysfs-class-power | 2 +-
+ drivers/power/supply/power_supply_sysfs.c   | 2 +-
+ include/linux/power_supply.h                | 3 +++
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
- Documentation/ABI/testing/sysfs-class-power   |    2 +-
- .../bindings/power/supply/bq2515x.yaml        |  106 ++
- drivers/power/supply/Kconfig                  |   13 +
- drivers/power/supply/Makefile                 |    1 +
- drivers/power/supply/bq2515x_charger.c        | 1159 +++++++++++++++++
- drivers/power/supply/power_supply_sysfs.c     |    2 +-
- include/linux/power_supply.h                  |    3 +
- 7 files changed, 1284 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/power/supply/bq2515x.yaml
- create mode 100644 drivers/power/supply/bq2515x_charger.c
-
+diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+index bf3b48f022dc..9f3fd01a9373 100644
+--- a/Documentation/ABI/testing/sysfs-class-power
++++ b/Documentation/ABI/testing/sysfs-class-power
+@@ -190,7 +190,7 @@ Description:
+ 		Valid values: "Unknown", "Good", "Overheat", "Dead",
+ 			      "Over voltage", "Unspecified failure", "Cold",
+ 			      "Watchdog timer expire", "Safety timer expire",
+-			      "Over current"
++			      "Over current", "Warm", "Cool", "Hot"
+ 
+ What:		/sys/class/power_supply/<supply_name>/precharge_current
+ Date:		June 2017
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index f37ad4eae60b..d0d549611794 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -61,7 +61,7 @@ static const char * const power_supply_charge_type_text[] = {
+ static const char * const power_supply_health_text[] = {
+ 	"Unknown", "Good", "Overheat", "Dead", "Over voltage",
+ 	"Unspecified failure", "Cold", "Watchdog timer expire",
+-	"Safety timer expire", "Over current"
++	"Safety timer expire", "Over current", "Warm", "Cool", "Hot"
+ };
+ 
+ static const char * const power_supply_technology_text[] = {
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index dcd5a71e6c67..8670e90c1d51 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -61,6 +61,9 @@ enum {
+ 	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
+ 	POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE,
+ 	POWER_SUPPLY_HEALTH_OVERCURRENT,
++	POWER_SUPPLY_HEALTH_WARM,
++	POWER_SUPPLY_HEALTH_COOL,
++	POWER_SUPPLY_HEALTH_HOT,
+ };
+ 
+ enum {
 -- 
 2.26.2
 
