@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D6B1DCCD4
-	for <lists+linux-pm@lfdr.de>; Thu, 21 May 2020 14:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380B11DCCD7
+	for <lists+linux-pm@lfdr.de>; Thu, 21 May 2020 14:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729043AbgEUM2v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 May 2020 08:28:51 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:46922 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727983AbgEUM2v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 May 2020 08:28:51 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200521122849euoutp017f9b75089208096f73b8e311f777fc02~RCuamG4_k3003330033euoutp01H
-        for <linux-pm@vger.kernel.org>; Thu, 21 May 2020 12:28:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200521122849euoutp017f9b75089208096f73b8e311f777fc02~RCuamG4_k3003330033euoutp01H
+        id S1728348AbgEUM24 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 May 2020 08:28:56 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:57941 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729197AbgEUM24 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 May 2020 08:28:56 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200521122854euoutp022c44cf626b4b65d4792c0bae7d0c4188~RCuf44xkf0385503855euoutp02p
+        for <linux-pm@vger.kernel.org>; Thu, 21 May 2020 12:28:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200521122854euoutp022c44cf626b4b65d4792c0bae7d0c4188~RCuf44xkf0385503855euoutp02p
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1590064129;
-        bh=vBvGj6yVvqPmrnQJqKFzoHCAcWR8PLLPXDMQj5rAEsg=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=nJWaVzrjUOh1nB2E7nj/LpV+y+KTZsOXDrKNB7FPNwNyDOg0eGhPjohaSG44j21HU
-         HRfhMtUFVNCtAzujt3N1/quciUPlMttMP14te/XiyWqgV8XDrkA8H3CE0AcodQfpgf
-         g4zkG9kileN6GBPr4ebS0PqSsz1dzv5qz5fEGpvo=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200521122848eucas1p2348735369f4dbe70ad1a3a91b0eb796a~RCuaTU06z2596525965eucas1p2a;
-        Thu, 21 May 2020 12:28:48 +0000 (GMT)
+        s=mail20170921; t=1590064134;
+        bh=IZ7CS4NJbb36gBFM7iksoxNTIp+cLNBvatf2Qrqvda0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NnCukAShjdWJnjNlsnxyhKu5xMYA7AcHcYs4gnw44FJSxAXrwhkhpaQqzeJKMjYhp
+         lSZkefUgBpnrN0VxM8JuCkzIuHcwvDbWAMjuXdMoO3m6MzD49qyMOJO/RgLiU8EFB6
+         Sqdn43ayrgt778dWlUl8q7gghVoi04mdgrv0iWJ8=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200521122854eucas1p13d58441e5d3560cf20fc7fd59a0da85e~RCufpeb3u2046020460eucas1p1r;
+        Thu, 21 May 2020 12:28:54 +0000 (GMT)
 Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id D8.E3.61286.00476CE5; Thu, 21
-        May 2020 13:28:48 +0100 (BST)
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id B2.28.60698.60476CE5; Thu, 21
+        May 2020 13:28:54 +0100 (BST)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200521122848eucas1p27ce74486ea2044cb0b942b2619426e21~RCuaCSnFA2363023630eucas1p2-;
-        Thu, 21 May 2020 12:28:48 +0000 (GMT)
+        20200521122854eucas1p2800cc56585f6f18512de270469cde59c~RCufLf5T_2575425754eucas1p2r;
+        Thu, 21 May 2020 12:28:54 +0000 (GMT)
 Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200521122848eusmtrp1459126053d931b29a3e895cac6282a50~RCuaBp_Nh2920829208eusmtrp1O;
-        Thu, 21 May 2020 12:28:48 +0000 (GMT)
-X-AuditID: cbfec7f2-ef1ff7000001ef66-ae-5ec67400d674
+        20200521122854eusmtrp1328491783e256f4b1fd7da9e24066663~RCufK3BiY2920829208eusmtrp1Z;
+        Thu, 21 May 2020 12:28:54 +0000 (GMT)
+X-AuditID: cbfec7f5-a29ff7000001ed1a-19-5ec674061939
 Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id E4.8F.08375.00476CE5; Thu, 21
-        May 2020 13:28:48 +0100 (BST)
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id F7.8F.08375.50476CE5; Thu, 21
+        May 2020 13:28:54 +0100 (BST)
 Received: from AMDC3061.digital.local (unknown [106.120.51.75]) by
         eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200521122848eusmtip23ca13617ce6c491920eb1698e3ac3651~RCuZjEaZP0357403574eusmtip2h;
-        Thu, 21 May 2020 12:28:48 +0000 (GMT)
+        20200521122853eusmtip26a086964120e0b4a5159e31bd4091706~RCuerkCOi1167511675eusmtip2i;
+        Thu, 21 May 2020 12:28:53 +0000 (GMT)
 From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
 To:     georgi.djakov@linaro.org
 Cc:     a.swigon@samsung.com, cw00.choi@samsung.com,
@@ -52,110 +52,113 @@ Cc:     a.swigon@samsung.com, cw00.choi@samsung.com,
         krzk@kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: [PATCH v5 0/3] interconnect: Support Samsung Exynos use-case
-Date:   Thu, 21 May 2020 14:28:38 +0200
-Message-Id: <20200521122841.8867-1-s.nawrocki@samsung.com>
+Subject: [PATCH v5 1/3] interconnect: Export of_icc_get_from_provider()
+Date:   Thu, 21 May 2020 14:28:39 +0200
+Message-Id: <20200521122841.8867-2-s.nawrocki@samsung.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200521122841.8867-1-s.nawrocki@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFKsWRmVeSWpSXmKPExsWy7djPc7oMJcfiDM6sM7S4P6+V0WLjjPWs
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBKsWRmVeSWpSXmKPExsWy7djPc7psJcfiDE5NVrK4P6+V0WLjjPWs
         Fte/PGe1mL53E5vF+fMb2C0u75rDZvG59wijxYzz+5gs1h65y25x+E07qwOXx6ZVnWwed67t
-        YfPo27KK0ePzJrkAligum5TUnMyy1CJ9uwSujJWX3jEV3BKqWNrXxdjA+J2vi5GTQ0LAROL4
-        1QPsXYxcHEICKxgl7k36yAzhfGGU6N1yAcr5zCjxckMfK0zLv4MnoFqWM0rMuLKMEa7l453l
-        bCBVbAKGEr1H+xhBbBEBGYk9TZNYQYqYBZqYJG4u3sACkhAWcJVYuu8bO4jNIqAqce3OVzCb
-        V8BK4sHCW8wQ6+QlVm84wAwRF5Q4OfMJWC8zULx562yw+yQE5rFL7D97GqrBReLk+SVsELaw
-        xKvjW9ghbBmJ05N7WCAamhklenbfZodwJjBK3D++gBGiylrizrlfQN0cQCs0Jdbv0gcxJQQc
-        JZYtUoUw+SRuvBWEuIFPYtK26cwQYV6JjjYhiBkqEr9XTWeCsKUkup/8Z4GwPSQmrX0OtkdI
-        IFbi+O85LBMYFWYh+WwWks9mIZywgJF5FaN4amlxbnpqsWFearlecWJucWleul5yfu4mRmAK
-        Ov3v+KcdjF8vJR1iFOBgVOLhfZB8LE6INbGsuDL3EKMEB7OSCO9C/qNxQrwpiZVVqUX58UWl
-        OanFhxilOViUxHmNF72MFRJITyxJzU5NLUgtgskycXBKNTDWZc076fO1et8e3au6WsYH9qRX
-        Fa1Qtlr8oq/TWKvl0ZvZ7/Y8/+W6I/j1itVfW6OevEgUbci3Lqwu3dvtyv3407/2zsx9VoHf
-        Nk6vsdue8uJwoqTN9cqfagnzipYLeBiqF+xt4chJ6bjVZHs2njfRtPFzWoDaw/PXN0hLmUau
-        8VzUu1TvbKMSS3FGoqEWc1FxIgD5GryePQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCIsWRmVeSWpSXmKPExsVy+t/xe7oMJcfiDOZelbO4P6+V0WLjjPWs
+        YfPo27KK0ePzJrkAligum5TUnMyy1CJ9uwSujCUfZrIVTBKsWHm0gb2B8SZfFyMnh4SAicT5
+        nhNsXYxcHEICKxglNm/sYYFwvjBKfJ18FCrzmVFi5/zljDAtVy58YIRILGeUeH2jlRmuZeW/
+        a+wgVWwChhK9R/vAOkQEZCT2NE1iBSliFmhikri5eAPQEg4OYQF3iW/rokFMFgFViUnLk0DK
+        eQWsJFbu62eBWCYvsXrDAWYQm1PAWmLbsSlMEDWCEidnPgGrYQaqad46G+wGCYFt7BLT/k1k
+        g2h2kVj65y8zhC0s8er4FnYIW0bi9GSIPyUEmhklenbfZodwJjBK3D++AOpPa4k7536xgVzH
+        LKApsX6XPkTYUeJr1y9mkLCEAJ/EjbeCEEfwSUzaNh0qzCvR0SYEUa0i8XvVdCYIW0qi+8l/
+        FogSD4nN/dETGBVnIflmFpJvZiGsXcDIvIpRPLW0ODc9tdg4L7Vcrzgxt7g0L10vOT93EyMw
+        /Zz+d/zrDsZ9f5IOMQpwMCrx8FqkHYsTYk0sK67MPcQowcGsJMK7kP9onBBvSmJlVWpRfnxR
+        aU5q8SFGaQ4WJXFe40UvY4UE0hNLUrNTUwtSi2CyTBycUg2Mfu3NvH6bbb9U3q4wm2K0jWUj
+        81qF7i8sH+ZqlL/2r74ia3NcWzD+n/IxiW6L2G8BZ6aKRV1899Y6Tur1SS/vzVtdD3V4P9UU
+        Foq2E2CzX7Ija9kKzY3utfaNHH3PbWd/Djl9RzvQine2+at91d6PjJa8YOXRPT8xWsndmfv8
+        v9jERzUvdy1RYinOSDTUYi4qTgQAP4H41jsDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsVy+t/xe7psJcfiDFbuYrK4P6+V0WLjjPWs
         Fte/PGe1mL53E5vF+fMb2C0u75rDZvG59wijxYzz+5gs1h65y25x+E07qwOXx6ZVnWwed67t
         YfPo27KK0ePzJrkAlig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMTSz1DY/NYKyNTJX07m5TU
-        nMyy1CJ9uwS9jJWX3jEV3BKqWNrXxdjA+J2vi5GTQ0LAROLfwRPsXYxcHEICSxkltl74B+Rw
-        ACWkJOa3KEHUCEv8udbFBmILCXxilNjzlRvEZhMwlOg92scIYosIyEjsaZrECjKHWaCHSeLM
-        5wXsIAlhAVeJpfu+gdksAqoS1+58BbN5BawkHiy8xQyxQF5i9YYDzBBxQYmTM5+wgNzALKAu
-        sX6eEEiYGaikeets5gmM/LOQVM1CqJqFpGoBI/MqRpHU0uLc9NxiQ73ixNzi0rx0veT83E2M
-        wBjZduzn5h2MlzYGH2IU4GBU4uF9kHwsTog1say4MvcQowQHs5II70L+o3FCvCmJlVWpRfnx
-        RaU5qcWHGE2BXpjILCWanA+M37ySeENTQ3MLS0NzY3NjMwslcd4OgYMxQgLpiSWp2ampBalF
-        MH1MHJxSDYzTb3zpW3798fvErIlxszctNN0hOXGyj/gNgzch5dKiR39t5jy8v6H3uG/CVIUP
-        gpcq1N5/OP33qvWmC8HHu27fdp6oZ9+9UnnF5ljumNkb/0+L3XEmT+Snf99129gLikfWms6R
-        fr/tbvKzNw46F6/fk7vIvTrp6c6eDX3cSb2CfTmL7+cdjpTZoMRSnJFoqMVcVJwIAFD+4fmn
-        AgAA
-X-CMS-MailID: 20200521122848eucas1p27ce74486ea2044cb0b942b2619426e21
+        nMyy1CJ9uwS9jCUfZrIVTBKsWHm0gb2B8SZfFyMnh4SAicSVCx8Yuxi5OIQEljJKtLU+Zepi
+        5ABKSEnMb1GCqBGW+HOtiw2i5hOjxKbdv1lAEmwChhK9R/sYQWwRARmJPU2TWEGKmAV6mCTO
+        fF7ADjJIWMBd4tu6aBCTRUBVYtLyJJByXgEriZX7+lkg5stLrN5wgBnE5hSwlth2bAoTiC0E
+        VHPxwQF2iHpBiZMzn7CAjGEWUJdYP08IJMwM1Nq8dTbzBEbBWUiqZiFUzUJStYCReRWjSGpp
+        cW56brGhXnFibnFpXrpecn7uJkZgRG079nPzDsZLG4MPMQpwMCrx8D5IPhYnxJpYVlyZe4hR
+        goNZSYR3If/ROCHelMTKqtSi/Pii0pzU4kOMpkCfTWSWEk3OB0Z7Xkm8oamhuYWlobmxubGZ
+        hZI4b4fAwRghgfTEktTs1NSC1CKYPiYOTqkGxulblTtOf/yUP92Jb07v3XmhVl/PHDl0nfnd
+        jpdx0k9+pn9snfM0s3b+o24dj9trazPmrXJ7MHtmS8Z/r9uvWXRf66dX5ZWcU9zEkmfwyPee
+        GbNHsnGQ2Km/7SH5wezzdn/fkLgu/biNuXnX9oufZfljfzJFXFp2iXFSgaFvN5Pna23tjAJl
+        TiWW4oxEQy3mouJEAOJEL5O+AgAA
+X-CMS-MailID: 20200521122854eucas1p2800cc56585f6f18512de270469cde59c
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200521122848eucas1p27ce74486ea2044cb0b942b2619426e21
+X-RootMTR: 20200521122854eucas1p2800cc56585f6f18512de270469cde59c
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20200521122848eucas1p27ce74486ea2044cb0b942b2619426e21
-References: <CGME20200521122848eucas1p27ce74486ea2044cb0b942b2619426e21@eucas1p2.samsung.com>
+X-CMS-RootMailID: 20200521122854eucas1p2800cc56585f6f18512de270469cde59c
+References: <20200521122841.8867-1-s.nawrocki@samsung.com>
+        <CGME20200521122854eucas1p2800cc56585f6f18512de270469cde59c@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi All,
+From: Artur Świgoń <a.swigon@samsung.com>
 
-This is a continuation of Artur's efforts to add interconnect and PM QoS
-support for Exynos SoCs. Previous version of the patch set can be found 
-at [1]. The only change comparing to v4 is an addition of missing 'static
-inline' qualifier to the of_icc_get_from_provider() function stub, i.e.
-addresing Georgi's review comments.
+This patch makes the above function public (for use in exynos-bus devfreq
+driver).
 
-The patches have been tested on Odroid U3 (Exynos4412 SoC). 
-
-Below is detailed description of the patch set as in v3.
-
-                              ---------
-Previously posted as a part of a larger RFC [2].
-
-The Exynos SoC family relies on the devfreq driver for frequency
-scaling. However, a means for programmatically enforcing QoS constraints
-(i.e., minimum frequency) for devices is required. A solution which uses 
-the interconnect framework to ensure QoS is currently being developed [2].
-
-The exynos-bus hierarchy is composed of multiple buses which are probed
-separately. Sometimes the DMC is even handled by a different driver.
-Since the exynos-bus driver is generic and supports multiple differing
-bus hierarchies, IDs for nodes (i.e. buses) are assigned dynamically. Due
-to an unspecified relative probing order, every bus registers its own
-interconnect provider.
-
-Rationale for each patch in this series:
-* Patch 01 (exporting of_icc_get_from_provider()) makes it easy to
-  retrieve the parent node from the DT (cf. patch 05 in [2]).
-* Patch 02 (allowing #interconnect-cells = <0>) allows to remove dummy
-  node IDs from the DT.
-* Patch 03 (allowing inter-provider node pairs) is necessary to make
-  such multi-provider hierarchy work. A new approach implemented in v3
-  ensures we will not cause regressions in any existing driver.
-
+Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 ---
-Changes since v3 (to patches in this series):
-* Improve commit messages.
-                              ---------
+ drivers/interconnect/core.c           | 3 ++-
+ include/linux/interconnect-provider.h | 6 ++++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-[1] https://lore.kernel.org/linux-pm/20200116144202.12116-4-a.swigon@samsung.com/T
-[2] https://patchwork.kernel.org/patch/11305287/
-
---
-Regards,
-Sylwester
-
-
-Artur Świgoń (3):
-  interconnect: Export of_icc_get_from_provider()
-  interconnect: Relax requirement in of_icc_get_from_provider()
-  interconnect: Allow inter-provider pairs to be configured
-
- drivers/interconnect/core.c           | 16 ++++++++--------
- include/linux/interconnect-provider.h |  8 ++++++++
- 2 files changed, 16 insertions(+), 8 deletions(-)
-
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index ece2a57..1b51e0c 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -334,7 +334,7 @@ EXPORT_SYMBOL_GPL(of_icc_xlate_onecell);
+  * Returns a valid pointer to struct icc_node on success or ERR_PTR()
+  * on failure.
+  */
+-static struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
++struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
+ {
+ 	struct icc_node *node = ERR_PTR(-EPROBE_DEFER);
+ 	struct icc_provider *provider;
+@@ -353,6 +353,7 @@ static struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
+ 
+ 	return node;
+ }
++EXPORT_SYMBOL_GPL(of_icc_get_from_provider);
+ 
+ static void devm_icc_release(struct device *dev, void *res)
+ {
+diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
+index 0c49453..c92be2a 100644
+--- a/include/linux/interconnect-provider.h
++++ b/include/linux/interconnect-provider.h
+@@ -103,6 +103,7 @@ void icc_node_del(struct icc_node *node);
+ int icc_nodes_remove(struct icc_provider *provider);
+ int icc_provider_add(struct icc_provider *provider);
+ int icc_provider_del(struct icc_provider *provider);
++struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec);
+ 
+ #else
+ 
+@@ -154,6 +155,11 @@ static inline int icc_provider_del(struct icc_provider *provider)
+ 	return -ENOTSUPP;
+ }
+ 
++static inline struct icc_node *of_icc_get_from_provider(struct of_phandle_args *spec)
++{
++	return ERR_PTR(-ENOTSUPP);
++}
++
+ #endif /* CONFIG_INTERCONNECT */
+ 
+ #endif /* __LINUX_INTERCONNECT_PROVIDER_H */
 -- 
 2.7.4
 
