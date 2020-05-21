@@ -2,45 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A541DD6C9
-	for <lists+linux-pm@lfdr.de>; Thu, 21 May 2020 21:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367911DDA33
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 00:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729856AbgEUTLg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 May 2020 15:11:36 -0400
-Received: from mga11.intel.com ([192.55.52.93]:19619 "EHLO mga11.intel.com"
+        id S1730621AbgEUW0Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 May 2020 18:26:16 -0400
+Received: from mga02.intel.com ([134.134.136.20]:2767 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729600AbgEUTLf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 21 May 2020 15:11:35 -0400
-IronPort-SDR: maLjh0r2EZlqqjIjIriJ+oUX0H682Zgx+FEfV0VdNBzwLC2/lZJVfzHqRt9vPJyup9FaQ6tyac
- DKBZaHMydaLA==
+        id S1730381AbgEUW0P (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 21 May 2020 18:26:15 -0400
+IronPort-SDR: mXppxR+o1pIIF+7uwP2cZyoXkhot2UJfE3eadQdON8bIbImSVUSrfLQkdWKYf+/qbo7wF5Mlhg
+ waOpF5GUBxUg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 12:11:34 -0700
-IronPort-SDR: M2uM81xHsIDBAngYqcyS5CezqP/4gMRRL2Po6CAnz7jzgwtwBnjoEFPQVngT9UVeUmAteoNyei
- xWkHjXDaLfcw==
-X-IronPort-AV: E=Sophos;i="5.73,418,1583222400"; 
-   d="scan'208";a="309143304"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 15:26:15 -0700
+IronPort-SDR: 2mTeLmnU3/Kfnrn+4Xc/jiPTqnzmxEh1PYS/rDfrOfCo2vLWZaQXAdXO/hlBAk8F/jwtO1er++
+ ltPXcl6+M1Jg==
+X-IronPort-AV: E=Sophos;i="5.73,419,1583222400"; 
+   d="scan'208";a="255431509"
 Received: from spandruv-mobl.amr.corp.intel.com ([10.254.97.114])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 12:11:24 -0700
-Message-ID: <8f8731690b52266cf87050844e34af93349b54df.camel@linux.intel.com>
-Subject: Re: [RFC][PATCH 3/5] thermal: Add support for setting notification
- thresholds
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 15:26:13 -0700
+Message-ID: <939d1f9031fc4be6c0a8745938322d2722d977f1.camel@linux.intel.com>
+Subject: Re: [RFC][PATCH 4/5] thermal: Add support for setting polling
+ interval
 From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Amit Kucheria <amit.kucheria@verdurent.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Date:   Thu, 21 May 2020 12:11:12 -0700
-In-Reply-To: <CAHLCerOsZrrZYcRLH+iZFT9FPL8zfmy2Y-Py6f61YXUrMrkcbg@mail.gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date:   Thu, 21 May 2020 15:26:11 -0700
+In-Reply-To: <3898cf1a-8e4c-def4-73f7-9ef4954e88b8@linaro.org>
 References: <20200504181616.175477-1-srinivas.pandruvada@linux.intel.com>
-         <20200504181616.175477-4-srinivas.pandruvada@linux.intel.com>
-         <a9af415d-9fd0-dcea-79ee-0fb90f45045e@linaro.org>
-         <2cd6c73b890b3eab12420adf4ae29101672e6a0b.camel@linux.intel.com>
-         <CAHLCerMfnHPuJnj6G4EvRPvODf1_Se4xM-OobA1o7eao5eetzg@mail.gmail.com>
-         <703fcf3b2b6769f5e469f0b035846ee95193ef7d.camel@linux.intel.com>
-         <CAHLCerOsZrrZYcRLH+iZFT9FPL8zfmy2Y-Py6f61YXUrMrkcbg@mail.gmail.com>
+         <20200504181616.175477-5-srinivas.pandruvada@linux.intel.com>
+         <c2aad548-32c2-f008-5ce4-97b76a19271d@linaro.org>
+         <b74767964b028c297840aefc166e2384333afd3b.camel@linux.intel.com>
+         <3898cf1a-8e4c-def4-73f7-9ef4954e88b8@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
@@ -50,111 +46,152 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Amit,
-
-On Thu, 2020-05-21 at 10:41 +0530, Amit Kucheria wrote:
-> Hi Srinivas,
-> 
-> On Wed, May 20, 2020 at 11:46 PM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> > On Wed, 2020-05-20 at 09:58 +0530, Amit Kucheria wrote:
-> > > On Tue, May 19, 2020 at 5:10 AM Srinivas Pandruvada
-> > > <srinivas.pandruvada@linux.intel.com> wrote:
-> > > > On Mon, 2020-05-18 at 18:37 +0200, Daniel Lezcano wrote:
-> > > > > On 04/05/2020 20:16, Srinivas Pandruvada wrote:
-> > > > > > Add new attributes in thermal syfs when a thermal drivers
-> > > > > > provides
-> > > > > > callbacks for them and CONFIG_THERMAL_USER_EVENT_INTERFACE
-> > > > > > is
-> > > > > > defined.
-> > > > > > 
-> > > > > > These attribute allow user space to stop polling for
-> > > > > > temperature.
-> > > > > > 
-> > > > > > These attributes are:
-> > > > > > - temp_thres_low: Specify a notification temperature for a
-> > > > > > low
-> > > > > > temperature threshold event.
-> > > > > > temp_thres_high: Specify a notification temperature for a
-> > > > > > high
-> > > > > > temperature threshold event.
-> > > > > > temp_thres_hyst: Specify a change in temperature to send
-> > > > > > notification
-> > > > > > again.
-> > > > > > 
-> > > > > > This is implemented by adding additional sysfs attribute
-> > > > > > group.
-> > > > > > The
-> > > > > > changes in this patch are trivial to add new attributes in
-> > > > > > thermal
-> > > > > > sysfs as done for other attributes.
-> > > > > 
-> > > > > Isn't it duplicate with the trip point?
-> > > > A trip point is where an in-kernel governor takes some action.
-> > > > This
-> > > > is
-> > > > not same as a notification temperature. For example at trip
-> > > > point
-> > > > configured by ACPI at 85C, the thermal governor may start
-> > > > aggressive
-> > > > throttling.
-> > > > But a user space can set a notification threshold at 80C and
-> > > > start
-> > > > some
-> > > > active controls like activate some fan to reduce the impact of
-> > > > passive
-> > > > control on performance.
+On Tue, 2020-05-19 at 12:25 +0200, Daniel Lezcano wrote:
+> On 19/05/2020 01:46, Srinivas Pandruvada wrote:
+> > On Mon, 2020-05-18 at 18:51 +0200, Daniel Lezcano wrote:
+> > > On 04/05/2020 20:16, Srinivas Pandruvada wrote:
+> > > > Add new attribute in the thermal syfs for setting temperature
+> > > > sampling
+> > > > interval when CONFIG_THERMAL_USER_EVENT_INTERFACE is defined.
+> > > > The
+> > > > default
+> > > > value is 0, which means no polling.
+> > > > 
+> > > > At this interval user space will get an event
+> > > > THERMAL_TEMP_SAMPLE
+> > > > with
+> > > > temperature sample. This reuses existing polling mecahnism when
+> > > > polling
+> > > > or passive delay is specified during zone registry. To avoid
+> > > > interference
+> > > > with passive and polling delay, this new polling attribute
+> > > > can't be
+> > > > used
+> > > > for those zones.
 > > > 
-> > > Then what is the use of thermal trip type "ACTIVE" ?
-> > This is an example.
-> > The defaults are set by the OEMs via ACPI. User can't modify that
-> > if
-> > they want to optimize for their usage on Linux. There are fan
-> > control
-> > daemon's which user use on top.
+> > > The userspace can get the temperature whenever it wants via the
+> > > temperature file. The polling is designed for a specific hardware
+> > > and
+> > > the slope of the temperature graphic.
+> > > 
+> > > The userspace has the alternative of reading the temperature
+> > > based on
+> > > its own timer or wait for (and stick to) the thermal framework
+> > > sampling
+> > > rate. Adding a notification in the update is enough IMO.
+> > > 
+> > The problem with this approach is that the user can't change
+> > sampling
+> > interval. Those polling intervals are fixed during thermal-zone
+> > register. Is there any way to change those defaults from user
+> > space?
 > 
-> -ENOPARSE. Are you saying users "can" modify these?
+> No, we can't but the userspace can decide when to read the
+> temperature
+> (via sysfs or netlink) and thus decide its own sampling rate.
 
-Most of the x86 laptops will not have an active trip as the fan control
-is done by embedded controller. This is a safety and regulatory issue.
-Even when you have an active trip it will be read only and also ACPI
-fan cooling device will have few fix states to control.
+Yes, if we poll for temperature from user space, no change is required
+neighter netlink nor kfifo.
 
-There are fine grain controls on top are available outside of thermal
-drivers via hwmon or others.
-https://wiki.archlinux.org/index.php/Fan_speed_control#ThinkPad_laptops
+The average time to read CPU temperature and convert to int from sysfs
+takes 45us vs 7us for push via Kfifo. I haven't looked at your patches
+and checked this time. If it is comparable then netlink is better.
 
-Like in thermald we have XML config, which can be used to set different
-speed levels at different temperatures. Instead of polling of
-temperature, these attributes allow notification of temperature
-threshold. We currently mimic this behavior via adding a RW passive
-trip (The RW passive trips has a well defined usage different than what
-we are using for).
-There can be already existing RO passive/active trips in that zone
-already bound to some cooling device. So from user space we search for
-some RW passive trip and hope this is will give notifications. This I
-believe is a hack to use a fake trip point for notifications for
-temperature thresholds.
+
+> 
+> Otherwise, we are talking about an userspace governor, so the
+> platform
+> is setup with the desired sampling rate + userspace governor.
+> 
+> > Kernel can start with some long polling interval and user space can
+> > change close to some trip.
+> 
+> Ok, let me rephrase it. This (big) comment encompass also patch 3/5.
+> 
+> I understood now the initial need of adding user trip points.
+> 
+> There are platforms where the interrupt mode does not exist so
+> setting
+> an user trip point does not set the interrupt for the closer
+> temperature, hence we end up with a kernel sampling rate and in this
+> case adding a trip point + new user sampling rate is pointless as the
+> userspace can poll the temperature at its convenient rate.
+> 
+> If we summarize the different combinations we have:
+> 
+> 1. monitoring : interrupt mode, mitigation : interrupt mode
+> 
+> There are no thermal zone update until an interrupt fires. The
+> mitigation is based on trip point crossed.
+
+Yes. Basically daemon sleeps, till it gets a netlink notification
+currently.
+
+> 
+> 2. monitoring : interrupt mode, mitigation : polling
+> 
+> There are no thermal zone update until an interrupt fires. The
+> mitigation happens with a sampling rate specified with the polling
+> rate.
+> 
+More complex than this. interrupt fires but it will fire flood for any
+change (+/- around threshold) so after the first trigger, just disable
+interrupt for an interval and start polling from user space as this is
+more efficient.
+
+> 3. monitoring : polling, mitigation : polling
+> 
+> The thermal zone is updated at the polling rate, the mitigation
+> occurs
+> with an update at the second polling rate.
+> 
+Yes.
+
+> IIUC, the RFC proposes to add a new type of temperature threshold,
+> followed a new polling rate to update the userspace.
+> 
+> IMHO, it is not a good thing to delegate to the kernel what the
+> userspace can handle easily.
+> 
+> I suggest:
+> 
+>  - Not add another polling rate. If the thermal zone has a polling
+> rate
+> or supports the interrupt mode, then the user trip point setup
+> succeed
+> otherwise it fails and up to the userspace to read the temperature at
+> its convenient rate. (Note multiple process may want to get
+> temperature,
+> so one should not set the rate of others).
+
+Fine.
+
+> 
+>  - Not add another temp threshold structure but add a new trip type
+> "user" and keep using the existing trip structures, so the
+> notification
+> can happen in the handle_trip_point function. The sysfs only reflects
+> the setup via the "trip_point_x_hyst", "trip_point_0_temp",
+> "trip_point_x_type"
+
+Fine. It is better than what we re-purpose a passive trip currently.
+
+> 
+>  - Do not use sysfs for setup but rely on the genetlink for one
+> message
+> setup instead of multiple sysfs file writing. Adding a trip point
+> will
+
+Fine.
+
+> 
+> 
+> What do you think?
+Looks good.
 
 Thanks,
 Srinivas
 
-
 > 
-> In any case, how is what you described earlier not possible with an
-> ACTIVE trip point directly wired to the fan as a cooling device or
-> with a HOT trip point that causes the platform driver to send
-> notification to userspace where a fan control daemon can do what it
-> needs to?
 > 
-> Basically, I think the issue of polling is orthogonal to the
-> introduction of the new attributes introduced in this patch and I
-> don't understand the reason for these attributes from your commit
-> description.
-> 
-> > > > We need a way to distinguish between temperature notification
-> > > > threshold
-> > > > and actual trip point. Changing a trip point means that user
-> > > > wants
-> > > > kernel to throttle at temperature.
 
