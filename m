@@ -2,133 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 714A51DD49A
-	for <lists+linux-pm@lfdr.de>; Thu, 21 May 2020 19:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A541DD6C9
+	for <lists+linux-pm@lfdr.de>; Thu, 21 May 2020 21:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728022AbgEURle (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 May 2020 13:41:34 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:42724 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726821AbgEURle (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 May 2020 13:41:34 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04LHbUjp196368;
-        Thu, 21 May 2020 17:41:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=gA43wCjQqcJxoz3k/kU6IZwsYpzQYq2m+PwRQ/B3VuI=;
- b=KXrFiR/REHrzSvFv/SIXpsQFfN3guFg4aqUUlyaEwJhRMZIaeY41DOT6xi2xWZn1VgLH
- DOUvuKNnw+mcyEfDfOLg8Bf+knoOCwah2Mh47Q/mAmskorEFJ6kS+2vysisdbD5TNWUW
- MA0+YBpTVhUSTet98TijOcTX9S7qH7oj5XKjgFl3KDmcZIowc+7RNabKIIzXbDZR3H6T
- JpVH3whqOTuGKzGCFLlrzwMfjuUq/q6oYMtVVPN9R1Iy8lEDIQ1K+iuBacIXG799P1ic
- gKds2Z/KQwLMd4ajPFxq1AvbrJ0WExNDzVKZ6DR6MxrqVsPUi3MvXt7b8+SrCGrxcain WA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 31501rgby4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 21 May 2020 17:41:19 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04LHdFtJ105995;
-        Thu, 21 May 2020 17:39:18 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 315022uevc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 May 2020 17:39:18 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04LHdBli014341;
-        Thu, 21 May 2020 17:39:11 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 21 May 2020 10:39:10 -0700
-Date:   Thu, 21 May 2020 20:39:02 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     dinghao.liu@zju.edu.cn, devel@driverdev.osuosl.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>, Kangjie Lu <kjlu@umn.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: Re: [PATCH] media: staging: tegra-vde: fix runtime pm imbalance
- on error
-Message-ID: <20200521173901.GA22310@kadam>
-References: <20200520095148.10995-1-dinghao.liu@zju.edu.cn>
- <2b5d64f5-825f-c081-5d03-02655c2d9491@gmail.com>
- <20200520150230.GC30374@kadam>
- <2a46539d.b977f.1723553aa81.Coremail.dinghao.liu@zju.edu.cn>
- <20200521091505.GF30374@kadam>
- <CAJZ5v0irLayBUPRWNT1tcZivz9inS1YbUgGj5WXvucLKKwRQAw@mail.gmail.com>
+        id S1729856AbgEUTLg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 May 2020 15:11:36 -0400
+Received: from mga11.intel.com ([192.55.52.93]:19619 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729600AbgEUTLf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 21 May 2020 15:11:35 -0400
+IronPort-SDR: maLjh0r2EZlqqjIjIriJ+oUX0H682Zgx+FEfV0VdNBzwLC2/lZJVfzHqRt9vPJyup9FaQ6tyac
+ DKBZaHMydaLA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 12:11:34 -0700
+IronPort-SDR: M2uM81xHsIDBAngYqcyS5CezqP/4gMRRL2Po6CAnz7jzgwtwBnjoEFPQVngT9UVeUmAteoNyei
+ xWkHjXDaLfcw==
+X-IronPort-AV: E=Sophos;i="5.73,418,1583222400"; 
+   d="scan'208";a="309143304"
+Received: from spandruv-mobl.amr.corp.intel.com ([10.254.97.114])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2020 12:11:24 -0700
+Message-ID: <8f8731690b52266cf87050844e34af93349b54df.camel@linux.intel.com>
+Subject: Re: [RFC][PATCH 3/5] thermal: Add support for setting notification
+ thresholds
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Amit Kucheria <amit.kucheria@verdurent.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Date:   Thu, 21 May 2020 12:11:12 -0700
+In-Reply-To: <CAHLCerOsZrrZYcRLH+iZFT9FPL8zfmy2Y-Py6f61YXUrMrkcbg@mail.gmail.com>
+References: <20200504181616.175477-1-srinivas.pandruvada@linux.intel.com>
+         <20200504181616.175477-4-srinivas.pandruvada@linux.intel.com>
+         <a9af415d-9fd0-dcea-79ee-0fb90f45045e@linaro.org>
+         <2cd6c73b890b3eab12420adf4ae29101672e6a0b.camel@linux.intel.com>
+         <CAHLCerMfnHPuJnj6G4EvRPvODf1_Se4xM-OobA1o7eao5eetzg@mail.gmail.com>
+         <703fcf3b2b6769f5e469f0b035846ee95193ef7d.camel@linux.intel.com>
+         <CAHLCerOsZrrZYcRLH+iZFT9FPL8zfmy2Y-Py6f61YXUrMrkcbg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0irLayBUPRWNT1tcZivz9inS1YbUgGj5WXvucLKKwRQAw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 bulkscore=0 suspectscore=18 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005210127
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 spamscore=0
- mlxlogscore=999 clxscore=1011 priorityscore=1501 cotscore=-2147483648
- impostorscore=0 bulkscore=0 adultscore=0 malwarescore=0 phishscore=0
- mlxscore=0 suspectscore=18 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2005210127
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 21, 2020 at 05:22:05PM +0200, Rafael J. Wysocki wrote:
-> On Thu, May 21, 2020 at 11:15 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> >
-> > On Thu, May 21, 2020 at 11:42:55AM +0800, dinghao.liu@zju.edu.cn wrote:
-> > > Hi, Dan,
-> > >
-> > > I agree the best solution is to fix __pm_runtime_resume(). But there are also
-> > > many cases that assume pm_runtime_get_sync() will change PM usage
-> > > counter on error. According to my static analysis results, the number of these
-> > > "right" cases are larger. Adjusting __pm_runtime_resume() directly will introduce
-> > > more new bugs. Therefore I think we should resolve the "bug" cases individually.
-> > >
-> >
-> > That's why I was saying that we may need to introduce a new replacement
-> > function for pm_runtime_get_sync() that works as expected.
-> >
-> > There is no reason why we have to live with the old behavior.
+Hi Amit,
+
+On Thu, 2020-05-21 at 10:41 +0530, Amit Kucheria wrote:
+> Hi Srinivas,
 > 
-> What exactly do you mean by "the old behavior"?
+> On Wed, May 20, 2020 at 11:46 PM Srinivas Pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> > On Wed, 2020-05-20 at 09:58 +0530, Amit Kucheria wrote:
+> > > On Tue, May 19, 2020 at 5:10 AM Srinivas Pandruvada
+> > > <srinivas.pandruvada@linux.intel.com> wrote:
+> > > > On Mon, 2020-05-18 at 18:37 +0200, Daniel Lezcano wrote:
+> > > > > On 04/05/2020 20:16, Srinivas Pandruvada wrote:
+> > > > > > Add new attributes in thermal syfs when a thermal drivers
+> > > > > > provides
+> > > > > > callbacks for them and CONFIG_THERMAL_USER_EVENT_INTERFACE
+> > > > > > is
+> > > > > > defined.
+> > > > > > 
+> > > > > > These attribute allow user space to stop polling for
+> > > > > > temperature.
+> > > > > > 
+> > > > > > These attributes are:
+> > > > > > - temp_thres_low: Specify a notification temperature for a
+> > > > > > low
+> > > > > > temperature threshold event.
+> > > > > > temp_thres_high: Specify a notification temperature for a
+> > > > > > high
+> > > > > > temperature threshold event.
+> > > > > > temp_thres_hyst: Specify a change in temperature to send
+> > > > > > notification
+> > > > > > again.
+> > > > > > 
+> > > > > > This is implemented by adding additional sysfs attribute
+> > > > > > group.
+> > > > > > The
+> > > > > > changes in this patch are trivial to add new attributes in
+> > > > > > thermal
+> > > > > > sysfs as done for other attributes.
+> > > > > 
+> > > > > Isn't it duplicate with the trip point?
+> > > > A trip point is where an in-kernel governor takes some action.
+> > > > This
+> > > > is
+> > > > not same as a notification temperature. For example at trip
+> > > > point
+> > > > configured by ACPI at 85C, the thermal governor may start
+> > > > aggressive
+> > > > throttling.
+> > > > But a user space can set a notification threshold at 80C and
+> > > > start
+> > > > some
+> > > > active controls like activate some fan to reduce the impact of
+> > > > passive
+> > > > control on performance.
+> > > 
+> > > Then what is the use of thermal trip type "ACTIVE" ?
+> > This is an example.
+> > The defaults are set by the OEMs via ACPI. User can't modify that
+> > if
+> > they want to optimize for their usage on Linux. There are fan
+> > control
+> > daemon's which user use on top.
+> 
+> -ENOPARSE. Are you saying users "can" modify these?
 
-I'm suggesting we leave pm_runtime_get_sync() alone but we add a new
-function which called pm_runtime_get_sync_resume() which does something
-like this:
+Most of the x86 laptops will not have an active trip as the fan control
+is done by embedded controller. This is a safety and regulatory issue.
+Even when you have an active trip it will be read only and also ACPI
+fan cooling device will have few fix states to control.
 
-static inline int pm_runtime_get_sync_resume(struct device *dev)
-{
-	int ret;
+There are fine grain controls on top are available outside of thermal
+drivers via hwmon or others.
+https://wiki.archlinux.org/index.php/Fan_speed_control#ThinkPad_laptops
 
-	ret = __pm_runtime_resume(dev, RPM_GET_PUT);
-	if (ret < 0) {
-		pm_runtime_put(dev);
-		return ret;
-	}
-	return 0;
-}
+Like in thermald we have XML config, which can be used to set different
+speed levels at different temperatures. Instead of polling of
+temperature, these attributes allow notification of temperature
+threshold. We currently mimic this behavior via adding a RW passive
+trip (The RW passive trips has a well defined usage different than what
+we are using for).
+There can be already existing RO passive/active trips in that zone
+already bound to some cooling device. So from user space we search for
+some RW passive trip and hope this is will give notifications. This I
+believe is a hack to use a fake trip point for notifications for
+temperature thresholds.
 
-I'm not sure if pm_runtime_put() is the correct thing to do?  The other
-thing is that this always returns zero on success.  I don't know that
-drivers ever care to differentiate between one and zero returns.
+Thanks,
+Srinivas
 
-Then if any of the caller expect that behavior we update them to use the
-new function.
 
-regards,
-dan carpenter
+> 
+> In any case, how is what you described earlier not possible with an
+> ACTIVE trip point directly wired to the fan as a cooling device or
+> with a HOT trip point that causes the platform driver to send
+> notification to userspace where a fan control daemon can do what it
+> needs to?
+> 
+> Basically, I think the issue of polling is orthogonal to the
+> introduction of the new attributes introduced in this patch and I
+> don't understand the reason for these attributes from your commit
+> description.
+> 
+> > > > We need a way to distinguish between temperature notification
+> > > > threshold
+> > > > and actual trip point. Changing a trip point means that user
+> > > > wants
+> > > > kernel to throttle at temperature.
 
