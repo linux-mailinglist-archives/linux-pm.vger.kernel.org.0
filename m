@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 866101DC7F0
-	for <lists+linux-pm@lfdr.de>; Thu, 21 May 2020 09:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1D41DC852
+	for <lists+linux-pm@lfdr.de>; Thu, 21 May 2020 10:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728480AbgEUHrX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 May 2020 03:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
+        id S1728558AbgEUIQV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 May 2020 04:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728472AbgEUHrX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 May 2020 03:47:23 -0400
+        with ESMTP id S1727122AbgEUIQS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 May 2020 04:16:18 -0400
 Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE46C08C5C0
-        for <linux-pm@vger.kernel.org>; Thu, 21 May 2020 00:47:22 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id r3so3779368wrn.11
-        for <linux-pm@vger.kernel.org>; Thu, 21 May 2020 00:47:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62911C05BD43
+        for <linux-pm@vger.kernel.org>; Thu, 21 May 2020 01:16:17 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id l18so5764996wrn.6
+        for <linux-pm@vger.kernel.org>; Thu, 21 May 2020 01:16:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=scVYFjBGBAzKQ/hMy8PhK3pElGqsrP2y83QVfuiAxH4=;
-        b=vqpwnjz86M45u3Gnp4IxKufT5KEo7fxf+vl36qzM3nHslyhDCEJIEgQAXKyrOkPOzr
-         sxkJdaadCkojgsCryJFV/NsqAGAwrjmBPRNvm9KBnA7Rh2O1j/zY5DwTpPhcFG/rXfkM
-         6S23fM0SLLJ7TiHNbL0XWiLK7+upJ5+t62Ye2cO2Wkc0mHW9D9DAJ/WC/rz68M4FmrLX
-         k27QqVbp3qP4CmlFWSn5xCNh4GWwvUfMdUElIrpD+rHd5Pa/4AMCOHm/zmAtjuENvG0C
-         TUv6XE2S4gfjQ9slqcNHl1ztwdytcQWprTsMRJNpfjLkzetO4LLbY5K/5RpxkGAy8lfS
-         nK7Q==
+        bh=KPDqb+DCYxxpSLeq6U5D/jKybkhAzjGZ8QLA5YedgMg=;
+        b=fGuo2D4qqxs0LddmHxyYtVQK3DJjuNDPbTrhoeOfUGD4FH/OI2BX/z8FrTVVetWfeL
+         yxSdMCpaMuE0CT59NPSdKGWvlF/wEwwbQIo/ENQXqs6MPPqzlC/hfUJ3ybypKqgN2S5M
+         o/mvlR8mPiBPU+NJuQj2pwYDEzhalaTyOIGNdYlQJhhErXNjxuG9Jr41mL5qO2wLTlAk
+         8jKD8MUO2AnEnULwDQ+r5sELmzj3LIdAlcvGtV/Ye4p5M8rstCcL499Gc/SDCczcfnCn
+         U27GrGfii48SZIS+mbiHKcAl19InSZu9c9q8PSO1K6Rmk6MnZfOSiC2DrSOTeJm/M082
+         QFKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=scVYFjBGBAzKQ/hMy8PhK3pElGqsrP2y83QVfuiAxH4=;
-        b=PVHKO+S8Aw81osrXIAUAY5B4VOGakrTqPgXk2T4qSt/qz5nnW6C2FZrm5m0Itk2WMP
-         4sbl/gbb78rNLr7Cs8yHQeI4wCKxb5VhOCBNbOCMSd3CiEEF1ossoNPTYpRp6XOGCHKc
-         UA5bcdvHI9C5KQmiAV5fr8Vx0Z72wge+unc8JmeZosge7+qqLSIkppJqWx08TPlHieuP
-         b1dqjlmfAI1aUUaoUXaJ8Q27ubMEqi3kTqtQfgvUgho3YgOufToOnabMoOL7TFtAxkPw
-         v6yYSH1kICaEtHeu9pBV2SDupg5XI1Jm7258sG9sabramnUelIJuDacLCUpuKpZwVrp5
-         PqGg==
-X-Gm-Message-State: AOAM5316/UfIAVYiLJXZijGYEonekfLz7a0jdQYs+I0gZS1JXEzlVQWb
-        GWgk5HHcu5kJ1Aze5ekvW2YQWw==
-X-Google-Smtp-Source: ABdhPJxcZ6ZWteBLNFuVjrXs9CMtGph22AZeEwlyAM3AdFye7vHS83vjlNDUgEYM0NT1woW4CXf4Zg==
-X-Received: by 2002:adf:9010:: with SMTP id h16mr7329094wrh.412.1590047241123;
-        Thu, 21 May 2020 00:47:21 -0700 (PDT)
+        bh=KPDqb+DCYxxpSLeq6U5D/jKybkhAzjGZ8QLA5YedgMg=;
+        b=PJgu2ysLnL+x74ImgyH4pYnSlldh8Gzfdj/slbNit/nH9YYkm/RwseSbtufx7oJAgx
+         brEisy6LL4Z9+71PCGt3ePLrRvZZSfPeX+pVjFcEA4qGoR34znO1yyjQvXAYO9JkNt1G
+         +IhEaJervWznIBFrru2wXFd7on+ZpX1VJ596wMWIOFfR2FWF9jZZKUI3xJvxdznkkrZS
+         PTZddDfuCZsWcNEODKGink9YVK6SVBZY8leB8iMqlxvE7NfY9OzkLtyJpGe+7hmcYR2f
+         1KqkTFsOArV7B7JgAzhQaF6gnpGrXR8dBfzVcyEP6uKTHq9QpqW0T7fflhYAZFLlpLc1
+         1T2g==
+X-Gm-Message-State: AOAM5316fK2pJ7V3wTOhzkTzSmmKTPiKKmxFXCTFM72kWsEW7clESuhJ
+        k8IVfj60jUS3DGjR4rsidTGcXQ==
+X-Google-Smtp-Source: ABdhPJxUykPWBMpDxCLK97UyXMlHnRBvfRJh1k/pbvLfDpfppBXa1QMSqiirA7kcWucM6FnWvj4LJA==
+X-Received: by 2002:adf:dcc8:: with SMTP id x8mr7439168wrm.404.1590048975850;
+        Thu, 21 May 2020 01:16:15 -0700 (PDT)
 Received: from dell ([95.149.164.102])
-        by smtp.gmail.com with ESMTPSA id h20sm5542798wma.6.2020.05.21.00.47.19
+        by smtp.gmail.com with ESMTPSA id j190sm5848242wmb.33.2020.05.21.01.16.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2020 00:47:20 -0700 (PDT)
-Date:   Thu, 21 May 2020 08:47:18 +0100
+        Thu, 21 May 2020 01:16:15 -0700 (PDT)
+Date:   Thu, 21 May 2020 09:16:12 +0100
 From:   Lee Jones <lee.jones@linaro.org>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         drinkcat@chromium.org, Sean Wang <sean.wang@mediatek.com>,
         Sebastian Reichel <sre@kernel.org>,
@@ -67,49 +67,62 @@ Cc:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
         srv_heupstream@mediatek.com
-Subject: Re: [PATCH v13 5/6] rtc: mt6397: Add support for the MediaTek MT6358
- RTC
-Message-ID: <20200521074718.GN271301@dell>
+Subject: [GIT PULL] Immutable branch between MFD, Power and RTC due for the
+ v5.8 merge window
+Message-ID: <20200521081612.GO271301@dell>
 References: <1587438012-24832-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1587438012-24832-6-git-send-email-hsin-hsiung.wang@mediatek.com>
- <27c107b3-6ea8-e6f9-697c-7c3c4479008c@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <27c107b3-6ea8-e6f9-697c-7c3c4479008c@gmail.com>
+In-Reply-To: <1587438012-24832-1-git-send-email-hsin-hsiung.wang@mediatek.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 16 May 2020, Matthias Brugger wrote:
+Enjoy!
 
-> Hi Lee,
-> 
-> On 21/04/2020 05:00, Hsin-Hsiung Wang wrote:
-> > From: Ran Bi <ran.bi@mediatek.com>
-> > 
-> > This add support for the MediaTek MT6358 RTC. Driver using
-> > compatible data to store different RTC_WRTGR address offset.
-> > This replace RTC_WRTGR to RTC_WRTGR_MT6323 in mt6323-poweroff
-> > driver which only needed by armv7 CPU without ATF.
-> > 
-> > Signed-off-by: Ran Bi <ran.bi@mediatek.com>
-> > Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-> > Reviewed-by: Nicolas Boichat <drinkcat@chromium.org>
-> > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Acked-by: Sebastian Reichel <sre@kernel.org>
-> > Reviewed-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
-> 
-> We have Acked-by from rtc and reset drivers maintainers. Are you OK to take them
-> through your mfd branch?
-> 
-> Are you planning to queue them for v5.8?
-> 
-> Just asking because if so I'd queue patch 6 through my tree.
+The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
 
-Yes, please take patch 6.
+  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-power-rtc-v5.8
+
+for you to fetch changes up to 29ee40091e27615530c0ba7773a2879d8266381e:
+
+  rtc: mt6397: Add support for the MediaTek MT6358 RTC (2020-05-21 08:55:48 +0100)
+
+----------------------------------------------------------------
+Immutable branch between MFD, Power and RTC due for the v5.8 merge window
+
+----------------------------------------------------------------
+Hsin-Hsiung Wang (4):
+      mfd: mt6397: Modify suspend/resume behavior
+      mfd: mt6397: Trim probe function to support different chips more cleanly
+      dt-bindings: mfd: Add compatible for the MediaTek MT6358 PMIC
+      mfd: Add support for the MediaTek MT6358 PMIC
+
+Ran Bi (1):
+      rtc: mt6397: Add support for the MediaTek MT6358 RTC
+
+ Documentation/devicetree/bindings/mfd/mt6397.txt |  14 +-
+ drivers/mfd/Makefile                             |   2 +-
+ drivers/mfd/mt6358-irq.c                         | 235 +++++++++++++++++++
+ drivers/mfd/mt6397-core.c                        | 101 ++++----
+ drivers/mfd/mt6397-irq.c                         |  35 ++-
+ drivers/power/reset/mt6323-poweroff.c            |   2 +-
+ drivers/rtc/rtc-mt6397.c                         |  18 +-
+ include/linux/mfd/mt6358/core.h                  | 158 +++++++++++++
+ include/linux/mfd/mt6358/registers.h             | 282 +++++++++++++++++++++++
+ include/linux/mfd/mt6397/core.h                  |   5 +
+ include/linux/mfd/mt6397/rtc.h                   |   9 +-
+ 11 files changed, 799 insertions(+), 62 deletions(-)
+ create mode 100644 drivers/mfd/mt6358-irq.c
+ create mode 100644 include/linux/mfd/mt6358/core.h
+ create mode 100644 include/linux/mfd/mt6358/registers.h
 
 -- 
 Lee Jones [李琼斯]
