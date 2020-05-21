@@ -2,194 +2,456 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B45CB1DCA4C
-	for <lists+linux-pm@lfdr.de>; Thu, 21 May 2020 11:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633A81DCBA8
+	for <lists+linux-pm@lfdr.de>; Thu, 21 May 2020 13:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728879AbgEUJiu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 May 2020 05:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728719AbgEUJit (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 May 2020 05:38:49 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3D0C061A0E;
-        Thu, 21 May 2020 02:38:49 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id x14so620709wrp.2;
-        Thu, 21 May 2020 02:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=C7yQ0ptbZU7KZnOlxUVIZpP6EXczodGdgmJQdoW6NPg=;
-        b=Il4rxdZqAwPWu6MpGCvSdPJVldDI6qGUzV6YCpjPoUJrx7WxA3Pzo/Wr4kPFUs1YhR
-         Pxj4L1WPVzDewsAGX7Pajd0O01+mPpE1TJwS/dsVDmi2YAEa1dlfDmmUMKt4YSY3WEev
-         HoTiyrI3NoCRPNacN/4N0s0BdmAsl6zVqCcCVK5eqgt6toJScP9jk/5Hlqw0Wtk+M6Ka
-         yFTdipAeXr2c9mX4zPJxfQw59ei69d9gYzIpSDhKa9H2LYJDr98nES87qAsAQ5TOe4Jo
-         jR23AWof40JfaSgxxpYl0u44fiPt2lr+wPxrqsTB9Diw60zQYujua5RDmRWcAGOKZ2OM
-         h2VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=C7yQ0ptbZU7KZnOlxUVIZpP6EXczodGdgmJQdoW6NPg=;
-        b=pTlv6LlIfHLUp3e8eu7QW9lwAF+OEPcbUpF0aSOKgVFUV1XK9OKJ2P8wHQrPPX9rxw
-         xRhtsOavkRgUtxIBgNyIxSoTp/HCnjLczR8Qx0CfDm+EKysoMdts1WrDGQQof6lT4yT4
-         ZQuso/+Zo0Diud8PSsrrfAaYuXr0jTWr/8IQn6i2c6kEJL1Y86UFLPo7zoMr7d70MUkg
-         BWeCtmUKie9Pd7lOT8qJp1117nVqXtf8YX0NENqxQ155H90wRw9TVlcMxW9ToR4uyN9B
-         euuTuWvkj1hSYH31Kz7z3cdEobdzqlcM2PgxhNKtAIRr/kpUBGW05c7o4645yTLfqbEt
-         kJ4w==
-X-Gm-Message-State: AOAM533+JqSDSCp04cagC0cqpmH4DB5v07UCE7tafS0XrbRCBZJli+s3
-        /PR7uUmpD/fKwof0TfLxbFE=
-X-Google-Smtp-Source: ABdhPJyN6sxJp3xEIh+JPBeCNNk7peJGmsQowVToar1yZ794e2EOEDpZLrKi9XY9ErENsvv14XbzAA==
-X-Received: by 2002:adf:f4d0:: with SMTP id h16mr315735wrp.230.1590053928141;
-        Thu, 21 May 2020 02:38:48 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.113.243])
-        by smtp.gmail.com with ESMTPSA id z7sm5818784wrl.88.2020.05.21.02.38.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 May 2020 02:38:47 -0700 (PDT)
-Subject: Re: [PATCH v13 5/6] rtc: mt6397: Add support for the MediaTek MT6358
- RTC
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        drinkcat@chromium.org, Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Josef Friedl <josef.friedl@speed.at>,
-        Richard Fontana <rfontana@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ran Bi <ran.bi@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        srv_heupstream@mediatek.com
-References: <1587438012-24832-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1587438012-24832-6-git-send-email-hsin-hsiung.wang@mediatek.com>
- <27c107b3-6ea8-e6f9-697c-7c3c4479008c@gmail.com>
- <20200521074718.GN271301@dell>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <e3e29827-002d-0013-b0a0-675673afbac7@gmail.com>
-Date:   Thu, 21 May 2020 11:38:46 +0200
+        id S1728442AbgEULJb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 May 2020 07:09:31 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31962 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728414AbgEULJb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 May 2020 07:09:31 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04LB44CY096940;
+        Thu, 21 May 2020 07:09:12 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 314ua5dr40-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 May 2020 07:09:12 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04LB4C5U097610;
+        Thu, 21 May 2020 07:09:11 -0400
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 314ua5dr35-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 May 2020 07:09:11 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 04LB16NO031979;
+        Thu, 21 May 2020 11:09:09 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04fra.de.ibm.com with ESMTP id 313wne2a80-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 21 May 2020 11:09:09 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04LB96Jf59048006
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 May 2020 11:09:06 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B78EA405B;
+        Thu, 21 May 2020 11:09:06 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 02C42A4060;
+        Thu, 21 May 2020 11:09:04 +0000 (GMT)
+Received: from [9.85.82.119] (unknown [9.85.82.119])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 21 May 2020 11:09:03 +0000 (GMT)
+From:   Pratik Sampat <psampat@linux.ibm.com>
+Subject: Re: [RFC 0/1] Alternate history mechanism for the TEO governor
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael.j.wysocki@intel.com, peterz@infradead.org,
+        daniel.lezcano@linaro.org, ego@linux.vnet.ibm.com,
+        svaidy@linux.ibm.com, pratik.sampat@in.ibm.com,
+        pratik.r.sampat@gmail.com
+References: <20200511141055.43029-1-psampat@linux.ibm.com>
+ <000101d62c76$a16ac360$e4404a20$@net>
+Message-ID: <fca35bce-b1ae-7137-4bf8-aa385c371be4@linux.ibm.com>
+Date:   Thu, 21 May 2020 16:39:03 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200521074718.GN271301@dell>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <000101d62c76$a16ac360$e4404a20$@net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-21_05:2020-05-21,2020-05-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0 phishscore=0
+ cotscore=-2147483648 suspectscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ mlxscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2005210078
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello Doug,
+
+Thanks a lot for running these benchmarks on an Intel box.
 
 
-On 21/05/2020 09:47, Lee Jones wrote:
-> On Sat, 16 May 2020, Matthias Brugger wrote:
-> 
->> Hi Lee,
->>
->> On 21/04/2020 05:00, Hsin-Hsiung Wang wrote:
->>> From: Ran Bi <ran.bi@mediatek.com>
->>>
->>> This add support for the MediaTek MT6358 RTC. Driver using
->>> compatible data to store different RTC_WRTGR address offset.
->>> This replace RTC_WRTGR to RTC_WRTGR_MT6323 in mt6323-poweroff
->>> driver which only needed by armv7 CPU without ATF.
->>>
->>> Signed-off-by: Ran Bi <ran.bi@mediatek.com>
->>> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
->>> Reviewed-by: Nicolas Boichat <drinkcat@chromium.org>
->>> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
->>> Acked-by: Sebastian Reichel <sre@kernel.org>
->>> Reviewed-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
->>
->> We have Acked-by from rtc and reset drivers maintainers. Are you OK to take them
->> through your mfd branch?
->>
->> Are you planning to queue them for v5.8?
->>
->> Just asking because if so I'd queue patch 6 through my tree.
-> 
-> Yes, please take patch 6.
-> 
+On 17/05/20 11:41 pm, Doug Smythies wrote:
+> On 2020.05.11 Pratik Rajesh Sampat wrote:
+>> First RFC posting:https://lkml.org/lkml/2020/2/22/27
+> Summary:
+>
+> On that thread I wrote:
+>
+>    > I have done a couple of other tests with this patch set,
+>    > but nothing to report yet, as the differences have been
+>    > minor so far.
+>
+> I tried your tests, or as close as I could find, and still
+> do not notice much difference.
 
-Thanks!
+That is quite unfortunate. At least it doesn't seem to regress.
+
+Nevertheless, as Rafael suggested aging is crucial, this patch doesn't age
+weights. I do have a version with aging but I had a lot of run to run variance
+so I had refrained from posting that.
+I'm tweaking around the logic for aging as well as distribution of weights,
+hopefully that may help.
+
+> For detail, but likely little added value, read on:
+>
+> Kernel: 5.7-rc4:
+> "teo": unmodified kernel.
+> "wtteo": with this patch added.
+> "menu": the menu idle governor, for comparison.
+> CPU frequency scaling driver: intel-cpufreq
+> CPU frequency scaling governor: schedutil
+> CPU idle driver: intel_idle
+>
+> ...
+>
+>> Benchmarks:
+>> Schbench
+>> --------
+>> Benchmarks scheduler wakeup latencies
+>>
+>> 1. latency 99th percentile - usec
+> I found a Phoronix schbench test.
+> It defaults to 99.9th percentile.
+>
+> schbench (usec, 99.9th Latency Percentile, less is better)(8 workers)					
+>
+> threads	teo		wtteo				menu	
+> 	2	14197		14194		99.98%	14467		101.90%
+> 	4	46733		46490		99.48%	46554		99.62%
+> 	6	57306		58291		101.72%	57754		100.78%
+> 	8	81408		80768		99.21%	81715		100.38%
+> 	16	157286	156570	99.54%	156621	99.58%
+> 	32	314573	310784	98.80%	315802	100.39%
+>
+> Powers and other idle statistics were similar. [1]
+>
+>> 2. Power - watts
+>> Machine - IBM Power 9
+>>
+>> Latency and Power - Normalized
+>> +---------+--------------+-----------------+---------------+
+>> | Threads | TEO Baseline | Wt. TEO Latency | Wt. TEO Power |
+>> +---------+--------------+-----------------+---------------+
+>> | 2       | 100          | 101.3           | 85.29         |
+>> +---------+--------------+-----------------+---------------+
+>> | 4       | 100          | 105.06          | 113.63        |
+>> +---------+--------------+-----------------+---------------+
+>> | 8       | 100          | 92.32           | 90.36         |
+>> +---------+--------------+-----------------+---------------+
+>> | 16      | 100          | 99.1            | 92.43         |
+>> +---------+--------------+-----------------+---------------+
+>>
+>> Accuracy
+>>
+>> Vanilla TEO Governor - Prediction distribution %
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> | Threads | US 1 | US 2 | US 3 | US 4  | US 5  | US 6  | Correct |
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> | 2       | 6.12 | 1.08 | 1.76 | 20.41 | 9.2   | 28.74 | 22.51   |
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> | 4       | 8.54 | 1.56 | 1.25 | 20.24 | 10.75 | 25.17 | 22.67   |
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> | 8       | 5.88 | 2.67 | 1.09 | 13.72 | 17.08 | 32.04 | 22.95   |
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> | 16      | 6.29 | 2.43 | 0.86 | 13.21 | 15.33 | 26.52 | 29.34   |
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> +---------+------+------+------+
+>> | Threads | OS 1 | OS 2 | OS 3 |
+>> +---------+------+------+------+
+>> | 2       | 1.77 | 1.27 | 7.14 |
+>> +---------+------+------+------+
+>> | 4       | 1.8  | 1.31 | 6.71 |
+>> +---------+------+------+------+
+>> | 8       | 0.65 | 0.72 | 3.2  |
+>> +---------+------+------+------+
+>> | 16      | 0.63 | 1.71 | 3.68 |
+>> +---------+------+------+------+
+>>
+>> Weighted TEO Governor - Prediction distribution %
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> | Threads | US 1 | US 2 | US 3 | US 4  | US 5  | US 6  | Correct |
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> | 2       | 7.26 | 2.07 | 0.02 | 15.85 | 13.29 | 36.26 | 22.13   |
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> | 4       | 4.33 | 1.45 | 0.15 | 14.17 | 14.68 | 40.36 | 21.01   |
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> | 8       | 4.73 | 2.46 | 0.12 | 12.48 | 14.68 | 32.38 | 28.9    |
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> | 16      | 7.68 | 1.25 | 0.98 | 12.15 | 11.19 | 24.91 | 35.92   |
+>> +---------+------+------+------+-------+-------+-------+---------+
+>> +---------+------+------+------+
+>> | Threads | OS 1 | OS 2 | OS 3 |
+>> +---------+------+------+------+
+>> | 2       | 0.39 | 0.42 | 2.31 |
+>> +---------+------+------+------+
+>> | 4       | 0.45 | 0.51 | 2.89 |
+>> +---------+------+------+------+
+>> | 8       | 0.53 | 0.66 | 3.06 |
+>> +---------+------+------+------+
+>> | 16      | 0.97 | 1.9  | 3.05 |
+>> +---------+------+------+------+
+>>
+>> Sleeping Ebizzy
+>> ---------------
+>> Program to generate workloads resembling web server workloads.
+>> The benchmark is customized to allow for a sleep interval -i
+> I found a Phoronix ebizzy, but without the customization,
+> which I suspect is important to demonstrate your potential
+> improvement.
+>
+> Could you send me yours to try?
+
+Sure thing, sleeping ebizzy is hosted here:
+https://github.com/pratiksampat/sleeping-ebizzy
+
+>
+> ebizzy (records per second, more is better)					
+>
+> teo		wtteo				menu	
+> 132344	132228	99.91%	130926	98.93%
+>
+> Powers and other idle statistics were similar. [2]
+>
+>> 1. Number of records
+>> 2. Power - watts
+>> Machine - IBM Power 9
+>>
+>> Parameters:
+>> 1. -m -> Always use mmap instead of malloc
+>> 2. -M -> Never use mmap
+>> 3. -S <seconds> -> Number of seconds to run
+>> 4. -i <interval> -> Sleep interval
+> What are the units of this interval?
+> They must be microseconds, as that is the only thing that makes sense.
+
+Yes, it is in microseconds
+
+> I have tried to simulate the resulting actual workflow
+> myself, but didn't get results like yours. (I may have done a poorly.)
+> My test does not produce performance data, as it just has to do its work
+> before the next time to do a chunk of work.
+> The test is:
+>
+> forever
+>    do 100 times
+>      very short sleep
+>    enddo
+>    sleep for 10 milliseconds
+> endforever
+
+Yes, In logic this is very similar to what benchmark emulates.
+
+> The overheads result in enough activity.
+> Powers and other idle statistics were similar. [3]
+>
+>> Number of records and power normalized
+>> +-------------------+---------------+------------------+-----------------+
+>> | Parameters        | TEO baseline  | Wt TEO records   | Wt. TEO Power   |
+>> +-------------------+---------------+------------------+-----------------+
+>> | -S 60 -i 10000    | 100           | 106.56           | 93.95           |
+>> +-------------------+---------------+------------------+-----------------+
+>> | -m -S 60 -i 10000 | 100           | 100.62           | 82.14           |
+>> +-------------------+---------------+------------------+-----------------+
+>> | -M -S 60 -i 10000 | 100           | 104.97           | 95.19           |
+>> +-------------------+---------------+------------------+-----------------+
+>>
+>> Accuracy
+>>
+>> Vanilla TEO Governor - Prediction distribution %
+>> +-------------------+-------+------+------+-------+------+-------+
+>> | Parameters        | US 1  | US 2 | US 3 | US 4  | US 5 | US 6  |
+>> +-------------------+-------+------+------+-------+------+-------+
+>> | -S 60 -i 10000    | 45.46 | 0.52 | 1.5  | 15.34 | 2.44 | 8.61  |
+>> +-------------------+-------+------+------+-------+------+-------+
+>> | -m -S 60 -i 10000 | 4.22  | 2.08 | 0.71 | 90.01 | 0    | 0.01  |
+>> +-------------------+-------+------+------+-------+------+-------+
+>> | -M -S 60 -i 10000 | 15.78 | 1.42 | 2.4  | 22.39 | 1.68 | 11.25 |
+>> +-------------------+-------+------+------+-------+------+-------+
+>> +-------------------+---------+------+------+------+------+
+>> | Parameters        | Correct | OS 1 | OS 2 | OS 3 | OS 4 |
+>> +-------------------+---------+------+------+------+------+
+>> | -S 60 -i 10000    | 17.03   | 1.73 | 1.1  | 6.27 | 0    |
+>> +-------------------+---------+------+------+------+------+
+>> | -m -S 60 -i 10000 | 2.44    | 0.18 | 0.13 | 0.22 | 0    |
+>> +-------------------+---------+------+------+------+------+
+>> | -M -S 60 -i 10000 | 31.65   | 3.45 | 1.8  | 8.18 | 0    |
+>> +-------------------+---------+------+------+------+------+
+>>
+>> Weigted TEO Governor - Prediction distribution %
+>> +-------------------+-------+------+------+-------+------+-------+
+>> | Parameters        | US 1  | US 2 | US 3 | US 4  | US 5 | US 6  |
+>> +-------------------+-------+------+------+-------+------+-------+
+>> | -S 60 -i 10000    | 8.25  | 0.87 | 0.98 | 19.23 | 4.05 | 26.35 |
+>> +-------------------+-------+------+------+-------+------+-------+
+>> | -m -S 60 -i 10000 | 7.69  | 4.35 | 0.93 | 82.74 | 0.01 | 0.01  |
+>> +-------------------+-------+------+------+-------+------+-------+
+>> | -M -S 60 -i 10000 | 3.73  | 3.29 | 0.73 | 13.33 | 7.38 | 18.61 |
+>> +-------------------+-------+------+------+-------+------+-------+
+>> +-------------------+---------+------+------+------+------+
+>> | Parameters        | Correct | OS 1 | OS 2 | OS 3 | OS 4 |
+>> +-------------------+---------+------+------+------+------+
+>> | -S 60 -i 10000    | 32.86   | 3.27 | 2.05 | 2.09 | 0    |
+>> +-------------------+---------+------+------+------+------+
+>> | -m -S 60 -i 10000 | 3.4     | 0.29 | 0.28 | 0.3  | 0    |
+>> +-------------------+---------+------+------+------+------+
+>> | -M -S 60 -i 10000 | 48.19   | 1.8  | 0.93 | 1.97 | 0.04 |
+>> +-------------------+---------+------+------+------+------+
+> For accuracy numbers, it would help to know the sample size
+> and the importance.
+>
+> For this 60 second test, I wonder if the number of times
+> each idle state was entered and exited was large enough to
+> draw any conclusion. I often find for tests that some states are
+> only used a few times in 1 minute, and so don't really care about the accuracy.
+
+The sample size does go upto early double digit thousands but I don't really
+know the physical importance of such a number.
+So, I get what you're saying and maybe I need to benchmark with a longer duration
+as your experience shows.
+
+> Anyway, for my attempts that this test, I had to extend to a 5 minute sample
+> time to get adequate numbers in all idle states for the accuracy statistics.
+> (which showed no difference, by the way (for those not looking at the graphs).)
+>
+> For my test all three governors, teo, wtteo, and menu, were
+> using idle state 0 about 7 to 8 thousand times per 5 minutes,
+> and 100% of time the assessment was the state was too shallow.
+> However, I don't really care because it is only 0.003% of the time,
+> and if idle state 0 is disabled (teo-0disable on [3] (it is enabled
+> again at minute 35), the power doesn't change.
+>
+> All that being said, your power/accuracy results do seem correlated.
+>
+This I believe is a good affirmation to have. I would be worried if
+we predicted more correctly and somehow ended up doing worse or vise-versa.
+
+>> Pgbench
+>> -------
+>> pgbench is a simple program for running benchmark tests on PostgreSQL.
+>> It runs the same sequence of SQL commands over and over, possibly in
+>> multiple concurrent database sessions, and then calculates the average
+>> transaction rate (transactions per second).
+> I did not try this test or anything similar.
+> ...
+>
+>> Hackbench
+>> ---------
+>> Creates a specified number of pairs of schedulable entities
+>> which communicate via either sockets or pipes and time how long  it
+>> takes for each pair to send data back and forth.
+>>
+> I found a Phoronix version, but it doesn't like
+> your low loops counts, so I stayed with the default 50,000.
+>
+> I suspect your low loop count results in a workflow somewhat like
+> your special ebizzy test. Anyway, maybe I should try your version
+> and low loop counts.
+>
+> I did many tests, and get inconsistent results.
+>
+> You use these terms like "sockets" and "pipes", but
+> the phoronix test uses "count" and "thread" or "process".
+>
+> I only used "process" for the simple reason that there was very
+> very little use of idle at all with "thread", so there was no value
+> in any test.
+>
+> hackbench test 1: all - process (seconds, less is better)					
+> 						
+> test	count	teo		wtteo				menu	
+> 1	1	8.7		8.99		103.33%	9.071		104.26%
+> 2	2	16.509	16.96		102.73%	17.159	103.94%
+> 3	4	33.451	34.081	101.88%	34.101	101.94%
+> 4	8	69.037	71.647	103.78%	69.914	101.27%
+> 5	16	161.64	165.569	102.43%	165.015	102.09%
+>
+> Powers and other idle statistics were similar. [4]
+>
+> hackbench test 2: count 1 - process (seconds, less is better)					
+> 		teo	wtteo			menu	
+> average	8.906	8.703	97.72%	9.032	101.41%
+> max		9.263	8.856			9.228	
+> min		8.761	8.599			8.876	
+> Std. Dev.	0.83%	0.46%			0.80%	
+> runs		256	256			200	
+>
+> Powers and other idle statistics were similar. [5]
+> However, idle state 3 is worthy of a look.
+>
+> hackbench test 3: count 2 - process (seconds, less is better)					
+> 		teo		wtteo			menu	
+> average	16.702	16.65	99.69%	16.796	100.56%
+> max		16.853	16.966		17.058	
+> min		16.542	16.487		16.659	
+> Std. Dev.	0.41%		0.59%			0.56%	
+> runs		100		100			100	
+>
+> Powers and other idle statistics were similar. [6]
+> However, idle state 3 is worthy of a look.
+>
+>> Machine - IBM Power 9
+>>
+>> Scale of measurement:
+>> 1. Time (s)
+>> 2. Power (watts)
+>> Time is normalized
+>>
+>> +---------+----------+----------------------+-------------------+
+>> | Loops   | TEO Time | Wt. TEO Time Sockets | Wt. TEO Time Pipe |
+>> +---------+----------+----------------------+-------------------+
+>> | 100     | 100      | 95.23                | 87.09             |
+>> +---------+----------+----------------------+-------------------+
+>> | 1000    | 100      | 105.81               | 98.67             |
+>> +---------+----------+----------------------+-------------------+
+>> | 10000   | 100      | 99.33                | 92.73             |
+>> +---------+----------+----------------------+-------------------+
+>> | 100000  | 100      | 98.88                | 101.99            |
+>> +---------+----------+----------------------+-------------------+
+>> | 1000000 | 100      | 100.04               | 100.2             |
+>> +---------+----------+----------------------+-------------------+
+>>
+>> Power :Socket: Consistent between 135-140 watts for both TEO and Wt. TEO
+>>         Pipe: Consistent between 125-130 watts for both TEO and Wt. TEO
+>>
+>> Pratik Rajesh Sampat (1):
+>>    Weighted approach to gather and use history in TEO governor
+>>
+>>   drivers/cpuidle/governors/teo.c | 96 +++++++++++++++++++++++++++++++--
+>>   1 file changed, 91 insertions(+), 5 deletions(-)
+>>
+>> --
+>> 2.17.1
+> I also tried Giovanni's and Mel's mmtests, (uses idle states 0 and 1 a lot)
+> but couldn't extract the performance report. [7]
+>
+> Old sweep test, which doesn't produce performance data. [8]
+> Old system idle test. [9]
+>
+> [1]http://www.smythies.com/~doug/linux/idle/wtteo/schbench/
+> [2]http://www.smythies.com/~doug/linux/idle/wtteo/ebizzy/
+> [3]http://www.smythies.com/~doug/linux/idle/wtteo/pn01/
+> [4]http://www.smythies.com/~doug/linux/idle/wtteo/hackbench/
+> [5]http://www.smythies.com/~doug/linux/idle/wtteo/hackbench2/
+> [6]http://www.smythies.com/~doug/linux/idle/wtteo/hackbench3/
+> [7]http://www.smythies.com/~doug/linux/idle/wtteo/mmtests-udp/
+> [8]http://www.smythies.com/~doug/linux/idle/wtteo/sweep/
+> [9]http://www.smythies.com/~doug/linux/idle/wtteo/idle/
+>
+> ... Doug
+>
+>
+Thanks again for these comprehensive results.
+~ Pratik
+
