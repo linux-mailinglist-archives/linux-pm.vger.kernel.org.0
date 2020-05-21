@@ -2,76 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D46051DCEC5
-	for <lists+linux-pm@lfdr.de>; Thu, 21 May 2020 15:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE0A1DD0EF
+	for <lists+linux-pm@lfdr.de>; Thu, 21 May 2020 17:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729460AbgEUN6c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 May 2020 09:58:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49840 "EHLO mail.kernel.org"
+        id S1728136AbgEUPQX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 May 2020 11:16:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55816 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728060AbgEUN6c (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 21 May 2020 09:58:32 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1727898AbgEUPQX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 21 May 2020 11:16:23 -0400
+Received: from localhost (mobile-166-175-190-200.mycingular.net [166.175.190.200])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DBAB2206F6;
-        Thu, 21 May 2020 13:58:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8F64E204EA;
+        Thu, 21 May 2020 15:16:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590069512;
-        bh=1DCLIBCipyQQDUNxtyK8wNXEu9tHlAet1/MO76lJjLs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rWwrMq4iuSJiDkZKM5D6qCLydJQ+L6KtjaToSdqoPHn1VtoJ1bWS6V4T4lbSpwPF7
-         wPbywT4ELMPn9rKWbIf8Cwpz5oeOLh7M45hjm8PSkKv5pc3asmj2Aqo/IWhjflls5e
-         gu/1oKvdvxn7PShPmsRFfSn0tBMEMGwVDRhWQ0o4=
-Received: by mail-oi1-f177.google.com with SMTP id s198so6277299oie.6;
-        Thu, 21 May 2020 06:58:31 -0700 (PDT)
-X-Gm-Message-State: AOAM531CL9bxicurWM36f7RfVBWQjg/HotpK5zU7Ydz3B0wFHq4gfNrI
-        LpqjlnDqkQe5tYM52roELqTYwBF7519QMjt84g==
-X-Google-Smtp-Source: ABdhPJwgvDDeFp6B7d05F2Srm+AdAkJNDsKpqEmRJmIiYT/LJLqD3ySoCEf/pMzY3ACHdNOHzk8AcK1vNgX3IABDvF4=
-X-Received: by 2002:aca:f084:: with SMTP id o126mr827503oih.106.1590069511216;
- Thu, 21 May 2020 06:58:31 -0700 (PDT)
+        s=default; t=1590074182;
+        bh=j+ATZyTEUqzaa7C9cjX2VyqS6H/0GtWSC8aQQUq6YYE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=gNLoP7M3nC2UP2goc/ysaJwkL6GkbN6DWGIMDkWgKdq3+uYPqvVHNKIGKRyDGlFvv
+         4oh6IciHAv02TqYvn1C3gTXnsQWpnu9y1djjHjVlbmORSpY0f9RZc9g0OX7qw6dKUK
+         LqaWB6Sk/KL5NQSodyrBk8oXXOcrnd8AQTePYrrU=
+Date:   Thu, 21 May 2020 10:16:20 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Dinghao Liu <dinghao.liu@zju.edu.cn>
+Cc:     kjlu@umn.edu, Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>,
+        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] [v2] PCI: tegra194: Fix runtime PM imbalance on error
+Message-ID: <20200521151620.GA1135365@bjorn-Precision-5520>
 MIME-Version: 1.0
-References: <20200520142144.520139-1-anders.roxell@linaro.org>
-In-Reply-To: <20200520142144.520139-1-anders.roxell@linaro.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 21 May 2020 07:58:17 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLgnMYsf54_YdgWW6TZvPsRaH3LSmG_-0hYguAK2-0b5Q@mail.gmail.com>
-Message-ID: <CAL_JsqLgnMYsf54_YdgWW6TZvPsRaH3LSmG_-0hYguAK2-0b5Q@mail.gmail.com>
-Subject: Re: [PATCH] power: reset: vexpress: fix build issue
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200521031355.7022-1-dinghao.liu@zju.edu.cn>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 20, 2020 at 8:22 AM Anders Roxell <anders.roxell@linaro.org> wrote:
->
-> An allmodconfig kernel makes CONFIG_VEXPRESS_CONFIG a module and
-> CONFIG_POWER_RESET_VEXPRESS builtin. That makes us see this build
-> error:
->
-> aarch64-linux-gnu-ld: drivers/power/reset/vexpress-poweroff.o: in function `vexpress_reset_probe':
-> ../drivers/power/reset/vexpress-poweroff.c:119: undefined reference to `devm_regmap_init_vexpress_config'
-> ../drivers/power/reset/vexpress-poweroff.c:119:(.text+0x48c): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol
-> `devm_regmap_init_vexpress_config'
-> make[1]: *** [/srv/src/kernel/next/Makefile:1126: vmlinux] Error 1
->
-> Rework so that POWER_RESET_VEXPRESS depends on 'VEXPRESS_CONFIG=y'.
->
-> Fixes: d06cfe3f123c ("bus: vexpress-config: Merge vexpress-syscfg into vexpress-config")
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+[+cc Rafael, linux-pm]
+
+On Thu, May 21, 2020 at 11:13:49AM +0800, Dinghao Liu wrote:
+> pm_runtime_get_sync() increments the runtime PM usage counter even
+> when it returns an error code. Thus a pairing decrement is needed on
+> the error handling path to keep the counter balanced.
+
+I didn't realize there were so many drivers with the exact same issue.
+Can we just squash these all into a single patch so we can see them
+all together?
+
+Hmm.  There are over 1300 callers of pm_runtime_get_sync(), and it
+looks like many of them have similar issues, i.e., they have a pattern
+like this
+
+  ret = pm_runtime_get_sync(dev);
+  if (ret < 0)
+    return;
+
+  pm_runtime_put(dev);
+
+where there is not a pm_runtime_put() to match every
+pm_runtime_get_sync().  Random sample:
+
+  nds32_pmu_reserve_hardware
+  sata_rcar_probe
+  exynos_trng_probe
+  ks_sa_rng_probe
+  omap_aes_probe
+  sun8i_ss_probe
+  omap_aes_probe
+  zynq_gpio_probe
+  amdgpu_hwmon_show_power_avg
+  mtk_crtc_ddp_hw_init
+  ...
+
+Surely I'm missing something and these aren't all broken, right?
+
+Maybe we could put together a coccinelle script to scan the tree for
+this issue?
+
+> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
 > ---
->  drivers/power/reset/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Acked-by: Rob Herring <robh@kernel.org>
-
-Can you resend this to soc@kernel.org asking them to apply to
-vexpress/modules branch so it is applied where the problem was
-introduced.
-
-Rob
+>  drivers/pci/controller/dwc/pcie-tegra194.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+> index ae30a2fd3716..2c0d2ce16b47 100644
+> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
+> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+> @@ -1623,7 +1623,7 @@ static int tegra_pcie_config_rp(struct tegra_pcie_dw *pcie)
+>  	ret = pinctrl_pm_select_default_state(dev);
+>  	if (ret < 0) {
+>  		dev_err(dev, "Failed to configure sideband pins: %d\n", ret);
+> -		goto fail_pinctrl;
+> +		goto fail_pm_get_sync;
+>  	}
+>  
+>  	tegra_pcie_init_controller(pcie);
+> @@ -1650,9 +1650,8 @@ static int tegra_pcie_config_rp(struct tegra_pcie_dw *pcie)
+>  
+>  fail_host_init:
+>  	tegra_pcie_deinit_controller(pcie);
+> -fail_pinctrl:
+> -	pm_runtime_put_sync(dev);
+>  fail_pm_get_sync:
+> +	pm_runtime_put_sync(dev);
+>  	pm_runtime_disable(dev);
+>  	return ret;
+>  }
+> -- 
+> 2.17.1
+> 
