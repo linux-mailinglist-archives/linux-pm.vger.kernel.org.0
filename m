@@ -2,105 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 360671DE768
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 14:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BF81DE779
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 14:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729046AbgEVM61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 May 2020 08:58:27 -0400
-Received: from foss.arm.com ([217.140.110.172]:35140 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728898AbgEVM61 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 22 May 2020 08:58:27 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 07F76D6E;
-        Fri, 22 May 2020 05:58:26 -0700 (PDT)
-Received: from [10.37.12.7] (unknown [10.37.12.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D8533F68F;
-        Fri, 22 May 2020 05:58:13 -0700 (PDT)
-Subject: Re: [PATCH v7 00/15] Add support for devices in the Energy Model
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com
-Cc:     Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
-        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        qperret@google.com, bsegall@google.com, mgorman@suse.de,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        matthias.bgg@gmail.com, steven.price@arm.com,
-        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
-        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
-        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
-        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
-References: <20200511111912.3001-1-lukasz.luba@arm.com>
- <abff69b6-b033-18e2-f380-ceccb42c6b01@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <3f6652a5-ad9b-15cb-08a8-160becd3f912@arm.com>
-Date:   Fri, 22 May 2020 13:58:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1729839AbgEVM72 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 May 2020 08:59:28 -0400
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:27565 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729792AbgEVM7Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 08:59:25 -0400
+X-IronPort-AV: E=Sophos;i="5.73,421,1583190000"; 
+   d="scan'208";a="450910885"
+Received: from abo-173-121-68.mrs.modulonet.fr (HELO hadrien) ([85.68.121.173])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 May 2020 14:59:22 +0200
+Date:   Fri, 22 May 2020 14:59:22 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     kbuild-all@lists.01.org,
+        "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>,
+        srv_heupstream@mediatek.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Saravana Kannan <skannan@codeaurora.org>,
+        linux-mediatek@lists.infradead.org,
+        Sibi Sankar <sibis@codeaurora.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] PM / devfreq: fix odd_ptr_err.cocci warnings
+In-Reply-To: <20200521160908.GA88022@052716d1a29e>
+Message-ID: <alpine.DEB.2.21.2005221458020.2442@hadrien>
+References: <202005220024.mccUgEgn%lkp@intel.com> <20200521160908.GA88022@052716d1a29e>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <abff69b6-b033-18e2-f380-ceccb42c6b01@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hello,
 
-On 5/22/20 11:43 AM, Daniel Lezcano wrote:
-> 
-> Hi Lukasz,
-> 
-> On 11/05/2020 13:18, Lukasz Luba wrote:
->> Hi all,
->>
->> This patch set introduces support for devices in the Energy Model (EM)
->> framework. It will unify the power model for thermal subsystem. It will
->> make simpler to add support for new devices willing to use more
->> advanced features (like Intelligent Power Allocation). Now it should
->> require less knowledge and effort for driver developer to add e.g.
->> GPU driver with simple energy model. A more sophisticated energy model
->> in the thermal framework is also possible, driver needs to provide
->> a dedicated callback function. More information can be found in the
->> updated documentation file.
->>
->> First 7 patches are refactoring Energy Model framework to add support
->> of other devices that CPUs. They change:
->> - naming convention from 'capacity' to 'performance' state,
->> - API arguments adding device pointer and not rely only on cpumask,
->> - change naming when 'cpu' was used, now it's a 'device'
->> - internal structure to maintain registered devices
->> - update users to the new API
->> Patch 8 updates OPP framework helper function to be more generic, not
->> CPU specific.
->> Patches 9-14 change devfreq cooling, dropping part of old power model and
->> adding registration with Energy Model via exported GPL function.
->> The last path is a simple change for Panfrost GPU driver.
->>
->> The patch set is based on linux-next tag next-20200508.
-> 
-> Do you think it is possible to respin against linux-pm next ?
+This provides a patch, but it doesn't look like the right one.  It looks
+like the if test should be testing opp_table,
 
-Yes, I will do it and send the v8.
+julia
 
-> 
-> I wanted to try the series but I'm getting non trivial conflicts with
-> the devfreq_cooling changes
-> 
-> 
+On Fri, 22 May 2020, kbuild test robot wrote:
 
-Let me take care of this.
-
-Regards,
-Lukasz
+> From: kbuild test robot <lkp@intel.com>
+>
+> drivers/devfreq/governor_passive.c:336:7-13: inconsistent IS_ERR and PTR_ERR on line 337.
+>
+>  PTR_ERR should access the value just tested by IS_ERR
+>
+> Semantic patch information:
+>  There can be false positives in the patch case, where it is the call to
+>  IS_ERR that is wrong.
+>
+> Generated by: scripts/coccinelle/tests/odd_ptr_err.cocci
+>
+> CC: Saravana Kannan <skannan@codeaurora.org>
+> Signed-off-by: kbuild test robot <lkp@intel.com>
+> ---
+>
+> url:    https://github.com/0day-ci/linux/commits/Andrew-sh-Cheng/Add-cpufreq-and-cci-devfreq-for-mt8183-and-SVS-support/20200520-222709
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+> :::::: branch date: 26 hours ago
+> :::::: commit date: 26 hours ago
+>
+> Please take the patch only if it's a positive warning. Thanks!
+>
+>  governor_passive.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> --- a/drivers/devfreq/governor_passive.c
+> +++ b/drivers/devfreq/governor_passive.c
+> @@ -334,7 +334,7 @@ static int cpufreq_passive_register(stru
+>
+>  			opp_table = dev_pm_opp_get_opp_table(cpu_dev);
+>  			if (IS_ERR(devfreq->opp_table)) {
+> -				ret = PTR_ERR(opp_table);
+> +				ret = PTR_ERR(devfreq->opp_table);
+>  				goto out;
+>  			}
+>
+>
