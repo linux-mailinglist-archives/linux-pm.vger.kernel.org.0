@@ -2,227 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B0A1DE3FF
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 12:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34971DE449
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 12:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730003AbgEVKPa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 May 2020 06:15:30 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:44275 "EHLO
+        id S1728772AbgEVKY4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 May 2020 06:24:56 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:47257 "EHLO
         mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729091AbgEVKP1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 06:15:27 -0400
+        with ESMTP id S1728747AbgEVKYz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 06:24:55 -0400
 Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200522101525euoutp0267bec27133fd0294e0a72c820733d74d~RUjObtwZ81223912239euoutp02R
-        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 10:15:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200522101525euoutp0267bec27133fd0294e0a72c820733d74d~RUjObtwZ81223912239euoutp02R
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200522102453euoutp02497da571cf38c6544c3700752a6e9b6f~RUrgCZRDU1688016880euoutp02Z
+        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 10:24:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200522102453euoutp02497da571cf38c6544c3700752a6e9b6f~RUrgCZRDU1688016880euoutp02Z
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1590142525;
-        bh=3HYxB7x/RUYeYsXTIciTAB5xWK8LkdywlB5eocgLdQ0=;
+        s=mail20170921; t=1590143093;
+        bh=yuGCISGtXXxk6Kjio358dgLlQzOgYeCxLlP5RCiJcTI=;
         h=From:To:Cc:Subject:Date:References:From;
-        b=IekGMGPOzNhxP44nfZreaPriyNBk7hAoPdvbmvNiXz/ln33P04aQdABFviLn9mFCY
-         B4oRMo0mEvEi+dU7Fk1aEsE05saDekiAouBBkglyiASqGrWEAkmNiQXWWO51ZR7etb
-         jaCZluQmzgNXOpkA6YCdTUrejKKdsOzAooVFfMHM=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        b=lvPtxQHRGm0UQNAxNaTOiiHJDFc98wPpB1X2Ux25vfu4l2rBO2TonOHkLkVa8ai0Y
+         V2+S/7y4Q8u+0+KzboWS53Nku/TYpoDdLfi/IfM0VFp6NuYJusk8gxYShDvnYb/bBp
+         JbZa+z11/aqDdejVO0OdoTj/BzPkAzhudFX7Msvk=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200522101524eucas1p29f7a3412e8b0e5dac432cff706978a68~RUjOG-Jrb0131201312eucas1p2v;
-        Fri, 22 May 2020 10:15:24 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 82.7F.60679.C36A7CE5; Fri, 22
-        May 2020 11:15:24 +0100 (BST)
+        20200522102453eucas1p2e01a743f877ded1d3cf5c0ca6f29258b~RUrfqX0B41398613986eucas1p2u;
+        Fri, 22 May 2020 10:24:53 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 79.60.60698.578A7CE5; Fri, 22
+        May 2020 11:24:53 +0100 (BST)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
         eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7~RUjNtIl9n1170811708eucas1p1o;
-        Fri, 22 May 2020 10:15:24 +0000 (GMT)
+        20200522102452eucas1p17c18de8f79e27de96474e5fcad6db5fa~RUrfSQnq13204332043eucas1p1A;
+        Fri, 22 May 2020 10:24:52 +0000 (GMT)
 Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200522101524eusmtrp1e6df08f904aec341f6609ab7cbf267f0~RUjNscnWn2581025810eusmtrp1m;
-        Fri, 22 May 2020 10:15:24 +0000 (GMT)
-X-AuditID: cbfec7f4-0e5ff7000001ed07-eb-5ec7a63c203f
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id C1.9B.07950.C36A7CE5; Fri, 22
-        May 2020 11:15:24 +0100 (BST)
+        20200522102452eusmtrp17c082c7b0eaf39af67b0c9a15b5384b2~RUrfRneKU3174731747eusmtrp1g;
+        Fri, 22 May 2020 10:24:52 +0000 (GMT)
+X-AuditID: cbfec7f5-a29ff7000001ed1a-cf-5ec7a875664b
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 3E.BC.07950.478A7CE5; Fri, 22
+        May 2020 11:24:52 +0100 (BST)
 Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200522101523eusmtip1cdfc4bd183275555e857da2166e0bd3b~RUjNMSTAp2127421274eusmtip19;
-        Fri, 22 May 2020 10:15:23 +0000 (GMT)
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200522102452eusmtip286193654d8815aef3f5bc3f03cdc76d8~RUreqrkO90298302983eusmtip2q;
+        Fri, 22 May 2020 10:24:52 +0000 (GMT)
 From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-pm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        srv_heupstream@mediatek.com,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH] i2c: core: fix NULL pointer dereference in suspend/resume
- callbacks
-Date:   Fri, 22 May 2020 12:13:27 +0200
-Message-Id: <20200522101327.13456-1-m.szyprowski@samsung.com>
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v3 1/3] regulator: max14577: Add proper dt-compatible
+ strings
+Date:   Fri, 22 May 2020 12:24:46 +0200
+Message-Id: <20200522102448.30209-1-m.szyprowski@samsung.com>
 X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpnleLIzCtJLcpLzFFi42LZduznOV2bZcfjDG6dV7HYOGM9q8WXuadY
-        LGZumMFi0fH3C6PF5V1z2Cw+9x5htJhxfh+Txdojd9ktpt8Vsvjc+o/NYuWJWcwO3B7vb7Sy
-        e8xuuMji0XJyP4tH35ZVjB4nTz1h8fi8SS6ALYrLJiU1J7MstUjfLoEr48rJ66wFT5Qq1k+6
-        wtLAuFW2i5GDQ0LAROL2NK4uRi4OIYEVjBLn+w8zQzhfGCVuNM9hhXA+M0q8X3+HpYuRE6xj
-        291GJhBbSGA5o8TfIw5wHfPvfgIrYhMwlOh628UGYosIhEt8uXGbDaSIWeAUk8S1/72MIAlh
-        gTCJV78fsILYLAKqEp9+PQebyitgK/Hl3h1miG3yEqs3HAC7SULgN5vE1ocXoBIuEkeWr4ay
-        hSVeHd/CDmHLSJye3MMC0dDMKPHw3Fp2CKeHUeJy0wxGiCpriTvnfrGBgoBZQFNi/S59iLCj
-        xKa/V5ghIcMnceOtIEiYGcictG06VJhXoqNNCKJaTWLW8XVwaw9euAR1jofE2xUnGSEhFCtx
-        6fkX5gmMcrMQdi1gZFzFKJ5aWpybnlpslJdarlecmFtcmpeul5yfu4kRmDxO/zv+ZQfjrj9J
-        hxgFOBiVeHgfJB+LE2JNLCuuzD3EKMHBrCTCu5D/aJwQb0piZVVqUX58UWlOavEhRmkOFiVx
-        XuNFL2OFBNITS1KzU1MLUotgskwcnFINjCZsCueNLx1Zel+yOfUZx7yYNK3DMxNv5Zi/bnP7
-        MZn95g0e7qr+A3GJ7x2Ent4zC/iUsujJFk7j/t9Tgy7eaKp9oBqovlE9Xb5BdVbX4UxHfrtq
-        QZlfe5Pdp7ca8q14W3h1c3395eaJHZGmOQffVckLGv/29UyQtffLfOpnUyWvJ7xFRPe+Ektx
-        RqKhFnNRcSIAc7kAlhoDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHLMWRmVeSWpSXmKPExsVy+t/xu7o2y47HGdw6ym2xccZ6Vosvc0+x
-        WMzcMIPFouPvF0aLy7vmsFl87j3CaDHj/D4mi7VH7rJbTL8rZPG59R+bxcoTs5gduD3e32hl
-        95jdcJHFo+XkfhaPvi2rGD1OnnrC4vF5k1wAW5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJ
-        pZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexpWT11kLnihVrJ90haWBcatsFyMnh4SAicS2u41M
-        XYxcHEICSxklXn7rZ4RIyEicnNbACmELS/y51sUGUfSJUeLGhU5mkASbgKFE11uQBCeHiECk
-        xOu9K8GKmAUuMEkcePwSrEhYIETiy8uL7CA2i4CqxKdfz5lAbF4BW4kv9+4wQ2yQl1i94QDz
-        BEaeBYwMqxhFUkuLc9Nzi430ihNzi0vz0vWS83M3MQLDdtuxn1t2MHa9Cz7EKMDBqMTD+yD5
-        WJwQa2JZcWXuIUYJDmYlEd6F/EfjhHhTEiurUovy44tKc1KLDzGaAi2fyCwlmpwPjKm8knhD
-        U0NzC0tDc2NzYzMLJXHeDoGDMUIC6YklqdmpqQWpRTB9TBycUg2MPRPX/litvKYn8V5u8NSJ
-        1aGexuaKDixSaxMXWhocquR0uewg/eUQe2zjk6uXnlzdN2Ebh/M8Ed7M07trPjA/ZU0J+/Iv
-        f1/98j0imSvX30i8wcwZnchj0apSryf1qqb8gysji6/2Np64O51tVZOkfQUNma/M91/Eeey3
-        QpDP8vdquc0W9xOUWIozEg21mIuKEwFeZN0KcQIAAA==
-X-CMS-MailID: 20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLIsWRmVeSWpSXmKPExsWy7djP87qlK47HGeyZz2exccZ6VoupD5+w
+        WVz/8pzV4vz5DewWl3fNYbP43HuE0WLtkbvsFrcbV7BZnN5d4sDpsWlVJ5tH35ZVjB6fN8kF
+        MEdx2aSk5mSWpRbp2yVwZbye8IO94At3xc7LZg2M/VxdjJwcEgImEjNOLWQCsYUEVjBKrL0c
+        1sXIBWR/YZTY+3Y6E4TzmVFiUd9eVpiOtkUvWSESyxkldl1cyA7Xcn3eWrBZbAKGEl1vu9hA
+        bBEBK4nT/zuYQYqYBVYwSXz8/QmsSFjAX+LX2dfsIDaLgKpEw6MVjCA2r4CtxOJ7n5kh1slL
+        rN5wAKxZQuA6m8TVFUuhEi4SP2augLpJWOLV8S3sELaMxOnJPSwQDc2MEg/PrWWHcHoYJS43
+        zWCEqLKWuHPuF9B9HEA3aUqs36UPEXaUePn4CDtIWEKAT+LGW0GQMDOQOWnbdGaIMK9ER5sQ
+        RLWaxKzj6+DWHrxwCeo0D4l/h6aygpQLCcRKLN4QO4FRbhbCqgWMjKsYxVNLi3PTU4uN81LL
+        9YoTc4tL89L1kvNzNzECE8Hpf8e/7mDc9yfpEKMAB6MSD69F2rE4IdbEsuLK3EOMEhzMSiK8
+        C/mPxgnxpiRWVqUW5ccXleakFh9ilOZgURLnNV70MlZIID2xJDU7NbUgtQgmy8TBKdXAuL4z
+        +lPy2Z0iKjtX9Tv/DxS9WeO9T91R+UfAnUbf1x96u0X5dM83nKntffj12yvts4f1ZzmICt78
+        eSB2V4vxmrvd+x00az+08vhOkUrXmbbmatQijbAVf062Bq9PVLv5fFtN8urXa9RU/802k29a
+        +WHqaealGvIC2lW94j93y/VujpoS+zmWQ4mlOCPRUIu5qDgRALZSyS8AAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCLMWRmVeSWpSXmKPExsVy+t/xe7olK47HGTxv0LXYOGM9q8XUh0/Y
+        LK5/ec5qcf78BnaLy7vmsFl87j3CaLH2yF12i9uNK9gsTu8uceD02LSqk82jb8sqRo/Pm+QC
+        mKP0bIryS0tSFTLyi0tslaINLYz0DC0t9IxMLPUMjc1jrYxMlfTtbFJSczLLUov07RL0Ml5P
+        +MFe8IW7YudlswbGfq4uRk4OCQETibZFL1m7GLk4hASWMkrM+LKdHSIhI3FyWgMrhC0s8eda
+        FxtE0SdGiVeN71lAEmwChhJdb0ESnBwiAjYSdxdfYwEpYhZYwyTR8PAjE0hCWMBX4uq7WWCT
+        WARUJRoerWAEsXkFbCUW3/vMDLFBXmL1hgPMExh5FjAyrGIUSS0tzk3PLTbSK07MLS7NS9dL
+        zs/dxAgMwW3Hfm7Zwdj1LvgQowAHoxIP74PkY3FCrIllxZW5hxglOJiVRHgX8h+NE+JNSays
+        Si3Kjy8qzUktPsRoCrR8IrOUaHI+MD7ySuINTQ3NLSwNzY3Njc0slMR5OwQOxggJpCeWpGan
+        phakFsH0MXFwSjUwurZs2tPadF9I1FNoEo95zeH8qU7SLJMeWO3YcrWv6OXD1wxnG/fO/POs
+        +tL0/EWaE6UOdrqcNYtrmKmgdZ9rpsGCR2Jxy5IYTrF1BB5exrrq8VNO7Ut2FT/fTtgZNZl9
+        w8df4ipfLkt0168NTuaSe9R8g7VdiXGpXbvltbVSSQ+dciQrN7jMVmIpzkg01GIuKk4EAFdD
+        eIdXAgAA
+X-CMS-MailID: 20200522102452eucas1p17c18de8f79e27de96474e5fcad6db5fa
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7
+X-RootMTR: 20200522102452eucas1p17c18de8f79e27de96474e5fcad6db5fa
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7
-References: <CGME20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7@eucas1p1.samsung.com>
+X-CMS-RootMailID: 20200522102452eucas1p17c18de8f79e27de96474e5fcad6db5fa
+References: <CGME20200522102452eucas1p17c18de8f79e27de96474e5fcad6db5fa@eucas1p1.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit 6fe12cdbcfe3 ("i2c: core: support bus regulator controlling in
-adapter") added generic suspend and resume functions for i2c devices.
-Those functions unconditionally access an i2c_client structure assigned
-to the given i2c device. However, there exist i2c devices in the system
-without a valid i2c_client. Add the needed check before accessing the
-i2c_client.
+Add device tree compatible strings and create proper modalias structures
+to let this driver load automatically if compiled as module, because
+max14577 MFD driver creates MFD cells with such compatible strings.
 
-This fixes the following issue observed on Samsung Exynos4412-based
-Odroid U3 board:
-
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 00000018
-pgd = 2aed198a
-[00000018] *pgd=00000000
-Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-Modules linked in:
-CPU: 1 PID: 1295 Comm: rtcwake Not tainted 5.7.0-rc6-02700-g4773d1324da6 #739
-Hardware name: Samsung Exynos (Flattened Device Tree)
-PC is at i2c_suspend_late+0x20/0x48
-LR is at dpm_run_callback+0xb4/0x3fc
-pc : [<c07b404c>]    lr : [<c064b7cc>]    psr: 20000053
-...
-Process rtcwake (pid: 1295, stack limit = 0x7f1885cf)
-Stack: (0xec8f3d70 to 0xec8f4000)
-...
-[<c07b404c>] (i2c_suspend_late) from [<c064b7cc>] (dpm_run_callback+0xb4/0x3fc)
-[<c064b7cc>] (dpm_run_callback) from [<c064ce04>] (__device_suspend_late+0xcc/0x16c)
-[<c064ce04>] (__device_suspend_late) from [<c064f0b0>] (dpm_suspend_late+0x10c/0x568)
-[<c064f0b0>] (dpm_suspend_late) from [<c01996f0>] (suspend_devices_and_enter+0x31c/0xc70)
-[<c01996f0>] (suspend_devices_and_enter) from [<c019a43c>] (pm_suspend+0x3f8/0x480)
-[<c019a43c>] (pm_suspend) from [<c0198174>] (state_store+0x6c/0xc8)
-[<c0198174>] (state_store) from [<c035cf4c>] (kernfs_fop_write+0x10c/0x228)
-[<c035cf4c>] (kernfs_fop_write) from [<c02b94a4>] (__vfs_write+0x30/0x1d0)
-[<c02b94a4>] (__vfs_write) from [<c02bc444>] (vfs_write+0xa4/0x170)
-[<c02bc444>] (vfs_write) from [<c02bc690>] (ksys_write+0x60/0xd8)
-[<c02bc690>] (ksys_write) from [<c0100060>] (ret_fast_syscall+0x0/0x28)
-Exception stack(0xec8f3fa8 to 0xec8f3ff0)
-...
----[ end trace a43afef431782f37 ]---
-
-Fixes: 6fe12cdbcfe3 ("i2c: core: support bus regulator controlling in adapter")
 Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 ---
-This fixes suspend/resume issue observed on various board with linux-next
-from 20200521.
+v3:
+- sorted of_max14577_regulator_dt_match
+v2:
+- added .of_match_table pointer
 ---
- drivers/i2c/i2c-core-base.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+ drivers/regulator/max14577-regulator.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 5be24bf8a194..b531f5ad06b2 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -454,11 +454,13 @@ static int i2c_device_remove(struct device *dev)
- static int i2c_resume_early(struct device *dev)
- {
- 	struct i2c_client *client = i2c_verify_client(dev);
--	struct i2c_adapter *adap = client->adapter;
- 	int err;
+diff --git a/drivers/regulator/max14577-regulator.c b/drivers/regulator/max14577-regulator.c
+index 07a150c9bbf2..4c9ae52b9e87 100644
+--- a/drivers/regulator/max14577-regulator.c
++++ b/drivers/regulator/max14577-regulator.c
+@@ -238,10 +238,20 @@ static const struct platform_device_id max14577_regulator_id[] = {
+ };
+ MODULE_DEVICE_TABLE(platform, max14577_regulator_id);
  
-+	if (!client)
-+		return 0;
++static const struct of_device_id of_max14577_regulator_dt_match[] = {
++	{ .compatible = "maxim,max14577-regulator",
++	  .data = (void *)MAXIM_DEVICE_TYPE_MAX14577, },
++	{ .compatible = "maxim,max77836-regulator",
++	  .data = (void *)MAXIM_DEVICE_TYPE_MAX77836, },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, of_max14577_regulator_dt_match);
 +
- 	if (!pm_runtime_status_suspended(&client->dev)) {
--		err = regulator_enable(adap->bus_regulator);
-+		err = regulator_enable(client->adapter->bus_regulator);
- 		if (err)
- 			return err;
- 	}
-@@ -469,15 +471,17 @@ static int i2c_resume_early(struct device *dev)
- static int i2c_suspend_late(struct device *dev)
- {
- 	struct i2c_client *client = i2c_verify_client(dev);
--	struct i2c_adapter *adap = client->adapter;
- 	int err;
- 
-+	if (!client)
-+		return 0;
-+
- 	err = pm_generic_suspend_late(&client->dev);
- 	if (err)
- 		return err;
- 
- 	if (!pm_runtime_status_suspended(&client->dev))
--		return regulator_disable(adap->bus_regulator);
-+		return regulator_disable(client->adapter->bus_regulator);
- 
- 	return 0;
- }
-@@ -487,10 +491,12 @@ static int i2c_suspend_late(struct device *dev)
- static int i2c_runtime_resume(struct device *dev)
- {
- 	struct i2c_client *client = i2c_verify_client(dev);
--	struct i2c_adapter *adap = client->adapter;
- 	int err;
- 
--	err = regulator_enable(adap->bus_regulator);
-+	if (!client)
-+		return 0;
-+
-+	err = regulator_enable(client->adapter->bus_regulator);
- 	if (err)
- 		return err;
- 
-@@ -500,14 +506,16 @@ static int i2c_runtime_resume(struct device *dev)
- static int i2c_runtime_suspend(struct device *dev)
- {
- 	struct i2c_client *client = i2c_verify_client(dev);
--	struct i2c_adapter *adap = client->adapter;
- 	int err;
- 
-+	if (!client)
-+		return 0;
-+
- 	err = pm_generic_runtime_suspend(&client->dev);
- 	if (err)
- 		return err;
- 
--	return regulator_disable(adap->bus_regulator);
-+	return regulator_disable(client->adapter->bus_regulator);
- }
- #endif
- 
+ static struct platform_driver max14577_regulator_driver = {
+ 	.driver = {
+-		   .name = "max14577-regulator",
+-		   },
++		.name = "max14577-regulator",
++		.of_match_table = of_max14577_regulator_dt_match,
++	},
+ 	.probe		= max14577_regulator_probe,
+ 	.id_table	= max14577_regulator_id,
+ };
 -- 
 2.17.1
 
