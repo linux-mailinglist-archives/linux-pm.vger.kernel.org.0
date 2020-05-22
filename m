@@ -2,109 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 227051DDCC3
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 03:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149371DDDC9
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 05:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbgEVBoA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 May 2020 21:44:00 -0400
-Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:28080 "EHLO
-        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726335AbgEVBn7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 May 2020 21:43:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1590111840; x=1621647840;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version;
-  bh=n/q9AlKaX0CH8H7SaLZwpolAQTXmIBZYGWFCXorwbbQ=;
-  b=CwtmrhpQPU7Cvs03uzOHy/+EZjA8PmkyQo/M7u8XakiFxZxOmRDiDVpN
-   KqO//tjbD8rZZh4t9Zc7MSt6/RckzaMab7YvSEFpu+sahGaYZokVHk1Oz
-   wh77U3kSmYFkKje2xBB8rliaRMTOCx1x/jOFHk+KT7tNk0dzS0kJtWuhR
-   4=;
-IronPort-SDR: 10RDmI1c2uqp4SDgqcSm7g8lCY0lagez6ZlQ+gRsxTPsmKfrlLAe2ZGpTRamKe9T1KvVjxsLMt
- 9gULPZ8gXQeQ==
-X-IronPort-AV: E=Sophos;i="5.73,419,1583193600"; 
-   d="scan'208";a="31753098"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1a-67b371d8.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 22 May 2020 01:43:47 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1a-67b371d8.us-east-1.amazon.com (Postfix) with ESMTPS id 119F7A2193;
-        Fri, 22 May 2020 01:43:39 +0000 (UTC)
-Received: from EX13D10UWB004.ant.amazon.com (10.43.161.121) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Fri, 22 May 2020 01:43:39 +0000
-Received: from EX13D01UWB002.ant.amazon.com (10.43.161.136) by
- EX13D10UWB004.ant.amazon.com (10.43.161.121) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Fri, 22 May 2020 01:43:39 +0000
-Received: from EX13D01UWB002.ant.amazon.com ([10.43.161.136]) by
- EX13d01UWB002.ant.amazon.com ([10.43.161.136]) with mapi id 15.00.1497.006;
- Fri, 22 May 2020 01:43:39 +0000
-From:   "Singh, Balbir" <sblbir@amazon.com>
-To:     "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Agarwal, Anchal" <anchalag@amazon.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "roger.pau@citrix.com" <roger.pau@citrix.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH 06/12] xen-blkfront: add callbacks for PM suspend and
- hibernation
-Thread-Topic: [PATCH 06/12] xen-blkfront: add callbacks for PM suspend and
- hibernation
-Thread-Index: AQHWLjUeTCtt92OWtESWVO30imQxZaizODaAgAAgMwA=
-Date:   Fri, 22 May 2020 01:43:38 +0000
-Message-ID: <eea5ebc9adcd46b368c8d856e865a411b946f364.camel@amazon.com>
-References: <ad580b4d5b76c18fe2fe409704f25622e01af361.1589926004.git.anchalag@amazon.com>
-         <20200521234823.GA2131@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-In-Reply-To: <20200521234823.GA2131@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.161.175]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <415874684795E24488089E35061B3040@amazon.com>
-Content-Transfer-Encoding: base64
+        id S1727779AbgEVDSf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 May 2020 23:18:35 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:4837 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727024AbgEVDSf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 21 May 2020 23:18:35 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id B4F8F87925602EB79EAD;
+        Fri, 22 May 2020 11:18:30 +0800 (CST)
+Received: from [127.0.0.1] (10.74.219.194) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.487.0; Fri, 22 May 2020
+ 11:18:23 +0800
+Subject: Re: [PATCH] base:power:sysfs: Remove redundant attribute
+ runtime_status in runtime_attrs
+To:     kbuild test robot <lkp@intel.com>, <rafael@kernel.org>,
+        <pavel@ucw.cz>, <sre@kernel.org>
+References: <1590053147-32207-1-git-send-email-chenxiang66@hisilicon.com>
+ <202005212049.sWN89Bjc%lkp@intel.com>
+CC:     <kbuild-all@lists.01.org>, <john.garry@huawei.com>,
+        <linux-pm@vger.kernel.org>, <linuxarm@huawei.com>
+From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
+Message-ID: <63c077bb-53a2-c41e-bd94-9dcbd224f39c@hisilicon.com>
+Date:   Fri, 22 May 2020 11:18:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 MIME-Version: 1.0
+In-Reply-To: <202005212049.sWN89Bjc%lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.74.219.194]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiBAQCAtMTA1Nyw3ICsxMDYzLDcgQEAgc3RhdGljIGludCB4ZW5fdHJhbnNsYXRlX3ZkZXYoaW50
-IHZkZXZpY2UsIGludCAqbWlub3IsIHVuc2lnbmVkIGludCAqb2Zmc2V0KQ0KPiAgCQljYXNlIFhF
-Tl9TQ1NJX0RJU0s1X01BSk9SOg0KPiAgCQljYXNlIFhFTl9TQ1NJX0RJU0s2X01BSk9SOg0KPiAg
-CQljYXNlIFhFTl9TQ1NJX0RJU0s3X01BSk9SOg0KPiAtCQkJKm9mZnNldCA9ICgqbWlub3IgLyBQ
-QVJUU19QRVJfRElTSykgKyANCj4gKwkJCSpvZmZzZXQgPSAoKm1pbm9yIC8gUEFSVFNfUEVSX0RJ
-U0spICsNCj4gIAkJCQkoKG1ham9yIC0gWEVOX1NDU0lfRElTSzFfTUFKT1IgKyAxKSAqIDE2KSAr
-DQo+ICAJCQkJRU1VTEFURURfU0RfRElTS19OQU1FX09GRlNFVDsNCj4gIAkJCSptaW5vciA9ICpt
-aW5vciArDQo+IEBAIC0xMDcyLDcgKzEwNzgsNyBAQCBzdGF0aWMgaW50IHhlbl90cmFuc2xhdGVf
-dmRldihpbnQgdmRldmljZSwgaW50ICptaW5vciwgdW5zaWduZWQgaW50ICpvZmZzZXQpDQo+ICAJ
-CWNhc2UgWEVOX1NDU0lfRElTSzEzX01BSk9SOg0KPiAgCQljYXNlIFhFTl9TQ1NJX0RJU0sxNF9N
-QUpPUjoNCj4gIAkJY2FzZSBYRU5fU0NTSV9ESVNLMTVfTUFKT1I6DQo+IC0JCQkqb2Zmc2V0ID0g
-KCptaW5vciAvIFBBUlRTX1BFUl9ESVNLKSArIA0KPiArCQkJKm9mZnNldCA9ICgqbWlub3IgLyBQ
-QVJUU19QRVJfRElTSykgKw0KPiAgCQkJCSgobWFqb3IgLSBYRU5fU0NTSV9ESVNLOF9NQUpPUiAr
-IDgpICogMTYpICsNCj4gIAkJCQlFTVVMQVRFRF9TRF9ESVNLX05BTUVfT0ZGU0VUOw0KPiAgCQkJ
-Km1pbm9yID0gKm1pbm9yICsNCg0KVGhlc2Ugc2VlbSBsaWtlIHdoaXRlc3BhY2UgZml4ZXM/IElm
-IHNvLCB0aGV5IHNob3VsZCBiZSBpbiBhIHNlcGFyYXRlIHBhdGNoDQoNCkJhbGJpcg0KDQo=
+OK, please ignore the patch.
+
+在 2020/5/21 21:05, kbuild test robot 写道:
+> Hi chenxiang,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on pm/linux-next]
+> [also build test WARNING on pavel-linux-leds/for-next v5.7-rc6 next-20200519]
+> [if your patch is applied to the wrong git tree, please drop us a note to help
+> improve the system. BTW, we also suggest to use '--base' option to specify the
+> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+>
+> url:    https://github.com/0day-ci/linux/commits/chenxiang/base-power-sysfs-Remove-redundant-attribute-runtime_status-in-runtime_attrs/20200521-173130
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+> config: arm-eseries_pxa_defconfig (attached as .config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 9.3.0
+> reproduce:
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # save the attached .config to linux build tree
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=arm
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kbuild test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>, old ones prefixed by <<):
+>
+> In file included from drivers/base/power/sysfs.c:3:
+> include/linux/device.h:132:26: warning: 'dev_attr_runtime_status' defined but not used [-Wunused-variable]
+> 132 |  struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
+> |                          ^~~~~~~~~
+>>> drivers/base/power/sysfs.c:177:8: note: in expansion of macro 'DEVICE_ATTR_RO'
+> 177 | static DEVICE_ATTR_RO(runtime_status);
+> |        ^~~~~~~~~~~~~~
+>
+> vim +/DEVICE_ATTR_RO +177 drivers/base/power/sysfs.c
+>
+> 0fcb4eef829449 Alan Stern      2010-07-08  176
+> 47acbd77e6e481 Andy Shevchenko 2017-11-10 @177  static DEVICE_ATTR_RO(runtime_status);
+> 15bcb91d7e607d Alan Stern      2010-09-25  178
+>
+> :::::: The code at line 177 was first introduced by commit
+> :::::: 47acbd77e6e481abf2f41d3a99cb3762f296b2e6 PM / sysfs: Convert to use DEVICE_ATTR_RO / DEVICE_ATTR_RW
+>
+> :::::: TO: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> :::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+
