@@ -2,66 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 935D11DED9A
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 18:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50081DEDA4
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 18:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730674AbgEVQps (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 May 2020 12:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
+        id S1730487AbgEVQte (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 May 2020 12:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730306AbgEVQps (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 12:45:48 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B93CC061A0E
-        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 09:45:46 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id i15so10757290wrx.10
-        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 09:45:46 -0700 (PDT)
+        with ESMTP id S1730364AbgEVQtd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 12:49:33 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED21C08C5C0
+        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 09:49:33 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id l17so10821604wrr.4
+        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 09:49:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6GR7HmOw0vXex6U/cofpWanbE4mJ+fAlXyaVxc3rmoo=;
-        b=NpqBOWpwojM3LZTZCer6cwQuU9Dfk1PLl0mrthDrget8CeNH7MzEpwyyOdNyQN4oLh
-         tt3nB1FEWebWGLUxl8I+9w+zng9TfV9LUoju/5OVWAjc/5uyhpFcRydeEmUUL7oKHw5M
-         qJ7bW4Zh4BRJjnlFgneqd+Su1h+XvhUlO8pqnOGjhHvOaupupW1ce079blAkO9epqZnE
-         TjYBIlEcsq3pkRNUxW1idDro7u9J+BugJFpw/X0okhleEiuVTdbQT6RMbmii0ubjd0YM
-         9FkmN497bB8UNU7GmqJMHmxidVRaML5jJmA1nRkCeLtd4cI8TIDVEFJrYSJ3revpk8X6
-         K+wA==
+        bh=CHmt5En+DFO/DuBHKWsIxBf0v+xGme/FyBgyiiEFXXs=;
+        b=Ir6xPMv9mrnspy3tVQXUJZtsY3vGrInCmlHrvQktRVS8HdjNwmhztgnzWKN3kEEQNK
+         45gbMbWW89VWRfHJS71ORURcXjtguVKtmsZg3vjQZaulCx++nEKPBPO3UJ7tHi/x32n3
+         xePjXyNVu80hEp1ibwJ8/J/+t7/NEP1h6lMd5MDasnAeJx5Bz3KXdK8gZZCnW8iUMav/
+         ENqNO4J2RYDWboR535xH9HSh2nHAk10pRpPlVo6JK1mJ6IJ9KStSIwl6hJ+qi+Ao7f16
+         3DfSqE7ZI8qoR1aYsed6kqOOredsgU6sjf8yaIa3VAYC5Tsv31TnzinHTVYDa5bBhSG4
+         WMIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=6GR7HmOw0vXex6U/cofpWanbE4mJ+fAlXyaVxc3rmoo=;
-        b=lE2ogbi7JnN3Oiy7VVVlLv5ZTUxoIl0ndJigyL5HgeHB4odOvKjU3cPgez0TTlScht
-         gefuK1OKbHAQKuV0ZyHdXF1c87565QclADrIUskOxpW/g8efPIhW76hJZET2Vvt+C0du
-         R7S6HbA9EUeYy9ZjvTvO3bkFu7s6Mgc70ujO2ogAEuIYOfRBGYA6HptO8SZXaAg7Q2jA
-         nqEsxQMy1r3Yv8s+cU/lfsCTwBi2GPHSzN+qRlo4Uc8OiE3ClmjgylAKQs0PY6DKt6a0
-         D8g2cCCBX1Z+8EdkiXsSgpOOeiNFzj4ENRHqx0nWqDnV0gyLwNyifSbmbayvbz5yrHuQ
-         d96Q==
-X-Gm-Message-State: AOAM530lu0Gq5Gz3AzbhfWNJbZem3NnPPaURsagWjUiYfWxys3Z7PdQD
-        Bfg5+Yh0WFwbSMSJet3rNhQNiw==
-X-Google-Smtp-Source: ABdhPJyLiO4hYgR2VrqVwoiZ28msGE7VhjnrrBlGyww3F4/QoNednCytSwz5z9BFpSWThz5DUcBoZA==
-X-Received: by 2002:a5d:4b04:: with SMTP id v4mr4369245wrq.182.1590165945140;
-        Fri, 22 May 2020 09:45:45 -0700 (PDT)
+        bh=CHmt5En+DFO/DuBHKWsIxBf0v+xGme/FyBgyiiEFXXs=;
+        b=Du2Hc9sKAHOpjJ+5vyE1OxUhFU6Pao7rPvKLzh/tDrUeRUw8k5p4WoePHFeTb1Eg66
+         C5KqBIBXPOq3xAFmqg8a/GLRCbMJ3D/MUToDAYtP3K8LtYWnLgeVCXRIz22SmFLtrB7T
+         cTjtpabbd3n4SDttiDBFsGSq/HZ2GKlJXsIUJ1Hm9Yha45Dmxqjd7nc+P+T+NUtk14iQ
+         uHgGrQqpxTUGuNpymBjICt+Myn4heYbitrBSZArqJ8BNuuRck+aqP/xZzM80Q27ow0ST
+         0mHFqfUjbF0jrWjGtDDl0SNqEfhVvBTuEPpQC+XiY7zyZKiMk06N9I8wpENoKeUTCQbL
+         NqOA==
+X-Gm-Message-State: AOAM532q4HG71AhYnGsl4ABVeXl0D1MRaCWPySQdsHf0P3AIGPvDG+1e
+        0D+Q8SgSVpV2+9M0wQAifDnOEP9ccWQ=
+X-Google-Smtp-Source: ABdhPJyq1cxtEc5HKwBxuhAsQAlPiFMzVMQB8y7RX31DLlCEjUdWW54j7m4nsSoZhC+Ye3nryhPyXQ==
+X-Received: by 2002:adf:9f48:: with SMTP id f8mr4094993wrg.228.1590166171626;
+        Fri, 22 May 2020 09:49:31 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:a82f:eaec:3c49:875a? ([2a01:e34:ed2f:f020:a82f:eaec:3c49:875a])
-        by smtp.googlemail.com with ESMTPSA id h137sm16308123wme.0.2020.05.22.09.45.44
+        by smtp.googlemail.com with ESMTPSA id p1sm1549793wrx.44.2020.05.22.09.49.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 May 2020 09:45:44 -0700 (PDT)
-Subject: Re: [PATCH] thermal: imx8mm: Replace zero-length array with
- flexible-array
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Fri, 22 May 2020 09:49:31 -0700 (PDT)
+Subject: Re: [PATCH 00/14] thermal core include cleanups
+To:     Amit Kucheria <amit.kucheria@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Javi Merino <javi.merino@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>
-Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200507192517.GA16557@embeddedor>
+Cc:     linux-pm@vger.kernel.org
+References: <cover.1589199124.git.amit.kucheria@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <9d0df1d5-cbe9-9ddd-2b1c-81298506c28f@linaro.org>
-Date:   Fri, 22 May 2020 18:45:43 +0200
+Message-ID: <2c065bae-06a5-e63c-4e01-be62dabe8890@linaro.org>
+Date:   Fri, 22 May 2020 18:49:30 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200507192517.GA16557@embeddedor>
+In-Reply-To: <cover.1589199124.git.amit.kucheria@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -70,48 +73,18 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/05/2020 21:25, Gustavo A. R. Silva wrote:
-> The current codebase makes use of the zero-length array language
-> extension to the C90 standard, but the preferred mechanism to declare
-> variable-length types such as these ones is a flexible array member[1][2],
-> introduced in C99:
+On 11/05/2020 14:24, Amit Kucheria wrote:
+> I noticed some remnants from when thermal core could be modular. While
+> cleaning that up, I fixed up the includes to be sorted alphabetically and
+> included export.h in files that were using EXPORT_SYMBOL* or THIS_MODULE
+> while at the same time removing inclusion of module.h from core files.
 > 
-> struct foo {
->         int stuff;
->         struct boo array[];
-> };
+> Finally, the names of the source files for the governors and core have some
+> inconsistencies and the last couple of patches rename them.
 > 
-> By making use of the mechanism above, we will get a compiler warning
-> in case the flexible array does not occur last in the structure, which
-> will help us prevent some kind of undefined behavior bugs from being
-> inadvertently introduced[3] to the codebase from now on.
-> 
-> Also, notice that, dynamic memory allocations won't be affected by
-> this change:
-> 
-> "Flexible array members have incomplete type, and so the sizeof operator
-> may not be applied. As a quirk of the original implementation of
-> zero-length arrays, sizeof evaluates to zero."[1]
-> 
-> sizeof(flexible-array-member) triggers a warning because flexible array
-> members have incomplete type[1]. There are some instances of code in
-> which the sizeof operator is being incorrectly/erroneously applied to
-> zero-length arrays and the result is zero. Such instances may be hiding
-> some bugs. So, this work (flexible-array member conversions) will also
-> help to get completely rid of those sorts of issues.
-> 
-> This issue was found with the help of Coccinelle.
-> 
-> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> [2] https://github.com/KSPP/linux/issues/21
-> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  drivers/thermal/imx8mm_thermal.c |    2 +-
+> Build and boot tested on some ARM boards.
 
-Applied, thanks
-
+Series applied, thanks !
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
