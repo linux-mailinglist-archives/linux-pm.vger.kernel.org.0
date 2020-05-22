@@ -2,79 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4811DE518
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 13:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB9F1DE531
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 13:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729161AbgEVLJH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 May 2020 07:09:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60338 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728281AbgEVLJG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 22 May 2020 07:09:06 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BDBEF206B6;
-        Fri, 22 May 2020 11:09:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590145746;
-        bh=akm9w9vUGMm1OZtMoY9+dDiEUBKGQg7DabJxbnXOXDY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jrMoWA3nOKs2MGjrLolal+vz6NUhgpGFJzvHoE/v9U3gXwsd7UVDpQNjCRJh3RRa0
-         0q90IBErHUS/9YGzSoj2wGN02Si616FepPxOKgt3xUZPQjgEY8KS/rwSl9ynOi3mM1
-         eFY+PXz4pJ5vT7Ld/aSDfVHhIjo5AnFOHEJWQmOM=
-Date:   Fri, 22 May 2020 12:09:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        id S1729022AbgEVLQM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 May 2020 07:16:12 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:34880 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729376AbgEVLPP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 07:15:15 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200522111512euoutp02f7a1b503d42767bee1060f6deeeeb7bd~RVXbuKxB_1737417374euoutp02Y
+        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 11:15:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200522111512euoutp02f7a1b503d42767bee1060f6deeeeb7bd~RVXbuKxB_1737417374euoutp02Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1590146112;
+        bh=g7lofStAEXI4rDBNDclmyeYgluSumM2150lwAjjqFGM=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=Un+f+jIUmk8Z5599psC7Yb7eNknrtoyvtxiHz3/YuXympaCqIfxzfyDVLpFI/EzRZ
+         QliYDYN+TKL/RN29YC/d9n+Dt0IgE5ZpaNBqDqP3duySJ7VFllF14lzaKwPd2owl87
+         1u/5iuV8BzPloamQ+sxGSenMdjLt71hchHTIoNu0=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200522111512eucas1p23793e88546caa1e9bbd836fcfa32eedb~RVXbZe0le1441014410eucas1p2J;
+        Fri, 22 May 2020 11:15:12 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id F9.96.60698.044B7CE5; Fri, 22
+        May 2020 12:15:12 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200522111512eucas1p17edeeea548dd59170c84c49ec650bd8a~RVXbFw97l0775607756eucas1p1Z;
+        Fri, 22 May 2020 11:15:12 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200522111512eusmtrp27b43e87159fec26f306e1ffa4579c921~RVXbFEdvK1476214762eusmtrp2k;
+        Fri, 22 May 2020 11:15:12 +0000 (GMT)
+X-AuditID: cbfec7f5-a0fff7000001ed1a-fa-5ec7b440f52a
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 3D.92.07950.F34B7CE5; Fri, 22
+        May 2020 12:15:11 +0100 (BST)
+Received: from [106.210.88.143] (unknown [106.210.88.143]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200522111511eusmtip1251a3e0431392af017466d40c4deba33~RVXadmGHQ2677026770eusmtip1W;
+        Fri, 22 May 2020 11:15:11 +0000 (GMT)
+Subject: Re: [PATCH] i2c: core: fix NULL pointer dereference in
+ suspend/resume callbacks
+To:     linux-pm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@the-dreams.de>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        srv_heupstream@mediatek.com,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH v3 1/3] regulator: max14577: Add proper dt-compatible
- strings
-Message-ID: <20200522110903.GC5801@sirena.org.uk>
-References: <CGME20200522102452eucas1p17c18de8f79e27de96474e5fcad6db5fa@eucas1p1.samsung.com>
- <20200522102448.30209-1-m.szyprowski@samsung.com>
+        linux-samsung-soc@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <34736047-3fc8-385b-cdea-79b061deb7b4@samsung.com>
+Date:   Fri, 22 May 2020 13:15:12 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5QAgd0e35j3NYeGe"
-Content-Disposition: inline
-In-Reply-To: <20200522102448.30209-1-m.szyprowski@samsung.com>
-X-Cookie: C for yourself.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200522101327.13456-1-m.szyprowski@samsung.com>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SbUhTYRjl3b3eXYfT16n5tKJolGGQJhpe+xCVgkERkVEh6Fp5U8tN29Rl
+        IfmdrGw1DHVqZVGm5WdDS0JzTZdKfmaIWiBZoGRim0EfWs6r5b/znHOe9zkHXpoQvXAQ03HK
+        JFallMdLKAHZ2PGjZ3uI0RK1w/jBg6kvqnVgbGVdJFNcV0QyefM2xAw2l1KMNd+MmKLeFh5T
+        +F7EWHMWKKbytYEIEUhnhnP40pL0flKa3dlKSq8bq5C0s2uClFobNhymIgR7otn4uBRW5Rt8
+        UhCbYSkkE4eoC7daX5HpqMFBixxpwAEw0p9BapGAFuFHCD625iMtohcHGwIDj+OtCPJ6p4iV
+        BZO2nc8JFQjq+mwEN8wgeDM3SNm33XAEmGed7Qvu+DjYhkcpu4fAZTxoG5hBdoHCfqCd1lJ2
+        LMTB0P9Jx7NjEm+Br7pc0o49cCR033+KOI8rdBZPLPGOi/5fZQVLiQi8EZqmS5exJ4xM3FmK
+        DbiDDzfND3j2QID3QXY/cA3cYMpi5HN4Pfx5vuLPQjDeU83nhmsIBjOLEOfaDWM9P5eaEdgb
+        apt9OToUGubfEtz7zjA87cplcAZ9Y+EyLYS8XBHn9gKDpebf2ba+AeIGkhhWNTOsamNY1cbw
+        /+5dRFYhTzZZrYhh1f5KVuOjlivUycoYn9MJiga0+Ke6Fyxzz1DL71MmhGkkcRIyZzqiRA7y
+        FHWqwoSAJiTuwnKX9iiRMFqeepFVJchUyfGs2oTW0aTEU+h/bzJShGPkSew5lk1kVSsqj3YU
+        p6MCL75VH47FYfsfBycqdDUxcsUh2execU181eiVte/Kn5wN/7z5YGCKo/hy7CDrplwTMJ4G
+        wqA0vyZ+tm6niyyMNzk/9vBIp/Kq3mJgv/DaS445nTdfkh3VDAVpd5V/q7+t1M8cqJ5zzjyx
+        KQBrFgr0FZrvgcGhlS+js7yJrRkSUh0r99tGqNTyv1/9JB1PAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAIsWRmVeSWpSXmKPExsVy+t/xu7r2W47HGRyYaWmxccZ6Vosvc0+x
+        WMzcMIPFouPvF0aLy7vmsFl87j3CaDHj/D4mi+l3hSw+t/5js1h5YhazA5fH+xut7B6zGy6y
+        eLSc3M/i0bdlFaPHyVNPWDw+b5ILYIvSsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaP
+        tTIyVdK3s0lJzcksSy3St0vQy2g8Pp2l4CpbxdT9h1kaGDexdjFyckgImEgc6jrK3sXIxSEk
+        sJRRYuGJC2wQCRmJk9MaoIqEJf5c6wKLCwm8ZZQ4sDEWxBYWiJKYfuAAO4gtIhAucfXca0YQ
+        m1lgPpNEx99siKETGSWmTP0PVsQmYCjR9RZiEK+AncTFp/1MIDaLgKrEu/42FhBbVCBWYvW1
+        VkaIGkGJkzOfgMU5gep/z53CDLHATGLe5odQtrzE9rdzoGxxiVtP5jNNYBSahaR9FpKWWUha
+        ZiFpWcDIsopRJLW0ODc9t9hIrzgxt7g0L10vOT93EyMwNrcd+7llB2PXu+BDjAIcjEo8vA+S
+        j8UJsSaWFVfmHmKU4GBWEuFdyH80Tog3JbGyKrUoP76oNCe1+BCjKdBzE5mlRJPzgWkjryTe
+        0NTQ3MLS0NzY3NjMQkmct0PgYIyQQHpiSWp2ampBahFMHxMHp1QD4z7jKDvFz/Fl6xUeO6lM
+        fvF169ll68SezjhTPue/XPD2Pa8XLpg4yeR6VauY35THxUpmMoV1nW+/nFttZ+QQe5xHsO2V
+        b6rQwZX3XmjGsrNnrjkxfYYgZ2GkY7Nos9VzX89zH4Xllou9iCt5+kw2admLpU1OpjybSyQz
+        OnJzTaov9e8q7mT3UmIpzkg01GIuKk4EAIlRpMnjAgAA
+X-CMS-MailID: 20200522111512eucas1p17edeeea548dd59170c84c49ec650bd8a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7
+References: <CGME20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7@eucas1p1.samsung.com>
+        <20200522101327.13456-1-m.szyprowski@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi All,
 
---5QAgd0e35j3NYeGe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 22.05.2020 12:13, Marek Szyprowski wrote:
+> Commit 6fe12cdbcfe3 ("i2c: core: support bus regulator controlling in
+> adapter") added generic suspend and resume functions for i2c devices.
+> Those functions unconditionally access an i2c_client structure assigned
+> to the given i2c device. However, there exist i2c devices in the system
+> without a valid i2c_client. Add the needed check before accessing the
+> i2c_client.
 
-On Fri, May 22, 2020 at 12:24:46PM +0200, Marek Szyprowski wrote:
-> Add device tree compatible strings and create proper modalias structures
-> to let this driver load automatically if compiled as module, because
-> max14577 MFD driver creates MFD cells with such compatible strings.
+Just one more comment. The devices without i2c_client structure are the 
+i2c 'devices' associated with the respective i2c bus. They are visible 
+in /sys:
 
-Same issue as before, you're putting the current Linux model into DT
-without adding any additional description of the hardware.
+ls -l /sys/bus/i2c/devices/i2c-*
 
---5QAgd0e35j3NYeGe
-Content-Type: application/pgp-signature; name="signature.asc"
+I wonder if this patch has been ever tested with system suspend/resume, 
+as those devices are always available in the system...
 
------BEGIN PGP SIGNATURE-----
+> ...
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7Hss8ACgkQJNaLcl1U
-h9DIJgf7BpDKzpW22MjREOy/41/5TdMCG7vybW18iFY8cHBhBjkkP/8J24jCBWS4
-9MQsT4JKH4gJyZANrjPM79ARiUiSH2GIpfBieUoMVEqcoHF2IsQobLgVbji2BXHH
-m8CZooQ9v5ayNjkIvXUvnJE6Dm4ynGcoeOnyQ5xoV+o2QJlcXkdARQgYll1DQsgj
-QO0iqLxLGzRM3VkNlZkQ7d3dz8i8ZTnwotJesCoLL1f0dm318aHCLZPC8bAyUI6w
-r7A6uxjbo05r0q8JApVUc5MoavmnIsT3samcO+RsNqh5VvfLkWoc4kDNey92eJ86
-hdvteo+Qp9VPvmvdlDTfvCtdfVV89w==
-=IFlK
------END PGP SIGNATURE-----
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
---5QAgd0e35j3NYeGe--
