@@ -2,129 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E90AD1DE4AD
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 12:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4811DE518
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 13:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728669AbgEVKnU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 May 2020 06:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728542AbgEVKnS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 06:43:18 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33630C061A0E
-        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 03:43:18 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id g12so8493162wrw.1
-        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 03:43:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VGoYWtdu5N5u5jqWgNJFmyeBLxTDklq5XGRfQf6qY4Q=;
-        b=YdeY/dYKbHgnjF5Rfbcb+eEpYTqwDn5A1vVV0JJ5zhynRDstj4c9FpHWPMl+epaBKj
-         4+oNruH5nf6kCafoeC8oqKNyZ/Po23OIUoBNbYN9r4/k0SejSAvyGC92UsY58XQLUfsa
-         3JjDrFGsY19YdyfPsHQclmg1uXVg+LMh91ZPjSFXVChXGrVWjG0Ui7eJQGqklE6+5kay
-         g5Uz20ffaV5DdoIjAToXKulBulbkNzxmwxh2KnSMRG7DYDLx1ioPSUF/Sq5icU69Spbb
-         sYt6m5Pg2RyBF7ZlFDkiMCnoSB3EaxfTGXp6TNa8MZWvQOKRiLEeX0kDcZ6ep0ep66E5
-         CPew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VGoYWtdu5N5u5jqWgNJFmyeBLxTDklq5XGRfQf6qY4Q=;
-        b=opgPQMkks4smzPwNbO+QCFlXH+EO8AES6N4mzcPAgLSInUSIITVafKfvY10aOwJ5CJ
-         QFeXRognP1KcjWsgYJWq0+UOSaV2dJ0NdWqxwgnF3d086GNmkvlmplVgOs6XrogqgWYG
-         S4TZM7gOf/AlbvEXWxC+XF1auh1LK3n0vEnk2vtQy84m2M9vgFbS2Eu8ceUIc+XaN8RV
-         BVF5+axQ1hCrzpYmM4rx6nMyREqUGBmaPmvu64PL2paZzYQ3TdSw7rBRPvf9Wm+V+0DZ
-         Otsbgc7GOmnqETZKRzhBg0iQXJqpv6OWmER9Zhc8YhuktbEPFuaEoN9b1hTk6SYkcY4h
-         CRmA==
-X-Gm-Message-State: AOAM530fKp0SbLB1cU21iqO25C3LW7OebtmXnJSFIS2ivvfgWAaZAZip
-        QDWoWxJ6J+RtKVHgafWMnHKRzg==
-X-Google-Smtp-Source: ABdhPJybiYUfjcoyk6EZQDK4C+UEDo86CQQDAJc9f/khvU4Ce7Ww2hRO343VGYU3st9oV83jeHWEKA==
-X-Received: by 2002:a5d:52c6:: with SMTP id r6mr2933510wrv.269.1590144196705;
-        Fri, 22 May 2020 03:43:16 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:a82f:eaec:3c49:875a? ([2a01:e34:ed2f:f020:a82f:eaec:3c49:875a])
-        by smtp.googlemail.com with ESMTPSA id h1sm9702407wme.42.2020.05.22.03.43.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 May 2020 03:43:16 -0700 (PDT)
-Subject: Re: [PATCH v7 00/15] Add support for devices in the Energy Model
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com
-Cc:     Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
-        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        qperret@google.com, bsegall@google.com, mgorman@suse.de,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        matthias.bgg@gmail.com, steven.price@arm.com,
-        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
-        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
-        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
-        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
-References: <20200511111912.3001-1-lukasz.luba@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <abff69b6-b033-18e2-f380-ceccb42c6b01@linaro.org>
-Date:   Fri, 22 May 2020 12:43:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1729161AbgEVLJH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 May 2020 07:09:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60338 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728281AbgEVLJG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 22 May 2020 07:09:06 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BDBEF206B6;
+        Fri, 22 May 2020 11:09:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590145746;
+        bh=akm9w9vUGMm1OZtMoY9+dDiEUBKGQg7DabJxbnXOXDY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jrMoWA3nOKs2MGjrLolal+vz6NUhgpGFJzvHoE/v9U3gXwsd7UVDpQNjCRJh3RRa0
+         0q90IBErHUS/9YGzSoj2wGN02Si616FepPxOKgt3xUZPQjgEY8KS/rwSl9ynOi3mM1
+         eFY+PXz4pJ5vT7Ld/aSDfVHhIjo5AnFOHEJWQmOM=
+Date:   Fri, 22 May 2020 12:09:03 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCH v3 1/3] regulator: max14577: Add proper dt-compatible
+ strings
+Message-ID: <20200522110903.GC5801@sirena.org.uk>
+References: <CGME20200522102452eucas1p17c18de8f79e27de96474e5fcad6db5fa@eucas1p1.samsung.com>
+ <20200522102448.30209-1-m.szyprowski@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <20200511111912.3001-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5QAgd0e35j3NYeGe"
+Content-Disposition: inline
+In-Reply-To: <20200522102448.30209-1-m.szyprowski@samsung.com>
+X-Cookie: C for yourself.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Lukasz,
+--5QAgd0e35j3NYeGe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 11/05/2020 13:18, Lukasz Luba wrote:
-> Hi all,
-> 
-> This patch set introduces support for devices in the Energy Model (EM)
-> framework. It will unify the power model for thermal subsystem. It will
-> make simpler to add support for new devices willing to use more
-> advanced features (like Intelligent Power Allocation). Now it should
-> require less knowledge and effort for driver developer to add e.g.
-> GPU driver with simple energy model. A more sophisticated energy model
-> in the thermal framework is also possible, driver needs to provide
-> a dedicated callback function. More information can be found in the
-> updated documentation file.
-> 
-> First 7 patches are refactoring Energy Model framework to add support
-> of other devices that CPUs. They change:
-> - naming convention from 'capacity' to 'performance' state,
-> - API arguments adding device pointer and not rely only on cpumask,
-> - change naming when 'cpu' was used, now it's a 'device'
-> - internal structure to maintain registered devices
-> - update users to the new API
-> Patch 8 updates OPP framework helper function to be more generic, not
-> CPU specific.
-> Patches 9-14 change devfreq cooling, dropping part of old power model and
-> adding registration with Energy Model via exported GPL function.
-> The last path is a simple change for Panfrost GPU driver.
-> 
-> The patch set is based on linux-next tag next-20200508.
+On Fri, May 22, 2020 at 12:24:46PM +0200, Marek Szyprowski wrote:
+> Add device tree compatible strings and create proper modalias structures
+> to let this driver load automatically if compiled as module, because
+> max14577 MFD driver creates MFD cells with such compatible strings.
 
-Do you think it is possible to respin against linux-pm next ?
+Same issue as before, you're putting the current Linux model into DT
+without adding any additional description of the hardware.
 
-I wanted to try the series but I'm getting non trivial conflicts with
-the devfreq_cooling changes
+--5QAgd0e35j3NYeGe
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7Hss8ACgkQJNaLcl1U
+h9DIJgf7BpDKzpW22MjREOy/41/5TdMCG7vybW18iFY8cHBhBjkkP/8J24jCBWS4
+9MQsT4JKH4gJyZANrjPM79ARiUiSH2GIpfBieUoMVEqcoHF2IsQobLgVbji2BXHH
+m8CZooQ9v5ayNjkIvXUvnJE6Dm4ynGcoeOnyQ5xoV+o2QJlcXkdARQgYll1DQsgj
+QO0iqLxLGzRM3VkNlZkQ7d3dz8i8ZTnwotJesCoLL1f0dm318aHCLZPC8bAyUI6w
+r7A6uxjbo05r0q8JApVUc5MoavmnIsT3samcO+RsNqh5VvfLkWoc4kDNey92eJ86
+hdvteo+Qp9VPvmvdlDTfvCtdfVV89w==
+=IFlK
+-----END PGP SIGNATURE-----
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--5QAgd0e35j3NYeGe--
