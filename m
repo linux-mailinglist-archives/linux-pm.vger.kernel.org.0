@@ -2,169 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E04211DE7F3
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 15:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 072FF1DE8AB
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 16:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729406AbgEVNXv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 May 2020 09:23:51 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:48006 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729399AbgEVNXv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 09:23:51 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04MDMLnF129997;
-        Fri, 22 May 2020 13:23:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=gZnfBrzAvRzx8jUFLTXQ8QllxngxYzmzC5MjjDonJe8=;
- b=tX0SIp0bVzqD3O0hqKK1fsbNI5KXLBSbmIK3CQsCMzIj7t04LDO17Trpko/fAzkFZ11r
- kEWAvq/E8fQkiW7vuXl+RbTkRpMJXyauafF0xW6AUTp0kG8uV1rg40/BvUsHc9InYWpD
- BLkbCPMrXketqBlyfRMexfCSVdVkeBpBxuzVNiQ5Ero86RtvT4mOyx+jwW9+28JrrFfA
- IfyOd0YDmTeFlJBR7uZY5kancMr02DMQyx//VZatXlSLvrEPVlQEa8mC3laP/zGIdFMx
- Pz9rIQLJQRhgRyGC8XbqWTlhvcXUb3F6wbOya9sMZ1kWJm7fYr9fvEtwiJ5Pe9xYN+dw Zw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 31284mdq3s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 22 May 2020 13:23:38 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04MDIaNo006519;
-        Fri, 22 May 2020 13:23:37 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 314gmb52d4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 May 2020 13:23:37 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04MDNS3x025160;
-        Fri, 22 May 2020 13:23:28 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 22 May 2020 06:23:27 -0700
-Date:   Fri, 22 May 2020 16:23:18 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     devel@driverdev.osuosl.org, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        dinghao.liu@zju.edu.cn, Kangjie Lu <kjlu@umn.edu>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: Re: [PATCH] media: staging: tegra-vde: fix runtime pm imbalance
- on error
-Message-ID: <20200522132318.GM30374@kadam>
-References: <20200520095148.10995-1-dinghao.liu@zju.edu.cn>
- <2b5d64f5-825f-c081-5d03-02655c2d9491@gmail.com>
- <20200520150230.GC30374@kadam>
- <2a46539d.b977f.1723553aa81.Coremail.dinghao.liu@zju.edu.cn>
- <20200521091505.GF30374@kadam>
- <CAJZ5v0irLayBUPRWNT1tcZivz9inS1YbUgGj5WXvucLKKwRQAw@mail.gmail.com>
- <20200521173901.GA22310@kadam>
- <20200522131031.GL2163848@ulmo>
+        id S1729926AbgEVOUc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 May 2020 10:20:32 -0400
+Received: from sauhun.de ([88.99.104.3]:60976 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729771AbgEVOUc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 22 May 2020 10:20:32 -0400
+Received: from localhost (p5486cea4.dip0.t-ipconnect.de [84.134.206.164])
+        by pokefinder.org (Postfix) with ESMTPSA id 9DD722C203F;
+        Fri, 22 May 2020 16:20:30 +0200 (CEST)
+Date:   Fri, 22 May 2020 16:20:29 +0200
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-pm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        srv_heupstream@mediatek.com,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH] i2c: core: fix NULL pointer dereference in
+ suspend/resume callbacks
+Message-ID: <20200522142029.GB5670@ninjato>
+References: <CGME20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7@eucas1p1.samsung.com>
+ <20200522101327.13456-1-m.szyprowski@samsung.com>
+ <34736047-3fc8-385b-cdea-79b061deb7b4@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dTy3Mrz/UPE2dbVg"
 Content-Disposition: inline
-In-Reply-To: <20200522131031.GL2163848@ulmo>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
- adultscore=0 phishscore=0 mlxscore=0 spamscore=0 suspectscore=21
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2005220109
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=21 mlxscore=0
- cotscore=-2147483648 impostorscore=0 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 phishscore=0 spamscore=0 bulkscore=0 adultscore=0
- priorityscore=1501 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005220109
+In-Reply-To: <34736047-3fc8-385b-cdea-79b061deb7b4@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 22, 2020 at 03:10:31PM +0200, Thierry Reding wrote:
-> On Thu, May 21, 2020 at 08:39:02PM +0300, Dan Carpenter wrote:
-> > On Thu, May 21, 2020 at 05:22:05PM +0200, Rafael J. Wysocki wrote:
-> > > On Thu, May 21, 2020 at 11:15 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> > > >
-> > > > On Thu, May 21, 2020 at 11:42:55AM +0800, dinghao.liu@zju.edu.cn wrote:
-> > > > > Hi, Dan,
-> > > > >
-> > > > > I agree the best solution is to fix __pm_runtime_resume(). But there are also
-> > > > > many cases that assume pm_runtime_get_sync() will change PM usage
-> > > > > counter on error. According to my static analysis results, the number of these
-> > > > > "right" cases are larger. Adjusting __pm_runtime_resume() directly will introduce
-> > > > > more new bugs. Therefore I think we should resolve the "bug" cases individually.
-> > > > >
-> > > >
-> > > > That's why I was saying that we may need to introduce a new replacement
-> > > > function for pm_runtime_get_sync() that works as expected.
-> > > >
-> > > > There is no reason why we have to live with the old behavior.
-> > > 
-> > > What exactly do you mean by "the old behavior"?
-> > 
-> > I'm suggesting we leave pm_runtime_get_sync() alone but we add a new
-> > function which called pm_runtime_get_sync_resume() which does something
-> > like this:
-> > 
-> > static inline int pm_runtime_get_sync_resume(struct device *dev)
-> > {
-> > 	int ret;
-> > 
-> > 	ret = __pm_runtime_resume(dev, RPM_GET_PUT);
-> > 	if (ret < 0) {
-> > 		pm_runtime_put(dev);
-> > 		return ret;
-> > 	}
-> > 	return 0;
-> > }
-> > 
-> > I'm not sure if pm_runtime_put() is the correct thing to do?  The other
-> > thing is that this always returns zero on success.  I don't know that
-> > drivers ever care to differentiate between one and zero returns.
-> > 
-> > Then if any of the caller expect that behavior we update them to use the
-> > new function.
-> 
-> Does that really have many benefits, though? I understand that this
-> would perhaps be easier to use because it is more in line with how other
-> functions operate. On the other hand, in some cases you may want to call
-> a different version of pm_runtime_put() on failure, as discussed in
-> other threads.
 
-I wasn't CC'd on the other threads so I don't know.  :/  I have always
-assumed it was something like this but I don't know the details and
-there is no documentation.
+--dTy3Mrz/UPE2dbVg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-http://sweng.the-davies.net/Home/rustys-api-design-manifesto
-You're essentially arguing that it's a #1 on Rusty's scale but ideally
-we would want to be at #7.
+On Fri, May 22, 2020 at 01:15:12PM +0200, Marek Szyprowski wrote:
+> Hi All,
+>=20
+> On 22.05.2020 12:13, Marek Szyprowski wrote:
+> > Commit 6fe12cdbcfe3 ("i2c: core: support bus regulator controlling in
+> > adapter") added generic suspend and resume functions for i2c devices.
+> > Those functions unconditionally access an i2c_client structure assigned
+> > to the given i2c device. However, there exist i2c devices in the system
+> > without a valid i2c_client. Add the needed check before accessing the
+> > i2c_client.
+>=20
+> Just one more comment. The devices without i2c_client structure are the=
+=20
+> i2c 'devices' associated with the respective i2c bus. They are visible=20
+> in /sys:
+>=20
+> ls -l /sys/bus/i2c/devices/i2c-*
+>=20
+> I wonder if this patch has been ever tested with system suspend/resume,=
+=20
+> as those devices are always available in the system...
 
-> 
-> Even ignoring that issue, any existing callsites that are leaking the
-> reference would have to be updated to call the new function, which would
-> be pretty much the same amount of work as updating the callsites to fix
-> the leak, right?
+There was another issue with this patch. Although it is not clear yet,
+if the patch itself is the culprit or if it just unshadows something
+else, however, I am considering to just revert it until these issues are
+fixed.
 
-With the current API we're constantly adding bugs.  I imagine that once
-we add a straight forward default and some documentation then we will
-solve this.
 
-> 
-> So if instead we just fix up the leaks, we might have a case of an API
-> that doesn't work as some of us (myself included) expected it, but at
-> least it would be consistent. If we add another variant things become
-> fragmented and therefore even more complicated to use and review.
+--dTy3Mrz/UPE2dbVg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-That's the approach that we've been trying and it's clearly not working.
+-----BEGIN PGP SIGNATURE-----
 
-regards,
-dan carpenter
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl7H360ACgkQFA3kzBSg
+KbZxwA//XrAA5EoLsXd9wAeV/TJMdqTuVPon4p5jh8DNGzh32u175zocF6eFD/p+
+cAaHO/M1JoKGVIZp/emSN+9RVS3HoBCm682QsOGU0jlhKsYm7aWsNW8fD7wakPh0
+cWrJ/WlkGqlMxRdozW63mL7UtbPPxvceBFFLv5gI/uW1BJNRhf/cJZDdGwaDAST7
+U9NlWQGIheQUwOKVGI0qwfnqcNcZ719fNmBIvdsrKaoRXV4i0BRflXs+NRvtk7gB
+BxcRBtEv2NXHGlfYkAmB4qwZF171V/5/jLLaCkcEikibCKS+geCCDuSqiFwDfpJ8
+NMVmZSAm1PPopxkTknfum+eJZ4KVwQDhCCeeoUTmvdVNECzEkErDZagh2CPdusYQ
+4gPU0X2tMbHRzZZOZ44IogMvExRwsRUxppnpMjiMtYgZL4ayxpgSzfTy7F1i4puc
+YlJnwyT5xNl5bL0krBM8eXlQQP+QnIa7pxbmyST4DVI7voPgdhBR5xW1OU1baDqF
+l4CSM64EGSTUy+pEP6zlrrGNVFV4HDSc1dvbu8Bha62Wmr6GkmMrRKufzcDlzZzl
+gkXZkVgTellll1dPQPVWid+Zci8aJEIrmJmZRpTR7KbdXPiIn7xXjv/PtiS5om5u
+hM/kOcHV1seezhDUrRZANyfx+ClPCsjyz4uYjYlDCjZMkOwiPLg=
+=cMqr
+-----END PGP SIGNATURE-----
 
+--dTy3Mrz/UPE2dbVg--
