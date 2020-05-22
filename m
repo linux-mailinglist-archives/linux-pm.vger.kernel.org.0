@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B161DF114
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 23:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BBB1DF11D
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 23:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731064AbgEVV2e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 May 2020 17:28:34 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:36632 "EHLO
+        id S1731029AbgEVV3f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 May 2020 17:29:35 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:40104 "EHLO
         mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731035AbgEVV2e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 17:28:34 -0400
-Received: by mail-il1-f194.google.com with SMTP id 17so12159149ilj.3;
-        Fri, 22 May 2020 14:28:32 -0700 (PDT)
+        with ESMTP id S1731027AbgEVV3e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 17:29:34 -0400
+Received: by mail-il1-f194.google.com with SMTP id m6so12131460ilq.7;
+        Fri, 22 May 2020 14:29:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aeNkqKnvqrQ1R9V6A7mXbyK3G4VemHM61exPIH1obU8=;
-        b=toDixm3r78ob4m1rBDOOq6aEFOX1cMsnnypBr+soAcOLbklCtOcz/y4Q8AJaUNYnFn
-         wcbIHu1EqFqEdfvw820qNELwVJA05OAfCgwWWj0vXqUJVzISsiC0AmaqMTpGkHrwP9WT
-         Ma6hBtNRkir9rLjAEiMiviXc0oDNASGY5RGQTbdW3cFQw5swLBs1n5Gn4zgXgMkuq7aP
-         rqGGB6Ge+Y4+80FOeK8/DQIBIjSW7piLj0CR5M9P1uroj9ZgN8BoVdbvUAdRSBxigiBP
-         l0CZ2L3IT69eX3yUs0d77142YZoSmnb8SSSCFl3Q2dZH3OuluXsOwClTnga9sglyM/N4
-         8HUA==
-X-Gm-Message-State: AOAM533l4ZoILMBigswybeK0pHI3cZE2ImGcFLs8+I54dt9Aofs6QUXZ
-        LgzSmKX8eeU40ONWI84a97DYehVvmWs=
-X-Google-Smtp-Source: ABdhPJxqs7mPKhasfMjw+2Tly2+Y+QUzs6NUQl34JF5bRHWwIbhB/Cbx9lPWfsTZeeLAl+TerA0d1g==
-X-Received: by 2002:a92:914d:: with SMTP id t74mr14383223ild.182.1590182911723;
-        Fri, 22 May 2020 14:28:31 -0700 (PDT)
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com. [209.85.166.52])
-        by smtp.gmail.com with ESMTPSA id y12sm5450562ilk.16.2020.05.22.14.28.30
+        bh=/FEKPVDTqZYdkry/gHcCWAwnNiWnV8DNS7HV5f1GoQI=;
+        b=TPJIde6dEdsLcs1LdhvEyhOySzeUOZ1CiNJG4he1j98yAbJ8gV8W+ArPh8Ipnd37Vz
+         pXZi1nqHmj4C550599w3TQs77ZV4/Xwl79pxGSHNv8lwI3IAKVzpR2cql4Znyt+C+mFB
+         Imnk7SQFcQFg8vX+Y8+0Q8Pkszu6NF27mazBbP/K50ws/A3rkAfXBJK2XRN42qCSxRDD
+         M+2S3vDO2ATKV9vYtb7LHdpQtdx5zXfkcH6hdwwj1ePj17F0Ua8EECTQZwt93FjQcotY
+         uFBjYJR8DsUE6c5uUYffGoWVMc7zLkMAHENqhtwjMAdCKUIZIj7CUa7SroRjphJNProC
+         C1Cg==
+X-Gm-Message-State: AOAM533ODoUo1KGWCL203aK17phDpKpoay+y02m8aT0FSAyOvkrZwKit
+        /wvc5ByijjaWv7k8A7wlK3s5+4SRUks=
+X-Google-Smtp-Source: ABdhPJzgfC3yWWqO9UdDXOUNAhppP8mwrfKJ+jxYsbjhm0H4TYVYNN8ckWDxtItweG5bQSkvVk7kvQ==
+X-Received: by 2002:a92:4909:: with SMTP id w9mr15370034ila.302.1590182973671;
+        Fri, 22 May 2020 14:29:33 -0700 (PDT)
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com. [209.85.166.48])
+        by smtp.gmail.com with ESMTPSA id f15sm5252270ill.58.2020.05.22.14.29.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 May 2020 14:28:31 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id q8so11555333iow.7;
-        Fri, 22 May 2020 14:28:30 -0700 (PDT)
-X-Received: by 2002:a6b:1505:: with SMTP id 5mr4759580iov.198.1590182910435;
- Fri, 22 May 2020 14:28:30 -0700 (PDT)
+        Fri, 22 May 2020 14:29:32 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id r2so2621462ioo.4;
+        Fri, 22 May 2020 14:29:32 -0700 (PDT)
+X-Received: by 2002:a5e:8b4b:: with SMTP id z11mr4708967iom.78.1590182972502;
+ Fri, 22 May 2020 14:29:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200507112955.23520-1-geert+renesas@glider.be> <20200507112955.23520-4-geert+renesas@glider.be>
-In-Reply-To: <20200507112955.23520-4-geert+renesas@glider.be>
+References: <20200507112955.23520-1-geert+renesas@glider.be> <20200507112955.23520-2-geert+renesas@glider.be>
+In-Reply-To: <20200507112955.23520-2-geert+renesas@glider.be>
 From:   Li Yang <leoyang.li@nxp.com>
-Date:   Fri, 22 May 2020 16:28:06 -0500
-X-Gmail-Original-Message-ID: <CADRPPNQxRwa2kQj_5K26RcovBhtfxdKitOxBKF8sgoyu9O+W-Q@mail.gmail.com>
-Message-ID: <CADRPPNQxRwa2kQj_5K26RcovBhtfxdKitOxBKF8sgoyu9O+W-Q@mail.gmail.com>
-Subject: Re: [PATCH 3/4] clk: qoriq: Add platform dependencies
+Date:   Fri, 22 May 2020 16:29:09 -0500
+X-Gmail-Original-Message-ID: <CADRPPNSwEv_SV4jQk-gOj6+WhAX1jVQk2szgPN=o2JVqV0yjLw@mail.gmail.com>
+Message-ID: <CADRPPNSwEv_SV4jQk-gOj6+WhAX1jVQk2szgPN=o2JVqV0yjLw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] ahci: qoriq: Add platform dependencies
 To:     Geert Uytterhoeven <geert+renesas@glider.be>
 Cc:     Shawn Guo <shawnguo@kernel.org>, Jens Axboe <axboe@kernel.dk>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -65,41 +65,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 7, 2020 at 6:31 AM Geert Uytterhoeven
+On Thu, May 7, 2020 at 6:30 AM Geert Uytterhoeven
 <geert+renesas@glider.be> wrote:
 >
-> The Freescale QorIQ clock controller is only present on Freescale E500MC
-> and Layerscape SoCs.  Add platform dependencies to the CLK_QORIQ config
+> The Freescale QorIQ AHCI SATA controller is only present on Freescale
+> Layerscape SoCs.  Add platform dependencies to the AHCI_QORIQ config
 > symbol, to avoid asking the user about it when configuring a kernel
-> without E500MC or Layerscape support.
+> without Layerscape support.
 >
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Hi Michael/Stephen,
+Hi Jens,
 
-Are you applying this patch?  If not I can apply it with your ACK.
+Are you applying this patches?  I can also apply it with your ACK.
 
 Regards,
 Leo
-
 > ---
->  drivers/clk/Kconfig | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/ata/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-> index bcb257baed06daa0..22bf015610d1724c 100644
-> --- a/drivers/clk/Kconfig
-> +++ b/drivers/clk/Kconfig
-> @@ -232,7 +232,8 @@ config COMMON_CLK_AXI_CLKGEN
->
->  config CLK_QORIQ
->         bool "Clock driver for Freescale QorIQ platforms"
-> -       depends on (PPC_E500MC || ARM || ARM64 || COMPILE_TEST) && OF
-> +       depends on OF
-> +       depends on PPC_E500MC || SOC_LS1021A || ARCH_LAYERSCAPE || COMPILE_TEST
->         ---help---
->           This adds the clock driver support for Freescale QorIQ platforms
->           using common clock framework.
+> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> index 05ecdce1b702cf8b..d9e66b37acd1862a 100644
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+> @@ -264,6 +264,7 @@ config AHCI_XGENE
+>  config AHCI_QORIQ
+>         tristate "Freescale QorIQ AHCI SATA support"
+>         depends on OF
+> +       depends on SOC_LS1021A || ARCH_LAYERSCAPE || COMPILE_TEST
+>         select SATA_HOST
+>         help
+>           This option enables support for the Freescale QorIQ AHCI SoC's
 > --
 > 2.17.1
 >
