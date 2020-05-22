@@ -2,110 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C071DDEF7
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 06:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4496B1DDF2F
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 07:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725956AbgEVEhl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 May 2020 00:37:41 -0400
-Received: from spam.zju.edu.cn ([61.164.42.155]:19294 "EHLO zju.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726666AbgEVEhk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 22 May 2020 00:37:40 -0400
-Received: by ajax-webmail-mail-app4 (Coremail) ; Fri, 22 May 2020 12:36:51
- +0800 (GMT+08:00)
-X-Originating-IP: [222.205.77.158]
-Date:   Fri, 22 May 2020 12:36:51 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   dinghao.liu@zju.edu.cn
-To:     "Bjorn Helgaas" <helgaas@kernel.org>
-Cc:     kjlu@umn.edu, "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
-        "Rob Herring" <robh@kernel.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        "Thierry Reding" <thierry.reding@gmail.com>,
-        "Jonathan Hunter" <jonathanh@nvidia.com>,
-        "Vidya Sagar" <vidyas@nvidia.com>,
-        "Andrew Murray" <amurray@thegoodpenguin.co.uk>,
-        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: Re: Re: [PATCH] [v2] PCI: tegra194: Fix runtime PM imbalance on
- error
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.10 build 20190906(84e8bf8f)
- Copyright (c) 2002-2020 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20200521151620.GA1135365@bjorn-Precision-5520>
-References: <20200521151620.GA1135365@bjorn-Precision-5520>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        id S1727906AbgEVFTb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 May 2020 01:19:31 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:60795 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726530AbgEVFTa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 01:19:30 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200522051928euoutp01364a85b191648e57a18ba9dce95210b9~RQg1lQ_9b1376213762euoutp01g
+        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 05:19:28 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200522051928euoutp01364a85b191648e57a18ba9dce95210b9~RQg1lQ_9b1376213762euoutp01g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1590124768;
+        bh=bDBvRfRwXpfJfQj2KXHjRFIv2OKEmKMJBjpkDpCPm3o=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=fEGc3xK//4xmizDC3Lwt/WL6Lc1RO1I1CCKcjMXmd9E9cCATyEKAGwHBOJ3uqbVVS
+         P/c5qSS7wMONMPJ8euUOxN0FJRNs8dsOqCfCUH8q41izHujPPR9qDJyCr4paUEBzjw
+         GtEnDGARkdGqjIAvwaBiYnpPCO8oQ6l+UIKTXoHk=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200522051928eucas1p2ae7e6d0237f73826f0ec5fe6346314be~RQg1IgnGu1567415674eucas1p2Q;
+        Fri, 22 May 2020 05:19:28 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 1F.78.61286.0E067CE5; Fri, 22
+        May 2020 06:19:28 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200522051927eucas1p107f4aae8f0f47043f067d7d6b58efd19~RQg04aWgR3127431274eucas1p1H;
+        Fri, 22 May 2020 05:19:27 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200522051927eusmtrp132203103fb852f9fbbbdaf357a54095b~RQg030OQj2136521365eusmtrp1n;
+        Fri, 22 May 2020 05:19:27 +0000 (GMT)
+X-AuditID: cbfec7f2-ef1ff7000001ef66-53-5ec760e0572c
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id B5.BE.08375.FD067CE5; Fri, 22
+        May 2020 06:19:27 +0100 (BST)
+Received: from [106.210.88.143] (unknown [106.210.88.143]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200522051927eusmtip2f7fc78fc9283057109a1d9cdb3fa9efd~RQg0cUKZL3144231442eusmtip2O;
+        Fri, 22 May 2020 05:19:27 +0000 (GMT)
+Subject: Re: [PATCH] PM: runtime: clk: Fix clk_pm_runtime_get() error path
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <e9130ce8-fd22-c871-c089-585585c7133f@samsung.com>
+Date:   Fri, 22 May 2020 07:19:28 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.8.0
 MIME-Version: 1.0
-Message-ID: <b626ea1.bdecf.1723aab689f.Coremail.dinghao.liu@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgCnjwrjVsdexUb7AQ--.40632W
-X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgQIBlZdtOQIGQABsD
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJTRUUUbtvS07vEb7Iv0x
-        C_Cr1lV2xY67kC6x804xWlV2xY67CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DMIAI
-        bVAFxVCF77xC64kEw24lV2xY67C26IkvcIIF6IxKo4kEV4ylV2xY628lY4IE4IxF12IF4w
-        CS07vE84x0c7CEj48ve4kI8wCS07vE84ACjcxK6xIIjxv20xvE14v26w1j6s0DMIAIbVA2
-        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIAIbVA2z4x0Y4vEx4A2jsIE14v26r
-        xl6s0DMIAIbVA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lV2xY62AIxVAIcxkEcVAq
-        07x20xvEncxIr21lV2xY6c02F40EFcxC0VAKzVAqx4xG6I80ewCS07vEYx0E2Ix0cI8IcV
-        AFwI0_Jrv_JF1lV2xY6cIj6I8E87Iv67AKxVWUJVW8JwCS07vEOx8S6xCaFVCjc4AY6r1j
-        6r4UMIAIbVACI402YVCY1x02628vn2kIc2xKxwCS07vE7I0Y64k_MIAIbVCY02Avz4vE14
-        v_GrylV2xY6xkI7II2jI8vz4vEwIxGrwCS07vE42xK82IY6x8ErcxFaVAv8VW8uw4UJr1U
-        MIAIbVCF72vE77IF4wCS07vE4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lV2xY6I8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lV2xY6I8I3I0E7480Y4vE14v26r106r1rMIAIbVC2zVAF1VAY17CE14v2
-        6r1q6r43MIAIbVCI42IY6xIIjxv20xvE14v26r1j6r1xMIAIbVCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lV2xY6IIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIAIbVCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCS07vEIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUU==
+In-Reply-To: <5127441.yGvM1JjtLk@kreacher>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLKsWRmVeSWpSXmKPExsWy7djPc7oPEo7HGUw5zGexccZ6Vovz5zew
+        W1zeNYfN4nPvEUaLi6dcLc6cvsRqcXxtuAO7x/sbrewem1Z1snncubaHzWPL1XYWj74tqxg9
+        Pm+SC2CL4rJJSc3JLEst0rdL4MqYtWcbW8Fq/oqPl+6wNDAu4Oli5OSQEDCRWLngGVMXIxeH
+        kMAKRokt66ZBOV8YJc4tOsIG4XxmlLjzaw9rFyMHWMvvkwYQ8eWMEmtmLGGEcN4zSnz7/YQd
+        ZK6wgJfEh95mVhBbRCBIYu3cWWwgNrPAXUaJM/s4QWw2AUOJrrddYHFeATuJR3fbmEBsFgFV
+        iT+HZjCC2KICsRKnF29mhKgRlDg58wkLiM0poCWx7ekRVoiZ8hLb385hhrDFJW49mQ/2goTA
+        PnaJtrn3mSGudpE42p8K8bOwxKvjW9ghbBmJ05N7WCDqmxklHp5byw7h9DBKXG6CuEJCwFri
+        zrlfbCCDmAU0Jdbv0ocIO0rsunGEHWI+n8SNt4IQN/BJTNo2HWotr0RHmxBEtZrErOPr4NYe
+        vHCJeQKj0iwkn81C8s0sJN/MQti7gJFlFaN4amlxbnpqsWFearlecWJucWleul5yfu4mRmAi
+        Ov3v+KcdjF8vJR1iFOBgVOLhfZB8LE6INbGsuDL3EKMEB7OSCO9C/qNxQrwpiZVVqUX58UWl
+        OanFhxilOViUxHmNF72MFRJITyxJzU5NLUgtgskycXBKNTBa/w8tPTJbp+v17y0ckt0yHVZb
+        Voq4TAiWUVTe/K/RsChMTEXPeOad96u/HVN+knLrVr/HG6k9T5skTaX/bFAtOab2Immixsyz
+        Fb/vhvS9qiys0q0/cH7PHaEwXkG/GlOdxPUib/cosGXzTbt0MVzPyJZvykM5UcGNTvZKPjGs
+        czMdd76SzFFiKc5INNRiLipOBAC1zfHdQAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAIsWRmVeSWpSXmKPExsVy+t/xe7r3E47HGUxcYGGxccZ6Vovz5zew
+        W1zeNYfN4nPvEUaLi6dcLc6cvsRqcXxtuAO7x/sbrewem1Z1snncubaHzWPL1XYWj74tqxg9
+        Pm+SC2CL0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXSt7NJSc3JLEst0rdL
+        0MuYtWcbW8Fq/oqPl+6wNDAu4Oli5OCQEDCR+H3SoIuRi0NIYCmjxPoXZ9m7GDmB4jISJ6c1
+        sELYwhJ/rnWxQRS9ZZQ4sfkXE0hCWMBL4kNvM1iRiECQxP15f1hAipgF7jJK/Dw/ESwhJFAr
+        cfXsQ7CpbAKGEl1vQSZxcvAK2Ek8utsGNohFQFXiz6EZjCC2qECsxOprrYwQNYISJ2c+YQGx
+        OQW0JLY9PQI2k1nATGLe5ofMELa8xPa3c6BscYlbT+YzTWAUmoWkfRaSlllIWmYhaVnAyLKK
+        USS1tDg3PbfYUK84Mbe4NC9dLzk/dxMjMPa2Hfu5eQfjpY3BhxgFOBiVeHgfJB+LE2JNLCuu
+        zD3EKMHBrCTCu5D/aJwQb0piZVVqUX58UWlOavEhRlOg5yYyS4km5wPTQl5JvKGpobmFpaG5
+        sbmxmYWSOG+HwMEYIYH0xJLU7NTUgtQimD4mDk6pBsaEnM0vvP7rpJpPf9dxI2d3lu9+uY1i
+        U3wtsu3WzqqtPDDz+pt9XiGeD6TyD9yfqFbp7vN8Q8OT/R5+QcvzNdukMsqauDoWcB/NTN5z
+        8+Av3XuHbpyyyZY/vXn9Iv6gm1qf3q2weriUJ17xoVFL2jKLf/5iIf0zre4utPu02Cyx5mSQ
+        cRnf1a9KLMUZiYZazEXFiQCOKI8Y0wIAAA==
+X-CMS-MailID: 20200522051927eucas1p107f4aae8f0f47043f067d7d6b58efd19
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200521170817eucas1p13d9477a0a5d13d2df876134cf41131d8
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200521170817eucas1p13d9477a0a5d13d2df876134cf41131d8
+References: <CGME20200521170817eucas1p13d9477a0a5d13d2df876134cf41131d8@eucas1p1.samsung.com>
+        <5127441.yGvM1JjtLk@kreacher>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgQmpvcm4sCgpJbiBmYWN0LCBtb3N0IHVzYWdlIG9mIHBtX3J1bnRpbWVfZ2V0X3N5bmMoKSBp
-cyBjb3JyZWN0LiBJIG1hZGUgCmEgc3RhdGljIGFuYWx5c2lzIHRvb2wgdG8gY2hlY2sgdGhpcyBp
-bWJhbGFuY2UgaW4ga2VybmVsIGFuZCAKZm91bmQgYWJvdXQgODAgYnVncyBpbiBkaXJ2ZXJzLiBT
-b21lIG9mIG15IHBhdGNoZXMgaGF2ZSBiZWVuIAphY2NlcHRlZCBhbmQgSSdtIHRyeWluZyB0byBw
-YXRjaCB0aGUgcmVzdCBhcyBzb29uIGFzIHBvc3NpYmxlLgoKUmVnYXJkcywKRGluZ2hhbyAKCj4g
-WytjYyBSYWZhZWwsIGxpbnV4LXBtXQo+IAo+IE9uIFRodSwgTWF5IDIxLCAyMDIwIGF0IDExOjEz
-OjQ5QU0gKzA4MDAsIERpbmdoYW8gTGl1IHdyb3RlOgo+ID4gcG1fcnVudGltZV9nZXRfc3luYygp
-IGluY3JlbWVudHMgdGhlIHJ1bnRpbWUgUE0gdXNhZ2UgY291bnRlciBldmVuCj4gPiB3aGVuIGl0
-IHJldHVybnMgYW4gZXJyb3IgY29kZS4gVGh1cyBhIHBhaXJpbmcgZGVjcmVtZW50IGlzIG5lZWRl
-ZCBvbgo+ID4gdGhlIGVycm9yIGhhbmRsaW5nIHBhdGggdG8ga2VlcCB0aGUgY291bnRlciBiYWxh
-bmNlZC4KPiAKPiBJIGRpZG4ndCByZWFsaXplIHRoZXJlIHdlcmUgc28gbWFueSBkcml2ZXJzIHdp
-dGggdGhlIGV4YWN0IHNhbWUgaXNzdWUuCj4gQ2FuIHdlIGp1c3Qgc3F1YXNoIHRoZXNlIGFsbCBp
-bnRvIGEgc2luZ2xlIHBhdGNoIHNvIHdlIGNhbiBzZWUgdGhlbQo+IGFsbCB0b2dldGhlcj8KPiAK
-PiBIbW0uICBUaGVyZSBhcmUgb3ZlciAxMzAwIGNhbGxlcnMgb2YgcG1fcnVudGltZV9nZXRfc3lu
-YygpLCBhbmQgaXQKPiBsb29rcyBsaWtlIG1hbnkgb2YgdGhlbSBoYXZlIHNpbWlsYXIgaXNzdWVz
-LCBpLmUuLCB0aGV5IGhhdmUgYSBwYXR0ZXJuCj4gbGlrZSB0aGlzCj4gCj4gICByZXQgPSBwbV9y
-dW50aW1lX2dldF9zeW5jKGRldik7Cj4gICBpZiAocmV0IDwgMCkKPiAgICAgcmV0dXJuOwo+IAo+
-ICAgcG1fcnVudGltZV9wdXQoZGV2KTsKPiAKPiB3aGVyZSB0aGVyZSBpcyBub3QgYSBwbV9ydW50
-aW1lX3B1dCgpIHRvIG1hdGNoIGV2ZXJ5Cj4gcG1fcnVudGltZV9nZXRfc3luYygpLiAgUmFuZG9t
-IHNhbXBsZToKPiAKPiAgIG5kczMyX3BtdV9yZXNlcnZlX2hhcmR3YXJlCj4gICBzYXRhX3JjYXJf
-cHJvYmUKPiAgIGV4eW5vc190cm5nX3Byb2JlCj4gICBrc19zYV9ybmdfcHJvYmUKPiAgIG9tYXBf
-YWVzX3Byb2JlCj4gICBzdW44aV9zc19wcm9iZQo+ICAgb21hcF9hZXNfcHJvYmUKPiAgIHp5bnFf
-Z3Bpb19wcm9iZQo+ICAgYW1kZ3B1X2h3bW9uX3Nob3dfcG93ZXJfYXZnCj4gICBtdGtfY3J0Y19k
-ZHBfaHdfaW5pdAo+ICAgLi4uCj4gCj4gU3VyZWx5IEknbSBtaXNzaW5nIHNvbWV0aGluZyBhbmQg
-dGhlc2UgYXJlbid0IGFsbCBicm9rZW4sIHJpZ2h0Pwo+IAo+IE1heWJlIHdlIGNvdWxkIHB1dCB0
-b2dldGhlciBhIGNvY2NpbmVsbGUgc2NyaXB0IHRvIHNjYW4gdGhlIHRyZWUgZm9yCj4gdGhpcyBp
-c3N1ZT8KPiAKPiA+IFNpZ25lZC1vZmYtYnk6IERpbmdoYW8gTGl1IDxkaW5naGFvLmxpdUB6anUu
-ZWR1LmNuPgo+ID4gLS0tCj4gPiAgZHJpdmVycy9wY2kvY29udHJvbGxlci9kd2MvcGNpZS10ZWdy
-YTE5NC5jIHwgNSArKy0tLQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDMg
-ZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BjaS9jb250cm9sbGVy
-L2R3Yy9wY2llLXRlZ3JhMTk0LmMgYi9kcml2ZXJzL3BjaS9jb250cm9sbGVyL2R3Yy9wY2llLXRl
-Z3JhMTk0LmMKPiA+IGluZGV4IGFlMzBhMmZkMzcxNi4uMmMwZDJjZTE2YjQ3IDEwMDY0NAo+ID4g
-LS0tIGEvZHJpdmVycy9wY2kvY29udHJvbGxlci9kd2MvcGNpZS10ZWdyYTE5NC5jCj4gPiArKysg
-Yi9kcml2ZXJzL3BjaS9jb250cm9sbGVyL2R3Yy9wY2llLXRlZ3JhMTk0LmMKPiA+IEBAIC0xNjIz
-LDcgKzE2MjMsNyBAQCBzdGF0aWMgaW50IHRlZ3JhX3BjaWVfY29uZmlnX3JwKHN0cnVjdCB0ZWdy
-YV9wY2llX2R3ICpwY2llKQo+ID4gIAlyZXQgPSBwaW5jdHJsX3BtX3NlbGVjdF9kZWZhdWx0X3N0
-YXRlKGRldik7Cj4gPiAgCWlmIChyZXQgPCAwKSB7Cj4gPiAgCQlkZXZfZXJyKGRldiwgIkZhaWxl
-ZCB0byBjb25maWd1cmUgc2lkZWJhbmQgcGluczogJWRcbiIsIHJldCk7Cj4gPiAtCQlnb3RvIGZh
-aWxfcGluY3RybDsKPiA+ICsJCWdvdG8gZmFpbF9wbV9nZXRfc3luYzsKPiA+ICAJfQo+ID4gIAo+
-ID4gIAl0ZWdyYV9wY2llX2luaXRfY29udHJvbGxlcihwY2llKTsKPiA+IEBAIC0xNjUwLDkgKzE2
-NTAsOCBAQCBzdGF0aWMgaW50IHRlZ3JhX3BjaWVfY29uZmlnX3JwKHN0cnVjdCB0ZWdyYV9wY2ll
-X2R3ICpwY2llKQo+ID4gIAo+ID4gIGZhaWxfaG9zdF9pbml0Ogo+ID4gIAl0ZWdyYV9wY2llX2Rl
-aW5pdF9jb250cm9sbGVyKHBjaWUpOwo+ID4gLWZhaWxfcGluY3RybDoKPiA+IC0JcG1fcnVudGlt
-ZV9wdXRfc3luYyhkZXYpOwo+ID4gIGZhaWxfcG1fZ2V0X3N5bmM6Cj4gPiArCXBtX3J1bnRpbWVf
-cHV0X3N5bmMoZGV2KTsKPiA+ICAJcG1fcnVudGltZV9kaXNhYmxlKGRldik7Cj4gPiAgCXJldHVy
-biByZXQ7Cj4gPiAgfQo+ID4gLS0gCj4gPiAyLjE3LjEKPiA+IAo=
+Hi Rafael,
+
+On 21.05.2020 19:08, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> clk_pm_runtime_get() assumes that the PM-runtime usage counter will
+> be dropped by pm_runtime_get_sync() on errors, which is not the case,
+> so PM-runtime references to devices acquired by the former are leaked
+> on errors returned by the latter.
+>
+> Fix this by modifying clk_pm_runtime_get() to drop the reference if
+> pm_runtime_get_sync() returns an error.
+>
+> Fixes: 9a34b45397e5 clk: Add support for runtime PM
+> Cc: 4.15+ <stable@vger.kernel.org> # 4.15+
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Frankly, I would rather fix the runtime_get_sync() instead of fixing the 
+return path everywhere in the kernel. The current behavior of the 
+pm_runtime_get_sync() is completely counter-intuitive then. I bet that 
+in the 99% of the places where it is being called assume that no special 
+fixup is needed in case of failure. This is one of the most common 
+runtime PM related function and it is really a common pattern in the 
+drivers to call:
+
+pm_runtime_get_sync()
+
+do something with the hardware
+
+pm_runtime_put()
+
+Do you really want to fix the error paths of the all such calls?
+
+
+> ---
+>   drivers/clk/clk.c |    6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> Index: linux-pm/drivers/clk/clk.c
+> ===================================================================
+> --- linux-pm.orig/drivers/clk/clk.c
+> +++ linux-pm/drivers/clk/clk.c
+> @@ -114,7 +114,11 @@ static int clk_pm_runtime_get(struct clk
+>   		return 0;
+>   
+>   	ret = pm_runtime_get_sync(core->dev);
+> -	return ret < 0 ? ret : 0;
+> +	if (ret < 0) {
+> +		pm_runtime_put_noidle(core->dev);
+> +		return ret;
+> +	}
+> +	return 0;
+>   }
+>   
+>   static void clk_pm_runtime_put(struct clk_core *core)
+>
+>
+>
+>
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
