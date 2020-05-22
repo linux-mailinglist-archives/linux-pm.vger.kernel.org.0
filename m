@@ -2,54 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1431DEBE2
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 17:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3433C1DEBF1
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 17:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730559AbgEVPcK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 May 2020 11:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+        id S1730271AbgEVPdu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 May 2020 11:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730469AbgEVPcJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 11:32:09 -0400
+        with ESMTP id S1729040AbgEVPdt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 11:33:49 -0400
 Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02FEC05BD43
-        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 08:32:07 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id g14so4634450wme.1
-        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 08:32:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14FAC061A0E
+        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 08:33:48 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id u12so5426241wmd.3
+        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 08:33:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=otTjOhB3pQfb5rvNf3iE/1EF+uvqWUVNS9VHLDzOq6I=;
-        b=YjORt36Ol5Z1zqcZJ9PdVDQlWbU2xMv+HuUp2H6cXcxLt9hXl7O4guMpdaJSCxMlk/
-         F0ZgAw2FvlH34VcN4fni2/NgLuZkYmwMItA0MjVGnZ5p9uL6jvhBff0Q4CTl85Yw1pw3
-         rvDo4oOuVmI951FS3NPpy9tLJaA5xxllVZY0spCqdqsRGD2+abdJquNCoJXQpWfgPgGu
-         ZCn9yjxdzIlUYRfFPLW4aL2snRBCG82tP7948zBCVceR9ovXv0brb7+4rimzBnUS+lwv
-         j8ylwDgWE60TyNowyMK8CQRJ2u9gxTZKcsVP1PX2qZIf9VY10WFDjw1Xh8dRTP1Yiq0I
-         zC8g==
+        bh=hcAXj+h6riPB6ZVFEUDphaR6SMt//XrFMgdCLb/lUPw=;
+        b=ZXPT8vQKI0THre0nWQptX5DX3OQEF0MPvOLZC7BlkLaE8b8NlW7h8xPy4kbSwyIZHV
+         pWs116H27CkgzXUT7qAcDmdmELdwgYchJL2Wm/AczM9aL0p/p7gE2uGxh2SV0rFX7XHl
+         RxcaGG0N7CkRI162e7zraSaqMieQFCIrcm3Xuwm+s2vSd6PyqmJbKTs4BD9MDjdvWpbp
+         efG81d4dq20GG9GGcLe9ZagCLUuMs/imDDvN9h5F6VPHNcCzTdZb4Nhkfu1AjzTQJVhd
+         6+qPw/syj140kRSQa8Ae/WBtvlLjXn6BaoIpSYLcUuzNmVu9CoerPfegvw+D7g1xaLLA
+         2SbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=otTjOhB3pQfb5rvNf3iE/1EF+uvqWUVNS9VHLDzOq6I=;
-        b=cAnRXKEvmFKjrYFoxl8oAZGcaDtZIAZ5Br8wU8ON061evxjGr5tOHIoT3hDZiFnTSq
-         WjKnKrbr8ICnzONgBFIq+w/v3G9QP7OEL4sA29qmFt9CAkEkhPOVaZyE1eZKKiVz3l45
-         tb6ZZFTsJqWq8gMOADTjJr+YmZZSWrxfhUTnO5t6CW6HdxpKV+Tk6Ag8U5jZRXXCy4jq
-         5wkjcdjDDZlWexYXmuFcTdI8EL2VCOAqQnMoTbSQ5Caa9/ENxRiodtNyS4NQrBhYdgGE
-         SXh53WaDFCM19y+LeBFuS6jSd1qR6LdFQDxrVGCuLESikm/BP7tc8r8YySMZqpx3BEdu
-         bDaQ==
-X-Gm-Message-State: AOAM53048XX3+fZZXZXJ7zfAG0D6cEF6MD+ibcsMbr+itQFkmTLGgjt0
-        TsMrOpKbldpKUx1QA6wd8u45xA==
-X-Google-Smtp-Source: ABdhPJxZhfb8FvGiHXbP4WIrzNxdJ9R0OJbYjAm99WLd9VjIJX2ehUsAjztVxh8MlTgphwpbBpEHEA==
-X-Received: by 2002:a1c:1983:: with SMTP id 125mr13524236wmz.43.1590161526337;
-        Fri, 22 May 2020 08:32:06 -0700 (PDT)
+        bh=hcAXj+h6riPB6ZVFEUDphaR6SMt//XrFMgdCLb/lUPw=;
+        b=PNYUfSZn4Qy15BBhsXkemjyq8V0A3y7YXtnlmSxZ63w9o5yY8DQOSkxq3CT5lIiCo2
+         +39JXHORFm1U7jNi4Osvsrtm/SMRR5pYegCGeZzu4iYLgmVRkfWK4UhrBXEykOl4+FD9
+         ml+qIyWZ7exrAzseR4fy8pT5biSQByaPqWqxX4ufX8GZdy6n2SwC0hzrDELi0YIMfINy
+         cbCGzUFB+OAoy0HqOZbWbuL9BtSBLh4keStIrLXi9e9MDiiS/0jC8HvqkZcA0eoeyqLa
+         zP5q3vJvmvQVi10MOA6a4gfhrIrPFmRQKmk9iKtspUgbOLbeDxp5jIOBQGICmxrD3+oh
+         xRGQ==
+X-Gm-Message-State: AOAM530BaytSiheZzJgP9QRDGM5He6N6gsOu6MdNvFE+dcQUXzlIz2WK
+        2yofIbIqh17e5ef/WD/RpfqiqA==
+X-Google-Smtp-Source: ABdhPJxxBsnw5zL4lBpgkFI3TE2YpKrnDJ7HYXK3kVd96/lV1AeheFpxuXyyvMvX9yH1jJgZavj/BQ==
+X-Received: by 2002:a1c:9d85:: with SMTP id g127mr12895128wme.149.1590161626832;
+        Fri, 22 May 2020 08:33:46 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:a82f:eaec:3c49:875a? ([2a01:e34:ed2f:f020:a82f:eaec:3c49:875a])
-        by smtp.googlemail.com with ESMTPSA id x17sm9694035wrp.71.2020.05.22.08.32.04
+        by smtp.googlemail.com with ESMTPSA id d13sm9605844wmb.39.2020.05.22.08.33.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 May 2020 08:32:05 -0700 (PDT)
-Subject: Re: [v4,6/7] thermal: mediatek: add another get_temp ops for thermal
- sensors
+        Fri, 22 May 2020 08:33:46 -0700 (PDT)
+Subject: Re: [v4,5/7] thermal: mediatek: mt8183: fix bank number settings
 To:     Michael Kao <michael.kao@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Zhang Rui <rui.zhang@intel.com>,
@@ -61,14 +60,14 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
 References: <20200323121537.22697-1-michael.kao@mediatek.com>
- <20200323121537.22697-7-michael.kao@mediatek.com>
+ <20200323121537.22697-6-michael.kao@mediatek.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <fa43c55b-96c2-30c8-eb7e-983177dad13d@linaro.org>
-Date:   Fri, 22 May 2020 17:32:04 +0200
+Message-ID: <c88aab57-7c0b-cb9a-3ee0-68e7c140c985@linaro.org>
+Date:   Fri, 22 May 2020 17:33:45 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200323121537.22697-7-michael.kao@mediatek.com>
+In-Reply-To: <20200323121537.22697-6-michael.kao@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -78,150 +77,44 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 23/03/2020 13:15, Michael Kao wrote:
-> Provide thermal zone to read thermal sensor
-> in the SoC. We can read all the thermal sensors
-> value in the SoC by the node /sys/class/thermal/
-> 
-> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
-> on the first read of sensor that often are bogus values.
-> This can avoid following warning on boot:
-> 
->   thermal thermal_zone6: failed to read out thermal zone (-13)
+> MT8183_NUM_ZONES should be set to 1
+> because MT8183 doesn't have multiple banks.
 
-What the source problem of the sensor returning bogus values?
+Apparently this is a hot fix. Can you confirm and explain what is the
+procedure to hit the bug?
 
+I'll pick it for the next -rc if possible
 
-
+> Fixes: a4ffe6b52d27 ("thermal: mediatek: add support for MT8183")
 > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
 > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
 > ---
->  drivers/thermal/mtk_thermal.c | 74 +++++++++++++++++++++++++++++++----
->  1 file changed, 67 insertions(+), 7 deletions(-)
+>  drivers/thermal/mtk_thermal.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-> index 6b7ef1993d7e..9eaca432920e 100644
+> index 76e30603d4d5..6b7ef1993d7e 100644
 > --- a/drivers/thermal/mtk_thermal.c
 > +++ b/drivers/thermal/mtk_thermal.c
-> @@ -225,6 +225,11 @@ enum {
+> @@ -211,6 +211,9 @@ enum {
+>  /* The total number of temperature sensors in the MT8183 */
+>  #define MT8183_NUM_SENSORS	6
 >  
->  struct mtk_thermal;
+> +/* The number of banks in the MT8183 */
+> +#define MT8183_NUM_ZONES               1
+> +
+>  /* The number of sensing points per bank */
+>  #define MT8183_NUM_SENSORS_PER_ZONE	 6
 >  
-> +struct mtk_thermal_zone {
-> +	struct mtk_thermal *mt;
-> +	int id;
-> +};
-> +
->  struct thermal_bank_cfg {
->  	unsigned int num_sensors;
->  	const int *sensors;
-> @@ -607,7 +612,7 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->  		 * not immediately shut down.
->  		 */
->  		if (temp > 200000)
-> -			temp = 0;
-> +			temp = -EAGAIN;
->  
->  		if (temp > max)
->  			max = temp;
-> @@ -618,7 +623,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->  
->  static int mtk_read_temp(void *data, int *temperature)
->  {
-> -	struct mtk_thermal *mt = data;
-> +	struct mtk_thermal_zone *tz = data;
-> +	struct mtk_thermal *mt = tz->mt;
->  	int i;
->  	int tempmax = INT_MIN;
->  
-> @@ -637,10 +643,44 @@ static int mtk_read_temp(void *data, int *temperature)
->  	return 0;
->  }
->  
-> +static int mtk_read_sensor_temp(void *data, int *temperature)
-> +{
-> +	struct mtk_thermal_zone *tz = data;
-> +	struct mtk_thermal *mt = tz->mt;
-> +	const struct mtk_thermal_data *conf = mt->conf;
-> +	int id = tz->id - 1;
-> +	int temp = INT_MIN;
-> +	u32 raw;
-> +
-> +	if (id < 0)
-> +		return  -EACCES;
-> +
-> +	raw = readl(mt->thermal_base + conf->msr[id]);
-> +
-> +	temp = raw_to_mcelsius(mt, id, raw);
-> +
-> +	/*
-> +	 * The first read of a sensor often contains very high bogus
-> +	 * temperature value. Filter these out so that the system does
-> +	 * not immediately shut down.
-> +	 */
-> +
-> +	if (temp > 200000)
-> +		return  -EAGAIN;
-> +
-> +	*temperature = temp;
-> +
-> +	return 0;
-> +}
-> +
->  static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
->  	.get_temp = mtk_read_temp,
->  };
->  
-> +static const struct thermal_zone_of_device_ops mtk_thermal_sensor_ops = {
-> +	.get_temp = mtk_read_sensor_temp,
-> +};
-> +
->  static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
->  				  u32 apmixed_phys_base, u32 auxadc_phys_base,
->  				  int ctrl_id)
-> @@ -873,6 +913,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->  	struct resource *res;
->  	u64 auxadc_phys_base, apmixed_phys_base;
->  	struct thermal_zone_device *tzdev;
-> +	struct mtk_thermal_zone *tz;
->  
->  	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
->  	if (!mt)
-> @@ -954,11 +995,30 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, mt);
->  
-> -	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
-> -						     &mtk_thermal_ops);
-> -	if (IS_ERR(tzdev)) {
-> -		ret = PTR_ERR(tzdev);
-> -		goto err_disable_clk_peri_therm;
-> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
-> +		tz = kmalloc(sizeof(*tz), GFP_KERNEL);
-> +		if (!tz)
-> +			return -ENOMEM;
-> +
-> +		tz->mt = mt;
-> +		tz->id = i;
-> +
-> +		tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, i,
-> +							     tz, (i == 0) ?
-> +				&mtk_thermal_ops : &mtk_thermal_sensor_ops);
-> +
-> +		if (IS_ERR(tzdev)) {
-> +			if (PTR_ERR(tzdev) == -ENODEV) {
-> +				dev_warn(&pdev->dev,
-> +					 "sensor %d not registered in thermal zone in dt\n",
-> +					 i);
-> +				continue;
-> +			}
-> +			if (PTR_ERR(tzdev) == -EACCES) {
-> +				ret = PTR_ERR(tzdev);
-> +				goto err_disable_clk_peri_therm;
-> +			}
-> +		}
->  	}
->  
->  	return 0;
+> @@ -497,7 +500,7 @@ static const struct mtk_thermal_data mt7622_thermal_data = {
+>   */
+>  static const struct mtk_thermal_data mt8183_thermal_data = {
+>  	.auxadc_channel = MT8183_TEMP_AUXADC_CHANNEL,
+> -	.num_banks = MT8183_NUM_SENSORS_PER_ZONE,
+> +	.num_banks = MT8183_NUM_ZONES,
+>  	.num_sensors = MT8183_NUM_SENSORS,
+>  	.vts_index = mt8183_vts_index,
+>  	.cali_val = MT8183_CALIBRATION,
 > 
 
 
