@@ -2,144 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2815C1DE5DA
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 13:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 360671DE768
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 14:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729830AbgEVLq5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 May 2020 07:46:57 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:38912 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729748AbgEVLqz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 07:46:55 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1590148014; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=ioG91ONt67Thh3+++IhEIy7PrY5ruyU1b97zWmsYRzM=; b=aG7YxhTrByn1IwJKz+2vkAZFWhI76uXAdZkh+1iPVIdCBUjp/P2BqkYXmAi59jqEOINqh/gP
- 2E6nNmC/NCi6jAhiYp/8ak3qpujcFmON5rjnKLP7+qFqCFFfccwfUDtGyY8hlHVjxWbkksE+
- xiKQ487T9iBWnxz1KUOrQdN+T3o=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5ec7bbae.7f14944eb570-smtp-out-n01;
- Fri, 22 May 2020 11:46:54 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 96367C43395; Fri, 22 May 2020 11:46:54 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from codeaurora.org (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: manafm)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9DD86C433C6;
-        Fri, 22 May 2020 11:46:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9DD86C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=manafm@codeaurora.org
-From:   Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
-To:     Amit Kucheria <amit.kucheria@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
-Subject: [PATCH v3 2/2] dt-bindings: thermal: tsens: Add cold interrupt support in yaml
-Date:   Fri, 22 May 2020 17:16:26 +0530
-Message-Id: <20200522114626.28834-3-manafm@codeaurora.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200522114626.28834-1-manafm@codeaurora.org>
-References: <20200522114626.28834-1-manafm@codeaurora.org>
+        id S1729046AbgEVM61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 May 2020 08:58:27 -0400
+Received: from foss.arm.com ([217.140.110.172]:35140 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728898AbgEVM61 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 22 May 2020 08:58:27 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 07F76D6E;
+        Fri, 22 May 2020 05:58:26 -0700 (PDT)
+Received: from [10.37.12.7] (unknown [10.37.12.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D8533F68F;
+        Fri, 22 May 2020 05:58:13 -0700 (PDT)
+Subject: Re: [PATCH v7 00/15] Add support for devices in the Energy Model
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com
+Cc:     Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
+        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        qperret@google.com, bsegall@google.com, mgorman@suse.de,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
+        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
+        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
+References: <20200511111912.3001-1-lukasz.luba@arm.com>
+ <abff69b6-b033-18e2-f380-ceccb42c6b01@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <3f6652a5-ad9b-15cb-08a8-160becd3f912@arm.com>
+Date:   Fri, 22 May 2020 13:58:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <abff69b6-b033-18e2-f380-ceccb42c6b01@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add cold interrupt support for tsens in yaml.
+Hi Daniel,
 
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
----
- .../bindings/thermal/qcom-tsens.yaml          | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
+On 5/22/20 11:43 AM, Daniel Lezcano wrote:
+> 
+> Hi Lukasz,
+> 
+> On 11/05/2020 13:18, Lukasz Luba wrote:
+>> Hi all,
+>>
+>> This patch set introduces support for devices in the Energy Model (EM)
+>> framework. It will unify the power model for thermal subsystem. It will
+>> make simpler to add support for new devices willing to use more
+>> advanced features (like Intelligent Power Allocation). Now it should
+>> require less knowledge and effort for driver developer to add e.g.
+>> GPU driver with simple energy model. A more sophisticated energy model
+>> in the thermal framework is also possible, driver needs to provide
+>> a dedicated callback function. More information can be found in the
+>> updated documentation file.
+>>
+>> First 7 patches are refactoring Energy Model framework to add support
+>> of other devices that CPUs. They change:
+>> - naming convention from 'capacity' to 'performance' state,
+>> - API arguments adding device pointer and not rely only on cpumask,
+>> - change naming when 'cpu' was used, now it's a 'device'
+>> - internal structure to maintain registered devices
+>> - update users to the new API
+>> Patch 8 updates OPP framework helper function to be more generic, not
+>> CPU specific.
+>> Patches 9-14 change devfreq cooling, dropping part of old power model and
+>> adding registration with Energy Model via exported GPL function.
+>> The last path is a simple change for Panfrost GPU driver.
+>>
+>> The patch set is based on linux-next tag next-20200508.
+> 
+> Do you think it is possible to respin against linux-pm next ?
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index 2ddd39d96766..3592322fe172 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -52,12 +52,14 @@ properties:
-     items:
-       - description: Combined interrupt if upper or lower threshold crossed
-       - description: Interrupt if critical threshold crossed
-+      - description: Interrupt if cold threshold is crossed
- 
-   interrupt-names:
-     minItems: 1
-     items:
-       - const: uplow
-       - const: critical
-+      - const: cold
- 
-   nvmem-cells:
-     minItems: 1
-@@ -109,8 +111,10 @@ allOf:
-       properties:
-         interrupts:
-           minItems: 2
-+          maxItems: 3
-         interrupt-names:
-           minItems: 2
-+          maxItems: 3
- 
- required:
-   - compatible
-@@ -174,4 +178,42 @@ examples:
-            #qcom,sensors = <13>;
-            #thermal-sensor-cells = <1>;
-     };
-+
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    // Example 4 (for any platform containing v2.6+ of the TSENS IP)
-+    //           (with thermal-zone):
-+    tsens4: thermal-sensor@c265000 {
-+           compatible = "qcom,sc7180-tsens", "qcom,tsens-v2";
-+           reg = <0xc265000 0x1ff>,
-+                 <0xc223000 0x1ff>;
-+
-+           interrupts = <GIC_SPI 507 IRQ_TYPE_LEVEL_HIGH>,
-+                        <GIC_SPI 509 IRQ_TYPE_LEVEL_HIGH>,
-+                        <GIC_SPI 501 IRQ_TYPE_EDGE_RISING>;
-+           interrupt-names = "uplow", "critical", "cold";
-+
-+           #qcom,sensors = <15>;
-+           #thermal-sensor-cells = <1>;
-+    };
-+
-+    thermal-zones {
-+            cold_thermal: cold-thermal {
-+                    polling-delay-passive = <0>;
-+                    polling-delay = <0>;
-+
-+                    thermal-sensors = <&tsens4 128>;
-+
-+                    trips {
-+                            cold-trip {
-+                                    temperature = <1>;
-+                                    hysteresis = <1>;
-+                                    type = "passive";
-+                            };
-+                    };
-+
-+                    cooling-maps {
-+                    };
-+            };
-+    };
- ...
--- 
-2.26.2
+Yes, I will do it and send the v8.
+
+> 
+> I wanted to try the series but I'm getting non trivial conflicts with
+> the devfreq_cooling changes
+> 
+> 
+
+Let me take care of this.
+
+Regards,
+Lukasz
