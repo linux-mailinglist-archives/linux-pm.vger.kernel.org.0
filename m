@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 322781DE01C
-	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 08:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E271DE01B
+	for <lists+linux-pm@lfdr.de>; Fri, 22 May 2020 08:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728251AbgEVGsL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 May 2020 02:48:11 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:49306 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728169AbgEVGsJ (ORCPT
+        id S1728253AbgEVGsK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 May 2020 02:48:10 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:32932 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728249AbgEVGsJ (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 22 May 2020 02:48:09 -0400
 Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200522064807euoutp015df293dd4c2fbee7ce7d7b381d0c128d~RRuPXYb381799917999euoutp01e
-        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 06:48:07 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200522064807euoutp015df293dd4c2fbee7ce7d7b381d0c128d~RRuPXYb381799917999euoutp01e
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200522064808euoutp020114fa51ac27984b1333f08180a048fe~RRuPnmDrh0992509925euoutp02m
+        for <linux-pm@vger.kernel.org>; Fri, 22 May 2020 06:48:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200522064808euoutp020114fa51ac27984b1333f08180a048fe~RRuPnmDrh0992509925euoutp02m
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1590130087;
-        bh=zoGnv7c01nBpJYDQXUNSkx7X75BRfdmAGhcR2vRa5m0=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=p/U7T0ZVQgL7kY7nvqtcgXkjdvd5ZaLNDo1+u5M7tdmZqYInnLy37fMg90QrwRNKq
-         AFLuZU8OSwP4q2J9u/7eVeQ/Va1Ztl/jSHh3RI+FHJPTLXRMaQHSRJS5LQQ79nXW/5
-         yTaqOm2YY1BfElGSFPGAJGp6SlnnZaiT8oWzC2DA=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        s=mail20170921; t=1590130088;
+        bh=smAZi9fZbvDKEfoiWe78k+Q3pnTMoASjWoqnfT0Mfgo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Znf8Twb4/P44+pBkOrTx+5xcSMOAqWr019rhl2BTHd3yUVmTnuTNx239INlhJE8WU
+         6dSjjDD/AZnU+Cj1o8CpmzxIdA3NpM9zOrFQXxE+yiUuaKXj0TezXEqSAdViZj9HwF
+         w3STbNAfc5XmaCgC49zStjOBYrgpIJ8YC2uYTj9M=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
         eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200522064807eucas1p13b8779b1d1cd1edbbfcb5352ea46ed90~RRuO8J0gd3153831538eucas1p1w;
+        20200522064807eucas1p1d04a18a6955457648aafea0e3a8933cf~RRuPUSd6n2618826188eucas1p1N;
         Fri, 22 May 2020 06:48:07 +0000 (GMT)
 Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 73.9E.61286.7A577CE5; Fri, 22
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id B6.63.60698.7A577CE5; Fri, 22
         May 2020 07:48:07 +0100 (BST)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200522064806eucas1p120fc21b6e3ae5783e627a3da3761def3~RRuOR6x9G2818528185eucas1p15;
-        Fri, 22 May 2020 06:48:06 +0000 (GMT)
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200522064807eucas1p2665d6b3928b2ad515abe54513cbd7fd8~RRuOuKOlv0153601536eucas1p2p;
+        Fri, 22 May 2020 06:48:07 +0000 (GMT)
 Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200522064806eusmtrp176a9b58573bf227de2e987a6d70dfac9~RRuOPkwFd1662516625eusmtrp1h;
-        Fri, 22 May 2020 06:48:06 +0000 (GMT)
-X-AuditID: cbfec7f2-ef1ff7000001ef66-17-5ec775a7b0f9
+        20200522064807eusmtrp14542641d7991d48ca334eb8d178195ac~RRuOtlA0M1644516445eusmtrp1A;
+        Fri, 22 May 2020 06:48:07 +0000 (GMT)
+X-AuditID: cbfec7f5-a0fff7000001ed1a-10-5ec775a7fffa
 Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 82.60.07950.6A577CE5; Fri, 22
-        May 2020 07:48:06 +0100 (BST)
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 63.60.07950.7A577CE5; Fri, 22
+        May 2020 07:48:07 +0100 (BST)
 Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
         eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200522064806eusmtip2baee80d262bca22389c420cc313cebba~RRuNrhTo62166121661eusmtip2s;
-        Fri, 22 May 2020 06:48:05 +0000 (GMT)
+        20200522064806eusmtip2a535114fc83d4aa358c90f0b34e9d5eb~RRuOPY9KK2870328703eusmtip2I;
+        Fri, 22 May 2020 06:48:06 +0000 (GMT)
 From:   Marek Szyprowski <m.szyprowski@samsung.com>
 To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
@@ -54,44 +54,45 @@ Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Sebastian Reichel <sre@kernel.org>,
         Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 1/3] regulator: max14577: Add proper dt-compatible
- strings
-Date:   Fri, 22 May 2020 08:47:59 +0200
-Message-Id: <20200522064801.16822-1-m.szyprowski@samsung.com>
+Subject: [PATCH v2 2/3] extcon: max14577: Add proper dt-compatible strings
+Date:   Fri, 22 May 2020 08:48:00 +0200
+Message-Id: <20200522064801.16822-2-m.szyprowski@samsung.com>
 X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLIsWRmVeSWpSXmKPExsWy7djP87rLS4/HGbz7yWexccZ6VoupD5+w
+In-Reply-To: <20200522064801.16822-1-m.szyprowski@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLIsWRmVeSWpSXmKPExsWy7djP87rLS4/HGTw9rGOxccZ6VoupD5+w
         WVz/8pzV4vz5DewWl3fNYbP43HuE0WLtkbvsFrcbV7BZnN5d4sDpsWlVJ5tH35ZVjB6fN8kF
-        MEdx2aSk5mSWpRbp2yVwZSw9/5yp4Bh3xYGHN9gaGJ9zdjFycEgImEi8uMfSxcjFISSwglHi
-        4ew9bBDOF0aJ/kmHoJzPjBJvnx1h7mLkBOu4Pv00G4gtJLCcUeL/Zye4jn/rHoAVsQkYSnS9
-        7QIrEhGwkjj9v4MZpIhZYAWTxMffn5hAEsIC/hKrpvWygtgsAqoSZx8uZwexeQVsJWa3fmKB
-        2CYvsXrDAbBmCYHbbBLXDzWwQSRcJI4tPMMOYQtLvDq+BcqWkTg9uYcFoqEZ6KNza9khnB5G
-        ictNMxghqqwl7pz7xQYKAmYBTYn1u/Qhwo4SHVd7WCEhwydx460gSJgZyJy0bTozRJhXoqNN
-        CKJaTWLW8XVwaw9euAQNIQ+Jpw1TGUHKhQRiJRqusExglJuFsGoBI+MqRvHU0uLc9NRiw7zU
-        cr3ixNzi0rx0veT83E2MwERw+t/xTzsYv15KOsQowMGoxMP7IPlYnBBrYllxZe4hRgkOZiUR
-        3oX8R+OEeFMSK6tSi/Lji0pzUosPMUpzsCiJ8xovehkrJJCeWJKanZpakFoEk2Xi4JRqYBS9
-        /V9yzr+EqFtXZ8wtTrD19rBPzIq1Ou7kVsl7oqZqh6fEOal/ZdLM3DuPK3v7v39SXPgtcP4b
-        lelfmly1mBqDXxaFyv4Tu/hOsdL7+opNgs3Mr5Y8nZvz5DXX1G2diq8md68Kc5XQv95/w+iy
-        i+Xjr5ZP03g19tZYr+zYGbts1vY1U8U5viqxFGckGmoxFxUnAgDS7DCIAAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKLMWRmVeSWpSXmKPExsVy+t/xe7rLSo/HGWzYqWyxccZ6VoupD5+w
+        MEdx2aSk5mSWpRbp2yVwZXxb2M5UsIarYkr7RNYGxnscXYycHBICJhJ/d79k7GLk4hASWMEo
+        8X3OGRYI5wujxMeWfiYI5zOjxPTObkaYlgV3pkIlljNKrPt/lRWupffDbyaQKjYBQ4mut11s
+        ILaIgJXE6f8dzCBFzAIrmCQ+/v4EViQs4CVx5NAbsLEsAqoSr3+8BbN5BWwlnnZ1MUGsk5dY
+        veEAM4jNKWAnMeHIG7BBEgLv2SQ6b3awQRS5SFx/+4QdwhaWeHV8C5QtI3F6cg8LREMzo8TD
+        c2vZIZweRonLTTOgPrKWuHPuF9AkDqD7NCXW79KHCDtKbP2ziwkkLCHAJ3HjrSBImBnInLRt
+        OjNEmFeio00IolpNYtbxdXBrD164xAxhe0g8ntUFDa6JjBKT1pxmmsAoPwth2QJGxlWM4qml
+        xbnpqcXGeanlesWJucWleel6yfm5mxiBieL0v+NfdzDu+5N0iFGAg1GJh9ci7VicEGtiWXFl
+        7iFGCQ5mJRHehfxH44R4UxIrq1KL8uOLSnNSiw8xSnOwKInzGi96GSskkJ5YkpqdmlqQWgST
+        ZeLglGpgnDyxcRublHrJD8W4KLnP/QflI1kl1j1huDSxYIpaxe4ztWKC/KLqT/7W7p3J0c10
+        esGNuE1f35+18WOTfplqOtV+2pYGib5b9utdRTrv/9p+5iK33W4Wi/hrLLd32vGmmL66vdBh
+        0zK1mozt37XiVwT4zAh6bD/t5Pm/ckX7T+3/X/Xpo6PhYyWW4oxEQy3mouJEAB+HQXUQAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLLMWRmVeSWpSXmKPExsVy+t/xe7rLS4/HGZy+zmaxccZ6VoupD5+w
         WVz/8pzV4vz5DewWl3fNYbP43HuE0WLtkbvsFrcbV7BZnN5d4sDpsWlVJ5tH35ZVjB6fN8kF
-        MEfp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXoZSw9
-        /5yp4Bh3xYGHN9gaGJ9zdjFyckgImEhcn36arYuRi0NIYCmjxMaLDewQCRmJk9MaWCFsYYk/
-        17qgij4xSrS8/cMCkmATMJToeguS4OQQEbCRuLv4GgtIEbPAGiaJhocfmUASwgK+Es/evmIG
-        sVkEVCXOPlwOtoFXwFZidusnFogN8hKrNxxgnsDIs4CRYRWjSGppcW56brGRXnFibnFpXrpe
-        cn7uJkZgEG479nPLDsaud8GHGAU4GJV4eB8kH4sTYk0sK67MPcQowcGsJMK7kP9onBBvSmJl
-        VWpRfnxRaU5q8SFGU6DlE5mlRJPzgRGSVxJvaGpobmFpaG5sbmxmoSTO2yFwMEZIID2xJDU7
-        NbUgtQimj4mDU6qBUW/RqUNPTVd+07/PtfnUB5twZ8HHl4ROnPW5uMXx8I/65PPx/zRabL9f
-        eDGzonXGUuv6VTZmB99Kf7ix7/PTpdskyzwl+GZ9PC0T4PB25ozGWnaBoItr1nJOfXfPeFZl
-        rvotHy370EMi6+KYpU1V5lw+NTfIbdPdbxalNdWfi+Nq9Eo2GojyX1NiKc5INNRiLipOBAAU
-        noPaWAIAAA==
-X-CMS-MailID: 20200522064806eucas1p120fc21b6e3ae5783e627a3da3761def3
+        MEfp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXoZXxb
+        2M5UsIarYkr7RNYGxnscXYycHBICJhIL7kxl6mLk4hASWMoosbKtlwkiISNxcloDK4QtLPHn
+        WhcbRNEnRon2CeeYQRJsAoYSXW9BEpwcIgI2EncXX2MBKWIWWMMk0fDwI9gkYQEviSOH3jCC
+        2CwCqhKvf7wFs3kFbCWednVBbZOXWL3hANhQTgE7iQlH3oDZQkA19+evYpnAyLeAkWEVo0hq
+        aXFuem6xkV5xYm5xaV66XnJ+7iZGYNBuO/Zzyw7GrnfBhxgFOBiVeHgfJB+LE2JNLCuuzD3E
+        KMHBrCTCu5D/aJwQb0piZVVqUX58UWlOavEhRlOgoyYyS4km5wMjKq8k3tDU0NzC0tDc2NzY
+        zEJJnLdD4GCMkEB6YklqdmpqQWoRTB8TB6dUA+PxnT+mBaxeq+S78/1yE84FPMwKX5Z865m4
+        SvS01ORdBvPOXpyy7dp88c11Uf3TY4vn2vWH+E3SdJAp8PhruN1V+ukehtSJ2WUTxTf8K35s
+        +eVukRpbydlscYts5nu7a2757ufw0bvl0xR5zFCoKn4Hx41FS/ltX/cmT589UT3pPruAr+83
+        uSNKLMUZiYZazEXFiQCE38nScAIAAA==
+X-CMS-MailID: 20200522064807eucas1p2665d6b3928b2ad515abe54513cbd7fd8
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200522064806eucas1p120fc21b6e3ae5783e627a3da3761def3
+X-RootMTR: 20200522064807eucas1p2665d6b3928b2ad515abe54513cbd7fd8
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20200522064806eucas1p120fc21b6e3ae5783e627a3da3761def3
-References: <CGME20200522064806eucas1p120fc21b6e3ae5783e627a3da3761def3@eucas1p1.samsung.com>
+X-CMS-RootMailID: 20200522064807eucas1p2665d6b3928b2ad515abe54513cbd7fd8
+References: <20200522064801.16822-1-m.szyprowski@samsung.com>
+        <CGME20200522064807eucas1p2665d6b3928b2ad515abe54513cbd7fd8@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -106,36 +107,33 @@ Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 v2:
 - added .of_match_table pointer
 ---
- drivers/regulator/max14577-regulator.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ drivers/extcon/extcon-max14577.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/regulator/max14577-regulator.c b/drivers/regulator/max14577-regulator.c
-index 07a150c9bbf2..4c9ae52b9e87 100644
---- a/drivers/regulator/max14577-regulator.c
-+++ b/drivers/regulator/max14577-regulator.c
-@@ -238,10 +238,20 @@ static const struct platform_device_id max14577_regulator_id[] = {
+diff --git a/drivers/extcon/extcon-max14577.c b/drivers/extcon/extcon-max14577.c
+index 32f663436e6e..03af678ddeba 100644
+--- a/drivers/extcon/extcon-max14577.c
++++ b/drivers/extcon/extcon-max14577.c
+@@ -782,9 +782,19 @@ static const struct platform_device_id max14577_muic_id[] = {
  };
- MODULE_DEVICE_TABLE(platform, max14577_regulator_id);
+ MODULE_DEVICE_TABLE(platform, max14577_muic_id);
  
-+static const struct of_device_id of_max14577_regulator_dt_match[] = {
-+	{ .compatible = "maxim,max77836-regulator",
++static const struct of_device_id of_max14577_muic_dt_match[] = {
++	{ .compatible = "maxim,max77836-muic",
 +	  .data = (void *)MAXIM_DEVICE_TYPE_MAX77836, },
-+	{ .compatible = "maxim,max14577-regulator",
++	{ .compatible = "maxim,max14577-muic",
 +	  .data = (void *)MAXIM_DEVICE_TYPE_MAX14577, },
 +	{ },
 +};
-+MODULE_DEVICE_TABLE(of, of_max14577_regulator_dt_match);
++MODULE_DEVICE_TABLE(of, of_max14577_muic_dt_match);
 +
- static struct platform_driver max14577_regulator_driver = {
- 	.driver = {
--		   .name = "max14577-regulator",
--		   },
-+		.name = "max14577-regulator",
-+		.of_match_table = of_max14577_regulator_dt_match,
-+	},
- 	.probe		= max14577_regulator_probe,
- 	.id_table	= max14577_regulator_id,
- };
+ static struct platform_driver max14577_muic_driver = {
+ 	.driver		= {
+ 		.name	= "max14577-muic",
++		.of_match_table = of_max14577_muic_dt_match,
+ 	},
+ 	.probe		= max14577_muic_probe,
+ 	.remove		= max14577_muic_remove,
 -- 
 2.17.1
 
