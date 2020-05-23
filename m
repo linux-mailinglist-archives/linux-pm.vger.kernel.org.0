@@ -2,104 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D561DF72A
-	for <lists+linux-pm@lfdr.de>; Sat, 23 May 2020 14:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E7C1DF742
+	for <lists+linux-pm@lfdr.de>; Sat, 23 May 2020 14:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387772AbgEWMUL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 23 May 2020 08:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
+        id S1728969AbgEWMdp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 23 May 2020 08:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729150AbgEWMUK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 May 2020 08:20:10 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AD4C061A0E;
-        Sat, 23 May 2020 05:20:10 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id l5so11373142edn.7;
-        Sat, 23 May 2020 05:20:10 -0700 (PDT)
+        with ESMTP id S1729150AbgEWMdo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 May 2020 08:33:44 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0F3C061A0E
+        for <linux-pm@vger.kernel.org>; Sat, 23 May 2020 05:33:44 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id x14so7519333wrp.2
+        for <linux-pm@vger.kernel.org>; Sat, 23 May 2020 05:33:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=0eDh4QSckHASr5gJNa93QIawwkukXovHo+mlHmY4Lhs=;
-        b=abXODuSDPU+tSd/aKAtdwD4ZmcwhOK6kZpXLE+1Mt/0RNH7RLOueH2k+wCQRqgCtT6
-         YfKQDXCg07z+3VvEoz2zDnJnqF8w5WVgb6Lg32BuTYrgqjSlxQWab/q2OZ8lvyN0hs7G
-         HixW5Lu0fGx9fL39/3dDxIUlu+rdiw8LWY4Q91wN/6cxtfgV1zvR/YpySJeQutRwWUue
-         5A+a8Z/BPcebwaO6RDIcYHasM8pU/9k7F+t5dIAJGlxzqusMn4qxnaRTNbCT1y/+X6fY
-         8aMfms1rfJ3NNr2wde8rPzS1o6TtajZvnkxVPcK14+2OfA9aM7fOqJBvJqdo1kJSedos
-         bApQ==
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+ha2P0gI7/dhCR+x1uWrZGR8vEfMxTFQAnCpem5drIw=;
+        b=m5pSwqzqb6HpOMNW5gFCyuwJNBY7jMuVL1za74VwCneV9k6X7R6QpHOUgqEQWRtNn4
+         SvgCa954xVeXMD3Km6dpuNgUjmocnT70TzaK9JeGyXbRNIY1Sr3DsXl957oOAGywgQsi
+         2XswZKMKCgiGNlyFjiExEZuBIglEdLs1Ps7G1cuh+GODhvIvW2hSCVJJbuKwtIEswduK
+         Ca8K/X0yHehp9OEEpgRyIWdiOPMG3ADKIc0H9OYpSdEbduubihaEYZDKvrDe4Uq1g4Bu
+         rygpkOerSD5lSVX2Re+Mx0lILNsyegxBIBaxW5W2xzgeXUfsn9fYw9sX273OQBRAf++1
+         Wvvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=0eDh4QSckHASr5gJNa93QIawwkukXovHo+mlHmY4Lhs=;
-        b=SG9DgMlDKwz32k12Rt44EcUAaAvyK6879Tf5h2Ud2jlJt3GVdxm+NsUlY5Al2WkV9i
-         0agLNwpxToNP7OtFeVpvpDLWuEqXiBZcsNPxH+Nk337WIhVNs6YJS+z7l7/wK7SjAw5F
-         vWZGJuNT0wX5ub3iHB1I7w6mbfcWQgegbRszO/070j4jpRfo/jgvZar5JSFKVUJmUkZ2
-         r0LdkMgnI5uqXfBi9GBp9t/z5NYbvR6YUr1zwRLorxj6VD73TGw3ve6a8x6S5ljvSRIj
-         o92s7tZzyu5u0kyaRD/7qlD44dyh7q6Rx1hmZtOA1i0rar1YoNXh6MgpGfv1rKSU1JlW
-         9QtA==
-X-Gm-Message-State: AOAM531cfnyAu2Eqxgky0WHhMHgt53203nQuFD6vgnEdA5IAFDk/R61h
-        rhnvXyybfAiqRVcCyYUaTFVMQqA1220=
-X-Google-Smtp-Source: ABdhPJw0WWrU6MYwaQyjtRK0gQ22IEoCRNxXM7wU4niVLiDiVFKlpp+B5SscpiO/jz0dd9+0GzUcQw==
-X-Received: by 2002:a50:f086:: with SMTP id v6mr7192187edl.140.1590236408350;
-        Sat, 23 May 2020 05:20:08 -0700 (PDT)
-Received: from [192.168.0.104] (p5dcfec14.dip0.t-ipconnect.de. [93.207.236.20])
-        by smtp.gmail.com with ESMTPSA id h12sm10038898ejk.103.2020.05.23.05.20.06
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+ha2P0gI7/dhCR+x1uWrZGR8vEfMxTFQAnCpem5drIw=;
+        b=pu8OQ7lZKCYDVglAUhRL+XLRYStNv4e6f3VxEfbgR+69qZF4HYn0Fog4dbbI+ekkAP
+         qQPODSx2j8mZqZ0pVh8KRxcLldTaLYQSUJCTqjsAnS8yolJ2O07+9oE3M9XITh8Pc2eS
+         YbKhx+wGAaTrELlFIs1ca/E8rtNeKaZbXcNK2Y6qI5uhp6d96rCw4cJpnabopyMD8tn7
+         DwhH1b0OWeWUu/o841o1cuZLMhb/RiEW5P8pPB2MF1yUdNlLjo4HmH7V3eStbbSnRMlE
+         Rv7OdRfaqBlne3D6HqrwSQxt9zLcj7hAhLfg4xu1+2MMCFxpvF+ZaNO976YSHTEh+uSD
+         bIBA==
+X-Gm-Message-State: AOAM532DarpB6DgIl/eg7/cb3yeSR4TVuL4Fo6hrhlXAq4dNRH0OxKJ+
+        NnUhLDrHeqtYa/g05woZvyeoKA==
+X-Google-Smtp-Source: ABdhPJyL1mgbO/QqqFeAEHWsW/FnRQwYf9IXv1JuxdTJ0DWSLveRKUz+j5yAZUkxEzwjdUnPqh5o8Q==
+X-Received: by 2002:adf:fec3:: with SMTP id q3mr1267150wrs.123.1590237222514;
+        Sat, 23 May 2020 05:33:42 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:c871:e070:f68d:a4f7? ([2a01:e34:ed2f:f020:c871:e070:f68d:a4f7])
+        by smtp.googlemail.com with ESMTPSA id h1sm12875416wme.42.2020.05.23.05.33.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 May 2020 05:20:07 -0700 (PDT)
-Subject: Re: [PATCH v11 2/6] mfd: mp2629: Add support for mps battery charger
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     andy.shevchenko@gmail.com, robh+dt@kernel.org, jic23@kernel.org,
-        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
-        sre@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20200430155810.21383-1-sravanhome@gmail.com>
- <20200430155810.21383-3-sravanhome@gmail.com> <20200519103741.GW271301@dell>
-From:   saravanan sekar <sravanhome@gmail.com>
-Message-ID: <75b6a2ee-2d90-17c2-4b2b-0ef6238e903e@gmail.com>
-Date:   Sat, 23 May 2020 14:20:06 +0200
+        Sat, 23 May 2020 05:33:41 -0700 (PDT)
+Subject: Re: [PATCH] thermal: imx8mm: Add get_trend ops
+To:     Anson Huang <anson.huang@nxp.com>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     dl-linux-imx <linux-imx@nxp.com>
+References: <1589338689-15700-1-git-send-email-Anson.Huang@nxp.com>
+ <fccf4197-d0ca-f313-8f70-000ef4731033@linaro.org>
+ <DB3PR0402MB3916B6D11328A036BD479D39F5B50@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <6a4d31e4-8a24-2e9f-aa49-bec8258ead4c@linaro.org>
+Date:   Sat, 23 May 2020 14:33:40 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200519103741.GW271301@dell>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <DB3PR0402MB3916B6D11328A036BD479D39F5B50@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lee,
-
-On 19/05/20 12:37 pm, Lee Jones wrote:
-> On Thu, 30 Apr 2020, Saravanan Sekar wrote:
->
->> mp2629 is a highly-integrated switching-mode battery charge management
->> device for single-cell Li-ion or Li-polymer battery.
+On 23/05/2020 02:35, Anson Huang wrote:
+> Hi, Daniel
+> 
+> 
+>> Subject: Re: [PATCH] thermal: imx8mm: Add get_trend ops
 >>
->> Add MFD core enables chip access for ADC driver for battery readings,
->> and a power supply battery-charger driver
+>> On 13/05/2020 04:58, Anson Huang wrote:
+>>> Add get_trend ops for i.MX8MM thermal to apply fast cooling mechanism,
+>>> when temperature exceeds passive trip point, the highest cooling
+>>> action will be applied, and when temperature drops to lower than the
+>>> margin below passive trip point, the lowest cooling action will be
+>>> applied.
 >>
->> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
->> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->> ---
->>   drivers/mfd/Kconfig        |  9 +++++
->>   drivers/mfd/Makefile       |  2 +
->>   drivers/mfd/mp2629.c       | 79 ++++++++++++++++++++++++++++++++++++++
->>   include/linux/mfd/mp2629.h | 17 ++++++++
->>   4 files changed, 107 insertions(+)
->>   create mode 100644 drivers/mfd/mp2629.c
->>   create mode 100644 include/linux/mfd/mp2629.h
-> For my own reference (apply this as-is to your sign-off block):
->
->    Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
->
-Do I have to resend with above sign-off in all the patch?
+>> You are not describing what is the goal of this change.
+> 
+> The goal of this change is to make sure whenever temperature exceeds passive trip point,
+> the highest cooling action will be applied immediately, e.g., if there are many cpufreq OPP,
+> the default cooling will be step by step, it will take some more rounds to make cpufreq drop
+> to lowest OPP, while on i.MX, we expect the cpufreq drop to lowest OPP immediately.
 
-Thanks,
-Saravanan
+Whatever the slope of the temperature increase?
 
+>> IIUC, the resulting change will be an on/off action. The thermal zone is
+>> mitigated with the highest cooling effect, so the lowest OPP, then the
+>> temperature trend is stable until it goes below the trip - margin where the
+>> mitigation is stopped.
+> 
+> Yes, your understanding is correctly, once the temperature exceeds passive trip point,
+> the highest cooling action will be applied immediately and then it will be stable there
+> until temperature drop to trip - margin, then the cooling action will be cancelled, the
+> margin is to avoid the back and forth near the passive trip point.
+> 
+>>
+>> Except, I'm missing something, setting a trip point with a 10000 hysteresis and
+>> a cooling map min/max set to the highest opp will result on the same.
+> 
+> Yes setting cooling map min/max cooling state to highest OPP will make the highest
+> cooling action applied immediately, and to have the function of cooling action being
+> cancelled when temperature drops to trip - margin, I have to define another trip point,
+> say passive trip point is 85000, and cooling map min/max set to highest OPP in passive
+> trip point then add another trip point named "active" with 75000, and without any
+> cooling map in it, right?
+
+May be I misunderstood but only the change as below is needed. No need
+to add a trip point, especially an 'active' trip which is a for an
+active cooling device like a fan.
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+index cc7152ecedd9..bea263bd06b4 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+@@ -231,10 +231,10 @@ cooling-maps {
+ 				map0 {
+ 					trip = <&cpu_alert0>;
+ 					cooling-device =
+-						<&A53_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+-						<&A53_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+-						<&A53_2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+-						<&A53_3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++						<&A53_0 2 2>,
++						<&A53_1 2 2>,
++						<&A53_2 2 2>,
++						<&A53_3 2 2>
+ 				};
+ 			};
+ 		};
+
+
+> If yes, then I think I can try to make the changes in DT instead of thermal driver. 
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
