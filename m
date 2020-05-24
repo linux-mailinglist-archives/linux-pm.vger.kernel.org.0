@@ -2,191 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E5A1DFD3D
-	for <lists+linux-pm@lfdr.de>; Sun, 24 May 2020 07:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A551DFD44
+	for <lists+linux-pm@lfdr.de>; Sun, 24 May 2020 07:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725887AbgEXFAr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 May 2020 01:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
+        id S1728092AbgEXFFn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 May 2020 01:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725805AbgEXFAq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 May 2020 01:00:46 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE98DC061A0E;
-        Sat, 23 May 2020 22:00:46 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id y18so7201530pfl.9;
-        Sat, 23 May 2020 22:00:46 -0700 (PDT)
+        with ESMTP id S1725805AbgEXFFm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 May 2020 01:05:42 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EBEC061A0E
+        for <linux-pm@vger.kernel.org>; Sat, 23 May 2020 22:05:42 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id u13so3709384wml.1
+        for <linux-pm@vger.kernel.org>; Sat, 23 May 2020 22:05:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=krhEzLWzxEpnShGlmjhN0o67VmqokPQZNn+Tla1ZW8U=;
-        b=hJ2opN80KCVUYIaWN3aTL8FGh7posS3Q3ixIPePsYObtlauNGZEyij+9xYg73Tpctx
-         KU4cm0U4X7FzGxHY2MaYz0oGmKh8w3co+sy0EspH9f6sewqksyamluEkLWyvlZ9IFCio
-         LcKJuC8DS5jWowGZlwrouqLeBFOiR1vVbZgievi7IryexwuwZPzBtWZ2I0sbEw6PmYEg
-         1uIEH6q/vL9UVF3Q4LuIovZb0xGCBpI78+8K6dPDsemRrfafFc8t8DqmMiNx+t4g9jsi
-         I6fPioCW2pLsjnaKqPJipysTZWYCvuc4QAIaEdLGYlvV//hebbERAFpMpcf8b02rMIL5
-         JRIQ==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yOIx32DzV9Yk/O3q4NLhph8Gyjxz3HGsJqmaZP5BXsg=;
+        b=h0X98o+dRzjFWkvGg+RVmrUh81Ek8j36zAZtYtaLmx/I5qzSvxxpXToFKCvDnAmiwt
+         4a8QEoW1hYjKF7mQxdP//+r98T0Saps4B16lcvA/xxDRC4tmjNyrddvVD21yllEM4WPX
+         SA9Mh/jDUtVXRs8uN54riWl0nZGpRNVlApCSIXVIwlhmkGkRRN+zSxSSxHqHVANheISQ
+         J42Wjgo0n/l6BipOl8pqdgbkAiglrtQso5igL+bn5ZS2Z1QYMNt9ZsLIemb6cZXoEMNc
+         7QBoiRd2LMPeZmy+iu+2ZlnE6AKP4D87/XyLuRLPlN1K1KiXfEZX1iaEcHbtOUuvLYAi
+         yrhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=krhEzLWzxEpnShGlmjhN0o67VmqokPQZNn+Tla1ZW8U=;
-        b=n3vo2d9iIO6MCllXFbTfqYRQ6akxqSG3+C0sMiL+Mu+OXB3lCGfHTGmTM7TGjTBe6L
-         rIJaf8kCAYaFYhux6EL/hmFwwCCmIlfod/ak4Oo11O3sReLgGcM3Z/llR7O+dahHv2X6
-         4K3RsTzG179XT6fiHxY/pwixRc1UFEvfq/bnj0MVHSXnxofXLL5nAQkvGoVhsZphIMap
-         I0VSkecyQQnokPdDIXkXelnUCs5uC8ptmB9k1jx0l1rk11G0nSNsAFTlPxGJMI6jFpPx
-         XizHakGlVv6lGa0xJhCu6jcARnell2J1DJ4p/ufJduQXx8ibvF4JFrUDO5Dga9wRWuCC
-         CYHg==
-X-Gm-Message-State: AOAM530ceeKDwmt1owFDWmgG7WR000n98Soq3twijZ2xF8itlw/qt7L/
-        WjmLuJHHZs50AVZX6TA7VY8=
-X-Google-Smtp-Source: ABdhPJxVCxuXdDwqi8KaMFlgylLB8kaz2JVsKVLdE35iVR0WuQ4XbqTOElwdNHusHNZMlES/Cvgviw==
-X-Received: by 2002:a62:7b09:: with SMTP id w9mr11756543pfc.157.1590296446048;
-        Sat, 23 May 2020 22:00:46 -0700 (PDT)
-Received: from syed ([106.223.122.111])
-        by smtp.gmail.com with ESMTPSA id x14sm9785264pfi.60.2020.05.23.22.00.36
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 23 May 2020 22:00:45 -0700 (PDT)
-Date:   Sun, 24 May 2020 10:30:24 +0530
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-To:     linus.walleij@linaro.org, akpm@linux-foundation.org
-Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
-        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        yamada.masahiro@socionext.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v7 0/4] Introduce the for_each_set_clump macro
-Message-ID: <cover.1590017578.git.syednwaris@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yOIx32DzV9Yk/O3q4NLhph8Gyjxz3HGsJqmaZP5BXsg=;
+        b=avKkC8RR0Yu/0QsUJsIWOt9RHokmzJE8XjpRljGKF80cnBljfEdl5iGwlz5scOnTYf
+         TfgBsUF9tgOD4xv+qTY6+5Pw7tCPTEqT543UV9xd4qU31Kxs/CM1FGV9XjSjxo7wmzvD
+         v0LXJLRqg3ON4KWPodCDl6XNDrSjd8LzysnQqSscCRe1AOEbXxzoq1xhWNPWekJ0sF4B
+         1b8ntsdjdh4keqixVlR8MzPISJKQs7/emiH6k74/SIXtA0ZC3m0/OkjjCMCRnhnbWzpf
+         8oZS+si6VtTSjRyFIfD4A3XbS1jQIuO7yvdTU+sY4kRdUrvOHeZpAFg3kCVCDzC8v5w/
+         QSyg==
+X-Gm-Message-State: AOAM532lN4AA012lzrRcEmgDBCgNywu/cM13HEq/jNcov4JvuLDfbeBK
+        WEaIc5sTzaGwFMpNeFIMFf7wZw==
+X-Google-Smtp-Source: ABdhPJy5BIy2yzNSXBycuVdf4capa9hemit9Tyinx3iO/bYzMEVC0j8+1ysL4G44A6HziAp/xv3PTw==
+X-Received: by 2002:a1c:27c2:: with SMTP id n185mr21596506wmn.68.1590296738569;
+        Sat, 23 May 2020 22:05:38 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:c871:e070:f68d:a4f7? ([2a01:e34:ed2f:f020:c871:e070:f68d:a4f7])
+        by smtp.googlemail.com with ESMTPSA id h1sm14766532wme.42.2020.05.23.22.05.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 23 May 2020 22:05:37 -0700 (PDT)
+Subject: Re: [PATCH V3] thermal: imx: Add missing of_node_put()
+To:     Anson Huang <anson.huang@nxp.com>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     dl-linux-imx <linux-imx@nxp.com>
+References: <1588128570-12917-1-git-send-email-Anson.Huang@nxp.com>
+ <DB3PR0402MB391639FE30CD00F3371A0763F5B20@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <e824c7a9-91ba-b44c-8e3f-f6dc39d6ec0e@linaro.org>
+Date:   Sun, 24 May 2020 07:05:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <DB3PR0402MB391639FE30CD00F3371A0763F5B20@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Linus,
+On 24/05/2020 05:26, Anson Huang wrote:
+> Gentle ping...
 
-Since this patchset primarily affects GPIO drivers, would you like
-to pick it up through your GPIO tree?
+It is applied, sorry for not letting you know.
 
-This patchset introduces a new generic version of for_each_set_clump. 
-The previous version of for_each_set_clump8 used a fixed size 8-bit
-clump, but the new generic version can work with clump of any size but
-less than or equal to BITS_PER_LONG. The patchset utilizes the new macro 
-in several GPIO drivers.
-
-The earlier 8-bit for_each_set_clump8 facilitated a
-for-loop syntax that iterates over a memory region entire groups of set
-bits at a time.
-
-For example, suppose you would like to iterate over a 32-bit integer 8
-bits at a time, skipping over 8-bit groups with no set bit, where
-XXXXXXXX represents the current 8-bit group:
-
-    Example:        10111110 00000000 11111111 00110011
-    First loop:     10111110 00000000 11111111 XXXXXXXX
-    Second loop:    10111110 00000000 XXXXXXXX 00110011
-    Third loop:     XXXXXXXX 00000000 11111111 00110011
-
-Each iteration of the loop returns the next 8-bit group that has at
-least one set bit.
-
-But with the new for_each_set_clump the clump size can be different from 8 bits.
-Moreover, the clump can be split at word boundary in situations where word 
-size is not multiple of clump size. Following are examples showing the working 
-of new macro for clump sizes of 24 bits and 6 bits.
-
-Example 1:
-clump size: 24 bits, Number of clumps (or ports): 10
-bitmap stores the bit information from where successive clumps are retrieved.
-
-     /* bitmap memory region */
-        0x00aa0000ff000000;  /* Most significant bits */
-        0xaaaaaa0000ff0000;
-        0x000000aa000000aa;
-        0xbbbbabcdeffedcba;  /* Least significant bits */
-
-Different iterations of for_each_set_clump:-
-'offset' is the bit position and 'clump' is the 24 bit clump from the
-above bitmap.
-Iteration first:        offset: 0 clump: 0xfedcba
-Iteration second:       offset: 24 clump: 0xabcdef
-Iteration third:        offset: 48 clump: 0xaabbbb
-Iteration fourth:       offset: 96 clump: 0xaa
-Iteration fifth:        offset: 144 clump: 0xff
-Iteration sixth:        offset: 168 clump: 0xaaaaaa
-Iteration seventh:      offset: 216 clump: 0xff
-Loop breaks because in the end the remaining bits (0x00aa) size was less
-than clump size of 24 bits.
-
-In above example it can be seen that in iteration third, the 24 bit clump
-that was retrieved was split between bitmap[0] and bitmap[1]. This example 
-also shows that 24 bit zeroes if present in between, were skipped (preserving
-the previous for_each_set_macro8 behaviour). 
-
-Example 2:
-clump size = 6 bits, Number of clumps (or ports) = 3.
-
-     /* bitmap memory region */
-        0x00aa0000ff000000;  /* Most significant bits */
-        0xaaaaaa0000ff0000;
-        0x0f00000000000000;
-        0x0000000000000ac0;  /* Least significant bits */
-
-Different iterations of for_each_set_clump:
-'offset' is the bit position and 'clump' is the 6 bit clump from the
-above bitmap.
-Iteration first:        offset: 6 clump: 0x2b
-Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
-Here 6 * 3 is clump size * no. of clumps.
-
-Changes in v7:
- - [Patch 2/4]: Minor changes: Use macro 'DECLARE_BITMAP()' and split 'struct'
-   definition and test data.
-
-Changes in v6:
- - [Patch 2/4]: Make 'for loop' inside test_for_each_set_clump more
-   succinct.
-
-Changes in v5:
- - [Patch 4/4]: Minor change: Hardcode value for better code readability.
-
-Changes in v4:
- - [Patch 2/4]: Use 'for' loop in test function of for_each_set_clump.
- - [Patch 3/4]: Minor change: Inline value for better code readability.
- - [Patch 4/4]: Minor change: Inline value for better code readability.
-
-Changes in v3:
- - [Patch 3/4]: Change datatype of some variables from u64 to unsigned long
-   in function thunderx_gpio_set_multiple.
-
-CHanges in v2:
- - [Patch 2/4]: Unify different tests for 'for_each_set_clump'. Pass test data as
-   function parameters.
- - [Patch 2/4]: Remove unnecessary bitmap_zero calls.
-
-Syed Nayyar Waris (4):
-  bitops: Introduce the the for_each_set_clump macro
-  lib/test_bitmap.c: Add for_each_set_clump test cases
-  gpio: thunderx: Utilize for_each_set_clump macro
-  gpio: xilinx: Utilize for_each_set_clump macro
-
- drivers/gpio/gpio-thunderx.c      |  11 ++-
- drivers/gpio/gpio-xilinx.c        |  62 ++++++-------
- include/asm-generic/bitops/find.h |  19 ++++
- include/linux/bitmap.h            |  61 +++++++++++++
- include/linux/bitops.h            |  13 +++
- lib/find_bit.c                    |  14 +++
- lib/test_bitmap.c                 | 144 ++++++++++++++++++++++++++++++
- 7 files changed, 290 insertions(+), 34 deletions(-)
+>> Subject: [PATCH V3] thermal: imx: Add missing of_node_put()
+>>
+>> After finishing using cpu node got from of_get_cpu_node(), of_node_put()
+>> needs to be called, the cpufreq policy also needs to be put unconditionally.
+>>
+>> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+>> ---
+>> Changes since V2:
+>> 	- call cpufreq_cpu_put() unconditionally after cooling register done.
+>> ---
+>>  drivers/thermal/imx_thermal.c | 13 ++++++-------
+>>  1 file changed, 6 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+>> index e761c9b..8764cb5 100644
+>> --- a/drivers/thermal/imx_thermal.c
+>> +++ b/drivers/thermal/imx_thermal.c
+>> @@ -649,7 +649,7 @@ MODULE_DEVICE_TABLE(of, of_imx_thermal_match);
+>> static int imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
+>> {
+>>  	struct device_node *np;
+>> -	int ret;
+>> +	int ret = 0;
+>>
+>>  	data->policy = cpufreq_cpu_get(0);
+>>  	if (!data->policy) {
+>> @@ -661,20 +661,19 @@ static int
+>> imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
+>>
+>>  	if (!np || !of_find_property(np, "#cooling-cells", NULL)) {
+>>  		data->cdev = cpufreq_cooling_register(data->policy);
+>> -		if (IS_ERR(data->cdev)) {
+>> +		if (IS_ERR(data->cdev))
+>>  			ret = PTR_ERR(data->cdev);
+>> -			cpufreq_cpu_put(data->policy);
+>> -			return ret;
+>> -		}
+>>  	}
+>>
+>> -	return 0;
+>> +	cpufreq_cpu_put(data->policy);
+>> +	of_node_put(np);
+>> +
+>> +	return ret;
+>>  }
+>>
+>>  static void imx_thermal_unregister_legacy_cooling(struct imx_thermal_data
+>> *data)  {
+>>  	cpufreq_cooling_unregister(data->cdev);
+>> -	cpufreq_cpu_put(data->policy);
+>>  }
+>>
+>>  #else
+>> --
+>> 2.7.4
+> 
 
 
-base-commit: b9bbe6ed63b2b9f2c9ee5cbd0f2c946a2723f4ce
 -- 
-2.26.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
