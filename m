@@ -2,87 +2,306 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE6E1E1581
-	for <lists+linux-pm@lfdr.de>; Mon, 25 May 2020 23:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E911E1796
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 00:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729431AbgEYVJ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 May 2020 17:09:58 -0400
-Received: from cmta20.telus.net ([209.171.16.93]:35762 "EHLO cmta20.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729404AbgEYVJ5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 25 May 2020 17:09:57 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id dKM5jEHnSdVYHdKM6jX09H; Mon, 25 May 2020 15:09:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1590440996; bh=E6euisO0yE/Fs40IpuKFjZmhJuLZeL7J5pqllyIRrzQ=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=izo/GrihCTAyL7wxdUDzqoApjM9nfnrX1rqAD0v1gB0en1/Pr5qDq1xEbOCOPDDGN
-         AExW7WcecmKO7ZG5yxbizxul6EG8JWPaAdlpBJ0ElaKMjZB+N+LoNj2QCyD3VwUfkw
-         U06nBuRJWL5C2x4FdSYfUtkhA7FMO6246eMheVIaVVuiSCcwGsXYyRZ603rp8uCRYS
-         ZyvNOOYZKVRMBV7XK4J7SDPWR3xwNoLSZi3OJOjuWrFplOy/8hfS07BbPlgWfbYx1g
-         hGS7X7Tz2E2xuCX+ResHyWUQ1YF/TELTR4XgRKrUMHsrKZ0DEkc9VUzftLRojxV5B/
-         L+7CKFyh8mD1w==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=Y5CGTSWN c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=kAzHQTmmk_fIg6_RNCcA:9
- a=CjuIK1q_8ugA:10
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-Cc:     "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Len Brown'" <len.brown@intel.com>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>,
-        "'Francisco Jerez'" <francisco.jerez.plata@intel.com>
-References: <3169564.ZRsPWhXyMD@kreacher> <000801d632a9$6a586c90$3f0945b0$@net>
-In-Reply-To: <000801d632a9$6a586c90$3f0945b0$@net>
-Subject: RE: [RFC/RFT][PATCH] cpufreq: intel_pstate: Work in passive mode with HWP enabled
-Date:   Mon, 25 May 2020 14:09:51 -0700
-Message-ID: <001101d632d8$d6a01b30$83e05190$@net>
+        id S1729711AbgEYWIo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 May 2020 18:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725964AbgEYWIn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 May 2020 18:08:43 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F193C061A0E
+        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 15:08:43 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id y5so1350542wmj.4
+        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 15:08:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=B1HW4u5LJKYDF9KUNg/7Plr8B/Znc0iT47gyM0yG2iU=;
+        b=cX6QZ9y5aiks4vwrtxOkDbQEjk/dF9h25k22Jg+APG/88UZFshwzTAu+JwmS5qpazX
+         Cqz3FVk7wDfM85nq29VU+qwUgFCHz+86sPNm6IiOlFH+jmyY3aZNMNAYBxdX/Hs9iHXK
+         OnOE+QDH3rYDn51T/D2mlcKuHBEmk6NS1vPg1cCbn3rSopGbBPpAw51DLh23pF5ptpmh
+         iqw+d2VaYJr89ghY3lQCj9xT9UI/Ygi6I00HUuHCAZMbL7dK8LmvkLcJXxLnB/JY5FDf
+         J+DnU3jAc0Vbb4DJIe5gBh9rxLCchse5DC264bgZvZGpn1owvQc1LAipt5FwR8jULpUF
+         cqDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=B1HW4u5LJKYDF9KUNg/7Plr8B/Znc0iT47gyM0yG2iU=;
+        b=A5We/THv46X1Bdqh35BZabzCDS8zpoG64kPLGZrvc/LisaU6sgAOBm/XMz6yqk3mqX
+         aOqae1UZ0ZgiGoJMxcAVwgs9ocZcXwAqhCDbx8TdjL7WdQjEjY+Y1KwoXhBcE15hd8Dv
+         +GZDJw3OM8TPUYxO4LDSqy5hr1jXrl5wTyFw+a8mz/tbogOMl3tRkWI/mo+Y0kjWWSuC
+         IV2vlSPDubj2urToOiq5ko8F6MQji67yg3klLhBlOSuP47YQHEebWd6JjYH6AAB1CI0j
+         xr/uHP3BXyldbZeP/FKYfK3sYmKkBrC/dWXtMXap4Lw7mKaojnmNu/NyhiOcLVTPxplE
+         bq3w==
+X-Gm-Message-State: AOAM533l1MGDdsUMYI8oohd1mqpou+9oVlTNgvqtYVyXxh0jr2AuI/Ke
+        W3nPT3DaGd7D15NrcFjwtOpsZw==
+X-Google-Smtp-Source: ABdhPJw9Rxu8ps0O9Ohw9wOXynvpYrr9Dk3yASRBFsmg5cRbkDT4TwOGptGM9LwM8pEcGCRK28UFRA==
+X-Received: by 2002:a7b:cd06:: with SMTP id f6mr8591078wmj.8.1590444521387;
+        Mon, 25 May 2020 15:08:41 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:f482:8f0b:7244:7a1b? ([2a01:e34:ed2f:f020:f482:8f0b:7244:7a1b])
+        by smtp.googlemail.com with ESMTPSA id f11sm4457423wrm.13.2020.05.25.15.08.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 May 2020 15:08:40 -0700 (PDT)
+Subject: Re: [RFC v3 1/2] thermal: core: Let thermal zone device's mode be
+ stored in its struct
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+        Barlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+References: <9ac3b37a-8746-b8ee-70e1-9c876830ac83@linaro.org>
+ <20200417162020.19980-1-andrzej.p@collabora.com>
+ <20200417162020.19980-2-andrzej.p@collabora.com>
+ <f39c5ca6-5efa-889c-21f5-632dfd24715e@linaro.org>
+ <802b4bd5-07c9-de3a-2ac6-5905b12d6adc@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <b8b69bf3-07bf-8747-dce6-65a73c02fb88@linaro.org>
+Date:   Tue, 26 May 2020 00:08:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdYvk3X5bnwqpX6hRwi7ciAthJfS0ADBo0fwAA9F6bA=
-X-CMAE-Envelope: MS4wfEucPqWNd1dMiC4Rfsb/loWX2wDsbH1jnGYnBd7z7rfnF8IkJe3mMjEq5QtGIPjwHJRbfkWeFH+/BcHigRmBrxdi+yNem7AUGSdwWrrPGGpIgLhDVjiW
- YOsCK6MayGljnaVmYc1R+ywIhRiOYL6SWnRAW8eAB4M2Z9Mj5iJFEjy6t7ms8ry80GVxQhGs37dwz9wQcbHQpTYVR1fEsJI3O9jgwJzJ82gK8K6xZynz4ktj
- M73J3gxWkBagvLkVcIxk2UczBbScFwIcQF5WblPyjCZEnTP1aEhetJZ/7Ct9mF4PEacLf/2POEti+hSabik5Vo+GH5+FNIlzJFvYk0s/YpGQ0cYIM5o1/vKO
- 2WX5ZSiynZSeKLPRdgF0KM9VcoSy2OOosmUeuCxmqH6UgLTYBOmeSkIJX7DsekxUBsPEFbDl
+In-Reply-To: <802b4bd5-07c9-de3a-2ac6-5905b12d6adc@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi all,
-
-The INTEL_CPUFREQ_TRANSITION_DELAY_HWP = 20000
-test results from this e-mail were incorrect.
-The test and graphs are being re-done.
-
-On 2020.05.25 08:30 Doug smythies wrote:
-
+On 25/05/2020 21:35, Andrzej Pietrasiewicz wrote:
+> Hi Daniel,
 > 
-> Legend - intel_pstate - powersave graph [2].
+> W dniu 23.05.2020 o 23:24, Daniel Lezcano pisze:
+>> Hi Andrzej,
+>>
+>> On 17/04/2020 18:20, Andrzej Pietrasiewicz wrote:
+>>> Thermal zone devices' mode is stored in individual drivers. This patch
+>>> changes it so that mode is stored in struct thermal_zone_device instead.
+>>>
+>>> As a result all driver-specific variables storing the mode are not
+>>> needed
+>>> and are removed. Consequently, the get_mode() implementations have
+>>> nothing
+>>> to operate on and need to be removed, too.
+>>>
+>>> Some thermal framework specific functions are introduced:
+>>>
+>>> thermal_zone_device_get_mode()
+>>> thermal_zone_device_set_mode()
+>>> thermal_zone_device_enable()
+>>> thermal_zone_device_disable()
+>>>
+>>> thermal_zone_device_get_mode() and its "set" counterpart take tzd's lock
+>>> and the "set" calls driver's set_mode() if provided, so the latter must
+>>> not take this lock again. At the end of the "set"
+>>> thermal_zone_device_update() is called so drivers don't need to
+>>> repeat this
+>>> invocation in their specific set_mode() implementations.
+>>>
+>>> The scope of the above 4 functions is purposedly limited to the thermal
+>>> framework and drivers are not supposed to call them. This encapsulation
+>>> does not fully work at the moment for some drivers, though:
+>>>
+>>> - platform/x86/acerhdf.c
+>>> - drivers/thermal/imx_thermal.c
+>>> - drivers/thermal/intel/intel_quark_dts_thermal.c
+>>> - drivers/thermal/of-thermal.c
+>>>
+>>> and they manipulate struct thermal_zone_device's members directly.
+>>>
+>>> struct thermal_zone_params gains a new member called initial_mode, which
+>>> is used to set tzd's mode at registration time.
+>>>
+>>> The sysfs "mode" attribute is always exposed from now on, because all
+>>> thermal zone devices now have their get_mode() implemented at the
+>>> generic
+>>> level and it is always available. Exposing "mode" doesn't hurt the
+>>> drivers
+>>> which don't provide their own set_mode(), because writing to "mode" will
+>>> result in -EPERM, as expected.
+>>
+>> The result is great, that is a nice cleanup of the thermal framework.
+>>
+>> After review it appears there are still problems IMO, especially with
+>> the suspend / resume path. The patch is big, it is a bit complex to
+>> comment. I suggest to re-org the changes as following:
+>>
+>>   - patch 1 : Add the four functions:
+>>
+>>   * thermal_zone_device_set_mode()
+>>   * thermal_zone_device_enable()
+>>   * thermal_zone_device_disable()
+>>   * thermal_zone_device_is_enabled()
+>>
+>> *but* do not export thermal_zone_device_set_mode(), it must stay private
+>> to the thermal framework ATM.
 > 
-> What? Why is there such a graph, unrelated to this patch?
-> Well, because there is a not yet understood effect.
+> Not exporting thermal_zone_device_set_mode() implies not exporting
+> thermal_zone_device_enable()/thermal_zone_device_disable() because they
+> are implemented in terms of the former. Or do you have a different idea?
+
+I meant no inline for them but as below:
+
+in .h
+
+extern int thermal_zone_device_enable();
+extern int thermal_zone_device_disable();
+extern int thermal_zone_device_is_enabled();
+
+in .c
+
+static int thermal_zone_device_set_mode()
+{
+	...
+}
+
+int thermal_zone_device_enable()
+{
+	thermal_zone_device_set_mode();
+}
+EXPORT_SYMBOL_GPL(thermal_zone_device_enable);
+
+
+>>   - patch 2 : Add the mode THERMAL_DEVICE_SUSPENDED
+>>
+>> In the thermal_pm_notify() in the:
+>>
+>>   - PM_SUSPEND_PREPARE case, set the mode to THERMAL_DEVICE_SUSPENDED if
+>> the mode is THERMAL_DEVICE_ENABLED
+>>
+>>   - PM_POST_SUSPEND case, set the mode to THERMAL_DEVICE_ENABLED, if the
+>> mode is THERMAL_DEVICE_SUSPENDED
+>>
+>>   - patch 3 : Change the monitor function
+>>
+>> Change monitor_thermal_zone() function to set the polling to zero if the
+>> mode is THERMAL_DEVICE_DISABLED
 > 
-> p_powe_stock : intel_pstate, powersave, stock kernel (5.7-rc6), hwp disabled.
-> P_powe_hwp : intel_pstate, powersave, patched kernel (5.7-rc6), DELAY_HWP 5000.
-> P_powe_hwp2 : intel_pstate, powersave, patched kernel (5.7-rc6), DELAY_HWP 20000.
+> So we assume this: if a driver creates a tz which is initially ENABLED,
+> it will be polled. If a driver creates a tz which is initially DISABLED
+> (which is what you suggest the drivers should be doing, but not all of them
+> do), it won't be polled unless the driver explicitly enables its tz.
+
+Yes.
+
+> Am I concluding right that a suspended device will remain polled? Is it ok?
+
+Actually it is not ok but AFAICT, it is the current behavior. The
+polling do not stop but the 'in_suspend' prevent an update. I thought we
+can post-pone the suspend case later when the ENABLED/DISABLED changes
+are consolidated, so SUSPENDED will act as DISABLED.
+
+>>   - patch 4 : Do the changes to remove get_mode() ops
+>>
+>> Make sure there is no access to tz->mode from the drivers anymore but
+>> use of the functions of patch 1. IMO, this is the tricky part because a
+>> part of the drivers are not calling the update after setting the mode
+>> while the function thermal_zone_device_enable()/disable() call update
+>> via the thermal_zone_device_set_mode(), so we must be sure to not break
+>> anything.
 > 
-> Conclusion: ??
+> Ah, I guess now is the time to make the functions from patch 1 exported?
+
+Yes :)
+
+> Ensuring no driver accesses tz->mode directly might be tricky, indeed.
+> If it can be shown that calling the update doesn't hurt a particular
+> driver,
+> it can be converted to use the helpers instead of manipulating tz->mode
+> directly. If, however, it does make a difference then it all depends and
+> getting rid of accessing tz->mode directly might require help from the
+> respective maintainers.
+
+Agree.
+
+> This also calls for storing tz's mode in struct thermal_zone_device
+> rather than in individual drivers. In fact it seems the purpose
+> of ->get_mode() is to produce the state stored internally in drivers.
+> Removing ->get_mode() requires changing the place where the state is
+> stored. struct thermal_zone_device seems most appropriate. So this patch
+> is not going to be small.
+
+Yes, the patch can be big. It is fine if the changes are only to replace
+tz->mode by their respective disable/enable/is_enabled functions. More
+complex changes can be separate.
+
+> Once we start storing tz's state in struct thermal_zone_device the
+> ->set_mode() implementations need to be changed, too. To me it seems
+> awkward to split this change in two patches: if we keep the changes
+> split then in patch 4 we need to introduce code which implements
+> ->set_mode() in terms of the new state location, only to remove it
+> in the very next patch.
+
+Yes, it is a valid point. May be you can do the changes in two patches
+to see the results in terms of complexity for the review process, then
+decide if it is worth to merge them before sending.
+
+> While we are at it some drivers, namely acpi/thermal and int3400 store
+> their mode in an int rather than enum thermal_device_mode. So maybe
+> changing this should go even before patch 4?
+
+I agree.
+
+> acerhdf does not store
+> its mode at all and on top of it it wants to manipulate the polling
+> delay directly and it has a module parameter which specifies it.
+
+
+
+>>   - patch 5 : Do the changes to remove set_mode() ops users
+>>
+>> As the patch 3 sets the polling to zero, the routine in the driver
+>> setting the polling to zero is no longer needed (eg. in the mellanox
+>> driver). I expect int300 to be the last user of this ops, hopefully we
+>> can find a way to get rid of the specific call done inside and then
+>> remove the ops.
 > 
-> Note: That I merely made a stupid mistake is a real possibility.
+> acerhdf wants ->set_mode() desperately.
 
-Yes, that was it. However all DELAY_HWP 20000 tests were bad,
-Not just this one.
+Yes, there is a couple of drivers which requires for the moment to keep
+the ops->set_mode to be called: int3400 and acerhdf. Both of them will
+be greatly simplified with the DISABLED / ENABLED changes.
 
-... Doug
+>> The initial_mode approach looks hackish, I suggest to make the default
+>> the thermal zone disabled after creating and then explicitly enable it.
+> 
+> Is it needed in drivers which create their thermal zone enabled?
+
+IMO, yes. We are doing changes with a code prone to issues, so making
+the steps: creation + enable will make things more clear. For instance,
+the clk framework do the same.
 
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
