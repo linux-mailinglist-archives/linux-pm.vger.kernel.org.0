@@ -2,80 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 179261E0C6D
-	for <lists+linux-pm@lfdr.de>; Mon, 25 May 2020 13:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948741E0C84
+	for <lists+linux-pm@lfdr.de>; Mon, 25 May 2020 13:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389926AbgEYLFv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 May 2020 07:05:51 -0400
-Received: from mail.zju.edu.cn ([61.164.42.155]:62642 "EHLO zju.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2389897AbgEYLFv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 25 May 2020 07:05:51 -0400
-Received: from localhost.localdomain (unknown [222.205.77.158])
-        by mail-app2 (Coremail) with SMTP id by_KCgBnEb2Epste7jMFAA--.16764S4;
-        Mon, 25 May 2020 19:05:44 +0800 (CST)
-From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
-To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] [v2] power: supply: bq24190_charger: Fix runtime PM imbalance on error
-Date:   Mon, 25 May 2020 19:05:40 +0800
-Message-Id: <20200525110540.6949-1-dinghao.liu@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgBnEb2Epste7jMFAA--.16764S4
-X-Coremail-Antispam: 1UD129KBjvdXoWrKrW5ZF15Jr17CrWrKFy7trb_yoWDArb_C3
-        y8Zas29rs8Wr42ywnrGw4rZry09r9rXryxWr48tr13ta4j9F1DJr18ZF98ZF45WFWUCrZ8
-        ta98KF93AryDujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbIkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4kMxAIw28IcxkI7VAKI48J
-        MxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_
-        Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x0JUqZXOUUUUU=
-X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgEJBlZdtORShQA+s+
+        id S2390003AbgEYLJM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 May 2020 07:09:12 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45209 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389942AbgEYLJL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 May 2020 07:09:11 -0400
+Received: by mail-ot1-f65.google.com with SMTP id c3so13518843otr.12;
+        Mon, 25 May 2020 04:09:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SB0wil5McK190NuQj9OZqwjEId4UBlaUoJWnHA0mJ7Y=;
+        b=tJZkYuy/83pyaG94T2GyhpZfTr/essjsHtK6rPaZ9eS87JXvjzDUfCRI98tA6odFCt
+         F5wCr6J1rqLutKnPeqSq/kFDD8c0MXxPUZU1MGiI3PoCiYXQXlRLym/NmbuuVQ9lU92B
+         ovGkXCounnw910c0l7JpSqZGPGvMLYlVCLJe2YUdbJfyfz5MBze7cChTHyxplDg70qxy
+         nhmOO0oX2wJ+NkvbCGleXFSYnZP9jpoiVrpQFDHA/wyd9zldOloFGAvrG2Dx7BV64PZu
+         m23VWjPGoaSHLecrCWHncjpPETYZ1rv1JhahvWQ45nAXBAKXkei5XS7tgWWnh90rAgH+
+         bPRg==
+X-Gm-Message-State: AOAM531OZ9Vr3Ux9zUNMuOUfkz4BQ+kTvmf693TrdcXkhOhs8/GZBFgC
+        ouiXp5Nva4V/yuuYwfW3OEwyVdSOUyDXXJ5r12EAOA==
+X-Google-Smtp-Source: ABdhPJzrnyOd62zbBJsrbKsaVS2KQXryawISoD+ng7KNkAatkOYfv5p1N8glpoiD0mjKlyRE6+1P7B4oWAeXdua48Ps=
+X-Received: by 2002:a9d:4713:: with SMTP id a19mr1428590otf.167.1590404950954;
+ Mon, 25 May 2020 04:09:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200525110540.6949-1-dinghao.liu@zju.edu.cn>
+In-Reply-To: <20200525110540.6949-1-dinghao.liu@zju.edu.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 25 May 2020 13:09:00 +0200
+Message-ID: <CAJZ5v0j7cy1qZ5q3jWjJ77zJrVp+Kt2-4sWN3KF0jBgV9FOQew@mail.gmail.com>
+Subject: Re: [PATCH] [v2] power: supply: bq24190_charger: Fix runtime PM
+ imbalance on error
+To:     Dinghao Liu <dinghao.liu@zju.edu.cn>
+Cc:     Kangjie Lu <kjlu@umn.edu>, Sebastian Reichel <sre@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm_runtime_get_sync() increments the runtime PM usage counter even
-it returns an error code. Thus a pairing decrement is needed on
-the error handling path to keep the counter balanced.
+On Mon, May 25, 2020 at 1:05 PM Dinghao Liu <dinghao.liu@zju.edu.cn> wrote:
+>
+> pm_runtime_get_sync() increments the runtime PM usage counter even
+> it returns an error code. Thus a pairing decrement is needed on
+> the error handling path to keep the counter balanced.
+>
+> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
----
+Better now:
 
-Changelog:
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-v2: - Use pm_runtime_put_noidle() rather than
-      pm_runtime_put_autosuspend().
----
- drivers/power/supply/bq24190_charger.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
-index 453d6332d43a..7b24c41a2137 100644
---- a/drivers/power/supply/bq24190_charger.c
-+++ b/drivers/power/supply/bq24190_charger.c
-@@ -481,8 +481,10 @@ static ssize_t bq24190_sysfs_store(struct device *dev,
- 		return ret;
- 
- 	ret = pm_runtime_get_sync(bdi->dev);
--	if (ret < 0)
-+	if (ret < 0) {
-+		pm_runtime_put_noidle(bdi->dev);
- 		return ret;
-+	}
- 
- 	ret = bq24190_write_mask(bdi, info->reg, info->mask, info->shift, v);
- 	if (ret)
--- 
-2.17.1
-
+> ---
+>
+> Changelog:
+>
+> v2: - Use pm_runtime_put_noidle() rather than
+>       pm_runtime_put_autosuspend().
+> ---
+>  drivers/power/supply/bq24190_charger.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+> index 453d6332d43a..7b24c41a2137 100644
+> --- a/drivers/power/supply/bq24190_charger.c
+> +++ b/drivers/power/supply/bq24190_charger.c
+> @@ -481,8 +481,10 @@ static ssize_t bq24190_sysfs_store(struct device *dev,
+>                 return ret;
+>
+>         ret = pm_runtime_get_sync(bdi->dev);
+> -       if (ret < 0)
+> +       if (ret < 0) {
+> +               pm_runtime_put_noidle(bdi->dev);
+>                 return ret;
+> +       }
+>
+>         ret = bq24190_write_mask(bdi, info->reg, info->mask, info->shift, v);
+>         if (ret)
+> --
+> 2.17.1
+>
