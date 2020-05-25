@@ -2,143 +2,263 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 420131E0EA6
-	for <lists+linux-pm@lfdr.de>; Mon, 25 May 2020 14:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AC81E0F62
+	for <lists+linux-pm@lfdr.de>; Mon, 25 May 2020 15:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390616AbgEYMn6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 May 2020 08:43:58 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:34210 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390556AbgEYMn6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 May 2020 08:43:58 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200525124356euoutp0236976fb965a1503f1ca80964aa91ac4e~SRgw-LeD-1083210832euoutp02D
-        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 12:43:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200525124356euoutp0236976fb965a1503f1ca80964aa91ac4e~SRgw-LeD-1083210832euoutp02D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1590410636;
-        bh=WSbY84KbUGFbLyo6SUqTrYaZH9Ab/qZiVUsKoLI42iw=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=nU79SSkESRoSeFaLsdTqupsE9qSA1wJhg2vElk9ARFXXq2/JGPWtc9+pgKQYb6hsA
-         50WJlf35pMJNO0+Sz6Igorq7izAUsb16oEz/rAcI6gmPfQw/zGxKowNn8b7UAZRQfR
-         Q3ozL8bnCUhOBR6Bm3z4mYBIC3bGz0iCtfbsb2gk=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200525124356eucas1p1d14dd0b7bf2919bdbe1f1bef094c0634~SRgwvW9Yk1354113541eucas1p10;
-        Mon, 25 May 2020 12:43:56 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id B4.CC.61286.C8DBBCE5; Mon, 25
-        May 2020 13:43:56 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200525124355eucas1p28f232f83f79fee234635a64270e4dd32~SRgwFl-M92127721277eucas1p2J;
-        Mon, 25 May 2020 12:43:55 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200525124355eusmtrp27a65ce5361bfea56fc7aeda010be4b81~SRgwE6aPp0100701007eusmtrp2j;
-        Mon, 25 May 2020 12:43:55 +0000 (GMT)
-X-AuditID: cbfec7f2-f0bff7000001ef66-41-5ecbbd8cbbf3
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 60.43.08375.B8DBBCE5; Mon, 25
-        May 2020 13:43:55 +0100 (BST)
-Received: from [106.210.88.143] (unknown [106.210.88.143]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200525124355eusmtip2f220baba69d595fe546ae2255a0cf363~SRgvfJiAM0854808548eusmtip2D;
-        Mon, 25 May 2020 12:43:55 +0000 (GMT)
-Subject: Re: [PATCH] i2c: core: fix NULL pointer dereference in
- suspend/resume callbacks
-To:     Tomasz Figa <tfiga@chromium.org>,
-        Bibby Hsieh <bibby.hsieh@mediatek.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <77f41c67-cd6f-59c5-15b4-c7d8756ca28a@samsung.com>
-Date:   Mon, 25 May 2020 14:43:55 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.8.0
+        id S2390719AbgEYNX7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 May 2020 09:23:59 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:33149 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388685AbgEYNX7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 May 2020 09:23:59 -0400
+Received: by mail-ot1-f67.google.com with SMTP id v17so13846711ote.0;
+        Mon, 25 May 2020 06:23:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lKcylKx93r/wOpHzhdxMmD4v8ts9DIzYV8SX+zfE+o4=;
+        b=Mga+gPdMFYSxfTDanPPWzS7dABd95BqA+P1ZXa8VPNHvFIfpRywgh/Mbpxgsuz7VgL
+         QDJZKLd6cXXpNVg8fYl6TiSYYSpCFhaqm/3APuoh7qKFkxfWb941igk6EKNojXbEUIqX
+         uecbvhEq+EAUBfJkfVEFLVsfVRqKkzTEUUKAKQtXonPBDPpWXh5lj3phM+FcFGUzLqpE
+         IdxoNSoqopsi7DZ9SVneKYfkT6lLtHHyMCcbq/3Ksj9SKKb5GeigfP0hnOBf5HGoXZVp
+         vT0wWk0NCSIL/Wd7oVjqg5CrxGwpeZQxQ4pUr9uR6lPaR6GcXNx+RbFJ+H2qvJYanp0f
+         glVg==
+X-Gm-Message-State: AOAM531H8NXVw/cUHJapW2gjky27ZrhYpI7fXZqtl+3n/2if1J78RVrm
+        fbf9q3XCHjiyXpdUKI5lDBeYq8ZY7xTZNyiqYKE=
+X-Google-Smtp-Source: ABdhPJyY61c7eNoJeM8XyhRi5p7Ejy0kYy1iwAmz5dGvp4vUrjEqJHVevMb3DUOBdBVsgzkhA8nS2/iEz71bbBDgjHw=
+X-Received: by 2002:a9d:6c0f:: with SMTP id f15mr18601337otq.118.1590413037749;
+ Mon, 25 May 2020 06:23:57 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAAFQd5DdiKDGsodJF_KW8H6YYwAkeaJLE7CoJ=cEX5KeTzO5mw@mail.gmail.com>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHKsWRmVeSWpSXmKPExsWy7djP87o9e0/HGew4Km2xccZ6Vosvc0+x
-        WMzcMIPFouPvF0aLy7vmsFl87j3CaDHj/D4mi+l3hSw+t/5js1h5YhazA5fH+xut7B6zGy6y
-        eLSc3M/i0bdlFaPHyVNPWDw+b5ILYIvisklJzcksSy3St0vgyphzaCFLwQmuil2HZrA1MJ7n
-        6GLk5JAQMJHofzWfrYuRi0NIYAWjxLx9JxkhnC+MEhtXtLBCOJ8ZJQ43TAZyOMBaZnXlQMSX
-        M0r8PHufHcJ5zyjx/Pk3NpAiYYEoiSMf+UBWiAj4SPyf2AA2lVmgiVni2s0XTCAJNgFDia63
-        XWwgNq+AncTH60uZQWwWAVWJBbMXgdmiArESpxdvZoSoEZQ4OfMJC4jNKRAo8ezdMbAaZgF5
-        ie1v50DZ4hK3nsxnAlkmIXCOXeLV/gcsEI+6SJx+/IMJwhaWeHV8CzuELSPxfydMQzOjxMNz
-        a9khnB5GictNMxghqqwl7pz7BfYas4CmxPpd+hBhR4lNf68wQ4KFT+LGW0GII/gkJm2bDhXm
-        lehoE4KoVpOYdXwd3NqDFy4xT2BUmoXktVlI3pmF5J1ZCHsXMLKsYhRPLS3OTU8tNsxLLdcr
-        TswtLs1L10vOz93ECExVp/8d/7SD8eulpEOMAhyMSjy8FmtOxwmxJpYVV+YeYpTgYFYS4W1z
-        BwrxpiRWVqUW5ccXleakFh9ilOZgURLnNV70MlZIID2xJDU7NbUgtQgmy8TBKdXAuG15bZfZ
-        HL3lrx/mT018MSVK2dFvQzf7iaWt8TdbFOQWiJQ6xV1nd+vcVrSjMidSereW7QXutru2hjY8
-        cmmCuoLr4pVWHOf567g+2GvPsy8/52yY9UvA80NduPrlI9tkv7lum6RT0c6UsJL714q9Lq1T
-        n54rL41cnf5mEaN8xsJKm4WGtlOjlViKMxINtZiLihMBFpiN7VEDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIIsWRmVeSWpSXmKPExsVy+t/xe7rde0/HGfxZpmexccZ6Vosvc0+x
-        WMzcMIPFouPvF0aLy7vmsFl87j3CaDHj/D4mi+l3hSw+t/5js1h5YhazA5fH+xut7B6zGy6y
-        eLSc3M/i0bdlFaPHyVNPWDw+b5ILYIvSsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaP
-        tTIyVdK3s0lJzcksSy3St0vQy5hzaCFLwQmuil2HZrA1MJ7n6GLk4JAQMJGY1ZXTxcjFISSw
-        lFFi+5sPbF2MnEBxGYmT0xpYIWxhiT/Xutggit4ySsyY0cYCkhAWiJKYfuAAO4gtIuAj8X9i
-        AyNIEbNAC7PEqTcrmCA6epkkLuyZDdbBJmAo0fW2C2wFr4CdxMfrS5lBbBYBVYkFsxeB2aIC
-        sRKrr7UyQtQISpyc+QSsl1MgUOLZu2NgNcwCZhLzNj+EsuUltr+dA2WLS9x6Mp9pAqPQLCTt
-        s5C0zELSMgtJywJGllWMIqmlxbnpucWGesWJucWleel6yfm5mxiB0bnt2M/NOxgvbQw+xCjA
-        wajEw2ux5nScEGtiWXFl7iFGCQ5mJRHeNnegEG9KYmVValF+fFFpTmrxIUZToOcmMkuJJucD
-        E0deSbyhqaG5haWhubG5sZmFkjhvh8DBGCGB9MSS1OzU1ILUIpg+Jg5OqQbGmozVvptYUpQS
-        8vY9Mjp+qW+/5ImiRZ4izufSygILmFQ2ZC5jseXTkZ1+Xu7V6d3beD7XTjUTWFMhd6nOVUHn
-        zu/UngqZxz23nwi93ms3wdVALHvfquu2P3JFYx1fy015KTX5tajSpPzWbyLfS25XxlwVP7Y+
-        v0v6zZaIjd+3fz4+zdPKX5FDiaU4I9FQi7moOBEAlwxD7eQCAAA=
-X-CMS-MailID: 20200525124355eucas1p28f232f83f79fee234635a64270e4dd32
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7
-References: <CGME20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7@eucas1p1.samsung.com>
-        <20200522101327.13456-1-m.szyprowski@samsung.com>
-        <34736047-3fc8-385b-cdea-79b061deb7b4@samsung.com>
-        <CAAFQd5DdiKDGsodJF_KW8H6YYwAkeaJLE7CoJ=cEX5KeTzO5mw@mail.gmail.com>
+References: <3169564.ZRsPWhXyMD@kreacher> <87mu5wre1v.fsf@intel.com>
+In-Reply-To: <87mu5wre1v.fsf@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 25 May 2020 15:23:46 +0200
+Message-ID: <CAJZ5v0hBiKdDQJjdcuV72+3jCOZPNekmGxdtod-f9Sgwc_7D+g@mail.gmail.com>
+Subject: Re: [RFC/RFT][PATCH] cpufreq: intel_pstate: Work in passive mode with
+ HWP enabled
+To:     Francisco Jerez <francisco.jerez.plata@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Doug Smythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Tomasz
-
-On 25.05.2020 14:28, Tomasz Figa wrote:
-> On Fri, May 22, 2020 at 1:15 PM Marek Szyprowski
-> <m.szyprowski@samsung.com> wrote:
->> On 22.05.2020 12:13, Marek Szyprowski wrote:
->>> Commit 6fe12cdbcfe3 ("i2c: core: support bus regulator controlling in
->>> adapter") added generic suspend and resume functions for i2c devices.
->>> Those functions unconditionally access an i2c_client structure assigned
->>> to the given i2c device. However, there exist i2c devices in the system
->>> without a valid i2c_client. Add the needed check before accessing the
->>> i2c_client.
->> Just one more comment. The devices without i2c_client structure are the
->> i2c 'devices' associated with the respective i2c bus. They are visible
->> in /sys:
->>
->> ls -l /sys/bus/i2c/devices/i2c-*
->>
->> I wonder if this patch has been ever tested with system suspend/resume,
->> as those devices are always available in the system...
-> Sorry for the trouble and thanks a lot for the fix. We'll make sure to
-> do more thorough testing, including suspend/resume before relanding
-> this change.
+On Mon, May 25, 2020 at 3:39 AM Francisco Jerez
+<francisco.jerez.plata@intel.com> wrote:
 >
-> Since the patch was reverted, can we squash your fix with the next
-> revision together with your Co-developed-by and Signed-off-by tags?
-Sure, no problem. The fix is trivial.
+> "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
+>
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Allow intel_pstate to work in the passive mode with HWP enabled and
+> > make it translate the target frequency supplied by the cpufreq
+> > governor in use into an EPP value to be written to the HWP request
+> > MSR (high frequencies are mapped to low EPP values that mean more
+> > performance-oriented HWP operation) as a hint for the HWP algorithm
+> > in the processor, so as to prevent it and the CPU scheduler from
+> > working against each other at least when the schedutil governor is
+> > in use.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > This is a prototype not intended for production use (based on linux-next).
+> >
+> > Please test it if you can (on HWP systems, of course) and let me know the
+> > results.
+> >
+> > The INTEL_CPUFREQ_TRANSITION_DELAY_HWP value has been guessed and it very well
+> > may turn out to be either too high or too low for the general use, which is one
+> > reason why getting as much testing coverage as possible is key here.
+> >
+> > If you can play with different INTEL_CPUFREQ_TRANSITION_DELAY_HWP values,
+> > please do so and let me know the conclusions.
+> >
+> > Cheers,
+> > Rafael
+> >
+> > ---
+> >  drivers/cpufreq/intel_pstate.c |  169 +++++++++++++++++++++++++++++++----------
+> >  1 file changed, 131 insertions(+), 38 deletions(-)
+> >
+> > Index: linux-pm/drivers/cpufreq/intel_pstate.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+> > +++ linux-pm/drivers/cpufreq/intel_pstate.c
+> > @@ -36,6 +36,7 @@
+> >  #define INTEL_PSTATE_SAMPLING_INTERVAL       (10 * NSEC_PER_MSEC)
+> >
+> >  #define INTEL_CPUFREQ_TRANSITION_LATENCY     20000
+> > +#define INTEL_CPUFREQ_TRANSITION_DELAY_HWP   5000
+> >  #define INTEL_CPUFREQ_TRANSITION_DELAY               500
+> >
+> >  #ifdef CONFIG_ACPI
+> > @@ -95,6 +96,8 @@ static inline int32_t percent_ext_fp(int
+> >       return div_ext_fp(percent, 100);
+> >  }
+> >
+> > +#define HWP_EPP_TO_BYTE(x)   (((u64)x >> 24) & 0xFF)
+> > +
+> >  /**
+> >   * struct sample -   Store performance sample
+> >   * @core_avg_perf:   Ratio of APERF/MPERF which is the actual average
+> > @@ -2175,7 +2178,10 @@ static int intel_pstate_verify_policy(st
+> >
+> >  static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
+> >  {
+> > -     intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+> > +     if (hwp_active)
+> > +             intel_pstate_hwp_force_min_perf(policy->cpu);
+> > +     else
+> > +             intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+> >  }
+> >
+> >  static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+> > @@ -2183,12 +2189,10 @@ static void intel_pstate_stop_cpu(struct
+> >       pr_debug("CPU %d exiting\n", policy->cpu);
+> >
+> >       intel_pstate_clear_update_util_hook(policy->cpu);
+> > -     if (hwp_active) {
+> > +     if (hwp_active)
+> >               intel_pstate_hwp_save_state(policy);
+> > -             intel_pstate_hwp_force_min_perf(policy->cpu);
+> > -     } else {
+> > -             intel_cpufreq_stop_cpu(policy);
+> > -     }
+> > +
+> > +     intel_cpufreq_stop_cpu(policy);
+> >  }
+> >
+> >  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+> > @@ -2296,7 +2300,8 @@ static int intel_cpufreq_verify_policy(s
+> >  #define      INTEL_PSTATE_TRACE_TARGET 10
+> >  #define      INTEL_PSTATE_TRACE_FAST_SWITCH 90
+> >
+> > -static void intel_cpufreq_trace(struct cpudata *cpu, unsigned int trace_type, int old_pstate)
+> > +static void intel_cpufreq_trace(struct cpudata *cpu, unsigned int trace_type,
+> > +                             int from, int to)
+> >  {
+> >       struct sample *sample;
+> >
+> > @@ -2309,8 +2314,8 @@ static void intel_cpufreq_trace(struct c
+> >       sample = &cpu->sample;
+> >       trace_pstate_sample(trace_type,
+> >               0,
+> > -             old_pstate,
+> > -             cpu->pstate.current_pstate,
+> > +             from,
+> > +             to,
+> >               sample->mperf,
+> >               sample->aperf,
+> >               sample->tsc,
+> > @@ -2318,40 +2323,110 @@ static void intel_cpufreq_trace(struct c
+> >               fp_toint(cpu->iowait_boost * 100));
+> >  }
+> >
+> > -static int intel_cpufreq_target(struct cpufreq_policy *policy,
+> > -                             unsigned int target_freq,
+> > -                             unsigned int relation)
+> > +static void intel_cpufreq_update_hwp_request(struct cpudata *cpu, u8 new_epp)
+> >  {
+> > -     struct cpudata *cpu = all_cpu_data[policy->cpu];
+> > -     struct cpufreq_freqs freqs;
+> > -     int target_pstate, old_pstate;
+> > +     u64 value, prev;
+> >
+> > -     update_turbo_state();
+> > +     prev = READ_ONCE(cpu->hwp_req_cached);
+> > +     value = prev;
+> >
+> > -     freqs.old = policy->cur;
+> > -     freqs.new = target_freq;
+> > +     /*
+> > +      * The entire MSR needs to be updated in order to update the EPP field
+> > +      * in it, so opportunistically update the min and max too if needed.
+> > +      */
+> > +     value &= ~HWP_MIN_PERF(~0L);
+> > +     value |= HWP_MIN_PERF(cpu->min_perf_ratio);
+> > +
+> > +     value &= ~HWP_MAX_PERF(~0L);
+> > +     value |= HWP_MAX_PERF(cpu->max_perf_ratio);
+> > +
+> > +     if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
+> > +             intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_TARGET,
+> > +                                 HWP_EPP_TO_BYTE(prev), new_epp);
+> > +
+> > +             value &= ~GENMASK_ULL(31, 24);
+> > +             value |= HWP_ENERGY_PERF_PREFERENCE(new_epp);
+> > +     }
+> > +
+> > +     if (value != prev) {
+> > +             WRITE_ONCE(cpu->hwp_req_cached, value);
+> > +             wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, value);
+> > +     }
+> > +}
+> > +
+> > +/**
+> > + * intel_cpufreq_adjust_hwp_request - Adjust the HWP reuqest register.
+> > + * @cpu: Target CPU.
+> > + * @max_freq: Maximum frequency to consider.
+> > + * @target_freq: Target frequency selected by the governor.
+> > + *
+> > + * Translate the target frequency into a new EPP value to be written into the
+> > + * HWP request MSR of @cpu as a hint for the HW-driven P-state selection.
+> > + *
+> > + * The purpose of this is to avoid situations in which the kernel and the HWP
+> > + * algorithm work against each other by giving a hint about the expectations of
+> > + * the former to the latter.
+> > + *
+> > + * The mapping betweeen the target frequencies and the hint values need not be
+> > + * exact, but it must be monotonic, so that higher target frequencies always
+> > + * indicate more performance-oriented P-state selection.
+> > + */
+> > +static void intel_cpufreq_adjust_hwp_request(struct cpudata *cpu, s64 max_freq,
+> > +                                          unsigned int target_freq)
+> > +{
+> > +     s64 epp_fp = div_fp(255 * (max_freq - target_freq), max_freq);
+> > +
+> > +     intel_cpufreq_update_hwp_request(cpu, fp_toint(epp_fp));
+> > +}
+> > +
+>
+> Hey Rafael, I'm building a kernel with this in order to give it a try on
+> my system, but I'm skeptical that translating the target frequency to an
+> EPP value will work reliably.  AFAIA the EPP value only has an indirect
+> influence on the processor's performance by adjusting the trade-off
+> between its responsiveness (rather than the actual clock frequency which
+> it will sustain in the long run) and its energy usage, in a largely
+> unspecified and non-linear way (non-linear like the effect of switching
+> CPU energy optimization features on and off, or like its effect on the
+> energy balancing behavior of the processor which can have a paradoxical
+> effect on performance).
+>
+> I doubt that the scheduling-based CPU utilization is a good predictor
+> for the optimal trade-off between those two variables.
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+While I agree that this is not perfect, there barely is anything else
+that can be used for this purpose.
 
+Using the desired field or trying to adjust the limits relatively
+often would basically cause the P-state selection to be driven
+entirely by the kernel which simply doesn't know certain things only
+known to the P-unit, so it is reasonable to leave some level of
+control to the latter, so as to allow it to use the information known
+to it only.
+
+However, if it is allowed to do whatever it likes without any hints
+from the kernel, it may very well go against the scheduler's decisions
+which is not going to be optimal.
+
+I'm simply not sure if there is any other way to give such hints to it
+that through the EPP.
+
+Thanks!
