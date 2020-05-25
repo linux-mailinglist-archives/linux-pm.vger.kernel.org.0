@@ -2,89 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B041E0D53
-	for <lists+linux-pm@lfdr.de>; Mon, 25 May 2020 13:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7C41E0E6E
+	for <lists+linux-pm@lfdr.de>; Mon, 25 May 2020 14:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390137AbgEYLc2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 May 2020 07:32:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54050 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388733AbgEYLc1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 25 May 2020 07:32:27 -0400
-Received: from kozik-lap.mshome.net (unknown [194.230.155.118])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D195F20787;
-        Mon, 25 May 2020 11:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590406346;
-        bh=wiKO9ZZ2xlGA++fntc5tHue7H7VM7k0ZGV0z0X7E/BE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bjbxUQ+9O7AIW3rZSJ2V/MYQ7lfowjf+b01Pg8o9Y7sbrMjFunOJQ+kqyed9Ow3yB
-         0SW7Ws7esp2tIDjPUJpY7byOGS64erfIYdee/cphuPChMCnSUZLSFY/BUicdS6b6cW
-         kfWopQodjT0h1otwWiKfY5hReiFK21iA4NaUhk1w=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        "Andrew F. Davis" <afd@ti.com>, Sebastian Reichel <sre@kernel.org>,
-        Anton Vorontsov <cbouatmailru@gmail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>, stable@vger.kernel.org
-Subject: [RFC] power: supply: bq27xxx_battery: Fix polling interval after re-bind
-Date:   Mon, 25 May 2020 13:32:19 +0200
-Message-Id: <20200525113220.369-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S2390597AbgEYM2w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 May 2020 08:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390488AbgEYM2w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 May 2020 08:28:52 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3A3C061A0E
+        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 05:28:51 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id bs4so14879866edb.6
+        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 05:28:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4brhUMvajhqCMbsLZet6vC1Qy3ztqFVBNLV1y3fJ0Ok=;
+        b=hnhOWAjqAv1GZGWkwmr90o7yeD20DdB7e42yX7ajg/ZCxiJyFkeAtysH96F8mWj0a5
+         qEFDLtEu+h64FvqQnCfWlsaHd7VhN7vI5fg/UDW8ngyxV4/2boMBDLWOkkSzWgBV1vEH
+         zAGhmm2uShjKSYCQN2/RgtBN47hewG1wCB47Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4brhUMvajhqCMbsLZet6vC1Qy3ztqFVBNLV1y3fJ0Ok=;
+        b=pGkGcN7Jid0AvrxQSZi28ccVCK+FSRVX4v5TOpWJ+LX3mx8VntCJ+hk1u4K9AIpjva
+         uosqyOpPZ23MMIVzzM4d0Y44iHA6NS8kIuI3xyHMhjRfV/CYJRYj4ZURaYNJfdi19DKn
+         qtp5oePajH0eq44GOR0ti1xvzkrA4OQm+P76brZz9R/Nt0O7B3U+aMkqFjEL8V/H+76w
+         YOkxvDz9ohYfBubWEJfEdc4PAQ0iKbsOPkJdmVU6Xsd8DElGvv23++GGA+krUdbGQ4Xa
+         NlNoOyNjTu2HZHTOqajhzY1w48WPz4CQ/zVoy/19BypjcYcjZRhaSSjVmvR9OGOCNqFS
+         xuvA==
+X-Gm-Message-State: AOAM531O+KlnWbI7X+J4kb+27iSAu47zO+KvGEDK/j87HoTymRuxULw6
+        MxdHggr/W4mXKeZYDB1BFSL8kgGp2RNMcg==
+X-Google-Smtp-Source: ABdhPJym/E8/AtGd/LWIZlEbp+p2MkcVc2Dm4OCdbbPBLCgJfAz64e0H8Sq/feWvN0RD+s1FSCwvww==
+X-Received: by 2002:a05:6402:b06:: with SMTP id bm6mr15611880edb.17.1590409729889;
+        Mon, 25 May 2020 05:28:49 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id bf15sm15755580edb.46.2020.05.25.05.28.49
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 May 2020 05:28:49 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id r7so229495wro.1
+        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 05:28:49 -0700 (PDT)
+X-Received: by 2002:a5d:66c5:: with SMTP id k5mr14649696wrw.17.1590409728561;
+ Mon, 25 May 2020 05:28:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <CGME20200522101524eucas1p1aeef4a054a80b5d822ed3dc4b16139d7@eucas1p1.samsung.com>
+ <20200522101327.13456-1-m.szyprowski@samsung.com> <34736047-3fc8-385b-cdea-79b061deb7b4@samsung.com>
+In-Reply-To: <34736047-3fc8-385b-cdea-79b061deb7b4@samsung.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Mon, 25 May 2020 14:28:36 +0200
+X-Gmail-Original-Message-ID: <CAAFQd5DdiKDGsodJF_KW8H6YYwAkeaJLE7CoJ=cEX5KeTzO5mw@mail.gmail.com>
+Message-ID: <CAAFQd5DdiKDGsodJF_KW8H6YYwAkeaJLE7CoJ=cEX5KeTzO5mw@mail.gmail.com>
+Subject: Re: [PATCH] i2c: core: fix NULL pointer dereference in suspend/resume callbacks
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This reverts commit 8cfaaa811894a3ae2d7360a15a6cfccff3ebc7db.
+Hi Marek,
 
-If device was unbound and bound, the polling interval would be set to 0.
-This is both unexpected and messes up with other bq27xxx devices (if
-more than one battery device is used).
+On Fri, May 22, 2020 at 1:15 PM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
+>
+> Hi All,
+>
+> On 22.05.2020 12:13, Marek Szyprowski wrote:
+> > Commit 6fe12cdbcfe3 ("i2c: core: support bus regulator controlling in
+> > adapter") added generic suspend and resume functions for i2c devices.
+> > Those functions unconditionally access an i2c_client structure assigned
+> > to the given i2c device. However, there exist i2c devices in the system
+> > without a valid i2c_client. Add the needed check before accessing the
+> > i2c_client.
+>
+> Just one more comment. The devices without i2c_client structure are the
+> i2c 'devices' associated with the respective i2c bus. They are visible
+> in /sys:
+>
+> ls -l /sys/bus/i2c/devices/i2c-*
+>
+> I wonder if this patch has been ever tested with system suspend/resume,
+> as those devices are always available in the system...
 
-This reset of polling interval was added in commit 8cfaaa811894
-("bq27x00_battery: Fix OOPS caused by unregistring bq27x00 driver")
-stating that power_supply_unregister() calls get_property().  However in
-Linux kernel v3.1 and newer, such call trace does not exist.
-Unregistering power supply does not call get_property() on unregistered
-power supply.
+Sorry for the trouble and thanks a lot for the fix. We'll make sure to
+do more thorough testing, including suspend/resume before relanding
+this change.
 
-Fixes: 8cfaaa811894 ("bq27x00_battery: Fix OOPS caused by unregistring bq27x00 driver")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Since the patch was reverted, can we squash your fix with the next
+revision together with your Co-developed-by and Signed-off-by tags?
 
----
-
-I really could not identify the issue being fixed in offending commit
-8cfaaa811894 ("bq27x00_battery: Fix OOPS caused by unregistring bq27x00
-driver"), therefore maybe I missed here something important.
-
-Please share your thoughts on this.
----
- drivers/power/supply/bq27xxx_battery.c | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 942c92127b6d..4c94ee72de95 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -1905,14 +1905,6 @@ EXPORT_SYMBOL_GPL(bq27xxx_battery_setup);
- 
- void bq27xxx_battery_teardown(struct bq27xxx_device_info *di)
- {
--	/*
--	 * power_supply_unregister call bq27xxx_battery_get_property which
--	 * call bq27xxx_battery_poll.
--	 * Make sure that bq27xxx_battery_poll will not call
--	 * schedule_delayed_work again after unregister (which cause OOPS).
--	 */
--	poll_interval = 0;
--
- 	cancel_delayed_work_sync(&di->work);
- 
- 	power_supply_unregister(di->bat);
--- 
-2.17.1
-
+Best regards,
+Tomasz
