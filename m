@@ -2,133 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E581E0A94
-	for <lists+linux-pm@lfdr.de>; Mon, 25 May 2020 11:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4F51E0AB7
+	for <lists+linux-pm@lfdr.de>; Mon, 25 May 2020 11:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389365AbgEYJb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 May 2020 05:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
+        id S2388437AbgEYJgt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 May 2020 05:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388669AbgEYJb0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 May 2020 05:31:26 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D167CC05BD43
-        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 02:31:25 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id u79so9606157vsu.4
-        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 02:31:25 -0700 (PDT)
+        with ESMTP id S2389591AbgEYJgs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 May 2020 05:36:48 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEE2C08C5C0
+        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 02:36:46 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id v4so13409621qte.3
+        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 02:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2SJy3teeS/DAEycN8FRbgylUfmtHnW0QUGPznK0vKdk=;
-        b=oOVlDGlyYvsjt9O70aWettNvYp5QuWpirQw83njS4tN9OVs1QOHpQ6l4kTXcQxSSyH
-         Nhslhcled0cALdykwKEM9G2EaYphVlW+R4mq2rsKBu1pBFetLlagvOXR8qS+HhpbLsfv
-         EfsZ8lsKt84cOgjPFwv4DmDm0ZPvnauZJpxKpOo+OpMGpvtMwjQ6XKPlh3MotvunFVL9
-         WD2yTLvNTyCG/2t90ne8LWfZc32BozQ1R2+QEeYjj/yC2M0mLjdFEr7Rpjxhx3xSEYoq
-         8v/VxK+F4xDjizjBPUPqFQu56jScEuiwTQ1LcqmVtKUa1VPGxM84KBhaYWAlwlkXpfRC
-         itEA==
+         :cc:content-transfer-encoding;
+        bh=RrCJYv2CMkjmXgxh4luY1jGTleOro3sZ8PAwMM7JZE8=;
+        b=fuRxqLaU5g8a+KV52JfO8iIc6Dpzv7xH8zEcUSQ/EPvQBP7xuZujlB1Zqe487JQ3Kq
+         07LoVBHsy1UXVK+h1466jj5fLf4k0US9SOPw/xkahZeYDz6NXGm5hSOhNSrUBtmqhLWK
+         KpGTM4RgelTirb7PDz/hSax3IAD2wQczpkOEfKXlM0XO/X+ySXMhXr8sWjHil9VXwp4a
+         gjc6rD/Jhv2tYnFrfXg8taOWar/FQPrbAQeQRe+RXkie2tW8wVIJTOK74bsrPbGDoPrG
+         lezjk7vKK6+6lpnEOFAUY+wGVeHzj2KdWfnZ/xg9pSOhTX2lpNrlKoV/wVcAJES3+lOl
+         9t6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2SJy3teeS/DAEycN8FRbgylUfmtHnW0QUGPznK0vKdk=;
-        b=bhTtRw3///UGpOQqmho6OFVk5Tpb2f7zl08XQrjbxHYIiFtfV42eKWv1pMEz10kkG5
-         xBW+2dcq2NZeABcrkyGNht6BYt7FEBrKc9LYXcZVJhNFl/pz+AEcstNjAWU+jvaDEzOo
-         z6V2ukvWxWtfo9coDLAvWw2auSui/V5emD+QO4AQpejnGKQGMYCialJyFezh8W1pTFCX
-         8RMeO5+KWM8qgKxaGmdMq9v1N2uitLIZzImILPjsYYAWuzZQV7WSLwKNwRPZgN1PuCj+
-         Bf/1vp4cXXA9dwjZpzJvYljm+8QtFgZhTUOKUTQgS46wyQpqh0sZd9uZdEO79rPSX6wF
-         yP2Q==
-X-Gm-Message-State: AOAM530iVnNS7stbFA2VX0y08VryzmXlNCLMEZmsCCkwybJcd8Q2qMV9
-        yRCY0o+uK6trGmeM+cbthxHUAvOlCa2Dr2qH2YAcSA==
-X-Google-Smtp-Source: ABdhPJzdToedW+b7g2VJmgHmi3EXlqTSzajnqP28mVcwwaT9fRa4OEbfVkWvnBRvi/o5+XV/vwN09H2AFAdUDE1INz4=
-X-Received: by 2002:a67:1486:: with SMTP id 128mr13187332vsu.191.1590399084957;
- Mon, 25 May 2020 02:31:24 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RrCJYv2CMkjmXgxh4luY1jGTleOro3sZ8PAwMM7JZE8=;
+        b=Mzhf1QyxcNKruVOj0mI+JbIrmjR4qOBZ+5IwNVJWcjOJwrGKwOtBdkMknwYH6Rm28w
+         Kd5sOevVM3ceeSXM/deBlQGMxo0Zd8CAPl/B2tqvZNhWTtKe6ySHjM+20gpGpalN4Sil
+         tmtGplZv8IiqLBJiWhqocxPXgzOkn8pzGWs9qJcIJEqqEMoNMtT6kgInyurNiAgXquge
+         H9BHwECgdImBo/lWILtujhCbiwqEZiUnAZynG+MSbS6mkLcXk1QmmqVENFOyQv0q1sPm
+         6nBiqnEd3EofFCbp23Ypg5VOfUNBjYKfKIHQSoRB6kveKN+dkQ7WMijn4LBlgDjcNA1Q
+         p3lw==
+X-Gm-Message-State: AOAM531PvMOxsdU49GajxeslNuJW/9fXARXN5s/HtnklWpINPoUFL0N7
+        zRoMmUPrYoicBrRcwgfo+rMBJJtuftfl0HaFfySXlg==
+X-Google-Smtp-Source: ABdhPJxH6RRcuaHYqO3WxxeIfwE81GyLqMO/ChAPMvFcbjmN7sgsVd4B4nKXJegt6FTlMqeYNykQPLynPcScd/lVDDo=
+X-Received: by 2002:aed:257c:: with SMTP id w57mr26966940qtc.208.1590399406112;
+ Mon, 25 May 2020 02:36:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20200521170817eucas1p13d9477a0a5d13d2df876134cf41131d8@eucas1p1.samsung.com>
- <5127441.yGvM1JjtLk@kreacher> <e9130ce8-fd22-c871-c089-585585c7133f@samsung.com>
- <CAJZ5v0j+bsHaQcxK41yph8eRpMZ3DoerqA7uwS2B8De41Jwi7Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j+bsHaQcxK41yph8eRpMZ3DoerqA7uwS2B8De41Jwi7Q@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 25 May 2020 11:30:48 +0200
-Message-ID: <CAPDyKFrHcvhi+qZk-65+FpDMu6y_ZU-K=nRWQY63qMR21m9yMg@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: clk: Fix clk_pm_runtime_get() error path
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
+References: <cover.1590017578.git.syednwaris@gmail.com>
+In-Reply-To: <cover.1590017578.git.syednwaris@gmail.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Mon, 25 May 2020 11:36:35 +0200
+Message-ID: <CAMpxmJUrC270rgWcADYruqA_qVeh9-N8mCVPWgJkL-8kU2bO1A@mail.gmail.com>
+Subject: Re: [PATCH v7 0/4] Introduce the for_each_set_clump macro
+To:     Syed Nayyar Waris <syednwaris@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>, rrichter@marvell.com,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-arch@vger.kernel.org,
+        linux-gpio <linux-gpio@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-pm <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 22 May 2020 at 20:39, Rafael J. Wysocki <rafael@kernel.org> wrote:
+niedz., 24 maj 2020 o 07:00 Syed Nayyar Waris <syednwaris@gmail.com> napisa=
+=C5=82(a):
 >
-> On Fri, May 22, 2020 at 7:19 AM Marek Szyprowski
-> <m.szyprowski@samsung.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On 21.05.2020 19:08, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > clk_pm_runtime_get() assumes that the PM-runtime usage counter will
-> > > be dropped by pm_runtime_get_sync() on errors, which is not the case,
-> > > so PM-runtime references to devices acquired by the former are leaked
-> > > on errors returned by the latter.
-> > >
-> > > Fix this by modifying clk_pm_runtime_get() to drop the reference if
-> > > pm_runtime_get_sync() returns an error.
-> > >
-> > > Fixes: 9a34b45397e5 clk: Add support for runtime PM
-> > > Cc: 4.15+ <stable@vger.kernel.org> # 4.15+
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Frankly, I would rather fix the runtime_get_sync() instead of fixing the
-> > return path everywhere in the kernel. The current behavior of the
-> > pm_runtime_get_sync() is completely counter-intuitive then. I bet that
-> > in the 99% of the places where it is being called assume that no special
-> > fixup is needed in case of failure. This is one of the most common
-> > runtime PM related function and it is really a common pattern in the
-> > drivers to call:
-> >
-> > pm_runtime_get_sync()
-> >
-> > do something with the hardware
-> >
-> > pm_runtime_put()
-> >
-> > Do you really want to fix the error paths of the all such calls?
+> Hello Linus,
 >
-> No, I don't, and that's why I'm proposing this patch.
+> Since this patchset primarily affects GPIO drivers, would you like
+> to pick it up through your GPIO tree?
 >
-> The caller that does what you said above is OK now and if the behavior
-> of pm_runtime_get_sync() changed, that caller would need to be
-> updated.
+> This patchset introduces a new generic version of for_each_set_clump.
+> The previous version of for_each_set_clump8 used a fixed size 8-bit
+> clump, but the new generic version can work with clump of any size but
+> less than or equal to BITS_PER_LONG. The patchset utilizes the new macro
+> in several GPIO drivers.
 >
-> OTOH, a caller that fails to drop the reference on an error returned
-> by pm_runtime_get_sync() is buggy (and has ever been so).
+> The earlier 8-bit for_each_set_clump8 facilitated a
+> for-loop syntax that iterates over a memory region entire groups of set
+> bits at a time.
 >
-> I'd rather update the buggy callers than the ones that are OK.
 
-I agree.
+The GPIO part looks good to me. Linus: how do we go about merging it
+given the bitops dependency?
 
-In hindsight we should have dropped the usage count in
-pm_runtime_get_sync(), when it fails. However, that's too late,
-especially since there are many cases having no error handling at all
-- and in those cases, that would mean the subsequent call to
-pm_runtime_put() can mess up the usage count (if pm_runtime_get_sync()
-failed and has already dropped the count).
-
-So, feel free to add:
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-[...]
-
-Kind regards
-Uffe
+Bart
