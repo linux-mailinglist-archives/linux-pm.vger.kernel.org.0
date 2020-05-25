@@ -2,97 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57ADD1E0F8C
-	for <lists+linux-pm@lfdr.de>; Mon, 25 May 2020 15:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5991E1027
+	for <lists+linux-pm@lfdr.de>; Mon, 25 May 2020 16:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390754AbgEYNdf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 May 2020 09:33:35 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:39138 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388794AbgEYNdf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 May 2020 09:33:35 -0400
-Received: by mail-ot1-f66.google.com with SMTP id d7so13803821ote.6;
-        Mon, 25 May 2020 06:33:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q3iZXQVOrAzTRalMEWpzyXuGfM2DVDNSP7yRTGMprno=;
-        b=csR0DAp0JE0lKdsnc9OCrIPH84KeaYSn5TBcvYM9k/ZF+ge8S8cm+QKj2ohQm4WTRw
-         ewBeCpomccCrEBjdEfz+EeABYxjG/l0/PFkkxcGzfID6P18f5mSNef3eK5mTVf5hsS5o
-         ew6lOAwZwqls0LRUPKc5w39L45k6vgDm6KLgkj5oKi4HvjfMWLsNvn4fDtATXKMmjwkQ
-         eB6TMyMCTYPgP1nG3tlvHGYun2VJjt/eA9H05RosD+tfMindc/wNN4eL5E+7t59/hMnZ
-         ncVUBDoS4uCv+sWJQ4t+OBbvFNHvYhP3Iicnf9ZwJwc1hTyKYn9wV+gCcWromYn9DNO+
-         cu5A==
-X-Gm-Message-State: AOAM531BS6rAFeHKAKLWNldE63/1MknodaxhXZAGh2Fg6JIIibq+u+pK
-        187XEGb+1r0IeIC0ZMBV0p3WRjZW5YRYlINO4hA=
-X-Google-Smtp-Source: ABdhPJxH53sSQQ6MgkCscPJLy6R+m/Ffo7n4UaokQzcM2BtXNS/a2/B/Xn5yLGNX8exhkr0lIHwWS3e7Q7DJIU8Q1a0=
-X-Received: by 2002:a9d:3d05:: with SMTP id a5mr21110123otc.262.1590413614201;
- Mon, 25 May 2020 06:33:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200430063229.6182-1-rui.zhang@intel.com> <20200430063229.6182-2-rui.zhang@intel.com>
-In-Reply-To: <20200430063229.6182-2-rui.zhang@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 25 May 2020 15:33:23 +0200
-Message-ID: <CAJZ5v0j1Nehwq5eCVBo7StJ=vxBKpO454ywkVJmVRD=MQOVu=w@mail.gmail.com>
-Subject: Re: [PATCH 1/6] iwlwifi: use thermal_zone_device_update() for
- temperature change
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        "open list:NETWORKING DRIVERS (WIRELESS)" 
-        <linux-wireless@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        andrzej.p@collabora.com,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        luca@coelho.fi
-Content-Type: text/plain; charset="UTF-8"
+        id S2390817AbgEYOMK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 May 2020 10:12:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57644 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388862AbgEYOMK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 25 May 2020 10:12:10 -0400
+Received: from kozik-lap.mshome.net (unknown [194.230.155.118])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 12428207C3;
+        Mon, 25 May 2020 14:12:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590415930;
+        bh=H7j7pXAQBMY0+lN3fLm+BybDcMoNqFcnyIRJOr6BKAc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DuOnfyoWC6xbM3Cnr0lkDtdQinhZ20Qt1GC41RL1WfZo49g3v9/IGD3YEpWaWQh83
+         RCPX1T38RBRb5KXYsSrM+JMvOd+qOR89Tomz2KoQbXLlOt4sH+vkYqEcAkr4ZthJTQ
+         qQ0z526sARs3FyspaUjJ6NQlJB5y1JeZcdUrbm2w=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     "Andrew F. Davis" <afd@ti.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@proceq.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH 1/2] power: supply: bq27xxx_battery: Notify about all battery changes
+Date:   Mon, 25 May 2020 16:11:59 +0200
+Message-Id: <20200525141200.17199-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 30, 2020 at 8:29 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> thermal_notify_framework() is an obsolete API, and iwlwifi is the only
-> user of it.
-> Convert iwlwifi driver to use thermal_zone_device_update() instead.
+All battery related data could be important for user-space.  For example
+time-to-full could be shown to user on the screen or health could be
+monitored for any issues.  Instead of comparing few selected old/new
+values, just check if anything changed in the cache.
 
-IMO it is rather hard to figure out what is going to change
-functionally, from the driver's perspective, after this change.
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ drivers/power/supply/bq27xxx_battery.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-In particular, is user space going to notice any change?  If so, then
-what kind of change can it see?
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 942c92127b6d..33c26d42cd02 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -1612,12 +1612,10 @@ void bq27xxx_battery_update(struct bq27xxx_device_info *di)
+ 			di->charge_design_full = bq27xxx_battery_read_dcap(di);
+ 	}
+ 
+-	if ((di->cache.capacity != cache.capacity) ||
+-	    (di->cache.flags != cache.flags))
++	if (memcmp(&di->cache, &cache, sizeof(cache)) != 0) {
+ 		power_supply_changed(di->bat);
+-
+-	if (memcmp(&di->cache, &cache, sizeof(cache)) != 0)
+ 		di->cache = cache;
++	}
+ 
+ 	di->last_update = jiffies;
+ }
+-- 
+2.17.1
 
-> Note that, thermal_zone_device_update() is able to handle the crossed
-> threshold by comparing the current temperature with every trip point, so
-> ths_crossed variant in iwl_mvm_temp_notif() is probably not needed.
->
-> It is still left there in this patch, in case the debug information is
-> still needed.
-
-Well, it should be possible to figure this out just from the code ...
-
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/net/wireless/intel/iwlwifi/mvm/tt.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-> index 418e59b..6344b6b 100644
-> --- a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-> +++ b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-> @@ -203,9 +203,8 @@ void iwl_mvm_temp_notif(struct iwl_mvm *mvm, struct iwl_rx_cmd_buffer *rxb)
->
->         if (mvm->tz_device.tzone) {
->                 struct iwl_mvm_thermal_device *tz_dev = &mvm->tz_device;
-> -
-> -               thermal_notify_framework(tz_dev->tzone,
-> -                                        tz_dev->fw_trips_index[ths_crossed]);
-> +               thermal_zone_device_update(tz_dev->tzone,
-> +                                          THERMAL_EVENT_UNSPECIFIED);
->         }
->  #endif /* CONFIG_THERMAL */
->  }
-> --
-> 2.7.4
->
