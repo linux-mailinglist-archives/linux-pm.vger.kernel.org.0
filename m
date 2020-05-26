@@ -2,94 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E71B1E24FA
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 17:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1421F1E2534
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 17:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729703AbgEZPHt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 11:07:49 -0400
-Received: from mail-ej1-f65.google.com ([209.85.218.65]:43297 "EHLO
-        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728166AbgEZPHt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 11:07:49 -0400
-Received: by mail-ej1-f65.google.com with SMTP id a2so24155918ejb.10;
-        Tue, 26 May 2020 08:07:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KjgTih7A660W8l2Ai5zV0xie7l2fjS3cquiqxZY0eUs=;
-        b=lj0xOxS+RFiPf9SsOq/2HiLpzJM8NqDxbOEmL6gK5IWHwUO1MvEcGdGh/ue2UIwHEs
-         g1fuHrUZTMNafI1bJQlUpKzxnH0gIOZ2sDFdr3agSkIZjUNbR+E+3qyAH8GhAbdq+JQO
-         uowDnKKCjJIGxSvbMpLth3SFSzzIFsGZtL8EgFNZpGPyXxh2/PdBvnFAGRG+aE0vP4A8
-         Jk5rQMDzbtDospNqOqOlXNmu5iNO6beaa8MWhQt6lm/O3dx5IYX2B9t6zjPUsAQuBYGW
-         +1KPD8SnieaYmzDNPUcPPHZqGVuJBVrp4k5fShXQmCcuIFEyUovshFaMOKky8Wl3YcdI
-         ToQA==
-X-Gm-Message-State: AOAM5306iPBdlX3xOO+3pC8x3R7m9tVCiXk0LcQ01D98VdJJ/LLCrMTi
-        8Sp0+ggbBZLudgHz0UkIczY=
-X-Google-Smtp-Source: ABdhPJzpF2izaI7HGirZOZ/xZQdcIiUyWXIQKdVRDh55kJz8UdqLFQpxuDMPANNvmQBg9fruG2pCcw==
-X-Received: by 2002:a17:906:8748:: with SMTP id hj8mr1609977ejb.335.1590505666414;
-        Tue, 26 May 2020 08:07:46 -0700 (PDT)
-Received: from rocinante ([95.155.85.46])
-        by smtp.gmail.com with ESMTPSA id t22sm137834ejr.93.2020.05.26.08.07.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 08:07:45 -0700 (PDT)
-Date:   Tue, 26 May 2020 17:07:44 +0200
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Johan Hovold <johan@kernel.org>,
-        Alex Elder <elder@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Ursula Braun <ubraun@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        greybus-dev@lists.linaro.org, netdev@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 8/8] net/iucv: Use the new device_to_pm() helper to
- access struct dev_pm_ops
-Message-ID: <20200526150744.GC75990@rocinante>
-References: <20200525182608.1823735-1-kw@linux.com>
- <20200525182608.1823735-9-kw@linux.com>
- <20200526063521.GC2578492@kroah.com>
+        id S1728799AbgEZPRR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 11:17:17 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:24236 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728088AbgEZPRR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 11:17:17 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04QFBuJc017743;
+        Tue, 26 May 2020 17:16:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=799GJcMpL2LNU/Tm5lFInudYnzHhcFshxvnKZptqkbM=;
+ b=oxdsZGrxKp0SO7XEMvJ8Yvlq8g0WKFQAg87HbE/QqERMb5eh488/eNTbrNOOUJLEXHYL
+ sw1sp0a1SkfYe/2vG7UEfAZwPaOSFyhjaLCrJ/T2TqkEBt2g73TRIOK2N9Kiyf22HbaV
+ rdLb35QPuV6UkPY/VkTxVMU1XuqBZxKObokv3xdNIS397Fr5O1KTaArl1Sjk2FF3Ps3D
+ zYFGs7PvV58mjc9MePvXw8mgt3OOa09IZcFzTcUV+1HC37y2coTiqNppxUf+O9/lwQxg
+ KGvlbBjS3ZaVbrTI+GIXwn3gJPR1G+AYDrdFUyGKxVsROhOKVMR6mPSJsjg5MRvsK3Qj Dw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 316rya8feu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 May 2020 17:16:26 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4E8E010002A;
+        Tue, 26 May 2020 17:16:25 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 312E02C1D9F;
+        Tue, 26 May 2020 17:16:25 +0200 (CEST)
+Received: from localhost (10.75.127.49) by SFHDAG3NODE3.st.com (10.75.127.9)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 26 May 2020 17:16:24
+ +0200
+From:   Benjamin Gaignard <benjamin.gaignard@st.com>
+To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
+        <hugues.fruchet@st.com>, <mchehab@kernel.org>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <pavel@ucw.cz>, <len.brown@intel.com>,
+        <valentin.schneider@arm.com>, <vincent.guittot@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: [RFC RESEND 0/3] Introduce cpufreq minimum load QoS
+Date:   Tue, 26 May 2020 17:16:16 +0200
+Message-ID: <20200526151619.8779-1-benjamin.gaignard@st.com>
+X-Mailer: git-send-email 2.15.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200526063521.GC2578492@kroah.com>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG3NODE3.st.com
+ (10.75.127.9)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-05-26_02:2020-05-26,2020-05-26 signatures=0
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Greg,
+A first round [1] of discussions and suggestions have already be done on 
+this series but without found a solution to the problem. I resend it to
+progress on this topic.
 
-[...]
-> It's "interesting" how using your new helper doesn't actually make the
-> code smaller.  Perhaps it isn't a good helper function?
+When start streaming from the sensor the CPU load could remain very low 
+because almost all the capture pipeline is done in hardware (i.e. without 
+using the CPU) and let believe to cpufreq governor that it could use lower 
+frequencies. If the governor decides to use a too low frequency that 
+becomes a problem when we need to acknowledge the interrupt during the 
+blanking time.
+The delay to ack the interrupt and perform all the other actions before
+the next frame is very short and doesn't allow to the cpufreq governor to
+provide the required burst of power. That led to drop the half of the frames.
 
-The idea for the helper was inspired by the comment Dan made to Bjorn
-about Bjorn's change, as per:
+To avoid this problem, DCMI driver informs the cpufreq governors by adding
+a cpufreq minimum load QoS resquest.
 
-  https://lore.kernel.org/driverdev-devel/20191016135002.GA24678@kadam/
+Benjamin 
 
-It looked like a good idea to try to reduce the following:
+[1] https://lkml.org/lkml/2020/4/24/360
 
-  dev->driver && dev->driver->pm && dev->driver->pm->prepare
+Benjamin Gaignard (3):
+  PM: QoS: Introduce cpufreq minimum load QoS
+  cpufreq: governor: Use minimum load QoS
+  media: stm32-dcmi: Inform cpufreq governors about cpu load needs
 
-Into something more succinct.  Albeit, given the feedback from yourself
-and Rafael, I gather that this helper is not really a good addition.
+ drivers/cpufreq/cpufreq_governor.c        |   5 +
+ drivers/media/platform/stm32/stm32-dcmi.c |   8 ++
+ include/linux/pm_qos.h                    |  12 ++
+ kernel/power/qos.c                        | 213 ++++++++++++++++++++++++++++++
+ 4 files changed, 238 insertions(+)
 
-Thank you everyone and sorry for the commotion!
+-- 
+2.15.0
 
-Krzysztof
