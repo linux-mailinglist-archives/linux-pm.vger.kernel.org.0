@@ -2,143 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BECA31E1B1E
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 08:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5851E1B4C
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 08:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728066AbgEZGRW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 02:17:22 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:55110 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726873AbgEZGRW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 26 May 2020 02:17:22 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 937A61A0422;
-        Tue, 26 May 2020 08:17:20 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id D3BF11A0324;
-        Tue, 26 May 2020 08:17:17 +0200 (CEST)
-Received: from titan.ap.freescale.net (titan.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 29E424028B;
-        Tue, 26 May 2020 14:17:13 +0800 (SGT)
-From:   Yuantian Tang <andy.tang@nxp.com>
-To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, edubezval@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yuantian Tang <andy.tang@nxp.com>
-Subject: [PATCH v4] thermal: qoriq: Update the settings for TMUv2
-Date:   Tue, 26 May 2020 14:02:12 +0800
-Message-Id: <20200526060212.4118-1-andy.tang@nxp.com>
-X-Mailer: git-send-email 2.9.5
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1729109AbgEZGbX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 02:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728120AbgEZGbX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 02:31:23 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13BF4C061A0E
+        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 23:31:22 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id y18so9664203pfl.9
+        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 23:31:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=gKUKyvOgQlnfDf+bW5bLD0I0FnciI0xVVaCOIbtUIgg=;
+        b=Y/1pqs56VgJVyASHAjvle1VJFDfinST0HNeckm7SKW59c5L6SbGV3R6mOOg3o3AM4E
+         3SLbmogUYpx5KHcpx9T3hj9r6qljysDbKYWbXBMydrJ4dX5r8BDTX5gwjQGjaD4MkM8K
+         vAr32bCE5C6RSmRCoXHSGWCK4fscU7GEqOC/Q0ug7FB09C59YI6hY4ehnDhyMa/VERVe
+         klothWnLwpxxecY1WmHb8ig+G2GRqYeWpJhtHhnooPHhFNnI/wF3Da5R+JVauTX+tn6k
+         szRsNCfLK5P4T7F4tXOgai+aud8Tr8L3md6FqQ4RLBiVzfJj5Ponksl9hSuzdsIkBgJV
+         1xgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=gKUKyvOgQlnfDf+bW5bLD0I0FnciI0xVVaCOIbtUIgg=;
+        b=rp6Z3GmUWulpYJZGL3IvLIQmrqm/EbtcQcwfLJ2dL65aA8hIMLmHvnOWOaYizhczvu
+         epqxfQRaaPEtsC1Ji9w0/Un5ynm4zwjZ4iVSdDHX1npHWu8ZpVyeNzisCPzBTIdMDHKf
+         FLOJJnZAKCUPBzHCSWDrOP57LdhwhTcaAV1fhZpKmA0ef3zFIcvbdVJy1yaYS1OnPHRn
+         4wed261Rysuxlz8GNCLpA7ADBJ8qgsWR9aBmfP5ZntGPJl3qJtZa8aQLKnRZAESnFJdo
+         Ud/JGiFkeAf6FuapLfXfJQCTeij/tEyGHAynJrLGMjumbiIo27i4KwYPitZunv+75mBK
+         2Eyw==
+X-Gm-Message-State: AOAM5332b0XoUIFYdCQcTrYweDDqaLRXRHsgChXfKV8K3ox+Uk9U4Ns4
+        Jt2774a9g033q93tJ+SsCkFvqPP+u9U=
+X-Google-Smtp-Source: ABdhPJwMdjBIKy4mj45LUAafVqnXssU1tz0DQWBfBVe4KKDMjuAyhNlm5mjy/ecmF2OEGOn5/sYq1w==
+X-Received: by 2002:aa7:8a48:: with SMTP id n8mr20726431pfa.257.1590474681412;
+        Mon, 25 May 2020 23:31:21 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id z8sm11725712pgc.80.2020.05.25.23.31.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 May 2020 23:31:20 -0700 (PDT)
+Message-ID: <5eccb7b8.1c69fb81.4e843.d2bb@mx.google.com>
+Date:   Mon, 25 May 2020 23:31:20 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.7-rc7-74-g6b0724667355
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: testing
+Subject: pm/testing boot: 56 boots: 1 failed,
+ 54 passed with 1 conflict (v5.7-rc7-74-g6b0724667355)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For TMU v2, TMSAR registers need to be set properly to get the
-accurate temperature values.
-Also the temperature read needs to be converted to degree Celsius
-since it is in degrees Kelvin.
+******************************************
+* WARNING: Boot tests are now deprecated *
+******************************************
 
-Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
+As kernelci.org is expanding its functional testing capabilities, the conce=
+pt
+of boot testing is now deprecated.  Boot results are scheduled to be droppe=
+d on
+*5th June 2020*.  The full schedule for boot tests deprecation is available=
+ on
+this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
+
+The new equivalent is the *baseline* test suite which also runs sanity chec=
+ks
+using dmesg and bootrr: https://github.com/kernelci/bootrr
+
+See the *baseline results for this kernel revision* on this page:
+https://kernelci.org/test/job/pm/branch/testing/kernel/v5.7-rc7-74-g6b07246=
+67355/plan/baseline/
+
+---------------------------------------------------------------------------=
+----
+
+pm/testing boot: 56 boots: 1 failed, 54 passed with 1 conflict (v5.7-rc7-74=
+-g6b0724667355)
+
+Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
+el/v5.7-rc7-74-g6b0724667355/
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+7-rc7-74-g6b0724667355/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.7-rc7-74-g6b0724667355
+Git Commit: 6b0724667355b76a0813de36e987f6b881131a69
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Tested: 48 unique boards, 15 SoC families, 3 builds out of 6
+
+Boot Regressions Detected:
+
+x86_64:
+
+    x86_64_defconfig:
+        gcc-8:
+          qemu_x86_64:
+              lab-baylibre: new failure (last pass: v5.7-rc6-64-gbb7ba30bf9=
+60)
+
+Boot Failure Detected:
+
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+x86_64:
+    x86_64_defconfig:
+        qemu_x86_64:
+            lab-baylibre: FAIL (gcc-8)
+            lab-collabora: PASS (gcc-8)
+
 ---
-v4:
-	- replace the hard-coded number with constant variables
-	- update some comments as needed
-
- drivers/thermal/qoriq_thermal.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-index 028a6bbf75dc..73049f9bea25 100644
---- a/drivers/thermal/qoriq_thermal.c
-+++ b/drivers/thermal/qoriq_thermal.c
-@@ -11,6 +11,7 @@
- #include <linux/regmap.h>
- #include <linux/sizes.h>
- #include <linux/thermal.h>
-+#include <linux/units.h>
- 
- #include "thermal_core.h"
- #include "thermal_hwmon.h"
-@@ -23,6 +24,7 @@
- #define TMTMIR_DEFAULT	0x0000000f
- #define TIER_DISABLE	0x0
- #define TEUMR0_V2		0x51009c00
-+#define TMSARA_V2		0xe
- #define TMU_VER1		0x1
- #define TMU_VER2		0x2
- 
-@@ -50,6 +52,9 @@
- 					    * Site Register
- 					    */
- #define TRITSR_V	BIT(31)
-+#define REGS_V2_TMSAR(n)	(0x304 + 16 * (n))	/* TMU monitoring
-+						* site adjustment register
-+						*/
- #define REGS_TTRnCR(n)	(0xf10 + 4 * (n)) /* Temperature Range n
- 					   * Control Register
- 					   */
-@@ -85,12 +90,21 @@ static int tmu_get_temp(void *p, int *temp)
- 	/*
- 	 * REGS_TRITSR(id) has the following layout:
- 	 *
-+	 * For TMU Rev1:
- 	 * 31  ... 7 6 5 4 3 2 1 0
- 	 *  V          TEMP
- 	 *
- 	 * Where V bit signifies if the measurement is ready and is
- 	 * within sensor range. TEMP is an 8 bit value representing
--	 * temperature in C.
-+	 * temperature in Celsius.
-+
-+	 * For TMU Rev2:
-+	 * 31  ... 8 7 6 5 4 3 2 1 0
-+	 *  V          TEMP
-+	 *
-+	 * Where V bit signifies if the measurement is ready and is
-+	 * within sensor range. TEMP is an 9 bit value representing
-+	 * temperature in KelVin.
- 	 */
- 	if (regmap_read_poll_timeout(qdata->regmap,
- 				     REGS_TRITSR(qsensor->id),
-@@ -100,7 +114,10 @@ static int tmu_get_temp(void *p, int *temp)
- 				     10 * USEC_PER_MSEC))
- 		return -ENODATA;
- 
--	*temp = (val & 0xff) * 1000;
-+	if (qdata->ver == TMU_VER1)
-+		*temp = (val & GENMASK(7, 0)) * MILLIDEGREE_PER_DEGREE;
-+	else
-+		*temp = kelvin_to_millicelsius(val & GENMASK(8, 0));
- 
- 	return 0;
- }
-@@ -192,6 +209,8 @@ static int qoriq_tmu_calibration(struct device *dev,
- 
- static void qoriq_tmu_init_device(struct qoriq_tmu_data *data)
- {
-+	int i;
-+
- 	/* Disable interrupt, using polling instead */
- 	regmap_write(data->regmap, REGS_TIER, TIER_DISABLE);
- 
-@@ -202,6 +221,8 @@ static void qoriq_tmu_init_device(struct qoriq_tmu_data *data)
- 	} else {
- 		regmap_write(data->regmap, REGS_V2_TMTMIR, TMTMIR_DEFAULT);
- 		regmap_write(data->regmap, REGS_V2_TEUMR(0), TEUMR0_V2);
-+		for (i = 0; i < SITES_MAX; i++)
-+			regmap_write(data->regmap, REGS_V2_TMSAR(i), TMSARA_V2);
- 	}
- 
- 	/* Disable monitoring */
-@@ -212,6 +233,7 @@ static const struct regmap_range qoriq_yes_ranges[] = {
- 	regmap_reg_range(REGS_TMR, REGS_TSCFGR),
- 	regmap_reg_range(REGS_TTRnCR(0), REGS_TTRnCR(3)),
- 	regmap_reg_range(REGS_V2_TEUMR(0), REGS_V2_TEUMR(2)),
-+	regmap_reg_range(REGS_V2_TMSAR(0), REGS_V2_TMSAR(15)),
- 	regmap_reg_range(REGS_IPBRR(0), REGS_IPBRR(1)),
- 	/* Read only registers below */
- 	regmap_reg_range(REGS_TRITSR(0), REGS_TRITSR(15)),
--- 
-2.17.1
-
+For more info write to <info@kernelci.org>
