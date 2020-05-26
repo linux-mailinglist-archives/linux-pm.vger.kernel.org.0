@@ -2,257 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1324B1E2579
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 17:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFAF1E2609
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 17:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729710AbgEZPaB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 11:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729181AbgEZPaA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 11:30:00 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076EEC03E96D;
-        Tue, 26 May 2020 08:30:00 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id t18so6747740wru.6;
-        Tue, 26 May 2020 08:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5BPymIBZxiXUqqTT3U9Z1NeZW1/IDkJhQmzDdmvJt0I=;
-        b=BoN2nxXuqeOcT3KmiqCiW7UQMyQSLNw99rEXvwyx+Zod2+GM4/HoJCCD953KdicI8j
-         JOizdLhJDvy/zf1N9Nht7gLUTjU0OjsTX3ksW45NoczGgL/032dd0KCIeugh/hI9hLYP
-         mwJlY7z/3LRvEVs7ea0bIRxAXX6aJqBcZ0hlk2anJe64b2YXTZaHDi1dQ1i65wSBrbAn
-         iqRxtQcSvlEpP8XvIm1UZvXN/mM3eZsSBrLF5JWbd4vevPZkS/zWq0qMTfNXdmhy4gem
-         xPaBHYZ8DAsCf2OT8/LpDmOvw6R65etEt8OFHKae6IMLZ1eMeiYIRsnn5aoa3TkIYxSg
-         jB1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=5BPymIBZxiXUqqTT3U9Z1NeZW1/IDkJhQmzDdmvJt0I=;
-        b=GZslCP0IwKjL8eVgNfc0JeM/20YG+dJvL04mWVqfSkAPL+2mC7DmQZXNHEz9qcjVXw
-         tPxXetVpBSTWVYuLrue6IPhDhP6CyZV2g+DBMrOWDuR/Ol/9Bh84V1Cf/6+YArGobIdv
-         3g2T4HXoocDY2haoqLW6jMxlHAk+euJwBB5WW7NDP4Uobq5o7nEDIMc1mDKSthUdbwm5
-         sx2MEQQAWgy7PVFRBjMRO2brXgampObt8kC3/jeI63sBHAC4P0RudFYl0vYuztHqsjkT
-         nVnNgo3EPiJ3NqZ0wB5vpzsvnVDO+bO3NI1Gsz3zdLz2IIgEqx5/YhVDpzAB4m9bu7cY
-         VBsQ==
-X-Gm-Message-State: AOAM531qkAl85EYtHOko36BjESIbK2Aa6nHRomfw+xMaonGwpbg70/PZ
-        pEQYrZH8/rNjuhvUZqgR2+A=
-X-Google-Smtp-Source: ABdhPJyHaM3mUoTord+k9hozkTkhWW6QO/90O4G2+ygztlGLXkjqJSf8bitdmX7pYqgCRTttGThsDg==
-X-Received: by 2002:adf:a407:: with SMTP id d7mr11389219wra.368.1590506998679;
-        Tue, 26 May 2020 08:29:58 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.113.243])
-        by smtp.gmail.com with ESMTPSA id n19sm4290wmi.33.2020.05.26.08.29.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2020 08:29:58 -0700 (PDT)
-Subject: Re: [PATCH v8 3/3] PM / AVS: SVS: Introduce SVS engine
-To:     Roger Lu <roger.lu@mediatek.com>
-Cc:     Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, Angus Lin <Angus.Lin@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>, Fan Chen <fan.chen@mediatek.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20200518092403.22647-1-roger.lu@mediatek.com>
- <20200518092403.22647-4-roger.lu@mediatek.com>
- <CAFqH_527ZJEmsvrk-n-uNSc+Bx87ZVppn=rNKDWPGYUuf+gvPA@mail.gmail.com>
- <1590140434.4392.22.camel@mtksdaap41>
- <3b810588-ac4a-7fec-2163-38555dd83928@gmail.com>
- <1590484328.4392.44.camel@mtksdaap41>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <2566c070-1f7c-6c28-81ed-fd3edbc865cc@gmail.com>
-Date:   Tue, 26 May 2020 17:29:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1728301AbgEZPvy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 11:51:54 -0400
+Received: from cmta18.telus.net ([209.171.16.91]:48810 "EHLO cmta18.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728107AbgEZPvx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 26 May 2020 11:51:53 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id dbrojbJ6MVEJfdbrpjmJc2; Tue, 26 May 2020 09:51:52 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1590508312; bh=rvRTnl21xY1bE06cPy+n/6GL8pvu7dqzkWh0KRXTCgw=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=IcILxIPHyQAqBA07zd26fJ+SDdIIIj8H3VFVte0eoS0OrZy3eENxW5kgl2k6niPwa
+         2ODrLMBAWdYlg18hgOi0JBLulhkBTnC7egAoIKtBqVFqOeFRj+TmrQsa1Rl/5kXfOa
+         4YdKP0xiOvHZSlxc7wTeZ2Q6lyY2hFrJWae7gRSHA5uxOPJCCcAF4pOXUJ52VqcY65
+         vE8q3WQvJRBQrqxJIhNU0MoGHMNzkgbNKHrLi0hlpQCBcDHgY3OyWmtJopGKu3WgrS
+         zv5neatDZgJX1+qN1vagQy74385B3RHHi/nR4J/rYJzpunamTbUvXBr9EFAOfh555U
+         CHfvuoVrSg4sg==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=KIck82No c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=IkcTkHD0fZMA:10 a=VwQbUJbxAAAA:8
+ a=FGbulvE0AAAA:8 a=TkEsygaeObAnKy-4MokA:9 a=7Zwj6sZBwVKJAoWSPKxL6X1jA+E=:19
+ a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=svzTaB3SJmTkU8mK-ULk:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        "'Francisco Jerez'" <francisco.jerez.plata@intel.com>
+Cc:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>,
+        "'LKML'" <linux-kernel@vger.kernel.org>,
+        "'Len Brown'" <len.brown@intel.com>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>
+References: <3169564.ZRsPWhXyMD@kreacher> <87mu5wre1v.fsf@intel.com> <CAJZ5v0hBiKdDQJjdcuV72+3jCOZPNekmGxdtod-f9Sgwc_7D+g@mail.gmail.com> <87a71vraus.fsf@intel.com> <CAJZ5v0j4EYLej+Xb=huAGTDEH_0mgRShBkjBeib38exmss60Sg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0j4EYLej+Xb=huAGTDEH_0mgRShBkjBeib38exmss60Sg@mail.gmail.com>
+Subject: RE: [RFC/RFT][PATCH] cpufreq: intel_pstate: Work in passive mode with HWP enabled
+Date:   Tue, 26 May 2020 08:51:48 -0700
+Message-ID: <000801d63375$927946a0$b76bd3e0$@net>
 MIME-Version: 1.0
-In-Reply-To: <1590484328.4392.44.camel@mtksdaap41>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain;
+        charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdYzNmRr0lgQYeCwTpGIV0wU6iZXRgALoz3Q
+X-CMAE-Envelope: MS4wfMXTJ9StKBHKi6NbuF8/H5aacLAutS9AAM/3BjdeZfjwAlD/+YO/yGGP1H3zVmSzO7IFG/3Q2XG7cKpE1iidsZZxyNw9twBAInuOYvh8+jE1casRbEXD
+ 2j34mVbcsyng5C4XT6H39bJFgCkXrBQYfr0hfCThpAIoLBdQr1GL7UZxz7J1dwqYLpDqwnBtlpsnATkArCROEyUOGlSZ3PqLxt0LwEo3uq2vvz2blYtNqqYm
+ B0pNpQHb5mnAUMjk/D65zmzWteteEYDTMaaS8CMHGRMDVtTCfWNS6/KLz3xYhk0jlvOTh74iDd5umB9ArCtM0Rgt64SeMzcfSGu5CGk7iFGQTMgogFOWzTpi
+ mgSpO2eUhIunqU8aS9kRCYnGTELQeCXgByqdKgsjPDzog95SWUGjvW0Qmb4Yd1R3FLrXXa0c3Iy8BI38twSYid8REDx2E2oIs3qiKCzLcNe1JtBxtL0=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 2020.05.26 01:19 Rafael J. Wysocki wrote:
+>  to On Mon, May 25, 2020 at 10:57 PM Francisco Jerez
+> > "Rafael J. Wysocki" <rafael@kernel.org> writes:
+> > > On Mon, May 25, 2020 at 3:39 AM Francisco Jerez
+> >
+> > Why not HWP_MIN_PERF?  That would leave the HWP quite some room for
+> > maneuvering (the whole HWP_MIN_PERF-HWP_MAX_PERF P-state range, it's not
+> > like P-state selection would be entirely driven by the kernel), while
+> > avoiding every failure scenario I was describing in my previous reply.
+
+I have re-done my tests.
+The problem that I observe seems specific to hwp itself
+and not this patch and it's use in passive mode.
+I see the exact same thing with intel_pstate/powersave.
+[1] detail A.
 
 
-On 26/05/2020 11:12, Roger Lu wrote:
-> Hi Matthias,
-> 
-> Thanks for the feedback.
-> 
-> On Fri, 2020-05-22 at 17:38 +0200, Matthias Brugger wrote:
->>
->> On 22/05/2020 11:40, Roger Lu wrote:
->>>
->>> Hi Enric,
->>>
->>> On Tue, 2020-05-19 at 17:30 +0200, Enric Balletbo Serra wrote:
->>>> Hi Roger,
->>>>
->>>> Thank you for your patch. I have the feeling that this driver is
->>>> complex and difficult to follow and I am wondering if it wouldn't be
->>>> better if you can send a version that simply adds basic functionality
->>>> for now. Some comments below.
->>>
->>> Thanks for the advices. I'll submit SVS v9 with basic functionality
->>> patch + step by step functionalities' patches. 
->>>
->>>>
->>>> Missatge de Roger Lu <roger.lu@mediatek.com> del dia dl., 18 de maig
->>>> 2020 a les 11:25:
->>>>>
->>>>> The SVS (Smart Voltage Scaling) engine is a piece
->>>>> of hardware which is used to calculate optimized
->>>>> voltage values of several power domains,
->>>>> e.g. CPU/GPU/CCI, according to chip process corner,
->>>>> temperatures, and other factors. Then DVFS driver
->>>>> could apply those optimized voltage values to reduce
->>>>> power consumption.
->>>>>
->>>>> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
->>>>> ---
->>>>>  drivers/power/avs/Kconfig     |   10 +
->>>>>  drivers/power/avs/Makefile    |    1 +
->>>>>  drivers/power/avs/mtk_svs.c   | 2119 +++++++++++++++++++++++++++++++++
->>>>>  include/linux/power/mtk_svs.h |   23 +
->>>>>  4 files changed, 2153 insertions(+)
->>>>>  create mode 100644 drivers/power/avs/mtk_svs.c
->>>>>  create mode 100644 include/linux/power/mtk_svs.h
->>>>>
->>>>> diff --git a/drivers/power/avs/Kconfig b/drivers/power/avs/Kconfig
->>>>> index cdb4237bfd02..67089ac6040e 100644
->>>>> --- a/drivers/power/avs/Kconfig
->>>>> +++ b/drivers/power/avs/Kconfig
->>>>> @@ -35,3 +35,13 @@ config ROCKCHIP_IODOMAIN
->>>>>           Say y here to enable support io domains on Rockchip SoCs. It is
->>>>>           necessary for the io domain setting of the SoC to match the
->>>>>           voltage supplied by the regulators.
->>>>> +
->>>>> +config MTK_SVS
->>>>> +       bool "MediaTek Smart Voltage Scaling(SVS)"
->>>>
->>>> Can't be this a module? Why? In such case, you should use tristate option
->>>
->>> Generally, MTK_SVS is needed in MTK SoC(mt81xx) products. So, we don't provide
->>> module option in config. If, somehow, SVS isn't needed, we suggest
->>> CONFIG_MTK_SVS=n to be set.
->>>
->>
->> The question here is if it needs to be probed before we probe the modules. If
->> not, we should add a Kconfig option for MT81xx SoCs to select MTK_SVS.
-> 
-> Excuse me to make you confuse. MT81xx SoCs is the subset MTK ICs that
-> will use CONFIG_MTK_SVS. In other words, CONFIG_MTK_SVS will be used
-> with other MTK ICs as well. So, MTK_SVS is the general naming for MTK IC
-> to enable SVS power feature. Anyway, back to Enric's question, I'll make
-> MTK_SVS become a tristate feature in the next patch. Thanks.
-> 
->>
-[...]
->>>>> +
->>>>> +static const u32 svs_regs_v2[] = {
->>>>
->>>> Is this SoC specific or shared between SoCs?
->>>
->>> Shared between SoCs. Some SVS in MTK SoCs use v2 register map.
->>>
->>
->> And which silicon uses v1 then? Is v2 a MediaTek internal naming you want to keep?
-> 
-> 1. MT8173 IC uses v1 register map. 
-> 2. Yes, I'll keep v2 postfix.
-> 
+Test: still simple single threaded load sweep,
+at 347 hertz work/sleep frequency.
+What do I see?
 
-Sounds good, thanks for clarification.
+Unexpected frequency drops at around 70% load.
+Example, from trace:
 
-Regards,
-Matthias
+First, the thing has been going for awhile at 4.8 GHz.
+
+Old epp ; new epp ; freq GHz; load % ; duration mS
+80	  ; 82      ; 4.57    ; 61.94  ; 20.001
+82      ; 80	; 4.57    ; 62.47  ; 40.003
+80      ; 44      ; 3.73    ;	68.63  ; 62.009  <<<< What? Why freq down? Why long duration?
+44      ;  0      ; 1.96    ; 100.23 ; 19.995  <<<< Even lower freq. load overruns.
+ 0      ; 73      ; 4.56    ; 82.93  ; 40.07   <<<< O.K. recovered, but damage done.
+73      ; 46      ; 2.36    ;	79.19  ; 20.94   <<< now things oscillate a little.
+46      ; 0       ; 1.9884  ;	100.24 ; 20.99
+ 0      ; 75      ; 4.5624  ;	82.1   ; 41.002  <<< Event ends. Next event in 487 milliseconds.
+
+Observation: Events are often, but not always, preceded by a longer than normal duration.
+However, long durations are also not out of the ordinary in passive mode.
+
+And yes, the above trace was with DELAY_HWP 20,000, but I do have trace examples
+with it at 5,000. This was just a particularly good example.
+
+Observation (from looking at a lot of trace data): There are phase delays
+between the two systems, intel_cpufreq and hwp, and sometimes they seem to
+oscillate a little and fight each other. There maybe some problematic
+work/sleep frequencies where the oscillation builds into a full blown
+resonance. 
+ 
+Why does hwp drop the frequency?
+
+This system is otherwise fairly idle,
+so maybe because the pll drops down during the non work periods.
+
+Maybe HWP thinks the system is idle and drops the frequency.
+I can eliminate the overruns by disabling deep idle states such
+that the PLL vote is never relinquished, but it's not a fair test.
+
+Note that the above response can be "tuned".
+If we take the conversation algorithm from target frequency to EPP
+and introduce and offset, the above can be improved.
+
+At what cost? More sluggishness, for a large positive offset.
+So, the overruns just move from the steady state side of the task to
+when the task starts. I did not find if there is a "sweet spot"
+between offset and system response, and I do not think there is value
+added in trying.
+
+Note: With original settings, I rarely observe a problem with the step
+function response to a new task.
+
+> 
+> Actually, I have been thinking about the HWP min as an alternative
+> that may be worth evaluating.
+> 
+> However, I would rather set the HWP min to something like 80% if the
+> cpufreq request.
+
+Yes, this is a good idea and should not suffer from the two servo systems
+fighting each other.
+
+I got 0 overruns, verses 2240 overruns with no min limitation (100 second test).
+
+As for INTEL_CPUFREQ_TRANSITION_DELAY_HWP, I'll probably use
+10 milliseconds moving forward, because that is what I am most
+familiar with from years ago work on the this driver. But, I did
+not observe any issue with 5 milliseconds.
+
+[1] http://www.smythies.com/~doug/linux/intel_pstate/passive-hwp/passive-hwp-but-active-powersave.png
+
+Other replaced graphs:
+
+http://www.smythies.com/~doug/linux/intel_pstate/passive-hwp/passive-hwp-ondemand.png
+http://www.smythies.com/~doug/linux/intel_pstate/passive-hwp/passive-hwp-schedutil.png
+ 
+... Doug
+
+
