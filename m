@@ -2,133 +2,282 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F074A1E1CB9
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 09:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8BEB1E1D1C
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 10:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731414AbgEZH7a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 03:59:30 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:35074 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728364AbgEZH73 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 03:59:29 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04Q72te3172987;
-        Tue, 26 May 2020 03:07:33 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 316yqhtjpg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 May 2020 03:07:33 -0400
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04Q72ajK171037;
-        Tue, 26 May 2020 03:07:33 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 316yqhtjnu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 May 2020 03:07:33 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 04Q764jX026533;
-        Tue, 26 May 2020 07:07:31 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 316uf8j6d8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 May 2020 07:07:31 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04Q77S5F62914722
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 May 2020 07:07:28 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3774FAE055;
-        Tue, 26 May 2020 07:07:28 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 57101AE05A;
-        Tue, 26 May 2020 07:07:27 +0000 (GMT)
-Received: from oc5311105230.ibm.com (unknown [9.145.70.211])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 26 May 2020 07:07:27 +0000 (GMT)
-Subject: Re: [PATCH 8/8] net/iucv: Use the new device_to_pm() helper to access
- struct dev_pm_ops
-To:     =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        greybus-dev@lists.linaro.org, netdev@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20200525182608.1823735-1-kw@linux.com>
- <20200525182608.1823735-9-kw@linux.com>
-From:   Ursula Braun <ubraun@linux.ibm.com>
-Message-ID: <55c3d2eb-feff-bf33-235d-b89c0abef7b1@linux.ibm.com>
-Date:   Tue, 26 May 2020 09:07:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1730341AbgEZITf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 04:19:35 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:41917 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726926AbgEZITf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 04:19:35 -0400
+Received: by mail-ot1-f67.google.com with SMTP id 63so15606273oto.8;
+        Tue, 26 May 2020 01:19:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KsvQXeXpFRPNar5wQqzlPMtmhRYyKZVsuupY3jGdM1E=;
+        b=QLUi9LjCShLQP3J/tKOvkuSW7pRQPUpfxZ1oczHkI7rmgU7aE6aLqBHkZexQTn5dkr
+         2jDS8OP/gihyO6pWLKoGjajwXplGAKLV7Z/YAe2i0W3yGRvK9V/3uRqccpQUrRj8Srm0
+         KKCW7woSzoP0HpnQZC/9agcVgt6OrU2x0Zw0zttcxFtE516jv1TufIqtHgkn8f2Pk9h9
+         2w1Hlf4sceXnDm8YYCdj/iELJLCnleiigfx3hkfuuUIla+uk4kZtSfZw/RGl3eCmT94a
+         vYeuuX39+Ces5UGRsW04RX0D8O4HRf7lUul97fvfJL1NDQQNVTDAeE6GOgpOEN7ZVf7f
+         OZcQ==
+X-Gm-Message-State: AOAM532umeZCwfVWi0vDKge4MkFHDFXqSHc8oAzfxzQcXDvPaz5tpDig
+        WmOKGsTNzO8HTfHnCeGvdktMoqfy1NlYNBN+GNo=
+X-Google-Smtp-Source: ABdhPJz91c3R5cD6QHE0e4JfDdOdZaa6g2vXS3BZTtKAxHVTomXeIVwcab2P4mjhewzXMeomqVg/ZWaEHBF+6ozcEcM=
+X-Received: by 2002:a9d:4713:: with SMTP id a19mr36157otf.167.1590481173929;
+ Tue, 26 May 2020 01:19:33 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200525182608.1823735-9-kw@linux.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-05-25_12:2020-05-25,2020-05-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 suspectscore=0 clxscore=1011 priorityscore=1501 bulkscore=0
- lowpriorityscore=0 mlxlogscore=999 phishscore=0 adultscore=0 mlxscore=0
- spamscore=0 cotscore=-2147483648 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005260049
+References: <3169564.ZRsPWhXyMD@kreacher> <87mu5wre1v.fsf@intel.com>
+ <CAJZ5v0hBiKdDQJjdcuV72+3jCOZPNekmGxdtod-f9Sgwc_7D+g@mail.gmail.com> <87a71vraus.fsf@intel.com>
+In-Reply-To: <87a71vraus.fsf@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 May 2020 10:19:21 +0200
+Message-ID: <CAJZ5v0j4EYLej+Xb=huAGTDEH_0mgRShBkjBeib38exmss60Sg@mail.gmail.com>
+Subject: Re: [RFC/RFT][PATCH] cpufreq: intel_pstate: Work in passive mode with
+ HWP enabled
+To:     Francisco Jerez <francisco.jerez.plata@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Doug Smythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+ to On Mon, May 25, 2020 at 10:57 PM Francisco Jerez
+<francisco.jerez.plata@intel.com> wrote:
+>
+> "Rafael J. Wysocki" <rafael@kernel.org> writes:
+>
+> > On Mon, May 25, 2020 at 3:39 AM Francisco Jerez
+> > <francisco.jerez.plata@intel.com> wrote:
+> >>
+> >> "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
+> >>
+> >> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >> >
+> >> > Allow intel_pstate to work in the passive mode with HWP enabled and
+> >> > make it translate the target frequency supplied by the cpufreq
+> >> > governor in use into an EPP value to be written to the HWP request
+> >> > MSR (high frequencies are mapped to low EPP values that mean more
+> >> > performance-oriented HWP operation) as a hint for the HWP algorithm
+> >> > in the processor, so as to prevent it and the CPU scheduler from
+> >> > working against each other at least when the schedutil governor is
+> >> > in use.
+> >> >
+> >> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >> > ---
+> >> >
+> >> > This is a prototype not intended for production use (based on linux-next).
+> >> >
+> >> > Please test it if you can (on HWP systems, of course) and let me know the
+> >> > results.
+> >> >
+> >> > The INTEL_CPUFREQ_TRANSITION_DELAY_HWP value has been guessed and it very well
+> >> > may turn out to be either too high or too low for the general use, which is one
+> >> > reason why getting as much testing coverage as possible is key here.
+> >> >
+> >> > If you can play with different INTEL_CPUFREQ_TRANSITION_DELAY_HWP values,
+> >> > please do so and let me know the conclusions.
+> >> >
+> >> > Cheers,
+> >> > Rafael
+> >> >
+> >> > ---
+> >> >  drivers/cpufreq/intel_pstate.c |  169 +++++++++++++++++++++++++++++++----------
+> >> >  1 file changed, 131 insertions(+), 38 deletions(-)
+> >> >
+> >> > Index: linux-pm/drivers/cpufreq/intel_pstate.c
+> >> > ===================================================================
+> >> > --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+> >> > +++ linux-pm/drivers/cpufreq/intel_pstate.c
+> >> > @@ -36,6 +36,7 @@
+> >> >  #define INTEL_PSTATE_SAMPLING_INTERVAL       (10 * NSEC_PER_MSEC)
+> >> >
+> >> >  #define INTEL_CPUFREQ_TRANSITION_LATENCY     20000
+> >> > +#define INTEL_CPUFREQ_TRANSITION_DELAY_HWP   5000
+> >> >  #define INTEL_CPUFREQ_TRANSITION_DELAY               500
+> >> >
+> >> >  #ifdef CONFIG_ACPI
+> >> > @@ -95,6 +96,8 @@ static inline int32_t percent_ext_fp(int
+> >> >       return div_ext_fp(percent, 100);
+> >> >  }
+> >> >
+> >> > +#define HWP_EPP_TO_BYTE(x)   (((u64)x >> 24) & 0xFF)
+> >> > +
+> >> >  /**
+> >> >   * struct sample -   Store performance sample
+> >> >   * @core_avg_perf:   Ratio of APERF/MPERF which is the actual average
+> >> > @@ -2175,7 +2178,10 @@ static int intel_pstate_verify_policy(st
+> >> >
+> >> >  static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
+> >> >  {
+> >> > -     intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+> >> > +     if (hwp_active)
+> >> > +             intel_pstate_hwp_force_min_perf(policy->cpu);
+> >> > +     else
+> >> > +             intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+> >> >  }
+> >> >
+> >> >  static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+> >> > @@ -2183,12 +2189,10 @@ static void intel_pstate_stop_cpu(struct
+> >> >       pr_debug("CPU %d exiting\n", policy->cpu);
+> >> >
+> >> >       intel_pstate_clear_update_util_hook(policy->cpu);
+> >> > -     if (hwp_active) {
+> >> > +     if (hwp_active)
+> >> >               intel_pstate_hwp_save_state(policy);
+> >> > -             intel_pstate_hwp_force_min_perf(policy->cpu);
+> >> > -     } else {
+> >> > -             intel_cpufreq_stop_cpu(policy);
+> >> > -     }
+> >> > +
+> >> > +     intel_cpufreq_stop_cpu(policy);
+> >> >  }
+> >> >
+> >> >  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+> >> > @@ -2296,7 +2300,8 @@ static int intel_cpufreq_verify_policy(s
+> >> >  #define      INTEL_PSTATE_TRACE_TARGET 10
+> >> >  #define      INTEL_PSTATE_TRACE_FAST_SWITCH 90
+> >> >
+> >> > -static void intel_cpufreq_trace(struct cpudata *cpu, unsigned int trace_type, int old_pstate)
+> >> > +static void intel_cpufreq_trace(struct cpudata *cpu, unsigned int trace_type,
+> >> > +                             int from, int to)
+> >> >  {
+> >> >       struct sample *sample;
+> >> >
+> >> > @@ -2309,8 +2314,8 @@ static void intel_cpufreq_trace(struct c
+> >> >       sample = &cpu->sample;
+> >> >       trace_pstate_sample(trace_type,
+> >> >               0,
+> >> > -             old_pstate,
+> >> > -             cpu->pstate.current_pstate,
+> >> > +             from,
+> >> > +             to,
+> >> >               sample->mperf,
+> >> >               sample->aperf,
+> >> >               sample->tsc,
+> >> > @@ -2318,40 +2323,110 @@ static void intel_cpufreq_trace(struct c
+> >> >               fp_toint(cpu->iowait_boost * 100));
+> >> >  }
+> >> >
+> >> > -static int intel_cpufreq_target(struct cpufreq_policy *policy,
+> >> > -                             unsigned int target_freq,
+> >> > -                             unsigned int relation)
+> >> > +static void intel_cpufreq_update_hwp_request(struct cpudata *cpu, u8 new_epp)
+> >> >  {
+> >> > -     struct cpudata *cpu = all_cpu_data[policy->cpu];
+> >> > -     struct cpufreq_freqs freqs;
+> >> > -     int target_pstate, old_pstate;
+> >> > +     u64 value, prev;
+> >> >
+> >> > -     update_turbo_state();
+> >> > +     prev = READ_ONCE(cpu->hwp_req_cached);
+> >> > +     value = prev;
+> >> >
+> >> > -     freqs.old = policy->cur;
+> >> > -     freqs.new = target_freq;
+> >> > +     /*
+> >> > +      * The entire MSR needs to be updated in order to update the EPP field
+> >> > +      * in it, so opportunistically update the min and max too if needed.
+> >> > +      */
+> >> > +     value &= ~HWP_MIN_PERF(~0L);
+> >> > +     value |= HWP_MIN_PERF(cpu->min_perf_ratio);
+> >> > +
+> >> > +     value &= ~HWP_MAX_PERF(~0L);
+> >> > +     value |= HWP_MAX_PERF(cpu->max_perf_ratio);
+> >> > +
+> >> > +     if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
+> >> > +             intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_TARGET,
+> >> > +                                 HWP_EPP_TO_BYTE(prev), new_epp);
+> >> > +
+> >> > +             value &= ~GENMASK_ULL(31, 24);
+> >> > +             value |= HWP_ENERGY_PERF_PREFERENCE(new_epp);
+> >> > +     }
+> >> > +
+> >> > +     if (value != prev) {
+> >> > +             WRITE_ONCE(cpu->hwp_req_cached, value);
+> >> > +             wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, value);
+> >> > +     }
+> >> > +}
+> >> > +
+> >> > +/**
+> >> > + * intel_cpufreq_adjust_hwp_request - Adjust the HWP reuqest register.
+> >> > + * @cpu: Target CPU.
+> >> > + * @max_freq: Maximum frequency to consider.
+> >> > + * @target_freq: Target frequency selected by the governor.
+> >> > + *
+> >> > + * Translate the target frequency into a new EPP value to be written into the
+> >> > + * HWP request MSR of @cpu as a hint for the HW-driven P-state selection.
+> >> > + *
+> >> > + * The purpose of this is to avoid situations in which the kernel and the HWP
+> >> > + * algorithm work against each other by giving a hint about the expectations of
+> >> > + * the former to the latter.
+> >> > + *
+> >> > + * The mapping betweeen the target frequencies and the hint values need not be
+> >> > + * exact, but it must be monotonic, so that higher target frequencies always
+> >> > + * indicate more performance-oriented P-state selection.
+> >> > + */
+> >> > +static void intel_cpufreq_adjust_hwp_request(struct cpudata *cpu, s64 max_freq,
+> >> > +                                          unsigned int target_freq)
+> >> > +{
+> >> > +     s64 epp_fp = div_fp(255 * (max_freq - target_freq), max_freq);
+> >> > +
+> >> > +     intel_cpufreq_update_hwp_request(cpu, fp_toint(epp_fp));
+> >> > +}
+> >> > +
+> >>
+> >> Hey Rafael, I'm building a kernel with this in order to give it a try on
+> >> my system, but I'm skeptical that translating the target frequency to an
+> >> EPP value will work reliably.  AFAIA the EPP value only has an indirect
+> >> influence on the processor's performance by adjusting the trade-off
+> >> between its responsiveness (rather than the actual clock frequency which
+> >> it will sustain in the long run) and its energy usage, in a largely
+> >> unspecified and non-linear way (non-linear like the effect of switching
+> >> CPU energy optimization features on and off, or like its effect on the
+> >> energy balancing behavior of the processor which can have a paradoxical
+> >> effect on performance).
+> >>
+> >> I doubt that the scheduling-based CPU utilization is a good predictor
+> >> for the optimal trade-off between those two variables.
+> >
+> > While I agree that this is not perfect, there barely is anything else
+> > that can be used for this purpose.
+> >
+> > Using the desired field or trying to adjust the limits relatively
+> > often would basically cause the P-state selection to be driven
+> > entirely by the kernel which simply doesn't know certain things only
+> > known to the P-unit, so it is reasonable to leave some level of
+> > control to the latter, so as to allow it to use the information known
+> > to it only.
+> >
+> > However, if it is allowed to do whatever it likes without any hints
+> > from the kernel, it may very well go against the scheduler's decisions
+> > which is not going to be optimal.
+> >
+> > I'm simply not sure if there is any other way to give such hints to it
+> > that through the EPP.
+> >
+>
+> Why not HWP_MIN_PERF?  That would leave the HWP quite some room for
+> maneuvering (the whole HWP_MIN_PERF-HWP_MAX_PERF P-state range, it's not
+> like P-state selection would be entirely driven by the kernel), while
+> avoiding every failure scenario I was describing in my previous reply.
 
+Actually, I have been thinking about the HWP min as an alternative
+that may be worth evaluating.
 
-On 5/25/20 8:26 PM, Krzysztof Wilczyński wrote:
-> Use the new device_to_pm() helper to access Power Management callbacs
-> (struct dev_pm_ops) for a particular device (struct device_driver).
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Krzysztof Wilczyński <kw@linux.com>
+However, I would rather set the HWP min to something like 80% if the
+cpufreq request.
 
-pm support is going to be removed (for s390 in general and) for
-net/iucv/iucv.c with this net-next patch:
-
-commit 4b32f86bf1673acb16441dd55d7b325609f54897
-Author: Julian Wiedmann <jwi@linux.ibm.com>
-Date:   Tue May 19 21:10:08 2020 +0200
-
-    net/iucv: remove pm support
-    
-    commit 394216275c7d ("s390: remove broken hibernate / power management support")
-    removed support for ARCH_HIBERNATION_POSSIBLE from s390.
-    
-    So drop the unused pm ops from the s390-only iucv bus driver.
-    
-    CC: Hendrik Brueckner <brueckner@linux.ibm.com>
-    Signed-off-by: Julian Wiedmann <jwi@linux.ibm.com>
-    Signed-off-by: David S. Miller <davem@davemloft.net>
-
-> ---
->  net/iucv/iucv.c | 30 ++++++++++++++++++------------
->  1 file changed, 18 insertions(+), 12 deletions(-)
-> 
-> diff --git a/net/iucv/iucv.c b/net/iucv/iucv.c
-> index 9a2d023842fe..1a3029ab7c1f 100644
-> --- a/net/iucv/iucv.c
-> +++ b/net/iucv/iucv.c
-
-...
+Let me cut an alternative patch.
