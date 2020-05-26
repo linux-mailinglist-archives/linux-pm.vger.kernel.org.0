@@ -2,211 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED3B61E3056
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 22:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F6D1E30D9
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 23:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404052AbgEZUxP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 16:53:15 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:38388 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404010AbgEZUxP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 16:53:15 -0400
-Received: by mail-io1-f66.google.com with SMTP id d7so23643673ioq.5;
-        Tue, 26 May 2020 13:53:14 -0700 (PDT)
+        id S2391579AbgEZVCt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 17:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389124AbgEZVCr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 17:02:47 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E345C061A0F;
+        Tue, 26 May 2020 14:02:47 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id x22so13172974lfd.4;
+        Tue, 26 May 2020 14:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8GEbzgI+bztUbMO5Sm0NmMZg/3FD1KT72eplUCOCNgI=;
+        b=o6pf/C+eDKKeKyR5Hu7iEdzMJa+zJM/GmLlz7R/4UWkjQ6puv+fWQmAhoV8NxD+E80
+         VfmtvosT+TiWUYYhrkm+NyC2OgvaqHXVpftBFVnkaexqg6XKzp0ryrEHfY/Cu97bUIyl
+         +EcHnb2vTO+zjoEf6lx5iTfO/xFoCRAj3m1EcNRnD2DT0EQyTKTU0abnjpZWS/3Yzsmc
+         KTEAiWQ161F0KBE/04PPQ6Z8HdHdVwEWRqcjPkUCV9hjsh5rilzyvwwkLpSsecL3y1G2
+         wbvakXDL008LgfU86HieSHRCulVqLuLMd8fYolAnkhezxtZLkKW4hyooGX+UPTCznXBT
+         sQfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qjmwyia8m0idHo7LSD/jUZIkRzjqZXNiiim0DOiQRZg=;
-        b=uCLCeBuVoVtMJCluG3aKXYME8nFsxbV4h2SgwvaB1I30SckKZ+qpV/NT/3QNEBMPw9
-         OK9FOJ2yM+m9/FbxilerpSzWDGlnPD6kRiqv6USCbqJNBj7dzatxsbHjI/jfx1uOejqn
-         Oblr9+im0nVP/UUB8NhMicdmpKakhuPTN+A06G61IGPU+rjtUOIZShrE6oF+UV0cL9o6
-         eCqKM7megByJC1ny5b1w0Yp18Euxpb/i+be3cEB8EOh7MGzjAVNHRCjX0GGmJPmhnC6V
-         3XPRlmEhQbEvCSD7B0KLYVAQxI+azi4bF9l2cqUhCuC4AD7r3CGnM2DvSOXCwqt8s5oj
-         WVLA==
-X-Gm-Message-State: AOAM531p/och7esOkCa3TFbMt6SIAycy2/Axpj+Lr+zVp5KK63DyNXI9
-        MRBM1G4fQcSvuf1sTllnXQ==
-X-Google-Smtp-Source: ABdhPJwDNco5Muj0tbO/Tcz6zkkPMhylBcvTg1YWB0BRz9M/iDI5+3oQwITya3FlxOlrjEMqsrnFjQ==
-X-Received: by 2002:a5d:8e0d:: with SMTP id e13mr18640719iod.132.1590526393661;
-        Tue, 26 May 2020 13:53:13 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id t17sm545168ilm.7.2020.05.26.13.53.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8GEbzgI+bztUbMO5Sm0NmMZg/3FD1KT72eplUCOCNgI=;
+        b=NYOXjpbW+rvWfcewrEaOpkrsQjt7Q/6/jS+Ujvrdp47l0mSuVHbksAMV2jjOvd425w
+         jzHLW5PR9KRF8DIb+ZjMK5FEYmf5ZmWCfyrOsxo+1GPfqSlpq5TCFOABs4hUd69uVfb6
+         Xap/XvajxcI+g7euM7N4ZJSkLSbskerWYlvprc0ZJUwNzK5uT26wNr7W2IANvGelODVY
+         xTjdLCzDKRQn/A15pV8d6wSu4xmfgPC+ecVCwbF0U/tOPRqM/7PJHVJk3VfwcL/Wa9iO
+         EeIIOfN2Md2iFM9Sy+57iB2Y9dovrH6I+Sfh2MAH8fe8zVJPU1Nr45KwtlzaSUWwTMfl
+         A/Fw==
+X-Gm-Message-State: AOAM530fIxItY2vTHRXx0Az2dQxANzqHTA6Enhis/htkP+uSEh0l5oCq
+        LVPgvfAqoB3/bkooLQmtr94=
+X-Google-Smtp-Source: ABdhPJzyKtT85+/yHaFXfp7D5et++o5RZQ+pqHHb1QFxcI7thOIhmBLCC1FpkN96W1fiha4eqoLFMg==
+X-Received: by 2002:ac2:5cac:: with SMTP id e12mr1401821lfq.92.1590526965952;
+        Tue, 26 May 2020 14:02:45 -0700 (PDT)
+Received: from localhost.localdomain (h-158-174-22-22.NA.cust.bahnhof.se. [158.174.22.22])
+        by smtp.gmail.com with ESMTPSA id z133sm240443lfa.41.2020.05.26.14.02.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 13:53:12 -0700 (PDT)
-Received: (nullmailer pid 351420 invoked by uid 1000);
-        Tue, 26 May 2020 20:53:12 -0000
-Date:   Tue, 26 May 2020 14:53:12 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dan Murphy <dmurphy@ti.com>
-Cc:     sre@kernel.org, sspatil@android.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-Subject: Re: [PATCH v8 2/3] Add the bindings for the bq25150 and bq25155
- 500mA charging ICs from Texas Instruments.
-Message-ID: <20200526205312.GA337476@bogus>
-References: <20200520122027.31320-1-dmurphy@ti.com>
- <20200520122027.31320-3-dmurphy@ti.com>
+        Tue, 26 May 2020 14:02:44 -0700 (PDT)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        linux-pm@vger.kernel.org,
+        Michael Hennerich <Michael.Hennerich@analog.com>
+Subject: [PATCH 0/6] drivers/iio: Constify structs
+Date:   Tue, 26 May 2020 23:02:17 +0200
+Message-Id: <20200526210223.1672-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200520122027.31320-3-dmurphy@ti.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 20, 2020 at 07:20:26AM -0500, Dan Murphy wrote:
-> From: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-> 
-> The BQ2515X family of devices are highly integrated battery management
-> ICs that integrate the most common functions for wearable devices
-> namely a charger, an output voltage rail, ADC for battery and system
-> monitoring, and a push-button controller.
-> 
-> Datasheets:
-> http://www.ti.com/lit/ds/symlink/bq25150.pdf
-> http://www.ti.com/lit/ds/symlink/bq25155.pdf
-> 
-> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-> ---
->  .../bindings/power/supply/bq2515x.yaml        | 106 ++++++++++++++++++
->  1 file changed, 106 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> new file mode 100644
-> index 000000000000..83487957fc8c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> @@ -0,0 +1,106 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (C) 2020 Texas Instruments Incorporated
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/power/supply/bq2515x.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: TI bq2515x 500-mA Linear charger family
-> +
-> +maintainers:
-> +  - Dan Murphy <dmurphy@ti.com>
-> +  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-> +
-> +description: |
-> +  The BQ2515x family is a highly integrated battery charge management IC that
-> +  integrates the most common functions for wearable devices, namely a charger,
-> +  an output voltage rail, ADC for battery and system monitoring, and
-> +  push-button controller.
-> +
-> +  Specifications about the charger can be found at:
-> +    http://www.ti.com/lit/ds/symlink/bq25150.pdf
-> +    http://www.ti.com/lit/ds/symlink/bq25155.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,bq25150
-> +      - ti,bq25155
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: I2C address of the charger.
-> +
-> +  ac-detect-gpios:
-> +    description: |
-> +       GPIO used for connecting the bq2515x device PG (AC Detect)
-> +       pin.  This pin should be used if possible as this is the
-> +       recommended way to obtain the charger's input PG state.
-> +       If this pin is not specified a software-based approach for PG
-> +       detection is used.
+Constify a number of static structs to allow the compiler to put them in
+read-only memory. The patches are independent.
 
-How many? (maxItems: 1)
+Rikard Falkeborn (6):
+  iio: adc: max11100: Constify struct iio_chan_spec
+  iio: dac: ad5380: Constify struct iio_chan_spec_ext_info
+  iio: dac: ad5592r-base: Constify struct iio_chan_spec_ext_info
+  iio: dac: ad5686: Constify static struct iio_chan_spec
+  iio: light: stk3310: Constify regmap_config
+  iio: magnetometer: mmc35240: Constify struct reg_default
 
-Same for the rest of the GPIOs.
+ drivers/iio/adc/max11100.c          | 2 +-
+ drivers/iio/dac/ad5380.c            | 2 +-
+ drivers/iio/dac/ad5592r-base.c      | 2 +-
+ drivers/iio/dac/ad5686.c            | 8 ++++----
+ drivers/iio/dac/ad5686.h            | 2 +-
+ drivers/iio/light/stk3310.c         | 2 +-
+ drivers/iio/magnetometer/mmc35240.c | 2 +-
+ 7 files changed, 10 insertions(+), 10 deletions(-)
 
-> +
-> +  reset-gpios:
-> +    description: |
-> +       GPIO used for hardware reset.
-> +
-> +  low-power-gpios:
-> +    description: |
-> +       GPIO used for low power mode of IC.
+-- 
+2.26.2
 
-powerdown-gpios is the somewhat standard name for this.
-
-> +
-> +  charge-enable-gpios:
-> +    description: |
-> +       GPIO used to turn on and off charging.
-> +
-
-> +  constant-charge-current-max-microamp:
-> +    description: |
-> +       Maximum charging current in micro Amps.
-> +    minimum: 50000
-> +    maximum: 600000
-> +
-> +  precharge-current-max-microamp:
-> +    description: |
-> +       Maximum precharging current in micro Amps.
-> +    minimum: 1250
-> +    maximum: 77500
-> +
-> +  input-current-limit-microamp:
-> +    description: |
-> +       Maximum input current in micro Amps.
-> +    minimum: 50000
-> +    maximum: 500000
-> +
-> +  constant-charge-voltage-max-microvolt:
-> +    description: |
-> +       Maximum charging voltage in micro volts.
-> +    minimum: 3600000
-> +    maximum: 4600000
-
-Other than input-current-limit-microamp, none of these should be part of 
-this schema as they apply to the battery node. There's not really a way 
-for us to express something like this.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-
-Add:
-
-additionalProperties: false
-
-> +
-> +examples:
-> +  - |
-> +    bat: battery {
-> +      compatible = "simple-battery";
-> +      constant-charge-current-max-microamp = <50000>;
-> +      precharge-current-microamp = <2500>;
-> +      constant-charge-voltage-max-microvolt = <4000000>;
-> +    };
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    i2c0 {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      bq25150: charger@6b {
-> +        compatible = "ti,bq25150";
-> +        reg = <0x6b>;
-> +        monitored-battery = <&bat>;
-
-Not documented.
-
-> +        input-current-limit-microamp = <100000>;
-> +
-> +        ac-detect-gpios = <&gpio1 28 GPIO_ACTIVE_HIGH>;
-> +        reset-gpios = <&gpio0 14 GPIO_ACTIVE_HIGH>;
-> +        low-power-gpios = <&gpio0 15 GPIO_ACTIVE_HIGH>;
-> +        charge-enable-gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
-> +      };
-> +    };
-> -- 
-> 2.26.2
-> 
