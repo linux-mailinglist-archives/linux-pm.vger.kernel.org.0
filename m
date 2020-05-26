@@ -2,184 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8A41E1B49
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 08:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A9E1E1B53
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 08:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727965AbgEZGbW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 02:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727873AbgEZGbW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 02:31:22 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45252C03E97E
-        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 23:31:22 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id s10so9546057pgm.0
-        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 23:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=vFdsK0w80lrb1Q7vBDOLNNP/pZZogv6uA98ZUvu1Kj8=;
-        b=1oMuS4/iW4LvbuN+ocg1n/6F/wRZvkQzXy92UQsLEFmTacl9qV5qxWFQHMyEBzqu84
-         zW93Pj2qY2UUHbzD/yh6S/J9J/eFMVi6oW3sWF9SucMqiDPy8qbTDT3SQayi2oNqbaz0
-         muvAf8muP71SHTYROMz78lGaX4n4+dc3xryAQH+BYtms2P9VNT44ANGfxLVYbbpQ44g9
-         QJDvogFK68LbFVwC7U2+AovaQkE6yrwUYXhXaM02ljmeYok5nAKqoxn7l/tBAWNQtpte
-         Ks/C1wP1f9zmZflxtapwBO2VmEXtFb8kh60nIzRXQykspD7FDw1aI+qVgbb7CuWJD2SI
-         xjGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=vFdsK0w80lrb1Q7vBDOLNNP/pZZogv6uA98ZUvu1Kj8=;
-        b=JyPbAhR0FxCSLXjSu9Px1EtxXOd/gECTqQYg1SVUEKCV4BnB1EXKWQqIrDT0cMcgYN
-         kMFhRxm89ytQlvi4BpTmrNb0p9ShTzNO640T1oUhYb0ong1HvRIAgg6Nq5smJJCBhXMC
-         GtFHLTCXBtg3wmkkLK3BdY3sHgHl5UIx3XFDj7xOQtwfz5Dm5+hJyUzXt1dAnPchBYek
-         FydLy8hDJeGjlqINWG3e8EyZDM4MRniJnyMzQZqX6IimlUspGQEa8daycljsidugU+2f
-         kQE8g/AyB+5s19piuFRI60cJvfB0jhjSxhRAXVqv6LGO2uRDH8GobvFn5cc+1IH/IBFS
-         xsDQ==
-X-Gm-Message-State: AOAM530lEgJ0XraPXaHT2RMDRR6nK6KLb20ndqDumHX3srgoX9ASj3fo
-        ipNjQQfe/twzW/b3QqLXdE0KHhV1A5Y=
-X-Google-Smtp-Source: ABdhPJwo6Dnyin0ATNkOmeIgcsf0lgv/OmrAU5iYTnWhPRIlJhe6vLc2Gka/LmW2JR2vSgIeXMTUJA==
-X-Received: by 2002:a63:e702:: with SMTP id b2mr29738898pgi.158.1590474681791;
-        Mon, 25 May 2020 23:31:21 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id e18sm14549135pfh.75.2020.05.25.23.31.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 May 2020 23:31:20 -0700 (PDT)
-Message-ID: <5eccb7b8.1c69fb81.2c1c0.82de@mx.google.com>
-Date:   Mon, 25 May 2020 23:31:20 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1729389AbgEZGdj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 02:33:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35540 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726842AbgEZGdi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 26 May 2020 02:33:38 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 493922073B;
+        Tue, 26 May 2020 06:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590474816;
+        bh=ekoHJmuDYgfF1SuG9z404kGqxsTf0Kd2lPtuC2TdX78=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=upgmfSg6+hyi2RnYD15UKVCUWWpzVmk35guz+ryNT4da9EZJ7evbDVNO0PKMLrqsQ
+         +fGZzarS6/XMZfmdW21nbzBX5BfMvv+D0W3fk0eD7I2f2aKeRnpBAyI0v+M2ILIryk
+         7qnBc+AjLpsROB+BxZwolVoeKKpBh4GZdOQAKZLI=
+Date:   Tue, 26 May 2020 08:33:34 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Johan Hovold <johan@kernel.org>,
+        Alex Elder <elder@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        greybus-dev@lists.linaro.org, netdev@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/8] driver core: Add helper for accessing Power
+ Management callbacs
+Message-ID: <20200526063334.GB2578492@kroah.com>
+References: <20200525182608.1823735-1-kw@linux.com>
+ <20200525182608.1823735-2-kw@linux.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.7-rc7-74-g6b0724667355
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 55 runs,
- 3 regressions (v5.7-rc7-74-g6b0724667355)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200525182608.1823735-2-kw@linux.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 55 runs, 3 regressions (v5.7-rc7-74-g6b0724667355)
+On Mon, May 25, 2020 at 06:26:01PM +0000, Krzysztof Wilczyński wrote:
+> Add driver_to_pm() helper allowing for accessing the Power Management
+> callbacs for a particular device.  Access to the callbacs (struct
+> dev_pm_ops) is normally done through using the pm pointer that is
+> embedded within the device_driver struct.
+> 
+> Helper allows for the code required to reference the pm pointer and
+> access Power Management callbas to be simplified.  Changing the
+> following:
+> 
+>   struct device_driver *drv = dev->driver;
+>   if (dev->driver && dev->driver->pm && dev->driver->pm->prepare) {
+>       int ret = dev->driver->pm->prepare(dev);
+> 
+> To:
+> 
+>   const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>   if (pm && pm->prepare) {
+>       int ret = pm->prepare(dev);
+> 
+> Or, changing the following:
+> 
+>      const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> 
+> To:
+>      const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+> 
+> Signed-off-by: Krzysztof Wilczyński <kw@linux.com>
+> ---
+>  include/linux/device/driver.h | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
+> index ee7ba5b5417e..ccd0b315fd93 100644
+> --- a/include/linux/device/driver.h
+> +++ b/include/linux/device/driver.h
+> @@ -236,6 +236,21 @@ driver_find_device_by_acpi_dev(struct device_driver *drv, const void *adev)
+>  }
+>  #endif
+>  
+> +/**
+> + * driver_to_pm - Return Power Management callbacs (struct dev_pm_ops) for
+> + *                a particular device.
+> + * @drv: Pointer to a device (struct device_driver) for which you want to access
+> + *       the Power Management callbacks.
+> + *
+> + * Returns a pointer to the struct dev_pm_ops embedded within the device (struct
+> + * device_driver), or returns NULL if Power Management is not present and the
+> + * pointer is not valid.
+> + */
+> +static inline const struct dev_pm_ops *driver_to_pm(struct device_driver *drv)
+> +{
+> +	return drv && drv->pm ? drv->pm : NULL;
 
-Regressions Summary
--------------------
+I hate ? : lines with a passion, as they break normal pattern mattching
+in my brain.  Please just spell this all out:
+	if (drv && drv->pm)
+		return drv->pm;
+	return NULL;
 
-platform        | arch   | lab           | compiler | defconfig        | re=
-sults
-----------------+--------+---------------+----------+------------------+---=
------
-bcm2837-rpi-3-b | arm64  | lab-baylibre  | gcc-8    | defconfig        | 4/=
-5    =
+Much easier to read, and the compiler will do the exact same thing.
 
-qemu_x86_64     | x86_64 | lab-baylibre  | gcc-8    | x86_64_defconfig | 0/=
-1    =
+Only place ? : are ok to use in my opinion, are as function arguments.
 
-qemu_x86_64     | x86_64 | lab-collabora | gcc-8    | x86_64_defconfig | 0/=
-1    =
+thanks,
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.7-rc7=
--74-g6b0724667355/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.7-rc7-74-g6b0724667355
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      6b0724667355b76a0813de36e987f6b881131a69 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch   | lab           | compiler | defconfig        | re=
-sults
-----------------+--------+---------------+----------+------------------+---=
------
-bcm2837-rpi-3-b | arm64  | lab-baylibre  | gcc-8    | defconfig        | 4/=
-5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5eccad87e7499db9274397c8
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc7-74-g6b0724=
-667355/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc7-74-g6b0724=
-667355/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5eccad87e7499db9=
-274397cb
-      failing since 10 days (last pass: v5.7-rc5-53-gfbe093dd16f4, first fa=
-il: v5.7-rc5-57-g8ef6544598d6)
-      1 lines =
-
-
-
-platform        | arch   | lab           | compiler | defconfig        | re=
-sults
-----------------+--------+---------------+----------+------------------+---=
------
-qemu_x86_64     | x86_64 | lab-baylibre  | gcc-8    | x86_64_defconfig | 0/=
-1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5eccaa56b1425fc2a64397bd
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    gcc-8 (gcc (Debian 8.3.0-6) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc7-74-g6b0724=
-667355/x86_64/x86_64_defconfig/gcc-8/lab-baylibre/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc7-74-g6b0724=
-667355/x86_64/x86_64_defconfig/gcc-8/lab-baylibre/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/x86/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5eccaa56b1425fc2a6439=
-7be
-      new failure (last pass: v5.7-rc6-64-gbb7ba30bf960) =
-
-
-
-platform        | arch   | lab           | compiler | defconfig        | re=
-sults
-----------------+--------+---------------+----------+------------------+---=
------
-qemu_x86_64     | x86_64 | lab-collabora | gcc-8    | x86_64_defconfig | 0/=
-1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5eccaa6efdc0b9a8884397c2
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    gcc-8 (gcc (Debian 8.3.0-6) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc7-74-g6b0724=
-667355/x86_64/x86_64_defconfig/gcc-8/lab-collabora/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc7-74-g6b0724=
-667355/x86_64/x86_64_defconfig/gcc-8/lab-collabora/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/x86/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5eccaa6efdc0b9a888439=
-7c3
-      new failure (last pass: v5.7-rc6-64-gbb7ba30bf960) =20
+greg k-h
