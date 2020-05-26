@@ -2,106 +2,292 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE96A1E2959
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 19:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4891E29E9
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 20:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389176AbgEZRsY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 13:48:24 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:19235 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389136AbgEZRsX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 13:48:23 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1590515303; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=7keFiYQqaL3DuPDgQ1CTQxclwRsZANwrQiftoCTSuPc=;
- b=wqeCS4Fo89xkLbREIf3CQM9saoPbjiLfdWl7YnycJgQEbioB0EzbzPMIr3haXYu39eQhz4Ce
- ofRfFh/EIjrjZlFMi4BLlon5cgYXqD9gTyqW04Mx7CDn2g6V8P51/DEXu6KJ6RGccJ/RqBn3
- 8sbqWuIAcO3203UFSy40z90sZts=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 5ecd5665cb04586933a7b977 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 26 May 2020 17:48:21
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 6262DC433AD; Tue, 26 May 2020 17:48:20 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 73091C433C6;
-        Tue, 26 May 2020 17:48:19 +0000 (UTC)
+        id S1728685AbgEZSUm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 14:20:42 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:64106 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727112AbgEZSUm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 14:20:42 -0400
+Received: from 89-64-86-86.dynamic.chello.pl (89.64.86.86) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id 5bdc457a80a12290; Tue, 26 May 2020 20:20:38 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Doug Smythies <dsmythies@telus.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Francisco Jerez <francisco.jerez.plata@intel.com>
+Subject: [RFC/RFT][PATCH] cpufreq: intel_pstate: Accept passive mode with HWP enabled
+Date:   Tue, 26 May 2020 20:20:37 +0200
+Message-ID: <2931539.RsFqoHxarq@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 26 May 2020 23:18:19 +0530
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     sboyd@kernel.org, georgi.djakov@linaro.org,
-        bjorn.andersson@linaro.org, saravanak@google.com, mka@chromium.org,
-        nm@ti.com, agross@kernel.org, david.brown@linaro.org,
-        robh+dt@kernel.org, mark.rutland@arm.com, rjw@rjwysocki.net,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dianders@chromium.org, vincent.guittot@linaro.org,
-        amit.kucheria@linaro.org, ulf.hansson@linaro.org,
-        lukasz.luba@arm.com, sudeep.holla@arm.com
-Subject: Re: [PATCH v4 06/12] cpufreq: qcom: Update the bandwidth levels on
- frequency change
-In-Reply-To: <8fc5b72c9af6fd6a707a280cfc678677@codeaurora.org>
-References: <20200504202243.5476-1-sibis@codeaurora.org>
- <20200504202243.5476-7-sibis@codeaurora.org>
- <20200505045012.zfx2e6chqo5f3e4n@vireshk-i7>
- <8fc5b72c9af6fd6a707a280cfc678677@codeaurora.org>
-Message-ID: <b7e184b2da5b780a4e7e6ee47963f9b4@codeaurora.org>
-X-Sender: sibis@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-05-05 12:49, Sibi Sankar wrote:
-> On 2020-05-05 10:20, Viresh Kumar wrote:
->> On 05-05-20, 01:52, Sibi Sankar wrote:
->>> Add support to parse optional OPP table attached to the cpu node when
->>> the OPP bandwidth values are populated. This allows for scaling of
->>> DDR/L3 bandwidth levels with frequency change.
->>> 
->>> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
->> 
->> What about using opp_set_rate instead ?
-> 
-> I can't use opp_set_rate since
-> the cpu dev does not have a
-> clock associated with it and the
-> scaling is done through writing
-> on perf state register.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Viresh,
+Allow intel_pstate to work in the passive mode with HWP enabled and
+make it set the HWP minimum performance limit to 75% of the P-state
+value corresponding to the target frequency supplied by the cpufreq
+governor, so as to prevent the HWP algorithm and the CPU scheduler
+from working against each other at least when the schedutil governor
+is in use.
 
-https://patchwork.kernel.org/cover/11548479/
-GPU driver uses Georgi's series
-for scaling and will need a way to
-remove the icc votes in the suspend
-path, (this looks like a pattern
-that might be used by other clients
-as well) I could probably update
-opp_set_bw to support removing bw
-when NULL opp is specified. Similarly
-opp_set_rate will need to support
-set bw to 0 when set_rate is passed
-0 as target freq for the same use case.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project.
+This is a replacement for https://patchwork.kernel.org/patch/11563615/ that
+uses the HWP floor (minimum performance limit) as the feedback to the HWP
+algorithm (instead of the EPP).
+
+The INTEL_CPUFREQ_TRANSITION_DELAY_HWP is still 5000 and the previous comments
+still apply to it.
+
+In addition to that, the 75% fraction used in intel_cpufreq_adjust_hwp() can be
+adjusted too, but I would like to use a value with a power-of-2 denominator for
+that (so the next candidate would be 7/8).
+
+Everyone who can do that is kindly requested to test this and let me know
+the outcome.
+
+Of course, the documentation still needs to be updated.  Also, the EPP can be
+handled in analogy with the active mode now, but that part can be added in a
+separate patch on top of this one.
+
+Thanks!
+
+---
+ drivers/cpufreq/intel_pstate.c |  119 ++++++++++++++++++++++++++++++-----------
+ 1 file changed, 88 insertions(+), 31 deletions(-)
+
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -36,6 +36,7 @@
+ #define INTEL_PSTATE_SAMPLING_INTERVAL	(10 * NSEC_PER_MSEC)
+ 
+ #define INTEL_CPUFREQ_TRANSITION_LATENCY	20000
++#define INTEL_CPUFREQ_TRANSITION_DELAY_HWP	5000
+ #define INTEL_CPUFREQ_TRANSITION_DELAY		500
+ 
+ #ifdef CONFIG_ACPI
+@@ -2175,7 +2176,10 @@ static int intel_pstate_verify_policy(st
+ 
+ static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
+ {
+-	intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
++	if (hwp_active)
++		intel_pstate_hwp_force_min_perf(policy->cpu);
++	else
++		intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+ }
+ 
+ static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+@@ -2183,12 +2187,10 @@ static void intel_pstate_stop_cpu(struct
+ 	pr_debug("CPU %d exiting\n", policy->cpu);
+ 
+ 	intel_pstate_clear_update_util_hook(policy->cpu);
+-	if (hwp_active) {
++	if (hwp_active)
+ 		intel_pstate_hwp_save_state(policy);
+-		intel_pstate_hwp_force_min_perf(policy->cpu);
+-	} else {
+-		intel_cpufreq_stop_cpu(policy);
+-	}
++
++	intel_cpufreq_stop_cpu(policy);
+ }
+ 
+ static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+@@ -2318,13 +2320,58 @@ static void intel_cpufreq_trace(struct c
+ 		fp_toint(cpu->iowait_boost * 100));
+ }
+ 
++static void intel_cpufreq_update_hwp_request(struct cpudata *cpu, u32 min_perf)
++{
++	u64 value, prev;
++
++	rdmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, &prev);
++	value = prev;
++
++	value &= ~HWP_MIN_PERF(~0L);
++	value |= HWP_MIN_PERF(min_perf);
++
++	/*
++	 * The entire MSR needs to be updated in order to update the HWP min
++	 * field in it, so opportunistically update the max too if needed.
++	 */
++	value &= ~HWP_MAX_PERF(~0L);
++	value |= HWP_MAX_PERF(cpu->max_perf_ratio);
++
++	if (value != prev)
++		wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, value);
++}
++
++/**
++ * intel_cpufreq_adjust_hwp - Adjust the HWP reuqest register.
++ * @cpu: Target CPU.
++ * @target_pstate: P-state corresponding to the target frequency.
++ *
++ * Set the HWP minimum performance limit to 75% of @target_pstate taking the
++ * global min and max policy limits into account.
++ *
++ * The purpose of this is to avoid situations in which the kernel and the HWP
++ * algorithm work against each other by giving a hint about the expectations of
++ * the former to the latter.
++ */
++static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32 target_pstate)
++{
++	u32 min_perf;
++
++	min_perf = max_t(u32, (3 * target_pstate) / 4, cpu->min_perf_ratio);
++	min_perf = min_t(u32, min_perf, cpu->max_perf_ratio);
++	if (min_perf != cpu->pstate.current_pstate) {
++		cpu->pstate.current_pstate = min_perf;
++		intel_cpufreq_update_hwp_request(cpu, min_perf);
++	}
++}
++
+ static int intel_cpufreq_target(struct cpufreq_policy *policy,
+ 				unsigned int target_freq,
+ 				unsigned int relation)
+ {
+ 	struct cpudata *cpu = all_cpu_data[policy->cpu];
++	int target_pstate, old_pstate = cpu->pstate.current_pstate;
+ 	struct cpufreq_freqs freqs;
+-	int target_pstate, old_pstate;
+ 
+ 	update_turbo_state();
+ 
+@@ -2332,26 +2379,33 @@ static int intel_cpufreq_target(struct c
+ 	freqs.new = target_freq;
+ 
+ 	cpufreq_freq_transition_begin(policy, &freqs);
++
+ 	switch (relation) {
+ 	case CPUFREQ_RELATION_L:
+-		target_pstate = DIV_ROUND_UP(freqs.new, cpu->pstate.scaling);
++		target_pstate = DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
+ 		break;
+ 	case CPUFREQ_RELATION_H:
+-		target_pstate = freqs.new / cpu->pstate.scaling;
++		target_pstate = target_freq / cpu->pstate.scaling;
+ 		break;
+ 	default:
+-		target_pstate = DIV_ROUND_CLOSEST(freqs.new, cpu->pstate.scaling);
++		target_pstate = DIV_ROUND_CLOSEST(target_freq, cpu->pstate.scaling);
+ 		break;
+ 	}
+-	target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
+-	old_pstate = cpu->pstate.current_pstate;
+-	if (target_pstate != cpu->pstate.current_pstate) {
+-		cpu->pstate.current_pstate = target_pstate;
+-		wrmsrl_on_cpu(policy->cpu, MSR_IA32_PERF_CTL,
+-			      pstate_funcs.get_val(cpu, target_pstate));
++
++	if (hwp_active) {
++		intel_cpufreq_adjust_hwp(cpu, target_pstate);
++	} else {
++		target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
++		if (target_pstate != old_pstate) {
++			cpu->pstate.current_pstate = target_pstate;
++			wrmsrl_on_cpu(cpu->cpu, MSR_IA32_PERF_CTL,
++				      pstate_funcs.get_val(cpu, target_pstate));
++		}
+ 	}
+-	freqs.new = target_pstate * cpu->pstate.scaling;
+ 	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_TARGET, old_pstate);
++
++	freqs.new = target_pstate * cpu->pstate.scaling;
++
+ 	cpufreq_freq_transition_end(policy, &freqs, false);
+ 
+ 	return 0;
+@@ -2361,14 +2415,19 @@ static unsigned int intel_cpufreq_fast_s
+ 					      unsigned int target_freq)
+ {
+ 	struct cpudata *cpu = all_cpu_data[policy->cpu];
+-	int target_pstate, old_pstate;
++	int target_pstate, old_pstate = cpu->pstate.current_pstate;
+ 
+ 	update_turbo_state();
+ 
+ 	target_pstate = DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
+-	target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
+-	old_pstate = cpu->pstate.current_pstate;
+-	intel_pstate_update_pstate(cpu, target_pstate);
++
++	if (hwp_active) {
++		intel_cpufreq_adjust_hwp(cpu, target_pstate);
++	} else {
++		target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
++		intel_pstate_update_pstate(cpu, target_pstate);
++	}
++
+ 	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_FAST_SWITCH, old_pstate);
+ 	return target_pstate * cpu->pstate.scaling;
+ }
+@@ -2389,7 +2448,6 @@ static int intel_cpufreq_cpu_init(struct
+ 		return ret;
+ 
+ 	policy->cpuinfo.transition_latency = INTEL_CPUFREQ_TRANSITION_LATENCY;
+-	policy->transition_delay_us = INTEL_CPUFREQ_TRANSITION_DELAY;
+ 	/* This reflects the intel_pstate_get_cpu_pstates() setting. */
+ 	policy->cur = policy->cpuinfo.min_freq;
+ 
+@@ -2401,10 +2459,13 @@ static int intel_cpufreq_cpu_init(struct
+ 
+ 	cpu = all_cpu_data[policy->cpu];
+ 
+-	if (hwp_active)
++	if (hwp_active) {
+ 		intel_pstate_get_hwp_max(policy->cpu, &turbo_max, &max_state);
+-	else
++		policy->transition_delay_us = INTEL_CPUFREQ_TRANSITION_DELAY_HWP;
++	} else {
+ 		turbo_max = cpu->pstate.turbo_pstate;
++		policy->transition_delay_us = INTEL_CPUFREQ_TRANSITION_DELAY;
++	}
+ 
+ 	min_freq = DIV_ROUND_UP(turbo_max * global.min_perf_pct, 100);
+ 	min_freq *= cpu->pstate.scaling;
+@@ -2505,9 +2566,6 @@ static int intel_pstate_register_driver(
+ 
+ static int intel_pstate_unregister_driver(void)
+ {
+-	if (hwp_active)
+-		return -EBUSY;
+-
+ 	cpufreq_unregister_driver(intel_pstate_driver);
+ 	intel_pstate_driver_cleanup();
+ 
+@@ -2815,12 +2873,11 @@ static int __init intel_pstate_setup(cha
+ 	if (!str)
+ 		return -EINVAL;
+ 
+-	if (!strcmp(str, "disable")) {
++	if (!strcmp(str, "disable"))
+ 		no_load = 1;
+-	} else if (!strcmp(str, "passive")) {
++	else if (!strcmp(str, "passive"))
+ 		default_driver = &intel_cpufreq;
+-		no_hwp = 1;
+-	}
++
+ 	if (!strcmp(str, "no_hwp")) {
+ 		pr_info("HWP disabled\n");
+ 		no_hwp = 1;
+
+
+
