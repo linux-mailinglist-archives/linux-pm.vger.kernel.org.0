@@ -2,118 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 994DC1E2366
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 15:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AE31E24AC
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 16:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728061AbgEZNwT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 09:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726930AbgEZNwT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 09:52:19 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F2DC03E96D
-        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 06:52:19 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id i17so209001pli.13
-        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 06:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=mVghy4myKTrVo55JKqW8ZpudABx2DALNUmTkceqYsrs=;
-        b=CZsfiyOOdtWNwF58Ja/US/YbRUgbzLGDAtw95IqGFnka0WDx5Ium5Xkl4W8UPfDFIx
-         Iv0Fbqs40t/UME8In1mL9jfYUewnrAAnkz20JKap8Ec9OR+vIlE2xcq/1dqMtczi4ZMB
-         QyhYAPsG9MCRX4BEh/CR3DtZjEp8LFBXh0cm3egrUBPH8uLAiTFZeQm2KW5rkDJTV0H3
-         gJ/ZzDuenBQtV8y+gWsytmy3rsz0Adpjr8GHosIwmV+gQMDRRCtLCGklCbIn0qtG4Drb
-         lVB4gp+QzYhR6HFYATeY0CNdl306VpOjZx+3siqEfbVaOJ7zmwjja2GkMVjvO1d4LEUu
-         zY/g==
+        id S1729088AbgEZO5r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 10:57:47 -0400
+Received: from mail-ej1-f65.google.com ([209.85.218.65]:37776 "EHLO
+        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727978AbgEZO5r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 10:57:47 -0400
+Received: by mail-ej1-f65.google.com with SMTP id l21so24159170eji.4;
+        Tue, 26 May 2020 07:57:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=mVghy4myKTrVo55JKqW8ZpudABx2DALNUmTkceqYsrs=;
-        b=Zt3OmSlzpBJvdS2EWPmS34Disaf6/JHxvWtX+hvp8G7l1hwrcuPn1NgJzOQz+hXX49
-         gG6HJLz+I86JF8dHEWRpRNUglxe8aQWSTUX7Pm8EZz1BFKlg+mxIC7AxITCAD/p+dNiR
-         hK0N63hOFP1QNikSEsldlVo3NVtMIfAfGHlNX3USmR6YeLU4m0sJXoFrgyeJQnapWtQT
-         978eFu6a+a86f9P6Z0ZNDarBFAUVp4Uo+VLv71e1DkYJIteOvk7ChGLCx3K2KDp6kZmN
-         EHaX8mUJIRBRNXsAaOv4LbaOZ4v1UTQIsxhLt6QUTx0z34ovSxKJuAT+1A8qR/BmjeqM
-         dKJw==
-X-Gm-Message-State: AOAM530ZdZmxn8lArOryNTD1d2lZMM9SLQqShoKV6+xrPPWaKEQhKvzl
-        Yoxf/NNUvS2026CZgFpoiwyrJQ==
-X-Google-Smtp-Source: ABdhPJz1k7S1e2bD+uBd9AlzxUUZxZIHJdmlVQbcf7LFkCxbWUx+rmYHvevs6/XB/0q+v6FMqM1/Xw==
-X-Received: by 2002:a17:902:6b07:: with SMTP id o7mr1177980plk.74.1590501138668;
-        Tue, 26 May 2020 06:52:18 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i66sm15080510pfe.135.2020.05.26.06.52.17
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=h/vc/U48e43hYebkBpRwszhtS9SjYZ2xSvS7nTqAhXk=;
+        b=JPgpJnLNkWjACul1dvYApARVGs2Cs5gfG38iSSaBGT9/l5HFAlskGf9v34VHttoTvd
+         cN9mDEwJ9T2RpslOcBxIh3Ok6hEdzIQwFiiibxZG5vsq7L6QpmZwS2RWsfcLS4DzBhpL
+         2UsyWHHXavFq7+qswrou69yuetvQU/XCZlHtrhiyueM6ERqDLX8Xd3B0xuRVF4u0T/JB
+         3FbgiyyU/xsDy3HAghkLsm0BWrnDttYQlIdKeg33LsCiCJA9GTkm9MSzIjVerh8ATz3W
+         fvX6oKgTZC+77hTsTqts/rPQf8cB7ZzNHFrzvM3tRsKxivdTMljMV9kdwqgl9PT3z9r8
+         ql7g==
+X-Gm-Message-State: AOAM5322H1G4oVJlE4HYNCDokfd3D5xFWS8N3RXUnHQpcWHMowcngU31
+        1wgyg9nuoHj3xOkFpKT+l+Y=
+X-Google-Smtp-Source: ABdhPJzdElVIHtsR0qMTrQLNXyURt2kuG/VwKifaQBwdr8EPvJOXOlo0YVxmLG6Ml176FD4Quk6tgg==
+X-Received: by 2002:a17:906:4406:: with SMTP id x6mr1463667ejo.160.1590505065110;
+        Tue, 26 May 2020 07:57:45 -0700 (PDT)
+Received: from rocinante ([95.155.85.46])
+        by smtp.gmail.com with ESMTPSA id v3sm149610ejj.14.2020.05.26.07.57.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 06:52:17 -0700 (PDT)
-Message-ID: <5ecd1f11.1c69fb81.2afa2.ca85@mx.google.com>
-Date:   Tue, 26 May 2020 06:52:17 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 26 May 2020 07:57:44 -0700 (PDT)
+Date:   Tue, 26 May 2020 16:57:42 +0200
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Ursula Braun <ubraun@linux.ibm.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        greybus-dev@lists.linaro.org, netdev@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 8/8] net/iucv: Use the new device_to_pm() helper to
+ access struct dev_pm_ops
+Message-ID: <20200526145742.GA75990@rocinante>
+References: <20200525182608.1823735-1-kw@linux.com>
+ <20200525182608.1823735-9-kw@linux.com>
+ <55c3d2eb-feff-bf33-235d-b89c0abef7b1@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.7-rc7-85-g813946019dfd
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 56 runs,
- 1 regressions (v5.7-rc7-85-g813946019dfd)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <55c3d2eb-feff-bf33-235d-b89c0abef7b1@linux.ibm.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 56 runs, 1 regressions (v5.7-rc7-85-g813946019dfd)
+Hi Ursula,
 
-Regressions Summary
--------------------
+On 20-05-26 09:07:27, Ursula Braun wrote:
+> 
+> 
+> On 5/25/20 8:26 PM, Krzysztof Wilczyński wrote:
+> > Use the new device_to_pm() helper to access Power Management callbacs
+> > (struct dev_pm_ops) for a particular device (struct device_driver).
+> > 
+> > No functional change intended.
+> > 
+> > Signed-off-by: Krzysztof Wilczyński <kw@linux.com>
+> 
+> pm support is going to be removed (for s390 in general and) for
+> net/iucv/iucv.c with this net-next patch:
+[...]
 
-platform        | arch  | lab          | compiler | defconfig | results
-----------------+-------+--------------+----------+-----------+--------
-bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
+Good to know!  Thank you for letting me know.  I appreciate that.
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.7-rc7=
--85-g813946019dfd/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.7-rc7-85-g813946019dfd
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      813946019dfd8929048c3350d3d320f34ebcb01c =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab          | compiler | defconfig | results
-----------------+-------+--------------+----------+-----------+--------
-bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ecd1543eb868c348b4397d5
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc7-85-g813946=
-019dfd/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc7-85-g813946=
-019dfd/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ecd1543eb868c34=
-8b4397d8
-      failing since 10 days (last pass: v5.7-rc5-53-gfbe093dd16f4, first fa=
-il: v5.7-rc5-57-g8ef6544598d6)
-      2 lines =20
+Krzysztof
