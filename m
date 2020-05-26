@@ -2,157 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 379561E211F
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 13:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D9C1E215A
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 13:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726325AbgEZLnn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 07:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
+        id S1731443AbgEZLx3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 07:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731539AbgEZLnm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 07:43:42 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB797C03E97E
-        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 04:43:42 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id a68so729483vsd.8
-        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 04:43:42 -0700 (PDT)
+        with ESMTP id S1731468AbgEZLx0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 07:53:26 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C04C03E97A
+        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 04:53:25 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id h10so21564811iob.10
+        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 04:53:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nPdu7SPTh7JNX7Uc2Z7FhGt13qKrZbymgkVtLODSfA4=;
-        b=ZwYOS+cV7mJ83i9sr2VExWXiEFDnq/JqhbFXX3fAzvAOd2oPuprKymA6ETAeP8GLqm
-         vL5jZBCNjHihDatlNRKcDFnK8MmiWCN1sXxalNaD9LTWUIqelPlo0st0vrUa40U7qu7i
-         XzjQoWcFOv8iMrkaQ+jw5n7utfuSi5UWtzQiNV6lglrMugIvxm1WbZM7DmEjLRwk4E83
-         brPR3zg3zu/gefBQWQFSAo4/iRw204LTUubMH8VQ/uKzQwNZg2D6yDvHlnu1BUsgjm8I
-         8tpFcbUsS0WLKUvjWWMw+sOg3wmf119zvHke6fIkU+5FdDPV2BX0y+bB8twggxD817B2
-         qpuw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hlMxfZxeMD+DKWmT3pt17RdFPN380iI2WVeOeZ79wkw=;
+        b=t4kZrH+2brZaCI4MrOkR6KZfqPavGym3179KUX4j/ZvYjMZeGwNOrjXyEzeIGYdSAV
+         5PSjV6gaZI3+EepcmOnwgmqSZhsuJiMkZi7Pd8CQCruTBzcT6c5Ley9CH2SsLVshyIt3
+         QNsiKJjobAtOpmroQCiLNENOzYP0eYjZlDsUmDlIgRz7hEU6moYbMyw7UQaxsEmCHNA/
+         qZOM3IaV+rOtSdd1HCCRWWUcEIllNbeZrBRMH2IICgG1iA6wF2ughWfOqEzUP8+mT3/1
+         ycBv0p1napzjkUUxgXfJ/eXiWh48UrP1d6+OA7KfHNjYL+8zAtH4huoUG0QivvNCEAYz
+         ekyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nPdu7SPTh7JNX7Uc2Z7FhGt13qKrZbymgkVtLODSfA4=;
-        b=Aw2LltTeW7V7FozQXI6Npv+AJ4dqF3/5RCDwKpwwFKx1qgAH8/VKeUOG6wrgEC6aju
-         8u0SgRTLF9qXjCrwXkcOomouUxeHZLfjvbDyqf8tWbiCXyvwW/8ACvBhsrukmNtxJw8/
-         /mtk3HdzTL51Egl5yR1bszA0A02C//ZJKj+skpIkG7PXNzJb/R/5d9glG3nNv2LuxBT/
-         1KfeHT7RFstcQeGppa1OAbl7IZR9KQIajMKroapimckkojMij6uBTrDXGP4eOfI+RhkA
-         lgE0u7C0N1ERLtzDsjpCiTPWwDz20xxjia9nrJZiWKfQ7GhYLZJ/hJ+xJoUx3b8wSD2u
-         X0bw==
-X-Gm-Message-State: AOAM5318k8PgCnjCE3FqpDeUYcuU4X8tZTOvT22XtwE9dImeD9jP/e9Y
-        wohynQ6Q10Z9JH3PRlQu2ufw5oVTTJDYh1zE0kTPFQ==
-X-Google-Smtp-Source: ABdhPJxX3ByxW2H4N6c89dFaCJvwdMVe5SnL4enMfxjWHotYtz6hvN2m1vJ0v196TxJgcUHhkScnUgdJSyhPeOpEZus=
-X-Received: by 2002:a67:690e:: with SMTP id e14mr512853vsc.34.1590493421821;
- Tue, 26 May 2020 04:43:41 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hlMxfZxeMD+DKWmT3pt17RdFPN380iI2WVeOeZ79wkw=;
+        b=ZwfMoEDLNyXoRFlNudr8oBxyVZ/7xkHaexJW57boSb5cXawdKahjzDal+uzh5Mfod5
+         K4zxSyf0ke7oWk9ayl12o1KNYRemRhIdUpIOaysQGK0mg1qcNtchptQeX3oQyEhwt3q9
+         Nb3GLw4cGEYEEZTmRJ03RiM6760OxH82WISzC+qBOYgjYye+GpBdZqQeEYVhlV0WAA9y
+         Ln3mEIF2nRjsKR73t8FsJBmoNUS05o34+RB71ZjY1IJpoBfH+le/UTVeOAIoOaMd+gc9
+         jYZngeZ60bHVN3+ZusDl1W5SIvPsxd3WTra9OMJ1yFfSq7NcSXTKnHHKpxnqBKbEfOGH
+         gT2Q==
+X-Gm-Message-State: AOAM530I5JoYJcGsd25O+s+c5rNDRUZS5xUE/5iLMK2uWFdDH1ns8Yht
+        sWb3TXK7oU7T8H/cqF05cxmyjQ==
+X-Google-Smtp-Source: ABdhPJysJNQt3T6dM953D88S5wdzxi/U/oshKuW/qDlHy6hbQRmFmerb1YPlez4lats+13/+SUWV/g==
+X-Received: by 2002:a5e:a70b:: with SMTP id b11mr8299591iod.63.1590494004490;
+        Tue, 26 May 2020 04:53:24 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id c7sm11123220ilf.36.2020.05.26.04.53.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 May 2020 04:53:23 -0700 (PDT)
+Subject: Re: [greybus-dev] [PATCH 1/8] driver core: Add helper for accessing
+ Power Management callbacs
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pci@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, Kevin Hilman <khilman@kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        linux-acpi@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Johan Hovold <johan@kernel.org>, greybus-dev@lists.linaro.org,
+        John Stultz <john.stultz@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Felipe Balbi <balbi@kernel.org>, Alex Elder <elder@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20200525182608.1823735-1-kw@linux.com>
+ <20200525182608.1823735-2-kw@linux.com> <20200526063334.GB2578492@kroah.com>
+From:   Alex Elder <elder@linaro.org>
+Message-ID: <41c42552-0f4f-df6a-d587-5c62333aa6a8@linaro.org>
+Date:   Tue, 26 May 2020 06:53:22 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <1590481839-28603-1-git-send-email-haibo.chen@nxp.com>
-In-Reply-To: <1590481839-28603-1-git-send-email-haibo.chen@nxp.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 26 May 2020 13:43:05 +0200
-Message-ID: <CAPDyKFqjZdN0zv2iW+Rq6WZSo56HfyPFYHvg-JvzYZPy_eTSBQ@mail.gmail.com>
-Subject: Re: [PATCH] mmc: host: sdhci-esdhc-imx: add wakeup feature for GPIO
- CD pin
-To:     Haibo Chen <haibo.chen@nxp.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200526063334.GB2578492@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+ Rafael, linux-pm
+On 5/26/20 1:33 AM, Greg Kroah-Hartman wrote:
+> On Mon, May 25, 2020 at 06:26:01PM +0000, Krzysztof Wilczyński wrote:
+>> Add driver_to_pm() helper allowing for accessing the Power Management
+>> callbacs for a particular device.  Access to the callbacs (struct
+>> dev_pm_ops) is normally done through using the pm pointer that is
+>> embedded within the device_driver struct.
+>>
+>> Helper allows for the code required to reference the pm pointer and
+>> access Power Management callbas to be simplified.  Changing the
+>> following:
+>>
+>>    struct device_driver *drv = dev->driver;
+>>    if (dev->driver && dev->driver->pm && dev->driver->pm->prepare) {
+>>        int ret = dev->driver->pm->prepare(dev);
+>>
+>> To:
+>>
+>>    const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>>    if (pm && pm->prepare) {
+>>        int ret = pm->prepare(dev);
+>>
+>> Or, changing the following:
+>>
+>>       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+>>
+>> To:
+>>       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>>
+>> Signed-off-by: Krzysztof Wilczyński <kw@linux.com>
+>> ---
+>>   include/linux/device/driver.h | 15 +++++++++++++++
+>>   1 file changed, 15 insertions(+)
+>>
+>> diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
+>> index ee7ba5b5417e..ccd0b315fd93 100644
+>> --- a/include/linux/device/driver.h
+>> +++ b/include/linux/device/driver.h
+>> @@ -236,6 +236,21 @@ driver_find_device_by_acpi_dev(struct device_driver *drv, const void *adev)
+>>   }
+>>   #endif
+>>   
+>> +/**
+>> + * driver_to_pm - Return Power Management callbacs (struct dev_pm_ops) for
+>> + *                a particular device.
+>> + * @drv: Pointer to a device (struct device_driver) for which you want to access
+>> + *       the Power Management callbacks.
+>> + *
+>> + * Returns a pointer to the struct dev_pm_ops embedded within the device (struct
+>> + * device_driver), or returns NULL if Power Management is not present and the
+>> + * pointer is not valid.
+>> + */
+>> +static inline const struct dev_pm_ops *driver_to_pm(struct device_driver *drv)
+>> +{
+>> +	return drv && drv->pm ? drv->pm : NULL;
 
-On Tue, 26 May 2020 at 10:41, <haibo.chen@nxp.com> wrote:
->
-> From: Haibo Chen <haibo.chen@nxp.com>
->
-> When use the specific GPIO to detect the card insert/remove, we can
-> also add the GPIO as a wakeup source. When system suspend, insert or
-> remove the card can wakeup the system.
+This could just be:
 
-Yes, this makes perfect sense! However...
+	if (drv)
+		return drv->pm;
 
->
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> ---
->  drivers/mmc/host/sdhci-esdhc-imx.c | 19 +++++++++++++++++--
->  1 file changed, 17 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
-> index 5398af4824c3..7af9d87d4245 100644
-> --- a/drivers/mmc/host/sdhci-esdhc-imx.c
-> +++ b/drivers/mmc/host/sdhci-esdhc-imx.c
-> @@ -1599,6 +1599,11 @@ static int sdhci_esdhc_imx_probe(struct platform_device *pdev)
->         if (esdhc_is_usdhc(imx_data)) {
->                 host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
->                 host->mmc->caps |= MMC_CAP_1_8V_DDR | MMC_CAP_3_3V_DDR;
-> +
-> +               /* GPIO CD can be set as a wakeup source */
-> +               host->mmc->caps |= MMC_CAP_CD_WAKE;
-> +               device_init_wakeup(&pdev->dev, true);
-> +
+	return NULL;
 
-... if the device is attached to a genpd (a PM domain), this may cause
-it to stay powered on in the system suspend state. Not sure if that
-can cause a problem for you? Wasting energy?
+Or if you want to evoke passion in Greg:
 
-In any case, I think it's wrong to make "&pdev->dev" wakeup capable,
-like this. Especially as at it's the GPIO controller that manages the
-system wakeup irq.
+	return drv ? drv->pm : NULL;
 
->                 if (!(imx_data->socdata->flags & ESDHC_FLAG_HS200))
->                         host->quirks2 |= SDHCI_QUIRK2_BROKEN_HS200;
->
-> @@ -1734,8 +1739,15 @@ static int sdhci_esdhc_suspend(struct device *dev)
->                 mmc_retune_needed(host->mmc);
->
->         ret = sdhci_suspend_host(host);
-> -       if (!ret)
-> -               return pinctrl_pm_select_sleep_state(dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = pinctrl_pm_select_sleep_state(dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (device_may_wakeup(dev))
-> +               ret = mmc_gpio_set_cd_wake(host->mmc, true);
+					-Alex
 
-With the above said, I think the best available approach at this
-point, is to just call mmc_gpio_set_cd_wake() - and just skip checking
-device_may_wakeup().
+> I hate ? : lines with a passion, as they break normal pattern mattching
+> in my brain.  Please just spell this all out:
+> 	if (drv && drv->pm)
+> 		return drv->pm;
+> 	return NULL;
+> 
+> Much easier to read, and the compiler will do the exact same thing.
+> 
+> Only place ? : are ok to use in my opinion, are as function arguments.
+> 
+> thanks,
+> 
+> greg k-h
+> _______________________________________________
+> greybus-dev mailing list
+> greybus-dev@lists.linaro.org
+> https://lists.linaro.org/mailman/listinfo/greybus-dev
+> 
 
-BTW, mmc_gpio_set_cd_wake() calls enable_irq_wake(), which doesn't
-require the "dev" to be wakeup capable. So this is fine!
-
-Yes, it means that the IRQ will be configured as a system wakeup,
-without letting user space to have a say about it. I guess we can live
-with that limitation.
-
->
->         return ret;
->  }
-> @@ -1759,6 +1771,9 @@ static int sdhci_esdhc_resume(struct device *dev)
->         if (host->mmc->caps2 & MMC_CAP2_CQE)
->                 ret = cqhci_resume(host->mmc);
->
-> +       if (!ret && device_may_wakeup(dev))
-> +               ret = mmc_gpio_set_cd_wake(host->mmc, false);
-> +
->         return ret;
->  }
->  #endif
-> --
-> 2.17.1
->
-
-Kind regards
-Uffe
