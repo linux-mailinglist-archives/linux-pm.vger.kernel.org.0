@@ -2,95 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD331E1EA8
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 11:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F371E1EF3
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 11:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728850AbgEZJe4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 05:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728568AbgEZJe4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 05:34:56 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06289C08C5C2
-        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 02:34:55 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id r15so2299117wmh.5
-        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 02:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=uIfXKUCbDucsPOYpYgkjOAmRdJUZDObk3f5/C3vKFFQ=;
-        b=oLg3EzO5sInVvZZNdMUReY1VU37G5NrZ3kBSjpnme2iHn/mLV/BmxA0Mo0n0GfZf/n
-         lj+UYmqPYbPByclPic5/sFkZ/kokkxdJvkdDu87bglSe6+DoLTbQBunk1n5bfEbv0snV
-         xx9+mvNp1yASRai5BFwtpx5FG4W6kk8iaoY6AB/T46B9iZyEvpeh33OILv4HJ+xVhzv4
-         XRqO1XWRBCSxRsyl2lxztWFsVJlASL64oNxnEfnSM+Pa9yM/z/zx35H9sS2jj4+PaHfA
-         EZXMEIoqDNyIu9rCt3OkBrRR4qN4VCvhxiKAeb8xH1fijdU1ByRTg3XrxqkA8YLKH9xQ
-         MzeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=uIfXKUCbDucsPOYpYgkjOAmRdJUZDObk3f5/C3vKFFQ=;
-        b=feekWjSwBjP+BaaAZQ9vHzITl0dRGsbPRUYyX3r2F/qxOcOtLP0/0CSCbl/r7X4mv9
-         d/xZ6MMAu/FCo/5jRaFR3LnQxmYopItq8rf6x5NPKO5R4lXniFVZRR7WS//boH9FWX6q
-         cMZ7VREVjZT3nrOrAQt2pP22emt2p6fXctqVX2AnKlk9pKVESHEd5lVfcUo1bMWINO96
-         8CVtPZWNkXD3Jdq2Fm2rQpTFCnXGzlz4BsZP1pK3Ni1d62EYvpI2gGJOZtM+5zkNfE/H
-         TCx4ANiEZJrcjKTq9Lf2S0Wa8+3XclF4uTcWtMjq52kwtDlqY+U3ApjlJ46NspZC77lT
-         9ebQ==
-X-Gm-Message-State: AOAM533BNiJt2jdSDVvultfqSlMv0yE6Ke6iSXxHCounJq+b6SSnBkw4
-        Mfa2fIiI2rjcvYd1vfCjf+s0ew==
-X-Google-Smtp-Source: ABdhPJzrrxB7FkN/xp0+nIBota9X6mJMdDJrXBjQdIa6PiqyON/o1c2F/P0fkO+zgSyNBPJ1/c0myw==
-X-Received: by 2002:a1c:9cd4:: with SMTP id f203mr618021wme.26.1590485694696;
-        Tue, 26 May 2020 02:34:54 -0700 (PDT)
-Received: from dell ([95.149.164.102])
-        by smtp.gmail.com with ESMTPSA id x18sm21533655wru.72.2020.05.26.02.34.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 02:34:54 -0700 (PDT)
-Date:   Tue, 26 May 2020 10:34:50 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Saravanan Sekar <sravanhome@gmail.com>
-Cc:     andy.shevchenko@gmail.com, robh+dt@kernel.org, jic23@kernel.org,
-        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
-        sre@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v12 0/6] Add battery charger driver support for MP2629
-Message-ID: <20200526093450.GM3628@dell>
-References: <20200526090646.25827-1-sravanhome@gmail.com>
+        id S1731755AbgEZJpW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 05:45:22 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:55976 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728686AbgEZJpW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 05:45:22 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 791CE1C02C0; Tue, 26 May 2020 11:45:19 +0200 (CEST)
+Date:   Tue, 26 May 2020 11:45:18 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        greybus-dev@lists.linaro.org, netdev <netdev@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-s390@vger.kernel.org,
+        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 2/8] ACPI: PM: Use the new device_to_pm() helper to
+ access struct dev_pm_ops
+Message-ID: <20200526094518.GA4600@amd>
+References: <20200525182608.1823735-1-kw@linux.com>
+ <20200525182608.1823735-3-kw@linux.com>
+ <CAJZ5v0jQUmdDYmJsP43Ja3urpVLUxe-yD_Hm_Jd2LtCoPiXsrQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="bg08WKrSYDhXBjb5"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200526090646.25827-1-sravanhome@gmail.com>
+In-Reply-To: <CAJZ5v0jQUmdDYmJsP43Ja3urpVLUxe-yD_Hm_Jd2LtCoPiXsrQ@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 26 May 2020, Saravanan Sekar wrote:
 
-> changes in v12:
->  - added SOB Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+--bg08WKrSYDhXBjb5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Looks like you added my Acked-by to every patch, when actually I only
-Acked the MFD one.  Fortunately, as I'm the one applying these, I can
-strip them off, but please be more careful about which *-bys you apply
-to which patches in the future.
+On Tue 2020-05-26 10:37:36, Rafael J. Wysocki wrote:
+> On Mon, May 25, 2020 at 8:26 PM Krzysztof Wilczy=C5=84ski <kw@linux.com> =
+wrote:
+> >
+> > Use the new device_to_pm() helper to access Power Management callbacs
+> > (struct dev_pm_ops) for a particular device (struct device_driver).
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Krzysztof Wilczy=C5=84ski <kw@linux.com>
+> > ---
+> >  drivers/acpi/device_pm.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+> > index 5832bc10aca8..b98a32c48fbe 100644
+> > --- a/drivers/acpi/device_pm.c
+> > +++ b/drivers/acpi/device_pm.c
+> > @@ -1022,9 +1022,10 @@ static bool acpi_dev_needs_resume(struct device =
+*dev, struct acpi_device *adev)
+> >  int acpi_subsys_prepare(struct device *dev)
+> >  {
+> >         struct acpi_device *adev =3D ACPI_COMPANION(dev);
+> > +       const struct dev_pm_ops *pm =3D driver_to_pm(dev->driver);
+>=20
+> I don't really see a reason for this change.
+>=20
+> What's wrong with the check below?
 
-> changes in v11:
->  - module_remove part replaced by devm_add_action_or_reset in charger patch
->  - minor review comments solved in mfd and adc patch
-> 
-> I expect, that Lee will provide an immutable branch for me and
-> Jonathan once the MFD bits have been reviewed. Please tell me,
-> if I should prepare one instead.
+Duplicated code. Yes, compiler can sort it out, but... new version
+looks better to me.
 
-I'll do this now.
+Best regards,
+								pavel
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> >
+> > -       if (dev->driver && dev->driver->pm && dev->driver->pm->prepare)=
+ {
+> > -               int ret =3D dev->driver->pm->prepare(dev);
+> > +       if (pm && pm->prepare) {
+> > +               int ret =3D pm->prepare(dev);
+
+
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--bg08WKrSYDhXBjb5
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl7M5S0ACgkQMOfwapXb+vJLqgCcCbDmh7NooqBM+qslb58avjsp
+78cAn1mUUlj/BAfzgJELHWPID2a0mmvg
+=+Cmh
+-----END PGP SIGNATURE-----
+
+--bg08WKrSYDhXBjb5--
