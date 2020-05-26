@@ -2,244 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 291AB1E1ACA
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 07:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECA31E1B1E
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 08:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726048AbgEZFre (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 01:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbgEZFre (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 01:47:34 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19716C061A0E
-        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 22:47:34 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id f21so6495767pgg.12
-        for <linux-pm@vger.kernel.org>; Mon, 25 May 2020 22:47:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=oXbG022ZimMFFvyqjVrNnffd9Gy3wDfvXrizE/VPTAk=;
-        b=PWi4gAMoWGrzMeKnym+62KUk1eKjwbqy+k4TqOz9GfB2QYKmEyFK8Bl7YEabOqqPqp
-         QOBUkmS37DsCCaoPdrm7YAsIcfllZWSbvKip3BW7FeGaOe+R/xvyO3U9VEqBe4R63NHQ
-         jUa60reOOQ7fiGQV32ivodA5Xh9+hEJK9NC8phuQqh4T+1WNVR0JZVa6RvHEt00StzxA
-         ZkSd63uKz//8t5wyqXy60b87u0vQV88fyKm/rREYmLQTBQp3CZ/dVcMBux0AXtkKSON0
-         sDcFpnoB6Dc17qqwIyweGhFB5VQbqE5T4V629euTSkOg+LPiH5z1fYnkhxDGUUCQtzwl
-         HCYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=oXbG022ZimMFFvyqjVrNnffd9Gy3wDfvXrizE/VPTAk=;
-        b=ugsmCbALOr/xm5P9f8yfBG66layohnlX7dyroInQUDNnpjzlpOZtFMOWnYUqk2cTq+
-         uT74WchTWDXIqPd6CcPz1ogiSj3LyPFh8Y2gm3zGi+2qZ+NtcbTzi+ZGWkPoZDKTX5el
-         kdF1ZPpEt44ywjM+TPTm3l+vfSkw1HYVsZbVdc44L2mMl6vNwoSZ2n/YTO7j265KuWn7
-         qTLvoiBsULS1wj9AKwou64jW0DwcAXCvL2FZdCyzG9mXtRIwXmJ0KTjL6DzrNU/6ftYP
-         95QVSBjFuY+OhSlaVCNh+mmQghsFHkiCUh2f2/YKhiuOcZgO5wObGgs2D1Lj0HXbkU1Z
-         gtRQ==
-X-Gm-Message-State: AOAM531tC0UVe6Bflx+h3wGXgG7oOFX2kyKHDxcB3vuTQeE6ZHZ/bJC3
-        wgNIEstmYwsQLhNI7UcJhZMh5w==
-X-Google-Smtp-Source: ABdhPJyxgNHTTLCXO2hlCa/tEwG6zNC1+lHKw42BDWtEfnW253o8a+oIq9NHYmmjWukBPPmlzjXHvg==
-X-Received: by 2002:aa7:87d6:: with SMTP id i22mr8481483pfo.39.1590472053455;
-        Mon, 25 May 2020 22:47:33 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j26sm14088378pfr.215.2020.05.25.22.47.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 May 2020 22:47:32 -0700 (PDT)
-Message-ID: <5eccad74.1c69fb81.d94a2.68e0@mx.google.com>
-Date:   Mon, 25 May 2020 22:47:32 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.7-rc7-74-g6b0724667355
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
- 24 warnings (v5.7-rc7-74-g6b0724667355)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+        id S1728066AbgEZGRW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 02:17:22 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:55110 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726873AbgEZGRW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 26 May 2020 02:17:22 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 937A61A0422;
+        Tue, 26 May 2020 08:17:20 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id D3BF11A0324;
+        Tue, 26 May 2020 08:17:17 +0200 (CEST)
+Received: from titan.ap.freescale.net (titan.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 29E424028B;
+        Tue, 26 May 2020 14:17:13 +0800 (SGT)
+From:   Yuantian Tang <andy.tang@nxp.com>
+To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, edubezval@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuantian Tang <andy.tang@nxp.com>
+Subject: [PATCH v4] thermal: qoriq: Update the settings for TMUv2
+Date:   Tue, 26 May 2020 14:02:12 +0800
+Message-Id: <20200526060212.4118-1-andy.tang@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 6 builds: 0 failed, 6 passed, 24 warnings (v5.7-rc7-74-g6=
-b0724667355)
+For TMU v2, TMSAR registers need to be set properly to get the
+accurate temperature values.
+Also the temperature read needs to be converted to degree Celsius
+since it is in degrees Kelvin.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-7-rc7-74-g6b0724667355/
-
-Tree: pm
-Branch: testing
-Git Describe: v5.7-rc7-74-g6b0724667355
-Git Commit: 6b0724667355b76a0813de36e987f6b881131a69
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 6 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-    defconfig (gcc-8): 24 warnings
-
-arm:
-
-mips:
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    16   arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (=
-dma_ranges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" p=
-roperty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, chil=
-d #address-cells =3D=3D 2, #size-cells =3D=3D 1)
-    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
-rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
- its #size-cells (1) differs from / (2)
-    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
-rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
- its #address-cells (1) differs from / (2)
-    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
-s_format): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells=
- (1) differs from / (2)
-    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
-s_format): /soc:dma-ranges: empty "dma-ranges" property but its #address-ce=
-lls (1) differs from / (2)
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 24 warnings, 0 section m=
-ismatches
-
-Warnings:
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
-anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
-ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
-dress-cells =3D=3D 2, #size-cells =3D=3D 1)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#address-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#size-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#address-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#size-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#address-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#size-cells (1) differs from / (2)
-    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
-mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
-1) differs from / (2)
-    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
-mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
-differs from / (2)
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
+Signed-off-by: Yuantian Tang <andy.tang@nxp.com>
 ---
-For more info write to <info@kernelci.org>
+v4:
+	- replace the hard-coded number with constant variables
+	- update some comments as needed
+
+ drivers/thermal/qoriq_thermal.c | 26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+index 028a6bbf75dc..73049f9bea25 100644
+--- a/drivers/thermal/qoriq_thermal.c
++++ b/drivers/thermal/qoriq_thermal.c
+@@ -11,6 +11,7 @@
+ #include <linux/regmap.h>
+ #include <linux/sizes.h>
+ #include <linux/thermal.h>
++#include <linux/units.h>
+ 
+ #include "thermal_core.h"
+ #include "thermal_hwmon.h"
+@@ -23,6 +24,7 @@
+ #define TMTMIR_DEFAULT	0x0000000f
+ #define TIER_DISABLE	0x0
+ #define TEUMR0_V2		0x51009c00
++#define TMSARA_V2		0xe
+ #define TMU_VER1		0x1
+ #define TMU_VER2		0x2
+ 
+@@ -50,6 +52,9 @@
+ 					    * Site Register
+ 					    */
+ #define TRITSR_V	BIT(31)
++#define REGS_V2_TMSAR(n)	(0x304 + 16 * (n))	/* TMU monitoring
++						* site adjustment register
++						*/
+ #define REGS_TTRnCR(n)	(0xf10 + 4 * (n)) /* Temperature Range n
+ 					   * Control Register
+ 					   */
+@@ -85,12 +90,21 @@ static int tmu_get_temp(void *p, int *temp)
+ 	/*
+ 	 * REGS_TRITSR(id) has the following layout:
+ 	 *
++	 * For TMU Rev1:
+ 	 * 31  ... 7 6 5 4 3 2 1 0
+ 	 *  V          TEMP
+ 	 *
+ 	 * Where V bit signifies if the measurement is ready and is
+ 	 * within sensor range. TEMP is an 8 bit value representing
+-	 * temperature in C.
++	 * temperature in Celsius.
++
++	 * For TMU Rev2:
++	 * 31  ... 8 7 6 5 4 3 2 1 0
++	 *  V          TEMP
++	 *
++	 * Where V bit signifies if the measurement is ready and is
++	 * within sensor range. TEMP is an 9 bit value representing
++	 * temperature in KelVin.
+ 	 */
+ 	if (regmap_read_poll_timeout(qdata->regmap,
+ 				     REGS_TRITSR(qsensor->id),
+@@ -100,7 +114,10 @@ static int tmu_get_temp(void *p, int *temp)
+ 				     10 * USEC_PER_MSEC))
+ 		return -ENODATA;
+ 
+-	*temp = (val & 0xff) * 1000;
++	if (qdata->ver == TMU_VER1)
++		*temp = (val & GENMASK(7, 0)) * MILLIDEGREE_PER_DEGREE;
++	else
++		*temp = kelvin_to_millicelsius(val & GENMASK(8, 0));
+ 
+ 	return 0;
+ }
+@@ -192,6 +209,8 @@ static int qoriq_tmu_calibration(struct device *dev,
+ 
+ static void qoriq_tmu_init_device(struct qoriq_tmu_data *data)
+ {
++	int i;
++
+ 	/* Disable interrupt, using polling instead */
+ 	regmap_write(data->regmap, REGS_TIER, TIER_DISABLE);
+ 
+@@ -202,6 +221,8 @@ static void qoriq_tmu_init_device(struct qoriq_tmu_data *data)
+ 	} else {
+ 		regmap_write(data->regmap, REGS_V2_TMTMIR, TMTMIR_DEFAULT);
+ 		regmap_write(data->regmap, REGS_V2_TEUMR(0), TEUMR0_V2);
++		for (i = 0; i < SITES_MAX; i++)
++			regmap_write(data->regmap, REGS_V2_TMSAR(i), TMSARA_V2);
+ 	}
+ 
+ 	/* Disable monitoring */
+@@ -212,6 +233,7 @@ static const struct regmap_range qoriq_yes_ranges[] = {
+ 	regmap_reg_range(REGS_TMR, REGS_TSCFGR),
+ 	regmap_reg_range(REGS_TTRnCR(0), REGS_TTRnCR(3)),
+ 	regmap_reg_range(REGS_V2_TEUMR(0), REGS_V2_TEUMR(2)),
++	regmap_reg_range(REGS_V2_TMSAR(0), REGS_V2_TMSAR(15)),
+ 	regmap_reg_range(REGS_IPBRR(0), REGS_IPBRR(1)),
+ 	/* Read only registers below */
+ 	regmap_reg_range(REGS_TRITSR(0), REGS_TRITSR(15)),
+-- 
+2.17.1
+
