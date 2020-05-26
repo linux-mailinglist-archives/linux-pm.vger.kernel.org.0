@@ -2,273 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 563591E27F6
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 19:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019801E2940
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 19:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728523AbgEZRIq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 13:08:46 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:53339 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728546AbgEZRIo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 13:08:44 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1590512922; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=E/TUuzUpjVlMjRqaJlVv+mTsnkBZEql2N8QaKUXAGtk=; b=e8gccUiPCEjm5ua9uSxGG7C1hRvfNmZ4Iwfn9drNYpV5WW/OSwiMzpBFaIhtQamHQ6rPUhrQ
- buzYU4k7vbA9yn2dE+LcQupNKDRcvXNVFSnFdRE6U7Klu7fCGEJPyQI5uRnUVCytSdX66cRh
- 3KAevM9lJ8dSTWOcUj0G8hQ2u+4=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 5ecd4d09809d904967469b2e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 26 May 2020 17:08:25
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 49A03C433C6; Tue, 26 May 2020 17:08:25 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.79.43.230] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BCC43C433C9;
-        Tue, 26 May 2020 17:08:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org BCC43C433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-Subject: Re: [PATCH v8 09/10] dt-bindings: interconnect: Add interconnect-tags
- bindings
-To:     Saravana Kannan <saravanak@google.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Jordan Crouse <jcrouse@codeaurora.org>,
-        Evan Green <evgreen@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20200512125327.1868-1-georgi.djakov@linaro.org>
- <20200512125327.1868-10-georgi.djakov@linaro.org>
- <20200519185836.GA469006@bogus>
- <CAGETcx8+NZYT863ySLf6XvgLBm8PM_4euue2=zbDscgmDFh+7g@mail.gmail.com>
- <3a392629be195fa6bebca18309efffab@codeaurora.org>
- <CAGETcx9a=9pMonfyoNGqkkfaDwJ+=U6OqK1op5UYM2zQbktsXQ@mail.gmail.com>
-From:   Sibi Sankar <sibis@codeaurora.org>
-Message-ID: <7eed4379-618c-46b6-3b3e-2e4c0334bf2e@codeaurora.org>
-Date:   Tue, 26 May 2020 22:38:09 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S2388654AbgEZRmZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 13:42:25 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:41844 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388499AbgEZRmZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 13:42:25 -0400
+Received: by mail-ot1-f67.google.com with SMTP id 63so17016717oto.8;
+        Tue, 26 May 2020 10:42:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SmxTWFXXM8Y+h9jTDITVUIXUE4Zfd86HNcIQXeGrsvg=;
+        b=lZCtJr2r84UqdgbPW+lqqg9NsydVGA70wLSWXVu3D70BjVEedy9OfaIxwH4qKgaRzd
+         eNZ4aeZaoVxdk4yBgK9U8qZHshJ9jIwHYAU/mmG9iavJF/Ug1IIsPpCJeKJTAZprXRQx
+         GytE4bEri7yRY617WiFoMA+Y90Adtd0vSSiI413qdfgHno6Orez+gpnoq8vu1LyS0qhD
+         mZy0VLzLYZxxeBN4sE23QrWzajBfIRcZzxH/4KhIt/GbJH+IOAQ9RJ5Fh+eX8fzLnc2f
+         Y3unTa4xI35mIgmnX2a5JZWEmvL/vAEQqJbtRleY62Ha1S8j+Uq6mRbUUHTWvBc/nymE
+         Uvgg==
+X-Gm-Message-State: AOAM531uyGjw3UUo95m1BI752ooP/UQtVMLc24thDGhZDlAnzTRByXuS
+        1FxzZD+gP6Svj7vFTRyuctnT1bLnUV/ytIoULP4=
+X-Google-Smtp-Source: ABdhPJwFFP4P8gdh3vXJm5dZIVmlwwrvCbfa1hsaT/wQPQI9ONnf3VgoTYFCJk9CkNQheEUgN7QsNloQASq382OXMHQ=
+X-Received: by 2002:a9d:3d05:: with SMTP id a5mr1722231otc.262.1590514943990;
+ Tue, 26 May 2020 10:42:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAGETcx9a=9pMonfyoNGqkkfaDwJ+=U6OqK1op5UYM2zQbktsXQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <3169564.ZRsPWhXyMD@kreacher> <87mu5wre1v.fsf@intel.com>
+ <CAJZ5v0hBiKdDQJjdcuV72+3jCOZPNekmGxdtod-f9Sgwc_7D+g@mail.gmail.com>
+ <87a71vraus.fsf@intel.com> <CAJZ5v0j4EYLej+Xb=huAGTDEH_0mgRShBkjBeib38exmss60Sg@mail.gmail.com>
+ <000801d63375$927946a0$b76bd3e0$@net>
+In-Reply-To: <000801d63375$927946a0$b76bd3e0$@net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 May 2020 19:42:12 +0200
+Message-ID: <CAJZ5v0jSZVGYxQY5pJ89U-XGTwTFciQRuz87a8ekGBDx55WTvw@mail.gmail.com>
+Subject: Re: [RFC/RFT][PATCH] cpufreq: intel_pstate: Work in passive mode with
+ HWP enabled
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Francisco Jerez <francisco.jerez.plata@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 5/21/20 12:43 AM, Saravana Kannan wrote:
-> On Wed, May 20, 2020 at 11:51 AM Sibi Sankar <sibis@codeaurora.org> wrote:
->>
->> On 2020-05-20 01:27, Saravana Kannan wrote:
->>> On Tue, May 19, 2020 at 11:58 AM Rob Herring <robh@kernel.org> wrote:
->>>>
->>>> On Tue, May 12, 2020 at 03:53:26PM +0300, Georgi Djakov wrote:
->>>>> From: Sibi Sankar <sibis@codeaurora.org>
->>>>>
->>>>> Add interconnect-tags bindings to enable passing of optional
->>>>> tag information to the interconnect framework.
->>>>>
->>>>> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
->>>>> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
->>>>> ---
->>>>> v8:
->>>>> * New patch, picked from here:
->>>>>    https://lore.kernel.org/r/20200504202243.5476-10-sibis@codeaurora.org
->>>>>
->>>>>   .../devicetree/bindings/interconnect/interconnect.txt        | 5 +++++
->>>>>   1 file changed, 5 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/interconnect/interconnect.txt b/Documentation/devicetree/bindings/interconnect/interconnect.txt
->>>>> index 6f5d23a605b7..c1a226a934e5 100644
->>>>> --- a/Documentation/devicetree/bindings/interconnect/interconnect.txt
->>>>> +++ b/Documentation/devicetree/bindings/interconnect/interconnect.txt
->>>>> @@ -55,6 +55,11 @@ interconnect-names : List of interconnect path name strings sorted in the same
->>>>>                         * dma-mem: Path from the device to the main memory of
->>>>>                                    the system
->>>>>
->>>>> +interconnect-tags : List of interconnect path tags sorted in the same order as the
->>>>> +                 interconnects property. Consumers can append a specific tag to
->>>>> +                 the path and pass this information to the interconnect framework
->>>>> +                 to do aggregation based on the attached tag.
->>>>
->>>> Why isn't this information in the 'interconnect' arg cells?
->>>>
->>>> We have 'interconnect-names' because strings don't mix with cells. An
->>>> expanding list of 'interconnect-.*' is not a good pattern IMO.
->>
->> Rob,
->> Currently the interconnect paths
->> assume a default tag and only few
->> icc paths require tags that differ
->> from the default ones. Encoding the
->> tags in the interconnect arg cells
->> would force all paths to specify
->> the tags. I guess that's okay.
-> 
-> I think that's the right thing. Those cells are meant to be "args" to
-> the provider.
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi 
-b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-
-index ea4764f06a901..b34f024d4ab63 100644
-
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-
-@@ -132,9 +132,8 @@ &LITTLE_CPU_SLEEP_1
-
-                         capacity-dmips-mhz = <1024>;
-
-                         dynamic-power-coefficient = <100>;
-
-                         operating-points-v2 = <&cpu0_opp_table>;
-
--                       interconnects = <&gem_noc MASTER_APPSS_PROC 
-&mc_virt SLAVE_EBI1>,
-
-+                       interconnects = <&gem_noc MASTER_APPSS_PROC 3 
-&mc_virt SLAVE_EBI1 3>,
-
-                                         <&osm_l3 MASTER_OSM_L3_APPS 
-&osm_l3 SLAVE_OSM_L3>;
-
-                         next-level-cache = <&L2_0>;
-
-                         #cooling-cells = <2>;
-
-                         qcom,freq-domain = <&cpufreq_hw 0>;
-
-
-
-....
-
-                 mc_virt: interconnect@1638000 {
-
-                         compatible = "qcom,sc7180-mc-virt";
-
-                         reg = <0 0x01638000 0 0x1000>;
-
--                       #interconnect-cells = <1>;
-
-+                       #interconnect-cells = <2>;
-
-                         qcom,bcm-voters = <&apps_bcm_voter>;
-
-                 };
-
-....
-
-
-
-@@ -2216,14 +2208,14 @@ system-cache-controller@9200000 {
-
-                 gem_noc: interconnect@9680000 {
-
-                         compatible = "qcom,sc7180-gem-noc";
-
-                         reg = <0 0x09680000 0 0x3e200>;
-
--                       #interconnect-cells = <1>;
-
-+                       #interconnect-cells = <2>;
-
-                         qcom,bcm-voters = <&apps_bcm_voter>;
-
-                 };
-
-....
-
-
-
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-
-index 294e9c58565bb..6a7a785bd90b9 100644
-
---- a/drivers/interconnect/core.c
-
-+++ b/drivers/interconnect/core.c
-
-@@ -340,7 +340,7 @@ static struct icc_node 
-*of_icc_get_from_provider(struct of_phandle_args *spec)
-
-         struct icc_node *node = ERR_PTR(-EPROBE_DEFER);
-
-         struct icc_provider *provider;
-
-
-
--       if (!spec || spec->args_count != 1)
-
-+       if (!spec || spec->args_count < 1)
-
-                 return ERR_PTR(-EINVAL);
-
-
-
-         mutex_lock(&icc_lock);
-
-@@ -469,6 +469,9 @@ struct icc_path *of_icc_get_by_index(struct device 
-*dev, int idx)
-
-                 return ERR_PTR(-ENOMEM);
-
-         }
-
-
-
-+       if (src_args.args_count == 2)
-
-+               icc_set_tag(path, src_args.args[1]);
-
-diff: https://paste.ubuntu.com/p/sRRYhxQjsV/
-
-Saravana/Georgi,
-A few concerns here, I feel tag info as the second arg to the provider
-may not be true for all socs. Does introducing soc specific of_icc_get
-functions make sense?
-
-> 
->>>
->>> Also, is there an example for interconnect-tags that I missed? Is it a
->>> list of strings, numbers, etc?
->>
->> Saravana,
->> https://patchwork.kernel.org/patch/11527589/
->> ^^ is an example of interconnect-tag useage.
-> 
-> If we actually merge interconnect-tags, I think the doc should be
-> updated. Instead of having to grep around.
-> 
-> -Saravana
-> 
-
--- 
-Qualcomm Innovation Center, Inc.
-Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+On Tue, May 26, 2020 at 5:51 PM Doug Smythies <dsmythies@telus.net> wrote:
+>
+> On 2020.05.26 01:19 Rafael J. Wysocki wrote:
+> >  to On Mon, May 25, 2020 at 10:57 PM Francisco Jerez
+> > > "Rafael J. Wysocki" <rafael@kernel.org> writes:
+> > > > On Mon, May 25, 2020 at 3:39 AM Francisco Jerez
+> > >
+> > > Why not HWP_MIN_PERF?  That would leave the HWP quite some room for
+> > > maneuvering (the whole HWP_MIN_PERF-HWP_MAX_PERF P-state range, it's not
+> > > like P-state selection would be entirely driven by the kernel), while
+> > > avoiding every failure scenario I was describing in my previous reply.
+>
+> I have re-done my tests.
+> The problem that I observe seems specific to hwp itself
+> and not this patch and it's use in passive mode.
+> I see the exact same thing with intel_pstate/powersave.
+> [1] detail A.
+>
+>
+> Test: still simple single threaded load sweep,
+> at 347 hertz work/sleep frequency.
+> What do I see?
+>
+> Unexpected frequency drops at around 70% load.
+> Example, from trace:
+>
+> First, the thing has been going for awhile at 4.8 GHz.
+>
+> Old epp ; new epp ; freq GHz; load % ; duration mS
+> 80        ; 82      ; 4.57    ; 61.94  ; 20.001
+> 82      ; 80    ; 4.57    ; 62.47  ; 40.003
+> 80      ; 44      ; 3.73    ;   68.63  ; 62.009  <<<< What? Why freq down? Why long duration?
+> 44      ;  0      ; 1.96    ; 100.23 ; 19.995  <<<< Even lower freq. load overruns.
+>  0      ; 73      ; 4.56    ; 82.93  ; 40.07   <<<< O.K. recovered, but damage done.
+> 73      ; 46      ; 2.36    ;   79.19  ; 20.94   <<< now things oscillate a little.
+> 46      ; 0       ; 1.9884  ;   100.24 ; 20.99
+>  0      ; 75      ; 4.5624  ;   82.1   ; 41.002  <<< Event ends. Next event in 487 milliseconds.
+>
+> Observation: Events are often, but not always, preceded by a longer than normal duration.
+> However, long durations are also not out of the ordinary in passive mode.
+>
+> And yes, the above trace was with DELAY_HWP 20,000, but I do have trace examples
+> with it at 5,000. This was just a particularly good example.
+>
+> Observation (from looking at a lot of trace data): There are phase delays
+> between the two systems, intel_cpufreq and hwp, and sometimes they seem to
+> oscillate a little and fight each other. There maybe some problematic
+> work/sleep frequencies where the oscillation builds into a full blown
+> resonance.
+>
+> Why does hwp drop the frequency?
+>
+> This system is otherwise fairly idle,
+> so maybe because the pll drops down during the non work periods.
+>
+> Maybe HWP thinks the system is idle and drops the frequency.
+> I can eliminate the overruns by disabling deep idle states such
+> that the PLL vote is never relinquished, but it's not a fair test.
+>
+> Note that the above response can be "tuned".
+> If we take the conversation algorithm from target frequency to EPP
+> and introduce and offset, the above can be improved.
+>
+> At what cost? More sluggishness, for a large positive offset.
+> So, the overruns just move from the steady state side of the task to
+> when the task starts. I did not find if there is a "sweet spot"
+> between offset and system response, and I do not think there is value
+> added in trying.
+>
+> Note: With original settings, I rarely observe a problem with the step
+> function response to a new task.
+>
+> >
+> > Actually, I have been thinking about the HWP min as an alternative
+> > that may be worth evaluating.
+> >
+> > However, I would rather set the HWP min to something like 80% if the
+> > cpufreq request.
+>
+> Yes, this is a good idea and should not suffer from the two servo systems
+> fighting each other.
+
+OK, thanks for the feedback!
+
+I am about to post this patch.
+
+> I got 0 overruns, verses 2240 overruns with no min limitation (100 second test).
+>
+> As for INTEL_CPUFREQ_TRANSITION_DELAY_HWP, I'll probably use
+> 10 milliseconds moving forward, because that is what I am most
+> familiar with from years ago work on the this driver. But, I did
+> not observe any issue with 5 milliseconds.
+
+I'm going to use INTEL_CPUFREQ_TRANSITION_DELAY_HWP in the new patch
+for now then.
+
+> [1] http://www.smythies.com/~doug/linux/intel_pstate/passive-hwp/passive-hwp-but-active-powersave.png
+
+Thanks!
