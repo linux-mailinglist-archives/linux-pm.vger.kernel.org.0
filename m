@@ -2,282 +2,428 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BEB1E1D1C
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 10:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F7A1E1D3A
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 10:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730341AbgEZITf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 04:19:35 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:41917 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726926AbgEZITf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 04:19:35 -0400
-Received: by mail-ot1-f67.google.com with SMTP id 63so15606273oto.8;
-        Tue, 26 May 2020 01:19:34 -0700 (PDT)
+        id S1731491AbgEZIYx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 04:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731394AbgEZIYx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 04:24:53 -0400
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6ABC08C5C0
+        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 01:24:53 -0700 (PDT)
+Received: by mail-ua1-x941.google.com with SMTP id k3so6934743ual.8
+        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 01:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oSi+AtdhRmnPFfjArA39Nl6kTxOyVsgzR4xACr8nKSQ=;
+        b=ifubUX9hVVvApdJ8/P5VSmZ8GCfF2AbdnugRMizG275kA6TAh8E/ju+Wf3jsn7UarL
+         QK4MCRYHb4Rc/DhSpiedJqq2wScXnH4gBvp+szJUGRfiDLuol9krf/dd4pqwXui4EPWg
+         NWo3rkuVz5nv9HAM09x51pn4ZyPbD26lZOdjqphCohbsRLqV8gCyA2zhxpp5Z1LFN8EH
+         iLtOMrPdiVzvu9pEEpS1pqKVh/xlY4BYZU+RH8njyLbFgVHQBDUMbKcVR+xkfvjAFG3M
+         w8gycwaEAG94yYPHLBEKgjS1d8AvKzgSLLh3c1nDZSxmi+V0121e8Gth+KqlnCAL9aHA
+         j3Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KsvQXeXpFRPNar5wQqzlPMtmhRYyKZVsuupY3jGdM1E=;
-        b=QLUi9LjCShLQP3J/tKOvkuSW7pRQPUpfxZ1oczHkI7rmgU7aE6aLqBHkZexQTn5dkr
-         2jDS8OP/gihyO6pWLKoGjajwXplGAKLV7Z/YAe2i0W3yGRvK9V/3uRqccpQUrRj8Srm0
-         KKCW7woSzoP0HpnQZC/9agcVgt6OrU2x0Zw0zttcxFtE516jv1TufIqtHgkn8f2Pk9h9
-         2w1Hlf4sceXnDm8YYCdj/iELJLCnleiigfx3hkfuuUIla+uk4kZtSfZw/RGl3eCmT94a
-         vYeuuX39+Ces5UGRsW04RX0D8O4HRf7lUul97fvfJL1NDQQNVTDAeE6GOgpOEN7ZVf7f
-         OZcQ==
-X-Gm-Message-State: AOAM532umeZCwfVWi0vDKge4MkFHDFXqSHc8oAzfxzQcXDvPaz5tpDig
-        WmOKGsTNzO8HTfHnCeGvdktMoqfy1NlYNBN+GNo=
-X-Google-Smtp-Source: ABdhPJz91c3R5cD6QHE0e4JfDdOdZaa6g2vXS3BZTtKAxHVTomXeIVwcab2P4mjhewzXMeomqVg/ZWaEHBF+6ozcEcM=
-X-Received: by 2002:a9d:4713:: with SMTP id a19mr36157otf.167.1590481173929;
- Tue, 26 May 2020 01:19:33 -0700 (PDT)
+        bh=oSi+AtdhRmnPFfjArA39Nl6kTxOyVsgzR4xACr8nKSQ=;
+        b=t/KGjKiyyl5Z5gYDkK51EBefwg/eGQzLdHB96Kfhc4EbGUxstK4tHN/fk4PqEgv7Gl
+         8Us9AdxzFgqMOeckbJe9iPXJakcjxSpUtLmEneksp4h8dU8Uf2TFvFquNg+F2n/WWidi
+         zEx051WXl3XuPsGAtYOzOknC1cnHIz0UvRuLWzYYZ1JOxE12qFfW3it+4R8/Ns2WvACW
+         Z1N+HQXnEoLFEDxNppw57KFbkhKb0U3Vwq1HJ7v0/OaageWsRypCJCuYagOgWO42ours
+         SpnQECb/F8Pwt2KLyO8PhhHblt+T41lNnZIK1jGRkAj0Tmm1Q5iu6uyJPUVFQAng1Dtb
+         zpZA==
+X-Gm-Message-State: AOAM532geolmSeaTQix6WvDfWcUL2M4Bo8aQNPWY3lBgmQx0eHeNqgEC
+        dfIhkmy0YvR22F9Sd6DxI+PqTliDh4mToGIp03Kohg==
+X-Google-Smtp-Source: ABdhPJxgHZ4GquHP8yPjUoYR2rthkm3MhzcX6EG3uVb2Gqk13LYahLNrX0BpRmYUilySI9i2svk4UlqS6Kovqyqyxbo=
+X-Received: by 2002:a9f:3701:: with SMTP id z1mr11512517uad.100.1590481491900;
+ Tue, 26 May 2020 01:24:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <3169564.ZRsPWhXyMD@kreacher> <87mu5wre1v.fsf@intel.com>
- <CAJZ5v0hBiKdDQJjdcuV72+3jCOZPNekmGxdtod-f9Sgwc_7D+g@mail.gmail.com> <87a71vraus.fsf@intel.com>
-In-Reply-To: <87a71vraus.fsf@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 May 2020 10:19:21 +0200
-Message-ID: <CAJZ5v0j4EYLej+Xb=huAGTDEH_0mgRShBkjBeib38exmss60Sg@mail.gmail.com>
-Subject: Re: [RFC/RFT][PATCH] cpufreq: intel_pstate: Work in passive mode with
- HWP enabled
-To:     Francisco Jerez <francisco.jerez.plata@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Doug Smythies <dsmythies@telus.net>
+References: <20200416085821.108778-1-stephan@gerhold.net>
+In-Reply-To: <20200416085821.108778-1-stephan@gerhold.net>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 26 May 2020 10:24:15 +0200
+Message-ID: <CAPDyKFq0qFjS_VB7okPdXzc0DfWf8saNax7ZsuxeUWB6svRnhQ@mail.gmail.com>
+Subject: Re: [PATCH v2] cpuidle: Convert Qualcomm SPM driver to a generic
+ CPUidle driver
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, Luca Weiss <luca@z3ntu.xyz>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
- to On Mon, May 25, 2020 at 10:57 PM Francisco Jerez
-<francisco.jerez.plata@intel.com> wrote:
+On Thu, 16 Apr 2020 at 10:59, Stephan Gerhold <stephan@gerhold.net> wrote:
 >
-> "Rafael J. Wysocki" <rafael@kernel.org> writes:
+> The Qualcomm SPM cpuidle driver seems to be the last driver still
+> using the generic ARM CPUidle infrastructure.
 >
-> > On Mon, May 25, 2020 at 3:39 AM Francisco Jerez
-> > <francisco.jerez.plata@intel.com> wrote:
-> >>
-> >> "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
-> >>
-> >> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >> >
-> >> > Allow intel_pstate to work in the passive mode with HWP enabled and
-> >> > make it translate the target frequency supplied by the cpufreq
-> >> > governor in use into an EPP value to be written to the HWP request
-> >> > MSR (high frequencies are mapped to low EPP values that mean more
-> >> > performance-oriented HWP operation) as a hint for the HWP algorithm
-> >> > in the processor, so as to prevent it and the CPU scheduler from
-> >> > working against each other at least when the schedutil governor is
-> >> > in use.
-> >> >
-> >> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >> > ---
-> >> >
-> >> > This is a prototype not intended for production use (based on linux-next).
-> >> >
-> >> > Please test it if you can (on HWP systems, of course) and let me know the
-> >> > results.
-> >> >
-> >> > The INTEL_CPUFREQ_TRANSITION_DELAY_HWP value has been guessed and it very well
-> >> > may turn out to be either too high or too low for the general use, which is one
-> >> > reason why getting as much testing coverage as possible is key here.
-> >> >
-> >> > If you can play with different INTEL_CPUFREQ_TRANSITION_DELAY_HWP values,
-> >> > please do so and let me know the conclusions.
-> >> >
-> >> > Cheers,
-> >> > Rafael
-> >> >
-> >> > ---
-> >> >  drivers/cpufreq/intel_pstate.c |  169 +++++++++++++++++++++++++++++++----------
-> >> >  1 file changed, 131 insertions(+), 38 deletions(-)
-> >> >
-> >> > Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> >> > ===================================================================
-> >> > --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> >> > +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> >> > @@ -36,6 +36,7 @@
-> >> >  #define INTEL_PSTATE_SAMPLING_INTERVAL       (10 * NSEC_PER_MSEC)
-> >> >
-> >> >  #define INTEL_CPUFREQ_TRANSITION_LATENCY     20000
-> >> > +#define INTEL_CPUFREQ_TRANSITION_DELAY_HWP   5000
-> >> >  #define INTEL_CPUFREQ_TRANSITION_DELAY               500
-> >> >
-> >> >  #ifdef CONFIG_ACPI
-> >> > @@ -95,6 +96,8 @@ static inline int32_t percent_ext_fp(int
-> >> >       return div_ext_fp(percent, 100);
-> >> >  }
-> >> >
-> >> > +#define HWP_EPP_TO_BYTE(x)   (((u64)x >> 24) & 0xFF)
-> >> > +
-> >> >  /**
-> >> >   * struct sample -   Store performance sample
-> >> >   * @core_avg_perf:   Ratio of APERF/MPERF which is the actual average
-> >> > @@ -2175,7 +2178,10 @@ static int intel_pstate_verify_policy(st
-> >> >
-> >> >  static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
-> >> >  {
-> >> > -     intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
-> >> > +     if (hwp_active)
-> >> > +             intel_pstate_hwp_force_min_perf(policy->cpu);
-> >> > +     else
-> >> > +             intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
-> >> >  }
-> >> >
-> >> >  static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
-> >> > @@ -2183,12 +2189,10 @@ static void intel_pstate_stop_cpu(struct
-> >> >       pr_debug("CPU %d exiting\n", policy->cpu);
-> >> >
-> >> >       intel_pstate_clear_update_util_hook(policy->cpu);
-> >> > -     if (hwp_active) {
-> >> > +     if (hwp_active)
-> >> >               intel_pstate_hwp_save_state(policy);
-> >> > -             intel_pstate_hwp_force_min_perf(policy->cpu);
-> >> > -     } else {
-> >> > -             intel_cpufreq_stop_cpu(policy);
-> >> > -     }
-> >> > +
-> >> > +     intel_cpufreq_stop_cpu(policy);
-> >> >  }
-> >> >
-> >> >  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
-> >> > @@ -2296,7 +2300,8 @@ static int intel_cpufreq_verify_policy(s
-> >> >  #define      INTEL_PSTATE_TRACE_TARGET 10
-> >> >  #define      INTEL_PSTATE_TRACE_FAST_SWITCH 90
-> >> >
-> >> > -static void intel_cpufreq_trace(struct cpudata *cpu, unsigned int trace_type, int old_pstate)
-> >> > +static void intel_cpufreq_trace(struct cpudata *cpu, unsigned int trace_type,
-> >> > +                             int from, int to)
-> >> >  {
-> >> >       struct sample *sample;
-> >> >
-> >> > @@ -2309,8 +2314,8 @@ static void intel_cpufreq_trace(struct c
-> >> >       sample = &cpu->sample;
-> >> >       trace_pstate_sample(trace_type,
-> >> >               0,
-> >> > -             old_pstate,
-> >> > -             cpu->pstate.current_pstate,
-> >> > +             from,
-> >> > +             to,
-> >> >               sample->mperf,
-> >> >               sample->aperf,
-> >> >               sample->tsc,
-> >> > @@ -2318,40 +2323,110 @@ static void intel_cpufreq_trace(struct c
-> >> >               fp_toint(cpu->iowait_boost * 100));
-> >> >  }
-> >> >
-> >> > -static int intel_cpufreq_target(struct cpufreq_policy *policy,
-> >> > -                             unsigned int target_freq,
-> >> > -                             unsigned int relation)
-> >> > +static void intel_cpufreq_update_hwp_request(struct cpudata *cpu, u8 new_epp)
-> >> >  {
-> >> > -     struct cpudata *cpu = all_cpu_data[policy->cpu];
-> >> > -     struct cpufreq_freqs freqs;
-> >> > -     int target_pstate, old_pstate;
-> >> > +     u64 value, prev;
-> >> >
-> >> > -     update_turbo_state();
-> >> > +     prev = READ_ONCE(cpu->hwp_req_cached);
-> >> > +     value = prev;
-> >> >
-> >> > -     freqs.old = policy->cur;
-> >> > -     freqs.new = target_freq;
-> >> > +     /*
-> >> > +      * The entire MSR needs to be updated in order to update the EPP field
-> >> > +      * in it, so opportunistically update the min and max too if needed.
-> >> > +      */
-> >> > +     value &= ~HWP_MIN_PERF(~0L);
-> >> > +     value |= HWP_MIN_PERF(cpu->min_perf_ratio);
-> >> > +
-> >> > +     value &= ~HWP_MAX_PERF(~0L);
-> >> > +     value |= HWP_MAX_PERF(cpu->max_perf_ratio);
-> >> > +
-> >> > +     if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
-> >> > +             intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_TARGET,
-> >> > +                                 HWP_EPP_TO_BYTE(prev), new_epp);
-> >> > +
-> >> > +             value &= ~GENMASK_ULL(31, 24);
-> >> > +             value |= HWP_ENERGY_PERF_PREFERENCE(new_epp);
-> >> > +     }
-> >> > +
-> >> > +     if (value != prev) {
-> >> > +             WRITE_ONCE(cpu->hwp_req_cached, value);
-> >> > +             wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, value);
-> >> > +     }
-> >> > +}
-> >> > +
-> >> > +/**
-> >> > + * intel_cpufreq_adjust_hwp_request - Adjust the HWP reuqest register.
-> >> > + * @cpu: Target CPU.
-> >> > + * @max_freq: Maximum frequency to consider.
-> >> > + * @target_freq: Target frequency selected by the governor.
-> >> > + *
-> >> > + * Translate the target frequency into a new EPP value to be written into the
-> >> > + * HWP request MSR of @cpu as a hint for the HW-driven P-state selection.
-> >> > + *
-> >> > + * The purpose of this is to avoid situations in which the kernel and the HWP
-> >> > + * algorithm work against each other by giving a hint about the expectations of
-> >> > + * the former to the latter.
-> >> > + *
-> >> > + * The mapping betweeen the target frequencies and the hint values need not be
-> >> > + * exact, but it must be monotonic, so that higher target frequencies always
-> >> > + * indicate more performance-oriented P-state selection.
-> >> > + */
-> >> > +static void intel_cpufreq_adjust_hwp_request(struct cpudata *cpu, s64 max_freq,
-> >> > +                                          unsigned int target_freq)
-> >> > +{
-> >> > +     s64 epp_fp = div_fp(255 * (max_freq - target_freq), max_freq);
-> >> > +
-> >> > +     intel_cpufreq_update_hwp_request(cpu, fp_toint(epp_fp));
-> >> > +}
-> >> > +
-> >>
-> >> Hey Rafael, I'm building a kernel with this in order to give it a try on
-> >> my system, but I'm skeptical that translating the target frequency to an
-> >> EPP value will work reliably.  AFAIA the EPP value only has an indirect
-> >> influence on the processor's performance by adjusting the trade-off
-> >> between its responsiveness (rather than the actual clock frequency which
-> >> it will sustain in the long run) and its energy usage, in a largely
-> >> unspecified and non-linear way (non-linear like the effect of switching
-> >> CPU energy optimization features on and off, or like its effect on the
-> >> energy balancing behavior of the processor which can have a paradoxical
-> >> effect on performance).
-> >>
-> >> I doubt that the scheduling-based CPU utilization is a good predictor
-> >> for the optimal trade-off between those two variables.
-> >
-> > While I agree that this is not perfect, there barely is anything else
-> > that can be used for this purpose.
-> >
-> > Using the desired field or trying to adjust the limits relatively
-> > often would basically cause the P-state selection to be driven
-> > entirely by the kernel which simply doesn't know certain things only
-> > known to the P-unit, so it is reasonable to leave some level of
-> > control to the latter, so as to allow it to use the information known
-> > to it only.
-> >
-> > However, if it is allowed to do whatever it likes without any hints
-> > from the kernel, it may very well go against the scheduler's decisions
-> > which is not going to be optimal.
-> >
-> > I'm simply not sure if there is any other way to give such hints to it
-> > that through the EPP.
-> >
+> Converting it actually allows us to simplify the driver,
+> and we end up being able to remove more lines than adding new ones:
 >
-> Why not HWP_MIN_PERF?  That would leave the HWP quite some room for
-> maneuvering (the whole HWP_MIN_PERF-HWP_MAX_PERF P-state range, it's not
-> like P-state selection would be entirely driven by the kernel), while
-> avoiding every failure scenario I was describing in my previous reply.
+>   - We can parse the CPUidle states in the device tree directly
+>     with dt_idle_states (and don't need to duplicate that
+>     functionality into the spm driver).
+>
+>   - Each "saw" device managed by the SPM driver now directly
+>     registers its own cpuidle driver, removing the need for
+>     any global (per cpu) state.
+>
+> The device tree binding is the same, so the driver stays
+> compatible with all old device trees.
+>
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 
-Actually, I have been thinking about the HWP min as an alternative
-that may be worth evaluating.
+Rafael, I think we all believed that you were intending to pick this
+up. Is there anything additional you need to make that happen?
 
-However, I would rather set the HWP min to something like 80% if the
-cpufreq request.
+FYI, this allows further cleanup to be made on the ARM cpuidle code.
+Both in arch and cpuidle code.
 
-Let me cut an alternative patch.
+Kind regards
+Uffe
+
+> ---
+> Related change for the PSCI cpuidle driver:
+>   https://lore.kernel.org/linux-pm/cover.1565348376.git.lorenzo.pieralisi@arm.com/
+> (converting the QCOM SPM driver was mentioned there)
+>
+> Changes in v2:
+>   - Rebase on top of linux-next, fix conflicts
+>     (Apparently sending shortly before the end of the merge window
+>      was a bad idea... ;) )
+>
+> v1: https://lore.kernel.org/linux-arm-msm/20200405162052.53622-1-stephan@gerhold.net/
+> ---
+>  MAINTAINERS                                   |   1 +
+>  drivers/cpuidle/Kconfig.arm                   |  13 ++
+>  drivers/cpuidle/Makefile                      |   1 +
+>  .../qcom/spm.c => cpuidle/cpuidle-qcom-spm.c} | 138 +++++++-----------
+>  drivers/soc/qcom/Kconfig                      |  10 --
+>  drivers/soc/qcom/Makefile                     |   1 -
+>  6 files changed, 67 insertions(+), 97 deletions(-)
+>  rename drivers/{soc/qcom/spm.c => cpuidle/cpuidle-qcom-spm.c} (75%)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e64e5db31497..2fd05a6835a6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2223,6 +2223,7 @@ F:        drivers/*/qcom*
+>  F:     drivers/*/qcom/
+>  F:     drivers/bluetooth/btqcomsmd.c
+>  F:     drivers/clocksource/timer-qcom.c
+> +F:     drivers/cpuidle/cpuidle-qcom-spm.c
+>  F:     drivers/extcon/extcon-qcom*
+>  F:     drivers/i2c/busses/i2c-qcom-geni.c
+>  F:     drivers/i2c/busses/i2c-qup.c
+> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+> index 99a2d72ac02b..51a7e89085c0 100644
+> --- a/drivers/cpuidle/Kconfig.arm
+> +++ b/drivers/cpuidle/Kconfig.arm
+> @@ -94,3 +94,16 @@ config ARM_TEGRA_CPUIDLE
+>         select ARM_CPU_SUSPEND
+>         help
+>           Select this to enable cpuidle for NVIDIA Tegra20/30/114/124 SoCs.
+> +
+> +config ARM_QCOM_SPM_CPUIDLE
+> +       bool "CPU Idle Driver for Qualcomm Subsystem Power Manager (SPM)"
+> +       depends on (ARCH_QCOM || COMPILE_TEST) && !ARM64
+> +       select ARM_CPU_SUSPEND
+> +       select CPU_IDLE_MULTIPLE_DRIVERS
+> +       select DT_IDLE_STATES
+> +       select QCOM_SCM
+> +       help
+> +         Select this to enable cpuidle for Qualcomm processors.
+> +         The Subsystem Power Manager (SPM) controls low power modes for the
+> +         CPU and L2 cores. It interface with various system drivers to put
+> +         the cores in low power modes.
+> diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
+> index 55a464f6a78b..f07800cbb43f 100644
+> --- a/drivers/cpuidle/Makefile
+> +++ b/drivers/cpuidle/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_ARM_PSCI_CPUIDLE)                += cpuidle_psci.o
+>  cpuidle_psci-y                         := cpuidle-psci.o
+>  cpuidle_psci-$(CONFIG_PM_GENERIC_DOMAINS_OF) += cpuidle-psci-domain.o
+>  obj-$(CONFIG_ARM_TEGRA_CPUIDLE)                += cpuidle-tegra.o
+> +obj-$(CONFIG_ARM_QCOM_SPM_CPUIDLE)     += cpuidle-qcom-spm.o
+>
+>  ###############################################################################
+>  # MIPS drivers
+> diff --git a/drivers/soc/qcom/spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
+> similarity index 75%
+> rename from drivers/soc/qcom/spm.c
+> rename to drivers/cpuidle/cpuidle-qcom-spm.c
+> index 8e10e02c6aa5..adf91a6e4d7d 100644
+> --- a/drivers/soc/qcom/spm.c
+> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+> @@ -19,10 +19,11 @@
+>  #include <linux/cpu_pm.h>
+>  #include <linux/qcom_scm.h>
+>
+> -#include <asm/cpuidle.h>
+>  #include <asm/proc-fns.h>
+>  #include <asm/suspend.h>
+>
+> +#include "dt_idle_states.h"
+> +
+>  #define MAX_PMIC_DATA          2
+>  #define MAX_SEQ_DATA           64
+>  #define SPM_CTL_INDEX          0x7f
+> @@ -62,6 +63,7 @@ struct spm_reg_data {
+>  };
+>
+>  struct spm_driver_data {
+> +       struct cpuidle_driver cpuidle_driver;
+>         void __iomem *reg_base;
+>         const struct spm_reg_data *reg_data;
+>  };
+> @@ -107,11 +109,6 @@ static const struct spm_reg_data spm_reg_8064_cpu = {
+>         .start_index[PM_SLEEP_MODE_SPC] = 2,
+>  };
+>
+> -static DEFINE_PER_CPU(struct spm_driver_data *, cpu_spm_drv);
+> -
+> -typedef int (*idle_fn)(void);
+> -static DEFINE_PER_CPU(idle_fn*, qcom_idle_ops);
+> -
+>  static inline void spm_register_write(struct spm_driver_data *drv,
+>                                         enum spm_reg reg, u32 val)
+>  {
+> @@ -172,10 +169,9 @@ static int qcom_pm_collapse(unsigned long int unused)
+>         return -1;
+>  }
+>
+> -static int qcom_cpu_spc(void)
+> +static int qcom_cpu_spc(struct spm_driver_data *drv)
+>  {
+>         int ret;
+> -       struct spm_driver_data *drv = __this_cpu_read(cpu_spm_drv);
+>
+>         spm_set_low_power_mode(drv, PM_SLEEP_MODE_SPC);
+>         ret = cpu_suspend(0, qcom_pm_collapse);
+> @@ -190,94 +186,49 @@ static int qcom_cpu_spc(void)
+>         return ret;
+>  }
+>
+> -static int qcom_idle_enter(unsigned long index)
+> +static int spm_enter_idle_state(struct cpuidle_device *dev,
+> +                               struct cpuidle_driver *drv, int idx)
+>  {
+> -       return __this_cpu_read(qcom_idle_ops)[index]();
+> +       struct spm_driver_data *data = container_of(drv, struct spm_driver_data,
+> +                                                   cpuidle_driver);
+> +
+> +       return CPU_PM_CPU_IDLE_ENTER_PARAM(qcom_cpu_spc, idx, data);
+>  }
+>
+> -static const struct of_device_id qcom_idle_state_match[] __initconst = {
+> -       { .compatible = "qcom,idle-state-spc", .data = qcom_cpu_spc },
+> +static struct cpuidle_driver qcom_spm_idle_driver = {
+> +       .name = "qcom_spm",
+> +       .owner = THIS_MODULE,
+> +       .states[0] = {
+> +               .enter                  = spm_enter_idle_state,
+> +               .exit_latency           = 1,
+> +               .target_residency       = 1,
+> +               .power_usage            = UINT_MAX,
+> +               .name                   = "WFI",
+> +               .desc                   = "ARM WFI",
+> +       }
+> +};
+> +
+> +static const struct of_device_id qcom_idle_state_match[] = {
+> +       { .compatible = "qcom,idle-state-spc", .data = spm_enter_idle_state },
+>         { },
+>  };
+>
+> -static int __init qcom_cpuidle_init(struct device_node *cpu_node, int cpu)
+> +static int spm_cpuidle_init(struct cpuidle_driver *drv, int cpu)
+>  {
+> -       const struct of_device_id *match_id;
+> -       struct device_node *state_node;
+> -       int i;
+> -       int state_count = 1;
+> -       idle_fn idle_fns[CPUIDLE_STATE_MAX];
+> -       idle_fn *fns;
+> -       cpumask_t mask;
+> -       bool use_scm_power_down = false;
+> -
+> -       if (!qcom_scm_is_available())
+> -               return -EPROBE_DEFER;
+> -
+> -       for (i = 0; ; i++) {
+> -               state_node = of_parse_phandle(cpu_node, "cpu-idle-states", i);
+> -               if (!state_node)
+> -                       break;
+> -
+> -               if (!of_device_is_available(state_node))
+> -                       continue;
+> -
+> -               if (i == CPUIDLE_STATE_MAX) {
+> -                       pr_warn("%s: cpuidle states reached max possible\n",
+> -                                       __func__);
+> -                       break;
+> -               }
+> -
+> -               match_id = of_match_node(qcom_idle_state_match, state_node);
+> -               if (!match_id)
+> -                       return -ENODEV;
+> -
+> -               idle_fns[state_count] = match_id->data;
+> -
+> -               /* Check if any of the states allow power down */
+> -               if (match_id->data == qcom_cpu_spc)
+> -                       use_scm_power_down = true;
+> -
+> -               state_count++;
+> -       }
+> -
+> -       if (state_count == 1)
+> -               goto check_spm;
+> -
+> -       fns = devm_kcalloc(get_cpu_device(cpu), state_count, sizeof(*fns),
+> -                       GFP_KERNEL);
+> -       if (!fns)
+> -               return -ENOMEM;
+> -
+> -       for (i = 1; i < state_count; i++)
+> -               fns[i] = idle_fns[i];
+> +       int ret;
+>
+> -       if (use_scm_power_down) {
+> -               /* We have atleast one power down mode */
+> -               cpumask_clear(&mask);
+> -               cpumask_set_cpu(cpu, &mask);
+> -               qcom_scm_set_warm_boot_addr(cpu_resume_arm, &mask);
+> -       }
+> +       memcpy(drv, &qcom_spm_idle_driver, sizeof(*drv));
+> +       drv->cpumask = (struct cpumask *)cpumask_of(cpu);
+>
+> -       per_cpu(qcom_idle_ops, cpu) = fns;
+> +       /* Parse idle states from device tree */
+> +       ret = dt_init_idle_driver(drv, qcom_idle_state_match, 1);
+> +       if (ret <= 0)
+> +               return ret ? : -ENODEV;
+>
+> -       /*
+> -        * SPM probe for the cpu should have happened by now, if the
+> -        * SPM device does not exist, return -ENXIO to indicate that the
+> -        * cpu does not support idle states.
+> -        */
+> -check_spm:
+> -       return per_cpu(cpu_spm_drv, cpu) ? 0 : -ENXIO;
+> +       /* We have atleast one power down mode */
+> +       return qcom_scm_set_warm_boot_addr(cpu_resume_arm, drv->cpumask);
+>  }
+>
+> -static const struct cpuidle_ops qcom_cpuidle_ops __initconst = {
+> -       .suspend = qcom_idle_enter,
+> -       .init = qcom_cpuidle_init,
+> -};
+> -
+> -CPUIDLE_METHOD_OF_DECLARE(qcom_idle_v1, "qcom,kpss-acc-v1", &qcom_cpuidle_ops);
+> -CPUIDLE_METHOD_OF_DECLARE(qcom_idle_v2, "qcom,kpss-acc-v2", &qcom_cpuidle_ops);
+> -
+>  static struct spm_driver_data *spm_get_drv(struct platform_device *pdev,
+>                 int *spm_cpu)
+>  {
+> @@ -323,11 +274,15 @@ static int spm_dev_probe(struct platform_device *pdev)
+>         struct resource *res;
+>         const struct of_device_id *match_id;
+>         void __iomem *addr;
+> -       int cpu;
+> +       int cpu, ret;
+> +
+> +       if (!qcom_scm_is_available())
+> +               return -EPROBE_DEFER;
+>
+>         drv = spm_get_drv(pdev, &cpu);
+>         if (!drv)
+>                 return -EINVAL;
+> +       platform_set_drvdata(pdev, drv);
+>
+>         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>         drv->reg_base = devm_ioremap_resource(&pdev->dev, res);
+> @@ -340,6 +295,10 @@ static int spm_dev_probe(struct platform_device *pdev)
+>
+>         drv->reg_data = match_id->data;
+>
+> +       ret = spm_cpuidle_init(&drv->cpuidle_driver, cpu);
+> +       if (ret)
+> +               return ret;
+> +
+>         /* Write the SPM sequences first.. */
+>         addr = drv->reg_base + drv->reg_data->reg_offset[SPM_REG_SEQ_ENTRY];
+>         __iowrite32_copy(addr, drv->reg_data->seq,
+> @@ -362,13 +321,20 @@ static int spm_dev_probe(struct platform_device *pdev)
+>         /* Set up Standby as the default low power mode */
+>         spm_set_low_power_mode(drv, PM_SLEEP_MODE_STBY);
+>
+> -       per_cpu(cpu_spm_drv, cpu) = drv;
+> +       return cpuidle_register(&drv->cpuidle_driver, NULL);
+> +}
+> +
+> +static int spm_dev_remove(struct platform_device *pdev)
+> +{
+> +       struct spm_driver_data *drv = platform_get_drvdata(pdev);
+>
+> +       cpuidle_unregister(&drv->cpuidle_driver);
+>         return 0;
+>  }
+>
+>  static struct platform_driver spm_driver = {
+>         .probe = spm_dev_probe,
+> +       .remove = spm_dev_remove,
+>         .driver = {
+>                 .name = "saw",
+>                 .of_match_table = spm_match_table,
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index bf42a17a45de..285baa7e474e 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -80,16 +80,6 @@ config QCOM_PDR_HELPERS
+>         tristate
+>         select QCOM_QMI_HELPERS
+>
+> -config QCOM_PM
+> -       bool "Qualcomm Power Management"
+> -       depends on ARCH_QCOM && !ARM64
+> -       select ARM_CPU_SUSPEND
+> -       select QCOM_SCM
+> -       help
+> -         QCOM Platform specific power driver to manage cores and L2 low power
+> -         modes. It interface with various system drivers to put the cores in
+> -         low power modes.
+> -
+>  config QCOM_QMI_HELPERS
+>         tristate
+>         depends on NET
+> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+> index 5d6b83dc58e8..92cc4232d72c 100644
+> --- a/drivers/soc/qcom/Makefile
+> +++ b/drivers/soc/qcom/Makefile
+> @@ -8,7 +8,6 @@ obj-$(CONFIG_QCOM_GSBI) +=      qcom_gsbi.o
+>  obj-$(CONFIG_QCOM_MDT_LOADER)  += mdt_loader.o
+>  obj-$(CONFIG_QCOM_OCMEM)       += ocmem.o
+>  obj-$(CONFIG_QCOM_PDR_HELPERS) += pdr_interface.o
+> -obj-$(CONFIG_QCOM_PM)  +=      spm.o
+>  obj-$(CONFIG_QCOM_QMI_HELPERS) += qmi_helpers.o
+>  qmi_helpers-y  += qmi_encdec.o qmi_interface.o
+>  obj-$(CONFIG_QCOM_RMTFS_MEM)   += rmtfs_mem.o
+> --
+> 2.26.1
+>
