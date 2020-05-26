@@ -2,62 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D1A1E2367
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 15:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994DC1E2366
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 15:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728151AbgEZNwT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1728061AbgEZNwT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 26 May 2020 09:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
         with ESMTP id S1726930AbgEZNwT (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 09:52:19 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F7CC03E96D
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F2DC03E96D
         for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 06:52:19 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id v63so10197453pfb.10
+Received: by mail-pl1-x644.google.com with SMTP id i17so209001pli.13
         for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 06:52:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=CKE5O2KYei1qGcIAaZy5r9oGg8jUlkng0vug4owpBhs=;
-        b=1jyZjxgrMlFU4Z/ZgjixXfHtmyP3tYWWv0cfOwpcV3WDr3BHVNMoOhcy5PMk/dJdA0
-         2w842fqC9F1xNFLnacefZR3ytQX89DcTcpPW6hOAPW+p37JBO8av9I5YUFfVb04lw/q4
-         C5Uh/TfUQrORdEmok+uf4IYhtJdXO47BOFJ8w6YngqBtaYhJkfKKyx2d2U1F3wo4f1aa
-         RjDKQwlrE0ITx6hH1UIz4eaWHkLXyfNK+CYhBXTnQZCLBmJsD8DmsWgBD8t8/y9bpFgo
-         TV8thY3zxii5kg7cnD0XX4pJ5MlY2M7rOPSRK+aPo9wA24kpwkPsbcTI1TrAjp0+jLnK
-         YGlA==
+        bh=mVghy4myKTrVo55JKqW8ZpudABx2DALNUmTkceqYsrs=;
+        b=CZsfiyOOdtWNwF58Ja/US/YbRUgbzLGDAtw95IqGFnka0WDx5Ium5Xkl4W8UPfDFIx
+         Iv0Fbqs40t/UME8In1mL9jfYUewnrAAnkz20JKap8Ec9OR+vIlE2xcq/1dqMtczi4ZMB
+         QyhYAPsG9MCRX4BEh/CR3DtZjEp8LFBXh0cm3egrUBPH8uLAiTFZeQm2KW5rkDJTV0H3
+         gJ/ZzDuenBQtV8y+gWsytmy3rsz0Adpjr8GHosIwmV+gQMDRRCtLCGklCbIn0qtG4Drb
+         lVB4gp+QzYhR6HFYATeY0CNdl306VpOjZx+3siqEfbVaOJ7zmwjja2GkMVjvO1d4LEUu
+         zY/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=CKE5O2KYei1qGcIAaZy5r9oGg8jUlkng0vug4owpBhs=;
-        b=Lik+CFtCrTRxJ0yh70aRNyxOUkkiqwpgLOHo/r/PJJwH1kFByvYMmQRIkMN/j358s4
-         lpOQYrOQaTscxlAd4NwsCwbXsap48IhkXHxKWR/sHUOYXxkIhQfXkOFML/GfRfdxoG5u
-         alRKDBzG4HYO4D5oWpd62bpnt4RQik3yhxb5o1CHSmB0XXMSlCAlaR4qayKXdZ33VTCO
-         1s2fvxXmO46KQAdni3vyksTgh5eReRd4/N7Xx7CR0vt+xJIlAIeryWOEw1XjHzEcMYuJ
-         Z3nXdWfSyGpp6UHGt6eo0JC4ys1tdtCyqrl/h41GoKKefee639d4bzfh2LPHBfv74HZN
-         x15Q==
-X-Gm-Message-State: AOAM532JhKnrA8+AcyubkpRiCQ49oFsRMCWUZYzxO5otDGr6B9K23BVC
-        mjEoR2JiLB3hygO9atz4GGdC9g==
-X-Google-Smtp-Source: ABdhPJxs+rnkj0LstxFVTm60lriKb7unJDoH8zlHW+RXMjIgMDD+P4q/afD9mlQiNKCuZNSNCT3bPw==
-X-Received: by 2002:a63:5812:: with SMTP id m18mr1131343pgb.407.1590501139202;
-        Tue, 26 May 2020 06:52:19 -0700 (PDT)
+        bh=mVghy4myKTrVo55JKqW8ZpudABx2DALNUmTkceqYsrs=;
+        b=Zt3OmSlzpBJvdS2EWPmS34Disaf6/JHxvWtX+hvp8G7l1hwrcuPn1NgJzOQz+hXX49
+         gG6HJLz+I86JF8dHEWRpRNUglxe8aQWSTUX7Pm8EZz1BFKlg+mxIC7AxITCAD/p+dNiR
+         hK0N63hOFP1QNikSEsldlVo3NVtMIfAfGHlNX3USmR6YeLU4m0sJXoFrgyeJQnapWtQT
+         978eFu6a+a86f9P6Z0ZNDarBFAUVp4Uo+VLv71e1DkYJIteOvk7ChGLCx3K2KDp6kZmN
+         EHaX8mUJIRBRNXsAaOv4LbaOZ4v1UTQIsxhLt6QUTx0z34ovSxKJuAT+1A8qR/BmjeqM
+         dKJw==
+X-Gm-Message-State: AOAM530ZdZmxn8lArOryNTD1d2lZMM9SLQqShoKV6+xrPPWaKEQhKvzl
+        Yoxf/NNUvS2026CZgFpoiwyrJQ==
+X-Google-Smtp-Source: ABdhPJz1k7S1e2bD+uBd9AlzxUUZxZIHJdmlVQbcf7LFkCxbWUx+rmYHvevs6/XB/0q+v6FMqM1/Xw==
+X-Received: by 2002:a17:902:6b07:: with SMTP id o7mr1177980plk.74.1590501138668;
+        Tue, 26 May 2020 06:52:18 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q3sm15435307pfg.22.2020.05.26.06.52.17
+        by smtp.gmail.com with ESMTPSA id i66sm15080510pfe.135.2020.05.26.06.52.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 26 May 2020 06:52:17 -0700 (PDT)
-Message-ID: <5ecd1f11.1c69fb81.e00d.d8bf@mx.google.com>
+Message-ID: <5ecd1f11.1c69fb81.2afa2.ca85@mx.google.com>
 Date:   Tue, 26 May 2020 06:52:17 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Tree: pm
 X-Kernelci-Kernel: v5.7-rc7-85-g813946019dfd
-X-Kernelci-Report-Type: boot
+X-Kernelci-Report-Type: test
 X-Kernelci-Branch: testing
-Subject: pm/testing boot: 57 boots: 1 failed,
- 56 passed (v5.7-rc7-85-g813946019dfd)
+Subject: pm/testing baseline: 56 runs,
+ 1 regressions (v5.7-rc7-85-g813946019dfd)
 To:     rafael@kernel.org, linux-pm@vger.kernel.org,
         kernel-build-reports@lists.linaro.org
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -66,49 +66,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-******************************************
-* WARNING: Boot tests are now deprecated *
-******************************************
+pm/testing baseline: 56 runs, 1 regressions (v5.7-rc7-85-g813946019dfd)
 
-As kernelci.org is expanding its functional testing capabilities, the conce=
-pt
-of boot testing is now deprecated.  Boot results are scheduled to be droppe=
-d on
-*5th June 2020*.  The full schedule for boot tests deprecation is available=
- on
-this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
+Regressions Summary
+-------------------
 
-The new equivalent is the *baseline* test suite which also runs sanity chec=
-ks
-using dmesg and bootrr: https://github.com/kernelci/bootrr
+platform        | arch  | lab          | compiler | defconfig | results
+----------------+-------+--------------+----------+-----------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
 
-See the *baseline results for this kernel revision* on this page:
-https://kernelci.org/test/job/pm/branch/testing/kernel/v5.7-rc7-85-g8139460=
-19dfd/plan/baseline/
 
----------------------------------------------------------------------------=
-----
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.7-rc7=
+-85-g813946019dfd/plan/baseline/
 
-pm/testing boot: 57 boots: 1 failed, 56 passed (v5.7-rc7-85-g813946019dfd)
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.7-rc7-85-g813946019dfd
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      813946019dfd8929048c3350d3d320f34ebcb01c =
 
-Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
-el/v5.7-rc7-85-g813946019dfd/
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-7-rc7-85-g813946019dfd/
 
-Tree: pm
-Branch: testing
-Git Describe: v5.7-rc7-85-g813946019dfd
-Git Commit: 813946019dfd8929048c3350d3d320f34ebcb01c
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Tested: 49 unique boards, 15 SoC families, 3 builds out of 6
 
-Boot Failure Detected:
+Test Regressions
+---------------- =
 
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
 
----
-For more info write to <info@kernelci.org>
+
+platform        | arch  | lab          | compiler | defconfig | results
+----------------+-------+--------------+----------+-----------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ecd1543eb868c348b4397d5
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc7-85-g813946=
+019dfd/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc7-85-g813946=
+019dfd/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ecd1543eb868c34=
+8b4397d8
+      failing since 10 days (last pass: v5.7-rc5-53-gfbe093dd16f4, first fa=
+il: v5.7-rc5-57-g8ef6544598d6)
+      2 lines =20
