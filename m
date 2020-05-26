@@ -2,110 +2,575 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 774021E1D4D
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 10:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D8D1E1D65
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 10:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731428AbgEZI1u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 04:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729605AbgEZI1t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 04:27:49 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC21C03E97E
-        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 01:27:48 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id j198so4508725wmj.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 01:27:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=cfMx3QPegcW07ui0zEuFM9OMjXtnMXJjCz03Y4QBbMI=;
-        b=xgwwlZ/1mJxBPIFU8h/wk6la1tlt+HGj/xGHn7d9tdu6b3kNjT32rubdBqAyNjbJPT
-         3X3wPGbpgVBB7qgdheTHXP+kyfKdRaIgpcV9IIFK1BH+GHyilXXzlZDguSzzhvobiP+a
-         Vn8hjcqu3uW+1n3i2vh6BhuGj3PXl7xQjcUn6pqRS0qdeBbf17HoWN456lW769ZDJ/ql
-         TKMCLcEf4pwBi3FvKpn+n7e7iNsWUSAw5Wj40WYIbmoOyF5xvzwfcrzXY8C7PSKBSH+P
-         XdKVYYZ9HigzzyRDUuRVm9CZxKxDsoUcPpQvoxfBCWegSEFdUSwRasTloTWtRGFXxjaC
-         nRQA==
+        id S1729978AbgEZIdt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 May 2020 04:33:49 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:43819 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726926AbgEZIds (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 04:33:48 -0400
+Received: by mail-ot1-f67.google.com with SMTP id a68so15611078otb.10;
+        Tue, 26 May 2020 01:33:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=cfMx3QPegcW07ui0zEuFM9OMjXtnMXJjCz03Y4QBbMI=;
-        b=LLH3xhVqbJZ3lVrn5T9xSk9USlhqvw3I76fL8dJ6Ixli1dmZT4pA7eWsHIJ1yvLplg
-         56CerIYFOBwSn4QgIcCLMt2rXb7pL7HWecAuOIcrMvRGph/SKqmhIEZ8r/PpcFjYHowm
-         tII+8DDV6xzT30dA1DSH9TqfE8I6AdERYYAERzxihcTc6q97V4WAeuPco6WPSp0SuQWd
-         SMVRInufVaopsgOa7fYD5JBoRP6u5l3Ck2P7Mo4ePCemz1R/QBQN8Coh314x3Qld60Du
-         +VRP215HsLQyeWdShVoPIbNZxeBht3mWqwfEYCp2ImZQYObfBBk5+JBYqritvIS78inl
-         ab3w==
-X-Gm-Message-State: AOAM531bGyb2+qdRSwBHv9XmPoTg5uZLrLYtGoHjrqNJHrJ9Ag6RXkRc
-        5slSZoHCnUbV6vY63paIMqGa5w==
-X-Google-Smtp-Source: ABdhPJwivVEa7Wbrfc8XZwwaPB5guQr4hvCUswwOuC6U80Y/wBCxFVwaG5kew77mdKPQT0wWtp3qiA==
-X-Received: by 2002:a1c:5a82:: with SMTP id o124mr288626wmb.188.1590481666849;
-        Tue, 26 May 2020 01:27:46 -0700 (PDT)
-Received: from dell ([95.149.164.102])
-        by smtp.gmail.com with ESMTPSA id p65sm20347925wmp.36.2020.05.26.01.27.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 01:27:46 -0700 (PDT)
-Date:   Tue, 26 May 2020 09:27:44 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     saravanan sekar <sravanhome@gmail.com>
-Cc:     andy.shevchenko@gmail.com, robh+dt@kernel.org, jic23@kernel.org,
-        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
-        sre@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v11 2/6] mfd: mp2629: Add support for mps battery charger
-Message-ID: <20200526082744.GJ3628@dell>
-References: <20200430155810.21383-1-sravanhome@gmail.com>
- <20200430155810.21383-3-sravanhome@gmail.com>
- <20200519103741.GW271301@dell>
- <75b6a2ee-2d90-17c2-4b2b-0ef6238e903e@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xqwx4Jc2H37OdksQTVzbDpdEmrIEPoemMtqVyiXEljw=;
+        b=I8PWdZEdhzqZjf50/VRnQCMNEFuWF0WBwYifkSe7ItvDF59Kf+ZwwqSRiIKdE8bFpS
+         sTVoM5MbLXRNM3Hxtm/aLkx3iXvKBNAot8MOPNZelFj4rFbIAPATAMJ8/oU1Y21tEFzf
+         REGb7J0/egvrcvIYJ8TlfUzlWoZmrw3129/MYRTTYu0YOMe6TPij+xq+Ev1M9sX985sC
+         HS4rM9MbuU1Pw0E1Wsw5hGt9jmcN07t97YrAS4p/08KKzV2NqA4HufJ39KYNBaeUMWZz
+         KlOX9R9G6EgpLOTvNPufF02ZJBJXZoaSb/2qTDdyqkKM2wFgxFXWtu9PY7/AYculjUa1
+         l2xw==
+X-Gm-Message-State: AOAM5339z8fbWnEUfsa7Fx1OjNgQsldReAQ0SrUnq5o9rru19jhHUt1t
+        4Wa11sbLd8Wwp4W8lLZcfiEjSsE2V7HXkgb9Bcw=
+X-Google-Smtp-Source: ABdhPJyNysLWVKRczFBkQ43E30zRMxZYV4/+Y8mbsCWT22nMW3MidJq/4M9bYbWziVMtomZyKvvgUfhmzVxAJU8js1I=
+X-Received: by 2002:a9d:6c0f:: with SMTP id f15mr84522otq.118.1590482027093;
+ Tue, 26 May 2020 01:33:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <75b6a2ee-2d90-17c2-4b2b-0ef6238e903e@gmail.com>
+References: <20200525182608.1823735-1-kw@linux.com> <20200525182608.1823735-8-kw@linux.com>
+In-Reply-To: <20200525182608.1823735-8-kw@linux.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 May 2020 10:33:34 +0200
+Message-ID: <CAJZ5v0h7hMJW5iprAU406oMPFBE6mSaj4u9KOGBEfP82SzPqAg@mail.gmail.com>
+Subject: Re: [PATCH 7/8] PM: Use the new device_to_pm() helper to access
+ struct dev_pm_ops
+To:     =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        greybus-dev@lists.linaro.org, netdev <netdev@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-s390@vger.kernel.org,
+        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 23 May 2020, saravanan sekar wrote:
+On Mon, May 25, 2020 at 8:26 PM Krzysztof Wilczyński <kw@linux.com> wrote:
+>
+> Use the new device_to_pm() helper to access Power Management callbacs
+> (struct dev_pm_ops) for a particular device (struct device_driver).
+>
+> No functional change intended.
+>
+> This change builds on top of the previous commit 6da2f2ccfd2d ("PCI/PM:
+> Make power management op coding style consistent").
+>
+> Links:
+>   https://lore.kernel.org/driverdev-devel/20191014230016.240912-6-helgaas@kernel.org/
+>   https://lore.kernel.org/driverdev-devel/8592302.r4xC6RIy69@kreacher/
+>   https://lore.kernel.org/driverdev-devel/20191016135002.GA24678@kadam/
+>
+> Signed-off-by: Krzysztof Wilczyński <kw@linux.com>
+> ---
+>  drivers/base/power/domain.c      | 12 ++++--
+>  drivers/base/power/generic_ops.c | 65 ++++++++++++++------------------
+>  drivers/base/power/main.c        | 48 +++++++++++++++--------
+>  drivers/base/power/runtime.c     |  7 ++--
+>  4 files changed, 73 insertions(+), 59 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 0a01df608849..92a96fcb2717 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -703,6 +703,7 @@ static void genpd_power_off_work_fn(struct work_struct *work)
+>  static int __genpd_runtime_suspend(struct device *dev)
+>  {
+>         int (*cb)(struct device *__dev);
+> +       const struct dev_pm_ops *pm;
+>
+>         if (dev->type && dev->type->pm)
+>                 cb = dev->type->pm->runtime_suspend;
+> @@ -713,8 +714,9 @@ static int __genpd_runtime_suspend(struct device *dev)
+>         else
+>                 cb = NULL;
+>
+> -       if (!cb && dev->driver && dev->driver->pm)
+> -               cb = dev->driver->pm->runtime_suspend;
+> +       pm = driver_to_pm(dev->driver);
+> +       if (!cb && pm)
+> +               cb = pm->runtime_suspend;
 
-> Hi Lee,
-> 
-> On 19/05/20 12:37 pm, Lee Jones wrote:
-> > On Thu, 30 Apr 2020, Saravanan Sekar wrote:
-> > 
-> > > mp2629 is a highly-integrated switching-mode battery charge management
-> > > device for single-cell Li-ion or Li-polymer battery.
-> > > 
-> > > Add MFD core enables chip access for ADC driver for battery readings,
-> > > and a power supply battery-charger driver
-> > > 
-> > > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > ---
-> > >   drivers/mfd/Kconfig        |  9 +++++
-> > >   drivers/mfd/Makefile       |  2 +
-> > >   drivers/mfd/mp2629.c       | 79 ++++++++++++++++++++++++++++++++++++++
-> > >   include/linux/mfd/mp2629.h | 17 ++++++++
-> > >   4 files changed, 107 insertions(+)
-> > >   create mode 100644 drivers/mfd/mp2629.c
-> > >   create mode 100644 include/linux/mfd/mp2629.h
-> > For my own reference (apply this as-is to your sign-off block):
-> > 
-> >    Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> > 
-> Do I have to resend with above sign-off in all the patch?
+So why exactly is the new version better?
 
-That would make things simpler, yes.
+1. It adds lines of code.
+2. It adds checks.
+3. It adds function calls.
+4. It makes one need to see the extra driver_to_pm() function to find
+out what's going on.
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Which of the above is an improvement?
+
+>         return cb ? cb(dev) : 0;
+>  }
+> @@ -726,6 +728,7 @@ static int __genpd_runtime_suspend(struct device *dev)
+>  static int __genpd_runtime_resume(struct device *dev)
+>  {
+>         int (*cb)(struct device *__dev);
+> +       const struct dev_pm_ops *pm;
+>
+>         if (dev->type && dev->type->pm)
+>                 cb = dev->type->pm->runtime_resume;
+> @@ -736,8 +739,9 @@ static int __genpd_runtime_resume(struct device *dev)
+>         else
+>                 cb = NULL;
+>
+> -       if (!cb && dev->driver && dev->driver->pm)
+> -               cb = dev->driver->pm->runtime_resume;
+> +       pm = driver_to_pm(dev->driver);
+> +       if (!cb && pm)
+> +               cb = pm->runtime_resume;
+>
+>         return cb ? cb(dev) : 0;
+>  }
+> diff --git a/drivers/base/power/generic_ops.c b/drivers/base/power/generic_ops.c
+> index 4fa525668cb7..fbd2edef0201 100644
+> --- a/drivers/base/power/generic_ops.c
+> +++ b/drivers/base/power/generic_ops.c
+> @@ -19,12 +19,9 @@
+>   */
+>  int pm_generic_runtime_suspend(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> -       int ret;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+> -       ret = pm && pm->runtime_suspend ? pm->runtime_suspend(dev) : 0;
+> -
+> -       return ret;
+> +       return pm && pm->runtime_suspend ? pm->runtime_suspend(dev) : 0;
+>  }
+>  EXPORT_SYMBOL_GPL(pm_generic_runtime_suspend);
+>
+> @@ -38,12 +35,9 @@ EXPORT_SYMBOL_GPL(pm_generic_runtime_suspend);
+>   */
+>  int pm_generic_runtime_resume(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> -       int ret;
+> -
+> -       ret = pm && pm->runtime_resume ? pm->runtime_resume(dev) : 0;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+> -       return ret;
+> +       return pm && pm->runtime_resume ? pm->runtime_resume(dev) : 0;
+>  }
+>  EXPORT_SYMBOL_GPL(pm_generic_runtime_resume);
+>  #endif /* CONFIG_PM */
+> @@ -57,13 +51,12 @@ EXPORT_SYMBOL_GPL(pm_generic_runtime_resume);
+>   */
+>  int pm_generic_prepare(struct device *dev)
+>  {
+> -       struct device_driver *drv = dev->driver;
+> -       int ret = 0;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+> -       if (drv && drv->pm && drv->pm->prepare)
+> -               ret = drv->pm->prepare(dev);
+> +       if (pm && pm->prepare)
+> +               return pm->prepare(dev);
+>
+> -       return ret;
+> +       return 0;
+>  }
+>
+>  /**
+> @@ -72,7 +65,7 @@ int pm_generic_prepare(struct device *dev)
+>   */
+>  int pm_generic_suspend_noirq(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->suspend_noirq ? pm->suspend_noirq(dev) : 0;
+>  }
+> @@ -84,7 +77,7 @@ EXPORT_SYMBOL_GPL(pm_generic_suspend_noirq);
+>   */
+>  int pm_generic_suspend_late(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->suspend_late ? pm->suspend_late(dev) : 0;
+>  }
+> @@ -96,7 +89,7 @@ EXPORT_SYMBOL_GPL(pm_generic_suspend_late);
+>   */
+>  int pm_generic_suspend(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->suspend ? pm->suspend(dev) : 0;
+>  }
+> @@ -108,7 +101,7 @@ EXPORT_SYMBOL_GPL(pm_generic_suspend);
+>   */
+>  int pm_generic_freeze_noirq(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->freeze_noirq ? pm->freeze_noirq(dev) : 0;
+>  }
+> @@ -120,7 +113,7 @@ EXPORT_SYMBOL_GPL(pm_generic_freeze_noirq);
+>   */
+>  int pm_generic_freeze_late(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->freeze_late ? pm->freeze_late(dev) : 0;
+>  }
+> @@ -132,7 +125,7 @@ EXPORT_SYMBOL_GPL(pm_generic_freeze_late);
+>   */
+>  int pm_generic_freeze(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->freeze ? pm->freeze(dev) : 0;
+>  }
+> @@ -144,7 +137,7 @@ EXPORT_SYMBOL_GPL(pm_generic_freeze);
+>   */
+>  int pm_generic_poweroff_noirq(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->poweroff_noirq ? pm->poweroff_noirq(dev) : 0;
+>  }
+> @@ -156,7 +149,7 @@ EXPORT_SYMBOL_GPL(pm_generic_poweroff_noirq);
+>   */
+>  int pm_generic_poweroff_late(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->poweroff_late ? pm->poweroff_late(dev) : 0;
+>  }
+> @@ -168,7 +161,7 @@ EXPORT_SYMBOL_GPL(pm_generic_poweroff_late);
+>   */
+>  int pm_generic_poweroff(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->poweroff ? pm->poweroff(dev) : 0;
+>  }
+> @@ -180,7 +173,7 @@ EXPORT_SYMBOL_GPL(pm_generic_poweroff);
+>   */
+>  int pm_generic_thaw_noirq(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->thaw_noirq ? pm->thaw_noirq(dev) : 0;
+>  }
+> @@ -192,7 +185,7 @@ EXPORT_SYMBOL_GPL(pm_generic_thaw_noirq);
+>   */
+>  int pm_generic_thaw_early(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->thaw_early ? pm->thaw_early(dev) : 0;
+>  }
+> @@ -204,7 +197,7 @@ EXPORT_SYMBOL_GPL(pm_generic_thaw_early);
+>   */
+>  int pm_generic_thaw(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->thaw ? pm->thaw(dev) : 0;
+>  }
+> @@ -216,7 +209,7 @@ EXPORT_SYMBOL_GPL(pm_generic_thaw);
+>   */
+>  int pm_generic_resume_noirq(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->resume_noirq ? pm->resume_noirq(dev) : 0;
+>  }
+> @@ -228,7 +221,7 @@ EXPORT_SYMBOL_GPL(pm_generic_resume_noirq);
+>   */
+>  int pm_generic_resume_early(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->resume_early ? pm->resume_early(dev) : 0;
+>  }
+> @@ -240,7 +233,7 @@ EXPORT_SYMBOL_GPL(pm_generic_resume_early);
+>   */
+>  int pm_generic_resume(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->resume ? pm->resume(dev) : 0;
+>  }
+> @@ -252,7 +245,7 @@ EXPORT_SYMBOL_GPL(pm_generic_resume);
+>   */
+>  int pm_generic_restore_noirq(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->restore_noirq ? pm->restore_noirq(dev) : 0;
+>  }
+> @@ -264,7 +257,7 @@ EXPORT_SYMBOL_GPL(pm_generic_restore_noirq);
+>   */
+>  int pm_generic_restore_early(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->restore_early ? pm->restore_early(dev) : 0;
+>  }
+> @@ -276,7 +269,7 @@ EXPORT_SYMBOL_GPL(pm_generic_restore_early);
+>   */
+>  int pm_generic_restore(struct device *dev)
+>  {
+> -       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+>         return pm && pm->restore ? pm->restore(dev) : 0;
+>  }
+> @@ -290,9 +283,9 @@ EXPORT_SYMBOL_GPL(pm_generic_restore);
+>   */
+>  void pm_generic_complete(struct device *dev)
+>  {
+> -       struct device_driver *drv = dev->driver;
+> +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>
+> -       if (drv && drv->pm && drv->pm->complete)
+> -               drv->pm->complete(dev);
+> +       if (pm && pm->complete)
+> +               pm->complete(dev);
+>  }
+>  #endif /* CONFIG_PM_SLEEP */
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index 0e07e17c2def..6c41da0bebb0 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -640,6 +640,7 @@ static pm_callback_t dpm_subsys_suspend_late_cb(struct device *dev,
+>  static int device_resume_noirq(struct device *dev, pm_message_t state, bool async)
+>  {
+>         pm_callback_t callback;
+> +       const struct dev_pm_ops *pm;
+>         const char *info;
+>         bool skip_resume;
+>         int error = 0;
+> @@ -687,9 +688,10 @@ static int device_resume_noirq(struct device *dev, pm_message_t state, bool asyn
+>                 }
+>         }
+>
+> -       if (dev->driver && dev->driver->pm) {
+> +       pm = driver_to_pm(dev->driver);
+> +       if (pm) {
+>                 info = "noirq driver ";
+> -               callback = pm_noirq_op(dev->driver->pm, state);
+> +               callback = pm_noirq_op(pm, state);
+>         }
+>
+>  Run:
+> @@ -850,6 +852,7 @@ static pm_callback_t dpm_subsys_resume_early_cb(struct device *dev,
+>  static int device_resume_early(struct device *dev, pm_message_t state, bool async)
+>  {
+>         pm_callback_t callback;
+> +       const struct dev_pm_ops *pm;
+>         const char *info;
+>         int error = 0;
+>
+> @@ -867,9 +870,10 @@ static int device_resume_early(struct device *dev, pm_message_t state, bool asyn
+>
+>         callback = dpm_subsys_resume_early_cb(dev, state, &info);
+>
+> -       if (!callback && dev->driver && dev->driver->pm) {
+> +       pm = driver_to_pm(dev->driver);
+> +       if (!callback && pm) {
+>                 info = "early driver ";
+> -               callback = pm_late_early_op(dev->driver->pm, state);
+> +               callback = pm_late_early_op(pm, state);
+>         }
+>
+>         error = dpm_run_callback(callback, dev, state, info);
+> @@ -963,6 +967,7 @@ static int device_resume(struct device *dev, pm_message_t state, bool async)
+>  {
+>         pm_callback_t callback = NULL;
+>         const char *info = NULL;
+> +       const struct dev_pm_ops *pm = NULL;
+>         int error = 0;
+>         DECLARE_DPM_WATCHDOG_ON_STACK(wd);
+>
+> @@ -1023,9 +1028,10 @@ static int device_resume(struct device *dev, pm_message_t state, bool async)
+>         }
+>
+>   Driver:
+> -       if (!callback && dev->driver && dev->driver->pm) {
+> +       pm = driver_to_pm(dev->driver);
+> +       if (!callback && pm) {
+>                 info = "driver ";
+> -               callback = pm_op(dev->driver->pm, state);
+> +               callback = pm_op(pm, state);
+>         }
+>
+>   End:
+> @@ -1116,6 +1122,7 @@ void dpm_resume(pm_message_t state)
+>  static void device_complete(struct device *dev, pm_message_t state)
+>  {
+>         void (*callback)(struct device *) = NULL;
+> +       const struct dev_pm_ops *pm = NULL;
+>         const char *info = NULL;
+>
+>         if (dev->power.syscore)
+> @@ -1137,9 +1144,10 @@ static void device_complete(struct device *dev, pm_message_t state)
+>                 callback = dev->bus->pm->complete;
+>         }
+>
+> -       if (!callback && dev->driver && dev->driver->pm) {
+> +       pm = driver_to_pm(dev->driver);
+> +       if (!callback && pm) {
+>                 info = "completing driver ";
+> -               callback = dev->driver->pm->complete;
+> +               callback = pm->complete;
+>         }
+>
+>         if (callback) {
+> @@ -1312,6 +1320,7 @@ static bool device_must_resume(struct device *dev, pm_message_t state,
+>  static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool async)
+>  {
+>         pm_callback_t callback;
+> +       const struct dev_pm_ops *pm;
+>         const char *info;
+>         bool no_subsys_cb = false;
+>         int error = 0;
+> @@ -1336,9 +1345,10 @@ static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool a
+>         if (dev_pm_smart_suspend_and_suspended(dev) && no_subsys_cb)
+>                 goto Skip;
+>
+> -       if (dev->driver && dev->driver->pm) {
+> +       pm = driver_to_pm(dev->driver);
+> +       if (pm) {
+>                 info = "noirq driver ";
+> -               callback = pm_noirq_op(dev->driver->pm, state);
+> +               callback = pm_noirq_op(pm, state);
+>         }
+>
+>  Run:
+> @@ -1514,6 +1524,7 @@ static pm_callback_t dpm_subsys_suspend_late_cb(struct device *dev,
+>  static int __device_suspend_late(struct device *dev, pm_message_t state, bool async)
+>  {
+>         pm_callback_t callback;
+> +       const struct dev_pm_ops *pm;
+>         const char *info;
+>         int error = 0;
+>
+> @@ -1543,9 +1554,10 @@ static int __device_suspend_late(struct device *dev, pm_message_t state, bool as
+>             !dpm_subsys_suspend_noirq_cb(dev, state, NULL))
+>                 goto Skip;
+>
+> -       if (dev->driver && dev->driver->pm) {
+> +       pm = driver_to_pm(dev->driver);
+> +       if (pm) {
+>                 info = "late driver ";
+> -               callback = pm_late_early_op(dev->driver->pm, state);
+> +               callback = pm_late_early_op(pm, state);
+>         }
+>
+>  Run:
+> @@ -1717,6 +1729,7 @@ static void dpm_clear_superiors_direct_complete(struct device *dev)
+>  static int __device_suspend(struct device *dev, pm_message_t state, bool async)
+>  {
+>         pm_callback_t callback = NULL;
+> +       const struct dev_pm_ops *pm = NULL;
+>         const char *info = NULL;
+>         int error = 0;
+>         DECLARE_DPM_WATCHDOG_ON_STACK(wd);
+> @@ -1803,9 +1816,10 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
+>         }
+>
+>   Run:
+> -       if (!callback && dev->driver && dev->driver->pm) {
+> +       pm = driver_to_pm(dev->driver);
+> +       if (!callback && pm) {
+>                 info = "driver ";
+> -               callback = pm_op(dev->driver->pm, state);
+> +               callback = pm_op(pm, state);
+>         }
+>
+>         error = dpm_run_callback(callback, dev, state, info);
+> @@ -1917,6 +1931,7 @@ int dpm_suspend(pm_message_t state)
+>  static int device_prepare(struct device *dev, pm_message_t state)
+>  {
+>         int (*callback)(struct device *) = NULL;
+> +       const struct dev_pm_ops *pm = NULL;
+>         int ret = 0;
+>
+>         if (dev->power.syscore)
+> @@ -1946,8 +1961,9 @@ static int device_prepare(struct device *dev, pm_message_t state)
+>         else if (dev->bus && dev->bus->pm)
+>                 callback = dev->bus->pm->prepare;
+>
+> -       if (!callback && dev->driver && dev->driver->pm)
+> -               callback = dev->driver->pm->prepare;
+> +       pm = driver_to_pm(dev->driver);
+> +       if (!callback && pm)
+> +               callback = pm->prepare;
+>
+>         if (callback)
+>                 ret = callback(dev);
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index 99c7da112c95..c142824c7541 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -21,7 +21,7 @@ typedef int (*pm_callback_t)(struct device *);
+>  static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+>  {
+>         pm_callback_t cb;
+> -       const struct dev_pm_ops *ops;
+> +       const struct dev_pm_ops *ops, *pm;
+>
+>         if (dev->pm_domain)
+>                 ops = &dev->pm_domain->ops;
+> @@ -39,8 +39,9 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+>         else
+>                 cb = NULL;
+>
+> -       if (!cb && dev->driver && dev->driver->pm)
+> -               cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+> +       pm = driver_to_pm(dev->driver);
+> +       if (!cb && pm)
+> +               cb = *(pm_callback_t *)((void *)pm + cb_offset);
+>
+>         return cb;
+>  }
+> --
+> 2.26.2
+>
