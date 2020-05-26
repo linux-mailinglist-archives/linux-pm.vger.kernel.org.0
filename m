@@ -2,243 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BDC1E26C0
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 18:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA871E27A4
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 18:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388551AbgEZQUB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 12:20:01 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:60240 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388447AbgEZQUA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 12:20:00 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04QGHhbg075545;
-        Tue, 26 May 2020 16:19:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=ZBzh/ybbV61B1Qei3812YPkuod4SSPrDyvvb4BUpNrU=;
- b=s2Af90imq+R8Ct3jec5smTb58lz3XYj28S2RmI5QOq1qrahWHRbSiWGEgByDxN4OWP+g
- xdi1+jm77RmAU5Z00zbI4yalzSEObd93gkYp8sRuDnQ5dTrBQKx4f4Oy5i3M8qdw6jFh
- qiqZgzZ4J4PtyuOHTkfhNkQd4nQMNXc/I1T2/SfTcsTbdhIEdlbXm58GLj5MJvCnw2G4
- ubfHKtPrpzNqTN9kKFYrfcQYR3feq0x323wC/Xyw+nWJ4iovYe2aS0Y9Z3MIGsgkjjBp
- CUOVJwL8tWedyytmhSu+KW0QfgZv0dnMGVnNsat2u9/qBriY3Jgr2EU2ZfEKvruH6OHu EQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 318xbjtvjg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 26 May 2020 16:19:41 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04QGJ0S0032213;
-        Tue, 26 May 2020 16:19:40 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 317ddp54r5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 26 May 2020 16:19:38 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04QGJYhv023079;
-        Tue, 26 May 2020 16:19:34 GMT
-Received: from localhost (/67.169.218.210)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 26 May 2020 09:19:34 -0700
-Date:   Tue, 26 May 2020 09:19:32 -0700
-From:   "Darrick J. Wong" <darrick.wong@oracle.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Domenico Andreoli <domenico.andreoli@linux.com>,
-        Pavel Machek <pavel@ucw.cz>, Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>, "Ted Ts'o" <tytso@mit.edu>,
-        Len Brown <len.brown@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] PM: hibernate: restrict writes to the resume device
-Message-ID: <20200526161932.GD252930@magnolia>
-References: <20200519181410.GA1963@dumbo>
- <CAJZ5v0jgA3hh3nB60ANKN1WG9py9BoBqp8N8BuM2W-gpcUaPpg@mail.gmail.com>
+        id S1731508AbgEZQsQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 12:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731495AbgEZQsP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 12:48:15 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A48C03E96D
+        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 09:48:15 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id j8so22709537iog.13
+        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 09:48:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=CDy85Gj7MYd1kNtILJcUzn7KVIhIM0XshsVeAc/i0tA=;
+        b=dCxwuhqpPbwbXsS8D4GR15Oi/vkWvJ2t6JE5jqhDuEYRBCxiAwo9cWnqARqt/pZ9N3
+         vSDlZ8wDeZydMMsvQgllY5SFL21AkwmUO/yVMpJRwkWuLZ+okFm2plV7st5ZUHxgg7+n
+         nw9y2DMW7Y1odFWc8D0ovkNrkmBQTlf+wVi0icllMuisiL6LQjhD1eU0HTahi0uvVson
+         7H1igoRa7sC3VzH0k6kw37/8QsEYXM6RYbG1TkZAtikaoCp3wlyHVEwAfTjAFYYV3q4L
+         NgflHMgnD8hmupC7gXChsbUVMFzyhgq3aBSV9WdpBp5mfIm6+JpoU8GgF7qXRXSqT3gV
+         qZIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CDy85Gj7MYd1kNtILJcUzn7KVIhIM0XshsVeAc/i0tA=;
+        b=h/bpzqgBqw0nuW6Xzje9HPArL9nZtPKK6EwRGtcjaWh9UlH7hp/fmJpCoqgHv68DKF
+         Sx8oacotaxWVXJB+GCpZ6k+HNeFd5jhvyFq913/bj5AIAyQJH0ryqoFD4QFgFZk6113T
+         3HPGCzDna+cW63sHOhGiS7EUuUeTqXPYwGo1jatVWAEnMM4b6mkoNIkyfJQYFL9V3XmB
+         CoDotnm6rEahe2HnuQovlSWzi8Eq0mw42yb1OGZk1IjaF5jY6j3J8Sk6I/jbUQ/Tb60F
+         BjTXPZJMlHItYAB6G6uU/qkMn4qh0/ImjGfrxPC8kkY3/COpcUEmzLFMj7mJPhmwQYMU
+         6W6A==
+X-Gm-Message-State: AOAM531Biz/cfVcJNxjvONeSnkeYqsNxAddSCs1ugDD17wkpqk8njXse
+        0dahB03w93tFwSATfVYsnmJMuQ==
+X-Google-Smtp-Source: ABdhPJwt8EDbE+Md3qNwECgPyEhh34GzLnn6Kwx5Q+Egs2R3PU4UAkkaFOOCDwhKuojJpS4rMr4mTQ==
+X-Received: by 2002:a02:2708:: with SMTP id g8mr1921759jaa.52.1590511694529;
+        Tue, 26 May 2020 09:48:14 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id d29sm250489ild.42.2020.05.26.09.48.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 May 2020 09:48:13 -0700 (PDT)
+Subject: Re: [greybus-dev] [PATCH 8/8] net/iucv: Use the new device_to_pm()
+ helper to access struct dev_pm_ops
+To:     =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pci@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, Kevin Hilman <khilman@kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        linux-acpi@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Johan Hovold <johan@kernel.org>, greybus-dev@lists.linaro.org,
+        John Stultz <john.stultz@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Felipe Balbi <balbi@kernel.org>, Alex Elder <elder@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20200525182608.1823735-1-kw@linux.com>
+ <20200525182608.1823735-9-kw@linux.com> <20200526063521.GC2578492@kroah.com>
+ <20200526150744.GC75990@rocinante>
+From:   Alex Elder <elder@linaro.org>
+Message-ID: <acb9415a-d0d0-3ebc-b5ae-c26a7dc2114a@linaro.org>
+Date:   Tue, 26 May 2020 11:48:12 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jgA3hh3nB60ANKN1WG9py9BoBqp8N8BuM2W-gpcUaPpg@mail.gmail.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9633 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0 mlxscore=0
- phishscore=0 adultscore=0 suspectscore=5 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005260126
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9633 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 mlxscore=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 cotscore=-2147483648
- suspectscore=5 bulkscore=0 clxscore=1011 impostorscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2005260126
+In-Reply-To: <20200526150744.GC75990@rocinante>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 25, 2020 at 12:52:17PM +0200, Rafael J. Wysocki wrote:
-> On Tue, May 19, 2020 at 8:14 PM Domenico Andreoli
-> <domenico.andreoli@linux.com> wrote:
-> >
-> > From: Domenico Andreoli <domenico.andreoli@linux.com>
-> >
-> > Hibernation via snapshot device requires write permission to the swap
-> > block device, the one that more often (but not necessarily) is used to
-> > store the hibernation image.
-> >
-> > With this patch, such permissions are granted iff:
-> >
-> > 1) snapshot device config option is enabled
-> > 2) swap partition is used as resume device
-> >
-> > In other circumstances the swap device is not writable from userspace.
-> >
-> > In order to achieve this, every write attempt to a swap device is
-> > checked against the device configured as part of the uswsusp API [0]
-> > using a pointer to the inode struct in memory. If the swap device being
-> > written was not configured for resuming, the write request is denied.
-> >
-> > NOTE: this implementation works only for swap block devices, where the
-> > inode configured by swapon (which sets S_SWAPFILE) is the same used
-> > by SNAPSHOT_SET_SWAP_AREA.
-> >
-> > In case of swap file, SNAPSHOT_SET_SWAP_AREA indeed receives the inode
-> > of the block device containing the filesystem where the swap file is
-> > located (+ offset in it) which is never passed to swapon and then has
-> > not set S_SWAPFILE.
-> >
-> > As result, the swap file itself (as a file) has never an option to be
-> > written from userspace. Instead it remains writable if accessed directly
-> > from the containing block device, which is always writeable from root.
-> >
-> > [0] Documentation/power/userland-swsusp.rst
-> >
-> > v2:
-> >  - rename is_hibernate_snapshot_dev() to is_hibernate_resume_dev()
-> >  - fix description so to correctly refer to the resume device
-> >
-> > Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
-> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > Cc: Pavel Machek <pavel@ucw.cz>
-> > Cc: Darrick J. Wong <darrick.wong@oracle.com>
-> > Cc: Christoph Hellwig <hch@lst.de>
-> > Cc: viro@zeniv.linux.org.uk
-> > Cc: tytso@mit.edu
-> > Cc: len.brown@intel.com
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: linux-mm@kvack.org
-> > Cc: linux-xfs@vger.kernel.org
-> > Cc: linux-fsdevel@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> >
-> > ---
-> >  fs/block_dev.c          |    3 +--
-> >  include/linux/suspend.h |    6 ++++++
-> >  kernel/power/user.c     |   14 +++++++++++++-
-> >  3 files changed, 20 insertions(+), 3 deletions(-)
-> >
-> > Index: b/include/linux/suspend.h
-> > ===================================================================
-> > --- a/include/linux/suspend.h
-> > +++ b/include/linux/suspend.h
-> > @@ -466,6 +466,12 @@ static inline bool system_entering_hiber
-> >  static inline bool hibernation_available(void) { return false; }
-> >  #endif /* CONFIG_HIBERNATION */
-> >
-> > +#ifdef CONFIG_HIBERNATION_SNAPSHOT_DEV
-> > +int is_hibernate_resume_dev(const struct inode *);
-> > +#else
-> > +static inline int is_hibernate_resume_dev(const struct inode *i) { return 0; }
-> > +#endif
-> > +
-> >  /* Hibernation and suspend events */
-> >  #define PM_HIBERNATION_PREPARE 0x0001 /* Going to hibernate */
-> >  #define PM_POST_HIBERNATION    0x0002 /* Hibernation finished */
-> > Index: b/kernel/power/user.c
-> > ===================================================================
-> > --- a/kernel/power/user.c
-> > +++ b/kernel/power/user.c
-> > @@ -35,8 +35,14 @@ static struct snapshot_data {
-> >         bool ready;
-> >         bool platform_support;
-> >         bool free_bitmaps;
-> > +       struct inode *bd_inode;
-> >  } snapshot_state;
-> >
-> > +int is_hibernate_resume_dev(const struct inode *bd_inode)
-> > +{
-> > +       return hibernation_available() && snapshot_state.bd_inode == bd_inode;
-> > +}
-> > +
-> >  static int snapshot_open(struct inode *inode, struct file *filp)
-> >  {
-> >         struct snapshot_data *data;
-> > @@ -95,6 +101,7 @@ static int snapshot_open(struct inode *i
-> >         data->frozen = false;
-> >         data->ready = false;
-> >         data->platform_support = false;
-> > +       data->bd_inode = NULL;
-> >
-> >   Unlock:
-> >         unlock_system_sleep();
-> > @@ -110,6 +117,7 @@ static int snapshot_release(struct inode
-> >
-> >         swsusp_free();
-> >         data = filp->private_data;
-> > +       data->bd_inode = NULL;
-> >         free_all_swap_pages(data->swap);
-> >         if (data->frozen) {
-> >                 pm_restore_gfp_mask();
-> > @@ -202,6 +210,7 @@ struct compat_resume_swap_area {
-> >  static int snapshot_set_swap_area(struct snapshot_data *data,
-> >                 void __user *argp)
-> >  {
-> > +       struct block_device *bdev;
-> >         sector_t offset;
-> >         dev_t swdev;
-> >
-> > @@ -232,9 +241,12 @@ static int snapshot_set_swap_area(struct
-> >                 data->swap = -1;
-> >                 return -EINVAL;
-> >         }
-> > -       data->swap = swap_type_of(swdev, offset, NULL);
-> > +       data->swap = swap_type_of(swdev, offset, &bdev);
-> >         if (data->swap < 0)
-> >                 return -ENODEV;
-> > +
-> > +       data->bd_inode = bdev->bd_inode;
-> > +       bdput(bdev);
-> >         return 0;
-> >  }
-> >
-> > Index: b/fs/block_dev.c
-> > ===================================================================
-> > --- a/fs/block_dev.c
-> > +++ b/fs/block_dev.c
-> > @@ -2023,8 +2023,7 @@ ssize_t blkdev_write_iter(struct kiocb *
-> >         if (bdev_read_only(I_BDEV(bd_inode)))
-> >                 return -EPERM;
-> >
-> > -       /* uswsusp needs write permission to the swap */
-> > -       if (IS_SWAPFILE(bd_inode) && !hibernation_available())
-> > +       if (IS_SWAPFILE(bd_inode) && !is_hibernate_resume_dev(bd_inode))
-> >                 return -ETXTBSY;
-> >
-> >         if (!iov_iter_count(from))
-> >
-> > --
+On 5/26/20 10:07 AM, Krzysztof Wilczyński wrote:
+> Hello Greg,
 > 
-> The patch looks OK to me.
+> [...]
+>> It's "interesting" how using your new helper doesn't actually make the
+>> code smaller.  Perhaps it isn't a good helper function?
+
+Helper functions often improve code readability, which is
+beneficial even if it doesn't reduce code size or efficiency.
+
+But I won't argue for or against this particular change.
+It's OK with me either way.
+
+					-Alex
+
+> The idea for the helper was inspired by the comment Dan made to Bjorn
+> about Bjorn's change, as per:
 > 
-> Darrick, what do you think?
-
-Looks fine to me too.
-
-I kinda wonder how uswsusp prevents the bdev from being swapoff'd (or
-just plain disappearing) such that bd_inode will never point to a
-recycled inode, but I guess since we're only comparing pointer values
-it's not a big deal for this patch...
-
-Acked-by: Darrick J. Wong <darrick.wong@oracle.com>
-
---D
+>    https://lore.kernel.org/driverdev-devel/20191016135002.GA24678@kadam/
+> 
+> It looked like a good idea to try to reduce the following:
+> 
+>    dev->driver && dev->driver->pm && dev->driver->pm->prepare
+> 
+> Into something more succinct.  Albeit, given the feedback from yourself
+> and Rafael, I gather that this helper is not really a good addition.
+> 
+> Thank you everyone and sorry for the commotion!
+> 
+> Krzysztof
+> _______________________________________________
+> greybus-dev mailing list
+> greybus-dev@lists.linaro.org
+> https://lists.linaro.org/mailman/listinfo/greybus-dev
+> 
 
