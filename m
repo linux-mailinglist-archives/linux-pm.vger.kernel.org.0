@@ -2,123 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 226F51E253A
-	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 17:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E09AA1E2547
+	for <lists+linux-pm@lfdr.de>; Tue, 26 May 2020 17:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729311AbgEZPRS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 11:17:18 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:38500 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728205AbgEZPRR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 11:17:17 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04QFDG8V007562;
-        Tue, 26 May 2020 17:16:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=f15cWn5l7+qnePYQkKeXeKN4S4ucsruNAsfQ5NRJgnw=;
- b=zpX6gM+963osYSTNm0NetVZRMoM9e8ye4AfJof65ff2WaNs3AZWKAyCrGWZ0mKNa0avq
- M7epb9sAZb7vr4G3rGWmmRxm0NJeqUtG6ytTtelsiMqU2jglLeE4cRICnyvF5Kwyk+QZ
- tRJ3PGRxR0XyqVESMIk1WuoNpUriT4FZmybFnruS3bZJRjXOstoRO4YlqGTAxZtQjZ+J
- /Q9riOB8lFLuumg1MJkP2ytirbUl9PF/y71J+NeNorKQorPZApwmkq85xXZIzEeyFOUC
- vg4mNSYsJRSPFUJp2nUdLUEGN0JLxixtZ8ogBlFJgTPT0Lrxjrz+4h1bjyrOezGuEINn rg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 316tqh04wa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 26 May 2020 17:16:29 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0AB3410002A;
-        Tue, 26 May 2020 17:16:29 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EE0F02C1DA0;
-        Tue, 26 May 2020 17:16:28 +0200 (CEST)
-Received: from localhost (10.75.127.50) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 26 May 2020 17:16:28
- +0200
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
-        <hugues.fruchet@st.com>, <mchehab@kernel.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
-        <pavel@ucw.cz>, <len.brown@intel.com>,
-        <valentin.schneider@arm.com>, <vincent.guittot@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [RFC 3/3] media: stm32-dcmi: Inform cpufreq governors about cpu load needs
-Date:   Tue, 26 May 2020 17:16:19 +0200
-Message-ID: <20200526151619.8779-4-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
-In-Reply-To: <20200526151619.8779-1-benjamin.gaignard@st.com>
-References: <20200526151619.8779-1-benjamin.gaignard@st.com>
+        id S1728803AbgEZPTU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 26 May 2020 11:19:20 -0400
+Received: from mail-oo1-f67.google.com ([209.85.161.67]:40593 "EHLO
+        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726939AbgEZPTU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 11:19:20 -0400
+Received: by mail-oo1-f67.google.com with SMTP id f39so976300ooi.7;
+        Tue, 26 May 2020 08:19:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=VZBcz6P8XvlHsbrU2eTtG7/ScIEzLwH8fekfbRdSKRQ=;
+        b=axB0+ztMZNPQHmh2T5J1rNX9XSSqUJ1ghF8kZRp21n86wbYCSnhFvdknxHvMgxWxZL
+         rJYrae7L8x9X9tavzKHdELQgCk12rkUHqFsMLw0DOyOPALJ64FjunAwiRSUvz1m3yVhr
+         YEgm3brc/NQ/u+Z1lT5X4ylfv29HXZrhuqdCJ1AntbRSp1wcywD6q2CsIn5JhLuIWysr
+         t+cDgFv5/X0ScpqJLzcNZ5SDMwfmAU1MKJwdysYqI01xgTnA25QVvB21spZSxQ/bSpyO
+         i79CoXuo5QvVoCierl6itgrB8iHESrqx4Z6WWFHlVXuIllaA8n62yLSWiTTNaaTXTJpz
+         LKzQ==
+X-Gm-Message-State: AOAM530hYjiOOErfVOwMBEOEK3O85DOWy81EVO7IHYM6CudnZRKUWkfX
+        Cr6QBA3mlyVEcrw/eY8Zjl1zL0ULWIYdXBscdXM=
+X-Google-Smtp-Source: ABdhPJz6T1ptdbNy/G/lwrqbnMsBUWMLewVuG8K8TUsIgnEptYY3NNFI0VGqY6Fo8CDoDMoNJVTCuZ+6jxk8hfWP6YI=
+X-Received: by 2002:a4a:be07:: with SMTP id l7mr17198759oop.38.1590506358744;
+ Tue, 26 May 2020 08:19:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-05-26_02:2020-05-26,2020-05-26 signatures=0
+References: <20200525182608.1823735-1-kw@linux.com> <20200525182608.1823735-9-kw@linux.com>
+ <20200526063521.GC2578492@kroah.com> <20200526150744.GC75990@rocinante>
+In-Reply-To: <20200526150744.GC75990@rocinante>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 May 2020 17:19:07 +0200
+Message-ID: <CAJZ5v0grVQhmk=q9_=CbBa8y_8XbTOeqv-Hb6Hivi6ffKsVHmQ@mail.gmail.com>
+Subject: Re: [PATCH 8/8] net/iucv: Use the new device_to_pm() helper to access
+ struct dev_pm_ops
+To:     =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Johan Hovold <johan@kernel.org>,
+        Alex Elder <elder@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        greybus-dev@lists.linaro.org, netdev <netdev@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-s390@vger.kernel.org,
+        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When start streaming the CPU load could remain very low because almost
-all the capture pipeline is done in hardware (i.e. without using the CPU)
-and let believe to cpufreq governor that it could use lower frequencies.
-If the governor decides to use a too low frequency that becomes a problem
-when we need to acknowledge the interrupt during the blanking time.
+On Tue, May 26, 2020 at 5:07 PM Krzysztof Wilczyński <kw@linux.com> wrote:
+>
+> Hello Greg,
+>
+> [...]
+> > It's "interesting" how using your new helper doesn't actually make the
+> > code smaller.  Perhaps it isn't a good helper function?
+>
+> The idea for the helper was inspired by the comment Dan made to Bjorn
+> about Bjorn's change, as per:
+>
+>   https://lore.kernel.org/driverdev-devel/20191016135002.GA24678@kadam/
+>
+> It looked like a good idea to try to reduce the following:
+>
+>   dev->driver && dev->driver->pm && dev->driver->pm->prepare
+>
+> Into something more succinct.  Albeit, given the feedback from yourself
+> and Rafael, I gather that this helper is not really a good addition.
 
-To avoid this problem, DCMI driver informs the cpufreq governors by adding
-a cpufreq minimum load QoS resquest.
+IMO it could be used for reducing code duplication like you did in the
+PCI code, but not necessarily in the other places where the code in
+question is not exactly duplicated.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
----
- drivers/media/platform/stm32/stm32-dcmi.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index b8931490b83b..774f2506b2f1 100644
---- a/drivers/media/platform/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/stm32/stm32-dcmi.c
-@@ -24,6 +24,7 @@
- #include <linux/of_graph.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_qos.h>
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
- #include <linux/videodev2.h>
-@@ -173,6 +174,8 @@ struct stm32_dcmi {
- 	struct media_device		mdev;
- 	struct media_pad		vid_cap_pad;
- 	struct media_pipeline		pipeline;
-+
-+	struct pm_qos_request		qos_request;
- };
- 
- static inline struct stm32_dcmi *notifier_to_dcmi(struct v4l2_async_notifier *n)
-@@ -827,6 +830,9 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	else
- 		reg_set(dcmi->regs, DCMI_IER, IT_OVR | IT_ERR);
- 
-+	cpufreq_minload_qos_add_request(&dcmi->qos_request,
-+					CPUFREQ_GOV_QOS_MIN_LOAD_MAX_VALUE);
-+
- 	return 0;
- 
- err_pipeline_stop:
-@@ -859,6 +865,8 @@ static void dcmi_stop_streaming(struct vb2_queue *vq)
- 	struct stm32_dcmi *dcmi = vb2_get_drv_priv(vq);
- 	struct dcmi_buf *buf, *node;
- 
-+	cpufreq_minload_qos_remove_request(&dcmi->qos_request);
-+
- 	dcmi_pipeline_stop(dcmi);
- 
- 	media_pipeline_stop(&dcmi->vdev->entity);
--- 
-2.15.0
-
+Thanks!
