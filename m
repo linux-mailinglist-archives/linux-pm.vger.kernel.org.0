@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E73981E348C
-	for <lists+linux-pm@lfdr.de>; Wed, 27 May 2020 03:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D65A1E34AF
+	for <lists+linux-pm@lfdr.de>; Wed, 27 May 2020 03:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728138AbgE0BQc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 May 2020 21:16:32 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:57754 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727937AbgE0BQc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 21:16:32 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04R1GUbm093022;
-        Tue, 26 May 2020 20:16:30 -0500
+        id S1725271AbgE0BYn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 May 2020 21:24:43 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:53710 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725267AbgE0BYn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 May 2020 21:24:43 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04R1OeNe063851;
+        Tue, 26 May 2020 20:24:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1590542190;
-        bh=YaLjPcSfIGjeXsxNRxJYxq5PIRurQHe+sHMb1HbpNqE=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=D7QwxQvI4mWsmsEqjEAoTQozZj4ML/fZ6w9wuvRxqoH3WYQ7+PRgi2m9R9ypPzeuN
-         smCNq/6pRllEq8X+20mADyFmNpoVN8IyGWjHECdzSV8NI+PMy/JxOV3C6VuqpyGXlH
-         +/p2I0rp8lOHKe4Dhxs6w6kvhL6XTeUiCsB/I3Vw=
+        s=ti-com-17Q1; t=1590542680;
+        bh=ADdbGb/hIBjYZiW4ec9QCkuMgaagk2p6/g+owkkLpUA=;
+        h=Subject:To:References:From:Date:In-Reply-To;
+        b=RX2mmeg7ubG+IMbmQBaha0GNc/WJk/VMEX/58PNCKR2ZGK6I/dpduz+TFtCWMcUis
+         OI3v1xX0S40zey47iTCjeaoSk527MAqQ4EpMxNqdVz3YXAF8LIHUwr7s02Yr9568yc
+         q+a1YrHQ6hQgF9B12xY8JDftowLp8lFDrENe+JMA=
 Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04R1GU96045204;
-        Tue, 26 May 2020 20:16:30 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE115.ent.ti.com
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04R1Oen7069277
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 26 May 2020 20:24:40 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE115.ent.ti.com
  (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 26
- May 2020 20:16:30 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ May 2020 20:24:39 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 26 May 2020 20:16:30 -0500
+ Frontend Transport; Tue, 26 May 2020 20:24:40 -0500
 Received: from [10.250.38.163] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04R1GTSS001014;
-        Tue, 26 May 2020 20:16:29 -0500
-Subject: Re: [RFC] power: supply: bq27xxx_battery: Fix polling interval after
- re-bind
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04R1OdmM119336;
+        Tue, 26 May 2020 20:24:39 -0500
+Subject: Re: [PATCH 1/2] power: supply: bq27xxx_battery: Notify about all
+ battery changes
 To:     Krzysztof Kozlowski <krzk@kernel.org>,
         =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
         Sebastian Reichel <sre@kernel.org>,
-        Anton Vorontsov <cbouatmailru@gmail.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>
-References: <20200525113220.369-1-krzk@kernel.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@proceq.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+References: <20200525141200.17199-1-krzk@kernel.org>
 From:   "Andrew F. Davis" <afd@ti.com>
-Message-ID: <65ccf383-85a3-3ccd-f38c-e92ddae8fe1e@ti.com>
-Date:   Tue, 26 May 2020 21:16:28 -0400
+Message-ID: <fc59bcd5-1868-8c7a-9fc9-67ad70b477f4@ti.com>
+Date:   Tue, 26 May 2020 21:24:39 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200525113220.369-1-krzk@kernel.org>
+In-Reply-To: <20200525141200.17199-1-krzk@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -60,76 +60,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/25/20 7:32 AM, Krzysztof Kozlowski wrote:
-> This reverts commit 8cfaaa811894a3ae2d7360a15a6cfccff3ebc7db.
+On 5/25/20 10:11 AM, Krzysztof Kozlowski wrote:
+> All battery related data could be important for user-space.  For example
+> time-to-full could be shown to user on the screen or health could be
+> monitored for any issues.  Instead of comparing few selected old/new
+> values, just check if anything changed in the cache.
 > 
-> If device was unbound and bound, the polling interval would be set to 0.
-> This is both unexpected and messes up with other bq27xxx devices (if
-> more than one battery device is used).
-> 
-> This reset of polling interval was added in commit 8cfaaa811894
-> ("bq27x00_battery: Fix OOPS caused by unregistring bq27x00 driver")
-> stating that power_supply_unregister() calls get_property().  However in
-> Linux kernel v3.1 and newer, such call trace does not exist.
-> Unregistering power supply does not call get_property() on unregistered
-> power supply.
-> 
-> Fixes: 8cfaaa811894 ("bq27x00_battery: Fix OOPS caused by unregistring bq27x00 driver")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> 
-> ---
-> 
-> I really could not identify the issue being fixed in offending commit
-> 8cfaaa811894 ("bq27x00_battery: Fix OOPS caused by unregistring bq27x00
-> driver"), therefore maybe I missed here something important.
-> 
-> Please share your thoughts on this.
 
 
-I'm having a hard time finding the OOPS also. Maybe there is a window
-where the poll function is running or about to run where
-cancel_delayed_work_sync() is called and cancels the work, only to have
-an interrupt or late get_property call in to the poll function and
-re-schedule it.
-
-What we really need is to do is look at how we are handling the polling
-function. It gets called from the workqueue, from a threaded interrupt
-context, and from a power supply framework callback, possibly all at the
-same time. Sometimes its protected by a lock, sometimes not. Updating
-the device's cached data should always be locked.
-
-What's more is the poll function is self-arming, so if we call
-cancel_delayed_work_sync() (remove it from the work queue then then wait
-for it to finish if running), are we sure it wont have just re-arm itself?
-
-We should make the only way we call the poll function be through the
-work queue, (plus make sure all accesses to the cache are locked).
+At least some value will change every time we poll the battery, are we
+okay with having power_supply_changed() called every time?
 
 Andrew
 
 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
->  drivers/power/supply/bq27xxx_battery.c | 8 --------
->  1 file changed, 8 deletions(-)
+>  drivers/power/supply/bq27xxx_battery.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
 > diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-> index 942c92127b6d..4c94ee72de95 100644
+> index 942c92127b6d..33c26d42cd02 100644
 > --- a/drivers/power/supply/bq27xxx_battery.c
 > +++ b/drivers/power/supply/bq27xxx_battery.c
-> @@ -1905,14 +1905,6 @@ EXPORT_SYMBOL_GPL(bq27xxx_battery_setup);
+> @@ -1612,12 +1612,10 @@ void bq27xxx_battery_update(struct bq27xxx_device_info *di)
+>  			di->charge_design_full = bq27xxx_battery_read_dcap(di);
+>  	}
 >  
->  void bq27xxx_battery_teardown(struct bq27xxx_device_info *di)
->  {
-> -	/*
-> -	 * power_supply_unregister call bq27xxx_battery_get_property which
-> -	 * call bq27xxx_battery_poll.
-> -	 * Make sure that bq27xxx_battery_poll will not call
-> -	 * schedule_delayed_work again after unregister (which cause OOPS).
-> -	 */
-> -	poll_interval = 0;
+> -	if ((di->cache.capacity != cache.capacity) ||
+> -	    (di->cache.flags != cache.flags))
+> +	if (memcmp(&di->cache, &cache, sizeof(cache)) != 0) {
+>  		power_supply_changed(di->bat);
 > -
->  	cancel_delayed_work_sync(&di->work);
+> -	if (memcmp(&di->cache, &cache, sizeof(cache)) != 0)
+>  		di->cache = cache;
+> +	}
 >  
->  	power_supply_unregister(di->bat);
+>  	di->last_update = jiffies;
+>  }
 > 
