@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3291E3E59
-	for <lists+linux-pm@lfdr.de>; Wed, 27 May 2020 12:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D8B1E3E69
+	for <lists+linux-pm@lfdr.de>; Wed, 27 May 2020 12:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729723AbgE0KBL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 May 2020 06:01:11 -0400
-Received: from foss.arm.com ([217.140.110.172]:35204 "EHLO foss.arm.com"
+        id S1728203AbgE0KBV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 May 2020 06:01:21 -0400
+Received: from foss.arm.com ([217.140.110.172]:35258 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727884AbgE0KBK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 27 May 2020 06:01:10 -0400
+        id S1725848AbgE0KBV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 27 May 2020 06:01:21 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4A33106F;
-        Wed, 27 May 2020 03:01:09 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 783D255D;
+        Wed, 27 May 2020 03:01:20 -0700 (PDT)
 Received: from e123648.arm.com (unknown [10.37.12.61])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AAC6C3F6C4;
-        Wed, 27 May 2020 03:00:59 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3AF573F6C4;
+        Wed, 27 May 2020 03:01:09 -0700 (PDT)
 From:   Lukasz Luba <lukasz.luba@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
@@ -39,9 +39,9 @@ Cc:     Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
         lorenzo.pieralisi@arm.com, lukasz.luba@arm.com,
         patrick.bellasi@matbug.net, orjan.eide@arm.com,
         rdunlap@infradead.org, mka@chromium.org
-Subject: [PATCH v8 5/8] PM / EM: remove em_register_perf_domain
-Date:   Wed, 27 May 2020 10:58:51 +0100
-Message-Id: <20200527095854.21714-6-lukasz.luba@arm.com>
+Subject: [PATCH v8 6/8] PM / EM: change name of em_pd_energy to em_cpu_energy
+Date:   Wed, 27 May 2020 10:58:52 +0100
+Message-Id: <20200527095854.21714-7-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200527095854.21714-1-lukasz.luba@arm.com>
 References: <20200527095854.21714-1-lukasz.luba@arm.com>
@@ -50,79 +50,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Remove old function em_register_perf_domain which is no longer needed.
-There is em_dev_register_perf_domain that covers old use cases and new as
-well.
+Energy Model framework now supports other devices than CPUs. Refactor some
+of the functions in order to prevent wrong usage. The old function
+em_pd_energy has to generic name. It must not be used without proper
+cpumask pointer, which is possible only for CPU devices. Thus, rename it
+and add proper description to warn of potential wrong usage for other
+devices.
 
 Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Acked-by: Quentin Perret <qperret@google.com>
 Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
- include/linux/energy_model.h |  7 -------
- kernel/power/energy_model.c  | 25 -------------------------
- 2 files changed, 32 deletions(-)
+ include/linux/energy_model.h | 11 ++++++++---
+ kernel/sched/fair.c          |  2 +-
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-index 0ebb083b15a0..3aaa0bc43429 100644
+index 3aaa0bc43429..a0aff705b535 100644
 --- a/include/linux/energy_model.h
 +++ b/include/linux/energy_model.h
-@@ -78,8 +78,6 @@ struct em_data_callback {
- 
- struct em_perf_domain *em_cpu_get(int cpu);
- struct em_perf_domain *em_pd_get(struct device *dev);
--int em_register_perf_domain(cpumask_t *span, unsigned int nr_states,
--						struct em_data_callback *cb);
- int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
- 				struct em_data_callback *cb, cpumask_t *span);
+@@ -83,15 +83,20 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
  void em_dev_unregister_perf_domain(struct device *dev);
-@@ -181,11 +179,6 @@ static inline int em_pd_nr_perf_states(struct em_perf_domain *pd)
- struct em_data_callback {};
- #define EM_DATA_CB(_active_power_cb) { }
  
--static inline int em_register_perf_domain(cpumask_t *span,
--			unsigned int nr_states, struct em_data_callback *cb)
--{
--	return -EINVAL;
--}
- static inline
- int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
- 				struct em_data_callback *cb, cpumask_t *span)
-diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-index 07e8307460bc..73e44c1fc4bd 100644
---- a/kernel/power/energy_model.c
-+++ b/kernel/power/energy_model.c
-@@ -322,31 +322,6 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
- }
- EXPORT_SYMBOL_GPL(em_dev_register_perf_domain);
- 
--/**
-- * em_register_perf_domain() - Register the Energy Model of a performance domain
-- * @span	: Mask of CPUs in the performance domain
-- * @nr_states	: Number of capacity states to register
-- * @cb		: Callback functions providing the data of the Energy Model
-- *
-- * Create Energy Model tables for a performance domain using the callbacks
-- * defined in cb.
-- *
-- * If multiple clients register the same performance domain, all but the first
-- * registration will be ignored.
-- *
-- * Return 0 on success
-- */
--int em_register_perf_domain(cpumask_t *span, unsigned int nr_states,
--						struct em_data_callback *cb)
--{
--	struct device *cpu_dev;
--
--	cpu_dev = get_cpu_device(cpumask_first(span));
--
--	return em_dev_register_perf_domain(cpu_dev, nr_states, cb, span);
--}
--EXPORT_SYMBOL_GPL(em_register_perf_domain);
--
  /**
-  * em_dev_unregister_perf_domain() - Unregister Energy Model (EM) for a device
-  * @dev		: Device for which the EM is registered
+- * em_pd_energy() - Estimates the energy consumed by the CPUs of a perf. domain
++ * em_cpu_energy() - Estimates the energy consumed by the CPUs of a
++		performance domain
+  * @pd		: performance domain for which energy has to be estimated
+  * @max_util	: highest utilization among CPUs of the domain
+  * @sum_util	: sum of the utilization of all CPUs in the domain
+  *
++ * This function must be used only for CPU devices. There is no validation,
++ * i.e. if the EM is a CPU type and has cpumask allocated. It is called from
++ * the scheduler code quite frequently and that is why there is not checks.
++ *
+  * Return: the sum of the energy consumed by the CPUs of the domain assuming
+  * a capacity state satisfying the max utilization of the domain.
+  */
+-static inline unsigned long em_pd_energy(struct em_perf_domain *pd,
++static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+ 				unsigned long max_util, unsigned long sum_util)
+ {
+ 	unsigned long freq, scale_cpu;
+@@ -196,7 +201,7 @@ static inline struct em_perf_domain *em_pd_get(struct device *dev)
+ {
+ 	return NULL;
+ }
+-static inline unsigned long em_pd_energy(struct em_perf_domain *pd,
++static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+ 			unsigned long max_util, unsigned long sum_util)
+ {
+ 	return 0;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 538ba5d94e99..c28f1de43f5e 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6489,7 +6489,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
+ 		max_util = max(max_util, cpu_util);
+ 	}
+ 
+-	return em_pd_energy(pd->em_pd, max_util, sum_util);
++	return em_cpu_energy(pd->em_pd, max_util, sum_util);
+ }
+ 
+ /*
 -- 
 2.17.1
 
