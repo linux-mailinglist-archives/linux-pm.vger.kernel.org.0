@@ -2,105 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA5E1E4C7A
-	for <lists+linux-pm@lfdr.de>; Wed, 27 May 2020 19:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18101E4D3B
+	for <lists+linux-pm@lfdr.de>; Wed, 27 May 2020 20:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388607AbgE0R5H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 May 2020 13:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387653AbgE0R5G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 May 2020 13:57:06 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104C9C03E97D;
-        Wed, 27 May 2020 10:57:06 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id z13so20366038ljn.7;
-        Wed, 27 May 2020 10:57:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=l4NpTDexV8NESh3eG0B8gFwKIHqu0TSUXXYRfhGYw7Y=;
-        b=b+B6T+tBvfzagYHPLXBQNz8SCjxiQkUWkDAaKG0p0w291UMQEAvZHxegetvnU3L7e+
-         B05xBzx9hfsr/9mYjUBl3SCsr4UsO4gBKG9HiLRBHerPk7RI+0YVH1nIfhvgZwqSV0gn
-         IWm0mzjFkedkZL8TjkmrIXq1Xow47cv6BtTlJlDhczotmg07MPPcXNKiA4vtl5H/gPeh
-         D06dSyaRBKsTEcLilqgxHYGw+y0ivMTHkKu4MPXa7fJmYW/9IgcwJAtoCJyvl3bOQCHb
-         vzXvrjLWQ6mx9XFAT4j45AkHTyVQLLZ3kP0wCCmydB9x1eO4pCU+ImVKjaebHXCvPjSu
-         rMOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=l4NpTDexV8NESh3eG0B8gFwKIHqu0TSUXXYRfhGYw7Y=;
-        b=CmblZwB2HwxXrK2vnf7/WVzeJiAF+JUOe0yh3x+KHaJN/7yq/bF0FHUNaApOdxa9Cf
-         QbIM8qZhDj+F/EcOqWDRMcGNmkeAp3eIYqR9+/yaxuBasjsRoMTeDhOOSN4KGrV5mPCQ
-         //+I9H5dH4sJDVNjUzhH/kYyeqqX5QXX8jBVUE01zgHbc9IBg2XS65XWqjPKQEmcEvZ5
-         MurKrn3I1ITyGlth5pGniuZfQCa8o+lDqqOwG+tcSMkMclbDAkUseLzcDzVA2qQaZBt/
-         zUPiCuS2twkOensfx76h7M6PsQ1yzbjUkY1aPKTYwB/IqoFBFGGN7xeGpLOLJsmLlNIK
-         brdQ==
-X-Gm-Message-State: AOAM531OgLOlt/1aH9tzzMXmIrivRIbFjNVrJpdQ2cJha32OKsLvCHjf
-        /LRxH/ny58TJD684vJ51JwpxpsKg
-X-Google-Smtp-Source: ABdhPJyqLNLcb7qoReLMeZMoVIOzAmQUlY1fXb7b0/Yec6i4WzKF+DVENYGIIo/mdHTuhx2vw5WHiA==
-X-Received: by 2002:a2e:860f:: with SMTP id a15mr3322870lji.197.1590602224226;
-        Wed, 27 May 2020 10:57:04 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-173-94.dynamic.spd-mgts.ru. [109.252.173.94])
-        by smtp.googlemail.com with ESMTPSA id s9sm819212ljc.43.2020.05.27.10.57.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 May 2020 10:57:03 -0700 (PDT)
-Subject: Re: [PATCH v1 2/5] clk: Introduce clk_round_rate_unboundly()
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200330231617.17079-1-digetx@gmail.com>
- <20200330231617.17079-3-digetx@gmail.com>
- <159055894944.88029.2029223648098859689@swboyd.mtv.corp.google.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <3fcac59c-7a37-d4af-9d12-710d7af05845@gmail.com>
-Date:   Wed, 27 May 2020 20:57:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726337AbgE0Sqo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 May 2020 14:46:44 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:37089 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726095AbgE0Sqo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 May 2020 14:46:44 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1590605203; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=6t2pkQsbSECmtGTXOY98W5BwhT1648xPdDFse8Y3ryY=;
+ b=JxZeAB1D+lkulp1c0MgxSTemj3xfbS6TObNf5u44ZaIoNyzv/JnPjTKsn3KXGY5tieF7e3KO
+ yZPmdkeBcZfDJ5ZjnN4ue2Q6c5sg1nZOnc+o+ZXBOiRrNwa5YIcf4pcBEYSkfJuljzZaBmZk
+ NahhPWuFoDMUdL+d0TkWL+oM3xA=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 5eceb1f93131442d95b1b437 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 27 May 2020 18:31:21
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 51C03C433C9; Wed, 27 May 2020 18:31:20 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 76523C433CB;
+        Wed, 27 May 2020 18:31:19 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <159055894944.88029.2029223648098859689@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 28 May 2020 00:01:19 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>, georgi.djakov@linaro.org,
+        linux-kernel@vger.kernel.org, linux-kernel-owner@vger.kernel.org
+Subject: Re: [PATCH V2] opp: Remove bandwidth votes when target_freq is zero
+In-Reply-To: <3aa3870d71b536127bb6af88c1dbfb4672ba4173.1590552778.git.viresh.kumar@linaro.org>
+References: <20200512125327.1868-1-georgi.djakov@linaro.org>
+ <3aa3870d71b536127bb6af88c1dbfb4672ba4173.1590552778.git.viresh.kumar@linaro.org>
+Message-ID: <8bcec7186a4fc0d291d834a5964dab2f@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-27.05.2020 08:55, Stephen Boyd пишет:
-> Quoting Dmitry Osipenko (2020-03-30 16:16:14)
->> In same cases it may be desired to round clock's rate without taking into
->> account current min/max requests made by the clock's users. One example is
->> building up OPP table based on a possible clock rates.
+On 2020-05-27 09:43, Viresh Kumar wrote:
+> We already drop several votes when target_freq is set to zero, drop
+> bandwidth votes as well.
 > 
-> Shouldn't the OPP table come from firmware/DT? I don't quite understand
-> why we're generating OPP tables on top of the rate rounding API.
-> clk_round_rate() is supposed to tell us what rate we'll get if we call
-> clk_set_rate() with the same arguments. An unboundly version of that
-> doesn't make sense. 
+> Reported-by: Sibi Sankar <sibis@codeaurora.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+> V2: Some changes left uncommited in my tree by mistake.
 
-The OPP should come from the DT, but unfortunately DT and Tegra's
-devfreq driver wasn't designed like that from the start, so it will take
-some extra effort to re-do it properly now. I wanted to postpone that
-effort a tad and get at least the basics upstreamed for the starter.
+Viresh,
+Thanks for the patch :)
 
-> I wonder if perhaps the clk provider should be populating OPP tables in
-> this case? Or basically anything besides adding another clk consumer API
-> to solve this problem. Who is the caller? Something later in this
-> series?
+Tested-by: Sibi Sankar <sibis@codeaurora.org>
+Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
 
-I'll try to add a proper OPP table with freqs and voltages, will see how
-it goes. We will need to do it sooner or later anyways. So perhaps it's
-fine to drop the current approach with the clk_round_rate_unboundly()
-and re-focus on a proper OPP implementation.
+> 
+>  drivers/opp/core.c | 49 ++++++++++++++++++++++++++++++++++------------
+>  1 file changed, 37 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 56d3022c1ca2..df12c3804533 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -725,6 +725,34 @@ static int _generic_set_opp_regulator(struct
+> opp_table *opp_table,
+>  	return ret;
+>  }
+> 
+> +static int _set_opp_bw(const struct opp_table *opp_table,
+> +		       struct dev_pm_opp *opp, struct device *dev, bool remove)
+> +{
+> +	u32 avg, peak;
+> +	int i, ret;
+> +
+> +	if (!opp_table->paths)
+> +		return 0;
+> +
+> +	for (i = 0; i < opp_table->path_count; i++) {
+> +		if (remove) {
+> +			avg = 0;
+> +			peak = 0;
+> +		} else {
+> +			avg = opp->bandwidth[i].avg;
+> +			peak = opp->bandwidth[i].peak;
+> +		}
+> +		ret = icc_set_bw(opp_table->paths[i], avg, peak);
+> +		if (ret) {
+> +			dev_err(dev, "Failed to %s bandwidth[%d]: %d\n",
+> +				remove ? "remove" : "set", i, ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int _set_opp_custom(const struct opp_table *opp_table,
+>  			   struct device *dev, unsigned long old_freq,
+>  			   unsigned long freq,
+> @@ -820,7 +848,7 @@ int dev_pm_opp_set_rate(struct device *dev,
+> unsigned long target_freq)
+>  	unsigned long freq, old_freq, temp_freq;
+>  	struct dev_pm_opp *old_opp, *opp;
+>  	struct clk *clk;
+> -	int ret, i;
+> +	int ret;
+> 
+>  	opp_table = _find_opp_table(dev);
+>  	if (IS_ERR(opp_table)) {
+> @@ -837,12 +865,17 @@ int dev_pm_opp_set_rate(struct device *dev,
+> unsigned long target_freq)
+>  		if (!_get_opp_count(opp_table))
+>  			return 0;
+> 
+> -		if (!opp_table->required_opp_tables && !opp_table->regulators) {
+> +		if (!opp_table->required_opp_tables && !opp_table->regulators &&
+> +		    !opp_table->paths) {
+>  			dev_err(dev, "target frequency can't be 0\n");
+>  			ret = -EINVAL;
+>  			goto put_opp_table;
+>  		}
+> 
+> +		ret = _set_opp_bw(opp_table, opp, dev, true);
+> +		if (ret)
+> +			return ret;
+> +
+>  		if (opp_table->regulator_enabled) {
+>  			regulator_disable(opp_table->regulators[0]);
+>  			opp_table->regulator_enabled = false;
+> @@ -932,16 +965,8 @@ int dev_pm_opp_set_rate(struct device *dev,
+> unsigned long target_freq)
+>  			dev_err(dev, "Failed to set required opps: %d\n", ret);
+>  	}
+> 
+> -	if (!ret && opp_table->paths) {
+> -		for (i = 0; i < opp_table->path_count; i++) {
+> -			ret = icc_set_bw(opp_table->paths[i],
+> -					 opp->bandwidth[i].avg,
+> -					 opp->bandwidth[i].peak);
+> -			if (ret)
+> -				dev_err(dev, "Failed to set bandwidth[%d]: %d\n",
+> -					i, ret);
+> -		}
+> -	}
+> +	if (!ret)
+> +		ret = _set_opp_bw(opp_table, opp, dev, false);
+> 
+>  put_opp:
+>  	dev_pm_opp_put(opp);
 
-Thank you for getting back and replying to this topic :)
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
