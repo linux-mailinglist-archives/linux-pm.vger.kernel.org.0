@@ -2,128 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0340F1E3AD2
-	for <lists+linux-pm@lfdr.de>; Wed, 27 May 2020 09:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FB81E3B7F
+	for <lists+linux-pm@lfdr.de>; Wed, 27 May 2020 10:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387539AbgE0Hm6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 May 2020 03:42:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50368 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387505AbgE0Hm6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 27 May 2020 03:42:58 -0400
-Received: from pali.im (pali.im [31.31.79.79])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 206BB207CB;
-        Wed, 27 May 2020 07:42:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590565377;
-        bh=y9jv0X6AJuMhRlgaHgmpRyxvEQ1kjbp4zfnCjc2GtLo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t+D/NwRI+txSmZugjz829nauDSQwiNIfYqiLI4Fq/oyuzNzRSXl3CrSBGAAI5NlX7
-         8wQEitRE7t+HJ+B8JKcWvjzzdSK/ZJ77QQAz8l3gy1dy3ZMCaihz8YTeVnQrbhnhvt
-         FQd84V9xOkiyKqe7p9uFCe+ZxIdWS/kco3AlYlsM=
-Received: by pali.im (Postfix)
-        id BAD19BF4; Wed, 27 May 2020 09:42:54 +0200 (CEST)
-Date:   Wed, 27 May 2020 09:42:54 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     "Andrew F. Davis" <afd@ti.com>
-Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Anton Vorontsov <cbouatmailru@gmail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [RFC] power: supply: bq27xxx_battery: Fix polling interval after
- re-bind
-Message-ID: <20200527074254.vhyfntpolphj3eeq@pali>
-References: <20200525113220.369-1-krzk@kernel.org>
- <65ccf383-85a3-3ccd-f38c-e92ddae8fe1e@ti.com>
+        id S2387756AbgE0IN2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 May 2020 04:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729520AbgE0IL7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 May 2020 04:11:59 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7918FC03E97A
+        for <linux-pm@vger.kernel.org>; Wed, 27 May 2020 01:11:59 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id h21so26921311ejq.5
+        for <linux-pm@vger.kernel.org>; Wed, 27 May 2020 01:11:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0v4FUUdOqnp7RuUd3enj3icuA3Tv1E+eMrUcax4ybiE=;
+        b=W+3hnCfCOEdWNjyHZKfqtTXWWAvcsc9X6JViElZFaf6JXTcTdJDeA2F8fNSV5tvTcT
+         xKmnm1BZ212eJIIbHKg/1Pzap8L/aN8QNvBe2z+8psEUJbvwLKXd2skAOhwb2q7hAo4S
+         1pYTZRzrmqkgWSVTVPHvK2HGF8vUbhCGAaixdnhcGOlC/fq2fiV7kmgo3juztV6Qa2Gt
+         iDM2dzf14TFCVqxLtuG0Zv3GU1m1c73EWzmDzgM0vPeVQihqPBn/QuMg3/cuET2lc/1s
+         sVigw7hp3G1JLqOVRcP1Lm5NbPjQay39nOaLgM8u2LUqXJcO/zfuQY9L7A3yZN63coqb
+         K6gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0v4FUUdOqnp7RuUd3enj3icuA3Tv1E+eMrUcax4ybiE=;
+        b=E7IE4BRfwm257r3ip+OwZ3kI/azlFKptOR3/xAlwH6AkqDrQ9kOGU0h5Jpgf1IzsvN
+         ZkK0wyzXXCWkmzei6dVKRK5CNxWafOEoW/8RO2FrWlG57SbsVxorhshQ1solTpklExA8
+         5A3DZ+PfTeQn7cjnkN/0HNGV1axV2XqnYTHKsHCGwGQbidsLb0i9DSSlupPqXy9BwuGC
+         Uz2GsDXXoxlf1IjyLr9a3jIewXa7D0P+5ogzBTSL+z2V/xtpJNKU/HMSjUceUMrQWwZs
+         CJXxo7rOBgp3fTVoWWITKFdWOXQOXA/g457s8C2AOvDG+6mE04+15NGUrtiCJBuCp/sZ
+         RYDA==
+X-Gm-Message-State: AOAM531Yv0aGeJT8EhZ+X5IgueSgBsmrPYfXLWSh+eTksVcKekhGkFpS
+        YEVtajwzqC5vHNdI44y2IUpo8g==
+X-Google-Smtp-Source: ABdhPJzw6zpLQcFWBHtAfTQmhIs1joyz3snPNSslBRSJqdi3yEGoxUHTg79dA7jWdpyt65HDHZIB2g==
+X-Received: by 2002:a17:906:1c10:: with SMTP id k16mr4564291ejg.511.1590567118159;
+        Wed, 27 May 2020 01:11:58 -0700 (PDT)
+Received: from [10.44.66.8] ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id nj6sm2041629ejb.99.2020.05.27.01.11.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 27 May 2020 01:11:57 -0700 (PDT)
+Subject: Re: [PATCH V2] opp: Remove bandwidth votes when target_freq is zero
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        linux-kernel@vger.kernel.org
+References: <20200512125327.1868-1-georgi.djakov@linaro.org>
+ <3aa3870d71b536127bb6af88c1dbfb4672ba4173.1590552778.git.viresh.kumar@linaro.org>
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
+ 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
+ KEmKjLDvB0pePJkdTw==
+Message-ID: <a5e60c39-0a17-bc6a-6992-4b8b3991be52@linaro.org>
+Date:   Wed, 27 May 2020 11:11:54 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65ccf383-85a3-3ccd-f38c-e92ddae8fe1e@ti.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <3aa3870d71b536127bb6af88c1dbfb4672ba4173.1590552778.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday 26 May 2020 21:16:28 Andrew F. Davis wrote:
-> On 5/25/20 7:32 AM, Krzysztof Kozlowski wrote:
-> > This reverts commit 8cfaaa811894a3ae2d7360a15a6cfccff3ebc7db.
-> > 
-> > If device was unbound and bound, the polling interval would be set to 0.
-> > This is both unexpected and messes up with other bq27xxx devices (if
-> > more than one battery device is used).
-> > 
-> > This reset of polling interval was added in commit 8cfaaa811894
-> > ("bq27x00_battery: Fix OOPS caused by unregistring bq27x00 driver")
-> > stating that power_supply_unregister() calls get_property().  However in
-> > Linux kernel v3.1 and newer, such call trace does not exist.
-> > Unregistering power supply does not call get_property() on unregistered
-> > power supply.
-> > 
-> > Fixes: 8cfaaa811894 ("bq27x00_battery: Fix OOPS caused by unregistring bq27x00 driver")
-> > Cc: <stable@vger.kernel.org>
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > 
-> > ---
-> > 
-> > I really could not identify the issue being fixed in offending commit
-> > 8cfaaa811894 ("bq27x00_battery: Fix OOPS caused by unregistring bq27x00
-> > driver"), therefore maybe I missed here something important.
-> > 
-> > Please share your thoughts on this.
+On 5/27/20 07:13, Viresh Kumar wrote:
+> We already drop several votes when target_freq is set to zero, drop
+> bandwidth votes as well.
 > 
-> 
-> I'm having a hard time finding the OOPS also. Maybe there is a window
-> where the poll function is running or about to run where
-> cancel_delayed_work_sync() is called and cancels the work, only to have
-> an interrupt or late get_property call in to the poll function and
-> re-schedule it.
-> 
-> What we really need is to do is look at how we are handling the polling
-> function. It gets called from the workqueue, from a threaded interrupt
-> context, and from a power supply framework callback, possibly all at the
-> same time. Sometimes its protected by a lock, sometimes not. Updating
-> the device's cached data should always be locked.
-> 
-> What's more is the poll function is self-arming, so if we call
-> cancel_delayed_work_sync() (remove it from the work queue then then wait
-> for it to finish if running), are we sure it wont have just re-arm itself?
-> 
-> We should make the only way we call the poll function be through the
-> work queue, (plus make sure all accesses to the cache are locked).
-> 
-> Andrew
+> Reported-by: Sibi Sankar <sibis@codeaurora.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-I do not remember details too. It is long time ago.
+Reviewed-by: Georgi Djakov <georgi.djakov@linaro.org>
+Tested-by: Georgi Djakov <georgi.djakov@linaro.org>
 
-CCing Ivaylo Dimitrov as he may remember something...
-
-> 
-> > ---
-> >  drivers/power/supply/bq27xxx_battery.c | 8 --------
-> >  1 file changed, 8 deletions(-)
-> > 
-> > diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-> > index 942c92127b6d..4c94ee72de95 100644
-> > --- a/drivers/power/supply/bq27xxx_battery.c
-> > +++ b/drivers/power/supply/bq27xxx_battery.c
-> > @@ -1905,14 +1905,6 @@ EXPORT_SYMBOL_GPL(bq27xxx_battery_setup);
-> >  
-> >  void bq27xxx_battery_teardown(struct bq27xxx_device_info *di)
-> >  {
-> > -	/*
-> > -	 * power_supply_unregister call bq27xxx_battery_get_property which
-> > -	 * call bq27xxx_battery_poll.
-> > -	 * Make sure that bq27xxx_battery_poll will not call
-> > -	 * schedule_delayed_work again after unregister (which cause OOPS).
-> > -	 */
-> > -	poll_interval = 0;
-> > -
-> >  	cancel_delayed_work_sync(&di->work);
-> >  
-> >  	power_supply_unregister(di->bat);
-> > 
+Thanks!
+Georgi
