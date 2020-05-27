@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7E61E36DF
-	for <lists+linux-pm@lfdr.de>; Wed, 27 May 2020 06:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32111E36E4
+	for <lists+linux-pm@lfdr.de>; Wed, 27 May 2020 06:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728611AbgE0EHu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 May 2020 00:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
+        id S1728628AbgE0ENd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 May 2020 00:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726907AbgE0EHs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 May 2020 00:07:48 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75EAC03E97B
-        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 21:07:46 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id e11so10295809pfn.3
-        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 21:07:46 -0700 (PDT)
+        with ESMTP id S1726907AbgE0ENc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 May 2020 00:13:32 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B41C061A0F
+        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 21:13:32 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id j21so11182971pgb.7
+        for <linux-pm@vger.kernel.org>; Tue, 26 May 2020 21:13:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=pIU60IIBCZmiBBYjlcnA3+Z62eyxZftbez2P4JhOGz0=;
-        b=ji07iUmsxzL5OTjKkByLDlUB9yuFIIUDKEFDffRLh2WLg3PTMsr6gSb9aheyF3dWhh
-         1jydjFmU3me6Rzh9/791mf0yg0KRn+554youg0XUgm0UhIxYmjOWMYL0dHTWV6hcQHam
-         vD11UOkYMs3OZhZ1ipCE+9NTk5e7I45zuOgNzN3YR9POohMHq9J2BhuX5M0OVyuSSZCF
-         1oJJDFWV3b29m/lTzMVeTdpDzympPTsyXD1GlKasOpkWvFiCFoUUISyrhQIwOxi8y5Nq
-         DhshdPhvEOIoasTQo8YXczmzazKd6u3OHZtodB7NuH1u/lcW4x3RUTh/3cQ+Bn9T2FZj
-         RGWw==
+        bh=AfGrQhANyY91hXOGSpuo1mwaEcVmt3M+OaE9Tl+XS5Y=;
+        b=yc9MHRKHZBNnZOmxUrGmqU+Z+7ZywJkjcbhb96l70OeshyTattGt2KB+DO5GOfMS9q
+         0dUP/f4JiyU+qJq1zXgDQWJkJcqE0HCu3Rme/QapoxmAQf/6iJMbZgQ7Fxzwr6G1+Rft
+         MW4+9dTfS6xhmJk349y9xRFKkfD2Q61CnFLkZAaeI2d02s5EqwSwylsetVlMhNhmbCz3
+         V1iD+MrvsmQxsCmhHwSAZwUiIa7HrMzVYaO0nJZvrxHlHhrISjTqSlguqfVgD18MEHnw
+         jKkUJNkUs/UMWRCiR4dGUdK68aw6sQKfKeTZY1Bqs/LetHNcrlZIqLAXI1+Gsci6sh/N
+         k5GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pIU60IIBCZmiBBYjlcnA3+Z62eyxZftbez2P4JhOGz0=;
-        b=EFK2SkmTei0+F5CWHwLdQ4go5ib7G4QV1+Ph7QH8vrc2L2JLnQPwQWIaLamPJepM4m
-         v9aFqMjXcbe3Yltj/5TQIhgE5aVK1Z+EQLShcWR5Q8qxVO8PWVLMxBEYpSxl8LQlC1Ff
-         6+6m7yhuRrpgwTNo95XSht4pRiJgpOjnTyyzqOtYg4dC7f5gPqcyDJ+OQJvpOK27pslG
-         YWhiN3Xo035hLVmehRiVktTKG3yyqb1Fz5e+B80h44ziooZlh6y/7HaUSmhFJ+2H/ITD
-         sCB5EKmwhjO+h6D3P7TNpOg2VIvU1h5jiVXcUoyN6ChxWhkJplHTmxGZbkfk8D20EixZ
-         K2jg==
-X-Gm-Message-State: AOAM531S6IPfdL/wuSuyAWX4/wjbkvT7eG26/ua/wmij+zx4ZjiMu7n2
-        fHUbsZ+U0pyuIdXlVzS5+ZFJmA==
-X-Google-Smtp-Source: ABdhPJzEM29IyiSEssb7QXL96O/HQMHYQ/moyf5cAXSnMKK0zq8bqWNjRk5L63foZs2z2MdlVxuWbw==
-X-Received: by 2002:aa7:928e:: with SMTP id j14mr1939135pfa.261.1590552466476;
-        Tue, 26 May 2020 21:07:46 -0700 (PDT)
+        bh=AfGrQhANyY91hXOGSpuo1mwaEcVmt3M+OaE9Tl+XS5Y=;
+        b=Rq+7q3f+V9e7l66Cd30SI7Z/8lxPQOJwcEoO/zouADdRHcopb4RxXXfjw3BqTjBwHn
+         +/6Pqp04usQ4KVjoXeTX0BRG7d3jBgxvbeSvczLB6HxzyqeHD89VedvMNH9j04QS9y3q
+         W41T8zKUpvJ8hd7vwgvYFlFslHZQY8yFYuC0uklh28b5qUzEH7NxsJ6nw6Q1OmuN844c
+         +AfXVrlbFM3YOcHJKsgUMmeJ93B6oNWVJ1QiFW4o9fF5r76ASA9Oz9UzV/jYxT3AmMmk
+         rTY44Bzayxy31yXrC6iXzTxK17eb0/C18K+m2shvoRj4d0diGGp5q9nRjF5eV7lyBQFs
+         Rjlg==
+X-Gm-Message-State: AOAM530dAxjWU9Q4gJqHaVlNGthfQ9cJC/kvARB8MsUe6tBoWYJTuQC0
+        ltMvQH0U/RBP50eNriSGhLEC/A==
+X-Google-Smtp-Source: ABdhPJzmmNzofmSQKXXkiLwVh283U0hXbNZue0aNKNZCZ8WLJSKaHQuIFhwfg9UwS2ZESJKgLXFaPw==
+X-Received: by 2002:a63:f502:: with SMTP id w2mr2061317pgh.321.1590552812239;
+        Tue, 26 May 2020 21:13:32 -0700 (PDT)
 Received: from localhost ([122.172.60.59])
-        by smtp.gmail.com with ESMTPSA id u69sm848927pjb.40.2020.05.26.21.07.45
+        by smtp.gmail.com with ESMTPSA id 192sm823471pfu.202.2020.05.26.21.13.31
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 26 May 2020 21:07:45 -0700 (PDT)
+        Tue, 26 May 2020 21:13:31 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -55,9 +55,9 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Rafael Wysocki <rjw@rjwysocki.net>, georgi.djakov@linaro.org,
         Sibi Sankar <sibis@codeaurora.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: Remove bandwidth votes when target_freq is zero
-Date:   Wed, 27 May 2020 09:37:36 +0530
-Message-Id: <a761681456ef6b8c9a98918c130a0b402caf90c4.1590552303.git.viresh.kumar@linaro.org>
+Subject: [PATCH V2] opp: Remove bandwidth votes when target_freq is zero
+Date:   Wed, 27 May 2020 09:43:26 +0530
+Message-Id: <3aa3870d71b536127bb6af88c1dbfb4672ba4173.1590552778.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 In-Reply-To: <20200512125327.1868-1-georgi.djakov@linaro.org>
 References: <20200512125327.1868-1-georgi.djakov@linaro.org>
@@ -74,13 +74,13 @@ bandwidth votes as well.
 Reported-by: Sibi Sankar <sibis@codeaurora.org>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
-@Georgi/Sibi: Sibi requested this change, please test this out.
+V2: Some changes left uncommited in my tree by mistake.
 
- drivers/opp/core.c | 47 +++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 36 insertions(+), 11 deletions(-)
+ drivers/opp/core.c | 49 ++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 37 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 56d3022c1ca2..0c259d5ed232 100644
+index 56d3022c1ca2..df12c3804533 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
 @@ -725,6 +725,34 @@ static int _generic_set_opp_regulator(struct opp_table *opp_table,
@@ -88,7 +88,7 @@ index 56d3022c1ca2..0c259d5ed232 100644
  }
  
 +static int _set_opp_bw(const struct opp_table *opp_table,
-+		       struct dev_pm_opp *opp, bool remove)
++		       struct dev_pm_opp *opp, struct device *dev, bool remove)
 +{
 +	u32 avg, peak;
 +	int i, ret;
@@ -108,7 +108,7 @@ index 56d3022c1ca2..0c259d5ed232 100644
 +		if (ret) {
 +			dev_err(dev, "Failed to %s bandwidth[%d]: %d\n",
 +				remove ? "remove" : "set", i, ret);
-+			retrun ret;
++			return ret;
 +		}
 +	}
 +
@@ -118,6 +118,15 @@ index 56d3022c1ca2..0c259d5ed232 100644
  static int _set_opp_custom(const struct opp_table *opp_table,
  			   struct device *dev, unsigned long old_freq,
  			   unsigned long freq,
+@@ -820,7 +848,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+ 	unsigned long freq, old_freq, temp_freq;
+ 	struct dev_pm_opp *old_opp, *opp;
+ 	struct clk *clk;
+-	int ret, i;
++	int ret;
+ 
+ 	opp_table = _find_opp_table(dev);
+ 	if (IS_ERR(opp_table)) {
 @@ -837,12 +865,17 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
  		if (!_get_opp_count(opp_table))
  			return 0;
@@ -130,7 +139,7 @@ index 56d3022c1ca2..0c259d5ed232 100644
  			goto put_opp_table;
  		}
  
-+		ret = _set_opp_bw(opp_table, opp, true);
++		ret = _set_opp_bw(opp_table, opp, dev, true);
 +		if (ret)
 +			return ret;
 +
@@ -152,7 +161,7 @@ index 56d3022c1ca2..0c259d5ed232 100644
 -		}
 -	}
 +	if (!ret)
-+		ret = _set_opp_bw(opp_table, opp, false);
++		ret = _set_opp_bw(opp_table, opp, dev, false);
  
  put_opp:
  	dev_pm_opp_put(opp);
