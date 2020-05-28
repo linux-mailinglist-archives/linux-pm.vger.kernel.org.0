@@ -2,55 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3D21E582D
-	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 09:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DBD91E587E
+	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 09:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725830AbgE1HHP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 May 2020 03:07:15 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:25678 "EHLO
+        id S1726394AbgE1HZV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 May 2020 03:25:21 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:35990 "EHLO
         mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725779AbgE1HHO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 03:07:14 -0400
+        with ESMTP id S1726161AbgE1HZV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 03:25:21 -0400
 Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200528070708epoutp01061c022c00ebfd7a1cb8c6b3207c39e3~TH2jYN_qM1470314703epoutp01X
-        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 07:07:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200528070708epoutp01061c022c00ebfd7a1cb8c6b3207c39e3~TH2jYN_qM1470314703epoutp01X
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200528072517epoutp01b3cc89887c947616163afda39cd1b697~TIGZJtS8E2777827778epoutp01b
+        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 07:25:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200528072517epoutp01b3cc89887c947616163afda39cd1b697~TIGZJtS8E2777827778epoutp01b
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1590649628;
-        bh=CiG6BB1PuYpGEojCVeeKBD6x3ygZzpcBt7Es2xx2lZs=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FLAwhwlV0b932esAkAupnM1SOf26Acex/zXRsWd2VV6ab9C8Wd9LhvdrRzjFeWxkD
-         bmt36dN4dyL3EPaVUO1to4J1FDESrgY90bYV7B9LiyD51VefIbnTOYRJGF4aWO/fAN
-         TJXkOOBUv64KRchIapA3rkRAooPOPHdf049IjwuI=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200528070707epcas1p15255cb8b7c89c47ff9de311c5eec534f~TH2ivV3km3190131901epcas1p1I;
-        Thu, 28 May 2020 07:07:07 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.153]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 49Xdzs416mzMqYl3; Thu, 28 May
-        2020 07:07:05 +0000 (GMT)
+        s=mail20170921; t=1590650717;
+        bh=63sggEwMXFg5//iy9mkhqyXY/p5ye2eUye4JI3aTFNA=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=gzzRRRewTL8AIphaaUgjbLkvqTt87CD7NN3eScUgUUcfC7a2JYDYTRzlW6sO6N5Ah
+         1OXDJf5fsWVnPVAUujo57rjLzqtD/UbDAXSGrgVtz6ouFYx8CY1EKtMxZ3u76t5rS2
+         v7HBLV80AYDTI43JklQ/xza8d4rDg8cYqujRJSPs=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20200528072516epcas1p38cb7bc241406202fa3d3619e1e3f5f7b~TIGYoNgOh0411404114epcas1p35;
+        Thu, 28 May 2020 07:25:16 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.156]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 49XfNm60qLzMqYkk; Thu, 28 May
+        2020 07:25:12 +0000 (GMT)
 Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
         epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EA.3C.04388.9136FCE5; Thu, 28 May 2020 16:07:05 +0900 (KST)
+        F4.A2.04388.8576FCE5; Thu, 28 May 2020 16:25:12 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200528070704epcas1p28e7d1b06ef8e9c2e679542eb17941f52~TH2f6sDVO2041720417epcas1p2D;
-        Thu, 28 May 2020 07:07:04 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200528072512epcas1p14d1270ffbc287a95423f195c2cd7c163~TIGU9DDpf0387903879epcas1p1a;
+        Thu, 28 May 2020 07:25:12 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200528070704epsmtrp22016e4512d7fee9b7704da54eef992e0~TH2f5neu13022430224epsmtrp2i;
-        Thu, 28 May 2020 07:07:04 +0000 (GMT)
-X-AuditID: b6c32a35-c84b79e000001124-d8-5ecf63192c80
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        91.C2.08303.8136FCE5; Thu, 28 May 2020 16:07:04 +0900 (KST)
+        20200528072512epsmtrp240f422f53f859ac2b0ef15a9fc0e2169~TIGU7c6-L0618806188epsmtrp2u;
+        Thu, 28 May 2020 07:25:12 +0000 (GMT)
+X-AuditID: b6c32a35-77bff70000001124-27-5ecf67586260
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        96.05.08382.8576FCE5; Thu, 28 May 2020 16:25:12 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200528070704epsmtip24c47dd7d69cb0a2ddff39e51688154c3~TH2fhU0zI0117301173epsmtip2R;
-        Thu, 28 May 2020 07:07:04 +0000 (GMT)
-Subject: Re: [PATCH 06/12] PM / devfreq: Add cpu based scaling support to
- passive_governor
-From:   Chanwoo Choi <cw00.choi@samsung.com>
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200528072512epsmtip1a21d95c302e8e9fe3f4f911374c2d3fa~TIGUj993O3158331583epsmtip1j;
+        Thu, 28 May 2020 07:25:12 +0000 (GMT)
+Subject: Re: [PATCH 09/12] devfreq: add mediatek cci devfreq
 To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -65,62 +63,62 @@ To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>,
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srv_heupstream@mediatek.com, Sibi Sankar <sibis@codeaurora.org>
+        srv_heupstream@mediatek.com
+From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <7ad35770-9327-084a-d2ca-1646cabd0a4d@samsung.com>
-Date:   Thu, 28 May 2020 16:17:25 +0900
+Message-ID: <c39e4f30-805a-78c4-b1c4-e55a03e2408e@samsung.com>
+Date:   Thu, 28 May 2020 16:35:33 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <64b81eea-641c-811d-9830-718b28db4188@samsung.com>
+In-Reply-To: <20200520034307.20435-10-andrew-sh.cheng@mediatek.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TfUwbZRzH8/R614JWz5bJb426cs4loIXeSufDhPnGzEW3SKKZ8SV0l3IC
-        oW/plek0cQxxY0S2mY0oBcFF2AtpRLBCQbGxdMFmUMAC25xsElicC25kgKI4tO2xyH/f5/d8
-        P/n9vs+LklCvUFplqd0tuOy8laGS5V396Xr9estwoeHr/g24u/0aieumZijcHIqQeKhyVoH/
-        GKuW4c7pCRJHexspHH1/FOH52hDCredHZbiyyogv7T9N4dmlIRkePPcjiT/oCynwykSHHE+c
-        uEnijyfVuGORe0rDeZu8iIserpVxPZ5JBdfZdojifp74luK+atnHVYUDcs43flDOHfa1IW7g
-        QreMm+98qOCu18pySwS+SHDpBLvFUVRqL85jXnjJ/KzZtMXA6tkc/Dijs/M2IY/J31Ggf67U
-        GgvH6Pbw1vJYqYAXRSZrW67LUe4WdCUO0Z3HCM4iqzPHmSnyNrHcXpxpcdi2sgbDZlPMuLus
-        pPbsOOX0fonebgq1oAo0UoNqUJIS6Gy4EqxTxLWa9iM4HthVg5Jj+haC7yMjlLSYR9DoHaPu
-        ENHf/kHSRi+C+q4+QlrcRLAQvSyPuzT0GzDbd4SIa4rOgMC1Cwk6hb5EwNGGl+MAQf+K4Fal
-        NwHcS6fB+NJ0YigVvQ2+OH0mAcjpR+CHU2cTA66jd0G4q2rVcx+E62cSbBL9JFxZ8Sf8BJ0K
-        P800yyS9Abp/b0xMB3RDEnT4FkgpQz6cP9m8mkcD1wd8CklrYf5G32r9XTgTDlESXI3AFxhZ
-        hY0QaD0W66CMdUiH9t4sqZwGPcufIqnxPXBj8UMybgFaBdUH1JLlYYj+MimT9Hr4/OAh6ihi
-        PGvieNZE8KyJ4Pm/2WdI3obuF5yirVgQWSe79sI7UeLtZ5j86HhkRxDRSsTcrTJwkUI1ye8R
-        99qCCJQEk6J6ZuhcoVpVxO99R3A5zK5yqyAGkSl22h8R2nUWR+wn2d1m1rTZaDTibHaLiWWZ
-        VFXz0mChmi7m3UKZIDgF1x1OpkzSVqBXkq8bL29d/ve9zBP1KQuB/Ncvmn0bN+n7X9TRy/4D
-        pj+7W9tzT5LpaUdacpavGu2eudtdPZ+MfXebe4DUPDaqiVrmdlMj1u3DF9vqpvypQe2+TRXe
-        YNPcqxnbFzXDb07/tfPq8w07H8z6e+Nb+ieetlYey56awwP7wy79N6caByNZjzJysYRnMwiX
-        yP8HJ8vIKBEEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNIsWRmVeSWpSXmKPExsWy7bCSvK5E8vk4g/ZZOhbb179gtZj68Amb
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Tf0wTZxjed3c9DrLq5yHzG384OPUPidUete5zAbNNslwyF4lOYsxCd6G3
+        Quiv9FodW1QERgHnInNO6ajMTKcii1KZ/JiViE0MUUBAEMcYgkSZQxbp2jRbsq3HYcZ/z/u+
+        z/O+7/P9YEh2jk5liuxuyWUXrRydRF29uVan223py9ef6+Fx66VpDT4+MUXjhlCvBveUzSTg
+        6L0qAgceDWvwYEc9jQfL+wEOHwkBfPZ+P4HLKgx49NB5Gs/Eegh85/aABn8WDCXgf4abKXxi
+        jMXNEeFNVmg61QSEdt9YghBorKaFX4av0cKVMweFiu5OSmgZ8lLCFy2NQLg10koI4cDK3KQ9
+        xVmFkmiWXGmSvcBhLrJbsrl3d5q2moyb9LyO34xf59Lsok3K5nK25ereKbLGLXFpe0WrJ57K
+        FWWZ27Aly+XwuKW0QofszuYkp9nq3OxcL4s22WO3rC9w2N7g9fpMY5z4YXHh94cjlDOc+3Hv
+        QBsoBT+9VQMSGQQ3ov6yy3QNSGJY2AZQXcBPqcEcQF9f8y9UogDFaseoF5LJ4acLrCBAZx78
+        ANTgD4DOx+7RCisZZqFzp8s0Cl4OR0l09Jv3FRIJbwB0YqCfUAo0zECd0yPzgqUwHQ3FHsU7
+        MYwWbkHRqKSkKbgGzU6MzvdJgXmo+2oFULAWLkPddVPzGyXCrcjbd5xUMAlXoJ+nGggVv4Za
+        n9WTylwEjyUi74h/wUIOuvjgrwQVJ6Ont1oWcCoKzwZpFX+KLnSHaFVcBVBL512NWjCgzrPH
+        CGVREq5Flzo2qOl01P63H6iDl6DZyOcahYKgFlVVsiplFRp8OEao+FX0nbeaPgo43yI7vkUW
+        fIss+P4f9i2gGsErklO2WSSZd/KLrzsA5t97hrENfNW7rQtABnAva/VCbz6rEffKJbYugBiS
+        W659u+d2Pqs1iyWfSC6HyeWxSnIXMMZPu5ZMTSlwxH+P3W3ijZkGgwFv5DcZeZ5boW2I3cln
+        oUV0S8WS5JRcL3QEk5haClLy/OM/vrQrZ7VQ2rjdQFeXm8HO9sx/O2qT3frLhDUaHK8JXtFN
+        nHJOTz6vFFfaTOvC79U1GT9Y8/jArv0371fsYJ88WZ23e11waZGPf5ZezlX6m8cf18/9KV/v
+        azI3DJ3ct6NyJmDcH/FMHvGeLjnwW3PKR78uOfS7GIocJq/LX3KUXCjyGaRLFv8DR32ctQUE
+        AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAIsWRmVeSWpSXmKPExsWy7bCSnG5E+vk4g6Y7Ehbb179gtZj68Amb
         xfwj51gtzja9Ybf4dqWDyWLT42usFpd3zWGzuNx8kdHic+8RRoul1y8yWTS1GFvcblzBZvHm
-        x1kmizOnL7FatO49wm7x79pGFotrC9+zWky/K2Sx8auHg7DHmnlrGD0u9/UyeeycdZfdY9Oq
-        TjaPO9f2sHlsXlLv0XJyP4vHlqvtLB59W1Yxehy/sZ3J4/MmuQDuKC6blNSczLLUIn27BK6M
-        3qNX2QrWbGCsmHdkCWMD44Uuxi5GTg4JAROJyy//ANlcHEICOxglWmefZYZISEpMu3gUyOYA
-        soUlDh8uBgkLCbxllNhyNA3EFhaIkXiztx+snE1AS2L/ixtsIHNEBO4zSyy/exXMYRZ4ziix
-        tPkoG0R3E5PE2y2yIDa/gKLE1R+Pwa7gFbCTWLdiJVgNi4CqxInlR9lBbFGBMImdSx4zQdQI
-        Spyc+YQFxOYUsJe4/28HWD2zgLrEn3mXmCFscYlbT+YzQdjyEtvfzmGewCg8C0n7LCQts5C0
-        zELSsoCRZRWjZGpBcW56brFhgVFearlecWJucWleul5yfu4mRnD8a2ntYNyz6oPeIUYmDsZD
-        jBIczEoivE5nT8cJ8aYkVlalFuXHF5XmpBYfYpTmYFES5/06a2GckEB6YklqdmpqQWoRTJaJ
-        g1OqgUmuz2bp70LdzhVinRGlHxMW/xfYlBua6X5zXcbO+do1OkzPJvy34fwje3K5wmH7E9sC
-        k0vlNu7ZpRW42ORV8YOlgl4terUznq3YdEPkwB41nQ7xQytMd4QqnzRTE6q5eqj1he2TymPr
-        o48J/U+O0TnatFxEJcQhtqrJWpWDjS960bX+hqN3cpwnvZ3vsSDhjEeF25ojkuGhfgfOSD5y
-        2//ZY8Fbhb/GVUf4bPqefkoXvfBJeXYuw8qYo/9YpWbc39KT9lqJxeH11elJyf4zS7b+nnX3
-        w2nNk/IP22zD5wUrrdD7UOBSJTH1+4H8he6rln9MUqpwl7gh7LjprKk4X3F/W19Da96VP12G
-        LUXab5RYijMSDbWYi4oTAZFsXnduAwAA
-X-CMS-MailID: 20200528070704epcas1p28e7d1b06ef8e9c2e679542eb17941f52
+        x1kmizOnL7FatO49wm7x79pGFovpd4UsNn71cBDyWDNvDaPHzll32T02repk87hzbQ+bx+Yl
+        9R4tJ/ezeGy52s7i0bdlFaPH8RvbmTw+b5IL4IrisklJzcksSy3St0vgyljW/ZWl4HNAxblL
+        OxgbGHc7djFyckgImEg8uvaKpYuRi0NIYDejxNru2ywQCUmJaRePMncxcgDZwhKHDxdD1Lxl
+        lDg26y9YjbCAjcTyhU2sIAkRgfvMEsvvXmUDcZgFDjJKPOv+ww7Rco5R4v2eDYwgLWwCWhL7
+        X9xgA7H5BRQlrv54zAiyglfATuLbt1SQMIuAqsS7h7dZQWxRgTCJnUseM4HYvAKCEidnPgHb
+        zCngLNF+fioziM0soC7xZ94lKFtc4taT+UwQtrzE9rdzmCcwCs9C0j4LScssJC2zkLQsYGRZ
+        xSiZWlCcm55bbFhgmJdarlecmFtcmpeul5yfu4kRHOlamjsYt6/6oHeIkYmD8RCjBAezkgiv
+        09nTcUK8KYmVValF+fFFpTmpxYcYpTlYlMR5bxQujBMSSE8sSc1OTS1ILYLJMnFwSjUwTVzC
+        fO3kTnfBwh+3/NLeWqrdTn3jNiFrW5IPc+SX/0H72Gs2lFzZHfJwc1L35OT1ixctyDm9zLAt
+        pE4sluF+Xsc1qy5Z//+/J1f8TmB7mqjtpHuKV8JHPW2q2nvRZ0HVCcfV+2Kvsx/dJhZ1yTtC
+        V+K16MEzC9/VX0y4FnF6g2vKwhdqp974vuT5z9jIc8js9B0OkwPhpyOMPnyd9uL40namgN4M
+        DiXHs8sX32LcZ/FESrJApkzZVLrmAC/f51kvPa5EvMkM+zEz8fuPe98/vlWf9qfom0Y2m+D+
+        6++O/4zVkYrSDKx7O0840aDYKFoyUlzIKbK3/pF9aRTj5K6Zd/QPMyv3vL9kY2Q35bSwEktx
+        RqKhFnNRcSIAxBSLJGMDAAA=
+X-CMS-MailID: 20200528072512epcas1p14d1270ffbc287a95423f195c2cd7c163
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200520034335epcas1p45a321a1a878fb7cd7b9c9ada0a474ef7
+X-CMS-RootMailID: 20200520034338epcas1p1b3c7eb91a37dfd1d9cfc150a2310f120
 References: <20200520034307.20435-1-andrew-sh.cheng@mediatek.com>
-        <CGME20200520034335epcas1p45a321a1a878fb7cd7b9c9ada0a474ef7@epcas1p4.samsung.com>
-        <20200520034307.20435-7-andrew-sh.cheng@mediatek.com>
-        <64b81eea-641c-811d-9830-718b28db4188@samsung.com>
+        <CGME20200520034338epcas1p1b3c7eb91a37dfd1d9cfc150a2310f120@epcas1p1.samsung.com>
+        <20200520034307.20435-10-andrew-sh.cheng@mediatek.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -128,665 +126,355 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Andrew-sh.Cheng,
 
-The exynos-bus.c used the passive governor.
-Even if don't make the problem because DEVFREQ_PARENT_DEV is zero,
-you need to initialize the parent_type with DEVFREQ_PARENT_DEV as following:
+On 5/20/20 12:43 PM, Andrew-sh.Cheng wrote:
+> This adds a devfreq driver for the Cache Coherent Interconnect (CCI)
+> of the Mediatek MT8183.
+> 
+> On the MT8183 the CCI is supplied by the same regulator as the LITTLE
+> cores. The driver is notified when the regulator voltage changes
+> (driven by cpufreq) and adjusts the CCI frequency to the maximum
+> possible value.
+> 
+> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> ---
+>  drivers/devfreq/Kconfig              |  10 ++
+>  drivers/devfreq/Makefile             |   1 +
+>  drivers/devfreq/mt8183-cci-devfreq.c | 206 +++++++++++++++++++++++++++++++++++
 
-diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-index 8fa8eb541373..1c71c47bc2ac 100644
---- a/drivers/devfreq/exynos-bus.c
-+++ b/drivers/devfreq/exynos-bus.c
-@@ -369,6 +369,7 @@ static int exynos_bus_profile_init_passive(struct exynos_bus *bus,
-                return -ENOMEM;
- 
-        passive_data->parent = parent_devfreq;
-+       passive_data->parent_type = DEVFREQ_PARENT_DEV;
- 
-        /* Add devfreq device for exynos bus with passive governor */
-        bus->devfreq = devm_devfreq_add_device(dev, profile, DEVFREQ_GOV_PASSIVE,
+The mt8183-cci.c is enough for driver name.
+
+>  3 files changed, 217 insertions(+)
+>  create mode 100644 drivers/devfreq/mt8183-cci-devfreq.c
+> 
+> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> index d9067950af6a..4ed7116271ee 100644
+> --- a/drivers/devfreq/Kconfig
+> +++ b/drivers/devfreq/Kconfig
+> @@ -103,6 +103,16 @@ config ARM_IMX8M_DDRC_DEVFREQ
+>  	  This adds the DEVFREQ driver for the i.MX8M DDR Controller. It allows
+>  	  adjusting DRAM frequency.
+>  
+> +config ARM_MT8183_CCI_DEVFREQ
+> +	tristate "MT8183 CCI DEVFREQ Driver"
+> +	depends on ARM_MEDIATEK_CPUFREQ
+> +	help
+> +		This adds a devfreq driver for Cache Coherent Interconnect
+> +		of Mediatek MT8183, which is shared the same regulator
+> +		with cpu cluster.
+> +		It can track buck voltage and update a proper cci frequency.
+
+s/cci/CCI
+
+> +		Use notification to get regulator status.
+> +
+>  config ARM_TEGRA_DEVFREQ
+>  	tristate "NVIDIA Tegra30/114/124/210 DEVFREQ Driver"
+>  	depends on ARCH_TEGRA_3x_SOC || ARCH_TEGRA_114_SOC || \
+> diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
+> index 3eb4d5e6635c..5b1b670c954d 100644
+> --- a/drivers/devfreq/Makefile
+> +++ b/drivers/devfreq/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
+>  # DEVFREQ Drivers
+>  obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
+>  obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
+> +obj-$(CONFIG_ARM_MT8183_CCI_DEVFREQ)	+= mt8183-cci-devfreq.o
+>  obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
+>  obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
+>  obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)	+= tegra20-devfreq.o
+> diff --git a/drivers/devfreq/mt8183-cci-devfreq.c b/drivers/devfreq/mt8183-cci-devfreq.c
+> new file mode 100644
+> index 000000000000..cd7929a83bf8
+> --- /dev/null
+> +++ b/drivers/devfreq/mt8183-cci-devfreq.c
+> @@ -0,0 +1,206 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2019 MediaTek Inc.
+
+s/2019/2020
+
+> +
+> + * Author: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/devfreq.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/time.h>
+> +
+> +#include "governor.h"
+
+It is not needed. Please remove it.
+
+> +
+> +#define MAX_VOLT_LIMIT		(1150000)
+> +
+> +struct cci_devfreq {
+> +	struct devfreq *devfreq;
+> +	struct regulator *proc_reg;
+
+'proc' means the 'processor'?
+Instead of 'proc_reg', you better to use 'cpu_reg'.
+
+> +	struct clk *cci_clk;
+> +	int old_vproc;
+> +	unsigned long old_freq;
+> +};
+> +
+> +static int mtk_cci_set_voltage(struct cci_devfreq *cci_df, int vproc)
+> +{
+> +	int ret;
+> +
+> +	ret = regulator_set_voltage(cci_df->proc_reg, vproc,
+> +				    MAX_VOLT_LIMIT);
+> +	if (!ret)
+> +		cci_df->old_vproc = vproc;
+> +	return ret;
+> +}
+> +
+> +static int mtk_cci_devfreq_target(struct device *dev, unsigned long *freq,
+> +				  u32 flags)
+> +{
+> +	int ret;
+> +	struct cci_devfreq *cci_df = dev_get_drvdata(dev);
+> +	struct dev_pm_opp *opp;
+> +	unsigned long opp_rate, opp_voltage, old_voltage;
+> +
+> +	if (!cci_df)
+> +		return -EINVAL;
+> +
+> +	if (cci_df->old_freq == *freq)
+> +		return 0;
+> +
+> +	opp_rate = *freq;
+> +	opp = dev_pm_opp_find_freq_floor(dev, &opp_rate);
+> +	opp_voltage = dev_pm_opp_get_voltage(opp);
+> +	dev_pm_opp_put(opp);
 
 
-On 5/28/20 3:14 PM, Chanwoo Choi wrote:
-> Hi Andrew-sh.Cheng,
-> 
-> Thanks for your posting. I like this approach absolutely.
-> I think that it is necessary. When I developed the embedded product,
-> I needed this feature always. 
-> 
-> I add the comments on below.
-> 
-> 
-> And the following email is not valid. So, I dropped this email
-> from Cc list.
-> Saravana Kannan <skannan@codeaurora.org>
-> 
-> 
-> On 5/20/20 12:43 PM, Andrew-sh.Cheng wrote:
->> From: Saravana Kannan <skannan@codeaurora.org>
->>
->> Many CPU architectures have caches that can scale independent of the
->> CPUs. Frequency scaling of the caches is necessary to make sure that the
->> cache is not a performance bottleneck that leads to poor performance and
->> power. The same idea applies for RAM/DDR.
->>
->> To achieve this, this patch adds support for cpu based scaling to the
->> passive governor. This is accomplished by taking the current frequency
->> of each CPU frequency domain and then adjust the frequency of the cache
->> (or any devfreq device) based on the frequency of the CPUs. It listens
->> to CPU frequency transition notifiers to keep itself up to date on the
->> current CPU frequency.
->>
->> To decide the frequency of the device, the governor does one of the
->> following:
->> * Derives the optimal devfreq device opp from required-opps property of
->>   the parent cpu opp_table.
->>
->> * Scales the device frequency in proportion to the CPU frequency. So, if
->>   the CPUs are running at their max frequency, the device runs at its
->>   max frequency. If the CPUs are running at their min frequency, the
->>   device runs at its min frequency. It is interpolated for frequencies
->>   in between.
->>
->> Andrew-sh.Cheng change
->> dev_pm_opp_xlate_opp to dev_pm_opp_xlate_required_opp devfreq->max_freq
->> to devfreq->user_min_freq_req.data.freq.qos->min_freq.target_value
->> for kernel-5.7
->>
->> Signed-off-by: Saravana Kannan <skannan@codeaurora.org>
->> [Sibi: Integrated cpu-freqmap governor into passive_governor]
->> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
->> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
->> ---
->>  drivers/devfreq/Kconfig            |   2 +
->>  drivers/devfreq/governor_passive.c | 278 ++++++++++++++++++++++++++++++++++---
->>  include/linux/devfreq.h            |  40 +++++-
->>  3 files changed, 299 insertions(+), 21 deletions(-)
->>
->> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
->> index 0b1df12e0f21..d9067950af6a 100644
->> --- a/drivers/devfreq/Kconfig
->> +++ b/drivers/devfreq/Kconfig
->> @@ -73,6 +73,8 @@ config DEVFREQ_GOV_PASSIVE
->>  	  device. This governor does not change the frequency by itself
->>  	  through sysfs entries. The passive governor recommends that
->>  	  devfreq device uses the OPP table to get the frequency/voltage.
->> +	  Alternatively the governor can also be chosen to scale based on
->> +	  the online CPUs current frequency.
->>  
->>  comment "DEVFREQ Drivers"
->>  
->> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
->> index 2d67d6c12dce..7dcda02a5bb7 100644
->> --- a/drivers/devfreq/governor_passive.c
->> +++ b/drivers/devfreq/governor_passive.c
->> @@ -8,11 +8,89 @@
->>   */
->>  
->>  #include <linux/module.h>
->> +#include <linux/cpu.h>
->> +#include <linux/cpufreq.h>
->> +#include <linux/cpumask.h>
->>  #include <linux/device.h>
->>  #include <linux/devfreq.h>
->> +#include <linux/slab.h>
->>  #include "governor.h"
->>  
->> -static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
->> +static unsigned int xlate_cpufreq_to_devfreq(struct devfreq_passive_data *data,
-> 
-> Need to change 'unsigned int' to 'unsigned long'.
-> 
->> +					     unsigned int cpu)
->> +{
->> +	unsigned int cpu_min, cpu_max, dev_min, dev_max, cpu_percent, max_state;
-> 
-> Better to define them separately as following and then need to rename
-> the variable. Usually, use the 'min_freq' and 'max_freq' word for
-> the minimum/maximum frequency.
-> 
-> 	unsigned int cpu_min_freq, cpu_max_freq, cpu_curr_freq, cpu_percent;
-> 	unsigned long dev_min_freq, dev_max_freq, dev_max_state,
-> 
-> The devfreq used 'unsigned long'. The cpufreq used 'unsigned long'
-> and 'unsigned int'. You need to handle them properly.
-> 
-> 
->> +	struct devfreq_cpu_state *cpu_state = data->cpu_state[cpu];
->> +	struct devfreq *devfreq = (struct devfreq *)data->this;
->> +	unsigned long *freq_table = devfreq->profile->freq_table;
-> 
-> In this function, use 'cpu' work for cpufreq and use 'dev' for devfreq.
-> So, I think 'dev_freq_table' is proper name instead of 'freq_table'
-> for the readability.
-> 
-> 	freq_table -> dev_freq_table
-> 
->> +	struct dev_pm_opp *opp = NULL, *cpu_opp = NULL;
-> 
-> In the get_target_freq_with_devfreq(), use 'p_opp' indicating
-> the OPP of parent device. For the consistency, I think that
-> use 'p_opp' instead of 'cpu_opp'. 
-> 
->> +	unsigned long cpu_freq, freq;
-> 
-> Define the 'cpu_freq' on above with cpu_min_freq/cpu_max_freq definition.
-> 	cpu_freq -> cpu_curr_freq.
-> 
->> +
->> +	if (!cpu_state || cpu_state->first_cpu != cpu ||
->> +	    !cpu_state->opp_table || !devfreq->opp_table)
->> +		return 0;
->> +
->> +	cpu_freq = cpu_state->freq * 1000;
->> +	cpu_opp = devfreq_recommended_opp(cpu_state->dev, &cpu_freq, 0);
->> +	if (IS_ERR(cpu_opp))
->> +		return 0;
->> +
->> +	opp = dev_pm_opp_xlate_required_opp(cpu_state->opp_table,
->> +					    devfreq->opp_table, cpu_opp);
->> +	dev_pm_opp_put(cpu_opp);
->> +
->> +	if (!IS_ERR(opp)) {
->> +		freq = dev_pm_opp_get_freq(opp);
->> +		dev_pm_opp_put(opp);
-> 
-> Better to add the 'out' goto statement.
-> If you use 'goto out', you can reduce the one indentation
-> without 'else' statement.
-> 	
-> 
->> +	} else {
-> 
-> As I commented, when dev_pm_opp_xlate_required_opp() return successfully
-> , use 'goto out'. We can remove 'else' and then reduce the unneeded indentation.
-> 
-> 
->> +		/* Use Interpolation if required opps is not available */
->> +		cpu_min = cpu_state->min_freq;
->> +		cpu_max = cpu_state->max_freq;
->> +		cpu_freq = cpu_state->freq;
->> +
->> +		if (freq_table) {
->> +			/* Get minimum frequency according to sorting order */
->> +			max_state = freq_table[devfreq->profile->max_state - 1];
->> +			if (freq_table[0] < max_state) {
->> +				dev_min = freq_table[0];
->> +				dev_max = max_state;
->> +			} else {
->> +				dev_min = max_state;
->> +				dev_max = freq_table[0];
->> +			}
->> +		} else {
->> +			if (devfreq->user_max_freq_req.data.freq.qos->max_freq.target_value
->> +			    <= devfreq->user_min_freq_req.data.freq.qos->min_freq.target_value)
->> +				return 0;
->> +			dev_min =
->> +			devfreq->user_min_freq_req.data.freq.qos->min_freq.target_value;
->> +			dev_max =
->> +			devfreq->user_max_freq_req.data.freq.qos->max_freq.target_value;
-> 
-> I think it is not proper to access the variable of pm_qos structure directly.
-> Instead of direct access, you have to use the exported PM QoS function such as
-> - pm_qos_read_value(devfreq->dev.parent, DEV_PM_QOS_MIN_FREQUENCY);
-> - pm_qos_read_value(devfreq->dev.parent, DEV_PM_QOS_MAX_FREQUENCY);
-> 
->> +		}
->> +		cpu_percent = ((cpu_freq - cpu_min) * 100) / cpu_max - cpu_min;
->> +		freq = dev_min + mult_frac(dev_max - dev_min, cpu_percent, 100);
->> +	}
-> 
-> 
-> I think that you better to add 'out' jump label as following:
-> 
-> out:
-> 
->> +
->> +	return freq;
->> +}
->> +
->> +static int get_target_freq_with_cpufreq(struct devfreq *devfreq,
->> +					unsigned long *freq)
->> +{
->> +	struct devfreq_passive_data *p_data =
->> +				(struct devfreq_passive_data *)devfreq->data;
->> +	unsigned int cpu, target_freq = 0;
-> 
-> Need to define 'target_freq' with 'unsigned long' type.
-> 
->> +
->> +	for_each_online_cpu(cpu)
->> +		target_freq = max(target_freq,
->> +				  xlate_cpufreq_to_devfreq(p_data, cpu));
->> +
->> +	*freq = target_freq;
->> +
->> +	return 0;
->> +}
->> +
->> +static int get_target_freq_with_devfreq(struct devfreq *devfreq,
->>  					unsigned long *freq)
->>  {
->>  	struct devfreq_passive_data *p_data
->> @@ -23,16 +101,6 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
->>  	int i, count, ret = 0;
->>  
->>  	/*
->> -	 * If the devfreq device with passive governor has the specific method
->> -	 * to determine the next frequency, should use the get_target_freq()
->> -	 * of struct devfreq_passive_data.
->> -	 */
->> -	if (p_data->get_target_freq) {
->> -		ret = p_data->get_target_freq(devfreq, freq);
->> -		goto out;
->> -	}
->> -
->> -	/*
->>  	 * If the parent and passive devfreq device uses the OPP table,
->>  	 * get the next frequency by using the OPP table.
->>  	 */
->> @@ -102,6 +170,37 @@ static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
->>  	return ret;
->>  }
->>  
->> +static int devfreq_passive_get_target_freq(struct devfreq *devfreq,
->> +					   unsigned long *freq)
->> +{
->> +	struct devfreq_passive_data *p_data =
->> +				(struct devfreq_passive_data *)devfreq->data;
->> +	int ret;
->> +
->> +	/*
->> +	 * If the devfreq device with passive governor has the specific method
->> +	 * to determine the next frequency, should use the get_target_freq()
->> +	 * of struct devfreq_passive_data.
->> +	 */
->> +	if (p_data->get_target_freq)
->> +		return p_data->get_target_freq(devfreq, freq);
->> +
->> +	switch (p_data->parent_type) {
->> +	case DEVFREQ_PARENT_DEV:
->> +		ret = get_target_freq_with_devfreq(devfreq, freq);
->> +		break;
->> +	case CPUFREQ_PARENT_DEV:
->> +		ret = get_target_freq_with_cpufreq(devfreq, freq);
->> +		break;
->> +	default:
->> +		ret = -EINVAL;
->> +		dev_err(&devfreq->dev, "Invalid parent type\n");
->> +		break;
->> +	}
->> +
->> +	return ret;
->> +}
->> +
->>  static int update_devfreq_passive(struct devfreq *devfreq, unsigned long freq)
->>  {
->>  	int ret;
->> @@ -156,6 +255,140 @@ static int devfreq_passive_notifier_call(struct notifier_block *nb,
->>  	return NOTIFY_DONE;
->>  }
->>  
->> +static int cpufreq_passive_notifier_call(struct notifier_block *nb,
->> +					 unsigned long event, void *ptr)
->> +{
->> +	struct devfreq_passive_data *data =
->> +			container_of(nb, struct devfreq_passive_data, nb);
->> +	struct devfreq *devfreq = (struct devfreq *)data->this;
->> +	struct devfreq_cpu_state *cpu_state;
->> +	struct cpufreq_freqs *freq = ptr;
-> 
-> How about changing 'freq' to 'cpu_freqs'?
-> 
-> In the drivers/cpufreq/cpufreq.c, use 'freqs' name indicating
-> the instance of 'struct cpufreq_freqs'. And in order to
-> identfy, how about adding 'cpu_' prefix for variable name?
-> 
->> +	unsigned int current_freq;
-> 
-> Need to define curr_freq with 'unsigned long' type
-> and better to use 'curr_freq' variable name.
-> 
->> +	int ret;
->> +
->> +	if (event != CPUFREQ_POSTCHANGE || !freq ||
->> +	    !data->cpu_state[freq->policy->cpu])
->> +		return 0;
->> +
->> +	cpu_state = data->cpu_state[freq->policy->cpu];
->> +	if (cpu_state->freq == freq->new)
->> +		return 0;
->> +
->> +	/* Backup current freq and pre-update cpu state freq*/
->> +	current_freq = cpu_state->freq;
->> +	cpu_state->freq = freq->new;
->> +
->> +	mutex_lock(&devfreq->lock);
->> +	ret = update_devfreq(devfreq);
->> +	mutex_unlock(&devfreq->lock);
->> +	if (ret) {
->> +		cpu_state->freq = current_freq;
->> +		dev_err(&devfreq->dev, "Couldn't update the frequency.\n");
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int cpufreq_passive_register(struct devfreq_passive_data **p_data)
->> +{
->> +	struct devfreq_passive_data *data = *p_data;
->> +	struct devfreq *devfreq = (struct devfreq *)data->this;
->> +	struct device *dev = devfreq->dev.parent;
->> +	struct opp_table *opp_table = NULL;
->> +	struct devfreq_cpu_state *state;
-> 
-> For the readability, I thinkt 'cpu_state' is proper instead of 'state'.
-> 
->> +	struct cpufreq_policy *policy;
->> +	struct device *cpu_dev;
->> +	unsigned int cpu;
->> +	int ret;
->> +
->> +	get_online_cpus();
-> 
-> Add blank line.
-> 
->> +	data->nb.notifier_call = cpufreq_passive_notifier_call;
->> +	ret = cpufreq_register_notifier(&data->nb,
->> +					CPUFREQ_TRANSITION_NOTIFIER);
->> +	if (ret) {
->> +		dev_err(dev, "Couldn't register cpufreq notifier.\n");
->> +		data->nb.notifier_call = NULL;
->> +		goto out;
->> +	}
->> +
->> +	/* Populate devfreq_cpu_state */
->> +	for_each_online_cpu(cpu) {
->> +		if (data->cpu_state[cpu])
->> +			continue;
->> +
->> +		policy = cpufreq_cpu_get(cpu);
-> 
-> cpufreq_cpu_get() might return 'NULL'. I think you need to handle
-> return value as following:
-> 
-> 		if (!policy) {
-> 			ret = -EINVAL;
-> 			goto out;
-> 		} else if (PTR_ERR(policy) == -EPROBE_DEFER) {
-> 			goto out;
-> 		} else if (IS_ERR(policy) {
-> 			ret = PTR_ERR(policy);
-> 			dev_err(dev, "Couldn't get the cpufreq_poliy.\n");
-> 			goto out;
-> 		}
-> 
-> If cpufreq_cpu_get() return successfully, to do next.
-> It reduces the one indentaion.
-> 
-> 
-> 
->> +		if (policy) {
->> +			state = kzalloc(sizeof(*state), GFP_KERNEL);
->> +			if (!state) {
->> +				ret = -ENOMEM;
->> +				goto out;
->> +			}
->> +
->> +			cpu_dev = get_cpu_device(cpu);
->> +			if (!cpu_dev) {
->> +				dev_err(dev, "Couldn't get cpu device.\n");
->> +				ret = -ENODEV;
->> +				goto out;
->> +			}
->> +
->> +			opp_table = dev_pm_opp_get_opp_table(cpu_dev);
->> +			if (IS_ERR(devfreq->opp_table)) {
->> +				ret = PTR_ERR(opp_table);
->> +				goto out;
->> +			}
->> +
->> +			state->dev = cpu_dev;
->> +			state->opp_table = opp_table;
->> +			state->first_cpu = cpumask_first(policy->related_cpus);
->> +			state->freq = policy->cur;
->> +			state->min_freq = policy->cpuinfo.min_freq;
->> +			state->max_freq = policy->cpuinfo.max_freq;
->> +			data->cpu_state[cpu] = state;
-> 
-> Add blank line.
-> 
->> +			cpufreq_cpu_put(policy);
->> +		} else {
->> +			ret = -EPROBE_DEFER;
->> +			goto out;
->> +		}
->> +	}
-> 
-> Add blank line.
-> 
->> +out:
->> +	put_online_cpus();
->> +	if (ret)
->> +		return ret;
->> +
->> +	/* Update devfreq */
->> +	mutex_lock(&devfreq->lock);
->> +	ret = update_devfreq(devfreq);
->> +	mutex_unlock(&devfreq->lock);
->> +	if (ret)
->> +		dev_err(dev, "Couldn't update the frequency.\n");
->> +
->> +	return ret;
->> +}
->> +
->> +static int cpufreq_passive_unregister(struct devfreq_passive_data **p_data)
->> +{
->> +	struct devfreq_passive_data *data = *p_data;
->> +	struct devfreq_cpu_state *cpu_state;
->> +	int cpu;
->> +
->> +	if (data->nb.notifier_call)
->> +		cpufreq_unregister_notifier(&data->nb,
->> +					    CPUFREQ_TRANSITION_NOTIFIER);
->> +
->> +	for_each_possible_cpu(cpu) {
->> +		cpu_state = data->cpu_state[cpu];
->> +		if (cpu_state) {
->> +			if (cpu_state->opp_table)
->> +				dev_pm_opp_put_opp_table(cpu_state->opp_table);
->> +			kfree(cpu_state);
->> +			cpu_state = NULL;
->> +		}
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->>  static int devfreq_passive_event_handler(struct devfreq *devfreq,
->>  				unsigned int event, void *data)
->>  {
->> @@ -165,7 +398,7 @@ static int devfreq_passive_event_handler(struct devfreq *devfreq,
->>  	struct notifier_block *nb = &p_data->nb;
->>  	int ret = 0;
->>  
->> -	if (!parent)
->> +	if (p_data->parent_type == DEVFREQ_PARENT_DEV && !parent)
->>  		return -EPROBE_DEFER;
-> 
-> If you modify the devfreq_passive_event_handler() as following,
-> you can move this condition for DEVFREQ_PARENT_DEV into 
-> (register|unregister)_parent_dev_notifier.
-> 
-> 	switch (event) {                                                                                  
-> 	case DEVFREQ_GOV_START:                                               
-> 		ret = register_parent_dev_notifier(p_data);
-> 		break;
-> 	case DEVFREQ_GOV_STOP:                                             
-> 		ret = unregister_parent_dev_notifier(p_data);
-> 		break;
-> 	default: 
-> 		ret = -EINVAL;
-> 		break;
-> 	}
->                                                                                               
-> 	return ret;
-> 
->>  
->>  	switch (event) {
->> @@ -173,13 +406,24 @@ static int devfreq_passive_event_handler(struct devfreq *devfreq,
->>  		if (!p_data->this)
->>  			p_data->this = devfreq;
->>  
->> -		nb->notifier_call = devfreq_passive_notifier_call;
->> -		ret = devfreq_register_notifier(parent, nb,
->> -					DEVFREQ_TRANSITION_NOTIFIER);
->> +		if (p_data->parent_type == DEVFREQ_PARENT_DEV) {
->> +			nb->notifier_call = devfreq_passive_notifier_call;
->> +			ret = devfreq_register_notifier(parent, nb,
->> +						DEVFREQ_TRANSITION_NOTIFIER);
->> +		} else if (p_data->parent_type == CPUFREQ_PARENT_DEV) {
->> +			ret = cpufreq_passive_register(&p_data);
-> 
-> I think that we better to collect the code related to notifier registration
-> into one function like devfreq_pass_register_notifier() instead of
-> cpufreq_passive_register() as following: I think it is more simple and readable.
-> 
-> If you have more proper function name of register_parent_dev_notifier,
-> please give your opinion.
-> 
-> 
-> 	int register_parent_dev_notifier(struct devfreq_passive_data **p_data)
-> 		switch (p_data->parent_type) {
-> 		case DEVFREQ_PARENT_DEV:
-> 			nb->notifier_call = devfreq_passive_notifier_call;
-> 			ret = devfreq_register_notifier(parent, nb,
-> 			break;
-> 		case CPUFREQ_PARENT_DEV:
-> 			cpufreq_register_notifier(...)
-> 			...
-> 			break;
-> 		}
-> 		
-> 
->> +		} else {
->> +			ret = -EINVAL;
->> +		}
->>  		break;
->>  	case DEVFREQ_GOV_STOP:
->> -		WARN_ON(devfreq_unregister_notifier(parent, nb,
->> -					DEVFREQ_TRANSITION_NOTIFIER));
->> +		if (p_data->parent_type == DEVFREQ_PARENT_DEV)
->> +			WARN_ON(devfreq_unregister_notifier(parent, nb,
->> +						DEVFREQ_TRANSITION_NOTIFIER));
->> +		else if (p_data->parent_type == CPUFREQ_PARENT_DEV)
->> +			cpufreq_passive_unregister(&p_data);
->> +		else
->> +			ret = -EINVAL;
-> 
-> ditto. unregister_parent_dev_notifier(struct devfreq_passive_data **p_data)
-> 
->>  		break;
->>  	default:
->>  		break;
->> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
->> index a4b19d593151..04ce576fd6f1 100644
->> --- a/include/linux/devfreq.h
->> +++ b/include/linux/devfreq.h
->> @@ -278,6 +278,32 @@ struct devfreq_simple_ondemand_data {
->>  
->>  #if IS_ENABLED(CONFIG_DEVFREQ_GOV_PASSIVE)
->>  /**
->> + * struct devfreq_cpu_state - holds the per-cpu state
->> + * @freq:	the current frequency of the cpu.
->> + * @min_freq:	the min frequency of the cpu.
->> + * @max_freq:	the max frequency of the cpu.
->> + * @first_cpu:	the cpumask of the first cpu of a policy.
->> + * @dev:	reference to cpu device.
->> + * @opp_table:	reference to cpu opp table.
->> + *
->> + * This structure stores the required cpu_state of a cpu.
->> + * This is auto-populated by the governor.
->> + */
->> +struct devfreq_cpu_state {> +	unsigned int freq;
-> 
-> It is better to change from 'freq' to 'curr_freq'
-> for more correct expression.
-> 
->> +	unsigned int min_freq;
->> +	unsigned int max_freq;
->> +	unsigned int first_cpu;
->> +	struct device *dev;
-> 
-> How about changing the name 'dev' to 'cpu_dev'?
-> 
-> 
->> +	struct opp_table *opp_table;
->> +};
-> 
-> devfreq_cpu_state is only handled by within driver/devfreq/governor_passive.c.
-> 
-> So, you can move it into drivers/devfreq/governor_passive.c
-> and just add the definition into include/linux/devfreq.h as following:
-> It is able to prevent the access of variable of 'struct devfreq_cpu_state'
-> outside.
-> 
-> 	struct devfreq_cpu_state;
-> 
->> +
->> +enum devfreq_parent_dev_type {
->> +	DEVFREQ_PARENT_DEV,
->> +	CPUFREQ_PARENT_DEV,
->> +};
->> +
->> +/**
->>   * struct devfreq_passive_data - ``void *data`` fed to struct devfreq
->>   *	and devfreq_add_device
->>   * @parent:	the devfreq instance of parent device.
->> @@ -288,13 +314,15 @@ struct devfreq_simple_ondemand_data {
->>   *			using governors except for passive governor.
->>   *			If the devfreq device has the specific method to decide
->>   *			the next frequency, should use this callback.
->> - * @this:	the devfreq instance of own device.
->> - * @nb:		the notifier block for DEVFREQ_TRANSITION_NOTIFIER list
->> + * @parent_type		parent type of the device
-> 
-> Need to add ':' at the end of word. -> "parent_type:".
-> 
->> + * @this:		the devfreq instance of own device.
->> + * @nb:			the notifier block for DEVFREQ_TRANSITION_NOTIFIER list
-> 
-> I knew that you make them with same indentation.
-> But, actually, it is not related to this patch like clean-up code.
-> Even if it is not pretty, you better to don't touch 'this' and 'nb' indentaion.
-> 
->> + * @cpu_state:		the state min/max/current frequency of all online cpu's
->>   *
->>   * The devfreq_passive_data have to set the devfreq instance of parent
->>   * device with governors except for the passive governor. But, don't need to
->> - * initialize the 'this' and 'nb' field because the devfreq core will handle
->> - * them.
->> + * initialize the 'this', 'nb' and 'cpu_state' field because the devfreq core
->> + * will handle them.
->>   */
->>  struct devfreq_passive_data {
->>  	/* Should set the devfreq instance of parent device */
->> @@ -303,9 +331,13 @@ struct devfreq_passive_data {
->>  	/* Optional callback to decide the next frequency of passvice device */
->>  	int (*get_target_freq)(struct devfreq *this, unsigned long *freq);
->>  
->> +	/* Should set the type of parent device */
->> +	enum devfreq_parent_dev_type parent_type;
->> +
->>  	/* For passive governor's internal use. Don't need to set them */
->>  	struct devfreq *this;
->>  	struct notifier_block nb;
->> +	struct devfreq_cpu_state *cpu_state[NR_CPUS];
->>  };
->>  #endif
->>  
->>
-> 
+You can use the helper function for getting the rate 
+with devfreq_recommended_opp(). You can refer the following code
+in drivers/devfreq/exynos-bus.c
+
+	opp = devfreq_recommended_opp(dev, freq, flags);
+	if (IS_ERR(opp)) {
+		dev_err(dev, "failed to get recommended opp instance\n");
+		return PTR_ERR(opp);
+	}
+	dev_pm_opp_put(opp);
+
+> +
+> +	old_voltage = cci_df->old_vproc;
+> +	if (old_voltage == 0)
+> +		old_voltage = regulator_get_voltage(cci_df->proc_reg);
+> +
+> +	// scale up: set voltage first then freq
+> +	if (opp_voltage > old_voltage) {
+> +		ret = mtk_cci_set_voltage(cci_df, opp_voltage);
+> +		if (ret) {
+> +			pr_err("cci: failed to scale up voltage\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	ret = clk_set_rate(cci_df->cci_clk, *freq);
+> +	if (ret) {
+> +		pr_err("%s: failed cci to set rate: %d\n", __func__,
+> +		       ret);
+> +		mtk_cci_set_voltage(cci_df, old_voltage);
+> +		return ret;
+> +	}
+> +
+> +	// scale down: set freq first then voltage
+> +	if (opp_voltage < old_voltage) {
+> +		ret = mtk_cci_set_voltage(cci_df, opp_voltage);
+> +		if (ret) {
+> +			pr_err("cci: failed to scale down voltage\n");
+> +			clk_set_rate(cci_df->cci_clk, cci_df->old_freq);
+> +			return ret;
+> +		}
+> +	}
+
+
+I recommend that dev_pm_opp_set_rate() and dev_pm_opp_set_regulator()
+instead of 'clk_set_rate' and 'regulator_set_voltage'.
+In the dev_pm_opp_set_rate(), handle the these sequence.
+You can refer the merged patch[1].
+
+[1] commit 4294a779bd8dff6c65e7e85ffe7a1ea236e92a68
+- PM / devfreq: exynos-bus: Convert to use dev_pm_opp_set_rate()
+
+
+> +
+> +	cci_df->old_freq = *freq;
+> +
+> +	return 0;
+> +}
+> +
+> +static struct devfreq_dev_profile cci_devfreq_profile = {
+> +	.target = mtk_cci_devfreq_target,
+
+Need to add '.exit' for calling dev_pm_opp_of_remove_table().
+You can refer the merged devfreq patches like exynos_bus.c, imx-bus.c.
+
+> +};
+> +
+> +static int mtk_cci_devfreq_probe(struct platform_device *pdev)
+> +{
+> +	struct device *cci_dev = &pdev->dev;
+> +	struct cci_devfreq *cci_df;
+> +	struct devfreq_passive_data *passive_data;
+> +	int ret;
+> +
+> +	cci_df = devm_kzalloc(cci_dev, sizeof(*cci_df), GFP_KERNEL);
+> +	if (!cci_df)
+> +		return -ENOMEM;
+> +
+> +	cci_df->cci_clk = devm_clk_get(cci_dev, "cci_clock");
+> +	ret = PTR_ERR_OR_ZERO(cci_df->cci_clk);
+> +	if (ret) {
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(cci_dev, "failed to get clock for CCI: %d\n",
+> +				ret);
+> +		return ret;
+> +	}
+> +	cci_df->proc_reg = devm_regulator_get_optional(cci_dev, "proc");
+> +	ret = PTR_ERR_OR_ZERO(cci_df->proc_reg);
+> +	if (ret) {
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(cci_dev, "failed to get regulator for CCI: %d\n",
+> +				ret);
+> +		return ret;
+> +	}
+
+I recommend that use dev_pm_opp_set_regulators.
+You can refer the merged patch[1].
+
+[1] commit 4294a779bd8dff6c65e7e85ffe7a1ea236e92a68
+- PM / devfreq: exynos-bus: Convert to use dev_pm_opp_set_rate()
+
+
+> +	ret = regulator_enable(cci_df->proc_reg);
+> +	if (ret) {
+> +		pr_warn("enable buck for cci fail\n");
+
+Use dev_err instead of 'pr_warn'.
+
+> +		return ret;
+> +	}
+> +
+> +	ret = dev_pm_opp_of_add_table(cci_dev);
+> +	if (ret) {
+> +		dev_err(cci_dev, "Fail to init CCI OPP table: %d\n", ret);
+
+How about changing the error log as following
+because in this driver, use the 'failed to' sentence for error handling?
+
+	failed to get OPP table for CCI:L %d
+
+> +		return ret;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, cci_df);
+> +
+> +	passive_data = devm_kzalloc(cci_dev, sizeof(*passive_data), GFP_KERNEL);
+> +	if (!passive_data)
+> +		return -ENOMEM;
+
+On this error case, you have to call dev_pm_opp_of_remove_table().
+You better to make the 'err_opp' jump lable and then add 'goto err_opp'.
+
+> +
+> +	passive_data->parent_type = CPUFREQ_PARENT_DEV;
+> +
+> +	cci_df->devfreq = devm_devfreq_add_device(cci_dev,
+> +						  &cci_devfreq_profile,
+> +						  DEVFREQ_GOV_PASSIVE,
+> +						  passive_data);
+> +	if (IS_ERR(cci_df->devfreq)) {
+> +		ret = PTR_ERR(cci_df->devfreq);
+> +		dev_err(cci_dev, "cannot create cci devfreq device:%d\n", ret);
+> +		dev_pm_opp_of_remove_table(cci_dev);
+
+Instead of direct call, use 'goto err_opp'.
+
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_cci_devfreq_remove(struct platform_device *pdev)
+> +{
+> +	struct device *cci_dev = &pdev->dev;
+> +	struct cci_devfreq *cci_df;
+> +	struct notifier_block *opp_nb;
+> +
+> +	cci_df = platform_get_drvdata(pdev);
+> +	opp_nb = &cci_df->opp_nb;
+> +
+> +	dev_pm_opp_unregister_notifier(cci_dev, opp_nb);
+
+This patch doesn't call the dev_pm_opp_register_notifier.
+Please remove it.
+
+> +	devm_devfreq_remove_device(cci_dev, cci_df->devfreq);
+
+Don't need to call this function because you used devm_devfreq_add_device().
+
+> +	dev_pm_opp_of_remove_table(cci_dev)> +	regulator_disable(cci_df->proc_reg);
+> +
+> +	return 0;
+> +}
+> +
+> +static const __maybe_unused struct of_device_id
+> +	mediatek_cci_devfreq_of_match[] = {
+
+Make it on one line and remove '__maybe_unused' keyword.
+- mediatek_cci_devfreq_of_match-> mediatek_cci_of_match
+
+> +	{ .compatible = "mediatek,mt8183-cci" },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, mediatek_cci_devfreq_of_match);
+
+ditto.
+
+> +
+> +static struct platform_driver cci_devfreq_driver = {
+> +	.probe	= mtk_cci_devfreq_probe,
+> +	.remove	= mtk_cci_devfreq_remove,
+> +	.driver = {
+> +		.name = "mediatek-cci-devfreq",
+> +		.of_match_table = of_match_ptr(mediatek_cci_devfreq_of_match),
+
+ditto.
+
+> +	},
+> +};
+> +
+> +static int __init mtk_cci_devfreq_init(void)
+> +{
+> +	return platform_driver_register(&cci_devfreq_driver);
+> +}
+> +module_init(mtk_cci_devfreq_init)
+> +
+> +static void __exit mtk_cci_devfreq_exit(void)
+> +{
+> +	platform_driver_unregister(&cci_devfreq_driver);
+> +}
+> +module_exit(mtk_cci_devfreq_exit)
+
+Use 'module_platform_driver' instead of module_init and module_exit.
+
+> +
+> +MODULE_DESCRIPTION("Mediatek CCI devfreq driver");
+> +MODULE_AUTHOR("Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>");
+> +MODULE_LICENSE("GPL v2");
 > 
 
 
