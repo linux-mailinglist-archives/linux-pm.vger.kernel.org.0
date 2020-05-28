@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1431E1E553C
-	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 06:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79BC1E5735
+	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 08:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725779AbgE1ExN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 May 2020 00:53:13 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:31579 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725764AbgE1ExN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 00:53:13 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200528045306epoutp0223b94043a1417b747c358e0abab7b1f8~TGBhsasv60191401914epoutp02i
-        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 04:53:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200528045306epoutp0223b94043a1417b747c358e0abab7b1f8~TGBhsasv60191401914epoutp02i
+        id S1725859AbgE1GEZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 May 2020 02:04:25 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:44126 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726932AbgE1GEZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 02:04:25 -0400
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200528060417epoutp01d5e518fc1f901db490d3b7d6e40e1aa1~TG-rbWI302406824068epoutp013
+        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 06:04:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200528060417epoutp01d5e518fc1f901db490d3b7d6e40e1aa1~TG-rbWI302406824068epoutp013
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1590641586;
-        bh=JiZ1mXnfKpe9m6BNhP4M9O4R+4coStFJA2TE486yjc8=;
+        s=mail20170921; t=1590645857;
+        bh=bsWWGBc7XFv7+O4U9b6YFrCFo8z9ka4wANPexUZ1KK0=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Q/Op9jsfOa9AqUu9rHx06vsxXZ4Clh9w3GF6KtH0hrLwe91ILTmMMcd4hlAL+zoBf
-         8RFVZfJw3Xf9jjIDcw5ads6IISfPLqlOPTzvj2hlZyeL8awjiKklnusbTTKrJmVuid
-         Q+KcVIR2iqjbrBMTx6frNE0XGiYQHT+sEvn8Tcac=
+        b=NS75LoYzmyGS61GA+UbhhOYNgd2ksapOo8dAXEMDAioeg5Yz3omt/7eGG2r6ze5nA
+         ow8vbFVSJYIlVISn7ZGMH87CTEPWmP3GnXDqXEVjmna1uKlBbueBfQDhOlNo9DJeVi
+         xaCus364AMorsSsSMgS6KWapD7ch6OOlImVY90Nc=
 Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20200528045305epcas1p40cae63ccf88ab0ec10fc1ec724358b0d~TGBg9D5-i3216732167epcas1p4g;
-        Thu, 28 May 2020 04:53:05 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 49Xb1C07ZZzMqYkp; Thu, 28 May
-        2020 04:53:03 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        35.CA.04392.EA34FCE5; Thu, 28 May 2020 13:53:02 +0900 (KST)
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200528060416epcas1p1b8d0948a3b164930d2ace585e6992758~TG-qnSoPu0417904179epcas1p1h;
+        Thu, 28 May 2020 06:04:16 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.152]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 49XcbL0PZFzMqYkf; Thu, 28 May
+        2020 06:04:14 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        6E.3D.04395.D545FCE5; Thu, 28 May 2020 15:04:13 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200528045302epcas1p25f00cf42a4ecd907e017f04970ab3566~TGBd43_kA1139311393epcas1p2T;
-        Thu, 28 May 2020 04:53:02 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20200528060413epcas1p4567f813b4524d36985cd4862c36f2347~TG-niNbI71578115781epcas1p4W;
+        Thu, 28 May 2020 06:04:13 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200528045302epsmtrp2ad52b1a91ea2ae7efea6aa20c721556b~TGBd3GPhA2826528265epsmtrp2C;
-        Thu, 28 May 2020 04:53:02 +0000 (GMT)
-X-AuditID: b6c32a37-cc3ff70000001128-7b-5ecf43aea493
+        20200528060413epsmtrp2160ad869cc83b4215c4a4a1afe529840~TG-ng47Rn3138131381epsmtrp2L;
+        Thu, 28 May 2020 06:04:13 +0000 (GMT)
+X-AuditID: b6c32a39-46b9a9e00000112b-27-5ecf545d28f5
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        69.96.08303.EA34FCE5; Thu, 28 May 2020 13:53:02 +0900 (KST)
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        34.4D.08382.D545FCE5; Thu, 28 May 2020 15:04:13 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200528045302epsmtip1fc88aff40189470bd8091a7a1a6c027d~TGBdcnvxv1896718967epsmtip19;
-        Thu, 28 May 2020 04:53:02 +0000 (GMT)
+        20200528060413epsmtip1ec9a316f45ef34a1be0805bd46df56d8~TG-nKCf7o2629926299epsmtip1I;
+        Thu, 28 May 2020 06:04:13 +0000 (GMT)
 Subject: Re: [PATCH 06/12] PM / devfreq: Add cpu based scaling support to
  passive_governor
 To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>,
@@ -64,54 +64,52 @@ To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>,
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srv_heupstream@mediatek.com,
-        Saravana Kannan <skannan@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>
+        srv_heupstream@mediatek.com, Sibi Sankar <sibis@codeaurora.org>
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <fc718d05-6e03-e9df-df4b-10af26d17de3@samsung.com>
-Date:   Thu, 28 May 2020 14:03:22 +0900
+Message-ID: <64b81eea-641c-811d-9830-718b28db4188@samsung.com>
+Date:   Thu, 28 May 2020 15:14:33 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
 In-Reply-To: <20200520034307.20435-7-andrew-sh.cheng@mediatek.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTVxzHc+6rRS3eFdQDySbejT8gIr3U6oGJWcAsN5nZcI4tGQvdDb2h
-        jL68t9XplqiAk6owiFnUykQ3TRQZLxlFnto1wQ5hw0IhMhKQxrilSLLCxrZkWduLGf99zu98
-        v/nmex5KXH1Skawss9gF0cKbGGod0fVDWmZGS/5PxZqRp68jd+szEn01F6RQo3eURCMVIQX6
-        Y7waQx3zARL5exoo5K8cAyhc4wXoxuQYhiqqtGj65E0KhVZGMPRw+BGJTvV7FejfQDuBAtcW
-        SXRvrJ5CF2bUqH2ZeyORa77SDDh/bQ3G3XXNKLiOJifF/RLoo7g7149zVb5BguucOE1wtZ1N
-        gBuacmNcuOOVgvUflu8xCrxBEFMES4nVUGYpzWXeOqjP1+t2adgMNhvtZlIsvFnIZfbtL8h4
-        s8wUacikHOZNjsiogJckJnPvHtHqsAspRqtkz2UEm8Fky7btkHiz5LCU7iixmnNYjSZLFxF+
-        XG6ceXzAducb8OniJSd5AniPnwFxSkjvhJPhXuoMWKdU090A/hlaUMiL3wGsWX5KRVVqOgzg
-        lV91Lxx/1fcRsqgHwJbrwVX7IoCz5y9iUVUC/REM9X+JRzmRnsZh3eX3oiKcrsfgwI+nYhsU
-        nQ4Hn03FIjbS2+DEyjyIsoreC+fuuxVRJuhU+H1gKcab6Pehr6tqVfMS9F0KElGOo/Pg4oOL
-        McbpLfBxsBGTeSt0LzTg0WBI346DF0JOIHfYB933Z0mZE+BvQ50KmZNh+Hk/JfNn8JbPS8nm
-        agA7B39eNWjh4I3zkQRlJCENtvZkyuNt8O4/XwM5OB4+Xz5HRiWQVsHqL9Sy5FXon53BZE6C
-        3552UnWAca2p41pTwbWmguv/sKuAaAKbBZtkLhUk1qZde90dIPb803d3g7bR/R5AKwGzQaXh
-        RovVJH9YOmr2AKjEmURV3shwsVpl4I8eE0SrXnSYBMkDdJHTrseTN5VYI5/JYtezuiytVot2
-        srt0LMtsUTWuPCxW06W8XSgXBJsgvvBhyrjkEyAvqdf63csfXP6kwX7A8HfhOLxde6TxtUcb
-        Uo8MnK3DsvH1h1KfxC+0bX13YcmZc2x5umKiyM/6DiZ4hgcmy5oPjb8ztFHTUlQoLXU527Tb
-        jehJ39laRzCtdX6zMiupu03v2X6zqD1nKl71uVjZLuT7K8X0xLcLH5wbtptqem/N3WMIyciz
-        6bgo8f8BtZ7FVxQEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPIsWRmVeSWpSXmKPExsWy7bCSnO465/NxBrvXClhsX/+C1WLqwyds
-        FvOPnGO1ONv0ht3i25UOJotNj6+xWlzeNYfN4nLzRUaLz71HGC2WXr/IZNHUYmxxu3EFm8Wb
-        H2eZLM6cvsRq0br3CLvFv2sbWSyuLXzPanHg4kQ2i+l3hSw2fvVwEPFYM28No8flvl4mj52z
-        7rJ7bFrVyeZx59oeNo/NS+o9Wk7uZ/HYcrWdxaNvyypGj+M3tjN5fN4kF8AdxWWTkpqTWZZa
-        pG+XwJVx91ZgweZFjBXvZ3ayNjAeqe9i5OSQEDCR+DlxDwuILSSwg1Hix65giLikxLSLR5m7
-        GDmAbGGJw4eLuxi5gEreMkocWLKMGaRGWCBG4s3efmaQhIjAfWaJ5XevsoE4zAITmSTOta9g
-        g2g5yyjxu+cbI0gLm4CWxP4XN9hAbH4BRYmrPx6DxXkF7CQeHtzODmKzCKhKbL32BcwWFQiT
-        2LnkMRNEjaDEyZlPwE7lFHCSeH9iBpjNLKAu8WfeJWYIW1zi1pP5TBC2vMT2t3OYJzAKz0LS
-        PgtJyywkLbOQtCxgZFnFKJlaUJybnltsWGCUl1quV5yYW1yal66XnJ+7iRGcBrS0djDuWfVB
-        7xAjEwfjIUYJDmYlEV6ns6fjhHhTEiurUovy44tKc1KLDzFKc7AoifN+nbUwTkggPbEkNTs1
-        tSC1CCbLxMEp1cCUKbaeRcBHo4Lr9ba01mevOJfWL59cdlz3VVzvySVSie41x7PerHmr8WSL
-        UGqbwqx+TukI9x/uGy02Tub5ePDNR0Uu178lO/pPLjz09DLXUsMbi5odg05+/nXvl/u0GRLF
-        id3Z3u8/V97fyxC3qCmtjm2q57TZZc2rMlZ+frljm9PTpwWVj/VeV72u4uidufCu0e0g5m2T
-        2qO2Xr2Te7Lz3/7vjqe2l7+e+VBao4rnCMd0vYnuqkrV/E84vJb6HDpxj2uFbfMzBfvzMVOu
-        fn60JHZZw8aQaU8mqEw7sePhkz8PDzx/vCyn++vb02wnm6wyw8zZtZqfH5fK9fjx69Vvzg85
-        cceyw95tsTh2jDtTZrsSS3FGoqEWc1FxIgCYSUnpcgMAAA==
-X-CMS-MailID: 20200528045302epcas1p25f00cf42a4ecd907e017f04970ab3566
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDJsWRmVeSWpSXmKPExsWy7bCmnm5syPk4g2tvbSy2r3/BajH14RM2
+        i/lHzrFanG16w27x7UoHk8Wmx9dYLS7vmsNmcbn5IqPF594jjBZLr19ksmhqMba43biCzeLN
+        j7NMFmdOX2K1aN17hN3i37WNLBbXFr5ntZh+V8hi41cPB2GPNfPWMHpc7utl8tg56y67x6ZV
+        nWwed67tYfPYvKTeo+XkfhaPLVfbWTz6tqxi9Dh+YzuTx+dNcgHcUdk2GamJKalFCql5yfkp
+        mXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUDPKSmUJeaUAoUCEouLlfTtbIry
+        S0tSFTLyi0tslVILUnIKLAv0ihNzi0vz0vWS83OtDA0MjEyBChOyM05u0ijYtJixYt+OCcwN
+        jCsaGLsYOTkkBEwkdjV/Y+1i5OIQEtjBKHF/2Rs2COcTo0TzjmOMEM43Rolnqw6yw7Ssmnyf
+        BSKxl1Fi9sWjzBDOe0aJNXvOglUJC8RIvNnbzwxiiwjcZpaYMDsEpIhZ4DmjxKemNSwgCTYB
+        LYn9L26wgdj8AooSV388BruKV8BOovnpAbBmFgFVifn/F4PFRQXCJE5ua4GqEZQ4OfMJ2BxO
+        ASeJ9ydmgNnMAuISt57MZ4Kw5SW2v53DDHH2fE6J9iUCXYwcQLaLxNJ5ohBhYYlXx7dAfSYl
+        8fndXjYIu1pi5ckj4LCQEOhglNiy/wIrRMJYYv/SyUwgc5gFNCXW79KHCCtK7Pw9lxFiLZ/E
+        u689rBCreCU62oQgSpQlLj+4ywRhS0osbu9km8CoNAvJM7OQPDALyQOzEJYtYGRZxSiWWlCc
+        m55abFhgihzdmxjBKV/LcgfjsXM+hxgFOBiVeHgNPM7FCbEmlhVX5h5ilOBgVhLhdTp7Ok6I
+        NyWxsiq1KD++qDQntfgQoykwrCcyS4km5wPzUV5JvKGpkbGxsYWJoZmpoaGSOO/8H2fihATS
+        E0tSs1NTC1KLYPqYODilGhi3/9zvaDFfvfnrptDHD7ivKN24NOW9eKan56U9gpk8F59NzvWP
+        Fe8pad0tsDr9zKx3myc8t5zREV8x1XjVq+t3EtS7FhbbSZkGWUZETrm0voKvx3jC1UeZuekv
+        dRqE9kwT/+EV+r/J9Z5D6jafPaaLzq7kbOGrZLSe6KVyNiQvvOvlMnsGvnYlluKMREMt5qLi
+        RACDlyTIDwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsWy7bCSnG5syPk4g2+r+C22r3/BajH14RM2
+        i/lHzrFanG16w27x7UoHk8Wmx9dYLS7vmsNmcbn5IqPF594jjBZLr19ksmhqMba43biCzeLN
+        j7NMFmdOX2K1aN17hN3i37WNLBbXFr5ntZh+V8hi41cPB2GPNfPWMHpc7utl8tg56y67x6ZV
+        nWwed67tYfPYvKTeo+XkfhaPLVfbWTz6tqxi9Dh+YzuTx+dNcgHcUVw2Kak5mWWpRfp2CVwZ
+        JzdpFGxazFixb8cE5gbGFQ2MXYycHBICJhKrJt9n6WLk4hAS2M0ocevIDiaIhKTEtItHmbsY
+        OYBsYYnDh4shat4ySjRc2Q/WLCwQI/Fmbz8zSEJE4D6zxPK7V9lAHGaB54wSS5uPskG0nGWU
+        +N3zDayFTUBLYv+LG2wgNr+AosTVH4/B4rwCdhLNTw8wg9gsAqoS8/8vBouLCoRJ7FzymAmi
+        RlDi5MwnLCA2p4CTxPsTM8BsZgF1iT/zLjFD2OISt57MZ4Kw5SW2v53DPIFReBaS9llIWmYh
+        aZmFpGUBI8sqRsnUguLc9NxiwwLDvNRyveLE3OLSvHS95PzcTYzgBKCluYNx+6oPeocYmTgY
+        DzFKcDArifA6nT0dJ8SbklhZlVqUH19UmpNafIhRmoNFSZz3RuHCOCGB9MSS1OzU1ILUIpgs
+        EwenVAPT6ky9yO8uUinuLgwZt9Sfm75Lf7lPe2fHVpH7B54q7J2Veujszk/f/xi0pzdbv5nf
+        +vt/0a6PVee/Wqk8k209fi7wmvuC42VTu5lXLTY+tf50THfKO80HP7Q3PL407aNH1uZu73qz
+        8JlvHj84a/9L5pP0vZ4qy7LOcMtPu2e/fJaXfbN0m+fL82KzguMu+PqE3N1gb9j5Iql0SRiv
+        d42O9Hdpi2m8E8Jja8JVZvlbclk3Xp8Yfktvfu3dtx2cQkdnTK58qzbxxuSrSfNLD+Qcvm8x
+        7UPgZaEl8es0Q1QmVZ7Tl9vz7jjntl8Lb3892hqRIBfvv/JfxyP+Lasyg2b/T1lt/L3EiveL
+        5Dnx8ski0UosxRmJhlrMRcWJAKveo6FvAwAA
+X-CMS-MailID: 20200528060413epcas1p4567f813b4524d36985cd4862c36f2347
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
@@ -134,6 +132,12 @@ I think that it is necessary. When I developed the embedded product,
 I needed this feature always. 
 
 I add the comments on below.
+
+
+And the following email is not valid. So, I dropped this email
+from Cc list.
+Saravana Kannan <skannan@codeaurora.org>
+
 
 On 5/20/20 12:43 PM, Andrew-sh.Cheng wrote:
 > From: Saravana Kannan <skannan@codeaurora.org>
