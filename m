@@ -2,118 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8534B1E5AD4
-	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 10:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A641E5BDB
+	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 11:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727035AbgE1Ib4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 May 2020 04:31:56 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:40166 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726085AbgE1Ib4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 04:31:56 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 262EF80307C0;
-        Thu, 28 May 2020 08:31:47 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mso_D6x-Sr2v; Thu, 28 May 2020 11:31:46 +0300 (MSK)
-Date:   Thu, 28 May 2020 11:31:44 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
-        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
-        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
-        Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RESEND v3 0/2] syscon: Alter syscon and reboot drivers
-Message-ID: <20200528083144.5r2qn3mule4dvvgf@mobilestation>
-References: <20200526135102.21236-1-Sergey.Semin@baikalelectronics.ru>
- <20200528070311.uj6bxlplxe2bths5@earth.universe>
+        id S1728251AbgE1J3i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 May 2020 05:29:38 -0400
+Received: from foss.arm.com ([217.140.110.172]:49970 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728199AbgE1J3i (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 28 May 2020 05:29:38 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA5B431B;
+        Thu, 28 May 2020 02:29:37 -0700 (PDT)
+Received: from [10.37.12.44] (unknown [10.37.12.44])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 304353F6C4;
+        Thu, 28 May 2020 02:29:34 -0700 (PDT)
+Subject: Re: [RFC] GPU-bound energy efficiency improvements for the
+ intel_pstate driver (v2.99)
+To:     Valentin Schneider <valentin.schneider@arm.com>,
+        Francisco Jerez <currojerez@riseup.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        chris.p.wilson@intel.com, "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com
+References: <20200428032258.2518-1-currojerez@riseup.net>
+ <20200511105701.GA2940@hirez.programming.kicks-ass.net>
+ <874ksmuqx6.fsf@riseup.net> <jhjwo5erb0e.mognet@arm.com>
+ <87a72at44d.fsf@riseup.net> <jhjv9kxqdcf.mognet@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <d6ad1c7e-7bce-4f16-3606-a9777ac07cc1@arm.com>
+Date:   Thu, 28 May 2020 10:29:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200528070311.uj6bxlplxe2bths5@earth.universe>
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+In-Reply-To: <jhjv9kxqdcf.mognet@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 28, 2020 at 09:03:11AM +0200, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Tue, May 26, 2020 at 04:50:59PM +0300, Serge Semin wrote:
-> > This is a small patchset about tuning the syscon infrastructure a bit.
-> > As it's going to be general in the framework of the Baikal-T1 SoC support
-> > integration into the kernel, we suggest to replace the legacy text-based
-> > syscon-reboot-mode dts-bindings file with yaml-based one. Then seeing a
-> > syscon reboot block is normally expected to be a part of a system
-> > controller and based on the discussion
-> > https://lore.kernel.org/linux-pm/20200306130402.1F4F0803079F@mail.baikalelectronics.ru/
-> > we decided to alter the syscon reboot driver so one would also try to fetch
-> > the syscon registers map from a parental DT node. regmap property is left
-> > supported although it's marked as deprecated from now.
-> > 
-> > This patchset is rebased and tested on the mainline Linux kernel 5.7-rc4:
-> > 0e698dfa2822 ("Linux 5.7-rc4")
-> > tag: v5.7-rc4
-> > 
-> > Changelog v2:
-> > - Add Sebastian' Acked-by tag to patch 1.
-> > - Use a shorter summary describing the bindings modification patches.
-> > - Our corporate email server doesn't change Message-Id anymore, so the patchset
-> >   is resubmitted being in the cover-letter-threaded format.
-> > - Discard patch with syscon "-endian" property support. As Rob said It shall be
-> >   in the common dt-schema.
-> > - Replace patches of adding a regmap property support to the syscon-reboot-mode
-> >   with patches making syscon-reboot a sub-node of a system controller node.
-> > - Mark regmap property as deprecated from now.
-> > 
-> > Link: https://lore.kernel.org/linux-pm/20200507233846.11548-1-Sergey.Semin@baikalelectronics.ru/
-> > Changelog v3:
-> > - Discard the commit 6acd3ecd88ff ("dt-bindings: power: reset: Convert
-> >   syscon-reboot-mode to DT schema") since it has been merged in by Sebatian.
-> > - Add Rob's Reviewed-by tag to the patch "dt-bindings: power: reset: Unrequire
-> >   regmap property in syscon-reboot node"
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
-> > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> > Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-> > Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
-> > Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
-> > Cc: Alexey Kolotnikov <Alexey.Kolotnikov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: devicetree@vger.kernel.org
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > 
-> > Serge Semin (2):
-> >   dt-bindings: power: reset: Unrequire regmap property in syscon-reboot
-> >     node
-> >   power: reset: syscon-reboot: Add parental syscon support
-> > 
-> >  .../bindings/power/reset/syscon-reboot.yaml       | 15 ++++++++++-----
-> >  drivers/power/reset/syscon-reboot.c               |  7 +++++--
-> >  2 files changed, 15 insertions(+), 7 deletions(-)
-> 
-> Thanks, I queued both patches to power-supply's for-next branch.
-> 
-> -- Sebastian
 
-Great! Thanks.
 
--Sergey
+On 5/15/20 7:09 PM, Valentin Schneider wrote:
+> 
+> On 15/05/20 01:48, Francisco Jerez wrote:
+>> Valentin Schneider <valentin.schneider@arm.com> writes:
+>>
+>>> (+Lukasz)
+>>>
+>>> On 11/05/20 22:01, Francisco Jerez wrote:
+>>>>> What I'm missing is an explanation for why this isn't using the
+>>>>> infrastructure that was build for these kinds of things? The thermal
+>>>>> framework, was AFAIU, supposed to help with these things, and the IPA
+>>>>> thing in particular is used by ARM to do exactly this GPU/CPU power
+>>>>> budget thing.
+>>>>>
+>>>>> If thermal/IPA is found wanting, why aren't we improving that?
+>>>>
+>>>> The GPU/CPU power budget "thing" is only a positive side effect of this
+>>>> series on some TDP-bound systems.  Its ultimate purpose is improving the
+>>>> energy efficiency of workloads which have a bottleneck on a device other
+>>>> than the CPU, by giving the bottlenecking device driver some influence
+>>>> over the response latency of CPUFREQ governors via a PM QoS interface.
+>>>> This seems to be completely outside the scope of the thermal framework
+>>>> and IPA AFAIU.
+>>>>
+>>>
+>>> It's been a while since I've stared at IPA, but it does sound vaguely
+>>> familiar.
+>>>
+>>> When thermally constrained, IPA figures out a budget and splits it between
+>>> actors (cpufreq and devfreq devices) depending on how much juice they are
+>>> asking for; see cpufreq_get_requested_power() and
+>>> devfreq_cooling_get_requested_power(). There's also some weighing involved.
+>>>
+>>
+>> I'm aware of those.  Main problem is that the current mechanism for IPA
+>> to figure out the requested power of each actor is based on a rough
+>> estimate of their past power consumption: If an actor was operating at a
+>> highly energy-inefficient regime it will end up requesting more power
+>> than another actor with the same load but more energy-efficient
+>> behavior.
+
+This can be tweaked by changing the weight of an actor (unfortunately
+not in a real-time by kernel). We usually setup them once, in DT.
+So, it's possible to set different weight for the LITTLE cores (which
+are more energy-efficient) and the big cores (in a good way or bad).
+
+> 
+> Right, we do mix load (busy time for either cpufreq and devfreq devices
+> AFAIR) and current state (freq) into one single power value.
+> 
+>> The IPA power allocator is therefore ineffective at improving
+>> the energy efficiency of an agent beyond its past behavior --
+>> Furthermore it seems to *rely* on individual agents being somewhat
+>> energetically responsible in order for its power allocation result to be
+>> anywhere close to optimal.  But improving the energy efficiency of an
+>> agent seems useful in its own right, whether IPA is used to balance
+>> power across agents or not.  That's precisely the purpose of this
+>> series.
+
+I don't fully agree here, i.e. in a properly setup platform we promote
+more energy-efficient LITTLE cores when there is a limited power budget. 
+That would cause capping on big cores and scheduler should see it.
+There are some limitations in the IPA, but the requirements where
+different back then, mainline code was different, etc.
+
+>>
+>>> If you look at the cpufreq cooling side of things, you'll see it also uses
+>>> the PM QoS interface. For instance, should IPA decide to cap the CPUs
+>>> (perhaps because say the GPU is the one drawing most of the juice), it'll
+>>> lead to a maximum frequency capping request.
+>>>
+>>> So it does sound like that's what you want, only not just when thermally
+>>> constrained.
+>>
+>> Capping the CPU frequency from random device drivers is highly
+>> problematic, because the CPU is a shared resource which a number of
+>> different concurrent applications might be using beyond the GPU client.
+>> The GPU driver has no visibility over its impact on the performance of
+>> other applications.  And even in a single-task environment, in order to
+>> behave as effectively as the present series the GPU driver would need to
+>> monitor the utilization of *all* CPUs in the system and place a
+>> frequency constraint on each one of them (since there is the potential
+>> of the task scheduler migrating the process from one CPU to another
+>> without notice).  Furthermore these frequency constraints would need to
+>> be updated at high frequency in order to avoid performance degradation
+>> whenever the balance of load between CPU and IO device fluctuates.
+>>
+>> The present series attempts to remove the burden of computing frequency
+>> constraints out of individual device drivers into the CPUFREQ governor.
+>> Instead the device driver provides a response latency constraint when it
+>> encounters a bottleneck, which can be more easily derived from hardware
+>> and protocol characteristics than a CPU frequency.  PM QoS aggregates
+>> the response latency constraints provided by all applications and gives
+>> CPUFREQ a single response latency target compatible with all of them (so
+>> a device driver specifying a high latency target won't lead to
+>> performance degradation in a concurrent application with lower latency
+>> constraints).  The CPUFREQ governor then computes frequency constraints
+>> for each CPU core that minimize energy usage without limiting
+>> throughput, based on the results obtained from CPU performance counters,
+>> while guaranteeing that a discontinuous transition in CPU utilization
+>> leads to a proportional transition in the CPU frequency before the
+>> specified response latency has elapsed.
+> 
+> Right, I think I see your point there. I'm thinking the 'actual' IPA gurus
+> (Lukasz or even Javi) may want to have a look at this.
+> 
+
+This patch set AFAIU has different goals than IPA or any other thermal
+governor.
+
+I don't know the details of this Intel platform and the mechanisms
+which are there for thermal and power budget, so I might be wrong in
+some points (correct me where needed).
+
+Main differences comparing to IPA in regards the platform:
+- the series works on a platform which does not actually control the
+frequency (AFAIK Intel freq can be changed by FW due to any reason).
+IPA has been designed for platform which has full control over the
+frequency.
+- It does not work on Heterogeneous CPUs.
+IPA is aware of big, LITTLE or even a different tracks used
+- this patch set ignores the temperature probably assuming it is done
+by something else (FW or thermal governor).
+IPA has the PID built on top of temp sensor and must control it.
+
+Different platforms, different behaviors, different requirements.
+I agree IPA has to catch up with the new mainline solutions, though.
+
+Regards,
+Lukasz
+
