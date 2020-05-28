@@ -2,73 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 771271E70CF
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 01:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B8B1E7080
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 01:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437726AbgE1Xwl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 May 2020 19:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437545AbgE1Xwj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 19:52:39 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C322DC08C5CA;
-        Thu, 28 May 2020 16:32:27 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id q18so719696ilm.5;
-        Thu, 28 May 2020 16:32:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BZi6tHzaqVOINM6eCQ7Fjz2GRrahqrn6iNrzJqKN3TI=;
-        b=NSdSGab+9wxkHte3KclmnLInDM+Ozgw62lC7+Em79c3hEUajYVbtHBri+d1kAUbpXw
-         IXk4wmAFzkImWksmbU8F3FB00+MHBLE9UEHdwXeo3ObQEX1FRR9FqB8DbIldWI+su7aY
-         MgscDIJp70zugJhBsDeNhtdkrdmwoXsJ6k0SdIFyZBJwUeIAX3CKb8cH0avfQJ88vtoJ
-         /g9CI2OikyQ4VvIrgZ4wOdOYnBuoFRfh9vyh+L8JSoHdXQ+OK4HtZHTAwFeTyjP2snmA
-         eWfmXmhyTYrT9q+/1swwgXZy4lySaLBs92o/JjhcB6NbT1kTNAPFHbrasmvqvxh7NBGJ
-         1GLA==
-X-Gm-Message-State: AOAM531xkmM7k7UdNq+xLuozH2mPr0JyqI75mGykkSuD4WfPew2ONSb7
-        T4mmrmtW7PYScY5htVrUFA==
-X-Google-Smtp-Source: ABdhPJz6C7QcrvueupRQJa7HorI+iAXdaNb7Lq3g5NQJCL3NZrsyI7wQ7jCvvU+e4TRS5EU8jnaesw==
-X-Received: by 2002:a92:8818:: with SMTP id h24mr4741049ild.92.1590708747096;
-        Thu, 28 May 2020 16:32:27 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id z3sm3174482ior.45.2020.05.28.16.32.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2020 16:32:26 -0700 (PDT)
-Received: (nullmailer pid 881280 invoked by uid 1000);
-        Thu, 28 May 2020 23:32:25 -0000
-Date:   Thu, 28 May 2020 17:32:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] dt-bindings: thermal: tsens: Add cold interrupt
- support in yaml
-Message-ID: <20200528233225.GA881244@bogus>
-References: <20200522114626.28834-1-manafm@codeaurora.org>
- <20200522114626.28834-3-manafm@codeaurora.org>
+        id S2437646AbgE1Xks (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 May 2020 19:40:48 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:40680 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437593AbgE1Xkq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 19:40:46 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04SNYfv7090690;
+        Thu, 28 May 2020 18:34:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1590708881;
+        bh=rl7/xrN4dyHCY0P9+fejZ1982cTwA0TKyTv5w1Z40oA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=iM2RRmz4/3X5f176xVtTiWBycEJKu+Heq2CbqG5eR0d6bNtQ+WIcMlVIcRDeC7/yl
+         35/hMLFEeKXzzrrGHFsSXLXcDKemIdhgbvq3BOXdLZaqGnQ00zNDwv6BX4CpjpgCF5
+         83y1ahAhQxC/Rc2zgX/gORZFZ62zBbjxsBlm71GI=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04SNYfPu022920
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 28 May 2020 18:34:41 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 28
+ May 2020 18:34:40 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 28 May 2020 18:34:40 -0500
+Received: from [10.250.38.163] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04SNYdoL029206;
+        Thu, 28 May 2020 18:34:40 -0500
+Subject: Re: [PATCH v12 1/4] power_supply: Add additional health properties to
+ the header
+To:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>, <sre@kernel.org>,
+        <pali@kernel.org>, <robh@kernel.org>
+CC:     <dmurphy@ti.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <sspatil@android.com>, Guru Das Srinagesh <gurus@codeaurora.org>
+References: <20200528225350.661-1-r-rivera-matos@ti.com>
+ <20200528225350.661-2-r-rivera-matos@ti.com>
+From:   "Andrew F. Davis" <afd@ti.com>
+Message-ID: <5be7933c-dc85-d526-a321-1cc0ce127ddc@ti.com>
+Date:   Thu, 28 May 2020 19:34:39 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200522114626.28834-3-manafm@codeaurora.org>
+In-Reply-To: <20200528225350.661-2-r-rivera-matos@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 22 May 2020 17:16:26 +0530, Manaf Meethalavalappu Pallikunhi wrote:
-> Add cold interrupt support for tsens in yaml.
+On 5/28/20 6:53 PM, Ricardo Rivera-Matos wrote:
+> From: Dan Murphy <dmurphy@ti.com>
 > 
-> Signed-off-by: Manaf Meethalavalappu Pallikunhi <manafm@codeaurora.org>
-> ---
->  .../bindings/thermal/qcom-tsens.yaml          | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
+> Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
 > 
+> HEALTH_WARM, HEALTH_COOL, and HEALTH_HOT properties are taken
+> from JEITA specification JISC8712:2015
+> 
+> Tested-by: Guru Das Srinagesh <gurus@codeaurora.org>
+> Signed-off-by: Dan Murphy <dmurphy@ti.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+
+You should collect the acks and such you have received in previous
+versions here, like mine from v11:
+
+Acked-by: Andrew F. Davis <afd@ti.com>
+
+
+> ---
+>  Documentation/ABI/testing/sysfs-class-power | 2 +-
+>  drivers/power/supply/power_supply_sysfs.c   | 2 +-
+>  include/linux/power_supply.h                | 3 +++
+>  3 files changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+> index bf3b48f022dc..9f3fd01a9373 100644
+> --- a/Documentation/ABI/testing/sysfs-class-power
+> +++ b/Documentation/ABI/testing/sysfs-class-power
+> @@ -190,7 +190,7 @@ Description:
+>  		Valid values: "Unknown", "Good", "Overheat", "Dead",
+>  			      "Over voltage", "Unspecified failure", "Cold",
+>  			      "Watchdog timer expire", "Safety timer expire",
+> -			      "Over current"
+> +			      "Over current", "Warm", "Cool", "Hot"
+>  
+>  What:		/sys/class/power_supply/<supply_name>/precharge_current
+>  Date:		June 2017
+> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+> index f37ad4eae60b..d0d549611794 100644
+> --- a/drivers/power/supply/power_supply_sysfs.c
+> +++ b/drivers/power/supply/power_supply_sysfs.c
+> @@ -61,7 +61,7 @@ static const char * const power_supply_charge_type_text[] = {
+>  static const char * const power_supply_health_text[] = {
+>  	"Unknown", "Good", "Overheat", "Dead", "Over voltage",
+>  	"Unspecified failure", "Cold", "Watchdog timer expire",
+> -	"Safety timer expire", "Over current"
+> +	"Safety timer expire", "Over current", "Warm", "Cool", "Hot"
+>  };
+>  
+>  static const char * const power_supply_technology_text[] = {
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index dcd5a71e6c67..8670e90c1d51 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -61,6 +61,9 @@ enum {
+>  	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
+>  	POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE,
+>  	POWER_SUPPLY_HEALTH_OVERCURRENT,
+> +	POWER_SUPPLY_HEALTH_WARM,
+> +	POWER_SUPPLY_HEALTH_COOL,
+> +	POWER_SUPPLY_HEALTH_HOT,
+>  };
+>  
+>  enum {
+> 
