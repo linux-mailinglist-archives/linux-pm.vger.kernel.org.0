@@ -2,128 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12CED1E6F1F
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 00:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9EB1E6F50
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 00:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437212AbgE1Wd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 May 2020 18:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437209AbgE1Wd5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 18:33:57 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B55C08C5C7
-        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 15:33:56 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id k3so108708ual.8
-        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 15:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oJwhQE9HCeUTmiQtOiXxx9Sh1XueYzXHCo6Y9/1H83Q=;
-        b=SjlvqeKViVGc7aOIS9eI2nhNipm1JrZGMDy/o1jRikdumEEXnkEqCW6BJ3WM9EtI0G
-         EjdYq017AM9wb/eys7oQOuC/Lwd1gLpHRCxbVFKCCYonJaiV2cEGPC463oXY8ubK7OSm
-         NAkzAC23S5wEIW0UyRbu2fZ5IIsFBfzsyOoDLyedSQJOGehRF2Nd7E6qEehF3W9wzhhT
-         x9j5j7YlkCde71vYDiyPZ1V/OKZHrH+hKDh01IUz7SVtuZCbWfCbGMm/bhJSN6ukP1+v
-         XxNEXigd6eU8E3UhcGAn2715dp/hEKKdseUw3SeXbNp50dW/MA2wnc9ZVPuyOo5uTAH7
-         kQaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oJwhQE9HCeUTmiQtOiXxx9Sh1XueYzXHCo6Y9/1H83Q=;
-        b=qxezUEmgsvJ3S3jbGuXEkEevh5mn7kFIPWk0wofmcP4PZMFqxDZUKmoF799Na/EdUD
-         VYwKMZCnvDbMk3mQAZt2/K1bAt2lUiTo2lOUNEnevIHXMDOCUbgU/xEvLizyeyKexZtL
-         7wOSpOcm3o6Sfiay1FHyZV06MDsCEClnuYwFLq3BtXBP7ML1BzJ4huAr1pN7vO/iu1NB
-         sBVGiMEc37IV6ifqrkjW4fBbQP/0Rwzi1nZTT/i2U5yS+sGfGE2eHgkLpIp+68mxW0V/
-         P9fVcObzsstRJ6+GWHKGohFyiT5xqx68G3StdK+26uD4m36u7GdZJahKnBagfgrxdxO/
-         7qig==
-X-Gm-Message-State: AOAM533I65XsUBhOMXh54Xn/Avv2EhQwdRVSbPEWrWxjJ+SdiPwX3B4O
-        BS4TgpI5Xil/3DZ7t8KgFyE4LJ8lqESVHWxFRr5SjbDHSrQ=
-X-Google-Smtp-Source: ABdhPJwklG24qC78tLiUv+OAMMw6dDxwznIIbf38X/ZwCsQtI8hzivv650mDJNKc2du4KXbfksdIAeyKB5m3lhC8GwE=
-X-Received: by 2002:ab0:70c9:: with SMTP id r9mr3866432ual.15.1590705235797;
- Thu, 28 May 2020 15:33:55 -0700 (PDT)
+        id S2437193AbgE1Wmq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 May 2020 18:42:46 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:34286 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437076AbgE1Wmp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 18:42:45 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04SMggbG078132;
+        Thu, 28 May 2020 17:42:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1590705762;
+        bh=7QwFblAtt+WIP3VoVS1JJkv9bJSkC9RsnIpL6BTk8Hg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=tvup+SljfHGv2OIeX28+4Q4806IZagwBD3caCmcLx6SAVO/Y7RkjiIQ+ygqOvnI4d
+         U+m7Ceo3S1E+NC9gWgBi1W52jYZXCmUee4Y6O8I0Iuf9tKk1QTnMKkNPDfQSLTHhYD
+         0XcEljj9k6hLGVadWDq9D5bEQLGMfShQjHYv3GMU=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04SMgggI026449
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 28 May 2020 17:42:42 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 28
+ May 2020 17:42:41 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 28 May 2020 17:42:41 -0500
+Received: from [10.250.43.45] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04SMgfjx036389;
+        Thu, 28 May 2020 17:42:41 -0500
+Subject: Re: [PATCH v11 1/4] power_supply: Add additional health properties to
+ the header
+To:     "Andrew F. Davis" <afd@ti.com>, <sre@kernel.org>,
+        <pali@kernel.org>, <robh@kernel.org>
+CC:     <dmurphy@ti.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <sspatil@android.com>, Guru Das Srinagesh <gurus@codeaurora.org>
+References: <20200528140546.25260-1-r-rivera-matos@ti.com>
+ <20200528140546.25260-2-r-rivera-matos@ti.com>
+ <66823f18-dc74-107f-39ae-aade2d3738c0@ti.com>
+From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Message-ID: <18f0d3ad-f3f6-5c98-4612-0431f709fb0b@ti.com>
+Date:   Thu, 28 May 2020 17:42:41 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <2735489.s4WY8YHBoM@kreacher>
-In-Reply-To: <2735489.s4WY8YHBoM@kreacher>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 29 May 2020 00:33:19 +0200
-Message-ID: <CAPDyKFqVfk5aH=NyinUQXywZfQzf3EcGx6BiDp7qutRPcUV7dA@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Replace pm_runtime_callbacks_present()
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <66823f18-dc74-107f-39ae-aade2d3738c0@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 28 May 2020 at 16:45, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> The name of pm_runtime_callbacks_present() is confusing, because
-> it suggests that the device has PM-runtime callbacks if 'true' is
-> returned by that function, but in fact that may not be the case,
-> so replace it with pm_runtime_has_no_callbacks() which is not
-> ambiguous.
->
-> No functional impact.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Makes sense to me, feel free to add:
-
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
-
-> ---
->  drivers/base/power/sysfs.c |    4 ++--
->  include/linux/pm_runtime.h |    4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+On 5/28/20 9:16 AM, Andrew F. Davis wrote:
+> On 5/28/20 10:05 AM, Ricardo Rivera-Matos wrote:
+>> From: Dan Murphy <dmurphy@ti.com>
+>>
+>> Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
+>>
+>> HEALTH_WARM, HEALTH_COOL, and HEALTH_HOT properties are taken from the JEITA spec.
 >
-> Index: linux-pm/include/linux/pm_runtime.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/pm_runtime.h
-> +++ linux-pm/include/linux/pm_runtime.h
-> @@ -102,9 +102,9 @@ static inline bool pm_runtime_enabled(st
->         return !dev->power.disable_depth;
->  }
+> Wouldn't hurt to list the specific version of the spec these are from,
+> but not super important,
 >
-> -static inline bool pm_runtime_callbacks_present(struct device *dev)
-> +static inline bool pm_runtime_has_no_callbacks(struct device *dev)
->  {
-> -       return !dev->power.no_callbacks;
-> +       return dev->power.no_callbacks;
->  }
->
->  static inline void pm_runtime_mark_last_busy(struct device *dev)
-> Index: linux-pm/drivers/base/power/sysfs.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/power/sysfs.c
-> +++ linux-pm/drivers/base/power/sysfs.c
-> @@ -666,7 +666,7 @@ int dpm_sysfs_add(struct device *dev)
->         if (rc)
->                 return rc;
->
-> -       if (pm_runtime_callbacks_present(dev)) {
-> +       if (!pm_runtime_has_no_callbacks(dev)) {
->                 rc = sysfs_merge_group(&dev->kobj, &pm_runtime_attr_group);
->                 if (rc)
->                         goto err_out;
-> @@ -709,7 +709,7 @@ int dpm_sysfs_change_owner(struct device
->         if (rc)
->                 return rc;
->
-> -       if (pm_runtime_callbacks_present(dev)) {
-> +       if (!pm_runtime_has_no_callbacks(dev)) {
->                 rc = sysfs_group_change_owner(
->                         &dev->kobj, &pm_runtime_attr_group, kuid, kgid);
->                 if (rc)
+> Acked-by: Andrew F. Davis <afd@ti.com>
+ACK. This originates from JISC8712:2015, but is more succinctly 
+explained in "A Guide to the Safe Use of Secondary Lithium Ion Batteries 
+in Notebook-type Personal Computer"
 >
 >
->
+>> Tested-by: Guru Das Srinagesh <gurus@codeaurora.org>
+>> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+>> ---
+>>   Documentation/ABI/testing/sysfs-class-power | 2 +-
+>>   drivers/power/supply/power_supply_sysfs.c   | 2 +-
+>>   include/linux/power_supply.h                | 3 +++
+>>   3 files changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+>> index bf3b48f022dc..9f3fd01a9373 100644
+>> --- a/Documentation/ABI/testing/sysfs-class-power
+>> +++ b/Documentation/ABI/testing/sysfs-class-power
+>> @@ -190,7 +190,7 @@ Description:
+>>   		Valid values: "Unknown", "Good", "Overheat", "Dead",
+>>   			      "Over voltage", "Unspecified failure", "Cold",
+>>   			      "Watchdog timer expire", "Safety timer expire",
+>> -			      "Over current"
+>> +			      "Over current", "Warm", "Cool", "Hot"
+>>   
+>>   What:		/sys/class/power_supply/<supply_name>/precharge_current
+>>   Date:		June 2017
+>> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+>> index f37ad4eae60b..d0d549611794 100644
+>> --- a/drivers/power/supply/power_supply_sysfs.c
+>> +++ b/drivers/power/supply/power_supply_sysfs.c
+>> @@ -61,7 +61,7 @@ static const char * const power_supply_charge_type_text[] = {
+>>   static const char * const power_supply_health_text[] = {
+>>   	"Unknown", "Good", "Overheat", "Dead", "Over voltage",
+>>   	"Unspecified failure", "Cold", "Watchdog timer expire",
+>> -	"Safety timer expire", "Over current"
+>> +	"Safety timer expire", "Over current", "Warm", "Cool", "Hot"
+>>   };
+>>   
+>>   static const char * const power_supply_technology_text[] = {
+>> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+>> index dcd5a71e6c67..8670e90c1d51 100644
+>> --- a/include/linux/power_supply.h
+>> +++ b/include/linux/power_supply.h
+>> @@ -61,6 +61,9 @@ enum {
+>>   	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
+>>   	POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE,
+>>   	POWER_SUPPLY_HEALTH_OVERCURRENT,
+>> +	POWER_SUPPLY_HEALTH_WARM,
+>> +	POWER_SUPPLY_HEALTH_COOL,
+>> +	POWER_SUPPLY_HEALTH_HOT,
+>>   };
+>>   
+>>   enum {
+>>
