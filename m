@@ -2,178 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 264271E68F6
-	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 20:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB771E6926
+	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 20:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405681AbgE1SAI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 May 2020 14:00:08 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:31187 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405660AbgE1SAG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 14:00:06 -0400
+        id S2405732AbgE1SOX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 May 2020 14:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405736AbgE1SOW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 14:14:22 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750B4C08C5C6
+        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 11:14:22 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id n15so13997519pfd.0
+        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 11:14:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1590688806; x=1622224806;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version;
-  bh=oNLZyUl66SSao9Xw7N5boBOPLPGR9xPVVpFRzGyK3NE=;
-  b=s43+FZ8Nz7kZbtJperGPcMOuVZQdzrpN3OXb3G6Oh8IxBFS/d0txTVGj
-   O7B359ro3OopCvJYCugnmdDztIGiQDLsM++TyyA5WGMChwI8wCkUEWGj8
-   1Yeey6KTRKCYyenGtMcWpmFOjkiw1BEnflsFxR/Qa7QshpJ+ebLo3a4Bh
-   w=;
-IronPort-SDR: DwLXL+vYnHFAOhYL+bAJq2wvFGMWzlfLyvOlliswhA0S5m+T3cKSKThAFDRaimJS+sGp4RwSS/
- uPgnrdWwGcFA==
-X-IronPort-AV: E=Sophos;i="5.73,445,1583193600"; 
-   d="scan'208";a="46991822"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1d-37fd6b3d.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 28 May 2020 18:00:01 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1d-37fd6b3d.us-east-1.amazon.com (Postfix) with ESMTPS id 772142849E5;
-        Thu, 28 May 2020 17:59:53 +0000 (UTC)
-Received: from EX13D10UWB002.ant.amazon.com (10.43.161.130) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 28 May 2020 17:59:52 +0000
-Received: from EX13D07UWB002.ant.amazon.com (10.43.161.131) by
- EX13D10UWB002.ant.amazon.com (10.43.161.130) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 28 May 2020 17:59:52 +0000
-Received: from EX13D07UWB002.ant.amazon.com ([10.43.161.131]) by
- EX13D07UWB002.ant.amazon.com ([10.43.161.131]) with mapi id 15.00.1497.006;
- Thu, 28 May 2020 17:59:52 +0000
-From:   "Agarwal, Anchal" <anchalag@amazon.com>
-To:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "roger.pau@citrix.com" <roger.pau@citrix.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
-Subject: Re: [PATCH 00/12] Fix PM hibernation in Xen guests
-Thread-Topic: [PATCH 00/12] Fix PM hibernation in Xen guests
-Thread-Index: AQHWLiw8BReG6kpgjke8dS/vAeapjqi9Yd+A
-Date:   Thu, 28 May 2020 17:59:52 +0000
-Message-ID: <0C3CEAD6-E79C-490E-8FEA-2276E87BD7B4@amazon.com>
-References: <cover.1589926004.git.anchalag@amazon.com>
-In-Reply-To: <cover.1589926004.git.anchalag@amazon.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.162.50]
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=xOf7K2RhgDVuK3GvY4sLkahIaJtruJgT5I9q1rpee1Y=;
+        b=fQfvq3LCbNCgQHYroGuzXpcw6J1WvCfaqYdTvV6+49IAl7ZAD/7ylgc4mNZfZLClMp
+         zU2jc8gqpjndWuytD3neKaVkz2fFnKT8z/Gj5Zi0Xefi2EAi/jqj6Y4SX39cwU70qswb
+         MvR8wVNx3Z0vLsXXZ9aOMbbmXA9x26eSjkSb0RKd1g7MxPQvvdYNOMNguUzgG2TWFUv4
+         naKAR20eflPNyuUFRKhocVJNq1KA0vhLCKUhtXe0ZVfzCfXdDAJX87hX+xuv6VZ5uFaP
+         fifj8hnt97i6O0H0WyXgA4eDdYrbCoLqsHg/fs9Uul+NYOiY7y5KtLIi6X2O3PPVEdvw
+         jNdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=xOf7K2RhgDVuK3GvY4sLkahIaJtruJgT5I9q1rpee1Y=;
+        b=V3skcR6yxh3A6eMhJoqCf0Tng7ZZzXlGZ8GygxwJXUymkmNgN3O3u5HEM8RPL9AybL
+         97iXwoe9oxz2HHV70XPIfA/8lWK1sI/qNs2Y5HrHnlg8K/fNgfI0onhYNaQrAXxdwj58
+         FL8cjcadRAQ20jCRdYnZf9d9EULxjmONDVw9xyPTjN/wuPFpwxfTKbkBjv7ZZdw5qGmd
+         drHoSOzDNp1nCX06ZW+ywwK6VZ51aPJrBqVQfjFl5OXzVDSvW8RQMiAU/i/a2WG8gjtA
+         iPeSd3PneGNZrMqUQcCbguklznYGQBkII1H/6IRp1+cqhnjCRkOxaEe1wd5OYa4dWvtf
+         RdGA==
+X-Gm-Message-State: AOAM533EAHqUB2gdvcbxb88FNQUIWiYsgfvQex14pZ87HzKBWgBbJ4Xt
+        tsqTgg9S+cIXUmIkmzpk1vlja1k5nxk=
+X-Google-Smtp-Source: ABdhPJy0cRxepO2D7CDsUAehnVXb/bEG3u/rUDUwn9ysOIvyJ5qhZ9v+alxY5Po6yKqICj3AshguXQ==
+X-Received: by 2002:a63:1415:: with SMTP id u21mr4088795pgl.366.1590689661888;
+        Thu, 28 May 2020 11:14:21 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id o16sm5038881pgg.57.2020.05.28.11.14.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2020 11:14:20 -0700 (PDT)
+Message-ID: <5ecfff7c.1c69fb81.f9e95.feab@mx.google.com>
+Date:   Thu, 28 May 2020 11:14:20 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <20D843639614D14FA2EFCF8BE29971CC@amazon.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: v5.7-rc7-92-g065693d08662
+Subject: pm/testing boot: 53 boots: 1 failed,
+ 52 passed (v5.7-rc7-92-g065693d08662)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-QSBnZW50bGUgcGluZyBvbiB0aGlzIHdob2xlIHBhdGNoIHNlcmllcy4NCg0KVGhhbmtzLA0KQW5j
-aGFsDQoNCu+7vyAgICBIZWxsbywNCiAgICBUaGlzIHNlcmllcyBmaXhlcyBQTSBoaWJlcm5hdGlv
-biBmb3IgaHZtIGd1ZXN0cyBydW5uaW5nIG9uIHhlbiBoeXBlcnZpc29yLg0KICAgIFRoZSBydW5u
-aW5nIGd1ZXN0IGNvdWxkIG5vdyBiZSBoaWJlcm5hdGVkIGFuZCByZXN1bWVkIHN1Y2Nlc3NmdWxs
-eSBhdCBhDQogICAgbGF0ZXIgdGltZS4gVGhlIGZpeGVzIGZvciBQTSBoaWJlcm5hdGlvbiBhcmUg
-YWRkZWQgdG8gYmxvY2sgYW5kDQogICAgbmV0d29yayBkZXZpY2UgZHJpdmVycyBpLmUgeGVuLWJs
-a2Zyb250IGFuZCB4ZW4tbmV0ZnJvbnQuIEFueSBvdGhlciBkcml2ZXINCiAgICB0aGF0IG5lZWRz
-IHRvIGFkZCBTNCBzdXBwb3J0IGlmIG5vdCBhbHJlYWR5LCBjYW4gZm9sbG93IHNhbWUgbWV0aG9k
-IG9mDQogICAgaW50cm9kdWNpbmcgZnJlZXplL3RoYXcvcmVzdG9yZSBjYWxsYmFja3MuDQogICAg
-VGhlIHBhdGNoZXMgaGFkIGJlZW4gdGVzdGVkIGFnYWluc3QgdXBzdHJlYW0ga2VybmVsIGFuZCB4
-ZW40LjExLiBMYXJnZQ0KICAgIHNjYWxlIHRlc3RpbmcgaXMgYWxzbyBkb25lIG9uIFhlbiBiYXNl
-ZCBBbWF6b24gRUMyIGluc3RhbmNlcy4gQWxsIHRoaXMgdGVzdGluZw0KICAgIGludm9sdmVkIHJ1
-bm5pbmcgbWVtb3J5IGV4aGF1c3Rpbmcgd29ya2xvYWQgaW4gdGhlIGJhY2tncm91bmQuDQoNCiAg
-ICBEb2luZyBndWVzdCBoaWJlcm5hdGlvbiBkb2VzIG5vdCBpbnZvbHZlIGFueSBzdXBwb3J0IGZy
-b20gaHlwZXJ2aXNvciBhbmQNCiAgICB0aGlzIHdheSBndWVzdCBoYXMgY29tcGxldGUgY29udHJv
-bCBvdmVyIGl0cyBzdGF0ZS4gSW5mcmFzdHJ1Y3R1cmUNCiAgICByZXN0cmljdGlvbnMgZm9yIHNh
-dmluZyB1cCBndWVzdCBzdGF0ZSBjYW4gYmUgb3ZlcmNvbWUgYnkgZ3Vlc3QgaW5pdGlhdGVkDQog
-ICAgaGliZXJuYXRpb24uDQoNCiAgICBUaGVzZSBwYXRjaGVzIHdlcmUgc2VuZCBvdXQgYXMgUkZD
-IGJlZm9yZSBhbmQgYWxsIHRoZSBmZWVkYmFjayBoYWQgYmVlbg0KICAgIGluY29ycG9yYXRlZCBp
-biB0aGUgcGF0Y2hlcy4gVGhlIGxhc3QgUkZDVjMgY291bGQgYmUgZm91bmQgaGVyZToNCiAgICBo
-dHRwczovL2xrbWwub3JnL2xrbWwvMjAyMC8yLzE0LzI3ODkNCg0KICAgIEtub3duIGlzc3VlczoN
-CiAgICAxLktBU0xSIGNhdXNlcyBpbnRlcm1pdHRlbnQgaGliZXJuYXRpb24gZmFpbHVyZXMuIFZN
-IGZhaWxzIHRvIHJlc3VtZXMgYW5kDQogICAgaGFzIHRvIGJlIHJlc3RhcnRlZC4gSSB3aWxsIGlu
-dmVzdGlnYXRlIHRoaXMgaXNzdWUgc2VwYXJhdGVseSBhbmQgc2hvdWxkbid0DQogICAgYmUgYSBi
-bG9ja2VyIGZvciB0aGlzIHBhdGNoIHNlcmllcy4NCiAgICAyLiBEdXJpbmcgaGliZXJuYXRpb24s
-IEkgb2JzZXJ2ZWQgc29tZXRpbWVzIHRoYXQgZnJlZXppbmcgb2YgdGFza3MgZmFpbHMgZHVlDQog
-ICAgdG8gYnVzeSBYRlMgd29ya3F1ZXVlaVt4ZnMtY2lsL3hmcy1zeW5jXS4gVGhpcyBpcyBhbHNv
-IGludGVybWl0dGVudCBtYXkgYmUgMQ0KICAgIG91dCBvZiAyMDAgcnVucyBhbmQgaGliZXJuYXRp
-b24gaXMgYWJvcnRlZCBpbiB0aGlzIGNhc2UuIFJlLXRyeWluZyBoaWJlcm5hdGlvbg0KICAgIG1h
-eSB3b3JrLiBBbHNvLCB0aGlzIGlzIGEga25vd24gaXNzdWUgd2l0aCBoaWJlcm5hdGlvbiBhbmQg
-c29tZQ0KICAgIGZpbGVzeXN0ZW1zIGxpa2UgWEZTIGhhcyBiZWVuIGRpc2N1c3NlZCBieSB0aGUg
-Y29tbXVuaXR5IGZvciB5ZWFycyB3aXRoIG5vdCBhbg0KICAgIGVmZmVjdHZlIHJlc29sdXRpb24g
-YXQgdGhpcyBwb2ludC4NCg0KICAgIFRlc3RpbmcgSG93IHRvOg0KICAgIC0tLS0tLS0tLS0tLS0t
-LQ0KICAgIDEuIFNldHVwIHhlbiBoeXBlcnZpc29yIG9uIGEgcGh5c2ljYWwgbWFjaGluZVsgSSB1
-c2VkIFVidW50dSAxNi4wNCArdXBzdHJlYW0NCiAgICB4ZW4tNC4xMV0NCiAgICAyLiBCcmluZyB1
-cCBhIEhWTSBndWVzdCB3L3Qga2VybmVsIGNvbXBpbGVkIHdpdGggaGliZXJuYXRpb24gcGF0Y2hl
-cw0KICAgIFtJIHVzZWQgdWJ1bnR1MTguMDQgbmV0Ym9vdCBiaW9uaWMgaW1hZ2VzIGFuZCBhbHNv
-IEFtYXpvbiBMaW51eCBvbi1wcmVtIGltYWdlc10uDQogICAgMy4gQ3JlYXRlIGEgc3dhcCBmaWxl
-IHNpemU9UkFNIHNpemUNCiAgICA0LiBVcGRhdGUgZ3J1YiBwYXJhbWV0ZXJzIGFuZCByZWJvb3QN
-CiAgICA1LiBUcmlnZ2VyIHBtLWhpYmVybmF0aW9uIGZyb20gd2l0aGluIHRoZSBWTQ0KDQogICAg
-RXhhbXBsZToNCiAgICBTZXQgdXAgYSBmaWxlLWJhY2tlZCBzd2FwIHNwYWNlLiBTd2FwIGZpbGUg
-c2l6ZT49VG90YWwgbWVtb3J5IG9uIHRoZSBzeXN0ZW0NCiAgICBzdWRvIGRkIGlmPS9kZXYvemVy
-byBvZj0vc3dhcCBicz0kKCggMTAyNCAqIDEwMjQgKSkgY291bnQ9NDA5NiAjIDQwOTZNaUINCiAg
-ICBzdWRvIGNobW9kIDYwMCAvc3dhcA0KICAgIHN1ZG8gbWtzd2FwIC9zd2FwDQogICAgc3VkbyBz
-d2Fwb24gL3N3YXANCg0KICAgIFVwZGF0ZSByZXN1bWUgZGV2aWNlL3Jlc3VtZSBvZmZzZXQgaW4g
-Z3J1YiBpZiB1c2luZyBzd2FwIGZpbGU6DQogICAgcmVzdW1lPS9kZXYveHZkYTEgcmVzdW1lX29m
-ZnNldD0yMDA3MDQgbm9fY29uc29sZV9zdXNwZW5kPTENCg0KICAgIEV4ZWN1dGU6DQogICAgLS0t
-LS0tLS0NCiAgICBzdWRvIHBtLWhpYmVybmF0ZQ0KICAgIE9SDQogICAgZWNobyBkaXNrID4gL3N5
-cy9wb3dlci9zdGF0ZSAmJiBlY2hvIHJlYm9vdCA+IC9zeXMvcG93ZXIvZGlzaw0KDQogICAgQ29t
-cHV0ZSByZXN1bWUgb2Zmc2V0IGNvZGU6DQogICAgIg0KICAgICMhL3Vzci9iaW4vZW52IHB5dGhv
-bg0KICAgIGltcG9ydCBzeXMNCiAgICBpbXBvcnQgYXJyYXkNCiAgICBpbXBvcnQgZmNudGwNCg0K
-ICAgICNzd2FwIGZpbGUNCiAgICBmID0gb3BlbihzeXMuYXJndlsxXSwgJ3InKQ0KICAgIGJ1ZiA9
-IGFycmF5LmFycmF5KCdMJywgWzBdKQ0KDQogICAgI0ZJQk1BUA0KICAgIHJldCA9IGZjbnRsLmlv
-Y3RsKGYuZmlsZW5vKCksIDB4MDEsIGJ1ZikNCiAgICBwcmludCBidWZbMF0NCiAgICAiDQoNCg0K
-ICAgIEFuY2hhbCBBZ2Fyd2FsICg1KToNCiAgICAgIHg4Ni94ZW46IEludHJvZHVjZSBuZXcgZnVu
-Y3Rpb24gdG8gbWFwIEhZUEVSVklTT1Jfc2hhcmVkX2luZm8gb24NCiAgICAgICAgUmVzdW1lDQog
-ICAgICBnZW5pcnE6IFNodXRkb3duIGlycSBjaGlwcyBpbiBzdXNwZW5kL3Jlc3VtZSBkdXJpbmcg
-aGliZXJuYXRpb24NCiAgICAgIHhlbjogSW50cm9kdWNlIHdyYXBwZXIgZm9yIHNhdmUvcmVzdG9y
-ZSBzY2hlZCBjbG9jayBvZmZzZXQNCiAgICAgIHhlbjogVXBkYXRlIHNjaGVkIGNsb2NrIG9mZnNl
-dCB0byBhdm9pZCBzeXN0ZW0gaW5zdGFiaWxpdHkgaW4NCiAgICAgICAgaGliZXJuYXRpb24NCiAg
-ICAgIFBNIC8gaGliZXJuYXRlOiB1cGRhdGUgdGhlIHJlc3VtZSBvZmZzZXQgb24gU05BUFNIT1Rf
-U0VUX1NXQVBfQVJFQQ0KDQogICAgTXVuZWhpc2EgS2FtYXRhICg3KToNCiAgICAgIHhlbi9tYW5h
-Z2U6IGtlZXAgdHJhY2sgb2YgdGhlIG9uLWdvaW5nIHN1c3BlbmQgbW9kZQ0KICAgICAgeGVuYnVz
-OiBhZGQgZnJlZXplL3RoYXcvcmVzdG9yZSBjYWxsYmFja3Mgc3VwcG9ydA0KICAgICAgeDg2L3hl
-bjogYWRkIHN5c3RlbSBjb3JlIHN1c3BlbmQgYW5kIHJlc3VtZSBjYWxsYmFja3MNCiAgICAgIHhl
-bi1ibGtmcm9udDogYWRkIGNhbGxiYWNrcyBmb3IgUE0gc3VzcGVuZCBhbmQgaGliZXJuYXRpb24N
-CiAgICAgIHhlbi1uZXRmcm9udDogYWRkIGNhbGxiYWNrcyBmb3IgUE0gc3VzcGVuZCBhbmQgaGli
-ZXJuYXRpb24NCiAgICAgIHhlbi90aW1lOiBpbnRyb2R1Y2UgeGVuX3tzYXZlLHJlc3RvcmV9X3N0
-ZWFsX2Nsb2NrDQogICAgICB4ODYveGVuOiBzYXZlIGFuZCByZXN0b3JlIHN0ZWFsIGNsb2NrDQoN
-CiAgICAgYXJjaC94ODYveGVuL2VubGlnaHRlbl9odm0uYyAgICAgIHwgICA4ICsrDQogICAgIGFy
-Y2gveDg2L3hlbi9zdXNwZW5kLmMgICAgICAgICAgICB8ICA3MiArKysrKysrKysrKysrKysrKysN
-CiAgICAgYXJjaC94ODYveGVuL3RpbWUuYyAgICAgICAgICAgICAgIHwgIDE4ICsrKystDQogICAg
-IGFyY2gveDg2L3hlbi94ZW4tb3BzLmggICAgICAgICAgICB8ICAgMyArDQogICAgIGRyaXZlcnMv
-YmxvY2sveGVuLWJsa2Zyb250LmMgICAgICB8IDEyMiArKysrKysrKysrKysrKysrKysrKysrKysr
-KysrLS0NCiAgICAgZHJpdmVycy9uZXQveGVuLW5ldGZyb250LmMgICAgICAgIHwgIDk4ICsrKysr
-KysrKysrKysrKysrKysrKysrLQ0KICAgICBkcml2ZXJzL3hlbi9ldmVudHMvZXZlbnRzX2Jhc2Uu
-YyAgfCAgIDEgKw0KICAgICBkcml2ZXJzL3hlbi9tYW5hZ2UuYyAgICAgICAgICAgICAgfCAgNzMg
-KysrKysrKysrKysrKysrKysrDQogICAgIGRyaXZlcnMveGVuL3RpbWUuYyAgICAgICAgICAgICAg
-ICB8ICAyOSArKysrKystDQogICAgIGRyaXZlcnMveGVuL3hlbmJ1cy94ZW5idXNfcHJvYmUuYyB8
-ICA5OSArKysrKysrKysrKysrKysrKysrLS0tLS0NCiAgICAgaW5jbHVkZS9saW51eC9pcnEuaCAg
-ICAgICAgICAgICAgIHwgICAyICsNCiAgICAgaW5jbHVkZS94ZW4veGVuLW9wcy5oICAgICAgICAg
-ICAgIHwgICA4ICsrDQogICAgIGluY2x1ZGUveGVuL3hlbmJ1cy5oICAgICAgICAgICAgICB8ICAg
-MyArDQogICAgIGtlcm5lbC9pcnEvY2hpcC5jICAgICAgICAgICAgICAgICB8ICAgMiArLQ0KICAg
-ICBrZXJuZWwvaXJxL2ludGVybmFscy5oICAgICAgICAgICAgfCAgIDEgKw0KICAgICBrZXJuZWwv
-aXJxL3BtLmMgICAgICAgICAgICAgICAgICAgfCAgMzEgKysrKystLS0NCiAgICAga2VybmVsL3Bv
-d2VyL3VzZXIuYyAgICAgICAgICAgICAgIHwgICA2ICstDQogICAgIDE3IGZpbGVzIGNoYW5nZWQs
-IDUzNiBpbnNlcnRpb25zKCspLCA0MCBkZWxldGlvbnMoLSkNCg0KICAgIC0tIA0KICAgIDIuMjQu
-MS5BTVpODQoNCg0K
+******************************************
+* WARNING: Boot tests are now deprecated *
+******************************************
+
+As kernelci.org is expanding its functional testing capabilities, the conce=
+pt
+of boot testing is now deprecated.  Boot results are scheduled to be droppe=
+d on
+*5th June 2020*.  The full schedule for boot tests deprecation is available=
+ on
+this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
+
+The new equivalent is the *baseline* test suite which also runs sanity chec=
+ks
+using dmesg and bootrr: https://github.com/kernelci/bootrr
+
+See the *baseline results for this kernel revision* on this page:
+https://kernelci.org/test/job/pm/branch/testing/kernel/v5.7-rc7-92-g065693d=
+08662/plan/baseline/
+
+---------------------------------------------------------------------------=
+----
+
+pm/testing boot: 53 boots: 1 failed, 52 passed (v5.7-rc7-92-g065693d08662)
+
+Full Boot Summary: https://kernelci.org/boot/all/job/pm/branch/testing/kern=
+el/v5.7-rc7-92-g065693d08662/
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+7-rc7-92-g065693d08662/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.7-rc7-92-g065693d08662
+Git Commit: 065693d08662db2ceebb2aa051ffae22d364cd25
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Tested: 46 unique boards, 15 SoC families, 3 builds out of 5
+
+Boot Failure Detected:
+
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+---
+For more info write to <info@kernelci.org>
