@@ -2,133 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3CA1E5CE3
-	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 12:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D6F1E5EB8
+	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 13:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387816AbgE1KPy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 May 2020 06:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387753AbgE1KPV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 06:15:21 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9BDC08C5CB
-        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 03:15:10 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id c1so226152vsc.11
-        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 03:15:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wYvD4r1ulJrSPmdQw9SLGgFwZG+MxRo/QXyqHRDFej0=;
-        b=CNJPDqLTi/IuZgQRPBMg2yxNxoePxYEAJVmhhtvE8OlJJFcBDQUOzDfbOfCRdSnmBm
-         8uF8pKL4NTg9pkrglxDWZ43R5v8xOCf957HqPBm7Bhn60M/lvAwLr57p/Ec04gy7abhj
-         /4Wr/kJ4dMPeVI264fensIP3MSNHMEexAFLX3Fzf3Lqf4WhgcXpcxmCS/Y7xgUxfTSxt
-         jnKX1AM4ntK+UBYh2R3qgH0oZ8b7BSt6ccIfacVMJQzsWFM53tYNbs20i6aBM9XbeD/l
-         DzQTZ3GEGyBcv9KYZSRZ+eLQTQgn6dhHS78QePY5HrkiMK0pbfisPhLL747if5W6pPEN
-         SyxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wYvD4r1ulJrSPmdQw9SLGgFwZG+MxRo/QXyqHRDFej0=;
-        b=neqFM95Pv9dEgOpiZQuitKmPAq7G5S9+GpZdPGwHnRokp/TWcGswNCgAhG89JfT6FS
-         RvlW5//fNBmxNofBJqpfOrQpJJtQSjf6ct/X5B9gRGdfGGWIZqTlpphHrtfUHL/xnvso
-         ZwUhEW1jazUEPH0bEhx+gaLPrupo4EOqpU0ntv/J4Lz8zv8SMIhy/Yqy/aIbt2Me4ssI
-         Zs685Vl93HDMuQxpSHEMDrbEwi2JVn97m63F/oTj5XKV1COCLOXYHqg2lsptYZI5dP5q
-         dr8o93u5HThcqNCiNZxYFyHWyPJ9eLtWgSDKtVuu64ldk17RK5Rm3Gu0wJpjJvxh9FDi
-         cR1Q==
-X-Gm-Message-State: AOAM530j66eiiKqR61y4/S7LS9e8DiRY/svBktnYX+FLQukDc3UJ6XNl
-        3sLcZPwSbgLzluS3NevzCKf0/KmtqHT0EU/y/DUtvQ==
-X-Google-Smtp-Source: ABdhPJxb2WnpVRS9U3plDTUUei62NNTnraVpSBNhYL/j1TslMciPD++P7b1aKtf45q8ShwLdi/3Vrx+gxW3AtR2NmzM=
-X-Received: by 2002:a67:be05:: with SMTP id x5mr1263018vsq.35.1590660909658;
- Thu, 28 May 2020 03:15:09 -0700 (PDT)
+        id S2388503AbgE1Lwg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 May 2020 07:52:36 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:40512 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388480AbgE1Lwg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 07:52:36 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04SBqTh7100508;
+        Thu, 28 May 2020 06:52:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1590666749;
+        bh=+Bl/RgqFM80J5ZPxiQ9jUxFBvVC4VpLXi511omtcn3U=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=bb8WmApxzG6vG8QWEBhIvTtt20Gs72sNdWPocwxNIkWhoTUb+Zw1pC/nZN1AlBOlz
+         QK48sWREInt5+9B/PEwAnqRscb419BF53gLm+Z01uW+EFuZPHPSYfaPnTpC/YRwcVr
+         DQ0Rx7rk9xj9yel/wyLldirvfobixrgdeGcUn8U8=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04SBqTYK069626
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 28 May 2020 06:52:29 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 28
+ May 2020 06:52:29 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 28 May 2020 06:52:29 -0500
+Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04SBqRbW095499;
+        Thu, 28 May 2020 06:52:28 -0500
+Subject: Re: [PATCH v10 1/4] power_supply: Add additional health properties to
+ the header
+To:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>, <sre@kernel.org>,
+        <pali@kernel.org>, <robh@kernel.org>
+CC:     <afd@ti.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <sspatil@android.com>, Guru Das Srinagesh <gurus@codeaurora.org>
+References: <20200527231743.18066-1-r-rivera-matos@ti.com>
+ <20200527231743.18066-2-r-rivera-matos@ti.com>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <e7474766-f424-4fec-2310-76a29233980d@ti.com>
+Date:   Thu, 28 May 2020 06:52:27 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <1590547175-15070-1-git-send-email-haibo.chen@nxp.com>
-In-Reply-To: <1590547175-15070-1-git-send-email-haibo.chen@nxp.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 28 May 2020 12:14:33 +0200
-Message-ID: <CAPDyKFrJMcKA89t7wMa8knOz4DwJ=ZPUf=RCeGcJK==UHjNQvw@mail.gmail.com>
-Subject: Re: [PATCH v2] mmc: host: sdhci-esdhc-imx: add wakeup feature for
- GPIO CD pin
-To:     Haibo Chen <haibo.chen@nxp.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200527231743.18066-2-r-rivera-matos@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 27 May 2020 at 04:50, <haibo.chen@nxp.com> wrote:
+Sebasitan
+
+On 5/27/20 6:17 PM, Ricardo Rivera-Matos wrote:
+> From: Dan Murphy <dmurphy@ti.com>
 >
-> From: Haibo Chen <haibo.chen@nxp.com>
+> Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
 >
-> When use the specific GPIO to detect the card insert/remove, we can
-> also add the GPIO as a wakeup source. When system suspend, insert or
-> remove the card can wakeup the system.
+> HEALTH_WARM, HEALTH_COOL, and HEALTH_HOT properties are taken from the JEITA spec.
 >
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-
-Applied for next, thanks!
-
-Kind regards
-Uffe
-
-
+> Tested-by: Guru Das Srinagesh <gurus@codeaurora.org>
+> Signed-off-by: Dan Murphy <dmurphy@ti.com>
 > ---
->  drivers/mmc/host/sdhci-esdhc-imx.c | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
-> index 5398af4824c3..5a27511438c8 100644
-> --- a/drivers/mmc/host/sdhci-esdhc-imx.c
-> +++ b/drivers/mmc/host/sdhci-esdhc-imx.c
-> @@ -1599,6 +1599,10 @@ static int sdhci_esdhc_imx_probe(struct platform_device *pdev)
->         if (esdhc_is_usdhc(imx_data)) {
->                 host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
->                 host->mmc->caps |= MMC_CAP_1_8V_DDR | MMC_CAP_3_3V_DDR;
-> +
-> +               /* GPIO CD can be set as a wakeup source */
-> +               host->mmc->caps |= MMC_CAP_CD_WAKE;
-> +
->                 if (!(imx_data->socdata->flags & ESDHC_FLAG_HS200))
->                         host->quirks2 |= SDHCI_QUIRK2_BROKEN_HS200;
->
-> @@ -1734,8 +1738,14 @@ static int sdhci_esdhc_suspend(struct device *dev)
->                 mmc_retune_needed(host->mmc);
->
->         ret = sdhci_suspend_host(host);
-> -       if (!ret)
-> -               return pinctrl_pm_select_sleep_state(dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = pinctrl_pm_select_sleep_state(dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = mmc_gpio_set_cd_wake(host->mmc, true);
->
->         return ret;
->  }
-> @@ -1759,6 +1769,9 @@ static int sdhci_esdhc_resume(struct device *dev)
->         if (host->mmc->caps2 & MMC_CAP2_CQE)
->                 ret = cqhci_resume(host->mmc);
->
-> +       if (!ret)
-> +               ret = mmc_gpio_set_cd_wake(host->mmc, false);
-> +
->         return ret;
->  }
->  #endif
-> --
-> 2.17.1
->
+
+What is the possibility of getting this patch applied for 5.8?
+
+We have a few devices in back log waiting to be posted for review but 
+they all depend on this header to be available as they use the new 
+properties.
+
+Dan
+
