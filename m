@@ -2,181 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A641E5BDB
-	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 11:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3CA1E5CE3
+	for <lists+linux-pm@lfdr.de>; Thu, 28 May 2020 12:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728251AbgE1J3i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 May 2020 05:29:38 -0400
-Received: from foss.arm.com ([217.140.110.172]:49970 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728199AbgE1J3i (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 28 May 2020 05:29:38 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA5B431B;
-        Thu, 28 May 2020 02:29:37 -0700 (PDT)
-Received: from [10.37.12.44] (unknown [10.37.12.44])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 304353F6C4;
-        Thu, 28 May 2020 02:29:34 -0700 (PDT)
-Subject: Re: [RFC] GPU-bound energy efficiency improvements for the
- intel_pstate driver (v2.99)
-To:     Valentin Schneider <valentin.schneider@arm.com>,
-        Francisco Jerez <currojerez@riseup.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        chris.p.wilson@intel.com, "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com
-References: <20200428032258.2518-1-currojerez@riseup.net>
- <20200511105701.GA2940@hirez.programming.kicks-ass.net>
- <874ksmuqx6.fsf@riseup.net> <jhjwo5erb0e.mognet@arm.com>
- <87a72at44d.fsf@riseup.net> <jhjv9kxqdcf.mognet@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <d6ad1c7e-7bce-4f16-3606-a9777ac07cc1@arm.com>
-Date:   Thu, 28 May 2020 10:29:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2387816AbgE1KPy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 May 2020 06:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387753AbgE1KPV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 06:15:21 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9BDC08C5CB
+        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 03:15:10 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id c1so226152vsc.11
+        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 03:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wYvD4r1ulJrSPmdQw9SLGgFwZG+MxRo/QXyqHRDFej0=;
+        b=CNJPDqLTi/IuZgQRPBMg2yxNxoePxYEAJVmhhtvE8OlJJFcBDQUOzDfbOfCRdSnmBm
+         8uF8pKL4NTg9pkrglxDWZ43R5v8xOCf957HqPBm7Bhn60M/lvAwLr57p/Ec04gy7abhj
+         /4Wr/kJ4dMPeVI264fensIP3MSNHMEexAFLX3Fzf3Lqf4WhgcXpcxmCS/Y7xgUxfTSxt
+         jnKX1AM4ntK+UBYh2R3qgH0oZ8b7BSt6ccIfacVMJQzsWFM53tYNbs20i6aBM9XbeD/l
+         DzQTZ3GEGyBcv9KYZSRZ+eLQTQgn6dhHS78QePY5HrkiMK0pbfisPhLL747if5W6pPEN
+         SyxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wYvD4r1ulJrSPmdQw9SLGgFwZG+MxRo/QXyqHRDFej0=;
+        b=neqFM95Pv9dEgOpiZQuitKmPAq7G5S9+GpZdPGwHnRokp/TWcGswNCgAhG89JfT6FS
+         RvlW5//fNBmxNofBJqpfOrQpJJtQSjf6ct/X5B9gRGdfGGWIZqTlpphHrtfUHL/xnvso
+         ZwUhEW1jazUEPH0bEhx+gaLPrupo4EOqpU0ntv/J4Lz8zv8SMIhy/Yqy/aIbt2Me4ssI
+         Zs685Vl93HDMuQxpSHEMDrbEwi2JVn97m63F/oTj5XKV1COCLOXYHqg2lsptYZI5dP5q
+         dr8o93u5HThcqNCiNZxYFyHWyPJ9eLtWgSDKtVuu64ldk17RK5Rm3Gu0wJpjJvxh9FDi
+         cR1Q==
+X-Gm-Message-State: AOAM530j66eiiKqR61y4/S7LS9e8DiRY/svBktnYX+FLQukDc3UJ6XNl
+        3sLcZPwSbgLzluS3NevzCKf0/KmtqHT0EU/y/DUtvQ==
+X-Google-Smtp-Source: ABdhPJxb2WnpVRS9U3plDTUUei62NNTnraVpSBNhYL/j1TslMciPD++P7b1aKtf45q8ShwLdi/3Vrx+gxW3AtR2NmzM=
+X-Received: by 2002:a67:be05:: with SMTP id x5mr1263018vsq.35.1590660909658;
+ Thu, 28 May 2020 03:15:09 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <jhjv9kxqdcf.mognet@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1590547175-15070-1-git-send-email-haibo.chen@nxp.com>
+In-Reply-To: <1590547175-15070-1-git-send-email-haibo.chen@nxp.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 28 May 2020 12:14:33 +0200
+Message-ID: <CAPDyKFrJMcKA89t7wMa8knOz4DwJ=ZPUf=RCeGcJK==UHjNQvw@mail.gmail.com>
+Subject: Re: [PATCH v2] mmc: host: sdhci-esdhc-imx: add wakeup feature for
+ GPIO CD pin
+To:     Haibo Chen <haibo.chen@nxp.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, 27 May 2020 at 04:50, <haibo.chen@nxp.com> wrote:
+>
+> From: Haibo Chen <haibo.chen@nxp.com>
+>
+> When use the specific GPIO to detect the card insert/remove, we can
+> also add the GPIO as a wakeup source. When system suspend, insert or
+> remove the card can wakeup the system.
+>
+> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+
+Applied for next, thanks!
+
+Kind regards
+Uffe
 
 
-On 5/15/20 7:09 PM, Valentin Schneider wrote:
-> 
-> On 15/05/20 01:48, Francisco Jerez wrote:
->> Valentin Schneider <valentin.schneider@arm.com> writes:
->>
->>> (+Lukasz)
->>>
->>> On 11/05/20 22:01, Francisco Jerez wrote:
->>>>> What I'm missing is an explanation for why this isn't using the
->>>>> infrastructure that was build for these kinds of things? The thermal
->>>>> framework, was AFAIU, supposed to help with these things, and the IPA
->>>>> thing in particular is used by ARM to do exactly this GPU/CPU power
->>>>> budget thing.
->>>>>
->>>>> If thermal/IPA is found wanting, why aren't we improving that?
->>>>
->>>> The GPU/CPU power budget "thing" is only a positive side effect of this
->>>> series on some TDP-bound systems.  Its ultimate purpose is improving the
->>>> energy efficiency of workloads which have a bottleneck on a device other
->>>> than the CPU, by giving the bottlenecking device driver some influence
->>>> over the response latency of CPUFREQ governors via a PM QoS interface.
->>>> This seems to be completely outside the scope of the thermal framework
->>>> and IPA AFAIU.
->>>>
->>>
->>> It's been a while since I've stared at IPA, but it does sound vaguely
->>> familiar.
->>>
->>> When thermally constrained, IPA figures out a budget and splits it between
->>> actors (cpufreq and devfreq devices) depending on how much juice they are
->>> asking for; see cpufreq_get_requested_power() and
->>> devfreq_cooling_get_requested_power(). There's also some weighing involved.
->>>
->>
->> I'm aware of those.  Main problem is that the current mechanism for IPA
->> to figure out the requested power of each actor is based on a rough
->> estimate of their past power consumption: If an actor was operating at a
->> highly energy-inefficient regime it will end up requesting more power
->> than another actor with the same load but more energy-efficient
->> behavior.
-
-This can be tweaked by changing the weight of an actor (unfortunately
-not in a real-time by kernel). We usually setup them once, in DT.
-So, it's possible to set different weight for the LITTLE cores (which
-are more energy-efficient) and the big cores (in a good way or bad).
-
-> 
-> Right, we do mix load (busy time for either cpufreq and devfreq devices
-> AFAIR) and current state (freq) into one single power value.
-> 
->> The IPA power allocator is therefore ineffective at improving
->> the energy efficiency of an agent beyond its past behavior --
->> Furthermore it seems to *rely* on individual agents being somewhat
->> energetically responsible in order for its power allocation result to be
->> anywhere close to optimal.  But improving the energy efficiency of an
->> agent seems useful in its own right, whether IPA is used to balance
->> power across agents or not.  That's precisely the purpose of this
->> series.
-
-I don't fully agree here, i.e. in a properly setup platform we promote
-more energy-efficient LITTLE cores when there is a limited power budget. 
-That would cause capping on big cores and scheduler should see it.
-There are some limitations in the IPA, but the requirements where
-different back then, mainline code was different, etc.
-
->>
->>> If you look at the cpufreq cooling side of things, you'll see it also uses
->>> the PM QoS interface. For instance, should IPA decide to cap the CPUs
->>> (perhaps because say the GPU is the one drawing most of the juice), it'll
->>> lead to a maximum frequency capping request.
->>>
->>> So it does sound like that's what you want, only not just when thermally
->>> constrained.
->>
->> Capping the CPU frequency from random device drivers is highly
->> problematic, because the CPU is a shared resource which a number of
->> different concurrent applications might be using beyond the GPU client.
->> The GPU driver has no visibility over its impact on the performance of
->> other applications.  And even in a single-task environment, in order to
->> behave as effectively as the present series the GPU driver would need to
->> monitor the utilization of *all* CPUs in the system and place a
->> frequency constraint on each one of them (since there is the potential
->> of the task scheduler migrating the process from one CPU to another
->> without notice).  Furthermore these frequency constraints would need to
->> be updated at high frequency in order to avoid performance degradation
->> whenever the balance of load between CPU and IO device fluctuates.
->>
->> The present series attempts to remove the burden of computing frequency
->> constraints out of individual device drivers into the CPUFREQ governor.
->> Instead the device driver provides a response latency constraint when it
->> encounters a bottleneck, which can be more easily derived from hardware
->> and protocol characteristics than a CPU frequency.  PM QoS aggregates
->> the response latency constraints provided by all applications and gives
->> CPUFREQ a single response latency target compatible with all of them (so
->> a device driver specifying a high latency target won't lead to
->> performance degradation in a concurrent application with lower latency
->> constraints).  The CPUFREQ governor then computes frequency constraints
->> for each CPU core that minimize energy usage without limiting
->> throughput, based on the results obtained from CPU performance counters,
->> while guaranteeing that a discontinuous transition in CPU utilization
->> leads to a proportional transition in the CPU frequency before the
->> specified response latency has elapsed.
-> 
-> Right, I think I see your point there. I'm thinking the 'actual' IPA gurus
-> (Lukasz or even Javi) may want to have a look at this.
-> 
-
-This patch set AFAIU has different goals than IPA or any other thermal
-governor.
-
-I don't know the details of this Intel platform and the mechanisms
-which are there for thermal and power budget, so I might be wrong in
-some points (correct me where needed).
-
-Main differences comparing to IPA in regards the platform:
-- the series works on a platform which does not actually control the
-frequency (AFAIK Intel freq can be changed by FW due to any reason).
-IPA has been designed for platform which has full control over the
-frequency.
-- It does not work on Heterogeneous CPUs.
-IPA is aware of big, LITTLE or even a different tracks used
-- this patch set ignores the temperature probably assuming it is done
-by something else (FW or thermal governor).
-IPA has the PID built on top of temp sensor and must control it.
-
-Different platforms, different behaviors, different requirements.
-I agree IPA has to catch up with the new mainline solutions, though.
-
-Regards,
-Lukasz
-
+> ---
+>  drivers/mmc/host/sdhci-esdhc-imx.c | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
+> index 5398af4824c3..5a27511438c8 100644
+> --- a/drivers/mmc/host/sdhci-esdhc-imx.c
+> +++ b/drivers/mmc/host/sdhci-esdhc-imx.c
+> @@ -1599,6 +1599,10 @@ static int sdhci_esdhc_imx_probe(struct platform_device *pdev)
+>         if (esdhc_is_usdhc(imx_data)) {
+>                 host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
+>                 host->mmc->caps |= MMC_CAP_1_8V_DDR | MMC_CAP_3_3V_DDR;
+> +
+> +               /* GPIO CD can be set as a wakeup source */
+> +               host->mmc->caps |= MMC_CAP_CD_WAKE;
+> +
+>                 if (!(imx_data->socdata->flags & ESDHC_FLAG_HS200))
+>                         host->quirks2 |= SDHCI_QUIRK2_BROKEN_HS200;
+>
+> @@ -1734,8 +1738,14 @@ static int sdhci_esdhc_suspend(struct device *dev)
+>                 mmc_retune_needed(host->mmc);
+>
+>         ret = sdhci_suspend_host(host);
+> -       if (!ret)
+> -               return pinctrl_pm_select_sleep_state(dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = pinctrl_pm_select_sleep_state(dev);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = mmc_gpio_set_cd_wake(host->mmc, true);
+>
+>         return ret;
+>  }
+> @@ -1759,6 +1769,9 @@ static int sdhci_esdhc_resume(struct device *dev)
+>         if (host->mmc->caps2 & MMC_CAP2_CQE)
+>                 ret = cqhci_resume(host->mmc);
+>
+> +       if (!ret)
+> +               ret = mmc_gpio_set_cd_wake(host->mmc, false);
+> +
+>         return ret;
+>  }
+>  #endif
+> --
+> 2.17.1
+>
