@@ -2,127 +2,219 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B8B1E7080
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 01:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B24D1E729C
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 04:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437646AbgE1Xks (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 May 2020 19:40:48 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:40680 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437593AbgE1Xkq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 May 2020 19:40:46 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04SNYfv7090690;
-        Thu, 28 May 2020 18:34:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1590708881;
-        bh=rl7/xrN4dyHCY0P9+fejZ1982cTwA0TKyTv5w1Z40oA=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=iM2RRmz4/3X5f176xVtTiWBycEJKu+Heq2CbqG5eR0d6bNtQ+WIcMlVIcRDeC7/yl
-         35/hMLFEeKXzzrrGHFsSXLXcDKemIdhgbvq3BOXdLZaqGnQ00zNDwv6BX4CpjpgCF5
-         83y1ahAhQxC/Rc2zgX/gORZFZ62zBbjxsBlm71GI=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04SNYfPu022920
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 28 May 2020 18:34:41 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 28
- May 2020 18:34:40 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 28 May 2020 18:34:40 -0500
-Received: from [10.250.38.163] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04SNYdoL029206;
-        Thu, 28 May 2020 18:34:40 -0500
-Subject: Re: [PATCH v12 1/4] power_supply: Add additional health properties to
- the header
-To:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>, <sre@kernel.org>,
-        <pali@kernel.org>, <robh@kernel.org>
-CC:     <dmurphy@ti.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <sspatil@android.com>, Guru Das Srinagesh <gurus@codeaurora.org>
-References: <20200528225350.661-1-r-rivera-matos@ti.com>
- <20200528225350.661-2-r-rivera-matos@ti.com>
-From:   "Andrew F. Davis" <afd@ti.com>
-Message-ID: <5be7933c-dc85-d526-a321-1cc0ce127ddc@ti.com>
-Date:   Thu, 28 May 2020 19:34:39 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S2405317AbgE2Can (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 May 2020 22:30:43 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:50122 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2405151AbgE2Can (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 28 May 2020 22:30:43 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 0E5DE91E7189AB9DFF33;
+        Fri, 29 May 2020 10:30:40 +0800 (CST)
+Received: from [127.0.0.1] (10.166.215.101) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Fri, 29 May 2020
+ 10:30:32 +0800
+Subject: Re: [PATCH v4 1/2] cpufreq: change '.set_boost' to act on only one
+ policy
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC:     <viresh.kumar@linaro.org>, <Souvik.Chakravarty@arm.com>,
+        <Thanu.Rangarajan@arm.com>, <Sudeep.Holla@arm.com>,
+        <guohanjun@huawei.com>, <john.garry@huawei.com>,
+        <jonathan.cameron@huawei.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1590118476-28742-1-git-send-email-wangxiongfeng2@huawei.com>
+ <1590118476-28742-2-git-send-email-wangxiongfeng2@huawei.com>
+ <5425098.HjpDb7yAz6@kreacher>
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Message-ID: <1ff97ec7-2111-e4a7-c6d5-9f1c983239e3@huawei.com>
+Date:   Fri, 29 May 2020 10:30:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200528225350.661-2-r-rivera-matos@ti.com>
+In-Reply-To: <5425098.HjpDb7yAz6@kreacher>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Originating-IP: [10.166.215.101]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/28/20 6:53 PM, Ricardo Rivera-Matos wrote:
-> From: Dan Murphy <dmurphy@ti.com>
-> 
-> Add HEALTH_WARM, HEALTH_COOL and HEALTH_HOT to the health enum.
-> 
-> HEALTH_WARM, HEALTH_COOL, and HEALTH_HOT properties are taken
-> from JEITA specification JISC8712:2015
-> 
-> Tested-by: Guru Das Srinagesh <gurus@codeaurora.org>
-> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+Hi Rafael,
 
+Thanks for your reply !
 
-You should collect the acks and such you have received in previous
-versions here, like mine from v11:
-
-Acked-by: Andrew F. Davis <afd@ti.com>
-
-
-> ---
->  Documentation/ABI/testing/sysfs-class-power | 2 +-
->  drivers/power/supply/power_supply_sysfs.c   | 2 +-
->  include/linux/power_supply.h                | 3 +++
->  3 files changed, 5 insertions(+), 2 deletions(-)
+On 2020/5/28 20:48, Rafael J. Wysocki wrote:
+> On Friday, May 22, 2020 5:34:35 AM CEST Xiongfeng Wang wrote:
+>> Macro 'for_each_active_policy()' is defined internally. To avoid some
+>> cpufreq driver needing this macro to iterate over all the policies in
+>> '.set_boost' callback, we redefine '.set_boost' to act on only one
+>> policy and pass the policy as an argument.
+>> 'cpufreq_boost_trigger_state()' iterate over all the policies to set
+>> boost for the system. This is preparation for adding SW BOOST support
+>> for CPPC.
+>>
+>> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+>> Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
+>> ---
+>>  drivers/cpufreq/acpi-cpufreq.c | 10 ++++----
+>>  drivers/cpufreq/cpufreq.c      | 53 +++++++++++++++++++++---------------------
+>>  include/linux/cpufreq.h        |  2 +-
+>>  3 files changed, 34 insertions(+), 31 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+>> index 289e8ce..813aabf 100644
+>> --- a/drivers/cpufreq/acpi-cpufreq.c
+>> +++ b/drivers/cpufreq/acpi-cpufreq.c
+>> @@ -126,12 +126,14 @@ static void boost_set_msr_each(void *p_en)
+>>  	boost_set_msr(enable);
+>>  }
+>>  
+>> -static int set_boost(int val)
+>> +static int set_boost(struct cpufreq_policy *policy, int val)
+>>  {
+>>  	get_online_cpus();
+>> -	on_each_cpu(boost_set_msr_each, (void *)(long)val, 1);
+>> +	on_each_cpu_mask(policy->cpus, boost_set_msr_each,
+>> +			 (void *)(long)val, 1);
+>>  	put_online_cpus();
+>> -	pr_debug("Core Boosting %sabled.\n", val ? "en" : "dis");
+>> +	pr_debug("CPU %*pbl: Core Boosting %sabled.\n",
+>> +		 cpumask_pr_args(policy->cpus), val ? "en" : "dis");
+>>  
+>>  	return 0;
+>>  }
+>> @@ -162,7 +164,7 @@ static ssize_t store_cpb(struct cpufreq_policy *policy, const char *buf,
+>>  	if (ret || val > 1)
+>>  		return -EINVAL;
+>>  
+>> -	set_boost(val);
+>> +	set_boost(policy, val);
+>>  
+>>  	return count;
+>>  }
+>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>> index d03f250..d0d86b1 100644
+>> --- a/drivers/cpufreq/cpufreq.c
+>> +++ b/drivers/cpufreq/cpufreq.c
+>> @@ -2532,34 +2532,29 @@ void cpufreq_update_limits(unsigned int cpu)
+>>  /*********************************************************************
+>>   *               BOOST						     *
+>>   *********************************************************************/
+>> -static int cpufreq_boost_set_sw(int state)
+>> +static int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state)
+>>  {
+>> -	struct cpufreq_policy *policy;
+>> -
+>> -	for_each_active_policy(policy) {
+>> -		int ret;
+>> -
+>> -		if (!policy->freq_table)
+>> -			return -ENXIO;
+>> +	int ret;
+>>  
+>> -		ret = cpufreq_frequency_table_cpuinfo(policy,
+>> -						      policy->freq_table);
+>> -		if (ret) {
+>> -			pr_err("%s: Policy frequency update failed\n",
+>> -			       __func__);
+>> -			return ret;
+>> -		}
+>> +	if (!policy->freq_table)
+>> +		return -ENXIO;
+>>  
+>> -		ret = freq_qos_update_request(policy->max_freq_req, policy->max);
+>> -		if (ret < 0)
+>> -			return ret;
+>> +	ret = cpufreq_frequency_table_cpuinfo(policy, policy->freq_table);
+>> +	if (ret) {
+>> +		pr_err("%s: Policy frequency update failed\n", __func__);
+>> +		return ret;
+>>  	}
+>>  
+>> +	ret = freq_qos_update_request(policy->max_freq_req, policy->max);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>>  	return 0;
+>>  }
+>>  
+>>  int cpufreq_boost_trigger_state(int state)
+>>  {
+>> +	struct cpufreq_policy *policy;
+>>  	unsigned long flags;
+>>  	int ret = 0;
+>>  
+>> @@ -2570,16 +2565,22 @@ int cpufreq_boost_trigger_state(int state)
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-> index bf3b48f022dc..9f3fd01a9373 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power
-> +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -190,7 +190,7 @@ Description:
->  		Valid values: "Unknown", "Good", "Overheat", "Dead",
->  			      "Over voltage", "Unspecified failure", "Cold",
->  			      "Watchdog timer expire", "Safety timer expire",
-> -			      "Over current"
-> +			      "Over current", "Warm", "Cool", "Hot"
->  
->  What:		/sys/class/power_supply/<supply_name>/precharge_current
->  Date:		June 2017
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index f37ad4eae60b..d0d549611794 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -61,7 +61,7 @@ static const char * const power_supply_charge_type_text[] = {
->  static const char * const power_supply_health_text[] = {
->  	"Unknown", "Good", "Overheat", "Dead", "Over voltage",
->  	"Unspecified failure", "Cold", "Watchdog timer expire",
-> -	"Safety timer expire", "Over current"
-> +	"Safety timer expire", "Over current", "Warm", "Cool", "Hot"
->  };
->  
->  static const char * const power_supply_technology_text[] = {
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index dcd5a71e6c67..8670e90c1d51 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -61,6 +61,9 @@ enum {
->  	POWER_SUPPLY_HEALTH_WATCHDOG_TIMER_EXPIRE,
->  	POWER_SUPPLY_HEALTH_SAFETY_TIMER_EXPIRE,
->  	POWER_SUPPLY_HEALTH_OVERCURRENT,
-> +	POWER_SUPPLY_HEALTH_WARM,
-> +	POWER_SUPPLY_HEALTH_COOL,
-> +	POWER_SUPPLY_HEALTH_HOT,
->  };
->  
->  enum {
+> AFAICS this gets called via sysfs without any cpufreq locking whatever, so
+> I'm not really sure what causes it to be safe with respect to CPU offline /
+> online, especially if the ->set_boost() callback only wants to do stuff
+> for CPUs that are online.
+
+Thanks for your advice. Yes, we have 'cpu_hotplug_lock' in 'set_boost' in
+acpi_cpufreq. But we don't have 'cpu_hotplug_lock' for the general SW BOOST
+framework. So I think I will need to move the lock from 'set_boost()' to
+'store_cpb()' and add lock in 'cpufreq_boost_trigger_state' for the general SW
+BOOST.
+
+Thanks,
+Xiongfeng
+
 > 
+>>  	cpufreq_driver->boost_enabled = state;
+>>  	write_unlock_irqrestore(&cpufreq_driver_lock, flags);
+>>  
+>> -	ret = cpufreq_driver->set_boost(state);
+>> -	if (ret) {
+>> -		write_lock_irqsave(&cpufreq_driver_lock, flags);
+>> -		cpufreq_driver->boost_enabled = !state;
+>> -		write_unlock_irqrestore(&cpufreq_driver_lock, flags);
+>> -
+>> -		pr_err("%s: Cannot %s BOOST\n",
+>> -		       __func__, state ? "enable" : "disable");
+>> +	for_each_active_policy(policy) {
+>> +		ret = cpufreq_driver->set_boost(policy, state);
+>> +		if (ret)
+>> +			goto err_reset_state;
+>>  	}
+>>  
+>> +	return 0;
+>> +
+>> +err_reset_state:
+>> +	write_lock_irqsave(&cpufreq_driver_lock, flags);
+>> +	cpufreq_driver->boost_enabled = !state;
+>> +	write_unlock_irqrestore(&cpufreq_driver_lock, flags);
+>> +
+>> +	pr_err("%s: Cannot %s BOOST\n",
+>> +	       __func__, state ? "enable" : "disable");
+>> +
+>>  	return ret;
+>>  }
+>>  
+>> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+>> index 67d5950..3494f67 100644
+>> --- a/include/linux/cpufreq.h
+>> +++ b/include/linux/cpufreq.h
+>> @@ -367,7 +367,7 @@ struct cpufreq_driver {
+>>  
+>>  	/* platform specific boost support code */
+>>  	bool		boost_enabled;
+>> -	int		(*set_boost)(int state);
+>> +	int		(*set_boost)(struct cpufreq_policy *policy, int state);
+>>  };
+>>  
+>>  /* flags */
+>>
+> 
+> 
+> 
+> 
+> 
+> .
+> 
+
