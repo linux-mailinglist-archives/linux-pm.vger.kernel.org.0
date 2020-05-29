@@ -2,97 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFC61E84CC
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 19:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D99A1E84EB
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 19:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726555AbgE2RbZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 13:31:25 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:41856 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726857AbgE2RXB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 13:23:01 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id EAFDB2A194B
-Subject: Re: [PATCH v4 05/11] thermal: remove get_mode() operation of drivers
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        kernel@collabora.com, Fabio Estevam <festevam@gmail.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Allison Randal <allison@lohutok.net>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Enrico Weigelt <info@metux.net>,
-        Peter Kaestle <peter@piie.net>,
-        Sebastian Reichel <sre@kernel.org>,
+        id S1727030AbgE2Rdm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 May 2020 13:33:42 -0400
+Received: from mail-ej1-f68.google.com ([209.85.218.68]:37501 "EHLO
+        mail-ej1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726829AbgE2Rdj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 13:33:39 -0400
+Received: by mail-ej1-f68.google.com with SMTP id mb16so2855500ejb.4;
+        Fri, 29 May 2020 10:33:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PszhtAwUwwlJ09xeuuN/pO1JWqOLkuSHz7sxH2UKeTE=;
+        b=ljsFLDKbFzxxve6rCp79GQeVuJbYjNaGeji8kKrEryqZ73+1u/UfggSaZXYH7s97uF
+         GZ3b4Xr9wEvOdMFssodcEEkkcpEm13WG6ftRy1EgKxV9wqM1XOIDU8xGVW4/YARnYriD
+         FTAxmBKWg9nm4HFIgwBHGwYJbC9NMHAnz12RTsoHl2BwY3KbUJOdGOR+tW5+1cPBif2z
+         bVhywxE/5z9CBTZ2gmePR0jGfdg4TwBLrNd4Wfp2XBg8v/A3+JJ+FhT0l+adp5X0kkZo
+         SyXgX/BGH22hF8Tv4W5/CctywlAjZVvySo9w8XD5O82VWO3GwtcnF0pWCYLra4C6aNnj
+         lwNQ==
+X-Gm-Message-State: AOAM532PHbbQ0pR1l3Aks1Gw3yN0E0LgYXCaDBNXD/G1zegrIvju2XRM
+        VzBP5paH0v48UMBa5vTKIfk=
+X-Google-Smtp-Source: ABdhPJyNrwdibGKDjwG2u2mVPxTu3VxK3FigRubMSp4DXgAyfIUx0rd177S7EUDIxfFpk+50i/9Q0Q==
+X-Received: by 2002:a17:906:ce36:: with SMTP id sd22mr8463743ejb.94.1590773615802;
+        Fri, 29 May 2020 10:33:35 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.118])
+        by smtp.googlemail.com with ESMTPSA id kt10sm3513669ejb.54.2020.05.29.10.33.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 29 May 2020 10:33:35 -0700 (PDT)
+Date:   Fri, 29 May 2020 19:33:32 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andy@infradead.org>
-References: <20200529154910.GA158174@roeck-us.net>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <1c4a029e-bb5b-fcfd-1b4b-beea1d6fd577@collabora.com>
-Date:   Fri, 29 May 2020 19:22:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>, peron.clem@gmail.com,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH 0/2] Fix regulators coupling for Exynos5800
+Message-ID: <20200529173332.GA20540@kozik-lap>
+References: <CGME20200529124948eucas1p175379ead8afd1932f7b7ae61e35cf632@eucas1p1.samsung.com>
+ <20200529124940.10675-1-m.szyprowski@samsung.com>
+ <159077112408.28818.15178843458792850223.b4-ty@kernel.org>
+ <20200529165827.GP4610@sirena.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <20200529154910.GA158174@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200529165827.GP4610@sirena.org.uk>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Guenter,
-
-W dniu 29.05.2020 o 17:49, Guenter Roeck pisze:
-> On Thu, May 28, 2020 at 09:20:45PM +0200, Andrzej Pietrasiewicz wrote:
->> get_mode() is now redundant, as the state is stored in struct
->> thermal_zone_device.
->>
->> Consequently the "mode" attribute in sysfs can always be visible, because
->> it is always possible to get the mode from struct tzd.
->>
->> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+On Fri, May 29, 2020 at 05:58:27PM +0100, Mark Brown wrote:
+> On Fri, May 29, 2020 at 05:52:15PM +0100, Mark Brown wrote:
 > 
-> There is a slight semantic change for the two drivers which still have
-> a local copy of enum thermal_device_mode: Previously trying to read the
-> mode for those would return -EPERM since they don't have a get_mode
-> function. Now the global value for mode is returned, but I am not sure
-> if it matches the local value.
+> > [1/1] regulator: extract voltage balancing code to the separate function
+> >       commit: 752db83a5dfd4fd3a0624b9ab440ed947fa003ca
+> 
+> Let me know if you need a pull request for this - I figured it was too
+> late to apply the second patch before the merge window with the cross
+> tree stuff.
 
-Please see my replies to your comment about patch 4/11.
+Thanks, I think it will not be needed. I'll apply the second patch after
+the merge window.
 
-Regards,
+Best regards,
+Krzysztof
 
-Andrzej
