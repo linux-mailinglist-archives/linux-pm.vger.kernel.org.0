@@ -2,28 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1525F1E8416
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 18:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451A51E8431
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 18:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727924AbgE2QwQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 12:52:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43966 "EHLO mail.kernel.org"
+        id S1726849AbgE2Q6d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 May 2020 12:58:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48938 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726616AbgE2QwP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 29 May 2020 12:52:15 -0400
+        id S1725601AbgE2Q6c (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 29 May 2020 12:58:32 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9AA8D207BC;
-        Fri, 29 May 2020 16:52:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0E96B2075A;
+        Fri, 29 May 2020 16:58:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590771135;
-        bh=ty93gwPtPYx0e0WzBVbqMLEGQwQX5iIquHmLbxDNrU8=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=Jo1HfsPho6m9fUgNaAI7sh6ej0LRhDQHBWNGCfxpylrA3LjEzpwn63fVGjvYsBXCp
-         ymXScRVggk0ra1WnvzeYGtRCGieaS6E7MhdoKkXW5BNCp4meSUPlhwfTYBETTwFlyd
-         GfQxS91oS3ehWzJvKNHWOfjMBf3KWr+lsX01I6WE=
-Date:   Fri, 29 May 2020 17:52:11 +0100
+        s=default; t=1590771512;
+        bh=X9EtO+jSwn5ip0cASm/U3/ohqZtcK6GSwCt+9vC2cy4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iISym5Us2DAtonwuWFKLN6dS9M6ONYc4yp3aKXrxPzDiktjhNHbynxkFhd+RWU3pB
+         hTFNRiF6ag5jKMab1KMU4zEPbplsYHvYQVN+giBaEJJ4hDQHlvM8DN7L5K398w7FdS
+         KaqeZ6r4oF8cFOlxamMQBjN6EcBhS9GqgtcuHSXU=
+Date:   Fri, 29 May 2020 17:58:27 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     linux-pm@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
@@ -39,50 +39,50 @@ Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
         Lucas Stach <l.stach@pengutronix.de>, peron.clem@gmail.com,
         Rafael Wysocki <rjw@rjwysocki.net>,
         Vincent Guittot <vincent.guittot@linaro.org>
-In-Reply-To: <20200529124940.10675-1-m.szyprowski@samsung.com>
-References: <CGME20200529124948eucas1p175379ead8afd1932f7b7ae61e35cf632@eucas1p1.samsung.com> <20200529124940.10675-1-m.szyprowski@samsung.com>
 Subject: Re: [PATCH 0/2] Fix regulators coupling for Exynos5800
-Message-Id: <159077112408.28818.15178843458792850223.b4-ty@kernel.org>
+Message-ID: <20200529165827.GP4610@sirena.org.uk>
+References: <CGME20200529124948eucas1p175379ead8afd1932f7b7ae61e35cf632@eucas1p1.samsung.com>
+ <20200529124940.10675-1-m.szyprowski@samsung.com>
+ <159077112408.28818.15178843458792850223.b4-ty@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+W7ryvxEk4RRyt+P"
+Content-Disposition: inline
+In-Reply-To: <159077112408.28818.15178843458792850223.b4-ty@kernel.org>
+X-Cookie: The Killer Ducks are coming!!!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 29 May 2020 14:49:38 +0200, Marek Szyprowski wrote:
-> This patchset is another attempt to fix the regulator coupling on
-> Exynos5800/5422 SoCs. Here are links to the previous attempts:
-> 
-> https://lore.kernel.org/linux-samsung-soc/20191008101709.qVNy8eijBi0LynOteWFMnTg4GUwKG599n6OyYoX1Abs@z/
-> https://lore.kernel.org/lkml/20191017102758.8104-1-m.szyprowski@samsung.com/
-> https://lore.kernel.org/linux-pm/cover.1589528491.git.viresh.kumar@linaro.org/
-> https://lore.kernel.org/linux-pm/20200528131130.17984-1-m.szyprowski@samsung.com/
-> 
-> [...]
 
-Applied to
+--+W7ryvxEk4RRyt+P
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+On Fri, May 29, 2020 at 05:52:15PM +0100, Mark Brown wrote:
 
-Thanks!
+> [1/1] regulator: extract voltage balancing code to the separate function
+>       commit: 752db83a5dfd4fd3a0624b9ab440ed947fa003ca
 
-[1/1] regulator: extract voltage balancing code to the separate function
-      commit: 752db83a5dfd4fd3a0624b9ab440ed947fa003ca
+Let me know if you need a pull request for this - I figured it was too
+late to apply the second patch before the merge window with the cross
+tree stuff.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+--+W7ryvxEk4RRyt+P
+Content-Type: application/pgp-signature; name="signature.asc"
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-----BEGIN PGP SIGNATURE-----
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7RPzMACgkQJNaLcl1U
+h9B9jAf+MIaqrDJTZLjVTFB7PyoS1HONgnNh1HIsRXUgSMtlUU6SRDfmoo/KriEP
+QkiKgNLCc4QGuSA7ttP6FbmbWZRwbodiRfoXfC/fNpP2YOmde6657uOkkHgLRzUg
+gQtw3QVUfF3wIkYznk/n69PIutoQI22mvv1fq2unHolcVH6xNAh90yOV3pRl63jY
+J2AWs/iRn4l1fUUDXhpHf7er4sQr9boX/V5ak1Ab6GzC98y6KuAEurarGcwWW1PB
+KhD+yQQ1I4jJu4Ecr+mQTT3tX0jaUo3QBucaRbeQz6kRDF1siiOe5/mseEggXadT
+BJ/bSFFJl8wLDViz9zx/97IDlTZLZQ==
+=oyxQ
+-----END PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--+W7ryvxEk4RRyt+P--
