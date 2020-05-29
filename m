@@ -2,118 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA431E8334
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 18:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756551E839D
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 18:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbgE2QJB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 12:09:01 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:41062 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgE2QJA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 12:09:00 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id E130E2A2DFE
-Subject: Re: [PATCH v4 04/11] thermal: Store device mode in struct
- thermal_zone_device
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        kernel@collabora.com, Fabio Estevam <festevam@gmail.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Allison Randal <allison@lohutok.net>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Enrico Weigelt <info@metux.net>,
-        Peter Kaestle <peter@piie.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andy@infradead.org>
-References: <20200529154205.GA157653@roeck-us.net>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <5010f7df-59d6-92ef-c99a-0dbd715f0ad2@collabora.com>
-Date:   Fri, 29 May 2020 18:08:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1727076AbgE2Q1I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 May 2020 12:27:08 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:35142 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725601AbgE2Q1H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 12:27:07 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 8F4971C0385; Fri, 29 May 2020 18:27:05 +0200 (CEST)
+Date:   Fri, 29 May 2020 18:27:04 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCHv1 00/19] Improve SBS battery support
+Message-ID: <20200529162704.GA3709@amd>
+References: <20200513185615.508236-1-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <20200529154205.GA157653@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="sdtB3X0nJg68CQEu"
+Content-Disposition: inline
+In-Reply-To: <20200513185615.508236-1-sebastian.reichel@collabora.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Guenter,
 
-W dniu 29.05.2020 o 17:42, Guenter Roeck pisze:
-> On Thu, May 28, 2020 at 09:20:44PM +0200, Andrzej Pietrasiewicz wrote:
->> Prepare for eliminating get_mode().
->>
-> Might be worthwhile to explain (not only in the subject) what you are
-> doing here.
-> 
->> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
->> ---
->>   drivers/acpi/thermal.c                        | 18 ++++++----------
->>   .../ethernet/mellanox/mlxsw/core_thermal.c    | 21 +++++++------------
->>   drivers/platform/x86/acerhdf.c                | 15 ++++++-------
->>   drivers/thermal/da9062-thermal.c              |  6 ++----
->>   drivers/thermal/imx_thermal.c                 | 17 +++++++--------
->>   .../intel/int340x_thermal/int3400_thermal.c   | 12 +++--------
->>   .../thermal/intel/intel_quark_dts_thermal.c   | 16 +++++++-------
->>   drivers/thermal/thermal_of.c                  | 10 +++------
-> 
-> After this patch is applied on top of the thermal 'testing' branch,
-> there are still local instances of thermal_device_mode in
-> 	drivers/thermal/st/stm_thermal.c
-> 	drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-> 
-> If there is a reason not to replace those, it might make sense to explain
-> it here.
-> 
+--sdtB3X0nJg68CQEu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My understanding is that these two are sensor devices which are "plugged"
-into their "parent" thermal zone device. The latter is the "proper" tzd.
-They both use thermal_zone_of_device_ops instead of thermal_zone_device_ops.
-The former doesn't even have get_mode(). The thermal core, when it calls
-get_mode(), operates on the "parent" thermal zone devices.
+Hi!
 
-Consequently, the drivers you mention use their "mode" members for
-their private purpose, not for the purpose of storing the "parent"
-thermal zone device mode.
+> This patchset improves support for SBS compliant batteries. Due to
+> the changes, the battery now exposes 32 power supply properties and
+> (un)plugging it generates a backtrace containing the following message
+> without the first patch in this series:
+>=20
+> ---------------------------
+> WARNING: CPU: 0 PID: 20 at lib/kobject_uevent.c:659 add_uevent_var+0xd4/0=
+x104
+> add_uevent_var: too many keys
+> ---------------------------
+>=20
+> For references this is what an SBS battery status looks like after
+> the patch series has been applied:
+>=20
+> POWER_SUPPLY_VOLTAGE_MIN_DESIGN=3D10800000
+> POWER_SUPPLY_VOLTAGE_MAX_DESIGN=3D10800000
 
-Andrzej
+Is that correct, BTW? sounds like these should not be equal...
 
+Best regards,
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
 
+--sdtB3X0nJg68CQEu
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl7RN9gACgkQMOfwapXb+vJsVwCgpHjzsBvFVswrLrtJc0NNZQMo
+BMYAniyjyZf3dR0x51pP7eY2lzcXk4Uy
+=8ya5
+-----END PGP SIGNATURE-----
+
+--sdtB3X0nJg68CQEu--
