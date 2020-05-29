@@ -2,87 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 451A51E8431
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 18:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFB01E84B6
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 19:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726849AbgE2Q6d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 12:58:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48938 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725601AbgE2Q6c (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 29 May 2020 12:58:32 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0E96B2075A;
-        Fri, 29 May 2020 16:58:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590771512;
-        bh=X9EtO+jSwn5ip0cASm/U3/ohqZtcK6GSwCt+9vC2cy4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iISym5Us2DAtonwuWFKLN6dS9M6ONYc4yp3aKXrxPzDiktjhNHbynxkFhd+RWU3pB
-         hTFNRiF6ag5jKMab1KMU4zEPbplsYHvYQVN+giBaEJJ4hDQHlvM8DN7L5K398w7FdS
-         KaqeZ6r4oF8cFOlxamMQBjN6EcBhS9GqgtcuHSXU=
-Date:   Fri, 29 May 2020 17:58:27 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-pm@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S1726882AbgE2RV7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 May 2020 13:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbgE2RV6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 13:21:58 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDF4C03E969;
+        Fri, 29 May 2020 10:21:58 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id F17622A194B
+Subject: Re: [PATCH v4 04/11] thermal: Store device mode in struct
+ thermal_zone_device
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        kernel@collabora.com, Fabio Estevam <festevam@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Allison Randal <allison@lohutok.net>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Enrico Weigelt <info@metux.net>,
+        Peter Kaestle <peter@piie.net>,
+        Sebastian Reichel <sre@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>, peron.clem@gmail.com,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH 0/2] Fix regulators coupling for Exynos5800
-Message-ID: <20200529165827.GP4610@sirena.org.uk>
-References: <CGME20200529124948eucas1p175379ead8afd1932f7b7ae61e35cf632@eucas1p1.samsung.com>
- <20200529124940.10675-1-m.szyprowski@samsung.com>
- <159077112408.28818.15178843458792850223.b4-ty@kernel.org>
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andy@infradead.org>
+References: <20200529154205.GA157653@roeck-us.net>
+ <5010f7df-59d6-92ef-c99a-0dbd715f0ad2@collabora.com>
+Message-ID: <a0c0310f-9870-47be-4ca3-c07e41c380fc@collabora.com>
+Date:   Fri, 29 May 2020 19:21:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+W7ryvxEk4RRyt+P"
-Content-Disposition: inline
-In-Reply-To: <159077112408.28818.15178843458792850223.b4-ty@kernel.org>
-X-Cookie: The Killer Ducks are coming!!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <5010f7df-59d6-92ef-c99a-0dbd715f0ad2@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi again,
 
---+W7ryvxEk4RRyt+P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+W dniu 29.05.2020 o 18:08, Andrzej Pietrasiewicz pisze:
+> Hi Guenter,
+> 
+> W dniu 29.05.2020 o 17:42, Guenter Roeck pisze:
+>> On Thu, May 28, 2020 at 09:20:44PM +0200, Andrzej Pietrasiewicz wrote:
+>>> Prepare for eliminating get_mode().
+>>>
+>> Might be worthwhile to explain (not only in the subject) what you are
+>> doing here.
+>>
+>>> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+>>> ---
+>>>   drivers/acpi/thermal.c                        | 18 ++++++----------
+>>>   .../ethernet/mellanox/mlxsw/core_thermal.c    | 21 +++++++------------
+>>>   drivers/platform/x86/acerhdf.c                | 15 ++++++-------
+>>>   drivers/thermal/da9062-thermal.c              |  6 ++----
+>>>   drivers/thermal/imx_thermal.c                 | 17 +++++++--------
+>>>   .../intel/int340x_thermal/int3400_thermal.c   | 12 +++--------
+>>>   .../thermal/intel/intel_quark_dts_thermal.c   | 16 +++++++-------
+>>>   drivers/thermal/thermal_of.c                  | 10 +++------
+>>
+>> After this patch is applied on top of the thermal 'testing' branch,
+>> there are still local instances of thermal_device_mode in
+>>     drivers/thermal/st/stm_thermal.c
+>>     drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+>>
+>> If there is a reason not to replace those, it might make sense to explain
+>> it here.
+>>
+> 
+> My understanding is that these two are sensor devices which are "plugged"
+> into their "parent" thermal zone device. The latter is the "proper" tzd.
+> They both use thermal_zone_of_device_ops instead of thermal_zone_device_ops.
+> The former doesn't even have get_mode(). The thermal core, when it calls
+> get_mode(), operates on the "parent" thermal zone devices.
+> 
+> Consequently, the drivers you mention use their "mode" members for
+> their private purpose, not for the purpose of storing the "parent"
+> thermal zone device mode.
+> 
 
-On Fri, May 29, 2020 at 05:52:15PM +0100, Mark Brown wrote:
+Let me also say it differently.
 
-> [1/1] regulator: extract voltage balancing code to the separate function
->       commit: 752db83a5dfd4fd3a0624b9ab440ed947fa003ca
+Both drivers which you mention use devm_thermal_zone_of_sensor_register().
+It calls thermal_zone_of_sensor_register(), which "will search the list of
+thermal zones described in device tree and look for the zone that refer to
+the sensor device pointed by @dev->of_node as temperature providers. For
+the zone pointing to the sensor node, the sensor will be added to the DT
+thermal zone device." When a match is found thermal_zone_of_add_sensor()
+is invoked, which (using thermal_zone_get_zone_by_name()) iterates over
+all registered thermal_zone_devices. The one eventually found will be
+returned and propagated to the original caller of
+devm_thermal_zone_of_sensor_register(). The state of this returned
+device is managed elsewhere (in that device's struct tzd). The "mode"
+member you are referring to is thus unrelated.
 
-Let me know if you need a pull request for this - I figured it was too
-late to apply the second patch before the merge window with the cross
-tree stuff.
+Regards,
 
---+W7ryvxEk4RRyt+P
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7RPzMACgkQJNaLcl1U
-h9B9jAf+MIaqrDJTZLjVTFB7PyoS1HONgnNh1HIsRXUgSMtlUU6SRDfmoo/KriEP
-QkiKgNLCc4QGuSA7ttP6FbmbWZRwbodiRfoXfC/fNpP2YOmde6657uOkkHgLRzUg
-gQtw3QVUfF3wIkYznk/n69PIutoQI22mvv1fq2unHolcVH6xNAh90yOV3pRl63jY
-J2AWs/iRn4l1fUUDXhpHf7er4sQr9boX/V5ak1Ab6GzC98y6KuAEurarGcwWW1PB
-KhD+yQQ1I4jJu4Ecr+mQTT3tX0jaUo3QBucaRbeQz6kRDF1siiOe5/mseEggXadT
-BJ/bSFFJl8wLDViz9zx/97IDlTZLZQ==
-=oyxQ
------END PGP SIGNATURE-----
-
---+W7ryvxEk4RRyt+P--
+Andrzej
