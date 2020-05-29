@@ -2,116 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 404B71E7A47
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 12:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2371E7A77
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 12:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726555AbgE2KQU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 06:16:20 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45483 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgE2KQR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 06:16:17 -0400
-Received: by mail-lj1-f196.google.com with SMTP id z18so1881456lji.12;
-        Fri, 29 May 2020 03:16:13 -0700 (PDT)
+        id S1726086AbgE2KXx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 May 2020 06:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725795AbgE2KXv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 06:23:51 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E037DC03E969
+        for <linux-pm@vger.kernel.org>; Fri, 29 May 2020 03:23:50 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id z13so1937712ljn.7
+        for <linux-pm@vger.kernel.org>; Fri, 29 May 2020 03:23:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RtiHAujl9lf2oMvwRBMnVGbOD90IBdFARsRXPPpNsWY=;
+        b=poIRSp28YZwRA/l7u/DkP2Hcl603SWYzvPDSwddXAqTudJYmQuYGH2QobiSOQjiMWD
+         tYlGXNTFFdq9mJS01vTirdtF8gpUxBdiBnNnRO0nOOMmuar7cHod5Xuno9HPM/9VKrZR
+         N1Iya4RgYNf18bhwdD8BiKNnjzMN1CsW6RSQUNRGjiMgl8vfxuY0UUVKQMnSx3RRKjSZ
+         U3bWKwWDKABc7hix4vDyqhOHlbmkdALRq7pOVAqByi286lDEW71KixibqBWdPe4KSKz+
+         rd9NYrNSKFlyqgY0cHaYdN4c4+ypEuFLGI/9BYKhne0AjaWYRiujURjfTJUkjOI3Pb4x
+         UwUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Qb23YrFge2bev6B+pdY5MYpRbBAt1YLbxMOSUywPdHk=;
-        b=cZaH0DKeLwkKayN1g+x2VJNhADXnu4nL0vSdS/b+fM2kg+16H4sXwqx6iK+z8ZyLeF
-         uPY2l26f1BPnMQft2ohw7um4HIFJRpj6OL3aQkyb1cFItrFXrXmSCdT5H7jC+TlyQwDm
-         ZjfpqLk5ryiZaCaBSoSaMAVOEfWBRMg2yP4zNFDPNLx1iDNny2k1ZgNw3mx02BIpRWVV
-         XKCXBojmkFewoirKEDwupB9EKXMiPWwfaXZg7aJUIaIrifa5ohS7rFYYTkMXQGo2J/z0
-         0CVzTu3Gp9kz3GXLKhI4Dir9VBMXpCVOy+TnoQHfJ7wUQFB5TvozI5lpt2meE0lEoBln
-         9m3A==
-X-Gm-Message-State: AOAM531MzDINtCgDtROORRtIEWc36Cnsd2TOl9Tl3yF03DFtuIwvi6f6
-        51KH4BmEL9ijvv2nF/RLdPs=
-X-Google-Smtp-Source: ABdhPJyb49lJcndlDqUtkrSajYOpqC0lpLBM00Du0tW1RABChW4sreguvSnQJV4+HR28+sDilaHYIw==
-X-Received: by 2002:a05:651c:39b:: with SMTP id e27mr3886282ljp.253.1590747373144;
-        Fri, 29 May 2020 03:16:13 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id h26sm2236339lja.0.2020.05.29.03.16.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RtiHAujl9lf2oMvwRBMnVGbOD90IBdFARsRXPPpNsWY=;
+        b=LB8JB9Mg9CEFan/yARH9N8h9EYeCGusEE0CiGq2xw5ZQ/XSw1OWU1jg1CgstswcCyb
+         vH73ONSM8JwuWHyDwooCdHRiLL7RYOK178rYMnFJQ476OaAKLlHH5mRMVtVRMIfHmi/v
+         YL0pGAemJL0i7Y/cdbyD8PsXglbPzCOlS111ztLvpVau/AG6BitJyJkPIVbf5Wn5DUrF
+         goIlGCMgNG+0kMWB9v2EKqExKlXUc6MP5uGpsTpDdDWvtWplnx4U/Qrh/EBqXsairsaC
+         q4b0/IA48GOvCzb2eaaTh5hhVEWnVhAH5OagQoLJR38GnypHZeMMALXF9VPNsITx40vD
+         4THA==
+X-Gm-Message-State: AOAM531z4GOapvq9XgLj/zfVwYfpA1Z5AI4Wig1yCI/Vsy3iI3AvgRQP
+        6fkinuuYwiqX7c0E7AXyDYcM6Q==
+X-Google-Smtp-Source: ABdhPJycAtZPotAPlmj89l9sOK9ZfCEE9Y2BHD3lMtTp3cDn3DaGEz7sVaVlq2KCtV8mrq07crqmxQ==
+X-Received: by 2002:a2e:980d:: with SMTP id a13mr4017188ljj.277.1590747829267;
+        Fri, 29 May 2020 03:23:49 -0700 (PDT)
+Received: from localhost.localdomain (h-98-128-181-7.NA.cust.bahnhof.se. [98.128.181.7])
+        by smtp.gmail.com with ESMTPSA id g142sm2175067lfd.59.2020.05.29.03.23.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 03:16:12 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jec3c-0004TR-D6; Fri, 29 May 2020 12:16:08 +0200
-Date:   Fri, 29 May 2020 12:16:08 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, linux-samsung-soc@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devel@driverdev.osuosl.org,
-        vilhelm.gray@gmail.com, syednwaris@gmail.com,
-        fabrice.gasnier@st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, jic23@kernel.org, dan@dlrobertson.com,
-        jikos@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linus.walleij@linaro.org, wens@csie.org, hdegoede@redhat.com,
-        rjui@broadcom.com, sbranden@broadcom.com, peda@axentia.se,
-        kgene@kernel.org, krzk@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, ak@it-klinger.de, paul@crapouillou.net,
-        milo.kim@ti.com, vz@mleia.com, slemieux.tyco@gmail.com,
-        khilman@baylibre.com, matthias.bgg@gmail.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, heiko@sntech.de, orsonzhai@gmail.com,
-        baolin.wang7@gmail.com, zhang.lyra@gmail.com, mripard@kernel.org,
-        tduszyns@gmail.com, rmfrfs@gmail.com, lorenzo.bianconi83@gmail.com,
-        ktsai@capellamicro.com, songqiang1304521@gmail.com,
-        tomislav.denis@avl.com, eajames@linux.ibm.com,
-        dmitry.torokhov@gmail.com, coproscefalo@gmail.com
-Subject: Re: [PATCH 4/5] iio: light: lm3533-als: remove explicit parent
- assignment
-Message-ID: <20200529101608.GC19480@localhost>
-References: <20200522082208.383631-1-alexandru.ardelean@analog.com>
- <20200522082208.383631-4-alexandru.ardelean@analog.com>
+        Fri, 29 May 2020 03:23:47 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     linux-mmc@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     Haibo Chen <haibo.chen@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org
+Subject: [PATCH] mmc: core: Always allow the card detect uevent to be consumed
+Date:   Fri, 29 May 2020 12:23:41 +0200
+Message-Id: <20200529102341.12529-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200522082208.383631-4-alexandru.ardelean@analog.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 22, 2020 at 11:22:07AM +0300, Alexandru Ardelean wrote:
-> This assignment is the more peculiar of the bunch as it assigns the parent
-> of the platform-device's device (i.e. pdev->dev.parent) as the IIO device's
-> parent.
->
-> It's unclear whether this is intentional or not.
-> Hence it is in it's own patch.
+The approach to allow userspace ~5s to consume the uevent, which is
+triggered when a new card is inserted/initialized, currently requires the
+mmc host to support system wakeup.
 
-Yeah, we have a few mfd drivers whose child drivers registers their
-class devices directly under the parent mfd device rather than the
-corresponding child platform device.
+This is unnecessary limiting, especially for an mmc host that relies on a
+GPIO IRQ for card detect. More precisely, the mmc host may not support
+system wakeup for its corresponding struct device, while the GPIO IRQ still
+could be configured as a wakeup IRQ via enable_irq_wake().
 
-Since it's done consistently I think you need to update them all if you
-really want to change this. 
+To support all various cases, let's simply drop the need for the wakeup
+support. Instead let's always register a wakeup source and activate it for
+all card detect IRQs by calling __pm_wakeup_event().
 
-And it may not be worth it since at least in theory someone could now be
-relying on this topology.
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/mmc/core/core.c  | 10 +++++-----
+ drivers/mmc/core/host.c  |  3 +++
+ include/linux/mmc/host.h |  1 +
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
-> ---
->  drivers/iio/light/lm3533-als.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/iio/light/lm3533-als.c b/drivers/iio/light/lm3533-als.c
-> index bc196c212881..0f380ec8d30c 100644
-> --- a/drivers/iio/light/lm3533-als.c
-> +++ b/drivers/iio/light/lm3533-als.c
-> @@ -852,7 +852,6 @@ static int lm3533_als_probe(struct platform_device *pdev)
->  	indio_dev->channels = lm3533_als_channels;
->  	indio_dev->num_channels = ARRAY_SIZE(lm3533_als_channels);
->  	indio_dev->name = dev_name(&pdev->dev);
-> -	indio_dev->dev.parent = pdev->dev.parent;
->  	indio_dev->modes = INDIO_DIRECT_MODE;
->  
->  	als = iio_priv(indio_dev);
+diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
+index 8d2b808e9b58..aff3fa937674 100644
+--- a/drivers/mmc/core/core.c
++++ b/drivers/mmc/core/core.c
+@@ -1455,12 +1455,12 @@ void mmc_detach_bus(struct mmc_host *host)
+ void _mmc_detect_change(struct mmc_host *host, unsigned long delay, bool cd_irq)
+ {
+ 	/*
+-	 * If the device is configured as wakeup, we prevent a new sleep for
+-	 * 5 s to give provision for user space to consume the event.
++	 * Prevent system sleep for 5s to allow user space to consume the
++	 * corresponding uevent. This is especially useful, when CD irq is used
++	 * as a system wakeup, but doesn't hurt in other cases.
+ 	 */
+-	if (cd_irq && !(host->caps & MMC_CAP_NEEDS_POLL) &&
+-		device_can_wakeup(mmc_dev(host)))
+-		pm_wakeup_event(mmc_dev(host), 5000);
++	if (cd_irq && !(host->caps & MMC_CAP_NEEDS_POLL))
++		__pm_wakeup_event(host->ws, 5000);
+ 
+ 	host->detect_change = 1;
+ 	mmc_schedule_delayed_work(&host->detect, delay);
+diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
+index c8768726d925..6141a85749ca 100644
+--- a/drivers/mmc/core/host.c
++++ b/drivers/mmc/core/host.c
+@@ -15,6 +15,7 @@
+ #include <linux/of.h>
+ #include <linux/of_gpio.h>
+ #include <linux/pagemap.h>
++#include <linux/pm_wakeup.h>
+ #include <linux/export.h>
+ #include <linux/leds.h>
+ #include <linux/slab.h>
+@@ -36,6 +37,7 @@ static DEFINE_IDA(mmc_host_ida);
+ static void mmc_host_classdev_release(struct device *dev)
+ {
+ 	struct mmc_host *host = cls_dev_to_mmc_host(dev);
++	wakeup_source_unregister(host->ws);
+ 	ida_simple_remove(&mmc_host_ida, host->index);
+ 	kfree(host);
+ }
+@@ -400,6 +402,7 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
+ 	host->index = err;
+ 
+ 	dev_set_name(&host->class_dev, "mmc%d", host->index);
++	host->ws = wakeup_source_register(NULL, dev_name(&host->class_dev));
+ 
+ 	host->parent = dev;
+ 	host->class_dev.parent = dev;
+diff --git a/include/linux/mmc/host.h b/include/linux/mmc/host.h
+index 7149bab555d7..1fa4fa1caef5 100644
+--- a/include/linux/mmc/host.h
++++ b/include/linux/mmc/host.h
+@@ -287,6 +287,7 @@ struct mmc_host {
+ #ifdef CONFIG_PM_SLEEP
+ 	struct notifier_block	pm_notify;
+ #endif
++	struct wakeup_source	*ws;		/* Enable consume of uevents */
+ 	u32			max_current_330;
+ 	u32			max_current_300;
+ 	u32			max_current_180;
+-- 
+2.20.1
 
-Johan
