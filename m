@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDEB1E89BA
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 23:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E501E89BD
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 23:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728310AbgE2VN3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 17:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
+        id S1728391AbgE2VNn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 May 2020 17:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727964AbgE2VN2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 17:13:28 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E32C03E969;
-        Fri, 29 May 2020 14:13:28 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id h3so3845732ilh.13;
-        Fri, 29 May 2020 14:13:28 -0700 (PDT)
+        with ESMTP id S1727964AbgE2VNl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 17:13:41 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47254C03E969;
+        Fri, 29 May 2020 14:13:41 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id 17so3913325ilj.3;
+        Fri, 29 May 2020 14:13:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Jt21Ps9+FBfKcNDuc8FGSnESCVuwAkGYn52AtK2/my0=;
-        b=sRBj0+Ppc7iItYy7PgZkBnNG7da65q4EmFfkJHRbwo6jGTj9wX4wTpAKNDKg+/wc98
-         7buaceYdzMJ9nPlBGkxdHUIm7Ae+Ux0Ghi8LvMIvvXQXNyuNI541xgtioLzL9bYIzHw8
-         Px0JOmQVBDxLOPcUoj+HBzMiCKsPTkTR0FXbBd9HHfohNlNrZYRdGYMPYoEpbrNqzcdv
-         RzLihGI5JedvgZxNAZO0kfaMwBS5iaR2B9WhQ3wSS7V8Pv8fUj8UIbZZoPYqMZ8Fgkb6
-         7I1h1sJz4LE5SQq6jc0HWHh7/FwzxNWp/+znNYUrTsY63qmOZTGP2mS0jj0kLck/K4XD
-         WKvA==
+        bh=/dLkMJn0QiVpV9Of7J4nw4nIp9zcJOlOeEhXZiLTfEM=;
+        b=ePqjhnu16E0Jhahg6XdHQJ5PDrqh8FukjCER5ulalEySfxgRqjeopwCBDNeivg+aOT
+         THF+yWs8Yj4CVxaVlByFJUtNEV6mIsHQMD7fzEoSH58JVrrFasSsuOxVQUSrzq2lW38q
+         dhx4KS9MXcaBjE/T2f9yWmM5dtUL84h9DW2Tnoz+vPUohbH/Yr3xEMcOGMMxfMAwIPSa
+         3O9BXxv3n/PgCvVw5Fk/a9JRgdP40uQ8qm8aZ7aiGY7NdfZQXUOaywsRAmSSVzr1+29t
+         BbdoGa7TIGMtslJVgV72qwWSBCHVTwcumfKfLn8dde3cP+ny2GZs8dZZEAvixMhRGmtv
+         7y3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=Jt21Ps9+FBfKcNDuc8FGSnESCVuwAkGYn52AtK2/my0=;
-        b=JyvGz86fDxRbkVNre70GnJlAc5g2FufljnAxpXPI6289G2jxUmWz7JzIcGFGBbO1dY
-         fhbeVpYjyuqmqmhSkiEFwtmP7B2qmG+ht1qkYDFhycXyc3/bniXrydsPZ4ImJmPLd3sC
-         efxT1PXNvUg05SgD0xiYkGYTGOck3fLFr3fvjokZDOeQjY1xj1vTIajhdr9GikfHHiqq
-         kmdc8cVosHHLXtXZtvKhfbRKjvtja+q3d+Y1b7UKEDXw5EazbA2AQ0w+TdobKUUGFMHj
-         Te5rYVynU4Qb3CjIOh3ltmCsOT0ubDjszYHq516A7Z75lNPjjXQy+hJtKNDWuVPT7AtY
-         4wtg==
-X-Gm-Message-State: AOAM533hpNVOzH+JheUExa3KLnbIBuHPc3cp1niqBDY5jtQ9ZNXoYHv4
-        voeX+lGMKvLJ3Ztg6PUbMwU0DIsv
-X-Google-Smtp-Source: ABdhPJykRswbemFD9ygIADTIYs3BlujLkEyTV/gfU/Eo7CFF+ov7rAEGnqxPK4yvdyi1MgyQLq8i4w==
-X-Received: by 2002:a05:6e02:ea2:: with SMTP id u2mr9309952ilj.202.1590786807650;
-        Fri, 29 May 2020 14:13:27 -0700 (PDT)
+        bh=/dLkMJn0QiVpV9Of7J4nw4nIp9zcJOlOeEhXZiLTfEM=;
+        b=Hq17CI1NM7xq8cmvVZ9BWHYS+OTPmbnlIoCl+Y0TW42lt6Wb7U123NX2XQEa9GdvJP
+         5Sv+Z0ZYGYUA3s5e1zExYA66t93ksVYB3n4CmaqQNaVfvN/lDYRAy9/NSFwijMwjRDUn
+         vvHDaHAPylxbiOA4ll37h9G6dl6obQ2u9y9DCu1WsubH1ShzWR7U/K3Ns59o3WCWcbax
+         pcDsgd9qShLofP5bbcMzdxHJxGoNVIBtQhTD1G/FE3uXY5RgFdqqCLZN3MujB9thYZkF
+         xJRcUauw9WjBx8ZmL4dWvUOWa7XL2kXeJuU6flE7jqnR+qEKOBBcoQ/XEQ/XaFVlfRM5
+         dMpA==
+X-Gm-Message-State: AOAM533NAiB860qnTxvoiMpAO1sgJ3WJGAmMuCVdxFveDYMl6Cv4/tV2
+        O+zvcHUCfNihocIa0PGIGjbtXII8
+X-Google-Smtp-Source: ABdhPJw5Tem8TuV9FAcL5Up3BD9pUxEXEty/777TKhZNe8MZHN1fJpHPIrieQuXlX03vG3BoDhL3jA==
+X-Received: by 2002:a92:2a06:: with SMTP id r6mr8537644ile.121.1590786820308;
+        Fri, 29 May 2020 14:13:40 -0700 (PDT)
 Received: from [10.67.49.116] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id m5sm4189886ioj.52.2020.05.29.14.13.25
+        by smtp.googlemail.com with ESMTPSA id t189sm4221511iod.16.2020.05.29.14.13.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2020 14:13:26 -0700 (PDT)
-Subject: Re: [PATCH 1/3] cpufreq: brcmstb-avs-cpufreq: more flexible interface
- for __issue_avs_command()
+        Fri, 29 May 2020 14:13:39 -0700 (PDT)
+Subject: Re: [PATCH 3/3] cpufreq: brcmstb-avs-cpufreq: send S2_ENTER / S2_EXIT
+ commands to AVS
 To:     Markus Mayer <markus.mayer@broadcom.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -59,6 +59,7 @@ Cc:     Linux Power Management List <linux-pm@vger.kernel.org>,
         ARM Kernel List <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 References: <20200528182014.20021-1-mmayer@broadcom.com>
+ <20200528182014.20021-3-mmayer@broadcom.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
 Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  xsDiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
@@ -114,12 +115,12 @@ Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  HvsHIcv4lxCWkFXkwsuWqzEKK6kxVpRDoEQPDj+Oy/ZJ5fYuMbkdHrlegwoQ64LrqdmiVVPC
  TwQYEQIADwIbDAUCVF/S8QUJHlwd3wAKCRBhV5kVtWN2Do+FAJ956xSz2XpDHql+Wg/2qv3b
  G10n8gCguORqNGMsVRxrlLs7/himep7MrCc=
-Message-ID: <35e51785-e5f2-792f-321e-e083572a21b5@gmail.com>
-Date:   Fri, 29 May 2020 14:13:24 -0700
+Message-ID: <6b1a2e6d-46bc-b540-b368-c2cd600de4c3@gmail.com>
+Date:   Fri, 29 May 2020 14:13:37 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200528182014.20021-1-mmayer@broadcom.com>
+In-Reply-To: <20200528182014.20021-3-mmayer@broadcom.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -129,9 +130,9 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 5/28/20 11:20 AM, Markus Mayer wrote:
-> We are changing how parameters are passed to __issue_avs_command(), so we
-> can pass input *and* output arguments with the same command, rather than
-> just one or the other.
+> On suspend we send AVS_CMD_S2_ENTER and on resume AVS_CMD_S2_EXIT.
+> These are best effort calls, so we don't check the return code or take
+> any action if either of the calls fails.
 > 
 > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 
