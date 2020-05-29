@@ -2,232 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 601791E79FD
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 12:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404B71E7A47
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 12:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725863AbgE2KAe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 06:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbgE2KAc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 06:00:32 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093A8C03E969
-        for <linux-pm@vger.kernel.org>; Fri, 29 May 2020 03:00:32 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id q16so939765plr.2
-        for <linux-pm@vger.kernel.org>; Fri, 29 May 2020 03:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3gSuXGOWGraV02Ow0L0i7sd8hsTVt5hmju0us+gXA8o=;
-        b=kyNtSCAtRrsMRC/o10vYfWqp9g05/2+aA61AGbTPKFKMwsBAFXK4iKKDfeXoQzF8hi
-         kbWUjy6oWOTPlmvIobL6xMcZnx1SmBlz/xaR5VQ0GR4e/kNB7slw6ZQi8dat0HwJ/To5
-         xWkqsuXMvdNRBOz4p/whXCxvz/jwKoTC7GMoKE5HZQDkGF4CJjWBRnrNOqM4uDPKWz9t
-         ofSb8YZcQzgUM0S+Y4fLqNIvnVD3EsKVyueAIwPt4kQ+QOaabZy/EbarjIb+SQ8aH+Bl
-         gpOCnh7vo3+YE/QZtQ5lmZyCYIkTCrPAhP1je9U0D71Qs52lM9ML6PZyP+4kx8k4OaCU
-         g1NQ==
+        id S1726555AbgE2KQU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 May 2020 06:16:20 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:45483 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725601AbgE2KQR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 06:16:17 -0400
+Received: by mail-lj1-f196.google.com with SMTP id z18so1881456lji.12;
+        Fri, 29 May 2020 03:16:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3gSuXGOWGraV02Ow0L0i7sd8hsTVt5hmju0us+gXA8o=;
-        b=XXbIp9sNAlMHIDuWpqKpAkcPjpr2BW6VtE/DCBkuLA58RgTldFqPPWJkOJ7kFU4Ea3
-         V8IF+p7GQofwCO7SR4U9Wlqi9yT5aUr0uK2FmG/boVRh4y+R3RqMPyXDMYCZpu1k6aVi
-         uiws2pZ5N/PpHUKLOWVYjxyvxLt3HY5lEWy+DSfmVD6CAxTV2l3N9XT/d6uYOLhX8bZF
-         Ye8vMuYKv+dDVxcquJlxmP+2Y7OzHAdUc02e/yvkMGq6uhnDhENV+uoItih3a06UBMEe
-         a2V8DFhMkoqgaYoS5hcCJ0remxjhKjklr8K3e7mO6nQWTSVweqnTFn02CeGuEh5QUGBO
-         lsuw==
-X-Gm-Message-State: AOAM532KeA/aIz9eaqU6XCZHBFvZMddBLAsv74jRM9DYuZqZRuRrFqq4
-        X0Mgxlnu7M+J/UfwPg41sTDs4w==
-X-Google-Smtp-Source: ABdhPJyrzJMEG4Ks4VvFP/4SNrgVTccSb1hrZ9W7XjPAPMwxSUZP7Lv+DJkHwFxglN70sluDC20+3w==
-X-Received: by 2002:a17:90a:fa0d:: with SMTP id cm13mr8548358pjb.131.1590746431426;
-        Fri, 29 May 2020 03:00:31 -0700 (PDT)
-Received: from localhost ([122.172.60.59])
-        by smtp.gmail.com with ESMTPSA id d21sm6909350pfd.109.2020.05.29.03.00.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 29 May 2020 03:00:30 -0700 (PDT)
-Date:   Fri, 29 May 2020 15:30:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     sboyd@kernel.org, georgi.djakov@linaro.org, saravanak@google.com,
-        mka@chromium.org, nm@ti.com, bjorn.andersson@linaro.org,
-        agross@kernel.org, rjw@rjwysocki.net,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org,
-        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
-        lukasz.luba@arm.com, sudeep.holla@arm.com, smasetty@codeaurora.org
-Subject: Re: [PATCH v5 4/5] cpufreq: qcom: Update the bandwidth levels on
- frequency change
-Message-ID: <20200529100028.2wz2iqi5vqji2heb@vireshk-i7>
-References: <20200527202153.11659-1-sibis@codeaurora.org>
- <20200527202153.11659-5-sibis@codeaurora.org>
+         :mime-version:content-disposition:in-reply-to;
+        bh=Qb23YrFge2bev6B+pdY5MYpRbBAt1YLbxMOSUywPdHk=;
+        b=cZaH0DKeLwkKayN1g+x2VJNhADXnu4nL0vSdS/b+fM2kg+16H4sXwqx6iK+z8ZyLeF
+         uPY2l26f1BPnMQft2ohw7um4HIFJRpj6OL3aQkyb1cFItrFXrXmSCdT5H7jC+TlyQwDm
+         ZjfpqLk5ryiZaCaBSoSaMAVOEfWBRMg2yP4zNFDPNLx1iDNny2k1ZgNw3mx02BIpRWVV
+         XKCXBojmkFewoirKEDwupB9EKXMiPWwfaXZg7aJUIaIrifa5ohS7rFYYTkMXQGo2J/z0
+         0CVzTu3Gp9kz3GXLKhI4Dir9VBMXpCVOy+TnoQHfJ7wUQFB5TvozI5lpt2meE0lEoBln
+         9m3A==
+X-Gm-Message-State: AOAM531MzDINtCgDtROORRtIEWc36Cnsd2TOl9Tl3yF03DFtuIwvi6f6
+        51KH4BmEL9ijvv2nF/RLdPs=
+X-Google-Smtp-Source: ABdhPJyb49lJcndlDqUtkrSajYOpqC0lpLBM00Du0tW1RABChW4sreguvSnQJV4+HR28+sDilaHYIw==
+X-Received: by 2002:a05:651c:39b:: with SMTP id e27mr3886282ljp.253.1590747373144;
+        Fri, 29 May 2020 03:16:13 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id h26sm2236339lja.0.2020.05.29.03.16.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2020 03:16:12 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1jec3c-0004TR-D6; Fri, 29 May 2020 12:16:08 +0200
+Date:   Fri, 29 May 2020 12:16:08 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, linux-samsung-soc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, devel@driverdev.osuosl.org,
+        vilhelm.gray@gmail.com, syednwaris@gmail.com,
+        fabrice.gasnier@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, jic23@kernel.org, dan@dlrobertson.com,
+        jikos@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linus.walleij@linaro.org, wens@csie.org, hdegoede@redhat.com,
+        rjui@broadcom.com, sbranden@broadcom.com, peda@axentia.se,
+        kgene@kernel.org, krzk@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, ak@it-klinger.de, paul@crapouillou.net,
+        milo.kim@ti.com, vz@mleia.com, slemieux.tyco@gmail.com,
+        khilman@baylibre.com, matthias.bgg@gmail.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, heiko@sntech.de, orsonzhai@gmail.com,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com, mripard@kernel.org,
+        tduszyns@gmail.com, rmfrfs@gmail.com, lorenzo.bianconi83@gmail.com,
+        ktsai@capellamicro.com, songqiang1304521@gmail.com,
+        tomislav.denis@avl.com, eajames@linux.ibm.com,
+        dmitry.torokhov@gmail.com, coproscefalo@gmail.com
+Subject: Re: [PATCH 4/5] iio: light: lm3533-als: remove explicit parent
+ assignment
+Message-ID: <20200529101608.GC19480@localhost>
+References: <20200522082208.383631-1-alexandru.ardelean@analog.com>
+ <20200522082208.383631-4-alexandru.ardelean@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200527202153.11659-5-sibis@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20200522082208.383631-4-alexandru.ardelean@analog.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28-05-20, 01:51, Sibi Sankar wrote:
-> Add support to parse optional OPP table attached to the cpu node when
-> the OPP bandwidth values are populated. This allows for scaling of
-> DDR/L3 bandwidth levels with frequency change.
-> 
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+On Fri, May 22, 2020 at 11:22:07AM +0300, Alexandru Ardelean wrote:
+> This assignment is the more peculiar of the bunch as it assigns the parent
+> of the platform-device's device (i.e. pdev->dev.parent) as the IIO device's
+> parent.
+>
+> It's unclear whether this is intentional or not.
+> Hence it is in it's own patch.
+
+Yeah, we have a few mfd drivers whose child drivers registers their
+class devices directly under the parent mfd device rather than the
+corresponding child platform device.
+
+Since it's done consistently I think you need to update them all if you
+really want to change this. 
+
+And it may not be worth it since at least in theory someone could now be
+relying on this topology.
+
+> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 > ---
+>  drivers/iio/light/lm3533-als.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> V5:
->  * Use dev_pm_opp_adjust_voltage instead [Viresh]
->  * Misc cleanup
-> 
-> v4:
->  * Split fast switch disable into another patch [Lukasz]
-> 
->  drivers/cpufreq/qcom-cpufreq-hw.c | 77 ++++++++++++++++++++++++++++++-
->  1 file changed, 75 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index fc92a8842e252..fbd73d106a3ae 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -6,6 +6,7 @@
->  #include <linux/bitfield.h>
->  #include <linux/cpufreq.h>
->  #include <linux/init.h>
-> +#include <linux/interconnect.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of_address.h>
-> @@ -31,6 +32,52 @@
->  static unsigned long cpu_hw_rate, xo_rate;
->  static struct platform_device *global_pdev;
+> diff --git a/drivers/iio/light/lm3533-als.c b/drivers/iio/light/lm3533-als.c
+> index bc196c212881..0f380ec8d30c 100644
+> --- a/drivers/iio/light/lm3533-als.c
+> +++ b/drivers/iio/light/lm3533-als.c
+> @@ -852,7 +852,6 @@ static int lm3533_als_probe(struct platform_device *pdev)
+>  	indio_dev->channels = lm3533_als_channels;
+>  	indio_dev->num_channels = ARRAY_SIZE(lm3533_als_channels);
+>  	indio_dev->name = dev_name(&pdev->dev);
+> -	indio_dev->dev.parent = pdev->dev.parent;
+>  	indio_dev->modes = INDIO_DIRECT_MODE;
 >  
-> +static int qcom_cpufreq_set_bw(struct cpufreq_policy *policy,
-> +			       unsigned long freq_khz)
-> +{
-> +	unsigned long freq_hz = freq_khz * 1000;
-> +	struct dev_pm_opp *opp;
-> +	struct device *dev;
-> +	int ret;
-> +
-> +	dev = get_cpu_device(policy->cpu);
-> +	if (!dev)
-> +		return -ENODEV;
-> +
-> +	opp = dev_pm_opp_find_freq_exact(dev, freq_hz, true);
-> +	if (IS_ERR(opp))
-> +		return PTR_ERR(opp);
-> +
-> +	ret = dev_pm_opp_set_bw(dev, opp);
-> +	dev_pm_opp_put(opp);
-> +	return ret;
-> +}
-> +
-> +static int qcom_cpufreq_update_opp(struct device *cpu_dev,
-> +				   unsigned long freq_khz,
-> +				   unsigned long volt)
-> +{
-> +	unsigned long freq_hz = freq_khz * 1000;
-> +
-> +	if (dev_pm_opp_adjust_voltage(cpu_dev, freq_hz, volt, volt, volt))
-> +		return dev_pm_opp_add(cpu_dev, freq_hz, volt);
+>  	als = iio_priv(indio_dev);
 
-What's going on here ? Why add OPP here ?
-
-> +
-> +	/* Enable the opp after voltage update */
-> +	return dev_pm_opp_enable(cpu_dev, freq_hz);
-> +}
-> +
-> +/* Check for optional interconnect paths on CPU0 */
-> +static int qcom_cpufreq_find_icc_paths(struct device *dev)
-> +{
-> +	struct device *cpu_dev;
-> +
-> +	cpu_dev = get_cpu_device(0);
-> +	if (!cpu_dev)
-> +		return -EPROBE_DEFER;
-> +
-> +	return dev_pm_opp_of_find_icc_paths(cpu_dev, NULL);
-> +}
-> +
-
-open code this into the probe routine.
-
->  static int qcom_cpufreq_hw_target_index(struct cpufreq_policy *policy,
->  					unsigned int index)
->  {
-> @@ -39,6 +86,8 @@ static int qcom_cpufreq_hw_target_index(struct cpufreq_policy *policy,
->  
->  	writel_relaxed(index, perf_state_reg);
->  
-> +	qcom_cpufreq_set_bw(policy, freq);
-> +
->  	arch_set_freq_scale(policy->related_cpus, freq,
->  			    policy->cpuinfo.max_freq);
->  	return 0;
-> @@ -88,12 +137,30 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
->  {
->  	u32 data, src, lval, i, core_count, prev_freq = 0, freq;
->  	u32 volt;
-> +	u64 rate;
->  	struct cpufreq_frequency_table	*table;
-> +	struct device_node *opp_table_np, *np;
-> +	int ret;
->  
->  	table = kcalloc(LUT_MAX_ENTRIES + 1, sizeof(*table), GFP_KERNEL);
->  	if (!table)
->  		return -ENOMEM;
->  
-> +	ret = dev_pm_opp_of_add_table(cpu_dev);
-> +	if (!ret) {
-> +		/* Disable all opps and cross-validate against LUT */
-> +		opp_table_np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
-> +		for_each_available_child_of_node(opp_table_np, np) {
-> +			ret = of_property_read_u64(np, "opp-hz", &rate);
-
-No way, please use dev_pm_opp_find_freq_*() here instead to grab OPPs
-one by one.
-
-> +			if (!ret)
-> +				dev_pm_opp_disable(cpu_dev, rate);
-> +		}
-> +		of_node_put(opp_table_np);
-> +	} else if (ret != -ENODEV) {
-> +		dev_err(cpu_dev, "Invalid OPP table in Device tree\n");
-> +		return ret;
-> +	}
-
-Rather put this in the if (ret) block and so the else part doesn't
-need extra indentation.
-
-> +
->  	for (i = 0; i < LUT_MAX_ENTRIES; i++) {
->  		data = readl_relaxed(base + REG_FREQ_LUT +
->  				      i * LUT_ROW_SIZE);
-> @@ -112,7 +179,7 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
->  
->  		if (freq != prev_freq && core_count != LUT_TURBO_IND) {
->  			table[i].frequency = freq;
-> -			dev_pm_opp_add(cpu_dev, freq * 1000, volt);
-> +			qcom_cpufreq_update_opp(cpu_dev, freq, volt);
->  			dev_dbg(cpu_dev, "index=%d freq=%d, core_count %d\n", i,
->  				freq, core_count);
->  		} else if (core_count == LUT_TURBO_IND) {
-> @@ -133,7 +200,8 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
->  			if (prev->frequency == CPUFREQ_ENTRY_INVALID) {
->  				prev->frequency = prev_freq;
->  				prev->flags = CPUFREQ_BOOST_FREQ;
-> -				dev_pm_opp_add(cpu_dev,	prev_freq * 1000, volt);
-> +				qcom_cpufreq_update_opp(cpu_dev, prev_freq,
-> +							volt);
->  			}
->  
->  			break;
-
--- 
-viresh
+Johan
