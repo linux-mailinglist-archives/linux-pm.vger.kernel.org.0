@@ -2,214 +2,244 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 768431E75BF
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 08:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9451E7706
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 09:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725959AbgE2GCI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 02:02:08 -0400
-Received: from mga06.intel.com ([134.134.136.31]:49573 "EHLO mga06.intel.com"
+        id S1726161AbgE2HjO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 May 2020 03:39:14 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:43666 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725562AbgE2GCH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 29 May 2020 02:02:07 -0400
-IronPort-SDR: xYIC046JdiyNZxMiJoCvril7C1pAdJ+C4B9GXyqD1H3w8p/Y4sqj3e6RTEHsq6vV7EwV6/7XDl
- gp038syOPWWg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2020 23:02:07 -0700
-IronPort-SDR: 0UJwj7a7wT/VqnN+yimcj1Qsbmsjv20XByvlxEFiKso7kYVrAe1DRSCdb9BevFS/rq75UU7aqY
- VUq3T7mjEc+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,447,1583222400"; 
-   d="scan'208";a="346165792"
-Received: from zhouchao-mobl1.ccr.corp.intel.com ([10.255.31.99])
-  by orsmga001.jf.intel.com with ESMTP; 28 May 2020 23:02:05 -0700
-Message-ID: <e9232e0b18ecdd3c09401a4dac8b7c1fa513276a.camel@intel.com>
-Subject: Re: [PATCH V2 1/3] thermal/int340x_thermal: Export GDDV
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "matthewgarrett@google.com" <matthewgarrett@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Aram, Nisha" <nisha.aram@intel.com>,
-        "mjg59@google.com" <mjg59@google.com>
-Date:   Fri, 29 May 2020 14:02:04 +0800
-In-Reply-To: <fe5119b46d975e4699ced2d9ed12a25f8ae5d1cd.camel@intel.com>
-References: <20200414020953.255364-1-matthewgarrett@google.com>
-         <4c00e15c8d5e34a723896f132989edd581c6995e.camel@intel.com>
-         <fe5119b46d975e4699ced2d9ed12a25f8ae5d1cd.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1725906AbgE2HjN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 29 May 2020 03:39:13 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5AA131A003B;
+        Fri, 29 May 2020 09:39:10 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5342A1A0034;
+        Fri, 29 May 2020 09:39:06 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 50235402A7;
+        Fri, 29 May 2020 15:39:01 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, robh+dt@kernel.org,
+        hongtao.jia@freescale.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH] dt-bindings: thermal: Convert qoriq to json-schema
+Date:   Fri, 29 May 2020 15:28:58 +0800
+Message-Id: <1590737338-7318-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2020-05-29 at 00:00 -0600, Pandruvada, Srinivas wrote:
-> On Mon, 2020-05-18 at 23:18 +0000, Pandruvada, Srinivas wrote:
-> > On Mon, 2020-04-13 at 19:09 -0700, Matthew Garrett wrote:
-> > > From: Matthew Garrett <mjg59@google.com>
-> > > 
-> > > Implementing DPTF properly requires making use of firmware-
-> > > provided
-> > > information associated with the INT3400 device. Calling GDDV
-> > > provides
-> > > a
-> > > buffer of information which userland can then interpret to
-> > > determine
-> > > appropriate DPTF policy.
-> > > 
-> > > Signed-off-by: Matthew Garrett <mjg59@google.com>
-> > 
-> > Tested-by: Pandruvada, Srinivas <
-> > srinivas.pandruvada@linux.intel.com>
-> 
-> Can we take this series for 5.8?
+Convert the qoriq thermal binding to DT schema format using json-schema
 
-They are in testing branch and has just passed the build test, will
-queue them for 5.8.
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+ .../devicetree/bindings/thermal/qoriq-thermal.txt  |  71 -------------
+ .../devicetree/bindings/thermal/qoriq-thermal.yaml | 111 +++++++++++++++++++++
+ 2 files changed, 111 insertions(+), 71 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/thermal/qoriq-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
 
-thanks,
-rui
-> 
-> Thanks,
-> Srinivas
-> 
-> > 
-> > > ---
-> > >  .../intel/int340x_thermal/int3400_thermal.c   | 60
-> > > +++++++++++++++++++
-> > >  1 file changed, 60 insertions(+)
-> > > 
-> > > diff --git
-> > > a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > > b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > > index ceef89c956bd4..00a7732724cd0 100644
-> > > --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > > +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > > @@ -52,6 +52,25 @@ struct int3400_thermal_priv {
-> > >  	u8 uuid_bitmap;
-> > >  	int rel_misc_dev_res;
-> > >  	int current_uuid_index;
-> > > +	char *data_vault;
-> > > +};
-> > > +
-> > > +static ssize_t data_vault_read(struct file *file, struct kobject
-> > > *kobj,
-> > > +	     struct bin_attribute *attr, char *buf, loff_t off, size_t
-> > > count)
-> > > +{
-> > > +	memcpy(buf, attr->private + off, count);
-> > > +	return count;
-> > > +}
-> > > +
-> > > +static BIN_ATTR_RO(data_vault, 0);
-> > > +
-> > > +static struct bin_attribute *data_attributes[] = {
-> > > +	&bin_attr_data_vault,
-> > > +	NULL,
-> > > +};
-> > > +
-> > > +static const struct attribute_group data_attribute_group = {
-> > > +	.bin_attrs = data_attributes,
-> > >  };
-> > >  
-> > >  static ssize_t available_uuids_show(struct device *dev,
-> > > @@ -278,6 +297,32 @@ static struct thermal_zone_params
-> > > int3400_thermal_params = {
-> > >  	.no_hwmon = true,
-> > >  };
-> > >  
-> > > +static void int3400_setup_gddv(struct int3400_thermal_priv
-> > > *priv)
-> > > +{
-> > > +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-> > > +	union acpi_object *obj;
-> > > +	acpi_status status;
-> > > +
-> > > +	status = acpi_evaluate_object(priv->adev->handle, "GDDV", NULL,
-> > > +				      &buffer);
-> > > +	if (ACPI_FAILURE(status) || !buffer.length)
-> > > +		return;
-> > > +
-> > > +	obj = buffer.pointer;
-> > > +	if (obj->type != ACPI_TYPE_PACKAGE || obj->package.count != 1
-> > > +	    || obj->package.elements[0].type != ACPI_TYPE_BUFFER) {
-> > > +		kfree(buffer.pointer);
-> > > +		return;
-> > > +	}
-> > > +
-> > > +	priv->data_vault = kmemdup(obj-
-> > > > package.elements[0].buffer.pointer,
-> > > 
-> > > +				   obj-
-> > > > package.elements[0].buffer.length,
-> > > 
-> > > +				   GFP_KERNEL);
-> > > +	bin_attr_data_vault.private = priv->data_vault;
-> > > +	bin_attr_data_vault.size = obj-
-> > > > package.elements[0].buffer.length;
-> > > 
-> > > +	kfree(buffer.pointer);
-> > > +}
-> > > +
-> > >  static int int3400_thermal_probe(struct platform_device *pdev)
-> > >  {
-> > >  	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-> > > @@ -309,6 +354,8 @@ static int int3400_thermal_probe(struct
-> > > platform_device *pdev)
-> > >  
-> > >  	platform_set_drvdata(pdev, priv);
-> > >  
-> > > +	int3400_setup_gddv(priv);
-> > > +
-> > >  	int3400_thermal_ops.get_mode = int3400_thermal_get_mode;
-> > >  	int3400_thermal_ops.set_mode = int3400_thermal_set_mode;
-> > >  
-> > > @@ -327,6 +374,13 @@ static int int3400_thermal_probe(struct
-> > > platform_device *pdev)
-> > >  	if (result)
-> > >  		goto free_rel_misc;
-> > >  
-> > > +	if (priv->data_vault) {
-> > > +		result = sysfs_create_group(&pdev->dev.kobj,
-> > > +					    &data_attribute_group);
-> > > +		if (result)
-> > > +			goto free_uuid;
-> > > +	}
-> > > +
-> > >  	result = acpi_install_notify_handler(
-> > >  			priv->adev->handle, ACPI_DEVICE_NOTIFY,
-> > > int3400_notify,
-> > >  			(void *)priv);
-> > > @@ -336,6 +390,9 @@ static int int3400_thermal_probe(struct
-> > > platform_device *pdev)
-> > >  	return 0;
-> > >  
-> > >  free_sysfs:
-> > > +	if (priv->data_vault)
-> > > +		sysfs_remove_group(&pdev->dev.kobj,
-> > > &data_attribute_group);
-> > > +free_uuid:
-> > >  	sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
-> > >  free_rel_misc:
-> > >  	if (!priv->rel_misc_dev_res)
-> > > @@ -360,8 +417,11 @@ static int int3400_thermal_remove(struct
-> > > platform_device *pdev)
-> > >  	if (!priv->rel_misc_dev_res)
-> > >  		acpi_thermal_rel_misc_device_remove(priv->adev-
-> > > > handle);
-> > > 
-> > >  
-> > > +	if (priv->data_vault)
-> > > +		sysfs_remove_group(&pdev->dev.kobj,
-> > > &data_attribute_group);
-> > >  	sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
-> > >  	thermal_zone_device_unregister(priv->thermal);
-> > > +	kfree(priv->data_vault);
-> > >  	kfree(priv->trts);
-> > >  	kfree(priv->arts);
-> > >  	kfree(priv);
+diff --git a/Documentation/devicetree/bindings/thermal/qoriq-thermal.txt b/Documentation/devicetree/bindings/thermal/qoriq-thermal.txt
+deleted file mode 100644
+index 28f2cba..0000000
+--- a/Documentation/devicetree/bindings/thermal/qoriq-thermal.txt
++++ /dev/null
+@@ -1,71 +0,0 @@
+-* Thermal Monitoring Unit (TMU) on Freescale QorIQ SoCs
+-
+-Required properties:
+-- compatible : Must include "fsl,qoriq-tmu" or "fsl,imx8mq-tmu". The
+-	version of the device is determined by the TMU IP Block Revision
+-	Register (IPBRR0) at offset 0x0BF8.
+-	Table of correspondences between IPBRR0 values and example  chips:
+-		Value           Device
+-		----------      -----
+-		0x01900102      T1040
+-- reg : Address range of TMU registers.
+-- interrupts : Contains the interrupt for TMU.
+-- fsl,tmu-range : The values to be programmed into TTRnCR, as specified by
+-	the SoC reference manual. The first cell is TTR0CR, the second is
+-	TTR1CR, etc.
+-- fsl,tmu-calibration : A list of cell pairs containing temperature
+-	calibration data, as specified by the SoC reference manual.
+-	The first cell of each pair is the value to be written to TTCFGR,
+-	and the second is the value to be written to TSCFGR.
+-- #thermal-sensor-cells : Must be 1. The sensor specifier is the monitoring
+-	site ID, and represents the "n" in TRITSRn and TRATSRn.
+-
+-Optional property:
+-- little-endian : If present, the TMU registers are little endian. If absent,
+-	the default is big endian.
+-- clocks : the clock for clocking the TMU silicon.
+-
+-Example:
+-
+-tmu@f0000 {
+-	compatible = "fsl,qoriq-tmu";
+-	reg = <0xf0000 0x1000>;
+-	interrupts = <18 2 0 0>;
+-	fsl,tmu-range = <0x000a0000 0x00090026 0x0008004a 0x0001006a>;
+-	fsl,tmu-calibration = <0x00000000 0x00000025
+-			       0x00000001 0x00000028
+-			       0x00000002 0x0000002d
+-			       0x00000003 0x00000031
+-			       0x00000004 0x00000036
+-			       0x00000005 0x0000003a
+-			       0x00000006 0x00000040
+-			       0x00000007 0x00000044
+-			       0x00000008 0x0000004a
+-			       0x00000009 0x0000004f
+-			       0x0000000a 0x00000054
+-
+-			       0x00010000 0x0000000d
+-			       0x00010001 0x00000013
+-			       0x00010002 0x00000019
+-			       0x00010003 0x0000001f
+-			       0x00010004 0x00000025
+-			       0x00010005 0x0000002d
+-			       0x00010006 0x00000033
+-			       0x00010007 0x00000043
+-			       0x00010008 0x0000004b
+-			       0x00010009 0x00000053
+-
+-			       0x00020000 0x00000010
+-			       0x00020001 0x00000017
+-			       0x00020002 0x0000001f
+-			       0x00020003 0x00000029
+-			       0x00020004 0x00000031
+-			       0x00020005 0x0000003c
+-			       0x00020006 0x00000042
+-			       0x00020007 0x0000004d
+-			       0x00020008 0x00000056
+-
+-			       0x00030000 0x00000012
+-			       0x00030001 0x0000001d>;
+-	#thermal-sensor-cells = <1>;
+-};
+diff --git a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
+new file mode 100644
+index 0000000..bfbfa04
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
+@@ -0,0 +1,111 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/qoriq-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Thermal Monitoring Unit (TMU) on Freescale QorIQ SoCs
++
++maintainers:
++  - Hongtao Jia <hongtao.jia@freescale.com>
++
++properties:
++  compatible:
++    description: |
++      The version of the device is determined by the TMU IP Block Revision
++      Register (IPBRR0) at offset 0x0BF8.
++      Table of correspondences between IPBRR0 values and example chips:
++            Value           Device
++            ----------      -----
++            0x01900102      T1040
++    enum:
++      - fsl,qoriq-tmu
++      - fsl,imx8mq-tmu
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  fsl,tmu-range:
++    $ref: '/schemas/types.yaml#/definitions/uint32-array'
++    description: |
++      The values to be programmed into TTRnCR, as specified by the SoC
++      reference manual. The first cell is TTR0CR, the second is TTR1CR, etc.
++
++  fsl,tmu-calibration:
++    $ref: '/schemas/types.yaml#/definitions/uint32-array'
++    description: |
++      A list of cell pairs containing temperature calibration data, as
++      specified by the SoC reference manual. The first cell of each pair
++      is the value to be written to TTCFGR, and the second is the value
++      to be written to TSCFGR.
++
++  little-endian:
++    description: |
++      boolean, if present, the TMU registers are little endian. If absent,
++      the default is big endian.
++    type: boolean
++
++  clocks:
++    maxItems: 1
++
++  "#thermal-sensor-cells":
++    const: 1
++    description: |
++      Number of cells required to uniquely identify the thermal sensors. This
++      is set to 1 for multiple sensors.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - fsl,tmu-range
++  - fsl,tmu-calibration
++  - '#thermal-sensor-cells'
++
++examples:
++  - |
++    tmu@f0000 {
++        compatible = "fsl,qoriq-tmu";
++        reg = <0xf0000 0x1000>;
++        interrupts = <18 2 0 0>;
++        fsl,tmu-range = <0x000a0000 0x00090026 0x0008004a 0x0001006a>;
++        fsl,tmu-calibration = <0x00000000 0x00000025
++                               0x00000001 0x00000028
++                               0x00000002 0x0000002d
++                               0x00000003 0x00000031
++                               0x00000004 0x00000036
++                               0x00000005 0x0000003a
++                               0x00000006 0x00000040
++                               0x00000007 0x00000044
++                               0x00000008 0x0000004a
++                               0x00000009 0x0000004f
++                               0x0000000a 0x00000054
++
++                               0x00010000 0x0000000d
++                               0x00010001 0x00000013
++                               0x00010002 0x00000019
++                               0x00010003 0x0000001f
++                               0x00010004 0x00000025
++                               0x00010005 0x0000002d
++                               0x00010006 0x00000033
++                               0x00010007 0x00000043
++                               0x00010008 0x0000004b
++                               0x00010009 0x00000053
++
++                               0x00020000 0x00000010
++                               0x00020001 0x00000017
++                               0x00020002 0x0000001f
++                               0x00020003 0x00000029
++                               0x00020004 0x00000031
++                               0x00020005 0x0000003c
++                               0x00020006 0x00000042
++                               0x00020007 0x0000004d
++                               0x00020008 0x00000056
++
++                               0x00030000 0x00000012
++                               0x00030001 0x0000001d>;
++        #thermal-sensor-cells = <1>;
++    };
+-- 
+2.7.4
 
