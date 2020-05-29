@@ -2,185 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 957FF1E753F
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 07:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F221E7581
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 07:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725795AbgE2FUf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 01:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725562AbgE2FUe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 01:20:34 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95ACC08C5C6
-        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 22:20:34 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id x11so594007plv.9
-        for <linux-pm@vger.kernel.org>; Thu, 28 May 2020 22:20:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=V9yAtHKZIr9aOByyuI66DPzP7Py6j0XSgzrFMqDdxTU=;
-        b=OOrORhJkpf8Mp7z+oqNxR9xu5seNIbKXOzZyEI/8AAwCWwBYwSCti5MilBVhNulAtS
-         U0wks5EBu8WnaOEwNukcF4Xsu/XJIO32WBqs8FAYpv6x02oZn2dVDDAc3/rcPOMQWY8f
-         Vda3wNSPK1ZT+SsGbPD9L4lZEb3t7cRo4zzRu0FbzHKy2MY5Hg4swSc3quqJ2Aqg6qvx
-         V3n/N7KW9lLlXfJj8WfNAjQbcFotigP9gLyq45SQKz9petsVnEnLv2KXjlOZM8vOWYbg
-         76LiFY2T5cfBnV+RNhdvlxbzVVSSs5SuupGq2RgFLREsTSjfrprDhgBS1cC92VY+HdBh
-         TTYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=V9yAtHKZIr9aOByyuI66DPzP7Py6j0XSgzrFMqDdxTU=;
-        b=IjGw6k+/gPYhaxwUV7olP5Zt+0NWaUnxg8AI1rWevazU/Xfc3VZXVLQR6J7kbg0wGU
-         95ElPwC9swldZ8EokGqGWRQMxv1GNWgMGtKInh1Nd34O+CtHKZ2ZcolybR7pPkGTtsn9
-         gScjB9KjNtMWDzaukkNJx9674ta5bg08eT7LWZkaa4JTdBtf7AHf+XERqDvWbJl1JfPU
-         UnodlQtcfF1TFyBcaQYvXAYnXuebed+89JAT/ItdRxqyhaYY/t5kZhv9hnLjKZcHSCH+
-         NqNOI30Wamc39PD6juXQZmp5ndzOWYUnXHq8Tbn3Sukm9qghsflAdFX708GO3f9RSO6A
-         s4PQ==
-X-Gm-Message-State: AOAM531Rvq0x4+VVDw/MM54lKarRPz6aV9ZcflIY0d86r7si78Kp7FXK
-        P65te1SdmYU7+pOhx5DWdP3qeg==
-X-Google-Smtp-Source: ABdhPJwLHxiF5TCadAYY6aE6dCZnGwiEO4jsHRimGs/GMFoHDgf8qs7IhqpPo7PUWxDQUmdCXb+sGQ==
-X-Received: by 2002:a17:90a:fa0d:: with SMTP id cm13mr7547666pjb.131.1590729634252;
-        Thu, 28 May 2020 22:20:34 -0700 (PDT)
-Received: from localhost ([122.172.60.59])
-        by smtp.gmail.com with ESMTPSA id d15sm8570637pjc.0.2020.05.28.22.20.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 28 May 2020 22:20:33 -0700 (PDT)
-Date:   Fri, 29 May 2020 10:50:31 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     sboyd@kernel.org, georgi.djakov@linaro.org, nm@ti.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, saravanak@google.com, mka@chromium.org,
-        smasetty@codeaurora.org
-Subject: Re: [PATCH] OPP: Check for bandwidth values before creating icc paths
-Message-ID: <20200529052031.n2nvzxdsifwmthfv@vireshk-i7>
-References: <20200527192418.20169-1-sibis@codeaurora.org>
+        id S1725777AbgE2FpL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 May 2020 01:45:11 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:53496 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725681AbgE2FpK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 01:45:10 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200529054508euoutp028e5a66d548050c4bd2a546f113ec8cd1~TaYPVRtdn2842028420euoutp02P
+        for <linux-pm@vger.kernel.org>; Fri, 29 May 2020 05:45:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200529054508euoutp028e5a66d548050c4bd2a546f113ec8cd1~TaYPVRtdn2842028420euoutp02P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1590731108;
+        bh=PhYV4Ig7hxvvmf0mdrqx6bcTuMgVhMvwyNQLnIx936w=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=pk00bMCqaMz41c8y4EMFkOLaDj661V0DtzYjz31GCg2a/wTA6WnLVdcPYMSfexXF8
+         K5a/Alzdf+q9SdTz1R6Z4oI0lm3uQ1TUstKVaaGqlxS59s6i6XQVnsCC/A0sYiLRom
+         QLRbNq4odB+dG4+wSK9Itwy2okluOjtYHAcOjdhc=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200529054507eucas1p2bfa9e6bd17d79b2ad655cf9692828634~TaYO7KLFs2876028760eucas1p2R;
+        Fri, 29 May 2020 05:45:07 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 3B.38.60698.361A0DE5; Fri, 29
+        May 2020 06:45:07 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200529054507eucas1p25ab3a5fe0f76e766738143b46b2c6e87~TaYOcteCM0802308023eucas1p2v;
+        Fri, 29 May 2020 05:45:07 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200529054507eusmtrp1fd3b41be09d8c35f3d9b9148147bf8be~TaYOb6-tf0887308873eusmtrp1R;
+        Fri, 29 May 2020 05:45:07 +0000 (GMT)
+X-AuditID: cbfec7f5-a0fff7000001ed1a-95-5ed0a163fbf0
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 0E.FF.07950.361A0DE5; Fri, 29
+        May 2020 06:45:07 +0100 (BST)
+Received: from [106.210.88.143] (unknown [106.210.88.143]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200529054506eusmtip212b23ce8c28928465fcd087af254baf0~TaYNqnhVK2563425634eusmtip2K;
+        Fri, 29 May 2020 05:45:06 +0000 (GMT)
+Subject: Re: [PATCH] regulator: do not balance regulators without
+ constraints
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>, peron.clem@gmail.com,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        linux-samsung-soc@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <56e496bc-172f-d62f-5376-c8d734af6a51@samsung.com>
+Date:   Fri, 29 May 2020 07:45:06 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200527192418.20169-1-sibis@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20200528134338.GD3606@sirena.org.uk>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRjm2znbjquN41R8UStYJBSmLfvxWWJ3ONSPCqIi8LLq5KRpspOW
+        /SjNTJM17UZzaloSmem8YKnDJDVctdpKU8tLJRmWuG66pVmS2+niv+d5n+f53gsfRcjfCwOo
+        hKQjrDZJpVGIJOTdjinb8v3XnsWsyHQpca2hWogvDw2LcO/EiBDf/voOYbu9RozfFr8SYNeL
+        HAHuMheJ8Pi5Bwgb7C0CPDb5VID7r3aR+Im1U4hnempJnPPAReBaJ7OOZpqMg2KmruKsiBno
+        aRYxeb9WMPXd2SSjr69AjOVlg4AZr1u4ndoriTzAahJSWW1YVJxE3fvlkzj55rxj5nJ1Oir1
+        ykUUBfQqMDnVuUhCyelyBOXPuwU8mUBQWWQieTKOoL/yzazi5Uk4Szr+CDcRPMq0Ejz5jMCR
+        8U3sdvnQ22DolgG5sS+9GLq/3/MkCLqChKr8G0K3IKKVkOvIFbmxlI6CFwaHpwVJL4HnzVme
+        h/zoaNC9GSV4jzc8Khgm3diLXgm/bk96PAS9CBocRQSP/aFvuMSzBNBZFOgbBxE/9ybQ9w4K
+        eewDo5Z6MY+DwHpRR/KBTARDtioxT3QIuk4Z/qTXwIDth8h9M4JeCtXmML68HqbPZgn5U8rg
+        pcObH0IGF+5eIfiyFHLOyHl3MBgtpn9tW591EvlIYZyzmnHOOsY56xj/9y1FZAXyZ1O4xHiW
+        C09ij4ZyqkQuJSk+dP/hxDo0+/msMxZnI2r5ua8N0RRSzJfWFNhj5EJVKpeW2IaAIhS+0g1P
+        rTFy6QFV2nFWezhWm6JhuTYUSJEKf2n49Y/RcjpedYQ9xLLJrPavKqC8AtJRwYnXEdNNUZam
+        ntVpeXZZtr6PK/HdvOq9sT9kRLxg6+Wgg3fCdAk7L8lm2scu7SY1I2qQMUfx6uC1gkb/8zur
+        1staQjcOyO4rH5ftKzG1R7TbzX47NHu2hBBBHS6TeldxYSuW1yZnRILt9EO/D4WBZWzgycfV
+        fd7jcbH5o1OcguTUKuUyQsupfgOtJGNveAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBIsWRmVeSWpSXmKPExsVy+t/xe7rJCy/EGWyaK2qxccZ6VoupD5+w
+        WVz/8pzVYvXHx4wW589vYLd4MPcmk8W3Kx1MFpd3zWGz+Nx7hNFixvl9TBZvfpxlsrg97zKL
+        xZnTl1gt/l3byGLRceQbs8XGrx4OAh47Z91l99i0qpPN4861PWwe/X8NPLZcbWfx6NuyitHj
+        +I3tTB6fN8kFcETp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSW
+        pRbp2yXoZVz/8I69YDl3xa4VGQ2MCzi7GDk5JARMJL7OP8bSxcjFISSwlFHi8MZ+doiEjMTJ
+        aQ2sELawxJ9rXWwQRW8ZJdrWdTKDJIQFfCUaVzwBaxARUJa4+n0v2CRmgTUsEo0H70J17GSU
+        6N2wkg2kik3AUKLrbReYzStgJ3FlxlsmEJtFQFXi4p5WsEmiArES3Yt/sEPUCEqcnPmEBcTm
+        FDCS+LsaIs4sYCYxb/NDZghbXmL72zlQtrjErSfzmSYwCs1C0j4LScssJC2zkLQsYGRZxSiS
+        Wlqcm55bbKRXnJhbXJqXrpecn7uJERjr24793LKDsetd8CFGAQ5GJR7eDTPPxwmxJpYVV+Ye
+        YpTgYFYS4XU6ezpOiDclsbIqtSg/vqg0J7X4EKMp0HMTmaVEk/OBaSivJN7Q1NDcwtLQ3Njc
+        2MxCSZy3Q+BgjJBAemJJanZqakFqEUwfEwenVANj7sSQcy2ZWu83zQ85UbL8e9/6tsvr2v/r
+        JG9fu1qBhyVZPu1X7m6mr49EDosGnJhcJjF1w11B19+KUmeZcreEzO6oslo91e786YOqW5we
+        bdROfv51l1WhLfuH7mfhO5/IbF8XvHanmqVh6xWhW8pHVRtd62rKOK3WFW/ufOx6waL0xqat
+        p3euUWIpzkg01GIuKk4EAHc2PxoLAwAA
+X-CMS-MailID: 20200529054507eucas1p25ab3a5fe0f76e766738143b46b2c6e87
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200528131144eucas1p121b9151996fa3f780a5028f68c69d5ba
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200528131144eucas1p121b9151996fa3f780a5028f68c69d5ba
+References: <CGME20200528131144eucas1p121b9151996fa3f780a5028f68c69d5ba@eucas1p1.samsung.com>
+        <20200528131130.17984-1-m.szyprowski@samsung.com>
+        <20200528134338.GD3606@sirena.org.uk>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28-05-20, 00:54, Sibi Sankar wrote:
-> Prevent the core from creating and voting on icc paths when the
-> opp-table does not have the bandwidth values populated. Currently
-> this check is performed on the first OPP node.
-> 
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-> ---
->  drivers/opp/of.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index 61fce1284f012..95cf6f1312765 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -338,6 +338,21 @@ int dev_pm_opp_of_find_icc_paths(struct device *dev,
->  	struct device_node *np;
->  	int ret = 0, i, count, num_paths;
->  	struct icc_path **paths;
-> +	struct property *prop;
-> +
-> +	/* Check for bandwidth values on the first OPP node */
-> +	if (opp_table && opp_table->np) {
-> +		np = of_get_next_available_child(opp_table->np, NULL);
-> +		if (!np) {
-> +			dev_err(dev, "Empty OPP table\n");
-> +			return 0;
-> +		}
-> +
-> +		prop = of_find_property(np, "opp-peak-kBps", NULL);
-> +		of_node_put(np);
-> +		if (!prop || !prop->length)
-> +			return 0;
-> +	}
+Hi Mark,
 
-This doesn't support the call made from cpufreq-dt driver. Pushed
-this, please give this a try:
+On 28.05.2020 15:43, Mark Brown wrote:
+> On Thu, May 28, 2020 at 03:11:30PM +0200, Marek Szyprowski wrote:
+>> Balancing coupled regulators must wait until the clients for all of the
+>> coupled regualtors set their constraints, otherwise the balancing code
+>> might change the voltage of the not-yet-constrained regulator to the
+>> value below the bootloader-configured operation point, what might cause a
+>> system crash.
+> This forces every supply to have something which explicitly manages
+> voltages which means that if one of the coupled supplies doesn't really
+> care about the voltage (perhaps doesn't even have any explicit
+> consumers) and just needs to be within a certain range of another supply
+> then it'll end up restricting things needlessly.
+Frankly, that's exactly what we need for Exynos5422 case. If devfreq 
+driver is not enabled/compiled, we want to keep the "vdd_int" volatage 
+unchanged. This confirms me that we really need to have a custom coupler 
+for Exynos5422 case. It will solve such issues without adding hacks to 
+regulator core.
+> Saravana was trying to do some stuff with sync_state() which might be
+> interesting here although I have concerns with that approach too:
+>
+>     https://lore.kernel.org/lkml/20200527074057.246606-1-saravanak@google.com/
 
-From: Sibi Sankar <sibis@codeaurora.org>
-Date: Thu, 28 May 2020 00:54:18 +0530
-Subject: [PATCH] opp: Don't parse icc paths unnecessarily
+This still doesn't solve the above mentioned case.
 
-The DT node of the device may contain interconnect paths while the OPP
-table doesn't have the bandwidth values. There is no need to parse the
-paths in such cases.
-
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-[ Viresh: Support the case of !opp_table and massaged changelog ]
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/of.c | 45 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 44 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index 61fce1284f01..8c1bf01f0e50 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -332,13 +332,56 @@ static int _of_opp_alloc_required_opps(struct opp_table *opp_table,
- 	return ret;
- }
- 
-+static int _bandwidth_supported(struct device *dev, struct opp_table *opp_table)
-+{
-+	struct device_node *np, *opp_np;
-+	struct property *prop;
-+
-+	if (!opp_table) {
-+		np = of_node_get(dev->of_node);
-+		if (!np)
-+			return -ENODEV;
-+
-+		opp_np = _opp_of_get_opp_desc_node(np, 0);
-+		of_node_put(np);
-+
-+		/* Lets not fail in case we are parsing opp-v1 bindings */
-+		if (!opp_np)
-+			return 0;
-+	} else {
-+		opp_np = of_node_get(opp_table->np);
-+	}
-+
-+	/* Checking only first OPP is sufficient */
-+	np = of_get_next_available_child(opp_np, NULL);
-+	if (!np) {
-+		dev_err(dev, "OPP table empty\n");
-+		return -EINVAL;
-+	}
-+	of_node_put(opp_np);
-+
-+	prop = of_find_property(np, "opp-peak-kBps", NULL);
-+	of_node_put(np);
-+
-+	if (!prop || !prop->length)
-+		return 0;
-+
-+	return 1;
-+}
-+
- int dev_pm_opp_of_find_icc_paths(struct device *dev,
- 				 struct opp_table *opp_table)
- {
- 	struct device_node *np;
--	int ret = 0, i, count, num_paths;
-+	int ret, i, count, num_paths;
- 	struct icc_path **paths;
- 
-+	ret = _bandwidth_supported(dev, opp_table);
-+	if (ret <= 0)
-+		return ret;
-+
-+	ret = 0;
-+
- 	np = of_node_get(dev->of_node);
- 	if (!np)
- 		return 0;
-
+Best regards
 -- 
-viresh
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
