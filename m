@@ -2,98 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5DC1E8116
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 17:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EFF1E812E
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 17:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbgE2PBA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 11:01:00 -0400
-Received: from foss.arm.com ([217.140.110.172]:37480 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726849AbgE2PA7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 29 May 2020 11:00:59 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D452F1045;
-        Fri, 29 May 2020 08:00:58 -0700 (PDT)
-Received: from [10.37.12.52] (unknown [10.37.12.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C41F73F718;
-        Fri, 29 May 2020 08:00:48 -0700 (PDT)
-Subject: Re: [PATCH v8 0/8] Add support for devices in the Energy Model
-To:     rjw@rjwysocki.net
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        id S1726988AbgE2PFx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 May 2020 11:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbgE2PFx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 11:05:53 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA35C03E969;
+        Fri, 29 May 2020 08:05:52 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id m7so1262786plt.5;
+        Fri, 29 May 2020 08:05:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=/9QtcEbKXfSNd6feJXtVNBLkm/HB/zDagS27p6rwHqQ=;
+        b=qSTu3FS1pH6rTOhpEl7mQBPlB0nfj8DPoBnNJBjGJle0vPvr7h+0pzEf46FzYRp27K
+         oupOOhVj00G0SWyvIa6wOWeRbcm+9+COI14yoWHxJWpJIoSDx+AP36Ox4QWShXTGNZxN
+         TxNkEiXdQQ9kY1huboUiQ+2kC/e6Aih6vjiUX3CQoEa6CwMQKX7IQKpJU0v4jYKtZPm2
+         HNIdojbfSui/yD8HKZq1d++WtYy8Q4W5cZ4e7l9/vgFWt0U4KHS2ubxYSBOAYDZ89Unj
+         LhG/A5ZUkMuhAVUk0XM9tRPDxwR/WS+7DJuWESvgkRbh3eMDTFArLl4L0Zmo4oKgR8u3
+         0EEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition:user-agent;
+        bh=/9QtcEbKXfSNd6feJXtVNBLkm/HB/zDagS27p6rwHqQ=;
+        b=QO8f2KsprAJmBA40jLRKUdhf+j0h51jk8ib57jGQnQwLwdE9p7wV8uJJH9IYorj1+S
+         kdTs8pkVdMR1m4bvz5lieW7VF8MC0Gnx3OEtw+HKDcVAw/deHjhkglB6njkBpsworE6c
+         v6nplP1hIFuG+elWHNickegkexNSGGlfxb7mTniPm/mjwdXLs/QH7owvbPXahUzgL2h4
+         U42DOkE+Et0SRiBjl0IcC+NndJpvka+iSNo8okkvZG03sEU3YxmVqpv/sOLPXuIMXxB7
+         7Od955gQItLtCHZiAPx3WxTK1/LywE+BRdEklgCgyXdr38v3d1kowDl2lEjfxaDEGMYk
+         +RTA==
+X-Gm-Message-State: AOAM531rYDczjoIE1wsvBbN0A8DQgNINiuA17J0mJ0itpPLf/azUSbGU
+        FL6gBWqtYhzfshKid8ArSqY=
+X-Google-Smtp-Source: ABdhPJx1brJDIFAXFe0nbUSyhXFeAV3BsFWLNPpVKbWXwwZAgQOrMCreap/a2uy/VNLw/df7eQUMbg==
+X-Received: by 2002:a17:90a:f40a:: with SMTP id ch10mr9777692pjb.161.1590764751884;
+        Fri, 29 May 2020 08:05:51 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w19sm7592452pfq.43.2020.05.29.08.05.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 29 May 2020 08:05:50 -0700 (PDT)
+Date:   Fri, 29 May 2020 08:05:49 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com, Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, sudeep.holla@arm.com,
-        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        daniel.lezcano@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, qperret@google.com, bsegall@google.com,
-        mgorman@suse.de, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, kernel@pengutronix.de, khilman@kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, robh@kernel.org,
-        matthias.bgg@gmail.com, steven.price@arm.com,
-        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
-        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
-        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
-        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
-References: <20200527095854.21714-1-lukasz.luba@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <8fca24a1-93f7-f859-bd1f-b7bf484737f4@arm.com>
-Date:   Fri, 29 May 2020 16:00:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        kernel@collabora.com, Fabio Estevam <festevam@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Allison Randal <allison@lohutok.net>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Enrico Weigelt <info@metux.net>,
+        Peter Kaestle <peter@piie.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>, Shawn Guo <shawnguo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andy@infradead.org>
+Subject: Re: [PATCH v4 02/11] thermal: Store thermal mode in a dedicated enum
+Message-ID: <20200529150549.GA154196@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <20200527095854.21714-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Thu, May 28, 2020 at 09:20:42PM +0200, Andrzej Pietrasiewicz wrote:
+> Prepare for storing mode in struct thermal_zone_device.
+> 
+> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
+What is the baseline for this series ? I can't get this patch to apply
+on top of current mainline, nor on v5.6, nor on top of linux-next.
 
-On 5/27/20 10:58 AM, Lukasz Luba wrote:
-> Hi all,
-> 
-> Background of this version:
-> This is the v8 of the patch set and is has smaller scope. I had to split
-> the series into two: EM changes and thermal changes due to devfreq
-> dependencies. The patches from v7 9-14 which change devfreq cooling are
-> going to be sent in separate patch series, just after this set get merged
-> into mainline. These patches related to EM got acks and hopefully can go
-> through linux-pm tree. The later thermal patches will go through thermal
-> tree.
-> 
-> The idea and purpose of the Energy Model framework changes:
-> This patch set introduces support for devices in the Energy Model (EM)
-> framework. It will unify the power model for thermal subsystem. It will
-> make simpler to add support for new devices willing to use more
-> advanced features (like Intelligent Power Allocation). Now it should
-> require less knowledge and effort for driver developer to add e.g.
-> GPU driver with simple energy model. A more sophisticated energy model
-> in the thermal framework is also possible, driver needs to provide
-> a dedicated callback function. More information can be found in the
-> updated documentation file.
-> 
-> First 7 patches are refactoring Energy Model framework to add support
-> of other devices that CPUs. They change:
-> - naming convention from 'capacity' to 'performance' state,
-> - API arguments adding device pointer and not rely only on cpumask,
-> - change naming when 'cpu' was used, now it's a 'device'
-> - internal structure to maintain registered devices
-> - update users to the new API
-> Patch 8 updates OPP framework helper function to be more generic, not
-> CPU specific.
-> 
-> The patch set is based on linux-pm branch linux-next 813946019dfd.
-> 
-
-Could you take the patch set via your linux-pm?
-
-Regards,
-Lukasz
+Thanks,
+Guenter
