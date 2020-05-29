@@ -2,177 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4F81E856C
-	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 19:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9F21E8572
+	for <lists+linux-pm@lfdr.de>; Fri, 29 May 2020 19:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726936AbgE2RnV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 13:43:21 -0400
-Received: from mail-ej1-f68.google.com ([209.85.218.68]:40661 "EHLO
-        mail-ej1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgE2RnU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 13:43:20 -0400
-Received: by mail-ej1-f68.google.com with SMTP id d7so2873335eja.7;
-        Fri, 29 May 2020 10:43:18 -0700 (PDT)
+        id S1728081AbgE2Rnc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 May 2020 13:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726970AbgE2Rnb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 May 2020 13:43:31 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F92C08C5C8
+        for <linux-pm@vger.kernel.org>; Fri, 29 May 2020 10:43:31 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id v19so4420359wmj.0
+        for <linux-pm@vger.kernel.org>; Fri, 29 May 2020 10:43:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=gVHswwd0kSAFGKu/imUZP8zXFuR2uDAO/9AxJgTWj2k=;
+        b=vNp+WRPzmVLo1r8+DFAF8gNmZb/28QvNPt/T2VsGiAimd+bWW8HoyDgA44dOUlNzMk
+         fY65A1nqYFgcKpVZcbbW6tYLMtlh1ht+H5UUiLrE4WcIm9kEtdVSx+NatHrZ+lmYrhhC
+         TEkORAF/qRMaBY4K+bWEZXNc34wV8hrH9Sl3bfCSd73vqQudGr/rBOnFlwIQXYpV3J4O
+         YveoFJuluD6cvfUPa7l+Qm9w38CmY64aFpgFFPWvaEWCWqOWPw39DK4zY7+IW5lqL77K
+         De+wvJPgksSh0vXciTQWXdpFVX/+YAGuASngCU8rlZeV4qPQ6T0jq8K2Odu8OOwprjGT
+         T3UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DGdAJwSRoy97UkF9GUASzP4mclDuzVGuVm8dza65mL0=;
-        b=RAX7ynDu+XkLRnvKIo5ucLQeExw8wPKzDYNl97EYkEtIMxzbbX+MzmqvbD6dO2b7Np
-         7uzeJUbEmMesI/cO6plUZnbp3izshtLyDsVEGUU9+omnPsNaMPFUYHSN1cR0/S084vgx
-         PEsqNzHIU31LtpAHhvCf/NnT9+wGzDQkeHRqjY7ZhAxVNCT/v17mkb0DC5ecMeF7xx36
-         SRYk17hcRPFQHdjkTkLOKS3A+i2IY/kiHhw02GIcw6DlnghrhvovZAps9cyse1tF778R
-         8w0b8FM5Q+Q5bYaeidq5/8idT1fj29ggebY/vACsNjpygGI8sfD03PPbYG/ASRQ+dVxx
-         vntQ==
-X-Gm-Message-State: AOAM532+lcjlrmN4x6PmHKBjGaqfSTxfQY22sfvxtZ8/9LYLvL2CY1eO
-        9VFIvMUS03RuRaIjh2NnaXE=
-X-Google-Smtp-Source: ABdhPJwAz/hHPcOg45ajcxiaPekh/DxsPSzG81NjEdM9fiBtISODvcpodzPSoCYvLaLGwSoDNelQpg==
-X-Received: by 2002:a17:906:d216:: with SMTP id w22mr8317518ejz.420.1590774197560;
-        Fri, 29 May 2020 10:43:17 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.118])
-        by smtp.googlemail.com with ESMTPSA id g22sm6589331edj.63.2020.05.29.10.43.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 29 May 2020 10:43:16 -0700 (PDT)
-Date:   Fri, 29 May 2020 19:43:14 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>, peron.clem@gmail.com,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        linux-samsung-soc@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Subject: Re: [PATCH 2/2] soc: samsung: Add simple voltage coupler for
- Exynos5800
-Message-ID: <20200529174314.GB20540@kozik-lap>
-References: <20200529124940.10675-1-m.szyprowski@samsung.com>
- <CGME20200529124952eucas1p2565c598c3c0164b5dec6ed83e19148b8@eucas1p2.samsung.com>
- <20200529124940.10675-3-m.szyprowski@samsung.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gVHswwd0kSAFGKu/imUZP8zXFuR2uDAO/9AxJgTWj2k=;
+        b=ZkUMslvhTF8El4/9Exrpj//EdzAnUl2Nvh7BYN6EF9YUQLi27P/1KPh2FLcglXGifE
+         fusiig3UZrcoa0z2I1TgROq36Mz99C5r+evjmDP3Qyxux5GBoiHsoLEeQ1lXE+rWu340
+         qE/6IgqrBFwg4YUkiUHAmoWmyHsWnTu1pQKjICwNFruaP0ufdqn8pXSYG3mCuuIqOzQ9
+         zZAirQLLO0N4FsMqcASdec6l71wAMoD+plYw9Yyfp7fqebs5mH6ftr5EdDKYWm+5Uvyd
+         9EoF6i7mylSsPf+wb3KNVKrhsk5O2kQGr5/XmaXQD0QHtkmefQo7E+ROS+gdsVd3Pw33
+         QrhQ==
+X-Gm-Message-State: AOAM530eUJBZpXcvgRjXSrSLzsR0JjeMqgDjvrpmnremuH+6DIbAYzlM
+        qVycSRaOgZ4xnXbAHlq1iD7ZoQ==
+X-Google-Smtp-Source: ABdhPJw5RPN4E4dGorLBaNA+WhTMk21B9a7oGwIJp3X1RT5IwHv1j8KNJcB+UIWbVhdzlIO7TazAAQ==
+X-Received: by 2002:a1c:a403:: with SMTP id n3mr9510567wme.98.1590774210138;
+        Fri, 29 May 2020 10:43:30 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:5568:5913:8a3a:5e4e? ([2a01:e34:ed2f:f020:5568:5913:8a3a:5e4e])
+        by smtp.googlemail.com with ESMTPSA id q13sm10600040wrn.84.2020.05.29.10.43.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 May 2020 10:43:29 -0700 (PDT)
+Subject: Re: [PATCH v8 3/8] PM / EM: update callback structure and add device
+ pointer
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-imx@nxp.com
+Cc:     Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
+        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
+        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        qperret@google.com, bsegall@google.com, mgorman@suse.de,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        matthias.bgg@gmail.com, steven.price@arm.com,
+        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
+        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
+        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
+        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
+References: <20200527095854.21714-1-lukasz.luba@arm.com>
+ <20200527095854.21714-4-lukasz.luba@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <666b2f9e-d7ed-6ddb-80aa-e63ab9909ee6@linaro.org>
+Date:   Fri, 29 May 2020 19:43:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <20200527095854.21714-4-lukasz.luba@arm.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200529124940.10675-3-m.szyprowski@samsung.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 29, 2020 at 02:49:40PM +0200, Marek Szyprowski wrote:
-> Add custom voltage regulator coupler for Exynos5800 SoCs, which require
-> coupling between "vdd_arm" and "vdd_int" regulators. This coupler ensures
-> that coupled regulators voltage balancing is done only when clients for
-> each regulator (cpufreq for "vdd_arm" and devfreq for "vdd_int") apply
-> their constraints, so the voltage values don't go beyond the
-> bootloader-selected operation point during the boot process. This also
-> ensures proper voltage balancing if any of those drivers is missing.
+On 27/05/2020 11:58, Lukasz Luba wrote:
+> The Energy Model framework is going to support devices other that CPUs. In
+> order to make this happen change the callback function and add pointer to
+> a device as an argument.
 > 
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->  arch/arm/mach-exynos/Kconfig                  |  1 +
->  drivers/soc/samsung/Kconfig                   |  3 +
->  drivers/soc/samsung/Makefile                  |  1 +
->  .../soc/samsung/exynos-regulator-coupler.c    | 59 +++++++++++++++++++
->  4 files changed, 64 insertions(+)
->  create mode 100644 drivers/soc/samsung/exynos-regulator-coupler.c
+> Update the related users to use new function and new callback from the
+> Energy Model.
 > 
-> diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
-> index 76838255b5fa..f185cd3d4c62 100644
-> --- a/arch/arm/mach-exynos/Kconfig
-> +++ b/arch/arm/mach-exynos/Kconfig
-> @@ -118,6 +118,7 @@ config SOC_EXYNOS5800
->  	bool "Samsung EXYNOS5800"
->  	default y
->  	depends on SOC_EXYNOS5420
-> +	select EXYNOS_REGULATOR_COUPLER
->  
->  config EXYNOS_MCPM
->  	bool
-> diff --git a/drivers/soc/samsung/Kconfig b/drivers/soc/samsung/Kconfig
-> index c7a2003687c7..264185664594 100644
-> --- a/drivers/soc/samsung/Kconfig
-> +++ b/drivers/soc/samsung/Kconfig
-> @@ -37,4 +37,7 @@ config EXYNOS_PM_DOMAINS
->  	bool "Exynos PM domains" if COMPILE_TEST
->  	depends on PM_GENERIC_DOMAINS || COMPILE_TEST
->  
-> +config EXYNOS_REGULATOR_COUPLER
-> +	bool "Exynos SoC Regulator Coupler" if COMPILE_TEST
-> +	depends on ARCH_EXYNOS || COMPILE_TEST
->  endif
-> diff --git a/drivers/soc/samsung/Makefile b/drivers/soc/samsung/Makefile
-> index edd1d6ea064d..ecc3a32f6406 100644
-> --- a/drivers/soc/samsung/Makefile
-> +++ b/drivers/soc/samsung/Makefile
-> @@ -9,3 +9,4 @@ obj-$(CONFIG_EXYNOS_PMU)	+= exynos-pmu.o
->  obj-$(CONFIG_EXYNOS_PMU_ARM_DRIVERS)	+= exynos3250-pmu.o exynos4-pmu.o \
->  					exynos5250-pmu.o exynos5420-pmu.o
->  obj-$(CONFIG_EXYNOS_PM_DOMAINS) += pm_domains.o
-> +obj-$(CONFIG_EXYNOS_REGULATOR_COUPLER) += exynos-regulator-coupler.o
-> diff --git a/drivers/soc/samsung/exynos-regulator-coupler.c b/drivers/soc/samsung/exynos-regulator-coupler.c
-> new file mode 100644
-> index 000000000000..54445918bd75
-> --- /dev/null
-> +++ b/drivers/soc/samsung/exynos-regulator-coupler.c
-> @@ -0,0 +1,59 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2020 Samsung Electronics Co., Ltd.
-> + *	      http://www.samsung.com/
-> + * Author: Marek Szyprowski <m.szyprowski@samsung.com>
-> + *
-> + * Samsung Exynos SoC voltage coupler
-> + */
-> +
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/of.h>
-> +#include <linux/regulator/coupler.h>
-> +#include <linux/regulator/driver.h>
-> +
-> +static int exynos_coupler_balance_voltage(struct regulator_coupler *coupler,
-> +					  struct regulator_dev *rdev,
-> +					  suspend_state_t state)
-> +{
-> +	struct coupling_desc *c_desc = &rdev->coupling_desc;
-> +	int ret, cons_uV = 0, cons_max_uV = INT_MAX;
-> +	bool skip_coupled = false;
-> +
-> +	/* get coupled regulator constraints */
-> +	ret = regulator_check_consumers(c_desc->coupled_rdevs[1], &cons_uV,
-> +					&cons_max_uV, state);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	/* skip adjusting coupled regulator if it has no constraints set yet */
-> +	if (cons_uV == 0)
-> +		skip_coupled = true;
-> +
-> +	return regulator_do_balance_voltage(rdev, state, skip_coupled);
-> +}
-> +
-> +static int exynos_coupler_attach(struct regulator_coupler *coupler,
-> +				 struct regulator_dev *rdev)
-> +{
-> +	if (strcmp(rdev_get_name(rdev), "vdd_arm") == 0 ||
-> +	    strcmp(rdev_get_name(rdev), "vdd_int") == 0)
+> Acked-by: Quentin Perret <qperret@google.com>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 
-Thanks for the patch!
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-You hard-coded specific names of regulators existing
-only in DTS. They do not come from any driver nor bindings, therefore
-they could change making driver unusable. Someone could add a new DTS
-with different names and expect this to work as well.
+[ ... ]
 
-You need bindings for this. Something like:
-Documentation/devicetree/bindings/regulator/nvidia,tegra-regulators-coupling.txt
-But better in YAML, if possible.
 
-Best regards,
-Krzysztof
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
