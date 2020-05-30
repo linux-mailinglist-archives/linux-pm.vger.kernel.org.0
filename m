@@ -2,134 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CF31E92A3
-	for <lists+linux-pm@lfdr.de>; Sat, 30 May 2020 18:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B261E92A8
+	for <lists+linux-pm@lfdr.de>; Sat, 30 May 2020 18:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729133AbgE3Qdm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 May 2020 12:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728927AbgE3Qdm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 May 2020 12:33:42 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395A5C03E969;
-        Sat, 30 May 2020 09:33:42 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id x1so5116840ejd.8;
-        Sat, 30 May 2020 09:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:cc:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=KnghmerSNdwoxGexYivjS5o548htuxNSrbhg+RVRtPQ=;
-        b=er6kemQP2Y+MzHzHZ6ORCyJ9vb1OE6uFyoA2okXI7qTG75+1L0Vnkzvtts0aVlb9zL
-         fkmJxEzxXIKXf1dF1CZnjdrn2VjpeM4qE8XR+fb314nrzpKRgJTeV4UR4lDlkxvJLVM7
-         OBW2UhrkdG1RluWyQAtwLuU3t48IboIl1W/RNob5Kdjo1jgAvjFBDO48PemxgjvyF1rZ
-         gFOfdWCKcdgnk7k3YVVxPGZS92jxjiylqFQUOBA8F9LsRws0zlKgdZA1RtitcUJwSXgC
-         N1IdP3YKOK2VxutVGp01G5x5bF/I4Uc8OwDIb6EHm56t3Peaix8mg9n1xCUZJgoAWXLd
-         nJVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=KnghmerSNdwoxGexYivjS5o548htuxNSrbhg+RVRtPQ=;
-        b=JosgYOvICUdKdXLM2F5MZYT4u7ExdOc8fvN/gE89osmkUuYPQGsgva8l+DRyDGS3f2
-         4De5snt/JgbHRku1ekV3oM6DWNdveaui4ZpjegLJ/AvXge7ezpTXRFCiTFFN0QDntFQz
-         xlYxlJYZEleEUu7fkkVozX+mESWzpcJETPmPswol1iTi3NuUilHj98/M/yj5oU3Tj0OD
-         8757Bv661ZkPoM3JKgTjsmTyCdJ6uYhx+lgsU7qofLWltwarj8Gk5ROIhEvCCJZhASpB
-         5/PEXF6O4GrjY9x9X5S+LE5vxIGAP6n5UtvI33CY6HjqMXLb4Aj+ongstJ4wFHjx/L2H
-         S3hg==
-X-Gm-Message-State: AOAM530cxaAtyl8Ij9QRs1muRXiGOidK5E7/IBbGvmXj73+6tCi5//Zw
-        QsZSYfjBDc93Xdoy500N4uq3Vq7g
-X-Google-Smtp-Source: ABdhPJz7Rpf0OLy1MxXwnNbI9BzsI4rayT0P5TXJKfzVinlbJpTcf36wPBgioNd8W07VmIUwCWsMTQ==
-X-Received: by 2002:a17:906:1442:: with SMTP id q2mr12064078ejc.33.1590856420605;
-        Sat, 30 May 2020 09:33:40 -0700 (PDT)
-Received: from ?IPv6:2003:ea:8f23:5700:9c9f:9224:f2fc:26c2? (p200300ea8f2357009c9f9224f2fc26c2.dip0.t-ipconnect.de. [2003:ea:8f23:5700:9c9f:9224:f2fc:26c2])
-        by smtp.googlemail.com with ESMTPSA id b15sm10685016edj.37.2020.05.30.09.33.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 May 2020 09:33:40 -0700 (PDT)
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH] PM: runtime: add RPM_IDLE_SUSPEND / RPM_IDLE_NO_SUSPEND
- constants
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Message-ID: <94fe944c-c528-9459-fc75-7c94273dd2b1@gmail.com>
-Date:   Sat, 30 May 2020 18:33:33 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.1
+        id S1728998AbgE3Qkf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 May 2020 12:40:35 -0400
+Received: from mga04.intel.com ([192.55.52.120]:33181 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728797AbgE3Qke (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 30 May 2020 12:40:34 -0400
+IronPort-SDR: IMgn3zVL4j5nhkKM+rwJS/3BnvAWGmhqNXVTiVyxZH72cn9HF4+dvspdywb+I2oudAJ3MhCx1y
+ wKbOxLTsBt9Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2020 09:40:34 -0700
+IronPort-SDR: pBcmbwceL4vwrd0iFMvcBWa5H2aGsaXCl1JwbUHAjEBTHsIaKWch7Nrg4sbyqK3CntVWtV82T8
+ Mg8Lekmca+uw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,452,1583222400"; 
+   d="scan'208";a="256812472"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 30 May 2020 09:40:32 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6B2AEBD; Sat, 30 May 2020 19:40:31 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tobias Schrammm <t.schramm@manjaro.org>, linux-pm@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        kbuild test robot <lkp@intel.com>
+Subject: [PATCH v1] power: supply: cw2015: Attach OF ID table to the driver
+Date:   Sat, 30 May 2020 19:40:30 +0300
+Message-Id: <20200530164030.47884-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-runtime_idle() callback implementations have to return a non-zero value
-if they don't intend to suspend now. Several drivers use an errno like
--EBUSY for this purpose. This can be problematic because the return
-value is propagated up the call chain, from rpm_idle() to
-__pm_runtime_idle(), and from there to callers like
-pm_runtime_put_sync(). A driver author checking the return value of
-e.g. pm_runtime_put_sync() may as usual check for retval < 0 and
-bail out.
-Therefore a positive value should be returned. To facilitate this
-add constants RPM_IDLE_SUSPEND and RPM_IDLE_NO_SUSPEND.
+It appears that OF ID table was hanging around without being attached
+to the driver. Attach it properly.
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+Fixes: b4c7715c10c1 ("power: supply: add CellWise cw2015 fuel gauge driver")
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/base/power/runtime.c |  6 +++++-
- include/linux/pm.h           | 10 ++++++++--
- 2 files changed, 13 insertions(+), 3 deletions(-)
+ drivers/power/supply/cw2015_battery.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 9f62790f6..4f529075e 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -453,7 +453,11 @@ static int rpm_idle(struct device *dev, int rpmflags)
- 
-  out:
- 	trace_rpm_return_int_rcuidle(dev, _THIS_IP_, retval);
--	return retval ? retval : rpm_suspend(dev, rpmflags | RPM_AUTO);
-+
-+	if (retval == RPM_IDLE_SUSPEND)
-+		return rpm_suspend(dev, rpmflags | RPM_AUTO);
-+
-+	return retval;
- }
- 
- /**
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index 121c104a4..971ed3d77 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -227,8 +227,9 @@ typedef struct pm_message {
-  *
-  * @runtime_idle: Device appears to be inactive and it might be put into a
-  *	low-power state if all of the necessary conditions are satisfied.
-- *	Check these conditions, and return 0 if it's appropriate to let the PM
-- *	core queue a suspend request for the device.
-+ *	Check these conditions, and return RPM_IDLE_SUSPEND if it's
-+ *	appropriate to let the PM core queue a suspend request for the device.
-+ *	Return RPM_IDLE_NO_SUSPEND if you don't want to suspend now.
-  *
-  * Several device power state transitions are externally visible, affecting
-  * the state of pending I/O queues and (for drivers that touch hardware)
-@@ -523,6 +524,11 @@ enum rpm_request {
- 	RPM_REQ_RESUME,
- };
- 
-+enum rpm_idle {
-+	RPM_IDLE_SUSPEND = 0,
-+	RPM_IDLE_NO_SUSPEND,
-+};
-+
- struct wakeup_source;
- struct wake_irq;
- struct pm_domain_data;
+diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply/cw2015_battery.c
+index 19f62ea957ee..0146f1bfc29b 100644
+--- a/drivers/power/supply/cw2015_battery.c
++++ b/drivers/power/supply/cw2015_battery.c
+@@ -734,6 +734,7 @@ MODULE_DEVICE_TABLE(of, cw2015_of_match);
+ static struct i2c_driver cw_bat_driver = {
+ 	.driver = {
+ 		.name = "cw2015",
++		.of_match_table = cw2015_of_match,
+ 		.pm = &cw_bat_pm_ops,
+ 	},
+ 	.probe_new = cw_bat_probe,
 -- 
-2.26.2
+2.27.0.rc2
 
