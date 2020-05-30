@@ -2,166 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 722B01E8D23
-	for <lists+linux-pm@lfdr.de>; Sat, 30 May 2020 04:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F156D1E8FF7
+	for <lists+linux-pm@lfdr.de>; Sat, 30 May 2020 11:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728694AbgE3CO6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 May 2020 22:14:58 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:55964 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728349AbgE3CO6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 29 May 2020 22:14:58 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 09083A0ECA6C91CD19DD;
-        Sat, 30 May 2020 10:14:55 +0800 (CST)
-Received: from linux-ibm.site (10.175.102.37) by
- DGGEMS409-HUB.china.huawei.com (10.3.19.209) with Microsoft SMTP Server id
- 14.3.487.0; Sat, 30 May 2020 10:14:46 +0800
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-To:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>
-CC:     <Souvik.Chakravarty@arm.com>, <Thanu.Rangarajan@arm.com>,
-        <Sudeep.Holla@arm.com>, <guohanjun@huawei.com>,
-        <john.garry@huawei.com>, <jonathan.cameron@huawei.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wangxiongfeng2@huawei.com>
-Subject: [PATCH v5 2/2] CPPC: add support for SW BOOST
-Date:   Sat, 30 May 2020 10:08:31 +0800
-Message-ID: <1590804511-9672-3-git-send-email-wangxiongfeng2@huawei.com>
-X-Mailer: git-send-email 1.7.12.4
-In-Reply-To: <1590804511-9672-1-git-send-email-wangxiongfeng2@huawei.com>
-References: <1590804511-9672-1-git-send-email-wangxiongfeng2@huawei.com>
+        id S1728642AbgE3JU7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 May 2020 05:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728304AbgE3JU7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 May 2020 05:20:59 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46581C08C5C9
+        for <linux-pm@vger.kernel.org>; Sat, 30 May 2020 02:20:59 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id 131so1037632pfv.13
+        for <linux-pm@vger.kernel.org>; Sat, 30 May 2020 02:20:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tFqkLWC2pY58NUrIUJD/QvnAc/AFJ0vbxV6JYXJ+5Jc=;
+        b=INS/lYCR2yuP/7lJfdbXSqTPYRANMke3tOVlOeqe8yKCjKTYx9PyI12EiLNKh17Drd
+         X3awrenwazzQhc3XH2hlRSQfkBtYIjOxyBtSjN+UNkBaVwbUsMnrq9H/jGcEr8Idw256
+         gRADSjFRve8uDJW5GVraPgPuMSfOMdnBIP/4BTX/XwK8VEHXxG6IKBDnEh1lTa4697+o
+         YYjZiV1EK+90ud5kW5lycFnNWCXCQkfbYMokF0Q+ttfNy2MEXGVPv4x24sQbzA4kbpUT
+         no5MMLsgI31unUK2mBnu3ukuM+xgN6CntN0JY3vKugSnrJJIZTsUgq3J5AdT+NyLyegn
+         L2fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tFqkLWC2pY58NUrIUJD/QvnAc/AFJ0vbxV6JYXJ+5Jc=;
+        b=m5yWyseUmCtmqeqrFRib/o+1s1t/+Y7r3+y577hg7SPmr4P1dlszvKFtTJ2FxIsTTj
+         W3dWlH0B0T9LvupvyKwf+TDKKFoL43MPTzZvajolQdzGiRCSYhAaVU6uXsbBGTOvti7z
+         c/jx3ueiGscRgbDSW4X4kvwelRH+vbcByEehT0UPtpYgvSGE3midO3+QCGdCQw7ttHCk
+         OQYNIBjCHAvhoN7qI2rphJzoe+DyhDd2lECmUig3Y89gk4WsEg4bDO3D+f9fPq1f6dcG
+         WZ04I3Suns9HeEcPVvAhew5isLhLePcoiMNxGDzMKGCRExRhwWVONet+w0jeFWyrepnN
+         Yb1w==
+X-Gm-Message-State: AOAM531Y6dGBYejLCNNzVL+WdptA/ueLcOxspGCN5yuCL+sj3t+YhWnA
+        wLGSFr1AxzVpPsko5b+57Qj5Fw==
+X-Google-Smtp-Source: ABdhPJyb2NA/vQHCkzHJpBs8Uk/oiz03G2N8vnGHJxnceaSY49hm6wSxb9RTHv26cT8L/AI0gFGljw==
+X-Received: by 2002:a63:c848:: with SMTP id l8mr11545514pgi.180.1590830458641;
+        Sat, 30 May 2020 02:20:58 -0700 (PDT)
+Received: from localhost ([122.172.62.209])
+        by smtp.gmail.com with ESMTPSA id c12sm1769766pjm.46.2020.05.30.02.20.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 30 May 2020 02:20:57 -0700 (PDT)
+Date:   Sat, 30 May 2020 14:50:52 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] opp: avoid uninitialized-variable use
+Message-ID: <20200530092052.ksuncmgx3cahokzo@vireshk-i7>
+References: <20200529201731.545859-1-arnd@arndb.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.102.37]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200529201731.545859-1-arnd@arndb.de>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To add SW BOOST support for CPPC, we need to get the max frequency of
-boost mode and non-boost mode. ACPI spec 6.2 section 8.4.7.1 describe
-the following two CPC registers.
+On 29-05-20, 22:17, Arnd Bergmann wrote:
+> An uninitialized pointer is passed into another function but
+> ignored there:
+> 
+> drivers/opp/core.c:875:32: error: variable 'opp' is uninitialized when used here [-Werror,-Wuninitialized]
+>                 ret = _set_opp_bw(opp_table, opp, dev, true);
+>                                              ^~~
+> drivers/opp/core.c:849:34: note: initialize the variable 'opp' to silence this warning
+>         struct dev_pm_opp *old_opp, *opp;
+>                                         ^
+> 
+> gcc no longer warns about this, but it seems it really should,
+> so change the code to just pass a NULL pointer here.
+> 
+> See-also: 78a5255ffb6a ("Stop the ad-hoc games with -Wno-maybe-initialized")
+> Fixes: c57afacc9270 ("opp: Remove bandwidth votes when target_freq is zero")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/opp/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index df12c3804533..7302f2631f8d 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -872,7 +872,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+>  			goto put_opp_table;
+>  		}
+>  
+> -		ret = _set_opp_bw(opp_table, opp, dev, true);
+> +		ret = _set_opp_bw(opp_table, NULL, dev, true);
+>  		if (ret)
+>  			return ret;
+>  
 
-"Highest performance is the absolute maximum performance an individual
-processor may reach, assuming ideal conditions. This performance level
-may not be sustainable for long durations, and may only be achievable if
-other platform components are in a specific state; for example, it may
-require other processors be in an idle state.
+Not sure why people are still seeing this, I pushed a fix for this 2
+days back.
 
-Nominal Performance is the maximum sustained performance level of the
-processor, assuming ideal operating conditions. In absence of an
-external constraint (power, thermal, etc.) this is the performance level
-the platform is expected to be able to maintain continuously. All
-processors are expected to be able to sustain their nominal performance
-state simultaneously."
-
-To add SW BOOST support for CPPC, we can use Highest Performance as the
-max performance in boost mode and Nominal Performance as the max
-performance in non-boost mode. If the Highest Performance is greater
-than the Nominal Performance, we assume SW BOOST is supported.
-
-The current CPPC driver does not support SW BOOST and use 'Highest
-Performance' as the max performance the CPU can achieve. 'Nominal
-Performance' is used to convert 'performance' to 'frequency'. That
-means, if firmware enable boost and provide a value for Highest
-Performance which is greater than Nominal Performance, boost feature is
-enabled by default.
-
-Because SW BOOST is disabled by default, so, after this patch, boost
-feature is disabled by default even if boost is enabled by firmware.
-
-Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/cppc_cpufreq.c | 39 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 37 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index bda0b24..257d726 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -37,6 +37,7 @@
-  * requested etc.
-  */
- static struct cppc_cpudata **all_cpu_data;
-+static bool boost_supported;
- 
- struct cppc_workaround_oem_info {
- 	char oem_id[ACPI_OEM_ID_SIZE + 1];
-@@ -310,7 +311,7 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	 * Section 8.4.7.1.1.5 of ACPI 6.1 spec)
- 	 */
- 	policy->min = cppc_cpufreq_perf_to_khz(cpu, cpu->perf_caps.lowest_nonlinear_perf);
--	policy->max = cppc_cpufreq_perf_to_khz(cpu, cpu->perf_caps.highest_perf);
-+	policy->max = cppc_cpufreq_perf_to_khz(cpu, cpu->perf_caps.nominal_perf);
- 
- 	/*
- 	 * Set cpuinfo.min_freq to Lowest to make the full range of performance
-@@ -318,7 +319,7 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	 * nonlinear perf
- 	 */
- 	policy->cpuinfo.min_freq = cppc_cpufreq_perf_to_khz(cpu, cpu->perf_caps.lowest_perf);
--	policy->cpuinfo.max_freq = cppc_cpufreq_perf_to_khz(cpu, cpu->perf_caps.highest_perf);
-+	policy->cpuinfo.max_freq = cppc_cpufreq_perf_to_khz(cpu, cpu->perf_caps.nominal_perf);
- 
- 	policy->transition_delay_us = cppc_cpufreq_get_transition_delay_us(cpu_num);
- 	policy->shared_type = cpu->shared_type;
-@@ -343,6 +344,13 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 
- 	cpu->cur_policy = policy;
- 
-+	/*
-+	 * If 'highest_perf' is greater than 'nominal_perf', we assume CPU Boost
-+	 * is supported.
-+	 */
-+	if (cpu->perf_caps.highest_perf > cpu->perf_caps.nominal_perf)
-+		boost_supported = true;
-+
- 	/* Set policy->cur to max now. The governors will adjust later. */
- 	policy->cur = cppc_cpufreq_perf_to_khz(cpu,
- 					cpu->perf_caps.highest_perf);
-@@ -410,6 +418,32 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpunum)
- 	return cppc_get_rate_from_fbctrs(cpu, fb_ctrs_t0, fb_ctrs_t1);
- }
- 
-+static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
-+{
-+	struct cppc_cpudata *cpudata;
-+	int ret;
-+
-+	if (!boost_supported) {
-+		pr_err("BOOST not supported by CPU or firmware\n");
-+		return -EINVAL;
-+	}
-+
-+	cpudata = all_cpu_data[policy->cpu];
-+	if (state)
-+		policy->max = cppc_cpufreq_perf_to_khz(cpudata,
-+					cpudata->perf_caps.highest_perf);
-+	else
-+		policy->max = cppc_cpufreq_perf_to_khz(cpudata,
-+					cpudata->perf_caps.nominal_perf);
-+	policy->cpuinfo.max_freq = policy->max;
-+
-+	ret = freq_qos_update_request(policy->max_freq_req, policy->max);
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
- static struct cpufreq_driver cppc_cpufreq_driver = {
- 	.flags = CPUFREQ_CONST_LOOPS,
- 	.verify = cppc_verify_policy,
-@@ -417,6 +451,7 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpunum)
- 	.get = cppc_cpufreq_get_rate,
- 	.init = cppc_cpufreq_cpu_init,
- 	.stop_cpu = cppc_cpufreq_stop_cpu,
-+	.set_boost = cppc_cpufreq_set_boost,
- 	.name = "cppc_cpufreq",
- };
- 
 -- 
-1.7.12.4
-
+viresh
