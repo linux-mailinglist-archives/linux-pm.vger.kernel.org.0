@@ -2,88 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8D81E9141
-	for <lists+linux-pm@lfdr.de>; Sat, 30 May 2020 14:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21CF31E92A3
+	for <lists+linux-pm@lfdr.de>; Sat, 30 May 2020 18:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729017AbgE3MlP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 May 2020 08:41:15 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:54527 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726860AbgE3MlO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 May 2020 08:41:14 -0400
-Received: from mail-qk1-f182.google.com ([209.85.222.182]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1M42fG-1jf0nY3NJY-0004XU; Sat, 30 May 2020 14:41:13 +0200
-Received: by mail-qk1-f182.google.com with SMTP id 205so4856598qkg.3;
-        Sat, 30 May 2020 05:41:12 -0700 (PDT)
-X-Gm-Message-State: AOAM532ekAxTBYq6oyJycdBdVG/WjYfjJULI0ytMjlDp4FbmlO9rZgO+
-        a2IaEPwUIhyNiZkMW3XIxnjwIevfK3RoUwmpATA=
-X-Google-Smtp-Source: ABdhPJydoZz/ssTjLXxCt2yeqV8hAaHbfCWOWY6wEJBIVgR/U5A4FoXmjwXzYGkUpjWGkYh20OdZtmbtwwVbzTOQYhs=
-X-Received: by 2002:ae9:de85:: with SMTP id s127mr11396467qkf.352.1590842471556;
- Sat, 30 May 2020 05:41:11 -0700 (PDT)
+        id S1729133AbgE3Qdm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 May 2020 12:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728927AbgE3Qdm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 May 2020 12:33:42 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395A5C03E969;
+        Sat, 30 May 2020 09:33:42 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id x1so5116840ejd.8;
+        Sat, 30 May 2020 09:33:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=KnghmerSNdwoxGexYivjS5o548htuxNSrbhg+RVRtPQ=;
+        b=er6kemQP2Y+MzHzHZ6ORCyJ9vb1OE6uFyoA2okXI7qTG75+1L0Vnkzvtts0aVlb9zL
+         fkmJxEzxXIKXf1dF1CZnjdrn2VjpeM4qE8XR+fb314nrzpKRgJTeV4UR4lDlkxvJLVM7
+         OBW2UhrkdG1RluWyQAtwLuU3t48IboIl1W/RNob5Kdjo1jgAvjFBDO48PemxgjvyF1rZ
+         gFOfdWCKcdgnk7k3YVVxPGZS92jxjiylqFQUOBA8F9LsRws0zlKgdZA1RtitcUJwSXgC
+         N1IdP3YKOK2VxutVGp01G5x5bF/I4Uc8OwDIb6EHm56t3Peaix8mg9n1xCUZJgoAWXLd
+         nJVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=KnghmerSNdwoxGexYivjS5o548htuxNSrbhg+RVRtPQ=;
+        b=JosgYOvICUdKdXLM2F5MZYT4u7ExdOc8fvN/gE89osmkUuYPQGsgva8l+DRyDGS3f2
+         4De5snt/JgbHRku1ekV3oM6DWNdveaui4ZpjegLJ/AvXge7ezpTXRFCiTFFN0QDntFQz
+         xlYxlJYZEleEUu7fkkVozX+mESWzpcJETPmPswol1iTi3NuUilHj98/M/yj5oU3Tj0OD
+         8757Bv661ZkPoM3JKgTjsmTyCdJ6uYhx+lgsU7qofLWltwarj8Gk5ROIhEvCCJZhASpB
+         5/PEXF6O4GrjY9x9X5S+LE5vxIGAP6n5UtvI33CY6HjqMXLb4Aj+ongstJ4wFHjx/L2H
+         S3hg==
+X-Gm-Message-State: AOAM530cxaAtyl8Ij9QRs1muRXiGOidK5E7/IBbGvmXj73+6tCi5//Zw
+        QsZSYfjBDc93Xdoy500N4uq3Vq7g
+X-Google-Smtp-Source: ABdhPJz7Rpf0OLy1MxXwnNbI9BzsI4rayT0P5TXJKfzVinlbJpTcf36wPBgioNd8W07VmIUwCWsMTQ==
+X-Received: by 2002:a17:906:1442:: with SMTP id q2mr12064078ejc.33.1590856420605;
+        Sat, 30 May 2020 09:33:40 -0700 (PDT)
+Received: from ?IPv6:2003:ea:8f23:5700:9c9f:9224:f2fc:26c2? (p200300ea8f2357009c9f9224f2fc26c2.dip0.t-ipconnect.de. [2003:ea:8f23:5700:9c9f:9224:f2fc:26c2])
+        by smtp.googlemail.com with ESMTPSA id b15sm10685016edj.37.2020.05.30.09.33.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 May 2020 09:33:40 -0700 (PDT)
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: [PATCH] PM: runtime: add RPM_IDLE_SUSPEND / RPM_IDLE_NO_SUSPEND
+ constants
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Message-ID: <94fe944c-c528-9459-fc75-7c94273dd2b1@gmail.com>
+Date:   Sat, 30 May 2020 18:33:33 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
 MIME-Version: 1.0
-References: <20200529201731.545859-1-arnd@arndb.de> <20200530092052.ksuncmgx3cahokzo@vireshk-i7>
-In-Reply-To: <20200530092052.ksuncmgx3cahokzo@vireshk-i7>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 30 May 2020 14:40:54 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2dADAG9-NnsR8opP++xq6T_BB3C6i-wvkzrKvXNOghiQ@mail.gmail.com>
-Message-ID: <CAK8P3a2dADAG9-NnsR8opP++xq6T_BB3C6i-wvkzrKvXNOghiQ@mail.gmail.com>
-Subject: Re: [PATCH] opp: avoid uninitialized-variable use
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:zj3+1RfAi2Y/LpsF8bm3Zq2xu2mtaVM8XjKxbIKNCoP80ODOuyh
- /amKCQAptrayWhr9F7hGhmK/Uujoz1v4xMy/4O7UlTPm6atRdTVaOpikNHKohJvWSNSX7hi
- 5+hgMPPRY3Yt+eJYcyw3EYPHkEKhj5NEnS+i/0sY8jr57WyGLl3SsF+KQN4dVX5GOXifnnh
- AprDtpEIuC0S7gPMjkP2w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wbu0eVypBFo=:a7h3+yUlj+MQA08lBE+Vn9
- pWhPhuanuvemjezDgtfYVAMhDAlr/7l4xet8szPK2gkpdzY2p8Pcei3mvAL7HAJd9V1OWGl5c
- SLVNJwWArGuAqJvE09y2CoJicJm4TzPDCWYNfZPrdsgTeptouPWRKFr6cWEa61ior3RJAbogO
- CrexdDWbP0tJYPPP0ycBHq41skNVEOcyFPcsu3xoHV8MuFdJc9T9oqIkFpg5RbceGrHRZ0+v6
- UfpLslgBbl5AE9VOZ+gPpCCvhf6BnAhY6oecjhJoDDRINPvc1c3r0ZhqfztFWBTyoiUYqGpZ+
- MQhAInCubOlqg4qJYJ/vUv7nVdxq2yLI2bn68gtgzhTBMD7ZhsvHuRIxRRParNO41s4KE9oTn
- 09+S2ZCFqnTWBpuHx/O5z2pSZeaJQoo2kVnSSQInEGTxpokhNj2gTkXLHjCIultPFZ8efcJFz
- A/rJujZuUZucvhyB5CotCPjrrlhvHLTzqhCaZF5SGq5G4yzvv8aYOWkwMNx0HaaRQV5cgr6vn
- I9LaMBiJsx4Ha3fnHqwdED+0JU4/Hwz6ynYPfElRRDhfSNWGS/NaL4KaSKV4vbjVQBUA3N4Wt
- yYHREsbmmJ9GZZ6IHEjXSArEtQLV+pG+tBAwUtwCmkGbK3S8GLjh8ZMiGl8t6Vk6nlnZvjMH1
- frDufCHY6c4ZZpFp+DXgFiPQEVC4/UVn8xt4VnhwBOv2OcLLj6HqHbRhonAWEad3RWVCA8Ww5
- 67kmVkzgRPGdS2GrvmWa7VW+Hg48BiPJyDFHo7GQonrEbiPaCClcZC9k4Dpo6PmDn+ultvUHu
- lD4rcePW51CHDynpg5sE6zo9RLjUotIMnvSgnNjwdzg687H3EY=
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, May 30, 2020 at 11:21 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> On 29-05-20, 22:17, Arnd Bergmann wrote:
-> > An uninitialized pointer is passed into another function but
-> > --- a/drivers/opp/core.c
-> > +++ b/drivers/opp/core.c
-> > @@ -872,7 +872,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
-> >                       goto put_opp_table;
-> >               }
-> >
-> > -             ret = _set_opp_bw(opp_table, opp, dev, true);
-> > +             ret = _set_opp_bw(opp_table, NULL, dev, true);
-> >               if (ret)
-> >                       return ret;
-> >
->
-> Not sure why people are still seeing this, I pushed a fix for this 2
-> days back.
+runtime_idle() callback implementations have to return a non-zero value
+if they don't intend to suspend now. Several drivers use an errno like
+-EBUSY for this purpose. This can be problematic because the return
+value is propagated up the call chain, from rpm_idle() to
+__pm_runtime_idle(), and from there to callers like
+pm_runtime_put_sync(). A driver author checking the return value of
+e.g. pm_runtime_put_sync() may as usual check for retval < 0 and
+bail out.
+Therefore a positive value should be returned. To facilitate this
+add constants RPM_IDLE_SUSPEND and RPM_IDLE_NO_SUSPEND.
 
-I was on next-20200528, which was the first version that was broken for me,
-and I sent all my fixes after I had tested them. Since a lot of things
-got broken
-at once that day, it took me until the end of 20200529 to get it all tested
-properly and then send them out.
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/base/power/runtime.c |  6 +++++-
+ include/linux/pm.h           | 10 ++++++++--
+ 2 files changed, 13 insertions(+), 3 deletions(-)
 
-      Arnd
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 9f62790f6..4f529075e 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -453,7 +453,11 @@ static int rpm_idle(struct device *dev, int rpmflags)
+ 
+  out:
+ 	trace_rpm_return_int_rcuidle(dev, _THIS_IP_, retval);
+-	return retval ? retval : rpm_suspend(dev, rpmflags | RPM_AUTO);
++
++	if (retval == RPM_IDLE_SUSPEND)
++		return rpm_suspend(dev, rpmflags | RPM_AUTO);
++
++	return retval;
+ }
+ 
+ /**
+diff --git a/include/linux/pm.h b/include/linux/pm.h
+index 121c104a4..971ed3d77 100644
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -227,8 +227,9 @@ typedef struct pm_message {
+  *
+  * @runtime_idle: Device appears to be inactive and it might be put into a
+  *	low-power state if all of the necessary conditions are satisfied.
+- *	Check these conditions, and return 0 if it's appropriate to let the PM
+- *	core queue a suspend request for the device.
++ *	Check these conditions, and return RPM_IDLE_SUSPEND if it's
++ *	appropriate to let the PM core queue a suspend request for the device.
++ *	Return RPM_IDLE_NO_SUSPEND if you don't want to suspend now.
+  *
+  * Several device power state transitions are externally visible, affecting
+  * the state of pending I/O queues and (for drivers that touch hardware)
+@@ -523,6 +524,11 @@ enum rpm_request {
+ 	RPM_REQ_RESUME,
+ };
+ 
++enum rpm_idle {
++	RPM_IDLE_SUSPEND = 0,
++	RPM_IDLE_NO_SUSPEND,
++};
++
+ struct wakeup_source;
+ struct wake_irq;
+ struct pm_domain_data;
+-- 
+2.26.2
+
