@@ -2,45 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E95AB1E943B
-	for <lists+linux-pm@lfdr.de>; Sun, 31 May 2020 00:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC9C1E945A
+	for <lists+linux-pm@lfdr.de>; Sun, 31 May 2020 00:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729365AbgE3W1u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 May 2020 18:27:50 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:49118 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729350AbgE3W1t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 May 2020 18:27:49 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04UMM6I1098715;
-        Sat, 30 May 2020 22:26:48 GMT
+        id S1729529AbgE3W5b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 May 2020 18:57:31 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:57096 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729520AbgE3W5a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 May 2020 18:57:30 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04UMr5Bx162406;
+        Sat, 30 May 2020 22:56:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=CBHeXinRSNKscFFXqb9c9PV2yKgdDM1KpYggUDQwi+Q=;
- b=WyX+m6Zvxh5lConkWkFX3kS0hdsLPuUxDG6Ek8mXJFtSNttmUPs9D3dyY4ZMcB2UJBkq
- EOWMGNjvbkKqEIAfrq/FHGnRELR9UuXqFfFEkZza60jvbPYsFxlrEenJj3LT1GtOQ+2d
- 0ZMLln8PGYHq53o6YLU/tt7bL2dx7M4wJiSM17+lIxQ/qi5HdYGVK+jwYqFBle8qz7x8
- n6RyHbaFk/vNuA3Mq9BoChiKw4YS8JseTtPNxlBLqFoYF0MFQeLeAgNA27kU1v9zT+Sv
- vKRFkrBkOuo+xSKm4jZaffXJzUcQARNcPhcR77mEOqLRAI373UAQqpt9tO/WIpgK+YUs CA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 31bg4mssge-1
+ bh=nRI8/WGqU10HxUBdfywB8qJJ+zkivb2UYjEAwimayWg=;
+ b=j9RAE4QJDyU5mkZtmHGy9KeRSad5ty+NbS47nrwkSZqhsxge3YTaJtMzPDdR/5IPG3wf
+ rnO7jFpNK3ZBwx3S+3EnZEwhJdtVcJ9bOEAj1aZG1Rf/NwALS2bDwYskk8MtvmcRUrNm
+ 6wE01JzWk5OmP+lrQnNRzCeXGaQf/Bxj4gGoSU5ORhwHs6VjQTRPUVHmgA3KTNpf5/4D
+ W6JgqISSuyVK5E380RpU7mTPzlmzLESU37iMiq1rzxuSP7AH5Hq0/3mE7RfazgSLqJX5
+ p5TBnPP2FTpyeUWEzAqyAdjFdFLmowD1GyTFHbqwjxhjzRPeBItITt0e95/S8JnaHxH2 sg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 31bfeksw3v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 30 May 2020 22:26:48 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04UMNnUB129829;
-        Sat, 30 May 2020 22:26:48 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 31bethnktf-1
+        Sat, 30 May 2020 22:56:38 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04UMr5er060838;
+        Sat, 30 May 2020 22:56:37 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 31bckr8f4r-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 30 May 2020 22:26:48 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04UMQZa9014487;
-        Sat, 30 May 2020 22:26:35 GMT
+        Sat, 30 May 2020 22:56:37 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04UMuXtw014919;
+        Sat, 30 May 2020 22:56:33 GMT
 Received: from [10.39.241.21] (/10.39.241.21)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 30 May 2020 15:26:34 -0700
-Subject: Re: [PATCH 01/12] xen/manage: keep track of the on-going suspend mode
+        with ESMTP ; Sat, 30 May 2020 15:56:32 -0700
+Subject: Re: [PATCH 02/12] xenbus: add freeze/thaw/restore callbacks support
 To:     Anchal Agarwal <anchalag@amazon.com>, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
         jgross@suse.com, linux-pm@vger.kernel.org, linux-mm@kvack.org,
@@ -52,7 +52,7 @@ To:     Anchal Agarwal <anchalag@amazon.com>, tglx@linutronix.de,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         dwmw@amazon.co.uk, benh@kernel.crashing.org
 References: <cover.1589926004.git.anchalag@amazon.com>
- <20200519232451.GA18632@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <7fd12227f923eacc5841b47bd69f72b4105843a7.1589926004.git.anchalag@amazon.com>
 From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Autocrypt: addr=boris.ostrovsky@oracle.com; keydata=
  xsFNBFH8CgsBEAC0KiOi9siOvlXatK2xX99e/J3OvApoYWjieVQ9232Eb7GzCWrItCzP8FUV
@@ -97,69 +97,82 @@ Autocrypt: addr=boris.ostrovsky@oracle.com; keydata=
  Fm5PY8YtX576DchSP6qJC57/eAAe/9ztZdVAdesQwGb9hZHJc75B+VNm4xrh/PJO6c1THqdQ
  19WVJ+7rDx3PhVncGlbAOiiiE3NOFPJ1OQYxPKtpBUukAlOTnkKE6QcA4zckFepUkfmBV1wM
  Jg6OxFYd01z+a+oL
-Message-ID: <d360e97f-1935-89f1-6dab-3b0bc6b1b3e2@oracle.com>
-Date:   Sat, 30 May 2020 18:26:32 -0400
+Message-ID: <835ca864-3e35-9a82-f3fd-24ca4e2ec06e@oracle.com>
+Date:   Sat, 30 May 2020 18:56:30 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200519232451.GA18632@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+In-Reply-To: <7fd12227f923eacc5841b47bd69f72b4105843a7.1589926004.git.anchalag@amazon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Content-Language: en-US
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9637 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
- bulkscore=0 mlxscore=0 phishscore=0 suspectscore=0 malwarescore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2005300173
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 adultscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2005300178
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9637 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 lowpriorityscore=0
- malwarescore=0 phishscore=0 suspectscore=0 priorityscore=1501 adultscore=0
- mlxlogscore=999 cotscore=-2147483648 bulkscore=0 mlxscore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005300173
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1015
+ impostorscore=0 adultscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
+ cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2005300178
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/19/20 7:24 PM, Anchal Agarwal wrote:
+On 5/19/20 7:25 PM, Anchal Agarwal wrote:
 > =20
-> +enum suspend_modes {
-> +	NO_SUSPEND =3D 0,
-> +	XEN_SUSPEND,
-> +	PM_SUSPEND,
-> +	PM_HIBERNATION,
-> +};
-> +
-> +/* Protected by pm_mutex */
-> +static enum suspend_modes suspend_mode =3D NO_SUSPEND;
-> +
-> +bool xen_suspend_mode_is_xen_suspend(void)
-> +{
-> +	return suspend_mode =3D=3D XEN_SUSPEND;
-> +}
-> +
-> +bool xen_suspend_mode_is_pm_suspend(void)
-> +{
-> +	return suspend_mode =3D=3D PM_SUSPEND;
-> +}
-> +
-> +bool xen_suspend_mode_is_pm_hibernation(void)
-> +{
-> +	return suspend_mode =3D=3D PM_HIBERNATION;
-> +}
-> +
+>  int xenbus_dev_resume(struct device *dev)
+>  {
+> -	int err;
+> +	int err =3D 0;
 
 
-I don't see these last two used anywhere. Are you, in fact,
-distinguishing between PM suspend and hibernation?
+That's not necessary.
 
 
-(I would also probably shorten the name a bit, perhaps
-xen_is_pv/pm_suspend()?)
+>  	struct xenbus_driver *drv;
+>  	struct xenbus_device *xdev
+>  		=3D container_of(dev, struct xenbus_device, dev);
+> -
+> +	bool xen_suspend =3D xen_suspend_mode_is_xen_suspend();
+>  	DPRINTK("%s", xdev->nodename);
+> =20
+>  	if (dev->driver =3D=3D NULL)
+> @@ -627,24 +645,32 @@ int xenbus_dev_resume(struct device *dev)
+>  	drv =3D to_xenbus_driver(dev->driver);
+>  	err =3D talk_to_otherend(xdev);
+>  	if (err) {
+> -		pr_warn("resume (talk_to_otherend) %s failed: %i\n",
+> +		pr_warn("%s (talk_to_otherend) %s failed: %i\n",
+
+
+Please use dev_warn() everywhere, we just had a bunch of patches that
+replaced pr_warn(). In fact,=C2=A0 this is one of the lines that got chan=
+ged.
+
+
+> =20
+>  int xenbus_dev_cancel(struct device *dev)
+>  {
+> -	/* Do nothing */
+> -	DPRINTK("cancel");
+> +	int err =3D 0;
+
+
+Again, no need to initialize.
+
+
+> +	struct xenbus_driver *drv;
+> +	struct xenbus_device *xdev
+> +		=3D container_of(dev, struct xenbus_device, dev);
+
+
+xendev please to be consistent with other code. And use to_xenbus_device(=
+).
 
 
 -boris
-
-
 
