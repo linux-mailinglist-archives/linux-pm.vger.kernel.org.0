@@ -2,104 +2,251 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F291E9C0B
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 05:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73611E9C20
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 05:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726555AbgFADcP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 31 May 2020 23:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726218AbgFADcP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 May 2020 23:32:15 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565F1C08C5C0
-        for <linux-pm@vger.kernel.org>; Sun, 31 May 2020 20:32:11 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id x11so3670563plv.9
-        for <linux-pm@vger.kernel.org>; Sun, 31 May 2020 20:32:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GiN6URCGOi3zRMrgGTBxhLW3I/ES5CEjKSS6Efx8Rn8=;
-        b=ImCDKxj6g9w1zOY09EE2wYtZmGjUvkxmO/6oBVTbP0l962iXO11Pw3cB+X7Bl1LsOA
-         9sow2JwLIVNGKEUSlIkOw4FwTSDp/NtcUACWvQ1jFMzHw2CrwjAHv70+qe9q8iMP3AFh
-         RXaG0gWPDgxJHcI4T3YbvbJFVtQHbQAOWIGmfpps4TfOjDfc4VOIG0fMJDUMvNnRgihQ
-         KQ7tsmVmb49D22qAruIdUn6UsUYZ5mis8hsWrYU4Z399XCzwcEPufqU1fuL+pw3MqRMg
-         q3kiIlvoSzXONKofT1mkJu2md1IdV08xjSdJacVoORVljabL1hLinP8qKuuC86NR5zev
-         doww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GiN6URCGOi3zRMrgGTBxhLW3I/ES5CEjKSS6Efx8Rn8=;
-        b=PFBONNL8BVz1oYNWM4H0f+lmvZRslMTqm1Tn9c3hD2rtpQBNJk/dsmhhcpEYBBe8qr
-         Ym1lpFYipbPo9hUP3p9tKlUBAZqdRFjPY5l3JejooQEDx1yazTj/WhXzYtEaKNnKvhTZ
-         P3jnXDYNQPsp6oXllN3RnPV6sOQxsxnpg7410deH2BaYcHNa9+z7ux1yjAA7+8nSkoMt
-         iak75zt87v9scH4vvZOJqrI6wtB9fJJxb2/KPErO7D3pWGEDo0gai46uyKVccyIFo79k
-         RbEL1O/ij1+FLlSEWGAprVsUEd+knAUriMz2OjtzkdKHy+rfwG56HCXqFvSjNdH7tccr
-         Osdw==
-X-Gm-Message-State: AOAM531v+UME9jSPX0KkG80QtoUYUgKEQjlpnl7teRdzkU3+odfixlFJ
-        DsdJ2mbfaN0xWM44Vsk1OJfZeQ==
-X-Google-Smtp-Source: ABdhPJym07gd+NSj3jXYzvEjjDY2repB3sRc/S4lw1IVMp0MmA2Dg8j3uqQWKiFQIPm8IfYjGh4qhg==
-X-Received: by 2002:a17:902:7618:: with SMTP id k24mr18753586pll.167.1590982330607;
-        Sun, 31 May 2020 20:32:10 -0700 (PDT)
-Received: from localhost ([122.172.62.209])
-        by smtp.gmail.com with ESMTPSA id a5sm12895162pfk.210.2020.05.31.20.32.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 31 May 2020 20:32:09 -0700 (PDT)
-Date:   Mon, 1 Jun 2020 09:02:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] opp: avoid uninitialized-variable use
-Message-ID: <20200601033207.ekro7fckvguguuxf@vireshk-i7>
-References: <20200529201731.545859-1-arnd@arndb.de>
- <20200530092052.ksuncmgx3cahokzo@vireshk-i7>
- <CAK8P3a2dADAG9-NnsR8opP++xq6T_BB3C6i-wvkzrKvXNOghiQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a2dADAG9-NnsR8opP++xq6T_BB3C6i-wvkzrKvXNOghiQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+        id S1726218AbgFADpo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 31 May 2020 23:45:44 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:43800 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726002AbgFADpn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 31 May 2020 23:45:43 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A759D1A0592;
+        Mon,  1 Jun 2020 05:45:40 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A95AD1A05CA;
+        Mon,  1 Jun 2020 05:45:36 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id A85B5402E4;
+        Mon,  1 Jun 2020 11:45:31 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, robh+dt@kernel.org,
+        hongtao.jia@freescale.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH V2] dt-bindings: thermal: Convert qoriq to json-schema
+Date:   Mon,  1 Jun 2020 11:35:20 +0800
+Message-Id: <1590982520-5437-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30-05-20, 14:40, Arnd Bergmann wrote:
-> On Sat, May 30, 2020 at 11:21 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > On 29-05-20, 22:17, Arnd Bergmann wrote:
-> > > An uninitialized pointer is passed into another function but
-> > > --- a/drivers/opp/core.c
-> > > +++ b/drivers/opp/core.c
-> > > @@ -872,7 +872,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
-> > >                       goto put_opp_table;
-> > >               }
-> > >
-> > > -             ret = _set_opp_bw(opp_table, opp, dev, true);
-> > > +             ret = _set_opp_bw(opp_table, NULL, dev, true);
-> > >               if (ret)
-> > >                       return ret;
-> > >
-> >
-> > Not sure why people are still seeing this, I pushed a fix for this 2
-> > days back.
-> 
-> I was on next-20200528, which was the first version that was broken for me,
-> and I sent all my fixes after I had tested them. Since a lot of things
-> got broken
-> at once that day, it took me until the end of 20200529 to get it all tested
-> properly and then send them out.
+Convert the qoriq thermal binding to DT schema format using json-schema
 
-Okay, I asked as around 3-4 people have already sent out this patch to
-me :)
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+Changes since V1:
+	- add 'maxItems' for 'fsl,tmu-range' property;
+	- add 'minItems'/'maxItems' and items descriptions for 'fsl,tmu-calibration' property;
+	- remove description for common property '#thermal-sensor-cells';
+	- refine 'fsl,tmu-calibration' format in example.
+---
+ .../devicetree/bindings/thermal/qoriq-thermal.txt  |  71 -------------
+ .../devicetree/bindings/thermal/qoriq-thermal.yaml | 112 +++++++++++++++++++++
+ 2 files changed, 112 insertions(+), 71 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/thermal/qoriq-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
 
+diff --git a/Documentation/devicetree/bindings/thermal/qoriq-thermal.txt b/Documentation/devicetree/bindings/thermal/qoriq-thermal.txt
+deleted file mode 100644
+index 28f2cba..0000000
+--- a/Documentation/devicetree/bindings/thermal/qoriq-thermal.txt
++++ /dev/null
+@@ -1,71 +0,0 @@
+-* Thermal Monitoring Unit (TMU) on Freescale QorIQ SoCs
+-
+-Required properties:
+-- compatible : Must include "fsl,qoriq-tmu" or "fsl,imx8mq-tmu". The
+-	version of the device is determined by the TMU IP Block Revision
+-	Register (IPBRR0) at offset 0x0BF8.
+-	Table of correspondences between IPBRR0 values and example  chips:
+-		Value           Device
+-		----------      -----
+-		0x01900102      T1040
+-- reg : Address range of TMU registers.
+-- interrupts : Contains the interrupt for TMU.
+-- fsl,tmu-range : The values to be programmed into TTRnCR, as specified by
+-	the SoC reference manual. The first cell is TTR0CR, the second is
+-	TTR1CR, etc.
+-- fsl,tmu-calibration : A list of cell pairs containing temperature
+-	calibration data, as specified by the SoC reference manual.
+-	The first cell of each pair is the value to be written to TTCFGR,
+-	and the second is the value to be written to TSCFGR.
+-- #thermal-sensor-cells : Must be 1. The sensor specifier is the monitoring
+-	site ID, and represents the "n" in TRITSRn and TRATSRn.
+-
+-Optional property:
+-- little-endian : If present, the TMU registers are little endian. If absent,
+-	the default is big endian.
+-- clocks : the clock for clocking the TMU silicon.
+-
+-Example:
+-
+-tmu@f0000 {
+-	compatible = "fsl,qoriq-tmu";
+-	reg = <0xf0000 0x1000>;
+-	interrupts = <18 2 0 0>;
+-	fsl,tmu-range = <0x000a0000 0x00090026 0x0008004a 0x0001006a>;
+-	fsl,tmu-calibration = <0x00000000 0x00000025
+-			       0x00000001 0x00000028
+-			       0x00000002 0x0000002d
+-			       0x00000003 0x00000031
+-			       0x00000004 0x00000036
+-			       0x00000005 0x0000003a
+-			       0x00000006 0x00000040
+-			       0x00000007 0x00000044
+-			       0x00000008 0x0000004a
+-			       0x00000009 0x0000004f
+-			       0x0000000a 0x00000054
+-
+-			       0x00010000 0x0000000d
+-			       0x00010001 0x00000013
+-			       0x00010002 0x00000019
+-			       0x00010003 0x0000001f
+-			       0x00010004 0x00000025
+-			       0x00010005 0x0000002d
+-			       0x00010006 0x00000033
+-			       0x00010007 0x00000043
+-			       0x00010008 0x0000004b
+-			       0x00010009 0x00000053
+-
+-			       0x00020000 0x00000010
+-			       0x00020001 0x00000017
+-			       0x00020002 0x0000001f
+-			       0x00020003 0x00000029
+-			       0x00020004 0x00000031
+-			       0x00020005 0x0000003c
+-			       0x00020006 0x00000042
+-			       0x00020007 0x0000004d
+-			       0x00020008 0x00000056
+-
+-			       0x00030000 0x00000012
+-			       0x00030001 0x0000001d>;
+-	#thermal-sensor-cells = <1>;
+-};
+diff --git a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
+new file mode 100644
+index 0000000..c5df999
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
+@@ -0,0 +1,112 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/qoriq-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Thermal Monitoring Unit (TMU) on Freescale QorIQ SoCs
++
++maintainers:
++  - Hongtao Jia <hongtao.jia@freescale.com>
++
++properties:
++  compatible:
++    description: |
++      The version of the device is determined by the TMU IP Block Revision
++      Register (IPBRR0) at offset 0x0BF8.
++      Table of correspondences between IPBRR0 values and example chips:
++            Value           Device
++            ----------      -----
++            0x01900102      T1040
++    enum:
++      - fsl,qoriq-tmu
++      - fsl,imx8mq-tmu
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  fsl,tmu-range:
++    $ref: '/schemas/types.yaml#/definitions/uint32-array'
++    description: |
++      The values to be programmed into TTRnCR, as specified by the SoC
++      reference manual. The first cell is TTR0CR, the second is TTR1CR, etc.
++    maxItems: 4
++
++  fsl,tmu-calibration:
++    $ref: '/schemas/types.yaml#/definitions/uint32-matrix'
++    description: |
++      A list of cell pairs containing temperature calibration data, as
++      specified by the SoC reference manual. The first cell of each pair
++      is the value to be written to TTCFGR, and the second is the value
++      to be written to TSCFGR.
++    items:
++      items:
++        - description: value for TTCFGR
++        - description: value for TSCFGR
++    minItems: 1
++    maxItems: 64
++
++  little-endian:
++    description: |
++      boolean, if present, the TMU registers are little endian. If absent,
++      the default is big endian.
++    type: boolean
++
++  clocks:
++    maxItems: 1
++
++  "#thermal-sensor-cells":
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - fsl,tmu-range
++  - fsl,tmu-calibration
++  - '#thermal-sensor-cells'
++
++examples:
++  - |
++    tmu@f0000 {
++        compatible = "fsl,qoriq-tmu";
++        reg = <0xf0000 0x1000>;
++        interrupts = <18 2 0 0>;
++        fsl,tmu-range = <0x000a0000 0x00090026 0x0008004a 0x0001006a>;
++        fsl,tmu-calibration = <0x00000000 0x00000025>,
++                              <0x00000001 0x00000028>,
++                              <0x00000002 0x0000002d>,
++                              <0x00000003 0x00000031>,
++                              <0x00000004 0x00000036>,
++                              <0x00000005 0x0000003a>,
++                              <0x00000006 0x00000040>,
++                              <0x00000007 0x00000044>,
++                              <0x00000008 0x0000004a>,
++                              <0x00000009 0x0000004f>,
++                              <0x0000000a 0x00000054>,
++                              <0x00010000 0x0000000d>,
++                              <0x00010001 0x00000013>,
++                              <0x00010002 0x00000019>,
++                              <0x00010003 0x0000001f>,
++                              <0x00010004 0x00000025>,
++                              <0x00010005 0x0000002d>,
++                              <0x00010006 0x00000033>,
++                              <0x00010007 0x00000043>,
++                              <0x00010008 0x0000004b>,
++                              <0x00010009 0x00000053>,
++                              <0x00020000 0x00000010>,
++                              <0x00020001 0x00000017>,
++                              <0x00020002 0x0000001f>,
++                              <0x00020003 0x00000029>,
++                              <0x00020004 0x00000031>,
++                              <0x00020005 0x0000003c>,
++                              <0x00020006 0x00000042>,
++                              <0x00020007 0x0000004d>,
++                              <0x00020008 0x00000056>,
++                              <0x00030000 0x00000012>,
++                              <0x00030001 0x0000001d>;
++        #thermal-sensor-cells = <1>;
++    };
 -- 
-viresh
+2.7.4
+
