@@ -2,80 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 562571EA0E3
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 11:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6C71EA0F8
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 11:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725951AbgFAJVM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jun 2020 05:21:12 -0400
-Received: from foss.arm.com ([217.140.110.172]:35324 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725909AbgFAJVM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 1 Jun 2020 05:21:12 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6D6B41FB;
-        Mon,  1 Jun 2020 02:21:11 -0700 (PDT)
-Received: from [10.37.12.87] (unknown [10.37.12.87])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2CF523F305;
-        Mon,  1 Jun 2020 02:21:00 -0700 (PDT)
-Subject: Re: [PATCH v8 3/8] PM / EM: update callback structure and add device
- pointer
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-imx@nxp.com
-Cc:     Dietmar.Eggemann@arm.com, cw00.choi@samsung.com,
-        b.zolnierkie@samsung.com, rjw@rjwysocki.net, sudeep.holla@arm.com,
-        viresh.kumar@linaro.org, nm@ti.com, sboyd@kernel.org,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, rostedt@goodmis.org,
-        qperret@google.com, bsegall@google.com, mgorman@suse.de,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        kernel@pengutronix.de, khilman@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        matthias.bgg@gmail.com, steven.price@arm.com,
-        tomeu.vizoso@collabora.com, alyssa.rosenzweig@collabora.com,
-        airlied@linux.ie, daniel@ffwll.ch, liviu.dudau@arm.com,
-        lorenzo.pieralisi@arm.com, patrick.bellasi@matbug.net,
-        orjan.eide@arm.com, rdunlap@infradead.org, mka@chromium.org
-References: <20200527095854.21714-1-lukasz.luba@arm.com>
- <20200527095854.21714-4-lukasz.luba@arm.com>
- <666b2f9e-d7ed-6ddb-80aa-e63ab9909ee6@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <3a7d1261-df40-4b3a-14c2-6c6d18b5b5c1@arm.com>
-Date:   Mon, 1 Jun 2020 10:20:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1725788AbgFAJ35 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jun 2020 05:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725290AbgFAJ34 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 05:29:56 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C05C061A0E
+        for <linux-pm@vger.kernel.org>; Mon,  1 Jun 2020 02:29:56 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id c12so7096509qtq.11
+        for <linux-pm@vger.kernel.org>; Mon, 01 Jun 2020 02:29:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=TViWHe/fCibeg71RMzs+W48ldBatY/PqH+UEQJGff2s=;
+        b=or6q/TAOuXcqHd/vmeX+VKKjcyV8ramK5A4vyhpwJa/jJQYlSx9yvqqf7GmhimSUJp
+         MFl3Uov9e2/JwPUlOs9POH11U1iZoE7F12w+2mA3zXWft4TD5dsURLVu6nU6XIUD5SXN
+         nOa9v0ytXErPzLHYYp2VI245J8ms9v6sPRSMo2rdRX7z4BLK3qg5vvwQQ3ptBnJB4GiM
+         f7R5nEpEOR5MXFELJSCqJEFtcHtcOeYPwHclZLKMjJBFO3oDhaozXYiMwp1omau1jGUe
+         LXRG1KP97B5ekCGmjMuCTQxhwvULfb/IxDKsc6hmIADMZWwND2n8ilEL0/NHEzyJcxTS
+         nPBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=TViWHe/fCibeg71RMzs+W48ldBatY/PqH+UEQJGff2s=;
+        b=ufjp+VAkUlSdgVibMx5CQA85Awvl/6eJbbJeMUPAhbrxNNibWfkQWKMwpF67XKo+ZO
+         85fdUWcGrKNeVrlUeo6HoXGFhRdcEqnmZ5WQyaucTofvgXGtRDXcHICIYjXk+UO4bgn6
+         /z8kmlmxZUQ2KubwZv808PqffUUdDiiubwQ/3VdzGXPGxNO9aJteySsd9UfhILz/8Ra4
+         BRdj3ySdAAL/ebpSNtHijYw+JoXxBT/VkzjKJ+xpkrz4J4RMLHHss+YoNyTPtt4Yg6XA
+         jK/H/45WifrYx55GeAb1kSv0c2vMgZkruOXnVw/j7xmcXXm8xzObLSa+Yez37q1r8ZzG
+         6XVw==
+X-Gm-Message-State: AOAM531hdldFN7wzCiFoEt73XAGCeZ585qKXJFR3ZU39wu9hYwAvmkTk
+        yQdIMZR2jW1keI8kRJYEotn6Ee3+yfwc3bnFUTs=
+X-Google-Smtp-Source: ABdhPJx9pXInPB7/wXWB3APHArZPCuV5MrDcCmWXmcuHtGN07rku4fwCV/i9wDg9vQoIFo2SXgh7OUC0MvN+cKL99gg=
+X-Received: by 2002:ac8:34d0:: with SMTP id x16mr21437314qtb.300.1591003794987;
+ Mon, 01 Jun 2020 02:29:54 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <666b2f9e-d7ed-6ddb-80aa-e63ab9909ee6@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a0c:99ef:0:0:0:0:0 with HTTP; Mon, 1 Jun 2020 02:29:53 -0700 (PDT)
+Reply-To: daoudaali2200@gmail.com
+From:   Mr Daouda Ali <mrdaoudaali@gmail.com>
+Date:   Mon, 1 Jun 2020 09:29:53 +0000
+Message-ID: <CAHkZVBxE7oMBsD2_NJgDLanvcbES7dyHuU9YV7XHBZxq9=iRPw@mail.gmail.com>
+Subject: INVESTMENT PROPOSAL.
+To:     daoudaali2200@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+It=E2=80=99s my pleasure to contact you through this media because I need a=
+n
+investment assistance in your country. However I have a profitable
+investment proposal with  good interest to share with you, amounted
+the sum of (Twenty Eight Million Four Hundred Thousand United State
+Dollar ($28.400.000.00). If you  are willing to handle this project
+kindly reply urgent to enable me provide you more information about
+the investment funds and the project.
 
+I am waiting to hear from you through this my private
+email(daoudaali2200@gmail.com) so we can proceed further.
 
-On 5/29/20 6:43 PM, Daniel Lezcano wrote:
-> On 27/05/2020 11:58, Lukasz Luba wrote:
->> The Energy Model framework is going to support devices other that CPUs. In
->> order to make this happen change the callback function and add pointer to
->> a device as an argument.
->>
->> Update the related users to use new function and new callback from the
->> Energy Model.
->>
->> Acked-by: Quentin Perret <qperret@google.com>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> 
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> 
-
-Thank you Daniel!
-
-Regards,
-Lukasz
+Best Regards.
+Mr. Daouda Ali.
