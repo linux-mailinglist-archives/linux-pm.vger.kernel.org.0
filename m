@@ -2,92 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4D71EA251
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 12:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8FE1EA258
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 12:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbgFAK5O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jun 2020 06:57:14 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:34333 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbgFAK5N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 06:57:13 -0400
-Received: by mail-oi1-f196.google.com with SMTP id w4so8550211oia.1
-        for <linux-pm@vger.kernel.org>; Mon, 01 Jun 2020 03:57:12 -0700 (PDT)
+        id S1726094AbgFAK7c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jun 2020 06:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725925AbgFAK7b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 06:59:31 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D69DC061A0E
+        for <linux-pm@vger.kernel.org>; Mon,  1 Jun 2020 03:59:30 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id x207so1429741pfc.5
+        for <linux-pm@vger.kernel.org>; Mon, 01 Jun 2020 03:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=O7dtDsTn8AU/RZ5LNEfHyIycb+r+zNEVy/2VPUEZ5s8=;
+        b=jO7GQRuhXm4cImdACv9PjBouRLw9HvnFE22VCVFQ7BcD005PALTOJh75Immk7dbBrq
+         Y6Bo2xX0P2878kmD+yFwGfgn46JSUacByGQhGDfvxpbCSu4I73Iz8UBT1G7C51xGTFGx
+         vNUsUSqOIKffASzQwPhxTEkkVJCvQtdWOP9dAowzErUd6eXEHF1FpWdn5qoIcMqcjdOu
+         9ZQy+RMOSXnKo69cgjS5M7ircER5MXxuWLe0Jyv88iJhwepz2I214UdFosOLynZGG73y
+         G4T2dvvSn4sxuwvwPhWR6TtE1Ulc+S/Yb+OB7+lgvYXOMNBtuSlFLALGdcTaMmY6m6rl
+         5zdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6p3gRkmcNenifyX9yc6xx9fokHoaPxNxP8DLYDyavr0=;
-        b=kddAGjZat5R99hBxSgNO/73HojbKk0eollfpphfnT79hS5nDjXN/7IyBXI5CzBv3W5
-         G0f5v3cAOqPAipOtr93rAeTJ504boBqKnpojYEp82EwN7ujKvf0c+Ex7rtn+Xy3UKEun
-         VfNgR9ojyFZueanCsriilHyG5cfTYRNTqokZj5m1GbFeXXuPRd4onc8qJ9VSpUtRHRvk
-         sqkwUHx+o6uONhiU0yka/hd+glcH92aUd9dwEMWrFlk3KW/XB+v04ftcyQBK2KxXU3b/
-         3ScMIie0aBjjRmBxZDitG06ZlsYzcEiSDhxGxuzno1Nc+u8vv9MaRVg6ElcLpnfYmWwg
-         CaHQ==
-X-Gm-Message-State: AOAM533JqMKTpM+Acgj3+ElP8jbTpGE3bP46lIEGrV6ofu+MI7Z+1jT2
-        vxgiR/cPltajSp5iFzsQThUmqgAFUShSD6dKaKw=
-X-Google-Smtp-Source: ABdhPJwiZ5MFe9B4AGzO72k/2DZcc+6a2v0919FEhmDC/9I/BckrigIxhp/pdMm5Pow8OcXzpZJodikj4qrn7Q7ajYw=
-X-Received: by 2002:aca:4254:: with SMTP id p81mr13309271oia.68.1591009031922;
- Mon, 01 Jun 2020 03:57:11 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=O7dtDsTn8AU/RZ5LNEfHyIycb+r+zNEVy/2VPUEZ5s8=;
+        b=EgGeLPJrSPeOQMeqPlWPF/nQKUqSbUxQg+x0oq5XM2Fi55f4UrSwch38W9QyxbwjCO
+         8eDyBEOrgECRcT0Kx1LWyXW+f89B45vxZuuJ3sk1DY4gjAE2AmW5zpZC2mhJ+DKPYD51
+         SG5G3g+T3DjwS8puDqfeVDmhw35qGBElw9u3tKNp+TOqvdAb1ZC+XrLZqeiropZgjYuF
+         Ls+zfbzJge9doPS+XafJxf080SzCJdeTSOc/d2tVTxv7dPPfURHARY+6pI2LGNu37g5u
+         b+vxxiicVG6kqkrnCVV24ZJGY7yab6t8AxtFNXYdfeyE21gnslaupuXiNqdfLvOpZJ4P
+         uOTg==
+X-Gm-Message-State: AOAM530jpH0f67QGkWn7GjcZF2cWIpyLJNEqRVumx2HaGC4d77PkL3dt
+        OEKBYD/hAk84m3PziAdOSr+ZUIRHpjI=
+X-Google-Smtp-Source: ABdhPJzsLmBeHZ0V1E5EwI908mvRU9IJuO0/fRm7A3rLgSfjZI/ia3SJKKZfOlkWc7OdUY2BVokYHw==
+X-Received: by 2002:a63:348a:: with SMTP id b132mr17916961pga.283.1591009169727;
+        Mon, 01 Jun 2020 03:59:29 -0700 (PDT)
+Received: from localhost ([122.172.62.209])
+        by smtp.gmail.com with ESMTPSA id 2sm14218648pfz.39.2020.06.01.03.59.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 01 Jun 2020 03:59:29 -0700 (PDT)
+Date:   Mon, 1 Jun 2020 16:29:26 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] cpufreq/arm changes for 5.8 (2)
+Message-ID: <20200601105926.hug72sdvpywpbjr7@vireshk-i7>
 MIME-Version: 1.0
-References: <20200601043440.c5oiuucf7wuqeasd@vireshk-i7> <20200601074230.xflri4k5tmrbyezo@vireshk-i7>
-In-Reply-To: <20200601074230.xflri4k5tmrbyezo@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 1 Jun 2020 12:56:55 +0200
-Message-ID: <CAJZ5v0gmO8CJkG0h6o9CgjRONTZ4Zc7ZJqJucCfYcYp9ivng3g@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP changes for 5.8
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Nayak, Rajendra" <rnayak@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 1, 2020 at 9:42 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 01-06-20, 10:04, Viresh Kumar wrote:
-> > Hi Rafael,
-> >
-> > This pull request contains:
-> >
-> > - support for interconnect bandwidth in the OPP core (Georgi Djakov,
-> >   Saravana Kannan, Sibi Sankar, Viresh Kumar).
-> >
-> > - support for regulator enable/disable (Kamil Konieczny).
-> >
-> > This is based on three patches from the interconnect tree which shall
-> > get merged via Greg's tree.
-> >
-> > -------------------------8<-------------------------
-> >
-> > The following changes since commit ae83d0b416db002fe95601e7f97f64b59514d936:
-> >
-> >   Linux 5.7-rc2 (2020-04-19 14:35:30 -0700)
-> >
-> > are available in the Git repository at:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
-> >
-> > for you to fetch changes up to 264c280442847ac7ed0bb89ac3a1e2e8859f25d8:
-> >
-> >   opp: Don't parse icc paths unnecessarily (2020-06-01 09:37:45 +0530)
-> >
->
-> Had to modify the top commit a bit, here are the pull details:
->
-> The following changes since commit ae83d0b416db002fe95601e7f97f64b59514d936:
->
->   Linux 5.7-rc2 (2020-04-19 14:35:30 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
->
-> for you to fetch changes up to 45679f9b508f10c12a1e93cf2bdccbc1c594aa39:
->
->   opp: Don't parse icc paths unnecessarily (2020-06-01 13:10:15 +0530)
+Hi Rafael,
 
-Pulled now, thanks!
+This pull request contains a single patch to enable
+CPUFREQ_NEED_INITIAL_FREQ_CHECK flag for tegra driver.
+
+--
+viresh
+
+-------------------------8<-------------------------
+
+The following changes since commit 1f1755af4f062cb1cbd55ca4a250fe272b82fe2f:
+
+  cpufreq: qoriq: Add platform dependencies (2020-05-08 10:53:10 +0530)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+
+for you to fetch changes up to 6cc3d0e9a097981c8a0317c65b8a2278593bd2b0:
+
+  cpufreq: tegra186: add CPUFREQ_NEED_INITIAL_FREQ_CHECK flag (2020-05-18 10:58:40 +0530)
+
+----------------------------------------------------------------
+Mian Yousaf Kaukab (1):
+      cpufreq: tegra186: add CPUFREQ_NEED_INITIAL_FREQ_CHECK flag
+
+ drivers/cpufreq/tegra186-cpufreq.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+
+-- 
+viresh
