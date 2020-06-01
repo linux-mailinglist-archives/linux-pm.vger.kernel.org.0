@@ -2,76 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F349F1E9AAB
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 00:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F291E9C0B
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 05:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727915AbgEaWLa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 31 May 2020 18:11:30 -0400
-Received: from smtprelay0182.hostedemail.com ([216.40.44.182]:57272 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726008AbgEaWLa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 May 2020 18:11:30 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 90F1C1802926E;
-        Sun, 31 May 2020 22:11:29 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:966:981:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2196:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3352:3865:3866:3867:3871:3872:4250:4321:4385:5007:7903:10004:10400:10848:11026:11232:11658:11914:12048:12295:12297:12555:12740:12760:12895:13069:13311:13357:13439:14096:14097:14180:14659:14721:21080:21324:21627:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: chess64_5207aa126d78
-X-Filterd-Recvd-Size: 1901
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf03.hostedemail.com (Postfix) with ESMTPA;
-        Sun, 31 May 2020 22:11:28 +0000 (UTC)
-Message-ID: <effe3cde7b1f188427c42c476f5a96251d837416.camel@perches.com>
-Subject: Re: [PATCH] kernel: power: swap: mark a function as __init to save
- some memory
-From:   Joe Perches <joe@perches.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
-        Dan Carpenter <error27@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Date:   Sun, 31 May 2020 15:11:27 -0700
-In-Reply-To: <20200531210059.647066-1-christophe.jaillet@wanadoo.fr>
-References: <20200531210059.647066-1-christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.2-0ubuntu1 
+        id S1726555AbgFADcP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 31 May 2020 23:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726218AbgFADcP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 31 May 2020 23:32:15 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565F1C08C5C0
+        for <linux-pm@vger.kernel.org>; Sun, 31 May 2020 20:32:11 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id x11so3670563plv.9
+        for <linux-pm@vger.kernel.org>; Sun, 31 May 2020 20:32:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=GiN6URCGOi3zRMrgGTBxhLW3I/ES5CEjKSS6Efx8Rn8=;
+        b=ImCDKxj6g9w1zOY09EE2wYtZmGjUvkxmO/6oBVTbP0l962iXO11Pw3cB+X7Bl1LsOA
+         9sow2JwLIVNGKEUSlIkOw4FwTSDp/NtcUACWvQ1jFMzHw2CrwjAHv70+qe9q8iMP3AFh
+         RXaG0gWPDgxJHcI4T3YbvbJFVtQHbQAOWIGmfpps4TfOjDfc4VOIG0fMJDUMvNnRgihQ
+         KQ7tsmVmb49D22qAruIdUn6UsUYZ5mis8hsWrYU4Z399XCzwcEPufqU1fuL+pw3MqRMg
+         q3kiIlvoSzXONKofT1mkJu2md1IdV08xjSdJacVoORVljabL1hLinP8qKuuC86NR5zev
+         doww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GiN6URCGOi3zRMrgGTBxhLW3I/ES5CEjKSS6Efx8Rn8=;
+        b=PFBONNL8BVz1oYNWM4H0f+lmvZRslMTqm1Tn9c3hD2rtpQBNJk/dsmhhcpEYBBe8qr
+         Ym1lpFYipbPo9hUP3p9tKlUBAZqdRFjPY5l3JejooQEDx1yazTj/WhXzYtEaKNnKvhTZ
+         P3jnXDYNQPsp6oXllN3RnPV6sOQxsxnpg7410deH2BaYcHNa9+z7ux1yjAA7+8nSkoMt
+         iak75zt87v9scH4vvZOJqrI6wtB9fJJxb2/KPErO7D3pWGEDo0gai46uyKVccyIFo79k
+         RbEL1O/ij1+FLlSEWGAprVsUEd+knAUriMz2OjtzkdKHy+rfwG56HCXqFvSjNdH7tccr
+         Osdw==
+X-Gm-Message-State: AOAM531v+UME9jSPX0KkG80QtoUYUgKEQjlpnl7teRdzkU3+odfixlFJ
+        DsdJ2mbfaN0xWM44Vsk1OJfZeQ==
+X-Google-Smtp-Source: ABdhPJym07gd+NSj3jXYzvEjjDY2repB3sRc/S4lw1IVMp0MmA2Dg8j3uqQWKiFQIPm8IfYjGh4qhg==
+X-Received: by 2002:a17:902:7618:: with SMTP id k24mr18753586pll.167.1590982330607;
+        Sun, 31 May 2020 20:32:10 -0700 (PDT)
+Received: from localhost ([122.172.62.209])
+        by smtp.gmail.com with ESMTPSA id a5sm12895162pfk.210.2020.05.31.20.32.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 31 May 2020 20:32:09 -0700 (PDT)
+Date:   Mon, 1 Jun 2020 09:02:07 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] opp: avoid uninitialized-variable use
+Message-ID: <20200601033207.ekro7fckvguguuxf@vireshk-i7>
+References: <20200529201731.545859-1-arnd@arndb.de>
+ <20200530092052.ksuncmgx3cahokzo@vireshk-i7>
+ <CAK8P3a2dADAG9-NnsR8opP++xq6T_BB3C6i-wvkzrKvXNOghiQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2dADAG9-NnsR8opP++xq6T_BB3C6i-wvkzrKvXNOghiQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-(adding Dan Carpenter)
-
-On Sun, 2020-05-31 at 23:00 +0200, Christophe JAILLET wrote:
-> 'swsusp_header_init()' is only called via 'core_initcall'.
-> It can be marked as __init to save a few bytes of memory.
-
-Hey Dan
-
-smatch has a full function calling tree right?
-
-Can smatch find unmarked functions called only by __init
-functions so those unmarked functions can be appropriately
-marked with __init like the below?
-
-> ---
->  kernel/power/swap.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 30-05-20, 14:40, Arnd Bergmann wrote:
+> On Sat, May 30, 2020 at 11:21 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > On 29-05-20, 22:17, Arnd Bergmann wrote:
+> > > An uninitialized pointer is passed into another function but
+> > > --- a/drivers/opp/core.c
+> > > +++ b/drivers/opp/core.c
+> > > @@ -872,7 +872,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+> > >                       goto put_opp_table;
+> > >               }
+> > >
+> > > -             ret = _set_opp_bw(opp_table, opp, dev, true);
+> > > +             ret = _set_opp_bw(opp_table, NULL, dev, true);
+> > >               if (ret)
+> > >                       return ret;
+> > >
+> >
+> > Not sure why people are still seeing this, I pushed a fix for this 2
+> > days back.
 > 
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index ca0fcb5ced71..01e2858b5fe3 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -1590,7 +1590,7 @@ int swsusp_unmark(void)
->  }
->  #endif
->  
-> -static int swsusp_header_init(void)
-> +static int __init swsusp_header_init(void)
->  {
->  	swsusp_header = (struct swsusp_header*) __get_free_page(GFP_KERNEL);
->  	if (!swsusp_header)
+> I was on next-20200528, which was the first version that was broken for me,
+> and I sent all my fixes after I had tested them. Since a lot of things
+> got broken
+> at once that day, it took me until the end of 20200529 to get it all tested
+> properly and then send them out.
 
+Okay, I asked as around 3-4 people have already sent out this patch to
+me :)
+
+-- 
+viresh
