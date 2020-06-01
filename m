@@ -2,101 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8D11EA25B
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 13:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D74B1EA287
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 13:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725935AbgFALBi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jun 2020 07:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
+        id S1725886AbgFALQr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jun 2020 07:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725847AbgFALBV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 07:01:21 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9B4C03E96F
-        for <linux-pm@vger.kernel.org>; Mon,  1 Jun 2020 04:01:19 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id y11so4134526plt.12
-        for <linux-pm@vger.kernel.org>; Mon, 01 Jun 2020 04:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=vSd1F9IWmylmdRhuAnkzZkcm/vhp0PvuDBF/lEkmWYM=;
-        b=t/Z7/edJ+cZ8JjeZehSfuBXZPJJtj7/nryWGlIAR6tVr3jRy92L52wK2yPqqcJ6hUZ
-         Zw2fDUxXjK4GLKozfv5U2FexgQOI+tiIvUmSfh1QP1fnlNvOPAvorTf8bJW2IhNr031a
-         9mzjkAzrQzmmZI9NTUnAAol0UsJ66onm5nIy/+U9tIly5mu4YgSKOoZ38lPxfHTMsJBp
-         qGTj1qfgCNvY4LEI5xJQ85EIUn522vjEXAjRPHdrhTwnpV5ZUzNoQ1f8+27fU31yAvte
-         fWfrQ7Ne16RjH7nH35WeQs/F3bLDRAj8OeO2Xl3cRiGS9zL1FCTppOHUjx96V4Hywxmc
-         cXfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vSd1F9IWmylmdRhuAnkzZkcm/vhp0PvuDBF/lEkmWYM=;
-        b=phSlfR7v9WaajB7XqrMngPO3w2CTq7N6GR356g7K0HfLaDK9XorkLyyg4gPFgjnQCD
-         WWN2YoPkZsPzpz355sBe+shDqQ5Y+HxN9OxRF7G5NGDdf1U0xu9WMAQkFTAkNpteDim6
-         O47uU8O1HpAPZfzqnt1gMqakQpb0+XRNRCLLcXK17xPdEDt4TSp3ixhu46zKs8JOrM4X
-         zvMaV7CjDMtsMrTGYQa+QljxV0FMSjAsstMgXBxRlk24RAKNTwE91d318tAftKI3Naby
-         fenl37WxDS5RKWMUMa3WLPcEPcj3WuA/KpxpE3e41caeGjkCNqHRXC8xUP8vqgshYgdF
-         Zlww==
-X-Gm-Message-State: AOAM533jWbFy2xfUHNx2mcCbrBK6CZGLVpa6ez8/jKdDe/l+yfppm6Y2
-        NFhhUm8O1RAldQ3pe8yvq34QzQ==
-X-Google-Smtp-Source: ABdhPJwAVadiEigs3N3Sh4nG5ncaSZnIPjxqEIMNOmDBbJC05+jH/KHIkzRncLVURZ5nRvvxZzCKTw==
-X-Received: by 2002:a17:90a:f508:: with SMTP id cs8mr5446247pjb.16.1591009278922;
-        Mon, 01 Jun 2020 04:01:18 -0700 (PDT)
-Received: from localhost ([122.172.62.209])
-        by smtp.gmail.com with ESMTPSA id q5sm14121925pfl.199.2020.06.01.04.01.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Jun 2020 04:01:17 -0700 (PDT)
-Date:   Mon, 1 Jun 2020 16:31:16 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     sboyd@kernel.org, georgi.djakov@linaro.org, saravanak@google.com,
-        mka@chromium.org, nm@ti.com, bjorn.andersson@linaro.org,
-        agross@kernel.org, rjw@rjwysocki.net,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org,
-        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
-        lukasz.luba@arm.com, sudeep.holla@arm.com, smasetty@codeaurora.org,
-        linux-arm-msm-owner@vger.kernel.org
-Subject: Re: [PATCH v5 4/5] cpufreq: qcom: Update the bandwidth levels on
- frequency change
-Message-ID: <20200601110116.jteoalg3yjhsbkpw@vireshk-i7>
-References: <20200527202153.11659-1-sibis@codeaurora.org>
- <20200527202153.11659-5-sibis@codeaurora.org>
- <20200529100028.2wz2iqi5vqji2heb@vireshk-i7>
- <a90bce2d52f7cdb726e8b799e3512fad@codeaurora.org>
+        with ESMTP id S1725788AbgFALQq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 07:16:46 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC2DC061A0E;
+        Mon,  1 Jun 2020 04:16:46 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 8966B2A15EF
+Subject: Re: [PATCH v4 06/11] thermal: Add mode helpers
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        kernel@collabora.com, Fabio Estevam <festevam@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Allison Randal <allison@lohutok.net>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Enrico Weigelt <info@metux.net>,
+        Peter Kaestle <peter@piie.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andy@infradead.org>
+References: <20200529155206.GA158553@roeck-us.net>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Message-ID: <526286da-70d2-7c55-3c41-15fd2c969a39@collabora.com>
+Date:   Mon, 1 Jun 2020 13:16:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a90bce2d52f7cdb726e8b799e3512fad@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20200529155206.GA158553@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29-05-20, 17:00, Sibi Sankar wrote:
-> > > +static int qcom_cpufreq_update_opp(struct device *cpu_dev,
-> > > +				   unsigned long freq_khz,
-> > > +				   unsigned long volt)
-> > > +{
-> > > +	unsigned long freq_hz = freq_khz * 1000;
-> > > +
-> > > +	if (dev_pm_opp_adjust_voltage(cpu_dev, freq_hz, volt, volt, volt))
-> > > +		return dev_pm_opp_add(cpu_dev, freq_hz, volt);
-> > 
-> > What's going on here ? Why add OPP here ?
+Hi Guenter,
+
+W dniu 29.05.2020 o 17:52, Guenter Roeck pisze:
+> On Thu, May 28, 2020 at 09:20:46PM +0200, Andrzej Pietrasiewicz wrote:
+>> Prepare for making the drivers not access tzd's private members.
+>>
+>> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+
+<snip>
+
+>> +
+> Nit: unnecessary empty line.
 > 
-> We update the voltage if opp were
-> initially added as part of
-> dev_pm_opp_of_add_table. However
-> if the cpu node does not have an
-> opp table associated with it, we
-> do a opp_add_v1 instead.
+>> +		return ret;
 
-Instead of depending on the failure of dev_pm_opp_adjust_voltage(),
-pass a flag to qcom_cpufreq_update_opp() which will decide if we want
-to adjust voltage or add an opp.
+<snip>
 
--- 
-viresh
+>> +	return thermal_zone_device_set_mode(tz, THERMAL_DEVICE_ENABLED);
+>> +}
+>> +EXPORT_SYMBOL(thermal_zone_device_enable);
+> 
+> Other exports in thermal/ use EXPORT_SYMBOL_GPL.
+
+Other than that does it look good to you?
+I can send a v5 where the two above will be corrected, but did you have
+a chance to review patches 7-11?
+
+Andrzej
