@@ -2,106 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8243C1EB163
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 23:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BDF1EB1AD
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 00:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729795AbgFAV5S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jun 2020 17:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
+        id S1728216AbgFAWZn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jun 2020 18:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728917AbgFAV5S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 17:57:18 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD184C061A0E;
-        Mon,  1 Jun 2020 14:57:17 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 16EE92A24B9
-Received: by earth.universe (Postfix, from userid 1000)
-        id 921263C08C7; Mon,  1 Jun 2020 23:57:13 +0200 (CEST)
-Date:   Mon, 1 Jun 2020 23:57:13 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCHv1 00/19] Improve SBS battery support
-Message-ID: <20200601215713.kefq72upysjjlrwm@earth.universe>
-References: <20200513185615.508236-1-sebastian.reichel@collabora.com>
- <20200529162704.GA3709@amd>
+        with ESMTP id S1728489AbgFAWZn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 18:25:43 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87365C061A0E
+        for <linux-pm@vger.kernel.org>; Mon,  1 Jun 2020 15:25:43 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id a127so2074251pfa.12
+        for <linux-pm@vger.kernel.org>; Mon, 01 Jun 2020 15:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=E9JUa1yumyY9fgcnWG3AJgUqfdeNBuOEvTmvrp1AaVo=;
+        b=S/CddwRoFWjo9U3ELdnmx9r+NsKSoj9di3EWHwzeQU8MRuQgiKx+IkLUhE19gZx5RK
+         Iz+yVLmDrZrDX3KmF9GbeWnOIHXknrJeCOLL6bSzpna1zwHYw2hUqIjH02hqaZZhssFe
+         SL0Gs65G2wH5V9/ojGxnaldQIm6jfrSiMpLz73uN4mC/0TWvQPj1f2AjNoVwQJUbZQEY
+         JB60GQjvlW01wZZhZI7OtUbtWiKdXxqCrcYzxV1Y8I07D1doDAAozRSKinZSfJsAcrPw
+         9gRrQOig7eKN7hOvhMQHTjcBCZq1K0bzhbxHeka43QO3CYePRcDTdSA7XwFuNpbF8ssZ
+         ZHgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=E9JUa1yumyY9fgcnWG3AJgUqfdeNBuOEvTmvrp1AaVo=;
+        b=dD2Hi2XQ1CZlYwV8R2jPFS3zPrQO/giaAuedzUhJpRlgTi1FK5e7RZ+CeTzv5haY1P
+         1qQNEWUk01eD9MCzz0LTPgWDMT0FosaiEWJlHvgNArVcdNqaIFjLqN/HX2P2zHZ4qiEv
+         cP95OWLkhXjhN30omNJaBaTS8UQXFaNh9LgnettO2QRH/bsGWY8DxQ7H8ruWAhPCgD6C
+         qNhwaBkCOrqE7XHSwluUpEIwgH7tS+0CAWlekVU5Q8uMuoLuX2kino9OxlvenPg/9DEv
+         ULHraWRtl+1TLzwvQfXVjuKG5c0PLt6r3FZo4MwAzvJPJ9xIlNVoCkxM+k0QHFh85ZgI
+         Oj2Q==
+X-Gm-Message-State: AOAM532oOUkFBCn4j4wDDkz9mWJSSxtH8NQqTIZgFJt9X7cM9xJHKa+z
+        gMdnyJwNW8JPXO2vSiFBPse4qw==
+X-Google-Smtp-Source: ABdhPJwt75ZzqI0xolBomEBbCKmcXJS1tX8ol/vZSbPg5XKhow80vttmtmXodlvekc+1QVLKRRtzFA==
+X-Received: by 2002:a63:da0e:: with SMTP id c14mr20734575pgh.377.1591050343114;
+        Mon, 01 Jun 2020 15:25:43 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id h35sm421607pje.29.2020.06.01.15.25.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Jun 2020 15:25:41 -0700 (PDT)
+Message-ID: <5ed58065.1c69fb81.9134f.19d4@mx.google.com>
+Date:   Mon, 01 Jun 2020 15:25:41 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zdj3sjeruhoqdhgk"
-Content-Disposition: inline
-In-Reply-To: <20200529162704.GA3709@amd>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.7-rc7-129-gc291ca907606
+Subject: pm/testing baseline: 43 runs,
+ 2 regressions (v5.7-rc7-129-gc291ca907606)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing baseline: 43 runs, 2 regressions (v5.7-rc7-129-gc291ca907606)
 
---zdj3sjeruhoqdhgk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Regressions Summary
+-------------------
 
-Hi,
+platform                     | arch  | lab          | compiler | defconfig =
+| results
+-----------------------------+-------+--------------+----------+-----------=
++--------
+bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig =
+| 4/5    =
 
-On Fri, May 29, 2020 at 06:27:04PM +0200, Pavel Machek wrote:
-> > This patchset improves support for SBS compliant batteries. Due to
-> > the changes, the battery now exposes 32 power supply properties and
-> > (un)plugging it generates a backtrace containing the following message
-> > without the first patch in this series:
-> >=20
-> > ---------------------------
-> > WARNING: CPU: 0 PID: 20 at lib/kobject_uevent.c:659 add_uevent_var+0xd4=
-/0x104
-> > add_uevent_var: too many keys
-> > ---------------------------
-> >=20
-> > For references this is what an SBS battery status looks like after
-> > the patch series has been applied:
-> >=20
-> > POWER_SUPPLY_VOLTAGE_MIN_DESIGN=3D10800000
-> > POWER_SUPPLY_VOLTAGE_MAX_DESIGN=3D10800000
->=20
-> Is that correct, BTW? sounds like these should not be equal...
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig =
+| 4/5    =
 
-(Some) GE batteries have weird values stored in the SBS chip.
-For example manufacturer and model name are swapped:
 
-POWER_SUPPLY_MANUFACTURER=3DUR18650A
-POWER_SUPPLY_MODEL_NAME=3DGEHC
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.7-rc7=
+-129-gc291ca907606/plan/baseline/
 
-I carefully checked manufacturer/model name when writing these
-patches some time ago and came to the conclusion that the batteries
-do report it the wrong way around.
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.7-rc7-129-gc291ca907606
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      c291ca907606f834e19abfb788b11dfbc888b7e4 =
 
-I will have a look for the design voltages (which are not modified
-by this patchset), but I expect this to be another GE specific thing.
 
--- Sebastian
 
---zdj3sjeruhoqdhgk
-Content-Type: application/pgp-signature; name="signature.asc"
+Test Regressions
+---------------- =
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl7VebQACgkQ2O7X88g7
-+ppwnw/+OxP+ohJdLekmFK9Z6xByRmB746XuY51AvyPxPn1i+6BYCNYiF9BH1H6H
-NigPpmlgaNOPVVAQGaB67rlIAEVFgOM893vY6BQEWqK8kf/cwGDy0z0OyMvQIct2
-j4seRHmom2gfHWsmrZIsD1O1LO3ENwkIMFXBDt1r/Km5UPdChoQ84qdGpIWbBQKC
-19AnKoMaQSERyZZne2vHqBmDDmnxo2P7burzUhPSMV2h//1XXeW2s1uEZiKie7xn
-5llxeOWHScN50sS7V69ZFjMSYYN5poLsk4KyQhJo0WnMZIY0G3+gO8BK4UbncsOy
-jBSv1iEnGRnFt2f3Sfn6Jn9Dq+nSJCY95S/Ho4aPFcdUsaGApnJcTkAF9xxMfugG
-i0kFZLvUCThcwOekMZvxjZjD5tk0cWQlJ1HNMwsBO9ZVXOFBSMiL8QY/f2VdF70n
-kQ7sEgdAHelkgVrrsynWY0GcBqH9/QdUpFxu3xwUqb4kVV+DB0K5ZCzp0Iot9GQR
-I3w4MB60c6DJ9xAbrRr5+WcX2IT+GvzzS0boe/yw7rq2thVcsrzBTvPlPNqmj3l8
-m5ML0+rCNDzHsRzfyKavXrkf0OLW+tIAn7m+7HbOWM/2xf4tsBKVHidB7Zkr3bEi
-ml/3Ht7zNUy2MDWNWOPu8PWqNjW637qt1cxd38lhCtFdxsbMII8=
-=mJgM
------END PGP SIGNATURE-----
 
---zdj3sjeruhoqdhgk--
+platform                     | arch  | lab          | compiler | defconfig =
+| results
+-----------------------------+-------+--------------+----------+-----------=
++--------
+bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig =
+| 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ed575e0ef8ebb724a1dba7f
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc7-129-gc291c=
+a907606/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc7-129-gc291c=
+a907606/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ed575e0ef8ebb72=
+4a1dba84
+      failing since 3 days (last pass: v5.7-rc7-92-g065693d08662, first fai=
+l: v5.7-rc7-109-g1a09809dda81)
+      2 lines =
+
+
+
+platform                     | arch  | lab          | compiler | defconfig =
+| results
+-----------------------------+-------+--------------+----------+-----------=
++--------
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig =
+| 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ed577539a61b3aa9c1dba92
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.7-rc7-129-gc291c=
+a907606/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-librete=
+ch-ac.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.7-rc7-129-gc291c=
+a907606/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-librete=
+ch-ac.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5ed577539a61b3a=
+a9c1dba99
+      new failure (last pass: v5.7-rc7-109-g1a09809dda81)
+      2 lines =20
