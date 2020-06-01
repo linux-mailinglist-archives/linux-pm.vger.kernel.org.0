@@ -2,85 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E02D51E9C5F
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 06:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F05B1E9CBE
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 06:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725938AbgFAEHs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jun 2020 00:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
+        id S1725909AbgFAEeq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jun 2020 00:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725935AbgFAEHr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 00:07:47 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99D2C08C5CA
-        for <linux-pm@vger.kernel.org>; Sun, 31 May 2020 21:07:45 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id 185so2865543pgb.10
-        for <linux-pm@vger.kernel.org>; Sun, 31 May 2020 21:07:45 -0700 (PDT)
+        with ESMTP id S1725290AbgFAEeo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 00:34:44 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C55C061A0E
+        for <linux-pm@vger.kernel.org>; Sun, 31 May 2020 21:34:44 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id 131so2831143pfv.13
+        for <linux-pm@vger.kernel.org>; Sun, 31 May 2020 21:34:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+6ownZMPIgJJdia/JCvZ/qOK36qij75yfOhvnZqmGDk=;
-        b=MoT4G10i1QXRhHmSLvbhdqLIFOsga5P29Iy8cfjKMfdpgwmgMC65N9xZ/pXrQh2M0L
-         u3tOTwAiW98462Lh4X4ZoucKG+NEqtadraC3IqVW6XaglxEAryoj1UdXBVy4j8JBC1se
-         QI+FOF0aiVjU0eW0aPnDuYAN/r1AWtS7SNafakuv+FvamuiseKiQ9PeZApiBwLWxRwfU
-         fXYVA78P4ovkSxWztSVfDyIDwrr+sMhuPHj3It/gmfI/hHQswR+y+wsfDzeHLxqY25EN
-         LDGDz3Xi2L9L7EMyzWTyui2bBFWiLMi/XSSO1cbbQfcZO73vGk8K9IXa7QCL4yY0hJYz
-         qa4A==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=FDLsT8SXqD8oqNptpiupoZ7qxxpJJUa+umzBfIkScIc=;
+        b=ZogN07ARzcrQmrpuFIC0CtilGKhAS5AUUjVLvAIBBLWd9Elr14oX3ru5EhauMsrXmS
+         obW32fdOA8YF4mPA4wllV9qjWJe94TG6GNvb53WR+smsiRFIYCtfwo3xRqIGj+d4ZEGi
+         KqS2bnDHal8bo+99TL8IjYS9MgC+O0d/QtYZ9m5ykVr4mWg30I3yYtq67gFXozjLGqVK
+         HW2CLyHLOUHOmsj5h0ka74oSAXcQlXMvpx/AqmS0jWsSDW/P6E7MkQsJD4Pl99d+y0No
+         OJaSBrG/gaip0p9rN0IVtlPGwW539OkSjKQcbLFxebP2WYLimc7TDd1YM1uEg/VUwLtZ
+         TZeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+6ownZMPIgJJdia/JCvZ/qOK36qij75yfOhvnZqmGDk=;
-        b=Xsqq6ZIPW3okaXldkHGarx+UaBnpInWrHWRJjOG6CoW7Vt+YLAagjSNGZFgI/vbYxG
-         B1BAoqVboHFXAqEb7uDSdeBY00dD0PNukUEwKmM8Z5mfdfjgB9RyCuD8YC5JFljdf6fW
-         vmcl+LS/mRq97JPB6ZPfRXZOmd2eCUjB16pid3heZFgnhYFVIGP4cYKgFJzvN42aoBBz
-         VVuv9d5h1XP//6+U+4d2KkGpjJkcu+kDkcerownuwOw5mlg+wscewBfA+w5O4VxitR3Y
-         1cH+rR30QMaWA73sfTkNXaMFKYzwj3HoBkob1NtFn9uo4OAO1Hn51d5gBQvksh3cz3vY
-         VtuA==
-X-Gm-Message-State: AOAM532ZWMB9iy09I97v1dgyJH/T2nYXzZZQCt6HN87i1rfZ/ROHswnB
-        gRD1HlE2faplY+HKWJlSt4h1VQ==
-X-Google-Smtp-Source: ABdhPJx2sQD+gYk0YMveVCSJnx6ztfk0oDnR8Id3d7XxHmX6wCFUYDgpyaGtL8cCxpigl5RQ7QO+Fg==
-X-Received: by 2002:a05:6a00:150e:: with SMTP id q14mr18059424pfu.325.1590984465237;
-        Sun, 31 May 2020 21:07:45 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=FDLsT8SXqD8oqNptpiupoZ7qxxpJJUa+umzBfIkScIc=;
+        b=c1ddPcM7rhWbmmNFVt2XiyU2EksWLGTFJV1pqmBYqw6Q9c3vq+ikoch6pPQDgWdlo3
+         OAll/aWkavaGmf1MVKL4Dbx3MGEacwc6V2fDMcGSzFm8bVD76KxHnFdNZH1D96YaIgV5
+         P7nhB3hwBZ7wWs4fr+GQjc9QFankWNaha37bb5T5UwLqJOZv9eCKFPrVQ5sFVJUkCMJR
+         /e7AZ8WlWBY5gSp5CyHnoVODPIPwanjYmyeUY/9Y9fz3JkAsgH1dUMHrxCcE57YNAUtt
+         7sGUkl96WJYdXTZ+420AuQgyu4VOXgWwdFEusrO12Qrdt+KuZYT67VypOAWTRE+6xars
+         e2kg==
+X-Gm-Message-State: AOAM5334dyVUgdHcKRChdWNqpBs9b+RKHZAa9nsOZjTvyBn2qXKYjsUF
+        c5qopVDwucyDfT0OLlxVJ3bXXw==
+X-Google-Smtp-Source: ABdhPJz/mbrIgzTLWlYvvx8icQf/IRYc/pyC44Ba33VxysHu/6kFSRBUWkQSDGfj010LQQbfqkyWsA==
+X-Received: by 2002:a62:3006:: with SMTP id w6mr18973662pfw.29.1590986083352;
+        Sun, 31 May 2020 21:34:43 -0700 (PDT)
 Received: from localhost ([122.172.62.209])
-        by smtp.gmail.com with ESMTPSA id 140sm9923609pfy.95.2020.05.31.21.07.44
+        by smtp.gmail.com with ESMTPSA id w4sm10440724pfq.57.2020.05.31.21.34.42
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 31 May 2020 21:07:44 -0700 (PDT)
-Date:   Mon, 1 Jun 2020 09:37:42 +0530
+        Sun, 31 May 2020 21:34:42 -0700 (PDT)
+Date:   Mon, 1 Jun 2020 10:04:40 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     sboyd@kernel.org, georgi.djakov@linaro.org, nm@ti.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, saravanak@google.com, mka@chromium.org,
-        smasetty@codeaurora.org, linux-arm-msm-owner@vger.kernel.org
-Subject: Re: [PATCH] OPP: Check for bandwidth values before creating icc paths
-Message-ID: <20200601040742.3a4cmhrwgh2ueksy@vireshk-i7>
-References: <20200527192418.20169-1-sibis@codeaurora.org>
- <20200529052031.n2nvzxdsifwmthfv@vireshk-i7>
- <0205034b0ece173a7152a43b016985a7@codeaurora.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>, rnayak@codeaurora.org
+Subject: [GIT PULL] OPP changes for 5.8
+Message-ID: <20200601043440.c5oiuucf7wuqeasd@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0205034b0ece173a7152a43b016985a7@codeaurora.org>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29-05-20, 19:47, Sibi Sankar wrote:
-> opp_np needs to be subjected
-> to NULL check as well.
+Hi Rafael,
 
-No, it isn't. It should already be valid and is set by the OPP core.
-Actually we don't need to do of_node_get(opp_table->np) and just use
-np, I did that to not have a special case while putting the resource.
+This pull request contains:
 
-> Tested-by: Sibi Sankar <sibis@codeaurora.org>
-> Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
+- support for interconnect bandwidth in the OPP core (Georgi Djakov,
+  Saravana Kannan, Sibi Sankar, Viresh Kumar).
 
-Thanks.
+- support for regulator enable/disable (Kamil Konieczny).
+
+This is based on three patches from the interconnect tree which shall
+get merged via Greg's tree.
+
+-------------------------8<-------------------------
+
+The following changes since commit ae83d0b416db002fe95601e7f97f64b59514d936:
+
+  Linux 5.7-rc2 (2020-04-19 14:35:30 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+
+for you to fetch changes up to 264c280442847ac7ed0bb89ac3a1e2e8859f25d8:
+
+  opp: Don't parse icc paths unnecessarily (2020-06-01 09:37:45 +0530)
+
+----------------------------------------------------------------
+Georgi Djakov (5):
+      interconnect: Add of_icc_get_by_index() helper function
+      opp: Add support for parsing interconnect bandwidth
+      opp: Add sanity checks in _read_opp_key()
+      opp: Update the bandwidth on OPP frequency changes
+      cpufreq: dt: Add support for interconnect bandwidth scaling
+
+Jordan Crouse (1):
+      interconnect: Remove unused module exit code from core
+
+Kamil Konieczny (1):
+      opp: core: add regulators enable and disable
+
+Saravana Kannan (2):
+      dt-bindings: opp: Introduce opp-peak-kBps and opp-avg-kBps bindings
+      OPP: Add helpers for reading the binding properties
+
+Sibi Sankar (1):
+      opp: Don't parse icc paths unnecessarily
+
+Viresh Kumar (5):
+      interconnect: Disallow interconnect core to be built as a module
+      Merge remote-tracking branch 'georgi/icc-get-by-index' into opp/linux-next
+      opp: Expose bandwidth information via debugfs
+      opp: Reorder the code for !target_freq case
+      opp: Remove bandwidth votes when target_freq is zero
+
+ Documentation/devicetree/bindings/opp/opp.txt      |  17 +-
+ .../devicetree/bindings/property-units.txt         |   4 +
+ drivers/cpufreq/cpufreq-dt.c                       |   4 +
+ drivers/interconnect/Kconfig                       |   2 +-
+ drivers/interconnect/core.c                        |  97 +++++++---
+ drivers/opp/core.c                                 | 119 ++++++++++--
+ drivers/opp/debugfs.c                              |  42 +++++
+ drivers/opp/of.c                                   | 205 +++++++++++++++++++--
+ drivers/opp/opp.h                                  |  10 +
+ include/linux/interconnect.h                       |  12 ++
+ include/linux/pm_opp.h                             |  18 ++
+ 11 files changed, 473 insertions(+), 57 deletions(-)
 
 -- 
 viresh
