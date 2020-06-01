@@ -2,73 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6C71EA0F8
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 11:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00A41EA177
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jun 2020 12:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725788AbgFAJ35 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jun 2020 05:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725290AbgFAJ34 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 05:29:56 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C05C061A0E
-        for <linux-pm@vger.kernel.org>; Mon,  1 Jun 2020 02:29:56 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id c12so7096509qtq.11
-        for <linux-pm@vger.kernel.org>; Mon, 01 Jun 2020 02:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=TViWHe/fCibeg71RMzs+W48ldBatY/PqH+UEQJGff2s=;
-        b=or6q/TAOuXcqHd/vmeX+VKKjcyV8ramK5A4vyhpwJa/jJQYlSx9yvqqf7GmhimSUJp
-         MFl3Uov9e2/JwPUlOs9POH11U1iZoE7F12w+2mA3zXWft4TD5dsURLVu6nU6XIUD5SXN
-         nOa9v0ytXErPzLHYYp2VI245J8ms9v6sPRSMo2rdRX7z4BLK3qg5vvwQQ3ptBnJB4GiM
-         f7R5nEpEOR5MXFELJSCqJEFtcHtcOeYPwHclZLKMjJBFO3oDhaozXYiMwp1omau1jGUe
-         LXRG1KP97B5ekCGmjMuCTQxhwvULfb/IxDKsc6hmIADMZWwND2n8ilEL0/NHEzyJcxTS
-         nPBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=TViWHe/fCibeg71RMzs+W48ldBatY/PqH+UEQJGff2s=;
-        b=ufjp+VAkUlSdgVibMx5CQA85Awvl/6eJbbJeMUPAhbrxNNibWfkQWKMwpF67XKo+ZO
-         85fdUWcGrKNeVrlUeo6HoXGFhRdcEqnmZ5WQyaucTofvgXGtRDXcHICIYjXk+UO4bgn6
-         /z8kmlmxZUQ2KubwZv808PqffUUdDiiubwQ/3VdzGXPGxNO9aJteySsd9UfhILz/8Ra4
-         BRdj3ySdAAL/ebpSNtHijYw+JoXxBT/VkzjKJ+xpkrz4J4RMLHHss+YoNyTPtt4Yg6XA
-         jK/H/45WifrYx55GeAb1kSv0c2vMgZkruOXnVw/j7xmcXXm8xzObLSa+Yez37q1r8ZzG
-         6XVw==
-X-Gm-Message-State: AOAM531hdldFN7wzCiFoEt73XAGCeZ585qKXJFR3ZU39wu9hYwAvmkTk
-        yQdIMZR2jW1keI8kRJYEotn6Ee3+yfwc3bnFUTs=
-X-Google-Smtp-Source: ABdhPJx9pXInPB7/wXWB3APHArZPCuV5MrDcCmWXmcuHtGN07rku4fwCV/i9wDg9vQoIFo2SXgh7OUC0MvN+cKL99gg=
-X-Received: by 2002:ac8:34d0:: with SMTP id x16mr21437314qtb.300.1591003794987;
- Mon, 01 Jun 2020 02:29:54 -0700 (PDT)
+        id S1725788AbgFAKBL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jun 2020 06:01:11 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:29237 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726316AbgFAKBK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 1 Jun 2020 06:01:10 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1591005670; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=VZgW0yWmZWnfdGXGSRXAEISoIkntsyNDe6/pKlJFF58=;
+ b=gHfabsPOxHyT6AkNfhiva/GaTzeeLjZIvhNDNPUbfu5hiHymFu4DZmhatEuVkX1tJ4UZz58b
+ j3dYYbaaKA9eoRHezq+GMfYT9Xg1o5wSoeQ/k6iZhDI7RerB8xkiE+uf7MCIbKH4/qypW6t9
+ i8XqIFxqPTm4pIbtvOZzAreYETs=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 5ed4d1b8c0031c71c2434c95 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 01 Jun 2020 10:00:24
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id BE642C43391; Mon,  1 Jun 2020 10:00:23 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2CD57C433C6;
+        Mon,  1 Jun 2020 10:00:23 +0000 (UTC)
 MIME-Version: 1.0
-Received: by 2002:a0c:99ef:0:0:0:0:0 with HTTP; Mon, 1 Jun 2020 02:29:53 -0700 (PDT)
-Reply-To: daoudaali2200@gmail.com
-From:   Mr Daouda Ali <mrdaoudaali@gmail.com>
-Date:   Mon, 1 Jun 2020 09:29:53 +0000
-Message-ID: <CAHkZVBxE7oMBsD2_NJgDLanvcbES7dyHuU9YV7XHBZxq9=iRPw@mail.gmail.com>
-Subject: INVESTMENT PROPOSAL.
-To:     daoudaali2200@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 01 Jun 2020 15:30:23 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     sboyd@kernel.org, georgi.djakov@linaro.org, nm@ti.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, saravanak@google.com, mka@chromium.org,
+        smasetty@codeaurora.org, linux-arm-msm-owner@vger.kernel.org,
+        linux-kernel-owner@vger.kernel.org
+Subject: Re: [PATCH] OPP: Check for bandwidth values before creating icc paths
+In-Reply-To: <20200601071349.gbuyfaasdu27a3bd@vireshk-i7>
+References: <20200527192418.20169-1-sibis@codeaurora.org>
+ <20200529052031.n2nvzxdsifwmthfv@vireshk-i7>
+ <0205034b0ece173a7152a43b016985a7@codeaurora.org>
+ <20200601040742.3a4cmhrwgh2ueksy@vireshk-i7>
+ <ee51e55bdf518832e4ecb2faf98c6b58@codeaurora.org>
+ <20200601071349.gbuyfaasdu27a3bd@vireshk-i7>
+Message-ID: <4258c6b122fa352a6b5cccb07a9b1203@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It=E2=80=99s my pleasure to contact you through this media because I need a=
-n
-investment assistance in your country. However I have a profitable
-investment proposal with  good interest to share with you, amounted
-the sum of (Twenty Eight Million Four Hundred Thousand United State
-Dollar ($28.400.000.00). If you  are willing to handle this project
-kindly reply urgent to enable me provide you more information about
-the investment funds and the project.
+On 2020-06-01 12:43, Viresh Kumar wrote:
+> On 01-06-20, 12:09, Sibi Sankar wrote:
+>> On 2020-06-01 09:37, Viresh Kumar wrote:
+>> > On 29-05-20, 19:47, Sibi Sankar wrote:
+>> > > opp_np needs to be subjected
+>> > > to NULL check as well.
+>> >
+>> > No, it isn't. It should already be valid and is set by the OPP core.
+>> > Actually we don't need to do of_node_get(opp_table->np) and just use
+>> > np, I did that to not have a special case while putting the resource.
+>> >
+>> 
+>> I should have phrased it differently.
+>> opp_np needs to be checked to deal
+>> with cases where devices don't have
+>> "operating-points-v2" associated with
+>> it.
+>> 
+>> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+>> index a5d87ca0ab571..06976d14e6ccb 100644
+>> --- a/drivers/opp/of.c
+>> +++ b/drivers/opp/of.c
+>> @@ -344,14 +344,14 @@ static int _bandwidth_supported(struct device 
+>> *dev,
+>> struct opp_table *opp_table)
+>> 
+>>                 opp_np = _opp_of_get_opp_desc_node(np, 0);
+>>                 of_node_put(np);
+>> -
+>> -               /* Lets not fail in case we are parsing opp-v1 
+>> bindings */
+>> -               if (!opp_np)
+>> -                       return 0;
+>>         } else {
+>>                 opp_np = of_node_get(opp_table->np);
+>>         }
+>> 
+>> +       /* Lets not fail in case we are parsing opp-v1 bindings */
+>> +       if (!opp_np)
+>> +               return 0;
+>> +
+>> 
+>> sdhci_msm 7c4000.sdhci: OPP table empty
+>> sdhci_msm 7c4000.sdhci: _allocate_opp_table: Error finding 
+>> interconnect
+>> paths: -22
+>> 
+>> I see the following errors without
+>> the check.
+> 
+> My reply unfortunately only considered the case where this routine was
+> called from within the opp table. Are you testing it for the case
+> where you are adding OPPs dynamically from the code ?
 
-I am waiting to hear from you through this my private
-email(daoudaali2200@gmail.com) so we can proceed further.
+Yeah dev_pm_opp_add/dev_pm_opp_set_clkname
+or pretty much any api doing a
+dev_pm_opp_get_opp_table without
+a opp_table node associated with
+it will run into this issue.
 
-Best Regards.
-Mr. Daouda Ali.
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
