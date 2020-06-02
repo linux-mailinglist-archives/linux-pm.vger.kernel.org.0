@@ -2,113 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F471EB4F6
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 07:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B7C1EB60A
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 08:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725787AbgFBFQR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Jun 2020 01:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725841AbgFBFQO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jun 2020 01:16:14 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B8DC061A0E
-        for <linux-pm@vger.kernel.org>; Mon,  1 Jun 2020 22:16:13 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id m2so886044pjv.2
-        for <linux-pm@vger.kernel.org>; Mon, 01 Jun 2020 22:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wDwA49qlibi8ifBKcQK5YxVr+aaj4hDDJcJVTNeIJ48=;
-        b=rM7Q3kkjKcwtSFNIipJS/A4g/HnsQ1TsKTtLks8FS5hyB/S44lrzWqoImAeehYh+Dz
-         WTjzuvsYIhRxoBgcTryPVTOIWEL+q+ftsR62L86UDYi6dFfHRyJLKulD1KLE8H+l+OSt
-         CPu6no5aD/z8x8E6Ggvtgxq4dxz5BtDAKpNF3kF5G5436Km6Y+t8vh5DRd2f6WG9HZSo
-         8f6yhbnLOtumZ3Nqau4SorDMFk2J/8VCtT7EmFVP/RteSMBD/kw18Qjjihr8x0xZ/mdR
-         Wpi0Pr7n6FmV1r4qBYNjk3i36rX1IoST1Aqu91UbSEB/xm3wbC6fBrzrbE6+YJMfcZcy
-         DRAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wDwA49qlibi8ifBKcQK5YxVr+aaj4hDDJcJVTNeIJ48=;
-        b=U/AYRxpwXwPmykCyebqP6M54dCgo5+ZQkQ817FGLW47pzHB0g26iSPPV2kvjc2+KMM
-         AIbM5fW+bLJD8x772XdbInQKFFul8+bz12CRZjjggRAFwzgVXDHl9WXcqa3qmuW3ZyFT
-         RTnRSV4BnDuH3tJ4a00udAf3vGYWq/kjXdu/Ij2cUzWRXnJoTXaqBbG6q4LKUFG16XMc
-         NNMkCx5+rptVGiSLtZj2I5OOElTFKq990zukQvlohc0FfsoeD5QDUoxSNXRYAK9Oz8nB
-         zC5NFV2RZ4kFU/e7vSwkQheTH1DEa4eEjgOSjjQdoFIIelb27HRFofax7vkPb1XnKMJf
-         b3Yg==
-X-Gm-Message-State: AOAM531hJKsIt5brC0aPlPXzd4ivf4t+UlXWHUw/7o+cVr7Alk5QohgK
-        TiViIwAj0lZ7J8YO3DfB2o3o1g==
-X-Google-Smtp-Source: ABdhPJxK9MCNSAN72Ms1ilFwN/924RoU9ltixe5/gs2CCe/vT8GeVBVorAjhiJip1VvS9nwHngjmLQ==
-X-Received: by 2002:a17:90b:30d8:: with SMTP id hi24mr3472370pjb.78.1591074973062;
-        Mon, 01 Jun 2020 22:16:13 -0700 (PDT)
-Received: from localhost ([122.172.62.209])
-        by smtp.gmail.com with ESMTPSA id s8sm994752pjz.44.2020.06.01.22.16.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Jun 2020 22:16:12 -0700 (PDT)
-Date:   Tue, 2 Jun 2020 10:46:09 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Cc:     rjw@rjwysocki.net, Souvik.Chakravarty@arm.com,
-        Thanu.Rangarajan@arm.com, Sudeep.Holla@arm.com,
-        guohanjun@huawei.com, john.garry@huawei.com,
-        jonathan.cameron@huawei.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/2] add SW BOOST support for CPPC
-Message-ID: <20200602051609.ahot4qv2nlb6yh3t@vireshk-i7>
-References: <1590804511-9672-1-git-send-email-wangxiongfeng2@huawei.com>
+        id S1725921AbgFBG5Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Jun 2020 02:57:25 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:52750 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725897AbgFBG5Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jun 2020 02:57:25 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1591081043; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=gLmQdz2bGLYsw+rnxBnJcFNszpdH/RBI0fmfD79V7/k=;
+ b=HCchhsHdZjx7FURvyMH1Du6XtP/8YMA6TdEAhxMo8bBRG1jPZAV4D2jd6iZfQL8m6MCY4tpI
+ M9n3yN/q1HMMd3DQ5RTPkjjlwf+5ODbqBTxNohaXECybVZFAOcJ0OCAfl0YKCFWWVRuoHwdj
+ Rwd4mAuvAlOQ3mqii8ScPoWTL3U=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n12.prod.us-west-2.postgun.com with SMTP id
+ 5ed5f8528e09c0ae09d1b3e2 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 02 Jun 2020 06:57:22
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6C1B9C43387; Tue,  2 Jun 2020 06:57:22 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 953F6C433C9;
+        Tue,  2 Jun 2020 06:57:20 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1590804511-9672-1-git-send-email-wangxiongfeng2@huawei.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 02 Jun 2020 12:27:20 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     sboyd@kernel.org, georgi.djakov@linaro.org, saravanak@google.com,
+        mka@chromium.org, nm@ti.com, bjorn.andersson@linaro.org,
+        agross@kernel.org, rjw@rjwysocki.net,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org,
+        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
+        lukasz.luba@arm.com, sudeep.holla@arm.com, smasetty@codeaurora.org,
+        linux-arm-msm-owner@vger.kernel.org,
+        linux-kernel-owner@vger.kernel.org
+Subject: Re: [PATCH v5 4/5] cpufreq: qcom: Update the bandwidth levels on
+ frequency change
+In-Reply-To: <20200601110116.jteoalg3yjhsbkpw@vireshk-i7>
+References: <20200527202153.11659-1-sibis@codeaurora.org>
+ <20200527202153.11659-5-sibis@codeaurora.org>
+ <20200529100028.2wz2iqi5vqji2heb@vireshk-i7>
+ <a90bce2d52f7cdb726e8b799e3512fad@codeaurora.org>
+ <20200601110116.jteoalg3yjhsbkpw@vireshk-i7>
+Message-ID: <129d8c6c7099ca49dd465b34a6c5fa34@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30-05-20, 10:08, Xiongfeng Wang wrote:
-> ACPI spec 6.2 section 8.4.7.1 provide the following two CPC registers.
+On 2020-06-01 16:31, Viresh Kumar wrote:
+> On 29-05-20, 17:00, Sibi Sankar wrote:
+>> > > +static int qcom_cpufreq_update_opp(struct device *cpu_dev,
+>> > > +				   unsigned long freq_khz,
+>> > > +				   unsigned long volt)
+>> > > +{
+>> > > +	unsigned long freq_hz = freq_khz * 1000;
+>> > > +
+>> > > +	if (dev_pm_opp_adjust_voltage(cpu_dev, freq_hz, volt, volt, volt))
+>> > > +		return dev_pm_opp_add(cpu_dev, freq_hz, volt);
+>> >
+>> > What's going on here ? Why add OPP here ?
+>> 
+>> We update the voltage if opp were
+>> initially added as part of
+>> dev_pm_opp_of_add_table. However
+>> if the cpu node does not have an
+>> opp table associated with it, we
+>> do a opp_add_v1 instead.
 > 
-> "Highest performance is the absolute maximum performance an individual
-> processor may reach, assuming ideal conditions. This performance level
-> may not be sustainable for long durations, and may only be achievable if
-> other platform components are in a specific state; for example, it may
-> require other processors be in an idle state.
-> 
-> Nominal Performance is the maximum sustained performance level of the
-> processor, assuming ideal operating conditions. In absence of an
-> external constraint (power, thermal, etc.) this is the performance level
-> the platform is expected to be able to maintain continuously. All
-> processors are expected to be able to sustain their nominal performance
-> state simultaneously."
-> 
-> We can use Highest Performance as the max performance in boost mode and
-> Nomial Performance as the max performance in non-boost mode. If the
-> Highest Performance is greater than the Nominal Performance, we assume
-> SW BOOST is supported.
-> 
-> Changelog:
-> 
-> v4 -> v5:
-> 	add 'cpu_hotplug_lock' before calling '.set_boost'
-> v3 -> v4:
-> 	run 'boost_set_msr_each' for each CPU in the policy rather than
-> 	each CPU in the system for 'acpi-cpufreq'
-> 	add 'Suggested-by'
-> 
-> Xiongfeng Wang (2):
->   cpufreq: change '.set_boost' to act on only one policy
->   CPPC: add support for SW BOOST
-> 
->  drivers/cpufreq/acpi-cpufreq.c | 14 ++++++-----
->  drivers/cpufreq/cppc_cpufreq.c | 39 +++++++++++++++++++++++++++--
->  drivers/cpufreq/cpufreq.c      | 57 +++++++++++++++++++++++-------------------
->  include/linux/cpufreq.h        |  2 +-
->  4 files changed, 77 insertions(+), 35 deletions(-)
+> Instead of depending on the failure of dev_pm_opp_adjust_voltage(),
+> pass a flag to qcom_cpufreq_update_opp() which will decide if we want
+> to adjust voltage or add an opp.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Sure will add it in the next
+re-spin.
 
 -- 
-viresh
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
