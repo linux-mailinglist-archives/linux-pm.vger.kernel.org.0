@@ -2,130 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1431EB777
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 10:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8401EB8CB
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 11:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726622AbgFBIdP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Jun 2020 04:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725811AbgFBIdP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jun 2020 04:33:15 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FE9C05BD43
-        for <linux-pm@vger.kernel.org>; Tue,  2 Jun 2020 01:33:14 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id e1so2454767wrt.5
-        for <linux-pm@vger.kernel.org>; Tue, 02 Jun 2020 01:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=7H1jGmdpunK0UnpTr7PELYFOau+0SDjGmyZeNU7l2WE=;
-        b=XQyBLPtBdqQOAVQxORH0WMvK8c7jAnhw7HnsfvKWm85fSsgd/SsCqwiw9n6xZK+tx7
-         o4DSQYLwZ8YCxHV59VL9JjH6M+O3AxueEkFGjlwYAFqJBp94Ku6Xi5hzbK3h4Kvg3KPr
-         MmCxgREKkngV8Cbbpe9+M72opU6j6OfcflSXcUpmqvZ8xID5/B0ZJhS6IEQ9WjCnssXp
-         uu64wX9kvwJNZZZQRSfvB8CLAcHOLvZp2Wt8kl3O5jRh/XVkRlALE52jOU+9PWRmChZN
-         +VO3kn5jOnZj+mPkhBYJdJS9o2NKd95hosuB3A12H2sKIwDr4qua1Hy+LFxlDu68FxU2
-         Tv0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=7H1jGmdpunK0UnpTr7PELYFOau+0SDjGmyZeNU7l2WE=;
-        b=T4Jk5/YQQE8jLv6niLNg/rVmfTM4oHZicydixTbNL+f7HVBYfg9046SLo53KTorCur
-         i2qRHoTdk6/qROEeiAckGZHuvUOCsxJeRue9KIfroewfyU+k30eVZP5NkWH7Of7PGfBT
-         theysyqivzREle4zb7bUXHbyWKhIXihGVQPww4a6pX0J8jX3wE4QJGn9Aqqy+E6GxZhf
-         Tw6h8NHyZ+4r3Nc9ISP26zidnSbzKsyUUmWkQ52SSX1pkanqAWdQGjpVWgpMdMFXo46a
-         hyIO7DAx7/Y332zi+ioCXmY26Aw2uj4vSAqqsQG2AZfi5xvzSGBtsMqQn/+0jvWncLZP
-         dMtQ==
-X-Gm-Message-State: AOAM532sjBb/opVfiySrgUNekwmwTuqOzNQqaVZmNTR9Sehw1byL0BJQ
-        GCxfgNM70mFlSf4qLV5c7IGr7w==
-X-Google-Smtp-Source: ABdhPJwTWstLJV8DOsVmKsrBfUkOLHr+Ifb0u8UVqxHHLBh22pbnHCSAkqvAWuYTZbyxJQ25mTIjDQ==
-X-Received: by 2002:adf:a4dd:: with SMTP id h29mr27110163wrb.372.1591086793255;
-        Tue, 02 Jun 2020 01:33:13 -0700 (PDT)
-Received: from dell ([95.147.198.92])
-        by smtp.gmail.com with ESMTPSA id h7sm2489681wml.24.2020.06.02.01.33.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2020 01:33:12 -0700 (PDT)
-Date:   Tue, 2 Jun 2020 09:33:11 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     linux-amlogic@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] mfd: add support for the Khadas System control
- Microcontroller
-Message-ID: <20200602083311.GD3714@dell>
-References: <20200512132613.31507-1-narmstrong@baylibre.com>
- <20200512132613.31507-3-narmstrong@baylibre.com>
- <20200520090101.GE271301@dell>
- <8837fa43-bf46-fdd1-472e-e5f0159dab2c@baylibre.com>
+        id S1726139AbgFBJtN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Jun 2020 05:49:13 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:39654 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725958AbgFBJtN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jun 2020 05:49:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1591091352; x=1622627352;
+  h=references:from:to:cc:subject:in-reply-to:date:
+   message-id:mime-version;
+  bh=XYWvcTMnu5gYjXeMs5ChljnhBkkNboMpnYYArlKHA2Y=;
+  b=WoDUn//rTpWgTuD+HxRRkDzKDOV3Xp69/yl+MDI9lQFz2tvBYpthWNMT
+   9WEddTAzz5Grr4DZDqaJPTa6zvwG/uqqI1QMjKMw54oSdehVunlUhrBW9
+   XREu++t50pZBVWl2MgMjr9hncSaaCXYEYr8jqMFp3qqZz59nXifN3+k32
+   lvCrE1WObAca/SPQHnAHS4vZlAM6TP7TEUzSpisnegZy0hfSJOvxC+EqO
+   ghtoAFBG+vFtr2y5CtV7zL82Jfmg0apLEG1LLLKVmsdt7OvTlQVzDMSey
+   uICZr+ubPEMUJk06YN5bgBmKSKIuNx9Kj1DSsqgLoRt/VN+UmaJGlhifu
+   g==;
+IronPort-SDR: vkMrKR4DTnFoAhQgn4Xj1OqpqZBjuz9tFOz8GKffkGjDmng3TRtTay4RgFkq7ULrjECwGmLp2m
+ MdaD91OpomcTxZoazsPtP8rBvk1J/QPwvHPriOj4gjHo6X3yW+V7odKuskYGG/vk5coh3y+k4v
+ 5vkWGsKDTL2niv/nkykeYnFTG4jIV0YXk4WAsd2uVrVbQ89uuxfPhB3A8oxGLQzsiG5teIAGDZ
+ GxjzyHPPXkMhugow9mwMqubhKeLm9tfEeYLqLs8YPwhZ3VbI/aLrVZOqNwif5U3PoYtoSP0QBS
+ LIk=
+X-IronPort-AV: E=Sophos;i="5.73,463,1583218800"; 
+   d="scan'208";a="78594449"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Jun 2020 02:49:12 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 2 Jun 2020 02:49:12 -0700
+Received: from soft-dev15.microsemi.net.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
+ via Frontend Transport; Tue, 2 Jun 2020 02:49:09 -0700
+References: <20200513130842.24847-1-lars.povlsen@microchip.com> <20200513130842.24847-4-lars.povlsen@microchip.com> <20200528022502.GA3234572@bogus>
+From:   Lars Povlsen <lars.povlsen@microchip.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Lars Povlsen <lars.povlsen@microchip.com>,
+        Sebastian Reichel <sre@kernel.org>, SoC Team <soc@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 3/5] dt-bindings: reset: ocelot: Add documentation for 'microchip,reset-switch-core' property
+In-Reply-To: <20200528022502.GA3234572@bogus>
+Date:   Tue, 2 Jun 2020 11:49:08 +0200
+Message-ID: <87wo4piyqz.fsf@soft-dev15.microsemi.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8837fa43-bf46-fdd1-472e-e5f0159dab2c@baylibre.com>
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 02 Jun 2020, Neil Armstrong wrote:
 
-> On 20/05/2020 11:01, Lee Jones wrote:
-> > On Tue, 12 May 2020, Neil Armstrong wrote:
-> > 
-> >> This Microcontroller is present on the Khadas VIM1, VIM2, VIM3 and Edge
-> >> boards.
-> >>
-> >> It has multiple boot control features like password check, power-on
-> >> options, power-off control and system FAN control on recent boards.
-> >>
-> >> This implements a very basic MFD driver with the fan control and User
-> >> NVMEM cells.
-> >>
-> >> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> >> ---
-> >>  drivers/mfd/Kconfig            |  14 ++++
-> >>  drivers/mfd/Makefile           |   1 +
-> >>  drivers/mfd/khadas-mcu.c       | 143 +++++++++++++++++++++++++++++++++
-> >>  include/linux/mfd/khadas-mcu.h |  91 +++++++++++++++++++++
-> >>  4 files changed, 249 insertions(+)
-> >>  create mode 100644 drivers/mfd/khadas-mcu.c
-> >>  create mode 100644 include/linux/mfd/khadas-mcu.h
-> >>
-> >> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> >> index 0a59249198d3..b95091397052 100644
-> >> --- a/drivers/mfd/Kconfig
-> >> +++ b/drivers/mfd/Kconfig
-> >> @@ -2003,6 +2003,20 @@ config MFD_WCD934X
-> >>  	  This driver provides common support WCD934x audio codec and its
-> >>  	  associated Pin Controller, Soundwire Controller and Audio codec.
-> >>  
-> >> +config MFD_KHADAS_MCU
-> >> +	tristate "Support for Khadas System control Microcontroller"
-> >> +	depends on I2C
-> >> +	depends on OF || COMPILE_TEST
-> >> +	select MFD_CORE
-> >> +	select REGMAP_I2C
-> >> +	help
-> >> +	  Support for the Khadas System control Microcontroller interface present
-> >> +	  on their VIM and Edge boards.
-> >> +
-> >> +	  This driver provides common support for accessing the device,
-> >> +	  additional drivers must be enabled in order to use the functionality
-> >> +	  of the device.
-> > 
-> > It would be good to describe the device here.
-> 
-> Ok
+Rob Herring writes:
 
-If you agree with all review comments, there really is no need to
-reply.  It's a waste of your time and anyone else who cares enough to
-search through looking for replies (as I just did).
+> On Wed, May 13, 2020 at 03:08:40PM +0200, Lars Povlsen wrote:
+>> This documents the 'microchip,reset-switch-core' property in the
+>> ocelot-reset driver.
+>>
+>> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+>> ---
+>>  .../devicetree/bindings/power/reset/ocelot-reset.txt        | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/reset/ocelot-reset.txt b/Documentation/devicetree/bindings/power/reset/ocelot-reset.txt
+>> index 4d530d8154848..20fff03753ad2 100644
+>> --- a/Documentation/devicetree/bindings/power/reset/ocelot-reset.txt
+>> +++ b/Documentation/devicetree/bindings/power/reset/ocelot-reset.txt
+>> @@ -9,9 +9,15 @@ microchip Sparx5 armv8 SoC's.
+>>  Required Properties:
+>>   - compatible: "mscc,ocelot-chip-reset" or "microchip,sparx5-chip-reset"
+>>
+>> +Optional properties:
+>> +- microchip,reset-switch-core : Perform a switch core reset at the
+>> +  time of driver load. This is may be used to initialize the switch
+>> +  core to a known state (before other drivers are loaded).
+>
+> How do you know when other drivers are loaded? This could be a module
+> perhaps. Doesn't seem like something that belongs in DT.
+>
+
+The reset driver is loaded at postcore_initcall() time, which ensures it
+is loaded before other drivers using the switch core. I noticed other
+drivers do the same to do low-level system reset and initialization at
+early boot time.
+
+> Can this behavior be implied with "microchip,sparx5-chip-reset"?
+
+Since we need to cater for both modus operandi, I would need two driver
+compatible strings per platform, which scales worse than a single
+property.
+
+The "microchip,reset-switch-core" is a device configuration property
+which tells the system (driver) how the hw should be handled. Since you
+do not *always* want to reset the switch core (f.ex. when implementing
+systems with warm reboot), I think it makes perfect sense - but I may be
+biased off course :-)
+
+Thank you for (all) of your comments, by the way!
+
+---Lars
+
+>
+> Rob
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Lars Povlsen,
+Microchip
