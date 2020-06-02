@@ -2,66 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE1C1EB752
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 10:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C00A41EB760
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 10:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbgFBI1G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Jun 2020 04:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S1726026AbgFBI3V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Jun 2020 04:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726185AbgFBI1A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jun 2020 04:27:00 -0400
+        with ESMTP id S1725811AbgFBI3U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jun 2020 04:29:20 -0400
 Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA38C061A0E
-        for <linux-pm@vger.kernel.org>; Tue,  2 Jun 2020 01:26:59 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id x14so2453280wrp.2
-        for <linux-pm@vger.kernel.org>; Tue, 02 Jun 2020 01:26:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1973EC061A0E
+        for <linux-pm@vger.kernel.org>; Tue,  2 Jun 2020 01:29:20 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id x13so2458920wrv.4
+        for <linux-pm@vger.kernel.org>; Tue, 02 Jun 2020 01:29:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=subject:to:cc:references:from:autocrypt:organization:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=9iCXZSHoQIXChWxRpGbJdiyfBVJFkoVsgSKtvaGUDDE=;
-        b=BMex2UqMIKtWc12N+ht34kvCEVwkuEFcLfh/zOuN18UXnaApVBCbQze1dtWVChxHsC
-         dsV8TIhVrk/DsEk4hQzx+HHBNClk24BHAZXB/dH4+lwgnirICIelK3FguVwh75U6D1nL
-         iA3wteUo2x2oXaKXQI7jLu6aKOAOJcauBwrG2FLcZCy1AMUXSIhP0JT7RNweNRhju5U7
-         wPO/RYUBoP0yncO1mZivcM42LRMUWzqVH/ReG1b+E0Cz+YelPwb1l+biQryfBBcPovTl
-         c5hoycXDUi36YtJRPufxinLXUS1oiFK77XGl75cK88B9hX31/2raNqJTj673DD4dAQwY
-         kKCw==
+        bh=3RTuazf5i9JHlMDykeEXlm8G4ttdBjukN2WPd0K9oQg=;
+        b=0OW29RiRVrfl1PAiM7rWBjohG+AAVluEPhljP95FZqwFFw30iKHw7brDAg0f/GeMVs
+         +bZi3ifbwWDC2aqMtiP+sW0o/H8L5noshDV3nYGhapv1/02S0kziFr4wm8cokVCCMRi+
+         KEqc15Dd6t2sJZ9QH1OywiaPL2jATu/JGsBP+M9snh13IhglFi10nzCZop3SOV6NBkjw
+         QABJn8kiiggY3oa0u5XC6YO3dLHmsMPX7LGFq6fsAsWDJ3ZeOBa7dSI0HtC5A1nUOxRX
+         yLZkkYtYsPIZKlUQSOqNOtqkFxs+6yuMgVgrV2xJLYNKR+/UaKKrxUoKbSYjHt/6JKd1
+         OdJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :organization:message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=9iCXZSHoQIXChWxRpGbJdiyfBVJFkoVsgSKtvaGUDDE=;
-        b=CNHSQeEkDn0jI2sWszQLL91A7krVNkyOqUPf0Jk+4CdBGiSrKOQQ/NgHoV6ULKvhv+
-         2u0jA0DIpH/fNVGy0KvmYUhmSy6m0NbD7gnkalcQfWcixQX/3khy0QFw0IgDO0FaS824
-         yOyA/Z1Ldlkdtc1HgNt8AfA6BZ80xAeFpvFTzO1WVxBfrhw9kN1trRm8P7GfaRwW74Yk
-         Itkm9nZrwIvMrzFKmsHkYbooy/kVd/y3EHJrj5Yg5ZVrBJOhXC8+8nUGqRJE0D0IeBjc
-         XH+/BeCDnRxDXC/e0ypQlclD4Idr4PJN2ExhzuSip+bL2bG3g6XRnoUW9tWCahwZK+1r
-         c4Fw==
-X-Gm-Message-State: AOAM533LnzHPtNis3SZkmqdYgv66FwxrsNN9VtfNmN7EfsmW4JOVYXYc
-        KR+5KGknQ8tph3T5R/M2xRLtJSql2s9E0g==
-X-Google-Smtp-Source: ABdhPJxm3u1r4/gYE6qwAo+bw0LBlm8qFtLcG1rpeCO7A8p+pGJp4rUpANDZKAXG/PDk9g9nonYnHg==
-X-Received: by 2002:adf:a18b:: with SMTP id u11mr25111061wru.102.1591086417978;
-        Tue, 02 Jun 2020 01:26:57 -0700 (PDT)
+        bh=3RTuazf5i9JHlMDykeEXlm8G4ttdBjukN2WPd0K9oQg=;
+        b=itqFyaWEkJOErYGMw+Lwe99FfMiEsLWELXmXO791FBKHlbil6++gQg+HJCx8g2LlBz
+         XnXL9pc4j9gZzmNoqL5gJa+fVXMs9ISMlsKwV8c2V+XvIMMqfk8wxrVl66HOjVyBXPZB
+         pVjNbBt/FM5FJuq2jZonAzWrLGV4G5H7B64et3w1iGd+jxYm1xWKf4+3S82NAcD2Ft9T
+         n73TPEuxkHI5KgtWpKntO8hpBkwVAVvMK8EzBVUsMwIMum0a/aLI2gMn9T3Ym+HBTVtH
+         wH2Rrq2JBSwb8WsZJAgn4/z/L/d28PfbSeKgamot5uCUpVeyuNS8aeGoxR1w0z4mr9HX
+         23wA==
+X-Gm-Message-State: AOAM531VMZtHeGznKtgbju3AiUBT5a7zLnhz8MUXG/ocS1VxU3uPcDvu
+        SnmHLNsPEyw6jdLtxc3+qaxz8ZwH1o1X0g==
+X-Google-Smtp-Source: ABdhPJyWerqEhvE3tfQLKuPmXHOVf/qgAEIWm2qP/V5PsTcizuOP+D88lFcd81u5QEwSkvhLU9+eCg==
+X-Received: by 2002:adf:9404:: with SMTP id 4mr22319789wrq.367.1591086558569;
+        Tue, 02 Jun 2020 01:29:18 -0700 (PDT)
 Received: from ?IPv6:2a01:e35:2ec0:82b0:acf8:18a8:b3a5:a17b? ([2a01:e35:2ec0:82b0:acf8:18a8:b3a5:a17b])
-        by smtp.gmail.com with ESMTPSA id l17sm2821054wrq.17.2020.06.02.01.26.55
+        by smtp.gmail.com with ESMTPSA id b14sm2401421wmj.47.2020.06.02.01.29.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jun 2020 01:26:57 -0700 (PDT)
-Subject: Re: [PATCH v2 3/6] thermal: add support for the MCU controlled FAN on
- Khadas boards
-To:     Amit Kucheria <amit.kucheria@verdurent.com>
-Cc:     Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-amlogic@lists.infradead.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        lakml <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        Tue, 02 Jun 2020 01:29:17 -0700 (PDT)
+Subject: Re: [PATCH v2 4/6] nvmem: add support for the Khadas MCU Programmable
+ User Memory
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     linux-amlogic@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20200512132613.31507-1-narmstrong@baylibre.com>
- <20200512132613.31507-4-narmstrong@baylibre.com>
- <CAHLCerPiC3QS5u5CGX20q_5aUk4sN5knF4043_=WjtbhDDGuUg@mail.gmail.com>
+ <20200512132613.31507-5-narmstrong@baylibre.com>
+ <09026bde-0ae7-b1a4-835f-bf2481199398@linaro.org>
+ <b885eeb5-1542-775f-ab7b-b1218c6a337a@baylibre.com>
+ <5f24e094-088b-5787-f1be-158ab9412812@linaro.org>
 From:   Neil Armstrong <narmstrong@baylibre.com>
 Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -113,255 +110,280 @@ Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  zR8QplXA5kogS4kLe/7/JmlDMO8Zgm9vKLHSUeesLOrjdZ59EcjldNNBszRZQgEhwaarfz46
  BSwxi7g3Mu7u5kUByanqHyA=
 Organization: Baylibre
-Message-ID: <ea96167b-4382-b2b1-c22e-746641a33768@baylibre.com>
-Date:   Tue, 2 Jun 2020 10:26:55 +0200
+Message-ID: <b55b68fa-1872-199f-77e7-532ba9c78a61@baylibre.com>
+Date:   Tue, 2 Jun 2020 10:29:16 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <CAHLCerPiC3QS5u5CGX20q_5aUk4sN5knF4043_=WjtbhDDGuUg@mail.gmail.com>
+In-Reply-To: <5f24e094-088b-5787-f1be-158ab9412812@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/05/2020 08:41, Amit Kucheria wrote:
-> On Tue, May 12, 2020 at 6:56 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->>
->> The new Khadas VIM2 and VIM3 boards controls the cooling fan via the
->> on-board microcontroller.
->>
->> This implements the FAN control as thermal devices and as cell of the Khadas
->> MCU MFD driver.
->>
->> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
->> ---
->>  drivers/thermal/Kconfig          |  10 ++
->>  drivers/thermal/Makefile         |   1 +
->>  drivers/thermal/khadas_mcu_fan.c | 174 +++++++++++++++++++++++++++++++
->>  3 files changed, 185 insertions(+)
->>  create mode 100644 drivers/thermal/khadas_mcu_fan.c
->>
->> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
->> index 91af271e9bb0..72b3960cc5ac 100644
->> --- a/drivers/thermal/Kconfig
->> +++ b/drivers/thermal/Kconfig
->> @@ -490,4 +490,14 @@ config SPRD_THERMAL
->>         help
->>           Support for the Spreadtrum thermal sensor driver in the Linux thermal
->>           framework.
->> +
->> +config KHADAS_MCU_FAN_THERMAL
->> +       tristate "Khadas MCU controller FAN cooling support"
->> +       depends on OF || COMPILE_TEST
+On 15/05/2020 12:55, Srinivas Kandagatla wrote:
 > 
-> Could you add a depends on the some board/SoC Kconfig option here so
-> this doesn't show up for non-Amlogic/non-Khadas boards?
+> 
+> On 13/05/2020 13:33, Neil Armstrong wrote:
+>> On 13/05/2020 12:34, Srinivas Kandagatla wrote:
+>>>
+>>>
+>>> On 12/05/2020 14:26, Neil Armstrong wrote:
+>>>> The new Khadas VIM2, VIM3 and Edge boards embeds an on-board microcontroller
+>>>> offering a 56bytes User Programmable NVMEM array.
+>>>>
+>>>> This array needs a password to be writable, thus a password sysfs file
+>>>> has been added on the device node to unlock the NVMEM.
+>>>
+>>> Is this one time programmable? Or does it need to be unlocked for every read/write?
+>>
+>> It can be rewritten, and needs the password to read & write.
+>>
+>>>
+>>> How can you make sure that the memory is unlocked before making attempt to read/write?
+>>
+>> The only way to know it's unlock is reading back the password when unlocked.
+> 
+> 
+> Current code has no such checks for every read/write?
+> and looks very disconnected w.r.t to password and read/writes.
+> 
+> If user attempts to read/write he will not be aware that he should program the password first!
+> 
+> Also if the password is static or un-changed then why not just statically program this from the driver rather than providing sysfs file?
 
-Ok
+The passworsd can be changed, how should this be taken in account ?
 
 > 
-> Looks OK otherwise.
+> I dont see how kernel nvmem read/write interface can make sure that memory is unlocked?
+
+Not sure how to be sure, if locked all the user memory and password is read as 0xff
+
 > 
->> +       select MFD_CORE
->> +       select REGMAP
->> +       help
->> +         If you say yes here you get support for the FAN controlled
->> +         by the Microcontroller found on the Khadas VIM boards.
->> +
->>  endif
->> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
->> index 8c8ed7b79915..460428c2122c 100644
->> --- a/drivers/thermal/Makefile
->> +++ b/drivers/thermal/Makefile
->> @@ -60,3 +60,4 @@ obj-$(CONFIG_ZX2967_THERMAL)  += zx2967_thermal.o
->>  obj-$(CONFIG_UNIPHIER_THERMAL) += uniphier_thermal.o
->>  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
->>  obj-$(CONFIG_SPRD_THERMAL)     += sprd_thermal.o
->> +obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)   += khadas_mcu_fan.o
->> diff --git a/drivers/thermal/khadas_mcu_fan.c b/drivers/thermal/khadas_mcu_fan.c
->> new file mode 100644
->> index 000000000000..044d4aba8be2
->> --- /dev/null
->> +++ b/drivers/thermal/khadas_mcu_fan.c
->> @@ -0,0 +1,174 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +/*
->> + * Khadas MCU Controlled FAN driver
->> + *
->> + * Copyright (C) 2020 BayLibre SAS
->> + * Author(s): Neil Armstrong <narmstrong@baylibre.com>
->> + */
->> +
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/mfd/khadas-mcu.h>
->> +#include <linux/regmap.h>
->> +#include <linux/sysfs.h>
->> +#include <linux/thermal.h>
->> +
->> +#define MAX_LEVEL 3
->> +
->> +struct khadas_mcu_fan_ctx {
->> +       struct khadas_mcu *mcu;
->> +       unsigned int level;
->> +       struct thermal_cooling_device *cdev;
->> +};
->> +
->> +static int khadas_mcu_fan_set_level(struct khadas_mcu_fan_ctx *ctx,
->> +                                   unsigned int level)
->> +{
->> +       int ret;
->> +
->> +       ret = regmap_write(ctx->mcu->map, KHADAS_MCU_CMD_FAN_STATUS_CTRL_REG,
->> +                          level);
->> +       if (ret)
->> +               return ret;
->> +
->> +       ctx->level = level;
->> +
->> +       return 0;
->> +}
->> +
->> +static int khadas_mcu_fan_get_max_state(struct thermal_cooling_device *cdev,
->> +                                       unsigned long *state)
->> +{
->> +       struct khadas_mcu_fan_ctx *ctx = cdev->devdata;
->> +
->> +       if (!ctx)
->> +               return -EINVAL;
->> +
->> +       *state = MAX_LEVEL;
->> +
->> +       return 0;
->> +}
->> +
->> +static int khadas_mcu_fan_get_cur_state(struct thermal_cooling_device *cdev,
->> +                                       unsigned long *state)
->> +{
->> +       struct khadas_mcu_fan_ctx *ctx = cdev->devdata;
->> +
->> +       if (!ctx)
->> +               return -EINVAL;
->> +
->> +       *state = ctx->level;
->> +
->> +       return 0;
->> +}
->> +
->> +static int
->> +khadas_mcu_fan_set_cur_state(struct thermal_cooling_device *cdev,
->> +                            unsigned long state)
->> +{
->> +       struct khadas_mcu_fan_ctx *ctx = cdev->devdata;
->> +
->> +       if (!ctx || (state > MAX_LEVEL))
->> +               return -EINVAL;
->> +
->> +       if (state == ctx->level)
->> +               return 0;
->> +
->> +       return khadas_mcu_fan_set_level(ctx, state);
->> +}
->> +
->> +static const struct thermal_cooling_device_ops khadas_mcu_fan_cooling_ops = {
->> +       .get_max_state = khadas_mcu_fan_get_max_state,
->> +       .get_cur_state = khadas_mcu_fan_get_cur_state,
->> +       .set_cur_state = khadas_mcu_fan_set_cur_state,
->> +};
->> +
->> +static int khadas_mcu_fan_probe(struct platform_device *pdev)
->> +{
->> +       struct khadas_mcu *mcu = dev_get_drvdata(pdev->dev.parent);
->> +       struct thermal_cooling_device *cdev;
->> +       struct device *dev = &pdev->dev;
->> +       struct khadas_mcu_fan_ctx *ctx;
->> +       int ret;
->> +
->> +       ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
->> +       if (!ctx)
->> +               return -ENOMEM;
->> +       ctx->mcu = mcu;
->> +       platform_set_drvdata(pdev, ctx);
->> +
->> +       cdev = devm_thermal_of_cooling_device_register(dev->parent,
->> +                       dev->parent->of_node, "khadas-mcu-fan", ctx,
->> +                       &khadas_mcu_fan_cooling_ops);
->> +       if (IS_ERR(cdev)) {
->> +               ret = PTR_ERR(cdev);
->> +               dev_err(dev,
->> +                               "Failed to register khadas-mcu-fan as cooling device: %d\n",
->> +                               ret);
->> +               return ret;
->> +       }
->> +       ctx->cdev = cdev;
->> +       thermal_cdev_update(cdev);
->> +
->> +       return 0;
->> +}
->> +
->> +static int khadas_mcu_fan_disable(struct device *dev)
->> +{
->> +       struct khadas_mcu_fan_ctx *ctx = dev_get_drvdata(dev);
->> +       unsigned int level_save = ctx->level;
->> +       int ret;
->> +
->> +       ret = khadas_mcu_fan_set_level(ctx, 0);
->> +       if (ret)
->> +               return ret;
->> +
->> +       ctx->level = level_save;
->> +
->> +       return 0;
->> +}
->> +
->> +static void khadas_mcu_fan_shutdown(struct platform_device *pdev)
->> +{
->> +       khadas_mcu_fan_disable(&pdev->dev);
->> +}
->> +
->> +#ifdef CONFIG_PM_SLEEP
->> +static int khadas_mcu_fan_suspend(struct device *dev)
->> +{
->> +       return khadas_mcu_fan_disable(dev);
->> +}
->> +
->> +static int khadas_mcu_fan_resume(struct device *dev)
->> +{
->> +       struct khadas_mcu_fan_ctx *ctx = dev_get_drvdata(dev);
->> +
->> +       return khadas_mcu_fan_set_level(ctx, ctx->level);
->> +}
->> +#endif
->> +
->> +static SIMPLE_DEV_PM_OPS(khadas_mcu_fan_pm, khadas_mcu_fan_suspend,
->> +                        khadas_mcu_fan_resume);
->> +
->> +static const struct platform_device_id khadas_mcu_fan_id_table[] = {
->> +       { .name = "khadas-mcu-fan-ctrl", },
->> +       {},
->> +};
->> +MODULE_DEVICE_TABLE(platform, khadas_mcu_fan_id_table);
->> +
->> +static struct platform_driver khadas_mcu_fan_driver = {
->> +       .probe          = khadas_mcu_fan_probe,
->> +       .shutdown       = khadas_mcu_fan_shutdown,
->> +       .driver = {
->> +               .name           = "khadas-mcu-fan-ctrl",
->> +               .pm             = &khadas_mcu_fan_pm,
->> +       },
->> +       .id_table       = khadas_mcu_fan_id_table,
->> +};
->> +
->> +module_platform_driver(khadas_mcu_fan_driver);
->> +
->> +MODULE_AUTHOR("Neil Armstrong <narmstrong@baylibre.com>");
->> +MODULE_DESCRIPTION("Khadas MCU FAN driver");
->> +MODULE_LICENSE("GPL");
->> --
->> 2.22.0
+> Who is the real consumer for this provider?
+
+well, it's more user-space, indeed without the in-kernel password unlock, kernel won't be able
+to make great use of the data.
+
+I'll drop for next serie until we have a clearer view.
+
+Neil
+
+> 
+> --srini
+> 
+> 
+>>
+>>>
+>>>>
+>>>> The default 6bytes password id: "Khadas"
+>>>>
+>>>> This implements the user NVMEM devices as cell of the Khadas MCU MFD driver.
+>>>>
+>>>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+>>>> ---
+>>>>    drivers/nvmem/Kconfig               |   8 ++
+>>>>    drivers/nvmem/Makefile              |   2 +
+>>>>    drivers/nvmem/khadas-mcu-user-mem.c | 128 ++++++++++++++++++++++++++++
+>>>>    3 files changed, 138 insertions(+)
+>>>>    create mode 100644 drivers/nvmem/khadas-mcu-user-mem.c
+>>>>
+>>>> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+>>>> index d7b7f6d688e7..92cd4f6aa931 100644
+>>>> --- a/drivers/nvmem/Kconfig
+>>>> +++ b/drivers/nvmem/Kconfig
+>>>> @@ -67,6 +67,14 @@ config JZ4780_EFUSE
+>>>>          To compile this driver as a module, choose M here: the module
+>>>>          will be called nvmem_jz4780_efuse.
+>>>>    +config NVMEM_KHADAS_MCU_USER_MEM
+>>>> +    tristate "Khadas MCU User programmable memory support"
+>>>> +    depends on MFD_KHADAS_MCU
+>>>> +    depends on REGMAP
+>>>> +    help
+>>>> +      This is a driver for the MCU User programmable memory
+>>>> +      available on the Khadas VIM and Edge boards.
+>>>> +
+>>>>    config NVMEM_LPC18XX_EEPROM
+>>>>        tristate "NXP LPC18XX EEPROM Memory Support"
+>>>>        depends on ARCH_LPC18XX || COMPILE_TEST
+>>>> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
+>>>> index a7c377218341..0516a309542d 100644
+>>>> --- a/drivers/nvmem/Makefile
+>>>> +++ b/drivers/nvmem/Makefile
+>>>> @@ -17,6 +17,8 @@ obj-$(CONFIG_NVMEM_IMX_OCOTP_SCU)    += nvmem-imx-ocotp-scu.o
+>>>>    nvmem-imx-ocotp-scu-y        := imx-ocotp-scu.o
+>>>>    obj-$(CONFIG_JZ4780_EFUSE)        += nvmem_jz4780_efuse.o
+>>>>    nvmem_jz4780_efuse-y        := jz4780-efuse.o
+>>>> +obj-$(CONFIG_NVMEM_KHADAS_MCU_USER_MEM)    += nvmem-khadas-mcu-user-mem.o
+>>>> +nvmem-khadas-mcu-user-mem-y    := khadas-mcu-user-mem.o
+>>>>    obj-$(CONFIG_NVMEM_LPC18XX_EEPROM)    += nvmem_lpc18xx_eeprom.o
+>>>>    nvmem_lpc18xx_eeprom-y    := lpc18xx_eeprom.o
+>>>>    obj-$(CONFIG_NVMEM_LPC18XX_OTP)    += nvmem_lpc18xx_otp.o
+>>>> diff --git a/drivers/nvmem/khadas-mcu-user-mem.c b/drivers/nvmem/khadas-mcu-user-mem.c
+>>>> new file mode 100644
+>>>> index 000000000000..a1d5ae9a030c
+>>>> --- /dev/null
+>>>> +++ b/drivers/nvmem/khadas-mcu-user-mem.c
+>>>> @@ -0,0 +1,128 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0
+>>>> +/*
+>>>> + * Driver for Khadas MCU User programmable Memory
+>>>> + *
+>>>> + * Copyright (C) 2020 BayLibre SAS
+>>>> + * Author(s): Neil Armstrong <narmstrong@baylibre.com>
+>>>> + */
+>>>> +
+>>>> +#include <linux/clk.h>
+>>>
+>>> Why do we need this header?
+>>
+>> Will drop
+>>
+>>>
+>>>> +#include <linux/module.h>
+>>>> +#include <linux/nvmem-provider.h>
+>>>> +#include <linux/mfd/khadas-mcu.h>
+>>>> +#include <linux/regmap.h>
+>>>> +#include <linux/of.h>
+>>>> +#include <linux/platform_device.h>
+>>>> +
+>>>> +static int khadas_mcu_user_mem_read(void *context, unsigned int offset,
+>>>> +                void *val, size_t bytes)
+>>>> +{
+>>>> +    struct khadas_mcu *khadas_mcu = context;
+>>>> +
+>>>> +    return regmap_bulk_read(khadas_mcu->map,
+>>>> +                KHADAS_MCU_USER_DATA_0_REG + offset,
+>>>> +                val, bytes);
+>>>> +}
+>>>> +
+>>>> +static int khadas_mcu_user_mem_write(void *context, unsigned int offset,
+>>>> +                 void *val, size_t bytes)
+>>>> +{
+>>>> +    struct khadas_mcu *khadas_mcu = context;
+>>>> +
+>>>> +    return regmap_bulk_write(khadas_mcu->map,
+>>>> +                KHADAS_MCU_USER_DATA_0_REG + offset,
+>>>> +                val, bytes);
+>>>> +}
+>>>> +
+>>>> +static ssize_t password_store(struct device *dev, struct device_attribute *attr,
+>>>> +                 const char *buf, size_t count)
+>>>> +{
+>>>> +    struct khadas_mcu *khadas_mcu = dev_get_drvdata(dev);
+>>>> +    int i, ret;
+>>>> +
+>>>> +    if (count < 6)
+>>>> +        return -EINVAL;
+>>>
+>>> Possibly this magic 6 value needs proper define. An additional check here for > 6 would be better as well.
+>>
+>> Ok
+>>
+>>>
+>>>> +
+>>>> +    ret = regmap_write(khadas_mcu->map, KHADAS_MCU_PASSWD_START_REG, 1);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    for (i = 0 ; i < 6 ; ++i) {
+>>>> +        ret = regmap_write(khadas_mcu->map,
+>>>> +                   KHADAS_MCU_CHECK_USER_PASSWD_REG,
+>>>> +                   buf[i]);
+>>>> +        if (ret)
+>>>> +            goto out;
+>>>> +    }
+>>>> +
+>>>> +    ret = regmap_write(khadas_mcu->map, KHADAS_MCU_PASSWD_START_REG, 0);
+>>>> +    if (ret)
+>>>> +        return ret;
+>>>> +
+>>>> +    return count;
+>>>> +out:
+>>>> +    regmap_write(khadas_mcu->map, KHADAS_MCU_PASSWD_START_REG, 0);
+>>>> +
+>>>> +    return ret;
+>>>> +}
+>>>> +
+>>>> +static DEVICE_ATTR_WO(password);
+>>>> +
+>>>> +static struct attribute *khadas_mcu_user_mem_sysfs_attributes[] = {
+>>>> +    &dev_attr_password.attr,
+>>>> +    NULL,
+>>>> +};
+>>>> +
+>>>> +static const struct attribute_group khadas_mcu_user_mem_sysfs_attr_group = {
+>>>> +    .attrs = khadas_mcu_user_mem_sysfs_attributes,
+>>>> +};
+>>>> +
+>>>> +static int khadas_mcu_user_mem_probe(struct platform_device *pdev)
+>>>> +{
+>>>> +    struct khadas_mcu *khadas_mcu = dev_get_drvdata(pdev->dev.parent);
+>>>
+>>> You could probably get away with dependency of this structure and the header itself by directly getting hold of regmap from parent device.
+>>
+>> Ok
+>>
+>>>
+>>>
+>>>> +    struct device *dev = &pdev->dev;
+>>>> +    struct nvmem_device *nvmem;
+>>>> +    struct nvmem_config *econfig;
+>>>> +
+>>>> +    econfig = devm_kzalloc(dev, sizeof(*econfig), GFP_KERNEL);
+>>>> +    if (!econfig)
+>>>> +        return -ENOMEM;
+>>>> +
+>>>> +    econfig->dev = pdev->dev.parent;
+>>>> +    econfig->name = dev_name(pdev->dev.parent);
+>>>> +    econfig->stride = 1;
+>>>> +    econfig->word_size = 1;
+>>>> +    econfig->reg_read = khadas_mcu_user_mem_read;
+>>>> +    econfig->reg_write = khadas_mcu_user_mem_write;
+>>>> +    econfig->size = 56;
+>>> define 56 to make it more readable!
+>>
+>> Ok
+>>
+>>>
+>>>> +    econfig->priv = khadas_mcu;
+>>>> +
+>>>> +    platform_set_drvdata(pdev, khadas_mcu);
+>>>> +
+>>>> +    nvmem = devm_nvmem_register(&pdev->dev, econfig);
+>>>> +    if (IS_ERR(nvmem))
+>>>> +        return PTR_ERR(nvmem);
+>>>> +
+>>>> +    return sysfs_create_group(&pdev->dev.kobj,
+>>>> +                  &khadas_mcu_user_mem_sysfs_attr_group);
+>>>> +}
+>>>> +
+>>>> +static const struct platform_device_id khadas_mcu_user_mem_id_table[] = {
+>>>> +    { .name = "khadas-mcu-user-mem", },
+>>>> +    {},
+>>>> +};
+>>>> +MODULE_DEVICE_TABLE(platform, khadas_mcu_user_mem_id_table);
+>>>> +
+>>>> +static struct platform_driver khadas_mcu_user_mem_driver = {
+>>>> +    .probe = khadas_mcu_user_mem_probe,
+>>>> +    .driver = {
+>>>> +        .name = "khadas-mcu-user-mem",
+>>>> +    },
+>>>> +    .id_table = khadas_mcu_user_mem_id_table,
+>>>> +};
+>>>> +
+>>>> +module_platform_driver(khadas_mcu_user_mem_driver);
+>>>> +
+>>>> +MODULE_AUTHOR("Neil Armstrong <narmstrong@baylibre.com>");
+>>>> +MODULE_DESCRIPTION("Khadas MCU User MEM driver");
+>>>> +MODULE_LICENSE("GPL v2");
+>>>>
+>>
+>> Thanks for the review.
+>>
+>> Neil
 >>
 
