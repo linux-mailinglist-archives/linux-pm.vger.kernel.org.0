@@ -2,123 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 254211EB23B
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 01:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 408D21EB288
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 02:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725841AbgFAXgn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jun 2020 19:36:43 -0400
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:59549 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725802AbgFAXgm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 19:36:42 -0400
+        id S1725944AbgFBAHJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jun 2020 20:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725446AbgFBAHI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 1 Jun 2020 20:07:08 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0B6C05BD43
+        for <linux-pm@vger.kernel.org>; Mon,  1 Jun 2020 17:07:08 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id f5so1262309wmh.2
+        for <linux-pm@vger.kernel.org>; Mon, 01 Jun 2020 17:07:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1591054601; x=1622590601;
-  h=from:to:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version:subject;
-  bh=J/MloPbOinRJ95w81UPzW+FxLSViVtVGzpvoTyLM11E=;
-  b=RZxK3wAOHv6CMin5dMxgBXCRZ9obWrv84xYhEPiBIL3JP2iPgWCZwwFw
-   MM5UMHV9x/2Qdd3ctwiXXfVvBI85t5xZo9erEs3RhTlSWjyNfakuvmq83
-   GgvgzIF33CIaUY4r/+N2Gr61rKg5m85UmMgl/lUZo96Vx6jv+cr0f2+0i
-   U=;
-IronPort-SDR: LkBdX1Jax7kcHTVh6vnZJsyZjBLWu31bHv/02Ku7vm+Mkckt6fxAI0NtZC78idaa9UVK8IjDRw
- A+7M5cTZONqA==
-X-IronPort-AV: E=Sophos;i="5.73,462,1583193600"; 
-   d="scan'208";a="33842841"
-Subject: Re: [PATCH 02/12] xenbus: add freeze/thaw/restore callbacks support
-Thread-Topic: [PATCH 02/12] xenbus: add freeze/thaw/restore callbacks support
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-5bdc5131.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 01 Jun 2020 23:36:26 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
-        by email-inbound-relay-2b-5bdc5131.us-west-2.amazon.com (Postfix) with ESMTPS id C2C57A1F45;
-        Mon,  1 Jun 2020 23:36:24 +0000 (UTC)
-Received: from EX13D10UWB001.ant.amazon.com (10.43.161.111) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Mon, 1 Jun 2020 23:36:24 +0000
-Received: from EX13D07UWB001.ant.amazon.com (10.43.161.238) by
- EX13D10UWB001.ant.amazon.com (10.43.161.111) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Mon, 1 Jun 2020 23:36:24 +0000
-Received: from EX13D07UWB001.ant.amazon.com ([10.43.161.238]) by
- EX13D07UWB001.ant.amazon.com ([10.43.161.238]) with mapi id 15.00.1497.006;
- Mon, 1 Jun 2020 23:36:23 +0000
-From:   "Agarwal, Anchal" <anchalag@amazon.com>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "roger.pau@citrix.com" <roger.pau@citrix.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
-Thread-Index: AQHWLjS9hSpS5JM2xU+iWpBujRQ276jBTrMAgAK6doA=
-Date:   Mon, 1 Jun 2020 23:36:23 +0000
-Message-ID: <687F52C0-A277-4D21-8802-3CF1358EEB31@amazon.com>
-References: <cover.1589926004.git.anchalag@amazon.com>
- <7fd12227f923eacc5841b47bd69f72b4105843a7.1589926004.git.anchalag@amazon.com>
- <835ca864-3e35-9a82-f3fd-24ca4e2ec06e@oracle.com>
-In-Reply-To: <835ca864-3e35-9a82-f3fd-24ca4e2ec06e@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.162.200]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E4B98ACC553D1F40BCA6C165846D175D@amazon.com>
-Content-Transfer-Encoding: base64
+        d=colorremedies-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=/isNv6SGnX5LsLB01BWCVpvM2d/HaAsQOpGW8ggH+6Y=;
+        b=shoS+Izrlimff66QPQteZKNveX7M94sZZkXIhOiQJJe+25Di7AKrSlxOCJbAgCuwXI
+         O/2ovZyc069xkn9JXihv0Fgl6/xoxXjnVobQMKXHw4URObX5vjPhVGVm5fTY8HDXu8Ac
+         k9KNObAaOCC8on3JUm1MQ+WuG/gCQ4/GvOSDTB0KGvAoPPQ5usFiE8w2+12VsAQypk9P
+         1nzKdm+wSpeX7RTNrBXgucjNjSGJKmM58J9gRiZKaMqM7eqn7meAUvuLlBKq9s+zTqao
+         XMGTPZ+N29rPZ/CRk8T8oZrGo9ueq2yFbPgME4i+WITu76+1dWjVLL36oHIz3SQydkmZ
+         0JOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=/isNv6SGnX5LsLB01BWCVpvM2d/HaAsQOpGW8ggH+6Y=;
+        b=P765cBNQ9aYqhURRqBDGpxkZyx/qMQgezcqSS6vf1JNmPI0A9hx1SLDCqIt2Prd+Ck
+         3yOCdT+XpVbpFP0ZWYwPiyMmpqOd8XALtvfWPacJEuUBDWhIH6A4/1vVDWWsyUA5/Fb0
+         13+u6D6nnPzzKQURv0AptK3FB0vEq3Ah8wqyeddRD69FOUs8wLm5nIQXCYbov31x0W3U
+         /g3/IqOvPWmLqIhz/GswVEsujgbbOE9rc1iuAkkxa4cTPobpvPwbWptNGcEQKDk9nhXA
+         +s5cxRPk8yI4CCWKUC9DuoddOvGtHpgJyDoDcmhBO0an0iKGfZ0HvR8eZQNb3/fI2D8f
+         J+XQ==
+X-Gm-Message-State: AOAM530SBzb7y1MtctTz+2mBkYFcofjKF1gq4y1MraWkcnbqUoBiQBa6
+        1OeKaLZ6IXsQeuH6qz0PKjJsggmleS7xt2gOZKQX/n1BWZq7Jg==
+X-Google-Smtp-Source: ABdhPJw+dDYPhNZspHV8oM5ALd1Xq1803dli9lham6WJv2G6ZgaKMjTuRnobtlXBtV0NQxI8oHGV5cuqc6UxmUISuUM=
+X-Received: by 2002:a1c:230a:: with SMTP id j10mr1517131wmj.124.1591056426774;
+ Mon, 01 Jun 2020 17:07:06 -0700 (PDT)
 MIME-Version: 1.0
+From:   Chris Murphy <lists@colorremedies.com>
+Date:   Mon, 1 Jun 2020 18:06:50 -0600
+Message-ID: <CAJCQCtQVGqxtZZTRgscT7e4inTacAd7KAmoNOz3gB4Hf1Nkp0w@mail.gmail.com>
+Subject: PM: Image not found (code -22)
+To:     Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DQoNCu+7vyAgICBDQVVUSU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQgZnJvbSBvdXRzaWRlIG9m
-IHRoZSBvcmdhbml6YXRpb24uIERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRz
-IHVubGVzcyB5b3UgY2FuIGNvbmZpcm0gdGhlIHNlbmRlciBhbmQga25vdyB0aGUgY29udGVudCBp
-cyBzYWZlLg0KDQoNCg0KICAgIE9uIDUvMTkvMjAgNzoyNSBQTSwgQW5jaGFsIEFnYXJ3YWwgd3Jv
-dGU6DQogICAgPg0KICAgID4gIGludCB4ZW5idXNfZGV2X3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpk
-ZXYpDQogICAgPiAgew0KICAgID4gLSAgICAgaW50IGVycjsNCiAgICA+ICsgICAgIGludCBlcnIg
-PSAwOw0KDQoNCiAgICBUaGF0J3Mgbm90IG5lY2Vzc2FyeS4NCkFDSy4NCg0KICAgID4gICAgICAg
-c3RydWN0IHhlbmJ1c19kcml2ZXIgKmRydjsNCiAgICA+ICAgICAgIHN0cnVjdCB4ZW5idXNfZGV2
-aWNlICp4ZGV2DQogICAgPiAgICAgICAgICAgICAgID0gY29udGFpbmVyX29mKGRldiwgc3RydWN0
-IHhlbmJ1c19kZXZpY2UsIGRldik7DQogICAgPiAtDQogICAgPiArICAgICBib29sIHhlbl9zdXNw
-ZW5kID0geGVuX3N1c3BlbmRfbW9kZV9pc194ZW5fc3VzcGVuZCgpOw0KICAgID4gICAgICAgRFBS
-SU5USygiJXMiLCB4ZGV2LT5ub2RlbmFtZSk7DQogICAgPg0KICAgID4gICAgICAgaWYgKGRldi0+
-ZHJpdmVyID09IE5VTEwpDQogICAgPiBAQCAtNjI3LDI0ICs2NDUsMzIgQEAgaW50IHhlbmJ1c19k
-ZXZfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikNCiAgICA+ICAgICAgIGRydiA9IHRvX3hlbmJ1
-c19kcml2ZXIoZGV2LT5kcml2ZXIpOw0KICAgID4gICAgICAgZXJyID0gdGFsa190b19vdGhlcmVu
-ZCh4ZGV2KTsNCiAgICA+ICAgICAgIGlmIChlcnIpIHsNCiAgICA+IC0gICAgICAgICAgICAgcHJf
-d2FybigicmVzdW1lICh0YWxrX3RvX290aGVyZW5kKSAlcyBmYWlsZWQ6ICVpXG4iLA0KICAgID4g
-KyAgICAgICAgICAgICBwcl93YXJuKCIlcyAodGFsa190b19vdGhlcmVuZCkgJXMgZmFpbGVkOiAl
-aVxuIiwNCg0KDQogICAgUGxlYXNlIHVzZSBkZXZfd2FybigpIGV2ZXJ5d2hlcmUsIHdlIGp1c3Qg
-aGFkIGEgYnVuY2ggb2YgcGF0Y2hlcyB0aGF0DQogICAgcmVwbGFjZWQgcHJfd2FybigpLiBJbiBm
-YWN0LCAgdGhpcyBpcyBvbmUgb2YgdGhlIGxpbmVzIHRoYXQgZ290IGNoYW5nZWQuDQoNCkFDSy4g
-V2lsbCBzZW5kIGZpeGVzIGluIG5leHQgc2VyaWVzDQoNCiAgICA+DQogICAgPiAgaW50IHhlbmJ1
-c19kZXZfY2FuY2VsKHN0cnVjdCBkZXZpY2UgKmRldikNCiAgICA+ICB7DQogICAgPiAtICAgICAv
-KiBEbyBub3RoaW5nICovDQogICAgPiAtICAgICBEUFJJTlRLKCJjYW5jZWwiKTsNCiAgICA+ICsg
-ICAgIGludCBlcnIgPSAwOw0KDQoNCiAgICBBZ2Fpbiwgbm8gbmVlZCB0byBpbml0aWFsaXplLg0K
-DQpBQ0suDQogICAgPiArICAgICBzdHJ1Y3QgeGVuYnVzX2RyaXZlciAqZHJ2Ow0KICAgID4gKyAg
-ICAgc3RydWN0IHhlbmJ1c19kZXZpY2UgKnhkZXYNCiAgICA+ICsgICAgICAgICAgICAgPSBjb250
-YWluZXJfb2YoZGV2LCBzdHJ1Y3QgeGVuYnVzX2RldmljZSwgZGV2KTsNCg0KDQogICAgeGVuZGV2
-IHBsZWFzZSB0byBiZSBjb25zaXN0ZW50IHdpdGggb3RoZXIgY29kZS4gQW5kIHVzZSB0b194ZW5i
-dXNfZGV2aWNlKCkuDQpBQ0suDQoNCiAgICAtYm9yaXMNCg0KSSB3aWxsIHB1dCB0aGUgZml4ZXMg
-aW4gbmV4dCByb3VuZCBvZiBwYXRjaGVzLg0KDQpUaGFua3MsDQpBbmNoYWwNCg0KDQo=
+Hi,
+
+I'm seeing this when attempting to hibernate using 'systemctl
+hibernate' with thefollowing kernels. These are the last lines in the
+journal for each kernel version.
+
+5.5.19-100.fc30.x86_64
+
+[  197.383204] fmac.local systemd[1]: Reached target Sleep.
+[  197.384902] fmac.local systemd[1]: Starting Hibernate...
+[  197.402982] fmac.local kernel: PM: Image not found (code -22)
+
+5.6.13-300.fc32.x86_64
+
+[   65.151923] fmac.local systemd[1]: Reached target Sleep.
+[   65.153707] fmac.local systemd[1]: Starting Hibernate...
+[   65.230276] fmac.local kernel: PM: Image not found (code -22)
+[   65.165588] fmac.local systemd-sleep[2484]: Suspending system...
+[   65.233176] fmac.local kernel: PM: hibernation: hibernation entry
+
+5.7.0-0.rc7.1.fc33.x86_64
+
+[   46.426356] fmac.local systemd[1]: Reached target Sleep.
+[   46.427600] fmac.local systemd[1]: Starting Hibernate...
+[   46.923201] fmac.local kernel: PM: Image not found (code -22)
+[   46.440792] fmac.local systemd-sleep[2461]: Suspending system...
+[   46.925332] fmac.local kernel: PM: hibernation: hibernation entry
+
+
+1. The terminology is confusing: sleep, suspend, hibernate. These
+things aren't all the same thing. Suspend is ambiguous, it could be
+suspend-to-ram or suspend-to-disk.
+
+2. What is "image not found code -22"?
+
+3. Does hibernation: hibernation entry mean the hibernation definitely
+was committed to disk?
+
+4. I don't read C pretty much at all, but I can tell in hibernate.c
+that there are multiple steps for hibernation entry including multiple
+sanity checks. And the same for hibernation exit/resume. And yet there
+seems to be a lack of milestone reporting for each one of these so a
+mortal use could have some idea which one of these did and did not
+work. This makes hibernation difficult to troubleshoot.
+
+5. In each subsequent boot following the ostensibly successful
+hibernation entry (entry doesn't really mean anything, did it succeed?
+did it fail? I have no idea) - there are only these kinds of messages:
+
+ [    0.073695] fmac.local kernel: PM: hibernation: Registered nosave
+memory: [mem 0x00000000-0x00000fff]
+
+There is no PM message indicating that the kernel command line for
+resume is being honored. There is no PM message indicating that resume
+is going to be attempted. There is no PM message whether there's an
+image being looked for. There is no PM message whether an image was
+found or not. There is nothing.
+
+Clearly it's not working. But also basic progress reporting is not
+even present, so I don't in fact know for sure from these messages,
+whether the hibernation image actually made it to disk. Whether it was
+even looked for on boot. And if not, why not.
+
+$ cat /proc/cmdline
+BOOT_IMAGE=(hd5,gpt4)/boot/vmlinuz-5.7.0-0.rc7.1.fc33.x86_64
+root=UUID=02f5bdeb-534b-403c-8420-68834b4689fe ro
+rootflags=subvol=root log_buf_len=2M mitigations=off enforcing=0
+resume=UUID=afbc3995-f82b-44fc-9ce8-0eca59bf5709
+
+Here's the complete dmesg for the most recent "image not found"
+message, maybe there's some hint elsewhere that suggests why it can't
+be found?
+
+https://paste.centos.org/view/4516a549
+
+
+If the image was not written out or could not be written out or really
+is "not found" then I don't see why hibernation entry even happened.
+This is 100% data loss every single time - even though this is a test
+machine and I don't care :D It is for sure not fail safe.
+
+
+Thanks,
+
+-- 
+Chris Murphy
