@@ -2,229 +2,605 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8791EBCAE
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 15:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AE61EBE96
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 17:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726185AbgFBNJj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Jun 2020 09:09:39 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:41829 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727055AbgFBNJg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jun 2020 09:09:36 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200602130932euoutp020104bf24bb3f28efdc24adca31ec42f6~UvBZsimwQ2434324343euoutp02M
-        for <linux-pm@vger.kernel.org>; Tue,  2 Jun 2020 13:09:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200602130932euoutp020104bf24bb3f28efdc24adca31ec42f6~UvBZsimwQ2434324343euoutp02M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1591103372;
-        bh=mqXQUJYme8sb1kqyyvm+dIEEXicHI1pNmMuhexl44FY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JvH6xRRKpNIE6J6Or813n+/x5J6SdAlVvNHoRWI5RMMBzWwoVWNuPT0TkluDE/rmI
-         e6BEh5ULO8rq082LoJv4lvmnDlD0He3ulRHg8jhtHuEZmmDs/yGmqviqFpFzF1iLjO
-         VJ1/gTj07mM2j/aexBkvBv0kaZAWZg/1cHLDD5oQ=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200602130932eucas1p2fd3291361188944610cbfe39dacb9167~UvBY89fm52884128841eucas1p24;
-        Tue,  2 Jun 2020 13:09:32 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 7E.29.60698.B8F46DE5; Tue,  2
-        Jun 2020 14:09:31 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200602130931eucas1p1cd784c8f692fa91dc566504543a927de~UvBYTXxxs1673516735eucas1p1S;
-        Tue,  2 Jun 2020 13:09:31 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200602130931eusmtrp1a44b6adeb42cbadf5c1397223ff4fca6~UvBYSlpQe0850308503eusmtrp1i;
-        Tue,  2 Jun 2020 13:09:31 +0000 (GMT)
-X-AuditID: cbfec7f5-a29ff7000001ed1a-47-5ed64f8ba37e
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 56.80.07950.B8F46DE5; Tue,  2
-        Jun 2020 14:09:31 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200602130930eusmtip2d4d6e6598c097b354cc224f2f84170fb~UvBXd9TTM2230822308eusmtip2v;
-        Tue,  2 Jun 2020 13:09:30 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
+        id S1726485AbgFBPAh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Jun 2020 11:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726139AbgFBPAg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jun 2020 11:00:36 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E97C08C5C0;
+        Tue,  2 Jun 2020 08:00:36 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id m7so1447902plt.5;
+        Tue, 02 Jun 2020 08:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=eKhOQfoFNsuQlbvdZkOTh/BI9i9onf181GqSl/HO//Y=;
+        b=KXgpHRRvGBg01Om87aasMtJGqoO1htG3d7L3kxGw4y5LEx/Li1ZXnx2RhzAxsUUrWY
+         1aK/PSVoJEeu7DN42Gth/o6L+k5sp2tTnX/PDkAv1kNc6LlmGd6lsswSNkFNaKfnqsCY
+         3d/pKu1gafn+IkLZw0L7nbiRRo8RXltA0yRLMAWYD3DmfaZAEHYQIIztYJtUFhYPJ+3z
+         EHDgGVHGwMKrOzoPtDc2mxQRQpmAh5dKVgmPI/2ojV65+6vVkBJUrmOtjH0nfkydxUQ0
+         m3vsfKPOmm/PjzHMb6kKlHSAJ3WqXnftT9thhtW2S2Rd/8VrLt98dHO+M8lMpR/YqjpK
+         WdZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition:user-agent;
+        bh=eKhOQfoFNsuQlbvdZkOTh/BI9i9onf181GqSl/HO//Y=;
+        b=QSFWdQUZ+SsQt3EhQ7Fj92kfASib5eCmw5VMN6LadXcCMZXkfwDQhK86svE+bKhbY/
+         Bd/QWRNI9mUpkIzzxNdhhVBtwIw5aGuE26Ts6H21ETQds3j6SNMV3zWuIMp4Kr5pPAJz
+         4FyXa3RtAktcqLjgVZzOY58dxCIsYCkNQ0RBcwR3xPx1aXVC9vZUwW8GCCcycowvPmKo
+         KV8AsGDDVG75Gt/slaCA+J0Ye7gPHDJSU/G+QxLWcbiiQXBItTNB19gbGdSekXClZ9mi
+         pftzjMXifVEidLwacI+dO9sHTCpAe2erJMLAaxiT0bJRgHmpkUG2nnR9Aal0fIJ55stT
+         aaVA==
+X-Gm-Message-State: AOAM533GjVOTFDT2CtUfVBYXgVP3nHBBNQahEchNCwmoqqwsXEJZGOo+
+        r6Jc/zzPiGlMHwgT1Cc/Wi0=
+X-Google-Smtp-Source: ABdhPJx4D2bqn8xtbM4xa06uPTV5AGtTkAkRE2JRfQ5eoilARXj4YpP2mJRu/2GAGN/yHwtmqseAeQ==
+X-Received: by 2002:a17:90a:8c12:: with SMTP id a18mr6141403pjo.144.1591110035599;
+        Tue, 02 Jun 2020 08:00:35 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t25sm2444252pgo.7.2020.06.02.08.00.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 02 Jun 2020 08:00:34 -0700 (PDT)
+Date:   Tue, 2 Jun 2020 08:00:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        kernel@collabora.com, Fabio Estevam <festevam@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Allison Randal <allison@lohutok.net>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Enrico Weigelt <info@metux.net>,
+        Peter Kaestle <peter@piie.net>,
+        Sebastian Reichel <sre@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, peron.clem@gmail.com,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        linux-samsung-soc@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Subject: [PATCH v2] soc: samsung: Add simple voltage coupler for Exynos5800
-Date:   Tue,  2 Jun 2020 15:02:11 +0200
-Message-Id: <20200602130211.2727-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <57cf3a15-5d9b-7636-4c69-60742e8cfae6@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0VSa0hTYRjmO+fs7Dicnabki5nioKCbF+zHB4l28cepKPvjj4KWqw4qOpUt
-        S4XIDLxslqaYYiZiSl5Th7csw3Q0aupMa5nO0BJtlkHp7KJJbkfz3/O9z/PwPO/Lx5CyLpEX
-        E5twmVcnKOPltIRqf/F7cL8uwqII/JgXgltKmkS4aGqaxu8WZ0W4/vsnhM3mZjGevP+ewEtv
-        sgk80lVG44VbBoRLzM8I3GiYEOOvvwYIPF4+QuF+07AIr1paKJxtWCJxi507tJV7XDoh5vR1
-        OTRntTyluby/gVzr2yyKu91ahzjjaAfBLeh9TjNnJSGX+PjYK7w6IDRKErMy6plULU95mV1F
-        pyOrtxa5MMAegNwKO6FFEkbG1iB4p2+kHYSMXUTwYeKEQCwgeNKxTG44Rle7SIF4iGC2eGLT
-        kdEf6cA0GwTaeS3tEHmwNxC0VQwRDoJkl0nofu3nwO7sCZg1NYsdmGJ3wvsZnRNL2RDozB9H
-        Qpov1Df3OJNd2DC4Z9Q6uwL7SgxjfZ8pQRQOtm/zYgG7w5yxdR17g6kwlxIMNxFMDTaKhUcu
-        gpGMkvWIg2Ad/LPWlVmrtxuaugKE8WEoqS1zjoF1g9H5rcICblDQXkwKYylkZ8oE9S4oNT76
-        H/t8aHj9WhzUagvXr1WAoMlqQvnIt3QzrAKhOuTJJ2tU0bwmOIG/6q9RqjTJCdH+FxNVerT2
-        o0yrRnsnerZyoRexDJK7SgODLAqZSHlFk6rqRcCQcg/pkQGTQia9pExN49WJ59XJ8bymF21n
-        KLmnNLjSdk7GRisv83E8n8SrN1iCcfFKR6KMnPKMM67HHlQrJ4sX9pZf734TY/gZpoCatp4f
-        xDRtNERuqYro7sjKvGvv648NH9+m/1JkMy/uU8247bhDj7mXj1TdzR0MjRX3Re071bBkTrEd
-        9fMJHXjScNLe98GH15mHV3f7TqXDcVY31zzvV2StjGsNvRhcGh6vGEu79lhOaWKUQXtItUb5
-        D7BvGOhNAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDIsWRmVeSWpSXmKPExsVy+t/xe7rd/tfiDPruC1psnLGe1WLqwyds
-        Fte/PGe1WP3xMaPF+fMb2C0ezL3JZPHtSgeTxeVdc9gsPvceYbSYcX4fk8XaI3fZLd78OMtk
-        cXveZRaLM6cvsVr8u7aRxaLjyDdmi41fPRwEPXbOusvusWlVJ5vHnWt72Dz6/xp4bLnazuLR
-        t2UVo8fxG9uZPD5vkgvgiNKzKcovLUlVyMgvLrFVija0MNIztLTQMzKx1DM0No+1MjJV0rez
-        SUnNySxLLdK3S9DL+HNDvGCpUsXJjiVsDYx3ZLoYOTkkBEwkbvzbxdzFyMUhJLCUUWLajE+M
-        EAkZiZPTGlghbGGJP9e62CCKPjFKnPkyAayITcBQoustREJEoJVR4vzrVUwgDrNAK4vEgjur
-        mEGqhAW8JZ6f3sAOYrMIqErcfNYNZvMK2EjsmHAbap28xOoNB8DqOQXsJWYf7wIaxAG0zk7i
-        9weuCYx8CxgZVjGKpJYW56bnFhvpFSfmFpfmpesl5+duYgTGzLZjP7fsYOx6F3yIUYCDUYmH
-        18DwWpwQa2JZcWXuIUYJDmYlEV6ns6fjhHhTEiurUovy44tKc1KLDzGaAt00kVlKNDkfGM95
-        JfGGpobmFpaG5sbmxmYWSuK8HQIHY4QE0hNLUrNTUwtSi2D6mDg4pRoY9y088S6fp+f15bqQ
-        xqOclyQ4p6n7ulqLT3hg0/uhRPHMjTdvp7OeM5q55WyUH3/+EesD34Rvvn1oee/Zd/Z32zZx
-        hc/NSjGpO/7R/cQPb6VH+SKavBVan7qZOTqYGt8GLP666Mi6uMOZGatCzolbncy7ukxDfYuT
-        6P3lPBkvt6z9+CV58bQjc5RYijMSDbWYi4oTAdTZRnevAgAA
-X-CMS-MailID: 20200602130931eucas1p1cd784c8f692fa91dc566504543a927de
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200602130931eucas1p1cd784c8f692fa91dc566504543a927de
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200602130931eucas1p1cd784c8f692fa91dc566504543a927de
-References: <57cf3a15-5d9b-7636-4c69-60742e8cfae6@samsung.com>
-        <CGME20200602130931eucas1p1cd784c8f692fa91dc566504543a927de@eucas1p1.samsung.com>
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>, Shawn Guo <shawnguo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andy@infradead.org>
+Subject: Re: [PATCH v4 04/11] thermal: Store device mode in struct
+ thermal_zone_device
+Message-ID: <20200602150033.GA187219@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a simple custom voltage regulator coupler for Exynos5800 SoCs, which
-require coupling between "vdd_arm" and "vdd_int" regulators. This coupler
-ensures that the voltage balancing for the coupled regulators is done
-only when clients for the each regulator apply their constraints, so the
-voltage values don't go beyond the bootloader-selected operation point
-during the boot process. This also ensures proper voltage balancing if
-any of the client driver is missing.
+On Thu, May 28, 2020 at 09:20:44PM +0200, Andrzej Pietrasiewicz wrote:
+> Prepare for eliminating get_mode().
+> 
+> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
-v2:
-- removed dependency on the regulator names as pointed by krzk, now it
-  works with all coupled regulators. So far the coupling between the
-  regulators on Exynos5800 based boards is defined only between
-  "vdd_arm" and "vdd_int" supplies.
----
- arch/arm/mach-exynos/Kconfig                  |  1 +
- drivers/soc/samsung/Kconfig                   |  3 +
- drivers/soc/samsung/Makefile                  |  1 +
- .../soc/samsung/exynos-regulator-coupler.c    | 56 +++++++++++++++++++
- 4 files changed, 61 insertions(+)
- create mode 100644 drivers/soc/samsung/exynos-regulator-coupler.c
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
-index 76838255b5fa..f185cd3d4c62 100644
---- a/arch/arm/mach-exynos/Kconfig
-+++ b/arch/arm/mach-exynos/Kconfig
-@@ -118,6 +118,7 @@ config SOC_EXYNOS5800
- 	bool "Samsung EXYNOS5800"
- 	default y
- 	depends on SOC_EXYNOS5420
-+	select EXYNOS_REGULATOR_COUPLER
- 
- config EXYNOS_MCPM
- 	bool
-diff --git a/drivers/soc/samsung/Kconfig b/drivers/soc/samsung/Kconfig
-index c7a2003687c7..264185664594 100644
---- a/drivers/soc/samsung/Kconfig
-+++ b/drivers/soc/samsung/Kconfig
-@@ -37,4 +37,7 @@ config EXYNOS_PM_DOMAINS
- 	bool "Exynos PM domains" if COMPILE_TEST
- 	depends on PM_GENERIC_DOMAINS || COMPILE_TEST
- 
-+config EXYNOS_REGULATOR_COUPLER
-+	bool "Exynos SoC Regulator Coupler" if COMPILE_TEST
-+	depends on ARCH_EXYNOS || COMPILE_TEST
- endif
-diff --git a/drivers/soc/samsung/Makefile b/drivers/soc/samsung/Makefile
-index edd1d6ea064d..ecc3a32f6406 100644
---- a/drivers/soc/samsung/Makefile
-+++ b/drivers/soc/samsung/Makefile
-@@ -9,3 +9,4 @@ obj-$(CONFIG_EXYNOS_PMU)	+= exynos-pmu.o
- obj-$(CONFIG_EXYNOS_PMU_ARM_DRIVERS)	+= exynos3250-pmu.o exynos4-pmu.o \
- 					exynos5250-pmu.o exynos5420-pmu.o
- obj-$(CONFIG_EXYNOS_PM_DOMAINS) += pm_domains.o
-+obj-$(CONFIG_EXYNOS_REGULATOR_COUPLER) += exynos-regulator-coupler.o
-diff --git a/drivers/soc/samsung/exynos-regulator-coupler.c b/drivers/soc/samsung/exynos-regulator-coupler.c
-new file mode 100644
-index 000000000000..370a0ce4de3a
---- /dev/null
-+++ b/drivers/soc/samsung/exynos-regulator-coupler.c
-@@ -0,0 +1,56 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2020 Samsung Electronics Co., Ltd.
-+ *	      http://www.samsung.com/
-+ * Author: Marek Szyprowski <m.szyprowski@samsung.com>
-+ *
-+ * Simple Samsung Exynos SoC voltage coupler. Ensures that all
-+ * clients set their constraints before balancing the voltages.
-+ */
-+
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/of.h>
-+#include <linux/regulator/coupler.h>
-+#include <linux/regulator/driver.h>
-+
-+static int exynos_coupler_balance_voltage(struct regulator_coupler *coupler,
-+					  struct regulator_dev *rdev,
-+					  suspend_state_t state)
-+{
-+	struct coupling_desc *c_desc = &rdev->coupling_desc;
-+	int ret, cons_uV = 0, cons_max_uV = INT_MAX;
-+	bool skip_coupled = false;
-+
-+	/* get coupled regulator constraints */
-+	ret = regulator_check_consumers(c_desc->coupled_rdevs[1], &cons_uV,
-+					&cons_max_uV, state);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* skip adjusting coupled regulator if it has no constraints set yet */
-+	if (cons_uV == 0)
-+		skip_coupled = true;
-+
-+	return regulator_do_balance_voltage(rdev, state, skip_coupled);
-+}
-+
-+static int exynos_coupler_attach(struct regulator_coupler *coupler,
-+				 struct regulator_dev *rdev)
-+{
-+	return 0;
-+}
-+
-+static struct regulator_coupler exynos_coupler = {
-+	.attach_regulator = exynos_coupler_attach,
-+	.balance_voltage  = exynos_coupler_balance_voltage,
-+};
-+
-+static int __init exynos_coupler_init(void)
-+{
-+	if (!of_machine_is_compatible("samsung,exynos5800"))
-+		return 0;
-+
-+	return regulator_coupler_register(&exynos_coupler);
-+}
-+arch_initcall(exynos_coupler_init);
--- 
-2.17.1
-
+> ---
+>  drivers/acpi/thermal.c                        | 18 ++++++----------
+>  .../ethernet/mellanox/mlxsw/core_thermal.c    | 21 +++++++------------
+>  drivers/platform/x86/acerhdf.c                | 15 ++++++-------
+>  drivers/thermal/da9062-thermal.c              |  6 ++----
+>  drivers/thermal/imx_thermal.c                 | 17 +++++++--------
+>  .../intel/int340x_thermal/int3400_thermal.c   | 12 +++--------
+>  .../thermal/intel/intel_quark_dts_thermal.c   | 16 +++++++-------
+>  drivers/thermal/thermal_of.c                  | 10 +++------
+>  8 files changed, 44 insertions(+), 71 deletions(-)
+> 
+> diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
+> index fb46070c66d8..4ba273f49d87 100644
+> --- a/drivers/acpi/thermal.c
+> +++ b/drivers/acpi/thermal.c
+> @@ -172,7 +172,6 @@ struct acpi_thermal {
+>  	struct acpi_thermal_trips trips;
+>  	struct acpi_handle_list devices;
+>  	struct thermal_zone_device *thermal_zone;
+> -	enum thermal_device_mode mode;
+>  	int kelvin_offset;	/* in millidegrees */
+>  	struct work_struct thermal_check_work;
+>  };
+> @@ -500,7 +499,7 @@ static void acpi_thermal_check(void *data)
+>  {
+>  	struct acpi_thermal *tz = data;
+>  
+> -	if (tz->mode != THERMAL_DEVICE_ENABLED)
+> +	if (tz->thermal_zone->mode != THERMAL_DEVICE_ENABLED)
+>  		return;
+>  
+>  	thermal_zone_device_update(tz->thermal_zone,
+> @@ -529,12 +528,7 @@ static int thermal_get_temp(struct thermal_zone_device *thermal, int *temp)
+>  static int thermal_get_mode(struct thermal_zone_device *thermal,
+>  				enum thermal_device_mode *mode)
+>  {
+> -	struct acpi_thermal *tz = thermal->devdata;
+> -
+> -	if (!tz)
+> -		return -EINVAL;
+> -
+> -	*mode = tz->mode;
+> +	*mode = thermal->mode;
+>  
+>  	return 0;
+>  }
+> @@ -556,11 +550,11 @@ static int thermal_set_mode(struct thermal_zone_device *thermal,
+>  	if (mode == THERMAL_DEVICE_DISABLED)
+>  		pr_warn("thermal zone will be disabled\n");
+>  
+> -	if (mode != tz->mode) {
+> -		tz->mode = mode;
+> +	if (mode != tz->thermal_zone->mode) {
+> +		tz->thermal_zone->mode = mode;
+>  		ACPI_DEBUG_PRINT((ACPI_DB_INFO,
+>  			"%s kernel ACPI thermal control\n",
+> -			tz->mode == THERMAL_DEVICE_ENABLED ?
+> +			tz->thermal_zone->mode == THERMAL_DEVICE_ENABLED ?
+>  			"Enable" : "Disable"));
+>  		acpi_thermal_check(tz);
+>  	}
+> @@ -912,7 +906,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
+>  		goto remove_dev_link;
+>  	}
+>  
+> -	tz->mode = THERMAL_DEVICE_ENABLED;
+> +	tz->thermal_zone->mode = THERMAL_DEVICE_ENABLED;
+>  
+>  	dev_info(&tz->device->dev, "registered as thermal_zone%d\n",
+>  		 tz->thermal_zone->id);
+> diff --git a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+> index ce0a6837daa3..aa082e8a0b13 100644
+> --- a/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+> +++ b/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
+> @@ -98,7 +98,6 @@ struct mlxsw_thermal_module {
+>  	struct mlxsw_thermal *parent;
+>  	struct thermal_zone_device *tzdev;
+>  	struct mlxsw_thermal_trip trips[MLXSW_THERMAL_NUM_TRIPS];
+> -	enum thermal_device_mode mode;
+>  	int module; /* Module or gearbox number */
+>  };
+>  
+> @@ -110,7 +109,6 @@ struct mlxsw_thermal {
+>  	struct thermal_cooling_device *cdevs[MLXSW_MFCR_PWMS_MAX];
+>  	u8 cooling_levels[MLXSW_THERMAL_MAX_STATE + 1];
+>  	struct mlxsw_thermal_trip trips[MLXSW_THERMAL_NUM_TRIPS];
+> -	enum thermal_device_mode mode;
+>  	struct mlxsw_thermal_module *tz_module_arr;
+>  	u8 tz_module_num;
+>  	struct mlxsw_thermal_module *tz_gearbox_arr;
+> @@ -280,9 +278,7 @@ static int mlxsw_thermal_unbind(struct thermal_zone_device *tzdev,
+>  static int mlxsw_thermal_get_mode(struct thermal_zone_device *tzdev,
+>  				  enum thermal_device_mode *mode)
+>  {
+> -	struct mlxsw_thermal *thermal = tzdev->devdata;
+> -
+> -	*mode = thermal->mode;
+> +	*mode = tzdev->mode;
+>  
+>  	return 0;
+>  }
+> @@ -299,9 +295,9 @@ static int mlxsw_thermal_set_mode(struct thermal_zone_device *tzdev,
+>  	else
+>  		tzdev->polling_delay = 0;
+>  
+> +	tzdev->mode = mode;
+>  	mutex_unlock(&tzdev->lock);
+>  
+> -	thermal->mode = mode;
+>  	thermal_zone_device_update(tzdev, THERMAL_EVENT_UNSPECIFIED);
+>  
+>  	return 0;
+> @@ -469,9 +465,7 @@ static int mlxsw_thermal_module_unbind(struct thermal_zone_device *tzdev,
+>  static int mlxsw_thermal_module_mode_get(struct thermal_zone_device *tzdev,
+>  					 enum thermal_device_mode *mode)
+>  {
+> -	struct mlxsw_thermal_module *tz = tzdev->devdata;
+> -
+> -	*mode = tz->mode;
+> +	*mode = tzdev->mode;
+>  
+>  	return 0;
+>  }
+> @@ -489,9 +483,10 @@ static int mlxsw_thermal_module_mode_set(struct thermal_zone_device *tzdev,
+>  	else
+>  		tzdev->polling_delay = 0;
+>  
+> +	tzdev->mode = mode;
+> +
+>  	mutex_unlock(&tzdev->lock);
+>  
+> -	tz->mode = mode;
+>  	thermal_zone_device_update(tzdev, THERMAL_EVENT_UNSPECIFIED);
+>  
+>  	return 0;
+> @@ -765,7 +760,7 @@ mlxsw_thermal_module_tz_init(struct mlxsw_thermal_module *module_tz)
+>  		return err;
+>  	}
+>  
+> -	module_tz->mode = THERMAL_DEVICE_ENABLED;
+> +	module_tz->tzdev->mode = THERMAL_DEVICE_ENABLED;
+>  	return 0;
+>  }
+>  
+> @@ -881,7 +876,7 @@ mlxsw_thermal_gearbox_tz_init(struct mlxsw_thermal_module *gearbox_tz)
+>  	if (IS_ERR(gearbox_tz->tzdev))
+>  		return PTR_ERR(gearbox_tz->tzdev);
+>  
+> -	gearbox_tz->mode = THERMAL_DEVICE_ENABLED;
+> +	gearbox_tz->tzdev->mode = THERMAL_DEVICE_ENABLED;
+>  	return 0;
+>  }
+>  
+> @@ -1050,7 +1045,7 @@ int mlxsw_thermal_init(struct mlxsw_core *core,
+>  	if (err)
+>  		goto err_unreg_modules_tzdev;
+>  
+> -	thermal->mode = THERMAL_DEVICE_ENABLED;
+> +	thermal->tzdev->mode = THERMAL_DEVICE_ENABLED;
+>  	*p_thermal = thermal;
+>  	return 0;
+>  
+> diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
+> index 830a8b060e74..97b288485837 100644
+> --- a/drivers/platform/x86/acerhdf.c
+> +++ b/drivers/platform/x86/acerhdf.c
+> @@ -68,7 +68,6 @@ static int kernelmode = 1;
+>  #else
+>  static int kernelmode;
+>  #endif
+> -static enum thermal_device_mode thermal_mode;
+>  
+>  static unsigned int interval = 10;
+>  static unsigned int fanon = 60000;
+> @@ -398,15 +397,16 @@ static inline void acerhdf_revert_to_bios_mode(void)
+>  {
+>  	acerhdf_change_fanstate(ACERHDF_FAN_AUTO);
+>  	kernelmode = 0;
+> -	thermal_mode = THERMAL_DEVICE_DISABLED;
+> -	if (thz_dev)
+> +	if (thz_dev) {
+> +		thz_dev->mode = THERMAL_DEVICE_DISABLED;
+>  		thz_dev->polling_delay = 0;
+> +	}
+>  	pr_notice("kernel mode fan control OFF\n");
+>  }
+>  static inline void acerhdf_enable_kernelmode(void)
+>  {
+>  	kernelmode = 1;
+> -	thermal_mode = THERMAL_DEVICE_ENABLED;
+> +	thz_dev->mode = THERMAL_DEVICE_ENABLED;
+>  
+>  	thz_dev->polling_delay = interval*1000;
+>  	thermal_zone_device_update(thz_dev, THERMAL_EVENT_UNSPECIFIED);
+> @@ -419,7 +419,7 @@ static int acerhdf_get_mode(struct thermal_zone_device *thermal,
+>  	if (verbose)
+>  		pr_notice("kernel mode fan control %d\n", kernelmode);
+>  
+> -	*mode = thermal_mode;
+> +	*mode = thermal->mode;
+>  
+>  	return 0;
+>  }
+> @@ -741,8 +741,6 @@ static int __init acerhdf_register_thermal(void)
+>  	if (IS_ERR(cl_dev))
+>  		return -EINVAL;
+>  
+> -	thermal_mode = kernelmode ?
+> -		THERMAL_DEVICE_ENABLED : THERMAL_DEVICE_DISABLED;
+>  	thz_dev = thermal_zone_device_register("acerhdf", 2, 0, NULL,
+>  					      &acerhdf_dev_ops,
+>  					      &acerhdf_zone_params, 0,
+> @@ -750,6 +748,9 @@ static int __init acerhdf_register_thermal(void)
+>  	if (IS_ERR(thz_dev))
+>  		return -EINVAL;
+>  
+> +	thz_dev->mode = kernelmode ?
+> +		THERMAL_DEVICE_ENABLED : THERMAL_DEVICE_DISABLED;
+> +
+>  	if (strcmp(thz_dev->governor->name,
+>  				acerhdf_zone_params.governor_name)) {
+>  		pr_err("Didn't get thermal governor %s, perhaps not compiled into thermal subsystem.\n",
+> diff --git a/drivers/thermal/da9062-thermal.c b/drivers/thermal/da9062-thermal.c
+> index c32709badeda..a14c7981c7c7 100644
+> --- a/drivers/thermal/da9062-thermal.c
+> +++ b/drivers/thermal/da9062-thermal.c
+> @@ -49,7 +49,6 @@ struct da9062_thermal {
+>  	struct da9062 *hw;
+>  	struct delayed_work work;
+>  	struct thermal_zone_device *zone;
+> -	enum thermal_device_mode mode;
+>  	struct mutex lock; /* protection for da9062_thermal temperature */
+>  	int temperature;
+>  	int irq;
+> @@ -124,8 +123,7 @@ static irqreturn_t da9062_thermal_irq_handler(int irq, void *data)
+>  static int da9062_thermal_get_mode(struct thermal_zone_device *z,
+>  				   enum thermal_device_mode *mode)
+>  {
+> -	struct da9062_thermal *thermal = z->devdata;
+> -	*mode = thermal->mode;
+> +	*mode = z->mode;
+>  	return 0;
+>  }
+>  
+> @@ -233,7 +231,6 @@ static int da9062_thermal_probe(struct platform_device *pdev)
+>  
+>  	thermal->config = match->data;
+>  	thermal->hw = chip;
+> -	thermal->mode = THERMAL_DEVICE_ENABLED;
+>  	thermal->dev = &pdev->dev;
+>  
+>  	INIT_DELAYED_WORK(&thermal->work, da9062_thermal_poll_on);
+> @@ -248,6 +245,7 @@ static int da9062_thermal_probe(struct platform_device *pdev)
+>  		ret = PTR_ERR(thermal->zone);
+>  		goto err;
+>  	}
+> +	thermal->zone->mode = THERMAL_DEVICE_ENABLED;
+>  
+>  	dev_dbg(&pdev->dev,
+>  		"TJUNC temperature polling period set at %d ms\n",
+> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+> index e761c9b42217..9a1114d721b6 100644
+> --- a/drivers/thermal/imx_thermal.c
+> +++ b/drivers/thermal/imx_thermal.c
+> @@ -197,7 +197,6 @@ struct imx_thermal_data {
+>  	struct cpufreq_policy *policy;
+>  	struct thermal_zone_device *tz;
+>  	struct thermal_cooling_device *cdev;
+> -	enum thermal_device_mode mode;
+>  	struct regmap *tempmon;
+>  	u32 c1, c2; /* See formula in imx_init_calib() */
+>  	int temp_passive;
+> @@ -256,7 +255,7 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+>  	bool wait;
+>  	u32 val;
+>  
+> -	if (data->mode == THERMAL_DEVICE_ENABLED) {
+> +	if (tz->mode == THERMAL_DEVICE_ENABLED) {
+>  		/* Check if a measurement is currently in progress */
+>  		regmap_read(map, soc_data->temp_data, &val);
+>  		wait = !(val & soc_data->temp_valid_mask);
+> @@ -283,7 +282,7 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+>  
+>  	regmap_read(map, soc_data->temp_data, &val);
+>  
+> -	if (data->mode != THERMAL_DEVICE_ENABLED) {
+> +	if (tz->mode != THERMAL_DEVICE_ENABLED) {
+>  		regmap_write(map, soc_data->sensor_ctrl + REG_CLR,
+>  			     soc_data->measure_temp_mask);
+>  		regmap_write(map, soc_data->sensor_ctrl + REG_SET,
+> @@ -334,9 +333,7 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
+>  static int imx_get_mode(struct thermal_zone_device *tz,
+>  			enum thermal_device_mode *mode)
+>  {
+> -	struct imx_thermal_data *data = tz->devdata;
+> -
+> -	*mode = data->mode;
+> +	*mode = tz->mode;
+>  
+>  	return 0;
+>  }
+> @@ -376,7 +373,7 @@ static int imx_set_mode(struct thermal_zone_device *tz,
+>  		}
+>  	}
+>  
+> -	data->mode = mode;
+> +	tz->mode = mode;
+>  	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+>  
+>  	return 0;
+> @@ -831,7 +828,7 @@ static int imx_thermal_probe(struct platform_device *pdev)
+>  		     data->socdata->measure_temp_mask);
+>  
+>  	data->irq_enabled = true;
+> -	data->mode = THERMAL_DEVICE_ENABLED;
+> +	data->tz->mode = THERMAL_DEVICE_ENABLED;
+>  
+>  	ret = devm_request_threaded_irq(&pdev->dev, data->irq,
+>  			imx_thermal_alarm_irq, imx_thermal_alarm_irq_thread,
+> @@ -885,7 +882,7 @@ static int __maybe_unused imx_thermal_suspend(struct device *dev)
+>  		     data->socdata->measure_temp_mask);
+>  	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+>  		     data->socdata->power_down_mask);
+> -	data->mode = THERMAL_DEVICE_DISABLED;
+> +	data->tz->mode = THERMAL_DEVICE_DISABLED;
+>  	clk_disable_unprepare(data->thermal_clk);
+>  
+>  	return 0;
+> @@ -905,7 +902,7 @@ static int __maybe_unused imx_thermal_resume(struct device *dev)
+>  		     data->socdata->power_down_mask);
+>  	regmap_write(map, data->socdata->sensor_ctrl + REG_SET,
+>  		     data->socdata->measure_temp_mask);
+> -	data->mode = THERMAL_DEVICE_ENABLED;
+> +	data->tz->mode = THERMAL_DEVICE_ENABLED;
+>  
+>  	return 0;
+>  }
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index e84faaadff87..f65b2fc09198 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -48,7 +48,6 @@ struct int3400_thermal_priv {
+>  	struct acpi_device *adev;
+>  	struct platform_device *pdev;
+>  	struct thermal_zone_device *thermal;
+> -	enum thermal_device_mode mode;
+>  	int art_count;
+>  	struct art *arts;
+>  	int trt_count;
+> @@ -381,12 +380,7 @@ static int int3400_thermal_get_temp(struct thermal_zone_device *thermal,
+>  static int int3400_thermal_get_mode(struct thermal_zone_device *thermal,
+>  				enum thermal_device_mode *mode)
+>  {
+> -	struct int3400_thermal_priv *priv = thermal->devdata;
+> -
+> -	if (!priv)
+> -		return -EINVAL;
+> -
+> -	*mode = priv->mode;
+> +	*mode = thermal->mode;
+>  
+>  	return 0;
+>  }
+> @@ -404,8 +398,8 @@ static int int3400_thermal_set_mode(struct thermal_zone_device *thermal,
+>  	    mode != THERMAL_DEVICE_DISABLED)
+>  		return -EINVAL;
+>  
+> -	if (mode != priv->mode) {
+> -		priv->mode = mode;
+> +	if (mode != thermal->mode) {
+> +		thermal->mode = mode;
+>  		result = int3400_thermal_run_osc(priv->adev->handle,
+>  						priv->current_uuid_index,
+>  						mode == THERMAL_DEVICE_ENABLED);
+> diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
+> index d704fc104cfd..d77cb3df5ade 100644
+> --- a/drivers/thermal/intel/intel_quark_dts_thermal.c
+> +++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
+> @@ -103,7 +103,6 @@ struct soc_sensor_entry {
+>  	bool locked;
+>  	u32 store_ptps;
+>  	u32 store_dts_enable;
+> -	enum thermal_device_mode mode;
+>  	struct thermal_zone_device *tzone;
+>  };
+>  
+> @@ -128,7 +127,7 @@ static int soc_dts_enable(struct thermal_zone_device *tzd)
+>  		return ret;
+>  
+>  	if (out & QRK_DTS_ENABLE_BIT) {
+> -		aux_entry->mode = THERMAL_DEVICE_ENABLED;
+> +		tzd->mode = THERMAL_DEVICE_ENABLED;
+>  		return 0;
+>  	}
+>  
+> @@ -139,9 +138,9 @@ static int soc_dts_enable(struct thermal_zone_device *tzd)
+>  		if (ret)
+>  			return ret;
+>  
+> -		aux_entry->mode = THERMAL_DEVICE_ENABLED;
+> +		tzd->mode = THERMAL_DEVICE_ENABLED;
+>  	} else {
+> -		aux_entry->mode = THERMAL_DEVICE_DISABLED;
+> +		tzd->mode = THERMAL_DEVICE_DISABLED;
+>  		pr_info("DTS is locked. Cannot enable DTS\n");
+>  		ret = -EPERM;
+>  	}
+> @@ -161,7 +160,7 @@ static int soc_dts_disable(struct thermal_zone_device *tzd)
+>  		return ret;
+>  
+>  	if (!(out & QRK_DTS_ENABLE_BIT)) {
+> -		aux_entry->mode = THERMAL_DEVICE_DISABLED;
+> +		tzd->mode = THERMAL_DEVICE_DISABLED;
+>  		return 0;
+>  	}
+>  
+> @@ -173,9 +172,9 @@ static int soc_dts_disable(struct thermal_zone_device *tzd)
+>  		if (ret)
+>  			return ret;
+>  
+> -		aux_entry->mode = THERMAL_DEVICE_DISABLED;
+> +		tzd->mode = THERMAL_DEVICE_DISABLED;
+>  	} else {
+> -		aux_entry->mode = THERMAL_DEVICE_ENABLED;
+> +		tzd->mode = THERMAL_DEVICE_ENABLED;
+>  		pr_info("DTS is locked. Cannot disable DTS\n");
+>  		ret = -EPERM;
+>  	}
+> @@ -312,8 +311,7 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd,
+>  static int sys_get_mode(struct thermal_zone_device *tzd,
+>  				enum thermal_device_mode *mode)
+>  {
+> -	struct soc_sensor_entry *aux_entry = tzd->devdata;
+> -	*mode = aux_entry->mode;
+> +	*mode = tzd->mode;
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index ddf88dbe7ba2..c495b1e48ef2 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -51,7 +51,6 @@ struct __thermal_bind_params {
+>  
+>  /**
+>   * struct __thermal_zone - internal representation of a thermal zone
+> - * @mode: current thermal zone device mode (enabled/disabled)
+>   * @passive_delay: polling interval while passive cooling is activated
+>   * @polling_delay: zone polling interval
+>   * @slope: slope of the temperature adjustment curve
+> @@ -65,7 +64,6 @@ struct __thermal_bind_params {
+>   */
+>  
+>  struct __thermal_zone {
+> -	enum thermal_device_mode mode;
+>  	int passive_delay;
+>  	int polling_delay;
+>  	int slope;
+> @@ -272,9 +270,7 @@ static int of_thermal_unbind(struct thermal_zone_device *thermal,
+>  static int of_thermal_get_mode(struct thermal_zone_device *tz,
+>  			       enum thermal_device_mode *mode)
+>  {
+> -	struct __thermal_zone *data = tz->devdata;
+> -
+> -	*mode = data->mode;
+> +	*mode = tz->mode;
+>  
+>  	return 0;
+>  }
+> @@ -296,7 +292,7 @@ static int of_thermal_set_mode(struct thermal_zone_device *tz,
+>  
+>  	mutex_unlock(&tz->lock);
+>  
+> -	data->mode = mode;
+> +	tz->mode = mode;
+>  	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+>  
+>  	return 0;
+> @@ -979,7 +975,6 @@ __init *thermal_of_build_thermal_zone(struct device_node *np)
+>  
+>  finish:
+>  	of_node_put(child);
+> -	tz->mode = THERMAL_DEVICE_DISABLED;
+>  
+>  	return tz;
+>  
+> @@ -1134,6 +1129,7 @@ int __init of_parse_thermal_zones(void)
+>  			of_thermal_free_zone(tz);
+>  			/* attempting to build remaining zones still */
+>  		}
+> +		zone->mode = THERMAL_DEVICE_DISABLED;
+>  	}
+>  	of_node_put(np);
+>  
