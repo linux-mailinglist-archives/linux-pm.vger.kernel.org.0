@@ -2,33 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 890831EB2F2
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 03:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928861EB308
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jun 2020 03:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725826AbgFBBZ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 1 Jun 2020 21:25:59 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:53224 "EHLO inva020.nxp.com"
+        id S1726683AbgFBBdL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 1 Jun 2020 21:33:11 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:52934 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725793AbgFBBZ7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 1 Jun 2020 21:25:59 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id EE2171A09DE;
-        Tue,  2 Jun 2020 03:25:55 +0200 (CEST)
+        id S1725825AbgFBBdJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 1 Jun 2020 21:33:09 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 9001F2008B2;
+        Tue,  2 Jun 2020 03:33:06 +0200 (CEST)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id EF7431A09CF;
-        Tue,  2 Jun 2020 03:25:51 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EA2652008A7;
+        Tue,  2 Jun 2020 03:33:02 +0200 (CEST)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id EE13240285;
-        Tue,  2 Jun 2020 09:25:46 +0800 (SGT)
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 5D4AD40280;
+        Tue,  2 Jun 2020 09:32:58 +0800 (SGT)
 From:   Anson Huang <Anson.Huang@nxp.com>
 To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
         amit.kucheria@verdurent.com, robh+dt@kernel.org,
-        hongtao.jia@nxp.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     Linux-imx@nxp.com
-Subject: [PATCH V3] dt-bindings: thermal: Convert qoriq to json-schema
-Date:   Tue,  2 Jun 2020 09:15:32 +0800
-Message-Id: <1591060532-14727-1-git-send-email-Anson.Huang@nxp.com>
+Subject: [PATCH V4] dt-bindings: thermal: Convert qoriq to json-schema
+Date:   Tue,  2 Jun 2020 09:22:43 +0800
+Message-Id: <1591060963-14904-1-git-send-email-Anson.Huang@nxp.com>
 X-Mailer: git-send-email 2.7.4
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
@@ -40,8 +40,8 @@ Convert the qoriq thermal binding to DT schema format using json-schema
 
 Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 ---
-Changes since V2:
-	- correct maintainer's email address.
+Changes since V3:
+	- Update maintainer since previous maintainer's email is NOT longer available.
 ---
  .../devicetree/bindings/thermal/qoriq-thermal.txt  |  71 -------------
  .../devicetree/bindings/thermal/qoriq-thermal.yaml | 112 +++++++++++++++++++++
@@ -128,7 +128,7 @@ index 28f2cba..0000000
 -};
 diff --git a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
 new file mode 100644
-index 0000000..4bc344a
+index 0000000..ae76208
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
 @@ -0,0 +1,112 @@
@@ -141,7 +141,7 @@ index 0000000..4bc344a
 +title: Thermal Monitoring Unit (TMU) on Freescale QorIQ SoCs
 +
 +maintainers:
-+  - Hongtao Jia <hongtao.jia@nxp.com>
++  - Anson Huang <Anson.Huang@nxp.com>
 +
 +properties:
 +  compatible:
