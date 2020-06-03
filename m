@@ -2,133 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A32DB1ECD2C
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jun 2020 12:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D041ECD36
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jun 2020 12:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726788AbgFCKHe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jun 2020 06:07:34 -0400
-Received: from foss.arm.com ([217.140.110.172]:59482 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726787AbgFCKHd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 3 Jun 2020 06:07:33 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5158F31B;
-        Wed,  3 Jun 2020 03:07:32 -0700 (PDT)
-Received: from bogus (unknown [10.37.12.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D2653F305;
-        Wed,  3 Jun 2020 03:07:29 -0700 (PDT)
-Date:   Wed, 3 Jun 2020 11:07:27 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        id S1725943AbgFCKKO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jun 2020 06:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725881AbgFCKKO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jun 2020 06:10:14 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA789C05BD43
+        for <linux-pm@vger.kernel.org>; Wed,  3 Jun 2020 03:10:13 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id 64so1296476pfg.8
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jun 2020 03:10:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=NMA8UswHoR10ZkKb/xOBjfFah7opSPUF3++8T+IfxFs=;
+        b=bbY2Dpz1nYTTpJmtv4MB4qZePaCtWdI2q0cWL16Ks+j0wZKR8/5Ks5hu4TPVUai1sr
+         RYBRPO4yT9Wwkur4+WZRMT1CZ3rIvVrNEiparBSnRiDOx4HgDLldQ26qvGo2mgR+70MW
+         +qD6UM9LZC1GqAPuvv3Om2jH99di6UMYJtvICVhDyQ4cVkXchRRpGdZhQT+FMPbg0Vif
+         oDnFjOudHWJwuHzUq18DbSfR/TV442MJ2N/xa6Ch/Uj4O27wgsOLZVlTXb2zyu5hALVQ
+         c7WL7a9RDlgB9qnUGHusQ+Ygqo9gzRZVMX/faO5lc1xArPgKQdwoA24EsDHFVvKxrTDp
+         QyyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=NMA8UswHoR10ZkKb/xOBjfFah7opSPUF3++8T+IfxFs=;
+        b=VLlqdfHlUJUmwqa6YtBadC9SigRrRNMMPaP56dl3T12GazODM3XbajdlHdsBkkaoBv
+         5bTP2LYt6DtMik/NxEfWtAqYNrkJZImAaHM25uI9qKStUrBZc7BGowIodT8+wmqkRSBI
+         H8oWEiUB6vYlV/vDUf4Ue/82/hiThcV0wOOngl/i2U9GWcAq73YqTdgTQZCUROR3JYp0
+         9QuVmVDhIDoRxfZd6TNJznnhuMic0EjDBZrvT2346s844BgjhItxvpWQXh6JIC7f9mcw
+         yLtURAd87w9AIsGcrIJt7cuZxej+VM31l48PBFJMVAMII8AcexkdRnrLo/8SXEYh3ru/
+         7v+g==
+X-Gm-Message-State: AOAM532L4cFlAFMVzcpi/ADPFbzj0VJd7hZ+5j/jX0Pv0vXwfMqdUwPl
+        xCswPraCLfsYUDBvAFKX3SktDA==
+X-Google-Smtp-Source: ABdhPJxkZFOpVSUQKBvnC0ohU+GJ++eICExvZmctfWCbjff/g0JyLwrXZZFZxU+HAISkO3HyZGHNww==
+X-Received: by 2002:aa7:96d7:: with SMTP id h23mr14182341pfq.320.1591179013326;
+        Wed, 03 Jun 2020 03:10:13 -0700 (PDT)
+Received: from localhost ([122.172.62.209])
+        by smtp.gmail.com with ESMTPSA id w6sm1947722pjy.15.2020.06.03.03.10.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 03 Jun 2020 03:10:12 -0700 (PDT)
+Date:   Wed, 3 Jun 2020 15:40:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
 Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, rjw@rjwysocki.net,
         guohanjun@huawei.com, ionela.voinescu@arm.com,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [Question]: about 'cpuinfo_cur_freq' shown in sysfs when the CPU
  is in idle state
-Message-ID: <20200603100727.GB7259@bogus>
+Message-ID: <20200603101010.alijrfmte2c6xv5c@vireshk-i7>
 References: <f1773fdc-f6ef-ec28-0c0a-4a09e66ab63b@huawei.com>
  <20200603075200.hbyofgcyiwocl565@vireshk-i7>
+ <20200603100727.GB7259@bogus>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200603075200.hbyofgcyiwocl565@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200603100727.GB7259@bogus>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 03, 2020 at 01:22:00PM +0530, Viresh Kumar wrote:
-> On 02-06-20, 11:34, Xiongfeng Wang wrote:
-> > Hi Viresh,
-> > 
-> > Sorry to disturb you about another problem as follows.
-> > 
-> > CPPC use the increment of Desired Performance counter and Reference Performance
-> > counter to get the CPU frequency and show it in sysfs through
-> > 'cpuinfo_cur_freq'. But ACPI CPPC doesn't specifically define the behavior of
-> > these two counters when the CPU is in idle state, such as stop incrementing when
-> > the CPU is in idle state.
-> > 
-> > ARMv8.4 Extension inctroduced support for the Activity Monitors Unit (AMU). The
-> > processor frequency cycles and constant frequency cycles in AMU can be used as
-> > Delivered Performance counter and Reference Performance counter. These two
-> > counter in AMU does not increase when the PE is in WFI or WFE. So the increment
-> > is zero when the PE is in WFI/WFE. This cause no issue because
-> > 'cppc_get_rate_from_fbctrs()' in cppc_cpufreq driver will check the increment
-> > and return the desired performance if the increment is zero.
-> > 
-> > But when the CPU goes into power down idle state, accessing these two counters
-> > in AMU by memory-mapped address will return zero. Such as CPU1 went into power
-> > down idle state and CPU0 try to get the frequency of CPU1. In this situation,
-> > will display a very big value for 'cpuinfo_cur_freq' in sysfs. Do you have some
-> > advice about this problem ?
-> > 
-> > I was thinking about an idea as follows. We can run 'cppc_cpufreq_get_rate()' on
-> > the CPU to be measured, so that we can make sure the CPU is in C0 state when we
-> > access the two counters. Also we can return the actual frequency rather than
-> > desired performance when the CPU is in WFI/WFE. But this modification will
-> > change the existing logical and I am not sure if this will cause some bad effect.
-> > 
-> > 
-> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> > index 257d726..ded3bcc 100644
-> > --- a/drivers/cpufreq/cppc_cpufreq.c
-> > +++ b/drivers/cpufreq/cppc_cpufreq.c
-> > @@ -396,9 +396,10 @@ static int cppc_get_rate_from_fbctrs(struct cppc_cpudata *cpu,
-> >         return cppc_cpufreq_perf_to_khz(cpu, delivered_perf);
-> >  }
-> > 
-> > -static unsigned int cppc_cpufreq_get_rate(unsigned int cpunum)
-> > +static int cppc_cpufreq_get_rate_cpu(void *info)
-> >  {
-> >         struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
-> > + unsigned int cpunum = *(unsigned int *)info;
-> >         struct cppc_cpudata *cpu = all_cpu_data[cpunum];
-> >         int ret;
-> > 
-> > @@ -418,6 +419,22 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpunum)
-> >         return cppc_get_rate_from_fbctrs(cpu, fb_ctrs_t0, fb_ctrs_t1);
-> >  }
-> > 
-> > +static unsigned int cppc_cpufreq_get_rate(unsigned int cpunum)
-> > +{
-> > + unsigned int ret;
-> > +
-> > + ret = smp_call_on_cpu(cpunum, cppc_cpufreq_get_rate_cpu, &cpunum, true);
-> > +
-> > + /*
-> > +  * convert negative error code to zero, otherwise we will display
-> > +  * an odd value for 'cpuinfo_cur_freq' in sysfs
-> > +  */
-> > + if (ret < 0)
-> > +         ret = 0;
-> > +
-> > + return ret;
-> > +}
-> > +
-> >  static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
-> >  {
-> >         struct cppc_cpudata *cpudata;
-> 
-> I don't see any other sane solution, even if this brings the CPU back
-> to normal state and waste power. We should be able to reliably provide
-> value to userspace.
-> 
-> Rafael / Sudeep: What you do say ?
+On 03-06-20, 11:07, Sudeep Holla wrote:
+> But I have another question. If we can detect that CPPC on some platforms
+> rely on CPU registers(I assume FFH registers here and not system/io/...
+> type of GAS registers), can we set dvfs_on_any_cpu(can't recall exact
+> flag name) to false if not already done to prevent such issues. Or I am
+> talking non-sense as it may be applicable only for _set operation and
 
-Agreed on returning 0 as it aligns with the semantics followed. We can't
-return the last set/fetched value as it fails to align with the values
-returned when CPU is not idle.
+          Yes, non-sense :)
 
-But I have another question. If we can detect that CPPC on some platforms
-rely on CPU registers(I assume FFH registers here and not system/io/...
-type of GAS registers), can we set dvfs_on_any_cpu(can't recall exact
-flag name) to false if not already done to prevent such issues. Or I am
-talking non-sense as it may be applicable only for _set operation and
-not _get.
+> not _get.
 
 -- 
-Regards,
-Sudeep
+viresh
