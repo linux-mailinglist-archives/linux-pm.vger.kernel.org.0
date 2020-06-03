@@ -2,103 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3131ED29A
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jun 2020 16:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840811ED409
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jun 2020 18:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726225AbgFCOvh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jun 2020 10:51:37 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:39396 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725854AbgFCOvg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jun 2020 10:51:36 -0400
-Received: by mail-ot1-f66.google.com with SMTP id g5so2069432otg.6;
-        Wed, 03 Jun 2020 07:51:35 -0700 (PDT)
+        id S1726084AbgFCQQH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jun 2020 12:16:07 -0400
+Received: from mail-oo1-f45.google.com ([209.85.161.45]:43572 "EHLO
+        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725939AbgFCQQH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jun 2020 12:16:07 -0400
+Received: by mail-oo1-f45.google.com with SMTP id n31so604943ooi.10;
+        Wed, 03 Jun 2020 09:16:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+IFxkwdJki1WIWWrFUItKHxjWSf4ueSBqfwRQQudi88=;
-        b=tMR8MNQ3Y2eCFDh4CEbiq7m9U3AmQ8uElTDhB+WiEofCYQ062bEdcCeb5bKX1a00Ax
-         N20KlQSzK6AarYZNvo+OuknoB7BzsUlwnY/W/IZmIWkInpE/l8r8tfd30B17UhV5kU+/
-         1Sdt3kkRLB3sq1KrICnvfDk+4mNUqSjUsyvqVlRpOMXr3/rtb0ZkfgWn8x7g5QckhGHl
-         fxsWQl8QVYV4IPJYblLmXpt/1GCkqhKyV57gqBj8Kg9iBsD3XMYoDHiuj8sa99qXeWrO
-         yJwIh+OuRIqJoCzJmsVfTP8eHzWFR7BoA1KN6ifkgTylNTzOPWAi3+cGisonDx6M+oKJ
-         DqXw==
-X-Gm-Message-State: AOAM5309TkeoeYeWil9LGPWKSNjQ2FbR2gGrDy9ms0wM5vDPh0ujWvI9
-        y6Ik6h1ujlzsfmcsJk5zr4vb6IOerDaAJOtVUsE=
-X-Google-Smtp-Source: ABdhPJwIEcy/bVF3SW/JRia20NXxWrHhYWn8UPD0KO/W61cy6Dhgv1+6DhN8aYGYhoVFdS0tesZTDuB0tYuKIXrjXiU=
-X-Received: by 2002:a9d:3d05:: with SMTP id a5mr272952otc.262.1591195892184;
- Wed, 03 Jun 2020 07:51:32 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Vxn+FjB/uZOo05O2K5geDoSeOoBfcm/lAO32rEYhUNo=;
+        b=E5BTwD8lG9kXzRl+XzMmdDv0CGTN+xz9MmecwdQpE7gzgfuj1oXD6sThb7UNvIIHFM
+         OFWgiT67KnpPoRB99D3ftKLPqSZjbX+TE6X9OXF03sqfIhFfXCyx2bbjPU+H8mhrF4A+
+         3QNFicG0s9oigya7BGeW2XLla5xuszSXqlLAFpG7pr8AUHlUmW3J9N1pZkKlSFODF8fc
+         njDFB1afJmnJptya4x3CNxCBigrFQDLYXTR9h/EfHyrCwSz6FPWshd380yrsycflTUWo
+         zF1mvAeeT7KDU7YAFnaj4jlhizuSRxBq6aOlfGElwk6WgfbZxaaeFW4VKIDKltTn4vBZ
+         AP8A==
+X-Gm-Message-State: AOAM5327XMwXtKiZwovO0BbwXMOI9V/cWfdLDw/IpWuincxQQ+P7R+3e
+        csb7AHJP9ASN9Wp83J6g5YndAL4LaQtJjRSMysk=
+X-Google-Smtp-Source: ABdhPJxw/Pnp3nDj6jnUi3o5Zz0u1oBqUw/9QDv9mZ5BdrX2beN5NLul+BkgpakXsob6ohmeLTazz2ECPSnPm5kk7Eg=
+X-Received: by 2002:a4a:96f1:: with SMTP id t46mr520597ooi.75.1591200964789;
+ Wed, 03 Jun 2020 09:16:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200531182453.15254-1-ggherdovich@suse.cz> <20200531182453.15254-4-ggherdovich@suse.cz>
-In-Reply-To: <20200531182453.15254-4-ggherdovich@suse.cz>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 3 Jun 2020 16:51:21 +0200
-Message-ID: <CAJZ5v0iNFDjt6rqXfiwn_UwiKgJDgAUshChVh5YoOCXF9hy=_A@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] x86, sched: Bail out of frequency invariance if
- turbo_freq/base_freq gives 0
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Date:   Wed, 3 Jun 2020 18:15:53 +0200
+Message-ID: <CAJZ5v0gA9Egmff0y4yTm2UH=ge+jJH1nMbLhTsRbUtP=+m8OLg@mail.gmail.com>
+Subject: Problematic BT commit in Linux 5.7
+To:     Marcel Holtmann <marcel@holtmann.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, May 31, 2020 at 8:26 PM Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
->
-> Be defensive against the case where the processor reports a base_freq
-> larger than turbo_freq (the ratio would be zero).
->
-> Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Fixes: 1567c3e3467c ("x86, sched: Add support for frequency invariance")
+Hi Marcel,
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Unfortunately, we are observing system suspend failures on multiple
+lab machines as reported in the BZ entry at
 
-> ---
->  arch/x86/kernel/smpboot.c | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index fe154c8226ba..f619007f46cf 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1976,6 +1976,7 @@ static bool core_set_max_freq_ratio(u64 *base_freq, u64 *turbo_freq)
->  static bool intel_set_max_freq_ratio(void)
->  {
->         u64 base_freq, turbo_freq;
-> +       u64 turbo_ratio;
->
->         if (slv_set_max_freq_ratio(&base_freq, &turbo_freq))
->                 goto out;
-> @@ -2009,9 +2010,15 @@ static bool intel_set_max_freq_ratio(void)
->                 return false;
->         }
->
-> -       arch_turbo_freq_ratio = div_u64(turbo_freq * SCHED_CAPACITY_SCALE,
-> -                                       base_freq);
-> +       turbo_ratio = div_u64(turbo_freq * SCHED_CAPACITY_SCALE, base_freq);
-> +       if (!turbo_ratio) {
-> +               pr_debug("Non-zero turbo and base frequencies led to a 0 ratio.\n");
-> +               return false;
-> +       }
-> +
-> +       arch_turbo_freq_ratio = turbo_ratio;
->         arch_set_max_freq_ratio(turbo_disabled());
-> +
->         return true;
->  }
->
-> --
-> 2.16.4
->
+https://bugzilla.kernel.org/show_bug.cgi?id=207629
+
+which is due to the following commit:
+
+commit dd522a7429b07e4441871ae75ebbfcf53635bdd4
+Author: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date:   Wed Mar 11 08:54:02 2020 -0700
+
+    Bluetooth: Handle LE devices during suspend
+
+Ostensibly, this is because the BT firmware on the machines in
+question does not match the new kernel code, but the firmware update
+requirement is not entirely obvious to the users and the steps to take
+in order to upgrade the firmware are not clear.
+
+Apart from the above, failing system suspend for a reason like a
+protocol timeout isn't really user-friendly, because the user may just
+have closed the lid of a laptop and is expecting the system to be
+suspended (so it may go into a backpack or similar).  Yes, the driver
+may not be able to suspend its device gracefully, but failing the
+entire system suspend really is a big deal and should be treated as a
+last-resort type of action.
+
+As stated in the BZ above, reverting the above commit along with
+"Bluetooth: Pause discovery and advertising during suspend"
+(4867bd007d25a8dfd4ffc558534f7aec8b361789) makes the issue go away, so
+can you please consider doing that?
+
+Alternatively, would it be possible to address the issue in a way that
+would not require many users to update firmware on their systems?
+
+Cheers,
+Rafael
