@@ -2,100 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 931AC1EC5F8
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jun 2020 01:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D6A1EC70D
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jun 2020 04:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727811AbgFBX5q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 2 Jun 2020 19:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726809AbgFBX5q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 2 Jun 2020 19:57:46 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EACC08C5C0;
-        Tue,  2 Jun 2020 16:57:46 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id x207so298448pfc.5;
-        Tue, 02 Jun 2020 16:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=LhRRdC8w+lAb0OncPPcS/QlJQRfxazO8sGm5lyED8hA=;
-        b=OX+NgxMFH6HKye9aRqJ+3IK3xmOQDZuLYWfZ0rlo0pL/zSX9CECd/jP2r1qBGQCL+C
-         bX8jR7OP4+F4OutWf/eHB7w3OBIsOmeVcpVkMAUF4xKx0DHDx8jr1xE4yTxJyqs6Sa8e
-         ttvKQbzw66Uq1f92vRaymJRtK8Z+trVPiPbRCsvrUyvIgb56bMaIoqVmOE2OBtJb7iqa
-         qpzjgBtJ+KFXNaCdQgMoq2292STnrtRbwTqt1kBRx8cq1N8XtACr8t+fbSUJcb0hutKl
-         x5YZ47S7HMxhEoJmUiakT4wmHnZUvMuFxqvSGXFNL97Watb/ZvwKAUYHQogj5wf12+yi
-         EtBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=LhRRdC8w+lAb0OncPPcS/QlJQRfxazO8sGm5lyED8hA=;
-        b=cCMgIC7hrW+2eb986gzYfJ4SgTN9lW2At+yzxfdzghaK4UiLi/gJo1iUrt2TdbEL2K
-         N0mvt254dcvErARJccLJ2hslxw/cEaJleHs4TTWZozKYDfKrKl+IOoHMDr9T0Y0IezPu
-         8BF0wQCjLTwuDkYBUaVM+K4Amf5YnbtcnJU1ODnPfouSJx5+xG+msGr5UGTlrcHMfBH7
-         lrdLz6ROWcEJcHO2sOH9IVB63tkGKI5bErE4VToR3ElaG6WQ0+2C7cAqHsMeWHu1/15X
-         inFt/Sb736DmSPOddH4TIbhQ9ns1BhNTaAlsF75OKg8HKC8tM1pSFyLXDZg3Cba5WqVA
-         xGgw==
-X-Gm-Message-State: AOAM5332+vCjxIRM0Kol7YWMpb5pOjLS5vJj0fUhJ3ww1vNCboXLKyCg
-        UzCqMP31zD23XYMtmy1z6bvdY3lK
-X-Google-Smtp-Source: ABdhPJxqg4L7MZn6XvklSG2hY4H1xfxiw+5gCrmvl4JKcQd8v5YDGrrkWiHabJbEgaOcqtAvMtx0AQ==
-X-Received: by 2002:a63:4c0b:: with SMTP id z11mr26828518pga.348.1591142265263;
-        Tue, 02 Jun 2020 16:57:45 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id q28sm210308pfg.180.2020.06.02.16.57.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2020 16:57:44 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, zhuguangqing <zhuguangqing@xiaomi.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE)
-Subject: [PATCH stable 5.4] PM: wakeup: Show statistics for deleted wakeup sources again
-Date:   Tue,  2 Jun 2020 16:57:39 -0700
-Message-Id: <20200602235740.17574-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1725794AbgFCCFh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 2 Jun 2020 22:05:37 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:33556 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725789AbgFCCFh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 2 Jun 2020 22:05:37 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 2B4E85FC262AB94366C8;
+        Wed,  3 Jun 2020 10:05:33 +0800 (CST)
+Received: from [127.0.0.1] (10.166.213.93) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Wed, 3 Jun 2020
+ 10:05:23 +0800
+Subject: Re: [Question]: about 'cpuinfo_cur_freq' shown in sysfs when the CPU
+ is in idle state
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        <viresh.kumar@linaro.org>, <rjw@rjwysocki.net>
+CC:     <Sudeep.Holla@arm.com>, <ionela.voinescu@arm.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <f1773fdc-f6ef-ec28-0c0a-4a09e66ab63b@huawei.com>
+From:   Hanjun Guo <guohanjun@huawei.com>
+Message-ID: <ef524d5f-185d-4ca8-c717-929e59db0813@huawei.com>
+Date:   Wed, 3 Jun 2020 10:05:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <f1773fdc-f6ef-ec28-0c0a-4a09e66ab63b@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.166.213.93]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: zhuguangqing <zhuguangqing@xiaomi.com>
+On 2020/6/2 11:34, Xiongfeng Wang wrote:
+> Hi Viresh,
+> 
+> Sorry to disturb you about another problem as follows.
+> 
+> CPPC use the increment of Desired Performance counter and Reference Performance
+> counter to get the CPU frequency and show it in sysfs through
+> 'cpuinfo_cur_freq'. But ACPI CPPC doesn't specifically define the behavior of
+> these two counters when the CPU is in idle state, such as stop incrementing when
+> the CPU is in idle state.
+> 
+> ARMv8.4 Extension inctroduced support for the Activity Monitors Unit (AMU). The
+> processor frequency cycles and constant frequency cycles in AMU can be used as
+> Delivered Performance counter and Reference Performance counter. These two
+> counter in AMU does not increase when the PE is in WFI or WFE. So the increment
+> is zero when the PE is in WFI/WFE. This cause no issue because
+> 'cppc_get_rate_from_fbctrs()' in cppc_cpufreq driver will check the increment
+> and return the desired performance if the increment is zero.
+> 
+> But when the CPU goes into power down idle state, accessing these two counters
+> in AMU by memory-mapped address will return zero. Such as CPU1 went into power
+> down idle state and CPU0 try to get the frequency of CPU1. In this situation,
+> will display a very big value for 'cpuinfo_cur_freq' in sysfs. Do you have some
+> advice about this problem ?
 
-commit e976eb4b91e906f20ec25b20c152d53c472fc3fd upstream
+Just a wild guess, how about just return 0 for idle CPUs? which means
+the frequency is 0 for idle CPUs.
 
-After commit 00ee22c28915 (PM / wakeup: Use seq_open() to show wakeup
-stats), print_wakeup_source_stats(m, &deleted_ws) is not called from
-wakeup_sources_stats_seq_show() any more.
+> 
+> I was thinking about an idea as follows. We can run 'cppc_cpufreq_get_rate()' on
+> the CPU to be measured, so that we can make sure the CPU is in C0 state when we
+> access the two counters. Also we can return the actual frequency rather than
+> desired performance when the CPU is in WFI/WFE. But this modification will
+> change the existing logical and I am not sure if this will cause some bad effect.
+> 
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 257d726..ded3bcc 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -396,9 +396,10 @@ static int cppc_get_rate_from_fbctrs(struct cppc_cpudata *cpu,
+>          return cppc_cpufreq_perf_to_khz(cpu, delivered_perf);
+>   }
+> 
+> -static unsigned int cppc_cpufreq_get_rate(unsigned int cpunum)
+> +static int cppc_cpufreq_get_rate_cpu(void *info)
+>   {
+>          struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
+> + unsigned int cpunum = *(unsigned int *)info;
+>          struct cppc_cpudata *cpu = all_cpu_data[cpunum];
+>          int ret;
+> 
+> @@ -418,6 +419,22 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpunum)
+>          return cppc_get_rate_from_fbctrs(cpu, fb_ctrs_t0, fb_ctrs_t1);
+>   }
+> 
+> +static unsigned int cppc_cpufreq_get_rate(unsigned int cpunum)
+> +{
+> + unsigned int ret;
+> +
+> + ret = smp_call_on_cpu(cpunum, cppc_cpufreq_get_rate_cpu, &cpunum, true);
+> +
+> + /*
+> +  * convert negative error code to zero, otherwise we will display
+> +  * an odd value for 'cpuinfo_cur_freq' in sysfs
+> +  */
+> + if (ret < 0)
+> +         ret = 0;
+> +
+> + return ret;
+> +}
+> +
+>   static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
+>   {
+>          struct cppc_cpudata *cpudata;
+> 
 
-Because deleted_ws is one of the wakeup sources, it should be shown
-too, so add it to the end of all other wakeup sources.
+It will bring the CPU back if the CPU is in idle state, not friendly to
+powersaving :)
 
-Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
-[ rjw: Subject & changelog ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/base/power/wakeup.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 0bd9b291bb29..92f0960e9014 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -1073,6 +1073,9 @@ static void *wakeup_sources_stats_seq_next(struct seq_file *m,
- 		break;
- 	}
- 
-+	if (!next_ws)
-+		print_wakeup_source_stats(m, &deleted_ws);
-+
- 	return next_ws;
- }
- 
--- 
-2.17.1
+Thanks
+Hanjun
 
