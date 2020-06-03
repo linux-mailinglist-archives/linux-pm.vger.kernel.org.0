@@ -2,70 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 953DD1ECE1C
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jun 2020 13:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D662B1ECFC8
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jun 2020 14:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725951AbgFCLQV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jun 2020 07:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
+        id S1725948AbgFCMb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jun 2020 08:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbgFCLQV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jun 2020 07:16:21 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161B7C08C5C2
-        for <linux-pm@vger.kernel.org>; Wed,  3 Jun 2020 04:16:21 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id k18so851373ybm.13
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jun 2020 04:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=d8q1i/RKsyok9DhZnpJtralPU0m9ZjwaGfmaM5P3JI0=;
-        b=qOlwfV0z6g6xdyBO9fhS/mMIhJTzYtOXs48x43UsXCMF5PzYuL/MbJuKxofES/Epd2
-         ncDNC95FjgxlyEx8KfOMqI/WWGgHXhgn5FzBdmI9KKwuep5y3Tb97AYlvKmMZ/zqCPqi
-         zSNEwwbporCWWkytkwqC+IxIlYJDRR5xypKYwDxDTAiIHYHvo2d+yX618K1SsRZiwzNQ
-         R2pj6DcTBX/ns58h4zvJt3Vprr8fBGKGDqrMOxB8HyoPMDMhy5g4gjzdtmf8a8ERhloC
-         tbe64LKNygxGBMJ47n31s/t9EqJLacF1e+A7+d+/NG8ZuEzTQDFDwpSy6I9lytfDjFoO
-         0K/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=d8q1i/RKsyok9DhZnpJtralPU0m9ZjwaGfmaM5P3JI0=;
-        b=fl0YdoPWLsTXleb37omGNOx3/Mveem7HhN9OSUz3N3YBBLwrNvvN39/T7peP20gH5o
-         GC+buoh4VNvZtiOtPzxkizlw3ZR9f10Lp1OIaNe4n/aNDoL1DRqgq18IKdQF3fOtWuN6
-         uox3/1MsKZDriyWy8RpmPs2xyySYLR10olYlrHEecl+3njq0rMzAPbenwOv22un6dADU
-         PbhWNbYzKK1DOyNdHYQdpA67Xa3mF175lekYvH3Za2NAFq2Lz/sV8NGE3Jgb8Kq3iEVJ
-         xA8+nSBjB1R/+8jNE0Eia7B0TtidGR7LNoV81hrVSQC12Jwjm3ICHj32Nwm7Bs2XLt2p
-         X7IA==
-X-Gm-Message-State: AOAM531I+h21BREFkN5ZKlDN+ezfdzIBDUykr1N8pELeE6b7Np8nCiUz
-        9YGHWQ/gd7jqiBVjEo8yWdVuYYEvGawVbwKqck4=
-X-Google-Smtp-Source: ABdhPJwpWT5C6FLaIOYzb5s/QgarNK+7sM+Iix4kEsBUjPEidYt5x0yssDdOfbdHp+sscgBDAp+zECQHxbG2YPCU36E=
-X-Received: by 2002:a25:a248:: with SMTP id b66mr42422283ybi.81.1591182979837;
- Wed, 03 Jun 2020 04:16:19 -0700 (PDT)
+        with ESMTP id S1726050AbgFCMb2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jun 2020 08:31:28 -0400
+Received: from merlin.infradead.org (unknown [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62077C08C5C0;
+        Wed,  3 Jun 2020 05:31:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1R/2YdAZSvt3VyvYBxysqrGCsIyLuWCrDG39UYVf7Wo=; b=B5HfY2k7oWgDgwYI4Ho2MRl72v
+        qRcxT5aVUTiZPip/orNqNpF2m5BQLkMvGTG/FQRd5dR00vVEVUv+s+GOWOrVY855oa3PQTYNmiDAt
+        Rwbv3/Kw7Ne/csOfPykzVrbSrLpQ7KLWd6ShCnyfDYwKjXkGPV2DzfKs9UW+jC6NyEzb0R1o3Qfps
+        /QSf2uDzRTGeaBa5itJc6lBDDJ/LjgaFzGLfHnj4V2Kfw0mRDNDVYH7ptFqDv/ZMUOlg+UQCyiC8h
+        26OdfkOmk6iopJPpDhdl/qI+e029JYR0Vxomnpz64CpaX5WFJB+RAcatXi2HfLZ9cxj7AL94feeO0
+        Yz5hLKtg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jgSXx-0006oY-9w; Wed, 03 Jun 2020 12:31:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 277C4301ABC;
+        Wed,  3 Jun 2020 14:31:03 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 11B2B20BDBF72; Wed,  3 Jun 2020 14:31:03 +0200 (CEST)
+Date:   Wed, 3 Jun 2020 14:31:03 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Giovanni Gherdovich <ggherdovich@suse.cz>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@suse.de>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: Re: [PATCH v2 0/3] More frequency invariance fixes for x86
+Message-ID: <20200603123103.GI2604@hirez.programming.kicks-ass.net>
+References: <20200531182453.15254-1-ggherdovich@suse.cz>
 MIME-Version: 1.0
-Received: by 2002:a25:a56a:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 04:16:19 -0700 (PDT)
-Reply-To: viviangary53@gmail.com
-From:   Vivian Gary <barr.j.kodjo@gmail.com>
-Date:   Wed, 3 Jun 2020 13:16:19 +0200
-Message-ID: <CAAB3HGTW+AD_oduPCBtaFG=ZwTL40sdt2D4k8BTnWZyr4ThN=w@mail.gmail.com>
-Subject: I am Still Expecting Your Reply
-To:     barr.j.kodjo@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200531182453.15254-1-ggherdovich@suse.cz>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello
+On Sun, May 31, 2020 at 08:24:50PM +0200, Giovanni Gherdovich wrote:
+> changes wrt v1:
+> 
+> - add Peter Zijlstra's code to check for multiplication overflow, see
+>   https://lore.kernel.org/lkml/20200501133042.GE3762@hirez.programming.kicks-ass.net/
+> - put all frequence invariant code behind CONFIG_X86_64, as the overflow
+>   checks need 64 bits operations, see the build error at
+>   https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/7GDIBOMNVDG5W2XZD4EICE2TUZR3THBN/
+> - add additional patch to check for when base_freq > turbo_freq,
+>   suggested by Peter Zijlstra at
+>   https://lore.kernel.org/lkml/20200501130427.GD3762@hirez.programming.kicks-ass.net/
 
-Greetings to you, this is the second time I send this letter to
-you,because of that I'm not sure
-
-what you got the first one. I have an important and confidential
-deal,to discuss with you about
-
-dead relative, reply to this letter. Please go back to my personal address Email
-
-(viviangary53@gmail.com) if you want to know more detailed information
-Sincerely yours,
-Vivian Gary
+Thanks!
