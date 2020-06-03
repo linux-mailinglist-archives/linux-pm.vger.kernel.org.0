@@ -2,71 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 800041ECDBB
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jun 2020 12:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 953DD1ECE1C
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jun 2020 13:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725836AbgFCKkY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 3 Jun 2020 06:40:24 -0400
-Received: from foss.arm.com ([217.140.110.172]:59786 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725828AbgFCKkX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 3 Jun 2020 06:40:23 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A86331B;
-        Wed,  3 Jun 2020 03:40:23 -0700 (PDT)
-Received: from bogus (unknown [10.37.12.118])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 152D53F305;
-        Wed,  3 Jun 2020 03:40:20 -0700 (PDT)
-Date:   Wed, 3 Jun 2020 11:40:17 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, rjw@rjwysocki.net,
-        guohanjun@huawei.com, ionela.voinescu@arm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Question]: about 'cpuinfo_cur_freq' shown in sysfs when the CPU
- is in idle state
-Message-ID: <20200603104017.GD7259@bogus>
-References: <f1773fdc-f6ef-ec28-0c0a-4a09e66ab63b@huawei.com>
- <20200603075200.hbyofgcyiwocl565@vireshk-i7>
- <20200603100727.GB7259@bogus>
- <20200603101010.alijrfmte2c6xv5c@vireshk-i7>
- <20200603101753.GC7259@bogus>
- <20200603102159.hzctwiqiukwhrpo7@vireshk-i7>
+        id S1725951AbgFCLQV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 3 Jun 2020 07:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725956AbgFCLQV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 3 Jun 2020 07:16:21 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161B7C08C5C2
+        for <linux-pm@vger.kernel.org>; Wed,  3 Jun 2020 04:16:21 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id k18so851373ybm.13
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jun 2020 04:16:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=d8q1i/RKsyok9DhZnpJtralPU0m9ZjwaGfmaM5P3JI0=;
+        b=qOlwfV0z6g6xdyBO9fhS/mMIhJTzYtOXs48x43UsXCMF5PzYuL/MbJuKxofES/Epd2
+         ncDNC95FjgxlyEx8KfOMqI/WWGgHXhgn5FzBdmI9KKwuep5y3Tb97AYlvKmMZ/zqCPqi
+         zSNEwwbporCWWkytkwqC+IxIlYJDRR5xypKYwDxDTAiIHYHvo2d+yX618K1SsRZiwzNQ
+         R2pj6DcTBX/ns58h4zvJt3Vprr8fBGKGDqrMOxB8HyoPMDMhy5g4gjzdtmf8a8ERhloC
+         tbe64LKNygxGBMJ47n31s/t9EqJLacF1e+A7+d+/NG8ZuEzTQDFDwpSy6I9lytfDjFoO
+         0K/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=d8q1i/RKsyok9DhZnpJtralPU0m9ZjwaGfmaM5P3JI0=;
+        b=fl0YdoPWLsTXleb37omGNOx3/Mveem7HhN9OSUz3N3YBBLwrNvvN39/T7peP20gH5o
+         GC+buoh4VNvZtiOtPzxkizlw3ZR9f10Lp1OIaNe4n/aNDoL1DRqgq18IKdQF3fOtWuN6
+         uox3/1MsKZDriyWy8RpmPs2xyySYLR10olYlrHEecl+3njq0rMzAPbenwOv22un6dADU
+         PbhWNbYzKK1DOyNdHYQdpA67Xa3mF175lekYvH3Za2NAFq2Lz/sV8NGE3Jgb8Kq3iEVJ
+         xA8+nSBjB1R/+8jNE0Eia7B0TtidGR7LNoV81hrVSQC12Jwjm3ICHj32Nwm7Bs2XLt2p
+         X7IA==
+X-Gm-Message-State: AOAM531I+h21BREFkN5ZKlDN+ezfdzIBDUykr1N8pELeE6b7Np8nCiUz
+        9YGHWQ/gd7jqiBVjEo8yWdVuYYEvGawVbwKqck4=
+X-Google-Smtp-Source: ABdhPJwpWT5C6FLaIOYzb5s/QgarNK+7sM+Iix4kEsBUjPEidYt5x0yssDdOfbdHp+sscgBDAp+zECQHxbG2YPCU36E=
+X-Received: by 2002:a25:a248:: with SMTP id b66mr42422283ybi.81.1591182979837;
+ Wed, 03 Jun 2020 04:16:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200603102159.hzctwiqiukwhrpo7@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Received: by 2002:a25:a56a:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 04:16:19 -0700 (PDT)
+Reply-To: viviangary53@gmail.com
+From:   Vivian Gary <barr.j.kodjo@gmail.com>
+Date:   Wed, 3 Jun 2020 13:16:19 +0200
+Message-ID: <CAAB3HGTW+AD_oduPCBtaFG=ZwTL40sdt2D4k8BTnWZyr4ThN=w@mail.gmail.com>
+Subject: I am Still Expecting Your Reply
+To:     barr.j.kodjo@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 03, 2020 at 03:51:59PM +0530, Viresh Kumar wrote:
-> On 03-06-20, 11:17, Sudeep Holla wrote:
-> > On Wed, Jun 03, 2020 at 03:40:10PM +0530, Viresh Kumar wrote:
-> > > On 03-06-20, 11:07, Sudeep Holla wrote:
-> > > > But I have another question. If we can detect that CPPC on some platforms
-> > > > rely on CPU registers(I assume FFH registers here and not system/io/...
-> > > > type of GAS registers), can we set dvfs_on_any_cpu(can't recall exact
-> > > > flag name) to false if not already done to prevent such issues. Or I am
-> > > > talking non-sense as it may be applicable only for _set operation and
-> > >
-> > >           Yes, non-sense :)
-> > >
-> >
-> > Thanks for confirming 👍.
->
-> Hehe.
->
-> So, do you agree that we better do the read from the CPUs themselves ?
->
+Hello
 
-Yes if that is fine. I thought waking up the core was not a good solution
-in terms of power, but I have no objection for that as well as return 0
-as IMO it aligns with the AMU counters when CPU is idle.
+Greetings to you, this is the second time I send this letter to
+you,because of that I'm not sure
 
---
-Regards,
-Sudeep
+what you got the first one. I have an important and confidential
+deal,to discuss with you about
+
+dead relative, reply to this letter. Please go back to my personal address Email
+
+(viviangary53@gmail.com) if you want to know more detailed information
+Sincerely yours,
+Vivian Gary
