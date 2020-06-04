@@ -2,153 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E47CA1EE957
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jun 2020 19:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF901EEA52
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jun 2020 20:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730090AbgFDRWa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Jun 2020 13:22:30 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:42574 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730043AbgFDRWa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jun 2020 13:22:30 -0400
-Received: from 89-64-85-58.dynamic.chello.pl (89.64.85.58) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 27bd5aa14999d311; Thu, 4 Jun 2020 19:22:27 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        youling257@gmail.com, LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: [PATCH] ACPI: PM: Avoid using power resources if there are none for D0
-Date:   Thu, 04 Jun 2020 19:22:26 +0200
-Message-ID: <13388608.OHKVb9tm6R@kreacher>
-In-Reply-To: <d084b424-a340-a24a-d681-c92d80d8421d@redhat.com>
-References: <20200603194659.185757-1-hdegoede@redhat.com> <CAJZ5v0g7rhiWs0ZeGGS5OoSMH7DiVT1D-EUgX5HFXYkcvXcm2Q@mail.gmail.com> <d084b424-a340-a24a-d681-c92d80d8421d@redhat.com>
+        id S1730350AbgFDSeA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Jun 2020 14:34:00 -0400
+Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:56834 "EHLO
+        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730348AbgFDSeA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jun 2020 14:34:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1591295640; x=1622831640;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=HTqcTU628wYZT8oBd+ArbsC8bAoTC8fUsqm9xVXgmro=;
+  b=Xp9f4OPOff8jKD9jEy1DjSHAIcs2lzAnVrlmF0AHlIJCv2t4VyR2I90N
+   W2uPj+W/Lk5RB/+9ORMMpEcESt24L93jfYkl583RKiRRNFX49bmz4ONaR
+   B2P/P6uydCs3Meo0yV8sS5exYbOWuUKhWhAxbnRfUk0jqI/ddyiyO3P8K
+   0=;
+IronPort-SDR: Bp9sXjz5OL6Qmgdn1t2NjI2Ij78oRPs1ANk1UfVNxYHuSJrPGMGuWQ5o01KOARrU4ThWIT/DpG
+ g10L4tLv3oVA==
+X-IronPort-AV: E=Sophos;i="5.73,472,1583193600"; 
+   d="scan'208";a="41639696"
+Subject: Re: [PATCH 09/12] x86/xen: save and restore steal clock
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2a-90c42d1d.us-west-2.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 04 Jun 2020 18:33:58 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
+        by email-inbound-relay-2a-90c42d1d.us-west-2.amazon.com (Postfix) with ESMTPS id 2AEAAA22B6;
+        Thu,  4 Jun 2020 18:33:56 +0000 (UTC)
+Received: from EX13D08UEB004.ant.amazon.com (10.43.60.142) by
+ EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 4 Jun 2020 18:33:36 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D08UEB004.ant.amazon.com (10.43.60.142) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 4 Jun 2020 18:33:36 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Thu, 4 Jun 2020 18:33:36 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id 5663D403BB; Thu,  4 Jun 2020 18:33:36 +0000 (UTC)
+Date:   Thu, 4 Jun 2020 18:33:36 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <jgross@suse.com>,
+        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
+        <kamatam@amazon.com>, <sstabellini@kernel.org>,
+        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>,
+        <anchalag@amazon.com>
+Message-ID: <20200604183336.GA25251@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <cover.1589926004.git.anchalag@amazon.com>
+ <6f39a1594a25ab5325f34e1e297900d699cd92bf.1589926004.git.anchalag@amazon.com>
+ <5edb4147-af12-3a0e-e8f7-5b72650209ac@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <5edb4147-af12-3a0e-e8f7-5b72650209ac@oracle.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Sat, May 30, 2020 at 07:44:06PM -0400, Boris Ostrovsky wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> 
+> 
+> 
+> On 5/19/20 7:28 PM, Anchal Agarwal wrote:
+> > From: Munehisa Kamata <kamatam@amazon.com>
+> >
+> > Save steal clock values of all present CPUs in the system core ops
+> > suspend callbacks. Also, restore a boot CPU's steal clock in the system
+> > core resume callback. For non-boot CPUs, restore after they're brought
+> > up, because runstate info for non-boot CPUs are not active until then.
+> >
+> > Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+> > Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
+> > ---
+> >  arch/x86/xen/suspend.c | 13 ++++++++++++-
+> >  arch/x86/xen/time.c    |  3 +++
+> >  2 files changed, 15 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/x86/xen/suspend.c b/arch/x86/xen/suspend.c
+> > index 784c4484100b..dae0f74f5390 100644
+> > --- a/arch/x86/xen/suspend.c
+> > +++ b/arch/x86/xen/suspend.c
+> > @@ -91,12 +91,20 @@ void xen_arch_suspend(void)
+> >  static int xen_syscore_suspend(void)
+> >  {
+> >       struct xen_remove_from_physmap xrfp;
+> > -     int ret;
+> > +     int cpu, ret;
+> >
+> >       /* Xen suspend does similar stuffs in its own logic */
+> >       if (xen_suspend_mode_is_xen_suspend())
+> >               return 0;
+> >
+> > +     for_each_present_cpu(cpu) {
+> > +             /*
+> > +              * Nonboot CPUs are already offline, but the last copy of
+> > +              * runstate info is still accessible.
+> > +              */
+> > +             xen_save_steal_clock(cpu);
+> > +     }
+> > +
+> >       xrfp.domid = DOMID_SELF;
+> >       xrfp.gpfn = __pa(HYPERVISOR_shared_info) >> PAGE_SHIFT;
+> >
+> > @@ -118,6 +126,9 @@ static void xen_syscore_resume(void)
+> >
+> >       pvclock_resume();
+> 
+> 
+> Doesn't make any difference but I think since this patch is where you
+> are dealing with clock then pvclock_resume() should be added here and
+> not in the earlier patch.
+> 
+> 
+> -boris
+I think the reason it may be in previous patch because it was a part
+of syscore_resume and steal clock fix came in later. 
+It could me moved to this patch that deals with all clock stuff.
 
-As recently reported, some platforms provide a list of power
-resources for device power state D3hot, through the _PR3 object,
-but they do not provide a list of power resources for device power
-state D0.
+-Anchal
+> 
+> 
 
-Among other things, this causes acpi_device_get_power() to return
-D3hot as the current state of the device in question if all of the
-D3hot power resources are "on", because it sees the power_resources
-flag set and calls acpi_power_get_inferred_state() which finds that
-D3hot is the shallowest power state with all of the associated power
-resources turned "on", so that's what it returns.  Moreover, that
-value takes precedence over the acpi_dev_pm_explicit_get() return
-value, because it means a deeper power state.  The device may very
-well be in D0 physically at that point, however.
-
-Moreover, the presence of _PR3 without _PR0 for a given device
-means that only one D3-level power state can be supported by it.
-Namely, because there are no power resources to turn "off" when
-transitioning the device from D0 into D3cold (which should be
-supported since _PR3 is present), the evaluation of _PS3 should
-be sufficient to put it straight into D3cold, but this means that
-the effect of turning "on" the _PR3 power resources is unclear,
-so it is better to avoid doing that altogether.  Consequently,
-there is no practical way do distinguish D3cold from D3hot for
-the device in question and the power states of it can be labeled
-so that D3hot is the deepest supported one (and Linux assumes
-that putting a device into D3hot via ACPI may cause power to be
-removed from it anyway, for legacy reasons).
-
-To work around the problem described above modify the ACPI
-enumeration of devices so that power resources are only used
-for device power management if the list of D0 power resources
-is not empty and make it mart D3cold as supported only if that
-is the case and the D3hot list of power resources is not empty
-too.
-
-Fixes: ef85bdbec444 ("ACPI / scan: Consolidate extraction of power resources lists")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=205057
-Link: https://lore.kernel.org/linux-acpi/20200603194659.185757-1-hdegoede@redhat.com/
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Cc: 3.10+ <stable@vger.kernel.org> # 3.10+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/device_pm.c |    2 +-
- drivers/acpi/scan.c      |   28 +++++++++++++++++++---------
- 2 files changed, 20 insertions(+), 10 deletions(-)
-
-Index: linux-pm/drivers/acpi/scan.c
-===================================================================
---- linux-pm.orig/drivers/acpi/scan.c
-+++ linux-pm/drivers/acpi/scan.c
-@@ -919,12 +919,9 @@ static void acpi_bus_init_power_state(st
- 
- 		if (buffer.length && package
- 		    && package->type == ACPI_TYPE_PACKAGE
--		    && package->package.count) {
--			int err = acpi_extract_power_resources(package, 0,
--							       &ps->resources);
--			if (!err)
--				device->power.flags.power_resources = 1;
--		}
-+		    && package->package.count)
-+			acpi_extract_power_resources(package, 0, &ps->resources);
-+
- 		ACPI_FREE(buffer.pointer);
- 	}
- 
-@@ -971,14 +968,27 @@ static void acpi_bus_get_power_flags(str
- 		acpi_bus_init_power_state(device, i);
- 
- 	INIT_LIST_HEAD(&device->power.states[ACPI_STATE_D3_COLD].resources);
--	if (!list_empty(&device->power.states[ACPI_STATE_D3_HOT].resources))
--		device->power.states[ACPI_STATE_D3_COLD].flags.valid = 1;
- 
--	/* Set defaults for D0 and D3hot states (always valid) */
-+	/* Set the defaults for D0 and D3hot (always supported). */
- 	device->power.states[ACPI_STATE_D0].flags.valid = 1;
- 	device->power.states[ACPI_STATE_D0].power = 100;
- 	device->power.states[ACPI_STATE_D3_HOT].flags.valid = 1;
- 
-+	/*
-+	 * Use power resources only if the D0 list of them is populated, because
-+	 * some platforms may provide _PR3 only to indicate D3cold support and
-+	 * in those cases the power resources list returned by it may be bogus.
-+	 */
-+	if (!list_empty(&device->power.states[ACPI_STATE_D0].resources)) {
-+		device->power.flags.power_resources = 1;
-+		/*
-+		 * D3cold is supported if the D3hot list of power resources is
-+		 * not empty.
-+		 */
-+		if (!list_empty(&device->power.states[ACPI_STATE_D3_HOT].resources))
-+			device->power.states[ACPI_STATE_D3_COLD].flags.valid = 1;
-+	}
-+
- 	if (acpi_bus_init_power(device))
- 		device->flags.power_manageable = 0;
- }
-Index: linux-pm/drivers/acpi/device_pm.c
-===================================================================
---- linux-pm.orig/drivers/acpi/device_pm.c
-+++ linux-pm/drivers/acpi/device_pm.c
-@@ -186,7 +186,7 @@ int acpi_device_set_power(struct acpi_de
- 		 * possibly drop references to the power resources in use.
- 		 */
- 		state = ACPI_STATE_D3_HOT;
--		/* If _PR3 is not available, use D3hot as the target state. */
-+		/* If D3cold is not supported, use D3hot as the target state. */
- 		if (!device->power.states[ACPI_STATE_D3_COLD].flags.valid)
- 			target_state = state;
- 	} else if (!device->power.states[state].flags.valid) {
-
-
-
+> >
+> > +     /* Nonboot CPUs will be resumed when they're brought up */
+> > +     xen_restore_steal_clock(smp_processor_id());
+> > +
+> >       gnttab_resume();
+> >  }
+> >
+> > diff --git a/arch/x86/xen/time.c b/arch/x86/xen/time.c
+> > index c8897aad13cd..33d754564b09 100644
+> > --- a/arch/x86/xen/time.c
+> > +++ b/arch/x86/xen/time.c
+> > @@ -545,6 +545,9 @@ static void xen_hvm_setup_cpu_clockevents(void)
+> >  {
+> >       int cpu = smp_processor_id();
+> >       xen_setup_runstate_info(cpu);
+> > +     if (cpu)
+> > +             xen_restore_steal_clock(cpu);
+> > +
+> >       /*
+> >        * xen_setup_timer(cpu) - snprintf is bad in atomic context. Hence
+> >        * doing it xen_hvm_cpu_notify (which gets called by smp_init during
+> 
+> 
+> 
