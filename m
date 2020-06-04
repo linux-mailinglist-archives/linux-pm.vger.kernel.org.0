@@ -2,179 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5540E1EE54E
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jun 2020 15:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E47CA1EE957
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jun 2020 19:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728590AbgFDN23 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 4 Jun 2020 09:28:29 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:54052 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728541AbgFDN22 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jun 2020 09:28:28 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200604132826euoutp02a930d75568021445686abbd5d75345d1~VWkeROnkL1768417684euoutp025
-        for <linux-pm@vger.kernel.org>; Thu,  4 Jun 2020 13:28:26 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200604132826euoutp02a930d75568021445686abbd5d75345d1~VWkeROnkL1768417684euoutp025
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1591277306;
-        bh=rQhEujvdCub17kDRdV7XcRmQnjRGEuw4sAkltLJjWEw=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=HTk9blknIgpL+VgH1uxuvXmD2ue/AE+3wN1onWhwLukvAUTT89h7+ZO5QXCFgxykv
-         ueCAxBUg5XBupZYD3mMITxZ8M5U99O8VdGnH9REfKPEUwfu87Vb/qLDFxJBir+tMZA
-         RZQ9+lqGzp1eXlOfVgffi2pTiLhr4TPakdiGYTWQ=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200604132826eucas1p10ef27317919d02b41863129351f4f23f~VWkd5s9Da1331913319eucas1p14;
-        Thu,  4 Jun 2020 13:28:26 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 65.06.60698.AF6F8DE5; Thu,  4
-        Jun 2020 14:28:26 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200604132826eucas1p22f1d6e0121994e4579fca30f6b53e03b~VWkdo1G8U0300503005eucas1p2s;
-        Thu,  4 Jun 2020 13:28:26 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200604132826eusmtrp2aa584879f4bccf6009be867d2c23f547~VWkdn9nCt0897308973eusmtrp2C;
-        Thu,  4 Jun 2020 13:28:26 +0000 (GMT)
-X-AuditID: cbfec7f5-a0fff7000001ed1a-95-5ed8f6fa8a71
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 6E.75.08375.9F6F8DE5; Thu,  4
-        Jun 2020 14:28:26 +0100 (BST)
-Received: from [106.210.88.143] (unknown [106.210.88.143]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200604132825eusmtip203543a6a26b8a72a3973ba67c34eef2a~VWkcy6kGH1944419444eusmtip2L;
-        Thu,  4 Jun 2020 13:28:25 +0000 (GMT)
-Subject: Re: [PATCH v2] soc: samsung: Add simple voltage coupler for
- Exynos5800
-To:     Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, peron.clem@gmail.com,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        linux-samsung-soc@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <3fffeb5b-85d5-7528-9edf-2a047d57e9a1@samsung.com>
-Date:   Thu, 4 Jun 2020 15:28:24 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.8.1
+        id S1730090AbgFDRWa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 4 Jun 2020 13:22:30 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42574 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730043AbgFDRWa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 4 Jun 2020 13:22:30 -0400
+Received: from 89-64-85-58.dynamic.chello.pl (89.64.85.58) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id 27bd5aa14999d311; Thu, 4 Jun 2020 19:22:27 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        youling257@gmail.com, LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: [PATCH] ACPI: PM: Avoid using power resources if there are none for D0
+Date:   Thu, 04 Jun 2020 19:22:26 +0200
+Message-ID: <13388608.OHKVb9tm6R@kreacher>
+In-Reply-To: <d084b424-a340-a24a-d681-c92d80d8421d@redhat.com>
+References: <20200603194659.185757-1-hdegoede@redhat.com> <CAJZ5v0g7rhiWs0ZeGGS5OoSMH7DiVT1D-EUgX5HFXYkcvXcm2Q@mail.gmail.com> <d084b424-a340-a24a-d681-c92d80d8421d@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <4a5874c1-6b4e-2da5-4dd1-dd5537fe6de7@gmail.com>
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHe3fOzo7DyXEqvmgZLcmyUodFh0orCTv1ITLtS6C18jAtb+yo
-        ZVCYls3hyoSVLksRK++35hWVadIILyuvywvmBUTRrKZmYppnp4vffs/z/J/L/+XFEfEE3wkP
-        j4qlFVGyCAkmRGve/ezav7JkCvGqUDuQlZnlfFIzNomRAwtTfLL42wQgjcYKAfn5+SceudSr
-        5JE9DdkYaVa3ATLT2MwjZ5c7eeTQix6U7Gjv5pNr/ZUoqWxbQsjKReo4QdVrRwRUVVEqRg33
-        N2LUo19elK7vAUo91BUBymCq5VHmKpdz+EXh0VA6IjyeVnj6XhaGGZPH+TFLjjc16y/RRFBi
-        pwJWOCQOQKVaz1cBIS4mCgCc1g1iXLAA4ELTMp9ViQkzgE1Zx1QAt3SoSiku/RrAxdlATj8P
-        YLI6B2MLdkQAbMmttUy1J+4CqEudQtgCQnQgsGzGiWWMkELVnMrSICJ84ePBfAHLKOEKR8x1
-        FnYggmHa6AzCaWzh+6xJlGUrwge++joPuJnbYXL1sz/zHeHgZA6Ps6bGYXGNC8cnoX4oBePY
-        Ds4YdAKOt8L1elYv3OBkAMe6SgVckAZgT1Im4FRH4HDXCsbaR4g9sLzBk0ufgJmF2Rj3KjbQ
-        NGfL3WADM2qeIlxaBJUpYk69C2oNZf/WtnzoRtKBRLvJmXaTG+0mN9r/e3MBWgQc6TgmUk4z
-        3lH0DQ9GFsnERck9rkZHVoGNr9e+ZlisA82rV1oBgQOJtcj00RQi5svimYTIVgBxRGIv8uts
-        DxGLQmUJt2hF9CVFXATNtAJnHJU4irzzpoPFhFwWS1+n6Rha8bfKw62cEkHYQGHzNX2Zh82+
-        C9WjmvNDhSqfgJ5JvyC3bUVBU6290reHdxCufaXS/BLG81TfPd7E3vtuX/zlgelJB33U3tbS
-        6CDnndqGupaz82diy11UT1YP/UD0uxMWHdxHTvv2Ao+5Jr0iK+NJo21wxYhmiyQ8LzVmCrO5
-        c9tz9fvgm3H/AgnKhMmk7oiCkf0GHlMq83YDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJIsWRmVeSWpSXmKPExsVy+t/xe7q/vt2IM/jexGSxccZ6VoupD5+w
-        WVz/8pzVYvXHx4wW589vYLd4MPcmk8W3Kx1MFpd3zWGz+Nx7hNFixvl9TBZvfpxlsrg97zKL
-        xZnTl1gt/l3byGLRceQbs8XGrx4OAh47Z91l99i0qpPN4861PWwe/X8NPLZcbWfx6NuyitHj
-        +I3tTB6fN8kFcETp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSW
-        pRbp2yXoZZxvfsRa8E28Yur/pSwNjGuEuxg5OCQETCS61np0MXJxCAksZZRYsWQpYxcjJ1Bc
-        RuLktAZWCFtY4s+1LjaIoreMEj37NzODJIQFAiUOLtjOCpIQEWhklJi1YRc7iMMscI5Z4viH
-        V1AtPxglLh59wwbSwiZgKNH1tgvM5hWwk5h4awk7iM0ioCJx9/MOMFtUIFaie/EPdogaQYmT
-        M5+wgNicArYSyz68B7uPWcBMYt7mh8wQtrxE89bZULa4xK0n85kmMArNQtI+C0nLLCQts5C0
-        LGBkWcUoklpanJueW2yoV5yYW1yal66XnJ+7iREY7duO/dy8g/HSxuBDjAIcjEo8vDcu3ogT
-        Yk0sK67MPcQowcGsJMLrdPZ0nBBvSmJlVWpRfnxRaU5q8SFGU6DnJjJLiSbnAxNRXkm8oamh
-        uYWlobmxubGZhZI4b4fAwRghgfTEktTs1NSC1CKYPiYOTqkGxphsOSuTZ1/a18999IzTpkIo
-        4PAcgYKpZZtEbF/UZWRpbSq5wl9dWbdu15kVC2aWaX56G80R8t/ZOnWj05mS2ylWa1ZPTNbV
-        Zpafu6jf56rstij7Z9IM4c07T6Tefn7I9My1Q8WcHQ8CVAR0+me21Mj9k9ih/IUj3SeMUSla
-        t6VMxelI0kt+JZbijERDLeai4kQAvii5hQwDAAA=
-X-CMS-MailID: 20200604132826eucas1p22f1d6e0121994e4579fca30f6b53e03b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200602130931eucas1p1cd784c8f692fa91dc566504543a927de
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200602130931eucas1p1cd784c8f692fa91dc566504543a927de
-References: <57cf3a15-5d9b-7636-4c69-60742e8cfae6@samsung.com>
-        <CGME20200602130931eucas1p1cd784c8f692fa91dc566504543a927de@eucas1p1.samsung.com>
-        <20200602130211.2727-1-m.szyprowski@samsung.com>
-        <4a5874c1-6b4e-2da5-4dd1-dd5537fe6de7@gmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On 02.06.2020 17:15, Dmitry Osipenko wrote:
-> 02.06.2020 16:02, Marek Szyprowski пишет:
->> Add a simple custom voltage regulator coupler for Exynos5800 SoCs, which
->> require coupling between "vdd_arm" and "vdd_int" regulators. This coupler
->> ensures that the voltage balancing for the coupled regulators is done
->> only when clients for the each regulator apply their constraints, so the
->> voltage values don't go beyond the bootloader-selected operation point
->> during the boot process. This also ensures proper voltage balancing if
->> any of the client driver is missing.
->>
->> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
->> ---
->>   (...)
-> Hello Marek,
->
-> Does this mean that you're going to allow to violate the coupling
-> constraints while coupled regulator has no consumers?
->
-> I don't think that you may want to skip the coupled balancing ever.
-> Instead you may want to assume that the min-voltage constraint equals to
-> the current regulator's voltage while the coupled regulator has no
-> consumers.
->
-> Yours variant of the balancer doesn't prevent the voltage dropping on
-> regulator's enabling while coupled regulator doesn't have active
-> consumers. This is the problem which we previously had once OPP code was
-> changed to enable regulator.
->
-> Secondly, yours variant of the balancer also doesn't handle the case
-> where set_voltage() is invoked while one of the couples doesn't have
-> active consumers because voltage of this couple may drop more than
-> allowed on the voltage re-balancing.
-Indeed. I've focused on disabling balancing when there are no consumers 
-and I didn't notice that the max_spread might be violated in such case.
-> I'd suggest to simply change the regulator_get_optimal_voltage() to
-> limit the desired_min_uV to the current voltage if coupled regulator has
-> no consumers.
+As recently reported, some platforms provide a list of power
+resources for device power state D3hot, through the _PR3 object,
+but they do not provide a list of power resources for device power
+state D0.
 
-Right, this sounds like a best solution. I have an idea to try to add it 
-again to the core as a simple check: if regultor is boot_on, use current 
-voltage as min_uV until a consumer is registered. I've checked and this 
-approach fixes the issue. I will submit a patch in a few minutes.
+Among other things, this causes acpi_device_get_power() to return
+D3hot as the current state of the device in question if all of the
+D3hot power resources are "on", because it sees the power_resources
+flag set and calls acpi_power_get_inferred_state() which finds that
+D3hot is the shallowest power state with all of the associated power
+resources turned "on", so that's what it returns.  Moreover, that
+value takes precedence over the acpi_dev_pm_explicit_get() return
+value, because it means a deeper power state.  The device may very
+well be in D0 physically at that point, however.
 
-> I don't think that any of the today's upstream kernel coupled-regulator
-> users really need to support the case where a regulator couple is
-> allowed *not* to have active consumers, so for now it should be fine to
-> change the core code to accommodate the needs of the Exynos regulators
-> (IMO). We may get back to this later on once there will be a real need
-> support that case.
->
-> Please also note that I'm assuming that each of the coupled regulators
-> doesn't have more than one consumer at a time in yours case (correct?),
-> because yours solution won't work well in a case of multiple consumers.
-> There is no universal solution for this bootstrapping problem yet.
+Moreover, the presence of _PR3 without _PR0 for a given device
+means that only one D3-level power state can be supported by it.
+Namely, because there are no power resources to turn "off" when
+transitioning the device from D0 into D3cold (which should be
+supported since _PR3 is present), the evaluation of _PS3 should
+be sufficient to put it straight into D3cold, but this means that
+the effect of turning "on" the _PR3 power resources is unclear,
+so it is better to avoid doing that altogether.  Consequently,
+there is no practical way do distinguish D3cold from D3hot for
+the device in question and the power states of it can be labeled
+so that D3hot is the deepest supported one (and Linux assumes
+that putting a device into D3hot via ACPI may cause power to be
+removed from it anyway, for legacy reasons).
 
-There are only a single consumers for each coupled regulator (cpufreq 
-for vdd_arm and devfreq for vdd_int).
+To work around the problem described above modify the ACPI
+enumeration of devices so that power resources are only used
+for device power management if the list of D0 power resources
+is not empty and make it mart D3cold as supported only if that
+is the case and the D3hot list of power resources is not empty
+too.
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+Fixes: ef85bdbec444 ("ACPI / scan: Consolidate extraction of power resources lists")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=205057
+Link: https://lore.kernel.org/linux-acpi/20200603194659.185757-1-hdegoede@redhat.com/
+Reported-by: Hans de Goede <hdegoede@redhat.com>
+Cc: 3.10+ <stable@vger.kernel.org> # 3.10+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/device_pm.c |    2 +-
+ drivers/acpi/scan.c      |   28 +++++++++++++++++++---------
+ 2 files changed, 20 insertions(+), 10 deletions(-)
+
+Index: linux-pm/drivers/acpi/scan.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/scan.c
++++ linux-pm/drivers/acpi/scan.c
+@@ -919,12 +919,9 @@ static void acpi_bus_init_power_state(st
+ 
+ 		if (buffer.length && package
+ 		    && package->type == ACPI_TYPE_PACKAGE
+-		    && package->package.count) {
+-			int err = acpi_extract_power_resources(package, 0,
+-							       &ps->resources);
+-			if (!err)
+-				device->power.flags.power_resources = 1;
+-		}
++		    && package->package.count)
++			acpi_extract_power_resources(package, 0, &ps->resources);
++
+ 		ACPI_FREE(buffer.pointer);
+ 	}
+ 
+@@ -971,14 +968,27 @@ static void acpi_bus_get_power_flags(str
+ 		acpi_bus_init_power_state(device, i);
+ 
+ 	INIT_LIST_HEAD(&device->power.states[ACPI_STATE_D3_COLD].resources);
+-	if (!list_empty(&device->power.states[ACPI_STATE_D3_HOT].resources))
+-		device->power.states[ACPI_STATE_D3_COLD].flags.valid = 1;
+ 
+-	/* Set defaults for D0 and D3hot states (always valid) */
++	/* Set the defaults for D0 and D3hot (always supported). */
+ 	device->power.states[ACPI_STATE_D0].flags.valid = 1;
+ 	device->power.states[ACPI_STATE_D0].power = 100;
+ 	device->power.states[ACPI_STATE_D3_HOT].flags.valid = 1;
+ 
++	/*
++	 * Use power resources only if the D0 list of them is populated, because
++	 * some platforms may provide _PR3 only to indicate D3cold support and
++	 * in those cases the power resources list returned by it may be bogus.
++	 */
++	if (!list_empty(&device->power.states[ACPI_STATE_D0].resources)) {
++		device->power.flags.power_resources = 1;
++		/*
++		 * D3cold is supported if the D3hot list of power resources is
++		 * not empty.
++		 */
++		if (!list_empty(&device->power.states[ACPI_STATE_D3_HOT].resources))
++			device->power.states[ACPI_STATE_D3_COLD].flags.valid = 1;
++	}
++
+ 	if (acpi_bus_init_power(device))
+ 		device->flags.power_manageable = 0;
+ }
+Index: linux-pm/drivers/acpi/device_pm.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/device_pm.c
++++ linux-pm/drivers/acpi/device_pm.c
+@@ -186,7 +186,7 @@ int acpi_device_set_power(struct acpi_de
+ 		 * possibly drop references to the power resources in use.
+ 		 */
+ 		state = ACPI_STATE_D3_HOT;
+-		/* If _PR3 is not available, use D3hot as the target state. */
++		/* If D3cold is not supported, use D3hot as the target state. */
+ 		if (!device->power.states[ACPI_STATE_D3_COLD].flags.valid)
+ 			target_state = state;
+ 	} else if (!device->power.states[state].flags.valid) {
+
+
 
