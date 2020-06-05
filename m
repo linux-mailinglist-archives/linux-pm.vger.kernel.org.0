@@ -2,253 +2,230 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3FA41F0152
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 23:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A511F0181
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 23:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728170AbgFEVJm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Jun 2020 17:09:42 -0400
-Received: from mga12.intel.com ([192.55.52.136]:23117 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727888AbgFEVJm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Jun 2020 17:09:42 -0400
-IronPort-SDR: 9J2tvaG6Rla6wf9lKJvd8muskTh4GjXNiFz7VNQIXD4VwkFzPqK3RAAQ09noBmmU0AuVCVo9FV
- Sq1Rtjsw7pKg==
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2020 14:09:39 -0700
-IronPort-SDR: e54a9bH0CQvT5TXsLyE8X2Upk0TzjgRvaQZh0cXs90gPmQug5Dd/79BnM8qr4CLWJeLOdQvt2k
- FJgkjR+FlVlQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,477,1583222400"; 
-   d="gz'50?scan'50,208,50";a="417397850"
-Received: from lkp-server02.sh.intel.com (HELO 85fa322b0eb2) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 05 Jun 2020 14:09:36 -0700
-Received: from kbuild by 85fa322b0eb2 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jhJap-0000P5-DD; Fri, 05 Jun 2020 21:09:35 +0000
-Date:   Sat, 6 Jun 2020 05:08:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>
-Cc:     kbuild-all@lists.01.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Brad Campbell <lists2009@fnarfbargle.com>
-Subject: Re: [PATCH] x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during
- wakeup
-Message-ID: <202006060421.fTpTXYbe%lkp@intel.com>
-References: <20200605200728.10145-1-sean.j.christopherson@intel.com>
+        id S1728330AbgFEVZq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Jun 2020 17:25:46 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:35112 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726664AbgFEVZq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Jun 2020 17:25:46 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 055LCfnP068053;
+        Fri, 5 Jun 2020 21:24:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=aV98zPU93QBvNWrzk/ChQ5VDmnpe9w8rIC4yo8Fb6lM=;
+ b=Q1wCXDw9w/bF7V0bkGC6IvL76x/w0WRjHOjcxmnHanLSCPjsBGyoHCWarj+RUh94mOSJ
+ JOw6GQd3a5lw9KYdYwB2p/gU3zJuSBSrGrcp6GYC6IH07y9J6nCZZj+uTRccUfHts6bd
+ MdUyRr//DuAUp9QUBtGFB4+83Cz9gWQPj0pd9i6KcEhicYRbbQUTTrLaGUHKpeehAJCZ
+ 81LgCPL7zl/DqQu7VMtqkC3X4EK4U8vjMA9l5YLArm6psse7CKjV7A9oD3lz3ZtmSrRt
+ ET2Dx60lQiQPN8gE2bl/ckY4w3R5KJWxgT9i2gvTGQxuSupj4SrfzCWHtvZJZpGjkGwB yQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 31f91dvsxd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 05 Jun 2020 21:24:53 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 055LEWQ2149042;
+        Fri, 5 Jun 2020 21:24:52 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 31f927qyn8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 05 Jun 2020 21:24:52 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 055LOfOR001022;
+        Fri, 5 Jun 2020 21:24:41 GMT
+Received: from [10.39.238.70] (/10.39.238.70)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 05 Jun 2020 14:24:41 -0700
+Subject: Re: [PATCH 04/12] x86/xen: add system core suspend and resume
+ callbacks
+To:     "Agarwal, Anchal" <anchalag@amazon.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Kamata, Munehisa" <kamatam@amazon.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "roger.pau@citrix.com" <roger.pau@citrix.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
+References: <cover.1589926004.git.anchalag@amazon.com>
+ <79cf02631dc00e62ebf90410bfbbdb52fe7024cb.1589926004.git.anchalag@amazon.com>
+ <4b577564-e4c3-0182-2b9e-5f79004f32a1@oracle.com>
+ <B966B3A2-4F08-42FA-AF59-B8AA0783C2BA@amazon.com>
+From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Autocrypt: addr=boris.ostrovsky@oracle.com; keydata=
+ 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
+ Jg6OxFYd01z+a+oL
+Message-ID: <e2073aa4-2410-4630-fee6-4e4abc172876@oracle.com>
+Date:   Fri, 5 Jun 2020 17:24:37 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="9jxsPFA5p3P2qPhR"
-Content-Disposition: inline
-In-Reply-To: <20200605200728.10145-1-sean.j.christopherson@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <B966B3A2-4F08-42FA-AF59-B8AA0783C2BA@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9643 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0
+ mlxlogscore=999 bulkscore=0 suspectscore=0 adultscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006050158
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9643 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 bulkscore=0
+ clxscore=1015 cotscore=-2147483648 malwarescore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 spamscore=0 mlxscore=0
+ impostorscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006050158
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 6/3/20 6:40 PM, Agarwal, Anchal wrote:
+>     CAUTION: This email originated from outside of the organization. Do=
+ not click links or open attachments unless you can confirm the sender an=
+d know the content is safe.
+>
+>
+>
+>     On 5/19/20 7:26 PM, Anchal Agarwal wrote:
+>     > From: Munehisa Kamata <kamatam@amazon.com>
+>     >
+>     > Add Xen PVHVM specific system core callbacks for PM suspend and
+>     > hibernation support. The callbacks suspend and resume Xen
+>     > primitives,like shared_info, pvclock and grant table. Note that
+>     > Xen suspend can handle them in a different manner, but system
+>     > core callbacks are called from the context.
+>
+>
+>     I don't think I understand that last sentence.
+>
+> Looks like it may have cryptic meaning of stating that xen_suspend call=
+s syscore_suspend from xen_suspend
+> So, if these syscore ops gets called  during xen_suspend do not do anyt=
+hing. Check if the mode is in xen suspend=20
+> and return from there. These syscore_ops are specifically for domU hibe=
+rnation.
+> I must admit, I may have overlooked lack of explanation of some implici=
+t details in the original commit msg.=20
+>
+>     >  So if the callbacks
+>     > are called from Xen suspend context, return immediately.
+>     >
+>
+>
+>     > +
+>     > +static int xen_syscore_suspend(void)
+>     > +{
+>     > +     struct xen_remove_from_physmap xrfp;
+>     > +     int ret;
+>     > +
+>     > +     /* Xen suspend does similar stuffs in its own logic */
+>     > +     if (xen_suspend_mode_is_xen_suspend())
+>     > +             return 0;
 
---9jxsPFA5p3P2qPhR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-Hi Sean,
+With your explanation now making this clearer, is this check really
+necessary? From what I see we are in XEN_SUSPEND mode when
+lock_system_sleep() lock is taken, meaning that we can't initialize
+hibernation.
 
-I love your patch! Yet something to improve:
 
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on tip/auto-latest v5.7 next-20200605]
-[cannot apply to bp/for-next]
-[if your patch is applied to the wrong git tree, please drop us a note to help
-improve the system. BTW, we also suggest to use '--base' option to specify the
-base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+>     > +
+>     > +     xrfp.domid =3D DOMID_SELF;
+>     > +     xrfp.gpfn =3D __pa(HYPERVISOR_shared_info) >> PAGE_SHIFT;
+>     > +
+>     > +     ret =3D HYPERVISOR_memory_op(XENMEM_remove_from_physmap, &x=
+rfp);
+>     > +     if (!ret)
+>     > +             HYPERVISOR_shared_info =3D &xen_dummy_shared_info;
+>     > +
+>     > +     return ret;
+>     > +}
+>     > +
+>     > +static void xen_syscore_resume(void)
+>     > +{
+>     > +     /* Xen suspend does similar stuffs in its own logic */
+>     > +     if (xen_suspend_mode_is_xen_suspend())
+>     > +             return;
+>     > +
+>     > +     /* No need to setup vcpu_info as it's already moved off */
+>     > +     xen_hvm_map_shared_info();
+>     > +
+>     > +     pvclock_resume();
+>     > +
+>     > +     gnttab_resume();
+>
+>
+>     Do you call gnttab_suspend() in pm suspend path?
+> No, since it does nothing for HVM guests. The unmap_frames is only appl=
+icable for PV guests right?
 
-url:    https://github.com/0day-ci/linux/commits/Sean-Christopherson/x86-cpu-Reinitialize-IA32_FEAT_CTL-MSR-on-BSP-during-wakeup/20200606-040921
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 9cb1fd0efd195590b828b9b865421ad345a4a145
-config: i386-tinyconfig (attached as .config)
-compiler: gcc-9 (Debian 9.3.0-13) 9.3.0
-reproduce (this is a W=1 build):
-        # save the attached .config to linux build tree
-        make W=1 ARCH=i386 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+You should call it nevertheless. It will decide whether or not anything
+needs to be done.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-arch/x86/kernel/cpu/centaur.c: In function 'init_centaur':
->> arch/x86/kernel/cpu/centaur.c:219:2: error: implicit declaration of function 'init_ia32_feat_ctl' [-Werror=implicit-function-declaration]
-219 |  init_ia32_feat_ctl(c);
-|  ^~~~~~~~~~~~~~~~~~
-cc1: some warnings being treated as errors
---
-arch/x86/kernel/cpu/zhaoxin.c: In function 'init_zhaoxin':
->> arch/x86/kernel/cpu/zhaoxin.c:110:2: error: implicit declaration of function 'init_ia32_feat_ctl' [-Werror=implicit-function-declaration]
-110 |  init_ia32_feat_ctl(c);
-|  ^~~~~~~~~~~~~~~~~~
-cc1: some warnings being treated as errors
+-boris
 
-vim +/init_ia32_feat_ctl +219 arch/x86/kernel/cpu/centaur.c
 
-60882cc159e141 arch/x86/kernel/cpu/centaur.c  David Wang          2018-04-20  218  
-501444905fcb41 arch/x86/kernel/cpu/centaur.c  Sean Christopherson 2019-12-20 @219  	init_ia32_feat_ctl(c);
-^1da177e4c3f41 arch/i386/kernel/cpu/centaur.c Linus Torvalds      2005-04-16  220  }
-^1da177e4c3f41 arch/i386/kernel/cpu/centaur.c Linus Torvalds      2005-04-16  221  
-
-:::::: The code at line 219 was first introduced by commit
-:::::: 501444905fcb4166589fda99497c273ac5efc65e x86/centaur: Use common IA32_FEAT_CTL MSR initialization
-
-:::::: TO: Sean Christopherson <sean.j.christopherson@intel.com>
-:::::: CC: Borislav Petkov <bp@suse.de>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-
---9jxsPFA5p3P2qPhR
-Content-Type: application/gzip
-Content-Disposition: attachment; filename=".config.gz"
-Content-Transfer-Encoding: base64
-
-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
-Vg3I8DBoAAA=
-
---9jxsPFA5p3P2qPhR--
