@@ -2,157 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E84A1F00F9
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 22:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29711F0102
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 22:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728129AbgFEUbE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Jun 2020 16:31:04 -0400
-Received: from mga12.intel.com ([192.55.52.136]:19950 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727888AbgFEUbE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Jun 2020 16:31:04 -0400
-IronPort-SDR: xMNEOeWJ9SU+AihKHHlrs0yTcSQri0aUklQZ4EveFvGwMudxVuAne+YKgdZCltq8GviiF61+lo
- GGYE2FCGgVQg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2020 13:31:03 -0700
-IronPort-SDR: pwsKWOtCQmVoAe3oNneWMuF2iH8nJAWheywWnYTF+WEgsXGxw9eYjkF9gncwffGnz/HMBI0c7d
- Rmjxw3QrPy5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,477,1583222400"; 
-   d="scan'208";a="446015406"
-Received: from lkp-server02.sh.intel.com (HELO 85fa322b0eb2) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 05 Jun 2020 13:31:01 -0700
-Received: from kbuild by 85fa322b0eb2 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jhIzU-0000Nd-Rw; Fri, 05 Jun 2020 20:31:00 +0000
-Date:   Sat, 06 Jun 2020 04:29:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 1e4a104be0a3afafbafc13bacc5f42007db8d43e
-Message-ID: <5edaab47.BGrzd29tN8xz8E0X%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728163AbgFEUeW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Jun 2020 16:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727888AbgFEUeW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Jun 2020 16:34:22 -0400
+Received: from merlin.infradead.org (unknown [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D9CC08C5C2;
+        Fri,  5 Jun 2020 13:34:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mw8VvWe7EE3uVg13FxiUrEz8BgF0q+z7XfuLsYKCdMs=; b=XHAiRDHRfrtWsqJ/5YI/J+wEym
+        fa0fexDxTJwq+EdTS7AbxsFSe4+NNIUeHBU/6Rxr80OklDhzTfHrDx9rfj9NSAHJ1sEzKB3Fsr4u6
+        uuB6SkvEOPuqg9UUbJSS7oXcrqYzKKDLrV065Z6kEWqNL7fkS7OZVR4ZQFImCgKTTGtdGdogA5nVU
+        YPTBrWzCqBkNOdpvF6yG3rYiCeMxY1W4IuK89xhywUDqKsA0Bgd1ubp+pbpOE93I3yqPqG9Ef8bzv
+        3qH49us5CbN4FNIv4YyIW05myBHUjNt//8ENJgJi93Gfqf2IVDhXIAa7NtDsxP4dwt/xCFNiIs0Wz
+        P80sOuYg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jhJ2E-0003eW-T9; Fri, 05 Jun 2020 20:33:51 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 65DBB30067C;
+        Fri,  5 Jun 2020 22:33:47 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0E18221A308C6; Fri,  5 Jun 2020 22:33:47 +0200 (CEST)
+Date:   Fri, 5 Jun 2020 22:33:47 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     Alexander Monakov <amonakov@ispras.ru>,
+        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>, qperret@google.com,
+        juri.lelli@redhat.com,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Doug Smythies <dsmythies@telus.net>
+Subject: Re: schedutil issue with serial workloads
+Message-ID: <20200605203347.GM3976@hirez.programming.kicks-ass.net>
+References: <alpine.LNX.2.20.13.2006042341160.3984@monopod.intra.ispras.ru>
+ <c3145e26-56c8-4979-513c-cfac191e989b@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <c3145e26-56c8-4979-513c-cfac191e989b@intel.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 1e4a104be0a3afafbafc13bacc5f42007db8d43e  Merge branch 'pm-cpufreq' into bleeding-edge
+On Fri, Jun 05, 2020 at 06:51:12PM +0200, Rafael J. Wysocki wrote:
+> On 6/4/2020 11:29 PM, Alexander Monakov wrote:
 
-elapsed time: 484m
+> > this is a question/bugreport about behavior of schedutil on serial workloads
+> > such as rsync, or './configure', or 'make install'. These workloads are
+> > such that there's no single task that takes a substantial portion of CPU
+> > time, but at any moment there's at least one runnable task, and overall
+> > the workload is compute-bound. To run the workload efficiently, cpufreq
+> > governor should select a high frequency.
+> > 
+> > Assume the system is idle except for the workload in question.
+> > 
+> > Sadly, schedutil will select the lowest frequency, unless the workload is
+> > confined to one core with taskset (in which case it will select the
+> > highest frequency, correctly though somewhat paradoxically).
+> 
+> That's because the CPU utilization generated by the workload on all CPUs is
+> small.
+> 
+> Confining it to one CPU causes the utilization of this one to grow and so
+> schedutil selects a higher frequency for it.
 
-configs tested: 97
-configs skipped: 1
+My initial question was why doesn't io-boosting fix this up, but a quick
+look at our pipe code shows me that it doesn't seem to use
+io_schedule().
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+That is currently our only means to express 'someone is waiting on us'
+to which we then say 'lets hurry up a bit'.
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-i386                              allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20200605
-x86_64               randconfig-a001-20200605
-x86_64               randconfig-a006-20200605
-x86_64               randconfig-a003-20200605
-x86_64               randconfig-a004-20200605
-x86_64               randconfig-a005-20200605
-i386                 randconfig-a001-20200605
-i386                 randconfig-a006-20200605
-i386                 randconfig-a002-20200605
-i386                 randconfig-a005-20200605
-i386                 randconfig-a004-20200605
-i386                 randconfig-a003-20200605
-i386                 randconfig-a014-20200605
-i386                 randconfig-a015-20200605
-i386                 randconfig-a011-20200605
-i386                 randconfig-a016-20200605
-i386                 randconfig-a012-20200605
-i386                 randconfig-a013-20200605
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                                  defconfig
-um                               allyesconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Because, as you've found, if the tasks do not queue up, there is nothing
+to push the frequency up.
