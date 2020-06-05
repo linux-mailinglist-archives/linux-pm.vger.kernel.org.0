@@ -2,95 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2621EF52F
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 12:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A511EF6E1
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 13:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726233AbgFEKUW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Jun 2020 06:20:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60158 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725926AbgFEKUV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Jun 2020 06:20:21 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2DC01206A2;
-        Fri,  5 Jun 2020 10:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591352420;
-        bh=0Lc6LV1qscUeMNvN13MORO4Kv4mAyEfjM/eifugNtFU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F1SZirs580058Yb5bxxi3nJl7rNYeahVvgVpSXuzblma3gX4fn0wVFptYysjT0c2f
-         3eMs4Fo8k8i9mYI4rV4s8I2ymtCjfa9qPuBGHXGbq3ZoICdJAApmGwljY4x5jR4sWy
-         iECn4Q0jATRDn3ibmRvew7qUCYa7+gmF8vWaolVg=
-Date:   Fri, 5 Jun 2020 11:20:18 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, peron.clem@gmail.com,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        linux-samsung-soc@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Saravana Kannan <saravanak@google.com>
-Subject: Re: [PATCH] regulator: do not balance 'boot-on' coupled regulators
- without constraints
-Message-ID: <20200605102018.GA5413@sirena.org.uk>
-References: <CGME20200605063729eucas1p288dd9d3acdb62cc86745cb6af5c31fc6@eucas1p2.samsung.com>
- <20200605063724.9030-1-m.szyprowski@samsung.com>
+        id S1726324AbgFEL4y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Jun 2020 07:56:54 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:44339 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726314AbgFEL4y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Jun 2020 07:56:54 -0400
+Received: by mail-ot1-f67.google.com with SMTP id e5so7351197ote.11;
+        Fri, 05 Jun 2020 04:56:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qInNzFs9OuInC8XUdISfvho2DGF8I27nH1b8Z9VVeDA=;
+        b=j5JzhS49igjJPCiKhvbCUw8tHRafRRt5fj/pYCDuMjW+zEUJmXI0tseXCONtO1fV6e
+         lzBDHS3P6ux8UHfMHa54FMY26YIxPru/LLkbWXYWNSlbMrBmDM1oVM2MavUlqeZ3h6Kb
+         RDEe4YBspnvsIuWPPs1pe5/ReSsBwZNlHOJyhlXBs372xYgGidHR2P+9OIcA/X7EBKS+
+         HV6LkBG2+KA7byPJ9zTdtRF/QEB5AMTqsKRKrw3CqBjqeC0u1TECBkrWdGBS09cXbHMN
+         Lby+kUzQWKj0nnUFBOaSeJDUGoU5wN/aFU5EEhfmIxZsjxITKpSx/tDuoSmloTn15YjV
+         +ZJg==
+X-Gm-Message-State: AOAM530XUO6MWPjmCnKq9lST2UvhVu/cBmnMGkU6ipbmifZEi5RQ2Ypo
+        z/6APCQ2a+Dw5cka/WmRAcSSUqUPJDKqRvW6r+8=
+X-Google-Smtp-Source: ABdhPJxRLaIx3AEGb1LLnk6ZGsFvh4ZBuPVgMUwGbOd63KGxEAuLoT1dNUTMppRydnaZ9O3PLo5VZ1HV+Bn9eWw2Yxo=
+X-Received: by 2002:a9d:39f5:: with SMTP id y108mr701232otb.262.1591358212129;
+ Fri, 05 Jun 2020 04:56:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fdj2RfSjLxBAspz7"
-Content-Disposition: inline
-In-Reply-To: <20200605063724.9030-1-m.szyprowski@samsung.com>
-X-Cookie: Air is water with holes in it.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200531210059.647066-1-christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20200531210059.647066-1-christophe.jaillet@wanadoo.fr>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 5 Jun 2020 13:56:41 +0200
+Message-ID: <CAJZ5v0gCZtAxsLi8LdDDDnUg6resj8WvKOberoJ+9VznwWpmAQ@mail.gmail.com>
+Subject: Re: [PATCH] kernel: power: swap: mark a function as __init to save
+ some memory
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Sun, May 31, 2020 at 11:01 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> 'swsusp_header_init()' is only called via 'core_initcall'.
+> It can be marked as __init to save a few bytes of memory.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  kernel/power/swap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+> index ca0fcb5ced71..01e2858b5fe3 100644
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -1590,7 +1590,7 @@ int swsusp_unmark(void)
+>  }
+>  #endif
+>
+> -static int swsusp_header_init(void)
+> +static int __init swsusp_header_init(void)
+>  {
+>         swsusp_header = (struct swsusp_header*) __get_free_page(GFP_KERNEL);
+>         if (!swsusp_header)
+> --
 
---fdj2RfSjLxBAspz7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Fri, Jun 05, 2020 at 08:37:24AM +0200, Marek Szyprowski wrote:
-
-> Balancing of the 'boot-on' coupled regulators must wait until the clients
-> set their constraints, otherwise the balancing code might change the
-
-No, this is not what boot-on means at all.  It is there for cases where
-we can't read the enable status from the hardware.  Trying to infer
-*anything* about the runtime behaviour from it being present or absent
-is very badly broken.
-
-Saravana (CCed) was working on some patches which tried to deal with
-some stuff around this for enables using the sync_state() callback.
-Unfortunately there's quite a few problems with the current approach
-(the biggest one from my point of view being that it's implemented so
-that it requires every single consumer of every device on the PMIC to
-come up but there's others at more of an implementation level).
-
---fdj2RfSjLxBAspz7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7aHGEACgkQJNaLcl1U
-h9BpIAf/buuk5QSHSM+OJ3DcfZlFFgTR5AHmHfgy3qRK3tKYJpoam0zxq52MR8uj
-G9uLVi/6d2ZhnWOPxO1es+6UqilwyeoXNB3e7SLrjjXAahAzqLBfb+67N3dW/+Ur
-th8CghZ79LKGJtoPYFfRdrF3lKQhnyRORbkkVewJa1suMR+HdN8GeS5bI1RVeI9D
-Kasg0AZ06GEvn1sNFbT9H8B93xJ0MKJnvRmZPcorUQaWPPzzGqQEsuYfjQ+5rj8K
-H9gn9mU9v7Fqn5iGaOtzCKYUc15GOIIx2VxTGb4ogTvNJ7B0HJ9BnqRD5ZTWeGSt
-fgLY83QgpD/CzcRDtXCj+PmvSBD2Dg==
-=exUj
------END PGP SIGNATURE-----
-
---fdj2RfSjLxBAspz7--
+Applied as 5.8-rc material under the "PM: hibernate: Add __init
+annotation to swsusp_header_init()" subject, thanks!
