@@ -2,134 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 441211EFD1D
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 17:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC22B1EFE3D
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 18:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726739AbgFEP7G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Jun 2020 11:59:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44462 "EHLO mail.kernel.org"
+        id S1726236AbgFEQvR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Jun 2020 12:51:17 -0400
+Received: from mga02.intel.com ([134.134.136.20]:33158 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726729AbgFEP7G (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Jun 2020 11:59:06 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6BDFD206DC;
-        Fri,  5 Jun 2020 15:59:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591372745;
-        bh=+DeSwYrnPA6G0ugZwfX3ACwrq9yW7J/IId7P9pQilp4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zQSiprL2cwbeT/YPWP/8YAd9Un60KPo0blinDMpaFBO7IGpqGCUZVBJqgyLIbL73g
-         hHlJXxtqVpPH++fsYYcMHMJBGLSgdQdromJBHdD41GzKB1RJyx2D/pWBRgqo1bty3G
-         Nl8EOuOWpYXEOq98dsXWf9vmNrAkfvnRe3iLETMU=
-Date:   Fri, 5 Jun 2020 16:59:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, peron.clem@gmail.com,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        id S1726044AbgFEQvR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Jun 2020 12:51:17 -0400
+IronPort-SDR: VYTyUCeDZWDyKYS185id1RtOV0Ef1Z5wMyZiRzMtdUJKOOuSk0W11rjPOK2HexK6mX2CvI6RTI
+ l9bJZLW5ZCHQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2020 09:51:16 -0700
+IronPort-SDR: 7Arn7IAbvIVYlIlpzd7oXzQ9tQZ2H13N8ezxBepmWVr3of8JU7PwRIaupEp7p+9SDDyua7+/dC
+ 4PXxKndlm/kA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,477,1583222400"; 
+   d="scan'208";a="313248012"
+Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.143.24]) ([10.249.143.24])
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Jun 2020 09:51:14 -0700
+Subject: Re: schedutil issue with serial workloads
+To:     Alexander Monakov <amonakov@ispras.ru>
+References: <alpine.LNX.2.20.13.2006042341160.3984@monopod.intra.ispras.ru>
+Cc:     linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>, qperret@google.com,
+        juri.lelli@redhat.com,
+        Valentin Schneider <valentin.schneider@arm.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        linux-samsung-soc@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Saravana Kannan <saravanak@google.com>
-Subject: Re: [PATCH] regulator: do not balance 'boot-on' coupled regulators
- without constraints
-Message-ID: <20200605155903.GI5413@sirena.org.uk>
-References: <CGME20200605063729eucas1p288dd9d3acdb62cc86745cb6af5c31fc6@eucas1p2.samsung.com>
- <20200605063724.9030-1-m.szyprowski@samsung.com>
- <20200605102018.GA5413@sirena.org.uk>
- <2f0e021d-387a-4693-882d-aba66e20dd2b@samsung.com>
+        Doug Smythies <dsmythies@telus.net>
+From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+Message-ID: <c3145e26-56c8-4979-513c-cfac191e989b@intel.com>
+Date:   Fri, 5 Jun 2020 18:51:12 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rCb8EA+9TsBVtA92"
-Content-Disposition: inline
-In-Reply-To: <2f0e021d-387a-4693-882d-aba66e20dd2b@samsung.com>
-X-Cookie: Air is water with holes in it.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <alpine.LNX.2.20.13.2006042341160.3984@monopod.intra.ispras.ru>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 6/4/2020 11:29 PM, Alexander Monakov wrote:
+> Hello,
 
---rCb8EA+9TsBVtA92
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Fri, Jun 05, 2020 at 03:37:32PM +0200, Marek Szyprowski wrote:
-> On 05.06.2020 12:20, Mark Brown wrote:
+Let's make more people see your report.
 
-> > No, this is not what boot-on means at all.  It is there for cases where
-> > we can't read the enable status from the hardware.  Trying to infer
-> > *anything* about the runtime behaviour from it being present or absent
-> > is very badly broken.
++Peter, Giovanni, Quentin, Juri, Valentin, Vincent, Doug, and linux-pm.
 
-> Okay, what about the 'always-on' property? I don't think that we need=20
-> another property for annotating this behavior, as in my opinion this is=
-=20
+> this is a question/bugreport about behavior of schedutil on serial workloads
+> such as rsync, or './configure', or 'make install'. These workloads are
+> such that there's no single task that takes a substantial portion of CPU
+> time, but at any moment there's at least one runnable task, and overall
+> the workload is compute-bound. To run the workload efficiently, cpufreq
+> governor should select a high frequency.
+>
+> Assume the system is idle except for the workload in question.
+>
+> Sadly, schedutil will select the lowest frequency, unless the workload is
+> confined to one core with taskset (in which case it will select the
+> highest frequency, correctly though somewhat paradoxically).
 
-No, that's just as disconnected from the need - we may as well do it
-based on the regulator name being an odd number of characters.
+That's because the CPU utilization generated by the workload on all CPUs 
+is small.
 
-> just an implementation issue on the Linux kernel and regulator=20
-> framework. Alternatively I can drop the property check, but then it=20
-> won't be possible to have a regulator without a consumer, which follows=
-=20
-> the other one (although we still don't have a real use case for it).
+Confining it to one CPU causes the utilization of this one to grow and 
+so schedutil selects a higher frequency for it.
 
-> If you don't like this idea at all, I will try to move this logic to the=
-=20
-> custom coupler again, although it would mean some code copying.
+> This sounds like it should be a known problem, but I couldn't find any
+> mention of it in the documentation.
 
-I think that's better TBH.
+Well, what would you expect to happen instead of what you see?
 
-> > Saravana (CCed) was working on some patches which tried to deal with
-> > some stuff around this for enables using the sync_state() callback.
-> > Unfortunately there's quite a few problems with the current approach
-> > (the biggest one from my point of view being that it's implemented so
-> > that it requires every single consumer of every device on the PMIC to
-> > come up but there's others at more of an implementation level).
 
-> I'm not sure if we really need such complex solution for this...
+> I was able to replicate the effect with a pair of 'ping-pong' programs
+> that get a token, burn some cycles to simulate work, and pass the token.
+> Thus, each program has 50% CPU utilization. To repeat my test:
+>
+> gcc -O2 pingpong.c -o pingpong
+> mkfifo ping
+> mkfifo pong
+> taskset -c 0 ./pingpong 1000000 < ping > pong &
+> taskset -c 1 ./pingpong 1000000 < pong > ping &
+> echo > ping
+>
+> #include <stdio.h>
+> #include <unistd.h>
+> int main(int argc, char *argv[])
+> {
+> 	unsigned i, n;
+> 	sscanf(argv[1], "%u", &n);
+> 	for (;;) {
+> 		char c;
+> 		read(0, &c, 1);
+> 		for (i = n; i; i--)
+> 			asm("" :: "r"(i));
+> 		write(1, &c, 1);
+> 	}
+> }
+>
+> Alexander
 
-So I think that the specific approach there is overly heavyweight and
-restrictive but I do see the general use case here for something per
-regulator providing we can avoid breaking anything that does actually
-need to change the regulator state (eg, raising the voltage for
-cpufreq).  Previously to the past week I'd only really heard about it
-causing problems in the context of displays left on by the bootloader
-glitching during boot but this is a concrete use case and we already
-have the infrastructure to track dependencies at the device model level
-if we use it well. =20
 
-OTOH if you have a coupler already that needs to be doing stuff all the
-time at runtime it may be easier to just put this in the coupler,
-especially I think in this case where the lack of the devfreq driver
-wouldn't mean that the hardware being controlled wasn't being used at
-all.  The coupler would end up backstopping a missing cpufreq or devfreq
-driver.
-
---rCb8EA+9TsBVtA92
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7aa8cACgkQJNaLcl1U
-h9CF1Qf/eNmlSRJrp5ipDLEwz6mu9IGiA3HFJjyQeiDeTsAjHVWQ0OjybOTCX+Sj
-ppAhpN58xLP3ZBL5XJc1VcuM2Aq8EMMmST7StSNewJX3ISdCOOfMdmBTqhiZ1cZR
-cehYMgBwA2U02TNi6gXAd6HCGAIaSpDmnBVo3+4oNcnr/6O+RSzcJk+HUWAeRTyO
-K+E9Vd6adqQkzislcP9fxuSoABOqOaad3xcoSSA++JKdJZcevIyhzB3fK51jwErr
-UmCxXir40BdfF7CVAfqNT9ocwwGF8Q6RdLSy6Gf7fpZDwa8W1SIQSTSLPTDQFz7+
-MZknGWhZ1tN1gmMvBn1DKMFi7RwlqQ==
-=zvyi
------END PGP SIGNATURE-----
-
---rCb8EA+9TsBVtA92--
