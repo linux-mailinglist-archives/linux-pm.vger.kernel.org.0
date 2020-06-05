@@ -2,20 +2,20 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F791F02FA
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jun 2020 00:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B27291F030F
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jun 2020 00:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728452AbgFEWoM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Jun 2020 18:44:12 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:41708 "EHLO
+        id S1728342AbgFEWob (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Jun 2020 18:44:31 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:41774 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728339AbgFEWoK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Jun 2020 18:44:10 -0400
+        with ESMTP id S1728256AbgFEWoL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Jun 2020 18:44:11 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 44DFA2A51AB
+        with ESMTPSA id 85C4A2A51C6
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 308C2480104; Sat,  6 Jun 2020 00:44:04 +0200 (CEST)
+        id 33916480105; Sat,  6 Jun 2020 00:44:04 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -28,9 +28,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel@collabora.com, linux-arm-kernel@lists.infradead.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCHv2 4/6] ARM: pxa: Use GPIO descriptor for gpio-charger
-Date:   Sat,  6 Jun 2020 00:44:01 +0200
-Message-Id: <20200605224403.181015-5-sebastian.reichel@collabora.com>
+Subject: [PATCHv2 5/6] ARM: sa1100: Use GPIO descriptor for gpio-charger
+Date:   Sat,  6 Jun 2020 00:44:02 +0200
+Message-Id: <20200605224403.181015-6-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200605224403.181015-1-sebastian.reichel@collabora.com>
 References: <20200605224403.181015-1-sebastian.reichel@collabora.com>
@@ -45,74 +45,57 @@ Provide AC detect GPIO via gpiod table instead of
 legacy platform data so that legacy GPIO support
 can be removed from the driver.
 
-Also remove useless IRQ resource, which is not
-used by the driver.
-
 Due to lack of hardware this has only been compile
 tested.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- arch/arm/mach-pxa/tosa.c | 24 +++++++++---------------
- 1 file changed, 9 insertions(+), 15 deletions(-)
+ arch/arm/mach-sa1100/collie.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-pxa/tosa.c b/arch/arm/mach-pxa/tosa.c
-index 3d2c108e911e..e4da2b4c5055 100644
---- a/arch/arm/mach-pxa/tosa.c
-+++ b/arch/arm/mach-pxa/tosa.c
-@@ -369,6 +369,14 @@ static struct pxaficp_platform_data tosa_ficp_platform_data = {
+diff --git a/arch/arm/mach-sa1100/collie.c b/arch/arm/mach-sa1100/collie.c
+index 3cc2b71e16f0..3e871a3db3b0 100644
+--- a/arch/arm/mach-sa1100/collie.c
++++ b/arch/arm/mach-sa1100/collie.c
+@@ -30,6 +30,7 @@
+ #include <linux/gpio_keys.h>
+ #include <linux/input.h>
+ #include <linux/gpio.h>
++#include <linux/gpio/machine.h>
+ #include <linux/power/gpio-charger.h>
+ 
+ #include <video/sa1100fb.h>
+@@ -131,6 +132,14 @@ static struct irda_platform_data collie_ir_data = {
  /*
-  * Tosa AC IN
+  * Collie AC IN
   */
-+static struct gpiod_lookup_table tosa_charger_gpiod_table = {
++static struct gpiod_lookup_table collie_charger_gpiod_table = {
 +	.dev_id = "gpio-charger",
 +	.table = {
-+		GPIO_LOOKUP("gpio-pxa", TOSA_GPIO_AC_IN, NULL, GPIO_ACTIVE_LOW),
++		GPIO_LOOKUP("gpio", COLLIE_GPIO_AC_IN, NULL, GPIO_ACTIVE_HIGH),
 +		{},
 +	},
 +};
 +
- static char *tosa_ac_supplied_to[] = {
+ static char *collie_ac_supplied_to[] = {
  	"main-battery",
  	"backup-battery",
-@@ -378,29 +386,14 @@ static char *tosa_ac_supplied_to[] = {
- static struct gpio_charger_platform_data tosa_power_data = {
+@@ -140,7 +149,6 @@ static char *collie_ac_supplied_to[] = {
+ static struct gpio_charger_platform_data collie_power_data = {
  	.name			= "charger",
  	.type			= POWER_SUPPLY_TYPE_MAINS,
--	.gpio			= TOSA_GPIO_AC_IN,
--	.gpio_active_low	= 1,
- 	.supplied_to		= tosa_ac_supplied_to,
- 	.num_supplicants	= ARRAY_SIZE(tosa_ac_supplied_to),
+-	.gpio			= COLLIE_GPIO_AC_IN,
+ 	.supplied_to		= collie_ac_supplied_to,
+ 	.num_supplicants	= ARRAY_SIZE(collie_ac_supplied_to),
  };
+@@ -386,6 +394,7 @@ static void __init collie_init(void)
  
--static struct resource tosa_power_resource[] = {
--	{
--		.name		= "ac",
--		.start		= PXA_GPIO_TO_IRQ(TOSA_GPIO_AC_IN),
--		.end		= PXA_GPIO_TO_IRQ(TOSA_GPIO_AC_IN),
--		.flags		= IORESOURCE_IRQ |
--				  IORESOURCE_IRQ_HIGHEDGE |
--				  IORESOURCE_IRQ_LOWEDGE,
--	},
--};
--
- static struct platform_device tosa_power_device = {
- 	.name			= "gpio-charger",
- 	.id			= -1,
- 	.dev.platform_data	= &tosa_power_data,
--	.resource		= tosa_power_resource,
--	.num_resources		= ARRAY_SIZE(tosa_power_resource),
- };
+ 	platform_scoop_config = &collie_pcmcia_config;
  
- /*
-@@ -950,6 +943,7 @@ static void __init tosa_init(void)
- 
- 	clk_add_alias("CLK_CK3P6MI", tc6393xb_device.name, "GPIO11_CLK", NULL);
- 
-+	gpiod_add_lookup_table(&tosa_charger_gpiod_table);
- 	gpiod_add_lookup_table(&tosa_udc_gpiod_table);
- 	platform_add_devices(devices, ARRAY_SIZE(devices));
- }
++	gpiod_add_lookup_table(&collie_charger_gpiod_table);
+ 	ret = platform_add_devices(devices, ARRAY_SIZE(devices));
+ 	if (ret) {
+ 		printk(KERN_WARNING "collie: Unable to register LoCoMo device\n");
 -- 
 2.26.2
 
