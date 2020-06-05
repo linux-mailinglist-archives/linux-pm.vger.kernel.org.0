@@ -2,126 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 529FC1F00B8
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 22:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E84A1F00F9
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 22:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728126AbgFEUHb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Jun 2020 16:07:31 -0400
-Received: from mga06.intel.com ([134.134.136.31]:29603 "EHLO mga06.intel.com"
+        id S1728129AbgFEUbE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Jun 2020 16:31:04 -0400
+Received: from mga12.intel.com ([192.55.52.136]:19950 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727863AbgFEUHb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 5 Jun 2020 16:07:31 -0400
-IronPort-SDR: 9+/foVPL4zKWpLFPjcMZ5jOulC2NGrrkaSmrW0fmrRkxCSZDxFduUa77/GlPCsfV9GwjecvihX
- ZFVqsJkSugug==
+        id S1727888AbgFEUbE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Jun 2020 16:31:04 -0400
+IronPort-SDR: xMNEOeWJ9SU+AihKHHlrs0yTcSQri0aUklQZ4EveFvGwMudxVuAne+YKgdZCltq8GviiF61+lo
+ GGYE2FCGgVQg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2020 13:07:30 -0700
-IronPort-SDR: isHsEJJwy5bDEQA3VzN4WLRvdBKo8wguUddVPlTivtJSK5oLw205TZHHBA1nmxfFh3FXYe6Yxy
- 6rJTfRuXs+0g==
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2020 13:31:03 -0700
+IronPort-SDR: pwsKWOtCQmVoAe3oNneWMuF2iH8nJAWheywWnYTF+WEgsXGxw9eYjkF9gncwffGnz/HMBI0c7d
+ Rmjxw3QrPy5A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,477,1583222400"; 
-   d="scan'208";a="305171032"
-Received: from sjchrist-coffee.jf.intel.com ([10.54.74.152])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Jun 2020 13:07:29 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Brad Campbell <lists2009@fnarfbargle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: [PATCH] x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during wakeup
-Date:   Fri,  5 Jun 2020 13:07:28 -0700
-Message-Id: <20200605200728.10145-1-sean.j.christopherson@intel.com>
-X-Mailer: git-send-email 2.26.0
+   d="scan'208";a="446015406"
+Received: from lkp-server02.sh.intel.com (HELO 85fa322b0eb2) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 05 Jun 2020 13:31:01 -0700
+Received: from kbuild by 85fa322b0eb2 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jhIzU-0000Nd-Rw; Fri, 05 Jun 2020 20:31:00 +0000
+Date:   Sat, 06 Jun 2020 04:29:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 1e4a104be0a3afafbafc13bacc5f42007db8d43e
+Message-ID: <5edaab47.BGrzd29tN8xz8E0X%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reinitialize IA32_FEAT_CTL on the BSP during wakeup to handle the case
-where firmware doesn't initialize or save/restore across S3.  This fixes
-a bug where IA32_FEAT_CTL is left uninitialized and results in VMXON
-taking a #GP due to VMX not being fully enabled, i.e. breaks KVM.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 1e4a104be0a3afafbafc13bacc5f42007db8d43e  Merge branch 'pm-cpufreq' into bleeding-edge
 
-Use init_ia32_feat_ctl() to "restore" IA32_FEAT_CTL as it already deals
-with the case where the MSR is locked, and because APs already redo
-init_ia32_feat_ctl() during suspend by virtue of the SMP boot flow being
-used to reinitialize APs upon wakeup.  Do the call in the early wakeup
-flow to avoid dependencies in the syscore_ops chain, e.g. simply adding
-a resume hook is not guaranteed to work, as KVM does VMXON in its own
-resume hook, kvm_resume(), when KVM has active guests.
+elapsed time: 484m
 
-Reported-by: Brad Campbell <lists2009@fnarfbargle.com>
-Cc: Maxim Levitsky <mlevitsk@redhat.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: kvm@vger.kernel.org
-Fixes: 21bd3467a58e ("KVM: VMX: Drop initialization of IA32_FEAT_CTL MSR")
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+configs tested: 97
+configs skipped: 1
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+i386                              allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a002-20200605
+x86_64               randconfig-a001-20200605
+x86_64               randconfig-a006-20200605
+x86_64               randconfig-a003-20200605
+x86_64               randconfig-a004-20200605
+x86_64               randconfig-a005-20200605
+i386                 randconfig-a001-20200605
+i386                 randconfig-a006-20200605
+i386                 randconfig-a002-20200605
+i386                 randconfig-a005-20200605
+i386                 randconfig-a004-20200605
+i386                 randconfig-a003-20200605
+i386                 randconfig-a014-20200605
+i386                 randconfig-a015-20200605
+i386                 randconfig-a011-20200605
+i386                 randconfig-a016-20200605
+i386                 randconfig-a012-20200605
+i386                 randconfig-a013-20200605
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                                  defconfig
+um                               allyesconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
 ---
- arch/x86/include/asm/cpu.h | 5 +++++
- arch/x86/kernel/cpu/cpu.h  | 4 ----
- arch/x86/power/cpu.c       | 6 ++++++
- 3 files changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
-index dd17c2da1af5..da78ccbd493b 100644
---- a/arch/x86/include/asm/cpu.h
-+++ b/arch/x86/include/asm/cpu.h
-@@ -58,4 +58,9 @@ static inline bool handle_guest_split_lock(unsigned long ip)
- 	return false;
- }
- #endif
-+#ifdef CONFIG_IA32_FEAT_CTL
-+void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
-+#else
-+static inline void init_ia32_feat_ctl(struct cpuinfo_x86 *c) {}
-+#endif
- #endif /* _ASM_X86_CPU_H */
-diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
-index 37fdefd14f28..38ab6e115eac 100644
---- a/arch/x86/kernel/cpu/cpu.h
-+++ b/arch/x86/kernel/cpu/cpu.h
-@@ -80,8 +80,4 @@ extern void x86_spec_ctrl_setup_ap(void);
- 
- extern u64 x86_read_arch_cap_msr(void);
- 
--#ifdef CONFIG_IA32_FEAT_CTL
--void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
--#endif
--
- #endif /* ARCH_X86_CPU_H */
-diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-index aaff9ed7ff45..b0d3c5ca6d80 100644
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -193,6 +193,8 @@ static void fix_processor_context(void)
-  */
- static void notrace __restore_processor_state(struct saved_context *ctxt)
- {
-+	struct cpuinfo_x86 *c;
-+
- 	if (ctxt->misc_enable_saved)
- 		wrmsrl(MSR_IA32_MISC_ENABLE, ctxt->misc_enable);
- 	/*
-@@ -263,6 +265,10 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
- 	mtrr_bp_restore();
- 	perf_restore_debug_store();
- 	msr_restore_context(ctxt);
-+
-+	c = &cpu_data(smp_processor_id());
-+	if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
-+		init_ia32_feat_ctl(c);
- }
- 
- /* Needed by apm.c */
--- 
-2.26.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
