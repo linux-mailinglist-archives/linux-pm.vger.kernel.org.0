@@ -2,111 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D37C01EF9DE
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 16:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441211EFD1D
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jun 2020 17:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbgFEOCh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 5 Jun 2020 10:02:37 -0400
-Received: from sender4-of-o53.zoho.com ([136.143.188.53]:21309 "EHLO
-        sender4-of-o53.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727085AbgFEOCf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 5 Jun 2020 10:02:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1591365749; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=ktCgRGRp5TNqHHuH+3Op5mSa6e1yqaFYnnRSnVES9IDY+m5XhkkhZrse//utnsUXsak5ClNqx1EqDJtCPvp+QeqJaVY0OhquLDKJs7VjCpQ3cFGWPIvh/jqdW5gcYxt+i4ntS8uaaCS6Gu/YLwACo7GjR1DB28snZDiUup30Ikg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1591365749; h=Content-Type:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=6259WH+8GXwpvJ8L+deRyee+WkZ0pOpRoX37oxGIAHU=; 
-        b=LBri1xZLqTf0J1cChmT7XxOPn14gXcF3St4xwojDYcZ7RYkf272OknD4gnT71FImKKcAProAIljaT1DvfTuDUXrkU79kQTW+p1rHHM0YHRNeDMg+o4pvhMhkYbcp7KW3jSODDv3+W7jhD3kP2c6GjQGBfqvbbRJurb7XOqFbaEM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=qubes-os.org;
-        spf=pass  smtp.mailfrom=frederic.pierret@qubes-os.org;
-        dmarc=pass header.from=<frederic.pierret@qubes-os.org> header.from=<frederic.pierret@qubes-os.org>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1591365749;
-        s=s; d=qubes-os.org; i=frederic.pierret@qubes-os.org;
-        h=From:To:Cc:Subject:Message-ID:Date:MIME-Version:Content-Type;
-        bh=6259WH+8GXwpvJ8L+deRyee+WkZ0pOpRoX37oxGIAHU=;
-        b=PQlhbHNnQoOueWb9PqTzjCU6sGXjaZb6+/pClUk1jSGTXgTyd/Kz6rLsR/29AeBM
-        V6gZ+bPuhS05J3Wh58exvfU2CkV+BFClmU4SdauyTNARvQwA6ZPdFKz36P3KolHGn2G
-        7pTUEuYsu5aK8jgQuurau1/u9wKf6zUWfM+0woKM=
-Received: from [10.137.0.45] (92.188.110.153 [92.188.110.153]) by mx.zohomail.com
-        with SMTPS id 1591365745631622.3889732173463; Fri, 5 Jun 2020 07:02:25 -0700 (PDT)
-From:   =?UTF-8?B?RnLDqWTDqXJpYyBQaWVycmV0?= 
-        <frederic.pierret@qubes-os.org>
-To:     linux-pm@vger.kernel.org
-Cc:     =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
-        <marmarek@invisiblethingslab.com>
-Subject: dummy-psu
-Message-ID: <a8223cce-636f-578b-7304-eb0e4868e018@qubes-os.org>
-Date:   Fri, 5 Jun 2020 16:02:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726739AbgFEP7G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 5 Jun 2020 11:59:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44462 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726729AbgFEP7G (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 5 Jun 2020 11:59:06 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6BDFD206DC;
+        Fri,  5 Jun 2020 15:59:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591372745;
+        bh=+DeSwYrnPA6G0ugZwfX3ACwrq9yW7J/IId7P9pQilp4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zQSiprL2cwbeT/YPWP/8YAd9Un60KPo0blinDMpaFBO7IGpqGCUZVBJqgyLIbL73g
+         hHlJXxtqVpPH++fsYYcMHMJBGLSgdQdromJBHdD41GzKB1RJyx2D/pWBRgqo1bty3G
+         Nl8EOuOWpYXEOq98dsXWf9vmNrAkfvnRe3iLETMU=
+Date:   Fri, 5 Jun 2020 16:59:03 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>, peron.clem@gmail.com,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        linux-samsung-soc@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Saravana Kannan <saravanak@google.com>
+Subject: Re: [PATCH] regulator: do not balance 'boot-on' coupled regulators
+ without constraints
+Message-ID: <20200605155903.GI5413@sirena.org.uk>
+References: <CGME20200605063729eucas1p288dd9d3acdb62cc86745cb6af5c31fc6@eucas1p2.samsung.com>
+ <20200605063724.9030-1-m.szyprowski@samsung.com>
+ <20200605102018.GA5413@sirena.org.uk>
+ <2f0e021d-387a-4693-882d-aba66e20dd2b@samsung.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="GvWCsJwxqkqQJXB20RU5x6EHX1jiBEgQD"
-X-Zoho-Virus-Status: 1
-X-ZohoMailClient: External
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rCb8EA+9TsBVtA92"
+Content-Disposition: inline
+In-Reply-To: <2f0e021d-387a-4693-882d-aba66e20dd2b@samsung.com>
+X-Cookie: Air is water with holes in it.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---GvWCsJwxqkqQJXB20RU5x6EHX1jiBEgQD
-Content-Type: multipart/mixed; boundary="4h2qsgUTaQmHOYZN8q5lBhTKIZDKyEhvI"
 
---4h2qsgUTaQmHOYZN8q5lBhTKIZDKyEhvI
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+--rCb8EA+9TsBVtA92
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Dear all,
+On Fri, Jun 05, 2020 at 03:37:32PM +0200, Marek Szyprowski wrote:
+> On 05.06.2020 12:20, Mark Brown wrote:
 
-I'm working on a kernel module currently called "dummy-psu" (https://gith=
-ub.com/fepitre/dummy-psu) which creates a power supply AC and a battery l=
-ike in 'drivers/power/supply/test_power.c'. After loaded, this driver all=
-ows to modify integer values of the virtual psu created through its sysfs=
- attribute directly. String values are currently set through module param=
-eters. Such module allows for example to test ACPI tools or desktop plugi=
-ns.
+> > No, this is not what boot-on means at all.  It is there for cases where
+> > we can't read the enable status from the hardware.  Trying to infer
+> > *anything* about the runtime behaviour from it being present or absent
+> > is very badly broken.
 
-In the context of the Qubes OS project, it allows to setup into a VM, PSU=
- components with real information coming from the host system battery or =
-ac with some refresh time.
+> Okay, what about the 'always-on' property? I don't think that we need=20
+> another property for annotating this behavior, as in my opinion this is=
+=20
 
-I'm writing to you to know if you would be interested to have such module=
- integrating side to test_power.c.
+No, that's just as disconnected from the need - we may as well do it
+based on the regulator name being an odd number of characters.
 
-Another name could be "virtual-psu". Any kind of improvements are very we=
-lcomed. Thank you.
+> just an implementation issue on the Linux kernel and regulator=20
+> framework. Alternatively I can drop the property check, but then it=20
+> won't be possible to have a regulator without a consumer, which follows=
+=20
+> the other one (although we still don't have a real use case for it).
 
-Best regards,
-Fr=C3=A9d=C3=A9ric Pierret
+> If you don't like this idea at all, I will try to move this logic to the=
+=20
+> custom coupler again, although it would mean some code copying.
 
+I think that's better TBH.
 
---4h2qsgUTaQmHOYZN8q5lBhTKIZDKyEhvI--
+> > Saravana (CCed) was working on some patches which tried to deal with
+> > some stuff around this for enables using the sync_state() callback.
+> > Unfortunately there's quite a few problems with the current approach
+> > (the biggest one from my point of view being that it's implemented so
+> > that it requires every single consumer of every device on the PMIC to
+> > come up but there's others at more of an implementation level).
 
---GvWCsJwxqkqQJXB20RU5x6EHX1jiBEgQD
+> I'm not sure if we really need such complex solution for this...
+
+So I think that the specific approach there is overly heavyweight and
+restrictive but I do see the general use case here for something per
+regulator providing we can avoid breaking anything that does actually
+need to change the regulator state (eg, raising the voltage for
+cpufreq).  Previously to the past week I'd only really heard about it
+causing problems in the context of displays left on by the bootloader
+glitching during boot but this is a concrete use case and we already
+have the infrastructure to track dependencies at the device model level
+if we use it well. =20
+
+OTOH if you have a coupler already that needs to be doing stuff all the
+time at runtime it may be easier to just put this in the coupler,
+especially I think in this case where the lack of the devfreq driver
+wouldn't mean that the hardware being controlled wasn't being used at
+all.  The coupler would end up backstopping a missing cpufreq or devfreq
+driver.
+
+--rCb8EA+9TsBVtA92
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEn6ZLkvlecGvyjiymSEAQtc3FduIFAl7aUG0ACgkQSEAQtc3F
-duJTmA//RVZRomMOjJ45DL9AfphaEubm6x5dwZcWzLbVShhUHkBqSbAUI6ElAQ7s
-xfghxttWuEYhtd5hgV48nHmt55lkTvyDSfw57WnhQ1jWSQCzRqltfVkL9prKpq3M
-Nfl8z6wH/RXyyJaYj4GVzLU+0BtxBPWFQJJo+vnbM/NxEgGQwuWKYYHN1LaerqAS
-24EizMQOLbDO/0toan0554OZBzrNz1LzWezX6aQy3SjlhqZ59SaCqWGM08CAQ2VY
-NR02LxPLdkz+IbVZBwF0WEb0yDUASQyl7BA1nBaP5FcC8QizGSZR9XKarupVVya0
-FE8RWAZHPFIDn9gjEM0d2QOipedLsyoJsKiZ6txIPpV+lKtaHujswku5PZHElhw+
-mwLKTq1433xizK/EledlFXpDlHW4bTop6B+0d+afI3Dzm20CnaTgIon0CHwpEXn+
-wOPCOUqt3gj42ZQqKvtTrfE7hhIgxTf9n5tj+nB7x0Ses415qtzej/KpGf497e4L
-nfQBlusqKUam22Pzm+kHP+ujfa2uankO/qRT8GoXWKzl7bsqbT3vr8DRux2bk0Hr
-0BviY65pMMpQAAUJRsl1LBVNhvwWa0nOm8taaocuPLaDmi6HaBPubMSfPwoXvvD1
-OqkfFMgH1BBHulbeDhDiVS58tuOXUWN3qoHJbiDS4QToLb2Oc1w=
-=3heO
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7aa8cACgkQJNaLcl1U
+h9CF1Qf/eNmlSRJrp5ipDLEwz6mu9IGiA3HFJjyQeiDeTsAjHVWQ0OjybOTCX+Sj
+ppAhpN58xLP3ZBL5XJc1VcuM2Aq8EMMmST7StSNewJX3ISdCOOfMdmBTqhiZ1cZR
+cehYMgBwA2U02TNi6gXAd6HCGAIaSpDmnBVo3+4oNcnr/6O+RSzcJk+HUWAeRTyO
+K+E9Vd6adqQkzislcP9fxuSoABOqOaad3xcoSSA++JKdJZcevIyhzB3fK51jwErr
+UmCxXir40BdfF7CVAfqNT9ocwwGF8Q6RdLSy6Gf7fpZDwa8W1SIQSTSLPTDQFz7+
+MZknGWhZ1tN1gmMvBn1DKMFi7RwlqQ==
+=zvyi
 -----END PGP SIGNATURE-----
 
---GvWCsJwxqkqQJXB20RU5x6EHX1jiBEgQD--
+--rCb8EA+9TsBVtA92--
