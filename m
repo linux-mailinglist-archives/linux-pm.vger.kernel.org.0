@@ -2,347 +2,363 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA8F1F074B
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jun 2020 17:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B707D1F0755
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jun 2020 17:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728770AbgFFPVS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 6 Jun 2020 11:21:18 -0400
-Received: from cmta16.telus.net ([209.171.16.89]:42225 "EHLO cmta16.telus.net"
+        id S1728660AbgFFPVh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Jun 2020 11:21:37 -0400
+Received: from cmta18.telus.net ([209.171.16.91]:40659 "EHLO cmta18.telus.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728590AbgFFPVM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 6 Jun 2020 11:21:12 -0400
+        id S1728839AbgFFPVb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 6 Jun 2020 11:21:31 -0400
 Received: from dougxps ([173.180.45.4])
         by cmsmtp with SMTP
-        id had5jYF0p2DNIhad7jqGR3; Sat, 06 Jun 2020 09:21:09 -0600
+        id hadSjyUCKVEJfhadTjiTAT; Sat, 06 Jun 2020 09:21:29 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1591456869; bh=uOxn5FNAbjgCIjHRF/u6CYwICtWoh+9aGnyj2hCy6cg=;
+        t=1591456889; bh=acRMgmXS6uF437+l0bg28fHQ4L6K4pZsGqCvVybiXV8=;
         h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=OnrHi8/dJr2Il/xdNnPgV2NEwHQiewPLYG7UuKi+SuX4Zj0E1VZCQcyWurFVdcZid
-         GkbUiWfejW0lPjjcUCIXIwTO/RAJOoXpIrZ3IUosJNpVP1mHE19oHyL3+KOvJThZ0w
-         6XQ0ZG4k7jZFkUS2wJTUC2IL1piLyCA7lna4cOenGWf+McB3WiA8XglC2hmpqEbJkz
-         ds1i5V6z0GnHEfhKVf4l/mLDiq1zYIvAQ4UKGYwD+Sd4KvS2FqyndPymYxLgdULaVs
-         BbfQNzTlkVrSCvN8+/wDeOLSQJ+QdiudLATRtNp2Z/+mUIBUjrZGuNCRNz5D2eEBrP
-         W9G8Dg1gzpSrA==
+        b=HCtzslmgSjtOMMu+C8mO38bSPqKiHGQAaNkD7Ijefw+YzB463gB0L7IvR1N5IvLUB
+         OkocJ/00YXdXipbF6yX579Kt3HObLQe/2PojrChxnBqFALwvx0M4mGqvoclOntLhPG
+         WBIoj3MankywoMwnRz7nKbrBnX4R67EJnzFoPycypctMb/HEpoA/Fl+rbtUxZ1wuNt
+         YRru0Ikd+4hUFTpCLJ/mLaDRAzZg1O6R+JOZ1QEOhx+kZtvd4aDTGiJA+bCzs0ezKz
+         9ulIK0go4WRZ7/2RT6WRmN4ft527ygLB8IoG+3ihlOL+bAZt7YFWlkmWVpsRg9GOM/
+         ItYl6NbMEmnKQ==
 X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=H+qlPNQi c=1 sm=1 tr=0
+X-Authority-Analysis: v=2.3 cv=KIck82No c=1 sm=1 tr=0
  a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=p-nOP-kxAAAA:8
- a=QyXUC8HyAAAA:8 a=VwQbUJbxAAAA:8 a=Rq_R0krhRepCojYYGuIA:9 a=CjuIK1q_8ugA:10
- a=XN2wCei03jY4uMu7D0Wg:22 a=AjGcO6oz07-iQ99wixmX:22
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=QyXUC8HyAAAA:8
+ a=VwQbUJbxAAAA:8 a=9E8nperVKYpAKzPi-k0A:9 a=CjuIK1q_8ugA:10
+ a=AjGcO6oz07-iQ99wixmX:22
 From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>
+To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
 Cc:     "'LKML'" <linux-kernel@vger.kernel.org>,
         "'Len Brown'" <len.brown@intel.com>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
         "'Peter Zijlstra'" <peterz@infradead.org>,
         "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
         "'Francisco Jerez'" <francisco.jerez.plata@intel.com>,
         "'Linux PM'" <linux-pm@vger.kernel.org>
-References: <2931539.RsFqoHxarq@kreacher> <000001d6376a$03bbaae0$0b3300a0$@net>
-In-Reply-To: <000001d6376a$03bbaae0$0b3300a0$@net>
+References: <2931539.RsFqoHxarq@kreacher>
+In-Reply-To: <2931539.RsFqoHxarq@kreacher>
 Subject: RE: [RFC/RFT][PATCH] cpufreq: intel_pstate: Accept passive mode with HWP enabled
-Date:   Sat, 6 Jun 2020 08:21:03 -0700
-Message-ID: <000001d63c16$1a972b30$4fc58190$@net>
+Date:   Sat, 6 Jun 2020 08:21:25 -0700
+Message-ID: <000101d63c16$265d3cc0$7317b640$@net>
 MIME-Version: 1.0
 Content-Type: text/plain;
         charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdYzimEBSb+8wZd2QXK6gu6IWqSeRQBbEZjAAcSKPdA=
+Thread-Index: AdYzimEBSb+8wZd2QXK6gu6IWqSeRQFZYydA
 Content-Language: en-ca
-X-CMAE-Envelope: MS4wfBtxeAR0RLMY6azxvE5hSY4lybZhOGVvERAE2KGLwLoa7o6ZXIt1zgn5aE5aJqrpPzwvLw2hbXBalAO5Im04Rs1DThCivuqna1EB//zfTxJVGz5+IO+h
- mSdHM2XPxbEbQ6D9BbGIpW8ADYIUvzbqSbJOSJEY4YNPHWwKj2Sgq/QSFlWuoSOBzAKZD+3/axZ6uxaqATRimqvJuc2HNi1xGcxtNIdxbHh6GpNYCxBv4QUE
- NmzKZ6FRDVi+V3y07QeuTQRp/R1P9jBQH2IwK/7MfhFYikDhT/SxYCShdGdKy/qJmRyBGm2doa99Oj6xOSsz4/IJmInesyWso9ASANg7EEmoB1CrHoyv3KeG
- Av0C0QNtssD6IfHbabEK99RHzaWmS8Fm30upNdtVFh1QCEzceDXFPc1jgwPZdcHCdR8eAlCN
+X-CMAE-Envelope: MS4wfNhjr2RbLuvnMKpbPjqt/4UERj5RsojBBMSbY+H4Udb3XdsDznK3piqmWeLLIZsGtO22keQOqAFqf+aLgCrwKBQviN941VPg4tckh5S8lwDc9WLfLyPm
+ Oy+GbFQTl2pCcbmGSjlw4ZmRZ60psGKfbkIaVeIfjBGzq8EL7k72/V7tVEcITHNkToaJwM9Fl13I+tzoHxkC1DNeNn/4RKn8u2zuJHtXQ1H2Ny7NvP8wxygQ
+ 1rJncm3UB0WjGqtPSU0CfLmyNAbSwzxwqnMluaZAkMyRfNT6IjLaQxFi9jiIldhzW/cKi2qzyNkPR+6RoQrw+Hr7F5RJHf+lB9TDQ84FDD8q4ajdWgodEZhE
+ pGspa7XNVVonAWj7HBBV3VPde9a97FmGzemBP/GUE/zNbCRQaJVx8oU0XuAewqL4T8wrOuYK
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Note 1: I have gone back a few e-mails in the thread for this reply.
-Note 2: Srinivas and I have exchanged several e-mails off-list. Thanks.
+Hi Rafael,
 
-On 2020.05.31 09:39 Doug wrote:
+As you well know, I often test first and
+ask questions and review code later.
+
+I think I should have questioned this first.
+
+To the best of my ability/availability, I am
+committed to follow up on the hwp issue raised on
+the other branch of this thread. However, moving
+forward the typical CPU frequency scaling
+configuration for my test system will be:
+
+driver: intel-cpufreq, forced at boot.
+governor: schedutil
+hwp: forced off at boot.
+
+On 2020.05.26 11:21 Rafael J. Wysocki wrote:
+> 
+> Allow intel_pstate to work in the passive mode with HWP enabled and
+> make it set the HWP minimum performance limit to 75% of the P-state
+> value corresponding to the target frequency supplied by the cpufreq
+> governor, so as to prevent the HWP algorithm and the CPU scheduler
+> from working against each other at least when the schedutil governor
+> is in use.
+
+I think we need to define what "passive" mode is.
+I have always interpreted it to mean "I would like
+this pstate please. It has been requested by some higher level
+servo". The name intel_cpufreq makes sense.
+
+I have always interpreted "active" to mean "I would like
+the intel_pstate CPU frequency driver to decide what pstate
+I need".
+
+As mentioned on the other branch of this thread, I don't have
+a stable test baseline, but the servos are still fighting each other
+with this version of the patch.
 
 > 
-> The content of this e-mail is also at [1],
-> with annotated graphs.
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> This is a replacement for https://patchwork.kernel.org/patch/11563615/ that
+> uses the HWP floor (minimum performance limit) as the feedback to the HWP
+> algorithm (instead of the EPP).
+> 
+> The INTEL_CPUFREQ_TRANSITION_DELAY_HWP is still 5000 and the previous comments
+> still apply to it.
+> 
+> In addition to that, the 75% fraction used in intel_cpufreq_adjust_hwp() can be
+> adjusted too, but I would like to use a value with a power-of-2 denominator for
+> that (so the next candidate would be 7/8).
 
-That reference is now a few days out of date.
+The issue here is that the lag of the CPU frequency is not a constant, but rather
+a function of the task work/sleep timing verses whatever else is going on. One has
+to allow for the worst case. From thousands of seconds of intel_pstate trace data,
+that limit needs to be about 3% (31/32).
+
+Disclaimer: Done with no-hwp, active/powersave. The results might not be transferrable
+to hwp enabled.
 
 > 
-> Hi Rafael,
+> Everyone who can do that is kindly requested to test this and let me know
+> the outcome.
 > 
-> Hmmm... I think the most important takeaway from
-> my previous e-mail might have been missed!
+> Of course, the documentation still needs to be updated.  Also, the EPP can be
+> handled in analogy with the active mode now, but that part can be added in a
+> separate patch on top of this one.
 > 
-> HWP does not work properly on my i5-9600K test computer.
+> Thanks!
 > 
-> For those that don't have to read all this, my upgraded
-> assertion is:
+> ---
+>  drivers/cpufreq/intel_pstate.c |  119 ++++++++++++++++++++++++++++++-----------
+>  1 file changed, 88 insertions(+), 31 deletions(-)
 > 
-> With HWP enabled, if idle state 2 is used, there is a probability
-> that the CPU frequency might unexpectedly drop significantly.
+> Index: linux-pm/drivers/cpufreq/intel_pstate.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+> +++ linux-pm/drivers/cpufreq/intel_pstate.c
+> @@ -36,6 +36,7 @@
+>  #define INTEL_PSTATE_SAMPLING_INTERVAL	(10 * NSEC_PER_MSEC)
 > 
+>  #define INTEL_CPUFREQ_TRANSITION_LATENCY	20000
+> +#define INTEL_CPUFREQ_TRANSITION_DELAY_HWP	5000
+>  #define INTEL_CPUFREQ_TRANSITION_DELAY		500
+> 
+>  #ifdef CONFIG_ACPI
+> @@ -2175,7 +2176,10 @@ static int intel_pstate_verify_policy(st
+> 
+>  static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
+>  {
+> -	intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+> +	if (hwp_active)
+> +		intel_pstate_hwp_force_min_perf(policy->cpu);
+> +	else
+> +		intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+>  }
+> 
+>  static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+> @@ -2183,12 +2187,10 @@ static void intel_pstate_stop_cpu(struct
+>  	pr_debug("CPU %d exiting\n", policy->cpu);
+> 
+>  	intel_pstate_clear_update_util_hook(policy->cpu);
+> -	if (hwp_active) {
+> +	if (hwp_active)
+>  		intel_pstate_hwp_save_state(policy);
+> -		intel_pstate_hwp_force_min_perf(policy->cpu);
+> -	} else {
+> -		intel_cpufreq_stop_cpu(policy);
+> -	}
+> +
+> +	intel_cpufreq_stop_cpu(policy);
+>  }
+> 
+>  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+> @@ -2318,13 +2320,58 @@ static void intel_cpufreq_trace(struct c
+>  		fp_toint(cpu->iowait_boost * 100));
+>  }
+> 
+> +static void intel_cpufreq_update_hwp_request(struct cpudata *cpu, u32 min_perf)
+> +{
+> +	u64 value, prev;
+> +
+> +	rdmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, &prev);
+> +	value = prev;
+> +
+> +	value &= ~HWP_MIN_PERF(~0L);
+> +	value |= HWP_MIN_PERF(min_perf);
+> +
+> +	/*
+> +	 * The entire MSR needs to be updated in order to update the HWP min
+> +	 * field in it, so opportunistically update the max too if needed.
+> +	 */
+> +	value &= ~HWP_MAX_PERF(~0L);
+> +	value |= HWP_MAX_PERF(cpu->max_perf_ratio);
+> +
+> +	if (value != prev)
+> +		wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, value);
+> +}
+> +
+> +/**
+> + * intel_cpufreq_adjust_hwp - Adjust the HWP reuqest register.
+                                                ^^^^^^^
+request/request
 
-After another week of investigation, my refined assertion is:
+> + * @cpu: Target CPU.
+> + * @target_pstate: P-state corresponding to the target frequency.
+> + *
+> + * Set the HWP minimum performance limit to 75% of @target_pstate taking the
+> + * global min and max policy limits into account.
+> + *
+> + * The purpose of this is to avoid situations in which the kernel and the HWP
+> + * algorithm work against each other by giving a hint about the expectations of
 
-For any workload from periodic to 100% busy but with infrequent small gaps,
-there is a significant probability that the processor will lock
-at minimum CPU frequency for a period of up to 30 milliseconds.
 
-Gap definition:
-lower limit not known, but < 747 uSeconds.
-Upper limit is between 952 and 955 uSeconds (there will be some overhead uncertainties).
-Must be preceded by busy time spanning a couple of HWP sampling boundaries
-or jiffy boundaries or something (I don't actually know how HWP does stuff).
 
-My long e-mail from last week was entirely based on periodic work in the 347 hertz area.
-This e-mail is about the same fundamental issue, but a completely different approach.
-
-Workflow: long busy, short gap, busy but taking loop time samples so as to estimate CPU frequency.
-I am calling it an inverse impulse response test.
-
-Results:
-
-If 747 uSec < gap < 950 uSeconds then there is approximately a 17% probability
-that upon exit from the gap back to busy the CPU will be held at 800 Mhz (or whatever minimum)
-for about 30 milliseconds before ramping up. The expectation is that the CPU frequency
-ramp up time would even be detectable by my test program, and that is the case for
-the other 83% of test runs.
-
-Sanity check (842 uSec gap time):
-
-O.K. so I should be able to observe this with the workflow running in
-a loop if I run turbostat at the same time. If I use a 3 second sample time,
-sometimes a frequency drop from 4600 MHz to 4573 is shown. If there is an
-event during a turbostat sample, there can be only one. So let's reverse
-calculate the frequency from the data:
-
-ave mhz = (time at 4600 + time at 0 + time at 800 Mhz)/3
-let the time at 800 MHz be Y.
-
-4573 = (4600 * ((3 Sec - gap) - Y) + 800 * Y)/3
-4573 = (13796.1268 - 3800 Y)/3
-13719 = 13796.1268 -  3800 Y
-Y = 20.3 milliseconds.
-
-Note: the transition time from 800 MHz to 4600 MHz
-Is not really 0, so the real Y should be longer.
-
-Real data:
-
-Test runs: 511
-Bad runs: 86 (17%)
-Average time at suppressed CPU frequency: ~ 29.8 milliseconds.
-
-Overall I have run this test about 6,500 times.
-So far, nohwp, passive, schedutil has failed the test 0 times
-out of 361 runs.
-
-Note: under these condition this computer should never
-throttle back from 4600 MHz, because (from turbostat):
-
-cpu2: MSR_TURBO_RATIO_LIMIT: 0x2b2b2e2e2e2e2e2e
-43 * 100.0 = 4300.0 MHz max turbo 8 active cores << I don't have 8 cores
-43 * 100.0 = 4300.0 MHz max turbo 7 active cores << I don't have 7 cores
-46 * 100.0 = 4600.0 MHz max turbo 6 active cores << I do have 6
-46 * 100.0 = 4600.0 MHz max turbo 5 active cores
-46 * 100.0 = 4600.0 MHz max turbo 4 active cores
-46 * 100.0 = 4600.0 MHz max turbo 3 active cores
-46 * 100.0 = 4600.0 MHz max turbo 2 active cores
-46 * 100.0 = 4600.0 MHz max turbo 1 active cores
-
-> Detail (see [1] for supporting graphs and links):
+> + * the former to the latter.
+> + */
+> +static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32 target_pstate)
+> +{
+> +	u32 min_perf;
+> +
+> +	min_perf = max_t(u32, (3 * target_pstate) / 4, cpu->min_perf_ratio);
+> +	min_perf = min_t(u32, min_perf, cpu->max_perf_ratio);
+> +	if (min_perf != cpu->pstate.current_pstate) {
+> +		cpu->pstate.current_pstate = min_perf;
+> +		intel_cpufreq_update_hwp_request(cpu, min_perf);
+> +	}
+> +}
+> +
+>  static int intel_cpufreq_target(struct cpufreq_policy *policy,
+>  				unsigned int target_freq,
+>  				unsigned int relation)
+>  {
+>  	struct cpudata *cpu = all_cpu_data[policy->cpu];
+> +	int target_pstate, old_pstate = cpu->pstate.current_pstate;
+>  	struct cpufreq_freqs freqs;
+> -	int target_pstate, old_pstate;
 > 
-> I can not proceed with testing this.
-> Why not?
-> Because I do not have a stable good system on top of which to add this patch.
-> I do not know what is wrong such that HWP appears broken.
+>  	update_turbo_state();
 > 
-> For my part of it, I had to stop and dig into
-> why HWP doesn't seem to work properly on my newer test computer.
+> @@ -2332,26 +2379,33 @@ static int intel_cpufreq_target(struct c
+>  	freqs.new = target_freq;
 > 
-> Notes:
-> I have never used HWP before, and have had it disabled so far on this
-> newer test computer. This patch seemed like a great opportunity to try it.
-> Why (in addition to helping via review/test)? Because trace now works,
-> whereas it doesn't in active mode with HWP.
+>  	cpufreq_freq_transition_begin(policy, &freqs);
+> +
+>  	switch (relation) {
+>  	case CPUFREQ_RELATION_L:
+> -		target_pstate = DIV_ROUND_UP(freqs.new, cpu->pstate.scaling);
+> +		target_pstate = DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
+>  		break;
+>  	case CPUFREQ_RELATION_H:
+> -		target_pstate = freqs.new / cpu->pstate.scaling;
+> +		target_pstate = target_freq / cpu->pstate.scaling;
+>  		break;
+>  	default:
+> -		target_pstate = DIV_ROUND_CLOSEST(freqs.new, cpu->pstate.scaling);
+> +		target_pstate = DIV_ROUND_CLOSEST(target_freq, cpu->pstate.scaling);
+>  		break;
+>  	}
+> -	target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
+> -	old_pstate = cpu->pstate.current_pstate;
+> -	if (target_pstate != cpu->pstate.current_pstate) {
+> -		cpu->pstate.current_pstate = target_pstate;
+> -		wrmsrl_on_cpu(policy->cpu, MSR_IA32_PERF_CTL,
+> -			      pstate_funcs.get_val(cpu, target_pstate));
+> +
+> +	if (hwp_active) {
+> +		intel_cpufreq_adjust_hwp(cpu, target_pstate);
+> +	} else {
+> +		target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
+> +		if (target_pstate != old_pstate) {
+> +			cpu->pstate.current_pstate = target_pstate;
+> +			wrmsrl_on_cpu(cpu->cpu, MSR_IA32_PERF_CTL,
+> +				      pstate_funcs.get_val(cpu, target_pstate));
+> +		}
+>  	}
+> -	freqs.new = target_pstate * cpu->pstate.scaling;
+>  	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_TARGET, old_pstate);
+> +
+> +	freqs.new = target_pstate * cpu->pstate.scaling;
+> +
+>  	cpufreq_freq_transition_end(policy, &freqs, false);
 > 
-> It is on my list to explore viability of a mode for trace where it monitors
-> what the processor is doing via HWP, rather than reporting what the
-> processor is being told to do. However, in the meantime, this is great.
+>  	return 0;
+> @@ -2361,14 +2415,19 @@ static unsigned int intel_cpufreq_fast_s
+>  					      unsigned int target_freq)
+>  {
+>  	struct cpudata *cpu = all_cpu_data[policy->cpu];
+> -	int target_pstate, old_pstate;
+> +	int target_pstate, old_pstate = cpu->pstate.current_pstate;
 > 
-> Example of what is wrong on my system (repeated, but new example trace data,
-> from earlier e-mail):
+>  	update_turbo_state();
 > 
-> Kernel: 5.7-rc6 and + this version of patch when trace data required.
-> Patch config: DELAY_HWP 10000 ; 87.5% fraction (7/8).
-> Keep in mind that the trace entry is the scaled min value, not the target p-state.
+>  	target_pstate = DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
+> -	target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
+> -	old_pstate = cpu->pstate.current_pstate;
+> -	intel_pstate_update_pstate(cpu, target_pstate);
+> +
+> +	if (hwp_active) {
+> +		intel_cpufreq_adjust_hwp(cpu, target_pstate);
+> +	} else {
+> +		target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
+> +		intel_pstate_update_pstate(cpu, target_pstate);
+> +	}
+> +
+>  	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_FAST_SWITCH, old_pstate);
+>  	return target_pstate * cpu->pstate.scaling;
+>  }
+> @@ -2389,7 +2448,6 @@ static int intel_cpufreq_cpu_init(struct
+>  		return ret;
 > 
-> Load:
-> Single thread, forced CPU affinity.
-> fixed work packet per work period, i.e. the amount of work to do is independent of CPU frequency.
-> 347 hertz work / sleep frequency.
-> To reveal any hysteresis (i.e. with conservative governor) load ramps up from none
-> to 100% and then back down to none at 3 seconds per step (step size is uncalibrated).
+>  	policy->cpuinfo.transition_latency = INTEL_CPUFREQ_TRANSITION_LATENCY;
+> -	policy->transition_delay_us = INTEL_CPUFREQ_TRANSITION_DELAY;
+>  	/* This reflects the intel_pstate_get_cpu_pstates() setting. */
+>  	policy->cur = policy->cpuinfo.min_freq;
 > 
-> Processor:
-> Intel(R) Core(TM) i5-9600K CPU @ 3.70GHz
+> @@ -2401,10 +2459,13 @@ static int intel_cpufreq_cpu_init(struct
 > 
-> What do I see?
+>  	cpu = all_cpu_data[policy->cpu];
 > 
-> Unexpected frequency drops at around 70% load.
-> Example, from trace:
+> -	if (hwp_active)
+> +	if (hwp_active) {
+>  		intel_pstate_get_hwp_max(policy->cpu, &turbo_max, &max_state);
+> -	else
+> +		policy->transition_delay_us = INTEL_CPUFREQ_TRANSITION_DELAY_HWP;
+> +	} else {
+>  		turbo_max = cpu->pstate.turbo_pstate;
+> +		policy->transition_delay_us = INTEL_CPUFREQ_TRANSITION_DELAY;
+> +	}
 > 
-> Event begins at 17.456 seconds elapsed time.
-> Previous event was about 107 milliseconds ago.
+>  	min_freq = DIV_ROUND_UP(turbo_max * global.min_perf_pct, 100);
+>  	min_freq *= cpu->pstate.scaling;
+> @@ -2505,9 +2566,6 @@ static int intel_pstate_register_driver(
 > 
-> Old min ; new min ; freq GHz; load % ; duration mS
-> 27      ; 28      ; 4.60    ; 68.17  ; 10.226
-> 28      ; 26      ; 4.53    ; 57.47  ; 10.005
-> 26      ; 40      ; 2.87    ; 100.00 ; 10.996  <<<< What? Why freq down? (note: it is always above old
-> min)
-> 40      ; 29      ; 4.25    ; 69.67  ; 10.002  <<<< O.K. recovering, but damage done.
-> 29      ; 26      ; 4.60    ; 59.14  ; 10.652  <<<< Event ends. Next event in 128 milliseconds.
+>  static int intel_pstate_unregister_driver(void)
+>  {
+> -	if (hwp_active)
+> -		return -EBUSY;
+> -
+>  	cpufreq_unregister_driver(intel_pstate_driver);
+>  	intel_pstate_driver_cleanup();
 > 
-> I can not think of any reason why the frequency would have been reduced so far by HWP.
+> @@ -2815,12 +2873,11 @@ static int __init intel_pstate_setup(cha
+>  	if (!str)
+>  		return -EINVAL;
 > 
-> O.K., the above had to be done with the patch so that trace could be used.
-> Ondemand was the governor, because its response curve looks the same as
-> active/powersave in the area of concern.
+> -	if (!strcmp(str, "disable")) {
+> +	if (!strcmp(str, "disable"))
+>  		no_load = 1;
+> -	} else if (!strcmp(str, "passive")) {
+> +	else if (!strcmp(str, "passive"))
+>  		default_driver = &intel_cpufreq;
+> -		no_hwp = 1;
+> -	}
+> +
+>  	if (!strcmp(str, "no_hwp")) {
+>  		pr_info("HWP disabled\n");
+>  		no_hwp = 1;
 > 
-> The below was done with kernel 5.7-rc6 and only turbostat, at a low sample rate of 15 seconds per,
-> in addition to the test load. 100 seconds each:
-> 
-> intel_pstate/powersave hwp:
-> 
-> Overruns: 11327
-> Ave. work percent: 77.952091
-> Processor package power: ~13 watts.
-> Average CPU frequency: 3.8 gigahertz
-> 
-> intel_pstate/powersave no-hwp:
-> 
-> Overruns: 7 (task start ramp up related. I have trace proof.)
-> Ave. work percent: 74.932603
-> Processor package power: ~11.5 watts.
-> Average CPU frequency: 4.0 gigahertz
-> 
-> Question: What is the relevance of the 347 hertz and
-> the >=70% load for this issue? Why does it appear
-> to be such a sharp works/fine doesn't work issue?
-> 
-> Answer: The issue seems to be related to when the
-> sleep portion of a work/sleep periodic workflow
-> approaches and goes below 1 millisecond (1 jiffy).
-> 
-> some tests were done, varying the work/sleep frequency,
-> and idle states and overruns and such, the web version
-> of this e-mail has graphs.
-> 
-> Notes:
-> 
-> The breakpoint between no-overruns/overruns is around 950 microseconds.
-> 
-> A 250 hertz kernel was tested, and it did not have this issue in this area.
-> Perhaps elsewhere, I didn't look.
-> 
-> 1000 hertz kernels were tested back to kernel 5.2, all failed.
-> 
-> If the issue is jiffy related (a race condition?) then a work/sleep frequency
-> of 333.3333 hertz should behave in binary way, either lots of overruns or none
-> as a function of the task start time. (Preliminary) It does.
-> 
-> If the issue is jiffy related (a race condition?) then a work/sleep frequency
-> of 500.00 hertz should behave in binary way, either lots of overruns or none
-> as a function of the task start time. It does. There are occurrences when idle
-> state 2 is used somewhat without overruns.
-> 
-> Both teo and menu idle governors were tested, and while both suffer from
-> unexpected CPU frequency drop, teo seems much worse. However failure points
-> for both governors are repeatable.
-> 
-> There was new BIOS for this test computer a week ago.
-> System now upgraded and tested with default BIOS settings (by accident)
-> and my settings. (Note: slight changes in processor package power for
-> system idle and one CPU loaded with new BIOS, and earlier tests NOT re-done).
-> 
-> Is the processor using the latest microcode? Currently 0xcc. Can not figure out if there is anything
-> newer.
-> 
-> Leaving out the details, but all the tests and results are available, a mess but available, the
-> summary is:
-> 
-> With HWP enabled, if idle state 2 is used, there is a probability that the CPU frequency might
-> unexpectedly drop significantly.
-> If the processor does this by itself, or by being told to via sources outside of the intel_pstate CPU
-> frequency driver, I don't
-> know.
-> 
-> The load sweep test was run at 6 seconds per step during increasing load and 3 seconds per step
-> decreasing
-> (by mistake, if you must know), while monitoring the idle statistics.
-> The test was done in a hurry, so many above/below statistics are 0%, due to insufficient sample size.
-> The overruns and use of idle state 0 are exactly correlated.
-> There are a lot of graphs on the idle statistics web page, but the idle state 2 usage correlates
-> exactly with
-> undesired low CPU frequency and overruns.
-> 
-> Side note: Even in the areas where HWP appears to behave, the no-hwp power use is much better.
-> 
-> O.K., so now, do a couple of more turbostat samples:
-> 
-> intel_pstate/powersave hwp idle state 2 disabled:
-> 
-> Overruns: 3
-> Ave. work percent: 66.647895
-> Processor package power: ~16.8 watts.
-> Average CPU frequency: 4.6 gigahertz
-> 
-> intel_pstate/powersave hwp idle state 3 disabled:
-> 
-> Overruns: 22
-> Ave. work percent: 66.647895
-> Processor package power: ~16.2 watts.
-> Average CPU frequency: 4.6 gigahertz
-> 
-> To prevent all the bots that burden my site, the link is coded:
-> [1] double u double u double u dot smythies dot com /~doug/linux/s18/hwp/index.html
-> 
-> ... Doug
-> 
-> > -----Original Message-----
-> > From: Rafael J. Wysocki [mailto:rjw@rjwysocki.net]
-> > Sent: May 26, 2020 11:21 AM
-> > To: Linux PM; Doug Smythies
-> > Cc: LKML; Len Brown; Srinivas Pandruvada; Peter Zijlstra; Giovanni Gherdovich; Francisco Jerez
-> > Subject: [RFC/RFT][PATCH] cpufreq: intel_pstate: Accept passive mode with HWP enabled
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Allow intel_pstate to work in the passive mode with HWP enabled and
-> > make it set the HWP minimum performance limit to 75% of the P-state
-> > value corresponding to the target frequency supplied by the cpufreq
-> > governor, so as to prevent the HWP algorithm and the CPU scheduler
-> > from working against each other at least when the schedutil governor
-> > is in use.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > This is a replacement for https://patchwork.kernel.org/patch/11563615/ that
-> > uses the HWP floor (minimum performance limit) as the feedback to the HWP
-> > algorithm (instead of the EPP).
-> >
-> > The INTEL_CPUFREQ_TRANSITION_DELAY_HWP is still 5000 and the previous comments
-> > still apply to it.
-> >
-> > In addition to that, the 75% fraction used in intel_cpufreq_adjust_hwp() can be
-> > adjusted too, but I would like to use a value with a power-of-2 denominator for
-> > that (so the next candidate would be 7/8).
-> >
-> > Everyone who can do that is kindly requested to test this and let me know
-> > the outcome.
 
 
