@@ -2,363 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B707D1F0755
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jun 2020 17:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE86F1F07A6
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jun 2020 17:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728660AbgFFPVh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 6 Jun 2020 11:21:37 -0400
-Received: from cmta18.telus.net ([209.171.16.91]:40659 "EHLO cmta18.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728839AbgFFPVb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 6 Jun 2020 11:21:31 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id hadSjyUCKVEJfhadTjiTAT; Sat, 06 Jun 2020 09:21:29 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1591456889; bh=acRMgmXS6uF437+l0bg28fHQ4L6K4pZsGqCvVybiXV8=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=HCtzslmgSjtOMMu+C8mO38bSPqKiHGQAaNkD7Ijefw+YzB463gB0L7IvR1N5IvLUB
-         OkocJ/00YXdXipbF6yX579Kt3HObLQe/2PojrChxnBqFALwvx0M4mGqvoclOntLhPG
-         WBIoj3MankywoMwnRz7nKbrBnX4R67EJnzFoPycypctMb/HEpoA/Fl+rbtUxZ1wuNt
-         YRru0Ikd+4hUFTpCLJ/mLaDRAzZg1O6R+JOZ1QEOhx+kZtvd4aDTGiJA+bCzs0ezKz
-         9ulIK0go4WRZ7/2RT6WRmN4ft527ygLB8IoG+3ihlOL+bAZt7YFWlkmWVpsRg9GOM/
-         ItYl6NbMEmnKQ==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=KIck82No c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=QyXUC8HyAAAA:8
- a=VwQbUJbxAAAA:8 a=9E8nperVKYpAKzPi-k0A:9 a=CjuIK1q_8ugA:10
- a=AjGcO6oz07-iQ99wixmX:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-Cc:     "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Len Brown'" <len.brown@intel.com>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
-        "'Francisco Jerez'" <francisco.jerez.plata@intel.com>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>
-References: <2931539.RsFqoHxarq@kreacher>
-In-Reply-To: <2931539.RsFqoHxarq@kreacher>
-Subject: RE: [RFC/RFT][PATCH] cpufreq: intel_pstate: Accept passive mode with HWP enabled
-Date:   Sat, 6 Jun 2020 08:21:25 -0700
-Message-ID: <000101d63c16$265d3cc0$7317b640$@net>
+        id S1727095AbgFFPpS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 6 Jun 2020 11:45:18 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:58757 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726968AbgFFPpR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 6 Jun 2020 11:45:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591458315;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VJQzV0rdN7ALnL6NeYYp172fRlPbPlchooy6Ga8Vcnw=;
+        b=hdWfJjyv+qpTD95utnbVggtkePgX7CNyj9QZWTdGduImB6TzY9AWYSkiCNKMxKBwWAgup0
+        hVgg/ncIdOCVrOYtcXU2mLdl9zI80gcwCurBEI0pZeVcwP3xKsBkFPObpAr1HYAa5syaJf
+        kFnHnhe3RNwAIzdm+UJfPKFLpMGt4qg=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-354-sYtX0IxZOHeA8eWgfXHM-Q-1; Sat, 06 Jun 2020 11:45:13 -0400
+X-MC-Unique: sYtX0IxZOHeA8eWgfXHM-Q-1
+Received: by mail-wr1-f70.google.com with SMTP id p10so5180627wrn.19
+        for <linux-pm@vger.kernel.org>; Sat, 06 Jun 2020 08:45:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=VJQzV0rdN7ALnL6NeYYp172fRlPbPlchooy6Ga8Vcnw=;
+        b=VkZ1Z/hdpnd2jmGlau6fhHRVoHPAjz5ypDopVTpeEXx2vjjPqjsJoAt/9qWYR0VwBU
+         Qre7RxiCC7ry+QIJUTUqK7OmGjFOrs0eUU3tx4QmM0p+ROxuZ7WgNg8IyAkyaYrEFIb/
+         mtWE+GwPkPW2tSkp6eV45230N8AG5fATDdj+CzGfXevUGw+w6x1gUiTBEtLMMSVBMT93
+         P/PHs1Ew2yBqI3HBGO4/bIDDJdYlJXxMevYQuMuqZyTQEjWKiKVgS+JWFg7ZL91sk3g1
+         Td0pM41CbHDkj5gv9ykTb0BlKoCZn8StEif6gXQMT/FjUUXWbGL5Fn9x3+/a9VLGQmSd
+         csfg==
+X-Gm-Message-State: AOAM532dgWqHRv2HFnCxLcZPQDAXjbEsONz2VoMuAn5jZ8fVr2KMgDm3
+        QT5ULC+S7uv6IwUsvhlQlBz7ETG9AY+/jruE0EFYkfjRcimgqApjphHjWGvzjmpibsB8vSn5m0j
+        DmqsrAqs/3dq+TBp+mhc=
+X-Received: by 2002:a1c:3987:: with SMTP id g129mr7911380wma.139.1591458311908;
+        Sat, 06 Jun 2020 08:45:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwCDW5eisq+hVdc/k8mWioQT6xTsFq1sXcnNLuRMkVzcYDUxMLASfVmmPO56Y+qGXj0fQVHZA==
+X-Received: by 2002:a1c:3987:: with SMTP id g129mr7911353wma.139.1591458311579;
+        Sat, 06 Jun 2020 08:45:11 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id t14sm18219200wrb.94.2020.06.06.08.45.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 Jun 2020 08:45:10 -0700 (PDT)
+Subject: Re: [PATCH] ACPI: PM: Avoid using power resources if there are none
+ for D0
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        youling257@gmail.com, LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <20200603194659.185757-1-hdegoede@redhat.com>
+ <CAJZ5v0g7rhiWs0ZeGGS5OoSMH7DiVT1D-EUgX5HFXYkcvXcm2Q@mail.gmail.com>
+ <d084b424-a340-a24a-d681-c92d80d8421d@redhat.com>
+ <13388608.OHKVb9tm6R@kreacher>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <fddf7e38-cbc3-e923-9e4c-fe4f9903f24e@redhat.com>
+Date:   Sat, 6 Jun 2020 17:45:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
+In-Reply-To: <13388608.OHKVb9tm6R@kreacher>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdYzimEBSb+8wZd2QXK6gu6IWqSeRQFZYydA
-Content-Language: en-ca
-X-CMAE-Envelope: MS4wfNhjr2RbLuvnMKpbPjqt/4UERj5RsojBBMSbY+H4Udb3XdsDznK3piqmWeLLIZsGtO22keQOqAFqf+aLgCrwKBQviN941VPg4tckh5S8lwDc9WLfLyPm
- Oy+GbFQTl2pCcbmGSjlw4ZmRZ60psGKfbkIaVeIfjBGzq8EL7k72/V7tVEcITHNkToaJwM9Fl13I+tzoHxkC1DNeNn/4RKn8u2zuJHtXQ1H2Ny7NvP8wxygQ
- 1rJncm3UB0WjGqtPSU0CfLmyNAbSwzxwqnMluaZAkMyRfNT6IjLaQxFi9jiIldhzW/cKi2qzyNkPR+6RoQrw+Hr7F5RJHf+lB9TDQ84FDD8q4ajdWgodEZhE
- pGspa7XNVVonAWj7HBBV3VPde9a97FmGzemBP/GUE/zNbCRQaJVx8oU0XuAewqL4T8wrOuYK
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Hi,
 
-As you well know, I often test first and
-ask questions and review code later.
-
-I think I should have questioned this first.
-
-To the best of my ability/availability, I am
-committed to follow up on the hwp issue raised on
-the other branch of this thread. However, moving
-forward the typical CPU frequency scaling
-configuration for my test system will be:
-
-driver: intel-cpufreq, forced at boot.
-governor: schedutil
-hwp: forced off at boot.
-
-On 2020.05.26 11:21 Rafael J. Wysocki wrote:
+On 6/4/20 7:22 PM, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Allow intel_pstate to work in the passive mode with HWP enabled and
-> make it set the HWP minimum performance limit to 75% of the P-state
-> value corresponding to the target frequency supplied by the cpufreq
-> governor, so as to prevent the HWP algorithm and the CPU scheduler
-> from working against each other at least when the schedutil governor
-> is in use.
-
-I think we need to define what "passive" mode is.
-I have always interpreted it to mean "I would like
-this pstate please. It has been requested by some higher level
-servo". The name intel_cpufreq makes sense.
-
-I have always interpreted "active" to mean "I would like
-the intel_pstate CPU frequency driver to decide what pstate
-I need".
-
-As mentioned on the other branch of this thread, I don't have
-a stable test baseline, but the servos are still fighting each other
-with this version of the patch.
-
+> As recently reported, some platforms provide a list of power
+> resources for device power state D3hot, through the _PR3 object,
+> but they do not provide a list of power resources for device power
+> state D0.
 > 
+> Among other things, this causes acpi_device_get_power() to return
+> D3hot as the current state of the device in question if all of the
+> D3hot power resources are "on", because it sees the power_resources
+> flag set and calls acpi_power_get_inferred_state() which finds that
+> D3hot is the shallowest power state with all of the associated power
+> resources turned "on", so that's what it returns.  Moreover, that
+> value takes precedence over the acpi_dev_pm_explicit_get() return
+> value, because it means a deeper power state.  The device may very
+> well be in D0 physically at that point, however.
+> 
+> Moreover, the presence of _PR3 without _PR0 for a given device
+> means that only one D3-level power state can be supported by it.
+> Namely, because there are no power resources to turn "off" when
+> transitioning the device from D0 into D3cold (which should be
+> supported since _PR3 is present), the evaluation of _PS3 should
+> be sufficient to put it straight into D3cold, but this means that
+> the effect of turning "on" the _PR3 power resources is unclear,
+> so it is better to avoid doing that altogether.  Consequently,
+> there is no practical way do distinguish D3cold from D3hot for
+> the device in question and the power states of it can be labeled
+> so that D3hot is the deepest supported one (and Linux assumes
+> that putting a device into D3hot via ACPI may cause power to be
+> removed from it anyway, for legacy reasons).
+> 
+> To work around the problem described above modify the ACPI
+> enumeration of devices so that power resources are only used
+> for device power management if the list of D0 power resources
+> is not empty and make it mart D3cold as supported only if that
+> is the case and the D3hot list of power resources is not empty
+> too.
+> 
+> Fixes: ef85bdbec444 ("ACPI / scan: Consolidate extraction of power resources lists")
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=205057
+> Link: https://lore.kernel.org/linux-acpi/20200603194659.185757-1-hdegoede@redhat.com/
+> Reported-by: Hans de Goede <hdegoede@redhat.com>
+> Cc: 3.10+ <stable@vger.kernel.org> # 3.10+
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Thank you.
+
+I've tested this and I can confirm that it fixes the issue:
+
+Tested-by: Hans de Goede <hdegoede@redhat.com>
+
+I've also looked at the code and it looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+
+
+
 > ---
+>   drivers/acpi/device_pm.c |    2 +-
+>   drivers/acpi/scan.c      |   28 +++++++++++++++++++---------
+>   2 files changed, 20 insertions(+), 10 deletions(-)
 > 
-> This is a replacement for https://patchwork.kernel.org/patch/11563615/ that
-> uses the HWP floor (minimum performance limit) as the feedback to the HWP
-> algorithm (instead of the EPP).
-> 
-> The INTEL_CPUFREQ_TRANSITION_DELAY_HWP is still 5000 and the previous comments
-> still apply to it.
-> 
-> In addition to that, the 75% fraction used in intel_cpufreq_adjust_hwp() can be
-> adjusted too, but I would like to use a value with a power-of-2 denominator for
-> that (so the next candidate would be 7/8).
-
-The issue here is that the lag of the CPU frequency is not a constant, but rather
-a function of the task work/sleep timing verses whatever else is going on. One has
-to allow for the worst case. From thousands of seconds of intel_pstate trace data,
-that limit needs to be about 3% (31/32).
-
-Disclaimer: Done with no-hwp, active/powersave. The results might not be transferrable
-to hwp enabled.
-
-> 
-> Everyone who can do that is kindly requested to test this and let me know
-> the outcome.
-> 
-> Of course, the documentation still needs to be updated.  Also, the EPP can be
-> handled in analogy with the active mode now, but that part can be added in a
-> separate patch on top of this one.
-> 
-> Thanks!
-> 
-> ---
->  drivers/cpufreq/intel_pstate.c |  119 ++++++++++++++++++++++++++++++-----------
->  1 file changed, 88 insertions(+), 31 deletions(-)
-> 
-> Index: linux-pm/drivers/cpufreq/intel_pstate.c
+> Index: linux-pm/drivers/acpi/scan.c
 > ===================================================================
-> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> @@ -36,6 +36,7 @@
->  #define INTEL_PSTATE_SAMPLING_INTERVAL	(10 * NSEC_PER_MSEC)
-> 
->  #define INTEL_CPUFREQ_TRANSITION_LATENCY	20000
-> +#define INTEL_CPUFREQ_TRANSITION_DELAY_HWP	5000
->  #define INTEL_CPUFREQ_TRANSITION_DELAY		500
-> 
->  #ifdef CONFIG_ACPI
-> @@ -2175,7 +2176,10 @@ static int intel_pstate_verify_policy(st
-> 
->  static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
->  {
-> -	intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
-> +	if (hwp_active)
-> +		intel_pstate_hwp_force_min_perf(policy->cpu);
-> +	else
-> +		intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
->  }
-> 
->  static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
-> @@ -2183,12 +2187,10 @@ static void intel_pstate_stop_cpu(struct
->  	pr_debug("CPU %d exiting\n", policy->cpu);
-> 
->  	intel_pstate_clear_update_util_hook(policy->cpu);
-> -	if (hwp_active) {
-> +	if (hwp_active)
->  		intel_pstate_hwp_save_state(policy);
-> -		intel_pstate_hwp_force_min_perf(policy->cpu);
-> -	} else {
-> -		intel_cpufreq_stop_cpu(policy);
-> -	}
+> --- linux-pm.orig/drivers/acpi/scan.c
+> +++ linux-pm/drivers/acpi/scan.c
+> @@ -919,12 +919,9 @@ static void acpi_bus_init_power_state(st
+>   
+>   		if (buffer.length && package
+>   		    && package->type == ACPI_TYPE_PACKAGE
+> -		    && package->package.count) {
+> -			int err = acpi_extract_power_resources(package, 0,
+> -							       &ps->resources);
+> -			if (!err)
+> -				device->power.flags.power_resources = 1;
+> -		}
+> +		    && package->package.count)
+> +			acpi_extract_power_resources(package, 0, &ps->resources);
 > +
-> +	intel_cpufreq_stop_cpu(policy);
->  }
-> 
->  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
-> @@ -2318,13 +2320,58 @@ static void intel_cpufreq_trace(struct c
->  		fp_toint(cpu->iowait_boost * 100));
->  }
-> 
-> +static void intel_cpufreq_update_hwp_request(struct cpudata *cpu, u32 min_perf)
-> +{
-> +	u64 value, prev;
-> +
-> +	rdmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, &prev);
-> +	value = prev;
-> +
-> +	value &= ~HWP_MIN_PERF(~0L);
-> +	value |= HWP_MIN_PERF(min_perf);
-> +
+>   		ACPI_FREE(buffer.pointer);
+>   	}
+>   
+> @@ -971,14 +968,27 @@ static void acpi_bus_get_power_flags(str
+>   		acpi_bus_init_power_state(device, i);
+>   
+>   	INIT_LIST_HEAD(&device->power.states[ACPI_STATE_D3_COLD].resources);
+> -	if (!list_empty(&device->power.states[ACPI_STATE_D3_HOT].resources))
+> -		device->power.states[ACPI_STATE_D3_COLD].flags.valid = 1;
+>   
+> -	/* Set defaults for D0 and D3hot states (always valid) */
+> +	/* Set the defaults for D0 and D3hot (always supported). */
+>   	device->power.states[ACPI_STATE_D0].flags.valid = 1;
+>   	device->power.states[ACPI_STATE_D0].power = 100;
+>   	device->power.states[ACPI_STATE_D3_HOT].flags.valid = 1;
+>   
 > +	/*
-> +	 * The entire MSR needs to be updated in order to update the HWP min
-> +	 * field in it, so opportunistically update the max too if needed.
+> +	 * Use power resources only if the D0 list of them is populated, because
+> +	 * some platforms may provide _PR3 only to indicate D3cold support and
+> +	 * in those cases the power resources list returned by it may be bogus.
 > +	 */
-> +	value &= ~HWP_MAX_PERF(~0L);
-> +	value |= HWP_MAX_PERF(cpu->max_perf_ratio);
-> +
-> +	if (value != prev)
-> +		wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, value);
-> +}
-> +
-> +/**
-> + * intel_cpufreq_adjust_hwp - Adjust the HWP reuqest register.
-                                                ^^^^^^^
-request/request
-
-> + * @cpu: Target CPU.
-> + * @target_pstate: P-state corresponding to the target frequency.
-> + *
-> + * Set the HWP minimum performance limit to 75% of @target_pstate taking the
-> + * global min and max policy limits into account.
-> + *
-> + * The purpose of this is to avoid situations in which the kernel and the HWP
-> + * algorithm work against each other by giving a hint about the expectations of
-
-
-
-> + * the former to the latter.
-> + */
-> +static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32 target_pstate)
-> +{
-> +	u32 min_perf;
-> +
-> +	min_perf = max_t(u32, (3 * target_pstate) / 4, cpu->min_perf_ratio);
-> +	min_perf = min_t(u32, min_perf, cpu->max_perf_ratio);
-> +	if (min_perf != cpu->pstate.current_pstate) {
-> +		cpu->pstate.current_pstate = min_perf;
-> +		intel_cpufreq_update_hwp_request(cpu, min_perf);
-> +	}
-> +}
-> +
->  static int intel_cpufreq_target(struct cpufreq_policy *policy,
->  				unsigned int target_freq,
->  				unsigned int relation)
->  {
->  	struct cpudata *cpu = all_cpu_data[policy->cpu];
-> +	int target_pstate, old_pstate = cpu->pstate.current_pstate;
->  	struct cpufreq_freqs freqs;
-> -	int target_pstate, old_pstate;
-> 
->  	update_turbo_state();
-> 
-> @@ -2332,26 +2379,33 @@ static int intel_cpufreq_target(struct c
->  	freqs.new = target_freq;
-> 
->  	cpufreq_freq_transition_begin(policy, &freqs);
-> +
->  	switch (relation) {
->  	case CPUFREQ_RELATION_L:
-> -		target_pstate = DIV_ROUND_UP(freqs.new, cpu->pstate.scaling);
-> +		target_pstate = DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
->  		break;
->  	case CPUFREQ_RELATION_H:
-> -		target_pstate = freqs.new / cpu->pstate.scaling;
-> +		target_pstate = target_freq / cpu->pstate.scaling;
->  		break;
->  	default:
-> -		target_pstate = DIV_ROUND_CLOSEST(freqs.new, cpu->pstate.scaling);
-> +		target_pstate = DIV_ROUND_CLOSEST(target_freq, cpu->pstate.scaling);
->  		break;
->  	}
-> -	target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
-> -	old_pstate = cpu->pstate.current_pstate;
-> -	if (target_pstate != cpu->pstate.current_pstate) {
-> -		cpu->pstate.current_pstate = target_pstate;
-> -		wrmsrl_on_cpu(policy->cpu, MSR_IA32_PERF_CTL,
-> -			      pstate_funcs.get_val(cpu, target_pstate));
-> +
-> +	if (hwp_active) {
-> +		intel_cpufreq_adjust_hwp(cpu, target_pstate);
-> +	} else {
-> +		target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
-> +		if (target_pstate != old_pstate) {
-> +			cpu->pstate.current_pstate = target_pstate;
-> +			wrmsrl_on_cpu(cpu->cpu, MSR_IA32_PERF_CTL,
-> +				      pstate_funcs.get_val(cpu, target_pstate));
-> +		}
->  	}
-> -	freqs.new = target_pstate * cpu->pstate.scaling;
->  	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_TARGET, old_pstate);
-> +
-> +	freqs.new = target_pstate * cpu->pstate.scaling;
-> +
->  	cpufreq_freq_transition_end(policy, &freqs, false);
-> 
->  	return 0;
-> @@ -2361,14 +2415,19 @@ static unsigned int intel_cpufreq_fast_s
->  					      unsigned int target_freq)
->  {
->  	struct cpudata *cpu = all_cpu_data[policy->cpu];
-> -	int target_pstate, old_pstate;
-> +	int target_pstate, old_pstate = cpu->pstate.current_pstate;
-> 
->  	update_turbo_state();
-> 
->  	target_pstate = DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
-> -	target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
-> -	old_pstate = cpu->pstate.current_pstate;
-> -	intel_pstate_update_pstate(cpu, target_pstate);
-> +
-> +	if (hwp_active) {
-> +		intel_cpufreq_adjust_hwp(cpu, target_pstate);
-> +	} else {
-> +		target_pstate = intel_pstate_prepare_request(cpu, target_pstate);
-> +		intel_pstate_update_pstate(cpu, target_pstate);
+> +	if (!list_empty(&device->power.states[ACPI_STATE_D0].resources)) {
+> +		device->power.flags.power_resources = 1;
+> +		/*
+> +		 * D3cold is supported if the D3hot list of power resources is
+> +		 * not empty.
+> +		 */
+> +		if (!list_empty(&device->power.states[ACPI_STATE_D3_HOT].resources))
+> +			device->power.states[ACPI_STATE_D3_COLD].flags.valid = 1;
 > +	}
 > +
->  	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_FAST_SWITCH, old_pstate);
->  	return target_pstate * cpu->pstate.scaling;
->  }
-> @@ -2389,7 +2448,6 @@ static int intel_cpufreq_cpu_init(struct
->  		return ret;
+>   	if (acpi_bus_init_power(device))
+>   		device->flags.power_manageable = 0;
+>   }
+> Index: linux-pm/drivers/acpi/device_pm.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/device_pm.c
+> +++ linux-pm/drivers/acpi/device_pm.c
+> @@ -186,7 +186,7 @@ int acpi_device_set_power(struct acpi_de
+>   		 * possibly drop references to the power resources in use.
+>   		 */
+>   		state = ACPI_STATE_D3_HOT;
+> -		/* If _PR3 is not available, use D3hot as the target state. */
+> +		/* If D3cold is not supported, use D3hot as the target state. */
+>   		if (!device->power.states[ACPI_STATE_D3_COLD].flags.valid)
+>   			target_state = state;
+>   	} else if (!device->power.states[state].flags.valid) {
 > 
->  	policy->cpuinfo.transition_latency = INTEL_CPUFREQ_TRANSITION_LATENCY;
-> -	policy->transition_delay_us = INTEL_CPUFREQ_TRANSITION_DELAY;
->  	/* This reflects the intel_pstate_get_cpu_pstates() setting. */
->  	policy->cur = policy->cpuinfo.min_freq;
 > 
-> @@ -2401,10 +2459,13 @@ static int intel_cpufreq_cpu_init(struct
 > 
->  	cpu = all_cpu_data[policy->cpu];
-> 
-> -	if (hwp_active)
-> +	if (hwp_active) {
->  		intel_pstate_get_hwp_max(policy->cpu, &turbo_max, &max_state);
-> -	else
-> +		policy->transition_delay_us = INTEL_CPUFREQ_TRANSITION_DELAY_HWP;
-> +	} else {
->  		turbo_max = cpu->pstate.turbo_pstate;
-> +		policy->transition_delay_us = INTEL_CPUFREQ_TRANSITION_DELAY;
-> +	}
-> 
->  	min_freq = DIV_ROUND_UP(turbo_max * global.min_perf_pct, 100);
->  	min_freq *= cpu->pstate.scaling;
-> @@ -2505,9 +2566,6 @@ static int intel_pstate_register_driver(
-> 
->  static int intel_pstate_unregister_driver(void)
->  {
-> -	if (hwp_active)
-> -		return -EBUSY;
-> -
->  	cpufreq_unregister_driver(intel_pstate_driver);
->  	intel_pstate_driver_cleanup();
-> 
-> @@ -2815,12 +2873,11 @@ static int __init intel_pstate_setup(cha
->  	if (!str)
->  		return -EINVAL;
-> 
-> -	if (!strcmp(str, "disable")) {
-> +	if (!strcmp(str, "disable"))
->  		no_load = 1;
-> -	} else if (!strcmp(str, "passive")) {
-> +	else if (!strcmp(str, "passive"))
->  		default_driver = &intel_cpufreq;
-> -		no_hwp = 1;
-> -	}
-> +
->  	if (!strcmp(str, "no_hwp")) {
->  		pr_info("HWP disabled\n");
->  		no_hwp = 1;
-> 
-
 
