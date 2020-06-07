@@ -2,137 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E04AD1F0C0D
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Jun 2020 16:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D0C1F0D27
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Jun 2020 18:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgFGOpd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Jun 2020 10:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726762AbgFGOp2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 7 Jun 2020 10:45:28 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1543FC08C5C3;
-        Sun,  7 Jun 2020 07:45:28 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id a9so13751195ljn.6;
-        Sun, 07 Jun 2020 07:45:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lfL/r1htdP9PiIBaZcQxVZ6voLKiwdEQ8IbCOeWza6A=;
-        b=F2mKAwuzjxAgedp/+YsmHWSd/69jzNNmCqJbuVTXk5OZFvOBQ2uxLjW/SdgzELRfaH
-         8onq9IUyf6hOkjsCWURnrDfC/ltXl8Qv3iwoa98AN3eSueCbgWOGhmA4X4p0tN478dXX
-         U+m8CwOZmLhPmjzwqA17KZn+h1whAaB+5zOYIV4UM7y9zLbbf45naMpbpIEkq5KD10xQ
-         0TcMRj88h/2OFul3mbMqqcRXrBR17F7YnqUGg17E79Q+y3rEjcP5vFyQPqvvwPFSVun/
-         3o1oexIGGbz0YElqBWWLvov52XuwsRFuEvKToCOAgSyufte5awTv2jkVTW19oUc9UMCQ
-         J0iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lfL/r1htdP9PiIBaZcQxVZ6voLKiwdEQ8IbCOeWza6A=;
-        b=b4EAnJgnYuta7t/Lfz6303qPuQX/orkfYHBNLa4OfOE770zQJHh5img4+TGENTARIQ
-         TnymuUmSvpdetfv8itFk+YWhD7KDHWLV/8qq5mPeWhAYdI9MRcl3+MZB548SN4WclcE2
-         /9xaKY85g4JnFLpNTzuGExxdWuUh/d8MAXaVx4chaqWWckrSfFn7BcoCQb4nj4AMXcsJ
-         5cxx53ejD8WdntN0k+f0QIOsuRxQQVnatzfpdZolZuhe1fhIBEJihIB4Werpy4F10vQL
-         jEKyiDKl6mG8QsoxNepWjSNNNR1dwDQ/QE/BfDJ+r8p6ZNrADHDQfUJMk7LrLGcaxjNF
-         80qw==
-X-Gm-Message-State: AOAM5322i3uXs6GYOnwPfKxXr55ND7oQq80JOWHZ+vs4w4cI6NQzC715
-        zTDNZBsW9+1yAXsxpvUIKzE=
-X-Google-Smtp-Source: ABdhPJw2hnkRZpEz3xvP42UA6MOStGsDyxqyIF/rxMxPa659kz9A/8+dqsknHvl1DT4uiVe2y6zzeA==
-X-Received: by 2002:a05:651c:233:: with SMTP id z19mr9481431ljn.428.1591541126619;
-        Sun, 07 Jun 2020 07:45:26 -0700 (PDT)
-Received: from localhost.localdomain (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
-        by smtp.gmail.com with ESMTPSA id g24sm4059724lfh.90.2020.06.07.07.45.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jun 2020 07:45:26 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Heidelberg <david@ixit.cz>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Jonghwa Lee <jonghwa3.lee@samsung.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Vinay Simha BN <simhavcs@gmail.com>
-Subject: [PATCH v2 9/9] ARM: dts: qcom: apq8064-nexus7: Add SMB345 charger node
-Date:   Sun,  7 Jun 2020 17:41:13 +0300
-Message-Id: <20200607144113.10202-10-digetx@gmail.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200607144113.10202-1-digetx@gmail.com>
-References: <20200607144113.10202-1-digetx@gmail.com>
+        id S1726683AbgFGQea (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Jun 2020 12:34:30 -0400
+Received: from mga07.intel.com ([134.134.136.100]:58842 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726646AbgFGQe3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 7 Jun 2020 12:34:29 -0400
+IronPort-SDR: UFC7Ab1xN9mMIw+3cO9GT6fLGmIBJT4aLikBO+OucFtE6gIEWtvtT0tJ2/TxGqNdSbKIIK411G
+ 961vTGiXO+YQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2020 09:34:28 -0700
+IronPort-SDR: Fyk1InqYMPYgh1T0kcnxxfilbZ5XgWp5wHXXAKKqigkdTzUJ4X4gN7NUquJyqONUiDLVB/kR+a
+ Tw6xi5oUdIhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,484,1583222400"; 
+   d="scan'208";a="258486290"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
+  by fmsmga007.fm.intel.com with ESMTP; 07 Jun 2020 09:34:28 -0700
+Date:   Sun, 7 Jun 2020 09:34:28 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, kbuild-all@lists.01.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Brad Campbell <lists2009@fnarfbargle.com>
+Subject: Re: [PATCH] x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during
+ wakeup
+Message-ID: <20200607163428.GB24576@linux.intel.com>
+References: <20200605200728.10145-1-sean.j.christopherson@intel.com>
+ <202006060421.fTpTXYbe%lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202006060421.fTpTXYbe%lkp@intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: David Heidelberg <david@ixit.cz>
+On Sat, Jun 06, 2020 at 05:08:38AM +0800, kernel test robot wrote:
+ arch/x86/kernel/cpu/centaur.c: In function 'init_centaur':
+> >> arch/x86/kernel/cpu/centaur.c:219:2: error: implicit declaration of function 'init_ia32_feat_ctl' [-Werror=implicit-function-declaration]
+> 219 |  init_ia32_feat_ctl(c);
+> |  ^~~~~~~~~~~~~~~~~~
+> cc1: some warnings being treated as errors
+> --
+> arch/x86/kernel/cpu/zhaoxin.c: In function 'init_zhaoxin':
+> >> arch/x86/kernel/cpu/zhaoxin.c:110:2: error: implicit declaration of function 'init_ia32_feat_ctl' [-Werror=implicit-function-declaration]
+> 110 |  init_ia32_feat_ctl(c);
+> |  ^~~~~~~~~~~~~~~~~~
+> cc1: some warnings being treated as errors
 
-Add SMB345 charger node to Nexus 7 2013 DTS.
-Proper charger configuration prevents battery from overcharging.
+Blech, zhaoxin.c an centaur.c don't include asm/cpu.h, and I (obviously)
+don't have them enabled in my configs.  I'll wait a day or two more before
+sending v2.
 
-Original author: Vinay Simha BN <simhavcs@gmail.com>
-
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
- .../boot/dts/qcom-apq8064-asus-nexus7-flo.dts | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
-
-diff --git a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-index a701d4bac320..7a7784206dd8 100644
---- a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-+++ b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
+diff --git a/arch/x86/kernel/cpu/centaur.c b/arch/x86/kernel/cpu/centaur.c
+index 426792565d86..c5cf336e5077 100644
+--- a/arch/x86/kernel/cpu/centaur.c
++++ b/arch/x86/kernel/cpu/centaur.c
 @@ -3,6 +3,7 @@
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-+#include <dt-bindings/power/summit,smb347-charger.h>
- / {
- 	model = "Asus Nexus7(flo)";
- 	compatible = "asus,nexus7-flo", "qcom,apq8064";
-@@ -56,6 +57,11 @@ volume_down {
- 		};
- 	};
- 
-+	battery_cell: battery-cell {
-+		compatible = "simple-battery";
-+		constant-charge-current-max-microamp = <1800000>;
-+	};
-+
- 	soc {
- 		rpm@108000 {
- 			regulators {
-@@ -296,8 +302,25 @@ eeprom@52 {
- 				bq27541@55 {
- 					compatible = "ti,bq27541";
- 					reg = <0x55>;
-+					power-supplies = <&power_supply>;
-+					monitored-battery = <&battery_cell>;
- 				};
- 
-+				power_supply: charger@6a {
-+					compatible = "summit,smb345";
-+					reg = <0x6a>;
-+
-+					interrupt-parent = <&tlmm_pinmux>;
-+					interrupts = <23 IRQ_TYPE_EDGE_BOTH>;
-+
-+					summit,chip-temperature-threshold-celsius = <110>;
-+					summit,usb-current-limit-microamp = <500000>;
-+					summit,enable-charge-control = <SMB3XX_CHG_ENABLE_SW>;
-+					summit,enable-usb-charging;
-+					summit,enable-otg-charging;
-+
-+					monitored-battery = <&battery_cell>;
-+				};
- 			};
- 		};
- 
--- 
-2.26.0
+ #include <linux/sched.h>
+ #include <linux/sched/clock.h>
+
++#include <asm/cpu.h>
+ #include <asm/cpufeature.h>
+ #include <asm/e820/api.h>
+ #include <asm/mtrr.h>
+diff --git a/arch/x86/kernel/cpu/zhaoxin.c b/arch/x86/kernel/cpu/zhaoxin.c
+index df1358ba622b..05fa4ef63490 100644
+--- a/arch/x86/kernel/cpu/zhaoxin.c
++++ b/arch/x86/kernel/cpu/zhaoxin.c
+@@ -2,6 +2,7 @@
+ #include <linux/sched.h>
+ #include <linux/sched/clock.h>
+
++#include <asm/cpu.h>
+ #include <asm/cpufeature.h>
+
+ #include "cpu.h"
 
