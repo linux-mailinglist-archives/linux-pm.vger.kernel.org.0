@@ -2,91 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D0C1F0D27
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Jun 2020 18:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65061F0D54
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Jun 2020 19:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbgFGQea (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 7 Jun 2020 12:34:30 -0400
-Received: from mga07.intel.com ([134.134.136.100]:58842 "EHLO mga07.intel.com"
+        id S1726764AbgFGRYc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 7 Jun 2020 13:24:32 -0400
+Received: from cmta16.telus.net ([209.171.16.89]:40819 "EHLO cmta16.telus.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726646AbgFGQe3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 7 Jun 2020 12:34:29 -0400
-IronPort-SDR: UFC7Ab1xN9mMIw+3cO9GT6fLGmIBJT4aLikBO+OucFtE6gIEWtvtT0tJ2/TxGqNdSbKIIK411G
- 961vTGiXO+YQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2020 09:34:28 -0700
-IronPort-SDR: Fyk1InqYMPYgh1T0kcnxxfilbZ5XgWp5wHXXAKKqigkdTzUJ4X4gN7NUquJyqONUiDLVB/kR+a
- Tw6xi5oUdIhQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,484,1583222400"; 
-   d="scan'208";a="258486290"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Jun 2020 09:34:28 -0700
-Date:   Sun, 7 Jun 2020 09:34:28 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, kbuild-all@lists.01.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Brad Campbell <lists2009@fnarfbargle.com>
-Subject: Re: [PATCH] x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during
- wakeup
-Message-ID: <20200607163428.GB24576@linux.intel.com>
-References: <20200605200728.10145-1-sean.j.christopherson@intel.com>
- <202006060421.fTpTXYbe%lkp@intel.com>
+        id S1726683AbgFGRYc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 7 Jun 2020 13:24:32 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id hz21jefG52DNIhz22juPq7; Sun, 07 Jun 2020 11:24:30 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1591550670; bh=bjB5OQj4KnJNWDep2n0cWBgNUf5MHV0Y7f0NGsHlhIE=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=ZLKYyaAx5rLDrxUzmKoZhsKN9j8NEOvuqjK8fmHPTHbAg35GE1dIwE8TcqK1kkdzu
+         WjYBbPyyWrkra7IMJgpvT7+zwTZowuV2zUW6EapiN3hviZTem1gK39gqdmyE7rdOZq
+         IiZ94yqjISbsO0HEmmIrIS0zcaWLdtrejAjzFC+A5G6LV4DqyvMZnGFD9R8j5MMkWK
+         5GTcFCxL0IH/wokRbh41jBK7TxkxB30PtVOUF45Q1MSGEQlT9u10vAEwdvJW9QwFq7
+         5WEGUA7hVgMakLv5c5kCBl9YRGgkcUSU9o5yyTxojp/F74+ltGLUATWqqfMhJzGYRU
+         0vigkeCqcdwGA==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=H+qlPNQi c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=IkcTkHD0fZMA:10 a=ZrPGNbafH8e2tRZWgBQA:9
+ a=QEXdDO2ut3YA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Alexander Monakov'" <amonakov@ispras.ru>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
+        <qperret@google.com>, <juri.lelli@redhat.com>,
+        "'Valentin Schneider'" <valentin.schneider@arm.com>,
+        "'Vincent Guittot'" <vincent.guittot@linaro.org>,
+        "'Rafael J. Wysocki'" <rafael.j.wysocki@intel.com>
+References: <alpine.LNX.2.20.13.2006042341160.3984@monopod.intra.ispras.ru> <c3145e26-56c8-4979-513c-cfac191e989b@intel.com>
+In-Reply-To: <c3145e26-56c8-4979-513c-cfac191e989b@intel.com>
+Subject: RE: schedutil issue with serial workloads
+Date:   Sun, 7 Jun 2020 10:24:24 -0700
+Message-ID: <000201d63cf0$7ff6d9f0$7fe48dd0$@net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202006060421.fTpTXYbe%lkp@intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Thread-Index: AdY7WYonjz95N/d2SmuVF/i870KCdQAvLDJQ
+Content-Language: en-ca
+X-CMAE-Envelope: MS4wfJy1ysNcj8Wpnx8SI0svMznv4ha65BMUhAaA5NjJJkF9x/0GObetZ+GN25ECQdHa/sxUgUq3op9/KpbafwzIW7G6cZ2teJzcFr4s0zwxW0iVTv7mZRIM
+ TgLVB4k3CxWolDRvFE85ZfHufgd0XQP3x6pbMkOqCXlWUe63ktNeAjGPys1f4mY3UjHRm+xEkN8n9vt1664cyJKCngyyf7Ht1rL4dgV6TmqyBJOSoIpnboBn
+ 7j3CeOwttKx/IE2K32aW2rblPdSbZZFoIgIfDCoW5RMvj5IFeaw9DeJli2NNBSBfNtiBeKlCR5LZtgLmg2YS1jomjy1iDx0ScizSzT+mS80zrmhsMgRoFsip
+ zHMLM5q+kStIsJJqjGL4BGdSA3ivV6lIMhRGRIHP1ddCU0dO/esjL6Mwp0rodaI2JSEqBb81eTx94HZbzThXCNYFuklt1iU2QUObB4sMr1Ch9GtyzeT5o9Sh
+ ApCePXo50SmRbxxY
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 06, 2020 at 05:08:38AM +0800, kernel test robot wrote:
- arch/x86/kernel/cpu/centaur.c: In function 'init_centaur':
-> >> arch/x86/kernel/cpu/centaur.c:219:2: error: implicit declaration of function 'init_ia32_feat_ctl' [-Werror=implicit-function-declaration]
-> 219 |  init_ia32_feat_ctl(c);
-> |  ^~~~~~~~~~~~~~~~~~
-> cc1: some warnings being treated as errors
-> --
-> arch/x86/kernel/cpu/zhaoxin.c: In function 'init_zhaoxin':
-> >> arch/x86/kernel/cpu/zhaoxin.c:110:2: error: implicit declaration of function 'init_ia32_feat_ctl' [-Werror=implicit-function-declaration]
-> 110 |  init_ia32_feat_ctl(c);
-> |  ^~~~~~~~~~~~~~~~~~
-> cc1: some warnings being treated as errors
+On 2020.06.05 Rafael J. Wysocki wrote:
+> On 6/4/2020 11:29 PM, Alexander Monakov wrote:
+> > Hello,
+> 
+> Hi,
+> 
+> Let's make more people see your report.
+> 
+> +Peter, Giovanni, Quentin, Juri, Valentin, Vincent, Doug, and linux-pm.
+> 
+>> this is a question/bugreport about behavior of schedutil on serial workloads
+>> such as rsync, or './configure', or 'make install'. These workloads are
+>> such that there's no single task that takes a substantial portion of CPU
+>> time, but at any moment there's at least one runnable task, and overall
+>> the workload is compute-bound. To run the workload efficiently, cpufreq
+>> governor should select a high frequency.
+>>
+>> Assume the system is idle except for the workload in question.
+>>
+>> Sadly, schedutil will select the lowest frequency, unless the workload is
+>> confined to one core with taskset (in which case it will select the
+>> highest frequency, correctly though somewhat paradoxically).
+> 
+> That's because the CPU utilization generated by the workload on all CPUs
+> is small.
+> 
+> Confining it to one CPU causes the utilization of this one to grow and
+> so schedutil selects a higher frequency for it.
+> 
+>> This sounds like it should be a known problem, but I couldn't find any
+>> mention of it in the documentation.
 
-Blech, zhaoxin.c an centaur.c don't include asm/cpu.h, and I (obviously)
-don't have them enabled in my configs.  I'll wait a day or two more before
-sending v2.
+Yes, this issue is very well known, and has been discussed on this list
+several times, going back many years (and I likely missed some of the
+discussions). In recent years Giovanni's git "make test" has
+been the "goto" example for this. From that test, which has run to run
+variability due to disk I/O, I made some test that varys PIDs per second
+verses time. Giovanni's recent work on frequency invariance made a huge
+difference for the schedutil response to this type of serialized workflow.
 
-diff --git a/arch/x86/kernel/cpu/centaur.c b/arch/x86/kernel/cpu/centaur.c
-index 426792565d86..c5cf336e5077 100644
---- a/arch/x86/kernel/cpu/centaur.c
-+++ b/arch/x86/kernel/cpu/centaur.c
-@@ -3,6 +3,7 @@
- #include <linux/sched.h>
- #include <linux/sched/clock.h>
+For my part of it:
+I only ever focused on a new PID per work packet serialized workflow;
+Since my last testing on this subject in January, I fell behind with
+system issues and infrastructure updates.
 
-+#include <asm/cpu.h>
- #include <asm/cpufeature.h>
- #include <asm/e820/api.h>
- #include <asm/mtrr.h>
-diff --git a/arch/x86/kernel/cpu/zhaoxin.c b/arch/x86/kernel/cpu/zhaoxin.c
-index df1358ba622b..05fa4ef63490 100644
---- a/arch/x86/kernel/cpu/zhaoxin.c
-+++ b/arch/x86/kernel/cpu/zhaoxin.c
-@@ -2,6 +2,7 @@
- #include <linux/sched.h>
- #include <linux/sched/clock.h>
+Your workflow example is fascinating and rather revealing.
+I will make use of it moving forward. Thank you.
 
-+#include <asm/cpu.h>
- #include <asm/cpufeature.h>
+Yes, schedutil basically responds poorly as it did for PIDs/second
+based workflow before frequency invariance, but...(digression follows)...
 
- #include "cpu.h"
+Typically, I merely set the performance governor whenever I know
+I will be doing serialized workflow, or whenever I just want the
+job done the fastest (i.e. kernel compile).
+
+If I use performance mode (hwp disabled, either active or passive,
+doesn't matter), then I can not get the CPU frequency to max,
+even if I set:
+
+$ grep . /sys/devices/system/cpu/intel_pstate/m??_perf_pct
+/sys/devices/system/cpu/intel_pstate/max_perf_pct:100
+/sys/devices/system/cpu/intel_pstate/min_perf_pct:100
+
+I have to increase EPB all way to 1 to get to max CPU frequency.
+There also is extreme hysteresis, as I have to back to 9 for
+the frequency to drop again.
+
+The above was an i5-9600K. My much older i7-9600K, works fine
+with default EPB of 6. I had not previously realized there was
+so much difference between processors and EPB.
+
+I don't have time to dig deeper right now, but will in future.
+
+>> I was able to replicate the effect with a pair of 'ping-pong' programs
+>> that get a token, burn some cycles to simulate work, and pass the token.
+>> Thus, each program has 50% CPU utilization. To repeat my test:
+>>
+>> gcc -O2 pingpong.c -o pingpong
+>> mkfifo ping
+>> mkfifo pong
+>> taskset -c 0 ./pingpong 1000000 < ping > pong &
+>> taskset -c 1 ./pingpong 1000000 < pong > ping &
+>> echo > ping
+>>
+>> #include <stdio.h>
+>> #include <unistd.h>
+>> int main(int argc, char *argv[])
+>> {
+>> 	unsigned i, n;
+>> 	sscanf(argv[1], "%u", &n);
+>> 	for (;;) {
+>> 		char c;
+>> 		read(0, &c, 1);
+>> 		for (i = n; i; i--)
+>> 			asm("" :: "r"(i));
+>> 		write(1, &c, 1);
+>> 	}
+>> }
+>>
+>> Alexander
+
+It was not obvious to me what the approximate work/sleep frequency would be for
+your work flow. For my version of it I made the loop time slower on purpose, and
+because I could merely adjust "N" to compensate. I measured 100 hertz work/sleep
+frequency per CPU, but my pipeline is 6 instead of 2.
+
+Just for the record, this is what I did:
+
+doug@s18:~/c$ cat pingpong.c
+#include <stdio.h>
+#include <unistd.h>
+int main(int argc, char *argv[])
+{
+        unsigned i, n, k;
+        sscanf(argv[1], "%u", &n);
+        while(1) {
+                char c;
+                read(0, &c, 1);
+                for (i = n; i; i--){
+                        k = i;
+                        k = k++;
+                }
+                write(1, &c, 1);
+        }
+}
+
+Compiled with:
+
+cc pingpong.c -o pingpong
+
+and run with (on purpose, I did not force CPU affinity,
+as I wanted schedutil to decide (when it was the
+governor, at least)):
+
+#! /bin/dash
+#
+# ping-pong-test Smythies 2019.06.06
+#       serialized workflow, but same PID.
+#       from Alexander, but modified.
+#
+
+# because I always forget from last time
+killall pingpong
+
+rm --force pong1
+rm --force pong2
+rm --force pong3
+rm --force pong4
+rm --force pong5
+rm --force pong6
+
+mkfifo pong1
+mkfifo pong2
+mkfifo pong3
+mkfifo pong4
+mkfifo pong5
+mkfifo pong6
+~/c/pingpong 1000000 < pong1 > pong2 &
+~/c/pingpong 1000000 < pong2 > pong3 &
+~/c/pingpong 1000000 < pong3 > pong4 &
+~/c/pingpong 1000000 < pong4 > pong5 &
+~/c/pingpong 1000000 < pong5 > pong6 &
+~/c/pingpong 1000000 < pong6 > pong1 &
+echo > pong1
+
+To measure work/sleep frequency, I made a
+version that would only run, say, 10,000 times
+and timed it.
+
+... Doug
+
 
