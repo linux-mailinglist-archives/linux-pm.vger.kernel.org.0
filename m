@@ -2,167 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F5C1F1683
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 12:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733551F16AA
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 12:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729281AbgFHKPx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 06:15:53 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:52800 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726660AbgFHKPx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 06:15:53 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 058ACoUg058320;
-        Mon, 8 Jun 2020 10:12:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=l34Xot7MybPSbqmYWFa62Zo+/7NSV5MICSBYANC247Q=;
- b=SxjCr9G/3QtNn7U8znTEG1NfoSqEFwwu1NcBbPIl1DJ6xFWT385v9+an1ItZuGbfyrJ5
- xXfOBftZGgqhjzyJdCMae5NugB/9j4dCqvX+ZaXks4MjHuXJpS6kH8ViFgLevlYzi+Yu
- uZBrZ7PjwHz1gEUNeSqgH/q9uNQnn9fjUoasHZgU56D6wLAOPlt9MSWl00/mWkrY4tOP
- Ne31YSIAMMIt/+ntwX/jL96Vv7bsI14/mnkQ3SmIcbbaOUsE3TxD4cHiEcwUe7/cqkDl
- THuAyDL7hJKGTM/x0Sr5HUsWmcVOpz/0g7hktq45VdC9DbV9TyG7gVVWHL1kH+C8RhV2 VA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 31g3smnwj2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 08 Jun 2020 10:12:50 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 058A4KY4098781;
-        Mon, 8 Jun 2020 10:12:50 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 31gmwpqspn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 08 Jun 2020 10:12:50 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 058ACdun032703;
-        Mon, 8 Jun 2020 10:12:40 GMT
-Received: from [10.175.214.200] (/10.175.214.200)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 08 Jun 2020 03:12:39 -0700
-Subject: Re: [PATCH] x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during
- wakeup
-To:     Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Brad Campbell <lists2009@fnarfbargle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        liam.merwick@oracle.com
-References: <20200605200728.10145-1-sean.j.christopherson@intel.com>
-From:   Liam Merwick <liam.merwick@oracle.com>
-Message-ID: <b2ac2400-dbc1-f6bc-a397-17f1ae10bd83@oracle.com>
-Date:   Mon, 8 Jun 2020 11:12:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1729356AbgFHK2E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 06:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729293AbgFHK2D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 06:28:03 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3703C08C5C4
+        for <linux-pm@vger.kernel.org>; Mon,  8 Jun 2020 03:28:01 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id m7so6496595plt.5
+        for <linux-pm@vger.kernel.org>; Mon, 08 Jun 2020 03:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=39m+2LLbv6DmBKnk5P51Aj/s0CDKaXKRY6RVZpmO47k=;
+        b=WAGe9EfgYRXcs6oNuDgg+A5B5DLZKzh4sjoqPNRbHSPYUsD654Ef1u0NL1YTyBQJbH
+         3AAQHDRAFqZYQHcRUlc7swh6QESQXgVdWti12n2MKx0W1qMmCYiJOf3wVNg3llo5qVzU
+         jeLX7I4WOEoskkTxzZilOnuhERrqKx2CArW9Ay9eBSsErMEDyjfiinrbF1tbnOIfRVKT
+         zYqOwFTR6JxFVjVfjYdV1Ozd+PV88T94fYPeucXCSGHFqpmfTc6v3FhZUeqIRJwyqwLC
+         6pGwNOxhVFiddns9nUl45WEcBbvoHqPVAC2h8E95E+7t447c4eMegnPjx9xnAmolpzvJ
+         4j4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=39m+2LLbv6DmBKnk5P51Aj/s0CDKaXKRY6RVZpmO47k=;
+        b=d7NyF3nhI4iKkT9DyLgt+Yr/HZjrfrKK9nu6NSdSITDRx5amrqK2eZUgX80D5d8+vl
+         eXJZcRtbs6Pxo7PIOIIMzEfGyFDFqpYmfNPEdw1T7xz+Pi0PdX5SeWVX3TJF5EHijWAC
+         UiNRzLOsgO6hnn5b99LNwEFIq/1H9/Gc5rgjgRcyWYKoXok+xrEHvkd/YV6WWbT+X8n9
+         sXue5cMdCW2ZzDyY8JhD6ewxIwNLJaZn587J+/HRZ144Y1dDZVN26oQDdiobAxWZxf2E
+         E5rFAY+U8GgXeb/Oa8ZKtsQRqgZJi2mrBIFdhQmPauD/e5rgXHPw5/DMytNJmX0B5VE+
+         gq9A==
+X-Gm-Message-State: AOAM533OSK+gSsXsZmDXQaFSrNMa+yGCuVIYFhmHybBH4cqM8KSutSWG
+        +njwY6pPuJK4ol6LT0bmrwqkXQ==
+X-Google-Smtp-Source: ABdhPJy7tUDmw7E2+N2dP4+jFgxDi565u5EZbJy/npJ1/aTQhfV9kSuAXl9CPg0tBQD4hXT6yfe9gg==
+X-Received: by 2002:a17:902:6bc8:: with SMTP id m8mr20467004plt.138.1591612080996;
+        Mon, 08 Jun 2020 03:28:00 -0700 (PDT)
+Received: from localhost ([122.172.62.209])
+        by smtp.gmail.com with ESMTPSA id n24sm14806270pjt.47.2020.06.08.03.27.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Jun 2020 03:28:00 -0700 (PDT)
+Date:   Mon, 8 Jun 2020 15:57:58 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     sboyd@kernel.org, georgi.djakov@linaro.org, saravanak@google.com,
+        mka@chromium.org, nm@ti.com, bjorn.andersson@linaro.org,
+        agross@kernel.org, rjw@rjwysocki.net,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org,
+        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
+        lukasz.luba@arm.com, sudeep.holla@arm.com, smasetty@codeaurora.org
+Subject: Re: [PATCH v6 0/5] DDR/L3 Scaling support on SDM845 and SC7180 SoCs
+Message-ID: <20200608102758.54vdswjievx3cc7l@vireshk-i7>
+References: <20200605213332.609-1-sibis@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <20200605200728.10145-1-sean.j.christopherson@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 adultscore=0
- mlxscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006080077
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 cotscore=-2147483648 suspectscore=0
- spamscore=0 bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0
- mlxlogscore=999 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006080078
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200605213332.609-1-sibis@codeaurora.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/06/2020 21:07, Sean Christopherson wrote:
-> Reinitialize IA32_FEAT_CTL on the BSP during wakeup to handle the case
-> where firmware doesn't initialize or save/restore across S3.  This fixes
-> a bug where IA32_FEAT_CTL is left uninitialized and results in VMXON
-> taking a #GP due to VMX not being fully enabled, i.e. breaks KVM.
+On 06-06-20, 03:03, Sibi Sankar wrote:
+> This patch series aims to extend cpu based scaling support to L3/DDR on
+> SDM845 and SC7180 SoCs.
 > 
-> Use init_ia32_feat_ctl() to "restore" IA32_FEAT_CTL as it already deals
-> with the case where the MSR is locked, and because APs already redo
-> init_ia32_feat_ctl() during suspend by virtue of the SMP boot flow being
-> used to reinitialize APs upon wakeup.  Do the call in the early wakeup
-> flow to avoid dependencies in the syscore_ops chain, e.g. simply adding
-> a resume hook is not guaranteed to work, as KVM does VMXON in its own
-> resume hook, kvm_resume(), when KVM has active guests.
+> Patches [1-2] - Blacklist SDM845 and SC7180 in cpufreq-dt-platdev
+> Patches [3-5] - Update bw levels based on cpu frequency change
 > 
-> Reported-by: Brad Campbell <lists2009@fnarfbargle.com>
-> Cc: Maxim Levitsky <mlevitsk@redhat.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: kvm@vger.kernel.org
-
-Should it have the following tag since it fixes a commit introduced in 5.6?
-Cc: stable@vger.kernel.org # v5.6
-
-> Fixes: 21bd3467a58e ("KVM: VMX: Drop initialization of IA32_FEAT_CTL MSR")
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-
-Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
-
-> ---
->   arch/x86/include/asm/cpu.h | 5 +++++
->   arch/x86/kernel/cpu/cpu.h  | 4 ----
->   arch/x86/power/cpu.c       | 6 ++++++
->   3 files changed, 11 insertions(+), 4 deletions(-)
+> Based on Viresh's opp-next:
+> https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/log/?h=opp/linux-next
 > 
-> diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
-> index dd17c2da1af5..da78ccbd493b 100644
-> --- a/arch/x86/include/asm/cpu.h
-> +++ b/arch/x86/include/asm/cpu.h
-> @@ -58,4 +58,9 @@ static inline bool handle_guest_split_lock(unsigned long ip)
->   	return false;
->   }
->   #endif
-> +#ifdef CONFIG_IA32_FEAT_CTL
-> +void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
-> +#else
-> +static inline void init_ia32_feat_ctl(struct cpuinfo_x86 *c) {}
-> +#endif
->   #endif /* _ASM_X86_CPU_H */
-> diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
-> index 37fdefd14f28..38ab6e115eac 100644
-> --- a/arch/x86/kernel/cpu/cpu.h
-> +++ b/arch/x86/kernel/cpu/cpu.h
-> @@ -80,8 +80,4 @@ extern void x86_spec_ctrl_setup_ap(void);
->   
->   extern u64 x86_read_arch_cap_msr(void);
->   
-> -#ifdef CONFIG_IA32_FEAT_CTL
-> -void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
-> -#endif
-> -
->   #endif /* ARCH_X86_CPU_H */
-> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-> index aaff9ed7ff45..b0d3c5ca6d80 100644
-> --- a/arch/x86/power/cpu.c
-> +++ b/arch/x86/power/cpu.c
-> @@ -193,6 +193,8 @@ static void fix_processor_context(void)
->    */
->   static void notrace __restore_processor_state(struct saved_context *ctxt)
->   {
-> +	struct cpuinfo_x86 *c;
-> +
->   	if (ctxt->misc_enable_saved)
->   		wrmsrl(MSR_IA32_MISC_ENABLE, ctxt->misc_enable);
->   	/*
-> @@ -263,6 +265,10 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
->   	mtrr_bp_restore();
->   	perf_restore_debug_store();
->   	msr_restore_context(ctxt);
-> +
-> +	c = &cpu_data(smp_processor_id());
-> +	if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
-> +		init_ia32_feat_ctl(c);
->   }
->   
->   /* Needed by apm.c */
-> 
+> V6:
+>  * Add global flag to distinguish between voltage update and opp add.
+>    Use the same flag before trying to scale ddr/l3 bw [Viresh]
+>  * Use dev_pm_opp_find_freq_ceil to grab all opps [Viresh] 
+>  * Move dev_pm_opp_of_find_icc_paths into probe [Viresh]
 
+Picked for 5.9, will push to my branch after rc1 is out.
+
+-- 
+viresh
