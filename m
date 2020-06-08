@@ -2,45 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EE71F1E87
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 19:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF991F1EEC
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 20:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730071AbgFHRts (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 13:49:48 -0400
-Received: from mga04.intel.com ([192.55.52.120]:11150 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730247AbgFHRts (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Jun 2020 13:49:48 -0400
-IronPort-SDR: v62WnqnW/CNcsjzCc9QHAvI9TpTWk+je1kVzaCUA47AuXms0bY1oJc1ghoBt0hiPKXapZXIYfU
- Eew0dxRKRusg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2020 10:49:45 -0700
-IronPort-SDR: plH9hL/3uaiz4LrI869hiDPlJo9zwuQekZQbWDqHmJq3YVsL3tRjGOPHnyUBU1u01b1h6neVw0
- 9hO14zg240mA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,487,1583222400"; 
-   d="scan'208";a="418133308"
-Received: from sjchrist-coffee.jf.intel.com ([10.54.74.152])
-  by orsmga004.jf.intel.com with ESMTP; 08 Jun 2020 10:49:45 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Brad Campbell <lists2009@fnarfbargle.com>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: [PATCH v2] x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during wakeup
-Date:   Mon,  8 Jun 2020 10:41:34 -0700
-Message-Id: <20200608174134.11157-1-sean.j.christopherson@intel.com>
-X-Mailer: git-send-email 2.26.0
+        id S1725926AbgFHS1D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 14:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725797AbgFHS1D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 14:27:03 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FC7C08C5C2;
+        Mon,  8 Jun 2020 11:27:02 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id d128so542405wmc.1;
+        Mon, 08 Jun 2020 11:27:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hvRrHd8bC9uCfGjyL3GOLoak3bX7Ko8cQb8L4zQ0GAc=;
+        b=rnj2cuZyjxkdPSYoKcDyj6QKNuE7eMXvAbCFvWrs7/fSbL9S0OyUe5TArZ58/alBsa
+         s7N0DyLN3wDq1pbuxD9SQOkq42mLZTfZi9JzT87baAgVcrJNyJH2x0VccOufMg9DcNFw
+         Ij3xC9wNS6CXmRpLhzBxHu9h+VAJ33tTkEm268FOQCe/LtAfWpFGwR8dbI0OzHG7h7ea
+         aPKHKkqGkuDN9MhvebkOSdtooabA8lyjf9oQOL7wqKhH/UyCIFRKR8fCk2A4yhYRmBsU
+         +i8Brg/deaAYttupqYiPldC6Bzi+oZ3kxX9LM9Cl2sxUsVqeMsJxr+lapC6/G6AjrodR
+         pNFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hvRrHd8bC9uCfGjyL3GOLoak3bX7Ko8cQb8L4zQ0GAc=;
+        b=NnjuEhnUnccQ6bBlx2VSsSPnjOx82z3pcpxX6xlw99NMONAefL+2BsOzcNx9Pqhpgz
+         htc/DeM5Y/SwkZEYXZ31RIbZ7VwZjN9oRKz9QcdcdtyZSbv4esm+RM+tR5wDOvvCjnLB
+         QunkIRXc9Vb2M8PHDO0AYCYHAMt49EIEtrxLqyT3nshjaR/eBgGOAyaUv6mNJnI3JofJ
+         S4oV6yb92wT1+ciTX4CiVHGzAP9/RlXTcXgCXaalXyOAdK6yLbVJf8BVOQOSfRew28nW
+         OE9WAgZsmLdlTnu1ZcSEMB5AX6VDdmPCEooljIsHCBGvF8zN+0oKkiIvTM/KuuzbCWID
+         zFsw==
+X-Gm-Message-State: AOAM531B0ZsZqruNW6AW7IWeof69nEmpuEp65nzNPcm8eUdSf5rNXFS1
+        lCwiaobyhW5W42XyOtkOTtp6OWCwAzR8kg==
+X-Google-Smtp-Source: ABdhPJxYH6qX5MxKcQYcT4dhKEoWjVLVUIiLEg3kUDbhj5qn4paWnxcT4VYvH9RoLRtTVAIYoDKNqQ==
+X-Received: by 2002:a1c:6243:: with SMTP id w64mr35589wmb.162.1591640821653;
+        Mon, 08 Jun 2020 11:27:01 -0700 (PDT)
+Received: from localhost ([213.191.183.145])
+        by smtp.gmail.com with ESMTPSA id h27sm663689wrb.18.2020.06.08.11.26.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Jun 2020 11:27:00 -0700 (PDT)
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Iskren Chernev <iskren.chernev@gmail.com>
+Subject: [PATCH 1/2] dt-bindints: power: supply: Document max17040 extensions
+Date:   Mon,  8 Jun 2020 21:26:41 +0300
+Message-Id: <20200608182642.592848-1-iskren.chernev@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -48,117 +65,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reinitialize IA32_FEAT_CTL on the BSP during wakeup to handle the case
-where firmware doesn't initialize or save/restore across S3.  This fixes
-a bug where IA32_FEAT_CTL is left uninitialized and results in VMXON
-taking a #GP due to VMX not being fully enabled, i.e. breaks KVM.
+Maxim max17040 is a fuel gauge from a larger family utilising the Model
+Gauge thechnology. Document all different compatible strings that the
+max17040 driver recognizes.
 
-Use init_ia32_feat_ctl() to "restore" IA32_FEAT_CTL as it already deals
-with the case where the MSR is locked, and because APs already redo
-init_ia32_feat_ctl() during suspend by virtue of the SMP boot flow being
-used to reinitialize APs upon wakeup.  Do the call in the early wakeup
-flow to avoid dependencies in the syscore_ops chain, e.g. simply adding
-a resume hook is not guaranteed to work, as KVM does VMXON in its own
-resume hook, kvm_resume(), when KVM has active guests.
+Some devices in the wild report double the capacity. The
+maxim,double-soc (from State-Of-Charge) property fixes that.
 
-Reported-by: Brad Campbell <lists2009@fnarfbargle.com>
-Tested-by: Brad Campbell <lists2009@fnarfbargle.com>
-Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: kvm@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.6
-Fixes: 21bd3467a58e ("KVM: VMX: Drop initialization of IA32_FEAT_CTL MSR")
-Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+To compensate for the battery chemistry and operating conditions the
+chips support a compensation value. Specify one or two byte compensation
+via the maxim,rcomp byte array.
+
+Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
 ---
+ .../power/supply/max17040_battery.txt         | 22 ++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-v2:
-  - Collect Reviewed/Tested tags. [Brad, Liam, Maxim].
-  - Include asm/cpu.h to fix Zhaoxin and Centaur builds. [Brad, LKP]
-  - Add Cc to stable. [Liam]
-
- arch/x86/include/asm/cpu.h    | 5 +++++
- arch/x86/kernel/cpu/centaur.c | 1 +
- arch/x86/kernel/cpu/cpu.h     | 4 ----
- arch/x86/kernel/cpu/zhaoxin.c | 1 +
- arch/x86/power/cpu.c          | 6 ++++++
- 5 files changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
-index dd17c2da1af5..da78ccbd493b 100644
---- a/arch/x86/include/asm/cpu.h
-+++ b/arch/x86/include/asm/cpu.h
-@@ -58,4 +58,9 @@ static inline bool handle_guest_split_lock(unsigned long ip)
- 	return false;
- }
- #endif
-+#ifdef CONFIG_IA32_FEAT_CTL
-+void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
-+#else
-+static inline void init_ia32_feat_ctl(struct cpuinfo_x86 *c) {}
-+#endif
- #endif /* _ASM_X86_CPU_H */
-diff --git a/arch/x86/kernel/cpu/centaur.c b/arch/x86/kernel/cpu/centaur.c
-index 426792565d86..c5cf336e5077 100644
---- a/arch/x86/kernel/cpu/centaur.c
-+++ b/arch/x86/kernel/cpu/centaur.c
-@@ -3,6 +3,7 @@
- #include <linux/sched.h>
- #include <linux/sched/clock.h>
+diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+index 4e0186b8380fa..be11cab4530b9 100644
+--- a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
++++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+@@ -2,7 +2,9 @@ max17040_battery
+ ~~~~~~~~~~~~~~~~
  
-+#include <asm/cpu.h>
- #include <asm/cpufeature.h>
- #include <asm/e820/api.h>
- #include <asm/mtrr.h>
-diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
-index 37fdefd14f28..38ab6e115eac 100644
---- a/arch/x86/kernel/cpu/cpu.h
-+++ b/arch/x86/kernel/cpu/cpu.h
-@@ -80,8 +80,4 @@ extern void x86_spec_ctrl_setup_ap(void);
+ Required properties :
+- - compatible : "maxim,max17040" or "maxim,max77836-battery"
++ - compatible : "maxim,max17040", "maxim,max17041", "maxim,max17043",
++ 		"maxim,max17044", "maxim,max17048", "maxim,max17049",
++		"maxim,max17058", "maxim,max17059" or "maxim,max77836-battery"
+  - reg: i2c slave address
  
- extern u64 x86_read_arch_cap_msr(void);
- 
--#ifdef CONFIG_IA32_FEAT_CTL
--void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
--#endif
--
- #endif /* ARCH_X86_CPU_H */
-diff --git a/arch/x86/kernel/cpu/zhaoxin.c b/arch/x86/kernel/cpu/zhaoxin.c
-index df1358ba622b..05fa4ef63490 100644
---- a/arch/x86/kernel/cpu/zhaoxin.c
-+++ b/arch/x86/kernel/cpu/zhaoxin.c
-@@ -2,6 +2,7 @@
- #include <linux/sched.h>
- #include <linux/sched/clock.h>
- 
-+#include <asm/cpu.h>
- #include <asm/cpufeature.h>
- 
- #include "cpu.h"
-diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-index aaff9ed7ff45..b0d3c5ca6d80 100644
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -193,6 +193,8 @@ static void fix_processor_context(void)
-  */
- static void notrace __restore_processor_state(struct saved_context *ctxt)
- {
-+	struct cpuinfo_x86 *c;
+ Optional properties :
+@@ -11,6 +13,15 @@ Optional properties :
+ 				generated. Can be configured from 1 up to 32
+ 				(%). If skipped the power up default value of
+ 				4 (%) will be used.
++- maxim,double-soc : 		Certain devices return double the capacity.
++				Specify this boolean property to divide the
++				reported value in 2 and thus normalize it.
++				SOC == State of Charge == Capacity.
++- maxim,rcomp :			A value to compensate readings for various
++				battery chemistries and operating temperatures.
++				max17040,41 have 2 byte rcomp, default to
++				0x97 0x00. All other devices have one byte
++				rcomp, default to 0x97.
+ - interrupts : 			Interrupt line see Documentation/devicetree/
+ 				bindings/interrupt-controller/interrupts.txt
+ - wakeup-source :		This device has wakeup capabilities. Use this
+@@ -27,7 +38,16 @@ Example:
+ 		compatible = "maxim,max77836-battery";
+ 		reg = <0x36>;
+ 		maxim,alert-low-soc-level = <10>;
++		maxim,rcomp = /bits/ 8 <0x97 0x00>;
+ 		interrupt-parent = <&gpio7>;
+ 		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
+ 		wakeup-source;
+ 	};
 +
- 	if (ctxt->misc_enable_saved)
- 		wrmsrl(MSR_IA32_MISC_ENABLE, ctxt->misc_enable);
- 	/*
-@@ -263,6 +265,10 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
- 	mtrr_bp_restore();
- 	perf_restore_debug_store();
- 	msr_restore_context(ctxt);
-+
-+	c = &cpu_data(smp_processor_id());
-+	if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
-+		init_ia32_feat_ctl(c);
- }
- 
- /* Needed by apm.c */
++	battery-fuel-gauge@36 {
++		compatible = "maxim,max17048";
++		reg = <0x36>;
++		maxim,rcomp = /bits/ 8 <0x97>;
++		maxim,alert-low-soc-level = <10>;
++		maxim,double-soc;
++	};
+
+base-commit: 1713116fa907cc7290020f0d8632ec646d2936f8
 -- 
-2.26.0
+2.27.0
 
