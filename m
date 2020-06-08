@@ -2,119 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AA71F155E
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 11:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F5C1F1683
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 12:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728956AbgFHJ2L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 05:28:11 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:32944 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728022AbgFHJ2L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 05:28:11 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id CEE412A10C1
-Subject: Re: [PATCH v3 0/7] Support inhibiting input devices
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        id S1729281AbgFHKPx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 06:15:53 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:52800 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726660AbgFHKPx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 06:15:53 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 058ACoUg058320;
+        Mon, 8 Jun 2020 10:12:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=l34Xot7MybPSbqmYWFa62Zo+/7NSV5MICSBYANC247Q=;
+ b=SxjCr9G/3QtNn7U8znTEG1NfoSqEFwwu1NcBbPIl1DJ6xFWT385v9+an1ItZuGbfyrJ5
+ xXfOBftZGgqhjzyJdCMae5NugB/9j4dCqvX+ZaXks4MjHuXJpS6kH8ViFgLevlYzi+Yu
+ uZBrZ7PjwHz1gEUNeSqgH/q9uNQnn9fjUoasHZgU56D6wLAOPlt9MSWl00/mWkrY4tOP
+ Ne31YSIAMMIt/+ntwX/jL96Vv7bsI14/mnkQ3SmIcbbaOUsE3TxD4cHiEcwUe7/cqkDl
+ THuAyDL7hJKGTM/x0Sr5HUsWmcVOpz/0g7hktq45VdC9DbV9TyG7gVVWHL1kH+C8RhV2 VA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 31g3smnwj2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 08 Jun 2020 10:12:50 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 058A4KY4098781;
+        Mon, 8 Jun 2020 10:12:50 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 31gmwpqspn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 08 Jun 2020 10:12:50 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 058ACdun032703;
+        Mon, 8 Jun 2020 10:12:40 GMT
+Received: from [10.175.214.200] (/10.175.214.200)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 08 Jun 2020 03:12:39 -0700
+Subject: Re: [PATCH] x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during
+ wakeup
+To:     Sean Christopherson <sean.j.christopherson@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Pavel Machek <pavel@ucw.cz>
-Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Barry Song <baohua@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Nick Dyer <nick@shmanahar.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ferruh Yigit <fery@cypress.com>,
-        Sangwon Jee <jeesw@melfas.com>,
-        Peter Hutterer <peter.hutterer@redhat.com>,
-        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
-        kernel@collabora.com
-References: <20200604072853.GP89269@dtor-ws>
- <20200605173335.13753-1-andrzej.p@collabora.com> <20200607202414.GB13138@amd>
- <20200608053737.GS89269@dtor-ws>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <b1b282ed-ddea-fdd8-bf1a-3e918653f1e3@collabora.com>
-Date:   Mon, 8 Jun 2020 11:28:03 +0200
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Brad Campbell <lists2009@fnarfbargle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        liam.merwick@oracle.com
+References: <20200605200728.10145-1-sean.j.christopherson@intel.com>
+From:   Liam Merwick <liam.merwick@oracle.com>
+Message-ID: <b2ac2400-dbc1-f6bc-a397-17f1ae10bd83@oracle.com>
+Date:   Mon, 8 Jun 2020 11:12:35 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200608053737.GS89269@dtor-ws>
+In-Reply-To: <20200605200728.10145-1-sean.j.christopherson@intel.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006080077
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 cotscore=-2147483648 suspectscore=0
+ spamscore=0 bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0
+ mlxlogscore=999 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006080078
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Pavel,
-
-W dniu 08.06.2020 o 07:37, Dmitry Torokhov pisze:
-> On Sun, Jun 07, 2020 at 10:24:14PM +0200, Pavel Machek wrote:
->> On Fri 2020-06-05 19:33:28, Andrzej Pietrasiewicz wrote:
->>> Userspace might want to implement a policy to temporarily disregard input
->>> from certain devices.
->>
->> Wow, you certainly cc a lot of lists.
->>
->>> An example use case is a convertible laptop, whose keyboard can be folded
->>> under the screen to create tablet-like experience. The user then must hold
->>> the laptop in such a way that it is difficult to avoid pressing the keyboard
->>> keys. It is therefore desirable to temporarily disregard input from the
->>> keyboard, until it is folded back. This obviously is a policy which should
->>> be kept out of the kernel, but the kernel must provide suitable means to
->>> implement such a policy.
->>>
->>> Due to interactions with suspend/resume, a helper has been added for drivers
->>> to decide if the device is being used or not (PATCH 1/7) and it has been
->>> applied to relevant drivers (PATCH 2,4,5,6/7).
->>
->> But is that a right way to implement it?
->>
->> We want this for cellphones, too -- touchscreen should be disabled
->> while the device is locked in the pocket -- but we really want the
->> touchscreen hardware to be powered down in that case (because it keeps
->> SoC busy and eats a _lot_ of electricity).
->>
->> But simplistic "receive an event and then drop it if device is
->> inhibited" does not allow that...
+On 05/06/2020 21:07, Sean Christopherson wrote:
+> Reinitialize IA32_FEAT_CTL on the BSP during wakeup to handle the case
+> where firmware doesn't initialize or save/restore across S3.  This fixes
+> a bug where IA32_FEAT_CTL is left uninitialized and results in VMXON
+> taking a #GP due to VMX not being fully enabled, i.e. breaks KVM.
 > 
-> I do not think you read the entirety of this patch series...
+> Use init_ia32_feat_ctl() to "restore" IA32_FEAT_CTL as it already deals
+> with the case where the MSR is locked, and because APs already redo
+> init_ia32_feat_ctl() during suspend by virtue of the SMP boot flow being
+> used to reinitialize APs upon wakeup.  Do the call in the early wakeup
+> flow to avoid dependencies in the syscore_ops chain, e.g. simply adding
+> a resume hook is not guaranteed to work, as KVM does VMXON in its own
+> resume hook, kvm_resume(), when KVM has active guests.
+> 
+> Reported-by: Brad Campbell <lists2009@fnarfbargle.com>
+> Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: kvm@vger.kernel.org
+
+Should it have the following tag since it fixes a commit introduced in 5.6?
+Cc: stable@vger.kernel.org # v5.6
+
+> Fixes: 21bd3467a58e ("KVM: VMX: Drop initialization of IA32_FEAT_CTL MSR")
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+
+Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
+
+> ---
+>   arch/x86/include/asm/cpu.h | 5 +++++
+>   arch/x86/kernel/cpu/cpu.h  | 4 ----
+>   arch/x86/power/cpu.c       | 6 ++++++
+>   3 files changed, 11 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
+> index dd17c2da1af5..da78ccbd493b 100644
+> --- a/arch/x86/include/asm/cpu.h
+> +++ b/arch/x86/include/asm/cpu.h
+> @@ -58,4 +58,9 @@ static inline bool handle_guest_split_lock(unsigned long ip)
+>   	return false;
+>   }
+>   #endif
+> +#ifdef CONFIG_IA32_FEAT_CTL
+> +void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
+> +#else
+> +static inline void init_ia32_feat_ctl(struct cpuinfo_x86 *c) {}
+> +#endif
+>   #endif /* _ASM_X86_CPU_H */
+> diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
+> index 37fdefd14f28..38ab6e115eac 100644
+> --- a/arch/x86/kernel/cpu/cpu.h
+> +++ b/arch/x86/kernel/cpu/cpu.h
+> @@ -80,8 +80,4 @@ extern void x86_spec_ctrl_setup_ap(void);
+>   
+>   extern u64 x86_read_arch_cap_msr(void);
+>   
+> -#ifdef CONFIG_IA32_FEAT_CTL
+> -void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
+> -#endif
+> -
+>   #endif /* ARCH_X86_CPU_H */
+> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
+> index aaff9ed7ff45..b0d3c5ca6d80 100644
+> --- a/arch/x86/power/cpu.c
+> +++ b/arch/x86/power/cpu.c
+> @@ -193,6 +193,8 @@ static void fix_processor_context(void)
+>    */
+>   static void notrace __restore_processor_state(struct saved_context *ctxt)
+>   {
+> +	struct cpuinfo_x86 *c;
+> +
+>   	if (ctxt->misc_enable_saved)
+>   		wrmsrl(MSR_IA32_MISC_ENABLE, ctxt->misc_enable);
+>   	/*
+> @@ -263,6 +265,10 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
+>   	mtrr_bp_restore();
+>   	perf_restore_debug_store();
+>   	msr_restore_context(ctxt);
+> +
+> +	c = &cpu_data(smp_processor_id());
+> +	if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
+> +		init_ia32_feat_ctl(c);
+>   }
+>   
+>   /* Needed by apm.c */
 > 
 
-Yeah, kindly read the whole thread. Long story short: Inhibiting _is_ about
-ignoring events from inhibited devices. Obviously we can do better than
-just that. Indeed, the open() and close() callbacks (which are called at
-uninhibiting/inhibiting) mean "start providing events" and "stop providing
-events", respectively. How that translates into driver operation is highly
-driver-specific and cannot be handled at the input subsystem level, but it
-is the place where power savings can be realized: whenever the driver knows
-that nobody wants events from it it can do whatever it considers appropriate,
-including transitioning the device into low power mode, for example using
-PM runtime.
-
-Regards,
-
-Andrzej
