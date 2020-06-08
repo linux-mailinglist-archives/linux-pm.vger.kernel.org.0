@@ -2,70 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB2F1F2B7D
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 02:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B76DE1F2A3F
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 02:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731199AbgFIAQB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 20:16:01 -0400
-Received: from mga14.intel.com ([192.55.52.115]:9553 "EHLO mga14.intel.com"
+        id S1730569AbgFHXVH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 19:21:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44976 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729523AbgFIAPX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Jun 2020 20:15:23 -0400
-IronPort-SDR: 0A6QxNPgstd7B6Bg7M9/cnZ3tw8+LV7TPGdZ07kvwvVfkqxE9yOq52F5m0mBJl0LtJVfnDRJS9
- ANgLvCXr7cuA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2020 17:15:22 -0700
-IronPort-SDR: lW1f/BmKLN9Wi6VuYnd3WCgBkqh499vtnJmRkvcOseJGs9cgHIgcaOebDazF7Ls/B/Ykbj37sM
- jR7hqWhD3INw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,489,1583222400"; 
-   d="scan'208";a="259618088"
-Received: from lkp-server01.sh.intel.com (HELO 12d5c0ac8e64) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 08 Jun 2020 17:15:19 -0700
-Received: from kbuild by 12d5c0ac8e64 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jiRvD-00000X-3F; Tue, 09 Jun 2020 00:15:19 +0000
-Date:   Tue, 9 Jun 2020 05:23:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Iskren Chernev <iskren.chernev@gmail.com>
-Subject: [RFC PATCH] power: supply: max17040: max17040_family[] can be static
-Message-ID: <20200608212356.GA34456@af167214b55a>
-References: <20200608182642.592848-2-iskren.chernev@gmail.com>
+        id S1731105AbgFHXVG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:21:06 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C062920823;
+        Mon,  8 Jun 2020 23:21:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591658466;
+        bh=FCCEw+4akgFAHzkOen0GsKaRoZY8JJzUhE5Y8DFpSiE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Cgas8/HAhQo5uPv0bX1+KM/p+VrXu/+ykdRPpkwX57dYu35HyJjciPVzu+PtlHVGD
+         efkefiEocgqBNVrCZoUja/bytQiJLyFeMwwyiiYCEzKc6y5PaiTD619QA7oFZu9ZOR
+         Pyey5cWSlhCEJZvHrWerAwTrvD6nNzYDTjfTdUis=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 104/175] mips: cm: Fix an invalid error code of INTVN_*_ERR
+Date:   Mon,  8 Jun 2020 19:17:37 -0400
+Message-Id: <20200608231848.3366970-104-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
+References: <20200608231848.3366970-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200608182642.592848-2-iskren.chernev@gmail.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Signed-off-by: kernel test robot <lkp@intel.com>
+[ Upstream commit 8a0efb8b101665a843205eab3d67ab09cb2d9a8d ]
+
+Commit 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache
+errors") adds cm2_causes[] array with map of error type ID and
+pointers to the short description string. There is a mistake in
+the table, since according to MIPS32 manual CM2_ERROR_TYPE = {17,18}
+correspond to INTVN_WR_ERR and INTVN_RD_ERR, while the table
+claims they have {0x17,0x18} codes. This is obviously hex-dec
+copy-paste bug. Moreover codes {0x18 - 0x1a} indicate L2 ECC errors.
+
+Fixes: 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache errors")
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- max17040_battery.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/kernel/mips-cm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-index 4fd6cf7b60c71..78f04aba4f26a 100644
---- a/drivers/power/supply/max17040_battery.c
-+++ b/drivers/power/supply/max17040_battery.c
-@@ -62,7 +62,7 @@ struct chip_data {
- 	u8  has_soc_alert;
+diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
+index e5ea3db23d6b..a9eab83d9148 100644
+--- a/arch/mips/kernel/mips-cm.c
++++ b/arch/mips/kernel/mips-cm.c
+@@ -119,9 +119,9 @@ static char *cm2_causes[32] = {
+ 	"COH_RD_ERR", "MMIO_WR_ERR", "MMIO_RD_ERR", "0x07",
+ 	"0x08", "0x09", "0x0a", "0x0b",
+ 	"0x0c", "0x0d", "0x0e", "0x0f",
+-	"0x10", "0x11", "0x12", "0x13",
+-	"0x14", "0x15", "0x16", "INTVN_WR_ERR",
+-	"INTVN_RD_ERR", "0x19", "0x1a", "0x1b",
++	"0x10", "INTVN_WR_ERR", "INTVN_RD_ERR", "0x13",
++	"0x14", "0x15", "0x16", "0x17",
++	"0x18", "0x19", "0x1a", "0x1b",
+ 	"0x1c", "0x1d", "0x1e", "0x1f"
  };
  
--struct chip_data max17040_family[] = {
-+static struct chip_data max17040_family[] = {
- 	[ID_MAX17040] = {
- 		.reset_val = 0x0054,
- 		.vcell_shift = 4,
+-- 
+2.25.1
+
