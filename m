@@ -2,96 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9341E1F2EE4
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 02:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C7D1F31E1
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 03:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730723AbgFIAp5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 20:45:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58752 "EHLO mail.kernel.org"
+        id S1726966AbgFIBTt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 8 Jun 2020 21:19:49 -0400
+Received: from mail2.mrdoors.com ([194.84.146.90]:62010 "EHLO mrdoors.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728234AbgFHXLo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:11:44 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3648D21508;
-        Mon,  8 Jun 2020 23:11:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591657903;
-        bh=3RrjVjucjaQRqQ0XpzGPy0vis0dtQ3RxxAdXgJmrAC4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nJZYs9AHcvtBqOZ/0evyRmorFpTprlg5EB1khVH8jcjf+InDEJUCWRnzCRNPIMCB2
-         +JHYBI2xMHDPNgrjU08S3odzdDSLWU5jym3aRwbC6Bpla/46ivNxNo+R1BeLlAZGwo
-         ATPhWgygZm9NucV5o+h3AMTvg/UzOIRGJiLSoVYo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qiushi Wu <wu000273@umn.edu>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 256/274] cpuidle: Fix three reference count leaks
-Date:   Mon,  8 Jun 2020 19:05:49 -0400
-Message-Id: <20200608230607.3361041-256-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608230607.3361041-1-sashal@kernel.org>
-References: <20200608230607.3361041-1-sashal@kernel.org>
+        id S1726942AbgFIBTt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Jun 2020 21:19:49 -0400
+X-MDAV-Processed: mrdoors.com, Tue, 09 Jun 2020 04:11:53 +0300
+Received: from mrdoors.com by mrdoors.com (MDaemon PRO v12.5.7)
+        with ESMTP id md50000444707.msg
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jun 2020 04:11:41 +0300
+X-Spam-Processed: mrdoors.com, Tue, 09 Jun 2020 04:11:41 +0300
+        (not processed: message from trusted or authenticated source)
+X-MDPtrLookup-Result: hardfail ip=197.234.221.253 (no PTR records found) (mrdoors.com)
+X-MDHeloLookup-Result: hardfail smtp.helo=mrdoors.com (does not match 197.234.221.253) (mrdoors.com)
+X-Authenticated-Sender: vacation@mrdoors.com
+X-MDRemoteIP: 197.234.221.253
+X-Return-Path: vacation@mrdoors.com
+X-Envelope-From: vacation@mrdoors.com
+X-MDaemon-Deliver-To: linux-pm@vger.kernel.org
+Reply-To: tolarokanse12@gmail.com
+From:   Mr TOLAR OKANSE <vacation@mrdoors.com>
+To:     linux-pm@vger.kernel.org
+Subject: Mes Salutations
+Date:   09 Jun 2020 00:52:41 +0800
+Message-ID: <20200609005240.E790B95330DED3EC@mrdoors.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Qiushi Wu <wu000273@umn.edu>
+Mes Salutations
 
-[ Upstream commit c343bf1ba5efcbf2266a1fe3baefec9cc82f867f ]
+Je suis Mr Tolar Okanse,  conseiller financier, des biens et de 
+patrimoines privés. J'ai trouvé votre contact suite à une 
+recherche via l'Internet et je vous prie de m'excuser pour cette 
+intrusion inattendue de ma part et l'effet surpris que cela peut 
+causer vu tout ce qui se passe actuellement sur l'Internet.
 
-kobject_init_and_add() takes reference even when it fails.
-If this function returns an error, kobject_put() must be called to
-properly clean up the memory associated with the object.
+Par ce message, je viens vous solliciter pour une collaboration 
+sérieuse et fructueuse. Dans le cas où vous serez intéressés par 
+mon offre, une rencontre physique est nécessaire, voir 
+indispensable  afin de discuter tête à tête des axes et 
+paramètres  pour la bonne réalisation de cette collaboration.
 
-Previous commit "b8eb718348b8" fixed a similar problem.
+En effet, je suis en contact avec un client (ressortissent 
+libyen) qui souhaiterait faire des placements et investissement 
+dans tous les domaines rentable. Ce dernier est à la recherche 
+d'un manager sérieux à qui il va tout confier pour la réalisation 
+de ce projet.
 
-Signed-off-by: Qiushi Wu <wu000273@umn.edu>
-[ rjw: Subject ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/cpuidle/sysfs.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
-index cdeedbf02646..55107565b319 100644
---- a/drivers/cpuidle/sysfs.c
-+++ b/drivers/cpuidle/sysfs.c
-@@ -515,7 +515,7 @@ static int cpuidle_add_state_sysfs(struct cpuidle_device *device)
- 		ret = kobject_init_and_add(&kobj->kobj, &ktype_state_cpuidle,
- 					   &kdev->kobj, "state%d", i);
- 		if (ret) {
--			kfree(kobj);
-+			kobject_put(&kobj->kobj);
- 			goto error_state;
- 		}
- 		cpuidle_add_s2idle_attr_group(kobj);
-@@ -646,7 +646,7 @@ static int cpuidle_add_driver_sysfs(struct cpuidle_device *dev)
- 	ret = kobject_init_and_add(&kdrv->kobj, &ktype_driver_cpuidle,
- 				   &kdev->kobj, "driver");
- 	if (ret) {
--		kfree(kdrv);
-+		kobject_put(&kdrv->kobj);
- 		return ret;
- 	}
- 
-@@ -740,7 +740,7 @@ int cpuidle_add_sysfs(struct cpuidle_device *dev)
- 	error = kobject_init_and_add(&kdev->kobj, &ktype_cpuidle, &cpu_dev->kobj,
- 				   "cpuidle");
- 	if (error) {
--		kfree(kdev);
-+		kobject_put(&kdev->kobj);
- 		return error;
- 	}
- 
--- 
-2.25.1
+Contact direct: tolarokense12@gmail.com
+
+
+Cordialement...
+Mr T. Okanse
 
