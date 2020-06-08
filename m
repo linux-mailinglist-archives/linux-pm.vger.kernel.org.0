@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E571F27E2
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 01:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3151F2769
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 01:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731690AbgFHXYz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 19:24:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51150 "EHLO mail.kernel.org"
+        id S1731125AbgFHXpp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 19:45:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54262 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728799AbgFHXYw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:24:52 -0400
+        id S1731991AbgFHX0f (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:26:35 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 434BA214F1;
-        Mon,  8 Jun 2020 23:24:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B5D9520853;
+        Mon,  8 Jun 2020 23:26:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658691;
-        bh=vLM00da0dcPE+XpMqn8kxehxh+b2qBbY1T82WW91wwQ=;
+        s=default; t=1591658795;
+        bh=KKLwxl/ZfJ4twlLSEGeuu76jQlodASbwQcAU9WHc2Cg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jkNW6RUbz9Y9W3x6alVT52WRA1XrYVqcaISHnlD+AdO9eAL2vVmKdkFGrh7G8z/uz
-         eQcxvBAB9T5PvF/a+lsxB4+6pqXyewDnl9m+qZ7dNZ+pQOiEUZdn1YZZMqfGEyaJ9g
-         sQtFxjC5pIeQzPJtWh8CHEdjGkRczOzpWCVq7RYI=
+        b=Wh/R8GLCfn6b/YmKNOIdugeLLZJ6v8r3wbrP2TP1EYtJ5x8V2C4iuf0CJucCahgig
+         YzIMWCoDAMkd2NfqMo4V5wPzWg/zVxKAHmdG2WJ71eooX3X9KRH46ZI546SlvIkFC7
+         ayvQ8KLUmmfedxx+scVArNYXV+hHQHv6d17uYbz4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Qiushi Wu <wu000273@umn.edu>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 100/106] cpuidle: Fix three reference count leaks
-Date:   Mon,  8 Jun 2020 19:22:32 -0400
-Message-Id: <20200608232238.3368589-100-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 69/72] cpuidle: Fix three reference count leaks
+Date:   Mon,  8 Jun 2020 19:24:57 -0400
+Message-Id: <20200608232500.3369581-69-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608232238.3368589-1-sashal@kernel.org>
-References: <20200608232238.3368589-1-sashal@kernel.org>
+In-Reply-To: <20200608232500.3369581-1-sashal@kernel.org>
+References: <20200608232500.3369581-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,10 +62,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
-index e754c7aae7f7..66979dc33680 100644
+index ae948b1da93a..909bd2255978 100644
 --- a/drivers/cpuidle/sysfs.c
 +++ b/drivers/cpuidle/sysfs.c
-@@ -467,7 +467,7 @@ static int cpuidle_add_state_sysfs(struct cpuidle_device *device)
+@@ -414,7 +414,7 @@ static int cpuidle_add_state_sysfs(struct cpuidle_device *device)
  		ret = kobject_init_and_add(&kobj->kobj, &ktype_state_cpuidle,
  					   &kdev->kobj, "state%d", i);
  		if (ret) {
@@ -73,8 +73,8 @@ index e754c7aae7f7..66979dc33680 100644
 +			kobject_put(&kobj->kobj);
  			goto error_state;
  		}
- 		cpuidle_add_s2idle_attr_group(kobj);
-@@ -598,7 +598,7 @@ static int cpuidle_add_driver_sysfs(struct cpuidle_device *dev)
+ 		kobject_uevent(&kobj->kobj, KOBJ_ADD);
+@@ -544,7 +544,7 @@ static int cpuidle_add_driver_sysfs(struct cpuidle_device *dev)
  	ret = kobject_init_and_add(&kdrv->kobj, &ktype_driver_cpuidle,
  				   &kdev->kobj, "driver");
  	if (ret) {
@@ -83,7 +83,7 @@ index e754c7aae7f7..66979dc33680 100644
  		return ret;
  	}
  
-@@ -692,7 +692,7 @@ int cpuidle_add_sysfs(struct cpuidle_device *dev)
+@@ -638,7 +638,7 @@ int cpuidle_add_sysfs(struct cpuidle_device *dev)
  	error = kobject_init_and_add(&kdev->kobj, &ktype_cpuidle, &cpu_dev->kobj,
  				   "cpuidle");
  	if (error) {
