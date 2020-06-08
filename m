@@ -2,96 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D81691F1791
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 13:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A001F17E4
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 13:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729656AbgFHLW6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 07:22:58 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:46400 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729640AbgFHLWu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 07:22:50 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 058BMRGD111939;
-        Mon, 8 Jun 2020 11:22:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=g/SBqla2Qz8YmgXWV5dNE6NiesBkgSREBkriy+DQb8o=;
- b=T2VIpFyRZdRUANYlq3EtlHGqp8itK8+N7iO7owb3UkNmIQnmlkjUZjHNsC4JQ8Z5yCZD
- SGoJ1XLBMMT7lUSQyg5PNdF/yyMUhwIp6fzvzsVKWFnt8iihZ5XHGtYeGM69Vw9eW5t+
- Mgj0WcDHHJ0+k6k4aSg4gVNSpSwB9JphTvMU9Mn1Th4IfAK1DxC2w4DULZBiAH3Y/oBu
- izQAKPWW+xk6JzJtIepE5jnm6IkKsG+49UHcvd6EVyEz15hMyoewGo1ODtK4fne/Vq0e
- 5o1aQ/XlxyDzNbdLzzIPhTR1TzAlHUxQxxNYAsLNv5VPbAM0cJ/FAJcezXRZJFYwyznQ pw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 31g3smp5y8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 08 Jun 2020 11:22:39 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 058BHmnK020506;
-        Mon, 8 Jun 2020 11:22:38 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 31gmqm38yx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 08 Jun 2020 11:22:38 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 058BMaa1010818;
-        Mon, 8 Jun 2020 11:22:37 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 08 Jun 2020 04:22:36 -0700
-Date:   Mon, 8 Jun 2020 14:22:28 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        id S1729548AbgFHLe2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 07:34:28 -0400
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:5402 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729310AbgFHLe2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 07:34:28 -0400
+X-IronPort-AV: E=Sophos;i="5.73,487,1583190000"; 
+   d="scan'208";a="453527699"
+Received: from abo-173-121-68.mrs.modulonet.fr (HELO hadrien) ([85.68.121.173])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jun 2020 13:34:25 +0200
+Date:   Mon, 8 Jun 2020 13:34:25 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+cc:     Joe Perches <joe@perches.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
         Dan Carpenter <error27@gmail.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
 Subject: Re: [PATCH] kernel: power: swap: mark a function as __init to save
  some memory
-Message-ID: <20200608112228.GW30374@kadam>
-References: <20200531210059.647066-1-christophe.jaillet@wanadoo.fr>
- <effe3cde7b1f188427c42c476f5a96251d837416.camel@perches.com>
+In-Reply-To: <20200608112228.GW30374@kadam>
+Message-ID: <alpine.DEB.2.21.2006081329570.3136@hadrien>
+References: <20200531210059.647066-1-christophe.jaillet@wanadoo.fr> <effe3cde7b1f188427c42c476f5a96251d837416.camel@perches.com> <20200608112228.GW30374@kadam>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <effe3cde7b1f188427c42c476f5a96251d837416.camel@perches.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 mlxscore=0
- mlxlogscore=936 adultscore=0 spamscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006080086
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 cotscore=-2147483648 suspectscore=0
- spamscore=0 bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0
- mlxlogscore=963 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006080086
+Content-Type: multipart/mixed; boundary="8323329-1740847280-1591616066=:3136"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, May 31, 2020 at 03:11:27PM -0700, Joe Perches wrote:
-> (adding Dan Carpenter)
-> 
-> On Sun, 2020-05-31 at 23:00 +0200, Christophe JAILLET wrote:
-> > 'swsusp_header_init()' is only called via 'core_initcall'.
-> > It can be marked as __init to save a few bytes of memory.
-> 
-> Hey Dan
-> 
-> smatch has a full function calling tree right?
-> 
-> Can smatch find unmarked functions called only by __init
-> functions so those unmarked functions can be appropriately
-> marked with __init like the below?
-> 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-It turns out it's complicated to do this in Smatch because Sparse
-ignores the section attribute.  :/
+--8323329-1740847280-1591616066=:3136
+Content-Type: text/plain; charset=US-ASCII
 
-regards,
-dan carpenter
 
+
+On Mon, 8 Jun 2020, Dan Carpenter wrote:
+
+> On Sun, May 31, 2020 at 03:11:27PM -0700, Joe Perches wrote:
+> > (adding Dan Carpenter)
+> >
+> > On Sun, 2020-05-31 at 23:00 +0200, Christophe JAILLET wrote:
+> > > 'swsusp_header_init()' is only called via 'core_initcall'.
+> > > It can be marked as __init to save a few bytes of memory.
+> >
+> > Hey Dan
+> >
+> > smatch has a full function calling tree right?
+> >
+> > Can smatch find unmarked functions called only by __init
+> > functions so those unmarked functions can be appropriately
+> > marked with __init like the below?
+> >
+>
+> It turns out it's complicated to do this in Smatch because Sparse
+> ignores the section attribute.  :/
+
+I wrote a script at one point for this for Coccinelle, and sent some
+patches.  It requires some effort, because you want to run it over and
+over - once function Y becomes init, some other functions might become
+init as well.  The iteration could be done automatically with Coccinelle,
+but I didn't take that option, because it semed safer to check the results
+along the way.  A version of the script is attached.
+
+julia
+--8323329-1740847280-1591616066=:3136
+Content-Type: text/plain; charset=US-ASCII; name=useful_inits3.cocci
+Content-Transfer-Encoding: BASE64
+Content-ID: <alpine.DEB.2.21.2006081334250.3136@hadrien>
+Content-Description: 
+Content-Disposition: attachment; filename=useful_inits3.cocci
+
+Ly8gTm8gaXRlcmF0aW9uLiAgRG8gaXQgYnkgaGFuZC4NCg0KQGluaXRpYWxp
+emU6b2NhbWxADQpAQA0KDQpsZXQgaXRibCA9IEhhc2h0YmwuY3JlYXRlIDEw
+MQ0KbGV0IGx0YmwgPSBIYXNodGJsLmNyZWF0ZSAxMDENCmxldCB0aGVmaWxl
+ID0gcmVmICIiDQoNCmxldCBoYXNoYWRkIHQgayA9DQogIGxldCBjZWxsID0N
+CiAgICB0cnkgSGFzaHRibC5maW5kIHQgaw0KICAgIHdpdGggTm90X2ZvdW5k
+IC0+DQogICAgICBsZXQgY2VsbCA9IHJlZiAwIGluDQogICAgICBIYXNodGJs
+LmFkZCB0IGsgY2VsbDsNCiAgICAgIGNlbGwgaW4NCiAgY2VsbCA6PSAhY2Vs
+bCArIDENCg0KbGV0IGhhc2hnZXQgdCBrID0gdHJ5ICEoSGFzaHRibC5maW5k
+IHQgaykgd2l0aCBOb3RfZm91bmQgLT4gMA0KDQpsZXQgc2VlbiAgPSByZWYg
+W10NCg0KQHNjcmlwdDpvY2FtbEANCkBADQoNCihsZXQgZmlsZSA9IExpc3Qu
+aGQgKENvY2NpbGliLmZpbGVzKCkpIGluDQp0aGVmaWxlIDo9IGZpbGU7DQps
+ZXQgZmlsZSA9DQogICAgdHJ5IExpc3QuaGQoTGlzdC50bCAoU3RyLnNwbGl0
+IChTdHIucmVnZXhwICIvbGludXgtbmV4dC8iKSBmaWxlKSkNCiAgICB3aXRo
+IF8gLT4gZmlsZSBpbg0KbGV0IG9maWxlID0gIi92YXIvanVsaWEvbGludXgt
+bmV4dC8iIF4NCiAgICAgIChGaWxlbmFtZS5jaG9wX2V4dGVuc2lvbiBmaWxl
+KSBeICIubyIgaW4NCmlmIG5vdChTeXMuZmlsZV9leGlzdHMgb2ZpbGUpDQp0
+aGVuIENvY2NpbGliLmV4aXQoKSk7DQoNCkhhc2h0YmwuY2xlYXIgaXRibDsN
+Ckhhc2h0YmwuY2xlYXIgbHRibDsNCnNlZW4gOj0gW10NCg0KQHJADQppZGVu
+dGlmaWVyIGY7DQpAQA0KDQpfX2luaXQgZiguLi4pIHsgLi4uIH0NCg0KQHNj
+cmlwdDpvY2FtbEANCmYgPDwgci5mOw0KQEANCg0KSGFzaHRibC5hZGQgaXRi
+bCBmICgpDQoNCkBzIGRpc2FibGUgb3B0aW9uYWxfYXR0cmlidXRlc0ANCmlk
+ZW50aWZpZXIgZjsNCkBADQoNCnN0YXRpYyBmKC4uLikgeyAuLi4gfQ0KDQpA
+c2NyaXB0Om9jYW1sQA0KZiA8PCBzLmY7DQpAQA0KDQpIYXNodGJsLmFkZCBs
+dGJsIGYgKCkNCg0KQHQgZXhpc3RzQA0KaWRlbnRpZmllciBmLGc7DQpwb3Np
+dGlvbiBwOw0KQEANCg0KX19pbml0IGYoLi4uKSB7IC4uLiB3aGVuIGFueQ0K
+ICAgZ0BwKC4uLikNCiAgIC4uLiB3aGVuIGFueQ0KIH0NCg0KQHNjcmlwdDpv
+Y2FtbEANCmcgPDwgdC5nOw0KX3AgPDwgdC5wOw0KQEANCg0KaWYgbm90IChI
+YXNodGJsLm1lbSBsdGJsIGcpIHx8IEhhc2h0YmwubWVtIGl0YmwgZw0KdGhl
+biBDb2NjaWxpYi5pbmNsdWRlX21hdGNoIGZhbHNlDQoNCkBvazEgZGlzYWJs
+ZSBvcHRpb25hbF9hdHRyaWJ1dGVzIGV4aXN0c0ANCmlkZW50aWZpZXIgZix0
+Lmc7DQpAQA0KDQpmKC4uLikgeyAuLi4gd2hlbiBhbnkNCiAgIGcNCiAgIC4u
+LiB3aGVuIGFueQ0KIH0NCg0KQG9rMiBkaXNhYmxlIG9wdGlvbmFsX2F0dHJp
+YnV0ZXMgZXhpc3RzQA0KaWRlbnRpZmllciBpLGosZmxkLHQuZzsNCkBADQoN
+CnN0cnVjdCBpIGogPSB7IC5mbGQgPSBnLCB9Ow0KDQpAb2szIGRpc2FibGUg
+b3B0aW9uYWxfYXR0cmlidXRlcyBleGlzdHNADQppZGVudGlmaWVyIHQuZzsN
+CmRlY2xhcmVyIGQ7DQpAQA0KDQpkKC4uLixnLC4uLik7DQoNCkBvazQgZGlz
+YWJsZSBvcHRpb25hbF9hdHRyaWJ1dGVzIGV4aXN0c0ANCmlkZW50aWZpZXIg
+dC5nOw0KZXhwcmVzc2lvbiBlOw0KQEANCg0KKA0KZSguLi4sZywuLi4pDQp8
+DQplKC4uLiwmZywuLi4pDQp8DQplID0gJmcNCnwNCmUgPSBnDQopDQoNCkBz
+Y3JpcHQ6b2NhbWwgZGVwZW5kcyBvbiAhb2sxICYmICFvazIgJiYgIW9rMyAm
+JiAhb2s0QA0KZyA8PCB0Lmc7DQpAQA0KDQpsZXQgZmlsZSA9ICF0aGVmaWxl
+IGluDQpsZXQgZmlsZSA9DQogICAgdHJ5IExpc3QuaGQoTGlzdC50bCAoU3Ry
+LnNwbGl0IChTdHIucmVnZXhwICIvbGludXgtbmV4dC8iKSBmaWxlKSkNCiAg
+ICB3aXRoIF8gLT4gZmlsZSBpbg0KaWYgbm90KExpc3QubWVtIChnLGZpbGUp
+ICFzZWVuKQ0KdGhlbg0KICBiZWdpbg0KICAgIHNlZW4gOj0gKGcsZmlsZSkg
+OjogIXNlZW47DQogICAgbGV0IG9maWxlID0gIi92YXIvanVsaWEvbGludXgt
+bmV4dC8iIF4NCiAgICAgIChGaWxlbmFtZS5jaG9wX2V4dGVuc2lvbiBmaWxl
+KSBeICIubyIgaW4NCiAgICBpZiBTeXMuZmlsZV9leGlzdHMgb2ZpbGUNCiAg
+ICB0aGVuDQogICAgICBsZXQgbCA9DQoJQ29tbW9uLmNtZF90b19saXN0DQoJ
+ICAoUHJpbnRmLnNwcmludGYNCgkgICAgICJvYmpkdW1wIC14ICVzIHwgZ3Jl
+cCAtdyAlcyB8IGdyZXAgLXcgRiB8IGdyZXAgLnRleHQudW5saWtlbHkiDQoJ
+ICAgICBvZmlsZSBnKSBpbg0KICAgICAgbWF0Y2ggbCB3aXRoDQoJW10gLT4g
+Q29jY2lsaWIuaW5jbHVkZV9tYXRjaCBmYWxzZQ0KICAgICAgfCBfIC0+DQoJ
+ICBQcmludGYucHJpbnRmICJJbmZvIGZvciAlcyAlc1xuIiBmaWxlIGc7DQoJ
+ICBMaXN0Lml0ZXINCgkgICAgKGZ1bmN0aW9uIGwgLT4gUHJpbnRmLnByaW50
+ZiAiJXNcbiIgbCkNCgkgICAgbDsNCgkgIFByaW50Zi5wcmludGYgIlxuIjsg
+Zmx1c2ggc3Rkb3V0DQogICAgZWxzZSBDb2NjaWxpYi5pbmNsdWRlX21hdGNo
+IGZhbHNlDQogIGVuZA0KZWxzZSBDb2NjaWxpYi5pbmNsdWRlX21hdGNoIGZh
+bHNlDQoNCkBkZXBlbmRzIG9uICFvazEgJiYgIW9rMiAmJiAhb2szICYmICFv
+azRADQppZGVudGlmaWVyIHQuZzsNCkBADQoNCi0gZw0KK19faW5pdCBnDQog
+KC4uLikgeyAuLi4gfQ0K
+
+--8323329-1740847280-1591616066=:3136--
