@@ -2,118 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A526C1F1532
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 11:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AA71F155E
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 11:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729132AbgFHJRx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 05:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729213AbgFHJRw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 05:17:52 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2407C08C5C6
-        for <linux-pm@vger.kernel.org>; Mon,  8 Jun 2020 02:17:51 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id c71so14564667wmd.5
-        for <linux-pm@vger.kernel.org>; Mon, 08 Jun 2020 02:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=itZ8nYpO9rVwAB+XOSiZ1Zaz+WlUMeN8KYJbRrgai8w=;
-        b=l7DQzFGSrv4z2pwkGTr5wRytkcMyxSBUNwqJUmmoa0jIaizCifAiGTW4Ra+5LDMc0H
-         33RoSFLpDmOXChn8CPGWvV8+jciU+jYwrR39lPv9PKGtNQZkse7loLOdUU8neJsEBcpT
-         awlD/WxgfMusa4hrvPHANnYZtgyZ0WPAVPhTz4wZFegA3NykKbQ6Xx6vThwsq6WUj6xM
-         lkCDzkpH6i50UF6l+l2wg+2skKTNV9JqscRxvoTin0X2W7YsRQ/Z4VnNus7GmeSI7WGs
-         8xpUX4jaxBLadrlFxX61WDqowj4vC2Apoz9u25nf9kmQb2Vbj4qXQHDV8aEYxqSsNe6n
-         /o5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=itZ8nYpO9rVwAB+XOSiZ1Zaz+WlUMeN8KYJbRrgai8w=;
-        b=deCthRUNWtuca+S5aYE/PMMHoqsAM5YbWwpcdqcxAYS+xKw5VnqN1rdtmXDVOJYmSW
-         aN1FxBfKgaN6wuj1hdawqYhT7ERcA6DlxIlEd6aMD7TwMis+h+3B7lmR0Sw/GGYydXdw
-         6gIWiSALYPZ1KzdfBcc1bJlTcyy/+169d4GDXzP19DtRFnfPGB4LCTpSraGxPyBwefgn
-         Yn+33iHJlwAkVeoHZ8eNBPjFZT9W7czyewVFQ2nlgh1wVSfnRwzOgqtlkoF+yBAfqQOC
-         mrHJmcu5/zCP+rE6gGJQZUjWczwnFxF445mdUxGGPi4Yf5LdBnEV6rYvBXji05Nd7VaP
-         J+Tw==
-X-Gm-Message-State: AOAM533/1DJKmolbK4E/oklnu469D+lkf8zitCFMYzMARZPqrdjtl2kL
-        YjwZB0Ffbs2gCztKh5scg6XDEvTiaBMveA==
-X-Google-Smtp-Source: ABdhPJzrMGTk69KE1wsSY5muCwS8Xznk2Z2jhdHWIbXZ5sbFgJPKZN2ZhlPLbzx6XFNulQJ+rLPHVQ==
-X-Received: by 2002:a1c:2506:: with SMTP id l6mr7539438wml.34.1591607870432;
-        Mon, 08 Jun 2020 02:17:50 -0700 (PDT)
-Received: from bender.baylibre.local ([2a01:e35:2ec0:82b0:22:5867:d2c6:75f4])
-        by smtp.gmail.com with ESMTPSA id t7sm22732326wrq.41.2020.06.08.02.17.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2020 02:17:49 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     khilman@baylibre.com
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] arm64: dts: meson-khadas-vim3: add Khadas MCU nodes
-Date:   Mon,  8 Jun 2020 11:17:39 +0200
-Message-Id: <20200608091739.2368-6-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20200608091739.2368-1-narmstrong@baylibre.com>
-References: <20200608091739.2368-1-narmstrong@baylibre.com>
+        id S1728956AbgFHJ2L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 05:28:11 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:32944 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728022AbgFHJ2L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 05:28:11 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id CEE412A10C1
+Subject: Re: [PATCH v3 0/7] Support inhibiting input devices
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>
+Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Barry Song <baohua@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Nick Dyer <nick@shmanahar.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ferruh Yigit <fery@cypress.com>,
+        Sangwon Jee <jeesw@melfas.com>,
+        Peter Hutterer <peter.hutterer@redhat.com>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        kernel@collabora.com
+References: <20200604072853.GP89269@dtor-ws>
+ <20200605173335.13753-1-andrzej.p@collabora.com> <20200607202414.GB13138@amd>
+ <20200608053737.GS89269@dtor-ws>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Message-ID: <b1b282ed-ddea-fdd8-bf1a-3e918653f1e3@collabora.com>
+Date:   Mon, 8 Jun 2020 11:28:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <20200608053737.GS89269@dtor-ws>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the Khadas MCU node with active FAN thermal nodes for all the
-Khadas VIM3 variants.
+Hi Pavel,
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- .../boot/dts/amlogic/meson-khadas-vim3.dtsi   | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+W dniu 08.06.2020 o 07:37, Dmitry Torokhov pisze:
+> On Sun, Jun 07, 2020 at 10:24:14PM +0200, Pavel Machek wrote:
+>> On Fri 2020-06-05 19:33:28, Andrzej Pietrasiewicz wrote:
+>>> Userspace might want to implement a policy to temporarily disregard input
+>>> from certain devices.
+>>
+>> Wow, you certainly cc a lot of lists.
+>>
+>>> An example use case is a convertible laptop, whose keyboard can be folded
+>>> under the screen to create tablet-like experience. The user then must hold
+>>> the laptop in such a way that it is difficult to avoid pressing the keyboard
+>>> keys. It is therefore desirable to temporarily disregard input from the
+>>> keyboard, until it is folded back. This obviously is a policy which should
+>>> be kept out of the kernel, but the kernel must provide suitable means to
+>>> implement such a policy.
+>>>
+>>> Due to interactions with suspend/resume, a helper has been added for drivers
+>>> to decide if the device is being used or not (PATCH 1/7) and it has been
+>>> applied to relevant drivers (PATCH 2,4,5,6/7).
+>>
+>> But is that a right way to implement it?
+>>
+>> We want this for cellphones, too -- touchscreen should be disabled
+>> while the device is locked in the pocket -- but we really want the
+>> touchscreen hardware to be powered down in that case (because it keeps
+>> SoC busy and eats a _lot_ of electricity).
+>>
+>> But simplistic "receive an event and then drop it if device is
+>> inhibited" does not allow that...
+> 
+> I do not think you read the entirety of this patch series...
+> 
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi b/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
-index 094ecf2222bb..3325e54ea690 100644
---- a/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
-@@ -183,6 +183,23 @@
- 	hdmi-phandle = <&hdmi_tx>;
- };
- 
-+&cpu_thermal {
-+	trips {
-+		cpu_active: cpu-active {
-+			temperature = <80000>; /* millicelsius */
-+			hysteresis = <2000>; /* millicelsius */
-+			type = "active";
-+		};
-+	};
-+
-+	cooling-maps {
-+		map {
-+			trip = <&cpu_active>;
-+			cooling-device = <&khadas_mcu THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+		};
-+	};
-+};
-+
- &ext_mdio {
- 	external_phy: ethernet-phy@0 {
- 		/* Realtek RTL8211F (0x001cc916) */
-@@ -222,6 +239,12 @@
- 	pinctrl-0 = <&i2c_ao_sck_pins>, <&i2c_ao_sda_pins>;
- 	pinctrl-names = "default";
- 
-+	khadas_mcu: system-controller@18 {
-+		compatible = "khadas,mcu";
-+		reg = <0x18>;
-+		#cooling-cells = <2>;
-+	};
-+
- 	gpio_expander: gpio-controller@20 {
- 		compatible = "ti,tca6408";
- 		reg = <0x20>;
--- 
-2.22.0
+Yeah, kindly read the whole thread. Long story short: Inhibiting _is_ about
+ignoring events from inhibited devices. Obviously we can do better than
+just that. Indeed, the open() and close() callbacks (which are called at
+uninhibiting/inhibiting) mean "start providing events" and "stop providing
+events", respectively. How that translates into driver operation is highly
+driver-specific and cannot be handled at the input subsystem level, but it
+is the place where power savings can be realized: whenever the driver knows
+that nobody wants events from it it can do whatever it considers appropriate,
+including transitioning the device into low power mode, for example using
+PM runtime.
 
+Regards,
+
+Andrzej
