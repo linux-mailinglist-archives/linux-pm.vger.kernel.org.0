@@ -2,177 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A67861F1E2B
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 19:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305281F1E54
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 19:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730737AbgFHRK2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 13:10:28 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:62208 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730696AbgFHRK1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 13:10:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1591636226; x=1623172226;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=t5Ht9pQ/L15OhRjsj3oBdWbi3godPK4J8lNDSU8Sric=;
-  b=h7W5QzygyIq9kvN2MXSsz8d2kdwog+IbguIPcpOcwHFxk4ZfUhoy3VYU
-   v38Ybr+IdaQPH88f0HS1mGGClX6F04gM3GQNi6w95YpSflTOWLj2fefu1
-   BrX8Ww8aTcmVeGu1pg5Ca1tqXgKTILyD1UIVTd2PBcOLCx9/tsUcEp/MY
-   c=;
-IronPort-SDR: S8JB7UWD4QsekyIBB/T3lttKcrT1Ne/0DCTZfl8uIv+BINZ1G4WVygkiGFpts8j2A2qHCjsFIu
- YrHU8J2n5sQQ==
-X-IronPort-AV: E=Sophos;i="5.73,487,1583193600"; 
-   d="scan'208";a="49364832"
-Subject: Re: [PATCH 04/12] x86/xen: add system core suspend and resume callbacks
-Received: from sea32-co-svc-lb4-vlan2.sea.corp.amazon.com (HELO email-inbound-relay-1e-57e1d233.us-east-1.amazon.com) ([10.47.23.34])
-  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 08 Jun 2020 17:10:17 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1e-57e1d233.us-east-1.amazon.com (Postfix) with ESMTPS id C791814168C;
-        Mon,  8 Jun 2020 17:10:08 +0000 (UTC)
-Received: from EX13D05UWC001.ant.amazon.com (10.43.162.82) by
- EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Mon, 8 Jun 2020 17:09:48 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
- EX13D05UWC001.ant.amazon.com (10.43.162.82) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Mon, 8 Jun 2020 17:09:48 +0000
-Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.162.232) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Mon, 8 Jun 2020 17:09:47 +0000
-Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id F15BC40832; Mon,  8 Jun 2020 17:09:47 +0000 (UTC)
-Date:   Mon, 8 Jun 2020 17:09:47 +0000
-From:   Anchal Agarwal <anchalag@amazon.com>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "roger.pau@citrix.com" <roger.pau@citrix.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
-Message-ID: <20200608170947.GA4392@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-References: <cover.1589926004.git.anchalag@amazon.com>
- <79cf02631dc00e62ebf90410bfbbdb52fe7024cb.1589926004.git.anchalag@amazon.com>
- <4b577564-e4c3-0182-2b9e-5f79004f32a1@oracle.com>
- <B966B3A2-4F08-42FA-AF59-B8AA0783C2BA@amazon.com>
- <e2073aa4-2410-4630-fee6-4e4abc172876@oracle.com>
+        id S1730739AbgFHR3X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 13:29:23 -0400
+Received: from mga11.intel.com ([192.55.52.93]:12672 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730697AbgFHR3W (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Jun 2020 13:29:22 -0400
+IronPort-SDR: TkRODIQiUQCJlXzq7ghxlfdz+jDAX14ny9tZ6sz4B54ceGJeLgtUb6Fe7P0Fwlb9oSwZ7+MV+2
+ Hqb3RqJ92eGA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2020 10:29:21 -0700
+IronPort-SDR: qptkctbUJUSvQAC1ycvjADfEDhUrhHOX5yl1OzzQxI56au3vxE+MjQ88fkKwTx8lv1vlJ4i/FY
+ fWhF3aO1hQDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,487,1583222400"; 
+   d="scan'208";a="258747153"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.152])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Jun 2020 10:29:21 -0700
+Date:   Mon, 8 Jun 2020 10:29:21 -0700
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Liam Merwick <liam.merwick@oracle.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Brad Campbell <lists2009@fnarfbargle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH] x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during
+ wakeup
+Message-ID: <20200608172921.GC8223@linux.intel.com>
+References: <20200605200728.10145-1-sean.j.christopherson@intel.com>
+ <b2ac2400-dbc1-f6bc-a397-17f1ae10bd83@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e2073aa4-2410-4630-fee6-4e4abc172876@oracle.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <b2ac2400-dbc1-f6bc-a397-17f1ae10bd83@oracle.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 05, 2020 at 05:24:37PM -0400, Boris Ostrovsky wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> 
-> 
-> 
-> On 6/3/20 6:40 PM, Agarwal, Anchal wrote:
-> >     CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+On Mon, Jun 08, 2020 at 11:12:35AM +0100, Liam Merwick wrote:
+> On 05/06/2020 21:07, Sean Christopherson wrote:
+> >Reinitialize IA32_FEAT_CTL on the BSP during wakeup to handle the case
+> >where firmware doesn't initialize or save/restore across S3.  This fixes
+> >a bug where IA32_FEAT_CTL is left uninitialized and results in VMXON
+> >taking a #GP due to VMX not being fully enabled, i.e. breaks KVM.
 > >
+> >Use init_ia32_feat_ctl() to "restore" IA32_FEAT_CTL as it already deals
+> >with the case where the MSR is locked, and because APs already redo
+> >init_ia32_feat_ctl() during suspend by virtue of the SMP boot flow being
+> >used to reinitialize APs upon wakeup.  Do the call in the early wakeup
+> >flow to avoid dependencies in the syscore_ops chain, e.g. simply adding
+> >a resume hook is not guaranteed to work, as KVM does VMXON in its own
+> >resume hook, kvm_resume(), when KVM has active guests.
 > >
-> >
-> >     On 5/19/20 7:26 PM, Anchal Agarwal wrote:
-> >     > From: Munehisa Kamata <kamatam@amazon.com>
-> >     >
-> >     > Add Xen PVHVM specific system core callbacks for PM suspend and
-> >     > hibernation support. The callbacks suspend and resume Xen
-> >     > primitives,like shared_info, pvclock and grant table. Note that
-> >     > Xen suspend can handle them in a different manner, but system
-> >     > core callbacks are called from the context.
-> >
-> >
-> >     I don't think I understand that last sentence.
-> >
-> > Looks like it may have cryptic meaning of stating that xen_suspend calls syscore_suspend from xen_suspend
-> > So, if these syscore ops gets called  during xen_suspend do not do anything. Check if the mode is in xen suspend
-> > and return from there. These syscore_ops are specifically for domU hibernation.
-> > I must admit, I may have overlooked lack of explanation of some implicit details in the original commit msg.
-> >
-> >     >  So if the callbacks
-> >     > are called from Xen suspend context, return immediately.
-> >     >
-> >
-> >
-> >     > +
-> >     > +static int xen_syscore_suspend(void)
-> >     > +{
-> >     > +     struct xen_remove_from_physmap xrfp;
-> >     > +     int ret;
-> >     > +
-> >     > +     /* Xen suspend does similar stuffs in its own logic */
-> >     > +     if (xen_suspend_mode_is_xen_suspend())
-> >     > +             return 0;
+> >Reported-by: Brad Campbell <lists2009@fnarfbargle.com>
+> >Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> >Cc: Paolo Bonzini <pbonzini@redhat.com>
+> >Cc: kvm@vger.kernel.org
 > 
+> Should it have the following tag since it fixes a commit introduced in 5.6?
+> Cc: stable@vger.kernel.org # v5.6
+
+It definitely warrants a backport to v5.6.  I didn't include a Cc to stable
+because I swear I had seen an email fly by that stated an explicit Cc is
+unnecessary/unwanted for tip-tree patches, but per a recent statement from
+Boris it looks like I'm simply confused[*].  I'll add the Cc in v2.
+
+[*] https://lkml.kernel.org/r/20200417164752.GF7322@zn.tnic
+
+> >Fixes: 21bd3467a58e ("KVM: VMX: Drop initialization of IA32_FEAT_CTL MSR")
+> >Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> With your explanation now making this clearer, is this check really
-> necessary? From what I see we are in XEN_SUSPEND mode when
-> lock_system_sleep() lock is taken, meaning that we can't initialize
-> hibernation.
-> 
-I see. Sounds plausible. I will fix both the code and commit message
-for better readability. Thanks for catching this.
-> 
-> >     > +
-> >     > +     xrfp.domid = DOMID_SELF;
-> >     > +     xrfp.gpfn = __pa(HYPERVISOR_shared_info) >> PAGE_SHIFT;
-> >     > +
-> >     > +     ret = HYPERVISOR_memory_op(XENMEM_remove_from_physmap, &xrfp);
-> >     > +     if (!ret)
-> >     > +             HYPERVISOR_shared_info = &xen_dummy_shared_info;
-> >     > +
-> >     > +     return ret;
-> >     > +}
-> >     > +
-> >     > +static void xen_syscore_resume(void)
-> >     > +{
-> >     > +     /* Xen suspend does similar stuffs in its own logic */
-> >     > +     if (xen_suspend_mode_is_xen_suspend())
-> >     > +             return;
-> >     > +
-> >     > +     /* No need to setup vcpu_info as it's already moved off */
-> >     > +     xen_hvm_map_shared_info();
-> >     > +
-> >     > +     pvclock_resume();
-> >     > +
-> >     > +     gnttab_resume();
-> >
-> >
-> >     Do you call gnttab_suspend() in pm suspend path?
-> > No, since it does nothing for HVM guests. The unmap_frames is only applicable for PV guests right?
-> 
-> 
-> You should call it nevertheless. It will decide whether or not anything
-> needs to be done.
-Will fix it in V2.
-> 
-> 
-> -boris
-> 
-Thanks,
-Anchal
-> 
+> Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
