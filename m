@@ -2,75 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F34081F13F7
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 09:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFDBD1F1459
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 10:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728983AbgFHHup (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 03:50:45 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:53931 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729014AbgFHHum (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Jun 2020 03:50:42 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 49gQR427lLz2d;
-        Mon,  8 Jun 2020 09:50:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1591602640; bh=1E5TLFv0Qix6OuC8g563KyHdAer+hGy3zGxRZ3URGDs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lu9kB5ghtQ+L+JZed3mX4EQCmuQ1enh5MasGPi2Xm9/SRiSVO9GJtM/hhVdqmGbRQ
-         y4orwsM+PhC1jpt5YQxyTpe2zH+FTKYZTd9gBi9Ph3lgWcvJwtazj1GY0oFRgDApbr
-         rtqEasRwT0tGXXsP9GguvquX9/yHU4O/nRUJX+NwC1ox/TPsq+rRF9k+VFBVRHVI4d
-         MNW3LwUgYs7mWSwiOkNpeLwTMPkmpj3xeuOLQojm7sup22PE6KyARhn6XQx77azo+X
-         ot+kl5M/01i/6D8xDo5FjokwKazFSSja9k+YDGXSqa+i4H8dINzKHMylei7vy2Jdjq
-         aa8mMQ0y9a35A==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Mon, 8 Jun 2020 09:50:39 +0200
-From:   Michal Miroslaw <mirq-linux@rere.qmqm.pl>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2][RFC v2] PM-runtime: change the tracepoints to cover
- all usage_count
-Message-ID: <20200608075038.GB1124@qmqm.qmqm.pl>
-References: <cover.1591600914.git.yu.c.chen@intel.com>
- <0a3ae7be4c467912327005995b1defb4fefd8101.1591600914.git.yu.c.chen@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0a3ae7be4c467912327005995b1defb4fefd8101.1591600914.git.yu.c.chen@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1729123AbgFHIRI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 8 Jun 2020 04:17:08 -0400
+Received: from coyote.holtmann.net ([212.227.132.17]:52107 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729085AbgFHIRI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 04:17:08 -0400
+Received: from marcel-macpro.fritz.box (p5b3d2638.dip0.t-ipconnect.de [91.61.38.56])
+        by mail.holtmann.org (Postfix) with ESMTPSA id A3843CEC82;
+        Mon,  8 Jun 2020 10:26:54 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
+Subject: Re: [PATCH v3] Bluetooth: Allow suspend even when preparation has
+ failed
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <20200605135009.v3.1.I0ec31d716619532fc007eac081e827a204ba03de@changeid>
+Date:   Mon, 8 Jun 2020 10:17:05 +0200
+Cc:     Bluez mailing list <linux-bluetooth@vger.kernel.org>,
+        len.brown@intel.com,
+        ChromeOS Bluetooth Upstreaming 
+        <chromeos-bluetooth-upstreaming@chromium.org>,
+        linux-pm@vger.kernel.org, rafael@kernel.org,
+        todd.e.brandt@linux.intel.com, rui.zhang@intel.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <24703FC2-32D1-434A-84FC-7111BEC45C2F@holtmann.org>
+References: <20200605135009.v3.1.I0ec31d716619532fc007eac081e827a204ba03de@changeid>
+To:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+X-Mailer: Apple Mail (2.3608.80.23.2.2)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 08, 2020 at 03:42:15PM +0800, Chen Yu wrote:
-> Commit d229290689ae ("PM-runtime: add tracepoints for usage_count changes")
-> has added some tracepoints to monitor the change of runtime usage, and
-> there is something to improve:
-> 1. There are some places that adjust the usage count have not
->    been traced yet. For example, pm_runtime_get_noresume() and
->    pm_runtime_put_noidle()
-> 2. The change of the usage count will not be tracked if decreased
->    from 1 to 0.
-> 
-> This patch intends to adjust the logic to be consistent with the
-> change of usage_counter, that is to say, only after the counter has
-> been possibly modified, we record it. Besides, all usage changes will
-> be shown using rpm_usage even if included by other trace points.
-> And these changes has helped track down the e1000e runtime issue.
-> 
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
-> v2: According to Michal's suggestion, adjust the commit log
->     to better describe the meaning of this patch.
-> --
->  drivers/base/power/runtime.c | 38 +++++++++++++++++++++++-------------
->  1 file changed, 24 insertions(+), 14 deletions(-)
-[...]
+Hi Abhishek,
 
-Reviewed-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
+> It is preferable to allow suspend even when Bluetooth has problems
+> preparing for sleep. When Bluetooth fails to finish preparing for
+> suspend, log the error and allow the suspend notifier to continue
+> instead.
+> 
+> To also make it clearer why suspend failed, change bt_dev_dbg to
+> bt_dev_err when handling the suspend timeout.
+> 
+> Fixes: dd522a7429b07e ("Bluetooth: Handle LE devices during suspend")
+> Reported-by: Len Brown <len.brown@intel.com>
+> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> ---
+> To verify this is properly working, I added an additional change to
+> hci_suspend_wait_event to always return -16. This validates that suspend
+> continues even when an error has occurred during the suspend
+> preparation.
+> 
+> Example on Chromebook:
+> [   55.834524] PM: Syncing filesystems ... done.
+> [   55.841930] PM: Preparing system for sleep (s2idle)
+> [   55.940492] Bluetooth: hci_core.c:hci_suspend_notifier() hci0: Suspend notifier action (3) failed: -16
+> [   55.940497] Freezing user space processes ... (elapsed 0.001 seconds) done.
+> [   55.941692] OOM killer disabled.
+> [   55.941693] Freezing remaining freezable tasks ... (elapsed 0.000 seconds) done.
+> [   55.942632] PM: Suspending system (s2idle)
+> 
+> I ran this through a suspend_stress_test in the following scenarios:
+> * Peer classic device connected: 50+ suspends
+> * No devices connected: 100 suspends
+> * With the above test case returning -EBUSY: 50 suspends
+> 
+> I also ran this through our automated testing for suspend and wake on
+> BT from suspend continues to work.
+> 
+> 
+> Changes in v3:
+> - Changed printf format for unsigned long
+> 
+> Changes in v2:
+> - Added fixes and reported-by tags
+> 
+> net/bluetooth/hci_core.c | 17 ++++++++++-------
+> 1 file changed, 10 insertions(+), 7 deletions(-)
+
+patch has been applied to bluetooth-next tree.
+
+Regards
+
+Marcel
+
